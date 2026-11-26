@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Cohomology.CocycleCohomology
 import QICLean.Analysis.Cohomology.CircleCohomology
 import Mathlib.LinearAlgebra.UnitaryGroup
+import QICLean.Analysis.Cohomology.ProjectiveUnitary
 
 /-!
 # Rephasing virtual projective representations
@@ -20,32 +21,6 @@ matrix-valued projective representations used in TNLean.
 open scoped Matrix ScalarCohomology
 
 variable {G : Type} [Group G] {D : ℕ}
-
-/-- Multiplying each virtual matrix by a scalar unit changes its factor system
-by the corresponding coboundary. Schuch–Pérez-García–Cirac, arXiv:1010.3732,
-Section II.F.2, lines 886–929. -/
-def ProjectiveRepresentation.rephase {ω : ScalarCocycle G}
-    (ρ : ProjectiveRepresentation (D := D) ω) (φ : G → Units ℂ) :
-    ProjectiveRepresentation (D := D)
-      (fun p => φ p.1 * φ p.2 * (φ (p.1 * p.2))⁻¹ * ω p) where
-  X g := Matrix.GeneralLinearGroup.scalar (Fin D) (φ g) * ρ.X g
-  map_mul' := by
-    intro g h
-    simp only [Matrix.GeneralLinearGroup.coe_scalar, Matrix.scalar_apply,
-      ← Matrix.smul_eq_diagonal_mul, Units.val_mul,
-      Units.val_inv_eq_inv_val]
-    calc
-      ((φ g : ℂ) • (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) *
-          ((φ h : ℂ) • (ρ.X h : Matrix (Fin D) (Fin D) ℂ))
-          = ((φ g : ℂ) * (φ h : ℂ)) •
-              ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
-                (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) := by
-              simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_comm]
-      _ = ((φ g : ℂ) * (φ h : ℂ) * (φ (g * h) : ℂ)⁻¹ * (ω (g, h) : ℂ)) •
-          ((φ (g * h) : ℂ) •
-            (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ)) := by
-          rw [ρ.map_mul]
-          simp [smul_smul, mul_assoc, mul_comm, mul_left_comm]
 
 namespace TNLean.Algebra
 
@@ -68,7 +43,7 @@ end TNLean.Algebra
 /-- Rephasing by unit-circle scalars preserves virtual unitarity.
 Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
 lines 886–921. -/
-theorem ProjectiveRepresentation.rephase_mem_unitaryGroup
+theorem TNLean.Algebra.rephase_mem_unitaryGroup
     {ω : ScalarCocycle G}
     (ρ : ProjectiveRepresentation (D := D) ω)
     (φ : G → Circle) (g : G)
@@ -86,7 +61,7 @@ systems can be aligned to an identical factor system without losing
 unitarity. This is the rephasing prerequisite for the common-factor direct
 sum in Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
 lines 886–921. -/
-theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
+theorem TNLean.Algebra.exists_unitary_rephase_of_cohomologous
     {ω₀ ω₁ : ScalarCocycle G}
     (ρ₀ : ProjectiveRepresentation (D := D) ω₀.circlePhaseInclusion)
     (h : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₀))
@@ -118,6 +93,6 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
   rw [← heq]
   refine ⟨ρ₀.rephase (fun g => Circle.toUnits (ψ g)), ψ, ?_, ?_⟩
   · intro g
-    exact ρ₀.rephase_mem_unitaryGroup ψ g (hρ₀ g)
+    exact TNLean.Algebra.rephase_mem_unitaryGroup ρ₀ ψ g (hρ₀ g)
   · intro g
     rfl

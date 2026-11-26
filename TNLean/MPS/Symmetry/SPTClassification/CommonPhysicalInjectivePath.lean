@@ -127,7 +127,7 @@ theorem exists_commonPhysicalInjectiveGappedPath_of_cohomologous
         (LinearMap.toMatrix' (parentInteraction
           (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2))) := by
   obtain ⟨σ, φ, hσ, hX⟩ :=
-    ρ₀.exists_unitary_rephase_of_unitary_cohomologous ρ₁ h₀ h₁ hCoh
+    TNLean.MPS.Symmetry.exists_unitary_rephase_of_unitary_cohomologous ρ₀ ρ₁ h₀ h₁ hCoh
   have hCovσ := rotatePhysical_covariance_of_circle_rephase
     ρ₁ σ φ hX U₁ A₁ hCov₁
   exact ⟨commonSptPhysicalAction ρ₀ σ h₀ hσ U₀ U₁,

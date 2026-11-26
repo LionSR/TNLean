@@ -13,8 +13,6 @@ import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryCrossObservableCompre
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableAlgebra
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableCommutator
-import TNLean.MPS.ParentHamiltonian.BulkObservable.GroundSpaceCompressionNorm
-import TNLean.MPS.ParentHamiltonian.BulkObservable.GroundSpaceCrossCompressionNorm
 import TNLean.MPS.ParentHamiltonian.BulkObservable.LocalCommutatorExpectation
 import TNLean.MPS.ParentHamiltonian.BulkObservable.MultiblockLocalCommutatorGap
 import TNLean.MPS.ParentHamiltonian.BulkObservable.PrimitiveLocalCommutatorGap

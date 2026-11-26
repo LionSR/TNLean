@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSGappedPhase
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator
 import QICLean.ManyBody.Hamiltonian.NegativeFrequency
+import QICLean.Analysis.Norm.MatrixToEuclidean
 
 /-!
 # Normalized correlations depend only on the periodic MPS rays
@@ -20,26 +21,6 @@ states are rays and the minimal tensor representative may change.
 -/
 
 open scoped InnerProductSpace
-
-namespace Matrix
-
-/-- A nonzero scalar does not change the actual normalized expectation
-`⟪ψ, A ψ⟫ / ‖ψ‖²`,
-even when the vector itself is zero. Source: SPC11, arXiv:1010.3732,
-Section II.F, lines 929–953, normalization of physical rays. -/
-theorem inner_toEuclideanCLM_div_norm_sq_smul
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (ψ : EuclideanSpace ℂ n) (A : Matrix n n ℂ) {c : ℂ} (hc : c ≠ 0) :
-    ⟪c • ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) A (c • ψ)⟫_ℂ / ((‖c • ψ‖ ^ 2 : ℝ) : ℂ) =
-      ⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) := by
-  have hnorm (φ : EuclideanSpace ℂ n) :
-      ((‖φ‖ ^ 2 : ℝ) : ℂ) = ⟪φ, φ⟫_ℂ := by
-    rw [inner_self_eq_norm_sq_to_K]; norm_cast
-  simp only [hnorm, map_smul, inner_smul_left,
-    inner_smul_right, ← mul_assoc]
-  exact mul_div_mul_left _ _ (mul_ne_zero hc ((map_ne_zero _).mpr hc))
-
-end Matrix
 
 namespace MPSTensor
 

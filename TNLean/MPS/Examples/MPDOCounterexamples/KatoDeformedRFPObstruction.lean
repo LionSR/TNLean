@@ -561,7 +561,7 @@ private lemma reducedBlockState_tensor_apply_eq {N L : ℕ} (hL : L ≤ N) (hNpo
   have hNM : N = L + M := by omega
   have hcard_fun : Fintype.card (Fin M → Fin 2) = 2 ^ M := by
     simp
-  rw [reducedBlockState_eq_sum tensor hL u v,
+  rw [MPOTensor.reducedBlockState_eq_sum tensor hL u v,
     normalizedMPO_tensor_eq_mpo N hNpos,
     mpo_tensor_eq_diagonal N]
   by_cases huv : u = v

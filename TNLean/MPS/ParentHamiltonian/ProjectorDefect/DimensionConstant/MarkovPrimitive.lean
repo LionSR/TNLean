@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.DimensionConstant.MarkovChannel
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint
+import QICLean.Kraus.Transfer
+import TNLean.MPS.Tensor
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import QICLean.Algebra.Matrix.MatrixAux
 

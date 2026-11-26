@@ -5,7 +5,16 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAlgebra.MatrixStarEquivSpatial
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardFormOpenWord
-import TNLean.QCA.StarSubalgebra.BipartiteSupportAlgebra
+import Mathlib.Algebra.Star.Subalgebra
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Dimension.Free
+import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.Algebra.Kronecker.TensorMap
+import QICLean.Algebra.StarSubalgebra.CommutingProduct
+import QICLean.Algebra.Kronecker.CommutingDecomposition
+import QICLean.Algebra.Kronecker.SupportAlgebra
+import QICLean.Algebra.Kronecker.SupportAlgebraCommutant
 import QICLean.Algebra.MatrixAlgebra.SkolemNoetherUnitary
 import Mathlib.Data.Matrix.Basis
 

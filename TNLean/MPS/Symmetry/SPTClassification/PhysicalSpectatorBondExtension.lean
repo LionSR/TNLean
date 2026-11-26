@@ -35,7 +35,7 @@ namespace Matrix
 /-- The active pair carries the prescribed virtual bond; every pair
 meeting an additional physical sector carries the identity. Source context:
 arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
-noncomputable def physicalSpectatorEdgeInteraction (K d₀ d₁ : ℕ)
+noncomputable def _root_.TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction (K d₀ d₁ : ℕ)
     (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ) (q h : Fin 3) :
     Matrix (EtaEdgeIndex ![K, d₀, d₁] ![K, 1, 1] q h)
       (EtaEdgeIndex ![K, d₀, d₁] ![K, 1, 1] q h) ℂ :=
@@ -50,11 +50,11 @@ noncomputable def physicalSpectatorEdgeInteraction (K d₀ d₁ : ℕ)
 /-- Projection-valued active bonds give projection-valued interactions
 on every pair of sectors. Source context: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
-theorem physicalSpectatorEdgeInteraction_isStarProjection (K d₀ d₁ : ℕ)
+theorem _root_.TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction_isStarProjection (K d₀ d₁ : ℕ)
     (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hB : IsStarProjection B) (q h : Fin 3) :
-    IsStarProjection (physicalSpectatorEdgeInteraction K d₀ d₁ B q h) := by
-  unfold physicalSpectatorEdgeInteraction
+    IsStarProjection (TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction K d₀ d₁ B q h) := by
+  unfold TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction
   split_ifs with hq hh
   · subst q
     subst h
@@ -72,8 +72,8 @@ noncomputable def physicalSpectatorBondInteraction (K d₀ d₁ : ℕ)
     (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ) :
     MPOTensor.ChainOperator ((K * K + d₀) + d₁) 2 :=
   sectorBondInteraction ![K, d₀, d₁] ![K, 1, 1]
-    (Matrix.physicalSpectatorEquiv K d₀ d₁)
-    (Matrix.physicalSpectatorEdgeInteraction K d₀ d₁ B)
+    (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁)
+    (TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction K d₀ d₁ B)
 
 /-- An orthogonal-projection virtual bond gives an orthogonal-projection
 interaction on the common physical space. Source context: arXiv:1010.3732,
@@ -83,7 +83,7 @@ theorem physicalSpectatorBondInteraction_isStarProjection (K d₀ d₁ : ℕ)
     (hB : IsStarProjection B) :
     IsStarProjection (physicalSpectatorBondInteraction K d₀ d₁ B) := by
   exact sectorBondInteraction_isStarProjection _ _ _ _
-    (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB)
+    (TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB)
 
 /-- All periodic translates of the extended independent-bond interaction
 commute. Source context: arXiv:1010.3732, Sections II.D.2 and II.F.2,
@@ -111,7 +111,7 @@ theorem physicalSpectatorBondInteraction_eigenvalue_gap_one {N : ℕ}
       μ = 0 ∨ (1 : ℂ) ≤ μ := by
   have : NeZero N := ⟨by omega⟩
   exact sectorBondInteraction_eigenvalue_gap_one _ _ _ _
-    (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN
+    (TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN
 
 end MPSTensor
 
@@ -154,13 +154,13 @@ theorem commonFixedPointInclusion_eq_coordinateInclusion (m d₀ d₁ : ℕ) :
 private theorem commonFixedPointInclusion_eta_apply (K d₀ d₁ : ℕ)
     (x : Matrix.EtaSiteIndex 3 ![K, d₀, d₁] ![K, 1, 1]) (l r : Fin K) :
     commonFixedPointInclusion (K * K) d₀ d₁
-        (Matrix.physicalSpectatorEquiv K d₀ d₁ x) (finProdFinEquiv (l, r)) =
+        (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ x) (finProdFinEquiv (l, r)) =
       if x = ⟨0, (r, l)⟩ then 1 else 0 := by
   rw [commonFixedPointInclusion_eq_coordinateInclusion]
-  change (if Matrix.physicalSpectatorEquiv K d₀ d₁ x =
-      Matrix.physicalSpectatorEquiv K d₀ d₁ ⟨0, (r, l)⟩ then 1 else 0) =
+  change (if TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ x =
+      TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ ⟨0, (r, l)⟩ then 1 else 0) =
     if x = ⟨0, (r, l)⟩ then 1 else 0
-  simp only [(Matrix.physicalSpectatorEquiv K d₀ d₁).injective.eq_iff]
+  simp only [(TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁).injective.eq_iff]
 
 private abbrev SpectatorPairSpace (K d₀ d₁ : ℕ) (qh : Fin 3 × Fin 3) :=
   ((Fin (![K, d₀, d₁] qh.1) ×
@@ -178,7 +178,7 @@ private def activePairEmbedding (K d₀ d₁ : ℕ) :
 
 private def spectatorPairConfigurationEquiv (K d₀ d₁ : ℕ) :
     SpectatorPairIndex K d₀ d₁ ≃ Cfg ((K * K + d₀) + d₁) 2 :=
-  (Matrix.etaPairSpatialBlockEquiv (Matrix.physicalSpectatorEquiv K d₀ d₁)).trans
+  (Matrix.etaPairSpatialBlockEquiv (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁)).trans
     (finTwoArrowEquiv (Fin ((K * K + d₀) + d₁))).symm
 
 private theorem singleKrausMap_coordinateInclusion_sigmaMk
@@ -205,7 +205,7 @@ set_option backward.isDefEq.respectTransparency false in
 private theorem piKronecker_commonFixedPointInclusion_sector
     (K d₀ d₁ : ℕ) :
     (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion (K * K) d₀ d₁)).submatrix
-        ((Matrix.etaPairSpatialBlockEquiv (Matrix.physicalSpectatorEquiv K d₀ d₁)).trans
+        ((Matrix.etaPairSpatialBlockEquiv (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁)).trans
           (finTwoArrowEquiv (Fin ((K * K + d₀) + d₁))).symm)
         (twoSiteBondEquiv K).symm =
       Matrix.coordinateInclusion (activePairEmbedding K d₀ d₁) := by
@@ -214,10 +214,10 @@ private theorem piKronecker_commonFixedPointInclusion_sector
     Equiv.trans_apply, Matrix.etaPairSpatialBlockEquiv, finTwoArrowEquiv_symm_apply,
     twoSiteBondEquiv, Matrix.cons_val_zero, Matrix.cons_val_one]
   change commonFixedPointInclusion (K * K) d₀ d₁
-      (Matrix.physicalSpectatorEquiv K d₀ d₁ ⟨x.1.1, (x.2.1.2.1, x.2.1.1)⟩)
+      (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ ⟨x.1.1, (x.2.1.2.1, x.2.1.1)⟩)
         (finProdFinEquiv (y.1.1, y.1.2.1)) *
     commonFixedPointInclusion (K * K) d₀ d₁
-      (Matrix.physicalSpectatorEquiv K d₀ d₁ ⟨x.1.2, (x.2.2, x.2.1.2.2)⟩)
+      (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ ⟨x.1.2, (x.2.2, x.2.1.2.2)⟩)
         (finProdFinEquiv (y.1.2.2, y.2)) =
       Matrix.coordinateInclusion (activePairEmbedding K d₀ d₁) x y
   simp only [commonFixedPointInclusion_eta_apply]
@@ -232,7 +232,7 @@ private noncomputable def spectatorBondBlocks (K d₀ d₁ : ℕ)
     (qh : Fin 3 × Fin 3) →
       Matrix (SpectatorPairSpace K d₀ d₁ qh) (SpectatorPairSpace K d₀ d₁ qh) ℂ :=
   fun qh => ((1 : Matrix (Fin (![K, d₀, d₁] qh.1)) (Fin (![K, d₀, d₁] qh.1)) ℂ) ⊗ₖ
-    Matrix.physicalSpectatorEdgeInteraction K d₀ d₁ B qh.1 qh.2) ⊗ₖ
+    TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction K d₀ d₁ B qh.1 qh.2) ⊗ₖ
       (1 : Matrix (Fin (![K, 1, 1] qh.2)) (Fin (![K, 1, 1] qh.2)) ℂ)
 
 set_option backward.isDefEq.respectTransparency false in
@@ -245,7 +245,7 @@ private theorem spectatorBondBlocks_complement (K d₀ d₁ : ℕ)
   funext qh
   rcases qh with ⟨q, h⟩
   fin_cases q <;> fin_cases h <;> simp [spectatorBondBlocks,
-    Matrix.physicalSpectatorEdgeInteraction, Pi.single]
+    TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction, Pi.single]
 
 private theorem physicalSpectatorBondInteraction_sector (K d₀ d₁ : ℕ)
     (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ) :

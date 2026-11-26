@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedInteractionKernel
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedInteractionWindow
-import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PositiveFunctionalCommutator
+import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal
+import Mathlib.Analysis.Matrix.Order
+import QICLean.Analysis.Order.PosSemidefCommute
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalOpenInteractionExpectation
 import TNLean.QCA.State.BlockingStateTransport

@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointEdgeBoundaryTransport
-import TNLean.MPS.ParentHamiltonian.Gap.Spectator.BoundedProjectionDeformation
+import QICLean.Spectral.Gap.EigenvalueGap
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
+import QICLean.Spectral.Gap.WeightedPositiveKernel
+import QICLean.Spectral.Gap.PositiveComparisonGap
 
 /-!
 # Canonical deformations of the actual active-edge constraints

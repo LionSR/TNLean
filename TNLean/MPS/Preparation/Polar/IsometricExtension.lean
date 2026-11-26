@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Combinatorics.FinsetEnumeration
 import TNLean.MPS.Preparation.Polar.BlockGateUnitary
 import TNLean.MPS.Preparation.Polar.SequentialFactorization
+import QICLean.Analysis.Isometry.IsometricDomainExtension
 
 /-!
 # The block unitary of a tensor that is not injective
@@ -44,62 +45,6 @@ open QuantumCircuit
 open Kraus (blockPhysDim decodeBlockEquiv)
 
 /-! ### A basis adapted to a projector -/
-
-namespace Matrix
-
-/-- **An orthonormal basis adapted to an orthogonal projector.** For a Hermitian idempotent `E`
-on `ℂ^m` there are `r ≤ m` and a unitary `T` whose first `r` columns span the range of `E` and
-whose other columns span its kernel: `E T = T diag(1, …, 1, 0, …, 0)`. -/
-theorem exists_unitary_mul_diagonal_of_isHermitian {m : ℕ} {E : Matrix (Fin m) (Fin m) ℂ}
-    (hE : E.IsHermitian) (hEE : E * E = E) :
-    ∃ (r : ℕ) (T : Matrix (Fin m) (Fin m) ℂ), r ≤ m ∧ T ∈ unitary (Matrix (Fin m) (Fin m) ℂ) ∧
-      E * T = T * diagonal fun y => if y.val < r then 1 else 0 := by
-  classical
-  set U : Matrix (Fin m) (Fin m) ℂ := ↑hE.eigenvectorUnitary with hUdef
-  set μ : Fin m → ℂ := fun j => (hE.eigenvalues j : ℂ) with hμ
-  have hU : U ∈ unitary (Matrix (Fin m) (Fin m) ℂ) := hE.eigenvectorUnitary.2
-  have hEU : E * U = U * diagonal μ := by
-    ext i j
-    have h := congrFun (hE.mulVec_eigenvectorBasis j) i
-    simp only [mulVec, dotProduct, Pi.smul_apply, RCLike.real_smul_eq_coe_smul (K := ℂ),
-      smul_eq_mul] at h
-    rw [mul_diagonal, mul_apply]
-    simpa [U, μ, mul_comm] using h
-  have hμμ : ∀ j, μ j = 0 ∨ μ j = 1 := fun j => by
-    have h : U * (diagonal μ * diagonal μ) = U * diagonal μ := by
-      rw [← Matrix.mul_assoc, ← hEU, Matrix.mul_assoc, ← hEU, ← Matrix.mul_assoc, hEE]
-    have h' := congrArg (star U * ·) h
-    simp only [← Matrix.mul_assoc, Unitary.star_mul_self_of_mem hU, Matrix.one_mul,
-      diagonal_mul_diagonal] at h'
-    have := congrFun (congrFun h' j) j
-    simp only [diagonal_apply_eq] at this
-    rcases mul_eq_zero.mp (show μ j * (μ j - 1) = 0 by rw [mul_sub, this]; ring) with h1 | h1
-    · exact Or.inl h1
-    · exact Or.inr (sub_eq_zero.mp h1)
-  set S : Finset (Fin m) := Finset.univ.filter fun j => μ j = 1
-  obtain ⟨π, hπ⟩ := Finset.exists_equiv_val_lt_card_iff_mem S
-  set ρ : Fin m ≃ Fin m := (finCongr (Fintype.card_fin m).symm).trans π with hρ
-  have hρS : ∀ y, ρ y ∈ S ↔ y.val < S.card := fun y => (hπ (finCongr _ y)).symm
-  refine ⟨S.card, U.submatrix id ρ, ?_, ?_, ?_⟩
-  · simpa using S.card_le_univ
-  · refine (Matrix.mem_unitaryGroup_iff' (α := ℂ)).mpr ?_
-    calc star (U.submatrix id ρ) * U.submatrix id ρ = (star U * U).submatrix ρ ρ := by
-          ext; simp [mul_apply, star_eq_conjTranspose]
-      _ = 1 := by rw [Unitary.star_mul_self_of_mem hU, submatrix_one_equiv]
-  · ext i y
-    have h := congrFun (congrFun hEU i) (ρ y)
-    rw [mul_apply, mul_diagonal] at h ⊢
-    simp only [submatrix_apply, id] at h ⊢
-    rw [h]
-    congr 1
-    rcases hμμ (ρ y) with h0 | h1
-    · have : ¬ y.val < S.card := fun hy => by
-        have := (hρS y).mpr hy
-        simp [S, h0] at this
-      rw [h0, ite_eq_right this]
-    · rw [h1, ite_eq_left ((hρS y).mp (by simp [S, h1]))]
-
-end Matrix
 
 /-! ### The isometric factor on the support projector -/
 

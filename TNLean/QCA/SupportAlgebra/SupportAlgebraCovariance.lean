@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.SupportAlgebra.SiteIndexedSupportAlgebra
+import QICLean.Algebra.Kronecker.SupportAlgebraCommutant
 
 /-!
 # Two-site translation covariance of the site-indexed support algebras
@@ -85,57 +86,6 @@ index is proved here.
 -/
 
 open scoped BigOperators Kronecker
-
-namespace Matrix
-
-variable {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
-
-/-- A first-factor coefficient of a bipartite matrix, tensored with the identity of the second
-factor, is the sum of the compressions of that matrix by the matrix units of the second factor:
-\[
-  X_{ij}\otimes\mathbf 1=\sum_k(\mathbf 1\otimes e_{ki})\,X\,(\mathbf 1\otimes e_{jk}).
-\]
-
-This is the coefficient family of Schumacher--Werner, quant-ph/0405174, lines 1137--1169,
-rewritten so that each coefficient is a sum of products inside the ambient algebra. Neither that
-paper nor GNVW, arXiv:0910.3675v2, lines 1188--1191, displays the identity separately. -/
-theorem leftKroneckerEmbed_bipartiteSlice_eq_sum
-    (X : Matrix (m × n) (m × n) ℂ) (i j : n) :
-    leftKroneckerEmbed (n := n) (bipartiteSlice X i j) =
-      ∑ k : n, rightKroneckerEmbed (m := m) (single k i (1 : ℂ)) * X *
-        rightKroneckerEmbed (m := m) (single j k (1 : ℂ)) := by
-  ext p q
-  obtain ⟨a, u⟩ := p
-  obtain ⟨b, v⟩ := q
-  rw [Matrix.sum_apply]
-  simp only [leftKroneckerEmbed_apply, rightKroneckerEmbed_apply, Matrix.mul_apply,
-    Matrix.kroneckerMap_apply, Fintype.sum_prod_type, Matrix.one_apply, Matrix.single_apply,
-    bipartiteSlice_apply]
-  simp [ite_and, eq_comm, mul_comm]
-
-/-- A second-factor coefficient of a bipartite matrix, tensored with the identity of the first
-factor, is the sum of the compressions of that matrix by the matrix units of the first factor:
-\[
-  \mathbf 1\otimes X_{ij}=\sum_k(e_{ki}\otimes\mathbf 1)\,X\,(e_{jk}\otimes\mathbf 1).
-\]
-
-This is the symmetric counterpart of `Matrix.leftKroneckerEmbed_bipartiteSlice_eq_sum` for the
-coefficient family of GNVW, arXiv:0910.3675v2, lines 1211--1219. -/
-theorem rightKroneckerEmbed_operatorBlock_eq_sum
-    (X : Matrix (m × n) (m × n) ℂ) (i j : m) :
-    rightKroneckerEmbed (m := m) (operatorBlock X i j) =
-      ∑ k : m, leftKroneckerEmbed (n := n) (single k i (1 : ℂ)) * X *
-        leftKroneckerEmbed (n := n) (single j k (1 : ℂ)) := by
-  ext p q
-  obtain ⟨a, u⟩ := p
-  obtain ⟨b, v⟩ := q
-  rw [Matrix.sum_apply]
-  simp only [leftKroneckerEmbed_apply, rightKroneckerEmbed_apply, Matrix.mul_apply,
-    Matrix.kroneckerMap_apply, Fintype.sum_prod_type, Matrix.one_apply, Matrix.single_apply,
-    operatorBlock_apply]
-  simp [ite_and, eq_comm, mul_comm]
-
-end Matrix
 
 namespace SpinChain
 

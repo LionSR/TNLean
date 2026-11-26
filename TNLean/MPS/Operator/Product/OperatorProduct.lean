@@ -8,6 +8,7 @@ import QICLean.Algebra.PartialTrace
 import TNLean.MPS.Operator.Defs
 import QICLean.Algebra.Word.OrderedProduct
 import Mathlib.LinearAlgebra.Matrix.Reindex
+import QICLean.Algebra.Kronecker.KroneckerEmbed
 
 /-!
 # The operator product of MPO tensors
@@ -67,68 +68,6 @@ section OperatorProduct
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
 open Matrix
-
-namespace Matrix
-
-/-- Taking the Kronecker product with a nonempty identity matrix is injective. -/
-theorem kronecker_one_injective {m n : Type*} {D : ℕ} (hD : 0 < D) :
-    Function.Injective (fun A : Matrix m n ℂ =>
-      A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-  intro A B h
-  let z : Fin D := ⟨0, hD⟩
-  ext x y
-  have hEntry := congrArg (fun M => M (x, z) (y, z)) h
-  simpa [one_apply, z] using hEntry
-
-/-- Taking the Kronecker product with an identity matrix preserves matrix multiplication. -/
-theorem mul_kronecker_one {l m n : Type*} [Fintype m]
-    (A : Matrix l m ℂ) (B : Matrix m n ℂ) (D : ℕ) :
-    (A * B) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-        (B ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-  simpa only [one_mul] using mul_kronecker_mul A B
-    (1 : Matrix (Fin D) (Fin D) ℂ) (1 : Matrix (Fin D) (Fin D) ℂ)
-
-/-- A matrix product is the identity when its Kronecker amplification by a nonempty identity
-matrix is the identity. -/
-theorem mul_eq_one_of_kronecker_one {m n : Type*} [DecidableEq m] [Fintype n]
-    {D : ℕ} (hD : 0 < D) (F : Matrix m n ℂ) (G : Matrix n m ℂ)
-    (h : (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (G ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) = 1) :
-    F * G = 1 := by
-  apply kronecker_one_injective hD
-  calc
-    (F * G) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-        (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-          (G ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := mul_kronecker_one F G D
-    _ = 1 := h
-    _ = (1 : Matrix m m ℂ) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) :=
-      one_kronecker_one.symm
-
-/-- A matrix has orthonormal rows when its Kronecker amplification by a nonempty identity matrix
-has orthonormal rows. -/
-theorem mul_conjTranspose_eq_one_of_kronecker_one
-    {m n : Type*} [Fintype n] [DecidableEq m] {D : ℕ} (hD : 0 < D)
-    (F : Matrix m n ℂ)
-    (hF : (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ = 1) :
-    F * Fᴴ = 1 := by
-  apply mul_eq_one_of_kronecker_one hD F Fᴴ
-  simpa only [conjTranspose_kronecker, conjTranspose_one] using hF
-
-/-- A matrix has orthonormal columns when its Kronecker amplification by a nonempty identity
-matrix has orthonormal columns. -/
-theorem conjTranspose_mul_eq_one_of_kronecker_one
-    {m n : Type*} [Fintype m] [DecidableEq n] {D : ℕ} (hD : 0 < D)
-    (F : Matrix m n ℂ)
-    (hF : (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ *
-      (F ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) = 1) :
-    Fᴴ * F = 1 := by
-  apply mul_eq_one_of_kronecker_one hD Fᴴ F
-  rw [conjTranspose_kronecker, conjTranspose_one] at hF
-  exact hF
-
-end Matrix
 
 namespace MPOTensor
 

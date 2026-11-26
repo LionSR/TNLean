@@ -4,7 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.FixedPoint.BondInterpolation
-import TNLean.MPS.Symmetry.Projective.ProjectiveDirectSum
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
+import Mathlib.Data.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Reindex
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixCoordinateInclusion
+import Mathlib.Data.Fin.Embedding
+import QICLean.Analysis.Cohomology.ProjectiveUnitary
 
 /-!
 # Symmetry of the interpolating bond

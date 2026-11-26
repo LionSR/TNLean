@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenKernel
 import QICLean.Spectral.Gap.ReducingProjectionGap
 import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
+import QICLean.Analysis.Norm.MatrixToEuclidean
 
 /-!
 # Inner physical-sector penalties on the open mixed chain
@@ -27,12 +28,6 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692.
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
 
 namespace MPSTensor
-
-/-- A diagonal matrix acts on Euclidean coordinates by pointwise multiplication. -/
-theorem _root_.Matrix.toEuclideanLin_diagonal_apply {ι : Type*} [Fintype ι]
-    [DecidableEq ι] (f : ι → ℂ) (v : EuclideanSpace ℂ ι) (i : ι) :
-    Matrix.toEuclideanLin (Matrix.diagonal f) v i = f i * v i := by
-  simp [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec_diagonal]
 
 /-- A term of the translates of a local matrix on the ring acts on the active-coordinate fiber
 of a configuration. -/

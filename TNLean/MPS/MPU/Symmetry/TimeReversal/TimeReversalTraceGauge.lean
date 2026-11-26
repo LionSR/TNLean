@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Kronecker.MaximallyEntangled
 import TNLean.MPS.Operator.Unitary.StaircaseGates
+import QICLean.Algebra.Hermitian.MatrixSandwichIntertwine
 
 /-!
 # Gauge invariance of the time-reversal trace
@@ -31,23 +32,6 @@ the two-site product coordinates.
 -/
 
 open scoped Matrix Kronecker
-
-namespace Matrix
-
-/-- A trace pairing is unchanged by an intertwining pair of changes of basis.
-The identities `S L = R S` and `K R = I` give
-`tr(S L M K) = tr(S M)` by cyclicity.
-
-This is the final trace step in arXiv:1703.09188, Proposition
-`prop:sigma-well-defined`, lines 1624--1630. -/
-lemma trace_mul_mul_eq_of_intertwine {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (S L R K M : Matrix ι ι ℂ) (hSL : S * L = R * S) (hKR : K * R = 1) :
-    Matrix.trace (S * (L * M * K)) = Matrix.trace (S * M) := by
-  rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hSL, Matrix.trace_mul_cycle]
-  simp only [Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc K R, hKR, Matrix.one_mul]
-
-end Matrix
 
 namespace MPOTensor
 

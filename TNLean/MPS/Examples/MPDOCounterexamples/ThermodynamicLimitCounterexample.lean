@@ -229,8 +229,8 @@ private theorem reducedBlockState_one_zero_zero (K : ℕ) :
   have reindexed_zero :
       e (Fin.append zeroSite (fun _ : Fin (K + 1 - 1) => (0 : Fin 2))) = fun _ => 0 := by
     rw [append_zero, e_const]
-  simp only [reducedBlockState, blockReducedState, Matrix.partialTraceRight_apply,
-    Matrix.submatrix_apply, blockSplitEquiv_symm_apply]
+  simp only [reducedBlockState, MPOTensor.blockReducedState, Matrix.partialTraceRight_apply,
+    Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply]
   simp_rw [normalizedMPO, Matrix.smul_apply, smul_eq_mul,
     mpo_parityTensor_eq_diagonal (K + 1) (by omega), Matrix.diagonal_apply_eq]
   rw [Fintype.sum_eq_single (fun _ => 0)]
@@ -367,7 +367,7 @@ private lemma reducedBlockState_eq_diagonal_of_odd {N L : ℕ} (hN : Odd N)
     reducedBlockState parityTensor N L hLN =
       Matrix.diagonal fun sigma ↦ (oddWeight sigma : ℂ) := by
   ext u v
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   by_cases huv : u = v
   · subst v
     rw [Matrix.diagonal_apply_eq]
@@ -404,7 +404,7 @@ private lemma reducedBlockState_eq_diagonal_of_even {N L : ℕ} (hN : Even N)
     reducedBlockState parityTensor N L hLN =
       Matrix.diagonal fun sigma ↦ (evenWeight sigma : ℂ) := by
   ext u v
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   by_cases huv : u = v
   · subst v
     rw [Matrix.diagonal_apply_eq]

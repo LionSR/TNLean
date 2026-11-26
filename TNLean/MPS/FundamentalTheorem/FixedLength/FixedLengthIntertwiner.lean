@@ -434,15 +434,15 @@ theorem exists_intertwiner_of_kronecker_chain {B C : MPSTensor d D}
     exact hW (m + 1) (by omega) hzero
   obtain ⟨x, hx, hxeq⟩ := exists_pgvwc07_chain_root lam' hlam_ne
   -- The nonzero combination and its intertwining relation.
-  set Wc := ∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam' x k • W k with hWc_def
+  set Wc := ∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam' x k • W k with hWc_def
   have hWc_ne : Wc ≠ 0 :=
-    (pgvwc07_chainCoeff_combination_spec
+    (TNLean.MPS.FundamentalTheorem.pgvwc07_chainCoeff_combination_spec
       (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
       0 W lam' (fun _ _ => by simp) hindep hdep hx hxeq).1
   have hWc_rel : ∀ i, Wc * (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
       x⁻¹ • ((B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * Wc) := by
     intro i
-    have := (pgvwc07_chainCoeff_combination_spec
+    have := (TNLean.MPS.FundamentalTheorem.pgvwc07_chainCoeff_combination_spec
       (LinearMap.mulRight ℂ (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
       (LinearMap.mulLeft ℂ (B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
       W lam' (fun k hk => by simpa using hchain k (by omega) i) hindep hdep hx hxeq).2

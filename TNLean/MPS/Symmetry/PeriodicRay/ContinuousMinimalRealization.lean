@@ -112,7 +112,7 @@ theorem exists_local_continuous_minimalTensor_of_two_three_trace_eq
   let G : T → Matrix (Fin d) (Fin d) ℂ :=
     fun t j i => Matrix.trace (B t i * B t j)
   obtain ⟨F, S₀, u, p, hS₀, ht₀, hM, hu, hp, hR, hPrimitive⟩ :=
-    Matrix.exists_local_continuous_traceQuotientPrimitive B hB G (fun _ _ _ => rfl)
+    TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive B hB G (fun _ _ _ => rfl)
       (fun _ => D) (fun _ => rfl) A hA α₂ α₃ hα₂ hα₃ hPair hTriple t₀ (NeZero.pos D)
   let M : T → Matrix (Fin (D * D)) (Fin (D * D) × Fin (D * D)) ℂ :=
     fun t => Matrix.traceQuotientProductCoordinates (G t) F
@@ -134,7 +134,7 @@ theorem exists_local_continuous_minimalTensor_of_two_three_trace_eq
       Function.Injective (G t * F).mulVec ∧
       ∀ i, E t (Matrix.traceQuotientLetterCoordinates (G t) F *ᵥ Pi.single i 1) =
         (α₃ t / α₂ t) • A t i :=
-    fun t => Matrix.traceQuotientLetters_of_normalized_linearEquiv
+    fun t => TNLean.MPS.CanonicalForm.traceQuotientLetters_of_normalized_linearEquiv
       (A t) (hA t) (E t) (G t) F (α₂ t) (α₃ t / α₂ t)
       (hα₂ t) (div_ne_zero (hα₃ t) (hα₂ t))
       (fun j i => hPair t i j) (Classical.choose_spec (hPrimitive t).2.2).1

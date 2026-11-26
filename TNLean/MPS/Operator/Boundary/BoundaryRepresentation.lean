@@ -7,6 +7,7 @@ import TNLean.MPS.Operator.Boundary.BoundaryTransport
 import TNLean.MPS.Tensor.DirectSum.BoundaryDecomposition
 import TNLean.MPS.Tensor.Gauge.WordTupleGauge
 import Mathlib.Algebra.Algebra.NonUnitalHom
+import QICLean.Algebra.Matrix.MatrixTracePairing
 
 /-!
 # The representation determined by arbitrary-boundary transport
@@ -32,44 +33,6 @@ the biorthogonal fusion or action matrices.
 open scoped Matrix BigOperators
 
 noncomputable section
-
-namespace Matrix
-
-variable {r D : ℕ} {dim : Fin r → ℕ}
-
-/-- The trace dual of a boundary map taking an ambient matrix to one boundary
-for each target block. Source: GLM23, Appendix A, `decompopen`. -/
-def familyTraceAdjoint
-    (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
-      ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ)) :
-    ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₗ[ℂ]
-      Matrix (Fin D) (Fin D) ℂ :=
-  ∑ c : Fin r,
-    (traceAdjointMap ((LinearMap.proj c).comp b)).comp (LinearMap.proj c)
-
-/-- The defining trace identity of the family trace dual. No adjoints or
-positivity hypotheses occur. Source: GLM23, Appendix A, `decompopen`. -/
-theorem trace_familyTraceAdjoint_mul
-    (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
-      ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
-    (M : (c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace (familyTraceAdjoint b M * X) =
-      ∑ c : Fin r, trace (M c * b X c) := by
-  simp only [familyTraceAdjoint, LinearMap.sum_apply, LinearMap.comp_apply,
-    LinearMap.proj_apply, Matrix.sum_mul, Matrix.trace_sum,
-    trace_traceAdjointMap_mul]
-
-/-- Extract all diagonal blocks of a matrix on a flattened direct sum.
-Source: GLM23, Appendix A, the block projectors preceding `decompopen`. -/
-def finSigmaDiagonalBlocks :
-    Matrix (Fin (∑ c : Fin r, dim c)) (Fin (∑ c : Fin r, dim c)) ℂ →ₗ[ℂ]
-      ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) where
-  toFun X c := finSigmaDiagonalBlock X c
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-end Matrix
 
 namespace MPSTensor
 

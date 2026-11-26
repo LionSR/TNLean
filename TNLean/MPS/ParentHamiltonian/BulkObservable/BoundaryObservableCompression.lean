@@ -4,10 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableInsertion
-import TNLean.MPS.ParentHamiltonian.BulkObservable.GroundSpaceCompressionNorm
+import QICLean.Analysis.Projection.InjectiveRangeProjector
+import Mathlib.Topology.Order.Basic
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryCrossObservableCompression
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.LinearAlgebra.DFinsupp
+import QICLean.Analysis.Projection.OverlapMatrix
+import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+import Mathlib.Analysis.SpecificLimits.Basic
+import QICLean.Analysis.Projection.ProjectorSumConvergence
 
 /-!
 # Scalar compression of an interior observable to a primitive MPS ground space
@@ -83,7 +89,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_co
     dsimp [N]
     omega
   have hC : Tendsto C f (nhds 0) := by
-    have hlim := (hP.groundSpaceMapES_bulkObservable_compression_tendsto X hℓ hr).sub
+    have hlim := (TNLean.MPS.ParentHamiltonian.groundSpaceMapES_bulkObservable_compression_tendsto
+      hP X hℓ hr).sub
       ((tendsto_const_nhds (x := η)).smul
         (hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj.comp hN))
     simpa only [C, N, η, Function.comp_def, sub_self] using hlim

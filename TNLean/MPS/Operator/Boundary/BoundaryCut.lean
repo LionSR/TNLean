@@ -45,14 +45,14 @@ side of the cut is empty. Source: the finite-chain contraction underlying GLM23,
 arXiv:2203.12563v3, Section 5, lines 1276--1320. -/
 theorem mpoWithBoundary_reindex_blockSplit (T : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) (L K : ℕ) :
-    Matrix.reindex (blockSplitEquiv d L K) (blockSplitEquiv d L K)
+    Matrix.reindex (MPOTensor.blockSplitEquiv d L K) (MPOTensor.blockSplitEquiv d L K)
         (mpoWithBoundary T X (L + K)) =
       ∑ a : Fin D, ∑ b : Fin D,
         mpoWithBoundary T (Matrix.single b a 1 * X) L ⊗ₖ
           mpoWithBoundary T (Matrix.single a b 1) K := by
   classical
   ext ⟨σ, τ⟩ ⟨σ', τ'⟩
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, blockSplitEquiv_symm_apply,
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply,
     Matrix.sum_apply, Matrix.kroneckerMap_apply, mpoWithBoundary, List.ofFn_fin_append]
   rw [evalWord_append T _ _ _ _ (by simp)]
   exact trace_mul_mul_eq_sum_matrixUnits X _ _

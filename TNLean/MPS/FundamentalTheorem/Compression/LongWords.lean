@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
+import QICLean.Kraus.BlockTriangularWord
 
 /-!
 # Long words in a triangular form
@@ -43,52 +44,6 @@ theorem of matrix product states*, Lemma 6.7.
 -/
 
 open scoped Matrix
-
-namespace Matrix
-
-variable {o : Type*} [Fintype o] [DecidableEq o] {n : o → ℕ} {d r : ℕ} {b : o → Fin r}
-
-/-- **The chain count** (proof of blueprint `lem:asym_uniq_long_words`, *Long words in a triangular
-form*). Let `T` be a family of block upper-triangular matrices for an injective labelling `b` of the
-blocks by positions. If every block at a position between those of `x` and `y` has zero diagonal
-block in every letter, and the word is longer than the distance from the position of `x` to that of
-`y`, then the `(x, y)` entry of the word vanishes: every nondecreasing chain of positions from `x`
-to `y` has an equal step, whose factor is a zero diagonal block. -/
-theorem entry_evalWord_eq_zero_of_blockDiag'_eq_zero (hb : Function.Injective b)
-    {T : Fin d → Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ}
-    (hT : ∀ i, (T i).BlockTriangular fun x => b x.1) :
-    ∀ (w : List (Fin d)) (x y : Σ k, Fin (n k)),
-      (∀ k, b x.1 ≤ b k → b k ≤ b y.1 → ∀ i, (T i).blockDiag' k = 0) →
-      (b y.1 : ℕ) < (b x.1 : ℕ) + w.length → Kraus.evalWord T w x y = 0 := by
-  intro w
-  induction w with
-  | nil =>
-      intro x y _ h
-      simp only [List.length_nil, Nat.add_zero] at h
-      have hxy : x ≠ y := by
-        rintro rfl
-        exact absurd h (lt_irrefl _)
-      simp [Kraus.evalWord, hxy]
-  | cons i w' ih =>
-      intro x y hdiag h
-      simp only [List.length_cons] at h
-      rcases lt_or_ge (b y.1) (b x.1) with hyx | hxy
-      · exact blockTriangular_evalWord hT (i :: w') hyx
-      simp only [Kraus.evalWord, Matrix.mul_apply]
-      refine Finset.sum_eq_zero fun z _ => ?_
-      rcases lt_trichotomy (b z.1) (b x.1) with hzx | hzx | hzx
-      · rw [hT i hzx, zero_mul]
-      · obtain ⟨kz, jz⟩ := z
-        obtain ⟨kx, jx⟩ := x
-        obtain rfl : kz = kx := hb hzx
-        have h0 := congrFun (congrFun (hdiag kz le_rfl hxy i) jx) jz
-        rw [blockDiag'_apply, zero_apply] at h0
-        rw [h0, zero_mul]
-      · have hzx' : (b x.1 : ℕ) < (b z.1 : ℕ) := Fin.lt_def.mp hzx
-        have hzy : (b y.1 : ℕ) < (b z.1 : ℕ) + w'.length := by omega
-        rw [ih z y (fun k hk hk' => hdiag k (hzx.le.trans hk) hk') hzy, mul_zero]
-
-end Matrix
 
 namespace MPSTensor
 

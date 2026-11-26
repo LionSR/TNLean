@@ -863,7 +863,7 @@ which is legitimate only because the periodic operator is translation invariant.
   for Hermiticity (`MPOTensor.mutualInfoChain_eq_mutualInformation`, `MPDO/MutualInfoBridge.lean:209`).
   It is **not** a definitional equality and **not** a pure reindexing: the state is reindexed by
   `chainBipartitionEquiv d N L (N-L) _ : (Fin N → Fin d) ≃ Fin (d^L) × Fin (d^(N-L))`
-  (`finCongr` to `Fin (L + (N-L))`, then `blockSplitEquiv`, then `finFunctionFinEquiv` on each factor),
+  (`finCongr` to `Fin (L + (N-L))`, then `MPOTensor.blockSplitEquiv`, then `finFunctionFinEquiv` on each factor),
   and then
   - the joint term and the first marginal match by reindexing only
     (`vonNeumannEntropy_submatrix_equiv`, `bipartitionedNormalizedMPO_traceRight`, `:146`);
@@ -907,9 +907,9 @@ module of this family lies in `MPS/MPDO`; all other top-level directories have 0
 | `MPOTensor.mutualInfoChain_eq` (`AreaLaw.lean:451`) | the same formula, `rfl` | l.797 | 2 | 3 |
 | `MPOTensor.mutualInfoChain_eq_mutualInformation` (`MutualInfoBridge.lean:209`) | `mutualInfoChain = Entropy.mutualInformation (bipartitionedNormalizedMPO …)` | l.792–797, 1338–1340 | 4 | 7 |
 | `MPOTensor.blockEntropy` (`AreaLaw.lean:399`) | `vonNeumannEntropy (reducedBlockState M N L hL)` | l.797 | 13 | 79 |
-| `MPOTensor.reducedBlockState` (`AreaLaw.lean:378`) | `blockReducedState d L (N-L) (normalizedMPO M N reindexed)` | l.797 | 30 | 229 |
-| `blockReducedState` (`AreaLaw.lean:261`) | `partialTraceRight (ρ.submatrix (blockSplitEquiv d L K).symm …)` | — | 7 | 31 |
-| `blockSplitEquiv`, `MPOTensor.blockReindexEquiv` (`AreaLaw.lean:254, 372`) | `(Fin (L+K) → Fin d) ≃ (Fin L → Fin d) × (Fin K → Fin d)`; `finCongr` | — | 7; 6 | 33; 31 |
+| `MPOTensor.reducedBlockState` (`AreaLaw.lean:378`) | `MPOTensor.blockReducedState d L (N-L) (normalizedMPO M N reindexed)` | l.797 | 30 | 229 |
+| `MPOTensor.blockReducedState` (`AreaLaw.lean:261`) | `partialTraceRight (ρ.submatrix (MPOTensor.blockSplitEquiv d L K).symm …)` | — | 7 | 31 |
+| `MPOTensor.blockSplitEquiv`, `MPOTensor.blockReindexEquiv` (`AreaLaw.lean:254, 372`) | `(Fin (L+K) → Fin d) ≃ (Fin L → Fin d) × (Fin K → Fin d)`; `finCongr` | — | 7; 6 | 33; 31 |
 | `MPOTensor.chainBipartitionEquiv` (`MutualInfoBridge.lean:32`) | `(Fin N → Fin d) ≃ Fin (d^L) × Fin (d^K)` | — | 3 | 22 |
 | `MPOTensor.bipartitionedNormalizedMPO` (`MutualInfoBridge.lean:41`) | `normalizedMPO M N` reindexed by `chainBipartitionEquiv` | l.792–797 | 4 | 56 |
 | `biSplitEquiv`, `tripartiteSplitEquiv` (`MutualInfoMonotone.lean:49, 39`) | flattened two- and three-block splits | — | 4; 6 | 12; 69 |
@@ -953,7 +953,7 @@ Proved relations at HEAD (all hypothesis lists are those of the Lean statements)
   `MutualInfoAreaLaw.lean`.
 * **`ManyBody.regionMutualInformation`: different notion** (pure vector, arbitrary regions); its name
   already says it is regional. No change.
-* **`reducedBlockState`/`blockReducedState`/`blockEntropy`**: equal to QICLean's `regionMatrix` on the
+* **`reducedBlockState`/`MPOTensor.blockReducedState`/`blockEntropy`**: equal to QICLean's `regionMatrix` on the
   prefix interval after reindexing (checked). Under the rule this is a second spelling of the
   regional matrix; see open decision D4. `blockEntropy` itself is a named special case of
   `vonNeumannEntropy` (passes).
@@ -1055,12 +1055,12 @@ mentions the names.
   pass-through) and a `Fin dA × Fin dB`-only index type, which forces `finFunctionFinEquiv` into
   `chainBipartitionEquiv` and `Fintype.equivFin` into QICLean's `jointMatrix`. *Recommendation:*
   write the name QICLean keeps; ask QICLean to delete the alias and to state `mutualInformation` on
-  arbitrary finite factors, after which `chainBipartitionEquiv` is `blockSplitEquiv` up to `finCongr`.
+  arbitrary finite factors, after which `chainBipartitionEquiv` is `MPOTensor.blockSplitEquiv` up to `finCongr`.
   Not blocking.
 * **D4. Mixed block states.** `reducedBlockState` (30 modules, 229 occurrences) equals QICLean's
   `regionMatrix` of the prefix interval after `prefixConfigEquiv` (checked). Deleting it would put
   subtype-indexed configurations into the word calculus of 30 modules. *Recommendation:* add the
-  characterization theorem now; later redefine `blockReducedState`/`reducedBlockState` as that
+  characterization theorem now; later redefine `MPOTensor.blockReducedState`/`reducedBlockState` as that
   reindexed regional matrix (named special case), together with the regional-state work; do not
   delete.
 * **D5. SSA transport lemmas.** They exist because QICLean's region SSA (`Entropy.regionEntropy_ssa`)

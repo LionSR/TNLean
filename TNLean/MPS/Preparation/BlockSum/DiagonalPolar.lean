@@ -5,7 +5,14 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.ApproximationError
 import TNLean.MPS.Preparation.BlockSum.NonNormalCanonicalForm
-import TNLean.MPS.Tensor.Physical.PolarUniqueness
+import QICLean.Entropy.StrongSubadditivity.TripartiteDecorrelation
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 
 /-!
 # The approximating state of a diagonal tensor
@@ -49,57 +56,6 @@ The overlap of the approximating state with the target reduces to entries of `P`
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open Matrix
 open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
-
-namespace Matrix
-
-variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-
-/-- The isometry `J : ℂ^κ → ℂ^κ ⊗ ℂ^κ`, `|e⟩ ↦ |e e⟩`, onto the diagonal pairs. -/
-def diagPairEmbedding (κ : Type*) [DecidableEq κ] : Matrix (κ × κ) κ ℂ :=
-  of fun p e => if p.1 = e ∧ p.2 = e then 1 else 0
-
-theorem diagPairEmbedding_mul_apply {ρ : Type*} (X : Matrix κ ρ ℂ) (p : κ × κ)
-    (r : ρ) : (diagPairEmbedding κ * X) p r = if p.1 = p.2 then X p.1 r else 0 := by
-  rw [mul_apply, Finset.sum_eq_single p.1]
-  · by_cases h : p.1 = p.2
-    · simp [diagPairEmbedding, h]
-    · simp [diagPairEmbedding, h, Ne.symm h]
-  · intro e _ he
-    simp [diagPairEmbedding, Ne.symm he]
-  · simp
-
-theorem mul_conjTranspose_diagPairEmbedding_apply {ρ : Type*}
-    (X : Matrix ρ κ ℂ) (r : ρ) (p : κ × κ) :
-    (X * (diagPairEmbedding κ)ᴴ) r p = if p.1 = p.2 then X r p.1 else 0 := by
-  rw [mul_apply, Finset.sum_eq_single p.1]
-  · by_cases h : p.1 = p.2
-    · simp [diagPairEmbedding, conjTranspose_apply, h]
-    · simp [diagPairEmbedding, conjTranspose_apply, h, Ne.symm h]
-  · intro e _ he
-    simp [diagPairEmbedding, conjTranspose_apply, Ne.symm he]
-  · simp
-
-/-- `J` is an isometry, `Jᴴ J = 1`. -/
-theorem conjTranspose_diagPairEmbedding_mul_self :
-    (diagPairEmbedding κ)ᴴ * diagPairEmbedding κ = 1 := by
-  ext e e'
-  rw [mul_apply, Fintype.sum_prod_type, Finset.sum_eq_single e]
-  · rw [Finset.sum_eq_single e]
-    · by_cases h : e = e' <;> simp [diagPairEmbedding, conjTranspose_apply, h, one_apply]
-    · intro x _ hx; simp [diagPairEmbedding, conjTranspose_apply, hx]
-    · simp
-  · intro x _ hx
-    refine Finset.sum_eq_zero fun y _ => ?_
-    simp [diagPairEmbedding, conjTranspose_apply, hx]
-  · simp
-
-/-- The entries of `J X Jᴴ` on diagonal pairs are the entries of `X`. -/
-theorem diagPairEmbedding_mul_mul_conjTranspose_apply (X : Matrix κ κ ℂ) (c e : κ) :
-    (diagPairEmbedding κ * X * (diagPairEmbedding κ)ᴴ) (c, c) (e, e) = X c e := by
-  rw [mul_conjTranspose_diagPairEmbedding_apply, diagPairEmbedding_mul_apply]
-  simp
-
-end Matrix
 
 namespace MPSTensor
 

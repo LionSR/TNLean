@@ -253,7 +253,7 @@ theorem bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
     funext n
     simp only [chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
       Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map,
-      blockSplitEquiv_symm_apply, Equiv.refl_symm, finCongr_refl,
+      MPOTensor.blockSplitEquiv_symm_apply, Equiv.refl_symm, finCongr_refl,
       Equiv.arrowCongr_refl, Equiv.trans_apply, Equiv.refl_apply]
     rw [blockSpinAncillaEquiv_symm_decode,
       blockSpinAncillaEquiv_symm_decode]

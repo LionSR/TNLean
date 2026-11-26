@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Boundary.DualRepresentationAdjointBoundary
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Algebra.PreBialgebra
 
 /-!
 # Weak-Hopf representations realized by boundary operators
@@ -51,19 +52,6 @@ open scoped Matrix TensorProduct
 open WithConv
 
 noncomputable section
-
-namespace Coalgebra
-
-/-- The comultiplication of a coalgebra is injective: applying the counit to
-the first tensor factor recovers the element. -/
-theorem comul_injective {R A : Type*} [CommSemiring R] [AddCommMonoid A] [Module R A]
-    [Coalgebra R A] : Function.Injective (comul (R := R) (A := A)) := by
-  intro x y h
-  have key : ∀ z : A, TensorProduct.lid R A ((counit (R := R) (A := A)).rTensor A (comul z)) = z :=
-    fun z ↦ by simp
-  rw [← key x, ← key y, h]
-
-end Coalgebra
 
 namespace MPOTensor
 

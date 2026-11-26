@@ -112,8 +112,8 @@ theorem reducedPureBlockState_eq_gram (A : MPSTensor d D) (N L : ℕ) (hL : L �
       = (Matrix.trace (MPSTensor.pureState A N))⁻¹ •
         (schmidtMat A N L hL * (schmidtMat A N L hL)ᴴ) := by
   ext u v
-  simp only [MPSTensor.reducedPureBlockState, blockReducedState, partialTraceRight_apply,
-    Matrix.submatrix_apply, blockSplitEquiv_symm_apply, MPSTensor.normalizedPureState,
+  simp only [MPSTensor.reducedPureBlockState, MPOTensor.blockReducedState, partialTraceRight_apply,
+    Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply, MPSTensor.normalizedPureState,
     Matrix.smul_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtMat,
     MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, smul_eq_mul, RCLike.star_def,
     Finset.mul_sum]
@@ -289,12 +289,12 @@ theorem pureBlockEntropy_monotone (A : MPSTensor d D) {N L : ℕ} (hN : 2 * L + 
 reindexed along the trivial length identity L + 0 = L. -/
 theorem blockReducedState_zero {L : ℕ}
     (Z : Matrix (Fin (L + 0) → Fin d) (Fin (L + 0) → Fin d) ℂ) :
-    blockReducedState d L 0 Z
+    MPOTensor.blockReducedState d L 0 Z
       = Z.submatrix (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d)))
           (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d))) := by
   ext u v
-  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
-    blockSplitEquiv_symm_apply, Fintype.sum_unique, Fin.append_right_nil]
+  simp only [MPOTensor.blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
+    MPOTensor.blockSplitEquiv_symm_apply, Fintype.sum_unique, Fin.append_right_nil]
   rfl
 
 /-- The full-system pure block entropy vanishes: the whole-chain reduced state
@@ -311,14 +311,14 @@ theorem pureBlockEntropy_full (A : MPSTensor d D) (N : ℕ)
   set κ := Equiv.arrowCongr (finCongr (Nat.add_zero N).symm) (Equiv.refl (Fin d)) with hκ
   have ekey : MPSTensor.reducedPureBlockState A N N (le_refl N)
       = (Y.submatrix g.symm g.symm).submatrix κ κ :=
-    (blockReducedState_submatrix_finCongr hN0 Y).symm.trans
+    (MPOTensor.blockReducedState_submatrix_finCongr hN0 Y).symm.trans
       (blockReducedState_zero (Y.submatrix g.symm g.symm))
   have hσH := MPSTensor.normalizedPureState_isHermitian A N
   rw [MPSTensor.pureBlockEntropy,
     vonNeumannEntropy_congr ekey _ (((hσH.submatrix _).submatrix _).submatrix _),
     vonNeumannEntropy_submatrix_equiv, vonNeumannEntropy_submatrix_equiv,
     vonNeumannEntropy_submatrix_equiv]
-  · exact vonNeumannEntropy_normalizedPureState A N htr
+  · exact MPOTensor.vonNeumannEntropy_normalizedPureState A N htr
   · exact (hσH.submatrix _).submatrix _
   · exact hσH.submatrix _
 

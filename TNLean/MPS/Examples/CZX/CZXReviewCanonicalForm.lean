@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import QICLean.Algebra.Hermitian.OrthogonalProjection
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling

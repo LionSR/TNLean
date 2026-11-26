@@ -340,7 +340,7 @@ theorem isPure_groundSpace_supported_iff_sector_of_hasComplementaryFixedPointGap
       quasiLocalExpectation_toTensorFromBlocks_groundSpaceProjection_eq_one μ A hμ j
         (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
         (hP j).trace_ne_zero a N,
-      (hP j).isPureQuasiLocalState_quasiLocalExpectation (hρ j)⟩
+      TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation (hP j) (hρ j)⟩
 end MPSTensor
 
 end MultiblockQuasiLocalSupport

@@ -11,12 +11,10 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.Physical.BlockedPolar
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
-import TNLean.MPS.Tensor.Physical.MatrixPolar
 import TNLean.MPS.Tensor.Physical.PhysicalEmbedding
 import TNLean.MPS.Tensor.Physical.PhysicalIndexMixing
 import TNLean.MPS.Tensor.Physical.PhysicalMatrix
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
-import TNLean.MPS.Tensor.Physical.PolarUniqueness
 import TNLean.MPS.Tensor.Physical.SupportedPolar
 import TNLean.MPS.Tensor.Physical.TensorProduct
 import TNLean.MPS.Tensor.Physical.TensorProductSpan

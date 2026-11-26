@@ -98,7 +98,9 @@ theorem exists_flagData_of_isIrreducibleAction {S : Finset ι} {D : ι → ℕ}
     have hfin : Module.finrank ℂ (M ⧸ K) = 1 :=
       finrank_eq_one_of_isSimpleModule_of_forall_smul_eq_zero hQ
     have hQw : ∀ w : List (Fin d), w ≠ [] → traceWord (M ⧸ K) w = 0 := fun _ hw =>
-      traceWord_eq_zero_of_forall_smul_eq_zero hQ hw
+      traceWord_eq_zero_of_forall_ofWord_smul_eq_zero (n := 1) (fun w hw x => by
+        obtain ⟨i, rfl⟩ := List.length_eq_one_iff.mp hw
+        exact hQ i x) hw
     have htrK : ∀ w : List (Fin d), w ≠ [] →
         traceWord K w = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w) := by
       intro w hw

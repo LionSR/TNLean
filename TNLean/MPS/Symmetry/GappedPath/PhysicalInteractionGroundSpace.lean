@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGap
+import QICLean.Channel.KrausMap.SingleKrausMap
 
 /-!
 # Ground spaces under isometric physical inclusions
@@ -22,27 +23,6 @@ lines 1733–1770.
 open scoped Matrix BigOperators ComplexOrder Kronecker
 
 open ManyBody
-
-namespace Matrix
-
-/-- The range of an isometrically conjugated matrix is the isometric
-image of its original range. -/
-theorem range_toEuclideanLin_singleKrausMap_of_isometry
-    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
-    (V : Matrix κ ι ℂ) (hV : Vᴴ * V = 1) (M : Matrix ι ι ℂ) :
-    LinearMap.range (Matrix.toEuclideanLin (singleKrausMap V M)) =
-      (LinearMap.range (Matrix.toEuclideanLin M)).map (Matrix.toEuclideanLin V) := by
-  have hSurj : Function.Surjective (Matrix.toEuclideanLin Vᴴ) := fun x =>
-    ⟨Matrix.toEuclideanLin V x, by
-      simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-        Matrix.toLpLin_one, LinearMap.comp_apply, LinearMap.id_apply] using
-        congrArg (fun A => Matrix.toEuclideanLin A x) hV⟩
-  simpa only [singleKrausMap_apply, Matrix.toEuclideanLin, Matrix.toLpLin_mul_same] using
-    (LinearMap.range_comp_of_range_eq_top
-      (Matrix.toEuclideanLin V ∘ₗ Matrix.toEuclideanLin M)
-      (LinearMap.range_eq_top.mpr hSurj)).trans (LinearMap.range_comp _ _)
-
-end Matrix
 
 namespace MPSTensor
 

@@ -263,7 +263,7 @@ private lemma reducedBlockState_apply_of_trace_one {d D : ℕ}
     M.reducedBlockState N m hm u v =
       Matrix.trace
         (M.evalWord (List.ofFn u) (List.ofFn v) * M.verticalLoop ^ (N - m)) := by
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   simp only [normalizedMPO, htrace, inv_one, one_smul, mpo_apply, mpoMatrixEntry]
   have hwords (a : Fin m → Fin d) (w : Fin (N - m) → Fin d) :
       List.ofFn
@@ -314,7 +314,7 @@ private lemma ofFn_tripartite_middle
         [k] ++ List.ofFn (finFunctionFinEquiv.symm j) := by
   simp only [tripartiteSplitEquiv, Equiv.symm_trans_apply, Equiv.prodCongr_symm,
     Equiv.refl_symm, Equiv.prodAssoc_symm_apply, Equiv.prodCongr_apply,
-    Equiv.coe_refl, Prod.map, id_eq, blockSplitEquiv_symm_apply]
+    Equiv.coe_refl, Prod.map, id_eq, MPOTensor.blockSplitEquiv_symm_apply]
   rw [List.ofFn_fin_append, List.ofFn_fin_append]
   congr 1
   simp [oneSiteEquiv]

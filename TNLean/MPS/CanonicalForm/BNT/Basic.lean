@@ -9,6 +9,7 @@ import QICLean.Analysis.Topology.GramMatrixLI
 import Mathlib.Analysis.InnerProductSpace.l2Space
 import Mathlib.Topology.Algebra.Star
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
+import QICLean.Analysis.Subspace.FamilyImage
 
 /-!
 # Basis of normal tensors (BNT) and matching theory
@@ -252,83 +253,6 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
 end MPSTensor
 
 /-! ## Pure linear algebra: invertible change of basis -/
-
-section LinearAlgebra
-
-variable {g : ℕ} {V : Type*} [AddCommGroup V] [Module ℂ V]
-
-/-- Auxiliary: express `w j` in the span of `v` and extract its coefficients.
-Given LI `v` and `w j ∈ Submodule.span ℂ (Set.range v)`, define the coefficients. -/
-private noncomputable def changeBasisCoeffs
-    (v w : Fin g → V)
-    (hw_mem : ∀ j, w j ∈ Submodule.span ℂ (Set.range v)) :
-    Fin g → Fin g → ℂ :=
-  fun j => Classical.choose ((Submodule.mem_span_range_iff_exists_fun ℂ).mp (hw_mem j))
-
-private lemma changeBasisCoeffs_spec
-    (v w : Fin g → V)
-    (hw_mem : ∀ j, w j ∈ Submodule.span ℂ (Set.range v)) :
-    ∀ j, ∑ i : Fin g, changeBasisCoeffs v w hw_mem j i • v i = w j :=
-  fun j => Classical.choose_spec ((Submodule.mem_span_range_iff_exists_fun ℂ).mp (hw_mem j))
-
-/--
-**Invertible change-of-basis lemma.**
-
-If two finite families of vectors `v, w : Fin g → V` in a complex vector space are both
-linearly independent and span the same subspace, then there exists an invertible
-`g × g` matrix `U` such that `w j = ∑ i, U i j • v i` for all `j`.
-
-This is the key algebraic step in the BNT permutation-matching argument: it converts the
-subspace-level agreement of two BNT families into a *matrix* equation whose asymptotics
-(as the system size grows) can then be analysed.
--/
-lemma exists_invertible_changeBasis
-    (v w : Fin g → V)
-    (_hv : LinearIndependent ℂ v)
-    (hw : LinearIndependent ℂ w)
-    (hspan : Submodule.span ℂ (Set.range v) = Submodule.span ℂ (Set.range w)) :
-    ∃ U : Matrix (Fin g) (Fin g) ℂ,
-      U.det ≠ 0 ∧
-      ∀ j : Fin g, w j = ∑ i : Fin g, U i j • v i := by
-  classical
-  -- Each `w j` lies in the span of `v`.
-  have hw_mem : ∀ j, w j ∈ Submodule.span ℂ (Set.range v) := by
-    intro j
-    rw [hspan]
-    exact Submodule.subset_span ⟨j, rfl⟩
-  -- Extract coefficients: for each `j`, ∃ `c j : Fin g → ℂ` with `∑ i, c j i • v i = w j`.
-  let c := changeBasisCoeffs v w hw_mem
-  have hc := changeBasisCoeffs_spec v w hw_mem
-  -- Define the matrix `U i j := c j i` (transpose of the natural coefficient ordering).
-  let U : Matrix (Fin g) (Fin g) ℂ := Matrix.of fun i j => c j i
-  -- The expansion holds by construction.
-  have hU : ∀ j, w j = ∑ i : Fin g, U i j • v i := by
-    intro j
-    exact (hc j).symm
-  -- It remains to show `U.det ≠ 0` from the triviality of the kernel of `U.mulVec`.
-  have hmulVec_zero : ∀ a : Fin g → ℂ, U.mulVec a = 0 → a = 0 := by
-    intro a ha
-    -- It suffices to show ∑ j, a j • w j = 0 (then LI of w gives a = 0).
-    suffices h : ∑ j : Fin g, a j • w j = 0 by
-      exact funext (Fintype.linearIndependent_iff.mp hw a h)
-    -- Compute: ∑ j, a j • w j = ∑ i, (U.mulVec a) i • v i = 0.
-    calc ∑ j : Fin g, a j • w j
-        = ∑ j, a j • (∑ i, U i j • v i) := by simp_rw [hU]
-      _ = ∑ j, ∑ i, (a j * U i j) • v i := by simp_rw [Finset.smul_sum, smul_smul]
-      _ = ∑ i, ∑ j, (a j * U i j) • v i := Finset.sum_comm
-      _ = ∑ i, (∑ j, a j * U i j) • v i := by simp_rw [← Finset.sum_smul]
-      _ = ∑ i, (U.mulVec a) i • v i := by
-            congr 1; ext i; congr 1
-            rw [Matrix.mulVec_apply_eq_sum]
-            exact Finset.sum_congr rfl fun j _ => mul_comm (a j) (U i j)
-      _ = 0 := by simp [ha]
-  have hdet : U.det ≠ 0 := by
-    intro hdet
-    obtain ⟨a, ha, hUa⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
-    exact ha (hmulVec_zero a hUa)
-  exact ⟨U, hdet, hU⟩
-
-end LinearAlgebra
 
 /-! ## MPS application -/
 

@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 import TNLean.MPS.Operator.Defs
+import QICLean.Algebra.Matrix.MatrixCongruence
 
 /-!
 # Bond similarities and periodic operators of matrix-unit tensors
@@ -29,26 +30,6 @@ the matrix elements of the periodic operator are read off from the cyclic chaini
 -/
 
 open scoped Matrix
-
-namespace Matrix
-
-variable {n K : Type*} [Fintype n] [DecidableEq n] [Field K]
-
-/-- A diagonal matrix with nowhere-zero entries times the diagonal matrix of the entrywise
-inverses is the identity. -/
-theorem diagonal_mul_diagonal_inv {v : n → K} (hv : ∀ i, v i ≠ 0) :
-    diagonal v * diagonal v⁻¹ = 1 := by
-  rw [diagonal_mul_diagonal, ← diagonal_one]
-  exact congrArg diagonal (funext fun i => mul_inv_cancel₀ (hv i))
-
-/-- The diagonal matrix of the entrywise inverses of nowhere-zero entries times the original
-diagonal matrix is the identity. -/
-theorem diagonal_inv_mul_diagonal {v : n → K} (hv : ∀ i, v i ≠ 0) :
-    diagonal v⁻¹ * diagonal v = 1 := by
-  rw [diagonal_mul_diagonal, ← diagonal_one]
-  exact congrArg diagonal (funext fun i => inv_mul_cancel₀ (hv i))
-
-end Matrix
 
 namespace MPOTensor
 

@@ -7,7 +7,11 @@ import QICLean.Algebra.Unitary.MatrixCoordinateInclusion
 import TNLean.MPS.Tensor.IsometricBondCompression
 import TNLean.MPS.Symmetry.FixedPoint.WeightedMatrixUnitInterpolation
 import TNLean.MPS.Symmetry.FixedPoint.SPTFixedPointEmbedding
-import TNLean.MPS.Symmetry.Projective.ProjectiveDirectSum
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
+import Mathlib.Data.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Reindex
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.Cohomology.ProjectiveUnitary
 import Mathlib.Data.Fin.Embedding
 
 /-!

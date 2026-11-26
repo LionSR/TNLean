@@ -8,7 +8,9 @@ import QICLean.Spectral.Radius.PowerDecay
 import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Kraus.Transfer
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceGram
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint
+import TNLean.MPS.Tensor
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 
 /-!
 # Convergence of MPS ground-space Gram operators

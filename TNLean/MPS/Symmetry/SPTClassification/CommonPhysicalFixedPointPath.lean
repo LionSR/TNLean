@@ -9,6 +9,7 @@ import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGap
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGroundSpace
 import TNLean.MPS.Symmetry.SPTClassification.PhysicalSpectatorBondExtension
+import QICLean.Channel.KrausMap.SingleKrausMap
 
 /-!
 # The fixed-point path in the common physical representation
@@ -32,35 +33,6 @@ case, with trivial scalar character. These restrictions are documented in
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 open ManyBody
-
-namespace Matrix
-
-/-- Unitary symmetry is preserved by physical conjugation when the
-rectangular physical map intertwines the two unitary actions. -/
-theorem commute_singleKrausMap_of_unitary_intertwiner
-    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
-    (U : Matrix κ κ ℂ) (V : Matrix ι ι ℂ) (E : Matrix κ ι ℂ)
-    (hU : U ∈ Matrix.unitaryGroup κ ℂ) (hV : V ∈ Matrix.unitaryGroup ι ℂ)
-    (hE : U * E = E * V) (M : Matrix ι ι ℂ) (hM : Commute V M) :
-    Commute U (singleKrausMap E M) := by
-  have hRight : Eᴴ * U = V * Eᴴ := by
-    have h := congrArg Matrix.conjTranspose hE
-    have hh := congrArg (fun A => V * A * U) h
-    simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc,
-      ← Matrix.star_eq_conjTranspose] at hh
-    rw [(Matrix.mem_unitaryGroup_iff'.mp hU), Matrix.mul_one,
-      ← Matrix.mul_assoc V, (Matrix.mem_unitaryGroup_iff.mp hV), Matrix.one_mul] at hh
-    exact hh.symm
-  apply (commute_iff_eq _ _).mpr
-  calc
-    U * singleKrausMap E M = (U * E) * M * Eᴴ := by
-      simp only [singleKrausMap_apply, Matrix.mul_assoc]
-    _ = (E * V) * M * Eᴴ := by rw [hE]
-    _ = E * (M * V) * Eᴴ := by rw [Matrix.mul_assoc E V M, hM.eq]
-    _ = (E * M) * (Eᴴ * U) := by simp only [Matrix.mul_assoc, hRight]
-    _ = singleKrausMap E M * U := by simp only [singleKrausMap_apply, Matrix.mul_assoc]
-
-end Matrix
 
 namespace MPSTensor
 

@@ -24,4 +24,3 @@ import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWTransferConvention
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWTransferDecay
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWTransferEigenvalueRate
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual
-import TNLean.MPS.ParentHamiltonian.ProjectorDefect.WeightedVirtualHilbert

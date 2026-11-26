@@ -13,9 +13,7 @@ import TNLean.MPS.MPU.Circuit.Merging.BondDilationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.EncodedUniformMergingCircuit
 import TNLean.MPS.MPU.Circuit.Merging.ExactUniformMerging
-import TNLean.MPS.MPU.Circuit.Merging.OrthogonalIsometrySwap
 import TNLean.MPS.MPU.Circuit.Merging.PermutedEncodedMergingCircuit
 import TNLean.MPS.MPU.Circuit.Merging.SingleSiteCircuit
 import TNLean.MPS.MPU.Circuit.Merging.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.SupportedAmplification
-import TNLean.MPS.MPU.Circuit.Merging.TwoSectorMerging

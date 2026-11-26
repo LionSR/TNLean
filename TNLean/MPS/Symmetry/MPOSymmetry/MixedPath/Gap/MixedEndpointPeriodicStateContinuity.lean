@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.RingEndpointRightComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenGapContinuity
 import TNLean.MPS.ParentHamiltonian.Continuity.PeriodicShortGapContinuity
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 import Mathlib.Topology.UnitInterval
 
 /-!

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
+import QICLean.Algebra.Kronecker.KroneckerEmbed
 
 /-!
 # Matrix-unit registers in products of operator tensors
@@ -24,21 +25,6 @@ boundary-fusion scope is recorded in
 -/
 
 open scoped Matrix Kronecker BigOperators
-
-namespace Matrix
-
-/-- Reconstruct a matrix from its register blocks by tensoring each block with
-its matrix unit. This is the register identity used in the construction record
-`Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, section 0. -/
-theorem sum_single_kronecker_submatrix
-    {R r k : Type*} [CommSemiring R] [Fintype r] [DecidableEq r]
-    (Z : Matrix (r × k) (r × k) R) :
-    (∑ a : r, ∑ b : r, Matrix.single a b (1 : R) ⊗ₖ
-      Z.submatrix (fun i => (a, i)) (fun j => (b, j))) = Z := by
-  ext ⟨a, i⟩ ⟨b, j⟩
-  simp [Matrix.sum_apply, Matrix.single_apply, Matrix.submatrix_apply, ite_and]
-
-end Matrix
 
 namespace MPOTensor
 

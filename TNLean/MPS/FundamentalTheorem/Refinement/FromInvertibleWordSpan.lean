@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.ChoiRankSpan
-import TNLean.MPS.FundamentalTheorem.Refinement.RootWordSpan
+import QICLean.Kraus.Wielandt.SpanGrowth.InvertibleWordSpan
+import QICLean.Kraus.WordSpan
 import TNLean.MPS.FundamentalTheorem.Refinement.RefinableOfDivisible
 
 /-!

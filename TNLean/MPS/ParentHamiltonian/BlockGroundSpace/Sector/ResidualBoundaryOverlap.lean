@@ -5,7 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicResidualGroundSpace
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockGroundSpaceOverlap
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.LinearAlgebra.DFinsupp
+import QICLean.Analysis.Projection.OverlapMatrix
+import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+import Mathlib.Analysis.SpecificLimits.Basic
+import QICLean.Analysis.Projection.ProjectorSumConvergence
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
 
 /-!

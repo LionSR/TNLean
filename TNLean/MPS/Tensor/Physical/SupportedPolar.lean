@@ -5,7 +5,13 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Tensor.Physical.BlockedPolar
-import TNLean.MPS.Tensor.Physical.PolarUniqueness
+import QICLean.Entropy.StrongSubadditivity.TripartiteDecorrelation
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
 
 /-!
 # Polar decomposition of a tensor injective on a set of bond pairs
@@ -42,64 +48,6 @@ satisfies `V†V = Π` with `Π` the projector onto the image of `P`; under inje
 -/
 
 open scoped Matrix BigOperators ComplexOrder
-
-namespace Matrix
-
-variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-
-/-- **The support projector of a matrix supported on a set of columns.** If the columns of `M`
-outside `S` vanish and `M` is injective on the vectors supported on `S`, then the support
-projector `Π` of the polar decomposition of `M` is the coordinate projector onto `S`.
-
-arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
-`V†V = Π` with `Π` the projector onto the range of `P`. -/
-theorem polarSupport_eq_diagonal_of_support {M : Matrix ι κ ℂ} {S : Set κ}
-    [DecidablePred (· ∈ S)] (h0 : ∀ i p, p ∉ S → M i p = 0)
-    (hinj : ∀ x : κ → ℂ, (∀ p, p ∉ S → x p = 0) → M *ᵥ x = 0 → x = 0) :
-    polarSupport M = diagonal fun p => if p ∈ S then 1 else 0 := by
-  set E : Matrix κ κ ℂ := diagonal fun p => if p ∈ S then 1 else 0 with hEdef
-  have hEh : Eᴴ = E := by
-    rw [hEdef, diagonal_conjTranspose]
-    congr 1
-    funext p
-    split_ifs <;> simp_all
-  have hME : M * E = M := by
-    ext i p
-    rw [hEdef, mul_diagonal]
-    by_cases hp : p ∈ S
-    · simp [hp]
-    · simp [hp, h0 i p hp]
-  have hPh : (polarPos M)ᴴ = polarPos M := (posSemidef_polarPos M).isHermitian
-  have hSh : (polarSupport M)ᴴ = polarSupport M := isHermitian_polarSupport M
-  have h1 : M * (1 - E) = 0 := by rw [Matrix.mul_sub, Matrix.mul_one, hME, sub_self]
-  have h2 : polarPos M * (1 - E) = 0 := by
-    refine conjTranspose_mul_self_eq_zero.mp ?_
-    rw [conjTranspose_mul, hPh, Matrix.mul_assoc, ← Matrix.mul_assoc (polarPos M),
-      polarPos_mul_polarPos, Matrix.mul_assoc, h1, Matrix.mul_zero, Matrix.mul_zero]
-  obtain ⟨R, hR⟩ := exists_polarPos_mul_eq_polarSupport M
-  have h3 : polarSupport M = polarSupport M * E := by
-    have h : polarSupport M * (1 - E) = 0 := by
-      rw [← hSh, ← hR, conjTranspose_mul, hPh, Matrix.mul_assoc, h2, Matrix.mul_zero]
-    rw [Matrix.mul_sub, Matrix.mul_one, sub_eq_zero] at h
-    exact h
-  have h4 : E = E * polarSupport M := by
-    have hX : M * (E * (1 - polarSupport M)) = 0 := by
-      rw [← Matrix.mul_assoc, hME, Matrix.mul_sub, Matrix.mul_one, mul_polarSupport, sub_self]
-    have h : E * (1 - polarSupport M) = 0 := by
-      ext p c
-      have hx := hinj (fun p => (E * (1 - polarSupport M)) p c)
-        (fun p hp => by simp [hEdef, diagonal_mul, hp]) (funext fun i => by
-          have := congrFun (congrFun hX i) c
-          simpa [Matrix.mul_apply, Matrix.mulVec, dotProduct] using this)
-      simpa using congrFun hx p
-    rw [Matrix.mul_sub, Matrix.mul_one, sub_eq_zero] at h
-    exact h
-  calc polarSupport M = (polarSupport M)ᴴ := hSh.symm
-    _ = (polarSupport M * E)ᴴ := by rw [← h3]
-    _ = E * polarSupport M := by rw [conjTranspose_mul, hEh, hSh]
-    _ = E := h4.symm
-
-end Matrix
 
 namespace MPSTensor
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Boundary.BoundaryBiorthogonal
+import QICLean.Algebra.Matrix.MatrixTracePairing
 
 /-!
 # Comparing exact decompositions with repeated target blocks
@@ -72,26 +73,3 @@ theorem support_eq_of_wordTupleSpanTop
   simpa using h.sum_sandwich_eq_of_wordTupleSpanTop h' hL hSpan 1
 
 end MPSTensor.IsBiorthogonalDecomposition
-
-namespace Matrix
-
-/-- Coordinate changes between two left-invertible factorizations of the
-same support are inverse and carry each synthesis to the other. No adjoints
-or completeness on the ambient space are needed. Source: GLM23 `1Fsymbol`. -/
-theorem comparison_of_common_support
-    {R m n k : Type*} [Semiring R] [Fintype m] [Fintype n] [Fintype k]
-    [DecidableEq n] [DecidableEq k]
-    (S : Matrix m n R) (H : Matrix n m R)
-    (S' : Matrix m k R) (H' : Matrix k m R)
-    (hHS : H * S = 1) (hHS' : H' * S' = 1) (hSupport : S * H = S' * H') :
-    (H' * S) * (H * S') = 1 ∧ (H * S') * (H' * S) = 1 ∧
-      S' * (H' * S) = S ∧ S * (H * S') = S' := by
-  have hforward : S' * (H' * S) = S := by
-    rw [← Matrix.mul_assoc, ← hSupport, Matrix.mul_assoc, hHS, Matrix.mul_one]
-  have hbackward : S * (H * S') = S' := by
-    rw [← Matrix.mul_assoc, hSupport, Matrix.mul_assoc, hHS', Matrix.mul_one]
-  refine ⟨?_, ?_, hforward, hbackward⟩
-  · rw [Matrix.mul_assoc, hbackward, hHS']
-  · rw [Matrix.mul_assoc, hforward, hHS]
-
-end Matrix

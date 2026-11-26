@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableState
+import QICLean.Analysis.Projection.ProjectorSumConvergence
 /-!
 # Asymptotic sector decomposition of interior observables
 
@@ -23,75 +24,6 @@ assume or assert a classification of quasi-local ground states.
 
 open Filter
 open scoped Topology Matrix ComplexOrder BigOperators
-
-namespace Submodule
-variable {ι : Type*} [Fintype ι]
-  {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-  [FiniteDimensional ℂ F]
-
-private theorem norm_joint_compression_sub_sector_sum_le
-    (G : ι → Submodule ℂ F) (X : F →L[ℂ] F) (c : ι → ℂ) :
-    ‖(⨆ i, G i).starProjection.comp (X.comp (⨆ i, G i).starProjection) -
-      ∑ i, c i • (G i).starProjection‖ ≤
-      ‖(∑ i, (G i).starProjection) - (⨆ i, G i).starProjection‖ * ‖X‖ +
-        ∑ i, ‖(⨆ j, G j).starProjection.comp (X.comp (G i).starProjection) -
-          c i • (G i).starProjection‖ := by
-  let P := (⨆ i, G i).starProjection
-  let Q := ∑ i, (G i).starProjection
-  have hEq : P.comp (X.comp P) - ∑ i, c i • (G i).starProjection =
-      P.comp (X.comp (P - Q)) +
-        ∑ i, (P.comp (X.comp (G i).starProjection) - c i • (G i).starProjection) := by
-    simp only [ContinuousLinearMap.comp_sub, Q,
-      ContinuousLinearMap.comp_finsetSum, Finset.sum_sub_distrib]
-    abel
-  change ‖P.comp (X.comp P) - ∑ i, c i • (G i).starProjection‖ ≤
-    ‖Q - P‖ * ‖X‖ +
-      ∑ i, ‖P.comp (X.comp (G i).starProjection) - c i • (G i).starProjection‖
-  rw [hEq]
-  refine (norm_add_le _ _).trans (add_le_add ?_ (norm_sum_le _ _))
-  refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
-  refine (mul_le_mul_of_nonneg_right (⨆ i, G i).starProjection_norm_le
-    (norm_nonneg _)).trans ?_
-  simpa only [one_mul, norm_sub_rev, mul_comm] using
-    ContinuousLinearMap.opNorm_comp_le X (P - Q)
-
-variable {κ : Type*} {f : Filter κ}
-  {E : κ → Type*} [∀ n, NormedAddCommGroup (E n)]
-  [∀ n, InnerProductSpace ℂ (E n)] [∀ n, FiniteDimensional ℂ (E n)]
-
-/-- Vanishing sector column errors and vanishing projection-sum error give
-vanishing joint compression error for uniformly bounded observables.
-The Hilbert spaces may vary along the filter. This is the finite-family
-operator estimate used with Nachtergaele, arXiv:cond-mat/9410110,
-Lemma commutation (i) and equations (3.8)--(3.9). -/
-theorem tendsto_norm_joint_compression_sub_sector_sum_zero
-    (G : (n : κ) → ι → Submodule ℂ (E n))
-    (X : (n : κ) → E n →L[ℂ] E n) (c : ι → ℂ) {C : ℝ}
-    (hError : Tendsto (fun n =>
-      ‖(∑ i, (G n i).starProjection) - (⨆ i, G n i).starProjection‖) f (𝓝 0))
-    (hX : ∀ᶠ n in f, ‖X n‖ ≤ C)
-    (hColumns : ∀ i, Tendsto (fun n =>
-      ‖(⨆ j, G n j).starProjection.comp ((X n).comp (G n i).starProjection) -
-        c i • (G n i).starProjection‖) f (𝓝 0)) :
-    Tendsto (fun n =>
-      ‖(⨆ i, G n i).starProjection.comp ((X n).comp (⨆ i, G n i).starProjection) -
-        ∑ i, c i • (G n i).starProjection‖) f (𝓝 0) := by
-  have hSum : Tendsto (fun n => ∑ i,
-      ‖(⨆ j, G n j).starProjection.comp ((X n).comp (G n i).starProjection) -
-        c i • (G n i).starProjection‖) f (𝓝 0) := by
-    simpa only [Finset.sum_const_zero] using
-      tendsto_finsetSum Finset.univ (fun i _ => hColumns i)
-  have hUpper : Tendsto (fun n =>
-      ‖(∑ i, (G n i).starProjection) - (⨆ i, G n i).starProjection‖ * C +
-        ∑ i, ‖(⨆ j, G n j).starProjection.comp ((X n).comp (G n i).starProjection) -
-          c i • (G n i).starProjection‖) f (𝓝 0) := by
-    simpa only [zero_mul, zero_add] using (hError.mul_const C).add hSum
-  refine squeeze_zero' (Eventually.of_forall fun n => norm_nonneg _) ?_ hUpper
-  filter_upwards [hX] with n hn
-  exact (norm_joint_compression_sub_sector_sum_le (G n) (X n) c).trans
-    (add_le_add (mul_le_mul_of_nonneg_left hn (norm_nonneg _)) le_rfl)
-end Submodule
-
 
 namespace MPSTensor
 variable {ι : Type*} [Finite ι] {d : ℕ} {D : ι → ℕ} [∀ i, NeZero (D i)]

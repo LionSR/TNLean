@@ -8,21 +8,13 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
-import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.ComplexOfInt
-import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.EndpointEmbeddingMatrix
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.GInjective
 import TNLean.Algebra.IsingCrossingCoefficients
-import TNLean.Algebra.LSymbolFreeAction
-import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.ProtocolDensityError
-import TNLean.Algebra.RepresentationOrthogonalSectors
-import TNLean.Algebra.RepresentationThetaPositive
 import TNLean.Algebra.RestrictedScalarGauge
-import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.TwoMarkerMiddleFactors
 import TNLean.Algebra.TwoMarkerMiddleIndexCardinality
-import TNLean.Algebra.TwoWindowFamily
 import TNLean.Algebra.TwoWindowPolynomialRecovery

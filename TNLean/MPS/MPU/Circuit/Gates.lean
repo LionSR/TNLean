@@ -8,11 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU.Circuit.Gates
 
-import TNLean.MPS.MPU.Circuit.Gates.FiniteAlphabetRows
 import TNLean.MPS.MPU.Circuit.Gates.ParityConditioning
 import TNLean.MPS.MPU.Circuit.Gates.PauliControlObstruction
 import TNLean.MPS.MPU.Circuit.Gates.ProjectionPhaseIsometries
-import TNLean.MPS.MPU.Circuit.Gates.SchmidtSpanCuts
 import TNLean.MPS.MPU.Circuit.Gates.SpinOneSchmidtObstruction
-import TNLean.MPS.MPU.Circuit.Gates.TwoKrausPolar
-import TNLean.MPS.MPU.Circuit.Gates.UnitCircleRankTwo

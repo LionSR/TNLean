@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Transfer
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 import TNLean.MPS.Tensor
 
 /-!

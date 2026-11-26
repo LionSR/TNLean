@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.OnSite.VirtualRepresentation
+import QICLean.Analysis.Cohomology.ProjectiveUnitary
 
 /-!
 # Transporting virtual projective representations through a gauge
@@ -17,30 +18,6 @@ Source: arXiv:1010.3732, Sections II.C and II.F.2.
 -/
 
 open scoped Matrix ScalarCohomology
-
-namespace ProjectiveRepresentation
-
-variable {G : Type} [Group G] {D : ℕ} {ω : ScalarCocycle G}
-
-/-- Conjugating the virtual matrices retains the factor system. Source:
-arXiv:1010.3732, Section II.C, virtual gauge preparation. -/
-def conjugate (ρ : ProjectiveRepresentation (D := D) ω) (Y : GL (Fin D) ℂ) :
-    ProjectiveRepresentation (D := D) ω where
-  X g := Y * ρ.X g * Y⁻¹
-  map_mul' := by
-    intro g h
-    have hY : ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
-        (Y : Matrix (Fin D) (Fin D) ℂ) = 1 := by simp
-    simp only [Matrix.GeneralLinearGroup.coe_mul]
-    calc
-      _ = (Y : Matrix (Fin D) (Fin D) ℂ) *
-          ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) * (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) *
-          ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-            simp only [Matrix.mul_assoc, ← Matrix.mul_assoc
-              ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ), hY, Matrix.one_mul]
-      _ = _ := by rw [ρ.map_mul, Matrix.mul_smul, Matrix.smul_mul]
-
-end ProjectiveRepresentation
 
 namespace MPSTensor
 

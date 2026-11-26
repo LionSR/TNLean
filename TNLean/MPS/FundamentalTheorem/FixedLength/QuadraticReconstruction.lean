@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import TNLean.MPS.Tensor.Defs
+import QICLean.Algebra.Kronecker.KroneckerEmbed
 
 /-!
 # Quadratic reconstruction system for the translation-invariant canonical form
@@ -43,7 +44,7 @@ theorem `thm-uniq`, the two lemmas formalized below: the chain-combination lemma
 
 * `MPSTensor.QuadraticReconstructionSolution` - a solution of the PGVWC07
   system (S) over a supplied window of open-boundary matrices.
-* `pgvwc07ChainCoeff`, `pgvwc07_chainCoeff_combination_spec` - the coefficient
+* `TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff`, `TNLean.MPS.FundamentalTheorem.pgvwc07_chainCoeff_combination_spec` - the coefficient
   sequence and conclusion of PGVWC07 Lemma `lem-same-matr`.
 * `Matrix.kronecker_one_intertwines_iff_kroneckerSlice_intertwines`,
   `Matrix.exists_nonzero_intertwiner_of_kronecker_one_intertwines` - PGVWC07
@@ -64,14 +65,14 @@ open scoped Matrix Kronecker
 one-based data `λ_1, …, λ_{n-1}` written zero-based as `lam 0, …, lam (n - 1)`,
 the value at `j` is the source coefficient
 `μ_{j+1} = λ_1 x^{j+1} + λ_2 x^{j} + ⋯ + λ_{j+1} x`. -/
-def pgvwc07ChainCoeff (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) : ℂ :=
+def TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) : ℂ :=
   ∑ k ∈ Finset.range (j + 1), lam k * x ^ (j + 1 - k)
 
 /-- The recurrence `μ_{j+1} = x (λ_{j+1} + μ_j)` satisfied by the coefficients
 of PGVWC07 Lemma `lem-same-matr` (MPSarchive.tex lines 1032-1037). -/
-theorem pgvwc07ChainCoeff_succ (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) :
-    pgvwc07ChainCoeff lam x (j + 1) = x * (lam (j + 1) + pgvwc07ChainCoeff lam x j) := by
-  unfold pgvwc07ChainCoeff
+theorem TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff_succ (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) :
+    TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x (j + 1) = x * (lam (j + 1) + TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x j) := by
+  unfold TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff
   rw [Finset.sum_range_succ]
   have hstep : ∀ k ∈ Finset.range (j + 1),
       lam k * x ^ (j + 1 + 1 - k) = x * (lam k * x ^ (j + 1 - k)) := by
@@ -91,9 +92,9 @@ and `Y 0, …, Y n` vectors such that `T (Y k) = S (Y (k + 1))` for `k < n`, the
 vectors `Y 0, …, Y (n - 1)` are linearly independent, and
 `Y n = ∑ k < n, lam k • Y k`. For any solution `x ≠ 0` of the polynomial
 equation `∑ k < n, lam k * x ^ (n - k) = 1`, the combination
-`∑ k < n, μ k • Y k` with the coefficients `μ` of `pgvwc07ChainCoeff` is
+`∑ k < n, μ k • Y k` with the coefficients `μ` of `TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff` is
 nonzero and satisfies `T Y = x⁻¹ • S Y`. -/
-theorem pgvwc07_chainCoeff_combination_spec
+theorem TNLean.MPS.FundamentalTheorem.pgvwc07_chainCoeff_combination_spec
     {M M' : Type*} [AddCommGroup M] [Module ℂ M] [AddCommGroup M'] [Module ℂ M']
     (T S : M →ₗ[ℂ] M') {n : ℕ} (Y : ℕ → M) (lam : ℕ → ℂ) {x : ℂ}
     (hchain : ∀ k < n, T (Y k) = S (Y (k + 1)))
@@ -101,108 +102,50 @@ theorem pgvwc07_chainCoeff_combination_spec
     (hdep : Y n = ∑ k ∈ Finset.range n, lam k • Y k)
     (hx : x ≠ 0)
     (hxeq : ∑ k ∈ Finset.range n, lam k * x ^ (n - k) = 1) :
-    (∑ k ∈ Finset.range n, pgvwc07ChainCoeff lam x k • Y k) ≠ 0 ∧
-      T (∑ k ∈ Finset.range n, pgvwc07ChainCoeff lam x k • Y k) =
-        x⁻¹ • S (∑ k ∈ Finset.range n, pgvwc07ChainCoeff lam x k • Y k) := by
+    (∑ k ∈ Finset.range n, TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y k) ≠ 0 ∧
+      T (∑ k ∈ Finset.range n, TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y k) =
+        x⁻¹ • S (∑ k ∈ Finset.range n, TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y k) := by
   classical
   rcases n with - | m
   · exact absurd hxeq (by simp)
-  have hlast : pgvwc07ChainCoeff lam x m = 1 := hxeq
+  have hlast : TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x m = 1 := hxeq
   constructor
   · intro h0
-    have hfin : ∑ k : Fin (m + 1), pgvwc07ChainCoeff lam x (k : ℕ) • Y (k : ℕ) = 0 := by
-      rw [Fin.sum_univ_eq_sum_range fun k ↦ pgvwc07ChainCoeff lam x k • Y k]
+    have hfin : ∑ k : Fin (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x (k : ℕ) • Y (k : ℕ) = 0 := by
+      rw [Fin.sum_univ_eq_sum_range fun k ↦ TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y k]
       exact h0
     have hzero :=
-      Fintype.linearIndependent_iff.mp hindep (fun k : Fin (m + 1) ↦ pgvwc07ChainCoeff lam x k)
+      Fintype.linearIndependent_iff.mp hindep (fun k : Fin (m + 1) ↦ TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k)
         hfin ⟨m, Nat.lt_succ_self m⟩
     rw [show (((⟨m, Nat.lt_succ_self m⟩ : Fin (m + 1)) : ℕ)) = m from rfl, hlast] at hzero
     exact one_ne_zero hzero
-  · have step1 : T (∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam x k • Y k) =
-        S (∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam x k • Y (k + 1)) := by
+  · have step1 : T (∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y k) =
+        S (∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y (k + 1)) := by
       rw [map_sum, map_sum]
       refine Finset.sum_congr rfl fun k hk ↦ ?_
       rw [map_smul, map_smul, hchain k (Finset.mem_range.mp hk)]
-    have hshift : (∑ k ∈ Finset.range m, pgvwc07ChainCoeff lam x k • Y (k + 1)) =
+    have hshift : (∑ k ∈ Finset.range m, TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y (k + 1)) =
         ∑ j ∈ Finset.range (m + 1),
-          (if j = 0 then 0 else pgvwc07ChainCoeff lam x (j - 1)) • Y j := by
+          (if j = 0 then 0 else TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x (j - 1)) • Y j := by
       rw [Finset.sum_range_succ']
       simp
-    have step2 : (∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam x k • Y (k + 1)) =
-        x⁻¹ • ∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam x k • Y k := by
+    have step2 : (∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y (k + 1)) =
+        x⁻¹ • ∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x k • Y k := by
       rw [Finset.sum_range_succ, hlast, one_smul, hdep, hshift, ← Finset.sum_add_distrib,
         Finset.smul_sum]
       refine Finset.sum_congr rfl fun j _ ↦ ?_
       rw [← add_smul, smul_smul]
       congr 1
       rcases j with - | j'
-      · have h0 : pgvwc07ChainCoeff lam x 0 = lam 0 * x := by
-          simp [pgvwc07ChainCoeff]
+      · have h0 : TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam x 0 = lam 0 * x := by
+          simp [TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff]
         rw [ite_eq_left rfl, zero_add, h0, mul_comm (lam 0) x, inv_mul_cancel_left₀ hx]
-      · rw [ite_eq_right (Nat.succ_ne_zero j'), Nat.succ_sub_one, pgvwc07ChainCoeff_succ,
+      · rw [ite_eq_right (Nat.succ_ne_zero j'), Nat.succ_sub_one, TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff_succ,
           inv_mul_cancel_left₀ hx]
         ring
     rw [step1, step2, map_smul]
 
 /-! ## The Kronecker intertwiner lemma `lem-horn` -/
-
-namespace Matrix
-
-variable {n m : Type*} [Fintype n] [Fintype m] [DecidableEq m]
-variable {R : Type*} [CommRing R]
-
-/-- The multiplicity slice of a matrix on a doubled index: the `(a, b)` slice
-of `W` is the matrix of entries `W (p, a) (q, b)`. This realizes the tensor
-factorization `M_{nm} = M_n ⊗ M_m` used in PGVWC07, Lemma `lem-horn`
-(arXiv:quant-ph/0608197, MPSarchive.tex lines 1053-1058). -/
-def kroneckerSlice (W : Matrix (n × m) (n × m) R) (a b : m) : Matrix n n R :=
-  fun p q ↦ W (p, a) (q, b)
-
-/-- **PGVWC07, Lemma `lem-horn`** (arXiv:quant-ph/0608197, MPSarchive.tex
-lines 1053-1058) in multiplicity-slice form: `W` solves the amplified matrix
-equation `W (C ⊗ 1) = (B ⊗ 1) W` if and only if every multiplicity slice of
-`W` solves the unamplified equation `X C = B X`. The source phrases this as
-the solution space of the amplified equation being `S ⊗ M_n` for `S` the
-solution space of `X C = B X`; the slice decomposition realizes exactly that
-tensor factorization. -/
-theorem kronecker_one_intertwines_iff_kroneckerSlice_intertwines
-    (B C : Matrix n n R) (W : Matrix (n × m) (n × m) R) :
-    W * (C ⊗ₖ (1 : Matrix m m R)) = (B ⊗ₖ (1 : Matrix m m R)) * W ↔
-      ∀ a b, kroneckerSlice W a b * C = B * kroneckerSlice W a b := by
-  constructor
-  · intro h a b
-    ext p q
-    have h' := congrFun (congrFun h (p, a)) (q, b)
-    simpa [kroneckerSlice, Matrix.mul_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
-      Fintype.sum_prod_type, mul_comm] using h'
-  · intro h
-    ext ⟨p, a⟩ ⟨q, b⟩
-    have h' := congrFun (congrFun (h a b) p) q
-    simpa [kroneckerSlice, Matrix.mul_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
-      Fintype.sum_prod_type, mul_comm] using h'
-
-/-- The consequence of PGVWC07 Lemma `lem-horn` used in the uniqueness and
-reconstruction proofs (arXiv:quant-ph/0608197, MPSarchive.tex lines 1094-1095): a
-nonzero simultaneous solution `W` of the amplified equations
-`W (C i ⊗ 1) = (B i ⊗ 1) W` yields a nonzero matrix `X` with `X * C i = B i * X`
-for every `i`. -/
-theorem exists_nonzero_intertwiner_of_kronecker_one_intertwines
-    {ι : Type*} (B C : ι → Matrix n n R) (W : Matrix (n × m) (n × m) R)
-    (hW : W ≠ 0)
-    (h : ∀ i, W * (C i ⊗ₖ (1 : Matrix m m R)) = (B i ⊗ₖ (1 : Matrix m m R)) * W) :
-    ∃ X : Matrix n n R, X ≠ 0 ∧ ∀ i, X * C i = B i * X := by
-  have hslice : ∃ a b, kroneckerSlice W a b ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    refine hW ?_
-    ext ⟨p, a⟩ ⟨q, b⟩
-    have := congrFun (congrFun (hall a b) p) q
-    simpa [kroneckerSlice] using this
-  obtain ⟨a, b, hab⟩ := hslice
-  exact ⟨kroneckerSlice W a b, hab, fun i ↦
-    (kronecker_one_intertwines_iff_kroneckerSlice_intertwines (B i) (C i) W).mp (h i) a b⟩
-
-end Matrix
 
 /-! ## The quadratic system (S) -/
 

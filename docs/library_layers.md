@@ -1752,7 +1752,7 @@ part places it in `MPS/Operator/PhysicalSector`).
 |---|---|---|---|
 | `Vertical/VerticalCoisometry` | base (matrix) / MPDO | `Matrix.sigmaBlockRow`, `_conjTranspose`, `blockDiagonal'_mul_sigmaBlockRow`, `sigmaBlockRow_conjTranspose_mul`, `sigmaBlockRow_mul_conjTranspose`, `sigmaBlockRow_isCoisometry` and two more (8 of 10) | block-row coisometries to QICLean matrix; one tensor theorem stays |
 | `MPOAction/BoundaryActionLMatrixPath` | base (analysis) / MPDO | `MPOTensor.hasDerivAt_idKron_entries`, `hasDerivAt_kronId_entries`, `hasDerivAt_const_entries` | to `Algebra/MatrixEntrywiseDeriv` |
-| `Fusion/BNTFixedFinalUnitarity` | base / MPDO | `Matrix.sigmaDiagonal_mul_conjTranspose_eq_one`, `Matrix.sigmaDiagonal_conjTranspose_mul_eq_one` | to a QICLean matrix module |
+| `Fusion/BNTFixedFinalUnitarity` | base / MPDO | `Matrix.sigmaDiagonal_mul_conjTranspose_eq_one`, `TNLean.MPS.MPDO.sigmaDiagonal_conjTranspose_mul_eq_one` | to a QICLean matrix module |
 | `Fusion/BNTFusionIsometries` | base / MPDO | `Matrix.blockDiagonal'_conj`, `Matrix.submatrix_left_conj_equiv` | same |
 | `Operator/Periodic/DiagonalCutRank` | base / Operator | `Matrix.traceMulMatrix`, `Matrix.rank_traceMulMatrix_le` | same |
 | `Operator/Product/DirectSum` | base / Operator | `Matrix.trace_fromBlocks_submatrix_finSumFinEquiv` | same |

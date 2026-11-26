@@ -8,6 +8,7 @@ import QICLean.Algebra.Matrix.ComplexOfRing
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Operator.Defs
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
+import QICLean.Algebra.Combinatorics.ZModIntCast
 
 /-!
 # Tools for computing anomaly three-cochains of explicit representations
@@ -172,35 +173,6 @@ theorem idKron_complexOfRing {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R
 end ComplexOfRing
 
 end MPOTensor
-
-namespace Multiplicative
-
-/-- A statement about every element of `ℤ₂`, written multiplicatively, follows from its
-two instances. -/
-theorem forall_zmod_two {P : Multiplicative (ZMod 2) → Prop}
-    (h0 : P (ofAdd 0)) (h1 : P (ofAdd 1)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1]
-
-/-- A statement about every element of `ℤ₂ × ℤ₂`, written multiplicatively, follows from its
-four instances. -/
-theorem forall_zmod_two_prod {P : Multiplicative (ZMod 2 × ZMod 2) → Prop}
-    (h00 : P (ofAdd (0, 0))) (h01 : P (ofAdd (0, 1))) (h10 : P (ofAdd (1, 0)))
-    (h11 : P (ofAdd (1, 1))) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h00, h01, h10, h11]
-
-/-- A statement about every element of `ℤ₃`, written multiplicatively, follows from its
-three instances. -/
-theorem forall_zmod_three {P : Multiplicative (ZMod 3) → Prop}
-    (h0 : P (ofAdd 0)) (h1 : P (ofAdd 1)) (h2 : P (ofAdd 2)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1, h2]
-
-end Multiplicative
 
 namespace MPOTensor
 

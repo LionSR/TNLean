@@ -100,7 +100,7 @@ private theorem splitMPO_slice
   ext x y
   simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
     Matrix.reindex_apply, chainBipartitionEquiv, biSplitEquiv,
-    Matrix.bipartiteSlice, blockSplitEquiv_symm_apply, mpoMatrixEntry,
+    Matrix.bipartiteSlice, MPOTensor.blockSplitEquiv_symm_apply, mpoMatrixEntry,
     List.ofFn_fin_append, evalWord_append]
 
 /-- The preceding slice identity for the normalized periodic MPO. -/

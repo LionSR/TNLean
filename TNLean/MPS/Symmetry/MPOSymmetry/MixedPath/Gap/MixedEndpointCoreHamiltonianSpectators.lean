@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointActiveEdgeNormalization
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointCoreEdgeSpectators
 import QICLean.Spectral.Gap.EuclideanFiberwiseGap
+import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 
 /-!
 # The normalized open chain as one common core with exterior spectators
@@ -28,42 +29,6 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692.
 -/
 
 open scoped Matrix InnerProductSpace BigOperators
-
-namespace ContinuousLinearMap
-
-variable {I S : Type*} [Fintype I] [Fintype S]
-
-/-- An operator and its independent extension over a nonempty finite spectator space have the
-same eigenvalues. -/
-theorem hasEigenvalue_rightFiberwiseMap_iff [Nonempty S]
-    (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) (μ : ℂ) :
-    Module.End.HasEigenvalue (rightFiberwiseMap (S := S) G).toLinearMap μ ↔
-      Module.End.HasEigenvalue G.toLinearMap μ := by
-  classical
-  constructor
-  · intro h
-    obtain ⟨x, hx⟩ := h.exists_hasEigenvector
-    obtain ⟨s, hs⟩ : ∃ s, rightFiber x s ≠ 0 := by
-      by_contra! hzero
-      refine hx.2 (PiLp.ext fun ⟨i, t⟩ ↦ ?_)
-      simpa only [rightFiber_apply, PiLp.zero_apply] using congrArg (fun y ↦ y i) (hzero t)
-    refine Module.End.hasEigenvalue_of_hasEigenvector (x := rightFiber x s) ⟨?_, hs⟩
-    rw [Module.End.mem_eigenspace_iff]
-    refine PiLp.ext fun i ↦ ?_
-    simpa [rightFiber_apply] using congrArg (fun y ↦ y (i, s)) hx.apply_eq_smul
-  · intro h
-    obtain ⟨x, hx⟩ := h.exists_hasEigenvector
-    let s : S := Classical.choice ‹Nonempty S›
-    refine Module.End.hasEigenvalue_of_hasEigenvector (x := singleRightFiber s x) ⟨?_, ?_⟩
-    · rw [Module.End.mem_eigenspace_iff, ContinuousLinearMap.coe_coe,
-        rightFiberwiseMap_singleRightFiber]
-      have hGx : G x = μ • x := hx.apply_eq_smul
-      refine PiLp.ext fun p ↦ ?_
-      by_cases hp : p.2 = s <;> simp [singleRightFiber, hp, hGx]
-    · intro h0
-      exact hx.2 (by rw [← norm_eq_zero, ← norm_singleRightFiber s x, h0, norm_zero])
-
-end ContinuousLinearMap
 
 namespace MPSTensor
 namespace MPOSymmetry

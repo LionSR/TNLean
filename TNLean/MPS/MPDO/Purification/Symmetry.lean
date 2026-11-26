@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.Purification.LocalPurificationRFP
 import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.Operator.Fusion.DensityOperatorSymmetry
+import QICLean.Algebra.Matrix.MatrixCongruence
 
 /-!
 # Strong and weak symmetries through purifications
@@ -65,32 +66,6 @@ theorem has no such restriction. See `docs/paper-gaps/sun25_mpdo_symmetry_bounda
 -/
 
 open scoped Matrix ComplexOrder BigOperators Kronecker
-
-namespace Matrix
-
-variable {m k : Type*} [Fintype m] [Fintype k]
-
-/-- **The purification form of strong symmetry.**
-
-Source: arXiv:2504.16985, Lemma `prop:purification`, lines 184–187: for a purification
-`Ψ = ∑ Φ_{σκ} |σ⟩|κ⟩` of `ρ = Φ Φ^†`, `O ρ = λ ρ` holds exactly when `(O ⊗ 1_anc) Ψ = λ Ψ`,
-that is `O Φ = λ Φ`. The forward direction is the source's lemma: `(O - λ) Φ` has vanishing
-Gram matrix `(O - λ) ρ (O - λ)^†`. The converse is immediate. -/
-theorem mul_mul_conjTranspose_eq_smul_iff (O : Matrix m m ℂ) (Φ : Matrix m k ℂ) (c : ℂ) :
-    O * (Φ * Φᴴ) = c • (Φ * Φᴴ) ↔ O * Φ = c • Φ := by
-  classical
-  constructor
-  · intro h
-    have h1 : (O - c • 1) * (Φ * Φᴴ) = 0 := by
-      rw [Matrix.sub_mul, h, Matrix.smul_mul, Matrix.one_mul, sub_self]
-    have h2 : ((O - c • 1) * Φ) * ((O - c • 1) * Φ)ᴴ = 0 := by
-      rw [conjTranspose_mul, ← Matrix.mul_assoc, Matrix.mul_assoc _ Φ, h1, Matrix.zero_mul]
-    have h3 := self_mul_conjTranspose_eq_zero.mp h2
-    rwa [Matrix.sub_mul, Matrix.smul_mul, Matrix.one_mul, sub_eq_zero] at h3
-  · intro h
-    rw [← Matrix.mul_assoc, h, Matrix.smul_mul]
-
-end Matrix
 
 namespace MPOTensor
 

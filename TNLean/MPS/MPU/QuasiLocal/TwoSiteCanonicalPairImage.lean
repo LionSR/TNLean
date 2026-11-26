@@ -8,7 +8,17 @@ import TNLean.QCA.LocalAlgebra.LocalAlgebra
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteBlockedLocalAction
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteOutputSupport
 import TNLean.QCA.SupportAlgebra.GNVWIndex
-import TNLean.QCA.StarSubalgebra.SupportAlgebraReindex
+import Mathlib.Algebra.Star.Subalgebra
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Dimension.Free
+import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.Algebra.Kronecker.TensorMap
+import QICLean.Algebra.StarSubalgebra.CommutingProduct
+import QICLean.Algebra.Kronecker.CommutingDecomposition
+import QICLean.Algebra.Kronecker.SupportAlgebra
+import QICLean.Algebra.Kronecker.SupportAlgebraCommutant
+import QICLean.Algebra.MatrixAlgebra.SkolemNoetherUnitary
 
 /-!
 # The actual canonical QCA pair image of supplied MPU gates

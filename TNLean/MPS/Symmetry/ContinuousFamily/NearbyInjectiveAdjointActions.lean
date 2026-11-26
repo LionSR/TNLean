@@ -100,21 +100,6 @@ end ContinuousLinearMap
 
 namespace Matrix
 
-/-- Bond conjugation acting on the Euclidean space of matrix entries. -/
-noncomputable def conjugationEuclideanCLM {D : ℕ} (V : Matrix (Fin D) (Fin D) ℂ) :
-    EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D) :=
-  (frobeniusEuclideanMap ((LinearMap.mulRight ℂ Vᴴ).comp
-    (LinearMap.mulLeft ℂ V))).toContinuousLinearMap
-
-/-- Euclidean bond conjugation agrees with ordinary matrix conjugation. -/
-theorem conjugationEuclideanCLM_apply {D : ℕ}
-    (V X : Matrix (Fin D) (Fin D) ℂ) :
-    conjugationEuclideanCLM V (frobeniusEquivEuclidean (Fin D) (Fin D) X) =
-      frobeniusEquivEuclidean (Fin D) (Fin D) (V * X * Vᴴ) := by
-  simp only [conjugationEuclideanCLM, LinearMap.coe_toContinuousLinearMap',
-    frobeniusEuclideanMap_apply, LinearMap.comp_apply,
-    LinearMap.mulRight_apply, LinearMap.mulLeft_apply]
-
 private theorem norm_toEuclideanCLM_transpose_le_one {d : ℕ}
     (U : Matrix.unitaryGroup (Fin d) ℂ) :
     ‖(Matrix.toEuclideanCLM (n := Fin d) (𝕜 := ℂ)) ((U : Matrix (Fin d) (Fin d) ℂ)ᵀ)‖ ≤ 1 := by

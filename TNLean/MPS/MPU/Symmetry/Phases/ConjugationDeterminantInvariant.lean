@@ -50,47 +50,6 @@ hypotheses; the "only if" direction does not use that one rank is odd.
 
 open scoped Matrix Kronecker
 
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- A complex square matrix whose powers of exponent at least two all have trace one has trace
-one. The matrix `X - X²` has vanishing traces of its powers of exponent at least two, hence is
-nilpotent, so `tr X = tr X² = 1`.
-
-Source context: arXiv:1703.09188, MPU unitarity at lengths `N = 2, 3, …`, lines 319--335. -/
-theorem trace_eq_one_of_forall_trace_pow_eq_one_of_one_lt (X : Matrix n n ℂ)
-    (h : ∀ N : ℕ, 1 < N → trace (X ^ N) = 1) : trace X = 1 := by
-  set Z := X - X ^ 2 with hZ
-  have hpow : ∀ N : ℕ, 1 < N → trace (Z ^ N) = 0 := by
-    intro N hN
-    have hZ' : Z = X * (1 - X) := by rw [hZ, Matrix.mul_sub, Matrix.mul_one, sq]
-    have hc : Commute X (1 - X) := (Commute.one_right X).sub_right (Commute.refl X)
-    have hexp : (1 - X) ^ N = ∑ m ∈ Finset.range (N + 1),
-        ((-1 : ℂ) ^ m * (N.choose m : ℂ)) • X ^ m := by
-      rw [sub_eq_neg_add, ((Commute.one_right X).neg_left).add_pow]
-      refine Finset.sum_congr rfl fun m _ ↦ ?_
-      rw [one_pow, Matrix.mul_one, ← neg_one_smul ℂ X, smul_pow, ← Nat.cast_comm,
-        ← nsmul_eq_mul, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul, mul_comm (N.choose m : ℂ)]
-    rw [hZ', hc.mul_pow, hexp, Finset.mul_sum, trace_sum]
-    have hterm : ∀ m ∈ Finset.range (N + 1),
-        trace (X ^ N * (((-1 : ℂ) ^ m * (N.choose m : ℂ)) • X ^ m)) =
-          (-1 : ℂ) ^ m * (N.choose m : ℂ) := by
-      intro m _
-      rw [Matrix.mul_smul, trace_smul, ← pow_add, h (N + m) (by omega), smul_eq_mul, mul_one]
-    rw [Finset.sum_congr rfl hterm]
-    have := (Commute.one_right (-1 : ℂ)).add_pow N
-    rw [neg_add_cancel, zero_pow (by omega)] at this
-    rw [this]
-    refine Finset.sum_congr rfl fun m _ ↦ ?_
-    rw [one_pow, mul_one]
-  have hnil := isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt Z hpow
-  have h0 := (isNilpotent_trace_of_isNilpotent hnil).eq_zero
-  rw [hZ, trace_sub, h 2 (by norm_num), sub_eq_zero] at h0
-  exact h0
-
-end Matrix
-
 namespace MPOTensor
 
 variable {d D D₁ D₂ ℓ r : ℕ}

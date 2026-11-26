@@ -8,8 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Symmetry.Projective
 
-import TNLean.MPS.Symmetry.Projective.ProjectiveDirectSum
-import TNLean.MPS.Symmetry.Projective.ProjectiveHomConjugation
 import TNLean.MPS.Symmetry.Projective.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.Projective.ProjectiveRephasing
 import TNLean.MPS.Symmetry.Projective.UnitModulusProjectiveFactor

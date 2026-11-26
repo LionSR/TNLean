@@ -4,7 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.SupportAlgebra.GNVWIndex
-import TNLean.QCA.StarSubalgebra.KroneckerSupportAlgebra
+import Mathlib.Algebra.Star.Subalgebra
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Dimension.Free
+import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.Algebra.Kronecker.TensorMap
+import QICLean.Algebra.StarSubalgebra.CommutingProduct
+import QICLean.Algebra.Kronecker.CommutingDecomposition
+import QICLean.Algebra.Kronecker.SupportAlgebra
+import QICLean.Algebra.Kronecker.SupportAlgebraCommutant
 import TNLean.QCA.QuasiLocal.QuasiLocalTranslation
 
 /-!

@@ -14,6 +14,7 @@ import QICLean.Analysis.Topology.ContinuousIdempotentFrames
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Topology.Instances.Matrix
 import Mathlib.LinearAlgebra.Matrix.BilinearForm
+import QICLean.Analysis.Topology.TraceQuotientCoordinates
 
 /-!
 # Continuous multiplication on finite-ring trace quotients
@@ -38,9 +39,9 @@ Gram matrix is used only to invert the chosen section.
 
 It also contains the following results.
 
-* `Matrix.exists_local_continuous_traceQuotientPrimitive`: continuous primitive elements of a trace
+* `TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive`: continuous primitive elements of a trace
   quotient.
-* `Matrix.exists_local_continuous_traceQuotientUnit`: continuous units of trace-quotient algebras.
+* `TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientUnit`: continuous units of trace-quotient algebras.
 -/
 
 section TraceQuotientTripleContinuity
@@ -51,26 +52,6 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix BigOperators
 namespace Matrix
 
-/-- Contracting a continuous raw tensor family against a fixed physical
-section gives continuous three-site trace columns. Auxiliary context:
-arXiv:1010.3732, Section II.F.2, lines 953–993. -/
-theorem continuous_traceQuotientTripleColumns
-    {T : Type*} [TopologicalSpace T] {d r D : ℕ}
-    (B : T → MPSTensor d D) (hB : Continuous B)
-    (F : Matrix (Fin d) (Fin r) ℂ) :
-    Continuous fun t => traceQuotientTripleColumns (B t) F := by
-  have hLC : ∀ x : Fin d → ℂ,
-      Continuous fun t => Fintype.linearCombination ℂ (B t) x := by
-    intro x
-    simpa only [Fintype.linearCombination_apply, Pi.smul_apply, Function.comp_apply] using
-      continuous_finsetSum Finset.univ fun i _ =>
-        ((continuous_apply i).comp hB).const_smul (x i)
-  apply continuous_matrix
-  intro j ab
-  exact ((hLC (F *ᵥ Pi.single ab.1 1)).matrix_mul
-    (hLC (F *ᵥ Pi.single ab.2 1))).matrix_mul
-      ((continuous_apply j).comp hB) |>.matrix_trace
-
 private theorem rank_traceGram_of_pair {d D : ℕ} (A : MPSTensor d D)
     (hA : Kraus.IsInjective A) (G : Matrix (Fin d) (Fin d) ℂ)
     (α₂ : ℂ) (hα₂ : α₂ ≠ 0)
@@ -80,7 +61,7 @@ private theorem rank_traceGram_of_pair {d D : ℕ} (A : MPSTensor d D)
       α₂ • (MPSTensor.traceMulRightPi A).comp (Fintype.linearCombination ℂ A) :=
     LinearMap.ext fun x => by
       simpa only [Matrix.mul_one, Matrix.one_mulVec, Matrix.coe_mulVecLin, LinearMap.comp_apply,
-        LinearMap.smul_apply] using traceQuotientSection_pair A G
+        LinearMap.smul_apply] using TNLean.MPS.CanonicalForm.traceQuotientSection_pair A G
         (1 : Matrix (Fin d) (Fin d) ℂ) α₂ hG x
   rw [Matrix.rank, hMap, LinearMap.range_smul _ α₂ hα₂,
     LinearMap.range_comp_of_range_eq_top _
@@ -94,7 +75,7 @@ constant minimal dimension admits locally continuous associative quotient
 multiplication. The normalized matrix-algebra identifications are pointwise;
 no continuity of the realizations or their normalization scalars is assumed.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
-theorem exists_local_continuous_traceQuotientAlgebra
+theorem _root_.TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientAlgebra
     {T : Type*} [TopologicalSpace T] {d r K : ℕ}
     (B : T → MPSTensor d K) (hB : Continuous B)
     (G : T → Matrix (Fin d) (Fin d) ℂ)
@@ -130,7 +111,7 @@ theorem exists_local_continuous_traceQuotientAlgebra
       (fun F t => traceQuotientTripleColumns (B t) F)
       (fun F => continuous_traceQuotientTripleColumns B hB F)
   exact ⟨F, S, hS, ht₀, hCont, fun t ht =>
-    traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq
+    TNLean.MPS.CanonicalForm.traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq
       (A t) (B t) (G t) (hG t) F (α₂ t) (α₃ t) (hα₂ t) (hα₃ t)
       (hD t).symm (hSection t ht).1 (hPair t) (hTriple t)⟩
 
@@ -254,7 +235,7 @@ minimal dimension admit local continuous quotient multiplication and a local
 continuous two-sided unit. The matrix-algebra identifications and the unit are
 derived; no continuous choice of a minimal tensor is assumed.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
-theorem exists_local_continuous_traceQuotientUnit
+theorem _root_.TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientUnit
     {T : Type*} [TopologicalSpace T] {d r K : ℕ}
     (B : T → MPSTensor d K) (hB : Continuous B)
     (G : T → Matrix (Fin d) (Fin d) ℂ)
@@ -281,7 +262,7 @@ theorem exists_local_continuous_traceQuotientUnit
           (∀ x y z, μ (μ x y) z = μ x (μ y z)) := by
   classical
   obtain ⟨F, S₀, hS₀, ht₀, hM, hRecovery⟩ :=
-    exists_local_continuous_traceQuotientAlgebra B hB G hG D hD A hA
+    TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientAlgebra B hB G hG D hD A hA
       α₂ α₃ hα₂ hα₃ hPair hTriple t₀
   let M := fun t => traceQuotientProductCoordinates (G t) F
     (traceQuotientTripleColumns (B t) F)
@@ -509,7 +490,7 @@ primitive idempotent in their reconstructed quotient algebra. Its principal
 left ideal has the minimal bond dimension. Neither a continuous minimal tensor
 nor a continuous matrix-algebra identification is assumed.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
-theorem exists_local_continuous_traceQuotientPrimitive
+theorem _root_.TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive
     {T : Type*} [TopologicalSpace T] {d r K : ℕ}
     (B : T → MPSTensor d K) (hB : Continuous B)
     (G : T → Matrix (Fin d) (Fin d) ℂ)
@@ -541,7 +522,7 @@ theorem exists_local_continuous_traceQuotientPrimitive
             (∀ x y z, μ t (μ t x y) z = μ t x (μ t y z)) := by
   classical
   obtain ⟨F, S₀, u, hS₀, ht₀, hM, hu, hRecovery⟩ :=
-    exists_local_continuous_traceQuotientUnit B hB G hG D hD A hA
+    TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientUnit B hB G hG D hD A hA
       α₂ α₃ hα₂ hα₃ hPair hTriple t₀
   let M := fun t => traceQuotientProductCoordinates (G t) F
     (traceQuotientTripleColumns (B t) F)

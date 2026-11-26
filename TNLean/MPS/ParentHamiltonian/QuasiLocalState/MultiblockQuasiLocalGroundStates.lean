@@ -153,7 +153,7 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
       quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
         μ A hμ j (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
         (hP j).trace_ne_zero h hker⟩,
-      (hP j).isPureQuasiLocalState_quasiLocalExpectation (hρ j)⟩
+      TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation (hP j) (hρ j)⟩
 
 end MPSTensor
 

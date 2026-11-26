@@ -355,7 +355,9 @@ private theorem traceWord_eq_sum_nonzeroStep [FiniteDimensional ℂ M]
   · intro k _ hk
     by_contra hnot
     simp only [not_exists, not_not] at hnot
-    exact hk (traceWord_eq_zero_of_forall_smul_eq_zero hnot hw)
+    exact hk (traceWord_eq_zero_of_forall_ofWord_smul_eq_zero (n := 1) (fun w hw x => by
+      obtain ⟨i, rfl⟩ := List.length_eq_one_iff.mp hw
+      exact hnot i x) hw)
 
 variable {M' : Type*} [AddCommGroup M'] [Module ℂ M'] [Module (WordAlgebra d) M']
   [IsScalarTower ℂ (WordAlgebra d) M']

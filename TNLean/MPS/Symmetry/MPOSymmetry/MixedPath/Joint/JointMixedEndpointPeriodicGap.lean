@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointPeriodicSectors
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGapThreshold
 import TNLean.MPS.ParentHamiltonian.Continuity.BlockPeriodicGroundSpaceContinuity
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 
 /-!
 # Periodic kernel and uniform gap of the actual joint mixed endpoint
