@@ -16,7 +16,7 @@ The last assertion of Proposition 10.2 says that the graph neighborhood
 target `T` is far from the cut endpoints `Z`. A walk of length at most `2r` from
 `S₀` that leaves `A` crosses the cut at an endpoint within ambient distance
 `L + 2r` of `T`; with the explicit clearance `L + 2r < dist_∞(T, Z)` this is
-`graphNeighborhood_subset_of_cut_clearance`. This module derives the clause from the
+`ManyBody.graphNeighborhood_subset_of_cut_clearance`. This module derives the clause from the
 source clearance `L + n^β` at all large scales, uniformly in the domain, the cut and
 the target. Consequently the amplification proposition reduces to its radius and
 information bounds.
@@ -29,9 +29,6 @@ information bounds.
   `Exponents.collarRadiusThreshold C 1`.
 * `amplificationBound_of_radius_output`: the radius and output bounds of
   Proposition 10.2 imply `AmplificationBound`.
-* `TNLean.PEPS.AreaLaw.graphNeighborhood_subset_of_cut_clearance`,
-  `TNLean.PEPS.AreaLaw.exterior_union_subset_graphNeighborhood_compl_of_clearance`: graph
-  neighborhoods separated from physical cuts.
 
 ## References
 
