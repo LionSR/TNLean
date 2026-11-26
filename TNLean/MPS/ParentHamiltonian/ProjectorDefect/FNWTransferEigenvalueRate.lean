@@ -69,7 +69,7 @@ theorem fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
   have hPX : fnwLimitMap ρ hP.trace_ne_zero X = 0 := by
     apply (smul_eq_zero.mp
       (show ν • fnwLimitMap ρ hP.trace_ne_zero X = 0 from ?_)).resolve_left hν0
-    simpa only [Module.End.mul_apply, hX.apply_eq_smul, map_smul, LinearMap.zero_apply]
+    simpa only [Module.End.mul_apply, hX.apply_eq_smul, _root_.map_smul, LinearMap.zero_apply]
       using LinearMap.congr_fun hzero X
   exact Module.End.hasEigenvalue_of_hasEigenvector
     ⟨Module.End.mem_eigenspace_iff.mpr (by

@@ -112,6 +112,8 @@ open MPSTensor
 
 variable {d D : ℕ}
 
+attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
 uniformly in the prefix length and in every positive suffix length. -/

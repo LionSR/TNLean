@@ -202,7 +202,7 @@ theorem eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
     (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
+    (hDistinct : ∀ e : F = E, ¬ MPSTensor.GaugePhaseEquiv (e ▸ B') B)
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ N in Filter.atTop, ∀ r,
       ∀ x ∈ (blockedResidualBoundaryMapES A L B V N r).range,

@@ -192,7 +192,7 @@ theorem quasiLocalState_interval_eq_insertion_of_groundSpace_support
       (bulkObservable X n n) (isStarProjection_groundSpaceProjectionMatrix A _)
       (hSupport (a - n) _) (observableInsertionExpectation A ρ X)
     simpa only [quasiLocalIntervalObservable_bulkObservable, groundSpaceProjectionMatrix,
-      map_sub, map_mul, map_smul, StarAlgEquiv.apply_symm_apply,
+      map_sub, map_mul, _root_.map_smul, StarAlgEquiv.apply_symm_apply,
       ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc] using h
   have hzero := squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _)
     (Eventually.of_forall hbound) hlim

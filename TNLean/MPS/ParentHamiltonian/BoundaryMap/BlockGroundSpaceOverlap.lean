@@ -90,7 +90,7 @@ theorem eventually_norm_inner_groundSpaceES_le_of_inequivalent
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A)
+    (hDistinct : ∀ h : D₂ = D₁, ¬ MPSTensor.GaugePhaseEquiv (h ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ n in Filter.atTop, ∀ x ∈ groundSpaceES A n, ∀ y ∈ groundSpaceES B n,
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
