@@ -66,6 +66,8 @@ assumption. A nonzero periodic target is required.
   The uniform ordered-mixing estimate is an additional quantitative hypothesis.
 -/
 
+open MPTensor
+
 section InhomogeneousOverlap
 
 /-!

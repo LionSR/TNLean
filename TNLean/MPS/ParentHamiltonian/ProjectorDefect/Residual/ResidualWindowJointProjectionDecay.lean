@@ -48,6 +48,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma commutation (ii), lines 2442--2531, and Section 6.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix InnerProductSpace ComplexOrder

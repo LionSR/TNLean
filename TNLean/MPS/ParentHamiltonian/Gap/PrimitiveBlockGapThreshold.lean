@@ -69,6 +69,8 @@ This is the uniform-in-length conclusion in arXiv:2011.12127, Gaps subsection,
 lines 2183--2187, at the range in PGVWC07, Theorem 12 (`2blocks.2`).
 -/
 
+open MPTensor
+
 section
 
 open Filter

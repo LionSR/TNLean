@@ -34,6 +34,8 @@ paper's minimal BNT representative construction.
   BNT minimal representative condition.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.A]: Existence of canonical form.
 -/
+
+open MPTensor
 open scoped Matrix BigOperators
 
 namespace MPSTensor

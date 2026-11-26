@@ -1533,7 +1533,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Sanctioned bridges:** `MPSTensor.eq_zero_or_isGaugeRelated_of_intertwines`
   shows that a letter intertwiner between normal tensors is zero or witnesses
   the predicate.
-- **Caveat:** for equal bond dimensions this is `MPSTensor.GaugeEquiv A A'`
+- **Caveat:** for equal bond dimensions this is `MPTensor.GaugeEquiv A A'`
   with the gauge `X⁻¹`; no bridge to `GaugeEquiv` is stated, because the
   predicate is only used to separate blocks of possibly different bond
   dimensions.

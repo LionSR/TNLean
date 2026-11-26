@@ -56,6 +56,8 @@ every eigenspace is the degeneracy the source asserts.
   Concepts, symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder ScalarCohomology
 open Kraus (blockPhysDim blockTensor)
 

@@ -75,6 +75,8 @@ number of blocks is `1 + z = D_B - D_A + 1`.
   rectangular reduction onto it whose residual is nilpotent of length `D_B - D_A + 1`.
 -/
 
+open MPTensor
+
 section MultiBlock
 
 section

@@ -57,6 +57,8 @@ of arXiv:1606.00608, Corollary A.6, and in the periodic corner-unitary argument
 of arXiv:1708.00029, Appendix A, lines 1110--1117.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

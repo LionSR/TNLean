@@ -36,6 +36,8 @@ printed there; the numbers are those of `check/worked_example_normal.py` and
 `thm:asym_uniq_different_flags`, *Two compressions with different flags*.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MultiBlockExamples

@@ -127,7 +127,7 @@ private theorem physicalSupportProj_isHermitian {d D : ℕ} (K : MPOTensor d D) 
   (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K)).supportProj_isHermitian
 
 private theorem physicalSupportProj_eq_of_gaugeEquiv {d D : ℕ}
-    {K L : MPOTensor d D} (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    {K L : MPOTensor d D} (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     physicalSupportProj K = physicalSupportProj L := by
   have hGaugeSymm := hGauge.symm
   obtain ⟨X, hX⟩ := hGauge
@@ -185,8 +185,8 @@ Perron-gauged representative. -/
 theorem exists_embedded_leftCanonical_normal_obstruction_block :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
-        MPSTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
-        MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+        MPTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
+        MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
         physicalSupportProj (verticalBNTMPO B) = obstructionPhysicalSupport := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hTensorGauge⟩ :=
     exists_leftCanonical_normalTensor_scalar_representation
@@ -196,15 +196,15 @@ theorem exists_embedded_leftCanonical_normal_obstruction_block :
   have hAmbientInj : Kraus.IsInjective Bambient := by
     exact (isInjective_toMPSTensor_changePhysicalBasis_iff
       physicalInclusion physicalInclusion_isometry Bmpo).2 (by simpa [Bmpo] using hBInj)
-  have hAmbientLeft : MPSTensor.IsLeftCanonical Bambient := by
+  have hAmbientLeft : MPTensor.IsLeftCanonical Bambient := by
     exact isLeftCanonical_toMPSTensor_changePhysicalBasis
       physicalInclusion physicalInclusion_isometry Bmpo (by simpa [Bmpo] using hBLeft)
   have hAmbientNormal : MPSTensor.IsNormalTensor Bambient := by
     exact (isNormalTensor_toMPSTensor_changePhysicalBasis_iff
       physicalInclusion physicalInclusion_isometry Bmpo).2 (by simpa [Bmpo] using hBNormal)
   have hAmbientGauge :
-      MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • Bambient) := by
-    have hSource : MPSTensor.GaugeEquiv tensor.toMPSTensor
+      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • Bambient) := by
+    have hSource : MPTensor.GaugeEquiv tensor.toMPSTensor
         (verticalBNTMPO (mu • B)).toMPSTensor := by
       simpa using hTensorGauge
     have h := gaugeEquiv_toMPSTensor_changePhysicalBasis
@@ -212,7 +212,7 @@ theorem exists_embedded_leftCanonical_normal_obstruction_block :
     have hVertical : verticalBNTMPO (mu • B) = mu • verticalBNTMPO B := rfl
     rw [hVertical, changePhysicalBasis_smul] at h
     exact h
-  have hAmbientGaugeMPO : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor
+  have hAmbientGaugeMPO : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor
       (mu • verticalBNTMPO Bambient).toMPSTensor := by
     rw [← show verticalBNTMPO (mu • Bambient) =
       mu • verticalBNTMPO Bambient from rfl, verticalBNTMPO_toMPSTensor]
@@ -305,10 +305,10 @@ theorem terminalBlock_isInjective : Kraus.IsInjective terminalBlock.toMPSTensor 
 
 /-- The terminal block is left-canonical. -/
 theorem terminalBlock_isLeftCanonical :
-    MPSTensor.IsLeftCanonical terminalBlock.toMPSTensor := by
+    MPTensor.IsLeftCanonical terminalBlock.toMPSTensor := by
   apply isLeftCanonical_toMPSTensor_changePhysicalBasis
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource
-  simp [MPSTensor.IsLeftCanonical, Kraus.IsTP, toMPSTensor, terminalSource_apply]
+  simp [MPTensor.IsLeftCanonical, Kraus.IsTP, toMPSTensor, terminalSource_apply]
 
 /-- The terminal block is a normal tensor. -/
 theorem terminalBlock_isNormalTensor :
@@ -332,9 +332,9 @@ private theorem terminalSource_physTraceTransfer_eq_one :
 private theorem scalarUnitTensor_pureState_trace_ne_zero (N : ℕ) :
     Matrix.trace (MPSTensor.pureState MPSTensor.scalarUnitTensor N) ≠ 0 := by
   have hMpv : ∀ σ : Fin N → Fin 1,
-      MPSTensor.mpv MPSTensor.scalarUnitTensor σ = 1 := by
+      MPTensor.mpv MPSTensor.scalarUnitTensor σ = 1 := by
     intro σ
-    simp [MPSTensor.mpv, MPSTensor.scalarUnitTensor_evalWord, Matrix.trace]
+    simp [MPTensor.mpv, MPSTensor.scalarUnitTensor_evalWord, Matrix.trace]
   have hPure : MPSTensor.pureState MPSTensor.scalarUnitTensor N = 1 := by
     ext σ τ
     obtain rfl : τ = σ := Subsingleton.elim τ σ
@@ -479,7 +479,7 @@ basis-family separation is forced by the impossible bond-dimension equality
 `2 = 1`; the terminal coefficient supplies the single global unit witness. -/
 theorem obstructionTerminalDecomposition_isBNTCanonicalForm
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) (hmuNorm : ‖mu‖ < 1)
-    (hBInj : Kraus.IsInjective B) (hBLeft : MPSTensor.IsLeftCanonical B)
+    (hBInj : Kraus.IsInjective B) (hBLeft : MPTensor.IsLeftCanonical B)
     (hBNormal : MPSTensor.IsNormalTensor B) :
     MPSTensor.IsBNTCanonicalForm (obstructionTerminalDecomposition mu B hmu) := by
   have hTerminalNormal := terminalBlock_isNormalTensor
@@ -580,9 +580,9 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
-      MPSTensor.IsLeftCanonical B ∧
+      MPTensor.IsLeftCanonical B ∧
       MPSTensor.IsNormalTensor B ∧
-      MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       (obstructionTerminalDecomposition mu B hmu).basisCount = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).copies 0 = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).copies (Fin.succ 0) = 1 ∧

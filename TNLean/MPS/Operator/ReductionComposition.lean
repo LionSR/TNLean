@@ -55,6 +55,8 @@ related in this way by a unique nonzero scalar
 is compatible with the three compositions above.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 namespace MPSTensor

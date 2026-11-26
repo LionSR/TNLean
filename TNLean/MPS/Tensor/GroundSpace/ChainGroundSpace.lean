@@ -15,6 +15,8 @@ This file contains the generic definitions and elementary consequences that do
 not use injectivity or uniqueness.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

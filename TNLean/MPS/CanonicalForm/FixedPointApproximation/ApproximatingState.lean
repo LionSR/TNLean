@@ -60,6 +60,8 @@ This file proves these three steps.
   Material, "Proof of Lemma 1 and extension to non-normal tensors" and proof of Lemma 1'(i).
 -/
 
+open MPTensor
+
 section FixedPointPairs
 
 /-!

@@ -81,6 +81,8 @@ Pauli `Z`, and the vector is `|-⟩`. These are the values the trace formula giv
   Verstraete, Cirac, *Valence bond solids for quantum computation*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset
 open Kraus (blockPhysDim blockPhysDim_eq_pow blockTensor)

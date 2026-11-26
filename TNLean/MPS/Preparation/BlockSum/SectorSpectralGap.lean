@@ -19,6 +19,8 @@ compilation and measurement protocols.
   Supplemental Material, proof of Lemma 1'(ii).
 -/
 
+open MPTensor
+
 open Matrix MPSTensor
 open scoped BigOperators
 

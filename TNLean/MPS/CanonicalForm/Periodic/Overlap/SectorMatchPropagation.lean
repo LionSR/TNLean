@@ -30,6 +30,8 @@ whole periodic orbit.
   arXiv:1708.00029, Appendix A.
 -/
 
+open MPTensor
+
 section SectorOverlapTransport
 
 /-!

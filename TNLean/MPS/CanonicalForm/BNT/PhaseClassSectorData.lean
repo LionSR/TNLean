@@ -20,6 +20,8 @@ irreducible blocks by MPV phase equivalence.  It proves the representative
 overlap data and transports finite-length MPV span identities through the chosen
 phase classes.
 -/
+
+open MPTensor
 open scoped Matrix BigOperators
 open Filter
 

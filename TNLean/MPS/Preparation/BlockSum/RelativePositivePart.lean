@@ -61,6 +61,8 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   BIT Numerical Mathematics 37 (1997), 67–75.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
 open Kraus (blockTensor)

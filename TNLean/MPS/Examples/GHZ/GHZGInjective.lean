@@ -59,6 +59,8 @@ and virtual levels and a blocking of two sites, it is the GHZ tensor.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix MPOTensor.GroupCocycle
 

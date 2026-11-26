@@ -38,6 +38,8 @@ not equality of periodic vectors.
   Appendix A, for the GHZ tensor; Section IV.C, for parent spaces.
 -/
 
+open MPTensor
+
 open Matrix QuantumCircuit
 open scoped BigOperators InnerProductSpace
 

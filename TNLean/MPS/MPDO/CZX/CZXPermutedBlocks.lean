@@ -442,10 +442,10 @@ private theorem evalWord_blockedSector (x : Fin 2) (w : List (Fin 4)) :
     by_cases hi : i = finProdFinEquiv (x, x) <;> simp [hi]
 
 private theorem mpv_blockedSector (x : Fin 2) {N : ℕ} :
-    (fun σ : Fin N → Fin 4 ↦ MPSTensor.mpv (blockedSector x) σ) =
+    (fun σ : Fin N → Fin 4 ↦ MPTensor.mpv (blockedSector x) σ) =
       Pi.single (fun _ ↦ finProdFinEquiv (x, x)) 1 := by
   funext σ
-  rw [MPSTensor.mpv, MPSTensor.coeff, evalWord_blockedSector]
+  rw [MPTensor.mpv, MPTensor.coeff, evalWord_blockedSector]
   by_cases h : σ = fun _ ↦ finProdFinEquiv (x, x)
   · subst h
     simp
@@ -454,8 +454,8 @@ private theorem mpv_blockedSector (x : Fin 2) {N : ℕ} :
     simp [h']
 
 private theorem mpo_tensor_mulVec_blockedSector {N : ℕ} [NeZero N] (x : Fin 2) :
-    mpo tensor N *ᵥ (fun σ : Fin N → Fin 4 ↦ MPSTensor.mpv (blockedSector x) σ) =
-      fun σ ↦ MPSTensor.mpv (blockedSector (1 - x)) σ := by
+    mpo tensor N *ᵥ (fun σ : Fin N → Fin 4 ↦ MPTensor.mpv (blockedSector x) σ) =
+      fun σ ↦ MPTensor.mpv (blockedSector (1 - x)) σ := by
   rw [mpv_blockedSector, mpv_blockedSector, mpo_tensor, Matrix.monomial_mulVec_single]
   have hc : complement N (fun _ ↦ finProdFinEquiv (x, x)) =
       fun _ ↦ finProdFinEquiv (1 - x, 1 - x) :=

@@ -64,6 +64,8 @@ The Z-gauge construction (the scalar-entry part of `thm:bdequal`) is fully prove
   sector-decomposition matching template for the non-periodic theorem
 * Z-gauge construction lemmas in `ZGauge.lean`
 -/
+
+open MPTensor
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -108,7 +110,7 @@ also in the heterogeneous-dimension formulation.
 Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
 lines 276--284; the pure normalization similarities used here occur at
 lines 313--332. -/
-theorem GaugeEquiv.toHetRepeatedBlocks {D : ℕ} {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.toHetRepeatedBlocks {D : ℕ} {A B : MPSTensor d D}
     (h : GaugeEquiv A B) : HetRepeatedBlocks A B :=
   HetRepeatedBlocks.of_repeatedBlocks
     ((equivalentBlocks_iff_gaugeEquiv.mpr h).to_repeatedBlocks)

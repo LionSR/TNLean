@@ -26,6 +26,8 @@ has one unit weight and one smaller weight, so it remains a BNT canonical form
 without satisfying the equal-modulus condition.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

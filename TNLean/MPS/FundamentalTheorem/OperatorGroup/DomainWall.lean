@@ -532,9 +532,9 @@ theorem mpo_mulVec_twoWallMPV (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A
   obtain ⟨N₁, H₁⟩ := he.eq
   obtain ⟨N₂, H₂⟩ := hf.eq
   have hBx := (ad.isReduction g x).bondDim_isReductionResidualNilpotencyBound
-    ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
+    ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))
   have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
-    ((hperm g y).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
+    ((hperm g y).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))
   set M := N₁ + N₂ + F.bondDim g * D x + F.bondDim g * D y
   refine ⟨2 * M + 1, fun k l n hk hl ↦ ?_⟩
   change mpo (F.tensor g) _ *ᵥ (fun τ ↦ (twoWallChain (A x) e (A y) f τ).trace) = _
@@ -635,9 +635,9 @@ theorem exists_evalWord_mul_actW_eq (hA : ∀ x, Kraus.IsNormal (A x))
         ((ad.lSymbol fd x g h)⁻¹ : ℂˣ) •
           (Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
             ad.fuseW fd g h x) := by
-  have hSame : MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
+  have hSame : MPTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
       (A (g • h • x)) :=
-    ((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _)
+    ((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _)
   obtain ⟨z, -, hz⟩ :=
     (ad.isReduction_actV g h x).exists_boundary_dressed_proportional_of_nilpotencyLength_le
       (ad.isReduction_fuseV fd g h x) (hA _) hSame (le_max_left _ _) (le_max_right _ _)

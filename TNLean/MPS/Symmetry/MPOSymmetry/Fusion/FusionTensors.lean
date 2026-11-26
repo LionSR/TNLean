@@ -72,6 +72,8 @@ periodic-boundary relation `O_a ψ_{A_x} = ∑_y M_{a,x}^y ψ_{A_y}` (lines 567-
   states*
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor
@@ -340,8 +342,8 @@ theorem exists_actionTensors_of_mpo_mulVec_eq_sum {κ : Type*} [Fintype κ]
     (A : ∀ y, MPSTensor d (D y)) (M : κ → ℕ) (hA : ∀ y, Kraus.IsNormal (A y))
     (hD : ∀ y, 0 < D y)
     (hact : ∀ n : ℕ, 0 < n →
-      mpo T n *ᵥ (fun τ : Fin n → Fin d => MPSTensor.mpv Ax τ) =
-        fun σ : Fin n → Fin d => ∑ y, (M y : ℂ) * MPSTensor.mpv (A y) σ) :
+      mpo T n *ᵥ (fun τ : Fin n → Fin d => MPTensor.mpv Ax τ) =
+        fun σ : Fin n → Fin d => ∑ y, (M y : ℂ) * MPTensor.mpv (A y) σ) :
     ∃ (V : ∀ s : Σ y, Fin (M y), Matrix (Fin (D s.1)) (Fin (χ * Dx)) ℂ)
       (W : ∀ s : Σ y, Fin (M y), Matrix (Fin (χ * Dx)) (Fin (D s.1)) ℂ),
       (∀ s, MPSTensor.IsReduction (actTensor T Ax) (A s.1) (V s) (W s)) ∧
@@ -395,8 +397,8 @@ theorem nonempty_actionTensors_of_mpo_mulVec_eq_sum {K : Type*} [Fintype K] {χ 
     {D : K → ℕ} (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x)) (M : L → K → K → ℕ)
     (hA : ∀ y, Kraus.IsNormal (A y)) (hD : ∀ y, 0 < D y) (a : L) (x : K)
     (hact : ∀ n : ℕ, 0 < n →
-      mpo (O a) n *ᵥ (fun τ : Fin n → Fin d => MPSTensor.mpv (A x) τ) =
-        fun σ : Fin n → Fin d => ∑ y, (M a x y : ℂ) * MPSTensor.mpv (A y) σ) :
+      mpo (O a) n *ᵥ (fun τ : Fin n → Fin d => MPTensor.mpv (A x) τ) =
+        fun σ : Fin n → Fin d => ∑ y, (M a x y : ℂ) * MPTensor.mpv (A y) σ) :
     Nonempty (ActionTensors O A M a x) := by
   obtain ⟨V, W, hred, horth, hnil⟩ :=
     exists_actionTensors_of_mpo_mulVec_eq_sum (O a) (A x) A (M a x) hA hD hact
@@ -427,7 +429,7 @@ theorem IsMPOSymmetricFamily.exists_nat_actionTensors {K : Type*} [Fintype K] {�
     {D : K → ℕ} {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
     {M : L → K → K → ℂ} (hsym : IsMPOSymmetricFamily O A M) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) {L₀ : ℕ}
-    (hli : LinearIndependent ℂ fun x => fun σ : Fin L₀ → Fin d => MPSTensor.mpv (A x) σ) :
+    (hli : LinearIndependent ℂ fun x => fun σ : Fin L₀ → Fin d => MPTensor.mpv (A x) σ) :
     ∃ N : L → K → K → ℕ, (∀ a x y, M a x y = N a x y) ∧
       ∀ a x, Nonempty (ActionTensors O A N a x) := by
   choose N hN using exists_nat_eq_of_isMPOSymmetricFamily O A M hsym hA hD hli

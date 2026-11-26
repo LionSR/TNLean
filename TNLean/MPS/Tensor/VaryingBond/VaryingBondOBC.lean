@@ -531,7 +531,7 @@ in `docs/paper-gaps/pgvwc07_site_independent_scope.tex`. -/
 theorem pgvwc07_site_independent_matrices
     (A : OBCChainTensor d D N) [NeZero N]
     (hTI : A.IsTranslationInvariantState) (σ : Fin N → Fin d) :
-    MPSTensor.mpv (MPSChainTensor.cyclicBlockTensor A.zeroPad) σ =
+    MPTensor.mpv (MPSChainTensor.cyclicBlockTensor A.zeroPad) σ =
       A.coeff σ := by
   rw [MPSChainTensor.mpv_cyclicBlockTensor_eq_average]
   simp_rw [coeff_cyclicRotation_zeroPad_eq_coeff_cyclicTranslateConfig_neg A]
@@ -549,7 +549,7 @@ theorem exists_pgvwc07_site_independent_tensor
     (A : OBCChainTensor d D N) [NeZero N]
     (hTI : A.IsTranslationInvariantState) :
     ∃ B : MPSTensor d (N * D),
-      ∀ σ : Fin N → Fin d, MPSTensor.mpv B σ = A.coeff σ :=
+      ∀ σ : Fin N → Fin d, MPTensor.mpv B σ = A.coeff σ :=
   ⟨MPSChainTensor.cyclicBlockTensor A.zeroPad,
     pgvwc07_site_independent_matrices A hTI⟩
 

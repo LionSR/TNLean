@@ -24,6 +24,8 @@ It is generally different from the Hilbert-space adjoint for the rho-weighted
 inner product of FNW equation (5.6).
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

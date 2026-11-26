@@ -14,6 +14,8 @@ summand at the endpoints and the full direct sum in the open interval.
 Source: arXiv:1010.3732, Section II.F.2, equation `eq:sym:omega-gamma`.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder
 
 namespace MPSTensor

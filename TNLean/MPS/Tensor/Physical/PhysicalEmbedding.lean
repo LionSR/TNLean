@@ -19,6 +19,8 @@ investigation of SPWC10, arXiv:0909.5347, Theorem 5, lines 850–880. It asserts
 only the actual state identity, not a ground-space or all-volume conclusion.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 /-- Extension of the physical tensor by zero produces exactly the isometric

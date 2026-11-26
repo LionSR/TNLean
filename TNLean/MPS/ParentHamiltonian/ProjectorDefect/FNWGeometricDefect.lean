@@ -49,6 +49,8 @@ This correction is documented in `docs/paper-gaps/cpgsv21_martingale_overlap.tex
 * `Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric`
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder ENNReal Matrix NNReal
 
 namespace MPSTensor

@@ -35,6 +35,8 @@ the non-strict, ties-allowed order used in the reduction to canonical form.
   primitive weighted block decompositions.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 section BlockFamily

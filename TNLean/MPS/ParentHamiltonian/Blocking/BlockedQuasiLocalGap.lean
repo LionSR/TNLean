@@ -59,6 +59,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947,
 the site grouping at lines 825--836, and Section 6, lines 2649--2675.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators

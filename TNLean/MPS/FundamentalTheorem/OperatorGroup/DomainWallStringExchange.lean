@@ -155,7 +155,7 @@ theorem wallString_outer_mul_inner_mulVec_mpv_apply
       ∀ p a μ₁ i ν j μ₃ b q,
       ((ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ))
+          (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
         (cAB * cBA) * fourWallCoeff (A x) eAB (A y) eBA p a μ₁ i ν j μ₃ b q := by
   obtain ⟨N, hN⟩ := BlockActionData.IsDomainWallAction.pair hperm hAB hBA
@@ -202,7 +202,7 @@ theorem wallString_inner_mul_outer_mulVec_mpv_apply
     (b : Fin d) (q : Fin w → Fin d) :
     ((ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
         ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-        (fun σ ↦ MPSTensor.mpv (A x) σ))
+        (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
       fourWallCoeff (A x) eAB (A y) eBA p a μ₁ i ν j μ₃ b q := by
   rw [← Matrix.mulVec_mulVec, wallString_mulVec_mpv_left ad hÂ h₂]
@@ -244,7 +244,7 @@ theorem wallString_cross_over_right_mulVec_mpv_apply
       ∀ p a μ₁ i ν j μ₃ b q,
       ((ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') (v + 1 + w') w h₄ *
           ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v) (w' + 1 + w) h₃) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ))
+          (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
         cBA * fourWallCoeff (A x) eAB (A y) eBA p a μ₁ i ν j μ₃ b q := by
   obtain ⟨N, hN⟩ := hBA.physAct_eq
@@ -296,7 +296,7 @@ theorem wallString_cross_over_left_mulVec_mpv_apply
       ∀ p a μ₁ i ν j μ₃ b q,
       ((ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v) (w' + 1 + w) h₃ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') (v + 1 + w') w h₄) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ))
+          (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
         cAB * fourWallCoeff (A x) eAB (A y) eBA p a μ₁ i ν j μ₃ b q := by
   obtain ⟨N, hN⟩ := hAB.physAct_eq
@@ -354,10 +354,10 @@ theorem wallString_mul_wallString_mulVec_mpv
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
+          (fun σ ↦ MPTensor.mpv (A x) σ) =
         (cAB * cBA) • ((ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
           ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+            (fun σ ↦ MPTensor.mpv (A x) σ)) := by
   obtain ⟨N, hN⟩ := ad.wallString_outer_mul_inner_mulVec_mpv_apply hperm hÂ hAB hBA
   refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' ↦ funext fun τ ↦ ?_⟩
   obtain ⟨p, a, μ₁, i, ν, j, μ₃, b, q, rfl⟩ := exists_wallConfig_wallSplit u' v w' h₂ τ
@@ -382,10 +382,10 @@ theorem wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
           ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
+          (fun σ ↦ MPTensor.mpv (A x) σ) =
         (cAB * cBA) • ((ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+            (fun σ ↦ MPTensor.mpv (A x) σ)) := by
   have hc := hAB.mul_sq_eq_one_of_mpo_mul_self_eq_one
     (isInjective_of_physPairing_eq_one hÂ.left_left).isNormal
     (isInjective_of_physPairing_eq_one hÂ.right_right).isNormal hperm hU hBA
@@ -418,10 +418,10 @@ theorem wallString_mul_wallString_mulVec_mpv_swap_left_far
       (h₄ : u + 1 + u' + 1 + (v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
+          (fun σ ↦ MPTensor.mpv (A x) σ) =
         cAB • ((ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') (v + 1 + w') w h₄ *
           ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v) (w' + 1 + w) h₃) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+            (fun σ ↦ MPTensor.mpv (A x) σ)) := by
   obtain ⟨N₁, hN₁⟩ := ad.wallString_outer_mul_inner_mulVec_mpv_apply hperm hÂ hAB hBA
   obtain ⟨N₂, hN₂⟩ := ad.wallString_cross_over_right_mulVec_mpv_apply hÂ hBA
   refine ⟨N₁ + N₂, fun u u' v w' w L h₁ h₂ h₃ h₄ hu' hv hw' ↦ funext fun τ ↦ ?_⟩
@@ -450,10 +450,10 @@ theorem wallString_mul_wallString_mulVec_mpv_swap_left_near
       (h₄ : u + 1 + u' + 1 + (v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v →
       (ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v) (w' + 1 + w) h₃ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') (v + 1 + w') w h₄) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
+          (fun σ ↦ MPTensor.mpv (A x) σ) =
         cAB • ((ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
           ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+            (fun σ ↦ MPTensor.mpv (A x) σ)) := by
   obtain ⟨N, hN⟩ := ad.wallString_cross_over_left_mulVec_mpv_apply hÂ hAB
   refine ⟨N, fun u u' v w' w L h₁ h₂ h₃ h₄ hu' hv ↦ funext fun τ ↦ ?_⟩
   obtain ⟨p, a, μ₁, i, ν, j, μ₃, b, q, rfl⟩ := exists_wallConfig_wallSplit u' v w' h₂ τ

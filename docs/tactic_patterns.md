@@ -3503,7 +3503,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` and
   `TNLean/MPS/FundamentalTheorem/Periodic/ProportionalOverlap.lean` in the sectorwise-normalization
   draft (2026-08-02).
-- **Abstraction:** `MPSTensor.GaugeEquiv.toHetRepeatedBlocks` in
+- **Abstraction:** `MPTensor.GaugeEquiv.toHetRepeatedBlocks` in
   `TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean`.
 - **Notes:** the lemma fixes the otherwise easy-to-reverse orientation between
   pure gauges and `RepeatedBlocks`, while `HetRepeatedBlocks.trans` absorbs all
@@ -3951,7 +3951,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/ParentHamiltonian/Gap/Comparison/PrimitiveGaugeExistence.lean`.
 - **Abstraction:** `MPSTensor.groundSpace_smul_eq` in
   `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`, placed beside
-  `MPSTensor.GaugeEquiv.groundSpace_eq` so that the scalar and the gauge half
+  `MPTensor.GaugeEquiv.groundSpace_eq` so that the scalar and the gauge half
   of the normalization are available together.
 - **Notes:** both private copies are deleted and their call sites now pass the
   nonzero scalar to the public theorem; the third consumer chains it with the
@@ -10430,7 +10430,7 @@ there is no need for a new tactic.
 - **Seen:** `MPS/Tensor/Physical/PhysicalEmbedding.lean` and the existing
   `MPS/Tensor/Physical/PhysicalRotation.lean` physical-coordinate calculations.
 - **Pattern:** Transport periodic coefficients after changing the physical alphabet.
-- **Reuse:** The new embedding identity uses `MPSTensor.mpv_reindexPhysical` on
+- **Reuse:** The new embedding identity uses `MPTensor.mpv_reindexPhysical` on
   image configurations and `Kraus.evalWord_append` at a zero letter elsewhere;
   it does not copy the general physical-rotation word expansion.
 - **Decision:** Existing mathematical helpers suffice; no new tactic or tensor

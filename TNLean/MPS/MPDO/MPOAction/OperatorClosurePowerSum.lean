@@ -20,6 +20,8 @@ tensor of arXiv:1606.00608, Section 4.5. No positivity of the weights or renorma
 fixed-point channel structure is asserted.
 -/
 
+open MPTensor
+
 open scoped BigOperators
 
 namespace MPOTensor

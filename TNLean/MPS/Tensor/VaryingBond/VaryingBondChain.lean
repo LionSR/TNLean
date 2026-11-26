@@ -31,6 +31,8 @@ for matrix product states "with bond dimension at most `D`".
 * arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS".
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix
 
 /-- A periodic chain of tensors on a ring of `N` sites with **bond dimensions at most `D`**: the

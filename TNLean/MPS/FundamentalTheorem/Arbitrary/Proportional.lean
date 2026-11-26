@@ -57,6 +57,8 @@ the existence of reductions and the uniqueness of the factors.
   non-repeated special case.
 -/
 
+open MPTensor
+
 open scoped Matrix Matrix.Norms.Operator
 
 namespace MPSTensor

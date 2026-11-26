@@ -241,7 +241,7 @@ theorem castMat_eq_reindexBondMatrix {a b : G} (e : a = b) :
 namespace IsRepresentation
 
 variable (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- The dagger-inverse gauges of two equal group elements agree after the bond
 identification. -/
@@ -419,7 +419,7 @@ namespace MPOTensor.GroupFamily.FusionData
 
 variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
   (fd : FusionData F) (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- The daggered left fusion tensor is the dagger of $F^<_{h^{-1},g^{-1}}$. -/
 theorem daggerFusionV_eq_daggerBoundary (g h : G) :

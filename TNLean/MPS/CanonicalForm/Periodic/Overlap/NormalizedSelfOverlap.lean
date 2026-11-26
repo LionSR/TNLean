@@ -37,6 +37,8 @@ basis of normal tensors from the normalized representatives.
 * [Wolf, *Quantum Channels & Operations*, Theorem 6.6]
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 open Filter
 

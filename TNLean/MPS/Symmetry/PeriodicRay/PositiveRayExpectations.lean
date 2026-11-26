@@ -19,6 +19,8 @@ Source: SPC11, arXiv:1010.3732, Section II.F, lines 929–953, where physical
 states are rays and the minimal tensor representative may change.
 -/
 
+open MPTensor
+
 open scoped InnerProductSpace
 
 namespace Matrix

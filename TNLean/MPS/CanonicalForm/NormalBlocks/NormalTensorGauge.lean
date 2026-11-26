@@ -81,6 +81,8 @@ by transport through this gauge.
 Source context: arXiv:1606.00608, lines 318–344, and quantum Wielandt theory.
 -/
 
+open MPTensor
+
 section NormalTensorGauge
 
 section
@@ -92,14 +94,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-namespace GaugeEquiv
-
 /-- The transfer maps of gauge-equivalent tensors are related by the standard
 congruence similarity of completely positive maps.
 
 Source: arXiv:1606.00608, lines 219--223 define the transfer map and lines
 264--268 give the invertible gauge relation. -/
-theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+theorem _root_.MPTensor.GaugeEquiv.transferMap_eq_similarityMap {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) :
     ∃ C : Matrix (Fin D) (Fin D) ℂ, C.det ≠ 0 ∧
       Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         similarityMap (D := D) C (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
@@ -151,7 +152,7 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
               hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
 
 /-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
-theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (c : ℂ) :
     Kraus.transferMap (ι := Fin d) (n := Fin D) B ∘ₗ Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         c • Kraus.transferMap (ι := Fin d) (n := Fin D) B ↔
@@ -176,8 +177,6 @@ theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
   · intro hPoly
     rw [← Module.End.mul_eq_comp] at hPoly ⊢
     simpa using congrArg e hPoly
-
-end GaugeEquiv
 
 namespace IsNormalTensor
 

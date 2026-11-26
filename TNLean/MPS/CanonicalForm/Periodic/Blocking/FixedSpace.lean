@@ -31,6 +31,8 @@ conclusion of arXiv:1708.00029, Lemma `lem:blocking-arbitrary`.
 * `IsPeriodic.isIrreducibleFamily_compressed_stepOrbit`: the compressed blocks are irreducible.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Fin.NatCast
 open Kraus (blockPhysDim blockTensor)

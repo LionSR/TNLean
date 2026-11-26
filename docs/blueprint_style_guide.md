@@ -428,7 +428,7 @@ python3 scripts/add_blueprint_search.py --web-root blueprint/web  # search index
 ```
 
 ## Fact-Check Lessons
-- **Chapter 2**: `mpv` in Lean returns a scalar (the σ-component), NOT a ket vector. The ket is `mpvState`. Blueprint presents the ket form (standard physics) but `\lean{MPSTensor.mpv}` points to the component function — this is acceptable as long as it's clear.
+- **Chapter 2**: `mpv` in Lean returns a scalar (the σ-component), NOT a ket vector. The ket is `mpvState`. Blueprint presents the ket form (standard physics) but `\lean{MPTensor.mpv}` points to the component function — this is acceptable as long as it's clear.
 - **Chapter 2**: Overlap and inner product differ by conjugation. Lean: `mpvOverlap A B N = star (mpvInner A B N)`. The overlap sums $V_\sigma \overline{W_\sigma}$; the inner product sums $\overline{V_\sigma} W_\sigma$.
 - **Chapter 4**: KS inequality is for UNITAL maps, not TP. HS contraction requires BOTH.
 - **Chapter 4**: `kraus_commute_of_ks_equality` proves $X K_i^\dagger = K_i^\dagger E(X)$, not Kraus commutation with a unitary.

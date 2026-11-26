@@ -147,8 +147,8 @@ theorem verticalComponent_isInjective : Kraus.IsInjective verticalComponent := b
   exact (Submodule.smul_mem_iff _ hc).mp (hv ▸ Submodule.subset_span ⟨v, rfl⟩)
 
 /-- The four matrices `A` are left-canonical. -/
-theorem A_isLeftCanonical : MPSTensor.IsLeftCanonical A := by
-  unfold MPSTensor.IsLeftCanonical Kraus.IsTP
+theorem A_isLeftCanonical : MPTensor.IsLeftCanonical A := by
+  unfold MPTensor.IsLeftCanonical Kraus.IsTP
   rw [Fin.sum_univ_four]
   ext i j
   fin_cases i <;> fin_cases j <;>
@@ -157,7 +157,7 @@ theorem A_isLeftCanonical : MPSTensor.IsLeftCanonical A := by
 
 /-- The normalized vertical component is left-canonical. -/
 theorem verticalComponent_isLeftCanonical : verticalComponent.IsLeftCanonical := by
-  unfold MPSTensor.IsLeftCanonical Kraus.IsTP
+  unfold MPTensor.IsLeftCanonical Kraus.IsTP
   rw [← Equiv.sum_comp (finProdFinEquiv : Fin 4 × Fin 4 ≃ Fin 16)]
   rw [Fintype.sum_prod_type]
   have hterm (a b : Fin 4) :
@@ -189,7 +189,7 @@ private def verticalZeroLetter : Fin 16 :=
   finProdFinEquiv ((0 : Fin 4), (0 : Fin 4))
 
 private theorem verticalComponent_mpv_zeroLoop (N : ℕ) (hN : 0 < N) :
-    MPSTensor.mpv verticalComponent (fun _ : Fin N ↦ verticalZeroLetter) =
+    MPTensor.mpv verticalComponent (fun _ : Fin N ↦ verticalZeroLetter) =
       (16 / 25 : ℂ) ^ N := by
   rw [MPSTensor.mpv_const_eq_trace_pow]
   have hletter : verticalComponent verticalZeroLetter =
@@ -218,7 +218,7 @@ theorem verticalComponent_isCPSVBasisOfNormalTensors :
     intro σ
     simp only [Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton]
     rw [verticalTensor_R_eq_smul_verticalComponent]
-    change MPSTensor.mpv (fun i ↦ (25 / 32 : ℂ) • verticalComponent i) σ = _
+    change MPTensor.mpv (fun i ↦ (25 / 32 : ℂ) • verticalComponent i) σ = _
     exact MPSTensor.mpv_smul (25 / 32 : ℂ) verticalComponent σ
   · refine ⟨0, ?_⟩
     intro N hN

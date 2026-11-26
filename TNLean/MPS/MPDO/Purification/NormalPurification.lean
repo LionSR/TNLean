@@ -64,6 +64,8 @@ See `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
   and boundary theories*
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators Kronecker
 open Filter MPSTensor
 

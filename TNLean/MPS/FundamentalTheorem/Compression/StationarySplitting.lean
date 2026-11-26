@@ -22,6 +22,8 @@ silently added. The analytic converse and the exclusion of zero factors are
 proved separately in the stationary-semisimplicity note cited below.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix WordAlgebra
 namespace MPSTensor

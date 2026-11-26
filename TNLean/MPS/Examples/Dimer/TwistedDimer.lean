@@ -97,6 +97,8 @@ The construction and its exact data were first recorded in
 check `checks/round44_p6_z2_twisted_dimer.py`; they are verification records, not the source.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 namespace P6Compression

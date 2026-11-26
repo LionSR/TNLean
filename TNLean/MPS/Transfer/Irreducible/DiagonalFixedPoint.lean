@@ -54,6 +54,8 @@ This file collects the common conversion from an irreducible TP MPS tensor to
 the conjugate-transposed Kraus family used in cyclic-sector decompositions.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators ComplexOrder

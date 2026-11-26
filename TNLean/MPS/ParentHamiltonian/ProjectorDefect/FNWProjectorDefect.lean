@@ -19,6 +19,8 @@ physical reversal then identifies these three ranges with the two overlapping
 boundary ranges and the full ground space in reversed block order.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder Matrix
 
 namespace MPSTensor

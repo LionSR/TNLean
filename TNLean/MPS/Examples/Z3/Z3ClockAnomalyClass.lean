@@ -63,6 +63,8 @@ The clock tensors themselves are a construction of this development (`Z3ClockTen
 * `Z3Clock.cyclicInvariant_omega_clockFamily`: the gauge-invariant product is one.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped BigOperators Matrix

@@ -30,6 +30,8 @@ It also contains the following results.
   arXiv:1708.00029, Appendix A.
 -/
 
+open MPTensor
+
 section SelfOverlapNonrep
 
 open scoped Matrix BigOperators ComplexOrder

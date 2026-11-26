@@ -55,7 +55,7 @@ private theorem mpvOverlap_two_eq_zero_of_bondDim_eq_zero
     {e E : ℕ} (A : MPSTensor e E) (hE : E = 0) :
     MPSTensor.mpvOverlap A A 2 = 0 := by
   subst E
-  simp [MPSTensor.mpvOverlap, MPSTensor.mpv, MPSTensor.coeff, Matrix.trace]
+  simp [MPSTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, Matrix.trace]
 
 /-- The unit shifted transfer traces of a matrix product unitary pass to every
 tensor generating the same positive-length matrix product vectors as its
@@ -65,7 +65,7 @@ Source: arXiv:1703.09188, lines 344--356. -/
 private theorem trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : U.IsMPU)
     {E : ℕ} [NeZero E] {A : MPSTensor (d * d) E}
-    (hSame : MPSTensor.SameMPV₂Pos U.normalizedFlattening A)
+    (hSame : MPTensor.SameMPV₂Pos U.normalizedFlattening A)
     (N : ℕ) (hN : 1 < N) :
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1 := by
   calc
@@ -128,7 +128,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
       (cfii : MPSTensor.CPSVCanonicalFormIIData Ared)
       (ρ : Matrix (Fin Dred) (Fin Dred) ℂ),
       Dred ≤ D ∧
-      MPSTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
+      MPTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
       MPSTensor.IsNormalTensor Ared ∧
       cfii.toCPSVCanonicalFormData.HasFullSupport ∧
       ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
@@ -209,9 +209,9 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
     rfl
   obtain ⟨B, dataB, hGauge, hTotalDim⟩ :=
     data.exists_gaugeEquiv_canonicalFormIIData
-  have hGaugePos : MPSTensor.SameMPV₂Pos Ared B :=
-    MPSTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => hGauge.sameMPV N σ)
-  have hSameB : MPSTensor.SameMPV₂Pos U.normalizedFlattening B :=
+  have hGaugePos : MPTensor.SameMPV₂Pos Ared B :=
+    MPTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => hGauge.sameMPV N σ)
+  have hSameB : MPTensor.SameMPV₂Pos U.normalizedFlattening B :=
     hSame.trans hGaugePos
   have hTraceB : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap B) ^ N) = 1 :=
@@ -319,7 +319,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
           ← Matrix.mul_assoc W Wᴴ, hWWstar, Matrix.one_mul, dataB.coisometric]
       reconstruct := hrecC }
   have hFullC : dataC.toCPSVCanonicalFormData.HasFullSupport := hFullB
-  have hSameBC : MPSTensor.SameMPV₂Pos B C :=
+  have hSameBC : MPTensor.SameMPV₂Pos B C :=
     MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction B C Wᴴ
       (by rw [Matrix.conjTranspose_conjTranspose, hWstarW])
       (fun i => by
@@ -328,7 +328,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
           B i = (W * Wᴴ) * B i * (W * Wᴴ) := by
             rw [hWWstar, Matrix.one_mul, Matrix.mul_one]
           _ = W * C i * Wᴴ := by rw [hCdef]; simp only [Matrix.mul_assoc])
-  have hSameC : MPSTensor.SameMPV₂Pos U.normalizedFlattening C :=
+  have hSameC : MPTensor.SameMPV₂Pos U.normalizedFlattening C :=
     hSameB.trans hSameBC
   have hTraceC : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap C) ^ N) = 1 :=
@@ -403,7 +403,7 @@ theorem IsMPU.exists_reduced_cfii_representative
   let Ured : MPOTensor d Dred := ofNormalizedFlattening Ared
   have hFlat : Ured.normalizedFlattening = Ared :=
     normalizedFlattening_ofNormalizedFlattening Ared
-  have hRaw : MPSTensor.SameMPV₂Pos U.toMPSTensor Ured.toMPSTensor := by
+  have hRaw : MPTensor.SameMPV₂Pos U.toMPSTensor Ured.toMPSTensor := by
     mpv_ext
     rw [← sqrt_smul_normalizedFlattening U,
       toMPSTensor_ofNormalizedFlattening, MPSTensor.mpv_smul,
@@ -449,7 +449,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
       (∀ N : ℕ, 0 < N → mpo V N = mpo U N) := by
   let : NeZero D := hU.neZero_bond
   obtain ⟨E, _hE, V, hV, hED, hMpo⟩ := hU.exists_reduced_cfii_representative
-  have hSame : MPSTensor.SameMPV₂Pos V.toMPSTensor U.toMPSTensor := by
+  have hSame : MPTensor.SameMPV₂Pos V.toMPSTensor U.toMPSTensor := by
     intro N hN σ
     have hσ : σ = (fun n => finProdFinEquiv ((σ n).divNat, (σ n).modNat)) := by
       funext n

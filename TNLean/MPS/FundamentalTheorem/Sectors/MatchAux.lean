@@ -13,6 +13,8 @@ Shared overlap and linear-independence lemmas used by both exact and
 proportional matching of BNT canonical-form sectors.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

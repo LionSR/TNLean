@@ -43,6 +43,8 @@ states of the one-site tensor are the same product vector.
   symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix
 open QuantumCircuit

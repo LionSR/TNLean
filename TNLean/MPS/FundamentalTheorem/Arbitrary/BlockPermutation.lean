@@ -44,6 +44,8 @@ blockwise structure of `Z` in that theorem is not stated here.
   lines 249–262, and `thm:bdequal`, lines 643–656.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix

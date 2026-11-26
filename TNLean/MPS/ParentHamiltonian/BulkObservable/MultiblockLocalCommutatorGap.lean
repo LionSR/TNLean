@@ -31,6 +31,8 @@ completed-state and GNS formulations remain separate; see
 docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 -/
 
+open MPTensor
+
 open Filter
 open scoped Matrix Topology ComplexOrder InnerProductSpace
 

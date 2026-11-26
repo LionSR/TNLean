@@ -25,6 +25,8 @@ In the physics literature one often uses the bilinear overlap without complex co
 on the first factor, `∑ σ, mpv A σ * star (mpv B σ)`. We define this as `mpvOverlap A B N`;
 it differs from Lean's inner product by a complex conjugation.
 -/
+
+open MPTensor
 open scoped BigOperators InnerProductSpace
 
 namespace MPSTensor

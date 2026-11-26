@@ -20,6 +20,8 @@ Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. The transfer
 spectral bound is supplied; no bound is deduced from a physical Hamiltonian gap.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

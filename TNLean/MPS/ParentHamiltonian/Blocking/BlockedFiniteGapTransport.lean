@@ -37,6 +37,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 equations (3.12)--(3.14), lines 1547--1570, and Theorem 1.2.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim blockTensor)
 open ManyBody.Interaction (chainTranslates)

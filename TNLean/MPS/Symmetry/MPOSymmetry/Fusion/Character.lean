@@ -54,6 +54,8 @@ of the arbitrary-boundary subspace (lines 431–434); documented in
   product states*
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPOTensor

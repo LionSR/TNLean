@@ -48,6 +48,8 @@ cast, and has non-decaying overlap. This is the equal-MPV specialization of the
 proportional sector matcher.
 -/
 
+open MPTensor
+
 section ProportionalMatchCore
 
 section

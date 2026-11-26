@@ -69,6 +69,8 @@ valence-bond construction.
   lines 2183--2187.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

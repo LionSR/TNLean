@@ -16,6 +16,8 @@ pair-homogenization development and completes the pair-span homogenization
 layer.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

@@ -31,6 +31,8 @@ It also contains the following results.
   at a common blocking length.
 -/
 
+open MPTensor
+
 section PrimitiveWitnessTransport
 
 open scoped Matrix BigOperators ComplexOrder

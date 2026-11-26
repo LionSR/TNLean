@@ -54,6 +54,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
 lines 1695--1777, with `defAgamma` and `Agammasym`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor.MPOSymmetry

@@ -39,6 +39,8 @@ cross-correlations between distinct blocks decay exponentially.
   Source: `Papers/0802.0447/`
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Kraus

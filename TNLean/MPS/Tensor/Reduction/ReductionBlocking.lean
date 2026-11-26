@@ -54,6 +54,8 @@ one; see `docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.
   exterior buffer length.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Kraus (blockTensor evalWord_blockTensor length_flattenBlockedWord)
 

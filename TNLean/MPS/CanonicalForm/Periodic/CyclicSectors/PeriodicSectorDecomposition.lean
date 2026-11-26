@@ -58,6 +58,8 @@ only \(m\le D^2\).
   periodic vector at lengths not divisible by the period.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace

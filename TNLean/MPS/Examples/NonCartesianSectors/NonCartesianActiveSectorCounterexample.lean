@@ -250,10 +250,10 @@ representative `B`. The exact test-matrix estimate above gives
 private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     ∃ (A : MPOTensor 4 2) (mu : ℂ) (B : MPSTensor (4 * 4) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
-        MPSTensor.GaugeEquiv A.toMPSTensor B ∧
-        Kraus.IsInjective B ∧ MPSTensor.IsLeftCanonical B ∧
+        MPTensor.GaugeEquiv A.toMPSTensor B ∧
+        Kraus.IsInjective B ∧ MPTensor.IsLeftCanonical B ∧
         MPSTensor.IsNormalTensor B ∧
-        MPSTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
+        MPTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
   let _ : NeZero 2 := ⟨by omega⟩
   have hNormal : Kraus.IsNormal tensor.toMPSTensor :=
     Kraus.IsInjective.isNormal tensor_isInjective
@@ -315,15 +315,15 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one hAIrr hRadius
   have hGaugeNormal :
       Kraus.IsNormal (Kraus.tpGauge A.toMPSTensor sigma) :=
-    MPSTensor.isNormal_of_gaugeEquiv hANormal hGauge
+    MPTensor.isNormal_of_gaugeEquiv hANormal hGauge
   have hGaugeNormalTensor :
       MPSTensor.IsNormalTensor (Kraus.tpGauge A.toMPSTensor sigma) :=
     MPSTensor.isNormalTensor_of_isNormal_leftCanonical _ hGaugeNormal hLeft
   have hGaugeInjective :
       Kraus.IsInjective (Kraus.tpGauge A.toMPSTensor sigma) :=
-    MPSTensor.isInjective_of_gaugeEquiv hAinj hGauge
+    MPTensor.isInjective_of_gaugeEquiv hAinj hGauge
   have hTensorGauge :
-      MPSTensor.GaugeEquiv tensor.toMPSTensor
+      MPTensor.GaugeEquiv tensor.toMPSTensor
         (mu • Kraus.tpGauge A.toMPSTensor sigma) := by
     obtain ⟨X, hX⟩ := hGauge
     refine ⟨X, fun i ↦ ?_⟩
@@ -343,8 +343,8 @@ relation after scalar absorption. -/
 theorem exists_leftCanonical_normalTensor_scalar_representation :
     ∃ (mu : ℂ) (B : MPSTensor (4 * 4) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
-        MPSTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
-        MPSTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
+        MPTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
+        MPTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
   obtain ⟨_, mu, B, hmu, hmuNorm, _, _, hBInj, hBLeft, hBNormal,
       hTensorGauge⟩ :=
     exists_scalar_and_leftCanonical_normalTensor_representations

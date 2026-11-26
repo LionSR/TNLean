@@ -225,7 +225,7 @@ variable {G : Type} [Group G] {F : GroupFamily G d}
 namespace IsRepresentation
 
 variable (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- The bond dimension of the tensor of `g h` equals that of `h⁻¹ g⁻¹ = (g h)⁻¹`. -/
 theorem bondDim_mul_inv_rev (hF : F.IsRepresentation) (g h : G) :
@@ -321,7 +321,7 @@ end IsRepresentation
 namespace FusionData
 
 variable (fd : FusionData F) (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- **The daggered left fusion tensor**
 $T_{(gh)^{-1}}\bigl(F^<_{h^{-1},g^{-1}}\bigr)^\dagger

@@ -188,10 +188,10 @@ matching the orientation used by the later rectangular reduction interface.
 Source: arXiv:2502.20257, lines 1403--1407. -/
 theorem IsRepresentation.sameMPV₂Pos_mulTensor [Group G]
     (F : GroupFamily G d) (hF : F.IsRepresentation) (g h : G) :
-    MPSTensor.SameMPV₂Pos
+    MPTensor.SameMPV₂Pos
       (F.tensor (g * h)).toMPSTensor
       (MPOTensor.mulTensor (F.tensor g) (F.tensor h)).toMPSTensor := by
-  apply MPSTensor.SameMPV₂Pos.symm
+  apply MPTensor.SameMPV₂Pos.symm
   intro N hN ρ
   let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
   let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat

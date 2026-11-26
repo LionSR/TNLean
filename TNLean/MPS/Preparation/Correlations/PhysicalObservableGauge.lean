@@ -25,6 +25,8 @@ It also contains the following results.
   correlations in an arbitrary normal representation.
 -/
 
+open MPTensor
+
 section PhysicalObservableGauge
 
 open scoped Matrix BigOperators

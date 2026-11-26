@@ -27,6 +27,8 @@ concern the first endpoint on periodic chains. They assert no open-chain
 comparison, near-endpoint uniform gap, or classification of phases.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators InnerProductSpace ComplexOrder MatrixOrder
 open ManyBody.Interaction (translationInvariant)
 

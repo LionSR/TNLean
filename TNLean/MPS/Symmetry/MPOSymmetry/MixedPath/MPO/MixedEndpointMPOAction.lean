@@ -25,6 +25,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3,
 1269, and 1584–1665.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor.MPOSymmetry

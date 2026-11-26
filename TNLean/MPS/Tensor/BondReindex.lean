@@ -33,6 +33,8 @@ These lemmas were previously duplicated as private auxiliary results in
 `CanonicalForm/Reduction`.
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor

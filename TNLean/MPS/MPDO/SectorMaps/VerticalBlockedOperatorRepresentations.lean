@@ -113,9 +113,9 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
   classical
   let A₁' : MPSTensor (D * D) n₂ := fun ab =>
     Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDim) (A₁ ab)
-  have hReindex : MPSTensor.SameMPV₂ A₁ A₁' := by
+  have hReindex : MPTensor.SameMPV₂ A₁ A₁' := by
     mpv_ext
-    simp only [MPSTensor.mpv, MPSTensor.coeff]
+    simp only [MPTensor.mpv, MPTensor.coeff]
     change Matrix.trace (Kraus.evalWord A₁ (List.ofFn σ)) =
       Matrix.trace (Kraus.evalWord
         (fun ab => Matrix.reindex (finCongr hDim) (finCongr hDim) (A₁ ab))
@@ -132,7 +132,7 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
           (fun ab => Matrix.reindex (finCongr hDim) (finCongr hDim) (A₁ ab))
           (List.ofFn σ)) := congrArg Matrix.trace hEval.symm
   have hScaled (N : ℕ) (σ : Fin N → Fin (D * D)) :
-      MPSTensor.mpv A₂ σ = c ^ N * MPSTensor.mpv A₁' σ := by
+      MPTensor.mpv A₂ σ = c ^ N * MPTensor.mpv A₁' σ := by
     have hA₂ : A₂ = fun ab => c • ((V : Matrix (Fin n₂) (Fin n₂) ℂ) *
         A₁' ab * (V : Matrix (Fin n₂) (Fin n₂) ℂ)ᴴ) := by
       funext ab
@@ -146,11 +146,11 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
   simp only [Matrix.smul_apply]
   let pair : Fin L → Fin (D * D) := fun n => finProdFinEquiv (σ n, τ n)
   calc
-    mpo (verticalBNTMPO A₂) L σ τ = MPSTensor.mpv A₂ pair := by
+    mpo (verticalBNTMPO A₂) L σ τ = MPTensor.mpv A₂ pair := by
       simpa [pair] using
         (MPSTensor.mpv_toMPSTensor_pairConfig (verticalBNTMPO A₂) σ τ).symm
-    _ = c ^ L * MPSTensor.mpv A₁' pair := hScaled L pair
-    _ = c ^ L * MPSTensor.mpv A₁ pair := by rw [hReindex L pair]
+    _ = c ^ L * MPTensor.mpv A₁' pair := hScaled L pair
+    _ = c ^ L * MPTensor.mpv A₁ pair := by rw [hReindex L pair]
     _ = c ^ L * mpo (verticalBNTMPO A₁) L σ τ := by
       rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
       simp [pair]

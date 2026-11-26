@@ -39,6 +39,8 @@ absent from `IsBNT`.
 * CPSV21, arXiv:2011.12127, Definition 4.2, lines 1846--1850.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

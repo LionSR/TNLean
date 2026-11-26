@@ -32,6 +32,8 @@ basis tensors have been matched, all remaining terms are expressed in the
 same BNT basis tensor family and separated by its eventual linear independence.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

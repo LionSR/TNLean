@@ -29,6 +29,8 @@ three-site vectors alone does not identify all positive-length MPS rays of a raw
 tensor. Such a conclusion requires full positive-ray equality separately.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

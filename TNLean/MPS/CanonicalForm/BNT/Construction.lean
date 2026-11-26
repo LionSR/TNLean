@@ -48,6 +48,8 @@ decomposition. That comparison is carried out for sector decompositions, where
 the sums `Σ_q μ_{j,q}^N` and their multiplicities remain visible.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter
 

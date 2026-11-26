@@ -71,6 +71,8 @@ positive diagonal dual fixed point `Λ` appears as the fixed point of
   \(\lambda_\alpha \lambda_\beta / \mathrm{tr}(\Lambda)^2\).
 -/
 
+open MPTensor
+
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder Kraus
 open Polynomial
 

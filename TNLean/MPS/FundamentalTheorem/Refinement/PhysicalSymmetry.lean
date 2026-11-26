@@ -43,6 +43,8 @@ itself, not for a chosen basis of periodic tensors.
   lines 828--845.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor

@@ -60,6 +60,8 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
    permutation times diagonal phases, using the overlap orthonormality conditions.
 -/
 
+open MPTensor
+
 open scoped BigOperators InnerProductSpace Matrix
 open Filter Finset
 

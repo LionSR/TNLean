@@ -42,6 +42,8 @@ agree blockwise up to a permutation, dimension equality, and gauge-phase equival
 5. Injectivity of the assignment (hence permutation) from B-off-diagonal orthogonality.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix InnerProductSpace
 open Filter Finset
 
@@ -100,7 +102,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     ∃ perm : Fin g ≃ Fin g,
       ∀ j,
         ∃ hdim : dimA j = dimB (perm j),
-          GaugePhaseEquiv (d := d)
+          GaugePhaseEquiv (α := Fin d)
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j)) := by
   classical
@@ -268,7 +270,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       (hA_inj (f j)) (hB_inj j) (hA_norm (f j)) (hB_norm j) hne)
   --
   have hf_gauge : ∀ j : Fin g,
-      GaugePhaseEquiv (d := d)
+      GaugePhaseEquiv (α := Fin d)
         (cast (congr_arg (MPSTensor d) (hf_dim j)) (A (f j)))
         (B j) := by
     intro j
@@ -447,7 +449,7 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
       ∃ perm : Fin gA ≃ Fin gB,
         ∀ j : Fin gA,
           ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
+            GaugePhaseEquiv (α := Fin d)
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) := by
   -- ═══════════════════════════════════════════════════════════════════════════

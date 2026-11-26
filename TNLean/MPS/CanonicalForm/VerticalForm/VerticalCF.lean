@@ -127,6 +127,8 @@ location matches the existing layering.
   Proposition 4.13 and the auxiliary Lemma L in the appendix
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
@@ -144,8 +146,8 @@ MPV. This is the hypothesis used in the paper's Lemma L. -/
 def FirstSiteActionAgree (A : MPSTensor d D)
     (Y Z : Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∀ (N : ℕ) (σ : Fin (N + 1) → Fin d),
-    ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
-      ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
+    ∑ i : Fin d, Y (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
+      ∑ i : Fin d, Z (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
 
 /-- Equality of all positive-length matrix product vectors transports a
 first-site action identity between tensors of possibly different bond dimensions.
@@ -156,19 +158,19 @@ length-zero coefficient is involved.
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem FirstSiteActionAgree.of_sameMPVPos {D' : ℕ} {A : MPSTensor d D}
     {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAB : MPSTensor.SameMPV₂Pos A B) (h : FirstSiteActionAgree A Y Z) :
+    (hAB : MPTensor.SameMPV₂Pos A B) (h : FirstSiteActionAgree A Y Z) :
     FirstSiteActionAgree B Y Z := by
   intro N σ
   calc
-    ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) =
-        ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
+    ∑ i : Fin d, Y (σ 0) i * MPTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) =
+        ∑ i : Fin d, Y (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
       apply Finset.sum_congr rfl
       intro i _
       rw [hAB (N + 1) (by omega) (Fin.cons i (σ ∘ Fin.succ))]
     _ = ∑ i : Fin d, Z (σ 0) i *
-        MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := h N σ
+        MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := h N σ
     _ = ∑ i : Fin d, Z (σ 0) i *
-        MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) := by
+        MPTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) := by
       apply Finset.sum_congr rfl
       intro i _
       rw [hAB (N + 1) (by omega) (Fin.cons i (σ ∘ Fin.succ))]
@@ -176,7 +178,7 @@ theorem FirstSiteActionAgree.of_sameMPVPos {D' : ℕ} {A : MPSTensor d D}
 /-- Full MPV equality transports a first-site action identity. -/
 theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
     {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAB : MPSTensor.SameMPV₂ A B) (h : FirstSiteActionAgree A Y Z) :
+    (hAB : MPTensor.SameMPV₂ A B) (h : FirstSiteActionAgree A Y Z) :
     FirstSiteActionAgree B Y Z :=
   h.of_sameMPVPos hAB.toSameMPV₂Pos
 
@@ -211,9 +213,9 @@ noncomputable def ketLeftBraRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
 corresponding matrix entry of the horizontal MPO contraction. -/
 theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
     (σ τ : Fin N → Fin d) :
-    MPSTensor.mpv M.toMPSTensor (fun n => finProdFinEquiv (σ n, τ n)) =
+    MPTensor.mpv M.toMPSTensor (fun n => finProdFinEquiv (σ n, τ n)) =
       MPOTensor.mpo M N σ τ := by
-  simp only [MPSTensor.mpv, MPSTensor.coeff, MPOTensor.mpo_apply,
+  simp only [MPTensor.mpv, MPTensor.coeff, MPOTensor.mpo_apply,
     MPOTensor.mpoMatrixEntry]
   congr 1
   induction N with
@@ -229,7 +231,7 @@ theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
 doubled-index tail. -/
 theorem mpv_toMPSTensor_cons_pair (M : MPOTensor d D) {N : ℕ}
     (i j : Fin d) (ρ : Fin N → Fin (d * d)) :
-    MPSTensor.mpv M.toMPSTensor (Fin.cons (finProdFinEquiv (i, j)) ρ) =
+    MPTensor.mpv M.toMPSTensor (Fin.cons (finProdFinEquiv (i, j)) ρ) =
       MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ n).divNat))
         (Fin.cons j (fun n => (ρ n).modNat)) := by
   rw [← mpv_toMPSTensor_pairConfig]
@@ -245,7 +247,7 @@ with the matrix entries of $PH^{(N)}$. -/
 theorem ketLeftAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
     ∑ q : Fin (d * d), ketLeftAction P (ρ 0) q *
-        MPSTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+        MPTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
       ∑ i : Fin d, P (ρ 0).divNat i *
         MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
           (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) := by
@@ -266,7 +268,7 @@ with the matrix entries of $H^{(N)}P$. -/
 theorem braRightAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
     ∑ q : Fin (d * d), braRightAction P (ρ 0) q *
-        MPSTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+        MPTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
       ∑ j : Fin d,
         MPOTensor.mpo M (N + 1)
           (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
@@ -289,7 +291,7 @@ action with the matrix entries of $PH^{(N)}P$. -/
 theorem ketLeftBraRightAction_mpv (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
     ∑ q : Fin (d * d), ketLeftBraRightAction P (ρ 0) q *
-        MPSTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+        MPTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
       ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
         MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
           (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat := by
@@ -422,12 +424,12 @@ configuration `k ↦ (σ k, σ k)`. This lets the horizontal canonical form of
 `M.toMPSTensor` (which constrains all `Fin (d*d)` configurations) be specialized to the
 diagonal configurations seen by `diagonalTensor M`, the first step of Proposition 4.13. -/
 theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    MPSTensor.mpv (diagonalTensor M) σ
-      = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
+    MPTensor.mpv (diagonalTensor M) σ
+      = MPTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
   have htensor : diagonalTensor M =
       Kraus.reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor :=
     funext (diagonalTensor_apply_eq M)
-  rw [htensor, MPSTensor.mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor]
+  rw [htensor, MPTensor.mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor]
 
 /-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
@@ -438,11 +440,11 @@ the horizontal weights need not be positive. -/
 theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor
       (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
     {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
-    MPSTensor.mpv (diagonalTensor M) σ
-      = MPSTensor.mpv (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
+    MPTensor.mpv (diagonalTensor M) σ
+      = MPTensor.mpv (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
   rw [mpv_diagonalTensor, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
 
@@ -460,15 +462,15 @@ vector of the diagonal tensor at a configuration `σ` equals the diagonal entry
 ⟨σ|ρ^{(N)}(M)|σ⟩ of the generated operator. When `M` generates an MPDO this entry is a
 nonnegative real, which is the source of the positivity of the vertical weights. -/
 theorem mpv_diagonalTensor_eq_mpo_diag (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    MPSTensor.mpv (diagonalTensor M) σ = mpo M N σ σ := by
-  simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry, evalWord_diagonalTensor]
+    MPTensor.mpv (diagonalTensor M) σ = mpo M N σ σ := by
+  simp only [MPTensor.mpv, MPTensor.coeff, mpo_apply, mpoMatrixEntry, evalWord_diagonalTensor]
 
 /-- For a tensor generating a positive semidefinite operator, the diagonal-tensor matrix
 product vector is a nonnegative real. This is the positivity that the vertical
 canonical-form weights inherit from the MPDO. -/
 theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
     (hM : (mpo M N).PosSemidef) (σ : Fin N → Fin d) :
-    0 ≤ MPSTensor.mpv (diagonalTensor M) σ := by
+    0 ≤ MPTensor.mpv (diagonalTensor M) σ := by
   rw [mpv_diagonalTensor_eq_mpo_diag]
   exact hM.diag_nonneg
 
@@ -610,11 +612,11 @@ flattened `(block, multiplicity)` index `(α, j)`:
 theorem mpv_verticalAssembledTensor_eq_sum {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ) (A : (α : Fin g) → MPSTensor d (dim α))
     {N : ℕ} (σ : Fin N → Fin d) :
-    MPSTensor.mpv (verticalAssembledTensor dim mult ω A) σ
-      = ∑ p : (α : Fin g) × Fin (mult α), (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ := by
+    MPTensor.mpv (verticalAssembledTensor dim mult ω A) σ
+      = ∑ p : (α : Fin g) × Fin (mult α), (ω p.1 p.2) ^ N • MPTensor.mpv (A p.1) σ := by
   rw [verticalAssembledTensor, MPSTensor.mpv_toTensorFromBlocks_eq_sum]
   exact Equiv.sum_comp finSigmaFinEquiv.symm
-    (fun s : (α : Fin g) × Fin (mult α) => (ω s.1 s.2) ^ N • MPSTensor.mpv (A s.1) σ)
+    (fun s : (α : Fin g) × Fin (mult α) => (ω s.1 s.2) ^ N • MPTensor.mpv (A s.1) σ)
 
 /-- Regrouping an indexed block assembly into repeated copies of a family of
 representative blocks preserves its positive-length matrix product vector
@@ -633,17 +635,17 @@ theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv
     (A : (α : Fin g) → MPSTensor d (dim α))
     (e : Fin r ≃ (α : Fin g) × Fin (mult α))
     (hWeight : ∀ k, μ k = ω (e k).1 (e k).2)
-    (hBlock : ∀ k, MPSTensor.SameMPV₂Pos (B k) (A (e k).1)) :
-    MPSTensor.SameMPV₂Pos
+    (hBlock : ∀ k, MPTensor.SameMPV₂Pos (B k) (A (e k).1)) :
+    MPTensor.SameMPV₂Pos
       (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) B)
       (verticalAssembledTensor dim mult ω A) := by
   intro N hN σ
   rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]
-  trans ∑ k : Fin r, (ω (e k).1 (e k).2) ^ N • MPSTensor.mpv (A (e k).1) σ
+  trans ∑ k : Fin r, (ω (e k).1 (e k).2) ^ N • MPTensor.mpv (A (e k).1) σ
   · refine Finset.sum_congr rfl fun k _ ↦ ?_
     rw [hWeight k, hBlock k N hN σ]
   · exact Equiv.sum_comp e
-      (fun p : (α : Fin g) × Fin (mult α) ↦ (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ)
+      (fun p : (α : Fin g) × Fin (mult α) ↦ (ω p.1 p.2) ^ N • MPTensor.mpv (A p.1) σ)
 
 -- The BNT-refined implication `verticalCF_of_horizontalCF` is proved in
 -- `VerticalCanonicalForm.lean`; the literal CPSV implication is proved by

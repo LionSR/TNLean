@@ -15,6 +15,8 @@ ambient bond spaces have the same dimension, by lifting the exact BNT reconstruc
 their coisometric inclusions.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

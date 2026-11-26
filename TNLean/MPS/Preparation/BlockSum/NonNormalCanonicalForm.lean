@@ -94,6 +94,8 @@ and proves the exact physical-vector identity for the assembled canonical tensor
   arXiv:2307.01696, eqs. (19), (S2), (S4), (S5), (S7).
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
 open QuantumCircuit

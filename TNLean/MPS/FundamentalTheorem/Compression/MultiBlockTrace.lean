@@ -29,6 +29,8 @@ to exist, but is exactly the trace identity that every multi-block compression d
   multi-block compression datum.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 section MultiBlockTrace
@@ -173,8 +175,8 @@ direction). -/
 theorem mpo_mulVec_mpv_eq_sum_of_multiBlockCompression {D DA : ℕ} {Dy : ι → ℕ}
     {T : MPOTensor d D} {A : MPSTensor d DA} {S : Finset ι} {C : ∀ s, MPSTensor d (Dy s)}
     (P : MPSTensor.MultiBlockCompression (actTensor T A) S C) (L : ℕ) (hL : 0 < L) :
-    mpo T L *ᵥ (fun τ : Fin L → Fin d => MPSTensor.mpv A τ) =
-      fun σ : Fin L → Fin d => ∑ s ∈ S, MPSTensor.mpv (C s) σ := by
+    mpo T L *ᵥ (fun τ : Fin L → Fin d => MPTensor.mpv A τ) =
+      fun σ : Fin L → Fin d => ∑ s ∈ S, MPTensor.mpv (C s) σ := by
   rw [mpo_mulVec_mpv]
   funext σ
   exact P.mpv_eq_sum L hL σ

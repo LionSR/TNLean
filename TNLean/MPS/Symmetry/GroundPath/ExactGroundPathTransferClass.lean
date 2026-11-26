@@ -56,6 +56,8 @@ It also contains the following results.
   bound from the actual physical gap.
 -/
 
+open MPTensor
+
 section ExactGroundPathTransferBound
 
 /-!

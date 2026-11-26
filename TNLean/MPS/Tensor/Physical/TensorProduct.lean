@@ -41,6 +41,8 @@ normality assertion is made here.
   from the two constituent normalization identities.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 namespace MPSTensor

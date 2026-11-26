@@ -100,6 +100,8 @@ arXiv:2404.15883, which is not formalized here; documented in
   class is nontrivial.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped BigOperators Matrix

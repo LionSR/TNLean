@@ -44,6 +44,8 @@ of the direct-sum lemma (label lem:direct-sum), lines 1346--1408. No larger
 injective length is chosen.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators

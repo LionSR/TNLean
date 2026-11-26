@@ -112,13 +112,13 @@ theorem mpvOverlap_toMPSTensor_self (K : MPOTensor d D) (N : ℕ) :
   calc ∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
           mpo K N σ τ * star (mpo K N σ τ)
       = ∑ p : (Fin N → Fin d) × (Fin N → Fin d),
-          MPSTensor.mpv K.toMPSTensor (pairCfgEquiv d N p) *
-            star (MPSTensor.mpv K.toMPSTensor (pairCfgEquiv d N p)) := by
+          MPTensor.mpv K.toMPSTensor (pairCfgEquiv d N p) *
+            star (MPTensor.mpv K.toMPSTensor (pairCfgEquiv d N p)) := by
         rw [Fintype.sum_prod_type]
         exact Finset.sum_congr rfl fun σ _ ↦ Finset.sum_congr rfl fun τ _ ↦ by
           rw [pairCfgEquiv_apply, MPSTensor.mpv_toMPSTensor_pairConfig]
     _ = ∑ ρ : Fin N → Fin (d * d),
-          MPSTensor.mpv K.toMPSTensor ρ * star (MPSTensor.mpv K.toMPSTensor ρ) :=
+          MPTensor.mpv K.toMPSTensor ρ * star (MPTensor.mpv K.toMPSTensor ρ) :=
         Fintype.sum_equiv (pairCfgEquiv d N) _ _ fun _ ↦ rfl
     _ = MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N := rfl
 

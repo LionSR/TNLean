@@ -29,6 +29,8 @@ case with trivial scalar character, as recorded in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix ScalarCohomology
 open Kraus (singleBlockEquiv decodeBlock blockTensor)
 

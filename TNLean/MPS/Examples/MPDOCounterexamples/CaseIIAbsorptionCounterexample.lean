@@ -140,7 +140,7 @@ private theorem basis_not_gaugePhaseEquiv :
   intro j k hjk hdim
   fin_cases j <;> fin_cases k
   · exact absurd rfl hjk
-  · change ¬ MPSTensor.GaugePhaseEquiv (basis 0) (basis 1)
+  · change ¬ MPTensor.GaugePhaseEquiv (basis 0) (basis 1)
     rintro ⟨X, ζ, hζ, hX⟩
     have h := congrFun (congrFun (hX 8) 0) 0
     simp only [basis, Fin.isValue, one_ne_zero, ↓reduceIte, secondBasisTensor,
@@ -148,7 +148,7 @@ private theorem basis_not_gaugePhaseEquiv :
       or_self, mul_zero, Matrix.coe_units_inv, Matrix.inv_subsingleton,
       Ring.inverse_eq_inv', zero_mul, Matrix.smul_apply, Matrix.zero_apply,
       smul_eq_mul] at h
-  · change ¬ MPSTensor.GaugePhaseEquiv (basis 1) (basis 0)
+  · change ¬ MPTensor.GaugePhaseEquiv (basis 1) (basis 0)
     rintro ⟨X, ζ, hζ, hX⟩
     have h := congrFun (congrFun (hX 0) 0) 0
     simp only [basis, Fin.isValue, ↓reduceIte, firstBasisTensor, Nat.reduceMul,
@@ -174,8 +174,8 @@ theorem sectors_isBNTCanonicalForm :
     basis_left_canonical := by
       intro s
       fin_cases s
-      · change MPSTensor.IsLeftCanonical firstBasisTensor
-        rw [MPSTensor.IsLeftCanonical]
+      · change MPTensor.IsLeftCanonical firstBasisTensor
+        rw [MPTensor.IsLeftCanonical]
         ext a b
         fin_cases a
         fin_cases b
@@ -191,8 +191,8 @@ theorem sectors_isBNTCanonicalForm :
           simp [firstBasisTensor, Fin.sum_univ_succ]
         rw [hsum, invSqrtTwo_mul_self]
         ring
-      · change MPSTensor.IsLeftCanonical secondBasisTensor
-        rw [MPSTensor.IsLeftCanonical]
+      · change MPTensor.IsLeftCanonical secondBasisTensor
+        rw [MPTensor.IsLeftCanonical]
         ext a b
         fin_cases a
         fin_cases b

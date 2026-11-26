@@ -68,6 +68,8 @@ replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented i
   (`eq:fid_err_gen_non_normal`).
 -/
 
+open MPTensor
+
 section RepeatedOverlappingBlockError
 
 /-!

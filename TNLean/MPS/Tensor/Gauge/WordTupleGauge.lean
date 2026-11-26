@@ -40,6 +40,8 @@ hypotheses from the parent-Hamiltonian theorem.
 * Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608, lines 317--345.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

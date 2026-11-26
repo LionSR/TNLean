@@ -34,6 +34,8 @@ Positive blocking preserves the full predicate `IsBNTCanonicalForm`.
 * Positive physical blocking preserves BNT canonical form.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter
 open Kraus (blockPhysDim length_wordOfBlock evalWord_blockTensor)
@@ -288,7 +290,7 @@ theorem IsBNTCanonicalForm.blockTensor
     · intro j σ
       change mpv (Kraus.blockTensor (P.basis j) p) (e.symm σ) =
         mpv (P.basis j) σ
-      simp only [mpv, MPSTensor.coeff, evalWord_blockTensor]
+      simp only [mpv, MPTensor.coeff, evalWord_blockTensor]
       rw [← ofFn_blockedConfigEquiv d N p (e.symm σ)]
       simp [e]
     · have hNp : N₀ < N * p := by

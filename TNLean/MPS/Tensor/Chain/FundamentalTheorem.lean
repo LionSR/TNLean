@@ -23,6 +23,8 @@ argument for `n ≥ 3`; this step is not formalized here.
 * [arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Theorem 1
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor
@@ -59,7 +61,7 @@ theorem fundamentalTheorem_injective_chain
     (A B : MPSChainTensor d D n)
     (hn : 0 < n) (_hD : 0 < D)
     (hA : IsInjective A)
-    (hMPV : MPSTensor.SameMPV (MPSTensor.chainCombinedTensor A)
+    (hMPV : MPTensor.SameMPV (MPSTensor.chainCombinedTensor A)
       (MPSTensor.chainCombinedTensor B)) :
     GaugeEquiv A B := by
   /- Note: this formulation only assumes injectivity of `A`. The proof applies
@@ -86,7 +88,7 @@ theorem fundamentalTheorem_injective_chain_gaugePhase
     (A B : MPSChainTensor d D n)
     (hn : 0 < n) (hD : 0 < D)
     (hA : IsInjective A)
-    (hGauge : MPSTensor.GaugePhaseEquiv
+    (hGauge : MPTensor.GaugePhaseEquiv
       (MPSTensor.chainCombinedTensor A)
       (MPSTensor.chainCombinedTensor B)) :
     ∃ Z : Fin n → GL (Fin D) ℂ,
@@ -99,7 +101,7 @@ theorem fundamentalTheorem_injective_chain_gaugePhase
   rcases hGauge with ⟨X, ζ, hζ, hX⟩
   let B' : MPSChainTensor d D n := fun k i => ζ⁻¹ • B k i
   have hCombinedGauge :
-      MPSTensor.GaugeEquiv
+      MPTensor.GaugeEquiv
         (MPSTensor.chainCombinedTensor A)
         (MPSTensor.chainCombinedTensor B') := by
     refine ⟨X, ?_⟩
@@ -118,10 +120,10 @@ theorem fundamentalTheorem_injective_chain_gaugePhase
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
             simp [smul_smul, hζ]
   have hSame :
-      MPSTensor.SameMPV
+      MPTensor.SameMPV
         (MPSTensor.chainCombinedTensor A)
         (MPSTensor.chainCombinedTensor B') :=
-    MPSTensor.GaugeEquiv.sameMPV hCombinedGauge
+    MPTensor.GaugeEquiv.sameMPV hCombinedGauge
   obtain ⟨Z, hZ⟩ := fundamentalTheorem_injective_chain A B' hn hD hA hSame
   refine ⟨Z, ζ, hζ, ?_⟩
   intro k i

@@ -59,6 +59,8 @@ docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex.
   intertwiner \(R\) with \(RC_i=x^{-1}B_iR\), lines 1087-1095.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker BigOperators ComplexOrder
 
 namespace MPSTensor

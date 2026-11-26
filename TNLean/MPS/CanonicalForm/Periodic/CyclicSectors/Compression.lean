@@ -38,6 +38,8 @@ compression theorem.
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder

@@ -267,7 +267,7 @@ theorem exists_evalWord_tensor_ne_zero (ω : ScalarThreeCochain G) (g : G) (N : 
     funext k
     simp [ρ]
   rw [hdiv, hmod, mpo_tensor_apply] at hmpv
-  simp only [↓reduceIte, MPSTensor.mpv, MPSTensor.coeff, h0, Matrix.trace_zero] at hmpv
+  simp only [↓reduceIte, MPTensor.mpv, MPTensor.coeff, h0, Matrix.trace_zero] at hmpv
   exact (Units.ne_zero (∏ i, ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i))))
     (by rw [Units.coe_prod]; exact hmpv.symm)
 

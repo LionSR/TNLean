@@ -327,7 +327,7 @@ Source: CPSV16, Appendix C.2, lines 1660--1665 and Proposition `prop4to2`,
 lines 1801--1808. -/
 theorem isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     [Nonempty (Fin S.basisCount)]
@@ -380,7 +380,7 @@ theorem
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

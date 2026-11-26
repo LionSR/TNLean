@@ -23,6 +23,8 @@ It also contains the following results.
   canonical-form blocking.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 open Kraus (blockPhysDim blockTensor)

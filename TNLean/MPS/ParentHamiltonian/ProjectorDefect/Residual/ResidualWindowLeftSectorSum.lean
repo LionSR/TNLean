@@ -27,6 +27,8 @@ part of Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (i),
 lines 2442--2531; the remaining within-sector projector defect is separate.
 -/
 
+open MPTensor
+
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim)
 namespace MPSTensor

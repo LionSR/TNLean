@@ -40,6 +40,8 @@ References:
   support projection)
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators
 
 namespace MPSTensor

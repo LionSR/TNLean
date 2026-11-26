@@ -30,6 +30,8 @@ forces the overlap to tend to $0$.
   arXiv:1708.00029, Appendix A.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
 

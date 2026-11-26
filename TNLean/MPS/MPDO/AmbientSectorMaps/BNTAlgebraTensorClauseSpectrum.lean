@@ -88,7 +88,7 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
 
   Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
   sector_sameMPV : ∀ γ : Fin H.labelCount,
-    MPSTensor.SameMPV₂Pos (H.tensor γ) (decomposition.tensor (relabel γ))
+    MPTensor.SameMPV₂Pos (H.tensor γ) (decomposition.tensor (relabel γ))
   /-- Equality with multiplicity between the matched two-site weights and the products of
   one-site and chi weights from arXiv:1606.00608, Appendix C.4, lines 2054--2058. -/
   spectrum_eq : ∀ γ : Fin H.labelCount,
@@ -347,7 +347,7 @@ noncomputable def toTwoSiteExactSectorGauge
         refine Finset.sum_congr₂ fun q _ r _ ↦ ?_
         rw [Finset.mul_sum]
         ring_nf
-  have hPBlocked : MPSTensor.SameMPV₂Pos
+  have hPBlocked : MPTensor.SameMPV₂Pos
       (verticalTensor (blockTwo M)) P.toTensor := by
     intro L hL σ
     let ket : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).1
@@ -377,7 +377,7 @@ noncomputable def toTwoSiteExactSectorGauge
       weight := D₂.weight
       weight_ne_zero := fun γ r ↦ (D₂.weight_pos γ r).ne' }
   }
-  have hQAssembly : MPSTensor.SameMPV₂Pos Q.toTensor
+  have hQAssembly : MPTensor.SameMPV₂Pos Q.toTensor
       (verticalAssembledTensor D₂.bondDim D₂.multiplicity
         D₂.weight D₂.tensor) := by
     apply sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv
@@ -387,7 +387,7 @@ noncomputable def toTwoSiteExactSectorGauge
       rfl
     · intro k N hN σ
       rfl
-  have hQBlocked : MPSTensor.SameMPV₂Pos
+  have hQBlocked : MPTensor.SameMPV₂Pos
       (verticalTensor (blockTwo M)) Q.toTensor :=
     (MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
       (verticalTensor (blockTwo M))
@@ -464,7 +464,7 @@ noncomputable def toTwoSiteExactSectorGauge
     Equiv.ofBijective f hfBijective
   have hGaugeExists : ∀ γ : Fin H.labelCount,
       ∃ hdim : H.bondDim γ = D₂.bondDim (sigma γ),
-        MPSTensor.GaugePhaseEquiv
+        MPTensor.GaugePhaseEquiv
           (cast (congrArg (MPSTensor (D * D)) hdim) (H.tensor γ))
           (D₂.tensor (sigma γ)) := by
     intro γ
@@ -475,8 +475,8 @@ noncomputable def toTwoSiteExactSectorGauge
   choose gauge zeta hzetaNe hTensor using hGaugePhase
   have hzetaMPV : ∀ (γ : Fin H.labelCount) (N : ℕ), 0 < N →
       ∀ σ : Fin N → Fin (D * D),
-        MPSTensor.mpv (D₂.tensor (sigma γ)) σ =
-          zeta γ ^ N * MPSTensor.mpv (H.tensor γ) σ := by
+        MPTensor.mpv (D₂.tensor (sigma γ)) σ =
+          zeta γ ^ N * MPTensor.mpv (H.tensor γ) σ := by
     intro γ N _hN σ
     rw [MPSTensor.mpv_eq_pow_mul_of_gaugePhase
       (A := cast (congrArg (MPSTensor (D * D)) (hdim γ)) (H.tensor γ))
@@ -642,7 +642,7 @@ noncomputable def toTwoSiteExactSectorGauge
     rw [← hzetaEqReal, hRealOne]
     norm_num
   have hSectorSameMPV : ∀ γ : Fin H.labelCount,
-      MPSTensor.SameMPV₂Pos (H.tensor γ) (D₂.tensor (sigma γ)) := by
+      MPTensor.SameMPV₂Pos (H.tensor γ) (D₂.tensor (sigma γ)) := by
     intro γ L hL σ
     have hMpv := hzetaMPV γ L hL σ
     change (D₂.tensor (sigma γ)).mpv σ =

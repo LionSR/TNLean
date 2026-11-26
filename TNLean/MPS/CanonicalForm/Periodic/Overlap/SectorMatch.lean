@@ -26,6 +26,8 @@ It also contains the following results.
   periodic sector matches.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
 open Filter Matrix Module
 

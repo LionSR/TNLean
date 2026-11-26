@@ -31,6 +31,8 @@ This module constructs a basis of normal tensors from literal CPSV canonical-for
 choosing one representative from each MPV phase-equivalence class of the displayed blocks.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators

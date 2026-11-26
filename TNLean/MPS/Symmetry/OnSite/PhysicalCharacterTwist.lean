@@ -16,6 +16,8 @@ Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.C.2,
 lines 440–453, and Appendix B, lines 2614–2632.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

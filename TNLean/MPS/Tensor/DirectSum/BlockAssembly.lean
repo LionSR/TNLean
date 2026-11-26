@@ -28,6 +28,8 @@ It also contains the following results.
   the bond space.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -292,7 +294,7 @@ theorem mpv_toTensorFromBlocks_eq_sum
   classical
   set w := List.ofFn σ with hw
   have hwlen : w.length = N := by simp [w]
-  simp only [MPSTensor.mpv, MPSTensor.coeff, hw.symm, smul_eq_mul]
+  simp only [MPTensor.mpv, MPTensor.coeff, hw.symm, smul_eq_mul]
   rw [evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal μ A w, Matrix.trace_reindex]
   rw [Matrix.trace_blockDiagonal']
   exact Finset.sum_congr rfl fun k _ => by simp [Matrix.trace_smul, hwlen]

@@ -91,7 +91,7 @@ theorem trace_mixedMapLM_rect_pow_eq_mpvOverlap
   -- Apply the helper equalities.
   rw [h1, hswap]
   -- Unfold `mpvOverlap`/`mpv`/`coeff` so both sides are sums over σ.
-  simp only [mpvOverlap, MPSTensor.mpv, MPSTensor.coeff]
+  simp only [mpvOverlap, MPTensor.mpv, MPTensor.coeff]
   -- Now compute the inner double sum termwise in σ.
   refine Fintype.sum_congr _ _ (fun σ => ?_)
   calc

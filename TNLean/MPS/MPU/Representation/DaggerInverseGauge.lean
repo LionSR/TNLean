@@ -94,7 +94,7 @@ same matrix product vectors at every positive length.
 Source: arXiv:2502.20257, line 1552. -/
 theorem IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation) (g : G) :
-    MPSTensor.SameMPV₂Pos
+    MPTensor.SameMPV₂Pos
       (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor
       (F.tensor g⁻¹).toMPSTensor := by
   intro N hN ρ
@@ -154,7 +154,7 @@ This is the Fundamental-Theorem step in equation `eq:defT` of
 arXiv:2502.20257, lines 1552--1557. -/
 private theorem IsRepresentation.sameMPV_physicalAdjointTensor_inverseFlattening
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation) (g : G) :
-    MPSTensor.SameMPV
+    MPTensor.SameMPV
       (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor
       (inverseFlattening F hF g) := by
   intro N ρ
@@ -165,8 +165,8 @@ private theorem IsRepresentation.sameMPV_physicalAdjointTensor_inverseFlattening
       exact hF.sameMPV₂Pos_physicalAdjointTensor_inv F g (N + 1) (by omega) ρ
 
 private theorem leftCanonical_reindex {D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor (d * d) D₁) (hA : MPSTensor.IsLeftCanonical A) :
-    MPSTensor.IsLeftCanonical (MPSTensor.reindex h A) := by
+    (A : MPSTensor (d * d) D₁) (hA : MPTensor.IsLeftCanonical A) :
+    MPTensor.IsLeftCanonical (MPSTensor.reindex h A) := by
   subst h
   simpa using hA
 
@@ -214,15 +214,15 @@ between two injective tensors.  This supplies the canonical-form unitarity in
 equation `eq:defT` of arXiv:2502.20257, lines 1554--1557. -/
 private theorem exists_unitaryConj_of_gaugeEquiv_of_smul_leftCanonical
     {D : ℕ} [NeZero D] {A B : MPSTensor (d * d) D} {c : ℂ}
-    (hc : c ≠ 0) (hA : Kraus.IsInjective A) (h : MPSTensor.GaugeEquiv A B)
-    (hAleft : MPSTensor.IsLeftCanonical (fun i ↦ c • A i))
-    (hBleft : MPSTensor.IsLeftCanonical (fun i ↦ c • B i)) :
+    (hc : c ≠ 0) (hA : Kraus.IsInjective A) (h : MPTensor.GaugeEquiv A B)
+    (hAleft : MPTensor.IsLeftCanonical (fun i ↦ c • A i))
+    (hBleft : MPTensor.IsLeftCanonical (fun i ↦ c • B i)) :
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
       ∀ i, B i = (U : Matrix (Fin D) (Fin D) ℂ) * A i *
         (U : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   obtain ⟨X, hX⟩ := h
   have hB : Kraus.IsInjective B :=
-    MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hX⟩
+    MPTensor.isInjective_of_gaugeEquiv hA ⟨X, hX⟩
   have hAc : Kraus.IsInjective (fun i ↦ c • A i) := hA.smul hc
   have hBc : Kraus.IsInjective (fun i ↦ c • B i) := hB.smul hc
   have hAc_irr : Kraus.IsIrreducibleFamily (fun i ↦ c • A i) :=
@@ -256,7 +256,7 @@ left-canonical. This is equation `eq:defT` of arXiv:2502.20257, lines
 theorem IsRepresentation.exists_daggerInverseGauge [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) :
     ∃ T : Matrix.unitaryGroup (Fin (F.bondDim g)) ℂ,
       ∀ i,
@@ -270,10 +270,10 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
   have hA : Kraus.IsInjective A := by
     simp only [A, inverseFlattening, MPSTensor.isInjective_reindex]
     exact hF.isInjective g⁻¹
-  have hSame : MPSTensor.SameMPV A B := by
+  have hSame : MPTensor.SameMPV A B := by
     intro N ρ
     exact (hF.sameMPV_physicalAdjointTensor_inverseFlattening F g N ρ).symm
-  have hGauge : MPSTensor.GaugeEquiv A B :=
+  have hGauge : MPTensor.GaugeEquiv A B :=
     MPSTensor.fundamentalTheorem_singleBlock hA hSame
   have hd : d ≠ 0 := by
     let hdd : NeZero (d * d) := Kraus.neZero_d_of_isInjective (hF.isInjective g)
@@ -283,23 +283,23 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
     apply Complex.ofReal_ne_zero.mpr
     exact (Real.sqrt_pos.2 (by exact_mod_cast Nat.pos_of_ne_zero hd)).ne'
   have hc : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 := inv_ne_zero hsqrt
-  have hAleft : MPSTensor.IsLeftCanonical
+  have hAleft : MPTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • A i) := by
-    change MPSTensor.IsLeftCanonical
+    change MPTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) •
         MPSTensor.reindex (hF.bondDim_inv F g).symm
           (F.tensor g⁻¹).toMPSTensor i)
     rw [← reindex_smul]
     exact leftCanonical_reindex (hF.bondDim_inv F g).symm
       (F.tensor g⁻¹).normalizedFlattening (hcanonical g⁻¹)
-  have hBcanonical : MPSTensor.IsLeftCanonical
+  have hBcanonical : MPTensor.IsLeftCanonical
       (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening := by
     rw [MPOTensor.normalizedFlattening_physicalAdjointTensor]
     exact (MPSTensor.leftCanonical_reindexPhysical_equiv
       (MPOTensor.physicalPairSwapEquiv d) _).2 ((hcanonical g).mapStar)
-  have hBleft : MPSTensor.IsLeftCanonical
+  have hBleft : MPTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • B i) := by
-    change MPSTensor.IsLeftCanonical
+    change MPTensor.IsLeftCanonical
       (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening
     exact hBcanonical
   obtain ⟨U, hU⟩ :=
@@ -313,7 +313,7 @@ arXiv:2502.20257, lines 1552--1557. -/
 noncomputable def IsRepresentation.daggerInverseGauge [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) : Matrix.unitaryGroup (Fin (F.bondDim g)) ℂ :=
   Classical.choose (hF.exists_daggerInverseGauge F hcanonical g)
 
@@ -322,7 +322,7 @@ arXiv:2502.20257, lines 1552--1557. -/
 theorem IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (i : Fin (d * d)) :
     (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor i =
       (hF.daggerInverseGauge F hcanonical g :
@@ -339,7 +339,7 @@ arXiv:2502.20257, lines 1557--1562. -/
 noncomputable def IsRepresentation.inverseDaggerInverseGauge [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) : Matrix.unitaryGroup (Fin (F.bondDim g)) ℂ :=
   unitaryReindex (hF.bondDim_inv F g).symm
     (hF.daggerInverseGauge F hcanonical g⁻¹)
@@ -481,7 +481,7 @@ of \(g\) and physically adjointed as in arXiv:2502.20257, lines 1557--1562. -/
 private theorem IsRepresentation.flattenedPhysicalAdjoint_inverseFlattening
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (i : Fin (d * d)) :
     flattenedPhysicalAdjoint (d := d) (inverseFlattening F hF g) i =
       (hF.inverseDaggerInverseGauge F hcanonical g :
@@ -513,7 +513,7 @@ This is equation `eq:intro_sigma` of arXiv:2502.20257, lines 1557--1562. -/
 theorem IsRepresentation.exists_daggerInverseScalar [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) :
     ∃ σ : ℂ,
       (hF.daggerInverseGauge F hcanonical g :
@@ -582,7 +582,7 @@ arXiv:2502.20257, lines 1557--1562. -/
 noncomputable def IsRepresentation.daggerInverseScalar [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) : ℂ :=
   Classical.choose (hF.exists_daggerInverseScalar F hcanonical g)
 
@@ -591,7 +591,7 @@ arXiv:2502.20257, lines 1557--1562. -/
 theorem IsRepresentation.daggerInverseGauge_mul_mapStar_inverse_eq_smul_one
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) :
     (hF.daggerInverseGauge F hcanonical g :
         Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) *
@@ -619,7 +619,7 @@ of \(g\), as in arXiv:2502.20257, lines 1559--1563. -/
 private theorem IsRepresentation.inverseDaggerInverseGauge_mul_mapStar_eq_smul_one
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) :
     (hF.inverseDaggerInverseGauge F hcanonical g :
         Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) *
@@ -651,7 +651,7 @@ arXiv:2502.20257, lines 1559--1562. -/
 theorem IsRepresentation.daggerInverseScalar_mul_star_eq_one [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) :
     hF.daggerInverseScalar F hcanonical g *
       starRingEnd ℂ (hF.daggerInverseScalar F hcanonical g) = 1 :=
@@ -668,7 +668,7 @@ This is the assertion \(\sigma_g\in U(1)\) following equation
 theorem IsRepresentation.norm_daggerInverseScalar [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) : ‖hF.daggerInverseScalar F hcanonical g‖ = 1 := by
   let σ := hF.daggerInverseScalar F hcanonical g
   have h := hF.daggerInverseScalar_mul_star_eq_one F hcanonical g
@@ -686,7 +686,7 @@ arXiv:2502.20257, lines 1559--1562. -/
 theorem IsRepresentation.daggerInverseScalar_mul_inverse_eq_one [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) :
     hF.daggerInverseScalar F hcanonical g *
       hF.daggerInverseScalar F hcanonical g⁻¹ = 1 :=
@@ -705,7 +705,7 @@ conventions at lines 1933–1955. -/
 theorem IsRepresentation.inverseDaggerInverseGauge_eq_of_inv_eq
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) :
     hF.inverseDaggerInverseGauge F hcanonical g =
       hF.daggerInverseGauge F hcanonical g := by
@@ -730,7 +730,7 @@ at lines 5444–5487, without making another scalar choice. -/
 theorem IsRepresentation.daggerInverseGauge_mul_mapStar_self_eq_smul_one_of_inv_eq
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) :
     (hF.daggerInverseGauge F hcanonical g :
         Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) *
@@ -747,7 +747,7 @@ arXiv:2502.20257, lines 1563--1567. -/
 theorem IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq
     [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) :
     hF.daggerInverseScalar F hcanonical g = 1 ∨
       hF.daggerInverseScalar F hcanonical g = -1 := by

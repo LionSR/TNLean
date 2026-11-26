@@ -277,7 +277,7 @@ variable {fd}
 tensor of `g * h * k`. -/
 theorem _root_.MPOTensor.GroupFamily.IsNormalRepresentation.sameMPV₂Pos_tripleTensor
     (hF : F.IsNormalRepresentation) (g h k : G) :
-    MPSTensor.SameMPV₂Pos (F.tripleTensor g h k).toMPSTensor
+    MPTensor.SameMPV₂Pos (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor :=
   sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
     simp only [mpo_mulTensor, ← hF.operator_mul _ _ N hN]

@@ -39,6 +39,8 @@ matrix product coefficients.
   definition and the characterization prop:char-BNT.
 -/
 
+open MPTensor
+
 open Kraus (blockPhysDim blockTensor flattenBlockedWord evalWord_blockTensor)
 
 namespace MPSTensor

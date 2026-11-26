@@ -33,6 +33,8 @@ is a nonzero scalar times a unitary, and the unitary is unique up to a phase.
   between left-canonical tensors.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

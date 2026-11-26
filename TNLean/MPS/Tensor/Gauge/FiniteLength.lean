@@ -60,6 +60,8 @@ connection `CumulativeToWordSpan`.  These are the declarations that make the
 finite-length word-span conclusion available inside the MPS proof route.
 -/
 
+open MPTensor
+
 section FundamentalTheorem
 
 /-!
@@ -143,7 +145,7 @@ def SameMPVFrom (N₀ : ℕ) (A B : MPSTensor d D) : Prop :=
   ∀ (N : ℕ), N₀ ≤ N → ∀ (σ : Fin N → Fin d), mpv A σ = mpv B σ
 
 /-- `SameMPV` implies `SameMPVFrom N₀` for any `N₀`. -/
-theorem SameMPV.sameMPVFrom {A B : MPSTensor d D} (h : SameMPV A B) (N₀ : ℕ) :
+theorem _root_.MPTensor.SameMPV.sameMPVFrom {A B : MPSTensor d D} (h : SameMPV A B) (N₀ : ℕ) :
     SameMPVFrom N₀ A B :=
   fun N _ σ => h N σ
 

@@ -43,6 +43,8 @@ It also contains the following results.
   quasi-local ground states of finite periodic block families.
 -/
 
+open MPTensor
+
 section PeriodicBlockFamilyGroundStates
 
 /-!

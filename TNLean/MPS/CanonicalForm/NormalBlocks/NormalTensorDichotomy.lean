@@ -31,6 +31,8 @@ matrix product vectors differ by the corresponding power of the phase at every l
   Lemma A.2 (equalMPS) and Corollary A.3 (eqV), lines 1080--1128.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 open Filter
 
@@ -170,7 +172,7 @@ documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 Source: CPSV16, Corollary eqV, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem thm1, lines 1167--1182;
 see also arXiv:2011.12127, Theorem IV.4. -/
-theorem EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
+theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hProp : EventuallyNonzeroProportionalMPV₂ A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
@@ -204,7 +206,7 @@ the eventual geometric-phase theorem for normal tensors.
 
 Source: CPSV16, Corollary eqV, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem thm1, lines 1167--1182. -/
-theorem NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
+theorem _root_.MPTensor.NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hProp : NonzeroProportionalMPV₂ A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :

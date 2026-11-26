@@ -130,7 +130,7 @@ noncomputable def physicalAdjointNormalizedFlattening
   blocks_left_canonical := fun k ↦
     (MPSTensor.leftCanonical_reindexPhysical_equiv
       (MPOTensor.physicalPairSwapEquiv d) _).2
-      (MPSTensor.IsLeftCanonical.mapStar (data.blocks_left_canonical k))
+      (MPTensor.IsLeftCanonical.mapStar (data.blocks_left_canonical k))
   blocks_fixed_point := by
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k

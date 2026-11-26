@@ -26,6 +26,8 @@ Source: PGVWC07, arXiv:quant-ph/0608197, the proposition on condition C1,
 MPSarchive.tex lines 911--931, and Theorem 8, lines 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation
 open scoped BigOperators
 

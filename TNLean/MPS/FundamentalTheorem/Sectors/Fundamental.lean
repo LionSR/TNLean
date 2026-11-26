@@ -46,6 +46,8 @@ It also contains the following results.
   BNT sector matching.
 -/
 
+open MPTensor
+
 section CopyWeightMatching
 
 /-!

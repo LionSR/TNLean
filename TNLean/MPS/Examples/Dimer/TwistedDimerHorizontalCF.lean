@@ -157,7 +157,7 @@ Grouping the letters by the right bits of their two physical indices, the
 matrix units at $((r,r'),(r,r'))$ carry the coefficient sum of
 `sum_normalizedCoef_sq`. -/
 theorem normalizedBlock_isLeftCanonical (k : Fin 2) :
-    MPSTensor.IsLeftCanonical (normalizedBlock k).toMPSTensor := by
+    MPTensor.IsLeftCanonical (normalizedBlock k).toMPSTensor := by
   let c : Fin 8 → Fin 8 → ℂ := fun i j => ((8 / 5 : ℂ) * coef k i j) ^ 2
   have hterm : ∀ i j : Fin 8,
       ((normalizedBlock k).toMPSTensor (finProdFinEquiv (i, j)))ᴴ *

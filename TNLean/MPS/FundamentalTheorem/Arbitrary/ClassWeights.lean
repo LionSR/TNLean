@@ -40,6 +40,8 @@ induction on the index set (`exists_modEq_of_pairwise`).
   matrices `R_j` are the class weights.
 -/
 
+open MPTensor
+
 open Filter
 
 namespace MPSTensor

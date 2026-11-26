@@ -37,6 +37,8 @@ of the blocks with the norm of the target. The error bounds themselves are
   (`eq:fid_err_gen_non_normal`).
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
 open Kraus (blockTensor)

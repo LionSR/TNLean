@@ -131,7 +131,7 @@ boundary conditions (PBC).
 \end{proof}
 
 \begin{definition}[Matrix product vector]\label{def:mpv}
-    \lean{MPSTensor.mpv}
+    \lean{MPTensor.mpv}
     \leanok
     \uses{def:eval_word}
     The \emph{matrix product vector} (MPV) of a tensor~$A$
@@ -396,7 +396,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \section{Gauge equivalence and same MPV}
 
 \begin{definition}[Gauge equivalence]\label{def:gauge_equiv}
-    \lean{MPSTensor.GaugeEquiv}
+    \lean{MPTensor.GaugeEquiv}
     \leanok
     \uses{def:mps_tensor}
     Two tensors $A$ and $B$ of the same bond dimension~$D$ are
@@ -430,7 +430,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[Same MPV]\label{def:same_mpv}
-    \lean{MPSTensor.SameMPV}
+    \lean{MPTensor.SameMPV}
     \leanok
     \uses{def:mpv}
     Two tensors $A$ and $B$ (of the same bond dimension)
@@ -439,7 +439,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[Same MPV - different bond dimensions]\label{def:same_mpv2}
-    \lean{MPSTensor.SameMPV₂}
+    \lean{MPTensor.SameMPV₂}
     \leanok
     \uses{def:mpv}
     For tensors $A$ and $B$ of possibly different bond
@@ -452,7 +452,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{definition}[Positive-length same MPV - different bond dimensions]%
     \label{def:same_mpv2_pos}
-    \lean{MPSTensor.SameMPV₂Pos}
+    \lean{MPTensor.SameMPV₂Pos}
     \leanok
     \uses{def:mpv}
     For tensors $A$ and $B$ of possibly different bond dimensions,
@@ -510,7 +510,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{remark}
 
 \begin{definition}[Nonzero proportional MPV]\label{def:nonzero_proportional_mpv}
-    \lean{MPSTensor.NonzeroProportionalMPV₂}
+    \lean{MPTensor.NonzeroProportionalMPV₂}
     \leanok
     \uses{def:mpv}
     In the projective reading of the proportionality hypothesis in
@@ -524,7 +524,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{definition}[Eventually nonzero proportional MPV]%
     \label{def:eventually_nonzero_proportional_mpv}
-    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂}
+    \lean{MPTensor.EventuallyNonzeroProportionalMPV₂}
     \leanok
     \uses{def:mpv}
     Two tensors $A$ and $B$ are eventually nonzero proportional if, for all
@@ -536,9 +536,9 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{lemma}[Elementary nonzero proportionality rules]%
     \label{lem:nonzero_proportional_mpv_basic}
-    \lean{MPSTensor.NonzeroProportionalMPV₂.eventually,
-        MPSTensor.NonzeroProportionalMPV₂.symm,
-        MPSTensor.SameMPV₂Pos.toNonzeroProportionalMPV₂}
+    \lean{MPTensor.NonzeroProportionalMPV₂.eventually,
+        MPTensor.NonzeroProportionalMPV₂.symm,
+        MPTensor.SameMPV₂Pos.toNonzeroProportionalMPV₂}
     \leanok
     \uses{def:nonzero_proportional_mpv,def:eventually_nonzero_proportional_mpv,def:same_mpv2_pos}
     Nonzero proportionality implies eventual nonzero
@@ -613,8 +613,8 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
-    \lean{MPSTensor.GaugePhaseEquiv}
-    \lean{MPSTensor.GaugeEquiv.toGaugePhaseEquiv}
+    \lean{MPTensor.GaugePhaseEquiv}
+    \lean{MPTensor.GaugeEquiv.toGaugePhaseEquiv}
     \leanok
     \uses{def:mps_tensor}
     Two tensors $A$ and $B$ are \emph{gauge-phase equivalent}
@@ -633,7 +633,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{definition}[Unit gauge-phase equivalence]
     \label{def:unit_gauge_phase_equiv}
-    \lean{MPSTensor.UnitGaugePhaseEquiv}
+    \lean{MPTensor.UnitGaugePhaseEquiv}
     \leanok
     \uses{def:gauge_phase_equiv}
     Two tensors are unit gauge-phase equivalent when the gauge-phase equation
@@ -642,7 +642,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{lemma}[Unit gauge phase implies gauge phase]
     \label{lem:unit_gauge_phase_to_gauge_phase}
-    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
+    \lean{MPTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
     \leanok
     \uses{def:unit_gauge_phase_equiv,def:gauge_phase_equiv}
     Unit gauge-phase equivalence implies gauge-phase equivalence.
@@ -688,7 +688,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{lemma}[Gauge covariance of word evaluation]\label{lem:eval_word_gauge}
-    \lean{MPSTensor.evalWord_gauge}
+    \lean{MPTensor.evalWord_gauge}
     \leanok
     \uses{def:eval_word}
     If $B^i = X A^i X^{-1}$ for all~$i$, then
@@ -701,7 +701,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{theorem}[Gauge invariance of MPVs]\label{thm:gauge_invariance}
-    \lean{MPSTensor.GaugeEquiv.sameMPV}
+    \lean{MPTensor.GaugeEquiv.sameMPV}
     \leanok
     \uses{def:gauge_equiv,def:same_mpv}
     If $A$ and $B$ are gauge equivalent, then they generate the same
@@ -817,7 +817,7 @@ $A^{-1}A=\Id$.
 
 \begin{lemma}[Gauge invariance of block injectivity]
     \label{lem:gauge_invariance_block_injective}
-    \lean{MPSTensor.isNBlkInjective_of_gaugeEquiv}
+    \lean{MPTensor.isNBlkInjective_of_gaugeEquiv}
     \leanok
     \uses{def:gauge_equiv,def:l_blk_injective}
     If $A$ and $B$ are gauge equivalent and $A$ is $L$-block injective, then
@@ -834,7 +834,7 @@ $A^{-1}A=\Id$.
 
 \begin{lemma}[Gauge invariance of normality]
     \label{thm:gauge_invariance_normal}
-    \lean{MPSTensor.isNormal_of_gaugeEquiv}
+    \lean{MPTensor.isNormal_of_gaugeEquiv}
     \leanok
     \uses{def:gauge_equiv,def:normal}
     If $A$ and $B$ are gauge equivalent and $A$ is normal, then $B$ is normal.
@@ -1083,7 +1083,7 @@ $A^{-1}A=\Id$.
 \end{proof}
 
 \begin{lemma}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}
-    \lean{MPSTensor.SameMPV.blockTensor}
+    \lean{MPTensor.SameMPV.blockTensor}
     \leanok
     \uses{def:same_mpv,def:blocked_tensor}
     If $A$ and $B$ generate the same MPV family, then for any

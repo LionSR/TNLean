@@ -106,8 +106,8 @@ The coefficients are a priori complex; that they are the nonnegative integer mul
 def IsMPOSymmetricFamily {χ : ι → ℕ} {D : κ → ℕ} (O : ∀ a, MPOTensor d (χ a))
     (A : ∀ x, MPSTensor d (D x)) (M : ι → κ → κ → ℂ) : Prop :=
   ∀ a x, ∀ L : ℕ, 0 < L →
-    mpo (O a) L *ᵥ (fun τ : Fin L → Fin d => MPSTensor.mpv (A x) τ) =
-      fun σ : Fin L → Fin d => ∑ y, M a x y * MPSTensor.mpv (A y) σ
+    mpo (O a) L *ᵥ (fun τ : Fin L → Fin d => MPTensor.mpv (A x) τ) =
+      fun σ : Fin L → Fin d => ∑ y, M a x y * MPTensor.mpv (A y) σ
 
 /-- **A single matrix product state symmetric under a matrix product operator algebra.**
 
@@ -119,8 +119,8 @@ this definition. -/
 def IsMPOSymmetric {χ : ι → ℕ} {D : ℕ} (O : ∀ a, MPOTensor d (χ a)) (A : MPSTensor d D)
     (c : ι → ℂ) : Prop :=
   ∀ a, ∀ L : ℕ, 0 < L →
-    mpo (O a) L *ᵥ (fun τ : Fin L → Fin d => MPSTensor.mpv A τ) =
-      c a • fun σ : Fin L → Fin d => MPSTensor.mpv A σ
+    mpo (O a) L *ᵥ (fun τ : Fin L → Fin d => MPTensor.mpv A τ) =
+      c a • fun σ : Fin L → Fin d => MPTensor.mpv A σ
 
 /-- **Fusion character.**
 

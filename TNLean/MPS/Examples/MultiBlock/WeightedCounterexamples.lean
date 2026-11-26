@@ -22,6 +22,8 @@ length, yet the weights do not factor through a common family: there are no mult
 `G₁`, `G₂` with `U G₁ = {1, 2}`, `U G₂ = {1, 8}`, `U' G₁ = {1, 2, 4}`, `U' G₂ = {1, 4, 16}`.
 -/
 
+open MPTensor
+
 open Filter
 
 namespace MPSTensor

@@ -18,6 +18,8 @@ arXiv:0909.5347, Theorem 5, lines 850--880; finite-dimensional trace-MPS
 conventions in PGVWC07, arXiv:quant-ph/0608197, lines 400--429.
 -/
 
+open MPTensor
+
 open Matrix
 open scoped BigOperators
 

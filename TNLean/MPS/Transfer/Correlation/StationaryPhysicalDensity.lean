@@ -26,6 +26,8 @@ and consistency under tracing out either boundary site.
   canonical normalization and Theorem 2, lines 297–323.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kronecker ComplexOrder MatrixOrder
 open Kraus (blockPhysDim wordOfBlock length_wordOfBlock decodeBlockEquiv
   decodeBlock_decodeBlockEquiv_symm blockTensor)

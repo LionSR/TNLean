@@ -71,7 +71,7 @@ variable {d : ℕ} {G : Type u} [Group G] {F : GroupFamily G d} {D : ℕ} {A : M
 Source: arXiv:2203.12563, line 1064, with `y = x`. -/
 def FixesMPV {D₁ : ℕ} (T : MPOTensor d D₁) (A : MPSTensor d D) : Prop :=
   ∀ N, 0 < N →
-    mpo T N *ᵥ (fun τ : Fin N → Fin d ↦ MPSTensor.mpv A τ) = fun σ ↦ MPSTensor.mpv A σ
+    mpo T N *ᵥ (fun τ : Fin N → Fin d ↦ MPTensor.mpv A τ) = fun σ ↦ MPTensor.mpv A σ
 
 /-- A product of two operators fixing a vector fixes it. -/
 theorem FixesMPV.mulTensor {D₁ D₂ : ℕ} {M : MPOTensor d D₁} {N : MPOTensor d D₂}
@@ -82,10 +82,10 @@ theorem FixesMPV.mulTensor {D₁ D₂ : ℕ} {M : MPOTensor d D₁} {N : MPOTens
 /-- An action tensor of an operator fixing `A`, applied to a state with the positive-length
 vectors of `A`, again has the positive-length vectors of `A`. -/
 theorem FixesMPV.sameMPV₂Pos_actTensor {D₁ D₂ : ℕ} {T : MPOTensor d D₁} {B : MPSTensor d D₂}
-    (hT : FixesMPV T A) (hB : MPSTensor.SameMPV₂Pos B A) :
-    MPSTensor.SameMPV₂Pos (actTensor T B) A := by
+    (hT : FixesMPV T A) (hB : MPTensor.SameMPV₂Pos B A) :
+    MPTensor.SameMPV₂Pos (actTensor T B) A := by
   intro N hN σ
-  have hB' : (fun τ : Fin N → Fin d ↦ MPSTensor.mpv B τ) = fun τ ↦ MPSTensor.mpv A τ :=
+  have hB' : (fun τ : Fin N → Fin d ↦ MPTensor.mpv B τ) = fun τ ↦ MPTensor.mpv A τ :=
     funext (hB N hN)
   rw [← congrFun (mpo_mulVec_mpv T B N) σ, hB', hT N hN]
 
@@ -191,7 +191,7 @@ theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h
     exact hW.exists_isDressedProportional hW' hA
-      (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A))
+      (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl A))
   exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-! ### The five reductions of the triple action -/
@@ -274,14 +274,14 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   intro x g h k
   have hfix : ∀ a, FixesMPV (F.tensor a) A := hinv
   set B3 := actTensor (F.tripleTensor g h k) A
-  have hSame3 : MPSTensor.SameMPV₂Pos B3 A :=
+  have hSame3 : MPTensor.SameMPV₂Pos B3 A :=
     (((hfix g).mulTensor (hfix h)).mulTensor (hfix k)).sameMPV₂Pos_actTensor
-      (MPSTensor.SameMPV₂Pos.refl A)
+      (MPTensor.SameMPV₂Pos.refl A)
   have hSameC : ∀ a b : G,
-      MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) A :=
-    fun a b ↦ ((hfix a).mulTensor (hfix b)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A)
+      MPTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) A :=
+    fun a b ↦ ((hfix a).mulTensor (hfix b)).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl A)
   have hSame3C : ∀ a b : G,
-      MPSTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) :=
+      MPTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) :=
     fun a b ↦ fun N hN σ ↦ (hSame3 N hN σ).trans (hSameC a b N hN σ).symm
   -- the three reductions of `B3` used for pullbacks
   have hR : MPSTensor.IsReduction B3 (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)

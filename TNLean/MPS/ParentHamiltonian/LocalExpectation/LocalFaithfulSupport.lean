@@ -39,6 +39,8 @@ It also contains the following results.
   and their MPS support.
 -/
 
+open MPTensor
+
 section LocalFaithfulSupport
 
 open scoped Matrix BigOperators ComplexOrder

@@ -55,6 +55,8 @@ states, is proved in `TNLean.MPS.Examples.MajumdarGhoshLowerBound`.
   states: Concepts, symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset
 

@@ -165,7 +165,7 @@ private def gaugedNormalizedSingletonFamily :
   fun _ ↦ gaugedNormalizedSingletonTensor
 
 private lemma normalizedSingletonTensor_gaugeEquiv_gauged :
-    MPSTensor.GaugeEquiv normalizedSingletonTensor
+    MPTensor.GaugeEquiv normalizedSingletonTensor
       gaugedNormalizedSingletonTensor :=
   ⟨gauge, fun _ ↦ rfl⟩
 
@@ -186,7 +186,7 @@ private lemma mpo_verticalBNTMPO_gaugedNormalizedSingletonTensor
   rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
     ← MPSTensor.mpv_toMPSTensor_pairConfig,
     verticalBNTMPO_toMPSTensor, verticalBNTMPO_toMPSTensor]
-  exact (MPSTensor.GaugeEquiv.sameMPV
+  exact (MPTensor.GaugeEquiv.sameMPV
     normalizedSingletonTensor_gaugeEquiv_gauged L
       (fun n ↦ finProdFinEquiv (sigma n, tau n))).symm
 
@@ -230,17 +230,17 @@ private theorem gaugeDeformedBaseMPO_isCPSVBasis :
     obtain ⟨c, hc⟩ := normalizedSingleton_isCPSVBasis.spans_mpv N hN
     refine ⟨c, fun sigma ↦ ?_⟩
     calc
-      MPSTensor.mpv (verticalTensor (gaugeDeformedBaseMPO gauge)) sigma =
-          MPSTensor.mpv singletonTensor sigma := by
+      MPTensor.mpv (verticalTensor (gaugeDeformedBaseMPO gauge)) sigma =
+          MPTensor.mpv singletonTensor sigma := by
         rw [verticalTensor_gaugeDeformedBaseMPO]
-        exact (MPSTensor.GaugeEquiv.sameMPV
+        exact (MPTensor.GaugeEquiv.sameMPV
           singletonTensor_gaugeEquiv_gaugedSingletonTensor N sigma).symm
-      _ = ∑ alpha, c alpha * MPSTensor.mpv normalizedSingletonTensor sigma := hc sigma
-      _ = ∑ alpha, c alpha * MPSTensor.mpv gaugedNormalizedSingletonTensor sigma := by
+      _ = ∑ alpha, c alpha * MPTensor.mpv normalizedSingletonTensor sigma := hc sigma
+      _ = ∑ alpha, c alpha * MPTensor.mpv gaugedNormalizedSingletonTensor sigma := by
         apply Finset.sum_congr rfl
         intro alpha _halpha
         congr 1
-        exact MPSTensor.GaugeEquiv.sameMPV
+        exact MPTensor.GaugeEquiv.sameMPV
           normalizedSingletonTensor_gaugeEquiv_gauged N sigma
   · obtain ⟨N₀, hLI⟩ := normalizedSingleton_isCPSVBasis.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
@@ -254,7 +254,7 @@ private theorem gaugeDeformedBaseMPO_isCPSVBasis :
       apply PiLp.ext
       intro sigma
       simpa only [MPSTensor.mpvState_apply] using
-        (MPSTensor.GaugeEquiv.sameMPV
+        (MPTensor.GaugeEquiv.sameMPV
           normalizedSingletonTensor_gaugeEquiv_gauged N sigma).symm
     rw [hstates]
     exact hLI N hN

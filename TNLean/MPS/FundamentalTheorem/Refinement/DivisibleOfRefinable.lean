@@ -63,6 +63,8 @@ makes `𝔼_B` trace preserving. Documented in
   Theorem 4.1, lines 715--810.
 -/
 
+open MPTensor
+
 section Normalization
 
 /-!

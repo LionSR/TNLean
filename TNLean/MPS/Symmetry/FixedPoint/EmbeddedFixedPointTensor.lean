@@ -31,6 +31,8 @@ second block with indices `D₀+1, …, D₀+D₁`, not the printed upper limit
 `D₁`; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

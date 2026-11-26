@@ -27,6 +27,8 @@ blocked source path in `IsometricDeformation`, remove this restriction;
 documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder
 
 namespace MPSTensor

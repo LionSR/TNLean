@@ -134,7 +134,7 @@ theorem isDressedProportional_relativeScalar (hA : ∀ x, Kraus.IsNormal (A x))
   have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
       (actTensor (F.tensor g) (A x)) (ad.V g x) (ad'.V g x) z :=
     (ad.isReduction g x).exists_isDressedProportional (ad'.isReduction g x) (hA _)
-      ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl (A x)))
+      ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl (A x)))
   exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-- **Reciprocal rescaling of action tensors** (arXiv:2502.20257, `eq:scalar_act_ten`,
@@ -178,8 +178,8 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
   funext x g h
   have hγ := isDressedProportional_relativeScalar hA hperm ad ad'
   have hSame : ∀ (a : G) {n : ℕ} (C : MPSTensor d n) (y : X),
-      MPSTensor.SameMPV₂Pos C (A y) →
-        MPSTensor.SameMPV₂Pos (actTensor (F.tensor a) C) (A (a • y)) :=
+      MPTensor.SameMPV₂Pos C (A y) →
+        MPTensor.SameMPV₂Pos (actTensor (F.tensor a) C) (A (a • y)) :=
     fun a _ C y hC ↦ (hperm a y).sameMPV₂Pos_actTensor hC
   -- the tree acting with `h` and then `g`
   have hact : MPSTensor.IsDressedProportional
@@ -188,8 +188,8 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
         ad.relativeScalar ad' g (h • x)) := by
     have h₁ := ((hγ h x).actTensor_idKron (F.tensor g)).mul_left (ad.V g (h • x))
     have h₂ := (hγ g (h • x)).pullback ((ad'.isReduction h x).actTensor_idKron (F.tensor g))
-      ((hSame g _ (h • x) (hSame h _ x (MPSTensor.SameMPV₂Pos.refl (A x)))).trans
-        (hSame g _ (h • x) (MPSTensor.SameMPV₂Pos.refl _)).symm)
+      ((hSame g _ (h • x) (hSame h _ x (MPTensor.SameMPV₂Pos.refl (A x)))).trans
+        (hSame g _ (h • x) (MPTensor.SameMPV₂Pos.refl _)).symm)
     exact (h₁.trans h₂).of_intertwine (mulTensorAssocMatrix_mul_invMatrix _ _ _)
       (mulTensorAssocInvMatrix_mul_matrix _ _ _)
       (actTensor_mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (A x))
@@ -198,13 +198,13 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
       (ad.fuseV fd g h x) (ad'.fuseV fd' g h x) (fd.relativeScalar fd' (g, h) *
         ad.relativeScalar ad' (g * h) x) := by
-    have hSameB : MPSTensor.SameMPV₂Pos
+    have hSameB : MPTensor.SameMPV₂Pos
         (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
         (actTensor (F.tensor (g * h)) (A x)) := by
       intro N hN σ
       rw [(((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
-          (MPSTensor.SameMPV₂Pos.refl (A x))) N hN σ,
-        (hSame (g * h) _ x (MPSTensor.SameMPV₂Pos.refl (A x))) N hN σ, mul_smul]
+          (MPTensor.SameMPV₂Pos.refl (A x))) N hN σ,
+        (hSame (g * h) _ x (MPTensor.SameMPV₂Pos.refl (A x))) N hN σ, mul_smul]
     have h₁ := ((FusionData.isDressedProportional_relativeScalar hF fd fd' g h).actTensor_kronId
       (A x)).mul_left (ad.V (g * h) x)
     have h₂ := (hγ (g * h) x).pullback ((fd'.isReduction g h).actTensor_kronId (A x)) hSameB

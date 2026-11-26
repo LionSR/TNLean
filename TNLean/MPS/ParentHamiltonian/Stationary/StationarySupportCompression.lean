@@ -62,6 +62,8 @@ It also contains the following results.
   quasi-local MPS expectations.
 -/
 
+open MPTensor
+
 section StationarySupportCompression
 
 section

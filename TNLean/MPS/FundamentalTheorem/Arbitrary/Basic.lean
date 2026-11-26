@@ -43,6 +43,8 @@ with `V_N(A) = c_N • V_N(B)` for which no rescaling of `B` has the states of `
 * `MPSTensor.sameMPV₂Pos_smul_iff`.
 -/
 
+open MPTensor
+
 section
 
 namespace WordAlgebra

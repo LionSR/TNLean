@@ -68,6 +68,8 @@ and \(X=0\) on odd rings.
   Verstraete, Wolf, Cirac, *Matrix product state representations*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset
 

@@ -25,6 +25,8 @@ trace-preserving gauge.
   the trace-preserving gauge of line 625.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix
 namespace MPSTensor
 

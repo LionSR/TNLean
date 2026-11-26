@@ -43,6 +43,8 @@ This is the estimate from Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma `commutation` (ii), applied to the ground spaces of the direct sum.
 -/
 
+open MPTensor
+
 section
 
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator

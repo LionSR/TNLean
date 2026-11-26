@@ -51,6 +51,8 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 * arXiv:2606.24475, App. B3, eqs. (S27)–(S38), for the Lipschitz step.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Kraus (blockTensor)
 

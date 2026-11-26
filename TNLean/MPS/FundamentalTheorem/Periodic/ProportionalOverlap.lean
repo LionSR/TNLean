@@ -40,6 +40,8 @@ the nonzero complex multiplicity weights.
   arXiv:1708.00029, theorem `thm:bd`, lines 613--623.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

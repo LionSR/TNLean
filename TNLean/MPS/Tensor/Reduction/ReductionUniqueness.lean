@@ -18,6 +18,8 @@ Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22,
 `cornerproblem.tex` lines 3156--3162 and proof at lines 4007--4035.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

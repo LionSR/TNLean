@@ -103,7 +103,7 @@ $2 \sum_{k, p} C_k[p, p']^2 / (2\mu)^2 = 4 \cdot \tfrac{25}{64} / \tfrac{100}{64
 
 Project example; not from CPSV16. -/
 theorem flagFamily_isLeftCanonical (f : Fin 2) : (flagFamily f).IsLeftCanonical := by
-  unfold MPSTensor.IsLeftCanonical Kraus.IsTP
+  unfold MPTensor.IsLeftCanonical Kraus.IsTP
   rw [← (finProdFinEquiv (m := 8) (n := 8)).sum_comp, Fintype.sum_prod_type]
   simp only [flagFamily_finProdFinEquiv, conjTranspose_flagMPO_mul_self]
   ext i j

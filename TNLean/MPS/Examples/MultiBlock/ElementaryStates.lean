@@ -53,6 +53,8 @@ The tensors `ghzB` and `repB` were first recorded as Examples B and C of
 `ex:p5ft-ghz` and `ex:p5ft-jordan`); these are verification records, not the source.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

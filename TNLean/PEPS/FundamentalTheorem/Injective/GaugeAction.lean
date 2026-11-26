@@ -125,7 +125,7 @@ theorem edge_gauge_absorption (B : Tensor G d)
 /-- Two PEPS tensors are gauge-equivalent if they have the same bond dimensions
 and `B` is obtained from `A` by applying invertible gauge matrices on each edge.
 
-This is the PEPS generalisation of `MPSTensor.GaugeEquiv`: instead of a single
+This is the PEPS generalisation of `MPTensor.GaugeEquiv`: instead of a single
 global `X ∈ GL(D, ℂ)`, we have one `X_e ∈ GL(D_e, ℂ)` per edge. -/
 def GaugeEquiv (A B : Tensor G d) : Prop :=
   ∃ (hDim : A.bondDim = B.bondDim)

@@ -141,7 +141,7 @@ blocks, the downstream argument needs only
 \end{align}
 No physical theorem therefore needs an empty-word coefficient or a scalar
 recording the dimension of the discarded bond space. Formally, positive-length
-equality is \leanid{MPSTensor.SameMPV₂Pos}; the canonical-form reduction carries
+equality is \leanid{MPTensor.SameMPV₂Pos}; the canonical-form reduction carries
 Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison}
 and the bound in
 Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
@@ -160,7 +160,7 @@ Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
 The intermediate declarations carrying \texttt{zeroTailDim} and the former
 support lemma \path{zeroTail_toTensorFromBlocks_blockPower} have been
 removed. The subsequent common-sector theorems now assume
-\leanid{MPSTensor.SameMPV₂Pos} directly; their proofs no longer convert an all-length
+\leanid{MPTensor.SameMPV₂Pos} directly; their proofs no longer convert an all-length
 hypothesis back to positive length. The former bridge from positive-length
 equality plus equal bond dimensions to an all-length statement has also been
 removed from the public comparison surface. The empty-word coefficient lemma

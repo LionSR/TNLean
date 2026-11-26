@@ -99,11 +99,11 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
       MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT.toMPSTensor
     basis_left_canonical := by
       intro j
-      simp [MPSTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
+      simp [MPTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
         scalarBNT, toMPSTensor]
     basis_normalized_self_overlap := by
       intro j
-      simp [MPSTensor.mpvOverlap, MPSTensor.mpv, MPSTensor.coeff, scalarBNT_evalWord,
+      simp [MPSTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
         Matrix.trace]
     bnt_data := by
       refine ⟨0, ?_⟩
@@ -112,7 +112,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
       intro hzero
       have h := congrArg
         (fun v : MPSTensor.MPVSpace 1 N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
-      simp [MPSTensor.mpvState_apply, MPSTensor.mpv, MPSTensor.coeff, scalarBNT_evalWord,
+      simp [MPSTensor.mpvState_apply, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
         Matrix.trace] at h
     basis_distinct := by
       intro j k hjk
@@ -127,8 +127,8 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
       simp }
 
 private lemma scalarBNT_mpv {N : ℕ} (σ : Fin N → Fin 1) :
-    MPSTensor.mpv scalarBNT.toMPSTensor σ = 1 := by
-  simp [MPSTensor.mpv, MPSTensor.coeff, scalarBNT_evalWord, Matrix.trace]
+    MPTensor.mpv scalarBNT.toMPSTensor σ = 1 := by
+  simp [MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord, Matrix.trace]
 
 /-- Every periodic contraction of the repeated-copy MPO is
 $1+(1/2)^N$.

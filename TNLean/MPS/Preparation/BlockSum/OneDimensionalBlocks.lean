@@ -54,6 +54,8 @@ assembled tensor with a displayed tensor, coordinate by coordinate.
   arXiv:2307.01696, Supplemental Material, eqs. (S2) and `eq:Ek_decomp`.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology
 

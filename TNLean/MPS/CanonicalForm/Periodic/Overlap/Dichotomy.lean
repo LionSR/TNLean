@@ -27,6 +27,8 @@ This module contains the statement of the source proposition
   and Appendix A.
 -/
 
+open MPTensor
+
 section Dichotomy
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace

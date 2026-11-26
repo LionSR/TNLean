@@ -27,6 +27,8 @@ canonical OBC window and first clause of Theorem 8, MPSarchive.tex
 lines 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation OBCChainTensor
 open scoped BigOperators
 

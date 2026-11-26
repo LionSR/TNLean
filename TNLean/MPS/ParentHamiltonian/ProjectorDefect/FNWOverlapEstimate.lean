@@ -15,6 +15,8 @@ Nachtergaele--Werner, *Communications in Mathematical Physics* 144 (1992),
 equation (6.5), without introducing the later quadratic contribution.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder Matrix
 
 namespace MPSTensor

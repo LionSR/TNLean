@@ -27,6 +27,8 @@ It also contains the following results.
   tensor.
 -/
 
+open MPTensor
+
 section Periodic
 
 open scoped Matrix BigOperators Matrix.Norms.Operator Kraus

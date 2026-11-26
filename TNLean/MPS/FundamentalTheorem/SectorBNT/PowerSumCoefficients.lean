@@ -64,6 +64,8 @@ matrix product states, renormalization fixed point, structure constants, normal
 tensors, linear independence, power sums
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

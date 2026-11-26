@@ -24,6 +24,8 @@ On-site symmetry is also transported along a rescaling of the tensor
 * arXiv:0802.0447 (PGWSVC 2008), Condition C1
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

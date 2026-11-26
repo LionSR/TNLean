@@ -53,6 +53,8 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
   (line 811), Definition 3.13 (line 600), eq. line 797.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators
 open Matrix Finset
 
@@ -622,20 +624,20 @@ theorem vonNeumannEntropy_normalizedPureState {d D : ℕ} (A : MPSTensor d D) (N
     rw [hn, Nat.one_le_iff_ne_zero]; intro h0
     have : IsEmpty (Fin N → Fin d) := Fintype.card_eq_zero_iff.mp h0
     exact htr (by simp [Matrix.trace, Matrix.diag, Finset.univ_eq_empty])
-  have hdotEq : (fun σ : Fin N → Fin d => MPSTensor.mpv A σ) ⬝ᵥ
-      (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) =
+  have hdotEq : (fun σ : Fin N → Fin d => MPTensor.mpv A σ) ⬝ᵥ
+      (star (fun σ : Fin N → Fin d => MPTensor.mpv A σ)) =
       Matrix.trace (MPSTensor.pureState A N) := by
     rw [Matrix.trace]
     simp only [Matrix.diag, MPSTensor.pureState, Matrix.vecMulVec_apply, dotProduct,
       Pi.star_apply]
   have hnp : MPSTensor.normalizedPureState A N
       = Matrix.vecMulVec ((Matrix.trace (MPSTensor.pureState A N))⁻¹ •
-          (fun σ : Fin N → Fin d => MPSTensor.mpv A σ))
-          (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) := by
+          (fun σ : Fin N → Fin d => MPTensor.mpv A σ))
+          (star (fun σ : Fin N → Fin d => MPTensor.mpv A σ)) := by
     rw [Matrix.smul_vecMulVec]; rfl
   have hdot : ((Matrix.trace (MPSTensor.pureState A N))⁻¹ •
-        (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) ⬝ᵥ
-        (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) = 1 := by
+        (fun σ : Fin N → Fin d => MPTensor.mpv A σ)) ⬝ᵥ
+        (star (fun σ : Fin N → Fin d => MPTensor.mpv A σ)) = 1 := by
     rw [smul_dotProduct, hdotEq, smul_eq_mul, inv_mul_cancel₀ htr]
   rw [vonNeumannEntropy_eq_charpoly_roots, hnp, Matrix.charpoly_vecMulVec, hdot, one_smul, ← hn]
   have hX1 : (X - 1 : ℂ[X]) ≠ 0 := by

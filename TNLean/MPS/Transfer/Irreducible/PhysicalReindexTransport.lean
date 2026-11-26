@@ -31,6 +31,8 @@ basic tensor properties used by blocking and canonical-form arguments.
   linear independence of MPV states are preserved.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

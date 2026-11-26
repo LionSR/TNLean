@@ -47,6 +47,8 @@ gives `W_N` for all `N ≥ 1`, and among `W_1, …, W_{D+1}` one fails. The asym
   symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Kraus (evalWord_replicate)
 

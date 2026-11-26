@@ -229,8 +229,8 @@ end Rep
 /-- The matrix product vector of the doubled tensor at a word `w` is the entry of the
 periodic operator at the ket and bra configurations of `w`. -/
 theorem mpv_toMPSTensor (M : MPOTensor d D) {N : ℕ} (w : Fin N → Fin (d * d)) :
-    MPSTensor.mpv (toMPSTensor M) w = mpo M N (fun n => (w n).divNat) fun n => (w n).modNat := by
-  rw [MPSTensor.mpv_eq, MPSTensor.coeff_eq, evalWord_toMPSTensor_ofFn, mpo_apply, mpoMatrixEntry]
+    MPTensor.mpv (toMPSTensor M) w = mpo M N (fun n => (w n).divNat) fun n => (w n).modNat := by
+  rw [MPTensor.mpv_eq, MPTensor.coeff_eq, evalWord_toMPSTensor_ofFn, mpo_apply, mpoMatrixEntry]
 
 /-- **Proportional vectorized states are proportional density operators.**
 
@@ -238,7 +238,7 @@ Bridge: at a fixed length, the matrix product vectors of the doubled tensors of 
 are proportional with factor `c` exactly when `ρ^{(N)}(X) = c ρ^{(N)}(Y)`. -/
 theorem mpv_toMPSTensor_eq_mul_iff (X Y : MPOTensor d D) (N : ℕ) (c : ℂ) :
     (∀ w : Fin N → Fin (d * d),
-        MPSTensor.mpv (toMPSTensor X) w = c * MPSTensor.mpv (toMPSTensor Y) w) ↔
+        MPTensor.mpv (toMPSTensor X) w = c * MPTensor.mpv (toMPSTensor Y) w) ↔
       mpo X N = c • mpo Y N := by
   constructor
   · intro h
@@ -254,7 +254,7 @@ theorem mpv_toMPSTensor_eq_mul_iff (X Y : MPOTensor d D) (N : ℕ) (c : ℂ) :
 Bridge: `SameMPV (toMPSTensor X) (toMPSTensor Y)` holds exactly when the periodic operators
 agree at every positive length; at length zero both vectors are the bond dimension. -/
 theorem sameMPV_toMPSTensor_iff (X Y : MPOTensor d D) :
-    MPSTensor.SameMPV (toMPSTensor X) (toMPSTensor Y) ↔ ∀ N, 0 < N → mpo X N = mpo Y N := by
+    MPTensor.SameMPV (toMPSTensor X) (toMPSTensor Y) ↔ ∀ N, 0 < N → mpo X N = mpo Y N := by
   constructor
   · intro h N _
     rw [← one_smul ℂ (mpo Y N), ← mpv_toMPSTensor_eq_mul_iff]
@@ -340,8 +340,8 @@ theorem isStrongOnSiteSymmetry_iff_mpv_toMPSTensor (M : MPOTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) (c : G → ℕ → ℂ) :
     IsStrongOnSiteSymmetry M 1 U c ↔
       ∀ g L, 0 < L → ∀ w : Fin L → Fin (d * d),
-        MPSTensor.mpv (MPSTensor.twistedTensor (toMPSTensor M) (pairRep U 1) g) w =
-          c g L * MPSTensor.mpv (toMPSTensor M) w := by
+        MPTensor.mpv (MPSTensor.twistedTensor (toMPSTensor M) (pairRep U 1) g) w =
+          c g L * MPTensor.mpv (toMPSTensor M) w := by
   unfold IsStrongOnSiteSymmetry IsStrongMPOSymmetry
   simp only [mpoWithBoundary_one]
   refine forall_congr' fun g => forall_congr' fun L => forall_congr' fun _ => ?_

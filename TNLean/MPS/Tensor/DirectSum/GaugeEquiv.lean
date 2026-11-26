@@ -31,6 +31,8 @@ intermediate constructions and have been moved to `TNLean.MPS.SharedInfra.BlockG
 canonical-form modules can use them without inverting the layer order.  They
 are re-stated here transitively through the import above.
 -/
+
+open MPTensor
 open scoped Matrix BigOperators
 
 namespace MPSTensor

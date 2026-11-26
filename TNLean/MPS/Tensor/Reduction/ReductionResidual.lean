@@ -30,6 +30,8 @@ not formalized here; see
 `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

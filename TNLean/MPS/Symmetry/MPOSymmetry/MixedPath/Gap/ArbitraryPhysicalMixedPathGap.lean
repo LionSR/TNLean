@@ -35,6 +35,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5,
 lines 1584–1601 and 1687–1692.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
 
 open ManyBody

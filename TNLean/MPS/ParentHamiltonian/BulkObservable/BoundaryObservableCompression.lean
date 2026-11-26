@@ -43,6 +43,8 @@ finite-chain ground space and does not infer finite-chain uniqueness or
 purity of a completed state.
 -/
 
+open MPTensor
+
 section
 
 open Filter

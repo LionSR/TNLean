@@ -32,6 +32,8 @@ arXiv:2011.12127, Section III.A, lines 1084 and 1171.
   Verstraete, Wolf, Cirac, *Matrix Product State Representations*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor

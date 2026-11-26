@@ -567,7 +567,7 @@ theorem exists_isReduction_of_mpo_eq_cfii
   have hNormalRaw : Kraus.IsNormal V.toMPSTensor := by
     apply (MPSTensor.isNormal_smul_iff hζ V.toMPSTensor).mp
     exact hNormalNorm
-  have hSame : MPSTensor.SameMPV₂Pos U.toMPSTensor V.toMPSTensor := by
+  have hSame : MPTensor.SameMPV₂Pos U.toMPSTensor V.toMPSTensor := by
     intro N hN σ
     rw [mpv_toMPSTensor, mpv_toMPSTensor, hEq N hN]
   exact MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos

@@ -38,6 +38,8 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
   lines 214--245 and eq. `II_CF1`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Kraus (blockPhysDim blockTensor)
 
@@ -45,13 +47,11 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-namespace GaugeEquiv
-
 /-- Gauge equivalence is preserved by blocking the physical alphabet.
 
 Source: arXiv:1606.00608, line 227 defines blocking by matrix products and
 lines 264--268 give the invertible gauge relation. -/
-theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
+theorem _root_.MPTensor.GaugeEquiv.blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
     GaugeEquiv (blockTensor (d := d) (n := Fin D) A p)
       (blockTensor (d := d) (n := Fin D) B p) := by
   obtain ⟨X, hX⟩ := h
@@ -59,8 +59,6 @@ theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
   simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock,
     Matrix.GeneralLinearGroup.coe_inv] using
     evalWord_gauge (A := A) (B := B) X hX (Kraus.wordOfBlock d p i)
-
-end GaugeEquiv
 
 namespace IsNormalTensor
 

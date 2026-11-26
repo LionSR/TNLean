@@ -32,6 +32,8 @@ the two legs of each split-index tensor by a phase is implemented on the interme
   then fixes the trace.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

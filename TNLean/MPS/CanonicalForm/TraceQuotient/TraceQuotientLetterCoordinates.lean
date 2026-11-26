@@ -42,6 +42,8 @@ The coefficient identification is used pointwise and is not assumed continuous; 
 physical-gap implication is asserted.
 -/
 
+open MPTensor
+
 section
 
 set_option relaxedAutoImplicit false

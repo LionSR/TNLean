@@ -36,6 +36,8 @@ It also contains the following results.
   periodic closure of the actual single-domain-wall boundary space.
 -/
 
+open MPTensor
+
 section UncleBoundaryWords
 
 open scoped Matrix BigOperators

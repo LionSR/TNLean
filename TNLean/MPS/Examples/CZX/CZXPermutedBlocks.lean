@@ -79,8 +79,8 @@ theorem czx_carriesMPV (g x : Multiplicative (Fin 2)) :
     | (change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
        rw [mpo_idTensor, Matrix.one_mulVec]; rfl)
     | (change mpo czxDecoratedTensor N *ᵥ
-          (fun σ ↦ MPSTensor.mpv (ghzSectorTensor _) σ) =
-          fun σ ↦ MPSTensor.mpv (ghzSectorTensor _) σ
+          (fun σ ↦ MPTensor.mpv (ghzSectorTensor _) σ) =
+          fun σ ↦ MPTensor.mpv (ghzSectorTensor _) σ
        rw [mpv_ghzSectorTensor, mpv_ghzSectorTensor, mpo_czxDecoratedTensor,
          Matrix.monomial_mulVec_single]
        have hflip : ∀ c : Fin 2, spinFlip N (fun _ ↦ c) = fun _ ↦ c.rev := fun c ↦ rfl

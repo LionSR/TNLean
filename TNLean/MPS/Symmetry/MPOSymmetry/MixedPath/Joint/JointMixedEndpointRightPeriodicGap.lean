@@ -26,6 +26,8 @@ over the intervening path is asserted.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
+open MPTensor
+
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder
 open ManyBody.Interaction (translationInvariant)
 

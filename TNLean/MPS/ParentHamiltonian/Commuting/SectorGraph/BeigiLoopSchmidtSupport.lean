@@ -23,6 +23,8 @@ realization at every positive length.
   Section IV, equation (10) and the paragraph following it.
 -/
 
+open MPTensor
+
 open scoped BigOperators Kronecker Matrix
 
 namespace MPSTensor.BeigiSectorGraphData

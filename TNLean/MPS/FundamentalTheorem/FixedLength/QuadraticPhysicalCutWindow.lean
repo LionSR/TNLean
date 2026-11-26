@@ -24,6 +24,8 @@ Source: PGVWC07, arXiv:quant-ph/0608197, first clause of Theorem 8,
 MPSarchive.tex lines 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation
 open scoped BigOperators Kronecker
 

@@ -170,7 +170,7 @@ theorem IsHorizontalCF.hasHorizontalCFMPVRepresentation
   obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
   refine ⟨S, hCF, ?_⟩
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
     refine ⟨MPSTensor.globalGaugeOfBlocks Xcopy, ?_⟩
     intro i
     simpa using hX i
@@ -229,8 +229,8 @@ theorem IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
     intro i
     simpa using hX i
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
+  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
     intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   have hBasis :=
@@ -277,16 +277,16 @@ theorem IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
       MPSTensor.IsBNTCanonicalForm S ∧
-      MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor ∧
+      MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor ∧
       ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
         MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by
   obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
     refine ⟨MPSTensor.globalGaugeOfBlocks Xcopy, ?_⟩
     intro i
     simpa using hX i
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
+  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
     intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   exact ⟨S, hCF, hM,
@@ -321,8 +321,8 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
     intro i
     simpa using hX i
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
+  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
     intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   have hBasis := basis_braRight_eq_ketLeftBraRight_of_invariant

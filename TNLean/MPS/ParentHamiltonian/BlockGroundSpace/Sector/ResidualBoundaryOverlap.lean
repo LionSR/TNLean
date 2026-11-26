@@ -53,6 +53,8 @@ arXiv:cond-mat/9410110, Lemma disjoint, lines 1744--1820, and
 Lemma commutation (i), lines 2442--2531.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder

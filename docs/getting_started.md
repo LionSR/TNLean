@@ -131,7 +131,7 @@ the `Kraus` namespace. TNLean retains the matrix-product-state vocabulary in
 | `Kraus.IsInjective` | The matrices of a tensor span the full matrix algebra. | `QICLean/Kraus/Injectivity.lean` |
 | `Kraus.IsNormal` | The tensor becomes injective after blocking sites (eventual full Kraus rank). | `QICLean/Kraus/Injectivity.lean` |
 | `Kraus.transferMap` | The completely positive map $E_A(X) = \sum_i A_i X A_i^\dagger$. | `QICLean/Kraus/Transfer.lean` |
-| `MPSTensor.SameMPV` / `MPSTensor.GaugeEquiv` | Two tensors generate the same states at every system size / are related by conjugation `B i = X * A i * X⁻¹`. | `TNLean/MPS/Tensor/Defs.lean` |
+| `MPTensor.SameMPV` / `MPTensor.GaugeEquiv` | Two tensors generate the same states at every system size / are related by conjugation `B i = X * A i * X⁻¹`. | `TNLean/MPS/Tensor/Defs.lean` |
 | `fundamentalTheorem_singleBlock` | The single-block fundamental theorem: injective + same states implies gauge equivalent. | `TNLean/MPS/Tensor/Gauge/FiniteLength.lean` |
 
 For anything not in this short list — what a predicate means, which source it
@@ -163,8 +163,8 @@ alongside the corresponding blueprint chapters:
 1. `QICLean/Kraus/Word.lean` (in the QICLean dependency) — `MPSTensor`,
    `Kraus.evalWord`. The basic objects: a tensor is a family of matrices,
    and a word evaluates to a matrix product.
-2. `TNLean/MPS/Tensor/Defs.lean` — `MPSTensor.mpv` (the matrix-product-vector
-   coefficient), `MPSTensor.SameMPV`, `MPSTensor.GaugeEquiv`. What it means
+2. `TNLean/MPS/Tensor/Defs.lean` — `MPTensor.mpv` (the matrix-product-vector
+   coefficient), `MPTensor.SameMPV`, `MPTensor.GaugeEquiv`. What it means
    for two tensors to generate the same states, and what a gauge transformation
    is. Read alongside `blueprint/src/chapter/ch02_mps.tex`.
 3. `QICLean/Kraus/Injectivity.lean` — `Kraus.IsInjective`, `Kraus.IsNormal`. The

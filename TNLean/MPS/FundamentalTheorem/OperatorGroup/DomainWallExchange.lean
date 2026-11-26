@@ -234,7 +234,7 @@ theorem pair (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {z z
   obtain ⟨N₁, H₁⟩ := he.eq
   obtain ⟨N₂, H₂⟩ := hf.eq
   have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
-    ((hperm g y).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
+    ((hperm g y).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))
   set M := N₁ + N₂ + F.bondDim g * D y
   refine ⟨2 * M + 1, fun u v w i j hu hv hw ↦ ?_⟩
   obtain ⟨p, c₁, q, hsplit, hp, hq, hc₁⟩ :=

@@ -65,16 +65,16 @@ Source: arXiv:2203.12563, `REsubmission.tex` line 1064: `U_g |ψ_{A_x}⟩ = |ψ_
 def CarriesMPV {D₁ D₂ D₃ : ℕ} (T : MPOTensor d D₁) (B : MPSTensor d D₂)
     (B' : MPSTensor d D₃) : Prop :=
   ∀ N, 0 < N →
-    mpo T N *ᵥ (fun τ : Fin N → Fin d ↦ MPSTensor.mpv B τ) = fun σ ↦ MPSTensor.mpv B' σ
+    mpo T N *ᵥ (fun τ : Fin N → Fin d ↦ MPTensor.mpv B τ) = fun σ ↦ MPTensor.mpv B' σ
 
 omit [Group G] [MulAction G X] in
 /-- An action tensor of an operator carrying `B` to `B'`, applied to a state with the
 positive-length vectors of `B`, has the positive-length vectors of `B'`. -/
 theorem CarriesMPV.sameMPV₂Pos_actTensor {D₁ D₂ D₃ D₄ : ℕ} {T : MPOTensor d D₁}
     {B : MPSTensor d D₂} {B' : MPSTensor d D₃} {C : MPSTensor d D₄} (hT : CarriesMPV T B B')
-    (hC : MPSTensor.SameMPV₂Pos C B) : MPSTensor.SameMPV₂Pos (actTensor T C) B' := by
+    (hC : MPTensor.SameMPV₂Pos C B) : MPTensor.SameMPV₂Pos (actTensor T C) B' := by
   intro N hN σ
-  have hC' : (fun τ : Fin N → Fin d ↦ MPSTensor.mpv C τ) = fun τ ↦ MPSTensor.mpv B τ :=
+  have hC' : (fun τ : Fin N → Fin d ↦ MPTensor.mpv C τ) = fun τ ↦ MPTensor.mpv B τ :=
     funext (hC N hN)
   rw [← congrFun (mpo_mulVec_mpv T C N) σ, hC', hT N hN]
 
@@ -233,7 +233,7 @@ theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h x
     exact hW.exists_isDressedProportional hW' (hA _)
       (((hperm g (h • x)).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
-        (MPSTensor.SameMPV₂Pos.refl (A x)))
+        (MPTensor.SameMPV₂Pos.refl (A x)))
   exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-- **Uniqueness of the L-symbols**: a scalar `z` with `actV g h x ~ z · fuseV g h x` against
@@ -350,15 +350,15 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
   set B3 := actTensor (F.tripleTensor g h k) (A x)
   have hcar3 : CarriesMPV (F.tripleTensor g h k) (A x) (A (g • h • k • x)) :=
     ((hperm g _).mulTensor (hperm h _)).mulTensor (hperm k x)
-  have hSame3 : MPSTensor.SameMPV₂Pos B3 (A (g • h • k • x)) :=
-    hcar3.sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl (A x))
+  have hSame3 : MPTensor.SameMPV₂Pos B3 (A (g • h • k • x)) :=
+    hcar3.sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl (A x))
   have hSameC : ∀ (a b : G) (y : X),
-      MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) (A y))
+      MPTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor a) (F.tensor b)) (A y))
         (A (a • b • y)) :=
     fun a b y ↦ ((hperm a _).mulTensor (hperm b y)).sameMPV₂Pos_actTensor
-      (MPSTensor.SameMPV₂Pos.refl (A y))
+      (MPTensor.SameMPV₂Pos.refl (A y))
   have hSame3C : ∀ (a b : G) (y : X), a • b • y = g • h • k • x →
-      MPSTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) (A y)) := by
+      MPTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) (A y)) := by
     intro a b y e N hN σ
     rw [hSame3 N hN σ, hSameC a b y N hN σ, e]
   have hR : MPSTensor.IsReduction B3

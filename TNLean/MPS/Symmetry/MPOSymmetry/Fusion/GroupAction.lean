@@ -36,6 +36,8 @@ nonnegative integer representation has no boundary restriction.
   permutes the periodic vectors at every positive length.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPOTensor

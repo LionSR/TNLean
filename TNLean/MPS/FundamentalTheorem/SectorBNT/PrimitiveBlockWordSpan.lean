@@ -19,6 +19,8 @@ the direct-sum lemma (lines 1346--1408) and Theorem 12 (lines
 1424--1456).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

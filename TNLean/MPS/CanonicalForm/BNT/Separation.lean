@@ -22,6 +22,8 @@ It also contains the following results.
   separation.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 section Separation
@@ -59,7 +61,7 @@ abbrev BlockPermutationGaugePhaseConclusion
     ∃ perm : Fin rA ≃ Fin rB,
       ∀ j : Fin rA,
         ∃ hdim : dimA j = dimB (perm j),
-          GaugePhaseEquiv (d := d)
+          GaugePhaseEquiv (α := Fin d)
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 

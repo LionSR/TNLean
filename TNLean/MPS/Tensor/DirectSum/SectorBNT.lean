@@ -75,6 +75,8 @@ core BNT predicate.
   periodic generalization).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

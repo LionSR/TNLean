@@ -28,6 +28,8 @@ coisometry-invariance theorem below. That theorem is a derived trace-cyclicity
 result for any exact coisometric reconstruction.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Kraus (blockPhysDim)
 

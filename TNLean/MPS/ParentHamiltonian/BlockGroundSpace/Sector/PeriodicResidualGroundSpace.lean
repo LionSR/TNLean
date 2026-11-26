@@ -33,6 +33,8 @@ local support spaces and intersection property at lines 1504--1538.
 recorded in docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 namespace MPSTensor

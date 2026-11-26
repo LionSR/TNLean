@@ -42,6 +42,8 @@ and then applies the equal-vector theorem `MPSTensor.fundamentalTheorem_singleBl
   *Fractional domain wall statistics in spin chains with anomalous symmetries*
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

@@ -57,6 +57,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
 lines 1691 and 1695--1777.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Topology ComplexOrder
 
 open Filter

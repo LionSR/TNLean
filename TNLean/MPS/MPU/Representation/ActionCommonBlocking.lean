@@ -69,9 +69,9 @@ theorem CarriesMPV.blockTensor {D₃ : ℕ} {T : MPOTensor d D₁}
   rw [mpo_mulVec_mpv]
   funext σ
   rw [← blockTensor_actTensor]
-  have hSame := h.sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl B)
+  have hSame := h.sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl B)
     (N * L) (Nat.mul_pos hN hL) (MPSTensor.blockedConfigEquiv d N L σ)
-  simpa only [MPSTensor.mpv, MPSTensor.coeff, Kraus.evalWord_blockTensor,
+  simpa only [MPTensor.mpv, MPTensor.coeff, Kraus.evalWord_blockTensor,
     MPSTensor.ofFn_blockedConfigEquiv] using hSame
 
 namespace BlockActionData
@@ -134,7 +134,7 @@ theorem block_hasExteriorBufferLength_one (ad : BlockActionData F A)
     (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x) 1
   rw [← blockTensor_actTensor]
   exact ((ad.isReduction g x).isReductionExteriorBufferLength_nilpotencyLength
-    ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))).blockTensor hL
+    ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))).blockTensor hL
       (by have := hN g x; change ad.nilpotencyLength g x - 1 ≤ 1 * L; omega)
 
 section Finite

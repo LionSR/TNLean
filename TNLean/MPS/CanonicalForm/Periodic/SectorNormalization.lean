@@ -52,6 +52,8 @@ De las Cuevas--Cirac--Schuch--Pérez-García, arXiv:1708.00029,
 equation `eq:bdnr` and lines 286--332.
 -/
 
+open MPTensor
+
 section Normalization
 
 /-!

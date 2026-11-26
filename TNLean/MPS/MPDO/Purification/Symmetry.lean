@@ -105,7 +105,7 @@ matrix product density operator). -/
 noncomputable def purificationAmplitude (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (L : ℕ) : Matrix (Fin L → Fin d) (Fin L → Fin dK) ℂ :=
   Matrix.of fun σ κ =>
-    MPSTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (σ n, κ n))
+    MPTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (σ n, κ n))
 
 theorem purificationAmplitude_apply (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     {L : ℕ} (σ : Fin L → Fin d) (κ : Fin L → Fin dK) :
@@ -116,7 +116,7 @@ theorem purificationAmplitude_apply (A : Fin d → Fin dK → Matrix (Fin D') (F
     funext fun l => by
       change A (finProdFinEquiv (σ l, κ l)).divNat (finProdFinEquiv (σ l, κ l)).modNat = _
       rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-  simp only [purificationAmplitude, Matrix.of_apply, MPSTensor.mpv_eq, MPSTensor.coeff_eq,
+  simp only [purificationAmplitude, Matrix.of_apply, MPTensor.mpv_eq, MPTensor.coeff_eq,
     MPSTensor.evalWord_ofFn_eq_prod, hfun]
 
 /-- The ancillary trace of the purifying state is `Φ Φ^†`.

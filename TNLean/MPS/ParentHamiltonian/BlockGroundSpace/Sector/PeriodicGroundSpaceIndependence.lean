@@ -51,6 +51,8 @@ It also contains the following results.
   to distinct periodic tensors.
 -/
 
+open MPTensor
+
 section PeriodicGroundSpaceIndependence
 
 section

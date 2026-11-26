@@ -38,6 +38,8 @@ It also contains the following results.
 * `MPSTensor.ExactMPSGroundPath.trans`: concatenation of continuous exact MPS ground states.
 -/
 
+open MPTensor
+
 section ExactMPSGappedPhase
 
 open scoped Matrix

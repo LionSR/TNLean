@@ -36,6 +36,8 @@ Thus the common length in condition C1, and consequently the interaction bound
 in PGVWC07, Theorem 12, need not be increased during normalization.
 -/
 
+open MPTensor
+
 section
 
 open scoped ComplexOrder

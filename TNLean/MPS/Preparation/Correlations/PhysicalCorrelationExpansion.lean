@@ -26,6 +26,8 @@ see `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`.
 - arXiv:2011.12127, Section II.B.3, lines 433–441.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder Polynomial
 
 namespace MPSTensor

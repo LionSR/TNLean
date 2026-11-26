@@ -54,6 +54,8 @@ translation-invariant canonical-form proof.
 * Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -112,7 +114,7 @@ theorem exists_tp_data_of_irreducible
       -- B is TP
       (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
       -- B is gauge-equivalent to the rescaled tensor
-      GaugeEquiv (d := d) (D := D)
+      GaugeEquiv (α := Fin d) (β := Fin D)
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
@@ -141,7 +143,7 @@ theorem exists_unital_data_of_irreducible
           (↑((Real.sqrt r)⁻¹) : ℂ) •
             ((CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ)) ∧
       (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
-      GaugeEquiv (d := d) (D := D)
+      GaugeEquiv (α := Fin d) (β := Fin D)
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
   classical
   let Aadj : MPSTensor d D := fun i => (A i)ᴴ
@@ -166,7 +168,7 @@ theorem exists_unital_data_of_irreducible
     simpa [B, Kraus.IsUnital] using
       Kraus.spectralUnitalGauge_isUnital_of_map_eigenvector
         (d := d) (D := D) A ρ r hρ hr hρ_eig
-  have hGauge : GaugeEquiv (d := d) (D := D)
+  have hGauge : GaugeEquiv (α := Fin d) (β := Fin D)
       (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
     convert
       gaugeEquiv_unitalGauge (d := d) (D := D)

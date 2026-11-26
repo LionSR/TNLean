@@ -29,6 +29,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5,
 `defAgamma`, lines 1586–1601 and 1687–1692.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix Topology
 
 namespace MPSTensor

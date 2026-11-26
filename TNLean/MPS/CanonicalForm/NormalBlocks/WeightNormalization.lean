@@ -27,6 +27,8 @@ remains to normalize.  The convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder
 
 namespace MPSTensor

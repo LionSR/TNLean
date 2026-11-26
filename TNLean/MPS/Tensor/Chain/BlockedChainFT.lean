@@ -47,7 +47,7 @@ theorem fundamentalTheorem_blockedChain
     (A B : MPSTensor d D) (L n : ℕ)
     (hn : 0 < n) (hD : 0 < D)
     (hA_block : Kraus.IsNBlkInjective A L)
-    (hMPV : MPSTensor.SameMPV
+    (hMPV : MPTensor.SameMPV
       (MPSTensor.chainCombinedTensor (blockedChain A L n))
       (MPSTensor.chainCombinedTensor (blockedChain B L n))) :
     GaugeEquiv (blockedChain A L n) (blockedChain B L n) :=

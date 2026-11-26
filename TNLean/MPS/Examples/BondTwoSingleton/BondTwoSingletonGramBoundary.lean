@@ -222,15 +222,15 @@ def gaugedSingletonTensor : MPSTensor (4 * 4) 2 :=
 /-- The original and deformed retained tensors are related by the concrete
 invertible similarity. -/
 lemma singletonTensor_gaugeEquiv_gaugedSingletonTensor :
-    MPSTensor.GaugeEquiv singletonTensor gaugedSingletonTensor :=
+    MPTensor.GaugeEquiv singletonTensor gaugedSingletonTensor :=
   ⟨gauge, fun _ ↦ rfl⟩
 
 /-- The nonunitary similarity preserves every positive-length vertical closed
 matrix-product vector. -/
 lemma singletonTensor_sameMPV₂Pos_gaugedSingletonTensor :
-    MPSTensor.SameMPV₂Pos singletonTensor gaugedSingletonTensor := by
+    MPTensor.SameMPV₂Pos singletonTensor gaugedSingletonTensor := by
   mpv_ext
-  exact MPSTensor.GaugeEquiv.sameMPV
+  exact MPTensor.GaugeEquiv.sameMPV
     singletonTensor_gaugeEquiv_gaugedSingletonTensor N σ
 
 /-- Similarity deformation of the one-site terminal operator. -/

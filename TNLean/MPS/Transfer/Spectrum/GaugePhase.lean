@@ -25,6 +25,8 @@ It also contains the following results.
   single-block Fundamental Theorem (primitive case).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kraus
 
 namespace MPSTensor

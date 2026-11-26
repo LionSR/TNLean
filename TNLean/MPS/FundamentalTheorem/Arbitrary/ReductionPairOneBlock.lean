@@ -29,6 +29,8 @@ and states behave under transposition.
   the theorem on one block.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

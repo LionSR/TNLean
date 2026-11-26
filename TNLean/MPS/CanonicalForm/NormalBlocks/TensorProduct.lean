@@ -42,6 +42,8 @@ claim attributed to that passage.
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker BigOperators ComplexOrder
 
 namespace MPSTensor

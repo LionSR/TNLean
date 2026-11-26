@@ -62,9 +62,9 @@ bra configurations encoded by that letter.
 
 Source: arXiv:1606.00608, Section 4.1 (the operator family `O_N` and its matrix entries). -/
 theorem mpv_toMPSTensor {D : ℕ} (M : MPOTensor d D) {N : ℕ} (ρ : Fin N → Fin (d * d)) :
-    MPSTensor.mpv M.toMPSTensor ρ =
+    MPTensor.mpv M.toMPSTensor ρ =
       mpo M N (fun k => (ρ k).divNat) (fun k => (ρ k).modNat) := by
-  simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry]
+  simp only [MPTensor.mpv, MPTensor.coeff, mpo_apply, mpoMatrixEntry]
   rw [evalWord_toMPSTensor_ofFn]
 
 /-- Equal periodic operators at every positive length give equal positive-length
@@ -74,7 +74,7 @@ Source: arXiv:1606.00608, Section 4.1 (the operator family `O_N` and its matrix
 entries). -/
 theorem sameMPV₂Pos_toMPSTensor_of_mpo_eq {D₁ D₂ : ℕ} {M : MPOTensor d D₁}
     {M' : MPOTensor d D₂} (h : ∀ N, 0 < N → mpo M N = mpo M' N) :
-    MPSTensor.SameMPV₂Pos M.toMPSTensor M'.toMPSTensor := by
+    MPTensor.SameMPV₂Pos M.toMPSTensor M'.toMPSTensor := by
   intro N hN ρ
   rw [mpv_toMPSTensor, mpv_toMPSTensor, h N hN]
 
@@ -173,7 +173,7 @@ vectors of the tensor of `g * h`.
 Source: arXiv:2502.20257, lines 1403--1407. -/
 theorem IsNormalRepresentation.sameMPV₂Pos_mulTensor {F : GroupFamily G d}
     (hF : F.IsNormalRepresentation) (g h : G) :
-    MPSTensor.SameMPV₂Pos (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.SameMPV₂Pos (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (F.tensor (g * h)).toMPSTensor :=
   sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
     rw [mpo_mulTensor, hF.operator_mul g h N hN]
@@ -234,8 +234,8 @@ paper cites at line 1078. -/
 theorem exists_isReduction_actTensor_of_isNormal {D Dx Dy : ℕ} (T : MPOTensor d D)
     (Ax : MPSTensor d Dx) (Ay : MPSTensor d Dy) (hAy : Kraus.IsNormal Ay) (hDy : 0 < Dy)
     (hact : ∀ N : ℕ, 0 < N →
-      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPSTensor.mpv Ax τ) =
-        fun σ : Fin N → Fin d => MPSTensor.mpv Ay σ) :
+      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPTensor.mpv Ax τ) =
+        fun σ : Fin N → Fin d => MPTensor.mpv Ay σ) :
     ∃ (V : Matrix (Fin Dy) (Fin (D * Dx)) ℂ) (W : Matrix (Fin (D * Dx)) (Fin Dy) ℂ),
       MPSTensor.IsReduction (actTensor T Ax) Ay V W ∧
         ∀ w : List (Fin d), D * Dx - Dy + 1 ≤ w.length →
@@ -259,8 +259,8 @@ theorem exists_multiBlockCompression_actTensor_of_isNormal {D Dx : ℕ} {Dy : ι
     (Ay : ∀ s, MPSTensor d (Dy s)) (hμ : ∀ s ∈ S, μ s ≠ 0)
     (hAy : ∀ s ∈ S, Kraus.IsNormal (Ay s)) (hD : ∀ s ∈ S, 0 < Dy s)
     (hact : ∀ N : ℕ, 0 < N →
-      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPSTensor.mpv Ax τ) =
-        fun σ : Fin N → Fin d => ∑ s ∈ S, μ s ^ N * MPSTensor.mpv (Ay s) σ) :
+      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPTensor.mpv Ax τ) =
+        fun σ : Fin N → Fin d => ∑ s ∈ S, μ s ^ N * MPTensor.mpv (Ay s) σ) :
     Nonempty (MPSTensor.MultiBlockCompression (actTensor T Ax) S fun s => μ s • Ay s) :=
   MPSTensor.exists_weightedMultiBlockCompression_of_isNormal S μ Ay hμ hAy hD
     (actTensor T Ax) fun N hN σ =>

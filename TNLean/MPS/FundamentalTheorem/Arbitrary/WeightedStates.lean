@@ -35,6 +35,8 @@ fundamental theorem for equal states:
   theorems from dependent states.
 -/
 
+open MPTensor
+
 open Filter
 
 section WeightedStates

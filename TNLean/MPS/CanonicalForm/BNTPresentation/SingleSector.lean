@@ -29,6 +29,8 @@ a presentation after its pure trace-preserving Perron gauge.
   lines 217--301.
 -/
 
+open MPTensor
+
 open Filter Topology
 
 namespace MPSTensor

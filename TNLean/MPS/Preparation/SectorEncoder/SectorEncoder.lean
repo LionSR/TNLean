@@ -64,6 +64,8 @@ rescaling change to the chosen encoder columns.
   lines 317–345, the uniform blocking bound.
 -/
 
+open MPTensor
+
 section
 
 open Matrix MPSTensor QuantumCircuit

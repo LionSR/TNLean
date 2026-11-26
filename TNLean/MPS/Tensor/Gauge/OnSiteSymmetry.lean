@@ -48,6 +48,8 @@ MPV families into a virtual gauge.
   arXiv:0802.0447
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockTensor)
 

@@ -17,6 +17,8 @@ length-\(N-L_0\) product to vanish, and strong induction on word length gives a
 contradiction.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d D : ℕ}

@@ -166,7 +166,7 @@ Source: arXiv:2502.20257, `eq:defT`, `eq:intro_sigma` (lines 1552–1562),
 theorem IsRepresentation.inverseCompatibleSourceProperties_of_inv_eq
     {G : Type*} [Group G] {d : ℕ} (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) (hU : IsMPUCanonicalFormII (F.tensor g)) :
     let T := hF.daggerInverseGauge F hcanonical g
     let σ := hF.daggerInverseScalar F hcanonical g

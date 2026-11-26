@@ -43,6 +43,8 @@ replaced by a positive finite length when all subleading eigenvalues vanish.
 See `docs/paper-gaps/mswc24_zero_subleading_spectrum_endpoint.tex`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder MatrixOrder

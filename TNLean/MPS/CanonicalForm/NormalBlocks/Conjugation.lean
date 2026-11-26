@@ -20,13 +20,15 @@ and the transfer-map fixed-point equations used in canonical forms.
 
 * `Kraus.IsInjective.mapStar`: conjugation preserves injectivity.
 * `Kraus.IsNormal.mapStar`: conjugation preserves normality.
-* `MPSTensor.IsLeftCanonical.mapStar`: conjugation preserves left-canonical normalization.
-* `MPSTensor.GaugeEquiv.mapStar`: conjugation preserves gauge equivalence.
+* `MPTensor.IsLeftCanonical.mapStar`: conjugation preserves left-canonical normalization.
+* `MPTensor.GaugeEquiv.mapStar`: conjugation preserves gauge equivalence.
 * `MPSTensor.transferMap_mapStar_eq_entrywiseConjTransport`: conjugating the tensor
   conjugates its transfer map anti-linearly, as an operator identity.
 * `Kraus.IsIrreducibleFamily.mapStar`: conjugation preserves irreducibility.
 * `MPSTensor.IsNormalTensor.mapStar`: conjugation preserves normalized normal tensors.
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder Kraus
 open Kraus (isNBlkInjective_iff_blockTensor_isInjective)
@@ -119,7 +121,7 @@ end Kraus
 namespace MPSTensor
 
 /-- Left-canonical normalization is preserved by entrywise complex conjugation. -/
-theorem IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeftCanonical A) :
+theorem _root_.MPTensor.IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeftCanonical A) :
     IsLeftCanonical (mapStar A) := by
   classical
   rw [IsLeftCanonical] at hA ⊢
@@ -139,7 +141,7 @@ theorem IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeftCanonical A) :
 
 This conjugates the invertible gauge in the relation of arXiv:1606.00608,
 lines 264--268. -/
-theorem GaugeEquiv.mapStar {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+theorem _root_.MPTensor.GaugeEquiv.mapStar {A B : MPSTensor d D} (h : GaugeEquiv A B) :
     GaugeEquiv (mapStar A) (mapStar B) := by
   obtain ⟨X, hX⟩ := h
   let f : Matrix (Fin D) (Fin D) ℂ →+* Matrix (Fin D) (Fin D) ℂ :=

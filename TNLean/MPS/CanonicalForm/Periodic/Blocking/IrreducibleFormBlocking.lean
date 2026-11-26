@@ -33,6 +33,8 @@ It also contains the following results.
   tensor.
 -/
 
+open MPTensor
+
 section PrescribedBlocking
 
 /-!
@@ -176,7 +178,7 @@ of total bond dimensions by evaluation on the empty word. -/
 theorem IsIrreducibleForm.sum_dim_eq {D : ℕ} {A : MPSTensor d D} (h : IsIrreducibleForm A) :
     (∑ k, h.dim k) = D := by
   have he := h.sameMPV 0 Fin.elim0
-  simp only [mpv_zero_length] at he
+  simp only [mpv_zero_length, Fintype.card_fin] at he
   exact_mod_cast he.symm
 
 end MPSTensor

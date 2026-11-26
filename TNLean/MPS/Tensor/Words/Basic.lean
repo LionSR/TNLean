@@ -31,6 +31,8 @@ to a nonempty physical word.
 ## Moving a scalar grading through a matrix word
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix

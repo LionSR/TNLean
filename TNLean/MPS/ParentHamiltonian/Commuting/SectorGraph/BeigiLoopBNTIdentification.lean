@@ -30,6 +30,8 @@ sectors and derives transfer idempotence of their multiplicity-one, unit-weight
 direct sum from the all-chain NNCPH ground-space condition.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 open FiniteWeightedDigraph
 
@@ -242,7 +244,7 @@ identification at arXiv:1606.00608, line 1307. Algebraic normality reaches these
 quantum Wielandt Proposition 3 (arXiv:0909.5347), Wolf, Theorem 6.3, and the spectral
 normalization of arXiv:1606.00608, lines 224--235.
 -/
-theorem GaugePhaseEquiv.isTransferIdempotent
+theorem _root_.MPTensor.GaugePhaseEquiv.isTransferIdempotent
     {A B : MPSTensor d D} (h : GaugePhaseEquiv A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hRFP : IsTransferIdempotent A) : IsTransferIdempotent B := by

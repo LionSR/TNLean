@@ -25,6 +25,8 @@ assembled transfer is nevertheless not idempotent.
 See `docs/paper-gaps/cpsv16_pure_zcl_raw_weight_counterexample.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 
