@@ -16,3 +16,42 @@ import TNLean.MPS.Examples.KramersWannier.KramersWannierPhysical
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSectors
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
 import TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
+
+/-!
+# Kramers–Wannier duality on the periodic Ising chain
+
+The unnormalized Kramers–Wannier kernel `⟨s'| D~ |s⟩ = ∏_j (-1)^{s'_j (s_j + s_{j+1})}` on a ring
+of `L` qubits, the periodic operator of a matrix product operator of bond dimension two: the
+duality defect of AMF16 (arXiv:1601.07185, lines 994–1000) without the factor `2^{-L/2}` and with
+the dual site `j + 1/2` identified with `j`. On one lattice its square is
+`D~² = 2^L (1 + η) T`, with `η` the global spin flip and `T` the one-site translation, so the
+kernel is not a member of the fusion algebra `{1, η}` but a bimodule over it, as in LDOV21
+(arXiv:2112.09091, lines 49–77). After a Hadamard change of basis it is, with scalar one, the
+non-invertible translation circuit of Seiberg–Shao (arXiv:2307.02534, lines 2431–2437), whose
+printed local relations and algebra follow; it also acts on the product and GHZ states, has
+kernel the spin-flip-odd sector and rank `2^{L-1}`, and exchanges the two couplings of the
+transverse-field Ising Hamiltonian.
+
+## General theorems instantiated
+
+* `MPOTensor.mpo_mulTensor` (operator products): the stacked tensors generate the products of
+  periodic operators; arXiv:1606.00608, lines 962–993.
+* `MPSTensor.MultiBlockCompression.ofRing` and
+  `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum` (multi-block compression): the stacked
+  square compresses, by an explicit half-integer gauge, onto `2 T ⊕ 2 η T` with no zero slot and
+  block-diagonal letters, and the action tensors on the product and GHZ states compress onto
+  their targets.
+* `MPOTensor.mpo_mulVec_mpv` (action tensors): the compressions give `D~ P_L = 2^L G_L` and
+  `D~ G_L = 2 P_L` on the product and GHZ states; arXiv:2203.12563, lines 1070–1078.
+* `MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum` (compression of operator
+  products): `K Kᵀ` and `Kᵀ K` compress onto the weighted blocks `2 · 1` and `2 · η` with two zero
+  slots; P5 note, Theorem 7.12.
+* `MPSTensor.exists_isReduction_and_nilpotent_of_isNormal` (single-block asymmetric compression):
+  the absorption `K η = η K = K` is a letterwise gauge equivalence of the stacked tensors with
+  the kernel tensor; arXiv:1706.07329, Proposition 20.
+* `MPOTensor.IsMPOFusionAlgebra` (matrix product operator fusion algebras): the bond-one tensors
+  of `1` and `η` form the `ℤ₂` fusion algebra over which the kernel is a bimodule;
+  arXiv:2203.12563, lines 361–362.
+* `Matrix.IsHermitian.rank_eq_trace_re_of_idem` (rank of projections): the rank of the kernel is
+  `2^{L-1}`.
+-/

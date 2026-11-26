@@ -30,3 +30,48 @@ import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
 import TNLean.MPS.Examples.MultiBlock.WeightedCounterexamples
 import TNLean.MPS.Examples.MultiBlock.Worked
 import TNLean.MPS.Examples.MultiBlock.WorkedAdaptedBasis
+
+/-!
+# Worked examples and counterexamples for multi-block tensors
+
+The examples of *The asymmetric fundamental theorem of matrix product states* (equation (1.1),
+Examples 1.2, 3.4, 4.4, 4.5, 6.10 and 6.13 to 6.16) and further project constructions: the
+running example `diag(1, 2)` with all its reductions, the matching and the basis adapted to two
+flags; the worked example on `ℂ⁴` with a non-split extension; two copies of one normal block;
+the one-letter Jordan tensors showing the one-block threshold sharp; the periodic tensor
+`(E₁₂, E₂₁)`, irreducible but not normal; same word traces without a gauge; and upper-triangular
+sources of the GHZ and product states of the review arXiv:2011.12127 (Appendix A, lines
+2332–2345). Counterexamples show which hypotheses of the theorems for arbitrary tensors cannot
+be dropped.
+
+## General theorems instantiated
+
+* `MPSTensor.MultiBlockCompression` and `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum`
+  (multi-block compressions): the reductions of the worked examples are explicit compression
+  data, whose word traces are the weighted sums of the block traces.
+* `MPSTensor.isIrreducibleAction_of_isNormal` (normal blocks are irreducible): the blocks of
+  the running, one-block and multiplicity examples, while the periodic tensor shows that the
+  converse fails.
+* `MPSTensor.isNormal_of_single_eq_two_words` (normality certificates): the parity-weighted
+  tensor is normal at word length two.
+
+## General statements whose hypotheses are shown necessary
+
+* `MPSTensor.MultiBlockCompression.exists_smul_single_block` (the one-block theorem): its bound
+  `|w| ≥ D_B - D_C` cannot be lowered for any number of zero slots, for the reading maps and
+  for the embeddings.
+* `MPSTensor.MultiBlockCompression.exists_left_eq_smul_of_last` (bare uniqueness at the end of
+  the flag): it fails for a block that is last in only one of the two reductions.
+* `MPSTensor.MultiBlockCompression.existsUnique_conjTriangular` (the set of all reductions,
+  Theorem 6.5): the running and worked examples determine all reductions by hand; two copies of
+  one block give infinitely many invariant subspaces carrying it.
+* `MPSTensor.eventually_mpv_eq_pow_mul_iff_classWeights` and
+  `MPSTensor.eventually_statesDependentAt_iff_classWeights` (theorems for arbitrary tensors):
+  proportional states with a constant not of the form `λ^N` have different factors, dependent
+  states need not be proportional, and the weights need not factor through a common family.
+* `MPSTensor.gaugeEquiv_of_sameMPV_of_isGaugeRelated_toTensorFromBlocks` (block sums with the
+  same states are gauge equivalent; arXiv:1708.00029, `thm:bdequal`): it needs block sums,
+  since a Jordan block and the identity satisfy `MPSTensor.IsIrreducibleForm` with equal states
+  and no `ℤ_m`-gauge, and a repeated block with a nontrivial extension has the word traces of
+  the direct sum but no gauge to it.
+-/

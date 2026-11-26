@@ -23,3 +23,53 @@ import TNLean.MPS.Examples.CZX.Gauging.CZXPermutedBlocks
 import TNLean.MPS.Examples.CZX.Gauging.CZXSecondTupleCertificate
 import TNLean.MPS.Examples.CZX.Gauging.CZXSourceFactors
 import TNLean.MPS.Examples.CZX.Gauging.CZXTensor
+
+/-!
+# Gauging the blocked CZX matrix product unitary
+
+The once-blocked, `Z`-decorated CZX matrix product unitary of FBC25 (arXiv:2502.20257,
+`eq:MPU_CZX`, lines 4503–4547): an injective bond-two tensor on two-qubit sites whose operator
+squares to the identity and exchanges the sectors `|00⟩` and `|11⟩` of the once-blocked GHZ
+state. The modules compute its fusion and action tensors, its anomaly
+`ω(h₁,h₂,h₃) = (-1)^(δ_{h₁,g} δ_{h₂,g} δ_{h₃,g})` and its L-symbols (the orientation of the
+fusion caps is a local fix recorded in
+`docs/paper-gaps/fbc25_czx_fusion_coordinate_compatibility.tex`, and the printed action pair
+holds only on nonempty words, `docs/paper-gaps/fbc25_czx_action_empty_word.tex`), its dagger
+gauge and displayed source factors. For the gauging of lines 5121–5204, the gauged state is not
+fixed by the unmodified Gauss law but is fixed by the modified one, whose projectors on
+neighbouring windows do not commute. The displayed circuit tuple has gauge-invariant subspace of
+dimension `2^N` for every `N ≥ 3`, a second displayed tuple has dimensions `14` and `36` at
+three and four sites only, and both tuples are completions of the defect maps derived in
+`docs/paper-gaps/fbc25_czx_defect_domains.tex`, so the supremum of the dimension over the
+completion class is at least `2^N`.
+
+## General theorems instantiated
+
+* `MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator` and
+  `MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV` (anomaly three-cochain):
+  the displayed anomaly from the printed caps; arXiv:2502.20257, display preceding
+  `eq:3-cocycle`.
+* `MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo`,
+  `ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one` and
+  `MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff` (anomaly class): the class is
+  nonzero for every choice of fusion tensors; arXiv:2502.20257, `eq:omegagauge`.
+* `MPOTensor.GroupFamily.BlockActionData.eq_lSymbol_of_isDressedProportional` (L-symbols): the
+  L-symbols of the two GHZ sectors are read off the explicit tensors; arXiv:2502.20257,
+  `eq:defL`.
+* `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` and
+  `LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one` (L-symbols of permuted blocks): the ratio
+  `L⁰_{g,g} L⁰_{g,e} / (L¹_{g,g} L⁰_{e,g})` is `ω(g,g,g)` for every choice of fusion and action
+  tensors; arXiv:2502.20257, `eq:omega_and_Ls`.
+* `GaussLaw.gaussOperator_eq_monomial` (local Gauss operators): the Gauss operators of the
+  displayed tuples are monomial; arXiv:2502.20257, `eq:mcG`.
+* `Hypercube.finrank_commonFixedSubmodule_monomial_fiberFlip` (monomial fixed-space
+  criterion): the dimensions `2^N`, `14` and `36` count the fibers with trivial holonomy.
+* `MPOTensor.gaugeInvariantSubspace` and `MPOTensor.placedGaussProjector` (gauge-invariant
+  subspace of placed Gauss projectors): the dimension and membership statements concern this
+  subspace; arXiv:2502.20257, `eq:gauge_projs` and lines 4325–4335.
+* `GaussLaw.DefectMaps.IsCompletion` and `GaussLaw.DefectMaps.completionClass` (completion class
+  of prescribed defect maps): both displayed tuples are members; arXiv:2502.20257, lines
+  4215–4326.
+* `MPOTensor.SourceFactors` (source factors of a matrix product unitary): the displayed factors
+  of `eq:modif_XY` are an explicit witness; arXiv:1703.09188, lines 479–506.
+-/

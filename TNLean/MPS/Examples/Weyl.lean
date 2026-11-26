@@ -19,3 +19,37 @@ import TNLean.MPS.Examples.Weyl.SevenCyclicObstruction
 import TNLean.MPS.Examples.Weyl.ShortOverlapBridges
 import TNLean.MPS.Examples.Weyl.WeylSpans
 import TNLean.MPS.Examples.Weyl.WeylWords
+
+/-!
+# Fifth-root Weyl example
+
+The three-letter tensor of bond dimension five whose letters are fifth-root Weyl matrices of
+charges `(1,0)`, `(0,1)`, `(-1,-1)` modulo five, built for the finite-prefix question of SPWC10,
+arXiv:0909.5347, Theorem 5, `main.tex` lines 850–880. Every word of degree seven is traceless,
+while the words of degree eight span the full matrix algebra. The modules prove that the periodic
+kernel of the seven-site parent interaction is zero at seven sites and is the line of the trace
+vector at every larger length. Adding the one-particle line of the PVBS model in a second
+physical sector gives one positive interaction of range seven whose kernel is the particle line
+at seven sites and the Weyl line at every volume of at least eight sites; the modules state that
+this is not a counterexample to an eventual fixed-tensor conclusion of that theorem.
+
+## General theorems instantiated
+
+* `MPSTensor.contiguous_mem_of_restriction_intersection_submodules` and
+  `MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules` (open-segment
+  and cyclic-local iteration): global boundary-space membership from the seven-site constraints;
+  PGVWC07, Theorem 12.
+* `MPSTensor.groundSpaceMap_mul_eq_of_restrict` and `MPSTensor.mem_groundSpace_succ_of_intertwine`
+  (inverting and growing back): the long-window intersections; arXiv:2011.12127, Section IV.C,
+  lines 2013–2078.
+* `MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top` (boundary map of a spanning length):
+  injectivity of the boundary map from degree eight on.
+* `MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace`,
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker` and
+  `MPSTensor.cyclicTranslateState_mem_chainGroundSpace` (periodic parent kernel): the periodic
+  kernel as the trace line.
+* `MPSTensor.ker_physical_sum_translationInvariant_projector` (physical-sector assembly): the
+  kernel of the two-sector interaction is the sum of the embedded kernels.
+* `Kraus.not_isNBlkInjective_of_linearMap` (companion library): the tensor is not injective at
+  degree seven, by the trace functional.
+-/

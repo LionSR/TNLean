@@ -12,3 +12,31 @@ import TNLean.MPS.Examples.Rings.EisensteinCertificates
 import TNLean.MPS.Examples.Rings.EisensteinRing
 import TNLean.MPS.Examples.Rings.GoldenRing
 import TNLean.MPS.Examples.Rings.Zsqrt2Ring
+
+/-!
+# Exact rings for worked examples
+
+The rings `ℤ[ω]` with `ω = e^{2πi/3}`, `ℤ[σ]` with `σ = φ^{-1/2}`, and `ℤ[√2]`, with decidable
+equality and their embeddings into `ℂ`, so that letter identities of worked examples are decided
+exactly and transported to complex matrices. They hold the entries of the `ℤ/3` matrix product
+operator examples, of the Fibonacci data (arXiv:1511.08090, Appendix D.1.1, lines 1244–1260),
+and of the Ising data (arXiv:1511.08090, Appendix D.2.1, lines 1312–1323); the rings themselves
+are constructions of this development, stated in no paper.
+
+## General theorems instantiated
+
+The directory specializes ring-generic transport statements to each embedding; it instantiates
+no tensor-network theorem beyond these.
+
+* `MPSTensor.MultiBlockCompression.ofRing` (multi-block compression data, P5 note,
+  Theorem 7.7(i)–(iii)): the data attached to Eisenstein-integral and golden-integer gauges.
+* `MPSTensor.isNBlkInjective_of_complexOfRing_smul_single` (block injectivity from scaled matrix
+  units): the injectivity certificate over `ℤ[ω]`.
+* `MPSTensor.right_intertwiner_eq_zero_of_certificate` and
+  `MPSTensor.left_intertwiner_eq_zero_of_certificate` (absence of sitewise intertwiners): the
+  intertwiner certificates transported from `ℤ[ω]`.
+* `MPSTensor.isNormal_of_complexOfRing_letter_eq_smul_single` (normality from scaled matrix
+  units): the normality criterion over `ℤ[√2]`.
+* `MPSTensor.evalWord_complexOfRing` and `MPSTensor.mulTensor_complexOfRing` (compatibility of
+  the embedding): word evaluation and bond-space products over `ℤ[σ]`.
+-/

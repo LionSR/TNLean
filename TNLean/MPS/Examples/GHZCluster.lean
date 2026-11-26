@@ -11,3 +11,32 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.GHZCluster.GHZCluster
 import TNLean.MPS.Examples.GHZCluster.GHZClusterAction
 import TNLean.MPS.Examples.GHZCluster.GHZClusterLSymbol
+
+/-!
+# GHZ–cluster state
+
+The `ℤ₄ × ℤ₂` GHZ–cluster tensor of arXiv:2502.20257, `example:z4z2` (equation `eq:z4z2MPS`,
+lines 4448–4496): the GHZ tensor tensored with the once-blocked cluster tensor, of physical
+dimension eight and bond dimension four, with two injective blocks supported on disjoint values
+of the GHZ qubit. The modules give the on-site representation and the table of action tensors
+(lines 4481–4489), the L-symbols with values in `{±1, ±i}`, and the stabilizer cocycle on the
+unbroken subgroup `⟨(2,0), (0,1)⟩`, whose class is nontrivial and does not extend to
+`ℤ₄ × ℤ₂`, so block independence fails (line 4490). Block independence is taken as the scalar
+condition on the L-symbols with `ℂˣ` coefficients, a recorded scope restriction.
+
+## General theorems instantiated
+
+* `MPSTensor.isInjective_tensorProduct` (injectivity of tensor products): both blocks are
+  injective.
+* `MPSTensor.IsBNTLocallyOrthogonal` (local orthogonality of normal blocks): the two blocks
+  satisfy it by disjointness of their supports.
+* `LSymbol.isCompatible_one_of_mul_eq_smul` and `LSymbol.isNormalized_of_mul_eq_smul`
+  (L-symbols, companion library): the L-symbols are compatible with the trivial three-cochain
+  and normalized; arXiv:2502.20257, lines 4363–4368 and 1920–1923, and `eq:triv_Ls`.
+* `LSymbol.exists_extension_of_isBlockIndependent` (block independence, companion library):
+  block independence would extend the stabilizer cocycle; the converse direction of
+  arXiv:2502.20257, `prop:BI_psi`, lines 7057–7064.
+* `ScalarCocycle.H2π_mem_range_map_subtype_iff` and `ScalarCocycle.commPhase_pow_left`
+  (cocycle restriction and commutator phases, companion library): the class does not lie in the
+  image of restriction; arXiv:2502.20257, `prop:BI_psi`, lines 7042–7064.
+-/

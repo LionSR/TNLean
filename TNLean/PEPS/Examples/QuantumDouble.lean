@@ -15,3 +15,49 @@ import TNLean.PEPS.Examples.QuantumDouble.QuantumDoubleLocalConstraint
 import TNLean.PEPS.Examples.QuantumDouble.QuantumDoublePlaquetteConstraint
 import TNLean.PEPS.Examples.QuantumDouble.QuantumDoubleRenormalization
 import TNLean.PEPS.Examples.QuantumDouble.QuantumDoubleTensor
+
+/-!
+# Quantum double models
+
+Kitaev's quantum double models for a finite group `G` (arXiv:quant-ph/9707021, lines 662–690)
+as PEPS: the primal tensor of the review arXiv:2011.12127 (Appendix A, lines 2450–2467), which
+carries the four edge spins of a plaquette and has virtual labels fusing to the identity; the
+dual tensor, with plaquette colors on the bonds and every spin the difference of two adjacent
+colors; and the blocked tensor `K(p,q,r,s) = |pq⁻¹, qr⁻¹, rs⁻¹, sp⁻¹⟩` of SCP10
+(arXiv:1001.3807, equation (7.10), lines 2858–2923). The modules prove that the dual tensor is
+`G`-injective and `G`-isometric with factor `|G|` for the right-regular color shift, that the
+primal tensor absorbs `π(t) π(r) π(b)⁻¹ π(l)⁻¹` for every representation `π`, string
+deformation for both tensors on the torus, and that the dual torus network is the equal-weight
+superposition, with weight `|G|`, of the Gauss-law configurations of trivial holonomy. For `K`
+they show that the local, bond and four-block plaquette terms are orthogonal projectors fixing
+the actual contractions, that the image of the two-tensor contraction is the common fixed space
+of the local constraints and the bond average, and that a physical permutation and a virtual
+relabelling carry four elementary tensors to `K` times surplus identity factors. The
+normalizations and the right-regular convention are Local fixes
+(`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`,
+`docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex`); the superposition statement is
+restricted to the trivial-holonomy sector on tori of periods at least three, and no periodic
+parent-Hamiltonian ground space is identified.
+
+## General theorems instantiated
+
+* `TNLean.PEPS.IsGInjective` and `TNLean.PEPS.IsGIsometric` (`G`-injectivity and
+  `G`-isometry): the dual tensor satisfies both for the right-regular representation on its
+  legs, with factor `|G|`; SCP10, arXiv:1001.3807, Definitions `def:2d-Ug-inj` and
+  `def:iso:isopeps`.
+* `TNLean.PEPS.IsGInjective.torusBondNetwork_westSouthOperatorString_eq` (string deformation
+  for `G`-injective tensors): strings of right-regular `R_g` on the dual torus network move
+  across every rectangle of sites; arXiv:1001.3807, equation `eq:2d:move-strings` and the Lemma
+  "Deformations of the string", lines 2199–2214.
+* `TNLean.PEPS.sum_smul_torusWestSouthString_eq` (virtual strings through a torus PEPS): the
+  string of `π(g)` of the primal tensor is pulled through every rectangle of the contracted
+  network; arXiv:2011.12127, line 2465.
+* `TNLean.PEPS.stateCoeff_torusSiteTensor` (contraction of a torus site-tensor PEPS): the dual
+  torus coefficient as a count of colorings; arXiv:2011.12127, Appendix A, line 2415.
+* `TNLean.PEPS.exists_isTorusParallelSection_iff` and `TNLean.PEPS.card_isTorusParallelSection`
+  (parallel sections on the torus): colorings with prescribed differences exist exactly under
+  the Gauss law and trivial holonomy, and then number `|G|`, which gives the support and the
+  weight of the dual state.
+* `Matrix.isStarProjection_inv_card_smul_sum` (finite-group averages): the normalized bond
+  average of `K` is an orthogonal projector; arXiv:2502.20257, lines 457–461.
+-/

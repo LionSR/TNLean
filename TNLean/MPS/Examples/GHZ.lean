@@ -12,3 +12,30 @@ import TNLean.MPS.Examples.GHZ.GHZ
 import TNLean.MPS.Examples.GHZ.GHZGInjective
 import TNLean.MPS.Examples.GHZ.GHZParentHamiltonian
 import TNLean.MPS.Examples.GHZ.GHZQudit
+
+/-!
+# GHZ state
+
+The GHZ state as the matrix product state `A⁰ = |0⟩⟨0|`, `A¹ = |1⟩⟨1|` (arXiv:2011.12127,
+Example III.1; arXiv:quant-ph/0608197, Section 4.1), its `d`-level version
+`A^i_{αβ} = δ_{i=α=β}` (arXiv:2011.12127, Appendix A, lines 2338–2345), and the `G`-injective
+tensor of equation `GinjMPS` (arXiv:2011.12127, lines 1196–1206), whose `ℤ₂` case becomes the
+two-site blocked GHZ tensor after a Fourier transform. These tensors are renormalization fixed
+points, not injective, and symmetric under their on-site groups. The two-site parent ground
+space and the periodic nearest-neighbour chain ground space, spanned by `|0⋯0⟩` and `|1⋯1⟩`, are
+computed directly (arXiv:1210.6613, Section 3; arXiv:2011.12127, line 2205), without a general
+uniqueness theorem, since the GHZ tensor is not normal.
+
+## General theorems instantiated
+
+* `MPSTensor.IsTransferIdempotent` with
+  `MPSTensor.eq_one_of_hasEigenvalue_of_isTransferIdempotent` (renormalization fixed points): the
+  GHZ, `d`-level GHZ and `G`-injective tensors are fixed points, and every nonzero transfer
+  eigenvalue of the `G`-injective tensor is `1`; arXiv:2011.12127, line 1197.
+* `TNLean.PEPS.IsGInjective` (`G`-injectivity): the tensor of `GinjMPS` is `G`-injective for the
+  representation `L_g ⊗ L̄_g`; arXiv:1001.3807, Definition `def:2d-Ug-inj`, lines 1278–1296.
+* `MPSTensor.IsOnSiteSymmetric` (on-site symmetry): the `Z₂`, permutation, cyclic-shift and
+  regular-representation symmetries.
+* `Kraus.not_isInjective_of_linearMap` (companion library): non-injectivity of the GHZ tensors
+  from a functional annihilating every letter.
+-/

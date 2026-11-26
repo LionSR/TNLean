@@ -26,3 +26,54 @@ import TNLean.MPS.Examples.Z3.Z3ClockAnomalyClass
 import TNLean.MPS.Examples.Z3.Z3ClockDefect
 import TNLean.MPS.Examples.Z3.Z3ClockTensor
 import TNLean.MPS.Examples.Z3.Z3FusionAlgebra
+
+/-!
+# Anomalous and non-anomalous `ℤ₃` matrix product operator symmetries
+
+Two constructions of this development, against the three-cocycles `ω_j` of `ℤ_n` of GS24
+(arXiv:2405.00439, Section IV.D, line 2040). The anomalous symmetry is the phase-decorated shift
+`U = X^{⊗ L} ∏_k ω^{[s_k ≠ 0] s_{k+1}}` on qutrits, a matrix product unitary of bond dimension
+two with `U³ = 1` at every length, so that `{1, U, U†}` is an exact representation of `ℤ₃`; it is
+conjugate by one diagonal unitary to the periodic representation of GLM23 (arXiv:2203.12563,
+lines 2202–2224) built from `ω_1`, and its anomaly class is the class of `ω_2` in the orientation
+of the anomaly three-cochain of arXiv:2502.20257. Its condensation defect `A = 1 ⊕ U ⊕ U†` obeys
+`A² = 3A` at every positive length and `A / 3` is a projector. The clock symmetry
+`U = X^{⊗ N} ∏_k CZ_{k,k+1}` represents `ℤ₃` only up to the phases `ω^N`; after a rescaling its
+anomaly class is trivial, and the fusion coefficients of its condensation defect depend on the
+length, so that `{1, U, V}` is no fusion algebra.
+
+## General theorems instantiated
+
+* `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum` and
+  `MPOTensor.mpo_mul_eq_of_trace_evalWord` (multi-block compression of operator products): the
+  stacked products `U ⊗ U → U†`, `U† ⊗ U† → U`, `U ⊗ U† → 1`, `U† ⊗ U → 1` compress with
+  remainders nilpotent of order exactly three, giving the group law of the periodic operators.
+* `MPSTensor.MultiBlockCompression.directSum` and
+  `MPSTensor.MultiBlockCompression.evalWord_remainder_directSum_ne_zero` (direct sums of
+  compressions): the stacked square of the condensation defect compresses onto nine slots with
+  `25 = 15 + 10`, its remainder nilpotent of order exactly three.
+* `Matrix.isStarProjection_inv_card_smul_sum` (group averages): `(1 + U_L + U_L²)/3` is an
+  orthogonal projector; arXiv:2502.20257, lines 457–461.
+* `MPOTensor.GroupFamily.IsRawRepresentation.of_isNBlkInjective` and
+  `MPOTensor.GroupFamily.isMPOFusionAlgebra` (group representations by matrix product unitaries):
+  the family blocked by two sites is a raw representation, and `1, U, U†` form the group fusion
+  algebra; arXiv:2405.00439, line 1684, and arXiv:2203.12563, line 660.
+* `MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator` and
+  `MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff` (anomaly three-cochain): the
+  gauge-invariant product of fusion-tree scalars is `ω₃²`, so the anomaly class is nontrivial for
+  every choice of fusion tensors; arXiv:2502.20257, display preceding `eq:3-cocycle`.
+* `ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq` and
+  `ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant` (cyclic invariants of
+  three-cocycles of `ℤ_n`): the anomaly cochain is cohomologous to `ω_2`, with domain-wall phase
+  `exp(2πi/3)`; arXiv:2405.00439, lines 2013–2054.
+* `MPOTensor.GroupCocycle.fusionData_omega` and
+  `MPOTensor.GroupCocycle.not_isNormalRepresentation` (the cocycle construction): the
+  construction from `ω_1` carries `ω_1⁻¹` and has no normal tensors, unlike `{1, U, U†}`;
+  arXiv:2203.12563, lines 2044 and 2224–2225.
+* `MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant`
+  (invariant states force a trivial anomaly): an explicit normal state fixed by the rescaled
+  clock family shows that its anomaly class is trivial; arXiv:2502.20257, main.tex line 1545.
+* `MPOTensor.IsMPOFusionAlgebra` (matrix product operator fusion algebras): the anomalous family
+  is one, while the clock family `{1, U, V}` is not for any structure constants;
+  arXiv:2203.12563, lines 361–362.
+-/

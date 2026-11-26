@@ -16,3 +16,38 @@ import TNLean.MPS.Examples.NonCartesianSectors.NonCartesianActiveSectorCandidate
 import TNLean.MPS.Examples.NonCartesianSectors.NonCartesianActiveSectorCounterexample
 import TNLean.MPS.Examples.NonCartesianSectors.NonCartesianActiveSectorObstruction
 import TNLean.MPS.Examples.NonCartesianSectors.NonCartesianActiveSectorRigidity
+
+/-!
+# Non-Cartesian active sectors and the printed CPSV16 Theorem 4.9
+
+A project counterexample to steps of Appendix C.2 of CPSV16 (arXiv:1606.00608, lines
+1628–1825) and to two printed implications of Theorem 4.9 (lines 851–893). A four-letter,
+four-sector diagonal tensor with closed factors `L`, `R` (`LR = diag(1, 0)`, `T = RL` with
+`T² = T³ ≠ T`) admits no physical-sector factorization with neighbouring traces
+`tr(η_{k,h}) = a_k b_h`, `∑_k a_k b_k = 1`, the form used in Proposition `prop2to3`
+(lines 1740–1782). Embedded isometrically into five letters and assembled with a terminal
+product block, it gives a matrix product density operator in simple block-injective canonical
+form, with the global unit-weight normalization, saturation of the area law and idempotent
+physical-trace transfer. For it the two-to-three-site channel of Proposition `prop2to5` (C.15)
+does not exist and the two-site blocking is not a renormalization fixed point, so the printed
+implications (ii) to (iv) and (ii) to (v) of Theorem 4.9 fail; see
+`docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex` and
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
+
+## General statements whose hypotheses are shown necessary
+
+* `MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization` (neighbouring-trace
+  factorizations, the hypotheses of Proposition C.7; arXiv:1606.00608, lines 1389–1403): the
+  common-weight-absorbed representative of a simple canonical form need not admit one.
+* `MPOTensor.IsSimpleCanonicalForm`, `MPOTensor.IsSimple`, `MPSTensor.IsBNTCanonicalForm` and
+  `MPOTensor.IsSAL` (the hypotheses of Theorem 4.9(ii)): all hold for the ambient tensor,
+  which is nevertheless not `MPOTensor.IsRFPViaTS` after two-site blocking.
+
+## General theorems instantiated
+
+* `MPOTensor.isSAL_changePhysicalBasis_iff` and `MPOTensor.isMPDO_changePhysicalBasis_iff`
+  (isometric physical embeddings): the obstruction and the standing hypotheses survive the
+  embedding into the five-letter space.
+* `MPOTensor.isSourceZCL_of_physTraceTransfer_sq` (zero correlation length): the candidate
+  tensor, with idempotent nonzero physical-trace transfer, is `MPOTensor.IsSourceZCL`.
+-/

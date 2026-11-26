@@ -11,3 +11,45 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.MPUPhases.ConjugationPhaseRepresentatives
 import TNLean.MPS.Examples.MPUPhases.TimeReversalSecondSigns
 import TNLean.MPS.Examples.MPUPhases.TimeReversalTraceSigns
+
+/-!
+# Example gates for the phases of matrix product unitaries
+
+The gate pairs `(u, v)` that arXiv:1703.09188 lists as representatives of the phases of
+matrix product unitaries in standard form under symmetries. For complex conjugation (Example
+`ex:all-phases-under-conjugation`, lines 1847–1876), the sign gates `u_± = v_±` and their
+even-rank variants built with the matrix `R` of Corollary `cor:sympl-to-orthogonal` generate
+conjugation-invariant unitaries in Case I and Case II of Proposition `corconj`, with the printed
+determinants; when one rank is odd they realize exactly the two phases. The side on which `R`
+acts in `v'` is a local fix recorded in `docs/paper-gaps/mpu_conjugation_example_r_side.tex`.
+For time reversal (lines 1906–1962), the four pairs built from `1`, `i 1`, `CZ` and `X ⊗ X` give
+self-adjoint operators on rings of an even number of standard-form sites; their first signs
+`σ⁽¹⁾`, the normalized traces of `eq:sigma-from-trace`, agree with the printed values, and their
+second signs `σ⁽²⁾` are computed from the blocked standard form.
+
+## General theorems instantiated
+
+* `MPOTensor.exists_isMPUCanonicalForm_twoSiteStandardFormData` (tensors from standard-form
+  gates): tensors in canonical form carrying the example gates; arXiv:1703.09188, equation
+  `StandardForm` and Definition `SF`.
+* `MPOTensor.isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates` (conjugation
+  invariance from gates): the example unitaries are fixed by complex conjugation;
+  arXiv:1703.09188, Proposition `prop1conj`.
+* `MPOTensor.IsConjugationCaseI` and `MPOTensor.IsConjugationCaseII` (the two cases of
+  conjugation-invariant gates): the sign gates are in Case I and their even-rank variants in
+  Case II; arXiv:1703.09188, Proposition `corconj`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq` (determinant
+  classification): for one odd rank the two sign examples are not strictly equivalent, and every
+  other such tensor is equivalent to one of them; arXiv:1703.09188, Theorem `conjphs`.
+* `MPOTensor.TwoSiteStandardFormData.det_mpo_one_eq` and
+  `MPOTensor.IsMPU.det_mpo_one_eq_one_or_neg_one_of_map_star_eq` (one-site determinant):
+  `det(u v) = ±1` read off the operator on one standard-form site; arXiv:1703.09188, proof of
+  Theorem `conjphs`.
+* `MPOTensor.TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted` (standard-form circuits): the
+  operators of the time-reversal examples are the shifted `v` layer after the `u` layer;
+  arXiv:1703.09188, equations `uuvv` and `StandardForm`.
+* `MPOTensor.TwoSiteStandardFormData.doubled` and
+  `MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic` (intrinsic time-reversal
+  sign): the second sign of each example is the intrinsic sign of the blocked standard form;
+  arXiv:1703.09188, `eq:sigma-from-trace` and `prop:sigma-well-defined`.
+-/

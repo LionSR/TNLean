@@ -10,3 +10,29 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.WeakHopf.BellPairWeakHopf
 import TNLean.MPS.Examples.WeakHopf.FiniteSetWeakHopf
+
+/-!
+# Weak Hopf algebras of a Bell pair and of a finite set
+
+Two weak Hopf algebras whose matrix product operator representations instantiate the
+weak-Hopf average of GLM23 (Garre-Rubio, Lootens, Molnár, arXiv:2203.12563v3, Appendix B,
+lines 2463–2466). The first is `End(ℂ^r ⊗ ℂ^r)` with the Bell-pair comultiplication and the
+Bell projector as canonical integral, represented on the state tensor `A^{ij} = E_{ij}/√r`,
+which is injective at one site. The second is the commutative and cocommutative algebra `ℂ^m`
+of functions on a finite set, a weak but not an ordinary Hopf algebra for `m ≥ 2`, whose
+average is the pinching by the represented idempotents.
+
+## General theorems instantiated
+
+* `MPOTensor.WeakHopfRepresentation` (weak-Hopf MPO representations): both algebras, with a
+  faithful representation of the convolution dual, form such a representation.
+* `MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection` (weak-Hopf average of a
+  compatible state): the average fixes the support projection `P_n` of the Bell-pair state,
+  and the pinching fixes the support projection of every compatible state injective after
+  blocking; GLM23, Appendix B, lines 2463–2466.
+* `MPOTensor.WeakHopfRepresentation.weakHopfAverage_eq_sum` (the average as a sum over the
+  integral): the explicit formulas `E_n(X) = r^{-2} tr(Q_n X) Q_n` and the pinching.
+* `MPSTensor.toMatrix'_parentInteraction_ne_zero` (parent interactions): the canonical parent
+  term `I - P_n` of the Bell-pair state is nonzero for `r ≥ 2`, `n ≥ 2`, although its
+  uncompleted average vanishes.
+-/

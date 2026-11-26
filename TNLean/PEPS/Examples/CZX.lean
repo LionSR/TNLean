@@ -20,3 +20,54 @@ import TNLean.PEPS.Examples.CZX.CZXRegionSymmetry
 import TNLean.PEPS.Examples.CZX.CZXSymmetry
 import TNLean.PEPS.Examples.CZX.CZXWrappingRectangle
 import TNLean.PEPS.Examples.CZX.CZXWrappingRectangleTransport
+
+/-!
+# The CZX model
+
+The CZX model of Chen, Liu and Wen (arXiv:1106.4752, Section "CZX model", lines 270–323) and
+its PEPS in the review arXiv:2011.12127 (Appendix A, lines 2502–2516): four qubits per site,
+the ground state the product of plaquette GHZ states, the site tensor
+`∑ |ijkl⟩((i,j),(j,k),(k,l),(l,i)|` of bond dimension four, and the on-site `ℤ₂` symmetry
+`U_{CZX} = U_X U_{CZ}`. The modules prove the plaquette formula of the torus PEPS, its
+invariance under `U_{CZX}` and the pull-through of `U_{CZX}` to `(X ⊗ X) CZ` on every virtual
+leg, and, on every positive proper bounded or cyclic coordinate rectangle, the faithful
+boundary image of the open-region contraction, the support and rank of the reduced density, and
+the action of the physical symmetry on that image as the CZX matrix product unitary of the
+review (lines 2582–2591). Blocked over pairs of boundary sites, this operator generates a normal
+representation of `ℤ₂` whose anomaly class in `H³(ℤ₂, ℂˣ)` is nonzero, the nontrivial
+three-cocycle of line 2584. Local fixes reverse the bottom and left bond pairs
+(`docs/paper-gaps/rmp_peps_czx_bond_orientation.tex`), use the printed matrices of the CZX
+operator (`docs/paper-gaps/mpu_czx_tensor_normalization.tex`) and block two boundary sites
+(`docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`); both torus periods are at least three, and
+nonrectangular regions, entropies and normalized spectra are not covered.
+
+## General theorems instantiated
+
+* `TNLean.PEPS.stateCoeff_torusSiteTensor` (contraction of a torus site-tensor PEPS): the
+  coefficient of the CZX PEPS is the product of plaquette GHZ indicators; arXiv:2011.12127,
+  Appendix A, line 2415.
+* `TNLean.PEPS.onSiteOperator_monomial` (on-site operators): the global symmetry
+  `U_{CZX}^{⊗V}` is a monomial matrix, which gives the torus invariance and the region
+  symmetry.
+* `TNLean.PEPS.regionPhysicalMap_openRegionWeight` (physical maps on open regions): the CZX
+  symmetry passes into the internal-bond sum of an open-region contraction, where its
+  controlled-phase factors cancel on internal bonds; SCP10, arXiv:1001.3807, Observation
+  `obs:iso:accessible-virt`.
+* `TNLean.PEPS.stateCoeff_eq_openRegionComplement_unconditional`,
+  `TNLean.PEPS.range_regionReducedDensity_eq_cutRange` and
+  `TNLean.PEPS.regionReducedDensity_posSemidef` (regional reduced densities): the reduced
+  density of a rectangle has the open-region image as its support, with rank the dimension of
+  that image and nonzero trace; arXiv:2011.12127, lines 2003–2011.
+* `MPOTensor.GroupFamily.IsNormalRepresentation.withTensor_pairTwist` and
+  `MPOTensor.GroupFamily.IsNormalRepresentation.withTensor_smul` (normal representations under a
+  change of physical basis and under a character): the blocked boundary family is a normal
+  representation of `ℤ₂`, transported from the decorated CZX family of the matrix product
+  examples through `S ⊗ S` with `S = diag(1, i)` and the sign character.
+* `MPOTensor.GroupFamily.FusionData.omega_physicalTwist` and
+  `MPOTensor.GroupFamily.FusionData.omega_smulTensor` (invariance of the anomaly three-cochain):
+  both transports leave the anomaly three-cochain unchanged; arXiv:2502.20257, display preceding
+  `eq:3-cocycle`.
+* `MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass` and
+  `MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff` (anomaly class): the anomaly
+  class of the boundary family is nonzero; arXiv:2502.20257, `eq:3-cocycle`.
+-/
