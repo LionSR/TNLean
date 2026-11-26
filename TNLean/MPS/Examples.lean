@@ -45,4 +45,3 @@ import TNLean.MPS.Examples.Weyl
 import TNLean.MPS.Examples.Wielandt
 import TNLean.MPS.Examples.Z2Z2
 import TNLean.MPS.Examples.Z3
-import TNLean.MPS.Examples.ZMod2

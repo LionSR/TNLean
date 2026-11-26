@@ -7,7 +7,7 @@ import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
 import TNLean.MPS.Symmetry.StringOrder.StringOrder
 import TNLean.MPS.Examples.GHZ.GHZ
-import TNLean.MPS.Examples.ZMod2
+import QICLean.Representation.ZMod2Representation
 import QICLean.Analysis.Real.ComplexSqrt
 import QICLean.Algebra.Cohomology.CocycleCohomology
 import QICLean.Algebra.Hermitian.MatrixScalarIdentity

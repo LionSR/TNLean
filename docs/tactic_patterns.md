@@ -3848,7 +3848,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** the cluster-state and AKLT examples each used a four-case finite-matrix
   proof for their physical action.
 - **Abstraction:** `ofCommutingInvolutions_mul_conjTranspose` in
-  `TNLean/MPS/Examples/ZMod2.lean`.
+  the QICLean module `QICLean/Representation/ZMod2Representation.lean`.
 - **Notes:** each example now supplies only the involution, commutation, and generator
   unitarity facts. The public action and unitarity theorem statements are unchanged.
 
@@ -4874,7 +4874,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### Anticommuting-involution projective multiplication
 - **Pattern:** split both `Z₂ × Z₂` inputs into sixteen cases, expand two concrete
   `2 × 2` matrices entrywise, and normalize every resulting scalar expression.
-- **Reuse:** `mul_of_anticommuting_involutions` in `MPS/Examples/ZMod2.lean`
+- **Reuse:** `mul_of_anticommuting_involutions` in QICLean's `Representation/ZMod2Representation.lean`
   proves the multiplication table once from the two involution laws and their
   anticommutation law. `clusterProjRep` now supplies only those three relations.
 - **Result:** the concrete sixteen-case proof in `MPS/Examples/Cluster/Cluster.lean`
@@ -9975,7 +9975,7 @@ there is no need for a new tactic.
 
 ### Cardinality of a finite union with a uniform bound — reused Mathlib (2026-10-26)
 
-- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `card_sizeTrimmingSelection_le`.
+- **Seen:** `MPS/AreaLaw/GroundStateAlgorithm/ViableVector/Selection.lean`, `card_sizeTrimmingSelection_le`.
 - **Pattern:** A finite family of sets has at most the number of indices times a uniform
   cardinality bound; here the indices are all actual bond dimensions `m : Fin (D + 1)`.
 - **Reuse:** `Finset.card_biUnion_le_card_mul` gives the union bound directly after
@@ -9985,7 +9985,7 @@ there is no need for a new tactic.
 ### Trace of a normalized pure density — existing mathematical lemmas (2026-10-26)
 
 - **Seen:** The pure-state trace arguments in `MPS/AreaLaw/GroundStateAlgorithm/BoundaryState/ViableLeadingBounds.lean`
-  and `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, and the companion QICLean module
+  and `MPS/AreaLaw/GroundStateAlgorithm/ViableVector/Selection.lean`, and the companion QICLean module
   `Channel/BoundaryDensityMinimizer.lean`.
 - **Pattern:** For a unit vector `x`, rewrite the trace of `vecMulVec x (star x)` as its
   Euclidean inner product, then as the squared norm.
@@ -11714,7 +11714,7 @@ removed after the dependency audit exposed it.
   hypothesis.  The three primary and three Gram coordinates produce the same
   eight-line proof fragment.
 - **Occurrences:** three simultaneous rounding theorems in
-  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+  the modules of `MPS/AreaLaw/GroundStateAlgorithm/BoundarySDP/`.
 - **Candidate abstraction:** a small product-membership transport lemma should
   package the six rewrites together.  Promote when the surrounding certificate
   statements have stabilized; the present repetition is confined to one file.

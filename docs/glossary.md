@@ -2420,7 +2420,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ### `ManyBody.ChainInteraction.IsAdmissibleNet` and `IsAdmissibleSolver`
 
-- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/SizeTrimming.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/GroundStateAlgorithm/ViableVector/Selection.lean`.
 - **Meaning:** `IsAdmissibleNet` says that for every bond dimension `m` up to the
   uniform cut bound, the net covers the trace-norm unit ball of boundary densities
   within `c / (2L)`, `c = (Δ / 169)²`. `IsAdmissibleSolver` says that at every bond

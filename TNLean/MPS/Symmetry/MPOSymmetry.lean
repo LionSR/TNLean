@@ -9,10 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry.MPOSymmetry
 
 import TNLean.MPS.Symmetry.MPOSymmetry.Anomaly
-import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
-import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.Fusion
-import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
-import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath
 import TNLean.MPS.Symmetry.MPOSymmetry.ParentHamiltonian
