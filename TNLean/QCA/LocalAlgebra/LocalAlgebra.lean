@@ -52,10 +52,13 @@ open scoped ComplexOrder
 namespace SpinChain
 
 /-- Configurations of \(d\)-level spins on the finite region \(\Lambda\): the
-configurations of the region \(\Lambda\) of the chain of qudits on \(\mathbb Z\).
+configurations `ManyBody.RegionConfig (ManyBody.Qudits ℤ d) Λ` of the region \(\Lambda\) of the
+chain of qudits on \(\mathbb Z\), to which this abbreviation is reducibly equal. It is written
+as a nondependent function type, so that rewriting a site under a configuration needs no
+dependent motive.
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
-abbrev Config (d : ℕ) (Λ : Finset ℤ) := ManyBody.RegionConfig (ManyBody.Qudits ℤ d) Λ
+abbrev Config (d : ℕ) (Λ : Finset ℤ) := Λ → Fin d
 
 /-- The local observable C⋆-algebra on a finite region \(\Lambda\).
 
@@ -63,6 +66,16 @@ Its norm is the `CStarMatrix` operator norm, rather than a norm inherited from p
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 abbrev LocalAlgebra (d : ℕ) (Λ : Finset ℤ) :=
   CStarMatrix (Config d Λ) (Config d Λ) ℂ
+
+/-- Configurations on a finite region form a finite type. The named instance keeps one
+instance term for the index type of every local algebra, which keeps the unification of the
+algebra structures cheap. -/
+instance instFintypeConfig (d : ℕ) (Λ : Finset ℤ) : Fintype (Config d Λ) :=
+  inferInstanceAs (Fintype (Λ → Fin d))
+
+/-- Equality of finite-region configurations is decidable. -/
+instance instDecidableEqConfig (d : ℕ) (Λ : Finset ℤ) : DecidableEq (Config d Λ) :=
+  inferInstanceAs (DecidableEq (Λ → Fin d))
 
 /-- A finite region has one independent physical coordinate per site,
 so its configuration cardinality is the corresponding power of the
