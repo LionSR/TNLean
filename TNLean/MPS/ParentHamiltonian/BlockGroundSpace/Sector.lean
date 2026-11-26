@@ -15,7 +15,6 @@ import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGro
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicResidualGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicSectorRepresentatives
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PrimitiveSectorRepresentatives
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PrimitiveWitnessTransport
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGram
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGramInverse
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryOverlap
