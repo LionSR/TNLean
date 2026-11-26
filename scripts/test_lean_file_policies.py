@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unit tests for the Lean module file-size, import and pass-through policy checkers."""
+"""Unit tests for the Lean module file-size, import, pass-through and small-module checkers."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from pathlib import Path
 import check_import_layers as layers
 import check_oversized_lean_files as oversized
 import check_pass_through_declarations as forwarding
+import check_small_lean_modules as small
 
 
 class CapturedCheck(unittest.TestCase):
@@ -552,6 +553,128 @@ class PassThroughPolicyTests(unittest.TestCase):
         root = Path(__file__).resolve().parent.parent
         sources = layers.tracked_sources(root)
         self.assertEqual(set(forwarding.pass_throughs(sources)), forwarding.PASS_THROUGH)
+
+
+class SmallModuleCeilingTests(unittest.TestCase):
+    def test_public_top_level_declarations_are_counted(self) -> None:
+        count = small.public_declarations
+        source = (
+            "import TNLean.MPS.Tensor.Defs\n"
+            "/-! A module docstring naming theorem fake. -/\n"
+            "@[simp] theorem a : True := trivial\n"
+            "private lemma b : True := trivial\n"
+            "noncomputable def c := 0\n"
+            "  theorem indented : True := trivial\n"
+            'def d := "theorem inString"\n'
+            "-- theorem commented : True := trivial\n"
+        )
+        self.assertEqual(count(source), 3)
+        self.assertEqual(count("syntax \"foo\" : tactic\n"), 0)
+
+    def test_aggregators_and_import_only_modules_are_not_counted(self) -> None:
+        generated = f"-- {small.AGGREGATOR_MARKER}\nimport TNLean.A\n"
+        self.assertIsNone(small.public_declarations(generated))
+        self.assertIsNone(small.public_declarations("/- forward -/\nimport TNLean.A\n"))
+
+    def test_modules_are_grouped_by_the_directories_of_the_layer_check(self) -> None:
+        sources = {
+            "TNLean.MPS.AreaLaw.Sub.A": "theorem a : True := trivial\n",
+            "TNLean.Algebra.Deep.B": "def b := 0\n",
+            "TNLean.Root": "def r := 0\n",
+            "TNLean.MPS.AreaLaw.Big": "def x := 0\ndef y := 0\ndef z := 0\n",
+        }
+        self.assertEqual(
+            small.small_modules(sources),
+            {
+                "MPS/AreaLaw": {"TNLean.MPS.AreaLaw.Sub.A": 1},
+                "Algebra": {"TNLean.Algebra.Deep.B": 1},
+                ".": {"TNLean.Root": 1},
+            },
+        )
+
+    def test_a_count_above_its_ceiling_names_the_directory_and_modules(self) -> None:
+        found = {"MPS/AreaLaw": {"TNLean.MPS.AreaLaw.A": 1, "TNLean.MPS.AreaLaw.B": 2}}
+        errors, _ = small.check(found, {"MPS/AreaLaw": 1})
+        self.assertEqual(len(errors), 1)
+        self.assertIn("MPS/AreaLaw has 2 modules", errors[0])
+        self.assertIn("TNLean.MPS.AreaLaw.A (1), TNLean.MPS.AreaLaw.B (2)", errors[0])
+        # A changed module is named in preference to the others.
+        errors, _ = small.check(found, {"MPS/AreaLaw": 1}, {"MPS/AreaLaw": 1}, {},
+                                {"TNLean.MPS.AreaLaw.B"})
+        self.assertIn("added or changed modules: TNLean.MPS.AreaLaw.B (2)", errors[0])
+        # A directory without a ceiling has ceiling 0.
+        errors, _ = small.check({"QCA": {"TNLean.QCA.New": 0}}, {})
+        self.assertIn("above its ceiling of 0", errors[0])
+        # A count below its ceiling only warns.
+        errors, warnings = small.check({}, {"QCA": 2})
+        self.assertEqual(errors, [])
+        self.assertIn("below its ceiling of 2", warnings[0])
+
+    def test_write_lowers_ceilings_and_never_raises_one(self) -> None:
+        self.assertEqual(
+            small.lowered({"A": 3, "B": 2, "C": 1}, {"A": 1, "B": 5, "D": 4}), {"A": 1, "B": 2}
+        )
+        text = small.format_ceilings({"MPS/AreaLaw": 2, "QCA": 1, "Gone": 0})
+        self.assertEqual(small.parse_ceilings(text), {"MPS/AreaLaw": 2, "QCA": 1})
+        for bad in ("A\n", "A x\n", "A 1\nA 2\n"):
+            with self.assertRaises(ValueError):
+                small.parse_ceilings(bad)
+
+    def test_ceilings_may_only_fall_against_the_base(self) -> None:
+        found = {"A": {"TNLean.A.X": 1, "TNLean.A.Y": 1}}
+        errors, _ = small.check(found, {"A": 2}, {"A": 1}, {})
+        self.assertEqual(
+            errors,
+            [
+                "Ceiling of A rose from 1 to 2; a ceiling may only fall",
+                "Sum of the ceilings rose from 1 to 2; when a small module moves, lower the "
+                "ceiling of the directory it left",
+            ],
+        )
+        # A moved module carries its ceiling, provided the directory it left falls.
+        moved = {"B": {"TNLean.B.X": 1}, "A": {"TNLean.A.Y": 1}}
+        self.assertEqual(small.check(moved, {"A": 1, "B": 1}, {"A": 2}, {"B": 1})[0], [])
+        errors, _ = small.check(moved, {"A": 2, "B": 1}, {"A": 2}, {"B": 1})
+        self.assertEqual(len(errors), 1)
+        self.assertIn("Sum of the ceilings rose from 2 to 3", errors[0])
+        # Without a base the recorded ceilings are the baseline.
+        self.assertEqual(small.check(found, {"A": 2}, None)[0], [])
+
+    def test_moves_and_changes_are_read_from_git(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+
+            def git(*args: str) -> None:
+                subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
+
+            def write(relative: str, text: str) -> None:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8")
+
+            git("init", "-q")
+            git("config", "user.email", "test@example.com")
+            git("config", "user.name", "test")
+            write("TNLean/QCA/Moved.lean", "theorem moved_statement : True := trivial\n")
+            write(small.CEILINGS_PATH, "QCA 1\n")
+            git("add", ".")
+            git("commit", "-q", "-m", "base")
+            git("branch", "base")
+            write("TNLean/Algebra/New.lean", "def fresh := 0\n")
+            git("mv", "TNLean/QCA/Moved.lean", "TNLean/Algebra/Moved.lean")
+            git("add", ".")
+            git("commit", "-q", "-m", "head")
+            found = small.small_modules(layers.tracked_sources(root))
+            base, moved_in, changed = small.base_state(root, "base", found)
+        self.assertEqual(base, {"QCA": 1})
+        self.assertEqual(moved_in, {"Algebra": 1})
+        self.assertEqual(changed, {"TNLean.Algebra.Moved", "TNLean.Algebra.New"})
+
+    def test_recorded_ceilings_hold_for_the_tree(self) -> None:
+        root = Path(__file__).resolve().parent.parent
+        found = small.small_modules(layers.tracked_sources(root))
+        ceilings = small.parse_ceilings((root / small.CEILINGS_PATH).read_text(encoding="utf-8"))
+        self.assertEqual(small.check(found, ceilings)[0], [])
 
 
 if __name__ == "__main__":

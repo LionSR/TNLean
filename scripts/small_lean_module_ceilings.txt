@@ -1,0 +1,30 @@
+# Ceilings on the number of small Lean modules per directory of TNLean, read by
+# scripts/check_small_lean_modules.py.  A small module has at most two public
+# top-level declarations; it is merged into the module of its object.  A
+# directory not listed here has ceiling 0.  The ceilings may only fall: lower
+# them with `python3 scripts/check_small_lean_modules.py --write`, and when a
+# small module moves to another directory, move its ceiling with it.
+Algebra                 5
+MPS                     1
+MPS/AreaLaw             65
+MPS/CanonicalForm       16
+MPS/Examples            4
+MPS/FundamentalTheorem  15
+MPS/MPDO                13
+MPS/MPU                 12
+MPS/Operator            1
+MPS/ParentHamiltonian   13
+MPS/Preparation         13
+MPS/Symmetry            18
+MPS/Tensor              9
+MPS/Transfer            4
+Network                 3
+PEPS/Approximation      17
+PEPS/AreaLaw            46
+PEPS/FundamentalTheorem 7
+PEPS/Graph              2
+PEPS/Injectivity        8
+PEPS/ParentHamiltonian  1
+PEPS/Tensor             1
+QCA                     2
+Tactic                  2

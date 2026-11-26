@@ -380,6 +380,23 @@ during review.
   recorded in the two scripts in sets that may only shrink, compared with the
   merge base: recording a new case fails,
   and a case that is repaired must be removed from its set in the same change.
+- A module holds one coherent interface: the definition of an object and the
+  facts about it, or one theorem with the lemmas only it uses. A module of one
+  or two declarations is merged into the module of its object, or, when its
+  lemma is one step of one proof, into the module of that theorem.
+  `scripts/check_small_lean_modules.py` counts, in each directory, the modules
+  with at most two public top-level declarations (aggregators, import-only
+  modules and `TNLean/Archive` are not counted), and fails when a count rises
+  above its ceiling in `scripts/small_lean_module_ceilings.txt`. Directories
+  are those of the import-layer check: two path components below `TNLean/MPS`
+  and `TNLean/PEPS`, one elsewhere. A directory that is not listed has ceiling
+  0. The ceilings may only fall. After a change that merges small modules, run
+  `python3 scripts/check_small_lean_modules.py --write`, which lowers the
+  ceilings to the current counts and never raises one. When a small module
+  moves to another directory, move its ceiling by hand: compared with the merge
+  base, a ceiling may rise only by the number of small modules that Git records
+  as moved in, and the sum of the ceilings may not rise. `--list` prints the
+  small modules of each directory.
 
 When a proof approaches the cap, split by mathematical responsibility rather
 than chronology. Put shared definitions and setup in a family `Basic.lean`
@@ -390,8 +407,8 @@ exception must explain why the numeral belongs to the mathematics or source
 citation; it is not an escape hatch for continuation files.
 
 **When it runs**: On pull requests and pushes to `main` whenever Lean sources,
-either checker, their tests, this documentation, or the workflow changes. CI
-runs the policy unit tests before both repository checks. The numbered-module
+any checker, their tests, the ceilings, this documentation, or the workflow
+changes. CI runs the policy unit tests before the repository checks. The numbered-module
 ratchet compares a pull request with its merge base and a push with the commit
 recorded by the push event before any commit in that push was applied.
 
