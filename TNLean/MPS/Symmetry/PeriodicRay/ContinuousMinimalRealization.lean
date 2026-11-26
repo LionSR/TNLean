@@ -111,7 +111,8 @@ theorem exists_local_continuous_minimalTensor_of_two_three_trace_eq
   let G : T → Matrix (Fin d) (Fin d) ℂ :=
     fun t j i => Matrix.trace (B t i * B t j)
   obtain ⟨F, S₀, u, p, hS₀, ht₀, hM, hu, hp, hR, hPrimitive⟩ :=
-    TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive B hB G (fun _ _ _ => rfl)
+    TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive B hB G
+      (fun _ _ _ => rfl)
       (fun _ => D) (fun _ => rfl) A hA α₂ α₃ hα₂ hα₃ hPair hTriple t₀ (NeZero.pos D)
   let M : T → Matrix (Fin (D * D)) (Fin (D * D) × Fin (D * D)) ℂ :=
     fun t => Matrix.traceQuotientProductCoordinates (G t) F

@@ -205,7 +205,8 @@ set_option backward.isDefEq.respectTransparency false in
 private theorem piKronecker_commonFixedPointInclusion_sector
     (K d₀ d₁ : ℕ) :
     (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion (K * K) d₀ d₁)).submatrix
-        ((Matrix.etaPairSpatialBlockEquiv (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁)).trans
+        ((Matrix.etaPairSpatialBlockEquiv
+            (TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁)).trans
           (finTwoArrowEquiv (Fin ((K * K + d₀) + d₁))).symm)
         (twoSiteBondEquiv K).symm =
       Matrix.coordinateInclusion (activePairEmbedding K d₀ d₁) := by

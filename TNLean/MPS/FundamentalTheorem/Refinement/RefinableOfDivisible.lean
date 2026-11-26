@@ -310,7 +310,8 @@ theorem isPRefinable_of_isPDivisibleChannel_fin_two
   obtain ⟨F, hF, hpow⟩ := hDiv
   have hRank : Channel.choiRank F ≤ d := by
     calc
-      Channel.choiRank F ≤ Channel.choiRank (F ^ p) := TNLean.MPS.FundamentalTheorem.choiRank_le_pow_fin_two hF hp
+      Channel.choiRank F ≤ Channel.choiRank (F ^ p) :=
+          TNLean.MPS.FundamentalTheorem.choiRank_le_pow_fin_two hF hp
       _ = Channel.choiRank (Kraus.transferMap B) := congrArg Channel.choiRank hpow.symm
       _ ≤ d := Channel.choiRank_le_of_hasKrausCard ⟨B, by intro X; simp⟩
   exact isPRefinable_of_channel_root_hasKrausRankLE B hp F hpow

@@ -235,7 +235,8 @@ theorem MPOTensor.blockSplitEquiv_symm_apply {d L K : ℕ} (a : Fin L → Fin d)
 /-- Concatenating the two parts of a block split recovers the original
 configuration. -/
 theorem MPOTensor.append_blockSplitEquiv {d K₁ K₂ : ℕ} (k : Fin (K₁ + K₂) → Fin d) :
-    Fin.append (MPOTensor.blockSplitEquiv d K₁ K₂ k).1 (MPOTensor.blockSplitEquiv d K₁ K₂ k).2 = k := by
+    Fin.append (MPOTensor.blockSplitEquiv d K₁ K₂ k).1
+      (MPOTensor.blockSplitEquiv d K₁ K₂ k).2 = k := by
   rw [← MPOTensor.blockSplitEquiv_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
 
 /-- **Composition of contiguous-block reductions.** Tracing out the last `K₁`
@@ -252,7 +253,8 @@ theorem MPOTensor.blockReducedState_comp {d L K₁ K₂ : ℕ}
               (Equiv.refl (Fin d))).symm
             (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂))
               (Equiv.refl (Fin d))).symm) := by
-  rw [MPOTensor.blockReducedState, MPOTensor.blockReducedState, Matrix.partialTraceRight_submatrix_left,
+  rw [MPOTensor.blockReducedState, MPOTensor.blockReducedState,
+      Matrix.partialTraceRight_submatrix_left,
     Matrix.submatrix_submatrix, Matrix.partialTraceRight_partialTraceRight,
     Matrix.partialTraceRight_submatrix_right (MPOTensor.blockSplitEquiv d K₁ K₂),
     MPOTensor.blockReducedState, Matrix.submatrix_submatrix, Matrix.submatrix_submatrix]
@@ -260,7 +262,8 @@ theorem MPOTensor.blockReducedState_comp {d L K₁ K₂ : ℕ}
   simp only [partialTraceRight_apply, Matrix.submatrix_apply]
   refine Finset.sum_congr rfl fun k _ => ?_
   congr 1 <;>
-  · simp only [Function.comp, Prod.map, MPOTensor.blockSplitEquiv_symm_apply, id_eq, Fin.append_assoc,
+  · simp only [Function.comp, Prod.map, MPOTensor.blockSplitEquiv_symm_apply, id_eq,
+      Fin.append_assoc,
       MPOTensor.append_blockSplitEquiv]
     funext x
     simp only [Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,

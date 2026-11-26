@@ -299,7 +299,8 @@ theorem exists_pure_primitiveFamily_quasiLocalCommutator_limit_gap_of_wordTupleS
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   refine ⟨B, ρ, hP, hρ, hGS, ?_, ?_⟩
-  · exact fun α => TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation (hP α) (hρ α)
+  · exact fun α => TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation (hP α)
+      (hρ α)
   · apply exists_pos_multiblock_quasiLocalCommutator_limit_gap
       μ B hμ ρ hP hρ hS hSpanB hR h _
     refine ⟨hh.isPositive, hh.ker_eq.trans ?_⟩

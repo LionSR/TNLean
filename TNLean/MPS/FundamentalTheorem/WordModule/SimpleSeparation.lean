@@ -94,18 +94,21 @@ acting as the identity on the quotient.
 
 ### Main results
 
-* `TNLean.MPS.FundamentalTheorem.traceChar_eq_sum_of_traceWord_eq`: the trace character of `M` on the positive
+* `TNLean.MPS.FundamentalTheorem.traceChar_eq_sum_of_traceWord_eq`: the trace character of `M` on
+  the positive
   ideal is the sum of the characters of the blocks.
 * `MPSTensor.exists_linearEquiv_wordModule_of_isSimpleModule_quotient`: the identification.
 -/
 
-namespace WordAlgebra
+namespace TNLean.MPS.FundamentalTheorem
+
+open WordAlgebra
 
 variable {d : ℕ} {ι : Type*}
 
 /-- On the positive ideal, the trace character of `M` is the sum of the trace characters of a
 family of tensor modules whose word traces sum to those of `M`. -/
-lemma _root_.TNLean.MPS.FundamentalTheorem.traceChar_eq_sum_of_traceWord_eq (M : Type*) [AddCommGroup M] [Module ℂ M]
+lemma traceChar_eq_sum_of_traceWord_eq (M : Type*) [AddCommGroup M] [Module ℂ M]
     [Module (WordAlgebra d) M] [IsScalarTower ℂ (WordAlgebra d) M]
     (S : Finset ι) {D : ι → ℕ} (C : ∀ s, MPSTensor d (D s))
     (htr : ∀ w : List (Fin d), w ≠ [] →
@@ -119,7 +122,7 @@ lemma _root_.TNLean.MPS.FundamentalTheorem.traceChar_eq_sum_of_traceWord_eq (M :
     exact Finset.sum_congr rfl fun s _ => (MPSTensor.traceChar_wordModule_ofWord (C s) w).symm
   rw [linearMap_eq_on_ker_aug (χ₁ := traceChar M) h hp, LinearMap.sum_apply]
 
-end WordAlgebra
+end TNLean.MPS.FundamentalTheorem
 
 namespace MPSTensor
 
@@ -150,7 +153,8 @@ theorem exists_linearEquiv_wordModule_of_isSimpleModule_quotient
   -- `p` acts as zero on every block, so all its trace powers on `M` vanish.
   have hzero : ∀ k : ℕ, 0 < k → LinearMap.trace ℂ M ((Algebra.lsmul ℂ ℂ M p) ^ k) = 0 := by
     intro k hk
-    rw [← map_pow, ← traceChar_apply, TNLean.MPS.FundamentalTheorem.traceChar_eq_sum_of_traceWord_eq M S C htr (aug_pow hp hk)]
+    rw [← map_pow, ← traceChar_apply, TNLean.MPS.FundamentalTheorem.traceChar_eq_sum_of_traceWord_eq
+        M S C htr (aug_pow hp hk)]
     refine Finset.sum_eq_zero fun s hs => ?_
     have h0 : Algebra.lsmul ℂ ℂ (C s).WordModule p = 0 := by
       ext v

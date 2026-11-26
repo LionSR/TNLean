@@ -31,7 +31,8 @@ projections fixed by the adjoint transfer map.
   `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter`: cyclic-sector decompositions
   from commuting projections.
 * `pairwise_mul_zero_of_orthogonalProjection_sum_one`,
-  `TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection`: sector irreducibility: projection orthogonality and
+  `TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection`: sector irreducibility:
+  projection orthogonality and
   corner preservation.
 
 ## References
@@ -473,7 +474,8 @@ algebra.
 
 * `pairwise_mul_zero_of_orthogonalProjection_sum_one` — orthogonal projections
   summing to `1` are pairwise orthogonal.
-* `TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection` — an adjoint-fixed orthogonal
+* `TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection` — an adjoint-fixed
+  orthogonal
   projection yields a preserved corner algebra.
 
 ### Tags

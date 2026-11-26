@@ -47,9 +47,11 @@ https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pd
 
 * `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localized_le`,
   `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_localized_le`,
-  `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_localized_le`: the bounds on `‖H_tilde_• - M_•‖`.
+  `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_localized_le`: the bounds on
+  `‖H_tilde_• - M_•‖`.
 * `isSupportedOn_localized_sub_self`: `M - W` acts on `K`.
-* `TNLean.MPS.AreaLaw.isHermitian_leftPart_localized`, `TNLean.MPS.AreaLaw.isHermitian_rightPart_localized`,
+* `TNLean.MPS.AreaLaw.isHermitian_leftPart_localized`,
+  `TNLean.MPS.AreaLaw.isHermitian_rightPart_localized`,
   `TNLean.MPS.AreaLaw.isHermitian_bufferPart_localized`: the operators `M_•` are Hermitian.
 * `ManyBody.ChainInteraction.leftPart_eq_zero_of_le`: the left part vanishes when `j ≤ m`.
 
@@ -242,7 +244,7 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localiz
         2 * (cutCommutatorConst R * J ^ 2) *
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
-  TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
+  norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
     (h.isSupportedOn_commutator_leftPart j m) ((card_interval_le _ _).trans (by omega))
     (h.norm_commutator_leftPart_le hhJ j m) hT
 
@@ -269,7 +271,7 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_locali
         2 * (cutCommutatorConst R * J ^ 2) *
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
-  TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
+  norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
     (h.isSupportedOn_commutator_rightPart j m) ((card_interval_le _ _).trans (by omega))
     (h.norm_commutator_rightPart_le hhJ j m) hT
 
@@ -296,7 +298,7 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_local
         2 * (2 * (cutCommutatorConst R * J ^ 2)) *
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) := by
-  refine TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
+  refine norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
     (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hT
   refine (Finset.card_union_le _ _).trans ?_
   have h1 := card_interval_le (L := L) (j - m - 2 * R) (j - m + R)

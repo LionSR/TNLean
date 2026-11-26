@@ -208,7 +208,7 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_cutoffPair [NeZero q] (h : ChainInterac
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KL
       (h.norm_commutator_leftPart_le hhJ c m)
       (by
-        have hloc := TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localized_le h hh hhJ hq1 c m s ΔE
+        have hloc := norm_gaussianFilteredTerm_leftPart_sub_localized_le h hh hhJ hq1 c m s ΔE
           (ℓ := (k : ℝ)) hT
         rw [Nat.floor_natCast] at hloc
         exact hloc)
@@ -217,7 +217,7 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_cutoffPair [NeZero q] (h : ChainInterac
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KR
       (h.norm_commutator_rightPart_le hhJ c m)
       (by
-        have hloc := TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_localized_le h hh hhJ hq1 c m s ΔE
+        have hloc := norm_gaussianFilteredTerm_rightPart_sub_localized_le h hh hhJ hq1 c m s ΔE
           (ℓ := (k : ℝ)) hT
         rw [Nat.floor_natCast] at hloc
         exact hloc)

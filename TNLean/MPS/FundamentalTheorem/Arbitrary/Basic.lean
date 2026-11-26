@@ -15,7 +15,8 @@ import QICLean.Spectral.Eigenvalue.WordAlgebra
 
 Small facts about word-algebra modules and word traces used by several files of the
 `Arbitrary` folder: promoting a letterwise compatible linear equivalence to a module equivalence,
-the reformulation of equal states through word traces, and the consequences of gauge equivalence for word traces.
+the reformulation of equal states through word traces, and the consequences of gauge equivalence for
+word traces.
 
 ## Main results
 

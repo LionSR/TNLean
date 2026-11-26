@@ -28,7 +28,8 @@ lines 246–267, proof in the appendix, lines 766–907), for a gapped chain Ham
 `R` and term norm `J`.
 
 At a cut `c` and length `l`, the construction chains:
-* the cut-offs `O_L`, `O_R` of the centered localized parts (`TNLean.MPS.AreaLaw.exists_cutoffPair`);
+* the cut-offs `O_L`, `O_R` of the centered localized parts
+  (`TNLean.MPS.AreaLaw.exists_cutoffPair`);
 * the Gaussian time average next to the cut-offs, eq. `moved`
   (`norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le`);
 * the boundary operator `O_B` (`TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization`);
@@ -291,7 +292,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
   have hlk : 3 * R + 2 * k ≤ l := by omega
   set ℓn := l - 3 * R - 2 * k with hℓn
   obtain ⟨H₀, OL, OR, hH₀, hOL, hOR, hcomm, hsL, hsR, hθ', hη, hZ, hν⟩ :=
-    TNLean.MPS.AreaLaw.exists_cutoffPair h hh hhJ hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
+    exists_cutoffPair h hh hhJ hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
   have hE : ((E₀ : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).IsHermitian := by
     simp [IsHermitian, conjTranspose_smul]
   have hH' : (h.hamiltonian - (E₀ : ℂ) • 1).IsHermitian :=

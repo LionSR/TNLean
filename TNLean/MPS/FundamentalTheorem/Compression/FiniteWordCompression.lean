@@ -35,7 +35,8 @@ ambient complement is asserted.
 * `Kraus.allWordCompression_of_finiteWordCompression`: the sharp finite
   certificate, with bound `D - d + 1`.
 * `Kraus.HasInvariantSubquotient`: invariant-subquotient occurrence.
-* `TNLean.MPS.FundamentalTheorem.finiteWordCompression_iff_hasInvariantSubquotient`: equivalence of the
+* `TNLean.MPS.FundamentalTheorem.finiteWordCompression_iff_hasInvariantSubquotient`: equivalence of
+  the
   sharp finite certificate and invariant-subquotient occurrence.
 -/
 
@@ -138,7 +139,8 @@ theorem _root_.TNLean.MPS.FundamentalTheorem.hasWordCompressionUpTo_of_hasInvari
     HasInvariantSubquotient A B →
       HasWordCompressionUpTo A B (D - d + 1) := by
   intro h
-  rcases TNLean.MPS.FundamentalTheorem.exists_allWordCompression_of_hasInvariantSubquotient (A := A) (B := B) h with
+  rcases TNLean.MPS.FundamentalTheorem.exists_allWordCompression_of_hasInvariantSubquotient (A := A)
+      (B := B) h with
     ⟨V, W, hWV, hall⟩
   exact ⟨V, W, hWV, fun w _ _ => hall w⟩
 

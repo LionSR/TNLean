@@ -160,7 +160,8 @@ theorem gaugeEquiv_traceQuotientLetters {d r D : ℕ} [NeZero D]
     (Matrix.traceQuotientLetterCoordinates G F *ᵥ Pi.single i 1) =
       (X : Matrix (Fin D) (Fin D) ℂ) * (κ • A i) *
         ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  rw [hX, hNorm, TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover A Q G F α₂ hG hInj hPair]
+  rw [hX, hNorm, TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover A Q G F α₂ hG hInj
+      hPair]
 
 end MPSTensor
 
@@ -202,7 +203,8 @@ theorem _root_.TNLean.MPS.CanonicalForm.traceQuotientLetters_of_normalized_linea
     intro x
     change κ⁻¹ • E x = _
     rw [hE, smul_smul, inv_mul_cancel₀ hκ, one_smul]
-  have hRecover := TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover A Q G F α₂ hG hInj
+  have hRecover := TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover A Q G F α₂ hG
+      hInj
     (fun x => by rw [hQ]; exact hPair x)
   refine ⟨hInj, fun i => ?_⟩
   rw [hE]

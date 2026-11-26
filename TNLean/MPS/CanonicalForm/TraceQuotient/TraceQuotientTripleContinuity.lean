@@ -39,9 +39,11 @@ Gram matrix is used only to invert the chosen section.
 
 It also contains the following results.
 
-* `TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive`: continuous primitive elements of a trace
+* `TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive`: continuous primitive
+  elements of a trace
   quotient.
-* `TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientUnit`: continuous units of trace-quotient algebras.
+* `TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientUnit`: continuous units of
+  trace-quotient algebras.
 -/
 
 section TraceQuotientTripleContinuity
