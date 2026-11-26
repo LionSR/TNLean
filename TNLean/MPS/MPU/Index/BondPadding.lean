@@ -48,7 +48,7 @@ theorem bondInclusion_self (h : D ≤ D) : bondInclusion D D h = 1 := by
 /-- The tensor `U` with unused bond directions adjoined up to bond dimension `D'`: every letter
 is the upper-left block, zero elsewhere. -/
 noncomputable def padBond (U : MPOTensor d D) (D' : ℕ) (h : D ≤ D') : MPOTensor d D' :=
-  fun i j => bondInclusion D D' h * U i j * (bondInclusion D D' h)ᴴ
+  fun ij => bondInclusion D D' h * U ij * (bondInclusion D D' h)ᴴ
 
 /-- Adjoining no bond direction is the identity. -/
 @[simp] theorem padBond_self (U : MPOTensor d D) (h : D ≤ D) : padBond U D h = U := by

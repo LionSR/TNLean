@@ -128,10 +128,10 @@ theorem czSign_ne_zero (a b : Fin 2) : czSign a b ≠ 0 := by
 matrix `√2 H = ((-1)^{lj})` of the incoming bond absorbed into the site. The first physical
 index is the output. -/
 def czMPUTensor : MPOTensor 2 2 :=
-  fun i j ↦ Matrix.of fun l r ↦ if i = j ∧ r = j then czSign l j else 0
+  fun (i, j) ↦ Matrix.of fun l r ↦ if i = j ∧ r = j then czSign l j else 0
 
 theorem czMPUTensor_apply (i j l r : Fin 2) :
-    czMPUTensor i j l r = if i = id j ∧ r = j then czSign l j else 0 := rfl
+    czMPUTensor (i, j) l r = if i = id j ∧ r = j then czSign l j else 0 := rfl
 
 variable {N : ℕ} [NeZero N]
 

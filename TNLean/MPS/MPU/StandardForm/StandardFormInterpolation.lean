@@ -44,7 +44,7 @@ variable {d D D₁ D₂ ℓ r : ℕ}
 
 /-- Relabel the bond coordinates of every letter along a permutation. -/
 def bondReindex (σ : Fin D ≃ Fin D) (W : MPOTensor d D) : MPOTensor d D :=
-  fun i j ↦ (W i j).submatrix σ σ
+  fun ij ↦ (W ij).submatrix σ σ
 
 /-- **A bond relabelling is joined to the tensor through MPU tensors.** It is
 the virtual gauge by the permutation matrix.
@@ -74,13 +74,13 @@ theorem IsMPU.joinedIn_bondReindex {W : MPOTensor d D} (hW : IsMPU W)
 entries in the first coordinates, zero elsewhere. -/
 theorem padBond_apply {D' : ℕ} (W : MPOTensor d D) (h : D ≤ D') (i j : Fin d)
     (α γ : Fin D') :
-    padBond W D' h i j α γ =
-      if hα : (α : ℕ) < D then if hγ : (γ : ℕ) < D then W i j ⟨α, hα⟩ ⟨γ, hγ⟩ else 0
+    padBond W D' h (i, j) α γ =
+      if hα : (α : ℕ) < D then if hγ : (γ : ℕ) < D then W (i, j) ⟨α, hα⟩ ⟨γ, hγ⟩ else 0
       else 0 := by
   have hB : ∀ (a : Fin D') (b : Fin D), bondInclusion D D' h a b =
       if (a : ℕ) = b then 1 else 0 := fun _ _ ↦ rfl
   have hin : ∀ (hα : (α : ℕ) < D) (c : Fin D),
-      ∑ b : Fin D, bondInclusion D D' h α b * W i j b c = W i j ⟨α, hα⟩ c := by
+      ∑ b : Fin D, bondInclusion D D' h α b * W (i, j) b c = W (i, j) ⟨α, hα⟩ c := by
     intro hα c
     rw [Finset.sum_eq_single ⟨α, hα⟩]
     · simp [hB]
@@ -116,7 +116,7 @@ Source: arXiv:1703.09188, equation `StandardForm`, lines 603--617. -/
 def tensorOfHalves (X₁ : Matrix (Fin d × Fin D) (Fin r) ℂ)
     (X₂ : Matrix (Fin D × Fin d) (Fin ℓ) ℂ)
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ) : MPOTensor (d * d) D :=
-  fun i j α γ ↦ ∑ t : Fin ℓ, ∑ s : Fin r,
+  fun (i, j) α γ ↦ ∑ t : Fin ℓ, ∑ s : Fin r,
     X₂ (α, (finProdFinEquiv.symm i).1) t * u (t, s) (finProdFinEquiv.symm j) *
       X₁ ((finProdFinEquiv.symm i).2, γ) s
 
@@ -125,7 +125,7 @@ theorem TwoSiteStandardFormData.eq_tensorOfHalves {W : MPOTensor (d * d) D}
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) : W = tensorOfHalves S.X₁ S.X₂ u := by
-  funext i j
+  funext ⟨i, j⟩
   ext α γ
   exact S.W_apply i j α γ
 
@@ -188,7 +188,7 @@ theorem TwoSiteStandardFormData.tensorOfHalves_stack_one_zero
     (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v) :
     tensorOfHalves (stackRight 1 0 S₁.X₁ S₂.X₁) (stackLeft 1 0 S₁.X₂ S₂.X₂) u =
       padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _) := by
-  funext i j
+  funext ⟨i, j⟩
   ext α γ
   rw [padBond_apply]
   induction α using Fin.addCases with
@@ -209,7 +209,7 @@ theorem TwoSiteStandardFormData.tensorOfHalves_stack_zero_one
     (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v) :
     tensorOfHalves (stackRight 0 1 S₁.X₁ S₂.X₁) (stackLeft 0 1 S₁.X₂ S₂.X₂) u =
       bondReindex (stackFlip D₁ D₂) (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) := by
-  funext i j
+  funext ⟨i, j⟩
   ext α γ
   simp only [bondReindex, Matrix.submatrix_apply]
   rw [padBond_apply]
@@ -281,11 +281,11 @@ theorem joinedIn_sameMPOSet_virtualSandwich (W : MPOTensor d D)
     simp_rw [Matrix.inv_def, Ring.inverse_eq_inv']
     exact ((γ.continuous.matrix_det).inv₀ hdet).smul γ.continuous.matrix_adjugate
   have hcont : Continuous fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹ := by
-    refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
+    refine continuous_pi fun ⟨i, j⟩ ↦ ?_
     simp only [virtualSandwich_apply]
     exact (γ.continuous.matrix_mul continuous_const).matrix_mul hinv
   refine ⟨⟨⟨fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹, hcont⟩, ?_, ?_⟩, fun t ↦ ?_⟩
-  · funext i j
+  · funext ⟨i, j⟩
     simp
   · simp
   · intro N _

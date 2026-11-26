@@ -143,7 +143,7 @@ theorem actTensor_kronId
     rw [MPOTensor.kronId_mul, h.orthogonal i j hij]
     simp [MPOTensor.kronId]
   · intro a
-    have hletter (j : Fin d) : T a j = ∑ i, W i * S i a j * V i := by
+    have hletter (j : Fin d) : T (a, j) = ∑ i, W i * S i (a, j) * V i := by
       simpa [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
         MPSTensor.finProdFinEquiv_modNat] using h.letter (finProdFinEquiv (a, j))
     simp only [MPOTensor.actTensor_apply, MPOTensor.kronId, Matrix.submatrix_mul_equiv]

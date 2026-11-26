@@ -98,8 +98,8 @@ theorem sourceU_gram_eq_staggered_four_u
     (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
       ∑ α : Fin D, ∑ α' : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
       ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U j₁ p.2 α β) * ρ β β' * U j₁ q.2 α' β' *
-          (star (U j₂ p.1 γ α) * U j₂ q.1 γ α') := by
+        star (U (j₁, p.2) α β) * ρ β β' * U (j₁, q.2) α' β' *
+          (star (U (j₂, p.1) γ α) * U (j₂, q.1) γ α') := by
   classical
   rcases p with ⟨p₁, p₂⟩
   rcases q with ⟨q₁, q₂⟩
@@ -125,8 +125,8 @@ theorem sourceU_gram_eq_staggered_four_u
       refine Finset.sum_congr₂ fun α _ α' _ ↦ ?_
       rw [Finset.sum_comm]
     _ = ∑ α, ∑ α', ∑ β, ∑ β', ∑ γ, ∑ j₁, ∑ j₂,
-        star (U j₁ p₂ α β) * ρ β β' * U j₁ q₂ α' β' *
-          (star (U j₂ p₁ γ α) * U j₂ q₁ γ α') := by
+        star (U (j₁, p₂) α β) * ρ β β' * U (j₁, q₂) α' β' *
+          (star (U (j₂, p₁) γ α) * U (j₂, q₁) γ α') := by
       refine Finset.sum_congr₂ fun α _ α' _ ↦ ?_
       rw [← sourceYTensor_gram_eq_four_u_weighted U S
         (p₂, p₁) (q₂, q₁) (α, α) (α', α'),
@@ -145,42 +145,42 @@ theorem sourceU_gram_eq_transpose_fixed_pair_trace
     (p q : Fin d × Fin d) :
     (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
       Matrix.trace
-        (doubleLayerTensor U p.2 q.2 *
+        (doubleLayerTensor U (p.2, q.2) *
           Matrix.vecMulVec
             (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
             (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
               (finProdFinEquiv.symm x)) *
-          doubleLayerTensor U p.1 q.1) := by
+          doubleLayerTensor U (p.1, q.1)) := by
   classical
   rcases p with ⟨p₁, p₂⟩
   rcases q with ⟨q₁, q₂⟩
   have hentry (a b : Fin D) :
-      (doubleLayerTensor U p₂ q₂ *
+      (doubleLayerTensor U (p₂, q₂) *
           Matrix.vecMulVec
             (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
             (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
               (finProdFinEquiv.symm x)) *
-          doubleLayerTensor U p₁ q₁)
+          doubleLayerTensor U (p₁, q₁))
           (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) =
         ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
         ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
-            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
+          star (U (j₁, p₂) a β) * U (j₁, q₂) b β' * ρ β β' *
+            (star (U (j₂, p₁) γ a) * U (j₂, q₁) γ b) := by
     simpa only [Matrix.transpose_apply] using
       doubleLayerTensor_rankOne_mul_apply_four_u U ρ.transpose
         (p₂, p₁) (q₂, q₁) (a, a) (b, b)
   have htrace :
       Matrix.trace
-          (doubleLayerTensor U p₂ q₂ *
+          (doubleLayerTensor U (p₂, q₂) *
             Matrix.vecMulVec
               (fun x ↦ ρ.transpose.vec (finProdFinEquiv.symm x))
               (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
                 (finProdFinEquiv.symm x)) *
-            doubleLayerTensor U p₁ q₁) =
+            doubleLayerTensor U (p₁, q₁)) =
         ∑ a : Fin D, ∑ b : Fin D, ∑ β : Fin D, ∑ β' : Fin D,
         ∑ γ : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-          star (U j₁ p₂ a β) * U j₁ q₂ b β' * ρ β β' *
-            (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
+          star (U (j₁, p₂) a β) * U (j₁, q₂) b β' * ρ β β' *
+            (star (U (j₂, p₁) γ a) * U (j₂, q₁) γ b) := by
     unfold Matrix.trace
     rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
     refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
@@ -210,7 +210,7 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
           mpo U (K + 2) η
             ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) =
       Matrix.trace
-        (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2 *
+        (doubleLayerTensor U (p.1, q.1) * doubleLayerTensor U (p.2, q.2) *
           normalizedDiagonal (doubleLayerTensor U) ^ K) := by
   classical
   let W := doubleLayerTensor U
@@ -225,7 +225,7 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
   have hword (τ : Fin K → Fin d) :
       mpo W (K + 2) ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))
           ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) =
-        Matrix.trace (W p.1 q.1 * W p.2 q.2 *
+        Matrix.trace (W (p.1, q.1) * W (p.2, q.2) *
           evalWord W (List.ofFn τ) (List.ofFn τ)) := by
     rw [mpo_apply, mpoMatrixEntry]
     simp only [finAddTwoArrowEquiv_symm_apply, List.ofFn_succ, evalWord_cons,
@@ -234,9 +234,9 @@ theorem normalized_mpo_input_tail_eq_closed_doubleLayer_trace
   simp_rw [hword]
   change ((d : ℂ)⁻¹) ^ K *
       ∑ τ : Fin K → Fin d,
-        Matrix.trace (W p.1 q.1 * W p.2 q.2 *
+        Matrix.trace (W (p.1, q.1) * W (p.2, q.2) *
           evalWord W (List.ofFn τ) (List.ofFn τ)) =
-    Matrix.trace (W p.1 q.1 * W p.2 q.2 * normalizedDiagonal W ^ K)
+    Matrix.trace (W (p.1, q.1) * W (p.2, q.2) * normalizedDiagonal W ^ K)
   rw [normalizedDiagonal_pow_eq_sum_evalWord W K]
   simp only [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
     Matrix.mul_sum, Matrix.trace_sum]
@@ -258,7 +258,7 @@ theorem sourceU_gram_eq_closed_doubleLayer_trace_of_isSymm
     (p q : Fin d × Fin d) :
     (∑ lr, sourceU U S lr q * star (sourceU U S lr p)) =
       Matrix.trace
-        (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2 *
+        (doubleLayerTensor U (p.1, q.1) * doubleLayerTensor U (p.2, q.2) *
           normalizedDiagonal (doubleLayerTensor U) ^ K) := by
   rw [sourceU_gram_eq_transpose_fixed_pair_trace, hρ.eq, ← hK]
   exact Matrix.trace_mul_cycle _ _ _

@@ -28,7 +28,7 @@ theorem IsMPUCanonicalFormII.eq_virtualSandwich_of_mpo_eq
         (star (z : Matrix (Fin D) (Fin D) ℂ)) := by
   obtain ⟨hdim, z, hz⟩ := (hU.mpo_eq_iff_exists_unitary_conj hV).mp hEq
   refine ⟨z, ?_⟩
-  funext i j
+  funext ⟨i, j⟩
   rw [hz i j]
   rfl
 

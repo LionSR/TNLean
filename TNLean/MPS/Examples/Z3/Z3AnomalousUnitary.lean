@@ -85,7 +85,7 @@ def qutritShift (L : ℕ) : Equiv.Perm (Fin L → Fin 3) :=
 
 /-- The local entries, with the outgoing bond fixed by the input label. -/
 theorem uTensor_apply (i j : Fin 3) (l r : Fin 2) :
-    uTensor i j l r =
+    uTensor (i, j) l r =
       if i = j + 1 ∧ r = occupied j then eisensteinOmega ^ (l.val * j.val) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [uTensor, uEis, occupied, complexOfEisenstein]

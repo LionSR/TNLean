@@ -94,7 +94,7 @@ row/column orientation is determined by arXiv:1703.09188, Figures
 `II_X1Y1.png` and `II_SVDforms2.png`: the row factor $X_1$ carries the up
 and right legs, and the column factor $Y_1$ carries the left and down legs. -/
 def sourceCutM₁ : Matrix (Fin d × Fin D) (Fin D × Fin d) ℂ :=
-  fun (i, β) (α, j) => U i j α β
+  fun (i, β) (α, j) => U (i, j) α β
 
 /-- ${\cal M}_2$: group **row = (left, up)** and **column = (down, right)**.
 
@@ -102,7 +102,7 @@ The entry $({\cal M}_2)_{(\alpha,i),(j,\beta)}$ equals `U i j α β`.
 
 This follows arXiv:1703.09188, eq.~(II_SVD). -/
 def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
-  fun (α, i) (j, β) => U i j α β
+  fun (α, i) (j, β) => U (i, j) α β
 
 /-! ### Entry lemmas — `[simp]` -/
 
@@ -111,10 +111,10 @@ def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
 Source: CPSV17 source cut `II_SVD`, lines 458--477, and the factor diagrams
 `X1Y1` and `SVDforms2`, lines 508--530. -/
 @[simp] lemma sourceCutM₁_apply (i : Fin d) (β : Fin D) (α : Fin D) (j : Fin d) :
-    sourceCutM₁ U (i, β) (α, j) = U i j α β := rfl
+    sourceCutM₁ U (i, β) (α, j) = U (i, j) α β := rfl
 
 @[simp] lemma sourceCutM₂_apply (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
-    sourceCutM₂ U (α, i) (j, β) = U i j α β := rfl
+    sourceCutM₂ U (α, i) (j, β) = U (i, j) α β := rfl
 
 /-- Physical adjunction exchanges the first source cut with the adjoint of the second cut:
 $$M_1(U^\sharp)=M_2(U)^*.$$

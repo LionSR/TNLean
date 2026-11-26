@@ -87,7 +87,7 @@ open MPSTensor
 /-- The bond-two coordinates: output `i` is the flip of input `j`, the outgoing bond
 carries `j`, and the incoming bond `l` contributes `(-1)^{l j}`. -/
 theorem czxTensor_apply (i j l r : Fin 2) :
-    czxTensor i j l r = if i = j.rev ∧ r = j then (-1 : ℂ) ^ (l.val * j.val) else 0 := by
+    czxTensor (i, j) l r = if i = j.rev ∧ r = j then (-1 : ℂ) ^ (l.val * j.val) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [czxTensor, czxIntTensor, complexOfInt, Fin.rev]
 

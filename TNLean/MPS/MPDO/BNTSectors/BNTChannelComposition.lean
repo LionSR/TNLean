@@ -128,7 +128,7 @@ theorem equivReindexMap_physCloseN_two_eq_physClose1_blockTwo
       physClose1 (blockTwo K) X := by
   ext i j
   simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-    blockedOneChainEquiv, blockedIndexEquiv, blockTwo, physCloseN,
+    blockedOneChainEquiv, blockedIndexEquiv, blockTwo_apply, physCloseN,
     List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]
 
 /-- The two-site closure of a two-site blocking is the four-site chain closure
@@ -141,7 +141,7 @@ theorem equivReindexMap_physCloseN_four_eq_physClose2_blockTwo
       physClose2 (blockTwo K) X := by
   ext i j
   simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-    blockedTwoChainEquiv, blockedPairEquiv, blockedIndexEquiv, blockTwo,
+    blockedTwoChainEquiv, blockedPairEquiv, blockedIndexEquiv, blockTwo_apply,
     physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]
 
 /-- The outer-sector measurement on one blocked site: the original one-site
@@ -206,7 +206,7 @@ theorem firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice
     evalWord_cons, Matrix.mul_assoc]
   rw [sum_mul_trace_eq_trace_sum_smul]
   have hTensor :
-      (∑ i : Fin d, P (σ 0) i • K i (τ 0)) = K (σ 0) (τ 0) := by
+      (∑ i : Fin d, P (σ 0) i • K (i, τ 0)) = K (σ 0, τ 0) := by
     ext β α
     simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     simpa [physicalSlice, Matrix.mul_apply] using
@@ -229,7 +229,7 @@ theorem firstSiteMatrix_mul_physCloseN_eq_zero_of_mul_physicalSlice_eq_zero
   simp only [physCloseN_apply, List.ofFn_succ, Fin.cons_zero, Fin.cons_succ,
     evalWord_cons, Matrix.mul_assoc, Matrix.zero_apply]
   rw [sum_mul_trace_eq_trace_sum_smul]
-  have hTensor : (∑ i : Fin d, P (σ 0) i • K i (τ 0)) = 0 := by
+  have hTensor : (∑ i : Fin d, P (σ 0) i • K (i, τ 0)) = 0 := by
     ext β α
     simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.zero_apply]
     simpa [physicalSlice, Matrix.mul_apply] using
@@ -251,7 +251,7 @@ theorem physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
   simp only [physCloseN_apply, List.ofFn_succ, Fin.cons_zero, Fin.cons_succ,
     evalWord_cons, Matrix.mul_assoc]
   have hTensor :
-      (∑ j : Fin d, P j (τ 0) • K (σ 0) j) = K (σ 0) (τ 0) := by
+      (∑ j : Fin d, P j (τ 0) • K (σ 0, j)) = K (σ 0, τ 0) := by
     ext β α
     simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     simpa [physicalSlice, Matrix.mul_apply, mul_comm] using
@@ -259,19 +259,19 @@ theorem physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
   calc
     ∑ j : Fin d,
         Matrix.trace
-            (K (σ 0) j *
+            (K (σ 0, j) *
               (evalWord K (List.ofFn fun i ↦ σ i.succ)
                 (List.ofFn fun i ↦ τ i.succ) * X)) * P j (τ 0) =
         ∑ j : Fin d, P j (τ 0) *
           Matrix.trace
-            (K (σ 0) j *
+            (K (σ 0, j) *
               (evalWord K (List.ofFn fun i ↦ σ i.succ)
                 (List.ofFn fun i ↦ τ i.succ) * X)) := by
       apply Finset.sum_congr rfl
       intro j _
       exact mul_comm _ _
     _ = Matrix.trace
-        ((∑ j : Fin d, P j (τ 0) • K (σ 0) j) *
+        ((∑ j : Fin d, P j (τ 0) • K (σ 0, j)) *
           (evalWord K (List.ofFn fun i ↦ σ i.succ)
             (List.ofFn fun i ↦ τ i.succ) * X)) :=
       sum_mul_trace_eq_trace_sum_smul _ _ _

@@ -44,7 +44,7 @@ variable {d D : ℕ} (U : MPOTensor d D)
 output-layer reflection used in arXiv:1703.09188, Lemma `lemuisometry` (lines 545--557). -/
 @[simp] theorem physicalAdjointTensor_physicalAdjointTensor (U : MPOTensor d D) :
     physicalAdjointTensor (physicalAdjointTensor U) = U := by
-  ext i j α β
+  ext ⟨i, j⟩ α β
   simp only [physicalAdjointTensor_apply, star_star]
 
 /-- Passing to the physical adjoint preserves the MPU property. The proof transposes the
@@ -69,9 +69,9 @@ Thus the first factor is `U i j α β`, while the reflected output factor is
 arXiv:1703.09188, Lemma `lemuisometry` (lines 545--557). -/
 theorem doubleLayerTensor_physicalAdjointTensor_apply
     (U : MPOTensor d D) (i k : Fin d) (α γ β δ : Fin D) :
-    doubleLayerTensor (physicalAdjointTensor U) i k
+    doubleLayerTensor (physicalAdjointTensor U) (i, k)
         (finProdFinEquiv (α, γ)) (finProdFinEquiv (β, δ)) =
-      ∑ j : Fin d, U i j α β * star (U k j γ δ) := by
+      ∑ j : Fin d, U (i, j) α β * star (U (k, j) γ δ) := by
   simp [doubleLayerTensor, mulTensor_apply, Matrix.sum_apply, kroneckerMap_apply]
 
 /-- Recover the first right source factor by applying the weighted left inverse of `X₁` to

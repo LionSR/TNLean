@@ -210,13 +210,13 @@ private theorem isingBlockLetterZ_eq_fSymbol : ∀ (f : Fin 3) (h h' : Fin 10)
 upper label `h = (b, e, a)`, the lower label `h' = (c, e, d)` and the bond letters `p = (b, c)`,
 `q = (a, d)`, and zero otherwise. -/
 theorem isingBlock_apply_eq_fSymbol (f : Fin 3) (h h' : Fin 10) (p q : Fin (isingDim f)) :
-    isingBlock f h h' p q =
+    isingBlock f (h, h') p q =
       if isingRho h = isingRho h' ∧ isingBondLetter f p = (isingLeft h, isingLeft h') ∧
           isingBondLetter f q = (isingRight h, isingRight h') then
         isingFSymbol f (isingLeft h') (isingRho h) (isingRight h) (isingLeft h) (isingRight h')
       else 0 := by
   have hs : (Real.sqrt 2 : ℂ) ≠ 0 := by simp
-  have key : isingBlock f h h' p q = (Real.sqrt 2 : ℂ)⁻¹ *
+  have key : isingBlock f (h, h') p q = (Real.sqrt 2 : ℂ)⁻¹ *
       zsqrt2ToComplex (isingBlockScaleZ f * isingBlockLetterZ f h h' p q) := by
     match f, p, q with
     | 0, p, q =>
@@ -238,7 +238,7 @@ theorem isingBlock_apply_eq_fSymbol (f : Fin 3) (h h' : Fin 10) (p q : Fin (isin
 upper label `h = (b, e, a)` (ket), the lower label `h' = (c, e', d)` (bra), the left bond letter
 `p` and the right bond letter `q`, its entry is `G^{abc}_{def} √(v_a v_b v_c v_d)` when the edge
 label passes through, `e' = e`, and `p = (b, c)`, `q = (a, d)`, and zero otherwise. -/
-def isingStringNetTensor (f : Fin 3) : MPOTensor 10 (isingDim f) := fun h h' =>
+def isingStringNetTensor (f : Fin 3) : MPOTensor 10 (isingDim f) := fun (h, h') =>
   Matrix.of fun p q =>
     if isingRho h = isingRho h' ∧ isingBondLetter f p = (isingLeft h, isingLeft h') ∧
         isingBondLetter f q = (isingRight h, isingRight h') then
@@ -262,8 +262,8 @@ block: `g S^{h h'} g⁻¹ = isingBlock f h h'`. The G-symbol is moved to the F-s
 `isingBlock_apply_eq_fSymbol` by the tetrahedral symmetry, and the factors
 `√(v_a v_b v_c v_d)/(v_b v_d)` are absorbed by `g`. -/
 theorem isingStringNetTensor_conj (f : Fin 3) (h h' : Fin 10) :
-    Matrix.diagonal (isingStringNetGauge f) * isingStringNetTensor f h h' *
-        Matrix.diagonal (isingStringNetGauge f)⁻¹ = isingBlock f h h' := by
+    Matrix.diagonal (isingStringNetGauge f) * isingStringNetTensor f (h, h') *
+        Matrix.diagonal (isingStringNetGauge f)⁻¹ = isingBlock f (h, h') := by
   ext p q
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul, isingBlock_apply_eq_fSymbol]
   simp only [isingStringNetTensor, Matrix.of_apply]

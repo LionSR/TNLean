@@ -36,7 +36,7 @@ variable {d D N : ℕ} [NeZero N]
 /-- The entry of the periodic operator at `(s, t)` is the sum over closed bond configurations
 of the products of the tensor entries around the chain. -/
 theorem mpo_apply_eq_sum_cyclic (M : MPOTensor d D) (s t : Fin N → Fin d) :
-    mpo M N s t = ∑ g : Fin N → Fin D, ∏ n : Fin N, M (s n) (t n) (g n) (g (n + 1)) := by
+    mpo M N s t = ∑ g : Fin N → Fin D, ∏ n : Fin N, M (s n, t n) (g n) (g (n + 1)) := by
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
   have h := MPSTensor.trace_evalWord_eq_sum_cyclic M.toMPSTensor
     (fun n ↦ finProdFinEquiv (s n, t n))
@@ -48,8 +48,8 @@ theorem mpo_apply_eq_sum_cyclic (M : MPOTensor d D) (s t : Fin N → Fin d) :
 other than `g₀` meets a vanishing tensor entry, then the entry of the periodic operator at
 `(s, t)` is the product of the tensor entries along `g₀`. -/
 theorem mpo_apply_eq_prod_of_forced_bond (M : MPOTensor d D) (s t : Fin N → Fin d)
-    (g₀ : Fin N → Fin D) (h : ∀ g, g ≠ g₀ → ∃ n, M (s n) (t n) (g n) (g (n + 1)) = 0) :
-    mpo M N s t = ∏ n : Fin N, M (s n) (t n) (g₀ n) (g₀ (n + 1)) := by
+    (g₀ : Fin N → Fin D) (h : ∀ g, g ≠ g₀ → ∃ n, M (s n, t n) (g n) (g (n + 1)) = 0) :
+    mpo M N s t = ∏ n : Fin N, M (s n, t n) (g₀ n) (g₀ (n + 1)) := by
   rw [mpo_apply_eq_sum_cyclic, Fintype.sum_eq_single g₀]
   intro g hg
   obtain ⟨n, hn⟩ := h g hg
@@ -62,7 +62,7 @@ vanishes unless `s = π ∘ t`, and then it is the product over the edges `(n, n
 of site `n + 1` evaluated at the bond forced by site `n`. -/
 theorem mpo_apply_of_forced_right_bond {M : MPOTensor d D} {π : Fin d → Fin d}
     {β : Fin d → Fin d → Fin D} {φ : Fin d → Fin d → Fin D → ℂ}
-    (hM : ∀ i j l r, M i j l r = if i = π j ∧ r = β i j then φ i j l else 0)
+    (hM : ∀ i j l r, M (i, j) l r = if i = π j ∧ r = β i j then φ i j l else 0)
     (s t : Fin N → Fin d) :
     mpo M N s t = if s = (fun n ↦ π (t n)) then
       ∏ n : Fin N, φ (s (n + 1)) (t (n + 1)) (β (s n) (t n)) else 0 := by
@@ -84,7 +84,7 @@ vanishes unless `s = π ∘ t`, and then it is the product over the sites `n` of
 `n` evaluated at the bond forced by site `n + 1`. -/
 theorem mpo_apply_of_forced_left_bond {M : MPOTensor d D} {π : Fin d → Fin d}
     {β : Fin d → Fin d → Fin D} {φ : Fin d → Fin d → Fin D → ℂ}
-    (hM : ∀ i j l r, M i j l r = if i = π j ∧ l = β i j then φ i j r else 0)
+    (hM : ∀ i j l r, M (i, j) l r = if i = π j ∧ l = β i j then φ i j r else 0)
     (s t : Fin N → Fin d) :
     mpo M N s t = if s = (fun n ↦ π (t n)) then
       ∏ n : Fin N, φ (s n) (t n) (β (s (n + 1)) (t (n + 1))) else 0 := by

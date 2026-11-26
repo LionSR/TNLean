@@ -108,7 +108,7 @@ theorem exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq
     ext v a b
     simp [MPSTensor.insertedTensor]
   have hMzero : (M.ketLeftMul P).braRightMul P = 0 := by
-    funext i j
+    funext ⟨i, j⟩
     have hij := congrFun hTensor (finProdFinEquiv (i, j))
     simpa [toMPSTensor] using hij
   obtain ⟨v, hv⟩ := hcorner

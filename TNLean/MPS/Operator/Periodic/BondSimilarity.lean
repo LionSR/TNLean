@@ -57,13 +57,13 @@ variable {d D D' : ℕ}
 /-- A bond-space similarity with a two-sided inverse transports word evaluations. -/
 theorem evalWord_eq_mul_mul_of_conj {M : MPOTensor d D} {N : MPOTensor d D'}
     {G : Matrix (Fin D') (Fin D) ℂ} {H : Matrix (Fin D) (Fin D') ℂ} (hGH : G * H = 1)
-    (hHG : H * G = 1) (hconj : ∀ i j, G * M i j * H = N i j) :
+    (hHG : H * G = 1) (hconj : ∀ i j, G * M (i, j) * H = N (i, j)) :
     ∀ is js : List (Fin d), evalWord M is js = H * evalWord N is js * G
   | [], [] => by simp [hHG]
   | [], _ :: _ => by simp [evalWord]
   | _ :: _, [] => by simp [evalWord]
   | i :: is, j :: js => by
-    have hM : M i j = H * N i j * G := by
+    have hM : M (i, j) = H * N (i, j) * G := by
       rw [← hconj, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hHG, Matrix.one_mul,
         Matrix.mul_assoc, hHG, Matrix.mul_one]
     rw [evalWord_cons, evalWord_cons, evalWord_eq_mul_mul_of_conj hGH hHG hconj is js, hM]
@@ -74,7 +74,7 @@ theorem evalWord_eq_mul_mul_of_conj {M : MPOTensor d D} {N : MPOTensor d D'}
 same periodic operators, even when the bond dimensions are presented differently. -/
 theorem mpo_eq_of_conj {M : MPOTensor d D} {N : MPOTensor d D'}
     {G : Matrix (Fin D') (Fin D) ℂ} {H : Matrix (Fin D) (Fin D') ℂ} (hGH : G * H = 1)
-    (hHG : H * G = 1) (hconj : ∀ i j, G * M i j * H = N i j) (L : ℕ) :
+    (hHG : H * G = 1) (hconj : ∀ i j, G * M (i, j) * H = N (i, j)) (L : ℕ) :
     mpo M L = mpo N L := by
   ext σ τ
   simp only [mpo_apply, mpoMatrixEntry]
@@ -84,7 +84,7 @@ theorem mpo_eq_of_conj {M : MPOTensor d D} {N : MPOTensor d D'}
 /-- Tensors related letter by letter by a diagonal bond similarity `diag g`, with `g` nowhere
 zero, have the same periodic operators. -/
 theorem mpo_eq_of_diagonal_conj {M N : MPOTensor d D} (g : Fin D → ℂ) (hg : ∀ p, g p ≠ 0)
-    (hconj : ∀ i j, Matrix.diagonal g * M i j * Matrix.diagonal g⁻¹ = N i j) (L : ℕ) :
+    (hconj : ∀ i j, Matrix.diagonal g * M (i, j) * Matrix.diagonal g⁻¹ = N (i, j)) (L : ℕ) :
     mpo M L = mpo N L :=
   mpo_eq_of_conj (Matrix.diagonal_mul_diagonal_inv hg) (Matrix.diagonal_inv_mul_diagonal hg)
     hconj L
@@ -94,8 +94,9 @@ periodic operators: the entry of `mpo M L` at `(g ∘ σ, g ∘ τ)` is the entr
 periodic operator of the tensor with letters `M^{g i, g j}`. -/
 theorem mpo_apply_comp {d' : ℕ} (M : MPOTensor d D) (g : Fin d' → Fin d) (L : ℕ)
     (σ τ : Fin L → Fin d') :
-    mpo M L (g ∘ σ) (g ∘ τ) = mpo (fun i j => M (g i) (g j)) L σ τ := by
-  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Function.comp_apply]
+    mpo M L (g ∘ σ) (g ∘ τ) = mpo (Function.uncurry fun i j => M (g i, g j)) L σ τ := by
+  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Function.comp_apply,
+    Function.uncurry_apply_pair]
 
 /-- The MPO of the zero local tensor vanishes at every positive chain length. -/
 theorem mpo_zero_of_pos {L : ℕ} (hL : 0 < L) : mpo (0 : MPOTensor d D) L = 0 := by
@@ -110,7 +111,7 @@ matrix unit `c i j • E_{l i j, r i j}`, the `(σ, τ)` entry at positive lengt
 the scalars along the configuration if the matrix units chain around the ring, and zero
 otherwise. -/
 theorem mpo_apply_of_eq_smul_single (M : MPOTensor d D) (c : Fin d → Fin d → ℂ)
-    (l r : Fin d → Fin d → Fin D) (hM : ∀ i j, M i j = c i j • Matrix.single (l i j) (r i j) 1)
+    (l r : Fin d → Fin d → Fin D) (hM : ∀ i j, M (i, j) = c i j • Matrix.single (l i j) (r i j) 1)
     {N : ℕ} (hN : 0 < N) (σ τ : Fin N → Fin d) :
     mpo M N σ τ =
       if ∀ k, r (σ k) (τ k) = l (σ (finRotate N k)) (τ (finRotate N k)) then

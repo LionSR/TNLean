@@ -92,7 +92,7 @@ theorem physicalCoordinateMatrix_coisometry
 /-- Change the physical coordinates of an MPO tensor by a rectangular matrix. -/
 noncomputable def changePhysicalBasis {e : ℕ}
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) : MPOTensor e D :=
-  fun i j beta alpha ↦ (V * physicalSlice M beta alpha * Vᴴ) i j
+  fun (i, j) beta alpha ↦ (V * physicalSlice M beta alpha * Vᴴ) i j
 
 /-- Successive changes of physical coordinates multiply their coordinate
 matrices. -/
@@ -101,7 +101,7 @@ theorem changePhysicalBasis_changePhysicalBasis
     (V : Matrix (Fin b) (Fin d) ℂ) (M : MPOTensor d D) :
     changePhysicalBasis U (changePhysicalBasis V M) =
       changePhysicalBasis (U * V) M := by
-  ext i j beta alpha
+  ext ⟨i, j⟩ beta alpha
   change (U * (V * physicalSlice M beta alpha * Vᴴ) * Uᴴ) i j =
     ((U * V) * physicalSlice M beta alpha * (U * V)ᴴ) i j
   rw [Matrix.conjTranspose_mul]
@@ -112,7 +112,7 @@ local MPO matrix. -/
 theorem changePhysicalBasis_smul
     {e : ℕ} (V : Matrix (Fin e) (Fin d) ℂ) (c : ℂ) (M : MPOTensor d D) :
     changePhysicalBasis V (c • M) = c • changePhysicalBasis V M := by
-  ext i j beta alpha
+  ext ⟨i, j⟩ beta alpha
   simp only [changePhysicalBasis, physicalSlice, Pi.smul_apply,
     Matrix.smul_apply, smul_eq_mul, Matrix.mul_apply,
     Matrix.conjTranspose_apply]
@@ -335,7 +335,7 @@ theorem exists_neighboringTraceFactorization_changePhysicalBasis_iff_of_isUnitar
 theorem sectorCoordinateTensor_eq_changePhysicalBasis
     (F : PhysicalSectorFactorization K) :
     F.sectorCoordinateTensor = changePhysicalBasis F.physicalCoordinateMatrix K := by
-  ext i j beta alpha
+  ext ⟨i, j⟩ beta alpha
   simp [sectorCoordinateTensor_apply, transformedPhysicalSlice,
     changePhysicalBasis, physicalCoordinateMatrix, physicalFinEquiv,
     Matrix.reindex_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
@@ -395,9 +395,9 @@ theorem physicalCoordinateMatrixFour_coisometry
 theorem changePhysicalBasis_apply_eq_sum {e : ℕ}
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D)
     (i j : Fin e) :
-    changePhysicalBasis V M i j =
+    changePhysicalBasis V M (i, j) =
       ∑ p : Fin d × Fin d,
-        (V i p.1 * star (V j p.2)) • M p.1 p.2 := by
+        (V i p.1 * star (V j p.2)) • M (p.1, p.2) := by
   ext beta alpha
   simp only [changePhysicalBasis, Matrix.mul_apply,
     Matrix.conjTranspose_apply, Matrix.smul_apply, smul_eq_mul,
@@ -435,7 +435,7 @@ theorem physicalCoordinateMatrixTwo_physClose2
       (fun p ↦
         F.physicalCoordinateMatrix i₁ p.2.1 *
           F.physicalCoordinateMatrix i₂ p.2.2 *
-          Matrix.trace (K p.2.1 p.1.1 * K p.2.2 p.1.2 * X) *
+          Matrix.trace (K (p.2.1, p.1.1) * K (p.2.2, p.1.2) * X) *
           (star (F.physicalCoordinateMatrix j₁ p.1.1) *
             star (F.physicalCoordinateMatrix j₂ p.1.2)))
       (fun p ↦
@@ -443,7 +443,7 @@ theorem physicalCoordinateMatrixTwo_physClose2
           star (F.physicalCoordinateMatrix j₂ p.1.2) *
           (F.physicalCoordinateMatrix i₁ p.2.1 *
             star (F.physicalCoordinateMatrix j₁ p.2.2) *
-            Matrix.trace (K p.2.1 p.2.2 * K p.1.1 p.1.2 * X)))
+            Matrix.trace (K (p.2.1, p.2.2) * K (p.1.1, p.1.2) * X)))
       (fun _ ↦ by dsimp [e]; ring)
   rw [Fintype.sum_prod_type] at h
   conv at h =>
@@ -486,8 +486,8 @@ theorem physicalCoordinateMatrixFour_physClose4
             (F.physicalCoordinateMatrix i₃ p.2.2.2.1 *
               F.physicalCoordinateMatrix i₄ p.2.2.2.2)) *
           Matrix.trace
-            (K p.2.1 p.1.1 * K p.2.2.1 p.1.2.1 *
-              K p.2.2.2.1 p.1.2.2.1 * K p.2.2.2.2 p.1.2.2.2 * X) *
+            (K (p.2.1, p.1.1) * K (p.2.2.1, p.1.2.1) *
+              K (p.2.2.2.1, p.1.2.2.1) * K (p.2.2.2.2, p.1.2.2.2) * X) *
           (star (F.physicalCoordinateMatrix j₁ p.1.1) *
             (star (F.physicalCoordinateMatrix j₂ p.1.2.1) *
               (star (F.physicalCoordinateMatrix j₃ p.1.2.2.1) *
@@ -502,8 +502,8 @@ theorem physicalCoordinateMatrixFour_physClose4
               (F.physicalCoordinateMatrix i₁ p.2.1 *
                 star (F.physicalCoordinateMatrix j₁ p.2.2) *
                 Matrix.trace
-                  (K p.2.1 p.2.2 * K p.1.2.1 p.1.2.2 *
-                    K p.1.1.2.1 p.1.1.2.2 * K p.1.1.1.1 p.1.1.1.2 * X)))))
+                  (K (p.2.1, p.2.2) * K (p.1.2.1, p.1.2.2) *
+                    K (p.1.1.2.1, p.1.1.2.2) * K (p.1.1.1.1, p.1.1.1.2) * X)))))
       (fun _ ↦ by dsimp [e]; ring)
   rw [Fintype.sum_prod_type] at h
   conv at h =>

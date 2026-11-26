@@ -302,15 +302,15 @@ theorem physTraceTransfer_changePhysicalBasis
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
   calc
     ∑ i : Fin e, ∑ pq : Fin d × Fin d,
-        (V i pq.1 * star (V i pq.2)) * K pq.1 pq.2 beta alpha =
+        (V i pq.1 * star (V i pq.2)) * K (pq.1, pq.2) beta alpha =
         ∑ pq : Fin d × Fin d,
           (∑ i : Fin e, V i pq.1 * star (V i pq.2)) *
-            K pq.1 pq.2 beta alpha := by
+            K (pq.1, pq.2) beta alpha := by
               rw [Finset.sum_comm]
               apply Finset.sum_congr rfl
               intro pq _
               rw [Finset.sum_mul]
-    _ = ∑ p : Fin d, K p p beta alpha := by
+    _ = ∑ p : Fin d, K (p, p) beta alpha := by
       have hentry (p q : Fin d) :
           (∑ i : Fin e, V i p * star (V i q)) =
             if p = q then 1 else 0 := by

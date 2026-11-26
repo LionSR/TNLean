@@ -263,8 +263,8 @@ $(x^{-1})^{-1}=x$.
 
 Source: arXiv:2502.20257, `eq:defT`, lines 1552--1557. -/
 theorem tensor_mul_daggerLegGaugeInv (x : G) (i j : Fin d) :
-    F.tensor x i j * hF.daggerLegGaugeInv hc x =
-      hF.daggerLegGaugeInv hc x * physicalAdjointTensor (F.tensor x⁻¹) i j := by
+    F.tensor x (i, j) * hF.daggerLegGaugeInv hc x =
+      hF.daggerLegGaugeInv hc x * physicalAdjointTensor (F.tensor x⁻¹) (i, j) := by
   have hinv : inverseFlattening F hF x⁻¹ =
       MPSTensor.reindex (hF.bondDim_inv F x) (F.tensor x).toMPSTensor :=
     reindex_toMPSTensor_congr F (inv_inv x) _ _

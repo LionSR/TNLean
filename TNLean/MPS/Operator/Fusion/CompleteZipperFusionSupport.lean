@@ -219,7 +219,7 @@ private noncomputable def leftIntermediateLetter (a b c : Λ) (i l : Fin p) :
   (Matrix.blockDiagonal' fun e =>
     (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
       (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ
-        (∑ k : Fin p, Fus.tensor e i k ⊗ₖ Fus.tensor c k l)).submatrix
+        (∑ k : Fin p, Fus.tensor e (i, k) ⊗ₖ Fus.tensor c (k, l))).submatrix
           (Fus.leftFirstStageEquiv a b c) (Fus.leftFirstStageEquiv a b c)
 
 private noncomputable def leftNaturalDirectSumLetter
@@ -230,14 +230,14 @@ private noncomputable def leftNaturalDirectSumLetter
       (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ
         Matrix.blockDiagonal' (fun d =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity e c d))
-            (Fin (Fus.fusionMultiplicity e c d)) ℂ) ⊗ₖ Fus.tensor d i l)
+            (Fin (Fus.fusionMultiplicity e c d)) ℂ) ⊗ₖ Fus.tensor d (i, l))
 
 private theorem leftIntermediateLetter_eq_sum (a b c : Λ) (i l : Fin p) :
     Fus.leftIntermediateLetter a b c i l =
       ∑ k : Fin p, (Matrix.blockDiagonal' fun e =>
         (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
-          (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e i k) ⊗ₖ
-            Fus.tensor c k l := by
+          (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e (i, k)) ⊗ₖ
+            Fus.tensor c (k, l) := by
   classical
   funext ⟨⟨e, μ, z⟩, x⟩ ⟨⟨e', μ', z'⟩, x'⟩
   by_cases he : e = e'
@@ -296,31 +296,31 @@ private theorem tripleProductLetter_mul_leftFirstSynthesis
   have hPair := Fus.pairLetter_mul_synthesis a b i k
   calc
     (∑ j : Fin p,
-      ((Fus.tensor a i j ⊗ₖ Fus.tensor b j k) ⊗ₖ Fus.tensor c k l) *
+      ((Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) ⊗ₖ Fus.tensor c (k, l)) *
         (Fus.fusionSynthesis a b ⊗ₖ
           (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ))) =
-        (((∑ j : Fin p, Fus.tensor a i j ⊗ₖ Fus.tensor b j k) *
-          Fus.fusionSynthesis a b) ⊗ₖ Fus.tensor c k l) := by
+        (((∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) *
+          Fus.fusionSynthesis a b) ⊗ₖ Fus.tensor c (k, l)) := by
       rw [← Matrix.sum_mul]
       have hTensor :
           (∑ j : Fin p,
-            (Fus.tensor a i j ⊗ₖ Fus.tensor b j k) ⊗ₖ Fus.tensor c k l) =
-            (∑ j : Fin p, Fus.tensor a i j ⊗ₖ Fus.tensor b j k) ⊗ₖ
-              Fus.tensor c k l := by
+            (Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) ⊗ₖ Fus.tensor c (k, l)) =
+            (∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) ⊗ₖ
+              Fus.tensor c (k, l) := by
         funext x y
         simp only [Matrix.sum_apply, kroneckerMap_apply]
         rw [Finset.sum_mul]
       rw [hTensor, ← Matrix.mul_kronecker_mul, Matrix.mul_one]
     _ = ((Fus.fusionSynthesis a b * Matrix.blockDiagonal' (fun e =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
-            (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e i k)) ⊗ₖ
-          Fus.tensor c k l) := by rw [hPair]
+            (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e (i, k))) ⊗ₖ
+          Fus.tensor c (k, l)) := by rw [hPair]
     _ = (Fus.fusionSynthesis a b ⊗ₖ
           (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ)) *
         ((Matrix.blockDiagonal' fun e =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
-            (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e i k) ⊗ₖ
-          Fus.tensor c k l) := by
+            (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e (i, k)) ⊗ₖ
+          Fus.tensor c (k, l)) := by
       rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
 
 private theorem leftIntermediateLetter_mul_leftSecondSynthesis
@@ -332,7 +332,7 @@ private theorem leftIntermediateLetter_mul_leftSecondSynthesis
       (Matrix.blockDiagonal' fun e =>
         (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
           (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ
-            (∑ k : Fin p, Fus.tensor e i k ⊗ₖ Fus.tensor c k l)) *
+            (∑ k : Fin p, Fus.tensor e (i, k) ⊗ₖ Fus.tensor c (k, l))) *
         (Matrix.blockDiagonal' fun e =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
             (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.fusionSynthesis e c) =
@@ -357,7 +357,7 @@ private noncomputable def rightIntermediateLetter (a b c : Λ) (i l : Fin p) :
   (Matrix.blockDiagonal' fun f =>
     (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
       (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ
-        (∑ j : Fin p, Fus.tensor a i j ⊗ₖ Fus.tensor f j l)).submatrix
+        (∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Fus.tensor f (j, l))).submatrix
           (Fus.rightFirstStageEquiv a b c) (Fus.rightFirstStageEquiv a b c)
 
 private noncomputable def rightNaturalDirectSumLetter
@@ -368,7 +368,7 @@ private noncomputable def rightNaturalDirectSumLetter
       (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ
         Matrix.blockDiagonal' (fun d =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a f d))
-            (Fin (Fus.fusionMultiplicity a f d)) ℂ) ⊗ₖ Fus.tensor d i l)
+            (Fin (Fus.fusionMultiplicity a f d)) ℂ) ⊗ₖ Fus.tensor d (i, l))
 
 private theorem rightTripleDirectSumLetter_eq_submatrix (a b c : Λ) (i l : Fin p) :
     Fus.rightTripleDirectSumLetter a b c i l =
@@ -412,7 +412,7 @@ private theorem rightSecondAnalysis_mul_rightIntermediateLetter
         (Matrix.blockDiagonal' fun f =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
             (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ
-              (∑ j : Fin p, Fus.tensor a i j ⊗ₖ Fus.tensor f j l)) =
+              (∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Fus.tensor f (j, l))) =
       Fus.rightNaturalDirectSumLetter a b c i l *
         (Matrix.blockDiagonal' fun f =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
@@ -437,12 +437,12 @@ private theorem rightFirstAnalysis_mul_tripleProductLetter
   let P : Matrix
       (Fin (Fus.bondDim a) × (Fin (Fus.bondDim b) × Fin (Fus.bondDim c)))
       (Fin (Fus.bondDim a) × (Fin (Fus.bondDim b) × Fin (Fus.bondDim c))) ℂ :=
-    ∑ j : Fin p, Fus.tensor a i j ⊗ₖ
-      (∑ k : Fin p, Fus.tensor b j k ⊗ₖ Fus.tensor c k l)
+    ∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ
+      (∑ k : Fin p, Fus.tensor b (j, k) ⊗ₖ Fus.tensor c (k, l))
   let E : Matrix (Fus.RightFirstStage a b c) (Fus.RightFirstStage a b c) ℂ :=
-    ∑ j : Fin p, Fus.tensor a i j ⊗ₖ Matrix.blockDiagonal' (fun f =>
+    ∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Matrix.blockDiagonal' (fun f =>
       (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
-        (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ Fus.tensor f j l)
+        (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ Fus.tensor f (j, l))
   have hP : Fus.tripleProductLetter a b c i l =
       P.submatrix (Fus.rightBondAssocEquiv a b c)
         (Fus.rightBondAssocEquiv a b c) := by
@@ -544,18 +544,18 @@ noncomputable def finalBlockSelector (d : Λ) (ik : Fin p × Fin p) : ℂ :=
 its diagonal entries. -/
 theorem finalBlockSelector_apply (d e : Λ) (x y : Fin (Fus.bondDim e)) :
     (∑ i : Fin p, ∑ l : Fin p,
-      Fus.finalBlockSelector d (i, l) * Fus.tensor e i l x y) =
+      Fus.finalBlockSelector d (i, l) * Fus.tensor e (i, l) x y) =
       if h : d = e then if _ : h ▸ x = y then 1 else 0 else 0 := by
   classical
   simp only [finalBlockSelector, Finset.sum_mul]
   calc
     (∑ i : Fin p, ∑ l : Fin p, ∑ z : Fin (Fus.bondDim d),
-        Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e i l x y) =
+        Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e (i, l) x y) =
         ∑ z : Fin (Fus.bondDim d), ∑ i : Fin p, ∑ l : Fin p,
-          Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e i l x y := by
+          Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e (i, l) x y := by
       calc
         _ = ∑ i : Fin p, ∑ z : Fin (Fus.bondDim d), ∑ l : Fin p,
-            Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e i l x y := by
+            Fus.blockLeftInverse ⟨d, z, z⟩ (i, l) * Fus.tensor e (i, l) x y := by
           apply Finset.sum_congr rfl
           intro i hi
           exact Finset.sum_comm
@@ -573,7 +573,7 @@ selected block and zero on every other block. -/
 theorem finalBlockSelector_sum (d e : Λ) :
     (∑ i : Fin p, ∑ l : Fin p,
       Fus.finalBlockSelector d (i, l) •
-        (Fus.tensor e i l : Matrix (Fin (Fus.bondDim e))
+        (Fus.tensor e (i, l) : Matrix (Fin (Fus.bondDim e))
           (Fin (Fus.bondDim e)) ℂ)) =
       if d = e then 1 else 0 := by
   classical
@@ -599,20 +599,20 @@ Source: arXiv:1511.08090, the simultaneous inverse at lines 269--277. -/
 private theorem totalBlockSelector_sum (e : Λ) :
     (∑ i : Fin p, ∑ l : Fin p,
       Fus.totalBlockSelector (i, l) •
-        (Fus.tensor e i l : Matrix (Fin (Fus.bondDim e))
+        (Fus.tensor e (i, l) : Matrix (Fin (Fus.bondDim e))
           (Fin (Fus.bondDim e)) ℂ)) = 1 := by
   classical
   simp only [totalBlockSelector, Finset.sum_smul]
   calc
     (∑ i : Fin p, ∑ l : Fin p, ∑ d : Λ,
-        Fus.finalBlockSelector d (i, l) • Fus.tensor e i l) =
+        Fus.finalBlockSelector d (i, l) • Fus.tensor e (i, l)) =
         ∑ i : Fin p, ∑ d : Λ, ∑ l : Fin p,
-          Fus.finalBlockSelector d (i, l) • Fus.tensor e i l := by
+          Fus.finalBlockSelector d (i, l) • Fus.tensor e (i, l) := by
       apply Finset.sum_congr rfl
       intro i hi
       exact Finset.sum_comm
     _ = ∑ d : Λ, ∑ i : Fin p, ∑ l : Fin p,
-          Fus.finalBlockSelector d (i, l) • Fus.tensor e i l :=
+          Fus.finalBlockSelector d (i, l) • Fus.tensor e (i, l) :=
       Finset.sum_comm
     _ = ∑ d : Λ, if d = e then 1 else 0 := by
       apply Finset.sum_congr rfl
@@ -682,9 +682,9 @@ theorem tripleProductLetter_eq_left_reconstruction
     intro k hk
     have hTensor :
         (∑ j : Fin p,
-          (Fus.tensor a i j ⊗ₖ Fus.tensor b j k) ⊗ₖ Fus.tensor c k l) =
-          (∑ j : Fin p, Fus.tensor a i j ⊗ₖ Fus.tensor b j k) ⊗ₖ
-            Fus.tensor c k l := by
+          (Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) ⊗ₖ Fus.tensor c (k, l)) =
+          (∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) ⊗ₖ
+            Fus.tensor c (k, l) := by
       funext x y
       simp only [Matrix.sum_apply, kroneckerMap_apply]
       rw [Finset.sum_mul]
@@ -698,7 +698,7 @@ theorem tripleProductLetter_eq_left_reconstruction
         (Matrix.blockDiagonal' fun e =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
             (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ
-              (∑ k : Fin p, Fus.tensor e i k ⊗ₖ Fus.tensor c k l)) =
+              (∑ k : Fin p, Fus.tensor e (i, k) ⊗ₖ Fus.tensor c (k, l))) =
         (Matrix.blockDiagonal' fun e =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
             (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.fusionSynthesis e c) *
@@ -738,12 +738,12 @@ theorem tripleProductLetter_eq_right_reconstruction
     let P : Matrix
         (Fin (Fus.bondDim a) × (Fin (Fus.bondDim b) × Fin (Fus.bondDim c)))
         (Fin (Fus.bondDim a) × (Fin (Fus.bondDim b) × Fin (Fus.bondDim c))) ℂ :=
-      ∑ j : Fin p, Fus.tensor a i j ⊗ₖ
-        (∑ k : Fin p, Fus.tensor b j k ⊗ₖ Fus.tensor c k l)
+      ∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ
+        (∑ k : Fin p, Fus.tensor b (j, k) ⊗ₖ Fus.tensor c (k, l))
     let E : Matrix (Fus.RightFirstStage a b c) (Fus.RightFirstStage a b c) ℂ :=
-      ∑ j : Fin p, Fus.tensor a i j ⊗ₖ Matrix.blockDiagonal' (fun f =>
+      ∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Matrix.blockDiagonal' (fun f =>
         (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
-          (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ Fus.tensor f j l)
+          (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ Fus.tensor f (j, l))
     have hP : Fus.tripleProductLetter a b c i l =
         P.submatrix (Fus.rightBondAssocEquiv a b c)
           (Fus.rightBondAssocEquiv a b c) := by
@@ -795,7 +795,7 @@ theorem tripleProductLetter_eq_right_reconstruction
         (Matrix.blockDiagonal' fun f =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
             (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ
-              (∑ j : Fin p, Fus.tensor a i j ⊗ₖ Fus.tensor f j l)) =
+              (∑ j : Fin p, Fus.tensor a (i, j) ⊗ₖ Fus.tensor f (j, l))) =
         (Matrix.blockDiagonal' fun f =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity b c f))
             (Fin (Fus.fusionMultiplicity b c f)) ℂ) ⊗ₖ Fus.fusionSynthesis a f) *

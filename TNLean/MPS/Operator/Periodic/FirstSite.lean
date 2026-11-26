@@ -41,7 +41,7 @@ arXiv:1606.00608, lines 1874--1887, considers an orthogonal projector $P$ with
 $P\widetilde M=P\widetilde M P$ in this sense. -/
 noncomputable def ketLeftMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) :
     MPOTensor d D :=
-  fun i j => ∑ k : Fin d, P i k • M k j
+  fun (i, j) => ∑ k : Fin d, P i k • M (k, j)
 
 /-- The vertically viewed product $\widetilde M P$: multiply each
 physical-space operator $\widetilde M_{ab}$ by `P` on the right,
@@ -52,7 +52,7 @@ $P\widetilde M=P\widetilde M P$ in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1874--1887. -/
 noncomputable def braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) :
     MPOTensor d D :=
-  fun i j => ∑ k : Fin d, P k j • M i k
+  fun (i, j) => ∑ k : Fin d, P k j • M (i, k)
 
 /-- Splitting off the first site of a density-operator entry:
 $H^{(N+1)}_{(i,\sigma),(j,\tau)}
@@ -60,7 +60,7 @@ $H^{(N+1)}_{(i,\sigma),(j,\tau)}
 theorem mpo_cons_cons (M : MPOTensor d D) {N : ℕ} (i j : Fin d)
     (σ τ : Fin N → Fin d) :
     mpo M (N + 1) (Fin.cons i σ) (Fin.cons j τ) =
-      Matrix.trace (M i j * evalWord M (List.ofFn σ) (List.ofFn τ)) := by
+      Matrix.trace (M (i, j) * evalWord M (List.ofFn σ) (List.ofFn τ)) := by
   simp only [mpo_apply, mpoMatrixEntry]
   congr 1
   rw [List.ofFn_succ, List.ofFn_succ]

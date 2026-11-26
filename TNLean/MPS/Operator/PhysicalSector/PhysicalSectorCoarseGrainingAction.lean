@@ -224,8 +224,7 @@ theorem NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure
           s2Map_apply, s2ShiftEquiv] using hs
       rw [hlhs]
       have hz : F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨h, y⟩)
-          (F.sectorFinEquiv.symm ⟨q, w⟩) = 0 := by
+          (F.sectorFinEquiv.symm ⟨h, y⟩, F.sectorFinEquiv.symm ⟨q, w⟩) = 0 := by
         ext beta alpha
         exact sectorCoordinateTensor_apply_ne F hhq y w beta alpha
       change 0 = physClose2 F.sectorCoordinateTensor X
@@ -242,8 +241,7 @@ theorem NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure
         s2Map_apply, s2ShiftEquiv] using hs
     rw [hlhs]
     have hz : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨k, x⟩)
-        (F.sectorFinEquiv.symm ⟨p, z⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨p, z⟩) = 0 := by
       ext beta alpha
       exact sectorCoordinateTensor_apply_ne F hkp x z beta alpha
     change 0 = physClose2 F.sectorCoordinateTensor X

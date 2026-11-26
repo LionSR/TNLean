@@ -194,34 +194,34 @@ theorem tripleFusionComparison_intertwines_of_lengthIndependent
     (Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
       (1 : Matrix (Fin (Fam.chi.dim α β δ)) (Fin (Fam.chi.dim α β δ)) ℂ) ⊗ₖ
         ((1 : Matrix (Fin (Fam.chi.dim δ γ ε))
-          (Fin (Fam.chi.dim δ γ ε)) ℂ) ⊗ₖ Fam.tensor ε i k)) *
+          (Fin (Fam.chi.dim δ γ ε)) ℂ) ⊗ₖ Fam.tensor ε (i, k))) *
         Fam.tripleFusionComparison α β γ =
       Fam.tripleFusionComparison α β γ *
         (Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
           (1 : Matrix (Fin (Fam.chi.dim β γ δ))
             (Fin (Fam.chi.dim β γ δ)) ℂ) ⊗ₖ
             ((1 : Matrix (Fin (Fam.chi.dim α δ ε))
-              (Fin (Fam.chi.dim α δ ε)) ℂ) ⊗ₖ Fam.tensor ε i k)) := by
+              (Fin (Fam.chi.dim α δ ε)) ℂ) ⊗ₖ Fam.tensor ε (i, k))) := by
   have hLeft :
       Fam.leftFusionIsometry α β γ *
-          (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
+          (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k) *
           (Fam.leftFusionIsometry α β γ)ᴴ =
         Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
           (1 : Matrix (Fin (Fam.chi.dim α β δ))
             (Fin (Fam.chi.dim α β δ)) ℂ) ⊗ₖ
             ((1 : Matrix (Fin (Fam.chi.dim δ γ ε))
-              (Fin (Fam.chi.dim δ γ ε)) ℂ) ⊗ₖ Fam.tensor ε i k) := by
+              (Fin (Fam.chi.dim δ γ ε)) ℂ) ⊗ₖ Fam.tensor ε (i, k)) := by
     rw [Fam.leftFusion_apply]
     simp_rw [Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI]
   have hRight :
       Fam.rightFusionIsometry α β γ *
-          (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
+          (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k) *
           (Fam.rightFusionIsometry α β γ)ᴴ =
         Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
           (1 : Matrix (Fin (Fam.chi.dim β γ δ))
             (Fin (Fam.chi.dim β γ δ)) ℂ) ⊗ₖ
             ((1 : Matrix (Fin (Fam.chi.dim α δ ε))
-              (Fin (Fam.chi.dim α δ ε)) ℂ) ⊗ₖ Fam.tensor ε i k) := by
+              (Fin (Fam.chi.dim α δ ε)) ℂ) ⊗ₖ Fam.tensor ε (i, k)) := by
     rw [Fam.rightFusion_apply]
     simp_rw [Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI]
   unfold tripleFusionComparison

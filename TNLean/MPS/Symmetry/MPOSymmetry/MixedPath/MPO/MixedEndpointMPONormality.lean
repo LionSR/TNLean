@@ -118,8 +118,8 @@ theorem isNBlkInjective_mixedEndpointMPO_three
   let T := mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁
   let S := Kraus.wordSpan T.toMPSTensor 1
   let e : (Fin χ₀ ⊕ Fin χ₁) ≃ Fin (χ₀ + χ₁) := finSumFinEquiv
-  have hletter (i j) : T i j ∈ S := by
-    change T i j ∈ Kraus.wordSpan T.toMPSTensor 1
+  have hletter (i j) : T (i, j) ∈ S := by
+    change T (i, j) ∈ Kraus.wordSpan T.toMPSTensor 1
     rw [Kraus.wordSpan_one]
     exact Submodule.subset_span ⟨finProdFinEquiv (i, j), by
       simp [MPOTensor.toMPSTensor]⟩
@@ -210,10 +210,10 @@ theorem isNBlkInjective_mixedEndpointMPO_three
     exists_cross_entry_ne_zero V₀ V₁ W₀ W₁ hD₀ hD₁ hm hret₀ hret₁ horth₀
   obtain ⟨r₁, s₀, α₁, k₁, β₀, l₀, h₁₀⟩ :=
     exists_cross_entry_ne_zero V₁ V₀ W₁ W₀ hD₁ hD₀ hm hret₁ hret₀ horth₁
-  let C₀₁ := T (mixedEndpointPhysicalEquiv D₀ D₁ (.inl r₀, .inr s₁))
-    (mixedEndpointPhysicalEquiv D₀ D₁ (.inl k₀, .inr l₁))
-  let C₁₀ := T (mixedEndpointPhysicalEquiv D₀ D₁ (.inr r₁, .inl s₀))
-    (mixedEndpointPhysicalEquiv D₀ D₁ (.inr k₁, .inl l₀))
+  let C₀₁ := T (mixedEndpointPhysicalEquiv D₀ D₁ (.inl r₀, .inr s₁),
+      mixedEndpointPhysicalEquiv D₀ D₁ (.inl k₀, .inr l₁))
+  let C₁₀ := T (mixedEndpointPhysicalEquiv D₀ D₁ (.inr r₁, .inl s₀),
+      mixedEndpointPhysicalEquiv D₀ D₁ (.inr k₁, .inl l₀))
   have hC₀₁ : C₀₁ (e (.inl α₀)) (e (.inr β₁)) ≠ 0 := by
     simpa [C₀₁, T, e, mixedEndpointMPOLetter] using h₀₁
   have hC₁₀ : C₁₀ (e (.inr α₁)) (e (.inl β₀)) ≠ 0 := by
@@ -274,8 +274,8 @@ theorem multiplicity_pos_of_injective_endpoint_action {D χ : ℕ}
   have hlin : LinearIndependent ℂ A :=
     linearIndependent_of_top_le_span_of_card_eq_finrank (by rw [hA])
       (by simp [Module.finrank_matrix])
-  have hzero (i j : Fin (D * D)) (α β : Fin χ) : T i j α β = 0 := by
-    apply Fintype.linearIndependent_iff.mp hlin (fun k => T i k α β) _ j
+  have hzero (i j : Fin (D * D)) (α β : Fin χ) : T (i, j) α β = 0 := by
+    apply Fintype.linearIndependent_iff.mp hlin (fun k => T (i, k) α β) _ j
     ext r s
     have he := congrArg (fun M => M (finProdFinEquiv (α, r))
       (finProdFinEquiv (β, s))) (h.letter i)

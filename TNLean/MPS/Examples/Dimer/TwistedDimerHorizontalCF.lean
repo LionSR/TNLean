@@ -60,17 +60,17 @@ $\tfrac85\,$`coef k i j`. The rescaling makes the ket-against-bra letters
 resolve the identity (`normalizedBlock_isLeftCanonical`), which is the
 spectral normalization of arXiv:1606.00608, lines 224--235, for this project
 example. -/
-def normalizedBlock (k : Fin 2) : MPOTensor 8 4 := fun i j => (8 / 5 : ℂ) • block k i j
+def normalizedBlock (k : Fin 2) : MPOTensor 8 4 := fun ij => (8 / 5 : ℂ) • block k ij
 
 lemma normalizedBlock_apply (k : Fin 2) (i j : Fin 8) :
-    normalizedBlock k i j =
+    normalizedBlock k (i, j) =
       Matrix.single (finProdFinEquiv (bitL i, bitL j)) (finProdFinEquiv (bitR i, bitR j))
         ((8 / 5 : ℂ) * coef k i j) := by
   simp [normalizedBlock, block]
 
 /-- The doubled-index letter at `finProdFinEquiv (i, j)` is the MPO letter at `(i, j)`. -/
 lemma toMPSTensor_apply_finProdFinEquiv {d D : ℕ} (M : MPOTensor d D) (i j : Fin d) :
-    M.toMPSTensor (finProdFinEquiv (i, j)) = M i j := by
+    M.toMPSTensor (finProdFinEquiv (i, j)) = M (i, j) := by
   unfold MPOTensor.toMPSTensor
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
@@ -93,11 +93,11 @@ theorem block_toMPSTensor_isInjective (k : Fin 2) :
   obtain ⟨q, q', rfl⟩ : ∃ q q', b = finProdFinEquiv (q, q') :=
     ⟨((finProdFinEquiv (m := 2) (n := 2)).symm b).1,
       ((finProdFinEquiv (m := 2) (n := 2)).symm b).2, by simp⟩
-  have hmem : block k (physIdx p q 0) (physIdx p' q' 0) ∈
+  have hmem : block k (physIdx p q 0, physIdx p' q' 0) ∈
       Submodule.span ℂ (Set.range (block k).toMPSTensor) := by
     rw [← toMPSTensor_apply_finProdFinEquiv (block k)]
     exact Submodule.subset_span ⟨_, rfl⟩
-  have hblock : block k (physIdx p q 0) (physIdx p' q' 0) =
+  have hblock : block k (physIdx p q 0, physIdx p' q' 0) =
       coef k (physIdx p q 0) (physIdx p' q' 0) •
         Matrix.single (finProdFinEquiv (p, p')) (finProdFinEquiv (q, q')) (1 : ℂ) := by
     simp [block]
@@ -121,7 +121,7 @@ lemma star_coef (k : Fin 2) (i j : Fin 8) : star (coef k i j) = coef k i j := by
 /-- The ket-against-bra product of one letter of a rescaled block is the
 matrix unit at the right bits with the squared coefficient. -/
 lemma conjTranspose_mul_self_normalizedBlock (k : Fin 2) (i j : Fin 8) :
-    (normalizedBlock k i j)ᴴ * normalizedBlock k i j =
+    (normalizedBlock k (i, j))ᴴ * normalizedBlock k (i, j) =
       Matrix.single (finProdFinEquiv (bitR i, bitR j)) (finProdFinEquiv (bitR i, bitR j))
         (((8 / 5 : ℂ) * coef k i j) ^ 2) := by
   rw [normalizedBlock_apply, Matrix.conjTranspose_single, Matrix.single_mul_single_same,
@@ -285,7 +285,7 @@ theorem toMPSTensor_T_reconstruct (i : Fin (8 * 8)) :
   obtain ⟨q, q', k', rfl⟩ := exists_eq_physIdx b'
   simp only [MPSTensor.toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply,
     finSigmaFinEquiv_symm_retainedBondEquiv_symm]
-  change T i.divNat i.modNat (physIdx p p' k) (physIdx q q' k') = _
+  change T (i.divNat, i.modNat) (physIdx p p' k) (physIdx q q' k') = _
   rw [T_apply_blocks]
   by_cases hk : k = k'
   · subst hk

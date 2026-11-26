@@ -124,8 +124,8 @@ Source: arXiv:2203.12563, lines 2224–2225 (the tensors `T̂_g` satisfy `fusion
 the fusion tensors of `ftexam`). -/
 theorem fusionV_mul_mulTensor {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
     (g h : G) (i j : Fin n) :
-    fusionV e ω g h * mulTensor (tensor e ω g) (tensor e ω h) i j =
-      tensor e ω (g * h) i j * fusionV e ω g h := by
+    fusionV e ω g h * mulTensor (tensor e ω g) (tensor e ω h) (i, j) =
+      tensor e ω (g * h) (i, j) * fusionV e ω g h := by
   ext l p
   obtain ⟨p, rfl⟩ := finProdFinEquiv.surjective p
   rw [fusionV_mul_apply, mul_fusionV_apply]

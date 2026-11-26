@@ -133,19 +133,17 @@ theorem twoSiteGlobalClosure_eq (F : PhysicalSectorFactorization K)
     simp only [twoSiteSectorEmbedding, physClose2_apply]
     rcases hne with hne | hne
     · have hz : F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm
-            ⟨kh.1, ((F.twoSiteRegroupEquiv kh.1 kh.2).symm x).1⟩)
-          (F.sectorFinEquiv.symm
-            ⟨pq.1, ((F.twoSiteRegroupEquiv pq.1 pq.2).symm y).1⟩) = 0 := by
+          ((F.sectorFinEquiv.symm
+            ⟨kh.1, ((F.twoSiteRegroupEquiv kh.1 kh.2).symm x).1⟩), (F.sectorFinEquiv.symm
+            ⟨pq.1, ((F.twoSiteRegroupEquiv pq.1 pq.2).symm y).1⟩)) = 0 := by
         ext beta alpha
         exact sectorCoordinateTensor_apply_ne F hne _ _ beta alpha
       rw [hz]
       simp
     · have hz : F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm
-            ⟨kh.2, ((F.twoSiteRegroupEquiv kh.1 kh.2).symm x).2⟩)
-          (F.sectorFinEquiv.symm
-            ⟨pq.2, ((F.twoSiteRegroupEquiv pq.1 pq.2).symm y).2⟩) = 0 := by
+          ((F.sectorFinEquiv.symm
+            ⟨kh.2, ((F.twoSiteRegroupEquiv kh.1 kh.2).symm x).2⟩), (F.sectorFinEquiv.symm
+            ⟨pq.2, ((F.twoSiteRegroupEquiv pq.1 pq.2).symm y).2⟩)) = 0 := by
         ext beta alpha
         exact sectorCoordinateTensor_apply_ne F hne _ _ beta alpha
       rw [hz]
@@ -192,29 +190,29 @@ theorem threeSiteGlobalClosure_eq (F : PhysicalSectorFactorization K)
     simp only [threeSiteSectorEmbedding, physClose3_apply]
     rcases hne with hne | hne | hne
     · have hz : F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm
-            ⟨klh.1, ((F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2).symm x).1⟩)
-          (F.sectorFinEquiv.symm
-            ⟨pqr.1, ((F.threeSiteRegroupEquiv pqr.1 pqr.2.1 pqr.2.2).symm y).1⟩) = 0 := by
+          ((F.sectorFinEquiv.symm
+            ⟨klh.1, ((F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2).symm x).1⟩),
+                (F.sectorFinEquiv.symm
+            ⟨pqr.1, ((F.threeSiteRegroupEquiv pqr.1 pqr.2.1 pqr.2.2).symm y).1⟩)) = 0 := by
         ext beta alpha
         exact sectorCoordinateTensor_apply_ne F hne _ _ beta alpha
       rw [hz]
       simp
     · have hz : F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm
-            ⟨klh.2.1, ((F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2).symm x).2.1⟩)
-          (F.sectorFinEquiv.symm
-            ⟨pqr.2.1, ((F.threeSiteRegroupEquiv pqr.1 pqr.2.1 pqr.2.2).symm y).2.1⟩) =
+          ((F.sectorFinEquiv.symm
+            ⟨klh.2.1, ((F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2).symm x).2.1⟩),
+                (F.sectorFinEquiv.symm
+            ⟨pqr.2.1, ((F.threeSiteRegroupEquiv pqr.1 pqr.2.1 pqr.2.2).symm y).2.1⟩)) =
             0 := by
         ext beta alpha
         exact sectorCoordinateTensor_apply_ne F hne _ _ beta alpha
       rw [hz]
       simp
     · have hz : F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm
-            ⟨klh.2.2, ((F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2).symm x).2.2⟩)
-          (F.sectorFinEquiv.symm
-            ⟨pqr.2.2, ((F.threeSiteRegroupEquiv pqr.1 pqr.2.1 pqr.2.2).symm y).2.2⟩) =
+          ((F.sectorFinEquiv.symm
+            ⟨klh.2.2, ((F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2).symm x).2.2⟩),
+                (F.sectorFinEquiv.symm
+            ⟨pqr.2.2, ((F.threeSiteRegroupEquiv pqr.1 pqr.2.1 pqr.2.2).symm y).2.2⟩)) =
             0 := by
         ext beta alpha
         exact sectorCoordinateTensor_apply_ne F hne _ _ beta alpha

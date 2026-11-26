@@ -203,7 +203,7 @@ private theorem printedOpenGateContraction_succ {d D k : ℕ}
     (S : TwoSiteStandardFormData W u v)
     (i j : Fin (k + 1 + 1) → Fin d × Fin d) :
     printedOpenGateContraction S i j =
-      W (finProdFinEquiv (i 0)) (finProdFinEquiv (j 0)) *
+      W (finProdFinEquiv (i 0), finProdFinEquiv (j 0)) *
         printedOpenGateContraction S (i ∘ Fin.succ) (j ∘ Fin.succ) := by
   ext α γ
   symm
@@ -251,7 +251,7 @@ theorem TwoSiteStandardFormData.evalWord_eq_printedOpenGateContraction {d D k : 
         finProdFinEquiv (j 0) ::
           List.ofFn (fun p : Fin (k + 1) ↦ finProdFinEquiv (j p.succ)) := List.ofFn_succ
     rw [hi, hj, evalWord_cons]
-    exact (congrArg (W (finProdFinEquiv (i 0)) (finProdFinEquiv (j 0)) * ·)
+    exact (congrArg (W (finProdFinEquiv (i 0), finProdFinEquiv (j 0)) * ·)
       (ih (i ∘ Fin.succ) (j ∘ Fin.succ))).trans (printedOpenGateContraction_succ S i j).symm
 
 /-- Actual arbitrary positive physical blocking is the open printed gate
@@ -263,9 +263,10 @@ theorem TwoSiteStandardFormData.blockTensor_eq_printedOpenGateContraction {d D k
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
     (I J : Fin (Kraus.blockPhysDim (d * d) (k + 1))) :
-    blockTensor W (k + 1) I J = printedOpenGateContraction S
+    blockTensor W (k + 1) (I, J) = printedOpenGateContraction S
       (fun p ↦ finProdFinEquiv.symm (Kraus.decodeBlock (d * d) (k + 1) I p))
       (fun p ↦ finProdFinEquiv.symm (Kraus.decodeBlock (d * d) (k + 1) J p)) := by
+  rw [blockTensor_apply]
   change evalWord W (List.ofFn (Kraus.decodeBlock (d * d) (k + 1) I))
     (List.ofFn (Kraus.decodeBlock (d * d) (k + 1) J)) = _
   simpa only [Equiv.apply_symm_apply] using S.evalWord_eq_printedOpenGateContraction

@@ -159,17 +159,17 @@ theorem mpo_mul_eq_of_zsqrt2_conj {d D₁ D₂ k z : ℕ}
     (hGH : G * H = c • 1) (hHG : H * G = c • 1)
     (hconj : ∀ i j, G * mulZsqrt2Tensor XZ YZ i j * H = c • padZsqrt2 z (TZ i j))
     {L : ℕ} (hL : 0 < L) :
-    MPOTensor.mpo (fun i j => complexOfZsqrt2 (XZ i j)) L *
-        MPOTensor.mpo (fun i j => complexOfZsqrt2 (YZ i j)) L =
-      MPOTensor.mpo (fun i j => complexOfZsqrt2 (TZ i j)) L := by
+    MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (XZ i j)) L *
+        MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (YZ i j)) L =
+      MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (TZ i j)) L := by
   rw [← MPOTensor.mpo_mulTensor]
-  have hM : MPOTensor.mulTensor (fun i j => complexOfZsqrt2 (XZ i j))
-      (fun i j => complexOfZsqrt2 (YZ i j)) =
-      fun i j => complexOfZsqrt2 (mulZsqrt2Tensor XZ YZ i j) :=
-    funext fun i => funext fun j => mulTensor_complexOfRing _ XZ YZ i j
+  have hM : MPOTensor.mulTensor (Function.uncurry fun i j => complexOfZsqrt2 (XZ i j))
+      (Function.uncurry fun i j => complexOfZsqrt2 (YZ i j)) =
+      Function.uncurry fun i j => complexOfZsqrt2 (mulZsqrt2Tensor XZ YZ i j) :=
+    funext fun p => mulTensor_complexOfRing _ XZ YZ p.1 p.2
   have hγ : zsqrt2ToComplex c ≠ 0 := zsqrt2ToComplex_ne_zero hc
   rw [hM, MPOTensor.mpo_eq_of_conj (N := MPOTensor.directSum
-      (fun i j => complexOfZsqrt2 (TZ i j)) (0 : MPOTensor d z))
+      (Function.uncurry fun i j => complexOfZsqrt2 (TZ i j)) (0 : MPOTensor d z))
       (G := complexOfZsqrt2 G) (H := (zsqrt2ToComplex c)⁻¹ • complexOfZsqrt2 H) ?_ ?_ ?_,
     MPOTensor.mpo_directSum, MPOTensor.mpo_zero_of_pos hL, add_zero]
   · rw [Matrix.mul_smul, ← complexOfZsqrt2_mul, hGH, complexOfZsqrt2_smul, complexOfZsqrt2_one,
@@ -177,6 +177,7 @@ theorem mpo_mul_eq_of_zsqrt2_conj {d D₁ D₂ k z : ℕ}
   · rw [Matrix.smul_mul, ← complexOfZsqrt2_mul, hHG, complexOfZsqrt2_smul, complexOfZsqrt2_one,
       smul_smul, inv_mul_cancel₀ hγ, one_smul]
   · intro i j
+    simp only [Function.uncurry_apply_pair]
     rw [Matrix.mul_smul, ← complexOfZsqrt2_mul, ← complexOfZsqrt2_mul, hconj,
       complexOfZsqrt2_smul, smul_smul, inv_mul_cancel₀ hγ, one_smul, complexOfZsqrt2_padZsqrt2]
     rfl

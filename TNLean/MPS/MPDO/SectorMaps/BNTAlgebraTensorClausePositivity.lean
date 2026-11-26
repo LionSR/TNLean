@@ -34,13 +34,13 @@ private abbrev retainedDim (H : BNTAlgebraTensorClause M) : ℕ :=
 
 private def retainedAssembledMPO (H : BNTAlgebraTensorClause M) :
     MPOTensor H.retainedDim D :=
-  fun i j a b ↦ verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor
+  fun (i, j) a b ↦ verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor
     (finProdFinEquiv (a, b)) i j
 
 private theorem changePhysicalBasis_verticalCoisometry_eq_retainedAssembledMPO
     (H : BNTAlgebraTensorClause M) :
     changePhysicalBasis H.verticalCoisometry M = H.retainedAssembledMPO := by
-  ext i j a b
+  ext ⟨i, j⟩ a b
   unfold changePhysicalBasis retainedAssembledMPO
   have hs : physicalSlice M a b = verticalTensor M (finProdFinEquiv (a, b)) := by
     ext s t
@@ -56,8 +56,8 @@ private theorem changePhysicalBasis_verticalCoisometry_copy_same
     (H : BNTAlgebraTensorClause M) (γ : Fin H.labelCount)
     (q : Fin (H.multiplicity γ)) (x y : Fin (H.bondDim γ)) :
     changePhysicalBasis H.verticalCoisometry M
-        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, x)⟩)
-        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, y)⟩) =
+        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, x)⟩,
+            verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, y)⟩) =
       H.weight γ q • H.verticalCopyLetter ⟨γ, q⟩ x y := by
   rw [H.changePhysicalBasis_verticalCoisometry_eq_retainedAssembledMPO]
   ext a b

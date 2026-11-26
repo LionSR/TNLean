@@ -78,7 +78,7 @@ private noncomputable def retainedStackTerm
     Matrix (m × (Fin L → Fin q)) (m × (Fin L → Fin q)) ℂ :=
   Matrix.single i j (1 : ℂ) ⊗ₖ
     (fun σ τ ↦ Matrix.trace (retainedStackClosingMatrix R steps t i j *
-      (List.ofFn (fun v ↦ stackedTensor (A v) t (σ v) (τ v))).prod))
+      (List.ofFn (fun v ↦ stackedTensor (A v) t (σ v, τ v))).prod))
 
 /-- Resolve the retained coefficients on matrix units, obtaining one
 scalar-closed common stack for each degree and retained matrix entry.
@@ -106,7 +106,7 @@ private theorem prod_retainedCoreSteps_eq_sum_retainedStackTerm
     (fun w ↦ Matrix.coreWordCoeff R steps (List.ofFn w) i j) σ τ]
   let f : m → m → ℂ := fun a b ↦
     Matrix.trace (retainedStackClosingMatrix R steps t a b *
-      (List.ofFn (fun v ↦ stackedTensor (A v) t (σ v) (τ v))).prod)
+      (List.ofFn (fun v ↦ stackedTensor (A v) t (σ v, τ v))).prod)
   have hentry (a b : m) : retainedStackTerm R steps A t a b (i, σ) (j, τ) =
       Matrix.single a b (f a b) i j := by
     change Matrix.single a b (1 : ℂ) i j * f a b = _
@@ -124,7 +124,7 @@ noncomputable def retainedStackCore
     (steps : List (Matrix m m ℂ × ℂ)) (A : Fin L → MPOTensor q B)
     (t : ℕ) (i j : m) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   fun σ τ ↦ Matrix.trace (retainedStackClosingMatrix R steps t i j *
-    (List.ofFn (fun v ↦ stackedTensor (A v) t (σ v) (τ v))).prod)
+    (List.ofFn (fun v ↦ stackedTensor (A v) t (σ v, τ v))).prod)
 
 /-- A scalar-closed core with t layers has an open-boundary presentation
 of bond bound (B^t)^2. This conversion does not assert ALVV's sharper B^k
@@ -142,8 +142,7 @@ private theorem retainedStackCore_entries_isOpenMPS
   simpa only [retainedStackCore, Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map] using
     TNLean.MPS.AreaLaw.isOpenMPS_trace_closed_chain
       (retainedStackClosingMatrix R steps t i j)
-      (fun v z ↦ stackedTensor (A v) t (finProdFinEquiv.symm z).1
-        (finProdFinEquiv.symm z).2)
+      (fun v z ↦ stackedTensor (A v) t ((finProdFinEquiv.symm z).1, (finProdFinEquiv.symm z).2))
 
 /-- Resolve one ordered affine middle word into exactly
 (length+1)*card(m)^2 indexed retained matrix entries and scalar-closed cores.
@@ -328,7 +327,7 @@ private theorem trace_retained_entry_eq_sum_interiorMatrixSlice
     (F : m → m → Matrix (Fin B) (Fin B) ℂ)
     (A : Fin L → MPOTensor q B) :
     (fun x y : m × (Fin L → Fin q) ↦ Matrix.trace
-      (F x.1 y.1 * (List.ofFn (fun v ↦ A v (x.2 v) (y.2 v))).prod)) =
+      (F x.1 y.1 * (List.ofFn (fun v ↦ A v (x.2 v, y.2 v))).prod)) =
       ∑ ab : Fin B × Fin B,
         (fun i j : m ↦ F i j ab.2 ab.1) ⊗ₖ
           interiorMatrixSlice A ab.1 ab.2 := by
@@ -345,9 +344,9 @@ def actualRetainedIntervalClosing {T L q B : ℕ}
     (A : Fin T → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ)
     (a : ℕ) (ha : a + L ≤ T)
     (η θ : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q) :=
-  retainedIntervalSuffix (fun v (z : Fin q × Fin q) ↦ A v z.1 z.2)
+  retainedIntervalSuffix (fun v (z : Fin q × Fin q) ↦ A v (z.1, z.2))
       a ha (fun v ↦ (η v, θ v)) * C *
-    retainedIntervalPrefix (fun v (z : Fin q × Fin q) ↦ A v z.1 z.2)
+    retainedIntervalPrefix (fun v (z : Fin q × Fin q) ↦ A v (z.1, z.2))
       a ha (fun v ↦ (η v, θ v))
 
 /-- Fixing the physical configurations outside a contiguous interval changes
@@ -362,10 +361,10 @@ theorem trace_actual_retainedInterval_eq {T L q B : ℕ}
     (η θ : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q)
     (σ τ : Fin L → Fin q) :
     Matrix.trace (C * (List.ofFn (fun v ↦
-      A v (retainedIntervalEquiv a ha (η, σ) v)
-        (retainedIntervalEquiv a ha (θ, τ) v))).prod) =
+      A v (retainedIntervalEquiv a ha (η, σ) v,
+        retainedIntervalEquiv a ha (θ, τ) v))).prod) =
       Matrix.trace (actualRetainedIntervalClosing A C a ha η θ *
-        (List.ofFn (fun v : Fin L ↦ A ⟨a + v.val, by omega⟩ (σ v) (τ v))).prod) := by
+        (List.ofFn (fun v : Fin L ↦ A ⟨a + v.val, by omega⟩ (σ v, τ v))).prod) := by
   have hpair (v : Fin T) :
       (retainedIntervalEquiv a ha (η, σ) v,
         retainedIntervalEquiv a ha (θ, τ) v) =
@@ -373,15 +372,14 @@ theorem trace_actual_retainedInterval_eq {T L q B : ℕ}
     dsimp only [retainedIntervalEquiv, Equiv.coe_fn_mk]
     split_ifs <;> rfl
   have h := trace_retainedInterval_eq
-    (fun v (z : Fin q × Fin q) ↦ A v z.1 z.2)
+    (fun v (z : Fin q × Fin q) ↦ A v (z.1, z.2))
     C a ha (fun v ↦ (η v, θ v)) (fun v ↦ (σ v, τ v))
   have hsites (v : Fin T) :
-      A v (retainedIntervalEquiv a ha (η, σ) v)
-        (retainedIntervalEquiv a ha (θ, τ) v) =
-      A v (retainedIntervalEquiv a ha
-        (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).1
-        (retainedIntervalEquiv a ha
-          (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).2 := by
+      A v (retainedIntervalEquiv a ha (η, σ) v,
+        retainedIntervalEquiv a ha (θ, τ) v) =
+      A v ((retainedIntervalEquiv a ha
+        (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).1, (retainedIntervalEquiv a ha
+          (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).2) := by
     rw [← hpair v]
   simpa only [actualRetainedIntervalClosing, ← hsites] using h
 
@@ -398,8 +396,8 @@ private theorem trace_actual_retainedInterval_eq_sum {T L q B : ℕ}
     (fun s t :
         ({v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q) × (Fin L → Fin q) ↦
       Matrix.trace (C * (List.ofFn (fun v ↦
-        A v (retainedIntervalEquiv a ha s v)
-          (retainedIntervalEquiv a ha t v))).prod)) =
+        A v (retainedIntervalEquiv a ha s v,
+          retainedIntervalEquiv a ha t v))).prod)) =
       ∑ ab : Fin B × Fin B,
         (fun η θ ↦ actualRetainedIntervalClosing A C a ha η θ ab.2 ab.1) ⊗ₖ
           interiorMatrixSlice (fun v : Fin L ↦ A ⟨a + v.val, by omega⟩)
@@ -453,18 +451,18 @@ private theorem exists_retainedSingle_trace_tensors {T L q D : ℕ}
     ∃ Af : Fin T → MPOTensor q D, ∀ σ τ : Fin T → Fin q,
       ((Matrix.single η θ (1 : ℂ)) ⊗ₖ
         (Matrix.of fun x y : Fin L → Fin q ↦ Matrix.trace
-          (C * (List.ofFn (fun v ↦ A v (x v) (y v))).prod))).submatrix
+          (C * (List.ofFn (fun v ↦ A v (x v, y v))).prod))).submatrix
           (retainedIntervalEquiv a ha).symm (retainedIntervalEquiv a ha).symm σ τ =
-        Matrix.trace (C * (List.ofFn (fun v ↦ Af v (σ v) (τ v))).prod) := by
+        Matrix.trace (C * (List.ofFn (fun v ↦ Af v (σ v, τ v))).prod) := by
   classical
-  let Af : Fin T → MPOTensor q D := fun v x y ↦
-    if h : a ≤ v.val ∧ v.val < a + L then A ⟨v.val - a, by omega⟩ x y
+  let Af : Fin T → MPOTensor q D := fun v (x, y) ↦
+    if h : a ≤ v.val ∧ v.val < a + L then A ⟨v.val - a, by omega⟩ (x, y)
     else if x = η ⟨v, h⟩ ∧ y = θ ⟨v, h⟩ then 1 else 0
   have hcore (v : Fin L) (x y : Fin q) :
-      Af ⟨a + v.val, by omega⟩ x y = A v x y := by
+      Af ⟨a + v.val, by omega⟩ (x, y) = A v (x, y) := by
     simp [Af, show a ≤ a + v.val ∧ a + v.val < a + L by omega]
   have hoff (v : Fin T) (hv : ¬(a ≤ v.val ∧ v.val < a + L)) :
-      Af v (η ⟨v, hv⟩) (θ ⟨v, hv⟩) = 1 := by
+      Af v (η ⟨v, hv⟩, θ ⟨v, hv⟩) = 1 := by
     simp [Af, hv]
   have hcap : MPOTensor.actualRetainedIntervalClosing Af C a ha η θ = C := by
     simp [MPOTensor.actualRetainedIntervalClosing, retainedIntervalPrefix,
@@ -502,10 +500,10 @@ private theorem exists_retainedSingle_trace_tensors {T L q D : ℕ}
     have hbad : ¬(σ v.val = η v ∧ τ v.val = θ v) := by
       intro hh
       exact hv.elim (fun he ↦ he hh.1) (fun he ↦ he hh.2)
-    have hz : Af v.val (σ v.val) (τ v.val) = 0 := by
+    have hz : Af v.val (σ v.val, τ v.val) = 0 := by
       simp [Af, v.property, hbad]
     have hmem : (0 : Matrix (Fin D) (Fin D) ℂ) ∈
-        List.ofFn (fun v ↦ Af v (σ v) (τ v)) := by
+        List.ofFn (fun v ↦ Af v (σ v, τ v)) := by
       simp only [List.mem_ofFn]
       exact ⟨v.val, hz⟩
     simp only [List.prod_eq_zero hmem, Matrix.mul_zero, Matrix.trace_zero]
@@ -749,7 +747,7 @@ theorem prod_actual_natural_affine_eq {T L q B : ℕ}
           (actualAffineRetainedConfig T L q a) ℂ × ℂ ↦
         (z.1 ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).submatrix e.symm e.symm +
           z.2 • (Matrix.of fun σ τ : Fin T → Fin q ↦ Matrix.trace
-            (C * (List.ofFn (fun v : Fin T ↦ Afull v (σ v) (τ v))).prod)))).prod =
+            (C * (List.ofFn (fun v : Fin T ↦ Afull v (σ v, τ v))).prod)))).prod =
         ((steps.map (fun z : Matrix (actualAffineRetainedConfig T L q a)
             (actualAffineRetainedConfig T L q a) ℂ × ℂ ↦
           (z.1 ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) +
@@ -759,7 +757,7 @@ theorem prod_actual_natural_affine_eq {T L q B : ℕ}
   intro e R Ainterval
   have hH :
       (Matrix.of fun σ τ : Fin T → Fin q ↦ Matrix.trace
-        (C * (List.ofFn (fun v : Fin T ↦ Afull v (σ v) (τ v))).prod)) =
+        (C * (List.ofFn (fun v : Fin T ↦ Afull v (σ v, τ v))).prod)) =
         (∑ ab : Fin B × Fin B,
           R ab ⊗ₖ interiorMatrixSlice Ainterval ab.1 ab.2).submatrix e.symm e.symm := by
     ext σ τ

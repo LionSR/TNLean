@@ -72,7 +72,7 @@ def IsThreeSiteFamilyClosure
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ) : Prop :=
   ∀ i₁ i₂ i₃ j₁ j₂ j₃,
     ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
-      ∑ s : Fin g, Matrix.trace (K s i₁ j₁ * K s i₂ j₂ * K s i₃ j₃ * R s)
+      ∑ s : Fin g, Matrix.trace (K s (i₁, j₁) * K s (i₂, j₂) * K s (i₃, j₃) * R s)
 
 /-- Contract a tripartite operator with inverse tensors at its first and third
 sites, leaving a matrix on the middle physical space.
@@ -123,7 +123,7 @@ theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
     (x y : MPSTensor.BlockEntryIndex dim) (i₂ j₂ : Fin d) :
     outerInverseContraction C ρ x y i₂ j₂ =
       if h : x.1 = y.1 then
-        K x.1 i₂ j₂ x.2.2 (h.symm ▸ y.2.1) * R x.1 (h.symm ▸ y.2.2) x.2.1
+        K x.1 (i₂, j₂) x.2.2 (h.symm ▸ y.2.1) * R x.1 (h.symm ▸ y.2.2) x.2.1
       else 0 := by
   classical
   rcases x with ⟨sx, alpha₁, beta₁⟩
@@ -134,7 +134,7 @@ theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
   rw [outerInverseContraction]
   simp_rw [hρ]
   have hInv (z : MPSTensor.BlockEntryIndex dim) (s : Fin g) :
-      (∑ i : Fin d, ∑ j : Fin d, C z (i, j) • K s i j) =
+      (∑ i : Fin d, ∑ j : Fin d, C z (i, j) • K s (i, j)) =
         if h : z.1 = s then
           Matrix.single (h ▸ z.2.1) (h ▸ z.2.2) (1 : ℂ)
         else 0 := by
@@ -148,7 +148,7 @@ theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
     · simpa [hzs] using hC z.1 s z.2.1 z.2.2 alpha beta
   let L (z : MPSTensor.BlockEntryIndex dim) (s : Fin g) :
       Matrix (Fin (dim s)) (Fin (dim s)) ℂ :=
-    ∑ i : Fin d, ∑ j : Fin d, C z (i, j) • K s i j
+    ∑ i : Fin d, ∑ j : Fin d, C z (i, j) • K s (i, j)
   let sectorFirstEquiv :
       (Fin d × Fin d × Fin d × Fin d × Fin g) ≃
         (Fin g × Fin d × Fin d × Fin d × Fin d) := {
@@ -180,8 +180,8 @@ theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
   have hRegroup :
       (∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
           C x (i₁, j₁) * C y (i₃, j₃) *
-            ∑ s : Fin g, Matrix.trace (K s i₁ j₁ * K s i₂ j₂ * K s i₃ j₃ * R s)) =
-        ∑ s : Fin g, Matrix.trace (L x s * K s i₂ j₂ * L y s * R s) := by
+            ∑ s : Fin g, Matrix.trace (K s (i₁, j₁) * K s (i₂, j₂) * K s (i₃, j₃) * R s)) =
+        ∑ s : Fin g, Matrix.trace (L x s * K s (i₂, j₂) * L y s * R s) := by
     simp only [L, Matrix.sum_mul, Matrix.mul_sum, Matrix.trace_sum,
       Matrix.smul_mul, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
     simp_rw [Finset.mul_sum]
@@ -242,7 +242,7 @@ theorem exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
             ∀ (x y : MPSTensor.BlockEntryIndex dim) (i₂ j₂ : Fin d),
               outerInverseContraction C ρ x y i₂ j₂ =
                 if h : x.1 = y.1 then
-                  K x.1 i₂ j₂ x.2.2 (h.symm ▸ y.2.1) *
+                  K x.1 (i₂, j₂) x.2.2 (h.symm ▸ y.2.1) *
                     R x.1 (h.symm ▸ y.2.2) x.2.1
                 else 0 := by
   obtain ⟨C, hC⟩ := hSpan.exists_mpo_block_left_inverse

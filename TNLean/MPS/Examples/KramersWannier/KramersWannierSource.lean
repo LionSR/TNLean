@@ -257,7 +257,7 @@ theorem spinFlip_mul_apply (M : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ)
 /-- The local entries of the translation tensor: the letter `(s', s)` is the matrix unit
 `E_{s, s'}`. -/
 theorem shiftTensor_apply (a b u v : Fin 2) :
-    shiftTensor a b u v = if u = b ∧ v = a then 1 else 0 := by
+    shiftTensor (a, b) u v = if u = b ∧ v = a then 1 else 0 := by
   fin_cases a <;> fin_cases b <;> fin_cases u <;> fin_cases v <;>
     norm_num [shiftTensor, shiftIntTensor, complexOfInt]
 

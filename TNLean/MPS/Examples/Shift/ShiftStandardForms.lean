@@ -279,8 +279,8 @@ theorem shiftExampleU₃BlockedStandardForm_normalized (d : ℕ) [NeZero d] :
 
 private theorem ketLeftMul_shiftPhysicalSwap_apply {d D : ℕ}
     (U : MPOTensor (d * d) D) (i j : Fin (d * d)) (α β : Fin D) :
-    U.ketLeftMul (shiftPhysicalSwap d) i j α β =
-      U (finProdFinEquiv (i.modNat, i.divNat)) j α β := by
+    U.ketLeftMul (shiftPhysicalSwap d) (i, j) α β =
+      U (finProdFinEquiv (i.modNat, i.divNat), j) α β := by
   simp [ketLeftMul, shiftPhysicalSwap, Equiv.Perm.permMatrix, PEquiv.toMatrix,
     bondPairSwapEquiv, bondPairSwap, Matrix.sum_apply, Matrix.ite_apply]
 

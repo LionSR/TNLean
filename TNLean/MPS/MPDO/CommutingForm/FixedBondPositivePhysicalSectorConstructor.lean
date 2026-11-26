@@ -123,7 +123,7 @@ private noncomputable def positiveEtaSectorTensor {K : ℕ}
     (η : (q h : Fin K) →
       Matrix (Fin (dr q) × Fin (dl h)) (Fin (dr q) × Fin (dl h)) ℂ) :
     MPOTensor d (Fintype.card (EtaFactorIndex dl dr)) :=
-  fun i j beta alpha ↦
+  fun (i, j) beta alpha ↦
     Matrix.blockDiagonal' (fun q : Fin K ↦
       etaLeftFactorFin q beta ⊗ₖ etaRightFactorFin η q alpha)
         (etaPhysicalSectorEquiv e i) (etaPhysicalSectorEquiv e j)
@@ -447,7 +447,7 @@ private theorem positiveEtaPhysicalSectorFactorization_physicalBond_eq
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
 private def emptyPhysicalTensor : MPOTensor 0 1 :=
-  fun i _ _ _ ↦ Fin.elim0 i
+  fun (i, _) _ _ ↦ Fin.elim0 i
 
 /-- The zero-sector factorization of the tensor on the empty physical space.
 

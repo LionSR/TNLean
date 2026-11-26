@@ -65,12 +65,12 @@ theorem IsMPUCanonicalFormII.eq_sign_virtualSandwich_of_mpo_eq_even
         (star (z : Matrix (Fin D) (Fin D) ℂ)) := by
   obtain ⟨_, η, z, hηsign, hz⟩ := hU.exists_unitary_virtual_sign_gauge_of_mpo_eq_even hV hEq
   have hηsq : η ^ 2 = 1 := sq_eq_one_iff.mpr hηsign
-  have hz' : ∀ i j, V i j = η • ((z : Matrix (Fin D) (Fin D) ℂ) * U i j *
+  have hz' : ∀ i j, V (i, j) = η • ((z : Matrix (Fin D) (Fin D) ℂ) * U (i, j) *
       (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
     simpa only [cast_eq] using hz
   refine ⟨η, z, hηsign, ?_⟩
-  funext i j
-  change η • V i j = _
+  funext ⟨i, j⟩
+  change η • V (i, j) = _
   rw [hz' i j, smul_smul, ← pow_two, hηsq, one_smul]
   rfl
 

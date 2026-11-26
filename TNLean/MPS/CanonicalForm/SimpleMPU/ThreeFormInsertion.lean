@@ -182,14 +182,14 @@ theorem IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMul
     (ρ Φ : Fin (D * D) → ℂ) (hpair : Φ ⬝ᵥ ρ = 1)
     (hE : normalizedDiagonal (doubleLayerTensor U) = Matrix.vecMulVec ρ Φ) :
     (∀ i j,
-      Φ ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (D * D)) i j *ᵥ ρ) =
+      Φ ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (i, j) *ᵥ ρ) =
         if i = j then 1 else 0) ∧
     (∀ i j k l,
-      doubleLayerTensor (MPOTensor.blockTensor U (D * D)) i j *
-          doubleLayerTensor (MPOTensor.blockTensor U (D * D)) k l =
-        doubleLayerTensor (MPOTensor.blockTensor U (D * D)) i j *
+      doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (i, j) *
+          doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (k, l) =
+        doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (i, j) *
           Matrix.vecMulVec ρ Φ *
-            doubleLayerTensor (MPOTensor.blockTensor U (D * D)) k l) := by
+            doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (k, l)) := by
   classical
   let E := normalizedDiagonal (doubleLayerTensor U)
   let A := residualAlgebra U

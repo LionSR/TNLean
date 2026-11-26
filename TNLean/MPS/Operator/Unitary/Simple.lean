@@ -70,8 +70,8 @@ bond indices.
 Source: arXiv:1703.09188, Definition III.2, lines 363--374 and Figures
 `II_Simple1.png`, `II_Simple2.png`. -/
 @[simp] theorem doubleLayerTensor_apply (U : MPOTensor d D) (i k : Fin d) :
-    doubleLayerTensor U i k =
-      (∑ j : Fin d, (physicalAdjointTensor U i j) ⊗ₖ (U j k)).submatrix
+    doubleLayerTensor U (i, k) =
+      (∑ j : Fin d, (physicalAdjointTensor U (i, j)) ⊗ₖ (U (j, k))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
   rw [doubleLayerTensor, mulTensor_apply]
 
@@ -109,10 +109,10 @@ lines 363--374 and Figures `II_Simple1.png`, `II_Simple2.png`. -/
 def IsMPUSimple (U : MPOTensor d D) : Prop :=
   ∃ a b : Fin (D * D) → ℂ,
     (∀ i j : Fin d,
-      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0) ∧
+      a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b) = if i = j then 1 else 0) ∧
     (∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l)
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * vecMulVec b a * doubleLayerTensor U (k, l))
 
 /-- The bond-one identity tensor is simple, with both boundary vectors equal to one.
 
@@ -142,7 +142,7 @@ Source: arXiv:1703.09188, equation `simple1`, lines 363--370 and Figure
 `II_Simple1.png`. -/
 theorem simple1 {U : MPOTensor d D} (hU : IsMPUSimple U) :
     ∃ a b : Fin (D * D) → ℂ, ∀ i j : Fin d,
-      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0 := by
+      a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b) = if i = j then 1 else 0 := by
   obtain ⟨a, b, h₁, _⟩ := hU
   exact ⟨a, b, h₁⟩
 
@@ -154,8 +154,8 @@ Source: arXiv:1703.09188, equation `simple2`, lines 363--374 and Figure
 `II_Simple2.png`. -/
 theorem simple2 {U : MPOTensor d D} (hU : IsMPUSimple U) :
     ∃ a b : Fin (D * D) → ℂ, ∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l := by
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * vecMulVec b a * doubleLayerTensor U (k, l) := by
   obtain ⟨a, b, _, h₂⟩ := hU
   exact ⟨a, b, h₂⟩
 
@@ -172,8 +172,8 @@ theorem mpo_doubleLayerTensor_eq_one {U : MPOTensor d D} (hU : IsMPUSimple U)
   rw [mpo_apply, mpoMatrixEntry, Matrix.one_apply]
   rw [evalWord_ofFn]
   let P : Matrix (Fin (D * D)) (Fin (D * D)) ℂ → Prop :=
-    fun A ↦ ∃ i j, A = doubleLayerTensor U i j
-  have hP : ∀ A ∈ List.ofFn (fun x : Fin N ↦ doubleLayerTensor U (σ x) (τ x)), P A := by
+    fun A ↦ ∃ i j, A = doubleLayerTensor U (i, j)
+  have hP : ∀ A ∈ List.ofFn (fun x : Fin N ↦ doubleLayerTensor U (σ x, τ x)), P A := by
     intro A hA
     simp only [List.mem_ofFn] at hA
     obtain ⟨x, rfl⟩ := hA

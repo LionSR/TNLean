@@ -57,7 +57,7 @@ boundary, independently of chain length. -/
 theorem mpoWithBoundary_eq_of_conj {A : MPOTensor d D} {B : MPOTensor d E}
     {V : Matrix (Fin E) (Fin D) ℂ} {W : Matrix (Fin D) (Fin E) ℂ}
     (hVW : V * W = 1) (hWV : W * V = 1)
-    (hletter : ∀ i j, V * A i j * W = B i j)
+    (hletter : ∀ i j, V * A (i, j) * W = B (i, j))
     (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
     mpoWithBoundary A X N = mpoWithBoundary B (V * X * W) N := by
   ext σ τ
@@ -138,7 +138,7 @@ theorem exists_boundaryGauge (h : IsPeriodicAdjointFamily A dual)
     ∃ (V : Matrix (Fin (dim (dual a))) (Fin (dim a)) ℂ)
       (W : Matrix (Fin (dim a)) (Fin (dim (dual a))) ℂ),
       V * W = 1 ∧ W * V = 1 ∧
-      (∀ i j, physicalAdjointTensor (A a) i j = W * A (dual a) i j * V) ∧
+      (∀ i j, physicalAdjointTensor (A a) (i, j) = W * A (dual a) (i, j) * V) ∧
       ∀ (X : Matrix (Fin (dim a)) (Fin (dim a)) ℂ) (N : ℕ),
         (mpoWithBoundary (A a) X N)ᴴ =
           mpoWithBoundary (A (dual a)) (V * X.map (starRingEnd ℂ) * W) N := by
@@ -151,7 +151,7 @@ theorem exists_boundaryGauge (h : IsPeriodicAdjointFamily A dual)
     (Matrix.mul_eq_one_comm_of_equiv
       (finCongr (h.bondDim_dual hdual hNormal hDim a).symm)).mp hred.mul_eq_one
   have hletter (i j : Fin d) :
-      V * physicalAdjointTensor (A a) i j * W = A (dual a) i j := by
+      V * physicalAdjointTensor (A a) (i, j) * W = A (dual a) (i, j) := by
     simpa [toMPSTensor] using hred.evalWord [finProdFinEquiv (i, j)]
   refine ⟨V, W, hred.mul_eq_one, hWV, ?_, ?_⟩
   · intro i j

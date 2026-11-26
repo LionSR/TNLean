@@ -72,11 +72,11 @@ with blocks `N l`, then `(A · B)^{ik}` is block diagonal along `mulBond e₁ e�
 theorem mulTensor_blockDiagonal' (M : ∀ k, MPOTensor d (n k)) (N : ∀ l, MPOTensor d (m l))
     (e₁ : (Σ k, Fin (n k)) ≃ Fin D₁) (e₂ : (Σ l, Fin (m l)) ≃ Fin D₂) {A : MPOTensor d D₁}
     {B : MPOTensor d D₂}
-    (hA : ∀ i j, A i j = (Matrix.blockDiagonal' fun k => M k i j).submatrix e₁.symm e₁.symm)
-    (hB : ∀ i j, B i j = (Matrix.blockDiagonal' fun l => N l i j).submatrix e₂.symm e₂.symm)
+    (hA : ∀ i j, A (i, j) = (Matrix.blockDiagonal' fun k => M k (i, j)).submatrix e₁.symm e₁.symm)
+    (hB : ∀ i j, B (i, j) = (Matrix.blockDiagonal' fun l => N l (i, j)).submatrix e₂.symm e₂.symm)
     (i k : Fin d) :
-    mulTensor A B i k =
-      (Matrix.blockDiagonal' fun kl : κ × ν => mulTensor (M kl.1) (N kl.2) i k).submatrix
+    mulTensor A B (i, k) =
+      (Matrix.blockDiagonal' fun kl : κ × ν => mulTensor (M kl.1) (N kl.2) (i, k)).submatrix
         (mulBond e₁ e₂).symm (mulBond e₁ e₂).symm := by
   ext a b
   obtain ⟨⟨⟨k₁, l₁⟩, r⟩, rfl⟩ := (mulBond e₁ e₂).surjective a
@@ -100,11 +100,11 @@ sum of the two tensors, formed over `R`. -/
 theorem directSum_complexOfRing {R : Type*} [CommRing R] (f : R →+* ℂ)
     (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i j : Fin d) :
-    directSum (fun i j => Matrix.complexOfRing f (M i j))
-        (fun i j => Matrix.complexOfRing f (N i j)) i j =
+    directSum (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
+        (Function.uncurry fun i j => Matrix.complexOfRing f (N i j)) (i, j) =
       Matrix.complexOfRing f ((Matrix.fromBlocks (M i j) 0 0 (N i j)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) := by
-  simp only [directSum, Matrix.complexOfRing]
+  simp only [directSum, Matrix.complexOfRing, Function.uncurry_apply_pair]
   rw [← Matrix.submatrix_map, Matrix.fromBlocks_map, Matrix.map_zero _ (map_zero f),
     Matrix.map_zero _ (map_zero f)]
 

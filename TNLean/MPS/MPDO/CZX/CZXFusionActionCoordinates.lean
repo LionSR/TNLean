@@ -44,7 +44,7 @@ def sequentialActionKet (x : Fin 2) : Matrix (Fin 4) (Fin 1) ℂ :=
 Source: arXiv:2502.20257, `eq:defL`, lines 1875–1913, specialized to the CZX
 fusion/action data in lines 4671–4694. -/
 def fusionActionLetter (x : Fin 2) : Matrix (Fin 4) (Fin 4) ℂ :=
-  mulTensor tensor tensor (finProdFinEquiv (x, x)) (finProdFinEquiv (x, x))
+  mulTensor tensor tensor (finProdFinEquiv (x, x), finProdFinEquiv (x, x))
 
 /-- The scalar obtained by contracting the sequential printed bra, one supported
 product letter, and the maintained right fusion cap. Source: arXiv:2502.20257,

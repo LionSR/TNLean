@@ -44,8 +44,7 @@ unblocked double-layer word evaluation. -/
 @[simp] theorem doubleLayerTensor_blockTensor_decodeBlockEquiv_symm
     (U : MPOTensor d D) (L : ℕ) (σ τ : Fin L → Fin d) :
     doubleLayerTensor (blockTensor U L)
-        ((Kraus.decodeBlockEquiv d L).symm σ)
-        ((Kraus.decodeBlockEquiv d L).symm τ) =
+        ((Kraus.decodeBlockEquiv d L).symm σ, (Kraus.decodeBlockEquiv d L).symm τ) =
       evalWord (doubleLayerTensor U) (List.ofFn σ) (List.ofFn τ) := by
   rw [doubleLayerTensor_blockTensor, blockTensor_apply]
   simp [Kraus.wordOfBlock]
@@ -56,10 +55,10 @@ The transpose in the coefficient makes `contractPhysical W (single j i 1) = W i 
 Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
 noncomputable def contractPhysical (W : MPOTensor d D)
     (X : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  ∑ i : Fin d, ∑ j : Fin d, (X j i) • W i j
+  ∑ i : Fin d, ∑ j : Fin d, (X j i) • W (i, j)
 
 @[simp] theorem contractPhysical_single (W : MPOTensor d D) (i j : Fin d) :
-    contractPhysical W (Matrix.single j i 1) = W i j := by
+    contractPhysical W (Matrix.single j i 1) = W (i, j) := by
   classical
   simp only [contractPhysical]
   rw [Finset.sum_eq_single i]
@@ -109,7 +108,7 @@ theorem normalizedDiagonal_blockTensor [NeZero d] (L : ℕ)
         (List.ofFn (Kraus.decodeBlock d L x))) = _
   rw [hsum]
   simp only [evalWord_ofFn]
-  have hprod := List.prod_ofFn_sum (fun _ : Fin L ↦ fun i : Fin d ↦ W i i)
+  have hprod := List.prod_ofFn_sum (fun _ : Fin L ↦ fun i : Fin d ↦ W (i, i))
   rw [← hprod]
   rw [smul_pow]
   congr 1
@@ -135,7 +134,7 @@ theorem normalizedDiagonal_pow_eq_sum_evalWord
   rw [smul_pow]
   congr 1
   simpa [List.ofFn_const] using
-    (List.prod_ofFn_sum (fun _ : Fin K ↦ fun i : Fin d ↦ W i i))
+    (List.prod_ofFn_sum (fun _ : Fin K ↦ fun i : Fin d ↦ W (i, i)))
 
 /-- The normalized diagonal of the physical-adjoint double layer is the
 normalized transfer matrix, with the row and column pair indices explicitly
@@ -169,14 +168,14 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
     Finset.mem_univ, ↓reduceIte, Matrix.smul_apply, smul_eq_mul, mul_one,
     star_mul', star_inv₀, Complex.conj_ofReal, Finset.sum_ite_eq]
   let g : Fin d × Fin d → ℂ := fun x ↦
-    ((Real.sqrt d : ℂ)⁻¹) * U x.1 x.2 p₂ q₂ *
-      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U x.1 x.2 p₁ q₁))
+    ((Real.sqrt d : ℂ)⁻¹) * U (x.1, x.2) p₂ q₂ *
+      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U (x.1, x.2) p₁ q₁))
   let f : Fin (d * d) → ℂ := fun x ↦
-    ((Real.sqrt d : ℂ)⁻¹) * U x.divNat x.modNat p₂ q₂ *
-      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U x.divNat x.modNat p₁ q₁))
+    ((Real.sqrt d : ℂ)⁻¹) * U (x.divNat, x.modNat) p₂ q₂ *
+      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U (x.divNat, x.modNat) p₁ q₁))
   calc
     (∑ i : Fin d, ∑ j : Fin d,
-        (d : ℂ)⁻¹ * ((starRingEnd ℂ) (U j i p₁ q₁) * U j i p₂ q₂)) =
+        (d : ℂ)⁻¹ * ((starRingEnd ℂ) (U (j, i) p₁ q₁) * U (j, i) p₂ q₂)) =
         ∑ x : Fin d × Fin d, g x := by
       rw [Finset.sum_comm, Fintype.sum_prod_type]
       apply Finset.sum_congr₂
@@ -313,7 +312,7 @@ identity term and the residual slice against the dual physical matrix
 Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
 theorem entry_eq_diagonal_add_residual
     (W : MPOTensor d D) (i j : Fin d) :
-    W i j = (if i = j then (1 : ℂ) else 0) • normalizedDiagonal W +
+    W (i, j) = (if i = j then (1 : ℂ) else 0) • normalizedDiagonal W +
       residualSlice W (Matrix.single j i 1) := by
   rw [residualSlice, contractPhysical_single]
   by_cases hij : i = j
@@ -348,7 +347,7 @@ theorem exists_identity_add_traceless_decomposition [NeZero d]
       σ e = 1 ∧
       (∀ a, a ≠ e → Matrix.trace (σ a) = 0) ∧
       S e = normalizedDiagonal W ∧
-      ∀ i j, W i j =
+      ∀ i j, W (i, j) =
         (if i = j then normalizedDiagonal W else 0) +
           ∑ a ∈ (Finset.univ.erase e), (σ a i j) • S a := by
   obtain ⟨σ, e, he, htr⟩ := Matrix.exists_identity_traceless_basis (d := d)
@@ -373,10 +372,10 @@ theorem exists_identity_add_traceless_decomposition [NeZero d]
     change contractPhysicalLinear W (((d : ℂ)⁻¹) • 1) = _
     rw [map_smul]
     rfl
-  have hfull (i j : Fin d) : W i j = ∑ a : Fin (d * d), (σ a i j) • S a := by
+  have hfull (i j : Fin d) : W (i, j) = ∑ a : Fin (d * d), (σ a i j) • S a := by
     have hexpand := τ.sum_repr (Matrix.single j i (1 : ℂ))
     calc
-      W i j = contractPhysicalLinear W (Matrix.single j i (1 : ℂ)) := by simp
+      W (i, j) = contractPhysicalLinear W (Matrix.single j i (1 : ℂ)) := by simp
       _ = contractPhysicalLinear W
           (∑ a : Fin (d * d), (τ.repr (Matrix.single j i (1 : ℂ)) a) • τ a) := by
             rw [hexpand]
@@ -408,20 +407,20 @@ theorem trace_prod_contractPhysical_of_mpo_eq_one
       ∏ k, Matrix.trace (X k) := by
   classical
   change Matrix.trace
-      (List.ofFn (fun k ↦ ∑ i : Fin d, ∑ j : Fin d, ((X k) j i) • W i j)).prod = _
+      (List.ofFn (fun k ↦ ∑ i : Fin d, ∑ j : Fin d, ((X k) j i) • W (i, j))).prod = _
   rw [List.prod_ofFn_sum]
   simp_rw [List.prod_ofFn_sum]
   change Matrix.trace
       (∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
-        (List.ofFn (fun k ↦ ((X k) (τ k) (σ k)) • W (σ k) (τ k))).prod) = _
+        (List.ofFn (fun k ↦ ((X k) (τ k) (σ k)) • W (σ k, τ k))).prod) = _
   rw [Finset.sum_comm]
   have hdistrib :
       Matrix.trace
           (∑ τ : Fin N → Fin d, ∑ σ : Fin N → Fin d,
-            (List.ofFn (fun k ↦ ((X k) (τ k) (σ k)) • W (σ k) (τ k))).prod) =
+            (List.ofFn (fun k ↦ ((X k) (τ k) (σ k)) • W (σ k, τ k))).prod) =
         ∑ τ : Fin N → Fin d, ∑ σ : Fin N → Fin d,
           (∏ k, (X k) (τ k) (σ k)) *
-            Matrix.trace (List.ofFn (fun k ↦ W (σ k) (τ k))).prod := by
+            Matrix.trace (List.ofFn (fun k ↦ W (σ k, τ k))).prod := by
     rw [Matrix.trace_sum]
     apply Finset.sum_congr rfl
     intro τ _
@@ -432,7 +431,7 @@ theorem trace_prod_contractPhysical_of_mpo_eq_one
     rfl
   rw [hdistrib]
   have hentry (σ τ : Fin N → Fin d) :
-      Matrix.trace (List.ofFn (fun k ↦ W (σ k) (τ k))).prod =
+      Matrix.trace (List.ofFn (fun k ↦ W (σ k, τ k))).prod =
         if σ = τ then 1 else 0 := by
     have h := congrArg (fun M ↦ M σ τ) hW
     simpa [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.one_apply] using h

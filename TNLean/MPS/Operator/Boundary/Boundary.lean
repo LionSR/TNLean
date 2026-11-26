@@ -108,7 +108,7 @@ def IsMPDOWithBoundary (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) : Pr
 /-- Membership of the boundary algebra is precisely letterwise commutation. -/
 @[simp] theorem mem_commutingBoundaryAlgebra_iff (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    X ∈ commutingBoundaryAlgebra M ↔ ∀ i j, Commute X (M i j) := by
+    X ∈ commutingBoundaryAlgebra M ↔ ∀ i j, Commute X (M (i, j)) := by
   simp only [commutingBoundaryAlgebra, Subalgebra.mem_centralizer_iff, Set.forall_mem_range]
   constructor
   · intro h i j

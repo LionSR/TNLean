@@ -55,9 +55,9 @@ private lemma wordOfBlock_succ (k : ℕ)
 
 private lemma blockTensor_succ_apply (U : MPOTensor d D) (k : ℕ)
     (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
-    blockTensor U (k + 1) I J =
-      U (blockHead k I) (blockHead k J) *
-        blockTensor U k (blockTail k I) (blockTail k J) := by
+    blockTensor U (k + 1) (I, J) =
+      U (blockHead k I, blockHead k J) *
+        blockTensor U k (blockTail k I, blockTail k J) := by
   simp only [blockTensor_apply, wordOfBlock_succ, evalWord_cons]
 
 private lemma sourceCutSVD_factorization_apply
@@ -92,7 +92,7 @@ private noncomputable def rightSuccRight (U : MPOTensor d D) (k : ℕ) :
     ∑ γ : Fin D,
       ((sourceSVD₁ (blockTensor U k)).diagonal *
         (sourceSVD₁ (blockTensor U k)).U) q (γ, blockTail k J) *
-          U i (blockHead k J) α γ
+          U (i, blockHead k J) α γ
 
 /-- The first source cut after adjoining one blocked site factors through a space of
 size $d\,r[\operatorname{blockTensor}(U,k)]$.
@@ -112,25 +112,25 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
   · simp only [ite_eq_left]
     change (∑ q, Matrix.conjTranspose S.V (blockTail k I, β) q *
       ∑ γ, (S.diagonal * S.U) q (γ, blockTail k J) *
-        U (blockHead k I) (blockHead k J) α γ) = _
+        U (blockHead k I, blockHead k J) α γ) = _
     calc
-      _ = ∑ γ, U (blockHead k I) (blockHead k J) α γ *
+      _ = ∑ γ, U (blockHead k I, blockHead k J) α γ *
           ∑ q, Matrix.conjTranspose S.V (blockTail k I, β) q *
             (S.diagonal * S.U) q (γ, blockTail k J) := by
             simp only [Finset.mul_sum]
             rw [Finset.sum_comm]
             refine Finset.sum_congr₂ fun γ _ q _ ↦ ?_
             ring
-      _ = ∑ γ, U (blockHead k I) (blockHead k J) α γ *
+      _ = ∑ γ, U (blockHead k I, blockHead k J) α γ *
             sourceCutM₁ (blockTensor U k) (blockTail k I, β)
               (γ, blockTail k J) := by
             apply Finset.sum_congr rfl
             intro γ _
             rw [sourceCutSVD_factorization_apply S]
-      _ = (U (blockHead k I) (blockHead k J) *
-            blockTensor U k (blockTail k I) (blockTail k J)) α β := by
+      _ = (U (blockHead k I, blockHead k J) *
+            blockTensor U k (blockTail k I, blockTail k J)) α β := by
             simp only [sourceCutM₁_apply, Matrix.mul_apply]
-      _ = blockTensor U (k + 1) I J α β := by
+      _ = blockTensor U (k + 1) (I, J) α β := by
             rw [blockTensor_succ_apply]
   · intro i hi
     simp [hi]

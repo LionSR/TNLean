@@ -104,16 +104,16 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
     (hFusion : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
       U α β *
           (mulTensor (verticalBNTMPO (D₁.tensor α))
-            (verticalBNTMPO (D₁.tensor β))) i j *
+            (verticalBNTMPO (D₁.tensor β))) (i, j) *
           (U α β)ᴴ =
         Matrix.blockDiagonal' fun γ ↦
-          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) i j)
+          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j))
     (hReconstruction : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
       (mulTensor (verticalBNTMPO (D₁.tensor α))
-        (verticalBNTMPO (D₁.tensor β))) i j =
+        (verticalBNTMPO (D₁.tensor β))) (i, j) =
         (U α β)ᴴ *
           (Matrix.blockDiagonal' fun γ ↦
-            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) i j) *
+            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j)) *
           U α β)
     (hRepresentations : ∀ (L : ℕ), 0 < L →
       mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
@@ -341,16 +341,16 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
     (hFusion : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
       U α β *
           (mulTensor (verticalBNTMPO (D₁.tensor α))
-            (verticalBNTMPO (D₁.tensor β))) i j *
+            (verticalBNTMPO (D₁.tensor β))) (i, j) *
           (U α β)ᴴ =
         Matrix.blockDiagonal' fun γ ↦
-          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) i j)
+          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j))
     (hReconstruction : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
       (mulTensor (verticalBNTMPO (D₁.tensor α))
-        (verticalBNTMPO (D₁.tensor β))) i j =
+        (verticalBNTMPO (D₁.tensor β))) (i, j) =
         (U α β)ᴴ *
           (Matrix.blockDiagonal' fun γ ↦
-            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) i j) *
+            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j)) *
           U α β) :
     HasBNTFusionTensorClause M := by
   have hRepresentations : ∀ (L : ℕ), 0 < L →

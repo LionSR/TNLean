@@ -162,32 +162,33 @@ of their bond-space product, rescaled by the square of that scalar. -/
 theorem mulTensor_smul_complexOfRing (c : ℂ)
     (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
-    MPOTensor.mulTensor (fun i j => c • Matrix.complexOfRing f (M i j))
-        (fun i j => c • Matrix.complexOfRing f (N i j)) i k =
+    MPOTensor.mulTensor (Function.uncurry fun i j => c • Matrix.complexOfRing f (M i j))
+        (Function.uncurry fun i j => c • Matrix.complexOfRing f (N i j)) (i, k) =
       (c * c) • Matrix.complexOfRing f (mulTensorR M N i k) := by
   ext x y
   simp only [MPOTensor.mulTensor_apply, mulTensorR, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, smul_eq_mul, map_sum,
-    map_mul]
+    map_mul, Function.uncurry_apply_pair]
   rw [Finset.mul_sum]
   exact Finset.sum_congr rfl fun j _ => by ring
 
 /-- The bond-space product commutes with the entrywise image. -/
 theorem mulTensor_complexOfRing (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
-    MPOTensor.mulTensor (fun i j => Matrix.complexOfRing f (M i j))
-        (fun i j => Matrix.complexOfRing f (N i j)) i k =
+    MPOTensor.mulTensor (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
+        (Function.uncurry fun i j => Matrix.complexOfRing f (N i j)) (i, k) =
       Matrix.complexOfRing f (mulTensorR M N i k) := by
   simpa using mulTensor_smul_complexOfRing f 1 M N i k
 
 /-- The bond-space action commutes with the entrywise image. -/
 theorem actTensor_complexOfRing (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (A : Fin d → Matrix (Fin D₂) (Fin D₂) R) (i : Fin d) :
-    MPOTensor.actTensor (fun i j => Matrix.complexOfRing f (M i j))
+    MPOTensor.actTensor (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
         (fun j => Matrix.complexOfRing f (A j)) i =
       Matrix.complexOfRing f (actTensorR M A i) := by
   ext x y
   simp only [MPOTensor.actTensor_apply, actTensorR, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, map_sum, map_mul]
+    Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, map_sum, map_mul,
+    Function.uncurry_apply_pair]
 
 end MPSTensor

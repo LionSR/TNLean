@@ -458,7 +458,7 @@ theorem isInjective_blockMixedInterpolation
 to the output block `y`. -/
 def operatorSector {n : Fin s → ℕ} {χ : ℕ} (T : MPOTensor (∑ y, n y) χ) (y x : Fin s) :
     Fin (n y) → Fin (n x) → Matrix (Fin χ) (Fin χ) ℂ :=
-  fun t u => T (finSigmaFinEquiv ⟨y, t⟩) (finSigmaFinEquiv ⟨x, u⟩)
+  fun t u => T (finSigmaFinEquiv ⟨y, t⟩, finSigmaFinEquiv ⟨x, u⟩)
 
 /-- The letter of the common MPO between two physical sectors. -/
 noncomputable def blockMixedMPOEntry
@@ -489,7 +489,7 @@ noncomputable def blockMixedMPO
     (W₀ : ∀ x y, Fin (M x y) → Matrix (Fin (χ₀ * D₀ x)) (Fin (D₀ y)) ℂ)
     (W₁ : ∀ x y, Fin (M x y) → Matrix (Fin (χ₁ * D₁ x)) (Fin (D₁ y)) ℂ) :
     MPOTensor (blockMixedPhysicalDim D₀ D₁) (χ₀ + χ₁) :=
-  fun p q => blockMixedMPOEntry T₀ T₁ V₀ V₁ W₀ W₁
+  fun (p, q) => blockMixedMPOEntry T₀ T₁ V₀ V₁ W₀ W₁
     (finSigmaFinEquiv.symm p) (finSigmaFinEquiv.symm q)
 
 @[simp] theorem blockMixedMPO_finSigmaFinEquiv
@@ -500,10 +500,11 @@ noncomputable def blockMixedMPO
     (W₁ : ∀ x y, Fin (M x y) → Matrix (Fin (χ₁ * D₁ x)) (Fin (D₁ y)) ℂ)
     (y x : Fin s) (t : Fin ((D₀ y + D₁ y) * (D₀ y + D₁ y)))
     (u : Fin ((D₀ x + D₁ x) * (D₀ x + D₁ x))) :
-    blockMixedMPO T₀ T₁ V₀ V₁ W₀ W₁ (finSigmaFinEquiv ⟨y, t⟩) (finSigmaFinEquiv ⟨x, u⟩) =
+    blockMixedMPO T₀ T₁ V₀ V₁ W₀ W₁ (finSigmaFinEquiv ⟨y, t⟩, finSigmaFinEquiv ⟨x, u⟩) =
       blockMixedMPOSector (operatorSector T₀ y x) (operatorSector T₁ y x)
         (V₀ x y) (V₁ x y) (W₀ x y) (W₁ x y) t u := by
   unfold blockMixedMPO
+  dsimp only
   rw [Equiv.symm_apply_apply, Equiv.symm_apply_apply]
   rfl
 
@@ -528,7 +529,7 @@ private theorem endpoint_block_action_entry {D : Fin s → ℕ} {χ : ℕ}
     (h.letter (finSigmaFinEquiv ⟨y, finProdFinEquiv (r, t)⟩))
   simp only [MPOTensor.actTensor, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, Equiv.symm_apply_apply] at hh
-  rw [sum_sectorTensor A x (fun q Z => T _ q α β * Z i j) (by simp),
+  rw [sum_sectorTensor A x (fun q Z => T (_, q) α β * Z i j) (by simp),
     sum_sigma_sectorTensor A y _ (fun q Z => (W x q.1 q.2 * Z * V x q.1 q.2)
       (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j))) (by simp)] at hh
   rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type] at hh
@@ -585,7 +586,7 @@ theorem isBiorthogonalDecomposition_blockMixedInterpolation (γ : ℝ) (x : Fin 
     rw [hB x, MPOTensor.actTensor_right_mul]
     simp only [hB]
     rw [MPOTensor.actTensor_apply,
-      sum_sectorTensor _ x (fun q Z => blockMixedMPO T₀ T₁ V₀ V₁ W₀ W₁ _ q ⊗ₖ Z)
+      sum_sectorTensor _ x (fun q Z => blockMixedMPO T₀ T₁ V₀ V₁ W₀ W₁ (_, q) ⊗ₖ Z)
         (by simp)]
     simp only [blockMixedMPO_finSigmaFinEquiv]
     rw [blockMixedMPOSector_action _ _ (A₀ x) (A₁ x) (A₀ y) (A₁ y)

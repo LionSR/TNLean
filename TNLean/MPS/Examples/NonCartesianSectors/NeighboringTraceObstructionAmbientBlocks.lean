@@ -248,7 +248,7 @@ private noncomputable def terminalSource : MPOTensor 1 1 :=
   doubledTensor MPSTensor.scalarUnitTensor
 
 @[simp] private theorem terminalSource_apply (i j : Fin 1) :
-    terminalSource i j = 1 := by
+    terminalSource (i, j) = 1 := by
   fin_cases i
   fin_cases j
   ext a b

@@ -66,7 +66,7 @@ theorem TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges
     W' = virtualSandwich (z : Matrix (Fin D) (Fin D) ℂ) W
       (star (z : Matrix (Fin D) (Fin D) ℂ)) := by
   subst hu
-  funext i j
+  funext ⟨i, j⟩
   ext α γ
   set p := finProdFinEquiv.symm i
   set q := finProdFinEquiv.symm j
@@ -86,7 +86,7 @@ theorem TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges
       Matrix.one_apply, Matrix.transpose_apply, ite_mul, one_mul, zero_mul,
       Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq, Finset.mem_univ,
       ↓reduceIte]
-  calc W' i j α γ
+  calc W' (i, j) α γ
       = ∑ t, ∑ s, (a ᵥ* star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ)) t *
           (((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u) (t, s) q *
             (b ᵥ* star (y : Matrix (Fin r) (Fin r) ℂ)) s := by
@@ -97,14 +97,14 @@ theorem TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges
     _ = ∑ t, ∑ s, ∑ δ, ∑ β, Z α β * S.X₂ (β, p.1) t * u (t, s) q *
           (star Z δ γ * S.X₁ (p.2, δ) s) := by
         simp only [ha, hb, Finset.sum_mul, Finset.mul_sum]
-    _ = ∑ δ, ∑ β, Z α β * W i j β δ * star Z δ γ := by
+    _ = ∑ δ, ∑ β, Z α β * W (i, j) β δ * star Z δ γ := by
         rw [Fintype.sum_last_two_first_four]
         refine Finset.sum_congr rfl fun δ _ ↦ Finset.sum_congr rfl fun β _ ↦ ?_
         rw [S.W_apply, Finset.mul_sum, Finset.sum_mul]
         refine Finset.sum_congr rfl fun t _ ↦ ?_
         rw [Finset.mul_sum, Finset.sum_mul]
         exact Finset.sum_congr rfl fun s _ ↦ by ring
-    _ = virtualSandwich Z W (star Z) i j α γ := by
+    _ = virtualSandwich Z W (star Z) (i, j) α γ := by
         simp only [virtualSandwich_apply, Matrix.mul_apply, Finset.sum_mul]
 
 /-- **Converse of the fundamental theorem at block lengths.** Two-site standard forms whose gates

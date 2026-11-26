@@ -96,7 +96,8 @@ def thetaTwoZ (h h' : Fin 10) : Matrix (Fin 6) (Fin 6) (ℤ√2) :=
 
 /-- The weighted bond object `Θ_2 = 5 A_1 ⊕ 3 A_ψ` as a matrix product operator tensor: the
 weights are ten times the generic P6 point `(λ_1, λ_ψ) = (1/2, 3/10)` (data file §1.2). -/
-noncomputable def thetaTwo : MPOTensor 10 6 := fun h h' => complexOfZsqrt2 (thetaTwoZ h h')
+noncomputable def thetaTwo : MPOTensor 10 6 :=
+    Function.uncurry fun h h' => complexOfZsqrt2 (thetaTwoZ h h')
 
 /-- The stacked product `Θ_2 ⋆ (√2 A_σ)` on the hundred-letter pair alphabet, of bond dimension
 `24` in the bond order `4 (Θ_2 index) + (P_σ index)` (data file §1.2). -/

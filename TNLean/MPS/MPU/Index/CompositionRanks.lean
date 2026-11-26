@@ -235,12 +235,12 @@ private theorem sourceCutM₁_blockTwo_mulTensor_factorization
   apply Matrix.transpose_injective
   simp only [Matrix.transpose_mul, Matrix.transpose_transpose]
   have hA (i j : Fin q) (a b : Fin E₁) :
-      A i j a b = ∑ t : ι₁, R₁.transpose (a, j) t * L₁.transpose t (i, b) := by
+      A (i, j) a b = ∑ t : ι₁, R₁.transpose (a, j) t * L₁.transpose t (i, b) := by
     have h := congrArg (fun M => M (i, b) (a, j)) h₁
     simpa only [sourceCutM₁_apply, Matrix.mul_apply, Matrix.transpose_apply,
       mul_comm] using h
   have hB (i j : Fin q) (a b : Fin E₂) :
-      B i j a b = ∑ t : ι₂, R₂.transpose (a, j) t * L₂.transpose t (i, b) := by
+      B (i, j) a b = ∑ t : ι₂, R₂.transpose (a, j) t * L₂.transpose t (i, b) := by
     have h := congrArg (fun M => M (i, b) (a, j)) h₂
     simpa only [sourceCutM₁_apply, Matrix.mul_apply, Matrix.transpose_apply,
       mul_comm] using h
@@ -278,7 +278,7 @@ private theorem mulTensor_reindexPhysical {d' : ℕ} (σ : Fin d' ≃ Fin d)
     mulTensor (reindexPhysical σ U) (reindexPhysical σ V) =
       reindexPhysical σ (mulTensor U V) := by
   classical
-  ext i k x y
+  ext ⟨i, k⟩ x y
   simp only [mulTensor_apply, reindexPhysical, Matrix.submatrix_apply,
     Matrix.sum_apply, Matrix.kroneckerMap_apply]
   rw [← Equiv.sum_comp σ]
@@ -287,8 +287,8 @@ private theorem blockTwo_reindexPhysical {d' : ℕ} (σ : Fin d' ≃ Fin d)
     (U : MPOTensor d D₁) :
     blockTwo (reindexPhysical σ U) =
       reindexPhysical (pairPhysicalEquiv σ) (blockTwo U) := by
-  ext I J
-  simp [blockTwo, reindexPhysical, pairPhysicalEquiv]
+  funext ⟨I, J⟩
+  simp [blockTwo_apply, reindexPhysical, pairPhysicalEquiv]
 
 private theorem rightRank_blockTwo_mulTensor_reindexPhysical {d' : ℕ}
     (σ : Fin d' ≃ Fin d) (U : MPOTensor d D₁) (V : MPOTensor d D₂) :
@@ -346,12 +346,12 @@ private theorem reindexBond_blockTwo {D' : ℕ} (e : Fin D' ≃ Fin D₁)
     (U : MPOTensor d D₁) :
     reindexBond e (blockTwo U) = blockTwo (reindexBond e U) := by
   classical
-  ext I J a b
+  ext ⟨I, J⟩ a b
   simp only [reindexBond, blockTwo_apply, Matrix.mul_apply]
   rw [← Equiv.sum_comp e]
 
 private def physicalFlip (U : MPOTensor d D₁) : MPOTensor d D₁ :=
-  fun i j => U j i
+  fun (i, j) => U (j, i)
 
 private theorem rightRank_physicalFlip (U : MPOTensor d D₁) :
     r[physicalFlip U] = ℓ[U] := by
@@ -367,7 +367,7 @@ private theorem mulTensor_physicalFlip_swap
     mulTensor (physicalFlip V) (physicalFlip U) =
       reindexBond (productBondSwapEquiv D₂ D₁) (physicalFlip (mulTensor U V)) := by
   classical
-  ext i k x y
+  ext ⟨i, k⟩ x y
   simp only [mulTensor_apply, physicalFlip, reindexBond, productBondSwapEquiv,
     Equiv.trans_apply, Equiv.prodComm_apply, Equiv.symm_apply_apply,
     Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply]

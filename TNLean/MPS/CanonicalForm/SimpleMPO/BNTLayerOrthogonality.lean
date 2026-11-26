@@ -100,7 +100,7 @@ theorem exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO
 virtual-index pair followed by a physical column index. -/
 noncomputable def physicalSliceColumns (K : MPOTensor d D) :
     Matrix (Fin d) (Fin (D * D * d)) ℂ :=
-  fun i q ↦ K i q.modNat q.divNat.divNat q.divNat.modNat
+  fun i q ↦ K (i, q.modNat) q.divNat.divNat q.divNat.modNat
 
 /-- The orthogonal projection onto the span of all columns of all physical slices. -/
 noncomputable def physicalSupportProj (K : MPOTensor d D) : Matrix (Fin d) (Fin d) ℂ :=
@@ -109,7 +109,7 @@ noncomputable def physicalSupportProj (K : MPOTensor d D) : Matrix (Fin d) (Fin 
 /-- The product index selects the corresponding virtual pair and physical column. -/
 @[simp] theorem physicalSliceColumns_apply_finProdFinEquiv (K : MPOTensor d D)
     (i j : Fin d) (β α : Fin D) :
-    physicalSliceColumns K i (finProdFinEquiv (finProdFinEquiv (β, α), j)) = K i j β α := by
+    physicalSliceColumns K i (finProdFinEquiv (finProdFinEquiv (β, α), j)) = K (i, j) β α := by
   simp [physicalSliceColumns]
 
 /-- Orthogonal column spaces give orthogonal support projections. -/
@@ -217,11 +217,11 @@ theorem isBNTLayerOrthogonal_iff_physicalSlice_mul_eq_zero
     ext i j
     have hEntry := congrArg
       (fun T : MPOTensor d (bondDim y * bondDim x) ↦
-        T i j (finProdFinEquiv (βy, βx)) (finProdFinEquiv (αy, αx)))
+        T (i, j) (finProdFinEquiv (βy, βx)) (finProdFinEquiv (αy, αx)))
       (h x y hxy)
     simpa [layerMul_apply, physicalSlice, Matrix.mul_apply] using hEntry
   · intro h x y hxy
-    funext i j
+    funext ⟨i, j⟩
     ext a b
     obtain ⟨⟨βy, βx⟩, rfl⟩ := finProdFinEquiv.surjective a
     obtain ⟨⟨αy, αx⟩, rfl⟩ := finProdFinEquiv.surjective b
@@ -238,7 +238,7 @@ theorem isBNTLayerOrthogonal_iff_physicalSlice_mul_apply_eq_zero
     IsBNTLayerOrthogonal K ↔
       ∀ x y, x ≠ y → ∀ (βy αy : Fin (bondDim y)) (βx αx : Fin (bondDim x))
         (i j : Fin d),
-        ∑ k : Fin d, K y i k βy αy * K x k j βx αx = 0 := by
+        ∑ k : Fin d, K y (i, k) βy αy * K x (k, j) βx αx = 0 := by
   rw [isBNTLayerOrthogonal_iff_physicalSlice_mul_eq_zero]
   constructor
   · intro h x y hxy βy αy βx αx i j
@@ -356,7 +356,7 @@ theorem squareZeroPhysicalMatrix_mul_self :
 
 /-- The bond-dimension-one MPO tensor whose sole physical slice is the square-zero matrix. -/
 def tensor : MPOTensor 2 1 :=
-  fun i j _ _ ↦ squareZeroPhysicalMatrix i j
+  fun (i, j) _ _ ↦ squareZeroPhysicalMatrix i j
 
 /-- Two labelled copies of the same square-zero tensor. -/
 def family (_x : Fin 2) : MPOTensor 2 1 := tensor

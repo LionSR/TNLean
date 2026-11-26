@@ -55,7 +55,7 @@ Source: CPSV17, Proposition IV.5, lines 798–804. -/
 private theorem positive_gauge_mpo_eq {d D : ℕ}
     (U : MPOTensor d D) (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
     (N : ℕ) :
-    MPOTensor.mpo (fun i j ↦ CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹) N =
+    MPOTensor.mpo (fun ij ↦ CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) N =
       MPOTensor.mpo U N := by
   exact (MPOTensor.mpo_eq_of_conj
     (Matrix.mul_nonsing_inv _ hL.isUnit_det_cfc_sqrt)
@@ -65,7 +65,7 @@ private theorem positive_gauge_mpo_eq {d D : ℕ}
 bond matrices. -/
 private theorem normalizedFlattening_conj {d D : ℕ}
     (U : MPOTensor d D) (X Y : Matrix (Fin D) (Fin D) ℂ) :
-    MPOTensor.normalizedFlattening (fun i j ↦ X * U i j * Y : MPOTensor d D) =
+    MPOTensor.normalizedFlattening (fun ij ↦ X * U ij * Y : MPOTensor d D) =
       fun ij ↦ X * U.normalizedFlattening ij * Y := by
   funext ij
   simp only [MPOTensor.normalizedFlattening, MPOTensor.toMPSTensor,
@@ -75,7 +75,7 @@ private theorem normalizedFlattening_conj {d D : ℕ}
 private theorem unitary_conj_mpo_eq {d D : ℕ}
     (U : MPOTensor d D) (V : Matrix.unitaryGroup (Fin D) ℂ) (N : ℕ) :
     MPOTensor.mpo
-        (fun i j ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j *
+        (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * U ij *
           (V : Matrix (Fin D) (Fin D) ℂ)) N = MPOTensor.mpo U N := by
   exact (MPOTensor.mpo_eq_of_conj
     (by simpa only [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self V)
@@ -151,9 +151,9 @@ both source ranks. Source: CPSV17, Proposition IV.5, lines 797–804. -/
 private theorem source_ranks_canonical_gauge {d D : ℕ}
     (W : MPOTensor d D) (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
     (V : Matrix.unitaryGroup (Fin D) ℂ) :
-    let B : MPOTensor d D := fun i j ↦
+    let B : MPOTensor d D := fun ij ↦
       (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (CFC.sqrt L * W i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)
+        (CFC.sqrt L * W ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)
     MPOTensor.rightRank B = MPOTensor.rightRank W ∧
       MPOTensor.leftRank B = MPOTensor.leftRank W := by
   have hS : IsUnit (CFC.sqrt L) := (Matrix.isUnit_iff_isUnit_det _).2 hL.isUnit_det_cfc_sqrt
@@ -180,9 +180,9 @@ theorem exists_canonicalFormII_positiveGauge
     (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
     (hfix : Kraus.mapLM (fun i ↦ (U.normalizedFlattening i)ᴴ) L = L) :
     ∃ V : Matrix.unitaryGroup (Fin D) ℂ,
-      let B : MPOTensor d D := fun i j ↦
+      let B : MPOTensor d D := fun ij ↦
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-          (CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)
+          (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)
       Nonempty (MPOTensor.IsMPUCanonicalFormII B) ∧
         (∀ N, MPOTensor.mpo B N = MPOTensor.mpo U N) ∧
         MPOTensor.rightRank B = MPOTensor.rightRank U ∧
@@ -190,8 +190,8 @@ theorem exists_canonicalFormII_positiveGauge
   obtain ⟨V, ρ, hSame, hρ, hdiag, hρtr, hLeft, hfix⟩ :=
     positive_gauge_exists_diagonal_fixedPoint U hNormal L hL hfix
   have hnorm : MPOTensor.normalizedFlattening
-      (fun i j ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
           MPOTensor d D) =
       fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         Kraus.tpGauge U.normalizedFlattening L ij * (V : Matrix (Fin D) (Fin D) ℂ) :=
@@ -200,8 +200,8 @@ theorem exists_canonicalFormII_positiveGauge
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A ij * (V : Matrix (Fin D) (Fin D) ℂ))
         (normalizedFlattening_conj U (CFC.sqrt L) (CFC.sqrt L)⁻¹))
   have hEq (N : ℕ) : MPOTensor.mpo
-      (fun i j ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)) N =
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)) N =
       MPOTensor.mpo U N :=
     (unitary_conj_mpo_eq _ V N).trans (positive_gauge_mpo_eq U L hL N)
   exact ⟨V, ⟨canonicalFormII_of_normal_leftCanonical _
@@ -247,8 +247,8 @@ theorem IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm [NeZero d]
   refine ⟨(MPSTensor.unitaryGL V)⁻¹ * S, ?_⟩
   rw [hX, hXinv]
   convert hV using 3
-  funext i j
-  simp only [virtualSandwich_apply, Matrix.mul_assoc]
+  funext ij
+  simp only [virtualSandwich, Matrix.mul_assoc]
 
 end MPOTensor
 

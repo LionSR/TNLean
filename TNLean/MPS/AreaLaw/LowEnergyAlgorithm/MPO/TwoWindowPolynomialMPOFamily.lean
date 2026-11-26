@@ -84,7 +84,7 @@ private noncomputable def actualCrossingFrequencyGridMPOFamilyStatement
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : crossingFrequencyIndex ell k →
       Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) := fun v ↦
@@ -174,7 +174,7 @@ private theorem exists_crossing_frequency_grid_mpo_family
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : crossingFrequencyIndex ell k →
       Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) := fun v ↦
@@ -295,7 +295,7 @@ theorem exists_common_physical_polynomial_mpo_family
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
@@ -356,7 +356,7 @@ theorem exists_common_physical_polynomial_mpo_family
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
@@ -420,7 +420,7 @@ theorem exists_common_physical_polynomial_mpo_family_fin
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
@@ -514,7 +514,7 @@ theorem exists_common_physical_aeval_mpo_family_fin
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso

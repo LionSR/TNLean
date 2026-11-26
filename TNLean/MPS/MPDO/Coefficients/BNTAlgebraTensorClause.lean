@@ -49,12 +49,12 @@ For a vertical BNT tensor \(M_\alpha\), this is the MPO whose closed length-
 
 Source: arXiv:1606.00608, lines 962--967 and Theorem 4.14(ii), lines 972--985. -/
 def verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) : MPOTensor D n :=
-  fun a b => A (finProdFinEquiv (a, b))
+  fun ab => A (finProdFinEquiv ab)
 
 @[simp]
 theorem verticalBNTMPO_apply {D n : ℕ} (A : MPSTensor (D * D) n)
     (a b : Fin D) :
-    verticalBNTMPO A a b = A (finProdFinEquiv (a, b)) :=
+    verticalBNTMPO A (a, b) = A (finProdFinEquiv (a, b)) :=
   rfl
 
 /-- Separating and then recombining the doubled physical index recovers the

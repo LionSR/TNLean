@@ -69,7 +69,7 @@ Source: CPSV17 equation `vdagger` (lines 532--543) and FBC25 equation `eq:uv`
 Source: arXiv:1703.09188, equations `X1Y1` and `SVDforms2`, lines 508--528. -/
 @[simp] theorem X₁_mul_Y₁_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) (i : Fin d) (β α : Fin D) (j : Fin d) :
-    (S.X₁ * S.Y₁) (i, β) (α, j) = U i j α β := by
+    (S.X₁ * S.Y₁) (i, β) (α, j) = U (i, j) α β := by
   rw [← S.sourceCutM₁_eq]
   rfl
 
@@ -78,7 +78,7 @@ Source: arXiv:1703.09188, equations `X1Y1` and `SVDforms2`, lines 508--528. -/
 Source: arXiv:1703.09188, equations `X2Y2` and `SVDforms2`, lines 508--528. -/
 @[simp] theorem X₂_mul_Y₂_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) (α : Fin D) (i j : Fin d) (β : Fin D) :
-    (S.X₂ * S.Y₂) (α, i) (j, β) = U i j α β := by
+    (S.X₂ * S.Y₂) (α, i) (j, β) = U (i, j) α β := by
   rw [← S.sourceCutM₂_eq]
   rfl
 
@@ -163,19 +163,19 @@ the $Y_2$--$Y_1$ contraction around the periodic trace. -/
 theorem trace_mul_eq_sourceV_mul_sourceU_swap
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ i₂ j₁ j₂ : Fin d) :
-    Matrix.trace (U i₁ j₁ * U i₂ j₂) =
+    Matrix.trace (U (i₁, j₁) * U (i₂, j₂)) =
       ∑ lr : Fin ℓ[U] × Fin r[U],
         sourceV U ρ hρ (i₁, i₂) (lr.2, lr.1) *
           sourceU U ρ hρ lr (j₂, j₁) := by
   classical
   simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
   have h₁ (α β : Fin D) :
-      U i₁ j₁ α β = ∑ r, sourceX₁ U ρ hρ (i₁, β) r *
+      U (i₁, j₁) α β = ∑ r, sourceX₁ U ρ hρ (i₁, β) r *
         sourceY₁ U ρ hρ r (α, j₁) := by
     simpa only [Matrix.mul_apply] using
       (sourceX₁_mul_sourceY₁_apply U ρ hρ i₁ β α j₁).symm
   have h₂ (β α : Fin D) :
-      U i₂ j₂ β α = ∑ l, sourceX₂ U (β, i₂) l * sourceY₂ U l (j₂, α) := by
+      U (i₂, j₂) β α = ∑ l, sourceX₂ U (β, i₂) l * sourceY₂ U l (j₂, α) := by
     simpa only [Matrix.mul_apply] using
       (sourceX₂_mul_sourceY₂_apply U β i₂ j₂ α).symm
   simp_rw [h₁, h₂]

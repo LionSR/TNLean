@@ -44,10 +44,10 @@ namespace MPOTensor
 
 /-- The bond-$d$ tensor whose closed MPO is the right shift. -/
 def rightShiftTensor (d : ℕ) : MPOTensor d d :=
-  fun i j ↦ Matrix.single i j 1
+  fun (i, j) ↦ Matrix.single i j 1
 
 @[simp] theorem rightShiftTensor_apply (d : ℕ) (i j α β : Fin d) :
-    rightShiftTensor d i j α β = if i = α ∧ j = β then 1 else 0 := by
+    rightShiftTensor d (i, j) α β = if i = α ∧ j = β then 1 else 0 := by
   rfl
 
 /-- Entry formula fixing the row convention: Mathlib's permutation matrix for

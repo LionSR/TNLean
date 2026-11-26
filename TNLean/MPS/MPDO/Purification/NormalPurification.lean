@@ -141,7 +141,7 @@ length `L`. -/
 theorem mpv_purificationTensor_spinTwist_of_mpo_mul_eq_smul
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     {u : Matrix (Fin d) (Fin d) ℂ} {L : ℕ} {c : ℂ}
     (h : mpo (onSite u) L * mpo M L = c • mpo M L) (w : Fin L → Fin (d * dK)) :
@@ -169,7 +169,7 @@ theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor
     {G : Type*} [Monoid G] (U : G →* Matrix (Fin d) (Fin d) ℂ) (hU : ∀ g, (U g)ᴴ * U g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     {c : G → ℕ → ℂ} (hsym : IsStrongOnSiteSymmetry M 1 U c)
     (hA : IsNormalTensor (purificationTensor A)) (g : G) :
@@ -215,7 +215,7 @@ theorem exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor
     {G : Type*} [Monoid G] (U : G →* Matrix (Fin d) (Fin d) ℂ) (hU : ∀ g, (U g)ᴴ * U g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (hA : IsNormalTensor (purificationTensor A)) :
     (∃ c, IsStrongOnSiteSymmetry M 1 U c) ↔
@@ -240,7 +240,7 @@ theorem IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor
     {G : Type*} [Monoid G] {U : G →* Matrix (Fin d) (Fin d) ℂ} (hU : ∀ g, (U g)ᴴ * U g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     {c : G → ℕ → ℂ} (hsym : IsStrongOnSiteSymmetry M 1 U c)
     (hA : IsNormalTensor (purificationTensor A)) :

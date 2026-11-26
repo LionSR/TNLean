@@ -53,7 +53,7 @@ of `finProdFinEquiv`. Source: GLM23, `mpoMPSsten`, lines 1070–1090. -/
 theorem actTensor_apply_finProdFinEquiv (T : MPOTensor d χ) (A : MPSTensor d D)
     (p : Fin d) (β α : Fin χ) (x y : Fin D) :
     actTensor T A p (finProdFinEquiv (β, x)) (finProdFinEquiv (α, y)) =
-      ∑ q, T p q β α * A q x y := by
+      ∑ q, T (p, q) β α * A q x y := by
   simp [actTensor, Matrix.sum_apply, Matrix.kroneckerMap_apply]
 
 /-- A physical coordinate change of the operator is the change of the
@@ -96,7 +96,7 @@ theorem mulTensor_changePhysicalBasis_of_slice (V : Matrix (Fin e) (Fin d) ℂ)
     (hN : ∀ β α, Vᴴ * V * physicalSlice N β α * Vᴴ = physicalSlice N β α * Vᴴ) :
     mulTensor (changePhysicalBasis V M) (changePhysicalBasis V N) =
       changePhysicalBasis V (mulTensor M N) := by
-  funext i k
+  funext ⟨i, k⟩
   ext a b
   obtain ⟨⟨β₁, β₂⟩, rfl⟩ := finProdFinEquiv.surjective a
   obtain ⟨⟨α₁, α₂⟩, rfl⟩ := finProdFinEquiv.surjective b
@@ -224,11 +224,11 @@ theorem physicalSlice_mul_eq_of_isBiorthogonalDecomposition
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.mul_apply, physicalSlice,
     Finset.sum_mul, Finset.mul_sum] at hxy ⊢
   calc
-    _ = ∑ j, ∑ q, ∑ k, G p j * (T j q β α * (U q k * B k x y)) := by
+    _ = ∑ j, ∑ q, ∑ k, G p j * (T (j, q) β α * (U q k * B k x y)) := by
       rw [← Fintype.sum_reverse_three]
       refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
         Finset.sum_congr rfl fun _ _ => by ring
-    _ = ∑ q, ∑ k, T p q β α * (U q k * B k x y) := hxy
+    _ = ∑ q, ∑ k, T (p, q) β α * (U q k * B k x y) := hxy
     _ = _ := by
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring

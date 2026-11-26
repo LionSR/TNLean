@@ -90,11 +90,11 @@ $M^{00}=I$, $M^{11}=\sigma_z$, and $M^{01}=M^{10}=0$.
 
 Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--935. -/
 noncomputable def M : MPOTensor 2 2 :=
-  fun i j => if i = j then Matrix.diagonal ![(1 : ℂ), sigmaZ i i] else 0
+  fun (i, j) => if i = j then Matrix.diagonal ![(1 : ℂ), sigmaZ i i] else 0
 
 private lemma prod_M_diagonal :
     ∀ {N : ℕ} (σ : Fin N → Fin 2),
-      (List.ofFn fun k => M (σ k) (σ k)).prod =
+      (List.ofFn fun k => M (σ k, σ k)).prod =
         Matrix.diagonal ![(1 : ℂ), configurationSign σ] := by
   intro N
   induction N with

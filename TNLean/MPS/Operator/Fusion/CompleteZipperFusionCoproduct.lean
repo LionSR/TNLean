@@ -80,7 +80,7 @@ abbrev PairSpace : Type u :=
     (Fin (Fus.bondDim a) × Fin (Fus.bondDim b)) ℂ
 
 /-- The boundary element $(T_c^{ik})_c$ formed by one letter of every block. -/
-def letter (i k : Fin p) : Fus.BoundarySpace := fun c => Fus.tensor c i k
+def letter (i k : Fin p) : Fus.BoundarySpace := fun c => Fus.tensor c (i, k)
 
 /-- The direct sum $\bigoplus_c 1_{N_{ab}^c}\otimes X_c$ on the fusion coordinates of the pair
 `(a, b)`. -/
@@ -172,7 +172,7 @@ Source: arXiv:2204.05940, `mpo.tex`, lines 2003--2006: the identity
 $\sum_{x,y}xy\otimes\delta_x\otimes\delta_y=\sum_x x\otimes\Delta(\delta_x)$ and equation
 `eq:MPO_tensor_product`; arXiv:1511.08090, equation `inversegaugeone`, lines 184--186. -/
 theorem coproduct_letter (i k : Fin p) (a b : Λ) :
-    Fus.coproduct (Fus.letter i k) a b = ∑ j, Fus.tensor a i j ⊗ₖ Fus.tensor b j k :=
+    Fus.coproduct (Fus.letter i k) a b = ∑ j, Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k) :=
   (Fus.pairLetter_eq_synthesis_mul_directSum_mul_analysis a b i k).symm
 
 private theorem sum_smul_letter_apply (c : Λ) (x y : Fin (Fus.bondDim c)) (d : Λ)
@@ -226,7 +226,7 @@ same blocks gives the same map.
 
 Source: arXiv:2204.05940, `mpo.tex`, lines 1182 and 2003--2006. -/
 theorem coproduct_unique (Δ : Fus.BoundarySpace →ₗ[ℂ] Fus.PairSpace)
-    (h : ∀ i k a b, Δ (Fus.letter i k) a b = ∑ j, Fus.tensor a i j ⊗ₖ Fus.tensor b j k) :
+    (h : ∀ i k a b, Δ (Fus.letter i k) a b = ∑ j, Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) :
     Δ = Fus.coproduct :=
   LinearMap.ext_on_range Fus.span_letter_eq_top fun ik => by
     funext a b

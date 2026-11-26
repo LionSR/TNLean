@@ -73,7 +73,7 @@ noncomputable def sectorMatrix (k : Fin 4) : Matrix (Fin 2) (Fin 2) ℂ :=
 
 /-- The tensor whose four diagonal physical entries are the sector matrices. -/
 noncomputable def tensor : MPOTensor 4 2 :=
-  fun i j => if i = j then sectorMatrix i else 0
+  fun (i, j) => if i = j then sectorMatrix i else 0
 
 lemma leftPairing_mul_rightPairing : leftPairing * rightPairing = !![1, 0; 0, 0] := by
   ext i j
@@ -129,8 +129,7 @@ lemma tensor_isInjective : tensor.IsInjective := by
   rintro _ ⟨k, rfl⟩
   apply Submodule.subset_span
   refine ⟨finProdFinEquiv (k, k), ?_⟩
-  change tensor (finProdFinEquiv (k, k)).divNat
-      (finProdFinEquiv (k, k)).modNat = sectorMatrix k
+  change tensor ((finProdFinEquiv (k, k)).divNat, (finProdFinEquiv (k, k)).modNat) = sectorMatrix k
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
   simp [tensor]
 
@@ -202,7 +201,7 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
       rfl
     · simp only [Matrix.reindex_apply, Matrix.conjTranspose_one, Matrix.one_mul,
         Matrix.mul_one]
-      change tensor k h beta alpha =
+      change tensor (k, h) beta alpha =
         Matrix.blockDiagonal'
           (fun q => Matrix.kroneckerMap (· * ·)
             (Matrix.of fun _ _ => leftPairing beta q) (Matrix.of fun _ _ => rightPairing q alpha))

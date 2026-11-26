@@ -224,14 +224,14 @@ Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999, with the fixed-fin
 decomposition pattern of arXiv:1511.08090, lines 237--251. -/
 theorem leftFinalFusion_apply (α β γ ε : Λ) (i k : Fin p) :
     Fam.leftFinalFusionMap α β γ ε *
-        (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
+        (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k) *
         (Fam.leftFinalFusionMap α β γ ε)ᴴ =
       Matrix.blockDiagonal' fun δ =>
-        Fam.chi.matrix α β δ ⊗ₖ (Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε i k) := by
+        Fam.chi.matrix α β δ ⊗ₖ (Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε (i, k)) := by
   unfold leftFinalFusionMap
   let U := Fam.leftFusionIsometry α β γ
   let r := Fam.leftFinalRow α β γ ε
-  let X := (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k
+  let X := (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k)
   change U.submatrix r id * X * (U.submatrix r id)ᴴ = _
   have hleft : U.submatrix r id * X = (U * X).submatrix r id := by
     simpa using (Matrix.submatrix_mul U X r id id Function.bijective_id).symm
@@ -261,14 +261,14 @@ Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999, with the fixed-fin
 decomposition pattern of arXiv:1511.08090, lines 237--251. -/
 theorem rightFinalFusion_apply (α β γ ε : Λ) (i k : Fin p) :
     Fam.rightFinalFusionMap α β γ ε *
-        (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
+        (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k) *
         (Fam.rightFinalFusionMap α β γ ε)ᴴ =
       Matrix.blockDiagonal' fun δ =>
-        Fam.chi.matrix β γ δ ⊗ₖ (Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε i k) := by
+        Fam.chi.matrix β γ δ ⊗ₖ (Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε (i, k)) := by
   unfold rightFinalFusionMap
   let U := Fam.rightFusionIsometry α β γ
   let r := Fam.rightFinalRow α β γ ε
-  let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k
+  let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k)
   change U.submatrix r id * X * (U.submatrix r id)ᴴ = _
   have hleft : U.submatrix r id * X = (U * X).submatrix r id := by
     simpa using (Matrix.submatrix_mul U X r id id Function.bijective_id).symm

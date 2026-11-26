@@ -57,7 +57,7 @@ Source: CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
 theorem sourceCutM₂_rectangularSandwich
     (A : Matrix (Fin E) (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin E) ℂ) :
-    sourceCutM₂ (fun i j => A * U i j * B) =
+    sourceCutM₂ (fun ij => A * U ij * B) =
       (A ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * sourceCutM₂ U *
         ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ B) := by
   ext ⟨α, i⟩ ⟨j, β⟩
@@ -69,7 +69,7 @@ Source: CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
 theorem leftRank_rectangularSandwich_le
     (A : Matrix (Fin E) (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin E) ℂ) :
-    ℓ[fun i j => A * U i j * B] ≤ ℓ[U] := by
+    ℓ[fun ij => A * U ij * B] ≤ ℓ[U] := by
   rw [leftRank, sourceCutM₂_rectangularSandwich]
   exact (Matrix.rank_mul_le_left _ _).trans (Matrix.rank_mul_le_right _ _)
 
@@ -79,7 +79,7 @@ Source: CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
 theorem sourceCutM₁_rectangularSandwich
     (A : Matrix (Fin E) (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin E) ℂ) :
-    sourceCutM₁ (fun i j => A * U i j * B) =
+    sourceCutM₁ (fun ij => A * U ij * B) =
       ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ B.transpose) * sourceCutM₁ U *
         (A.transpose ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
   ext ⟨i, β⟩ ⟨α, j⟩
@@ -97,7 +97,7 @@ Source: CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
 theorem rightRank_rectangularSandwich_le
     (A : Matrix (Fin E) (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin E) ℂ) :
-    r[fun i j => A * U i j * B] ≤ r[U] := by
+    r[fun ij => A * U ij * B] ≤ r[U] := by
   rw [rightRank, sourceCutM₁_rectangularSandwich]
   exact (Matrix.rank_mul_le_left _ _).trans (Matrix.rank_mul_le_right _ _)
 
@@ -109,8 +109,8 @@ theorem eq_rectangularSandwich_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
     (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
-    V = fun i j => A * U i j * B :=
-  funext fun i => funext fun j => by
+    V = fun ij => A * U ij * B :=
+  funext fun (i, j) => by
     simpa [Kraus.evalWord, toMPSTensor] using (h.evalWord [finProdFinEquiv (i, j)]).symm
 
 /-- A rectangular reduction cannot increase the right source rank.

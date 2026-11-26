@@ -57,8 +57,7 @@ private lemma adjointMap_normalizingCoefficientWitness :
   have hletter (p q : Fin 4) :
       tensor.toMPSTensor (finProdFinEquiv (p, q)) =
         if p = q then sectorMatrix p else 0 := by
-    change tensor (finProdFinEquiv (p, q)).divNat
-        (finProdFinEquiv (p, q)).modNat = _
+    change tensor ((finProdFinEquiv (p, q)).divNat, (finProdFinEquiv (p, q)).modNat) = _
     rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
     rfl
   have hadj :
@@ -275,8 +274,8 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     exact (Real.sqrt_lt hr.le (by norm_num)).2 (by simpa using hr_lt_one)
   let A : MPOTensor 4 2 := mu⁻¹ • tensor
   have hrecover : tensor = mu • A := by
-    ext i j beta alpha
-    change tensor i j beta alpha = mu * (mu⁻¹ * tensor i j beta alpha)
+    ext ⟨i, j⟩ beta alpha
+    change tensor (i, j) beta alpha = mu * (mu⁻¹ * tensor (i, j) beta alpha)
     rw [← mul_assoc, mul_inv_cancel₀ hmu, one_mul]
   have hAinj : A.IsInjective := by
     exact tensor_isInjective.smul (inv_ne_zero hmu)

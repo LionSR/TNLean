@@ -122,7 +122,7 @@ when the density operator is compressed by $P$ there, as in the diagrams of
 the proof of Proposition 4.13 of arXiv:1606.00608, lines 1895--1902. -/
 noncomputable def verticalLoopWith (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  ∑ a : Fin d, ∑ i : Fin d, P a i • M i a
+  ∑ a : Fin d, ∑ i : Fin d, P a i • M (i, a)
 
 /-- The closed loop of a vertical representative tensor, written entrywise as
 
@@ -320,7 +320,7 @@ theorem trace_firstSiteMatrix_mul_mpo (M : MPOTensor d D)
   have hdiag : ∀ (a : Fin d) (ρ : Fin N → Fin d),
       (firstSiteMatrix P N * mpo M (N + 1)) (Fin.cons a ρ) (Fin.cons a ρ) =
         ∑ i : Fin d,
-          P a i * Matrix.trace (M i a * evalWord M (List.ofFn ρ) (List.ofFn ρ)) := by
+          P a i * Matrix.trace (M (i, a) * evalWord M (List.ofFn ρ) (List.ofFn ρ)) := by
     intro a ρ
     rw [firstSiteMatrix_mul_apply]
     have hcomp : (Fin.cons a ρ : Fin (N + 1) → Fin d) ∘ Fin.succ = ρ := by
@@ -338,10 +338,10 @@ theorem trace_firstSiteMatrix_mul_mpo (M : MPOTensor d D)
           (firstSiteMatrix P N * mpo M (N + 1)) (Fin.cons a ρ) (Fin.cons a ρ) :=
         sum_fin_succ_eq_sum_cons _
     _ = ∑ a : Fin d, ∑ ρ : Fin N → Fin d, ∑ i : Fin d,
-          P a i * Matrix.trace (M i a * evalWord M (List.ofFn ρ) (List.ofFn ρ)) :=
+          P a i * Matrix.trace (M (i, a) * evalWord M (List.ofFn ρ) (List.ofFn ρ)) :=
         Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun ρ _ => hdiag a ρ
     _ = ∑ ρ : Fin N → Fin d, ∑ a : Fin d, ∑ i : Fin d,
-          P a i * Matrix.trace (M i a * evalWord M (List.ofFn ρ) (List.ofFn ρ)) :=
+          P a i * Matrix.trace (M (i, a) * evalWord M (List.ofFn ρ) (List.ofFn ρ)) :=
         Finset.sum_comm
     _ = ∑ ρ : Fin N → Fin d,
           Matrix.trace (verticalLoopWith M P * evalWord M (List.ofFn ρ) (List.ofFn ρ)) :=

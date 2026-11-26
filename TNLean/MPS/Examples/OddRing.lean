@@ -46,11 +46,11 @@ namespace MPOTensor
 /-- The odd-ring tensor of Sahinoglu, Shukla, Bi and Chen (arXiv:1704.01943, Section 6,
 Figure `M_f`): `M^{ij} = |-(i+j))(j|` over `Fin 3` with its ring structure. -/
 noncomputable def oddRingTensor : MPOTensor 3 3 :=
-  fun i j => Matrix.single (-(i + j)) j 1
+  fun (i, j) => Matrix.single (-(i + j)) j 1
 
 /-- The entries of the odd-ring tensor. -/
 theorem oddRingTensor_apply (i j α β : Fin 3) :
-    oddRingTensor i j α β = if -(i + j) = α ∧ j = β then 1 else 0 := rfl
+    oddRingTensor (i, j) α β = if -(i + j) = α ∧ j = β then 1 else 0 := rfl
 
 /-- **The periodic operator of the odd-ring tensor** is the matrix of the map
 $j\mapsto i$, $i_n=-(j_{n-1}+j_n)$ (arXiv:1704.01943, Section 6). -/

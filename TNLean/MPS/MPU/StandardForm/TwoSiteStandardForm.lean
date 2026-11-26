@@ -73,7 +73,7 @@ structure TwoSiteStandardFormData
     v (i₁, i₂) (s, t) = ∑ β : Fin D, X₁ (i₁, β) s * X₂ (β, i₂) t
   /-- The tensor is the open contraction through the unshifted gate. -/
   W_apply (i j : Fin (d * d)) (α γ : Fin D) :
-    W i j α γ = ∑ t : Fin ℓ, ∑ s : Fin r,
+    W (i, j) α γ = ∑ t : Fin ℓ, ∑ s : Fin r,
       X₂ (α, (finProdFinEquiv.symm i).1) t *
         u (t, s) (finProdFinEquiv.symm j) *
           X₁ ((finProdFinEquiv.symm i).2, γ) s
@@ -142,11 +142,11 @@ private theorem reindexPhysical_blockTwo_blockTensor
     {d D : ℕ} (U : MPOTensor d D) (k : ℕ) :
     reindexPhysical (twoSiteBlockedPhysicalEquiv d k)
         (blockTwo (blockTensor U k)) = blockTensor U (k * 2) := by
-  funext i j
+  funext ⟨i, j⟩
   rw [blockTwo_eq_blockTensor_reindex]
   simp only [reindexPhysical, twoSiteBlockedPhysicalEquiv, Equiv.trans_apply,
-    Equiv.apply_symm_apply]
-  exact congrFun (congrFun (reindexPhysical_blockTensor_blockTensor U k 2) i) j
+    Equiv.apply_symm_apply, Function.uncurry_apply_pair]
+  exact congrFun (reindexPhysical_blockTensor_blockTensor U k 2) (i, j)
 
 /-- The physical-index equivalence from a direct block of length `2 * k`
 to the two-site block of a length-`k` tensor. -/

@@ -52,10 +52,10 @@ theorem conjugated_middle_threeSiteClosure
     (∑ i₂ : Fin d, ∑ j₂ : Fin d,
       U b i₂ * rho (i₁, i₂, i₃) (j₁, j₂, j₃) * star (U b' j₂)) =
       Matrix.trace
-        (K i₁ j₁ * conjugatePhysical K U b b' * K i₃ j₃ * R) := by
-  have hmiddle : conjugatePhysical K U b b' =
+        (K (i₁, j₁) * conjugatePhysical K U (b, b') * K (i₃, j₃) * R) := by
+  have hmiddle : conjugatePhysical K U (b, b') =
       ∑ i₂ : Fin d, ∑ j₂ : Fin d,
-        (U b i₂ * star (U b' j₂)) • K i₂ j₂ := by
+        (U b i₂ * star (U b' j₂)) • K (i₂, j₂) := by
     have h := PhysicalSectorFactorization.changePhysicalBasis_apply_eq_sum U K b b'
     rw [Fintype.sum_prod_type] at h
     exact h
@@ -136,7 +136,7 @@ theorem exists_active_sectorVirtualMatrix_ne_zero
       (hη.ρ_right k) (hη.hρ_right_dm k).2
   let x : F.SectorIndex k := (l, r)
   let b : Fin d := hη.decompB.symm ⟨k, (l, r)⟩
-  have hmid : conjugatePhysical K hη.U_B b b = 0 := by
+  have hmid : conjugatePhysical K hη.U_B (b, b) = 0 := by
     ext gamma delta
     have hslice := F.transformedPhysicalSlice_apply_same gamma delta k x x
     have hzero := congrFun (congrFun (hall x x) gamma) delta
@@ -150,7 +150,7 @@ theorem exists_active_sectorVirtualMatrix_ne_zero
     change (((hη.U_B : Matrix (Fin d) (Fin d) ℂ) *
       physicalSlice K gamma delta *
         (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ) b b) = _ at hslice
-    change conjugatePhysical K hη.U_B b b gamma delta = 0
+    change conjugatePhysical K hη.U_B (b, b) gamma delta = 0
     exact hslice.trans hzero
   have hs' :
       (∑ i₂ : Fin d, ∑ j₂ : Fin d,

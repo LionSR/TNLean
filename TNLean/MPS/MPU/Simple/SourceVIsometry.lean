@@ -44,7 +44,7 @@ theorem gram_eq_rotated_sourceCutM₂_gram_of_eq_mul
     (p q : Fin d) (a b : Fin D) :
     (∑ l : Fin ℓ[U], star (Y₂ l (p, a)) * Y₂ l (q, b)) =
       ∑ β : Fin D, ∑ j : Fin d,
-        star (U j p β a) * U j q β b := by
+        star (U (j, p) β a) * U (j, q) β b := by
   have hgram : Y₂ᴴ * Y₂ = (sourceCutM₂ U)ᴴ * sourceCutM₂ U := by
     calc
       Y₂ᴴ * Y₂ = Y₂ᴴ * (X₂ᴴ * X₂) * Y₂ := by
@@ -91,7 +91,7 @@ theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
     (p q : Fin d) (a b : Fin D) :
     (∑ r : Fin r[U], star (S.Y₁ r (a, p)) * S.Y₁ r (b, q)) =
       ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
-        star (U i p a β) * ρ β β' * U i q b β' := by
+        star (U (i, p) a β) * ρ β β' * U (i, q) b β' := by
   have hgram : S.Y₁ᴴ * S.Y₁ =
       (sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U := by
     calc
@@ -116,9 +116,9 @@ theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
   calc
     (∑ r : Fin r[U], star (S.Y₁ r (a, p)) * S.Y₁ r (b, q)) =
         ∑ i : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
-          star (U i p a β) * ρ β β' * U i q b β' := hentry
+          star (U (i, p) a β) * ρ β β' * U (i, q) b β' := hentry
     _ = ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
-          star (U i p a β) * ρ β β' * U i q b β' := by
+          star (U (i, p) a β) * ρ β β' * U (i, q) b β' := by
       rw [Fintype.sum_reverse_three]
 
 /-- Complete expansion of the supplied \(Y_1\otimes Y_2\) Gram entry into
@@ -134,8 +134,8 @@ theorem sourceYTensor_gram_eq_four_u_weighted
         sourceYTensor U S t ((b.1, q.1), (q.2, b.2))) =
       ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
       ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β' *
-          (star (U j₂ p.2 γ a.2) * U j₂ q.2 γ b.2) := by
+        star (U (j₁, p.1) a.1 β) * ρ β β' * U (j₁, q.1) b.1 β' *
+          (star (U (j₂, p.2) γ a.2) * U (j₂, q.2) γ b.2) := by
   rw [Fintype.sum_prod_type]
   simp only [sourceYTensor_apply, star_mul]
   calc
@@ -147,9 +147,9 @@ theorem sourceYTensor_gram_eq_four_u_weighted
       refine Finset.sum_congr₂ fun r _ l _ ↦ ?_
       ring
     _ = (∑ β : Fin D, ∑ β' : Fin D, ∑ j₁ : Fin d,
-          star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β') *
+          star (U (j₁, p.1) a.1 β) * ρ β β' * U (j₁, q.1) b.1 β') *
         (∑ γ : Fin D, ∑ j₂ : Fin d,
-          star (U j₂ p.2 γ a.2) * U j₂ q.2 γ b.2) := by
+          star (U (j₂, p.2) γ a.2) * U (j₂, q.2) γ b.2) := by
       rw [Y₁_gram_eq_weighted_sourceCutM₁_gram,
         gram_eq_rotated_sourceCutM₂_gram_of_eq_mul U S.X₂_isometry S.sourceCutM₂_eq]
     _ = _ := by
@@ -169,7 +169,7 @@ Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 theorem sourceY₂_gram_eq_rotated_sourceCutM₂_gram
     (p q : Fin d) (a b : Fin D) :
     (∑ β : Fin D, ∑ z : Fin d,
-      star (U z p β a) * U z q β b) =
+      star (U (z, p) β a) * U (z, q) β b) =
       ∑ l : Fin ℓ[U],
         star (sourceY₂ U l (p, a)) * sourceY₂ U l (q, b) :=
   (gram_eq_rotated_sourceCutM₂_gram_of_eq_mul U (sourceX₂_isometry U)
@@ -186,7 +186,7 @@ theorem sourceY₁_gram_eq_weighted_sourceCutM₁_gram
     (∑ r : Fin r[U],
       star (sourceY₁ U ρ hρ r (a, p)) * sourceY₁ U ρ hρ r (b, q)) =
       ∑ i : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
-        star (U i p a β) * ρ β β' * U i q b β' :=
+        star (U (i, p) a β) * ρ β β' * U (i, q) b β' :=
   ((sourceFactors U ρ hρ).Y₁_gram_eq_weighted_sourceCutM₁_gram U p q a b).trans
     (Fintype.sum_reverse_three _)
 
@@ -198,11 +198,11 @@ Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 (lines 563--601). -/
 theorem doubleLayerTensor_mul_apply_four_u
     (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
-    (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2)
+    (doubleLayerTensor U (p.1, q.1) * doubleLayerTensor U (p.2, q.2))
         (finProdFinEquiv (a.1, b.1)) (finProdFinEquiv (a.2, b.2)) =
       ∑ α : Fin D, ∑ β : Fin D, ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U j₁ p.1 a.1 α) * U j₁ q.1 b.1 β *
-          (star (U j₂ p.2 α a.2) * U j₂ q.2 β b.2) := by
+        star (U (j₁, p.1) a.1 α) * U (j₁, q.1) b.1 β *
+          (star (U (j₂, p.2) α a.2) * U (j₂, q.2) β b.2) := by
   classical
   simp only [Matrix.mul_apply]
   rw [← Equiv.sum_comp finProdFinEquiv]
@@ -221,25 +221,25 @@ Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 theorem doubleLayerTensor_rankOne_mul_apply_four_u
     (ρ : Matrix (Fin D) (Fin D) ℂ) (p q : Fin d × Fin d)
     (a b : Fin D × Fin D) :
-    (doubleLayerTensor U p.1 q.1 *
+    (doubleLayerTensor U (p.1, q.1) *
         Matrix.vecMulVec
           (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
           (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
             (finProdFinEquiv.symm x)) *
-        doubleLayerTensor U p.2 q.2)
+        doubleLayerTensor U (p.2, q.2))
         (finProdFinEquiv (a.1, b.1)) (finProdFinEquiv (a.2, b.2)) =
       ∑ α : Fin D, ∑ α' : Fin D, ∑ β : Fin D,
       ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U j₁ p.1 a.1 α) * U j₁ q.1 b.1 α' * ρ α' α *
-          (star (U j₂ p.2 β a.2) * U j₂ q.2 β b.2) := by
+        star (U (j₁, p.1) a.1 α) * U (j₁, q.1) b.1 α' * ρ α' α *
+          (star (U (j₂, p.2) β a.2) * U (j₂, q.2) β b.2) := by
   classical
   let ρ' : Fin (D * D) → ℂ := fun x ↦ ρ.vec (finProdFinEquiv.symm x)
   let Φ' : Fin (D * D) → ℂ := fun x ↦
     (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
   have hleft :
-      (doubleLayerTensor U p.1 q.1 *ᵥ ρ') (finProdFinEquiv (a.1, b.1)) =
+      (doubleLayerTensor U (p.1, q.1) *ᵥ ρ') (finProdFinEquiv (a.1, b.1)) =
         ∑ α : Fin D, ∑ α' : Fin D, ∑ j₁ : Fin d,
-          star (U j₁ p.1 a.1 α) * U j₁ q.1 b.1 α' * ρ α' α := by
+          star (U (j₁, p.1) a.1 α) * U (j₁, q.1) b.1 α' * ρ α' α := by
     simp only [Matrix.mulVec, dotProduct]
     rw [← Equiv.sum_comp finProdFinEquiv]
     simp only [ρ', Matrix.vec, doubleLayerTensor_apply, Matrix.submatrix_apply,
@@ -248,10 +248,10 @@ theorem doubleLayerTensor_rankOne_mul_apply_four_u
     simp_rw [Finset.sum_mul]
     rw [Fintype.sum_prod_type]
   have hright :
-      Matrix.vecMul Φ' (doubleLayerTensor U p.2 q.2)
+      Matrix.vecMul Φ' (doubleLayerTensor U (p.2, q.2))
           (finProdFinEquiv (a.2, b.2)) =
         ∑ β : Fin D, ∑ j₂ : Fin d,
-          star (U j₂ p.2 β a.2) * U j₂ q.2 β b.2 := by
+          star (U (j₂, p.2) β a.2) * U (j₂, q.2) β b.2 := by
     simp only [Matrix.vecMul, dotProduct]
     rw [← Equiv.sum_comp finProdFinEquiv]
     simp only [Φ', Matrix.vec, Matrix.one_apply, doubleLayerTensor_apply,
@@ -260,8 +260,8 @@ theorem doubleLayerTensor_rankOne_mul_apply_four_u
       ite_mul, one_mul, zero_mul]
     rw [Fintype.sum_prod_type]
     simp_rw [Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-  change (doubleLayerTensor U p.1 q.1 * Matrix.vecMulVec ρ' Φ' *
-      doubleLayerTensor U p.2 q.2)
+  change (doubleLayerTensor U (p.1, q.1) * Matrix.vecMulVec ρ' Φ' *
+      doubleLayerTensor U (p.2, q.2))
       (finProdFinEquiv (a.1, b.1)) (finProdFinEquiv (a.2, b.2)) = _
   rw [Matrix.mul_vecMulVec, Matrix.vecMulVec_mul, Matrix.vecMulVec_apply,
     hleft, hright]
@@ -312,8 +312,8 @@ theorem sourceYTensor_gram_eq_four_u_weighted
         sourceYTensor U ρ hρ t ((b.1, q.1), (q.2, b.2))) =
       ∑ i₁ : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
       ∑ δ : Fin D, ∑ i₂ : Fin d,
-        star (U i₁ p.1 a.1 β) * ρ β β' * U i₁ q.1 b.1 β' *
-          (star (U i₂ p.2 δ a.2) * U i₂ q.2 δ b.2) :=
+        star (U (i₁, p.1) a.1 β) * ρ β β' * U (i₁, q.1) b.1 β' *
+          (star (U (i₂, p.2) δ a.2) * U (i₂, q.2) δ b.2) :=
   ((sourceFactors U ρ hρ).sourceYTensor_gram_eq_four_u_weighted U p q a b).trans
     (Fintype.sum_permute_five _)
 
@@ -329,7 +329,7 @@ theorem sourceV_mul_sourceYTensor_apply
     (sourceV U ρ hρ * sourceYTensor U ρ hρ) z
         (((a.1, p.1), (p.2, a.2))) =
       ∑ γ : Fin D,
-        U z.1 p.1 a.1 γ * U z.2 p.2 γ a.2 := by
+        U (z.1, p.1) a.1 γ * U (z.2, p.2) γ a.2 := by
   classical
   simp only [Matrix.mul_apply, sourceV, SourceFactors.sourceV,
     sourceYTensor_apply, Fintype.sum_prod_type, Finset.sum_mul]

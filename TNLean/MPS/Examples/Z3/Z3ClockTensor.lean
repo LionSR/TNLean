@@ -124,10 +124,10 @@ theorem norm_phaseChar (a : Fin 3) : ‖phaseChar a‖ = 1 := by
 the input `j` shifted by `g`, the outgoing bond carries `j`, and the incoming bond `l` (the input
 of the previous site) contributes `ω^{f(l, j)}`. The first physical index is the output. -/
 def clockTensor (g : Fin 3) (f : Fin 3 → Fin 3 → Fin 3) : MPOTensor 3 3 :=
-  fun i j ↦ Matrix.of fun l r ↦ if i = j + g ∧ r = j then phaseChar (f l j) else 0
+  fun (i, j) ↦ Matrix.of fun l r ↦ if i = j + g ∧ r = j then phaseChar (f l j) else 0
 
 theorem clockTensor_apply (g : Fin 3) (f : Fin 3 → Fin 3 → Fin 3) (i j l r : Fin 3) :
-    clockTensor g f i j l r = if i = j + g ∧ r = j then phaseChar (f l j) else 0 := rfl
+    clockTensor g f (i, j) l r = if i = j + g ∧ r = j then phaseChar (f l j) else 0 := rfl
 
 /-- The global shift `X^{g ⊗ N}` of periodic qutrit configurations. -/
 def clockShift (g : Fin 3) (N : ℕ) : Equiv.Perm (Fin N → Fin 3) :=
@@ -230,8 +230,8 @@ weight**. The tensor `T̂_g` of arXiv:2203.12563, lines 2206–2222, for the coc
 arXiv:2405.00439, line 2040, multiplied entrywise by `ω^{f(l, j)}`. -/
 theorem clockTensor_apply_eq_cocycle (g : Multiplicative (ZMod 3))
     (f : Fin 3 → Fin 3 → Fin 3) (i j l r : Fin 3) :
-    clockTensor (GroupCocycle.residueEquiv 2 g) f i j l r =
-      GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0) g i j l r *
+    clockTensor (GroupCocycle.residueEquiv 2 g) f (i, j) l r =
+      GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0) g (i, j) l r *
         phaseChar (f l j) := by
   rw [clockTensor_apply, GroupCocycle.tensor_apply, siteShift_residueEquiv,
     cyclicCocycle_zero_val]

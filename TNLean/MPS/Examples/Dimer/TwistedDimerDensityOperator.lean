@@ -132,7 +132,7 @@ sum.
 
 Project example; not from CPSV16. -/
 lemma T_mul_single_sum (i j : Fin 8) (l l' r r' : Fin 2) (c : Fin 2 → ℂ) :
-    T i j * (∑ k : Fin 2, Matrix.single (physIdx l l' k) (physIdx r r' k) (c k)) =
+    T (i, j) * (∑ k : Fin 2, Matrix.single (physIdx l l' k) (physIdx r r' k) (c k)) =
       if bitR i = l ∧ bitR j = l' then
         ∑ k : Fin 2, Matrix.single (physIdx (bitL i) (bitL j) k) (physIdx r r' k)
           (coef k i j * c k)

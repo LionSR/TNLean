@@ -170,7 +170,7 @@ def IsMPOBlockLeftInverse
     {p : ℕ} (M : (k : Fin r) → MPOTensor p (dim k))
     (C : Matrix (BlockEntryIndex dim) (Fin p × Fin p) ℂ) : Prop :=
   ∀ (k j : Fin r) (x y : Fin (dim k)) (x' y' : Fin (dim j)),
-    (∑ i : Fin p, ∑ l : Fin p, C ⟨k, x, y⟩ (i, l) * M j i l x' y') =
+    (∑ i : Fin p, ∑ l : Fin p, C ⟨k, x, y⟩ (i, l) * M j (i, l) x' y') =
       if h : k = j then
         if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
       else 0
@@ -190,15 +190,15 @@ theorem WordTupleSpanTop.exists_mpo_block_left_inverse
   refine ⟨fun z il ↦ C z (finProdFinEquiv il), ?_⟩
   intro k j x y x' y'
   change (∑ i : Fin p, ∑ l : Fin p,
-    C ⟨k, x, y⟩ (finProdFinEquiv (i, l)) * M j i l x' y') = _
+    C ⟨k, x, y⟩ (finProdFinEquiv (i, l)) * M j (i, l) x' y') = _
   have hpair (il : Fin p × Fin p) :
       (M j).toMPSTensor (finProdFinEquiv il) x' y' =
-        M j il.1 il.2 x' y' := by
+        M j (il.1, il.2) x' y' := by
     rcases il with ⟨i, l⟩
     simp [MPOTensor.toMPSTensor]
   calc
     _ = ∑ il : Fin p × Fin p,
-        C ⟨k, x, y⟩ (finProdFinEquiv il) * M j il.1 il.2 x' y' :=
+        C ⟨k, x, y⟩ (finProdFinEquiv il) * M j (il.1, il.2) x' y' :=
       (Fintype.sum_prod_type _).symm
     _ = ∑ q : Fin (p * p),
         C ⟨k, x, y⟩ q * (M j).toMPSTensor q x' y' := by

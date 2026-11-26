@@ -136,9 +136,8 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       Kraus.reindexPhysical e M.toMPSTensor := by
     funext ij
     change
-      M (Kraus.singleBlockEquiv d ij.divNat)
-          (Kraus.singleBlockEquiv d ij.modNat) * 1 =
-        M (e ij).divNat (e ij).modNat
+      M (Kraus.singleBlockEquiv d ij.divNat, Kraus.singleBlockEquiv d ij.modNat) * 1 =
+        M ((e ij).divNat, (e ij).modNat)
     simp [e]
   refine ⟨hMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
   · have hCF' :=

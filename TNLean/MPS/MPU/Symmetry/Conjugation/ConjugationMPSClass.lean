@@ -148,7 +148,7 @@ a gate slice, and the right half factor. Source: arXiv:1703.09188,
 `StandardForm`, lines 603--617. -/
 theorem W_eq_halfLeft_mul (T : TwoSiteStandardFormData W u v) (i₁ i₂ : Fin d)
     (j : Fin d × Fin d) :
-    W (finProdFinEquiv (i₁, i₂)) (finProdFinEquiv j) =
+    W (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) =
       T.halfLeft i₁ * gateSlice u j * T.halfRight i₂ := by
   ext α γ
   rw [T.W_apply]
@@ -219,7 +219,7 @@ theorem TwoSiteStandardFormData.sign_eq_of_conjugation_gauge
     {y : Matrix (Fin r) (Fin r) ℂ} (hy : y ∈ Matrix.unitaryGroup (Fin r) ℂ)
     (hu : u.map (starRingEnd ℂ) = (x ⊗ₖ y) * u)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hgauge : ∀ i j, (W i j).map (starRingEnd ℂ) = ζ • (Xᴴ * W i j * X))
+    (hgauge : ∀ i j, (W (i, j)).map (starRingEnd ℂ) = ζ • (Xᴴ * W (i, j) * X))
     {s s' : ℂ} (hs : s = 1 ∨ s = -1) (hs' : s' = 1 ∨ s' = -1)
     (hxs : xᵀ = s • x) (hXs : X * X.map (starRingEnd ℂ) = s' • 1) :
     s = s' := by
@@ -359,8 +359,8 @@ theorem IsMPUCanonicalFormII.mps_conjugation_sign_iff
       ((x : Matrix (Fin ℓ[V]) (Fin ℓ[V]) ℂ) ⊗ₖ (y : Matrix (Fin r[V]) (Fin r[V]) ℂ)) *
         SourceFactors.sourceU V S)
     (G : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hgauge : ∀ i j, (MPOTensor.blockTwo V i j).map (starRingEnd ℂ) =
-      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V i j * G)) :
+    (hgauge : ∀ i j, (MPOTensor.blockTwo V (i, j)).map (starRingEnd ℂ) =
+      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V (i, j) * G)) :
     ((G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ↔
         (x : Matrix (Fin ℓ[V]) (Fin ℓ[V]) ℂ)ᵀ = x) ∧
       ((G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 ↔
@@ -418,10 +418,10 @@ theorem IsMPUCanonicalFormII.mps_conjugation_sign_iff
 block, with the square of the phase. -/
 theorem blockTwo_map_star_eq_of_gauge {V : MPOTensor d D} (G : Matrix (Fin D) (Fin D) ℂ)
     (hG : G * Gᴴ = 1) (ζ : ℂ)
-    (hgauge : ∀ i j, (V i j).map (starRingEnd ℂ) = ζ • (Gᴴ * V i j * G)) (i j : Fin (d * d)) :
-    (MPOTensor.blockTwo V i j).map (starRingEnd ℂ) =
-      (ζ * ζ) • (Gᴴ * MPOTensor.blockTwo V i j * G) := by
-  simp only [MPOTensor.blockTwo, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
+    (hgauge : ∀ i j, (V (i, j)).map (starRingEnd ℂ) = ζ • (Gᴴ * V (i, j) * G)) (i j : Fin (d * d)) :
+    (MPOTensor.blockTwo V (i, j)).map (starRingEnd ℂ) =
+      (ζ * ζ) • (Gᴴ * MPOTensor.blockTwo V (i, j) * G) := by
+  simp only [MPOTensor.blockTwo_apply, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
     smul_smul]
   congr 1
   simp only [Matrix.mul_assoc]
@@ -441,8 +441,8 @@ theorem IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge
       ((x : Matrix (Fin ℓ[V]) (Fin ℓ[V]) ℂ) ⊗ₖ (y : Matrix (Fin r[V]) (Fin r[V]) ℂ)) *
         SourceFactors.sourceU V S)
     (G : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hgauge : ∀ i j, (V i j).map (starRingEnd ℂ) =
-      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * V i j * G)) :
+    (hgauge : ∀ i j, (V (i, j)).map (starRingEnd ℂ) =
+      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * V (i, j) * G)) :
     ((G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ↔
         (x : Matrix (Fin ℓ[V]) (Fin ℓ[V]) ℂ)ᵀ = x) ∧
       ((G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 ↔

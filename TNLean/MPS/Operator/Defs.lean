@@ -76,13 +76,13 @@ open scoped Matrix ComplexOrder BigOperators
 open Matrix Finset
 
 /-- A **Matrix Product Operator** tensor:
-a family of `D × D` matrices `M^{ij}` indexed by a ket index `i` and a bra
-index `j`, both in `Fin d`.
+a family of `D × D` matrices `M^{ij}` indexed by a pair of a ket index `i` and a
+bra index `j`, both in `Fin d`, following the notation of arXiv:1606.00608,
+Section 4.
 
-This is equivalent to an MPS tensor with doubled physical index `Fin d × Fin d`;
-we keep both indices explicit following the notation of
-arXiv:1606.00608, Section 4. -/
-abbrev MPOTensor (d D : ℕ) := Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ
+It is the tensor of `MPTensor` whose physical basis is the product
+`Fin d × Fin d`, so the letter `M^{ij}` is `M (i, j)`. -/
+abbrev MPOTensor (d D : ℕ) := MPTensor (Fin d × Fin d) (Fin D)
 
 namespace MPSTensor
 
@@ -108,12 +108,12 @@ variable {d D : ℕ}
 identifying `Fin d × Fin d` with `Fin (d * d)` via the standard product encoding
 (`Fin.divNat` = ket, `Fin.modNat` = bra). -/
 def toMPSTensor (M : MPOTensor d D) : MPSTensor (d * d) D :=
-  fun ij => M (ij.divNat) (ij.modNat)
+  fun ij => M (ij.divNat, ij.modNat)
 
 /-- Reindex both physical legs of an MPO tensor by the same equivalence. -/
 def reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
     (U : MPOTensor d D) : MPOTensor d' D :=
-  fun i j ↦ U (e i) (e j)
+  fun (i, j) ↦ U (e i, e j)
 
 /-- Apply a physical-index equivalence sitewise to a finite configuration.
 
@@ -128,7 +128,7 @@ MPO tensor.
 Source: arXiv:1606.00608, Appendix C.2, lines 1424--1438 and equation `formK`. -/
 def physicalSlice (K : MPOTensor d D) (β α : Fin D) :
     Matrix (Fin d) (Fin d) ℂ :=
-  fun i j ↦ K i j β α
+  fun i j ↦ K (i, j) β α
 
 /-! ### Word evaluation -/
 
@@ -138,14 +138,14 @@ Returns `1` for the empty word pair, and `0` for mismatched lengths. -/
 noncomputable def evalWord (M : MPOTensor d D) :
     List (Fin d) → List (Fin d) → Matrix (Fin D) (Fin D) ℂ
   | [], [] => 1
-  | i :: is, j :: js => M i j * evalWord M is js
+  | i :: is, j :: js => M (i, j) * evalWord M is js
   | _, _ => 0
 
 @[simp] lemma evalWord_nil (M : MPOTensor d D) : evalWord M [] [] = 1 := rfl
 
 @[simp] lemma evalWord_cons (M : MPOTensor d D)
     (i j : Fin d) (is js : List (Fin d)) :
-    evalWord M (i :: is) (j :: js) = M i j * evalWord M is js := rfl
+    evalWord M (i :: is) (j :: js) = M (i, j) * evalWord M is js := rfl
 
 /-- Word evaluation after physical reindexing is word evaluation on the two
 mapped words.
@@ -166,7 +166,7 @@ theorem evalWord_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
 `evalWord M (ofFn σ) (ofFn τ) = (ofFn (fun i => M (σ i) (τ i))).prod`. -/
 lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
     evalWord M (List.ofFn σ) (List.ofFn τ) =
-      (List.ofFn fun i : Fin N => M (σ i) (τ i)).prod := by
+      (List.ofFn fun i : Fin N => M (σ i, τ i)).prod := by
   induction N with
   | zero =>
       simp only [List.ofFn_zero, evalWord_nil, List.prod_nil]
@@ -178,7 +178,7 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
 /-- If every off-diagonal physical entry of an MPO tensor vanishes, then its
 evaluation on two distinct physical configurations is zero. -/
 theorem evalWord_ofFn_eq_zero_of_ne (M : MPOTensor d D)
-    (hM : ∀ i j, i ≠ j → M i j = 0) {N : ℕ} {σ τ : Fin N → Fin d}
+    (hM : ∀ i j, i ≠ j → M (i, j) = 0) {N : ℕ} {σ τ : Fin N → Fin d}
     (hστ : σ ≠ τ) :
     evalWord M (List.ofFn σ) (List.ofFn τ) = 0 := by
   rw [evalWord_ofFn]
@@ -197,13 +197,24 @@ theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)
   | zero => simp
   | succ N ih =>
       rw [List.ofFn_succ, List.ofFn_succ, List.ofFn_succ]
-      change M (w 0).divNat (w 0).modNat *
+      change M ((w 0).divNat, (w 0).modNat) *
           Kraus.evalWord M.toMPSTensor (List.ofFn (w ∘ Fin.succ)) =
-        M (w 0).divNat (w 0).modNat *
+        M ((w 0).divNat, (w 0).modNat) *
           evalWord M (List.ofFn fun k ↦ (w (Fin.succ k)).divNat)
             (List.ofFn fun k ↦ (w (Fin.succ k)).modNat)
       rw [ih (w ∘ Fin.succ)]
       rfl
+
+/-- Word evaluation of an operator tensor, read as a tensor with the pair alphabet, on the word
+of paired letters is the evaluation on the ket and bra words. -/
+theorem kraus_evalWord_ofFn_pair (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
+    Kraus.evalWord M (List.ofFn fun k ↦ (σ k, τ k)) =
+      evalWord M (List.ofFn σ) (List.ofFn τ) := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      simp only [List.ofFn_succ, Kraus.evalWord_cons, evalWord_cons]
+      rw [ih]
 
 /-- Paired physical configurations give the same word evaluation in the MPO
 and doubled-index MPS descriptions. -/
@@ -244,7 +255,7 @@ theorem evalWord_ofFn_cons_snoc (M : MPOTensor d D) {K : ℕ}
     evalWord M
         (List.ofFn (Fin.cons i₁ (Fin.snoc σ i₂)))
         (List.ofFn (Fin.cons j₁ (Fin.snoc τ j₂))) =
-      M i₁ j₁ * evalWord M (List.ofFn σ) (List.ofFn τ) * M i₂ j₂ := by
+      M (i₁, j₁) * evalWord M (List.ofFn σ) (List.ofFn τ) * M (i₂, j₂) := by
   rw [List.ofFn_cons, List.ofFn_cons, evalWord_cons,
     List.ofFn_snoc, List.ofFn_snoc,
     evalWord_append M (List.ofFn σ) (List.ofFn τ) [i₂] [j₂] (by simp)]
@@ -308,7 +319,7 @@ noncomputable def normalizedMPO (M : MPOTensor d D) (N : ℕ) :
 
 /-- An MPO tensor is **Hermitian** if `M^{ij} = (M^{ji})†` for all `i, j`. -/
 def IsHermitian (M : MPOTensor d D) : Prop :=
-  ∀ i j : Fin d, M i j = (M j i)ᴴ
+  ∀ i j : Fin d, M (i, j) = (M (j, i))ᴴ
 
 /-! ### The adjoint tensor -/
 
@@ -319,19 +330,19 @@ the generated operator family; the $\dagger$-marked tensors in the first
 displayed diagram of the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1909--1913, are of this form. -/
 def adjointTensor (M : MPOTensor d D) : MPOTensor d D :=
-  fun i j => (M j i)ᴴ
+  fun (i, j) => (M (j, i))ᴴ
 
 @[simp] lemma adjointTensor_apply (M : MPOTensor d D) (i j : Fin d) :
-    adjointTensor M i j = (M j i)ᴴ := rfl
+    adjointTensor M (i, j) = (M (j, i))ᴴ := rfl
 
 /-- A tensor equals its adjoint tensor precisely when it is Hermitian. -/
 lemma adjointTensor_eq_iff_isHermitian (M : MPOTensor d D) :
     adjointTensor M = M ↔ IsHermitian M := by
   constructor
   · intro h i j
-    exact (congrFun (congrFun h i) j).symm
+    exact (congrFun h (i, j)).symm
   · intro h
-    funext i j
+    funext ⟨i, j⟩
     exact (h i j).symm
 
 /-- Word evaluation of the adjoint tensor: for equal-length words it is the
@@ -381,10 +392,10 @@ $$E_M(X) = \sum_{i,j} M^{ij} \, X \, (M^{ij})^\dagger.$$ -/
 noncomputable def transferMap (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
-    (LinearMap.mulLeft ℂ (M i j)).comp (LinearMap.mulRight ℂ (M i j)ᴴ)
+    (LinearMap.mulLeft ℂ (M (i, j))).comp (LinearMap.mulRight ℂ (M (i, j))ᴴ)
 
 lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap M X = ∑ i : Fin d, ∑ j : Fin d, M i j * X * (M i j)ᴴ := by
+    transferMap M X = ∑ i : Fin d, ∑ j : Fin d, M (i, j) * X * (M (i, j))ᴴ := by
   simp only [transferMap, LinearMap.sum_apply, LinearMap.comp_apply,
     LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
 
@@ -394,7 +405,7 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
   refine LinearMap.ext fun X => ?_
   simp only [transferMap_apply, Kraus.transferMap_apply, toMPSTensor]
   rw [← Fintype.sum_prod_type']
-  exact (finProdFinEquiv.symm.sum_comp _).symm
+  exact (finProdFinEquiv.symm.sum_comp fun ij : Fin d × Fin d => M ij * X * (M ij)ᴴ).symm
 
 /-- The transfer map of an MPO preserves positive semidefiniteness. -/
 theorem transferMap_pos (M : MPOTensor d D)
@@ -447,7 +458,7 @@ namespace MPOTensor
 generates the identity operator at every system size (`mpo_idTensor`) and
 serves as the empty vertical stack in `MPOTensor.stackedTensor`. -/
 noncomputable def idTensor (d : ℕ) : MPOTensor d 1 :=
-  fun i j => if i = j then 1 else 0
+  fun (i, j) => if i = j then 1 else 0
 
 /-- The identity tensor generates the identity operator at every system
 size. -/
@@ -464,7 +475,7 @@ theorem mpo_idTensor (d N : ℕ) : mpo (idTensor d) N = 1 := by
   · rw [ite_eq_right h]
     obtain ⟨l, hl⟩ : ∃ l, σ l ≠ τ l := Function.ne_iff.mp h
     have hzero : (0 : Matrix (Fin 1) (Fin 1) ℂ) ∈
-        List.ofFn fun l => idTensor d (σ l) (τ l) :=
+        List.ofFn fun l => idTensor d (σ l, τ l) :=
       List.mem_ofFn.mpr ⟨l, by simp [idTensor, hl]⟩
     rw [List.prod_eq_zero hzero, Matrix.trace_zero]
 

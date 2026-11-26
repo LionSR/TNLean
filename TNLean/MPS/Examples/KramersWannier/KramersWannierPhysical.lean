@@ -36,7 +36,7 @@ open MPSTensor
 /-- The local entries of the existing duality tensor. The row is fixed by the
 input physical bit, and the remaining factor is a binary phase. -/
 theorem kwTensor_apply (a b u v : Fin 2) :
-    kwTensor a b u v =
+    kwTensor (a, b) u v =
       if u = b then (-1 : ℂ) ^ (a.val * (b.val + v.val)) else 0 := by
   fin_cases a <;> fin_cases b <;> fin_cases u <;> fin_cases v <;>
     norm_num [kwTensor, kwIntTensor, complexOfInt]

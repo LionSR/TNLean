@@ -27,16 +27,16 @@ operator algebra in ALVV, arXiv:1602.08828v2, `prop:Cheby-AGSP-eff`, lines 1311�
 theorem traceChainOperator_conjTranspose {L q D : ℕ}
     (A : Fin L → MPOTensor q D) (C : Matrix (Fin D) (Fin D) ℂ) :
     (traceChainOperator A C)ᴴ =
-      traceChainOperator (fun v i j ↦ (A v j i).map (starRingEnd ℂ))
+      traceChainOperator (fun v (i, j) ↦ (A v (j, i)).map (starRingEnd ℂ))
         (C.map (starRingEnd ℂ)) := by
   ext sigma tau
   change (starRingEnd ℂ) (Matrix.trace
-      (C * (List.ofFn (fun v ↦ A v (tau v) (sigma v))).prod)) =
+      (C * (List.ofFn (fun v ↦ A v (tau v, sigma v))).prod)) =
     Matrix.trace (C.map (starRingEnd ℂ) *
-      (List.ofFn (fun v ↦ (A v (tau v) (sigma v)).map (starRingEnd ℂ))).prod)
+      (List.ofFn (fun v ↦ (A v (tau v, sigma v)).map (starRingEnd ℂ))).prod)
   rw [AddMonoidHom.map_trace, Matrix.map_mul]
   have hp := map_list_prod (starRingEnd ℂ).mapMatrix
-    (List.ofFn (fun v ↦ A v (tau v) (sigma v)))
+    (List.ofFn (fun v ↦ A v (tau v, sigma v)))
   simpa only [List.map_ofFn, Function.comp_def, RingHom.mapMatrix_apply] using
     congrArg (fun M ↦ Matrix.trace (C.map (starRingEnd ℂ) * M)) hp
 
@@ -49,10 +49,10 @@ theorem exists_traceChainOperator_selfAdjointPart {L q D : ℕ} (hL : 1 ≤ L)
       (selfAdjointPart ℝ (traceChainOperator A 1) :
           Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) = traceChainOperator B 1 := by
   let F : Fin 2 → Fin L → MPOTensor q D :=
-    ![A, fun v i j ↦ (A v j i).map (starRingEnd ℂ)]
+    ![A, fun v (i, j) ↦ (A v (j, i)).map (starRingEnd ℂ)]
   obtain ⟨B, hB⟩ := exists_traceChainOperator_linearCombination hL F (fun _ ↦ (1 / 2 : ℂ))
   refine ⟨B, ?_⟩
-  have hAdj : traceChainOperator (fun v i j ↦ (A v j i).map (starRingEnd ℂ)) 1 =
+  have hAdj : traceChainOperator (fun v (i, j) ↦ (A v (j, i)).map (starRingEnd ℂ)) 1 =
       (traceChainOperator A 1)ᴴ := by
     simpa using (traceChainOperator_conjTranspose A 1).symm
   simpa [F, Fin.sum_univ_two, hAdj, selfAdjointPart_apply_coe, invOf_eq_inv,

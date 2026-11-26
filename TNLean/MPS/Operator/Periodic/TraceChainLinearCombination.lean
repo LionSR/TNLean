@@ -50,7 +50,7 @@ theorem exists_traceChainOperator_common_linearCombination_varying {L q s : ℕ}
       Matrix (Fin (∑ a, D a)) (Fin (∑ a, D a)) ℂ :=
     (Matrix.reindexAlgEquiv ℂ ℂ e).toRingHom.comp
       (Matrix.blockDiagonal'RingHom (fun a : Fin s ↦ Fin (D a)) ℂ)
-  let B : Fin L → MPOTensor q (∑ a, D a) := fun v x y ↦ φ (fun a ↦ A a v x y)
+  let B : Fin L → MPOTensor q (∑ a, D a) := fun v (x, y) ↦ φ (fun a ↦ A a v (x, y))
   let C : Fin s → Matrix (Fin (∑ a, D a)) (Fin (∑ a, D a)) ℂ :=
     fun a ↦ φ (Pi.single a (Q a))
   have hφsmul (c : ℂ) (X : (a : Fin s) → Matrix (Fin (D a)) (Fin (D a)) ℂ) :
@@ -72,17 +72,17 @@ theorem exists_traceChainOperator_common_linearCombination_varying {L q s : ℕ}
     simp only [C, hφsmul]
   rw [hcap]
   ext σ τ
-  have hp := map_list_prod φ (List.ofFn (fun v a ↦ A a v (σ v) (τ v)))
+  have hp := map_list_prod φ (List.ofFn (fun v a ↦ A a v (σ v, τ v)))
   simp only [List.map_ofFn, Function.comp_def] at hp
   simp only [Matrix.sum_apply, Matrix.smul_apply, traceChainOperator]
-  change (∑ a, c a * Matrix.trace (Q a * (List.ofFn (fun v ↦ A a v (σ v) (τ v))).prod)) =
+  change (∑ a, c a * Matrix.trace (Q a * (List.ofFn (fun v ↦ A a v (σ v, τ v))).prod)) =
     Matrix.trace (φ (fun a ↦ c a • Q a) *
-      (List.ofFn (fun v ↦ φ (fun a ↦ A a v (σ v) (τ v)))).prod)
+      (List.ofFn (fun v ↦ φ (fun a ↦ A a v (σ v, τ v)))).prod)
   rw [← hp, ← map_mul]
-  change (∑ a, c a * Matrix.trace (Q a * (List.ofFn (fun v ↦ A a v (σ v) (τ v))).prod)) =
+  change (∑ a, c a * Matrix.trace (Q a * (List.ofFn (fun v ↦ A a v (σ v, τ v))).prod)) =
     Matrix.trace ((Matrix.blockDiagonal' (fun a ↦
       (c a • Q a) *
-        (List.ofFn (fun v a ↦ A a v (σ v) (τ v))).prod a)).reindex e e)
+        (List.ofFn (fun v a ↦ A a v (σ v, τ v))).prod a)).reindex e e)
   rw [Matrix.trace_reindex, Matrix.trace_blockDiagonal']
   apply Finset.sum_congr rfl
   intro a _ha

@@ -36,7 +36,7 @@ The canonical witness alignment uses arXiv:1703.09188, equations `Erightleft`,
 theorem IsMPUCanonicalFormII.oneLetter_physical_contraction
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) (p q : Fin d) :
     (∑ x : Fin D, ∑ α : Fin D, ∑ β : Fin D, ∑ z : Fin d,
-      star (U z p x α) * U z q x β * hU.ρ β α) =
+      star (U (z, p) x α) * U (z, q) x β * hU.ρ β α) =
         if p = q then 1 else 0 := by
   have := hU.neZero_phys
   let Φ : Fin (D * D) → ℂ := fun x ↦
@@ -45,9 +45,9 @@ theorem IsMPUCanonicalFormII.oneLetter_physical_contraction
   have h₂ := hU.simple2_recorded_fixed_pair hsimple
   have h₁ := hU.isMPU.simple1_of_simple2_supplied Φ ρ h₂ p q
   have hentry (x : Fin D) :
-      (doubleLayerTensor U p q *ᵥ ρ) (finProdFinEquiv (x, x)) =
+      (doubleLayerTensor U (p, q) *ᵥ ρ) (finProdFinEquiv (x, x)) =
         ∑ α : Fin D, ∑ β : Fin D, ∑ z : Fin d,
-          star (U z p x α) * U z q x β * hU.ρ β α := by
+          star (U (z, p) x α) * U (z, q) x β * hU.ρ β α := by
     simp only [Matrix.mulVec, dotProduct]
     rw [← Equiv.sum_comp finProdFinEquiv]
     simp only [ρ, Matrix.vec, doubleLayerTensor_apply, Matrix.submatrix_apply,
@@ -95,7 +95,7 @@ theorem IsMPUCanonicalFormII.sourceY₁_physical_contraction
   conv_lhs => arg 2; ext x; rw [Fintype.sum_reverse_three]
   calc
     _ = ∑ x : Fin D, ∑ α : Fin D, ∑ β : Fin D, ∑ z : Fin d,
-        star (U z p x α) * U z q x β * hU.ρ β α := by
+        star (U (z, p) x α) * U (z, q) x β * hU.ρ β α := by
       refine Finset.sum_congr₂ fun x _ α _ ↦ ?_
       refine Finset.sum_congr₂ fun β _ z _ ↦ ?_
       have hρ : hU.ρ α β = hU.ρ β α :=

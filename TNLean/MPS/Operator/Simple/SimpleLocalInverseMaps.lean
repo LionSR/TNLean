@@ -113,14 +113,14 @@ theorem reducedBlockState_four_three_apply
   simp_rw [heval]
   let z : Fin 1 := 0
   have hone (x : Fin 1 → Fin d) :
-      K.evalWord (List.ofFn x) (List.ofFn x) = K (x z) (x z) := by
+      K.evalWord (List.ofFn x) (List.ofFn x) = K (x z, x z) := by
     simp [z]
   simp_rw [hone]
   rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) (Fin d)).symm
     (fun x : Fin 1 → Fin d ↦
       (K.mpo 4).trace⁻¹ •
         Matrix.trace
-          (K.evalWord (List.ofFn u) (List.ofFn v) * K (x z) (x z)))]
+          (K.evalWord (List.ofFn u) (List.ofFn v) * K (x z, x z)))]
   simp only [Equiv.funUnique_symm_apply, uniqueElim_const]
   simp_rw [← Matrix.trace_smul]
   rw [← Matrix.trace_sum]

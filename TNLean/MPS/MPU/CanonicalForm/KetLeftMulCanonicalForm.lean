@@ -109,8 +109,8 @@ private theorem toMPSTensor_ketLeftMul (M : MPOTensor d D)
   classical
   funext p
   symm
-  change (∑ q : Fin (d * d), _ • M q.divNat q.modNat) =
-    ∑ k : Fin d, P p.divNat k • M k p.modNat
+  change (∑ q : Fin (d * d), _ • M (q.divNat, q.modNat)) =
+    ∑ k : Fin d, P p.divNat k • M (k, p.modNat)
   rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
   simp [ketLeftPhysicalMatrix, Matrix.reindex_apply,
     Matrix.one_apply, MPSTensor.finProdFinEquiv_divNat,

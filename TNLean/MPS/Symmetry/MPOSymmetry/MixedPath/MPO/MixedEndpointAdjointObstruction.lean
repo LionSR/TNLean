@@ -47,10 +47,10 @@ def endpoint : MPSTensor 4 2 :=
 def scalarEndpoint : MPSTensor 1 1 := fun _ => 1
 
 /-- The bond-one MPO for the physical endpoint involution. -/
-def endpointMPO : MPOTensor 4 1 := fun i j _ _ => physicalInvolution i j
+def endpointMPO : MPOTensor 4 1 := fun (i, j) _ _ => physicalInvolution i j
 
 /-- The scalar second endpoint MPO. -/
-def scalarMPO : MPOTensor 1 1 := fun _ _ _ _ => 1
+def scalarMPO : MPOTensor 1 1 := fun (_, _) _ _ => 1
 
 /-- The mixed MPO with one-dimensional action multiplicity and the virtual
 involution used as both analysis and synthesis at the first endpoint. -/
@@ -139,7 +139,7 @@ theorem physicalInvolution_unitary : physicalInvolutionᴴ * physicalInvolution 
 /-- The first endpoint tensor is fixed by the physical adjoint. -/
 theorem physicalAdjointTensor_endpointMPO :
     MPOTensor.physicalAdjointTensor endpointMPO = endpointMPO := by
-  ext i j α β
+  ext ⟨i, j⟩ α β
   fin_cases i <;> fin_cases j <;>
     norm_num [MPOTensor.physicalAdjointTensor, endpointMPO, physicalInvolution,
       Matrix.diagonal_apply]
@@ -147,7 +147,7 @@ theorem physicalAdjointTensor_endpointMPO :
 /-- The scalar endpoint tensor is fixed by the physical adjoint. -/
 theorem physicalAdjointTensor_scalarMPO :
     MPOTensor.physicalAdjointTensor scalarMPO = scalarMPO := by
-  ext i j α β
+  ext ⟨i, j⟩ α β
   simp [MPOTensor.physicalAdjointTensor, scalarMPO]
 
 /-- The first endpoint has an adjoint-closed boundary range at every length. -/

@@ -245,7 +245,7 @@ is the tensor-level support identity used in the local orthogonal-sum entropy
 argument. -/
 private theorem ketLeftMul_physicalSupportProj {d D : ℕ} (K : MPOTensor d D) :
     K.ketLeftMul (physicalSupportProj K) = K := by
-  ext i j β α
+  ext ⟨i, j⟩ β α
   have h := congrFun (congrFun (physicalSupportProj_mul_physicalSlice K β α) i) j
   simpa [ketLeftMul, physicalSlice, Matrix.mul_apply, Matrix.sum_apply,
     Matrix.smul_apply, smul_eq_mul] using h

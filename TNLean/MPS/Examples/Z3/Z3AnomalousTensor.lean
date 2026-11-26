@@ -111,13 +111,14 @@ def identityEis : Fin 3 → Fin 3 → Matrix (Fin 1) (Fin 1) EisensteinInt :=
   fun i j => if i = j then 1 else 0
 
 /-- The symmetry `U` as a matrix product operator tensor. -/
-def uTensor : MPOTensor 3 2 := fun i j => complexOfEisenstein (uEis i j)
+def uTensor : MPOTensor 3 2 := Function.uncurry fun i j => complexOfEisenstein (uEis i j)
 
 /-- The inverse symmetry `U†` as a matrix product operator tensor. -/
-def uDagTensor : MPOTensor 3 2 := fun i j => complexOfEisenstein (uDagEis i j)
+def uDagTensor : MPOTensor 3 2 := Function.uncurry fun i j => complexOfEisenstein (uDagEis i j)
 
 /-- The identity operator as a matrix product operator tensor of bond dimension one. -/
-def identityTensor : MPOTensor 3 1 := fun i j => complexOfEisenstein (identityEis i j)
+def identityTensor : MPOTensor 3 1 :=
+    Function.uncurry fun i j => complexOfEisenstein (identityEis i j)
 
 /-- The symmetry `U` read as a tensor over the pair alphabet `Fin 9`, letter `a = 3 i + j` with
 `i` the output and `j` the input label. -/
@@ -276,8 +277,8 @@ theorem ddStack_eq (a : Fin 9) : ddStack a = complexOfEisenstein (ddStackEis a) 
 
 /-- Bridge: the identity tensor is the general identity tensor `MPOTensor.idTensor`. -/
 theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
-  funext i j
-  simp only [identityTensor, identityEis, MPOTensor.idTensor]
+  funext ⟨i, j⟩
+  simp only [identityTensor, identityEis, MPOTensor.idTensor, Function.uncurry_apply_pair]
   split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
 
 /-- **The periodic operator of the identity tensor is the identity** at every length. -/

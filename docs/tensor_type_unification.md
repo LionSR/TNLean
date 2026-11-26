@@ -7,6 +7,14 @@ a change of basis type"). It applies the rules of that document: one definition 
 (No dual systems), statements as general as their layer (Generality), and the
 build, switch, sweep, delete method.
 
+Progress, 2026-11-26. T.1a and T.1b are done. T.2a′ is done: `MPOTensor d D` is
+`MPTensor (Fin d × Fin d) (Fin D)`, and a letter is written `M (i, j)`. The operator part of T.2b
+is done: `MPOTensor.blockTensor` is `Kraus.block` renumbered by the blocked ket and bra
+indices, and `blockTwo` is the case of two sites. Neither name is deleted yet: `toMPSTensor`
+(about 2,500 uses) waits for T.1c, since its codomain is `MPSTensor (d * d) D`, and `blockTwo`
+(about 700 uses) waits for the statements over `Fin (d * d)` to be restated. T.1c, T.2a, T.2c,
+T.3 and T.4 remain.
+
 All counts were measured by the scripts listed in §6 on TNLean `e8f8dd3202` (5,417 modules
 outside `Archive/`) and QICLean `80e0a1782` (1,874 modules). Comments and docstrings are
 stripped before counting, so a name mentioned only in prose is not a use.

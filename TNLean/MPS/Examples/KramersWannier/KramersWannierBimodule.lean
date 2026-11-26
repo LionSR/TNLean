@@ -91,7 +91,7 @@ variable {N : ℕ}
 /-! ### The symmetry algebra -/
 
 /-- The bond-one tensor of the global spin flip `η = ∏_j X_j`, `δ_{s', 1 - s}`. -/
-def flipTensor : MPOTensor 2 1 := fun i j => Matrix.of fun _ _ => if i = j.rev then 1 else 0
+def flipTensor : MPOTensor 2 1 := fun (i, j) => Matrix.of fun _ _ => if i = j.rev then 1 else 0
 
 /-- The flip tensor generates the global spin flip at every positive length. -/
 theorem mpo_flipTensor [NeZero N] : flipTensor.mpo N = spinFlip N := by
@@ -163,7 +163,7 @@ theorem z2Tensor_mpo_mul_kwTensor_mpo [NeZero N] (a : Fin 2) :
 
 /-- The kernel tensor with its two physical legs exchanged, `(Kᵀ)^{s's} = K^{ss'}`. It
 generates the transpose of the kernel, which is its adjoint (`kwTensor_mpo_conjTranspose`). -/
-def kwTransposeTensor : MPOTensor 2 2 := fun i j => kwTensor j i
+def kwTransposeTensor : MPOTensor 2 2 := fun (i, j) => kwTensor (j, i)
 
 private theorem evalWord_kwTransposeTensor :
     ∀ is js : List (Fin 2),
@@ -206,10 +206,10 @@ theorem kwTransposeTensor_mpo_mul_kwTensor_mpo [NeZero N] :
 theorem kwTensor_isNormal : Kraus.IsNormal kwTensor.toMPSTensor := by
   refine Kraus.IsInjective.isNormal (Submodule.eq_top_of_forall_single_mem _ fun p q => ?_)
   have hmem (i j : Fin 2) :
-      kwTensor i j ∈ Submodule.span ℂ (Set.range kwTensor.toMPSTensor) :=
+      kwTensor (i, j) ∈ Submodule.span ℂ (Set.range kwTensor.toMPSTensor) :=
     Submodule.subset_span ⟨finProdFinEquiv (i, j), toMPSTensor_finProdFinEquiv _ _ _⟩
   have hcomb (i j i' j' : Fin 2) (c c' : ℂ)
-      (h : Matrix.single p q (1 : ℂ) = c • kwTensor i j + c' • kwTensor i' j') :
+      (h : Matrix.single p q (1 : ℂ) = c • kwTensor (i, j) + c' • kwTensor (i', j')) :
       Matrix.single p q (1 : ℂ) ∈ Submodule.span ℂ (Set.range kwTensor.toMPSTensor) := by
     rw [h]
     exact Submodule.add_mem _ (Submodule.smul_mem _ _ (hmem i j))
@@ -230,7 +230,7 @@ with no room for a zero slot. -/
 private theorem exists_gauge_of_mpo_eq (M : MPOTensor 2 (2 * 1))
     (hM : ∀ L : ℕ, 0 < L → M.mpo L = kwTensor.mpo L) :
     ∃ (V : Matrix (Fin 2) (Fin (2 * 1)) ℂ) (W : Matrix (Fin (2 * 1)) (Fin 2) ℂ),
-      V * W = 1 ∧ W * V = 1 ∧ ∀ i j, M i j = W * kwTensor i j * V := by
+      V * W = 1 ∧ W * V = 1 ∧ ∀ i j, M (i, j) = W * kwTensor (i, j) * V := by
   obtain ⟨V, W, hred, hnil⟩ :=
     MPSTensor.exists_isReduction_and_nilpotent_of_isNormal kwTensor.toMPSTensor
       kwTensor_isNormal two_pos M.toMPSTensor fun L hL σ => by
@@ -252,7 +252,7 @@ single-block compression theorem. -/
 theorem exists_gauge_mulTensor_kwTensor_flipTensor :
     ∃ (V : Matrix (Fin 2) (Fin (2 * 1)) ℂ) (W : Matrix (Fin (2 * 1)) (Fin 2) ℂ),
       V * W = 1 ∧ W * V = 1 ∧
-        ∀ i j, mulTensor kwTensor flipTensor i j = W * kwTensor i j * V :=
+        ∀ i j, mulTensor kwTensor flipTensor (i, j) = W * kwTensor (i, j) * V :=
   exists_gauge_of_mpo_eq _ fun L hL => by
     have : NeZero L := NeZero.of_pos hL
     rw [mpo_mulTensor]
@@ -268,7 +268,7 @@ single-block compression theorem. -/
 theorem exists_gauge_mulTensor_flipTensor_kwTensor :
     ∃ (V : Matrix (Fin 2) (Fin (1 * 2)) ℂ) (W : Matrix (Fin (1 * 2)) (Fin 2) ℂ),
       V * W = 1 ∧ W * V = 1 ∧
-        ∀ i j, mulTensor flipTensor kwTensor i j = W * kwTensor i j * V :=
+        ∀ i j, mulTensor flipTensor kwTensor (i, j) = W * kwTensor (i, j) * V :=
   exists_gauge_of_mpo_eq _ fun L hL => by
     have : NeZero L := NeZero.of_pos hL
     rw [mpo_mulTensor]

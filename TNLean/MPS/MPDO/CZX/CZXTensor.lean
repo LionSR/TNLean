@@ -48,7 +48,7 @@ namespace MPOTensor.CZX
 /-- The corrected and output-Z-decorated one-qubit constituent of FBC25
 `eq:MPU_CZX`; its Hadamard weight is unnormalized (`eq:CZ`, `eq:deltas`). -/
 def decoratedSiteTensor : MPOTensor 2 2 :=
-  fun u d l r ↦ if u = 1 - (d : ZMod 2) ∧ l = u then
+  fun (u, d) l r ↦ if u = 1 - (d : ZMod 2) ∧ l = u then
     (-1 : ℂ) ^ (u.val + l.val * r.val) else 0
 
 /-- The single shared CZX tensor, FBC25 `eq:MPU_CZX`, lines 4503–4547.
@@ -72,9 +72,18 @@ def edgeExponent (i : Fin 4) (r : Fin 2) : ℕ :=
   (siteBits i).1.val + (siteBits i).2.val +
     (siteBits i).1.val * (siteBits i).2.val + (siteBits i).2.val * r.val
 
+/-- A letter of the once-blocked CZX tensor is the product of two decorated site letters. -/
+theorem tensor_apply_pair (i j : Fin 4) :
+    tensor (i, j) =
+      decoratedSiteTensor (((finProdFinEquiv (m := 2) (n := 2)).symm i).1,
+          ((finProdFinEquiv (m := 2) (n := 2)).symm j).1) *
+        decoratedSiteTensor (((finProdFinEquiv (m := 2) (n := 2)).symm i).2,
+          ((finProdFinEquiv (m := 2) (n := 2)).symm j).2) :=
+  blockTwo_apply decoratedSiteTensor i j
+
 /-- The displayed bond-two coordinates of FBC25 `eq:MPU_CZX`. -/
 theorem tensor_apply (i j : Fin 4) (l r : Fin 2) :
-    tensor i j l r =
+    tensor (i, j) l r =
       if i = complementSite j ∧ l = (show Fin 2 from (siteBits i).1) then
         (-1 : ℂ) ^ edgeExponent i r else 0 := by
   have hc : ∀ j : Fin 4, complementSite j = j.rev := by decide
@@ -86,15 +95,15 @@ theorem tensor_apply (i j : Fin 4) (l r : Fin 2) :
       (Fin.divNat (m := 2) (n := 2) i).val *
       (Fin.modNat (m := 2) (n := 2) i).val +
       (Fin.modNat (m := 2) (n := 2) i).val * r.val := by decide
-  rw [hc, hb, he]
+  rw [hc, hb, he, tensor_apply_pair]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
-    norm_num [tensor, blockTwo, decoratedSiteTensor, Matrix.mul_apply,
+    norm_num [decoratedSiteTensor, Matrix.mul_apply,
       Fin.sum_univ_two, Fin.divNat, Fin.modNat, Fin.rev]
 
 /-- FBC25 `eq:MPU_CZX` written with the six individual binary coordinates.
 The three conditions are the three Kronecker deltas in the diagram. -/
 theorem tensor_apply_bits (a b c d l r : ZMod 2) :
-    tensor (siteBits.symm (a, b)) (siteBits.symm (c, d)) l r =
+    tensor (siteBits.symm (a, b), siteBits.symm (c, d)) l r =
       if a = 1 - c ∧ b = 1 - d ∧ l = a then
         (-1 : ℂ) ^ (a.val + b.val + a.val * b.val + b.val * r.val) else 0 := by
   refine (tensor_apply (siteBits.symm (a, b)) (siteBits.symm (c, d)) l r).trans ?_
@@ -163,9 +172,9 @@ namespace MPOTensor.CZX
 private theorem single_eq_tensor_combination (i j : Fin 2) :
     Matrix.single i j (1 : ℂ) =
       (if i = 0 then (1 / 2 : ℂ) else -1 / 2) •
-        tensor (if i = 0 then 0 else 2) (if i = 0 then 3 else 1) +
+        tensor (if i = 0 then 0 else 2, if i = 0 then 3 else 1) +
       (if j = 0 then (-1 / 2 : ℂ) else 1 / 2) •
-        tensor (if i = 0 then 1 else 3) (if i = 0 then 2 else 0) := by
+        tensor (if i = 0 then 1 else 3, if i = 0 then 2 else 0) := by
   have hc : ∀ (u d : Fin 4) (l : Fin 2),
       (u = complementSite d ∧ l = (show Fin 2 from (siteBits u).1)) ↔
         u = d.rev ∧ l = u.divNat (n := 2) := by decide
@@ -183,7 +192,7 @@ letters span all bond matrix units by half-sums and half-differences. -/
 theorem tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
   rw [Kraus.IsInjective]
   let S := Submodule.span ℂ (Set.range tensor.toMPSTensor)
-  have hletter (i j : Fin 4) : tensor i j ∈ S := by
+  have hletter (i j : Fin 4) : tensor (i, j) ∈ S := by
     apply Submodule.subset_span
     exact ⟨finProdFinEquiv (i, j), by
       simp only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,

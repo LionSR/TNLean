@@ -125,7 +125,7 @@ scalar multiple of `Matrix.single a0 b0 1`: the outer-product structure of
 
 Project example; not from CPSV16. -/
 lemma R_eq_single (a0 b0 : Fin 4) :
-    R (bondEquiv (aRow a0, aRow b0)) (bondEquiv (aCol a0, aCol b0)) =
+    R (bondEquiv (aRow a0, aRow b0), bondEquiv (aCol a0, aCol b0)) =
       ((25/32 : ℂ) * sVal a0 * sVal b0) • Matrix.single a0 b0 (1 : ℂ) := by
   ext a b
   rw [R_apply, bondEquiv.symm_apply_apply, bondEquiv.symm_apply_apply]
@@ -148,7 +148,7 @@ lemma R_eq_single (a0 b0 : Fin 4) :
 /-- The doubled-index letter at `finProdFinEquiv (p, q)` is exactly the MPO letter
 `R p q`. -/
 lemma toMPSTensor_R_apply (p q : Fin 4) :
-    R.toMPSTensor (finProdFinEquiv (p, q)) = R p q := by
+    R.toMPSTensor (finProdFinEquiv (p, q)) = R (p, q) := by
   unfold MPOTensor.toMPSTensor
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
@@ -160,9 +160,9 @@ lemma R_toMPSTensor_isInjective : Kraus.IsInjective R.toMPSTensor := by
   have hc : (25/32 : ℂ) * sVal a0 * sVal b0 ≠ 0 := by
     have h25 : (25/32 : ℂ) ≠ 0 := by norm_num
     exact mul_ne_zero (mul_ne_zero h25 (sVal_ne_zero a0)) (sVal_ne_zero b0)
-  have hmem : R (bondEquiv (aRow a0, aRow b0)) (bondEquiv (aCol a0, aCol b0)) ∈
+  have hmem : R (bondEquiv (aRow a0, aRow b0), bondEquiv (aCol a0, aCol b0)) ∈
       Submodule.span ℂ (Set.range R.toMPSTensor) := by
-    have : R (bondEquiv (aRow a0, aRow b0)) (bondEquiv (aCol a0, aCol b0)) =
+    have : R (bondEquiv (aRow a0, aRow b0), bondEquiv (aCol a0, aCol b0)) =
         R.toMPSTensor (finProdFinEquiv (bondEquiv (aRow a0, aRow b0),
           bondEquiv (aCol a0, aCol b0))) := (toMPSTensor_R_apply _ _).symm
     rw [this]

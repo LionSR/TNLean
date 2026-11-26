@@ -57,11 +57,11 @@ Source: arXiv:2203.12563, equation `mpoMPSsten`, lines 1070--1090 (the tensor wh
 decomposition onto the image block is given by the action tensors). -/
 noncomputable def actTensor (T : MPOTensor d D₁) (A : MPSTensor d D₂) :
     MPSTensor d (D₁ * D₂) :=
-  fun i => (∑ j : Fin d, (T i j) ⊗ₖ (A j)).submatrix
+  fun i => (∑ j : Fin d, (T (i, j)) ⊗ₖ (A j)).submatrix
     finProdFinEquiv.symm finProdFinEquiv.symm
 
 @[simp] lemma actTensor_apply (T : MPOTensor d D₁) (A : MPSTensor d D₂) (i : Fin d) :
-    actTensor T A i = (∑ j : Fin d, (T i j) ⊗ₖ (A j)).submatrix
+    actTensor T A i = (∑ j : Fin d, (T (i, j)) ⊗ₖ (A j)).submatrix
       finProdFinEquiv.symm finProdFinEquiv.symm := rfl
 
 /-- Word evaluation of the action tensor is a sum over the contracted bra configurations of

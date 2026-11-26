@@ -85,8 +85,8 @@ theorem mpo_even_eq_of_blockTwo_mpo_eq {U V : MPOTensor d D}
 /-- Two-site blocking commutes with entrywise conjugation. -/
 theorem blockTwo_mapStar (U : MPOTensor d D) :
     MPOTensor.blockTwo (MPOTensor.mapStar U) = MPOTensor.mapStar (MPOTensor.blockTwo U) := by
-  funext i j
-  simp [MPOTensor.blockTwo, MPOTensor.mapStar, Matrix.map_mul]
+  funext ⟨i, j⟩
+  simp [MPOTensor.blockTwo_apply, MPOTensor.mapStar, Matrix.map_mul]
 
 /-- Conjugation invariance of the standard-form chain at every positive length
 is conjugation invariance of the original chain at every even length `N > 1`.

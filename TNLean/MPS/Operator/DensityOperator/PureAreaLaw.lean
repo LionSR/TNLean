@@ -34,7 +34,7 @@ variable {d D : ℕ}
 `Fin D × Fin D` via `finProdFinEquiv`. This is the single-ancilla purification
 of arXiv:1606.00608, eq:MPDO-Puri-1. -/
 noncomputable def doubledTensor (A : MPSTensor d D) : MPOTensor d (D * D) :=
-  fun i j => ((A i) ⊗ₖ ((A j).map (starRingEnd ℂ))).submatrix
+  fun (i, j) => ((A i) ⊗ₖ ((A j).map (starRingEnd ℂ))).submatrix
     finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- The word product of doubled-tensor entries is the Kronecker product of the

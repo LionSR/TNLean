@@ -41,33 +41,33 @@ theorem virtualSandwich_hat_eq_reducedProjection
     (hP : IsOrthogonalProjection P)
     (hXL : X * L = P) (hRZ : R * Z = Q)
     (hPQY : P * Q * Y = Matrix.reducedProjection P Q)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j) :
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) :
     virtualSandwich X (virtualSandwich L W R) (Z * Y) =
       virtualSandwich (Matrix.reducedProjection P Q) W
         (Matrix.reducedProjection P Q) := by
   let T := Matrix.reducedProjection P Q
   have hTQ : T * Q = P * Q := Matrix.reducedProjection_mul_second hP
-  funext i j
+  funext ⟨i, j⟩
   simp only [virtualSandwich_apply]
   calc
-    X * (L * W i j * R) * (Z * Y) = P * W i j * Q * Y := by
+    X * (L * W (i, j) * R) * (Z * Y) = P * W (i, j) * Q * Y := by
       calc
-        _ = (X * L) * W i j * (R * Z) * Y := by noncomm_ring
-        _ = P * W i j * Q * Y := by rw [hXL, hRZ]
-    _ = P * Q * W i j * P * Q * Y := by
+        _ = (X * L) * W (i, j) * (R * Z) * Y := by noncomm_ring
+        _ = P * W (i, j) * Q * Y := by rw [hXL, hRZ]
+    _ = P * Q * W (i, j) * P * Q * Y := by
       symm
       calc
-        _ = P * (Q * W i j) * P * Q * Y := by noncomm_ring
-        _ = P * W i j * P * Q * Y := by rw [hQW]
-        _ = P * (W i j * P) * Q * Y := by noncomm_ring
-        _ = P * W i j * Q * Y := by rw [hWP]
-    _ = T * W i j * T := by
+        _ = P * (Q * W (i, j)) * P * Q * Y := by noncomm_ring
+        _ = P * W (i, j) * P * Q * Y := by rw [hQW]
+        _ = P * (W (i, j) * P) * Q * Y := by noncomm_ring
+        _ = P * W (i, j) * Q * Y := by rw [hWP]
+    _ = T * W (i, j) * T := by
       calc
-        _ = (P * Q) * W i j * (P * Q * Y) := by noncomm_ring
-        _ = (T * Q) * W i j * T := by rw [hTQ, hPQY]
-        _ = T * (Q * W i j) * T := by noncomm_ring
-        _ = T * W i j * T := by rw [hQW]
+        _ = (P * Q) * W (i, j) * (P * Q * Y) := by noncomm_ring
+        _ = (T * Q) * W (i, j) * T := by rw [hTQ, hPQY]
+        _ = T * (Q * W (i, j)) * T := by noncomm_ring
+        _ = T * W (i, j) * T := by rw [hQW]
 
 /-- If the three outer factors are invertible, the right source rank of the hatted
 representative equals that of the reduced representative.
@@ -78,8 +78,8 @@ theorem rightRank_hat_eq_reducedProjection
     (hP : IsOrthogonalProjection P)
     (hXL : X * L = P) (hRZ : R * Z = Q)
     (hPQY : P * Q * Y = Matrix.reducedProjection P Q)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j)
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j))
     (hX : IsUnit X) (hZ : IsUnit Z) (hY : IsUnit Y) :
     r[virtualSandwich L W R] =
       r[virtualSandwich (Matrix.reducedProjection P Q) W
@@ -98,8 +98,8 @@ theorem leftRank_hat_eq_reducedProjection
     (hP : IsOrthogonalProjection P)
     (hXL : X * L = P) (hRZ : R * Z = Q)
     (hPQY : P * Q * Y = Matrix.reducedProjection P Q)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j)
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j))
     (hX : IsUnit X) (hZ : IsUnit Z) (hY : IsUnit Y) :
     ℓ[virtualSandwich L W R] =
       ℓ[virtualSandwich (Matrix.reducedProjection P Q) W

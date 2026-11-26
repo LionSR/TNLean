@@ -54,7 +54,7 @@ Source: arXiv:1703.09188, Proposition IV.5, lines 773--804; MD.tex Lemma 1.2. -/
 theorem blockTensor_virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin D) ℂ) (hBA : B * A = 1) (L : ℕ) :
     blockTensor (virtualSandwich A U B) L = virtualSandwich A (blockTensor U L) B := by
-  funext i j
+  funext ⟨i, j⟩
   simp only [blockTensor_apply, virtualSandwich_apply]
   exact evalWord_virtualSandwich A U B hBA _ _
 

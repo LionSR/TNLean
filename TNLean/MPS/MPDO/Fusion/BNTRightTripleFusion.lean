@@ -50,8 +50,8 @@ private theorem kronecker_sum_mulTensor_right {p a bd1 bd2 : ℕ}
         (Equiv.prodAssoc (Fin a) (Fin bd1) (Fin bd2)).symm).trans
       ((Equiv.prodCongr (Equiv.prodComm (Fin a) (Fin bd1)) (Equiv.refl (Fin bd2))).trans
         (Equiv.prodAssoc (Fin bd1) (Fin a) (Fin bd2)))) :
-    (∑ j : Fin p, Y i j ⊗ₖ (X ⊗ₖ Z j k)) =
-      (X ⊗ₖ mulTensor Y Z i k).submatrix E.symm E.symm := by
+    (∑ j : Fin p, Y (i, j) ⊗ₖ (X ⊗ₖ Z (j, k))) =
+      (X ⊗ₖ mulTensor Y Z (i, k)).submatrix E.symm E.symm := by
   subst hE
   rw [mulTensor_apply]
   ext ⟨x1, x2, x3⟩ ⟨y1, y2, y3⟩
@@ -62,7 +62,7 @@ private theorem kronecker_sum_mulTensor_right {p a bd1 bd2 : ℕ}
   simp
   simpa only [mul_comm, mul_left_comm, mul_assoc] using
     Fintype.sum_mul_mul_eq_mul_sum_mul (X x2 y2)
-      (fun j => Y i j x1 y1) (fun j => Z j k x3 y3)
+      (fun j => Y (i, j) x1 y1) (fun j => Z (j, k) x3 y3)
 
 namespace BNTFusionIsometryFamily
 
@@ -145,11 +145,11 @@ private theorem fuseLastTwoStep_isometry (α β γ : Λ) :
 
 private theorem fuseLastTwoStep_apply (α β γ : Λ) (i k : Fin p) :
     Fam.fuseLastTwoStep α β γ *
-        (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
+        (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k) *
         (Fam.fuseLastTwoStep α β γ)ᴴ =
-      (∑ j : Fin p, Fam.tensor α i j ⊗ₖ
+      (∑ j : Fin p, Fam.tensor α (i, j) ⊗ₖ
         (Matrix.blockDiagonal' fun δ =>
-          Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ j k)).submatrix
+          Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ (j, k))).submatrix
         (Fam.lastPairBondEquiv α β γ).symm (Fam.lastPairBondEquiv α β γ).symm := by
   unfold fuseLastTwoStep
   rw [mulTensor_apply, Matrix.conjTranspose_submatrix,
@@ -185,11 +185,11 @@ private theorem rightBlockPiece_isometry (α β γ δ : Λ) :
 
 private theorem rightBlockPiece_apply (α β γ δ : Λ) (i k : Fin p) :
     Fam.rightBlockPiece α β γ δ *
-        (∑ j : Fin p, Fam.tensor α i j ⊗ₖ
-          (Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ j k)) *
+        (∑ j : Fin p, Fam.tensor α (i, j) ⊗ₖ
+          (Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ (j, k))) *
         (Fam.rightBlockPiece α β γ δ)ᴴ =
       Fam.chi.matrix β γ δ ⊗ₖ
-        Matrix.blockDiagonal' fun ε => Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε i k := by
+        Matrix.blockDiagonal' fun ε => Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε (i, k) := by
   rw [kronecker_sum_mulTensor_right _ _ _ _ _
     (Fam.rightTripleMultEquiv α β γ δ) rfl]
   unfold rightBlockPiece
@@ -201,13 +201,13 @@ private theorem rightBlockPiece_apply (α β γ δ : Λ) (i k : Fin p) :
     Matrix.conjTranspose_one, Matrix.mul_one, Fam.fusion]
 
 private theorem lastPair_sum_blockDiagonal (α β γ : Λ) (i k : Fin p) :
-    (∑ j : Fin p, Fam.tensor α i j ⊗ₖ
+    (∑ j : Fin p, Fam.tensor α (i, j) ⊗ₖ
         (Matrix.blockDiagonal' fun δ =>
-          Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ j k)).submatrix
+          Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ (j, k))).submatrix
         (Fam.lastPairBondEquiv α β γ).symm (Fam.lastPairBondEquiv α β γ).symm =
       Matrix.blockDiagonal' fun δ =>
-        ∑ j : Fin p, Fam.tensor α i j ⊗ₖ
-          (Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ j k) := by
+        ∑ j : Fin p, Fam.tensor α (i, j) ⊗ₖ
+          (Fam.chi.matrix β γ δ ⊗ₖ Fam.tensor δ (j, k)) := by
   ext ⟨δ, a, m, b⟩ ⟨δ', a', m', b'⟩
   simp only [Matrix.submatrix_apply, lastPairBondEquiv, Equiv.symm_trans_apply,
     Equiv.sigmaCongrRight_symm, Equiv.sigmaCongrRight_apply, Equiv.prodComm_symm,
@@ -297,25 +297,25 @@ Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`, and arXiv:1511.08090, source lines 237--251. -/
 theorem rightFusion_apply (α β γ : Λ) (i k : Fin p) :
     Fam.rightFusionIsometry α β γ *
-        (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
+        (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k) *
         (Fam.rightFusionIsometry α β γ)ᴴ =
       Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
-        Fam.chi.matrix β γ δ ⊗ₖ (Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε i k) := by
+        Fam.chi.matrix β γ δ ⊗ₖ (Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε (i, k)) := by
   unfold rightFusionIsometry
   let A := Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) * Fam.fuseLastTwoStep α β γ
   let r := (Fam.rightTripleFlattenEquiv α β γ).symm
-  let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k
+  let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k)
   change A.submatrix r id * X * (A.submatrix r id)ᴴ = _
   rw [Matrix.submatrix_left_conj_equiv]
   dsimp only [A, r, X]
   have hreassoc :
       Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) * Fam.fuseLastTwoStep α β γ *
-          (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
+          (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k) *
           (Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) *
             Fam.fuseLastTwoStep α β γ)ᴴ =
         Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) *
           (Fam.fuseLastTwoStep α β γ *
-            (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
+            (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) (i, k) *
             (Fam.fuseLastTwoStep α β γ)ᴴ) *
           (Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ))ᴴ := by
     rw [Matrix.conjTranspose_mul]

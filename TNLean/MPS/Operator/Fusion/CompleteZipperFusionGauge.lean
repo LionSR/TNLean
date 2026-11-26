@@ -192,7 +192,7 @@ family are syntactically those of the original family. -/
     have hcomm := blockDiagonal_gauge_comm
       (fun c => ((Y a b c : GL (Fin (Fus.fusionMultiplicity a b c)) ℂ) :
         Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ)ᵀ)
-      (fun c => Fus.tensor c i k)
+      (fun c => Fus.tensor c (i, k))
     rw [Fus.pairLetter_eq_synthesis_mul_directSum_mul_analysis]
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc (pairGauge Y a b), pairGauge, ← hcomm, ← pairGauge, Matrix.mul_assoc,

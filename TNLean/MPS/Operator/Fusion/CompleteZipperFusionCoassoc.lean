@@ -237,10 +237,10 @@ representation of the dual algebra, and its block is such an identity block.
 
 Source: arXiv:2204.05940, `mpo.tex`, lines 880 and 1419. -/
 theorem identityBlockCounit_letter (c₀ : Λ)
-    (h : ∀ i k : Fin p, Fus.tensor c₀ i k = if i = k then 1 else 0) (i k : Fin p) :
+    (h : ∀ i k : Fin p, Fus.tensor c₀ (i, k) = if i = k then 1 else 0) (i k : Fin p) :
     Fus.identityBlockCounit c₀ (Fus.letter i k) = if i = k then 1 else 0 := by
   have hD : (Fus.bondDim c₀ : ℂ) ≠ 0 := Nat.cast_ne_zero.2 (Fus.bondDim_pos c₀).ne'
-  change (Fus.bondDim c₀ : ℂ)⁻¹ * (Fus.tensor c₀ i k).trace = _
+  change (Fus.bondDim c₀ : ℂ)⁻¹ * (Fus.tensor c₀ (i, k)).trace = _
   rw [h]
   split_ifs <;> simp [hD]
 
@@ -303,7 +303,7 @@ theorem exists_counit_iff :
     (∃ ε : Fus.BoundarySpace →ₗ[ℂ] ℂ,
         ∀ i k : Fin p, ε (Fus.letter i k) = if i = k then 1 else 0) ↔
       ∃ Y : Fus.BoundarySpace, ∀ i k : Fin p,
-        ∑ c, (Y c * Fus.tensor c i k).trace = if i = k then 1 else 0 := by
+        ∑ c, (Y c * Fus.tensor c (i, k)).trace = if i = k then 1 else 0 := by
   constructor
   · rintro ⟨ε, hε⟩
     obtain ⟨Y, rfl⟩ := Fus.exists_tracePairing_eq ε
@@ -319,7 +319,7 @@ of the fusion coproduct.
 Source: arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1421 and 1655. -/
 @[instance_reducible]
 noncomputable def toPreBialgebraOfUnitWitness (Y : Fus.BoundarySpace)
-    (hY : ∀ i k : Fin p, ∑ c, (Y c * Fus.tensor c i k).trace = if i = k then 1 else 0) :
+    (hY : ∀ i k : Fin p, ∑ c, (Y c * Fus.tensor c (i, k)).trace = if i = k then 1 else 0) :
     PreBialgebra ℂ Fus.BoundarySpace :=
   Fus.toPreBialgebra (Fus.tracePairing Y) hY
 

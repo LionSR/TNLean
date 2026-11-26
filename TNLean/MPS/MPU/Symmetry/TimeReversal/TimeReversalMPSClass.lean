@@ -75,7 +75,7 @@ theorem IsMPUCanonicalFormII.normalizedDiagonal_sq_eq_fixedPairProjector
   -- `E² = E P E` from `simple2`.
   have hEPE : E * E = E * P * E := by
     have h2 := hU.simple2_recorded_fixed_pair hsimple
-    have hE : E = (d : ℂ)⁻¹ • ∑ q : Fin d, doubleLayerTensor U q q :=
+    have hE : E = (d : ℂ)⁻¹ • ∑ q : Fin d, doubleLayerTensor U (q, q) :=
       normalizedDiagonal_eq_smul_sum_diagonal _
     rw [hE]
     simp only [Matrix.smul_mul, Matrix.mul_smul, Finset.sum_mul, Finset.mul_sum, h2]
@@ -116,7 +116,7 @@ theorem normalizedDiagonal_doubleLayerTensor_reindexPhysical {d' : ℕ} (e : Fin
   have hcard : d' = d := by simpa using Fintype.card_congr e
   subst hcard
   congr 1
-  exact Equiv.sum_comp e (fun q ↦ doubleLayerTensor U q q)
+  exact Equiv.sum_comp e (fun q ↦ doubleLayerTensor U (q, q))
 
 /-- Two-site blocking squares the normalized double-layer diagonal. Source:
 arXiv:1703.09188, lines 397--405. -/
@@ -134,7 +134,7 @@ theorem normalizedDiagonal_doubleLayerTensor_blockTwo [NeZero d] (U : MPOTensor 
 theorem normalizedDiagonal_doubleLayerTensor_apply (K : MPOTensor d D) (p₁ p₂ q₁ q₂ : Fin D) :
     normalizedDiagonal (doubleLayerTensor K) (finProdFinEquiv (p₁, p₂))
         (finProdFinEquiv (q₁, q₂)) =
-      (d : ℂ)⁻¹ * ∑ a : Fin d, ∑ b : Fin d, starRingEnd ℂ (K a b p₁ q₁) * K a b p₂ q₂ := by
+      (d : ℂ)⁻¹ * ∑ a : Fin d, ∑ b : Fin d, starRingEnd ℂ (K (a, b) p₁ q₁) * K (a, b) p₂ q₂ := by
   classical
   simp only [normalizedDiagonal, contractPhysical, doubleLayerTensor_apply,
     Matrix.submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
@@ -149,7 +149,7 @@ theorem sum_star_mul_eq_of_normalizedDiagonal_eq [NeZero d] {K : MPOTensor d D}
     {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hE : normalizedDiagonal (doubleLayerTensor K) = fixedPairProjector ρ)
     (p q β α : Fin D) :
-    ∑ a : Fin d, ∑ b : Fin d, starRingEnd ℂ (K a b p q) * K a b β α =
+    ∑ a : Fin d, ∑ b : Fin d, starRingEnd ℂ (K (a, b) p q) * K (a, b) β α =
       (d : ℂ) * (ρ β p * (1 : Matrix (Fin D) (Fin D) ℂ) α q) := by
   have h := normalizedDiagonal_doubleLayerTensor_apply K p β q α
   have h2 : fixedPairProjector ρ (finProdFinEquiv (p, β)) (finProdFinEquiv (q, α)) =
@@ -169,13 +169,13 @@ theorem sum_trace_mul_map_star_mul_eq [NeZero d] {K : MPOTensor d D}
     (hE : normalizedDiagonal (doubleLayerTensor K) = fixedPairProjector ρ)
     (M M' : Matrix (Fin D) (Fin D) ℂ) :
     ∑ a : Fin d, ∑ b : Fin d,
-        Matrix.trace (M * (K a b).map (starRingEnd ℂ) * M' * K a b) =
+        Matrix.trace (M * (K (a, b)).map (starRingEnd ℂ) * M' * K (a, b)) =
       (d : ℂ) * Matrix.trace (Mᵀ * M' * ρ) := by
   have hS := sum_star_mul_eq_of_normalizedDiagonal_eq hE
   calc
     _ = ∑ α : Fin D, ∑ p : Fin D, ∑ q : Fin D, ∑ β : Fin D,
           M α p * M' q β *
-            ∑ a : Fin d, ∑ b : Fin d, starRingEnd ℂ (K a b p q) * K a b β α := by
+            ∑ a : Fin d, ∑ b : Fin d, starRingEnd ℂ (K (a, b) p q) * K (a, b) β α := by
         simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.map_apply,
           Finset.sum_mul, Finset.mul_sum]
         conv_lhs => enter [2, a]; rw [Finset.sum_comm]
@@ -221,9 +221,9 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
     (hTR : ∀ N : ℕ, 1 < N → Even N →
       mpo (MPOTensor.blockTwo V) N = (mpo (MPOTensor.blockTwo V) N)ᴴ)
     (G : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hgauge : ∀ a b, (MPOTensor.blockTwo (MPOTensor.blockTwo V) b a).map (starRingEnd ℂ) =
+    (hgauge : ∀ a b, (MPOTensor.blockTwo (MPOTensor.blockTwo V) (b, a)).map (starRingEnd ℂ) =
       ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        MPOTensor.blockTwo (MPOTensor.blockTwo V) a b * G)) :
+        MPOTensor.blockTwo (MPOTensor.blockTwo V) (a, b) * G)) :
     (G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
       intrinsicTimeReversalSign (MPOTensor.blockTwo (MPOTensor.blockTwo V)) • 1 := by
   let : NeZero d := hV.neZero_phys
@@ -242,18 +242,18 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
     rw [normalizedDiagonal_doubleLayerTensor_blockTwo,
       hW.normalizedDiagonal_sq_eq_fixedPairProjector hWs]
   -- Inverting the gauge relation.
-  have hinv : ∀ a b, W₂ b a = starRingEnd ℂ ζ • (Gmᵀ * (W₂ a b).map (starRingEnd ℂ) *
+  have hinv : ∀ a b, W₂ (b, a) = starRingEnd ℂ ζ • (Gmᵀ * (W₂ (a, b)).map (starRingEnd ℂ) *
       Gm.map (starRingEnd ℂ)) := by
     intro a b
     have h := congrArg (·.map (starRingEnd ℂ)) (hgauge a b)
-    have hmap : ((W₂ b a).map (starRingEnd ℂ)).map (starRingEnd ℂ) = W₂ b a := by
+    have hmap : ((W₂ (b, a)).map (starRingEnd ℂ)).map (starRingEnd ℂ) = W₂ (b, a) := by
       ext i j; simp
     simp only [hmap, map_star_smul, Matrix.map_mul, conjTranspose_map_star] at h
     exact h
   -- Applying the symmetry twice: `G conj(G) = ±1`.
   have hconjT : (Gm.map (starRingEnd ℂ))ᴴ = Gmᵀ := by ext i j; simp
-  have htwice : ∀ a b, W₂ a b = (starRingEnd ℂ ζ * ζ) •
-      ((Gm * Gm.map (starRingEnd ℂ))ᴴ * W₂ a b * (Gm * Gm.map (starRingEnd ℂ))) := by
+  have htwice : ∀ a b, W₂ (a, b) = (starRingEnd ℂ ζ * ζ) •
+      ((Gm * Gm.map (starRingEnd ℂ))ᴴ * W₂ (a, b) * (Gm * Gm.map (starRingEnd ℂ))) := by
     intro a b
     have h := hinv b a
     rw [hgauge a b] at h
@@ -269,7 +269,7 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
       rw [smul_comm])
   -- The phase is one, from the length-two invariance.
   have htrW₂ : ∀ σ τ : Fin 2 → Fin (d * d),
-      Matrix.trace (W₂ (finProdFinEquiv (σ 0, σ 1)) (finProdFinEquiv (τ 0, τ 1))) =
+      Matrix.trace (W₂ (finProdFinEquiv (σ 0, σ 1), finProdFinEquiv (τ 0, τ 1))) =
         mpo W 2 σ τ := by
     intro σ τ
     simp [W₂, mpo_apply, mpoMatrixEntry, List.ofFn_succ]
@@ -301,9 +301,9 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
   -- The trace.
   have hT : intrinsicTimeReversalSign W₂ = Matrix.trace (Gm * Gm.map (starRingEnd ℂ) * hW.ρ) := by
     rw [intrinsicTimeReversalSign, timeReversalPeriodicTrace_eq_sum]
-    have hsum : ∑ i, ∑ j, Matrix.trace (W₂ i j * W₂ j i) =
-        ∑ a, ∑ b, Matrix.trace (Gmᵀ * (W₂ a b).map (starRingEnd ℂ) *
-          Gm.map (starRingEnd ℂ) * W₂ a b) := by
+    have hsum : ∑ i, ∑ j, Matrix.trace (W₂ (i, j) * W₂ (j, i)) =
+        ∑ a, ∑ b, Matrix.trace (Gmᵀ * (W₂ (a, b)).map (starRingEnd ℂ) *
+          Gm.map (starRingEnd ℂ) * W₂ (a, b)) := by
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
       rw [hinv a b]
@@ -321,11 +321,11 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
 block, with the square of the phase. -/
 theorem blockTwo_timeReversal_gauge {W : MPOTensor d D} (G : Matrix (Fin D) (Fin D) ℂ)
     (hG : G * Gᴴ = 1) (ζ : ℂ)
-    (hgauge : ∀ a b, (W b a).map (starRingEnd ℂ) = ζ • (Gᴴ * W a b * G))
+    (hgauge : ∀ a b, (W (b, a)).map (starRingEnd ℂ) = ζ • (Gᴴ * W (a, b) * G))
     (a b : Fin (d * d)) :
-    (MPOTensor.blockTwo W b a).map (starRingEnd ℂ) =
-      (ζ * ζ) • (Gᴴ * MPOTensor.blockTwo W a b * G) := by
-  simp only [MPOTensor.blockTwo, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
+    (MPOTensor.blockTwo W (b, a)).map (starRingEnd ℂ) =
+      (ζ * ζ) • (Gᴴ * MPOTensor.blockTwo W (a, b) * G) := by
+  simp only [MPOTensor.blockTwo_apply, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
     smul_smul]
   congr 1
   simp only [Matrix.mul_assoc]
@@ -342,8 +342,8 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq_of_gauge
     (hTR : ∀ N : ℕ, 1 < N → Even N →
       mpo (MPOTensor.blockTwo V) N = (mpo (MPOTensor.blockTwo V) N)ᴴ)
     (G : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hgauge : ∀ a b, (MPOTensor.blockTwo V b a).map (starRingEnd ℂ) =
-      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V a b * G)) :
+    (hgauge : ∀ a b, (MPOTensor.blockTwo V (b, a)).map (starRingEnd ℂ) =
+      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V (a, b) * G)) :
     (G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
       intrinsicTimeReversalSign (MPOTensor.blockTwo (MPOTensor.blockTwo V)) • 1 :=
   hV.mps_timeReversal_sign_eq hsimple hTR G (ζ * ζ)

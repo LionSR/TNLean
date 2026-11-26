@@ -38,7 +38,7 @@ private theorem endpoint_action_entry {D χ : ℕ}
     (h : IsBiorthogonalDecomposition (MPOTensor.actTensor T A) (fun _ : Fin m => A) V W)
     (r s i j : Fin D) (α β : Fin χ) :
     (∑ k : Fin D, ∑ l : Fin D,
-      T (finProdFinEquiv (r, s)) (finProdFinEquiv (k, l)) α β *
+      T (finProdFinEquiv (r, s), finProdFinEquiv (k, l)) α β *
         A (finProdFinEquiv (k, l)) i j) =
       ∑ μ, (W μ * A (finProdFinEquiv (r, s)) * V μ)
         (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j)) := by

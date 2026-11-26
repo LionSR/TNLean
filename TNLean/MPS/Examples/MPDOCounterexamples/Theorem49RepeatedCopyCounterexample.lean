@@ -36,7 +36,7 @@ namespace MPOTensor.CaseIIAbsorptionCounterexample
 
 This is the scalar normal tensor used in condition (iv) of arXiv:1606.00608,
 Theorem 4.9 (lines 863--889). -/
-noncomputable def scalarBNT : MPOTensor 1 1 := fun _ _ ↦ 1
+noncomputable def scalarBNT : MPOTensor 1 1 := fun (_, _) ↦ 1
 
 /-- The one-sector, two-copy BNT presentation of `repeatedCopyTensor`.
 
@@ -64,7 +64,7 @@ Its doubled-index MPS tensor is literally the canonical assembly
 arXiv:1606.00608 (lines 237--246 and 271--301). -/
 noncomputable def repeatedCopyTensor :
     MPOTensor 1 repeatedCopyDecomposition.totalDim :=
-  fun _ _ ↦ repeatedCopyDecomposition.toTensor 0
+  fun (_, _) ↦ repeatedCopyDecomposition.toTensor 0
 
 /-- The concrete repeated-copy MPO is exactly the raw-weight BNT assembly,
 not merely an MPO with the same periodic contractions.
@@ -288,7 +288,7 @@ noncomputable def scalarNeighboringTraceFactorization :
 
 private lemma evalWord_replicate_repeatedCopyTensor (N : ℕ) :
     evalWord repeatedCopyTensor (List.replicate N 0) (List.replicate N 0) =
-      (repeatedCopyTensor 0 0) ^ N := by
+      (repeatedCopyTensor (0, 0)) ^ N := by
   induction N with
   | zero => rfl
   | succ N ih =>
@@ -300,7 +300,7 @@ raw copy weights as $1+2^{-N}$.
 Source: arXiv:1606.00608, equations `eq:II_ABasicTensors` and `Eq19`, lines
 271--308. -/
 theorem trace_repeatedCopyTensor_pow (N : ℕ) :
-    Matrix.trace ((repeatedCopyTensor 0 0) ^ N) =
+    Matrix.trace ((repeatedCopyTensor (0, 0)) ^ N) =
       1 + (1 / 2 : ℂ) ^ N := by
   have h := repeatedCopyTensor_mpo N (fun _ ↦ 0) (fun _ ↦ 0)
   rw [mpo_apply, mpoMatrixEntry] at h
@@ -310,10 +310,10 @@ theorem trace_repeatedCopyTensor_pow (N : ℕ) :
 sole local matrix. -/
 theorem physTraceTransfer_blockTwo_repeatedCopyTensor :
     physTraceTransfer (blockTwo repeatedCopyTensor) =
-      (repeatedCopyTensor 0 0) ^ 2 := by
-  rw [physTraceTransfer, Fin.sum_univ_one]
-  change repeatedCopyTensor 0 0 * repeatedCopyTensor 0 0 =
-    (repeatedCopyTensor 0 0) ^ 2
+      (repeatedCopyTensor (0, 0)) ^ 2 := by
+  rw [physTraceTransfer, Fin.sum_univ_one, blockTwo_apply]
+  change repeatedCopyTensor (0, 0) * repeatedCopyTensor (0, 0) =
+    (repeatedCopyTensor (0, 0)) ^ 2
   rw [pow_two]
 
 /-- The two-site-blocked repeated-copy tensor cannot satisfy the tp-CP-map
@@ -330,13 +330,13 @@ theorem blockTwo_repeatedCopyTensor_not_isRFPViaTS :
   have hsq := physTraceTransfer_sq_of_isRFPViaTS
     (blockTwo repeatedCopyTensor) hRFP
   rw [physTraceTransfer_blockTwo_repeatedCopyTensor] at hsq
-  have hpowers : (repeatedCopyTensor 0 0) ^ 4 =
-      (repeatedCopyTensor 0 0) ^ 2 := by
+  have hpowers : (repeatedCopyTensor (0, 0)) ^ 4 =
+      (repeatedCopyTensor (0, 0)) ^ 2 := by
     calc
-      (repeatedCopyTensor 0 0) ^ 4 =
-          (repeatedCopyTensor 0 0) ^ 2 *
-            (repeatedCopyTensor 0 0) ^ 2 := by noncomm_ring
-      _ = (repeatedCopyTensor 0 0) ^ 2 := hsq
+      (repeatedCopyTensor (0, 0)) ^ 4 =
+          (repeatedCopyTensor (0, 0)) ^ 2 *
+            (repeatedCopyTensor (0, 0)) ^ 2 := by noncomm_ring
+      _ = (repeatedCopyTensor (0, 0)) ^ 2 := hsq
   have htrace := congrArg Matrix.trace hpowers
   rw [trace_repeatedCopyTensor_pow, trace_repeatedCopyTensor_pow] at htrace
   norm_num at htrace

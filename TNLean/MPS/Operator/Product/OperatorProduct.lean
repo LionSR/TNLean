@@ -143,19 +143,19 @@ Source: arXiv:1606.00608, lines 986--993 of
 $O_L(M_\alpha)O_L(M_\beta)$). -/
 noncomputable def mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
     MPOTensor d (D₁ * D₂) :=
-  fun i k => (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix
+  fun (i, k) => (∑ j : Fin d, (M (i, j)) ⊗ₖ (N (j, k))).submatrix
     finProdFinEquiv.symm finProdFinEquiv.symm
 
 @[simp] lemma mulTensor_apply (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (i k : Fin d) :
-    mulTensor M N i k = (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix
+    mulTensor M N (i, k) = (∑ j : Fin d, (M (i, j)) ⊗ₖ (N (j, k))).submatrix
       finProdFinEquiv.symm finProdFinEquiv.symm := rfl
 
 /-- The bond-space product of rescaled tensors is the rescaled product:
 `(a M)(b N) = (a b) (M N)`. -/
 theorem mulTensor_smul_smul (a b : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
     mulTensor (a • M) (b • N) = (a * b) • mulTensor M N := by
-  funext i k
+  funext ⟨i, k⟩
   ext r c
   simp only [mulTensor_apply, Pi.smul_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul, Finset.mul_sum]
@@ -192,8 +192,8 @@ Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
 lines 237--251 of the source. -/
 theorem mulTensor_assoc (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (P : MPOTensor d D₃) (i l : Fin d) :
-    mulTensor (mulTensor M N) P i l =
-      (mulTensor M (mulTensor N P) i l).submatrix
+    mulTensor (mulTensor M N) P (i, l) =
+      (mulTensor M (mulTensor N P) (i, l)).submatrix
         (mulTensorAssocEquiv D₁ D₂ D₃) (mulTensorAssocEquiv D₁ D₂ D₃) := by
   rw [mulTensor_apply, mulTensor_apply]
   ext x y
@@ -219,9 +219,9 @@ Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
 lines 237--251 of the source. -/
 theorem mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (P : MPOTensor d D₃) (i l : Fin d) :
-    mulTensor (mulTensor M N) P i l * mulTensorAssocMatrix D₁ D₂ D₃ =
+    mulTensor (mulTensor M N) P (i, l) * mulTensorAssocMatrix D₁ D₂ D₃ =
       mulTensorAssocMatrix D₁ D₂ D₃ *
-        mulTensor M (mulTensor N P) i l := by
+        mulTensor M (mulTensor N P) (i, l) := by
   rw [mulTensor_assoc, mulTensorAssocMatrix, PEquiv.mul_toMatrix_toPEquiv,
     PEquiv.toMatrix_toPEquiv_mul]
   ext x y

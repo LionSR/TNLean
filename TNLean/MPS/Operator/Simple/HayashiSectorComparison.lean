@@ -52,7 +52,7 @@ def IsThreeSiteClosure {d D : ℕ} (K : MPOTensor d D)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ) : Prop :=
   ∀ i₁ i₂ i₃ j₁ j₂ j₃,
     ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
-      Matrix.trace (K i₁ j₁ * K i₂ j₂ * K i₃ j₃ * R)
+      Matrix.trace (K (i₁, j₁) * K (i₂, j₂) * K (i₃, j₃) * R)
 
 /-- The left outer factor obtained by applying the inverse tensor to the left
 density matrix in a Hayashi sector.
@@ -149,7 +149,7 @@ theorem inverseMap_threeSite_closure_collapse {d D : ℕ}
       inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
         inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
         ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
-      K i₂ j₂ β₁ α₃ * R β₃ α₁ := by
+      K (i₂, j₂) β₁ α₃ * R β₃ α₁ := by
   calc
     _ = inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
         (finProdFinEquiv (i₂, j₂)) :=
@@ -192,7 +192,7 @@ theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
   have hcollapse (i₂ j₂ : Fin d) :
       ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
         A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
-        K i₂ j₂ β₁ α₃ * R β₃ α₁ :=
+        K (i₂, j₂) β₁ α₃ * R β₃ α₁ :=
     inverseMap_threeSite_closure_collapse K hK R ρ hρ α₁ β₁ α₃ β₃ i₂ j₂
   simp_rw [Matrix.mul_apply]
   simp only [Matrix.conjTranspose_apply, Complex.star_def]
@@ -238,7 +238,7 @@ theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
           calc
             R β₃ α₁ * (U b i₂ * physicalSlice K β₁ α₃ i₂ j₂ *
                 (starRingEnd ℂ) (U b' j₂)) =
-              U b i₂ * (K i₂ j₂ β₁ α₃ * R β₃ α₁) *
+              U b i₂ * (K (i₂, j₂) β₁ α₃ * R β₃ α₁) *
                 (starRingEnd ℂ) (U b' j₂) := by simp [physicalSlice]; ring
             _ = _ := by rw [← hcollapse]
     _ = ∑ i₂, ∑ j₂, ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃,

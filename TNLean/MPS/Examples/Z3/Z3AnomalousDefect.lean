@@ -148,7 +148,7 @@ def defectEis (i j : Fin 3) : Matrix (Fin 5) (Fin 5) EisensteinInt :=
   (Matrix.blockDiagonal' fun k => summandEis k i j).submatrix defectBond.symm defectBond.symm
 
 /-- The condensation defect as a matrix product operator tensor. -/
-def defectTensor : MPOTensor 3 5 := fun i j => complexOfEisenstein (defectEis i j)
+def defectTensor : MPOTensor 3 5 := Function.uncurry fun i j => complexOfEisenstein (defectEis i j)
 
 /-- The condensation defect read as a tensor over the pair alphabet `Fin 9`. -/
 def defectMPS : MPSTensor 9 5 := defectTensor.toMPSTensor

@@ -78,13 +78,13 @@ noncomputable def mixedEndpointMPOLetter
     Matrix (Fin χ₀ ⊕ Fin χ₁) (Fin χ₀ ⊕ Fin χ₁) ℂ :=
   fun α β => match r, s, k, l, α, β with
   | .inl r, .inl s, .inl k, .inl l, .inl α, .inl β =>
-      T₀ (finProdFinEquiv (r, s)) (finProdFinEquiv (k, l)) α β
+      T₀ (finProdFinEquiv (r, s), finProdFinEquiv (k, l)) α β
   | .inl r, .inr s, .inl k, .inr l, .inl α, .inr β =>
       ∑ μ, W₀ μ (finProdFinEquiv (α, k)) r * V₁ μ s (finProdFinEquiv (β, l))
   | .inr r, .inl s, .inr k, .inl l, .inr α, .inl β =>
       ∑ μ, W₁ μ (finProdFinEquiv (α, k)) r * V₀ μ s (finProdFinEquiv (β, l))
   | .inr r, .inr s, .inr k, .inr l, .inr α, .inr β =>
-      T₁ (finProdFinEquiv (r, s)) (finProdFinEquiv (k, l)) α β
+      T₁ (finProdFinEquiv (r, s), finProdFinEquiv (k, l)) α β
   | _, _, _, _, _, _ => 0
 
 /-- The explicit mixed MPO in the physical and virtual coordinates used by
@@ -97,7 +97,7 @@ noncomputable def mixedEndpointMPO
     (W₀ : Fin m → Matrix (Fin (χ₀ * D₀)) (Fin D₀) ℂ)
     (W₁ : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ) :
     MPOTensor ((D₀ + D₁) * (D₀ + D₁)) (χ₀ + χ₁) :=
-  fun i j =>
+  fun (i, j) =>
     (mixedEndpointMPOLetter T₀ T₁ V₀ V₁ W₀ W₁
       ((mixedEndpointPhysicalEquiv D₀ D₁).symm i).1
       ((mixedEndpointPhysicalEquiv D₀ D₁).symm i).2
@@ -164,8 +164,7 @@ mixed letter in standard bond coordinates. -/
     (W₁ : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ)
     (r s k l : Fin D₀ ⊕ Fin D₁) :
     mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁
-      (mixedEndpointPhysicalEquiv D₀ D₁ (r, s))
-      (mixedEndpointPhysicalEquiv D₀ D₁ (k, l)) =
+      (mixedEndpointPhysicalEquiv D₀ D₁ (r, s), mixedEndpointPhysicalEquiv D₀ D₁ (k, l)) =
       (mixedEndpointMPOLetter T₀ T₁ V₀ V₁ W₀ W₁ r s k l).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm := by
   simp [mixedEndpointMPO]

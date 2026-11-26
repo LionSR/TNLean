@@ -202,8 +202,8 @@ Source: arXiv:1703.09188, Proposition IV.5, lines 773--783 (restriction of the
 reduced tensor to the range of the reduced projection). -/
 theorem mpo_rectangularSandwich_of_absorb {m : ℕ}
     (M : MPOTensor n D) (Lf : Matrix (Fin m) (Fin D) ℂ) (Rt : Matrix (Fin D) (Fin m) ℂ)
-    (hright : ∀ i j, M i j * (Rt * Lf) = M i j) {N : ℕ} (hN : 0 < N) :
-    mpo (fun i j => Lf * M i j * Rt) N = mpo M N :=
+    (hright : ∀ i j, M (i, j) * (Rt * Lf) = M (i, j)) {N : ℕ} (hN : 0 < N) :
+    mpo (fun ij => Lf * M ij * Rt) N = mpo M N :=
   mpo_eq_of_trace_evalWord _ M (fun w hw =>
     Kraus.trace_evalWord_compress_of_right_absorb M.toMPSTensor Lf Rt
       (fun _ => hright _ _) w hw) N hN
@@ -232,16 +232,16 @@ theorem exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul [NeZero n]
     inv_ne_zero (Complex.ofReal_ne_zero.mpr
       (Real.sqrt_pos.mpr (by exact_mod_cast NeZero.pos n)).ne')
   have hflat : ∀ i j, V.normalizedFlattening (finProdFinEquiv (i, j)) =
-      ((Real.sqrt n : ℂ)⁻¹) • V i j := by
+      ((Real.sqrt n : ℂ)⁻¹) • V (i, j) := by
     intro i j
     simp only [normalizedFlattening, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
       MPSTensor.finProdFinEquiv_modNat]
-  have hVP : ∀ i j, V i j * P = V i j := by
+  have hVP : ∀ i j, V (i, j) * P = V (i, j) := by
     intro i j
     have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT (finProdFinEquiv (i, j))
     rw [hflat, Matrix.smul_mul] at h
     exact smul_right_injective _ hc h
-  have hQV : ∀ i j, Q * V i j = V i j := by
+  have hQV : ∀ i j, Q * V (i, j) = V (i, j) := by
     intro i j
     have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT (finProdFinEquiv (i, j))
     rw [hflat, Matrix.mul_smul] at h
@@ -265,20 +265,20 @@ theorem exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul [NeZero n]
     rw [hRtdef, ← hJJ, ← Matrix.mul_assoc, Matrix.mul_assoc J, hJ, Matrix.mul_one]
   have hTT : T * T = T := hTproj.2
   set M := virtualSandwich T V T with hMdef
-  have hMr : ∀ i j, M i j * (Rt * Lf) = M i j := by
+  have hMr : ∀ i j, M (i, j) * (Rt * Lf) = M (i, j) := by
     intro i j
     rw [hRtLf, hMdef, virtualSandwich_apply, Matrix.mul_assoc, hTT]
-  set B : MPOTensor n m := fun i j => Lf * V i j * Rt with hBdef
-  have hBM : B = fun i j => Lf * M i j * Rt := by
-    funext i j
+  set B : MPOTensor n m := fun ij => Lf * V ij * Rt with hBdef
+  have hBM : B = fun ij => Lf * M ij * Rt := by
+    funext ⟨i, j⟩
     rw [hMdef, virtualSandwich_apply]
-    calc Lf * V i j * Rt = (Lf * T) * V i j * (T * Rt) := by rw [hLfT, hTRt]
-      _ = Lf * (T * V i j * T) * Rt := by simp only [Matrix.mul_assoc]
-  have hMB : M = fun i j => Rt * B i j * Lf := by
-    funext i j
+    calc Lf * V (i, j) * Rt = (Lf * T) * V (i, j) * (T * Rt) := by rw [hLfT, hTRt]
+      _ = Lf * (T * V (i, j) * T) * Rt := by simp only [Matrix.mul_assoc]
+  have hMB : M = fun (i, j) => Rt * B (i, j) * Lf := by
+    funext ⟨i, j⟩
     rw [hBdef, hMdef, virtualSandwich_apply]
-    calc T * V i j * T = (Rt * Lf) * V i j * (Rt * Lf) := by rw [hRtLf]
-      _ = Rt * (Lf * V i j * Rt) * Lf := by simp only [Matrix.mul_assoc]
+    calc T * V (i, j) * T = (Rt * Lf) * V (i, j) * (Rt * Lf) := by rw [hRtLf]
+      _ = Rt * (Lf * V (i, j) * Rt) * Lf := by simp only [Matrix.mul_assoc]
   have hmpo : ∀ N, 0 < N → mpo B N = mpo V N := by
     intro N hN
     rw [hBM, mpo_rectangularSandwich_of_absorb M Lf Rt hMr hN, hMdef,

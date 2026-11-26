@@ -74,7 +74,7 @@ theorem czySquareTarget_eq (s : Unit) (a : Fin 4) :
 
 /-- The identity tensor of the CZX files is the general bond-one identity tensor. -/
 theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 2 := by
-  funext i j
+  funext ⟨i, j⟩
   ext a b
   obtain rfl := Subsingleton.elim a b
   fin_cases i <;> fin_cases j <;> simp [identityTensor, identityIntTensor, MPOTensor.idTensor]

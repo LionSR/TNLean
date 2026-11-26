@@ -188,8 +188,8 @@ theorem insertedTensor_braRightAction_toMPSTensor
   funext p
   rw [MPSTensor.insertedTensor]
   change (∑ q : Fin (d * d),
-      MPSTensor.braRightAction Q p q • M q.divNat q.modNat) =
-    ∑ k : Fin d, Q k p.modNat • M p.divNat k
+      MPSTensor.braRightAction Q p q • M (q.divNat, q.modNat)) =
+    ∑ k : Fin d, Q k p.modNat • M (p.divNat, k)
   rw [← finProdFinEquiv.sum_comp]
   rw [Fintype.sum_prod_type]
   simp only [MPSTensor.braRightAction, MPSTensor.finProdFinEquiv_divNat,
@@ -342,7 +342,7 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
     rw [← insertedTensor_braRightAction_toMPSTensor,
       ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
     exact hOriginal
-  funext i j
+  funext ⟨i, j⟩
   have hij := congrFun hTensor (finProdFinEquiv (i, j))
   simpa [toMPSTensor] using hij
 

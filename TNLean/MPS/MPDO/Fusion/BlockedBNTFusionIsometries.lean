@@ -47,7 +47,7 @@ noncomputable def blockedUnweightedDirectSumLetter
   Matrix.blockDiagonal' fun γ =>
     (1 : Matrix (Fin (Fam.chi.dim α β γ))
       (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-        blockTensor (Fam.tensor γ) L I J
+        blockTensor (Fam.tensor γ) L (I, J)
 
 /-- The fusion identity transported through a positive physical block.  The
 same fusion map conjugates a blocked product letter onto the unweighted direct
@@ -62,7 +62,7 @@ theorem blocked_fusion_of_lengthIndependent
     (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J *
+            (blockTensor (Fam.tensor β) L) (I, J) *
         (Fam.fusionIsometry α β)ᴴ =
       Fam.blockedUnweightedDirectSumLetter L α β I J := by
   obtain ⟨n, rfl⟩ : ∃ n, L = n + 1 :=
@@ -73,13 +73,11 @@ theorem blocked_fusion_of_lengthIndependent
       Matrix (Fin (Fam.bondDim α * Fam.bondDim β))
         (Fin (Fam.bondDim α * Fam.bondDim β)) ℂ :=
     fun l ↦ mulTensor (Fam.tensor α) (Fam.tensor β)
-      (Kraus.decodeBlock p (n + 1) I l)
-      (Kraus.decodeBlock p (n + 1) J l)
+      (Kraus.decodeBlock p (n + 1) I l, Kraus.decodeBlock p (n + 1) J l)
   let G : ∀ γ : Λ, Fin (n + 1) →
       Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ :=
     fun γ l ↦ Fam.tensor γ
-      (Kraus.decodeBlock p (n + 1) I l)
-      (Kraus.decodeBlock p (n + 1) J l)
+      (Kraus.decodeBlock p (n + 1) I l, Kraus.decodeBlock p (n + 1) J l)
   unfold blockedUnweightedDirectSumLetter
   simp only [blockTensor_apply, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn]
   change Fam.fusionIsometry α β * (List.ofFn F).prod *
@@ -122,13 +120,13 @@ theorem fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent
     (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     Fam.fusionIsometry α β *
         mulTensor (blockTensor (Fam.tensor α) L)
-          (blockTensor (Fam.tensor β) L) I J =
+          (blockTensor (Fam.tensor β) L) (I, J) =
       Fam.blockedUnweightedDirectSumLetter L α β I J *
         Fam.fusionIsometry α β := by
   calc
     _ = (Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J *
+            (blockTensor (Fam.tensor β) L) (I, J) *
           (Fam.fusionIsometry α β)ᴴ) *
         Fam.fusionIsometry α β := by
       rw [Matrix.mul_assoc, Fam.isometry, Matrix.mul_one]
@@ -145,7 +143,7 @@ theorem blocked_mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
     (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     mulTensor (blockTensor (Fam.tensor α) L)
-          (blockTensor (Fam.tensor β) L) I J *
+          (blockTensor (Fam.tensor β) L) (I, J) *
         (Fam.fusionIsometry α β)ᴴ =
       (Fam.fusionIsometry α β)ᴴ *
         Fam.blockedUnweightedDirectSumLetter L α β I J := by
@@ -153,7 +151,7 @@ theorem blocked_mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
     _ = (Fam.fusionIsometry α β)ᴴ *
         (Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J *
+            (blockTensor (Fam.tensor β) L) (I, J) *
           (Fam.fusionIsometry α β)ᴴ) := by
       rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, Fam.isometry,
         Matrix.one_mul]
@@ -171,20 +169,20 @@ theorem blocked_mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
     (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     mulTensor (blockTensor (Fam.tensor α) L)
-        (blockTensor (Fam.tensor β) L) I J =
+        (blockTensor (Fam.tensor β) L) (I, J) =
       (Fam.fusionIsometry α β)ᴴ *
         Fam.blockedUnweightedDirectSumLetter L α β I J *
         Fam.fusionIsometry α β := by
   calc
     _ = ((Fam.fusionIsometry α β)ᴴ * Fam.fusionIsometry α β) *
           mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J *
+            (blockTensor (Fam.tensor β) L) (I, J) *
           ((Fam.fusionIsometry α β)ᴴ * Fam.fusionIsometry α β) := by
       rw [Fam.isometry, Matrix.one_mul, Matrix.mul_one]
     _ = (Fam.fusionIsometry α β)ᴴ *
         (Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J *
+            (blockTensor (Fam.tensor β) L) (I, J) *
           (Fam.fusionIsometry α β)ᴴ) *
         Fam.fusionIsometry α β := by
       simp only [Matrix.mul_assoc]
@@ -218,21 +216,21 @@ theorem exists_positive_block_with_injective_fusion
       ∀ (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L)),
         (Fam.fusionIsometry α β *
               mulTensor (blockTensor (Fam.tensor α) L)
-                (blockTensor (Fam.tensor β) L) I J *
+                (blockTensor (Fam.tensor β) L) (I, J) *
             (Fam.fusionIsometry α β)ᴴ =
           Fam.blockedUnweightedDirectSumLetter L α β I J) ∧
         (Fam.fusionIsometry α β *
               mulTensor (blockTensor (Fam.tensor α) L)
-                (blockTensor (Fam.tensor β) L) I J =
+                (blockTensor (Fam.tensor β) L) (I, J) =
           Fam.blockedUnweightedDirectSumLetter L α β I J *
             Fam.fusionIsometry α β) ∧
         (mulTensor (blockTensor (Fam.tensor α) L)
-              (blockTensor (Fam.tensor β) L) I J *
+              (blockTensor (Fam.tensor β) L) (I, J) *
             (Fam.fusionIsometry α β)ᴴ =
           (Fam.fusionIsometry α β)ᴴ *
             Fam.blockedUnweightedDirectSumLetter L α β I J) ∧
         (mulTensor (blockTensor (Fam.tensor α) L)
-              (blockTensor (Fam.tensor β) L) I J =
+              (blockTensor (Fam.tensor β) L) (I, J) =
           (Fam.fusionIsometry α β)ᴴ *
             Fam.blockedUnweightedDirectSumLetter L α β I J *
             Fam.fusionIsometry α β) := by

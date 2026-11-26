@@ -47,25 +47,25 @@ variable {d D : ℕ}
 /-- The tensor whose letters have the entry `(β, α)` multiplied by `s ^ (w β - w α)`. For a
 level-triangular tensor and `s ≠ 0`, this is the conjugation of the bond by `diag(s^{w})`. -/
 def levelScale (w : Fin D → ℕ) (s : ℂ) (W : MPOTensor d D) : MPOTensor d D :=
-  fun i j β α => W i j β α * s ^ (w β - w α)
+  fun (i, j) β α => W (i, j) β α * s ^ (w β - w α)
 
 /-- The level-diagonal part of a tensor: the entries between bond directions of the same level. -/
 def levelDiag (w : Fin D → ℕ) (W : MPOTensor d D) : MPOTensor d D :=
-  fun i j β α => if w β = w α then W i j β α else 0
+  fun (i, j) β α => if w β = w α then W (i, j) β α else 0
 
 /-- A tensor is level-triangular when no letter has an entry from a higher level of the bond to a
 lower one. -/
 def IsLevelTriangular (w : Fin D → ℕ) (W : MPOTensor d D) : Prop :=
-  ∀ i j β α, w β < w α → W i j β α = 0
+  ∀ i j β α, w β < w α → W (i, j) β α = 0
 
 theorem levelScale_one (w : Fin D → ℕ) (W : MPOTensor d D) : levelScale w 1 W = W := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp [levelScale]
 
 theorem levelScale_zero {w : Fin D → ℕ} {W : MPOTensor d D} (hW : IsLevelTriangular w W) :
     levelScale w 0 W = levelDiag w W := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp only [levelScale, levelDiag]
   rcases lt_trichotomy (w β) (w α) with h | h | h
@@ -81,8 +81,8 @@ theorem continuous_levelScale (w : Fin D → ℕ) (W : MPOTensor d D) :
 /-- For `s ≠ 0` the scaled tensor is the conjugation of the bond by `diag(s^{w})`. -/
 private theorem levelScale_eq_conj {w : Fin D → ℕ} {W : MPOTensor d D}
     (hW : IsLevelTriangular w W) {s : ℂ} (hs : s ≠ 0) (i j : Fin d) :
-    Matrix.diagonal (fun β => s ^ w β) * W i j * Matrix.diagonal (fun β => s ^ w β)⁻¹ =
-      levelScale w s W i j := by
+    Matrix.diagonal (fun β => s ^ w β) * W (i, j) * Matrix.diagonal (fun β => s ^ w β)⁻¹ =
+      levelScale w s W (i, j) := by
   ext β α
   rw [Matrix.mul_apply]
   simp only [Matrix.diagonal_mul, Pi.inv_apply, levelScale, Matrix.diagonal_apply]

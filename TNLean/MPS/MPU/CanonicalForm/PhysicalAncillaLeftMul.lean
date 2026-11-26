@@ -92,7 +92,7 @@ theorem ketLeftMul_tensorPhysicalId (U : MPOTensor d D)
     (tensorPhysicalId U x).ketLeftMul (physicalIdMatrix Q x) =
       tensorPhysicalId (U.ketLeftMul Q) x := by
   classical
-  funext i j
+  funext ⟨i, j⟩
   simp only [ketLeftMul]
   rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
   by_cases hab : i.modNat = j.modNat

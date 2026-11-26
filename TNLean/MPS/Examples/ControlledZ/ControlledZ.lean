@@ -68,32 +68,32 @@ def czBond : Fin 2 × Fin 2 ≃ Fin 4 := finProdFinEquiv
   = \delta_{ij}\delta_{\alpha_2\beta_1}\delta_{\beta_2 i}(-1)^{\alpha_1 i}\), with the bond pair
 encoded by `czBond`. -/
 noncomputable def czTensor : MPOTensor 2 4 :=
-  fun i j ↦ Matrix.of fun α β ↦
+  fun (i, j) ↦ Matrix.of fun α β ↦
     if i = j ∧ (czBond.symm α).2 = (czBond.symm β).1 ∧ (czBond.symm β).2 = i then
       (-1 : ℂ) ^ (((czBond.symm α).1 : ℕ) * (i : ℕ))
     else 0
 
 /-- The letters of `czTensor` in bond-pair coordinates (chapter Example 4.9). -/
 theorem czTensor_apply_czBond (i j a₁ a₂ b₁ b₂ : Fin 2) :
-    czTensor i j (czBond (a₁, a₂)) (czBond (b₁, b₂)) =
+    czTensor (i, j) (czBond (a₁, a₂)) (czBond (b₁, b₂)) =
       if i = j ∧ a₂ = b₁ ∧ b₂ = i then (-1 : ℂ) ^ ((a₁ : ℕ) * (i : ℕ)) else 0 := by
   simp only [czTensor, of_apply, Equiv.symm_apply_apply]
 
 /-- The off-diagonal letters of `czTensor` vanish. -/
-theorem czTensor_of_ne {i j : Fin 2} (h : i ≠ j) : czTensor i j = 0 := by
+theorem czTensor_of_ne {i j : Fin 2} (h : i ≠ j) : czTensor (i, j) = 0 := by
   ext α β
   simp [czTensor, h]
 
 /-- A letter of `czTensor` vanishes unless its right bond is `(α₂, i)`. -/
 theorem czTensor_apply_eq_zero {i j : Fin 2} {α β : Fin 4}
     (h : ¬((czBond.symm α).2 = (czBond.symm β).1 ∧ (czBond.symm β).2 = i)) :
-    czTensor i j α β = 0 :=
+    czTensor (i, j) α β = 0 :=
   ite_eq_right_iff.mpr fun h' ↦ absurd h'.2 h
 
 /-- The letters of `czTensor` are real and diagonal, so the tensor is its own physical
 adjoint. -/
 theorem physicalAdjointTensor_czTensor : physicalAdjointTensor czTensor = czTensor := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   by_cases h : i = j
   · subst h
@@ -114,7 +114,7 @@ theorem czVec_mul_self (i k : Fin 2) (α : Fin 4) : czVec i k α * czVec i k α 
 /-- Two diagonal letters multiply to a rank-one matrix,
 \(U^{ii}U^{kk} = |f_i f_k\rangle\langle ik|\) (chapter Example 4.9, proof of (b)). -/
 theorem czTensor_mul_czTensor (i k : Fin 2) :
-    czTensor i i * czTensor k k =
+    czTensor (i, i) * czTensor (k, k) =
       vecMulVec (czVec i k) (Pi.single (czBond (i, k)) 1) := by
   ext α β
   obtain ⟨⟨a₁, a₂⟩, rfl⟩ := czBond.surjective α
@@ -197,16 +197,16 @@ theorem czTensor_isMPU : IsMPU czTensor := by
 /-- The doubled diagonal letters of the controlled-\(Z\) tensor: since the letters are diagonal
 and real, \(W^{ij} = U^{ii}\otimes U^{ij}\). -/
 theorem mulTensor_czTensor_apply (i j : Fin 2) :
-    mulTensor czTensor czTensor i j =
-      (czTensor i i ⊗ₖ czTensor i j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
+    mulTensor czTensor czTensor (i, j) =
+      (czTensor (i, i) ⊗ₖ czTensor (i, j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
   rw [mulTensor_apply, Fintype.sum_eq_single i fun h hh ↦ by
     rw [czTensor_of_ne (Ne.symm hh), zero_kronecker]]
 
 /-- The product of two diagonal double-layer letters,
 \(W^{ii}W^{kk} = U^{ii}U^{kk}\otimes U^{ii}U^{kk}\) (chapter Example 4.9, proof of (b)). -/
 theorem doubleLayerTensor_czTensor_mul (i k : Fin 2) :
-    doubleLayerTensor czTensor i i * doubleLayerTensor czTensor k k =
-      ((czTensor i i * czTensor k k) ⊗ₖ (czTensor i i * czTensor k k)).submatrix
+    doubleLayerTensor czTensor (i, i) * doubleLayerTensor czTensor (k, k) =
+      ((czTensor (i, i) * czTensor (k, k)) ⊗ₖ (czTensor (i, i) * czTensor (k, k))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
   rw [doubleLayerTensor, physicalAdjointTensor_czTensor, mulTensor_czTensor_apply,
     mulTensor_czTensor_apply, mul_kronecker_mul,
@@ -215,7 +215,7 @@ theorem doubleLayerTensor_czTensor_mul (i k : Fin 2) :
 /-- The row of \(W^{ii}W^{kk}\) at the doubled bond `((0,0), (0,0))` is the covector
 \(\langle ik|\otimes\langle ik|\) (chapter Example 4.9, proof of (b)). -/
 theorem doubleLayerTensor_czTensor_mul_apply (i k : Fin 2) (y₁ y₂ : Fin 4) :
-    (doubleLayerTensor czTensor i i * doubleLayerTensor czTensor k k)
+    (doubleLayerTensor czTensor (i, i) * doubleLayerTensor czTensor (k, k))
         (finProdFinEquiv (czBond (0, 0), czBond (0, 0))) (finProdFinEquiv (y₁, y₂)) =
       (Pi.single (czBond (i, k)) 1 : Fin 4 → ℂ) y₁ *
         (Pi.single (czBond (i, k)) 1 : Fin 4 → ℂ) y₂ := by
@@ -231,7 +231,7 @@ simplicity witnesses, the covector \(c = (a|W^{00}\) would satisfy \((c|b) = 1\)
 `c = 0`, a contradiction. -/
 theorem not_isMPUSimple_czTensor : ¬IsMPUSimple czTensor := by
   rintro ⟨a, b, h₁, h₂⟩
-  set c : Fin (4 * 4) → ℂ := a ᵥ* doubleLayerTensor czTensor 0 0 with hc_def
+  set c : Fin (4 * 4) → ℂ := a ᵥ* doubleLayerTensor czTensor (0, 0) with hc_def
   have hc : c ⬝ᵥ b = 1 := by
     rw [hc_def, ← dotProduct_mulVec, h₁]
     simp
@@ -240,9 +240,9 @@ theorem not_isMPUSimple_czTensor : ¬IsMPUSimple czTensor := by
     intro i y₁ y₂ hy
     have h := h₂ i i 0 0
     rw [mul_vecMulVec, vecMulVec_mul] at h
-    have e : ∀ q, (doubleLayerTensor czTensor i i * doubleLayerTensor czTensor 0 0)
+    have e : ∀ q, (doubleLayerTensor czTensor (i, i) * doubleLayerTensor czTensor (0, 0))
         (finProdFinEquiv (czBond (0, 0), czBond (0, 0))) q =
-          (doubleLayerTensor czTensor i i *ᵥ b)
+          (doubleLayerTensor czTensor (i, i) *ᵥ b)
             (finProdFinEquiv (czBond (0, 0), czBond (0, 0))) * c q := fun q ↦ by
       rw [h, vecMulVec_apply]
     have e₁ := e (finProdFinEquiv (czBond (i, 0), czBond (i, 0)))
@@ -266,9 +266,9 @@ theorem not_isMPUSimple_czTensor : ¬IsMPUSimple czTensor := by
 /-- A letter of the blocking of two sites is the product of the two letters of the decoded
 words. -/
 theorem blockTensor_czTensor_two_apply (I J : Fin (Kraus.blockPhysDim 2 2)) :
-    blockTensor czTensor 2 I J =
-      czTensor (Kraus.decodeBlock 2 2 I 0) (Kraus.decodeBlock 2 2 J 0) *
-        czTensor (Kraus.decodeBlock 2 2 I 1) (Kraus.decodeBlock 2 2 J 1) := by
+    blockTensor czTensor 2 (I, J) =
+      czTensor (Kraus.decodeBlock 2 2 I 0, Kraus.decodeBlock 2 2 J 0) *
+        czTensor (Kraus.decodeBlock 2 2 I 1, Kraus.decodeBlock 2 2 J 1) := by
   simp [blockTensor_apply, Kraus.wordOfBlock, List.ofFn_succ]
 
 /-- The bond basis vector \(|i_1 i_2\rangle\) of a blocked index \(\mathbf i = (i_1, i_2)\). -/
@@ -290,7 +290,7 @@ theorem czBlockVec_apply_zero (I : Fin (Kraus.blockPhysDim 2 2)) :
 \(x_{\mathbf i} = f_{i_1}f_{i_2}\) and \(y_{\mathbf i} = i_1 i_2\) (chapter Example 4.9, proof
 of (c)). -/
 theorem blockTensor_czTensor_two (I J : Fin (Kraus.blockPhysDim 2 2)) :
-    blockTensor czTensor 2 I J =
+    blockTensor czTensor 2 (I, J) =
       if I = J then vecMulVec (czBlockVec I) (Pi.single (czBlockBond I) 1) else 0 := by
   rw [blockTensor_czTensor_two_apply]
   split_ifs with h
@@ -323,7 +323,7 @@ noncomputable def czOmega : Fin (4 * 4) → ℂ := fun p ↦
 \(W^{\mathbf i\mathbf j} = \delta_{\mathbf i\mathbf j}|X_{\mathbf i})(Y_{\mathbf i}|\)
 (chapter Example 4.9, proof of (c)). -/
 theorem doubleLayerTensor_blockTensor_czTensor_two (I J : Fin (Kraus.blockPhysDim 2 2)) :
-    doubleLayerTensor (blockTensor czTensor 2) I J =
+    doubleLayerTensor (blockTensor czTensor 2) (I, J) =
       if I = J then vecMulVec (czBlockX I) (czBlockY I) else 0 := by
   rw [doubleLayerTensor, physicalAdjointTensor_blockTensor, physicalAdjointTensor_czTensor,
     mulTensor_apply, Fintype.sum_eq_single I fun H hH ↦ by
@@ -364,14 +364,14 @@ The scalar inputs are \((Y_{\mathbf i}|X_{\mathbf k}) = 1\), \((\Omega|X_{\mathb
 \((Y_{\mathbf i}|\Omega) = 1\). `blockTensor_czTensor_two_isMPUSimple` is the existential form. -/
 theorem blockTensor_czTensor_two_simple_witnesses :
     (∀ i j : Fin (Kraus.blockPhysDim 2 2),
-      czOmega ⬝ᵥ (doubleLayerTensor (blockTensor czTensor 2) i j *ᵥ ((1 / 4 : ℂ) • czOmega)) =
+      czOmega ⬝ᵥ (doubleLayerTensor (blockTensor czTensor 2) (i, j) *ᵥ ((1 / 4 : ℂ) • czOmega)) =
         if i = j then 1 else 0) ∧
     (∀ i j k l : Fin (Kraus.blockPhysDim 2 2),
-      doubleLayerTensor (blockTensor czTensor 2) i j *
-          doubleLayerTensor (blockTensor czTensor 2) k l =
-        doubleLayerTensor (blockTensor czTensor 2) i j *
+      doubleLayerTensor (blockTensor czTensor 2) (i, j) *
+          doubleLayerTensor (blockTensor czTensor 2) (k, l) =
+        doubleLayerTensor (blockTensor czTensor 2) (i, j) *
           vecMulVec ((1 / 4 : ℂ) • czOmega) czOmega *
-            doubleLayerTensor (blockTensor czTensor 2) k l) := by
+            doubleLayerTensor (blockTensor czTensor 2) (k, l)) := by
   have hYb : ∀ I, czBlockY I ⬝ᵥ ((1 / 4 : ℂ) • czOmega) = 1 / 4 := fun I ↦ by
     rw [czBlockY_dotProduct]
     simp [czOmega]

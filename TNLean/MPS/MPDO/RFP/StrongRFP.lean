@@ -69,9 +69,9 @@ def IsStrongRFP (M : MPOTensor d D) : Prop :=
     (U : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ),
     P.PosSemidef ∧ U ∈ Matrix.unitaryGroup (Fin d × Fin d) ℂ ∧
       ∀ i j : Fin d × Fin d,
-        M i.1 j.1 * M i.2 j.2 =
+        M (i.1, j.1) * M (i.2, j.2) =
           ∑ a, ∑ b,
-            (U i a * P a.2 b.2 * star (U j b)) • M a.1 b.1
+            (U i a * P a.2 b.2 * star (U j b)) • M (a.1, b.1)
 
 /-- The local tensor identity with fixed witnesses is equivalent to the
 physical-closure identity
@@ -86,9 +86,9 @@ theorem strongRFP_tensor_relation_iff_physClose
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     (U : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     (∀ i j : Fin d × Fin d,
-      M i.1 j.1 * M i.2 j.2 =
+      M (i.1, j.1) * M (i.2, j.2) =
         ∑ a, ∑ b,
-          (U i a * P a.2 b.2 * star (U j b)) • M a.1 b.1) ↔
+          (U i a * P a.2 b.2 * star (U j b)) • M (a.1, b.1)) ↔
       ∀ X : Matrix (Fin D) (Fin D) ℂ,
         physClose2 M X = U * (physClose1 M X ⊗ₖ P) * Uᴴ := by
   constructor

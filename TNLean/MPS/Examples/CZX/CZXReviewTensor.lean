@@ -94,21 +94,22 @@ being the output.
 Source: arXiv:2011.12127, Appendix A, `Papers/2011.12127/TN-Review-main.tex` lines 2588–2591.
 The bra-ket display at line 2585 differs from these matrices by `2^{-1/2}`
 (`docs/paper-gaps/mpu_czx_tensor_normalization.tex`). -/
-def reviewCZXTensor : MPOTensor 2 2 := fun i j => complexOfInt (reviewCZXIntTensor i j)
+def reviewCZXTensor : MPOTensor 2 2 :=
+    Function.uncurry fun i j => complexOfInt (reviewCZXIntTensor i j)
 
 /-- The entries of the review's tensor: output `i` is the flip of input `j`, the incoming bond
 carries `i`, and the outgoing bond `r` contributes `(-1)^{i r}`.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2585–2591. -/
 theorem reviewCZXTensor_apply (i j l r : Fin 2) :
-    reviewCZXTensor i j l r = if i = j.rev ∧ l = i then (-1 : ℂ) ^ (i.val * r.val) else 0 := by
+    reviewCZXTensor (i, j) l r = if i = j.rev ∧ l = i then (-1 : ℂ) ^ (i.val * r.val) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [reviewCZXTensor, reviewCZXIntTensor, complexOfInt, Fin.rev]
 
 /-- Bridge: the review's tensor is the tensor `czxTensor` of `CZXTensor` with its two physical
 indices exchanged and every matrix transposed. -/
 theorem reviewCZXTensor_eq_transpose (i j : Fin 2) :
-    reviewCZXTensor i j = (czxTensor j i)ᵀ := by
+    reviewCZXTensor (i, j) = (czxTensor (j, i))ᵀ := by
   ext l r
   rw [Matrix.transpose_apply, reviewCZXTensor_apply, czxTensor_apply]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;> simp [Fin.rev]
@@ -118,9 +119,9 @@ theorem reviewCZXTensor_eq_transpose (i j : Fin 2) :
 display at `Papers/2011.12127/TN-Review-main.tex` line 2585. -/
 theorem printed2017Tensor_eq_smul_reviewCZXTensor :
     MPOTensor.CZX.printed2017Tensor = ((↑(Real.sqrt 2) : ℂ)⁻¹) • reviewCZXTensor := by
-  funext i j
+  funext ⟨i, j⟩
   ext l r
-  change _ = (↑(Real.sqrt 2) : ℂ)⁻¹ * reviewCZXTensor i j l r
+  change _ = (↑(Real.sqrt 2) : ℂ)⁻¹ * reviewCZXTensor (i, j) l r
   rw [reviewCZXTensor_apply]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [MPOTensor.CZX.printed2017Tensor, MPSTensor.pauliX, Fin.rev]
@@ -252,20 +253,20 @@ theorem reviewCZXSquare_eq (a : Fin 4) :
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2594. -/
 theorem mulTensor_reviewCZX_zero_zero :
-    MPOTensor.mulTensor reviewCZXTensor reviewCZXTensor 0 0 =
-      (reviewCZXTensor 0 1 ⊗ₖ reviewCZXTensor 1 0).submatrix
+    MPOTensor.mulTensor reviewCZXTensor reviewCZXTensor (0, 0) =
+      (reviewCZXTensor (0, 1) ⊗ₖ reviewCZXTensor (1, 0)).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  have h : reviewCZXTensor 0 0 = 0 := complexOfInt_zero
+  have h : reviewCZXTensor (0, 0) = 0 := complexOfInt_zero
   rw [MPOTensor.mulTensor_apply, Fin.sum_univ_two, h, Matrix.zero_kronecker, zero_add]
 
 /-- `B^{11} = A^{10} ⊗ A^{01}`, with the bond pair `(α, β)` encoded as `2α + β`.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2595. -/
 theorem mulTensor_reviewCZX_one_one :
-    MPOTensor.mulTensor reviewCZXTensor reviewCZXTensor 1 1 =
-      (reviewCZXTensor 1 0 ⊗ₖ reviewCZXTensor 0 1).submatrix
+    MPOTensor.mulTensor reviewCZXTensor reviewCZXTensor (1, 1) =
+      (reviewCZXTensor (1, 0) ⊗ₖ reviewCZXTensor (0, 1)).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  have h : reviewCZXTensor 1 1 = 0 := complexOfInt_zero
+  have h : reviewCZXTensor (1, 1) = 0 := complexOfInt_zero
   rw [MPOTensor.mulTensor_apply, Fin.sum_univ_two, h, Matrix.kronecker_zero, add_zero]
 
 /-- **The printed matrix `B^{00}`** of the square.

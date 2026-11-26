@@ -52,7 +52,7 @@ theorem changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSuppo
     exact changePhysicalBasis_eq_self_of_twoSided_physicalSlice
       (P s) (K s) (hP s) (hSupport s)
   · rw [ite_eq_right hst]
-    ext i j β α
+    ext ⟨i, j⟩ β α
     change (P s * physicalSlice (K t) β α * (P s)ᴴ) i j = 0
     rw [(hP s).1.eq]
     calc

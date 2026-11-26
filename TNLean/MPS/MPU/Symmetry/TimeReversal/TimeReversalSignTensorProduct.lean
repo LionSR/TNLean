@@ -36,9 +36,9 @@ theorem timeReversalPeriodicTrace_tensorProduct (U : MPOTensor d D) (V : MPOTens
     timeReversalPeriodicTrace (tensorProduct U V) =
       timeReversalPeriodicTrace U * timeReversalPeriodicTrace V := by
   have hletter : ∀ (i j : Fin d) (a b : Fin e),
-      Matrix.trace (tensorProduct U V (finProdFinEquiv (i, a)) (finProdFinEquiv (j, b)) *
-        tensorProduct U V (finProdFinEquiv (j, b)) (finProdFinEquiv (i, a))) =
-        Matrix.trace (U i j * U j i) * Matrix.trace (V a b * V b a) := by
+      Matrix.trace (tensorProduct U V (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) *
+        tensorProduct U V (finProdFinEquiv (j, b), finProdFinEquiv (i, a))) =
+        Matrix.trace (U (i, j) * U (j, i)) * Matrix.trace (V (a, b) * V (b, a)) := by
     intro i j a b
     simp only [tensorProduct, MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat,
       Matrix.reindex_apply, Matrix.submatrix_mul_equiv, ← Matrix.mul_kronecker_mul]

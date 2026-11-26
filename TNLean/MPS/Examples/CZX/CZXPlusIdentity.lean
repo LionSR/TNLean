@@ -72,7 +72,7 @@ def plusIntTensor : Fin 2 → Fin 2 → Matrix (Fin 3) (Fin 3) ℤ
   | 1, 1 => !![1, 0, 0; 0, 0, 0; 0, 0, 0]
 
 /-- The bond-three tensor generating `O_L = id + U_L`. -/
-def plusTensor : MPOTensor 2 3 := fun i j => complexOfInt (plusIntTensor i j)
+def plusTensor : MPOTensor 2 3 := Function.uncurry fun i j => complexOfInt (plusIntTensor i j)
 
 /-- The stacked product tensor of Example E, of bond dimension nine. -/
 def czxPlusIdentity : MPSTensor 4 9 := (MPOTensor.mulTensor plusTensor plusTensor).toMPSTensor

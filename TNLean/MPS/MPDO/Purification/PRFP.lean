@@ -139,7 +139,7 @@ identity, not the definition itself. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D'),
-    (∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
 

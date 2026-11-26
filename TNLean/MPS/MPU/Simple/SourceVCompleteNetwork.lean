@@ -77,7 +77,7 @@ theorem sourceYTensor_conjTranspose_sourceV_gram_apply
     (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
     ((sourceYTensor U ρ hρ)ᴴ * ((sourceV U ρ hρ)ᴴ * sourceV U ρ hρ) *
         sourceYTensor U ρ hρ) ((a.1, p.1), (p.2, a.2)) ((b.1, q.1), (q.2, b.2)) =
-      (doubleLayerTensor U p.1 q.1 * doubleLayerTensor U p.2 q.2)
+      (doubleLayerTensor U (p.1, q.1) * doubleLayerTensor U (p.2, q.2))
         (finProdFinEquiv (a.1, b.1)) (finProdFinEquiv (a.2, b.2)) := by
   classical
   have hY : (sourceYTensor U ρ hρ)ᴴ * ((sourceV U ρ hρ)ᴴ * sourceV U ρ hρ) *
@@ -108,10 +108,10 @@ theorem sourceYTensor_gram_apply_eq_doubleLayerTensor_rankOne_mul_apply
     (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
     ((sourceYTensor U ρ hρ)ᴴ * sourceYTensor U ρ hρ)
         ((a.1, p.1), (p.2, a.2)) ((b.1, q.1), (q.2, b.2)) =
-      (doubleLayerTensor U p.1 q.1 *
+      (doubleLayerTensor U (p.1, q.1) *
         Matrix.vecMulVec (fun x ↦ ρᵀ.vec (finProdFinEquiv.symm x))
           (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) *
-        doubleLayerTensor U p.2 q.2)
+        doubleLayerTensor U (p.2, q.2))
         (finProdFinEquiv (a.1, b.1)) (finProdFinEquiv (a.2, b.2)) := by
   classical
   have h := doubleLayerTensor_rankOne_mul_apply_four_u U ρᵀ p q a b
@@ -138,12 +138,12 @@ theorem sourceVDressedGram_iff_simple2_transpose_fixed_pair
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     SourceVDressedGram U ρ hρ ↔
       ∀ i j k l : Fin d,
-        doubleLayerTensor U i j * doubleLayerTensor U k l =
-          doubleLayerTensor U i j *
+        doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+          doubleLayerTensor U (i, j) *
             Matrix.vecMulVec (fun x ↦ ρᵀ.vec (finProdFinEquiv.symm x))
               (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec
                 (finProdFinEquiv.symm x)) *
-            doubleLayerTensor U k l := by
+            doubleLayerTensor U (k, l) := by
   constructor
   · intro h i j k l
     have h' : (sourceYTensor U ρ hρ)ᴴ * ((sourceV U ρ hρ)ᴴ * sourceV U ρ hρ) *

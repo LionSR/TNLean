@@ -95,7 +95,7 @@ theorem conjugated_middle_threeSiteFamilyClosure
     (∑ i₂ : Fin d, ∑ j₂ : Fin d,
       U b i₂ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) * star (U b' j₂)) =
       ∑ s : Fin g, Matrix.trace
-        (K s i₁ j₁ * conjugatePhysical (K s) U b b' * K s i₃ j₃ * R s) := by
+        (K s (i₁, j₁) * conjugatePhysical (K s) U (b, b') * K s (i₃, j₃) * R s) := by
   classical
   unfold IsThreeSiteFamilyClosure at hρ
   simp_rw [hρ]
@@ -116,9 +116,9 @@ theorem conjugated_middle_threeSiteFamilyClosure
       simp [Fintype.sum_prod_type, F, rotate]
     rw [← hflat, ← hflat']
     exact (Equiv.sum_comp rotate.symm F).symm
-  have hmiddle (s : Fin g) : conjugatePhysical (K s) U b b' =
+  have hmiddle (s : Fin g) : conjugatePhysical (K s) U (b, b') =
       ∑ i₂ : Fin d, ∑ j₂ : Fin d,
-        (U b i₂ * star (U b' j₂)) • K s i₂ j₂ := by
+        (U b i₂ * star (U b' j₂)) • K s (i₂, j₂) := by
     exact conjugatePhysical_eq_sum (K s) U b b'
   simp_rw [hmiddle]
   simp only [Matrix.mul_sum, Matrix.mul_smul, Matrix.sum_mul,
@@ -173,13 +173,13 @@ theorem exists_bntMarkovBlockNonzero_of_probability_ne_zero
       hη.h_state_apply_middle_sector i₁ i₁ i₃ i₃ k k l r l r
   have hsum_ne :
       (∑ s : Fin g, Matrix.trace
-        (K s i₁ i₁ * conjugatePhysical (K s) hη.U_B b b *
-          K s i₃ i₃ * R s)) ≠ 0 := by
+        (K s (i₁, i₁) * conjugatePhysical (K s) hη.U_B (b, b) *
+          K s (i₃, i₃) * R s)) ≠ 0 := by
     rw [← conjugated_middle_threeSiteFamilyClosure
       hρ hη.U_B i₁ i₁ i₃ i₃ b b, hs']
     exact mul_ne_zero (mul_ne_zero (Complex.ofReal_ne_zero.mpr hk) hleft) hright
   obtain ⟨s, _, hs_ne⟩ := Finset.exists_ne_zero_of_sum_ne_zero hsum_ne
-  have hmiddle_ne : conjugatePhysical (K s) hη.U_B b b ≠ 0 := by
+  have hmiddle_ne : conjugatePhysical (K s) hη.U_B (b, b) ≠ 0 := by
     intro hzero
     rw [hzero] at hs_ne
     simp only [Matrix.mul_zero, Matrix.zero_mul, Matrix.trace_zero] at hs_ne
@@ -190,7 +190,7 @@ theorem exists_bntMarkovBlockNonzero_of_probability_ne_zero
   intro hblock
   have hdiag := congrFun (congrFun hblock (l, r)) (l, r)
   rw [bntMarkovBlock, Matrix.reindex_apply, Matrix.submatrix_apply] at hdiag
-  change conjugatePhysical (K s) hη.U_B b b β α = 0 at hdiag
+  change conjugatePhysical (K s) hη.U_B (b, b) β α = 0 at hdiag
   exact hentry hdiag
 
 /-- A positive-weight quantum-Markov sector cannot have nonzero diagonal

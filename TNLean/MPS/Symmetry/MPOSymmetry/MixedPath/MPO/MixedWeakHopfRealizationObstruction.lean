@@ -33,7 +33,7 @@ variable {H : Type*} [Ring H] [Algebra ℂ H] [Coalgebra ℂ H]
 /-- Faithfulness of the convolution-dual action and physical unitality forbid
 zero diagonal physical letters. No integral identity is needed. -/
 theorem tensor_diag_ne_zero (W : WeakHopfRepresentation H d D) (i : Fin d) :
-    W.tensor i i ≠ 0 := by
+    W.tensor (i, i) ≠ 0 := by
   intro hi
   have hc : dualCoefficient W.phys.toLinearMap i i = 0 :=
     W.virt_injective (hi.trans (map_zero W.virt).symm)
@@ -61,7 +61,7 @@ theorem commonFixedPointInclusion_middle_row (k : Fin d₀) (j : Fin m) :
 theorem changePhysicalBasis_eq_zero_of_row {a b χ : ℕ}
     (J : Matrix (Fin b) (Fin a) ℂ) (T : MPOTensor a χ)
     {i : Fin b} (hi : ∀ j, J i j = 0) (j : Fin b) :
-    changePhysicalBasis J T i j = 0 := by
+    changePhysicalBasis J T (i, j) = 0 := by
   ext β α
   simp [changePhysicalBasis, Matrix.mul_apply, hi]
 

@@ -189,11 +189,11 @@ variable {d D D₁ D₂ : ℕ}
 (`MPOTensor.mpo_timeReversal`). Source: arXiv:2203.12563, line 867. -/
 noncomputable def timeReversal (v : Matrix (Fin d) (Fin d) ℂ) (T : MPOTensor d D) :
     MPOTensor d D :=
-  pairTwist v (v.map (starRingEnd ℂ)) fun i j ↦ (T i j).map (starRingEnd ℂ)
+  pairTwist v (v.map (starRingEnd ℂ)) fun (i, j) ↦ (T (i, j)).map (starRingEnd ℂ)
 
 /-- Entrywise conjugation of the letters conjugates every periodic operator. -/
 theorem mpo_map_starRingEnd (T : MPOTensor d D) (N : ℕ) :
-    mpo (fun i j ↦ (T i j).map (starRingEnd ℂ)) N = (mpo T N).map (starRingEnd ℂ) := by
+    mpo (fun ij ↦ (T ij).map (starRingEnd ℂ)) N = (mpo T N).map (starRingEnd ℂ) := by
   ext σ τ
   simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.map_apply]
   have hprod : ∀ l : List (Matrix (Fin D) (Fin D) ℂ),
@@ -234,7 +234,7 @@ theorem mulTensor_timeReversal {v : Matrix (Fin d) (Fin d) ℂ} (hv : star v * v
   have hδ : ∀ b c, ∑ k, starRingEnd ℂ (v k b) * v k c = if b = c then 1 else 0 := by
     intro b c
     simpa [Matrix.mul_apply, Matrix.one_apply] using congrFun (congrFun hv b) c
-  funext i j
+  funext ⟨i, j⟩
   ext r s
   simp only [timeReversal, pairTwist, mulTensor_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.map_apply, Matrix.kroneckerMap_apply, smul_eq_mul,
@@ -346,8 +346,9 @@ theorem bondKron_bondKron_mul_assocInv (X : Matrix (Fin m) (Fin m) ℂ)
 /-- Intertwiners of the factors give an intertwiner of the stacked letters. -/
 theorem mulTensor_mul_bondKron_of_intertwine {A A' : MPOTensor d m} {B B' : MPOTensor d n}
     {P : Matrix (Fin m) (Fin m) ℂ} {Q : Matrix (Fin n) (Fin n) ℂ}
-    (hA : ∀ i l, A' i l * P = P * A i l) (hB : ∀ i l, B' i l * Q = Q * B i l) (i l : Fin d) :
-    mulTensor A' B' i l * bondKron P Q = bondKron P Q * mulTensor A B i l := by
+    (hA : ∀ i l, A' (i, l) * P = P * A (i, l)) (hB : ∀ i l, B' (i, l) * Q = Q *
+        B (i, l)) (i l : Fin d) :
+    mulTensor A' B' (i, l) * bondKron P Q = bondKron P Q * mulTensor A B (i, l) := by
   rw [bondKron, ← Matrix.mul_assoc, mulTensor_mul_kronId_of_intertwine B' hA, Matrix.mul_assoc,
     mulTensor_mul_idKron_of_intertwine A hB, ← Matrix.mul_assoc]
 
@@ -413,7 +414,7 @@ structure BondGauge (F : GroupFamily G d) (T : ∀ g, MPOTensor d (F.bondDim g))
   Q : ∀ g, Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ
   P_mul_Q : ∀ g, P g * Q g = 1
   Q_mul_P : ∀ g, Q g * P g = 1
-  intertwine : ∀ g i l, T g i l * Q g = Q g * F.tensor g i l
+  intertwine : ∀ g i l, T g (i, l) * Q g = Q g * F.tensor g (i, l)
 
 namespace BondGauge
 
@@ -422,10 +423,10 @@ variable {T : ∀ g, MPOTensor d (F.bondDim g)} (q : BondGauge F T)
 include q in
 omit [Group G] in
 /-- The inverse gauge intertwines in the opposite direction: `F_g^{il} P_g = P_g T_g^{il}`. -/
-theorem mul_P (g : G) (i l : Fin d) : F.tensor g i l * q.P g = q.P g * T g i l := by
-  calc F.tensor g i l * q.P g = q.P g * (q.Q g * F.tensor g i l) * q.P g := by
+theorem mul_P (g : G) (i l : Fin d) : F.tensor g (i, l) * q.P g = q.P g * T g (i, l) := by
+  calc F.tensor g (i, l) * q.P g = q.P g * (q.Q g * F.tensor g (i, l)) * q.P g := by
         rw [← Matrix.mul_assoc, q.P_mul_Q, Matrix.one_mul]
-    _ = q.P g * T g i l := by
+    _ = q.P g * T g (i, l) := by
         rw [← q.intertwine, Matrix.mul_assoc, Matrix.mul_assoc, q.Q_mul_P, Matrix.mul_one]
 
 end BondGauge
@@ -587,7 +588,7 @@ theorem nonempty_bondGauge_timeReversal (hF : F.IsNormalRepresentation)
     rw [mpo_timeReversal, hT g N hN, Matrix.mul_assoc, hV, Matrix.mul_one]
   have key : ∀ g, ∃ P Q : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ,
       P * Q = 1 ∧ Q * P = 1 ∧
-        ∀ i l, MPOTensor.timeReversal v (F.tensor g) i l * Q = Q * F.tensor g i l := by
+        ∀ i l, MPOTensor.timeReversal v (F.tensor g) (i, l) * Q = Q * F.tensor g (i, l) := by
     intro g
     obtain ⟨P, Q, hred, -⟩ := MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
       (F.tensor g).toMPSTensor (hF.isNormal g) (F.bondDim_pos g)
@@ -602,10 +603,10 @@ theorem nonempty_bondGauge_timeReversal (hF : F.IsNormalRepresentation)
       finProdFinEquiv.symm_apply_apply (i, l)
     rw [Prod.mk.injEq] at e
     rw [e.1, e.2] at h1
-    calc MPOTensor.timeReversal v (F.tensor g) i l * Q =
-        Q * (P * MPOTensor.timeReversal v (F.tensor g) i l * Q) := by
+    calc MPOTensor.timeReversal v (F.tensor g) (i, l) * Q =
+        Q * (P * MPOTensor.timeReversal v (F.tensor g) (i, l) * Q) := by
           rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hQP, Matrix.one_mul]
-      _ = Q * F.tensor g i l := by rw [h1]
+      _ = Q * F.tensor g (i, l) := by rw [h1]
   choose P Q hPQ hQP hint using key
   exact ⟨⟨P, Q, hPQ, hQP, hint⟩⟩
 

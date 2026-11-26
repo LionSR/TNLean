@@ -38,7 +38,7 @@ abbrev I := Fin 2
 /-- The ambient bond-four MPO.  Its physical letter `(i,j)` is the diagonal
 matrix unit indexed by the same pair. -/
 def baseMPO : MPOTensor 2 4 :=
-  fun i j ↦ Matrix.single (finProdFinEquiv (i, j)) (finProdFinEquiv (i, j)) 1
+  fun ij ↦ Matrix.single (finProdFinEquiv ij) (finProdFinEquiv ij) 1
 
 /-- The vertical tensor of the ambient model is exactly the retained singleton. -/
 theorem verticalTensor_baseMPO : verticalTensor baseMPO = singletonTensor := by
@@ -61,7 +61,7 @@ def constantPairWeight (i j i' j' : I) : ℂ :=
 /-- The base MPO is the cyclic-edge tensor for the equality weight. -/
 theorem baseMPO_eq_cyclicEdgeWeightTensor :
     baseMPO = cyclicEdgeWeightTensor constantPairWeight := by
-  funext i j a b
+  funext ⟨i, j⟩ a b
   obtain ⟨⟨ai, aj⟩, rfl⟩ :=
     (finProdFinEquiv : I × I ≃ Fin 4).surjective a
   obtain ⟨⟨bi, bj⟩, rfl⟩ :=

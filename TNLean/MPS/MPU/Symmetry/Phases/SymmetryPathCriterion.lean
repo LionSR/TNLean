@@ -70,8 +70,7 @@ variable {d D D₁ D₂ ℓ r : ℕ}
 /-- Physical relabelling depends continuously on the tensor. -/
 theorem continuous_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
     Continuous fun W : MPOTensor d D ↦ reindexPhysical e W :=
-  continuous_pi fun i ↦ continuous_pi fun j ↦
-    (continuous_apply (e j)).comp (continuous_apply (e i))
+  continuous_pi fun ⟨i, j⟩ ↦ continuous_apply (e i, e j)
 
 /-- Being an MPU and being invariant under a symmetry acting at positive lengths
 depend only on the periodic operators at positive lengths. -/
@@ -257,7 +256,7 @@ theorem strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path
   have hB : ∀ {D₀ : ℕ} (W : MPOTensor d D₀),
       reindexPhysical (twoSiteBlockEquiv d).symm (blockTwo W) = blockTensor W 2 := by
     intro D₀ W
-    funext i j
+    funext ⟨i, j⟩
     rw [blockTwo_eq_blockTensor_reindex]
     simp [reindexPhysical]
   have : NeZero d := h₁.neZero_phys

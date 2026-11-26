@@ -52,7 +52,7 @@ namespace CZXCompression
 tensor and the CZX tensor. -/
 theorem plusTensor_eq_directSum :
     plusTensor = MPOTensor.directSum (MPOTensor.idTensor 2) czxTensor := by
-  funext i j
+  funext ⟨i, j⟩
   ext a b
   fin_cases i <;> fin_cases j <;> fin_cases a <;> fin_cases b <;>
     simp [plusTensor, plusIntTensor, czxTensor, czxIntTensor, MPOTensor.directSum,

@@ -42,41 +42,41 @@ variable {d D D₁ D₂ : ℕ}
 /-- Place an operator tensor in the upper-left physical corner, with a zero
 last physical row and column. The virtual bond dimension is unchanged. -/
 def operatorPhysicalPadding (O : MPOTensor d D) : MPOTensor (d + 1) D :=
-  fun i j ↦ Fin.lastCases 0 (fun i ↦ Fin.lastCases 0 (fun j ↦ O i j) j) i
+  fun (i, j) ↦ Fin.lastCases 0 (fun i ↦ Fin.lastCases 0 (fun j ↦ O (i, j)) j) i
 
 /-- Place a state tensor in the last physical column, above a zero last row.
 The virtual bond dimension is unchanged. -/
 def statePhysicalPadding (A : MPSTensor d D) : MPOTensor (d + 1) D :=
-  fun i j ↦ Fin.lastCases 0 (fun i ↦ Fin.lastCases (A i) (fun _ ↦ 0) j) i
+  fun (i, j) ↦ Fin.lastCases 0 (fun i ↦ Fin.lastCases (A i) (fun _ ↦ 0) j) i
 
 /-- The retained physical corner is the original operator tensor. -/
 @[simp] theorem operatorPhysicalPadding_castSucc_castSucc (O : MPOTensor d D)
-    (i j : Fin d) : operatorPhysicalPadding O i.castSucc j.castSucc = O i j := by
+    (i j : Fin d) : operatorPhysicalPadding O (i.castSucc, j.castSucc) = O (i, j) := by
   simp [operatorPhysicalPadding]
 
 /-- The last physical row of a padded operator vanishes. -/
 @[simp] theorem operatorPhysicalPadding_last (O : MPOTensor d D) (j : Fin (d + 1)) :
-    operatorPhysicalPadding O (Fin.last d) j = 0 := by
+    operatorPhysicalPadding O (Fin.last d, j) = 0 := by
   simp [operatorPhysicalPadding]
 
 /-- The last physical column of a padded operator vanishes. -/
 @[simp] theorem operatorPhysicalPadding_last_right (O : MPOTensor d D)
-    (i : Fin (d + 1)) : operatorPhysicalPadding O i (Fin.last d) = 0 := by
+    (i : Fin (d + 1)) : operatorPhysicalPadding O (i, Fin.last d) = 0 := by
   cases i using Fin.lastCases <;> simp [operatorPhysicalPadding]
 
 /-- The retained part of the last physical column is the original state tensor. -/
 @[simp] theorem statePhysicalPadding_castSucc_last (A : MPSTensor d D) (i : Fin d) :
-    statePhysicalPadding A i.castSucc (Fin.last d) = A i := by
+    statePhysicalPadding A (i.castSucc, Fin.last d) = A i := by
   simp [statePhysicalPadding]
 
 /-- Every original physical column of a padded state vanishes. -/
 @[simp] theorem statePhysicalPadding_castSucc_right (A : MPSTensor d D)
-    (i : Fin (d + 1)) (j : Fin d) : statePhysicalPadding A i j.castSucc = 0 := by
+    (i : Fin (d + 1)) (j : Fin d) : statePhysicalPadding A (i, j.castSucc) = 0 := by
   cases i using Fin.lastCases <;> simp [statePhysicalPadding]
 
 /-- The last physical row of a padded state vanishes. -/
 @[simp] theorem statePhysicalPadding_last (A : MPSTensor d D) (j : Fin (d + 1)) :
-    statePhysicalPadding A (Fin.last d) j = 0 := by
+    statePhysicalPadding A (Fin.last d, j) = 0 := by
   simp [statePhysicalPadding]
 
 /-- Upper-left physical padding preserves operator multiplication, including
@@ -84,7 +84,7 @@ the original flattening of the product virtual bond. -/
 theorem mulTensor_operatorPhysicalPadding (O : MPOTensor d D₁) (P : MPOTensor d D₂) :
     mulTensor (operatorPhysicalPadding O) (operatorPhysicalPadding P) =
       operatorPhysicalPadding (mulTensor O P) := by
-  funext i k
+  funext ⟨i, k⟩
   cases i using Fin.lastCases <;> cases k using Fin.lastCases <;>
     simp [mulTensor, Fin.sum_univ_castSucc]
 
@@ -94,7 +94,7 @@ theorem mulTensor_operatorPhysicalPadding_statePhysicalPadding
     (O : MPOTensor d D₁) (A : MPSTensor d D₂) :
     mulTensor (operatorPhysicalPadding O) (statePhysicalPadding A) =
       statePhysicalPadding (actTensor O A) := by
-  funext i k
+  funext ⟨i, k⟩
   cases i using Fin.lastCases <;> cases k using Fin.lastCases <;>
     simp [mulTensor, actTensor, Fin.sum_univ_castSucc]
 
@@ -162,8 +162,8 @@ theorem operatorPhysicalPadding {O : MPOTensor d D}
   retract := h.retract
   orthogonal := h.orthogonal
   letter q := by
-    change MPOTensor.operatorPhysicalPadding O q.divNat q.modNat =
-      ∑ c : ι, W c * MPOTensor.operatorPhysicalPadding (T c) q.divNat q.modNat * V c
+    change MPOTensor.operatorPhysicalPadding O (q.divNat, q.modNat) =
+      ∑ c : ι, W c * MPOTensor.operatorPhysicalPadding (T c) (q.divNat, q.modNat) * V c
     generalize q.divNat = i, q.modNat = j
     cases i using Fin.lastCases with
     | last => simp
@@ -183,8 +183,8 @@ theorem statePhysicalPadding {B : MPSTensor d D}
   retract := h.retract
   orthogonal := h.orthogonal
   letter q := by
-    change MPOTensor.statePhysicalPadding B q.divNat q.modNat =
-      ∑ c : ι, W c * MPOTensor.statePhysicalPadding (A c) q.divNat q.modNat * V c
+    change MPOTensor.statePhysicalPadding B (q.divNat, q.modNat) =
+      ∑ c : ι, W c * MPOTensor.statePhysicalPadding (A c) (q.divNat, q.modNat) * V c
     generalize q.divNat = i, q.modNat = j
     cases i using Fin.lastCases with
     | last => simp

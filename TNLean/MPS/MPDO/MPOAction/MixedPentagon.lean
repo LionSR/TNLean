@@ -96,7 +96,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
       (Fin p × Fin p) ℂ)
   (hK : ∀ (c d : Fin r ⊕ Fin s)
     (x y : Fin (triangularBondDim χ D c)) (x' y' : Fin (triangularBondDim χ D d)),
-    (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+    (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
       if he : c = d then
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)
@@ -173,7 +173,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
       (Fin p × Fin p) ℂ)
   (hK : ∀ (c d : Fin r ⊕ Fin s)
     (x y : Fin (triangularBondDim χ D c)) (x' y' : Fin (triangularBondDim χ D d)),
-    (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+    (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
       if he : c = d then
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)

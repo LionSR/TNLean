@@ -76,7 +76,7 @@ theorem IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
   intro P hP hInv v
   have hLeft : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P := by
-    funext i j
+    funext ⟨i, j⟩
     ext a b
     let w := finProdFinEquiv (a, b)
     have hw : verticalTensor (M.ketLeftMul P) w =
@@ -114,7 +114,7 @@ theorem hasInvariantProjectorClosure_verticalTensor
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
   intro P hP hInv v
   have hLeft : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P := by
-    funext i j
+    funext ⟨i, j⟩
     ext a b
     let w := finProdFinEquiv (a, b)
     have hw : verticalTensor (M.ketLeftMul P) w =
@@ -133,7 +133,7 @@ theorem hasInvariantProjectorClosure_verticalTensor
       rw [← insertedTensor_braRightAction_toMPSTensor,
         ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
       exact hInserted
-    funext i j
+    funext ⟨i, j⟩
     have hij := congrFun hTensor (finProdFinEquiv (i, j))
     simpa [toMPSTensor] using hij
   rw [← verticalTensor_braRightMul, hRight, verticalTensor_braRightMul,

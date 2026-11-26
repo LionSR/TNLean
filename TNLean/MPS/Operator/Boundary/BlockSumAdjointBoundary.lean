@@ -120,8 +120,8 @@ theorem IsPeriodicAdjointFamily.exists_blockSumAdjointBoundary
     ∃ (V : ∀ a, Matrix (Fin (dim (dual a))) (Fin (dim a)) ℂ)
       (W : ∀ a, Matrix (Fin (dim a)) (Fin (dim (dual a))) ℂ),
       (∀ a, V a * W a = 1) ∧ (∀ a, W a * V a = 1) ∧
-      (∀ a i j, physicalAdjointTensor (A a) i j =
-        W a * A (dual a) i j * V a) ∧
+      (∀ a i j, physicalAdjointTensor (A a) (i, j) =
+        W a * A (dual a) (i, j) * V a) ∧
       ∀ (X : Matrix (Fin (∑ a, dim a)) (Fin (∑ a, dim a)) ℂ) (N : ℕ),
         (mpoWithBoundary (blockSum A) X N)ᴴ =
           mpoWithBoundary (blockSum A) (blockSumAdjointBoundary dual V W X) N := by

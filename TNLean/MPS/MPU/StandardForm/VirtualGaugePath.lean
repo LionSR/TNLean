@@ -47,11 +47,11 @@ theorem IsMPU.joinedIn_virtualSandwich {W : MPOTensor d D} (hW : IsMPU W)
     simp_rw [Matrix.inv_def, Ring.inverse_eq_inv']
     exact ((γ.continuous.matrix_det).inv₀ hdet).smul γ.continuous.matrix_adjugate
   have hcont : Continuous fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹ := by
-    refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
+    refine continuous_pi fun ⟨i, j⟩ ↦ ?_
     simp only [virtualSandwich_apply]
     exact (γ.continuous.matrix_mul continuous_const).matrix_mul hinv
   refine ⟨⟨⟨fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹, hcont⟩, ?_, ?_⟩, fun t ↦ ?_⟩
-  · funext i j
+  · funext ⟨i, j⟩
     simp
   · simp
   · exact hW.virtualSandwich _ _ (Matrix.nonsing_inv_mul _ (hγ t))
@@ -59,9 +59,8 @@ theorem IsMPU.joinedIn_virtualSandwich {W : MPOTensor d D} (hW : IsMPU W)
 /-- Adjoining unused bond directions depends continuously on the tensor. -/
 theorem continuous_padBond (D' : ℕ) (h : D ≤ D') :
     Continuous fun W : MPOTensor d D ↦ padBond W D' h := by
-  refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
-  exact (continuous_const.matrix_mul
-    ((continuous_apply j).comp (continuous_apply i))).matrix_mul continuous_const
+  refine continuous_pi fun ij ↦ ?_
+  exact (continuous_const.matrix_mul (continuous_apply ij)).matrix_mul continuous_const
 
 /-- **Adjoining unused bond directions carries paths of MPU tensors to paths of
 MPU tensors.**
@@ -83,8 +82,7 @@ theorem JoinedIn.reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) {W V : MPOTen
       (MPOTensor.reindexPhysical e W) (MPOTensor.reindexPhysical e V) := by
   obtain ⟨γ, hγ⟩ := hWV
   have hc : Continuous fun X : MPOTensor d D ↦ MPOTensor.reindexPhysical e X :=
-    continuous_pi fun i ↦ continuous_pi fun j ↦
-      (continuous_apply (e j)).comp (continuous_apply (e i))
+    continuous_pi fun ij ↦ continuous_apply (e ij.1, e ij.2)
   exact ⟨γ.map hc, fun t ↦ (hγ t).reindexPhysical e⟩
 
 /-- Adjoining unused bond directions in two steps is adjoining them at once. -/

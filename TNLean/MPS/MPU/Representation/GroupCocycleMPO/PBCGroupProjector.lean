@@ -170,7 +170,7 @@ This is the component contraction of the two periodic tensors at
 arXiv:2203.12563v3, lines 2245–2259. -/
 theorem mulTensor_tensor_apply (ω : ScalarThreeCochain G) (g h : G) (i j : Fin n)
     (p q : Fin n × Fin n) :
-    mulTensor (tensor e ω g) (tensor e ω h) i j
+    mulTensor (tensor e ω g) (tensor e ω h) (i, j)
         (finProdFinEquiv p) (finProdFinEquiv q) =
       (if i = siteShift e g (siteShift e h j) ∧ q.1 = siteShift e h j then
         (ω g (e.symm (siteShift e h j))
@@ -190,8 +190,8 @@ variable (e) in
 
 Source: the periodic support statement at arXiv:2203.12563v3, line 2287. -/
 theorem mulTensor_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G) (i j : Fin n) :
-    mulTensor (tensor e ω g) (tensor e ω h) i j * fusionProjector e h =
-      mulTensor (tensor e ω g) (tensor e ω h) i j := by
+    mulTensor (tensor e ω g) (tensor e ω h) (i, j) * fusionProjector e h =
+      mulTensor (tensor e ω g) (tensor e ω h) (i, j) := by
   ext p q
   obtain ⟨p, rfl⟩ := finProdFinEquiv.surjective p
   obtain ⟨q, rfl⟩ := finProdFinEquiv.surjective q
@@ -210,8 +210,8 @@ bond: `P_{g,h} (T̂_g T̂_h)^{ij} = F^>_{g,h} T̂_{gh}^{ij} F^<_{g,h}`.
 Source: arXiv:2203.12563v3, lines 2243–2263. -/
 theorem fusionProjector_mul_mulTensor {ω : ScalarThreeCochain G}
     (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (i j : Fin n) :
-    fusionProjector e h * mulTensor (tensor e ω g) (tensor e ω h) i j =
-      fusionW e ω g h * tensor e ω (g * h) i j * fusionV e ω g h := by
+    fusionProjector e h * mulTensor (tensor e ω g) (tensor e ω h) (i, j) =
+      fusionW e ω g h * tensor e ω (g * h) (i, j) * fusionV e ω g h := by
   rw [← fusionW_mul_fusionV e ω g h, Matrix.mul_assoc,
     fusionV_mul_mulTensor e hω, ← Matrix.mul_assoc]
 
@@ -220,8 +220,8 @@ theorem fusionProjector_mul_mulTensor {ω : ScalarThreeCochain G}
 Source: arXiv:2203.12563v3, lines 2243–2263, followed by contraction with `F^>`. -/
 theorem fusionProjector_mul_mulTensor_mul_fusionW {ω : ScalarThreeCochain G}
     (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (i j : Fin n) :
-    fusionProjector e h * mulTensor (tensor e ω g) (tensor e ω h) i j * fusionW e ω g h =
-      fusionW e ω g h * tensor e ω (g * h) i j := by
+    fusionProjector e h * mulTensor (tensor e ω g) (tensor e ω h) (i, j) * fusionW e ω g h =
+      fusionW e ω g h * tensor e ω (g * h) (i, j) := by
   rw [fusionProjector_mul_mulTensor hω, Matrix.mul_assoc, fusionV_mul_fusionW, Matrix.mul_one]
 
 /-- The exact factorization extends to every word, with the empty word giving `P = F^>F^<`.
@@ -283,8 +283,8 @@ component of `F^> T̂_{gh}`.
 Source: arXiv:2203.12563v3, line 2243 (failure of the right zipper). -/
 theorem exists_mulTensor_mul_fusionW_ne [Nontrivial G] (ω : ScalarThreeCochain G)
     (g h : G) :
-    ∃ i j, mulTensor (tensor e ω g) (tensor e ω h) i j * fusionW e ω g h ≠
-      fusionW e ω g h * tensor e ω (g * h) i j := by
+    ∃ i j, mulTensor (tensor e ω g) (tensor e ω h) (i, j) * fusionW e ω g h ≠
+      fusionW e ω g h * tensor e ω (g * h) (i, j) := by
   obtain ⟨a, b, hab⟩ := exists_pair_ne G
   have hs : e (h * a) ≠ siteShift e h (e b) := by
     intro hh
@@ -303,8 +303,8 @@ theorem exists_mulTensor_mul_fusionW_ne [Nontrivial G] (ω : ScalarThreeCochain 
 Source: arXiv:2203.12563v3, line 2243 (failure of equation `fusiontensorG`). -/
 theorem exists_mulTensor_ne_fusionW_mul_tensor_mul_fusionV [Nontrivial G]
     (ω : ScalarThreeCochain G) (g h : G) :
-    ∃ i j, mulTensor (tensor e ω g) (tensor e ω h) i j ≠
-      fusionW e ω g h * tensor e ω (g * h) i j * fusionV e ω g h := by
+    ∃ i j, mulTensor (tensor e ω g) (tensor e ω h) (i, j) ≠
+      fusionW e ω g h * tensor e ω (g * h) (i, j) * fusionV e ω g h := by
   obtain ⟨i, j, hij⟩ := exists_mulTensor_mul_fusionW_ne (e := e) ω g h
   refine ⟨i, j, fun heq ↦ hij ?_⟩
   rw [heq, Matrix.mul_assoc, fusionV_mul_fusionW, Matrix.mul_one]

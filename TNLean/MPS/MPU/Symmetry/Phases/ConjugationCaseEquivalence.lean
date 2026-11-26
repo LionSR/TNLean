@@ -187,8 +187,8 @@ private theorem sign_iff_case {D : ℕ} {𝒰 : MPOTensor d D} (h : IsMPUCanonic
     (hc : IsInvariantUnderSymmetry (conjugationSymmetry d) 𝒰)
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ} {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo 𝒰) u v) (G : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hg : ∀ i j, (𝒰 i j).map (starRingEnd ℂ) =
-      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * 𝒰 i j * G)) :
+    (hg : ∀ i j, (𝒰 (i, j)).map (starRingEnd ℂ) =
+      ζ • ((G : Matrix (Fin D) (Fin D) ℂ)ᴴ * 𝒰 (i, j) * G)) :
     (IsConjugationCaseI u v ↔
         (G : Matrix (Fin D) (Fin D) ℂ) * (G : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1) ∧
       (IsConjugationCaseII u v ↔
@@ -234,11 +234,11 @@ theorem equivalentUnderSymmetry_conjugation_iff_mps_sign
     (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
     (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
     (G₁ : Matrix.unitaryGroup (Fin D₁) ℂ) (ζ₁ : ℂ)
-    (hg₁ : ∀ i j, (𝒰₁ i j).map (starRingEnd ℂ) =
-      ζ₁ • ((G₁ : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ * 𝒰₁ i j * G₁))
+    (hg₁ : ∀ i j, (𝒰₁ (i, j)).map (starRingEnd ℂ) =
+      ζ₁ • ((G₁ : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ * 𝒰₁ (i, j) * G₁))
     (G₂ : Matrix.unitaryGroup (Fin D₂) ℂ) (ζ₂ : ℂ)
-    (hg₂ : ∀ i j, (𝒰₂ i j).map (starRingEnd ℂ) =
-      ζ₂ • ((G₂ : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ * 𝒰₂ i j * G₂)) :
+    (hg₂ : ∀ i j, (𝒰₂ (i, j)).map (starRingEnd ℂ) =
+      ζ₂ • ((G₂ : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ * 𝒰₂ (i, j) * G₂)) :
     EquivalentUnderSymmetry conjugationSymmetryFamily 𝒰₁ 𝒰₂ ↔
       ((G₁ : Matrix (Fin D₁) (Fin D₁) ℂ) * (G₁ : Matrix (Fin D₁) (Fin D₁) ℂ).map
           (starRingEnd ℂ) = 1 ↔

@@ -27,8 +27,8 @@ variable {d r : ℕ} {dim : Fin r → ℕ}
 dependent virtual direct sum flattened to a single finite index. -/
 def blockSum (O : (a : Fin r) → MPOTensor d (dim a)) :
     MPOTensor d (∑ a : Fin r, dim a) :=
-  fun i j ↦ Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
-    (Matrix.blockDiagonal' fun a ↦ O a i j)
+  fun ij ↦ Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
+    (Matrix.blockDiagonal' fun a ↦ O a ij)
 
 /-- The doubled-index MPS tensor of an MPO direct sum is the unweighted
 assembly of its doubled-index component tensors. -/
@@ -67,7 +67,7 @@ theorem blockBoundarySelector_mem_commutingBoundaryAlgebra
   let e : ((b : Fin r) × Fin (dim b)) ≃ Fin (∑ b : Fin r, dim b) :=
     finSigmaFinEquiv
   let E := Matrix.sigmaBlockInclusion (fun b ↦ Fin (dim b)) a
-  let B := fun b ↦ O b i j
+  let B := fun b ↦ O b (i, j)
   change Matrix.reindexLinearEquiv ℂ ℂ e e (E * Eᴴ) *
       Matrix.reindexLinearEquiv ℂ ℂ e e (Matrix.blockDiagonal' B) =
     Matrix.reindexLinearEquiv ℂ ℂ e e (Matrix.blockDiagonal' B) *

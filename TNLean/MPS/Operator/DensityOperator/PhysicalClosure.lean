@@ -88,7 +88,7 @@ open, giving `(physClose1 M X) i j = tr(M^{ij} X)` (figure MPDO_XM of
 arXiv:1606.00608). -/
 noncomputable def physClose1 (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ where
-  toFun X := Matrix.of fun i j => Matrix.trace (M i j * X)
+  toFun X := Matrix.of fun i j => Matrix.trace (M (i, j) * X)
   map_add' X Y := by
     ext i j
     simp [Matrix.mul_add, Matrix.trace_add]
@@ -97,7 +97,7 @@ noncomputable def physClose1 (M : MPOTensor d D) :
     simp [Matrix.trace_smul]
 
 @[simp] lemma physClose1_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
-    (i j : Fin d) : physClose1 M X i j = Matrix.trace (M i j * X) := rfl
+    (i j : Fin d) : physClose1 M X i j = Matrix.trace (M (i, j) * X) := rfl
 
 /-- The trace of the one-site physical closure is the trace pairing with the
 physical-trace transfer.
@@ -126,7 +126,7 @@ legs open, giving `(physClose2 M X) (i₁,i₂) (j₁,j₂) = tr(M^{i₁j₁} M^
 (figure MPDO_XMM of arXiv:1606.00608). -/
 noncomputable def physClose2 (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ where
-  toFun X := Matrix.of fun i j => Matrix.trace (M i.1 j.1 * M i.2 j.2 * X)
+  toFun X := Matrix.of fun i j => Matrix.trace (M (i.1, j.1) * M (i.2, j.2) * X)
   map_add' X Y := by
     ext i j
     simp [Matrix.mul_add, Matrix.trace_add]
@@ -136,7 +136,7 @@ noncomputable def physClose2 (M : MPOTensor d D) :
 
 @[simp] lemma physClose2_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
     (i j : Fin d × Fin d) :
-    physClose2 M X i j = Matrix.trace (M i.1 j.1 * M i.2 j.2 * X) := rfl
+    physClose2 M X i j = Matrix.trace (M (i.1, j.1) * M (i.2, j.2) * X) := rfl
 
 /-- The trace of the two-site physical closure is the trace pairing with the
 square of the physical-trace transfer.
@@ -145,7 +145,7 @@ Source: arXiv:1606.00608, Definition 4.1, line 657, and lines 1333--1340. -/
 theorem trace_physClose2_eq (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (physClose2 M X) =
       Matrix.trace (physTraceTransfer M * physTraceTransfer M * X) := by
-  change (∑ p : Fin d × Fin d, Matrix.trace (M p.1 p.1 * M p.2 p.2 * X)) = _
+  change (∑ p : Fin d × Fin d, Matrix.trace (M (p.1, p.1) * M (p.2, p.2) * X)) = _
   rw [Fintype.sum_prod_type]
   simp only [physTraceTransfer, Finset.sum_mul, Matrix.mul_sum, Matrix.trace_sum]
 
@@ -177,7 +177,7 @@ noncomputable def physClose3 (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       Matrix (Fin d × (Fin d × Fin d)) (Fin d × (Fin d × Fin d)) ℂ where
   toFun X := Matrix.of fun i j =>
-    Matrix.trace (M i.1 j.1 * M i.2.1 j.2.1 * M i.2.2 j.2.2 * X)
+    Matrix.trace (M (i.1, j.1) * M (i.2.1, j.2.1) * M (i.2.2, j.2.2) * X)
   map_add' X Y := by
     ext i j
     simp [Matrix.mul_add, Matrix.trace_add]
@@ -192,7 +192,7 @@ Proposition C.7, lines 1510--1516. -/
     (X : Matrix (Fin D) (Fin D) ℂ)
     (i j : Fin d × (Fin d × Fin d)) :
     physClose3 M X i j =
-      Matrix.trace (M i.1 j.1 * M i.2.1 j.2.1 * M i.2.2 j.2.2 * X) :=
+      Matrix.trace (M (i.1, j.1) * M (i.2.1, j.2.1) * M (i.2.2, j.2.2) * X) :=
   rfl
 
 /-- Under the canonical right-associated identification of three-site

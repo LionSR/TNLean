@@ -53,11 +53,11 @@ $\widehat U^{ij}=A U^{ij}B$.
 Source: arXiv:1703.09188, Proposition IV.5, lines 786--804. -/
 def virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin D) ℂ) : MPOTensor d D :=
-  fun i j ↦ A * U i j * B
+  fun ij ↦ A * U ij * B
 
 @[simp] theorem virtualSandwich_apply (A : Matrix (Fin D) (Fin D) ℂ)
     (U : MPOTensor d D) (B : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d) :
-    virtualSandwich A U B i j = A * U i j * B :=
+    virtualSandwich A U B (i, j) = A * U (i, j) * B :=
   rfl
 
 /-- Continuous families of virtual matrices and MPO tensors give a continuous
@@ -69,9 +69,8 @@ theorem continuous_virtualSandwich {X : Type*} [TopologicalSpace X]
     {B : X → Matrix (Fin D) (Fin D) ℂ} (hA : Continuous A)
     (hU : Continuous U) (hB : Continuous B) :
     Continuous fun x ↦ virtualSandwich (A x) (U x) (B x) := by
-  refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
-  have hUij : Continuous fun x ↦ U x i j :=
-    (continuous_apply j).comp ((continuous_apply i).comp hU)
+  refine continuous_pi fun ij ↦ ?_
+  have hUij : Continuous fun x ↦ U x ij := (continuous_apply ij).comp hU
   simpa [virtualSandwich] using (hA.matrix_mul hUij).matrix_mul hB
 
 /-- The transfer map of a virtual sandwich is obtained by compressing its input by the
@@ -100,22 +99,22 @@ theorem sourceCutM₁_virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ)
         (A.transpose ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
   ext ⟨i, β⟩ ⟨α, j⟩
   have h :
-      (∑ δ, (∑ γ, A α γ * U i j γ δ) * B δ β) =
-        ∑ γ, (∑ δ, B δ β * U i j γ δ) * A α γ := by
+      (∑ δ, (∑ γ, A α γ * U (i, j) γ δ) * B δ β) =
+        ∑ γ, (∑ δ, B δ β * U (i, j) γ δ) * A α γ := by
     calc
-      _ = ∑ δ, ∑ γ, (A α γ * U i j γ δ) * B δ β := by
+      _ = ∑ δ, ∑ γ, (A α γ * U (i, j) γ δ) * B δ β := by
         apply Finset.sum_congr rfl
         intro δ _
-        exact Finset.sum_mul Finset.univ (fun γ ↦ A α γ * U i j γ δ) (B δ β)
-      _ = ∑ γ, ∑ δ, (A α γ * U i j γ δ) * B δ β :=
+        exact Finset.sum_mul Finset.univ (fun γ ↦ A α γ * U (i, j) γ δ) (B δ β)
+      _ = ∑ γ, ∑ δ, (A α γ * U (i, j) γ δ) * B δ β :=
         Finset.sum_comm (s := Finset.univ) (t := Finset.univ)
-      _ = ∑ γ, ∑ δ, (B δ β * U i j γ δ) * A α γ := by
+      _ = ∑ γ, ∑ δ, (B δ β * U (i, j) γ δ) * A α γ := by
         refine Finset.sum_congr₂ fun γ _ δ _ ↦ ?_
         ring
       _ = _ := by
         apply Finset.sum_congr rfl
         intro γ _
-        exact (Finset.sum_mul Finset.univ (fun δ ↦ B δ β * U i j γ δ) (A α γ)).symm
+        exact (Finset.sum_mul Finset.univ (fun δ ↦ B δ β * U (i, j) γ δ) (A α γ)).symm
   simpa [virtualSandwich, sourceCutM₁, Matrix.mul_apply, Matrix.one_apply,
     Fintype.sum_prod_type] using h
 
@@ -186,7 +185,7 @@ lines 706--724. -/
 theorem evalWord_sandwich (A : Matrix (Fin D') (Fin D) ℂ) (U : MPOTensor d D)
     (B : Matrix (Fin D) (Fin D') ℂ) (hBA : B * A = 1) :
     ∀ is js : List (Fin d), is ≠ [] →
-      evalWord (fun i j ↦ A * U i j * B : MPOTensor d D') is js = A * evalWord U is js * B
+      evalWord (fun ij ↦ A * U ij * B : MPOTensor d D') is js = A * evalWord U is js * B
   | [], _, h => absurd rfl h
   | _ :: _, [], _ => by simp [evalWord]
   | [_], _ :: js, _ => by cases js <;> simp [evalWord]

@@ -72,7 +72,7 @@ theorem StrictlyEquivalentUnderSymmetry.reindexPhysical_conjugation {d' D₁ D�
   obtain ⟨-, -, D', ha, hb, hJ⟩ := h
   have hrefl : ∀ {n E : ℕ} (W : MPOTensor n E),
       reindexPhysical (finCongr (rfl : n = n)).symm W = W := fun W ↦ by
-    funext i j
+    funext ⟨i, j⟩
     simp [reindexPhysical]
   rw [hrefl] at hJ
   obtain ⟨γ, hγ⟩ := hJ
@@ -94,7 +94,7 @@ private noncomputable def fourSiteEquiv (d : ℕ) :
 
 theorem reindexPhysical_symm_reindexPhysical {n n' E : ℕ} (σ : Fin n ≃ Fin n')
     (W : MPOTensor n' E) : reindexPhysical σ.symm (reindexPhysical σ W) = W := by
-  funext i j
+  funext ⟨i, j⟩
   simp [reindexPhysical]
 
 theorem blockTwo_eq_reindexPhysical {n E : ℕ} (W : MPOTensor n E) :
@@ -110,8 +110,8 @@ private theorem blockTensor_blockTwo_two {D : ℕ} (U : MPOTensor d D) :
       blockTwo (reindexPhysical σ W) = reindexPhysical
         (finProdFinEquiv.symm.trans ((Equiv.prodCongr σ σ).trans finProdFinEquiv))
         (blockTwo W) := fun σ W ↦ by
-    ext I J
-    simp [blockTwo, reindexPhysical]
+    funext ⟨I, J⟩
+    simp [blockTwo_apply, reindexPhysical]
   have h4 : blockTensor (blockTensor U 2) 2 =
       reindexPhysical (MPSTensor.directIteratedBlockEquiv d 2 2).symm (blockTensor U (2 * 2)) := by
     rw [← reindexPhysical_blockTensor_blockTensor U 2 2, reindexPhysical_symm_reindexPhysical]
@@ -145,7 +145,7 @@ theorem det_doubledU_submatrix_of_real {u : Matrix (Fin ℓ × Fin r) (Fin d × 
 /-- An identity ancilla of dimension one is a relabelling of the physical index. -/
 theorem tensorPhysicalId_one {D : ℕ} (U : MPOTensor d D) :
     tensorPhysicalId U 1 = reindexPhysical (finCongr (Nat.mul_one d)) U := by
-  funext i j
+  funext ⟨i, j⟩
   have hi : i.divNat = finCongr (Nat.mul_one d) i := Fin.ext (by simp [Fin.divNat])
   have hj : j.divNat = finCongr (Nat.mul_one d) j := Fin.ext (by simp [Fin.divNat])
   simp [tensorPhysicalId, reindexPhysical, hi, hj, Subsingleton.elim i.modNat j.modNat]

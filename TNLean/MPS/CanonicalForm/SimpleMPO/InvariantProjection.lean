@@ -88,8 +88,8 @@ theorem insertedTensor_ketLeftAction_toMPSTensor
   funext p
   rw [MPSTensor.insertedTensor]
   change (∑ q : Fin (d * d),
-      MPSTensor.ketLeftAction Q p q • M q.divNat q.modNat) =
-    ∑ k : Fin d, Q p.divNat k • M k p.modNat
+      MPSTensor.ketLeftAction Q p q • M (q.divNat, q.modNat)) =
+    ∑ k : Fin d, Q p.divNat k • M (k, p.modNat)
   rw [← finProdFinEquiv.sum_comp]
   rw [Fintype.sum_prod_type]
   simp only [MPSTensor.ketLeftAction, MPSTensor.finProdFinEquiv_divNat,
@@ -113,8 +113,8 @@ theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
   funext p
   rw [MPSTensor.insertedTensor]
   change (∑ q : Fin (d * d),
-      MPSTensor.ketLeftBraRightAction Q p q • M q.divNat q.modNat) =
-    ∑ j : Fin d, Q j p.modNat • (∑ k : Fin d, Q p.divNat k • M k j)
+      MPSTensor.ketLeftBraRightAction Q p q • M (q.divNat, q.modNat)) =
+    ∑ j : Fin d, Q j p.modNat • (∑ k : Fin d, Q p.divNat k • M (k, j))
   rw [← finProdFinEquiv.sum_comp]
   rw [Fintype.sum_prod_type]
   simp only [MPSTensor.ketLeftBraRightAction,
@@ -141,26 +141,26 @@ theorem firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant
     ⟨σ 0, Fin.tail σ, (Fin.cons_self_tail σ).symm⟩
   obtain ⟨b, τ', rfl⟩ : ∃ b τ'', τ = Fin.cons b τ'' :=
     ⟨τ 0, Fin.tail τ, (Fin.cons_self_tail τ).symm⟩
-  have hPM' := congrFun (congrFun hPM a) b
+  have hPM' := congrFun hPM (a, b)
   simp only [ketLeftMul, braRightMul] at hPM'
   rw [mul_firstSiteMatrix_apply]
   simp only [firstSiteMatrix_mul_apply]
   simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ, mpo_cons_cons]
   calc
     ∑ i : Fin d, P a i *
-        Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ'))
-        = Matrix.trace ((∑ i : Fin d, P a i • M i b) *
+        Matrix.trace (M (i, b) * evalWord M (List.ofFn σ') (List.ofFn τ'))
+        = Matrix.trace ((∑ i : Fin d, P a i • M (i, b)) *
             evalWord M (List.ofFn σ') (List.ofFn τ')) :=
           sum_mul_trace_eq_trace_sum_smul _ _ _
-    _ = Matrix.trace ((∑ j : Fin d, P j b • ∑ i : Fin d, P a i • M i j) *
+    _ = Matrix.trace ((∑ j : Fin d, P j b • ∑ i : Fin d, P a i • M (i, j)) *
             evalWord M (List.ofFn σ') (List.ofFn τ')) := by rw [hPM']
     _ = ∑ j : Fin d, P j b *
-          Matrix.trace ((∑ i : Fin d, P a i • M i j) *
+          Matrix.trace ((∑ i : Fin d, P a i • M (i, j)) *
             evalWord M (List.ofFn σ') (List.ofFn τ')) :=
           (sum_mul_trace_eq_trace_sum_smul _ _ _).symm
     _ = ∑ j : Fin d,
           (∑ i : Fin d, P a i *
-            Matrix.trace (M i j * evalWord M (List.ofFn σ') (List.ofFn τ'))) *
+            Matrix.trace (M (i, j) * evalWord M (List.ofFn σ') (List.ofFn τ'))) *
             P j b := by
           refine Finset.sum_congr rfl fun j _ => ?_
           rw [sum_mul_trace_eq_trace_sum_smul, mul_comm]
@@ -297,7 +297,7 @@ theorem exists_not_commute_of_displaced_of_insertedTensor_eq
     rw [← insertedTensor_ketLeftAction_toMPSTensor,
       ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
     exact hInsert hAct
-  funext i j
+  funext ⟨i, j⟩
   have hij := congrFun hTensor (finProdFinEquiv (i, j))
   simpa [toMPSTensor] using hij
 
@@ -376,13 +376,14 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
       _ = firstSiteMatrix Q 1 * (firstSiteMatrix Q 1 * mpo M 2) := by rw [Matrix.mul_assoc]
       _ = firstSiteMatrix Q 1 * (mpo M 2 * firstSiteMatrix Q 1) := by rw [hComm.eq]
       _ = firstSiteMatrix Q 1 * mpo M 2 * firstSiteMatrix Q 1 := by rw [Matrix.mul_assoc]
-  funext a b
-  show (M.ketLeftMul Q) a b = ((M.ketLeftMul Q).braRightMul Q) a b
+  funext ⟨a, b⟩
+  change (M.ketLeftMul Q) (a, b) = ((M.ketLeftMul Q).braRightMul Q) (a, b)
   apply sub_eq_zero.mp
   apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hInj
   intro p
   change Matrix.trace
-    (((M.ketLeftMul Q) a b - ((M.ketLeftMul Q).braRightMul Q) a b) * M p.divNat p.modNat) = 0
+    (((M.ketLeftMul Q) (a, b) - ((M.ketLeftMul Q).braRightMul Q) (a, b)) *
+        M (p.divNat, p.modNat)) = 0
   set c := p.divNat
   set c' := p.modNat
   have h2 := Matrix.ext_iff.mpr hOneSided
@@ -393,18 +394,19 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
   simp only [mpo_cons_cons, List.ofFn_succ, List.ofFn_zero, evalWord_cons,
     evalWord_nil, mul_one] at h2
   rw [Matrix.sub_mul, Matrix.trace_sub, sub_eq_zero]
-  calc Matrix.trace ((M.ketLeftMul Q) a b * M c c')
-      = ∑ i : Fin d, Q a i * Matrix.trace (M i b * M c c') :=
-        (sum_mul_trace_eq_trace_sum_smul (fun i => Q a i) (fun i => M i b) (M c c')).symm
-    _ = ∑ j : Fin d, (∑ i : Fin d, Q a i * Matrix.trace (M i j * M c c')) * Q j b := h2
-    _ = ∑ j : Fin d, Q j b * ∑ i : Fin d, Q a i * Matrix.trace (M i j * M c c') :=
+  calc Matrix.trace ((M.ketLeftMul Q) (a, b) * M (c, c'))
+      = ∑ i : Fin d, Q a i * Matrix.trace (M (i, b) * M (c, c')) :=
+        (sum_mul_trace_eq_trace_sum_smul (fun i => Q a i) (fun i => M (i, b)) (M (c, c'))).symm
+    _ = ∑ j : Fin d, (∑ i : Fin d, Q a i * Matrix.trace (M (i, j) * M (c, c'))) * Q j b := h2
+    _ = ∑ j : Fin d, Q j b * ∑ i : Fin d, Q a i * Matrix.trace (M (i, j) * M (c, c')) :=
         Finset.sum_congr rfl fun j _ => mul_comm _ _
-    _ = ∑ j : Fin d, Q j b * Matrix.trace ((M.ketLeftMul Q) a j * M c c') := by
+    _ = ∑ j : Fin d, Q j b * Matrix.trace ((M.ketLeftMul Q) (a, j) * M (c, c')) := by
         refine Finset.sum_congr rfl fun j _ => ?_
         congr 1
-        exact sum_mul_trace_eq_trace_sum_smul (fun i => Q a i) (fun i => M i j) (M c c')
-    _ = Matrix.trace (((M.ketLeftMul Q).braRightMul Q) a b * M c c') :=
-        sum_mul_trace_eq_trace_sum_smul (fun j => Q j b) (fun j => (M.ketLeftMul Q) a j) (M c c')
+        exact sum_mul_trace_eq_trace_sum_smul (fun i => Q a i) (fun i => M (i, j)) (M (c, c'))
+    _ = Matrix.trace (((M.ketLeftMul Q).braRightMul Q) (a, b) * M (c, c')) :=
+        sum_mul_trace_eq_trace_sum_smul (fun j => Q j b) (fun j => (M.ketLeftMul Q) (a,
+            j)) (M (c, c'))
 
 /-- For an MPDO, any matrix commuting with a nonzero power of the $N$-site
 density operator commutes with the density operator itself.

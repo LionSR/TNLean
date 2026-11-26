@@ -69,7 +69,7 @@ variable {T : ∀ a, MPOTensor p (χ a)}
       (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2))
   (K : Matrix ((c : Fin r) × (Fin (χ c) × Fin (χ c))) (Fin p × Fin p) ℂ)
   (hK : ∀ (c d : Fin r) (x y : Fin (χ c)) (x' y' : Fin (χ d)),
-    (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+    (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
       if he : c = d then
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)

@@ -344,7 +344,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
 
 private noncomputable def ofNormalizedFlattening
     (A : MPSTensor (d * d) D) : MPOTensor d D :=
-  fun i j => (Real.sqrt d : ℂ) • A (finProdFinEquiv (i, j))
+  fun ij => (Real.sqrt d : ℂ) • A (finProdFinEquiv ij)
 
 private theorem toMPSTensor_ofNormalizedFlattening
     (A : MPSTensor (d * d) D) :
@@ -444,7 +444,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U) (hInj : Kraus.IsInjective U.toMPSTensor) :
     ∃ (V : MPOTensor d D) (_hV : IsMPUCanonicalFormII V)
       (X : GL (Fin D) ℂ),
-      (∀ i j, V i j = (X : Matrix (Fin D) (Fin D) ℂ) * U i j *
+      (∀ i j, V (i, j) = (X : Matrix (Fin D) (Fin D) ℂ) * U (i, j) *
         (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)) ∧
       (∀ N : ℕ, 0 < N → mpo V N = mpo U N) := by
   let : NeZero D := hU.neZero_bond
@@ -464,14 +464,14 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
   have hQP : Q * P = 1 := mul_eq_one_comm.mp hRed.mul_eq_one
   let X : GL (Fin D) ℂ := ⟨Q, P, hQP, hRed.mul_eq_one⟩
   refine ⟨V, hV, X, fun i j => ?_, hMpo⟩
-  change V i j = Q * U i j * P
-  have hij : P * V i j * Q = U i j := by
+  change V (i, j) = Q * U (i, j) * P
+  have hij : P * V (i, j) * Q = U (i, j) := by
     simpa [Kraus.evalWord, toMPSTensor] using hRed.evalWord [finProdFinEquiv (i, j)]
   calc
-    V i j = (Q * P) * V i j * (Q * P) := by
+    V (i, j) = (Q * P) * V (i, j) * (Q * P) := by
       rw [hQP, Matrix.one_mul, Matrix.mul_one]
-    _ = Q * (P * V i j * Q) * P := by simp only [Matrix.mul_assoc]
-    _ = Q * U i j * P := by rw [hij]
+    _ = Q * (P * V (i, j) * Q) * P := by simp only [Matrix.mul_assoc]
+    _ = Q * U (i, j) * P := by rw [hij]
 
 end MPOTensor
 

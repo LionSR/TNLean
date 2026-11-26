@@ -107,16 +107,16 @@ theorem biorthogonalAnalysis_mul_synthesis :
 through the direct sum of the target blocks. Source: GLM23 `fusiontensors`;
 arXiv:1511.08090, `inversegaugeone`. -/
 theorem pairLetter_eq_biorthogonalSynthesis_mul (i k : Fin p) :
-    (∑ j : Fin p, T a i j ⊗ₖ T b j k) =
+    (∑ j : Fin p, T a (i, j) ⊗ₖ T b (j, k)) =
       biorthogonalSynthesis W * Matrix.blockDiagonal' (fun c ↦
-        (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c i k) *
+        (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c (i, k)) *
         biorthogonalAnalysis V := by
   let S := biorthogonalSynthesis W
   let C := Matrix.blockDiagonal' (fun c ↦
-    (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c i k)
+    (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c (i, k))
   have hSC (x : Fin (D a) × Fin (D b)) (c : Λ) (μ : Fin (N a b c))
       (y : Fin (D c)) :
-      (S * C) x ⟨c, μ, y⟩ = ∑ z, W c μ (finProdFinEquiv x) z * T c i k z y := by
+      (S * C) x ⟨c, μ, y⟩ = ∑ z, W c μ (finProdFinEquiv x) z * T c (i, k) z y := by
     rw [Matrix.mul_apply, Fintype.sum_sigma,
       Finset.sum_eq_single c
         (fun c' _ hc' ↦ Finset.sum_eq_zero fun _ _ ↦ by
@@ -152,7 +152,7 @@ Source: GLM23 Appendix A; arXiv:1511.08090, lines 181--200 and 269--277. -/
         (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2))
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
     (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
-      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
         if he : c = d then
           if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
         else 0) : CompleteZipperFusionFamily Λ p where

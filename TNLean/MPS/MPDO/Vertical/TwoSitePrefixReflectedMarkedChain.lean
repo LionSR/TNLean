@@ -62,13 +62,13 @@ private theorem blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient
       horizontalSlice
           (fun v ↦ Vᴴ * verticalTensor (blockTwo M) v * V) r s =
         ∑ i : Fin (d * d), ∑ j : Fin (d * d),
-          (star (V i r) * V j s) • blockTwo M i j :=
+          (star (V i r) * V j s) • blockTwo M (i, j) :=
     horizontalSlice_twoSidedCompression (blockTwo M) V V r s
   rw [markedChainCoefficient, hslice, Finset.sum_mul, Matrix.trace_sum]
   simp_rw [Finset.sum_mul, Matrix.trace_sum, Matrix.smul_mul,
     Matrix.trace_smul, smul_eq_mul]
   simp only [mpo_apply, mpoMatrixEntry, List.ofFn_succ, Fin.cons_zero,
-    Fin.cons_succ, evalWord_cons, blockTwo]
+    Fin.cons_succ, evalWord_cons, blockTwo_apply]
   apply Finset.sum_congr₂
   intro i _ j _
   rw [Matrix.mul_assoc]

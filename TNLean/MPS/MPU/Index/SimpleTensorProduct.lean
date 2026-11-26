@@ -74,11 +74,10 @@ lines 363--374, to the tensoring operation in the proof of Theorem `IndexTh` (ii
 line 837. -/
 theorem doubleLayerTensor_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
     (i j : Fin d) (k l : Fin e) :
-    doubleLayerTensor (tensorProduct U V) (finProdFinEquiv (i, k))
-        (finProdFinEquiv (j, l)) =
+    doubleLayerTensor (tensorProduct U V) (finProdFinEquiv (i, k), finProdFinEquiv (j, l)) =
       Matrix.reindex (doubleLayerTensorProductShuffle D E)
         (doubleLayerTensorProductShuffle D E)
-        (doubleLayerTensor U i j ⊗ₖ doubleLayerTensor V k l) := by
+        (doubleLayerTensor U (i, j) ⊗ₖ doubleLayerTensor V (k, l)) := by
   ext x y
   obtain ⟨⟨x₁, x₂⟩, rfl⟩ := (doubleLayerTensorProductShuffle D E).surjective x
   obtain ⟨⟨y₁, y₂⟩, rfl⟩ := (doubleLayerTensorProductShuffle D E).surjective y

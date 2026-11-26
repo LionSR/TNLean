@@ -67,7 +67,7 @@ theorem trace_two_marked_evalWord_eq_sourcePeriodic_sewing
     (hcut₁ : sourceCutM₁ U = X₁ * Y₁) (hcut₂ : sourceCutM₂ U = X₂ * Y₂)
     {n m : ℕ} (a a' b b' : Fin d)
     (p p' : Fin n → Fin d) (q q' : Fin m → Fin d) :
-    (U a a' * evalWord U (List.ofFn p) (List.ofFn p') * U b b' *
+    (U (a, a') * evalWord U (List.ofFn p) (List.ofFn p') * U (b, b') *
       evalWord U (List.ofFn q) (List.ofFn q')).trace =
       ∑ t : Fin r, ∑ s : Fin l,
         sourcePeriodicArcB U X₁ X₂ n (a, p, b) (t, p', s) *
@@ -78,12 +78,12 @@ theorem trace_two_marked_evalWord_eq_sourcePeriodic_sewing
   let F : Matrix (Fin l) (Fin D) ℂ := fun s γ ↦ Y₂ s (b', γ)
   let P := evalWord U (List.ofFn p) (List.ofFn p')
   let Q := evalWord U (List.ofFn q) (List.ofFn q')
-  have ha : U a a' = H * C := by
+  have ha : U (a, a') = H * C := by
     ext δ α
-    change U a a' δ α = ∑ t : Fin r, Y₁ t (δ, a') * X₁ (a, α) t
+    change U (a, a') δ α = ∑ t : Fin r, Y₁ t (δ, a') * X₁ (a, α) t
     have h := congrArg (fun M ↦ M (a, α) (δ, a')) hcut₁
     simpa only [sourceCutM₁_apply, Matrix.mul_apply, mul_comm] using h
-  have hb : U b b' = E * F := by
+  have hb : U (b, b') = E * F := by
     ext β γ
     exact congrArg (fun M ↦ M (β, b) (b', γ)) hcut₂
   have hB (t : Fin r) (s : Fin l) :
@@ -94,7 +94,7 @@ theorem trace_two_marked_evalWord_eq_sourcePeriodic_sewing
       sourcePeriodicArcA U Y₁ Y₂ m (s, q, t) (b', q', a') = (F * Q * H) s t := by
     simp only [sourcePeriodicArcA, Matrix.mul_apply, Finset.sum_mul]
     rw [Finset.sum_comm]
-  change (U a a' * P * U b b' * Q).trace = _
+  change (U (a, a') * P * U (b, b') * Q).trace = _
   rw [ha, hb]
   calc
     _ = (H * (C * P * E * F * Q)).trace := by simp only [Matrix.mul_assoc]

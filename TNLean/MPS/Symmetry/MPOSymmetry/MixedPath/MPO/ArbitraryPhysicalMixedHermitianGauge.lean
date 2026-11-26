@@ -54,7 +54,7 @@ bond weight have the same boundary operators, after the boundary is
 conjugated by the diagonal matrix of the weight. -/
 theorem mpoWithBoundary_eq_of_apply_eq_div_mul {M N : MPOTensor d D}
     (g : Fin D → ℂ) (hg : ∀ p, g p ≠ 0)
-    (h : ∀ i j β α, N i j β α = g β / g α * M i j β α)
+    (h : ∀ i j β α, N (i, j) β α = g β / g α * M (i, j) β α)
     (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     mpoWithBoundary N X L =
       mpoWithBoundary M (Matrix.diagonal g⁻¹ * X * Matrix.diagonal g) L := by
@@ -70,7 +70,7 @@ theorem physicalAdjointTensor_changePhysicalBasis {e : ℕ}
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) :
     physicalAdjointTensor (changePhysicalBasis V M) =
       changePhysicalBasis V (physicalAdjointTensor M) := by
-  ext i j β α
+  ext ⟨i, j⟩ β α
   simp only [physicalAdjointTensor_apply, changePhysicalBasis,
     physicalSlice_physicalAdjointTensor]
   rw [← Matrix.conjTranspose_apply, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
@@ -79,9 +79,9 @@ theorem physicalAdjointTensor_changePhysicalBasis {e : ℕ}
 /-- A change of physical coordinates preserves an entrywise rescaling of the
 virtual indices. -/
 theorem changePhysicalBasis_apply_of_apply_eq_mul {e : ℕ} {M N : MPOTensor d D}
-    (c : Fin D → Fin D → ℂ) (h : ∀ i j β α, N i j β α = c β α * M i j β α)
+    (c : Fin D → Fin D → ℂ) (h : ∀ i j β α, N (i, j) β α = c β α * M (i, j) β α)
     (V : Matrix (Fin e) (Fin d) ℂ) (i j : Fin e) (β α : Fin D) :
-    changePhysicalBasis V N i j β α = c β α * changePhysicalBasis V M i j β α := by
+    changePhysicalBasis V N (i, j) β α = c β α * changePhysicalBasis V M (i, j) β α := by
   have hs : physicalSlice N β α = c β α • physicalSlice M β α := by
     ext k l
     simp [physicalSlice, h]
@@ -92,7 +92,7 @@ theorem changePhysicalBasis_apply_of_apply_eq_mul {e : ℕ} {M N : MPOTensor d D
 exactly when its on-site matrix is Hermitian. -/
 theorem physicalAdjointTensor_eq_self_of_isHermitian {M : MPOTensor d 1}
     (hM : (physicalSlice M 0 0).IsHermitian) : physicalAdjointTensor M = M := by
-  ext i j β α
+  ext ⟨i, j⟩ β α
   rw [Subsingleton.elim β 0, Subsingleton.elim α 0, physicalAdjointTensor_apply]
   exact congrFun (congrFun hM i) j
 
@@ -153,15 +153,15 @@ theorem physicalAdjointTensor_mixedEndpointMPO_apply
       ν₁ * V₁' μ s (finProdFinEquiv (β, l)))
     (h₀₁ : c * (ω₀ * ν₁) = 1) (h₁₀ : ω₁ * ν₀ = c)
     (i j : Fin ((D₀ + D₁) * (D₀ + D₁))) (β α : Fin (χ₀ + χ₁)) :
-    physicalAdjointTensor (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) i j β α =
+    physicalAdjointTensor (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) (i, j) β α =
       mixedEndpointBondWeight χ₀ χ₁ c β / mixedEndpointBondWeight χ₀ χ₁ c α *
-        mixedEndpointMPO T₀' T₁' V₀' V₁' W₀' W₁' i j β α := by
+        mixedEndpointMPO T₀' T₁' V₀' V₁' W₀' W₁' (i, j) β α := by
   have hc : c ≠ 0 := left_ne_zero_of_mul_eq_one h₀₁
   have h₀₁' : ω₀ * ν₁ = c⁻¹ := eq_inv_of_mul_eq_one_right h₀₁
-  have hT₀' : ∀ x y β α, star (T₀ y x β α) = T₀' x y β α := fun x y β α ↦
-    congrFun (congrFun (congrFun (congrFun hT₀ x) y) β) α
-  have hT₁' : ∀ x y β α, star (T₁ y x β α) = T₁' x y β α := fun x y β α ↦
-    congrFun (congrFun (congrFun (congrFun hT₁ x) y) β) α
+  have hT₀' : ∀ x y β α, star (T₀ (y, x) β α) = T₀' (x, y) β α := fun x y β α ↦
+    congrFun (congrFun (congrFun hT₀ (x, y)) β) α
+  have hT₁' : ∀ x y β α, star (T₁ (y, x) β α) = T₁' (x, y) β α := fun x y β α ↦
+    congrFun (congrFun (congrFun hT₁ (x, y)) β) α
   obtain ⟨⟨r, s⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective i
   obtain ⟨⟨k, l⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective j
   obtain ⟨β, rfl⟩ := finSumFinEquiv.surjective β
@@ -433,8 +433,8 @@ theorem exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq
     (c := c) (by rw [hcdef]; field_simp) rfl
   set g := mixedEndpointBondWeight 1 1 c
   have hadj : ∀ i j β α,
-      physicalAdjointTensor (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) i j β α =
-        g β / g α * arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ i j β α := by
+      physicalAdjointTensor (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) (i, j) β α =
+        g β / g α * arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ (i, j) β α := by
     intro i j β α
     rw [arbitraryPhysicalMixedMPO, physicalAdjointTensor_changePhysicalBasis]
     exact changePhysicalBasis_apply_of_apply_eq_mul (fun β α ↦ g β / g α) hmix _ i j β α

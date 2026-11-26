@@ -72,14 +72,14 @@ is a polynomial in the entries of the matrix and their conjugates.
 Source: arXiv:1703.09188, lines 2138--2151; chapter Example 7.9. -/
 theorem continuous_conjugatePhysical (U : MPOTensor d D) :
     Continuous fun u : Matrix (Fin d) (Fin d) ℂ => conjugatePhysical U u := by
-  refine continuous_pi fun i => continuous_pi fun j => continuous_pi fun β =>
+  refine continuous_pi fun ⟨i, j⟩ => continuous_pi fun β =>
     continuous_pi fun α => ?_
   exact ((continuous_id.matrix_mul continuous_const).matrix_mul
     continuous_id.matrix_conjTranspose).matrix_elem i j
 
 /-- Physical conjugation by the identity is trivial. -/
 theorem conjugatePhysical_one (U : MPOTensor d D) : conjugatePhysical U 1 = U := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp [conjugatePhysical, physicalSlice]
 
@@ -89,7 +89,7 @@ Source: arXiv:1703.09188, lines 2138--2151 (the swap `S` exchanges the two spins
 chapter Example 7.9. -/
 theorem conjugatePhysical_permMatrix (U : MPOTensor d D) (σ : Equiv.Perm (Fin d)) :
     conjugatePhysical U (σ.permMatrix ℂ) = reindexPhysical σ U := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp [conjugatePhysical, physicalSlice, reindexPhysical, Matrix.mul_apply,
     PEquiv.toMatrix_apply, Equiv.toPEquiv_apply, Equiv.symm_apply_eq]
@@ -103,7 +103,7 @@ Source: arXiv:1703.09188, Theorem `FundamentalMPU`, lines 624--648 (the "if" dir
 chapter Example 7.9. -/
 theorem IsMPU.bondConj {U : MPOTensor d D} (hU : IsMPU U)
     (z : Matrix (Fin D) (Fin D) ℂ) (hz : z ∈ Matrix.unitaryGroup (Fin D) ℂ) :
-    IsMPU (fun i j => z * U i j * zᴴ) := by
+    IsMPU (fun (i, j) => z * U (i, j) * zᴴ) := by
   intro N hN
   rw [← mpo_eq_of_conj (M := U) (G := z) (H := zᴴ) (mem_unitaryGroup_iff.mp hz)
     (mem_unitaryGroup_iff'.mp hz) (fun _ _ => rfl) N]
@@ -114,8 +114,8 @@ theorem IsMPU.bondConj {U : MPOTensor d D} (hU : IsMPU U)
 Source: chapter Example 7.9. -/
 theorem continuous_bondConj (U : MPOTensor d D) :
     Continuous fun z : Matrix (Fin D) (Fin D) ℂ =>
-      (fun i j => z * U i j * zᴴ : MPOTensor d D) :=
-  continuous_pi fun _ => continuous_pi fun _ =>
+      (fun ij => z * U ij * zᴴ : MPOTensor d D) :=
+  continuous_pi fun _ =>
     (continuous_id.matrix_mul continuous_const).matrix_mul continuous_id.matrix_conjTranspose
 
 /-! ### The swap path in the coordinates of the shift products -/
@@ -157,9 +157,9 @@ the bond.
 
 Source: arXiv:1703.09188, eq. (58), lines 1980--2001; chapter Example 7.9. -/
 theorem shiftExampleU₃_eq_bondConj (d : ℕ) :
-    shiftExampleU₃ d = fun i j => swapPathFin d 1 *
-      reindexPhysical (siteSwap d) (shiftExampleU₂ d) i j * (swapPathFin d 1)ᴴ := by
-  funext i j
+    shiftExampleU₃ d = fun ij => swapPathFin d 1 *
+      reindexPhysical (siteSwap d) (shiftExampleU₂ d) ij * (swapPathFin d 1)ᴴ := by
+  funext ⟨i, j⟩
   obtain ⟨⟨a₁, a₂⟩, rfl⟩ := finProdFinEquiv.surjective i
   obtain ⟨⟨b₁, b₂⟩, rfl⟩ := finProdFinEquiv.surjective j
   have h := congrArg (reindexAlgEquiv ℂ ℂ finProdFinEquiv)
@@ -214,8 +214,8 @@ theorem shiftExampleU₂_strictlyEquivalent_shiftExampleU₃ (d : ℕ) [NeZero d
     · rintro _ ⟨x, -, rfl⟩
       exact hQ₂.conjugatePhysical _ (swapPathFin_mem_unitaryGroup d x)
   · refine JoinedIn.ofLine
-      (f := fun x => (fun i j => swapPathFin d x *
-        conjugatePhysical (shiftExampleU₂ d) (swapPathFin d 1) i j * (swapPathFin d x)ᴴ :
+      (f := fun x => (fun ij => swapPathFin d x *
+        conjugatePhysical (shiftExampleU₂ d) (swapPathFin d 1) ij * (swapPathFin d x)ᴴ :
           MPOTensor (d * d) (d * d)))
       ((continuous_bondConj _).comp (continuous_swapPathFin d)).continuousOn ?_ ?_ ?_
     · funext i j

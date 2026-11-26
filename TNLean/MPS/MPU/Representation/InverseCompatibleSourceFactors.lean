@@ -69,14 +69,14 @@ first source-cut factor space. It is `finCongr` of the proved equality
 $\ell=r$, not a definitional identification or an arbitrary basis change.
 Source: arXiv:2502.20257, lines 5432–5443. -/
 noncomputable def inverseCompatibleRankEquiv
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T) :
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T) :
     Fin ℓ[U] ≃ Fin r[U] :=
   finCongr (rightRank_eq_leftRank_of_physicalAdjointTensor_eq_unitary_gauge U T hT).symm
 
 variable (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-  (hT : ∀ i j, physicalAdjointTensor U i j =
-    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+  (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
   (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
     (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1)
 
@@ -181,8 +181,8 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D) (T : Matrix.unitaryGroup (Fin D) ℂ)
   (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-  (hT : ∀ i j, physicalAdjointTensor U i j =
-    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+  (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
   (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
     (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1)
 
@@ -258,8 +258,8 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D) (T : Matrix.unitaryGroup (Fin D) ℂ)
   (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-  (hT : ∀ i j, physicalAdjointTensor U i j =
-    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+  (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
   (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
     (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1)
 

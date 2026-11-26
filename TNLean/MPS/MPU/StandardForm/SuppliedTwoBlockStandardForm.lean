@@ -107,7 +107,7 @@ noncomputable def TwoSiteStandardFormData.blockTwo
     let f := (finProdFinEquiv.symm j).2
     let F (l r : Fin d × Fin d) := S.cutX₂ (α, a) l *
       (∑ β : Fin D, S.cutY₂ l (c, β) * S.cutY₁ r (β, f)) * S.cutX₁ (b, γ) r
-    have hraw : (W a c * W b f) α γ = ∑ l, ∑ r, F l r :=
+    have hraw : (W (a, c) * W (b, f)) α γ = ∑ l, ∑ r, F l r :=
       mul_apply_eq_sum_of_sourceCut_factorizations W S.cutX₁ S.cutY₁ S.cutX₂ S.cutY₂
         S.sourceCutM₁_eq_cutX₁_mul_cutY₁ S.sourceCutM₂_eq_cutX₂_mul_cutY₂ a c b f α γ
     have hsum : (∑ l : Fin (d * d), ∑ r : Fin (d * d), F (e l) (e r)) =
@@ -116,7 +116,8 @@ noncomputable def TwoSiteStandardFormData.blockTwo
         _ = ∑ l : Fin (d * d), ∑ r : Fin d × Fin d, F (e l) r := by
           exact Finset.sum_congr rfl fun l _ ↦ e.sum_comp (F (e l))
         _ = _ := e.sum_comp (fun l ↦ ∑ r, F l r)
-    change (W a c * W b f) α γ =
+    rw [blockTwo_apply]
+    change (W (a, c) * W (b, f)) α γ =
       ∑ l : Fin (d * d), ∑ r : Fin (d * d), X₂ (α, a) l *
         twoBlockInputGate u v (l, r) (c, f) * X₁ (b, γ) r
     simp only [X₁, X₂, hinput]

@@ -44,19 +44,19 @@ two opposite physical letters, with no assumptions on the tensor.
 Source: arXiv:1703.09188, `eq:sigma-from-trace`, lines 1595--1610. -/
 theorem timeReversalPeriodicTrace_eq_sum (U : MPOTensor d D) :
     timeReversalPeriodicTrace U =
-      ∑ i : Fin d, ∑ j : Fin d, Matrix.trace (U i j * U j i) := by
+      ∑ i : Fin d, ∑ j : Fin d, Matrix.trace (U (i, j) * U (j, i)) := by
   classical
   have hentry (i j : Fin d) :
       (Matrix.swapMatrix d *
         Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
-          (mpo U 2)) (i, j) (i, j) = Matrix.trace (U j i * U i j) := by
+          (mpo U 2)) (i, j) (i, j) = Matrix.trace (U (j, i) * U (i, j)) := by
     simp [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.swapMatrix_apply,
       Matrix.reindex_apply, finTwoArrowEquiv, mpoMatrixEntry, ite_and, ite_mul,
       List.ofFn_succ, List.ofFn_zero, evalWord]
   change (∑ x : Fin d × Fin d, _) = _
   simp only [Fintype.sum_prod_type]
   exact Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun j _ ↦
-    (hentry i j).trans (Matrix.trace_mul_comm (U j i) (U i j))
+    (hentry i j).trans (Matrix.trace_mul_comm (U (j, i)) (U (i, j)))
 
 /-- The intrinsic periodic trace of a physical block is the sum of the
 oppositely contracted pairs of actual open words. The two words have exactly

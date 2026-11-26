@@ -79,12 +79,12 @@ theorem mpo_smul (c : ℂ) (M : MPOTensor d D) (N : ℕ) :
 configuration by the product of the scalars along it. -/
 theorem evalWord_ofFn_letterwise_smul (c : Fin d → Fin d → ℂ) (M : MPOTensor d D) {N : ℕ}
     (σ τ : Fin N → Fin d) :
-    evalWord (fun i j => c i j • M i j) (List.ofFn σ) (List.ofFn τ) =
+    evalWord (Function.uncurry fun i j => c i j • M (i, j)) (List.ofFn σ) (List.ofFn τ) =
       (∏ k, c (σ k) (τ k)) • evalWord M (List.ofFn σ) (List.ofFn τ) := by
   induction N with
   | zero => simp
   | succ n ih =>
-      simp only [List.ofFn_succ, evalWord_cons, Fin.prod_univ_succ]
+      simp only [List.ofFn_succ, evalWord_cons, Fin.prod_univ_succ, Function.uncurry_apply_pair]
       rw [ih (fun k => σ k.succ) (fun k => τ k.succ), Matrix.smul_mul, Matrix.mul_smul,
         smul_smul]
 
@@ -93,7 +93,8 @@ theorem evalWord_ofFn_letterwise_smul (c : Fin d → Fin d → ℂ) (M : MPOTens
 product `∏_k c (σ k) (τ k)` of the scalars along the configuration. -/
 theorem mpo_letterwise_smul (c : Fin d → Fin d → ℂ) (M : MPOTensor d D) (N : ℕ)
     (σ τ : Fin N → Fin d) :
-    mpo (fun i j => c i j • M i j) N σ τ = (∏ k, c (σ k) (τ k)) * mpo M N σ τ := by
+    mpo (Function.uncurry fun i j => c i j • M (i, j)) N σ τ = (∏ k, c (σ k) (τ k)) *
+        mpo M N σ τ := by
   simp only [mpo_apply, mpoMatrixEntry]
   rw [evalWord_ofFn_letterwise_smul, Matrix.trace_smul, smul_eq_mul]
 
@@ -103,7 +104,7 @@ Project-derived from the positive physical blocking at arXiv:1606.00608,
 line 815, using the project's explicit block-word encoding. -/
 theorem blockTensor_smul (c : ℂ) (M : MPOTensor d D) (L : ℕ) :
     blockTensor (c • M) L = c ^ L • blockTensor M L := by
-  funext i j
+  funext ⟨i, j⟩
   simp only [blockTensor_apply, Pi.smul_apply]
   rw [evalWord_smul c M (Kraus.wordOfBlock d L i)
     (Kraus.wordOfBlock d L j) (by simp), Kraus.length_wordOfBlock]

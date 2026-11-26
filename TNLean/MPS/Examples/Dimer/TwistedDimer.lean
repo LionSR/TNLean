@@ -124,7 +124,7 @@ def dimerMInt (f : Fin 2) (a b : Fin 8) : Matrix (Fin 4) (Fin 4) ℤ :=
 
 /-- The sector-`f` tensor as a matrix product operator tensor. -/
 noncomputable def dimerM (f : Fin 2) : MPOTensor 8 4 :=
-  fun a b => (16 : ℂ)⁻¹ • complexOfInt (dimerMInt f a b)
+  fun (a, b) => (16 : ℂ)⁻¹ • complexOfInt (dimerMInt f a b)
 
 /-- The sector-`f` tensor on the sixty-four-letter pair alphabet. -/
 noncomputable def dimerTarget (f : Fin 2) : MPSTensor 64 4 := (dimerM f).toMPSTensor
@@ -161,7 +161,7 @@ theorem dimerM_eq_smul_flagMPO (f : Fin 2) : dimerM f = (5 / 8 : ℂ) • flagMP
     fin_cases f <;> fin_cases p <;> fin_cases p' <;> fin_cases k <;>
       norm_num [dimerScalarInt, MPOTensor.TwistedDimer.Cmat, MPOTensor.TwistedDimer.cDiag_eq,
         MPOTensor.TwistedDimer.cOff_eq, MPOTensor.TwistedDimer.tau, MPOTensor.TwistedDimer.mu]
-  funext a b
+  funext ⟨a, b⟩
   ext i j
   simp only [dimerM, dimerMInt, Pi.smul_apply, Matrix.smul_apply, flagMPO,
     MPOTensor.TwistedDimer.unitTensor, MPOTensor.TwistedDimer.flagCoef]

@@ -66,12 +66,12 @@ def czyIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
 
 /-- The CZY tensor `A_1` as a matrix product operator tensor (arXiv:2509.03600, main.tex
 lines 203–218). -/
-def czyTensor : MPOTensor 2 2 := fun i j => complexOfInt (czyIntTensor i j)
+def czyTensor : MPOTensor 2 2 := Function.uncurry fun i j => complexOfInt (czyIntTensor i j)
 
 /-- The bond-two coordinates of `A_1`: the output `i` is the flip of the input `j`, the
 incoming bond is forced to be `i`, and the outgoing bond `r` contributes `(-1)^{i (1 - r)}`. -/
 theorem czyTensor_apply (i j l r : Fin 2) :
-    czyTensor i j l r =
+    czyTensor (i, j) l r =
       if i = j.rev ∧ l = i then (-1 : ℂ) ^ (i.val * r.rev.val) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [czyTensor, czyIntTensor, complexOfInt, Fin.rev]

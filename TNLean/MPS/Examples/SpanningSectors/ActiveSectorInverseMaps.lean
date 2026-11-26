@@ -137,13 +137,13 @@ private lemma sum_evalWord_diagonal (N : ℕ) :
         simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
       calc
         _ = ∑ a : Fin 4, ∑ rho : Fin N → Fin 4,
-            tensor a a * evalWord tensor (List.ofFn rho) (List.ofFn rho) := by
+            tensor (a, a) * evalWord tensor (List.ofFn rho) (List.ofFn rho) := by
               refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun rho _ => ?_
               change evalWord tensor (List.ofFn (Fin.cons a rho))
                   (List.ofFn (Fin.cons a rho)) =
-                tensor a a * evalWord tensor (List.ofFn rho) (List.ofFn rho)
+                tensor (a, a) * evalWord tensor (List.ofFn rho) (List.ofFn rho)
               rw [hlist a rho, evalWord_cons]
-        _ = (∑ a : Fin 4, tensor a a) *
+        _ = (∑ a : Fin 4, tensor (a, a)) *
               ∑ rho : Fin N → Fin 4,
                 evalWord tensor (List.ofFn rho) (List.ofFn rho) :=
           (Finset.sum_mul_sum _ _ _ _).symm

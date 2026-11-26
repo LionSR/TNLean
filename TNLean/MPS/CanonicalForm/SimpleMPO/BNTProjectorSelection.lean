@@ -372,7 +372,7 @@ theorem ketLeftMul_bntSectorProjection_basis
     (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
     (hR : ∀ s : Fin g, R s ≠ 0) (s : Fin g) :
     (K s).ketLeftMul (bntSectorProjection hC hρ hη hR s) = K s := by
-  ext a b β α
+  ext ⟨a, b⟩ β α
   simp only [ketLeftMul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
   have h := congrFun (congrFun
     (bntSectorProjection_mul_physicalSlice_self hC hρ hη hR s β α) a) b
@@ -472,7 +472,7 @@ theorem changePhysicalBasis_bntSectorProjection_basis
   let P := bntSectorProjection hC hρ hη hR s
   have hP : IsOrthogonalProjection P :=
     bntSectorProjection_isOrthogonal hC hρ hη hR s
-  ext a b β α
+  ext ⟨a, b⟩ β α
   simp only [changePhysicalBasis]
   rw [hP.1.eq]
   by_cases hsi : s = i
@@ -518,7 +518,7 @@ noncomputable def commonWeightAbsorbedBasisMPOTensor
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
     MPOTensor d (S.basisDim j) :=
-  fun a b => S.commonWeight hWeight j • S.basisMPOTensor j a b
+  fun (a, b) => S.commonWeight hWeight j • S.basisMPOTensor j (a, b)
 
 /-- The matching BNT projection fixes the ket index after the common copy
 weight has been absorbed into the normal representative.
@@ -540,21 +540,21 @@ theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
     (commonWeightAbsorbedBasisMPOTensor S hWeight s).ketLeftMul
         (bntSectorProjection hC hρ hη hR s) =
       commonWeightAbsorbedBasisMPOTensor S hWeight s := by
-  ext a b β α
-  have h := congrFun (congrFun (congrFun (congrFun
-    (ketLeftMul_bntSectorProjection_basis hC hρ hη hR s) a) b) β) α
+  ext ⟨a, b⟩ β α
+  have h := congrFun (congrFun (congrFun
+    (ketLeftMul_bntSectorProjection_basis hC hρ hη hR s) (a, b)) β) α
   simp only [ketLeftMul, commonWeightAbsorbedBasisMPOTensor,
     Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] at h ⊢
   calc
     ∑ x, bntSectorProjection hC hρ hη hR s a x *
-        (S.commonWeight hWeight s * S.basisMPOTensor s x b β α) =
+        (S.commonWeight hWeight s * S.basisMPOTensor s (x, b) β α) =
         S.commonWeight hWeight s *
           ∑ x, bntSectorProjection hC hρ hη hR s a x *
-            S.basisMPOTensor s x b β α := by
+            S.basisMPOTensor s (x, b) β α := by
       simpa only [mul_comm, mul_left_comm, mul_assoc] using
         Fintype.sum_mul_mul_eq_mul_sum_mul (S.commonWeight hWeight s)
           (fun x => bntSectorProjection hC hρ hη hR s a x)
-          (fun x => S.basisMPOTensor s x b β α)
+          (fun x => S.basisMPOTensor s (x, b) β α)
     _ = _ := by rw [h]
 
 /-- Returning the absorbed-weight MPO representative to doubled-index MPS

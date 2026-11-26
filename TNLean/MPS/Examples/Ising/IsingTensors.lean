@@ -97,10 +97,12 @@ def isingSigmaZ : Fin 10 → Fin 10 → Matrix (Fin 4) (Fin 4) (ℤ√2)
   | _, _ => 0
 
 /-- The tensor `A_1` as a matrix product operator tensor. -/
-noncomputable def isingOne : MPOTensor 10 3 := fun h h' => complexOfZsqrt2 (isingOneZ h h')
+noncomputable def isingOne : MPOTensor 10 3 :=
+    Function.uncurry fun h h' => complexOfZsqrt2 (isingOneZ h h')
 
 /-- The tensor `A_ψ` as a matrix product operator tensor. -/
-noncomputable def isingPsi : MPOTensor 10 3 := fun h h' => complexOfZsqrt2 (isingPsiZ h h')
+noncomputable def isingPsi : MPOTensor 10 3 :=
+    Function.uncurry fun h h' => complexOfZsqrt2 (isingPsiZ h h')
 
 /-- The tensor `√2 A_σ` as a matrix product operator tensor.
 
@@ -115,7 +117,7 @@ therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented
 `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
 -/
 noncomputable def isingSigma : MPOTensor 10 4 :=
-  fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
+  Function.uncurry fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
 
 theorem isingOneZ_eq_zero_of_rho_ne :
     ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingOneZ h h' = 0 := by

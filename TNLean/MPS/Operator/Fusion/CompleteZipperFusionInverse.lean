@@ -90,7 +90,7 @@ private theorem exists_inverseCorner_eq_kronecker_one (a b c d : Λ) :
         Fus.fullInversePrintedFMatrix a b c)
           (Fus.leftFinalRow a b c d ⟨mL, x⟩)
           (Fus.rightFinalRow a b c d ⟨mR, y⟩) =
-        ∑ z, Fus.tensor d i k x z * Fus.fullInversePrintedFMatrix a b c
+        ∑ z, Fus.tensor d (i, k) x z * Fus.fullInversePrintedFMatrix a b c
           (Fus.leftFinalRow a b c d ⟨mL, z⟩)
           (Fus.rightFinalRow a b c d ⟨mR, y⟩) := by
     rw [Matrix.mul_apply, Fintype.sum_sigma]
@@ -116,7 +116,7 @@ private theorem exists_inverseCorner_eq_kronecker_one (a b c d : Λ) :
           (Fus.rightFinalRow a b c d ⟨mR, y⟩) =
         ∑ z, Fus.fullInversePrintedFMatrix a b c
           (Fus.leftFinalRow a b c d ⟨mL, x⟩)
-          (Fus.rightFinalRow a b c d ⟨mR, z⟩) * Fus.tensor d i k z y := by
+          (Fus.rightFinalRow a b c d ⟨mR, z⟩) * Fus.tensor d (i, k) z y := by
     rw [Matrix.mul_apply, Fintype.sum_sigma]
     rw [Finset.sum_eq_single d
       (fun q _ hq => Finset.sum_eq_zero fun z _ => by
