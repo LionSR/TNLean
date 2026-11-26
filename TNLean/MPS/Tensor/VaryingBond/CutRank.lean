@@ -109,7 +109,7 @@ theorem eval_cutEquiv_symm {D : ℕ} (M : MPSChainTensor d D N) {k : ℕ} (hk : 
       (mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩)]
   · have hq : (Fin.cast (show N = k + (N - k) by omega).symm (Fin.natAdd k q)) =
         ⟨k + q.val, by omega⟩ := Fin.ext rfl
-    rw [hq, ManyBody.cutEquiv_symm_apply_not_mem (v := ⟨k + q.val, by omega⟩) _ _
+    rw [hq, ManyBody.cutEquiv_symm_apply_not_mem (v := (⟨k + q.val, by omega⟩ : Fin N)) _ _
       (fun h => by have := (mem_interval.mp h).2; simp at this)]
 
 /-- A nonzero vector has cut rank one at the cut `0`. -/
@@ -288,7 +288,7 @@ private theorem cutEquiv_symm_extendLeft {k : ℕ}
     by_cases h3 : p.val = k
     · rw [ManyBody.cutEquiv_symm_apply_mem (v := p) _ _
         (mem_interval.mpr ⟨Nat.zero_le _, by omega⟩)]
-      simp [extendLeft, consTail, h1, h3]
+      simp [extendLeft, consTail, h3]
     · have h2 : p ∉ interval N 0 (k + 1) := fun h => by have := (mem_interval.mp h).2; omega
       rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ h2]
       simp [consTail, h3]
@@ -507,7 +507,7 @@ theorem exists_coeff_eq_of_cutRank_le {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) 
     change ψ σ = ψ ((ManyBody.cutEquiv _ (interval (n + 1) 0 (n + 1))).symm (ρ σ, τ₀))
     congr 1
     funext p
-    exact (ManyBody.cutEquiv_symm_apply_mem (v := p) _ _
+    exact (ManyBody.cutEquiv_symm_apply_mem (ρ σ) τ₀
       (mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩)).symm
   let c₀ : ℂ := inner ℂ e ψ'
   have hψσ : ∀ σ, ψ' σ = c₀ * e σ := fun σ => by
