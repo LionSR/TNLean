@@ -10,4 +10,3 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.Projective.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.Projective.ProjectiveRephasing
-import TNLean.MPS.Symmetry.Projective.UnitModulusProjectiveFactor

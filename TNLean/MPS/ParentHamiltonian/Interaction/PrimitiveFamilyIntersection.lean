@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.JointGroundSpaceIntersection
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceIndependence
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
 import QICLean.Spectral.Gap.PositiveComparisonGap

@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.TraceQuotient
 
 import TNLean.MPS.CanonicalForm.TraceQuotient.FiniteRingTraceAlgebra
-import TNLean.MPS.CanonicalForm.TraceQuotient.FramedLeftIdealRealization
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientAlgebraRecovery
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientLetterCoordinates
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientTripleContinuity

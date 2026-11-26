@@ -27,9 +27,9 @@ import Mathlib.Analysis.Normed.Module.Convex
 import Mathlib.Analysis.Normed.Module.RCLike.Real
 import Mathlib.Tactic.Linarith
 import QICLean.Algebra.Matrix.MatrixAux
-import TNLean.MPS.Symmetry.OnSite.ProjectiveGaugeTransport
+import TNLean.MPS.Symmetry.OnSite.CompactSupportVirtualTransport
 import TNLean.MPS.Symmetry.ContinuousFamily.NearbyInjectiveAdjointActions
-import TNLean.MPS.Symmetry.Projective.UnitModulusProjectiveFactor
+import TNLean.MPS.Symmetry.Projective.ProjectiveRephasing
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import QICLean.Analysis.Cohomology.ProjectiveUnitary
 import Mathlib.Algebra.Star.Module

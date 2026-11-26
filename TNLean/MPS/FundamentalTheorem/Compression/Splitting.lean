@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import Mathlib.LinearAlgebra.DirectSum.Finite
 import QICLean.Algebra.Module.DirectSumBlockDiagonal
 import TNLean.MPS.FundamentalTheorem.Compression.ProjectorWeightedSum
-import TNLean.MPS.FundamentalTheorem.WordModule.StarSemisimple
+import TNLean.MPS.FundamentalTheorem.WordModule.GaugeWordModule
 
 /-!
 # The splitting criterion for multi-block compressions

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointPaths
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalFixedPointPath
 import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
-import TNLean.MPS.Symmetry.Projective.UnitModulusProjectiveFactor
+import TNLean.MPS.Symmetry.Projective.ProjectiveRephasing
 
 /-!
 # A common physical path between injective parent Hamiltonians

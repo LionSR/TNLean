@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Topology.ContinuousIdempotentFrames
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientTripleContinuity
-import TNLean.MPS.CanonicalForm.TraceQuotient.FramedLeftIdealRealization
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientLetterCoordinates
 import TNLean.MPS.Symmetry.PeriodicRay.PositiveRayFiniteTraceData
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSPhaseGaugeInvariance

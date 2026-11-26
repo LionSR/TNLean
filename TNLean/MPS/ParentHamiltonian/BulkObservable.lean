@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian.BulkObservable
 
-import TNLean.MPS.ParentHamiltonian.BulkObservable.BlockObservableSectorDecomposition
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryCrossObservableCompression
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableAlgebra

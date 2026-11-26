@@ -15,7 +15,6 @@ import TNLean.MPS.Symmetry.OnSite.MixedSymmetry
 import TNLean.MPS.Symmetry.OnSite.OnSiteSymmetry
 import TNLean.MPS.Symmetry.OnSite.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.OnSite.PositiveLengthSymmetryCharacter
-import TNLean.MPS.Symmetry.OnSite.ProjectiveGaugeTransport
 import TNLean.MPS.Symmetry.OnSite.SpinHalfObstruction
 import TNLean.MPS.Symmetry.OnSite.StationaryDensitySymmetry
 import TNLean.MPS.Symmetry.OnSite.SymmetricMPS

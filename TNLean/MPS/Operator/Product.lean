@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.Product.ActionTensor
 import TNLean.MPS.Operator.Product.DiagonalDressing
 import TNLean.MPS.Operator.Product.DirectSum
-import TNLean.MPS.Operator.Product.MatrixUnitRegister
 import TNLean.MPS.Operator.Product.OperatorProduct
 import TNLean.MPS.Operator.Product.OperatorProductBlockDiagonal
 import TNLean.MPS.Operator.Product.PhysicalAdjoint

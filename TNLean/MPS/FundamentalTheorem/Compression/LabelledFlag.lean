@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
-import TNLean.MPS.FundamentalTheorem.WordModule.StarSemisimple
+import TNLean.MPS.FundamentalTheorem.WordModule.GaugeWordModule
 import QICLean.Spectral.Eigenvalue.WordAlgebra
 
 /-!

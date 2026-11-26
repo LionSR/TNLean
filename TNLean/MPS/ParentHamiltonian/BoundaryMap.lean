@@ -15,7 +15,6 @@ import TNLean.MPS.ParentHamiltonian.BoundaryMap.CenteredOverlapFactor
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramConvergence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceGram
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.MixedGram

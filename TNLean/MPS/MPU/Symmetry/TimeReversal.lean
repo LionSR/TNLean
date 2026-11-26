@@ -23,5 +23,4 @@ import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalMPSClass
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignTensorProduct
-import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalTraceGauge
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalTwistedTransfer
