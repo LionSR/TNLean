@@ -27,9 +27,10 @@ and 565–588.
 
 It also contains the following results.
 
-* `QuantumCircuit.Party.SourceCircuit.exteriorConfigEquiv`,
-  `QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum`:
-  replacing sampled party factors by their incident constructions.
+* `exteriorConfigEquiv`,
+  `physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum`
+  (in `QuantumCircuit.Party.SourceCircuit`): replacing sampled party factors by their incident
+  constructions.
 * `QuantumCircuit.Party.SourceCircuit.incidentSampledPhysicalFactor`,
   `QuantumCircuit.Party.SourceCircuit.sampledPhysicalFactor_eq_incidentSampledPhysicalFactor`: the
   sampled physical matrix determined by incident labels.

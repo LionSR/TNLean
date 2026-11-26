@@ -61,8 +61,8 @@ two-site parent; see `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
 
 It also contains the following results.
 
-*
-  `MPSTensor.exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel`:
+* `exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel`
+  (in `MPSTensor`):
   transfer of canonical gaps to a positive interaction.
 -/
 

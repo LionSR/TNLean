@@ -41,8 +41,8 @@ It also contains the following results.
 * `MPSTensor.toMatrix'_parentInteraction_eq_of_groundSpaceES_eq`,
   `MPSTensor.hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq`: canonical interactions
   determined by their local support.
-*
-  `MPSTensor.exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction`:
+* `exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction`
+  (in `MPSTensor`):
   the positive canonical interaction from exact open kernels.
 -/
 

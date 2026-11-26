@@ -77,9 +77,9 @@ It also contains the following results.
 * `MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd`,
   `MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family`: aligned
   finite-chain gaps for periodic block families.
-* `MPSTensor.residual_cover_projection_defect_tendsto_zero_of_primitive_resolution`,
-  `MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_primitive_resolution`:
-  physical residual covers from a primitive-sector resolution.
+* `residual_cover_projection_defect_tendsto_zero_of_primitive_resolution`,
+  `exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_primitive_resolution`
+  (in `MPSTensor`): physical residual covers from a primitive-sector resolution.
 -/
 
 section PeriodicBlockFamilyGap

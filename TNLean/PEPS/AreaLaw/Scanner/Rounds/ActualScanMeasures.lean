@@ -28,10 +28,10 @@ Source: *A two-dimensional area law from a global spectral gap*,
 
 It also contains the following results.
 
-*
-  `TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian`,
-  `TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian`:
-  global replica energy of the actual filtered scan vector.
+* `actualFillScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian`,
+  `actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian`
+  (in `TNLean.PEPS.AreaLaw.Scan.CollarScan`): global replica energy of the actual filtered scan
+  vector.
 * `TNLean.PEPS.AreaLaw.Scan.CollarScan.norm_filteredVector_actualChargeData`,
   `TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_globalLowDefectProjection_mass_ge`: the
   gap estimate for the actual charge filtered vector.

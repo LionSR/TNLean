@@ -31,8 +31,8 @@ explicit; comparison with the source variable uses its stated range
 
 It also contains the following results.
 
-*
-  `TNLean.MPS.AreaLaw.exists_fixed_bandwidth_normalized_low_energy_approximation_of_independent_scales`:
+* `exists_fixed_bandwidth_normalized_low_energy_approximation_of_independent_scales`
+  (in `TNLean.MPS.AreaLaw`):
   normalized original-band approximations at independent scales.
 * `TNLean.MPS.AreaLaw.exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation`: one
   sharp matrix product approximation to an original low-energy vector.

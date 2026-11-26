@@ -32,8 +32,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19,
 
 It also contains the following results.
 
-*
-  `QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator`:
+* `physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator`
+  (in `QuantumCircuit.Party.SourceCircuit`):
   the exact distributed contraction of the sampled physical density.
 -/
 
