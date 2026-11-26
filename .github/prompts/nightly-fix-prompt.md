@@ -24,6 +24,8 @@ Instructions:
      `./scripts/build_blueprint_ch01_12.sh`, and the `python3 scripts/test_*.py`
      command of the failed step. The TeX stack is installed only when a
      blueprint job failed.
+     Run `python3 scripts/fetch_tenkz.py` first; the builds need the pinned
+     picture package.
 
    A failure that does not reproduce (an expired download, a runner outage, a
    timeout of the installer) is not a defect of the repository: change nothing

@@ -7,85 +7,11 @@ name: PR CI
 # and PDF builds and the browser tests run once a night in nightly.yml, and
 # nightly-fix.yml repairs what they find. See docs/ci-automation.md.
 #
-# One workflow means one completion event for the auto-fix dispatcher and
-# per-job change gating: Lean-only changes skip the blueprint lint.
+# One workflow means one completion event for the auto-fix dispatcher.
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - 'docs/paper-gaps/**/*.tex'
-      - 'docs/paper-gaps/**/*.bib'
-      - 'texra-blueprint.toml'
-      - 'scripts/generate_import_aggregators.py'
-      - 'scripts/lean_import_syntax.py'
-      - 'scripts/test_generate_import_aggregators.py'
-      # Trees the paper-gap reference check scans (texra-blueprint
-      # paper-gaps check); without these the check never runs
-      # on PRs that only touch a scanned file.
-      - 'blueprint/comments/**'
-      - 'docs/**/*.md'
-      - '**.lean'
-      - 'lakefile.*'
-      - 'lean-toolchain'
-      - 'lake-manifest.json'
-      - 'scripts/LintStyle.lean'
-      - 'scripts/nolints-style.txt'
-      - 'scripts/check_import_layers.py'
-      - 'scripts/check_oversized_lean_files.py'
-      - 'scripts/check_pass_through_declarations.py'
-      - 'scripts/check_small_lean_modules.py'
-      - 'scripts/small_lean_module_ceilings.txt'
-      - 'scripts/lean_import_syntax.py'
-      - 'scripts/test_lean_file_policies.py'
-      - 'docbuild/**'
-      - 'scripts/check_docbuild_manifest.py'
-      - 'scripts/lake_build_hotspots.py'
-      - 'scripts/ci_lean_checks.py'
-      - 'scripts/test_ci_lean_checks.py'
-      - 'scripts/test_lake_build_hotspots.py'
-      - 'scripts/lake_build_locked.sh'
-      - 'scripts/seed_lake_build.sh'
-      - 'scripts/test_seed_lake_build.sh'
-      - 'scripts/ci_compatible_cache.py'
-      - 'docs/ci-automation.md'
-      - 'docs/CONTRIBUTING.md'
-      - '.github/workflows/**'
-      - '.github/dependabot.yml'
-      - 'tenkz.toml'
-      - 'scripts/fetch_tenkz.py'
-      - 'scripts/tenkz_paths.py'
-      - 'scripts/prune_tenkz_render_cache.py'
-      - 'blueprint/src/**'
-      - 'scripts/build_blueprint_ch01_12.sh'
-      - 'docs/slides/**'
-      - 'blueprint/.chktexrc'
-      - 'blueprint/latexindent.yaml'
-      - 'scripts/latexindent'
-      - 'scripts/check_latexindent_formatting.sh'
-      - 'scripts/blueprint_lean_sync.py'
-      - 'scripts/test_blueprint_lean_sync.py'
-      - 'scripts/paper_gap_leanid_sync.py'
-      - 'scripts/test_paper_gap_leanid_sync.py'
-      - 'scripts/badge_utils.py'
-      - 'scripts/write_badges.py'
-      - 'scripts/generate_badges.py'
-      - 'scripts/test_blueprint_web_render.py'
-      - 'scripts/test_blueprint_graph_worker.py'
-      - 'scripts/test_blueprint_graph_precompute.py'
-      - 'scripts/add_blueprint_search.py'
-      - 'scripts/test_add_blueprint_search.py'
-      - 'scripts/test_blueprint_search_web.py'
-      - 'Papers/1606.00608/**'
-      - 'Papers/2502.20257/**'
-      - 'scripts/generate_paper_aux.sh'
-      - 'scripts/tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_*.py'
-      - 'scripts/test_*_diagram.py'
-      - 'scripts/run_diagram_tests.py'
-      - 'scripts/test_run_diagram_tests.py'
-      - 'scripts/test_tenkz_equation_web.py'
-      - 'scripts/test_tenkz_inline_web.py'
   workflow_dispatch:
 
 concurrency:
@@ -109,7 +35,9 @@ env:
     .lake/packages/cslib/.lake/build
 
 jobs:
-  # Per-job change gating. Dispatch runs skip this and run every job.
+  # Change gating. Dispatch runs skip this and run every job. The lists are
+  # deliberately coarse: every job here is cheap, so a needless run costs
+  # less than keeping per-script path lists in step with the scripts.
   changes:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -117,9 +45,7 @@ jobs:
       pull-requests: read
     outputs:
       lean: ${{ steps.filter.outputs.lean }}
-      module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
-      workflow: ${{ steps.filter.outputs.workflow }}
     steps:
       - uses: dorny/paths-filter@v4
         id: filter
@@ -130,68 +56,14 @@ jobs:
               - 'lakefile.*'
               - 'lean-toolchain'
               - 'lake-manifest.json'
-              - 'scripts/LintStyle.lean'
-              - 'scripts/nolints-style.txt'
-              - 'scripts/ci_compatible_cache.py'
-              - 'scripts/ci_lean_checks.py'
-            module_policy:
-              - 'scripts/check_import_layers.py'
-              - 'scripts/check_oversized_lean_files.py'
-              - 'scripts/check_pass_through_declarations.py'
-              - 'scripts/check_small_lean_modules.py'
-              - 'scripts/small_lean_module_ceilings.txt'
-              - 'scripts/lean_import_syntax.py'
-              - 'scripts/test_lean_file_policies.py'
-              - 'docbuild/**'
-              - 'scripts/check_docbuild_manifest.py'
-              - 'scripts/lake_build_hotspots.py'
-              - 'scripts/ci_lean_checks.py'
-              - 'scripts/test_ci_lean_checks.py'
-              - 'scripts/test_lake_build_hotspots.py'
-              - 'scripts/lake_build_locked.sh'
-              - 'scripts/seed_lake_build.sh'
-              - 'scripts/test_seed_lake_build.sh'
-              - 'scripts/ci_compatible_cache.py'
-              - 'docs/ci-automation.md'
-              - 'docs/CONTRIBUTING.md'
-              - 'scripts/generate_import_aggregators.py'
-              - 'scripts/test_generate_import_aggregators.py'
-            blueprint:
-              # Dependency upgrades must recheck the blueprint declaration tags.
-              - 'lean-toolchain'
-              - 'lakefile.*'
-              - 'lake-manifest.json'
-              - 'docbuild/**'
-              - 'blueprint/src/**'
-              - 'texra-blueprint.toml'
-              - 'tenkz.toml'
-              - 'scripts/fetch_tenkz.py'
-              - 'scripts/tenkz_paths.py'
-              - 'scripts/prune_tenkz_render_cache.py'
-              - 'docs/slides/**'
-              - 'blueprint/.chktexrc'
-              - 'blueprint/latexindent.yaml'
-              - 'scripts/latexindent'
-              - 'scripts/check_latexindent_formatting.sh'
-              - 'scripts/badge_utils.py'
-              - 'scripts/write_badges.py'
-              - 'scripts/generate_badges.py'
-              - 'scripts/test_blueprint_web_render.py'
-              - 'scripts/test_blueprint_graph_worker.py'
-              - 'scripts/test_blueprint_graph_precompute.py'
-              - 'scripts/add_blueprint_search.py'
-              - 'scripts/test_add_blueprint_search.py'
-              - 'scripts/test_blueprint_search_web.py'
-              - 'scripts/tenkz_blueprint_sweep.py'
-              - 'scripts/test_tenkz_*.py'
-              - 'scripts/test_*_diagram.py'
-              - 'scripts/run_diagram_tests.py'
-              - 'scripts/test_run_diagram_tests.py'
-              - 'scripts/test_tenkz_equation_web.py'
-              - 'scripts/test_tenkz_inline_web.py'
-            workflow:
+              - 'scripts/**'
               - '.github/workflows/**'
-              - '.github/dependabot.yml'
+            blueprint:
+              - 'blueprint/**'
+              - 'docs/slides/**'
+              - 'tenkz.toml'
+              - 'scripts/**'
+              - '.github/workflows/**'
 
   build:
     needs: changes
@@ -200,13 +72,12 @@ jobs:
     if: |
       !cancelled() && (
         github.event_name != 'pull_request' ||
-        needs.changes.outputs.lean == 'true' ||
-        needs.changes.outputs.workflow == 'true'
+        needs.changes.outputs.lean == 'true'
       )
     runs-on: ubuntu-latest
-    # The two changed-module steps stop themselves at their budgets; this
-    # bound only catches a hung setup.
-    timeout-minutes: 75
+    # The changed-module step stops itself at its budget; this bound only
+    # catches a hung setup.
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v7
@@ -215,7 +86,6 @@ jobs:
 
       # Read only: the nightly build of main saves this cache (nightly.yml).
       - name: Restore Lean build cache
-        id: build-cache
         uses: actions/cache/restore@v6
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
@@ -223,90 +93,15 @@ jobs:
           restore-keys: |
             tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
 
-      - name: Report exact-input cache lookup
-        env:
-          PRIMARY_KEY: ${{ steps.build-cache.outputs.cache-primary-key }}
-          MATCHED_KEY: ${{ steps.build-cache.outputs.cache-matched-key }}
-        run: |
-          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
-
-      # cache-hit=false also means a successful restore-prefix hit. Only an
-      # EMPTY matched key is a miss; never overwrite an ordinary restored cache.
-      - name: Select compatible main cache configuration
-        id: compatible-config
-        if: steps.build-cache.outputs.cache-matched-key == ''
-        continue-on-error: true
-        timeout-minutes: 3
-        run: |
-          python3 scripts/ci_compatible_cache.py prepare \
-            --state "$RUNNER_TEMP/compatible-cache.json" \
-            --inputs .ci-cache-baseline \
-            --qic "$RUNNER_TEMP/compatible-cache-qic.git"
-
-      - name: Look up compatible main cache without restoring
-        id: compatible-lookup
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-config.outputs.eligible == 'true'
-        continue-on-error: true
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ env.BUILD_CACHE_PATHS }}
-          # hashFiles computes the baseline's complete original three-file hash.
-          key: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-${{ steps.compatible-config.outputs.baseline }}
-          restore-keys: |
-            tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
-          lookup-only: true
-
-      - name: Select a validated exact compatible cache
-        id: compatible-cache
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-lookup.outputs.cache-matched-key != ''
-        continue-on-error: true
-        timeout-minutes: 3
-        env:
-          PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
-          MATCHED_KEY: ${{ steps.compatible-lookup.outputs.cache-matched-key }}
-          PRIMARY_KEY: ${{ steps.compatible-lookup.outputs.cache-primary-key }}
-        run: |
-          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
-          python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
-          python3 scripts/ci_compatible_cache.py select \
-            --state "$RUNNER_TEMP/compatible-cache.json" \
-            --prefix "$PREFIX" --matched "$MATCHED_KEY"
-
       - uses: leanprover/lean-action@v1
         with:
           build: false
           use-github-cache: false
 
-      # Setup/Mathlib prebuilt retrieval happens before this separate seed;
-      # no seeded artifact is available to a Lean command until pruning passes.
-      - name: Restore validated compatible cache by exact key
-        id: compatible-restore
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-cache.outputs.key != ''
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ env.BUILD_CACHE_PATHS }}
-          key: ${{ steps.compatible-cache.outputs.key }}
-          fail-on-cache-miss: true
-
-      - name: Discard unvalidated cross-commit artifacts
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-cache.outputs.key != ''
-        env:
-          PRIMARY_KEY: ${{ steps.compatible-restore.outputs.cache-primary-key }}
-          MATCHED_KEY: ${{ steps.compatible-restore.outputs.cache-matched-key }}
-          VERIFIED_KEY: ${{ steps.compatible-cache.outputs.key }}
-          VERIFIED_VERSION: ${{ steps.compatible-cache.outputs.version }}
-          PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
-        run: |
-          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
-          test "$MATCHED_KEY" = "$VERIFIED_KEY"
-          # Check scope again after restore; refuse a shadow/replacement race.
-          python3 scripts/ci_compatible_cache.py validate \
-            --state "$RUNNER_TEMP/compatible-cache.json" \
-            --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
-          python3 scripts/ci_compatible_cache.py prune
-
-      # Elaborate the PR's direct edits with warnings as errors. Selection
-      # uses the explicit feature head, while checks use this merged checkout.
+      # Build the PR's directly changed modules and elaborate them with
+      # warnings as errors, logging the timings that the compilation-time gate
+      # below reads. Selection uses the explicit feature head, while checks
+      # use this merged checkout. Selection: scripts/ci_lean_checks.py.
       # A failure it finds fails the job; past its 25-minute budget (a cold
       # dependency cache after a pin change, or a change near the bottom of
       # the import graph) it stops with a warning and leaves the remaining
@@ -331,24 +126,6 @@ jobs:
           python3 scripts/ci_lean_checks.py focused \
             --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 --budget 1500 \
             --log "$RUNNER_TEMP/lake-build.log"
-
-      # Build the changed production modules, logging the timings that the
-      # compilation-time gate below reads. Past its 15-minute budget the
-      # build stops with a warning and the nightly build covers the rest.
-      # Selection: scripts/ci_lean_checks.py.
-      - name: Build changed Lean modules early
-        if: github.event_name == 'pull_request'
-        timeout-minutes: 20
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          set -eo pipefail
-          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
-            git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
-          fi
-          python3 scripts/ci_lean_checks.py early --budget 900 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -434,14 +211,6 @@ jobs:
 
   file-length:
     name: Check Lean module policies
-    needs: changes
-    if: |
-      !cancelled() && (
-        github.event_name != 'pull_request' ||
-        needs.changes.outputs.lean == 'true' ||
-        needs.changes.outputs.module_policy == 'true' ||
-        needs.changes.outputs.workflow == 'true'
-      )
     runs-on: ubuntu-latest
     env:
       BASE_REF: ${{ github.event.pull_request.base.sha }}
@@ -546,7 +315,7 @@ jobs:
       BASE_REF: ${{ github.event.pull_request.base.sha }}
       # The lint steps run only when blueprint sources changed (always on
       # dispatch); the Lean-blueprint sync checks run on Lean-only changes too.
-      TEX_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true' }}
+      TEX_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' }}
     steps:
       - uses: actions/checkout@v7
         with:
