@@ -27,7 +27,7 @@ MPSarchive.tex lines 911--931, and Theorem 8, lines 1139--1169.
 -/
 
 open Matrix MPSPreparation
-open TNLean.MPS.AreaLaw (leftBlock mem_leftBlock)
+open ManyBody (interval mem_interval)
 open scoped BigOperators
 
 namespace MPSTensor
@@ -39,29 +39,30 @@ virtual cut factors, read on the first `k` and the last `N - k` sites, with the 
 virtual convention of the condition-C1 proof. No injectivity hypothesis is needed.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 theorem cutMatrix_mpv_eq_cutVector_mul (A : MPSTensor d D) (hk : k ≤ N) :
-    ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N)) =
+    ManyBody.cutMatrix (interval N 0 k) (mpv A (N := N)) =
       Matrix.of (fun σ a ↦
-          leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))) *
+          leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (intervalConfigEquiv d N k σ))) *
         Matrix.of fun a τ ↦ rightCutVector A (N - k) a
-          ((cutSuffixConfigEquiv hk).symm (leftBlockComplConfigEquiv d N k τ)) := by
+          ((cutSuffixConfigEquiv hk).symm (intervalComplConfigEquiv d N k τ)) := by
   classical
   ext σ τ
   have heval := eval_cutEquiv_symm (fun _ : Fin N ↦ A) hk σ τ
   rw [MPSChainTensor.eval_const] at heval
-  have hleft : (List.ofFn fun p : Fin k ↦ A (σ ⟨Fin.castLE hk p, mem_leftBlock.mpr p.isLt⟩)).prod =
+  have hleft : (List.ofFn fun p : Fin k ↦
+      A (σ ⟨Fin.castLE hk p, mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩⟩)).prod =
       Kraus.evalWord A (List.ofFn
-        ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))) :=
+        ((cutPrefixConfigEquiv hk).symm (intervalConfigEquiv d N k σ))) :=
     (MPSChainTensor.eval_eq_prod_ofFn (fun _ : Fin k ↦ A) _).symm.trans
       (MPSChainTensor.eval_const A _)
   have hright : (List.ofFn fun q : Fin (N - k) ↦ A (τ ⟨⟨k + q.val, by omega⟩,
-      fun h ↦ by have := mem_leftBlock.mp h; simp at this⟩)).prod =
+      fun h ↦ by have := (mem_interval.mp h).2; simp at this⟩)).prod =
       Kraus.evalWord A (List.ofFn
-        ((cutSuffixConfigEquiv hk).symm (leftBlockComplConfigEquiv d N k τ))) :=
+        ((cutSuffixConfigEquiv hk).symm (intervalComplConfigEquiv d N k τ))) :=
     (MPSChainTensor.eval_eq_prod_ofFn (fun _ : Fin (N - k) ↦ A) _).symm.trans
       (MPSChainTensor.eval_const A _)
   rw [hleft, hright] at heval
   change Matrix.trace (Kraus.evalWord A
-    (List.ofFn ((ManyBody.cutEquiv _ (leftBlock N k)).symm (σ, τ)))) = _
+    (List.ofFn ((ManyBody.cutEquiv _ (interval N 0 k)).symm (σ, τ)))) = _
   rw [heval, ← Kraus.evalWord_append]
   exact coeff_append_eq_sum_cutVector A _ _
 
@@ -87,12 +88,12 @@ theorem exists_rightInverse_rightCutVector {A : MPSTensor d D} {m : ℕ}
 
 /-- Under C1 on the prefix, the left virtual cut vectors read on the left block are linearly
 independent. Source: PGVWC07, MPSarchive.tex lines 936--949. -/
-theorem linearIndependent_leftCutVector_leftBlock {A : MPSTensor d D} (hk : k ≤ N)
+theorem linearIndependent_leftCutVector_interval {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) :
     LinearIndependent ℂ fun a σ ↦
-      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ)) :=
+      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (intervalConfigEquiv d N k σ)) :=
   (linearIndependent_leftCutVector hleft).map' (LinearEquiv.funCongrLeft ℂ ℂ
-    ((leftBlockConfigEquiv d N k).trans (cutPrefixConfigEquiv hk).symm)).toLinearMap
+    ((intervalConfigEquiv d N k).trans (cutPrefixConfigEquiv hk).symm)).toLinearMap
     (LinearEquiv.ker _)
 
 /-- When the suffix satisfies C1, the physical column space of the cut matrix across the left
@@ -101,25 +102,25 @@ an actual right inverse of the suffix factor.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 theorem span_cutMatrix_mpv_cols_eq {A : MPSTensor d D} (hk : k ≤ N)
     (hC1 : Kraus.IsNBlkInjective A (N - k)) :
-    Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).col) =
+    Submodule.span ℂ (Set.range (ManyBody.cutMatrix (interval N 0 k) (mpv A (N := N))).col) =
       Submodule.span ℂ (Set.range fun a σ ↦
-        leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))) := by
+        leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (intervalConfigEquiv d N k σ))) := by
   classical
-  let e := (leftBlockComplConfigEquiv d N k).trans (cutSuffixConfigEquiv (d := d) hk).symm
-  let F : Matrix (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k))
+  let e := (intervalComplConfigEquiv d N k).trans (cutSuffixConfigEquiv (d := d) hk).symm
+  let F : Matrix (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k))
       (Fin D × Fin D) ℂ := Matrix.of fun σ a ↦
-    leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))
-  let G : Matrix (Fin D × Fin D) (ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k))
+    leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (intervalConfigEquiv d N k σ))
+  let G : Matrix (Fin D × Fin D) (ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k))
       ℂ := (Matrix.of (rightCutVector A (N - k))).submatrix id e
   obtain ⟨S, hS⟩ := exists_rightInverse_rightCutVector hC1
-  have hfactor : ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N)) = F * G :=
+  have hfactor : ManyBody.cutMatrix (interval N 0 k) (mpv A (N := N)) = F * G :=
     cutMatrix_mpv_eq_cutVector_mul A hk
   have hGS : G * S.submatrix e id = 1 := by
     change (Matrix.of (rightCutVector A (N - k))).submatrix id e * S.submatrix e id = 1
     rw [Matrix.submatrix_mul_equiv, hS, Matrix.submatrix_id_id]
   have hrecover : (F * G) * S.submatrix e id = F := by
     rw [Matrix.mul_assoc, hGS, Matrix.mul_one]
-  change Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).col) =
+  change Submodule.span ℂ (Set.range (ManyBody.cutMatrix (interval N 0 k) (mpv A (N := N))).col) =
     Submodule.span ℂ (Set.range F.col)
   simp only [← Matrix.range_mulVecLin]
   apply le_antisymm
@@ -127,7 +128,7 @@ theorem span_cutMatrix_mpv_cols_eq {A : MPSTensor d D} (hk : k ≤ N)
     exact LinearMap.range_comp_le_range G.mulVecLin F.mulVecLin
   · rw [← hrecover, Matrix.mulVecLin_mul, ← hfactor]
     exact LinearMap.range_comp_le_range (S.submatrix e id).mulVecLin
-      (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).mulVecLin
+      (ManyBody.cutMatrix (interval N 0 k) (mpv A (N := N))).mulVecLin
 
 /-- The actual physical column space of the cut matrix across the left block has the virtual
 left cut vectors as a basis. This basis is derived from the coefficient matrix, not supplied as
@@ -137,17 +138,17 @@ noncomputable def periodicCutBasis {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k)) :
     Module.Basis (Fin D × Fin D) ℂ
       (Submodule.span ℂ
-        (Set.range (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).col)) :=
-  (Module.Basis.span (linearIndependent_leftCutVector_leftBlock hk hleft)).map
+        (Set.range (ManyBody.cutMatrix (interval N 0 k) (mpv A (N := N))).col)) :=
+  (Module.Basis.span (linearIndependent_leftCutVector_interval hk hleft)).map
     (LinearEquiv.ofEq _ _ (span_cutMatrix_mpv_cols_eq hk hright).symm)
 
 /-- The derived physical cut basis retains the actual virtual coefficients.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 @[simp] theorem periodicCutBasis_apply {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k))
-    (a : Fin D × Fin D) (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k)) :
+    (a : Fin D × Fin D) (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
     (periodicCutBasis hk hleft hright a).val σ =
-      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ)) := by
+      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (intervalConfigEquiv d N k σ)) := by
   simp only [periodicCutBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
     Module.Basis.coe_span_apply]
 
@@ -156,10 +157,10 @@ rank exactly the squared virtual dimension.
 Source: PGVWC07, proposition on C1, MPSarchive.tex lines 911--931. -/
 theorem cutRank_mpv_eq_of_isNBlkInjective {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k)) :
-    ManyBody.cutRank (leftBlock N k) (mpv A (N := N)) = D * D := by
+    ManyBody.cutRank (interval N 0 k) (mpv A (N := N)) = D * D := by
   classical
   rw [ManyBody.cutRank, Matrix.rank_eq_finrank_span_cols, span_cutMatrix_mpv_cols_eq hk hright,
-    finrank_span_eq_card (linearIndependent_leftCutVector_leftBlock hk hleft)]
+    finrank_span_eq_card (linearIndependent_leftCutVector_interval hk hleft)]
   simp only [Fintype.card_prod, Fintype.card_fin]
 
 /-- A canonical tensor satisfying C1 at one length satisfies it at all
@@ -187,7 +188,7 @@ Source: PGVWC07, MPSarchive.tex lines 911--931 and 1139--1169. -/
 theorem cutRank_mpv_eq_of_canonical [NeZero D] {A : MPSTensor d D}
     (hA : IsPGVWC07CanonicalForm A) {L : ℕ} (hC1 : Kraus.IsNBlkInjective A L)
     (hk : k ≤ N) (hleft : L ≤ k) (hright : L ≤ N - k) :
-    ManyBody.cutRank (leftBlock N k) (mpv A (N := N)) = D * D :=
+    ManyBody.cutRank (interval N 0 k) (mpv A (N := N)) = D * D :=
   cutRank_mpv_eq_of_isNBlkInjective hk
     (isNBlkInjective_of_le_of_canonical hA hC1 hleft)
     (isNBlkInjective_of_le_of_canonical hA hC1 hright)

@@ -125,7 +125,7 @@ open scoped BigOperators ComplexOrder
 namespace OBCChainTensor
 
 open MPSPreparation
-open TNLean.MPS.AreaLaw (leftBlock)
+open ManyBody (interval)
 
 /-- Every normalized physical state of positive length has an actual
 simultaneous OBC canonical representation. Bond dimensions are the actual
@@ -137,7 +137,7 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = ψ ∧
-      (∀ k, A.bondDim k = ManyBody.cutRank (leftBlock N k) ψ) ∧
+      (∀ k, A.bondDim k = ManyBody.cutRank (interval N 0 k) ψ) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
@@ -208,7 +208,7 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = ψ ∧
-      (∀ k, A.bondDim k = ManyBody.cutRank (leftBlock N k) ψ) ∧
+      (∀ k, A.bondDim k = ManyBody.cutRank (interval N 0 k) ψ) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
@@ -233,7 +233,7 @@ theorem exists_canonical_coeff_eq_rectangular_maps {d D N : ℕ} (hN : 0 < N)
     ∃ Y : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (B.bondDim k)) ℂ,
     ∃ Z : (k : Fin (N + 1)) → Matrix (Fin (B.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = B.coeff ∧
-      (∀ k, A.bondDim k = ManyBody.cutRank (leftBlock N k) B.coeff) ∧
+      (∀ k, A.bondDim k = ManyBody.cutRank (interval N 0 k) B.coeff) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧

@@ -9,8 +9,8 @@ import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 /-!
 # Coordinates of physical cut ranks
 
-The cut matrix `ManyBody.cutMatrix (leftBlock N k) ψ` indexes the sites before the cut by the
-members of the left block `leftBlock N k`. The minimal-representation coefficient matrix
+The cut matrix `ManyBody.cutMatrix (interval N 0 k) ψ` indexes the sites before the cut by the
+members of the left block `interval N 0 k`. The minimal-representation coefficient matrix
 indexes them by the sites `s` with `s < k`, and the remaining sites by the sites `s` with
 `k ≤ s`. Both index the same sites, so at every cut `k` the two matrices differ only by
 reindexing, and their ranks are equal, without a condition on the cut position, the local
@@ -27,7 +27,7 @@ interpretation is arXiv:quant-ph/0608197, local
 
 namespace MPSPreparation
 
-open TNLean.MPS.AreaLaw (leftBlock mem_leftBlock)
+open ManyBody (interval mem_interval)
 
 variable {d N k : ℕ}
 
@@ -62,16 +62,19 @@ def cutSuffixConfigEquiv (hk : k ≤ N) :
 variable (d N k) in
 /-- The configurations of the left block are the prefix configurations: both are indexed by the
 sites before the cut. Source: Section 5 of the exact MPU circuit note. -/
-def leftBlockConfigEquiv :
-    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k) ≃ CutPrefixConfig d N k :=
-  Equiv.arrowCongr (Equiv.subtypeEquivRight fun _ ↦ mem_leftBlock) (Equiv.refl (Fin d))
+def intervalConfigEquiv :
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ CutPrefixConfig d N k :=
+  Equiv.arrowCongr
+    (Equiv.subtypeEquivRight fun _ ↦ by rw [mem_interval, and_iff_right (Nat.zero_le _)])
+    (Equiv.refl (Fin d))
 
 variable (d N k) in
 /-- The configurations outside the left block are the suffix configurations: both are indexed
 by the sites from the cut on. Source: Section 5 of the exact MPU circuit note. -/
-def leftBlockComplConfigEquiv :
-    ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k) ≃ CutSuffixConfig d N k :=
-  Equiv.arrowCongr (Equiv.subtypeEquivRight fun _ ↦ by simp only [mem_leftBlock, not_lt])
+def intervalComplConfigEquiv :
+    ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ CutSuffixConfig d N k :=
+  Equiv.arrowCongr (Equiv.subtypeEquivRight fun _ ↦ by
+      rw [mem_interval, and_iff_right (Nat.zero_le _), not_lt])
     (Equiv.refl (Fin d))
 
 /-- At every physical cut, the finite-chain coefficient matrix is the cut matrix across the left
@@ -80,16 +83,17 @@ Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`
 and arXiv:quant-ph/0608197, lines 444--458. -/
 theorem cutCoefficientMatrix_eq_reindex_cutMatrix (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
     cutCoefficientMatrix ψ k =
-      (ManyBody.cutMatrix (leftBlock N k) ψ).reindex (leftBlockConfigEquiv d N k)
-        (leftBlockComplConfigEquiv d N k) := by
+      (ManyBody.cutMatrix (interval N 0 k) ψ).reindex (intervalConfigEquiv d N k)
+        (intervalComplConfigEquiv d N k) := by
   ext u v
   rw [Matrix.reindex_apply, Matrix.submatrix_apply, ManyBody.cutMatrix_apply]
   apply congrArg ψ
   funext s
   by_cases hs : s.val < k
-  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hs), dite_eq_left hs]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, hs⟩),
+      dite_eq_left hs]
     rfl
-  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ fun h ↦ hs (mem_leftBlock.mp h),
+  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ fun h ↦ hs ((mem_interval.mp h).2),
       dite_eq_right hs]
     rfl
 
@@ -98,7 +102,7 @@ at every cut. No cut-position, local-dimension or nonzero-tensor hypothesis is n
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex` and
 arXiv:quant-ph/0608197, lines 456--458. -/
 theorem cutCoefficientRank_eq_cutRank (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    cutCoefficientRank ψ k = ManyBody.cutRank (leftBlock N k) ψ := by
+    cutCoefficientRank ψ k = ManyBody.cutRank (interval N 0 k) ψ := by
   rw [cutCoefficientRank, ManyBody.cutRank, cutCoefficientMatrix_eq_reindex_cutMatrix ψ k,
     Matrix.rank_reindex]
 

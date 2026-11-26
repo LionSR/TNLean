@@ -1760,7 +1760,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`,
   `MPSPreparation.isDeterministicallyGenerated_iff`,
   `MPSPreparation.hasOBCRep_iff_cutRank_le` (for `0 < N` and `0 < D`, equivalent
-  to all cut ranks `ManyBody.cutRank (leftBlock N k) ψ` being at most `D`),
+  to all cut ranks `ManyBody.cutRank (ManyBody.interval N 0 k) ψ` being at most `D`),
   `MPSPreparation.hasOBCRep_pow_half` (every vector on `N ≥ 1` sites, with
   `D = d^{⌊N/2⌋}`), `MPSPreparation.HasOBCRep.smul` and
   `MPSPreparation.hasOBCRep_zero` (on chains of positive length the predicate
@@ -1770,7 +1770,7 @@ The following notions use different transfer objects and are not interchangeable
   `OBCChainTensor.exists_coeff_eq_of_cutRank_le` (bond `k` equal to the cut rank
   at `k`).
 - **Caveat:** `D` is a common upper bound, not the least bond dimension; the
-  least bond dimension at the cut `k` is `ManyBody.cutRank (leftBlock N k) ψ`
+  least bond dimension at the cut `k` is `ManyBody.cutRank (ManyBody.interval N 0 k) ψ`
   (`OBCChainTensor.cutRank_coeff_le`). At `N = 0` the predicate holds only for
   the vector `1`, so the sequential-generation component theorems apply it to
   `c • ψ` with `c ≠ 0` to cover that length.

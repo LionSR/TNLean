@@ -60,7 +60,7 @@ theorem prescribedOBC_window_bondDim_eq (hletter : ∃ i, A i ≠ 0)
     (j : Fin (D ^ 4 + 1)) : B.bondDim (reconstructionCut hN j) = D * D := by
   have : NeZero D := prescribedOBCBondNeZero B
   have hrank :
-      ManyBody.cutRank (TNLean.MPS.AreaLaw.leftBlock N (L + j.val)) B.coeff = D * D := by
+      ManyBody.cutRank (ManyBody.interval N 0 (L + j.val)) B.coeff = D * D := by
     rw [hcoeff, ← cutCoefficientRank_eq_cutRank]
     exact quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective A hC1 hletter hN j
   apply le_antisymm (B.bondDim_le _)

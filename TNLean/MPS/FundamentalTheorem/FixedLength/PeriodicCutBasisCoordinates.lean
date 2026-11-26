@@ -21,7 +21,7 @@ Source: PGVWC07, arXiv:quant-ph/0608197, MPSarchive.tex lines 921--931,
 -/
 
 open Matrix MPSPreparation
-open TNLean.MPS.AreaLaw (leftBlock)
+open ManyBody (interval)
 open scoped BigOperators Kronecker
 
 namespace MPSTensor
@@ -32,18 +32,18 @@ variable {d D N k : ℕ}
 coefficient matrix are linearly equivalent by the identification of their configurations.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 noncomputable def physicalCutCoordinates (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    (Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) ψ).col)) ≃ₗ[ℂ]
+    (Submodule.span ℂ (Set.range (ManyBody.cutMatrix (interval N 0 k) ψ).col)) ≃ₗ[ℂ]
       cutColumnSpace ψ k := by
-  let E := LinearEquiv.funCongrLeft ℂ ℂ (leftBlockConfigEquiv d N k).symm
-  let Q := LinearEquiv.funCongrLeft ℂ ℂ (leftBlockComplConfigEquiv d N k)
+  let E := LinearEquiv.funCongrLeft ℂ ℂ (intervalConfigEquiv d N k).symm
+  let Q := LinearEquiv.funCongrLeft ℂ ℂ (intervalComplConfigEquiv d N k)
   have hrange : cutColumnSpace ψ k =
-      (Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) ψ).col)).map
+      (Submodule.span ℂ (Set.range (ManyBody.cutMatrix (interval N 0 k) ψ).col)).map
         E.toLinearMap := by
     change Submodule.span ℂ (Set.range (cutCoefficientMatrix ψ k).col) = _
     rw [← Matrix.range_mulVecLin, ← Matrix.range_mulVecLin,
       cutCoefficientMatrix_eq_reindex_cutMatrix ψ k, Matrix.mulVecLin_reindex]
     change LinearMap.range (E.toLinearMap.comp
-      ((ManyBody.cutMatrix (leftBlock N k) ψ).mulVecLin.comp Q.toLinearMap)) = _
+      ((ManyBody.cutMatrix (interval N 0 k) ψ).mulVecLin.comp Q.toLinearMap)) = _
     rw [LinearMap.range_comp,
       LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_eq_top.mpr Q.surjective)]
   exact E.ofSubmodules _ _ hrange.symm
@@ -52,9 +52,9 @@ noncomputable def physicalCutCoordinates (ψ : (Fin N → Fin d) → ℂ) (k : �
 retaining every coefficient.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 @[simp] theorem physicalCutCoordinates_apply (ψ : (Fin N → Fin d) → ℂ) (k : ℕ)
-    (v : Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) ψ).col))
+    (v : Submodule.span ℂ (Set.range (ManyBody.cutMatrix (interval N 0 k) ψ).col))
     (u : CutPrefixConfig d N k) :
-    (physicalCutCoordinates ψ k v).val u = v.val ((leftBlockConfigEquiv d N k).symm u) :=
+    (physicalCutCoordinates ψ k v).val u = v.val ((intervalConfigEquiv d N k).symm u) :=
   rfl
 
 /-- The actual physical prefix column space has the virtual left cut
