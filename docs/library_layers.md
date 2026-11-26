@@ -57,6 +57,11 @@ rather than by their imports. Two come from unused imports
 (`PEPS/Approximation`–`PEPS/AreaLaw`, `PEPS/Examples`–`PEPS/Graph`). One is in
 MPS (`MPS/FundamentalTheorem`–`MPS/ParentHamiltonian`, one gauge lemma).
 
+*Status:* the declaration moves among the PEPS layers are done. The import
+check records one upward import (`QCA/LocalAlgebra/Blocking`, which waits for
+`MPSTensor.blockedConfigEquiv` to move to QICLean) and no pair of directories
+that import each other.
+
 ## Method
 
 Each module was classified by its statements, not by its name:
@@ -457,6 +462,9 @@ section):
 - `PEPS/Graph <-> PEPS/Tensor`: `PEPS.Graph.Holonomy.RegularRegionConnectivity` → `PEPS.Tensor.GraphState.RegularOpenRegion`; `PEPS.Tensor.Cycle.CycleMPSTensor` → `PEPS.Graph.Region.CycleArcRegion`
 - `PEPS/Injectivity <-> PEPS/ParentHamiltonian`: `PEPS.Injectivity.Regular.GInjectivePhysicalMap` → `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation`; `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Injectivity.Region.CycleMPSInjectivity`
 - `PEPS/Injectivity <-> PEPS/Tensor`: `PEPS.Injectivity.Boundary.BoundaryIsometry` → `PEPS.Tensor.GraphState.RegularBoundaryState`; `PEPS.Tensor.GraphState.RegularClosedGauge` → `PEPS.Injectivity.Regular.RegularRegionGaugeContraction`
+
+*Status:* all eight are gone; the declarations responsible were moved to the
+layer of their statements (see "Imports that remain" below).
 
 ## Declaration-level work
 
@@ -2285,7 +2293,7 @@ this part points upward.
 | `RegularTwoCycleGlobalFluxMove` (`Injectivity/Flux`) | Graph, Injectivity | `regularRegionBondExtension` | to `Graph/Holonomy` |
 | `NormalBlocking` (`Injectivity/Normal`) | Graph, Injectivity | `squareLatticeContiguousRectangle` and its membership lemma | to `Graph/Region` (beside QICLean's square lattice) |
 | `NormalPairBlocking` (`Injectivity/Normal`) | Graph, Injectivity | `nonempty_regionBoundaryEdge_of_connected` | to `Graph/Region` |
-| `RegionFibers` (formerly `RegionBlock/Recovery`) | Tensor, FundamentalTheorem | `regionInteriorBondProd`, `regionFiber`, `regionFiber_card` | to `Tensor/Region/RegionBlock` |
+| `RegionFibers` (formerly `RegionBlock/Recovery`) | Tensor, FundamentalTheorem | `regionInteriorBondProd`, `regionFiber`, `regionFiber_card` | to `Tensor/Region/RegionBlock`; done: the module is gone, its two remaining theorems are in `Normal/NormalFundamentalTheorem` |
 | `Insertion` (formerly `RegionBlock/Insertion`) | Graph, Tensor, FundamentalTheorem | `regionBoundaryEdgeComplEquiv`; `regionBlockedWeight_reindexTensor` | to `Graph/Region`; to `Tensor/Region/RegionBlock` |
 | `BlockRangeCoincidence` (`…/RegionInsertion`) | Tensor, FundamentalTheorem | `sum_regionBlockedWeight_mul_complement` | to `Tensor/Region/RegionBlock` |
 | `GaugeInjectivity` (`…/RegionInsertion`) | Graph, FundamentalTheorem | `prod_region_incident_eq_prod_edge` | to `Graph/Region` |

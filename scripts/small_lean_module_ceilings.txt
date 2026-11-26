@@ -22,7 +22,7 @@ Network                 3
 PEPS/Approximation      17
 PEPS/AreaLaw            46
 PEPS/FundamentalTheorem 7
-PEPS/Graph              2
+PEPS/Graph              1
 PEPS/Injectivity        8
 PEPS/ParentHamiltonian  1
 PEPS/Tensor             1
