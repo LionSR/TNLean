@@ -16,7 +16,6 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.EfficientSoftLowDen
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.LowEnergyFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.NativeLongIntervalSoftFamily
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.NestedChebyshevWordViability
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.OriginalLowEnergyFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.PhysicalBufferedTargets
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.PhysicalLowEnergyFamily

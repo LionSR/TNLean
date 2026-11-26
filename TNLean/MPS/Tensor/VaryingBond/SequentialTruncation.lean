@@ -15,6 +15,7 @@ import QICLean.ManyBody.Replica.RelativePin
 import QICLean.ManyBody.Entropy.MovementEtaRegional
 import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 import QICLean.Analysis.Norm.UnitNormalizationDistance
+import QICLean.ManyBody.Sites.RegionState
 
 /-!
 # Sequential truncation of a chain vector
@@ -71,114 +72,6 @@ section SequentialTruncation
 open Matrix
 open scoped ComplexOrder InnerProductSpace Kronecker
 open ManyBody (cutMatrix)
-
-namespace Entropy
-
-variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
-
-/-- A lift from a smaller region is a lift from any larger region. -/
-theorem exists_localLift_eq_localLift_of_subset {D D' : Finset V} (hDD : D ⊆ D')
-    (K : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
-        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ) :
-    ∃ K' : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D')
-        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D') ℂ,
-      ManyBody.place D K = ManyBody.place D' K' := by
-  rcases isEmpty_or_nonempty (∀ v, Fin (n v)) with _ | ⟨⟨σ₀⟩⟩
-  · exact ⟨0, Subsingleton.elim _ _⟩
-  · exact ManyBody.exists_eq_place_of_mem_supportedOperators
-      ((ManyBody.place_mem_supportedOperators K).mono hDD)
-
-omit [Fintype V] in
-private theorem conjTranspose_mul_self_of_isStarProjection {D : Finset V}
-    {P : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
-        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ} (hP : IsStarProjection P) :
-    Pᴴ * P = P := by
-  have h := hP.isSelfAdjoint.star_eq
-  rw [star_eq_conjTranspose] at h
-  rw [h, hP.isIdempotentElem.eq]
-
-/-- The squared norm of a lifted star projection applied to a vector is the trace of the
-projection against the regional state. -/
-theorem norm_sq_toEuclideanLin_localLift_eq_trace {D : Finset V}
-    {P : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
-        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ} (hP : IsStarProjection P)
-    (ψ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
-    ‖toEuclideanLin (ManyBody.place D P) ψ‖ ^ 2 = (P * ManyBody.regionState ψ D).trace.re := by
-  have hPP := conjTranspose_mul_self_of_isStarProjection hP
-  have hinner : ⟪toEuclideanLin (ManyBody.place D P) ψ, toEuclideanLin (ManyBody.place D P) ψ⟫_ℂ =
-      ⟪ψ, toEuclideanLin (ManyBody.place D P) ψ⟫_ℂ := by
-    rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
-      ← toEuclideanLin_mul_apply, ← ManyBody.place_conjTranspose, ← ManyBody.place_mul, hPP]
-  rw [ManyBody.inner_place, trace_mul_comm] at hinner
-  rw [← hinner]
-  exact (inner_self_eq_norm_sq (𝕜 := ℂ) _).symm
-
-/-- A lifted star projection is a contraction. -/
-theorem norm_toEuclideanLin_localLift_le {D : Finset V}
-    {P : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
-        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ} (hP : IsStarProjection P)
-    (ψ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
-    ‖toEuclideanLin (ManyBody.place D P) ψ‖ ≤ ‖ψ‖ := by
-  have hPP := conjTranspose_mul_self_of_isStarProjection hP
-  set v := toEuclideanLin (ManyBody.place D P) ψ
-  have hinner : ⟪v, v⟫_ℂ = ⟪ψ, v⟫_ℂ := by
-    simp only [v]
-    rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
-      ← toEuclideanLin_mul_apply, ← ManyBody.place_conjTranspose, ← ManyBody.place_mul, hPP]
-  have h1 : ‖v‖ ^ 2 ≤ ‖ψ‖ * ‖v‖ := by
-    have h : ‖v‖ ^ 2 = (⟪ψ, v⟫_ℂ).re := by
-      rw [← hinner]
-      exact (inner_self_eq_norm_sq (𝕜 := ℂ) _).symm
-    rw [h]
-    exact (Complex.re_le_norm _).trans (norm_inner_le_norm _ _)
-  rcases (norm_nonneg v).eq_or_lt with hv | hv
-  · rw [← hv]; exact norm_nonneg ψ
-  · nlinarith
-
-end Entropy
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n] {ρ : Matrix n n ℂ}
-
-/-- The spectral mass of a positive semidefinite matrix strictly below the threshold
-`exp (-(S + w))` is at most the two-sided surprisal tail of its spectrum at centre `S` and
-slack `w`: an eigenvalue below the threshold has surprisal above `S + w`. -/
-theorem PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail (hρ : ρ.PosSemidef)
-    (S w : ℝ) :
-    ((1 - spectralProjectionGE ρ (Real.exp (-(S + w)))) * ρ).trace.re ≤
-      Entropy.surprisalTail hρ.isHermitian.eigenvalues S w := by
-  rw [hρ.isHermitian.trace_complement_spectralProjectionGE, Entropy.surprisalTail]
-  refine Finset.sum_le_sum fun i _ ↦ ?_
-  have hi0 := hρ.eigenvalues_nonneg i
-  split_ifs with h1 h2 h2
-  · exact hi0
-  · exact le_rfl
-  · exact le_rfl
-  · rcases hi0.eq_or_lt with hz | hp
-    · exact hz ▸ le_rfl
-    · exfalso
-      apply h2
-      have hlog : Real.log (hρ.isHermitian.eigenvalues i) < -(S + w) := by
-        rw [← Real.log_exp (-(S + w))]
-        exact Real.log_lt_log hp (lt_of_not_ge h1)
-      exact lt_of_lt_of_le (by linarith) (le_abs_self _)
-
-/-- The rank of the spectral projection of a density matrix above `exp (-(S + w))` is at
-most `exp (S + w)`. -/
-theorem PosSemidef.rank_spectralProjectionGE_exp_le (hρ : ρ.PosSemidef) (hρ1 : ρ.trace = 1)
-    (S w : ℝ) :
-    ((spectralProjectionGE ρ (Real.exp (-(S + w)))).rank : ℝ) ≤ Real.exp (S + w) := by
-  have hrank := hρ.mul_rank_spectralProjectionGE_le_trace (Real.exp (-(S + w)))
-  rw [hρ1, Complex.one_re] at hrank
-  have h : ((spectralProjectionGE ρ (Real.exp (-(S + w)))).rank : ℝ) ≤
-      1 / Real.exp (-(S + w)) := by
-    apply (le_div_iff₀ (Real.exp_pos _)).mpr
-    simpa only [mul_comm] using hrank
-  refine h.trans (le_of_eq ?_)
-  rw [one_div, Real.exp_neg, inv_inv]
-
-end Matrix
 
 namespace TNLean.MPS.AreaLaw
 

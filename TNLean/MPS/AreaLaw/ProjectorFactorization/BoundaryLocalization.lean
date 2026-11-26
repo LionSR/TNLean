@@ -238,7 +238,7 @@ This is `exists_supported_interactionAverage_approx` with the time cutoff `T = �
 With `η = q/ΔE²`, `q` proportional to `l` (line 792) and `ℓ` proportional to `l`, the two
 terms depending on `ℓ` decay exponentially in `l`. The remaining term
 `√η (‖(A + B) - H‖ + ‖A - H₀‖)` does not depend on `ℓ`: it vanishes when `A = H₀` and
-`A + B = H`, as in `ManyBody.ChainInteraction.exists_boundaryOperator_factorization`, and in the
+`A + B = H`, as in `TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization`, and in the
 source's application `A = M_L + M_R`, `B = M_B` it is exponentially small in `l`
 (lines 849–850). Together these give the source's `O(ΔE⁻¹ J √q e^{-l/6ξ})`. -/
 theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)

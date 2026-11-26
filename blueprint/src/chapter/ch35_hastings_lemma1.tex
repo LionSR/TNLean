@@ -169,12 +169,12 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
-    \lean{ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
-        ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
-        ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
-        ManyBody.ChainInteraction.isHermitian_leftPart_localized,
-        ManyBody.ChainInteraction.isHermitian_rightPart_localized,
-        ManyBody.ChainInteraction.isHermitian_bufferPart_localized,
+    \lean{TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.isHermitian_leftPart_localized,
+        TNLean.MPS.AreaLaw.isHermitian_rightPart_localized,
+        TNLean.MPS.AreaLaw.isHermitian_bufferPart_localized,
         TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
     \leanok
     \uses{thm:hastings_part_commutators,thm:chain_lieb_robinson,thm:hastings_three_way_splitting_sum}
@@ -246,10 +246,10 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[The cut-offs on the chain]
     \label{thm:hastings_cutoff_pair}
-    \lean{ManyBody.ChainInteraction.exists_cutoffPair,
+    \lean{TNLean.MPS.AreaLaw.exists_cutoffPair,
         ManyBody.ChainInteraction.localizedPart,
-        ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart,
-        ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart,
+        TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_leftPart,
+        TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_rightPart,
         ManyBody.ChainInteraction.norm_localizedPart_apply_le,
         TNLean.MPS.AreaLaw.partLocalizationError,
         TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,
