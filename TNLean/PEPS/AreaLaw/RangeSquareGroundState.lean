@@ -34,6 +34,7 @@ revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
@@ -47,7 +48,8 @@ whose terms have supports of diameter at most `R` and norms at most `J`.
 
 Source: polynomial-PEPS `eq:model` and `eq:global-gap` (`00-introduction.tex`, lines 36–49),
 read with interactions of range `R` as in area-law Theorem 1.1. -/
-def IsRangeSquareGroundState (q R : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
+def IsRangeSquareGroundState (q R : ℕ) (J Δ : ℝ) (L : ℕ)
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) : Prop :=
   ∃ (H : PlaneInteraction (ManyBody.rectangularDomain L L) q R) (_ : ∀ X, (H.term X).IsHermitian)
       (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ),
     (‖AreaLaw.rectangleAreaLawState Ω‖ = 1 ∧ IsGapped H.hamiltonian E₀ Δ ∧
@@ -56,7 +58,8 @@ def IsRangeSquareGroundState (q R : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace
 /-- A ground vector of the range-`R` family is a unit vector.
 Source: polynomial-PEPS `eq:global-gap` (`00-introduction.tex`, lines 46–49). -/
 theorem IsRangeSquareGroundState.norm_eq_one {q R : ℕ} {J Δ : ℝ} {L : ℕ}
-    {Ω : StateSpace L q} (hΩ : IsRangeSquareGroundState q R J Δ L Ω) : ‖Ω‖ = 1 := by
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    (hΩ : IsRangeSquareGroundState q R J Δ L Ω) : ‖Ω‖ = 1 := by
   obtain ⟨_, _, _, _, hgap⟩ := hΩ
   exact (AreaLaw.norm_rectangleAreaLawState Ω).symm.trans hgap.1
 
@@ -66,7 +69,8 @@ range-one supports.
 Source: polynomial-PEPS `eq:model` (`00-introduction.tex`, lines 40–45) and area-law
 Corollary 1.2. -/
 theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
-    {L : ℕ} {Ω : StateSpace L q} (hΩ : IsSquareGroundState q J Δ L Ω) :
+    {L : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    (hΩ : IsSquareGroundState q J Δ L Ω) :
     IsRangeSquareGroundState q 1 J Δ L Ω := by
   obtain ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ := hΩ
   exact ⟨ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart,
@@ -76,9 +80,11 @@ theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
 
 /-- The square-grid area law passes to a smaller family of states at the same constant.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–52). -/
-theorem SquareEntropyAreaLawAt.mono {q : ℕ} {G G' : ∀ L : ℕ, StateSpace L q → Prop}
+theorem SquareEntropyAreaLawAt.mono {q : ℕ}
+    {G G' : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
     {C_A : ℝ} (hA : SquareEntropyAreaLawAt q G' C_A)
-    (hG : ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → G' L Ω) :
+    (hG : ∀ L : ℕ, ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+      G L Ω → G' L Ω) :
     SquareEntropyAreaLawAt q G C_A :=
   ⟨hA.1, fun L Ω hΩ ↦ hA.2 L Ω (hG L Ω hΩ)⟩
 

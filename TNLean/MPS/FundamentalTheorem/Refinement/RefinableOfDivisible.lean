@@ -93,7 +93,7 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
   calc
     Kraus.transferMap B = E' ^ p := hpow
     _ = (Kraus.transferMap A) ^ p := by rw [← hA]
-    _ = Kraus.transferMap (blockTensor A p) := by rw [transferMap_blockTensor]
+    _ = Kraus.transferMap (blockTensor A p) := by rw [Kraus.transferMap_blockTensor]
 
 /-- Equality with a blocked transfer map gives a refinement isometry.
 No irreducible-form assumption is needed for this Kraus representation step:
@@ -153,7 +153,7 @@ theorem isPRefinable_of_channel_root_hasKrausRankLE
     IsPRefinable B p := by
   obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE hRank
   apply isPRefinable_of_transferMap_eq_blockTensor B A hp
-  rw [transferMap_blockTensor, hA]
+  rw [Kraus.transferMap_blockTensor, hA]
   exact hpow
 
 /-- **Reverse direction of Theorem 4.1 (conditional form).**

@@ -364,7 +364,7 @@ theorem copyApproxVector_eq_sum (hι : ∀ j k, Function.Injective (ι j k))
       physicalMatrix (blockTensor (Aj j') q) = 0) (M : ℕ) [NeZero M] (α : Fin b → ℂ)
     (hN : ∑ _ : Fin M, q = M * q) (s : Cfg d (M * q)) :
     copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ
-        ((blockedConfigEquiv d M q).symm s) =
+        ((Kraus.blockedConfigEquiv d M q).symm s) =
       ∑ j, α j * blockIsometryState (Aj j) (fixedPointPair (σ j)) hN s := by
   rw [copyApproxVector_repeatedBlockSum hι hdisj hq horth σ M α]
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -434,7 +434,7 @@ theorem exists_isOneRoundConversion_copyApproxVector (d b : ℕ)
         ∃ T₁ T₂, T₁ + T₂ ≤ C * q ∧ ∃ v : Fin (M * q) → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring (M * q)) T₁ T₂ (fun x ↦ ∏ i, v i (x i)) fun s =>
             copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ
-              ((blockedConfigEquiv d M q).symm s) := by
+              ((Kraus.blockedConfigEquiv d M q).symm s) := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · -- No physical states: the hypotheses are contradictory.
     refine ⟨0, 1, fun Aj ι _ _ μ σ _ htr q hq hB _ M _ α hα => ?_⟩
@@ -565,7 +565,7 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   have hα : ∑ j, star (α j) * α j = 1 := ghzAmplitude_norm_sq hβ
   have hprep := hCp Aj ι hι hdisj μ σ (fun j => (hσ j).posSemidef) htr q hLq hB horth M α hα
   set v : Cfg d (M * q) → ℂ := fun s => copyApproxVector (repeatedBlockSum Aj ι μ) q M α
-    (copyIsometry ι μ q) σ ((blockedConfigEquiv d M q).symm s) with hv
+    (copyIsometry ι μ q) σ ((Kraus.blockedConfigEquiv d M q).symm s) with hv
   set ψ : MPVSpace d (M * q) := (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm v
   have hψ : (fun s => ψ s) = v := funext fun s => by
     simp [ψ, PiLp.toLp_apply]
@@ -574,19 +574,19 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   have hψn : ‖ψ‖ = 1 := by
     rw [EuclideanSpace.norm_eq]
     have : ∑ s, ‖ψ s‖ ^ 2 = 1 := by
-      rw [← hsq, ← (blockedConfigEquiv d M q).sum_comp]
+      rw [← hsq, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
       refine Finset.sum_congr rfl fun τ _ => ?_
-      rw [show ψ (blockedConfigEquiv d M q τ) = v (blockedConfigEquiv d M q τ) from
+      rw [show ψ (Kraus.blockedConfigEquiv d M q τ) = v (Kraus.blockedConfigEquiv d M q τ) from
         congrFun hψ _, hv]
       simp only [Equiv.symm_apply_apply]
     rw [this, Real.sqrt_one]
   have hinner : ⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) (M * q)⟫_ℂ =
       copyApproxOverlap (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ := by
     rw [copyApproxOverlap, hsq, Real.sqrt_one, Complex.ofReal_one, inv_one, PiLp.inner_apply,
-      ← (blockedConfigEquiv d M q).sum_comp]
+      ← (Kraus.blockedConfigEquiv d M q).sum_comp]
     refine Finset.sum_congr rfl fun τ _ => ?_
-    rw [RCLike.inner_apply, one_mul, show ψ (blockedConfigEquiv d M q τ) =
-      v (blockedConfigEquiv d M q τ) from congrFun hψ _, hv]
+    rw [RCLike.inner_apply, one_mul, show ψ (Kraus.blockedConfigEquiv d M q τ) =
+      v (Kraus.blockedConfigEquiv d M q τ) from congrFun hψ _, hv]
     simp only [Equiv.symm_apply_apply]
     rw [mul_comm]
     rfl

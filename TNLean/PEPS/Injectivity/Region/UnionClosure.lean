@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Region.RegionKernelDescent
-import TNLean.PEPS.Injectivity.Region.SingletonRegion
 
 /-!
 # Concrete region-injectivity union closure for vertex-injective PEPS
@@ -23,8 +22,6 @@ tensor family, `RegionBlockedTensorInjective A R`. The kernel-descent result
 injective once `A` is vertex-injective and every bond dimension is positive.
 The union-closure hypothesis is therefore discharged directly: for the concrete
 predicate, `R ∪ S` is injective regardless of the injectivity of `R` and `S`.
-The same input also supplies the singleton comparison of
-`TNLean.PEPS.SingletonRegion`.
 
 ## References
 
@@ -68,23 +65,6 @@ theorem regionInjectivityUnionClosure_of_isVertexInjective (A : Tensor G d)
     RegionInjectivityUnionClosure (regionInjectivityDataOf (G := G) A) where
   union_injective {R S} _ _ :=
     regionBlockedTensorInjective_of_isVertexInjective (G := G) A (R ∪ S) hA hpos
-
-/-- The singleton comparison for the concrete region-injectivity predicate of a
-vertex-injective PEPS tensor: injectivity of a singleton blocked tensor implies
-injectivity of the corresponding singleton region.
-
-For the concrete predicate the conclusion `regionInjectivityDataOf A` injective
-on `{v}` is exactly the kernel-descent result at the region `{v}`, so the
-hypothesis on the singleton tensor is not needed.
-
-Source: arXiv:1804.04964, Section 3, lines 981--1009 and 1322--1404 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem singletonRegionInjectivityComparison_of_isVertexInjective (A : Tensor G d)
-    (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    SingletonRegionInjectivityComparison (G := G) (d := d)
-      (regionInjectivityDataOf (G := G) A) A where
-  singleton_region_injective v _ :=
-    regionBlockedTensorInjective_of_isVertexInjective (G := G) A {v} hA hpos
 
 end PEPS
 end TNLean

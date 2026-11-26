@@ -26,7 +26,8 @@ This file assembles the local commutator calculations for the physical-sector
 bond into pairwise commutativity on every periodic chain of length at least
 two. For chains of length at least three, overlapping two-site windows either coincide or are cyclic
 neighbors; all other pairs have disjoint supports. The crossed two-site chain
-is treated separately.
+is treated separately. With positive neighboring operators, the physical bond
+is a commuting bond (`PhysicalSectorFactorization.commutingBond`).
 
 ### References
 
@@ -355,6 +356,20 @@ theorem physicalBond_pairwise_comm (F : PhysicalSectorFactorization K)
         rw [cyclicForwardSite_one_eq_finRotate]
         exact (F.physicalBond_adjacent_comm hthree j).symm
     · exact F.physicalBond_disjoint_comm hN hoverlap
+
+open scoped ComplexOrder in
+/-- A physical-sector factorization with positive neighboring operators
+determines a commuting bond: the physical bond is positive and its cyclic
+translates commute at every chain length.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+noncomputable def commutingBond (F : PhysicalSectorFactorization K)
+    (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
+    CommutingBond d where
+  bond := F.physicalBond
+  bond_pos := F.physicalBond_pos hη
+  bond_comm := fun hN i j ↦ F.physicalBond_pairwise_comm hN i j
 
 end MPOTensor.PhysicalSectorFactorization
 

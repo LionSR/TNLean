@@ -48,6 +48,8 @@ interface is resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface
   proof (`06-geometry.tex`, lines 12–53 and 559–681; `07-assembly.tex`, line 11).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -59,7 +61,9 @@ open EncodedFrame
 stronger.
 
 Polynomial-PEPS manuscript, `02-information.tex`, lines 635–658. -/
-theorem IsAngularScale.mono {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {a A₀ : ℝ} {m₀ p : ℕ}
+theorem IsAngularScale.mono {q : ℕ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop} {a A₀ : ℝ}
+    {m₀ p : ℕ}
     {D L₀ D' : ℝ} (h : IsAngularScale q G a A₀ m₀ p D L₀) (ha : 0 ≤ a) (hD : D ≤ D') :
     IsAngularScale q G a A₀ m₀ p D' (max L₀ 1) := by
   intro L hL Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep
@@ -78,7 +82,7 @@ theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
 namespace DyadicProtocol.IsDistributionProtocol
 
 variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] {D : DyadicProtocol L q P}
-  {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {C_N C_K C_E : ℝ} {b k r : ℕ}
 
 /-- **Larger constants are admissible.** The bounds of §8 with constants `C_N`, `C_K`, `C_E`
 hold with any larger constants `C_N' ≥ C_N`, `C_K' ≥ C_K` and `C_E' ≥ C_E`.
@@ -282,10 +286,12 @@ lines 12–53 and 559–681, with the mesh ratio of lines 447–541 and 559–57
 (`02-information.tex`, lines 635–658) and Proposition 4.1 (`03-patches.tex`, lines 26–49) at
 the power `60` (`07-assembly.tex`, line 11). -/
 theorem largeSizeDyadicProtocol_of_angularScale {q : ℕ} (hq : 2 ≤ q)
-    {G : ∀ L : ℕ, StateSpace L q → Prop} (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {D L_ang C c : ℝ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {D L_ang C c : ℝ}
     (hD1 : 1 ≤ D) (hD₁ : IsAngularScale q G (angularConstant / 2) 1 4 60 D L_ang)
     (hC : 0 < C)
-    (hsupply : ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q,
+    (hsupply : ∀ L : ℕ, 2 ≤ L →
+      ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
       G L Ω → AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) C c 60 L)
     {C_N C_K C_E : ℝ} (hCN : protocolCountConstant ≤ C_N)
     (hCK : protocolExpansionConstant protocolMeshRatio C ≤ C_K)
@@ -432,12 +438,15 @@ theorem largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint
     (hpatch : AdaptivePatchConstraint) {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ} (hJ : 0 < J)
     (hΔ : 0 < Δ) :
     ∃ D C c L₁ : ℝ, 1 ≤ D ∧ 0 < C ∧ 0 < c ∧
-      (∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+      (∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsSquareGroundState q J Δ L Ω →
         AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) C c 60 L) ∧
       ∀ C_N C_K C_E : ℝ, protocolCountConstant ≤ C_N →
         protocolExpansionConstant protocolMeshRatio C ≤ C_K →
         protocolErrorConstant protocolMeshRatio ≤ C_E →
-        ∀ L : ℕ, 2 ≤ L → L₁ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+        ∀ L : ℕ, 2 ≤ L → L₁ ≤ L →
+            ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+                IsSquareGroundState q J Δ L Ω →
           ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D' : DyadicProtocol L q P),
             D'.IsDistributionProtocol Ω C_N C_K C_E protocolLifetimeBound
               (protocolExpansionExponent protocolMeshRatio c)

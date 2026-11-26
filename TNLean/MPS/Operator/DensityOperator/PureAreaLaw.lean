@@ -328,7 +328,7 @@ theorem mutualInfoChain_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L �
     (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
     (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N)
       = 2 * MPSTensor.pureBlockEntropy A N L hL := by
-  rw [MPOTensor.mutualInfoChain, blockEntropy_doubledTensor, blockEntropy_doubledTensor,
+  rw [MPOTensor.mutualInfoChain_eq, blockEntropy_doubledTensor, blockEntropy_doubledTensor,
     blockEntropy_doubledTensor, pureBlockEntropy_full A N htr,
     ← pureBlockEntropy_complement A N L hL]
   ring

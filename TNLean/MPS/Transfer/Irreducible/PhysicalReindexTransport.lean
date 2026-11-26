@@ -14,11 +14,9 @@ basic tensor properties used by blocking and canonical-form arguments.
 ## Main statements
 
 * `reindexPhysical_cast_dim` — physical reindexing commutes with bond-dimension casts.
-* `transferMap_reindexPhysical_equiv` — the transfer map is unchanged by a physical
-  alphabet bijection.
-* `leftCanonical_reindexPhysical_equiv` and
-  `isPrimitive_transferMap_reindexPhysical_equiv` — left-canonical normalization and
-  transfer-map primitivity are preserved.
+* `isPrimitive_transferMap_reindexPhysical_equiv` — transfer-map primitivity is preserved,
+  since the transfer map is unchanged (`Kraus.transferMap_reindexPhysical_equiv`; trace
+  preservation is `Kraus.isTP_reindexPhysical_iff`).
 * `hasInvariantProj_reindexPhysical_equiv`, `isIrreducibleFamily_reindexPhysical_equiv`,
   `isInjective_reindexPhysical_equiv`, and `isNormal_reindexPhysical_equiv` — invariant
   projections, irreducibility, one-site injectivity, and normality are preserved.
@@ -43,45 +41,13 @@ theorem reindexPhysical_cast_dim {d₁ d₂ D₁ D₂ : ℕ} (e : Fin d₁ ≃ F
   subst h
   rfl
 
-/-- Reindexing by a physical-index equivalence does not change the transfer map. -/
-theorem transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (A : MPSTensor d₂ D) :
-    Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A) =
-      Kraus.transferMap (ι := Fin d₂) (n := Fin D) A := by
-  ext X i j
-  simp only [Kraus.transferMap_apply, Kraus.reindexPhysical]
-  have hsum :
-      (∑ x : Fin d₁, A (e x) * X * (A (e x))ᴴ) =
-        ∑ x : Fin d₂, A x * X * (A x)ᴴ :=
-    Fintype.sum_equiv e
-      (fun x : Fin d₁ => A (e x) * X * (A (e x))ᴴ)
-      (fun x : Fin d₂ => A x * X * (A x)ᴴ)
-      (fun _ => rfl)
-  exact congr_fun (congr_fun hsum i) j
-
-/-- Reindexing by a physical-index equivalence preserves left-canonical normalization. -/
-theorem leftCanonical_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (A : MPSTensor d₂ D) :
-    (∑ i : Fin d₁,
-        (Kraus.reindexPhysical e A i)ᴴ * Kraus.reindexPhysical e A i = 1) ↔
-      (∑ i : Fin d₂, (A i)ᴴ * A i = 1) := by
-  simp only [Kraus.reindexPhysical]
-  have hsum :
-      (∑ i : Fin d₁, (A (e i))ᴴ * A (e i)) =
-        ∑ i : Fin d₂, (A i)ᴴ * A i :=
-    Fintype.sum_equiv e
-      (fun i : Fin d₁ => (A (e i))ᴴ * A (e i))
-      (fun i : Fin d₂ => (A i)ᴴ * A i)
-      (fun _ => rfl)
-  rw [hsum]
-
 /-- Reindexing by a physical-index equivalence preserves transfer-map primitivity. -/
 theorem isPrimitive_transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
     _root_.IsPrimitive
         (Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A)) ↔
       _root_.IsPrimitive (Kraus.transferMap (ι := Fin d₂) (n := Fin D) A) := by
-  rw [transferMap_reindexPhysical_equiv e A]
+  rw [Kraus.transferMap_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves invariant projections. -/
 theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)

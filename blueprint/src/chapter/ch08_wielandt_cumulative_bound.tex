@@ -514,18 +514,6 @@ matrices, and let $\E_K$ be its Kraus map.
     dimension growth.
 \end{proof}
 
-\begin{lemma}[Word span characterises block injectivity]\label{lem:wordspan_blk_inj}
-    \lean{MPSTensor.wordSpan_eq_top_iff_isNBlkInjective}
-    \leanok
-    \uses{def:word_span,def:l_blk_injective}
-    One has $S_L(A)=\MN{D}$ if and only if $A$ is $L$-block injective.
-\end{lemma}
-
-\begin{proof}\leanok\uses{def:word_span,def:l_blk_injective}
-    Both conditions assert that the span of all products of length~$L$
-    equals $\MN{D}$.
-\end{proof}
-
 \begin{lemma}[Positive-length propagation of block injectivity]
     \label{thm:wordspan_blk_inj_succ}
     \lean{Kraus.wordSpan_succ_eq_mul_left}

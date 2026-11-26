@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
-import QICLean.Kraus.Blocking
+import QICLean.Kraus.BlockedConfiguration
+import QICLean.Kraus.BlockingTransfer
 
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.EquivFin
@@ -146,137 +147,6 @@ theorem blockTensor_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (C : MPSTens
 
 end KroneckerLift
 
-/-- Blocked configurations of length `N` are equivalent to ordinary configurations of length
-`N * L`.
-
-This is the configuration-level identification implicit in physical blocking; see
-arXiv:1606.00608, lines 318--344. -/
-noncomputable def blockedConfigEquiv (d N L : ℕ) :
-    (Fin N → Fin (blockPhysDim d L)) ≃ (Fin (N * L) → Fin d) :=
-  ((Equiv.arrowCongr (Equiv.refl (Fin N)) (decodeBlockEquiv d L)).trans
-    (Equiv.curry (Fin N) (Fin L) (Fin d)).symm).trans
-    (Equiv.arrowCongr finProdFinEquiv (Equiv.refl (Fin d)))
-
-/-- Reading a blocked configuration through `blockedConfigEquiv` gives the flattened blocked
-word.  This is the word-level identification used in the blocking step of
-arXiv:1606.00608, lines 318--344. -/
-lemma ofFn_blockedConfigEquiv (d N L : ℕ)
-    (σ : Fin N → Fin (blockPhysDim d L)) :
-    List.ofFn (blockedConfigEquiv d N L σ) = flattenBlockedWord d L (List.ofFn σ) := by
-  have hfun : blockedConfigEquiv d N L σ =
-      fun k : Fin (N * L) =>
-        decodeBlock d L (σ (finProdFinEquiv.symm k).1) (finProdFinEquiv.symm k).2 := by
-    funext k
-    simp [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
-  rw [hfun, List.ofFn_mul]
-  change _ = ((List.ofFn σ).map (Kraus.wordOfBlock d L)).flatten
-  rw [List.map_ofFn]
-  congr 1
-  refine congrArg List.ofFn (funext fun i => ?_)
-  have hsymm : ∀ j : Fin L,
-      finProdFinEquiv.symm
-          (⟨(i : ℕ) * L + (j : ℕ),
-            by
-              calc
-                (i : ℕ) * L + (j : ℕ) < ((i : ℕ) + 1) * L := by
-                  have := j.isLt
-                  rw [Nat.add_mul, Nat.one_mul]
-                  omega
-                _ ≤ N * L := Nat.mul_le_mul_right _ (by have := i.isLt; omega)⟩ :
-            Fin (N * L)) = (i, j) := by
-    intro j
-    rw [Equiv.symm_apply_eq]
-    apply Fin.ext
-    change (i : ℕ) * L + (j : ℕ) = (j : ℕ) + L * (i : ℕ)
-    rw [Nat.mul_comm L (i : ℕ), Nat.add_comm]
-  simp only [hsymm]
-  rfl
-
-/-- Left-canonical normalization propagates from one site to words of every fixed length. -/
-theorem sum_evalWord_conjTranspose_mul_evalWord
-    (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∀ L : ℕ,
-      ∑ σ : Fin L → Fin d,
-        (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ) = 1 := by
-  intro L
-  induction L with
-  | zero =>
-      simp
-  | succ L ih =>
-      let e : Fin d × (Fin L → Fin d) ≃ (Fin (L + 1) → Fin d) :=
-        Fin.consEquiv (fun _ => Fin d)
-      calc
-        ∑ σ : Fin (L + 1) → Fin d,
-            (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ)
-          = ∑ p : Fin d × (Fin L → Fin d),
-              (Kraus.evalWord A (List.ofFn (e p)))ᴴ * Kraus.evalWord A (List.ofFn (e p)) := by
-                simpa [e] using
-                  (Fintype.sum_equiv e
-                    (f := fun p : Fin d × (Fin L → Fin d) =>
-                      (Kraus.evalWord A (List.ofFn (e p)))ᴴ * Kraus.evalWord A (List.ofFn (e p)))
-                    (g := fun σ : Fin (L + 1) → Fin d =>
-                      (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ))
-                    (by intro p; rfl)).symm
-        _ = ∑ τ : Fin L → Fin d,
-              ∑ i : Fin d,
-                (Kraus.evalWord A (List.ofFn (e (i, τ))))ᴴ *
-                  Kraus.evalWord A (List.ofFn (e (i, τ))) := by
-                simpa using
-                  (Fintype.sum_prod_type_right'
-                    (f := fun i : Fin d => fun τ : Fin L → Fin d =>
-                      (Kraus.evalWord A (List.ofFn (e (i, τ))))ᴴ *
-                        Kraus.evalWord A (List.ofFn (e (i, τ)))))
-        _ = ∑ τ : Fin L → Fin d,
-              (Kraus.evalWord A (List.ofFn τ))ᴴ * Kraus.evalWord A (List.ofFn τ) := by
-                refine Finset.sum_congr rfl ?_
-                intro τ _
-                have hτ :
-                    ∑ i : Fin d,
-                      (Kraus.evalWord A (List.ofFn (Fin.cons i τ)))ᴴ *
-                        Kraus.evalWord A (List.ofFn (Fin.cons i τ)) =
-                    (Kraus.evalWord A (List.ofFn τ))ᴴ * Kraus.evalWord A (List.ofFn τ) := by
-                  calc
-                    ∑ i : Fin d,
-                        (Kraus.evalWord A (List.ofFn (Fin.cons i τ)))ᴴ *
-                          Kraus.evalWord A (List.ofFn (Fin.cons i τ))
-                      = ∑ i : Fin d,
-                          (Kraus.evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i *
-                            Kraus.evalWord A (List.ofFn τ) := by
-                              simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-                    _ = (Kraus.evalWord A (List.ofFn τ))ᴴ *
-                          (∑ i : Fin d, (A i)ᴴ * A i) *
-                          Kraus.evalWord A (List.ofFn τ) := by
-                            have hsum_right :
-                                ∑ i : Fin d,
-                                    (Kraus.evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i *
-                                      Kraus.evalWord A (List.ofFn τ)
-                                  = (∑ i : Fin d,
-                                      (Kraus.evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i) *
-                                      Kraus.evalWord A (List.ofFn τ) := by
-                                    simpa [Matrix.mul_assoc] using
-                                      (Finset.sum_mul
-                                        (s := (Finset.univ : Finset (Fin d)))
-                                        (f := fun i : Fin d =>
-                                          (Kraus.evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i)
-                                        (a := Kraus.evalWord A (List.ofFn τ))).symm
-                            have hsum_left :
-                                ∑ i : Fin d,
-                                    (Kraus.evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i
-                                  = (Kraus.evalWord A (List.ofFn τ))ᴴ *
-                                      ∑ i : Fin d, (A i)ᴴ * A i := by
-                                    simpa [Matrix.mul_assoc] using
-                                      (Finset.mul_sum
-                                        (s := (Finset.univ : Finset (Fin d)))
-                                        (a := (Kraus.evalWord A (List.ofFn τ))ᴴ)
-                                        (f := fun i : Fin d => (A i)ᴴ * A i)).symm
-                            rw [hsum_right, hsum_left]
-                    _ = (Kraus.evalWord A (List.ofFn τ))ᴴ * Kraus.evalWord A (List.ofFn τ) := by
-                          rw [hLeft]
-                          simp
-                simpa [e] using hτ
-        _ = 1 := ih
-
 /-- Right-canonical normalization propagates from letters to words of any fixed length.
 
 If
@@ -335,36 +205,7 @@ theorem sum_evalWord_mul_conjTranspose_evalWord
               (g := fun ρ : Fin L → Fin d =>
                 (Kraus.evalWord Aadj (List.ofFn ρ))ᴴ * Kraus.evalWord Aadj (List.ofFn ρ))
               (by intro ρ; rfl))
-    _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := Aadj) hLeft L
-
-/-- Left-canonical normalization is preserved by physical blocking. -/
-theorem leftCanonical_blockTensor
-    (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∑ i : Fin (blockPhysDim d L),
-      (blockTensor (d := d) (n := Fin D) A L i)ᴴ *
-        blockTensor (d := d) (n := Fin D) A L i = 1 := by
-  let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
-    (finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm
-  calc
-    ∑ i : Fin (blockPhysDim d L),
-        (blockTensor (d := d) (n := Fin D) A L i)ᴴ *
-          blockTensor (d := d) (n := Fin D) A L i
-      = ∑ σ : Fin L → Fin d,
-          (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ) := by
-            change
-              (∑ i : Fin (blockPhysDim d L),
-                (Kraus.evalWord A (List.ofFn (e i)))ᴴ * Kraus.evalWord A (List.ofFn (e i))) =
-                ∑ σ : Fin L → Fin d,
-                  (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ)
-            exact
-              Fintype.sum_equiv e
-                (fun i : Fin (blockPhysDim d L) =>
-                  (Kraus.evalWord A (List.ofFn (e i)))ᴴ * Kraus.evalWord A (List.ofFn (e i)))
-                (fun σ : Fin L → Fin d =>
-                  (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ))
-                (by intro i; rfl)
-    _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := A) hLeft L
+    _ = 1 := Kraus.sum_evalWord_conjTranspose_mul_evalWord Aadj hLeft L
 
 variable {d D : ℕ}
 

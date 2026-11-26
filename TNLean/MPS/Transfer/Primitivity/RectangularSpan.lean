@@ -164,8 +164,7 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
     (hN : Kraus.IsNormal (ι := Fin d) (n := Fin D) A) :
     Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A L) := by
   obtain ⟨N₀, hN₀pos, hN₀⟩ := hN
-  have hN₀_top : Kraus.wordSpan A N₀ = ⊤ :=
-    (wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀
+  have hN₀_top : Kraus.wordSpan A N₀ = ⊤ := hN₀
   -- Kraus.wordSpan A (N₀ * L) = ⊤
   have htopNL : Kraus.wordSpan A (N₀ * L) = ⊤ := by
     rw [Nat.mul_comm]
@@ -177,7 +176,7 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
   -- Conclude: Kraus.wordSpan B N₀ ≥ ⊤, hence = ⊤
   have hBtop : Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) N₀ = ⊤ :=
     eq_top_iff.mpr (htopNL ▸ hle)
-  exact ⟨N₀, hN₀pos, (wordSpan_eq_top_iff_isNBlkInjective _ N₀).mp hBtop⟩
+  exact ⟨N₀, hN₀pos, hBtop⟩
 
 /-! ## Section 2: Eigenvector for blocked tensor -/
 
@@ -324,8 +323,7 @@ theorem exists_rectSpan_eq_range_of_isNormal
     (hN : Kraus.IsNormal A) :
     ∃ n, Kraus.rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
   obtain ⟨N₀, _hN₀pos, hN₀⟩ := hN
-  exact ⟨N₀, Kraus.rectSpan_eq_range_of_wordSpan_eq_top P A
-    ((wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀)⟩
+  exact ⟨N₀, Kraus.rectSpan_eq_range_of_wordSpan_eq_top P A hN₀⟩
 
 end MPSTensor
 

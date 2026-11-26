@@ -33,7 +33,7 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451. -/
 noncomputable def residualBoundaryConfigEquiv (d L M r : ℕ) :
     Cfg (blockPhysDim d L) M × Cfg d r ≃ Cfg d (M * L + r) :=
-  (Equiv.prodCongr (blockedConfigEquiv d M L) (Equiv.refl (Cfg d r))).trans
+  (Equiv.prodCongr (Kraus.blockedConfigEquiv d M L) (Equiv.refl (Cfg d r))).trans
     (Fin.appendEquiv (M * L) r)
 
 /-- The right window is a finite direct sum of the residual boundary map,
@@ -58,7 +58,7 @@ theorem residualWindowRightMapES_eq_fiberwise
     blockedResidualBoundaryMap A L B V M r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm
         (ContinuousLinearMap.rightFiber x u))
-      (Fin.append (blockedConfigEquiv d M L v) τ)
+      (Fin.append (Kraus.blockedConfigEquiv d M L v) τ)
   simp [blockedResidualBoundaryMap, Function.comp_def]
   rfl
 

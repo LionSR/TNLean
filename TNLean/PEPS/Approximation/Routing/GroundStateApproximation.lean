@@ -46,6 +46,8 @@ the routing step. The small sizes and the final constants are handled in
   Lean code is copied or adapted.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -56,7 +58,8 @@ side at least one, where `L ^ c ≤ L ^ c'` for `c ≤ c'`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), the choice of the final constants,
 `07-assembly.tex:197–214`. -/
-theorem HasPEPSApproximation.mono_exponent {C c c' : ℝ} {L q : ℕ} {Ω : StateSpace L q}
+theorem HasPEPSApproximation.mono_exponent {C c c' : ℝ} {L q : ℕ}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
     (h : HasPEPSApproximation C c L q Ω) (hC : 0 ≤ C) (hL : 1 ≤ L) (hc : c ≤ c') :
     HasPEPSApproximation C c' L q Ω := by
   obtain ⟨A, hpos, hbound, hne, herr⟩ := h
@@ -81,9 +84,12 @@ paragraph containing it, `07-assembly.tex:53–63`, with the dyadic anchors of
 `07-assembly.tex:102–114`, the hypotheses of Lemma 8.2 `lem:routing` supplied by
 Proposition 7.1 `prop:protocol` (`07-assembly.tex:128–131`), and the polynomial link
 dimensions `C₁ L ^ r` of `07-assembly.tex:164–170`. -/
-def DyadicOperatorNetworkAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C C₁ k : ℝ)
+def DyadicOperatorNetworkAt (q : ℕ)
+    (G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop)
+    (C C₁ k : ℝ)
     (B deg c L₀ : ℕ) : Prop :=
-  ∀ L : ℕ, ∀ hL : 2 ≤ L, L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+  ∀ L : ℕ, ∀ hL : 2 ≤ L, L₀ ≤ L →
+      ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
     ∃ (P Λ : Type) (_ : Fintype P) (_ : DecidableEq P) (_ : Fintype Λ)
       (_ : DecidableEq Λ) (N : PartyNetwork P Λ (q * q)) (A : DyadicPlacement P),
       A.InGrid (paddedSide L) ∧ A.BlockBounded B ∧
@@ -127,9 +133,11 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), the proof of Theorem 1.1 in �
 `07-assembly.tex:53–63` (`eq:compressed-density`), `07-assembly.tex:122–177` (Lemmas 8.1 and
 8.2, `eq:final-bond`) and `07-assembly.tex:197–206` (the threshold). -/
 theorem hasPEPSApproximation_of_dyadicOperatorNetworkAt {q : ℕ}
-    {G : ∀ L : ℕ, StateSpace L q → Prop} (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {C C₁ k : ℝ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {C C₁ k : ℝ}
     {B deg c L₀ : ℕ} (hnet : DyadicOperatorNetworkAt q G C C₁ k B deg c L₀) :
-    ∀ L : ℕ, 2 ≤ L → max L₀ ⌈2 * C⌉₊ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    ∀ L : ℕ, 2 ≤ L → max L₀ ⌈2 * C⌉₊ ≤ L →
+        ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
       HasPEPSApproximation (max C₁ 1 ^ (8 * (2 * c + 1) * B * deg))
         (max k 0 * ((8 * (2 * c + 1) * B * deg : ℕ) : ℝ) + 1) L q Ω := by
   intro L hL hL₀ Ω hΩ

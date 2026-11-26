@@ -77,23 +77,23 @@ private theorem blocking_interval_commutator_eq
       (quasiLocalIntervalObservable (blockPhysDim d L) a N
         (Xᴴ * (H * X - X * H))) =
     φ (quasiLocalIntervalObservable d (a * L) (N * L)
-      ((Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L) X)ᴴ *
-        (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L) H *
-          Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L) X -
-          Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L) X *
-            Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L) H))) := by
+      ((Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) X)ᴴ *
+        (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) H *
+          Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) X -
+          Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) X *
+            Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) H))) := by
   change φ (quasiLocalBlocking d L
     (quasiLocalIntervalObservable (blockPhysDim d L) a N
       (Xᴴ * (H * X - X * H)))) = _
   rw [quasiLocalBlocking_quasiLocalIntervalObservable]
   apply congrArg (fun Z => φ (quasiLocalIntervalObservable d (a * L) (N * L) Z))
-  change (Matrix.reindexAlgEquiv ℂ ℂ (blockedConfigEquiv d N L))
+  change (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L))
       (Xᴴ * (H * X - X * H)) =
-    ((Matrix.reindexAlgEquiv ℂ ℂ (blockedConfigEquiv d N L)) X)ᴴ *
-      ((Matrix.reindexAlgEquiv ℂ ℂ (blockedConfigEquiv d N L)) H *
-          (Matrix.reindexAlgEquiv ℂ ℂ (blockedConfigEquiv d N L)) X -
-        (Matrix.reindexAlgEquiv ℂ ℂ (blockedConfigEquiv d N L)) X *
-          (Matrix.reindexAlgEquiv ℂ ℂ (blockedConfigEquiv d N L)) H)
+    ((Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L)) X)ᴴ *
+      ((Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L)) H *
+          (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L)) X -
+        (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L)) X *
+          (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L)) H)
   simp only [map_mul, map_sub]
   rfl
 /-- Equal quasi-local interval observables have equal stabilized commutator energies.
@@ -173,21 +173,21 @@ theorem blocking_localCommutator_energy_le
       φ (quasiLocalIntervalObservable d (a * L - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k * L) + (R - 1))
         (localCommutatorObservable h
-          (Matrix.reindex (blockedConfigEquiv d k L) (blockedConfigEquiv d k L) Y))) := by
+          (Matrix.reindex (Kraus.blockedConfigEquiv d k L) (Kraus.blockedConfigEquiv d k L) Y))) := by
   let n := K + R
   let N := (n + k) + n
   let f := intervalStateFunctional φ hpos ((a - (n : ℤ)) * L) (N * L)
-  let Z := Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+  let Z := Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
     (bulkObservable Y n n)
   let H := (chainTranslates R (N * L) h).hamiltonian
-  let C := Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+  let C := Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
     ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)
   have hKN : K ≤ N := by dsimp [N, n]; omega
   have hH : H.PosSemidef := hamiltonian_chainTranslates_posSemidef h hh (N * L)
   have hC : C.PosSemidef :=
     (hamiltonian_chainTranslates_posSemidef (blockedInteractionMatrix h L K)
       (blockedInteractionMatrix_posSemidef h hh L K) N).submatrix
-        (blockedConfigEquiv d N L).symm
+        (Kraus.blockedConfigEquiv d N L).symm
   have hfH : f H = 0 :=
     apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
       φ.toLinearMap h hzero ((a - (n : ℤ)) * L) (N * L)
@@ -214,7 +214,7 @@ theorem blocking_localCommutator_energy_le
       (blockedInteractionMatrix h L K) Y hK
       (show K - 1 ≤ n by dsimp [n]; omega)
       (show K - 1 ≤ n by dsimp [n]; omega)]
-  let X := Matrix.reindex (blockedConfigEquiv d k L) (blockedConfigEquiv d k L) Y
+  let X := Matrix.reindex (Kraus.blockedConfigEquiv d k L) (Kraus.blockedConfigEquiv d k L) Y
   have hZ : quasiLocalIntervalObservable d ((a - (n : ℤ)) * L) (N * L) Z =
       quasiLocalIntervalObservable d (a * L) (k * L) X := by
     rw [show quasiLocalIntervalObservable d ((a - (n : ℤ)) * L) (N * L) Z =
@@ -290,13 +290,13 @@ theorem quasiLocalCommutator_gap_of_blocking
   rw [hVariance] at hGap
   have hEnergy := blocking_localCommutator_energy_le φ hpos h hR hh hK hcover hzero b Y
   have hDecoded : quasiLocalIntervalObservable d (b * L) (t * L)
-      (Matrix.reindex (blockedConfigEquiv d t L) (blockedConfigEquiv d t L) Y) =
+      (Matrix.reindex (Kraus.blockedConfigEquiv d t L) (Kraus.blockedConfigEquiv d t L) Y) =
       quasiLocalIntervalObservable d a k X := by
     rw [← quasiLocalBlocking_quasiLocalIntervalObservable d L b t Y]
     exact hY
   have hEnergyEq := localCommutatorObservable_eq_of_quasiLocalIntervalObservable_eq
     h hR (b * L) a
-    (Matrix.reindex (blockedConfigEquiv d t L) (blockedConfigEquiv d t L) Y) X hDecoded
+    (Matrix.reindex (Kraus.blockedConfigEquiv d t L) (Kraus.blockedConfigEquiv d t L) Y) X hDecoded
   rw [hEnergyEq] at hEnergy
   have hEnergyRe := (Complex.le_def.mp hEnergy).1
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by

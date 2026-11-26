@@ -27,6 +27,7 @@ states*, Proposition 4.1, `03-patches.tex`, lines 26–54 and 534–603, revisio
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped BigOperators
 namespace TNLean.PEPS.Approximation
 open EncodedFrame
@@ -76,7 +77,7 @@ Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`, lines 26�
 534–603, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem adaptivePatchSupply_of_closedSquare_cylinders
     {q : ℕ} (hq : 1 ≤ q) {B₀ p R₀ : ℝ} (hB₀ : 0 < B₀) (hR₀ : 0 ≤ R₀)
-    {L : ℕ} (hL : 2 ≤ L) (Ω : StateSpace L q)
+    {L : ℕ} (hL : 2 ≤ L) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
     (m : ℝ → ℕ) (r : (u : ℝ) → Fin (m u) → ℝ)
     (hr : ∀ u, Monotone (r u)) (hle : ∀ u j, u ≤ r u j)
     (hle₂ : ∀ u, 0 ≤ u → ∀ j, r u j ≤ 2 * u)
@@ -173,7 +174,8 @@ lines 26–54 and 534–603, revision
 theorem SquareEntropyAreaLawAt.adaptivePatchSupply
     {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A)
     (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
-    ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+    ∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsSquareGroundState q J Δ L Ω →
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
   intro L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩

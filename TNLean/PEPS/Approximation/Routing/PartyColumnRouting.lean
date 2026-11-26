@@ -64,6 +64,8 @@ and Lemma 8.2, `07-assembly.tex`, lines 96–177. Source revision:
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 open ManyBody (Edge squareLatticeGraph)
@@ -107,7 +109,7 @@ theorem exists_squarePEPS_of_fixInput_dyadicRouting (hL : 0 < L)
     (N : PartyNetwork P Λ (q * q)) (A : DyadicPlacement P) (hgrid : A.InGrid (paddedSide L))
     {B Δ c D : ℕ} (hB : A.BlockBounded B) (hΔ : DyadicPlacement.DegreeBounded N.src N.tgt Δ)
     (hsep : A.SeparationBounded N.src N.tgt c) (hdim : ∀ ℓ, N.dim ℓ ≤ D)
-    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) {η : ℝ}
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) (hΩ : ‖Ω‖ = 1) {η : ℝ}
     (hσ : Matrix.rectangularTraceNorm
       (N.operatorCoeff (fun p ↦ foldVertex hL (A.anchor p)) - Matrix.euclideanOuterProduct Ω Ω)
         ≤ η)
@@ -144,8 +146,8 @@ theorem exists_squarePEPS_of_product_reference_dyadicRouting (hL : 0 < L)
     (N : PartyNetwork P Λ (q * q)) (A : DyadicPlacement P) (hgrid : A.InGrid (paddedSide L))
     {B Δ c D : ℕ} (hB : A.BlockBounded B) (hΔ : DyadicPlacement.DegreeBounded N.src N.tgt Δ)
     (hsep : A.SeparationBounded N.src N.tgt c) (hdim : ∀ ℓ, N.dim ℓ ≤ D)
-    {b : Type*} [Fintype b] (Ψ : EuclideanSpace ℂ (Configuration L q × b))
-    (Ω : StateSpace L q) (Ξ : EuclideanSpace ℂ b)
+    {b : Type*} [Fintype b] (Ψ : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q) × b))
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) (Ξ : EuclideanSpace ℂ b)
     (hΨ : ‖Ψ‖ ≤ 1) (hΩ : ‖Ω‖ = 1) (hΞ : ‖Ξ‖ ≤ 1) {ε δ κ : ℝ}
     (herror : ‖Ψ - Matrix.euclideanTensorVector Ω Ξ‖ ≤ ε) (hlower : 1 - δ ≤ ‖Ξ‖)
     (hcompression : Matrix.rectangularTraceNorm
@@ -175,7 +177,7 @@ theorem hasPEPSApproximation_of_fixInput_dyadicRouting (hL : 0 < L)
     {B Δ c : ℕ} (hB : A.BlockBounded B) (hΔ : DyadicPlacement.DegreeBounded N.src N.tgt Δ)
     (hsep : A.SeparationBounded N.src N.tgt c) {C₁ k : ℝ} (hC₁ : 1 ≤ C₁) (hk : 0 ≤ k)
     (hdim : ∀ ℓ, (N.dim ℓ : ℝ) ≤ C₁ * (L : ℝ) ^ k)
-    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) {η : ℝ}
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) (hΩ : ‖Ω‖ = 1) {η : ℝ}
     (hσ : Matrix.rectangularTraceNorm
       (N.operatorCoeff (fun p ↦ foldVertex hL (A.anchor p)) - Matrix.euclideanOuterProduct Ω Ω)
         ≤ η)

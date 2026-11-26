@@ -660,7 +660,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     change IsLeftCanonical
       (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
         (blocksA k) L)
-    exact (leftCanonical_reindexPhysical_equiv
+    exact (Kraus.isTP_reindexPhysical_iff
       (directIteratedBlockEquiv d p₀ L)
       (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hLCBlocked

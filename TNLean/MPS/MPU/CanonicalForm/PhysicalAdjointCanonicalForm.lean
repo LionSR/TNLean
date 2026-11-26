@@ -128,14 +128,14 @@ noncomputable def physicalAdjointNormalizedFlattening
       hmiddle] at hmap
     exact hmap
   blocks_left_canonical := fun k ↦
-    (MPSTensor.leftCanonical_reindexPhysical_equiv
+    (Kraus.isTP_reindexPhysical_iff
       (MPOTensor.physicalPairSwapEquiv d) _).2
       (MPSTensor.IsLeftCanonical.mapStar (data.blocks_left_canonical k))
   blocks_fixed_point := by
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
     refine ⟨Λ, hΛpos, hΛdiag, ?_⟩
-    rw [MPSTensor.transferMap_reindexPhysical_equiv]
+    rw [Kraus.transferMap_reindexPhysical_equiv]
     rw [← MPSTensor.map_star_eq_self_of_posDef_isDiag hΛpos hΛdiag,
       MPSTensor.transferMap_mapStar, hΛfix,
       MPSTensor.map_star_eq_self_of_posDef_isDiag hΛpos hΛdiag]

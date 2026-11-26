@@ -141,7 +141,7 @@ private theorem transferMap_blockTensor_eq_trace_smul_of_subleading_eigenvalues_
     (hzero : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → μ = 0)
     {n : ℕ} (hn : D ^ 2 ≤ n) (X : Matrix (Fin D) (Fin D) ℂ) :
     Kraus.transferMap (blockTensor A n) X = X.trace • σ := by
-  rw [transferMap_blockTensor,
+  rw [Kraus.transferMap_blockTensor,
     transferMap_pow_eq_fixedPointProj_of_subleading_eigenvalues_eq_zero
       A hnormal hA hσ htr hfix hzero hn]
   simp [fixedPointProj, htr]

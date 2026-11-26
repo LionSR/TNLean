@@ -21,9 +21,9 @@ length.
 * `etaCyclicEdgeWeight` gives the scalar neighboring-operator weight.
 * `reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight` identifies its
   closed operator in sector-edge coordinates.
-* `TranslationInvariantBondData.fixedProductTensorData` constructs an exact
+* `CommutingBond.fixedProductTensorData` constructs an exact
   selected fixed tensor for an arbitrary positive commuting bond.
-* `TranslationInvariantBondData.fixedProductTensorDataPhysicalSectorFactorization`
+* `CommutingBond.fixedProductTensorDataPhysicalSectorFactorization`
   retains the positive physical-sector factorization of the selected tensor.
 * `fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq`
   identifies its reconstructed bond with the input bond.
@@ -46,7 +46,7 @@ statement is asserted.
 
 ### Main statement
 
-* `TranslationInvariantBondData.exists_positive_physicalSectorFactorization_fixedProductTensorData`
+* `CommutingBond.exists_positive_physicalSectorFactorization_fixedProductTensorData`
   gives the factorization of the exact selected fixed-product tensor.
 
 ### References
@@ -147,7 +147,7 @@ theorem reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight
     apply hn
     simpa only [hk, hh] using congrArg Prod.fst hpairs
 
-namespace TranslationInvariantBondData
+namespace CommutingBond
 
 /-- A chosen exact matrix-product representation of the fixed commuting-bond
 product.  This is the representative whose positive physical sectors are
@@ -155,7 +155,7 @@ exposed by `fixedProductTensorDataPhysicalSectorFactorization`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
 `4to2`, lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
-noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d) :
+noncomputable def fixedProductTensorData (data : CommutingBond d) :
     FixedProductTensorData data :=
   data.positivePhysicalSectorFixedProductTensorData.repr
 
@@ -174,7 +174,7 @@ realization scalar of the source MPO.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
 `4to2`, lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
-theorem nonempty_fixedProductTensorData (data : TranslationInvariantBondData d) :
+theorem nonempty_fixedProductTensorData (data : CommutingBond d) :
     Nonempty (FixedProductTensorData data) :=
   ⟨data.fixedProductTensorData⟩
 
@@ -184,7 +184,7 @@ fixed-product tensor.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 noncomputable def fixedProductTensorDataPhysicalSectorFactorization
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     PhysicalSectorFactorization data.fixedProductTensorData.tensor :=
   data.positivePhysicalSectorFixedProductTensorData.factorization
 
@@ -194,7 +194,7 @@ factorization is the input commuting bond.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     data.fixedProductTensorDataPhysicalSectorFactorization.physicalBond =
       data.bond :=
   data.positivePhysicalSectorFixedProductTensorData.physicalBond_eq
@@ -205,37 +205,13 @@ factorization are positive semidefinite.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     ∀ q h,
       (data.fixedProductTensorDataPhysicalSectorFactorization
         |>.neighboringOperator q h).PosSemidef :=
   data.positivePhysicalSectorFixedProductTensorData.neighboring_pos
 
-end TranslationInvariantBondData
-
-namespace EtaLocalStructureData
-
-variable {D : ℕ} {M : MPOTensor d D}
-
-/-- The bond carried by an eta-local structure has one exact fixed matrix-product
-representation.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
-`4to2`, lines 1581--1605. -/
-theorem nonempty_fixedProductTensorData (data : EtaLocalStructureData M) :
-    Nonempty (TranslationInvariantBondData.FixedProductTensorData data.bondData) :=
-  data.bondData.nonempty_fixedProductTensorData
-
-/-- A chosen exact fixed matrix-product representation of the bond carried by an eta-local
-structure.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
-`4to2`, lines 1581--1605. -/
-noncomputable def fixedProductTensorData (data : EtaLocalStructureData M) :
-    TranslationInvariantBondData.FixedProductTensorData data.bondData :=
-  data.bondData.fixedProductTensorData
-
-end EtaLocalStructureData
+end CommutingBond
 
 end MPOTensor
 
@@ -245,7 +221,7 @@ section
 
 open scoped ComplexOrder
 
-namespace MPOTensor.TranslationInvariantBondData
+namespace MPOTensor.CommutingBond
 
 variable {d : ℕ}
 
@@ -265,7 +241,7 @@ comparison is recorded in
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem exists_positive_physicalSectorFactorization_fixedProductTensorData
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     ∃ F : PhysicalSectorFactorization data.fixedProductTensorData.tensor,
       F.physicalBond = data.bond ∧
         ∀ q h, (F.neighboringOperator q h).PosSemidef :=
@@ -273,6 +249,6 @@ theorem exists_positive_physicalSectorFactorization_fixedProductTensorData
     data.fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq,
     data.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos⟩
 
-end MPOTensor.TranslationInvariantBondData
+end MPOTensor.CommutingBond
 
 end

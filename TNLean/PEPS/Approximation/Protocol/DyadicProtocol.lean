@@ -140,6 +140,8 @@ module does not construct it.
 
 /-! ### The copies held by one party -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
@@ -322,7 +324,8 @@ physical output of a site is at its unit-square party, and every other party has
 output of dimension one.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:48–51`. -/
-def physicalConfigEquiv : ((p : P) → Fin (D.physicalDimension p)) ≃ Configuration L q := by
+def physicalConfigEquiv :
+    ((p : P) → Fin (D.physicalDimension p)) ≃ Config (Qudits (SquareLatticeVertex L L) q) := by
   classical
   haveI : ∀ p : {p // p ∉ Set.range D.site}, Unique (Fin (D.physicalDimension p)) := fun p ↦ by
     rw [D.physicalDimension_eq_one p p.2]; infer_instance
@@ -336,7 +339,9 @@ square, and the configuration of the private registers.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:43–51`, with the physical
 and private registers of Theorem 5.2, `04-compression.tex:148–153`. -/
-def finalConfigEquiv : Config (D.system D.changes) ≃ Configuration L q × Config D.privateOutput :=
+def finalConfigEquiv :
+    Config (D.system D.changes) ≃
+      Config (Qudits (SquareLatticeVertex L L) q) × Config D.privateOutput :=
   (Equiv.piCongrRight D.finalSystemEquiv).trans
     ((Equiv.arrowProdEquivProdArrow P (fun p ↦ Fin (D.physicalDimension p)) D.privateOutput).trans
       (D.physicalConfigEquiv.prodCongr (Equiv.refl _)))
@@ -346,14 +351,15 @@ def finalConfigEquiv : Config (D.system D.changes) ≃ Configuration L q × Conf
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:43–51`, with the physical
 and private registers of Theorem 5.2, `04-compression.tex:148–153`. -/
 def readout : EuclideanSpace ℂ (Config (D.system D.changes)) ≃ₗᵢ[ℂ]
-    EuclideanSpace ℂ (Configuration L q × Config D.privateOutput) :=
+    EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q) × Config D.privateOutput) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ D.finalConfigEquiv
 
 /-- The physical density of the actual final vector: the private registers are traced, and
 the vector is not normalized.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:36–49`. -/
-def physicalDensity : Matrix (Configuration L q) (Configuration L q) ℂ :=
+def physicalDensity : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+    (Config (Qudits (SquareLatticeVertex L L) q)) ℂ :=
   Matrix.partialTraceRight (Matrix.euclideanOuterProduct (D.readout (D.trajectory D.changes))
     (D.readout (D.trajectory D.changes)))
 
@@ -397,7 +403,9 @@ conclusion of Proposition 7.1.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
 `04-compression.tex:143–147`. -/
-structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k r : ℕ) :
+structure IsDistributionProtocol
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) (C_N C_K C_E : ℝ)
+    (b k r : ℕ) :
     Prop where
   /-- Item 1: every party is attached to a square of the padded hierarchy. -/
   inGrid : D.placement.InGrid (paddedSide L)
@@ -539,7 +547,8 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
 
 namespace IsDistributionProtocol
 
-variable {D} {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
+variable {D} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {C_N C_K C_E : ℝ}
+    {b k r : ℕ}
 
 /-- **The protocol density estimate.** For a protocol with the bounds of §8 on a
 square of side `L ≥ 1`, the physical density of the actual final vector satisfies
@@ -633,7 +642,9 @@ with patch and information power `60` (`07-assembly.tex:11`). -/
 def LargeSizeDyadicProtocolConsequences : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ (C : ℝ) (b k r L₀ : ℕ),
-      ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+      ∀ L : ℕ, 2 ≤ L → L₀ ≤ L →
+          ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+              IsSquareGroundState q J Δ L Ω →
         ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D : DyadicProtocol L q P),
           D.IsDistributionProtocol Ω C C C b k r
 
@@ -650,9 +661,12 @@ gapped ground vectors of the model.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, applied with patch and information power `60`
 (`07-assembly.tex:11`). -/
-def DyadicProtocolBoundsAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_N C_K C_E : ℝ)
+def DyadicProtocolBoundsAt (q : ℕ)
+    (G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop)
+    (C_N C_K C_E : ℝ)
     (b k r L₀ : ℕ) : Prop :=
-  ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+  ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+      G L Ω →
     ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D : DyadicProtocol L q P),
       D.IsDistributionProtocol Ω C_N C_K C_E b k r
 
@@ -695,7 +709,7 @@ noncomputable section
 namespace TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol
 
 variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] {D : DyadicProtocol L q P}
-  {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {C_N C_K C_E : ℝ} {b k r : ℕ}
 
 /-- **Retained norm and trace of the protocol.** For a protocol with the bounds of §8 on a
 square of side `L ≥ 1`, with count constant `C_N`, error constant `C_E ≥ 0` and `‖Ω‖ = 1`,

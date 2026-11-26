@@ -52,7 +52,7 @@ theorem peripheralEigenvalues_blockTensor {d D : ℕ} (A : MPSTensor d D)
     {p : ℕ} (hp : 0 < p) :
     peripheralEigenvalues (Kraus.transferMap (blockTensor A p)) =
       (fun z : ℂ => z ^ p) '' peripheralEigenvalues (Kraus.transferMap A) := by
-  rw [transferMap_blockTensor]
+  rw [Kraus.transferMap_blockTensor]
   ext z
   simp only [peripheralEigenvalues, Set.mem_ofPred_eq, Set.mem_image]
   constructor

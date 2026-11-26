@@ -119,11 +119,11 @@ The consecutive-cut identification turns this equality into
 
 The primary formal declaration is
 \leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} in
-\doclink{TNLean/MPS/MPDO/RFP/RFPViaTSSAL}. The channel identities and the
-bipartite-to-chain identification are supplied by
-\leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO},
-\leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}, and
-\leanid{MPOTensor.mutualInfoChain_eq_mutualInformation}.
+\doclink{TNLean/MPS/MPDO/RFP/RFPViaTSSAL}. The channel identities are supplied by
+\leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO} and
+\leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}; the chain
+quantity \leanid{MPOTensor.mutualInfoChain} is defined as the bipartite mutual
+information across the consecutive cut, so no further identification is needed.
 
 \section{Source zero correlation length}
 

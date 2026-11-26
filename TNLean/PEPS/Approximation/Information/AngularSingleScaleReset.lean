@@ -26,6 +26,7 @@ lines 692–778, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped Matrix.Norms.L2Operator
 
 
@@ -72,14 +73,15 @@ the family: every slope `D ≥ angularCellResetSlope C_p a' d` and every size at
 `max (angularCellResetThreshold a' d C_p C₁ M K) L₀` give the information reset at every scale
 `s ≥ D log L`.
 Source: `02-information.tex`, Proposition 3.4, lines 692–780. -/
-theorem angular_single_scale_reset_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
+theorem angular_single_scale_reset_of_bounds {q : ℕ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
     {a a' d p Cp L₀ C₁ K : ℝ}
     (hcell : SquareCellInformationBound q G (angularClearance a a' d) C₁ K)
     (hreset : SquareResetBound q G p Cp L₀) (hC₁ : 0 < C₁) (hK : 0 ≤ K) (hCp : 0 < Cp)
     (ha' : 0 < a') (ha'a : a' < a / 100) (hd : 0 < d) (hda : d < a' / 4) (hd1 : d ≤ 1)
     (hp : 0 < p) (M : ℕ) {D : ℝ} (hD : angularCellResetSlope Cp a' d ≤ D) :
     ∀ L : ℕ, max (angularCellResetThreshold a' d Cp C₁ M K) L₀ ≤ (L : ℝ) →
-      ∀ Ω : StateSpace L q, G L Ω →
+      ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
         ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
           ∀ (o : ℝ × ℝ) (Aold A E : Set (ℝ × ℝ)), Aold ⊆ A →
             (∀ x ∈ A, ∀ y ∈ E, (a / 2) * s ≤ dist x y) →
@@ -162,7 +164,7 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
     (hp : 0 < p) (M : ℕ) {D : ℝ} (hD : angularCellResetSlope (resetWidth J Δ p) a' d ≤ D) :
     ∀ L : ℕ, angularSingleScaleThreshold q J Δ a a' d p Ctpl N Ca Na M ≤ (L : ℝ) →
       ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace L q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
@@ -220,7 +222,7 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
     ∃ D L₀ : ℝ, 1 ≤ D ∧ Real.exp 1 ≤ L₀ ∧
       ∀ L : ℕ, L₀ ≤ (L : ℝ) →
         ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-            (E₀ : ℝ) (Ω : StateSpace L q),
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →

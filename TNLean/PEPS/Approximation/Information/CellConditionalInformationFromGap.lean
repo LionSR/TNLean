@@ -29,6 +29,7 @@ and 304–311, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction)
@@ -106,7 +107,8 @@ theorem cell_conditionalMutualInformation_le_square_closed
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Vertex L) :=
@@ -137,7 +139,8 @@ theorem exists_cell_conditionalMutualInformation_le_square
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
         m₀ ∉ A →
         ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+            (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           let G : Finset (Vertex L) :=

@@ -7433,7 +7433,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ---
 
-### scalar multiple preserves block injectivity — partial migration (2026-11-15)
+### scalar multiple preserves block injectivity — migrated (2026-11-15, 2026-11-26)
 - **Pattern:** nonzero scalar multiplication preserves fixed-length block
   injectivity and algebraic normality.
 - **Abstraction:** the existing `MPSTensor.isNBlkInjective_smul_iff` and
@@ -7441,9 +7441,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Refactored occurrences:** the private `isNBlkInjective_smul_of_ne` and
   `isNormal_smul_of_ne` in `MPS/CanonicalForm/Periodic/Overlap/SectorMatch.lean`
   are removed; the normality consumer applies the existing equivalence.
-  `TranslationInvariantUniqueness.isNBlkInjective_smul` remains in
-  `MPS/FundamentalTheorem/FixedLength/TranslationInvariantUniqueness.lean` with three local
-  consumers; their migration is still a candidate.
+  The copy `MPSTensor.isNBlkInjective_smul` in
+  `MPS/FundamentalTheorem/FixedLength/TranslationInvariantUniqueness.lean` was removed on
+  2026-11-26; its consumers apply `(isNBlkInjective_smul_iff hz _ _).2`.
 - **Notes:** this reuses existing mathematical lemmas and adds no abstraction
   below the promotion threshold. Net Lean delta: -40 lines, including the
   explicit import. Source-head PR CI passed on `cf8e9cf3`; the combined branch

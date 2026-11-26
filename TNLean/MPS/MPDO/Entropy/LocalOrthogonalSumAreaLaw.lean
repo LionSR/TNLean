@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Entropy.VonNeumann.EntropyDecomposition
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
-import TNLean.MPS.Operator.DensityOperator.AreaLaw
+import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
 import TNLean.MPS.Operator.Periodic.FirstSite
 
 /-!
@@ -526,7 +526,7 @@ theorem isSAL_of_proportionalLocalOrthogonalSum
     have hEm := hEntropy m (by omega) (hmN.trans (Nat.div_le_self N 2))
     have hEcomp := hEntropy (N - m) (by omega) (Nat.sub_le N m)
     have hEN := hEntropy N (by omega) (le_refl N)
-    simp only [mutualInfoChain]
+    simp only [mutualInfoChain_eq]
     rw [hEm, hEcomp, hEN]
     rw [← Finset.sum_add_distrib, ← Finset.sum_sub_distrib,
       ← Finset.sum_add_distrib]

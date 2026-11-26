@@ -49,6 +49,7 @@ with `angularScale` and `angularThresholdClosed`, are unchanged.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex rectangleEmbedding rectangularDomain rectangleSiteEquiv
   rectangleSiteEquiv_val)
 
@@ -79,7 +80,8 @@ theorem IsRangeSquareGroundState.squareCellInformationBound {q R : ℕ} (hq : 1 
 
 /-- The mutual information of a state of the square equals that of its placement on the integer
 square, for the corresponding sets of sites. -/
-theorem mutualInformation_rectangleAreaLawState {q L : ℕ} (Ω : StateSpace L q)
+theorem mutualInformation_rectangleAreaLawState {q L : ℕ}
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
     (X Y : Finset (SquareLatticeVertex L L)) :
     ManyBody.regionMutualInformation
         (AreaLaw.rectangleAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)

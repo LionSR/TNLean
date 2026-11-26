@@ -59,9 +59,9 @@ theorem prescribedOBC_window_bondDim_eq (hletter : ∃ i, A i ≠ 0)
     (B : OBCChainTensor d (D * D) N) (hcoeff : B.coeff = mpv A)
     (j : Fin (D ^ 4 + 1)) : B.bondDim (reconstructionCut hN j) = D * D := by
   have : NeZero D := prescribedOBCBondNeZero B
-  have hrank : cutRank B.coeff (L + j.val) = D * D := by
-    rw [hcoeff, ← cutCoefficientRank_eq_cutRank _
-      (show L + j.val ≤ N by have := j.isLt; omega)]
+  have hrank :
+      ManyBody.cutRank (TNLean.MPS.AreaLaw.leftBlock N (L + j.val)) B.coeff = D * D := by
+    rw [hcoeff, ← cutCoefficientRank_eq_cutRank]
     exact quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective A hC1 hletter hN j
   apply le_antisymm (B.bondDim_le _)
   exact hrank.symm.le.trans (B.cutRank_coeff_le (reconstructionCut hN j))

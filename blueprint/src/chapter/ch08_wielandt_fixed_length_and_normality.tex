@@ -153,6 +153,35 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     positive-length propagation at each step gives $S_{L+k}(A)=\MN{D}$.
 \end{proof}
 
+\begin{theorem}[Equivalent forms of normality]
+    \label{thm:normality_equivalent_forms}
+    \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal,
+        MPSTensor.normality_tfae}
+    \leanok
+    \uses{def:normal,def:l_blk_injective,thm:normalized_primitive_gauge,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:normality_rescaling_invariance,lem:gauge_invariance_block_injective,thm:wordspan_blk_inj_succ,lem:isNBlkInjective_iff_blockTensor_isInjective}
+    Let $A$ be an MPS tensor with bond dimension $D>0$; no normalization is
+    assumed. The following are equivalent:
+    \begin{enumerate}
+        \item $A$ is normal;
+        \item $S_n(A)=\MN{D}$ for every sufficiently large $n$;
+        \item $S_{D^4}(A)=\MN{D}$;
+        \item for some $L>0$ the tensor blocked over $L$ sites is injective.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:normality_rescaling_invariance,lem:gauge_invariance_block_injective,thm:wordspan_blk_inj_succ,lem:isNBlkInjective_iff_blockTensor_isInjective}
+    For (1)$\Rightarrow$(3), a nonzero rescaling of $A$ is gauge equivalent to a
+    left-canonical normal tensor (Lemma~\ref{thm:normalized_primitive_gauge}),
+    which is $D^4$-block injective by
+    Theorem~\ref{thm:exact_pow_four_block_injectivity_normal_left_canonical};
+    block injectivity is invariant under the gauge and the rescaling.
+    Positive-length propagation gives (3)$\Rightarrow$(2), and (2)$\Rightarrow$(1)
+    holds at any large positive length. Finally (1)$\Leftrightarrow$(4) is
+    Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective} at each length.
+\end{proof}
+
 \begin{lemma}[Exact block injectivity at positive multiples]
     \label{thm:exact_block_injectivity_positive_multiple}
     \lean{MPSTensor.isNBlkInjective_mul_of_isNBlkInjective}

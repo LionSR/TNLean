@@ -40,9 +40,9 @@ theorem mpo_apply_prefix_twoSiteBlock_suffix
     (i₂ j₂ : Fin s → Fin d) :
     mpo U (p + (m * (2 * k) + s))
         (Fin.append i₀
-          (Fin.append (MPSTensor.blockedConfigEquiv d m (2 * k) i₁) i₂))
+          (Fin.append (Kraus.blockedConfigEquiv d m (2 * k) i₁) i₂))
         (Fin.append j₀
-          (Fin.append (MPSTensor.blockedConfigEquiv d m (2 * k) j₁) j₂)) =
+          (Fin.append (Kraus.blockedConfigEquiv d m (2 * k) j₁) j₂)) =
       Matrix.trace
         (evalWord U (List.ofFn i₀) (List.ofFn j₀) *
           evalWord (blockTwo (blockTensor U k))
@@ -111,9 +111,9 @@ theorem originalSite_threeBlock_window_entry
       ![j₀, finProdFinEquiv j, j₂]) :
     mpo U (p + (3 * (2 * k) + s))
         (Fin.append preI (Fin.append
-          (MPSTensor.blockedConfigEquiv d 3 (2 * k) midI) sufI))
+          (Kraus.blockedConfigEquiv d 3 (2 * k) midI) sufI))
         (Fin.append preJ (Fin.append
-          (MPSTensor.blockedConfigEquiv d 3 (2 * k) midJ) sufJ)) =
+          (Kraus.blockedConfigEquiv d 3 (2 * k) midJ) sufJ)) =
       twoSiteThreeBlockTrace S
         (evalWord U (List.ofFn preI) (List.ofFn preJ))
         (evalWord U (List.ofFn sufI) (List.ofFn sufJ))
@@ -166,9 +166,9 @@ theorem originalSite_threeBlock_window_with_buffers_entry
       preJ ++ ([j₀, finProdFinEquiv j, j₂] ++ sufJ)) :
     mpo U (p + (m * (2 * k) + s))
         (Fin.append resPreI (Fin.append
-          (MPSTensor.blockedConfigEquiv d m (2 * k) midI) resSufI))
+          (Kraus.blockedConfigEquiv d m (2 * k) midI) resSufI))
         (Fin.append resPreJ (Fin.append
-          (MPSTensor.blockedConfigEquiv d m (2 * k) midJ) resSufJ)) =
+          (Kraus.blockedConfigEquiv d m (2 * k) midJ) resSufJ)) =
       twoSiteThreeBlockTrace S
         (evalWord U (List.ofFn resPreI) (List.ofFn resPreJ) *
           evalWord (blockTwo (blockTensor U k)) preI preJ)
@@ -202,9 +202,9 @@ noncomputable def originalSiteThreeBlockWindow
       (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ :=
   fun x j => mpo U (p + (m * (2 * k) + s))
     (Fin.append resPreI (Fin.append
-      (MPSTensor.blockedConfigEquiv d m (2 * k) (midI x)) resSufI))
+      (Kraus.blockedConfigEquiv d m (2 * k) (midI x)) resSufI))
     (Fin.append resPreJ (Fin.append
-      (MPSTensor.blockedConfigEquiv d m (2 * k) (midJ j)) resSufJ))
+      (Kraus.blockedConfigEquiv d m (2 * k) (midJ j)) resSufJ))
 
 /-- The three-block locality identity is an operator identity for a window
 inside an arbitrarily buffered original chain. The matrices of coefficients

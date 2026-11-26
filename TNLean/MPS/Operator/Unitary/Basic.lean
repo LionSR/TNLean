@@ -135,7 +135,7 @@ lemma IsMPU.blockTensor {U : MPOTensor d D} (hU : IsMPU U) (L : ℕ) (hL : 0 < L
       _ = N * 1 := by simp
       _ ≤ N * L := Nat.mul_le_mul_left N hL'
   apply Matrix.reindex_mem_unitaryGroup
-    (MPSTensor.blockedConfigEquiv d N L).symm (mpo U (N * L))
+    (Kraus.blockedConfigEquiv d N L).symm (mpo U (N * L))
   exact IsMPU.mpo_mem_unitaryGroup hU hNL
 
 end MPOTensor

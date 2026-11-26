@@ -48,16 +48,16 @@ lines 434--451. -/
 theorem residualCoverConfigEquiv_apply (K M r : ℕ)
     (u : Cfg (blockPhysDim d L) K) (v : Cfg (blockPhysDim d L) M) (τ : Cfg d r) :
     residualCoverConfigEquiv d L K M r (u, v, τ) =
-      Fin.append (Fin.append (blockedConfigEquiv d K L u) (blockedConfigEquiv d M L v)) τ := by
+      Fin.append (Fin.append (Kraus.blockedConfigEquiv d K L u) (Kraus.blockedConfigEquiv d M L v)) τ := by
   apply List.ofFn_injective
   have hCast := List.ofFn_congr
     (show (K + M) * L + r = K * L + M * L + r by rw [Nat.add_mul])
-    (Fin.append (blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
+    (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
   calc
-    _ = List.ofFn (Fin.append (blockedConfigEquiv d (K + M) L (Fin.append u v)) τ) :=
+    _ = List.ofFn (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ) :=
       hCast.symm
     _ = _ := by
-      simp only [List.ofFn_fin_append, ofFn_blockedConfigEquiv, flattenBlockedWord,
+      simp only [List.ofFn_fin_append, Kraus.ofFn_blockedConfigEquiv, flattenBlockedWord,
         Kraus.flattenBlockedWord, List.map_append, List.flatten_append]
 
 /-- Physical reindexing writes the terminal boundary map as independent
@@ -76,14 +76,14 @@ private theorem reindex_reassocTailBoundaryMapES_eq_fiberwise
             (groundSpaceMapES A (M * L + r))))).comp
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         ((Equiv.prodComm (Fin D × Fin D) (Cfg (blockPhysDim d L) K)).trans
-          (Equiv.prodCongr (blockedConfigEquiv d K L)
+          (Equiv.prodCongr (Kraus.blockedConfigEquiv d K L)
             (Equiv.refl (Fin D × Fin D)))).symm).toContinuousLinearMap := by
   ext x ⟨u, v, τ⟩
   change reassocTailBoundaryMapES A (K * L) (M * L) r x
       (residualCoverConfigEquiv d L K M r (u, v, τ)) =
     groundSpaceMapES A (M * L + r)
-      (WithLp.toLp 2 (fun p => x (blockedConfigEquiv d K L u, p)))
-      (Fin.append (blockedConfigEquiv d M L v) τ)
+      (WithLp.toLp 2 (fun p => x (Kraus.blockedConfigEquiv d K L u, p)))
+      (Fin.append (Kraus.blockedConfigEquiv d M L v) τ)
   rw [residualCoverConfigEquiv_apply, reassocTailBoundaryMapES_apply_threeBlock]
   rfl
 

@@ -35,6 +35,8 @@ as the party of a block of the root square next to the junction, which the resiz
   585–596); Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 open Set
@@ -57,7 +59,8 @@ abbrev rewriteGateBound (C' c' b L : ℕ) : ℕ :=
   (C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^ (2 * b) *
     L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30))
 
-variable {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} [NeZero q] {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    {B₀ C c : ℝ}
 
 /-- **The hole radii are admissible.** At the constants of the protocol and `L ≥ 2`, every hole
 radius `h_n = ε₀ min(n, t)`, `t = D log L`, is positive and at most `B₀ log L`: the constant `B₀`
@@ -265,7 +268,8 @@ change is the identity.
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 529–541, 559–570 and 572–596. -/
 theorem resize_hasSourceBoundedChange_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q]
+          {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
       {C c : ℝ}, ∀ hL : 2 ≤ L, L ≤ 2 ^ k → ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k) (J : DyadicJunction k), 0 < (J.1 : ℕ) →
@@ -395,7 +399,8 @@ such that for every mesh ratio `0 < ν ≤ ν'` the conclusion of
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 529–541, 559–570 and 572–596. -/
 theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
     ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q]
+          {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
       {C c : ℝ}, ∀ hL : 2 ≤ L, L ≤ 2 ^ k → ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k) (J : DyadicJunction k), 0 < (J.1 : ℕ) →

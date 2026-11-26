@@ -276,7 +276,7 @@ transfer map `E_A` is a CPTP channel) *and* the channel-level matching
 `(E_A)^p`.
 
 The proof combines the channel-level blocking identity `E_{A^{[p]}} = (E_A)^p`
-(`MPSTensor.transferMap_blockTensor`) with the left-canonical channel property
+(`Kraus.transferMap_blockTensor`) with the left-canonical channel property
 `Kraus.isChannel_mapLM`. The bridging from the direct coefficient-level
 `IsPRefinable B p` hypothesis to this witness is handled in
 `isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks` in
@@ -288,7 +288,7 @@ theorem thm_4_1_p_refinement_forward_witness
     (hTransferEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
     IsPDivisibleChannel (Kraus.transferMap B) p :=
   ⟨Kraus.transferMap A, Kraus.isChannel_mapLM A hA_norm, by
-    rw [hTransferEq, transferMap_blockTensor]⟩
+    rw [hTransferEq, Kraus.transferMap_blockTensor]⟩
 
 end Theorem41Forward
 

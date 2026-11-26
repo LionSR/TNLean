@@ -41,9 +41,9 @@ theorem exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap
   obtain ⟨p, hp, hAtP⟩ := exists_common_isNBlkInjective_of_isNormal_leftCanonical
     A (fun j ↦ (hP j).norm) (fun j ↦ NeZero.ne (dim j)) hNormal
   have hPair := hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
-    A (HasIrreducibleBlocks.ofForall fun j ↦ (hP j).isIrreducibleFamily_of_posDef (hρ j))
-    (IsLeftCanonicalBlockFamily.ofForall fun j ↦ (hP j).norm)
-    (HasNormalizedSelfOverlap.ofForall fun j ↦
+    A (fun j ↦ (hP j).isIrreducibleFamily_of_posDef (hρ j))
+    (fun j ↦ (hP j).norm)
+    (fun j ↦
       overlap_tendsto_one_of_peripheralPrimitive_of_irreducible (A j)
         ((hP j).isIrreducibleFamily_of_posDef (hρ j)) (hP j).norm (hP j).isPrimitive)
     (show BlocksNotGaugePhaseEquiv A from fun i j hij hdim ↦ by

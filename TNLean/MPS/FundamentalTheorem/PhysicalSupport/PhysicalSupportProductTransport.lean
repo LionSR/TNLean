@@ -31,7 +31,7 @@ incorrectly treated as unital.
 ## Cyclic eta decomposition for a commuting bond
 
 This file combines the dependency-neutral cyclic transport with the physical-support
-product transport to obtain the finite-chain decomposition of eta-local structure data.
+product transport to obtain the finite-chain decomposition of a commuting form.
 -/
 
 section
@@ -536,7 +536,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 and equation
 `generateMPDO`, lines 1571--1593 and 1733--1770. -/
 theorem singleKrausMap_bondProduct_eq_liftedBondProduct
     (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim)
+    (data : CommutingBond F.supportDim)
     {N : ℕ} (hN : 2 ≤ N) :
     singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
         (List.ofFn fun i : Fin N ↦
@@ -547,20 +547,20 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
           (F.liftedBond data.bond)).prod := by
   exact singleKrausMap_bondProduct_of_isometry F.inclusion F.inclusion_isometry
     data.bond data.bond_pos.isHermitian hN
-    (fun i j => (F.liftedTranslationInvariantBondData data).bond_comm hN i j)
+    (fun i j => (F.liftedCommutingBond data).bond_comm hN i j)
 
-/-- Eta-local structure on the restricted physical space extends through the
-support isometry to eta-local structure on the ambient tensor.  The same
+/-- A commuting form on the restricted physical space extends through the
+support isometry to a commuting form of the ambient tensor.  The same
 positive normalization scalar is retained at every chain length.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 and equation
 `generateMPDO`, lines 1571--1593 and 1733--1770. -/
-noncomputable def liftedEtaLocalStructureData
+noncomputable def liftedCommutingForm
     (F : PhysicalSupportRestrictionData P K)
-    (data : EtaLocalStructureData
+    (data : CommutingForm
       (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)) :
-    EtaLocalStructureData K where
-  bondData := F.liftedTranslationInvariantBondData data.bondData
+    CommutingForm K where
+  toCommutingBond := F.liftedCommutingBond data.toCommutingBond
   realizes_mpo := by
     intro N hN
     obtain ⟨c, hc, hreal⟩ := data.realizes_mpo N hN
@@ -568,7 +568,7 @@ noncomputable def liftedEtaLocalStructureData
     change mpo K N = (c : ℂ) •
       (List.ofFn fun i : Fin N ↦
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (F.liftedBond data.bondData.bond)).prod
+          (F.liftedBond data.bond)).prod
     have hmpo : mpo K N =
         singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
           (mpo (PhysicalSectorFactorization.changePhysicalBasis
@@ -578,11 +578,11 @@ noncomputable def liftedEtaLocalStructureData
       F.inclusionᴴ K) N = (c : ℂ) •
         (List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin F.supportDim) (ManyBody.ringWindow hN i)
-            data.bondData.bond).prod at hreal
+            data.bond).prod at hreal
     rw [hmpo, hreal]
     rw [(singleKrausMap
       (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)).map_smul]
-    rw [F.singleKrausMap_bondProduct_eq_liftedBondProduct data.bondData hN]
+    rw [F.singleKrausMap_bondProduct_eq_liftedBondProduct data.toCommutingBond hN]
 
 
 /-- A positive physical-sector factorization on the restricted physical space
@@ -592,23 +592,22 @@ the ambient MPO at every length at least two.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`, `Appetakhetc`,
 `PjKiPj`, and `generateMPDO`, lines 1383--1450 and 1680--1770. -/
-theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+theorem exists_commutingForm_lifted_supported_of_physicalSectorFactorization
     (F : PhysicalSupportRestrictionData P K)
     (G : PhysicalSectorFactorization
       (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K))
     (hη : ∀ k h, (G.neighboringOperator k h).PosSemidef) :
-    ∃ data : EtaLocalStructureData K,
-      twoSiteSectorProjection P * data.bondData.bond *
-          twoSiteSectorProjection P = data.bondData.bond ∧
+    ∃ data : CommutingForm K,
+      twoSiteSectorProjection P * data.bond *
+          twoSiteSectorProjection P = data.bond ∧
       ∀ N (hN : 2 ≤ N),
-        mpo K N = (data.bondData.toCommutingFormData hN).product := by
-  let restrictedData := G.etaLocalStructureData hη
-  let data := F.liftedEtaLocalStructureData restrictedData
-  refine ⟨data, F.liftedBond_supported restrictedData.bondData.bond, ?_⟩
+        mpo K N = data.product hN := by
+  let restrictedData := G.commutingForm hη
+  let data := F.liftedCommutingForm restrictedData
+  refine ⟨data, F.liftedBond_supported restrictedData.bond, ?_⟩
   intro N hN
   change mpo K N =
-    ((F.liftedTranslationInvariantBondData restrictedData.bondData).toCommutingFormData
-      hN).product
+    (F.liftedCommutingBond restrictedData.toCommutingBond).product hN
   have hmpo : mpo K N =
       singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
         (mpo (PhysicalSectorFactorization.changePhysicalBasis
@@ -620,33 +619,33 @@ theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactoriza
         F.inclusionᴴ K) N) =
     (List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-        (F.liftedBond restrictedData.bondData.bond)).prod
+        (F.liftedBond restrictedData.bond)).prod
   rw [show mpo (PhysicalSectorFactorization.changePhysicalBasis
       F.inclusionᴴ K) N =
       (List.ofFn fun i : Fin N ↦
         ManyBody.placeAlong (X := fun _ ↦ Fin F.supportDim) (ManyBody.ringWindow hN i)
-          restrictedData.bondData.bond).prod by
+          restrictedData.bond).prod by
     exact G.mpo_eq_product_physicalBond hN]
   exact F.singleKrausMap_bondProduct_eq_liftedBondProduct
-    restrictedData.bondData hN
+    restrictedData.toCommutingBond hN
 
-/-- Proposition C.8 on the injective physical support gives an eta-local
-commuting-product realization of the ambient tensor whose bond remains in the
+/-- Proposition C.8 on the injective physical support gives a commuting form,
+a commuting-product realization of the ambient tensor whose bond remains in the
 prescribed two-site sector.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`) and
 equations `PjKiPj` and `generateMPDO`, lines 1571--1593 and 1733--1770. -/
-theorem exists_etaLocalStructureData_lifted_supported
+theorem exists_commutingForm_lifted_supported
     (F : PhysicalSupportRestrictionData P K) (hSAL : IsSAL K) :
-    ∃ data : EtaLocalStructureData K,
-      twoSiteSectorProjection P * data.bondData.bond *
-          twoSiteSectorProjection P = data.bondData.bond ∧
+    ∃ data : CommutingForm K,
+      twoSiteSectorProjection P * data.bond *
+          twoSiteSectorProjection P = data.bond ∧
       ∀ N (hN : 2 ≤ N),
-        mpo K N = (data.bondData.toCommutingFormData hN).product := by
+        mpo K N = data.product hN := by
   obtain ⟨G, hG⟩ := exists_positive_physicalSectorFactorization_of_isSAL
     (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)
     F.restricted_injective (F.restricted_isSAL hSAL)
-  exact F.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+  exact F.exists_commutingForm_lifted_supported_of_physicalSectorFactorization
     G hG
 
 end PhysicalSupportRestrictionData
@@ -684,8 +683,8 @@ Proposition `4to2`.
 Source: arXiv:1606.00608, Appendix C.2, equation expression, lines 1571--1576,
 and equation sigmaNK2 as invoked at lines 1603--1605.
 Documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
-    {D : ℕ} {M : MPOTensor d D} (data : EtaLocalStructureData M) :
+theorem CommutingForm.exists_positive_cyclic_eta_block_decomposition
+    {D : ℕ} {M : MPOTensor d D} (data : CommutingForm M) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
       (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
       (U : Matrix (Fin d) (Fin d) ℂ)
@@ -711,7 +710,7 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
   refine ⟨K, dl, dr, e, U, η, hU, hdl, hdr, hη, ?_⟩
   intro N hN
   let : NeZero N := ⟨by omega⟩
-  obtain ⟨c, hc, hreal⟩ := data.exists_positive_scalar_mpo_eq_product N hN
+  obtain ⟨c, hc, hreal⟩ := data.realizes_mpo N hN
   refine ⟨c, hc, ?_⟩
   have hUco : U * Uᴴ = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
@@ -726,7 +725,7 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
   change mpo M N = (c : ℂ) •
     (List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-        data.bondData.bond).prod at hreal
+        data.bond).prod at hreal
   have hconj :
       singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ Uᴴ) (mpo M N) =
         (c : ℂ) • (List.ofFn fun i : Fin N ↦

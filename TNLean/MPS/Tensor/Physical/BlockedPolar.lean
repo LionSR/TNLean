@@ -312,7 +312,7 @@ variable {d : ℕ}
 arXiv:2307.01696, text after eq. `eq:B` (`E_B = E_A^q`) and eq. `eq:B_TM` (first equality). -/
 theorem transferMap_polarPosTensor_blockTensor (A : MPSTensor d D) (q : ℕ) :
     Kraus.transferMap (polarPosTensor (blockTensor A q)) = Kraus.transferMap A ^ q := by
-  rw [transferMap_polarPosTensor, transferMap_blockTensor]
+  rw [transferMap_polarPosTensor, Kraus.transferMap_blockTensor]
 
 /-- **Polar form of the blocked periodic state**: for `N = qM` sites, the periodic state of
 `A` equals `V^{⊗M}` applied to the periodic `M`-site state of the positive-part tensor `P` of
@@ -326,11 +326,11 @@ Lemma 1 and extension to non-normal tensors", with the positive-part tensor kept
 than split into its normal blocks. -/
 theorem mpv_blockedConfigEquiv_eq_sum_polar (A : MPSTensor d D) (q M : ℕ)
     (σ : Fin M → Fin (blockPhysDim d q)) :
-    mpv A (blockedConfigEquiv d M q σ) =
+    mpv A (Kraus.blockedConfigEquiv d M q σ) =
       ∑ τ : Fin M → Fin (D * D),
         (∏ j, polarIsoMatrix (blockTensor A q) (σ j) (τ j)) *
           mpv (polarPosTensor (blockTensor A q)) τ := by
   rw [← mpv_rotatePhysical, rotatePhysical_polarIsoMatrix_polarPosTensor]
-  simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
+  simp only [mpv, coeff, Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor]
 
 end MPSTensor

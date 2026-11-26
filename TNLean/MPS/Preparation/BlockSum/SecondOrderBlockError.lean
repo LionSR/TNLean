@@ -118,7 +118,7 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
   set z : Fin b → ℂ := fun j =>
     mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M
   have hbb : ∑ _l : Fin b, ‖(1 : ℂ)‖ ^ 2 = b := by simp
-  have hnum : ∑ τ, star (v τ) * mpv A (blockedConfigEquiv d M q τ) =
+  have hnum : ∑ τ, star (v τ) * mpv A (Kraus.blockedConfigEquiv d M q τ) =
       ((Real.sqrt b : ℝ) : ℂ)⁻¹ * ∑ j, z j := by
     simp only [v, hω]
     rw [sum_star_nonNormalApproxVector_mul_mpv, Finset.mul_sum]
@@ -145,7 +145,7 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
     rw [← ofReal_sum_norm_sq, ← Complex.ofReal_one] at hΩ
     exact h.trans (Complex.ofReal_injective hΩ).le
   -- The overlap is at least `|num| / ‖φ_N‖`.
-  set num := ∑ τ, star (v τ) * mpv A (blockedConfigEquiv d M q τ)
+  set num := ∑ τ, star (v τ) * mpv A (Kraus.blockedConfigEquiv d M q τ)
   set t := ‖mpvState A (M * q)‖
   have hov : t⁻¹ * ‖num‖ ≤ ‖nonNormalApproxOverlap A q M α ω‖ := by
     rw [nonNormalApproxOverlap_eq]

@@ -750,10 +750,11 @@ between the sites $k-1$ and $k$.
 \section{Cut ranks}
 \label{sec:seqanc_cut_ranks}
 
-For a configuration $\sigma$ of the first $k$ sites and a configuration $\tau$
-of the remaining $N-k$ sites, write $\sigma\tau$ for the configuration of $N$
-sites that agrees with $\sigma$ on the sites $p<k$ and with $\tau$ on the sites
-$p\ge k$, the site $p$ carrying $\tau_{p-k}$. Following
+For $k\ge 0$, the \emph{left block} of the cut after $k$ sites is the set of
+sites $p<k$. For a configuration $\sigma$ of the left block and a configuration
+$\tau$ of the remaining sites, write $\sigma\tau$ for the configuration of $N$
+sites that agrees with $\sigma$ on the left block and with $\tau$ on the
+remaining sites. Following
 \cite[Section~3.1]{PerezGarcia2007Matrix}, the bond dimensions of an
 open-boundary representation are bounded below by the ranks of the reduced
 density operators of the first $k$ sites, and successive Schmidt decompositions
@@ -761,57 +762,52 @@ of the state attain these ranks.
 
 \begin{definition}[Cut matrix and cut rank]
     \label{def:seqanc_cut_matrix}
-    \lean{MPSPreparation.cutConfig, MPSPreparation.cutMatrix,
-        MPSPreparation.cutRank}
+    \lean{ManyBody.cutRank}
     \leanok
     For $\psi\in(\C^d)^{\otimes N}$ and $k\ge 0$, the \emph{cut matrix} of
     $\psi$ at $k$ is the matrix with rows indexed by the configurations
-    $\sigma$ of $k$ sites, columns indexed by the configurations $\tau$ of
-    $N-k$ sites, and entries $\psi(\sigma\tau)$; for $k>N$ only the first $N$
-    letters of $\sigma$ enter. The \emph{cut rank} $\operatorname{rank}_k\psi$
-    is its rank. For $k\le N$ it is the rank of the reduced density operator
-    of the first $k$ sites.
+    $\sigma$ of the left block of the cut after $k$ sites, columns indexed by
+    the configurations $\tau$ of the remaining sites, and entries
+    $\psi(\sigma\tau)$; for $k\ge N$ the left block is the whole chain. The
+    \emph{cut rank} $\operatorname{rank}_k\psi$ is its rank, the rank of the
+    reduced density operator of the left block.
 \end{definition}
 
 \begin{lemma}[Splitting a configuration at a cut]
     \label{thm:seqanc_cut_split}
-    \lean{MPSPreparation.eval_cutConfig, MPSPreparation.cutConfig_restrict}
+    \lean{MPSPreparation.eval_cutEquiv_symm}
     \leanok
     \uses{def:seqanc_cut_matrix}
     Let $k\le N$. For square matrices $M_0,\dots,M_{N-1}$ indexed by the
     physical index, $M^{\sigma\tau}=(M_0^{\sigma_0}\cdots
-        M_{k-1}^{\sigma_{k-1}})(M_k^{\tau_0}\cdots M_{N-1}^{\tau_{N-k-1}})$.
-    Every configuration $c$ of $N$ sites is $\sigma\tau$ with
-    $\sigma=(c_0,\dots,c_{k-1})$ and $\tau=(c_k,\dots,c_{N-1})$.
+        M_{k-1}^{\sigma_{k-1}})(M_k^{\tau_k}\cdots M_{N-1}^{\tau_{N-1}})$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Splitting the ordered product after its first $k$ factors proves the first identity; the second claim
-    holds site by site.
+    Splitting the ordered product after its first $k$ factors proves the identity.
 \end{proof}
 
 \begin{lemma}[Elementary bounds on cut ranks]
     \label{thm:seqanc_cut_rank_bounds}
     \lean{MPSPreparation.cutRank_le_pow, MPSPreparation.cutRank_le_pow_sub,
-        MPSPreparation.cutRank_le_pow_half, MPSPreparation.cutRank_pos,
+        MPSPreparation.cutRank_le_pow_half, ManyBody.cutRank_pos,
         MPSPreparation.cutRank_zero_eq_one, MPSPreparation.cutRank_self_eq_one}
     \leanok
     \uses{def:seqanc_cut_matrix}
-    For every $k$, $\operatorname{rank}_k\psi\le d^k$ and
+    For every $k$, $\operatorname{rank}_k\psi\le d^{\min(k,N)}$ and
     $\operatorname{rank}_k\psi\le d^{N-k}$; if $d\ge 1$, then
     $\operatorname{rank}_k\psi\le d^{\lfloor N/2\rfloor}$. If $\psi\ne 0$, then
-    $\operatorname{rank}_k\psi\ge 1$ for every $k\le N$, and
+    $\operatorname{rank}_k\psi\ge 1$ for every $k$, and
     $\operatorname{rank}_0\psi=\operatorname{rank}_N\psi=1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_cut_split}
-    The rank is at most the number of rows, $d^k$, and of columns, $d^{N-k}$.
-    If $k\le\lfloor N/2\rfloor$ the row bound gives $d^k$, and otherwise $N-k\le\lfloor
-        N/2\rfloor$. If $\psi(c)\ne 0$, the entry of the cut matrix at the
-    restrictions of $c$ is nonzero by Lemma~\ref{thm:seqanc_cut_split}, so
-    the rank is positive. The cut matrices at $0$ and $N$ have one row and one
-    column, respectively.
+    The rank is at most the number of rows, $d^{\min(k,N)}$, and of columns,
+    $d^{N-k}$. If $k\le\lfloor N/2\rfloor$ the row bound gives $d^k$, and
+    otherwise $N-k\le\lfloor N/2\rfloor$. If $\psi(c)\ne 0$, the entry of the
+    cut matrix at the restrictions of $c$ to the left block and to the
+    remaining sites is $\psi(c)\ne 0$, so the rank is positive. The cut
+    matrices at $0$ and $N$ have one row and one column, respectively.
 \end{proof}
 
 \begin{lemma}[Cut ranks bound the bond dimensions]

@@ -61,6 +61,8 @@ lemma; it is supplied by the separate cell and information-reset estimates.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 open scoped Matrix.Norms.L2Operator
@@ -101,7 +103,7 @@ def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
   ∀ a A₀ : ℝ, 0 < a → 1 ≤ A₀ → ∀ m₀ : ℕ, ∀ p : ℝ, 0 < p →
     ∃ D L₀ : ℝ, ∀ L : ℕ, L₀ ≤ L →
       ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace L q,
+          ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
@@ -121,10 +123,12 @@ with `pos` gives `I_Ω(X : E) ≤ L^{-p}`. The statement of Proposition 3.4 is t
 
 Source: `02-information.tex`, lines 635–658, used at `p = 60` in `06-geometry.tex`,
 lines 440–445. -/
-def IsAngularScale (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (a A₀ : ℝ) (m₀ p : ℕ)
+def IsAngularScale (q : ℕ)
+    (G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop) (a A₀ : ℝ)
+    (m₀ p : ℕ)
     (D L₀ : ℝ) : Prop :=
   ∀ L : ℕ, L₀ ≤ L →
-    ∀ Ω : StateSpace L q, G L Ω →
+    ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
       ∀ (pos : SquareLatticeVertex L L → ℝ × ℝ) (c : ℝ × ℝ),
         (∀ v, pos v = sitePosition L v + c) →
       ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
@@ -140,10 +144,11 @@ the conclusion of Proposition 3.4 at accuracy `L^{-p}` holds for the slope `D` a
 `L₀` for every state of a family `G` with the sites placed at `Λ_L`, then it holds for sites
 placed at any common translation of `Λ_L`; the marked points are translated with the sites.
 Source: `02-information.tex`, lines 635–658; `06-geometry.tex`, lines 62–63 and 440–445. -/
-theorem IsAngularScale.of_sitePosition {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
+theorem IsAngularScale.of_sitePosition {q : ℕ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
     {a A₀ D L₀ : ℝ} {m₀ p : ℕ}
     (hD : ∀ L : ℕ, L₀ ≤ L →
-      ∀ Ω : StateSpace L q, G L Ω →
+      ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
@@ -200,7 +205,7 @@ count, and the final removal of padding follow from the geometric data.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 681–785. -/
 theorem mutualInformation_le_of_annular_reset {L q : ℕ}
-    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1)
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) (hΩ : ‖Ω‖ = 1)
     {X E : Finset (SquareLatticeVertex L L)}
     {n t a a' d A₀ ε : ℝ} {V : Finset (ℝ × ℝ)} {m₀ : ℕ}
     (hn : 0 < n) (ha : 0 ≤ a) (ha' : 0 < a') (ha'a : a' < a / 100)

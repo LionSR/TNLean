@@ -685,10 +685,10 @@ theorem pairTraceSeparatingAt_blockTensor
   intro ΔA ΔB hΔ
   apply hSep ΔA ΔB
   intro τ
-  let σ := (blockedConfigEquiv d N p).symm τ
+  let σ := (Kraus.blockedConfigEquiv d N p).symm τ
   have hσ := hΔ σ
   simp only [evalWord_blockTensor] at hσ
-  rw [← ofFn_blockedConfigEquiv] at hσ
+  rw [← Kraus.ofFn_blockedConfigEquiv] at hσ
   simpa [σ] using hσ
 
 end MPSTensor

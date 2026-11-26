@@ -219,9 +219,9 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlo
         (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
       groundSpaceES (toTensorFromBlocks μ A) N := by
   have hSpan := wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
-    A (HasIrreducibleBlocks.ofForall fun j ↦ (hP j).isIrreducibleFamily_of_posDef (hρ j))
-    (IsLeftCanonicalBlockFamily.ofForall fun j ↦ (hP j).norm)
-    (HasNormalizedSelfOverlap.ofForall fun j ↦
+    A (fun j ↦ (hP j).isIrreducibleFamily_of_posDef (hρ j))
+    (fun j ↦ (hP j).norm)
+    (fun j ↦
       overlap_tendsto_one_of_peripheralPrimitive_of_irreducible (A j)
         ((hP j).isIrreducibleFamily_of_posDef (hρ j)) (hP j).norm (hP j).isPrimitive)
     (show BlocksNotGaugePhaseEquiv A from fun i j hij hdim ↦ by

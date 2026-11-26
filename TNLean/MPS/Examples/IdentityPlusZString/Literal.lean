@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
 import QICLean.Algebra.SpinCover.Basic
-import TNLean.MPS.Operator.DensityOperator.AreaLaw
+import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
 import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
 import TNLean.MPS.Operator.DensityOperator.RFPViaTS
 
@@ -283,7 +283,7 @@ theorem M_isSAL : IsSAL M := by
     exact pow_ne_zero N (by norm_num)
   · intro N L hLpos hLhalf
     have hM : (mpo M N).PosSemidef := M_isMPDO N (by omega)
-    simp only [mutualInfoChain]
+    simp only [mutualInfoChain_eq]
     have hLval : blockEntropy M N L
         (Nat.le_of_lt (hLhalf.trans_le (Nat.div_le_self N 2))) hM =
         (L : ℝ) * Real.log 2 := by

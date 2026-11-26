@@ -26,25 +26,6 @@ namespace TNLean.MPS.AreaLaw.ALVV
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- A product of commuting complementary projections fixes precisely their common kernel.
-This identifies the regional ground spaces in ALVV, Definition 5.10. -/
-theorem complementProd_apply_eq_self_iff {h : ℕ → E →L[𝕜] E}
-    (hh : ∀ i, IsStarProjection (h i)) (hc : ∀ i j, Commute (h i) (h j))
-    (n : ℕ) (x : E) :
-    complementProd h n x = x ↔ ∀ i < n, h i x = 0 := by
-  constructor
-  · intro hfix i hi
-    have hz := norm_apply_complementProd_le hh x hi
-    simp only [hc, not_true_eq_false, and_false, Finset.filter_false, Finset.sum_empty] at hz
-    rw [hfix] at hz
-    exact norm_eq_zero.mp (le_antisymm hz (norm_nonneg _))
-  · intro hx
-    induction n with
-    | zero => rfl
-    | succ n ih =>
-      rw [complementProd_succ_apply, ih (fun i hi ↦ hx i (by omega)), hx n (by omega),
-        sub_zero]
-
 /-- Mask a family by a set of indices. Zero factors preserve the complementary product.
 ALVV, Definition 5.10. -/
 noncomputable def restrictedTerm (h : ℕ → E →L[𝕜] E) (s : Finset ℕ)
@@ -90,14 +71,13 @@ theorem isStarProjection_regionalProjection {h : ℕ → E →L[𝕜] E}
 /-- Vanishing of a layer complement means that every term in that layer vanishes.
 ALVV, Theorem 5.14(1). -/
 theorem sub_regionalProjection_apply_eq_zero_iff {h : ℕ → E →L[𝕜] E}
-    (hh : ∀ i, IsStarProjection (h i)) (s : Finset ℕ)
-    (hc : ∀ i ∈ s, ∀ j ∈ s, Commute (h i) (h j)) (m : ℕ) (x : E) :
+    (hh : ∀ i, IsStarProjection (h i)) (s : Finset ℕ) (m : ℕ) (x : E) :
     (1 - regionalProjection h s m) x = 0 ↔ ∀ i < m, i ∈ s → h i x = 0 := by
   classical
   change x - regionalProjection h s m x = 0 ↔ _
   rw [sub_eq_zero, eq_comm]
   rw [regionalProjection, complementProd_apply_eq_self_iff
-    (isStarProjection_restrictedTerm hh s) (commute_restrictedTerm s hc)]
+    (isStarProjection_restrictedTerm hh s)]
   simp only [restrictedTerm]
   constructor
   · intro hx i hi hs
@@ -157,8 +137,8 @@ theorem regionalReplacement_apply_eq_zero_iff {h : ℕ → E →L[𝕜] E}
       (ContinuousLinearMap.IsPositive.of_isStarProjection hoP),
     add_apply_eq_zero_iff hpos (ContinuousLinearMap.IsPositive.of_isStarProjection heP),
     sum_apply_eq_zero_iff hout,
-    sub_regionalProjection_apply_eq_zero_iff hh even he,
-    sub_regionalProjection_apply_eq_zero_iff hh odd ho]
+    sub_regionalProjection_apply_eq_zero_iff hh even,
+    sub_regionalProjection_apply_eq_zero_iff hh odd]
   simp only [restrictedTerm]
   constructor
   · rintro ⟨⟨hout, he⟩, ho⟩ i hi
@@ -187,16 +167,13 @@ theorem ker_regionalReplacement {h : ℕ → E →L[𝕜] E}
 /-- Every original zero-energy vector is annihilated by both regional layer terms and
 all retained exterior terms. ALVV, Theorem 5.14(1). -/
 theorem regionalReplacement_frustrationFree {h : ℕ → E →L[𝕜] E}
-    (hh : ∀ i, IsStarProjection (h i)) (even odd : Finset ℕ)
-    (he : ∀ i ∈ even, ∀ j ∈ even, Commute (h i) (h j))
-    (ho : ∀ i ∈ odd, ∀ j ∈ odd, Commute (h i) (h j))
-    (m : ℕ) {x : E} (hx : ∀ i < m, h i x = 0) :
+    (hh : ∀ i, IsStarProjection (h i)) (even odd : Finset ℕ) (m : ℕ) {x : E} (hx : ∀ i < m, h i x = 0) :
     (1 - regionalProjection h even m) x = 0 ∧
     (1 - regionalProjection h odd m) x = 0 ∧
     ∀ i < m, i ∉ even ∪ odd → h i x = 0 :=
-  ⟨(sub_regionalProjection_apply_eq_zero_iff hh even he m x).mpr
+  ⟨(sub_regionalProjection_apply_eq_zero_iff hh even m x).mpr
     (fun i hi _ ↦ hx i hi),
-   (sub_regionalProjection_apply_eq_zero_iff hh odd ho m x).mpr
+   (sub_regionalProjection_apply_eq_zero_iff hh odd m x).mpr
     (fun i hi _ ↦ hx i hi), fun i hi _ ↦ hx i hi⟩
 
 /-- The regional replacement is positive. ALVV, Theorem 5.14(1). -/

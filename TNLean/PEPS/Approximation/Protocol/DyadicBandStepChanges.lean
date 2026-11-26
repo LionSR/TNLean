@@ -28,6 +28,7 @@ guides before and after it, conditional on Proposition 3.4 through `IsAngularSca
   `05-frames.tex`.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -117,7 +118,8 @@ end Values
 section Changes
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The sites of a treated birth or death.** In the setting of `bandBirth_hasFrameChange`, at a
 point where the readings of the treated guides before and after an elementary birth or death that

@@ -62,7 +62,7 @@ variable {d D E F L : ℕ}
 
 private noncomputable def residualConfigEquiv (d N L r : ℕ) :
     Cfg (blockPhysDim d L) N × Cfg d r ≃ Cfg d (N * L + r) :=
-  (Equiv.prodCongr (blockedConfigEquiv d N L) (Equiv.refl (Cfg d r))).trans
+  (Equiv.prodCongr (Kraus.blockedConfigEquiv d N L) (Equiv.refl (Cfg d r))).trans
     (Fin.appendEquiv (N * L) r)
 
 private noncomputable def residualPrefixFiber {N r : ℕ}

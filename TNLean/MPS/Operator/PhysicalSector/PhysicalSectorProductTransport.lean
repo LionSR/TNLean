@@ -8,7 +8,6 @@ import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorBondTwoSite
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductRealization
 import TNLean.MPS.Operator.PhysicalSector.SitewisePhysicalMatrix
 import TNLean.MPS.Tensor.CyclicWindowIndex
-import TNLean.MPS.Operator.PhysicalSector.CommutingFormBridge
 
 /-!
 # Physical transport of the sector product realization
@@ -21,16 +20,16 @@ coordinates to the original physical coordinates.
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Appendix C.2, Proposition C.8, lines 1581--1593
 
-## Eta-local structure from a positive physical-sector factorization
+## Commuting form from a positive physical-sector factorization
 
 A physical-sector factorization with positive neighboring contractions
-determines the positive translation-invariant bond of Proposition C.8. The
-exact finite-chain product identity realizes every periodic MPO with scalar
-one, and hence gives `MPOTensor.EtaLocalStructureData`.
+determines the commuting bond of Proposition C.8. The exact finite-chain
+product identity realizes every periodic MPO with scalar one, and hence gives
+the commuting form `MPOTensor.CommutingForm`.
 
 ### Main declaration
 
-* `PhysicalSectorFactorization.etaLocalStructureData`
+* `PhysicalSectorFactorization.commutingForm`
 
 ### References
 
@@ -264,7 +263,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 
 **Scope restriction (given physical-sector factorization):** The source
 derives this factorization and positivity of the neighboring operators from
-SAL. The theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` supplies that
+SAL. The theorem `MPOTensor.nonempty_commutingForm_of_isSAL` supplies that
 factorization and the complete positive commuting product form from injectivity
 and SAL; the present theorem records only the conditional product identity.
 Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
@@ -437,7 +436,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 
 **Scope restriction (given physical-sector factorization):** The source
 derives this factorization and positivity of the neighboring operators from
-SAL. The theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` supplies that
+SAL. The theorem `MPOTensor.nonempty_commutingForm_of_isSAL` supplies that
 factorization and the complete positive commuting product form from injectivity
 and SAL; the present theorem records only the conditional product identity.
 Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
@@ -460,7 +459,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 
 **Scope restriction (given physical-sector factorization):** The source
 derives this factorization and positivity of the neighboring operators from
-SAL. The theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` supplies that
+SAL. The theorem `MPOTensor.nonempty_commutingForm_of_isSAL` supplies that
 factorization and the complete positive commuting product form from injectivity
 and SAL; the present theorem records only the conditional scalar formulation.
 Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
@@ -489,8 +488,8 @@ namespace MPOTensor.PhysicalSectorFactorization
 variable {d D : ℕ} {K : MPOTensor d D}
 
 /-- A physical-sector factorization whose neighboring contractions are
-positive semidefinite determines the eta-local commuting product structure.
-The normalization scalar at every chain length is one.
+positive semidefinite determines the commuting form. The normalization scalar
+at every chain length is one.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1571--1593.
@@ -501,13 +500,13 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 preceding Lemma `propSN`, lines 1441--1450. The present declaration instead
 takes both the physical-sector factorization and this positivity as
 hypotheses. The source-faithful implication is
-`MPOTensor.nonempty_etaLocalStructureData_of_isSAL`; see
+`MPOTensor.nonempty_commutingForm_of_isSAL`; see
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
-noncomputable def etaLocalStructureData
+noncomputable def commutingForm
     (F : PhysicalSectorFactorization K)
     (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    EtaLocalStructureData K where
-  bondData := F.translationInvariantBondData hη
+    CommutingForm K where
+  toCommutingBond := F.commutingBond hη
   realizes_mpo := by
     intro N hN
     refine ⟨1, by norm_num, ?_⟩

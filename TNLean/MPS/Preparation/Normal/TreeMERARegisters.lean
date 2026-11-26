@@ -73,9 +73,9 @@ variable {d D s k : ℕ}
 registers of `s` sites. -/
 noncomputable def registerCfgEquiv (d s q M : ℕ) :
     Cfg d (M * (s * q)) ≃ Cfg (blockPhysDim d s) (M * q) :=
-  ((blockedConfigEquiv d M (s * q)).symm.trans
+  ((Kraus.blockedConfigEquiv d M (s * q)).symm.trans
     (Equiv.piCongrRight fun _ => directIteratedBlockEquiv d s q)).trans
-    (blockedConfigEquiv (blockPhysDim d s) M q)
+    (Kraus.blockedConfigEquiv (blockPhysDim d s) M q)
 
 namespace BinaryMERA
 
@@ -91,7 +91,7 @@ noncomputable def registerState [NeZero D] (M : ℕ) : MPVSpace d (M * (s * 2 ^ 
 the MERA at the configuration of the registers of every block. -/
 theorem registerState_apply [NeZero D] (M : ℕ) (τ : Cfg d (M * (s * 2 ^ (k + 1)))) :
     𝓜.registerState M τ = 𝓜.amplitude fun j => directIteratedBlockEquiv d s (2 ^ (k + 1))
-      ((blockedConfigEquiv d M (s * 2 ^ (k + 1))).symm τ j) := by
+      ((Kraus.blockedConfigEquiv d M (s * 2 ^ (k + 1))).symm τ j) := by
   rw [registerState, LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply,
     Equiv.symm_symm, state_apply]
   simp [registerCfgEquiv]

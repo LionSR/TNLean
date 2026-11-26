@@ -211,7 +211,7 @@ theorem czxBoundaryFamily_anomalyClass_ne_zero :
 `(c_{2k}, c_{2k+1})` being the blocked site `k` in the order `2 a + b`. -/
 def czxBoundaryPairing (n m : ℕ) (hm : n * 2 = m) : (Fin n → Fin 4) ≃ (Fin m → Fin 2) :=
   ((Equiv.arrowCongr (Equiv.refl (Fin n)) (twoSiteBlockEquiv 2)).trans
-      (MPSTensor.blockedConfigEquiv 2 n 2)).trans
+      (Kraus.blockedConfigEquiv 2 n 2)).trans
     (Equiv.arrowCongr (finCongr hm) (Equiv.refl (Fin 2)))
 
 /-- The review's operator on `2 n` boundary spins is the operator of the generator of the

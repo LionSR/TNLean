@@ -33,6 +33,8 @@ The holes of a block guide sit at grid corners of the closed root square
   protocol (lines 653–667).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric
@@ -136,7 +138,7 @@ theorem repaintedBlocks_succ_inl {i : ℕ} (hi : i < (eventSchedule k).length) {
     · exact ⟨S, Or.inr rfl, rfl, rfl⟩
     · exact ⟨S', Or.inl h, hS, rfl⟩
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R₀ : RepaintedSquare k)
 

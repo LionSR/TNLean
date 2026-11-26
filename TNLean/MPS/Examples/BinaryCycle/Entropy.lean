@@ -135,7 +135,7 @@ theorem mutualInfo_two_sub_one :
         (by norm_num : (13 : ℝ) ^ 52 ≠ 0)]
     simp only [Real.log_pow]
     ring
-  rw [mutualInfoChain, mutualInfoChain, blockEntropy_one, blockEntropy_two,
+  rw [mutualInfoChain_eq, mutualInfoChain_eq, blockEntropy_one, blockEntropy_two,
     blockEntropy_three, blockEntropy_four, hlog]
   simp only [Real.negMulLog]
   rw [Real.log_div (by norm_num : (14 : ℝ) ≠ 0) (by norm_num : (41 : ℝ) ≠ 0),

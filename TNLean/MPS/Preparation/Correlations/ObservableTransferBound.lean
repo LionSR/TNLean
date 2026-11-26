@@ -40,7 +40,7 @@ maps `E_Z` in the chapter's proof of `thm:ldp_depth_lower_bound`. -/
 theorem sum_norm_sq_evalWord_apply_le {A : MPSTensor d D} (hA : ∑ i, (A i)ᴴ * A i = 1)
     (m : ℕ) (a e : Fin D) :
     ∑ τ : Fin m → Fin d, ‖Kraus.evalWord A (List.ofFn τ) a e‖ ^ 2 ≤ 1 := by
-  have hW := congrFun (congrFun (sum_evalWord_conjTranspose_mul_evalWord A hA m) e) e
+  have hW := congrFun (congrFun (Kraus.sum_evalWord_conjTranspose_mul_evalWord A hA m) e) e
   rw [Matrix.sum_apply, Matrix.one_apply_eq] at hW
   have hre : ∑ τ : Fin m → Fin d, ∑ a' : Fin D,
       ‖Kraus.evalWord A (List.ofFn τ) a' e‖ ^ 2 = 1 := by

@@ -30,7 +30,7 @@
     \label{lem:boundary_matrix_commutes_block_window}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}
     \leanok
-    \uses{def:l_blk_injective,def:eval_word,lem:wordspan_blk_inj,lem:padded_complement_annihilation,lem:block_mateq_of_blocked_mateq}
+    \uses{def:l_blk_injective,def:eval_word,lem:padded_complement_annihilation,lem:block_mateq_of_blocked_mateq}
     Let $A$ be $L_0$-block-injective with $L_0>0$. Let $X$ be a boundary
     matrix, and let $Y_v$ be a matrix for each complementary word $v$ of
     length $K$. Suppose that, for every word $u$ of length $L_0$ and every
@@ -44,8 +44,8 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:wordspan_blk_inj,lem:padded_complement_annihilation}
-    By Lemma~\ref{lem:wordspan_blk_inj},
+    \uses{def:l_blk_injective,lem:padded_complement_annihilation}
+    By Definition~\ref{def:l_blk_injective},
     $\spn\{A^u : |u|=L_0\} = \MN{D}$.
     Hence, for every $M\in\MN{D}$ and every complementary word $v$ of length
     $K$, the displayed hypothesis extends by linearity in the length-$L_0$

@@ -70,10 +70,10 @@ operator at every length $N\geq2$.\footnote{\raggedright Formal structure:
 \leanid{MPOTensor.IsGSNNCHAt}, \leanid{MPOTensor.IsGSNNCH}, and
 \leanid{MPOTensor.normalizedMPO}.}
 
-The auxiliary single-bond presentation is the realization relation for
-commuting-form data.\footnote{\raggedright Formal structure:
-\leanid{MPOTensor.CommutingFormData}. Formal predicate:
-\leanid{MPOTensor.CommutingFormData.Realizes}.} It has the form
+The auxiliary single-bond presentation is a positive scalar multiple of the
+product of the translates of one positive two-site bond whose neighbouring
+translates commute.\footnote{\raggedright Formal statement:
+\leanid{MPOTensor.exists_oneSector_gsnnchData_iff}.} It has the form
 \begin{align}
     \rho^{(N)}
         &=c_N\prod_{j=1}^N\tau_j(B_N),
@@ -82,9 +82,9 @@ commuting-form data.\footnote{\raggedright Formal structure:
         &>0.
     \label{eq:cpsv16_gsnnch_sector_decomposition_single_bond_positive_scalar}
 \end{align}
-A theorem embeds this presentation as the one-sector case of the source
-definition. No converse theorem is claimed that extracts a single bond from
-arbitrary source sector data.
+At a fixed chain length, a theorem proves that these presentations are exactly
+the one-sector cases of the source definition. No theorem is claimed that
+extracts a single bond from source sector data with several sectors.
 
 The represented finite-chain sector sum has the asserted analytic properties:
 all cyclic translates of each sector bond commute pairwise, the represented
@@ -135,7 +135,7 @@ one as in the restricted product.\footnote{\raggedright Formal declarations:
 \leanid{MPOTensor.PhysicalSupportRestrictionData},
 \leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis},
 \leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}, and
-\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}.}
+\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_commutingForm_lifted_supported}.}
 
 Choosing supported products for all absorbed BNT representatives gives an
 orthogonal commuting sector family once the required one-site supports are
@@ -181,7 +181,7 @@ All periodic translates of $B_x$ commute, and their product equals
 $\rho^{(N)}(\mathcal K_x)$ exactly for every $N\geq2$. Applying the construction
 to pairwise orthogonal projections gives the orthogonal commuting sector family
 required for the outer GSNNCH sum.\footnote{\raggedright Formal declarations:
-\leanid{MPOTensor.PhysicalSectorFactorization.exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice}
+\leanid{MPOTensor.PhysicalSectorFactorization.exists_commutingForm_supported_of_twoSidedPhysicalSlice}
 and
 \leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}.}
 

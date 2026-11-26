@@ -48,7 +48,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1450. -/
 theorem
     exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
     ∃ F : PhysicalSectorFactorization K,
       ∀ {N : ℕ} [NeZero N] (k : Fin N → Fin F.sectorCount),
         (F.cyclicNeighboringProduct k).PosSemidef := by

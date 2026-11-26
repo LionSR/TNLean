@@ -60,8 +60,8 @@ def blockedFamily : GroupFamily (Multiplicative (ZMod 2 × ZMod 2))
 its physical configurations regrouped in pairs. -/
 theorem mpo_blockedTensor (g : Multiplicative (ZMod 2 × ZMod 2)) (N : ℕ) :
     mpo (blockedTensor g) N =
-      Matrix.reindex (MPSTensor.blockedConfigEquiv 4 N 2).symm
-        (MPSTensor.blockedConfigEquiv 4 N 2).symm
+      Matrix.reindex (Kraus.blockedConfigEquiv 4 N 2).symm
+        (Kraus.blockedConfigEquiv 4 N 2).symm
         (mpo (symTensor (MPOTensor.GroupCocycle.kleinEquiv g)) (N * 2)) :=
   mpo_blockTensor_eq_reindex _ 2 N
 
@@ -99,9 +99,9 @@ theorem blockedFamily_isNormalRepresentation : blockedFamily.IsNormalRepresentat
   operator_mul g h N hN := by
     change mpo (blockedTensor g) N * mpo (blockedTensor h) N = mpo (blockedTensor (g * h)) N
     simp only [mpo_blockedTensor]
-    change (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv 4 N 2).symm) _ *
-        (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv 4 N 2).symm) _ =
-      (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv 4 N 2).symm) _
+    change (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv 4 N 2).symm) _ *
+        (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv 4 N 2).symm) _ =
+      (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv 4 N 2).symm) _
     rw [← map_mul, mpo_symTensor_mul_even _ _ N hN, gmul_kleinEquiv,
       Equiv.symm_apply_apply]
 

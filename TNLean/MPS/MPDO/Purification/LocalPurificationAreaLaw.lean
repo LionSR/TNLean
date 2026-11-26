@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.Entropy.MutualInformation.DataProcessing
 import TNLean.MPS.Operator.Periodic.LPDO
 import TNLean.MPS.MPDO.Purification.LocalPurificationRFP
-import TNLean.MPS.MPDO.Entropy.MutualInfoBridge
 import TNLean.MPS.Operator.DensityOperator.PureAreaLaw
 
 /-!
@@ -323,7 +322,7 @@ theorem mutualInfoChain_le_of_bipartitioned_channel_image
     (hM : (mpo M N).PosSemidef) (hD' : 0 < D')
     (htrA : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
     mutualInfoChain M N L hL hM ≤ 4 * Real.log D' := by
-  rw [mutualInfoChain_eq_mutualInformation M N L hL hM]
+  rw [mutualInfoChain]
   calc
     Entropy.mutualInformation
           (bipartitionedNormalizedMPO M N L (N - L) (by omega)) _
@@ -342,10 +341,7 @@ theorem mutualInfoChain_le_of_bipartitioned_channel_image
               (doubledTensor A) N L (N - L) (by omega) (doubledTensor_posSemidef A N)
           · apply bipartitionedNormalizedMPO_trace
             simpa [mpo_doubledTensor] using htrA
-    _ = (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N) := by
-          symm
-          exact mutualInfoChain_eq_mutualInformation
-            (doubledTensor A) N L hL (doubledTensor_posSemidef A N)
+    _ = (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N) := rfl
     _ ≤ 4 * Real.log D' := mutualInfoChain_doubledTensor_le A N L hL hD' htrA
 
 /-- **Mutual-information bound from explicit local-purification data.** If an

@@ -29,18 +29,18 @@ equivalence gives the sitewise power of its local blocked matrix.
 Source: arXiv:1703.09188, blocking at lines 297--305. -/
 theorem reindex_piKronecker_blockKron
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
-    Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
-        (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
+    Matrix.reindex (Kraus.blockedConfigEquiv d N k).symm
+        (Kraus.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
       (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k Q)) := by
   classical
   symm
   exact Matrix.ext fun σ τ => by
     simpa [Matrix.piKronecker_apply, MPSTensor.blockKron, Matrix.reindex_apply,
-      MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp,
+      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp,
       Fintype.prod_prod_type] using
       (finProdFinEquiv.prod_comp (fun v : Fin (N * k) =>
-        Q (MPSTensor.blockedConfigEquiv d N k σ v)
-          (MPSTensor.blockedConfigEquiv d N k τ v)))
+        Q (Kraus.blockedConfigEquiv d N k σ v)
+          (Kraus.blockedConfigEquiv d N k τ v)))
 
 private theorem symmetry_eq {n : ℕ} (S T : FiniteChainOperatorSymmetry n)
     (happlicable : S.applicable = T.applicable)

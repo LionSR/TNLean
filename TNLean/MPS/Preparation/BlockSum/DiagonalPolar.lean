@@ -201,14 +201,14 @@ theorem polarSupport_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D �
 tensor. -/
 theorem mpv_blockedConfigEquiv (A : MPSTensor d D) (q M : ℕ)
     (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv A (blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
-  simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
+    mpv A (Kraus.blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
+  simp only [mpv, coeff, Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor]
 
 /-- The periodic state of the diagonal tensor on `N = qM` sites, read through the regrouping of
 sites into `M` blocks: `φ_N(A)(τ) = ∑_e ∏ₖ b_e(τ_k)`. -/
 theorem mpv_blockedConfigEquiv_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ)
     (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv (fun i => diagonal (a i)) (blockedConfigEquiv d M q τ) =
+    mpv (fun i => diagonal (a i)) (Kraus.blockedConfigEquiv d M q τ) =
       ∑ e, ∏ k, blockDiagEntry a q (τ k) e := by
   rw [mpv_blockedConfigEquiv, mpv, coeff, funext (blockTensor_diagonal a q), evalWord_diagonal,
     trace_diagonal]
@@ -288,7 +288,7 @@ sites. The approximation error of Lemma 1' of the source is `ε = 1 - |⟨φ~_N|
 noncomputable def nonNormalApproxOverlap (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) : ℂ :=
   ∑ τ, star (nonNormalApproxState A q M α ω τ) *
-    normalizedMPVState A (M * q) (blockedConfigEquiv d M q τ)
+    normalizedMPVState A (M * q) (Kraus.blockedConfigEquiv d M q τ)
 
 /-- The squared norm of a vector, as a complex number. -/
 theorem ofReal_sum_norm_sq {n : Type*} [Fintype n] (f : n → ℂ) :
@@ -304,7 +304,7 @@ theorem nonNormalApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b �
       ((Real.sqrt (∑ τ, ‖nonNormalApproxVector A q M α ω τ‖ ^ 2) : ℂ)⁻¹ *
         (‖mpvState A (M * q)‖ : ℂ)⁻¹) *
         ∑ τ, star (nonNormalApproxVector A q M α ω τ) *
-          mpv A (blockedConfigEquiv d M q τ) := by
+          mpv A (Kraus.blockedConfigEquiv d M q τ) := by
   rw [nonNormalApproxOverlap, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
   simp only [nonNormalApproxState, normalizedMPVState, Pi.smul_apply, smul_eq_mul, star_mul',
@@ -354,7 +354,7 @@ theorem ofReal_norm_mpvState_sq_diagonal (a : Fin d → Fin D → ℂ) (q M : �
     ((‖mpvState (fun i => diagonal (a i)) (M * q)‖ ^ 2 : ℝ) : ℂ) =
       ∑ e, ∑ e', diagGram a q e e' ^ M := by
   rw [EuclideanSpace.norm_eq, Real.sq_sqrt (Finset.sum_nonneg fun _ _ => by positivity),
-    ofReal_sum_norm_sq, ← (blockedConfigEquiv d M q).sum_comp]
+    ofReal_sum_norm_sq, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
   simp only [mpvState_apply, mpv_blockedConfigEquiv_diagonal]
   rw [sum_star_sum_mul_sum
     (fun e (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, blockDiagEntry a q (τ k) e)
@@ -388,7 +388,7 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
     (α : Fin b → ℂ) (c : Fin b → Fin D) :
     ∑ τ, star (nonNormalApproxVector (fun i => diagonal (a i)) q M α
           (fun j => basisPair (c j)) τ) *
-        mpv (fun i => diagonal (a i)) (blockedConfigEquiv d M q τ) =
+        mpv (fun i => diagonal (a i)) (Kraus.blockedConfigEquiv d M q τ) =
       ∑ j, ∑ e, star (α j) *
         polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
           (c j, c j) (e, e) ^ M := by

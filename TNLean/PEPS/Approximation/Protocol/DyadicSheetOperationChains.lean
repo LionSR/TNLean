@@ -28,6 +28,8 @@ small-patch rewrites of the protocol.
   changes (lines 572–583).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -106,7 +108,8 @@ def IsLocalLabel (R : RepaintedSquare k) (done : Set (ℤ × ℤ)) (l : GuideLab
   l = newParty Sum.inl R.1.1 R.1.index ∨
     ∃ R' ∈ blockWindow 1, l = protocolLevelLabels k R.1.1 done (R' + R.1.index)
 
-variable {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} [NeZero q] {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R : RepaintedSquare k)
 

@@ -32,6 +32,7 @@ as in *A two-dimensional area law from a global spectral gap*, `eq:hamiltonian`;
 Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped BigOperators
 
 namespace TNLean.PEPS.Approximation
@@ -73,9 +74,10 @@ theorem rangeAdaptivePatchExponent_pos {q R : ℕ} {J Δ B₀ p : ℝ} (C_A : �
 
 Extension of polynomial-PEPS `03-patches.tex`, lines 362–368, to the range-`R` squares. -/
 theorem SquareEntropyAreaLawAt.rangeNestedPatch_entropy_le
-    {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {C_A : ℝ}
+    {q : ℕ} {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    {C_A : ℝ}
     (hA : SquareEntropyAreaLawAt q G C_A) (R : ℕ) :
-    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+    ∀ (L : ℕ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
         ∀ j : Fin (AreaLaw.Geometry.rangeNestedPatchCount R u),
           ManyBody.regionEntropy
@@ -99,7 +101,8 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
     (hA : SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C_A)
     (hq : 0 < q) (hR : 1 ≤ R) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀)
     (hp : 0 < p) :
-    ∀ (L : ℕ), 2 ≤ L → ∀ Ω : StateSpace L q, IsRangeSquareGroundState q R J Δ L Ω →
+    ∀ (L : ℕ), 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsRangeSquareGroundState q R J Δ L Ω →
       ∀ (center : ℝ × ℝ) (u : ℝ), 0 ≤ u → u ≤ B₀ * Real.log L →
         let Λ := ManyBody.rectangularDomain L L
         letI : LinearOrder ↥Λ :=
@@ -142,7 +145,8 @@ theorem SquareEntropyAreaLawAt.rangeAdaptivePatchSupply
     (hA : SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C_A)
     (hq : 0 < q) (hR : 1 ≤ R) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀)
     (hp : 0 < p) :
-    ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsRangeSquareGroundState q R J Δ L Ω →
+    ∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsRangeSquareGroundState q R J Δ L Ω →
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (rangeAdaptivePatchExponent q R J Δ B₀ p C_A) p L := by
   intro L hL Ω hΩ

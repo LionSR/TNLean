@@ -36,8 +36,8 @@ theorem mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two
     (σ : Fin N → Fin (blockPhysDim d L)) :
     mpv (blockTensor A L) σ = c (N * L) * mpv (blockTensor B L) σ := by
   have hNL : 2 ≤ N * L := by nlinarith
-  simpa only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor] using
-    hC (N * L) hNL (blockedConfigEquiv d N L σ)
+  simpa only [mpv, coeff, Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor] using
+    hC (N * L) hNL (Kraus.blockedConfigEquiv d N L σ)
 
 /-- Unimodular MPV proportionality at every length at least two is already
 geometric. The one-site phase is determined by the ratio of the coefficients

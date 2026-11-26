@@ -447,8 +447,8 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
         Finset.sum_le_sum fun j _ => hBNT.blocks_dim_pos j
       _ ≤ D := hDimSum
   have hNormal : ∀ j, IsNormalTensor (C j) := hCBNT.blocks_normal
-  have hIrr : HasIrreducibleBlocks (d := d) C :=
-    HasIrreducibleBlocks.ofForall fun j => (hNormal j).no_invariant_proj
+  have hIrr : ∀ k, Kraus.IsIrreducibleFamily (C k) :=
+    fun j => (hNormal j).no_invariant_proj
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) C :=
     hCBNT.blocks_not_gaugePhaseEquiv
   have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>

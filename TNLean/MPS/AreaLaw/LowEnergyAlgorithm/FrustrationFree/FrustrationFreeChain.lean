@@ -388,15 +388,12 @@ The global zero-energy premise is equivalent to termwise frustration freeness be
 all original terms are projections. ALVV, Theorem 5.14(1). -/
 theorem chainReplacement_frustrationFree
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) (a b : ℕ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hh : ∀ i, IsStarProjection (h i)) (a b : ℕ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : chainOperator h Ω = 0) :
     (1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
     (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
     ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0 := by
-  obtain ⟨he, ho⟩ := chain_parity_commute hsupp a b
-  exact regionalReplacement_frustrationFree (isStarProjection_chainTerm hh) _ _ he ho m
+  exact regionalReplacement_frustrationFree (isStarProjection_chainTerm hh) _ _ m
     ((chainOperator_apply_eq_zero_iff hh Ω).mp hΩ)
 
 /-- A concrete chain gap parameter at most one yields the uniform lower bound `γ/15`
@@ -461,7 +458,7 @@ theorem frustrationFree_regionalReplacement_chain
   refine ⟨(isStarProjection_regionalProjection hproj _ he m).one_sub,
     (isStarProjection_regionalProjection hproj _ ho m).one_sub,
     isPositive_regionalReplacement hproj _ _ he ho m, hk, ⟨hΩnorm, hΩ'⟩,
-    chainReplacement_frustrationFree hh hsupp a b hΩ,
+    chainReplacement_frustrationFree hh a b hΩ,
     (fun k ↦ rank_regionalReplacementMatrix_le_sq_add_three h hq hsupp a b k),
     (fun hb k ↦ rank_regionalReplacementMatrix_le_sq_add_two_of_boundary h hq hsupp a b k hb),
     ?_⟩

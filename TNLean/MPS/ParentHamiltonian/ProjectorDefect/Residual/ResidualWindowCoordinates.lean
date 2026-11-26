@@ -226,7 +226,7 @@ noncomputable def residualWindowConfigEquiv (d L K M r : ℕ) :
     Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) ≃
       Cfg d ((K + M) * L + r) :=
   (Equiv.prodAssoc _ _ _).symm.trans
-    ((Equiv.prodCongr ((Fin.appendEquiv K M).trans (blockedConfigEquiv d (K + M) L))
+    ((Equiv.prodCongr ((Fin.appendEquiv K M).trans (Kraus.blockedConfigEquiv d (K + M) L))
       (Equiv.refl (Cfg d r))).trans (Fin.appendEquiv ((K + M) * L) r))
 
 /-- The three-window full map is precisely the residual boundary map
@@ -247,7 +247,7 @@ theorem residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm x) =
     blockedResidualBoundaryMap A L B V (K + M) r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm x)
-        (Fin.append (blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
+        (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
   simp [blockedResidualBoundaryMap, Function.comp_def, List.ofFn_fin_append,
     Kraus.evalWord_append]
 end MPSTensor

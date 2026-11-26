@@ -125,6 +125,7 @@ open scoped BigOperators ComplexOrder
 namespace OBCChainTensor
 
 open MPSPreparation
+open TNLean.MPS.AreaLaw (leftBlock)
 
 /-- Every normalized physical state of positive length has an actual
 simultaneous OBC canonical representation. Bond dimensions are the actual
@@ -136,7 +137,7 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = ψ ∧
-      (∀ k, A.bondDim k = cutRank ψ k.val) ∧
+      (∀ k, A.bondDim k = ManyBody.cutRank (leftBlock N k) ψ) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
@@ -163,7 +164,7 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
   obtain ⟨B, hB0, hBN, hcuts⟩ := exists_canonicalCutBasisFamily hN ψ hnorm
   have hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ d ^ (N / 2) := by
     intro k
-    rw [cutCoefficientRank_eq_cutRank ψ (Nat.lt_succ_iff.mp k.isLt)]
+    rw [cutCoefficientRank_eq_cutRank ψ k.val]
     exact cutRank_le_pow_half ψ k.val
   let A := minimalCutChain ψ hψ B hbound
   let Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ :=
@@ -181,7 +182,7 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
         rw [trace_cutBondDensity_step ψ B (by omega) (hiso k (by omega)), ih (by omega)]
   refine ⟨A, Λ, funext (minimalCutChain_coeff ψ hψ B hB0 hBN hbound), ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro k
-    exact cutCoefficientRank_eq_cutRank ψ (Nat.lt_succ_iff.mp k.isLt)
+    exact cutCoefficientRank_eq_cutRank ψ k.val
   · intro p
     exact hiso p.val p.isLt
   · intro p
@@ -207,7 +208,7 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = ψ ∧
-      (∀ k, A.bondDim k = cutRank ψ k.val) ∧
+      (∀ k, A.bondDim k = ManyBody.cutRank (leftBlock N k) ψ) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
@@ -232,7 +233,7 @@ theorem exists_canonical_coeff_eq_rectangular_maps {d D N : ℕ} (hN : 0 < N)
     ∃ Y : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (B.bondDim k)) ℂ,
     ∃ Z : (k : Fin (N + 1)) → Matrix (Fin (B.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = B.coeff ∧
-      (∀ k, A.bondDim k = cutRank B.coeff k.val) ∧
+      (∀ k, A.bondDim k = ManyBody.cutRank (leftBlock N k) B.coeff) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧

@@ -31,6 +31,7 @@ states*, Proposition 4.1, `03-patches.tex`, lines 335–563,
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped Matrix.Norms.L2Operator
 
 open scoped BigOperators ComplexOrder MatrixOrder
@@ -178,7 +179,7 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∀ (L : ℕ), 2 ≤ L →
       ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace L q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
@@ -232,7 +233,7 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
     ∃ R₀ : ℝ, 0 < R₀ ∧
       ∀ (L : ℕ), 2 ≤ L →
         ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-            (E₀ : ℝ) (Ω : StateSpace L q),
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →

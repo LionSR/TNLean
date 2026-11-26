@@ -1377,15 +1377,18 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Numbering the sites at a physical cut]
     \label{def:mpu_physical_cut_numbering}
-    \lean{MPSPreparation.cutPrefixSiteEquiv, MPSPreparation.cutSuffixSiteEquiv, MPSPreparation.cutPrefixConfigEquiv, MPSPreparation.cutSuffixConfigEquiv}
+    \lean{MPSPreparation.cutPrefixSiteEquiv, MPSPreparation.cutSuffixSiteEquiv, MPSPreparation.cutPrefixConfigEquiv, MPSPreparation.cutSuffixConfigEquiv, MPSPreparation.leftBlockConfigEquiv, MPSPreparation.leftBlockComplConfigEquiv}
     \leanok
-    \uses{def:mpu_minimal_physical_cut_spaces}
+    \uses{def:mpu_minimal_physical_cut_spaces,def:seqanc_cut_matrix}
     Let $0\leq k\leq N$. Number the sites before cut $k$ by
     $0,\ldots,k-1$, and number the sites after the cut by
     $0,\ldots,N-k-1$. The corresponding bijections to the chain
     sites are $i\mapsto i$ and $j\mapsto k+j$. They induce
     bijections between the numbered configurations and the
-    configurations on the two subsets of physical sites.
+    configurations on the two subsets of physical sites. For every
+    $k$, the sites before cut $k$ are the sites of the left block,
+    and the sites from cut $k$ on are the remaining sites; this
+    identifies their configurations.
 \end{definition}
 
 \begin{lemma}[Cut rank is independent of site numbering]
@@ -1393,15 +1396,15 @@ left multiplication, right vector $b$ and left functional the trace.
     \lean{MPSPreparation.cutCoefficientMatrix_eq_reindex_cutMatrix, MPSPreparation.cutCoefficientRank_eq_cutRank}
     \leanok
     \uses{def:mpu_physical_cut_numbering}
-    For every coefficient tensor $\psi$ and every $k\leq N$, the
+    For every coefficient tensor $\psi$ and every $k$, the
     coefficient matrix indexed by the prefix and suffix
-    configurations is the matrix indexed by numbered configurations
-    after the preceding row and column bijections. Thus the two
-    matrices have the same rank. No assumption on the local dimension
-    or on the nonvanishing of $\psi$ is required.
+    configurations is the cut matrix across the left block after the
+    preceding identifications of the configurations. Thus the two
+    matrices have the same rank. No assumption on the cut position,
+    the local dimension or the nonvanishing of $\psi$ is required.
 \end{lemma}
 \begin{proof}\leanok
-    The site bijections reconstruct the same physical configuration,
+    The identifications reconstruct the same physical configuration,
     so corresponding entries agree. Reindexing rows and columns by
     bijections preserves matrix rank.
 \end{proof}

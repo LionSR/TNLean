@@ -259,7 +259,7 @@ noncomputable def twoSiteChainConfigEquiv (d N : ℕ) :
     (Fin N → Fin d × Fin d) ≃ (Fin (N * 2) → Fin d) :=
   (twoSitePairConfigEquiv d N).trans
     ((Equiv.arrowCongr (Equiv.refl (Fin N)) (twoSiteBlockEquiv d)).trans
-      (MPSTensor.blockedConfigEquiv d N 2))
+      (Kraus.blockedConfigEquiv d N 2))
 
 /-- On every positive even chain, a simple canonical-form-II MPU is the
 shifted source-gate layer after the unshifted source-gate layer. At four

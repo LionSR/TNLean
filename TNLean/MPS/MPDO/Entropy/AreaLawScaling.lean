@@ -64,7 +64,9 @@ convention of line 792. -/
 theorem mutualInfoChain_smul {c : ℂ} (hc : c ≠ 0) (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) (h₁ : (mpo (c • M) N).PosSemidef) (h₂ : (mpo M N).PosSemidef) :
     mutualInfoChain (c • M) N L hL h₁ = mutualInfoChain M N L hL h₂ := by
-  simp only [mutualInfoChain, blockEntropy_smul hc M N _ _ h₁ h₂]
+  unfold mutualInfoChain
+  congr 1
+  simp only [bipartitionedNormalizedMPO, normalizedMPO_smul hc]
 
 /-- Saturation of the area law is invariant under multiplication by a strictly
 positive real scalar.

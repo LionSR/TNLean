@@ -66,6 +66,8 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 open ManyBody (Edge SquareInteraction)
@@ -89,7 +91,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     [LinearOrder ↥(ManyBody.rectangularDomain L L)]
-    {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.hamiltonian E₀ Δ)
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩn : ‖Ω‖ = 1)
+    (hΩg : IsGapped h.hamiltonian E₀ Δ)
     (hΩs : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (D : ℕ → Finset ↥(ManyBody.rectangularDomain L L))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
@@ -289,13 +292,16 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
     exact mul_comm _ _
   rw [hs]
 
-private theorem rectangleAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
+private theorem rectangleAreaLawState_inner {L q : ℕ}
+    (φ ψ : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) :
     ⟪AreaLaw.rectangleAreaLawState φ, AreaLaw.rectangleAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (AreaLaw.rectangleConfigurationEquiv L L q)).inner_map_map φ ψ
 
 private theorem rectangleAreaLawState_operator {L q : ℕ}
-    (H : Matrix (Configuration L q) (Configuration L q) ℂ) (ψ : StateSpace L q) :
+    (H : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+      (Config (Qudits (SquareLatticeVertex L L) q)) ℂ)
+    (ψ : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) :
     AreaLaw.rectangleAreaLawState (toEuclideanLin H ψ) =
       toEuclideanLin (reindex (AreaLaw.rectangleConfigurationEquiv L L q)
         (AreaLaw.rectangleConfigurationEquiv L L q) H) (AreaLaw.rectangleAreaLawState ψ) := by
@@ -307,7 +313,8 @@ private theorem rectangleAreaLawState_operator {L q : ℕ}
 family. This helper makes no optimizer choice. -/
 private theorem fromCanonical_physical_estimates
     {L q m : ℕ} {E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-    {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    {X : Fin m → Finset (Vertex L)}
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (K : CanonicalFamily q X) (hK : ∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j))
     (hmax : ∀ K' : CanonicalFamily q X,

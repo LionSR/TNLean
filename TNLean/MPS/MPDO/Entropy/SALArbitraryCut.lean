@@ -62,7 +62,7 @@ theorem isSSAEquality_tripartite_m_of_isSAL (M : MPOTensor d D)
   have hNpos : 0 < N := by omega
   have hEq := mutualInfoChain_eq_of_isSAL M hSAL
     (N := N) (L := 1) (L' := m) (by omega) (by omega) hm1 hmN
-  simp only [mutualInfoChain] at hEq
+  simp only [mutualInfoChain_eq] at hEq
   have hEABC := vonNeumannEntropy_tripartiteSplit_eq_blockEntropy M
     (N := N) (a := m - 1) (b := 1) (c := N - m - 1) (by omega) (hMpdo N hNpos)
   have hEC := vonNeumannEntropy_traceC_eq_blockEntropy M
@@ -108,7 +108,7 @@ theorem mutualInfoChain_one_eq_of_isSSAEquality_tripartite_m
   have hNpos : 0 < N := by omega
   dsimp only at hSSA
   rw [IsSSAEquality] at hSSA
-  simp only [mutualInfoChain]
+  simp only [mutualInfoChain_eq]
   have hEABC := vonNeumannEntropy_tripartiteSplit_eq_blockEntropy M
     (N := N) (a := m - 1) (b := 1) (c := N - m - 1) (by omega) (hMpdo N hNpos)
   have hEC := vonNeumannEntropy_traceC_eq_blockEntropy M

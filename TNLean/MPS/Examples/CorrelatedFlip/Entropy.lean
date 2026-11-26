@@ -131,7 +131,7 @@ theorem mutualInfo_two_sub_one :
     mutualInfoChain M 4 2 (by omega) (M_isMPDO 4 (by omega)) -
         mutualInfoChain M 4 1 (by omega) (M_isMPDO 4 (by omega)) =
       (1 / 16 : ℝ) * Real.log (((2 : ℝ) ^ 32 * 7 ^ 7) / (3 ^ 3 * 5 ^ 20)) := by
-  rw [mutualInfoChain, mutualInfoChain, blockEntropy_one, blockEntropy_two,
+  rw [mutualInfoChain_eq, mutualInfoChain_eq, blockEntropy_one, blockEntropy_two,
     blockEntropy_three, blockEntropy_four]
   simpa [CPSVExample410CorrelatedFlip.mutualInfoOne,
     CPSVExample410CorrelatedFlip.mutualInfoTwo, two_mul] using

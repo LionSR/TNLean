@@ -464,10 +464,8 @@ theorem threeRegion_apply_eq_zero_iff
           norm_eq_zero.mp ((pow_eq_zero_iff two_ne_zero).mp h2)⟩
       · rintro ⟨h1, h2⟩
         rw [_root_.add_apply, h1, h2, add_zero]
-    rw [hsplit, sub_regionalProjection_apply_eq_zero_iff hproj _
-        (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hsupp (heven _ _ i hi j hj)),
-      sub_regionalProjection_apply_eq_zero_iff hproj _
-        (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hsupp (hodd _ _ i hi j hj))]
+    rw [hsplit, sub_regionalProjection_apply_eq_zero_iff hproj _,
+      sub_regionalProjection_apply_eq_zero_iff hproj _]
     constructor
     · rintro ⟨he, ho⟩ i hi hI
       by_cases hpar : i % 2 = 0

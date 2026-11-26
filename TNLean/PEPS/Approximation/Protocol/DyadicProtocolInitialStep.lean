@@ -41,6 +41,8 @@ not fixed.
   `06-geometry.tex`, lines 21–23, and its proof, lines 576, 649–652 and 658–667.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS
@@ -162,7 +164,8 @@ frames: the main copy of `Ω` followed by the auxiliary copies.
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and item 4, lines 38–40. -/
 theorem IsDistributionProtocol.exists_originalCircuit_initialCopies [NeZero q]
-    {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {C_N C_K C_E : ℝ}
+    {b k r : ℕ}
     (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) :
     ∃ c : OriginalCircuit (D.system 0)
         (framesSystem q (cellCenterPos L) (D.frames 0) fun _ ↦ Unit),
@@ -238,7 +241,8 @@ carries the initial reference vector exactly to the reference vector of the init
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and its proof, lines 658–667. -/
 theorem DyadicProtocol.exists_originalCircuit_initialFrames [NeZero q]
-    (D : DyadicProtocol L q (ProtocolParty k)) (Ω : StateSpace L q)
+    (D : DyadicProtocol L q (ProtocolParty k))
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
     (large : DyadicSquare k → Bool)
     (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k)
     (e : ∀ p, D.system 0 p ≃

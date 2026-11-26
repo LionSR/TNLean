@@ -98,7 +98,7 @@ noncomputable def IsMPUCanonicalFormII.physicalAdjointTensor
   ρ_trace := hU.ρ_trace
   ρ_fixed := by
     rw [normalizedFlattening_physicalAdjointTensor,
-      MPSTensor.transferMap_reindexPhysical_equiv]
+      Kraus.transferMap_reindexPhysical_equiv]
     rw [← MPSTensor.map_star_eq_self_of_posDef_isDiag hU.ρ_posDef hU.ρ_isDiag,
       MPSTensor.transferMap_mapStar, hU.ρ_fixed,
       MPSTensor.map_star_eq_self_of_posDef_isDiag hU.ρ_posDef hU.ρ_isDiag]

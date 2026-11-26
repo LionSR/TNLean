@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Operator.PhysicalSector.CommutingBondEtaCyclicCore
 import TNLean.MPS.Operator.PhysicalSector.CommutingBondEtaDecomposition
-import TNLean.MPS.Operator.PhysicalSector.CommutingFormBridge
 import TNLean.MPS.Operator.PhysicalSector.CommutingOverlappingCoordinates
 import TNLean.MPS.Operator.PhysicalSector.GSNNCHSectorSum
 import TNLean.MPS.Operator.PhysicalSector.InverseMapActiveSectorRecurrence

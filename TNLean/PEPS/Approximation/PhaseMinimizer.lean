@@ -29,6 +29,7 @@ error bound for the infimum over all phases.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open ManyBody (squareLatticeGraph)
 
 open Complex
@@ -71,7 +72,8 @@ theorem exists_phase_le_iff_iInf_le (u v : E) (ε : ℝ) :
 
 /-- `HasPEPSApproximation` with the error measured as the minimum over global phases,
 as printed in the source. Source: polynomial-PEPS Theorem 1.1 and `eq:target-error`. -/
-theorem hasPEPSApproximation_iff_iInf (C c : ℝ) (L q : ℕ) (Ω : StateSpace L q) :
+theorem hasPEPSApproximation_iff_iInf (C c : ℝ) (L q : ℕ)
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) :
     HasPEPSApproximation C c L q Ω ↔
       ∃ A : Tensor (squareLatticeGraph L L) q,
         (∀ e, 0 < A.bondDim e) ∧

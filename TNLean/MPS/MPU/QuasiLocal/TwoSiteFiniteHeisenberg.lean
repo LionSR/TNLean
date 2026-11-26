@@ -210,7 +210,7 @@ private noncomputable def originalWindowMiddleEquiv (d k : ℕ) :
     (Fin 3 → Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) ≃
       (Fin (3 * (2 * k)) → Fin d) :=
   (Equiv.arrowCongr (Equiv.refl (Fin 3)) (twoSiteDirectBlockEquiv d k).symm).trans
-    (MPSTensor.blockedConfigEquiv d 3 (2 * k))
+    (Kraus.blockedConfigEquiv d 3 (2 * k))
 
 private noncomputable def originalWindowConfigEquiv (d k p s : ℕ)
     {E C : Type*}
@@ -281,9 +281,9 @@ private theorem originalSiteHeisenbergMatrix_apply {d D ℓ r k p s : ℕ}
     (windowInputHeadEquiv (Kraus.blockPhysDim d k) (f.2, j) t)
   change mpo U (p + (3 * (2 * k) + s))
     (Fin.append e.1.1 (Fin.append
-      (MPSTensor.blockedConfigEquiv d 3 (2 * k) midI) e.1.2))
+      (Kraus.blockedConfigEquiv d 3 (2 * k) midI) e.1.2))
     (Fin.append f.1.1 (Fin.append
-      (MPSTensor.blockedConfigEquiv d 3 (2 * k) midJ) f.1.2)) = _
+      (Kraus.blockedConfigEquiv d 3 (2 * k) midJ) f.1.2)) = _
   apply originalSite_threeBlock_window_entry U k p s S
     e.1.1 f.1.1 e.1.2 f.1.2 midI midJ e.2.1 e.2.2 f.2.1 f.2.2 x j
   · funext t
@@ -510,7 +510,7 @@ private theorem originalWindowMiddleEquiv_block (d k : ℕ)
     (i : Fin 3) (j : Fin (2 * k)) :
     originalWindowMiddleEquiv d k w (finProdFinEquiv (i, j)) =
       Kraus.decodeBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm (w i)) j := by
-  simp [originalWindowMiddleEquiv, MPSTensor.blockedConfigEquiv,
+  simp [originalWindowMiddleEquiv, Kraus.blockedConfigEquiv,
     Equiv.arrowCongr, Equiv.curry, Function.comp]
 
 /-- The numbered middle interval reads exactly the complete central input
@@ -583,11 +583,11 @@ blocking, lines 603–622. -/
 theorem originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv (d k : ℕ)
     (c : HalfPair (Kraus.blockPhysDim d k)) :
     originalSiteHeisenbergCentreEquiv d k c =
-      MPSTensor.blockedConfigEquiv d 2 k ![c.1, c.2] := by
+      Kraus.blockedConfigEquiv d 2 k ![c.1, c.2] := by
   apply List.ofFn_injective
   change Kraus.wordOfBlock d (2 * k)
     ((twoSiteDirectBlockEquiv d k).symm (finProdFinEquiv c)) = _
-  rw [wordOfBlock_twoSiteDirectBlockEquiv_symm, MPSTensor.ofFn_blockedConfigEquiv]
+  rw [wordOfBlock_twoSiteDirectBlockEquiv_symm, Kraus.ofFn_blockedConfigEquiv]
   simp [Kraus.flattenBlockedWord, List.ofFn_succ]
 
 private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
@@ -595,7 +595,7 @@ private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
     originalSiteHeisenbergCentreEquiv d k c (finProdFinEquiv (b, j)) =
       Kraus.decodeBlock d k (![c.1, c.2] b) j := by
   rw [originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv]
-  simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+  simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
 
 /-- Four consecutive output half-block indices in their actual word order.
 Source: CPSV17, StandardForm and Appendix index comparison,
@@ -611,7 +611,7 @@ Source: CPSV17, StandardForm, lines 603–622. -/
 noncomputable def originalSiteHeisenbergOutputCentreEquiv (d k : ℕ) :
     FourHalves (Kraus.blockPhysDim d k) ≃ (Fin (4 * k) → Fin d) :=
   (originalSiteHeisenbergOutputBlockEquiv (Kraus.blockPhysDim d k)).trans
-    (MPSTensor.blockedConfigEquiv d 4 k)
+    (Kraus.blockedConfigEquiv d 4 k)
 
 private theorem originalSiteHeisenbergOutputWindowEquiv_half (d k : ℕ)
     (e : HalfPair (Kraus.blockPhysDim d k))
@@ -650,9 +650,9 @@ theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
     rw [hidx, originalSiteHeisenbergOutputWindowEquiv_half]
   have hcentre : originalSiteHeisenbergOutputCentreEquiv d k c (finProdFinEquiv (t, j)) =
       Kraus.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
-    change MPSTensor.blockedConfigEquiv d 4 k ![c.1.1, c.1.2, c.2.1, c.2.2]
+    change Kraus.blockedConfigEquiv d 4 k ![c.1.1, c.1.2, c.2.1, c.2.2]
       (finProdFinEquiv (t, j)) = _
-    simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+    simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
   rw [hcentre]
   fin_cases t
   · exact hread 0 1 (by change k + (j.val + k * 0) = j.val + k * 1 + (2 * k) * 0; omega)

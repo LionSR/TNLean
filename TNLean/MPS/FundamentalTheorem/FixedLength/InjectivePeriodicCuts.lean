@@ -27,36 +27,43 @@ MPSarchive.tex lines 911--931, and Theorem 8, lines 1139--1169.
 -/
 
 open Matrix MPSPreparation
+open TNLean.MPS.AreaLaw (leftBlock mem_leftBlock)
 open scoped BigOperators
 
 namespace MPSTensor
 
 variable {d D N k : ℕ}
 
-/-- The actual physical cut matrix is the product of its left and right
-virtual cut factors, with the column-first virtual convention of the
-condition-C1 proof. No injectivity hypothesis is needed.
+/-- The actual physical cut matrix across the left block is the product of its left and right
+virtual cut factors, read on the first `k` and the last `N - k` sites, with the column-first
+virtual convention of the condition-C1 proof. No injectivity hypothesis is needed.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 theorem cutMatrix_mpv_eq_cutVector_mul (A : MPSTensor d D) (hk : k ≤ N) :
-    cutMatrix (mpv A (N := N)) k =
-      Matrix.of (fun σ a ↦ leftCutVector A k a σ) * Matrix.of (rightCutVector A (N - k)) := by
+    ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N)) =
+      Matrix.of (fun σ a ↦
+          leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))) *
+        Matrix.of fun a τ ↦ rightCutVector A (N - k) a
+          ((cutSuffixConfigEquiv hk).symm (leftBlockComplConfigEquiv d N k τ)) := by
   classical
   ext σ τ
-  have heval := eval_cutConfig (fun _ : Fin N ↦ A) hk σ τ
+  have heval := eval_cutEquiv_symm (fun _ : Fin N ↦ A) hk σ τ
   rw [MPSChainTensor.eval_const] at heval
-  have hleft : (List.ofFn fun p : Fin k ↦ A (σ p)).prod =
-      Kraus.evalWord A (List.ofFn σ) :=
-    (MPSChainTensor.eval_eq_prod_ofFn (fun _ : Fin k ↦ A) σ).symm.trans
-      (MPSChainTensor.eval_const A σ)
-  have hright : (List.ofFn fun p : Fin (N - k) ↦ A (τ p)).prod =
-      Kraus.evalWord A (List.ofFn τ) :=
-    (MPSChainTensor.eval_eq_prod_ofFn (fun _ : Fin (N - k) ↦ A) τ).symm.trans
-      (MPSChainTensor.eval_const A τ)
-  change Kraus.evalWord A (List.ofFn (cutConfig σ τ)) = _ at heval
+  have hleft : (List.ofFn fun p : Fin k ↦ A (σ ⟨Fin.castLE hk p, mem_leftBlock.mpr p.isLt⟩)).prod =
+      Kraus.evalWord A (List.ofFn
+        ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))) :=
+    (MPSChainTensor.eval_eq_prod_ofFn (fun _ : Fin k ↦ A) _).symm.trans
+      (MPSChainTensor.eval_const A _)
+  have hright : (List.ofFn fun q : Fin (N - k) ↦ A (τ ⟨⟨k + q.val, by omega⟩,
+      fun h ↦ by have := mem_leftBlock.mp h; simp at this⟩)).prod =
+      Kraus.evalWord A (List.ofFn
+        ((cutSuffixConfigEquiv hk).symm (leftBlockComplConfigEquiv d N k τ))) :=
+    (MPSChainTensor.eval_eq_prod_ofFn (fun _ : Fin (N - k) ↦ A) _).symm.trans
+      (MPSChainTensor.eval_const A _)
   rw [hleft, hright] at heval
-  change Matrix.trace (Kraus.evalWord A (List.ofFn (cutConfig σ τ))) = _
+  change Matrix.trace (Kraus.evalWord A
+    (List.ofFn ((ManyBody.cutEquiv _ (leftBlock N k)).symm (σ, τ)))) = _
   rw [heval, ← Kraus.evalWord_append]
-  exact coeff_append_eq_sum_cutVector A σ τ
+  exact coeff_append_eq_sum_cutVector A _ _
 
 /-- Under C1 on the suffix, its actual virtual cut factor has a right
 inverse. This reads the left virtual coefficient from the physical suffix.
@@ -78,51 +85,69 @@ theorem exists_rightInverse_rightCutVector {A : MPSTensor d D} {m : ℕ}
   simpa only [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_one]
     using congrArg Matrix.transpose hmatrix
 
-/-- When the suffix satisfies C1, the physical prefix column space is
-exactly the span of the left virtual cut vectors. The reverse inclusion
-is derived from an actual right inverse of the suffix factor.
+/-- Under C1 on the prefix, the left virtual cut vectors read on the left block are linearly
+independent. Source: PGVWC07, MPSarchive.tex lines 936--949. -/
+theorem linearIndependent_leftCutVector_leftBlock {A : MPSTensor d D} (hk : k ≤ N)
+    (hleft : Kraus.IsNBlkInjective A k) :
+    LinearIndependent ℂ fun a σ ↦
+      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ)) :=
+  (linearIndependent_leftCutVector hleft).map' (LinearEquiv.funCongrLeft ℂ ℂ
+    ((leftBlockConfigEquiv d N k).trans (cutPrefixConfigEquiv hk).symm)).toLinearMap
+    (LinearEquiv.ker _)
+
+/-- When the suffix satisfies C1, the physical column space of the cut matrix across the left
+block is exactly the span of the left virtual cut vectors. The reverse inclusion is derived from
+an actual right inverse of the suffix factor.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 theorem span_cutMatrix_mpv_cols_eq {A : MPSTensor d D} (hk : k ≤ N)
     (hC1 : Kraus.IsNBlkInjective A (N - k)) :
-    Submodule.span ℂ (Set.range (cutMatrix (mpv A (N := N)) k).col) =
-      Submodule.span ℂ (Set.range (leftCutVector A k)) := by
+    Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).col) =
+      Submodule.span ℂ (Set.range fun a σ ↦
+        leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))) := by
   classical
-  let F : Matrix (Fin k → Fin d) (Fin D × Fin D) ℂ :=
-    Matrix.of fun σ a ↦ leftCutVector A k a σ
-  let G : Matrix (Fin D × Fin D) (Fin (N - k) → Fin d) ℂ :=
-    Matrix.of (rightCutVector A (N - k))
+  let e := (leftBlockComplConfigEquiv d N k).trans (cutSuffixConfigEquiv (d := d) hk).symm
+  let F : Matrix (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k))
+      (Fin D × Fin D) ℂ := Matrix.of fun σ a ↦
+    leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ))
+  let G : Matrix (Fin D × Fin D) (ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k))
+      ℂ := (Matrix.of (rightCutVector A (N - k))).submatrix id e
   obtain ⟨S, hS⟩ := exists_rightInverse_rightCutVector hC1
-  have hfactor : cutMatrix (mpv A (N := N)) k = F * G :=
+  have hfactor : ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N)) = F * G :=
     cutMatrix_mpv_eq_cutVector_mul A hk
-  have hrecover : (F * G) * S = F := by
-    rw [Matrix.mul_assoc, show G * S = 1 from hS, Matrix.mul_one]
-  change Submodule.span ℂ (Set.range (cutMatrix (mpv A (N := N)) k).col) =
+  have hGS : G * S.submatrix e id = 1 := by
+    change (Matrix.of (rightCutVector A (N - k))).submatrix id e * S.submatrix e id = 1
+    rw [Matrix.submatrix_mul_equiv, hS, Matrix.submatrix_id_id]
+  have hrecover : (F * G) * S.submatrix e id = F := by
+    rw [Matrix.mul_assoc, hGS, Matrix.mul_one]
+  change Submodule.span ℂ (Set.range (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).col) =
     Submodule.span ℂ (Set.range F.col)
   simp only [← Matrix.range_mulVecLin]
   apply le_antisymm
   · rw [hfactor, Matrix.mulVecLin_mul]
     exact LinearMap.range_comp_le_range G.mulVecLin F.mulVecLin
   · rw [← hrecover, Matrix.mulVecLin_mul, ← hfactor]
-    exact LinearMap.range_comp_le_range S.mulVecLin
-      (cutMatrix (mpv A (N := N)) k).mulVecLin
+    exact LinearMap.range_comp_le_range (S.submatrix e id).mulVecLin
+      (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).mulVecLin
 
-/-- The actual physical prefix column space has the virtual left cut
-vectors as a basis. This basis is derived from the coefficient matrix,
-not supplied as doubled-window data.
+/-- The actual physical column space of the cut matrix across the left block has the virtual
+left cut vectors as a basis. This basis is derived from the coefficient matrix, not supplied as
+doubled-window data.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 noncomputable def periodicCutBasis {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k)) :
     Module.Basis (Fin D × Fin D) ℂ
-      (Submodule.span ℂ (Set.range (cutMatrix (mpv A (N := N)) k).col)) :=
-  (Module.Basis.span (linearIndependent_leftCutVector hleft)).map
+      (Submodule.span ℂ
+        (Set.range (ManyBody.cutMatrix (leftBlock N k) (mpv A (N := N))).col)) :=
+  (Module.Basis.span (linearIndependent_leftCutVector_leftBlock hk hleft)).map
     (LinearEquiv.ofEq _ _ (span_cutMatrix_mpv_cols_eq hk hright).symm)
 
 /-- The derived physical cut basis retains the actual virtual coefficients.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 @[simp] theorem periodicCutBasis_apply {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k))
-    (a : Fin D × Fin D) (σ : Fin k → Fin d) :
-    (periodicCutBasis hk hleft hright a).val σ = leftCutVector A k a σ := by
+    (a : Fin D × Fin D) (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (leftBlock N k)) :
+    (periodicCutBasis hk hleft hright a).val σ =
+      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm (leftBlockConfigEquiv d N k σ)) := by
   simp only [periodicCutBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
     Module.Basis.coe_span_apply]
 
@@ -131,10 +156,10 @@ rank exactly the squared virtual dimension.
 Source: PGVWC07, proposition on C1, MPSarchive.tex lines 911--931. -/
 theorem cutRank_mpv_eq_of_isNBlkInjective {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k)) :
-    cutRank (mpv A (N := N)) k = D * D := by
+    ManyBody.cutRank (leftBlock N k) (mpv A (N := N)) = D * D := by
   classical
-  rw [cutRank, Matrix.rank_eq_finrank_span_cols, span_cutMatrix_mpv_cols_eq hk hright,
-    finrank_span_eq_card (linearIndependent_leftCutVector hleft)]
+  rw [ManyBody.cutRank, Matrix.rank_eq_finrank_span_cols, span_cutMatrix_mpv_cols_eq hk hright,
+    finrank_span_eq_card (linearIndependent_leftCutVector_leftBlock hk hleft)]
   simp only [Fintype.card_prod, Fintype.card_fin]
 
 /-- A canonical tensor satisfying C1 at one length satisfies it at all
@@ -151,10 +176,9 @@ theorem isNBlkInjective_of_le_of_canonical [NeZero D] {A : MPSTensor d D}
   let B : MPSTensor d D := fun i ↦ (lam : ℂ)⁻¹ • A i
   have hB : ∑ i, B i * (B i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlam hsum
   have hBL : Kraus.IsNBlkInjective B L :=
-    isNBlkInjective_smul _ (inv_ne_zero hlam0) hC1
+    (isNBlkInjective_smul_iff (inv_ne_zero hlam0) A L).2 hC1
   have hBm := isNBlkInjective_of_le_of_unital hB hBL hLm
-  have hscaled := isNBlkInjective_smul (lam : ℂ) hlam0 hBm
-  simpa only [B, smul_smul, mul_inv_cancel₀ hlam0, one_smul] using hscaled
+  exact (isNBlkInjective_smul_iff (inv_ne_zero hlam0) A m).1 hBm
 
 /-- Every interior cut of a canonical C1 tensor has doubled virtual
 rank once both its physical sides reach the C1 length. This derives the
@@ -163,7 +187,7 @@ Source: PGVWC07, MPSarchive.tex lines 911--931 and 1139--1169. -/
 theorem cutRank_mpv_eq_of_canonical [NeZero D] {A : MPSTensor d D}
     (hA : IsPGVWC07CanonicalForm A) {L : ℕ} (hC1 : Kraus.IsNBlkInjective A L)
     (hk : k ≤ N) (hleft : L ≤ k) (hright : L ≤ N - k) :
-    cutRank (mpv A (N := N)) k = D * D :=
+    ManyBody.cutRank (leftBlock N k) (mpv A (N := N)) = D * D :=
   cutRank_mpv_eq_of_isNBlkInjective hk
     (isNBlkInjective_of_le_of_canonical hA hC1 hleft)
     (isNBlkInjective_of_le_of_canonical hA hC1 hright)
@@ -175,7 +199,7 @@ theorem cutCoefficientRank_mpv_eq_of_canonical [NeZero D] {A : MPSTensor d D}
     (hA : IsPGVWC07CanonicalForm A) {L : ℕ} (hC1 : Kraus.IsNBlkInjective A L)
     (hk : k ≤ N) (hleft : L ≤ k) (hright : L ≤ N - k) :
     cutCoefficientRank (mpv A (N := N)) k = D * D := by
-  rw [cutCoefficientRank_eq_cutRank _ hk]
+  rw [cutCoefficientRank_eq_cutRank]
   exact cutRank_mpv_eq_of_canonical hA hC1 hk hleft hright
 
 /-- Every one of the endpoint-inclusive cuts of the reconstruction window
