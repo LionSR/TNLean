@@ -221,7 +221,7 @@ the clearance `dist_∞(T, Z) > 4 D₀ s₀` of Definition 9.3 and the cut clear
 `dist_∞(T, Z) > 2 n ^ β` of `geometry:cut-clearance`.
 Source: area-law Section 11, lines 748–750; Definition 9.3 (`scanner:template`)
 and `prop:two-families`, `geometry:cut-clearance`, lines 119–128. -/
-theorem Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀ : ℕ}
+theorem _root_.ManyBody.Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀ : ℕ}
     {Z : Finset (ℤ × ℤ)} {k C : ℕ} (T : Template Ctpl n s₀) (hC : 2 ≤ C)
     (hk₁ : 4 * D₀ * (2 * (2 : ℝ) ^ fineScaleIndex k) < (2 : ℝ) ^ k)
     (hk₂ : 2 * (⌈CB * (2 : ℝ) ^ fineScaleIndex k⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < (2 : ℝ) ^ k)

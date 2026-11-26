@@ -325,7 +325,7 @@ edges, and `|S₀| ≤ 10 n²`. The constants are universal; `24 ≤ Ctpl` is th
 template constant of Lemma 9.4, and `1 ≤ D₀` follows from the standing choice
 `D₀ > 2R + 10`.
 Source: `08-scanner.tex`, lines 824–826 and 942–943, from Lemma 9.4, lines 571–590. -/
-theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
+theorem _root_.ManyBody.Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
     (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)

@@ -821,7 +821,7 @@ theorem isTwoFamilyDecompositionConstant_of_one_le {D₀ Ctpl c₁ : ℝ} (hCtpl
 /-- A template for a larger template constant is a template for any smaller one:
 the constant enters only the scale inequality `Ctpl N₀ (s₀ + 1) ≤ n`, whose
 other factors are nonnegative. -/
-def ManyBody.Template.ofLe {Ctpl Ctpl' : ℝ} {n s₀ : ℕ} (h : Ctpl ≤ Ctpl')
+def _root_.ManyBody.Template.ofLe {Ctpl Ctpl' : ℝ} {n s₀ : ℕ} (h : Ctpl ≤ Ctpl')
     (T : ManyBody.Template Ctpl' n s₀) : ManyBody.Template Ctpl n s₀ where
   n_pos := T.n_pos
   s₀_pos := T.s₀_pos
