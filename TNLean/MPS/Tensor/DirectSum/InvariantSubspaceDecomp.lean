@@ -299,7 +299,7 @@ lemma mpv_twoBlockTensor_eq {n m N : ℕ}
       mpv A₁ σ + mpv A₂ σ := by
   classical
   have h :=
-    mpv_toTensorFromBlocks_eq_sum (d := d) (r := 2) (dim := ![n, m])
+    mpv_toTensorFromBlocks_eq_sum (α := Fin d) (r := 2) (dim := ![n, m])
       (μ := fun _ => (1 : ℂ))
       (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂) (σ := σ)
   have h' :

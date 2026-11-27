@@ -19,8 +19,6 @@ word and a bra word, the periodic operator `MPOTensor.mpo`, `MPOTensor.transferM
 
 * `MPOTensor.kraus_evalWord_ofFn`: a word over the pair alphabet evaluates as its ket and bra
   words.
-* `MPOTensor.transferMap_eq_kraus_transferMap`: the operator transfer map is the transfer map
-  of the tensor on the pair alphabet.
 * `MPOTensor.mpo_apply_eq_trace_kraus_evalWord`, `MPOTensor.trace_kraus_evalWord`: the matrix
   element `⟨σ|O_L(M)|τ⟩` is the trace of the word `k ↦ (σ k, τ k)`, and conversely.
 * `MPOTensor.mpv_eq_mpo`, `MPOTensor.mpv_pair`: the coefficients of `M` on the pair alphabet are
@@ -51,14 +49,6 @@ theorem kraus_evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (w : Fin N → Fin d �
     Kraus.evalWord M (List.ofFn w) =
       evalWord M (List.ofFn fun k ↦ (w k).1) (List.ofFn fun k ↦ (w k).2) :=
   kraus_evalWord_ofFn_pair M (fun k ↦ (w k).1) (fun k ↦ (w k).2)
-
-/-- The transfer map of an operator tensor is the transfer map of the tensor on the pair
-alphabet. -/
-theorem transferMap_eq_kraus_transferMap (M : MPOTensor d D) :
-    transferMap M = Kraus.transferMap M := by
-  refine LinearMap.ext fun X => ?_
-  rw [transferMap_apply, Kraus.transferMap_apply]
-  exact (Fintype.sum_prod_type' fun i j ↦ M (i, j) * X * (M (i, j))ᴴ).symm
 
 /-- The matrix element of a periodic operator is the trace of the word of paired letters.
 

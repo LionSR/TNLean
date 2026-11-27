@@ -221,7 +221,7 @@ normalization to another while preserving the block-family indices and bond dime
 In the PGVWC07 normalization route it transports the certificate from a left-canonical
 prepared family back to the source unital/dual-fixed-point gauge. -/
 theorem wordTupleSpanTop_of_family_gaugeEquiv
-    {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
+    [Fintype α] {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hSpan : WordTupleSpanTop A L)
     (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
     WordTupleSpanTop B L := by
@@ -268,7 +268,7 @@ blockwise invertible gauge relation.
 This is the directional form used when the certificate is known in the target gauge and is
 needed in the source gauge carrying the PGVWC07 positive dual fixed point. -/
 theorem wordTupleSpanTop_of_family_gaugeEquiv_symm
-    {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
+    [Fintype α] {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hSpan : WordTupleSpanTop B L)
     (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
     WordTupleSpanTop A L :=
@@ -282,7 +282,7 @@ block bond dimension.  It supports transport between a left-canonical prepared g
 the source unital/dual-fixed-point gauge in the PGVWC07 separation argument; further
 normalization-dependent parent-Hamiltonian steps remain separate. -/
 theorem wordTupleSpanTop_iff_of_family_gaugeEquiv
-    {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
+    [Fintype α] {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
     WordTupleSpanTop A L ↔ WordTupleSpanTop B L :=
   ⟨fun hSpan ↦ wordTupleSpanTop_of_family_gaugeEquiv hSpan hGauge,

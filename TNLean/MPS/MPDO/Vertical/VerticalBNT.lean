@@ -472,7 +472,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
             ∑ k : Fin r, (μ k) ^ N * MPTensor.mpv (blocks k) w := by
               simpa [smul_eq_mul] using
                 (MPSTensor.mpv_toTensorFromBlocks_eq_sum
-                  (d := D * D) μ blocks w)
+                  (α := Fin (D * D)) μ blocks w)
         _ = ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
             (μ (classes.enum j q)) ^ N *
               MPTensor.mpv (blocks (classes.enum j q)) w :=

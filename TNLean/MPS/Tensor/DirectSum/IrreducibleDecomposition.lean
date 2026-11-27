@@ -307,17 +307,17 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
       have hexpand₁ :
           mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ =
             ∑ k : Fin r₁, (1 : ℂ) ^ N • mpv (blocks₁ k) σ :=
-        mpv_toTensorFromBlocks_eq_sum (d := d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁ σ
+        mpv_toTensorFromBlocks_eq_sum (α := Fin d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁ σ
       have hexpand₂ :
           mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ =
             ∑ k : Fin r₂, (1 : ℂ) ^ N • mpv (blocks₂ k) σ :=
-        mpv_toTensorFromBlocks_eq_sum (d := d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂ σ
+        mpv_toTensorFromBlocks_eq_sum (α := Fin d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂ σ
       -- Step 5: expand the combined sum.
       have hexpand_combined :
           mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ))
             combinedBlocks) σ =
             ∑ k : Fin (r₁ + r₂), (1 : ℂ) ^ N • mpv (combinedBlocks k) σ :=
-        mpv_toTensorFromBlocks_eq_sum (d := d)
+        mpv_toTensorFromBlocks_eq_sum (α := Fin d)
           (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ)) combinedBlocks σ
       -- Step 6: split the Fin(r₁+r₂) sum into left and right halves.
       have hsplit :

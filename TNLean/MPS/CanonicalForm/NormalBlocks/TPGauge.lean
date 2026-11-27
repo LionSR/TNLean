@@ -383,7 +383,7 @@ private theorem gauge_blockwise_shared
           = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
               simpa [smul_eq_mul] using
                 (mpv_toTensorFromBlocks_eq_sum
-                  (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
+                  (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
       _ = ∑ k : Fin r0, (μ1 k) ^ N * mpv (blocks1 k) σ := by
             refine Finset.sum_congr rfl ?_
             intro k _
@@ -415,7 +415,7 @@ private theorem gauge_blockwise_shared
       _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) σ := by
             symm
             simpa [smul_eq_mul] using
-              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
+              (mpv_toTensorFromBlocks_eq_sum (α := Fin d) (μ := μ1) (A := blocks1) (σ := σ))
   have hSame1 :
       SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) := by
     intro N σ

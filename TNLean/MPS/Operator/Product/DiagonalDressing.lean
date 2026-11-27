@@ -63,7 +63,11 @@ theorem mpo_mulDiagonal (M : MPOTensor d D) (c : Fin d → ℂ) (N : ℕ) :
 `(i, j)` is rescaled by the nonzero scalar `c j`. -/
 theorem isNormal_mulDiagonal_iff (M : MPOTensor d D) {c : Fin d → ℂ}
     (hc : ∀ j, c j ≠ 0) :
-    Kraus.IsNormal (M.mulDiagonal c) ↔ Kraus.IsNormal M :=
-  MPSTensor.isNormal_letterSmul_iff (fun a ↦ hc a.2) M
+    Kraus.IsNormal (M.mulDiagonal c) ↔ Kraus.IsNormal M := by
+  have h : M.mulDiagonal c = fun a ↦ c a.2 • M a := by
+    funext ⟨i, j⟩
+    rfl
+  rw [h]
+  exact MPSTensor.isNormal_letterSmul_iff (fun a ↦ hc a.2) M
 
 end MPOTensor
