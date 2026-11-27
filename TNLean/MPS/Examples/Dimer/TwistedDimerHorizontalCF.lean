@@ -201,16 +201,8 @@ arXiv:1606.00608, lines 224--235: its letters span the bond matrix algebra and
 its ket-against-bra letters resolve the identity. -/
 theorem normalizedBlock_isNormalTensor (k : Fin 2) :
     MPTensor.IsNormalTensor (normalizedBlock k) := by
-  have h := MPSTensor.isNormalTensor_of_isNormal_leftCanonical (normalizedBlock k).toMPSTensor
-    ((isNormal_toMPSTensor_iff _).2 (normalizedBlock_isInjective k).isNormal)
-    ((isTP_toMPSTensor_iff _).2 (normalizedBlock_isLeftCanonical k))
-  have hRound : Kraus.reindexPhysical finProdFinEquiv (normalizedBlock k).toMPSTensor =
-      normalizedBlock k := by
-    funext ab
-    change normalizedBlock k (finProdFinEquiv.symm (finProdFinEquiv ab)) = _
-    rw [Equiv.symm_apply_apply]
-  rw [← hRound]
-  exact h.reindexPhysical finProdFinEquiv
+  exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical (normalizedBlock k)
+    (normalizedBlock_isInjective k).isNormal (normalizedBlock_isLeftCanonical k)
 
 /-- The physical-trace transfer of the rescaled block $k = 1$ vanishes, as it
 does for the displayed block (`physTraceTransfer_block_one`). -/

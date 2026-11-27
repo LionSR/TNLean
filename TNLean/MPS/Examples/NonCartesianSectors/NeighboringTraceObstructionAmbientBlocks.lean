@@ -226,7 +226,7 @@ theorem terminalPhysicalInclusion_isometry :
 
 /-- The scalar product-state MPO before inclusion into the ambient coordinate. -/
 private noncomputable def terminalSource : MPOTensor 1 1 :=
-  doubledTensor MPSTensor.scalarUnitTensor
+  doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1))
 
 @[simp] private theorem terminalSource_apply (i j : Fin 1) :
     terminalSource (i, j) = 1 := by
@@ -238,7 +238,7 @@ private noncomputable def terminalSource : MPOTensor 1 1 :=
   simp [terminalSource, doubledTensor, MPSTensor.scalarUnitTensor]
 
 private theorem scalarUnitTensor_transferMap_eq_id :
-    Kraus.transferMap MPSTensor.scalarUnitTensor = LinearMap.id := by
+    Kraus.transferMap (MPSTensor.scalarUnitTensor (α := Fin 1)) = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext a b
@@ -299,7 +299,7 @@ theorem terminalBlock_isNormalTensor : MPTensor.IsNormalTensor terminalBlock :=
 
 private theorem terminalSource_isMPDO : terminalSource.IsMPDO := by
   intro N _hN
-  exact doubledTensor_posSemidef MPSTensor.scalarUnitTensor N
+  exact doubledTensor_posSemidef (MPSTensor.scalarUnitTensor (α := Fin 1)) N
 
 private theorem terminalSource_physTraceTransfer_eq_one :
     physTraceTransfer terminalSource = 1 := by
@@ -309,12 +309,12 @@ private theorem terminalSource_physTraceTransfer_eq_one :
   simp [physTraceTransfer, terminalSource_apply]
 
 private theorem scalarUnitTensor_pureState_trace_ne_zero (N : ℕ) :
-    Matrix.trace (MPSTensor.pureState MPSTensor.scalarUnitTensor N) ≠ 0 := by
+    Matrix.trace (MPSTensor.pureState (MPSTensor.scalarUnitTensor (α := Fin 1)) N) ≠ 0 := by
   have hMpv : ∀ σ : Fin N → Fin 1,
-      MPTensor.mpv MPSTensor.scalarUnitTensor σ = 1 := by
+      MPTensor.mpv (MPSTensor.scalarUnitTensor (α := Fin 1)) σ = 1 := by
     intro σ
     simp [MPTensor.mpv, MPSTensor.scalarUnitTensor_evalWord, Matrix.trace]
-  have hPure : MPSTensor.pureState MPSTensor.scalarUnitTensor N = 1 := by
+  have hPure : MPSTensor.pureState (MPSTensor.scalarUnitTensor (α := Fin 1)) N = 1 := by
     ext σ τ
     obtain rfl : τ = σ := Subsingleton.elim τ σ
     simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply,
@@ -325,21 +325,21 @@ private theorem scalarUnitTensor_pureState_trace_ne_zero (N : ℕ) :
   simp
 
 private theorem terminalSource_isSAL : terminalSource.IsSAL := by
-  have hPureRFP : MPSTensor.IsTransferIdempotent MPSTensor.scalarUnitTensor := by
+  have hPureRFP : MPSTensor.IsTransferIdempotent (MPSTensor.scalarUnitTensor (α := Fin 1)) := by
     rw [MPSTensor.IsTransferIdempotent, scalarUnitTensor_transferMap_eq_id,
       LinearMap.comp_id]
   have hPureSAL := MPSTensor.isSAL_of_isTransferIdempotent
-    MPSTensor.scalarUnitTensor hPureRFP
+    (MPSTensor.scalarUnitTensor (α := Fin 1)) hPureRFP
   refine ⟨terminalSource_isMPDO, ?_, ?_⟩
   · intro N _hN
     rw [terminalSource, mpo_doubledTensor]
     exact scalarUnitTensor_pureState_trace_ne_zero N
   · intro N L hL hLN
-    change (doubledTensor MPSTensor.scalarUnitTensor).mutualInfoChain N L _ _ =
-      (doubledTensor MPSTensor.scalarUnitTensor).mutualInfoChain N (L + 1) _ _
-    rw [mutualInfoChain_doubledTensor MPSTensor.scalarUnitTensor N L _
+    change (doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1))).mutualInfoChain N L _ _ =
+      (doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1))).mutualInfoChain N (L + 1) _ _
+    rw [mutualInfoChain_doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1)) N L _
         (scalarUnitTensor_pureState_trace_ne_zero N),
-      mutualInfoChain_doubledTensor MPSTensor.scalarUnitTensor N (L + 1) _
+      mutualInfoChain_doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1)) N (L + 1) _
         (scalarUnitTensor_pureState_trace_ne_zero N)]
     congr 1
     exact hPureSAL N L hL hLN
@@ -501,7 +501,7 @@ theorem obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
   · exact MPSTensor.linearIndependent_mpvState_of_configEquiv
       (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv) P.basis
       (fun j ↦ Kraus.reindexPhysical finProdFinEquiv.symm (P.basis j))
-      (fun j σ ↦ by simp [MPTensor.mpv_reindexPhysical, Equiv.arrowCongr])
+      (fun j σ ↦ by rw [MPTensor.mpv_reindexPhysical]; rfl)
       (hN0 N (Nat.le_of_lt hN))
   · intro j
     change Fin 2 at j

@@ -772,18 +772,18 @@ in Subsection~\ref{sec:asymex_vertical_dictionary}.
 
 \begin{definition}[The sector tensors and their stacked product]
     \label{def:asymex_dimer}
-    \lean{P6Compression.dimerM, P6Compression.dimerTarget,
+    \lean{P6Compression.dimerM,
         P6Compression.dimerStacked, P6Compression.dimerBlocks,
         P6Compression.dimerWeights}
     \leanok
-    \uses{def:mpo_tensor,def:mpo_to_mps,def:mpdo_operator_product}
+    \uses{def:mpo_tensor,def:mpdo_operator_product}
     For $a=(p,p',k)$ and $b=(q,q',k')$, define
     \begin{align}
         M_f^{ab} & =\delta_{kk'} \frac12C_k(p,p')\tau_k(f)
         (E_{pp'}\otimes E_{qq'}).
         \label{eq:asymex_dimer_letters}
     \end{align}
-    The sixty-four-letter reading is the target tensor, of bond
+    Read on the sixty-four letters $(a,b)$, this is the target tensor, of bond
     dimension four. The stacked product
     $B_{f,f'}^{ab}=\sum_cM_f^{ac}\otimes M_{f'}^{cb}$ has bond
     dimension sixteen. Its target tensors are $M_{f+f'}$ and
@@ -855,7 +855,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 
 \begin{lemma}[Normality of the sectors]
     \label{thm:asymex_dimer_normal}
-    \lean{P6Compression.dimerTarget_isNormal}
+    \lean{P6Compression.dimerM_isNormal}
     \leanok
     \uses{def:asymex_dimer,def:normal}
     Each sector $M_f$ is normal at blocking length one in the sense of

@@ -260,11 +260,11 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
     conv_lhs => rw [h]
     rw [Matrix.conjTranspose_mul, hconjT, Matrix.mul_smul, Matrix.smul_mul, smul_smul]
     simp only [Matrix.mul_assoc]
-  have hN : Kraus.IsNormal W₂.normalizedFlattening.toMPSTensor :=
-    (isNormal_toMPSTensor_iff _).2 hW.blockTwo.isNormalTensor_normalizedFlattening.isNormal
+  have hN : Kraus.IsNormal W₂.normalizedFlattening :=
+    hW.blockTwo.isNormalTensor_normalizedFlattening.isNormal
   have hsign := MPSTensor.mul_map_star_eq_one_or_neg_one_of_twice hN G
-    (c := starRingEnd ℂ ζ * ζ) (fun i => by
-      simp only [toMPSTensor, normalizedFlattening, Matrix.mul_smul, Matrix.smul_mul]
+    (c := starRingEnd ℂ ζ * ζ) (fun ⟨a, b⟩ => by
+      simp only [normalizedFlattening, Matrix.mul_smul, Matrix.smul_mul]
       conv_lhs => rw [htwice]
       rw [smul_comm])
   -- The phase is one, from the length-two invariance.
