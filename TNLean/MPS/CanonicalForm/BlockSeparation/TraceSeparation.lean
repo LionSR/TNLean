@@ -83,7 +83,7 @@ injective.
 This is the projection to one labelled block in the simultaneous block
 injectivity statement of arXiv:1606.00608, lines 317--345. -/
 theorem WordTupleSpanTop.isInjective_one
-    {A : (k : Fin r) → MPSTensor d (dim k)}
+    {α : Type*} {A : (k : Fin r) → MPTensor α (Fin (dim k))}
     (hSpan : WordTupleSpanTop A 1) (j : Fin r) :
     Kraus.IsInjective (A j) := by
   classical

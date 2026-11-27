@@ -406,7 +406,7 @@ period: irreducibility, left-canonical normalization and the transfer map are un
 Source: arXiv:1708.00029, Section 2.1. -/
 theorem IsPeriodic.reindexPhysical {m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
     (e : α' ≃ α) : IsPeriodic m (Kraus.reindexPhysical e A) where
-  irreducible := (isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.irreducible
+  irreducible := (Kraus.isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.irreducible
   leftCanonical := (Kraus.isTP_reindexPhysical_iff e A).2 hA.leftCanonical
   period_pos := hA.period_pos
   peripheral_eq := by
