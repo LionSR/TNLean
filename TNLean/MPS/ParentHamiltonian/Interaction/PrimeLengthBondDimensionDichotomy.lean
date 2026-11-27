@@ -131,7 +131,7 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
       apply mpv_ne_zero_of_isNBlkInjective (hC1 j) hq hqM
       funext σ
       simpa only [mpvState_apply, PiLp.zero_apply, Pi.zero_apply] using
-        congrArg (fun v : MPVSpace d M => v σ) hMzero
+        congrArg (fun v : MPVSpace (Fin d) M => v σ) hMzero
     have hGround :=
       toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
         (B j) h (hker j) hLM
@@ -224,7 +224,7 @@ theorem exists_uniform_bond_on_cyclic_ground_sector
       LinearMap.ker (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M) :
     ∃ K : ℕ, 0 < K ∧
-      ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; ∀ ψ : MPVSpace d M,
+      ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; ∀ ψ : MPVSpace (Fin d) M,
         ψ ≠ 0 → Matrix.toEuclideanLin
           (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 →
         (∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ) →
@@ -280,7 +280,7 @@ theorem uniform_bond_family_iff_short_cyclic_ground
         LinearMap.ker (Matrix.toEuclideanLin
           (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState C M) ↔
     (∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; M < M₀ →
-      ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧ Matrix.toEuclideanLin
+      ∃ ψ : MPVSpace (Fin d) M, ψ ≠ 0 ∧ Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 ∧
         ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ) := by
   classical

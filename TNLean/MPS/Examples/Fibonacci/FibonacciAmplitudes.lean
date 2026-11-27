@@ -172,7 +172,7 @@ lemma norm_mpvState_fibChain_pos : 0 < ‖mpvState fibChain N‖ := by
     rw [this, zero_pow two_ne_zero] at h2
     exact (inv_pos.mpr Real.goldenRatio_pos).ne h2
   refine norm_pos_iff.mpr fun h ↦ ?_
-  have hx := congrArg (fun v : MPVSpace 2 N ↦ v fun _ ↦ 1) h
+  have hx := congrArg (fun v : MPVSpace (Fin 2) N ↦ v fun _ ↦ 1) h
   simp only [mpvState_apply, mpv_fibChain_eq_prod, PiLp.zero_apply] at hx
   simp [fibChainWeight, hσ] at hx
 

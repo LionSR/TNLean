@@ -249,7 +249,7 @@ theorem exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le [NeZero b]
   set Kμ := ‖LinearMap.toContinuousLinearMap μL‖
   have hμL : ∀ G, ‖μL G‖ ≤ Kμ * ‖G‖ := (LinearMap.toContinuousLinearMap μL).le_opNorm
   set Pinf := blockSumPosLimit ι σ
-  set w : Fin b → MPVSpace (D * D) 1 := fun k =>
+  set w : Fin b → MPVSpace (Fin (D * D)) 1 := fun k =>
     mpvState (fixedPointTensor (embeddedBlockState (ι k) (σ k))) 1
   set W := ∑ k, w k
   have hinner : ∀ (X : MPSTensor (D * D) D) (k : Fin b),

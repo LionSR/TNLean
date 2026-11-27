@@ -380,28 +380,28 @@ from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`):
 * (iii) there is some `N₀` such that for all `N > N₀`, the MPV states
       `mpvState (blocks j) N` are linearly independent.
 
-Here `blocks` is a family `(j : Fin g) → Σ Dj, MPSTensor d Dj`, allowing
-different bond dimensions for different blocks.
+Here `blocks` is a family `(j : Fin g) → Σ Dj, MPTensor α (Fin Dj)`, allowing
+different bond dimensions for different blocks, over any finite physical alphabet `α`.
 -/
-structure IsCPSVBasisOfNormalTensors {g : ℕ} (A : MPSTensor d D)
-    (blocks : (j : Fin g) → Σ Dj : ℕ, MPSTensor d Dj) : Prop where
+structure IsCPSVBasisOfNormalTensors {α : Type*} [Fintype α] {g : ℕ} (A : MPTensor α (Fin D))
+    (blocks : (j : Fin g) → Σ Dj : ℕ, MPTensor α (Fin Dj)) : Prop where
   /-- (i) each basis tensor `A_j` is a CPSV16 normal tensor. -/
   blocks_normal : ∀ j, IsNormalTensor (blocks j).2
   /-- (ii) at every positive length `N`, the MPV family of `A` is a linear combination of
   the per-block MPV families. -/
   spans_mpv : ∀ N : ℕ, 0 < N → ∃ c : Fin g → ℂ,
-    ∀ σ : Fin N → Fin d, mpv A σ = ∑ j : Fin g, c j * mpv (blocks j).2 σ
+    ∀ σ : Fin N → α, mpv A σ = ∑ j : Fin g, c j * mpv (blocks j).2 σ
   /-- (iii) eventually, the MPV states of the basis are linearly independent. -/
   eventually_li : ∃ N₀ : ℕ, ∀ N > N₀,
-    LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (blocks j).2 N)
+    LinearIndependent ℂ (fun j : Fin g => mpvState (blocks j).2 N)
 
 /-- Every tensor in a basis of normal tensors has positive bond dimension, since a normal tensor
 has transfer spectral radius one.
 
 Source: arXiv:1606.00608, lines 233--235 and 271--274. -/
 theorem IsCPSVBasisOfNormalTensors.blocks_dim_pos
-    {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPTensor α (Fin D)} {B : (j : Fin g) → MPTensor α (Fin (dim j))}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
     ∀ j, 0 < dim j :=
   fun j => Nat.pos_of_ne_zero (hBNT.blocks_normal j).bondDim_ne_zero

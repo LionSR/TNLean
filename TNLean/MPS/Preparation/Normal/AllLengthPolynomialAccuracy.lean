@@ -40,7 +40,7 @@ fixed-point pairs, or use the exact normalized state when the prescribed block i
 than the chain. Source: arXiv:2307.01696, eq. (10) and Supplemental Material, proof of
 Theorem 1. -/
 noncomputable def allLengthPolynomialState {d D : ℕ} (A : MPSTensor d D)
-    (σ : Matrix (Fin D) (Fin D) ℂ) (ξ η : ℝ) (N : ℕ) : MPVSpace d N :=
+    (σ : Matrix (Fin D) (Fin D) ℂ) (ξ η : ℝ) (N : ℕ) : MPVSpace (Fin d) N :=
   if h : 0 < polynomialBlockLength ξ η N ∧ polynomialBlockLength ξ η N ≤ N then
     blockIsometryState A (fixedPointPair σ) (sum_remainderBlockLengths h.1 h.2)
   else normalizedMPVState A N

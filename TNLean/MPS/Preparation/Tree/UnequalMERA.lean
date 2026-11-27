@@ -76,7 +76,7 @@ theorem isIsometry_treeMatrix (k : Fin 𝓜.numBlocks) : (𝓜.treeMatrix k).IsI
 
 /-- The state obtained by contracting the forest against the cyclic product of pairs
 prepared by the top disentanglers. -/
-noncomputable def state : MPVSpace d N :=
+noncomputable def state : MPVSpace (Fin d) N :=
   blockMatVector 𝓜.treeMatrix 𝓜.sum_blockLength (pairFamilyVector fun _ => 𝓜.topPair)
 
 @[simp] theorem state_apply (s : Cfg d N) :
@@ -172,7 +172,7 @@ theorem exists_of_trees_eq_blockIsometryState (hD : 0 < D) (A : MPSTensor d D)
 /-- Every normalized state on a positive chain of at most `R` sites is the state
 of a bond-one, single-leaf MERA. The leaf range `R` is fixed independently of the state
 and the chain length. The two layers are the leaf isometry and the top disentangler. -/
-theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace d N)
+theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace (Fin d) N)
     (hψ : ‖ψ‖ = 1) : ∃ 𝓜 : UnequalMERA d 1 R 0 N, 𝓜.state = ψ := by
   let : Unique (Fin (1 * 1)) := inferInstanceAs (Unique (Fin 1))
   let V : Matrix (Cfg d N) (Fin (1 * 1)) ℂ := Matrix.of fun s _ => ψ s

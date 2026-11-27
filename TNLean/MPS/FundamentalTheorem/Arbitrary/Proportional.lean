@@ -255,28 +255,28 @@ coefficient at each of those blocks. -/
 theorem coeff_eq_zero_of_forall_sum_mul_mpv_eq_zero {g : ℕ} {dim : Fin g → ℕ}
     (R : ∀ j, MPSTensor d (dim j)) (per : Fin g → ℕ) (hper : ∀ j, IsPeriodic (per j) (R j))
     {N : ℕ} (hLI : LinearIndependent ℂ
-      (fun j : {j : Fin g // per j ∣ N} => mpvState (d := d) (R ↑j) N))
+      (fun j : {j : Fin g // per j ∣ N} => mpvState (α := Fin d) (R ↑j) N))
     (a : Fin g → ℂ) (h : ∀ σ : Fin N → Fin d, ∑ j, a j * mpv (R j) σ = 0)
     (j : Fin g) (hj : per j ∣ N) : a j = 0 := by
   classical
-  have hSum : ∑ j, a j • mpvState (d := d) (R j) N = 0 := by
+  have hSum : ∑ j, a j • mpvState (α := Fin d) (R j) N = 0 := by
     ext σ
     simpa using h σ
   have hFilter : ∀ x : Fin g, x ∈ Finset.univ.filter (fun x => per x ∣ N) ↔ per x ∣ N := by
     intro x; simp
   have hDrop : ∑ x ∈ Finset.univ.filter (fun x => per x ∣ N),
-      a x • mpvState (d := d) (R x) N = 0 := by
+      a x • mpvState (α := Fin d) (R x) N = 0 := by
     rw [Finset.sum_subset (Finset.filter_subset _ _)]
     · exact hSum
     · intro x _ hx
       have hnd : ¬ per x ∣ N := by simpa using hx
-      have hzero : mpvState (d := d) (R x) N = 0 := by
+      have hzero : mpvState (α := Fin d) (R x) N = 0 := by
         ext σ
         simpa using pgvwc07_stateVector_eq_zero_of_not_dvd (R x) (hper x) hnd σ
       rw [hzero, smul_zero]
-  have hSubtype : ∑ k : {x : Fin g // per x ∣ N}, a ↑k • mpvState (d := d) (R ↑k) N = 0 :=
+  have hSubtype : ∑ k : {x : Fin g // per x ∣ N}, a ↑k • mpvState (α := Fin d) (R ↑k) N = 0 :=
     (Finset.sum_subtype (Finset.univ.filter (fun x => per x ∣ N)) hFilter
-      (fun x => a x • mpvState (d := d) (R x) N)).symm.trans hDrop
+      (fun x => a x • mpvState (α := Fin d) (R x) N)).symm.trans hDrop
   exact Fintype.linearIndependent_iff.mp hLI (fun k => a ↑k) hSubtype ⟨j, hj⟩
 
 /-- The states of a tensor at a positive length are the sums of the states of the blocks of a

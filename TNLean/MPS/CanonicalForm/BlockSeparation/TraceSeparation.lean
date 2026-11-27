@@ -221,14 +221,14 @@ theorem hasFiniteWordTraceSeparation_of_wordTupleSpanTop
 
 /-- A finite family of words which isolates each block: for every `k`, one can
 form a linear combination of those word evaluations that equals the identity on
-block `k` and vanishes on all other blocks. -/
-def HasBlockSelectorWords
-    (A : (k : Fin r) → MPSTensor d (dim k))
+block `k` and vanishes on all other blocks. The physical alphabet `α` is any finite type. -/
+def HasBlockSelectorWords {α : Type*} [Fintype α]
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (S : ℕ) : Prop :=
-  ∀ k : Fin r, ∃ c : (Fin S → Fin d) → ℂ,
-    (∑ w : Fin S → Fin d, c w • Kraus.evalWord (A k) (List.ofFn w)) = 1 ∧
+  ∀ k : Fin r, ∃ c : (Fin S → α) → ℂ,
+    (∑ w : Fin S → α, c w • Kraus.evalWord (A k) (List.ofFn w)) = 1 ∧
     ∀ j : Fin r, j ≠ k →
-      (∑ w : Fin S → Fin d, c w • Kraus.evalWord (A j) (List.ofFn w)) = 0
+      (∑ w : Fin S → α, c w • Kraus.evalWord (A j) (List.ofFn w)) = 0
 
 /-- A length-`S` word polynomial which selects block `k` on a finite set of
 other blocks. The tuple `M` lies in the span of simultaneous length-`S` word

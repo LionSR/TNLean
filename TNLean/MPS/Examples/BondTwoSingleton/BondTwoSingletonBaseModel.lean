@@ -540,7 +540,7 @@ theorem normalizedSingleton_isCPSVBasis :
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
     have hcomponent := congrArg
-      (fun v : MPSTensor.MPVSpace (4 * 4) N ↦
+      (fun v : MPSTensor.MPVSpace (Fin (4 * 4)) N ↦
         v (fun _ : Fin N ↦ retainedZeroLoopLetter)) hzero
     have hs : (singletonScale : ℂ) ≠ 0 := by
       exact_mod_cast ne_of_gt singletonScale_pos

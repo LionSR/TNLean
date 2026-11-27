@@ -99,7 +99,7 @@ theorem mpv_ghzTensor_eq_ghzState (N : ℕ) :
 theorem norm_mpvState_repeatedBlockTensor {N : ℕ} [NeZero N] :
     ‖mpvState repeatedBlockTensor N‖ = Real.sqrt 5 := by
   have h : ‖mpvState repeatedBlockTensor N‖ ^ 2 = 5 := by
-    change ‖(WithLp.toLp 2 (mpv repeatedBlockTensor) : MPVSpace 2 N)‖ ^ 2 = _
+    change ‖(WithLp.toLp 2 (mpv repeatedBlockTensor) : MPVSpace (Fin 2) N)‖ ^ 2 = _
     rw [mpv_repeatedBlockTensor_eq_ghzState, norm_ghzState_sq, Fin.sum_univ_two]
     norm_num
   nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num),
@@ -109,7 +109,7 @@ theorem norm_mpvState_repeatedBlockTensor {N : ℕ} [NeZero N] :
 theorem norm_mpvState_ghzTensor {N : ℕ} [NeZero N] :
     ‖mpvState ghzTensor N‖ = Real.sqrt 2 := by
   have h : ‖mpvState ghzTensor N‖ ^ 2 = 2 := by
-    change ‖(WithLp.toLp 2 (mpv ghzTensor) : MPVSpace 2 N)‖ ^ 2 = _
+    change ‖(WithLp.toLp 2 (mpv ghzTensor) : MPVSpace (Fin 2) N)‖ ^ 2 = _
     rw [mpv_ghzTensor_eq_ghzState, norm_ghzState_sq, Fin.sum_univ_two]
     norm_num
   nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num),

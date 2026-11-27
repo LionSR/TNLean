@@ -112,34 +112,34 @@ private lemma coeff_identity_via_matched_mpv_phase_scalar
   let b : ℕ → Fin P.basisCount → ℂ := fun N j =>
     c N * (ζ (β.symm j)) ^ N * Q.coeff N (β.symm j)
   have hLI : ∀ᶠ N in atTop,
-      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (d := d) (P.basis j) N) := by
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (α := Fin d) (P.basis j) N) := by
     obtain ⟨N₀, hN₀⟩ := hP.eventually_li
     rw [Filter.eventually_atTop]
     refine ⟨N₀ + 1, ?_⟩
     intro N hN
     exact hN₀ N (Nat.lt_of_succ_le hN)
   have hEq : ∀ᶠ N in atTop,
-      ∑ j : Fin P.basisCount, a N j • mpvState (d := d) (P.basis j) N =
-        ∑ j : Fin P.basisCount, b N j • mpvState (d := d) (P.basis j) N := by
+      ∑ j : Fin P.basisCount, a N j • mpvState (α := Fin d) (P.basis j) N =
+        ∑ j : Fin P.basisCount, b N j • mpvState (α := Fin d) (P.basis j) N := by
     filter_upwards [hc_mpv, hζ_mpv] with N hNscalar hNphase
     have hPstate := P.mpvState_toTensor_eq_sum_coeff N
     have hQstate := Q.mpvState_toTensor_eq_sum_coeff N
     have hStateEq :
-        mpvState (d := d) P.toTensor N = c N • mpvState (d := d) Q.toTensor N := by
+        mpvState (α := Fin d) P.toTensor N = c N • mpvState (α := Fin d) Q.toTensor N := by
       apply PiLp.ext
       intro σ
       simpa [mpvState_apply, mpv, Pi.smul_apply, smul_eq_mul] using hNscalar σ
     have hQsubst :
         c N • (∑ k : Fin Q.basisCount, Q.coeff N k •
-            mpvState (d := d) (Q.basis k) N) =
+            mpvState (α := Fin d) (Q.basis k) N) =
           ∑ k : Fin Q.basisCount,
             (c N * (ζ k) ^ N * Q.coeff N k) •
-              mpvState (d := d) (P.basis (β k)) N := by
+              mpvState (α := Fin d) (P.basis (β k)) N := by
       rw [Finset.smul_sum]
       refine Finset.sum_congr rfl ?_
       intro k _
-      have hState_k : mpvState (d := d) (Q.basis k) N =
-          ((ζ k) ^ N) • mpvState (d := d) (P.basis (β k)) N := by
+      have hState_k : mpvState (α := Fin d) (Q.basis k) N =
+          ((ζ k) ^ N) • mpvState (α := Fin d) (P.basis (β k)) N := by
         apply PiLp.ext
         intro σ
         simpa [mpvState_apply, smul_eq_mul] using hNphase k σ
@@ -149,36 +149,36 @@ private lemma coeff_identity_via_matched_mpv_phase_scalar
     have hReindex :
         (∑ k : Fin Q.basisCount,
             (c N * (ζ k) ^ N * Q.coeff N k) •
-              mpvState (d := d) (P.basis (β k)) N) =
+              mpvState (α := Fin d) (P.basis (β k)) N) =
           ∑ j : Fin P.basisCount,
             ((c N * (ζ (β.symm j)) ^ N * Q.coeff N (β.symm j)) •
-              mpvState (d := d) (P.basis j) N) := by
-      let f : Fin Q.basisCount → MPVSpace d N := fun k =>
-        (c N * (ζ k) ^ N * Q.coeff N k) • mpvState (d := d) (P.basis (β k)) N
-      let g : Fin P.basisCount → MPVSpace d N := fun j =>
+              mpvState (α := Fin d) (P.basis j) N) := by
+      let f : Fin Q.basisCount → MPVSpace (Fin d) N := fun k =>
+        (c N * (ζ k) ^ N * Q.coeff N k) • mpvState (α := Fin d) (P.basis (β k)) N
+      let g : Fin P.basisCount → MPVSpace (Fin d) N := fun j =>
         (c N * (ζ (β.symm j)) ^ N * Q.coeff N (β.symm j)) •
-          mpvState (d := d) (P.basis j) N
+          mpvState (α := Fin d) (P.basis j) N
       have hfg : ∀ k, f k = g (β k) := by
         intro k
         simp [f, g]
       simpa [f, g] using (Fintype.sum_equiv β f g hfg)
     calc
-      ∑ j : Fin P.basisCount, a N j • mpvState (d := d) (P.basis j) N
-          = mpvState (d := d) P.toTensor N := by
+      ∑ j : Fin P.basisCount, a N j • mpvState (α := Fin d) (P.basis j) N
+          = mpvState (α := Fin d) P.toTensor N := by
               simpa [a] using hPstate.symm
-      _ = c N • mpvState (d := d) Q.toTensor N := hStateEq
+      _ = c N • mpvState (α := Fin d) Q.toTensor N := hStateEq
       _ = c N • ∑ k : Fin Q.basisCount, Q.coeff N k •
-            mpvState (d := d) (Q.basis k) N := by rw [hQstate]
+            mpvState (α := Fin d) (Q.basis k) N := by rw [hQstate]
       _ = ∑ k : Fin Q.basisCount,
             (c N * (ζ k) ^ N * Q.coeff N k) •
-              mpvState (d := d) (P.basis (β k)) N := hQsubst
+              mpvState (α := Fin d) (P.basis (β k)) N := hQsubst
       _ = ∑ j : Fin P.basisCount, b N j •
-            mpvState (d := d) (P.basis j) N := by
+            mpvState (α := Fin d) (P.basis j) N := by
               simpa [b] using hReindex
   have hCoeff : ∀ᶠ N in atTop, ∀ j : Fin P.basisCount, a N j = b N j := by
     set_option maxRecDepth 1024 in
     exact coefficient_eventually_eq_of_eventually_linearIndependent
-      (v := fun N j => mpvState (d := d) (P.basis j) N) (a := a) (b := b) hLI hEq
+      (v := fun N j => mpvState (α := Fin d) (P.basis j) N) (a := a) (b := b) hLI hEq
   filter_upwards [hCoeff] with N hN k
   have h := hN (β k)
   simpa [a, b] using h

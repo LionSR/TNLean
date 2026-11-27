@@ -202,7 +202,7 @@ theorem exists_isMeasurementConversion_approximationError_le {d D : ℕ} [NeZero
     ∃ (s C : ℕ) (a b : ℝ), 1 ≤ s ∧ 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε →
       ∀ (N k : ℕ) [NeZero N], s * 2 ^ (k + 1) ∣ N →
         a * Real.log (N / ε) + b ≤ (s * 2 ^ (k + 1) : ℕ) →
-          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+          ∃ ψ : MPVSpace (Fin d) N, ‖ψ‖ = 1 ∧
             (∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) (C * (k + 1))
               (fun x ↦ ∏ i, v i (x i)) (fun x => ψ x)) ∧
             1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
@@ -244,7 +244,7 @@ theorem exists_isMeasurementConversion_le_logb_log {d D : ℕ} [NeZero D]
         a * Real.log (N / ε) + b ≤ (s * 2 ^ (k + 1) : ℕ) →
         ((s * 2 ^ (k + 1) : ℕ) : ℝ) ≤ 2 * (a * Real.log (N / ε) + b) →
           (k : ℝ) ≤ Real.logb 2 (a * Real.log (N / ε) + b) ∧
-          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+          ∃ ψ : MPVSpace (Fin d) N, ‖ψ‖ = 1 ∧
             (∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) (C * (k + 1))
               (fun x ↦ ∏ i, v i (x i)) (fun x => ψ x)) ∧
             1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by

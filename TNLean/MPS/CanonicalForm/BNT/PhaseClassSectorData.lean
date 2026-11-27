@@ -177,7 +177,7 @@ theorem collapsedBntSectorDecomp_hasBNT
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   have hLI : ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ
-        (fun j : Fin classes.g => mpvState (d := d) (blocks (classes.repr j)) N) := by
+        (fun j : Fin classes.g => mpvState (α := Fin d) (blocks (classes.repr j)) N) := by
     apply exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
       (fun j : Fin classes.g => blocks (classes.repr j))
     · intro j

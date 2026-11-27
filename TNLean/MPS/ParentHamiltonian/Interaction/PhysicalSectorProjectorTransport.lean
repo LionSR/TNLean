@@ -90,7 +90,7 @@ private theorem mem_natAdd_word_range_iff (σ : Cfg (a + b) M) :
 extensions of its actual coefficient restrictions, without scalar or dimension
 factors. The positive chain length makes the two word images disjoint.
 Source: physical-sector assembly for SPWC10, Theorem 5, lines 850--880. -/
-theorem physical_sum_state_decomposition (hM : 0 < M) (ψ : MPVSpace (a + b) M)
+theorem physical_sum_state_decomposition (hM : 0 < M) (ψ : MPVSpace (Fin (a + b)) M)
     (hψ : ∀ (σ : Cfg (a + b) M) (i j : Fin M),
       (σ i).val < a → a ≤ (σ j).val → ψ σ = 0) :
     ψ = Function.Embedding.euclideanExtendByZero
@@ -104,8 +104,8 @@ theorem physical_sum_state_decomposition (hM : 0 < M) (ψ : MPVSpace (a + b) M)
     (fun _ : Fin M ↦ (Fin.castAddEmb b : Fin a ↪ Fin (a + b)))
   let F := Function.Embedding.piCongrRight
     (fun _ : Fin M ↦ (Fin.natAddEmb a : Fin b ↪ Fin (a + b)))
-  let x : MPVSpace a M := WithLp.toLp 2 fun w ↦ ψ (E w)
-  let y : MPVSpace b M := WithLp.toLp 2 fun w ↦ ψ (F w)
+  let x : MPVSpace (Fin a) M := WithLp.toLp 2 fun w ↦ ψ (E w)
+  let y : MPVSpace (Fin b) M := WithLp.toLp 2 fun w ↦ ψ (F w)
   change ψ = E.euclideanExtendByZero x + F.euclideanExtendByZero y
   apply PiLp.ext
   intro σ
@@ -151,8 +151,8 @@ sector coefficient restrictions. Mixed coefficients are derived from the Hamilto
 rather than supplied.
 Source: physical-sector assembly for SPWC10, Theorem 5, lines 850--880. -/
 theorem physical_sum_state_decomposition_of_translationInvariant_projector_eq_zero
-    {R : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (a + b) M)
+    {R : ℕ} (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (Fin (a + b)) M)
     (hzero : haveI : NeZero M := ⟨by omega⟩;
       Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
       (Matrix.toEuclideanLin.symm
@@ -242,8 +242,8 @@ spaces restricts to the original complementary projection on the first sector.
 Source: orthogonal physical-sector sums in the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_parent_projection_embed
     (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
-    (hR : 0 < R) (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace a R) :
+    (hR : 0 < R) (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (v : MPVSpace (Fin a) R) :
     (S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
         |>.euclideanExtendByZero.toLinearMap) ⊔
       T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
@@ -256,7 +256,7 @@ theorem physical_sector_parent_projection_embed
   let U := S.map E.toLinearMap
   let V := T.map F.toLinearMap
   let K := U ⊔ V
-  have horth (x : MPVSpace a R) (y : MPVSpace b R) : ⟪E x, F y⟫_ℂ = 0 :=
+  have horth (x : MPVSpace (Fin a) R) (y : MPVSpace (Fin b) R) : ⟪E x, F y⟫_ℂ = 0 :=
     Function.Embedding.inner_extendByZero_eq_zero_of_disjoint _ _
       (disjoint_physical_word_ranges e f h hR) x y
   have hmem : E (S.starProjection v) ∈ K :=
@@ -281,7 +281,7 @@ theorem physical_sector_parent_projection_embed
   rw [hproj, map_sub]
 
 private theorem physical_embedding_cyclic_active_block
-    (e : Fin a ↪ Fin d) (hRM : R ≤ M) (i : Fin M) (v : MPVSpace a M) :
+    (e : Fin a ↪ Fin d) (hRM : R ≤ M) (i : Fin M) (v : MPVSpace (Fin a) M) :
     cyclicActiveBlockConfigLinearIsometryEquiv d R hRM i
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
       ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).prodMap
@@ -304,7 +304,7 @@ private theorem toEuclideanLin_translationInvariant_term_extend_physical
         |>.euclideanExtendByZero v) =
       (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero
         (Matrix.toEuclideanLin G v))
-    (i : Fin M) (v : MPVSpace a M) :
+    (i : Fin M) (v : MPVSpace (Fin a) M) :
     haveI : NeZero M := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M H).term i)
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
@@ -316,7 +316,7 @@ private theorem toEuclideanLin_translationInvariant_term_extend_physical
   let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
   let F := ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).prodMap
     (Function.Embedding.piCongrRight (fun _ : Fin (M - R) ↦ e))).euclideanExtendByZero
-  have hcoord (x : MPVSpace a M) : U (E x) = F (V x) :=
+  have hcoord (x : MPVSpace (Fin a) M) : U (E x) = F (V x) :=
     physical_embedding_cyclic_active_block e hRM i x
   apply U.injective
   calc
@@ -345,8 +345,8 @@ Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_hamiltonian_translationInvariant_embed
     (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (hRM : R ≤ M)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace a M) :
+    (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (v : MPVSpace (Fin a) M) :
     haveI : NeZero M := ⟨by omega⟩;
     Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm
@@ -374,8 +374,8 @@ Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_hamiltonian_translationInvariant_embed_eq_zero_iff
     (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (hRM : R ≤ M)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace a M) :
+    (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (v : MPVSpace (Fin a) M) :
     haveI : NeZero M := ⟨by omega⟩;
     Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm
@@ -400,8 +400,8 @@ Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_hamiltonian_translationInvariant_sum_eq_zero_iff
     (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (hRM : R ≤ M)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace a M) (w : MPVSpace b M) :
+    (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (v : MPVSpace (Fin a) M) (w : MPVSpace (Fin b) M) :
     haveI : NeZero M := ⟨by omega⟩;
     Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm
@@ -465,7 +465,7 @@ the two component Hamiltonians. The physical alphabet split is exhaustive, and t
 least two.
 Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem ker_physical_sum_translationInvariant_projector
-    {a b R M : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
+    {a b R M : ℕ} (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
     (hR : 2 ≤ R) (hRM : R ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
     LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
@@ -499,8 +499,8 @@ theorem ker_physical_sum_translationInvariant_projector
   ext ψ
   constructor
   · intro hψ
-    let x : MPVSpace a M := WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))
-    let y : MPVSpace b M := WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))
+    let x : MPVSpace (Fin a) M := WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))
+    let y : MPVSpace (Fin b) M := WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))
     have hdecomp : ψ = E x + F y :=
       physical_sum_state_decomposition_of_translationInvariant_projector_eq_zero
         S T hR hRM ψ hψ

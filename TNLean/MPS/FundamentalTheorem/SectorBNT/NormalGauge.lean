@@ -86,7 +86,7 @@ theorem normalizedMPVState_eq_of_gaugeEquiv {A B : MPSTensor d D} (h : GaugeEqui
 have the same modulus: the normalized vectors differ by the phase `c/|c|`. -/
 theorem norm_inner_normalizedMPVState_smul {A : MPSTensor d D} {D' : ℕ} {B : MPSTensor d D'}
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (h : mpvState B N = c • mpvState A N)
-    (v : MPVSpace d N) :
+    (v : MPVSpace (Fin d) N) :
     ‖⟪normalizedMPVState B N, v⟫_ℂ‖ = ‖⟪normalizedMPVState A N, v⟫_ℂ‖ := by
   simp only [normalizedMPVState, h, norm_smul, inner_smul_left, norm_mul, RCLike.norm_conj,
     Complex.ofReal_mul, mul_inv, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm]

@@ -196,7 +196,7 @@ noncomputable def amplitude [NeZero D] {M : ℕ}
 
 /-- The **state of the MERA** on `N = M 2^{k+1}` sites with `M` top sites, read through the
 regrouping of the sites into blocks. -/
-noncomputable def state [NeZero D] (M : ℕ) : MPVSpace n (M * 2 ^ (k + 1)) :=
+noncomputable def state [NeZero D] (M : ℕ) : MPVSpace (Fin n) (M * 2 ^ (k + 1)) :=
   (EuclideanSpace.equiv (ι := Cfg n (M * 2 ^ (k + 1))) (𝕜 := ℂ)).symm fun s =>
     𝓜.amplitude ((Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).symm s)
 

@@ -62,7 +62,7 @@ theorem IsCPSVBasisOfNormalTensors.reindex
   · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
     change LinearIndependent ℂ
-      ((fun j : Fin g₂ ↦ mpvState (d := d) (basis j).2 N) ∘ e)
+      ((fun j : Fin g₂ ↦ mpvState (α := Fin d) (basis j).2 N) ∘ e)
     exact (linearIndependent_equiv e).mpr (hLI N hN)
 
 end MPSTensor

@@ -121,7 +121,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_distinct
     (hDistinct : ∀ j k : ι, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
     ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun k : ι => mpvState (d := d) (A k) N) := by
+      LinearIndependent ℂ (fun k : ι => mpvState (α := Fin d) (A k) N) := by
   classical
   let : Fintype ι := Fintype.ofFinite ι
   set e := Fintype.equivFin ι with he
@@ -132,10 +132,10 @@ theorem exists_eventually_linearIndependent_of_normalTensor_distinct
       (fun j k hjk h => hDistinct (e.symm j) (e.symm k)
         (fun hEq => hjk (by simpa using congrArg e hEq)) h)
   refine ⟨N₀, fun N hN => ?_⟩
-  have hfun : ((fun k : Fin (Fintype.card ι) => mpvState (d := d) (A (e.symm k)) N) ∘ e)
-      = fun k : ι => mpvState (d := d) (A k) N := by
+  have hfun : ((fun k : Fin (Fintype.card ι) => mpvState (α := Fin d) (A (e.symm k)) N) ∘ e)
+      = fun k : ι => mpvState (α := Fin d) (A k) N := by
     funext k
-    exact congrArg (fun y : ι => mpvState (d := d) (A y) N) (e.symm_apply_apply k)
+    exact congrArg (fun y : ι => mpvState (α := Fin d) (A y) N) (e.symm_apply_apply k)
   rw [← hfun]
   exact (hLI N hN).comp e e.injective
 
@@ -145,7 +145,7 @@ theorem sum_smul_mpvState_eq_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} (A : (k : ι) → MPSTensor d (dim k))
     (g : ι → ℂ) {N : ℕ}
     (h : ∀ σ : Fin N → Fin d, ∑ k, g k * mpv (A k) σ = 0) :
-    ∑ k, g k • mpvState (d := d) (A k) N = 0 := by
+    ∑ k, g k • mpvState (α := Fin d) (A k) N = 0 := by
   apply PiLp.ext
   intro σ
   simp only [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply,

@@ -36,7 +36,7 @@ namespace MPSPreparation
 variable {d D : ℕ}
 
 /-- The squared norm of a vector as the sum of the squared moduli of its coefficients. -/
-theorem sum_star_mul_self_eq_norm_sq {N : ℕ} (v : MPVSpace d N) :
+theorem sum_star_mul_self_eq_norm_sq {N : ℕ} (v : MPVSpace (Fin d) N) :
     ∑ s, star (v s) * v s = ((‖v‖ ^ 2 : ℝ) : ℂ) := by
   rw [EuclideanSpace.norm_sq_eq]
   push_cast
@@ -56,7 +56,7 @@ arXiv:2307.01696, caption of
 Fig. 1(b), says the analogous thing of the circuit for the isometry `V`: it "can be further
 expressed with a low-depth circuit of local gates". -/
 theorem exists_isPreparedInDepth_of_norm_eq_one (hd : 0 < d) (n₀ : ℕ) :
-    ∃ K : ℕ, ∀ N [NeZero N], 2 ≤ N → N ≤ n₀ → ∀ ψ : MPVSpace d N, ‖ψ‖ = 1 →
+    ∃ K : ℕ, ∀ N [NeZero N], 2 ≤ N → N ≤ n₀ → ∀ ψ : MPVSpace (Fin d) N, ‖ψ‖ = 1 →
       IsPreparedInDepth (Geometry.ring N) K fun s => ψ s := by
   classical
   have h : ∀ n : Fin (n₀ + 1), ∃ K : ℕ, 2 ≤ n.val →

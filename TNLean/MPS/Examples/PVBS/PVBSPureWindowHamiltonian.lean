@@ -45,7 +45,7 @@ theorem posSemidef_pvbsPureWindowInteraction (q : ℂ) (R : ℕ) :
 actual geometric one-particle vector. Source: the complementary projection of
 the pure PVBS particle line, arXiv:1112.4097, Section II. -/
 theorem toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff (q : ℂ) (R : ℕ)
-    (ψ : MPVSpace 2 R) :
+    (ψ : MPVSpace (Fin 2) R) :
     Matrix.toEuclideanLin (pvbsPureWindowInteraction q R) ψ = 0 ↔
       ∃ c : ℂ, ∀ σ, ψ σ = c * pvbsEdge q R σ := by
   have hker : Matrix.toEuclideanLin (pvbsPureWindowInteraction q R) ψ = 0 ↔
@@ -68,7 +68,7 @@ theorem toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff (q : ℂ) (R 
 have no common kernel on their union. Source: the overlapping-window obstruction
 for the PVBS particle line, arXiv:1112.4097, Section II. -/
 theorem eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero
-    (q : ℂ) (hq : q ≠ 0) (N : ℕ) (ψ : MPVSpace 2 (N + 3))
+    (q : ℂ) (hq : q ≠ 0) (N : ℕ) (ψ : MPVSpace (Fin 2) (N + 3))
     (hleftTerm : Matrix.toEuclideanLin
       ((translationInvariant (N + 3) (pvbsPureWindowInteraction q (N + 2))).term
         ⟨0, by omega⟩) ψ = 0)
@@ -132,7 +132,7 @@ Source: the PVBS adjacent-window obstruction, arXiv:1112.4097, Section II;
 the finite-prefix question in SPWC10, Theorem 5, lines 850--880. -/
 theorem eq_zero_of_pvbsPureWindowHamiltonian_eq_zero
     (q : ℂ) (hq : q ≠ 0) (N : ℕ) {M : ℕ} (hM : N + 3 ≤ M)
-    (ψ : MPVSpace 2 M)
+    (ψ : MPVSpace (Fin 2) M)
     (hzero : haveI : NeZero M := ⟨by omega⟩;
       Matrix.toEuclideanLin
         (translationInvariant M (pvbsPureWindowInteraction q (N + 2))).hamiltonian ψ = 0) :

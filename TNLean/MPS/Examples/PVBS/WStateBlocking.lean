@@ -68,19 +68,19 @@ private theorem sum_norm_sq_wIndicator (N : ℕ) :
 /-- The unnormalized W vector has squared norm equal to its number of sites.
 Source: the single-excitation sum in arXiv:2011.12127, Appendix A, line 2350. -/
 theorem norm_sq_wIndicator (N : ℕ) :
-    ‖(WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)‖ ^ 2 = (N : ℝ) := by
+    ‖(WithLp.toLp 2 (wIndicator N) : MPVSpace (Fin 2) N)‖ ^ 2 = (N : ℝ) := by
   simpa only [EuclideanSpace.norm_sq_eq] using sum_norm_sq_wIndicator N
 
 /-- The square-root normalization of the W vector. -/
 theorem norm_wIndicator (N : ℕ) :
-    ‖(WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)‖ = Real.sqrt N := by
-  rw [← Real.sqrt_sq (norm_nonneg (WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)),
+    ‖(WithLp.toLp 2 (wIndicator N) : MPVSpace (Fin 2) N)‖ = Real.sqrt N := by
+  rw [← Real.sqrt_sq (norm_nonneg (WithLp.toLp 2 (wIndicator N) : MPVSpace (Fin 2) N)),
     norm_sq_wIndicator]
 
 /-- Dividing the W vector by the square root of a positive length gives a unit vector. -/
 theorem norm_normalized_wIndicator {N : ℕ} (hN : 0 < N) :
     ‖((Real.sqrt N : ℂ)⁻¹) •
-      (WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)‖ = 1 := by
+      (WithLp.toLp 2 (wIndicator N) : MPVSpace (Fin 2) N)‖ = 1 := by
   rw [norm_smul, norm_wIndicator, norm_inv, Complex.norm_real,
     Real.norm_of_nonneg (Real.sqrt_nonneg _)]
   exact inv_mul_cancel₀ (Real.sqrt_ne_zero'.mpr (by exact_mod_cast hN))

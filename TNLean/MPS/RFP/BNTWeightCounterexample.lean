@@ -107,7 +107,7 @@ theorem halvedWeightTensor_isLeftCanonicalBNTPresentation :
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
     have h := congrArg
-      (fun v : MPVSpace 1 N => v (fun _ : Fin N => (0 : Fin 1))) hzero
+      (fun v : MPVSpace (Fin 1) N => v (fun _ : Fin N => (0 : Fin 1))) hzero
     have : (1 : ℂ) = 0 := by
       simp [mpvState_apply, mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
     exact one_ne_zero this

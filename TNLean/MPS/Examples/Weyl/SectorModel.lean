@@ -140,7 +140,7 @@ the volume domain here is explicitly \(M\ge7\). -/
 theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (M : ℕ) (hM : 7 ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
-    ∃ v : MPVSpace 5 M, v ≠ 0 ∧
+    ∃ v : MPVSpace (Fin 5) M, v ≠ 0 ∧
       Matrix.toEuclideanLin
         (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian v = 0 ∧
       LinearMap.ker (Matrix.toEuclideanLin
@@ -202,7 +202,7 @@ the full physical alphabet; the particle coefficient restriction is derived.
 Source context: SPWC10, Theorem 5, lines 850--880, and the ordinary periodic
 trace convention at lines 790--793. -/
 theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (hqone : q ≠ 1) (ψ : MPVSpace 5 7)
+    (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (hqone : q ≠ 1) (ψ : MPVSpace (Fin 5) 7)
     (hzero : Matrix.toEuclideanLin
       (translationInvariant 7 (sevenSectorInteraction ζ q)).hamiltonian ψ = 0)
     (hfixed : ∀ s : Fin 7, cyclicTranslateState s ψ.ofLp = ψ.ofLp) : ψ = 0 := by
@@ -214,7 +214,7 @@ theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
   obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp hmem
   let E := (Function.Embedding.piCongrRight
     (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5))).euclideanExtendByZero
-  let y : MPVSpace 2 7 := c • WithLp.toLp 2 (pvbsEdge q 7)
+  let y : MPVSpace (Fin 2) 7 := c • WithLp.toLp 2 (pvbsEdge q 7)
   have hEy : E y = ψ := by
     dsimp only [y]
     rw [map_smul]
@@ -263,13 +263,13 @@ theorem exists_seven_site_interaction_without_short_fixed_ground :
       (∀ (M : ℕ) (hM : 7 ≤ M), haveI : NeZero M := ⟨by omega⟩;
         Module.finrank ℂ (LinearMap.ker
           (Matrix.toEuclideanLin (translationInvariant M h).hamiltonian)) = 1 ∧
-        ∃ v : MPVSpace 5 M, v ≠ 0 ∧
+        ∃ v : MPVSpace (Fin 5) M, v ≠ 0 ∧
           ∀ i : Fin M, Matrix.toEuclideanLin ((translationInvariant M h).term i) v = 0) ∧
       (∃ A : MPSTensor 5 5, ∀ (M : ℕ) (hM : 8 ≤ M), haveI : NeZero M := ⟨by omega⟩;
         mpvState A M ≠ 0 ∧
         LinearMap.ker (Matrix.toEuclideanLin (translationInvariant M h).hamiltonian) =
           Submodule.span ℂ {mpvState A M}) ∧
-      (∀ ψ : MPVSpace 5 7,
+      (∀ ψ : MPVSpace (Fin 5) 7,
         Matrix.toEuclideanLin (translationInvariant 7 h).hamiltonian ψ = 0 →
         (∀ s : Fin 7, cyclicTranslateState s ψ.ofLp = ψ.ofLp) → ψ = 0) := by
   let ζ : ℂ := Complex.exp (2 * Real.pi * Complex.I / 5)

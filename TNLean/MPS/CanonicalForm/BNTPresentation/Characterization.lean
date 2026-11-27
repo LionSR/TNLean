@@ -100,8 +100,8 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     exact hnot
   have hScalar : ∀ c : {j : Fin P.basisCount // j ∉ T},
       ∃ k : Fin g, ∃ α : ℕ → ℂ, ∀ N : ℕ, 0 < N →
-        mpvState (d := d) (P.basis c.1) N =
-          α N • mpvState (d := d) (B k) N := by
+        mpvState (α := Fin d) (P.basis c.1) N =
+          α N • mpvState (α := Fin d) (B k) N := by
     intro c
     obtain ⟨k, ζ, hζ, hmpv⟩ := hNotTPhase c.1 c.2
     refine ⟨k, fun N => (ζ ^ N)⁻¹, ?_⟩
@@ -174,17 +174,17 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
       LinearIndependent ℂ
         (Sum.elim
           (fun j : {j : Fin P.basisCount // j ∈ T} =>
-            mpvState (d := d) (P.basis j.1) N)
-          (fun k : Fin g => mpvState (d := d) (B k) N)) :=
+            mpvState (α := Fin d) (P.basis j.1) N)
+          (fun k : Fin g => mpvState (α := Fin d) (B k) N)) :=
     (eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
       C hSelf hCross).mono (fun N hN => by
         have key :
             (fun x : Sum {j : Fin P.basisCount // j ∈ T} (Fin g) =>
-              mpvState (d := d) (C x) N) =
+              mpvState (α := Fin d) (C x) N) =
               Sum.elim
                 (fun j : {j : Fin P.basisCount // j ∈ T} =>
-                  mpvState (d := d) (P.basis j.1) N)
-                (fun k : Fin g => mpvState (d := d) (B k) N) := by
+                  mpvState (α := Fin d) (P.basis j.1) N)
+                (fun k : Fin g => mpvState (α := Fin d) (B k) N) := by
           funext x
           cases x <;> rfl
         rw [← key]
@@ -196,18 +196,18 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     obtain ⟨cB, hcB⟩ := hBNT.spans_mpv N hNpos
     have hPstate := P.mpvState_toTensor_eq_sum_coeff N
     have hBstate :
-        mpvState (d := d) P.toTensor N =
-          ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
-      mpvState_eq_sum_of_decomp (d := d) P.toTensor B cB (hcB)
+        mpvState (α := Fin d) P.toTensor N =
+          ∑ k : Fin g, cB k • mpvState (α := Fin d) (B k) N :=
+      mpvState_eq_sum_of_decomp (α := Fin d) P.toTensor B cB (hcB)
     have hPBsum :
         (∑ j : Fin P.basisCount, P.coeff N j •
-            mpvState (d := d) (P.basis j) N) =
-          ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
+            mpvState (α := Fin d) (P.basis j) N) =
+          ∑ k : Fin g, cB k • mpvState (α := Fin d) (B k) N :=
       hPstate.symm.trans hBstate
     exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T) (a := fun j => P.coeff N j)
-      (u := fun j => mpvState (d := d) (P.basis j) N)
-      (b := cB) (v := fun k => mpvState (d := d) (B k) N)
+      (u := fun j => mpvState (α := Fin d) (P.basis j) N)
+      (b := cB) (v := fun k => mpvState (α := Fin d) (B k) N)
       (kOf := kOf) (α := fun c => αOf c N)
       (hComplement := fun c => hStateOf c N hNpos)
       (hSum := hPBsum) (hLI := hLIN) (i₀ := j₀) hj₀T
@@ -354,8 +354,8 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
         have hGroup :=
           Fintype.sum_fiber_smul (φ := jOf)
             (a := fun k : Fin r => (μ k * ζ k) ^ N)
-            (v := fun j : Fin g => mpvState (d := d) (basis j) N)
-        have hComponent := congrArg (fun v : MPVSpace d N => v σ) hGroup
+            (v := fun j : Fin g => mpvState (α := Fin d) (basis j) N)
+        have hComponent := congrArg (fun v : MPVSpace (Fin d) N => v σ) hGroup
         simpa [c, mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hComponent
 
 /-- Characterization of a basis of normal tensors for literal CPSV canonical-form data.

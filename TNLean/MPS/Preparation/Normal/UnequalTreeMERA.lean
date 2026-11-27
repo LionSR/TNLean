@@ -158,14 +158,14 @@ theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
     simpa only [max_eq_right hlog0, add_comm (1 : ℝ) (Real.log (N / ε))] using
       (tree_height_bound ha0 hb0 hlog0 hh)
   have hphase := norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv N)
-  have hself : ∀ v : MPVSpace d N, ‖v‖ = 1 → 1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun v hv => by
+  have hself : ∀ v : MPVSpace (Fin d) N, ‖v‖ = 1 → 1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun v hv => by
     rw [inner_self_eq_norm_sq_to_K, hv]
     norm_num [hε.le]
   have hB0 : mpvState B N ≠ 0 := by
     intro h
     apply h0
     ext x
-    have := congrArg (fun v : MPVSpace d N => v x) h
+    have := congrArg (fun v : MPVSpace (Fin d) N => v x) h
     simp only [mpvState_apply, hmpv, PiLp.zero_apply] at this
     simpa [pow_ne_zero N hζ] using this
   set Q := a * Real.log (N / ε) + b with hQ

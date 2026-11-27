@@ -43,7 +43,8 @@ theorem mpvState_ne_zero_of_normal_bondOne (B : MPSTensor d 1)
   obtain ⟨σ, hσ⟩ := exists_mpv_ne_zero_of_bondOne B (exists_apply_ne_zero_of_isNormal hB) hM
   intro hzero
   apply hσ
-  simpa only [mpvState_apply, PiLp.zero_apply] using congrArg (fun v : MPVSpace d M ↦ v σ) hzero
+  simpa only [mpvState_apply, PiLp.zero_apply] using
+    congrArg (fun v : MPVSpace (Fin d) M ↦ v σ) hzero
 
 /-- The actual derived local-kernel inclusion gives nonzero
 zero-momentum ground vectors at every permitted positive length in the
@@ -54,7 +55,7 @@ theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
     (hB : Kraus.IsNormal B) (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     (M : ℕ) (hM : 0 < M) (hLM : L ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
-    ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧
+    ∃ ψ : MPVSpace (Fin d) M, ψ ≠ 0 ∧
       Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 ∧
       ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ := by
   have : NeZero M := ⟨by omega⟩

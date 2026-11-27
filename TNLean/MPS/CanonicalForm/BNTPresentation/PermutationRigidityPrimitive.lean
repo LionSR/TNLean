@@ -54,14 +54,14 @@ namespace MPSTensor
 private lemma tendsto_mpvInner_zero_of_overlap_zero
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (h : Tendsto (fun N => mpvOverlap (α := Fin d) A B N) atTop (nhds (0 : ℂ))) :
-    Tendsto (fun N => mpvInner (d := d) A B N) atTop (nhds (0 : ℂ)) := by
+    Tendsto (fun N => mpvInner (α := Fin d) A B N) atTop (nhds (0 : ℂ)) := by
   have h' := h.star
   simpa only [mpvOverlap_eq_star_mpvInner, star_star, star_zero] using h'
 
 private lemma tendsto_mpvInner_one_of_overlap_one
     {d D : ℕ} (A : MPSTensor d D)
     (h : Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ))) :
-    Tendsto (fun N => mpvInner (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+    Tendsto (fun N => mpvInner (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
   have h' := h.star
   simpa only [mpvOverlap_eq_star_mpvInner, star_star, star_one] using h'
 
@@ -96,9 +96,9 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (α := Fin d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (B i) (B j) N) atTop (nhds 0))
     (hspan : ∀ᶠ N : ℕ in atTop,
-      Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (A j) N))
+      Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (α := Fin d) (A j) N))
       =
-      Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (B j) N))) :
+      Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (α := Fin d) (B j) N))) :
     ∃ perm : Fin g ≃ Fin g,
       ∀ j,
         ∃ hdim : dimA j = dimB (perm j),
@@ -121,8 +121,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   have hU_spec : ∀ N, N0 ≤ N →
       (U N).det ≠ 0 ∧
       ∀ j : Fin g,
-        mpvState (d := d) (B j) N =
-          ∑ i : Fin g, (U N) i j • mpvState (d := d) (A i) N := by
+        mpvState (α := Fin d) (B j) N =
+          ∑ i : Fin g, (U N) i j • mpvState (α := Fin d) (A i) N := by
     intro N hN
     simp only [U, dite_eq_left hN]
     exact (hN0 N hN).choose_spec
@@ -131,14 +131,14 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   -- Step 1: The Gram matrix of A tends to the identity, and so does its inverse.
   -- ═══════════════════════════════════════════════════════════════════════════
   have hA_inner_diag : ∀ i : Fin g,
-      Tendsto (fun N => mpvInner (d := d) (A i) (A i) N) atTop (nhds (1 : ℂ)) :=
+      Tendsto (fun N => mpvInner (α := Fin d) (A i) (A i) N) atTop (nhds (1 : ℂ)) :=
     fun i => tendsto_mpvInner_one_of_overlap_one (A i) (hA_self i)
   --
   have hA_inner_off : ∀ i j : Fin g, i ≠ j →
-      Tendsto (fun N => mpvInner (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ)) :=
+      Tendsto (fun N => mpvInner (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ)) :=
     fun i j hij => tendsto_mpvInner_zero_of_overlap_zero (A i) (A j) (hA_off i j hij)
   --
-  let GA : ℕ → Matrix (Fin g) (Fin g) ℂ := fun N i j => mpvInner (d := d) (A i) (A j) N
+  let GA : ℕ → Matrix (Fin g) (Fin g) ℂ := fun N i j => mpvInner (α := Fin d) (A i) (A j) N
   --
   have hGA_tendsto : Tendsto GA atTop (nhds (1 : Matrix (Fin g) (Fin g) ℂ)) := by
     refine tendsto_pi_nhds.2 ?_
@@ -176,18 +176,19 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     by_contra hall
     push Not at hall
     have hall_inner : ∀ i : Fin g,
-        Tendsto (fun N => mpvInner (d := d) (A i) (B j) N) atTop (nhds (0 : ℂ)) :=
+        Tendsto (fun N => mpvInner (α := Fin d) (A i) (B j) N) atTop (nhds (0 : ℂ)) :=
       fun i => tendsto_mpvInner_zero_of_overlap_zero (A i) (B j) (hall i)
     --
     let u : ℕ → Fin g → ℂ := fun N i => U N i j
-    let v : ℕ → Fin g → ℂ := fun N k => mpvInner (d := d) (A k) (B j) N
+    let v : ℕ → Fin g → ℂ := fun N k => mpvInner (α := Fin d) (A k) (B j) N
     --
     -- Eventually v_k = ∑ i, GA_{ki} * u_i.
     have hvu : ∀ N, N0 ≤ N →
         ∀ k : Fin g, v N k = ∑ i : Fin g, GA N k i * u N i := by
       intro N hN k
       have hexp := (hU_spec N hN).2 j
-      change mpvInner (d := d) (A k) (B j) N = ∑ i, mpvInner (d := d) (A k) (A i) N * U N i j
+      change mpvInner (α := Fin d) (A k) (B j) N =
+        ∑ i, mpvInner (α := Fin d) (A k) (A i) N * U N i j
       simp only [mpvInner, hexp, inner_sum, inner_smul_right]
       congr 1; ext i; ring
     --
@@ -227,13 +228,13 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       exact hsum.congr' (hev.mono fun N hN => hN.symm)
     --
     -- ⟪B_j, B_j⟫ → 0, contradicting self-overlap → 1.
-    have hBj_inner_zero : Tendsto (fun N => mpvInner (d := d) (B j) (B j) N)
+    have hBj_inner_zero : Tendsto (fun N => mpvInner (α := Fin d) (B j) (B j) N)
         atTop (nhds (0 : ℂ)) := by
       have hprod : ∀ i : Fin g,
           Tendsto (fun N => starRingEnd ℂ (u N i) * v N i) atTop (nhds (0 : ℂ)) := by
         intro i
         change Tendsto
-          (fun N => star (u N i) * mpvInner (d := d) (A i) (B j) N)
+          (fun N => star (u N i) * mpvInner (α := Fin d) (A i) (B j) N)
           atTop (nhds (0 : ℂ))
         simpa only [star_zero, zero_mul] using
           (hu_tendsto_zero i).star.mul (hall_inner i)
@@ -241,7 +242,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
           atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
           tendsto_finsetSum Finset.univ (fun i _ => hprod i)
-      have hev : ∀ᶠ N in atTop, mpvInner (d := d) (B j) (B j) N =
+      have hev : ∀ᶠ N in atTop, mpvInner (α := Fin d) (B j) (B j) N =
           ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i := by
         filter_upwards [Filter.eventually_atTop.2 ⟨N0, fun N h => h⟩] with N hN0N
         have hexp := (hU_spec N hN0N).2 j
@@ -249,7 +250,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       exact hsum.congr' (hev.mono fun N hN => hN.symm)
     --
     have hBj_inner_one :
-        Tendsto (fun N => mpvInner (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)) :=
+        Tendsto (fun N => mpvInner (α := Fin d) (B j) (B j) N) atTop (nhds (1 : ℂ)) :=
       tendsto_mpvInner_one_of_overlap_one (B j) (hB_self j)
     --
     exact zero_ne_one (tendsto_nhds_unique hBj_inner_zero hBj_inner_one)
@@ -442,9 +443,9 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     (hB_off : ∀ i j, i ≠ j →
       Tendsto (fun N => mpvOverlap (α := Fin d) (B i) (B j) N) atTop (nhds 0))
     (hspan : ∀ᶠ N : ℕ in atTop,
-      Submodule.span ℂ (Set.range (fun j : Fin gA => mpvState (d := d) (A j) N))
+      Submodule.span ℂ (Set.range (fun j : Fin gA => mpvState (α := Fin d) (A j) N))
         =
-      Submodule.span ℂ (Set.range (fun j : Fin gB => mpvState (d := d) (B j) N))) :
+      Submodule.span ℂ (Set.range (fun j : Fin gB => mpvState (α := Fin d) (B j) N))) :
     ∃ _h : gA = gB,
       ∃ perm : Fin gA ≃ Fin gB,
         ∀ j : Fin gA,
@@ -463,12 +464,12 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
   -- Step 2: Pick N where both are linearly independent and their spans agree.
   -- ═══════════════════════════════════════════════════════════════════════════
   have hBoth : ∀ᶠ N in atTop,
-      LinearIndependent ℂ (fun j : Fin gA => mpvState (d := d) (A j) N) ∧
-      LinearIndependent ℂ (fun j : Fin gB => mpvState (d := d) (B j) N) ∧
+      LinearIndependent ℂ (fun j : Fin gA => mpvState (α := Fin d) (A j) N) ∧
+      LinearIndependent ℂ (fun j : Fin gB => mpvState (α := Fin d) (B j) N) ∧
       Submodule.span ℂ
-          (Set.range (fun j : Fin gA => mpvState (d := d) (A j) N)) =
+          (Set.range (fun j : Fin gA => mpvState (α := Fin d) (A j) N)) =
         Submodule.span ℂ
-          (Set.range (fun j : Fin gB => mpvState (d := d) (B j) N)) := by
+          (Set.range (fun j : Fin gB => mpvState (α := Fin d) (B j) N)) := by
     filter_upwards [hA_li, hB_li, hspan] with N hA hB hspanN
     exact ⟨hA, hB, hspanN⟩
   obtain ⟨N, hA_N, hB_N, hspanN⟩ := hBoth.exists
@@ -479,9 +480,9 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
   have hfB := finrank_span_eq_card hB_N
   -- Both finranks refer to the same submodule by hspan.
   have hfAB : Module.finrank ℂ ↥(Submodule.span ℂ (Set.range
-      (fun j : Fin gA => mpvState (d := d) (A j) N))) =
+      (fun j : Fin gA => mpvState (α := Fin d) (A j) N))) =
     Module.finrank ℂ ↥(Submodule.span ℂ (Set.range
-      (fun j : Fin gB => mpvState (d := d) (B j) N))) := by
+      (fun j : Fin gB => mpvState (α := Fin d) (B j) N))) := by
     rw [hspanN]
   have hcard : Fintype.card (Fin gA) = Fintype.card (Fin gB) := by
     rw [← hfA, hfAB, hfB]

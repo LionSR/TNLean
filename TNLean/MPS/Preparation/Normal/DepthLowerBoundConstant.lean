@@ -221,7 +221,7 @@ theorem exists_depth_isTheta_log {A : MPSTensor d D}
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ lam₁ → ‖μ‖ ≤ ‖lam₂‖)
     (hξ : 0 < correlationLength (lam₂ / lam₁)) {ε : ℝ} (hε : 0 < ε) (hε2 : ε ≤ 1 / 2) :
     ∃ a c C : ℝ, ∃ N₀ : ℕ, 0 < a ∧ ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      (∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log N ∧
+      (∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log N ∧
           IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
             1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε) ∧
       ∀ (T : ℕ) (ψ : Cfg d N → ℂ), IsPreparedInDepth (Geometry.ring N) T ψ →

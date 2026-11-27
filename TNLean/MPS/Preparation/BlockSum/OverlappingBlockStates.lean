@@ -513,7 +513,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
       (hNs : ∑ k, ℓ k = N) (q : ℕ), (∀ k, q ≤ ℓ k) →
       (∀ k, IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))
         (blockPairs ι : Set (Fin D × Fin D))) →
-      ∀ φ : MPVSpace d N, (∀ s, φ s = ∑ j, β j * mpv (Aj j) s) →
+      ∀ φ : MPVSpace (Fin d) N, (∀ s, φ s = ∑ j, β j * mpv (Aj j) s) →
         1 - ‖⟪∑ j, ghzAmplitude β j • blockIsometryState (blockSum Aj ι fun _ => 1)
             (embedPair (ι j) (fixedPointPair (σ j))) hNs, ((‖φ‖ : ℂ)⁻¹) • φ⟫_ℂ‖ ≤
           C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by

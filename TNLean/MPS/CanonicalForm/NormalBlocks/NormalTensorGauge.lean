@@ -341,8 +341,8 @@ theorem IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
   obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
   have hN := hLI (N₀ + 1) (by omega)
   obtain ⟨X, ζ, _hζ, hConj⟩ := hGPE
-  have hState : ζ ^ (N₀ + 1) • mpvState (d := d) (B j) (N₀ + 1) =
-      mpvState (d := d) (B k) (N₀ + 1) := by
+  have hState : ζ ^ (N₀ + 1) • mpvState (α := Fin d) (B j) (N₀ + 1) =
+      mpvState (α := Fin d) (B k) (N₀ + 1) := by
     apply PiLp.ext
     intro σ
     simp only [PiLp.smul_apply, mpvState_apply, smul_eq_mul]
@@ -351,7 +351,7 @@ theorem IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
       (B := B k) X ζ hConj (N₀ + 1) σ,
       mpv_cast_dim hdim (B j) (N₀ + 1) σ]
   have hPair : LinearIndepOn ℂ
-      (fun l : Fin g => mpvState (d := d) (B l) (N₀ + 1)) {j, k} :=
+      (fun l : Fin g => mpvState (α := Fin d) (B l) (N₀ + 1)) {j, k} :=
     hN.linearIndepOn {j, k}
   have hNot := (linearIndepOn_pair_iff _ hjk (hN.ne_zero j)).mp hPair
   exact hNot (ζ ^ (N₀ + 1)) hState
@@ -369,7 +369,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
     (hNormal : ∀ k, IsNormalTensor (A k))
     (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) A) :
     ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun k : Fin r => mpvState (d := d) (A k) N) := by
+      LinearIndependent ℂ (fun k : Fin r => mpvState (α := Fin d) (A k) N) := by
   classical
   choose σ hσ hσfix hTP hGauge hPrim hIrr using
     fun k => (hNormal k).exists_tpGauge
@@ -391,8 +391,8 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
           hPreparedDistinct j k hjk)
   refine ⟨N₀, fun N hN => ?_⟩
   have hFamily :
-      (fun k : Fin r => mpvState (d := d) (prepared k) N) =
-        fun k : Fin r => mpvState (d := d) (A k) N := by
+      (fun k : Fin r => mpvState (α := Fin d) (prepared k) N) =
+        fun k : Fin r => mpvState (α := Fin d) (A k) N := by
     funext k
     ext w
     exact (GaugeEquiv.sameMPV (hGauge k) N w).symm

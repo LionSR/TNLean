@@ -391,7 +391,7 @@ private theorem left_isCPSVBasis :
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
     have hcomponent := congrArg
-      (fun v : MPSTensor.MPVSpace (2 * 2) L ↦
+      (fun v : MPSTensor.MPVSpace (Fin (2 * 2)) L ↦
         v (fun _ : Fin L ↦ (0 : Fin (2 * 2)))) hzero
     have hone : (1 : ℂ) = 0 := by
       simpa only [MPSTensor.mpvState_apply,
@@ -419,7 +419,7 @@ private theorem right_isCPSVBasis :
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
     have hcomponent := congrArg
-      (fun v : MPSTensor.MPVSpace (2 * 2) L ↦
+      (fun v : MPSTensor.MPVSpace (Fin (2 * 2)) L ↦
         v (fun _ : Fin L ↦ (0 : Fin (2 * 2)))) hzero
     have hpow : (4 / 5 : ℂ) ^ L ≠ 0 := by norm_num
     apply hpow

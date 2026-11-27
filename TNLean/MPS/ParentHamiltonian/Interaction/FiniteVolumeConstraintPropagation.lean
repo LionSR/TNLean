@@ -110,7 +110,7 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpace
     exact ⟨Kraus.evalWord A (List.ofFn τ), rfl⟩
   have hzero := hker hmem
   rw [ContinuousLinearMap.rightFiberwiseMap_apply_apply]
-  exact congrArg (fun v : MPVSpace d L => v σ) hzero
+  exact congrArg (fun v : MPVSpace (Fin d) L => v σ) hzero
 
 /-- The local-kernel inclusion implies zero energy of the Hamiltonian of the translates on every
 larger ring. Source: SPWC10, Theorem 5 proof, lines 877–880. -/

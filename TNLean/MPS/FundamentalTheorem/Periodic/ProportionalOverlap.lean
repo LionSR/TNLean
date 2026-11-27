@@ -55,7 +55,7 @@ Source: arXiv:1708.00029, definition `eq:rep`, lines 276--284. -/
 private lemma mpvState_eq_smul_of_hetRepeatedBlocks
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hRep : HetRepeatedBlocks A B) :
-    ∃ α : ℕ → ℂ, ∀ N : ℕ, mpvState (d := d) A N = α N • mpvState (d := d) B N := by
+    ∃ α : ℕ → ℂ, ∀ N : ℕ, mpvState (α := Fin d) A N = α N • mpvState (α := Fin d) B N := by
   classical
   obtain ⟨ξ, _hξ, hmpv⟩ := hRep.exists_unit_phase_power_mpv
   refine ⟨fun N : ℕ => ξ ^ N, ?_⟩
@@ -115,7 +115,7 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     exact hNot
   have hScalar : ∀ c : {j : Fin rA // j ∉ T},
       ∃ k : Fin rB, ∃ α : ℕ → ℂ, ∀ N : ℕ,
-        mpvState (d := d) (A c.1) N = α N • mpvState (d := d) (B k) N := by
+        mpvState (α := Fin d) (A c.1) N = α N • mpvState (α := Fin d) (B k) N := by
     intro c
     obtain ⟨k, hk⟩ := hNotT_nondecay c.1 c.2
     rcases periodicOverlapDichotomy (A c.1) (B k) (hPerA c.1) (hPerB k) with
@@ -197,55 +197,55 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     have hNpos : 0 < N := lt_of_lt_of_le Nat.zero_lt_one
       (le_trans (le_max_right N₀ 1) hN)
     have hLIN : LinearIndependent ℂ
-        (fun x ↦ mpvState (d := d) (C x) (p * N)) := hLI N hN₀
+        (fun x ↦ mpvState (α := Fin d) (C x) (p * N)) := hLI N hN₀
     have hpNpos : 0 < p * N := Nat.mul_pos hp hNpos
     obtain ⟨c, _hc, hEq⟩ := hProp (p * N) hpNpos
     have hAstate :
-        mpvState (d := d) X (p * N) =
+        mpvState (α := Fin d) X (p * N) =
           ∑ j : Fin rA, coeffA (p * N) j •
-            mpvState (d := d) (A j) (p * N) := by
-      refine mpvState_eq_sum_of_decomp (d := d) X A
+            mpvState (α := Fin d) (A j) (p * N) := by
+      refine mpvState_eq_sum_of_decomp (α := Fin d) X A
         (N := p * N) (coeffA (p * N)) ?_
       intro σ
       simpa [smul_eq_mul] using hExpandA σ
     have hBstate :
-        mpvState (d := d) Y (p * N) =
+        mpvState (α := Fin d) Y (p * N) =
           ∑ k : Fin rB, coeffB (p * N) k •
-            mpvState (d := d) (B k) (p * N) := by
-      refine mpvState_eq_sum_of_decomp (d := d) Y B
+            mpvState (α := Fin d) (B k) (p * N) := by
+      refine mpvState_eq_sum_of_decomp (α := Fin d) Y B
         (N := p * N) (coeffB (p * N)) ?_
       intro σ
       simpa [smul_eq_mul] using hExpandB σ
     have hStateEq :
-        mpvState (d := d) X (p * N) = c • mpvState (d := d) Y (p * N) := by
+        mpvState (α := Fin d) X (p * N) = c • mpvState (α := Fin d) Y (p * N) := by
       apply PiLp.ext
       intro σ
       simpa [mpvState_apply] using hEq σ
     have hSum :
         (∑ j : Fin rA, coeffA (p * N) j •
-            mpvState (d := d) (A j) (p * N)) =
+            mpvState (α := Fin d) (A j) (p * N)) =
           ∑ k : Fin rB, (c * coeffB (p * N) k) •
-            mpvState (d := d) (B k) (p * N) := by
+            mpvState (α := Fin d) (B k) (p * N) := by
       calc
         (∑ j : Fin rA, coeffA (p * N) j •
-            mpvState (d := d) (A j) (p * N)) =
-            mpvState (d := d) X (p * N) := hAstate.symm
-        _ = c • mpvState (d := d) Y (p * N) := hStateEq
+            mpvState (α := Fin d) (A j) (p * N)) =
+            mpvState (α := Fin d) X (p * N) := hAstate.symm
+        _ = c • mpvState (α := Fin d) Y (p * N) := hStateEq
         _ = c • (∑ k : Fin rB, coeffB (p * N) k •
-            mpvState (d := d) (B k) (p * N)) := by rw [hBstate]
+            mpvState (α := Fin d) (B k) (p * N)) := by rw [hBstate]
         _ = ∑ k : Fin rB, (c * coeffB (p * N) k) •
-            mpvState (d := d) (B k) (p * N) := by
+            mpvState (α := Fin d) (B k) (p * N) := by
           simp [Finset.smul_sum, smul_smul]
     have hLIN' : LinearIndependent ℂ
         (Sum.elim
-          (fun j : {j : Fin rA // j ∈ T} ↦ mpvState (d := d) (A j.1) (p * N))
-          (fun k : Fin rB ↦ mpvState (d := d) (B k) (p * N))) := by
+          (fun j : {j : Fin rA // j ∈ T} ↦ mpvState (α := Fin d) (A j.1) (p * N))
+          (fun k : Fin rB ↦ mpvState (α := Fin d) (B k) (p * N))) := by
       have hFamily :
-          (fun x ↦ mpvState (d := d) (C x) (p * N)) =
+          (fun x ↦ mpvState (α := Fin d) (C x) (p * N)) =
             Sum.elim
               (fun j : {j : Fin rA // j ∈ T} ↦
-                mpvState (d := d) (A j.1) (p * N))
-              (fun k : Fin rB ↦ mpvState (d := d) (B k) (p * N)) := by
+                mpvState (α := Fin d) (A j.1) (p * N))
+              (fun k : Fin rB ↦ mpvState (α := Fin d) (B k) (p * N)) := by
         funext x
         cases x <;> rfl
       rw [← hFamily]
@@ -253,9 +253,9 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T)
       (a := coeffA (p * N))
-      (u := fun j ↦ mpvState (d := d) (A j) (p * N))
+      (u := fun j ↦ mpvState (α := Fin d) (A j) (p * N))
       (b := fun k ↦ c * coeffB (p * N) k)
-      (v := fun k ↦ mpvState (d := d) (B k) (p * N))
+      (v := fun k ↦ mpvState (α := Fin d) (B k) (p * N))
       (kOf := kOf)
       (α := fun i ↦ αOf i (p * N))
       (hComplement := fun i ↦ hStateOf i (p * N))

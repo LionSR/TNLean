@@ -169,8 +169,8 @@ private theorem IsCPSVBasisOfNormalTensors.of_family_gaugeEquiv
   · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
     refine ⟨N₀, fun N hN => ?_⟩
     have hEq :
-        (fun j : Fin g => mpvState (d := d) (B j) N) =
-          fun j : Fin g => mpvState (d := d) (C j) N := by
+        (fun j : Fin g => mpvState (α := Fin d) (B j) N) =
+          fun j : Fin g => mpvState (α := Fin d) (C j) N := by
       funext j
       ext σ
       exact (hGauge j).sameMPV N σ

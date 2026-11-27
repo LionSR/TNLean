@@ -319,7 +319,7 @@ private theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repea
     (hNonrep : ∀ j k : ι, j ≠ k → ∀ h : dim j = dim k,
       ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
-      LinearIndependent ℂ (fun k : ι => mpvState (d := d) (A k) (p * N)) := by
+      LinearIndependent ℂ (fun k : ι => mpvState (α := Fin d) (A k) (p * N)) := by
   classical
   let : Fintype ι := Fintype.ofFinite ι
   set e := Fintype.equivFin ι with he
@@ -332,10 +332,10 @@ private theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repea
         (fun hEq => hjk (by simpa using congrArg e hEq)) h)
   refine ⟨N₀, fun N hN => ?_⟩
   have hfun :
-      ((fun k : Fin (Fintype.card ι) => mpvState (d := d) (A (e.symm k)) (p * N)) ∘ e) =
-        fun k : ι => mpvState (d := d) (A k) (p * N) := by
+      ((fun k : Fin (Fintype.card ι) => mpvState (α := Fin d) (A (e.symm k)) (p * N)) ∘ e) =
+        fun k : ι => mpvState (α := Fin d) (A k) (p * N) := by
     funext k
-    exact congrArg (fun y : ι => mpvState (d := d) (A y) (p * N)) (e.symm_apply_apply k)
+    exact congrArg (fun y : ι => mpvState (α := Fin d) (A y) (p * N)) (e.symm_apply_apply k)
   rw [← hfun]
   exact (hLI N hN).comp e e.injective
 

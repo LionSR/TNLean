@@ -201,7 +201,7 @@ theorem norm_sqrtWeightLM_fixedPointTensor {σ : Matrix (Fin D) (Fin D) ℂ} (h�
     rw [transferMap_fixedPointTensor_apply hσ σ, Matrix.trace_smul, htr, one_smul])
 
 /-- The one-site periodic state `X ↦ φ_1(X)`, with coefficients `Tr Xⁱ`, as a linear map. -/
-noncomputable def mpvStateOneLM {n : ℕ} : MPSTensor n D →ₗ[ℂ] MPVSpace n 1 where
+noncomputable def mpvStateOneLM {n : ℕ} : MPSTensor n D →ₗ[ℂ] MPVSpace (Fin n) 1 where
   toFun X := mpvState X 1
   map_add' X Y := by
     ext s; simp [mpvState_apply, coeff_eq, List.ofFn_succ, Matrix.trace_add]

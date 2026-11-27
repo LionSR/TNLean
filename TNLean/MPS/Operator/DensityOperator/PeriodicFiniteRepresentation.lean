@@ -60,7 +60,7 @@ theorem exists_mpv_eq_of_cyclic_invariant {d N : ℕ} (hN : 0 < N)
 Source: PGVWC07, Theorems 1 and 3, positive-length normalized or
 unnormalized vector convention. -/
 theorem exists_mpvState_eq_of_cyclic_invariant {d N : ℕ} (hN : 0 < N)
-    (ψ : MPVSpace d N) (hψ : ψ ≠ 0)
+    (ψ : MPVSpace (Fin d) N) (hψ : ψ ≠ 0)
     (hTI : ∀ (s : Fin N) (σ : Fin N → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ) :
     ∃ A : MPSTensor d (N * d ^ (N / 2)), mpvState A N = ψ := by
   have hfun : (fun σ ↦ ψ σ) ≠ 0 := by
@@ -90,7 +90,7 @@ An invariant line alone is insufficient for this equivalence.
 Source: PGVWC07, Theorem 3 and its periodic trace convention,
 lines 400--429 and 620--649. -/
 theorem exists_mpvState_eq_iff_cyclic_invariant {d N : ℕ} (hN : 0 < N)
-    (ψ : MPVSpace d N) (hψ : ψ ≠ 0) :
+    (ψ : MPVSpace (Fin d) N) (hψ : ψ ≠ 0) :
     (∃ (D : ℕ) (A : MPSTensor d D), mpvState A N = ψ) ↔
       ∀ (s : Fin N) (σ : Fin N → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ := by
   constructor

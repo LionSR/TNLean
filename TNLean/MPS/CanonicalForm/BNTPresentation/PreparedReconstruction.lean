@@ -84,20 +84,20 @@ theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne
   choose hEq G hG using fun j q =>
     exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
-      (hTP ((mpvPhaseClassData (d := d) blocks).repr j))
-      (hTP ((mpvPhaseClassData (d := d) blocks).enum j q))
-      (hPrim ((mpvPhaseClassData (d := d) blocks).repr j))
-      (hPrim ((mpvPhaseClassData (d := d) blocks).enum j q))
-      (hIrr ((mpvPhaseClassData (d := d) blocks).repr j))
-      (hIrr ((mpvPhaseClassData (d := d) blocks).enum j q))
-      ((mpvPhaseClassData (d := d) blocks).enum_phase j q)
+      (hTP ((mpvPhaseClassData (α := Fin d) blocks).repr j))
+      (hTP ((mpvPhaseClassData (α := Fin d) blocks).enum j q))
+      (hPrim ((mpvPhaseClassData (α := Fin d) blocks).repr j))
+      (hPrim ((mpvPhaseClassData (α := Fin d) blocks).enum j q))
+      (hIrr ((mpvPhaseClassData (α := Fin d) blocks).repr j))
+      (hIrr ((mpvPhaseClassData (α := Fin d) blocks).enum j q))
+      ((mpvPhaseClassData (α := Fin d) blocks).enum_phase j q)
   let copyEquiv : Fin P.totalCopies ≃ Fin r :=
-    P.flatIndexEquiv.symm.trans (mpvPhaseClassData (d := d) blocks).enumEquiv
+    P.flatIndexEquiv.symm.trans (mpvPhaseClassData (α := Fin d) blocks).enumEquiv
   have hFlatDim : ∀ s : Fin P.totalCopies, P.flatDim s = dim (copyEquiv s) := by
     intro s
     let jq := P.flatIndexEquiv.symm s
-    change dim ((mpvPhaseClassData (d := d) blocks).repr jq.1) =
-      dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2)
+    change dim ((mpvPhaseClassData (α := Fin d) blocks).repr jq.1) =
+      dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2)
     exact hEq jq.1 jq.2
   let Xcopy : (jq : (j : Fin P.basisCount) × Fin (P.copies j)) →
       GL (Fin (P.basisDim jq.1)) ℂ := fun jq =>
@@ -117,74 +117,74 @@ theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
     exact toTensorFromBlocks_eq_globalGaugeOfBlocks_conj P.flatWeight P.flatBasis
       gaugedFlat Xflat (fun _ _ => rfl) i
   let blockEquiv : Fin r ≃ Fin P.totalCopies :=
-    (mpvPhaseClassData (d := d) blocks).enumEquiv.symm.trans P.flatIndexEquiv
+    (mpvPhaseClassData (α := Fin d) blocks).enumEquiv.symm.trans P.flatIndexEquiv
   have hBlockDim : ∀ k : Fin r, dim k = P.flatDim (blockEquiv k) := by
     intro k
-    let jq := (mpvPhaseClassData (d := d) blocks).enumEquiv.symm k
+    let jq := (mpvPhaseClassData (α := Fin d) blocks).enumEquiv.symm k
     have hb : blockEquiv k = P.flatIndexEquiv jq := by
       simp [blockEquiv, jq]
       rfl
     rw [hb, hFlatDim]
     have hcopy : copyEquiv (P.flatIndexEquiv jq) =
-        (mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2 := by
-      change (mpvPhaseClassData (d := d) blocks).enumEquiv
+        (mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2 := by
+      change (mpvPhaseClassData (α := Fin d) blocks).enumEquiv
         (P.flatIndexEquiv.symm (P.flatIndexEquiv jq)) =
-          (mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2
-      exact congrArg (mpvPhaseClassData (d := d) blocks).enumEquiv
+          (mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2
+      exact congrArg (mpvPhaseClassData (α := Fin d) blocks).enumEquiv
         (P.flatIndexEquiv.symm_apply_apply jq) |>.trans
-          ((mpvPhaseClassData (d := d) blocks).enumEquiv_apply jq.1 jq.2)
+          ((mpvPhaseClassData (α := Fin d) blocks).enumEquiv_apply jq.1 jq.2)
     rw [hcopy]
-    exact congrArg dim ((mpvPhaseClassData (d := d) blocks).enumEquiv.apply_symm_apply k).symm
+    exact congrArg dim ((mpvPhaseClassData (α := Fin d) blocks).enumEquiv.apply_symm_apply k).symm
   have hBlock : ∀ k i, μ k • blocks k i =
       Matrix.reindex (finCongr (hBlockDim k)).symm (finCongr (hBlockDim k)).symm
         (P.flatWeight (blockEquiv k) • gaugedFlat (blockEquiv k) i) := by
     intro k i
-    generalize hjq : (mpvPhaseClassData (d := d) blocks).enumEquiv.symm k = jq
-    have henum : (mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2 = k := by
+    generalize hjq : (mpvPhaseClassData (α := Fin d) blocks).enumEquiv.symm k = jq
+    have henum : (mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2 = k := by
       rw [← hjq]
-      exact (mpvPhaseClassData (d := d) blocks).enumEquiv.apply_symm_apply k
+      exact (mpvPhaseClassData (α := Fin d) blocks).enumEquiv.apply_symm_apply k
     clear hjq
     subst k
     let jqP : (j : Fin P.basisCount) × Fin (P.copies j) := ⟨jq.1, jq.2⟩
     have hbe :
-        blockEquiv ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) =
+        blockEquiv ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) =
           P.flatIndexEquiv jqP := by
       change P.flatIndexEquiv
-          ((mpvPhaseClassData (d := d) blocks).enumEquiv.symm
-            ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2)) =
+          ((mpvPhaseClassData (α := Fin d) blocks).enumEquiv.symm
+            ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2)) =
         P.flatIndexEquiv jqP
       apply congrArg P.flatIndexEquiv
-      exact ((mpvPhaseClassData (d := d) blocks).enumEquiv.symm_apply_eq).mpr
-        ((mpvPhaseClassData (d := d) blocks).enumEquiv_apply jq.1 jq.2).symm
+      exact ((mpvPhaseClassData (α := Fin d) blocks).enumEquiv.symm_apply_eq).mpr
+        ((mpvPhaseClassData (α := Fin d) blocks).enumEquiv_apply jq.1 jq.2).symm
     have hcopyF : copyEquiv (P.flatIndexEquiv jqP) =
-        (mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2 := by
-      change (mpvPhaseClassData (d := d) blocks).enumEquiv
+        (mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2 := by
+      change (mpvPhaseClassData (α := Fin d) blocks).enumEquiv
         (P.flatIndexEquiv.symm (P.flatIndexEquiv jqP)) =
-          (mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2
-      exact congrArg (mpvPhaseClassData (d := d) blocks).enumEquiv
+          (mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2
+      exact congrArg (mpvPhaseClassData (α := Fin d) blocks).enumEquiv
         (P.flatIndexEquiv.symm_apply_apply jq) |>.trans
-          ((mpvPhaseClassData (d := d) blocks).enumEquiv_apply jq.1 jq.2)
-    have hdLocal : dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) =
+          ((mpvPhaseClassData (α := Fin d) blocks).enumEquiv_apply jq.1 jq.2)
+    have hdLocal : dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) =
         P.flatDim (P.flatIndexEquiv jqP) := by
       rw [← hcopyF]
       exact (hFlatDim (P.flatIndexEquiv jqP)).symm
     have hLocal :
-        μ ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) •
-            blocks ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) i =
+        μ ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) •
+            blocks ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) i =
         Matrix.reindex (finCongr hdLocal).symm (finCongr hdLocal).symm
           (P.flatWeight (P.flatIndexEquiv jqP) •
             gaugedFlat (P.flatIndexEquiv jqP) i) := by
       ext x y
       simp only [Matrix.smul_apply, Matrix.reindex_apply, Matrix.submatrix_apply]
-      let C : Matrix (Fin (dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2)))
-          (Fin (dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2))) ℂ :=
+      let C : Matrix (Fin (dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2)))
+          (Fin (dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2))) ℂ :=
         (G jq.1 jq.2 : Matrix _ _ ℂ) *
           (cast (congr_arg (MPSTensor d) (hEq jq.1 jq.2))
-            (blocks ((mpvPhaseClassData (d := d) blocks).repr jq.1))) i *
+            (blocks ((mpvPhaseClassData (α := Fin d) blocks).repr jq.1))) i *
           (↑((G jq.1 jq.2)⁻¹) : Matrix _ _ ℂ)
       have hg := congrFun (congrFun (hG jq.1 jq.2 i) x) y
-      have hgEntry : blocks ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) i x y =
-          ((mpvPhaseClassData (d := d) blocks).enum_phase jq.1 jq.2).choose * C x y := by
+      have hgEntry : blocks ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) i x y =
+          ((mpvPhaseClassData (α := Fin d) blocks).enum_phase jq.1 jq.2).choose * C x y := by
         simpa [C, Matrix.smul_apply, smul_eq_mul] using hg
       rw [hgEntry]
       have hinv : P.flatIndexEquiv.symm (P.flatIndexEquiv jqP) = jqP :=
@@ -202,19 +202,19 @@ theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
         apply eq_of_heq
         exact HEq.trans hXflat hXcopy
       have hBasisConcrete : P.flatBasis (P.flatIndexEquiv jqP) ≍
-          blocks ((mpvPhaseClassData (d := d) blocks).repr jq.1) := by
+          blocks ((mpvPhaseClassData (α := Fin d) blocks).repr jq.1) := by
         exact HEq.trans hBasis (by rfl)
       have hRepDim : P.flatDim (P.flatIndexEquiv jqP) =
-          dim ((mpvPhaseClassData (d := d) blocks).repr jq.1) := by
+          dim ((mpvPhaseClassData (α := Fin d) blocks).repr jq.1) := by
         exact hdLocal.symm.trans (hEq jq.1 jq.2).symm
       have hBasis_i : P.flatBasis (P.flatIndexEquiv jqP) i ≍
-          blocks ((mpvPhaseClassData (d := d) blocks).repr jq.1) i := by
+          blocks ((mpvPhaseClassData (α := Fin d) blocks).repr jq.1) i := by
         exact dcongr_heq (HEq.rfl : i ≍ i)
           (fun _ _ _ => congrArg (fun n => Matrix (Fin n) (Fin n) ℂ) hRepDim)
           (fun _ _ => hBasisConcrete)
       have hCastBasisMatrix :
           cast (congr_arg (fun n => Matrix (Fin n) (Fin n) ℂ) (hEq jq.1 jq.2))
-              (blocks ((mpvPhaseClassData (d := d) blocks).repr jq.1) i) =
+              (blocks ((mpvPhaseClassData (α := Fin d) blocks).repr jq.1) i) =
             cast (congr_arg (fun n => Matrix (Fin n) (Fin n) ℂ) hdLocal.symm)
               (P.flatBasis (P.flatIndexEquiv jqP) i) := by
         apply eq_of_heq
@@ -230,28 +230,28 @@ theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
         dsimp [C]
         rw [cast_eq_reindex (hEq jq.1 jq.2),
           reindex_apply_eq_cast (hEq jq.1 jq.2)]
-      have hfin (z : Fin (dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2))) :
+      have hfin (z : Fin (dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2))) :
           (finCongr hdLocal).symm.symm z = Fin.cast hdLocal z := by
         apply Fin.ext
         rfl
       rw [hfin x, hfin y, hgauged]
       have hw : P.flatWeight (P.flatIndexEquiv jqP) =
-          ((mpvPhaseClassData (d := d) blocks).enum_phase jq.1 jq.2).choose *
-            μ ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) := by
+          ((mpvPhaseClassData (α := Fin d) blocks).enum_phase jq.1 jq.2).choose *
+            μ ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) := by
         rw [SectorDecomposition.flatWeight_flatIndexEquiv]
         rfl
       rw [hw]
       simp only [smul_eq_mul]
       ring
     let Pack := {s : Fin P.totalCopies //
-      dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2) = P.flatDim s}
+      dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2) = P.flatDim s}
     let rhs (z : Pack) : Matrix
-        (Fin (dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2)))
-        (Fin (dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2))) ℂ :=
+        (Fin (dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2)))
+        (Fin (dim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2))) ℂ :=
       Matrix.reindex (finCongr z.property).symm (finCongr z.property).symm
         (P.flatWeight z.val • gaugedFlat z.val i)
-    let z₁ : Pack := ⟨blockEquiv ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2),
-      hBlockDim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2)⟩
+    let z₁ : Pack := ⟨blockEquiv ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2),
+      hBlockDim ((mpvPhaseClassData (α := Fin d) blocks).enum jq.1 jq.2)⟩
     let z₂ : Pack := ⟨P.flatIndexEquiv jqP, hdLocal⟩
     have hz : z₁ = z₂ := by
       apply Subtype.ext

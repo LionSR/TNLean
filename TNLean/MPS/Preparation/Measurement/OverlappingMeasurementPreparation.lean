@@ -264,7 +264,7 @@ theorem exists_isOneRoundConversion_of_isPreparedInDepth {N : ℕ}
 private theorem blockIsoVector_sum_smul {D M N : ℕ} {ℓ : Fin M → ℕ} {κ : Type*}
     [Fintype κ]
     (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (c : κ → ℂ)
-    (x : κ → MPVSpace (D * D) M) :
+    (x : κ → MPVSpace (Fin (D * D)) M) :
     blockIsoVector B hN (∑ i, c i • x i) = ∑ i, c i • blockIsoVector B hN (x i) := by
   ext s
   simp only [blockIsoVector_apply, WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply,
@@ -283,7 +283,7 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
     {N : ℕ} [NeZero N] (hN1 : ∑ _ : Fin 1, N = N)
     (hinj : IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) N)
       (blockPairs ι : Set (Fin D × Fin D)))
-    (β : Fin b → ℂ) (φ : MPVSpace d N) (hφ : ∀ s, φ s = ∑ j, β j * mpv (Aj j) s)
+    (β : Fin b → ℂ) (φ : MPVSpace (Fin d) N) (hφ : ∀ s, φ s = ∑ j, β j * mpv (Aj j) s)
     (hφ0 : φ ≠ 0) :
     ∃ ω : Fin D × Fin D → ℂ, ∑ p, star (ω p) * ω p = 1 ∧
       (∀ c : Fin 1 → Fin D × Fin D, pairFamilyState (fun _ => ω) c ≠ 0 →
@@ -292,14 +292,14 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
   classical
   set B := blockTensor (blockSum Aj ι fun _ => 1) N
   have hN0 : N ≠ 0 := NeZero.ne N
-  set y : Fin b → MPVSpace (D * D) 1 := fun j =>
+  set y : Fin b → MPVSpace (Fin (D * D)) 1 := fun j =>
     (EuclideanSpace.equiv (ι := Cfg (D * D) 1) (𝕜 := ℂ)).symm fun τ =>
       mpvFamily (n := fun _ => D * D) (fun _ => blockPosTensor ι B j) τ
-  set Y : MPVSpace (D * D) 1 := ∑ j, β j • y j
+  set Y : MPVSpace (Fin (D * D)) 1 := ∑ j, β j • y j
   have hφY : φ = blockIsoVector (fun _ : Fin 1 => B) hN1 Y := by
     rw [blockIsoVector_sum_smul]
     ext s
-    have h := fun j => congrArg (fun v : MPVSpace d N => v s)
+    have h := fun j => congrArg (fun v : MPVSpace (Fin d) N => v s)
       (mpvState_eq_blockIsoVector (Aj := Aj) hι hdisj j hN1 hN0 fun _ => hN0)
     simp only [mpvState_apply] at h
     rw [hφ]
@@ -386,14 +386,14 @@ theorem exists_isOneRoundConversion_le_log_of_mpv_eq_sum
       mpv A s = ∑ j, coeff N j * mpv (Aj j) s) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState A N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   -- The target itself, used for short chains.
-  have hself : ∀ (N : ℕ) (v : MPVSpace d N) (ε : ℝ), 0 < ε → ‖v‖ = 1 →
+  have hself : ∀ (N : ℕ) (v : MPVSpace (Fin d) N) (ε : ℝ), 0 < ε → ‖v‖ = 1 →
       1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun N v ε hε hv => by
     rw [inner_self_eq_norm_sq_to_K, hv]
     norm_num [hε.le]
@@ -623,7 +623,7 @@ theorem exists_isOneRoundConversion_le_log_of_mpvState_ne_zero
       ‖μ'‖ < 1) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ψ s)) ∧
@@ -675,7 +675,7 @@ theorem exists_mpvState_repeatedBlockSum_ne_zero
   have h := hT (Real.sqrt bb) β hβle N
   have hzero : ∑ s : Fin N → Fin d, ‖∑ j, β j * mpv (Aj j) s‖ ^ 2 = 0 := by
     refine Finset.sum_eq_zero fun s _ => ?_
-    have := congrArg (fun v : MPVSpace d N => v s) h0
+    have := congrArg (fun v : MPVSpace (Fin d) N => v s) h0
     simp only [mpvState_apply, mpv_repeatedBlockSum hι hdisj μ (by omega : N ≠ 0),
       PiLp.zero_apply] at this
     rw [this, norm_zero]
@@ -712,7 +712,7 @@ theorem exists_isOneRoundConversion_le_log
       ‖μ'‖ < 1) :
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       bntWeight μ N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ψ s)) ∧
