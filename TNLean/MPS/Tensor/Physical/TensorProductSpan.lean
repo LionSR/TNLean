@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Injectivity
 import QICLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
-import QICLean.Algebra.Combinatorics.TupleEquiv
 import TNLean.MPS.Tensor.Physical.TensorProduct
 
 /-!
@@ -45,7 +44,7 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {d D e E : ℕ}
+variable {α β : Type*} {D E : ℕ}
 
 /-- The homogeneous word span of an independent tensor product is the image
 of the two constituent homogeneous word spans under the canonical tensor-product
@@ -65,7 +64,7 @@ lines 824--845, rather than a separately stated theorem of that paper.  Its
 homogeneous-word route supplies the project's algebraic-normality input for
 the retained blocks described around arXiv:1606.00608, equation `II_CF1`,
 lines 214--245. -/
-theorem wordSpan_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem wordSpan_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     (N : ℕ) :
     Kraus.wordSpan (tensorProduct A B) N =
       Submodule.map
@@ -82,26 +81,19 @@ theorem wordSpan_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
   ext X
   constructor
   · rintro ⟨σ, rfl⟩
-    refine ⟨Kraus.evalWord A (List.ofFn (fun n ↦ (σ n).divNat)), ?_,
-      Kraus.evalWord B (List.ofFn (fun n ↦ (σ n).modNat)), ?_, ?_⟩
-    · exact ⟨fun n ↦ (σ n).divNat, rfl⟩
-    · exact ⟨fun n ↦ (σ n).modNat, rfl⟩
+    refine ⟨Kraus.evalWord A (List.ofFn (fun n ↦ (σ n).1)), ?_,
+      Kraus.evalWord B (List.ofFn (fun n ↦ (σ n).2)), ?_, ?_⟩
+    · exact ⟨fun n ↦ (σ n).1, rfl⟩
+    · exact ⟨fun n ↦ (σ n).2, rfl⟩
     · change _ = Kraus.evalWord (tensorProduct A B) (List.ofFn σ)
       rw [evalWord_tensorProduct]
       simp only [List.map_ofFn, Function.comp_def]
       rfl
   · rintro ⟨_, ⟨σA, rfl⟩, _, ⟨σB, rfl⟩, rfl⟩
-    refine ⟨(finTupleProdEquiv N d e).symm (σA, σB), ?_⟩
-    change Kraus.evalWord (tensorProduct A B)
-      (List.ofFn ((finTupleProdEquiv N d e).symm (σA, σB))) = _
+    refine ⟨fun n ↦ (σA n, σB n), ?_⟩
+    change Kraus.evalWord (tensorProduct A B) (List.ofFn fun n ↦ (σA n, σB n)) = _
     rw [evalWord_tensorProduct]
-    have hsplit := (finTupleProdEquiv N d e).apply_symm_apply (σA, σB)
-    rw [finTupleProdEquiv_apply] at hsplit
-    have hσA := congrArg Prod.fst hsplit
-    change (fun n ↦ ((finTupleProdEquiv N d e).symm (σA, σB) n).divNat) = σA at hσA
-    have hσB := congrArg Prod.snd hsplit
-    change (fun n ↦ ((finTupleProdEquiv N d e).symm (σA, σB) n).modNat) = σB at hσB
-    simp only [List.map_ofFn, Function.comp_def, hσA, hσB]
+    simp only [List.map_ofFn, Function.comp_def]
     rfl
 
 /-- Full homogeneous word spans at the same length are preserved by an
@@ -112,7 +104,7 @@ Surjectivity of the composite of `kroneckerLinearEquiv` and
 spaces onto the full product matrix algebra.  This is the fixed-length step
 in the algebraic proof associated with arXiv:1703.09188, Theorem `IndexTh`
 (ii), lines 824--845. -/
-theorem isNBlkInjective_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem isNBlkInjective_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     {N : ℕ} (hA : Kraus.IsNBlkInjective A N)
     (hB : Kraus.IsNBlkInjective B N) :
     Kraus.IsNBlkInjective (tensorProduct A B) N := by
@@ -126,13 +118,38 @@ theorem isNBlkInjective_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
       (Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv)).surjective
 
 /-- One-site injectivity is preserved by independent tensor products. -/
-theorem isInjective_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem isInjective_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B) :
     Kraus.IsInjective (tensorProduct A B) := by
   rw [Kraus.IsInjective, ← Kraus.wordSpan_one]
   exact isNBlkInjective_tensorProduct A B
     (Kraus.isNBlkInjective_one_of_isInjective hA)
     (Kraus.isNBlkInjective_one_of_isInjective hB)
+
+/-- A bijective relabelling of the physical alphabet does not change the homogeneous word
+spans. -/
+private theorem wordSpan_reindexPhysical_equiv {ι ι' : Type*} {n : ℕ} (e : ι' ≃ ι)
+    (A : MPTensor ι (Fin n)) (N : ℕ) :
+    Kraus.wordSpan (Kraus.reindexPhysical e A) N = Kraus.wordSpan A N := by
+  unfold Kraus.wordSpan
+  congr 1
+  ext X
+  constructor
+  · rintro ⟨σ, rfl⟩
+    exact ⟨fun i ↦ e (σ i), by
+      simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+  · rintro ⟨σ, rfl⟩
+    exact ⟨fun i ↦ e.symm (σ i), by
+      simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+
+/-- A full homogeneous word span at length `N` stays full at every positive multiple of `N`.
+The QICLean statement `Kraus.wordSpan_top_of_mul` is on a `Fin` alphabet; the alphabet is
+relabelled along `Fintype.equivFin`. -/
+private theorem wordSpan_top_of_mul {ι : Type*} [Fintype ι] {n : ℕ} (A : MPTensor ι (Fin n))
+    {N : ℕ} (h : Kraus.wordSpan A N = ⊤) (k : ℕ) (hk : 1 ≤ k) :
+    Kraus.wordSpan A (k * N) = ⊤ := by
+  rw [← wordSpan_reindexPhysical_equiv (Fintype.equivFin ι).symm] at h ⊢
+  exact Kraus.wordSpan_top_of_mul _ h k hk
 
 /-- Algebraic normality is preserved by independent tensor products.
 
@@ -145,7 +162,8 @@ If `S_{N_A}(A)` and `S_{N_B}(B)` are full at positive lengths `N_A` and
 The paired-span theorem at this common length gives a full product matrix
 algebra.  This is project infrastructure for arXiv:1703.09188, proof of
 Theorem `IndexTh` (ii), lines 824--845, not a separate paper theorem. -/
-theorem isNormal_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem isNormal_tensorProduct [Fintype α] [Fintype β]
+    (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B) :
     Kraus.IsNormal (tensorProduct A B) := by
   rcases hA with ⟨NA, hNA, hA⟩
@@ -153,12 +171,12 @@ theorem isNormal_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
   refine ⟨NA * NB, Nat.mul_pos hNA hNB, ?_⟩
   have hAcommon : Kraus.IsNBlkInjective A (NA * NB) := by
     change Kraus.wordSpan A (NA * NB) = ⊤
-    have h := Kraus.wordSpan_top_of_mul A hA NB
+    have h := wordSpan_top_of_mul A hA NB
       (Nat.one_le_iff_ne_zero.mpr hNB.ne')
     simpa [Nat.mul_comm] using h
   have hBcommon : Kraus.IsNBlkInjective B (NA * NB) := by
     change Kraus.wordSpan B (NA * NB) = ⊤
-    exact Kraus.wordSpan_top_of_mul B hB NA
+    exact wordSpan_top_of_mul B hB NA
       (Nat.one_le_iff_ne_zero.mpr hNA.ne')
   exact isNBlkInjective_tensorProduct A B hAcommon hBcommon
 

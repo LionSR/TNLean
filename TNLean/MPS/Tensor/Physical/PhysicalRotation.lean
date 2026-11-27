@@ -36,46 +36,46 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d m p D : ℕ}
+variable {α β γ : Type*} [Fintype α] {D : ℕ}
 
 /-- Physical-index rotation of a tensor by a matrix `M` on the physical leg:
 
 `(rotatePhysical M A) i = ∑ j, M i j • A j`.
 -/
-def rotatePhysical (M : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor m D :=
-  fun i => ∑ j : Fin d, M i j • A j
+def rotatePhysical (M : Matrix β α ℂ) (A : MPTensor α (Fin D)) : MPTensor β (Fin D) :=
+  fun i => ∑ j : α, M i j • A j
 
 @[simp] lemma rotatePhysical_apply
-    (M : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin m) :
-    rotatePhysical M A i = ∑ j : Fin d, M i j • A j := rfl
+    (M : Matrix β α ℂ) (A : MPTensor α (Fin D)) (i : β) :
+    rotatePhysical M A i = ∑ j : α, M i j • A j := rfl
 
 /-- Rotating by the identity on the physical index leaves the tensor unchanged. -/
-@[simp] lemma rotatePhysical_one (A : MPSTensor d D) :
-    rotatePhysical (1 : Matrix (Fin d) (Fin d) ℂ) A = A := by
+@[simp] lemma rotatePhysical_one [DecidableEq α] (A : MPTensor α (Fin D)) :
+    rotatePhysical (1 : Matrix α α ℂ) A = A := by
   funext i
   simp [rotatePhysical, Matrix.one_apply]
 
 /-- Two successive physical-index rotations compose to the rotation by the product:
 \(M (M' A) = (M M') A\). -/
-lemma rotatePhysical_rotatePhysical (M : Matrix (Fin p) (Fin m) ℂ)
-    (M' : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
+lemma rotatePhysical_rotatePhysical [Fintype β] (M : Matrix γ β ℂ)
+    (M' : Matrix β α ℂ) (A : MPTensor α (Fin D)) :
     rotatePhysical M (rotatePhysical M' A) = rotatePhysical (M * M') A := by
   funext i
   calc
     rotatePhysical M (rotatePhysical M' A) i
-        = ∑ j : Fin m, ∑ k : Fin d, (M i j * M' j k) • A k := by
+        = ∑ j : β, ∑ k : α, (M i j * M' j k) • A k := by
           simp [rotatePhysical, Finset.smul_sum, smul_smul]
-    _ = ∑ k : Fin d, ∑ j : Fin m, (M i j * M' j k) • A k := Finset.sum_comm
+    _ = ∑ k : α, ∑ j : β, (M i j * M' j k) • A k := Finset.sum_comm
     _ = rotatePhysical (M * M') A i := by
           simp [rotatePhysical, Matrix.mul_apply, Finset.sum_smul]
 
 /-- Expanding a word of a physically rotated tensor gives the sitewise matrix
 coefficients multiplying the corresponding unrotated words. -/
 theorem evalWord_rotatePhysical_ofFn
-    (M : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
-    ∀ (N : ℕ) (s : Fin N → Fin m),
+    (M : Matrix β α ℂ) (A : MPTensor α (Fin D)) :
+    ∀ (N : ℕ) (s : Fin N → β),
       Kraus.evalWord (rotatePhysical M A) (List.ofFn s) =
-        ∑ t : Fin N → Fin d,
+        ∑ t : Fin N → α,
           (∏ n : Fin N, M (s n) (t n)) • Kraus.evalWord A (List.ofFn t) := by
   intro N
   induction N with
@@ -89,20 +89,20 @@ theorem evalWord_rotatePhysical_ofFn
       rw [List.ofFn_succ, Kraus.evalWord_cons, rotatePhysical_apply]
       rw [ih (fun n : Fin N => s n.succ)]
       rw [Finset.sum_mul_sum]
-      let e : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
-        Fin.consEquiv (fun _ => Fin d)
+      let e : (α × (Fin N → α)) ≃ (Fin (N + 1) → α) :=
+        Fin.consEquiv (fun _ => α)
       have hreindex :
-          (∑ t : Fin (N + 1) → Fin d,
+          (∑ t : Fin (N + 1) → α,
               (∏ n : Fin (N + 1), M (s n) (t n)) •
                 Kraus.evalWord A (List.ofFn t)) =
-            ∑ p : Fin d × (Fin N → Fin d),
+            ∑ p : α × (Fin N → α),
               (∏ n : Fin (N + 1), M (s n) (e p n)) •
                 Kraus.evalWord A (List.ofFn (e p)) :=
         (Fintype.sum_equiv e
-          (f := fun p : Fin d × (Fin N → Fin d) =>
+          (f := fun p : α × (Fin N → α) =>
             (∏ n : Fin (N + 1), M (s n) (e p n)) •
               Kraus.evalWord A (List.ofFn (e p)))
-          (g := fun t : Fin (N + 1) → Fin d =>
+          (g := fun t : Fin (N + 1) → α =>
             (∏ n : Fin (N + 1), M (s n) (t n)) •
               Kraus.evalWord A (List.ofFn t))
           (by intro p; rfl)).symm
@@ -120,10 +120,10 @@ theorem evalWord_rotatePhysical_ofFn
 
 /-- The matrix product vector of a physical-index rotation is the sitewise
 matrix action on the original matrix product vector. -/
-theorem mpv_rotatePhysical (M : Matrix (Fin m) (Fin d) ℂ)
-    (A : MPSTensor d D) {N : ℕ} (s : Fin N → Fin m) :
+theorem mpv_rotatePhysical (M : Matrix β α ℂ)
+    (A : MPTensor α (Fin D)) {N : ℕ} (s : Fin N → β) :
     mpv (rotatePhysical M A) s =
-      ∑ t : Fin N → Fin d, (∏ n : Fin N, M (s n) (t n)) * mpv A t := by
+      ∑ t : Fin N → α, (∏ n : Fin N, M (s n) (t n)) * mpv A t := by
   rw [mpv, coeff, evalWord_rotatePhysical_ofFn, Matrix.trace_sum]
   simp only [Matrix.trace_smul, smul_eq_mul, mpv, coeff]
 

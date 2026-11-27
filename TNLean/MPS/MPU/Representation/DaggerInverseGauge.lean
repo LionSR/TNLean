@@ -11,7 +11,6 @@ import TNLean.MPS.MPU.CanonicalForm.PhysicalAdjointCanonicalForm
 import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
-import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 
 /-!
 # Virtual gauges relating physical adjoints and group inverses
@@ -223,22 +222,13 @@ private theorem exists_unitaryConj_of_gaugeEquiv_of_smul_leftCanonical
     intro i
     simpa only [one_smul, mul_smul_comm, smul_mul_assoc] using
       congrArg (c • ·) (hX i)
-  -- The unitary-gauge step is stated on a `Fin` alphabet: relabel along `Fintype.equivFin`.
-  let e := (Fintype.equivFin α).symm
   obtain ⟨U, _hOne, hU⟩ :=
     MPSTensor.exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
-      (A := Kraus.reindexPhysical e fun i ↦ c • A i)
-      (B := Kraus.reindexPhysical e fun i ↦ c • B i)
-      X 1 one_ne_zero (fun i ↦ hcGauge (e i))
-      ((Kraus.isTP_reindexPhysical_iff e _).2 hAleft)
-      ((Kraus.isTP_reindexPhysical_iff e _).2 hBleft)
-      ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).2 hAc_irr)
-      ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).2 hBc_irr)
+      X 1 one_ne_zero hcGauge hAleft hBleft hAc_irr hBc_irr
   refine ⟨U, fun i ↦ ?_⟩
   have hi : c • B i = c • ((U : Matrix (Fin D) (Fin D) ℂ) * A i *
       (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
-    simpa only [Kraus.reindexPhysical, Equiv.apply_symm_apply, one_smul, mul_smul_comm,
-      smul_mul_assoc] using hU (e.symm i)
+    simpa only [one_smul, mul_smul_comm, smul_mul_assoc] using hU i
   have hi' := congrArg (c⁻¹ • ·) hi
   simpa only [smul_smul, inv_mul_cancel₀ hc, one_smul] using hi'
 

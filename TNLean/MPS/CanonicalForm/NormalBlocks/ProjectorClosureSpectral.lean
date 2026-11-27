@@ -264,8 +264,8 @@ theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ}
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
       ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (ι := α) (n := Fin n) B ρ = (r : ℂ) • ρ := by
   have hne : Kraus.transferMap (ι := α) (n := Fin n) B ≠ 0 := by
-    obtain ⟨i, hi⟩ := hB
-    exact Kraus.mapLM_ne_zero_of_exists_ne_zero B ⟨i, hi⟩
+    simpa only using
+      Kraus.mapLM_ne_zero_of_exists_ne_zero B hB
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
     exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (ι := α) (n := Fin n) B)
       (Kraus.transferMap_isCPMap B)
