@@ -502,7 +502,8 @@ theorem loopProductState_mem_ker_parentHamiltonian
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
-    F.loopProductState l ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
+    F.loopProductState l ∈ LinearMap.ker (Matrix.toLin'
+      (parentRingInteraction A 2 N).hamiltonian) := by
   let : NeZero N := ⟨by omega⟩
   exact F.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self hN
     (F.loopProductState l) (F.groundBondProduct_mulVec_loopProductState l hN)

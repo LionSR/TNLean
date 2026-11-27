@@ -373,9 +373,13 @@ gauge substitution or sector matching is used. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian
     {d D : ℕ} [NeZero d] [NeZero D] {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A) {L N : ℕ} (hL : 3 * D ^ 5 ≤ L) (hLN : L ≤ N) :
+    haveI : NeZero N := ⟨by
+      obtain ⟨S, hS, hBound, -⟩ :=
+        data.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five
+      omega⟩;
     LinearMap.range
       (sectorEncoder (fun j => data.blocks (data.representativeIndex j)) N).mulVecLin =
-      LinearMap.ker (parentHamiltonian A L N) := by
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) := by
   rw [data.ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le hL hLN, range_sectorEncoder]
   rfl
 

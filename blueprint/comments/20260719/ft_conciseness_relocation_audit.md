@@ -32,7 +32,7 @@ make clear that the stationary-support and fixed-point-algebra material should
 be moved only as a coherent cluster, never deleted or casually split.
 
 `blueprint/README.md` and the historically named
-`scripts/build_blueprint_ch01_12.sh` now define and check the focused
+`scripts/blueprint/build_blueprint_ch01_12.sh` now define and check the focused
 Chapters 1--11 route.  The full router retains Chapter 12 immediately after
 the proof.
 
@@ -274,7 +274,7 @@ The conservative priorities were implemented as follows.
 ## Validation risks
 
 1. **Router contract:** after priority 1, change `content_ft_mps.tex`,
-   `scripts/build_blueprint_ch01_12.sh`, `blueprint/README.md`, and Chapter 1
+   `scripts/blueprint/build_blueprint_ch01_12.sh`, `blueprint/README.md`, and Chapter 1
    references together. The present script rejects any list other than
    the focused `ch01..ch11` route.
 2. **Standalone references:** the dedicated build script warns that references
@@ -295,7 +295,7 @@ The conservative priorities were implemented as follows.
 
 ## Implementation validation record (2026-07-19)
 
-- The focused build command `./scripts/build_blueprint_ch01_12.sh` completed
+- The focused build command `./scripts/blueprint/build_blueprint_ch01_12.sh` completed
   successfully after the relocation and wrote
   `blueprint/print/print12.pdf`. Its router check confirmed the exact,
   duplicate-free `ch01`--`ch11` sequence. The compiler reports 20 unresolved
@@ -319,7 +319,7 @@ The conservative priorities were implemented as follows.
   positive-Schwarz example are present.
 - Short final checks passed: the focused router has exactly eleven inputs,
   every moved/retained subsection heading occurs once in the chapter sources,
-  `bash -n scripts/build_blueprint_ch01_12.sh` succeeds, and `git diff --check`
+  `bash -n scripts/blueprint/build_blueprint_ch01_12.sh` succeeds, and `git diff --check`
   is clean.
 
 ## Conclusion

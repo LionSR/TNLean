@@ -30,7 +30,7 @@ dominant-block specialisations.
 This workstream now delivers:
 
 * a paper-faithful BNT canonical-form predicate
-  `IsBNTCanonicalFormSD` on the `SectorDecomposition` surface, staged for
+  `IsLeftCanonicalBNTPresentationSD` on the `SectorDecomposition` surface, staged for
   the eventual upstream refactor (no consumers in this PR — see
   Constraints honoured below);
 * the dominant-block discharges
@@ -109,10 +109,10 @@ families via `eventuallyNonzeroProportionalMPV₂_symm` and using
 | --- | --- |
 | `TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap/FixedBlockDecay.lean` | Restored the two `_CFBNT` sorries with open-obligation docstrings; added the two `_dominant_…_CFBNT` lemmas |
 | `TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap.lean` | Restored prior signature of `exists_nondecaying_overlap_…_CFBNT`; added `exists_nondecaying_dominant_overlap_…_CFBNT` |
-| `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean` | Trimmed to just the `IsBNTCanonicalFormSD` structure + paper docstring; removed the unused `dominantPhaseSectorDecomp` adapter, `of_isCanonicalFormBNT`, and `hc_lower_of_isCanonicalFormBNT` |
+| `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsLeftCanonicalBNTPresentationSD.lean` | Trimmed to just the `IsLeftCanonicalBNTPresentationSD` structure + paper docstring; removed the unused `dominantPhaseSectorDecomp` adapter, `of_isCanonicalFormBNT`, and `hc_lower_of_isCanonicalFormBNT` |
 | `audits/2026-05-13_cpsv16_ft_bridge_b_status.md` | This revised memo |
 
-`IsBNTCanonicalFormSD` is the eventual landing target of the upstream
+`IsLeftCanonicalBNTPresentationSD` is the eventual landing target of the upstream
 refactor in `audits/2026-05-13_cpsv16_ft_bridge_gap.md` §Resolution.  It is
 staged here without consumers in this PR; the follow-on PR that introduces
 its first consumer will also add the corresponding blueprint entry.

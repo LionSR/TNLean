@@ -46,7 +46,7 @@ its normal vertical sectors with their physical isometries, and the pairwise
 Figure 8 comparison of two positive corners of a common representative. This
 file names that pair of inputs and the additional blocked-tensor properties
 needed for product decomposition. Both literal CPSV canonical form and
-normalized BNT-refined horizontal form supply them.
+BNT-refined horizontal form supply them.
 
 The two canonical-form predicates stay independent: each one proves the two
 inputs from its own grouping and Figure 8 theorems, and no implication
@@ -79,7 +79,7 @@ between them is used or asserted.
 ## Vertical canonical form of matrix product density operators
 
 The grouped vertical decomposition of a matrix product density operator in
-normalized BNT-refined horizontal form supplies a basis of normal tensors and
+BNT-refined horizontal form supplies a basis of normal tensors and
 normalized physical sector maps. The resulting positive weights and sector
 maps give the coisometry and the two exact block-diagonal identities of the
 vertical canonical form.
@@ -87,7 +87,7 @@ vertical canonical form.
 ### Main result
 
 * `MPOTensor.verticalCF_of_horizontalCF`: every matrix product density operator
-  in normalized BNT-refined horizontal form is in vertical canonical form.
+  in BNT-refined horizontal form is in vertical canonical form.
 
 ### References
 
@@ -96,7 +96,7 @@ vertical canonical form.
 
 ## Vertical canonical form before and after two-site blocking
 
-For a matrix product density operator in normalized BNT-refined horizontal
+For a matrix product density operator in BNT-refined horizontal
 form, the current Proposition 4.13 specialization applies both to the original
 tensor and to its two-site physical blocking.
 This is the first step of the two-site comparison in Appendix C.4 of
@@ -446,7 +446,7 @@ theorem HasVerticalBNTGroupingInputs.verticalCF {M : MPOTensor d D}
     (h : HasVerticalBNTGroupingInputs M) : IsVerticalCF M :=
   verticalCF_of_grouping_and_gramDressing M h.grouping h.gramDressing
 
-/-- Normalized BNT-refined horizontal form compares the Gram dressings of two
+/-- BNT-refined horizontal form compares the Gram dressings of two
 positive vertical corners of a common representative.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines
@@ -458,7 +458,7 @@ theorem IsHorizontalCF.hasGroupedCornerGramDressing (M : MPOTensor d D)
   exact hHorizontal.gramDressing_eq_of_two_grouped_corners M hM
     A VX VY X Y cX cY hcX hcY hcornerX hcornerY
 
-/-- A matrix product density operator in normalized BNT-refined horizontal
+/-- A matrix product density operator in BNT-refined horizontal
 form supplies both inputs of the grouped vertical construction.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1895--1919. -/
@@ -536,7 +536,7 @@ structure HasVerticalBNTProductInputs (M : MPOTensor d D) : Prop where
       (∃ v, P * verticalTensor (blockTwo M) v * P ≠ 0) →
         ∃ N, sectorCompression (blockTwo M) P N ≠ 0
 
-/-- Normalized BNT-refined horizontal form supplies the product inputs.
+/-- BNT-refined horizontal form supplies the product inputs.
 
 Source: CPSV16, Proposition 4.13, lines 1873--1921. -/
 theorem IsHorizontalCF.hasVerticalBNTProductInputs (M : MPOTensor d D)
@@ -560,7 +560,7 @@ open MPSTensor
 variable {d D : ℕ}
 
 /-- Literal CPSV canonical form supplies the product inputs independently of
-normalized BNT-refined horizontal form.
+BNT-refined horizontal form.
 
 Source: CPSV16, Proposition 4.13, lines 1873--1921. -/
 theorem hasVerticalBNTProductInputs (M : MPOTensor d D)
@@ -588,7 +588,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A matrix product density operator in normalized BNT-refined horizontal form
+/-- A matrix product density operator in BNT-refined horizontal form
 is also in vertical canonical form.
 
 The same grouped vertical decomposition supplies both the algebraic basis of
@@ -612,7 +612,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A matrix product density operator in normalized BNT-refined horizontal form
+/-- A matrix product density operator in BNT-refined horizontal form
 and its two-site blocking are both in vertical canonical form.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/

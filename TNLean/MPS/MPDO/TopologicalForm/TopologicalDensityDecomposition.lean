@@ -31,7 +31,7 @@ coordinates.  The two global direct-sum factors commute because the multiplicity
 scalar identity in every configuration.  Applying the adjoint vertical map reconstructs the
 original density exactly.
 
-The RFP-derived theorems obtain their fusion clause only from normalized
+The RFP-derived theorems obtain their fusion clause only from
 BNT-refined horizontal form. They do not establish the corresponding
 construction from the literal CPSV canonical form; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
@@ -642,7 +642,7 @@ variable {d D : ℕ}
 
 /-- **Line-999 density decomposition for an RFP MPDO.**
 
-An MPDO in normalized BNT-refined horizontal form satisfying the source
+An MPDO in BNT-refined horizontal form satisfying the source
 renormalization fixed-point condition admits one BNT fusion clause whose same
 multiplicities, positive weights, rectangular vertical
 coisometry, fusion histories, and terminal operators give the all-initial-label density
@@ -666,7 +666,7 @@ theorem exists_topologicalDensityDecomposition_of_isRFPViaTS
 
 /-- **All-label density-factor commutator for an RFP MPDO.**
 
-An MPDO in normalized BNT-refined horizontal form satisfying the source
+An MPDO in BNT-refined horizontal form satisfying the source
 renormalization fixed-point condition admits one BNT fusion clause that gives
 both the exact all-label density decomposition and
 the commutator between its multiplicity-weight and reconstructed recursive factors at every

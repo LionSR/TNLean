@@ -145,7 +145,7 @@ the build loads both packages. Each
 `diagrams/NAME.tex` holds one picture body. Compile them with
 
 ```bash
-python3 scripts/fetch_tenkz.py
+python3 scripts/tenkz/fetch_tenkz.py
 python3 scripts/campaign_board/build_diagrams.py docs/campaign/openai-area-law-peps-proof
 ```
 

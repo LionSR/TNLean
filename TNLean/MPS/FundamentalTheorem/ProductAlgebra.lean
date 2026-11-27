@@ -284,7 +284,7 @@ theorem piTraceMulRightPi_ker_eq_bot
   rw [LinearMap.ker_eq_bot']
   intro M hM
   funext k
-  apply eq_zero_of_forall_trace_mul_right_eq_zero (hA k)
+  apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero (hA k)
   intro i
   simpa using congrFun (congrFun hM k) i
 

@@ -17,7 +17,7 @@ import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 This file gives the common construction of the BNT fusion tensor clause from
 one-site and two-site vertical decompositions under grouped product inputs,
-and its specializations to normalized BNT-refined horizontal form and literal
+and its specializations to BNT-refined horizontal form and literal
 CPSV canonical form. The transported vertical forms
 give both representations of the blocked closed-chain operator. Eventual
 linear independence of the BNT operators compares their coefficients, and the
@@ -29,7 +29,7 @@ positive power-sum lemma gives the length-one trace-scalar identity.
   completes positive fusion data related by a unitary sector equivalence to a
   BNT fusion tensor clause.
 * `HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF` specializes the
-  construction to normalized BNT-refined horizontal form.
+  construction to BNT-refined horizontal form.
 * `HasBNTFusionTensorClause.of_isRFPViaTS` specializes it to literal CPSV
   canonical form.
 
@@ -426,7 +426,7 @@ theorem of_isRFPViaTS_of_productInputs (M : MPOTensor d D)
     D₁ D₂ sigma hDim V hLetter chi U hChiPos hU hFusion
       hFusionReconstruction
 
-/-- Normalized BNT-refined horizontal form and the renormalization fixed-point
+/-- BNT-refined horizontal form and the renormalization fixed-point
 condition imply the active-support BNT fusion clause.
 
 Source: CPSV16, Appendix C.4, lines 1929--2046. -/

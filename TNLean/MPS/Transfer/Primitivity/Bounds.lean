@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Transfer.Primitivity.Equivalence
 import TNLean.MPS.Transfer.Primitivity.RectangularSpan
 import TNLean.MPS.Transfer.Primitivity.InvertibleWordSpan
-import QICLean.Kraus.Wielandt.RankOne.Products
+import QICLean.Kraus.Wielandt.RankOne.BoundedWord
 import QICLean.Kraus.Wielandt.Inequality.EigenvectorSpreading
 import TNLean.MPS.Tensor
 import TNLean.MPS.Tensor.Words.WordSpan

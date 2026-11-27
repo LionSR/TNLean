@@ -1097,14 +1097,14 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 % This node records normality of the representatives, biCF, exact assembly,
 % and nonnilpotence separately from the analytic and entropy conditions of the
 % same example.
-% The IsHorizontalCF conclusion uses the normalized BNT-refined notion; its
+% The IsHorizontalCF conclusion uses the BNT-refined notion; its
 % scope relative to the literal source grouping is documented in
 % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \begin{lemma}[Normal BNT representatives, biCF, exact direct sum, and
         nonnilpotence in the Case-II example]
     \label{thm:mpdo_caseii_absorption_algebraic_data}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.basis_isNormalTensor,
-        MPOTensor.CaseIIAbsorptionCounterexample.sectors_isBNTCanonicalForm,
+        MPOTensor.CaseIIAbsorptionCounterexample.sectors_isLeftCanonicalBNTPresentation,
         MPOTensor.CaseIIAbsorptionCounterexample.sectors_wordTupleSpanTop_one,
         MPOTensor.CaseIIAbsorptionCounterexample.ambient_eq_weighted_basis_blocks,
         MPOTensor.CaseIIAbsorptionCounterexample.ambient_toMPSTensor_eq_sectors_toTensor,
@@ -1126,7 +1126,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         M^{ab} & =\operatorname{diag}
         \bigl(\mu_0A_0^{ab},\mu_1A_1^{ab}\bigr), \notag
     \end{align}
-    both entrywise and as a doubled-index MPS tensor, and is in normalized
+    both entrywise and as a doubled-index MPS tensor, and is in
     BNT-refined horizontal form. In addition, the doubled physical-trace
     transfer of neither representative is nilpotent.
 

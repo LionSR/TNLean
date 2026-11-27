@@ -704,16 +704,12 @@ theorem ambient_literal_physTrace_ZCL
 block supplies the single global unit coefficient, and both unabsorbed BNT
 representatives have nonnilpotent physical-trace transfer.
 
-**Scope restriction (normalized fixed representative):** this is the
-project's fixed-representative predicate, including the global unit-weight
-convention at CPSV16, line 246.  See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 Source: CPSV16, canonical form at lines 224--246, simplicity at lines
 815--822, and the standing Appendix C.2 hypothesis at line 1628. -/
 theorem ambient_isSimpleCanonicalForm
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
     (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
-    (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
+    (hBNT : MPSTensor.IsLeftCanonicalBNTPresentation (sectors mu B hmu)) :
     IsSimpleCanonicalForm (ambient mu B hmu) := by
   refine ⟨ambient_isMPDO mu B hmu hGauge, sectors mu B hmu, hBNT,
     sectors_basis_doubledPhysTraceTransfer_not_isNilpotent mu B hmu hGauge, ?_⟩
@@ -731,15 +727,14 @@ theorem ambient_isSimpleCanonicalForm
   exact (cast_eq _ _).symm
 
 /-- The ambient tensor is simple in the sense of CPSV16, Definition 4.7.
-This follows from its displayed normalized simple canonical form; the
-conclusion forgets the global unit-weight normalization at line 246.
+This follows from its displayed simple canonical form.
 
 Source: CPSV16, Definition 4.7, lines 815--822, under the standing Appendix
 C.2 hypothesis at line 1628. -/
 theorem ambient_isSimple
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
     (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
-    (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
+    (hBNT : MPSTensor.IsLeftCanonicalBNTPresentation (sectors mu B hmu)) :
     IsSimple (ambient mu B hmu) :=
   (ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT).isSimple
 
@@ -824,7 +819,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       IsSAL K ∧
       IsSimpleCanonicalForm K ∧
       IsSimple K ∧
-      MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation S ∧
       MPSTensor.WordTupleSpanTop S.basis 1 ∧
       (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
       K.toMPSTensor = S.toTensor ∧
@@ -903,7 +898,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
         IsSAL K ∧
         IsSimpleCanonicalForm K ∧
         IsSimple K ∧
-        MPSTensor.IsBNTCanonicalForm S ∧
+        MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
         K.toMPSTensor = S.toTensor ∧

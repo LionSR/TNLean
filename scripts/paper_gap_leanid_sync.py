@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-r"""Check ``docs/paper-gaps`` ``\leanid{...}`` references.
+r"""Check ``docs/paper-gaps`` ``\leanid{...}`` references and ``docs/glossary.md`` names.
 
 The paper-gap notes use ``\leanid`` for prose-level Lean declaration citations.
 This script extracts the declaration head from each payload, writes the unique
 heads to a checkdecls-compatible file, and can invoke ``lake exe checkdecls`` so
 existence is checked by Lean's compiled environment rather than by source regexes.
+
+The glossary names declarations in backticks.  Every backticked span whose head is a
+qualified name (``Namespace.decl``, first component capitalized) is added to the same
+list, except module names and file names, so the one ``checkdecls`` run covers both.
 """
 
 from __future__ import annotations
@@ -155,6 +159,66 @@ def collect_paper_gap_leanid_refs(paper_gaps_dir: Path, root: Path) -> list[Lean
     return refs
 
 
+_GLOSSARY_PATH = Path("docs") / "glossary.md"
+_BACKTICK_SPAN = re.compile(r"(?<!`)`([^`\n]+)`(?!`)")
+_QUALIFIED_HEAD = re.compile(r"^[A-Z][^.\s]*(\.[^.\s]+)+$")
+_NAMESPACE_PREFIX = re.compile(r"\bnamespaces? $")
+_FILE_SUFFIXES = (".lean", ".md", ".tex", ".py", ".sh", ".yml", ".yaml", ".toml", ".json",
+                  ".txt", ".pdf", ".bib", ".cfg")
+
+
+def _module_roots(root: Path) -> list[Path]:
+    """Return the directories under which a dotted module name resolves to a source file."""
+    packages = root / ".lake" / "packages"
+    return [root, *sorted(path for path in packages.glob("*") if path.is_dir())]
+
+
+def _is_module_name(head: str, roots: list[Path]) -> bool:
+    relative = Path(*head.split(".")).with_suffix(".lean")
+    return any((base / relative).is_file() or (base / Path(*head.split("."))).is_dir()
+               for base in roots)
+
+
+def glossary_decl_head(span: str) -> str | None:
+    """Return the qualified declaration head named by one backticked glossary span."""
+    head = lean_decl_head(span)
+    if head is None or head != span.split(" ")[0].strip(_HEAD_STRIP_CHARS):
+        return None
+    if "/" in span.split(" ")[0] or head.endswith(_FILE_SUFFIXES):
+        return None
+    if not _QUALIFIED_HEAD.match(head) or len(head.split(".")[0]) == 1:
+        return None  # not qualified, or a projection of a variable such as `M.toMPSTensor`
+    return head
+
+
+def collect_glossary_refs(glossary: Path, root: Path) -> list[LeanIdRef]:
+    """Return the qualified declaration names that ``docs/glossary.md`` cites in backticks.
+
+    Fenced code blocks are skipped.  A span whose head is a module (a ``.lean`` file or a
+    directory of the repository or of a Lake package), a span introduced by the word
+    "namespace", and a projection of a one-letter variable are not declarations.
+    """
+    refs: list[LeanIdRef] = []
+    roots = _module_roots(root)
+    rel = str(glossary.relative_to(root))
+    in_fence = False
+    for line_number, line in enumerate(glossary.read_text(errors="replace").splitlines(), 1):
+        if line.lstrip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        for match in _BACKTICK_SPAN.finditer(line):
+            if _NAMESPACE_PREFIX.search(line[: match.start()]):
+                continue
+            head = glossary_decl_head(match.group(1).strip())
+            if head is None or _is_module_name(head, roots):
+                continue
+            refs.append(LeanIdRef(file=rel, line=line_number, column=match.start() + 1,
+                                  payload=match.group(1), head=head))
+    return refs
+
+
 def write_decl_list(refs: list[LeanIdRef], path: Path) -> None:
     heads = sorted({ref.head for ref in refs})
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -180,7 +244,8 @@ def run_checkdecls(root: Path, decls_file: Path) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Extract and check docs/paper-gaps \\leanid declaration heads."
+        description="Extract and check docs/paper-gaps \\leanid declaration heads and the "
+        "declaration names of docs/glossary.md."
     )
     parser.add_argument(
         "--root",
@@ -208,6 +273,12 @@ def main() -> None:
 
     refs = collect_paper_gap_leanid_refs(paper_gaps_dir, root)
     print_summary(refs)
+    glossary = root / _GLOSSARY_PATH
+    if glossary.is_file():
+        glossary_refs = collect_glossary_refs(glossary, root)
+        print(f"Found {len({ref.head for ref in glossary_refs})} declaration name(s) "
+              f"in {_GLOSSARY_PATH}.")
+        refs += glossary_refs
 
     output = args.output
     if output is None:

@@ -525,8 +525,6 @@ Step 1. -/
 theorem horizontalConsecutiveWindow_extend_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
@@ -541,6 +539,7 @@ theorem horizontalConsecutiveWindow_extend_eq
         (torusArcRectangle_subset_horizontalUnion_left (by omega) s) C₁ =
       extendInsert (G := torusGraph width height)
         (torusArcRectangle_subset_horizontalUnion_right (by omega) s) C₂ := by
+  have hUB := regionInjectivityUnionClosure_of_overlap B hpos
   -- Both extended inserts have equal union deformed states.
   have hunion : deformedRegionStateAssembled (G := torusGraph width height) B
         (torusArcRectangle s (L + 1) K)

@@ -191,7 +191,10 @@ rank theorem is separate from the detectability results above.
 \begin{definition}[The regional frustration-free truncation]
     \label{def:physical_ff_regional_truncation}
     \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation}
+    \lean{TNLean.MPS.AreaLaw.regionalTruncationInteraction}
+    \lean{TNLean.MPS.AreaLaw.hamiltonian_regionalTruncationInteraction}
     \leanok
+    \uses{thm:physical_regional_parity_support}
     Let $h_i$ be orthogonal projections supported on consecutive bonds
     of a finite chain. For a site interval $J=[a,b)$, put
     $h_i^J=h_i$ when $a\le i$ and $i+1<b$, and $h_i^J=0$ otherwise.
@@ -204,20 +207,28 @@ rank theorem is separate from the detectability results above.
     \]
     This is the regional construction of
     \cite[Section 6.1]{Arad2016RigorousRG}.
+    It is the Hamiltonian of an interaction on the chain: its terms are
+    $h_i$ on the bond $\{i,i+1\}$ when this bond is not contained in $J$
+    and zero otherwise, together with $I-Q_0$ and $I-Q_1$, which are
+    supported on $J$.
 \end{definition}
 
 \begin{lemma}[Positivity and the full kernel of the regional truncation]
     \label{thm:physical_ff_regional_kernel}
     \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_posSemidef}
-    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_kernel_iff}
+    \lean{TNLean.MPS.AreaLaw.isStarProjection_regionalTruncationInteraction_term}
+    \lean{TNLean.MPS.AreaLaw.zeroSpace_regionalTruncationInteraction}
     \lean{TNLean.MPS.AreaLaw.norm_physicalFrustrationFreeTruncation_region_le_two}
     \leanok
-    With the preceding definitions,
+    With the preceding definitions, every term of the interaction whose
+    Hamiltonian is $\widetilde H_J$ is an orthogonal projection, and
     \[
         \widetilde H_J\ge0,\qquad
-        \ker\widetilde H_J=\ker\sum_i h_i,\qquad
         \|(I-Q_0)+(I-Q_1)\|\le2.
     \]
+    A vector is annihilated by every term of this interaction if and
+    only if it is annihilated by every $h_i$. Since all terms are
+    positive, this gives $\ker\widetilde H_J=\ker\sum_i h_i$.
     The interval may be empty or touch a chain endpoint.
     No ground-state uniqueness or spectral gap is required.
 \end{lemma}

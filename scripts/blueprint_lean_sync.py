@@ -359,25 +359,41 @@ def collect_file_lean_decls(
     raw_lines = text.splitlines()
     rel = str(lean_file.relative_to(lean_root.parent))
 
-    # Track namespace and section stacks separately.
+    # Track namespace and section stacks separately, and the order in which
+    # the scopes were opened: `end X` closes the innermost scope, so a section
+    # and a namespace of the same name are told apart by their nesting.
     ns_stack: list[str] = []
     section_stack: list[str] = []
+    scope_kinds: list[str] = []
     decls: list[LeanDecl] = []
 
     for i, line in enumerate(lines, 1):
         m = _NAMESPACE_OPEN_RE.match(line)
         if m:
             ns_stack.append(m.group(1))
+            scope_kinds.append("namespace")
             continue
 
         m = _SECTION_OPEN_RE.match(line)
         if m:
             section_stack.append(m.group(1))
+            scope_kinds.append("section")
             continue
 
         m = _NAMESPACE_CLOSE_RE.match(line)
         if m:
             closed = m.group(1)
+            innermost = scope_kinds[-1] if scope_kinds else None
+            if (innermost == "section" and section_stack
+                    and section_stack[-1] == closed):
+                section_stack.pop()
+                scope_kinds.pop()
+                continue
+            if (innermost == "namespace" and ns_stack
+                    and ns_stack[-1] == closed):
+                ns_stack.pop()
+                scope_kinds.pop()
+                continue
             if section_stack and section_stack[-1] == closed:
                 section_stack.pop()
                 continue

@@ -329,17 +329,18 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
   simp only [G] at hback
   exact hback
 
-private theorem localTerm_commute (F : BeigiSectorGraphData A)
+private theorem parentRingInteraction_term_commute (F : BeigiSectorGraphData A)
     {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
     haveI : NeZero N := ⟨by omega⟩;
-    Commute (localTerm A 2 N i) (localTerm A 2 N j) := by
+    Commute (Matrix.toLin' ((parentRingInteraction A 2 N).term i))
+      (Matrix.toLin' ((parentRingInteraction A 2 N).term j)) := by
   have : NeZero N := ⟨by omega⟩
   classical
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n) (groundBond A)
   have hG : Commute (G i) (G j) := F.groundBondEmbeddings_commute hN i j
   have htoLin (n : Fin N) :
-      Matrix.toLin' (G n) = 1 - localTerm A 2 N n := by
+      Matrix.toLin' (G n) = 1 - Matrix.toLin' ((parentRingInteraction A 2 N).term n) := by
     simp only [G]
     rw [placeAlong_ringWindow_groundBond_eq_one_sub]
     change (Matrix.toLinAlgEquiv' :
@@ -351,15 +352,20 @@ private theorem localTerm_commute (F : BeigiSectorGraphData A)
     change 1 - Matrix.toLin'
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n)
         (LinearMap.toMatrix' (parentInteraction A 2))) = _
-    rw [localTerm_eq_toLin'_placeAlong_ringWindow A hN n]
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN n]
   have hcomp : Commute
-      (1 - localTerm A 2 N i) (1 - localTerm A 2 N j) := by
+      (1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i))
+        (1 - Matrix.toLin' ((parentRingInteraction A 2 N).term j)) := by
     rw [← htoLin i, ← htoLin j]
     exact hG.map Matrix.toLinAlgEquiv'
-  change localTerm A 2 N i * localTerm A 2 N j =
-    localTerm A 2 N j * localTerm A 2 N i
-  change (1 - localTerm A 2 N i) * (1 - localTerm A 2 N j) =
-    (1 - localTerm A 2 N j) * (1 - localTerm A 2 N i) at hcomp
+  change Matrix.toLin' ((parentRingInteraction A 2 N).term i) *
+      Matrix.toLin' ((parentRingInteraction A 2 N).term j) =
+    Matrix.toLin' ((parentRingInteraction A 2 N).term j) *
+        Matrix.toLin' ((parentRingInteraction A 2 N).term i)
+  change (1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)) *
+      (1 - Matrix.toLin' ((parentRingInteraction A 2 N).term j)) =
+    (1 - Matrix.toLin' ((parentRingInteraction A 2 N).term j)) *
+      (1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)) at hcomp
   simp only [sub_mul, mul_sub, one_mul, mul_one] at hcomp
   abel_nf at hcomp
   exact add_left_cancel (add_left_cancel (add_left_cancel hcomp))
@@ -370,8 +376,7 @@ private theorem commute_toEuclideanLin_parentRingInteraction_term
     Commute (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
       (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term j)) := by
   have : NeZero N := ⟨by omega⟩
-  have hraw := F.localTerm_commute hN i j
-  rw [localTerm_eq_toLin'_term A 2 i, localTerm_eq_toLin'_term A 2 j] at hraw
+  have hraw := F.parentRingInteraction_term_commute hN i j
   exact hraw.map (LinearEquiv.conjAlgEquiv ℂ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
 
 private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
@@ -482,12 +487,13 @@ private theorem toLin'_groundBondProduct {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toLin' ((List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod) =
-      (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod := by
+      (List.ofFn fun i : Fin N ↦
+        1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)).prod := by
   have : NeZero N := ⟨by omega⟩
   classical
   have hfactor (i : Fin N) : Matrix.toLin'
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)) =
-      1 - localTerm A 2 N i := by
+      1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i) := by
     rw [placeAlong_ringWindow_groundBond_eq_one_sub]
     change (Matrix.toLinAlgEquiv' :
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
@@ -498,7 +504,7 @@ private theorem toLin'_groundBondProduct {N : ℕ} (hN : 2 ≤ N) :
     change 1 - Matrix.toLin'
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (LinearMap.toMatrix' (parentInteraction A 2))) = _
-    rw [localTerm_eq_toLin'_placeAlong_ringWindow A hN i]
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
   change (Matrix.toLinAlgEquiv' :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
       Module.End ℂ (NSiteSpace d N)) _ = _
@@ -512,7 +518,8 @@ private theorem conj_localComplementProduct {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     (LinearEquiv.conjAlgEquiv ℂ
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
-        (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod =
+        (List.ofFn fun i : Fin N ↦
+          1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)).prod =
       (List.ofFn fun i : Fin N ↦
         1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod := by
   have : NeZero N := ⟨by omega⟩
@@ -520,7 +527,7 @@ private theorem conj_localComplementProduct {N : ℕ} (hN : 2 ≤ N) :
   apply congrArg List.prod
   apply congrArg List.ofFn
   funext i
-  rw [Function.comp_apply, map_sub, map_one, localTerm_eq_toLin'_term A 2 i]
+  rw [Function.comp_apply, map_sub, map_one]
   rfl
 
 /-- The three realizations of the complete complementary-interaction product,
@@ -542,7 +549,8 @@ private noncomputable def complementProductTransport (A : MPSTensor d D)
   haveI : NeZero N := ⟨by omega⟩
   { qMatrix := (List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
-    qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
+    qRaw := (List.ofFn fun i : Fin N ↦
+      1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)).prod
     qES := (List.ofFn fun i : Fin N ↦
       1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod
     e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
@@ -613,7 +621,8 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
           (finTwoArrowEquiv (Fin d)).symm
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec v = v) :
-    v ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    v ∈ LinearMap.ker (Matrix.toLin' (parentRingInteraction A 2 N).hamiltonian) := by
   classical
   have : NeZero N := ⟨by omega⟩
   let transport := complementProductTransport A hN
@@ -635,7 +644,7 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
       LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian) :=
     hproj.mem_iff_map_id.mpr hfixES
   rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero] at hkerES
-  rw [LinearMap.mem_ker, parentHamiltonian_eq_toLin'_hamiltonian A 2, Matrix.toLin'_apply]
+  rw [LinearMap.mem_ker, Matrix.toLin'_apply]
   exact hkerES
 
 /-- Beigi's finite-chain ground-space dimension formula: for a periodic chain

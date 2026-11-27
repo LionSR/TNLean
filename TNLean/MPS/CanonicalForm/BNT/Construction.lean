@@ -395,7 +395,7 @@ Separated blockwise hypotheses pass from canonical-form and
 normal-canonical-form hypotheses to the basis-of-normal-tensors formulation.
 The source BNT expansion in arXiv:1606.00608, Section II keeps repeated copies
 inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j`; that
-paper-faithful sector structure is represented by `IsBNTCanonicalForm` in the
+paper-faithful sector structure is represented by `IsLeftCanonicalBNTPresentation` in the
 fundamental-theorem files. The results here are auxiliary tools for already
 separated finite block families.
 

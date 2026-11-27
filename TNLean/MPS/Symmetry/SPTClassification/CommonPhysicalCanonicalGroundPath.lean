@@ -112,9 +112,8 @@ noncomputable def ExactMPSGroundPath.of_ordered_affine
     have hz : (0 : ℂ) ∈ spectrum ℂ
         (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian := by
       have hzA := hzero N hN
-      rw [← Matrix.spectrum_toLpLin (p := 2),
-        ← Module.End.hasEigenvalue_iff_mem_spectrum,
-        Module.End.hasEigenvalue_iff, Module.End.eigenspace_zero] at hzA ⊢
+      rw [← Matrix.hasEigenvalue_toEuclideanLin_iff_mem_spectrum, Module.End.hasEigenvalue_iff,
+        Module.End.eigenspace_zero] at hzA ⊢
       change LinearMap.ker (Matrix.toEuclideanLin
         (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian) ≠ ⊥
       rw [hkerEq]

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedHamiltonian
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.PhysicalRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.PolynomialRank
-import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
+import QICLean.Spectral.Eigenvalue.MatrixSpectralDecomp
 import QICLean.Analysis.Order.LowEnergyPerturbation
 import QICLean.Analysis.TraceNorm.OptimizedPureStateTraceError
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FavorableParameters

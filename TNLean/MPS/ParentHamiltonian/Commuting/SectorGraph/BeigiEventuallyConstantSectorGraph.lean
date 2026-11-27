@@ -64,8 +64,9 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
     {d : ℕ} {P : SectorDecomposition (Fin d)}
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis) :
-    ∃ N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (LinearMap.ker (parentHamiltonian P.toTensor 2 N)) =
+    ∃ N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (LinearMap.ker (Matrix.toLin'
+        (parentRingInteraction P.toTensor 2 N).hamiltonian)) =
         P.basisCount := by
   rcases hBNT with ⟨N₁, hLI⟩
   refine ⟨max N₁ 2, ?_⟩
@@ -83,6 +84,7 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
       (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace d N)) :=
     LinearIndependent.of_comp
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap hImage
+  have : NeZero N := ⟨by omega⟩
   rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
   simpa using finrank_span_eq_card hCoefficients
 

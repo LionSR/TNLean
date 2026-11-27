@@ -108,8 +108,8 @@ noncomputable def windowEdgeCoeffIdentityWitness
 /-- **The window-region witness from the window injectivity hypotheses.**
 
 The specialization of `windowEdgeCoeffIdentityWitness` under the one-orientation window injectivity
-hypotheses for `B` and their union closure.  The declaration also assumes positive `L` and `K`, the
-placement bounds for the staircase, the minimal torus bounds
+hypotheses for `B`, with union closure derived from the positive bonds.  The declaration also
+assumes positive `L` and `K`, the placement bounds for the staircase, the minimal torus bounds
 $2L+1\le\mathrm{width}$ and $2K+1\le\mathrm{height}$, positive bond dimensions for `B`, an
 identification `hE` of the reference bond dimensions of `A` and `B`, and the single-bond
 conjugation coefficient identity `hid` (the §5.1 peeling).  The window and host injectivity
@@ -122,8 +122,6 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
 noncomputable def windowEdgeCoeffIdentityWitness_of_hypotheses
     {A B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
-      (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
@@ -153,6 +151,7 @@ noncomputable def windowEdgeCoeffIdentityWitness_of_hypotheses
             (↑Z⁻¹ : Matrix _ _ ℂ)) σ τ) :
     EdgeCoeffIdentityWitness A B
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) Z Z hE :=
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   windowEdgeCoeffIdentityWitness (by omega) (by omega) ha0 haw hbh Z hE
     (by
       have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))

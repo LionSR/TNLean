@@ -429,10 +429,7 @@ theorem existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameStat
     exact deformedRegionStateAssembled_staircasePhysicalOp_sameState
       (L := L) (K := K) (a := a) (b := b) (j := j) (j' := 0)
       hA hATI hBTI hAB hposA (by omega) (by omega) haw (by omega) X
-  have hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B) :=
-    regionInjectivityUnionClosure_of_overlap B hposB
-  have hend := staircasePair_insert_eq_open hB hUB hposB hL hK hxw hyh s C common hagree
+  have hend := staircasePair_insert_eq_open hB hposB hL hK hxw hyh s C common hagree
   have hleftInjective : RegionBlockedTensorInjective (G := torusGraph width height) B
       (horizontalStaircaseLeftWindow s L K) :=
     hB.horizontalStaircaseLeftWindow_injective s

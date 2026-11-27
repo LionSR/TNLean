@@ -236,29 +236,6 @@ theorem IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle {A : Tenso
     ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
   fun e => hA.edgeBlockedThreeSiteInjective_of_middle e (hMiddle e)
 
-omit [Fintype V] in
-/-- Vertex injectivity gives injectivity of every nonempty finite region once
-singleton regions are compatible with the abstract region predicate and
-injectivity is closed under finite unions.
-
-For a one-vertex region the blocked tensor is the local tensor `A.component v`, so
-the singleton comparison is the implication from linear independence of that tensor
-to `κ {v}`. The formula behind the proof is $R = \bigcup_{v \in R} \{v\}$: vertex
-injectivity gives $\kappa(\{v\})$ for every $v$, and finite iteration of the
-injective-union lemma gives $\kappa(R)$.
-
-Source: arXiv:1804.04964, Section 3;
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009 and 1322--1404. -/
-theorem RegionInjectivityUnionClosure.finset_injective_of_singletons
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hSingleton : ∀ v : V, LinearIndependent ℂ (A.component v) → κ.IsInjective {v})
-    (hA : IsVertexInjective A) {R : Finset V} (hR : R.Nonempty) :
-    κ.IsInjective R := by
-  classical
-  simpa using hUnion.biUnion_injective hR (fun v => ({v} : Finset V))
-    (fun v _ => hSingleton v (hA v))
-
 /-! ### Empty complement obstruction
 
 The two lemmas below prove the part of the zero-dimensional-bond obstruction

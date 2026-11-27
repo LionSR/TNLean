@@ -146,20 +146,18 @@ normal once we know their transfer maps are primitive.
 -/
 
 
-/-- **Left-canonical normal tensor → bounded positive injective blocking**.
+/-- **Left-canonical normal tensor → bounded positive injective length**.
 
-This is the blocked-injectivity form of the quantum Wielandt bound needed by the
-canonical-form comparison chain.  The trace-preserving/left-canonical hypothesis rules out the
-scalar zero-physical-letter edge case and supplies a nonzero one-step Kraus matrix, which makes
-the general index bound `(D ^ 2 - krausRank A + 1) * D ^ 2` at most `D ^ 4`.
-
-The conclusion is stated for `blockTensor` because this is the form consumed by the BNT-sector
-comparison infrastructure. -/
-theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical [NeZero D]
+This is the bounded form of the quantum Wielandt bound needed by the canonical-form comparison
+chain: some positive length `L ≤ D ^ 4` has `S_L(A) = M_D`.  The trace-preserving/left-canonical
+hypothesis rules out the scalar zero-physical-letter edge case and supplies a nonzero one-step
+Kraus matrix, which makes the general index bound `(D ^ 2 - krausRank A + 1) * D ^ 2` at most
+`D ^ 4`.  Source: arXiv:1606.00608, Section II, line 332; arXiv:0909.5347, Theorem 1. -/
+theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hN : Kraus.IsNormal A) :
-    ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ Kraus.IsInjective (blockTensor A L) := by
+    ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ Kraus.IsNBlkInjective A L := by
   have hDpos : 0 < D := NeZero.pos D
   let L : ℕ := iIndex A
   have hNonempty : ({n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}).Nonempty := by
@@ -197,8 +195,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
       _ = D ^ 4 := by ring
   have hLpos : 0 < L := by
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
-  refine ⟨L, hLpos, hBound, ?_⟩
-  exact (isNBlkInjective_iff_blockTensor_isInjective A L).1 hTop
+  exact ⟨L, hLpos, hBound, hTop⟩
 
 /-- **Left-canonical normal tensor is block injective at length $D^4$.**
 
@@ -214,10 +211,8 @@ theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
     (hN : Kraus.IsNormal A) :
     Kraus.IsNBlkInjective A (D ^ 4) := by
   obtain ⟨L, hLpos, hLle, hL⟩ :=
-    exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical A hTP hN
-  have hL' : Kraus.IsNBlkInjective A L :=
-    (isNBlkInjective_iff_blockTensor_isInjective A L).2 hL
-  exact Kraus.isNBlkInjective_of_le hLpos hL' hLle
+    exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical A hTP hN
+  exact Kraus.isNBlkInjective_of_le hLpos hL hLle
 
 /-!
 ## Kraus.IsNormal is preserved by blocking
@@ -259,19 +254,14 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
   classical
   have : ∀ k : Fin r, NeZero (dim k) := fun k => ⟨hNonzero k⟩
   have hBlock : ∀ k : Fin r, ∃ L : ℕ, 0 < L ∧ L ≤ (dim k) ^ 4 ∧
-      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
-    intro k
-    exact exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
+      Kraus.IsNBlkInjective (blocks k) L := fun k =>
+    exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical
       (blocks k) (hLeft k) (hNormal k)
   let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
   have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
-  have hL_inj : ∀ k,
-      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (L k)) :=
-    fun k => (Classical.choose_spec (hBlock k)).2.2
   refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
   intro k
-  have hL_blk : Kraus.IsNBlkInjective (blocks k) (L k) :=
-    (isNBlkInjective_iff_blockTensor_isInjective (blocks k) (L k)).2 (hL_inj k)
+  have hL_blk : Kraus.IsNBlkInjective (blocks k) (L k) := (Classical.choose_spec (hBlock k)).2.2
   have hcommon : (∏ j : Fin r, L j) = (∏ j ∈ Finset.univ.erase k, L j) * L k := by
     simpa using (Finset.prod_erase_mul (s := Finset.univ) (a := k) (f := L)
       (Finset.mem_univ k)).symm

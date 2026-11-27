@@ -85,46 +85,32 @@ private lemma scalarBNT_evalWord (w : List (Fin 1)) :
       rw [Kraus.evalWord_cons, ih]
       simp [scalarBNT, toMPSTensor]
 
-/-- The raw repeated-copy presentation satisfies the source's BNT canonical
-form, including the global unit-weight convention but no equal-modulus
-condition on repeated copies.
+/-- The raw repeated-copy presentation is a presentation by a basis of normal
+tensors in left-canonical gauge, with no equal-modulus condition on repeated
+copies.  Its weights `1` and `1/2` satisfy the global unit-weight convention of
+line 246.
 
 Source: arXiv:1606.00608, canonical-form normalization at lines 237--246 and
 the BNT display at lines 271--301. -/
-theorem repeatedCopyDecomposition_isBNTCanonicalForm :
-    MPSTensor.IsBNTCanonicalForm repeatedCopyDecomposition := by
-  refine {
-    basis_dim_pos := by simp [repeatedCopyDecomposition]
-    basis_irreducible := fun _ ↦
-      MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT.toMPSTensor
-    basis_left_canonical := by
-      intro j
-      simp [MPTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
-        scalarBNT, toMPSTensor]
-    basis_normalized_self_overlap := by
-      intro j
-      simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
-        Matrix.trace]
-    bnt_data := by
-      refine ⟨0, ?_⟩
-      intro N hN
-      apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
-      intro hzero
-      have h := congrArg
-        (fun v : MPSTensor.MPVSpace 1 N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
-      simp [MPSTensor.mpvState_apply, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
-        Matrix.trace] at h
-    basis_distinct := by
-      intro j k hjk
-      exact absurd (Subsingleton.elim j k) hjk
-    weight_norm_le_one := by
-      intro j q
-      change ‖(if q = 0 then (1 : ℂ) else 1 / 2)‖ ≤ 1
-      split_ifs <;> norm_num
-    weight_unit_exists := by
-      refine ⟨0, 0, ?_⟩
-      change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else 1 / 2)‖ = 1
-      simp }
+theorem repeatedCopyDecomposition_isLeftCanonicalBNTPresentation :
+    MPSTensor.IsLeftCanonicalBNTPresentation repeatedCopyDecomposition := by
+  refine MPSTensor.IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
+    (by simp) (by simp [repeatedCopyDecomposition])
+    (fun _ ↦ MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT.toMPSTensor) ?_ ?_ ?_
+  · intro j
+    simp [MPTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
+      scalarBNT, toMPSTensor]
+  · intro j
+    simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
+      Matrix.trace]
+  · refine ⟨0, ?_⟩
+    intro N hN
+    apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
+    intro hzero
+    have h := congrArg
+      (fun v : MPSTensor.MPVSpace 1 N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
+    simp [MPSTensor.mpvState_apply, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
+      Matrix.trace] at h
 
 private lemma scalarBNT_mpv {N : ℕ} (σ : Fin N → Fin 1) :
     MPTensor.mpv scalarBNT.toMPSTensor σ = 1 := by
@@ -364,7 +350,7 @@ theorem printed_theorem49_iv_to_v_is_false :
     repeatedCopyDecomposition.weight 0 0 = 1 ∧
       repeatedCopyDecomposition.weight 0 1 = (1 / 2 : ℂ) ∧
       repeatedCopyTensor.toMPSTensor = repeatedCopyDecomposition.toTensor ∧
-      MPSTensor.IsBNTCanonicalForm repeatedCopyDecomposition ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation repeatedCopyDecomposition ∧
       IsMPDO repeatedCopyTensor ∧
       ¬ IsNilpotent (physTraceTransfer scalarBNT) ∧
       MPSTensor.WordTupleSpanTop
@@ -378,7 +364,7 @@ theorem printed_theorem49_iv_to_v_is_false :
       IsMPDO (blockTwo repeatedCopyTensor) ∧
       ¬ IsRFPViaTS (blockTwo repeatedCopyTensor) := by
   exact ⟨rfl, rfl, repeatedCopyTensor_toMPSTensor,
-    repeatedCopyDecomposition_isBNTCanonicalForm, repeatedCopyTensor_isMPDO,
+    repeatedCopyDecomposition_isLeftCanonicalBNTPresentation, repeatedCopyTensor_isMPDO,
     scalarBNT_physTraceTransfer_not_nilpotent, scalarBNT_wordTupleSpanTop,
     scalarBNT_isMPDO, scalarBNT_layer_orthogonal,
     ⟨scalarNeighboringTraceFactorization⟩,

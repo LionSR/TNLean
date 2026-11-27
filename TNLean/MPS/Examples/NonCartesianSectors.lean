@@ -39,7 +39,8 @@ implications (ii) to (iv) and (ii) to (v) of Theorem 4.9 fail; see
 * `MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization` (neighbouring-trace
   factorizations, the hypotheses of Proposition C.7; arXiv:1606.00608, lines 1389–1403): the
   common-weight-absorbed representative of a simple canonical form need not admit one.
-* `MPOTensor.IsSimpleCanonicalForm`, `MPOTensor.IsSimple`, `MPSTensor.IsBNTCanonicalForm` and
+* `MPOTensor.IsSimpleCanonicalForm`, `MPOTensor.IsSimple`,
+  `MPSTensor.IsLeftCanonicalBNTPresentation` and
   `MPOTensor.IsSAL` (the hypotheses of Theorem 4.9(ii)): all hold for the ambient tensor,
   which is nevertheless not `MPOTensor.IsRFPViaTS` after two-site blocking.
 

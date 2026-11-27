@@ -119,18 +119,6 @@ theorem NormalSquareLatticeRectangleInjectivityHypotheses.transportCoordinateSwa
       Region_map_squareLatticeCoordinateSwap_contiguousRectangle]
     exact h.rect23_injective hy hx
 
-/-- Coordinate swap preserves closure of tensor injectivity under unions. -/
-theorem RegionInjectivityUnionClosure.transportCoordinateSwap
-    {width height d : ℕ} (A : Tensor (squareLatticeGraph width height) d)
-    (h : RegionInjectivityUnionClosure (regionInjectivityDataOf A)) :
-    RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (A.transport squareLatticeCoordinateSwap)) where
-  union_injective := by
-    intro R S hR hS
-    rw [regionInjectivityDataOf_transport_squareLatticeCoordinateSwap_isInjective] at hR hS ⊢
-    rw [Region_map_union]
-    exact h.union_injective hR hS
-
 /-- Coordinate swap sends the red block of a translated vertical edge to the red block of the
 transposed horizontal edge. -/
 theorem Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeRed

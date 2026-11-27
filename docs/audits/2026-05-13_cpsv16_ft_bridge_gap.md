@@ -104,7 +104,7 @@ form
    all of modulus 1, with multiplicity `r_j`."
 
 To bridge cleanly, we need a refactor that splits `IsCanonicalFormBNT` into
-two layers, or a new structure `IsBNTCanonicalForm` over `SectorDecomposition`
+two layers, or a new structure `IsLeftCanonicalBNTPresentation` over `SectorDecomposition`
 that bakes in `hP_unit` / `hQ_unit` at the sector-weight layer.
 
 ## Resolution
@@ -122,7 +122,7 @@ follow-up workstream is to:
 1. Introduce a `SectorDecomposition`-level "BNT canonical form" wrapper
    bundling `hP_unit` / `hQ_unit` (sector-weight unit-modulus) alongside
    `HasBNTSectorData`, decay of self/cross-overlaps inside the basis, and
-   the dominant-weight normalization.  Call it `IsBNTCanonicalForm` (or
+   the dominant-weight normalization.  Call it `IsLeftCanonicalBNTPresentation` (or
    similar) over a `SectorDecomposition`.
 
 2. Provide the unconditional construction of this wrapper from the
@@ -131,7 +131,7 @@ follow-up workstream is to:
    `TNLean/MPS/CanonicalForm/BNT/PhaseClassSectorData.lean`).
 
 3. Retire the strict-anti restriction inside `IsCanonicalFormBNT`, or pull
-   it apart into a strict-anti wrapper over `IsBNTCanonicalForm`.
+   it apart into a strict-anti wrapper over `IsLeftCanonicalBNTPresentation`.
 
 4. Discharge the load-bearing `hNoCancel` hypothesis of the Plan C lemmas
    for the new wrapper.  This is the analytic content: almost-periodicity

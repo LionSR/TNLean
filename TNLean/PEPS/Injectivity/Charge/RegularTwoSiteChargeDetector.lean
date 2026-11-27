@@ -8,7 +8,7 @@ import TNLean.PEPS.Injectivity.Regular.RegularPhysicalUnitaryTransport
 import TNLean.PEPS.Injectivity.Charge.RegularChargeDetectorMatrix
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.PEPS.Injectivity.Closure.RegularTorusGramExpansion
-import QICLean.Algebra.Matrix.PermutationMatrixCommute
+import QICLean.Algebra.Matrix.MonomialMatrix
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!

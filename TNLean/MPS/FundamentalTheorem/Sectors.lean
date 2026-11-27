@@ -13,5 +13,6 @@ import TNLean.MPS.FundamentalTheorem.Sectors.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.Sectors.Fundamental
 import TNLean.MPS.FundamentalTheorem.Sectors.FundamentalCoord
 import TNLean.MPS.FundamentalTheorem.Sectors.MatchAux
+import TNLean.MPS.FundamentalTheorem.Sectors.Presentation
 import TNLean.MPS.FundamentalTheorem.Sectors.ProportionalMatchCore
 import TNLean.MPS.FundamentalTheorem.Sectors.WeightEquiv

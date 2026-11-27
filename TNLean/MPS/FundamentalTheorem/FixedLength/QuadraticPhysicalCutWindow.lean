@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.FixedLength.PeriodicCutBasisCoordinates
+import TNLean.MPS.FundamentalTheorem.FixedLength.InjectivePeriodicCuts
+import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentation
 
 /-!
 # A quadratic solution from actual physical cut bases
@@ -23,6 +24,8 @@ this file does not assume that construction as a conclusion-shaped input.
 Source: PGVWC07, arXiv:quant-ph/0608197, first clause of Theorem 8,
 MPSarchive.tex lines 1139--1169.
 -/
+
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 open MPTensor
 
@@ -61,7 +64,7 @@ theorem exists_physicalCutWindow_invertible_gauges {A : MPSTensor d D}
         P j.castSucc * quadraticPhysicalCutWindow (mpv A) C j i * P' j.succ =
           A i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  let Q (j : Fin (m + 1)) := physicalPeriodicCutBasis (hcut j) (hleft j) (hright j)
+  let Q (j : Fin (m + 1)) := periodicCutBasis (hcut j) (hleft j) (hright j)
   let P (k : Fin (m + 1)) := LinearMap.toMatrix (C k) (Q k) LinearMap.id
   let P' (k : Fin (m + 1)) := LinearMap.toMatrix (Q k) (C k) LinearMap.id
   have hinverse (k : Fin (m + 1)) : P k * P' k = 1 := by
@@ -78,7 +81,7 @@ theorem exists_physicalCutWindow_invertible_gauges {A : MPSTensor d D}
     rw [← LinearMap.toMatrix_comp (C j.succ) (C j.castSucc) (Q j.castSucc),
       ← LinearMap.toMatrix_comp (Q j.succ) (C j.succ) (Q j.castSucc)]
     simp only [LinearMap.id_comp, LinearMap.comp_id]
-    exact toMatrix_cutSlice_physicalPeriodicCutBasis (hcut j.succ)
+    exact toMatrix_cutSlice_periodicCutBasis (hcut j.succ)
       (hleft j.castSucc) (hright j.castSucc) (hleft j.succ) (hright j.succ) i
   exact ⟨P, P', hinverse, hlocal⟩
 
@@ -149,12 +152,12 @@ Source: PGVWC07, MPSarchive.tex lines 911--931 and 1139--1169. -/
 noncomputable def quadraticWindowCutBases [NeZero D] {A : MPSTensor d D}
     (hA : IsPGVWC07CanonicalForm A) (hC1 : Kraus.IsNBlkInjective A L)
     (hN : 2 * L + D ^ 4 < N)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (mpv A (N := N)) k)) ℂ
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (mpv A (N := N)))) ℂ
       (cutColumnSpace (mpv A (N := N)) k))
     (j : Fin (D ^ 4 + 1)) :
     Module.Basis (Fin D × Fin D) ℂ (cutColumnSpace (mpv A (N := N)) (L + j.val)) :=
   (B (L + j.val)).reindex
-    ((finCongr (quadraticWindow_cutCoefficientRank_eq hA hC1 hN j)).trans
+    ((finCongr (quadraticWindow_cutRank_eq hA hC1 hN j)).trans
       finProdFinEquiv.symm)
 
 /-- The original physical OBC site matrices, in the exact reindexed
@@ -165,7 +168,7 @@ Source: PGVWC07, first clause of Theorem 8, lines 1139--1169. -/
 theorem exists_quadraticSolution_cutSiteWindow [NeZero D] {A : MPSTensor d D}
     (hA : IsPGVWC07CanonicalForm A) (hC1 : Kraus.IsNBlkInjective A L)
     (hN : 2 * L + D ^ 4 < N)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (mpv A (N := N)) k)) ℂ
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (mpv A (N := N)))) ℂ
       (cutColumnSpace (mpv A (N := N)) k)) :
     Nonempty (QuadraticReconstructionSolution
       (quadraticPhysicalCutWindow (mpv A) (quadraticWindowCutBases hA hC1 hN B))) :=
@@ -177,13 +180,13 @@ reindexing. Source: PGVWC07, MPSarchive.tex lines 1139--1152. -/
 theorem quadraticPhysicalCutWindow_cutSiteMatrix [NeZero D] {A : MPSTensor d D}
     (hA : IsPGVWC07CanonicalForm A) (hC1 : Kraus.IsNBlkInjective A L)
     (hN : 2 * L + D ^ 4 < N)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (mpv A (N := N)) k)) ℂ
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (mpv A (N := N)))) ℂ
       (cutColumnSpace (mpv A (N := N)) k)) (j : Fin (D ^ 4)) (i : Fin d) :
     quadraticPhysicalCutWindow (mpv A) (quadraticWindowCutBases hA hC1 hN B) j i =
       Matrix.reindex
-        ((finCongr (quadraticWindow_cutCoefficientRank_eq hA hC1 hN j.castSucc)).trans
+        ((finCongr (quadraticWindow_cutRank_eq hA hC1 hN j.castSucc)).trans
           finProdFinEquiv.symm)
-        ((finCongr (quadraticWindow_cutCoefficientRank_eq hA hC1 hN j.succ)).trans
+        ((finCongr (quadraticWindow_cutRank_eq hA hC1 hN j.succ)).trans
           finProdFinEquiv.symm)
         (cutSiteMatrix (mpv A (N := N)) B (L + j.val) i) := by
   classical

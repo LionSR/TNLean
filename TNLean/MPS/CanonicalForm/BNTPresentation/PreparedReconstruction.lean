@@ -18,13 +18,13 @@ This module strengthens the prepared-block SectorBNT supplier from positive-leng
 matrix-product-vector equality to a letterwise reconstruction. It retains the precise
 phase-class scalar, assembles the resulting block gauges, and reindexes the heterogeneous
 block sum by an equivalence of flattened bond coordinates
-(`exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks`).
+(`exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks`).
 
 It also contains the following results.
 
-* `MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact`,
-  `MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm`: CPSV canonical forms as SectorBNT
-  decompositions.
+* `MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation_exact`,
+  `MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation`: CPSV canonical forms as
+  SectorBNT decompositions.
 -/
 
 open MPTensor
@@ -58,7 +58,7 @@ therefore letterwise, not only an equality of positive-length matrix product vec
 
 Source: arXiv:1606.00608, lines 237--301, 1080--1117, and 1135--1148;
 arXiv:2011.12127, lines 1831--1885. -/
-theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
+theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -67,10 +67,9 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (hμLe : ∀ k, ‖μ k‖ ≤ 1)
-    (hμUnit : ∃ k, ‖μ k‖ = 1) :
+    (hr : 0 < r) :
     ∃ P : SectorDecomposition (Fin d),
-      IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k ∧
+      IsLeftCanonicalBNTPresentation P ∧ P.totalDim = ∑ k : Fin r, dim k ∧
       ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin r, dim k),
       ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
         toTensorFromBlocks (α := Fin d) μ blocks i =
@@ -79,8 +78,8 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  have hBNT := isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
-    μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
+  have hBNT := isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+    μ blocks hDim hTP hPrim hIrr hμne hr
   have hTotal := collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
     μ blocks hDim hTP hPrim hIrr hμne
   choose hEq G hG using fun j q =>
@@ -273,7 +272,7 @@ section CanonicalFormBridge
 /-!
 ## CPSV canonical forms as SectorBNT decompositions
 
-A normalized nonzero CPSV canonical form determines a SectorBNT decomposition of its blocks.
+A nonzero CPSV canonical form determines a SectorBNT decomposition of its blocks.
 Each normal block is first put into a trace-preserving gauge, after which the prepared-block
 constructor groups phase-equivalent copies into BNT sectors.
 
@@ -390,7 +389,23 @@ section CPSVCanonicalFormData
 
 open MPTensor.CPSVCanonicalFormData
 
-/-- A normalized nonzero CPSV canonical form has an exact BNT reconstruction through a
+/-- A nonzero tensor in CPSV canonical form has at least one retained block: with no block,
+the reconstruction `A^i = C† (⊕_k μ_k A_k^i) C` is the zero matrix.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
+theorem _root_.MPTensor.CPSVCanonicalFormData.r_pos_of_ne_zero
+    (data : CPSVCanonicalFormData A) (hA : A ≠ 0) : 0 < data.r := by
+  refine Nat.pos_of_ne_zero fun hr0 => hA ?_
+  have hsum : (∑ k : Fin data.r, data.dim k) = 0 := by
+    have : IsEmpty (Fin data.r) := Fin.isEmpty_iff.mpr hr0
+    exact Fintype.sum_empty _
+  have : IsEmpty (Fin (∑ k : Fin data.r, data.dim k)) := Fin.isEmpty_iff.mpr hsum
+  funext i
+  rw [data.reconstruct i]
+  ext x y
+  simp [Matrix.mul_apply]
+
+/-- A nonzero CPSV canonical form has an exact BNT reconstruction through a
 coisometry.
 
 The sector decomposition retains exactly the displayed block dimensions. The matrix $U$ has
@@ -402,12 +417,11 @@ Unused ambient coordinates do not contribute to the retained bond dimension.
 
 Source: arXiv:1606.00608, lines 214--301 and 1080--1148; arXiv:2011.12127,
 lines 1831--1885. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation_exact
     (data : CPSVCanonicalFormData A)
-    (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
     ∃ P : SectorDecomposition (Fin d),
-      IsBNTCanonicalForm P ∧
+      IsLeftCanonicalBNTPresentation P ∧
       P.totalDim = ∑ k, data.dim k ∧
       ∃ U : Matrix (Fin P.totalDim) (Fin D) ℂ, U * Uᴴ = 1 ∧
         ∃ X : GL (Fin P.totalDim) ℂ,
@@ -429,9 +443,8 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact
     exact hGauge k
   obtain ⟨Y, hY⟩ := hDirectGauge
   obtain ⟨P, hBNT, hTotal, e, X, hExact⟩ :=
-    exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks data.weights prepared
-      data.dim_pos hTP hPrim hIrr data.weights_ne_zero hNorm.weight_norm_le_one
-      (hNorm.weight_unit_exists hA)
+    exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks data.weights prepared
+      data.dim_pos hTP hPrim hIrr data.weights_ne_zero (data.r_pos_of_ne_zero hA)
   let Q : Matrix (Fin P.totalDim) (Fin (∑ k, data.dim k)) ℂ :=
     equivalenceCoisometry e
   let W := transportGL e Y
@@ -516,23 +529,22 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact
   rw [data.reconstruct i, hOriginal i]
   simp only [U', Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
-/-- A normalized nonzero CPSV canonical form has a SectorBNT decomposition whose total bond
+/-- A nonzero CPSV canonical form has a SectorBNT decomposition whose total bond
 dimension is the sum of its block dimensions.
 
 Unused ambient coordinates do not contribute to this dimension.
 
 Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
 1135--1146. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation
     (data : CPSVCanonicalFormData A)
-    (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
     ∃ P : SectorDecomposition (Fin d),
-      IsBNTCanonicalForm P ∧
+      IsLeftCanonicalBNTPresentation P ∧
       SameMPV₂Pos A P.toTensor ∧
       P.totalDim = ∑ k, data.dim k := by
   obtain ⟨P, hBNT, hTotal, U, hU, X, hReconstruct⟩ :=
-    data.exists_isBNTCanonicalForm_exact hNorm hA
+    data.exists_isLeftCanonicalBNTPresentation_exact hA
   let B : MPSTensor d P.totalDim := fun i =>
     (X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)
   have hCoisometry : SameMPV₂Pos A B :=

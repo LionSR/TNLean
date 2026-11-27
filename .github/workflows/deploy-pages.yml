@@ -31,16 +31,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          ./scripts/fetch-latest-artifact.sh site-blueprint components/site-blueprint
-          ./scripts/fetch-latest-artifact.sh site-docs components/site-docs
-          ./scripts/fetch-latest-artifact.sh site-badges components/site-badges
-          ./scripts/fetch-latest-artifact.sh site-campaign components/site-campaign
+          ./scripts/deploy/fetch-latest-artifact.sh site-blueprint components/site-blueprint
+          ./scripts/deploy/fetch-latest-artifact.sh site-docs components/site-docs
+          ./scripts/deploy/fetch-latest-artifact.sh site-badges components/site-badges
+          ./scripts/deploy/fetch-latest-artifact.sh site-campaign components/site-campaign
 
       - name: Configure Pages
         uses: actions/configure-pages@v6
 
       - name: Assemble site
-        run: ./scripts/assemble-pages-site.sh components _site
+        run: ./scripts/deploy/assemble-pages-site.sh components _site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5

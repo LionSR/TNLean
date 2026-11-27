@@ -59,7 +59,7 @@ theorem IsBNTSectorPresentation.reindexPhysical {α α' : Type*} [Fintype α] [F
 
 end MPSTensor
 
-namespace MPSTensor.IsBNTCanonicalForm
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 /-- Every representative of a BNT canonical form is a normal tensor.
 
@@ -69,11 +69,11 @@ left-canonicality and normalized self-overlap give normality.
 Source: arXiv:1606.00608, lines 224--235 and 271--274; the period-one characterization is the
 non-periodic canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
 theorem basis_isNormalTensor {α : Type*} [Fintype α] {S : SectorDecomposition α}
-    (hCF : IsBNTCanonicalForm S) (j : Fin S.basisCount) :
+    (hCF : IsLeftCanonicalBNTPresentation S) (j : Fin S.basisCount) :
     MPTensor.IsNormalTensor (S.basis j) := by
   classical
   let f : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
-  have hCF' := SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF f
+  have hCF' := SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF f
   let _ : NeZero ((S.reindexPhysical f).basisDim j) := ⟨(hCF'.basis_dim_pos j).ne'⟩
   have h := (isNormalTensor_of_isNormal_leftCanonical ((S.reindexPhysical f).basis j)
     (hCF'.basis_isNormal j) (hCF'.basis_left_canonical j)).reindexPhysical f.symm
@@ -83,7 +83,7 @@ theorem basis_isNormalTensor {α : Type*} [Fintype α] {S : SectorDecomposition 
     simp [Kraus.reindexPhysical]
   rwa [hback] at h
 
-end MPSTensor.IsBNTCanonicalForm
+end MPSTensor.IsLeftCanonicalBNTPresentation
 
 namespace MPOTensor
 
@@ -188,9 +188,6 @@ matrix-product coefficient, while this relabeling preserves normality and the
 physical-trace transfer of each representative. Hence the displayed
 nonnilpotency certificates give the required BNT presentation after blocking.
 
-The implication forgets the line-246 unit-weight normalization built into
-`IsSimpleCanonicalForm`; that normalization is not part of `IsSimple`.
-
 Source: arXiv:1606.00608, canonical form at lines 217--246 and Definition 4.7
 at lines 815--822. -/
 theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
@@ -213,10 +210,8 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
     rw [Matrix.mul_one]
   refine ⟨hMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
   · have hCF' :=
-      MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e
-    refine ⟨?_, ?_, ?_, hCF'.bnt_data⟩
-    · obtain ⟨j, _q, _hj⟩ := hCF.weight_unit_exists
-      exact Fin.pos_iff_nonempty.mpr ⟨j⟩
+      MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF e
+    refine ⟨hCF.basisCount_pos, ?_, ?_, hCF'.eventually_li⟩
     · intro N hN σ
       rw [hBlock]
       change MPTensor.mpv (Kraus.reindexPhysical e M) σ =

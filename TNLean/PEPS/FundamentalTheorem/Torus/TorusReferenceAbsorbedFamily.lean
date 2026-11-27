@@ -299,8 +299,8 @@ variable {width height d : ℕ} [NeZero width] [NeZero height]
 /-- **The translation-covariant absorbed gauge family on the torus.**
 
 For a translation-invariant pair `A`, `B` on the torus with matched bond dimensions, positive
-bonds, the same state, and both satisfying the rectangular-injectivity hypotheses with union
-closure, there is a per-edge gauge family `X` over the second tensor's bonds that
+bonds, the same state, and both satisfying the rectangular-injectivity hypotheses, there is a
+per-edge gauge family `X` over the second tensor's bonds that
 
 * is translation covariant (`IsTranslationCovariantGaugeFamily`): the gauge at any translate of
   an edge is the gauge at the edge carried across the bond-dimension equality,
@@ -324,10 +324,6 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hxh0 : 2 ≤ xhStart) (hyh0 : 1 ≤ yhStart)
     (hxhw : xhStart + 5 = width ∨ xhStart + 7 ≤ width)
     (hyhh : yhStart + 5 = height ∨ yhStart + 7 ≤ height)
@@ -344,15 +340,17 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
         edgeInsertedCoeff (G := torusGraph width height) A e σ N =
           edgeInsertedCoeff (G := torusGraph width height) (applyGauge B X) e σ
             (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd e)) N) := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   classical
   have hw : 2 < width := by omega
   have hh : 2 < height := by omega
   -- The two reference gauges and their coefficient identities at the reference edges.
   obtain ⟨hEh, Zh, hZh⟩ :=
-    exists_horizontalReferenceEdgeGauge_coeff hAr hBr hUA hUB hxh0 hyh0 hxhw hyhh
+    exists_horizontalReferenceEdgeGauge_coeff hAr hBr hxh0 hyh0 hxhw hyhh
       hbd hAB hd hposA hposB
   obtain ⟨hEv, Zv, hZv⟩ :=
-    exists_verticalReferenceEdgeGauge_coeff hAr hBr hUA hUB hxv0 hyv0 hxvw hyvh
+    exists_verticalReferenceEdgeGauge_coeff hAr hBr hxv0 hyv0 hxvw hyvh
       hbd hAB hd hposA hposB
   -- The reference regions and their distinguished boundary edges.
   set Rh := (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw hyhh).red with hRhdef

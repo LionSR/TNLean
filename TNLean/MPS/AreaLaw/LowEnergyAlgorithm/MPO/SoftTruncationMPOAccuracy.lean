@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.OperatorMPOFromCutRank
-import QICLean.Analysis.Real.ExponentialGeometricTailOrder
+import QICLean.Analysis.Real.GeometricOrderPolynomialBound
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer

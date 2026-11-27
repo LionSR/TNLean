@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.BNTOrthogonality
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # BNT basis data for the unit-weight direct sum
@@ -30,7 +31,7 @@ theorem toTensorFromBlocks_one_eq_directSumTensor
   funext i
   simp [toTensorFromBlocks, directSumTensor]
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition (Fin d)}
 
@@ -45,7 +46,7 @@ one unit-weight copy of each distinct basis tensor. It does not reconstruct the
 raw weighted repeated-copy tensor of arXiv:1606.00608, eq. `II_CF1`; see
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isCPSVCanonicalForm_basisDirectSum
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     IsCPSVCanonicalForm (directSumTensor P.basis) := by
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
@@ -72,7 +73,7 @@ the direct sum of the distinct basis tensors with one unit-weight copy each.
 Repeated copies and raw sector weights remain outside this statement; see
 docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
 theorem isCPSVBasisOfNormalTensors_basisDirectSum
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     IsCPSVBasisOfNormalTensors (directSumTensor P.basis)
       (fun j => ⟨P.basisDim j, P.basis j⟩) := by
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
@@ -82,13 +83,13 @@ theorem isCPSVBasisOfNormalTensors_basisDirectSum
       isNormalTensor_of_isNormal_leftCanonical (P.basis j)
         (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
     spans_mpv := ?_
-    eventually_li := by exact hCF.bnt_data }
+    eventually_li := by exact hCF.eventually_li }
   intro N _hN
   refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
   rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis,
     mpv_toTensorFromBlocks_eq_sum]
   simp
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

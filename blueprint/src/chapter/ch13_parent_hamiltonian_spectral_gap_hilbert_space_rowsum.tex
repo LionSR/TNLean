@@ -1,14 +1,13 @@
 \begin{definition}[Parent Hamiltonian under the canonical $\ell^2$ identification]
     \label{def:parent_hamiltonian_es}
-    \lean{MPSTensor.parentRingInteraction}
     \leanok
     \uses{def:parent_hamiltonian,def:nsite_space_parent}
     For $N\ge1$, the parent interaction on the ring of $N$ sites assigns to
     each site $i$ the matrix of the local parent interaction placed on the
     cyclic window of $L$ sites starting at $i$, and zero when $L>N$. Denote
     by $H_{N,L}^{\mathrm{ES}}(A)$ the operator on
-    $\ell^2(\{0,\ldots,d-1\}^N)$ of the sum of these matrices; it is the
-    conjugate of $H_N(A,L)$ by the coordinate identification between the
+    $\ell^2(\{0,\ldots,d-1\}^N)$ of the sum of these matrices, that is,
+    $H_N(A,L)$ read through the coordinate identification between the
     coefficient space and $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
@@ -199,8 +198,8 @@
 
 \begin{lemma}[Adjacent three-site kernels and excitation projections]
     \label{thm:adjacent_two_site_local_terms_open_chain}
-    \lean{MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_zero,
-        MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_one,
+    \lean{MPSTensor.ker_toEuclideanLin_term_two_three_zero,
+        MPSTensor.ker_toEuclideanLin_term_two_three_one,
         MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term,
         MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term}
     \leanok
@@ -234,7 +233,7 @@
 
 \begin{lemma}[Zero energy gives the cyclic local constraints]
     \label{thm:parent_hamiltonian_kernel_le_chain_ground_space}
-    \lean{MPSTensor.ker_parentHamiltonian_le_chainGroundSpace}
+    \lean{MPSTensor.ker_hamiltonian_parentRingInteraction_le_chainGroundSpace}
     \leanok
     \uses{def:parent_hamiltonian,def:parent_hamiltonian_es,def:chain_ground_space,lem:transported_es_local_projections,lem:local_term_es_kernel_restrictions,rem:projection_geometry_rowsum_identities}
     Assume $N>0$ and $L\le N$. If a vector $\psi$ has zero energy for the
@@ -271,7 +270,7 @@
 
 \begin{lemma}[Cyclic constraints give zero energy]
     \label{lem:chain_ground_space_le_parent_hamiltonian_kernel}
-    \lean{MPSTensor.chainGroundSpace_le_ker_parentHamiltonian}
+    \lean{MPSTensor.chainGroundSpace_le_ker_hamiltonian_parentRingInteraction}
     \leanok
     \uses{def:parent_hamiltonian,def:chain_ground_space,thm:chain_ground_space_implies_frustration_free}
     Assume $N>0$ and $L\le N$. Then
@@ -287,7 +286,7 @@
 
 \begin{lemma}[The finite-volume kernel is the cyclic constraint space]
     \label{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
-    \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
+    \lean{MPSTensor.ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace}
     \lean{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace}
     \lean{MPSTensor.zeroSpace_parentRingInteraction_eq_map_chainGroundSpace}
     \leanok
@@ -342,7 +341,6 @@
     \label{lem:transported_es_nonoverlap_positive}
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
-    \lean{MPSTensor.localTerm_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.commute_parentRingInteraction_term_of_cyclic_windows_disjoint}
     \lean{MPSTensor.re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint}
     \leanok

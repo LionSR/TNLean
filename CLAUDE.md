@@ -4,7 +4,7 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Project Overview
 
-TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix product states (MPS), their canonical forms and gauge structure, and the theorems that classify them — including the **Fundamental Theorem of Matrix Product States** and **Quantum Wielandt theory**. Built on Mathlib v4.36.0-rc1. The finite-dimensional quantum-channel theory this rests on (following Wolf's *Quantum Channels & Operations*) no longer lives in this repository; it is developed in the companion library [QICLean](https://github.com/LionSR/QICLean), which TNLean depends on. Blueprint diagrams are drawn by the companion package [tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml` and fetched with `python3 scripts/fetch_tenkz.py`.
+TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix product states (MPS), their canonical forms and gauge structure, and the theorems that classify them — including the **Fundamental Theorem of Matrix Product States** and **Quantum Wielandt theory**. Built on Mathlib v4.36.0-rc1. The finite-dimensional quantum-channel theory this rests on (following Wolf's *Quantum Channels & Operations*) no longer lives in this repository; it is developed in the companion library [QICLean](https://github.com/LionSR/QICLean), which TNLean depends on. Blueprint diagrams are drawn by the companion package [tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml` and fetched with `python3 scripts/tenkz/fetch_tenkz.py`.
 
 ## Build Commands and Mathlib Cache Policy
 
@@ -53,7 +53,7 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 # plasTeX plugin (blueprint/src/plastex.cfg loads it unconditionally):
 #   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 # Run after lake build succeeds.
-python3 scripts/fetch_tenkz.py
+python3 scripts/tenkz/fetch_tenkz.py
 (cd blueprint && leanblueprint checkdecls)
 
 # Blueprint web/PDF generation
@@ -111,7 +111,7 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 - `IsInjective A` — matrices of `A` span the full matrix algebra
 - `SameMPV A B` / `SameMPV₂` — same matrix product vector family
 - `GaugeEquiv A B` — conjugation by invertible matrix (`B i = X * A i * X⁻¹`)
-- `IsBNTCanonicalForm` — paper-faithful basis-of-normal-tensors canonical form predicate
+- `IsLeftCanonicalBNTPresentation` — presentation of a tensor by a basis of normal tensors whose basis tensors are left-canonical
 - `cumulativeSpan A n` — span of all products of length <= n
 - `IsNormal A` — the project's normality notion for Wielandt theory
 - `transferMap A` — the CP map `rho -> sum_i A_i * rho * (A_i)^H`
@@ -185,7 +185,7 @@ process is in `docs/tactic_development.md`; the pattern ledger is
 2. **Detect** repetition while writing, and in proof-heavy PRs run:
 
    ```bash
-   python3 scripts/tactic_pattern_scan.py
+   python3 scripts/audit/tactic_pattern_scan.py
    ```
 
 3. **Record** noticed repetition as a candidate entry in the ledger — in the
@@ -451,7 +451,7 @@ follow-up, not against the temporary `sorry` count.
 | `SpinChain.quasiLocalTranslation_inv` | helper theorem | Rewriting the group inverse of a quasi-local translation as translation by the negative displacement | `TNLean/QCA/QuasiLocal/QuasiLocalTranslation.lean` |
 | `SpinChain.quasiLocalTranslation_one` | helper theorem | Rewriting the identity automorphism as quasi-local translation by zero | `TNLean/QCA/QuasiLocal/QuasiLocalTranslation.lean` |
 | `Kraus.map_compressed_fixedPoint` | helper theorem | Preserving a supported fixed point under finite-Kraus compression along an isometry | `QICLean/Channel/KrausMap/KrausCornerCompression.lean` (QICLean dependency) |
-| `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/MPS/Tensor/Words/TracePairing.lean` |
+| `Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings `tr (M A i) = 0` against every matrix of an injective family | `QICLean/Kraus/Injectivity.lean` (QICLean dependency) |
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/Entropy/SALTraceTransfer.lean` |
 | `ManyBody.submatrix_comp_perm_mem_supportedOperators` | helper theorem | Moving an operator supported on `S` along a permutation `p` of the sites, `A.submatrix (· ∘ p) (· ∘ p)` supported on `S.image p`, as for cyclic translations of a chain | `QICLean/ManyBody/Sites/Relabel.lean` (QICLean dependency) |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `QICLean/Algebra/Combinatorics/FinSum.lean` (QICLean dependency) |

@@ -160,7 +160,7 @@ theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -200,7 +200,7 @@ theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -243,7 +243,7 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat

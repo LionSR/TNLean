@@ -326,20 +326,19 @@
     Applying the preceding implication first with $r$ and then with $r^{-1}$
     proves the equivalence.
 \end{proof}
-\begin{definition}[Normalized simplicity in blocked canonical form]
+\begin{definition}[Simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}
     \lean{MPOTensor.IsSimpleCanonicalForm}
     \leanok
     \uses{def:mpdo,def:horizontal_cf_mpdo,def:mpo_physical_trace_transfer}
-    A tensor generating MPDOs satisfies this predicate if it has a normalized
+    A tensor generating MPDOs satisfies this predicate if it has a
     horizontal basis-of-normal-tensors decomposition whose basis elements all
     have non-nilpotent physical-trace transfer. This records the
     horizontal-canonical-form data of the already-blocked tensor $K$ fixed
     in~\cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
 
-    This definition fixes the canonical representative and incorporates the
-    global unit-weight convention of~\cite[line~246]{Cirac2016MPDO_arXiv}. It
-    instantiates the Appendix~C.2 hypothesis on the already-blocked tensor, in
+    This definition fixes the canonical representative; it imposes no
+    normalization of the copy weights. It instantiates the Appendix~C.2 hypothesis on the already-blocked tensor, in
     contrast to Definition~\ref{def:mpdo_simple_tensor} which quantifies over
     blocking lengths and presentations.
 \end{definition}

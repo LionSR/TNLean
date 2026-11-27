@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.GroundStateAlgorithm.ApproximateProjector.SampledProje
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.SuccessiveStep
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BondTrimmingBound
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
-import QICLean.Algebra.Combinatorics.DependentSequence
+import QICLean.Algebra.Combinatorics.IndexInduction
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.OrthonormalRounding
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.RationalRepresentationBounds

@@ -151,19 +151,21 @@ Hamiltonian of `majumdarGhoshTensor` is one third of the sum, over the windows o
 three consecutive sites, of the three transpositions within the window. -/
 theorem majumdarGhosh_parentHamiltonian_three_apply {N : ℕ} (hN3 : 3 ≤ N)
     (ψ : NSiteSpace 2 N) (σ : Cfg 2 N) :
-    parentHamiltonian majumdarGhoshTensor 3 N ψ σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toLin' (parentRingInteraction majumdarGhoshTensor 3 N).hamiltonian ψ σ =
       (1 / 3) * ∑ i : Fin N, (ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 1)) +
         ψ (σ ∘ Equiv.swap (cyclicForwardSite i 1) (cyclicForwardSite i 2)) +
           ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 2))) := by
   have hN : 0 < N := by omega
+  have : NeZero N := ⟨by omega⟩
   have hw : ∀ (i : Fin N) (a b : Fin 3),
       replaceWindow 3 hN3 i σ (extractWindow 3 i σ ∘ Equiv.swap a b) =
         σ ∘ Equiv.swap (cyclicForwardSite i a.val) (cyclicForwardSite i b.val) :=
     fun i a b => cyclicCfg_extractWindow_comp_swap hN hN3 i σ a b
-  simp only [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply, Finset.sum_apply,
+  simp only [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply, Finset.sum_apply,
     Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
-  rw [localTerm_apply_of_le _ 3 N hN3 i]
+  rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le _ 3 N hN3 i]
   rw [← majumdarGhoshTerm_shift_eq_parentInteraction, majumdarGhoshTerm_shift_apply]
   simp only [hw]
   simp [cyclicForwardSite_zero]
@@ -173,8 +175,11 @@ theorem majumdarGhosh_parentHamiltonian_three_apply {N : ℕ} (hN3 : 3 ≤ N)
 is the range-three parent Hamiltonian of `majumdarGhoshTensor` and \(H\) is the review's Hamiltonian
 (arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2398–2399). -/
 theorem majumdarGhoshHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN3 : 3 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id =
-      (3 / 4 : ℂ) • parentHamiltonian majumdarGhoshTensor 3 N := by
+      (3 / 4 : ℂ) •
+        Matrix.toLin' (parentRingInteraction majumdarGhoshTensor 3 N).hamiltonian := by
+  have : NeZero N := ⟨by omega⟩
   refine LinearMap.ext fun ψ => funext fun σ => ?_
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply, Pi.add_apply,
     Pi.smul_apply, smul_eq_mul, majumdarGhoshHamiltonian_apply hN3,
@@ -188,6 +193,7 @@ theorem majumdarGhoshHamiltonian_add_isPositive {N : ℕ} (hN3 : 3 ≤ N) :
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).symm.toLinearMap ∘ₗ
       (majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id) ∘ₗ
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).toLinearMap).IsPositive :=
+  haveI : NeZero N := ⟨by omega⟩
   isPositive_conj_of_add_eq_smul_parentHamiltonian
     (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num [Complex.le_def])
 
@@ -196,6 +202,7 @@ of the review's Hamiltonian \(H\) is real with \(\mu\ge-\tfrac{3N}8\). -/
 theorem majumdarGhoshHamiltonian_eigenvalue_ge {N : ℕ} (hN3 : 3 ≤ N) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (majumdarGhoshHamiltonian N) μ) :
     μ.im = 0 ∧ -(3 * N / 8 : ℝ) ≤ μ.re := by
+  have : NeZero N := ⟨by omega⟩
   have h := Complex.le_def.1 (neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian
     (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num [Complex.le_def]) hμ)
   simp only [Complex.neg_re, Complex.neg_im] at h
@@ -206,8 +213,10 @@ theorem majumdarGhoshHamiltonian_eigenvalue_ge {N : ℕ} (hN3 : 3 ≤ N) {μ : �
 Hamiltonian for \(-\tfrac{3N}8\) is the kernel of the range-three parent
 Hamiltonian of `majumdarGhoshTensor`. -/
 theorem majumdarGhoshHamiltonian_eigenspace_eq_ker {N : ℕ} (hN3 : 3 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Module.End.eigenspace (majumdarGhoshHamiltonian N) (-(3 * N / 8) : ℂ) =
-      LinearMap.ker (parentHamiltonian majumdarGhoshTensor 3 N) :=
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction majumdarGhoshTensor 3 N).hamiltonian) :=
+  haveI : NeZero N := ⟨by omega⟩
   eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian
     (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num)
 
@@ -243,7 +252,7 @@ eigenvalue of the review's Hamiltonian, so there the bound of
 theorem majumdarGhoshHamiltonian_not_hasEigenvalue_of_odd {N : ℕ} (hN : Odd N) (hN5 : 5 ≤ N) :
     ¬ Module.End.HasEigenvalue (majumdarGhoshHamiltonian N) (-(3 * N / 8) : ℂ) := by
   rw [Module.End.hasEigenvalue_iff, majumdarGhoshHamiltonian_eigenspace_eq_ker (by omega),
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) (by omega),
     majumdarGhosh_chainGroundSpace_eq_bot_of_odd hN hN5, not_not]
 
 end MPSTensor

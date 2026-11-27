@@ -7,7 +7,7 @@ Each deploy updates only its own files — blueprint deploys preserve `/docs/` a
 
 ```bash
 # Materialize the pinned diagram package.
-python3 scripts/fetch_tenkz.py
+python3 scripts/tenkz/fetch_tenkz.py
 
 # Build and preview blueprint locally
 cd blueprint
@@ -19,7 +19,7 @@ leanblueprint pdf          # output: blueprint/print/print.pdf
 
 # Build the FT-MPS blueprint volume
 cd ..
-./scripts/build_blueprint_ch01_12.sh  # output: blueprint/print/print12.pdf
+./scripts/blueprint/build_blueprint_ch01_12.sh  # output: blueprint/print/print12.pdf
 
 # Build and preview API docs locally
 cd docbuild && lake build TNLean:docs

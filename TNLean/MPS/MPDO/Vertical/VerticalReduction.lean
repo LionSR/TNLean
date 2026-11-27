@@ -26,7 +26,7 @@ normalization or grouping into a basis of normal tensors is asserted here.
 
 * `MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor`:
   every one-sided invariant orthogonal projection of the vertically viewed
-  tensor is reducing under normalized BNT-refined horizontal form.
+  tensor is reducing under BNT-refined horizontal form.
 * `MPTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor`:
   the predicate-level literal-CF conclusion.
 * `MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry`:
@@ -45,7 +45,7 @@ corner to spectral radius one.
 The construction is the isometry-preserving form of the canonical-form steps
 in arXiv:1606.00608, lines 214--225, applied after the invariant-projection and
 periodic-sector arguments of Proposition 4.13, lines 1873--1893.  It assumes
-normalized BNT-refined horizontal form, which is stronger than literal CPSV
+BNT-refined horizontal form, which is stronger than literal CPSV
 canonical form.  It gives a literal reconstruction of every vertical letter
 on the retained support.  It does not yet group gauge-equivalent normal tensors
 into a basis of normal tensors or prove positivity of the grouped multiplicity
@@ -241,7 +241,7 @@ variable {d D : ℕ}
 /-- Spectrally normalized nonzero vertical corners, with their physical
 isometries retained.
 
-Let `M` generate matrix product density operators and be in normalized
+Let `M` generate matrix product density operators and be in
 BNT-refined horizontal form.  The nonzero irreducible reducing corners of its
 vertically viewed tensor can be written as positive scalar multiples of normal
 tensors.

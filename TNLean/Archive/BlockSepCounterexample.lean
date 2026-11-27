@@ -15,6 +15,7 @@ scratch material explaining why the naive separation statement is false.
 -/
 
 open scoped Matrix BigOperators
+open MPTensor
 
 
 namespace MPSTensor
@@ -158,7 +159,7 @@ lemma hδEx : ∀ N (σ : Fin N → Fin 1),
               simp [mul_sub, h23]
       _ = 0 := by
         ring
-  simpa [AEx, BEx, μEx, dimEx, mpv_const_eq_trace_pow, evalWord_replicate,
+  simpa [AEx, BEx, μEx, dimEx, mpv_const_eq_trace_pow, Kraus.evalWord_replicate,
     mat1_pow, trace_mat1_pow, smul_eq_mul, h21, h23] using hgoal
 
 /-- The per-block MPVs are *not* equal: block 0 differs at `N = 1`. -/
@@ -171,7 +172,8 @@ lemma not_perBlock_sameMPV : ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
     -- `N = 1` forces `trace(mat1 1) = trace(mat1 3)`, i.e. `1 = 3`.
     -- The left-hand side simplifies to the trace of the identity, i.e. `D = 1`.
     have h13' := h0
-    simp [AEx, BEx, dimEx] at h13'
+    rw [mpv_const_eq_trace_pow, mpv_const_eq_trace_pow] at h13'
+    simpa using (trace_mat1_pow 1 1).symm.trans (h13'.trans (trace_mat1_pow 3 1))
   -- Contradiction.
   have : False := by
     norm_num at h13

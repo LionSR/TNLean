@@ -43,7 +43,8 @@ private theorem intervalBoundaryConfig_eq_physicalZero_of_not_boundaries
     {d D N : ℕ} [NeZero d] {ρ σ : Type*} (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j))
-    (p : CutIntervalConfig d N j.val k.val × (ρ × σ)) (s : LogicalSite d D N)
+    (p : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ ×
+        σ)) (s : LogicalSite d D N)
     (hR : s ∉ Set.range (cutBondSiteEmbedding d D N k 0))
     (hL : s ∉ Set.range (cutBondSiteEmbedding d D N j 1)) :
     intervalBoundaryConfig j k eρ eσ p s = intervalPhysicalZeroConfig j.val k.val p.1 s := by
@@ -59,7 +60,8 @@ theorem intervalBoundaryConfig_join_zero_left {d D N : ℕ} [NeZero d] {r l n : 
     (em : r ↪ Cfg d (cutBondRegisterWidth d D N m))
     (ej : l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : n ↪ Cfg d (cutBondRegisterWidth d D N k)) (q0 : r) (hem : em q0 = 0)
-    (x : CutIntervalConfig d N j.val m.val) (y : CutIntervalConfig d N m.val k.val)
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val)) (y :
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val))
     (β : n) (α : l) (s : LogicalSite d D N)
     (hs : s ∈ intervalLogicalSupport d D N j.val m.val) :
     intervalBoundaryConfig j m em ej (x, (q0, α)) s =
@@ -97,7 +99,8 @@ theorem intervalBoundaryConfig_join_zero_right {d D N : ℕ} [NeZero d] {r l n :
     (em : r ↪ Cfg d (cutBondRegisterWidth d D N m))
     (ej : l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : n ↪ Cfg d (cutBondRegisterWidth d D N k)) (q0 : r) (hem : em q0 = 0)
-    (x : CutIntervalConfig d N j.val m.val) (y : CutIntervalConfig d N m.val k.val)
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val)) (y :
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val))
     (β : n) (α : l) (s : LogicalSite d D N)
     (hs : s ∈ intervalLogicalSupport d D N m.val k.val) :
     intervalBoundaryConfig m k ek em (y, (β, q0)) s =
@@ -148,7 +151,8 @@ theorem intervalJointOutputEmbedding_zero_eq_parent_support
     (em : r ↪ Cfg d (cutBondRegisterWidth d D N m))
     (ej : l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : n ↪ Cfg d (cutBondRegisterWidth d D N k)) (q0 : r) (hem : em q0 = 0)
-    (p : (CutIntervalConfig d N j.val m.val × CutIntervalConfig d N m.val k.val) × (n × l))
+    (p : (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val)) × (n × l))
     (z : {s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j m k hjm hmk} → Fin d)
     (s : LogicalSite d D N) (hs : s ∈ intervalLogicalSupport d D N j.val k.val) :
     intervalJointOutputEmbedding j m k hjm hmk em ej ek
@@ -179,7 +183,8 @@ theorem intervalJointOutputEmbedding_zero_eq_parent
     (em : r ↪ Cfg d (cutBondRegisterWidth d D N m))
     (ej : l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : n ↪ Cfg d (cutBondRegisterWidth d D N k)) (q0 : r) (hem : em q0 = 0)
-    (p : (CutIntervalConfig d N j.val m.val × CutIntervalConfig d N m.val k.val) × (n × l))
+    (p : (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val)) × (n × l))
     (z : {s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j m k hjm hmk} → Fin d) :
     intervalJointOutputEmbedding j m k hjm hmk em ej ek
         (intervalJointInitializedOutsideEmbedding (d := d) (D := D) j m k hjm hmk)

@@ -89,7 +89,6 @@ theorem exists_absorbingGauge_of_pairBlockingDatum
       (regionInjectivityDataPair (regionInjectivityDataOf (G := G) A)
         (regionInjectivityDataOf (G := G) B)) G e)
     (hsingle : ∀ g : Edge G, IsCrossingEdge (G := G) A D.red D.blue g ↔ g = e)
-    (hUB : RegionInjectivityUnionClosure (regionInjectivityDataOf (G := G) B))
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g)
     (hposB : ∀ g : Edge G, 0 < B.bondDim g) :
@@ -100,6 +99,7 @@ theorem exists_absorbingGauge_of_pairBlockingDatum
           edgeInsertedCoeff (G := G) A e σ N =
             edgeInsertedCoeff (G := G) (applyGauge B X) e σ
               (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N) := by
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   classical
   let DA := D.pairLeft
   let DB := D.pairRight
@@ -173,8 +173,6 @@ theorem exists_normalAbsorbedGaugeFamily
           edgeInsertedCoeff (G := G) (applyGauge B X) e σ
             (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N) := by
   classical
-  have hUB : RegionInjectivityUnionClosure (regionInjectivityDataOf (G := G) B) :=
-    regionInjectivityUnionClosure_of_overlap B hposB
   have hsel : ∀ e : Edge G, ∃ Ze : GL (Fin (B.bondDim e)) ℂ,
       ∀ X : (g : Edge G) → GL (Fin (B.bondDim g)) ℂ,
         X e = Ze →
@@ -183,7 +181,7 @@ theorem exists_normalAbsorbedGaugeFamily
             edgeInsertedCoeff (G := G) (applyGauge B X) e σ
               (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N) :=
     fun e => exists_absorbingGauge_of_pairBlockingDatum A B
-      (h.edgeBlocking.blockingData e) (hsingle e) hUB hbond hAB hd hposA hposB
+      (h.edgeBlocking.blockingData e) (hsingle e) hbond hAB hd hposA hposB
   choose X hX using hsel
   exact ⟨X, fun e σ N => hX e X rfl σ N⟩
 

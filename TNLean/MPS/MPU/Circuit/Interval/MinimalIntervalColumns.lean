@@ -22,6 +22,8 @@ is supplied as a hypothesis.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped Kronecker Matrix ComplexOrder MatrixOrder
 
@@ -31,7 +33,7 @@ namespace MPUCircuit
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def minimalIntervalInputEmbedding {d D N : ℕ} [NeZero d] (j k : ℕ) :
-    (CutIntervalConfig d N j k ×
+    (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k) ×
       OutsidePlacedConfig d (intervalPacketSites d D N j k)) ↪
         Cfg d (logicalSiteCount d D N) :=
   placedBasisEmbedding (intervalPacketSites d D N j k)
@@ -44,11 +46,11 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def minimalIntervalOutputEmbedding {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (j k : Fin (N + 1)) :
-    ((CutIntervalConfig d N j.val k.val ×
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) k.val) ×
-        Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))) ×
+    ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) ×
+      (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
+        Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))) ×
       OutsidePlacedConfig d (intervalPacketSites d D N j.val k.val)) ↪
         Cfg d (logicalSiteCount d D N) :=
   placedBasisEmbedding (intervalPacketSites d D N j.val k.val)
@@ -63,11 +65,12 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def IsMinimalIntervalColumnImplementation {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (j k : Fin (N + 1)) (hjk : j.val ≤ k.val)
     (X : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ) : Prop :=
   X * basisInclusion (minimalIntervalInputEmbedding (D := D) j.val k.val) =
@@ -85,11 +88,12 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
     (X Y : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (hSX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
@@ -120,14 +124,14 @@ theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZer
   unfold IsMinimalIntervalColumnImplementation minimalIntervalInputEmbedding
     minimalIntervalOutputEmbedding at hX hY
   convert jointPlacedColumns_of_supported_individual
-    (α := CutIntervalConfig d N j.val m.val)
-    (β := CutIntervalConfig d N m.val k.val)
-    (γ := CutIntervalConfig d N j.val m.val ×
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) m.val) ×
-        Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)))
-    (δ := CutIntervalConfig d N m.val k.val ×
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) k.val) ×
-        Fin (cutCoefficientRank (operatorCoefficientTensor U) m.val)))
+    (α := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val))
+    (β := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val))
+    (γ := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
+      (Fin (cutRank (interval N 0 m.val) (operatorCoefficientTensor U)) ×
+        Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))))
+    (δ := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val) ×
+      (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
+        Fin (cutRank (interval N 0 m.val) (operatorCoefficientTensor U))))
     (τ := OutsidePlacedConfig d (Fin.Embedding.append
       (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk)))
     (intervalPacketSites d D N j.val m.val) (intervalPacketSites d D N m.val k.val)

@@ -313,21 +313,21 @@ seven instead of the stated bound six, as shown in
     \label{def:alvv_ff_chain_operators}
     \lean{TNLean.MPS.AreaLaw.ALVV.colorTerm,
         TNLean.MPS.AreaLaw.ALVV.chainTerm,
-        TNLean.MPS.AreaLaw.ALVV.chainOperator,
-        TNLean.MPS.AreaLaw.ALVV.chainReplacement,
-        TNLean.MPS.AreaLaw.ALVV.toEuclideanCLM_chainReplacementMatrix,
-        TNLean.MPS.AreaLaw.ALVV.chainOperator_eq_toEuclideanCLM_sum}
+        TNLean.MPS.AreaLaw.ALVV.sum_range_chainTerm,
+        TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_eq_regionalReplacementMatrix}
     \leanok
-    \uses{def:alvv_ff_regional_replacement,def:alvv_ff_matrix_replacement}
+    \uses{def:alvv_ff_regional_replacement,def:alvv_ff_matrix_replacement,def:physical_ff_regional_truncation}
     Let $h_i$, $0\le i<m$, be matrices on the chain Hilbert space,
-    extended by zero beyond $m$. Write $H=\sum_{i<m}h_i$.
+    extended by zero beyond $m$, and regard them as operators on the
+    Euclidean chain space. Write $H=\sum_{i<m}h_i$; the extended terms
+    with index below $m$ add up to $H$.
     For $c\in\{0,1\}$ let $h_i^{(c)}=h_i$ when $i\equiv c\pmod2$
-    and $h_i^{(c)}=0$ otherwise. The operator replacement
-    $\widetilde H$ is the matrix replacement under the canonical
-    star-algebra identification of matrices with continuous operators.
-    Thus $H$ is exactly the supplied finite bond sum and
-    $\widetilde H$ is exactly its regional replacement, retaining all
-    exterior bonds.
+    and $h_i^{(c)}=0$ otherwise.
+    For the $L-1$ bond terms of a chain of $L$ sites and a site interval
+    $J=\lbrack a,b)$, the regional truncation $\widetilde H_J$ of
+    Definition~\ref{def:physical_ff_regional_truncation} is the matrix
+    regional replacement of the even and odd bonds of
+    $\lbrack a,b-1)$, retaining every exterior bond.
 \end{definition}
 
 \begin{lemma}[Locality supplies commutation degree two]
@@ -352,31 +352,32 @@ seven instead of the stated bound six, as shown in
 
 \begin{lemma}[Kernel, constraints and gap for the chain]
     \label{lem:alvv_ff_chain_comparison}
-    \lean{TNLean.MPS.AreaLaw.ALVV.ker_chainReplacement,
-        TNLean.MPS.AreaLaw.ALVV.chainReplacement_frustrationFree,
-        TNLean.MPS.AreaLaw.ALVV.chainReplacement_gap,
-        TNLean.MPS.AreaLaw.ALVV.chainReplacement_gap_linear}
+    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_gap}
     \leanok
-    \uses{def:alvv_ff_chain_operators}
-    Suppose the supplied local terms are orthogonal projections
-    supported on their nearest-neighbor bonds.
-    Then $\ker\widetilde H=\ker H$, and each vector in this kernel
-    is annihilated separately by both regional layer complements and
-    by every retained exterior term.
+    \uses{def:alvv_ff_chain_operators,thm:physical_ff_regional_kernel}
+    Suppose the bond terms of a chain are orthogonal projections
+    supported on their nearest-neighbor bonds, and let $J$ be a site
+    interval. Then $\ker\widetilde H_J=\ker H$, and each vector in this
+    kernel is annihilated separately by both regional layer complements
+    and by every retained exterior term
+    (Lemma~\ref{thm:physical_ff_regional_kernel}).
     If $\gamma>0$ and
     $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ for all
     $y\perp\ker H$, every unit $x\perp\ker H$ satisfies
     \begin{align}
-        \operatorname{Re}\langle x,\widetilde Hx\rangle
+        \operatorname{Re}\langle x,\widetilde H_Jx\rangle
          & \ge\frac{\gamma}{3(\gamma+4)}.
         \label{eq:alvv_ff_chain_gap}
     \end{align}
-    For $0<\gamma\le1$, this lower bound is at least $\gamma/15$.
+    For $0<\gamma\le1$, this lower bound is at least $\gamma/15$
+    (Corollary~\ref{cor:alvv_ff_gap_ratio}).
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:alvv_ff_regional_kernel,lem:alvv_ff_chain_degree,thm:alvv_ff_collapsed_gap,cor:alvv_ff_gap_ratio}
-    Locality gives commutation within each parity, so apply full
-    kernel preservation. Positivity of the original terms identifies
+    Write $\widetilde H_J$ as the regional replacement of the bonds of
+    $\lbrack a,b-1)$ (Definition~\ref{def:alvv_ff_chain_operators}).
+    Locality gives commutation within each parity. Positivity of the
+    original terms identifies
     the original kernel with the common kernel of the ordered family.
     Write $P^{(c)}_S$ for the product of
     (\ref{eq:alvv_ff_regional_replacement}) formed from the family
@@ -404,20 +405,20 @@ seven instead of the stated bound six, as shown in
 
 \begin{theorem}[Regional replacement of a frustration-free chain]
     \label{thm:alvv_ff_chain_replacement}
-    \lean{TNLean.MPS.AreaLaw.ALVV.frustrationFree_regionalReplacement_chain}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_physicalFrustrationFreeTruncation_le_of_boundary}
     \leanok
     \uses{def:alvv_ff_chain_operators}
-    Let $d\ge1$, let the finite local terms be orthogonal
-    projections supported on $\lbrack i,i+2)$, and let $\Omega$ be a unit
+    Let $d\ge1$, let the bond terms of a chain of $L$ sites be orthogonal
+    projections supported on their bonds, and let $\Omega$ be a unit
     vector with $H\Omega=0$.
     Suppose $\gamma>0$ is a quadratic-form gap above the full kernel
-    of $H$. For every site region $\lbrack a,b+1)$, replace precisely its
-    bonds $\lbrack a,b)$ by the two regional parity complements, retaining
-    every exterior term. Then both regional terms are orthogonal
-    projections, $\widetilde H$ is positive and frustration free on
-    $\Omega$, and $\ker\widetilde H=\ker H$.
+    of $H$. For every site interval $J=\lbrack a,b)$, replace precisely
+    the bonds contained in $J$ by the two regional parity complements,
+    retaining every exterior term. Then both regional terms are orthogonal
+    projections, $\widetilde H_J$ is positive and frustration free on
+    $\Omega$, and $\ker\widetilde H_J=\ker H$.
     Its operator Schmidt rank at every cut is at most $d^2+3$,
-    improved to $d^2+2$ when $a=0$ or $m\le b$.
+    improved to $d^2+2$ when $a=0$ or $L\le b$.
     Every unit vector orthogonal to the full replacement kernel has
     energy at least $\gamma/[3(\gamma+4)]$.
     In particular, a unique original ground state remains unique.
@@ -427,12 +428,15 @@ seven instead of the stated bound six, as shown in
     $d^2+2$ assertion is not claimed.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:alvv_ff_common_kernel_layers,thm:alvv_ff_regional_kernel,lem:alvv_ff_chain_comparison,thm:alvv_ff_corrected_rank,thm:alvv_ff_boundary_rank}
-    Use the derived same-parity commutations to obtain the two regional
-    projections and positivity. Full kernel equality places the
-    original unit ground vector in the replacement kernel and
-    identifies the two orthogonal complements. The chain
-    comparison gives every termwise constraint and the explicit gap.
-    The matrix-to-operator identity identifies these same operators
-    with those in the proved interval and boundary rank bounds.
+    \uses{thm:physical_ff_regional_kernel,thm:physical_ff_regional_corrected_rank,lem:alvv_ff_chain_comparison,thm:alvv_ff_boundary_rank}
+    Positivity, the projection property of the regional terms, kernel
+    equality and the termwise constraints on $\Omega$ are
+    Lemma~\ref{thm:physical_ff_regional_kernel}. The bound $d^2+3$ is
+    Lemma~\ref{thm:physical_ff_regional_corrected_rank}, and the gap is
+    Lemma~\ref{lem:alvv_ff_chain_comparison}. For the improved bound,
+    identify $\widetilde H_J$ with the matrix regional replacement of the
+    bonds of $\lbrack a,b-1)$ by
+    Definition~\ref{def:alvv_ff_chain_operators}; when $a=0$ or $L\le b$
+    this region is a prefix or reaches the last bond, and
+    Lemma~\ref{thm:alvv_ff_boundary_rank} applies.
 \end{proof}

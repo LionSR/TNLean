@@ -202,7 +202,7 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_rankOne
   hSpan.exists_physicalObservableTransfer_directSum_sectorSupported j
     (fun z ↦ R z.1 z.2.2.1 * l z.2.2.2 z.2.1)
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition (Fin d)}
 
@@ -216,7 +216,7 @@ consequence of Proposition `propblockinj` used at arXiv:1606.00608, lines
 rank-one insertion there, while all other sector pairs vanish. The raw-weight
 repeated-copy tensor `P.toTensor` is not the tensor in this conclusion. -/
 theorem exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     ∃ L : ℕ, 0 < L ∧ L ≤ 3 * P.totalDim ^ 5 ∧
       ∀ (j : Fin P.basisCount)
         (R l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
@@ -237,6 +237,6 @@ theorem exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_fi
   intro j R l
   exact hSpan.exists_physicalObservableTransfer_directSum_rankOne j R l
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

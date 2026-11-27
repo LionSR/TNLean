@@ -90,8 +90,6 @@ Step 1. -/
 theorem verticalConsecutiveWindow_extend_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
@@ -105,6 +103,7 @@ theorem verticalConsecutiveWindow_extend_eq
         (staircaseWindow_subset_staircaseUnion s L K j) C₁ =
       extendInsert (G := torusGraph width height)
         (staircaseWindow_succ_subset_staircaseUnion s L K j) C₂ := by
+  have hUB := regionInjectivityUnionClosure_of_overlap B hpos
   -- The union complement is blocked-tensor injective: the union is the `L × (K + 1)` rectangle.
   have hcompl : RegionBlockedTensorInjective (G := torusGraph width height) B
       (Finset.univ \ staircaseUnion s L K j) := by
@@ -134,8 +133,6 @@ Step 1. -/
 theorem horizontalStaircaseConsecutiveWindow_extend_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : j < L)
@@ -149,6 +146,7 @@ theorem horizontalStaircaseConsecutiveWindow_extend_eq
         (staircaseWindow_subset_staircaseUnion s L K j) C₁ =
       extendInsert (G := torusGraph width height)
         (staircaseWindow_succ_subset_staircaseUnion s L K j) C₂ := by
+  have hUB := regionInjectivityUnionClosure_of_overlap B hpos
   -- The union complement is blocked-tensor injective: the union is the `(L + 1) × K` rectangle.
   have hcompl : RegionBlockedTensorInjective (G := torusGraph width height) B
       (Finset.univ \ staircaseUnion s L K j) := by
@@ -184,8 +182,6 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem staircaseStep_patch_extend_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hjK : j + 1 < L + K)
@@ -205,9 +201,9 @@ theorem staircaseStep_patch_extend_eq
       extendInsert (G := torusGraph width height)
         (staircaseWindow_succ_subset_staircaseUnion s L K j) C₂ := by
     rcases lt_or_ge j L with hj | hj
-    · exact horizontalStaircaseConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj C₁ C₂
+    · exact horizontalStaircaseConsecutiveWindow_extend_eq h hpos hL hK hxw hyh s hj C₁ C₂
         hstate
-    · exact verticalConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj hjK C₁ C₂ hstate
+    · exact verticalConsecutiveWindow_extend_eq h hpos hL hK hxw hyh s hj hjK C₁ C₂ hstate
   -- Extend both union-level inserts through `extendInsert (U_j ⊆ P)`; collapse by transitivity.
   have hUP : staircaseUnion s L K j ⊆ horizontalStaircasePatch s L K :=
     staircaseUnion_subset_patch (by omega) (by omega) (by omega) s
@@ -238,8 +234,6 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem staircasePatch_insert_eq_aux
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
@@ -259,7 +253,7 @@ theorem staircasePatch_insert_eq_aux
   | succ n ih =>
     intro hn
     -- The per-step equality advances the patch-extended insert from `W_n` to `W_{n+1}`.
-    have hstep := staircaseStep_patch_extend_eq h hUB hpos hL hK hxw hyh s (j := n) hn
+    have hstep := staircaseStep_patch_extend_eq h hpos hL hK hxw hyh s (j := n) hn
       (C n) (C (n + 1)) ((hagree n (by omega)).trans (hagree (n + 1) hn).symm)
     exact (ih (by omega)).trans hstep
 
@@ -274,8 +268,6 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem staircasePatch_insert_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
@@ -289,7 +281,7 @@ theorem staircasePatch_insert_eq
       extendInsert (G := torusGraph width height)
         (staircaseWindow_subset_patch (j := L + K - 1) (by omega) (by omega) (by omega) s)
         (C (L + K - 1)) :=
-  staircasePatch_insert_eq_aux h hUB hpos hL hK hxw hyh s C common hagree (L + K - 1) (by omega)
+  staircasePatch_insert_eq_aux h hpos hL hK hxw hyh s C common hagree (L + K - 1) (by omega)
 
 /-! ### The corner-completion nesting
 
@@ -366,8 +358,6 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem staircasePair_insert_eq_open
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
@@ -385,7 +375,7 @@ theorem staircasePair_insert_eq_open
       (horizontalStaircaseCompletedCorner s L K) :=
     h.horizontalStaircaseCompletedCorner_injective s
   -- The patch chaining: the two end windows' patch-extended inserts agree.
-  have hpatch := staircasePatch_insert_eq h hUB hpos hL hK hxw hyh s C common hagree
+  have hpatch := staircasePatch_insert_eq h hpos hL hK hxw hyh s C common hagree
   -- The corner-completion nestings.
   have hPcU : horizontalStaircasePatch s L K ⊆
       horizontalStaircaseEndPair s L K ∪ horizontalStaircaseCompletedCorner s L K :=

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Word.OrderedProduct
-import QICLean.Circuit.Gate.UnitaryExtension
+import QICLean.Circuit.Gate.PartialIsometryDilation
 import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import TNLean.MPS.Preparation.Sequential.Sequential
 import Mathlib.LinearAlgebra.Matrix.Kronecker

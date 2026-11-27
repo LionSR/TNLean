@@ -123,7 +123,7 @@ structure IsNormalSquareLatticeRectanglePEPS (A : Tensor (squareLatticeGraph wid
 /-- **Per-edge bond dimension equality at interior edges from rectangular injectivity.**
 
 For two tensors on the open square lattice with the rectangular-injectivity hypotheses and
-union closure, the bond dimensions of `A` and `B` agree at every edge with interior margins.
+positive bonds, the bond dimensions of `A` and `B` agree at every edge with interior margins.
 The equality follows from the one-edge blocking data built from the rectangular injectivity
 (the source's Lemma `inj_isomorph`, lines 560--583 of `Papers/1804.04964/paper_normal.tex`),
 together with the same-state and positive-bond assumptions.
@@ -134,11 +134,7 @@ theorem bondDim_apply_eq_of_normalSquareInteriorEdge
     (A B : Tensor (squareLatticeGraph width height) d)
     (hAr : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hBr : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (squareLatticeGraph width height), 0 < A.bondDim g)
@@ -146,6 +142,8 @@ theorem bondDim_apply_eq_of_normalSquareInteriorEdge
     (e : Edge (squareLatticeGraph width height))
     (he : NormalSquareInteriorEdgeDatum e) :
     A.bondDim e = B.bondDim e := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   rcases he with ⟨hEdge, hMargins⟩ | ⟨hEdge, hMargins⟩
   · -- Horizontal interior edge
     obtain ⟨hx3, hx7, hy4, hy6⟩ := hMargins
@@ -372,8 +370,6 @@ theorem exists_windowScalar_of_interiorAbsorbed
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hBr : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hbond : A.bondDim = B.bondDim)
@@ -394,6 +390,7 @@ theorem exists_windowScalar_of_interiorAbsorbed
         (σ : Fin d),
         A.component v η σ =
           lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
   classical
   obtain ⟨cR, hcR0, hcRprop⟩ := comparisonRegionProportional_of_interiorAbsorbed A B hAr hBr
     hUA hUB hbond X hedge v hwin
@@ -470,16 +467,13 @@ theorem fundamentalTheorem_normalSquarePEPS_unconditional
   have hposA := hA.bondDim_pos
   have hposB := hB.bondDim_pos
   -- The union closure of injective regions, from the nonzero bonds.
-  have hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := squareLatticeGraph width height) A) :=
-    regionInjectivityUnionClosure_of_overlap A hposA
   have hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := squareLatticeGraph width height) B) :=
     regionInjectivityUnionClosure_of_overlap B hposB
   -- The interior absorbed gauge family.
-  obtain ⟨X, hedge⟩ := exists_normalSquareInteriorAbsorbedGaugeFamily A B hAr hUA hBr hUB
+  obtain ⟨X, hedge⟩ := exists_normalSquareInteriorAbsorbedGaugeFamily A B hAr hBr
     hbond hAB hd hposA hposB
-  exact ⟨X, hedge, fun v hwin => exists_windowScalar_of_interiorAbsorbed A B hAr hBr hUA hUB
+  exact ⟨X, hedge, fun v hwin => exists_windowScalar_of_interiorAbsorbed A B hAr hBr hUB
     hbond hposA X hedge v hwin⟩
 
 end PEPS

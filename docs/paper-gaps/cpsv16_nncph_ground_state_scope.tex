@@ -148,7 +148,7 @@ every $N>2$.\footnote{Formal equivalence:
 For the direct sum containing one copy of each distinct BNT basis tensor,
 transfer idempotence of the overall tensor implies the reverse containment. The
 resulting theorem establishes the reverse containment.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.}
 
 The commutation clause is also proved for this multiplicity-one direct sum.
 The residual matrix entries form an orthonormal family on the disjoint union
@@ -160,11 +160,11 @@ the common physical isometry identifies this virtual projector with the
 canonical projector onto the direct sum's two-site space. Complementing and
 transporting the resulting three-site relation around the periodic chain
 gives pairwise commutation around the periodic chain.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.rfp_implies_nncph_basisDirectSum}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.rfp_implies_nncph_basisDirectSum}.}
 
 Combining commutation with ground-space spanning gives the all-chain
 ground-space condition.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.}
 This implication assumes only BNT canonical form and transfer idempotence of
 the whole multiplicity-one direct sum; it uses no comparison, crossing,
 repeated-copy, raw-weight, or externally supplied commutation hypothesis.
@@ -257,8 +257,8 @@ relation:
 
 The cyclic three-site restriction transports this commutator to every adjacent
 pair on every chain with $N>2$.\footnote{Formal declarations:
-\leanid{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
-and \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.}
+\leanid{MPSTensor.parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+and \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_parentRingInteraction_terms_commute}.}
 The resulting nearest-neighbor commutation is verified.\footnote{Formal theorem:
 \leanid{MPSTensor.AppendixBStructuralData.isNNCPH}.}
 
@@ -309,13 +309,13 @@ commute with their tensors. Consequently, the periodic nearest-neighbor chain
 space splits as the direct sum of the single-block chain spaces. The
 single-block injective periodic-chain theorem proves ground-space spanning for
 the direct sum.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.}
 The independent residual-family bond-projector argument proves
 commutation,\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.rfp_implies_nncph_basisDirectSum}.} and
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.rfp_implies_nncph_basisDirectSum}.} and
 their conjunction establishes the full ground-space condition.\footnote{Formal
 theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.}
 This settles the multiplicity-one, distinct-sector forward case, excluding
 repeated copies and arbitrary raw weights.
 
@@ -332,7 +332,7 @@ Theorem~\cpsvref{thm:main-MPS} of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 The reverse implication is also proved for the multiplicity-one, unit-weight
 direct sum of all distinct BNT basis sectors.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}.}
 The proof matches every BNT basis tensor with a distinct normalized loop tensor
 from the finite-degeneracy classification in Ref.~\cite{Cirac2016MPDO_arXiv}.
 The disjoint loop sectors have vanishing mixed transfer maps, and this local
@@ -414,7 +414,7 @@ likewise addresses only $N>2$.
 
 The project adopts the local convention that an $L$-site interaction vanishes
 when $L>N$. Thus $H_2^{(1)}=0$,\footnote{Formal theorem:
-\leanid{MPSTensor.parentHamiltonian_two_one_eq_zero}.} and the length-one ground
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_two_one}.} and the length-one ground
 space is full:\footnote{Formal theorem:
 \leanid{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_two_one_eq_top}.}
 \begin{align}
@@ -676,9 +676,9 @@ distinct BNT basis sectors. In the direct-sum theorem, the comparison with the
 locally orthogonal product-of-pairs loop states is familywise and requires no
 external axiom. The pairwise equivalences are formalized directly for the basis
 direct sum.\footnote{Formal equivalences:
-\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces}
 and
-\leanid{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.
 Tracked by \ghissue{2633}.}
 
 The proved reverse implication therefore covers the corrected basis-direct-sum

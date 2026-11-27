@@ -47,7 +47,7 @@ comparison of the general proof give `eq:far`.
   continuity steps (lines 330–364, 501–561) are reused.
 -/
 
-open ManyBody (IsFrustrationFreeGapped exists_overlapColoring kronecker_one_mulVec_apply
+open ManyBody (IsFrustrationFreeGapped exists_overlapColoring
   mem_ambientDilation_iff overlapDegreeBound sweepContraction sweepContraction_lt_one
   sweepContraction_pos)
 

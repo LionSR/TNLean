@@ -40,7 +40,7 @@ ground state $\Psi_0$.
 \begin{lemma}[The splitting is exact]
     \label{thm:hastings_three_way_splitting_sum}
     \lean{
-        ManyBody.ChainInteraction.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart,
+        ManyBody.ChainInteraction.hamiltonian_eq_cutLeftSupports_add_cutBufferSupports_add_cutRightSupports,
         ManyBody.ChainInteraction.centeredObservable_parts_sum,
         ManyBody.ChainInteraction.centeredObservable_parts_sum_of_eigen,
         ManyBody.ChainInteraction.isGapped_centeredObservable_parts_sum,
@@ -73,9 +73,9 @@ ground state $\Psi_0$.
     \label{thm:hastings_three_way_splitting_supports}
     \lean{
         ManyBody.Interaction.partialHamiltonian_mem_supportedOperators,
-        ManyBody.ChainInteraction.isSupportedOn_leftPart,
-        ManyBody.ChainInteraction.isSupportedOn_rightPart,
-        ManyBody.ChainInteraction.isSupportedOn_bufferPart,
+        ManyBody.ChainInteraction.isSupportedOn_partialHamiltonian_cutLeftSupports,
+        ManyBody.ChainInteraction.isSupportedOn_partialHamiltonian_cutRightSupports,
+        ManyBody.ChainInteraction.isSupportedOn_partialHamiltonian_cutBufferSupports,
         ManyBody.subset_window_of_mem_cutBufferSupports,
         ManyBody.centeredObservable_mem
     }
@@ -98,9 +98,9 @@ ground state $\Psi_0$.
         ManyBody.Interaction.norm_partialHamiltonian_le,
         ManyBody.ChainSupport.card_filter_mem_le,
         ManyBody.card_cutBufferSupports_le,
-        ManyBody.ChainInteraction.norm_bufferPart_le,
+        ManyBody.ChainInteraction.norm_partialHamiltonian_cutBufferSupports_le,
         ManyBody.norm_centeredObservable_le,
-        ManyBody.ChainInteraction.norm_centeredObservable_bufferPart_le
+        ManyBody.ChainInteraction.norm_centeredObservable_partialHamiltonian_cutBufferSupports_le
     }
     \leanok
     \uses{def:hastings_three_way_splitting,thm:hastings_three_way_splitting_supports}

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
 import QICLean.Analysis.Order.LowEnergyPerturbation
-import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
+import QICLean.Spectral.Eigenvalue.MatrixSpectralDecomp
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.GCongr

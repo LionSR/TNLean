@@ -369,7 +369,7 @@ open scoped Classical in
 /-- **The per-edge gauge at a translated horizontal interior edge.**
 
 Two normal PEPS `A` and `B` with the square-lattice rectangular-injectivity
-hypotheses, union closure, matched bond dimensions, the same state, positive bonds,
+hypotheses, matched bond dimensions, the same state, positive bonds,
 and a translated horizontal blocking frame with two rows and columns of margin admit,
 on the distinguished horizontal edge `e` of that frame, the per-edge gauge.  The two
 interior data of `A` and `B` share the red, blue, and complementary blocks (the blocks
@@ -386,11 +386,7 @@ theorem exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge
     (A B : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
@@ -408,6 +404,8 @@ theorem exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
               ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
                 Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   classical
   subst he
   have hew : xStart + 3 ≤ width := by omega
@@ -461,11 +459,7 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge
     (A B : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
@@ -503,8 +497,7 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge
     exact ManyBody.Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hew heh
   have hGauge := exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge
     (width := height) (height := width) (A.transport φ) (B.transport φ)
-    (hA.transportCoordinateSwap A) (hUA.transportCoordinateSwap A)
-    (hB.transportCoordinateSwap B) (hUB.transportCoordinateSwap B)
+    (hA.transportCoordinateSwap A) (hB.transportCoordinateSwap B)
     hy0 hx0 hyh hxw hbond' (hAB.transport φ) hd hposA' hposB' e' he'
   have hAedge : (A.transport φ).bondDim e' = A.bondDim e := by
     simp only [e', φ, Tensor.transport_bondDim,

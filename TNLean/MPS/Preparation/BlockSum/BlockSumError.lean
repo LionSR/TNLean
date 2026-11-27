@@ -593,8 +593,8 @@ approximating state of eq. (S7) satisfies `ε ≤ C y e^{C y}`.
 
 The `q`-site states of distinct blocks need not be orthogonal, and no condition `q = o(N)` is
 needed. The source's rate `e^{-γ q/ξ_diag}` fails for overlapping blocks
-(`isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock`); here `ξ` also bounds the
-correlation lengths `ξ_{jj'}` of the mixed transfer maps. -/
+(`isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlappingBlock`); here `ξ` also
+bounds the correlation lengths `ξ_{jj'}` of the mixed transfer maps. -/
 theorem exists_approximationError_le_overlappingBlockSum [NeZero b]
     (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))

@@ -140,12 +140,12 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 \begin{lemma}[Commutators of the parts with the Hamiltonian]
     \label{thm:hastings_part_commutators}
     \lean{
-        ManyBody.ChainInteraction.norm_commutator_leftPart_le,
-        ManyBody.ChainInteraction.norm_commutator_rightPart_le,
-        ManyBody.ChainInteraction.commutator_bufferPart_eq,
-        ManyBody.ChainInteraction.norm_commutator_bufferPart_le,
-        ManyBody.ChainInteraction.isSupportedOn_commutator_leftPart,
-        ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart
+        ManyBody.ChainInteraction.norm_commutator_partialHamiltonian_cutLeftSupports_le,
+        ManyBody.ChainInteraction.norm_commutator_partialHamiltonian_cutRightSupports_le,
+        ManyBody.ChainInteraction.commutator_partialHamiltonian_cutBufferSupports_eq,
+        ManyBody.ChainInteraction.norm_commutator_partialHamiltonian_cutBufferSupports_le,
+        ManyBody.ChainInteraction.isSupportedOn_commutator_partialHamiltonian_cutLeftSupports,
+        ManyBody.ChainInteraction.isSupportedOn_commutator_partialHamiltonian_cutRightSupports
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
@@ -169,12 +169,12 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
-    \lean{TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
-        TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
-        TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
-        TNLean.MPS.AreaLaw.isHermitian_leftPart_localized,
-        TNLean.MPS.AreaLaw.isHermitian_rightPart_localized,
-        TNLean.MPS.AreaLaw.isHermitian_bufferPart_localized,
+    \lean{TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_partialHamiltonian_cutLeftSupports_sub_localized_le,
+        TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_partialHamiltonian_cutRightSupports_sub_localized_le,
+        TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_partialHamiltonian_cutBufferSupports_sub_localized_le,
+        TNLean.MPS.AreaLaw.isHermitian_partialHamiltonian_cutLeftSupports_localized,
+        TNLean.MPS.AreaLaw.isHermitian_partialHamiltonian_cutRightSupports_localized,
+        TNLean.MPS.AreaLaw.isHermitian_partialHamiltonian_cutBufferSupports_localized,
         TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
     \leanok
     \uses{thm:hastings_part_commutators,thm:chain_lieb_robinson,thm:hastings_three_way_splitting_sum}
@@ -248,8 +248,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
     \label{thm:hastings_cutoff_pair}
     \lean{TNLean.MPS.AreaLaw.exists_cutoffPair,
         ManyBody.ChainInteraction.localizedPart,
-        TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_leftPart,
-        TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_rightPart,
+        TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_partialHamiltonian_cutLeftSupports,
+        TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_partialHamiltonian_cutRightSupports,
         ManyBody.ChainInteraction.norm_localizedPart_apply_le,
         TNLean.MPS.AreaLaw.partLocalizationError,
         TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,

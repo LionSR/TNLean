@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
 import Mathlib.Topology.Maps.Proper.Basic
 import QICLean.Channel.Irreducible.CollatzWielandt
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Gauge.TPGauge
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalInvariantCompression
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
