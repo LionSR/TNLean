@@ -233,7 +233,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1422--1438, 1666--1676,
 and 1719--1732. -/
 theorem exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
     (K : (s : Fin g) → MPOTensor d (dim s))
-    (hSpan : MPSTensor.WordTupleSpanTop (fun s ↦ (K s).toMPSTensor) 1) :
+    (hSpan : MPSTensor.WordTupleSpanTop K 1) :
     ∃ C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ,
       MPSTensor.IsMPOBlockLeftInverse K C ∧
         ∀ (R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ)

@@ -401,7 +401,7 @@ theorem three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- A BNT canonical form has a simultaneous representative word span at some
 positive length at most \(3D^5\), where \(D\) is the total bond dimension.

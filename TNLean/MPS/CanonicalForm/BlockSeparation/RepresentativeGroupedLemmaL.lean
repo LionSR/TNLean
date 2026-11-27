@@ -40,7 +40,7 @@ their full product matrix algebra.
 This is the representative-level separation condition in the proof of Lemma L
 of arXiv:1606.00608, Appendix C.3, lines 1848--1857.  It is imposed only on
 the basis tensors `P.basis j`, not on their repeated copies. -/
-def RepresentativeWordTupleSpanAt (P : SectorDecomposition d) (L : ℕ) : Prop :=
+def RepresentativeWordTupleSpanAt (P : SectorDecomposition (Fin d)) (L : ℕ) : Prop :=
   WordTupleSpanTop P.basis L
 
 /-- Representative word tuples span the full product algebra at every
@@ -51,7 +51,7 @@ property from block injectivity of a minimal basis of normal tensors.  That
 implication is not yet available from the abstract `SectorDecomposition`
 structure and is therefore stated explicitly.  See
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
-def EventuallyRepresentativeWordTupleSpan (P : SectorDecomposition d) : Prop :=
+def EventuallyRepresentativeWordTupleSpan (P : SectorDecomposition (Fin d)) : Prop :=
   ∃ L₀ : ℕ, ∀ L ≥ L₀, P.RepresentativeWordTupleSpanAt L
 
 /-- At one separating length, a nonzero grouped coefficient lets Lemma L
@@ -63,7 +63,7 @@ copies are grouped before the word-tuple separation is applied.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1848--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
-    (P : SectorDecomposition d) {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (P : SectorDecomposition (Fin d)) {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z)
     {L : ℕ} (hSpan : P.RepresentativeWordTupleSpanAt L)
     (j₀ : Fin P.basisCount) (hcoeff : P.coeff (L + 1) j₀ ≠ 0) :
@@ -176,7 +176,7 @@ open.  See `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree
-    (P : SectorDecomposition d) {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (P : SectorDecomposition (Fin d)) {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
@@ -212,7 +212,7 @@ needed.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (P : SectorDecomposition d)
+    {D : ℕ} (A : MPSTensor d D) (P : SectorDecomposition (Fin d))
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAP : SameMPV₂Pos A P.toTensor)
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
