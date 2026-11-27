@@ -49,6 +49,47 @@ section
 
 open scoped BigOperators Matrix
 
+/-- A fixed-length open-boundary MPS chain whose virtual dimensions may vary
+from bond to bond. The first and last bond spaces are one-dimensional, and all
+bond dimensions are bounded by \(D\). Intermediate bond dimensions may be zero.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, lines 419--429. -/
+structure OBCChainTensor (d D N : ℕ) where
+  /-- The dimension of each virtual bond space. -/
+  bondDim : Fin (N + 1) → ℕ
+  bondDim_le : ∀ k, bondDim k ≤ D
+  left_dim : bondDim 0 = 1
+  right_dim : bondDim (Fin.last N) = 1
+  /-- The rectangular matrix associated with a site and physical index. -/
+  tensor : ∀ k : Fin N, Fin d →
+    Matrix (Fin (bondDim k.castSucc)) (Fin (bondDim k.succ)) ℂ
+
+namespace Matrix
+
+variable {R : Type*} [Zero R] {a b : ℕ}
+
+/-- **Zero padding** of a rectangular `a × b` matrix to a `D × D` matrix: the entry `(α, β)` is
+`M α β` when `α < a` and `β < b`, and `0` otherwise. -/
+def zeroPad (D : ℕ) (M : Matrix (Fin a) (Fin b) R) : Matrix (Fin D) (Fin D) R :=
+  fun α β => if hα : α.val < a then if hβ : β.val < b then M ⟨α.val, hα⟩ ⟨β.val, hβ⟩ else 0
+    else 0
+
+/-- Inside the upper-left `a × b` corner the padded matrix has the entries of `M`. -/
+theorem zeroPad_apply_of_lt {D : ℕ} (M : Matrix (Fin a) (Fin b) R) {α β : Fin D}
+    (hα : α.val < a) (hβ : β.val < b) : zeroPad D M α β = M ⟨α.val, hα⟩ ⟨β.val, hβ⟩ := by
+  simp [zeroPad, hα, hβ]
+
+/-- Outside the upper-left `a × b` corner the padded matrix vanishes. -/
+theorem zeroPad_apply_eq_zero {D : ℕ} (M : Matrix (Fin a) (Fin b) R) {α β : Fin D}
+    (h : ¬(α.val < a ∧ β.val < b)) : zeroPad D M α β = 0 := by
+  unfold zeroPad
+  split_ifs with hα hβ
+  · exact absurd ⟨hα, hβ⟩ h
+  · rfl
+  · rfl
+
+end Matrix
+
 namespace OBCChainTensor
 
 variable {d D N : ℕ}
@@ -368,6 +409,51 @@ theorem coeff_zeroPad_eq_zero_of_bondDim_eq_zero
   rw [coeff_zeroPad, coeff_eq_zero_of_bondDim_eq_zero A σ k hk]
 
 end OBCChainTensor
+
+end
+
+section
+
+namespace Matrix
+
+variable {R : Type*} [Semiring R] {a b c D : ℕ}
+
+/-- Zero padding preserves a rectangular matrix product when the intermediate
+dimension is at most the padding dimension. The outer dimensions need not
+be bounded. Source: the minimal representation step in Section 5 of
+`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
+theorem zeroPad_mul (X : Matrix (Fin a) (Fin b) R)
+    (Y : Matrix (Fin b) (Fin c) R) (hb : b ≤ D) :
+    zeroPad D (X * Y) = zeroPad D X * zeroPad D Y := by
+  ext i j
+  by_cases hi : i.val < a
+  · by_cases hj : j.val < c
+    · rw [zeroPad_apply_of_lt _ hi hj, Matrix.mul_apply, Matrix.mul_apply]
+      rw [Fin.sum_castLE_extend_zero _ hb]
+      apply Finset.sum_congr rfl
+      intro k _
+      by_cases hk : k.val < b
+      · simp [zeroPad, hi, hj, hk]
+      · simp [zeroPad, hi, hk]
+    · simp [zeroPad, Matrix.mul_apply, hj]
+  · simp [zeroPad, Matrix.mul_apply, hi]
+
+/-- Applying a zero-padded rectangular matrix to a zero-padded vector gives
+the zero padding of their product. Source: the minimal representation step
+in Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
+theorem zeroPad_mulVec (X : Matrix (Fin a) (Fin b) R) (v : Fin b → R) (hb : b ≤ D) :
+    zeroPad D X *ᵥ (fun j : Fin D ↦ if h : j.val < b then v ⟨j.val, h⟩ else 0) =
+      fun i : Fin D ↦ if h : i.val < a then (X *ᵥ v) ⟨i.val, h⟩ else 0 := by
+  ext i
+  by_cases hi : i.val < a
+  · simp only [zeroPad, hi, dite_true, mulVec, dotProduct]
+    rw [Fin.sum_castLE_extend_zero _ hb]
+    apply Finset.sum_congr rfl
+    intro j _
+    by_cases hj : j.val < b <;> simp [hj]
+  · simp [zeroPad, mulVec, dotProduct, hi]
+
+end Matrix
 
 end
 
