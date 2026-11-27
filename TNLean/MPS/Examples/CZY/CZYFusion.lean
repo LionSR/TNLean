@@ -56,18 +56,18 @@ def czyY10 : Matrix (Fin 2) (Fin 6) ℂ := complexOfInt czyY10Int
 theorem czyY11_eq_submatrix : czyY11 = czyX11.submatrix Fin.castSucc id := by rfl
 
 private theorem czyY11Int_fusion (i k : Fin 2) :
-    czyY11Int * mulIntTensor czyIntTensor czyIntTensor i k =
-    czyReducedIntTensor i k * czyY11Int := by
+    czyY11Int * mulIntTensor czyIntTensor czyIntTensor (i, k) =
+    czyReducedIntTensor (i, k) * czyY11Int := by
   revert_decide_kernel i k
 
 private theorem czyY01Int_fusion (i k : Fin 2) :
-    czyY01Int * mulIntTensor czyReducedIntTensor czyIntTensor i k =
-    czyIntTensor i k * czyY01Int := by
+    czyY01Int * mulIntTensor czyReducedIntTensor czyIntTensor (i, k) =
+    czyIntTensor (i, k) * czyY01Int := by
   revert_decide_kernel i k
 
 private theorem czyY10Int_fusion (i k : Fin 2) :
-    czyY10Int * mulIntTensor czyIntTensor czyReducedIntTensor i k =
-    czyIntTensor i k * czyY10Int := by
+    czyY10Int * mulIntTensor czyIntTensor czyReducedIntTensor (i, k) =
+    czyIntTensor (i, k) * czyY10Int := by
   revert_decide_kernel i k
 
 /-- The two printed fusions at `(1,1,1)` differ by a minus sign
@@ -105,9 +105,9 @@ theorem czyY01_fusion (i k : Fin 2) : czyY01 *
     MPOTensor.mulTensor czyReducedTensor czyTensor (i, k) =
     czyTensor (i, k) * czyY01 := by
   rw [show MPOTensor.mulTensor czyReducedTensor czyTensor (i, k) =
-      complexOfInt (mulIntTensor czyReducedIntTensor czyIntTensor i k) from
-    mulTensor_complexOfRing _ czyReducedIntTensor czyIntTensor i k]
-  simpa only [czyY01, czyTensor, complexOfInt_mul, Function.uncurry_apply_pair]
+      complexOfInt (mulIntTensor czyReducedIntTensor czyIntTensor (i, k)) from
+    mulTensor_complexOfRing _ czyReducedIntTensor czyIntTensor (i, k)]
+  simpa only [czyY01, czyTensor, complexOfInt_mul]
     using congrArg complexOfInt (czyY01Int_fusion i k)
 
 /-- The printed one-sided fusion identity
@@ -116,9 +116,9 @@ theorem czyY10_fusion (i k : Fin 2) : czyY10 *
     MPOTensor.mulTensor czyTensor czyReducedTensor (i, k) =
     czyTensor (i, k) * czyY10 := by
   rw [show MPOTensor.mulTensor czyTensor czyReducedTensor (i, k) =
-      complexOfInt (mulIntTensor czyIntTensor czyReducedIntTensor i k) from
-    mulTensor_complexOfRing _ czyIntTensor czyReducedIntTensor i k]
-  simpa only [czyY10, czyTensor, complexOfInt_mul, Function.uncurry_apply_pair]
+      complexOfInt (mulIntTensor czyIntTensor czyReducedIntTensor (i, k)) from
+    mulTensor_complexOfRing _ czyIntTensor czyReducedIntTensor (i, k)]
+  simpa only [czyY10, czyTensor, complexOfInt_mul]
     using congrArg complexOfInt (czyY10Int_fusion i k)
 
 /-- The printed one-sided fusion identity
@@ -126,10 +126,10 @@ theorem czyY10_fusion (i k : Fin 2) : czyY10 *
 theorem czyY11_fusion (i k : Fin 2) : czyY11 * MPOTensor.mulTensor czyTensor czyTensor (i, k) =
     czyReducedTensor (i, k) * czyY11 := by
   rw [show MPOTensor.mulTensor czyTensor czyTensor (i, k) =
-      complexOfInt (mulIntTensor czyIntTensor czyIntTensor i k) from
-    mulTensor_complexOfRing _ czyIntTensor czyIntTensor i k]
+      complexOfInt (mulIntTensor czyIntTensor czyIntTensor (i, k)) from
+    mulTensor_complexOfRing _ czyIntTensor czyIntTensor (i, k)]
   simp only [czyY11, czyReducedTensor, Matrix.smul_mul, Matrix.mul_smul,
-    ← complexOfInt_mul, Function.uncurry_apply_pair]
+    ← complexOfInt_mul]
   exact congrArg (fun M => Complex.invSqrtTwo • complexOfInt M) (czyY11Int_fusion i k)
 
 end CZYCompression

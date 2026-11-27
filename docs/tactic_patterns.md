@@ -3362,8 +3362,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ### stacked-letter lookup-table identification by kernel decision — promoted
 - **Pattern:** identify the pair-alphabet stacked-letter function of two
-  integer tensors, `stackedInt A B`, with an explicit sixteen-entry lookup
-  table `C`, for a private `Fin 16`-indexed theorem `stackedInt A B b = C b`,
+  integer tensors, `mulIntTensor A B`, with an explicit sixteen-entry lookup
+  table `C`, for a private theorem `mulIntTensor A B b = C b` indexed by the
+  pair alphabet `Fin 4 × Fin 4`,
   by reverting the index and deciding the resulting closed proposition by
   kernel reduction:
 

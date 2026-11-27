@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
 import TNLean.MPS.Operator.Product.ActionTensor
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The word-trace converse of multi-block asymmetric compression
@@ -149,23 +150,18 @@ namespace MPOTensor
 variable {d : ℕ} {ι : Type*} [DecidableEq ι]
 
 /-- **A compression of a stacked product is a fusion rule of periodic operators.** If the
-stacked product of `M` and `N` compresses onto the doubled-index views of the operator tensors
-`C s`, then at every positive length the product of the periodic operators of `M` and `N` is the
-sum of the periodic operators of the `C s` (P5 note, Theorem 7.12, converse direction). -/
+stacked product of `M` and `N` compresses onto the operator tensors `C s` over the pair
+alphabet, then at every positive length the product of the periodic operators of `M` and `N` is
+the sum of the periodic operators of the `C s` (P5 note, Theorem 7.12, converse direction). -/
 theorem mpo_mul_eq_sum_of_multiBlockCompression {Dα Dβ : ℕ} {Dγ : ι → ℕ}
     {M : MPOTensor d Dα} {N : MPOTensor d Dβ} {S : Finset ι} {C : ∀ s, MPOTensor d (Dγ s)}
-    (P : MPSTensor.MultiBlockCompression (mulTensor M N).toMPSTensor S
-      fun s => (C s).toMPSTensor) (L : ℕ) (hL : 0 < L) :
+    (P : MPSTensor.MultiBlockCompression (mulTensor M N) S C) (L : ℕ) (hL : 0 < L) :
     mpo M L * mpo N L = ∑ s ∈ S, mpo (C s) L := by
   rw [← mpo_mulTensor]
   ext σ τ
-  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
-    simp only [ne_eq, List.ofFn_eq_nil_iff]
-    omega
-  have h := P.trace_evalWord_eq_sum _ hw
-  simp only [evalWord_toMPSTensor_pairConfig] at h
-  rw [Matrix.sum_apply]
-  simpa only [mpo_apply, mpoMatrixEntry] using h
+  rw [Matrix.sum_apply, mpo_apply_eq_trace_kraus_evalWord]
+  simp only [mpo_apply_eq_trace_kraus_evalWord]
+  exact P.trace_evalWord_eq_sum _ (ofFn_pair_ne_nil hL σ τ)
 
 /-- **A compression of an action tensor is an action rule of periodic operators.** If the
 action tensor of `T` on `A` compresses onto the state tensors `C s`, then at every positive

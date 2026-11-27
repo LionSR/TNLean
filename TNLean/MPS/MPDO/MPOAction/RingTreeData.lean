@@ -42,7 +42,7 @@ open scoped Matrix BigOperators Kronecker
 namespace MPSTensor
 
 variable {R : Type*} [CommRing R] (f : R →+* ℂ)
-  {ι : Type*} [Fintype ι] {d D : ℕ} {δ : ι → ℕ}
+  {ι : Type*} [Fintype ι] {α : Type*} {D : ℕ} {δ : ι → ℕ}
 
 /-- **Exact biorthogonal decompositions from identities over an exact ring.**
 If the retraction, orthogonality and letter-reconstruction identities hold
@@ -50,8 +50,8 @@ over `R`, they hold for the complex images. Source: GLM23,
 arXiv:2203.12563v3, `eq:orthoW`, `eq:orthoV`, `fusiontensors` and
 `fusiontensors2`, lines 361--391 and 459--490. -/
 theorem isBiorthogonalDecomposition_complexOfRing
-    (B : Fin d → Matrix (Fin D) (Fin D) R)
-    (A : ∀ c : ι, Fin d → Matrix (Fin (δ c)) (Fin (δ c)) R)
+    (B : α → Matrix (Fin D) (Fin D) R)
+    (A : ∀ c : ι, α → Matrix (Fin (δ c)) (Fin (δ c)) R)
     (V : ∀ c : ι, Matrix (Fin (δ c)) (Fin D) R)
     (W : ∀ c : ι, Matrix (Fin D) (Fin (δ c)) R)
     (hretract : ∀ c, V c * W c = 1)

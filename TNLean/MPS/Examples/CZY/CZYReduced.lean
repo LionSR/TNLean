@@ -67,28 +67,14 @@ open MPSTensor CZXCompression
 /-! ### The tensor `A_0` -/
 
 /-- The integer tensor `A_0` (arXiv:2509.03600, main.tex lines 223–239). -/
-def czyReducedIntTensor : Fin 2 → Fin 2 → Matrix (Fin 3) (Fin 3) ℤ
-  | 0, 0 => !![0, -1, 1; 0, 1, -1; 0, 0, 0]
-  | 1, 1 => !![0, 1, 1; 0, 1, 1; 0, 0, 0]
-  | _, _ => 0
+def czyReducedIntTensor : Fin 2 × Fin 2 → Matrix (Fin 3) (Fin 3) ℤ
+  | (0, 0) => !![0, -1, 1; 0, 1, -1; 0, 0, 0]
+  | (1, 1) => !![0, 1, 1; 0, 1, 1; 0, 0, 0]
+  | _ => 0
 
 /-- The tensor `A_0` as a matrix product operator tensor (arXiv:2509.03600, main.tex
 lines 223–239). -/
-def czyReducedTensor : MPOTensor 2 3 :=
-    Function.uncurry fun i j => complexOfInt (czyReducedIntTensor i j)
-
-/-- The integer matrices of `A_0` in the pair-alphabet order `(0,0), (0,1), (1,0), (1,1)`. -/
-def czyReducedIntMPS : Fin 4 → Matrix (Fin 3) (Fin 3) ℤ
-  | 0 => !![0, -1, 1; 0, 1, -1; 0, 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 1, 1; 0, 1, 1; 0, 0, 0]
-
-/-- The tensor `A_0` on the doubled index `Fin 4`. -/
-def czyReduced : MPSTensor 4 3 := czyReducedTensor.toMPSTensor
-
-theorem czyReduced_eq (a : Fin 4) : czyReduced a = complexOfInt (czyReducedIntMPS a) := by
-  fin_cases a <;> rfl
+def czyReducedTensor : MPOTensor 2 3 := fun ij => complexOfInt (czyReducedIntTensor ij)
 
 /-! ### The printed change of basis `X_{1,1}` -/
 
@@ -97,24 +83,24 @@ def czyX11Int : Matrix (Fin 4) (Fin 4) ℤ :=
   !![0, 1, 1, 0; 0, -1, 1, 0; -1, 0, 0, 1; -1, 0, 0, -1]
 
 /-- The integer matrices of `A_0 ⊕ 0`, with `A_0` on the first three coordinates. -/
-def czyReducedPadInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, -1, 1, 0; 0, 1, -1, 0; 0, 0, 0, 0; 0, 0, 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 1, 1, 0; 0, 1, 1, 0; 0, 0, 0, 0; 0, 0, 0, 0]
+def czyReducedPadInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, -1, 1, 0; 0, 1, -1, 0; 0, 0, 0, 0; 0, 0, 0, 0]
+  | (0, 1) => 0
+  | (1, 0) => 0
+  | (1, 1) => !![0, 1, 1, 0; 0, 1, 1, 0; 0, 0, 0, 0; 0, 0, 0, 0]
 
 /-- The padded letters are `A_0` on the first three coordinates and zero on the last row and
 column. -/
-theorem czyReducedPadInt_apply (a : Fin 4) (x y : Fin 3) :
+theorem czyReducedPadInt_apply (a : Fin 2 × Fin 2) (x y : Fin 3) :
     czyReducedPadInt a (Fin.castSucc x : Fin 4) (Fin.castSucc y : Fin 4) =
-      czyReducedIntMPS a x y ∧
+      czyReducedIntTensor a x y ∧
     czyReducedPadInt a 3 (Fin.castSucc y : Fin 4) = 0 ∧
     czyReducedPadInt a (Fin.castSucc x : Fin 4) 3 = 0 ∧ czyReducedPadInt a 3 3 = 0 := by
   fin_cases a <;> fin_cases x <;> fin_cases y <;> decide
 
 theorem czyX11Int_mul_transpose : czyX11Int * czyX11Intᵀ = (2 : ℤ) • 1 := by decide
 
-theorem czyX11Int_conj (a : Fin 4) :
+theorem czyX11Int_conj (a : Fin 2 × Fin 2) :
     czyX11Int * czySquareInt a * czyX11Intᵀ = (2 : ℤ) • czyReducedPadInt a := by
   revert a
   decide
@@ -141,7 +127,7 @@ theorem czyX11_mul_transpose : czyX11 * czyX11ᵀ = 1 := by
 
 /-- **The printed reduction of the stacked tensor** (arXiv:2509.03600, main.tex lines 223–239):
 `X_{1,1} Ã_0^a X_{1,1}⁻¹ = A_0^a ⊕ 0` for every letter `a`, with `X_{1,1}⁻¹ = X_{1,1}ᵀ`. -/
-theorem czyX11_conj (a : Fin 4) :
+theorem czyX11_conj (a : Fin 2 × Fin 2) :
     czyX11 * czySquare a * czyX11ᵀ = complexOfInt (czyReducedPadInt a) := by
   rw [czyX11_sandwich, czySquare_eq, ← complexOfInt_mul, ← complexOfInt_mul, czyX11Int_conj,
     complexOfInt_zsmul, smul_smul]
@@ -175,37 +161,37 @@ def czyReducedTau : BlockSpace squareDim oneSlot 2 ≃ Fin 3 where
 def czyReducedGauge : (Fin 3 → ℂ) ≃ₗ[ℂ] (BlockSpace squareDim oneSlot 2 → ℂ) :=
   gaugeOfRingMatrix (Int.castRingHom ℂ) czyReducedTau 1 1 (Matrix.mul_one 1) (Matrix.mul_one 1)
 
-theorem czyReduced_conjMatrix (i : Fin 4) :
-    conjMatrix czyReducedGauge (czyReduced i) =
-      (complexOfInt (czyReducedIntMPS i)).submatrix czyReducedTau czyReducedTau := by
-  rw [czyReducedGauge, conjMatrix_gaugeOfRingMatrix _ _ _ _ (czyReduced_eq i), Matrix.one_mul,
-    Matrix.mul_one]
+theorem czyReduced_conjMatrix (i : Fin 2 × Fin 2) :
+    conjMatrix czyReducedGauge (czyReducedTensor i) =
+      (complexOfInt (czyReducedIntTensor i)).submatrix czyReducedTau czyReducedTau := by
+  rw [czyReducedGauge, conjMatrix_gaugeOfRingMatrix _ _ _ _ (A := czyReducedTensor i)
+    (AR := czyReducedIntTensor i) rfl, Matrix.one_mul, Matrix.mul_one]
 
-private theorem czyReduced_triangular_int (i : Fin 4)
+private theorem czyReduced_triangular_int (i : Fin 2 × Fin 2)
     (x y : BlockSpace squareDim oneSlot 2) (h : czyReducedOrd y.1 < czyReducedOrd x.1) :
-    czyReducedIntMPS i (czyReducedTau x) (czyReducedTau y) = 0 := by
+    czyReducedIntTensor i (czyReducedTau x) (czyReducedTau y) = 0 := by
   revert i x y
   decide
 
-private theorem czyReduced_matched_int (i : Fin 4) (p q : Fin 1) :
-    czyReducedIntMPS i (czyReducedTau ⟨Sum.inl oneSlotMem, p⟩)
-        (czyReducedTau ⟨Sum.inl oneSlotMem, q⟩) = identityIntMPS i p q := by
+private theorem czyReduced_matched_int (i : Fin 2 × Fin 2) (p q : Fin 1) :
+    czyReducedIntTensor i (czyReducedTau ⟨Sum.inl oneSlotMem, p⟩)
+        (czyReducedTau ⟨Sum.inl oneSlotMem, q⟩) = identityIntTensor i p q := by
   obtain rfl : p = 0 := Subsingleton.elim p 0
   obtain rfl : q = 0 := Subsingleton.elim q 0
   revert i
   decide
 
-private theorem czyReduced_unmatched_int (i : Fin 4) (t : Fin 2) (p q : Fin 1) :
-    czyReducedIntMPS i (czyReducedTau ⟨Sum.inr t, p⟩) (czyReducedTau ⟨Sum.inr t, q⟩) = 0 := by
+private theorem czyReduced_unmatched_int (i : Fin 2 × Fin 2) (t : Fin 2) (p q : Fin 1) :
+    czyReducedIntTensor i (czyReducedTau ⟨Sum.inr t, p⟩) (czyReducedTau ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide
 
 /-- **`A_0` as a multi-block compression onto `δ`** with one matched slot and two zero slots
 (arXiv:2509.03600, main.tex lines 223–240, read through the multi-block asymmetric compression
 theorem). -/
-def czyReduced_compression : MultiBlockCompression czyReduced oneSlot czySquareTarget :=
+def czyReduced_compression : MultiBlockCompression czyReducedTensor oneSlot czySquareTarget :=
   MultiBlockCompression.ofRing (Int.castRingHom ℂ) czyReducedOrd czyReducedTau czyReducedGauge
-    czyReducedIntMPS czyReduced_conjMatrix (fun _ => identityIntMPS) czySquareTarget_eq
+    czyReducedIntTensor czyReduced_conjMatrix (fun _ => identityIntTensor) czySquareTarget_eq
     czyReduced_triangular_int
     (fun i s p q => by
       obtain rfl := eq_oneSlotMem s
@@ -214,7 +200,7 @@ def czyReduced_compression : MultiBlockCompression czyReduced oneSlot czySquareT
 
 /-- **Nilpotency of the remainder of `A_0`**: every word of length at least `1 + 2 = 3` in the
 remainder vanishes. -/
-theorem czyReduced_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 3 ≤ w.length) :
+theorem czyReduced_evalWord_remainder_eq_zero (w : List (Fin 2 × Fin 2)) (hw : 3 ≤ w.length) :
     Kraus.evalWord czyReduced_compression.remainder w = 0 :=
   czyReduced_compression.evalWord_remainder_eq_zero w (by change (1 : ℕ) + 2 ≤ w.length; omega)
 
@@ -223,28 +209,26 @@ line 240). -/
 theorem mpo_czyReducedTensor (N : ℕ) (hN : 0 < N) : MPOTensor.mpo czyReducedTensor N = 1 := by
   rw [MPOTensor.mpo_eq_of_forall_trace_evalWord (N := identityTensor) (fun w hw => ?_) hN,
     identityTensor_eq_idTensor, MPOTensor.mpo_idTensor]
-  have h := czyReduced_compression.trace_evalWord_eq_sum (w.map finProdFinEquiv)
-    (by simpa using hw)
-  rw [Finset.sum_singleton, czyReduced, czySquareTarget, identityMPS,
-    MPOTensor.evalWord_toMPSTensor, MPOTensor.evalWord_toMPSTensor, List.map_map,
-    Equiv.symm_comp_self, List.map_id] at h
-  exact h
+  rw [czyReduced_compression.trace_evalWord_eq_sum w hw, Finset.sum_singleton]
+  rfl
 
 /-! ### Nonsplitting of `A_0` -/
 
 /-- **No nonzero right sitewise intertwiner** `A_0^i X = X δ^i`. -/
 theorem czyReduced_right_intertwiner_eq_zero (X : Matrix (Fin 3) (Fin 1) ℂ)
-    (h : ∀ i, czyReduced i * X = X * czySquareTarget () i) : X = 0 :=
-  right_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czyReducedIntMPS
-    czyReduced_eq identityIntMPS (czySquareTarget_eq ()) ![(0, 0, 0), (0, 1, 0), (3, 0, 0)]
+    (h : ∀ i, czyReducedTensor i * X = X * czySquareTarget () i) : X = 0 :=
+  right_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czyReducedIntTensor
+    (fun _ => rfl) identityIntTensor (czySquareTarget_eq ())
+    ![((0, 0), 0, 0), ((0, 0), 1, 0), ((1, 1), 0, 0)]
     (Matrix.of fun x => ![![-1, -2, -1], ![-1, 0, 1], ![0, -2, 0]] x.1)
     (c := 2) (by norm_num) (by decide) X h
 
 /-- **No nonzero left sitewise intertwiner** `Y A_0^i = δ^i Y`. -/
 theorem czyReduced_left_intertwiner_eq_zero (Y : Matrix (Fin 1) (Fin 3) ℂ)
-    (h : ∀ i, Y * czyReduced i = czySquareTarget () i * Y) : Y = 0 :=
-  left_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czyReducedIntMPS
-    czyReduced_eq identityIntMPS (czySquareTarget_eq ()) ![(0, 0, 0), (0, 2, 0), (3, 2, 0)]
+    (h : ∀ i, Y * czyReducedTensor i = czySquareTarget () i * Y) : Y = 0 :=
+  left_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czyReducedIntTensor
+    (fun _ => rfl) identityIntTensor (czySquareTarget_eq ())
+    ![((0, 0), 0, 0), ((0, 0), 2, 0), ((1, 1), 2, 0)]
     (Matrix.of fun x => ![![-2, 0, 0], ![0, -1, 1], ![-2, -1, -1]] x.1)
     (c := 2) (by norm_num) (by decide) Y h
 
@@ -253,22 +237,33 @@ onto `δ` is nonzero. This excludes only compressions onto `δ`; the claim of ar
 main.tex line 240, that `A_0` "cannot be further decomposed into a direct sum of injective MPOs"
 concerns arbitrary decompositions and is established by `czyReduced_invariant_isCompl`. -/
 theorem czyReduced_remainder_ne_zero
-    (P : MultiBlockCompression czyReduced oneSlot czySquareTarget) : P.remainder ≠ 0 :=
+    (P : MultiBlockCompression czyReducedTensor oneSlot czySquareTarget) : P.remainder ≠ 0 :=
   P.remainder_ne_zero_of_forall_right_intertwiner_eq_zero oneSlotMem Nat.one_pos
     czyReduced_right_intertwiner_eq_zero
 
 /-- **The virtual algebra of `A_0` is not star closed.** -/
 theorem czyReduced_not_starClosed :
-    ¬ ∀ i, (czyReduced i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czyReduced) :=
-  MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    oneSlot czySquareTarget (fun s _ => czySquareTarget_isNormal s)
-    (fun _ _ => Nat.one_pos) czyReduced
-    (fun w hw => czyReduced_compression.trace_evalWord_eq_sum w hw) oneSlotMem
-    czyReduced_right_intertwiner_eq_zero
+    ¬ ∀ i, (czyReducedTensor i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czyReducedTensor) := by
+  -- The splitting criterion is stated on the letters `Fin (2 * 2)` (it runs through the word
+  -- algebra of `Fin d`); it is applied to the doubled-index views.
+  have hrange : Set.range czyReducedTensor.toMPSTensor = Set.range czyReducedTensor :=
+    finProdFinEquiv.symm.surjective.range_comp czyReducedTensor
+  intro hstar
+  refine MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
+    oneSlot (fun s => (czySquareTarget s).toMPSTensor)
+    (fun s _ => (MPOTensor.isNormal_toMPSTensor_iff _).2 (czySquareTarget_isNormal s))
+    (fun _ _ => Nat.one_pos) czyReducedTensor.toMPSTensor
+    (fun w hw => by
+      simp only [MPOTensor.evalWord_toMPSTensor]
+      exact czyReduced_compression.trace_evalWord_eq_sum _ (by simpa using hw)) oneSlotMem
+    (fun X hX => czyReduced_right_intertwiner_eq_zero X fun i => by
+      simpa [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical] using
+        hX (finProdFinEquiv i))
+    (fun i => by rw [hrange]; exact hstar _)
 
 /-- **The letters of `A_0` do not generate the full matrix algebra** (arXiv:2509.03600, main.tex
 line 240): the generated algebra is not star closed, while the full matrix algebra is. -/
-theorem czyReduced_adjoin_ne_top : Algebra.adjoin ℂ (Set.range czyReduced) ≠ ⊤ := by
+theorem czyReduced_adjoin_ne_top : Algebra.adjoin ℂ (Set.range czyReducedTensor) ≠ ⊤ := by
   intro h
   exact czyReduced_not_starClosed fun i => h ▸ Algebra.mem_top
 
@@ -278,13 +273,13 @@ theorem czyReduced_adjoin_ne_top : Algebra.adjoin ℂ (Set.range czyReduced) ≠
 This calculation establishes the indecomposability asserted in arXiv:2509.03600, Section II,
 main.tex line 240. -/
 theorem czyReduced_commutant_form (P : Matrix (Fin 3) (Fin 3) ℂ)
-    (h₀ : P * czyReduced 0 = czyReduced 0 * P)
-    (h₁ : P * czyReduced 3 = czyReduced 3 * P) :
+    (h₀ : P * czyReducedTensor (0, 0) = czyReducedTensor (0, 0) * P)
+    (h₁ : P * czyReducedTensor (1, 1) = czyReducedTensor (1, 1) * P) :
     P = !![P 2 2, 0, P 0 2; 0, P 2 2, 0; 0, 0, P 2 2] := by
-  have h : ∀ i j, (P * czyReduced 0) i j = (czyReduced 0 * P) i j ∧
-      (P * czyReduced 3) i j = (czyReduced 3 * P) i j :=
+  have h : ∀ i j, (P * czyReducedTensor (0, 0)) i j = (czyReducedTensor (0, 0) * P) i j ∧
+      (P * czyReducedTensor (1, 1)) i j = (czyReducedTensor (1, 1) * P) i j :=
     fun i j => ⟨congrArg (fun M => M i j) h₀, congrArg (fun M => M i j) h₁⟩
-  norm_num [Fin.forall_fin_succ, czyReduced_eq, czyReducedIntMPS,
+  norm_num [Fin.forall_fin_succ, czyReducedTensor, czyReducedIntTensor,
     complexOfInt, Matrix.complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ] at h
   ext i j
   fin_cases i <;> fin_cases j <;> simp <;> grind
@@ -292,9 +287,9 @@ theorem czyReduced_commutant_form (P : Matrix (Fin 3) (Fin 3) ℂ)
 /-- The commutant of `A₀` has no nontrivial idempotent (arXiv:2509.03600, Section II,
 main.tex line 240). -/
 theorem czyReduced_commuting_idempotent (P : Matrix (Fin 3) (Fin 3) ℂ)
-    (hP : P * P = P) (h : ∀ i, P * czyReduced i = czyReduced i * P) :
+    (hP : P * P = P) (h : ∀ i, P * czyReducedTensor i = czyReducedTensor i * P) :
     P = 0 ∨ P = 1 := by
-  have hform := czyReduced_commutant_form P (h 0) (h 3)
+  have hform := czyReduced_commutant_form P (h (0, 0)) (h (1, 1))
   have ha := congrArg (fun M => (M 2 2, M 0 2)) hP
   rw [hform] at ha
   norm_num [Matrix.mul_apply, Fin.sum_univ_succ] at ha
@@ -313,12 +308,12 @@ subspaces. Thus no simultaneous bond similarity can split `A₀` into two nonemp
 even if one block is zero (arXiv:2509.03600, Section II, main.tex line 240). Together with
 `czyReduced_adjoin_ne_top`, this excludes every direct sum of injective MPO tensors. -/
 theorem czyReduced_invariant_isCompl (V W : Submodule ℂ (Fin 3 → ℂ)) (hc : IsCompl V W)
-    (hV : ∀ a x, x ∈ V → (czyReduced a).mulVec x ∈ V)
-    (hW : ∀ a x, x ∈ W → (czyReduced a).mulVec x ∈ W) :
+    (hV : ∀ a x, x ∈ V → (czyReducedTensor a).mulVec x ∈ V)
+    (hW : ∀ a x, x ∈ W → (czyReducedTensor a).mulVec x ∈ W) :
     V = ⊥ ∨ W = ⊥ := by
   let p := V.projection W hc
-  have hcomm : ∀ a, p * Matrix.toLinAlgEquiv' (czyReduced a) =
-      Matrix.toLinAlgEquiv' (czyReduced a) * p := by
+  have hcomm : ∀ a, p * Matrix.toLinAlgEquiv' (czyReducedTensor a) =
+      Matrix.toLinAlgEquiv' (czyReducedTensor a) * p := by
     intro a
     refine LinearMap.ext fun x => ?_
     obtain ⟨v, w, rfl, _⟩ := Submodule.existsUnique_add_of_isCompl hc x
@@ -348,8 +343,8 @@ def czyY00Int : Matrix (Fin 3) (Fin 9) ℤ :=
     0, 0, 0, 0, 0, 2, 0, 2, 0]
 
 theorem czyY00Int_fusion (i k : Fin 2) :
-    czyY00Int * mulIntTensor czyReducedIntTensor czyReducedIntTensor i k =
-      czyReducedIntTensor i k * czyY00Int := by
+    czyY00Int * mulIntTensor czyReducedIntTensor czyReducedIntTensor (i, k) =
+      czyReducedIntTensor (i, k) * czyY00Int := by
   revert i k
   decide
 
@@ -359,9 +354,11 @@ theorem czyY00_fusion (i k : Fin 2) :
     complexOfInt czyY00Int * MPOTensor.mulTensor czyReducedTensor czyReducedTensor (i, k) =
       czyReducedTensor (i, k) * complexOfInt czyY00Int := by
   rw [show MPOTensor.mulTensor czyReducedTensor czyReducedTensor (i, k) =
-      complexOfInt (mulIntTensor czyReducedIntTensor czyReducedIntTensor i k) from
-    mulTensor_complexOfRing _ czyReducedIntTensor czyReducedIntTensor i k,
-    czyReducedTensor, Function.uncurry_apply_pair, ← complexOfInt_mul, ← complexOfInt_mul,
-    czyY00Int_fusion]
+      complexOfInt (mulIntTensor czyReducedIntTensor czyReducedIntTensor (i, k)) from
+    mulTensor_complexOfRing _ czyReducedIntTensor czyReducedIntTensor (i, k)]
+  change complexOfInt czyY00Int *
+      complexOfInt (mulIntTensor czyReducedIntTensor czyReducedIntTensor (i, k)) =
+    complexOfInt (czyReducedIntTensor (i, k)) * complexOfInt czyY00Int
+  rw [← complexOfInt_mul, ← complexOfInt_mul, czyY00Int_fusion]
 
 end CZYCompression

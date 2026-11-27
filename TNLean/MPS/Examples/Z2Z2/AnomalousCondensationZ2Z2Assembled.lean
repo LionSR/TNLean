@@ -77,14 +77,14 @@ open MPSTensor MPOTensor
 /-! ### The block-diagonal form of the defect and of its stacked square -/
 
 /-- The integer tensors of the four group elements, indexed by their site labels. -/
-def symIntTensor : (g : Fin 4) → Fin 4 → Fin 4 → Matrix (Fin (bondDim g)) (Fin (bondDim g)) ℤ
+def symIntTensor : (g : Fin 4) → Fin 4 × Fin 4 → Matrix (Fin (bondDim g)) (Fin (bondDim g)) ℤ
   | 0 => eIntTensor
   | 1 => yIntTensor
   | 2 => xIntTensor
   | 3 => xyIntTensor
 
 theorem symTensor_eq (g : Fin 4) (i j : Fin 4) :
-    symTensor g (i, j) = complexOfInt (symIntTensor g i j) := by
+    symTensor g (i, j) = complexOfInt (symIntTensor g (i, j)) := by
   fin_cases g <;> rfl
 
 /-- The first bond coordinate of each summand inside the bond space of `N = M_e ⊕ M_x ⊕ M_y ⊕
@@ -114,11 +114,11 @@ def condensationBond : (Σ g : Fin 4, Fin (bondDim g)) ≃ Fin 6 where
 private theorem condensationInt_eq (i j : Fin 4) :
     (Matrix.fromBlocks
         ((Matrix.fromBlocks
-          ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
-            finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor i j)).submatrix
-          finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (xyIntTensor i j)).submatrix
+          ((Matrix.fromBlocks (eIntTensor (i, j)) 0 0 (xIntTensor (i, j))).submatrix
+            finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor (i, j))).submatrix
+          finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (xyIntTensor (i, j))).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm =
-      (Matrix.blockDiagonal' fun g => symIntTensor g i j).submatrix condensationBond.symm
+      (Matrix.blockDiagonal' fun g => symIntTensor g (i, j)).submatrix condensationBond.symm
         condensationBond.symm := by
   revert i j
   decide +kernel
@@ -130,24 +130,27 @@ theorem condensationTensor_eq_blockDiagonal (i j : Fin 4) :
     condensationTensor (i, j) =
       (Matrix.blockDiagonal' fun g => symTensor g (i, j)).submatrix condensationBond.symm
         condensationBond.symm := by
-  have h1 : directSum eTensor xTensor = Function.uncurry fun i j => complexOfInt
-      ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
+  have h1 : directSum eTensor xTensor = fun ij => complexOfInt
+      ((Matrix.fromBlocks (eIntTensor ij) 0 0 (xIntTensor ij)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) :=
-    funext fun p => directSum_complexOfRing _ eIntTensor xIntTensor p.1 p.2
-  have h2 : directSum (directSum eTensor xTensor) yTensor = Function.uncurry fun i j => complexOfInt
-      ((Matrix.fromBlocks ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
-        finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor i j)).submatrix
+    funext fun p => directSum_complexOfRing _ eIntTensor xIntTensor p
+  have h2 : directSum (directSum eTensor xTensor) yTensor = fun ij => complexOfInt
+      ((Matrix.fromBlocks ((Matrix.fromBlocks (eIntTensor ij) 0 0 (xIntTensor ij)).submatrix
+        finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor ij)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) := by
     rw [h1]
-    exact funext fun p => directSum_complexOfRing _ _ yIntTensor p.1 p.2
+    exact funext fun p => directSum_complexOfRing _ (fun ij => (Matrix.fromBlocks (eIntTensor ij)
+      0 0 (xIntTensor ij)).submatrix finSumFinEquiv.symm finSumFinEquiv.symm) yIntTensor p
   have h : condensationTensor (i, j) = complexOfInt ((Matrix.fromBlocks
       ((Matrix.fromBlocks
-        ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
-          finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor i j)).submatrix
-        finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (xyIntTensor i j)).submatrix
+        ((Matrix.fromBlocks (eIntTensor (i, j)) 0 0 (xIntTensor (i, j))).submatrix
+          finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor (i, j))).submatrix
+        finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (xyIntTensor (i, j))).submatrix
       finSumFinEquiv.symm finSumFinEquiv.symm) := by
     rw [condensationTensor, h2]
-    exact directSum_complexOfRing _ _ xyIntTensor i j
+    exact directSum_complexOfRing _ (fun ij => (Matrix.fromBlocks ((Matrix.fromBlocks
+      (eIntTensor ij) 0 0 (xIntTensor ij)).submatrix finSumFinEquiv.symm finSumFinEquiv.symm) 0 0
+      (yIntTensor ij)).submatrix finSumFinEquiv.symm finSumFinEquiv.symm) xyIntTensor (i, j)
   rw [h, condensationInt_eq, complexOfInt, Matrix.complexOfRing_submatrix,
       Matrix.complexOfRing_blockDiagonal']
   congr 2
@@ -158,12 +161,12 @@ theorem condensationTensor_eq_blockDiagonal (i j : Fin 4) :
 abbrev pairBlockDim (p : Fin 4 × Fin 4) : ℕ := bondDim p.1 * bondDim p.2
 
 /-- The stacked tensor `M_g · M_h` of the pair `(g, h)`, over the pair alphabet. -/
-def pairStack (p : Fin 4 × Fin 4) : MPSTensor 16 (pairBlockDim p) :=
-  (mulTensor (symTensor p.1) (symTensor p.2)).toMPSTensor
+def pairStack (p : Fin 4 × Fin 4) : MPOTensor 4 (pairBlockDim p) :=
+  mulTensor (symTensor p.1) (symTensor p.2)
 
 /-- **The stacked defect tensor is block diagonal over the sixteen pairs** (data file,
 Section 4), the block of `(g, h)` being the stacked tensor `M_g · M_h`. -/
-theorem condensationSquare_eq_blockDiagonal (a : Fin 16) :
+theorem condensationSquare_eq_blockDiagonal (a : Fin 4 × Fin 4) :
     condensationSquare a =
       (Matrix.blockDiagonal' fun p => pairStack p a).submatrix
         (mulBond condensationBond condensationBond).symm
@@ -174,47 +177,47 @@ theorem condensationSquare_eq_blockDiagonal (a : Fin 16) :
 /-! ### Remainders of the four non-split pairs -/
 
 /-- The integer remainder letters of the pair `(x, x)`: `R^a = B^a - V C^a W`. -/
-def xXRemainderInt (a : Fin 16) : Matrix (Fin 4) (Fin 4) ℤ :=
-  xXInt a - !![1; -1; -1; 1] * eIntMPS a *
+def xXRemainderInt (a : Fin 4 × Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
+  xXInt a - !![1; -1; -1; 1] * eIntTensor a *
     (!![0, 0, 0, 1] : Matrix (Fin 1) (Fin 4) ℤ)
 
 /-- The integer remainder letters of the pair `(x, xy)`. -/
-def xXyRemainderInt (a : Fin 16) : Matrix (Fin 4) (Fin 4) ℤ :=
+def xXyRemainderInt (a : Fin 4 × Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
   xXyInt a - !![-1; -1; 1; 1] * negYIntMPS a *
     (!![0, 0, 1, 0] : Matrix (Fin 1) (Fin 4) ℤ)
 
 /-- The integer remainder letters of the pair `(xy, x)`. -/
-def xyXRemainderInt (a : Fin 16) : Matrix (Fin 4) (Fin 4) ℤ :=
-  xyXInt a - !![-1; -1; -1; -1] * yIntMPS a *
+def xyXRemainderInt (a : Fin 4 × Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
+  xyXInt a - !![-1; -1; -1; -1] * yIntTensor a *
     (!![-1, 0, 0, 0] : Matrix (Fin 1) (Fin 4) ℤ)
 
 /-- The integer remainder letters of the pair `(xy, xy)`. -/
-def xyXyRemainderInt (a : Fin 16) : Matrix (Fin 4) (Fin 4) ℤ :=
+def xyXyRemainderInt (a : Fin 4 × Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
   xyXyInt a - !![-1; 1; -1; 1] * negEIntMPS a *
     (!![0, 1, 0, 0] : Matrix (Fin 1) (Fin 4) ℤ)
 
-theorem xX_remainder_eq (a : Fin 16) :
+theorem xX_remainder_eq (a : Fin 4 × Fin 4) :
     xXCompression.remainder a = complexOfInt (xXRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xX_left_eq, xX_right_eq,
-    xXStacked_eq, eMPS_eq, xXLeft, xXRight, ← complexOfInt_mul, ← complexOfInt_mul,
+    xXStacked_eq, eTensor_eq, xXLeft, xXRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xXRemainderInt]
   exact (Matrix.complexOfRing_sub _ _ _).symm
 
-theorem xXy_remainder_eq (a : Fin 16) :
+theorem xXy_remainder_eq (a : Fin 4 × Fin 4) :
     xXyCompression.remainder a = complexOfInt (xXyRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xXy_left_eq, xXy_right_eq,
     xXyStacked_eq, negYMPS_eq, xXyLeft, xXyRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xXyRemainderInt]
   exact (Matrix.complexOfRing_sub _ _ _).symm
 
-theorem xyX_remainder_eq (a : Fin 16) :
+theorem xyX_remainder_eq (a : Fin 4 × Fin 4) :
     xyXCompression.remainder a = complexOfInt (xyXRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xyX_left_eq, xyX_right_eq,
-    xyXStacked_eq, yMPS_eq, xyXLeft, xyXRight, ← complexOfInt_mul, ← complexOfInt_mul,
+    xyXStacked_eq, yTensor_eq, xyXLeft, xyXRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xyXRemainderInt]
   exact (Matrix.complexOfRing_sub _ _ _).symm
 
-theorem xyXy_remainder_eq (a : Fin 16) :
+theorem xyXy_remainder_eq (a : Fin 4 × Fin 4) :
     xyXyCompression.remainder a = complexOfInt (xyXyRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xyXy_left_eq, xyXy_right_eq,
     xyXyStacked_eq, negEMPS_eq, xyXyLeft, xyXyRight, ← complexOfInt_mul, ← complexOfInt_mul,
@@ -223,31 +226,31 @@ theorem xyXy_remainder_eq (a : Fin 16) :
 
 /-- **Every product of three remainder letters of the pair `(x, x)` vanishes** (data file,
 Section 4). -/
-theorem xX_remainder_triple_mul_eq_zero (a b c : Fin 16) :
+theorem xX_remainder_triple_mul_eq_zero (a b c : Fin 4 × Fin 4) :
     xXRemainderInt a * xXRemainderInt b * xXRemainderInt c = 0 :=
-  triple_mul_eq_zero_of_support _ ![0, 10] (by decide +kernel) (by decide +kernel) a b c
+  triple_mul_eq_zero_of_support _ ![(0, 0), (2, 2)] (by decide +kernel) (by decide +kernel) a b c
 
 /-- **Every product of three remainder letters of the pair `(x, xy)` vanishes** (data file,
 Section 4). -/
-theorem xXy_remainder_triple_mul_eq_zero (a b c : Fin 16) :
+theorem xXy_remainder_triple_mul_eq_zero (a b c : Fin 4 × Fin 4) :
     xXyRemainderInt a * xXyRemainderInt b * xXyRemainderInt c = 0 :=
-  triple_mul_eq_zero_of_support _ ![1, 11] (by decide +kernel) (by decide +kernel) a b c
+  triple_mul_eq_zero_of_support _ ![(0, 1), (2, 3)] (by decide +kernel) (by decide +kernel) a b c
 
 /-- **Every product of three remainder letters of the pair `(xy, x)` vanishes** (data file,
 Section 4). -/
-theorem xyX_remainder_triple_mul_eq_zero (a b c : Fin 16) :
+theorem xyX_remainder_triple_mul_eq_zero (a b c : Fin 4 × Fin 4) :
     xyXRemainderInt a * xyXRemainderInt b * xyXRemainderInt c = 0 :=
-  triple_mul_eq_zero_of_support _ ![1, 11] (by decide +kernel) (by decide +kernel) a b c
+  triple_mul_eq_zero_of_support _ ![(0, 1), (2, 3)] (by decide +kernel) (by decide +kernel) a b c
 
 /-- **Every product of three remainder letters of the pair `(xy, xy)` vanishes** (data file,
 Section 4). -/
-theorem xyXy_remainder_triple_mul_eq_zero (a b c : Fin 16) :
+theorem xyXy_remainder_triple_mul_eq_zero (a b c : Fin 4 × Fin 4) :
     xyXyRemainderInt a * xyXyRemainderInt b * xyXyRemainderInt c = 0 :=
-  triple_mul_eq_zero_of_support _ ![0, 10] (by decide +kernel) (by decide +kernel) a b c
+  triple_mul_eq_zero_of_support _ ![(0, 0), (2, 2)] (by decide +kernel) (by decide +kernel) a b c
 
-/-- The square of the remainder letter `0` of the pair `(x, x)` does not vanish, so its
+/-- The square of the remainder letter `(0, 0)` of the pair `(x, x)` does not vanish, so its
 nilpotency order is exactly three (data file, Section 4). -/
-theorem xX_remainder_mul_ne_zero : xXRemainderInt 0 * xXRemainderInt 0 ≠ 0 := by
+theorem xX_remainder_mul_ne_zero : xXRemainderInt (0, 0) * xXRemainderInt (0, 0) ≠ 0 := by
   decide +kernel
 
 /-! ### The assembled datum -/
@@ -288,15 +291,15 @@ theorem condensationSquare_compression_z_eq : condensationSquare_compression.z =
 
 /-- A compression datum read against its target carried with the weight one has the same
 remainder. -/
-private theorem remainder_ofTargetEq_one {D DB : ℕ} {B : MPSTensor 16 DB} {C : MPSTensor 16 D}
+private theorem remainder_ofTargetEq_one {D DB : ℕ} {B : MPOTensor 4 DB} {C : MPOTensor 4 D}
     (P : MultiBlockCompression B oneSlot (fun _ : Unit => C)) :
     (P.ofTargetEq (C' := fun _ => (1 : ℂ) • C) fun _ _ => (one_smul ℂ _).symm).remainder =
       P.remainder :=
   MultiBlockCompression.remainder_ofTargetEq _ _
 
-private theorem evalWord_eq_zero_of_int {D : ℕ} {R : MPSTensor 16 D}
-    (RI : Fin 16 → Matrix (Fin D) (Fin D) ℤ) (hR : ∀ a, R a = complexOfInt (RI a))
-    (h : ∀ a b c, RI a * RI b * RI c = 0) (w : List (Fin 16)) (hw : 3 ≤ w.length) :
+private theorem evalWord_eq_zero_of_int {D : ℕ} {R : MPOTensor 4 D}
+    (RI : Fin 4 × Fin 4 → Matrix (Fin D) (Fin D) ℤ) (hR : ∀ a, R a = complexOfInt (RI a))
+    (h : ∀ a b c, RI a * RI b * RI c = 0) (w : List (Fin 4 × Fin 4)) (hw : 3 ≤ w.length) :
     Kraus.evalWord R w = 0 :=
   evalWord_eq_zero_of_triple_mul_eq_zero R (fun a b c => by
     rw [hR, hR, hR, ← complexOfInt_mul, ← complexOfInt_mul, h, complexOfInt_zero]) w hw
@@ -304,9 +307,9 @@ private theorem evalWord_eq_zero_of_int {D : ℕ} {R : MPSTensor 16 D}
 /-- **Every word of length at least three vanishes in the remainder of each pair block**
 (data file, Section 4): the twelve split pairs have zero remainder, and the four non-split pairs
 have remainders nilpotent of order three. -/
-theorem pairCompression_evalWord_remainder_eq_zero (p : Fin 4 × Fin 4) (w : List (Fin 16))
+theorem pairCompression_evalWord_remainder_eq_zero (p : Fin 4 × Fin 4) (w : List (Fin 4 × Fin 4))
     (hw : 3 ≤ w.length) : Kraus.evalWord (pairCompression p).remainder w = 0 := by
-  have hzero : ∀ {D : ℕ} (R : MPSTensor 16 D), R = 0 → Kraus.evalWord R w = 0 := by
+  have hzero : ∀ {D : ℕ} (R : MPOTensor 4 D), R = 0 → Kraus.evalWord R w = 0 := by
     intro D R hR
     obtain ⟨a, w, rfl⟩ : ∃ a w', w = a :: w' := w.exists_cons_of_length_pos (by omega)
     subst hR
@@ -335,30 +338,31 @@ theorem pairCompression_evalWord_remainder_eq_zero (p : Fin 4 × Fin 4) (w : Lis
 /-- **Nilpotency of the assembled remainder, of order three** (P5 note, Theorem 7.7(vi); data
 file, Section 4): every word of length at least three vanishes in the remainder of the stacked
 defect tensor, against the generic bound `|S| + z = 16 + 12 = 28` of clause (vi). -/
-theorem condensationSquare_evalWord_remainder_eq_zero (w : List (Fin 16)) (hw : 3 ≤ w.length) :
+theorem condensationSquare_evalWord_remainder_eq_zero (w : List (Fin 4 × Fin 4))
+    (hw : 3 ≤ w.length) :
     Kraus.evalWord condensationSquare_compression.remainder w = 0 :=
   MultiBlockCompression.evalWord_remainder_directSum_eq_zero _ _ _ w fun p =>
     pairCompression_evalWord_remainder_eq_zero p w hw
 
-/-- **The nilpotency order three is exact**: the square of the remainder letter `0` of the
+/-- **The nilpotency order three is exact**: the square of the remainder letter `(0, 0)` of the
 assembled datum does not vanish, because it does not vanish in the pair `(x, x)`. -/
 theorem condensationSquare_remainder_mul_ne_zero :
-    condensationSquare_compression.remainder 0 * condensationSquare_compression.remainder 0 ≠
-      0 := by
+    condensationSquare_compression.remainder (0, 0) *
+      condensationSquare_compression.remainder (0, 0) ≠ 0 := by
   have hxx : (pairCompression (2, 2)).remainder = xXCompression.remainder :=
     remainder_ofTargetEq_one xXCompression
   have h := MultiBlockCompression.evalWord_remainder_directSum_ne_zero pairCompression
-    (mulBond condensationBond condensationBond) condensationSquare_eq_blockDiagonal [0, 0]
+    (mulBond condensationBond condensationBond) condensationSquare_eq_blockDiagonal [(0, 0), (0, 0)]
     (2, 2) (by
       rw [hxx]
-      change xXCompression.remainder 0 *
-        (xXCompression.remainder 0 * (1 : Matrix (Fin 4) (Fin 4) ℂ)) ≠ 0
+      change xXCompression.remainder (0, 0) *
+        (xXCompression.remainder (0, 0) * (1 : Matrix (Fin 4) (Fin 4) ℂ)) ≠ 0
       rw [Matrix.mul_one, xX_remainder_eq, ← complexOfInt_mul]
       intro h0
       refine xX_remainder_mul_ne_zero (Matrix.ext fun i j => ?_)
       simpa using congrFun (congrFun h0 i) j)
-  change condensationSquare_compression.remainder 0 *
-    (condensationSquare_compression.remainder 0 * (1 : Matrix (Fin 36) (Fin 36) ℂ)) ≠ 0 at h
+  change condensationSquare_compression.remainder (0, 0) *
+    (condensationSquare_compression.remainder (0, 0) * (1 : Matrix (Fin 36) (Fin 36) ℂ)) ≠ 0 at h
   rwa [Matrix.mul_one] at h
 
 end Z2Z2Condensation

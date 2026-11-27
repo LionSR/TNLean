@@ -97,153 +97,173 @@ open MPSTensor
 /-! ### The ten blocks equal to their targets -/
 
 /-- The stacked tensor of `U_e U_e`. -/
-def eEStacked : MPSTensor 16 1 := (MPOTensor.mulTensor eTensor eTensor).toMPSTensor
+def eEStacked : MPOTensor 4 1 := MPOTensor.mulTensor eTensor eTensor
 
 /-- The stacked tensor of `U_e U_y`. -/
-def eYStacked : MPSTensor 16 1 := (MPOTensor.mulTensor eTensor yTensor).toMPSTensor
+def eYStacked : MPOTensor 4 1 := MPOTensor.mulTensor eTensor yTensor
 
 /-- The stacked tensor of `U_e U_x`. -/
-def eXStacked : MPSTensor 16 2 := (MPOTensor.mulTensor eTensor xTensor).toMPSTensor
+def eXStacked : MPOTensor 4 2 := MPOTensor.mulTensor eTensor xTensor
 
 /-- The stacked tensor of `U_e U_xy`. -/
-def eXyStacked : MPSTensor 16 2 := (MPOTensor.mulTensor eTensor xyTensor).toMPSTensor
+def eXyStacked : MPOTensor 4 2 := MPOTensor.mulTensor eTensor xyTensor
 
 /-- The stacked tensor of `U_y U_e`. -/
-def yEStacked : MPSTensor 16 1 := (MPOTensor.mulTensor yTensor eTensor).toMPSTensor
+def yEStacked : MPOTensor 4 1 := MPOTensor.mulTensor yTensor eTensor
 
 /-- The stacked tensor of `U_y U_y`. -/
-def yYStacked : MPSTensor 16 1 := (MPOTensor.mulTensor yTensor yTensor).toMPSTensor
+def yYStacked : MPOTensor 4 1 := MPOTensor.mulTensor yTensor yTensor
 
 /-- The stacked tensor of `U_y U_x`. -/
-def yXStacked : MPSTensor 16 2 := (MPOTensor.mulTensor yTensor xTensor).toMPSTensor
+def yXStacked : MPOTensor 4 2 := MPOTensor.mulTensor yTensor xTensor
 
 /-- The stacked tensor of `U_y U_xy`. -/
-def yXyStacked : MPSTensor 16 2 := (MPOTensor.mulTensor yTensor xyTensor).toMPSTensor
+def yXyStacked : MPOTensor 4 2 := MPOTensor.mulTensor yTensor xyTensor
 
 /-- The stacked tensor of `U_x U_e`. -/
-def xEStacked : MPSTensor 16 2 := (MPOTensor.mulTensor xTensor eTensor).toMPSTensor
+def xEStacked : MPOTensor 4 2 := MPOTensor.mulTensor xTensor eTensor
 
 /-- The stacked tensor of `U_xy U_e`. -/
-def xyEStacked : MPSTensor 16 2 := (MPOTensor.mulTensor xyTensor eTensor).toMPSTensor
+def xyEStacked : MPOTensor 4 2 := MPOTensor.mulTensor xyTensor eTensor
 
-private theorem eE_int (b : Fin 16) : stackedInt eIntTensor eIntTensor b = eIntMPS b := by
+private theorem eE_int (b : Fin 4 × Fin 4) :
+    mulIntTensor eIntTensor eIntTensor b = eIntTensor b := by
   revert_decide_kernel b
 
-private theorem eY_int (b : Fin 16) : stackedInt eIntTensor yIntTensor b = yIntMPS b := by
+private theorem eY_int (b : Fin 4 × Fin 4) :
+    mulIntTensor eIntTensor yIntTensor b = yIntTensor b := by
   revert_decide_kernel b
 
-private theorem eX_int (b : Fin 16) : stackedInt eIntTensor xIntTensor b = xIntMPS b := by
+private theorem eX_int (b : Fin 4 × Fin 4) :
+    mulIntTensor eIntTensor xIntTensor b = xIntTensor b := by
   revert_decide_kernel b
 
-private theorem eXy_int (b : Fin 16) : stackedInt eIntTensor xyIntTensor b = xyIntMPS b := by
+private theorem eXy_int (b : Fin 4 × Fin 4) :
+    mulIntTensor eIntTensor xyIntTensor b = xyIntTensor b := by
   revert_decide_kernel b
 
-private theorem yE_int (b : Fin 16) : stackedInt yIntTensor eIntTensor b = yIntMPS b := by
+private theorem yE_int (b : Fin 4 × Fin 4) :
+    mulIntTensor yIntTensor eIntTensor b = yIntTensor b := by
   revert_decide_kernel b
 
-private theorem yY_int (b : Fin 16) : stackedInt yIntTensor yIntTensor b = eIntMPS b := by
+private theorem yY_int (b : Fin 4 × Fin 4) :
+    mulIntTensor yIntTensor yIntTensor b = eIntTensor b := by
   revert_decide_kernel b
 
-private theorem yX_int (b : Fin 16) : stackedInt yIntTensor xIntTensor b = xyIntMPS b := by
+private theorem yX_int (b : Fin 4 × Fin 4) :
+    mulIntTensor yIntTensor xIntTensor b = xyIntTensor b := by
   revert_decide_kernel b
 
-private theorem yXy_int (b : Fin 16) : stackedInt yIntTensor xyIntTensor b = xIntMPS b := by
+private theorem yXy_int (b : Fin 4 × Fin 4) :
+    mulIntTensor yIntTensor xyIntTensor b = xIntTensor b := by
   revert_decide_kernel b
 
-private theorem xE_int (b : Fin 16) : stackedInt xIntTensor eIntTensor b = xIntMPS b := by
+private theorem xE_int (b : Fin 4 × Fin 4) :
+    mulIntTensor xIntTensor eIntTensor b = xIntTensor b := by
   revert_decide_kernel b
 
-private theorem xyE_int (b : Fin 16) : stackedInt xyIntTensor eIntTensor b = xyIntMPS b := by
+private theorem xyE_int (b : Fin 4 × Fin 4) :
+    mulIntTensor xyIntTensor eIntTensor b = xyIntTensor b := by
   revert_decide_kernel b
 
 /-- **`U_e U_e`**: the stacked tensor is the tensor of `U_e` (data file, Section 5). -/
-theorem eEStacked_eq (a : Fin 16) : eEStacked a = eMPS a := by
-  rw [eMPS_eq, ← eE_int]
-  exact toMPSTensor_mulTensor_complexOfInt eIntTensor eIntTensor a
+theorem eEStacked_eq (a : Fin 4 × Fin 4) : eEStacked a = eTensor a := by
+  change _ = complexOfInt (eIntTensor a)
+  rw [← eE_int]
+  exact mulTensor_complexOfRing _ eIntTensor eIntTensor a
 
 /-- **`U_e U_y`**: the stacked tensor is the tensor of `U_y` (data file, Section 5). -/
-theorem eYStacked_eq (a : Fin 16) : eYStacked a = yMPS a := by
-  rw [yMPS_eq, ← eY_int]
-  exact toMPSTensor_mulTensor_complexOfInt eIntTensor yIntTensor a
+theorem eYStacked_eq (a : Fin 4 × Fin 4) : eYStacked a = yTensor a := by
+  change _ = complexOfInt (yIntTensor a)
+  rw [← eY_int]
+  exact mulTensor_complexOfRing _ eIntTensor yIntTensor a
 
 /-- **`U_e U_x`**: the stacked tensor is the tensor of `U_x` (data file, Section 5). -/
-theorem eXStacked_eq (a : Fin 16) : eXStacked a = xMPS a := by
-  rw [xMPS_eq, ← eX_int]
-  exact toMPSTensor_mulTensor_complexOfInt eIntTensor xIntTensor a
+theorem eXStacked_eq (a : Fin 4 × Fin 4) : eXStacked a = xTensor a := by
+  change _ = complexOfInt (xIntTensor a)
+  rw [← eX_int]
+  exact mulTensor_complexOfRing _ eIntTensor xIntTensor a
 
 /-- **`U_e U_xy`**: the stacked tensor is the tensor of `U_xy` (data file, Section 5). -/
-theorem eXyStacked_eq (a : Fin 16) : eXyStacked a = xyMPS a := by
-  rw [xyMPS_eq, ← eXy_int]
-  exact toMPSTensor_mulTensor_complexOfInt eIntTensor xyIntTensor a
+theorem eXyStacked_eq (a : Fin 4 × Fin 4) : eXyStacked a = xyTensor a := by
+  change _ = complexOfInt (xyIntTensor a)
+  rw [← eXy_int]
+  exact mulTensor_complexOfRing _ eIntTensor xyIntTensor a
 
 /-- **`U_y U_e`**: the stacked tensor is the tensor of `U_y` (data file, Section 5). -/
-theorem yEStacked_eq (a : Fin 16) : yEStacked a = yMPS a := by
-  rw [yMPS_eq, ← yE_int]
-  exact toMPSTensor_mulTensor_complexOfInt yIntTensor eIntTensor a
+theorem yEStacked_eq (a : Fin 4 × Fin 4) : yEStacked a = yTensor a := by
+  change _ = complexOfInt (yIntTensor a)
+  rw [← yE_int]
+  exact mulTensor_complexOfRing _ yIntTensor eIntTensor a
 
 /-- **`U_y U_y`**: the stacked tensor is the tensor of `U_e` (data file, Section 5). -/
-theorem yYStacked_eq (a : Fin 16) : yYStacked a = eMPS a := by
-  rw [eMPS_eq, ← yY_int]
-  exact toMPSTensor_mulTensor_complexOfInt yIntTensor yIntTensor a
+theorem yYStacked_eq (a : Fin 4 × Fin 4) : yYStacked a = eTensor a := by
+  change _ = complexOfInt (eIntTensor a)
+  rw [← yY_int]
+  exact mulTensor_complexOfRing _ yIntTensor yIntTensor a
 
 /-- **`U_y U_x`**: the stacked tensor is the tensor of `U_xy` (data file, Section 5). -/
-theorem yXStacked_eq (a : Fin 16) : yXStacked a = xyMPS a := by
-  rw [xyMPS_eq, ← yX_int]
-  exact toMPSTensor_mulTensor_complexOfInt yIntTensor xIntTensor a
+theorem yXStacked_eq (a : Fin 4 × Fin 4) : yXStacked a = xyTensor a := by
+  change _ = complexOfInt (xyIntTensor a)
+  rw [← yX_int]
+  exact mulTensor_complexOfRing _ yIntTensor xIntTensor a
 
 /-- **`U_y U_xy`**: the stacked tensor is the tensor of `U_x` (data file, Section 5). -/
-theorem yXyStacked_eq (a : Fin 16) : yXyStacked a = xMPS a := by
-  rw [xMPS_eq, ← yXy_int]
-  exact toMPSTensor_mulTensor_complexOfInt yIntTensor xyIntTensor a
+theorem yXyStacked_eq (a : Fin 4 × Fin 4) : yXyStacked a = xTensor a := by
+  change _ = complexOfInt (xIntTensor a)
+  rw [← yXy_int]
+  exact mulTensor_complexOfRing _ yIntTensor xyIntTensor a
 
 /-- **`U_x U_e`**: the stacked tensor is the tensor of `U_x` (data file, Section 5). -/
-theorem xEStacked_eq (a : Fin 16) : xEStacked a = xMPS a := by
-  rw [xMPS_eq, ← xE_int]
-  exact toMPSTensor_mulTensor_complexOfInt xIntTensor eIntTensor a
+theorem xEStacked_eq (a : Fin 4 × Fin 4) : xEStacked a = xTensor a := by
+  change _ = complexOfInt (xIntTensor a)
+  rw [← xE_int]
+  exact mulTensor_complexOfRing _ xIntTensor eIntTensor a
 
 /-- **`U_xy U_e`**: the stacked tensor is the tensor of `U_xy` (data file, Section 5). -/
-theorem xyEStacked_eq (a : Fin 16) : xyEStacked a = xyMPS a := by
-  rw [xyMPS_eq, ← xyE_int]
-  exact toMPSTensor_mulTensor_complexOfInt xyIntTensor eIntTensor a
+theorem xyEStacked_eq (a : Fin 4 × Fin 4) : xyEStacked a = xyTensor a := by
+  change _ = complexOfInt (xyIntTensor a)
+  rw [← xyE_int]
+  exact mulTensor_complexOfRing _ xyIntTensor eIntTensor a
 
 /-- The compression datum of the pair `(e, e)`. -/
-def eECompression : MultiBlockCompression eEStacked oneSlot (fun _ => eMPS) :=
+def eECompression : MultiBlockCompression eEStacked oneSlot (fun _ => eTensor) :=
   MultiBlockCompression.ofEq eEStacked_eq
 
 /-- The compression datum of the pair `(e, y)`. -/
-def eYCompression : MultiBlockCompression eYStacked oneSlot (fun _ => yMPS) :=
+def eYCompression : MultiBlockCompression eYStacked oneSlot (fun _ => yTensor) :=
   MultiBlockCompression.ofEq eYStacked_eq
 
 /-- The compression datum of the pair `(e, x)`. -/
-def eXCompression : MultiBlockCompression eXStacked oneSlot (fun _ => xMPS) :=
+def eXCompression : MultiBlockCompression eXStacked oneSlot (fun _ => xTensor) :=
   MultiBlockCompression.ofEq eXStacked_eq
 
 /-- The compression datum of the pair `(e, xy)`. -/
-def eXyCompression : MultiBlockCompression eXyStacked oneSlot (fun _ => xyMPS) :=
+def eXyCompression : MultiBlockCompression eXyStacked oneSlot (fun _ => xyTensor) :=
   MultiBlockCompression.ofEq eXyStacked_eq
 
 /-- The compression datum of the pair `(y, e)`. -/
-def yECompression : MultiBlockCompression yEStacked oneSlot (fun _ => yMPS) :=
+def yECompression : MultiBlockCompression yEStacked oneSlot (fun _ => yTensor) :=
   MultiBlockCompression.ofEq yEStacked_eq
 
 /-- The compression datum of the pair `(y, y)`. -/
-def yYCompression : MultiBlockCompression yYStacked oneSlot (fun _ => eMPS) :=
+def yYCompression : MultiBlockCompression yYStacked oneSlot (fun _ => eTensor) :=
   MultiBlockCompression.ofEq yYStacked_eq
 
 /-- The compression datum of the pair `(y, x)`. -/
-def yXCompression : MultiBlockCompression yXStacked oneSlot (fun _ => xyMPS) :=
+def yXCompression : MultiBlockCompression yXStacked oneSlot (fun _ => xyTensor) :=
   MultiBlockCompression.ofEq yXStacked_eq
 
 /-- The compression datum of the pair `(y, xy)`. -/
-def yXyCompression : MultiBlockCompression yXyStacked oneSlot (fun _ => xMPS) :=
+def yXyCompression : MultiBlockCompression yXyStacked oneSlot (fun _ => xTensor) :=
   MultiBlockCompression.ofEq yXyStacked_eq
 
 /-- The compression datum of the pair `(x, e)`. -/
-def xECompression : MultiBlockCompression xEStacked oneSlot (fun _ => xMPS) :=
+def xECompression : MultiBlockCompression xEStacked oneSlot (fun _ => xTensor) :=
   MultiBlockCompression.ofEq xEStacked_eq
 
 /-- The compression datum of the pair `(xy, e)`. -/
-def xyECompression : MultiBlockCompression xyEStacked oneSlot (fun _ => xyMPS) :=
+def xyECompression : MultiBlockCompression xyEStacked oneSlot (fun _ => xyTensor) :=
   MultiBlockCompression.ofEq xyEStacked_eq
 
 /-! ### The two blocks with the sign gauge -/
@@ -255,115 +275,115 @@ def signGaugeInt : Matrix (Fin 2) (Fin 2) ℤ := !![0, -1; 1, 0]
 def signGaugeInvInt : Matrix (Fin 2) (Fin 2) ℤ := !![0, 1; -1, 0]
 
 /-- The stacked tensor of `U_x U_y`. -/
-def xYStacked : MPSTensor 16 2 := (MPOTensor.mulTensor xTensor yTensor).toMPSTensor
+def xYStacked : MPOTensor 4 2 := MPOTensor.mulTensor xTensor yTensor
 
 /-- The stacked tensor of `U_xy U_y`. -/
-def xyYStacked : MPSTensor 16 2 := (MPOTensor.mulTensor xyTensor yTensor).toMPSTensor
+def xyYStacked : MPOTensor 4 2 := MPOTensor.mulTensor xyTensor yTensor
 
 /-- The integer matrices of the stacked tensor of `U_x U_y` (data file, appendix). -/
-def xYInt : Fin 16 → Matrix (Fin 2) (Fin 2) ℤ
-  | 3 => !![1, 0; 1, 0]
-  | 6 => !![0, 1; 0, -1]
-  | 9 => !![1, 0; 1, 0]
-  | 12 => !![0, 1; 0, -1]
+def xYInt : Fin 4 × Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
+  | (0, 3) => !![1, 0; 1, 0]
+  | (1, 2) => !![0, 1; 0, -1]
+  | (2, 1) => !![1, 0; 1, 0]
+  | (3, 0) => !![0, 1; 0, -1]
   | _ => 0
 
 /-- The integer matrices of the stacked tensor of `U_xy U_y` (data file, appendix). -/
-def xyYInt : Fin 16 → Matrix (Fin 2) (Fin 2) ℤ
-  | 2 => !![0, 1; 0, -1]
-  | 7 => !![1, 0; 1, 0]
-  | 8 => !![0, 1; 0, -1]
-  | 13 => !![1, 0; 1, 0]
+def xyYInt : Fin 4 × Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
+  | (0, 2) => !![0, 1; 0, -1]
+  | (1, 3) => !![1, 0; 1, 0]
+  | (2, 0) => !![0, 1; 0, -1]
+  | (3, 1) => !![1, 0; 1, 0]
   | _ => 0
 
-private theorem xY_int (b : Fin 16) : stackedInt xIntTensor yIntTensor b = xYInt b := by
+private theorem xY_int (b : Fin 4 × Fin 4) : mulIntTensor xIntTensor yIntTensor b = xYInt b := by
   revert_decide_kernel b
 
-private theorem xyY_int (b : Fin 16) : stackedInt xyIntTensor yIntTensor b = xyYInt b := by
+private theorem xyY_int (b : Fin 4 × Fin 4) : mulIntTensor xyIntTensor yIntTensor b = xyYInt b := by
   revert_decide_kernel b
 
-theorem xYStacked_eq (a : Fin 16) : xYStacked a = complexOfInt (xYInt a) := by
+theorem xYStacked_eq (a : Fin 4 × Fin 4) : xYStacked a = complexOfInt (xYInt a) := by
   rw [← xY_int]
-  exact toMPSTensor_mulTensor_complexOfInt xIntTensor yIntTensor a
+  exact mulTensor_complexOfRing _ xIntTensor yIntTensor a
 
-theorem xyYStacked_eq (a : Fin 16) : xyYStacked a = complexOfInt (xyYInt a) := by
+theorem xyYStacked_eq (a : Fin 4 × Fin 4) : xyYStacked a = complexOfInt (xyYInt a) := by
   rw [← xyY_int]
-  exact toMPSTensor_mulTensor_complexOfInt xyIntTensor yIntTensor a
+  exact mulTensor_complexOfRing _ xyIntTensor yIntTensor a
 
 /-- **The pair `(x, y)`**: the stacked tensor is conjugate by the sign gauge to the tensor of
 `U_xy` carried with the weight `-1` (data file, Section 5). -/
-def xYCompression : MultiBlockCompression xYStacked oneSlot (fun _ => (-1 : ℂ) • xyMPS) :=
+def xYCompression : MultiBlockCompression xYStacked oneSlot (fun _ => (-1 : ℂ) • xyTensor) :=
   MultiBlockCompression.ofConjInt xYInt negXYIntMPS xYStacked_eq negXYMPS_eq signGaugeInt
     signGaugeInvInt (by decide) (by decide) (by decide +kernel)
 
 /-- **The pair `(xy, y)`**: the stacked tensor is conjugate by the sign gauge to the tensor of
 `U_x` carried with the weight `-1` (data file, Section 5). -/
-def xyYCompression : MultiBlockCompression xyYStacked oneSlot (fun _ => (-1 : ℂ) • xMPS) :=
+def xyYCompression : MultiBlockCompression xyYStacked oneSlot (fun _ => (-1 : ℂ) • xTensor) :=
   MultiBlockCompression.ofConjInt xyYInt negXIntMPS xyYStacked_eq negXMPS_eq signGaugeInt
     signGaugeInvInt (by decide) (by decide) (by decide +kernel)
 
 /-! ### Word traces -/
 
 /-- **`U_e U_e = U_e` at the level of word traces.** -/
-theorem eE_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord eEStacked w) = Matrix.trace (Kraus.evalWord eMPS w) :=
+theorem eE_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord eEStacked w) = Matrix.trace (Kraus.evalWord eTensor w) :=
   eECompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_e U_y = U_y` at the level of word traces.** -/
-theorem eY_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord eYStacked w) = Matrix.trace (Kraus.evalWord yMPS w) :=
+theorem eY_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord eYStacked w) = Matrix.trace (Kraus.evalWord yTensor w) :=
   eYCompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_e U_x = U_x` at the level of word traces.** -/
-theorem eX_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord eXStacked w) = Matrix.trace (Kraus.evalWord xMPS w) :=
+theorem eX_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord eXStacked w) = Matrix.trace (Kraus.evalWord xTensor w) :=
   eXCompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_e U_xy = U_xy` at the level of word traces.** -/
-theorem eXy_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord eXyStacked w) = Matrix.trace (Kraus.evalWord xyMPS w) :=
+theorem eXy_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord eXyStacked w) = Matrix.trace (Kraus.evalWord xyTensor w) :=
   eXyCompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_y U_e = U_y` at the level of word traces.** -/
-theorem yE_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord yEStacked w) = Matrix.trace (Kraus.evalWord yMPS w) :=
+theorem yE_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord yEStacked w) = Matrix.trace (Kraus.evalWord yTensor w) :=
   yECompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_y U_y = U_e` at the level of word traces.** -/
-theorem yY_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord yYStacked w) = Matrix.trace (Kraus.evalWord eMPS w) :=
+theorem yY_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord yYStacked w) = Matrix.trace (Kraus.evalWord eTensor w) :=
   yYCompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_y U_x = U_xy` at the level of word traces.** -/
-theorem yX_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord yXStacked w) = Matrix.trace (Kraus.evalWord xyMPS w) :=
+theorem yX_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord yXStacked w) = Matrix.trace (Kraus.evalWord xyTensor w) :=
   yXCompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_y U_xy = U_x` at the level of word traces.** -/
-theorem yXy_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord yXyStacked w) = Matrix.trace (Kraus.evalWord xMPS w) :=
+theorem yXy_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord yXyStacked w) = Matrix.trace (Kraus.evalWord xTensor w) :=
   yXyCompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_x U_e = U_x` at the level of word traces.** -/
-theorem xE_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord xEStacked w) = Matrix.trace (Kraus.evalWord xMPS w) :=
+theorem xE_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord xEStacked w) = Matrix.trace (Kraus.evalWord xTensor w) :=
   xECompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_xy U_e = U_xy` at the level of word traces.** -/
-theorem xyE_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord xyEStacked w) = Matrix.trace (Kraus.evalWord xyMPS w) :=
+theorem xyE_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord xyEStacked w) = Matrix.trace (Kraus.evalWord xyTensor w) :=
   xyECompression.trace_evalWord_oneSlot w hw
 
 /-- **`U_x U_y = (-1)^L U_xy` at the level of word traces** (data file, Section 2). -/
-theorem xY_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
+theorem xY_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord xYStacked w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord xyMPS w) :=
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord xyTensor w) :=
   xYCompression.trace_evalWord_oneSlot_smul w hw
 
 /-- **`U_xy U_y = (-1)^L U_x` at the level of word traces** (data file, Section 2). -/
-theorem xyY_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
+theorem xyY_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord xyYStacked w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord xMPS w) :=
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord xTensor w) :=
   xyYCompression.trace_evalWord_oneSlot_smul w hw
 
 /-! ### Vanishing remainders -/

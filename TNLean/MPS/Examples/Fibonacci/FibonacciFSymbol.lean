@@ -194,7 +194,7 @@ The entry of the `τ` block at the incoming bond letter `p = (x'_j, x_j)`, the o
 the Local fix (provenance) of the module header, documented in
 `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`. -/
 theorem fibTauGolden_eq_fSymbol (x' x : Fin 2) :
-    fibTauGolden x' x = Matrix.of fun p q =>
+    fibTauGolden (x', x) = Matrix.of fun p q =>
       if fibLetter p = (x', x) then
         fibFSymbolGolden 1 x 1 (fibLetter q).1 x' (fibLetter q).2
       else 0 := by

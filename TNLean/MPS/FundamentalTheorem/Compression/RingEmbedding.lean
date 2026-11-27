@@ -143,54 +143,55 @@ theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : α → Matrix (Fin 
 
 /-! ### Bond-space products and actions -/
 
-/-- The bond-space product of two tensors over a commutative ring,
-`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`, matching
+/-- The bond-space product of two tensors over a commutative ring on the pair alphabet,
+`(M · N)^{(i,k)} = ∑_j M^{(i,j)} ⊗ N^{(j,k)}`, in the bond order of `finProdFinEquiv`, matching
 `MPOTensor.mulTensor`. -/
-def mulTensorR (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
+def mulTensorR (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ik : Fin d × Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) R :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+  (∑ j : Fin d, (M (ik.1, j)) ⊗ₖ (N (j, ik.2))).submatrix finProdFinEquiv.symm
+    finProdFinEquiv.symm
 
 /-- The bond-space action of a matrix product operator tensor over a commutative ring on a
-matrix product state tensor over the same ring, `(M · A)^i = ∑_j M^{ij} ⊗ A^j`, in the bond
+matrix product state tensor over the same ring, `(M · A)^i = ∑_j M^{(i,j)} ⊗ A^j`, in the bond
 order of `finProdFinEquiv`, matching `MPOTensor.actTensor`. -/
-def actTensorR (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
+def actTensorR (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (A : Fin d → Matrix (Fin D₂) (Fin D₂) R) (i : Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) R :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (A j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+  (∑ j : Fin d, (M (i, j)) ⊗ₖ (A j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- The bond-space product of two tensors rescaled by one complex scalar is the entrywise image
 of their bond-space product, rescaled by the square of that scalar. -/
 theorem mulTensor_smul_complexOfRing (c : ℂ)
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
-    MPOTensor.mulTensor (Function.uncurry fun i j => c • Matrix.complexOfRing f (M i j))
-        (Function.uncurry fun i j => c • Matrix.complexOfRing f (N i j)) (i, k) =
-      (c * c) • Matrix.complexOfRing f (mulTensorR M N i k) := by
+    (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ik : Fin d × Fin d) :
+    MPOTensor.mulTensor (fun ij => c • Matrix.complexOfRing f (M ij))
+        (fun ij => c • Matrix.complexOfRing f (N ij)) ik =
+      (c * c) • Matrix.complexOfRing f (mulTensorR M N ik) := by
+  obtain ⟨i, k⟩ := ik
   ext x y
   simp only [MPOTensor.mulTensor_apply, mulTensorR, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, smul_eq_mul, map_sum,
-    map_mul, Function.uncurry_apply_pair]
+    map_mul]
   rw [Finset.mul_sum]
   exact Finset.sum_congr rfl fun j _ => by ring
 
 /-- The bond-space product commutes with the entrywise image. -/
-theorem mulTensor_complexOfRing (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
-    MPOTensor.mulTensor (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
-        (Function.uncurry fun i j => Matrix.complexOfRing f (N i j)) (i, k) =
-      Matrix.complexOfRing f (mulTensorR M N i k) := by
-  simpa using mulTensor_smul_complexOfRing f 1 M N i k
+theorem mulTensor_complexOfRing (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ik : Fin d × Fin d) :
+    MPOTensor.mulTensor (fun ij => Matrix.complexOfRing f (M ij))
+        (fun ij => Matrix.complexOfRing f (N ij)) ik =
+      Matrix.complexOfRing f (mulTensorR M N ik) := by
+  simpa using mulTensor_smul_complexOfRing f 1 M N ik
 
 /-- The bond-space action commutes with the entrywise image. -/
-theorem actTensor_complexOfRing (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
+theorem actTensor_complexOfRing (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (A : Fin d → Matrix (Fin D₂) (Fin D₂) R) (i : Fin d) :
-    MPOTensor.actTensor (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
+    MPOTensor.actTensor (fun ij => Matrix.complexOfRing f (M ij))
         (fun j => Matrix.complexOfRing f (A j)) i =
       Matrix.complexOfRing f (actTensorR M A i) := by
   ext x y
   simp only [MPOTensor.actTensor_apply, actTensorR, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, map_sum, map_mul,
-    Function.uncurry_apply_pair]
+    Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, map_sum, map_mul]
 
 end MPSTensor

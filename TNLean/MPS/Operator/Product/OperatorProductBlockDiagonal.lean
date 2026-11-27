@@ -98,13 +98,13 @@ theorem mulTensor_blockDiagonal' (M : ∀ k, MPOTensor d (n k)) (N : ∀ l, MPOT
 /-- The direct sum of the images of two tensors over a ring `R →+* ℂ` is the image of the direct
 sum of the two tensors, formed over `R`. -/
 theorem directSum_complexOfRing {R : Type*} [CommRing R] (f : R →+* ℂ)
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i j : Fin d) :
-    directSum (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
-        (Function.uncurry fun i j => Matrix.complexOfRing f (N i j)) (i, j) =
-      Matrix.complexOfRing f ((Matrix.fromBlocks (M i j) 0 0 (N i j)).submatrix
+    (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ij : Fin d × Fin d) :
+    directSum (fun ij => Matrix.complexOfRing f (M ij))
+        (fun ij => Matrix.complexOfRing f (N ij)) ij =
+      Matrix.complexOfRing f ((Matrix.fromBlocks (M ij) 0 0 (N ij)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) := by
-  simp only [directSum, Matrix.complexOfRing, Function.uncurry_apply_pair]
+  simp only [directSum, Matrix.complexOfRing]
   rw [← Matrix.submatrix_map, Matrix.fromBlocks_map, Matrix.map_zero _ (map_zero f),
     Matrix.map_zero _ (map_zero f)]
 

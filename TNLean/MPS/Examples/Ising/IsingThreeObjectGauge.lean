@@ -40,12 +40,12 @@ private def sumStackEquiv (m n k : ℕ) : Fin (m * k) ⊕ Fin (n * k) ≃ Fin ((
       ((Equiv.prodCongr finSumFinEquiv (Equiv.refl (Fin k))).trans finProdFinEquiv))
 
 private theorem mulTensorR_fromBlocks {R : Type*} [CommRing R] {d m n k : ℕ}
-    (M : Fin d → Fin d → Matrix (Fin m) (Fin m) R)
-    (M' : Fin d → Fin d → Matrix (Fin n) (Fin n) R)
-    (N : Fin d → Fin d → Matrix (Fin k) (Fin k) R) (i j : Fin d) :
-    mulTensorR (fun i j => (Matrix.fromBlocks (M i j) 0 0 (M' i j)).submatrix
-      finSumFinEquiv.symm finSumFinEquiv.symm) N i j =
-      (Matrix.fromBlocks (mulTensorR M N i j) 0 0 (mulTensorR M' N i j)).submatrix
+    (M : Fin d × Fin d → Matrix (Fin m) (Fin m) R)
+    (M' : Fin d × Fin d → Matrix (Fin n) (Fin n) R)
+    (N : Fin d × Fin d → Matrix (Fin k) (Fin k) R) (i j : Fin d) :
+    mulTensorR (fun ij => (Matrix.fromBlocks (M ij) 0 0 (M' ij)).submatrix
+      finSumFinEquiv.symm finSumFinEquiv.symm) N (i, j) =
+      (Matrix.fromBlocks (mulTensorR M N (i, j)) 0 0 (mulTensorR M' N (i, j))).submatrix
         (sumStackEquiv m n k).symm (sumStackEquiv m n k).symm := by
   ext x y
   obtain ⟨x, rfl⟩ := (sumStackEquiv m n k).surjective x
@@ -54,17 +54,17 @@ private theorem mulTensorR_fromBlocks {R : Type*} [CommRing R] {d m n k : ℕ}
   all_goals simp [mulTensorR, sumStackEquiv]
   all_goals simp [Matrix.sum_apply, Matrix.kroneckerMap_apply]
 
-private theorem thetaThreeZ_eq_fromBlocks (h h' : Fin 10) : thetaThreeZ h h' =
-    (Matrix.fromBlocks (thetaTwoZ h h') 0 0 ((sqrtd : ℤ√2) • isingSigmaZ h h')).submatrix
+private theorem thetaThreeZ_eq_fromBlocks (h h' : Fin 10) : thetaThreeZ (h, h') =
+    (Matrix.fromBlocks (thetaTwoZ (h, h')) 0 0 ((sqrtd : ℤ√2) • isingSigmaZ (h, h'))).submatrix
       (finSumFinEquiv (m := 6) (n := 4)).symm (finSumFinEquiv (m := 6) (n := 4)).symm := by
   apply Matrix.ext
   intro i j
   fin_cases i <;> fin_cases j <;> rfl
 
 private theorem mulTensorR_smul_left {R : Type*} [CommRing R] {d m n : ℕ} (c : R)
-    (M : Fin d → Fin d → Matrix (Fin m) (Fin m) R)
-    (N : Fin d → Fin d → Matrix (Fin n) (Fin n) R) (i j : Fin d) :
-    mulTensorR (fun i j => c • M i j) N i j = c • mulTensorR M N i j := by
+    (M : Fin d × Fin d → Matrix (Fin m) (Fin m) R)
+    (N : Fin d × Fin d → Matrix (Fin n) (Fin n) R) (i j : Fin d) :
+    mulTensorR (fun ij => c • M ij) N (i, j) = c • mulTensorR M N (i, j) := by
   apply Matrix.ext
   intro x y
   simp [mulTensorR, Matrix.sum_apply, Matrix.kroneckerMap_apply, Matrix.smul_apply,
@@ -109,14 +109,14 @@ private theorem threeGaugeMatrix_inv_mul : threeGaugeMatrixInv * threeGaugeMatri
   norm_num [Matrix.fromBlocks_one, Matrix.submatrix_one_equiv]
 
 private theorem threeStack_eq_fromBlocks (h h' : Fin 10) :
-    mulTensorR thetaThreeZ isingSigmaZ h h' =
-      (Matrix.fromBlocks (mulTensorR thetaTwoZ isingSigmaZ h h') 0 0
-        ((sqrtd : ℤ√2) • mulTensorR isingSigmaZ isingSigmaZ h h')).submatrix
+    mulTensorR thetaThreeZ isingSigmaZ (h, h') =
+      (Matrix.fromBlocks (mulTensorR thetaTwoZ isingSigmaZ (h, h')) 0 0
+        ((sqrtd : ℤ√2) • mulTensorR isingSigmaZ isingSigmaZ (h, h'))).submatrix
         (sumStackEquiv 6 4 4).symm (sumStackEquiv 6 4 4).symm := by
-  rw [show thetaThreeZ = (fun h h' =>
-    (Matrix.fromBlocks (thetaTwoZ h h') 0 0 ((sqrtd : ℤ√2) • isingSigmaZ h h')).submatrix
+  rw [show thetaThreeZ = (fun hh =>
+    (Matrix.fromBlocks (thetaTwoZ hh) 0 0 ((sqrtd : ℤ√2) • isingSigmaZ hh)).submatrix
       (finSumFinEquiv (m := 6) (n := 4)).symm (finSumFinEquiv (m := 6) (n := 4)).symm)
-    from funext fun h => funext fun h' => thetaThreeZ_eq_fromBlocks h h']
+    from funext fun hh => thetaThreeZ_eq_fromBlocks hh.1 hh.2]
   rw [mulTensorR_fromBlocks, mulTensorR_smul_left]
 
 private theorem complexOfZsqrt2_fromBlocks {m n : Type*}
@@ -127,12 +127,12 @@ private theorem complexOfZsqrt2_fromBlocks {m n : Type*}
 
 private noncomputable def threeConjugatedLetterZ (h h' : Fin 10) : Matrix (Fin 40) (Fin 40) (ℤ√2) :=
   (Matrix.fromBlocks
-    (isingGaugeZ * mulTensorR thetaTwoZ isingSigmaZ h h' * isingGaugeZᵀ) 0 0
-    ((sqrtd : ℤ√2) • padZsqrt2 10 (isingOnePsiZ h h'))).submatrix
+    (isingGaugeZ * mulTensorR thetaTwoZ isingSigmaZ (h, h') * isingGaugeZᵀ) 0 0
+    ((sqrtd : ℤ√2) • padZsqrt2 10 (isingOnePsiZ (h, h')))).submatrix
       (sumStackEquiv 6 4 4).symm (sumStackEquiv 6 4 4).symm
 
 private theorem threeGaugeMatrix_conj (h h' : Fin 10) :
-    threeGaugeMatrix * complexOfZsqrt2 (mulTensorR thetaThreeZ isingSigmaZ h h') *
+    threeGaugeMatrix * complexOfZsqrt2 (mulTensorR thetaThreeZ isingSigmaZ (h, h')) *
       threeGaugeMatrixInv = complexOfZsqrt2 (threeConjugatedLetterZ h h') := by
   rw [threeStack_eq_fromBlocks]
   simp only [threeGaugeMatrix, threeGaugeMatrixInv, threeConjugatedLetterZ,
@@ -167,8 +167,8 @@ private noncomputable def threeBlockEquiv :
 
 
 private theorem threeOldConjugatedLetter (h h' : Fin 10) :
-    isingGaugeZ * mulTensorR thetaTwoZ isingSigmaZ h h' * isingGaugeZᵀ =
-      (Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h'))).submatrix
+    isingGaugeZ * mulTensorR thetaTwoZ isingSigmaZ (h, h') * isingGaugeZᵀ =
+      (Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h')))).submatrix
         isingTau.symm isingTau.symm := by
   apply Matrix.ext
   intro i j
@@ -178,10 +178,10 @@ private theorem threeOldConjugatedLetter (h h' : Fin 10) :
 private def threeBlockZ (h h' : Fin 10) :
     ∀ b : BlockIndex (Finset.univ : Finset (Fin 4)) 26,
       Matrix (Fin (slotSize isingThreeBlockDim b)) (Fin (slotSize isingThreeBlockDim b)) (ℤ√2)
-  | Sum.inl ⟨0, _⟩ => (5 : ℤ√2) • isingSigmaZ h h'
-  | Sum.inl ⟨1, _⟩ => (3 : ℤ√2) • isingSigmaZ h h'
-  | Sum.inl ⟨2, _⟩ => (2 * sqrtd : ℤ√2) • isingOneZ h h'
-  | Sum.inl ⟨3, _⟩ => (2 * sqrtd : ℤ√2) • isingPsiZ h h'
+  | Sum.inl ⟨0, _⟩ => (5 : ℤ√2) • isingSigmaZ (h, h')
+  | Sum.inl ⟨1, _⟩ => (3 : ℤ√2) • isingSigmaZ (h, h')
+  | Sum.inl ⟨2, _⟩ => (2 * sqrtd : ℤ√2) • isingOneZ (h, h')
+  | Sum.inl ⟨3, _⟩ => (2 * sqrtd : ℤ√2) • isingPsiZ (h, h')
   | Sum.inr _ => 0
 
 private theorem threeBlockIdentity (h h' : Fin 10) :
@@ -293,32 +293,26 @@ private noncomputable def threeGauge : (Fin 40 → ℂ) ≃ₗ[ℂ]
   gaugeOfMatrix threeBlockEquiv threeGaugeMatrix threeGaugeMatrixInv
     threeGaugeMatrix_mul_inv threeGaugeMatrix_inv_mul
 
-private def threeTargetZ : (s : Fin 4) → Fin 100 →
+private def threeTargetZ : (s : Fin 4) → Fin 10 × Fin 10 →
     Matrix (Fin (isingThreeBlockDim s)) (Fin (isingThreeBlockDim s)) (ℤ√2)
-  | 0, a => (5 : ℤ√2) • isingSigmaZ
-      (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a)
-  | 1, a => (3 : ℤ√2) • isingSigmaZ
-      (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a)
-  | 2, a => (2 * sqrtd : ℤ√2) • isingOneZ
-      (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a)
-  | 3, a => (2 * sqrtd : ℤ√2) • isingPsiZ
-      (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a)
+  | 0, a => (5 : ℤ√2) • isingSigmaZ a
+  | 1, a => (3 : ℤ√2) • isingSigmaZ a
+  | 2, a => (2 * sqrtd : ℤ√2) • isingOneZ a
+  | 3, a => (2 * sqrtd : ℤ√2) • isingPsiZ a
 
-private theorem threeTargetZ_complex (s : Fin 4) (a : Fin 100) :
+private theorem threeTargetZ_complex (s : Fin 4) (a : Fin 10 × Fin 10) :
     isingThreeTargets s a = complexOfZsqrt2 (threeTargetZ s a) := by
   fin_cases s <;>
-    dsimp [isingThreeTargets, threeTargetZ, isingThreeBlockDim, MPOTensor.toMPSTensor]
+    dsimp [isingThreeTargets, threeTargetZ, isingThreeBlockDim]
   all_goals rw [complexOfZsqrt2_smul]
   all_goals simp [isingSigma, isingOne, isingPsi, map_ofNat, map_mul, zsqrt2ToComplex_sqrtd]
 
 
-private theorem isingBondObjectThree_conjMatrix (a : Fin 100) :
+private theorem isingBondObjectThree_conjMatrix (a : Fin 10 × Fin 10) :
     conjMatrix threeGauge (isingBondObjectThree a) =
-      complexOfZsqrt2 (Matrix.blockDiagonal' (threeBlockZ
-        (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a))) := by
-  have hA : isingBondObjectThree a = complexOfZsqrt2 (mulTensorR thetaThreeZ isingSigmaZ
-      (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a)) :=
-    mulTensor_complexOfRing _ thetaThreeZ isingSigmaZ _ _
+      complexOfZsqrt2 (Matrix.blockDiagonal' (threeBlockZ a.1 a.2)) := by
+  have hA : isingBondObjectThree a = complexOfZsqrt2 (mulTensorR thetaThreeZ isingSigmaZ a) :=
+    mulTensor_complexOfRing _ thetaThreeZ isingSigmaZ _
   rw [threeGauge, conjMatrix_gaugeOfMatrix, hA, threeGaugeMatrix_conj,
     ← complexOfZsqrt2_submatrix, threeBlockIdentity]
 
@@ -327,8 +321,7 @@ of the two-object gauge and the sigma-square gauge (arXiv:1511.08090, Appendix D
 noncomputable def isingThreeSplitCompression :
     MultiBlockCompression isingBondObjectThree Finset.univ isingThreeTargets :=
   MultiBlockCompression.ofRingBlockDiagonal zsqrt2ToComplex threeOrd threeBlockEquiv threeGauge
-    (fun a => threeBlockZ (Fin.divNat (m := 10) (n := 10) a)
-      (Fin.modNat (m := 10) (n := 10) a))
+    (fun a => threeBlockZ a.1 a.2)
     isingBondObjectThree_conjMatrix threeTargetZ threeTargetZ_complex
     (fun _ s => by obtain ⟨s, hs⟩ := s; fin_cases s <;> rfl) (fun _ _ => rfl)
 
@@ -340,7 +333,7 @@ theorem isingBondObjectThree_split_remainder : isingThreeSplitCompression.remain
 
 /-- The right inclusion intertwines every letter with its weighted target
 (data file §1.4; arXiv:1511.08090, Appendix D.2). -/
-theorem isingBondObjectThree_mul_right_eq_right_mul (a : Fin 100)
+theorem isingBondObjectThree_mul_right_eq_right_mul (a : Fin 10 × Fin 10)
     (s : {s : Fin 4 // s ∈ (Finset.univ : Finset (Fin 4))}) :
     isingBondObjectThree a * isingThreeSplitCompression.right s =
       isingThreeSplitCompression.right s * isingThreeTargets s.1 a :=
@@ -348,7 +341,7 @@ theorem isingBondObjectThree_mul_right_eq_right_mul (a : Fin 100)
 
 /-- The left projection intertwines every letter with its weighted target
 (data file §1.4; arXiv:1511.08090, Appendix D.2). -/
-theorem isingBondObjectThree_left_mul_eq_mul_left (a : Fin 100)
+theorem isingBondObjectThree_left_mul_eq_mul_left (a : Fin 10 × Fin 10)
     (s : {s : Fin 4 // s ∈ (Finset.univ : Finset (Fin 4))}) :
     isingThreeSplitCompression.left s * isingBondObjectThree a =
       isingThreeTargets s.1 a * isingThreeSplitCompression.left s :=
