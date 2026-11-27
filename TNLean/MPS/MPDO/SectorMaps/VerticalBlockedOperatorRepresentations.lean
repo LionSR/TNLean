@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.Coefficients.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorIdentity
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 import TNLean.MPS.Tensor.Tactic
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Simultaneous operator representations of a blocked vertical tensor
@@ -59,12 +60,10 @@ theorem mpo_verticalBNTMPO_verticalAssembledTensor_eq_sum
     mpo (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) L =
       ∑ α, (∑ q, weight α q ^ L) • mpo (verticalBNTMPO (A α)) L := by
   ext σ τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) σ τ]
-  simp only [verticalBNTMPO_toMPSTensor]
+  rw [← mpv_pair (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) σ τ,
+    mpv_verticalBNTMPO]
   rw [mpv_verticalAssembledTensor_eq_sum, Fintype.sum_sigma]
-  simp only [Matrix.sum_apply, Matrix.smul_apply,
-    ← MPSTensor.mpv_toMPSTensor_pairConfig, verticalBNTMPO_toMPSTensor,
+  simp only [Matrix.sum_apply, Matrix.smul_apply, ← mpv_pair, mpv_verticalBNTMPO,
     smul_eq_mul, Finset.sum_mul]
 
 /-- A coisometric vertical canonical-form reconstruction gives the weighted
@@ -88,9 +87,7 @@ theorem mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction
     mpo (verticalBNTMPO T) L =
         mpo (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) L := by
       ext σ τ
-      rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-        ← MPSTensor.mpv_toMPSTensor_pairConfig]
-      simp only [verticalBNTMPO_toMPSTensor]
+      rw [← mpv_pair, ← mpv_pair, mpv_verticalBNTMPO, mpv_verticalBNTMPO]
       exact MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
         T (verticalAssembledTensor dim mult weight A) U hU hReconstruct L hL _
     _ = _ := mpo_verticalBNTMPO_verticalAssembledTensor_eq_sum weight A L
@@ -147,13 +144,11 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
   let pair : Fin L → Fin (D * D) := fun n => finProdFinEquiv (σ n, τ n)
   calc
     mpo (verticalBNTMPO A₂) L σ τ = MPTensor.mpv A₂ pair := by
-      simpa [pair] using
-        (MPSTensor.mpv_toMPSTensor_pairConfig (verticalBNTMPO A₂) σ τ).symm
+      rw [← mpv_pair, mpv_verticalBNTMPO]
     _ = c ^ L * MPTensor.mpv A₁' pair := hScaled L pair
     _ = c ^ L * MPTensor.mpv A₁ pair := by rw [hReindex L pair]
     _ = c ^ L * mpo (verticalBNTMPO A₁) L σ τ := by
-      rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
-      simp [pair]
+      rw [← mpv_pair, mpv_verticalBNTMPO]
 
 /-- The two closed-chain representations, given the sector correspondence
 and its coefficient comparison.

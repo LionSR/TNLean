@@ -719,7 +719,7 @@ coisometry onto the active output sectors and satisfies exact adjoint
 reconstruction; no full-space isometry is asserted. See
 `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
 noncomputable def cpsvRFPBNTFusionTensorClause (M : MPOTensor d D)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
     BNTFusionTensorClause M :=
   Classical.choice
@@ -753,7 +753,7 @@ transported through the adjoint sitewise coisometry. See
 `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm
     (M : MPOTensor d D)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M)
     (hLI : (BNTLabelCoefficientFamily.ofChi
       (cpsvRFPBNTFusionTensorClause M hCanonical hM hRFP).chi).LengthIndependent) :

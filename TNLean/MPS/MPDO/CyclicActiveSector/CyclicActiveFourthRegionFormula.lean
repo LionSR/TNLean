@@ -348,7 +348,7 @@ square of the restricted cyclic-active trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_cyclicActiveFourthRegion_formula_of_isSourceZCL
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) (n : ℕ) :
     ∃ lam : ℝ, 0 < lam ∧

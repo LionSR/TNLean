@@ -206,7 +206,7 @@ Source: GLM23, lines 615--626. The orientation of the multiplicity indices
 of `F` is the corrected one of `docs/paper-gaps/glm23_multiplicity_l_indices.tex`;
 there the source's labels `μ, ν` and `χ, η` of this display are exchanged. -/
 theorem fusionFMatrix_eq_singleBlockLambda
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
     (a b c d e f : Fin r) (η : Fin (N a b d)) (χ' : Fin (N d c e))
     (μ : Fin (N b c f)) (ν : Fin (N a f e)) :
@@ -254,7 +254,7 @@ gives exact fusion maps all of whose F coefficients equal one. Source:
 GLM23, lines 626--630: "the F-symbols of the MPO belong to the trivial
 class, i.e. they are gauge equivalent to 1". -/
 theorem exists_fusionFMatrix_eq_one_of_singleBlock
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor)) :
     ∃ (VF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
       (WF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ),

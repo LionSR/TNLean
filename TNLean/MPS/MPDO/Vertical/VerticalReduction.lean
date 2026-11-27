@@ -156,10 +156,13 @@ vertically viewed tensor.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
 theorem hasInvariantProjectorClosure_verticalTensor
-    (M : MPOTensor d D) (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (M : MPOTensor d D) (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) :
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
-  let data := Classical.choice hCanonical
+  have hC : MPTensor.IsCPSVCanonicalForm M.toMPSTensor := by
+    rw [toMPSTensor_eq_reindexPhysical]
+    exact hCanonical.reindexPhysical _
+  let data := Classical.choice hC
   let ref := data.bntRefinement
   exact ref.hasInvariantProjectorClosure_verticalTensor M data hM
 
