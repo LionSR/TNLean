@@ -415,3 +415,26 @@ theorem IsLeftCanonical.physDim_ne_zero {d D : ℕ} [NeZero D] {A : MPSTensor d 
 end MPTensor
 
 end
+
+section
+
+namespace Kraus
+
+variable {ι n : Type*} [Fintype n]
+
+/-- Trace-pairing zero test for an injective Kraus family: a matrix `M` whose trace
+pairings `tr (M * A i)` all vanish against the members of an injective family `A` is zero.
+
+This is the kernel-triviality direction of `Kraus.isInjective_iff_injective_traceMap`
+transported across the cyclic symmetry of the trace: injectivity makes the map
+`X ↦ (tr (A i X))_i` injective, and `tr (M * A i) = tr (A i * M)`. -/
+theorem IsInjective.eq_zero_of_forall_trace_mul_eq_zero {A : ι → Matrix n n ℂ}
+    (hA : Kraus.IsInjective A) {M : Matrix n n ℂ}
+    (h : ∀ i, Matrix.trace (M * A i) = 0) : M = 0 := by
+  apply (Kraus.isInjective_iff_injective_traceMap A).mp hA
+  funext i
+  simpa [Matrix.trace_mul_comm (A i) M] using h i
+
+end Kraus
+
+end
