@@ -313,7 +313,8 @@ theorem IsBNTCanonicalForm.blockTensor
       (P.basis j) (hCF.basis_left_canonical j) (hPrimitive j)
         (hCF.basis_irreducible j) hp
   · intro j
-    exact Kraus.IsTP.blockTensor (A := P.basis j) (hCF.basis_left_canonical j) p
+    exact (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
+      (Kraus.IsTP.block (A := P.basis j) (hCF.basis_left_canonical j) p)
   · change ∀ j : Fin P.basisCount,
       Tendsto (fun N : ℕ ↦ mpvOverlap
         (Kraus.blockTensor (P.basis j) p)

@@ -211,7 +211,8 @@ noncomputable def blockTensor {A : MPSTensor d D}
     CPSVCanonicalFormIIData (Kraus.blockTensor (d := d) (n := Fin D) A p) where
   toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.blockTensor p hp
   blocks_left_canonical := fun k ↦
-    Kraus.IsTP.blockTensor (A := data.blocks k) (data.blocks_left_canonical k) p
+    (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
+      (Kraus.IsTP.block (A := data.blocks k) (data.blocks_left_canonical k) p)
   blocks_fixed_point := by
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k

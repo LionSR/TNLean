@@ -120,7 +120,8 @@ private theorem leftCanonical_blockTensor_one
     ∑ i : Fin (blockPhysDim d 1),
       (blockTensor (d := d) (n := Fin D) A 1 i)ᴴ *
         blockTensor (d := d) (n := Fin D) A 1 i = 1 := by
-  exact Kraus.IsTP.blockTensor (A := A) hLeft 1
+  exact (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
+      (Kraus.IsTP.block (A := A) hLeft 1)
 
 /-- A primitive weighted block family is already in common blocking length `p = 1`. -/
 private theorem common_blocking_primitive
