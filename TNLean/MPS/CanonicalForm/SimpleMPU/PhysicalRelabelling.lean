@@ -9,12 +9,11 @@ import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.Tensor.Reduction.Reduction
 
 /-!
-# Physical relabelling and blocking on the pair alphabet
+# Physical relabelling of overlaps and reductions
 
 An operator tensor `M : MPOTensor d D` is a tensor on the pair alphabet `Fin d × Fin d`. This file
 records how the overlap and rectangular reductions behave under a bijective relabelling of an
-arbitrary physical alphabet, and identifies the letters of a blocked operator tensor with the
-blocked words over the pair alphabet.
+arbitrary physical alphabet.
 
 ## Main results
 
@@ -22,9 +21,6 @@ blocked words over the pair alphabet.
   the overlap unchanged.
 * `MPTensor.isReduction_reindexPhysical_iff`: a bijective relabelling of the physical alphabet
   preserves rectangular reductions in both directions.
-* `MPOTensor.range_blockTensor`, `MPOTensor.isInjective_blockTensor_iff`: the letters of the
-  blocked operator tensor are the blocked words over the pair alphabet, so the blocked tensor is
-  injective exactly when the tensor on the pair alphabet is block injective.
 -/
 
 open scoped Matrix
@@ -56,25 +52,3 @@ theorem isReduction_reindexPhysical_iff {β₁ β₂ : Type*} [Fintype β₁] [D
   simpa [List.map_map] using h (w.map e.symm)
 
 end MPTensor
-
-namespace MPOTensor
-
-variable {d D : ℕ}
-
-/-- The letters of a blocked operator tensor are the blocked words over the pair alphabet. -/
-theorem range_blockTensor (M : MPOTensor d D) (L : ℕ) :
-    Set.range (blockTensor M L) = Set.range (Kraus.block M L) := by
-  refine Function.Surjective.range_comp (fun w : Fin L → Fin d × Fin d ↦
-    ⟨((Kraus.decodeBlockEquiv d L).symm fun k ↦ (w k).1,
-      (Kraus.decodeBlockEquiv d L).symm fun k ↦ (w k).2), ?_⟩) _
-  funext k
-  simp
-
-/-- A blocked operator tensor is injective exactly when the tensor on the pair alphabet is block
-injective at the blocking length. -/
-theorem isInjective_blockTensor_iff (M : MPOTensor d D) (L : ℕ) :
-    Kraus.IsInjective (blockTensor M L) ↔ Kraus.IsNBlkInjective M L := by
-  rw [Kraus.isNBlkInjective_iff_isInjective_block, Kraus.IsInjective, Kraus.IsInjective,
-    range_blockTensor]
-
-end MPOTensor

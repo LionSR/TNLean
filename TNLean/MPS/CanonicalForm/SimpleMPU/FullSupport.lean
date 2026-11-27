@@ -47,7 +47,8 @@ describes the intended reduced representative used in arXiv:1703.09188, Proposit
 `prop:normal-tensor`, lines 319--326 and 344--354, rather than every tensor satisfying
 the paper's literal canonical-form definition. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport (data : CPSVCanonicalFormData A) : Prop :=
+def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) : Prop :=
   ∑ k, data.dim k = D
 
 /-- Full support is preserved by blocking a positive number of sites.
@@ -61,9 +62,10 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor
   exact hfull
 
 /-- Full support is unchanged by a bijective relabeling of the physical alphabet. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical {d' : ℕ}
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
+    {α α' : Type*} [Fintype α] [Fintype α'] {A : MPTensor α (Fin D)}
     (data : CPSVCanonicalFormData A)
-    (hfull : data.HasFullSupport) (e : Fin d' ≃ Fin d) :
+    (hfull : data.HasFullSupport) (e : α' ≃ α) :
     (data.reindexPhysical e).HasFullSupport := by
   change ∑ k, data.dim k = D
   exact hfull
@@ -74,7 +76,8 @@ namespace CPSVCanonicalFormIIData
 
 /-- Full support is preserved when canonical-form-II data are cast along an equality of
 ambient tensors. -/
-theorem hasFullSupport_cast {A B : MPSTensor d D} (data : CPSVCanonicalFormIIData B)
+theorem hasFullSupport_cast {α : Type*} [Fintype α] {A B : MPTensor α (Fin D)}
+    (data : CPSVCanonicalFormIIData B)
     (hfull : data.toCPSVCanonicalFormData.HasFullSupport) (h : A = B) :
     (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
   subst h
@@ -397,7 +400,7 @@ theorem neZero_phys {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) : NeZero d
     rw [Kraus.transferMap_apply] at hfix
     have hzero : hU.ρ = 0 := by
       rw [← hfix]
-      exact Finset.sum_eq_zero fun i _ ↦ absurd i.isLt (by omega)
+      exact Finset.sum_eq_zero fun i _ ↦ absurd i.1.isLt (by omega)
     have h := hU.ρ_trace
     rw [hzero] at h
     simp at h⟩
@@ -414,8 +417,8 @@ private theorem sqrt_blockPhysDim (d p : ℕ) :
       rw [pow_succ, Nat.cast_mul, Real.sqrt_mul (by positivity), ih]
       simp [pow_succ]
 
-/-- Normalized MPO flattening commutes with physical blocking, up to the canonical equivalence
-between a doubled blocked index and a block of doubled indices.
+/-- Normalization commutes with physical blocking: the normalized tensor of the blocked
+operator tensor is the blocked normalized tensor.
 
 The identity holds for every blocking length; positivity is required only when it is used to
 preserve the full support and normal blocks.
@@ -424,37 +427,41 @@ Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, equation
 `eq:transfer-op`, and line 356. -/
 theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
     (MPOTensor.blockTensor U p).normalizedFlattening =
-      Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
-        (Kraus.blockTensor U.normalizedFlattening p) := by
-  funext ij
-  change ((Real.sqrt (Kraus.blockPhysDim d p) : ℂ)⁻¹) •
-    (MPOTensor.blockTensor U p).toMPSTensor ij = _
-  rw [toMPSTensor_blockTensor]
-  simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
-  change _ = Kraus.evalWord
-    (fun i : Fin (d * d) => ((Real.sqrt d : ℂ)⁻¹) • U (i.divNat, i.modNat)) _
-  rw [Kraus.evalWord_smul, List.length_ofFn]
+      MPOTensor.blockTensor U.normalizedFlattening p := by
   have hsqrtC : (Real.sqrt (Kraus.blockPhysDim d p) : ℂ) =
       (Real.sqrt d : ℂ) ^ p := by
     rw [sqrt_blockPhysDim]
     exact Complex.ofReal_pow _ _
-  rw [hsqrtC, inv_pow]
-  rfl
+  funext ij
+  change ((Real.sqrt (Kraus.blockPhysDim d p) : ℂ)⁻¹) • Kraus.evalWord U (List.ofFn _) =
+    Kraus.evalWord (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • U i) (List.ofFn _)
+  rw [Kraus.evalWord_smul, List.length_ofFn, hsqrtC, inv_pow]
 
-/-- Construct canonical-form-II data for a positively blocked MPO normalized flattening.
+/-- A blocked operator tensor is the doubled-index blocking of its relabelling, relabelled
+back to the pair alphabet. -/
+private theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
+    MPOTensor.blockTensor X p = Kraus.reindexPhysical finProdFinEquiv
+      (Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
+        (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
+  rw [← toMPSTensor_eq_reindexPhysical, ← toMPSTensor_blockTensor]
+  funext ⟨i, j⟩
+  simp [Kraus.reindexPhysical, toMPSTensor]
 
-The blocked MPS data are relabeled by `blockedDoubledIndexEquiv`, matching the index orientation in
-`normalizedFlattening_blockTensor`.
+/-- Construct canonical-form-II data for a positively blocked normalized MPO tensor.
+
+The data are blocked on the doubled index and relabelled back to the pair alphabet of the
+blocked tensor.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
 noncomputable def blockTensorCFIIData (U : MPOTensor d D)
     (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
     (p : ℕ) (hp : 0 < p) :
     MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening := by
-  rw [normalizedFlattening_blockTensor]
-  exact (data.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
+  rw [normalizedFlattening_blockTensor, blockTensor_eq_reindexPhysical]
+  exact (((data.reindexPhysical finProdFinEquiv.symm).blockTensor p hp).reindexPhysical
+    (blockedDoubledIndexEquiv d p)).reindexPhysical finProdFinEquiv
 
-/-- The normalized flattening of an MPU is normal when the chosen CPSV canonical-form
+/-- The normalized tensor of an MPU is normal when the chosen CPSV canonical-form
 representative has full support.
 
 **Scope restriction (full support):** Bare `IsMPU` does not imply normality for a
@@ -469,17 +476,24 @@ theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
     (data : MPTensor.CPSVCanonicalFormData U.normalizedFlattening)
     (hfull : data.HasFullSupport) :
     MPTensor.IsNormalTensor U.normalizedFlattening := by
+  let A : MPSTensor (d * d) D :=
+    Kraus.reindexPhysical finProdFinEquiv.symm U.normalizedFlattening
+  let data' : MPTensor.CPSVCanonicalFormData A := data.reindexPhysical finProdFinEquiv.symm
+  have hfull' : data'.HasFullSupport := hfull
   have htrace : ∀ N : ℕ, 1 < N →
-      Matrix.trace
-        (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 :=
-    fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
-  have hr : data.r = 1 :=
-    data.r_eq_one_of_shifted_transfer_trace htrace
+      Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1 := fun _ hN ↦ by
+    rw [Kraus.transferMap_reindexPhysical_equiv]
+    exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
+  have hr : data'.r = 1 := data'.r_eq_one_of_shifted_transfer_trace htrace
   obtain ⟨hrad, hprim⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
-      (Kraus.transferMap U.normalizedFlattening) htrace
-  exact data.isNormalTensor_of_r_eq_one_of_fullSupport
-    hr hfull hrad hprim
+      (Kraus.transferMap A) htrace
+  have hA := (data'.isNormalTensor_of_r_eq_one_of_fullSupport hr hfull' hrad hprim).reindexPhysical
+    finProdFinEquiv
+  have hAe : Kraus.reindexPhysical finProdFinEquiv A = U.normalizedFlattening := by
+    funext i
+    simp [A, Kraus.reindexPhysical]
+  rwa [hAe] at hA
 
 namespace IsMPUCanonicalFormII
 
