@@ -18,36 +18,36 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- The physical realization of a right virtual insertion.
 For injective `A`, `physRealize A hA X` is the `d × d` matrix of coefficients
 that rewrites each `A i * X` in the spanning family `{A j}`. -/
-noncomputable def physRealize (A : MPSTensor d D) (hA : Kraus.IsInjective A)
-    (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin d) (Fin d) ℂ :=
+noncomputable def physRealize (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
+    (X : Matrix (Fin D) (Fin D) ℂ) : Matrix α α ℂ :=
   fun i j => Kraus.decompositionMap (A := A) hA (A i * X) j
 
 /-- Defining property of `physRealize`: each right-inserted matrix decomposes
 in the span of `{A j}` with coefficients read from `physRealize`. -/
-theorem physRealize_spec (A : MPSTensor d D) (hA : Kraus.IsInjective A)
-    (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
+theorem physRealize_spec (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
+    (X : Matrix (Fin D) (Fin D) ℂ) (i : α) :
     A i * X = ∑ j, (physRealize A hA X) i j • A j :=
   (Kraus.decompositionMap_sum (A := A) hA (A i * X)).symm
 
 /-- Left-bond analogue of `physRealize`:
 `physRealizeLeft A hA X` captures coefficients that rewrite each `X * A i`. -/
-noncomputable def physRealizeLeft (A : MPSTensor d D) (hA : Kraus.IsInjective A)
-    (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin d) (Fin d) ℂ :=
+noncomputable def physRealizeLeft (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
+    (X : Matrix (Fin D) (Fin D) ℂ) : Matrix α α ℂ :=
   fun i j => Kraus.decompositionMap (A := A) hA (X * A i) j
 
 /-- Defining property for the left-bond realization map. -/
-theorem physRealizeLeft_spec (A : MPSTensor d D) (hA : Kraus.IsInjective A)
-    (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
+theorem physRealizeLeft_spec (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
+    (X : Matrix (Fin D) (Fin D) ℂ) (i : α) :
     X * A i = ∑ j, (physRealizeLeft A hA X) i j • A j :=
   (Kraus.decompositionMap_sum (A := A) hA (X * A i)).symm
 
 /-- `physRealize` preserves multiplication. -/
-theorem physRealize_mul (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+theorem physRealize_mul (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
     physRealize A hA (X * Y) = physRealize A hA X * physRealize A hA Y := by
   ext i k
@@ -79,12 +79,12 @@ theorem physRealize_mul (A : MPSTensor d D) (hA : Kraus.IsInjective A)
 
 /-- Three-site coefficient with a virtual insertion `X` between the first and
 second local tensors. -/
-def virtualInsertCoeff (A₁ A₂ A₃ : MPSTensor d D)
-    (σ : Fin 3 → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) : ℂ :=
+def virtualInsertCoeff (A₁ A₂ A₃ : MPTensor α (Fin D))
+    (σ : Fin 3 → α) (X : Matrix (Fin D) (Fin D) ℂ) : ℂ :=
   Matrix.trace (A₁ (σ 0) * X * A₂ (σ 1) * A₃ (σ 2))
 
-@[simp] lemma virtualInsertCoeff_eq (A₁ A₂ A₃ : MPSTensor d D)
-    (σ : Fin 3 → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
+@[simp] lemma virtualInsertCoeff_eq (A₁ A₂ A₃ : MPTensor α (Fin D))
+    (σ : Fin 3 → α) (X : Matrix (Fin D) (Fin D) ℂ) :
     virtualInsertCoeff A₁ A₂ A₃ σ X =
       Matrix.trace (A₁ (σ 0) * X * A₂ (σ 1) * A₃ (σ 2)) := rfl
 

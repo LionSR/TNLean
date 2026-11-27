@@ -84,7 +84,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hD : ∀ q, 0 < triangularBondDim χ D q)
-  (hT : ∀ q, Kraus.IsInjective (T q).toMPSTensor)
+  (hT : ∀ q, Kraus.IsInjective (T q))
   (hVW : ∀ a b,
     MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
@@ -101,7 +101,8 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)
 
-local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD hT
+local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
+  (fun q ↦ Iff.mpr (isInjective_toMPSTensor_iff _) (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The auxiliary forward F comparison is literally the original action L
@@ -161,7 +162,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hD : ∀ q, 0 < triangularBondDim χ D q)
-  (hT : ∀ q, Kraus.IsInjective (T q).toMPSTensor)
+  (hT : ∀ q, Kraus.IsInjective (T q))
   (hVW : ∀ a b,
     MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
@@ -178,7 +179,8 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)
 
-local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD hT
+local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
+  (fun q ↦ Iff.mpr (isInjective_toMPSTensor_iff _) (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The operator-only inverse comparison in the auxiliary family is the
@@ -284,7 +286,7 @@ Individual injectivity and scalar-gauge separation derive the common
 blocking needed in its proof; the conclusion uses the unblocked maps. -/
 theorem actionLMatrix_mixed_pentagon
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+    (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
@@ -332,10 +334,9 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
     {B : MPSTensor d (∑ x : Fin s, D x)}
     (hClosed : IsBoundaryClosed T) (hCompatible : IsBoundaryCompatible T B)
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (O a).toMPSTensor))
+    (hT : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) O)
     (hB : B = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+    (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
@@ -363,11 +364,14 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
             actionLMatrix WF VA WA b c x z ⟨t, j, k⟩ ⟨f, l, mu⟩ *
               actionLMatrix WF VA WA a f x y ⟨z, i, l⟩ ⟨e, m, nu⟩ := by
   classical
+  have hT' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
+      (fun a ↦ (O a).toMPSTensor) := congrArg toMPSTensor hT
   choose N VF WF hF using fun a b ↦
-    hClosed.exists_blockFusionDecomposition_of_isInjective O hT hInjO hχ hneO a b
+    hClosed.exists_blockFusionDecomposition_of_isInjective O hT'
+      (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInjO a)) hχ hneO a b
   choose M VA WA hA using fun a x ↦
     hCompatible.exists_blockActionDecomposition_of_isInjective
-      O A hT hB hInjA hD hneA a x
+      O A hT' hB hInjA hD hneA a x
   exact ⟨N, M, VF, WF, VA, WA, hF, hA,
     actionLMatrix_mixed_pentagon O A hInjO hInjA hχ hD hneO hneA
       VF WF VA WA hF hA⟩

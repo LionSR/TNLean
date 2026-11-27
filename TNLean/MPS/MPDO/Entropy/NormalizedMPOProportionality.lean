@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.DensityOperator.AreaLaw
 import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Normalized MPOs under finite-chain proportionality
@@ -44,14 +45,13 @@ Source context: arXiv:1606.00608, Theorem `thm1`, lines 1167--1182; this
 transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
 theorem normalizedMPO_eq_of_nonzeroProportionalMPV₂_at
     (M : MPOTensor d D₁) (K : MPOTensor d D₂)
-    (h : ∃ c : ℂ, c ≠ 0 ∧ ∀ ρ : Fin N → Fin (d * d),
-      MPTensor.mpv M.toMPSTensor ρ = c * MPTensor.mpv K.toMPSTensor ρ) :
+    (h : ∃ c : ℂ, c ≠ 0 ∧ ∀ ρ : Fin N → Fin d × Fin d,
+      MPTensor.mpv M ρ = c * MPTensor.mpv K ρ) :
     normalizedMPO M N = normalizedMPO K N := by
   obtain ⟨c, hc, hmpv⟩ := h
   have hmpo : mpo M N = c • mpo K N := by
     ext σ τ
-    rw [← MPSTensor.mpv_toMPSTensor_pairConfig, hmpv,
-      MPSTensor.mpv_toMPSTensor_pairConfig, Matrix.smul_apply, smul_eq_mul]
+    rw [← mpv_pair, hmpv, mpv_pair, Matrix.smul_apply, smul_eq_mul]
   rw [normalizedMPO, normalizedMPO, hmpo, Matrix.trace_smul, smul_smul, smul_eq_mul]
   congr 1
   field_simp
@@ -63,8 +63,8 @@ Source context: arXiv:1606.00608, Theorem `thm1`, lines 1167--1182; this
 transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
 theorem reducedBlockState_eq_of_nonzeroProportionalMPV₂_at
     (M : MPOTensor d D₁) (K : MPOTensor d D₂) (hL : L ≤ N)
-    (h : ∃ c : ℂ, c ≠ 0 ∧ ∀ ρ : Fin N → Fin (d * d),
-      MPTensor.mpv M.toMPSTensor ρ = c * MPTensor.mpv K.toMPSTensor ρ) :
+    (h : ∃ c : ℂ, c ≠ 0 ∧ ∀ ρ : Fin N → Fin d × Fin d,
+      MPTensor.mpv M ρ = c * MPTensor.mpv K ρ) :
     reducedBlockState M N L hL = reducedBlockState K N L hL := by
   unfold reducedBlockState
   rw [normalizedMPO_eq_of_nonzeroProportionalMPV₂_at M K h]
@@ -80,7 +80,7 @@ Source context: arXiv:1606.00608, Theorem `thm1`, lines 1167--1182; this
 transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
 theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.eventually_normalizedMPO_eq
     {d D₁ D₂ : ℕ} {M : MPOTensor d D₁} {K : MPOTensor d D₂}
-    (h : EventuallyNonzeroProportionalMPV₂ M.toMPSTensor K.toMPSTensor) :
+    (h : EventuallyNonzeroProportionalMPV₂ M K) :
     ∀ᶠ N in Filter.atTop, MPOTensor.normalizedMPO M N = MPOTensor.normalizedMPO K N :=
   h.mono fun _ hN ↦ MPOTensor.normalizedMPO_eq_of_nonzeroProportionalMPV₂_at M K hN
 
@@ -91,7 +91,7 @@ Source context: arXiv:1606.00608, Theorem `thm1`, lines 1167--1182; this
 transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
 theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.eventually_reducedBlockState_eq
     {d D₁ D₂ : ℕ} {M : MPOTensor d D₁} {K : MPOTensor d D₂}
-    (h : EventuallyNonzeroProportionalMPV₂ M.toMPSTensor K.toMPSTensor)
+    (h : EventuallyNonzeroProportionalMPV₂ M K)
     (L : ℕ) :
     ∀ᶠ N in Filter.atTop, ∀ hL : L ≤ N,
       MPOTensor.reducedBlockState M N L hL =

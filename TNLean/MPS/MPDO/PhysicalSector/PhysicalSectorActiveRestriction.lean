@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Matrix.DependentBlockDiagonal
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorActiveCoordinates
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Canonical physical restriction from active sector factors
@@ -202,7 +203,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450. -/
 theorem physicalSlice_mul_sectorCoordinatePhysicalSupportProj
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (β α : Fin D) :
     physicalSlice F.sectorCoordinateTensor β α *
@@ -379,7 +380,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450. -/
 theorem physicalSlice_mul_activePhysicalSupportProj
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (β α : Fin D) :
     physicalSlice K β α * F.activePhysicalSupportProj =
@@ -615,7 +616,7 @@ factor families, which CPSV16 does not make.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     changePhysicalBasis (F.physicalSupportInclusion A)
         (F.activePhysicalSupportRestriction A) = K := by
@@ -640,14 +641,14 @@ the key property enabling the active-support construction used after
 `propSN`. -/
 theorem activePhysicalSupportRestriction_isInjective
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    Kraus.IsInjective (F.activePhysicalSupportRestriction A).toMPSTensor :=
-  isInjective_of_eq_changePhysicalBasis
+    Kraus.IsInjective (F.activePhysicalSupportRestriction A) :=
+  (isInjective_toMPSTensor_iff _).1 <| isInjective_of_eq_changePhysicalBasis
     (F.physicalSupportInclusion A)
     (F.activePhysicalSupportRestriction A) K
     (F.changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
-      A hK hpos).symm hK
+      A hK hpos).symm ((isInjective_toMPSTensor_iff K).2 hK)
 
 /-- The explicitly assembled active-factor inclusion gives the canonical
 physical support restriction data.
@@ -663,7 +664,7 @@ neither of which CPSV16 constructs.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 noncomputable def activePhysicalSupportRestrictionData
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     PhysicalSupportRestrictionData (physicalSupportProj K) K where
   supportDim := F.supportedPhysicalDim A
@@ -673,7 +674,7 @@ noncomputable def activePhysicalSupportRestrictionData
     rw [F.physicalSupportInclusion_range,
       F.activePhysicalSupportProj_eq_physicalSupportProj]
   restricted_injective :=
-    F.activePhysicalSupportRestriction_isInjective A hK hpos
+    (isInjective_toMPSTensor_iff _).2 (F.activePhysicalSupportRestriction_isInjective A hK hpos)
   reembed :=
     F.changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
       A hK hpos

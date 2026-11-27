@@ -159,8 +159,7 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
     normalizedFlattening, Kraus.transferMap_apply, transferMatrix,
     Matrix.submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
     physicalAdjointTensor_apply, Matrix.kronecker_apply,
-    Equiv.symm_apply_apply, Matrix.one_apply, smul_eq_mul,
-    MPOTensor.toMPSTensor]
+    Equiv.symm_apply_apply, Matrix.one_apply, smul_eq_mul]
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.single,
     Matrix.of_apply, ite_and, Finset.mul_sum, Finset.sum_mul]
   simp only [RCLike.star_def, ite_mul, one_mul, zero_mul, mul_ite, mul_zero,

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalBNT
 import TNLean.MPS.MPDO.Vertical.RepresentativeGroupedMarkedLemmaL
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Marked tensors in the span of the physical letters
@@ -57,9 +58,19 @@ the physical letters.
 For coefficients `f u z`, the marked letter indexed by `u` is
 `sum_z f u z • A z`.  This is the class of marks induced by a linear map on
 the physical index in arXiv:1606.00608, Appendix C.3, lines 1835--1858. -/
-noncomputable def linearMarkedTensor
-    (f : Fin e → Fin d → ℂ) (A : MPSTensor d D) : MPSTensor e D :=
-  fun u ↦ ∑ z : Fin d, f u z • A z
+noncomputable def linearMarkedTensor {α β : Type*} [Fintype α]
+    (f : Fin e → α → ℂ) (A : MPTensor α β) : MPTensor (Fin e) β :=
+  fun u ↦ ∑ z : α, f u z • A z
+
+/-- Linear marking of a physically relabelled tensor is linear marking of the original tensor
+with the relabelled coefficients. -/
+theorem linearMarkedTensor_reindexPhysical {α α' β : Type*} [Fintype α] [Fintype α']
+    (e' : α' ≃ α) (f : Fin e → α' → ℂ) (A : MPTensor α β) :
+    linearMarkedTensor f (Kraus.reindexPhysical e' A) =
+      linearMarkedTensor (fun u z ↦ f u (e'.symm z)) A := by
+  funext u
+  simp only [linearMarkedTensor, Kraus.reindexPhysical]
+  exact (Finset.sum_congr rfl fun x _ ↦ by simp).trans (e'.sum_comp fun z ↦ f u (e'.symm z) • A z)
 
 /-- Linear marking commutes with a weighted block-diagonal direct sum.
 
@@ -174,24 +185,8 @@ namespace MPOTensor.IsHorizontalCF
 
 variable {d e D : ℕ}
 
-/-- Closed chains with one marked letter separate two physical-letter marks
-for a tensor in normalized BNT-refined horizontal form.
-
-For coefficient families `f` and `g`, suppose that replacing the first
-physical letter by `sum_z f u z M^z` or by `sum_z g u z M^z` gives equal
-closed chains for every marked index, tail word, and positive tail length.
-Then the two marked tensors are equal.
-
-The proof uses only marks in the span of the physical letters.  Arbitrary
-bond-space marks would give a false statement because closed chains cannot
-detect off-diagonal matrices between repeated sectors.
-
-This is the physical-insertion scope of Lemma L in arXiv:1606.00608,
-Appendix C.3, lines 1835--1858, under the stronger `IsHorizontalCF` hypothesis.
-It does not provide the retained-coordinate separation from literal CPSV
-canonical form needed by Proposition 4.13; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
-theorem linearMarkedTensor_eq_of_trace_agree
+/-- The doubled-index form of `linearMarkedTensor_eq_of_trace_agree`. -/
+private theorem linearMarkedTensor_eq_of_trace_agree_doubled
     (M : MPOTensor d D) (hHorizontal : M.IsHorizontalCF)
     (f g : Fin e → Fin (d * d) → ℂ)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin (d * d)),
@@ -235,5 +230,42 @@ theorem linearMarkedTensor_eq_of_trace_agree
   funext u
   rw [MPSTensor.linearMarkedTensor_gauge f X hX' u,
     MPSTensor.linearMarkedTensor_gauge g X hX' u, hSector]
+
+/-- Closed chains with one marked letter separate two physical-letter marks
+for a tensor in normalized BNT-refined horizontal form.
+
+For coefficient families `f` and `g`, suppose that replacing the first
+physical letter by `sum_z f u z M^z` or by `sum_z g u z M^z` gives equal
+closed chains for every marked index, tail word, and positive tail length.
+Then the two marked tensors are equal.
+
+The proof uses only marks in the span of the physical letters.  Arbitrary
+bond-space marks would give a false statement because closed chains cannot
+detect off-diagonal matrices between repeated sectors.
+
+This is the physical-insertion scope of Lemma L in arXiv:1606.00608,
+Appendix C.3, lines 1835--1858, under the stronger `IsHorizontalCF` hypothesis.
+It does not provide the retained-coordinate separation from literal CPSV
+canonical form needed by Proposition 4.13; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+theorem linearMarkedTensor_eq_of_trace_agree
+    (M : MPOTensor d D) (hHorizontal : M.IsHorizontalCF)
+    (f g : Fin e → Fin d × Fin d → ℂ)
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d × Fin d),
+      Matrix.trace
+          (MPSTensor.linearMarkedTensor f M u * Kraus.evalWord M (List.ofFn w)) =
+        Matrix.trace
+          (MPSTensor.linearMarkedTensor g M u * Kraus.evalWord M (List.ofFn w))) :
+    MPSTensor.linearMarkedTensor f M = MPSTensor.linearMarkedTensor g M := by
+  have hMark : ∀ h : Fin e → Fin d × Fin d → ℂ, MPSTensor.linearMarkedTensor h M =
+      MPSTensor.linearMarkedTensor (fun u (z : Fin (d * d)) ↦ h u (finProdFinEquiv.symm z))
+        M.toMPSTensor := by
+    intro h
+    rw [toMPSTensor_eq_reindexPhysical, MPSTensor.linearMarkedTensor_reindexPhysical]
+    simp
+  rw [hMark f, hMark g]
+  refine linearMarkedTensor_eq_of_trace_agree_doubled M hHorizontal _ _ fun L hL u w ↦ ?_
+  rw [← hMark f, ← hMark g, evalWord_toMPSTensor, List.map_ofFn]
+  exact hTrace L hL u _
 
 end MPOTensor.IsHorizontalCF

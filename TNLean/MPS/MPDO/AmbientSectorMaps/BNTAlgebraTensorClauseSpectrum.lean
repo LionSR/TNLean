@@ -156,7 +156,7 @@ Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toTwoSiteExactSectorGauge
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) :
     TwoSiteExactSectorGauge H := by
   classical
@@ -353,11 +353,9 @@ noncomputable def toTwoSiteExactSectorGauge
     let ket : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).1
     let bra : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).2
     have hEntry := congrFun (congrFun (hBlockedExpansion L hL) ket) bra
-    rw [← MPSTensor.mpv_toMPSTensor_pairConfig
-        (verticalBNTMPO (verticalTensor (blockTwo M))) ket bra]
-      at hEntry
-    simp only [verticalBNTMPO_toMPSTensor, Matrix.sum_apply,
-      Matrix.smul_apply, ← MPSTensor.mpv_toMPSTensor_pairConfig,
+    rw [← mpv_pair (verticalBNTMPO (verticalTensor (blockTwo M))) ket bra,
+      mpv_verticalBNTMPO] at hEntry
+    simp only [Matrix.sum_apply, Matrix.smul_apply, ← mpv_pair, mpv_verticalBNTMPO,
       smul_eq_mul] at hEntry
     have hPair : (fun l ↦ finProdFinEquiv (ket l, bra l)) = σ := by
       funext l
@@ -365,7 +363,7 @@ noncomputable def toTwoSiteExactSectorGauge
     rw [hPair] at hEntry
     exact hEntry.trans (P.mpv_toTensor_eq_sum_coeff σ).symm
   let D₂ : CPSVVerticalDecomposition (blockTwo M) := Classical.choice
-    ((IsCPSVCanonicalForm_toMPSTensor_blockTwo hCanonical).hasVerticalBNTGroupingInputs
+    ((isCPSVCanonicalForm_blockTwo hCanonical).hasVerticalBNTGroupingInputs
       (blockTwo M) hM.blockTwo).exists_cpsvVerticalDecomposition
   let Q : MPSTensor.SectorDecomposition (D * D) := {
     basisCount := D₂.labelCount
@@ -699,7 +697,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toTwoSiteMultiplicitySpectrum
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) :
     TwoSiteMultiplicitySpectrum H :=
   (H.toTwoSiteExactSectorGauge hCanonical hM).toTwoSiteMultiplicitySpectrum

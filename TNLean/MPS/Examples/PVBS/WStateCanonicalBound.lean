@@ -246,7 +246,7 @@ theorem lt_of_sum_mpv_eq_smul_wIndicator {r : ℕ} {dim : Fin r → ℕ}
       Kraus.transferMap (ι := Fin 2) (n := Fin (dim k)) (fun a => (B k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (B k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) B)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) B)
     (coef : Fin r → ℂ) (hcoef : ∀ k, coef k ≠ 0)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0)
     (hW : ∀ σ : Cfg 2 N, ∑ k, coef k * mpv (B k) σ = c * wIndicator N σ) :
@@ -332,7 +332,7 @@ pairwise different block states read as pairwise nonproportional, and the thresh
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator {D : ℕ} {A : MPSTensor 2 D}
     (h : PGVWC07CanonicalFormData A) {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
     N < 2 * max L₀ (3 * (h.r - 1) * (L₀ + 1)) :=
   lt_of_sum_mpv_eq_smul_wIndicator h.blocks h.dim_pos h.unital h.dualFixedPoint_transferMap
@@ -372,7 +372,7 @@ removes peripheral eigenvalues by blocking, lines 2092–2096). -/
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive {D : ℕ}
     {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
     (hPrim : ∀ k, IsPrimitive (Kraus.mapLM fun i => (h.blocks k i)ᴴ))
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
     N < 2 * max ((D ^ 2 + 1) ^ 2) (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) := by
   classical
@@ -410,7 +410,7 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit {D : ℕ
     {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
     (hC1 : ∀ k, ∃ L, 0 < L ∧ Kraus.IsNBlkInjective (h.blocks k) L)
     (hA0 : ∀ k, IsUnit (h.blocks k 0))
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
     N < 2 * max (D ^ 2 + 1) (3 * (D - 1) * (D ^ 2 + 2)) := by
   classical
@@ -469,7 +469,7 @@ theorem lt_of_sum_mpv_eq_smul_wIndicator_asymmetric {r : ℕ} {dim : Fin r → �
       Kraus.transferMap (ι := Fin 2) (n := Fin (dim k)) (fun a => (B k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (B k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) B)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) B)
     (coef : Fin r → ℂ) (hcoef : ∀ k, coef k ≠ 0)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0)
     (hW : ∀ σ : Cfg 2 N, ∑ k, coef k * mpv (B k) σ = c * wIndicator N σ) :
@@ -509,7 +509,7 @@ lines 2193--2225, proved for arbitrary nonzero block coefficients above. -/
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_asymmetric
     {D : ℕ} {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
     N < max (L₀ + max L₀ (3 * (h.r - 1) * (L₀ + 1))) (12 * (h.r - 1)) :=
   lt_of_sum_mpv_eq_smul_wIndicator_asymmetric h.blocks h.dim_pos h.unital
@@ -532,7 +532,7 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenva
     (hEigen : ∀ k, ∃ (X : Matrix (Fin (h.dim k)) (Fin (h.dim k)) ℂ)
       (μ : ℂ) (φ : Fin (h.dim k) → ℂ), X ∈ Kraus.wordSpan (h.blocks k) 1 ∧
         μ ≠ 0 ∧ φ ≠ 0 ∧ X *ᵥ φ = μ • φ)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin 2) h.blocks)
     {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
     let L₀ := max 1 (D ^ 2)
     N < max (L₀ + max L₀ (3 * (D - 1) * (L₀ + 1))) (12 * (D - 1)) := by

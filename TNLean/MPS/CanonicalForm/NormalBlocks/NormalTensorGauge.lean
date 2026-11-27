@@ -566,7 +566,7 @@ theorem IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
     {g : ℕ} {dim : Fin g → ℕ}
     {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
-    BlocksNotGaugePhaseEquiv (d := d) B := by
+    BlocksNotGaugePhaseEquiv (α := Fin d) B := by
   intro j k hjk hdim hGPE
   obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
   have hN := hLI (N₀ + 1) (by omega)
@@ -597,7 +597,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNormal : ∀ k, IsNormalTensor (A k))
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) A) :
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) A) :
     ∃ N₀ : ℕ, ∀ N > N₀,
       LinearIndependent ℂ (fun k : Fin r => mpvState (d := d) (A k) N) := by
   classical
@@ -605,7 +605,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
     fun k => (hNormal k).exists_tpGauge
   let prepared : (k : Fin r) → MPSTensor d (dim k) :=
     fun k => Kraus.tpGauge (ι := Fin d) (D := dim k) (A k) (σ k)
-  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) prepared := by
     intro j k hjk hdim hGPE
     apply hDistinct j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
@@ -641,7 +641,7 @@ theorem isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     {A : (k : Fin r) → MPSTensor d (dim k)} (hNormal : ∀ k, IsNormalTensor (A k)) :
     IsCPSVBasisOfNormalTensors (toTensorFromBlocks μ A) (fun k => ⟨dim k, A k⟩) ↔
-      BlocksNotGaugePhaseEquiv (d := d) A := by
+      BlocksNotGaugePhaseEquiv (α := Fin d) A := by
   refine ⟨fun h => h.blocks_not_gaugePhaseEquiv, fun hDistinct => ?_⟩
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hNormal k).bondDim_ne_zero⟩
   refine ⟨hNormal, fun N _ => ⟨fun k => μ k ^ N, fun σ => ?_⟩,

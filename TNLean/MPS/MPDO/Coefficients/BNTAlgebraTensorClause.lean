@@ -7,6 +7,7 @@ import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.MPDO.Coefficients.BNTTheoremData
 import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The BNT algebra clause attached to an MPO tensor
@@ -57,6 +58,13 @@ theorem verticalBNTMPO_apply {D n : ℕ} (A : MPSTensor (D * D) n)
     (a b : Fin D) :
     verticalBNTMPO A (a, b) = A (finProdFinEquiv (a, b)) :=
   rfl
+
+/-- The coefficients of the separated tensor on the pair alphabet are the coefficients of the
+original tensor on the recombined letters. -/
+theorem mpv_verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) {N : ℕ}
+    (w : Fin N → Fin D × Fin D) :
+    MPTensor.mpv (verticalBNTMPO A) w = MPTensor.mpv A fun k ↦ finProdFinEquiv (w k) :=
+  MPTensor.mpv_reindexPhysical finProdFinEquiv A w
 
 /-- Separating and then recombining the doubled physical index recovers the
 original tensor. -/

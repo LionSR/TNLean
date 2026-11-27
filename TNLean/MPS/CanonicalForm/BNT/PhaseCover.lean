@@ -156,7 +156,7 @@ structure MPVPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
   enum : (j : Fin g) → Fin (copies j) → Fin r
   repr : Fin g → Fin r
   enum_phase : ∀ j q, MPVPhaseEquiv blocks (repr j) (enum j q)
-  blocks_not_equiv : BlocksNotGaugePhaseEquiv (d := d) (fun j => blocks (repr j))
+  blocks_not_equiv : BlocksNotGaugePhaseEquiv (α := Fin d) (fun j => blocks (repr j))
   regroup : ∀ f : Fin r → ℂ,
     ∑ j : Fin g, ∑ q : Fin (copies j), f (enum j q) = ∑ k : Fin r, f k
 
@@ -284,7 +284,7 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     have henum : Quotient.mk (mpvPhaseSetoid blocks) (enumFn j q) = classOf j :=
       (Finset.mem_filter.mp ((classFinset j).orderEmbOfFin_mem rfl q)).2
     exact Quotient.exact (hrepr.trans henum.symm)
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) (fun j => blocks (reprFn j)) := by
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) (fun j => blocks (reprFn j)) := by
     intro j k hjk hdim hGPE
     have hphase : MPVPhaseEquiv blocks (reprFn j) (reprFn k) :=
       MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (blocks (reprFn j)) (blocks (reprFn k)) hdim hGPE

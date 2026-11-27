@@ -446,7 +446,7 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k) (Nmin : ℕ) :
     ∃ N : ℕ, Nmin ≤ N ∧
       ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d,
@@ -507,7 +507,7 @@ theorem cross_overlap_tendsto_zero_of_separated_bnt_data
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, Kraus.IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
@@ -543,7 +543,7 @@ theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k

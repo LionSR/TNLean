@@ -237,7 +237,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
       (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
         ((Real.sqrt (d * x) : ℂ)⁻¹) •
           tensorPhysicalId U x (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) by
-      simp [normalizedFlattening, MPOTensor.toMPSTensor]]
+      simp [normalizedFlattening]]
   rw [show Kraus.reindexPhysical (finDoubledProdEquiv d x)
       (normalizedDiagonalLift U.normalizedFlattening x)
       (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
@@ -251,7 +251,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
   push_cast
   rw [mul_inv]
   by_cases hab : a = b
-  · simp [hab, normalizedFlattening, MPOTensor.toMPSTensor, Matrix.smul_apply,
+  · simp [hab, normalizedFlattening, Matrix.smul_apply,
       mul_assoc, mul_comm]
   · simp [hab]
 

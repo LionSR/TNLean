@@ -62,7 +62,7 @@ lines 336–340, in the comparison of `prop1conj`, lines 1030–1033. -/
 theorem normalizedFlattening_mapStar (U : MPOTensor d D) :
     (mapStar U).normalizedFlattening = MPSTensor.mapStar U.normalizedFlattening := by
   ext i α β
-  simp [normalizedFlattening, MPOTensor.mapStar, MPSTensor.mapStar, toMPSTensor,
+  simp [normalizedFlattening, MPOTensor.mapStar, MPSTensor.mapStar,
     Matrix.smul_apply, Matrix.map_apply]
 
 /-- Canonical-form-II data, full ambient support, and the same real diagonal
@@ -80,7 +80,7 @@ noncomputable def IsMPUCanonicalFormII.mapStar {U : MPOTensor d D}
     rw [show i = finProdFinEquiv (i.divNat, i.modNat) by
       exact (finProdFinEquiv.apply_symm_apply i).symm]
     simp [normalizedFlattening, MPOTensor.mapStar, physicalAdjointTensor,
-      Kraus.reindexPhysical, toMPSTensor, Matrix.smul_apply, Matrix.map_apply]
+      Kraus.reindexPhysical, Matrix.smul_apply, Matrix.map_apply]
   have hfull : data.toCPSVCanonicalFormData.HasFullSupport := by
     change ∑ k, hU.cfii.toCPSVCanonicalFormData.dim k = D
     exact hU.fullSupport_eq
