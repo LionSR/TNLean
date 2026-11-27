@@ -331,8 +331,8 @@ theorem basis_braRight_eq_ketLeftBraRight_of_invariant
 /-- **Commutation at a two-site chain forces letter-level invariance, for a
 single-letter injective tensor.**
 
-If `M`'s doubled-index tensor `M.toMPSTensor` is (single-letter) injective —
-its `d * d` many matrices `M i j` already span the full `D × D` matrix
+If `M` is (single-letter) injective on the pair alphabet —
+its `d * d` many matrices `M (i, j)` already span the full `D × D` matrix
 algebra — then commutation of the first-site action of an idempotent `Q`
 with the two-site density operator `mpo M 2` alone forces the letter-level
 invariance `M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q`.  Hermiticity of
@@ -347,7 +347,7 @@ commutation `Q_1 H = H Q_1` to the one-sided reduction `Q_1 H = Q_1 H Q_1`
 conclusion); unfolding *that* identity against every trailing letter `M c c'`
 gives `d * d` many trace identities pairing `(M.ketLeftMul Q) a b` against
 `((M.ketLeftMul Q).braRightMul Q) a b`, for every physical index pair `a, b`,
-over every letter of `M.toMPSTensor`. Injectivity's spanning property and
+over every letter of `M`. Injectivity's spanning property and
 nondegeneracy of the trace pairing (`MPSTensor.traceMulRightPi_ker_eq_bot`)
 then force the two matrices to agree.
 
@@ -362,7 +362,7 @@ literal-gauge transport for the general case is supplied in
 the single trailing letter is the identity matrix, giving only a
 trace-level identity, not enough to separate the opposite-corner difference. -/
 theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
-    (M : MPOTensor d D) (hInj : Kraus.IsInjective M.toMPSTensor)
+    (M : MPOTensor d D) (hInj : Kraus.IsInjective M)
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)
     (hComm : Commute (firstSiteMatrix Q 1) (mpo M 2)) :
     M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q := by
@@ -379,7 +379,8 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
   funext ⟨a, b⟩
   change (M.ketLeftMul Q) (a, b) = ((M.ketLeftMul Q).braRightMul Q) (a, b)
   apply sub_eq_zero.mp
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hInj
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero
+    ((MPOTensor.isInjective_toMPSTensor_iff M).2 hInj)
   intro p
   change Matrix.trace
     (((M.ketLeftMul Q) (a, b) - ((M.ketLeftMul Q).braRightMul Q) (a, b)) *

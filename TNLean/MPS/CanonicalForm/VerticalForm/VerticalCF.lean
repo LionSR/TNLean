@@ -7,6 +7,7 @@ import QICLean.Algebra.Combinatorics.FinSumPermutation
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import TNLean.MPS.CanonicalForm.BNT.Basic
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 
@@ -59,8 +60,8 @@ construction (arXiv:1606.00608, lines 214--225).
 ## Main results (toward Proposition 4.13)
 
 * `mpv_diagonalTensor`:
-  the MPV of `diagonalTensor M` at `σ` equals the MPV of `M.toMPSTensor` at the
-  diagonal-paired configuration `k ↦ (σ k, σ k)`.
+  the MPV of `diagonalTensor M` at `σ` equals the MPV of `M` on the pair alphabet at
+  the diagonal-paired configuration `k ↦ (σ k, σ k)`.
 * `mpv_diagonalTensor_eq_blocks`:
   under a horizontal canonical form, `diagonalTensor M` shares its MPV family with
   the single-spin block-diagonal assembly of the diagonally-restricted blocks.
@@ -211,37 +212,25 @@ noncomputable def ketLeftBraRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
   fun p q => P p.divNat q.divNat * P q.modNat p.modNat
 
 /-- Reading the doubled physical index as a ket--bra pair recovers the
-corresponding matrix entry of the horizontal MPO contraction. -/
+corresponding matrix entry of the horizontal MPO contraction.  This is the bridge from the
+doubled-index view to `MPOTensor.mpv_pair`, used where the horizontal canonical form is still
+stated on the doubled index. -/
 theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
     (σ τ : Fin N → Fin d) :
     MPTensor.mpv M.toMPSTensor (fun n => finProdFinEquiv (σ n, τ n)) =
       MPOTensor.mpo M N σ τ := by
-  simp only [MPTensor.mpv, MPTensor.coeff, MPOTensor.mpo_apply,
-    MPOTensor.mpoMatrixEntry]
-  congr 1
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      simp only [List.ofFn_succ, Kraus.evalWord_cons, MPOTensor.evalWord_cons,
-        MPOTensor.toMPSTensor]
-      rw [finProdFinEquiv_divNat, finProdFinEquiv_modNat]
-      congr 1
-      convert ih (σ ∘ Fin.succ) (τ ∘ Fin.succ) using 1 <;> rfl
+  simp [MPOTensor.mpv_toMPSTensor_eq]
 
-/-- The preceding identity with one doubled index separated from an arbitrary
-doubled-index tail. -/
+/-- One doubled index separated from an arbitrary doubled-index tail: the coefficient of
+the doubled-index view is the corresponding matrix entry of the horizontal MPO
+contraction. -/
 theorem mpv_toMPSTensor_cons_pair (M : MPOTensor d D) {N : ℕ}
     (i j : Fin d) (ρ : Fin N → Fin (d * d)) :
     MPTensor.mpv M.toMPSTensor (Fin.cons (finProdFinEquiv (i, j)) ρ) =
       MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ n).divNat))
         (Fin.cons j (fun n => (ρ n).modNat)) := by
-  rw [← mpv_toMPSTensor_pairConfig]
-  congr 1
-  funext n
-  refine Fin.cases ?_ (fun k => ?_) n
-  · rfl
-  · change ρ k = finProdFinEquiv ((ρ k).divNat, (ρ k).modNat)
-    exact (finProdFinEquiv.apply_symm_apply (ρ k)).symm
+  rw [MPOTensor.mpv_toMPSTensor_eq, MPOTensor.mpv_eq_mpo]
+  congr 1 <;> funext n <;> refine Fin.cases (by simp) (fun k => rfl) n
 
 /-- Coefficient identity identifying the first-site doubled-index ket action
 with the matrix entries of $PH^{(N)}$. -/
@@ -412,25 +401,14 @@ def diagonalTensor (M : MPOTensor d D) : MPSTensor d D :=
     diagonalTensor M i = M (i, i) :=
   rfl
 
-/-- The diagonal tensor is the doubled-index tensor restricted to the diagonal pair
-`(i, i)`: `diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i))`. -/
-theorem diagonalTensor_apply_eq (M : MPOTensor d D) (i : Fin d) :
-    diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i)) := by
-  simp only [diagonalTensor_apply, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat]
-
 /-- **Matrix product vector of the diagonal tensor.** The MPV of the diagonal tensor at
-a configuration `σ` equals the MPV of the doubled-index tensor at the diagonal-paired
+a configuration `σ` equals the MPV of `M` on the pair alphabet at the diagonal-paired
 configuration `k ↦ (σ k, σ k)`. This lets the horizontal canonical form of
-`M.toMPSTensor` (which constrains all `Fin (d*d)` configurations) be specialized to the
+`M` (which constrains all pair-alphabet configurations) be specialized to the
 diagonal configurations seen by `diagonalTensor M`, the first step of Proposition 4.13. -/
 theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    MPTensor.mpv (diagonalTensor M) σ
-      = MPTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
-  have htensor : diagonalTensor M =
-      Kraus.reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor :=
-    funext (diagonalTensor_apply_eq M)
-  rw [htensor, MPTensor.mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor]
+    MPTensor.mpv (diagonalTensor M) σ = MPTensor.mpv M (fun k => (σ k, σ k)) :=
+  MPTensor.mpv_reindexPhysical (fun i => (i, i)) M σ
 
 /-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
@@ -447,7 +425,10 @@ theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     MPTensor.mpv (diagonalTensor M) σ
       = MPTensor.mpv (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
-  rw [mpv_diagonalTensor, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
+  have hpair : MPTensor.mpv M (fun k => (σ k, σ k)) =
+      MPTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
+    simp [MPOTensor.mpv_toMPSTensor_eq]
+  rw [mpv_diagonalTensor, hpair, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
 
 /-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal
 ket and bra words. -/

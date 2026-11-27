@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
 import TNLean.MPS.Operator.Product.ActionTensor
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Compression of matrix product operator products, fusion tensors and action tensors
@@ -32,10 +33,8 @@ non-invertible case in which the acted state decomposes over several blocks.
 
 ## Main results
 
-* `MPOTensor.mpv_toMPSTensor`: the periodic vector of the doubled-index view is the matrix
-  entry of the periodic operator.
-* `MPOTensor.GroupFamily.IsNormalRepresentation`: a group-indexed family of MPO tensors with
-  normal doubled-index tensors and the exact positive-length operator law.
+* `MPOTensor.GroupFamily.IsNormalRepresentation`: a group-indexed family of MPO tensors that
+  are normal on the pair alphabet, with the exact positive-length operator law.
 * `MPOTensor.left_mul_evalWord_mul_right_smul`: the compression identity
   `W B^{i₁j₁} ⋯ B^{i_Nj_N} V = λ^N M^{i₁j₁} ⋯ M^{i_Nj_N}`, the note's
   `eq:p5-mpo-product-compression`.
@@ -53,30 +52,6 @@ open scoped Matrix
 namespace MPOTensor
 
 variable {d : ℕ} {ι : Type*} [DecidableEq ι]
-
-/-! ### Periodic vectors of the doubled-index view -/
-
-/-- The periodic vector of the doubled-index MPS view of an MPO tensor, at an arbitrary
-configuration of the pair alphabet, is the matrix entry of the periodic operator at the ket and
-bra configurations encoded by that letter.
-
-Source: arXiv:1606.00608, Section 4.1 (the operator family `O_N` and its matrix entries). -/
-theorem mpv_toMPSTensor {D : ℕ} (M : MPOTensor d D) {N : ℕ} (ρ : Fin N → Fin (d * d)) :
-    MPTensor.mpv M.toMPSTensor ρ =
-      mpo M N (fun k => (ρ k).divNat) (fun k => (ρ k).modNat) := by
-  simp only [MPTensor.mpv, MPTensor.coeff, mpo_apply, mpoMatrixEntry]
-  rw [evalWord_toMPSTensor_ofFn]
-
-/-- Equal periodic operators at every positive length give equal positive-length
-matrix product vectors of the doubled-index tensors.
-
-Source: arXiv:1606.00608, Section 4.1 (the operator family `O_N` and its matrix
-entries). -/
-theorem sameMPV₂Pos_toMPSTensor_of_mpo_eq {D₁ D₂ : ℕ} {M : MPOTensor d D₁}
-    {M' : MPOTensor d D₂} (h : ∀ N, 0 < N → mpo M N = mpo M' N) :
-    MPTensor.SameMPV₂Pos M.toMPSTensor M'.toMPSTensor := by
-  intro N hN ρ
-  rw [mpv_toMPSTensor, mpv_toMPSTensor, h N hN]
 
 /-! ### Compression of a product of matrix product operators -/
 
@@ -111,21 +86,18 @@ nilpotency of the remainder. -/
 theorem exists_multiBlockCompression_mulTensor_of_mpo_eq_sum {Dα Dβ : ℕ} {Dγ : ι → ℕ}
     (Mα : MPOTensor d Dα) (Mβ : MPOTensor d Dβ) (S : Finset ι) (lam : ι → ℂ)
     (Mγ : ∀ s, MPOTensor d (Dγ s)) (hlam : ∀ s ∈ S, lam s ≠ 0)
-    (hMγ : ∀ s ∈ S, Kraus.IsNormal (Mγ s).toMPSTensor) (hD : ∀ s ∈ S, 0 < Dγ s)
+    (hMγ : ∀ s ∈ S, Kraus.IsNormal (Mγ s)) (hD : ∀ s ∈ S, 0 < Dγ s)
     (hmpo : ∀ N : ℕ, 0 < N →
       mpo (mulTensor Mα Mβ) N = ∑ s ∈ S, lam s ^ N • mpo (Mγ s) N) :
     Nonempty (MPSTensor.MultiBlockCompression (mulTensor Mα Mβ).toMPSTensor S
       fun s => lam s • (Mγ s).toMPSTensor) := by
   refine MPSTensor.exists_weightedMultiBlockCompression_of_isNormal S lam
-    (fun s => (Mγ s).toMPSTensor) hlam hMγ hD _ ?_
+    (fun s => (Mγ s).toMPSTensor) hlam
+    (fun s hs => (isNormal_toMPSTensor_iff (Mγ s)).2 (hMγ s hs)) hD _ ?_
   intro N hN ρ
-  have h : mpo (mulTensor Mα Mβ) N (fun k => (ρ k).divNat) (fun k => (ρ k).modNat) =
-      (∑ s ∈ S, lam s ^ N • mpo (Mγ s) N) (fun k => (ρ k).divNat)
-        (fun k => (ρ k).modNat) := by
-    rw [hmpo N hN]
-  rw [mpv_toMPSTensor, h, Matrix.sum_apply]
+  rw [mpv_toMPSTensor_eq, mpv_eq_mpo, hmpo N hN, Matrix.sum_apply]
   exact Finset.sum_congr rfl fun s _ => by
-    rw [Matrix.smul_apply, smul_eq_mul, mpv_toMPSTensor]
+    rw [Matrix.smul_apply, smul_eq_mul, mpv_toMPSTensor_eq, mpv_eq_mpo]
 
 /-! ### Fusion tensors of a matrix product operator group representation -/
 
@@ -136,7 +108,7 @@ universe u
 variable {G : Type u} [Group G]
 
 /-- A group-indexed family of matrix product operator tensors represents the
-group with normal tensors when every doubled-index tensor is normal and the
+group with normal tensors when every tensor is normal on the pair alphabet and the
 periodic operators multiply exactly as the group on every nonempty chain.
 
 Source: arXiv:2502.20257, lines 1403--1407 (the representation law), and
@@ -150,9 +122,9 @@ among its hypotheses, but the fusion-tensor statement it quotes from Molnár et 
 `U_g U_h = U_{gh}` and injectivity (line 1001), and line 1216 remarks that `U_e = 1` can be
 weakened to `U_e` a projector. -/
 structure IsNormalRepresentation (F : GroupFamily G d) : Prop where
-  /-- Every doubled-index tensor `T_g` is normal. This is weaker than the injectivity of
+  /-- Every tensor `T_g` is normal on the pair alphabet. This is weaker than the injectivity of
   arXiv:2203.12563, `REsubmission.tex` line 1211, which it replaces. -/
-  isNormal : ∀ g, Kraus.IsNormal (F.tensor g).toMPSTensor
+  isNormal : ∀ g, Kraus.IsNormal (F.tensor g)
   /-- The representation law `U_g U_h = U_{gh}` on every nonempty periodic chain
   (arXiv:2203.12563, line 1211; arXiv:2502.20257, lines 1403--1407). -/
   operator_mul : ∀ g h N, 0 < N →
@@ -165,7 +137,7 @@ Source: arXiv:2203.12563, line 1211 (the injective representations the fusion-te
 covers); arXiv:2502.20257, lines 1403--1407 (the representation law). -/
 theorem IsRepresentation.isNormalRepresentation {F : GroupFamily G d}
     (hF : F.IsRepresentation) : F.IsNormalRepresentation :=
-  ⟨fun g ↦ (hF.isInjective g).isNormal, hF.operator_mul⟩
+  ⟨fun g ↦ ((isInjective_toMPSTensor_iff _).1 (hF.isInjective g)).isNormal, hF.operator_mul⟩
 
 /-- Stacking the tensors of `g` and `h` gives the positive-length matrix product
 vectors of the tensor of `g * h`.
@@ -173,15 +145,14 @@ vectors of the tensor of `g * h`.
 Source: arXiv:2502.20257, lines 1403--1407. -/
 theorem IsNormalRepresentation.sameMPV₂Pos_mulTensor {F : GroupFamily G d}
     (hF : F.IsNormalRepresentation) (g h : G) :
-    MPTensor.SameMPV₂Pos (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-      (F.tensor (g * h)).toMPSTensor :=
-  sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
+    MPTensor.SameMPV₂Pos (mulTensor (F.tensor g) (F.tensor h)) (F.tensor (g * h)) :=
+  sameMPV₂Pos_iff_mpo_eq.2 fun N hN ↦ by
     rw [mpo_mulTensor, hF.operator_mul g h N hN]
 
 /-- **Fusion tensors of an MPO group representation** (Garre-Rubio--Lootens--Molnár,
 arXiv:2203.12563, equation `fusiontensorG2`, lines 1002--1026, and the lemma at line 1211).
-For a representation `U_g U_h = U_{gh}` on every nonempty chain by tensors whose
-doubled-index tensors are normal, the stacked product of the tensors of `g` and `h` reduces
+For a representation `U_g U_h = U_{gh}` on every nonempty chain by tensors that are normal
+on the pair alphabet, the stacked product of the tensors of `g` and `h` reduces
 onto the tensor of `g * h`: there are maps `V` and `W` that intertwine the pair word of the
 product with the pair word of the tensor of `g * h` at every length, and the remainder after
 the matched sector is removed is nilpotent.
@@ -207,15 +178,28 @@ theorem IsNormalRepresentation.exists_fusionTensors {F : GroupFamily G d}
     (hF : F.IsNormalRepresentation) (g h : G) :
     ∃ (V : Matrix (Fin (F.bondDim (g * h))) (Fin (F.bondDim g * F.bondDim h)) ℂ)
       (W : Matrix (Fin (F.bondDim g * F.bondDim h)) (Fin (F.bondDim (g * h))) ℂ),
-      MPTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-          (F.tensor (g * h)).toMPSTensor V W ∧
-        ∀ w : List (Fin (d * d)),
+      MPTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)) (F.tensor (g * h)) V W ∧
+        ∀ w : List (Fin d × Fin d),
           F.bondDim g * F.bondDim h - F.bondDim (g * h) + 1 ≤ w.length →
-            Kraus.evalWord (fun i => (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor i -
-              W * (F.tensor (g * h)).toMPSTensor i * V) w = 0 :=
-  MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
-    (F.tensor (g * h)).toMPSTensor (hF.isNormal (g * h)) (F.bondDim_pos (g * h))
-    (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (hF.sameMPV₂Pos_mulTensor g h)
+            Kraus.evalWord (fun i => mulTensor (F.tensor g) (F.tensor h) i -
+              W * F.tensor (g * h) i * V) w = 0 := by
+  obtain ⟨V, W, hR, hnil⟩ := MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
+    (F.tensor (g * h)).toMPSTensor ((isNormal_toMPSTensor_iff _).2 (hF.isNormal (g * h)))
+    (F.bondDim_pos (g * h)) (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (hF.sameMPV₂Pos_mulTensor g h))
+  have hmap : ∀ w : List (Fin d × Fin d),
+      (w.map finProdFinEquiv).map finProdFinEquiv.symm = w := fun w ↦ by
+    simp only [List.map_map, Equiv.symm_comp_self, List.map_id]
+  refine ⟨V, W, ⟨hR.mul_eq_one, fun w ↦ ?_⟩, fun w hw ↦ ?_⟩
+  · have h := hR.evalWord (w.map finProdFinEquiv)
+    rwa [evalWord_toMPSTensor, evalWord_toMPSTensor, hmap] at h
+  · have h := hnil (w.map finProdFinEquiv) (by rwa [List.length_map])
+    have hr := Kraus.evalWord_reindexPhysical finProdFinEquiv.symm
+      (fun i => mulTensor (F.tensor g) (F.tensor h) i - W * F.tensor (g * h) i * V)
+      (w.map finProdFinEquiv)
+    rw [hmap] at hr
+    rw [← hr]
+    exact h
 
 end GroupFamily
 

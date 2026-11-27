@@ -8,24 +8,21 @@ import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
 import TNLean.MPS.Tensor.Overlap
 
 /-!
-# The doubled-index overlap identity for an MPO tensor
+# The pair-alphabet overlap identity for an MPO tensor
 
-For an MPO tensor `K : MPOTensor d D`, the doubled-index MPS tensor
-`K.toMPSTensor` has physical index type `Fin (d * d)`.  This file proves the
-project derivation identifying the self-overlap of that doubled-index MPS
-family at chain length `N` with the Hilbert--Schmidt trace of the MPO:
+An MPO tensor `K : MPOTensor d D` is a tensor on the pair alphabet `Fin d × Fin d` of ket and
+bra indices.  This file proves the project derivation identifying the self-overlap of its
+matrix product vectors at chain length `N` with the Hilbert--Schmidt trace of the MPO:
 
 ```
-MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
-  = Matrix.trace (mpo K N * (mpo K N)ᴴ)
+MPTensor.mpvOverlap K K N = Matrix.trace (mpo K N * (mpo K N)ᴴ)
 ```
 
-Both sides are sums over physical configurations: the left side runs over doubled-index
-words `Fin N → Fin (d * d)`, while the right side expands to the Frobenius
+Both sides are sums over physical configurations: the left side runs over pair-alphabet
+words `Fin N → Fin d × Fin d`, while the right side expands to the Frobenius
 inner product `∑_{σ,τ} mpo K N σ τ * star (mpo K N σ τ)` over pairs `(σ, τ)`
-of ket/bra configurations.  The proof is a finite reindexing along the
-product encoding `finProdFinEquiv : Fin d × Fin d ≃ Fin (d * d)`, using the
-entry formula `MPSTensor.mpv_toMPSTensor_pairConfig`.
+of ket/bra configurations.  The proof is a finite reindexing along the currying
+equivalence, using the entry formula `MPOTensor.mpv_pair`.
 
 **Naming.**  The codebase has no separate purity predicate, so the results are
 stated in trace form and in the Frobenius-norm vocabulary of
@@ -41,11 +38,11 @@ not been established here.
 
 * `MPOTensor.pairCfgEquiv`: reindexing equivalence between pairs of ket/bra
   configurations and doubled-index configurations.
-* `MPOTensor.mpvOverlap_toMPSTensor_self`: the doubled-index overlap identity.
-* `MPOTensor.mpvOverlap_toMPSTensor_self_eq_trace_sq`: under the MPDO
+* `MPOTensor.mpvOverlap_self`: the pair-alphabet overlap identity.
+* `MPOTensor.mpvOverlap_self_eq_trace_sq`: under the MPDO
   positivity hypothesis, Hermiticity identifies the overlap with
   `Matrix.trace (mpo K N * mpo K N)`.
-* `MPOTensor.mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq`: the real
+* `MPOTensor.mpvOverlap_self_re_eq_frobenius_norm_sq`: the real
   part of the overlap is the squared Frobenius norm of the MPO.
 
 ## Source fidelity
@@ -79,19 +76,18 @@ def pairCfgEquiv (d N : ℕ) :
 @[simp] lemma pairCfgEquiv_apply {N : ℕ} (σ τ : Fin N → Fin d) :
     pairCfgEquiv d N (σ, τ) = fun n ↦ finProdFinEquiv (σ n, τ n) := rfl
 
-/-- **Doubled-index overlap identity.**  The self-overlap of the doubled-index
-MPS family of an MPO tensor at chain length `N` equals the Hilbert--Schmidt
+/-- **Pair-alphabet overlap identity.**  The self-overlap of the matrix product vectors of
+an MPO tensor on the pair alphabet at chain length `N` equals the Hilbert--Schmidt
 trace of the MPO:
 ```
-MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
-  = Matrix.trace (mpo K N * (mpo K N)ᴴ).
+MPTensor.mpvOverlap K K N = Matrix.trace (mpo K N * (mpo K N)ᴴ).
 ```
 
-The proof is a finite reindexing: the left side sums over doubled-index words
-`Fin N → Fin (d * d)`, the right side expands to the Frobenius inner product
+The proof is a finite reindexing: the left side sums over pair-alphabet words
+`Fin N → Fin d × Fin d`, the right side expands to the Frobenius inner product
 `∑_{σ,τ} mpo K N σ τ * star (mpo K N σ τ)` over pairs of ket/bra
-configurations, and `MPSTensor.mpv_toMPSTensor_pairConfig` identifies the
-summands along `pairCfgEquiv`.
+configurations, and `MPOTensor.mpv_pair` identifies the summands along the currying
+equivalence.
 
 This is a project derivation preparing the Lemma C.5 route of the eta-local
 structure paper-gap note
@@ -100,9 +96,8 @@ structure paper-gap note
 a claim from CPSV16.  Before trace normalization is established, the right
 side is the raw squared Hilbert--Schmidt norm of the MPO family, not a
 normalized-state purity. -/
-theorem mpvOverlap_toMPSTensor_self (K : MPOTensor d D) (N : ℕ) :
-    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
-      Matrix.trace (mpo K N * (mpo K N)ᴴ) := by
+theorem mpvOverlap_self (K : MPOTensor d D) (N : ℕ) :
+    MPTensor.mpvOverlap K K N = Matrix.trace (mpo K N * (mpo K N)ᴴ) := by
   have htrace : Matrix.trace (mpo K N * (mpo K N)ᴴ)
       = ∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
           mpo K N σ τ * star (mpo K N σ τ) := by
@@ -112,22 +107,22 @@ theorem mpvOverlap_toMPSTensor_self (K : MPOTensor d D) (N : ℕ) :
   calc ∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
           mpo K N σ τ * star (mpo K N σ τ)
       = ∑ p : (Fin N → Fin d) × (Fin N → Fin d),
-          MPTensor.mpv K.toMPSTensor (pairCfgEquiv d N p) *
-            star (MPTensor.mpv K.toMPSTensor (pairCfgEquiv d N p)) := by
+          MPTensor.mpv K (fun n ↦ (p.1 n, p.2 n)) *
+            star (MPTensor.mpv K (fun n ↦ (p.1 n, p.2 n))) := by
         rw [Fintype.sum_prod_type]
-        exact Finset.sum_congr rfl fun σ _ ↦ Finset.sum_congr rfl fun τ _ ↦ by
-          rw [pairCfgEquiv_apply, MPSTensor.mpv_toMPSTensor_pairConfig]
-    _ = ∑ ρ : Fin N → Fin (d * d),
-          MPTensor.mpv K.toMPSTensor ρ * star (MPTensor.mpv K.toMPSTensor ρ) :=
-        Fintype.sum_equiv (pairCfgEquiv d N) _ _ fun _ ↦ rfl
-    _ = MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N := rfl
+        simp only [mpv_pair]
+    _ = ∑ ρ : Fin N → Fin d × Fin d,
+          MPTensor.mpv K ρ * star (MPTensor.mpv K ρ) :=
+        Fintype.sum_equiv
+          (Equiv.arrowProdEquivProdArrow (Fin N) (fun _ ↦ Fin d) (fun _ ↦ Fin d)).symm
+          _ _ fun _ ↦ rfl
+    _ = MPTensor.mpvOverlap K K N := rfl
 
 /-- **Hermitian corollary.**  For an MPDO, positivity on every nonempty chain
 makes the density operator Hermitian, so the raw squared Hilbert--Schmidt norm
 identifies with the trace of the square:
 ```
-MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
-  = Matrix.trace (mpo K N * mpo K N).
+MPTensor.mpvOverlap K K N = Matrix.trace (mpo K N * mpo K N).
 ```
 
 This is a project derivation preparing the Lemma C.5 route of the eta-local
@@ -135,13 +130,12 @@ structure paper-gap note
 (<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>)
 (arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1473--1499); it is not
 a claim from CPSV16. -/
-theorem mpvOverlap_toMPSTensor_self_eq_trace_sq (K : MPOTensor d D) (hK : IsMPDO K)
+theorem mpvOverlap_self_eq_trace_sq (K : MPOTensor d D) (hK : IsMPDO K)
     {N : ℕ} (hN : 0 < N) :
-    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
-      Matrix.trace (mpo K N * mpo K N) := by
-  rw [mpvOverlap_toMPSTensor_self K N, (hK N hN).isHermitian.eq]
+    MPTensor.mpvOverlap K K N = Matrix.trace (mpo K N * mpo K N) := by
+  rw [mpvOverlap_self K N, (hK N hN).isHermitian.eq]
 
-/-- **Frobenius-norm form.**  The real part of the doubled-index self-overlap
+/-- **Frobenius-norm form.**  The real part of the pair-alphabet self-overlap
 is the squared Frobenius norm of the MPO, that is, its raw squared
 Hilbert--Schmidt norm in the vocabulary of `QICLean.Algebra.Matrix.MatrixAux`.
 
@@ -149,9 +143,9 @@ This is a project derivation preparing the Lemma C.5 route of the eta-local
 structure paper-gap note
 (<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>); it
 is not a claim from CPSV16. -/
-theorem mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq (K : MPOTensor d D) (N : ℕ) :
-    (MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N).re = ‖mpo K N‖ ^ 2 := by
-  rw [mpvOverlap_toMPSTensor_self K N, Matrix.trace_mul_comm]
+theorem mpvOverlap_self_re_eq_frobenius_norm_sq (K : MPOTensor d D) (N : ℕ) :
+    (MPTensor.mpvOverlap K K N).re = ‖mpo K N‖ ^ 2 := by
+  rw [mpvOverlap_self K N, Matrix.trace_mul_comm]
   exact Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq (mpo K N)
 
 end MPOTensor

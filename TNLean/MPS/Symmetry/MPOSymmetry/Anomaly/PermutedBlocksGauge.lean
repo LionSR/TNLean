@@ -88,7 +88,7 @@ noncomputable def rescale (fd : FusionData F) (β : ScalarCocycle G) : FusionDat
 
 /-- The left fusion tensors before and after rescaling by `β` differ by `β`. -/
 theorem isDressedProportional_rescale (fd : FusionData F) (β : ScalarCocycle G) (g h : G) :
-    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h))
       (fd.V g h) ((fd.rescale β).V g h) (β (g, h)) :=
   ⟨0, fun w _ ↦ by simp [rescale, Matrix.smul_mul, smul_smul, (β (g, h)).ne_zero]⟩
 

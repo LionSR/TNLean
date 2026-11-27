@@ -164,25 +164,25 @@ theorem scalar_adjoint_closed (X : Matrix (Fin 1) (Fin 1) ℂ) (N : ℕ) :
   refine ⟨X.map (starRingEnd ℂ), ?_⟩
   rw [MPOTensor.conjTranspose_mpoWithBoundary, physicalAdjointTensor_scalarMPO]
 
-/-- The mixed MPO itself is one-site injective after combining its physical
-indices; failure of adjoint closure is not caused by redundant MPO bonds. -/
-theorem mixedMPO_isInjective : Kraus.IsInjective mixedMPO.toMPSTensor := by
+/-- The mixed MPO itself is one-site injective as a tensor on the pair alphabet; failure of
+adjoint closure is not caused by redundant MPO bonds. -/
+theorem mixedMPO_isInjective : Kraus.IsInjective mixedMPO := by
   apply Submodule.eq_top_of_forall_single_mem
   intro i j
   let r : Fin 9 := if i = 0 then (if j = 0 then 0 else 2)
     else (if j = 0 then 6 else 8)
   let c : ℂ := if i = j then 1 else 1 / 3
   have h : Matrix.single i j (1 : ℂ) =
-      c • mixedMPO.toMPSTensor (finProdFinEquiv (r, r)) := by
+      c • mixedMPO (r, r) := by
     ext a b
     fin_cases i <;> fin_cases j <;> fin_cases a <;> fin_cases b <;>
-      norm_num [r, c, MPOTensor.toMPSTensor, mixedMPO, mixedEndpointMPO,
+      norm_num [r, c, mixedMPO, mixedEndpointMPO,
         mixedEndpointMPOLetter, mixedEndpointPhysicalEquiv, endpointMPO, scalarMPO,
         physicalInvolution, virtualInvolution, Matrix.diagonal_apply,
         Matrix.single_apply, Fin.sum_univ_succ, finSumFinEquiv, finProdFinEquiv,
         Fin.addCases, Fin.divNat, Fin.modNat, Matrix.one_apply]
   rw [h]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨finProdFinEquiv (r, r), rfl⟩)
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨(r, r), rfl⟩)
 
 private theorem mixed_boundary_entries (Y : Matrix (Fin 2) (Fin 2) ℂ) :
     MPOTensor.mpoWithBoundary mixedMPO Y 2 ![0, 2] ![0, 2] = 3 * Y 1 0 ∧
