@@ -14,9 +14,9 @@ import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 /-!
 # Canonical-form-II data for an independent tensor product
 
-This file identifies the normalized doubled-index MPS tensor of an independent
-MPO tensor product with the independent tensor product of the two normalized
-flattenings.  The physical coordinate is regrouped in the canonical
+This file identifies the normalized tensor of an independent MPO tensor product
+with the independent tensor product of the two normalized tensors, both relabelled
+to `Fin (d * d)`, on which the product of tensors is defined.  The physical coordinate is regrouped in the canonical
 product-coordinate order
 `((i, k), (j, l)) ↦ ((i, j), (k, l))`.
 
@@ -86,21 +86,22 @@ corresponding to the tensoring clause in arXiv:1703.09188, proof of Theorem
 `IndexTh` (ii), lines 824--845; the paper does not state it separately. -/
 theorem normalizedFlattening_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
     (tensorProduct U V).normalizedFlattening =
-      Kraus.reindexPhysical (finDoubledProdEquiv d e)
-        (MPSTensor.tensorProduct U.normalizedFlattening V.normalizedFlattening) := by
+      Kraus.reindexPhysical (finProdFinEquiv.trans (finDoubledProdEquiv d e))
+        (MPSTensor.tensorProduct
+          (Kraus.reindexPhysical finProdFinEquiv.symm U.normalizedFlattening)
+          (Kraus.reindexPhysical finProdFinEquiv.symm V.normalizedFlattening)) := by
   have hsqrt :
       (Real.sqrt ((d * e : ℕ) : ℝ) : ℂ) =
         (Real.sqrt d : ℂ) * (Real.sqrt e : ℂ) := by
     rw [Nat.cast_mul, Real.sqrt_mul (by positivity), Complex.ofReal_mul]
-  funext q
-  rcases finProdFinEquiv.surjective q with ⟨⟨ik, jl⟩, rfl⟩
+  funext ⟨ik, jl⟩
   rcases finProdFinEquiv.surjective ik with ⟨⟨i, k⟩, rfl⟩
   rcases finProdFinEquiv.surjective jl with ⟨⟨j, l⟩, rfl⟩
   ext αγ βδ
   rcases finProdFinEquiv.surjective αγ with ⟨⟨α, γ⟩, rfl⟩
   rcases finProdFinEquiv.surjective βδ with ⟨⟨β, δ⟩, rfl⟩
-  simp only [normalizedFlattening, Kraus.reindexPhysical,
-    finDoubledProdEquiv_apply, MPSTensor.tensorProduct_apply,
+  simp only [normalizedFlattening, Kraus.reindexPhysical, Equiv.trans_apply,
+    finDoubledProdEquiv_apply, MPSTensor.tensorProduct_apply, Equiv.symm_apply_apply,
     MPOTensor.tensorProduct_apply,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat,
     Matrix.smul_apply, smul_eq_mul]
@@ -124,7 +125,9 @@ noncomputable def tensorProductCFIIData (U : MPOTensor d D) (V : MPOTensor e E)
     (dataV : MPSTensor.CPSVCanonicalFormIIData V.normalizedFlattening) :
     MPSTensor.CPSVCanonicalFormIIData (tensorProduct U V).normalizedFlattening :=
   (normalizedFlattening_tensorProduct U V).symm ▸
-    (dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)
+    ((dataU.reindexPhysical finProdFinEquiv.symm).tensorProduct
+      (dataV.reindexPhysical finProdFinEquiv.symm)).reindexPhysical
+        (finProdFinEquiv.trans (finDoubledProdEquiv d e))
 
 /-- The product canonical-form-II data have full support when both supplied
 input data have full support.
@@ -139,13 +142,17 @@ theorem hasFullSupport_tensorProductCFIIData (U : MPOTensor d D)
     (hU : dataU.toCPSVCanonicalFormData.HasFullSupport)
     (hV : dataV.toCPSVCanonicalFormData.HasFullSupport) :
     (tensorProductCFIIData U V dataU dataV).toCPSVCanonicalFormData.HasFullSupport := by
-  have hprod := dataU.hasFullSupport_tensorProduct dataV hU hV
+  have hprod := (dataU.reindexPhysical finProdFinEquiv.symm).hasFullSupport_tensorProduct
+    (dataV.reindexPhysical finProdFinEquiv.symm) hU hV
   have hreindex :=
     MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
-      (dataU.tensorProduct dataV).toCPSVCanonicalFormData hprod
-      (finDoubledProdEquiv d e)
+      ((dataU.reindexPhysical finProdFinEquiv.symm).tensorProduct
+        (dataV.reindexPhysical finProdFinEquiv.symm)).toCPSVCanonicalFormData hprod
+      (finProdFinEquiv.trans (finDoubledProdEquiv d e))
   exact
-    ((dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)).hasFullSupport_cast
+    (((dataU.reindexPhysical finProdFinEquiv.symm).tensorProduct
+      (dataV.reindexPhysical finProdFinEquiv.symm)).reindexPhysical
+        (finProdFinEquiv.trans (finDoubledProdEquiv d e))).hasFullSupport_cast
       hreindex (normalizedFlattening_tensorProduct U V)
 
 /-- The independent tensor product of two MPUs in canonical form II is again
@@ -172,6 +179,7 @@ noncomputable def IsMPUCanonicalFormII.tensorProduct
     rw [normalizedFlattening_tensorProduct,
       Kraus.transferMap_reindexPhysical_equiv,
       MPSTensor.transferMap_tensorProduct_kronecker,
+      Kraus.transferMap_reindexPhysical_equiv, Kraus.transferMap_reindexPhysical_equiv,
       hU.ρ_fixed, hV.ρ_fixed]
 
 end MPOTensor

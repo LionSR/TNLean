@@ -10,6 +10,7 @@ import TNLean.MPS.Examples.CZX.Gauging.CZXTensor
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorOrderTwo
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.PermutedBlocks
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The anomaly and the L-symbols of the blocked CZX matrix product unitary
@@ -138,7 +139,8 @@ chain.
 Source: arXiv:2502.20257, `eq:MPU_CZX`, `main.tex` lines 4503--4547, with the representation
 law of lines 1403--1407. -/
 theorem family_isNormalRepresentation : family.IsNormalRepresentation where
-  isNormal := Multiplicative.forall_zmod_two idTensor_isNormal tensor_isInjective.isNormal
+  isNormal := Multiplicative.forall_zmod_two idTensor_isNormal
+    ((isNormal_toMPSTensor_iff _).2 tensor_isInjective.isNormal)
   operator_mul := by
     refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
       (Multiplicative.forall_zmod_two ?_ ?_) <;> intro N hN
@@ -154,7 +156,9 @@ theorem family_isNormalRepresentation : family.IsNormalRepresentation where
 
 private theorem fusion_isReduction_idTensor :
     IsReduction (mulTensor tensor tensor).toMPSTensor (idTensor 4).toMPSTensor fusionV fusionW :=
-  fusion_isReduction
+  ⟨fusion_isReduction.1, fun w ↦ by
+    rw [evalWord_toMPSTensor, evalWord_toMPSTensor]
+    exact fusion_isReduction.2 _⟩
 
 /-- **Fusion tensors of the CZX representation**: the identity whenever a factor is the
 identity, and the printed caps `F^<_{g,g} = Y`, `F^>_{g,g} = Y / 2` for two generators.

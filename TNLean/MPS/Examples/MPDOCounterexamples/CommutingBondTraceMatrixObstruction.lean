@@ -8,6 +8,8 @@ import TNLean.MPS.MPDO.PhysicalSector.BondOnePhysicalSectorFactorization
 import TNLean.MPS.Operator.Periodic.LPDO
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductTransport
 import TNLean.MPS.Operator.DensityOperator.ZCL
+import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # A nonminimal sector factorization with nonprimitive trace matrix
@@ -234,11 +236,11 @@ lemma traceMatrix_not_isPrimitive : ¬ Matrix.IsPrimitive traceMatrix := by
   rw [hdiag, Matrix.diagonal_pow] at h11
   norm_num [hn.ne'] at h11
 
-/-- The doubled-index transfer map of the product tensor is the identity on its
+/-- The transfer map of the product tensor on the pair alphabet is the identity on its
 one-dimensional bond algebra. -/
-lemma transferMap_toMPSTensor :
-    Kraus.transferMap tensor.toMPSTensor = LinearMap.id := by
-  rw [← transferMap_eq_toMPSTensor]
+lemma kraus_transferMap_tensor :
+    Kraus.transferMap tensor = LinearMap.id := by
+  rw [← transferMap_eq_kraus_transferMap]
   apply LinearMap.ext
   intro X
   rw [transferMap_apply]
@@ -248,25 +250,27 @@ lemma transferMap_toMPSTensor :
   simp [tensor, sectorWeight, Fin.sum_univ_two, Matrix.mul_apply]
 
 /-- The source tensor is normal. -/
-lemma tensor_isNormalTensor : MPTensor.IsNormalTensor tensor.toMPSTensor :=
-  MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    tensor.toMPSTensor transferMap_toMPSTensor
+lemma tensor_isNormalTensor : MPTensor.IsNormalTensor tensor := by
+  have h := MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    tensor.toMPSTensor ((kraus_transferMap_toMPSTensor tensor).trans kraus_transferMap_tensor)
+  have hRound : Kraus.reindexPhysical finProdFinEquiv tensor.toMPSTensor = tensor := by
+    funext ab
+    change tensor (finProdFinEquiv.symm (finProdFinEquiv ab)) = _
+    rw [Equiv.symm_apply_apply]
+  rw [← hRound]
+  exact h.reindexPhysical finProdFinEquiv
 
 /-- The product tensor is already injective before blocking. -/
-lemma tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
+lemma tensor_isInjective : Kraus.IsInjective tensor := by
   apply top_unique
   intro X _hX
-  have hdiv : (0 : Fin (2 * 2)).divNat = (0 : Fin 2) := by decide
-  have hmod : (0 : Fin (2 * 2)).modNat = (0 : Fin 2) := by decide
-  have hone : tensor.toMPSTensor (0 : Fin (2 * 2)) = 1 := by
-    change tensor ((0 : Fin (2 * 2)).divNat, (0 : Fin (2 * 2)).modNat) = 1
-    rw [hdiv, hmod]
+  have hone : tensor (0, 0) = 1 := by
     ext a b
     fin_cases a
     fin_cases b
     simp [tensor, sectorWeight]
   have hone_mem : (1 : Matrix (Fin 1) (Fin 1) ℂ) ∈
-      Submodule.span ℂ (Set.range tensor.toMPSTensor) := by
+      Submodule.span ℂ (Set.range tensor) := by
     rw [← hone]
     exact Submodule.subset_span (Set.mem_range_self _)
   have hX : X = (X 0 0) • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
@@ -334,8 +338,8 @@ trace matrix: the explicit one-sector factorization above has trace matrix
 $(1)$. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
-      Kraus.IsInjective tensor.toMPSTensor ∧
-      MPTensor.IsNormalTensor tensor.toMPSTensor ∧
+      Kraus.IsInjective tensor ∧
+      MPTensor.IsNormalTensor tensor ∧
       tensor.IsSourceZCL ∧
       (∀ k h, (factorization.neighboringOperator k h).PosSemidef) ∧
       (∀ (N : ℕ) (hN : 2 ≤ N),

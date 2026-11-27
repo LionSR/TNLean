@@ -71,14 +71,14 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-! ### The intertwiner lemma for normal tensors -/
 
 /-- Two tensors of possibly different bond dimensions are **gauge related** when an invertible
 rectangular matrix `X` intertwines their letters, `A i * X = X * A' i`, so that
 `A' i = X⁻¹ * A i * X`.  For equal bond dimensions this is gauge equivalence. -/
-def IsGaugeRelated {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (A' : MPSTensor d D₂) : Prop :=
+def IsGaugeRelated {D₁ D₂ : ℕ} (A : MPTensor α (Fin D₁)) (A' : MPTensor α (Fin D₂)) : Prop :=
   ∃ (X : Matrix (Fin D₁) (Fin D₂) ℂ) (Y : Matrix (Fin D₂) (Fin D₁) ℂ),
     X * Y = 1 ∧ Y * X = 1 ∧ ∀ i, A i * X = X * A' i
 
@@ -103,8 +103,8 @@ is the full matrix algebra, so a nonzero kernel vector forces `X = 0`; symmetric
 left kernel and the words of `A`.  This is the step "since the $B^{ik}_c$ are injective their
 commutant consists of multiples of the identity" of arXiv:1511.08090, lines 191--193, in the
 form needed for two different blocks. -/
-theorem eq_zero_or_isGaugeRelated_of_intertwines {D₁ D₂ : ℕ} {A : MPSTensor d D₁}
-    {A' : MPSTensor d D₂} (hA : Kraus.IsNormal A) (hA' : Kraus.IsNormal A')
+theorem eq_zero_or_isGaugeRelated_of_intertwines {D₁ D₂ : ℕ} {A : MPTensor α (Fin D₁)}
+    {A' : MPTensor α (Fin D₂)} (hA : Kraus.IsNormal A) (hA' : Kraus.IsNormal A')
     {X : Matrix (Fin D₁) (Fin D₂) ℂ} (hX : ∀ i, A i * X = X * A' i) :
     X = 0 ∨ IsGaugeRelated A A' := by
   classical
@@ -174,7 +174,7 @@ theorem eq_zero_or_isGaugeRelated_of_intertwines {D₁ D₂ : ℕ} {A : MPSTenso
     exact e.symm_apply_apply u
 
 /-- A normal tensor of positive bond dimension has a nonzero letter. -/
-theorem exists_ne_zero_of_isNormal {D : ℕ} [NeZero D] {A : MPSTensor d D}
+theorem exists_ne_zero_of_isNormal {D : ℕ} [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) : ∃ i, A i ≠ 0 := by
   by_contra h
   push Not at h
@@ -202,7 +202,7 @@ zipper decomposition, equation `inversegaugeone`, lines 181--191 (the absence of
 blocks above the diagonal).  For action tensors, arXiv:2203.12563, lines 459--490 and 595--602.
 The embeddings need not span the bond space of `B`: zero diagonal blocks are allowed, as in
 arXiv:1511.08090, lines 179--180. -/
-structure ZipperDecomposition (B : MPSTensor d DB) (C : ∀ c, MPSTensor d (D c))
+structure ZipperDecomposition (B : MPTensor α (Fin DB)) (C : ∀ c, MPTensor α (Fin (D c)))
     (N : ι → ℕ) where
   /-- The compressions `V c μ`. -/
   V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin DB) ℂ
@@ -218,7 +218,7 @@ structure ZipperDecomposition (B : MPSTensor d DB) (C : ∀ c, MPSTensor d (D c)
 
 namespace ZipperDecomposition
 
-variable {B : MPSTensor d DB} {C : ∀ c, MPSTensor d (D c)}
+variable {B : MPTensor α (Fin DB)} {C : ∀ c, MPTensor α (Fin (D c))}
 
 /-- Sandwiching a sum over the slots of a decomposition between a matrix `L` on the left
 whose products with the embeddings vanish off one slot picks out that slot. -/
@@ -252,7 +252,7 @@ private theorem sum_mul_W (P : ZipperDecomposition B C N) {m : ℕ}
 /-- **The zipper condition, compression side**: `V c μ * B i = C c i * V c μ`.
 
 Source: arXiv:1511.08090, equation `zippercondition2`, lines 194--200. -/
-theorem V_mul (P : ZipperDecomposition B C N) (c : ι) (μ : Fin (N c)) (i : Fin d) :
+theorem V_mul (P : ZipperDecomposition B C N) (c : ι) (μ : Fin (N c)) (i : α) :
     P.V c μ * B i = C c i * P.V c μ := by
   rw [P.decomp i]
   simpa only [Matrix.mul_assoc] using P.V_mul_sum (fun c' ν => C c' i * P.V c' ν) c μ
@@ -260,7 +260,7 @@ theorem V_mul (P : ZipperDecomposition B C N) (c : ι) (μ : Fin (N c)) (i : Fin
 /-- **The zipper condition, embedding side**: `B i * W c μ = W c μ * C c i`.
 
 Source: arXiv:1511.08090, equation `zippercondition2`, lines 194--200. -/
-theorem mul_W (P : ZipperDecomposition B C N) (c : ι) (μ : Fin (N c)) (i : Fin d) :
+theorem mul_W (P : ZipperDecomposition B C N) (c : ι) (μ : Fin (N c)) (i : α) :
     B i * P.W c μ = P.W c μ * C c i := by
   rw [P.decomp i]
   exact P.sum_mul_W (fun c' ν => P.W c' ν * C c' i) c μ
@@ -268,7 +268,7 @@ theorem mul_W (P : ZipperDecomposition B C N) (c : ι) (μ : Fin (N c)) (i : Fin
 /-- The cross product `Q.V c μ * P.W e ν` of two zipper decompositions intertwines the letters
 of the blocks `C c` and `C e`. -/
 theorem intertwines (P Q : ZipperDecomposition B C N) (c e : ι) (μ : Fin (N c))
-    (ν : Fin (N e)) (i : Fin d) :
+    (ν : Fin (N e)) (i : α) :
     C c i * (Q.V c μ * P.W e ν) = (Q.V c μ * P.W e ν) * C e i := by
   rw [← Matrix.mul_assoc, ← Q.V_mul, Matrix.mul_assoc, P.mul_W, Matrix.mul_assoc]
 
@@ -355,7 +355,7 @@ noncomputable def multiplicityGaugeUnit (P Q : ZipperDecomposition B C N)
 /-- The compressions of the second decomposition are the multiplicity-gauge combinations of
 those of the first, on the support of `B`: `Q.V c μ * B i = ∑ ν, Y μ ν • (P.V c ν * B i)`. -/
 theorem V_mul_eq_sum (P Q : ZipperDecomposition B C N) (hC : ∀ c, Kraus.IsNormal (C c))
-    (hsep : ∀ c e, c ≠ e → ¬ IsGaugeRelated (C c) (C e)) (c : ι) (μ : Fin (N c)) (i : Fin d) :
+    (hsep : ∀ c e, c ≠ e → ¬ IsGaugeRelated (C c) (C e)) (c : ι) (μ : Fin (N c)) (i : α) :
     Q.V c μ * B i = ∑ ν, P.multiplicityGauge Q c μ ν • (P.V c ν * B i) := by
   rw [P.decomp i, Matrix.mul_sum, Fintype.sum_eq_single c]
   · rw [Matrix.mul_sum]
@@ -372,7 +372,7 @@ theorem V_mul_eq_sum (P Q : ZipperDecomposition B C N) (hC : ∀ c, Kraus.IsNorm
 /-- The embeddings of the second decomposition are the inverse-gauge combinations of those of
 the first, on the support of `B`: `B i * Q.W c κ = ∑ ν, Y' ν κ • (B i * P.W c ν)`. -/
 theorem mul_W_eq_sum (P Q : ZipperDecomposition B C N) (hC : ∀ c, Kraus.IsNormal (C c))
-    (hsep : ∀ c e, c ≠ e → ¬ IsGaugeRelated (C c) (C e)) (c : ι) (κ : Fin (N c)) (i : Fin d) :
+    (hsep : ∀ c e, c ≠ e → ¬ IsGaugeRelated (C c) (C e)) (c : ι) (κ : Fin (N c)) (i : α) :
     B i * Q.W c κ = ∑ ν, Q.multiplicityGauge P c ν κ • (B i * P.W c ν) := by
   rw [P.decomp i, Matrix.sum_mul, Fintype.sum_eq_single c]
   · rw [Matrix.sum_mul]
@@ -454,17 +454,16 @@ Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 164--166 and 181--200 (fusion 
 the zipper condition, equation `inversegaugeone`); arXiv:2203.12563, lines 415--424. -/
 theorem exists_unique_zipperFusionGauge {Da Db : ℕ} {χ Nab : ι → ℕ} {Ta : MPOTensor d Da}
     {Tb : MPOTensor d Db} {T : ∀ c, MPOTensor d (χ c)}
-    (P Q : MPSTensor.ZipperDecomposition (mulTensor Ta Tb).toMPSTensor
-      (fun c => (T c).toMPSTensor) Nab)
-    (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hχ : ∀ c, 0 < χ c)
-    (hsep : ∀ c e, c ≠ e → ¬ MPSTensor.IsGaugeRelated (T c).toMPSTensor (T e).toMPSTensor) :
+    (P Q : MPSTensor.ZipperDecomposition (mulTensor Ta Tb) T Nab)
+    (hT : ∀ c, Kraus.IsNormal (T c)) (hχ : ∀ c, 0 < χ c)
+    (hsep : ∀ c e, c ≠ e → ¬ MPSTensor.IsGaugeRelated (T c) (T e)) :
     ∃! Y : ∀ c, GL (Fin (Nab c)) ℂ,
-      (∀ c μ i, Q.V c μ * (mulTensor Ta Tb).toMPSTensor i =
+      (∀ c μ i, Q.V c μ * mulTensor Ta Tb i =
         ∑ ν, (↑(Y c) : Matrix (Fin (Nab c)) (Fin (Nab c)) ℂ) μ ν •
-          (P.V c ν * (mulTensor Ta Tb).toMPSTensor i)) ∧
-      (∀ c κ i, (mulTensor Ta Tb).toMPSTensor i * Q.W c κ =
+          (P.V c ν * mulTensor Ta Tb i)) ∧
+      (∀ c κ i, mulTensor Ta Tb i * Q.W c κ =
         ∑ ν, (↑(Y c)⁻¹ : Matrix (Fin (Nab c)) (Fin (Nab c)) ℂ) ν κ •
-          ((mulTensor Ta Tb).toMPSTensor i * P.W c ν)) :=
+          (mulTensor Ta Tb i * P.W c ν)) :=
   P.exists_unique_multiplicityGauge Q hT hχ hsep
 
 /-- **Uniqueness of zipper action tensors up to the multiplicity gauge.** Let the blocks

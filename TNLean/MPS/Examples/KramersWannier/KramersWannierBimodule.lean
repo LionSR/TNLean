@@ -6,9 +6,10 @@ Authors: Sirui Lu
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 import TNLean.MPS.Operator.Fusion.MPOSymmetry
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Kramers–Wannier duality as a matrix product operator bimodule
@@ -112,7 +113,8 @@ def z2Fusion (a b c : Fin 2) : ℕ := if c = a + b then 1 else 0
 
 /-- Both blocks of the symmetry algebra are normal: each has a one-site matrix equal to the
 scalar `1`. -/
-theorem z2Tensor_isNormal (a : Fin 2) : Kraus.IsNormal (z2Tensor a).toMPSTensor := by
+theorem z2Tensor_isNormal (a : Fin 2) : Kraus.IsNormal (z2Tensor a) := by
+  rw [← isNormal_toMPSTensor_iff]
   fin_cases a
   · exact isNormal_of_bondOne (idTensor 2) 0 0 (by simp [idTensor])
   · exact isNormal_of_bondOne flipTensor 1 0 (by simp [flipTensor])
@@ -203,14 +205,14 @@ theorem kwTransposeTensor_mpo_mul_kwTensor_mpo [NeZero N] :
 /-! ### Tensor-level absorption: a gauge equivalence -/
 
 /-- The kernel tensor is normal: its four one-site matrices span `M_2(ℂ)`. -/
-theorem kwTensor_isNormal : Kraus.IsNormal kwTensor.toMPSTensor := by
+theorem kwTensor_isNormal : Kraus.IsNormal kwTensor := by
   refine Kraus.IsInjective.isNormal (Submodule.eq_top_of_forall_single_mem _ fun p q => ?_)
   have hmem (i j : Fin 2) :
-      kwTensor (i, j) ∈ Submodule.span ℂ (Set.range kwTensor.toMPSTensor) :=
-    Submodule.subset_span ⟨finProdFinEquiv (i, j), toMPSTensor_finProdFinEquiv _ _ _⟩
+      kwTensor (i, j) ∈ Submodule.span ℂ (Set.range kwTensor) :=
+    Submodule.subset_span ⟨(i, j), rfl⟩
   have hcomb (i j i' j' : Fin 2) (c c' : ℂ)
       (h : Matrix.single p q (1 : ℂ) = c • kwTensor (i, j) + c' • kwTensor (i', j')) :
-      Matrix.single p q (1 : ℂ) ∈ Submodule.span ℂ (Set.range kwTensor.toMPSTensor) := by
+      Matrix.single p q (1 : ℂ) ∈ Submodule.span ℂ (Set.range kwTensor) := by
     rw [h]
     exact Submodule.add_mem _ (Submodule.smul_mem _ _ (hmem i j))
       (Submodule.smul_mem _ _ (hmem i' j'))
@@ -233,7 +235,7 @@ private theorem exists_gauge_of_mpo_eq (M : MPOTensor 2 (2 * 1))
       V * W = 1 ∧ W * V = 1 ∧ ∀ i j, M (i, j) = W * kwTensor (i, j) * V := by
   obtain ⟨V, W, hred, hnil⟩ :=
     MPSTensor.exists_isReduction_and_nilpotent_of_isNormal kwTensor.toMPSTensor
-      kwTensor_isNormal two_pos M.toMPSTensor fun L hL σ => by
+      ((isNormal_toMPSTensor_iff _).2 kwTensor_isNormal) two_pos M.toMPSTensor fun L hL σ => by
         rw [MPOTensor.mpv_toMPSTensor, MPOTensor.mpv_toMPSTensor, hM L hL]
   refine ⟨V, W, hred.1, (Matrix.mul_eq_one_comm_of_equiv (finCongr (by norm_num))).mp hred.1,
     fun i j => ?_⟩
@@ -290,7 +292,8 @@ theorem exists_compression_mulTensor_kwTensor_kwTransposeTensor :
         Finset.univ (fun a => (2 : ℂ) • (z2Tensor a).toMPSTensor), P.z = 2 := by
   obtain ⟨P⟩ := exists_multiBlockCompression_mulTensor_of_mpo_eq_sum kwTensor kwTransposeTensor
     Finset.univ (fun _ => (2 : ℂ)) z2Tensor (fun _ _ => two_ne_zero)
-    (fun a _ => z2Tensor_isNormal a) (fun _ _ => Nat.one_pos) fun L hL => by
+    (fun a _ => (isNormal_toMPSTensor_iff _).2 (z2Tensor_isNormal a)) (fun _ _ => Nat.one_pos)
+    fun L hL => by
       have : NeZero L := NeZero.of_pos hL
       rw [mpo_mulTensor, kwTensor_mpo_mul_kwTransposeTensor_mpo]
   refine ⟨P, ?_⟩
@@ -308,7 +311,8 @@ theorem exists_compression_mulTensor_kwTransposeTensor_kwTensor :
         Finset.univ (fun a => (2 : ℂ) • (z2Tensor a).toMPSTensor), P.z = 2 := by
   obtain ⟨P⟩ := exists_multiBlockCompression_mulTensor_of_mpo_eq_sum kwTransposeTensor kwTensor
     Finset.univ (fun _ => (2 : ℂ)) z2Tensor (fun _ _ => two_ne_zero)
-    (fun a _ => z2Tensor_isNormal a) (fun _ _ => Nat.one_pos) fun L hL => by
+    (fun a _ => (isNormal_toMPSTensor_iff _).2 (z2Tensor_isNormal a)) (fun _ _ => Nat.one_pos)
+    fun L hL => by
       have : NeZero L := NeZero.of_pos hL
       rw [mpo_mulTensor, kwTransposeTensor_mpo_mul_kwTensor_mpo]
   refine ⟨P, ?_⟩

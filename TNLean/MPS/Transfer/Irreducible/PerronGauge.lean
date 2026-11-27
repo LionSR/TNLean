@@ -171,7 +171,7 @@ theorem exists_unital_data_of_irreducible
   have hGauge : GaugeEquiv (α := Fin d) (β := Fin D)
       (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
     convert
-      gaugeEquiv_unitalGauge (d := d) (D := D)
+      gaugeEquiv_unitalGauge (α := Fin d) (D := D)
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) ρ hρ using 1
     ext i
     simp [B, Kraus.spectralUnitalGauge, Kraus.unitalGauge]

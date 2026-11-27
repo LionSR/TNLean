@@ -362,7 +362,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hIrrB
   -- Its forward Perron eigenvector is a fixed point, since the spectral radius is one.
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
-    exists_posDef_transferMap_eigenvector_of_irreducible (d := d) (n := D) B hIrrB hBne
+    exists_posDef_transferMap_eigenvector_of_irreducible (n := D) B hIrrB hBne
   have hrRad :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))

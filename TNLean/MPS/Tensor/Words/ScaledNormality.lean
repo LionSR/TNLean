@@ -33,10 +33,10 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- Scaling a tensor by `c` scales MPVs by `c^N`. -/
-theorem mpv_smul (c : ℂ) (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+theorem mpv_smul (c : ℂ) (A : MPTensor α (Fin D)) {N : ℕ} (σ : Fin N → α) :
     mpv (fun i => c • A i) σ = c ^ N * mpv A σ := by
   simp only [mpv, coeff]
   rw [Kraus.evalWord_smul]
@@ -47,9 +47,9 @@ the length-\(N\) words.
 
 Each length-\(N\) word acquires the common factor \(\zeta^N\), which is a unit,
 and the span of a set is unchanged by a unit scalar. -/
-theorem wordSpan_smul_eq {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) (N : ℕ) :
+theorem wordSpan_smul_eq {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPTensor α (Fin D)) (N : ℕ) :
     Kraus.wordSpan (ζ • A) N = Kraus.wordSpan A N := by
-  have hword : ∀ σ : Fin N → Fin d,
+  have hword : ∀ σ : Fin N → α,
       Kraus.evalWord (ζ • A) (List.ofFn σ) =
         (ζ ^ N) • Kraus.evalWord A (List.ofFn σ) := fun σ => by
     have h := Kraus.evalWord_smul ζ A (List.ofFn σ)
@@ -62,7 +62,7 @@ theorem wordSpan_smul_eq {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) (N : �
 
 /-- Rescaling every matrix of a tensor by a nonzero scalar preserves block
 injectivity at every blocking length. -/
-theorem isNBlkInjective_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) (N : ℕ) :
+theorem isNBlkInjective_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPTensor α (Fin D)) (N : ℕ) :
     Kraus.IsNBlkInjective (ζ • A) N ↔ Kraus.IsNBlkInjective A N := by
   simp only [Kraus.IsNBlkInjective, wordSpan_smul_eq hζ A N]
 
@@ -70,7 +70,7 @@ theorem isNBlkInjective_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D)
 
 This is the scalar half of the normalization taken without loss of generality at
 arXiv:quant-ph/0608197, proof lines 765--767. -/
-theorem isNormal_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) :
+theorem isNormal_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPTensor α (Fin D)) :
     Kraus.IsNormal (ζ • A) ↔ Kraus.IsNormal A := by
   constructor
   · rintro ⟨N, hN, hInj⟩

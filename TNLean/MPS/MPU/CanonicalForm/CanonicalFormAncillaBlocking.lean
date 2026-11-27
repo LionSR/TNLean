@@ -55,7 +55,8 @@ variable {d D : ℕ}
 one filling the bond space.
 
 Source: arXiv:1703.09188, canonical form, lines 258--267. -/
-theorem _root_.MPTensor.IsMPUCanonicalBlock.isMPUCanonicalForm [NeZero D] {A : MPSTensor d D}
+theorem _root_.MPTensor.IsMPUCanonicalBlock.isMPUCanonicalForm [NeZero D] {α : Type*}
+    [Fintype α] {A : MPTensor α (Fin D)}
     (hA : IsMPUCanonicalBlock A) : IsMPUCanonicalForm A := by
   classical
   let V : Matrix (Fin (∑ _ : Fin 1, D)) (Fin D) ℂ :=
@@ -97,7 +98,8 @@ theorem _root_.MPTensor.IsMPUCanonicalBlock.isMPUCanonicalForm [NeZero D] {A : M
 filling the bond space.
 
 Source: arXiv:1703.09188, canonical form, lines 259--267. -/
-theorem _root_.MPTensor.IsNormalTensor.isMPUCanonicalForm {A : MPSTensor d D}
+theorem _root_.MPTensor.IsNormalTensor.isMPUCanonicalForm {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)}
     (hA : IsNormalTensor A) : IsMPUCanonicalForm A :=
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   IsMPUCanonicalBlock.isMPUCanonicalForm ⟨hA.no_invariant_proj, hA.spectral_radius_one⟩
@@ -118,10 +120,10 @@ theorem isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening [NeZero d]
   have hc : (Real.sqrt d : ℂ) ≠ 0 := by
     have hd : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
     exact_mod_cast (Real.sqrt_pos.mpr hd).ne'
-  refine (MPTensor.isMPUCanonicalForm_reindexPhysical_iff finProdFinEquiv.symm).1 ?_
-  rw [← sqrt_smul_normalizedFlattening]
   obtain ⟨data⟩ := hU.isMPUCanonicalForm
-  exact ⟨data.smul _ hc⟩
+  have h := data.smul _ hc
+  rw [sqrt_smul_normalizedFlattening] at h
+  exact ⟨h⟩
 
 /-- **Canonical form survives attaching an identity ancilla.** If an MPU tensor
 \(\mathcal U\) is in canonical form, then so is \(\mathcal U^{(p)}\) for every
@@ -152,9 +154,9 @@ theorem IsMPU.isMPUCanonicalForm_blockTensor [NeZero d] [NeZero D]
     rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero k (NeZero.ne d)⟩
   apply isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening
-  rw [normalizedFlattening_blockTensor]
-  exact ((hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf).blockTensor k
-    hk).reindexPhysical _
+  rw [normalizedFlattening_blockTensor, blockTensor_eq_reindexPhysical]
+  exact ((((hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf).reindexPhysical
+    finProdFinEquiv.symm).blockTensor k hk).reindexPhysical _).reindexPhysical _
 
 /-- **Canonical form survives attaching an identity ancilla and blocking.** If an
 MPU tensor \(\mathcal U\) is in canonical form, then so is

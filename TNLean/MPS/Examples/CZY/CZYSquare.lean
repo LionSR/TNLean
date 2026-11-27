@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.CZY.CZYTensor
 import TNLean.MPS.FundamentalTheorem.Compression.Splitting
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.Operator.Defs
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 

@@ -72,13 +72,12 @@ lines 1030–1033, with `Erightleft`, lines 269–281. -/
 noncomputable def IsMPUCanonicalFormII.mapStar {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) : IsMPUCanonicalFormII (MPOTensor.mapStar U) := by
   let data := hU.cfii.physicalAdjointNormalizedFlattening.reindexPhysical
-    (physicalPairSwapEquiv d)
+    (Equiv.prodComm (Fin d) (Fin d))
   have heq : (MPOTensor.mapStar U).normalizedFlattening =
-      Kraus.reindexPhysical (physicalPairSwapEquiv d)
+      Kraus.reindexPhysical (Equiv.prodComm (Fin d) (Fin d))
         (physicalAdjointTensor U).normalizedFlattening := by
-    ext i α β
-    rw [show i = finProdFinEquiv (i.divNat, i.modNat) by
-      exact (finProdFinEquiv.apply_symm_apply i).symm]
+    funext ⟨i, j⟩
+    ext α β
     simp [normalizedFlattening, MPOTensor.mapStar, physicalAdjointTensor,
       Kraus.reindexPhysical, Matrix.smul_apply, Matrix.map_apply]
   have hfull : data.toCPSVCanonicalFormData.HasFullSupport := by

@@ -23,13 +23,13 @@ namespace MPTensor.RetainedBlockReconstructionData
 
 open MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} {D : ℕ} {A : MPTensor α (Fin D)}
 
 /-- Multiplying all retained weights multiplies the assembled tensor by the
 same scalar. -/
 theorem toTensorFromBlocks_mul_weights {r : ℕ} {dim : Fin r → ℕ}
     (c : ℂ) (weights : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) (i : Fin d) :
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) (i : α) :
     toTensorFromBlocks (fun k => c * weights k) blocks i =
       c • toTensorFromBlocks weights blocks i := by
   ext x y
@@ -52,7 +52,7 @@ theorem ambientBlockInclusion_conjTranspose_mul_self
 /-- The reconstruction intertwines an ambient block inclusion with its
 weighted canonical block. -/
 theorem mul_ambientBlockInclusion (data : RetainedBlockReconstructionData A)
-    (k : Fin data.r) (i : Fin d) :
+    (k : Fin data.r) (i : α) :
     A i * data.ambientBlockInclusion k =
       data.ambientBlockInclusion k * (data.weights k • data.blocks k i) := by
   rw [data.reconstruct i, ambientBlockInclusion]

@@ -137,7 +137,7 @@ Source: arXiv:2203.12563, line 1211 (the injective representations the fusion-te
 covers); arXiv:2502.20257, lines 1403--1407 (the representation law). -/
 theorem IsRepresentation.isNormalRepresentation {F : GroupFamily G d}
     (hF : F.IsRepresentation) : F.IsNormalRepresentation :=
-  ⟨fun g ↦ ((isInjective_toMPSTensor_iff _).1 (hF.isInjective g)).isNormal, hF.operator_mul⟩
+  ⟨fun g ↦ (hF.isInjective g).isNormal, hF.operator_mul⟩
 
 /-- Stacking the tensors of `g` and `h` gives the positive-length matrix product
 vectors of the tensor of `g * h`.

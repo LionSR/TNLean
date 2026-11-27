@@ -208,11 +208,12 @@ every letter, then conjugation by `V` intertwines the transfer maps,
 This is the normalization-free relation between the transfer map of a tensor
 and the transfer maps of the corners of its invariant-subspace decomposition
 (arXiv:1606.00608, eq:II_Aiplusk1, lines 214--219 and eq. Ek, lines 220--223). -/
-theorem transferMap_conj_of_intertwine {n : ℕ} (A : MPSTensor d D) (B : MPSTensor d n)
-    (V : Matrix (Fin D) (Fin n) ℂ) (hint : ∀ i : Fin d, A i * V = V * B i)
+theorem transferMap_conj_of_intertwine {α : Type*} [Fintype α] {n : ℕ}
+    (A : MPTensor α (Fin D)) (B : MPTensor α (Fin n))
+    (V : Matrix (Fin D) (Fin n) ℂ) (hint : ∀ i : α, A i * V = V * B i)
     (X : Matrix (Fin n) (Fin n) ℂ) :
-    Kraus.transferMap (ι := Fin d) (n := Fin D) A (V * X * Vᴴ)
-      = V * Kraus.transferMap (ι := Fin d) (n := Fin n) B X * Vᴴ := by
+    Kraus.transferMap (ι := α) (n := Fin D) A (V * X * Vᴴ)
+      = V * Kraus.transferMap (ι := α) (n := Fin n) B X * Vᴴ := by
   rw [Kraus.transferMap_apply, Kraus.transferMap_apply, Matrix.mul_sum, Matrix.sum_mul]
   refine Finset.sum_congr rfl fun i _ => ?_
   have hstar : Vᴴ * (A i)ᴴ = (B i)ᴴ * Vᴴ := by
@@ -257,15 +258,16 @@ map of a nonzero irreducible tensor has a positive eigenvalue with a
 positive-definite eigenvector (Wolf Theorem 6.3(2), specialized to transfer
 maps).  This is the eigenvalue used for the spectral-radius normalization of
 arXiv:1606.00608, lines 224--225. -/
-theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ} [NeZero n]
-    (B : MPSTensor d n) (hIrr : Kraus.IsIrreducibleFamily B) (hB : ∃ i, B i ≠ 0) :
+theorem exists_posDef_transferMap_eigenvector_of_irreducible {α : Type*} [Fintype α] {n : ℕ}
+    [NeZero n] (B : MPTensor α (Fin n)) (hIrr : Kraus.IsIrreducibleFamily B)
+    (hB : ∃ i, B i ≠ 0) :
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
-      ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (ι := Fin d) (n := Fin n) B ρ = (r : ℂ) • ρ := by
-  have hne : Kraus.transferMap (ι := Fin d) (n := Fin n) B ≠ 0 := by
+      ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (ι := α) (n := Fin n) B ρ = (r : ℂ) • ρ := by
+  have hne : Kraus.transferMap (ι := α) (n := Fin n) B ≠ 0 := by
     simpa only using
       Kraus.mapLM_ne_zero_of_exists_ne_zero B hB
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
-    exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (ι := Fin d) (n := Fin n) B)
+    exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (ι := α) (n := Fin n) B)
       (Kraus.transferMap_isCPMap B)
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hIrr) hne
   exact ⟨ρ, r, hρ, hr, hEig⟩

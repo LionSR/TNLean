@@ -151,7 +151,8 @@ theorem of_target_intertwine {α : Type*} {B : MPTensor α (Fin D₂)} {A : MPTe
 
 /-- Entrywise complex conjugation of both tensors and both matrices preserves a
 reduction. -/
-theorem mapStar {B : MPSTensor d D₂} {A : MPSTensor d D₁} (h : IsReduction B A V W) :
+theorem mapStar {α : Type*} [Fintype α] {B : MPTensor α (Fin D₂)} {A : MPTensor α (Fin D₁)}
+    (h : IsReduction B A V W) :
     IsReduction (MPSTensor.mapStar B) (MPSTensor.mapStar A)
       (V.map (starRingEnd ℂ)) (W.map (starRingEnd ℂ)) := by
   refine ⟨?_, fun w ↦ ?_⟩
@@ -166,13 +167,12 @@ theorem of_reindexBond_source {D₂' : ℕ} {K : MPOTensor d D₂} {A : MPOTenso
     {V : Matrix (Fin D₁) (Fin D₂') ℂ} {W : Matrix (Fin D₂') (Fin D₁) ℂ}
     (e : Fin D₂' ≃ Fin D₂) (h : IsReduction (MPOTensor.reindexBond e K) A V W) :
     IsReduction K A (V * e.toPEquiv.toMatrix) (e.symm.toPEquiv.toMatrix * W) := by
-  rw [← isReduction_reindexPhysical_iff finProdFinEquiv.symm] at h ⊢
   refine h.of_intertwine ?_ (fun i ↦ ?_)
   · rw [← PEquiv.toMatrix_trans, ← Equiv.toPEquiv_trans, Equiv.self_trans_symm,
       Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
   · rw [PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv]
     ext x y
-    simp [Kraus.reindexPhysical, MPOTensor.reindexBond]
+    simp [MPOTensor.reindexBond]
 
 end MPTensor.IsReduction
 
@@ -180,16 +180,14 @@ namespace MPOTensor
 
 variable {d : ℕ}
 
-/-- The doubled-index tensor of the physical adjoint is the entrywise conjugate
-of the original doubled-index tensor, with the two physical coordinates
-exchanged. -/
-theorem toMPSTensor_physicalAdjointTensor {D : ℕ} (U : MPOTensor d D) :
-    (physicalAdjointTensor U).toMPSTensor =
-      Kraus.reindexPhysical (physicalPairSwapEquiv d) (MPSTensor.mapStar U.toMPSTensor) := by
-  ext ij β α
-  rw [show ij = finProdFinEquiv (ij.divNat, ij.modNat) by
-    exact (finProdFinEquiv.apply_symm_apply ij).symm]
-  simp [Kraus.reindexPhysical, MPSTensor.mapStar, MPOTensor.toMPSTensor, Matrix.map_apply]
+/-- The physical adjoint is the entrywise conjugate with the two physical indices of the pair
+alphabet exchanged. -/
+theorem physicalAdjointTensor_eq_reindexPhysical_mapStar {D : ℕ} (U : MPOTensor d D) :
+    physicalAdjointTensor U =
+      Kraus.reindexPhysical (Equiv.prodComm (Fin d) (Fin d)) (MPSTensor.mapStar U) := by
+  funext ⟨i, j⟩
+  ext β α
+  simp [Kraus.reindexPhysical, MPSTensor.mapStar, Matrix.map_apply]
 
 end MPOTensor
 
@@ -210,12 +208,9 @@ theorem physicalAdjointTensor {d D₁ D₂ : ℕ} {K : MPOTensor d D₂} {M : MP
     (h : IsReduction K M V W) :
     IsReduction (MPOTensor.physicalAdjointTensor K) (MPOTensor.physicalAdjointTensor M)
       (V.map (starRingEnd ℂ)) (W.map (starRingEnd ℂ)) := by
-  have h' := (isReduction_reindexPhysical_iff finProdFinEquiv.symm).2 h
-  rw [← isReduction_reindexPhysical_iff finProdFinEquiv.symm,
-    ← MPOTensor.toMPSTensor_eq_reindexPhysical, ← MPOTensor.toMPSTensor_eq_reindexPhysical,
-    MPOTensor.toMPSTensor_physicalAdjointTensor,
-    MPOTensor.toMPSTensor_physicalAdjointTensor]
-  exact h'.mapStar.reindexPhysical _
+  rw [MPOTensor.physicalAdjointTensor_eq_reindexPhysical_mapStar,
+    MPOTensor.physicalAdjointTensor_eq_reindexPhysical_mapStar]
+  exact (isReduction_reindexPhysical_iff _).2 h.mapStar
 
 end MPTensor.IsReduction
 
@@ -382,22 +377,20 @@ $h^{-1}$ and $(gh)^{-1}$. -/
 theorem isReduction_daggerFusion (g h : G) :
     MPTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h))
       (F.tensor (g * h)) (fd.daggerFusionV hF hc g h) (fd.daggerFusionW hF hc g h) := by
-  have h₀ := ((MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).1
-    (fd.isReduction h⁻¹ g⁻¹)).physicalAdjointTensor
+  have h₀ := (fd.isReduction h⁻¹ g⁻¹).physicalAdjointTensor
   rw [physicalAdjointTensor_mulTensor] at h₀
-  have h₁ := (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).2
-    ((h₀.of_target_intertwine (A' := F.tensor (g * h)) (hF.daggerTargetGauge_mul_inv hc g h)
-      (fun p ↦ hF.tensor_mul_daggerTargetGauge hc g h p.1 p.2)).of_reindexBond_source _)
-  have h₂ := h₁.of_intertwine (B' := (mulTensor (physicalAdjointTensor (F.tensor g⁻¹))
-      (F.tensor h)).toMPSTensor)
+  have h₁ := (h₀.of_target_intertwine (A' := F.tensor (g * h))
+    (hF.daggerTargetGauge_mul_inv hc g h)
+    (fun p ↦ hF.tensor_mul_daggerTargetGauge hc g h p.1 p.2)).of_reindexBond_source _
+  have h₂ := h₁.of_intertwine
+    (B' := mulTensor (physicalAdjointTensor (F.tensor g⁻¹)) (F.tensor h))
     (by rw [idKron_mul, hF.daggerLegGauge_mul_inv, idKron_one])
     (fun i ↦ mulTensor_mul_idKron_of_intertwine _
-      (hF.tensor_mul_daggerLegGaugeInv hc h) i.divNat i.modNat)
-  have h₃ := h₂.of_intertwine (B' := (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor)
+      (hF.tensor_mul_daggerLegGaugeInv hc h) i.1 i.2)
+  exact h₂.of_intertwine (B' := mulTensor (F.tensor g) (F.tensor h))
     (by rw [kronId_mul, hF.daggerLegGauge_mul_inv, kronId_one])
     (fun i ↦ mulTensor_mul_kronId_of_intertwine _
-      (hF.tensor_mul_daggerLegGaugeInv hc g) i.divNat i.modNat)
-  exact (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).1 h₃
+      (hF.tensor_mul_daggerLegGaugeInv hc g) i.1 i.2)
 
 /-- **The scalars $\zeta_{g,h}$ of `prop:zetas`**: $\zeta_{g,h}$ is the nonzero
 scalar comparing the daggered left fusion tensor with $F^<_{g,h}$ against long
@@ -408,7 +401,7 @@ words of $\mathcal U_g\mathcal U_h$
 Source: arXiv:2502.20257, Proposition `prop:zetas`, `eq:defzeta`,
 lines 1570--1637. -/
 noncomputable def daggerZeta : ScalarCocycle G := fun p ↦
-  MPSTensor.dressedScalar (mulTensor (F.tensor p.1) (F.tensor p.2)).toMPSTensor
+  MPSTensor.dressedScalar (mulTensor (F.tensor p.1) (F.tensor p.2))
     (fd.daggerFusionV hF hc p.1 p.2) (fd.V p.1 p.2)
 
 /-- **`eq:defzeta`.** The daggered fusion tensors are related to the chosen
@@ -426,25 +419,24 @@ Source: arXiv:2502.20257, Proposition `prop:zetas`, `eq:defzeta`
 (lines 1570--1637), with the proof at lines 1675--1677 through the
 boundary-dressed uniqueness of reductions (arXiv:1706.07329v2, Theorem 22). -/
 theorem daggerZeta_defzeta (g h : G) :
-    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h))
         (fd.daggerFusionV hF hc g h) (fd.V g h) (fd.daggerZeta hF hc (g, h)) ∧
-      ∃ N : ℕ, ∀ w : List (Fin (d * d)), N ≤ w.length →
-        Kraus.evalWord (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor w *
+      ∃ N : ℕ, ∀ w : List (Fin d × Fin d), N ≤ w.length →
+        Kraus.evalWord (mulTensor (F.tensor g) (F.tensor h)) w *
             fd.daggerFusionW hF hc g h =
           ((fd.daggerZeta hF hc (g, h) : ℂ))⁻¹ •
-            (Kraus.evalWord (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor w * fd.W g h) := by
+            (Kraus.evalWord (mulTensor (F.tensor g) (F.tensor h)) w * fd.W g h) := by
   have hN := hF.isNormalRepresentation
-  have hD := (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).2
-    (fd.isReduction_daggerFusion hF hc g h)
+  have hD := fd.isReduction_daggerFusion hF hc g h
   obtain ⟨z, hz, hw⟩ := hD.exists_boundary_dressed_proportional_of_nilpotencyLength_le
     (fd.isReduction g h) (hN.isNormal _) (hN.sameMPV₂Pos_mulTensor g h)
     (le_max_left _ _) (le_max_right _ _)
   have hleft : MPTensor.IsDressedProportional
-      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+      (mulTensor (F.tensor g) (F.tensor h))
       (fd.daggerFusionV hF hc g h) (fd.V g h) z :=
     ⟨_, fun w hlen ↦ (hw w (Nat.lt_of_succ_le hlen)).1⟩
   have hζ : MPTensor.IsDressedProportional
-      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+      (mulTensor (F.tensor g) (F.tensor h))
       (fd.daggerFusionV hF hc g h) (fd.V g h) (fd.daggerZeta hF hc (g, h)) :=
     MPSTensor.isDressedProportional_dressedScalar ⟨z, hz, hleft⟩
   have hzζ : z = fd.daggerZeta hF hc (g, h) :=
@@ -452,10 +444,10 @@ theorem daggerZeta_defzeta (g h : G) :
       (hD.exists_mul_evalWord_ne_zero (hN.isNormal _) (F.bondDim_pos _))
   refine ⟨hζ, 2 * max
     (MPTensor.reductionResidualNilpotencyLength
-      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
+      (mulTensor (F.tensor g) (F.tensor h)) (F.tensor (g * h))
       (fd.daggerFusionV hF hc g h) (fd.daggerFusionW hF hc g h))
     (MPTensor.reductionResidualNilpotencyLength
-      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
+      (mulTensor (F.tensor g) (F.tensor h)) (F.tensor (g * h))
       (fd.V g h) (fd.W g h)) + 1, fun w hlen ↦ ?_⟩
   rw [← hzζ]
   exact (hw w (Nat.lt_of_succ_le hlen)).2

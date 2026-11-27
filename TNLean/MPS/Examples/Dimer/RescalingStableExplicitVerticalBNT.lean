@@ -568,10 +568,10 @@ fixed-representative scale tension is recorded in
 <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>. -/
 theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R :
     ∃ (M : MPOTensor 4 4) (H : BNTAlgebraTensorClause M),
-      MPTensor.IsCPSVCanonicalForm M.toMPSTensor ∧
+      MPTensor.IsCPSVCanonicalForm M ∧
         IsMPDO M ∧ IsRFPViaTS M ∧ ¬ H.coeffs.LengthIndependent := by
   exact ⟨R, R_oneLabelBNTAlgebraTensorClause,
-    R_toMPSTensor_isCPSVCanonicalForm, R_isMPDO, isRFPViaTS_R,
+    R_isCPSVCanonicalForm, R_isMPDO, isRFPViaTS_R,
     oneLabelCoeffs_not_lengthIndependent⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP

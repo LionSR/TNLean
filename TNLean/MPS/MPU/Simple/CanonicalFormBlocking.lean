@@ -27,24 +27,6 @@ namespace MPOTensor
 
 variable {d D : ℕ} {U : MPOTensor d D}
 
-/-- Full support of canonical-form-II data is preserved by any positive
-physical blocking, after the canonical reindexing of the blocked alphabet.
-
-Source: arXiv:1703.09188, lines 269--281 and 297--305. -/
-theorem hasFullSupport_blockTensorCFIIData
-    (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
-    (hfull : data.toCPSVCanonicalFormData.HasFullSupport)
-    (p : ℕ) (hp : 0 < p) :
-    (blockTensorCFIIData U data p hp).toCPSVCanonicalFormData.HasFullSupport := by
-  unfold blockTensorCFIIData
-  convert ((data.blockTensor p hp).reindexPhysical
-      (blockedDoubledIndexEquiv d p)).hasFullSupport_cast
-    (MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical _
-      (data.toCPSVCanonicalFormData.hasFullSupport_blockTensor hfull p hp)
-      (blockedDoubledIndexEquiv d p)) (normalizedFlattening_blockTensor U p) using 1
-  congr 1
-  exact eq_of_heq ((cast_heq _ _).trans (eqRec_heq _ _).symm)
-
 /-- A positive block of an MPU in canonical form II retains canonical form II
 in the same ambient bond coordinates and with the same recorded fixed matrix.
 
@@ -60,8 +42,9 @@ noncomputable def IsMPUCanonicalFormII.blockTensor
   ρ_isDiag := hU.ρ_isDiag
   ρ_trace := hU.ρ_trace
   ρ_fixed := by
-    rw [normalizedFlattening_blockTensor, Kraus.transferMap_reindexPhysical_equiv]
-    exact Kraus.transferMap_blockTensor_fixedPoint U.normalizedFlattening p hU.ρ hU.ρ_fixed
+    rw [normalizedFlattening_blockTensor, blockTensor_eq_reindexPhysical_block,
+      Kraus.transferMap_reindexPhysical_equiv, Kraus.transferMap_block, Module.End.pow_apply,
+      Function.iterate_fixed hU.ρ_fixed]
 
 /-- If a positive block is simple, its source gate is an isometry for the
 original canonical-form-II weight. All source-cut factors here belong to the

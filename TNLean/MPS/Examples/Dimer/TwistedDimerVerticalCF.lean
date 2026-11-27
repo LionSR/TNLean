@@ -7,6 +7,7 @@ import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Examples.Dimer.TwistedDimerFlagSectors
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The vertical canonical form of the $\mathbb Z_2$-twisted quantum dimer
@@ -328,7 +329,8 @@ private lemma mpv_flagFamily_const (f : Fin 2) (n : ℕ) :
       (fun _ : Fin (n + 1) => finProdFinEquiv (physIdx 0 0 0, physIdx 0 0 0)) =
       (2 / 5 : ℂ) ^ (n + 1) := by
   unfold flagFamily
-  rw [MPSTensor.mpv_toMPSTensor_pairConfig, mpo_flagMPO_apply f n.succ_pos,
+  simp only [MPOTensor.mpv_toMPSTensor_eq, Equiv.symm_apply_apply, MPOTensor.mpv_pair]
+  rw [mpo_flagMPO_apply f n.succ_pos,
     ite_eq_left ⟨isCyclicBondMatched_const n, isCyclicBondMatched_const n, fun _ => rfl⟩]
   simp [flagWeight_physIdx_zero_zero_zero, div_pow]
 
@@ -338,7 +340,8 @@ private lemma mpv_flagFamily_signWord (f : Fin 2) (n : ℕ) :
     MPTensor.mpv (flagFamily f) (fun m => finProdFinEquiv (signWord n m, signWord n m)) =
       (3 / 10 : ℂ) * ((tau 1 f : ℝ) : ℂ) * (2 / 5 : ℂ) ^ n := by
   unfold flagFamily
-  rw [MPSTensor.mpv_toMPSTensor_pairConfig, mpo_flagMPO_apply f n.succ_pos,
+  simp only [MPOTensor.mpv_toMPSTensor_eq, Equiv.symm_apply_apply, MPOTensor.mpv_pair]
+  rw [mpo_flagMPO_apply f n.succ_pos,
     ite_eq_left ⟨isCyclicBondMatched_signWord n, isCyclicBondMatched_signWord n, fun _ => rfl⟩,
     Fin.prod_univ_succ]
   simp [signWord, flagWeight_physIdx_zero_zero_zero, flagWeight_physIdx_zero_zero_one, div_pow]

@@ -120,12 +120,16 @@ theorem isingBondObjectThree_compression_exists :
   apply exists_multiBlockCompression_of_isNormal
   · intro s _
     fin_cases s <;> dsimp [isingThreeTargets]
-    · exact (isNormal_smul_iff (by norm_num) _).2 isingSigma_isNormal
-    · exact (isNormal_smul_iff (by norm_num) _).2 isingSigma_isNormal
-    · apply (isNormal_smul_iff _ _).2 isingOne_isNormal
+    · exact (isNormal_smul_iff (by norm_num) _).2
+        ((MPOTensor.isNormal_toMPSTensor_iff _).2 isingSigma_isNormal)
+    · exact (isNormal_smul_iff (by norm_num) _).2
+        ((MPOTensor.isNormal_toMPSTensor_iff _).2 isingSigma_isNormal)
+    · apply (isNormal_smul_iff _ _).2
+        ((MPOTensor.isNormal_toMPSTensor_iff _).2 isingOne_isNormal)
       exact mul_ne_zero (by norm_num)
         (Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (by norm_num)))
-    · apply (isNormal_smul_iff _ _).2 isingPsi_isNormal
+    · apply (isNormal_smul_iff _ _).2
+        ((MPOTensor.isNormal_toMPSTensor_iff _).2 isingPsi_isNormal)
       exact mul_ne_zero (by norm_num)
         (Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (by norm_num)))
   · intro s _

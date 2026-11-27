@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.Examples.CZY.CZYSquare
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # CZY: the reduced bond-three tensor `A_0`
@@ -83,7 +84,7 @@ def czyReducedIntMPS : Fin 4 → Matrix (Fin 3) (Fin 3) ℤ
   | 2 => 0
   | 3 => !![0, 1, 1; 0, 1, 1; 0, 0, 0]
 
-/-- The tensor `A_0` in the pair-alphabet view. -/
+/-- The tensor `A_0` on the doubled index `Fin 4`. -/
 def czyReduced : MPSTensor 4 3 := czyReducedTensor.toMPSTensor
 
 theorem czyReduced_eq (a : Fin 4) : czyReduced a = complexOfInt (czyReducedIntMPS a) := by
@@ -220,11 +221,14 @@ theorem czyReduced_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 3 ≤ w.l
 /-- **`A_0` generates the identity at every positive length** (arXiv:2509.03600, main.tex
 line 240). -/
 theorem mpo_czyReducedTensor (N : ℕ) (hN : 0 < N) : MPOTensor.mpo czyReducedTensor N = 1 := by
-  rw [MPOTensor.mpo_eq_of_trace_evalWord _ identityTensor (fun w hw => by
-      rw [show czyReducedTensor.toMPSTensor = czyReduced from rfl,
-        czyReduced_compression.trace_evalWord_eq_sum w hw, Finset.sum_singleton]
-      rfl) N hN,
+  rw [MPOTensor.mpo_eq_of_forall_trace_evalWord (N := identityTensor) (fun w hw => ?_) hN,
     identityTensor_eq_idTensor, MPOTensor.mpo_idTensor]
+  have h := czyReduced_compression.trace_evalWord_eq_sum (w.map finProdFinEquiv)
+    (by simpa using hw)
+  rw [Finset.sum_singleton, czyReduced, czySquareTarget, identityMPS,
+    MPOTensor.evalWord_toMPSTensor, MPOTensor.evalWord_toMPSTensor, List.map_map,
+    Equiv.symm_comp_self, List.map_id] at h
+  exact h
 
 /-! ### Nonsplitting of `A_0` -/
 

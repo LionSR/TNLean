@@ -75,12 +75,12 @@ This answers the existential open question in arXiv:1606.00608, lines
 claim presentation independence. -/
 theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients :
     ∃ (M : MPOTensor 2 4) (H : BNTAlgebraTensorClause M),
-      MPTensor.IsCPSVCanonicalForm M.toMPSTensor ∧
+      MPTensor.IsCPSVCanonicalForm M ∧
         IsMPDO M ∧ IsRFPViaTS M ∧ ¬ H.coeffs.LengthIndependent := by
   refine ⟨baseMPO, baseMPOBNTAlgebraTensorClause,
-    baseMPO_toMPSTensor_isCPSVCanonicalForm, baseMPO_isMPDO, ?_, ?_⟩
+    baseMPO_isCPSVCanonicalForm, baseMPO_isMPDO, ?_, ?_⟩
   · exact baseMPOBNTAlgebraTensorClause.isRFPViaTS
-      baseMPO_toMPSTensor_isCPSVCanonicalForm baseMPO_isMPDO
+      (baseMPO_isCPSVCanonicalForm.reindexPhysical finProdFinEquiv.symm) baseMPO_isMPDO
   · exact normalizedSingletonCoeffs_not_lengthIndependent
 
 end MPOTensor.BondTwoSingletonBaseModel

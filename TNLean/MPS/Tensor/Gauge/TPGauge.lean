@@ -19,11 +19,11 @@ open scoped Matrix ComplexOrder MatrixOrder BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- The TP-gauged family is gauge-equivalent to the original tensor. -/
 theorem gaugeEquiv_tpGauge
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    (A : MPTensor α (Fin D)) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     GaugeEquiv A (Kraus.tpGauge A ρ) := by
   classical
   let X : GL (Fin D) ℂ :=
@@ -35,7 +35,7 @@ theorem gaugeEquiv_tpGauge
 
 /-- The unital-gauged family is gauge-equivalent to the original tensor. -/
 theorem gaugeEquiv_unitalGauge
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    (A : MPTensor α (Fin D)) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     GaugeEquiv A (Kraus.unitalGauge A ρ) := by
   classical
   let X : GL (Fin D) ℂ :=
@@ -47,7 +47,7 @@ theorem gaugeEquiv_unitalGauge
 
 /-- Unital gauging preserves finite-ring MPV coefficients. -/
 theorem sameMPV_unitalGauge
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    (A : MPTensor α (Fin D)) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     SameMPV A (Kraus.unitalGauge A ρ) :=
   GaugeEquiv.sameMPV (gaugeEquiv_unitalGauge A ρ hρ)
 

@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Operator.Periodic
 
-import TNLean.MPS.Operator.Periodic.BondOneOperator
 import TNLean.MPS.Operator.Periodic.BondSimilarity
 import TNLean.MPS.Operator.Periodic.CyclicEdgeWeightTensor
 import TNLean.MPS.Operator.Periodic.DiagonalCutRank

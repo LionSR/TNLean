@@ -38,12 +38,11 @@ unscaled conclusion is false for unrestricted `λ ≠ 1`; see
 open MPTensor
 
 open scoped Matrix Kronecker BigOperators
-open Kraus (blockPhysDim blockTensor flattenBlockedWord evalWord_blockTensor
-  length_flattenBlockedWord)
+
 
 namespace MPSTensor
 
-variable {d D_A D_B : ℕ}
+variable {α : Type*} [Fintype α] {D_A D_B : ℕ}
 
 /-- The coefficient-dual inverse tensor of an injective target tensor.
 Its upper virtual indices are ordered so that
@@ -52,8 +51,8 @@ chosen expansion of the matrix unit `|a⟩⟨a'|`.
 
 Source: the left inverse \(\widetilde A^{-1}\) in arXiv:1706.07329v2,
 `cornerproblem.tex` lines 3817--3823. -/
-noncomputable def coefficientDualInverse (A : MPSTensor d D_A)
-    (hA : Kraus.IsInjective A) : MPSTensor d D_A :=
+noncomputable def coefficientDualInverse (A : MPTensor α (Fin D_A))
+    (hA : Kraus.IsInjective A) : MPTensor α (Fin D_A) :=
   fun i a' a =>
     Kraus.decompositionMap (A := A) hA (Matrix.single a a' (1 : ℂ)) i
 
@@ -64,17 +63,17 @@ noncomputable def coefficientDualInverse (A : MPSTensor d D_A)
 The reversed pair `(a',a)` is the upper-leg convention in the source diagram.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3817--3823. -/
-theorem coefficientDualInverse_sum_entry (A : MPSTensor d D_A)
+theorem coefficientDualInverse_sum_entry (A : MPTensor α (Fin D_A))
     (hA : Kraus.IsInjective A) (x y a a' : Fin D_A) :
-    ∑ i : Fin d, A i x y * coefficientDualInverse A hA i a' a =
+    ∑ i : α, A i x y * coefficientDualInverse A hA i a' a =
       (if x = a then 1 else 0) * (if y = a' then 1 else 0) := by
   calc
-    ∑ i : Fin d, A i x y * coefficientDualInverse A hA i a' a =
-        ∑ i : Fin d, coefficientDualInverse A hA i a' a * A i x y := by
+    ∑ i : α, A i x y * coefficientDualInverse A hA i a' a =
+        ∑ i : α, coefficientDualInverse A hA i a' a * A i x y := by
       apply Finset.sum_congr rfl
       intro i _
       rw [mul_comm]
-    _ = (∑ i : Fin d,
+    _ = (∑ i : α,
           Kraus.decompositionMap (A := A) hA (Matrix.single a a' (1 : ℂ)) i • A i) x y := by
       simp only [coefficientDualInverse, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     _ = Matrix.single a a' (1 : ℂ) x y := by
@@ -88,24 +87,24 @@ theorem coefficientDualInverse_sum_entry (A : MPSTensor d D_A)
 `Fin D_B × Fin D_A`.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3824--3838. -/
-noncomputable def reductionCrossMatrix (B : MPSTensor d D_B)
-    (C : MPSTensor d D_A) :
+noncomputable def reductionCrossMatrix (B : MPTensor α (Fin D_B))
+    (C : MPTensor α (Fin D_A)) :
     Matrix (Fin D_B × Fin D_A) (Fin D_B × Fin D_A) ℂ :=
-  ∑ i : Fin d, B i ⊗ₖ (C i)ᵀ
+  ∑ i : α, B i ⊗ₖ (C i)ᵀ
 
 /-- Exact entry formula for the reduction cross matrix.  In particular, the
 upper inverse-tensor entry is `C i a' a`, not a conjugated entry.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3824--3838. -/
-@[simp] theorem reductionCrossMatrix_apply (B : MPSTensor d D_B)
-    (C : MPSTensor d D_A) (b b' : Fin D_B) (a a' : Fin D_A) :
+@[simp] theorem reductionCrossMatrix_apply (B : MPTensor α (Fin D_B))
+    (C : MPTensor α (Fin D_A)) (b b' : Fin D_B) (a a' : Fin D_A) :
     reductionCrossMatrix B C (b, a) (b', a') =
-      ∑ i : Fin d, B i b b' * C i a' a := by
+      ∑ i : α, B i b b' * C i a' a := by
   simp only [reductionCrossMatrix, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, Matrix.transpose_apply]
 
 private theorem listProd_kronecker_transpose
-    (B : MPSTensor d D_B) (C : MPSTensor d D_A) (w : List (Fin d)) :
+    (B : MPTensor α (Fin D_B)) (C : MPTensor α (Fin D_A)) (w : List α) :
     (w.map fun i => B i ⊗ₖ (C i)ᵀ).prod =
       Kraus.evalWord B w ⊗ₖ (Kraus.evalWord C w.reverse)ᵀ := by
   have hprod :
@@ -123,9 +122,9 @@ private theorem listProd_kronecker_transpose
 
 private theorem sum_family_pow_eq_sum_listProd
     {m : Type*} [Fintype m] [DecidableEq m]
-    (F : Fin d → Matrix m m ℂ) (n : ℕ) :
-    (∑ i : Fin d, F i) ^ n =
-      ∑ σ : Fin n → Fin d, (List.ofFn fun k => F (σ k)).prod := by
+    (F : α → Matrix m m ℂ) (n : ℕ) :
+    (∑ i : α, F i) ^ n =
+      ∑ σ : Fin n → α, (List.ofFn fun k => F (σ k)).prod := by
   rw [← List.prod_replicate, ← List.ofFn_const]
   exact List.prod_ofFn_sum (fun _ : Fin n => F)
 
@@ -134,10 +133,10 @@ source orientation explicitly: the lower `B` word is in site order while the
 upper `C` word is reversed before taking its ordinary transpose.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3839--3865. -/
-theorem reductionCrossMatrix_pow_eq_sum (B : MPSTensor d D_B)
-    (C : MPSTensor d D_A) (n : ℕ) :
+theorem reductionCrossMatrix_pow_eq_sum (B : MPTensor α (Fin D_B))
+    (C : MPTensor α (Fin D_A)) (n : ℕ) :
     reductionCrossMatrix B C ^ n =
-      ∑ σ : Fin n → Fin d,
+      ∑ σ : Fin n → α,
         Kraus.evalWord B (List.ofFn σ) ⊗ₖ
           (Kraus.evalWord C (List.ofFn σ).reverse)ᵀ := by
   rw [reductionCrossMatrix, sum_family_pow_eq_sum_listProd]
@@ -150,11 +149,11 @@ theorem reductionCrossMatrix_pow_eq_sum (B : MPSTensor d D_B)
 visible in the statement.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3839--3865. -/
-theorem reductionCrossMatrix_pow_apply (B : MPSTensor d D_B)
-    (C : MPSTensor d D_A) (n : ℕ)
+theorem reductionCrossMatrix_pow_apply (B : MPTensor α (Fin D_B))
+    (C : MPTensor α (Fin D_A)) (n : ℕ)
     (b b' : Fin D_B) (a a' : Fin D_A) :
     (reductionCrossMatrix B C ^ n) (b, a) (b', a') =
-      ∑ σ : Fin n → Fin d,
+      ∑ σ : Fin n → α,
         Kraus.evalWord B (List.ofFn σ) b b' *
           Kraus.evalWord C (List.ofFn σ).reverse a' a := by
   have h := congrArg
@@ -178,7 +177,7 @@ matrix supported on equal lower/upper bond indices.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3817--3838. -/
 theorem reductionCrossMatrix_coefficientDualInverse
-    (A : MPSTensor d D_A) (hA : Kraus.IsInjective A) :
+    (A : MPTensor α (Fin D_A)) (hA : Kraus.IsInjective A) :
     reductionCrossMatrix A (coefficientDualInverse A hA) =
       Matrix.vecMulVec (diagonalBondVector D_A) (diagonalBondVector D_A) := by
   ext p q
@@ -188,7 +187,7 @@ theorem reductionCrossMatrix_coefficientDualInverse
   simp [Matrix.vecMulVec_apply, diagonalBondVector]
 
 private theorem coefficientDualCross_pow
-    (A : MPSTensor d D_A) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D_A)) (hA : Kraus.IsInjective A)
     (n : ℕ) (hn : 0 < n) :
     reductionCrossMatrix A (coefficientDualInverse A hA) ^ n =
       ((D_A : ℂ) ^ (n - 1)) •
@@ -211,21 +210,21 @@ the source cross matrix is exactly `(D_A : ℂ)^n`.
 This is the algebraic form of the closed diagram at
 `cornerproblem.tex` lines 3839--3865. -/
 theorem trace_reductionCrossMatrix_pow_of_sameMPV₂Pos
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B)
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
     (hA : Kraus.IsInjective A) (hSame : SameMPV₂Pos B A)
     (n : ℕ) (hn : 0 < n) :
     Matrix.trace (reductionCrossMatrix B (coefficientDualInverse A hA) ^ n) =
       (D_A : ℂ) ^ n := by
   rw [reductionCrossMatrix_pow_eq_sum, Matrix.trace_sum]
   simp_rw [Matrix.trace_kronecker, Matrix.trace_transpose]
-  have hword (σ : Fin n → Fin d) :
+  have hword (σ : Fin n → α) :
       Matrix.trace (Kraus.evalWord B (List.ofFn σ)) =
         Matrix.trace (Kraus.evalWord A (List.ofFn σ)) := by
     exact hSame.trace_evalWord (List.ofFn σ) (by
       intro hnil
       exact (Nat.ne_of_gt hn) (List.ofFn_eq_nil_iff.mp hnil))
   simp_rw [hword]
-  change (∑ σ : Fin n → Fin d,
+  change (∑ σ : Fin n → α,
       Matrix.trace (Kraus.evalWord A (List.ofFn σ)) *
         Matrix.trace
           (Kraus.evalWord (coefficientDualInverse A hA) (List.ofFn σ).reverse)) = _
@@ -246,9 +245,9 @@ theorem trace_reductionCrossMatrix_pow_of_sameMPV₂Pos
 This form permits the inverse sites to be blocked while the tail remains an
 unblocked word, as in `cornerproblem.tex` lines 3866--3887. -/
 noncomputable def reductionOpenBoundaryMatrixContraction
-    (B : MPSTensor d D_B) (C : MPSTensor d D_A)
+    (B : MPTensor α (Fin D_B)) (C : MPTensor α (Fin D_A))
     (n : ℕ) (X : Matrix (Fin D_B) (Fin D_B) ℂ) (a' a : Fin D_A) : ℂ :=
-  ∑ σ : Fin n → Fin d,
+  ∑ σ : Fin n → α,
     Matrix.trace (Kraus.evalWord B (List.ofFn σ) * X) *
       Kraus.evalWord C (List.ofFn σ).reverse a' a
 
@@ -257,8 +256,8 @@ noncomputable def reductionOpenBoundaryMatrixContraction
 Source: arXiv:1706.07329v2, proof of Proposition 20,
 `cornerproblem.tex` lines 3866--3887. -/
 noncomputable def reductionOpenBoundaryContraction
-    (B : MPSTensor d D_B) (C : MPSTensor d D_A)
-    (n : ℕ) (w : List (Fin d)) (a' a : Fin D_A) : ℂ :=
+    (B : MPTensor α (Fin D_B)) (C : MPTensor α (Fin D_A))
+    (n : ℕ) (w : List α) (a' a : Fin D_A) : ℂ :=
   reductionOpenBoundaryMatrixContraction B C n (Kraus.evalWord B w) a' a
 
 private theorem trace_mul_eq_sum_entries {D : ℕ}
@@ -274,7 +273,7 @@ open padded contraction.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3866--3887. -/
 theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
-    (B : MPSTensor d D_B) (C : MPSTensor d D_A)
+    (B : MPTensor α (Fin D_B)) (C : MPTensor α (Fin D_A))
     (n : ℕ) (X : Matrix (Fin D_B) (Fin D_B) ℂ) (a' a : Fin D_A) :
     reductionOpenBoundaryMatrixContraction B C n X a' a =
       ∑ x : Fin D_B, ∑ y : Fin D_B,
@@ -283,7 +282,7 @@ theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
   simp only [reductionOpenBoundaryMatrixContraction]
   simp_rw [trace_mul_eq_sum_entries]
   simp_rw [reductionCrossMatrix_pow_apply]
-  have hleft (σ : Fin n → Fin d) :
+  have hleft (σ : Fin n → α) :
       (∑ x : Fin D_B, ∑ y : Fin D_B,
           Kraus.evalWord B (List.ofFn σ) x y * X y x) *
           Kraus.evalWord C (List.ofFn σ).reverse a' a =
@@ -295,10 +294,10 @@ theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
     intro x _
     rw [Finset.sum_mul]
   have hright (x y : Fin D_B) :
-      (∑ σ : Fin n → Fin d,
+      (∑ σ : Fin n → α,
           Kraus.evalWord B (List.ofFn σ) x y *
             Kraus.evalWord C (List.ofFn σ).reverse a' a) * X y x =
-        ∑ σ : Fin n → Fin d,
+        ∑ σ : Fin n → α,
           (Kraus.evalWord B (List.ofFn σ) x y *
             Kraus.evalWord C (List.ofFn σ).reverse a' a) * X y x := by
     rw [Finset.sum_mul]
@@ -315,7 +314,7 @@ theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
 Source: arXiv:1706.07329v2, proof of Proposition 20,
 `cornerproblem.tex` lines 3866--3887. -/
 theorem reductionOpenBoundaryMatrixContraction_self
-    (A : MPSTensor d D_A) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D_A)) (hA : Kraus.IsInjective A)
     (n : ℕ) (hn : 0 < n) (X : Matrix (Fin D_A) (Fin D_A) ℂ)
     (a' a : Fin D_A) :
     reductionOpenBoundaryMatrixContraction
@@ -331,8 +330,8 @@ theorem reductionOpenBoundaryMatrixContraction_self
 Source: arXiv:1706.07329v2, proof of Proposition 20,
 `cornerproblem.tex` lines 3866--3887. -/
 theorem reductionOpenBoundaryContraction_self
-    (A : MPSTensor d D_A) (hA : Kraus.IsInjective A)
-    (n : ℕ) (hn : 0 < n) (w : List (Fin d)) (a' a : Fin D_A) :
+    (A : MPTensor α (Fin D_A)) (hA : Kraus.IsInjective A)
+    (n : ℕ) (hn : 0 < n) (w : List α) (a' a : Fin D_A) :
     reductionOpenBoundaryContraction A (coefficientDualInverse A hA) n w a' a =
       (D_A : ℂ) ^ (n - 1) * Kraus.evalWord A w a' a := by
   exact reductionOpenBoundaryMatrixContraction_self A hA n hn
@@ -347,12 +346,12 @@ leg order.
 Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3866--3887; compare the
 rank-one rewrite and final reduction equation at lines 3907--3938. -/
 theorem reductionOpenBoundaryContraction_of_sameMPV₂Pos
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B)
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
     (hA : Kraus.IsInjective A) (hSame : SameMPV₂Pos B A)
-    (n : ℕ) (hn : 0 < n) (w : List (Fin d)) (a' a : Fin D_A) :
+    (n : ℕ) (hn : 0 < n) (w : List α) (a' a : Fin D_A) :
     reductionOpenBoundaryContraction B (coefficientDualInverse A hA) n w a' a =
       (D_A : ℂ) ^ (n - 1) * Kraus.evalWord A w a' a := by
-  have hterm (σ : Fin n → Fin d) :
+  have hterm (σ : Fin n → α) :
       Matrix.trace
           (Kraus.evalWord B (List.ofFn σ) * Kraus.evalWord B w) =
         Matrix.trace
@@ -370,37 +369,31 @@ theorem reductionOpenBoundaryContraction_of_sameMPV₂Pos
 `p`-blocked tensors, while the lower open tail is an arbitrary unblocked word.
 The reversed upper dual word is unchanged.  This is the mixed blocked/unblocked
 formula drawn in `cornerproblem.tex` lines 3866--3887. -/
-theorem reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B)
+theorem reductionOpenBoundaryMatrixContraction_block_of_sameMPV₂Pos
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
     (hSame : SameMPV₂Pos B A) (p : ℕ) (hp : 0 < p)
-    (hA : Kraus.IsInjective (blockTensor (d := d) (n := Fin D_A) A p))
-    (n : ℕ) (hn : 0 < n) (w : List (Fin d)) (a' a : Fin D_A) :
-    reductionOpenBoundaryMatrixContraction
-        (blockTensor (d := d) (n := Fin D_B) B p)
-        (coefficientDualInverse (blockTensor (d := d) (n := Fin D_A) A p) hA)
+    (hA : Kraus.IsInjective (Kraus.block A p))
+    (n : ℕ) (hn : 0 < n) (w : List α) (a' a : Fin D_A) :
+    reductionOpenBoundaryMatrixContraction (Kraus.block B p)
+        (coefficientDualInverse (Kraus.block A p) hA)
         n (Kraus.evalWord B w) a' a =
       (D_A : ℂ) ^ (n - 1) * Kraus.evalWord A w a' a := by
-  have hflat (σ : Fin n → Fin (blockPhysDim d p)) :
-      flattenBlockedWord d p (List.ofFn σ) ≠ [] := by
+  have hflat (σ : Fin n → Fin p → α) : (List.ofFn σ).flatMap List.ofFn ≠ [] := by
     apply List.ne_nil_of_length_pos
-    rw [length_flattenBlockedWord]
-    simp only [List.length_ofFn]
+    simp only [List.length_flatMap, List.map_ofFn, List.length_ofFn, Function.comp_def,
+      List.sum_ofFn, Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul]
     exact Nat.mul_pos hn hp
-  have hterm (σ : Fin n → Fin (blockPhysDim d p)) :
-      Matrix.trace
-          (Kraus.evalWord (blockTensor (d := d) (n := Fin D_B) B p) (List.ofFn σ) *
-            Kraus.evalWord B w) =
-        Matrix.trace
-          (Kraus.evalWord (blockTensor (d := d) (n := Fin D_A) A p) (List.ofFn σ) *
-            Kraus.evalWord A w) := by
-    rw [evalWord_blockTensor, evalWord_blockTensor,
+  have hterm (σ : Fin n → Fin p → α) :
+      Matrix.trace (Kraus.evalWord (Kraus.block B p) (List.ofFn σ) * Kraus.evalWord B w) =
+        Matrix.trace (Kraus.evalWord (Kraus.block A p) (List.ofFn σ) * Kraus.evalWord A w) := by
+    rw [Kraus.evalWord_block, Kraus.evalWord_block,
       ← Kraus.evalWord_append, ← Kraus.evalWord_append]
-    exact hSame.trace_evalWord (flattenBlockedWord d p (List.ofFn σ) ++ w) (by
+    exact hSame.trace_evalWord ((List.ofFn σ).flatMap List.ofFn ++ w) (by
       intro hnil
       exact hflat σ (List.append_eq_nil_iff.mp hnil).1)
   unfold reductionOpenBoundaryMatrixContraction
   simp_rw [hterm]
-  exact reductionOpenBoundaryMatrixContraction_self
-    (blockTensor (d := d) (n := Fin D_A) A p) hA n hn (Kraus.evalWord A w) a' a
+  exact reductionOpenBoundaryMatrixContraction_self (Kraus.block A p) hA n hn
+    (Kraus.evalWord A w) a' a
 
 end MPSTensor

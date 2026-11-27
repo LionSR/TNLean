@@ -121,7 +121,8 @@ private theorem czxDecoratedMPS_one :
 private theorem czxDecoratedMPS_two :
     czxDecoratedTensor.toMPSTensor 2 = complexOfInt !![0, -1; 0, 1] := rfl
 
-/-- Each matrix unit is a half-sum or a half-difference of two length-two words. -/
+/-- Each matrix unit is a half-sum or a half-difference of two length-two words, over the
+doubled index `Fin (2 * 2)` of the pair alphabet. -/
 private theorem czxDecorated_single (i j : Fin 2) :
     ∃ a b c e : Fin 4, ∃ u v : ℂ, Matrix.single i j (1 : ℂ) =
       u • (czxDecoratedTensor.toMPSTensor a * czxDecoratedTensor.toMPSTensor b) +
