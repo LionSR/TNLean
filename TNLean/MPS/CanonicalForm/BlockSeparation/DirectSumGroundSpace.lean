@@ -157,7 +157,7 @@ theorem groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     have hcoeff :
         Matrix.trace (Aw * X) = Matrix.trace (Bw * Y) := by
       simpa [Aw, Bw, groundSpaceMap_apply] using
-        congrArg (fun f : NSiteSpace d (L + (L + L)) => f w) (hXψ.trans hYψ.symm)
+        congrArg (fun f : NSiteSpace (Fin d) (L + (L + L)) => f w) (hXψ.trans hYψ.symm)
     calc
       Matrix.trace (X * Kraus.evalWord A (List.ofFn w)) +
           Matrix.trace ((-Y) * Kraus.evalWord B (List.ofFn w))
@@ -202,7 +202,7 @@ theorem pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpace
     exact Submodule.mem_inf.mpr
       ⟨⟨ΔA, rfl⟩, by rw [hEq]; exact ⟨-ΔB, rfl⟩⟩
   have hzero : groundSpaceMap A S ΔA = 0 := by
-    have hbot : groundSpaceMap A S ΔA ∈ (⊥ : Submodule ℂ (NSiteSpace d S)) := by
+    have hbot : groundSpaceMap A S ΔA ∈ (⊥ : Submodule ℂ (NSiteSpace (Fin d) S)) := by
       rwa [← hInf]
     simpa using hbot
   have hΔA : ΔA = 0 := hAinj (by simpa using hzero)

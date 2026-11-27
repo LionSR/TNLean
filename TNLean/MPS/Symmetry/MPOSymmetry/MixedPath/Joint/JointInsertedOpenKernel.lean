@@ -79,13 +79,13 @@ theorem ker_hamiltonian_chainTranslates_blockInserted_eq
       have hlocal := hv ⟨⟨s, by omega⟩, hs⟩ τ
       rw [mem_range_blockInsertedBoundaryMap_iff] at hlocal
       change cyclicRestrictₗ (by omega) 2 ⟨s, by omega⟩ τ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N) v) ∈
           blockInsertedGroundSpace A W 2 at hlocal
       rwa [cyclicRestrictₗ_eq_contiguousRestrictₗ _ hN hs] at hlocal
   · intro hv i τ
     rw [mem_range_blockInsertedBoundaryMap_iff]
     change cyclicRestrictₗ (Fin.pos i.1) 2 i.1 τ
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈ blockInsertedGroundSpace A W 2
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N) v) ∈ blockInsertedGroundSpace A W 2
     rw [cyclicRestrictₗ_eq_contiguousRestrictₗ _ hN i.2]
     exact contiguousRestrictₗ_blockInsertedGroundSpace_mem A W
       (by omega) i.1.val i.2 τ hv

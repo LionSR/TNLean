@@ -49,7 +49,7 @@ noncomputable def blockBoundaryEquiv :
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 noncomputable def blockGroundSpaceMap
     (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
-    ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ] NSiteSpace d L :=
+    ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) L :=
   LinearMap.lsum ℂ (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
     (fun j => groundSpaceMap (A j) L)
 
@@ -186,7 +186,7 @@ theorem blockGroundSpaceMapES_injective_iff
     Function.Injective (blockGroundSpaceMapES A L) ↔
       Function.Injective (blockGroundSpaceMap A L) := by
   have hEq (v) : blockGroundSpaceMapES A L v =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
         (blockGroundSpaceMap A L (blockBoundaryEquiv v)) := by
     ext σ
     simp only [blockGroundSpaceMapES_apply, WithLp.coe_symm_linearEquiv,
@@ -201,7 +201,7 @@ theorem blockGroundSpaceMapES_injective_iff
   · intro h x y hxy
     apply blockBoundaryEquiv.injective
     apply h
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective
     rw [hEq, hEq] at hxy
     exact hxy
 

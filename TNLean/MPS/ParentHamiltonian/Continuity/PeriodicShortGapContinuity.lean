@@ -31,7 +31,7 @@ theorem continuous_mpvES_family
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) (hA : Continuous A) (N : ℕ) :
     Continuous fun x =>
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv (A x)) := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv (A x)) := by
   let e := EuclideanSpace.equiv (Cfg d N) ℂ
   apply e.symm.continuous.comp
   apply continuous_pi
@@ -45,7 +45,7 @@ theorem continuous_mpvES_family
 noncomputable def periodicMpvLineMap {d D : ℕ} (A : MPSTensor d D) (N : ℕ) :
     ℂ →L[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   (1 : ℂ →L[ℂ] ℂ).smulRight
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))
 
 /-- The scalar-to-state map varies continuously with the tensor. -/
 theorem continuous_periodicMpvLineMap_family
@@ -71,17 +71,17 @@ theorem periodicMpvLineMap_injective_of_isInjective
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsInjective A) (hN : 2 ≤ N) :
     Function.Injective (periodicMpvLineMap A N) := by
-  have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) ≠ 0 := by
+  have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) ≠ 0 := by
     intro hzero
-    have h := congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)) hzero
-    have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
+    have h := congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)) hzero
+    have hmpv : (mpv A : NSiteSpace (Fin d) N) ≠ 0 :=
       mpv_ne_zero_of_isNBlkInjective
         (Kraus.isNBlkInjective_one_of_isInjective hA) (by norm_num : 0 < 1)
         (by omega : 1 + 1 ≤ N)
     exact hmpv (by simpa using h)
   intro c c' hcc
   have hsmul : (c - c') •
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) = 0 := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) = 0 := by
     simpa [periodicMpvLineMap, sub_smul] using congrArg (fun v => v - periodicMpvLineMap A N c') hcc
   exact sub_eq_zero.mp ((smul_eq_zero.mp hsmul).resolve_right hψ)
 
@@ -104,11 +104,11 @@ theorem ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap
   simp only [mpvSubmodule, periodicMpvLineMap]
   rw [Submodule.map_span]
   simp only [Set.image_singleton]
-  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))) = _
+  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))) = _
   exact
     (ContinuousLinearMap.range_smulRight_apply
       (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))).symm
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))).symm
 
 /-- For a one-site injective tensor, zero is an eigenvalue of the Hamiltonian of the two-site
 parent interaction on every ring of at least two sites: the periodic vector is a nonzero

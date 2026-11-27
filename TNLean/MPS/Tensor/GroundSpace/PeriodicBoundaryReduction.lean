@@ -97,7 +97,7 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) N} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X) :
     ∃ Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       (∀ (j : Fin d) (τ : Fin N → Fin d),

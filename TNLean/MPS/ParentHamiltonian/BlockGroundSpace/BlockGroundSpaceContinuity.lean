@@ -34,9 +34,9 @@ noncomputable def blockGroundSpaceMapES
     EuclideanSpace ℂ ((j : Fin r) × (Fin (dim j) × Fin (dim j))) →L[ℂ]
       EuclideanSpace ℂ (Cfg d L) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap.comp
       (show EuclideanSpace ℂ ((j : Fin r) × (Fin (dim j) × Fin (dim j))) →ₗ[ℂ]
-        NSiteSpace d L from
+        NSiteSpace (Fin d) L from
       { toFun := fun v => ∑ j, groundSpaceMap (A j) L
           (Matrix.of fun a b => v ⟨j, b, a⟩)
         map_add' := by
@@ -103,7 +103,7 @@ theorem range_blockGroundSpaceMapES
     (blockGroundSpaceMapES A L).range = ⨆ j, groundSpaceES (A j) L := by
   apply le_antisymm
   · rintro ψ ⟨v, rfl⟩
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
       (∑ j, groundSpaceMap (A j) L (Matrix.of fun a b => v ⟨j, b, a⟩)) ∈ _
     rw [map_sum]
     exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j

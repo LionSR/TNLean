@@ -233,11 +233,11 @@ theorem hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChai
 fixed final physical index. -/
 theorem rightFiber_rightSpectatorConfigLinearIsometryEquiv_one {n : ℕ}
     (v : EuclideanSpace ℂ (Cfg d (n + 1))) (s : Cfg d 1) :
-    WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
+    WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)
         (ContinuousLinearMap.rightFiber
           (rightSpectatorConfigLinearIsometryEquiv d n 1 v) s) =
       restrictLastₗ (s 0)
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 1)) v) := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 1)) v) := by
   funext σ
   change v (Fin.append σ s) = v (Fin.snoc σ (s 0))
   rw [Fin.append_right_eq_snoc]
@@ -318,7 +318,7 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpac
   · intro hv j
     have hs := hv (fun _ => j)
     rw [mem_groundSpaceES_iff] at hs
-    change WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
+    change WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)
         (ContinuousLinearMap.rightFiber
           (rightSpectatorConfigLinearIsometryEquiv d n 1 v) (fun _ => j)) ∈
       groundSpace A n at hs
@@ -341,7 +341,7 @@ theorem hamiltonian_restrict_parentChainInteraction_full_window_eq_term (A : MPS
   simp only [Nat.add_sub_cancel]
 
 private theorem contiguousRestrictₗ_tail_window {K L : ℕ} (τ : Cfg d (K + L))
-    (ψ : NSiteSpace d (K + L)) :
+    (ψ : NSiteSpace (Fin d) (K + L)) :
     contiguousRestrictₗ K L le_rfl τ ψ =
       tailRestrictₗ (fun k : Fin K => τ (Fin.castAdd L k)) ψ := by
   funext ω

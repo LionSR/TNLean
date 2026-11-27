@@ -232,7 +232,7 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
     have hmpv := mpv_arbitraryPhysicalMixedInterpolation_zero (N := N)
       A₀ A₁ h₀ (by omega)
     have hspan := congrArg
-      (fun v : NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N =>
+      (fun v : NSiteSpace (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) N =>
         Submodule.span ℂ {WithLp.toLp 2 v}) hmpv
     exact hline.trans (hspan.trans hParent.symm)
   · change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
@@ -259,7 +259,7 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
     have hmpv := mpv_arbitraryPhysicalMixedInterpolation_one (N := N)
       A₀ A₁ h₁ (by omega)
     have hspan := congrArg
-      (fun v : NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N =>
+      (fun v : NSiteSpace (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) N =>
         Submodule.span ℂ {WithLp.toLp 2 v}) hmpv
     exact hline.trans (hspan.trans hParent.symm)
 

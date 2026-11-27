@@ -198,15 +198,15 @@ theorem periodicMpvLineMap_injective_of_isNBlkInjective
     [NeZero D] (A : MPSTensor d D) {p N : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) (hN : p + 1 ≤ N) :
     Function.Injective (periodicMpvLineMap A N) := by
-  have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) ≠ 0 := by
+  have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) ≠ 0 := by
     intro hzero
-    have h := congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)) hzero
-    have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
+    have h := congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)) hzero
+    have hmpv : (mpv A : NSiteSpace (Fin d) N) ≠ 0 :=
       mpv_ne_zero_of_isNBlkInjective hA hp hN
     exact hmpv (by simpa using h)
   intro c c' hcc
   have hsmul : (c - c') •
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) = 0 := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) = 0 := by
     simpa [periodicMpvLineMap, sub_smul] using
       congrArg (fun v => v - periodicMpvLineMap A N c') hcc
   exact sub_eq_zero.mp ((smul_eq_zero.mp hsmul).resolve_right hψ)
@@ -229,11 +229,11 @@ theorem ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isN
   simp only [mpvSubmodule, periodicMpvLineMap]
   rw [Submodule.map_span]
   simp only [Set.image_singleton]
-  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))) = _
+  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))) = _
   exact
     (ContinuousLinearMap.range_smulRight_apply
       (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))).symm
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))).symm
 
 /-- Above a positive injectivity length \(p\), zero is an eigenvalue of the Hamiltonian of the
 parent interaction on every ring containing the interaction: the periodic vector is a nonzero

@@ -80,7 +80,7 @@ arXiv:2011.12127, Section IV.C. -/
 theorem contiguous_mem_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hwindow : ∀ (s : ℕ) (hs : s + (L₀ + 1) ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s (L₀ + 1) hs τ ψ ∈ groundSpace A (L₀ + 1)) :
     ψ ∈ groundSpace A N := by
@@ -221,7 +221,7 @@ Section IV.C, lines 2078--2079. -/
 theorem full_ring_boundary_intertwines_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {ψ : NSiteSpace d (L₀ + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (L₀ + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (L₀ + 1))
     (hψX : ψ = groundSpaceMap A (L₀ + 1) X) :
     ∀ a : Fin d, X * A a = A a * X := by
@@ -429,7 +429,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
     (hCompare :
-      ∀ {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ} (η : Fin d),
+      ∀ {ψ : NSiteSpace (Fin d) N} {X : Matrix (Fin D) (Fin D) ℂ} (η : Fin d),
         (hψ : ψ ∈ chainGroundSpace A L N) →
         (hψX : ψ = groundSpaceMap A N X) →
         (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ) →
@@ -485,7 +485,7 @@ equality after fixing each first physical index:
 the comparison described in arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_restriction_eq_of_fixed_boundary_letters
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)}
+    {ψ : NSiteSpace (Fin d) (M + 1)}
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (hfixed : ∀ j : Fin d,
       cyclicRestrictₗ (show 0 < M + 1 by omega) L₀
@@ -523,7 +523,7 @@ arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (_hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -552,7 +552,7 @@ arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -590,7 +590,7 @@ arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d) :
@@ -627,7 +627,7 @@ arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
@@ -678,7 +678,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) (hNlarge : L₀ + 1 < N)
-    {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) N} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X)
     (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),

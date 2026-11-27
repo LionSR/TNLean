@@ -98,14 +98,14 @@ theorem boundaryFamilyEquiv_apply_apply (S : Type*) [Fintype S]
 noncomputable def tailBoundaryMapES (A : MPSTensor d D) (K L : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ] EuclideanSpace ℂ (Cfg d (K + L)) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.toLinearMap.comp
       ((tailBoundaryMap A K L).comp (boundaryFamilyEquiv (D := D) (Cfg d K)).toLinearMap)
 
 /-- The left spectator boundary map as a continuous map between Euclidean Hilbert spaces. -/
 noncomputable def leftBoundaryMapES (A : MPSTensor d D) (K L : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg d L) →L[ℂ] EuclideanSpace ℂ (Cfg d (K + L)) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.toLinearMap.comp
       ((leftBoundaryMap A K L).comp (boundaryFamilyEquiv (D := D) (Cfg d L)).toLinearMap)
 
 /-- Evaluation of the Euclidean tail boundary map in the underlying site-space coordinates. -/
@@ -113,7 +113,7 @@ noncomputable def leftBoundaryMapES (A : MPSTensor d D) (K L : ℕ) :
 theorem tailBoundaryMapES_apply (A : MPSTensor d D) (K L : ℕ)
     (x : BoundaryFamilySpace (D := D) (Cfg d K)) :
     tailBoundaryMapES A K L x =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
         (tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) x)) := rfl
 
 /-- Evaluation of the Euclidean left boundary map in the underlying site-space coordinates. -/
@@ -121,7 +121,7 @@ theorem tailBoundaryMapES_apply (A : MPSTensor d D) (K L : ℕ)
 theorem leftBoundaryMapES_apply (A : MPSTensor d D) (K L : ℕ)
     (x : BoundaryFamilySpace (D := D) (Cfg d L)) :
     leftBoundaryMapES A K L x =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
         (leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d L) x)) := rfl
 
 /-- The Hilbert-space tail boundary map has exactly the open-chain tail ground space as range. -/
@@ -332,14 +332,14 @@ theorem tailBoundaryMapES_comp_tailVirtualMapES
   intro x
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
       (tailBoundaryMap A K L
         (boundaryFamilyEquiv (D := D) (Cfg d K)
           (tailVirtualMapES A K
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)))) =
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
       (groundSpaceMap A (K + L) X)
-  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm ?_
+  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm ?_
   have hfamily :
       boundaryFamilyEquiv (D := D) (Cfg d K)
           (tailVirtualMapES A K
@@ -359,14 +359,14 @@ theorem leftBoundaryMapES_comp_leftVirtualMapES
   intro x
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
       (leftBoundaryMap A K L
         (boundaryFamilyEquiv (D := D) (Cfg d L)
           (leftVirtualMapES A L
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)))) =
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
       (groundSpaceMap A (K + L) X)
-  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm ?_
+  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm ?_
   have hfamily :
       boundaryFamilyEquiv (D := D) (Cfg d L)
           (leftVirtualMapES A L
@@ -392,11 +392,11 @@ theorem tailBoundaryMapES_injective_of_groundSpaceMapES_injective
   apply h
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
     groundSpaceMapES_frobeniusEquivEuclidean_apply]
-  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
   have hraw :
       tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) x) =
         tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) y) := by
-    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm.injective hxy
+    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.injective hxy
   simpa using congrArg (tailRestrictₗ u) hraw
 
 /-- Injectivity of the local length-\(K\) boundary map implies injectivity of the
@@ -412,11 +412,11 @@ theorem leftBoundaryMapES_injective_of_groundSpaceMapES_injective
   apply h
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
     groundSpaceMapES_frobeniusEquivEuclidean_apply]
-  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d K)).symm
+  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) K)).symm
   have hraw :
       leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d L) x) =
         leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d L) y) := by
-    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm.injective hxy
+    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.injective hxy
   simpa using congrArg (prefixRestrictₗ τ) hraw
 
 /-! ### C3 overlapping-window projector identity -/

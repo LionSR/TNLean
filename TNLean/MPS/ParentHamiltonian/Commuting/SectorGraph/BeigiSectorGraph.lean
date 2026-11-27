@@ -345,7 +345,7 @@ private theorem parentRingInteraction_term_commute (F : BeigiSectorGraphData A)
     rw [placeAlong_ringWindow_groundBond_eq_one_sub]
     change (Matrix.toLinAlgEquiv' :
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
-        Module.End ℂ (NSiteSpace d N))
+        Module.End ℂ (NSiteSpace (Fin d) N))
         (1 - ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n)
           (LinearMap.toMatrix' (parentInteraction A 2))) = _
     rw [map_sub, map_one]
@@ -377,7 +377,7 @@ private theorem commute_toEuclideanLin_parentRingInteraction_term
       (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term j)) := by
   have : NeZero N := ⟨by omega⟩
   have hraw := F.parentRingInteraction_term_commute hN i j
-  exact hraw.map (LinearEquiv.conjAlgEquiv ℂ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
+  exact hraw.map (LinearEquiv.conjAlgEquiv ℂ (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm)
 
 private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
     {N : ℕ} (hN : 2 ≤ N) :
@@ -497,7 +497,7 @@ private theorem toLin'_groundBondProduct {N : ℕ} (hN : 2 ≤ N) :
     rw [placeAlong_ringWindow_groundBond_eq_one_sub]
     change (Matrix.toLinAlgEquiv' :
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
-        Module.End ℂ (NSiteSpace d N))
+        Module.End ℂ (NSiteSpace (Fin d) N))
         (1 - ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (LinearMap.toMatrix' (parentInteraction A 2))) = _
     rw [map_sub, map_one]
@@ -507,7 +507,7 @@ private theorem toLin'_groundBondProduct {N : ℕ} (hN : 2 ≤ N) :
     rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
   change (Matrix.toLinAlgEquiv' :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
-      Module.End ℂ (NSiteSpace d N)) _ = _
+      Module.End ℂ (NSiteSpace (Fin d) N)) _ = _
   rw [map_list_prod, List.map_ofFn]
   apply congrArg List.prod
   apply congrArg List.ofFn
@@ -517,7 +517,7 @@ private theorem toLin'_groundBondProduct {N : ℕ} (hN : 2 ≤ N) :
 private theorem conj_localComplementProduct {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     (LinearEquiv.conjAlgEquiv ℂ
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm)
         (List.ofFn fun i : Fin N ↦
           1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)).prod =
       (List.ofFn fun i : Fin N ↦
@@ -535,9 +535,9 @@ together with the canonical identifications between them. -/
 private structure ComplementProductTransport (A : MPSTensor d D)
     (N : ℕ) (_hN : 2 ≤ N) where
   qMatrix : Matrix (Cfg d N) (Cfg d N) ℂ
-  qRaw : Module.End ℂ (NSiteSpace d N)
+  qRaw : Module.End ℂ (NSiteSpace (Fin d) N)
   qES : Module.End ℂ (EuclideanSpace ℂ (Cfg d N))
-  e : EuclideanSpace ℂ (Cfg d N) ≃ₗ[ℂ] NSiteSpace d N
+  e : EuclideanSpace ℂ (Cfg d N) ≃ₗ[ℂ] NSiteSpace (Fin d) N
   hMatrix : Matrix.toLin' qMatrix = qRaw
   hES : (LinearEquiv.conjAlgEquiv ℂ e.symm) qRaw = qES
 
@@ -553,7 +553,7 @@ private noncomputable def complementProductTransport (A : MPSTensor d D)
       1 - Matrix.toLin' ((parentRingInteraction A 2 N).term i)).prod
     qES := (List.ofFn fun i : Fin N ↦
       1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod
-    e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+    e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)
     hMatrix := toLin'_groundBondProduct (A := A) hN
     hES := conj_localComplementProduct (A := A) hN }
 
@@ -572,7 +572,7 @@ private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
   change LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) transport.qES = _
   calc
     LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) transport.qES =
-        LinearMap.trace ℂ (NSiteSpace d N) transport.qRaw := by
+        LinearMap.trace ℂ (NSiteSpace (Fin d) N) transport.qRaw := by
           rw [← transport.hES]
           exact LinearMap.trace_conj' transport.qRaw transport.e.symm
     _ = Matrix.trace transport.qMatrix := by
@@ -615,7 +615,7 @@ generalization to an explicit commutativity hypothesis, are recorded in
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III. -/
 theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
     (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N)
-    (v : NSiteSpace d N)
+    (v : NSiteSpace (Fin d) N)
     (hv : ((List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm

@@ -17,8 +17,8 @@ representation: the matrix product is closed not by a trace but by a left and a
 right boundary vector.
 
 This file adds the minimal infrastructure for that contraction.  For a tensor
-`A : MPSTensor d D`, a left boundary `vL : Fin D → ℂ`, a right boundary
-`vR : Fin D → ℂ`, and a configuration `σ : Cfg d N`, the open-boundary amplitude
+`A : MPTensor α (Fin D)` over a physical alphabet `α`, a left boundary `vL : Fin D → ℂ`, a
+right boundary `vR : Fin D → ℂ`, and a configuration `σ : Fin N → α`, the open-boundary amplitude
 is
 \[
     \langle v_L \mid A^{\sigma_1} A^{\sigma_2} \cdots A^{\sigma_N} \mid v_R\rangle
@@ -50,7 +50,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- The open-boundary contraction of a word `w` against a left boundary covector
 `vL` and a right boundary vector `vR`:
@@ -58,15 +58,15 @@ variable {d D : ℕ}
 
 This is the bilinear pairing `(l| A^{w} |r)` of arXiv:2011.12127, lines
 2358--2362. -/
-noncomputable def openCoeff (vL vR : Fin D → ℂ) (A : MPSTensor d D)
-    (w : List (Fin d)) : ℂ :=
+noncomputable def openCoeff (vL vR : Fin D → ℂ) (A : MPTensor α (Fin D))
+    (w : List α) : ℂ :=
   vL ⬝ᵥ (Kraus.evalWord A w).mulVec vR
 
-@[simp] lemma openCoeff_def (vL vR : Fin D → ℂ) (A : MPSTensor d D) (w : List (Fin d)) :
+@[simp] lemma openCoeff_def (vL vR : Fin D → ℂ) (A : MPTensor α (Fin D)) (w : List α) :
     openCoeff vL vR A w = vL ⬝ᵥ (Kraus.evalWord A w).mulVec vR := rfl
 
 /-- The empty-word contraction is the boundary overlap `vL ⬝ vR`. -/
-@[simp] lemma openCoeff_nil (vL vR : Fin D → ℂ) (A : MPSTensor d D) :
+@[simp] lemma openCoeff_nil (vL vR : Fin D → ℂ) (A : MPTensor α (Fin D)) :
     openCoeff vL vR A [] = vL ⬝ᵥ vR := by
   simp [openCoeff]
 
@@ -74,12 +74,12 @@ noncomputable def openCoeff (vL vR : Fin D → ℂ) (A : MPSTensor d D)
 `σ ↦ (l| A^{σ_1} ⋯ A^{σ_N} |r)`, assembled as a function on configurations.
 
 This is the W-state-style state vector of arXiv:2011.12127, line 2361. -/
-noncomputable def openState (vL vR : Fin D → ℂ) (A : MPSTensor d D) (N : ℕ) :
-    Cfg d N → ℂ :=
-  fun σ : Cfg d N => openCoeff vL vR A (List.ofFn σ)
+noncomputable def openState (vL vR : Fin D → ℂ) (A : MPTensor α (Fin D)) (N : ℕ) :
+    (Fin N → α) → ℂ :=
+  fun σ : Fin N → α => openCoeff vL vR A (List.ofFn σ)
 
-@[simp] lemma openState_apply (vL vR : Fin D → ℂ) (A : MPSTensor d D)
-    (N : ℕ) (σ : Cfg d N) :
+@[simp] lemma openState_apply (vL vR : Fin D → ℂ) (A : MPTensor α (Fin D))
+    (N : ℕ) (σ : (Fin N → α)) :
     openState vL vR A N σ = openCoeff vL vR A (List.ofFn σ) := rfl
 
 end MPSTensor

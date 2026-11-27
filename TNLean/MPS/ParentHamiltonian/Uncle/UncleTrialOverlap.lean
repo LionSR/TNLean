@@ -193,7 +193,7 @@ theorem inner_mpvState_uncleTwoWallTrial_eq_trace
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c) (p r q s t : ℕ) :
     ⟪mpvState C (p + r + q + s + t),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + r + q + s + t))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + s + t))).symm
         (uncleTwoWallTrial A B R L p r q s t)⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
         (uncleTwoWallMixedTransfer A B R L C p r q s t) := by
@@ -228,10 +228,10 @@ theorem trace_uncleTwoWallMixedTransfer_join_exterior
       (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
 
 private theorem inner_mpvState_config_cast {n m : ℕ} (h : n = m)
-    (C : MPSTensor d c) (f : NSiteSpace d n) :
-    ⟪mpvState C m, (WithLp.linearEquiv 2 ℂ (NSiteSpace d m)).symm
+    (C : MPSTensor d c) (f : NSiteSpace (Fin d) n) :
+    ⟪mpvState C m, (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) m)).symm
       (fun σ ↦ f (σ ∘ Fin.cast h))⟫_ℂ =
-      ⟪mpvState C n, (WithLp.linearEquiv 2 ℂ (NSiteSpace d n)).symm f⟫_ℂ := by
+      ⟪mpvState C n, (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)).symm f⟫_ℂ := by
   subst m
   rfl
 
@@ -244,7 +244,7 @@ theorem inner_mpvState_uncleTwoWallTrialSource_eq_trace
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c)
     (N : ℕ) (hN : 0 < N) :
     ⟪mpvState C (6 * N + 1),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
         (uncleTwoWallMixedTransfer A B R L C (2 * N) (N + 1)
@@ -411,7 +411,7 @@ theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState A (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * (N : ℝ) ^ 2 * r ^ N := by
   obtain ⟨CR, hCR, hR⟩ := uncleWallMixedMap_left_norm_le_mul A B R hA hSpect
   obtain ⟨CL, hCL, hL⟩ := uncleWallMixedMap_right_norm_le_mul B A L hA hSpect
@@ -466,7 +466,7 @@ theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState B (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * (N : ℝ) ^ 2 * r ^ N := by
   obtain ⟨CR, hCR, hR⟩ := uncleWallMixedMap_right_norm_le_mul A B R hB hSpect
   obtain ⟨CL, hCL, hL⟩ := uncleWallMixedMap_left_norm_le_mul B A L hB hSpect
@@ -549,7 +549,7 @@ theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C z : ℝ, 0 < C ∧ 0 < z ∧ z < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState A (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * z ^ N := by
   obtain ⟨C, r, hC, hr, hr1, hbound⟩ :=
     norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul A B R L hA hSpect
@@ -571,7 +571,7 @@ theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C z : ℝ, 0 < C ∧ 0 < z ∧ z < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState B (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * z ^ N := by
   obtain ⟨C, r, hC, hr, hr1, hbound⟩ :=
     norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul A B R L hB hSpect
@@ -592,7 +592,7 @@ theorem inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     Filter.Tendsto (fun N : ℕ ↦ ⟪mpvState A (6 * N + 1),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)⟫_ℂ) Filter.atTop (nhds 0) := by
   obtain ⟨C, z, _, hz, hz1, hbound⟩ :=
     norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric A B R L hA hSpect
@@ -610,7 +610,7 @@ theorem inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     Filter.Tendsto (fun N : ℕ ↦ ⟪mpvState B (6 * N + 1),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)⟫_ℂ) Filter.atTop (nhds 0) := by
   obtain ⟨C, z, _, hz, hz1, hbound⟩ :=
     norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric A B R L hB hSpect

@@ -127,8 +127,8 @@ original matrix product vector: \(\ket{\psi'} = \Lambda^{\otimes N}\ket{\psi}\),
 line 2036. -/
 theorem mpv_rotatePhysical_eq_toLin' (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
     (N : ℕ) :
-    (mpv (rotatePhysical Λ A) : NSiteSpace d N) =
-      Matrix.toLin' (onSiteTensorPow N Λ) (mpv A : NSiteSpace d N) := by
+    (mpv (rotatePhysical Λ A) : NSiteSpace (Fin d) N) =
+      Matrix.toLin' (onSiteTensorPow N Λ) (mpv A : NSiteSpace (Fin d) N) := by
   ext s
   rw [mpv_rotatePhysical]
   simp [Matrix.toLin'_apply, Matrix.mulVec, dotProduct]
@@ -324,7 +324,7 @@ restrictions of \(\phi\); the coefficients are the products of the entries of \(
 over the sites outside the window.  This is the factorization behind the operator \(X\) of
 arXiv:2011.12127, lines 2035--2037. -/
 theorem cyclicRestrictₗ_toLin'_onSiteTensorPow {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
-    (i : Fin N) (τ : Cfg d N) (Λ : Matrix (Fin d) (Fin d) ℂ) (φ : NSiteSpace d N) :
+    (i : Fin N) (τ : Cfg d N) (Λ : Matrix (Fin d) (Fin d) ℂ) (φ : NSiteSpace (Fin d) N) :
     cyclicRestrictₗ hN L i τ (Matrix.toLin' (onSiteTensorPow N Λ) φ) =
       Matrix.toLin' (onSiteTensorPow L Λ)
         (∑ ω : Cfg d N,
@@ -430,7 +430,7 @@ theorem ker_hamiltonian_parentRingInteraction_rotatePhysical {Λ : Matrix (Fin d
 /-- The tensor power of an invertible on-site map as a linear automorphism of the
 \(N\)-site space. -/
 noncomputable def onSiteTensorPowEquiv (N : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) : NSiteSpace d N ≃ₗ[ℂ] NSiteSpace d N :=
+    (hΛ : IsUnit Λ) : NSiteSpace (Fin d) N ≃ₗ[ℂ] NSiteSpace (Fin d) N :=
   LinearEquiv.ofLinearMap (Matrix.toLin' (onSiteTensorPow N Λ))
     (Matrix.toLin' (onSiteTensorPow N Λ⁻¹))
     (by rw [← Matrix.toLin'_mul, onSiteTensorPow_mul_inv N hΛ, Matrix.toLin'_one])
@@ -443,7 +443,7 @@ chain ground space of \(A\) is the line through a nonzero vector \(\psi\), the c
 space of \(\Lambda A\) is the line through the nonzero vector \(\Lambda^{\otimes N}\psi\). -/
 theorem chainGroundSpace_rotatePhysical_eq_span
     {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ) {A : MPSTensor d D} {L N : ℕ}
-    {ψ : NSiteSpace d N} (hA : chainGroundSpace A L N = ℂ ∙ ψ ∧ ψ ≠ 0) :
+    {ψ : NSiteSpace (Fin d) N} (hA : chainGroundSpace A L N = ℂ ∙ ψ ∧ ψ ≠ 0) :
     chainGroundSpace (rotatePhysical Λ A) L N = ℂ ∙ Matrix.toLin' (onSiteTensorPow N Λ) ψ ∧
       Matrix.toLin' (onSiteTensorPow N Λ) ψ ≠ 0 := by
   refine ⟨?_, (onSiteTensorPowEquiv N hΛ).map_ne_zero_iff.mpr hA.2⟩

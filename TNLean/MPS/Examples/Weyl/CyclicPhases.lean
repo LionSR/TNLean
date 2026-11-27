@@ -79,7 +79,7 @@ theorem rootCharacter_wordPhase_cons {ζ : ℂ} (hζ : ζ ^ 5 = 1)
 coefficients related by the cyclic phase, with no comparison premise
 about those coefficients. -/
 theorem exists_charge_comparison_of_cyclic_agreement {ζ : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) {n : ℕ} (f g : NSiteSpace 3 (n + 1))
+    (hζ : IsPrimitiveRoot ζ 5) {n : ℕ} (f g : NSiteSpace (Fin 3) (n + 1))
     (hf : f ∈ groundSpace (threeLetterTensor ζ) (n + 1))
     (hg : g ∈ groundSpace (threeLetterTensor ζ) (n + 1))
     (hfg : ∀ (i : Fin 3) (σ : Cfg 3 n), f (Fin.cons i σ) = g (Fin.snoc σ i)) :
@@ -123,7 +123,7 @@ namespace MPSTensor.ShortMomentum
 coefficients normalized by the full-word phase. The functions may
 be arbitrary on charges not reached with the fixed endpoint. -/
 theorem exists_overlap_charge_coefficients {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    {n : ℕ} (ψ : NSiteSpace 3 (n + 2))
+    {n : ℕ} (ψ : NSiteSpace (Fin 3) (n + 2))
     (hLeft : InLeftGround (threeLetterTensor ζ) (n + 1) ψ)
     (hRight : InRightGround (threeLetterTensor ζ) (n + 1) ψ) :
     ∃ H K : Fin 3 → (ZMod 5 × ZMod 5) → ℂ,

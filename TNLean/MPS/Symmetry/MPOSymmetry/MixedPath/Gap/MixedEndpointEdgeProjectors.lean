@@ -347,7 +347,7 @@ def mixedEndpointInteriorEdgeSupportES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) :=
   (mixedEndpointInteriorEdgeBoundaryMap A₀ A₁).range.map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (D₀ * D₀) 2)).symm.toLinearMap
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (D₀ * D₀)) 2)).symm.toLinearMap
 
 /-- The actual interior support is the ordinary two-site endpoint support.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/

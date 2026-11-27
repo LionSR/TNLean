@@ -59,7 +59,7 @@ private theorem sum_cfg_two (f : Cfg 2 2 → ℂ) : ∑ σ, f σ = ∑ a, ∑ b,
 
 /-- The canonical parent projector has the normalized PVBS occupation/hopping formula.
 No independently defined Hamiltonian is used. -/
-theorem parentInteraction_pvbs_two_apply (μ : ℝ) (v : NSiteSpace 2 2) (σ : Cfg 2 2) :
+theorem parentInteraction_pvbs_two_apply (μ : ℝ) (v : NSiteSpace (Fin 2) 2) (σ : Cfg 2 2) :
     parentInteraction (pvbsTensor (μ : ℂ)) 2 v σ =
       (((μ : ℂ) ^ 2 * (σ 0).val + (σ 1).val) * v σ -
         (μ : ℂ) * (if σ 0 = σ 1 then 0 else v (σ ∘ Equiv.swap 0 1))) /
@@ -68,10 +68,10 @@ theorem parentInteraction_pvbs_two_apply (μ : ℝ) (v : NSiteSpace 2 2) (σ : C
   have hdreal : 0 < 1 + μ ^ 2 := by positivity
   have hd : (1 + (μ : ℂ) ^ 2) ≠ 0 := by exact_mod_cast hdreal.ne'
   let z := (v ![0, 1] - (μ : ℂ) * v ![1, 0]) / (1 + (μ : ℂ) ^ 2)
-  let w : NSiteSpace 2 2 := fun τ =>
+  let w : NSiteSpace (Fin 2) 2 := fun τ =>
     if τ 0 = 0 then (if τ 1 = 0 then 0 else z)
     else if τ 1 = 0 then -(μ : ℂ) * z else v ![1, 1]
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace 2 2)
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 2)
   let G := groundSpaceES (pvbsTensor (μ : ℂ)) 2
   have hwperp : e.symm w ∈ Gᗮ := by
     rw [Submodule.mem_orthogonal]

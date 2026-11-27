@@ -43,11 +43,11 @@ variable {d D₁ D₂ L N : ℕ}
 theorem mpvSubmodule_ne_of_not_exists_mpv_eq_smul
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hDistinct :
-      ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N)) :
+      ¬ ∃ c : ℂ, (mpv A : NSiteSpace (Fin d) N) = c • (mpv B : NSiteSpace (Fin d) N)) :
     mpvSubmodule A N ≠ mpvSubmodule B N := by
   intro hEq
   apply hDistinct
-  have hmem : (mpv A : NSiteSpace d N) ∈ mpvSubmodule B N := by
+  have hmem : (mpv A : NSiteSpace (Fin d) N) ∈ mpvSubmodule B N := by
     rw [← hEq, mpvSubmodule, Submodule.mem_span_singleton]
     exact ⟨1, by simp⟩
   rw [mpvSubmodule, Submodule.mem_span_singleton] at hmem
@@ -60,7 +60,7 @@ theorem not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hDistinct :
       ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
-    ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N) := by
+    ¬ ∃ c : ℂ, (mpv A : NSiteSpace (Fin d) N) = c • (mpv B : NSiteSpace (Fin d) N) := by
   rintro ⟨c, hc⟩
   apply hDistinct
   refine ⟨c, ?_⟩

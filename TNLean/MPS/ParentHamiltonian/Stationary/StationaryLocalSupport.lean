@@ -52,7 +52,7 @@ noncomputable def cornerGroundSpaceES (A : MPSTensor d D)
     (P : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
   ((cornerSubmodule P).map (groundSpaceMap A L)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap
 
 /-- The corner of the identity gives the full open-boundary space. -/
 theorem cornerGroundSpaceES_one (A : MPSTensor d D) (L : ℕ) :

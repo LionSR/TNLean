@@ -162,7 +162,7 @@ theorem clusterTensorVBS_mpv_eq_prod {N : ℕ} (hN : 0 < N) (s : Fin N → Fin 2
 /-- The controlled-`Z` gate between sites `a` and `b` of an `N`-qubit chain,
 acting on coefficient vectors: the coefficient of `|s⟩` is multiplied by
 `(-1)^{s_a s_b}`. For `a = b` this is the Pauli `Z` on site `a`. -/
-def controlledZ {N : ℕ} (a b : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N where
+def controlledZ {N : ℕ} (a b : Fin N) : NSiteSpace (Fin 2) N →ₗ[ℂ] NSiteSpace (Fin 2) N where
   toFun v s := (-1 : ℂ) ^ ((s a : ℕ) * (s b : ℕ)) * v s
   map_add' v w := by
     ext s
@@ -172,24 +172,24 @@ def controlledZ {N : ℕ} (a b : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 
     simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply]
     ring
 
-@[simp] lemma controlledZ_apply {N : ℕ} (a b : Fin N) (v : NSiteSpace 2 N)
+@[simp] lemma controlledZ_apply {N : ℕ} (a b : Fin N) (v : NSiteSpace (Fin 2) N)
     (s : Fin N → Fin 2) :
     controlledZ a b v s = (-1 : ℂ) ^ ((s a : ℕ) * (s b : ℕ)) * v s := rfl
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2369:
 controlled-`Z` gates between nearest neighbours, here on the ring of `N` sites,
 one gate on each cyclic bond `(j, j + 1 mod N)`. -/
-def clusterCZRing (N : ℕ) : Module.End ℂ (NSiteSpace 2 N) :=
+def clusterCZRing (N : ℕ) : Module.End ℂ (NSiteSpace (Fin 2) N) :=
   (List.ofFn fun j : Fin N => controlledZ j (finRotate N j)).prod
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2369:
 the product state `|+⟩^{⊗N}`, whose coefficient on every basis vector is
 `∏ⱼ ⟨sⱼ|+⟩ = (1/√2)^N`. -/
-def plusProductState (N : ℕ) : NSiteSpace 2 N :=
+def plusProductState (N : ℕ) : NSiteSpace (Fin 2) N :=
   fun _ => ∏ _j : Fin N, (↑(1 / Real.sqrt 2) : ℂ)
 
 private lemma list_prod_controlledZ_apply {N : ℕ} (l : List (Fin N × Fin N))
-    (v : NSiteSpace 2 N) (s : Fin N → Fin 2) :
+    (v : NSiteSpace (Fin 2) N) (s : Fin N → Fin 2) :
     (l.map fun p => controlledZ p.1 p.2).prod v s =
       (l.map fun p => (-1 : ℂ) ^ ((s p.1 : ℕ) * (s p.2 : ℕ))).prod * v s := by
   induction l with
@@ -200,7 +200,7 @@ private lemma list_prod_controlledZ_apply {N : ℕ} (l : List (Fin N × Fin N))
 
 /-- The ring of controlled-`Z` gates multiplies the coefficient of `|s⟩` by
 `∏ⱼ (-1)^{sⱼ s_{j+1}}`, indices mod `N`. -/
-theorem clusterCZRing_apply {N : ℕ} (v : NSiteSpace 2 N) (s : Fin N → Fin 2) :
+theorem clusterCZRing_apply {N : ℕ} (v : NSiteSpace (Fin 2) N) (s : Fin N → Fin 2) :
     clusterCZRing N v s =
       (∏ j : Fin N, (-1 : ℂ) ^ ((s j : ℕ) * (s (finRotate N j) : ℕ))) * v s := by
   have h : clusterCZRing N =

@@ -84,14 +84,14 @@ theorem groundSpaceMap_ghzTensor_eq_ghzState (N : ℕ)
 /-- Periodic trace multiplicity gives constant sector amplitudes `(2, 1)` at
 every length; the empty word has amplitude three. -/
 theorem mpv_repeatedBlockTensor_eq_ghzState (N : ℕ) :
-    (mpv repeatedBlockTensor : NSiteSpace 2 N) = ghzState (ι := Fin N) ![2, 1] := by
+    (mpv repeatedBlockTensor : NSiteSpace (Fin 2) N) = ghzState (ι := Fin N) ![2, 1] := by
   rw [mpv_eq_groundSpaceMap_one, groundSpaceMap_repeatedBlockTensor_eq_ghzState]
   norm_num
 
 /-- The periodic GHZ tensor gives the equal-weight GHZ vector; the empty word
 has amplitude two. -/
 theorem mpv_ghzTensor_eq_ghzState (N : ℕ) :
-    (mpv ghzTensor : NSiteSpace 2 N) = ghzState (ι := Fin N) ![1, 1] := by
+    (mpv ghzTensor : NSiteSpace (Fin 2) N) = ghzState (ι := Fin N) ![1, 1] := by
   rw [mpv_eq_groundSpaceMap_one, groundSpaceMap_ghzTensor_eq_ghzState]
   norm_num
 
@@ -124,7 +124,7 @@ theorem normalizedMPVState_repeatedBlockTensor {N : ℕ} [NeZero N] :
   rw [normalizedMPVState, norm_mpvState_repeatedBlockTensor]
   apply PiLp.ext
   intro σ
-  change ((Real.sqrt 5 : ℂ)⁻¹ • (mpv repeatedBlockTensor : NSiteSpace 2 N)) σ = _
+  change ((Real.sqrt 5 : ℂ)⁻¹ • (mpv repeatedBlockTensor : NSiteSpace (Fin 2) N)) σ = _
   rw [mpv_repeatedBlockTensor_eq_ghzState, ← ghzState_smul]
   congr 2
   ext j
@@ -138,7 +138,7 @@ theorem normalizedMPVState_ghzTensor {N : ℕ} [NeZero N] :
   rw [normalizedMPVState, norm_mpvState_ghzTensor]
   apply PiLp.ext
   intro σ
-  change ((Real.sqrt 2 : ℂ)⁻¹ • (mpv ghzTensor : NSiteSpace 2 N)) σ = _
+  change ((Real.sqrt 2 : ℂ)⁻¹ • (mpv ghzTensor : NSiteSpace (Fin 2) N)) σ = _
   rw [mpv_ghzTensor_eq_ghzState, ← ghzState_smul]
   congr 2
   ext j

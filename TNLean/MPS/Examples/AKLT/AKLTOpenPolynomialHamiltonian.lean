@@ -30,7 +30,7 @@ namespace MPSTensor
 /-- The bilinear-biquadratic AKLT Hamiltonian with no bond joining the last
 site to the first. Source: arXiv:quant-ph/0608197, equation `HAKLT`, with
 open boundaries as in arXiv:2011.12127, lines 1171--1174. -/
-def akltOpenHamiltonian (N : ℕ) : NSiteSpace 3 N →ₗ[ℂ] NSiteSpace 3 N :=
+def akltOpenHamiltonian (N : ℕ) : NSiteSpace (Fin 3) N →ₗ[ℂ] NSiteSpace (Fin 3) N :=
   ∑ i : NonwrappingStart 2 N,
     (spinExchange spinOneOperator i.1 (cyclicForwardSite i.1 1) +
       (1 / 3 : ℂ) • (spinExchange spinOneOperator i.1 (cyclicForwardSite i.1 1) ∘ₗ
@@ -96,9 +96,9 @@ theorem akltOpenHamiltonian_add_eq_parent {N : ℕ} (hN : 2 ≤ N) :
 coefficient vectors, is positive.
 Source: arXiv:2011.12127, lines 1171--1174; the energy shift is derived here. -/
 theorem akltOpenHamiltonian_add_isPositive {N : ℕ} (hN : 2 ≤ N) :
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).symm.toLinearMap ∘ₗ
       (akltOpenHamiltonian N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id) ∘ₗ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap).IsPositive := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).toLinearMap).IsPositive := by
   rw [akltOpenHamiltonian_add_eq_parent hN]
   exact (Matrix.isPositive_toEuclideanLin_iff.mpr
     (posSemidef_hamiltonian_parentChainInteraction akltTensor 2 N)).smul_of_nonneg
@@ -113,7 +113,7 @@ theorem akltOpenHamiltonian_eigenvalue_ge {N : ℕ} (hN : 2 ≤ N) {μ : ℂ}
   obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
   have hpos : 0 ≤ μ + (2 * (N - 1) / 3 : ℂ) :=
     (akltOpenHamiltonian_add_isPositive hN).nonneg_of_apply_eq_smul
-      (v := (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm v)
+      (v := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).symm v)
       ((LinearEquiv.map_ne_zero_iff _).mpr hv.2)
       (by simp [Module.End.mem_eigenspace_iff.1 hv.1, add_smul])
   rw [← sub_nonneg, sub_neg_eq_add]
@@ -124,13 +124,13 @@ the open AKLT matrix-product space. Source: arXiv:2011.12127, lines 1171--1174. 
 theorem akltOpenHamiltonian_eigenspace_eq_groundSpace {N : ℕ} (hN : 2 ≤ N) :
     Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) =
       (groundSpaceES akltTensor N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).toLinearMap := by
   rw [← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN]
   ext v
   have hv := LinearMap.congr_fun (akltOpenHamiltonian_add_eq_parent hN) v
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply] at hv
   rw [Module.End.mem_eigenspace_iff, Submodule.mem_map_equiv, LinearMap.mem_ker,
-    ← (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).map_eq_zero_iff,
+    ← (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).map_eq_zero_iff,
     ← smul_eq_zero_iff_right (by norm_num : (2 : ℂ) ≠ 0)]
   change _ ↔ (2 : ℂ) • Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian v = 0
   rw [← hv, neg_smul, ← sub_eq_zero, sub_neg_eq_add]

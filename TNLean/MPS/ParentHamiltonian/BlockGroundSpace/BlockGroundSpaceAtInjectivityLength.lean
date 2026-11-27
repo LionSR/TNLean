@@ -85,7 +85,7 @@ of open-boundary representations at every cyclic cut. This is the cyclic
 closure step of arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem mem_bntMPSVectorSpan_of_cyclic_openBoundary
     (A : (j : Fin r) → MPSTensor d (dim j)) {N : ℕ} (hN : 2 ≤ N)
-    (hSpan : WordTupleSpanTop A (N - 1)) (ψ : NSiteSpace d N)
+    (hSpan : WordTupleSpanTop A (N - 1)) (ψ : NSiteSpace (Fin d) N)
     (hBoundary : ∀ i : Fin N,
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
         cyclicTranslateState i ψ = ∑ j, groundSpaceMap (A j) N (X j)) :
@@ -221,7 +221,7 @@ theorem ker_sum_eq_bntMPSVectorSpan_of_wordTupleSpanTop
     (hker : haveI : NeZero N := ⟨by omega⟩; ∀ i, LinearMap.ker (H i) = LinearMap.ker
       (Matrix.toEuclideanLin ((parentRingInteraction (toTensorFromBlocks μ A) L N).term i))) :
     LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan A N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   have hEq : LinearMap.ker (∑ i, H i) = LinearMap.ker
       (Matrix.toEuclideanLin (parentRingInteraction (toTensorFromBlocks μ A) L N).hamiltonian) := by

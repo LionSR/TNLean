@@ -194,7 +194,7 @@ form.
 This amplitude is the two-site periodic coefficient of the chosen
 decomposition \(X,\Lambda,U\). -/
 noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 :=
+    (hStruct : AppendixBStructuralData A) : NSiteSpace (Fin d) 2 :=
   let L : Matrix (Fin D) (Fin D) ℂ :=
     Matrix.diagonal fun k => (hStruct.Λ k : ℂ)
   fun σ =>
@@ -267,7 +267,7 @@ description
 with \(\varphi_j\) shared between \(b_n\) and \(a_{n+1}\). -/
 noncomputable def AppendixBStructuralData.cyclicVirtualPairState
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {L : ℕ} (hL : 0 < L) : NSiteSpace d L :=
+    {L : ℕ} (hL : 0 < L) : NSiteSpace (Fin d) L :=
   fun σ =>
     ∑ α : Fin L → Fin D, ∏ t : Fin L,
       (hStruct.Λ (α t) : ℂ) *
@@ -322,7 +322,7 @@ theorem AppendixBStructuralData.parentInteraction_eq_coreTensor {A : MPSTensor d
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 noncomputable def AppendixBStructuralData.twoSiteBasicSpace {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : Submodule ℂ (NSiteSpace d 2) :=
+    (hStruct : AppendixBStructuralData A) : Submodule ℂ (NSiteSpace (Fin d) 2) :=
   groundSpace hStruct.coreTensor 2
 
 /-- The \(AX\) two-site coefficient-space representative associated with the
@@ -336,7 +336,7 @@ the source projector \(Q_{AX}\) as an operator on
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 noncomputable def AppendixBStructuralData.appendixBQAXOnCoeffSpace {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
+    (hStruct : AppendixBStructuralData A) : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
   parentInteraction hStruct.coreTensor 2
 
 /-- The Appendix B \(AX\) coefficient representative is the canonical two-site
@@ -396,8 +396,8 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 theorem
     AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {KAXB : Submodule ℂ (NSiteSpace d 3)}
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (hD2 : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
     (hAX : QAX = hStruct.appendixBQAXOnCoeffSpace)
     (hXB : QXB = hStruct.appendixBQAXOnCoeffSpace) :
@@ -491,7 +491,7 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_appendixD2
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
     (hD2 : HasAppendixD2ParentCommutingHamiltonian
       (d := d) KAXB hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQAXOnCoeffSpace) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
@@ -512,8 +512,8 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 theorem
     AppendixBStructuralData.term_two_three_zero_one_commute_of_appendixD2_identified_projectors
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {KAXB : Submodule ℂ (NSiteSpace d 3)}
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (hD2 : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
     (hAX : QAX = hStruct.appendixBQAXOnCoeffSpace)
     (hXB : QXB = hStruct.appendixBQAXOnCoeffSpace) :

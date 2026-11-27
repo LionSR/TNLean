@@ -54,7 +54,7 @@ two-site operator is its left overlapping matrix lift.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem leftPairLift_toMatrix_reindex_leftAssociated
-    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     Matrix.reindex (threeSiteParentInteractionEquiv (Fin d))
         (threeSiteParentInteractionEquiv (Fin d))
         (LinearMap.toMatrix' (leftPairLift Q)) =
@@ -78,7 +78,7 @@ two-site operator is its right overlapping matrix lift.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem rightPairLift_toMatrix_reindex_leftAssociated
-    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     Matrix.reindex (threeSiteParentInteractionEquiv (Fin d))
         (threeSiteParentInteractionEquiv (Fin d))
         (LinearMap.toMatrix' (rightPairLift Q)) =

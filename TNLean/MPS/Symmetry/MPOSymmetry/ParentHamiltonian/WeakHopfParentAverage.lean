@@ -351,11 +351,11 @@ theorem toEuclideanLin_rep_one_comp_starProjection {A : MPSTensor d Dₐ}
       (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
   apply LinearMap.ext
   intro ψ
-  apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n)).injective
+  apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) n)).injective
   change W.rep n 1 *ᵥ
-      ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
+      ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) n))
         ((MPSTensor.groundSpaceES A n).starProjection ψ)) =
-      (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
+      (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) n))
         ((MPSTensor.groundSpaceES A n).starProjection ψ)
   obtain ⟨X, hX⟩ := (MPSTensor.mem_groundSpaceES_iff A n _).mp
     (Submodule.starProjection_apply_mem (MPSTensor.groundSpaceES A n) ψ)

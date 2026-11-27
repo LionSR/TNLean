@@ -134,7 +134,7 @@ theorem groundSpaceMap_toMatrix' (A : MPSTensor d D) (n : ℕ)
 
 /-- The open-chain space `𝒮_n` is the range of the map `𝒫` of the blocked tensor. -/
 theorem mem_groundSpace_iff_exists_mpsSiteMap {A : MPSTensor d D} {n : ℕ}
-    {ψ : NSiteSpace d n} :
+    {ψ : NSiteSpace (Fin d) n} :
     ψ ∈ groundSpace A n ↔
       ∃ M : Module.End ℂ (Fin D → ℂ),
         mpsSiteMap (wordTensor (fun i => Matrix.toLin' (A i)) n) M = ψ := by
@@ -172,7 +172,7 @@ theorem isGInjective_mpsSiteMap_wordTensor
 restrictions to the first and to the last `K + 1` sites lie in `𝒮_{K+1}` lies in `𝒮_{K+2}`. -/
 theorem mem_groundSpace_add_two_of_isGInjective
     (hA : IsGInjective (linHom ρ ρ) (mpsSiteMap fun i => Matrix.toLin' (A i))) {K : ℕ}
-    (hK : 0 < K) {ψ : NSiteSpace d (K + 2)} (hLeft : InLeftGround A (K + 1) ψ)
+    (hK : 0 < K) {ψ : NSiteSpace (Fin d) (K + 2)} (hLeft : InLeftGround A (K + 1) ψ)
     (hRight : InRightGround A (K + 1) ψ) :
     ψ ∈ groundSpace A (K + 2) := by
   set A' : Fin d → Module.End ℂ (Fin D → ℂ) := fun i => Matrix.toLin' (A i) with hA'

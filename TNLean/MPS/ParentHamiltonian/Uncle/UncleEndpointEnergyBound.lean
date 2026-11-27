@@ -42,19 +42,19 @@ def uncleTrialPinnedGlobalState
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1)) :
     EuclideanSpace ℂ (Cfg d (6 * N + 1)) :=
   if i.val = N - 1 then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L N 1 (3 * N - 1) (N + 1) N
         (σ ∘ Fin.cast (by omega))
   else if i.val = 2 * N then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L (2 * N) 1 (2 * N - 1) (N + 1) N
         (σ ∘ Fin.cast (by omega))
   else if i.val = 4 * N - 1 then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) 1 (2 * N)
         (σ ∘ Fin.cast (by omega))
   else if i.val = 5 * N then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L N (N + 1) (3 * N - 1) 1 N
         (σ ∘ Fin.cast (by omega))
   else 0
@@ -212,14 +212,14 @@ theorem norm_uncleTrialPinnedGlobalState_sq_le_mul
   have hRC : CR ≤ C := le_max_left _ _
   have hLC : CL ≤ C := le_max_right _ _
   have hRcast (p q s t : ℕ) (hlen : p + 1 + q + s + t = 6 * N + 1) :
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (fun σ ↦ uncleTwoWallTrial A B R L p 1 q s t (σ ∘ Fin.cast hlen))‖ ^ 2 ≤
           C * s := by
     rw [norm_uncleTwoWallTrial_cast A B R L p 1 q s t (6 * N + 1) hlen]
     exact (hR p q s t).trans
       (mul_le_mul_of_nonneg_right hRC (Nat.cast_nonneg s))
   have hLcast (p r q t : ℕ) (hlen : p + r + q + 1 + t = 6 * N + 1) :
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (fun σ ↦ uncleTwoWallTrial A B R L p r q 1 t (σ ∘ Fin.cast hlen))‖ ^ 2 ≤
           C * r := by
     rw [norm_uncleTwoWallTrial_cast A B R L p r q 1 t (6 * N + 1) hlen]
@@ -256,7 +256,7 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_le_mul
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (N : ℕ), 0 < N →
-      let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)
       (⟪Matrix.toEuclideanLin
           (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ, φ⟫_ℂ).re ≤ C

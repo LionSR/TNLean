@@ -83,7 +83,7 @@ theorem mem_groundSpace_of_cyclicBoundary_restrictions
       ∃ X ∈ cyclicBoundarySpace P (n + 1), groundSpaceMap A (n + 1) X = ψ)
     (hInjective : Set.InjOn (groundSpaceMap A n)
       (cyclicBoundarySpace P n : Set (Matrix (Fin D) (Fin D) ℂ)))
-    {ψ : NSiteSpace d (n + 2)}
+    {ψ : NSiteSpace (Fin d) (n + 2)}
     (hLeft : InLeftGround A (n + 1) ψ)
     (hRight : InRightGround A (n + 1) ψ) :
     ψ ∈ groundSpace A (n + 2) := by
@@ -171,7 +171,7 @@ theorem exists_cyclicBoundary_of_mem_groundSpace [NeZero m]
     (hWord : ∀ u (σ : Fin n → Fin d),
       P u * Kraus.evalWord A (List.ofFn σ) =
         Kraus.evalWord A (List.ofFn σ) * P (u + n))
-    {ψ : NSiteSpace d n} (hψ : ψ ∈ groundSpace A n) :
+    {ψ : NSiteSpace (Fin d) n} (hψ : ψ ∈ groundSpace A n) :
     ∃ X ∈ cyclicBoundarySpace P n, groundSpaceMap A n X = ψ := by
   obtain ⟨X, rfl⟩ := LinearMap.mem_range.mp hψ
   exact ⟨_, sum_cyclicBoundary_mem P hOrth n X,

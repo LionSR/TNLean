@@ -46,7 +46,7 @@ variable {d D : ℕ}
 /-- Suffix restriction: fixing a prefix \(u\) and keeping the last
 \(L\) sites of a state on \(K + L\) sites. -/
 def tailRestrictₗ {d K L : ℕ} (u : Fin K → Fin d) :
-    NSiteSpace d (K + L) →ₗ[ℂ] NSiteSpace d L where
+    NSiteSpace (Fin d) (K + L) →ₗ[ℂ] NSiteSpace (Fin d) L where
   toFun ψ := fun σ => ψ (Fin.append u σ)
   map_add' ψ₁ ψ₂ := by
     ext σ
@@ -56,14 +56,14 @@ def tailRestrictₗ {d K L : ℕ} (u : Fin K → Fin d) :
     simp
 
 @[simp] theorem tailRestrictₗ_apply {d K L : ℕ} (u : Fin K → Fin d)
-    (ψ : NSiteSpace d (K + L)) (σ : Fin L → Fin d) :
+    (ψ : NSiteSpace (Fin d) (K + L)) (σ : Fin L → Fin d) :
     tailRestrictₗ u ψ σ = ψ (Fin.append u σ) :=
   rfl
 
 /-- Restricting the last site after fixing a prefix is the same as first
 restricting the last site and then fixing the prefix. -/
 @[simp] theorem tailRestrictₗ_restrictLast {d K L : ℕ} (u : Fin K → Fin d)
-    (ψ : NSiteSpace d (K + L + 1)) (j : Fin d) :
+    (ψ : NSiteSpace (Fin d) (K + L + 1)) (j : Fin d) :
     restrictLast (tailRestrictₗ u ψ) j = tailRestrictₗ u (restrictLast ψ j) := by
   ext σ
   simp only [restrictLast_apply, tailRestrictₗ_apply]
@@ -119,13 +119,13 @@ form, with the prefix word moved to the right boundary matrix by trace cyclicity
 
 /-- A state on \(K + L\) sites lies in the tail ground condition if every fixed
 prefix gives an \(L\)-site ground-space vector. -/
-def InTailGround (A : MPSTensor d D) (K L : ℕ) (ψ : NSiteSpace d (K + L)) : Prop :=
+def InTailGround (A : MPSTensor d D) (K L : ℕ) (ψ : NSiteSpace (Fin d) (K + L)) : Prop :=
   ∀ u : Fin K → Fin d, tailRestrictₗ u ψ ∈ groundSpace A L
 
 /-- A ground-space vector restricts to a ground-space vector on every suffix
 slice. -/
 theorem groundSpace_inTailGround (A : MPSTensor d D) (K L : ℕ)
-    {ψ : NSiteSpace d (K + L)} (hψ : ψ ∈ groundSpace A (K + L)) :
+    {ψ : NSiteSpace (Fin d) (K + L)} (hψ : ψ ∈ groundSpace A (K + L)) :
     InTailGround A K L ψ := by
   intro u
   rw [groundSpace, LinearMap.mem_range] at hψ ⊢
@@ -137,7 +137,7 @@ theorem groundSpace_inTailGround (A : MPSTensor d D) (K L : ℕ)
 boundary matrices satisfying the common overlap identity
 \(Z_j A^u = A_j Y_u\). -/
 theorem exists_left_tail_compatibility {A : MPSTensor d D} {K L₀ : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
+    (hInj : Kraus.IsNBlkInjective A L₀) {ψ : NSiteSpace (Fin d) (K + L₀ + 1)}
     (hLeft : InLeftGround A (K + L₀) ψ)
     (hTail : InTailGround A K (L₀ + 1) ψ) :
     ∃ Z : Fin d → Matrix (Fin D) (Fin D) ℂ,
@@ -330,7 +330,7 @@ injectivity length \(L₀ + 1\), then the full \((K + L₀ + 1)\)-site state is 
 in the open-chain ground space. -/
 theorem groundSpace_extend_right_of_isNBlkInjective
     [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
-    (hL₀ : 0 < L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
+    (hL₀ : 0 < L₀) {ψ : NSiteSpace (Fin d) (K + L₀ + 1)}
     (hLeft : InLeftGround A (K + L₀) ψ)
     (hTail : InTailGround A K (L₀ + 1) ψ) :
     ψ ∈ groundSpace A (K + L₀ + 1) := by

@@ -34,20 +34,20 @@ def physicalSiteReverseConfigEquiv (d N : ℕ) : Cfg d N ≃ Cfg d N :=
 
 /-- The raw linear equivalence that reverses the physical sites of a coefficient
 function.  This definition does not use a Hilbert-space structure. -/
-def physicalSiteReverse (d N : ℕ) : NSiteSpace d N ≃ₗ[ℂ] NSiteSpace d N :=
+def physicalSiteReverse (d N : ℕ) : NSiteSpace (Fin d) N ≃ₗ[ℂ] NSiteSpace (Fin d) N :=
   LinearEquiv.piCongrLeft' ℂ (fun _ : Cfg d N => ℂ)
     (physicalSiteReverseConfigEquiv d N)
 
 /-- Physical-site reversal evaluates a coefficient function on the reversed
 configuration. -/
-@[simp] theorem physicalSiteReverse_apply {N : ℕ} (ψ : NSiteSpace d N) (σ : Cfg d N) :
+@[simp] theorem physicalSiteReverse_apply {N : ℕ} (ψ : NSiteSpace (Fin d) N) (σ : Cfg d N) :
     physicalSiteReverse d N ψ σ = ψ (σ ∘ Fin.rev) := by
   rfl
 
 /-- The FNW boundary map of equation (5.5).  The matrix family \(v\) follows the
 source convention, before the identification \(A_\mu=v(\mu)^*\). -/
 noncomputable def fnwBoundaryMap (v : MPSTensor d D) (N : ℕ) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d N :=
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace (Fin d) N :=
   LinearMap.pi fun σ : Cfg d N =>
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
       (LinearMap.mulRight ℂ (Kraus.evalWord v (List.ofFn σ))ᴴ)

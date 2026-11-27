@@ -162,28 +162,25 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- Canonical identification between the doubled physical index of an
-`L`-site MPO block and the `L`-site block of the doubled MPS index.
+`L`-site MPO block and the words of length `L` over the doubled MPS index.
 
-The map decodes the blocked ket and bra words, pairs their letters site by
-site, and then encodes the resulting word in `Fin (d * d)`.  This is the
-index identification implicit in the blocking argument of
-arXiv:1606.00608, lines 317--345. -/
+The map decodes the blocked ket and bra words and pairs their letters site by
+site, each pair encoded in `Fin (d * d)`.  This is the index identification
+implicit in the blocking argument of arXiv:1606.00608, lines 317--345. -/
 noncomputable def blockedDoubledIndexEquiv (d L : ℕ) :
-    Fin (Kraus.blockPhysDim d L * Kraus.blockPhysDim d L) ≃
-      Fin (Kraus.blockPhysDim (d * d) L) :=
+    Fin (Kraus.blockPhysDim d L * Kraus.blockPhysDim d L) ≃ (Fin L → Fin (d * d)) :=
   finProdFinEquiv.symm |>.trans
     (Equiv.prodCongr (Kraus.decodeBlockEquiv d L)
       (Kraus.decodeBlockEquiv d L)) |>.trans
     (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin d)).symm |>.trans
-    (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv) |>.trans
-    (Kraus.decodeBlockEquiv (d * d) L).symm
+    (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
 
-/-- Decoding the doubled blocked index pairs the ket and bra letters pointwise. -/
+/-- The doubled blocked index pairs the ket and bra letters pointwise. -/
 @[simp]
-lemma decodeBlock_blockedDoubledIndexEquiv (d L : ℕ)
+lemma blockedDoubledIndexEquiv_apply (d L : ℕ)
     (ij : Fin (Kraus.blockPhysDim d L * Kraus.blockPhysDim d L))
     (k : Fin L) :
-    Kraus.decodeBlock (d * d) L (blockedDoubledIndexEquiv d L ij) k =
+    blockedDoubledIndexEquiv d L ij k =
       finProdFinEquiv
         (Kraus.decodeBlock d L ij.divNat k,
           Kraus.decodeBlock d L ij.modNat k) := by
@@ -217,11 +214,11 @@ bra words. -/
 theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
     (blockTensor M L).toMPSTensor =
       Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
-        (Kraus.blockTensor M.toMPSTensor L) := by
+        (Kraus.block M.toMPSTensor L) := by
   funext ij
   simp [toMPSTensor, blockTensor_apply, Kraus.reindexPhysical,
-    Kraus.blockTensor, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn,
-    MPSTensor.evalWord_ofFn_eq_prod, decodeBlock_blockedDoubledIndexEquiv,
+    Kraus.wordOfBlock, MPOTensor.evalWord_ofFn,
+    MPSTensor.evalWord_ofFn_eq_prod,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 /-- Injectivity of an MPO block is the injectivity of the corresponding block
@@ -229,7 +226,7 @@ of its doubled-index MPS tensor. -/
 theorem isInjective_toMPSTensor_blockTensor_iff
     (M : MPOTensor d D) {L : ℕ} :
     Kraus.IsInjective (blockTensor M L).toMPSTensor ↔
-      Kraus.IsInjective (Kraus.blockTensor M.toMPSTensor L) := by
+      Kraus.IsInjective (Kraus.block M.toMPSTensor L) := by
   rw [toMPSTensor_blockTensor M,
     MPSTensor.isInjective_reindexPhysical_equiv]
 
@@ -326,11 +323,10 @@ noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
   simp [blockTwo, reindexPhysical, blockTensor_apply, Kraus.wordOfBlock, twoSiteBlockEquiv,
     List.ofFn_succ]
 
-/-- Identify the doubled physical index of `blockTwo` with the general
-length-two block of the doubled MPS alphabet. -/
+/-- Identify the doubled physical index of `blockTwo` with the words of length two over the
+doubled MPS alphabet. -/
 noncomputable def twoSiteDoubledIndexEquiv (d : ℕ) :
-    Fin ((d * d) * (d * d)) ≃
-      Fin (Kraus.blockPhysDim (d * d) 2) :=
+    Fin ((d * d) * (d * d)) ≃ (Fin 2 → Fin (d * d)) :=
   finProdFinEquiv.symm |>.trans
     (Equiv.prodCongr (twoSiteBlockEquiv d) (twoSiteBlockEquiv d)) |>.trans
     finProdFinEquiv |>.trans
@@ -343,10 +339,10 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
     (blockTwo M).toMPSTensor =
       Kraus.reindexPhysical (twoSiteDoubledIndexEquiv d)
-        (Kraus.blockTensor M.toMPSTensor 2) := by
+        (Kraus.block M.toMPSTensor 2) := by
   funext ij
   simp [toMPSTensor, blockTwo_apply, Kraus.reindexPhysical,
-    Kraus.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
+    twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
     blockedDoubledIndexEquiv, Equiv.arrowCongr]
 
 /-- The concrete two-site blocking is the general length-two blocking after

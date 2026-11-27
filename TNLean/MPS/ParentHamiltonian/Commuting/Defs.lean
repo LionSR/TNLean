@@ -56,7 +56,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A parent Hamiltonian has **commuting** local terms when the translated
 interaction projectors commute.
@@ -67,7 +67,7 @@ predicate records the resulting pairwise commutativity of the translated local
 terms. The source definition of a parent Hamiltonian also includes the
 ground-space spanning condition by the periodic MPS vectors of the BNT
 components. -/
-def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
+def IsCommutingParentHam (A : MPTensor α (Fin D)) (L N : ℕ) : Prop :=
   ∀ i j : Fin N, haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toLin' ((parentRingInteraction A L N).term i) *
         Matrix.toLin' ((parentRingInteraction A L N).term j) =
@@ -80,12 +80,12 @@ commutation equations for the translated parent interaction terms.
 See arXiv:1606.00608, Definition 3.9. The source nearest-neighbor condition
 also fixes \(L=2\) and includes the parent-Hamiltonian ground-space spanning
 condition, which is not part of this predicate. -/
-def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
+def IsNNCPH (A : MPTensor α (Fin D)) (N : ℕ) : Prop :=
   IsCommutingParentHam A 2 N
 
 /-- Gauge-equivalent tensors have the same nearest-neighbor parent-Hamiltonian
 commutation equations. -/
-theorem _root_.MPTensor.GaugeEquiv.isNNCPH {A B : MPSTensor d D} (h : GaugeEquiv A B) {N : ℕ} :
+theorem _root_.MPTensor.GaugeEquiv.isNNCPH {A B : MPTensor α (Fin D)} (h : GaugeEquiv A B) {N : ℕ} :
     IsNNCPH A N → IsNNCPH B N := by
   intro hA i j
   have : NeZero N := NeZero.of_pos i.pos
@@ -103,8 +103,8 @@ separately supply the hypothesis that the family \(A_j\) is the BNT family of
 \(B\).
 
 See arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
-def HasParentHamiltonianGroundSpaceSpanning (B : MPSTensor d D) (L : ℕ)
-    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
+def HasParentHamiltonianGroundSpaceSpanning (B : MPTensor α (Fin D)) (L : ℕ)
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPTensor α (Fin (dim j))) : Prop :=
   ∀ N : ℕ, (hLN : L < N) → haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) = bntMPSVectorSpan A N
 
@@ -122,8 +122,8 @@ holds for every tensor (`toLp_mpv_mem_zeroSpace_parentRingInteraction`) and is n
 The source theorem quantifies this condition over all \(N>2\).  This definition
 only records the condition for one fixed chain length; it does not assert that
 the displayed spanning equation has been proved for any tensor. -/
-def HasNNCPHGroundSpace (B : MPSTensor d D)
-    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
+def HasNNCPHGroundSpace (B : MPTensor α (Fin D))
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (N : ℕ) [NeZero N] : Prop :=
   IsNNCPH B N ∧
     LinearMap.ker (Matrix.toLin' (parentRingInteraction B 2 N).hamiltonian) =
@@ -137,28 +137,28 @@ for every \(N>2\), the nearest-neighbor parent terms commute and the ground spac
 \(H_2^{(N)}\) is spanned by the BNT vectors (the zero energy of the periodic MPS vector is
 automatic). It packages only the condition; it does not prove the spanning
 equation for any tensor. -/
-def HasNNCPHGroundSpaces (B : MPSTensor d D)
-    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
+def HasNNCPHGroundSpaces (B : MPTensor α (Fin D))
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPTensor α (Fin (dim j))) : Prop :=
   ∀ N : ℕ, (hN : 2 < N) → haveI : NeZero N := ⟨by omega⟩; HasNNCPHGroundSpace B A N
 
 /-- The nearest-neighbor commuting condition is a special case of the commuting
 parent Hamiltonian (length two). -/
-theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH A N) :
+theorem IsNNCPH.isCommutingParentHam {A : MPTensor α (Fin D)} {N : ℕ} (h : IsNNCPH A N) :
     IsCommutingParentHam A 2 N :=
   h
 
 /-- The full fixed-chain NNCPH ground-space condition includes length-two
 local-term commutation. -/
-theorem HasNNCPHGroundSpace.isNNCPH {B : MPSTensor d D}
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+theorem HasNNCPHGroundSpace.isNNCPH {B : MPTensor α (Fin D)}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     {N : ℕ} [NeZero N] (h : HasNNCPHGroundSpace B A N) :
     IsNNCPH B N :=
   h.1
 
 /-- The full fixed-chain NNCPH ground-space condition contains the BNT
 ground-space spanning equation. -/
-theorem HasNNCPHGroundSpace.groundSpaceSpanning {B : MPSTensor d D}
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+theorem HasNNCPHGroundSpace.groundSpaceSpanning {B : MPTensor α (Fin D)}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     {N : ℕ} [NeZero N] (h : HasNNCPHGroundSpace B A N) :
     LinearMap.ker (Matrix.toLin' (parentRingInteraction B 2 N).hamiltonian) =
       bntMPSVectorSpan A N :=
@@ -168,8 +168,8 @@ theorem HasNNCPHGroundSpace.groundSpaceSpanning {B : MPSTensor d D}
 supplies the nearest-neighbor instance of the parent-Hamiltonian spanning
 predicate. -/
 theorem HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning
-    {B : MPSTensor d D}
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {B : MPTensor α (Fin D)}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     (h : ∀ N : ℕ, (hN : 2 < N) → haveI : NeZero N := ⟨by omega⟩;
       HasNNCPHGroundSpace B A N) :
     HasParentHamiltonianGroundSpaceSpanning B 2 A := by
@@ -178,8 +178,8 @@ theorem HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning
   exact (h N (by omega)).groundSpaceSpanning
 
 /-- The all-chain NNCPH ground-space condition gives the fixed-chain condition. -/
-theorem HasNNCPHGroundSpaces.hasNNCPHGroundSpace {B : MPSTensor d D}
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+theorem HasNNCPHGroundSpaces.hasNNCPHGroundSpace {B : MPTensor α (Fin D)}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     {N : ℕ} (h : HasNNCPHGroundSpaces B A) (hN : 2 < N) :
     haveI : NeZero N := ⟨by omega⟩;
     HasNNCPHGroundSpace B A N :=
@@ -188,8 +188,8 @@ theorem HasNNCPHGroundSpaces.hasNNCPHGroundSpace {B : MPSTensor d D}
 /-- The all-chain source condition contains the parent-Hamiltonian
 ground-space spanning clause. -/
 theorem HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning
-    {B : MPSTensor d D}
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {B : MPTensor α (Fin D)}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     (h : HasNNCPHGroundSpaces B A) :
     HasParentHamiltonianGroundSpaceSpanning B 2 A :=
   HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning h
@@ -205,8 +205,8 @@ condition and the spanning equation of arXiv:1606.00608, Definition 3.9.
 
 See arXiv:1606.00608, Definition 3.9 and Theorem 3.10(iii). -/
 theorem hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning
-    {B : MPSTensor d D}
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)} :
+    {B : MPTensor α (Fin D)}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))} :
     HasNNCPHGroundSpaces B A ↔
       (∀ N : ℕ, 2 < N → IsNNCPH B N) ∧
         HasParentHamiltonianGroundSpaceSpanning B 2 A := by
@@ -230,8 +230,8 @@ This is the easy inclusion in the source spanning equation
 \]
 from arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
 theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates
-    {B : MPSTensor d D} {r : ℕ} {dim : Fin r → ℕ}
-    {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ} [NeZero N]
+    {B : MPTensor α (Fin D)} {r : ℕ} {dim : Fin r → ℕ}
+    {A : (j : Fin r) → MPTensor α (Fin (dim j))} {L N : ℕ} [NeZero N]
     (h : ∀ j : Fin r, Matrix.toLin' (parentRingInteraction B L N).hamiltonian (mpv (A j)) = 0) :
     bntMPSVectorSpan A N ≤
       LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) := by
@@ -248,10 +248,10 @@ This records the zero-energy half of the source parent-Hamiltonian ground-space
 spanning condition from arXiv:1606.00608, Definition 3.9, source lines
 522--524. The reverse inclusion is the hard spanning direction. -/
 theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_mem_zeroSpace
-    {B : MPSTensor d D} {r : ℕ} {dim : Fin r → ℕ}
-    {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ} [NeZero N]
+    {B : MPTensor α (Fin D)} {r : ℕ} {dim : Fin r → ℕ}
+    {A : (j : Fin r) → MPTensor α (Fin (dim j))} {L N : ℕ} [NeZero N]
     (h : ∀ j : Fin r,
-      WithLp.toLp 2 (mpv (A j) : NSiteSpace d N) ∈ (parentRingInteraction B L N).zeroSpace) :
+      WithLp.toLp 2 (mpv (A j) : NSiteSpace α N) ∈ (parentRingInteraction B L N).zeroSpace) :
     bntMPSVectorSpan A N ≤
       LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) := by
   refine bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates ?_
@@ -260,7 +260,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_mem_zeroSpace
   exact Finset.sum_eq_zero fun i _ => ManyBody.Interaction.mem_zeroSpace_iff.mp (h j) i
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
-theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
+theorem IsCommutingParentHam.symm {A : MPTensor α (Fin D)} {L N : ℕ}
     (h : IsCommutingParentHam A L N) (i j : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toLin' ((parentRingInteraction A L N).term j) *
@@ -271,7 +271,7 @@ theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
 
 /-- If the parent Hamiltonian commutes, then the Hamiltonian commutes with
 each local term. -/
-theorem IsCommutingParentHam.ham_comm_parentRingInteraction_term {A : MPSTensor d D} {L N : ℕ}
+theorem IsCommutingParentHam.ham_comm_parentRingInteraction_term {A : MPTensor α (Fin D)} {L N : ℕ}
     (_h : IsCommutingParentHam A L N) (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toLin' (parentRingInteraction A L N).hamiltonian *

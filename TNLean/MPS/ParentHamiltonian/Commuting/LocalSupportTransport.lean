@@ -59,7 +59,7 @@ operators.
 Source: arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
     {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
-    {v : NSiteSpace d (L + 1)} :
+    {v : NSiteSpace (Fin d) (L + 1)} :
     Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (0 : Fin (L + 1))) v = 0 ∧
         Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (1 : Fin (L + 1))) v = 0 ↔
       v ∈ groundSpace A (L + 1) := by
@@ -224,7 +224,7 @@ This is the left-face transport for the local relation
 517--524. -/
 theorem cyclicRestrictₗ_three_parentRingInteraction_term_left
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
-    (ψ : NSiteSpace d N) :
+    (ψ : NSiteSpace (Fin d) N) :
     haveI : NeZero N := ⟨by omega⟩;
     cyclicRestrictₗ (by omega) 3 i τ (Matrix.toLin' ((parentRingInteraction A 2 N).term i) ψ) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3))
@@ -261,7 +261,7 @@ This is the right-face transport for the local relation
 517--524. -/
 theorem cyclicRestrictₗ_three_parentRingInteraction_term_right
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
-    (ψ : NSiteSpace d N) :
+    (ψ : NSiteSpace (Fin d) N) :
     haveI : NeZero N := ⟨by omega⟩;
     cyclicRestrictₗ (by omega) 3 i τ
         (Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) ψ) =
@@ -293,7 +293,7 @@ theorem cyclicRestrictₗ_three_parentRingInteraction_term_right
   rw [hfun]
 
 private theorem cyclicRestrictₗ_three_extractWindow
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (σ : Cfg d N) (ψ : NSiteSpace d N) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (σ : Cfg d N) (ψ : NSiteSpace (Fin d) N) :
     cyclicRestrictₗ (by omega) 3 i σ ψ (extractWindow 3 i σ) = ψ σ := by
   change ψ (replaceWindow 3 hN i σ (extractWindow 3 i σ)) = ψ σ
   rw [replaceWindow_extractWindow]

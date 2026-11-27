@@ -218,7 +218,7 @@ theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInte
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) {v : EuclideanSpace ℂ (Cfg d N)}
     (hv : v ∈ LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian))
     (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → Fin d) :
-    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈
+    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N) v) ∈
       groundSpace A L := by
   rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i) hLN hi]
   exact contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv

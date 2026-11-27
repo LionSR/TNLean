@@ -187,7 +187,7 @@ theorem eq_zero_of_inserted_word_trace_eq_zero
 Source: arXiv:2203.12563, Section 5, lines 1687–1692. -/
 noncomputable def insertedGroundSpaceMap
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d N where
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace (Fin d) N where
   toFun X σ := Matrix.trace (insertedEvalWord A W (List.ofFn σ) * X)
   map_add' X Y := by
     ext σ
@@ -290,7 +290,7 @@ theorem mem_range_insertedBoundaryMap_iff
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ) (N : ℕ)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     v ∈ (insertedBoundaryMap A W N).range ↔
-      WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v ∈ (insertedGroundSpaceMap A W N).range := by
+      WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N) v ∈ (insertedGroundSpaceMap A W N).range := by
   constructor
   · rintro ⟨X, rfl⟩
     exact ⟨Matrix.of (fun a b => X (a, b)), rfl⟩

@@ -74,16 +74,16 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
   have hN₁ : N₁ < N := lt_of_le_of_lt (Nat.le_max_left _ _) hN
   have hTwo : 2 < N := lt_of_le_of_lt (Nat.le_max_right _ _) hN
   have hImage : LinearIndependent ℂ
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘
-        fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace d N)) := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘
+        fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace (Fin d) N)) := by
     convert hLI N hN₁ using 1
     funext j
     ext σ
     simp [Function.comp_apply, mpvState_apply]
   have hCoefficients : LinearIndependent ℂ
-      (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace d N)) :=
+      (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace (Fin d) N)) :=
     LinearIndependent.of_comp
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap hImage
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap hImage
   have : NeZero N := ⟨by omega⟩
   rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
   simpa using finrank_span_eq_card hCoefficients
@@ -233,7 +233,7 @@ theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_ha
     intro M hM
     have : NeZero M := ⟨Nat.ne_zero_of_lt hM⟩
     rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker]
-    exact (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace d M)).symm _).trans
+    exact (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) M)).symm _).trans
       (hraw M hM)
   exact F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop hparent hN
 

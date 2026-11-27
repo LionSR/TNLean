@@ -37,8 +37,8 @@ noncomputable def blockPeriodicMpvMapES
     (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
     EuclideanSpace ℂ (Fin r) →L[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
-      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace d N))).comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
+      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace (Fin d) N))).comp
         (WithLp.linearEquiv 2 ℂ (Fin r → ℂ)).toLinearMap)
 
 @[simp]
@@ -98,10 +98,10 @@ arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem range_blockPeriodicMpvMapES
     (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
     (blockPeriodicMpvMapES A N).range = (bntMPSVectorSpan A N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   change LinearMap.range
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
-      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace d N))).comp
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
+      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace (Fin d) N))).comp
         (WithLp.linearEquiv 2 ℂ (Fin r → ℂ)).toLinearMap)) = _
   rw [LinearMap.range_comp, LinearMap.range_comp, LinearEquiv.range,
     Submodule.map_top, Fintype.range_linearCombination]
@@ -117,7 +117,7 @@ theorem continuous_blockPeriodicMpvMapES_family
   apply continuous_clm_apply.2
   intro c
   have h : Continuous fun x => ∑ j, c j •
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv (A x j)) :=
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv (A x j)) :=
     continuous_finsetSum _ fun j _ =>
       (continuous_mpvES_family (fun x => A x j) (hA j) N).const_smul (c j)
   convert h using 1

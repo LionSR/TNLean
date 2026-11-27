@@ -84,7 +84,7 @@ theorem IsBoundaryCompatible.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsNBlkInjective A L)
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n)
-    {ψ : MPSTensor.NSiteSpace d n} (hψ : ψ ∈ MPSTensor.groundSpace A n) :
+    {ψ : MPSTensor.NSiteSpace (Fin d) n} (hψ : ψ ∈ MPSTensor.groundSpace A n) :
     mpoWithBoundary T U n *ᵥ ψ = ψ := by
   obtain ⟨X, rfl⟩ := hψ
   simpa only [MPSTensor.mpvWithBoundary_eq_groundSpaceMap] using
@@ -105,9 +105,9 @@ theorem IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection
       (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
   apply LinearMap.ext
   intro ψ
-  apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n)).injective
+  apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) n)).injective
   change mpoWithBoundary T U n *ᵥ
-      ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
+      ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) n))
         ((MPSTensor.groundSpaceES A n).starProjection ψ)) = _
   exact h.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one hInj hL hU hn
     ((MPSTensor.mem_groundSpaceES_iff A n _).mp

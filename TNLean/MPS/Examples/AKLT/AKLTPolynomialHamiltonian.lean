@@ -87,22 +87,22 @@ namespace MPSTensor
 /-! ### The two-site term -/
 
 /-- The exchange of the two sites of a two-site spin-1 chain. -/
-local notation "𝐗" => (spinExchange spinOneOperator 0 1 : NSiteSpace 3 2 →ₗ[ℂ] NSiteSpace 3 2)
+local notation "𝐗" => (spinExchange spinOneOperator 0 1 : NSiteSpace (Fin 3) 2 →ₗ[ℂ] NSiteSpace (Fin 3) 2)
 
 /-- The two-site AKLT term \(\mathbf S_0\cdot\mathbf S_1+\tfrac13(\mathbf S_0\cdot\mathbf S_1)^2\)
 on two spin-1 sites. -/
-def akltBondTerm : NSiteSpace 3 2 →ₗ[ℂ] NSiteSpace 3 2 :=
+def akltBondTerm : NSiteSpace (Fin 3) 2 →ₗ[ℂ] NSiteSpace (Fin 3) 2 :=
   𝐗 + (1 / 3 : ℂ) • (𝐗 ∘ₗ 𝐗)
 
 /-- The shifted and rescaled two-site term \(\tfrac12(h+\tfrac23)\). -/
 local notation "𝐐" => ((1 / 2 : ℂ) •
-  (akltBondTerm + (2 / 3 : ℂ) • (LinearMap.id : NSiteSpace 3 2 →ₗ[ℂ] NSiteSpace 3 2)))
+  (akltBondTerm + (2 / 3 : ℂ) • (LinearMap.id : NSiteSpace (Fin 3) 2 →ₗ[ℂ] NSiteSpace (Fin 3) 2)))
 
 /-- The shifted two-site term \(\tfrac12(h+\tfrac23)\) as an explicit matrix: it is
 \(\sum_kw_kw_k^{\mathsf T}/\lVert w_k\rVert^2\) for the five spin-2 vectors
 \(|11\rangle\), \(|22\rangle\), \(|01\rangle+|10\rangle\), \(|02\rangle+|20\rangle\),
 \(|12\rangle+2|00\rangle+|21\rangle\). -/
-lemma akltBondTerm_shift_apply (v : NSiteSpace 3 2) (p q : Fin 3) :
+lemma akltBondTerm_shift_apply (v : NSiteSpace (Fin 3) 2) (p q : Fin 3) :
     𝐐 v ![p, q] =
       !![(2 * v ![0, 0] + v ![1, 2] + v ![2, 1]) / 3, (v ![0, 1] + v ![1, 0]) / 2,
           (v ![0, 2] + v ![2, 0]) / 2;
@@ -124,14 +124,14 @@ private lemma sum_cfg_three_two (f : Cfg 3 2 → ℂ) : ∑ σ, f σ = ∑ a, �
 
 /-- The operator \(\tfrac12(h+\tfrac23)\) is symmetric for the \(\ell^2\) pairing
 of coefficient vectors, since its matrix is real and symmetric. -/
-private lemma akltBondTerm_shift_symm (f g : NSiteSpace 3 2) :
+private lemma akltBondTerm_shift_symm (f g : NSiteSpace (Fin 3) 2) :
     ∑ σ, conj (f σ) * 𝐐 g σ = ∑ σ, conj (𝐐 f σ) * g σ := by
   simp only [sum_cfg_three_two, Fin.sum_univ_three, akltBondTerm_shift_apply]
   simp [map_add, map_div₀, map_mul, map_ofNat]
   ring
 
 /-- The operator \(\tfrac12(h+\tfrac23)\) is idempotent. -/
-private lemma akltBondTerm_shift_idem (v : NSiteSpace 3 2) : 𝐐 (𝐐 v) = 𝐐 v := by
+private lemma akltBondTerm_shift_idem (v : NSiteSpace (Fin 3) 2) : 𝐐 (𝐐 v) = 𝐐 v := by
   ext σ
   obtain ⟨p, q, rfl⟩ : ∃ p q, σ = ![p, q] := ⟨σ 0, σ 1, Matrix.eq_vecCons_fin_two σ⟩
   rw [akltBondTerm_shift_apply, akltBondTerm_shift_apply]
@@ -140,7 +140,7 @@ private lemma akltBondTerm_shift_idem (v : NSiteSpace 3 2) : 𝐐 (𝐐 v) = �
 
 /-- The kernel of \(\tfrac12(h+\tfrac23)\) is the two-site local ground space of the
 AKLT tensor. -/
-private lemma mem_aklt_groundSpace_two_iff_shift (v : NSiteSpace 3 2) :
+private lemma mem_aklt_groundSpace_two_iff_shift (v : NSiteSpace (Fin 3) 2) :
     v ∈ groundSpace akltTensor 2 ↔ 𝐐 v = 0 := by
   rw [mem_aklt_groundSpace_two_iff]
   constructor
@@ -166,7 +166,7 @@ theorem akltBondTerm_shift_eq_parentInteraction :
     (1 / 2 : ℂ) • (akltBondTerm + (2 / 3 : ℂ) • LinearMap.id) =
       parentInteraction akltTensor 2 := by
   set Q := 𝐐 with hQ
-  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace 3 2)
+  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)
   set G := groundSpaceES akltTensor 2
   have hker : ∀ u, u ∈ G ↔ Q (e u) = 0 := fun u => by
     rw [mem_groundSpaceES_iff, mem_aklt_groundSpace_two_iff_shift]
@@ -192,7 +192,7 @@ theorem akltBondTerm_shift_eq_parentInteraction :
 
 /-- The exchange acts as the identity on the range of \(\tfrac12(h+\tfrac23)\):
 \(\mathbf S_0\cdot\mathbf S_1=1\) on total spin \(2\). -/
-private lemma spinExchange_akltBondTerm_shift (v : NSiteSpace 3 2) : 𝐗 (𝐐 v) = 𝐐 v := by
+private lemma spinExchange_akltBondTerm_shift (v : NSiteSpace (Fin 3) 2) : 𝐗 (𝐐 v) = 𝐐 v := by
   ext σ
   obtain ⟨p, q, rfl⟩ : ∃ p q, σ = ![p, q] := ⟨σ 0, σ 1, Matrix.eq_vecCons_fin_two σ⟩
   rw [spinExchange_spinOneOperator_zero_one_apply, akltBondTerm_shift_apply]
@@ -203,12 +203,12 @@ private lemma spinExchange_akltBondTerm_shift (v : NSiteSpace 3 2) : 𝐗 (𝐐 
 total spin \(\mathbf S_{\mathrm{tot}}^2\) for \(6=2(2+1)\), in the \(\ell^2\) space of
 coefficient vectors. -/
 def akltSpinTwoES : Submodule ℂ (EuclideanSpace ℂ (Cfg 3 2)) :=
-  (Module.End.eigenspace (totalSpinSq spinOneOperator : NSiteSpace 3 2 →ₗ[ℂ] NSiteSpace 3 2)
-    6).map (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 2)).symm.toLinearMap
+  (Module.End.eigenspace (totalSpinSq spinOneOperator : NSiteSpace (Fin 3) 2 →ₗ[ℂ] NSiteSpace (Fin 3) 2)
+    6).map (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)).symm.toLinearMap
 
 /-- A two-site vector has squared total spin \(6\) exactly when it is fixed by the
 exchange, since \(\mathbf S_{\mathrm{tot}}^2=4+2\,\mathbf S_0\cdot\mathbf S_1\). -/
-private lemma totalSpinSq_eq_six_smul_iff (v : NSiteSpace 3 2) :
+private lemma totalSpinSq_eq_six_smul_iff (v : NSiteSpace (Fin 3) 2) :
     totalSpinSq spinOneOperator v = (6 : ℂ) • v ↔ 𝐗 v = v := by
   rw [totalSpinSq_spinOneOperator_two]
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply]
@@ -223,7 +223,7 @@ private lemma totalSpinSq_eq_six_smul_iff (v : NSiteSpace 3 2) :
 
 /-- A two-site vector is fixed by the exchange exactly when it is fixed by the
 parent interaction. -/
-private lemma spinExchange_eq_self_iff (v : NSiteSpace 3 2) :
+private lemma spinExchange_eq_self_iff (v : NSiteSpace (Fin 3) 2) :
     𝐗 v = v ↔ parentInteraction akltTensor 2 v = v := by
   rw [← akltBondTerm_shift_eq_parentInteraction]
   constructor
@@ -238,7 +238,7 @@ private lemma spinExchange_eq_self_iff (v : NSiteSpace 3 2) :
 ground space of `akltTensor`. -/
 theorem akltSpinTwoES_eq_orthogonal_groundSpaceES :
     akltSpinTwoES = (groundSpaceES akltTensor 2)ᗮ := by
-  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace 3 2)
+  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)
   ext v
   rw [akltSpinTwoES, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
     ← Submodule.starProjection_eq_self_iff, Module.End.mem_eigenspace_iff,
@@ -257,9 +257,9 @@ here by direct computation. The spin-2 projector identity
 orthogonal projector onto the total-spin-\(2\) subspace. -/
 theorem akltBondTerm_shift_eq_spinTwo_starProjection :
     (1 / 2 : ℂ) • (akltBondTerm + (2 / 3 : ℂ) • LinearMap.id) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 2)).toLinearMap ∘ₗ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)).toLinearMap ∘ₗ
         akltSpinTwoES.starProjection.toLinearMap ∘ₗ
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 2)).symm.toLinearMap := by
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)).symm.toLinearMap := by
   rw [akltBondTerm_shift_eq_parentInteraction, parentInteraction,
     akltSpinTwoES_eq_orthogonal_groundSpaceES]
 
@@ -269,7 +269,7 @@ theorem akltBondTerm_shift_eq_spinTwo_starProjection :
 lines 340–349, equation `HAKLT`. The AKLT Hamiltonian
 \(H=\sum_i\bigl(\mathbf S_i\cdot\mathbf S_{i+1}+\tfrac13(\mathbf S_i\cdot\mathbf S_{i+1})^2\bigr)\)
 on a periodic chain of \(N\) spin-1 sites, indices modulo \(N\). -/
-def akltHamiltonian (N : ℕ) : NSiteSpace 3 N →ₗ[ℂ] NSiteSpace 3 N :=
+def akltHamiltonian (N : ℕ) : NSiteSpace (Fin 3) N →ₗ[ℂ] NSiteSpace (Fin 3) N :=
   ∑ i : Fin N, (spinExchange spinOneOperator i (cyclicForwardSite i 1) +
     (1 / 3 : ℂ) • (spinExchange spinOneOperator i (cyclicForwardSite i 1) ∘ₗ
       spinExchange spinOneOperator i (cyclicForwardSite i 1)))
@@ -278,7 +278,7 @@ def akltHamiltonian (N : ℕ) : NSiteSpace 3 N →ₗ[ℂ] NSiteSpace 3 N :=
 Hamiltonian of `akltTensor` at the window \(i,i+1\) is
 \(\tfrac12(h_i+\tfrac23)\), with \(h_i\) the AKLT term of that bond. -/
 lemma aklt_parentRingInteraction_term_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N)
-    (ψ : NSiteSpace 3 N) (σ : Cfg 3 N) :
+    (ψ : NSiteSpace (Fin 3) N) (σ : Cfg 3 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toLin' ((parentRingInteraction akltTensor 2 N).term i) ψ σ =
       (1 / 2) * (spinExchange spinOneOperator i (cyclicForwardSite i 1) ψ σ +
@@ -318,9 +318,9 @@ theorem akltHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN2 : 2 ≤ N) :
 \(H+\tfrac{2N}3\), transported to the \(\ell^2\) space of coefficient vectors, is
 positive, that is, \(H\ge-\tfrac{2N}3\) as operators. -/
 theorem akltHamiltonian_add_isPositive {N : ℕ} (hN2 : 2 ≤ N) :
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).symm.toLinearMap ∘ₗ
       (akltHamiltonian N + (2 * N / 3 : ℂ) • LinearMap.id) ∘ₗ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap).IsPositive :=
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).toLinearMap).IsPositive :=
   haveI : NeZero N := ⟨by omega⟩
   isPositive_conj_of_add_eq_smul_parentHamiltonian
     (akltHamiltonian_add_eq_parentHamiltonian hN2) (by norm_num [Complex.le_def])

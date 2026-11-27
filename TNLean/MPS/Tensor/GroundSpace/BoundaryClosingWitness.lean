@@ -33,7 +33,7 @@ themselves. -/
 theorem cyclicRestrictₗ_first_products_eq_of_restriction_eq
     {A : MPSTensor d D} {N L : ℕ} (hInj : Kraus.IsNBlkInjective A L)
     (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i : Fin N) (τ₁ τ₂ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i : Fin N) (τ₁ τ₂ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY₁ : cyclicRestrictₗ hN (L + 1) i τ₁ ψ = groundSpaceMap A (L + 1) Y₁)
     (hY₂ : cyclicRestrictₗ hN (L + 1) i τ₂ ψ = groundSpaceMap A (L + 1) Y₂)
@@ -62,7 +62,7 @@ restriction as the local coordinate configuration \(\tau^+_\eta(\mu)\) used here
 for a coordinate form of the closure property. -/
 theorem cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
       ρ ⟨k.val + L₀, by omega⟩ = μ k) :
@@ -109,7 +109,7 @@ outside configuration has the same word on the sites outside the window as
 theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
@@ -139,7 +139,7 @@ periodic-boundary coordinate comparison. -/
 theorem wrappedMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
@@ -162,7 +162,7 @@ local coordinate configuration \(\tau^-_\eta(\mu)\) used here for a coordinate
 form of the closure property. -/
 theorem cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
     {L₀ M : ℕ} (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
       ρ ⟨k.val + 1, by omega⟩ = μ k) :
@@ -213,7 +213,7 @@ outside configuration has the same word on the sites outside the window as
 theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
@@ -243,7 +243,7 @@ periodic-boundary coordinate comparison. -/
 theorem mirrorMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),

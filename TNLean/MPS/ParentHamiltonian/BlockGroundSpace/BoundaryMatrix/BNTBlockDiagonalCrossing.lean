@@ -466,7 +466,7 @@ theorem
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hIdentity :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -523,7 +523,7 @@ theorem
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hIdentity :
-      ∀ {ψ : NSiteSpace d N},
+      ∀ {ψ : NSiteSpace (Fin d) N},
         ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N

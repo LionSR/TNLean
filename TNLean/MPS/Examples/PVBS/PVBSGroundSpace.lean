@@ -25,7 +25,7 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 /-- The two elementary nearest-neighbour constraints of a PVBS boundary state. -/
-theorem pvbs_pair_constraints (q : ℂ) (N : ℕ) {v : NSiteSpace 2 (N + 2)}
+theorem pvbs_pair_constraints (q : ℂ) (N : ℕ) {v : NSiteSpace (Fin 2) (N + 2)}
     (hv : v ∈ groundSpace (pvbsTensor q) (N + 2)) :
     v (Fin.cons 1 (Fin.cons 1 0)) = 0 ∧
       v (Fin.cons 0 (Fin.cons 1 0)) = q * v (Fin.cons 1 (Fin.cons 0 0)) := by
@@ -33,7 +33,7 @@ theorem pvbs_pair_constraints (q : ℂ) (N : ℕ) {v : NSiteSpace 2 (N + 2)}
   simp [pvbsVacuum_cons, mul_comm]
 
 /-- The length-two MPS space is exactly the kernel of the two PVBS constraints. -/
-theorem mem_groundSpace_pvbs_two_iff (q : ℂ) (v : NSiteSpace 2 2) :
+theorem mem_groundSpace_pvbs_two_iff (q : ℂ) (v : NSiteSpace (Fin 2) 2) :
     v ∈ groundSpace (pvbsTensor q) 2 ↔
       v (Fin.cons 1 (Fin.cons 1 0)) = 0 ∧
         v (Fin.cons 0 (Fin.cons 1 0)) = q * v (Fin.cons 1 (Fin.cons 0 0)) := by
@@ -102,7 +102,7 @@ theorem groundSpace_pvbs_intersection (q : ℂ) (N : ℕ) :
 /-- Every state satisfying the nonwrapping nearest-neighbour constraints is a
 vacuum-particle superposition. This uses the existing general interval iteration. -/
 theorem contiguous_mem_groundSpace_pvbs {N : ℕ} (q : ℂ) (hN : 2 ≤ N)
-    {v : NSiteSpace 2 N}
+    {v : NSiteSpace (Fin 2) N}
     (hv : ∀ (s : ℕ) (hs : s + 2 ≤ N) (τ : Cfg 2 N),
       contiguousRestrictₗ s 2 hs τ v ∈ groundSpace (pvbsTensor q) 2) :
     v ∈ groundSpace (pvbsTensor q) N := by

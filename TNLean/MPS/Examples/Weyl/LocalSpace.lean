@@ -90,7 +90,7 @@ theorem trace_chargedWeyl_mul_chargeBoundary {ζ : ℂ} (hζ : IsPrimitiveRoot �
 
 /-- Exact local-space characterization on finite configurations. -/
 theorem mem_groundSpace_threeLetterTensor_iff {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    (n : ℕ) (f : NSiteSpace 3 n) :
+    (n : ℕ) (f : NSiteSpace (Fin 3) n) :
     f ∈ groundSpace (threeLetterTensor ζ) n ↔
       ∃ g : ZMod 5 × ZMod 5 → ℂ, ∀ σ : Cfg 3 n,
         f σ = rootCharacter ζ (wordPhase (List.ofFn σ)) *
@@ -114,7 +114,7 @@ theorem mem_groundSpace_threeLetterTensor_iff {ζ : ℂ} (hζ : IsPrimitiveRoot 
 /-- Equal-charge configurations have exactly the corresponding phase relation
 in every local boundary vector. -/
 theorem groundSpace_threeLetterTensor_same_charge {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    {n : ℕ} {f : NSiteSpace 3 n} (hf : f ∈ groundSpace (threeLetterTensor ζ) n)
+    {n : ℕ} {f : NSiteSpace (Fin 3) n} (hf : f ∈ groundSpace (threeLetterTensor ζ) n)
     (σ τ : Cfg 3 n) (hcharge : wordCharge (List.ofFn σ) = wordCharge (List.ofFn τ)) :
     rootCharacter ζ (wordPhase (List.ofFn τ)) * f σ =
       rootCharacter ζ (wordPhase (List.ofFn σ)) * f τ := by

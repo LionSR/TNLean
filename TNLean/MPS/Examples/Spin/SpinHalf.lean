@@ -51,7 +51,7 @@ lemma spinHalfOperator_sum (p q a b : Fin 2) :
 /-- For two distinct sites, the exchange interaction is half the transposition of
 the two sites minus a quarter: \(\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14\). -/
 theorem spinExchange_spinHalfOperator_apply {N : ℕ} {j k : Fin N} (hjk : j ≠ k)
-    (ψ : NSiteSpace 2 N) (σ : Cfg 2 N) :
+    (ψ : NSiteSpace (Fin 2) N) (σ : Cfg 2 N) :
     spinExchange spinHalfOperator j k ψ σ =
       (1 / 2) * ψ (σ ∘ Equiv.swap j k) - (1 / 4) * ψ σ := by
   have hswap : σ ∘ Equiv.swap j k =

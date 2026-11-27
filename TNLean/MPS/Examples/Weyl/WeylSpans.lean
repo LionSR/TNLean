@@ -171,7 +171,7 @@ namespace MPSTensor.ShortMomentum
 least eight sites. -/
 theorem groundSpace_intersection_threeLetterTensor_of_eight_le {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) {K : ℕ} (hK : 8 ≤ K)
-    {ψ : NSiteSpace 3 (K + 2)}
+    {ψ : NSiteSpace (Fin 3) (K + 2)}
     (hLeft : InLeftGround (threeLetterTensor ζ) (K + 1) ψ)
     (hRight : InRightGround (threeLetterTensor ζ) (K + 1) ψ) :
     ψ ∈ groundSpace (threeLetterTensor ζ) (K + 2) := by

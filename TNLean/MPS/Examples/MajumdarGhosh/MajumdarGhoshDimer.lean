@@ -121,7 +121,7 @@ sites with pair amplitude `f`, written with sites `0, …, N-1`: the coefficient
 the basis vector `σ` is \(\prod_k f(\sigma_{2k},\sigma_{2k+1})\). It is a
 covering of the chain when `N` is even. -/
 def pairCoveringEven {d : ℕ} (f : Fin d → Fin d → ℂ) {N : ℕ} :
-    NSiteSpace d N := fun σ =>
+    NSiteSpace (Fin d) N := fun σ =>
   ∏ k : Fin (N / 2),
     f (σ ⟨2 * k.1, by have := k.isLt; omega⟩) (σ ⟨2 * k.1 + 1, by have := k.isLt; omega⟩)
 
@@ -129,7 +129,7 @@ def pairCoveringEven {d : ℕ} (f : Fin d → Fin d → ℂ) {N : ℕ} :
 sites with pair amplitude `f`, written with sites `0, …, N-1`: the coefficient of
 `σ` is \(\prod_k f(\sigma_{2k+1},\sigma_{(2k+2)\bmod N})\). -/
 def pairCoveringOdd {d : ℕ} (f : Fin d → Fin d → ℂ) {N : ℕ} :
-    NSiteSpace d N := fun σ =>
+    NSiteSpace (Fin d) N := fun σ =>
   ∏ k : Fin (N / 2),
     f (σ ⟨(2 * k.1 + 1) % N, Nat.mod_lt _ (by have := k.isLt; omega)⟩)
       (σ ⟨(2 * k.1 + 2) % N, Nat.mod_lt _ (by have := k.isLt; omega)⟩)
@@ -390,8 +390,8 @@ Majumdar-Ghosh state. On every even ring its periodic vector is not a scalar
 multiple of the periodic vector of `majumdarGhoshTensor`: on the configuration
 with all spins `0` the former is \(\pm4\) and the latter vanishes. -/
 theorem majumdarGhoshReview_mpv_ne_smul {m : ℕ} (hm : 0 < m) (c : ℂ) :
-    (mpv majumdarGhoshReviewTensor : NSiteSpace 2 (2 * m)) ≠
-      c • (mpv majumdarGhoshTensor : NSiteSpace 2 (2 * m)) := by
+    (mpv majumdarGhoshReviewTensor : NSiteSpace (Fin 2) (2 * m)) ≠
+      c • (mpv majumdarGhoshTensor : NSiteSpace (Fin 2) (2 * m)) := by
   intro h
   have h0 := congrFun h (fun _ => 0)
   have hk : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩

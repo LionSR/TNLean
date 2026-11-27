@@ -133,7 +133,7 @@ right factor at site `n` to the left factor at site `n + 1`.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopProductState (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] : NSiteSpace d N :=
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] : NSiteSpace (Fin d) N :=
   fun s ↦ ∑ t : Fin N → Fin d,
     (∏ n : Fin N, F.unitary (s n) (t n)) * F.loopCyclicProduct l t
 
@@ -143,7 +143,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopProductStateES (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     EuclideanSpace ℂ (Fin N → Fin d) :=
-  (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (F.loopProductState l)
+  (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (F.loopProductState l)
 
 private theorem edgeProjector_mulVec_loopBondVector
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
@@ -224,7 +224,7 @@ positive chain length.
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopCyclicProduct_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
-    F.loopCyclicProduct l ≠ (0 : NSiteSpace d N) := by
+    F.loopCyclicProduct l ≠ (0 : NSiteSpace (Fin d) N) := by
   classical
   have hexists : ∃ q, F.loopBondVector l q ≠ 0 := by
     by_contra h
@@ -399,7 +399,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopProductStateES_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     F.loopProductStateES (N := N) l ≠ 0 := by
-  exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.injective.ne
+  exact (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.injective.ne
     (F.loopProductState_ne_zero l)
 
 /-- Euclidean positive-loop product states belonging to distinct loops are
