@@ -193,23 +193,22 @@ theorem exists_embedded_leftCanonical_normal_obstruction_block :
   let C : MPOTensor 5 2 := changePhysicalBasis physicalInclusion Bsource
   let Bambient : MPSTensor (5 * 5) 2 := C.toMPSTensor
   have hAmbientInj : Kraus.IsInjective Bambient :=
-    (isInjective_toMPSTensor_changePhysicalBasis_iff
-      physicalInclusion physicalInclusion_isometry Bsource).2
-        ((isInjective_toMPSTensor_iff Bsource).2 hBInj)
+    (isInjective_toMPSTensor_iff C).2
+      ((isInjective_changePhysicalBasis_iff
+        physicalInclusion physicalInclusion_isometry Bsource).2 hBInj)
   have hAmbientLeft : MPTensor.IsLeftCanonical Bambient :=
-    isLeftCanonical_toMPSTensor_changePhysicalBasis
-      physicalInclusion physicalInclusion_isometry Bsource
-        ((isTP_toMPSTensor_iff Bsource).2 hBLeft)
+    (isTP_toMPSTensor_iff C).2
+      (isLeftCanonical_changePhysicalBasis
+        physicalInclusion physicalInclusion_isometry Bsource hBLeft)
   have hAmbientNormal : MPTensor.IsNormalTensor Bambient :=
-    (isNormalTensor_toMPSTensor_changePhysicalBasis_iff
-      physicalInclusion physicalInclusion_isometry Bsource).2
-        (hBNormal.reindexPhysical finProdFinEquiv.symm)
+    ((isNormalTensor_changePhysicalBasis_iff
+      physicalInclusion physicalInclusion_isometry Bsource).2 hBNormal).reindexPhysical
+        finProdFinEquiv.symm
   have hAmbientGauge :
       MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • Bambient) := by
-    have h := gaugeEquiv_toMPSTensor_changePhysicalBasis
-      physicalInclusion ((gaugeEquiv_toMPSTensor_iff tensor (mu • Bsource)).2 hTensorGauge)
+    have h := gaugeEquiv_changePhysicalBasis physicalInclusion hTensorGauge
     rw [changePhysicalBasis_smul] at h
-    exact h
+    exact (gaugeEquiv_toMPSTensor_iff _ _).2 h
   have hC : verticalBNTMPO Bambient = C := by
     funext ab
     change C (finProdFinEquiv.symm (finProdFinEquiv ab)) = C ab
@@ -297,31 +296,22 @@ private theorem terminalSource_isInjective : Kraus.IsInjective terminalSource :=
 
 /-- The terminal block is one-site injective. -/
 theorem terminalBlock_isInjective : Kraus.IsInjective terminalBlock :=
-  (isInjective_toMPSTensor_iff terminalBlock).1
-    ((isInjective_toMPSTensor_changePhysicalBasis_iff
-      terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
-        ((isInjective_toMPSTensor_iff terminalSource).2 terminalSource_isInjective))
+  (isInjective_changePhysicalBasis_iff
+    terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
+      terminalSource_isInjective
 
 /-- The terminal block is left-canonical. -/
 theorem terminalBlock_isLeftCanonical : MPTensor.IsLeftCanonical terminalBlock := by
-  apply (isTP_toMPSTensor_iff terminalBlock).1
-  apply isLeftCanonical_toMPSTensor_changePhysicalBasis
+  apply isLeftCanonical_changePhysicalBasis
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource
-  simp [MPTensor.IsLeftCanonical, Kraus.IsTP, toMPSTensor, terminalSource_apply]
+  simp [MPTensor.IsLeftCanonical, Kraus.IsTP, Fintype.sum_prod_type, terminalSource_apply]
 
 /-- The terminal block is a normal tensor. -/
-theorem terminalBlock_isNormalTensor : MPTensor.IsNormalTensor terminalBlock := by
-  have h := (isNormalTensor_toMPSTensor_changePhysicalBasis_iff
+theorem terminalBlock_isNormalTensor : MPTensor.IsNormalTensor terminalBlock :=
+  (isNormalTensor_changePhysicalBasis_iff
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
-      (MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-        terminalSource.toMPSTensor
-        (by rw [kraus_transferMap_toMPSTensor]; exact terminalSource_transferMap_eq_id))
-  have hRound : Kraus.reindexPhysical finProdFinEquiv terminalBlock.toMPSTensor =
-      terminalBlock := by
-    funext ab
-    simp [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical]
-  rw [← hRound]
-  exact h.reindexPhysical finProdFinEquiv
+      (MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id terminalSource
+        terminalSource_transferMap_eq_id)
 
 private theorem terminalSource_isMPDO : terminalSource.IsMPDO := by
   intro N _hN
