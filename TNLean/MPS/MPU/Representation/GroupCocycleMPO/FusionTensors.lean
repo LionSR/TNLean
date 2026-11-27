@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
-import TNLean.MPS.CanonicalForm.SimpleMPU.PhysicalRelabelling
+import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 
 /-!
 # Group matrix product operators from a three-cocycle: fusion tensors and the inverse cocycle
