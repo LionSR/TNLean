@@ -143,9 +143,9 @@ This is the definition of normality after arXiv:2307.01696, eq. `eq:transfer_mat
 left-canonical gauge. The spectral-radius-one field of `IsNormalTensor` is automatic there:
 the transfer map of a left-canonical tensor is a channel, so its spectral radius is one
 (Wolf Proposition 6.1). -/
-theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical [NeZero D]
-    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical {α : Type*} [Fintype α] [NeZero D]
+    (A : MPTensor α (Fin D)) (hIrr : Kraus.IsIrreducibleFamily A)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin D) A))
     (hLeft : IsLeftCanonical A) : IsNormalTensor A where
   no_invariant_proj := hIrr
   spectral_radius_one :=
