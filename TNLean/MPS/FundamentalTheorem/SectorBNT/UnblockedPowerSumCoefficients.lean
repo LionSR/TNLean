@@ -56,22 +56,6 @@ variable {d : ℕ}
 
 /-! ### Small bridges between `GaugePhaseEquiv` and `RepeatedBlocks` -/
 
-/-- Symmetry of gauge-phase equivalence. -/
-theorem gaugePhaseEquiv_symm {D : ℕ} {A B : MPSTensor d D}
-    (h : GaugePhaseEquiv A B) : GaugePhaseEquiv B A := by
-  obtain ⟨X, ζ, hζ, hrel⟩ := h
-  refine ⟨X⁻¹, ζ⁻¹, inv_ne_zero hζ, fun i => ?_⟩
-  have hi := hrel i
-  have hcancel :
-      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * B i *
-        ((X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = ζ • A i := by
-    rw [hi]
-    simp [Matrix.mul_assoc]
-  have hA : A i = ζ⁻¹ • (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * B i *
-      ((X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-    rw [hcancel, inv_smul_smul₀ hζ]
-  simpa [inv_inv] using hA
-
 /-- Transitivity of gauge-phase equivalence. -/
 theorem gaugePhaseEquiv_trans {D : ℕ} {A B C : MPSTensor d D}
     (hAB : GaugePhaseEquiv A B) (hBC : GaugePhaseEquiv B C) : GaugePhaseEquiv A C := by
@@ -101,7 +85,7 @@ theorem gaugePhaseEquiv_of_repeatedBlocks {D : ℕ} {A B : MPSTensor d D}
 theorem not_repeatedBlocks_of_not_gaugePhaseEquiv {D : ℕ} {A B : MPSTensor d D}
     (h : ¬ GaugePhaseEquiv A B) : ¬ RepeatedBlocks A B := by
   intro hRep
-  exact h (gaugePhaseEquiv_symm (gaugePhaseEquiv_of_repeatedBlocks hRep))
+  exact h (gaugePhaseEquiv_symm_same_dim (gaugePhaseEquiv_of_repeatedBlocks hRep))
 
 /-- A `RepeatedBlocks` relation across a dimension cast gives a gauge-phase
 equivalence with the cast transported to the other side. -/

@@ -126,7 +126,7 @@ theorem sum_mpo_threeSite_prefix_diagonal_tail
     (∑ w : Fin L → Fin d,
       mpo K (3 + L) (Fin.append u w) (Fin.append v w)) =
       Matrix.trace
-        (K.evalWord (List.ofFn u) (List.ofFn v) * K.verticalLoop ^ L) := by
+        (K.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer K ^ L) := by
   simp only [mpo_apply, mpoMatrixEntry]
   have hwords (a : Fin 3 → Fin d) (w : Fin L → Fin d) :
       List.ofFn (Fin.append a w) = List.ofFn a ++ List.ofFn w := by
@@ -217,7 +217,7 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
     _ = ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j) *
           Matrix.trace
             (MPOTensor.evalWord (S.basis j) (List.ofFn u) (List.ofFn v) *
-              MPOTensor.verticalLoop (S.basis j) ^ L) := by
+              MPOTensor.physTraceTransfer (S.basis j) ^ L) := by
       rw [sum_mpo_threeSite_prefix_diagonal_tail]
     _ = Matrix.trace
           (S.basis j (i₁, j₁) * S.basis j (i₂, j₂) *
@@ -225,7 +225,6 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
               S.normalizedThreeSiteClosingMatrix M L j) := by
       simp only [MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix,
         MPSTensor.SectorDecomposition.threeSiteClosingMatrix,
-        MPOTensor.verticalLoop,
         Matrix.mul_smul, Matrix.trace_smul,
         smul_smul, smul_eq_mul]
       have hcoeff : S.coeff (L + 3) j = S.coeff (3 + L) j := by
