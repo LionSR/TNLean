@@ -24,14 +24,14 @@ arXiv:1606.00608, Theorem 3.10 and the local relation
 
 ## Main statements
 
-* `adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ` characterizes the
+* `adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ` characterizes the
   \((L+1)\)-site ground space by the two adjacent length-\(L\) kernels.
 * `groundSpace_three_eq_adjacent_twoSite_parent_kernels` gives the three-site
   specialization for the canonical two-site parent interaction.
 * `re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite` and
   `re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite` transport a
   three-site anticommutator quadratic-form estimate to every cyclic adjacent pair.
-* `localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute` transports
+* `parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute` transports
   the three-site commutator to every translated three-site window.
 
 ## References
@@ -57,18 +57,17 @@ is obtained from the Euclidean-space statement without changing the two local
 operators.
 
 Source: arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
-theorem adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
+theorem adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
     {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : NSiteSpace d (L + 1)} :
-    localTerm A L (L + 1) (0 : Fin (L + 1)) v = 0 ∧
-        localTerm A L (L + 1) (1 : Fin (L + 1)) v = 0 ↔
+    Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (0 : Fin (L + 1))) v = 0 ∧
+        Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (1 : Fin (L + 1))) v = 0 ↔
       v ∈ groundSpace A (L + 1) := by
   have h := parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
     hA hL (v := WithLp.toLp 2 v)
   rw [mem_groundSpaceES_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
     WithLp.toLp_eq_zero] at h
-  rw [localTerm_eq_toLin'_term A L, localTerm_eq_toLin'_term A L, Matrix.toLin'_apply,
-    Matrix.toLin'_apply]
+  rw [Matrix.toLin'_apply, Matrix.toLin'_apply]
   exact h
 
 /-- The three-site MPS ground space of an injective tensor is the intersection
@@ -89,9 +88,9 @@ theorem groundSpace_three_eq_adjacent_twoSite_parent_kernels
         LinearMap.ker (rightPairLift (parentInteraction A 2)) := by
   ext v
   rw [Submodule.mem_inf, LinearMap.mem_ker, LinearMap.mem_ker]
-  rw [← localTerm_two_three_zero_eq_leftPairLift_parentInteraction]
-  rw [← localTerm_two_three_one_eq_rightPairLift_parentInteraction]
-  exact (adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
+  rw [← term_two_three_zero_eq_leftPairLift_parentInteraction]
+  rw [← term_two_three_one_eq_rightPairLift_parentInteraction]
+  exact (adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
     hA (by omega : 1 < 2)).symm
 
 private theorem extractWindow_two_replaceWindow_three_left
@@ -223,15 +222,19 @@ length-two term at (i) with the term at site (0) of the three-site chain.
 This is the left-face transport for the local relation
 \([\tau_1(P_2),P_2]=0\) in arXiv:1606.00608, Definition 3.9, source lines
 517--524. -/
-theorem cyclicRestrictₗ_three_localTerm_left
+theorem cyclicRestrictₗ_three_parentRingInteraction_term_left
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
     (ψ : NSiteSpace d N) :
-    cyclicRestrictₗ (by omega) 3 i τ (localTerm A 2 N i ψ) =
-      localTerm A 2 3 (0 : Fin 3) (cyclicRestrictₗ (by omega) 3 i τ ψ) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    cyclicRestrictₗ (by omega) 3 i τ (Matrix.toLin' ((parentRingInteraction A 2 N).term i) ψ) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3))
+        (cyclicRestrictₗ (by omega) 3 i τ ψ) := by
+  have : NeZero N := ⟨by omega⟩
   ext σ
   simp only [cyclicRestrictₗ_apply]
-  rw [localTerm_apply_of_le A 2 N (by omega) i]
-  rw [localTerm_apply_of_le A 2 3 (by omega) (0 : Fin 3)]
+  rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 N (by omega) i]
+  rw [Matrix.toLin'_apply,
+    parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by omega) (0 : Fin 3)]
   change parentInteraction A 2
       (fun α => ψ (replaceWindow 2 (by omega) i
         (replaceWindow 3 hN i τ σ) α))
@@ -256,16 +259,21 @@ length-two term at (i+1) with the term at site (1) of the three-site chain.
 This is the right-face transport for the local relation
 \([\tau_1(P_2),P_2]=0\) in arXiv:1606.00608, Definition 3.9, source lines
 517--524. -/
-theorem cyclicRestrictₗ_three_localTerm_right
+theorem cyclicRestrictₗ_three_parentRingInteraction_term_right
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
     (ψ : NSiteSpace d N) :
+    haveI : NeZero N := ⟨by omega⟩;
     cyclicRestrictₗ (by omega) 3 i τ
-        (localTerm A 2 N (cyclicForwardSite i 1) ψ) =
-      localTerm A 2 3 (1 : Fin 3) (cyclicRestrictₗ (by omega) 3 i τ ψ) := by
+        (Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) ψ) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3))
+        (cyclicRestrictₗ (by omega) 3 i τ ψ) := by
+  have : NeZero N := ⟨by omega⟩
   ext σ
   simp only [cyclicRestrictₗ_apply]
-  rw [localTerm_apply_of_le A 2 N (by omega) (cyclicForwardSite i 1)]
-  rw [localTerm_apply_of_le A 2 3 (by omega) (1 : Fin 3)]
+  rw [Matrix.toLin'_apply,
+    parentRingInteraction_term_mulVec_apply_of_le A 2 N (by omega) (cyclicForwardSite i 1)]
+  rw [Matrix.toLin'_apply,
+    parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by omega) (1 : Fin 3)]
   change parentInteraction A 2
       (fun β => ψ (replaceWindow 2 (by omega) (cyclicForwardSite i 1)
         (replaceWindow 3 hN i τ σ) β))
@@ -350,24 +358,31 @@ This is the finite-chain transport of the source relation
 517--524.  The bound (3\leq N) is exactly the (N>2) range in Theorem 3.10,
 source lines 534--540.  No assertion is made for (N=2), where the two cyclic
 windows traverse the same pair of sites in opposite orders. -/
-theorem localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute
+theorem parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute
     {A : MPSTensor d D}
     (h₃ :
-      localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-        localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3))
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+        Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+            Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)))
     {N : ℕ} (hN : 3 ≤ N) (i : Fin N) :
-    localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
-      localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i := by
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toLin' ((parentRingInteraction A 2 N).term i) *
+        Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) =
+      Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) *
+          Matrix.toLin' ((parentRingInteraction A 2 N).term i) := by
+  have : NeZero N := ⟨by omega⟩
   apply LinearMap.ext
   intro ψ
   funext σ
   have hcomm := LinearMap.congr_fun h₃ (cyclicRestrictₗ (by omega) 3 i σ ψ)
   simp only [Module.End.mul_apply] at hcomm
-  rw [← cyclicRestrictₗ_three_localTerm_right hN i σ ψ,
-    ← cyclicRestrictₗ_three_localTerm_left hN i σ
-      (localTerm A 2 N (cyclicForwardSite i 1) ψ)] at hcomm
-  rw [← cyclicRestrictₗ_three_localTerm_left hN i σ ψ,
-    ← cyclicRestrictₗ_three_localTerm_right hN i σ (localTerm A 2 N i ψ)] at hcomm
+  rw [← cyclicRestrictₗ_three_parentRingInteraction_term_right hN i σ ψ,
+    ← cyclicRestrictₗ_three_parentRingInteraction_term_left hN i σ
+      (Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) ψ)] at hcomm
+  rw [← cyclicRestrictₗ_three_parentRingInteraction_term_left hN i σ ψ,
+    ← cyclicRestrictₗ_three_parentRingInteraction_term_right hN i σ
+      (Matrix.toLin' ((parentRingInteraction A 2 N).term i) ψ)] at hcomm
   have hvalue := congrFun hcomm (extractWindow 3 i σ)
   rw [cyclicRestrictₗ_three_extractWindow hN i σ,
     cyclicRestrictₗ_three_extractWindow hN i σ] at hvalue
@@ -384,9 +399,9 @@ private theorem cyclicRestrictES_three_parentRingInteraction_term_left
       Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0)
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
   have : NeZero N := ⟨by omega⟩
-  have h := cyclicRestrictₗ_three_localTerm_left (A := A) hN i τ (WithLp.ofLp v)
-  rw [localTerm_eq_toLin'_term A 2, localTerm_eq_toLin'_term A 2,
-    Matrix.toLin'_apply, Matrix.toLin'_apply] at h
+  have h :=
+    cyclicRestrictₗ_three_parentRingInteraction_term_left (A := A) hN i τ (WithLp.ofLp v)
+  rw [Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
 private theorem cyclicRestrictES_three_parentRingInteraction_term_right
@@ -399,9 +414,9 @@ private theorem cyclicRestrictES_three_parentRingInteraction_term_right
       Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1)
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
   have : NeZero N := ⟨by omega⟩
-  have h := cyclicRestrictₗ_three_localTerm_right (A := A) hN i τ (WithLp.ofLp v)
-  rw [localTerm_eq_toLin'_term A 2, localTerm_eq_toLin'_term A 2,
-    Matrix.toLin'_apply, Matrix.toLin'_apply] at h
+  have h :=
+    cyclicRestrictₗ_three_parentRingInteraction_term_right (A := A) hN i τ (WithLp.ofLp v)
+  rw [Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
 /-- A three-site anticommutator quadratic-form estimate for the adjacent range-two terms of the

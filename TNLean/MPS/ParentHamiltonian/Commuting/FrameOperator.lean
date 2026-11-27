@@ -298,16 +298,18 @@ theorem isNNCPH_of_pairLift_groundSpaceFrame {A : MPSTensor d D} {c : ℝ} (hc :
     {N : ℕ} (hN : 3 ≤ N) : IsNNCPH A N := by
   have hC : Commute (leftPairLift (groundSpaceFrame A 2))
       (rightPairLift (groundSpaceFrame A 2)) := hcomm
-  have h₃ : localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
-    rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
-      localTerm_two_three_one_eq_rightPairLift_parentInteraction,
+  have h₃ : Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) := by
+    rw [term_two_three_zero_eq_leftPairLift_parentInteraction,
+      term_two_three_one_eq_rightPairLift_parentInteraction,
       parentInteraction_eq_one_sub_smul_groundSpaceFrame hc h, leftPairLift_one_sub,
       rightPairLift_one_sub, leftPairLift_smul, rightPairLift_smul]
     set k := ((c : ℂ)⁻¹)
     exact ((Commute.one_left _).sub_left (((Commute.one_right _)).sub_right
       ((hC.smul_left k).smul_right k))).eq
   exact isNNCPH_of_adjacent_twoSite_commute (by omega) fun i =>
-    localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute h₃ hN i
+    parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute h₃ hN i
 
 end MPSTensor

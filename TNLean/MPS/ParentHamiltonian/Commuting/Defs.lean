@@ -32,7 +32,7 @@ clause from Definition 3.9.
 
 ## Main results
 
-* `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
+* `MPSTensor.IsCommutingParentHam.ham_comm_parentRingInteraction_term` — if local terms commute,
   the full Hamiltonian commutes with each local term.
 * `MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning` —
   the all-chain source condition is equivalently all-chain nearest-neighbor
@@ -68,8 +68,11 @@ terms. The source definition of a parent Hamiltonian also includes the
 ground-space spanning condition by the periodic MPS vectors of the BNT
 components. -/
 def IsCommutingParentHam (A : MPSTensor d D) (L N : ℕ) : Prop :=
-  ∀ i j : Fin N,
-    localTerm A L N i * localTerm A L N j = localTerm A L N j * localTerm A L N i
+  ∀ i j : Fin N, haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toLin' ((parentRingInteraction A L N).term i) *
+        Matrix.toLin' ((parentRingInteraction A L N).term j) =
+      Matrix.toLin' ((parentRingInteraction A L N).term j) *
+        Matrix.toLin' ((parentRingInteraction A L N).term i)
 
 /-- **Nearest-neighbor commuting parent Hamiltonian** (NNCPH): the length-two
 commutation equations for the translated parent interaction terms.
@@ -85,7 +88,8 @@ commutation equations. -/
 theorem _root_.MPTensor.GaugeEquiv.isNNCPH {A B : MPSTensor d D} (h : GaugeEquiv A B) {N : ℕ} :
     IsNNCPH A N → IsNNCPH B N := by
   intro hA i j
-  rw [← h.localTerm_eq 2 N i, ← h.localTerm_eq 2 N j]
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [← h.parentRingInteraction_eq 2 N]
   exact hA i j
 
 /-- Source Definition 3.9 parent-Hamiltonian ground-space spanning clause.
@@ -101,7 +105,8 @@ separately supply the hypothesis that the family \(A_j\) is the BNT family of
 See arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
 def HasParentHamiltonianGroundSpaceSpanning (B : MPSTensor d D) (L : ℕ)
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
-  ∀ N : ℕ, L < N → LinearMap.ker (parentHamiltonian B L N) = bntMPSVectorSpan A N
+  ∀ N : ℕ, (hLN : L < N) → haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) = bntMPSVectorSpan A N
 
 /-- Fixed-chain nearest-neighbor commuting parent-Hamiltonian ground-space
 condition from arXiv:1606.00608, Definition 3.9 and Theorem 3.10(iii).
@@ -119,9 +124,10 @@ only records the condition for one fixed chain length; it does not assert that
 the displayed spanning equation has been proved for any tensor. -/
 def HasNNCPHGroundSpace (B : MPSTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
-    (N : ℕ) : Prop :=
+    (N : ℕ) [NeZero N] : Prop :=
   IsNNCPH B N ∧
-    LinearMap.ker (parentHamiltonian B 2 N) = bntMPSVectorSpan A N
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction B 2 N).hamiltonian) =
+      bntMPSVectorSpan A N
 
 /-- All-chain nearest-neighbor commuting parent-Hamiltonian ground-space
 condition.
@@ -133,7 +139,7 @@ automatic). It packages only the condition; it does not prove the spanning
 equation for any tensor. -/
 def HasNNCPHGroundSpaces (B : MPSTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
-  ∀ N : ℕ, 2 < N → HasNNCPHGroundSpace B A N
+  ∀ N : ℕ, (hN : 2 < N) → haveI : NeZero N := ⟨by omega⟩; HasNNCPHGroundSpace B A N
 
 /-- The nearest-neighbor commuting condition is a special case of the commuting
 parent Hamiltonian (length two). -/
@@ -145,7 +151,7 @@ theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH 
 local-term commutation. -/
 theorem HasNNCPHGroundSpace.isNNCPH {B : MPSTensor d D}
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    {N : ℕ} (h : HasNNCPHGroundSpace B A N) :
+    {N : ℕ} [NeZero N] (h : HasNNCPHGroundSpace B A N) :
     IsNNCPH B N :=
   h.1
 
@@ -153,8 +159,9 @@ theorem HasNNCPHGroundSpace.isNNCPH {B : MPSTensor d D}
 ground-space spanning equation. -/
 theorem HasNNCPHGroundSpace.groundSpaceSpanning {B : MPSTensor d D}
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    {N : ℕ} (h : HasNNCPHGroundSpace B A N) :
-    LinearMap.ker (parentHamiltonian B 2 N) = bntMPSVectorSpan A N :=
+    {N : ℕ} [NeZero N] (h : HasNNCPHGroundSpace B A N) :
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction B 2 N).hamiltonian) =
+      bntMPSVectorSpan A N :=
   h.2
 
 /-- Quantifying the fixed-chain NNCPH ground-space condition over \(N>2\)
@@ -163,15 +170,18 @@ predicate. -/
 theorem HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning
     {B : MPSTensor d D}
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    (h : ∀ N : ℕ, 2 < N → HasNNCPHGroundSpace B A N) :
+    (h : ∀ N : ℕ, (hN : 2 < N) → haveI : NeZero N := ⟨by omega⟩;
+      HasNNCPHGroundSpace B A N) :
     HasParentHamiltonianGroundSpaceSpanning B 2 A := by
   intro N hN
-  exact (h N hN).groundSpaceSpanning
+  have : NeZero N := ⟨by omega⟩
+  exact (h N (by omega)).groundSpaceSpanning
 
 /-- The all-chain NNCPH ground-space condition gives the fixed-chain condition. -/
 theorem HasNNCPHGroundSpaces.hasNNCPHGroundSpace {B : MPSTensor d D}
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {N : ℕ} (h : HasNNCPHGroundSpaces B A) (hN : 2 < N) :
+    haveI : NeZero N := ⟨by omega⟩;
     HasNNCPHGroundSpace B A N :=
   h N hN
 
@@ -203,10 +213,11 @@ theorem hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning
   constructor
   · intro h
     exact
-      ⟨fun N hN => (h N hN).isNNCPH,
+      ⟨fun N hN => haveI : NeZero N := ⟨by omega⟩; (h N hN).isNNCPH,
         h.hasParentHamiltonianGroundSpaceSpanning⟩
   · rintro ⟨hComm, hSpan⟩ N hN
-    exact ⟨hComm N hN, hSpan N hN⟩
+    have : NeZero N := ⟨by omega⟩
+    exact ⟨hComm N hN, hSpan N (by omega)⟩
 
 /-- If each BNT vector is killed by the parent Hamiltonian, then their span is
 contained in the parent-Hamiltonian kernel.
@@ -220,9 +231,10 @@ This is the easy inclusion in the source spanning equation
 from arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
 theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates
     {B : MPSTensor d D} {r : ℕ} {dim : Fin r → ℕ}
-    {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ}
-    (h : ∀ j : Fin r, parentHamiltonian B L N (mpv (A j)) = 0) :
-    bntMPSVectorSpan A N ≤ LinearMap.ker (parentHamiltonian B L N) := by
+    {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ} [NeZero N]
+    (h : ∀ j : Fin r, Matrix.toLin' (parentRingInteraction B L N).hamiltonian (mpv (A j)) = 0) :
+    bntMPSVectorSpan A N ≤
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) := by
   rw [bntMPSVectorSpan]
   refine Submodule.span_le.mpr ?_
   intro v hv
@@ -240,25 +252,34 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_mem_zeroSpace
     {A : (j : Fin r) → MPSTensor d (dim j)} {L N : ℕ} [NeZero N]
     (h : ∀ j : Fin r,
       WithLp.toLp 2 (mpv (A j) : NSiteSpace d N) ∈ (parentRingInteraction B L N).zeroSpace) :
-    bntMPSVectorSpan A N ≤ LinearMap.ker (parentHamiltonian B L N) := by
+    bntMPSVectorSpan A N ≤
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) := by
   refine bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates ?_
   intro j
-  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
+  rw [Matrix.toLin'_apply, ManyBody.Interaction.hamiltonian, Matrix.sum_mulVec]
   exact Finset.sum_eq_zero fun i _ => ManyBody.Interaction.mem_zeroSpace_iff.mp (h j) i
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
     (h : IsCommutingParentHam A L N) (i j : Fin N) :
-    localTerm A L N j * localTerm A L N i = localTerm A L N i * localTerm A L N j :=
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toLin' ((parentRingInteraction A L N).term j) *
+        Matrix.toLin' ((parentRingInteraction A L N).term i) =
+      Matrix.toLin' ((parentRingInteraction A L N).term i) *
+        Matrix.toLin' ((parentRingInteraction A L N).term j) :=
   (h i j).symm
 
 /-- If the parent Hamiltonian commutes, then the Hamiltonian commutes with
 each local term. -/
-theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
+theorem IsCommutingParentHam.ham_comm_parentRingInteraction_term {A : MPSTensor d D} {L N : ℕ}
     (_h : IsCommutingParentHam A L N) (i : Fin N) :
-    parentHamiltonian A L N * localTerm A L N i =
-      localTerm A L N i * parentHamiltonian A L N := by
-  simp only [parentHamiltonian_eq_sum_localTerm, Finset.sum_mul, Finset.mul_sum]
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toLin' (parentRingInteraction A L N).hamiltonian *
+        Matrix.toLin' ((parentRingInteraction A L N).term i) =
+      Matrix.toLin' ((parentRingInteraction A L N).term i) *
+        Matrix.toLin' (parentRingInteraction A L N).hamiltonian := by
+  have : NeZero N := NeZero.of_pos i.pos
+  simp only [ManyBody.Interaction.hamiltonian, map_sum, Finset.sum_mul, Finset.mul_sum]
   congr 1
   ext j : 1
   exact _h j i

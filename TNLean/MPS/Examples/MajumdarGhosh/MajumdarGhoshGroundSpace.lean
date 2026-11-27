@@ -453,10 +453,11 @@ theorem majumdarGhosh_chainGroundSpace_eq_span {N : ℕ} (hN : Even N) (hN4 : 4 
 range-three parent Hamiltonian of `majumdarGhoshTensor` (arXiv:quant-ph/0608197,
 Section 5) is spanned by the two nearest-neighbour singlet coverings. -/
 theorem majumdarGhosh_ker_parentHamiltonian_eq_span {N : ℕ} (hN : Even N) (hN4 : 4 ≤ N) :
-    LinearMap.ker (parentHamiltonian majumdarGhoshTensor 3 N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction majumdarGhoshTensor 3 N).hamiltonian) =
       Submodule.span ℂ {pairCoveringEven majumdarGhoshSinglet,
         pairCoveringOdd majumdarGhoshSinglet} := by
-  rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) (by omega),
     majumdarGhosh_chainGroundSpace_eq_span hN hN4]
 
 /-- Project result: on an even ring of \(N\ge4\) sites the two singlet coverings

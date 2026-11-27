@@ -100,8 +100,8 @@ tensors.
 \begin{lemma}[Local ground spaces determine the parent Hamiltonian]
     \label{thm:parent_hamiltonian_from_ground_space}
     \lean{MPSTensor.parentInteraction_eq_of_groundSpace_eq,
-        MPSTensor.localTerm_eq_of_parentInteraction_eq,
-        MPSTensor.parentHamiltonian_eq_of_groundSpace_eq,
+        MPSTensor.parentRingInteraction_eq_of_parentInteraction_eq,
+        MPSTensor.parentRingInteraction_eq_of_groundSpace_eq,
         MPSTensor.hamiltonian_parentRingInteraction_eq_of_groundSpace_eq}
     \leanok
     \uses{def:ground_space_parent,def:parent_interaction,def:parent_hamiltonian,def:parent_hamiltonian_es}
@@ -2385,8 +2385,6 @@ tensors.
 
 \begin{lemma}[Canonical parent projections give the canonical Hamiltonian]
     \label{thm:periodic-fixed-interaction-canonical}
-    \lean{MPSTensor.localTerm_eq_toLin'_term,
-        MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian}
     \leanok
     For a tensor $A$ and a positive interaction range $R$, the periodic
     sum of the canonical parent projection $h_R=I-P_{G_R(A)}$ is exactly the

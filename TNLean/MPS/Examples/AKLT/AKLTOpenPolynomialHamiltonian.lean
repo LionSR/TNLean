@@ -55,8 +55,10 @@ private theorem card_twoSite_nonwrappingStart (N : ℕ) :
 /-- The operator of the two-site parent Hamiltonian of the open AKLT chain is the sum of the
 translated local terms over the nonwrapping starts. -/
 private theorem toLin'_hamiltonian_parentChainInteraction_aklt {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian =
-      ∑ i : NonwrappingStart 2 N, localTerm akltTensor 2 N i.1 := by
+      ∑ i : NonwrappingStart 2 N,
+        Matrix.toLin' ((parentRingInteraction akltTensor 2 N).term i.1) := by
   rw [ManyBody.Interaction.hamiltonian, map_sum]
   refine Fintype.sum_equiv (twoSiteStartEquiv N) _ _ fun i ↦ ?_
   have hi : i.val + 2 ≤ N := by have := i.isLt; omega
@@ -67,7 +69,7 @@ private theorem toLin'_hamiltonian_parentChainInteraction_aklt {N : ℕ} (hN : 2
     rw [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE]
     exact (Nat.mod_eq_of_lt hj).symm
   have : NeZero N := ⟨by omega⟩
-  rw [localTerm_eq_toLin'_term akltTensor 2, ManyBody.Interaction.ofPlaceAlong_term,
+  rw [ManyBody.Interaction.ofPlaceAlong_term,
     ManyBody.Interaction.translationInvariant_term_of_le _ hN, hw]
 
 /-- The exact open-chain shift is \(2(N-1)/3\), one contribution per
@@ -83,7 +85,7 @@ theorem akltOpenHamiltonian_add_eq_parent {N : ℕ} (hN : 2 ≤ N) :
     LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply,
     LinearMap.sum_apply, LinearMap.comp_apply,
     Finset.sum_apply, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
-    aklt_localTerm_two_apply hN, Finset.mul_sum, Finset.sum_add_distrib]
+    aklt_parentRingInteraction_term_two_apply hN, Finset.mul_sum, Finset.sum_add_distrib]
   simp only [show ∀ x y z : ℂ, 2 * (1 / 2 * (x + y + z)) = x + y + z from
       fun x y z => by ring, Finset.sum_add_distrib, Finset.sum_const, Finset.card_univ,
     card_twoSite_nonwrappingStart, nsmul_eq_mul]

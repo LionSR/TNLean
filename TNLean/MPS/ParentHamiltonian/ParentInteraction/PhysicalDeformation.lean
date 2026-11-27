@@ -43,8 +43,8 @@ the periodic chain.
 * `MPSTensor.IsParentInteraction.deformedInteraction` — the deformed interaction is a parent
   interaction for the deformed tensor.
 * `MPSTensor.chainGroundSpace_rotatePhysical` and
-  `MPSTensor.ker_parentHamiltonian_rotatePhysical` — the ground spaces of the two parent
-  Hamiltonians correspond one-to-one through \(\Lambda^{\otimes N}\).
+  `MPSTensor.ker_hamiltonian_parentRingInteraction_rotatePhysical` — the ground spaces of the
+  two parent Hamiltonians correspond one-to-one through \(\Lambda^{\otimes N}\).
 * `MPSTensor.chainGroundSpace_rotatePhysical_eq_span` — uniqueness of the
   ground state transfers along the correspondence.
 -/
@@ -417,12 +417,15 @@ theorem chainGroundSpace_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ :
 (arXiv:2011.12127, lines 2035--2037), stated for the kernels of the finite parent
 Hamiltonians in the range \(0 < N\), \(L \le N\) where the local terms act on genuine
 cyclic windows. -/
-theorem ker_parentHamiltonian_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ)
-    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian (rotatePhysical Λ A) L N) =
-      (LinearMap.ker (parentHamiltonian A L N)).map (Matrix.toLin' (onSiteTensorPow N Λ)) := by
-  rw [ker_parentHamiltonian_eq_chainGroundSpace _ hN hLN,
-    ker_parentHamiltonian_eq_chainGroundSpace _ hN hLN, chainGroundSpace_rotatePhysical hΛ]
+theorem ker_hamiltonian_parentRingInteraction_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ}
+    (hΛ : IsUnit Λ) (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction (rotatePhysical Λ A) L N).hamiltonian) =
+      (LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian)).map
+        (Matrix.toLin' (onSiteTensorPow N Λ)) := by
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ hN hLN,
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ hN hLN,
+    chainGroundSpace_rotatePhysical hΛ]
 
 /-- The tensor power of an invertible on-site map as a linear automorphism of the
 \(N\)-site space. -/

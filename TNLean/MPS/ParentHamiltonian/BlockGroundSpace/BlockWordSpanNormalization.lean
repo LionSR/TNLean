@@ -108,16 +108,16 @@ theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_word
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       WordTupleSpanTop B S ∧
-      (∀ L N, parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
-        parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) B) L N) ∧
+      (∀ L, parentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
+        parentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) B) L) ∧
       (∀ N, bntMPSVectorSpan A N = bntMPSVectorSpan B N) := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, hBNT⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   refine ⟨B, ρ, hP, hρ, hSpanB, ?_, hBNT⟩
-  intro L N
-  exact parentHamiltonian_eq_of_groundSpace_eq
+  intro L
+  exact parentInteraction_eq_of_groundSpace_eq
     (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
-      μ μ A B hμ hμ (fun j ↦ hGS j L)) N
+      μ μ A B hμ hμ (fun j ↦ hGS j L))
 
 end MPSTensor
 
