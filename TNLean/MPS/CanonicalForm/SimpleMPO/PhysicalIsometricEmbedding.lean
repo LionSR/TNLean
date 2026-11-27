@@ -32,8 +32,10 @@ decomposition in lines 217--246 and the per-sector reduction in lines
 * `MPOTensor.toMPSTensor_changePhysicalBasis`: exact identification with
   isometric Kraus mixing on the doubled index, the bridge to the doubled-index
   isometric-mixing lemmas.
-* `MPOTensor.transferMap_changePhysicalBasis`, `MPOTensor.isInjective_changePhysicalBasis_iff`,
-  `MPOTensor.isLeftCanonical_changePhysicalBasis`, `MPOTensor.isNormalTensor_changePhysicalBasis_iff`,
+* `MPOTensor.transferMap_changePhysicalBasis`,
+  `MPOTensor.isInjective_changePhysicalBasis_iff`,
+  `MPOTensor.isLeftCanonical_changePhysicalBasis`,
+  `MPOTensor.isNormalTensor_changePhysicalBasis_iff`,
   `MPOTensor.gaugeEquiv_changePhysicalBasis`: the consequences for the tensor on the pair
   alphabet.
 

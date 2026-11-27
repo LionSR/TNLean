@@ -80,10 +80,11 @@ open MPTensor.IsDressedProportional
 variable {m : ℕ} {B : MPTensor α (Fin D)} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
 /-- Dressed proportionality persists when every letter is multiplied by the same scalar. -/
-theorem _root_.MPTensor.IsDressedProportional.smul [Fintype α]
+theorem _root_.MPTensor.IsDressedProportional.smul [Finite α]
     (h : IsDressedProportional B X Y z) (c : ℂ) :
     IsDressedProportional (fun i ↦ c • B i) X Y z := by
   classical
+  have := Fintype.ofFinite α
   simpa [ite_smul] using h.recombine fun i a ↦ if i = a then c else 0
 
 end IsDressedProportional
