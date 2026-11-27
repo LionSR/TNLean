@@ -460,8 +460,8 @@ private theorem originalCornerInclusion_intertwining
     (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
     (p : VerticalCopyPair mult) (k : Fin (S.count p))
     (ab : Fin (D * D)) :
-    (mulTensor (verticalBNTMPO (B p.1.1))
-        (verticalBNTMPO (B p.2.1))).toMPSTensor ab *
+    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
+        (verticalBNTMPO (B p.2.1)))) ab *
           originalCornerInclusion S C sigma hDim V omega p k =
       originalCornerInclusion S C sigma hDim V omega p k *
         (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
@@ -473,8 +473,8 @@ private theorem originalCornerInclusion_intertwining
     (Matrix (Fin (dim p.1.1 * dim p.2.1))
       (Fin (dim (originalCornerLabel S C sigma p k))) ℂ) ha
   calc
-    a • ((mulTensor (verticalBNTMPO (B p.1.1))
-          (verticalBNTMPO (B p.2.1))).toMPSTensor ab *
+    a • ((Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
+          (verticalBNTMPO (B p.2.1)))) ab *
         originalCornerInclusion S C sigma hDim V omega p k) =
       weightedVerticalProductBlock dim mult weight B p ab *
         originalCornerInclusion S C sigma hDim V omega p k := by
@@ -937,8 +937,8 @@ theorem exists_originalCornerFamily
       (Matrix (Fin (dim p.1.1 * dim p.2.1))
         (Fin (dim p.1.1 * dim p.2.1)) ℂ) ha
     calc
-      a • (mulTensor (verticalBNTMPO (B p.1.1))
-          (verticalBNTMPO (B p.2.1))).toMPSTensor ab =
+      a • (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
+          (verticalBNTMPO (B p.2.1)))) ab =
         weightedVerticalProductBlock dim mult weight B p ab := by
           rfl
       _ = ∑ k, S.localInclusion p k *

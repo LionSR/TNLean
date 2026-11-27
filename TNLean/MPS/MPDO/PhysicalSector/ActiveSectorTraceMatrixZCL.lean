@@ -8,7 +8,7 @@ import QICLean.Algebra.Combinatorics.FinSum
 import TNLean.MPS.MPDO.PhysicalSector.NeighboringTraceObstruction
 import TNLean.MPS.MPDO.PhysicalSector.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.Entropy.SALTraceTransfer
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Zero correlation length on an active-sector trace matrix
@@ -189,7 +189,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) (hZCL : IsSourceZCL K) :
     let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
+      K hK R hρ hη alpha beta hm
     ∃ (z : Fin F.sectorCount → Circle) (lam : ℝ), 0 < lam ∧
       (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
         Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) ∧
@@ -198,7 +198,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
             ∀ N : ℕ, 0 < N →
               Matrix.trace ((lam⁻¹ • T) ^ N) = Matrix.trace (lam⁻¹ • T) := by
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
+    K hK R hρ hη alpha beta hm
   change ∃ (z : Fin F.sectorCount → Circle) (lam : ℝ), 0 < lam ∧
     (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
       Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) ∧
@@ -255,7 +255,7 @@ theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
     exists_normalizedFourSiteTail_entry_ne_zero
       K ((Classical.choose_spec hSAL).1 4 (by omega))
   let F₀ := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K ((isInjective_toMPSTensor_iff K).2 hK) (normalizedFourSiteTail K)
+    K hK (normalizedFourSiteTail K)
       (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
   obtain ⟨z, lam, hlam, hpos, hprim, hrel⟩ :=
     exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations

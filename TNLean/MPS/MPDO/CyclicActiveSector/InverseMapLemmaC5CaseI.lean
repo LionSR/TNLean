@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSector.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.CyclicActiveSector.LemmaC5CaseI
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The literal normal Case-I coefficient theorem from saturation of the area law
@@ -63,7 +63,7 @@ theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
     exists_normalizedFourSiteTail_entry_ne_zero
       K ((Classical.choose_spec hSAL).1 4 (by omega))
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K ((isInjective_toMPSTensor_iff K).2 hK) (normalizedFourSiteTail K)
+    K hK (normalizedFourSiteTail K)
       (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
   obtain ⟨z, hpos, hspan, hnonzero, htriangle, hinactive, hne⟩ :=
     exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses

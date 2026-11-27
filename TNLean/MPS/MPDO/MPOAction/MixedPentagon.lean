@@ -102,7 +102,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
       else 0)
 
 local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
-  (fun q ↦ Iff.mpr (isInjective_toMPSTensor_iff _) (hT q))
+  (fun q ↦ (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The auxiliary forward F comparison is literally the original action L
@@ -180,7 +180,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
       else 0)
 
 local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
-  (fun q ↦ Iff.mpr (isInjective_toMPSTensor_iff _) (hT q))
+  (fun q ↦ (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The operator-only inverse comparison in the auxiliary family is the
@@ -368,7 +368,7 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
       (fun a ↦ (O a).toMPSTensor) := congrArg toMPSTensor hT
   choose N VF WF hF using fun a b ↦
     hClosed.exists_blockFusionDecomposition_of_isInjective O hT'
-      (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInjO a)) hχ hneO a b
+      (fun a ↦ (hInjO a)) hχ hneO a b
   choose M VA WA hA using fun a x ↦
     hCompatible.exists_blockActionDecomposition_of_isInjective
       O A hT' hB hInjA hD hneA a x

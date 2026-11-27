@@ -8,7 +8,7 @@ import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveMarkovDecomposition
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorAnalyticProperties
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Saturated area law for orthogonal commuting sectors

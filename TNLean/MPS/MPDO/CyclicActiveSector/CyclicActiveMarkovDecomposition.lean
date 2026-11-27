@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveCutRegrouping
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveAdjacentCoefficientExtraction
 import TNLean.MPS.MPDO.Entropy.SALArbitraryCut
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Hayashi decomposition in cyclic-active coordinates
@@ -805,7 +805,7 @@ Proposition C.8 (`3to4`), lines 1569--1594, and Proposition `4to2`, lines
 theorem isSAL_iff_nonempty_commutingForm (K : MPOTensor d D) (hMPDO : IsMPDO K)
     (hK : Kraus.IsInjective K) (hZCL : K.IsSourceZCL) :
     IsSAL K ↔ Nonempty (CommutingForm K) :=
-  ⟨nonempty_commutingForm_of_isSAL K ((isInjective_toMPSTensor_iff K).2 hK), fun ⟨data⟩ ↦
+  ⟨nonempty_commutingForm_of_isSAL K hK, fun ⟨data⟩ ↦
     data.isSAL_of_isSourceZCL hMPDO hK hZCL⟩
 
 end MPOTensor

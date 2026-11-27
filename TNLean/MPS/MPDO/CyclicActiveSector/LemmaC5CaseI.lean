@@ -21,7 +21,7 @@ import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorTraceMatrix
 import TNLean.MPS.CanonicalForm.VerticalForm.Purity
 import TNLean.MPS.Operator.Simple.SectorEtaPositivity
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components
@@ -498,13 +498,6 @@ theorem sum_prod_traceSq_eq_sum_active
     · simp [hk]
     · rw [ite_eq_right hk, prod_traceSq_eq_zero_of_not_forall_active K F p hinactive k hk]
 
-/-- The self-overlap of the doubled-index view is the self-overlap on the pair alphabet. -/
-private theorem mpvOverlap_toMPSTensor_toMPSTensor (N : ℕ) :
-    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N = MPTensor.mpvOverlap K K N :=
-  Fintype.sum_equiv (.arrowCongr (.refl _) finProdFinEquiv.symm) _ _ fun _ ↦ by
-    rw [mpv_toMPSTensor_eq]
-    rfl
-
 /-- **The overlap formula.** The doubled-index MPS self-overlap equals the real cast of
 `tr(S^N)`, where `S` is the active-sector trace-squared matrix.
 
@@ -519,8 +512,7 @@ theorem mpvOverlap_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
     MPTensor.mpvOverlap K K N =
       Complex.ofReal (Matrix.trace ((activeSectorTraceSqMatrix K F p) ^ N)) := by
   have hK : IsMPDO K := F.isMPDO_of_neighboringOperator_pos hpos
-  rw [← mpvOverlap_toMPSTensor_toMPSTensor, mpvOverlap_toMPSTensor_self_eq_trace_sq K hK
-    (NeZero.pos N)]
+  rw [mpvOverlap_self_eq_trace_sq K hK (NeZero.pos N)]
   rw [← trace_mpo_conjugatePhysical_mul_self K F.physicalIsometry
     F.physicalIsometry_isometry (N := N)]
   rw [← Matrix.trace_mul_self_eq_of_reindex_eq (F.physicalConfigEquiv N) _ _
@@ -639,8 +631,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
   have htendsto_one : Filter.Tendsto (fun N => Matrix.trace (S ^ N)) Filter.atTop (nhds 1) := by
     have hoverlap : Filter.Tendsto (fun N => MPTensor.mpvOverlap K K N)
         Filter.atTop (nhds (1 : ℂ)) :=
-      (hK_normal.reindexPhysical finProdFinEquiv.symm).selfOverlap_tendsto_one.congr
-        fun N ↦ mpvOverlap_toMPSTensor_toMPSTensor K N
+      hK_normal.selfOverlap_tendsto_one
     have hcongr : Filter.Tendsto (fun N => ((Matrix.trace (S ^ N) : ℝ) : ℂ))
         Filter.atTop (nhds (1 : ℂ)) := by
       apply hoverlap.congr'

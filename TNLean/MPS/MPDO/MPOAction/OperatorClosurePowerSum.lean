@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.Product.OperatorProduct
 import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
 import TNLean.MPS.Operator.PairAlphabet
-import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Power-sum coefficients of operator closure
@@ -36,29 +35,14 @@ private theorem mpo_eq_sum_iff_mpv {DB : ℕ} (B : MPOTensor d DB)
     {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ} (M : ∀ γ, MPOTensor d (DM γ))
     (L : ℕ) (c : Γ → ℂ) :
     mpo B L = ∑ γ, c γ • mpo (M γ) L ↔
-      ∀ σ : Fin L → Fin (d * d),
-        mpv B.toMPSTensor σ = ∑ γ, c γ * mpv (M γ).toMPSTensor σ := by
+      ∀ σ : Fin L → Fin d × Fin d, mpv B σ = ∑ γ, c γ * mpv (M γ) σ := by
   constructor
   · intro h σ
-    simp only [mpv_toMPSTensor_eq, mpv_eq_mpo, h, Matrix.sum_apply, Matrix.smul_apply,
-      smul_eq_mul]
+    simp only [mpv_eq_mpo, h, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
   · intro h
     ext σ τ
-    have he := h (fun k => finProdFinEquiv (σ k, τ k))
-    simpa only [mpv_toMPSTensor_eq, Equiv.symm_apply_apply, mpv_pair, Matrix.sum_apply,
-      Matrix.smul_apply, smul_eq_mul] using he
-
-/-- Gauge-phase equivalence of the doubled-index views, after a cast of the bond dimension, is
-gauge-phase equivalence on the pair alphabet. -/
-private theorem gaugePhaseEquiv_cast_toMPSTensor_iff {D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (A : MPOTensor d D₁) (B : MPOTensor d D₂) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor (d * d)) h) A.toMPSTensor) B.toMPSTensor ↔
-      GaugePhaseEquiv (cast (congr_arg (MPOTensor d) h) A) B := by
-  subst h
-  simp only [cast_eq, GaugePhaseEquiv, toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical]
-  exact exists_congr fun X ↦ exists_congr fun ζ ↦ and_congr_right fun _ ↦
-    (finProdFinEquiv.forall_congr_left
-      (p := fun i ↦ B i = ζ • ((X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)))).symm
+    have he := h (fun k => (σ k, τ k))
+    simpa only [mpv_pair, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using he
 
 /-- Operator closure at every positive length yields a unique nonzero-weight
 power-sum expansion for each output tensor. Arbitrary expansion coefficients agree
@@ -92,11 +76,8 @@ theorem exists_operatorProduct_powerSum_coeff_unique
     mpo_eq_sum_iff_mpv (mulTensor (M a) (M b)) M L c
   simp only [mpo_mulTensor] at bridge
   obtain ⟨n, μ, hμ, hexp, ⟨L₀, hL₀, hrig⟩, hbound, huniq⟩ :=
-    MPSTensor.exists_unblocked_powerSum_coeff_unique
-      (mulTensor (M a) (M b)).toMPSTensor (fun γ => (M γ).toMPSTensor)
-      (fun γ ↦ (isNormal_toMPSTensor_iff _).2 (hM γ)) hD
-      (fun γ δ hγδ h ↦ (gaugePhaseEquiv_cast_toMPSTensor_iff h _ _).not.2
-        (hdistinct γ δ hγδ h)) (by
+    MPSTensor.exists_unblocked_powerSum_coeff_unique (mulTensor (M a) (M b)) M hM hD
+      hdistinct (by
         intro L hL
         obtain ⟨c, hc⟩ := hspan L hL
         exact ⟨c, (bridge L c).mp hc⟩)

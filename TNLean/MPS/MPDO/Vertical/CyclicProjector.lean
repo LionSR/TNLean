@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalBNT
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The cyclic projector of a nontrivial periodic vector
