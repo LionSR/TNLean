@@ -42,11 +42,10 @@ This combines the raw composition tensor in arXiv:1703.09188, proof of Theorem
 paper. -/
 lemma normalizedFlattening_mulTensor_apply [NeZero d]
     (U : MPOTensor d D₁) (V : MPOTensor d D₂) (i k : Fin d) :
-    (mulTensor U V).normalizedFlattening (finProdFinEquiv (i, k)) =
+    (mulTensor U V).normalizedFlattening (i, k) =
       (Real.sqrt d : ℂ) •
         (∑ j : Fin d,
-          U.normalizedFlattening (finProdFinEquiv (i, j)) ⊗ₖ
-            V.normalizedFlattening (finProdFinEquiv (j, k))).submatrix
+          U.normalizedFlattening (i, j) ⊗ₖ V.normalizedFlattening (j, k)).submatrix
               finProdFinEquiv.symm finProdFinEquiv.symm := by
   classical
   have hd : (0 : ℝ) < d := by
@@ -55,7 +54,6 @@ lemma normalizedFlattening_mulTensor_apply [NeZero d]
     exact_mod_cast Real.sqrt_ne_zero'.mpr hd
   ext a b
   simp only [normalizedFlattening, mulTensor_apply,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat,
     Matrix.smul_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, smul_eq_mul]
   simp only [Finset.mul_sum]

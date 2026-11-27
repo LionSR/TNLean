@@ -104,19 +104,16 @@ theorem exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul [NeZero n]
   have hc : ((Real.sqrt n : ℂ)⁻¹) ≠ 0 :=
     inv_ne_zero (Complex.ofReal_ne_zero.mpr
       (Real.sqrt_pos.mpr (by exact_mod_cast NeZero.pos n)).ne')
-  have hflat : ∀ i j, V.normalizedFlattening (finProdFinEquiv (i, j)) =
-      ((Real.sqrt n : ℂ)⁻¹) • V (i, j) := by
-    intro i j
-    simp only [normalizedFlattening, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat]
+  have hflat : ∀ i j, V.normalizedFlattening (i, j) = ((Real.sqrt n : ℂ)⁻¹) • V (i, j) :=
+    fun _ _ ↦ rfl
   have hVP : ∀ i j, V (i, j) * P = V (i, j) := by
     intro i j
-    have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT (finProdFinEquiv (i, j))
+    have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT (i, j)
     rw [hflat, Matrix.smul_mul] at h
     exact smul_right_injective _ hc h
   have hQV : ∀ i j, Q * V (i, j) = V (i, j) := by
     intro i j
-    have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT (finProdFinEquiv (i, j))
+    have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT (i, j)
     rw [hflat, Matrix.mul_smul] at h
     exact smul_right_injective _ hc h
   set T := Matrix.reducedProjection P Q with hTdef
