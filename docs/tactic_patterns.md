@@ -5335,7 +5335,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   implications proved by hand.
 - **Seen:** 8 sites in 6 files (`Circuit/Channel/PortMatching.lean`, since deleted,
   `MPS/AreaLaw/ViableSet/Basic.lean`, `PEPS/Approximation/Frames/RankOneBlocks.lean`,
-  `PEPS/FundamentalTheorem/Injective/EdgeMiddleKernelDescent.lean` twice,
+  `PEPS/FundamentalTheorem/Injective/EdgeMiddleKernelDescent.lean` twice, since deleted,
   `PEPS/Injectivity/Region/RegionKernelDescent.lean` twice,
   `PEPS/Injectivity/Regular/RegularBoundaryLocalAlgebra.lean`).
 - **Abstraction:** the goals are `(if P then a else b) = (if Q then a else b)`

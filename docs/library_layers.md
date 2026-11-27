@@ -2224,7 +2224,7 @@ Those directories belong to the upper layers, and are subdivided there.
 |---|---|---|
 | `RegionBlock` (48) | `Tensor/Region` (the blocked region tensor `RegionBlock`, `InsertSplit`); `Injectivity/Region` (union closure, kernel descent, reindexing, the lemmas for disjoint and overlapping unions) | `FundamentalTheorem/Normal/RegionInsertion` (23) and `FundamentalTheorem/Normal/CoarseThreeSite` (10), the argument of the theorem for normal PEPS; two parts used only by the torus argument go to `FundamentalTheorem/Torus/Window` |
 | `TorusWindowPeeling` (7) | none | `FundamentalTheorem/Torus/Window` |
-| `EdgeMiddlePhysical` (2) | none | `FundamentalTheorem/Injective` (`EdgeMiddlePhysical`, `EdgeMiddleKernelDescent`) |
+| `EdgeMiddlePhysical` (2) | none | `FundamentalTheorem/Injective` (`EdgeMiddlePhysical`) |
 | `TwoInjectiveComparison` (2) | none | `FundamentalTheorem/Injective` (`TwoBlockTensor`, `EndOperationComposition`) |
 | `VertexComplement` (2) | `Tensor/Region/VertexComplement`, `Injectivity/Region/VertexComplementInjective` | none |
 | the `TorusWindow*` and `Normal*` modules at the top level | `Injectivity/Normal` (blocking hypotheses and covers) | `FundamentalTheorem/Torus/Window`, `FundamentalTheorem/Normal` |
