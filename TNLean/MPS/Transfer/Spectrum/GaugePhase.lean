@@ -8,6 +8,7 @@ import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
+import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Topology.Algebra.GroupWithZero
 
@@ -271,17 +272,7 @@ variable [NeZero D]
 
 /-! ## Gauge-phase equivalence from unit-modulus overlap -/
 
-/-- **Bond-dimension equality from a non-decaying rectangular overlap.**
-
-Source: arXiv:1606.00608, Lemma `equalMPS`, statement lines 1080--1091 and
-proof lines 1093--1117.  Two irreducible trace-preserving tensors whose
-rectangular MPV overlap has norm tending to one have equal bond dimensions.
-Indeed, distinct bond dimensions would force the same overlap to tend to zero.
-
-This is the bond-dimension part of the source lemma, separated from the
-same-dimension gauge recovery below.  The relation to the full source statement
-is recorded in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
-theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+private theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP_fin
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA_irr : Kraus.IsIrreducibleFamily A)
@@ -303,6 +294,36 @@ theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
         (nhds (0 : ℝ)) := by
     simpa using hzero.norm
   exact one_ne_zero (tendsto_nhds_unique hOverlap hnorm_zero)
+
+/-- **Bond-dimension equality from a non-decaying rectangular overlap.**
+
+Source: arXiv:1606.00608, Lemma `equalMPS`, statement lines 1080--1091 and
+proof lines 1093--1117.  Two irreducible trace-preserving tensors whose
+rectangular MPV overlap has norm tending to one have equal bond dimensions.
+Indeed, distinct bond dimensions would force the same overlap to tend to zero.
+
+This is the bond-dimension part of the source lemma, separated from the
+same-dimension gauge recovery below.  The relation to the full source statement
+is recorded in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
+    (hA_irr : Kraus.IsIrreducibleFamily A)
+    (hB_irr : Kraus.IsIrreducibleFamily B)
+    (hA_norm : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : α, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap A B N‖) Filter.atTop (nhds (1 : ℝ))) :
+    D₁ = D₂ := by
+  -- The proof runs on the `Fin` alphabet obtained by relabelling along `Fintype.equivFin`.
+  let e := (Fintype.equivFin α).symm
+  exact dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP_fin
+    (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B)
+    ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e A).2 hA_irr)
+    ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e B).2 hB_irr)
+    ((e.sum_comp fun i ↦ (A i)ᴴ * A i).trans hA_norm)
+    ((e.sum_comp fun i ↦ (B i)ᴴ * B i).trans hB_norm)
+    (by simpa only [mpvOverlap_reindexPhysical_equiv] using hOverlap)
 
 /-- **Spectral radius lower bound from unit-modulus overlap.**
 
@@ -345,6 +366,21 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
   exact one_ne_zero h01
 
 
+private theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP_fin
+    (A B : MPSTensor d D)
+    (hA_irr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+    (hB_irr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    GaugePhaseEquiv A B :=
+  modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
+    A B hA_irr hB_irr hA_norm hB_norm
+    (mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
+      (A := A) (B := B) hOverlap)
+
 /-- **Gauge-phase equivalence from unit-modulus overlap.**
 
 Source: arXiv:1606.00608, Lemma equalMPS, statement lines 1080-1091 and
@@ -370,19 +406,24 @@ force the overlap to decay, so a non-decaying overlap forces equal dimensions),
 which is applied directly where blocks of differing dimension arise. Documented
 in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
-    (A B : MPSTensor d D)
-    (hA_irr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
-    (hB_irr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (A B : MPTensor α (Fin D))
+    (hA_irr : Kraus.IsIrreducibleFamily A)
+    (hB_irr : Kraus.IsIrreducibleFamily B)
+    (hA_norm : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : α, (B i)ᴴ * B i = 1)
     (hOverlap :
-      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
-        (nhds (1 : ℝ))) :
-    GaugePhaseEquiv A B :=
-  modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
-    A B hA_irr hB_irr hA_norm hB_norm
-    (mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
-      (A := A) (B := B) hOverlap)
+      Filter.Tendsto (fun N => ‖mpvOverlap A B N‖) Filter.atTop (nhds (1 : ℝ))) :
+    GaugePhaseEquiv A B := by
+  -- The proof runs on the `Fin` alphabet obtained by relabelling along `Fintype.equivFin`.
+  let e := (Fintype.equivFin α).symm
+  exact (gaugePhaseEquiv_reindexPhysical_equiv e A B).1
+    (gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP_fin
+      (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B)
+      ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e A).2 hA_irr)
+      ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e B).2 hB_irr)
+      ((e.sum_comp fun i ↦ (A i)ᴴ * A i).trans hA_norm)
+      ((e.sum_comp fun i ↦ (B i)ᴴ * B i).trans hB_norm)
+      (by simpa only [mpvOverlap_reindexPhysical_equiv] using hOverlap))
 
 end OverlapGauge
 
