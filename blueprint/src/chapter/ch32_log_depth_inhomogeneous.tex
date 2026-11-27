@@ -260,6 +260,7 @@ into a single constant.
         MPSChainTensor.blockTensor_eq_zero_of_support,
         VaryingBondChain.chainBlockTensor_zeroPad_eq_zero,
         VaryingBondChain.IsBlockInjective.isInjectiveOn,
+        VaryingBondChain.isBlockInjective_iff_forall_isInjectiveOn,
         VaryingBondChain.sum_star_padPair_mul,
         VaryingBondChain.sum_star_padPairs_mul_self,
         VaryingBondChain.mem_blockCorner_of_pairFamilyState_ne_zero,
@@ -269,8 +270,8 @@ into a single constant.
     On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
     the chain. If all bonds already have dimension $D$, zero padding leaves
     every matrix unchanged. If every block has at least one site, the blocked tensor $B_k$
-    of the padded chain vanishes outside $R_k$; if the blocked tensors
-    are injective, $B_k$ is injective on $R_k$. Padding preserves inner
+    of the padded chain vanishes outside $R_k$, and the blocked tensors
+    are injective if and only if every $B_k$ is injective on $R_k$. Padding preserves inner
     products of pairs, so padded unit pairs are unit vectors, and the product
     $\ket\Omega$ of padded pairs vanishes at every bond configuration $c$ with
     some $c_k\notin R_k$.

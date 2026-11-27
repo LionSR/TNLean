@@ -19,7 +19,6 @@ import TNLean.PEPS.Injectivity.Region.OverlapUnionBridgeRow
 import TNLean.PEPS.Injectivity.Region.OverlapUnionGeometry
 import TNLean.PEPS.Injectivity.Region.RegionKernelDescent
 import TNLean.PEPS.Injectivity.Region.ReindexInjectivity
-import TNLean.PEPS.Injectivity.Region.SingletonRegion
 import TNLean.PEPS.Injectivity.Region.UnionClosure
 import TNLean.PEPS.Injectivity.Region.UnionInjectivity
 import TNLean.PEPS.Injectivity.Region.VertexComplementInjective

@@ -34,6 +34,8 @@ positive-length treatment of zero blocks is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

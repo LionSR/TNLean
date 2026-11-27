@@ -3,7 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.FixedLineLimitSimplicity
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+import Mathlib.Analysis.Normed.Operator.Bilinear
+import Mathlib.LinearAlgebra.Quotient.Basic
+import Mathlib.LinearAlgebra.Eigenspace.Matrix
+import Mathlib.LinearAlgebra.Eigenspace.Zero
+import Mathlib.LinearAlgebra.Eigenspace.Charpoly
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import QICLean.Spectral.Eigenvalue.EigenspaceMap
 import TNLean.MPS.Symmetry.PeriodicRay.MpvRayLimit
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.OnSite.BlockingVirtualCovariance
@@ -52,6 +60,8 @@ It also contains the following results.
 * `MPSTensor.isCompact_setOf_isUnital`, `MPSTensor.exists_subsequence_unital_stationary_limit`:
   compactness of unital tensors and stationary densities.
 -/
+
+open MPTensor
 
 section CompactSupportedSequenceClass
 
@@ -599,14 +609,14 @@ theorem SamePositiveMpvRay.blockTensor {d D E : ℕ}
     (L : ℕ) (hL : 0 < L) :
     SamePositiveMpvRay (Kraus.blockTensor A L) (Kraus.blockTensor B L) := by
   intro N hN
-  let f := LinearMap.funLeft ℂ ℂ (blockedConfigEquiv d N L)
+  let f := LinearMap.funLeft ℂ ℂ (Kraus.blockedConfigEquiv d N L)
   have hMap : ∀ {k : ℕ} (C : MPSTensor d k),
       f (mpv C : (Fin (N * L) → Fin d) → ℂ) =
         (mpv (Kraus.blockTensor C L) : (Fin N → Fin (blockPhysDim d L)) → ℂ) := by
     intro k C
     funext s
     simp only [f, LinearMap.funLeft_apply, mpv, coeff,
-      ofFn_blockedConfigEquiv, evalWord_blockTensor]
+      Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor]
   have h := congrArg (fun S : Submodule ℂ (((Fin (N * L) → Fin d) → ℂ)) => S.map f)
     (hRay (N * L) (Nat.mul_pos hN hL))
   simpa only [Submodule.map_span, Set.image_singleton, hMap] using h
@@ -618,7 +628,7 @@ namespace MPSTensor
 private theorem isUnital_blockTensor_of_isUnital {d D : ℕ}
     (A : MPSTensor d D) (hA : Kraus.IsUnital A) (L : ℕ) :
     Kraus.IsUnital (blockTensor A L) := by
-  have h := transferMap_blockTensor_fixedPoint A L 1 (Kraus.map_one_of_isUnital A hA)
+  have h := Kraus.transferMap_blockTensor_fixedPoint A L 1 (Kraus.map_one_of_isUnital A hA)
   change ∑ i, blockTensor A L i * (blockTensor A L i)ᴴ = 1
   simpa only [Kraus.transferMap_apply, Matrix.mul_one] using h
 
@@ -627,7 +637,7 @@ private theorem spectrum_blockTensor_norm_le {d D L : ℕ}
     (hSpec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q) :
     ∀ z ∈ spectrum ℂ (Kraus.transferMap (blockTensor A L)), z ≠ 1 → ‖z‖ ≤ q ^ L := by
   intro z hz hzOne
-  rw [transferMap_blockTensor, spectrum.map_pow_of_pos _ hL] at hz
+  rw [Kraus.transferMap_blockTensor, spectrum.map_pow_of_pos _ hL] at hz
   obtain ⟨w, hw, rfl⟩ := hz
   have hwOne : w ≠ 1 := by
     intro hwOne

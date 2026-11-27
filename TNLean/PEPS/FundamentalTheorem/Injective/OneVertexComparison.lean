@@ -294,7 +294,6 @@ omit [Fintype V] in
     (virtualConfigSplitAt (G := G) A e).symm x f.1 = x.2 f := by
   simp [virtualConfigSplitAt, Equiv.piSplitAt_symm_apply, f.2]
 
-
 /-! ### Edge-inserted coefficient and the two-block identity
 
 The two-block inserted coefficient of the vertex/complement split equals an
@@ -654,26 +653,7 @@ theorem twoBlockInsertedCoeff_eq_edgeInsertedCoeff (A : Tensor G d) (v : V)
       ¬ (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2).1.1.1 = e.1.2)]
     exact (edgeInsertedCoeff_eq_twoBlock_right A e M σ₁ τ).symm
 
-
 /-! ### Bond-dimension reindex and same two-block insertions -/
-
-/-- Reindex a PEPS tensor along a bond-dimension equality, producing a tensor
-whose bond dimensions are the left side of the equality. -/
-noncomputable def reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
-    (h : bd = B.bondDim) : Tensor G d where
-  bondDim := bd
-  component v η σ := B.component v (fun ie => Fin.cast (congr_fun h ie.1) (η ie)) σ
-
-omit [Fintype V] in
-@[simp] theorem reindexTensor_bondDim (B : Tensor G d) {bd : Edge G → ℕ}
-    (h : bd = B.bondDim) : (reindexTensor (G := G) B h).bondDim = bd := rfl
-
-omit [Fintype V] in
-@[simp] theorem reindexTensor_component (B : Tensor G d) {bd : Edge G → ℕ}
-    (h : bd = B.bondDim) (v : V)
-    (η : (ie : IncidentEdge G v) → Fin (bd ie.1)) (σ : Fin d) :
-    (reindexTensor (G := G) B h).component v η σ =
-      B.component v (fun ie => Fin.cast (congr_fun h ie.1) (η ie)) σ := rfl
 
 omit [Fintype V] in
 /-- The edge-doubled configuration of a reindexed tensor, cast to the original

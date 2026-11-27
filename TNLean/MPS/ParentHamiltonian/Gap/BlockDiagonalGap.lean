@@ -24,6 +24,8 @@ The range comparison and preservation of the C1 length are documented in
 `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
+open MPTensor
+
 open Filter
 open scoped Topology ComplexOrder
 

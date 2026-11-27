@@ -34,37 +34,6 @@ namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
 
-private theorem adj_inf_sup_of_mem_edgeSet (e : Sym2 V) (he : e ∈ Γ.edgeSet) :
-    Γ.Adj e.inf e.sup := by
-  cases e using Sym2.ind with
-  | _ u v =>
-    change Γ.Adj u v at he
-    rcases le_total u v with h | h
-    · simpa [h] using he
-    · simpa [h] using he.symm
-
-/-- Ordered endpoint pairs and Mathlib's unordered graph edges describe the
-same edges. The inverse sorts the two endpoints. -/
-def orderedEdgeEquivEdgeSet : Edge Γ ≃ Γ.edgeSet where
-  toFun e := ⟨s(e.1.1, e.1.2), e.2.2⟩
-  invFun e := ⟨(e.1.inf, e.1.sup),
-    lt_of_le_of_ne (Sym2.inf_le_sup e.1)
-      (Γ.ne_of_adj (adj_inf_sup_of_mem_edgeSet e.1 e.2)),
-    adj_inf_sup_of_mem_edgeSet e.1 e.2⟩
-  left_inv e := by
-    apply Subtype.ext
-    simp [e.2.1.le]
-  right_inv e := Subtype.ext (Sym2.sortEquiv.left_inv e.1)
-
-/-- An edge of the induced region graph is exactly an edge of the ambient
-graph with both endpoints in the region. -/
-def inducedRegionEdgeEquiv (R : Finset V) :
-    Edge (Γ.induce (R : Set V)) ≃ {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} where
-  toFun e := ⟨⟨(e.1.1.1, e.1.2.1), e.2.1, e.2.2⟩, e.1.1.2, e.1.2.2⟩
-  invFun e := ⟨(⟨e.1.1.1, e.2.1⟩, ⟨e.1.1.2, e.2.2⟩), e.1.2.1, e.1.2.2⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
-
 variable [Fintype V] [DecidableRel Γ.Adj]
 
 /-- The internal-edge count agrees with the edge count of the induced graph. -/

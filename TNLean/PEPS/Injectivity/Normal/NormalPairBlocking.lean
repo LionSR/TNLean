@@ -123,37 +123,6 @@ def NormalEdgeBlockingData.pairRight {κ κ' : RegionInjectivityData V} {e : Edg
     NormalEdgeBlockingData κ' G e :=
   D.ofLE fun _ h => h.2
 
-/-! ### Boundary edges of a proper region on a connected graph
-
-A region that is neither empty nor the full vertex set has a boundary edge on a
-connected graph: a walk from a vertex inside the region to a vertex outside it
-crosses the boundary at some step. -/
-
-omit [DecidableRel G.Adj] in
-/-- On a connected graph, a nonempty region different from the full vertex set
-has a boundary edge.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
-`Papers/1804.04964/paper_normal.tex` (the comparison regions are compared
-through their boundary bonds, which exist because the lattice is connected). -/
-theorem nonempty_regionBoundaryEdge_of_connected (hconn : G.Connected)
-    {R : Finset V} (hR : R.Nonempty) (hRtop : R ≠ Finset.univ) :
-    Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} := by
-  classical
-  obtain ⟨u, hu⟩ := hR
-  obtain ⟨w, hw⟩ : ∃ w : V, w ∉ R := by
-    by_contra hall
-    push Not at hall
-    exact hRtop (Finset.eq_univ_iff_forall.mpr hall)
-  obtain ⟨p⟩ := hconn.preconnected u w
-  obtain ⟨dart, -, hd1, hd2⟩ :=
-    p.exists_boundary_dart (↑R : Set V) (by simpa using hu) (by simpa using hw)
-  have hd1' : dart.fst ∈ R := by simpa using hd1
-  have hd2' : dart.snd ∉ R := by simpa using hd2
-  rcases ManyBody.Edge.ofAdj_endpoints dart.adj with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · exact ⟨⟨ManyBody.Edge.ofAdj dart.adj, Or.inl ⟨h1.symm ▸ hd1', h2.symm ▸ hd2'⟩⟩⟩
-  · exact ⟨⟨ManyBody.Edge.ofAdj dart.adj, Or.inr ⟨h1.symm ▸ hd2', h2.symm ▸ hd1'⟩⟩⟩
-
 /-! ### The one-site comparison pair as an `insert` -/
 
 /-- The region containing the distinguished site is the comparison region with

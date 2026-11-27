@@ -8,7 +8,9 @@ import TNLean.MPS.CanonicalForm.FixedPointApproximation.ApproximationError
 import TNLean.MPS.Tensor.Chain.BlockTensor
 import TNLean.MPS.Preparation.Circuit.RemainderBlocks
 import TNLean.MPS.Preparation.Inhomogeneous.InhomogeneousSequence
-import TNLean.MPS.Tensor.InjectivityCutoff
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import QICLean.Analysis.Real.PowerExponential
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.SecondOrderOverlap
 import QICLean.Analysis.Norm.NormedRingTelescoping
 
@@ -65,6 +67,8 @@ assumption. A nonzero periodic target is required.
   the inhomogeneous short-range correlated MPS discussion.
   The uniform ordered-mixing estimate is an additional quantitative hypothesis.
 -/
+
+open MPTensor
 
 section InhomogeneousOverlap
 

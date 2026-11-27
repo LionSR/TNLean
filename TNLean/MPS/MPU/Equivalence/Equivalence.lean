@@ -158,7 +158,7 @@ noncomputable def FiniteChainOperatorSymmetry.block
     FiniteChainOperatorSymmetry (Kraus.blockPhysDim d k) where
   applicable := {N | N * k ∈ S.applicable}
   action := fun {N} X ↦
-    let e := MPSTensor.blockedConfigEquiv d N k
+    let e := Kraus.blockedConfigEquiv d N k
     Matrix.reindex e.symm e.symm (S.action (Matrix.reindex e e X))
 
 /-- The blocked action is conjugation along the canonical blocked-configuration
@@ -170,10 +170,10 @@ theorem FiniteChainOperatorSymmetry.block_action
     (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d k))
       (Fin N → Fin (Kraus.blockPhysDim d k)) ℂ) :
     (S.block k).action X =
-      Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
-        (MPSTensor.blockedConfigEquiv d N k).symm
-        (S.action (Matrix.reindex (MPSTensor.blockedConfigEquiv d N k)
-          (MPSTensor.blockedConfigEquiv d N k) X)) := rfl
+      Matrix.reindex (Kraus.blockedConfigEquiv d N k).symm
+        (Kraus.blockedConfigEquiv d N k).symm
+        (S.action (Matrix.reindex (Kraus.blockedConfigEquiv d N k)
+          (Kraus.blockedConfigEquiv d N k) X)) := rfl
 
 /-- Invariance transports through the canonical identity-ancilla embedding for
 a coherent family of symmetries.
@@ -205,7 +205,7 @@ theorem IsInvariantUnderSymmetry.blockTensor
   intro N hN
   rw [mpo_blockTensor_eq_reindex]
   simp only [FiniteChainOperatorSymmetry.block_action]
-  let e := MPSTensor.blockedConfigEquiv d N k
+  let e := Kraus.blockedConfigEquiv d N k
   have hreindex : Matrix.reindex e e
       (Matrix.reindex e.symm e.symm (mpo U (N * k))) = mpo U (N * k) := by
     ext σ τ

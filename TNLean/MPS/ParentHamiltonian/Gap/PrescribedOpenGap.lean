@@ -25,6 +25,8 @@ Lemma `commutation` (ii), lines 2443--2464. The interaction range increases
 with the prescribed lower bound. No improvement at a fixed range is asserted.
 -/
 
+open MPTensor
+
 open Filter
 open scoped BigOperators Topology ComplexOrder InnerProductSpace
 

@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NestedPatches.AdaptivePatchSupply
-import TNLean.PEPS.ParentHamiltonian.Placement.DependentRegionCoordinates
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 import QICLean.ManyBody.Sites.Lattice.Rectangle
 import TNLean.PEPS.Injectivity.Normal.NormalBlocking
-import TNLean.PEPS.AreaLaw.Polygons.Squares.ClosedSquare
+import QICLean.ManyBody.Sites.Lattice.ClosedSquare
 
 /-!
 # Square patches from nested cylinder spaces
@@ -45,6 +45,13 @@ lines 53–54, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (coordinateRangeProjector_dependentRegionCylinder dependentRegionCylinder
+  mem_dependentRegionCylinder nestedCylinderInnovation
+  nestedCylinderInnovation_pairwise_orthogonal nestedCylinderInnovation_projector_sum
+  sum_finrank_nestedCylinderInnovation_le)
+open Matrix (coordinateRangeProjector coordinateRangeProjector_isStarProjection
+  coordinateRangeProjector_mulVec_eq_self_iff coordinateSubspaceES)
 
 section
 
@@ -229,9 +236,9 @@ theorem squareSample_integerCoordinates (Λ : Finset (ℤ × ℤ))
     (center : ℝ × ℝ) (r : ℝ) :
     EncodedFrame.squareSample
       (fun x : ↥Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) center r =
-      AreaLaw.Geometry.closedSquareSample Λ center r := by
+      ManyBody.closedSquareSample Λ center r := by
   ext x
-  simp [EncodedFrame.squareSample, AreaLaw.Geometry.mem_closedSquareSample,
+  simp [EncodedFrame.squareSample, ManyBody.mem_closedSquareSample,
     Prod.dist_eq, Real.dist_eq]
 
 /-- Translating the integer embedding by one in each coordinate gives the
@@ -290,7 +297,7 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
       Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
     simpa only [squareSample_integerCoordinates] using
       pow_le_pow_right' hq
-        (AreaLaw.Geometry.card_closedSquareSample_le_eightyOne Λ z hu.le hu4)
+        (ManyBody.card_closedSquareSample_le_eightyOne Λ z hu.le hu4)
   · exact le_antisymm (by simpa only [sub_self, norm_zero] using he) (norm_nonneg _)
 
 end TNLean.PEPS.Approximation

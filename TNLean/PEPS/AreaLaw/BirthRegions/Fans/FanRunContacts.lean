@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRuns
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.ElementarySideOpponents
 

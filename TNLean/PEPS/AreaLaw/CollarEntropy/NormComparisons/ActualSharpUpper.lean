@@ -8,10 +8,11 @@ import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusMarginalMoments
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ReceivingRegions
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.ManyBody.Replica.Bell.PrevectorSharpUpper
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
 
 /-!
 # A sharp upper estimate along the actual fill and charge trees
@@ -30,6 +31,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_schmidtBellPrevector_sharp_upper`: the
   common physical label sequence and its actual sharp upper estimate.
 -/
+
+open ManyBody (exists_global_schmidtBellPrevector)
 
 section ActualSharpUpper
 

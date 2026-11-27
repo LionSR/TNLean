@@ -62,6 +62,8 @@ other than "last in the second reduction" hold.
 arXiv:1708.00029, `thm:bdequal`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

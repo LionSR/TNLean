@@ -39,6 +39,8 @@ proves its key properties.
 * Perez-Garcia et al. (arXiv:quant-ph/0608197) Section 4.1
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset MPSTensor
 

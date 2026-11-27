@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Sites.PairSwapPermutation
@@ -15,7 +15,7 @@ import QICLean.ManyBody.Sites.ThreeRegion.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap
 import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import QICLean.Analysis.Norm.L2OpNormReindex
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
+import QICLean.ManyBody.Hamiltonian.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.ConfigurationMap
@@ -79,6 +79,8 @@ September 24, 2026, `00-introduction.tex`, `eq:model`, and
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 open scoped Matrix.Norms.L2Operator
@@ -105,19 +107,25 @@ theorem _root_.ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_e
           doubledHamiltonian (h.term (.inr e))) := by
   classical
   intro pr F
-  let δ : Matrix (Configuration L q) (Configuration L q) ℂ →ₗ[ℂ]
-      Matrix (Configuration L q × Configuration L q)
-        (Configuration L q × Configuration L q) ℂ :=
+  let δ : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+      (Config (Qudits (SquareLatticeVertex L L) q)) ℂ →ₗ[ℂ]
+      Matrix (Config (Qudits (SquareLatticeVertex L L) q) ×
+          Config (Qudits (SquareLatticeVertex L L) q))
+        (Config (Qudits (SquareLatticeVertex L L) q) ×
+          Config (Qudits (SquareLatticeVertex L L) q)) ℂ :=
     (LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id).comp
       ((Matrix.kroneckerBilinear (R := ℂ)).flip
-          (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
+          (1 : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+            (Config (Qudits (SquareLatticeVertex L L) q)) ℂ) +
         Matrix.kroneckerBilinear (R := ℂ)
-          (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
+          (1 : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+            (Config (Qudits (SquareLatticeVertex L L) q)) ℂ))
   change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R),
     δ (h.term (.inr e))
   simp only [ManyBody.Interaction.hamiltonian, Fintype.sum_sum_type, map_add, map_sum]
   have hcancel {S : Finset (SquareLatticeVertex L L)}
-      {A : Matrix (Configuration L q) (Configuration L q) ℂ}
+      {A : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+        (Config (Qudits (SquareLatticeVertex L L) q)) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
       (hS : S ⊆ R ∨ Disjoint S R) :
       δ A = 0 := by
@@ -234,7 +242,8 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
   change F * K * Fᴴ - K = ∑ e ∈ boundary,
     (F * Matrix.reindex p p (doubledHamiltonian (h.term (.inr e))) * Fᴴ -
       Matrix.reindex p p (doubledHamiltonian (h.term (.inr e)))) at hsum
-  have hnorm (A : Matrix (Configuration L q) (Configuration L q) ℂ) :
+  have hnorm (A : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+      (Config (Qudits (SquareLatticeVertex L L) q)) ℂ) :
       ‖F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
         Matrix.reindex p p (doubledHamiltonian A)‖ ≤ 4 * ‖A‖ := by
     simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
@@ -244,7 +253,8 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
           (Matrix.reindex pr pr (ManyBody.pairSwapOp R))ᴴ - doubledHamiltonian A)).trans_le
         (EncodedFrame.norm_pairSwapOp_conj_doubledHamiltonian_sub_le R A)
   have hplain (S : Finset (SquareLatticeVertex L L))
-      {A : Matrix (Configuration L q) (Configuration L q) ℂ}
+      {A : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+        (Config (Qudits (SquareLatticeVertex L L) q)) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       Matrix.reindex p p (doubledHamiltonian A) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
@@ -255,7 +265,8 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
     ext x y
     rfl
   have hlocal (S : Finset (SquareLatticeVertex L L))
-      {A : Matrix (Configuration L q) (Configuration L q) ℂ}
+      {A : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+        (Config (Qudits (SquareLatticeVertex L L) q)) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
           Matrix.reindex p p (doubledHamiltonian A) ∈
@@ -338,7 +349,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
     (R : Finset (SquareLatticeVertex L L)) :
     let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
     let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
-    let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+    let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
     let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp R))
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
     ∃ g : ManyBody.PlaneInteraction (ManyBody.rectangularDomain L L) (q * q) 1,
@@ -399,13 +410,18 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
     Matrix.isHermitian_mul_mul_conjTranspose F ((hDH i).reindex p)
   -- The doubled map is additive in its argument, so summing the doubled Hermitian
   -- parts recovers the doubled total.
-  let D : Matrix (Configuration L q) (Configuration L q) ℂ →ₗ[ℂ]
-      Matrix (Configuration L q × Configuration L q)
-        (Configuration L q × Configuration L q) ℂ :=
+  let D : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+      (Config (Qudits (SquareLatticeVertex L L) q)) ℂ →ₗ[ℂ]
+      Matrix (Config (Qudits (SquareLatticeVertex L L) q) ×
+          Config (Qudits (SquareLatticeVertex L L) q))
+        (Config (Qudits (SquareLatticeVertex L L) q) ×
+          Config (Qudits (SquareLatticeVertex L L) q)) ℂ :=
     (Matrix.kroneckerBilinear (R := ℂ)).flip
-        (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
+        (1 : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+          (Config (Qudits (SquareLatticeVertex L L) q)) ℂ) +
       Matrix.kroneckerBilinear (R := ℂ)
-        (1 : Matrix (Configuration L q) (Configuration L q) ℂ)
+        (1 : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+          (Config (Qudits (SquareLatticeVertex L L) q)) ℂ)
   have hDsum : (∑ i : SquareLatticeSiteOrEdge L L,
       Matrix.doubledHamiltonian (h.hermitianPart.term i)) =
       Matrix.doubledHamiltonian h.hamiltonian := by
@@ -438,7 +454,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
         (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
         (D' := (ManyBody.rectangleSupport i).val)
         (fun v ↦ (ManyBody.mem_rectangleSupport_iff i v).symm) (hBsupport i)
-      rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+      rw [ManyBody.siteConfigurationEquiv_rectangleSiteEquiv] at hs
       exact hs
     · rw [Function.extend_apply' _ _ _ hx]
       exact zero_mem _

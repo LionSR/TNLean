@@ -16,6 +16,8 @@ Section II.F.2, lines 953–993; they do not by themselves reconstruct every
 longer periodic ray of an arbitrary noninjective tensor.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

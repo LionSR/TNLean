@@ -29,6 +29,8 @@ when the protocol is assembled in `DyadicProtocolConsequences`.
   (lines 183–187), frozen auxiliary frames (lines 620–624) and the counts (lines 649–667).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -45,7 +47,7 @@ theorem scheduleIndex_getElem {i : ℕ} (hi : i < (eventSchedule k).length) :
     scheduleIndex (eventSchedule k)[i] = i :=
   (nodup_eventSchedule k).idxOf_getElem i hi
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   {ε₀ t : ℝ} (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * t ∧ ε₀ * t ≤ B₀ * Real.log L)
 

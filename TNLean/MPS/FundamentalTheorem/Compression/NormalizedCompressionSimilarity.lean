@@ -23,6 +23,8 @@ are explicit additional hypotheses, rather than conclusions of the
 unrestricted asymmetric compression theorem (P5, Theorem 7.7).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Matrix
 

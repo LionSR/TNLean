@@ -16,7 +16,6 @@ import TNLean.MPS.Operator.Boundary.BoundaryBiorthogonal
 import TNLean.MPS.Operator.Boundary.BoundaryBlockFusion
 import TNLean.MPS.Operator.Boundary.BoundaryClosedness
 import TNLean.MPS.Operator.Boundary.BoundaryCut
-import TNLean.MPS.Operator.Boundary.BoundaryDecompositionComparison
 import TNLean.MPS.Operator.Boundary.BoundaryDecompositionCoordinates
 import TNLean.MPS.Operator.Boundary.BoundaryDecompositionIntertwining
 import TNLean.MPS.Operator.Boundary.BoundaryRepresentation

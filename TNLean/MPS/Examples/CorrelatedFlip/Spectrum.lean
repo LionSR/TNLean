@@ -292,7 +292,7 @@ private theorem mpo_four_eq_purification :
   ext σ τ
   simp only [purificationDensity, Matrix.of_apply, Matrix.sum_apply,
     Matrix.vecMulVec_apply, Pi.star_apply]
-  simp_rw [MPSTensor.mpv_eq, MPSTensor.coeff_eq,
+  simp_rw [MPTensor.mpv_eq, MPTensor.coeff_eq,
     MPSTensor.evalWord_ofFn_eq_prod]
   simp only [purificationTensor, MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat]

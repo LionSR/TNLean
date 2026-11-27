@@ -26,6 +26,8 @@ main.tex lines 850--880; see
 `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 -/
 
+open MPTensor
+
 namespace MPSTensor.ShortMomentum
 
 /-- The actual one-step boundary-space intersection holds from the

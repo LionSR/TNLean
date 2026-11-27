@@ -12,3 +12,35 @@ import TNLean.MPS.Examples.BondTwoSingleton.BondTwoSingletonBaseModel
 import TNLean.MPS.Examples.BondTwoSingleton.BondTwoSingletonGramBoundary
 import TNLean.MPS.Examples.BondTwoSingleton.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.Examples.BondTwoSingleton.LengthDependentRFPExample
+
+/-!
+# The bond-two singleton model
+
+An explicit test model motivated by CPSV16 (arXiv:1606.00608), Appendix C.4, lines 2048–2057,
+and not a tensor stated there: a matrix-unit singleton retained tensor of bond dimension two,
+packaged as an ambient bond-four matrix product density operator whose closed operators are
+unnormalized rank-one GHZ operators. It is a density operator in literal canonical form with a
+tensor-attached algebra clause whose single coefficient is `(√(1/2))^L`, so it answers the
+question after Theorem 4.14 (lines 995–997) for this presentation: a renormalization fixed
+point whose structure coefficients depend on the length. A companion Gram-boundary calculation
+shows that a nonunitary physical similarity destroys positivity, the metric argument of
+Proposition 4.13 (lines 1898–1921); the missing two-site attachment is documented in
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
+## General theorems instantiated
+
+* `MPOTensor.BNTAlgebraTensorClause.isRFPViaTS` (reverse implication of the algebra theorem):
+  the tensor-attached clause and the canonical form make the model a renormalization fixed
+  point, `MPOTensor.IsRFPViaTS`; arXiv:1606.00608, Theorem 4.14(ii) to (i) and Appendix C.4.
+* `MPSTensor.IsCPSVCanonicalForm` and `MPSTensor.IsCPSVBasisOfNormalTensors` (canonical forms):
+  the doubled-index tensor is in literal canonical form with the singleton as basis;
+  arXiv:1606.00608, eq. `II_CF1`.
+* `MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id` and
+  `MPSTensor.isNormalTensor_of_isNormal_leftCanonical` (normal tensors): normality of the
+  retained blocks.
+* `MPOTensor.mpo_cyclicEdgeWeightTensor` (cyclic nearest-neighbour weights): the ambient
+  closed operators at positive length are the unnormalized rank-one GHZ operators;
+  arXiv:1606.00608, Appendix C.2, eq. `sigmaNK2`.
+* `MPOTensor.BNTLabelCoefficientFamily.LengthIndependent` (length-independent coefficients):
+  the displayed coefficient family fails it, since `c^{(1)} ≠ c^{(2)}`.
+-/

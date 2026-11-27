@@ -82,7 +82,7 @@ theorem ti_tensors_single_gauge
     (A B : MPSTensor d D)
     (hn : 0 < n)
     (hA : Kraus.IsInjective A)
-    (hMPV : MPSTensor.SameMPV
+    (hMPV : MPTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
     ∃ X : GL (Fin D) ℂ, ∀ i : Fin d,
@@ -107,7 +107,7 @@ theorem ti_tensors_collapse_to_single_gauge
     (A B : MPSTensor d D)
     (hn : 0 < n)
     (hA : Kraus.IsInjective A)
-    (hMPV : MPSTensor.SameMPV
+    (hMPV : MPTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
     ∃ Z : Matrix (Fin D) (Fin D) ℂ, ∃ lam : ℂ,
@@ -132,13 +132,13 @@ theorem ti_reduction_corollary
     (A B : MPSTensor d D)
     (hn : 0 < n)
     (hA : Kraus.IsInjective A)
-    (hMPV : MPSTensor.SameMPV
+    (hMPV : MPTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
     (∃ X : GL (Fin D) ℂ, ∀ i : Fin d,
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
     Kraus.IsInjective B := by
   obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
-  exact ⟨⟨X, hGauge⟩, MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
+  exact ⟨⟨X, hGauge⟩, MPTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
 
 end MPSChainTensor

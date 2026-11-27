@@ -265,8 +265,11 @@ theorem norm_vectorOfParameters_sub_le_one {D n : ℕ}
         Q.1 * (ofParameters A Q.2).coeff ((leftConfigOfFinEquiv hn).symm x)‖ ≤ C
       exact norm_scalar_mul_coeff_ofParameters_sub_le_one A P Q hδ hQscalar hQ
         hscalarclose hclose ((leftConfigOfFinEquiv hn).symm x))
+  have hcard : (ManyBody.interval L 0 n).card = min L n := by
+    rw [← Fin.card_filter_val_lt]
+    simp [ManyBody.interval]
   simpa only [C, ManyBody.RegionConfig, Fintype.card_pi, Fintype.card_fin,
-    Fintype.card_coe, card_leftBlock, min_eq_right hn, Finset.prod_const, Finset.card_univ,
+    Fintype.card_coe, hcard, min_eq_right hn, Finset.prod_const, Finset.card_univ,
     Nat.cast_mul, Nat.cast_pow, mul_assoc] using hbound
 
 /-- Finite open-boundary tensor contraction is continuous as a map into the complete

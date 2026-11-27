@@ -143,7 +143,7 @@ lemma sectorMatrix_span_eq_top :
     Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_range_self k))
 
 /-- The diagonal tensor is injective already at one site. -/
-lemma tensor_isInjective : tensor.IsInjective := by
+lemma tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
   apply top_unique
   rw [← sectorMatrix_span_eq_top]
   apply Submodule.span_le.2

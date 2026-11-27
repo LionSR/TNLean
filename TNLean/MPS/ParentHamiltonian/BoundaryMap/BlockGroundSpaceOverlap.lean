@@ -16,6 +16,8 @@ This follows Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma `disjoint`,
 equations `C1C2` and `limP12`.
 -/
 
+open MPTensor
+
 open scoped Matrix InnerProductSpace ComplexOrder
 
 namespace MPSTensor
@@ -33,16 +35,22 @@ theorem adjoint_groundSpaceMapES_comp_tendsto_zero_of_spectralRadius_lt_one
   adjoint_groundSpaceMapES_comp_tendsto_zero A B
     (Kraus.mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one B A hgap)
 
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D₁ D₂ : ℕ}
 variable [NeZero D₁] [NeZero D₂]
 
-set_option linter.style.longLine false in
 /-- The ground spaces of two primitive tensors become uniformly orthogonal
 when the mixed transfer map has spectral radius less than one. This combines
 the boundary normalization and mixed-transfer estimates in Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equations `C1C2` and `limP12`.
 The spectral-radius hypothesis is supplied separately by inequivalence of the
 normalized blocks. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_mixed_gap
+theorem eventually_norm_inner_groundSpaceES_le_of_mixed_gap
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
@@ -75,17 +83,16 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundS
   exact h.trans (mul_le_mul_of_nonneg_right
     (mul_le_mul_of_nonneg_right hn.le (norm_nonneg x)) (norm_nonneg y))
 
-set_option linter.style.longLine false in
 /-- Distinct normalized primitive blocks have asymptotically orthogonal local
 ground spaces. This is Nachtergaele, arXiv:cond-mat/9410110, equation
 `limitepsilonm` (lines 1661--1675), in the trace-preserving tensor convention.
 Inequivalence is imposed only when the bond dimensions agree. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_inequivalent
+theorem eventually_norm_inner_groundSpaceES_le_of_inequivalent
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A)
+    (hDistinct : ∀ h : D₂ = D₁, ¬ MPTensor.GaugePhaseEquiv (h ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ n in Filter.atTop, ∀ x ∈ groundSpaceES A n, ∀ y ∈ groundSpaceES B n,
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
@@ -100,4 +107,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundS
       (hB.isIrreducibleMap_of_posDef hσ) (hA.isIrreducibleMap_of_posDef hρ)
       hB.norm hA.norm hD
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

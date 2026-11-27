@@ -107,7 +107,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Left-canonical normalization under blocking]
     \label{thm:left_canonical_blocking}
-    \lean{MPSTensor.leftCanonical_blockTensor}
+    \lean{Kraus.IsTP.blockTensor}
     \leanok
     \uses{def:blocked_tensor}
     If a finite matrix family satisfies
@@ -140,8 +140,8 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Transfer map of a blocked tensor]
     \label{thm:blocked_transfer_map}
-    \lean{MPSTensor.transferMap_blockTensor,
-        MPSTensor.transferMap_blockTensor_apply}
+    \lean{Kraus.transferMap_blockTensor,
+        Kraus.transferMap_blockTensor_apply}
     \leanok
     \uses{def:blocked_tensor,def:transfer_map}
     For every tensor $A$ and every $L$, $\E_{A^{[L]}}=\E_A^{\,L}$.
@@ -158,7 +158,7 @@ through its own period agrees with the directly $p$-blocked block.
     \label{lem:blocked_irreducibility_direct_support}
     \lean{Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible}
     \lean{Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily}
-    \lean{MPSTensor.transferMap_blockTensor_fixedPoint}
+    \lean{Kraus.transferMap_blockTensor_fixedPoint}
     \lean{Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM}
     \leanok
     \uses{def:blocked_tensor,def:irreducible_tensor,def:primitive_mps,thm:left_canonical_blocking,thm:channel_posdef_fixed_point_unique_irreducible,thm:transfer_channel}
@@ -194,7 +194,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Blocking preserves irreducibility for primitive irreducible blocks]%
     \label{thm:blocked_irreducible_tp_primitive}
-    \lean{MPSTensor.isIrreducibleFamily_blockTensor_of_tp_primitive_irr}
+    \lean{Kraus.isIrreducibleFamily_blockTensor_of_tp_primitive_irr}
     \leanok
     \uses{def:blocked_tensor,def:irreducible_tensor,def:primitive_mps,lem:blocked_irreducibility_direct_support,thm:transfer_channel}
     Let $A$ be left-canonical, irreducible, primitive, of positive bond
@@ -257,7 +257,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Extra blocking of primitive irreducible sector blocks]%
     \label{thm:tp_primitive_irreducible_extra_blocking}
-    \lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
+    \lean{Kraus.tp_primitive_irreducible_extra_blocking}
     \leanok
     \uses{def:blocked_tensor,thm:blocked_irreducible_tp_primitive}
     Let $A$ have positive bond dimension and be trace-preserving, primitive,
@@ -324,7 +324,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Eventual nonzero proportionality survives blocking]%
     \label{thm:eventual_nonzero_proportional_mpv_blocking}
-    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.blockTensor}\leanok
+    \lean{MPTensor.EventuallyNonzeroProportionalMPV₂.blockTensor}\leanok
     \uses{def:blocked_tensor,def:eventually_nonzero_proportional_mpv}
     If two tensors have eventually nonzero proportional MPV coefficients, then
     so do their blocked tensors after any positive blocking length.

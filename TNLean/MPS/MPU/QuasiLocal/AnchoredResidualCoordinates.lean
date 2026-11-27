@@ -120,7 +120,7 @@ noncomputable def anchoredResidualConfig (d N L p m s : ℕ) (a : ℤ)
     (i₂ : Fin s → Fin d) : Config d (finiteChainRegion a N) :=
   finiteChainConfigEquiv d N a
     (fun k =>
-      Fin.append i₀ (Fin.append (MPSTensor.blockedConfigEquiv d m L i₁) i₂)
+      Fin.append i₀ (Fin.append (Kraus.blockedConfigEquiv d m L i₁) i₂)
         (Fin.cast hN k))
 
 /-- The ordered residual-prefix, complete-block, and residual-suffix words
@@ -130,7 +130,7 @@ noncomputable def anchoredResidualConfigEquiv
     (((Fin p → Fin d) × (Fin m → Fin (Kraus.blockPhysDim d L))) ×
       (Fin s → Fin d)) ≃ Config d (finiteChainRegion a N) :=
   ((Equiv.prodCongr
-      (Equiv.prodCongr (Equiv.refl _) (MPSTensor.blockedConfigEquiv d m L))
+      (Equiv.prodCongr (Equiv.refl _) (Kraus.blockedConfigEquiv d m L))
       (Equiv.refl _)).trans
     (Equiv.prodCongr (Fin.appendEquiv p (m * L)) (Equiv.refl _))).trans
     (Fin.appendEquiv (p + m * L) s) |>.trans
@@ -157,7 +157,7 @@ theorem anchoredResidualConfig_apply_site (d N L p m s : ℕ) (a : ℤ)
     (i₂ : Fin s → Fin d) (k : Fin (p + (m * L + s))) :
     anchoredResidualConfig d N L p m s a hN i₀ i₁ i₂
         (finiteChainSiteEquiv a N (Fin.cast hN.symm k)) =
-      Fin.append i₀ (Fin.append (MPSTensor.blockedConfigEquiv d m L i₁) i₂) k := by
+      Fin.append i₀ (Fin.append (Kraus.blockedConfigEquiv d m L i₁) i₂) k := by
   rw [anchoredResidualConfig, finiteChainConfigEquiv_apply_site]
   simp
 
@@ -207,10 +207,10 @@ theorem finiteChainMPOMatrix_apply_anchoredResidualConfig
         (anchoredResidualConfig d N L p m s a hN j₀ j₁ j₂) =
       MPOTensor.mpo U N
         (fun k => Fin.append i₀
-          (Fin.append (MPSTensor.blockedConfigEquiv d m L i₁) i₂)
+          (Fin.append (Kraus.blockedConfigEquiv d m L i₁) i₂)
           (Fin.cast hN k))
         (fun k => Fin.append j₀
-          (Fin.append (MPSTensor.blockedConfigEquiv d m L j₁) j₂)
+          (Fin.append (Kraus.blockedConfigEquiv d m L j₁) j₂)
           (Fin.cast hN k)) := by
   rw [finiteChainMPOMatrix_apply_config]
   simp only [anchoredResidualConfig, Equiv.symm_apply_apply]

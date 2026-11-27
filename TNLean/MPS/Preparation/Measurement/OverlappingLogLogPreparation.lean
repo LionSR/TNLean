@@ -55,6 +55,8 @@ these results do not close the unrestricted source theorem. See
 * arXiv:1606.00608, Section II.C and Appendix A, canonical reduction after blocking.
 -/
 
+open MPTensor
+
 section
 
 open Matrix MPSTensor QuantumCircuit

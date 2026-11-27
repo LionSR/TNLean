@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.Norm.NeumannInverse
+import QICLean.Analysis.Calculus.NeumannInverse
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramConvergence
 import QICLean.Channel.FixedPoint.MeanErgodic.LimitingGramMetric
 
@@ -189,7 +189,20 @@ theorem geometric_smallness_at_c3_lengths {c r : ℝ} (hc : 0 < c) (hr_pos : 0 <
     (mul_le_mul_of_nonneg_left (hpow hlm) hc.le).trans_lt hsmall
   exact ⟨hsmall_of_le (by omega), hsmall_of_le (by omega), hsmall_of_le (by omega)⟩
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+local instance : HasSummableGeomSeries
+    (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
+  have : CompleteSpace
+      (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
+    FiniteDimensional.complete ℂ _
+  inferInstance
+
 /-- For every relative tolerance \(a\) strictly between zero and one, the
 finite-volume Gram operator of a primitive MPS tensor is eventually a unit.
 Its ring inverse differs from the inverse of the reshuffled fixed-point
@@ -200,7 +213,7 @@ projection by at most
 Positive definiteness of \(\rho\) is explicit: primitivity alone only supplies a
 positive-semidefinite fixed point and does not justify invertibility of the
 limiting Gram operator. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceGram_isUnit_and_inverse_bound
+theorem eventually_groundSpaceGram_isUnit_and_inverse_bound
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
     (ha_lt_one : a < 1) :
@@ -233,7 +246,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceGram_is
 tensor converge to the inverse of the nonidentity limiting Gram operator.
 Positive definiteness of the fixed point is required to place the limit in the
 open set of units. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_tendsto
+theorem groundSpaceGram_ringInverse_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     Filter.Tendsto (fun n => Ring.inverse (groundSpaceGram A n)) Filter.atTop
@@ -245,7 +258,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_t
     simpa only [Kinf] using hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   exact NormedRing.inverse_tendsto_of_tendsto_of_isUnit hKinf hconv
 
-set_option linter.style.longLine false in
 /-- Eventually the Hilbert-space boundary map is injective. For any relative
 tolerance \(a\in(0,1)\), one may choose an injectivity proof so that its
 inverse-Gram operator is exactly the ring inverse of the finite-volume Gram
@@ -254,7 +266,7 @@ reshuffled fixed-point projection.
 
 The equality is independent of the chosen injectivity proof by proof
 irrelevance. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceMapES_injective_and_inverseGram_bound
+theorem eventually_groundSpaceMapES_injective_and_inverseGram_bound
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
     (ha_lt_one : a < 1) :
@@ -278,4 +290,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceMapES_i
   · rw [ContinuousLinearMap.inverseGram_eq_ringInverse]
     simpa only [groundSpaceGram] using hn.2
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

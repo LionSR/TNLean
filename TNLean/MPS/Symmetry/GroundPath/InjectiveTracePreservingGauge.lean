@@ -23,6 +23,8 @@ arXiv:2307.01696, the canonical gauge preceding equation (5);
 SPC11, arXiv:1010.3732, Section II.F, lines 929–953.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder

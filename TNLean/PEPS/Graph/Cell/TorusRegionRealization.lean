@@ -13,6 +13,10 @@ import Mathlib.Topology.Algebra.Module.LocallyConvex
 import Mathlib.Topology.Homotopy.Lifting
 import TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity
 import Mathlib.Analysis.Convex.Contractible
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.Normed.Group.AddCircle
+import Mathlib.Topology.Algebra.Module.ModuleTopology
 
 /-!
 # Local path connectedness of finite compact cell images

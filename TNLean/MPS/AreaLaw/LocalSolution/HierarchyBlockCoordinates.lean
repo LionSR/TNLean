@@ -8,8 +8,8 @@ import QICLean.Algebra.Combinatorics.DyadicBlock
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.ManyBody.Sites.Hierarchy.SupportedHierarchy
-import QICLean.ManyBody.Sites.ProductOperatorTrace
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductOperatorTrace
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Spectral.LowEnergy.HierarchyLevels
 

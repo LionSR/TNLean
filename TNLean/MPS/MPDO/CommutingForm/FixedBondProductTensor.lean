@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Operator.PhysicalSector.CommutingFormBridge
+import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorBondTwoSite
 import TNLean.MPS.Operator.Periodic.CyclicEdgeWeightTensor
 import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
@@ -28,12 +28,12 @@ selected product family has the source tensor itself as a representative.
 
 ## Main declarations
 
-* `MPOTensor.TranslationInvariantBondData.FixedProductTensorData`
-* `MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm`
-* `MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm.toFixedProductTensorData`
-* `MPOTensor.EtaLocalStructureData.eventuallyNonzeroProportionalMPV₂_fixedProductTensor`
-* `MPOTensor.EtaLocalStructureData.exists_unit_phase_power_mpo_eq_product_of_normal_smul`
-* `MPOTensor.EtaLocalStructureData.mpo_eq_positive_power_product_of_normal_smul`
+* `MPOTensor.CommutingBond.FixedProductTensorData`
+* `MPOTensor.CommutingBond.CyclicEdgeWeightForm`
+* `MPOTensor.CommutingBond.CyclicEdgeWeightForm.toFixedProductTensorData`
+* `MPOTensor.CommutingForm.eventuallyNonzeroProportionalMPV₂_fixedProductTensor`
+* `MPOTensor.CommutingForm.exists_unit_phase_power_mpo_eq_product_of_normal_smul`
+* `MPOTensor.CommutingForm.mpo_eq_positive_power_product_of_normal_smul`
 
 ## References
 
@@ -72,7 +72,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-namespace TranslationInvariantBondData
+namespace CommutingBond
 
 /-- A chain-independent matrix-product tensor whose closed operator family is
 exactly the product of all translates of one fixed commuting bond.
@@ -82,7 +82,7 @@ The positive bond dimension is part of the datum.  No normality is assumed.
 Local interface motivated by arXiv:1606.00608, Appendix C.2, Proposition C.8
 (`3to4`), lines 1570--1593.  The cited proposition gives proportionality to a
 fixed commuting-bond product; it does not construct this exact tensor datum. -/
-structure FixedProductTensorData (data : TranslationInvariantBondData d) where
+structure FixedProductTensorData (data : CommutingBond d) where
   /-- Bond dimension of the representing tensor. -/
   bondDim : ℕ
   /-- The representing bond space is nonzero. -/
@@ -93,7 +93,7 @@ structure FixedProductTensorData (data : TranslationInvariantBondData d) where
   source range. -/
   mpo_eq_product :
     ∀ (N : ℕ) (hN : 2 ≤ N),
-      mpo tensor N = (data.toCommutingFormData hN).product
+      mpo tensor N = data.product hN
 
 /-- A fixed bond product written entrywise as one cyclic nearest-neighbor
 scalar weight in the current one-site coordinates.
@@ -103,7 +103,7 @@ same weight is used at every site and every chain length.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1589. -/
-structure CyclicEdgeWeightForm (data : TranslationInvariantBondData d) where
+structure CyclicEdgeWeightForm (data : CommutingBond d) where
   /-- The chain-independent weight on two consecutive ket--bra pairs. -/
   weight : Fin d → Fin d → Fin d → Fin d → ℂ
   /-- Entrywise cyclic product formula at every length in the source range. -/
@@ -111,7 +111,7 @@ structure CyclicEdgeWeightForm (data : TranslationInvariantBondData d) where
     ∀ (N : ℕ) (hN : 2 ≤ N),
       letI : NeZero N := ⟨by omega⟩
       ∀ (sigma tau : Fin N → Fin d),
-        (data.toCommutingFormData hN).product sigma tau =
+        data.product hN sigma tau =
           ∏ n : Fin N,
             weight (sigma n) (tau n) (sigma (n + 1)) (tau (n + 1))
 
@@ -121,7 +121,7 @@ representation of bond dimension `d * d`.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1589. -/
 noncomputable def CyclicEdgeWeightForm.toFixedProductTensorData
-    [NeZero d] {data : TranslationInvariantBondData d}
+    [NeZero d] {data : CommutingBond d}
     (form : CyclicEdgeWeightForm data) : FixedProductTensorData data where
   bondDim := d * d
   bondDim_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
@@ -133,24 +133,24 @@ noncomputable def CyclicEdgeWeightForm.toFixedProductTensorData
     rw [mpo_cyclicEdgeWeightTensor]
     exact (form.product_apply N hN sigma tau).symm
 
-end TranslationInvariantBondData
+end CommutingBond
 
-namespace EtaLocalStructureData
+namespace CommutingForm
 
 variable {M : MPOTensor d D}
 
 private theorem fixedProduct_ne_zero_of_mpvOverlap_ne_zero
-    (data : EtaLocalStructureData M)
+    (data : CommutingForm M)
     {N : ℕ} (hN : 2 ≤ N)
-    (hOverlap : MPSTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0) :
-    (data.bondData.toCommutingFormData hN).product ≠ 0 := by
+    (hOverlap : MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0) :
+    data.product hN ≠ 0 := by
   classical
   have hExists : ∃ ρ : Fin N → Fin (d * d),
-      MPSTensor.mpv M.toMPSTensor ρ ≠ 0 := by
+      MPTensor.mpv M.toMPSTensor ρ ≠ 0 := by
     by_contra h
     push Not at h
     apply hOverlap
-    simp only [MPSTensor.mpvOverlap]
+    simp only [MPTensor.mpvOverlap]
     apply Finset.sum_eq_zero
     intro ρ _hρ
     rw [h ρ, zero_mul]
@@ -178,9 +178,9 @@ length-dependent scalar is asserted.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1570--1593. -/
 theorem eventuallyNonzeroProportionalMPV₂_fixedProductTensor
-    (data : EtaLocalStructureData M)
-    (repr : TranslationInvariantBondData.FixedProductTensorData data.bondData) :
-    MPSTensor.EventuallyNonzeroProportionalMPV₂
+    (data : CommutingForm M)
+    (repr : CommutingBond.FixedProductTensorData data.toCommutingBond) :
+    MPTensor.EventuallyNonzeroProportionalMPV₂
       M.toMPSTensor repr.tensor.toMPSTensor := by
   filter_upwards [Filter.eventually_ge_atTop 2] with N hN
   obtain ⟨c, hc, hreal⟩ := data.realizes_mpo N hN
@@ -218,19 +218,19 @@ arbitrary supplied representation after adjoining an all-zero virtual summand;
 the source-selected bond instead uses the source tensor itself. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
-    (data : EtaLocalStructureData M)
-    (repr : TranslationInvariantBondData.FixedProductTensorData data.bondData)
+    (data : CommutingForm M)
+    (repr : CommutingBond.FixedProductTensorData data.toCommutingBond)
     (s : ℝ) (hs : 0 < s)
     (hM : MPSTensor.IsNormalTensor M.toMPSTensor)
     (hRepr : MPSTensor.IsNormalTensor
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
-      mpo M N = ((ζ * (s : ℂ)) ^ N) • (data.bondData.toCommutingFormData hN).product := by
+      mpo M N = ((ζ * (s : ℂ)) ^ N) • data.product hN := by
   have : NeZero D := ⟨hM.bondDim_ne_zero⟩
   let : NeZero repr.bondDim := ⟨Nat.ne_of_gt repr.bondDim_pos⟩
   have hsℂ : (s : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt hs
-  have hProp : MPSTensor.EventuallyNonzeroProportionalMPV₂ M.toMPSTensor
+  have hProp : MPTensor.EventuallyNonzeroProportionalMPV₂ M.toMPSTensor
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i) := by
     filter_upwards [data.eventuallyNonzeroProportionalMPV₂_fixedProductTensor repr]
       with N hN
@@ -271,14 +271,14 @@ arbitrary supplied representation after adjoining an all-zero virtual summand;
 the source-selected bond instead uses the source tensor itself. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem mpo_eq_positive_power_product_of_normal_smul
-    (data : EtaLocalStructureData M)
-    (repr : TranslationInvariantBondData.FixedProductTensorData data.bondData)
+    (data : CommutingForm M)
+    (repr : CommutingBond.FixedProductTensorData data.toCommutingBond)
     (s : ℝ) (hs : 0 < s)
     (hM : MPSTensor.IsNormalTensor M.toMPSTensor)
     (hRepr : MPSTensor.IsNormalTensor
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∀ (N : ℕ) (hN : 2 ≤ N),
-      mpo M N = ((s : ℂ) ^ N) • (data.bondData.toCommutingFormData hN).product := by
+      mpo M N = ((s : ℂ) ^ N) • data.product hN := by
   have : NeZero D := ⟨hM.bondDim_ne_zero⟩
   rcases data.exists_unit_phase_power_mpo_eq_product_of_normal_smul
       repr s hs hM hRepr with ⟨ζ, hζ, hGeo⟩
@@ -287,22 +287,22 @@ theorem mpo_eq_positive_power_product_of_normal_smul
   let N := max K 2
   have hKN : K ≤ N := le_max_left K 2
   have hN : 2 ≤ N := le_max_right K 2
-  have hOverlapN : MPSTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0 := by
+  have hOverlapN : MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0 := by
     intro hZero
     have hDist := hK N hKN
     rw [hZero] at hDist
     norm_num at hDist
   have hOverlapSucc :
-      MPSTensor.mpvOverlap M.toMPSTensor M.toMPSTensor (N + 1) ≠ 0 := by
+      MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor (N + 1) ≠ 0 := by
     intro hZero
     have hDist := hK (N + 1) (by omega)
     rw [hZero] at hDist
     norm_num at hDist
-  have hProductN : (data.bondData.toCommutingFormData hN).product ≠ 0 :=
+  have hProductN : data.product hN ≠ 0 :=
     fixedProduct_ne_zero_of_mpvOverlap_ne_zero data hN hOverlapN
   have hNSucc : 2 ≤ N + 1 := by omega
   have hProductSucc :
-      (data.bondData.toCommutingFormData hNSucc).product ≠ 0 :=
+      data.product hNSucc ≠ 0 :=
     fixedProduct_ne_zero_of_mpvOverlap_ne_zero data hNSucc hOverlapSucc
   obtain ⟨cN, hcN, hRealN⟩ := data.realizes_mpo N hN
   obtain ⟨cSucc, hcSucc, hRealSucc⟩ := data.realizes_mpo (N + 1) hNSucc
@@ -341,7 +341,7 @@ theorem mpo_eq_positive_power_product_of_normal_smul
   intro L hL
   simpa [hζOne] using hGeo L hL
 
-end EtaLocalStructureData
+end CommutingForm
 
 end MPOTensor
 
@@ -371,8 +371,8 @@ noncomputable def fixedProductTensorData
     (F : PhysicalSectorFactorization K)
     (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hD : 0 < D) :
-    TranslationInvariantBondData.FixedProductTensorData
-      (F.translationInvariantBondData hη) where
+    CommutingBond.FixedProductTensorData
+      (F.commutingBond hη) where
   bondDim := D
   bondDim_pos := hD
   tensor := K
@@ -395,7 +395,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1570--1593. The positive physical-sector factorization is constructed in
 Lemma C.4 (`propSN`), lines 1406--1450. -/
 theorem exists_normal_fixedProductTensorData_of_isSAL
-    {d D : ℕ} (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    {d D : ℕ} (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hNormal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K)
       (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef),
@@ -403,7 +403,7 @@ theorem exists_normal_fixedProductTensorData_of_isSAL
       MPSTensor.IsNormalTensor repr.tensor.toMPSTensor ∧
         ∀ (N : ℕ) (hN : 2 ≤ N),
           mpo K N =
-            ((F.translationInvariantBondData hη).toCommutingFormData hN).product := by
+            (F.commutingBond hη).product hN := by
   obtain ⟨F, hη⟩ := exists_positive_physicalSectorFactorization_of_isSAL K hK hSAL
   let repr := F.fixedProductTensorData hη (bondDim_pos_of_isSAL K hSAL)
   refine ⟨F, hη, ?_, ?_⟩

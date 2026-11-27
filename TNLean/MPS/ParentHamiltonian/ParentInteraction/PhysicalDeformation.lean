@@ -49,6 +49,8 @@ the periodic chain.
   ground state transfers along the correspondence.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 open Kraus (decodeBlockEquiv)
 

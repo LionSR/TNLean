@@ -501,11 +501,11 @@ theorem reindex_reducedBlockState_add_eq_suffixSectorContraction
   classical
   have hblock :
       F.sectorCoordinateTensor.reducedBlockState (L + R) L (by omega) =
-        blockReducedState (Fintype.card (SectorSiteIndex F)) L R
+        MPOTensor.blockReducedState (Fintype.card (SectorSiteIndex F)) L R
           (F.sectorCoordinateTensor.normalizedMPO (L + R)) := by
     rw [MPOTensor.reducedBlockState]
     simpa only [blockReindexEquiv] using
-      blockReducedState_submatrix_finCongr
+      MPOTensor.blockReducedState_submatrix_finCongr
         (show L + R = L + (L + R - L) by omega)
         (F.sectorCoordinateTensor.normalizedMPO (L + R))
   rw [hblock]
@@ -513,11 +513,11 @@ theorem reindex_reducedBlockState_add_eq_suffixSectorContraction
   obtain ⟨k, x⟩ := s
   obtain ⟨h, y⟩ := t
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    blockReducedState, Matrix.partialTraceRight_apply,
+    MPOTensor.blockReducedState, Matrix.partialTraceRight_apply,
     normalizedMPO, Matrix.smul_apply, smul_eq_mul]
   rw [← Finset.mul_sum]
   congr 1
-  simp only [blockSplitEquiv_symm_apply]
+  simp only [MPOTensor.blockSplitEquiv_symm_apply]
   change (∑ i : Fin R → Fin (Fintype.card (SectorSiteIndex F)),
       mpo F.sectorCoordinateTensor (L + R)
         (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨k, x⟩) i)

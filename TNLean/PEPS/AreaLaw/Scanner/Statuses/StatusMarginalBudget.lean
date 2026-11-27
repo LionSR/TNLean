@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeConstraints
+import QICLean.ManyBody.Hamiltonian.Constraint.LatticeConstraints
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusContainment
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusCutBounds
 
@@ -20,6 +20,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 32–58 and 400–414; `07-comparators.tex`, lines 70–85,
 at `openai/math@adc7f124`.
 -/
+
+open ManyBody (designatedSupport latticeCutBudgetConstant latticeCutBudgetConstant_nonneg
+  latticeCutBudget_le_log)
 
 open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph ambientDepth supDist)
 
@@ -100,7 +103,7 @@ theorem statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
       S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
       (∀ d : ℕ, 1 ≤ d → d ≤ L →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       let B := statusMarginalBudgetConstant q R Cr *
         ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
@@ -177,7 +180,7 @@ theorem exists_statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : 
         S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
         (∀ d : ℕ, 1 ≤ d → d ≤ L →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),

@@ -26,6 +26,8 @@ has one unit weight and one smaller weight, so it remains a BNT canonical form
 without satisfying the equal-modulus condition.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 
@@ -73,7 +75,7 @@ noncomputable example
     (C : MPSTensor d D) [NeZero D]
     (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
-    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1)) :
+    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1)) :
     IsBNTCanonicalForm (singleSectorDecomposition C) :=
   isBNTCanonicalForm_singleSectorDecomposition hCIrr hCLeft hCSelf
 
@@ -104,7 +106,7 @@ noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
     (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
-    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
+    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (signFlipDecomp C) where
   basis_dim_pos := fun _ => hDpos
@@ -160,7 +162,7 @@ noncomputable example
     (C : MPSTensor d D) (θ : ℝ) (hDpos : 0 < D)
     (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
-    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
+    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (phaseDecomp C θ) where
   basis_dim_pos := fun _ => hDpos
@@ -282,7 +284,7 @@ noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
     (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
-    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
+    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
     IsBNTCanonicalForm (halvedDecomp C) where
   basis_dim_pos := fun _ => hDpos

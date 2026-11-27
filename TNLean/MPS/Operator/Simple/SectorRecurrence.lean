@@ -247,7 +247,7 @@ a single vertex-indexed rephasing over the whole support graph.
 This is a supporting lemma for arXiv:1606.00608, Appendix C.2,
 lines 1446--1450, not a separately stated result of the paper. -/
 theorem exists_pi_smul_posSemidef_of_sectorEta_cycle
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K)

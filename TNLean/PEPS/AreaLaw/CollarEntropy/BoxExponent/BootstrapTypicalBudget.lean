@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapComparisonBudget
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
+import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!
 # The restored rough comparison has the improved entropy power

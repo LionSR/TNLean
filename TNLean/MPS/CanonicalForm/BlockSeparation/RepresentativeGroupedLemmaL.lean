@@ -26,6 +26,8 @@ keeping the still-unformalized canonical-form-to-finite-span implication as an
 explicit hypothesis.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor.SectorDecomposition
@@ -98,7 +100,7 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
         have hof : List.ofFn (Fin.cons i w : Fin (L + 1) → Fin d) =
             i :: List.ofFn w := by
           simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
-        simp only [MPSTensor.mpv, MPSTensor.coeff, hof, Kraus.evalWord_cons]
+        simp only [MPTensor.mpv, MPTensor.coeff, hof, Kraus.evalWord_cons]
       simp_rw [hExp, Finset.mul_sum]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun j _ ↦ ?_

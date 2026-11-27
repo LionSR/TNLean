@@ -6,8 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.Graph.Region.EdgeMapSubgraph
 import TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry
 import TNLean.PEPS.Graph.Torus.TorusTranslation
-import TNLean.PEPS.Tensor.Region.RegionTransport
-import TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowComplement
 
 /-!
 # The actual two-plaquette block at every torus position

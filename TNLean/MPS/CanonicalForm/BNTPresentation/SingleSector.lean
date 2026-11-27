@@ -29,6 +29,8 @@ a presentation after its pure trace-preserving Perron gauge.
   lines 217--301.
 -/
 
+open MPTensor
+
 open Filter Topology
 
 namespace MPSTensor
@@ -57,7 +59,7 @@ theorem isBNTCanonicalForm_singleSectorDecomposition [NeZero D]
     {A : MPSTensor d D}
     (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
-    (hSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) A A N) atTop (𝓝 1)) :
+    (hSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) A A N) atTop (𝓝 1)) :
     IsBNTCanonicalForm (singleSectorDecomposition A) where
   basis_dim_pos := fun _ => NeZero.pos D
   basis_irreducible := fun _ => hIrr
@@ -100,7 +102,7 @@ theorem IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let B := Kraus.tpGauge (d := d) (D := D) A σ
   have hSelf :
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) B B N) atTop (𝓝 1) :=
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) B B N) atTop (𝓝 1) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible B hIrr hLeft hPrim
   have hBNT : IsBNTCanonicalForm (singleSectorDecomposition B) :=
     isBNTCanonicalForm_singleSectorDecomposition hIrr hLeft hSelf

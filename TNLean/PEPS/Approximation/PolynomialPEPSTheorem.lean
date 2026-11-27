@@ -39,6 +39,8 @@ manuscript) is the square-grid specialization of the two-dimensional area law.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 namespace TNLean.PEPS.Approximation
 
 /-- Proposition 4.1 of the polynomial-PEPS manuscript, `03-patches.tex`,
@@ -68,12 +70,15 @@ exponent `protocolExpansionExponent ν c` (`07-assembly.tex`, line 11). -/
 theorem largeSizeDyadicProtocol_of_le {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ} (hJ : 0 < J)
     (hΔ : 0 < Δ) :
     ∃ D C c L₁ : ℝ, 1 ≤ D ∧ 0 < C ∧ 0 < c ∧
-      (∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+      (∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsSquareGroundState q J Δ L Ω →
         EncodedFrame.AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) C c 60 L) ∧
       ∀ C_N C_K C_E : ℝ, protocolCountConstant ≤ C_N →
         protocolExpansionConstant protocolMeshRatio C ≤ C_K →
         protocolErrorConstant protocolMeshRatio ≤ C_E →
-        ∀ L : ℕ, 2 ≤ L → L₁ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+        ∀ L : ℕ, 2 ≤ L → L₁ ≤ L →
+            ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+                IsSquareGroundState q J Δ L Ω →
           ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D' : DyadicProtocol L q P),
             D'.IsDistributionProtocol Ω C_N C_K C_E protocolLifetimeBound
               (protocolExpansionExponent protocolMeshRatio c)

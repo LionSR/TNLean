@@ -16,6 +16,8 @@ This module collects the tensor-scaling identities that are used both by the
 canonical-form construction and by transfer-normalization arguments.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators Matrix.Norms.Operator Kraus
 
 namespace MPSTensor

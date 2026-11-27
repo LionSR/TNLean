@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.ChoiRankSpan
-import TNLean.MPS.FundamentalTheorem.Refinement.RootWordSpan
+import QICLean.Kraus.Wielandt.SpanGrowth.InvertibleWordSpan
+import QICLean.Kraus.WordSpan
 import TNLean.MPS.FundamentalTheorem.Refinement.RefinableOfDivisible
 
 /-!
@@ -39,7 +40,7 @@ theorem choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred
     Channel.choiRank (Kraus.transferMap A) ≤
       Channel.choiRank (Kraus.transferMap B) := by
   have hBblock : Kraus.transferMap B = Kraus.transferMap (blockTensor A p) := by
-    rw [transferMap_blockTensor]
+    rw [Kraus.transferMap_blockTensor]
     exact hpow
   calc
     Channel.choiRank (Kraus.transferMap A) =

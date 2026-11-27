@@ -99,7 +99,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Cross trace powers and source open-boundary contraction]
     \label{thm:mps_reduction_cross_trace_open}
-    \lean{MPSTensor.SameMPV₂Pos.trace_evalWord,
+    \lean{MPTensor.SameMPV₂Pos.trace_evalWord,
         MPSTensor.trace_reductionCrossMatrix_pow_of_sameMPV₂Pos,
         MPSTensor.reductionOpenBoundaryMatrixContraction,
         MPSTensor.reductionOpenBoundaryContraction,
@@ -318,8 +318,8 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Scalar covariance of rectangular reductions]
     \label{lem:mps_reduction_scalar_covariance}
-    \lean{MPSTensor.IsReduction.smul,
-        MPSTensor.IsReduction.evalWord_smul_target}
+    \lean{MPTensor.IsReduction.smul,
+        MPTensor.IsReduction.evalWord_smul_target}
     \leanok
     \uses{def:mps_rectangular_reduction}
     If $V,W$ form a reduction from $B$ to $A$, then they also form a reduction
@@ -442,9 +442,9 @@ nilpotency length of the resulting residual algebra.
 
 \begin{definition}[Residual algebra of a selected reduction]
     \label{def:mps_reduction_residual_algebra}
-    \lean{MPSTensor.reductionResidual,
-        MPSTensor.reductionResidualGeneratorSet,
-        MPSTensor.reductionResidualAlgebra}
+    \lean{MPTensor.reductionResidual,
+        MPTensor.reductionResidualGeneratorSet,
+        MPTensor.reductionResidualAlgebra}
     \leanok
     \uses{def:mps_rectangular_reduction}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For each physical letter
@@ -488,7 +488,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Residual letters belong to the residual algebra]
     \label{thm:mps_reduction_residual_mem_algebra}
-    \lean{MPSTensor.reductionResidual_mem_reductionResidualAlgebra}
+    \lean{MPTensor.reductionResidual_mem_reductionResidualAlgebra}
     \leanok
     \uses{def:mps_reduction_residual_algebra}
     For every physical letter $i$, one has
@@ -502,8 +502,8 @@ nilpotency length of the resulting residual algebra.
 
 \begin{definition}[Residual nilpotency length]
     \label{def:mps_reduction_residual_nilpotency_length}
-    \lean{MPSTensor.IsReductionResidualNilpotencyBound,
-        MPSTensor.reductionResidualNilpotencyLength}
+    \lean{MPTensor.IsReductionResidualNilpotencyBound,
+        MPTensor.reductionResidualNilpotencyLength}
     \leanok
     \uses{def:mps_reduction_residual_algebra}
     A natural number $L$ is a \emph{residual-word nilpotency bound} if
@@ -518,7 +518,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Exterior-word strengthening of the residual sandwich]
     \label{thm:mps_reduction_residual_exterior_sandwich}
-    \lean{MPSTensor.IsReduction.evalWord_mul_reductionResidual_mul_evalWord_eq_zero}
+    \lean{MPTensor.IsReduction.evalWord_mul_reductionResidual_mul_evalWord_eq_zero}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For arbitrary exterior words
@@ -547,7 +547,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Positive residual words vanish under the reduction]
     \label{thm:mps_reduction_residual_sandwich}
-    \lean{MPSTensor.IsReduction.evalWord_reductionResidual_sandwich_eq_zero}
+    \lean{MPTensor.IsReduction.evalWord_reductionResidual_sandwich_eq_zero}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every nonempty word
@@ -570,10 +570,10 @@ nilpotency length of the resulting residual algebra.
 
 \begin{definition}[Strict residual-window sums]
     \label{def:mps_reduction_strict_window_sums}
-    \lean{MPSTensor.reductionInitialWindowSum,
-        MPSTensor.reductionStrictWindowSum,
-        MPSTensor.reductionInitialWindowRangeSum,
-        MPSTensor.reductionStrictWindowRangeSum}
+    \lean{MPTensor.reductionInitialWindowSum,
+        MPTensor.reductionStrictWindowSum,
+        MPTensor.reductionInitialWindowRangeSum,
+        MPTensor.reductionStrictWindowRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra,def:eval_word}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For a word $\mathbf w$, set
@@ -607,7 +607,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Recursive residual expansion]
     \label{thm:mps_reduction_recursive_residual_expansion}
-    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowSum}
+    \lean{MPTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_strict_window_sums}
     Under the reduction hypothesis, every word satisfies
@@ -632,14 +632,14 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[All-cut contracted residual identities]
     \label{thm:mps_reduction_all_cut_contracted}
-    \lean{MPSTensor.reductionLeftContractedAllCutSum,
-        MPSTensor.reductionRightContractedAllCutSum,
-        MPSTensor.reductionLeftContractedSum,
-        MPSTensor.reductionRightContractedSum,
-        MPSTensor.reductionLeftContractedSum_eq_allCutSum,
-        MPSTensor.reductionRightContractedSum_eq_allCutSum,
-        MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
-        MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
+    \lean{MPTensor.reductionLeftContractedAllCutSum,
+        MPTensor.reductionRightContractedAllCutSum,
+        MPTensor.reductionLeftContractedSum,
+        MPTensor.reductionRightContractedSum,
+        MPTensor.reductionLeftContractedSum_eq_allCutSum,
+        MPTensor.reductionRightContractedSum_eq_allCutSum,
+        MPTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
+        MPTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$, and write
@@ -676,7 +676,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Recursive and explicit strict-window sums]
     \label{thm:mps_reduction_strict_window_range}
-    \lean{MPSTensor.IsReduction.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum}
+    \lean{MPTensor.IsReduction.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_strict_window_sums}
     Under the reduction hypothesis, for every word $\mathbf i$,
@@ -702,7 +702,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Corrected strict-window residual expansion]
     \label{thm:mps_reduction_residual_expansion}
-    \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowRangeSum}
+    \lean{MPTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_strict_window_sums}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every word
@@ -732,10 +732,10 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Residual trace vanishing and elementwise nilpotence]
     \label{thm:mps_reduction_residual_algebra_nilpotent}
-    \lean{MPSTensor.IsReduction.trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual,
-        MPSTensor.IsReduction.trace_evalWord_reductionResidual_eq_zero,
-        MPSTensor.IsReduction.trace_eq_zero_of_mem_reductionResidualAlgebra,
-        MPSTensor.IsReduction.isNilpotent_of_mem_reductionResidualAlgebra}
+    \lean{MPTensor.IsReduction.trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual,
+        MPTensor.IsReduction.trace_evalWord_reductionResidual_eq_zero,
+        MPTensor.IsReduction.trace_eq_zero_of_mem_reductionResidualAlgebra,
+        MPTensor.IsReduction.isNilpotent_of_mem_reductionResidualAlgebra}
     \leanok
     \uses{def:same_mpv2_pos,def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$, and assume
@@ -784,11 +784,11 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Dimension bound for the residual nilpotency length]
     \label{thm:mps_reduction_residual_dimension_bound}
-    \lean{MPSTensor.IsReduction.reductionResidualAlgebra_list_prod_eq_zero,
-        MPSTensor.IsReduction.bondDim_isReductionResidualNilpotencyBound,
-        MPSTensor.IsReduction.reductionResidualNilpotencyLength_isBound,
-        MPSTensor.IsReduction.reductionResidualNilpotencyLength_le_bondDim,
-        MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bondDim_le_length}
+    \lean{MPTensor.IsReduction.reductionResidualAlgebra_list_prod_eq_zero,
+        MPTensor.IsReduction.bondDim_isReductionResidualNilpotencyBound,
+        MPTensor.IsReduction.reductionResidualNilpotencyLength_isBound,
+        MPTensor.IsReduction.reductionResidualNilpotencyLength_le_bondDim,
+        MPTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bondDim_le_length}
     \leanok
     \uses{def:same_mpv2_pos,def:mps_rectangular_reduction,def:mps_reduction_residual_algebra,def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, and assume
@@ -817,7 +817,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Consequences of an arbitrary residual bound]
     \label{thm:mps_reduction_residual_bound_consequences}
-    \lean{MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bound_le_length}
+    \lean{MPTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bound_le_length}
     \leanok
     \uses{def:mps_reduction_residual_nilpotency_length}
     If $L$ is a residual-word nilpotency bound and
@@ -838,10 +838,10 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Bound-truncated contracted residual expansions]
     \label{thm:mps_reduction_contracted_expansions}
-    \lean{MPSTensor.reductionLeftContractedRangeSum,
-        MPSTensor.reductionRightContractedRangeSum,
-        MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedRangeSum,
-        MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedRangeSum}
+    \lean{MPTensor.reductionLeftContractedRangeSum,
+        MPTensor.reductionRightContractedRangeSum,
+        MPTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedRangeSum,
+        MPTensor.IsReduction.evalWord_mul_eq_reductionRightContractedRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, let $L$ be any residual-word
@@ -878,7 +878,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Exterior-buffer identity]
     \label{thm:mps_reduction_exterior_buffer}
-    \lean{MPSTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append}
+    \lean{MPTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, and let $L$ be any
@@ -992,10 +992,10 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Reductions and exterior buffers under blocking]
     \label{thm:mps_reduction_blocking}
-    \lean{MPSTensor.IsReduction.isReductionExteriorBufferLength_of_bound,
-        MPSTensor.IsReduction.isReductionExteriorBufferLength_nilpotencyLength,
-        MPSTensor.IsReduction.blockTensor,
-        MPSTensor.IsReduction.reindexPhysical,
+    \lean{MPTensor.IsReduction.isReductionExteriorBufferLength_of_bound,
+        MPTensor.IsReduction.isReductionExteriorBufferLength_nilpotencyLength,
+        MPTensor.IsReduction.blockTensor,
+        MPTensor.IsReduction.reindexPhysical,
         MPSTensor.IsReductionExteriorBufferLength.blockTensor,
         MPSTensor.IsReductionExteriorBufferLength.reindexPhysical}
     \leanok
@@ -1048,7 +1048,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Common blocking of a finite family of reductions]
     \label{thm:mps_reduction_common_blocking}
-    \lean{MPSTensor.IsReduction.blockTensor_commonBufferLength_one}
+    \lean{MPTensor.IsReduction.blockTensor_commonBufferLength_one}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_exterior_buffer_length,def:mps_reduction_residual_nilpotency_length,def:common_buffer_length,def:blocked_tensor}
     Let $(N_i)_{i\in I}$ be a finite family of natural numbers with common
@@ -1074,8 +1074,8 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Boundary-dressed uniqueness of rectangular reductions]
     \label{thm:mps_reduction_boundary_dressed_uniqueness}
-    \lean{MPSTensor.IsReduction.exists_boundary_dressed_proportional,
-        MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le}
+    \lean{MPTensor.IsReduction.exists_boundary_dressed_proportional,
+        MPTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le}
     \leanok
     \discussion{7395}
     \uses{def:same_mpv2_pos,def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length,def:normal}

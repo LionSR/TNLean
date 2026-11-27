@@ -13,3 +13,34 @@ import TNLean.MPS.Examples.CZY.CZYFusionAssociativity
 import TNLean.MPS.Examples.CZY.CZYReduced
 import TNLean.MPS.Examples.CZY.CZYSquare
 import TNLean.MPS.Examples.CZY.CZYTensor
+
+/-!
+# The CZY symmetry of the Levin–Gu edge
+
+The anomalous `ℤ₂` operator `U_CZY = ∏ CZ_{i,i+1} ∏ Z_i X_i` of the Levin–Gu edge, the bond-two
+matrix product operator with letters `A_1^{01} = [[1,1],[0,0]]` and `A_1^{10} = [[0,0],[-1,1]]`
+of Liu, Molnár, Sun, Verstraete, Kato and Lootens (arXiv:2509.03600, lines 198–223). Its stacked
+bond-four square, and the reduced bond-three tensor `A_0` obtained from it by the printed change
+of basis `X_{1,1}` (lines 223–240), both compress at the level of words onto the bond-one
+identity tensor with zero slots, so `U_N² = 1` for every `N ≥ 1`; neither compression splits,
+and `A_0` has no nontrivial decomposition into complementary invariant subspaces. The printed
+fusion maps satisfy the local intertwining identities, but the printed associativity relation
+fails on the full virtual space; it holds on the images of the three-layer physical letters,
+with scalar `-1` exactly at `(1,1,1)`, as recorded in
+`docs/paper-gaps/lmsvkl25_czy_associator.tex`.
+
+## General theorems instantiated
+
+* `MPSTensor.MultiBlockCompression.ofRing` and
+  `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum` (multi-block compression): explicit
+  integer compression data onto `δ`, with the word traces of a single identity block.
+* `MPOTensor.mpo_eq_of_trace_evalWord` (periodic operators from word traces): the stacked tensor
+  and `A_0` generate the identity at every positive length.
+* `MPSTensor.right_intertwiner_eq_zero_of_ringCertificate` and
+  `MPSTensor.left_intertwiner_eq_zero_of_ringCertificate` (intertwiner certificates): both
+  sitewise intertwiner spaces between each tensor and `δ` vanish.
+* `MPSTensor.MultiBlockCompression.remainder_ne_zero_of_forall_right_intertwiner_eq_zero` and
+  `MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero`
+  (nonsplitting compressions): no compression onto `δ` has zero remainder, and the virtual
+  algebras are not closed under conjugate transposition, so `A_0` is not injective.
+-/

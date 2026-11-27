@@ -28,6 +28,8 @@ PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849–858 and the direct-sum
 standing hypotheses at lines 1314–1330.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

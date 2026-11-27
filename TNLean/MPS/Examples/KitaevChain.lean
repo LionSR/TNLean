@@ -68,6 +68,8 @@ ordered graded product basis. Documented in
   *Unpaired Majorana fermions in quantum wires*
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Matrix
 

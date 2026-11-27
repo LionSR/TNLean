@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.AnchoredResidualCoordinates
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardFormResidualWord
+import QICLean.Algebra.Kronecker.KroneckerSandwich
 
 /-!
 # A three-block operator on an anchored finite chain
@@ -257,30 +258,6 @@ theorem threeBlockFiniteChainMatrix_slice
       (threeBlockInputEquiv d k ((j₀, j₂), j)) eL eR j₀ j₂ x j hI hJ
 
 end MPOTensor
-
-namespace Matrix
-
-/-- If every fixed-exterior slice intertwines an input and output operator,
-then the full matrix intertwines their tensor products with the identities
-on the exterior factors. -/
-theorem intertwiner_of_slices
-    {E F X J : Type*}
-    [Fintype E] [Fintype F] [Fintype X] [Fintype J]
-    [DecidableEq E] [DecidableEq F]
-    (U : Matrix (E × X) (F × J) ℂ)
-    (A : Matrix J J ℂ) (B : Matrix X X ℂ)
-    (h : ∀ e f, (show Matrix X J ℂ from fun x j => U (e, x) (f, j)) * A =
-      B * (show Matrix X J ℂ from fun x j => U (e, x) (f, j))) :
-    U * Matrix.kronecker (1 : Matrix F F ℂ) A =
-      Matrix.kronecker (1 : Matrix E E ℂ) B * U := by
-  ext ⟨e, x⟩ ⟨f, j⟩
-  have hs := congrArg (fun M : Matrix X J ℂ => M x j) (h e f)
-  change (∑ t : J, U (e, x) (f, t) * A t j) =
-    ∑ t : X, B x t * U (e, t) (f, j) at hs
-  simpa [Matrix.mul_apply, Matrix.kronecker_apply, Fintype.sum_prod_type,
-    Matrix.one_apply, mul_ite] using hs
-
-end Matrix
 
 namespace MPOTensor
 

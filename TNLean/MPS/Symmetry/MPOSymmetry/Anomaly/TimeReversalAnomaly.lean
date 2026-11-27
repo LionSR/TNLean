@@ -64,6 +64,8 @@ family with the same bond dimensions; it shows that the associator is unchanged.
   lines 865--891.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker BigOperators
 
 /-! ### Recombining and conjugating letters -/
@@ -85,14 +87,16 @@ private theorem evalWord_map_starRingEnd (K : MPSTensor d D) (w : List (Fin d)) 
   | cons i w ih =>
       rw [Kraus.evalWord_cons, Kraus.evalWord_cons, ih, Matrix.map_mul]
 
-namespace IsReduction
+section IsReduction
+
+open MPTensor.IsReduction
 
 variable {B : MPSTensor d D} {A : MPSTensor d D'}
   {V : Matrix (Fin D') (Fin D) ℂ} {W : Matrix (Fin D) (Fin D') ℂ}
 
 /-- A reduction persists when the letters of both tensors are replaced by the same linear
 combinations `∑_a c_{ia} B^a` and `∑_a c_{ia} A^a`. -/
-theorem recombine (h : IsReduction B A V W) (c : Fin d → Fin d → ℂ) :
+theorem _root_.MPTensor.IsReduction.recombine (h : IsReduction B A V W) (c : Fin d → Fin d → ℂ) :
     IsReduction (fun i ↦ ∑ a, c i a • B a) (fun i ↦ ∑ a, c i a • A a) V W := by
   refine ⟨h.mul_eq_one, fun w ↦ ?_⟩
   suffices H : ∀ u, V * (Kraus.evalWord B u *
@@ -112,7 +116,7 @@ theorem recombine (h : IsReduction B A V W) (c : Fin d → Fin d → ℂ) :
 
 /-- Entrywise complex conjugation of the tensors and of the boundaries preserves a
 reduction. -/
-theorem map_starRingEnd (h : IsReduction B A V W) :
+theorem _root_.MPTensor.IsReduction.map_starRingEnd (h : IsReduction B A V W) :
     IsReduction (fun i ↦ (B i).map (starRingEnd ℂ)) (fun i ↦ (A i).map (starRingEnd ℂ))
       (V.map (starRingEnd ℂ)) (W.map (starRingEnd ℂ)) := by
   refine ⟨by rw [← Matrix.map_mul, h.mul_eq_one, Matrix.map_one _ (map_zero _) (map_one _)],
@@ -121,7 +125,8 @@ theorem map_starRingEnd (h : IsReduction B A V W) :
     h.evalWord]
 
 /-- A reduction with target letters `A' = Q A Q⁻¹` gives a reduction onto `A`. -/
-theorem target_gauge {A' : MPSTensor d D'} {V : Matrix (Fin D') (Fin D) ℂ}
+theorem _root_.MPTensor.IsReduction.target_gauge {A' : MPSTensor d D'} {V : Matrix (Fin D')
+    (Fin D) ℂ}
     {W : Matrix (Fin D) (Fin D') ℂ} {P Q : Matrix (Fin D') (Fin D') ℂ}
     (h : IsReduction B A' V W) (hPQ : P * Q = 1) (hA : ∀ i, A' i * Q = Q * A i) :
     IsReduction B A (P * V) (W * Q) := by
@@ -135,14 +140,17 @@ theorem target_gauge {A' : MPSTensor d D'} {V : Matrix (Fin D') (Fin D) ℂ}
 
 end IsReduction
 
-namespace IsDressedProportional
+section IsDressedProportional
+
+open MPTensor.IsDressedProportional
 
 variable {B : MPSTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
 /-- Dressed proportionality persists when the letters are replaced by linear combinations
 `∑_a c_{ia} B^a`: a word of the new letters is a combination of words of the old letters of
 the same length. -/
-theorem recombine (h : IsDressedProportional B X Y z) (c : Fin d → Fin d → ℂ) :
+theorem _root_.MPTensor.IsDressedProportional.recombine (h : IsDressedProportional B X Y z)
+    (c : Fin d → Fin d → ℂ) :
     IsDressedProportional (fun i ↦ ∑ a, c i a • B a) X Y z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
@@ -165,7 +173,7 @@ theorem recombine (h : IsDressedProportional B X Y z) (c : Fin d → Fin d → �
 
 /-- Entrywise complex conjugation of the tensor and of the boundaries conjugates the scalar
 of a dressed proportionality. -/
-theorem map_starRingEnd (h : IsDressedProportional B X Y z) :
+theorem _root_.MPTensor.IsDressedProportional.map_starRingEnd (h : IsDressedProportional B X Y z) :
     IsDressedProportional (fun i ↦ (B i).map (starRingEnd ℂ)) (X.map (starRingEnd ℂ))
       (Y.map (starRingEnd ℂ)) (starRingEnd ℂ z) := by
   obtain ⟨N, h⟩ := h
@@ -266,7 +274,7 @@ variable {d D D' m : ℕ}
 
 /-- A reduction of tensors gives a reduction of their time-reversed tensors, with conjugated
 boundaries. -/
-theorem IsReduction.timeReversal {M : MPOTensor d D} {A : MPOTensor d D'}
+theorem _root_.MPTensor.IsReduction.timeReversal {M : MPOTensor d D} {A : MPOTensor d D'}
     {V : Matrix (Fin D') (Fin D) ℂ} {W : Matrix (Fin D) (Fin D') ℂ}
     (h : IsReduction M.toMPSTensor A.toMPSTensor V W) (v : Matrix (Fin d) (Fin d) ℂ) :
     IsReduction (MPOTensor.timeReversal v M).toMPSTensor (MPOTensor.timeReversal v A).toMPSTensor
@@ -276,7 +284,8 @@ theorem IsReduction.timeReversal {M : MPOTensor d D} {A : MPOTensor d D'}
 
 /-- A dressed proportionality of a tensor gives one of its time-reversed tensor, with
 conjugated boundaries and conjugated scalar. -/
-theorem IsDressedProportional.timeReversal {M : MPOTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ}
+theorem _root_.MPTensor.IsDressedProportional.timeReversal {M : MPOTensor d D} {X Y : Matrix (Fin m)
+    (Fin D) ℂ}
     {z : ℂ} (h : IsDressedProportional M.toMPSTensor X Y z) (v : Matrix (Fin d) (Fin d) ℂ) :
     IsDressedProportional (MPOTensor.timeReversal v M).toMPSTensor (X.map (starRingEnd ℂ))
       (Y.map (starRingEnd ℂ)) (starRingEnd ℂ z) := by
@@ -529,7 +538,7 @@ noncomputable def timeReversal (fd : FusionData F) (hv : star v * v = 1) :
   V g h := (fd.V g h).map (starRingEnd ℂ)
   W g h := (fd.W g h).map (starRingEnd ℂ)
   isReduction g h := by
-    change MPSTensor.IsReduction (mulTensor (MPOTensor.timeReversal v (F.tensor g))
+    change MPTensor.IsReduction (mulTensor (MPOTensor.timeReversal v (F.tensor g))
       (MPOTensor.timeReversal v (F.tensor h))).toMPSTensor
       (MPOTensor.timeReversal v (F.tensor (g * h))).toMPSTensor _ _
     rw [mulTensor_timeReversal hv]

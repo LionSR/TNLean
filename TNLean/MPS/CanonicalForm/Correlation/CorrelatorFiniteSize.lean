@@ -8,6 +8,7 @@ import TNLean.MPS.Transfer.Correlation.Correlations
 import TNLean.MPS.CanonicalForm.Correlation.DecayingCorrelations
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator
 import TNLean.MPS.Transfer.Primitivity.Equivalence
+import QICLean.Analysis.Norm.MatrixOperatorSpace
 
 /-!
 # Finite-size corrections to the correlator of a normal matrix product state
@@ -63,74 +64,6 @@ theorem limitCorrelator_zero_right (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin
     limitCorrelator A ρ htr L X 0 t = 0 := by
   simp [limitCorrelator, physicalConnectedCorrelator, ← physicalObservableTransferₗ_apply]
 
-/-- The algebraic estimate behind the replacement of the finite-size correlator by its
-limit: if the normalization `Z`, the two-point numerator and the one-point numerators
-are within `ε ≤ 1/2` of `1`, `ab + g` and `a, b`, then the connected correlator
-`n_{XY}/Z - (n_X/Z)(n_Y/Z)` is within `4(M+2)^2 ε` of `g`. This is the step "Replacing
-the last power … by `P` … changes `G_N(X,Y;s)` by at most `C_{X,Y} r^{N-s-L+1}`" of the
-chapter's proof of `thm:ldp_decaying_correlations`, which makes precise the
-large-`N` limit of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem _root_.Complex.norm_div_sub_div_mul_div_sub_le {Z nXY nX nY a b g : ℂ} {ε M : ℝ}
-    (hε0 : 0 ≤ ε) (hε : ε ≤ 1 / 2) (hM : 0 ≤ M) (hZ : ‖Z - 1‖ ≤ ε)
-    (hXY : ‖nXY - (a * b + g)‖ ≤ ε) (hX : ‖nX - a‖ ≤ ε) (hY : ‖nY - b‖ ≤ ε) (ha : ‖a‖ ≤ M)
-    (hb : ‖b‖ ≤ M) (hg : ‖g‖ ≤ M) :
-    ‖nXY / Z - nX / Z * (nY / Z) - g‖ ≤ 4 * (M + 2) ^ 2 * ε := by
-  set eZ := Z - 1
-  set eXY := nXY - (a * b + g)
-  set eX := nX - a
-  set eY := nY - b
-  have hZnorm : 1 / 2 ≤ ‖Z‖ := by
-    have h1 : ‖(1 : ℂ)‖ ≤ ‖Z‖ + ‖eZ‖ := by
-      calc ‖(1 : ℂ)‖ = ‖Z - eZ‖ := by simp [eZ]
-        _ ≤ ‖Z‖ + ‖eZ‖ := norm_sub_le _ _
-    rw [norm_one] at h1
-    linarith
-  have hZ0 : Z ≠ 0 := by
-    intro h
-    rw [h, norm_zero] at hZnorm
-    norm_num at hZnorm
-  have hkey : nXY / Z - nX / Z * (nY / Z) - g =
-      (eXY + a * b * eZ - g * eZ + eXY * eZ - a * eY - eX * b - eX * eY - g * eZ ^ 2) /
-        Z ^ 2 := by
-    simp only [eZ, eXY, eX, eY]
-    field_simp
-    ring
-  have hnum : ‖eXY + a * b * eZ - g * eZ + eXY * eZ - a * eY - eX * b - eX * eY -
-      g * eZ ^ 2‖ ≤ (M + 2) ^ 2 * ε := by
-    have h1 : ‖a * b * eZ‖ ≤ M * M * ε := by
-      rw [norm_mul, norm_mul]
-      exact mul_le_mul (mul_le_mul ha hb (norm_nonneg _) hM) hZ (norm_nonneg _)
-        (mul_nonneg hM hM)
-    have h2 : ‖g * eZ‖ ≤ M * ε := by
-      rw [norm_mul]; exact mul_le_mul hg hZ (norm_nonneg _) hM
-    have h3 : ‖eXY * eZ‖ ≤ ε := by
-      rw [norm_mul]; nlinarith [norm_nonneg eXY, norm_nonneg eZ]
-    have h4 : ‖a * eY‖ ≤ M * ε := by
-      rw [norm_mul]; exact mul_le_mul ha hY (norm_nonneg _) hM
-    have h5 : ‖eX * b‖ ≤ M * ε := by
-      rw [norm_mul, mul_comm]; exact mul_le_mul hb hX (norm_nonneg _) hM
-    have h6 : ‖eX * eY‖ ≤ ε := by
-      rw [norm_mul]; nlinarith [norm_nonneg eX, norm_nonneg eY]
-    have h7 : ‖g * eZ ^ 2‖ ≤ M * ε := by
-      rw [norm_mul, norm_pow]
-      have : ‖eZ‖ ^ 2 ≤ ε := by nlinarith [norm_nonneg eZ]
-      exact mul_le_mul hg this (sq_nonneg _) hM
-    have htri : ‖eXY + a * b * eZ - g * eZ + eXY * eZ - a * eY - eX * b - eX * eY -
-        g * eZ ^ 2‖ ≤ ‖eXY‖ + ‖a * b * eZ‖ + ‖g * eZ‖ + ‖eXY * eZ‖ + ‖a * eY‖ +
-          ‖eX * b‖ + ‖eX * eY‖ + ‖g * eZ ^ 2‖ := by
-      refine (norm_sub_le _ _).trans (add_le_add_left ?_ _)
-      refine (norm_sub_le _ _).trans (add_le_add_left ?_ _)
-      refine (norm_sub_le _ _).trans (add_le_add_left ?_ _)
-      refine (norm_sub_le _ _).trans (add_le_add_left ?_ _)
-      refine (norm_add_le _ _).trans (add_le_add_left ?_ _)
-      refine (norm_sub_le _ _).trans (add_le_add_left ?_ _)
-      exact norm_add_le _ _
-    nlinarith
-  rw [hkey, norm_div, norm_pow, div_le_iff₀ (pow_pos (by linarith) 2)]
-  have hZ2 : 1 / 4 ≤ ‖Z‖ ^ 2 := by nlinarith
-  have hpos : 0 ≤ (M + 2) ^ 2 * ε := mul_nonneg (sq_nonneg _) hε0
-  nlinarith
-
 /-- For `t + 1 ≤ s`, `e^{-(s-1)/ξ} ≤ |λ|^t`, where `ξ = -1/log|λ|` is the correlation
 length (arXiv:2307.01696, Supplemental Material, Lemma 2, eq. (auxform2)). -/
 theorem exp_neg_div_correlationLength_le_norm_pow {lam : ℂ} (hpos : 0 < ‖lam‖)
@@ -142,33 +75,6 @@ theorem exp_neg_div_correlationLength_le_norm_pow {lam : ℂ} (hpos : 0 < ‖lam
   rw [hξ', ← Real.exp_log (pow_pos hpos t), Real.log_pow, Real.exp_le_exp]
   have hts' : (t : ℝ) + 1 ≤ s := by exact_mod_cast hts
   nlinarith
-
-/-- The trace of a linear map on `D × D` matrices is bounded by a constant times the
-operator norm of the map, for the `ℓ^∞` operator norm on matrices. This controls the
-traces of the finite-size corrections in arXiv:2307.01696, Supplemental Material,
-proof of Lemma 2. -/
-theorem _root_.Matrix.norm_linearMap_trace_le_mul_norm
-    (F : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
-    ‖LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) F‖ ≤
-      (∑ p : Fin D, ∑ q : Fin D, ‖Matrix.single p q (1 : ℂ)‖) *
-        ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F‖ := by
-  classical
-  have hentry : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D), ‖M p q‖ ≤ ‖M‖ := by
-    intro M p q
-    rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
-    calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
-          Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le)
-            (Finset.mem_univ q)
-      _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
-          Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
-  rw [Matrix.linearMap_trace_eq_sum_apply_single, Finset.sum_mul]
-  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun p _ ↦ ?_)
-  rw [Finset.sum_mul]
-  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun q _ ↦ ?_)
-  refine (hentry _ p q).trans ?_
-  rw [mul_comm]
-  exact (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F).le_opNorm
-    (Matrix.single p q 1)
 
 /-- The powers of the complement `E_A - P` of the fixed-point projection decay at every
 rate `r` above `|λ₂|` in operator norm.

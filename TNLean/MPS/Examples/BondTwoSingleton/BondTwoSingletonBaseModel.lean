@@ -397,8 +397,8 @@ private lemma singletonScale_mul :
 
 /-- The normalized singleton is left-canonical. -/
 theorem normalizedSingletonTensor_isLeftCanonical :
-    MPSTensor.IsLeftCanonical normalizedSingletonTensor := by
-  unfold MPSTensor.IsLeftCanonical
+    MPTensor.IsLeftCanonical normalizedSingletonTensor := by
+  unfold MPTensor.IsLeftCanonical
   calc
     (∑ v : Fin (4 * 4),
         (normalizedSingletonTensor v)ᴴ * normalizedSingletonTensor v) =
@@ -446,12 +446,12 @@ theorem mpo_verticalBNTMPO_normalizedSingletonTensor
   ext sigma tau
   rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
     verticalBNTMPO_toMPSTensor]
-  change MPSTensor.mpv
+  change MPTensor.mpv
       (fun v ↦ (singletonScale : ℂ) • singletonTensor v)
       (fun n ↦ finProdFinEquiv (sigma n, tau n)) = _
   rw [MPSTensor.mpv_smul]
   change (singletonScale : ℂ) ^ L *
-      MPSTensor.mpv singletonTensor
+      MPTensor.mpv singletonTensor
         (fun n ↦ finProdFinEquiv (sigma n, tau n)) =
     (singletonScale : ℂ) ^ L *
       mpo (verticalBNTMPO singletonTensor) L sigma tau
@@ -506,7 +506,7 @@ private def retainedZeroLoopLetter : Fin (4 * 4) :=
 
 private lemma normalizedSingletonTensor_mpv_zeroLoop
     (N : ℕ) (hN : 0 < N) :
-    MPSTensor.mpv normalizedSingletonTensor
+    MPTensor.mpv normalizedSingletonTensor
       (fun _ : Fin N ↦ retainedZeroLoopLetter) =
         (singletonScale : ℂ) ^ N := by
   rw [MPSTensor.mpv_const_eq_trace_pow]
@@ -534,19 +534,19 @@ theorem normalizedSingleton_isCPSVBasis :
     refine ⟨fun _ ↦ (singletonScale : ℂ)⁻¹ ^ N, ?_⟩
     intro sigma
     simp only [Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton]
-    change MPSTensor.mpv singletonTensor sigma =
+    change MPTensor.mpv singletonTensor sigma =
       (singletonScale : ℂ)⁻¹ ^ N *
-        MPSTensor.mpv (fun v ↦ (singletonScale : ℂ) • singletonTensor v) sigma
+        MPTensor.mpv (fun v ↦ (singletonScale : ℂ) • singletonTensor v) sigma
     rw [MPSTensor.mpv_smul]
     have hs : (singletonScale : ℂ) ≠ 0 := by
       exact_mod_cast ne_of_gt singletonScale_pos
     symm
     calc
       (singletonScale : ℂ)⁻¹ ^ N *
-          ((singletonScale : ℂ) ^ N * MPSTensor.mpv singletonTensor sigma) =
+          ((singletonScale : ℂ) ^ N * MPTensor.mpv singletonTensor sigma) =
         ((singletonScale : ℂ)⁻¹ ^ N * (singletonScale : ℂ) ^ N) *
-          MPSTensor.mpv singletonTensor sigma := (mul_assoc _ _ _).symm
-      _ = MPSTensor.mpv singletonTensor sigma := by
+          MPTensor.mpv singletonTensor sigma := (mul_assoc _ _ _).symm
+      _ = MPTensor.mpv singletonTensor sigma := by
         rw [← mul_pow, inv_mul_cancel₀ hs, one_pow, one_mul]
   · refine ⟨0, ?_⟩
     intro N hN

@@ -43,6 +43,8 @@ blocked insertions implies equality before blocking.
   lines 318--345 and Appendix C.3, Lemma L, lines 1835--1858.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim decodeBlock decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm
   blockTensor flattenBlockedWord evalWord_blockTensor)

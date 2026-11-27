@@ -23,6 +23,8 @@ Appendix A, lines 2499–2503 and 2575–2578. They do not assert a spectral
 gap uniform in chain length.
 -/
 
+open MPTensor
+
 open scoped Matrix Topology ComplexOrder
 
 namespace MPSTensor

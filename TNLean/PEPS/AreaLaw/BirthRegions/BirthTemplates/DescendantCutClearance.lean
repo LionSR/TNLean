@@ -6,10 +6,11 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInduction
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairStage
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
+import QICLean.ManyBody.Sites.Template.Defs
 import QICLean.ManyBody.Sites.Lattice.SupDistance
 
 /-!
@@ -56,6 +57,9 @@ requires.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (Template boundaryEndpoints dyadicCell
+  dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices dyadicLayer_dist_lower integerPoint)
 
 open Filter
 
@@ -217,7 +221,7 @@ the clearance `dist_∞(T, Z) > 4 D₀ s₀` of Definition 9.3 and the cut clear
 `dist_∞(T, Z) > 2 n ^ β` of `geometry:cut-clearance`.
 Source: area-law Section 11, lines 748–750; Definition 9.3 (`scanner:template`)
 and `prop:two-families`, `geometry:cut-clearance`, lines 119–128. -/
-theorem Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀ : ℕ}
+theorem _root_.ManyBody.Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀ : ℕ}
     {Z : Finset (ℤ × ℤ)} {k C : ℕ} (T : Template Ctpl n s₀) (hC : 2 ≤ C)
     (hk₁ : 4 * D₀ * (2 * (2 : ℝ) ^ fineScaleIndex k) < (2 : ℝ) ^ k)
     (hk₂ : 2 * (⌈CB * (2 : ℝ) ^ fineScaleIndex k⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < (2 : ℝ) ^ k)

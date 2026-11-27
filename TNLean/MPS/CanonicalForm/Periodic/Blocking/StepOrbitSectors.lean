@@ -30,6 +30,8 @@ compressed blocks are separate from these algebraic identities.
   States: Theory and Applications*, arXiv:1708.00029, Lemma `lem:blocking-arbitrary`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Fin.NatCast
 open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
@@ -148,8 +150,9 @@ theorem adjoint_blockTensor_projection (P : Fin m → Matrix (Fin D) (Fin D) ℂ
       projector_mul_evalWord_eq_evalWord_mul_projector P A hshift u (wordOfBlock d p i)
   simp only [Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose,
     Matrix.mul_assoc, hword]
-  simp only [← Matrix.mul_assoc, ← Finset.sum_mul,
-    leftCanonical_blockTensor A p hA, Matrix.one_mul]
+  have hTP : ∑ i, (blockTensor A p i)ᴴ * blockTensor A p i = 1 :=
+    Kraus.IsTP.blockTensor (A := A) hA p
+  simp only [← Matrix.mul_assoc, ← Finset.sum_mul, hTP, Matrix.one_mul]
 
 /-- Compress the step-orbit corners to nonzero left-canonical blocks without changing any MPV.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, the block construction before
@@ -173,7 +176,7 @@ theorem exists_stepOrbit_blockDecomposition
     exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
       (blockTensor A p) (stepOrbitProjection P p)
       (stepOrbitProjection_isOrthogonalProjection P hproj hsum p)
-      ((sum_stepOrbitProjection P p).trans hsum) (leftCanonical_blockTensor A p hA)
+      ((sum_stepOrbitProjection P p).trans hsum) (Kraus.IsTP.blockTensor (A := A) hA p)
       (stepOrbitProjection_mul_blockTensor P A hshift p)
   have hentries (a : Fin (m.gcd p)) (i : Fin (blockPhysDim d p)) :
       blocks a i = (V a)ᴴ * blockTensor A p i * V a := by

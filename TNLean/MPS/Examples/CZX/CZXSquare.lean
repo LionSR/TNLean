@@ -64,6 +64,8 @@ The compression datum and its exact-arithmetic certificates were first recorded 
 (`ex:p5ft-czx`, lines 996–1037); they are verification records, not the source.
 -/
 
+open MPTensor
+
 section CZXSquare
 
 noncomputable section

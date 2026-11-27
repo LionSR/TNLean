@@ -18,6 +18,8 @@ For a tensor \(A\) and block length \(L\), the local ground space is
 \(X ↦ (σ ↦ \operatorname{tr}(A^σ X))\).
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor
@@ -110,7 +112,7 @@ lemma trace_gauge_boundary (X : GL (Fin D) ℂ) (E Y : Matrix (Fin D) (Fin D) �
         simpa [Matrix.mul_assoc] using Matrix.trace_mul_comm ((Xinv * Y) * Xmat) E
 
 /-- A virtual gauge change does not change the local ground space. -/
-theorem GaugeEquiv.groundSpace_le {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.groundSpace_le {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L : ℕ) :
     groundSpace B L ≤ groundSpace A L := by
   rcases h with ⟨X, hX⟩
@@ -124,7 +126,7 @@ theorem GaugeEquiv.groundSpace_le {A B : MPSTensor d D}
 
 /-- Gauge-equivalent tensors have identical local ground spaces at every
 length. -/
-theorem GaugeEquiv.groundSpace_eq {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.groundSpace_eq {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L : ℕ) :
     groundSpace A L = groundSpace B L := by
   apply le_antisymm

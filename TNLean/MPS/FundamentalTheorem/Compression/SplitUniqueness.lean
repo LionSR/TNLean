@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Compression.AdmissibleBlock
 import TNLean.MPS.FundamentalTheorem.Compression.UniquenessBlocks
 import TNLean.MPS.Operator.Fusion.ZipperUniqueness
+import QICLean.Kraus.BlockTriangularWord
 
 /-!
 # Uniqueness of split multi-block reductions
@@ -65,38 +66,6 @@ theorem of matrix product states*, Proposition 6.12.
 -/
 
 open scoped Matrix
-
-namespace Matrix
-
-variable {o : Type*} [Fintype o] [DecidableEq o] {n : o → ℕ}
-
-/-- The coordinate blocks resolve the identity: `∑ k, blockEmbed n k * blockProj n k = 1`. -/
-theorem sum_blockEmbed_mul_blockProj : ∑ k, blockEmbed n k * blockProj n k = 1 := by
-  have h := sum_blockEmbed_mul_mul_blockProj (n := n) fun _ => 1
-  simp only [Matrix.mul_one] at h
-  rw [h]
-  exact blockDiagonal'_one
-
-/-- A block diagonal matrix maps the `k`-th coordinate block into itself by its `k`-th block. -/
-theorem blockDiagonal'_mul_blockEmbed (M : ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (k : o) :
-    blockDiagonal' M * blockEmbed n k = blockEmbed n k * M k := by
-  rw [← sum_blockEmbed_mul_mul_blockProj, Matrix.sum_mul, Finset.sum_eq_single k]
-  · rw [Matrix.mul_assoc, blockProj_mul_blockEmbed_self, Matrix.mul_one]
-  · intro l _ hl
-    rw [Matrix.mul_assoc, blockProj_mul_blockEmbed_of_ne hl, Matrix.mul_zero]
-  · simp
-
-/-- The `k`-th coordinate projection of a block diagonal matrix is its `k`-th block. -/
-theorem blockProj_mul_blockDiagonal' (M : ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (k : o) :
-    blockProj n k * blockDiagonal' M = M k * blockProj n k := by
-  rw [← sum_blockEmbed_mul_mul_blockProj, Matrix.mul_sum, Finset.sum_eq_single k]
-  · rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, blockProj_mul_blockEmbed_self, Matrix.one_mul]
-  · intro l _ hl
-    rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, blockProj_mul_blockEmbed_of_ne (Ne.symm hl),
-      Matrix.zero_mul, Matrix.zero_mul]
-  · simp
-
-end Matrix
 
 namespace MPSTensor
 

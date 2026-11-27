@@ -294,7 +294,7 @@ theorem existsUnique_eq_smul_one_of_commute_quasiLocalObservable {d : ℕ} [NeZe
       apply quasiLocalObservable_injective d ∅
       simp only [map_smul, map_one]
       rw [← hc', ← hA, hAc, map_smul, map_one]
-    let i : Config d ∅ := Classical.choice (instNonemptyConfig d ∅)
+    let i : Config d ∅ := Classical.arbitrary _
     have hentry := congrFun (congrFun hlocal i) i
     simpa using hentry
 

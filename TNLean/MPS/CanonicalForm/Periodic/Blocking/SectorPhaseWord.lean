@@ -35,6 +35,8 @@ Theorem 4.1.
   into a blocked tensor root.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix
 
 section SectorPhaseWord

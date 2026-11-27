@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.GroundSpace.GroundSpace
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.Positive
+import QICLean.Analysis.Order.PosSemidefCommute
 
 /-!
 # The \(\ell^2\) pairing of coefficient vectors
@@ -28,24 +29,6 @@ positive has only nonnegative eigenvalues.
 -/
 
 open scoped InnerProductSpace ComplexConjugate ComplexOrder
-
-namespace LinearMap
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-
-/-- The eigenvalue of a positive operator for a nonzero eigenvector is nonnegative. -/
-theorem IsPositive.nonneg_of_apply_eq_smul {T : E →ₗ[ℂ] E} (hT : T.IsPositive) {v : E}
-    (hv : v ≠ 0) {μ : ℂ} (h : T v = μ • v) : 0 ≤ μ := by
-  have hnn := hT.inner_nonneg_right v
-  rw [h, inner_smul_right, inner_self_eq_norm_sq_to_K] at hnn
-  have hr : (0 : ℂ) < ((‖v‖ ^ 2 : ℝ) : ℂ) := by
-    exact_mod_cast (show (0 : ℝ) < ‖v‖ ^ 2 by positivity)
-  have hμ : μ = μ * ((‖v‖ ^ 2 : ℝ) : ℂ) * ((‖v‖ ^ 2 : ℝ) : ℂ)⁻¹ := by
-    rw [mul_assoc, mul_inv_cancel₀ hr.ne', mul_one]
-  rw [hμ]
-  exact mul_nonneg (by exact_mod_cast hnn) (inv_nonneg.2 hr.le)
-
-end LinearMap
 
 namespace MPSTensor
 

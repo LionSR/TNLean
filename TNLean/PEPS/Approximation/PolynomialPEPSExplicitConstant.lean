@@ -54,6 +54,8 @@ is a named numerical constant: the hole ratio `ε₀ = 1 / 30000`, the mesh rati
   `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -189,12 +191,15 @@ Source: Polynomial-PEPS manuscript, the proof of Theorem 1.1 in §8, `07-assembl
 with Proposition 3.4 (`02-information.tex:635–658`), Proposition 4.1 (`03-patches.tex:26–49`)
 and Proposition 7.1 (`06-geometry.tex:12–53`). -/
 theorem hasPEPSApproximation_of_patchSupply {q : ℕ} (hq : 2 ≤ q)
-    {G : ∀ L : ℕ, StateSpace L q → Prop} (hunit : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {D L_ang c : ℝ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hunit : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {D L_ang c : ℝ}
     (hD1 : 1 ≤ D) (hD : IsAngularScale q G (angularConstant / 2) 1 4 60 D L_ang)
-    (hsupply : ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    (hsupply : ∀ L : ℕ, 2 ≤ L →
+      ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
       AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) (adaptivePatchPrefactor q (20 * D)) c
         60 L) :
-    ∀ L : ℕ, 2 ≤ L → pepsSizeThresholdOf L_ang ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    ∀ L : ℕ, 2 ≤ L → pepsSizeThresholdOf L_ang ≤ L →
+        ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
       HasPEPSApproximation (pepsLargeSizePrefactorOf q D) (pepsBondExponentOfPatch c) L q Ω := by
   have hB₀ : (0 : ℝ) ≤ 20 * D := by linarith
   have hnet := dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt hq hunit
@@ -230,7 +235,8 @@ theorem polynomialPEPSApproximation_of_ratios {q : ℕ} (hq : 2 ≤ q) {J Δ : �
     (hJ : 0 < J) (hΔ : 0 < Δ) {C_A D L_ang : ℝ}
     (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A) (hD1 : 1 ≤ D)
     (hD : IsAngularScale q (IsSquareGroundState q J Δ) (angularConstant / 2) 1 4 60 D L_ang) :
-    ∀ L : ℕ, 2 ≤ L → pepsSizeThresholdOf L_ang ≤ L → ∀ Ω : StateSpace L q,
+    ∀ L : ℕ, 2 ≤ L → pepsSizeThresholdOf L_ang ≤ L →
+        ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
       IsSquareGroundState q J Δ L Ω →
         HasPEPSApproximation (pepsLargeSizePrefactorOf q D) (pepsBondExponentOf q J Δ C_A D)
           L q Ω := by

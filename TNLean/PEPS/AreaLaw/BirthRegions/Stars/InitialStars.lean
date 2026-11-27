@@ -38,6 +38,8 @@ Manuscript file:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (boundaryEndpoints fineLayerIndices)
+
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

@@ -141,7 +141,7 @@ and the new-gate step at lines 5440–5487. -/
 theorem IsRepresentation.inverseCompatibleGates_unitary_and_phase_of_inv_eq
     {G : Type*} [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) (hU : IsMPUCanonicalFormII (F.tensor g)) :
     let T := hF.daggerInverseGauge F hcanonical g
     let σ := hF.daggerInverseScalar F hcanonical g

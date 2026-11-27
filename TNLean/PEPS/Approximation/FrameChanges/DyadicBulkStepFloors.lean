@@ -50,6 +50,7 @@ is left to the assembly of Proposition 7.1.
   `02-information.tex`, lines 635–658.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -89,7 +90,8 @@ theorem mem_image_vertexZone_of_mem_outerHoles {κ : Type*} (F : Frame pos q Par
 end VertexZone
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
   {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} [Fintype Party]
   [DecidableEq Party] {κ : Type*}
 

@@ -28,6 +28,8 @@ eigenvalues of `A^w` and `B^w` agree with multiplicities (uniqueness of power su
 `tr A^w = tr B^w`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

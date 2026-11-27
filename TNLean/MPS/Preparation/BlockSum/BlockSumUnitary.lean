@@ -5,7 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.BlockUnitary
 import TNLean.MPS.Preparation.BlockSum.OrthogonalBlockSum
-import TNLean.MPS.Tensor.Physical.PolarUniqueness
+import QICLean.Entropy.StrongSubadditivity.TripartiteDecorrelation
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
 import TNLean.MPS.Preparation.Polar.SequentialFactorization
 
 /-!

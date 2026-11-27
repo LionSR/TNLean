@@ -57,8 +57,8 @@ coefficients.
 
 \begin{lemma}[Normality and left-canonical normalization under entrywise conjugation]
     \label{thm:cpsv_map_star_preservation}
-    \lean{MPSTensor.IsLeftCanonical.mapStar}
-    \lean{MPSTensor.GaugeEquiv.mapStar}
+    \lean{MPTensor.IsLeftCanonical.mapStar}
+    \lean{MPTensor.GaugeEquiv.mapStar}
     \lean{Kraus.IsNormal.mapStar}
     \lean{MPSTensor.IsNormalTensor.mapStar}
     \leanok
@@ -212,8 +212,8 @@ coefficients.
 \begin{lemma}[Physical relabeling preserves CPSV normal and canonical form]
     \label{thm:cpsv_physical_reindexing}
     \lean{MPSTensor.IsNormalTensor.reindexPhysical}
-    \lean{MPSTensor.leftCanonical_reindexPhysical_equiv}
-    \lean{MPSTensor.transferMap_reindexPhysical_equiv}
+    \lean{Kraus.isTP_reindexPhysical_iff}
+    \lean{Kraus.transferMap_reindexPhysical_equiv}
     \lean{MPSTensor.CPSVCanonicalFormData.reindexPhysical}
     \lean{MPSTensor.IsCPSVCanonicalForm.reindexPhysical}
     \lean{MPSTensor.isNormal_reindexPhysical_equiv}
@@ -256,7 +256,7 @@ coefficients.
 
 \begin{lemma}[Transfer maps under a bond-space gauge]
     \label{thm:cpsv_gauge_transfer_similarity}
-    \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
+    \lean{MPTensor.GaugeEquiv.transferMap_eq_similarityMap}
     \leanok
     \uses{def:gauge_equiv,def:transfer_map}
     If $B^i=XA^iX^{-1}$ for every physical index $i$, then there is an
@@ -274,7 +274,7 @@ coefficients.
 
 \begin{lemma}[Gauge invariance of transfer quasi-idempotence]
     \label{thm:cpsv_gauge_transfer_quasi_idempotence}
-    \lean{MPSTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff}
+    \lean{MPTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff}
     \leanok
     \uses{def:gauge_equiv,def:transfer_map}
     Let $A$ and $B$ be gauge-equivalent MPS tensors and let $c\in\C$. Then
@@ -364,9 +364,30 @@ coefficients.
     across the gauge.
 \end{proof}
 
+\begin{lemma}[CPSV normal tensors are the normal tensors of spectral radius one]
+    \label{thm:is_normal_tensor_iff_is_normal_spectral_radius_one}
+    \lean{MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one}
+    \leanok
+    \uses{def:normal,def:nt_cpsv,thm:normal_irreducible_tensor,thm:pure_perron_tp_gauge,thm:is_normal_tensor_of_is_normal_left_canonical,thm:cpsv_normal_tensor_gauge_transport}
+    A tensor $A$ is a CPSV normal tensor if and only if $A$ is normal and
+    $r(\E_A)=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:normal,thm:normal_irreducible_tensor,thm:pure_perron_tp_gauge,thm:is_normal_tensor_of_is_normal_left_canonical,thm:cpsv_normal_tensor_gauge_transport}
+    A CPSV normal tensor is normal and has $r(\E_A)=1$ by definition of the
+    second condition. Conversely, a normal tensor is irreducible
+    (Lemma~\ref{thm:normal_irreducible_tensor}); with $r(\E_A)=1$ it has
+    $D>0$ and is gauge equivalent to a left-canonical tensor $B$
+    (Lemma~\ref{thm:pure_perron_tp_gauge}). Normality passes to $B$, so $B$ is a
+    CPSV normal tensor by
+    Lemma~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}, and so is $A$
+    by Lemma~\ref{thm:cpsv_normal_tensor_gauge_transport}.
+\end{proof}
+
 \begin{lemma}[Positive blocking preserves CPSV normal tensors]
     \label{thm:cpsv_normal_tensor_positive_blocking}
-    \lean{MPSTensor.GaugeEquiv.blockTensor}
+    \lean{MPTensor.GaugeEquiv.blockTensor}
     \lean{MPSTensor.IsNormalTensor.blockTensor}
     \leanok
     \uses{def:nt_cpsv,def:blocked_tensor,thm:cpsv_normal_tp_gauge,thm:tp_primitive_irreducible_extra_blocking,thm:cpsv_normal_tensor_gauge_transport,thm:is_normal_tensor_of_is_normal_left_canonical}

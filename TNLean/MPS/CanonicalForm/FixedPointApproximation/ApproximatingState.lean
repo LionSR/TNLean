@@ -60,6 +60,8 @@ This file proves these three steps.
   Material, "Proof of Lemma 1 and extension to non-normal tensors" and proof of Lemma 1'(i).
 -/
 
+open MPTensor
+
 section FixedPointPairs
 
 /-!
@@ -133,7 +135,7 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
     simpa using (tendsto_const_nhds (x := P X)).add happ
   refine hlim.congr' ?_
   filter_upwards [eventually_ge_atTop 1] with q hq
-  rw [transferMap_blockTensor_apply,
+  rw [Kraus.transferMap_blockTensor_apply,
     pow_eq_fixedPointProj_add_compl_pow E htr' hTP hfix hq]
   rfl
 

@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.MatrixL2Contraction
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import TNLean.PEPS.Approximation.HoleEncoder
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 
 /-!
 # Encoded frames

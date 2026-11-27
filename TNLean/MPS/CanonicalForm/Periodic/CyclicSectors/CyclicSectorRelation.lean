@@ -35,6 +35,8 @@ iteration lemmas below.
 
 matrix product states, cyclic sectors, peripheral spectrum, blocking
 -/
+
+open MPTensor
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Kraus (blockPhysDim blockTensor)
 
@@ -100,7 +102,7 @@ adjoint transfer map:
 This is proved by passing to Frobenius adjoints. First,
 `Kraus.transferMap (fun i => (A i)ᴴ) = (Kraus.transferMap A).adjoint`, and likewise for the blocked
 family `blockTensor A m`. Second, `Kraus.transferMap (blockTensor A m) = (Kraus.transferMap A)^m` by
-`transferMap_blockTensor`. Finally, adjoint commutes with powers, so
+`Kraus.transferMap_blockTensor`. Finally, adjoint commutes with powers, so
 `((Kraus.transferMap A)^m).adjoint = ((Kraus.transferMap A).adjoint)^m`. -/
 theorem transferMap_adjoint_blocked_eq_pow
     {d D : ℕ} (A : MPSTensor d D) (m : ℕ) (X : MatrixAlg D) :
@@ -139,7 +141,7 @@ theorem transferMap_adjoint_blocked_eq_pow
             (blockTensor A m)).adjoint) X := by
             rw [hBlockedAdj]
     _ = (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m).adjoint) X := by
-          rw [transferMap_blockTensor]
+          rw [Kraus.transferMap_blockTensor]
     _ = ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) X := by
           rw [← hPowAdj]
 
@@ -230,7 +232,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
   -- Step 4: Blocked tensor is TP
   have hTP_blocked : ∑ i : Fin (blockPhysDim d m),
       (blockTensor A m i)ᴴ * blockTensor A m i = 1 :=
-    leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := m) hTP
+    Kraus.IsTP.blockTensor (A := A) hTP m
   -- Step 5: Apply the CyclicSectors decomposition
   obtain ⟨dim, blocks, φ, V, hLC, hMPV_hTrace⟩ :=
     exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry

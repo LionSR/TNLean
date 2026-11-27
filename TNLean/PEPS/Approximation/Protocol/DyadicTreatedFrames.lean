@@ -29,6 +29,8 @@ raw owners and tags are read through the party map of the repainting.
   (lines 481–505), and the parties of a repainting (lines 585–596).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric
@@ -85,7 +87,7 @@ lemma HasFrameChange.mono_error {F F' : Frame pos q Party}
 
 end Bounds
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
 
 /-- **The treated hole radius is admissible.** At the constants of the protocol and `L ≥ 2`, the
 radius `ε₀ t`, `t = D log L`, is positive and at most `B₀ log L` (`06-geometry.tex`,
@@ -223,7 +225,8 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559�
 theorem pointTreatment_hasSourceBoundedChange_of_le {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q]
+          {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
       {C c : ℝ}, ∀ hL : 2 ≤ L, ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
         (R : RepaintedSquare k), K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ) →
@@ -285,7 +288,8 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559�
 theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q]
+          {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
       {C c : ℝ}, ∀ hL : 2 ≤ L, ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
         (R : RepaintedSquare k), K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ) →

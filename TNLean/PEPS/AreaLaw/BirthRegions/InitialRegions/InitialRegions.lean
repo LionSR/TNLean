@@ -5,9 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.BeltFanColors
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRuns
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRunContacts
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.PrimaryFineCellCover
 import Mathlib.Analysis.Normed.Affine.AddTorsorBases
 import Mathlib.Topology.GDelta.Basic
@@ -45,6 +46,10 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_eq_closure_initialOpenRegion`: regularity of
   initial birth regions.
 -/
+
+open ManyBody (dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices dyadicLayer
+  dyadicNeighborhood dyadicNeighborhood_contact_layer_eq dyadicNeighborhood_disjoint_later_layer
+  fineLayerIndices occupiedCellIndices)
 
 section InitialRegions
 

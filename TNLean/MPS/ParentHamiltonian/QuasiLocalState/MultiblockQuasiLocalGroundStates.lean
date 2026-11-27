@@ -77,6 +77,8 @@ and its finite-family consequence, lines 919--924. The open-kernel threshold
 is PGVWC07, arXiv:quant-ph/0608197, Theorem 12, lines 1430--1454.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
@@ -153,7 +155,7 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
       quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
         μ A hμ j (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
         (hP j).trace_ne_zero h hker⟩,
-      (hP j).isPureQuasiLocalState_quasiLocalExpectation (hρ j)⟩
+      TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation (hP j) (hρ j)⟩
 
 end MPSTensor
 

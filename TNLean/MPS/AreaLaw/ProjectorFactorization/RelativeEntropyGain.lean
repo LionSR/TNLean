@@ -261,8 +261,8 @@ theorem relent_of_projectorFactorization
     (hfact : ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
       IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧ ‖OB‖ ≤ 1 ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L c ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 c ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 c) ∧
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L (c - l) (c + l) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(l / ξ')))
@@ -418,8 +418,8 @@ theorem relent_of_projectorFactorization_of_le_entropy (hq : 2 ≤ q)
   have hfactS : ∀ m : ℕ, c + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
       IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧ ‖OB‖ ≤ 1 ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L c ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 c ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 c) ∧
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L (c - m) (c + m) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')) := by
@@ -439,9 +439,9 @@ theorem relent_of_projectorFactorization_of_le_entropy (hq : 2 ≤ q)
   have hP : 0 < P := by linarith
   have hfact' : ∀ m : ℕ, c + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (c + m) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L c ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L 0 (c + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 c ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 c) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')) := by
     intro m hm
@@ -450,8 +450,7 @@ theorem relent_of_projectorFactorization_of_le_entropy (hq : 2 ≤ q)
     refine ⟨OB, OL, OR, SB, SL, SR, hSB, fun i hi ↦ ?_, hSL, hSLc, hSR, hSRc, hprod⟩
     have := hSBi hi
     rw [mem_interval] at this
-    rw [mem_leftBlock]
-    exact this.2
+    exact mem_interval.mpr ⟨Nat.zero_le _, this.2⟩
   have hboot := entropy_le_of_overlap_schmidtRank_mixture_of_factorization hq hΩ c hξ hC₁
     hfact' le_rfl w ψ hw hrank hnorm hP hPdef.symm
   -- `2 C₁² / P < C₁ e^{l/ξ'}`, so the bootstrap bound falls below the window condition.

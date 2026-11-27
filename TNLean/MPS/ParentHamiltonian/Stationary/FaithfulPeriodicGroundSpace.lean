@@ -33,6 +33,8 @@ Wolf, Proposition 6.11 and Theorem 6.13; periodicity follows from the irreducibl
 channel peripheral-spectrum theorem and DCCSP17, arXiv:1708.00029, Section 2.1.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
 variable {d D E : ℕ}
@@ -40,7 +42,7 @@ variable {d D E : ℕ}
 /-- Left-canonical normalization passes through an isometric intertwiner.
 This is the trace-preserving compression identity used in DCCSP17,
 arXiv:1708.00029, Section 2.1, equation eq:unital. -/
-theorem IsLeftCanonical.of_isometry_intertwine
+theorem _root_.MPTensor.IsLeftCanonical.of_isometry_intertwine
     {A : MPSTensor d D} (hA : IsLeftCanonical A)
     (B : MPSTensor d E) (V : Matrix (Fin D) (Fin E) ℂ)
     (hV : Vᴴ * V = 1) (hInt : ∀ i, A i * V = V * B i) :

@@ -89,6 +89,8 @@ before eq. `eq:B_TM`, is the positive semidefinite matrix `√σᵀ ⊗ 1`
   eq. `eq:key_approximation`, eq. `eq:phi_tilde`, eq. `eq:normal_fp_local`.
 -/
 
+open MPTensor
+
 open scoped Kronecker Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Operator
 open Matrix Finset
 

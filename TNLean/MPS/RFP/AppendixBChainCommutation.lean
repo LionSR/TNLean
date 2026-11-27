@@ -34,6 +34,8 @@ than two is the line spanned by the corresponding matrix product vector.
   lines 534--541.
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor

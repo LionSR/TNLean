@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
 import QICLean.Algebra.SpinCover.Basic
-import TNLean.MPS.Operator.DensityOperator.AreaLaw
+import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
 import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
 import TNLean.MPS.Operator.DensityOperator.RFPViaTS
 
@@ -189,7 +189,7 @@ private lemma reducedBlockState_M_apply {N L : ℕ} (hL : L ≤ N) (hN : 0 < N)
   set K := N - L with hK
   have hNK : N = L + K := by omega
   have hcard : Fintype.card (Fin K → Fin 2) = 2 ^ K := by simp
-  rw [reducedBlockState_eq_sum M hL u v, normalizedMPO_M_eq N hN,
+  rw [MPOTensor.reducedBlockState_eq_sum M hL u v, normalizedMPO_M_eq N hN,
     rho_eq_diagonal N]
   by_cases huv : u = v
   · subst v
@@ -283,7 +283,7 @@ theorem M_isSAL : IsSAL M := by
     exact pow_ne_zero N (by norm_num)
   · intro N L hLpos hLhalf
     have hM : (mpo M N).PosSemidef := M_isMPDO N (by omega)
-    simp only [mutualInfoChain]
+    simp only [mutualInfoChain_eq]
     have hLval : blockEntropy M N L
         (Nat.le_of_lt (hLhalf.trans_le (Nat.div_le_self N 2))) hM =
         (L : ℝ) * Real.log 2 := by

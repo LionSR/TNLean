@@ -48,7 +48,7 @@
     \label{thm:primitive_insertion_transfer_limit}
     \lean{MPSTensor.fixedPointProj_physicalObservableTransfer_fixedPointProj,
         Kraus.HasComplementaryFixedPointGap.transferMap_pow_tendsto_fixedPointProj,
-        Kraus.HasComplementaryFixedPointGap.physicalObservableTransfer_sandwich_tendsto}
+        TNLean.MPS.ParentHamiltonian.physicalObservableTransfer_sandwich_tendsto}
     \leanok
     Let $A$ be a normalized primitive tensor with invariant matrix $\rho$,
     and let $P_\rho(Y)=\operatorname{tr}(Y)\rho/\operatorname{tr}\rho$.
@@ -67,7 +67,7 @@
 
 \begin{lemma}[Limiting boundary compression]
     \label{thm:primitive_insertion_gram_limit}
-    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservable_compression_tendsto}
+    \lean{TNLean.MPS.ParentHamiltonian.groundSpaceMapES_bulkObservable_compression_tendsto}
     \leanok
     Under the preceding hypotheses, with $K_\infty=\mathcal R(P_\rho)$,
     $\Gamma_N^*X_{\ell,r}\Gamma_N\to\eta_A(X)K_\infty$ as both
@@ -1260,8 +1260,8 @@
 
 \begin{lemma}[Uniqueness of a state with primitive MPS support]
     \label{thm:primitive_supported_quasi_local_state_unique}
-    \lean{Kraus.HasComplementaryFixedPointGap.quasiLocalState_interval_eq_insertion_of_groundSpace_support,
-        Kraus.HasComplementaryFixedPointGap.eq_quasiLocalExpectation_of_groundSpace_support}
+    \lean{TNLean.MPS.ParentHamiltonian.quasiLocalState_interval_eq_insertion_of_groundSpace_support,
+        TNLean.MPS.ParentHamiltonian.eq_quasiLocalExpectation_of_groundSpace_support}
     \leanok
     \uses{def:mps_ground_space_projection_matrix}
     Let $A$ be a trace-preserving primitive MPS tensor of positive physical
@@ -1321,7 +1321,7 @@
 
 \begin{lemma}[Purity of the primitive quasi-local MPS state]
     \label{thm:primitive_quasi_local_purity}
-    \lean{Kraus.HasComplementaryFixedPointGap.isPureQuasiLocalState_quasiLocalExpectation}
+    \lean{TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation}
     \leanok
     Let $d,D>0$, let $A$ be a trace-preserving primitive tensor, and let
     $\rho>0$ be its invariant virtual matrix. The completed MPS state

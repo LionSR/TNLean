@@ -16,7 +16,6 @@ import TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalityChain
-import TNLean.MPS.CanonicalForm.NormalBlocks.PrimitiveBlocks
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosure
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral

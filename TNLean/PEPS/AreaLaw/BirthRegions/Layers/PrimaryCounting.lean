@@ -21,6 +21,9 @@ of `prop:two-families`. Source revision:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (boundaryEndpoints card_dyadicLayerIndices_boundary_le dyadicCell dyadicCellIndex
+  dyadicLayer dyadicLayerIndices dyadicLayer_eq_iUnion mem_dyadicCell_iff)
+
 noncomputable section
 
 open ManyBody (edgeBoundary planeDomainGraph)

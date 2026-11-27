@@ -25,6 +25,8 @@ increases with the requested lower bound; no improvement at a fixed shorter
 range is asserted.
 -/
 
+open MPTensor
+
 open Filter
 open scoped Topology ComplexOrder
 

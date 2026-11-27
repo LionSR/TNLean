@@ -15,6 +15,9 @@ of these site-image projectors, without requiring ambient surjectivity.
 Source: SCP10, arXiv:1001.3807, Definition 6.1 and Theorem 6.12.
 -/
 
+open Matrix (coordinateRangeProjector matrix_mul_eq_right_of_fixes_range
+  range_coordinateRangeProjector)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

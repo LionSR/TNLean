@@ -196,10 +196,10 @@ theorem isNormalTensor_normalizedDiagonalLift
 /-- A nonempty normalized diagonal lift preserves left-canonical normalization. -/
 theorem leftCanonical_normalizedDiagonalLift
     (A : MPSTensor (d * d) D) (x : ℕ) (hx : 0 < x)
-    (hA : MPSTensor.IsLeftCanonical A) :
-    MPSTensor.IsLeftCanonical (normalizedDiagonalLift A x) := by
+    (hA : MPTensor.IsLeftCanonical A) :
+    MPTensor.IsLeftCanonical (normalizedDiagonalLift A x) := by
   classical
-  rw [MPSTensor.IsLeftCanonical, Kraus.IsTP, ← Equiv.sum_comp finProdFinEquiv,
+  rw [MPTensor.IsLeftCanonical, Kraus.IsTP, ← Equiv.sum_comp finProdFinEquiv,
     Fintype.sum_prod_type]
   apply Eq.trans (Finset.sum_congr rfl fun ij _ ↦ ?_) hA
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
@@ -362,7 +362,7 @@ theorem transferMap_normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
     Kraus.transferMap (tensorPhysicalId U x).normalizedFlattening =
       Kraus.transferMap U.normalizedFlattening := by
   rw [normalizedFlattening_tensorPhysicalId U x hx,
-    MPSTensor.transferMap_reindexPhysical_equiv,
+    Kraus.transferMap_reindexPhysical_equiv,
     transferMap_normalizedDiagonalLift U.normalizedFlattening x hx]
 
 end MPOTensor

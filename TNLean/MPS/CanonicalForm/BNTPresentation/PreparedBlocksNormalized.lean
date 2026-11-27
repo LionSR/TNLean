@@ -39,6 +39,8 @@ matrix product coefficients.
   definition and the characterization prop:char-BNT.
 -/
 
+open MPTensor
+
 open Kraus (blockPhysDim blockTensor flattenBlockedWord evalWord_blockTensor)
 
 namespace MPSTensor
@@ -112,13 +114,13 @@ private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
         (fun i : Fin ((N₀ * q) * p) => flatWord.get (Fin.cast hlen.symm i))
     simpa [Function.comp, Fin.cast_cast] using hcongr
   let σ : Fin (N₀ * q) → Fin (blockPhysDim d p) :=
-    (blockedConfigEquiv d (N₀ * q) p).symm flatConfig
+    (Kraus.blockedConfigEquiv d (N₀ * q) p).symm flatConfig
   refine ⟨N₀ * q, Nat.mul_pos hN₀ hq, σ, ?_⟩
   have hflat : flattenBlockedWord d p (List.ofFn σ) = flatWord := by
     calc
       flattenBlockedWord d p (List.ofFn σ) =
-          List.ofFn (blockedConfigEquiv d (N₀ * q) p σ) :=
-        (ofFn_blockedConfigEquiv d (N₀ * q) p σ).symm
+          List.ofFn (Kraus.blockedConfigEquiv d (N₀ * q) p σ) :=
+        (Kraus.ofFn_blockedConfigEquiv d (N₀ * q) p σ).symm
       _ = List.ofFn flatConfig := by
         simp [σ]
       _ = flatWord := hofFn

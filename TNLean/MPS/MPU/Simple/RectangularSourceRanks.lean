@@ -108,7 +108,7 @@ Source: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20,
 theorem eq_rectangularSandwich_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
-    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
+    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
     V = fun ij => A * U ij * B :=
   funext fun (i, j) => by
     simpa [Kraus.evalWord, toMPSTensor] using (h.evalWord [finProdFinEquiv (i, j)]).symm
@@ -119,7 +119,7 @@ CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
 theorem rightRank_le_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
-    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
+    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
     r[V] ≤ r[U] := by
   rw [eq_rectangularSandwich_of_isReduction h]
   exact rightRank_rectangularSandwich_le A U B
@@ -130,7 +130,7 @@ CPSV17, arXiv:1703.09188, `defnrl`, lines 450--477. -/
 theorem leftRank_le_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
-    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
+    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
     ℓ[V] ≤ ℓ[U] := by
   rw [eq_rectangularSandwich_of_isReduction h]
   exact leftRank_rectangularSandwich_le A U B
@@ -142,8 +142,8 @@ Source: MGSC18, arXiv:1706.07329v2, Definition following Proposition 20,
 theorem isReduction_blockTensor
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
-    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
-    MPSTensor.IsReduction (blockTensor U L).toMPSTensor (blockTensor V L).toMPSTensor A B := by
+    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
+    MPTensor.IsReduction (blockTensor U L).toMPSTensor (blockTensor V L).toMPSTensor A B := by
   simpa only [toMPSTensor_blockTensor] using
     (h.blockTensor L).reindexPhysical (blockedDoubledIndexEquiv d L)
 
@@ -154,7 +154,7 @@ CPSV17, arXiv:1703.09188, `IndexTh` (ii), lines 837--845. -/
 theorem rightRank_blockTensor_le_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
-    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
+    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
     r[blockTensor V L] ≤ r[blockTensor U L] :=
   rightRank_le_of_isReduction (isReduction_blockTensor h L)
 
@@ -165,7 +165,7 @@ CPSV17, arXiv:1703.09188, `IndexTh` (ii), lines 837--845. -/
 theorem leftRank_blockTensor_le_of_isReduction
     {U : MPOTensor d D} {V : MPOTensor d E}
     {A : Matrix (Fin E) (Fin D) ℂ} {B : Matrix (Fin D) (Fin E) ℂ}
-    (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
+    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) (L : ℕ) :
     ℓ[blockTensor V L] ≤ ℓ[blockTensor U L] :=
   leftRank_le_of_isReduction (isReduction_blockTensor h L)
 

@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.Sweep
+import QICLean.ManyBody.Hamiltonian.FrustrationFreeSweep
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.TypicalProjectors
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaTransport
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
@@ -45,6 +46,10 @@ comparison of the general proof give `eq:far`.
   Proposition 10.2 (`09-amplification.tex`, lines 261–296), whose restoring, polar and
   continuity steps (lines 330–364, 501–561) are reused.
 -/
+
+open ManyBody (IsFrustrationFreeGapped exists_overlapColoring kronecker_one_mulVec_apply
+  mem_ambientDilation_iff overlapDegreeBound sweepContraction sweepContraction_lt_one
+  sweepContraction_pos)
 
 open Matrix
 open ManyBody (PlaneInteraction Config edgeBoundary graphNeighborhood ambientDilation
@@ -229,7 +234,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   frustrationFreeAmplificationConstant q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
-              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     ((supDist t z : ℤ) : ℝ)) →

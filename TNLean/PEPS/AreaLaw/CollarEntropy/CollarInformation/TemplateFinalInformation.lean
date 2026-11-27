@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.SourceRoundedInformation
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.TemplateSourceEntropy
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeCounts
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import Mathlib.Data.Fintype.EquivFin
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedSampling
@@ -37,6 +37,9 @@ It also contains the following results.
   `TNLean.PEPS.AreaLaw.Scan.finalTemplateScanner_truncationSet`: the literal physical scanner of an
   ambient template.
 -/
+
+open ManyBody (Template boundaryEndpoints card_anchor_fiber_le latticeTruncationRadiusConstant
+  latticeTruncationRadiusConstant_pos template_card_le template_layer_card_le)
 
 section TemplateScanner
 

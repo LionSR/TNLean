@@ -259,9 +259,10 @@ private theorem isSupportedOn_bondComplement
 /-- A letter meets both sides of the cut after the sites `0, …, b` exactly when it is the bond
 `b`, and then it has one site on the left. -/
 private theorem letterSupport_crossing (b : Fin (L - 1)) (t : Fin L) :
-    (¬(letterSupport L t ⊆ leftBlock L (b + 1) ∨ Disjoint (letterSupport L t) (leftBlock L (b + 1)))
+    (¬(letterSupport L t ⊆ interval L 0 (b + 1) ∨
+        Disjoint (letterSupport L t) (interval L 0 (b + 1)))
       ↔ t.val = b.val) ∧
-    (t.val = b.val → (letterSupport L t ∩ leftBlock L (b + 1)).card = 1) := by
+    (t.val = b.val → (letterSupport L t ∩ interval L 0 (b + 1)).card = 1) := by
   have hb := b.isLt
   by_cases ht : t.val < L - 1
   · simp only [letterSupport, ht, ite_true]
@@ -272,25 +273,25 @@ private theorem letterSupport_crossing (b : Fin (L - 1)) (t : Fin L) :
       · left
         intro x hx
         rw [mem_interval] at hx
-        rw [mem_leftBlock]
+        rw [mem_interval]
         omega
       · right
         rw [Finset.disjoint_left]
         intro x hx hx'
         rw [mem_interval] at hx
-        rw [mem_leftBlock] at hx'
+        rw [mem_interval] at hx'
         omega
     · let y : Fin L := ⟨t.val + 1, by omega⟩
       have hy : y ∈ interval L t (t + 2) := mem_interval.mpr ⟨by simp [y], by simp [y]⟩
       have ht' : t ∈ interval L t (t + 2) := mem_interval.mpr ⟨le_rfl, by omega⟩
       rintro (hsub | hdisj)
-      · have := mem_leftBlock.mp (hsub hy)
+      · have := (mem_interval.mp (hsub hy)).2
         simp only [y] at this
         omega
-      · exact Finset.disjoint_left.mp hdisj ht' (mem_leftBlock.mpr (by omega))
+      · exact Finset.disjoint_left.mp hdisj ht' (mem_interval.mpr ⟨Nat.zero_le _, by omega⟩)
     · refine Finset.card_eq_one.mpr ⟨t, ?_⟩
       ext x
-      simp only [Finset.mem_inter, mem_interval, mem_leftBlock, Finset.mem_singleton,
+      simp only [Finset.mem_inter, mem_interval, Finset.mem_singleton,
         Fin.ext_iff]
       omega
   · simp only [letterSupport, ht, ite_false, Finset.empty_subset, true_or, not_true_eq_false,
@@ -300,9 +301,9 @@ private theorem letterSupport_crossing (b : Fin (L - 1)) (t : Fin L) :
 /-- The sum of the left counts of the crossing occurrences is the number of occurrences of
 the bond `b`. -/
 private theorem sum_crossing_eq_countP (b : Fin (L - 1)) (w : List (Fin L)) :
-    ((w.filter fun t ↦ ¬(letterSupport L t ⊆ leftBlock L (b + 1) ∨
-        Disjoint (letterSupport L t) (leftBlock L (b + 1)))).map
-      fun t ↦ (letterSupport L t ∩ leftBlock L (b + 1)).card).sum =
+    ((w.filter fun t ↦ ¬(letterSupport L t ⊆ interval L 0 (b + 1) ∨
+        Disjoint (letterSupport L t) (interval L 0 (b + 1)))).map
+      fun t ↦ (letterSupport L t ∩ interval L 0 (b + 1)).card).sum =
       w.countP fun t ↦ t.val = b.val := by
   rw [List.countP_eq_length_filter]
   rw [List.filter_congr (q := fun t ↦ decide (t.val = b.val))
@@ -320,13 +321,13 @@ theorem operatorSchmidtRank_cutOperator_bondComplementWord_le
     (b : Fin (L - 1)) {m k : ℕ} (I : Fin m → Fin L)
     (hk : (Finset.univ.filter fun j ↦ (I j).val = b.val).card ≤ k) :
     Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (b + 1)) (bondComplementWord Φ I)) ≤ q ^ (2 * k) := by
+      (interval L 0 (b + 1)) (bondComplementWord Φ I)) ≤ q ^ (2 * k) := by
   classical
   have hword : bondComplementWord Φ I = ((List.ofFn I).map (bondComplement Φ)).prod := by
     rw [bondComplementWord, List.map_ofFn]
     rfl
   have hrank := Entropy.operatorSchmidtRank_cutOperator_list_prod_le (q := q)
-    (leftBlock L (b + 1)) (letterSupport L) (bondComplement Φ)
+    (interval L 0 (b + 1)) (letterSupport L) (bondComplement Φ)
     (isSupportedOn_bondComplement Φ) (List.ofFn I)
   rw [← hword, sum_crossing_eq_countP] at hrank
   have hcount : (List.ofFn I).countP (fun t ↦ t.val = b.val) =
@@ -337,8 +338,8 @@ theorem operatorSchmidtRank_cutOperator_bondComplementWord_le
   rw [hcount] at hrank
   rcases Nat.eq_zero_or_pos q with rfl | hq
   · have hb := b.isLt
-    have : IsEmpty ((v : {v // v ∈ leftBlock L (b + 1)}) → Fin 0) :=
-      ⟨fun f ↦ (f ⟨⟨0, by omega⟩, mem_leftBlock.mpr (by simp)⟩).elim0⟩
+    have : IsEmpty ((v : {v // v ∈ interval L 0 (b + 1)}) → Fin 0) :=
+      ⟨fun f ↦ (f ⟨⟨0, by omega⟩, mem_interval.mpr ⟨Nat.zero_le _, by simp⟩⟩).elim0⟩
     exact (Matrix.operatorSchmidtRank_le_card_of_blocks_mem_span _
       (fun i : Fin 0 ↦ i.elim0) fun i _ ↦ isEmptyElim i).trans (by simp)
   · exact hrank.trans (Nat.pow_le_pow_right hq (by omega))

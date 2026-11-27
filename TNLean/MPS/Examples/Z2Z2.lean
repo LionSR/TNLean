@@ -21,3 +21,51 @@ import TNLean.MPS.Examples.Z2Z2.KleinSymmetry
 import TNLean.MPS.Examples.Z2Z2.KleinSymmetryAnomaly
 import TNLean.MPS.Examples.Z2Z2.Z2Z2AnomalyClass
 import TNLean.MPS.Examples.Z2Z2.Z2Z2BlockedAnomaly
+
+/-!
+# Anomalous `ℤ₂ × ℤ₂` symmetries
+
+Matrix product operator representations of `ℤ₂ × ℤ₂` carrying the type-II three-cocycle
+`(−1)^{a₁ b₂ c₂}`, row `(0,0,1)` of the table of Garre-Rubio, Lootens and Molnár
+(arXiv:2203.12563, lines 1845–1888). The printed qubit operators `U_a = ∏ CZ_{i,i+1} Z_i` and
+`U_b = ∏ X_i` (line 1884) are commuting involutions with the printed invariant subspaces, and
+their anomaly is that class; the printed value `ω(ab,ab,ab) = -1` is read through the diagonal
+values, a local fix recorded in `docs/paper-gaps/glm23_klein_printed_anomaly_scope.tex`. The
+two-qubit tensors built from the CZX letters are a construction of this development: their
+operators are the cocycle construction of lines 2200–2224 up to an on-site dressing, multiply
+with the signs `λ(g,h)^L = (-1)^{g₁ h₂ L}`, and become an exact normal representation after a
+diagonal dressing or after blocking two sites, with the same anomaly class. Their condensation
+defect `A_L = ∑_g U_g` (in the sense of arXiv:2204.02407) satisfies
+`A_L² = (3 + (-1)^L) A_L`, so `A_L / 4` is an orthogonal projector exactly on even rings, and
+its stacked tensor compresses onto sixteen weighted targets, four of whose pair blocks do not
+split.
+
+## General theorems instantiated
+
+* `MPOTensor.GroupCocycle.mpo_tensor_klein_apply` (group-cocycle operators): the two-qubit
+  operators are the construction for `(−1)^{a₁ b₂ c₂}` up to an on-site dressing;
+  arXiv:2203.12563, lines 2204–2222.
+* `MPOTensor.mpo_mulDiagonal` and `MPOTensor.isNormal_toMPSTensor_mulDiagonal_iff` (diagonal
+  dressing): the dressed tensors are an exact representation by normal tensors.
+* `MPSTensor.isNormal_blockTensor` (blocking preserves normality): the original tensors blocked
+  twice form a normal representation.
+* `MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor` (periodic operators from word traces): the
+  sixteen fusion rules `U_g U_h = λ(g,h)^L U_{gh}` from the pair-block compression data.
+* `MPSTensor.exists_multiBlockCompression_of_isNormal` (multi-block compression theorem): the
+  stacked defect tensor compresses onto the sixteen targets `λ(g,h) M_{gh}` with twelve zero
+  slots.
+* `MPOTensor.mulTensor_blockDiagonal'`, `MPSTensor.MultiBlockCompression.directSum` and
+  `MPSTensor.MultiBlockCompression.evalWord_remainder_directSum_ne_zero` (block-diagonal
+  assembly): the explicit assembled datum, whose remainder is nilpotent of order exactly three.
+* `MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq` (restriction to
+  subgroups): the cyclic invariants `ω(g,e,g) ω(g,g,g)` at each element of order two are computed
+  on `ℤ₂`-subfamilies.
+* `ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq`,
+  `ScalarThreeCochain.cohomologousTo_iff_klein_three_cyclicInvariants` and
+  `ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one` (Klein classification):
+  every choice of fusion tensors gives the class of `ScalarThreeCochain.kleinCocycle`, which is
+  nontrivial; arXiv:2203.12563, lines 1850–1852.
+* `LSymbol.IsCompatible.apply_involution` (L-symbol sign relations): normalized compatible
+  L-symbols of the printed symmetry satisfy `Lˣ_{g,g} = ω_g L^{g·x}_{g,g}`; arXiv:2203.12563,
+  lines 1830–1839 and 1886.
+-/

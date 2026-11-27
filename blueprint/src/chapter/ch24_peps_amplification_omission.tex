@@ -29,7 +29,7 @@ with their multiplicities. All norms are operator norms.
 \begin{definition}[Omission defect]
     \label{def:al_channel_word_omission_defect}
     \uses{def:al_channel_word}
-    \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect}
+    \lean{ManyBody.channelWordOmissionDefect}
     \leanok
     For an operator $B$ and a word $w$, put
     $D_P(w;B)=\|\mathcal E_w(B)-\mathcal E_{w|_P}(B)\|$.
@@ -38,10 +38,10 @@ with their multiplicities. All norms are operator norms.
 \begin{lemma}[Elementary bounds for the defect]
     \label{thm:al_channel_word_omission_bounds}
     \uses{def:al_channel_word_omission_defect}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_sub,
-        TNLean.PEPS.AreaLaw.norm_spectatorRootChannelWord_sub_le,
-        TNLean.PEPS.AreaLaw.channelWordOmissionDefect_bounds,
-        TNLean.PEPS.AreaLaw.channelWordOmissionDefect_append_sub_le}
+    \lean{ManyBody.spectatorRootChannelWord_sub,
+        ManyBody.norm_spectatorRootChannelWord_sub_le,
+        ManyBody.channelWordOmissionDefect_bounds,
+        ManyBody.channelWordOmissionDefect_append_sub_le}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$. Every $\mathcal E_w$ is
     linear with $\|\mathcal E_w(A-R)\|\le\|A-R\|$ and
@@ -80,7 +80,7 @@ with their multiplicities. All norms are operator norms.
 \begin{lemma}[Omitted-prefix telescope]
     \label{thm:al_channel_word_omission_telescope}
     \uses{def:al_channel_word_omission_defect}
-    \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect_le_sum_prefix}
+    \lean{ManyBody.channelWordOmissionDefect_le_sum_prefix}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$. With $w_{<j}$ the prefix
     of length $j$,
@@ -127,7 +127,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 \begin{lemma}[Expected defect as a time integral]
     \label{thm:al_channel_word_expected_omission}
     \uses{def:al_channel_word_omission_defect}
-    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_channelWordOmissionDefect_le}
+    \lean{ManyBody.integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every $i$ in a finite set $F$, and put
     $F_P=\{i\in F:P(i)\}$. Then $w\mapsto D_P(w;B)$ is $\nu_{F,t}$-integrable
@@ -155,8 +155,8 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 \begin{lemma}[One-event error from the channel shells]
     \label{thm:al_channel_event_error}
     \uses{def:al_local_root_channel,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_self_le_exp_sum_siteOscillation,
-        TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_sub_self_le_exp_of_component_support}
+    \lean{ManyBody.norm_localRootChannel_sub_self_le_exp_sum_siteOscillation,
+        ManyBody.norm_spectatorRootChannel_sub_self_le_exp_of_component_support}
     \leanok
     Let $0\le k\le\mathbb 1$, let $(K_l)_{l\ge0}$ be increasing site sets, let
     $C\ge0$, $c>0$, and $0<\alpha\le1$, and suppose
@@ -182,7 +182,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 
 \begin{lemma}[Component support from the tails]
     \label{thm:al_component_support_of_tail}
-    \lean{TNLean.PEPS.AreaLaw.mem_supportedOperators_reachable_of_forall_tail}
+    \lean{ManyBody.mem_supportedOperators_reachable_of_forall_tail}
     \leanok
     If $\|k-E_{N_l(a)}k\|\le Ce^{-cl^\alpha}$ for every $l\ge0$, with
     $c,\alpha>0$, then $k$ is supported on the connected component of $a$.
@@ -196,7 +196,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 
 \begin{lemma}[Anchors whose balls contain a site]
     \label{thm:al_graph_ball_anchor_count}
-    \lean{TNLean.PEPS.AreaLaw.card_graphBall_anchors_le}
+    \lean{ManyBody.card_graphBall_anchors_le}
     \leanok
     Let labels on a graph be anchored at $a_i$ with $|\{i:a_i=x\}|\le\mu$ for
     every site $x$. For every site $y$ and $l\ge0$,
@@ -209,12 +209,12 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 
 \begin{lemma}[Distance tail of the omitted anchors]
     \label{thm:al_omitted_anchor_tail}
-    \lean{TNLean.PEPS.AreaLaw.sum_graph_singleton_exponentialDistanceProfile_le,
-        TNLean.PEPS.AreaLaw.sum_graph_exponentialDistanceProfile_le,
-        TNLean.PEPS.AreaLaw.exp_mul_graph_exponentialDistanceProfile_le_of_anchor_far,
-        TNLean.PEPS.AreaLaw.sum_graphBall_site_function_le,
-        TNLean.PEPS.AreaLaw.sum_graphBall_exponentialDistanceProfile_le,
-        TNLean.PEPS.AreaLaw.exists_sum_omitted_graphBall_exponentialDistanceProfile_le}
+    \lean{ManyBody.sum_graph_singleton_exponentialDistanceProfile_le,
+        ManyBody.sum_graph_exponentialDistanceProfile_le,
+        ManyBody.exp_mul_graph_exponentialDistanceProfile_le_of_anchor_far,
+        ManyBody.sum_graphBall_site_function_le,
+        ManyBody.sum_graphBall_exponentialDistanceProfile_le,
+        ManyBody.exists_sum_omitted_graphBall_exponentialDistanceProfile_le}
     \leanok
     Let $K,\mu\ge0$, $b,\beta>0$, and $0<\alpha\le1$, and put
     $\gamma=\min(b,\beta)/2$. There exists $L\ge0$ such that on any finite graph
@@ -243,7 +243,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 \begin{lemma}[Expected channel omission on a graph]
     \label{thm:al_graph_channel_omission}
     \uses{def:al_channel_word_omission_defect}
-    \lean{TNLean.PEPS.AreaLaw.exists_integrable_and_integral_channelWordOmissionDefect_le}
+    \lean{ManyBody.exists_integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
     Let $C,K,\mu\ge0$, $c>0$, and $0<\alpha\le1$. There exist $D\ge0$ and
     $v,\gamma>0$ such that on any finite graph with $|N_l(x)|\le K(l+1)^2$, if
@@ -276,7 +276,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Lemma~\ref{thm:al_lattice_counts}.
 \begin{lemma}[Expected channel omission on a lattice domain]
     \label{thm:al_domain_channel_omission}
     \uses{def:al_channel_word_omission_defect}
-    \lean{TNLean.PEPS.AreaLaw.exists_domain_integrable_and_integral_channelWordOmissionDefect_le}
+    \lean{ManyBody.exists_domain_integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
     Let $C,\mu\ge0$, $c>0$, and $0<\alpha\le1$. There exist $A\ge0$ and
     $v,\gamma>0$ such that if $0\le k_i\le\mathbb 1$ on a finite domain
@@ -301,7 +301,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Lemma~\ref{thm:al_lattice_counts}.
 \begin{lemma}[Omission of distant events from the constraint product]
     \label{thm:al_domain_constraint_omission}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_omission}
+    \lean{ManyBody.exists_domainConstraintWord_omission}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:al_domain_channel_omission}, with
     the same constants $A,v,\gamma$, suppose $k_i\Omega=0$ for a unit vector
@@ -329,7 +329,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Lemma~\ref{thm:al_lattice_counts}.
 \begin{lemma}[Omission for the exact positive constraints]
     \label{thm:al_lattice_constraint_omission}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_omission}
+    \lean{ManyBody.exists_latticeConstraintWord_omission}
     \leanok
     Let $p\ge1$, $R,J\ge0$, and $\Delta>0$, and put $\alpha=p/(p+1)$. There
     exist $A\ge0$ and $v,\gamma>0$ such that
@@ -349,7 +349,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Lemma~\ref{thm:al_lattice_counts}.
 
 \begin{lemma}[Local constraint products]
     \label{thm:al_local_constraint_products}
-    \lean{TNLean.PEPS.AreaLaw.exists_domainLocalConstraintProducts}
+    \lean{ManyBody.exists_domainLocalConstraintProducts}
     \leanok
     Let $C,\mu\ge0$, $c>0$, and $0<\alpha\le1$. There exist $A\ge0$ and
     $\gamma,v>0$ with the following property. Let $0\le k_i\le\mathbb 1$ on a

@@ -36,6 +36,8 @@ September 24, 2026, `07-assembly.tex`, lines 203–214, and the target conventio
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 open ManyBody (SquareLatticeVertex squareLatticeGraph)
@@ -156,7 +158,8 @@ zero normalized error and phase zero. Source: manuscript, assembly, lines
 203–214; this is only the finite-size part of Theorem 1.1. -/
 theorem hasPEPSApproximation_of_small_size {q L L₀ : ℕ}
     (hq : 0 < q) (hL : 0 < L) (hsmall : L ≤ L₀)
-    (C c : ℝ) (hc : 0 ≤ c) (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) :
+    (C c : ℝ) (hc : 0 ≤ c) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
+    (hΩ : ‖Ω‖ = 1) :
     HasPEPSApproximation (max C (q ^ (L₀ * L₀) : ℕ)) c L q Ω := by
   obtain ⟨A, hpos, hbound, hstate⟩ :=
     ExactTreeRepresentation.exists_exact_square_tensor_polynomial
@@ -176,7 +179,8 @@ Source: manuscript, assembly, lines 203–214. -/
 theorem exists_uniform_small_size_approximation {q L₀ : ℕ}
     (hq : 0 < q) (C c : ℝ) (hc : 0 ≤ c) :
     ∃ C' : ℝ, 0 < C' ∧ C ≤ C' ∧
-      ∀ L : ℕ, 2 ≤ L → L < L₀ → ∀ Ω : StateSpace L q,
+      ∀ L : ℕ, 2 ≤ L → L < L₀ →
+          ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
         ‖Ω‖ = 1 → HasPEPSApproximation C' c L q Ω := by
   refine ⟨max C (q ^ (L₀ * L₀) : ℕ), ?_, le_max_left _ _, ?_⟩
   · have hfinite : (0 : ℝ) < (q ^ (L₀ * L₀) : ℕ) := by

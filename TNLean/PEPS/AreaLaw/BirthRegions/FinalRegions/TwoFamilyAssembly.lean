@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.Template.BoundaryEntropyAssembly
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Lattice.SupDistance
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.InitialPrimaryErrorSum
@@ -61,6 +62,8 @@ fine-clearance inequality.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (Template boundaryEndpoints dyadicOrigin integerPoint)
 
 noncomputable section
 
@@ -365,15 +368,15 @@ Source: area-law Section 11, `prop:two-families`, `10-geometry.tex`,
 lines 98–141. -/
 def IsTwoFamilyDecompositionConstant (D₀ Ctpl : ℝ) (nstar : ℕ) (C : ℝ) : Prop :=
   ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ, 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
-    ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
-      ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
+    ∃ P : ManyBody.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
+      ∃ T : ∀ i, ManyBody.Template Ctpl (n i) (s i),
         (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
         (∀ i, (P.piece i).Nonempty) ∧
         (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
-        (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
+        (∀ i, (T i).IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A)) ∧
         (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
         (∀ i, nstar ≤ n i) ∧
-        (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+        (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
           2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
         (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
           2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
@@ -818,8 +821,8 @@ theorem isTwoFamilyDecompositionConstant_of_one_le {D₀ Ctpl c₁ : ℝ} (hCtpl
 /-- A template for a larger template constant is a template for any smaller one:
 the constant enters only the scale inequality `Ctpl N₀ (s₀ + 1) ≤ n`, whose
 other factors are nonnegative. -/
-def Geometry.Template.ofLe {Ctpl Ctpl' : ℝ} {n s₀ : ℕ} (h : Ctpl ≤ Ctpl')
-    (T : Geometry.Template Ctpl' n s₀) : Geometry.Template Ctpl n s₀ where
+def _root_.ManyBody.Template.ofLe {Ctpl Ctpl' : ℝ} {n s₀ : ℕ} (h : Ctpl ≤ Ctpl')
+    (T : ManyBody.Template Ctpl' n s₀) : ManyBody.Template Ctpl n s₀ where
   n_pos := T.n_pos
   s₀_pos := T.s₀_pos
   pieceCount := T.pieceCount

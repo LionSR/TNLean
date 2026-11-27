@@ -126,7 +126,7 @@ theorem T_not_isSimple : ¬ IsSimple T := by
   have hAll := (bnt_basis_not_isNilpotent_iff hPres hQ).mp hNonNil
   let k₁ : Fin data.r := (1 : Fin 2)
   apply hAll (data.classCopy k₁).1
-  have hGauge : MPSTensor.GaugePhaseEquiv
+  have hGauge : MPTensor.GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (Kraus.blockPhysDim 8 L * Kraus.blockPhysDim 8 L))
           (ref.copyDimEq k₁))
         (data.blocks (data.representativeIndex (data.classCopy k₁).1)))

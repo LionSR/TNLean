@@ -56,7 +56,7 @@ private noncomputable def blockSpectatorLinearIsometryEquiv (d D p : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1) ≃ₗᵢ[ℂ]
       BoundaryFamilySpace (D := D) (Cfg d p) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (((blockedConfigEquiv d 1 p).trans
+    (((Kraus.blockedConfigEquiv d 1 p).trans
       (Equiv.arrowCongr (finCongr (by omega : 1 * p = p))
         (Equiv.refl (Fin d)))).prodCongr (Equiv.refl (Fin D × Fin D)))
 
@@ -75,7 +75,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
   change Matrix.trace (Kraus.evalWord (blockTensor A p) (List.ofFn _) * _) =
     Matrix.trace (Kraus.evalWord A (List.ofFn _) * _)
   congr 2
-  rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv d 2 p]
+  rw [evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv d 2 p]
   congr 1
   congr 1
   · omega
@@ -89,7 +89,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
   suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (1 + k.val / p), by
       rw [hindex]
       omega⟩) ≍ fun k : Fin (p + p) => σ (k.addNat p) by
-    simpa [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+    simpa [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
       decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
   apply (Fin.heq_fun_iff (by omega)).2
   intro k
@@ -115,14 +115,14 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
   change Matrix.trace (Kraus.evalWord (blockTensor A p) (List.ofFn _) * _) =
     Matrix.trace (Kraus.evalWord A (List.ofFn _) * _)
   congr 2
-  · rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv d 2 p]
+  · rw [evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv d 2 p]
     congr 1
     congr 1
     · omega
     suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (k.val / p), by
         rw [Nat.mod_add_div]
         omega⟩) ≍ fun k : Fin (p + p) => σ (Fin.castAdd p k) by
-      simpa [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+      simpa [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
         decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
     apply (Fin.heq_fun_iff (by omega)).2
     intro k
@@ -141,7 +141,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
         (fun k => (decodeBlockEquiv d p).symm
           (Function.curry (fun ij => σ (Fin.natAdd (p + p) ij.2)) k), b, a) by
     simpa [blockSpectatorLinearIsometryEquiv, boundaryFamilyEquiv_apply_apply,
-      blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp_def,
+      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp_def,
       finProdFinEquiv]
   apply congrArg x.1
   congr 1
@@ -393,12 +393,12 @@ theorem exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
         ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
           Module.End.HasEigenvalue (Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+            (parentRingInteraction (Kraus.blockTensor A p) 2 N).hamiltonian) μ →
           μ = 0 ∨ ((1 / 8 : ℝ) : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
   obtain ⟨_, hGap⟩ :=
     hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator
-      (blockTensor A p) 2 (by omega) hAnti
+      (Kraus.blockTensor A p) 2 (by omega) hAnti
   refine ⟨p, hp, hInj, fun N hN μ hμ ↦ ?_⟩
   have hγ : (1 / 8 : ℝ) = 1 / (4 * ((2 : ℕ) : ℝ)) := by norm_num
   rw [hγ]
@@ -417,7 +417,7 @@ theorem exists_blockTensor_hamiltonian_parentRingInteraction_gapped
         ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
           Module.End.HasEigenvalue (Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+            (parentRingInteraction (Kraus.blockTensor A p) 2 N).hamiltonian) μ →
           μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hGap⟩ :=
     hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ

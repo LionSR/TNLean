@@ -51,6 +51,8 @@ subspace (lines 431–434), the form recalled at line 1801; documented in
   product states*
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPOTensor

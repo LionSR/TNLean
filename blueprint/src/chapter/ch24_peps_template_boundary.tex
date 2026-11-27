@@ -11,9 +11,9 @@ with a physical cut.
     \label{def:area_law_ambient_boundary}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.latticeNeighbors,
-        TNLean.PEPS.AreaLaw.ambientBoundaryRegion,
-        TNLean.PEPS.AreaLaw.ambientBoundary
+        ManyBody.latticeNeighbors,
+        ManyBody.ambientBoundaryRegion,
+        ManyBody.ambientBoundary
     }
     \uses{def:area_law_template}
     Regard $S$ as a subset of its unit sup-norm dilation $S_1$.
@@ -25,13 +25,13 @@ with a physical cut.
     \label{lem:area_law_ambient_boundary_crossing}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff,
-        TNLean.PEPS.AreaLaw.card_latticeNeighbors_le,
-        TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ,
-        TNLean.PEPS.AreaLaw.card_ambientBoundary,
-        TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff,
-        TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique,
-        TNLean.PEPS.AreaLaw.ambientBoundary_empty
+        ManyBody.mem_latticeNeighbors_iff,
+        ManyBody.card_latticeNeighbors_le,
+        ManyBody.neighbor_mem_ambientDilation_succ,
+        ManyBody.card_ambientBoundary,
+        ManyBody.mem_ambientBoundary_iff,
+        ManyBody.ambientBoundary_orientation_unique,
+        ManyBody.ambientBoundary_empty
     }
     \uses{def:area_law_ambient_boundary,thm:area_law_dilation_rows_union}
     The boundary consists exactly of edges $\{p,q\}$ with
@@ -54,10 +54,10 @@ with a physical cut.
     \label{lem:area_law_ambient_boundary_layers}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.latticeNeighbors_symm,
-        TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover,
-        TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer,
-        TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer
+        ManyBody.latticeNeighbors_symm,
+        ManyBody.card_ambientBoundary_le_of_endpoint_cover,
+        ManyBody.card_ambientBoundary_le_outer_layer,
+        ManyBody.card_ambientBoundary_dilation_le_layer
     }
     \uses{lem:area_law_ambient_boundary_crossing}
     The neighbor relation is symmetric. If a finite set $R$ meets every edge
@@ -80,8 +80,8 @@ with a physical cut.
     \label{lem:area_law_ambient_boundary_difference}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset,
-        TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le
+        ManyBody.ambientBoundary_sdiff_subset,
+        ManyBody.card_ambientBoundary_sdiff_le
     }
     \uses{lem:area_law_ambient_boundary_crossing}
     For finite lattice sets $S,U$,
@@ -100,8 +100,8 @@ with a physical cut.
     \label{lem:area_law_template_ambient_boundary}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le,
-        TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le
+        ManyBody.template_boundary_card_le,
+        ManyBody.template_shell_boundary_card_le
     }
     \uses{def:area_law_template,thm:area_law_template_depth_layers,lem:area_law_ambient_boundary_layers,lem:area_law_ambient_boundary_difference}
     If $C_{\rm tpl}\ge24$ and $0\le j\le s_0$, then

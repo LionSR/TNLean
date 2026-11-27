@@ -10,5 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Tensor.HalfChain.HalfChainPhysicalStability
 import TNLean.MPS.Tensor.HalfChain.HalfChainSchmidt
-import TNLean.MPS.Tensor.HalfChain.HalfChainSpectralComparison
 import TNLean.MPS.Tensor.HalfChain.HalfChainSpectrum

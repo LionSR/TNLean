@@ -70,7 +70,7 @@ expressed on \(K\) blocked sites. Source: the regrouping convention of
 Nachtergaele, arXiv:cond-mat/9410110, Section 3, equations (3.12)--(3.14). -/
 noncomputable def blockedInteractionMatrix (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (L K : ℕ) : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ :=
-  Matrix.reindex (blockedConfigEquiv d K L).symm (blockedConfigEquiv d K L).symm
+  Matrix.reindex (Kraus.blockedConfigEquiv d K L).symm (Kraus.blockedConfigEquiv d K L).symm
     ((chainTranslates R (K * L) h).hamiltonian)
 
 /-- Decoding the coarse interaction recovers its defining original open
@@ -78,9 +78,10 @@ sum. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 equations (3.12)--(3.14). -/
 @[simp] theorem reindex_blockedInteractionMatrix (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (L K : ℕ) :
-    Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)
+    Matrix.reindex (Kraus.blockedConfigEquiv d K L) (Kraus.blockedConfigEquiv d K L)
       (blockedInteractionMatrix h L K) = (chainTranslates R (K * L) h).hamiltonian :=
-  (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)).apply_symm_apply _
+  (Matrix.reindex (Kraus.blockedConfigEquiv d K L)
+    (Kraus.blockedConfigEquiv d K L)).apply_symm_apply _
 
 private theorem placeAlong_chainWindow_hamiltonian_chainTranslates {W n b : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hb : b + W ≤ n) :
@@ -119,7 +120,7 @@ including coarse windows shorter than the original range. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), positivity of its sums. -/
 theorem blockedInteractionMatrix_posSemidef (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef) (L K : ℕ) : (blockedInteractionMatrix h L K).PosSemidef :=
-  (hamiltonian_chainTranslates_posSemidef h hh (K * L)).submatrix (blockedConfigEquiv d K L)
+  (hamiltonian_chainTranslates_posSemidef h hh (K * L)).submatrix (Kraus.blockedConfigEquiv d K L)
 
 variable [NeZero d] [NeZero L]
 
@@ -129,7 +130,7 @@ gives a window of the original chain. Source: a regrouping identity for
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
 theorem hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) :
-    Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+    Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
       ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
       ∑ i ∈ Finset.range (N + 1 - K), ∑ j ∈ Finset.range (K * L + 1 - R),
         if hij : i * L + j + R ≤ N * L then
@@ -215,9 +216,9 @@ theorem hamiltonian_chainTranslates_blockedInteractionMatrix_comparison
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
     (chainTranslates R (N * L) h).hamiltonian ≤
-        Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+        Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
           ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) ∧
-      Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+      Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
           ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) ≤
         ((K * L + 1 - R : ℕ) : ℂ) • (chainTranslates R (N * L) h).hamiltonian := by
   rw [hamiltonian_chainTranslates_blockedInteractionMatrix_reindex h]
@@ -231,19 +232,19 @@ theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+      (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) =
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian)) := by
   obtain ⟨hLower, hUpper⟩ :=
     hamiltonian_chainTranslates_blockedInteractionMatrix_comparison h hh hKN hcover
   have hLower' : Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) ≤
-      Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
-        (blockedConfigEquiv d N L)
+      Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+        (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) := by
     rw [LinearMap.le_def, ← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hLower
-  have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
-      (blockedConfigEquiv d N L)
+  have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+      (Kraus.blockedConfigEquiv d N L)
       ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) ≤
       ((K * L + 1 - R : ℕ) : ℂ) •
         Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) := by
@@ -271,7 +272,7 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
         groundSpaceES A n) :
     ∀ᶠ N in Filter.atTop, LinearMap.ker (Matrix.toEuclideanLin
-      (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+      (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) =
       (groundSpaceES (blockTensor A L) N).map
         (blockedConfigLinearIsometryEquiv d N L).toLinearEquiv.toLinearMap := by
@@ -294,7 +295,7 @@ theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_
       (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)).map
       (blockedConfigLinearIsometryEquiv d N L).toLinearEquiv.toLinearMap =
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R (N * L) h).hamiltonian) :=
-  (Matrix.ker_toEuclideanLin_reindex_map (blockedConfigEquiv d N L) _).trans
+  (Matrix.ker_toEuclideanLin_reindex_map (Kraus.blockedConfigEquiv d N L) _).trans
     (ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
       h hh hKN hcover)
 

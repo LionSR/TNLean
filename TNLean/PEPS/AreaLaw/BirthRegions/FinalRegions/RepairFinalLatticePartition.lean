@@ -8,7 +8,7 @@ import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairReplacementLatticeCov
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTermination
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthRank
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairStageSites
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 import Mathlib.Data.Fin.Tuple.Sort
 import Mathlib.SetTheory.Cardinal.NatCard
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
@@ -61,6 +61,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_earlierTerminalSquares`:
   current regions avoid earlier terminal squares.
 -/
+
+open ManyBody (OrderedTwoFamilyPartition Template boundaryEndpoints dyadicOrigin integerPoint)
 
 section RepairCurrentDisjointness
 

@@ -39,14 +39,55 @@
 \end{proof}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
-    \lean{MPOTensor.mutualInfoChain, MPOTensor.mutualInfoChain_eq}
+    \lean{MPOTensor.chainBipartitionEquiv,
+        MPOTensor.bipartitionedNormalizedMPO,
+        MPOTensor.bipartitionedNormalizedMPO_posSemidef,
+        MPOTensor.bipartitionedNormalizedMPO_trace,
+        MPOTensor.mutualInfoChain}
     \leanok
     \uses{def:block_entropy}
-    For the same fixed system size $N$, block length $L\le N$, and positive
-    semidefiniteness of $\rho^{(N)}(M)$, the \emph{mutual information} between
-    a block of $L$ spins and the rest is
-    $I_L=S_L^{(N)}(M)+S_{N-L}^{(N)}(M)-S_N^{(N)}(M)$.
+    For $N=L+K$, split a physical configuration into consecutive intervals of
+    lengths $L$ and $K$, flatten each interval to a finite index, and denote the
+    resulting bipartite form of the normalized state $\sigma^{(N)}(M)$ by
+    $\sigma^{(N)}_{L:K}$. It is positive semidefinite when $\rho^{(N)}(M)$ is,
+    and it has unit trace when $\tr[\rho^{(N)}(M)]\neq0$. For a block length
+    $L\le N$ and positive semidefinite $\rho^{(N)}(M)$, the
+    \emph{mutual information} between the first $L$ spins and the remaining
+    $N-L$ spins is the bipartite mutual information
+    \begin{align}
+        I_L & =I(\sigma^{(N)}_{L:N-L})
+        =S(\tr_B\sigma^{(N)}_{L:N-L})+S(\tr_A\sigma^{(N)}_{L:N-L})
+        -S(\sigma^{(N)}_{L:N-L}).
+        \notag
+    \end{align}
 \end{definition}
+
+\begin{lemma}[Mutual information as block entropies]
+    \label{lem:mutual_info_chain_block_entropies}
+    \lean{MPOTensor.reducedBlockState_full,
+        MPOTensor.bipartitionedNormalizedMPO_traceRight,
+        MPOTensor.bipartitionedNormalizedMPO_traceLeft,
+        MPOTensor.mutualInfoChain_eq}
+    \leanok
+    \uses{def:mutual_info_chain,def:block_entropy}
+    Across the consecutive cut after the first $L$ sites, the two marginals
+    of $\sigma^{(N)}_{L:N-L}$ are the reduced states on the first $L$ and on
+    the first $N-L$ sites, up to the standard finite-index identifications.
+    Consequently, as displayed in \cite[line~797]{Cirac2016MPDO_arXiv},
+    \begin{align}
+        I_L & =S_L^{(N)}(M)+S_{N-L}^{(N)}(M)-S_N^{(N)}(M).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The first marginal is the defining partial trace over the last $N-L$
+    sites. The second marginal is the reduced state on the last $N-L$ sites,
+    and periodic translation invariance identifies it with the reduced state on
+    the first $N-L$ sites. Entropy is invariant under the finite-index
+    identifications, and retaining the full chain leaves the normalized state
+    unchanged.
+\end{proof}
 
 \begin{definition}[Saturation of the area law]\label{def:is_sal}
     \lean{MPOTensor.IsSAL}
@@ -158,7 +199,7 @@
     \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}, $I_L\le I_{L+1}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:block_entropy,thm:mpdo_tripartite_block_entropy_identifications}
+    \uses{lem:mutual_info_chain_block_entropies,thm:mpdo_tripartite_block_entropy_identifications}
     Splitting the reduced state of the first $N-L$ spins into three contiguous
     segments of lengths $1$, $L$, and $N-2L-1$ and tracing the appropriate
     segments yields the four block entropies
@@ -330,47 +371,19 @@ The corresponding generic result is proved in the companion quantum-channel volu
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Data processing for bipartite mutual information'']{QICLean2026Blueprint}.
 
 
-\begin{definition}[Normalized state across a consecutive bipartition]
+\begin{definition}[Local maps across a consecutive bipartition]
     \label{def:mpdo_split_normalized_mpo}
-    \lean{MPOTensor.chainBipartitionEquiv,
-        MPOTensor.bipartitionedNormalizedMPO,
-        MPOTensor.bipartitionedNormalizedMPO_posSemidef,
-        MPOTensor.bipartitionedNormalizedMPO_trace,
-        MPOTensor.refineFirstBlock,
+    \lean{MPOTensor.refineFirstBlock,
         MPOTensor.coarsenFirstBlock,
         MPOTensor.refineFirstBlock_isKrausCPTP,
         MPOTensor.coarsenFirstBlock_isKrausCPTP}
     \leanok
-    For $N=L+K$, split a physical configuration into consecutive intervals of
-    lengths $L$ and $K$, flatten each interval to a finite index, and denote the
-    resulting bipartite form of the normalized periodic MPO by
-    $\sigma^{(N)}_{L:K}$. The flattened local maps on the two factors are
-    denoted by $\widehat{\mathcal T}_L$ and
+    \uses{def:mutual_info_chain}
+    On the bipartite normalized state $\sigma^{(N)}_{L:K}$ of
+    Definition~\ref{def:mutual_info_chain}, the flattened local maps on the two
+    factors are denoted by $\widehat{\mathcal T}_L$ and
     $\widehat{\mathcal S}_K$.
 \end{definition}
-
-\begin{lemma}[Chain mutual information across a consecutive cut]
-    \label{lem:mpdo_chain_mutual_information_bipartition}
-    \lean{MPOTensor.reducedBlockState_full,
-        MPOTensor.bipartitionedNormalizedMPO_traceRight,
-        MPOTensor.bipartitionedNormalizedMPO_traceLeft,
-        MPOTensor.mutualInfoChain_eq_mutualInformation}
-    \leanok
-    \uses{def:mpdo_split_normalized_mpo}
-    Across the consecutive cut after the first $L$ sites, the two marginals
-    of $\sigma^{(N)}_{L:N-L}$ are the reduced states on $L$ and $N-L$ sites,
-    up to the standard finite-index identifications. Consequently,
-    $I_L(M)$ is the ordinary bipartite mutual information of
-    $\sigma^{(N)}_{L:N-L}$.
-\end{lemma}
-
-\begin{proof}\leanok
-    The first marginal is the defining partial trace over the last $N-L$
-    sites. Periodic translation invariance identifies the second marginal
-    with the reduced state on the first $N-L$ sites. Entropy is invariant
-    under the finite-index identifications, and retaining the full chain
-    leaves the normalized state unchanged.
-\end{proof}
 
 \begin{lemma}[Renormalization maps transfer one site across a cut]
     \label{lem:mpdo_rfp_transfer_across_cut}
@@ -446,7 +459,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{thm:mpdo_rfp_implies_sal}
     \lean{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
-    \uses{lem:mpdo_chain_mutual_information_bipartition,lem:mpdo_rfp_transfer_across_cut,thm:mpdo_rfp_split_mutual_information_eq}
+    \uses{def:mutual_info_chain,lem:mpdo_rfp_transfer_across_cut,thm:mpdo_rfp_split_mutual_information_eq}
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$, so that normalized states are
     well-defined. If $M$ satisfies the local renormalization fixed-point
@@ -460,8 +473,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
     processing give
     $I(\sigma^{(N)}_{a+2:b+1})\leq I(\sigma^{(N)}_{a+1:b+2})$ and
     $I(\sigma^{(N)}_{a+1:b+2})\leq I(\sigma^{(N)}_{a+2:b+1})$, so the two
-    quantities are equal and the consecutive-cut identification gives
-    $I_L(M)=I_{L+1}(M)$.
+    quantities are equal. By definition they are $I_L(M)$ and
+    $I_{L+1}(M)$.
 \end{proof}
 
 \begin{corollary}[Horizontal renormalization fixed points saturate the area law]
@@ -541,7 +554,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $0\le I_L$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:block_entropy,lem:block_entropy_nonneg}
+    \uses{lem:mutual_info_chain_block_entropies,lem:block_entropy_nonneg}
     Applying strong subadditivity with a trivial middle subsystem (equivalently,
     subadditivity) to the bipartition of the chain into the first $L$ and last
     $N-L$ spins gives $S_N+S_0\le S_L+S_{N-L}$. Since $S_0\ge0$
@@ -558,9 +571,10 @@ The corresponding generic result is proved in the companion quantum-channel volu
     equals that of their complement: $I_L=I_{N-L}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mutual_info_chain}
-    Both sides equal $S_L+S_{N-L}-S_N$ by the symmetric definition
-    $I_L=S_L+S_{N-L}-S_N$, using $N-(N-L)=L$.
+    \uses{lem:mutual_info_chain_block_entropies}
+    Both sides equal $S_L+S_{N-L}-S_N$ by the symmetric formula
+    $I_L=S_L+S_{N-L}-S_N$ of
+    Lemma~\ref{lem:mutual_info_chain_block_entropies}, using $N-(N-L)=L$.
 \end{proof}
 
 \begin{lemma}[Positive rank of a normalized state]
@@ -612,8 +626,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
     of the empty block vanishes: $I_0=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:block_entropy_zero}
-    By definition, $I_0=S_0+S_N-S_N=S_0$, which is zero by
+    \uses{lem:mutual_info_chain_block_entropies,lem:block_entropy_zero}
+    By Lemma~\ref{lem:mutual_info_chain_block_entropies},
+    $I_0=S_0+S_N-S_N=S_0$, which is zero by
     Lemma~\ref{lem:block_entropy_zero}.
 \end{proof}
 
@@ -692,7 +707,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         MPOTensor.trace_purificationDensity_eq_pureState,
         MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap}
     \leanok
-    \uses{def:block_ancillary_trace,def:mpdo_purification_tensor,def:mpdo_purification_density,def:mpdo_split_normalized_mpo}
+    \uses{def:block_ancillary_trace,def:mpdo_purification_tensor,def:mpdo_purification_density,def:mutual_info_chain}
     Fix a local-purification representation
     \begin{align}
         M^{ij}
@@ -790,7 +805,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{thm:local_channel_image_mutual_info_bound}
     \lean{MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image}
     \leanok
-    \uses{def:mutual_info_chain,def:mpdo_split_normalized_mpo,def:doubled_tensor}
+    \uses{def:mutual_info_chain,def:doubled_tensor}
     Let $M$ be an MPO tensor whose generated $N$-site operator is positive
     semidefinite. Let $A$ be an MPS tensor of bond dimension $D'\geq1$ whose
     $N$-site vector is nonzero. Suppose that, across the cut $L\mid(N-L)$, the

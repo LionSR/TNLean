@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -51,7 +51,7 @@ theorem exists_condEntropy_le_initialBuffer_real
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset ↥Λ) (Q : IntRect),
-          (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+          (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
             (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
@@ -77,7 +77,7 @@ theorem exists_condEntropy_le_initialBuffer_real
   have hsafe : IsSafe Λ A (R + 1) Q := by
     intro e he z hz p hp
     exact_mod_cast (mul_le_mul_of_nonneg_right hRD (Nat.cast_nonneg Q.size)).trans_lt
-      (hclear p hp z.1 (Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary he hz))
+      (hclear p hp z.1 (ManyBody.mem_boundaryEndpoints_of_mem_edgeBoundary he hz))
   exact condEntropy_le_initialBuffer_of_constants hq hJ hΔ (le_max_left _ _)
     ((le_max_left _ _).trans (le_max_right _ _))
     ((le_max_right _ _).trans (le_max_right _ _))

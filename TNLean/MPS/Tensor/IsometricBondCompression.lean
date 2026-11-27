@@ -18,6 +18,8 @@ identities used at the endpoints of the direct-sum interpolation in
 arXiv:1010.3732, Section II.F.2, equation `eq:sym:omega-gamma`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

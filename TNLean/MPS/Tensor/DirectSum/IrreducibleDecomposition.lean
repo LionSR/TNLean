@@ -56,6 +56,8 @@ These are separate steps in the canonical-form construction.
 * Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 765–833.
 -/
+
+open MPTensor
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 
 namespace MPSTensor

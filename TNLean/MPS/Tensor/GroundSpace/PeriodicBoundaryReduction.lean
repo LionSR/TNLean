@@ -13,6 +13,8 @@ The injective periodic ground-space identification and the two boundary-window
 compatibility families used in the block-injective closure argument.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

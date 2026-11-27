@@ -8,7 +8,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.RectangleSourceEntropy
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.RectangleBootstrapGeometry
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BoxEntropySupremum
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.ExponentBootstrap
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -33,6 +33,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_boxError`: the physical entropy bound for
   safe rectangles.
 -/
+
+open ManyBody (latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
 
 section PhysicalBoxBootstrap
 
@@ -578,7 +580,7 @@ theorem exists_regionEntropy_safe_rect_le_boxError
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset ↥Λ) (Q : IntRect),
-          (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+          (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ManyBody.regionEntropy Ω (rectRegion A Q) ≤
             C * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
@@ -597,7 +599,7 @@ theorem exists_regionEntropy_safe_rect_le_boxError
     simpa only [d, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] using hD₀
   have hsafe : IsSafe Λ A d Q := by
     intro e he z hz t ht
-    have hz' := Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary he hz
+    have hz' := ManyBody.mem_boundaryEndpoints_of_mem_edgeBoundary he hz
     have hreal := hclear t ht z.val hz'
     have hle : (d : ℝ) * (Q.size : ℝ) ≤ D₀ * (Q.size : ℝ) :=
       mul_le_mul_of_nonneg_right hdreal.le (Nat.cast_nonneg Q.size)

@@ -5,9 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Region.EdgeMapSubgraph
 import TNLean.PEPS.Graph.Torus.TorusRectangleRegion
-import TNLean.PEPS.Tensor.GraphState.RegularRegionCycleRank
-import TNLean.PEPS.Tensor.Network.IsoTransport
+import TNLean.PEPS.Graph.Region.InjectiveRegion
+import TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy
 import Mathlib.Combinatorics.SimpleGraph.Hasse
+import Mathlib.Combinatorics.SimpleGraph.Acyclic
 
 /-!
 # The six-site geometry of two adjacent plaquettes
@@ -31,6 +32,10 @@ period of three would add two wraparound edges inside this rectangle. These
 are auxiliary graph statements for the finite local construction, rather than
 the full flux-moving theorem; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+The positively oriented boundary walk of a native torus plaquette
+(`torusPlaquetteWalk`), its four sites (`torusPlaquetteRegion`), and its holonomy
+(`regularWalkHolonomy_torusPlaquetteWalk`) are recorded at the end of the file.
 -/
 
 open ManyBody (Edge)
@@ -182,7 +187,6 @@ theorem twoPlaquetteTorusVertex_adj_iff (i j : Fin 6) :
     (twoPlaquetteX a = twoPlaquetteX b ∧
       (twoPlaquetteY a + 1 = twoPlaquetteY b ∨ twoPlaquetteY b + 1 = twoPlaquetteY a)) ↔
     twoPlaquetteGraph.Adj a b) i j
-
 
 /-- The actual set of six native sites of the two-plaquette block. -/
 def twoPlaquetteTorusRegion : Finset (TorusVertex width height) :=
@@ -353,4 +357,48 @@ theorem twoPlaquetteTorusCycleBond_endpoints (i : Fin 2) :
   simp only [ManyBody.Edge.map, ManyBody.Edge.ofAdj, dite_eq_left hi]
   fin_cases i <;> simp [twoPlaquetteTorusIso, twoPlaquetteTorusVertexEquiv,
     twoPlaquetteCycleBond, twoPlaquetteTorusVertex, twoPlaquetteX, twoPlaquetteY]
+
+/-! ### The boundary walk of a native torus plaquette -/
+
+section NativePlaquette
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (2 < width)] [Fact (2 < height)]
+local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
+local notation "X" => TorusVertex width height
+local notation "Γₜ" => torusGraph width height
+
+variable {G : Type*} [Group G]
+
+/-- The positively oriented four-step walk around a native torus plaquette.
+Source: SCP10, flux detection, Theorem 6.15, lines 2217–2267. -/
+def torusPlaquetteWalk (v : X) : (Γₜ).Walk v v :=
+  .cons (torusGraph_adj_right v.1 v.2)
+    (.cons (torusGraph_adj_up (v.1 + 1) v.2)
+      (.cons (torusGraph_adj_right v.1 (v.2 + 1)).symm
+        (.cons (torusGraph_adj_up v.1 v.2).symm .nil)))
+
+/-- Counterclockwise plaquette transport is the reverse-ordered product of its
+four directed steps. Source: SCP10, Theorem 6.15, lines 2217–2267. -/
+theorem regularWalkHolonomy_torusPlaquetteWalk (u : Edge Γₜ → G) (v : X) :
+    regularWalkHolonomy u (torusPlaquetteWalk v) =
+      (regularDirectedTransport u (torusGraph_adj_up v.1 v.2))⁻¹ *
+        (regularDirectedTransport u (torusGraph_adj_right v.1 (v.2 + 1)))⁻¹ *
+        regularDirectedTransport u (torusGraph_adj_up (v.1 + 1) v.2) *
+        regularDirectedTransport u (torusGraph_adj_right v.1 v.2) := by
+  change (((1 * regularDirectedTransport u (torusGraph_adj_up v.1 v.2).symm) *
+    regularDirectedTransport u (torusGraph_adj_right v.1 (v.2 + 1)).symm) *
+    regularDirectedTransport u (torusGraph_adj_up (v.1 + 1) v.2)) *
+    regularDirectedTransport u (torusGraph_adj_right v.1 v.2) = _
+  rw [regularDirectedTransport_symm u (torusGraph_adj_up v.1 v.2),
+    regularDirectedTransport_symm u (torusGraph_adj_right v.1 (v.2 + 1)), one_mul]
+
+/-- The four physical sites surrounding a native torus plaquette. Source:
+SCP10, the detection tweezer in Theorem 6.15, lines 2225–2258. -/
+def torusPlaquetteRegion (v : X) : Finset X :=
+  (torusPlaquetteWalk v).support.toFinset
+
+end NativePlaquette
+
 end TNLean.PEPS

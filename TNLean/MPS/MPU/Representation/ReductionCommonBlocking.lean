@@ -134,7 +134,7 @@ structure ReductionFamily (F : GroupFamily G d) where
   /-- $(V_{g,h},W_{g,h})$ is a rectangular reduction from
   $\mathcal U_g\mathcal U_h$ to $\mathcal U_{gh}$. -/
   isReduction : ∀ g h : G,
-    MPSTensor.IsReduction (F.productTensor g h) (F.targetTensor g h) (V g h) (W g h)
+    MPTensor.IsReduction (F.productTensor g h) (F.targetTensor g h) (V g h) (W g h)
 
 /-- A simple injective MPU representation admits a selected reduction for every
 pair: the product tensor and the target tensor generate the same
@@ -147,7 +147,7 @@ theorem IsRepresentation.nonempty_reductionFamily (F : GroupFamily G d)
   have hpair : ∀ g h : G,
       ∃ (V : Matrix (Fin (F.bondDim (g * h))) (Fin (F.bondDim g * F.bondDim h)) ℂ)
         (W : Matrix (Fin (F.bondDim g * F.bondDim h)) (Fin (F.bondDim (g * h))) ℂ),
-        MPSTensor.IsReduction (F.productTensor g h) (F.targetTensor g h) V W :=
+        MPTensor.IsReduction (F.productTensor g h) (F.targetTensor g h) V W :=
     fun g h ↦ MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos _ _
       (hF.isInjective (g * h)) (hF.sameMPV₂Pos_mulTensor F g h).symm
   choose V W hVW using hpair
@@ -163,7 +163,7 @@ pair `(g, h)`.
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/
 noncomputable def nilpotencyLength (R : F.ReductionFamily) (g h : G) : ℕ :=
-  MPSTensor.reductionResidualNilpotencyLength (F.productTensor g h)
+  MPTensor.reductionResidualNilpotencyLength (F.productTensor g h)
     (F.targetTensor g h) (R.V g h) (R.W g h)
 
 /-- Every selected reduction satisfies the exterior identity with exterior

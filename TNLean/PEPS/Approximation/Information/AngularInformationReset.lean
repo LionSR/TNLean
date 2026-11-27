@@ -22,6 +22,7 @@ Source: polynomial-PEPS manuscript, Proposition 3.4,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits)
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (SquareLatticeVertex SquareInteraction rectangleEmbedding)
@@ -34,8 +35,10 @@ namespace TNLean.PEPS.Approximation
 /-- **The information reset of Lemma 3.3 for a family of states,** with width `C_p` and size
 threshold `L₀` at the accuracy `L^(-p)`.
 Source: `02-information.tex`, Lemma 3.3, lines 334–353. -/
-def SquareResetBound (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (p Cp L₀ : ℝ) : Prop :=
-  ∀ L : ℕ, L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+def SquareResetBound (q : ℕ)
+    (G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop)
+    (p Cp L₀ : ℝ) : Prop :=
+  ∀ L : ℕ, L₀ ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
     ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
     ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω R C ≤ b →
     (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <
@@ -53,8 +56,9 @@ open Classical in
 proof of `angular_information_reset_of_resetThreshold_le` with a reset bound of the family.
 Source: `02-information.tex`, lines 729–745. -/
 theorem angular_information_reset_of_squareResetBound {q : ℕ}
-    {G : ∀ L : ℕ, StateSpace L q → Prop} {p Cp L₀ : ℝ} (hreset : SquareResetBound q G p Cp L₀) :
-    ∀ L : ℕ, L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    {p Cp L₀ : ℝ} (hreset : SquareResetBound q G p Cp L₀) :
+    ∀ L : ℕ, L₀ ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
       ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
         0 ≤ a' → 0 < d → 0 < s →
         let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter
@@ -119,7 +123,7 @@ theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
       ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace L q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
@@ -154,7 +158,7 @@ theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L →
         ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-            (E₀ : ℝ) (Ω : StateSpace L q),
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),

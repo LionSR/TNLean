@@ -52,6 +52,8 @@ positive bond dimension. Reconstruction through a change of minimal dimension
 remains open; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open MPTensor
+
 section
 
 set_option relaxedAutoImplicit false
@@ -210,7 +212,7 @@ private theorem exists_continuous_unitalNormalization
         Kraus.transferMap (A t) (ρ t) = (r t : ℂ) • ρ t ∧
         B t = Kraus.spectralUnitalGauge (A t) (r t) (ρ t) ∧
         Kraus.IsUnital (B t) ∧
-        MPSTensor.GaugeEquiv ((↑((Real.sqrt (r t))⁻¹) : ℂ) • A t) (B t) := by
+        MPTensor.GaugeEquiv ((↑((Real.sqrt (r t))⁻¹) : ℂ) • A t) (B t) := by
   obtain ⟨ρ, r, hρcont, hrcont, hdata⟩ :=
     MPSTensor.exists_continuous_rightPerronPair_of_isInjective A hA hInj
   refine ⟨fun t => Kraus.spectralUnitalGauge (A t) (r t) (ρ t), ρ, r,

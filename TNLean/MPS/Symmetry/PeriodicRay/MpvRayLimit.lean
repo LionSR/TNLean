@@ -22,6 +22,7 @@ arXiv:1010.3732, Section II.F.2 and Appendix C, lines 2653–2717.
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
+open MPTensor
 open scoped Topology
 open Filter
 

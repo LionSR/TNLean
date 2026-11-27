@@ -464,7 +464,7 @@ Source context: arXiv:1708.00029, Theorem 4.1 converse. -/
 theorem root_isIrreducibleFamily : Kraus.IsIrreducibleFamily root := by
   apply isIrreducibleFamily_of_transferMap_eq_blockTensor square root 2
     square_isIrreducibleFamily
-  rw [transferMap_blockTensor]
+  rw [Kraus.transferMap_blockTensor]
   exact transferMap_square_eq_pow
 
 end MPSTensor.CyclicResetCounterexample

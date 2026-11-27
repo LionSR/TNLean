@@ -71,6 +71,7 @@ on two replicas, read on the two sheets by
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
@@ -145,7 +146,8 @@ Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. 
 theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+        (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
@@ -157,7 +159,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
         (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
       let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
@@ -252,7 +254,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
       ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
@@ -264,7 +267,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
           (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
         let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
@@ -295,7 +298,8 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+        (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
@@ -307,7 +311,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
         (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
       let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
@@ -346,7 +350,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
       ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
@@ -358,7 +363,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
           (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
         let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2

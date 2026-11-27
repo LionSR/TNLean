@@ -28,6 +28,8 @@ Section 3, lines 1394--1483, Lemma existenceinteraction, lines 2195--2230,
 and Section 6, lines 2649--2675.
 -/
 
+open MPTensor
+
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open ManyBody.Interaction (chainTranslates)

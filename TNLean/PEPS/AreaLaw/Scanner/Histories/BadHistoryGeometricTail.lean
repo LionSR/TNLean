@@ -19,6 +19,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
 -/
 
+open ManyBody (card_ancestry_time_window_le recentChargeTimes)
+
 open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -83,7 +85,7 @@ theorem sum_historyWeight_bad_through_geometric_planeDomainGraph_le
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {N L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hr : 0 < S.r₀) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)

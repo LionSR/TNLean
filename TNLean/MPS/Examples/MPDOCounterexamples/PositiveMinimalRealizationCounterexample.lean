@@ -38,6 +38,8 @@ Appendix C.4, lines 2048--2057, and Proposition 4.13, lines 1898--1921.
   nonunitary-similarity counterexample.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder
 
 noncomputable section

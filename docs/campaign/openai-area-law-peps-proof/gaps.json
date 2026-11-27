@@ -144,7 +144,7 @@
     },
     {
       "id": "docs/paper-gaps/arealaw2d_nondegenerate_templates.tex",
-      "repo": "TNLean",
+      "repo": "QICLean",
       "kind": "convention",
       "status": "resolved",
       "paper": "area",

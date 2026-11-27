@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BlockFamily
 import TNLean.MPS.Transfer.Spectrum.QuantitativeGap
-import QICLean.Channel.TransferMatrix
+import QICLean.Channel.TransferMatrix.Basic
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
+import QICLean.Analysis.Topology.NewtonIdempotent
 
 /-!
 # Transfer-map convergence for primitive canonical-form blocks
@@ -156,32 +157,6 @@ open Filter
 open scoped Topology
 
 noncomputable section
-
-/-- A limit of the dyadic powers \(x^{2^n}\) is idempotent.
-
-Indeed, the shifted sequence has the same limit, while
-\(x^{2^{n+1}} = x^{2^n}x^{2^n}\). Continuity of multiplication and uniqueness
-of limits give the result.
-
-Source: arXiv:1606.00608, proof of Theorem 3.1, lines 1205--1209. -/
-theorem isIdempotentElem_of_tendsto_pow_two_pow
-    {R : Type*} [TopologicalSpace R] [Monoid R] [ContinuousMul R] [T2Space R]
-    (x p : R)
-    (h : Tendsto (fun n : ℕ ↦ x ^ (2 ^ n : ℕ)) atTop (𝓝 p)) :
-    IsIdempotentElem p := by
-  have hmul :
-      Tendsto (fun n : ℕ ↦ x ^ (2 ^ n : ℕ) * x ^ (2 ^ n : ℕ))
-        atTop (𝓝 (p * p)) :=
-    h.mul h
-  have hshift :
-      Tendsto (fun n : ℕ ↦ x ^ (2 ^ (n + 1) : ℕ)) atTop (𝓝 p) :=
-    (tendsto_add_atTop_iff_nat 1).2 h
-  have heq : (fun n : ℕ ↦ x ^ (2 ^ (n + 1) : ℕ)) =
-      fun n : ℕ ↦ x ^ (2 ^ n : ℕ) * x ^ (2 ^ n : ℕ) := by
-    funext n
-    rw [pow_succ, Nat.mul_two, pow_add]
-  rw [heq] at hshift
-  exact tendsto_nhds_unique hmul hshift
 
 namespace MPSTensor
 

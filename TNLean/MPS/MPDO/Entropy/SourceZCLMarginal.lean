@@ -48,7 +48,7 @@ theorem reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow
       (mpo M N).trace⁻¹ *
         Matrix.trace
           (M.evalWord (List.ofFn u) (List.ofFn v) * M.verticalLoop ^ (N - L)) := by
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   simp only [normalizedMPO, Matrix.smul_apply, smul_eq_mul, mpo_apply, mpoMatrixEntry]
   rw [← Finset.mul_sum]
   congr 1

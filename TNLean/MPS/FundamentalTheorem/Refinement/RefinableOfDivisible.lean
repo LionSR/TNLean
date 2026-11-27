@@ -6,6 +6,13 @@ Authors: TNLean contributors
 import QICLean.Channel.KrausMap.KrausRank
 import TNLean.MPS.FundamentalTheorem.Refinement.IsometryTensor
 import QICLean.Channel.PSDConeAutomorphism.InjectivePositiveMapRank
+import Mathlib.LinearAlgebra.BilinearForm.Orthogonal
+import QICLean.Channel.KrausMap.KrausMap
+import QICLean.Channel.Schwarz.Closure
+import QICLean.Kraus.ChoiRankSpan
+import QICLean.Kraus.Wielandt.SpanGrowth.InvertibleWordSpan
+import QICLean.Kraus.WordSpan
+import QICLean.Algebra.Matrix.MatrixRankBaseChange
 
 /-!
 # Theorem 4.1, reverse direction
@@ -27,6 +34,8 @@ of arXiv:1708.00029, Theorem 4.1, lines 812--818, for transfer maps that are
 invertible as linear maps. The singular case remains the selection problem
 recorded in `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`.
 -/
+
+open MPTensor
 
 section
 
@@ -93,7 +102,7 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
   calc
     Kraus.transferMap B = E' ^ p := hpow
     _ = (Kraus.transferMap A) ^ p := by rw [← hA]
-    _ = Kraus.transferMap (blockTensor A p) := by rw [transferMap_blockTensor]
+    _ = Kraus.transferMap (blockTensor A p) := by rw [Kraus.transferMap_blockTensor]
 
 /-- Equality with a blocked transfer map gives a refinement isometry.
 No irreducible-form assumption is needed for this Kraus representation step:
@@ -153,7 +162,7 @@ theorem isPRefinable_of_channel_root_hasKrausRankLE
     IsPRefinable B p := by
   obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE hRank
   apply isPRefinable_of_transferMap_eq_blockTensor B A hp
-  rw [transferMap_blockTensor, hA]
+  rw [Kraus.transferMap_blockTensor, hA]
   exact hpow
 
 /-- **Reverse direction of Theorem 4.1 (conditional form).**
@@ -205,6 +214,106 @@ theorem isPRefinable_of_isPDivisibleChannel_of_injective
     calc
       Channel.choiRank F ≤ Channel.choiRank (F ^ p) :=
         Channel.choiRank_le_pow_of_injective hF.cp hFInjective hp
+      _ = Channel.choiRank (Kraus.transferMap B) := congrArg Channel.choiRank hpow.symm
+      _ ≤ d := Channel.choiRank_le_of_hasKrausCard ⟨B, by intro X; simp⟩
+  exact isPRefinable_of_channel_root_hasKrausRankLE B hp F hpow
+    ⟨Channel.choiRank F, hRank, Channel.hasKrausCard_choiRank_of_cp hF.cp⟩
+
+end MPSTensor
+
+end
+
+section
+
+/-!
+## Bounded roots for qubit channels
+
+Every qubit channel has Choi rank at most that of each positive power.
+Consequently channel divisibility gives refinement for every tensor of bond
+dimension two, including singular and reducible transfer maps. This proves
+the bond-dimension-two case of arXiv:1708.00029, Theorem 4.1, converse.
+The general higher-dimensional singular selection problem remains open;
+see `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`.
+-/
+
+open scoped Matrix BigOperators
+
+private theorem channel_injective_of_choiRank_le_one {D : ℕ}
+    {F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)} (hF : IsChannel F)
+    (hRank : Channel.choiRank F ≤ 1) : Function.Injective F := by
+  obtain ⟨K, hK⟩ := Channel.hasKrausCard_mono
+    (Channel.hasKrausCard_choiRank_of_cp hF.cp) hRank
+  have hNorm : (K 0)ᴴ * K 0 = 1 := by
+    simpa using kraus_sum_conjTranspose_mul_of_tp K F hK hF.tp
+  have hMap (X : Matrix (Fin D) (Fin D) ℂ) : F X = K 0 * X * (K 0)ᴴ := by
+    simpa using hK X
+  have hInv (X : Matrix (Fin D) (Fin D) ℂ) :
+      (K 0)ᴴ * (K 0 * X * (K 0)ᴴ) * K 0 = X := by
+    calc
+      _ = ((K 0)ᴴ * K 0) * X * ((K 0)ᴴ * K 0) := by noncomm_ring
+      _ = X := by simp only [hNorm, Matrix.one_mul, Matrix.mul_one]
+  intro X Y hXY
+  have h := congrArg (fun Z => (K 0)ᴴ * Z * K 0) hXY
+  simpa only [hMap, hInv] using h
+
+namespace Channel
+
+/-- Every qubit channel has Choi rank at most that of every positive
+power. No irreducibility or invertibility assumption is needed. This
+proves the full bond-dimension-two root-rank step in arXiv:1708.00029,
+Theorem 4.1, converse, lines 812--818. -/
+theorem _root_.TNLean.MPS.FundamentalTheorem.choiRank_le_pow_fin_two
+    {F : Module.End ℂ (Matrix (Fin 2) (Fin 2) ℂ)} (hF : IsChannel F)
+    {p : ℕ} (hp : 0 < p) : choiRank F ≤ choiRank (F ^ p) := by
+  by_cases hSmall : choiRank (F ^ p) ≤ 1
+  · have hPowInj : Function.Injective (F ^ p) :=
+      channel_injective_of_choiRank_le_one ⟨hF.cp.pow p, hF.tp.pow p⟩ hSmall
+    have hInj : Function.Injective F := by
+      obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hp.ne'
+      intro X Y hXY
+      apply hPowInj
+      simp only [pow_succ, Module.End.mul_apply, hXY]
+    exact choiRank_le_pow_of_injective hF.cp hInj hp
+  by_cases hRank : choiRank F ≤ 2
+  · omega
+  obtain ⟨r, A, hA, _⟩ := hF.exists_kraus_map_eq_and_normalized
+  have hDim : 2 < Module.finrank ℂ (Kraus.wordSpan A 1) := by
+    have h := choiRank_mapLM_eq_finrank_wordSpan_one A
+    rw [← hA] at h
+    omega
+  obtain ⟨X, hX, hUnit⟩ : ∃ X ∈ Kraus.wordSpan A 1, IsUnit X := by
+    by_contra! hNoUnit
+    have hDet (X : Matrix (Fin 2) (Fin 2) ℂ) (hX : X ∈ Kraus.wordSpan A 1) : X.det = 0 := by
+      have h := hNoUnit X hX
+      rwa [Matrix.isUnit_iff_isUnit_det, isUnit_iff_ne_zero, not_not] at h
+    have hLe := Matrix.finrank_le_two_of_forall_det_eq_zero_fin_two
+      (Kraus.wordSpan A 1) hDet
+    omega
+  calc
+    choiRank F = Module.finrank ℂ (Kraus.wordSpan A 1) := by
+      rw [hA, choiRank_mapLM_eq_finrank_wordSpan_one]
+    _ ≤ Module.finrank ℂ (Kraus.wordSpan A p) :=
+      Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_one A hp hX hUnit
+    _ = choiRank (Kraus.transferMap (Kraus.blockTensor A p)) := by
+      rw [choiRank_mapLM_eq_finrank_wordSpan_one, Kraus.wordSpan_blockTensor_one]
+    _ = choiRank (F ^ p) := by rw [Kraus.transferMap_blockTensor, hA]
+
+end Channel
+
+namespace MPSTensor
+
+/-- Every tensor of bond dimension two is refinable whenever its transfer
+map is channel-divisible. The target may be singular or reducible; no
+bounded-root hypothesis is assumed. This proves the bond-dimension-two
+case of arXiv:1708.00029, Theorem 4.1, converse. -/
+theorem isPRefinable_of_isPDivisibleChannel_fin_two
+    {d p : ℕ} (B : MPSTensor d 2) (hp : 0 < p)
+    (hDiv : IsPDivisibleChannel (Kraus.transferMap B) p) : IsPRefinable B p := by
+  obtain ⟨F, hF, hpow⟩ := hDiv
+  have hRank : Channel.choiRank F ≤ d := by
+    calc
+      Channel.choiRank F ≤ Channel.choiRank (F ^ p) :=
+          TNLean.MPS.FundamentalTheorem.choiRank_le_pow_fin_two hF hp
       _ = Channel.choiRank (Kraus.transferMap B) := congrArg Channel.choiRank hpow.symm
       _ ≤ d := Channel.choiRank_le_of_hasKrausCard ⟨B, by intro X; simp⟩
   exact isPRefinable_of_channel_root_hasKrausRankLE B hp F hpow

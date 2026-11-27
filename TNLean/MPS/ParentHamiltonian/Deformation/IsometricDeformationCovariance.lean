@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformation
+import QICLean.Analysis.FunctionalCalculus.LeftPolar
 
 /-!
 # Covariance of the constructed isometric deformation
@@ -21,83 +22,6 @@ state is a separate assertion.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder
-
-namespace Matrix
-
-variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
-
-/-- A unitary physical--virtual intertwining relation makes the physical
-Gram matrix commute with the physical action. Source: arXiv:1010.3732,
-lines 658--671. -/
-theorem commute_mul_conjTranspose_of_unitary_covariance
-    (P : Matrix ι κ ℂ) (U : Matrix ι ι ℂ) (X : Matrix κ κ ℂ)
-    (hU : U ∈ unitaryGroup ι ℂ) (hX : X ∈ unitaryGroup κ ℂ)
-    (hCov : U * P = P * X) : Commute U (P * Pᴴ) := by
-  have hAdj := congrArg conjTranspose hCov
-  simp only [conjTranspose_mul] at hAdj
-  have hXX : X * Xᴴ = 1 := by
-    simpa only [star_eq_conjTranspose] using mem_unitaryGroup_iff.mp hX
-  have hConj : U * (P * Pᴴ) * Uᴴ = P * Pᴴ := by
-    calc
-      U * (P * Pᴴ) * Uᴴ = (U * P) * (Pᴴ * Uᴴ) := by
-        simp only [Matrix.mul_assoc]
-      _ = (P * X) * (Xᴴ * Pᴴ) := by rw [hCov, hAdj]
-      _ = P * Pᴴ := by
-        rw [Matrix.mul_assoc, ← Matrix.mul_assoc X Xᴴ Pᴴ,
-          hXX, Matrix.one_mul]
-  have hUU : Uᴴ * U = 1 := by
-    simpa only [star_eq_conjTranspose] using mem_unitaryGroup_iff'.mp hU
-  calc
-    U * (P * Pᴴ) = (U * (P * Pᴴ) * Uᴴ) * U := by
-      rw [Matrix.mul_assoc, hUU, Matrix.mul_one]
-    _ = (P * Pᴴ) * U := by rw [hConj]
-
-/-- The physical support projection commutes with the physical unitary in
-an exact unitary covariance. Source: arXiv:1010.3732, lines 645--676;
-this also justifies extending the polar factor by the identity off support. -/
-theorem commute_leftPolarSupport_of_unitary_covariance
-    (P : Matrix ι κ ℂ) (U : Matrix ι ι ℂ) (X : Matrix κ κ ℂ)
-    (hU : U ∈ unitaryGroup ι ℂ) (hX : X ∈ unitaryGroup κ ℂ)
-    (hCov : U * P = P * X) : Commute U (polarSupport Pᴴ) := by
-  have hGram := commute_mul_conjTranspose_of_unitary_covariance P U X hU hX hCov
-  unfold polarSupport
-  simp only [conjTranspose_conjTranspose]
-  exact (hGram.symm.cfc_real _).symm
-
-/-- The positive left polar factor commutes with a unitary physical action
-intertwined with a virtual unitary. The assertion includes the identity
-extension outside the physical support. Source: arXiv:1010.3732,
-lines 658--676. -/
-theorem commute_leftPolarPos_of_unitary_covariance
-    (P : Matrix ι κ ℂ) (U : Matrix ι ι ℂ) (X : Matrix κ κ ℂ)
-    (hU : U ∈ unitaryGroup ι ℂ) (hX : X ∈ unitaryGroup κ ℂ)
-    (hCov : U * P = P * X) : Commute U (leftPolarPos P) := by
-  have hGram := commute_mul_conjTranspose_of_unitary_covariance P U X hU hX hCov
-  have hPos : Commute U (polarPos Pᴴ) := by
-    simpa only [polarPos, CFC.sqrt, conjTranspose_conjTranspose] using
-      (hGram.symm.cfcₙ_nnreal NNReal.sqrt).symm
-  exact hPos.add_right ((Commute.one_right U).sub_right
-    (commute_leftPolarSupport_of_unitary_covariance P U X hU hX hCov))
-
-/-- The left partial isometry has the same physical--virtual covariance
-as the original matrix. Source: arXiv:1010.3732, lines 658--676. -/
-theorem leftPolarIso_covariance_of_unitary_covariance
-    (P : Matrix ι κ ℂ) (U : Matrix ι ι ℂ) (X : Matrix κ κ ℂ)
-    (hU : U ∈ unitaryGroup ι ℂ) (hX : X ∈ unitaryGroup κ ℂ)
-    (hCov : U * P = P * X) : U * leftPolarIso P = leftPolarIso P * X := by
-  let := (posDef_leftPolarPos P).isUnit.invertible
-  apply mul_right_injective_of_invertible (leftPolarPos P)
-  have hComm := commute_leftPolarPos_of_unitary_covariance P U X hU hX hCov
-  calc
-    leftPolarPos P * (U * leftPolarIso P) = U * (leftPolarPos P * leftPolarIso P) := by
-      rw [← Matrix.mul_assoc, ← hComm.eq, Matrix.mul_assoc]
-    _ = U * P := by rw [leftPolarPos_mul_leftPolarIso]
-    _ = P * X := hCov
-    _ = (leftPolarPos P * leftPolarIso P) * X :=
-      congrArg (· * X) (leftPolarPos_mul_leftPolarIso P).symm
-    _ = leftPolarPos P * (leftPolarIso P * X) := Matrix.mul_assoc _ _ _
-
-end Matrix
 
 namespace MPSTensor
 

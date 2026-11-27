@@ -1,23 +1,26 @@
 \section{Single-bond commuting form from the local structure}
 
-\begin{definition}[Translation-invariant two-site bond]
+\begin{definition}[Commuting two-site bond]
     \label{def:mpdo_translation_invariant_bond_data}
-    \lean{MPOTensor.TranslationInvariantBondData}
+    \lean{MPOTensor.CommutingBond}
+    \lean{MPOTensor.CommutingBond.bondAt}
+    \lean{MPOTensor.CommutingBond.bondAt_comm}
+    \lean{MPOTensor.CommutingBond.product}
     \leanok
-    \uses{def:mpdo_commuting_form_data}
-    A positive semidefinite two-site bond $B\ge0$ whose
+    A commuting bond is a positive semidefinite two-site operator $B\ge0$ whose
     translated copies commute pairwise on the periodic $N$-site chain at
-    every chain length $N\ge2$: $[B_{i,i+1},B_{j,j+1}]=0$.
+    every chain length $N\ge2$: $[B_{i,i+1},B_{j,j+1}]=0$. At each such length
+    it determines the commuting product $\prod_{i=0}^{N-1}B_{i,i+1}$.
 \end{definition}
 
-\begin{definition}[$\eta$-local single-bond commuting-form data]
+\begin{definition}[Commuting form of an MPO tensor]
     \label{def:mpdo_eta_local_structure_data}
-    \lean{MPOTensor.EtaLocalStructureData}
+    \lean{MPOTensor.CommutingForm}
     \leanok
-    \uses{def:mpdo_translation_invariant_bond_data,def:mpdo_has_commuting_form}
-    The one-bond $\eta$-local form constructed in
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} consists of
-    a two-site bond $B$ as in
+    \uses{def:mpdo_translation_invariant_bond_data,def:mpo_tensor}
+    The commuting form of an MPO tensor $M$, as constructed in
+    \cite[Appendix~C.2, Proposition~C.8]{Cirac2016MPDO_arXiv}, consists of
+    one commuting bond $B$ as in
     Definition~\ref{def:mpdo_translation_invariant_bond_data} together with,
     for every chain length $N\ge2$, a constant $c>0$ such that
     \begin{align}
@@ -25,27 +28,15 @@
          & =c\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
-    The bond acts on the full two-site space.
-\end{definition}
-
-\begin{definition}[Finite-chain bond form]
-    \label{def:mpdo_translation_invariant_bond_to_commuting_form_data}
-    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
-    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond}
-    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
-    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
-    \leanok
-    \uses{def:mpdo_translation_invariant_bond_data,def:mpdo_commuting_form_data}
-    A translation-invariant positive two-site bond determines finite-chain
-    commuting-form data at every length $N\ge2$.
+    The bond acts on the full two-site space and is the same for every chain
+    length; see \cite{gap:cpsv16_commuting_form_to_sal}.
 \end{definition}
 
 \begin{definition}[Common three-site coordinates for overlapping bonds]
     \label{def:mpdo_three_site_overlapping_coordinates}
     \lean{MPOTensor.threeSiteOverlappingEquiv}
     \lean{MPOTensor.pairBondMatrix}
-    \lean{MPOTensor.TranslationInvariantBondData.pairBond}
-    \lean{MPOTensor.EtaLocalStructureData.pairBond}
+    \lean{MPOTensor.CommutingBond.pairBond}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data}
     Write the two-site bond on the ordered pair of physical indices, and
@@ -58,16 +49,16 @@
     \label{thm:mpdo_eta_bond_overlapping_lifts}
     \lean{MPOTensor.reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift}
     \lean{MPOTensor.reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift}
-    \lean{MPOTensor.TranslationInvariantBondData.pairBond_isHermitian}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.pairBond_isHermitian}
+    \lean{MPOTensor.CommutingBond.%
         reindex_bondAt_zero_eq_leftOverlappingLift}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         reindex_bondAt_one_eq_rightOverlappingLift}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         overlappingLifts_pairBond_comm}
     \leanok
     \uses{def:mpdo_three_site_overlapping_coordinates,def:mpdo_translation_invariant_bond_data}
-    Let $B$ be a translation-invariant positive two-site bond, written as an
+    Let $B$ be a commuting two-site bond, written as an
     operator $\widehat B$ on an ordered pair of physical spaces.
     Under the same three-site identification for both translates,
     \begin{align}
@@ -121,37 +112,9 @@
     overlapping lifts commute.
 \end{proof}
 
-\begin{lemma}[$\eta$-local structure carries single-bond commuting form]
-    \label{thm:mpdo_eta_local_structure_has_commuting_form}
-    \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
-    \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
-    \lean{MPOTensor.EtaLocalStructureData.formAt_bondAt_comm}
-    \lean{MPOTensor.EtaLocalStructureData.exists_positive_scalar_mpo_eq_product}
-    \lean{MPOTensor.EtaLocalStructureData.positive_commuting_product_form}
-    \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
-    \leanok
-    \uses{def:mpdo_eta_local_structure_data,def:mpdo_has_commuting_form}
-    As in the one-bond product conclusion of
-    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}, the $\eta$-local structure
-    itself determines a single-bond commuting-form presentation for every
-    chain length $N\ge2$: writing $B$ for its bond, the translated copies
-    commute, $[B_{i,i+1},B_{j,j+1}]=0$, and there exists $c>0$ with
-    \begin{align}
-        \rho^{(N)}(M)
-         & =c\prod_{i=0}^{N-1}B_{i,i+1}.
-        \notag
-    \end{align}
-    % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
-\end{lemma}
-
-\begin{proof}\leanok
-    At length $N$, the commuting two-site bond and realization identity
-    carried by the $\eta$-local structure give the product form directly.
-\end{proof}
-
 \begin{lemma}[A commuting bond admits unitary block actions]
     \label{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         exists_unitary_blockActions_of_pairBond}
     \leanok
     \uses{def:mpdo_three_site_overlapping_coordinates,thm:mpdo_eta_bond_overlapping_lifts}
@@ -203,9 +166,7 @@
 
 \begin{lemma}[Positive neighboring operators from the commuting bond]
     \label{thm:mpdo_commuting_bond_positive_eta_decomposition}
-    \lean{MPOTensor.TranslationInvariantBondData.%
-        exists_positive_eta_pairBond_decomposition}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingBond.%
         exists_positive_eta_pairBond_decomposition}
     \leanok
     \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
@@ -329,7 +290,7 @@
     \lean{Matrix.reindex_piKronecker_two}
     \lean{Matrix.piKronecker_const_mul_conjTranspose}
     \lean{MPOTensor.singleKrausMap_bondProduct_of_unitary}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         exists_positive_cyclic_eta_block_decomposition}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,thm:mpdo_commuting_bond_positive_eta_decomposition,thm:mpdo_eta_pair_bond_cyclic_product_transport}
@@ -425,9 +386,9 @@
 
 \begin{definition}[Fixed tensor for a bond-product family]
     \label{def:mpdo_fixed_bond_product_tensor}
-    \lean{MPOTensor.TranslationInvariantBondData.FixedProductTensorData}
-    \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm}
-    \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm.%
+    \lean{MPOTensor.CommutingBond.FixedProductTensorData}
+    \lean{MPOTensor.CommutingBond.CyclicEdgeWeightForm}
+    \lean{MPOTensor.CommutingBond.CyclicEdgeWeightForm.%
         toFixedProductTensorData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data,thm:mpdo_cyclic_edge_weight_tensor}
@@ -447,11 +408,9 @@
     \label{thm:mpdo_eta_fixed_bond_product_tensor}
     \lean{MPOTensor.%
         reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         nonempty_fixedProductTensorData}
-    \lean{MPOTensor.TranslationInvariantBondData.fixedProductTensorData}
-    \lean{MPOTensor.EtaLocalStructureData.nonempty_fixedProductTensorData}
-    \lean{MPOTensor.EtaLocalStructureData.fixedProductTensorData}
+    \lean{MPOTensor.CommutingBond.fixedProductTensorData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data,def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,thm:mpdo_commuting_bond_positive_eta_decomposition}
     Let $B\ge0$ be a two-site bond whose periodic translates commute. There
@@ -494,19 +453,19 @@
 
 \begin{lemma}[Positive physical sectors of the selected fixed tensor]
     \label{thm:mpdo_fixed_bond_positive_physical_sector_representative}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         exists_positive_physicalSectorFactorization_fixedProductTensorData}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         PositivePhysicalSectorFixedProductTensorData}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         nonempty_positivePhysicalSectorFixedProductTensorData}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         positivePhysicalSectorFixedProductTensorData}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         fixedProductTensorDataPhysicalSectorFactorization}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq}
-    \lean{MPOTensor.TranslationInvariantBondData.%
+    \lean{MPOTensor.CommutingBond.%
         fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv}
     \lean{MPOTensor.PhysicalSectorFactorization.%
@@ -590,12 +549,12 @@
 
 \begin{lemma}[Eventual proportionality from a fixed product tensor]
     \label{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,thm:mpdo_eta_fixed_bond_product_tensor}
     Suppose one fixed tensor $C$ generates the products of the bond carried
-    by an eta-local structure. Then the doubled-index tensors of $M$ and
+    by a commuting form. Then the doubled-index tensors of $M$ and
     $C$ are eventually nonzero proportional. The proof uses only lengths
     $N\ge2$ and therefore assumes no relation at length one.
 \end{lemma}
@@ -610,7 +569,7 @@
 
 \begin{lemma}[A normal rescaling gives a geometric phase]
     \label{thm:mpdo_eta_normal_rescaling_geometric_phase}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         exists_unit_phase_power_mpo_eq_product_of_normal_smul}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,def:nt_cpsv}
@@ -652,7 +611,7 @@
 
 \begin{lemma}[A normal rescaling forces the positive geometric law]
     \label{thm:mpdo_eta_normal_rescaling_positive_geometric_law}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         mpo_eq_positive_power_product_of_normal_smul}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,def:nt_cpsv}

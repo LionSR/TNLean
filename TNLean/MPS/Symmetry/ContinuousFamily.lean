@@ -10,15 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.ContinuousFamily.CompactMinimalClassStability
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousCanonicalNormalization
-import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousProjectionFrame
-import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousSpectralCorner
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.ContinuousFamily.GlobalVirtualGauge
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalInvariantCompression
-import TNLean.MPS.Symmetry.ContinuousFamily.LocalSpectralSupport
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalVirtualGauge
 import TNLean.MPS.Symmetry.ContinuousFamily.NearbyInjectiveAdjointActions
 import TNLean.MPS.Symmetry.ContinuousFamily.StationarySupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.ContinuousFamily.SupportPeriodicDecomposition
-import TNLean.MPS.Symmetry.ContinuousFamily.UniformProjectiveRigidity
-import TNLean.MPS.Symmetry.ContinuousFamily.VaryingSupportPhaseInvariance

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.Correlations.ObservableTransferBound
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator
+import QICLean.Analysis.Norm.MatrixToEuclidean
 
 /-!
 # Clustering of block observables in a normal matrix product state
@@ -126,15 +127,6 @@ theorem norm_mpvExpectation_le (A : MPSTensor d D) (N : ℕ)
     _ ≤ 1 * (‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O‖ * 1) := by
         gcongr
     _ = _ := by ring
-
-/-- The operator norm of a product of matrices is at most the product of the norms. -/
-theorem _root_.Matrix.norm_toEuclideanCLM_mul_le {n : Type*} [Fintype n] [DecidableEq n]
-    (P Q : Matrix n n ℂ) :
-    ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (P * Q)‖ ≤
-      ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) P‖ *
-        ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) Q‖ := by
-  rw [map_mul]
-  exact norm_mul_le _ _
 
 /-! ### Translation invariance -/
 

@@ -3,7 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.LinearAlgebra.DFinsupp
+import QICLean.Analysis.Projection.OverlapMatrix
+import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+import QICLean.Analysis.Projection.ProjectorSumConvergence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.SpectatorOverlap
 import Mathlib.Analysis.SpecificLimits.Basic
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockGroundSpaceOverlap
@@ -42,6 +46,8 @@ long. The nonzero block weights do not affect the interval ground spaces.
 This is the estimate from Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma `commutation` (ii), applied to the ground spaces of the direct sum.
 -/
+
+open MPTensor
 
 section
 

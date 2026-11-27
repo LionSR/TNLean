@@ -22,8 +22,6 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 
 ## Main declarations
 
-- `MPOTensor.IsInjective`: injectivity of a simple MPO tensor, expressed via the
-  doubled-index MPS tensor.
 - `MPOTensor.inverseTensor` / `MPOTensor.inverseTensor_spec`: the concrete
   inverse tensor `K⁻¹` and its matrix-unit contraction identity.
 - `MPOTensor.normalizedFourSiteTail` /
@@ -119,7 +117,7 @@ Hayashi-sector comparison then gives a factorization of the concrete tensor
     = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
 \]
 The inverse-map factorization has a coherently positive choice, and
-`MPOTensor.nonempty_etaLocalStructureData_of_isSAL` assembles its neighboring
+`MPOTensor.nonempty_commutingForm_of_isSAL` assembles its neighboring
 operators into the common two-site bond of Proposition C.8 from injectivity and
 SAL alone.
 
@@ -200,7 +198,7 @@ theorem isSSAEquality_tripartite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
   have hNpos : 0 < N := by omega
   rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
   have hEq := hstep N 1 (by omega) (by omega)
-  simp only [mutualInfoChain] at hEq
+  simp only [mutualInfoChain_eq] at hEq
   have hEABC := vonNeumannEntropy_tripartiteSplit_eq_blockEntropy M
     (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N hNpos)
   have hEC := vonNeumannEntropy_traceC_eq_blockEntropy M
@@ -291,7 +289,7 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
   have hρflatTrace : ρflat.trace = 1 := by
     dsimp only [ρflat]
     rw [Matrix.trace_submatrix_equiv]
-    exact reducedBlockState_trace K N (1 + 1 + (N - 3)) hNm1
+    exact MPOTensor.reducedBlockState_trace K N (1 + 1 + (N - 3)) hNm1
       ((Classical.choose_spec hSAL).1 N (by omega))
   have hEqFlat : IsSSAEquality ρflat hρflatPos.isHermitian := by
     simpa [ρflat, hM] using isSSAEquality_tripartite_of_isSAL K hSAL hN
@@ -308,7 +306,7 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
   let eC : Fin (d ^ (N - 3)) ≃ Fin d × (Fin (N - 4) → Fin d) :=
     finFunctionFinEquiv.symm |>.trans
       (Equiv.arrowCongr (finCongr (show N - 3 = 1 + (N - 4) by omega)) (Equiv.refl _)) |>.trans
-      (blockSplitEquiv d 1 (N - 4)) |>.trans
+      (MPOTensor.blockSplitEquiv d 1 (N - 4)) |>.trans
       (finFunctionFinEquiv.prodCongr (Equiv.refl _)) |>.trans
       (eSite.symm.prodCongr (Equiv.refl _))
   have hηSmall := Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong
@@ -331,8 +329,8 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
         Equiv.trans_apply, Equiv.prodAssoc_symm_apply, Function.comp_apply,
         Equiv.symm_apply_apply, Equiv.symm_symm, Equiv.coe_refl, Prod.map_apply,
         id_eq, Nat.succ_eq_add_one]
-      rw [blockSplitEquiv_symm_apply, blockSplitEquiv_symm_apply,
-        blockSplitEquiv_symm_apply]
+      rw [MPOTensor.blockSplitEquiv_symm_apply, MPOTensor.blockSplitEquiv_symm_apply,
+        MPOTensor.blockSplitEquiv_symm_apply]
       funext i
       refine Fin.addCases (fun j : Fin 3 ↦ ?_) (fun j : Fin (N - 4) ↦ ?_) i
       · fin_cases j <;>

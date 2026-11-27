@@ -57,65 +57,12 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-! ### Boundary edges of a region and its complement
-
-An edge crosses the boundary of `R` precisely when it crosses the boundary of the
-set complement `univ \ R`: in both cases exactly one endpoint lies in `R`. This
-symmetry lets the complement block reuse the boundary bonds of `R`. -/
-
-omit [DecidableRel G.Adj] in
-/-- An edge crosses the boundary of `R` exactly when it crosses the boundary of
-the set complement `univ \ R`. -/
-theorem isRegionBoundaryEdge_compl_iff (R : Finset V) (f : Edge G) :
-    ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f ↔
-      ManyBody.IsRegionBoundaryEdge (G := G) R f := by
-  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and]
-  tauto
-
-/-- A boundary edge of `R`, reread as a boundary edge of the complement
-`univ \ R`. -/
-def regionBoundaryEdgeToCompl (R : Finset V)
-    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
-    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
-  ⟨f.1, (isRegionBoundaryEdge_compl_iff (G := G) R f.1).mpr f.2⟩
-
-/-- The boundary edges of `R` and of its complement `univ \ R` are the same
-edges. -/
-def regionBoundaryEdgeComplEquiv (R : Finset V) :
-    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} ≃
-      {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
-  Equiv.subtypeEquivRight (fun f => (isRegionBoundaryEdge_compl_iff (G := G) R f).symm)
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem regionBoundaryEdgeComplEquiv_symm_apply_coe (R : Finset V)
-    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f}) :
-    (((regionBoundaryEdgeComplEquiv (G := G) R).symm f) : Edge G) = f.1 := rfl
-
 /-! ### The complement region as a two-block tensor over the boundary of `R`
 
 The complement block of `R` is the blocked tensor of the set complement
 `univ \ R`, reindexed so that its open boundary legs are indexed by the boundary
 edges of `R`. This is the second block in the region analogue of the
 one-vertex-versus-complement comparison. -/
-
-/-- The boundary configuration on the complement `univ \ R`, obtained from a
-boundary configuration on `R` by reading each crossing edge under the
-boundary-edge identification. -/
-def regionComplementBoundaryConfig (A : Tensor G d) (R : Finset V)
-    (bdry : RegionBoundaryConfig (G := G) A R) :
-    RegionBoundaryConfig (G := G) A (Finset.univ \ R) :=
-  fun f => bdry ((regionBoundaryEdgeComplEquiv (G := G) R).symm f)
-
-/-- The complement boundary configuration reads the boundary edge `f` of `R`,
-viewed on the complement as `regionBoundaryEdgeToCompl R f`, off the original
-boundary value at `f`. -/
-theorem regionComplementBoundaryConfig_apply_toCompl (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
-    (bdry : RegionBoundaryConfig (G := G) A R) :
-    regionComplementBoundaryConfig (G := G) A R bdry (regionBoundaryEdgeToCompl (G := G) R f) =
-      bdry f := by
-  rw [regionComplementBoundaryConfig]
-  congr 1
 
 /-- The complement region `univ \ R`, viewed as an abstract two-block tensor over
 the edges crossing the boundary of `R`.
@@ -276,56 +223,6 @@ To compare two tensors with the same bond dimensions, the second tensor is
 transported to the first tensor's bond family. The region-inserted coefficient
 transports by conjugating the inserted matrix with the reindexing equivalence,
 matching `edgeInsertedCoeff_reindexTensor`. -/
-
-/-- The blocked-region weight transports along a bond-dimension reindex: the
-weight of the reindexed tensor at a boundary configuration is the weight of the
-original tensor at the cast boundary configuration. -/
-theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
-    (h : bd = B.bondDim) (R : Finset V)
-    (bdry : RegionBoundaryConfig (G := G) (reindexTensor (G := G) B h) R)
-    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
-    regionBlockedWeight (G := G) (reindexTensor (G := G) B h) R bdry τ =
-      regionBlockedWeight (G := G) B R
-        (fun f => Fin.cast (congr_fun h f.1) (bdry f)) τ := by
-  classical
-  rw [regionBlockedWeight, regionBlockedWeight]
-  -- Reindex the constrained virtual-configuration sum by casting every bond.
-  let φ : VirtualConfig (reindexTensor (G := G) B h) ≃ VirtualConfig B :=
-    Equiv.piCongrRight fun e =>
-      finCongr (by simpa [reindexTensor_bondDim] using congr_fun h e)
-  refine Finset.sum_nbij' φ φ.symm ?_ ?_ ?_ ?_ ?_
-  · -- Forward map lands in the complement filter.
-    intro ζ hζ
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
-    funext f
-    have hf : regionBoundaryLabel (G := G) (reindexTensor (G := G) B h) R ζ f = bdry f :=
-      congrFun hζ f
-    rw [regionBoundaryLabel_apply] at hf ⊢
-    change Fin.cast (by simpa [reindexTensor_bondDim] using congr_fun h f.1) (ζ f.1) =
-      Fin.cast (by simpa [reindexTensor_bondDim] using congr_fun h f.1) (bdry f)
-    rw [hf]
-  · -- Backward map lands in the original filter.
-    intro ζ hζ
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
-    funext f
-    have hf : regionBoundaryLabel (G := G) B R ζ f = Fin.cast (congr_fun h f.1) (bdry f) :=
-      congrFun hζ f
-    rw [regionBoundaryLabel_apply] at hf ⊢
-    apply Fin.eq_of_val_eq
-    change (((finCongr (by simpa [reindexTensor_bondDim] using congr_fun h f.1)).symm
-      (ζ f.1) : Fin ((reindexTensor (G := G) B h).bondDim f.1)) : ℕ) = (bdry f : ℕ)
-    rw [finCongr_symm_apply_coe]
-    exact (congrArg Fin.val hf).trans (Fin.val_cast _ _)
-  · -- Left inverse.
-    intro ζ _
-    exact φ.left_inv ζ
-  · -- Right inverse.
-    intro ζ _
-    exact φ.right_inv ζ
-  · -- Matching summand: products of casts agree.
-    intro ζ _
-    refine Finset.prod_congr rfl fun w _ => ?_
-    rfl
 
 open scoped Classical in
 /-- `regionInsertedCoeff` transports along a bond-dimension reindex by conjugating

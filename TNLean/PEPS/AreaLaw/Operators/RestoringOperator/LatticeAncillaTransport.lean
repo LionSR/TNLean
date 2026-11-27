@@ -5,6 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AncillaTransport
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeRestoring
+import QICLean.Algebra.PartialTrace
+import QICLean.Analysis.Isometry.RestoringVectors
+import QICLean.Entropy.Typical.Density
 import QICLean.Analysis.Norm.MatrixKroneckerContraction
 import QICLean.Analysis.Norm.RootChannel
 

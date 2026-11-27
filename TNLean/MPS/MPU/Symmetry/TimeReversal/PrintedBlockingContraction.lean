@@ -291,7 +291,7 @@ private theorem spinPairEquiv_apply {d k : ℕ} (z : Fin k → Fin d × Fin d)
     change 2 * a.val + b.val = b.val + 2 * a.val
     omega
   simp [spinPairEquiv, twoSiteChainConfigEquiv, twoSitePairConfigEquiv,
-    MPSTensor.blockedConfigEquiv, twoSiteBlockEquiv, Equiv.arrowCongr,
+    Kraus.blockedConfigEquiv, twoSiteBlockEquiv, Equiv.arrowCongr,
     Equiv.curry, hr]
 
 private theorem spinPairEquiv_even {d k : ℕ} (z : Fin k → Fin d × Fin d) (a : Fin k) :

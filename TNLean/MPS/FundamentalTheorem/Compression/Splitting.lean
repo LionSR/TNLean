@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import Mathlib.LinearAlgebra.DirectSum.Finite
 import QICLean.Algebra.Module.DirectSumBlockDiagonal
 import TNLean.MPS.FundamentalTheorem.Compression.ProjectorWeightedSum
-import TNLean.MPS.FundamentalTheorem.WordModule.StarSemisimple
+import TNLean.MPS.FundamentalTheorem.WordModule.GaugeWordModule
 
 /-!
 # The splitting criterion for multi-block compressions
@@ -262,7 +262,7 @@ theorem exists_fusionTensors_of_star (S : Finset ι) (C : ∀ s, MPSTensor d (D 
     (hstar : ∀ i, (B i)ᴴ ∈ Algebra.adjoin ℂ (Set.range B)) :
     ∃ (left : ∀ s : {s // s ∈ S}, Matrix (Fin (D s.1)) (Fin DB) ℂ)
       (right : ∀ s : {s // s ∈ S}, Matrix (Fin DB) (Fin (D s.1)) ℂ),
-      (∀ s, MPSTensor.IsReduction B (C s.1) (left s) (right s)) ∧
+      (∀ s, MPTensor.IsReduction B (C s.1) (left s) (right s)) ∧
       (∀ (i : Fin d) (s : {s // s ∈ S}), B i * right s = right s * C s.1 i) ∧
       (∀ (i : Fin d) (s : {s // s ∈ S}), left s * B i = C s.1 i * left s) ∧
       (∀ s t : {s // s ∈ S}, s ≠ t → left s * right t = 0) := by

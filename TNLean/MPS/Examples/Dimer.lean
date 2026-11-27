@@ -34,3 +34,41 @@ import TNLean.MPS.Examples.Dimer.TwistedDimerSymmetry
 import TNLean.MPS.Examples.Dimer.TwistedDimerUnitaryFactorization
 import TNLean.MPS.Examples.Dimer.TwistedDimerVerticalCF
 import TNLean.MPS.Examples.Dimer.TwistedDimerViaTS
+
+/-!
+# Quantum dimers with length-dependent structure coefficients
+
+Two project examples bearing on the question after Theorem 4.14 of CPSV16 (arXiv:1606.00608,
+lines 995–1010), whether a renormalization fixed point can have structure coefficients that
+depend on the length; neither tensor is printed in the source. The rescaling-stable dimer `R`
+carries two qubits per site, the second qubit of a site matching the first qubit of the next on
+the support, with weight matrix `!![16/25, 9/25; 9/25, 16/25]`; its one-label coefficients
+`1 + (7/25)^L` stay length dependent under every rescaling. The
+`ℤ₂`-twisted (graded) quantum dimer `T`, at Bell weights `7/8` and `1/8`, has two flag sectors
+with the same-length product law of coefficients `(7/10)^L` and `(1/10)^L`. The strong and weak
+symmetries are those of Sun 2025 (arXiv:2504.16985, line 182).
+
+## General theorems instantiated
+
+* `MPOTensor.IsRFPViaTS` (density-operator renormalization fixed points): both `R` and `T`, and
+  the mixed-Bell bond factor of `T`, satisfy it through explicit Kraus channels;
+  arXiv:1606.00608, Definition 4.1.
+* `MPSTensor.IsCPSVCanonicalForm` and `MPSTensor.IsCPSVBasisOfNormalTensors` (canonical forms):
+  the doubled-index tensors are in literal canonical form, and the flag sectors of `T` are a
+  vertical basis of normal tensors; arXiv:1606.00608, eq. `II_CF1` and Proposition 4.13.
+* `MPSTensor.isNormalTensor_of_isNormal_leftCanonical` (normal blocks): the rescaled blocks and
+  sectors are normal tensors in the spectral normalization; arXiv:1606.00608, lines 224–235.
+* `MPOTensor.BNTAlgebraTensorClause` (algebra clause of the coefficient theorem): explicit
+  one-label and two-label clauses with length-dependent coefficients; arXiv:1606.00608,
+  Theorem 4.14(ii).
+* `MPOTensor.IsSimple` and `MPOTensor.bnt_basis_not_isNilpotent_iff` (simple density
+  operators): `R` and the bond factor are simple, and `T` is not simple at any blocking length
+  since one of its blocks has nilpotent physical-trace transfer; arXiv:1606.00608,
+  Definition 4.7 and Proposition 2.7.
+* `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul` (multi-block compression): the
+  fusion rule `M_f M_{f'} = (7/16) M_{f+f'} ⊕ (1/16) M_{f+f'+1}` of the graded twist gives
+  its word-trace identity.
+* `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry` (symmetries of density
+  operators): strong `ZZ` and weak but not strong `XX` symmetries of `R` and `T`;
+  arXiv:2504.16985, line 182.
+-/

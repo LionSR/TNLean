@@ -13,6 +13,8 @@ This file records the genuine `GaugeEquiv` and `SameMPV` consequences of the
 generic TP and unital gauge constructions.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 
 namespace MPSTensor

@@ -26,6 +26,8 @@ an example constructed in this development, as documented in `ParityGraded`.
 * `ParityGraded.trace_evalWord_parA_replicate_one`: the all-one amplitude is `1 + (-1)^N`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open MPSTensor
 

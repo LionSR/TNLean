@@ -71,6 +71,8 @@ the source dual fixed-point equation
 \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to \(\Lambda_j=1\).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -163,9 +165,10 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -288,9 +291,10 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -371,9 +375,10 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bn
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -442,9 +447,10 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -488,9 +494,10 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -532,9 +539,10 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_compa
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -586,9 +594,10 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -638,9 +647,10 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_co
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -710,9 +720,10 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)

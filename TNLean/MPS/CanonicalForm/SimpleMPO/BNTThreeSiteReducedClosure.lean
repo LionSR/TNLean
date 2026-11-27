@@ -32,6 +32,8 @@ positive-length matrix-product-vector families.
   Appendix C.2, lines 1660--1665 and 1714--1732.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor.SectorDecomposition
@@ -193,7 +195,7 @@ Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, equations `CFK`,
 theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor) (L : ℕ) :
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor) (L : ℕ) :
     IsThreeSiteFamilyClosure
       (fun j ↦ S.basisMPOTensor j)
       (S.normalizedThreeSiteClosingMatrix M L)
@@ -210,7 +212,7 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
         (Matrix.trace (M.mpo (L + 3)))⁻¹ *
           ∑ w : Fin L → Fin d,
             M.mpo (3 + L) (Fin.append u w) (Fin.append v w) := by
-    rw [reducedBlockState_eq_sum]
+    rw [MPOTensor.reducedBlockState_eq_sum]
     simp only [normalizedMPO, Matrix.smul_apply, smul_eq_mul]
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
@@ -287,7 +289,7 @@ C.2, lines 1646--1665 and 1714--1732. -/
 theorem reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

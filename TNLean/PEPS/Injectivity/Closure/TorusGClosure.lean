@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.Torus.TorusOperatorString
 import TNLean.PEPS.Injectivity.Closure.PairConjugacy
+import TNLean.PEPS.Graph.Holonomy.RegularTorusCompatibility
 
 /-!
 # Torus PEPS with group-valued closures
@@ -29,19 +30,6 @@ namespace TNLean.PEPS
 
 variable {G V Phys : Type*} [Group G] [Fintype V] [DecidableEq V]
 variable {width height : ℕ} [NeZero width] [NeZero height]
-
-/-- A horizontal closure inserts `U_h` on every bond from the last column to
-the first. Source: arXiv:1001.3807, equation `eq:2d:peps-with-ug-uh`. -/
-def torusHorizontalClosure (U : G →* Matrix V V ℂ) (h : G)
-    (v : TorusVertex width height) : Matrix V V ℂ :=
-  if v.1 + 1 = 0 then U h else 1
-
-/-- A vertical closure inserts `U_g` on every bond from the bottom row to the
-top, along the downward orientation. Source: arXiv:1001.3807,
-equation `eq:2d:peps-with-ug-uh`. -/
-def torusVerticalClosure (U : G →* Matrix V V ℂ) (g : G)
-    (v : TorusVertex width height) : Matrix V V ℂ :=
-  if v.2 + 1 = 0 then U g else 1
 
 /-- The torus PEPS vector with closures `(g,h)`, coefficient by coefficient.
 Source: arXiv:1001.3807, Definition 5.6, equation `eq:2d:peps-with-ug-uh`.

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Kronecker.CommutingDecomposition
 import QICLean.Algebra.Combinatorics.TupleEquiv
-import TNLean.MPS.Operator.PhysicalSector.CommutingFormBridge
+import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorBondTwoSite
 
 /-!
 # Three-site coordinates for overlapping translates of a commuting bond
@@ -29,10 +29,10 @@ identification and the two Hermitian block actions.
 * `MPOTensor.pairBondMatrix`
 * `MPOTensor.reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift`
 * `MPOTensor.reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift`
-* `MPOTensor.TranslationInvariantBondData.overlappingLifts_pairBond_comm`
-* `MPOTensor.TranslationInvariantBondData.reindex_bondAt_zero_eq_leftOverlappingLift`
-* `MPOTensor.TranslationInvariantBondData.reindex_bondAt_one_eq_rightOverlappingLift`
-* `MPOTensor.TranslationInvariantBondData.exists_unitary_blockActions_of_pairBond`
+* `MPOTensor.CommutingBond.overlappingLifts_pairBond_comm`
+* `MPOTensor.CommutingBond.reindex_bondAt_zero_eq_leftOverlappingLift`
+* `MPOTensor.CommutingBond.reindex_bondAt_one_eq_rightOverlappingLift`
+* `MPOTensor.CommutingBond.exists_unitary_blockActions_of_pairBond`
 
 ## References
 
@@ -192,7 +192,7 @@ theorem reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift
     have hi : i ≠ i' := fun hi ↦ h hi.symm
     simp [Matrix.rightOverlappingLift, hi]
 
-namespace TranslationInvariantBondData
+namespace CommutingBond
 
 variable {d : ℕ}
 
@@ -200,14 +200,14 @@ variable {d : ℕ}
 
 Source: arXiv:1606.00608, Appendix C.2, equation `expression` and Proposition
 `4to2`, lines 1571--1576 and 1599--1605. -/
-def pairBond (data : TranslationInvariantBondData d) :
+def pairBond (data : CommutingBond d) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
   pairBondMatrix data.bond
 
 /-- The pair-indexed bond is Hermitian because the fixed bond is positive semidefinite.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `expression`, lines 1571--1576. -/
-theorem pairBond_isHermitian (data : TranslationInvariantBondData d) :
+theorem pairBond_isHermitian (data : CommutingBond d) :
     data.pairBond.IsHermitian := by
   exact data.bond_pos.isHermitian.reindex (finTwoArrowEquiv (Fin d))
 
@@ -217,10 +217,10 @@ equivalence.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
 Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_bondAt_zero_eq_leftOverlappingLift
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
         (threeSiteOverlappingEquiv (Fin d))
-        ((data.toCommutingFormData two_le_three).bondAt (0 : Fin 3)) =
+        (data.bondAt two_le_three (0 : Fin 3)) =
       Matrix.leftOverlappingLift data.pairBond := by
   exact reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift data.bond
 
@@ -230,10 +230,10 @@ equivalence.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
 Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_bondAt_one_eq_rightOverlappingLift
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
         (threeSiteOverlappingEquiv (Fin d))
-        ((data.toCommutingFormData two_le_three).bondAt (1 : Fin 3)) =
+        (data.bondAt two_le_three (1 : Fin 3)) =
       Matrix.rightOverlappingLift data.pairBond := by
   exact reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift data.bond
 
@@ -242,7 +242,7 @@ with Hermiticity, they satisfy the hypotheses of Beigi's spatial decomposition.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
 Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
-theorem overlappingLifts_pairBond_comm (data : TranslationInvariantBondData d) :
+theorem overlappingLifts_pairBond_comm (data : CommutingBond d) :
     Matrix.leftOverlappingLift data.pairBond *
         Matrix.rightOverlappingLift data.pairBond =
       Matrix.rightOverlappingLift data.pairBond *
@@ -251,16 +251,16 @@ theorem overlappingLifts_pairBond_comm (data : TranslationInvariantBondData d) :
     ← data.reindex_bondAt_one_eq_rightOverlappingLift]
   change (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
       (threeSiteOverlappingEquiv (Fin d)))
-        ((data.toCommutingFormData two_le_three).bondAt 0) *
+        (data.bondAt two_le_three 0) *
       (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
         (threeSiteOverlappingEquiv (Fin d)))
-          ((data.toCommutingFormData two_le_three).bondAt 1) =
+          (data.bondAt two_le_three 1) =
     (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
       (threeSiteOverlappingEquiv (Fin d)))
-        ((data.toCommutingFormData two_le_three).bondAt 1) *
+        (data.bondAt two_le_three 1) *
       (Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
         (threeSiteOverlappingEquiv (Fin d)))
-          ((data.toCommutingFormData two_le_three).bondAt 0)
+          (data.bondAt two_le_three 0)
   rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
       (threeSiteOverlappingEquiv (Fin d)) (threeSiteOverlappingEquiv (Fin d)),
     Matrix.reindexLinearEquiv_mul ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
@@ -278,7 +278,7 @@ precisely the first two adjacent translates of the original bond.
 Source: arXiv:1606.00608, Appendix C.2, lines 1597--1610; Beigi,
 J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem exists_unitary_blockActions_of_pairBond
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
       (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d)
       (U : Matrix (Fin d) (Fin d) ℂ)
@@ -304,20 +304,6 @@ theorem exists_unitary_blockActions_of_pairBond
   · exact data.pairBond_isHermitian
   · exact data.overlappingLifts_pairBond_comm
 
-end TranslationInvariantBondData
+end CommutingBond
 
-namespace EtaLocalStructureData
-
-variable {M : MPOTensor d D}
-
-/-- The chain-independent bond of an eta-local structure, written on an ordered pair of
-physical indices.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `expression` and Proposition
-`4to2`, lines 1571--1576 and 1599--1605. -/
-def pairBond (data : EtaLocalStructureData M) :
-    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
-  data.bondData.pairBond
-
-end EtaLocalStructureData
 end MPOTensor

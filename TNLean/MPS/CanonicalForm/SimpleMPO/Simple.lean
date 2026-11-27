@@ -126,12 +126,12 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       (Equiv.prodCongr (Kraus.singleBlockEquiv d) (Kraus.singleBlockEquiv d)) |>.trans
         finProdFinEquiv
   let P := S.reindexPhysical e
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
     simpa using hEq i
-  have hSame : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
-    MPSTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => (hGauge.sameMPV N σ).symm)
+  have hSame : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+    MPTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => (hGauge.sameMPV N σ).symm)
   have hBlock : (blockTensor M 1).toMPSTensor =
       Kraus.reindexPhysical e M.toMPSTensor := by
     funext ij
@@ -147,9 +147,9 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       exact Fin.pos_iff_nonempty.mpr ⟨j⟩
     · intro N hN σ
       rw [hBlock]
-      change MPSTensor.mpv (Kraus.reindexPhysical e M.toMPSTensor) σ =
-        MPSTensor.mpv (Kraus.reindexPhysical e S.toTensor) σ
-      simp only [MPSTensor.mpv_reindexPhysical]
+      change MPTensor.mpv (Kraus.reindexPhysical e M.toMPSTensor) σ =
+        MPTensor.mpv (Kraus.reindexPhysical e S.toTensor) σ
+      simp only [MPTensor.mpv_reindexPhysical]
       exact hSame N hN (fun n => e (σ n))
     · let _ : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
         fun j => ⟨(hCF'.basis_dim_pos j).ne'⟩

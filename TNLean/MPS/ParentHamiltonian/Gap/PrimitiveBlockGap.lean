@@ -25,6 +25,8 @@ and the finite-range comparison for periodic chains.
   `docs/paper-gaps/knabe88_finite_range_coefficient.tex`.
 -/
 
+open MPTensor
+
 open Filter
 open scoped Topology ComplexOrder
 

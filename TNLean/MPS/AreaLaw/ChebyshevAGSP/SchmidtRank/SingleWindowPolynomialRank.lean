@@ -9,7 +9,7 @@ import QICLean.Algebra.OperatorSchmidt.Basic
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 
 /-!
 # Polynomial rank at one cut
@@ -37,14 +37,6 @@ namespace TNLean.MPS.AreaLaw.AKLV
 
 private local instance configurationDecidableEq {V : Type*} (q : ℕ) :
     DecidableEq (V → Fin q) := Classical.decEq _
-
-private theorem one_eq_classical {n : Type*} (d : DecidableEq n) :
-    @OfNat.ofNat (Matrix n n ℂ) 1 (@One.toOfNat1 _ (@Matrix.one n ℂ d _ _)) =
-      @OfNat.ofNat (Matrix n n ℂ) 1
-        (@One.toOfNat1 _ (@Matrix.one n ℂ (Classical.decEq n) _ _)) := by
-  exact congrArg (fun e : DecidableEq n ↦
-    @OfNat.ofNat (Matrix n n ℂ) 1 (@One.toOfNat1 _ (@Matrix.one n ℂ e _ _)))
-    (Subsingleton.elim d (Classical.decEq n))
 
 /-- Restricting spectator sites to fixed configurations recovers the
 original cut operator without increasing its operator Schmidt rank. -/
@@ -109,22 +101,6 @@ theorem operatorSchmidtRank_le_placeAlong
   rw [hmatrix]
   exact operatorSchmidtRank_submatrix_prod_le _ f f g g
 
-/-- The placement along an embedding, as a unital algebra homomorphism for the
-classical decidable equality of configurations fixed in this file. -/
-private def placeAlongAlgHom {V W : Type*} [Fintype V] [DecidableEq V]
-    [Fintype W] [DecidableEq W] {q : ℕ} (e : V ↪ W) :
-    Matrix (V → Fin q) (V → Fin q) ℂ →ₐ[ℂ] Matrix (W → Fin q) (W → Fin q) ℂ where
-  toFun := ManyBody.placeAlong (X := fun _ ↦ Fin q) e
-  map_one' := by
-    simpa only [one_eq_classical] using ManyBody.placeAlong_one (X := fun _ ↦ Fin q) e
-  map_mul' K K' := ManyBody.placeAlong_mul (X := fun _ ↦ Fin q) e K K'
-  map_zero' := ManyBody.placeAlong_zero (X := fun _ ↦ Fin q) e
-  map_add' := ManyBody.placeAlong_add (X := fun _ ↦ Fin q) e
-  commutes' z := by
-    simp only [Algebra.algebraMap_eq_smul_one, ManyBody.placeAlong_smul]
-    congr 1
-    simpa only [one_eq_classical] using ManyBody.placeAlong_one (X := fun _ ↦ Fin q) e
-
 /-- A polynomial in a single physical window and its two exterior
 operators has the rank bound inherited from the two-window estimate.
 The auxiliary window consists of zero interactions on spectator sites.
@@ -158,7 +134,7 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
       have := congrArg Fin.val hij
       dsimp at this
       omega⟩
-  let E := placeAlongAlgHom (q := q) e
+  let E := (ManyBody.placeAlongHom (X := fun _ ↦ Fin q) e).toAlgHom
   let b := N + c
   let F : ((Fin (2 * w) ⊕ Fin (2 * w)) ⊕ Fin 3) →
       Matrix (Fin T → Fin q) (Fin T → Fin q) ℂ :=

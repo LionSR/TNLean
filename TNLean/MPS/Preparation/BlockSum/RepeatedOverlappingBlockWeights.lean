@@ -68,6 +68,8 @@ replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented i
   (`eq:fid_err_gen_non_normal`).
 -/
 
+open MPTensor
+
 section RepeatedOverlappingBlockError
 
 /-!
@@ -138,7 +140,7 @@ physical leg is the pair of bond indices of block `j`, and `P_{σ_j}` is the fix
 theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
     (α : Fin b → ℂ) (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
-    ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (blockedConfigEquiv d M q τ) =
+    ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockedConfigEquiv d M q τ) =
       ∑ j, star (α j) * mpvOverlap (ofPhysicalMatrixLM ((L j)ᴴ *
         Matrix.polarPos (physicalMatrix (blockTensor A q)))) (fixedPointTensor (σ j)) M := by
   set Bq := blockTensor A q
@@ -572,7 +574,7 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
     mpvOverlap_conjTranspose_copyIsometry_mul_polarPos hι hdisj μ hq0 j
       _ M
   set v := copyApproxVector A q M (ghzAmplitude β) (copyIsometry ι μ q) σ
-  set num := ∑ τ, star (v τ) * mpv A (blockedConfigEquiv d M q τ)
+  set num := ∑ τ, star (v τ) * mpv A (Kraus.blockedConfigEquiv d M q τ)
   set Sz := ∑ j, star (β j) * z j
   have hnum : num = ((Real.sqrt bb : ℝ) : ℂ)⁻¹ * Sz := by
     simp only [num, v, sum_star_copyApproxVector_mul_mpv, Sz, Finset.mul_sum]

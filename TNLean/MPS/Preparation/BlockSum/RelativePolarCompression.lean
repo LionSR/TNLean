@@ -39,6 +39,8 @@ It also contains the following results.
   polar rows.
 -/
 
+open MPTensor
+
 section RelativePolarCompression
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Kronecker InnerProductSpace
@@ -245,7 +247,7 @@ theorem sum_norm_relative_column_sq
   change (∑ a, ∑ c, ∑ t, σ c t *
     ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj j) q))
       (a, t) (a, c)) = _
-  rw [← trace_transfer_eq_gram, transferMap_blockTensor_apply, Module.End.pow_apply,
+  rw [← trace_transfer_eq_gram, Kraus.transferMap_blockTensor_apply, Module.End.pow_apply,
     Function.iterate_fixed hfix, htr]
 
 /-- Positivity of the actual diagonal relative compression coefficient. -/

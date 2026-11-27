@@ -28,6 +28,8 @@ source diagram for one physical letter. It does not decide the mixed-state conti
 See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kronecker
 open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock wordOfBlock blockTensor)
 
@@ -44,7 +46,7 @@ direction of the printed diagram, and its symmetry gives the other.
 alphabet to one letter. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsOneLetterRFPViaTSUpToVirtualGauge {D : ℕ} (M : MPOTensor 1 D) : Prop :=
-  MPSTensor.GaugeEquiv (blockTwo M).toMPSTensor M.toMPSTensor
+  MPTensor.GaugeEquiv (blockTwo M).toMPSTensor M.toMPSTensor
 
 end MPOTensor
 

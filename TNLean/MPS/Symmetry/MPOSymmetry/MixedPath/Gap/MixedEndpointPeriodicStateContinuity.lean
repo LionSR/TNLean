@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.RingEndpointRightComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenGapContinuity
 import TNLean.MPS.ParentHamiltonian.Continuity.PeriodicShortGapContinuity
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 import Mathlib.Topology.UnitInterval
 
 /-!
@@ -28,6 +28,8 @@ on the length and is not a thermodynamic uniform-gap assertion.
 Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5,
 `defAgamma`, lines 1586–1601 and 1687–1692.
 -/
+
+open MPTensor
 
 open scoped BigOperators Matrix Topology
 

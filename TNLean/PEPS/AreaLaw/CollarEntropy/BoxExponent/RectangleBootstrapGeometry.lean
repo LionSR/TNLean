@@ -7,8 +7,8 @@ import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedSampling
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixBoundary
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.RoundedClearance
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusAsymptotics
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeCounts
-import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeBoxChildren
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
+import QICLean.ManyBody.Sites.Lattice.RectangleChildren
 
 /-!
 # Actual scanner geometry for a weakly safe integer rectangle
@@ -29,6 +29,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 32--58, 83--154 and 693--729, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (card_anchor_fiber_le)
 
 open ManyBody (IntRect IsSafe card_dilate_sdiff_le rectRegion supDist ambientDepth
   ambientDepth_le_iff_mem_ambientDilation)
@@ -69,7 +71,7 @@ private theorem rectangleBootstrap_prefix_eq {Λ : Finset (ℤ × ℤ)}
 private theorem rectangleBootstrap_clearance {Λ : Finset (ℤ × ℤ)}
     {A : Finset ↥Λ} {D₀ L r₀ : ℕ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) (hbudget : 2 * L + 10 * r₀ ≤ D₀ * Q.size) :
-    ∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+    ∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ) := by
   classical
   intro t ht z hz
@@ -121,7 +123,7 @@ theorem rectangleBootstrapScanner_geometry_of_threshold_le (F : ScannerExponents
       D₀ * F.L S.n + F.L S.n ≤ D₀ * Q.size ∧
       (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
         (ambientDilation Q.toFinset r \ ambientDilation Q.toFinset (r - 1)).card ≤ S.n) ∧
-      (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) ∧
       (S.A.filter fun x ↦ x.val ∈ Q.toFinset) = rectRegion A Q ∧
       (∀ j : ℕ, positiveDepthPrefix S.A S.depth (j : ℤ) =
@@ -181,7 +183,7 @@ theorem exists_rectangleBootstrapScanner_geometry (F : ScannerExponents)
         D₀ * F.L S.n + F.L S.n ≤ D₀ * Q.size ∧
         (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
           (ambientDilation Q.toFinset r \ ambientDilation Q.toFinset (r - 1)).card ≤ S.n) ∧
-        (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) ∧
         (S.A.filter fun x ↦ x.val ∈ Q.toFinset) = rectRegion A Q ∧
         (∀ j : ℕ, positiveDepthPrefix S.A S.depth (j : ℤ) =

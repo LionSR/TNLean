@@ -10,6 +10,7 @@ import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.Compression
 import QICLean.Algebra.Matrix.MatrixAux
 import TNLean.MPS.Transfer.Irreducible.PeriodicBlocking
 import QICLean.Channel.Semigroup.CPClosure
+import QICLean.Algebra.Hermitian.CornerCompression
 
 /-!
 # Cyclic-sector decompositions from fixed adjoint projections
@@ -30,7 +31,8 @@ projections fixed by the adjoint transfer map.
   `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter`: cyclic-sector decompositions
   from commuting projections.
 * `pairwise_mul_zero_of_orthogonalProjection_sum_one`,
-  `preservesCorner_of_adjoint_fixed_projection`: sector irreducibility: projection orthogonality and
+  `TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection`: sector irreducibility:
+  projection orthogonality and
   corner preservation.
 
 ## References
@@ -39,6 +41,8 @@ projections fixed by the adjoint transfer map.
 * [De las Cuevas–Cirac–Schuch–Pérez-García, arXiv:1708.00029, eq:Aoffdiag]
 * [Wolf, *Quantum Channels & Operations*, Chapter 6]
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -472,7 +476,8 @@ algebra.
 
 * `pairwise_mul_zero_of_orthogonalProjection_sum_one` — orthogonal projections
   summing to `1` are pairwise orthogonal.
-* `preservesCorner_of_adjoint_fixed_projection` — an adjoint-fixed orthogonal
+* `TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection` — an adjoint-fixed
+  orthogonal
   projection yields a preserved corner algebra.
 
 ### Tags
@@ -486,19 +491,6 @@ open Matrix Finset Complex
 
 variable {D m : ℕ}
 
-/-- If a finite family of orthogonal projections sums to the identity, then
-distinct projections are orthogonal: `P i * P j = 0` for `i ≠ j`.
-
-This is the `Pairwise` packaging of
-`orthogonalProjection_mul_eq_zero_of_sum_eq_one` from
-`TNLean/Channel/Irreducible/Basic.lean`. -/
-theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1) :
-    Pairwise fun i j : Fin m => P i * P j = 0 := fun _ _ hij =>
-  orthogonalProjection_mul_eq_zero_of_sum_eq_one P hPproj hPsum hij
-
 /-! ### Corner preservation from adjoint fixed projections -/
 
 variable {d : ℕ}
@@ -510,7 +502,7 @@ algebra `P · M_D(ℂ) · P`.
 The proof derives `[P, Aᵢ] = 0` from
 `MPSTensor.commutes_letters_of_adjoint_fixed_projection`, then threads the
 idempotent relation `P² = P` through the corner sandwich. -/
-theorem preservesCorner_of_adjoint_fixed_projection
+theorem TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : MatrixAlg D}

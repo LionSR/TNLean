@@ -193,7 +193,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         MPOTensor.bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition,
         MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le}
     \leanok
-    \uses{def:mpdo_split_normalized_mpo}
+    \uses{def:mutual_info_chain}
     Let $M$ be an MPO tensor of operator bond dimension $D$, and let
     $N=L+K$. Opening the two virtual bonds at the consecutive cut gives
     \begin{align}
@@ -448,7 +448,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_split_normalized_mpo,lem:mpdo_chain_mutual_information_bipartition,thm:mpdo_periodic_cut_operator_schmidt_rank}
+    \uses{def:mutual_info_chain,thm:mpdo_periodic_cut_operator_schmidt_rank}
     Reindexing the normalized chain operator across the consecutive cut preserves
     its unit trace and positivity, yielding
     \begin{align}

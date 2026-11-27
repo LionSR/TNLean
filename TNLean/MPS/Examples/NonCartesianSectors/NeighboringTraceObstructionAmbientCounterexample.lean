@@ -263,7 +263,7 @@ theorem physicalSector_reducedBlockState_supported
 
 /-- Gauge-equivalent doubled-index tensors have identical closed MPOs. -/
 private theorem mpo_eq_of_gaugeEquiv {d D : ℕ} {K L : MPOTensor d D}
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) (N : ℕ) :
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) (N : ℕ) :
     mpo K N = mpo L N := by
   ext σ τ
   rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
@@ -399,7 +399,7 @@ boundary specialization of the BNT assembly in CPSV16, Appendix C.2, lines
 1646--1665 and 1810--1825. -/
 theorem exists_ambient_boundary_physCloseN_eq_embeddedObstruction
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ∃ Y : Matrix (Fin 3) (Fin 3) ℂ, ∀ N : ℕ,
       physCloseN (ambient mu B hmu) N Y = physCloseN embeddedObstruction N X := by
@@ -440,7 +440,7 @@ theorem exists_ambient_boundary_physCloseN_eq_embeddedObstruction
 families of the ambient tensor and its BNT assembly. -/
 theorem ambient_sameMPV₂Pos_sectors_toTensor
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
-    MPSTensor.SameMPV₂Pos (ambient mu B hmu).toMPSTensor
+    MPTensor.SameMPV₂Pos (ambient mu B hmu).toMPSTensor
       (sectors mu B hmu).toTensor := by
   intro N _hN ρ
   rw [ambient_toMPSTensor_eq_sectors_toTensor]
@@ -453,7 +453,7 @@ This is the two-sector specialization of the coefficient-absorption identity
 in CPSV16, Appendix C.2, lines 1660--1665 and 1753--1770. -/
 theorem mpo_ambient_eq_sum_physicalSector
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (N : ℕ) (hN : 0 < N) :
     mpo (ambient mu B hmu) N = ∑ s : Fin 2, mpo (physicalSector s) N := by
   rw [mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
@@ -475,7 +475,7 @@ theorem mpo_ambient_eq_sum_physicalSector
         mpo terminalBlock N := by
     apply mpo_eq_of_gaugeEquiv (N := N)
     rw [secondAbsorbedSector_toMPSTensor]
-    exact MPSTensor.GaugeEquiv.refl _
+    exact MPTensor.GaugeEquiv.refl _
   rw [Fin.sum_univ_two, Fin.sum_univ_two]
   have hCopiesZero : (sectors mu B hmu).copies 0 = 1 := rfl
   have hSecond' :
@@ -491,7 +491,7 @@ theorem mpo_ambient_eq_sum_physicalSector
 /-- Positivity of the two actual sectors makes the ambient tensor an MPDO. -/
 theorem ambient_isMPDO
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     IsMPDO (ambient mu B hmu) := by
   intro N hN
   rw [mpo_ambient_eq_sum_physicalSector mu B hmu hGauge N hN]
@@ -502,7 +502,7 @@ theorem ambient_isMPDO
 embedded obstruction and terminal sectors to the ambient tensor. -/
 theorem ambient_isSAL
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     IsSAL (ambient mu B hmu) := by
   apply isSAL_of_localOrthogonalSum
     (ambient mu B hmu) physicalSector (fun _ : Fin 2 ↦ 1) sectorProjection
@@ -530,7 +530,7 @@ private theorem doubledPhysTraceTransfer_smul {d D : ℕ}
 similar matrices. -/
 private theorem exists_doubledPhysTraceTransfer_eq_conj_of_gaugeEquiv
     {d D : ℕ} {A B : MPSTensor (d * d) D}
-    (hGauge : MPSTensor.GaugeEquiv A B) :
+    (hGauge : MPTensor.GaugeEquiv A B) :
     ∃ X : GL (Fin D) ℂ,
       doubledPhysTraceTransfer d B =
         (X : Matrix (Fin D) (Fin D) ℂ) * doubledPhysTraceTransfer d A *
@@ -545,7 +545,7 @@ private theorem exists_doubledPhysTraceTransfer_eq_conj_of_gaugeEquiv
 the actual embedded obstruction by virtual gauge similarity. -/
 theorem firstAbsorbed_doubledPhysTraceTransfer_idempotent
     (mu : ℂ) (B : MPSTensor (5 * 5) 2)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     IsIdempotentElem (doubledPhysTraceTransfer 5 (mu • B)) := by
   obtain ⟨X, hTransfer⟩ :=
     exists_doubledPhysTraceTransfer_eq_conj_of_gaugeEquiv hGauge
@@ -574,7 +574,7 @@ embedded sector, its literal idempotence, nonzero scalar absorption, and
 virtual gauge transport. -/
 theorem obstructionBasis_doubledPhysTraceTransfer_not_isNilpotent
     (mu : ℂ) (B : MPSTensor (5 * 5) 2)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     ¬ IsNilpotent (doubledPhysTraceTransfer 5 B) := by
   intro hNil
   have hScaled : IsNilpotent (doubledPhysTraceTransfer 5 (mu • B)) := by
@@ -594,7 +594,7 @@ theorem obstructionBasis_doubledPhysTraceTransfer_not_isNilpotent
 physical-trace transfer. -/
 theorem sectors_basis_doubledPhysTraceTransfer_not_isNilpotent
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (j : Fin (sectors mu B hmu).basisCount) :
     ¬ IsNilpotent (doubledPhysTraceTransfer 5 ((sectors mu B hmu).basis j)) := by
   change Fin 2 at j
@@ -640,7 +640,7 @@ private theorem isIdempotentElem_smul_doubledPhysTraceTransfer_cast_iff
 physical-trace transfer. -/
 private theorem sectors_flatWeightedTransfer_idempotent
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (s : Fin (sectors mu B hmu).totalCopies) :
     IsIdempotentElem
       ((sectors mu B hmu).flatWeight s •
@@ -679,7 +679,7 @@ Source: CPSV16, Definition 4.2, lines 735--739, in the standing Appendix C.2
 setting at lines 1628--1782. -/
 theorem ambient_literal_physTrace_ZCL
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     physTraceTransfer (ambient mu B hmu) *
         physTraceTransfer (ambient mu B hmu) =
       physTraceTransfer (ambient mu B hmu) := by
@@ -714,7 +714,7 @@ Source: CPSV16, canonical form at lines 224--246, simplicity at lines
 815--822, and the standing Appendix C.2 hypothesis at line 1628. -/
 theorem ambient_isSimpleCanonicalForm
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
     IsSimpleCanonicalForm (ambient mu B hmu) := by
   refine ⟨ambient_isMPDO mu B hmu hGauge, sectors mu B hmu, hBNT,
@@ -740,7 +740,7 @@ Source: CPSV16, Definition 4.7, lines 815--822, under the standing Appendix
 C.2 hypothesis at line 1628. -/
 theorem ambient_isSimple
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
     IsSimple (ambient mu B hmu) :=
   (ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT).isSimple
@@ -752,7 +752,7 @@ standing MPDO and SAL hypotheses.
 Source: CPSV16, lines 623--630, 811--815, and 1760--1780. -/
 theorem trace_mpo_ambient_pos
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     {N : ℕ} (hN : 0 < N) :
     0 < Matrix.trace (mpo (ambient mu B hmu) N) := by
   exact trace_mpo_pos_of_isMPDO_isSourceZCL (ambient mu B hmu)
@@ -771,13 +771,13 @@ factorization at Appendix C.2, lines 1740--1782, but does not supply these
 results. -/
 theorem firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     ¬ ∃ F : PhysicalSectorFactorization
         (commonWeightAbsorbedBasisMPOTensor (sectors mu B hmu)
           (sectors_weight_copy_independent mu B hmu) 0),
       Nonempty F.NeighboringTraceFactorization := by
   intro hAbsorbed
-  have hGaugeAbsorbed : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor
+  have hGaugeAbsorbed : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor
       (commonWeightAbsorbedBasisMPOTensor (sectors mu B hmu)
         (sectors_weight_copy_independent mu B hmu) 0).toMPSTensor := by
     rw [firstAbsorbedSector_toMPSTensor]
@@ -815,9 +815,9 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
-      MPSTensor.IsLeftCanonical B ∧
+      MPTensor.IsLeftCanonical B ∧
       MPSTensor.IsNormalTensor B ∧
-      MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
       IsMPDO K ∧
@@ -894,9 +894,9 @@ theorem printed_theorem49_ii_to_iv_is_false :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
-      MPSTensor.IsLeftCanonical B ∧
+      MPTensor.IsLeftCanonical B ∧
       MPSTensor.IsNormalTensor B ∧
-      MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
       (IsMPDO K ∧

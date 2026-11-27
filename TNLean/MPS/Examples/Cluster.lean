@@ -14,3 +14,37 @@ import TNLean.MPS.Examples.Cluster.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.Cluster.ClusterReview
 import TNLean.MPS.Examples.Cluster.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.Cluster.ClusterSourceGroundState
+
+/-!
+# Cluster state
+
+The one-dimensional cluster state as the matrix product state `A⁰ = |+⟩⟨0|`, `A¹ = |−⟩⟨1|`, the
+transpose of the review tensor `A⁰ = |0)(+|`, `A¹ = |1)(-|` (arXiv:2011.12127, Appendix A,
+lines 2364–2369); it is normal, and its two-site blocking is injective. The modules prove the
+controlled-`Z` and valence-bond constructions of the review tensor, the unique ground state of
+the stabilizer Hamiltonian `∑ᵢ ½(1 - σᶻᵢ σˣᵢ₊₁ σᶻᵢ₊₂)` (arXiv:quant-ph/0608197, lines 374–387,
+whose printed matrices carry the opposite stabilizer sign), the `Z₂ × Z₂` symmetry-protected
+phase with nontrivial factor system, string order (arXiv:0802.0447, Example 2, for the specified
+twist `-σx`), and zero correlation length. The blocked tensor is compared with the `Z₂ × Z₂`
+fixed-point tensor of arXiv:2011.12127, line 1157, through the dimer fixed point, a local fix
+since the printed fixed-point tensor is not normal.
+
+## General theorems instantiated
+
+* `MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal` (unique ground state of the parent
+  Hamiltonian of a normal tensor): the common `+1` eigenspace of the translated stabilizers is
+  the line of the cluster state; arXiv:2011.12127, Section IV.C, lines 2078–2090.
+* `MPSTensor.hasStringOrder_of_symmetric_injective` (string order of symmetric injective
+  tensors): virtual-boundary nondecay for every `Z₂ × Z₂` twist of the blocked tensor and of the
+  blocked review tensor.
+* `MPSTensor.zcl_iff_idempotent_transfer` (zero correlation length): the blocked cluster tensor
+  and the GHZ tensor have zero correlation length because their transfer maps are idempotent;
+  single-block scope restriction of arXiv:1606.00608, lines 498–502.
+* `MPSTensor.cohomologousTo_of_sptFixedPointTensor` (SPT fixed points): every virtual
+  representation of the fixed-point tensor matched to the blocked cluster tensor has the
+  nontrivial class; arXiv:2011.12127, §III.A, lines 1147–1149.
+* `ScalarCocycle.isMulCocycle₂_of_projRep` (projective representations, companion library): the
+  factor system of the virtual `Z₂ × Z₂` action is a two-cocycle.
+* `MPSTensor.mpv_ne_zero_of_isNBlkInjective` (nonvanishing of periodic vectors): the vector of
+  the source tensor is nonzero.
+-/

@@ -52,6 +52,8 @@ symmetric states; the index statements here start from the gauge relations.
   Concepts, symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

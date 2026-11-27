@@ -32,6 +32,8 @@ The proof assembles the following ingredients:
   isometry family
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators
 open Matrix Finset
 
@@ -518,7 +520,7 @@ def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
 The diagonal weight and residual physical isometry are unchanged; only the
 outer invertible matrix is composed with the gauge. This is the final
 similarity step in arXiv:1606.00608, Lemma `charact-NT-pure-RFP`, line 1301. -/
-theorem GaugeEquiv.isIsometryCanonicalForm_iff {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.isIsometryCanonicalForm_iff {A B : MPSTensor d D}
     (hGauge : GaugeEquiv A B) :
     IsIsometryCanonicalForm A ↔ IsIsometryCanonicalForm B := by
   suffices ∀ {C E : MPSTensor d D}, GaugeEquiv C E →

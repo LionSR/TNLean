@@ -27,6 +27,8 @@ are held by the parties of the labels across the edges.
   653–667).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -120,7 +122,8 @@ theorem eq_auxInit_of_mem_auxIndices {large : DyadicSquare k → Bool}
 /-! ### The segment -/
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The memory through a large-scale repainting, conditional on Proposition 3.4.** At the
 constants of the protocol with `L ≤ 2 ^ k < 2 L`, let the event number `i` repaint a square `S` of

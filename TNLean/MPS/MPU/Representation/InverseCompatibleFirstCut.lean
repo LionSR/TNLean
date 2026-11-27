@@ -158,7 +158,7 @@ Source: arXiv:2502.20257, `eq:defT`, lines 1552–1557, and lines 1933–1955. -
 theorem IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ a : G,
-      MPSTensor.IsLeftCanonical (F.tensor a).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor a).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) (i j : Fin d) :
     let T := hF.daggerInverseGauge F hcanonical g
     physicalAdjointTensor (F.tensor g) (i, j) =
@@ -178,7 +178,7 @@ This is the construction at arXiv:2502.20257, lines 5390–5432, using `eq:defT`
 theorem IsRepresentation.inverseCompatibleFirstCut_of_inv_eq
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ a : G,
-      MPSTensor.IsLeftCanonical (F.tensor a).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor a).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) :
     let T := hF.daggerInverseGauge F hcanonical g
     let X := inverseCompatibleX₁ (F.tensor g) T

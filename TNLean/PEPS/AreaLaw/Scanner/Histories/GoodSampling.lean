@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Histories.ActualHistory
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BandMargins
 import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 
 /-!
 # Good-history sampling by the actual scanner
@@ -67,7 +67,7 @@ The clearance is stated on the actual ambient endpoints of physical cut edges,
 exactly as in `scanner:test-geometry`. Source: `08-scanner.tex`, lines 225–233. -/
 theorem planeDomainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
     (hT : T.Nonempty) (A : Finset ↥Λ) (L r₀ : ℕ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {anchor : ↥Λ}
     (hmeet : ∃ y ∈ A, ambientDepth T hT y.val ≤ L ∧
@@ -96,7 +96,7 @@ theorem planeDomainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
       _ = (planeDomainGraph Λ).edist y x := hp
       _ ≤ ((2 * r₀ : ℕ) : ℕ∞) := hyx
   have hvariation := abs_ambientDepth_sub_le_planeDomainGraph T hT hyd
-  have hz : u.val ∈ Geometry.boundaryEndpoints Λ A := by
+  have hz : u.val ∈ ManyBody.boundaryEndpoints Λ A := by
     refine Finset.mem_image.mpr ⟨u, ?_, rfl⟩
     exact Finset.mem_biUnion.mpr ⟨s(u, w), hcut, by simp⟩
   obtain ⟨t, ht, hmin⟩ := exists_mem_ambientDepth_eq T hT u.val
@@ -158,7 +158,7 @@ Source: `08-scanner.tex`, lines 225–233. -/
 theorem ball_subset_of_mem_ball_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {i : I} {y : ↥Λ} (hyb : y ∈ S.ball i) (hyA : y ∈ S.A) (hyL : S.depth y ≤ L) :
     S.ball i ⊆ S.A := by
@@ -173,7 +173,7 @@ in `A` at depth at most `L`. Source: `08-scanner.tex`, lines 225–233. -/
 theorem ball_subset_of_middle_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (σ : PhysicalPartition ↥Λ) (i : I)
     (hmiddle : ∀ x, σ x = none → x ∈ S.A ∧ S.depth x ≤ L)
@@ -293,7 +293,7 @@ Source: `08-scanner.tex`, lines 225–233. -/
 theorem ball_subset_of_oldChargeState_middle_planeDomainGraph {Λ T : Finset (ℤ × ℤ)}
     (hT : T.Nonempty) (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (h : History S.K S.m S.M k) (g : Fin S.K) (hL : 8 * S.K * S.m ≤ L) (i : I)
     (hsplit : (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty) : S.ball i ⊆ S.A :=
@@ -317,7 +317,7 @@ theorem good_split_sampling_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT : 
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hgood : S.IsGoodOldHistory h)
     (hsplit : (S.ball i ∩ receiving (S.oldChargeState h g) side).Nonempty ∧

@@ -96,6 +96,8 @@ positive length.  This is the mathematical content that justifies the
 matrix product states, canonical form, blocking, primitive transfer maps
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -158,7 +160,7 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
 
 private theorem isIrreducibleAction_gaugeEquiv
     {D : ℕ} {A B : MPSTensor d D}
-    (hGauge : GaugeEquiv (d := d) (D := D) A B)
+    (hGauge : GaugeEquiv (α := Fin d) (β := Fin D) A B)
     (hIrr : Matrix.IsIrreducibleAction (d := d) (D := D) A) :
     Matrix.IsIrreducibleAction (d := d) (D := D) B := by
   classical
@@ -216,7 +218,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
           B i =
             (↑((Real.sqrt r)⁻¹) : ℂ) •
               ((CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ)) ∧
-        GaugeEquiv (d := d) (D := D)
+        GaugeEquiv (α := Fin d) (β := Fin D)
           (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B ∧
         (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
         (∀ X : Matrix (Fin D) (Fin D) ℂ,
@@ -484,7 +486,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
               B i =
                 (↑((Real.sqrt r)⁻¹) : ℂ) •
                   ((CFC.sqrt ρ)⁻¹ * blocks0 k i * CFC.sqrt ρ)) ∧
-            GaugeEquiv (d := d) (D := dim0 k)
+            GaugeEquiv (α := Fin d) (β := Fin (dim0 k))
               (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B ∧
             (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
             (∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
@@ -594,7 +596,7 @@ theorem exists_tp_gauge_blockwise
             B i = CFC.sqrt σ *
               ((↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) * (CFC.sqrt σ)⁻¹) ∧
           (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
-          GaugeEquiv (d := d) (D := dim0 k)
+          GaugeEquiv (α := Fin d) (β := Fin (dim0 k))
             (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B := by
     intro k
     let : NeZero (dim0 k) :=
@@ -861,7 +863,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   refine ⟨P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (a) TP under blocking.
   · intro k
-    exact leftCanonical_blockTensor (d := d) (D := dim₀ k) (A := blocks₀ k) (L := P) (hTP₀ k)
+    exact Kraus.IsTP.blockTensor (A := blocks₀ k) (hTP₀ k) P
   -- (b) Primitive transfer maps.
   · exact hPrim
   -- (c) Positive bond dimensions (unchanged by blocking).

@@ -91,7 +91,7 @@ theorem eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul
     Z = 0 := by
   exact eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)
-    (Kraus.wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    (Kraus.wordSpan_top_of_mul A hInj q hq)
     hkq hzero
 
 end BoundaryStripping

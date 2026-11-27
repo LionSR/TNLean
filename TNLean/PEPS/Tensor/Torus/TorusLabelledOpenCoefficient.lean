@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.Network.LabelledOpenCoefficient
 import TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry
+import TNLean.PEPS.Tensor.Torus.TorusOperatorString
 
 /-!
 # Native torus coordinates for open coefficients

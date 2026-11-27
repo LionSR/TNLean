@@ -106,7 +106,7 @@ theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ
       (wordTupleSpanTop_of_le_one _ hr hC1) hUnital (le_of_max_le_left hn)
   · choose Λ hΛ hΛfix using hDual
     refine wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-      A hr (HasIrreducibleBlocks.ofForall hIrr) hDistinct Λ hΛ hΛfix hC1 hL₀ hUnital ?_
+      A hr hIrr hDistinct Λ hΛ hΛfix hC1 hL₀ hUnital ?_
     calc (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
         = 3 * (r - 1) * (L₀ + 1) := by ring
       _ ≤ n := le_of_max_le_right hn

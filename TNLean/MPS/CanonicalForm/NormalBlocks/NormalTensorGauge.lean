@@ -21,6 +21,7 @@ import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.Tensor.GroundSpace.ChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.ParentHamiltonianBasic
 import TNLean.MPS.Transfer.Primitivity.Equivalence
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 
 /-!
 # Perron gauges for normal tensors
@@ -81,6 +82,8 @@ by transport through this gauge.
 Source context: arXiv:1606.00608, lines 318–344, and quantum Wielandt theory.
 -/
 
+open MPTensor
+
 section NormalTensorGauge
 
 section
@@ -92,14 +95,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-namespace GaugeEquiv
-
 /-- The transfer maps of gauge-equivalent tensors are related by the standard
 congruence similarity of completely positive maps.
 
 Source: arXiv:1606.00608, lines 219--223 define the transfer map and lines
 264--268 give the invertible gauge relation. -/
-theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+theorem _root_.MPTensor.GaugeEquiv.transferMap_eq_similarityMap {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) :
     ∃ C : Matrix (Fin D) (Fin D) ℂ, C.det ≠ 0 ∧
       Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         similarityMap (D := D) C (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
@@ -151,7 +153,7 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
               hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
 
 /-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
-theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (c : ℂ) :
     Kraus.transferMap (ι := Fin d) (n := Fin D) B ∘ₗ Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         c • Kraus.transferMap (ι := Fin d) (n := Fin D) B ↔
@@ -176,8 +178,6 @@ theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
   · intro hPoly
     rw [← Module.End.mul_eq_comp] at hPoly ⊢
     simpa using congrArg e hPoly
-
-end GaugeEquiv
 
 namespace IsNormalTensor
 
@@ -383,6 +383,24 @@ theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical [NeZero D]
     hC.pos.spectralRadius_eq_one_of_tracePreserving hC.tp
   primitive_transfer := hPrim
 
+/-- **Normal tensors are the normal families with spectral radius one.**
+Definition NT of arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:233-235`) asks
+for no nontrivial invariant projection, transfer-map spectral radius one, and `1` as the only
+eigenvalue of modulus one. With no further hypothesis this is algebraic normality
+(arXiv:0909.5347, property (b), `main.tex:416-421`) together with spectral radius one:
+irreducibility follows from normality, and so does the peripheral condition after the
+trace-preserving gauge. -/
+theorem isNormalTensor_iff_isNormal_and_spectralRadius_eq_one (A : MPSTensor d D) :
+    IsNormalTensor A ↔ Kraus.IsNormal A ∧
+      spectralRadius ℂ ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1 := by
+  refine ⟨fun h => ⟨h.isNormal, h.spectral_radius_one⟩, fun ⟨hN, hr⟩ => ?_⟩
+  have : NeZero D := ⟨matrix_dim_ne_zero_of_spectralRadius_eq_one _ hr⟩
+  obtain ⟨σ, _, _, hLeft, hGauge, _⟩ :=
+    exists_tpGauge_of_irreducible_spectralRadius_one (isIrreducibleFamily_of_isNormal A hN) hr
+  exact IsNormalTensor.of_gaugeEquiv
+    (isNormalTensor_of_isNormal_leftCanonical _ (isNormal_of_gaugeEquiv hN hGauge) hLeft) hGauge
+
 /-- A normal tensor has a nonzero letter.
 
 Indeed, if every letter vanished, then its transfer map and hence its spectral
@@ -408,11 +426,11 @@ primitive trace-preserving overlap limit.  This is the normalization used in
 the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097. -/
 theorem IsNormalTensor.selfOverlap_tendsto_one
     {A : MPSTensor d D} (hA : IsNormalTensor A) :
-    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let A' := Kraus.tpGauge (d := d) (D := D) A σ
-  have hPrepared : Tendsto (fun N => mpvOverlap (d := d) A' A' N)
+  have hPrepared : Tendsto (fun N => mpvOverlap (α := Fin d) A' A' N)
       atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A' hIrr hTP hPrim
   apply hPrepared.congr'
@@ -448,10 +466,10 @@ theorem norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
   have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   subst D₂
-  have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖)
+  have hAA : Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖)
       atTop (nhds (1 : ℝ)) := by
     simpa using hA.selfOverlap_tendsto_one.norm
-  have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖)
+  have hBB : Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖)
       atTop (nhds (1 : ℝ)) := by
     simpa using hB.selfOverlap_tendsto_one.norm
   exact norm_eq_one_of_selfOverlap_scale hAA hBB
@@ -493,37 +511,37 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       _ = ζ ^ N * mpv X w := hmpv N hN w
       _ = ζ ^ N * mpv X' w := by rw [GaugeEquiv.sameMPV hGaugeX N w]
   have hSelf : Tendsto
-      (fun N => mpvOverlap (d := d) X' X' N) atTop (nhds (1 : ℂ)) :=
+      (fun N => mpvOverlap (α := Fin d) X' X' N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       X' hIrrX hTPX hPrimX
   have hSelfY : Tendsto
-      (fun N => mpvOverlap (d := d) Y' Y' N) atTop (nhds (1 : ℂ)) :=
+      (fun N => mpvOverlap (α := Fin d) Y' Y' N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       Y' hIrrY hTPY hPrimY
   have hSelfNorm : Tendsto
-      (fun N => ‖mpvOverlap (d := d) X' X' N‖) atTop (nhds (1 : ℝ)) := by
+      (fun N => ‖mpvOverlap (α := Fin d) X' X' N‖) atTop (nhds (1 : ℝ)) := by
     simpa using hSelf.norm
   have hSelfYNorm : Tendsto
-      (fun N => ‖mpvOverlap (d := d) Y' Y' N‖) atTop (nhds (1 : ℝ)) := by
+      (fun N => ‖mpvOverlap (α := Fin d) Y' Y' N‖) atTop (nhds (1 : ℝ)) := by
     simpa using hSelfY.norm
   have hζ : ‖hPhase.choose‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale_pos hSelfNorm hSelfYNorm
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos hPhase.choose_spec.2)
   have hCrossEq : ∀ N, 0 < N →
-      mpvOverlap (d := d) X' Y' N =
-        (star hPhase.choose) ^ N * mpvOverlap (d := d) X' X' N :=
+      mpvOverlap (α := Fin d) X' Y' N =
+        (star hPhase.choose) ^ N * mpvOverlap (α := Fin d) X' X' N :=
     mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_pos hPhase.choose_spec.2
   have hCrossNormEq : ∀ N, 0 < N →
-      ‖mpvOverlap (d := d) X' Y' N‖ = ‖mpvOverlap (d := d) X' X' N‖ := by
+      ‖mpvOverlap (α := Fin d) X' Y' N‖ = ‖mpvOverlap (α := Fin d) X' X' N‖ := by
     intro N hN
     rw [hCrossEq N hN, norm_mul, norm_pow]
     calc
-      ‖star hPhase.choose‖ ^ N * ‖mpvOverlap (d := d) X' X' N‖ =
-          ‖hPhase.choose‖ ^ N * ‖mpvOverlap (d := d) X' X' N‖ := by
+      ‖star hPhase.choose‖ ^ N * ‖mpvOverlap (α := Fin d) X' X' N‖ =
+          ‖hPhase.choose‖ ^ N * ‖mpvOverlap (α := Fin d) X' X' N‖ := by
             rw [norm_star]
-      _ = ‖mpvOverlap (d := d) X' X' N‖ := by rw [hζ, one_pow, one_mul]
+      _ = ‖mpvOverlap (α := Fin d) X' X' N‖ := by rw [hζ, one_pow, one_mul]
   have hCrossNorm : Tendsto
-      (fun N => ‖mpvOverlap (d := d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
+      (fun N => ‖mpvOverlap (α := Fin d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
     hSelfNorm.congr' (by
       filter_upwards [eventually_ge_atTop 1] with N hN
       exact (hCrossNormEq N hN).symm)
@@ -596,8 +614,8 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
         (prepared k) (hIrr k) (hTP k) (hPrim k))
       (fun j k hjk =>
         cross_overlap_tendsto_zero_of_separated_normal_bnt_data prepared
-          (HasIrreducibleBlocks.ofForall hIrr)
-          (IsLeftCanonicalBlockFamily.ofForall hTP)
+          hIrr
+          hTP
           hPreparedDistinct j k hjk)
   refine ⟨N₀, fun N hN => ?_⟩
   have hFamily :
@@ -757,6 +775,51 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal [NeZero D] {A : M
     simp [List.length_ofFn, Matrix.trace_smul]
   · exact fun L => parentInteraction_eq_of_groundSpace_eq (hGS L)
   · exact fun L N => chainGroundSpace_eq_of_groundSpace_eq (hGS L)
+
+/-- A normal tensor of bond dimension \(D>0\) is injective at length
+\(D^4\), without assuming a trace-preserving normalization. A nonzero
+rescaling and a virtual gauge reduce to the normalized quantum Wielandt
+bound, and injectivity is invariant under both operations. Source:
+arXiv:0909.5347, Theorem 1; arXiv:1606.00608, line 332. -/
+theorem isNBlkInjective_pow_four_of_isNormal [NeZero D]
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    Kraus.IsNBlkInjective A (D ^ 4) := by
+  obtain ⟨B, ζ, ρ, hζ, hGauge, _hMPV, hP, _hρ, _hGS, _hPI, _hChain⟩ :=
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
+  have hNormalB : Kraus.IsNormal B :=
+    isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
+  have hInjB : Kraus.IsNBlkInjective B (D ^ 4) :=
+    isNBlkInjective_pow_four_of_isNormal_leftCanonical B hP.norm hNormalB
+  exact (isNBlkInjective_smul_iff hζ A (D ^ 4)).1
+    (isNBlkInjective_of_gaugeEquiv hInjB hGauge.symm)
+
+/-- **Normality, four equivalent forms.** For bond dimension `D > 0`, with no
+normalization:
+1. `Kraus.IsNormal A`: some positive length has full word span (arXiv:0909.5347,
+   property (b), `Papers/0909.5347/main.tex:416-421`);
+2. all sufficiently long word spans are full;
+3. the word span of length `D ^ 4` is full (arXiv:0909.5347, Theorem 1;
+   arXiv:1606.00608, line 332);
+4. the tensor blocked over some positive number of sites is injective
+   (arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex:1815-1830`). -/
+theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
+    List.TFAE
+      [Kraus.IsNormal A,
+       ∀ᶠ N in Filter.atTop, Kraus.wordSpan A N = ⊤,
+       Kraus.IsNBlkInjective A (D ^ 4),
+       ∃ L, 0 < L ∧ Kraus.IsInjective (Kraus.blockTensor A L)] := by
+  have hD4 : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
+  tfae_have 1 → 3 := fun h => isNBlkInjective_pow_four_of_isNormal A h
+  tfae_have 3 → 2 := fun h =>
+    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => isNBlkInjective_of_le hD4 h hm⟩
+  tfae_have 2 → 1 := fun h => by
+    obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp h
+    exact ⟨max N 1, by omega, hN _ (le_max_left _ _)⟩
+  tfae_have 1 → 4 := fun ⟨N, hN, h⟩ =>
+    ⟨N, hN, (Kraus.isNBlkInjective_iff_blockTensor_isInjective A N).1 h⟩
+  tfae_have 4 → 1 := fun ⟨N, hN, h⟩ =>
+    ⟨N, hN, (Kraus.isNBlkInjective_iff_blockTensor_isInjective A N).2 h⟩
+  tfae_finish
 
 end MPSTensor
 

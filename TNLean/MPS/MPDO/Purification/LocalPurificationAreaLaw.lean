@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.MutualInformation.DataProcessing
+import QICLean.Entropy.StrongSubadditivity.MutualInformationDataProcessing
 import TNLean.MPS.Operator.Periodic.LPDO
 import TNLean.MPS.MPDO.Purification.LocalPurificationRFP
-import TNLean.MPS.MPDO.Entropy.MutualInfoBridge
 import TNLean.MPS.Operator.DensityOperator.PureAreaLaw
 
 /-!
@@ -162,9 +161,9 @@ theorem blockAncillaryTraceMap_pureState_purificationTensor
   simp_rw [hdecode]
   exact ((finFunctionFinEquiv (m := dK) (n := N)).symm.sum_comp
     (fun κ : Fin N → Fin dK ↦
-      MPSTensor.mpv (purificationTensor A)
+      MPTensor.mpv (purificationTensor A)
           (fun n ↦ finProdFinEquiv (finFunctionFinEquiv.symm i n, κ n)) *
-        star (MPSTensor.mpv (purificationTensor A)
+        star (MPTensor.mpv (purificationTensor A)
           (fun n ↦ finProdFinEquiv (finFunctionFinEquiv.symm j n, κ n)))))
 
 /-- The finite-chain purification density and its purifying pure state have the
@@ -203,7 +202,7 @@ theorem purifyingBondDimension_pos_of_trace_ne_zero
   have hDP0 : DP = 0 := Nat.eq_zero_of_not_pos hDP
   subst DP
   apply htr
-  simp [MPSTensor.pureState, MPSTensor.mpv, MPSTensor.coeff, Matrix.trace,
+  simp [MPSTensor.pureState, MPTensor.mpv, MPTensor.coeff, Matrix.trace,
     Matrix.vecMulVec_apply]
 
 /-- The normalized-form finite-chain operator of an explicit local purification
@@ -253,7 +252,7 @@ theorem bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
     funext n
     simp only [chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
       Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map,
-      blockSplitEquiv_symm_apply, Equiv.refl_symm, finCongr_refl,
+      MPOTensor.blockSplitEquiv_symm_apply, Equiv.refl_symm, finCongr_refl,
       Equiv.arrowCongr_refl, Equiv.trans_apply, Equiv.refl_apply]
     rw [blockSpinAncillaEquiv_symm_decode,
       blockSpinAncillaEquiv_symm_decode]
@@ -323,7 +322,7 @@ theorem mutualInfoChain_le_of_bipartitioned_channel_image
     (hM : (mpo M N).PosSemidef) (hD' : 0 < D')
     (htrA : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
     mutualInfoChain M N L hL hM ≤ 4 * Real.log D' := by
-  rw [mutualInfoChain_eq_mutualInformation M N L hL hM]
+  rw [mutualInfoChain]
   calc
     Entropy.mutualInformation
           (bipartitionedNormalizedMPO M N L (N - L) (by omega)) _
@@ -342,10 +341,7 @@ theorem mutualInfoChain_le_of_bipartitioned_channel_image
               (doubledTensor A) N L (N - L) (by omega) (doubledTensor_posSemidef A N)
           · apply bipartitionedNormalizedMPO_trace
             simpa [mpo_doubledTensor] using htrA
-    _ = (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N) := by
-          symm
-          exact mutualInfoChain_eq_mutualInformation
-            (doubledTensor A) N L hL (doubledTensor_posSemidef A N)
+    _ = (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N) := rfl
     _ ≤ 4 * Real.log D' := mutualInfoChain_doubledTensor_le A N L hL hD' htrA
 
 /-- **Mutual-information bound from explicit local-purification data.** If an

@@ -40,7 +40,7 @@ private def sigmaFinThreeEquiv (β : Fin 3 → Type) :
 /-- Three-sector coordinates for the active virtual-pair space and two
 physical complements. Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
-def physicalSpectatorEquiv (K d₀ d₁ : ℕ) :
+def _root_.TNLean.MPS.Symmetry.physicalSpectatorEquiv (K d₀ d₁ : ℕ) :
     EtaSiteIndex 3 ![K, d₀, d₁] ![K, 1, 1] ≃ Fin ((K * K + d₀) + d₁) :=
   (sigmaFinThreeEquiv _).trans
     ((Equiv.sumCongr
@@ -52,24 +52,24 @@ def physicalSpectatorEquiv (K d₀ d₁ : ℕ) :
 /-- The active sector uses the physical order of the virtual pair.
 Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
-theorem physicalSpectatorEquiv_active (K d₀ d₁ : ℕ) (r l : Fin K) :
-    physicalSpectatorEquiv K d₀ d₁ ⟨0, (r, l)⟩ =
+theorem _root_.TNLean.MPS.Symmetry.physicalSpectatorEquiv_active (K d₀ d₁ : ℕ) (r l : Fin K) :
+    TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ ⟨0, (r, l)⟩ =
       Fin.castAdd d₁ (Fin.castAdd d₀ (finProdFinEquiv (l, r))) := by
   rfl
 
 /-- The first physical complement occupies the middle summand.
 Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
-theorem physicalSpectatorEquiv_left (K d₀ d₁ : ℕ) (l : Fin d₀) :
-    physicalSpectatorEquiv K d₀ d₁ ⟨1, ((0 : Fin 1), l)⟩ =
+theorem _root_.TNLean.MPS.Symmetry.physicalSpectatorEquiv_left (K d₀ d₁ : ℕ) (l : Fin d₀) :
+    TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ ⟨1, ((0 : Fin 1), l)⟩ =
       Fin.castAdd d₁ (Fin.natAdd (K * K) l) := by
   rfl
 
 /-- The second physical complement occupies the final summand.
 Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
-theorem physicalSpectatorEquiv_right (K d₀ d₁ : ℕ) (l : Fin d₁) :
-    physicalSpectatorEquiv K d₀ d₁ ⟨2, ((0 : Fin 1), l)⟩ =
+theorem _root_.TNLean.MPS.Symmetry.physicalSpectatorEquiv_right (K d₀ d₁ : ℕ) (l : Fin d₁) :
+    TNLean.MPS.Symmetry.physicalSpectatorEquiv K d₀ d₁ ⟨2, ((0 : Fin 1), l)⟩ =
       Fin.natAdd (K * K + d₀) l := by
   rfl
 

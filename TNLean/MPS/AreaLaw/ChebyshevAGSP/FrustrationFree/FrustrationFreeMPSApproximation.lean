@@ -68,7 +68,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     ∃ y : EuclideanSpace ℂ (Fin L → Fin q), ‖y‖ = 1 ∧
       ‖y - Ω‖ ^ 2 ≤
         8 * (2 * exp (-2 * ((s ^ 2 : ℕ) : ℝ) * sqrt ((g / 2) / (2 * (1024 / g) + s)))) ^ 2 ∧
-      (cutMatrix (leftBlock L (a + s / 2)) y).rank ≤
+      (cutMatrix (interval L 0 (a + s / 2)) y).rank ≤
         (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) * (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1)) := by
   classical
   let t := 1024 / g
@@ -90,7 +90,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
       (a + m + 2) (a + m + s0 - 1) Φ (fun _ ↦ 0) t Finset.univ) p0
   have hrank0' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) K0) ≤ D0 := by
+      (interval L 0 k) K0) ≤ D0 := by
     rw [← hk0]
     change _ ≤ (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1))
     obtain ⟨hdiv, hsqrt⟩ := hsquare s0 (by omega)
@@ -124,7 +124,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
       (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ) p1
   have hrank1' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) K1) ≤ D1 := by
+      (interval L 0 k) K1) ≤ D1 := by
     change _ ≤ (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
     obtain ⟨hdiv, hsqrt⟩ := hsquare s (by omega)
     simpa only [hdiv, hsqrt, two_mul] using hrank1
@@ -161,10 +161,10 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
       intro hz0
       simp only [hz0, norm_zero, zero_ne_one] at hc
     have hyrank := normalized_cut_schmidtRank_le (k := k) K1 x c hc0 hK1x
-    change (cutMatrix (leftBlock L k)
+    change (cutMatrix (interval L 0 k)
       ⇑(c • (‖toEuclideanLin K1 x‖⁻¹ : ℂ) • toEuclideanLin K1 x)).rank ≤
-      _ * (cutMatrix (leftBlock L k) x).rank at hyrank
-    change (cutMatrix (leftBlock L k) x).rank ≤ D0 at hxrank
+      _ * (cutMatrix (interval L 0 k) x).rank at hyrank
+    change (cutMatrix (interval L 0 k) x).rank ≤ D0 at hxrank
     change _ ≤ D0 * D1
     exact hyrank.trans ((Nat.mul_le_mul hrank1' hxrank).trans_eq (Nat.mul_comm _ _))
 
@@ -189,7 +189,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
           C * (u ^ 3 / g + (z ^ 2 / g) ^ ((1 : ℝ) / 3) * (u + log (z + 1))) ∧
         ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
           ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
-            (cutMatrix (leftBlock L k) y).rank ≤ D := by
+            (cutMatrix (interval L 0 k) y).rank ≤ D := by
   obtain ⟨A, hA, _hA21, hscalar⟩ := exists_aklv_frustrationFree_scalar_parameters
   let W := 8192 * (A + 1) * (1 + log 8192) ^ 2
   let R := 8192 * (198 * (A + 1) * (6 + 2 * log (A + 1))) * (1 + log 8192) ^ 3
@@ -312,7 +312,7 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
   refine ⟨D, hlog, ?_⟩
   have htail (k : ℕ) (hk : k ≤ L) :
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) Ω).kyFanNorm D ≤ rho := by
+        (interval L 0 k) Ω).kyFanNorm D ≤ rho := by
     obtain ⟨y, hy, herror, hrank⟩ := hcuts k hk
     exact one_sub_kyFanNorm_le_of_unit_cut_rank_approximation Ω y hΩ hy herror hrank
   exact aklvNormalizedSpectralTruncation_spec Ω hΩ hepsilon hepsilon1 fun k hk ↦

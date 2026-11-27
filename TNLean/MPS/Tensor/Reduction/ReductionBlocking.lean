@@ -38,21 +38,23 @@ one; see `docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.
 
 ## Main results
 
-* `MPSTensor.IsReduction.isReductionExteriorBufferLength_of_bound`: a residual
+* `MPTensor.IsReduction.isReductionExteriorBufferLength_of_bound`: a residual
   nilpotency bound `N` gives exterior buffer length `N - 1`.
-* `MPSTensor.IsReduction.blockTensor`,
+* `MPTensor.IsReduction.blockTensor`,
   `MPSTensor.IsReductionExteriorBufferLength.blockTensor`: transport through
   physical blocking.
-* `MPSTensor.IsReduction.reindexPhysical`,
+* `MPTensor.IsReduction.reindexPhysical`,
   `MPSTensor.IsReductionExteriorBufferLength.reindexPhysical`: transport
   through a physical reindexing of both tensors.
-* `MPSTensor.IsReduction.blockTensor_commonBufferLength_one`: for a member of
+* `MPTensor.IsReduction.blockTensor_commonBufferLength_one`: for a member of
   a finite family of nilpotency bounds, blocking by the common buffer length
   makes one blocked exterior site suffice.
 * `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul`: the reciprocal
   scalar rescaling of arXiv:2502.20257, `eq:scalar_fus_ten`, preserves an
   exterior buffer length.
 -/
+
+open MPTensor
 
 open scoped Matrix
 open Kraus (blockTensor evalWord_blockTensor length_flattenBlockedWord)
@@ -139,7 +141,9 @@ theorem blockTensor (h : IsReductionExteriorBufferLength B A V W m) {L k : ℕ}
 
 end IsReductionExteriorBufferLength
 
-namespace IsReduction
+section IsReduction
+
+open MPTensor.IsReduction
 
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
@@ -148,7 +152,8 @@ variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
 
 This is the exterior-buffer identity restated with buffers measured in sites:
 the bound `N ≤ |p| + 1` reads `N - 1 ≤ |p|`. -/
-theorem isReductionExteriorBufferLength_of_bound (h : IsReduction B A V W)
+theorem _root_.MPTensor.IsReduction.isReductionExteriorBufferLength_of_bound
+    (h : IsReduction B A V W)
     {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N) :
     IsReductionExteriorBufferLength B A V W (N - 1) :=
   fun p c q hc hp hq ↦
@@ -157,7 +162,8 @@ theorem isReductionExteriorBufferLength_of_bound (h : IsReduction B A V W)
 
 /-- The MGSC18 nilpotency length of a reduction, less one, is an exterior
 buffer length whenever the closed chains of positive length agree. -/
-theorem isReductionExteriorBufferLength_nilpotencyLength (h : IsReduction B A V W)
+theorem _root_.MPTensor.IsReduction.isReductionExteriorBufferLength_nilpotencyLength
+    (h : IsReduction B A V W)
     (hSame : SameMPV₂Pos B A) :
     IsReductionExteriorBufferLength B A V W
       (reductionResidualNilpotencyLength B A V W - 1) :=
@@ -172,7 +178,7 @@ Source: arXiv:2502.20257, `main.tex` line 1498, read as the exterior identity
 of `eq:fusion_1` with $m\geq1$ after blocking; the bound $N_i\leq L+1$ is the
 hypothesis of the exterior-buffer identity, not the vanishing of a blocked
 residual letter. -/
-theorem blockTensor_commonBufferLength_one (h : IsReduction B A V W)
+theorem _root_.MPTensor.IsReduction.blockTensor_commonBufferLength_one (h : IsReduction B A V W)
     {ι : Type*} [Fintype ι] (N : ι → ℕ) {i : ι}
     (hBound : IsReductionResidualNilpotencyBound B A V W (N i)) :
     IsReductionExteriorBufferLength (blockTensor B (commonBufferLength N))
@@ -182,14 +188,14 @@ theorem blockTensor_commonBufferLength_one (h : IsReduction B A V W)
 
 /-- Reindexing the physical alphabet of both tensors by the same map preserves
 a rectangular reduction. -/
-theorem reindexPhysical (h : IsReduction B A V W) (f : Fin d' → Fin d) :
+theorem _root_.MPTensor.IsReduction.reindexPhysical (h : IsReduction B A V W) (f : Fin d' → Fin d) :
     IsReduction (Kraus.reindexPhysical f B) (Kraus.reindexPhysical f A) V W := by
   refine ⟨h.mul_eq_one, fun w ↦ ?_⟩
   rw [Kraus.evalWord_reindexPhysical, Kraus.evalWord_reindexPhysical, h.evalWord]
 
 /-- A rectangular reduction between tensors is a rectangular reduction between
 their physical blockings by the same length. -/
-theorem blockTensor (h : IsReduction B A V W) (L : ℕ) :
+theorem _root_.MPTensor.IsReduction.blockTensor (h : IsReduction B A V W) (L : ℕ) :
     IsReduction (blockTensor B L) (blockTensor A L) V W := by
   refine ⟨h.mul_eq_one, fun w ↦ ?_⟩
   rw [evalWord_blockTensor, evalWord_blockTensor, h.evalWord]

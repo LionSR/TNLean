@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointPeriodicSectors
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGapThreshold
 import TNLean.MPS.ParentHamiltonian.Continuity.BlockPeriodicGroundSpaceContinuity
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 
 /-!
 # Periodic kernel and uniform gap of the actual joint mixed endpoint
@@ -26,6 +26,8 @@ Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777. These results
 concern the first endpoint on periodic chains. They assert no open-chain
 comparison, near-endpoint uniform gap, or classification of phases.
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators InnerProductSpace ComplexOrder MatrixOrder
 open ManyBody.Interaction (translationInvariant)

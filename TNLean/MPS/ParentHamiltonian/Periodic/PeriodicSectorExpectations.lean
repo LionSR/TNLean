@@ -43,6 +43,8 @@ It also contains the following results.
   quasi-local ground states of finite periodic block families.
 -/
 
+open MPTensor
+
 section PeriodicBlockFamilyGroundStates
 
 /-!
@@ -318,7 +320,7 @@ theorem blockedQuasiLocalExpectation_interval
     (X : Matrix (Cfg (blockPhysDim d L) N) (Cfg (blockPhysDim d L) N) ℂ) :
     quasiLocalBlockingFunctional d L (quasiLocalExpectation B hTP hρ hfix htr)
       (quasiLocalIntervalObservable d (a * L) (N * L)
-        (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L) X)) =
+        (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) X)) =
       observableInsertionExpectation B ρ X := by
   rw [← quasiLocalBlocking_quasiLocalIntervalObservable,
     quasiLocalBlockingFunctional_apply, StarAlgEquiv.symm_apply_apply,
@@ -338,14 +340,14 @@ theorem blockedQuasiLocalExpectation_window
     quasiLocalBlockingFunctional d L (quasiLocalExpectation B hTP hρ hfix htr)
       (quasiLocalIntervalObservable d (a * L + (b : ℤ)) k X) =
       observableInsertionExpectation B ρ
-        (Matrix.reindex (blockedConfigEquiv d N L).symm (blockedConfigEquiv d N L).symm
+        (Matrix.reindex (Kraus.blockedConfigEquiv d N L).symm (Kraus.blockedConfigEquiv d N L).symm
           (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X)) := by
   rw [← quasiLocalIntervalObservable_placeAlong_chainWindow (a * L) (N * L) b X hb]
   have h := blockedQuasiLocalExpectation_interval B hTP hρ hfix htr a N
-    (Matrix.reindex (blockedConfigEquiv d N L).symm (blockedConfigEquiv d N L).symm
+    (Matrix.reindex (Kraus.blockedConfigEquiv d N L).symm (Kraus.blockedConfigEquiv d N L).symm
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X))
-  have hidx : Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-      (Matrix.reindex (blockedConfigEquiv d N L).symm (blockedConfigEquiv d N L).symm
+  have hidx : Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
+      (Matrix.reindex (Kraus.blockedConfigEquiv d N L).symm (Kraus.blockedConfigEquiv d N L).symm
         (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X)) =
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X := by
     ext σ τ

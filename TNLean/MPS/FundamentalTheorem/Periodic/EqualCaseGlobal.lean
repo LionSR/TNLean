@@ -33,6 +33,8 @@ blocks the global similarity is unitary.
   arXiv:1708.00029, theorem `thm:bdequal`, lines 689--690.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

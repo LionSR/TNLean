@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalBlocks.PrimitiveBlocks
+import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
 
 /-!
 # Common blocked cyclic-sector families
@@ -18,6 +18,8 @@ The structure and its derived theorems are intermediate constructions — they
 record reindexing, flattening, and common-alphabet transport.  They are
 not independent results of 1606.00608 or 2011.12127.
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Kraus (blockPhysDim blockPhysDim_eq_pow wordOfBlock blockTensor flattenBlockedWord)
@@ -156,7 +158,7 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
         (F.commonSectorBlock k s)) ∧
     Kraus.IsIrreducibleFamily (F.commonSectorBlock k s) := by
   have : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
-  have hExtra := tp_primitive_irreducible_extra_blocking
+  have hExtra := Kraus.tp_primitive_irreducible_extra_blocking
     (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
     (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
     (F.sector_irreducible k s) (hk := F.extra_pos k)
@@ -263,8 +265,9 @@ private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
             (finSigmaFinEquiv.symm :
               Fin (∑ k : Fin r, F.period k) ≃ ((k : Fin r) × Fin (F.period k)))
             gSigma).symm
-          simpa [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
-            smul_eq_mul] using h
+          simp only [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
+            smul_eq_mul] at h ⊢
+          exact h
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ :=
           (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm

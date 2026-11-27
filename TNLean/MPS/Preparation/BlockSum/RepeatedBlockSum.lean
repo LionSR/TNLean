@@ -91,6 +91,8 @@ Documented in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
   arXiv:2307.01696, Supplemental Material, Lemma 1'(ii) (`eq:fid_err_gen_non_normal`).
 -/
 
+open MPTensor
+
 section
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
@@ -388,7 +390,7 @@ noncomputable def copyApproxOverlap (A : MPSTensor d D) (q M : ℕ) (α : Fin b 
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) : ℂ :=
   ∑ τ, star (((Real.sqrt (∑ τ', ‖copyApproxVector A q M α L σ τ'‖ ^ 2) : ℂ)⁻¹) *
       copyApproxVector A q M α L σ τ) *
-    normalizedMPVState A (M * q) (blockedConfigEquiv d M q τ)
+    normalizedMPVState A (M * q) (Kraus.blockedConfigEquiv d M q τ)
 
 /-- The overlap is the unnormalized overlap divided by the two norms. -/
 theorem copyApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
@@ -397,7 +399,7 @@ theorem copyApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ
     copyApproxOverlap A q M α L σ =
       ((Real.sqrt (∑ τ, ‖copyApproxVector A q M α L σ τ‖ ^ 2) : ℂ)⁻¹ *
         (‖mpvState A (M * q)‖ : ℂ)⁻¹) *
-        ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (blockedConfigEquiv d M q τ) := by
+        ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockedConfigEquiv d M q τ) := by
   rw [copyApproxOverlap, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
   simp only [normalizedMPVState, star_mul', Complex.star_def, map_inv₀, Complex.conj_ofReal,

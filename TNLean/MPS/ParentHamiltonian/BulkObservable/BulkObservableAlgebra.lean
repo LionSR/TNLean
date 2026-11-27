@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableInsertion
 import TNLean.MPS.CanonicalForm.Correlation.WindowOperatorSupport
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!

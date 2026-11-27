@@ -40,6 +40,8 @@ deciding finitely many identities over `ℤ[ω]` and transporting them along the
   `MPSTensor.left_intertwiner_eq_zero_of_eisenstein`: the intertwiner certificates.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

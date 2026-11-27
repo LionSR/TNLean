@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicOrigin
+import QICLean.ManyBody.Sites.Dyadic.DyadicOrigin
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanFrontiers
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
@@ -48,6 +48,9 @@ September 24, 2026, Section 11, `prop:two-families`, lines 154–177,
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (IsAllowedSlope dyadicCell dyadicNeighborhood dyadicOrigin
+  dyadicOrigin_supporting_lines_avoid_lattice fineLayerIndices integerPoint occupiedCellIndices)
 
 section
 

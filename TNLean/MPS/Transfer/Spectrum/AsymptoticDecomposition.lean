@@ -21,6 +21,8 @@ Appendix C, lines 2653–2717. No equality of the retained and original periodic
 rays, or implication from a physical spectral gap, is asserted.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

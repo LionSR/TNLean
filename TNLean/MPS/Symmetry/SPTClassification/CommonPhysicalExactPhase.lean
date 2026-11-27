@@ -29,6 +29,8 @@ case with trivial scalar character, as recorded in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix ScalarCohomology
 open Kraus (singleBlockEquiv decodeBlock blockTensor)
 
@@ -433,7 +435,7 @@ theorem isSameExactMPSGappedPhase_of_unitary_cohomologous
         (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
     IsSameExactMPSGappedPhase A₀ A₁ U₀ U₁ := by
   obtain ⟨σ, φ, hσ, hX⟩ :=
-    ρ₀.exists_unitary_rephase_of_unitary_cohomologous ρ₁ h₀ h₁ hCoh
+    TNLean.MPS.Symmetry.exists_unitary_rephase_of_unitary_cohomologous ρ₀ ρ₁ h₀ h₁ hCoh
   exact isSameExactMPSGappedPhase_of_unitary_common_factor
     ρ₀ σ h₀ hσ U₀ U₁ A₀ hA₀ A₁ hA₁ hCov₀
     (rotatePhysical_covariance_of_circle_rephase ρ₁ σ φ hX U₁ A₁ hCov₁)

@@ -42,6 +42,8 @@ The positive-length convention is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder Kraus
 
 namespace MPSTensor

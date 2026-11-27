@@ -59,6 +59,8 @@ sufficient and need not be optimal. The sharper theorem assumes
 is documented in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Topology ComplexOrder

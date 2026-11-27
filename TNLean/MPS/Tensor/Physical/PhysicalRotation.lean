@@ -28,6 +28,8 @@ the on-site twist used for symmetric matrix product states.
 * `MPSTensor.rotatePhysical_rotatePhysical` — rotations compose multiplicatively.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

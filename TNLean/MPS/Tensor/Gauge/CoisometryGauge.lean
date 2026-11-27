@@ -25,6 +25,8 @@ unitary alignment of two different coisometries is an additional
 project-derived auxiliary result.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -158,8 +160,6 @@ theorem mul_coisometryExtendGL_inv {r n : ℕ}
   rw [hComplement, add_zero]
   simp only [← Matrix.mul_assoc, hU, Matrix.one_mul]
 
-namespace GaugeEquiv
-
 /-- Gauge equivalence lifts through two exact coisometric reconstructions in a
 common ambient bond dimension.
 
@@ -170,7 +170,7 @@ This is a project-derived auxiliary lemma. The single-space similarity
 gauge in arXiv:1606.00608, Appendix A, lines 1058--1077, motivates the
 retained-space extension; the cross-coisometry unitary alignment is
 additional. -/
-theorem of_coisometry_reconstruction
+theorem _root_.MPTensor.GaugeEquiv.of_coisometry_reconstruction
     {s n D : ℕ}
     {A B : MPSTensor s D}
     {C E : MPSTensor s n}
@@ -223,7 +223,5 @@ theorem of_coisometry_reconstruction
         ((((unitaryGL W * G)⁻¹ : GL (Fin D) ℂ) :
           Matrix (Fin D) (Fin D) ℂ)) := by
             simp [unitaryGL, Matrix.mul_assoc, mul_inv_rev]
-
-end GaugeEquiv
 
 end MPSTensor

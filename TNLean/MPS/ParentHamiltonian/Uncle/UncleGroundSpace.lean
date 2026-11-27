@@ -22,6 +22,8 @@ injective-perturbation condition is assumed; no intersection, closure or
 kernel equality is supplied as an extra hypothesis.
 -/
 
+open MPTensor
+
 open Kraus (blockPhysDim decodeBlock wordOfBlock decodeBlockEquiv flattenBlockedWord_nil
   flattenBlockedWord_cons)
 
@@ -36,9 +38,9 @@ open ManyBody.Interaction (translationInvariant)
 variable {d a b : ℕ}
 
 private theorem blockedConfigEquiv_one_two (σ : Cfg (blockPhysDim d 2) 1) :
-    blockedConfigEquiv d 1 2 σ = decodeBlock d 2 (σ 0) := by
+    Kraus.blockedConfigEquiv d 1 2 σ = decodeBlock d 2 (σ 0) := by
   apply List.ofFn_injective
-  rw [ofFn_blockedConfigEquiv]
+  rw [Kraus.ofFn_blockedConfigEquiv]
   simp only [flattenBlockedWord_cons,
     flattenBlockedWord_nil, List.append_nil, wordOfBlock, Kraus.wordOfBlock, List.ofFn_succ,
     List.ofFn_zero]
@@ -55,12 +57,12 @@ theorem mem_uncleBoundarySpace_two_iff
       Matrix.toEuclideanLin (uncleInteraction A B R L)
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ) = 0 := by
   let f : NSiteSpace d 2 ≃ₗ[ℂ] NSiteSpace (blockPhysDim d 2) 1 :=
-    LinearEquiv.funCongrLeft ℂ ℂ (blockedConfigEquiv d 1 2)
+    LinearEquiv.funCongrLeft ℂ ℂ (Kraus.blockedConfigEquiv d 1 2)
   have hmap (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
       f (uncleBoundaryMap A B R L 2 X) =
         groundSpaceMap (uncleTensor A B R L) 1 X := by
     ext σ
-    change uncleBoundaryMap A B R L 2 X (blockedConfigEquiv d 1 2 σ) = _
+    change uncleBoundaryMap A B R L 2 X (Kraus.blockedConfigEquiv d 1 2 σ) = _
     rw [uncleBoundaryMap_two, blockedConfigEquiv_one_two]
     have hcfg : (fun _ : Fin 1 ↦ (decodeBlockEquiv d 2).symm
         (decodeBlock d 2 (σ 0))) = σ := by

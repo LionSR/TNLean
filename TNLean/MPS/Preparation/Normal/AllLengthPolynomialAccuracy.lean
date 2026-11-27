@@ -23,6 +23,8 @@ assumes `ξ > 0`. The zero-correlation-length case remains outside this construc
 `docs/paper-gaps/mswc24_polynomial_accuracy_uniform_blocks.tex`.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder InnerProductSpace
 open MPSTensor QuantumCircuit
 open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)

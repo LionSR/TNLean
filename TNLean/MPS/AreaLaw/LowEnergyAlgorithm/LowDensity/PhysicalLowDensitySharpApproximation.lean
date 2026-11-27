@@ -531,7 +531,7 @@ theorem exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation
   · intro ψ hψG hψ
     have htail : ∀ k ∈ Finset.Ico 1 L,
         1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-          (leftBlock L k) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * B) ≤
+          (interval L 0 k) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * B) ≤
             delta / (8 * ((L : ℝ) + 1)) := by
       intro k hk
       have hkL : k ≤ L := (Finset.mem_Ico.mp hk).2.le
@@ -542,7 +542,6 @@ theorem exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation
       have hregional := one_sub_regional_kyFanNorm_le_twice_error
         (interval L 0 k) ψ φ hφ deltaCut hcut1 (Module.finrank ℂ (G etaLD) * B)
         (Nat.le_mul_ceil_exp_of_log_le hrG E hlogrank) hoverlap
-      rw [leftBlock_eq_interval]
       convert hregional using 1
       dsimp only [deltaCut]
       field_simp; ring
@@ -657,10 +656,10 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
       have hmps : IsOpenMPS L 1 (Module.finrank ℂ (G etaLD) * 1) (fun x ↦ ψ x) := by
         apply isOpenMPS_of_cutMatrix_rank_le ψ
         intro k
-        have hrank := Matrix.rank_le_card_height (cutMatrix (leftBlock L k) ψ)
+        have hrank := Matrix.rank_le_card_height (cutMatrix (interval L 0 k) ψ)
         have hcard : Fintype.card
             (ManyBody.RegionConfig (fun _ ↦ Fin 1)
-            (leftBlock L k)) = 1 := by simp [ManyBody.RegionConfig]
+            (interval L 0 k)) = 1 := by simp [ManyBody.RegionConfig]
         rw [hcard] at hrank
         simpa only [mul_one] using hrank.trans hrG
       refine ⟨ψ, hψ, hmps, ?_, ?_⟩

@@ -45,6 +45,8 @@ September 24, 2026, Section 11, `geometry:bad-sites`, lines 694–707.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (integerPoint)
+
 section
 
 noncomputable section

@@ -75,6 +75,8 @@ by either application, nor by the two together.
   coherence question between rows".
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace TNLean

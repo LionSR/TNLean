@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.Tensor.Network.Defs
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.PEPS.Injectivity.Normal.NormalBlocking
-import QICLean.ManyBody.Sites.ProductOperatorTrace
+import QICLean.ManyBody.Sites.Product.ProductOperatorTrace
 import QICLean.Circuit.Geometry
 import Mathlib.Data.Finset.NoncommProd
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -14,7 +14,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 
 /-!
 # The polynomial-bond PEPS approximation statement
@@ -41,6 +41,7 @@ the normalized global vector, with a freely chosen phase.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (Edge SquareInteraction SquareLatticeVertex squareLatticeGraph)
 
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
@@ -49,26 +50,20 @@ open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
-/-- Configuration coordinates on the original open square.
-Source: polynomial-PEPS Section 1, the site Hilbert spaces. -/
-abbrev Configuration (L q : ℕ) := SquareLatticeVertex L L → Fin q
-
-/-- The physical Hilbert space of the open square.
-Source: polynomial-PEPS Section 1. -/
-abbrev StateSpace (L q : ℕ) := EuclideanSpace ℂ (Configuration L q)
-
 /-- The states admitted by the model at local dimension `q`, term bound `J` and gap `Δ`: the
 unit gapped ground vectors, with gap `Δ`, of the open-square Hamiltonians of side `L`: one
 term on each site and one on each nearest-neighbor edge, each of norm at most `J`, with
 Hermitian total sum. Individual terms need not be Hermitian. Source: polynomial-PEPS
 `eq:model` and `eq:global-gap`. -/
-def IsSquareGroundState (q : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
+def IsSquareGroundState (q : ℕ) (J Δ : ℝ) (L : ℕ)
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) : Prop :=
   ∃ h : SquareInteraction L q, h.hamiltonian.IsHermitian ∧ (∀ i, ‖h.term i‖ ≤ J) ∧
     ∃ E₀ : ℝ, ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}
 
 /-- A ground vector of the model is a unit vector. Source: polynomial-PEPS `eq:global-gap`. -/
-theorem IsSquareGroundState.norm_eq_one {q : ℕ} {J Δ : ℝ} {L : ℕ} {Ω : StateSpace L q}
+theorem IsSquareGroundState.norm_eq_one {q : ℕ} {J Δ : ℝ} {L : ℕ}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
     (hΩ : IsSquareGroundState q J Δ L Ω) : ‖Ω‖ = 1 := by
   obtain ⟨_, _, _, _, hn, -, -⟩ := hΩ
   exact hn
@@ -76,13 +71,14 @@ theorem IsSquareGroundState.norm_eq_one {q : ℕ} {J Δ : ℝ} {L : ℕ} {Ω : S
 /-- The contraction of a native PEPS, in Euclidean configuration coordinates.
 Source: polynomial-PEPS Section 1, the unnormalized vector `Φ`. -/
 noncomputable def pepsVector {L q : ℕ} (A : Tensor (squareLatticeGraph L L) q) :
-    StateSpace L q :=
-  (EuclideanSpace.equiv (Configuration L q) ℂ).symm (stateCoeff A)
+    EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) :=
+  (EuclideanSpace.equiv (Config (Qudits (SquareLatticeVertex L L) q)) ℂ).symm (stateCoeff A)
 
 /-- A nonzero native PEPS on the original graph, with positive bonds bounded
 by `C L^c` and normalized global error at most `L⁻¹`, up to phase.
 Source: polynomial-PEPS Theorem 1.1 and `eq:target-error`. -/
-def HasPEPSApproximation (C c : ℝ) (L q : ℕ) (Ω : StateSpace L q) : Prop :=
+def HasPEPSApproximation (C c : ℝ) (L q : ℕ)
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) : Prop :=
   ∃ A : Tensor (squareLatticeGraph L L) q,
     (∀ e, 0 < A.bondDim e) ∧
     (∀ e, (A.bondDim e : ℝ) ≤ C * (L : ℝ) ^ c) ∧
@@ -100,7 +96,7 @@ def PolynomialPEPSApproximation : Prop :=
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
       ∀ L : ℕ, 2 ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
           (∀ i, ‖h.term i‖ ≤ J) →
-        ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
+        ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → HasPEPSApproximation C c L q Ω
 

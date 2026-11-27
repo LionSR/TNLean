@@ -110,7 +110,7 @@ theorem operatorCoefficientTensor_mpo_eq_mpv {d D N : ℕ} (M : MPOTensor d D) :
     operatorCoefficientTensor (M.mpo N) = M.toMPSTensor.mpv (N := N) := by
   funext σ
   simp only [operatorCoefficientTensor, MPOTensor.mpo_apply_toMPSTensor,
-    MPSTensor.mpv, MPSTensor.coeff]
+    MPTensor.mpv, MPTensor.coeff]
   congr 3
   funext s
   exact Equiv.apply_symm_apply finProdFinEquiv (σ s)

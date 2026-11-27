@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.RegionalReset
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RegionOperatorLocalization
+import QICLean.ManyBody.Hamiltonian.PlaneLocalization
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
@@ -35,7 +35,7 @@ graph-ball prefactor at range one. Its value is `64 e^{3/2} / (1 - e^{-1/2})`
 Source: the constant `C` of `eq:info-lr` and `eq:info-operator-localization`,
 polynomial-PEPS `02-information.tex`, lines 486–508. -/
 noncomputable def squareLocalizationPrefactor : ℝ :=
-  2 * AreaLaw.graphBallLocalizationPrefactor 1
+  2 * ManyBody.graphBallLocalizationPrefactor 1
 
 /-- The localization velocity of the doubled square Hamiltonian with interaction bound `J`:
 the graph-ball velocity at range one and term-norm bound `2J`. Its value is `320 e² J`
@@ -43,25 +43,25 @@ the graph-ball velocity at range one and term-norm bound `2J`. Its value is `320
 Source: the velocity `v` of `eq:info-lr`, polynomial-PEPS `02-information.tex`,
 lines 486–496. -/
 noncomputable def squareLocalizationVelocity (J : ℝ) : ℝ :=
-  AreaLaw.graphBallLocalizationVelocity 1 (2 * J)
+  ManyBody.graphBallLocalizationVelocity 1 (2 * J)
 
 theorem squareLocalizationPrefactor_pos : 0 < squareLocalizationPrefactor :=
-  mul_pos two_pos (AreaLaw.graphBallLocalizationPrefactor_pos 1)
+  mul_pos two_pos (ManyBody.graphBallLocalizationPrefactor_pos 1)
 
 theorem squareLocalizationVelocity_nonneg {J : ℝ} (hJ : 0 ≤ J) :
     0 ≤ squareLocalizationVelocity J :=
-  AreaLaw.graphBallLocalizationVelocity_nonneg 1 (by linarith)
+  ManyBody.graphBallLocalizationVelocity_nonneg 1 (by linarith)
 
 theorem squareLocalizationPrefactor_eq :
     squareLocalizationPrefactor = 64 * Real.exp (3 / 2) / (1 - Real.exp (-(1 / 2))) := by
   rw [show (3 / 2 : ℝ) = 1 + 1 / 2 by norm_num, Real.exp_add]
-  simp only [squareLocalizationPrefactor, AreaLaw.graphBallLocalizationPrefactor, Nat.cast_one,
+  simp only [squareLocalizationPrefactor, ManyBody.graphBallLocalizationPrefactor, Nat.cast_one,
     Nat.factorial]
   ring
 
 theorem squareLocalizationVelocity_eq (J : ℝ) :
     squareLocalizationVelocity J = 320 * Real.exp 2 * J := by
-  simp only [squareLocalizationVelocity, AreaLaw.graphBallLocalizationVelocity]
+  simp only [squareLocalizationVelocity, ManyBody.graphBallLocalizationVelocity]
   norm_num
   ring
 
@@ -87,7 +87,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
       let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
       let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let K' := F * K * Fᴴ
@@ -167,7 +167,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
       (D := Q) (D' := Q.image (ManyBody.rectangleSiteEquiv L L))
       (fun _ ↦ (ManyBody.rectangleSiteEquiv L L).injective.mem_finset_image.symm) hV₀
-    rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+    rw [ManyBody.siteConfigurationEquiv_rectangleSiteEquiv] at hs
     simpa only [a, V, Matrix.reindex_apply, Matrix.submatrix_submatrix] using! hs
   have hD : gH.hamiltonian - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset ↥Λ) := by
@@ -177,7 +177,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
       (fun _ ↦ (ManyBody.rectangleSiteEquiv L L).injective.mem_finset_image.symm)
       (h.swapped_doubled_boundary_bound hhJ R).1
-    rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+    rw [ManyBody.siteConfigurationEquiv_rectangleSiteEquiv] at hs
     rw [hK', hKK]
     exact hs
   have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
@@ -191,7 +191,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) 1
+    ManyBody.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) 1
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH hgH hgHJ K V (hDK.reindex (p.trans e))
       (Q.image a) (Z.image a) hV hD l
   rw [hK'] at hU hM
@@ -230,7 +230,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
           (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
         let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
         let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let K' := F * K * Fᴴ

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Correlation.EntanglementSpectrum
-import QICLean.Channel.PerronFrobenius.Existence
+import QICLean.Channel.Irreducible.KrausSetup
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
 import TNLean.Tactic.MatrixReciprocalSmul
 
@@ -31,6 +31,8 @@ arXiv:2011.12127, Section III.A, lines 1084 and 1171.
 - [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197) -- Pérez-García,
   Verstraete, Wolf, Cirac, *Matrix Product State Representations*
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 

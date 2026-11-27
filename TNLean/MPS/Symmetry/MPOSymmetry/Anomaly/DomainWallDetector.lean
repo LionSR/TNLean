@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Tensor.TruncationCommutator
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.FunctionalCalculus.FiniteKroneckerPowers
+import QICLean.Algebra.Kronecker.PiKronecker
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.DomainWallStringExchange
 
 /-!
@@ -84,19 +86,19 @@ theorem star_dotProduct_groupCommutator_mulVec_mpv_of_wallString
     ∃ N : ℕ, ∀ (u u' v w' w L : ℕ) (h₁ : u + 1 + u' + 1 + v + 1 + (w' + 1 + w) = L)
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       ∀ U₁ U₂ : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ, U₁ᴴ * U₁ = 1 → U₂ᴴ * U₂ = 1 →
-      (U₂ * U₁) *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+      (U₂ * U₁) *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
           (ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
             ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ) →
-      (U₁ * U₂) *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+            (fun σ ↦ MPTensor.mpv (A x) σ) →
+      (U₁ * U₂) *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
           (ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
             ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ) →
-      star (fun σ ↦ MPSTensor.mpv (A x) σ) ⬝ᵥ
-          (Matrix.groupCommutator U₁ U₂ *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ)) =
+            (fun σ ↦ MPTensor.mpv (A x) σ) →
+      star (fun σ ↦ MPTensor.mpv (A x) σ) ⬝ᵥ
+          (Matrix.groupCommutator U₁ U₂ *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ)) =
         (cAB * cBA) *
-          (star (fun σ : Fin L → Fin d ↦ MPSTensor.mpv (A x) σ) ⬝ᵥ
-            (fun σ : Fin L → Fin d ↦ MPSTensor.mpv (A x) σ)) := by
+          (star (fun σ : Fin L → Fin d ↦ MPTensor.mpv (A x) σ) ⬝ᵥ
+            (fun σ : Fin L → Fin d ↦ MPTensor.mpv (A x) σ)) := by
   obtain ⟨N, hN⟩ := ad.wallString_mul_wallString_mulVec_mpv hperm hÂ hAB hBA
   refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' U₁ U₂ hU₁ hU₂ h₂₁ h₁₂ ↦ ?_⟩
   refine Matrix.star_dotProduct_groupCommutator_mulVec hU₁ hU₂ ?_
@@ -120,19 +122,19 @@ theorem star_dotProduct_groupCommutator_mulVec_mpv_eq_omega {fd : FusionData F}
     ∃ N : ℕ, ∀ (u u' v w' w L : ℕ) (h₁ : u + 1 + u' + 1 + v + 1 + (w' + 1 + w) = L)
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       ∀ U₁ U₂ : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ, U₁ᴴ * U₁ = 1 → U₂ᴴ * U₂ = 1 →
-      (U₂ * U₁) *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+      (U₂ * U₁) *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
           (ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
             ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ) →
-      (U₁ * U₂) *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+            (fun σ ↦ MPTensor.mpv (A x) σ) →
+      (U₁ * U₂) *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
           (ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
             ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ) →
-      star (fun σ ↦ MPSTensor.mpv (A x) σ) ⬝ᵥ
-          (Matrix.groupCommutator U₁ U₂ *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ)) =
+            (fun σ ↦ MPTensor.mpv (A x) σ) →
+      star (fun σ ↦ MPTensor.mpv (A x) σ) ⬝ᵥ
+          (Matrix.groupCommutator U₁ U₂ *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ)) =
         ((fd.omega g g g * fd.omega g 1 g : ℂˣ) : ℂ) *
-          (star (fun σ : Fin L → Fin d ↦ MPSTensor.mpv (A x) σ) ⬝ᵥ
-            (fun σ : Fin L → Fin d ↦ MPSTensor.mpv (A x) σ)) := by
+          (star (fun σ : Fin L → Fin d ↦ MPTensor.mpv (A x) σ) ⬝ᵥ
+            (fun σ : Fin L → Fin d ↦ MPTensor.mpv (A x) σ)) := by
   rw [← IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA]
   exact ad.star_dotProduct_groupCommutator_mulVec_mpv_of_wallString hperm hÂ hAB hBA
 

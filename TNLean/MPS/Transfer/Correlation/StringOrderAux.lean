@@ -45,6 +45,8 @@ boundary-state invariance `V† Λ V = Λ`.
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447 (PRL 2008)
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor

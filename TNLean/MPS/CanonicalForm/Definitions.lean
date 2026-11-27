@@ -85,6 +85,8 @@ coordinates.
 Source: arXiv:1606.00608, Appendix A, lines 1054–1077.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder Kraus
@@ -410,7 +412,7 @@ already in one-block canonical form II in its given bond coordinates.
 Source: arXiv:1606.00608, Appendix A, lines 1054–1077. -/
 noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {A : MPSTensor d D}
     (hNormal : MPSTensor.IsNormalTensor A)
-    (hLeft : MPSTensor.IsLeftCanonical A)
+    (hLeft : MPTensor.IsLeftCanonical A)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρpd : ρ.PosDef) (hρdiag : ρ.IsDiag)
     (hρfix : Kraus.transferMap A ρ = ρ) :
     MPSTensor.CPSVCanonicalFormIIData A := by

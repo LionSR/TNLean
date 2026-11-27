@@ -5,7 +5,14 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.ApproximationError
 import TNLean.MPS.Preparation.BlockSum.NonNormalCanonicalForm
-import TNLean.MPS.Tensor.Physical.PolarUniqueness
+import QICLean.Entropy.StrongSubadditivity.TripartiteDecorrelation
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 
 /-!
 # The approximating state of a diagonal tensor
@@ -46,60 +53,11 @@ The overlap of the approximating state with the target reduces to entries of `P`
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S7).
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open Matrix
 open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
-
-namespace Matrix
-
-variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-
-/-- The isometry `J : ℂ^κ → ℂ^κ ⊗ ℂ^κ`, `|e⟩ ↦ |e e⟩`, onto the diagonal pairs. -/
-def diagPairEmbedding (κ : Type*) [DecidableEq κ] : Matrix (κ × κ) κ ℂ :=
-  of fun p e => if p.1 = e ∧ p.2 = e then 1 else 0
-
-theorem diagPairEmbedding_mul_apply {ρ : Type*} (X : Matrix κ ρ ℂ) (p : κ × κ)
-    (r : ρ) : (diagPairEmbedding κ * X) p r = if p.1 = p.2 then X p.1 r else 0 := by
-  rw [mul_apply, Finset.sum_eq_single p.1]
-  · by_cases h : p.1 = p.2
-    · simp [diagPairEmbedding, h]
-    · simp [diagPairEmbedding, h, Ne.symm h]
-  · intro e _ he
-    simp [diagPairEmbedding, Ne.symm he]
-  · simp
-
-theorem mul_conjTranspose_diagPairEmbedding_apply {ρ : Type*}
-    (X : Matrix ρ κ ℂ) (r : ρ) (p : κ × κ) :
-    (X * (diagPairEmbedding κ)ᴴ) r p = if p.1 = p.2 then X r p.1 else 0 := by
-  rw [mul_apply, Finset.sum_eq_single p.1]
-  · by_cases h : p.1 = p.2
-    · simp [diagPairEmbedding, conjTranspose_apply, h]
-    · simp [diagPairEmbedding, conjTranspose_apply, h, Ne.symm h]
-  · intro e _ he
-    simp [diagPairEmbedding, conjTranspose_apply, Ne.symm he]
-  · simp
-
-/-- `J` is an isometry, `Jᴴ J = 1`. -/
-theorem conjTranspose_diagPairEmbedding_mul_self :
-    (diagPairEmbedding κ)ᴴ * diagPairEmbedding κ = 1 := by
-  ext e e'
-  rw [mul_apply, Fintype.sum_prod_type, Finset.sum_eq_single e]
-  · rw [Finset.sum_eq_single e]
-    · by_cases h : e = e' <;> simp [diagPairEmbedding, conjTranspose_apply, h, one_apply]
-    · intro x _ hx; simp [diagPairEmbedding, conjTranspose_apply, hx]
-    · simp
-  · intro x _ hx
-    refine Finset.sum_eq_zero fun y _ => ?_
-    simp [diagPairEmbedding, conjTranspose_apply, hx]
-  · simp
-
-/-- The entries of `J X Jᴴ` on diagonal pairs are the entries of `X`. -/
-theorem diagPairEmbedding_mul_mul_conjTranspose_apply (X : Matrix κ κ ℂ) (c e : κ) :
-    (diagPairEmbedding κ * X * (diagPairEmbedding κ)ᴴ) (c, c) (e, e) = X c e := by
-  rw [mul_conjTranspose_diagPairEmbedding_apply, diagPairEmbedding_mul_apply]
-  simp
-
-end Matrix
 
 namespace MPSTensor
 
@@ -201,14 +159,14 @@ theorem polarSupport_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D �
 tensor. -/
 theorem mpv_blockedConfigEquiv (A : MPSTensor d D) (q M : ℕ)
     (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv A (blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
-  simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
+    mpv A (Kraus.blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
+  simp only [mpv, coeff, Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor]
 
 /-- The periodic state of the diagonal tensor on `N = qM` sites, read through the regrouping of
 sites into `M` blocks: `φ_N(A)(τ) = ∑_e ∏ₖ b_e(τ_k)`. -/
 theorem mpv_blockedConfigEquiv_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ)
     (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv (fun i => diagonal (a i)) (blockedConfigEquiv d M q τ) =
+    mpv (fun i => diagonal (a i)) (Kraus.blockedConfigEquiv d M q τ) =
       ∑ e, ∏ k, blockDiagEntry a q (τ k) e := by
   rw [mpv_blockedConfigEquiv, mpv, coeff, funext (blockTensor_diagonal a q), evalWord_diagonal,
     trace_diagonal]
@@ -288,7 +246,7 @@ sites. The approximation error of Lemma 1' of the source is `ε = 1 - |⟨φ~_N|
 noncomputable def nonNormalApproxOverlap (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) : ℂ :=
   ∑ τ, star (nonNormalApproxState A q M α ω τ) *
-    normalizedMPVState A (M * q) (blockedConfigEquiv d M q τ)
+    normalizedMPVState A (M * q) (Kraus.blockedConfigEquiv d M q τ)
 
 /-- The squared norm of a vector, as a complex number. -/
 theorem ofReal_sum_norm_sq {n : Type*} [Fintype n] (f : n → ℂ) :
@@ -304,7 +262,7 @@ theorem nonNormalApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b �
       ((Real.sqrt (∑ τ, ‖nonNormalApproxVector A q M α ω τ‖ ^ 2) : ℂ)⁻¹ *
         (‖mpvState A (M * q)‖ : ℂ)⁻¹) *
         ∑ τ, star (nonNormalApproxVector A q M α ω τ) *
-          mpv A (blockedConfigEquiv d M q τ) := by
+          mpv A (Kraus.blockedConfigEquiv d M q τ) := by
   rw [nonNormalApproxOverlap, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
   simp only [nonNormalApproxState, normalizedMPVState, Pi.smul_apply, smul_eq_mul, star_mul',
@@ -354,7 +312,7 @@ theorem ofReal_norm_mpvState_sq_diagonal (a : Fin d → Fin D → ℂ) (q M : �
     ((‖mpvState (fun i => diagonal (a i)) (M * q)‖ ^ 2 : ℝ) : ℂ) =
       ∑ e, ∑ e', diagGram a q e e' ^ M := by
   rw [EuclideanSpace.norm_eq, Real.sq_sqrt (Finset.sum_nonneg fun _ _ => by positivity),
-    ofReal_sum_norm_sq, ← (blockedConfigEquiv d M q).sum_comp]
+    ofReal_sum_norm_sq, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
   simp only [mpvState_apply, mpv_blockedConfigEquiv_diagonal]
   rw [sum_star_sum_mul_sum
     (fun e (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, blockDiagEntry a q (τ k) e)
@@ -388,7 +346,7 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
     (α : Fin b → ℂ) (c : Fin b → Fin D) :
     ∑ τ, star (nonNormalApproxVector (fun i => diagonal (a i)) q M α
           (fun j => basisPair (c j)) τ) *
-        mpv (fun i => diagonal (a i)) (blockedConfigEquiv d M q τ) =
+        mpv (fun i => diagonal (a i)) (Kraus.blockedConfigEquiv d M q τ) =
       ∑ j, ∑ e, star (α j) *
         polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
           (c j, c j) (e, e) ^ M := by

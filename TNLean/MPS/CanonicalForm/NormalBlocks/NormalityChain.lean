@@ -52,6 +52,8 @@ the full CPSV16 BNT multiplicity data with repeated copies inside one sector.
 matrix product states, canonical form, normality, blocking
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
@@ -169,7 +171,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
   let L : ℕ := iIndex A
   have hNonempty : ({n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}).Nonempty := by
     obtain ⟨N, hNpos, hNblk⟩ := hN
-    exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
+    exact ⟨N, hNpos, hNblk⟩
   have hTop : Kraus.wordSpan A L = ⊤ := by
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
   have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
@@ -203,8 +205,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
   have hLpos : 0 < L := by
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
   refine ⟨L, hLpos, hBound, ?_⟩
-  exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
-    ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
+  exact (isNBlkInjective_iff_blockTensor_isInjective A L).1 hTop
 
 /-- **Left-canonical normal tensor is block injective at length $D^4$.**
 
@@ -300,8 +301,7 @@ theorem isNormal_blockTensor_of_isNormal
     (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
     Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A P) := by
   obtain ⟨N, hNpos, hNblk⟩ := hN
-  have hwordN : Kraus.wordSpan A N = ⊤ :=
-    (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
+  have hwordN : Kraus.wordSpan A N = ⊤ := hNblk
   have hwordNP : Kraus.wordSpan A (P * N) = ⊤ :=
     Kraus.wordSpan_top_of_mul A hwordN P hP
   -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (blockTensor A P) N
@@ -311,8 +311,7 @@ theorem isNormal_blockTensor_of_isNormal
   have hwordNP' : Kraus.wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
   rw [hwordNP'] at hle
   refine ⟨N, hNpos, ?_⟩
-  exact (wordSpan_eq_top_iff_isNBlkInjective
-    (blockTensor (d := d) (n := Fin D) A P) N).mp (eq_top_iff.mpr hle)
+  exact eq_top_iff.mpr hle
 
 
 namespace IsNormalCanonicalFormBNT
@@ -402,7 +401,7 @@ theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
   refine ⟨LA * LB, Nat.mul_pos hLA_pos hLB_pos, ?_, ?_⟩
   · intro j
     have hmulN : Kraus.IsNBlkInjective (blocksA j) (LB * LA) :=
-      MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
+      MPTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
         ((Kraus.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
           (hLA j))
     have hmulN' : Kraus.IsNBlkInjective (blocksA j) (LA * LB) := by

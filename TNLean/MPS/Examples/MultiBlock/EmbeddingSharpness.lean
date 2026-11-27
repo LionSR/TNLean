@@ -27,6 +27,8 @@ one-block theorem cannot be lowered for the embeddings either.
   length `z - 1`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MultiBlockExamples.SharpnessOneBlock

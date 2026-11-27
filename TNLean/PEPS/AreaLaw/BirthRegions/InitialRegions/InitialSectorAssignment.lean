@@ -54,6 +54,9 @@ Manuscript file:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (closure_dyadicCell dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer_exists_dist_le fineLayerIndices)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 section InitialSectorAssignment

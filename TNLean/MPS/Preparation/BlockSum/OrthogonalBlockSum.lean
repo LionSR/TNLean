@@ -5,7 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.Polar.BondEmbedding
 import TNLean.MPS.Preparation.BlockSum.DiagonalPolar
-import TNLean.MPS.Preparation.Polar.OrthogonalSumPolar
+import QICLean.Entropy.StrongSubadditivity.TripartiteDecorrelation
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
 
 /-!
 # Direct sums of blocks with orthogonal states
@@ -58,6 +64,8 @@ source does not assume and without which eq. (S5) fails. Documented in
   *Preparation of matrix product states with log-depth quantum circuits*,
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S7).
 -/
+
+open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix

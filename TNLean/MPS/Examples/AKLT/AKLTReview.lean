@@ -75,6 +75,8 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
   states in antiferromagnets*, Phys. Rev. Lett. 59, 799 (1987)
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ScalarCohomology
 open Matrix Finset
 

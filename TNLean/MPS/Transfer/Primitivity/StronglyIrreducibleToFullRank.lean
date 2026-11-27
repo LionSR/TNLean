@@ -8,7 +8,7 @@ import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.PrimitiveFixedPoint
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import QICLean.Kraus.Transfer
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 import TNLean.MPS.Transfer.Primitivity.Definitions
 import TNLean.MPS.Tensor
 

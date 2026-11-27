@@ -9,13 +9,15 @@ import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 /-!
 # Coordinates of physical cut ranks
 
-The canonical cut matrix numbers the prefix sites by `Fin k` and the
-suffix sites by `Fin (N - k)`. The minimal-representation coefficient
-matrix instead indexes these sites by their actual subsets of `Fin N`.
-For every valid cut `k ≤ N`, explicit site equivalences induce
-configuration equivalences, and the two matrices differ only by reindexing.
-Their ranks are consequently equal, without a condition on the local
+The cut matrix `ManyBody.cutMatrix (interval N 0 k) ψ` indexes the sites before the cut by the
+members of the left block `interval N 0 k`. The minimal-representation coefficient matrix
+indexes them by the sites `s` with `s < k`, and the remaining sites by the sites `s` with
+`k ≤ s`. Both index the same sites, so at every cut `k` the two matrices differ only by
+reindexing, and their ranks are equal, without a condition on the cut position, the local
 dimension or the coefficient tensor.
+
+Numbering the sites of the left block by `Fin k`, for `k ≤ N`, reads its configurations as
+configurations of a chain of `k` sites.
 
 Source: the minimal representation in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`; the Schmidt cut-rank
@@ -24,6 +26,8 @@ interpretation is arXiv:quant-ph/0608197, local
 -/
 
 namespace MPSPreparation
+
+open ManyBody (interval mem_interval)
 
 variable {d N k : ℕ}
 
@@ -55,33 +59,51 @@ def cutSuffixConfigEquiv (hk : k ≤ N) :
     (Fin (N - k) → Fin d) ≃ CutSuffixConfig d N k :=
   Equiv.arrowCongr (cutSuffixSiteEquiv hk) (Equiv.refl (Fin d))
 
-/-- At a valid physical cut, the finite-chain coefficient matrix is the
-canonical cut matrix after the explicit configuration reindexing.
+variable (d N k) in
+/-- The configurations of the left block are the prefix configurations: both are indexed by the
+sites before the cut. Source: Section 5 of the exact MPU circuit note. -/
+def intervalConfigEquiv :
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ CutPrefixConfig d N k :=
+  Equiv.arrowCongr
+    (Equiv.subtypeEquivRight fun _ ↦ by rw [mem_interval, and_iff_right (Nat.zero_le _)])
+    (Equiv.refl (Fin d))
+
+variable (d N k) in
+/-- The configurations outside the left block are the suffix configurations: both are indexed
+by the sites from the cut on. Source: Section 5 of the exact MPU circuit note. -/
+def intervalComplConfigEquiv :
+    ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ CutSuffixConfig d N k :=
+  Equiv.arrowCongr (Equiv.subtypeEquivRight fun _ ↦ by
+      rw [mem_interval, and_iff_right (Nat.zero_le _), not_lt])
+    (Equiv.refl (Fin d))
+
+/-- At every physical cut, the finite-chain coefficient matrix is the cut matrix across the left
+block after the reindexing of both configuration spaces.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`
 and arXiv:quant-ph/0608197, lines 444--458. -/
-theorem cutCoefficientMatrix_eq_reindex_cutMatrix
-    (ψ : (Fin N → Fin d) → ℂ) (hk : k ≤ N) :
+theorem cutCoefficientMatrix_eq_reindex_cutMatrix (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
     cutCoefficientMatrix ψ k =
-      (cutMatrix ψ k).reindex (cutPrefixConfigEquiv hk) (cutSuffixConfigEquiv hk) := by
+      (ManyBody.cutMatrix (interval N 0 k) ψ).reindex (intervalConfigEquiv d N k)
+        (intervalComplConfigEquiv d N k) := by
   ext u v
+  rw [Matrix.reindex_apply, Matrix.submatrix_apply, ManyBody.cutMatrix_apply]
   apply congrArg ψ
   funext s
   by_cases hs : s.val < k
-  case neg =>
-    have hle : k ≤ s.val := Nat.le_of_not_lt hs
-    simp [cutConfig, hs, cutSuffixConfigEquiv, Equiv.arrowCongr,
-      cutSuffixSiteEquiv, Nat.add_sub_of_le hle]
-  case pos =>
-    simp [cutConfig, hs, cutPrefixConfigEquiv, Equiv.arrowCongr, cutPrefixSiteEquiv]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, hs⟩),
+      dite_eq_left hs]
+    rfl
+  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ fun h ↦ hs ((mem_interval.mp h).2),
+      dite_eq_right hs]
+    rfl
 
-/-- The minimal-representation coefficient rank is the canonical Schmidt
-cut rank at every valid cut. No local-dimension or nonzero-tensor
-hypothesis is needed. Source: Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex` and
+/-- The minimal-representation coefficient rank is the Schmidt cut rank across the left block
+at every cut. No cut-position, local-dimension or nonzero-tensor hypothesis is needed.
+Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex` and
 arXiv:quant-ph/0608197, lines 456--458. -/
-theorem cutCoefficientRank_eq_cutRank (ψ : (Fin N → Fin d) → ℂ) (hk : k ≤ N) :
-    cutCoefficientRank ψ k = cutRank ψ k := by
-  rw [cutCoefficientRank, cutRank, cutCoefficientMatrix_eq_reindex_cutMatrix ψ hk,
+theorem cutCoefficientRank_eq_cutRank (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
+    cutCoefficientRank ψ k = ManyBody.cutRank (interval N 0 k) ψ := by
+  rw [cutCoefficientRank, ManyBody.cutRank, cutCoefficientMatrix_eq_reindex_cutMatrix ψ k,
     Matrix.rank_reindex]
 
 end MPSPreparation

@@ -49,6 +49,8 @@ from the one- and two-block classification in this file; see the paper-gap note 
   product states*
 -/
 
+open MPTensor
+
 open MPSTensor MPOTensor
 
 namespace FibonacciCompression

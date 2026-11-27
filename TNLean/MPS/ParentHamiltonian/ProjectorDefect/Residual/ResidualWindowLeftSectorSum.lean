@@ -5,7 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockGroundSpaceOverlap
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.LinearAlgebra.DFinsupp
+import QICLean.Analysis.Projection.OverlapMatrix
+import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+import Mathlib.Analysis.SpecificLimits.Basic
+import QICLean.Analysis.Projection.ProjectorSumConvergence
 import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 
 /-!
@@ -26,6 +31,8 @@ zero lengths and empty sector families. This is the aligned left-window
 part of Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (i),
 lines 2442--2531; the remaining within-sector projector defect is separate.
 -/
+
+open MPTensor
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim)

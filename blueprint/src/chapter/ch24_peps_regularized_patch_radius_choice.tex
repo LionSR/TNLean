@@ -8,7 +8,7 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
 
 \begin{definition}[The radius exponent]
     \label{def:peps_patch_radius_exponent}
-    \lean{TNLean.PEPS.regularizedPatchRadiusExponent}
+    \lean{Real.regularizedPatchRadiusExponent}
     \leanok
     For real constants $C_0,B_0,p,\kappa$, set
     \begin{align}
@@ -20,7 +20,7 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
 
 \begin{lemma}[Radius and remainder bounds]
     \label{thm:peps_patch_radius_bounds}
-    \lean{TNLean.PEPS.regularizedPatchRadiusExponent_bounds}
+    \lean{Real.regularizedPatchRadiusExponent_bounds}
     \leanok
     Suppose that $C_0,B_0,p\ge0$, $\kappa>0$, $L\ge2$, and
     $u\le B_0\log L$. With $R_0$ as in
@@ -48,7 +48,7 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
 
 \begin{lemma}[Absorbing the logarithmic cylinder count]
     \label{thm:peps_patch_count_polynomial}
-    \lean{TNLean.PEPS.mul_rpow_le_succ_rpow_of_le_log}
+    \lean{Real.mul_rpow_le_succ_rpow_of_le_log}
     \leanok
     Let $B_0\ge0$, $L\ge2$, $\alpha\in\R$, and $m\in\N$.
     If $m\le(B_0/2)\log L+1$, then

@@ -29,3 +29,45 @@ import TNLean.MPS.Examples.Ising.IsingThreeObjectGauge
 import TNLean.MPS.Examples.Ising.IsingThreeObjectTwist
 import TNLean.MPS.Examples.Ising.IsingWeightedTwist
 import TNLean.MPS.Examples.Ising.Zsqrt2OperatorFusion
+
+/-!
+# The Ising matrix product operator algebra
+
+The Ising string-net matrix product operators of BMWSHV17 (arXiv:1511.08090, Appendix D.2,
+lines 1305–1323): three blocks `A_1`, `A_ψ`, `A_σ` on the ten fusion-tree labels `(x', ρ, x)`,
+whose letters are the Ising F-symbols, with the `σ` block stored scaled by `√2` so that every
+entry lies in `ℤ[√2]` (a **Local fix** recorded in
+`docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`). Their periodic operators
+satisfy the Ising fusion rules `ψ × ψ = 1`, `ψ × σ = σ × ψ = σ`, `σ × σ = 1 + ψ` at every positive
+length, the Ising analogue of the operator identities the source prints only for Fibonacci
+(line 1268), and the source's G-symbol tensors have the same periodic operators. A weighted bond
+object `5 A_1 ⊕ 3 A_ψ`, or `5 A_1 ⊕ 3 A_ψ ⊕ 2 A_σ`, inserted before the `σ` strand, is a
+construction of this development motivated by the question after Theorem 4.14 of CPSV16
+(arXiv:1606.00608, line 995): it gives the length-dependent coefficient `5^L + 3^L`; the
+three-object statement concerns only the sitewise product of bond dimension forty
+(**Scope restriction**, `docs/paper-gaps/tnlean_ising_three_object_twist_scope.tex`).
+
+## General theorems instantiated
+
+* `MPOTensor.IsMPOFusionAlgebra` (matrix product operator fusion algebras): the three blocks,
+  with `(√2)⁻¹ A_σ`, realize the Ising structure constants at every positive length;
+  arXiv:2203.12563, lines 361–362.
+* `MPOTensor.perronFrobeniusDim_eq_of_dimension_relation` (quantum dimensions): the dimension
+  relation for `(1, 1, √2)` gives `d_σ = √2`; arXiv:2204.05940, mpo.tex line 6068.
+* `MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter` (fusion-character
+  obstruction): the Ising ring has no fusion character in `ℕ`, so no single normal matrix product
+  state is symmetric under the algebra with the unit acting trivially.
+* `MPOTensor.mpo_eq_of_conj` and `MPOTensor.mpo_eq_of_diagonal_conj` (bond similarities): the
+  signed-permutation gauges prove the fusion rules from letter identities over `ℤ[√2]`, and a
+  diagonal similarity carries the source's G-symbol tensors to the stored blocks.
+* `MPSTensor.MultiBlockCompression.ofRingBlockDiagonal` and
+  `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum` (multi-block compression): the stacked
+  product `(5 A_1 ⊕ 3 A_ψ) ⋆ (√2 A_σ)` and the action of the three-object bond object on
+  `|σ1σ⟩^{⊗ L}` compress with vanishing remainder, giving their word-trace identities.
+* `MPSTensor.exists_multiBlockCompression_of_isNormal` (multi-block asymmetric compression
+  theorem): the three-object product compresses onto four weighted normal blocks, with
+  twenty-six zero slots.
+* `MPOTensor.mpo_mulTensor` and `MPOTensor.mpo_mulVec_mpv` (operator products and action
+  tensors): the word-trace identities become identities of periodic operators and of periodic
+  vectors; arXiv:1606.00608, lines 962–993, and arXiv:2203.12563, lines 1070–1078.
+-/

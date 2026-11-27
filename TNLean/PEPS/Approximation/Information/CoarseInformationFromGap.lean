@@ -28,6 +28,7 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding supDist
@@ -62,7 +63,7 @@ companion library, with the truncation constant `latticeTruncationRadiusConstant
 Source: area-law Proposition 9.6, `08-scanner.tex`, lines 808–827 and 942–943. -/
 noncomputable def collarThresholdClosed (q R : ℕ) (J Δ : ℝ) : ℕ :=
   AreaLaw.sublinearCollarThreshold q R J Δ (collarBoxConstantClosed q R J Δ)
-    (AreaLaw.latticeTruncationRadiusConstant R J Δ 10)
+    (ManyBody.latticeTruncationRadiusConstant R J Δ 10)
     TensorPower.ReplicaTransport.transportThreshold
     TensorPower.ReplicaTransport.transportEntropyConst
     TensorPower.ReplicaTransport.transportEntropyExponent
@@ -164,7 +165,8 @@ theorem coarse_mutualInformation_le_square {q : ℕ} (hq : 1 ≤ q)
     (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
@@ -188,24 +190,25 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
     {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ d : ℝ × ℝ,
           ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T,
-            dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) ≤ A₀ * u) →
+            dist (ManyBody.integerPoint x + d) (ManyBody.integerPoint y + d) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v ∈ T),
           ∀ E : Finset (Vertex L),
             (∀ t ∈ T, ∀ v ∈ E, u ^ β <
-              dist (Geometry.integerPoint t + d)
-                (Geometry.integerPoint (rectangleEmbedding v) + d)) →
+              dist (ManyBody.integerPoint t + d)
+                (ManyBody.integerPoint (rectangleEmbedding v) + d)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   obtain ⟨β, hβ, C, u₀, hmain⟩ := coarse_mutualInformation_le_square hq hJ hΔ N₀ A₀
   refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan d T hT hdiam X hX E hE ↦ ?_⟩
   have hdist (x y : ℤ × ℤ) :
-      dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) =
+      dist (ManyBody.integerPoint x + d) (ManyBody.integerPoint y + d) =
         ((supDist x y : ℤ) : ℝ) := by
-    simp only [dist_add_right, natCast_supDist, Geometry.integerPoint,
+    simp only [dist_add_right, natCast_supDist, ManyBody.integerPoint,
       Prod.dist_eq, Real.dist_eq, Int.cast_max, Int.cast_abs, Int.cast_sub]
   exact hmain u hu L h hh hhJ E₀ Ω hΩ hgap hspan 0 T hT
     (fun x hx y hy ↦ by simpa only [hdist] using hdiam x hx y hy)

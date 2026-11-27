@@ -202,7 +202,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1753--1759. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -251,7 +251,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1680--1759. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -296,7 +296,7 @@ theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hZCL : IsSourceZCL M)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')

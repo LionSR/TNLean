@@ -44,6 +44,8 @@ them (`MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero`).
   "Long-range MPS using measurements".
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
 open Kraus (blockPhysDim blockTensor)

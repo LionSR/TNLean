@@ -1,12 +1,14 @@
 \section{Sparse coordinate strips}
 \label{sec:area_law_sparse_strips}
 
-\begin{definition}[Coordinate residue strips]
-    \label{def:area_law_residue_strips}
+\begin{definition}[Belt cells]
+    \label{def:area_law_belt_cells}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellIndices}
+    \leanok
     Let $F\subset\mathbb Z^2$ be finite and let $m\ge1$ be an integer.
-    For residues $a,b\in\{0,\ldots,m-1\}$, define
+    For every pair of residues $a,b\in\{0,\ldots,m-1\}$, define
     \begin{align}
-        B_{a,b}(F) & =\{z\in F:z_1\equiv a\pmod m\ \text{or}\ z_2\equiv b\pmod m\}.
+        B(F;m,a,b) & =\{u\in F:u_1\equiv a\pmod m\ \text{or}\ u_2\equiv b\pmod m\}.
         \label{eq:area_law_residue_strips}
     \end{align}
 \end{definition}
@@ -15,11 +17,11 @@
     \label{thm:area_law_sparse_belt_shift}
     \lean{Finset.exists_mul_card_filter_emod_or_emod_le}
     \leanok
-    \uses{def:area_law_residue_strips}
+    \uses{def:area_law_belt_cells}
     For every finite $F\subset\mathbb Z^2$ and integer $m\ge1$, there are
     residues $a,b\in\{0,\ldots,m-1\}$ such that
     \begin{align}
-        m|B_{a,b}(F)| & \le2|F|.
+        m|B(F;m,a,b)| & \le2|F|.
         \label{eq:area_law_sparse_belt_shift}
     \end{align}
     This is the finite averaging step in the sparse-strip construction of
@@ -35,7 +37,7 @@
     Apply this to the two coordinate residue maps and choose their
     residues independently. Each selected strip contains at most
     $\lfloor|F|/m\rfloor$ cells, so their union satisfies
-    $|B_{a,b}(F)|\le2\lfloor|F|/m\rfloor$. Multiplying by $m$ and using
+    $|B(F;m,a,b)|\le2\lfloor|F|/m\rfloor$. Multiplying by $m$ and using
     $m\lfloor|F|/m\rfloor\le|F|$ gives
     (\ref{eq:area_law_sparse_belt_shift}). The argument includes $F=\varnothing$
     and $m=1$.
@@ -47,8 +49,8 @@
 \begin{definition}[Boundary endpoints and dyadic children]
     \label{def:area_law_cell_counts}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.boundaryEndpoints,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicChildren
+        ManyBody.boundaryEndpoints,
+        ManyBody.dyadicChildren
     }
     \leanok
     \uses{def:area_law_hamiltonian}
@@ -71,9 +73,9 @@
 \begin{lemma}[Finite cell counts]
     \label{thm:area_law_cell_counts}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.card_ambientDilation_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_boundaryEndpoints_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_dyadicChildren
+        ManyBody.card_ambientDilation_le,
+        ManyBody.card_boundaryEndpoints_le,
+        ManyBody.card_dyadicChildren
     }
     \leanok
     \uses{def:area_law_cell_counts,def:area_law_template,def:area_law_hamiltonian}

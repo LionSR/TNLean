@@ -27,6 +27,8 @@ This module gives algebraic support equalities, independently of the remaining
 joint intersection and infinite-volume classification arguments.
 -/
 
+open MPTensor
+
 open Filter
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor

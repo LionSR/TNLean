@@ -25,6 +25,8 @@ Higher-level coefficient comparison and Newton–Girard recovery theorems live i
 the `TNLean.MPS.FundamentalTheorem.SectorBNT` namespace.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

@@ -20,6 +20,10 @@ and its concatenation argument,
 `Papers/1001.3807/paper_v3.tex`, lines 1765–1820. These are identities of the
 actual finite sums; no block Gram identity is assumed.
 
+A physical linear map applied at every vertex deforms a tensor (`physicalDeform`);
+the open-region weights and maps of the deformed tensor are the regional product maps
+of the original ones.
+
 ## References
 
 - [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
@@ -139,5 +143,46 @@ theorem regionPhysicalMap_openRegionWeight (A : Tensor Γ d) (R : Finset V)
       F w.1 (τ w) s * A.component w.1
         (fun e => η ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) s)).symm
   · simp [h]
+
+/-! ### Physical deformation of a tensor -/
+
+section PhysicalDeform
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d e : ℕ}
+
+/-- Apply a physical linear map at every vertex, keeping every virtual bond.
+Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
+noncomputable def physicalDeform (A : Tensor Γ d)
+    (F : V → Matrix (Fin e) (Fin d) ℂ) : Tensor Γ e where
+  bondDim := A.bondDim
+  component v η t := ∑ s, F v t s * A.component v η s
+
+/-- Physical deformation of an open-region tensor is the regional product map.
+Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
+theorem openRegionWeight_physicalDeform (A : Tensor Γ d) (R : Finset V)
+    (F : V → Matrix (Fin e) (Fin d) ℂ) (μ : RegionBoundaryConfig A R) :
+    openRegionWeight (physicalDeform A F) R μ =
+      regionPhysicalMap R F (openRegionWeight A R μ) := by
+  funext τ
+  rw [regionPhysicalMap_openRegionWeight]
+  rfl
+
+/-- The genuine open-region maps commute with physical deformation.
+Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
+theorem openRegionMap_physicalDeform (A : Tensor Γ d) (R : Finset V)
+    (F : V → Matrix (Fin e) (Fin d) ℂ) :
+    openRegionMap (physicalDeform A F) R =
+      regionPhysicalMap R F ∘ₗ openRegionMap A R := by
+  classical
+  apply LinearMap.ext
+  intro x
+  change (∑ μ : RegionBoundaryConfig A R, x μ • openRegionWeight (physicalDeform A F) R μ) =
+    regionPhysicalMap R F (∑ μ : RegionBoundaryConfig A R, x μ • openRegionWeight A R μ)
+  simp only [map_sum, map_smul]
+  exact Finset.sum_congr rfl fun μ _ => congrArg (fun ψ => x μ • ψ)
+    (openRegionWeight_physicalDeform A R F μ)
+
+end PhysicalDeform
 
 end TNLean.PEPS

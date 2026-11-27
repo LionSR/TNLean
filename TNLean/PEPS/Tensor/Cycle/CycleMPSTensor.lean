@@ -275,8 +275,8 @@ Source: arXiv:1804.04964, Section 3, lines 1585--1668 of
 closed chain has the cyclic trace of the matrix product as its coefficients. -/
 theorem stateCoeff_cycleTensorOfMPS (hn : 3 ≤ n) (A : MPSTensor d D)
     (σ : Fin n → Fin d) :
-    stateCoeff (cycleTensorOfMPS hn A) σ = MPSTensor.mpv A σ := by
-  rw [MPSTensor.mpv_eq, MPSTensor.coeff_eq, MPSTensor.trace_evalWord_eq_sum_cyclic A σ]
+    stateCoeff (cycleTensorOfMPS hn A) σ = MPTensor.mpv A σ := by
+  rw [MPTensor.mpv_eq, MPTensor.coeff_eq, MPSTensor.trace_evalWord_eq_sum_cyclic A σ]
   simp only [stateCoeff]
   -- Reindex the virtual configurations by the site-to-bond bijection, then
   -- shift the cyclic bond labels by one step.

@@ -259,7 +259,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `CFK`, `biCFK`, `Pis`, and
 theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hCF : MPSTensor.IsBNTCanonicalForm S)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
@@ -345,11 +345,11 @@ theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
         ∀ (β α : Fin (S.basisDim i)),
           P s * physicalSlice (S.basisMPOTensor i) β α * P t = 0 := by
   subst D
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
     simpa using hEq i
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
     fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
   have hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q' :=

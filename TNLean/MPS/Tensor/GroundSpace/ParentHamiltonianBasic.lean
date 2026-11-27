@@ -15,6 +15,8 @@ It therefore annihilates any vector in the ground space. The periodic MPS vector
 frustration-freeness.
 -/
 
+open MPTensor
+
 open scoped BigOperators
 
 namespace MPSTensor
@@ -71,13 +73,13 @@ theorem parentHamiltonian_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
 
 The parent interaction depends only on the local MPS space, and gauge-equivalent
 tensors have the same local MPS space at every length. -/
-theorem GaugeEquiv.parentInteraction_eq {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.parentInteraction_eq {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L : ℕ) :
     parentInteraction A L = parentInteraction B L :=
   parentInteraction_eq_of_groundSpace_eq (h.groundSpace_eq L)
 
 /-- A virtual gauge change leaves every translated parent interaction unchanged. -/
-theorem GaugeEquiv.localTerm_eq {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.localTerm_eq {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L N : ℕ) (i : Fin N) :
     localTerm A L N i = localTerm B L N i :=
   localTerm_eq_of_parentInteraction_eq (h.parentInteraction_eq L) N i

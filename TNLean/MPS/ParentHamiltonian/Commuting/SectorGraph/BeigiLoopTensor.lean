@@ -35,6 +35,8 @@ length greater than two.  The short-chain conventions are recorded in
   Hamiltonians*, J. Phys. A 45 (2012) 025306, Section IV.
 -/
 
+open MPTensor
+
 open scoped BigOperators Kronecker Matrix
 
 namespace MPSTensor.BeigiSectorGraphData

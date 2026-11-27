@@ -21,6 +21,8 @@ tensors `⨁_s μ_s C_s` and `⨁_t ν_t C'_t`.
 * `MPSTensor.forall_sum_pow_mul_mpv_eq_iff_exists_equiv_isGaugeRelated`.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d : ℕ}

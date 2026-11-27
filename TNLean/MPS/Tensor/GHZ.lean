@@ -55,10 +55,10 @@ theorem evalWord_ghzSectorTensor (x : Fin 2) {N : ℕ} (σ : Fin N → Fin 2) :
 /-- The periodic vector of a GHZ sector, a product state, is the indicator of the constant
 configuration. -/
 theorem mpv_ghzSectorTensor (x : Fin 2) {N : ℕ} :
-    (fun σ : Fin N → Fin 2 ↦ MPSTensor.mpv (ghzSectorTensor x) σ) =
+    (fun σ : Fin N → Fin 2 ↦ MPTensor.mpv (ghzSectorTensor x) σ) =
       Pi.single (fun _ ↦ x) 1 := by
   funext σ
-  rw [MPSTensor.mpv, MPSTensor.coeff, evalWord_ghzSectorTensor, Pi.single_apply]
+  rw [MPTensor.mpv, MPTensor.coeff, evalWord_ghzSectorTensor, Pi.single_apply]
   split_ifs <;> simp
 
 /-- Every one-dimensional GHZ sector is injective. -/

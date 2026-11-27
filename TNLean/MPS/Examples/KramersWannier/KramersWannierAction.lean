@@ -60,6 +60,8 @@ sitewise pair. The word-level compression still holds.
 * Seiberg–Shao, arXiv:2307.02534 (Majorana chains and non-invertible symmetries).
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix Kronecker BigOperators

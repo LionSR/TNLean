@@ -59,6 +59,8 @@ is injective and which lies in a non-trivial symmetry-protected topological
   string order and local symmetry for finitely correlated states
 -/
 
+open MPTensor
+
 section Cluster
 
 open scoped Matrix BigOperators ScalarCohomology

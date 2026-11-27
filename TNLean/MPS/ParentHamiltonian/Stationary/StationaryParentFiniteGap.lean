@@ -69,6 +69,8 @@ lines 1436--1450, Theorems 1.1--1.2, and Section 6. Stationary-density existence
 uses the trace-preserving channel fixed-point theorem, proved by Cesàro means.
 -/
 
+open MPTensor
+
 section
 
 open SpinChain Filter

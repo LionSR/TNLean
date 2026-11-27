@@ -45,6 +45,8 @@ for the block-diagonal \(P\). The symmetry is a symmetry of the state, so it hol
 up to a phase (lines 655--657, 1313--1314 and 2590--2593).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor

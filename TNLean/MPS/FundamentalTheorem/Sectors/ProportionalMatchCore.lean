@@ -48,6 +48,8 @@ cast, and has non-decaying overlap. This is the equal-MPV specialization of the
 proportional sector matcher.
 -/
 
+open MPTensor
+
 section ProportionalMatchCore
 
 section
@@ -85,7 +87,7 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount,
       ¬ Tendsto (fun N : ℕ =>
-        mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N) atTop (𝓝 0) := by
+        mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N) atTop (𝓝 0) := by
   classical
   by_contra hNo
   push Not at hNo
@@ -93,22 +95,22 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
     Finset.univ.filter fun j : Fin P.basisCount =>
       ∀ k : Fin Q.basisCount,
         Tendsto (fun N : ℕ =>
-          mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)
+          mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)
   have hj₀T : j₀ ∈ T := by
     simp [T, hNo]
   have hTQ : ∀ (j : Fin P.basisCount), j ∈ T → ∀ k : Fin Q.basisCount,
       Tendsto (fun N : ℕ =>
-        mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0) := by
+        mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0) := by
     intro j hj k
     simpa [T] using (Finset.mem_filter.mp hj).2 k
   have hNotT_nondecay : ∀ j : Fin P.basisCount, j ∉ T →
       ∃ k : Fin Q.basisCount,
         ¬ Tendsto (fun N : ℕ =>
-          mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0) := by
+          mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0) := by
     intro j hjT
     have hnot : ¬ (∀ k : Fin Q.basisCount,
         Tendsto (fun N : ℕ =>
-          mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) := by
+          mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) := by
       intro hall
       exact hjT (by simp [T, hall])
     push Not at hnot
@@ -184,7 +186,7 @@ theorem exists_block_match_exact_of_eventuallyProportional
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount, ∃ h : P.basisDim j₀ = Q.basisDim k₀,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j₀)) (Q.basis k₀) ∧
-      ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
+      ¬ Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N)
         atTop (𝓝 0) := by
   classical
   obtain ⟨k₀, hk₀⟩ := exists_nondecaying_overlap_exact_of_eventuallyProportional
@@ -212,7 +214,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
             (cast (congr_arg (MPSTensor d) h) (P.basis j))
             (Q.basis k) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+            mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N)
           atTop (𝓝 0) := by
   classical
   intro k
@@ -252,7 +254,7 @@ theorem exists_block_match_exact
     ∃ k₀ : Fin Q.basisCount,
       ∃ h : P.basisDim j₀ = Q.basisDim k₀,
         GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j₀)) (Q.basis k₀) ∧
-        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N)
           atTop (𝓝 0) := by
   exact exists_block_match_exact_of_eventuallyProportional hP hQ j₀
     hEqual.toNonzeroProportionalMPV₂.eventually
@@ -320,7 +322,7 @@ theorem bijective_match_of_eventuallyProportional
             (cast (congr_arg (MPSTensor d) h) (P.basis (β k)))
             (Q.basis k) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
+            mpvOverlap (α := Fin d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) := by
   have hProp_symm : EventuallyNonzeroProportionalMPV₂ Q.toTensor P.toTensor :=
     hProp.symm
@@ -452,7 +454,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
           (cast (congr_arg (MPSTensor d) h) (P.basis j))
           (Q.basis k) ∧
       ¬ Tendsto (fun N : ℕ =>
-          mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+          mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N)
         atTop (𝓝 0) :=
   forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional hP hQ
     (hEqual.toNonzeroProportionalMPV₂.eventually)
@@ -481,7 +483,7 @@ theorem bijective_match_of_sameMPV
             (cast (congr_arg (MPSTensor d) h) (P.basis (β k)))
             (Q.basis k) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
+            mpvOverlap (α := Fin d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) := by
   exact bijection_from_matches hP hQ
     (forall_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hEqual)

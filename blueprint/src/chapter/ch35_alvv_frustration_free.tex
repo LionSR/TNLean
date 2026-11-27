@@ -29,8 +29,7 @@ seven instead of the stated bound six, as shown in
 
 \begin{lemma}[Projections of the common kernels]
     \label{lem:alvv_ff_common_kernel_layers}
-    \lean{TNLean.MPS.AreaLaw.ALVV.complementProd_apply_eq_self_iff,
-        TNLean.MPS.AreaLaw.ALVV.isStarProjection_restrictedTerm,
+    \lean{TNLean.MPS.AreaLaw.ALVV.isStarProjection_restrictedTerm,
         TNLean.MPS.AreaLaw.ALVV.commute_restrictedTerm,
         TNLean.MPS.AreaLaw.ALVV.isStarProjection_regionalProjection,
         TNLean.MPS.AreaLaw.ALVV.sub_regionalProjection_apply_eq_zero_iff}
@@ -39,8 +38,8 @@ seven instead of the stated bound six, as shown in
     For a commuting selected family, $P_S$ is an orthogonal projection
     and $(I-P_S)x=0$ if and only if $h_ix=0$ for every $i<m$ in $S$.
     Masking preserves projection and commutation identities.
-    The complementary product of any commuting family fixes exactly
-    its common kernel.
+    The complementary product of any family of orthogonal projections
+    fixes exactly its common kernel.
 \end{lemma}
 \begin{proof}\leanok
     Products of commuting orthogonal projections are orthogonal

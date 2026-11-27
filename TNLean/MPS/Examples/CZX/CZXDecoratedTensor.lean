@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
-import TNLean.MPS.MPDO.CZX.CZXTensor
+import TNLean.MPS.Examples.CZX.Gauging.CZXTensor
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.Instances
 
 /-!
@@ -24,8 +24,8 @@ the order-two relation `U^2 = 1` at every positive length, unitarity, and normal
 tensor (line 1181: "this tensor becomes injective when blocking two sites").
 
 The same Z-decorated one-site tensor, with its two bonds exchanged, is
-`MPOTensor.CZX.decoratedSiteTensor` of `TNLean.MPS.MPDO.CZXTensor` (arXiv:2502.20257); that
-tensor is the review's tensor with a Pauli `Z` on the output.
+`MPOTensor.CZX.decoratedSiteTensor` of `TNLean.MPS.Examples.CZX.Gauging.CZXTensor`
+(arXiv:2502.20257); that tensor is the review's tensor with a Pauli `Z` on the output.
 
 ## Main definitions
 

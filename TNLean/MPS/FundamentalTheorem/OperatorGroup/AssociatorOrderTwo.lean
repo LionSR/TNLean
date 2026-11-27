@@ -106,7 +106,7 @@ def FusionData.orderTwo (E : MPOTensor d 1) (A : MPOTensor d 2)
     (hEE : (mulTensor E E).toMPSTensor = E.toMPSTensor)
     (hEA : (mulTensor E A).toMPSTensor = A.toMPSTensor)
     (hAE : (mulTensor A E).toMPSTensor = A.toMPSTensor)
-    (hAA : MPSTensor.IsReduction (mulTensor A A).toMPSTensor E.toMPSTensor V W) :
+    (hAA : MPTensor.IsReduction (mulTensor A A).toMPSTensor E.toMPSTensor V W) :
     (orderTwoFamily E A).FusionData where
   V x y := orderTwoLabelV V x.toAdd y.toAdd
   W x y := orderTwoLabelW W x.toAdd y.toAdd
@@ -125,7 +125,7 @@ variable {E : MPOTensor d 1} {A : MPOTensor d 2} {V : Matrix (Fin 1) (Fin (2 * 2
   {hEE : (mulTensor E E).toMPSTensor = E.toMPSTensor}
   {hEA : (mulTensor E A).toMPSTensor = A.toMPSTensor}
   {hAE : (mulTensor A E).toMPSTensor = A.toMPSTensor}
-  {hAA : MPSTensor.IsReduction (mulTensor A A).toMPSTensor E.toMPSTensor V W}
+  {hAA : MPTensor.IsReduction (mulTensor A A).toMPSTensor E.toMPSTensor V W}
 
 private theorem assocInv_two_two_two :
     mulTensorAssocInvMatrix 2 2 2 = (1 : Matrix (Fin 8) (Fin 8) ℂ) := by

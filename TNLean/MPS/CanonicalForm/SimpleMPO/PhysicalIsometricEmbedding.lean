@@ -151,8 +151,8 @@ construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this lemma. -/
 theorem isLeftCanonical_toMPSTensor_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
-    (K : MPOTensor d D) (hK : MPSTensor.IsLeftCanonical K.toMPSTensor) :
-    MPSTensor.IsLeftCanonical (changePhysicalBasis V K).toMPSTensor := by
+    (K : MPOTensor d D) (hK : MPTensor.IsLeftCanonical K.toMPSTensor) :
+    MPTensor.IsLeftCanonical (changePhysicalBasis V K).toMPSTensor := by
   rw [toMPSTensor_changePhysicalBasis]
   exact MPSTensor.isLeftCanonical_kraus_isometry K.toMPSTensor
     (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV) hK
@@ -208,8 +208,8 @@ This is project-derived coordinate algebra used in the setting of
 arXiv:1606.00608, lines 217--246 and 1628--1665; the paper does not state it. -/
 theorem gaugeEquiv_toMPSTensor_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) {K L : MPOTensor d D}
-    (hKL : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
-    MPSTensor.GaugeEquiv
+    (hKL : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    MPTensor.GaugeEquiv
       (changePhysicalBasis V K).toMPSTensor
       (changePhysicalBasis V L).toMPSTensor := by
   simp only [toMPSTensor_changePhysicalBasis]

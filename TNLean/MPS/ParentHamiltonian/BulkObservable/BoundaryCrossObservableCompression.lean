@@ -213,7 +213,7 @@ theorem groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ h : D₂ = D₁, ¬ MPSTensor.GaugePhaseEquiv (h ▸ B) A) :
+    (hDistinct : ∀ h : D₂ = D₁, ¬ MPTensor.GaugePhaseEquiv (h ▸ B) A) :
     Tendsto (fun n =>
       ‖(groundSpaceES A n).starProjection.comp (groundSpaceES B n).starProjection‖)
       atTop (𝓝 0) := by
@@ -239,7 +239,7 @@ theorem bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalen
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ h : D₂ = D₁, ¬ MPSTensor.GaugePhaseEquiv (h ▸ B) A)
+    (hDistinct : ∀ h : D₂ = D₁, ¬ MPTensor.GaugePhaseEquiv (h ▸ B) A)
     {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ} (hℓ : Tendsto ℓ f atTop) :
     Tendsto (fun n =>

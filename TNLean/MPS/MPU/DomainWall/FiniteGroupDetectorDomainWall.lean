@@ -164,16 +164,16 @@ theorem interval_mul_interval_mulVec_mpv_cross_of_canonical_comparisons
       (h₃ : u + 1 + (u' + 1 + v) + 1 + (w' + 1 + w) = L)
       (h₄ : u + 1 + u' + 1 + (v + 1 + w') + 1 + w = L), N ≤ v → N ≤ w' →
       ∀ T₀ T₁ : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
-      T₀ *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+      T₀ *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
         ad.groupWallString g Â e u (u' + 1 + v) (w' + 1 + w) h₃ *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) →
+          (fun σ ↦ MPTensor.mpv (A x) σ) →
       T₁ *ᵥ (ad.groupWallString g Â e u (u' + 1 + v) (w' + 1 + w) h₃ *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ)) =
+          (fun σ ↦ MPTensor.mpv (A x) σ)) =
         ad.groupWallString g Â e (u + 1 + u') (v + 1 + w') w h₄ *ᵥ
           (ad.groupWallString g Â e u (u' + 1 + v) (w' + 1 + w) h₃ *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) →
+            (fun σ ↦ MPTensor.mpv (A x) σ)) →
       ∀ p a μ₁ i ν j μ₃ b q,
-      ((T₁ * T₀) *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ))
+      ((T₁ * T₀) *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
         B g (g • x) x *
           nestedWallCoeff (A x) (e x (g • x)) (A (g • x)) (e (g • x) (g • g • x))

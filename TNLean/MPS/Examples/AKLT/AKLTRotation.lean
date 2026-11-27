@@ -46,6 +46,8 @@ adds the AKLT-specific results.
 * RMP review (arXiv:2011.12127) line 1159 (`A^i = σ^i`, on-site `SO(3)`)
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset
 

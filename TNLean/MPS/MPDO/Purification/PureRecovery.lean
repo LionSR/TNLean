@@ -14,6 +14,8 @@ formalism and compares doubled-index transfer-map idempotence with the usual
 pure-state `IsTransferIdempotent` and `IsZCL` conditions.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 open MPOTensor

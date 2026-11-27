@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Representation.Bell.LabelDimensionRemainder
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualScanMeasures
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedRootCompression

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
+import QICLean.Algebra.Matrix.MatrixCongruence
 
 /-!
 # Reflected marked chains for vertical sectors
@@ -42,17 +43,6 @@ grouped sectors.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
-
-/-- The conjugate of a double sum `∑ i j, star (y i) * star (K j i) * x j` is the
-sandwich `∑ i j, star (x i) * K i j * y j`, for any kernel `K`. -/
-theorem Finset.sum_sum_star_mul_mul_eq_star {ι : Type*} [Fintype ι]
-    (K : ι → ι → ℂ) (x y : ι → ℂ) :
-    ∑ i, ∑ j, star (x i) * K i j * y j =
-      star (∑ i, ∑ j, star (y i) * star (K j i) * x j) := by
-  simp only [star_sum, star_mul', star_star]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun j _ ↦ ?_
-  ring
 
 namespace MPOTensor
 

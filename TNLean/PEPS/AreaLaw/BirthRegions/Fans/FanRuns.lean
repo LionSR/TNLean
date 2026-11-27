@@ -7,8 +7,9 @@ import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
 import QICLean.Algebra.Combinatorics.IndexInduction
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 import Mathlib.SetTheory.Cardinal.Finite
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplatePolygons
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
+import QICLean.ManyBody.Sites.Template.Polygons
 
 /-!
 # Equal-colored runs of a cell fan
@@ -53,6 +54,8 @@ Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `10-geometry.tex`, lines 299–318 and 732–740;
 the template fields are those of Definition 9.3 (`scanner:template`).
 -/
+
+open ManyBody (Template dyadicCell dyadicCell_dist_le integerPoint)
 
 section
 

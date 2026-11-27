@@ -32,7 +32,7 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -74,7 +74,7 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -110,7 +110,7 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -157,7 +157,7 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))

@@ -77,6 +77,8 @@ changes of the memory. This file assembles them, conditional on Proposition 3.4 
   (lines 572–583).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 noncomputable section
@@ -86,7 +88,8 @@ namespace TNLean.PEPS.Approximation
 open EncodedFrame PairEffect
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- The party of a local label is used by the repainting. -/
 theorem IsLocalLabel.eventUses {R : RepaintedSquare k} {done : Set (ℤ × ℤ)} {l : GuideLabel}
@@ -189,7 +192,8 @@ open EncodedFrame PairEffect
 /-! ### The chains of one sheet along an edge -/
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The three auxiliary births, conditional on Proposition 3.4.** At the constants of the
 protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`, the auxiliary sheet of an
@@ -307,7 +311,8 @@ namespace TNLean.PEPS.Approximation
 open EncodedFrame PairEffect
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
   {X : Type*} [DecidableEq X]
 
 /-- **The lens exchange with its point treatments, conditional on Proposition 3.4.** At the
@@ -477,7 +482,8 @@ namespace TNLean.PEPS.Approximation
 open EncodedFrame
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
   {X : Type*} [DecidableEq X]
 
 /-- The frame of the auxiliary sheet of the edge `e` after the edge construction: the auxiliary

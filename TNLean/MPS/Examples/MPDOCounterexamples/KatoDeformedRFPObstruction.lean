@@ -8,7 +8,7 @@ import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
 import TNLean.MPS.Operator.DensityOperator.RFPViaTS
 import TNLean.MPS.CanonicalForm.VerticalForm.SectorTrace
-import TNLean.MPS.Operator.DensityOperator.AreaLaw
+import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
 import TNLean.MPS.CanonicalForm.Definitions
 
 /-!
@@ -561,7 +561,7 @@ private lemma reducedBlockState_tensor_apply_eq {N L : ℕ} (hL : L ≤ N) (hNpo
   have hNM : N = L + M := by omega
   have hcard_fun : Fintype.card (Fin M → Fin 2) = 2 ^ M := by
     simp
-  rw [reducedBlockState_eq_sum tensor hL u v,
+  rw [MPOTensor.reducedBlockState_eq_sum tensor hL u v,
     normalizedMPO_tensor_eq_mpo N hNpos,
     mpo_tensor_eq_diagonal N]
   by_cases huv : u = v
@@ -683,9 +683,9 @@ theorem tensor_isSAL : IsSAL tensor := by
     intro N L hLpos hL_lt_half
     have hM : (mpo tensor N).PosSemidef :=
       tensor_isMPDO N (by omega)
-    -- mutualInfoChain expands to blockEntropy with specific hL proofs.
+    -- `mutualInfoChain_eq` expands to blockEntropy with specific hL proofs.
     -- We use `apply` with blockEntropy_tensor_eq so Lean unifies the proof terms.
-    simp only [mutualInfoChain]
+    simp only [mutualInfoChain_eq]
     have hL_val : blockEntropy tensor N L
         (Nat.le_of_lt (hL_lt_half.trans_le (Nat.div_le_self N 2))) hM =
         (L : ℝ) * Real.log 2 := by

@@ -7,7 +7,7 @@ import TNLean.PEPS.Graph.Plaquette.TorusJointFluxGeometry
 import TNLean.PEPS.Tensor.GraphState.RegularOpenRegion
 import TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove
 import TNLean.PEPS.Injectivity.Flux.RegularCycleFluxMeasurement
-
+import TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy
 
 /-!
 # A physical measurement of the joint flux of two adjacent plaquettes

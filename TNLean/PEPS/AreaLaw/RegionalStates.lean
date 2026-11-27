@@ -8,5 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.RegionalStates
 
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions

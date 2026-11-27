@@ -55,6 +55,8 @@ only the anticommuting pair `iσ_x`, `iσ_z` inside `SU(2)`.
   Concepts, symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 

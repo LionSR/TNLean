@@ -39,6 +39,8 @@ This is an auxiliary quantitative deduction using the cyclic-color initial
 constants. Independently proved; no upstream Lean proof text reused.
 -/
 
+open ManyBody (latticeTruncationRadiusConstant)
+
 section
 
 namespace TNLean.PEPS.AreaLaw.Scan

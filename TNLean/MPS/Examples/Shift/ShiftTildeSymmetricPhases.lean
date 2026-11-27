@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.Shift.ShiftStrictEquivalence
 import TNLean.MPS.Examples.Shift.SwapSymmetryTransport
 import TNLean.MPS.MPU.Symmetry.Transposition.PhysicalTransposeSourceFactors
+import QICLean.Algebra.Kronecker.MaximallyEntangled
 
 /-!
 # Time-reversal and transposition phases of the swap-transformed shifts
@@ -38,29 +39,6 @@ source keeps the swap-combined invariance because the swap commutes with `𝕊(x
 
 open scoped Matrix
 open Matrix
-
-namespace Matrix
-
-variable (d : ℕ)
-
-/-- The swap commutes with every point of the swap path, which is a polynomial in the swap. -/
-theorem swapMatrix_mul_swapPath (x : ℝ) :
-    swapMatrix d * swapPath d x = swapPath d x * swapMatrix d := by
-  simp only [swapPath, swapAntisymmetricProjection, swapSymmetricProjection, Matrix.mul_add,
-    Matrix.add_mul, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul,
-    Matrix.mul_one, Matrix.one_mul]
-
-/-- Every point of the swap path is a symmetric matrix. -/
-theorem transpose_swapPath (x : ℝ) : (swapPath d x)ᵀ = swapPath d x := by
-  have hS : (swapMatrix d)ᵀ = swapMatrix d := by
-    ext ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
-    simp only [transpose_apply, swapMatrix]
-    congr 1
-    exact propext ⟨fun h ↦ ⟨h.2.symm, h.1.symm⟩, fun h ↦ ⟨h.2.symm, h.1.symm⟩⟩
-  simp only [swapPath, swapAntisymmetricProjection, swapSymmetricProjection, transpose_add,
-    transpose_smul, transpose_sub, transpose_one, hS]
-
-end Matrix
 
 namespace MPOTensor
 

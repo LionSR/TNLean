@@ -31,7 +31,7 @@ self-loop `D_1 = Z` and counts the two-site edge twice, giving `D_2 = I`. Unitar
 `U_L² = (-1)^L I` at every positive length are proved in `CZXUnitary`. Chen–Liu–Wen (line 385)
 and the review's line 1472 write the reverse order `D_L X^{⊗ L}`, which differs from this
 operator by `(-1)^L`. The decorated, two-qubit-blocked convention of arXiv:2502.20257, in
-`TNLean.MPS.MPDO.CZXTensor`, is a different tensor whose square is the identity.
+`TNLean.MPS.Examples.CZX.Gauging.CZXTensor`, is a different tensor whose square is the identity.
 
 ## Main definitions
 

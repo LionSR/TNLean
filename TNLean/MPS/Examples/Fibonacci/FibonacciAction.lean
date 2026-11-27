@@ -75,6 +75,8 @@ multi-block asymmetric compression theorem (P5 note,
 `thm:p5-asymmetric-compression`). These are verification records, not the source.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix

@@ -172,14 +172,14 @@ variable {d D DA : ℕ}
 theorem trace_evalWord_actTensor_of_mpo_mulVec_eq {κ : Type*} [Fintype κ] {D' : κ → ℕ}
     (T : MPOTensor d D) (A : MPSTensor d DA) (A' : ∀ y, MPSTensor d (D' y)) (c : κ → ℂ)
     (h : ∀ N : ℕ, 0 < N →
-      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPSTensor.mpv A τ) =
-        fun σ : Fin N → Fin d => ∑ y, c y * MPSTensor.mpv (A' y) σ)
+      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPTensor.mpv A τ) =
+        fun σ : Fin N → Fin d => ∑ y, c y * MPTensor.mpv (A' y) σ)
     (w : List (Fin d)) (hw : w ≠ []) :
     (Kraus.evalWord (actTensor T A) w).trace = ∑ y, c y * (Kraus.evalWord (A' y) w).trace := by
   have hlen : 0 < w.length := List.length_pos_iff.mpr hw
   have hw' : w = List.ofFn w.get := (List.ofFn_get w).symm
   have hσ := congrFun ((mpo_mulVec_mpv T A w.length).symm.trans (h w.length hlen)) w.get
-  simp only [MPSTensor.mpv, MPSTensor.coeff] at hσ
+  simp only [MPTensor.mpv, MPTensor.coeff] at hσ
   rw [hw']
   exact hσ
 
@@ -189,8 +189,8 @@ bond dimension as multiplication by one scalar `c`, then `c` is a nonnegative in
 theorem exists_nat_eq_of_mpo_mulVec_mpv_eq_smul [NeZero DA] (T : MPOTensor d D)
     (A : MPSTensor d DA) (hA : Kraus.IsNormal A) (c : ℂ)
     (h : ∀ N : ℕ, 0 < N →
-      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPSTensor.mpv A τ) =
-        c • fun σ : Fin N → Fin d => MPSTensor.mpv A σ) :
+      mpo T N *ᵥ (fun τ : Fin N → Fin d => MPTensor.mpv A τ) =
+        c • fun σ : Fin N → Fin d => MPTensor.mpv A σ) :
     ∃ m : ℕ, c = m := by
   refine MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul (actTensor T A) A hA c
     fun w hw => ?_

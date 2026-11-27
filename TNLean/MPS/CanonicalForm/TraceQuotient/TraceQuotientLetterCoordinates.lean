@@ -5,10 +5,15 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Topology.ContinuousIdempotentFrames
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientAlgebraRecovery
-import TNLean.MPS.CanonicalForm.TraceQuotient.FramedLeftIdealRealization
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Topology.Instances.Matrix
+import QICLean.Analysis.Topology.TraceQuotientCoordinates
+import TNLean.MPS.Tensor.Defs
+import QICLean.Algebra.MatrixAlgebra.SkolemNoether
+import Mathlib.Algebra.Algebra.Bilinear
+import Mathlib.LinearAlgebra.Matrix.ToLin
+import Mathlib.Topology.ContinuousOn
 
 /-!
 # Reconstruction of physical letters from trace-quotient coordinates
@@ -42,6 +47,65 @@ The coefficient identification is used pointwise and is not assumed continuous; 
 physical-gap implication is asserted.
 -/
 
+open MPTensor
+
+section
+
+/-!
+## Matrix realization from a framed principal left ideal
+
+A finite-dimensional complex algebra identified pointwise with a full matrix algebra can be
+represented on a principal left ideal of the defining matrix dimension. A supplied frame and
+left inverse give explicit matrices for this representation. The representation is an inner
+conjugate of the pointwise identification, and therefore preserves its trace.
+
+This is an algebraic auxiliary result towards reconstruction from finite-ring trace data,
+motivated by arXiv:1010.3732, Section II.F.2, lines 953–993 of the local source. The frame and its
+left inverse are supplied. Their continuous construction is separate; no continuous choice of
+the pointwise matrix-algebra identification is required. No physical-gap implication or
+varying-rank phase invariance is asserted here.
+
+The inner-conjugacy and matrix-algebra equivalence statements concern positive matrix dimension.
+Idempotence of the element defining the ideal is unnecessary for these algebraic statements.
+
+## Continuity of a framed left action
+
+Continuous multiplication coefficients, rectangular frames, left inverses, and letter
+coordinates give continuous matrices for the left action. This is a finite-dimensional
+continuity statement towards tensor reconstruction in arXiv:1010.3732, Section II.F.2,
+lines 953–993 of the local source. The frame and left inverse are explicit inputs here;
+no continuous pointwise matrix-algebra identification or physical-gap implication is assumed.
+-/
+
+section
+
+set_option relaxedAutoImplicit false
+set_option maxSynthPendingDepth 3
+set_option linter.mathlibStandardSet true
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+/-- Evaluating letters in a framed principal left ideal preserves their tensor gauge class.
+The letters are compared with their supplied pointwise matrix-algebra identification; no
+claim about all positive-length vectors of an unrelated ambient tensor is made. -/
+theorem gaugeEquiv_leftIdealFrameAction {d r D : ℕ} [NeZero D]
+    (μ : (Fin r → ℂ) →ₗ[ℂ] (Fin r → ℂ) →ₗ[ℂ] (Fin r → ℂ))
+    (E : (Fin r → ℂ) ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hE : ∀ x y, E (μ x y) = E x * E y) (p : Fin r → ℂ)
+    (J : (Fin D → ℂ) →ₗ[ℂ] (Fin r → ℂ))
+    (H : (Fin r → ℂ) →ₗ[ℂ] (Fin D → ℂ)) (hHJ : H.comp J = LinearMap.id)
+    (hRange : LinearMap.range J = LinearMap.range (μ.flip p)) (v : Fin d → Fin r → ℂ) :
+    GaugeEquiv (fun i => E (v i)) (fun i => Matrix.leftIdealFrameAction μ J H (v i)) := by
+  obtain ⟨X, hX⟩ := Matrix.exists_inner_of_leftIdealFrame μ E hE p J H hHJ hRange
+  exact ⟨X, fun i => hX (v i)⟩
+
+end MPSTensor
+
+end
+
+end
+
 section
 
 set_option relaxedAutoImplicit false
@@ -51,16 +115,10 @@ open scoped Matrix BigOperators
 
 namespace Matrix
 
-/-- Coordinates of the original physical letters in a fixed trace section. -/
-noncomputable def traceQuotientLetterCoordinates {d r : ℕ}
-    (G : Matrix (Fin d) (Fin d) ℂ) (F : Matrix (Fin d) (Fin r) ℂ) :
-    Matrix (Fin r) (Fin d) ℂ :=
-  ((G * F)ᴴ * (G * F))⁻¹ * (G * F)ᴴ * G
-
 /-- The Gram left inverse of a physical trace section reconstructs each minimal tensor letter.
 This is an auxiliary finite-data statement towards arXiv:1010.3732, Section II.F.2,
 lines 953–993. Its pointwise bond identification is not assumed continuous. -/
-theorem traceQuotientLetterCoordinates_recover {d r D : ℕ}
+theorem _root_.TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover {d r D : ℕ}
     (A : MPSTensor d D) (Q : (Fin r → ℂ) ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (G : Matrix (Fin d) (Fin d) ℂ) (F : Matrix (Fin d) (Fin r) ℂ) (α₂ : ℂ)
     (hG : ∀ j i, G j i = α₂ * Matrix.trace (A i * A j))
@@ -104,33 +162,10 @@ theorem gaugeEquiv_traceQuotientLetters {d r D : ℕ} [NeZero D]
     (Matrix.traceQuotientLetterCoordinates G F *ᵥ Pi.single i 1) =
       (X : Matrix (Fin D) (Fin D) ℂ) * (κ • A i) *
         ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  rw [hX, hNorm, Matrix.traceQuotientLetterCoordinates_recover A Q G F α₂ hG hInj hPair]
+  rw [hX, hNorm, TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover A Q G F α₂ hG hInj
+      hPair]
 
 end MPSTensor
-
-end
-
-section
-
-set_option relaxedAutoImplicit false
-set_option maxSynthPendingDepth 3
-set_option linter.mathlibStandardSet true
-open scoped Matrix Matrix.Norms.L2Operator
-
-namespace Matrix
-
-/-- Reconstructed letter coordinates are continuous wherever the fixed section is injective. -/
-theorem continuousOn_traceQuotientLetterCoordinates
-    {T : Type*} [TopologicalSpace T] {d r : ℕ} (S : Set T)
-    (G : T → Matrix (Fin d) (Fin d) ℂ) (hG : ContinuousOn G S)
-    (F : Matrix (Fin d) (Fin r) ℂ)
-    (hInj : ∀ t ∈ S, Function.Injective (G t * F).mulVec) :
-    ContinuousOn (fun t => traceQuotientLetterCoordinates (G t) F) S := by
-  rw [continuousOn_iff_continuous_domRestrict] at hG ⊢
-  have hC : Continuous fun t : S => G t * F := hG.matrix_mul continuous_const
-  exact (continuous_gramLeftInverse _ hC (fun t => hInj t t.property)).matrix_mul hG
-
-end Matrix
 
 end
 
@@ -145,7 +180,7 @@ namespace Matrix
 
 /-- A normalized minimal coefficient identification derives section injectivity and
 reconstructs the normalized physical letters in that section. -/
-theorem traceQuotientLetters_of_normalized_linearEquiv {d r D : ℕ}
+theorem _root_.TNLean.MPS.CanonicalForm.traceQuotientLetters_of_normalized_linearEquiv {d r D : ℕ}
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (E : (Fin r → ℂ) ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (G : Matrix (Fin d) (Fin d) ℂ) (F : Matrix (Fin d) (Fin r) ℂ) (α₂ κ : ℂ)
@@ -154,7 +189,7 @@ theorem traceQuotientLetters_of_normalized_linearEquiv {d r D : ℕ}
     (hE : ∀ x, E x = κ • Fintype.linearCombination ℂ A (F *ᵥ x)) :
     Function.Injective (G * F).mulVec ∧
       ∀ i, E (traceQuotientLetterCoordinates G F *ᵥ Pi.single i 1) = κ • A i := by
-  have hPair := traceQuotientSection_pair A G F α₂ hG
+  have hPair := TNLean.MPS.CanonicalForm.traceQuotientSection_pair A G F α₂ hG
   have hTrace : Function.Injective (MPSTensor.traceMulRightPi A) :=
     LinearMap.ker_eq_bot.mp (MPSTensor.traceMulRightPi_ker_eq_bot hA)
   have hInj : Function.Injective (G * F).mulVec := by
@@ -170,7 +205,8 @@ theorem traceQuotientLetters_of_normalized_linearEquiv {d r D : ℕ}
     intro x
     change κ⁻¹ • E x = _
     rw [hE, smul_smul, inv_mul_cancel₀ hκ, one_smul]
-  have hRecover := traceQuotientLetterCoordinates_recover A Q G F α₂ hG hInj
+  have hRecover := TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover A Q G F α₂ hG
+      hInj
     (fun x => by rw [hQ]; exact hPair x)
   refine ⟨hInj, fun i => ?_⟩
   rw [hE]

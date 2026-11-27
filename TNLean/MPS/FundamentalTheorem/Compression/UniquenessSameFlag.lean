@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.IrreducibleTensor
 import TNLean.MPS.FundamentalTheorem.Compression.LabelledFlag
+import QICLean.Kraus.BlockTriangularWord
 
 /-!
 # Two multi-block reductions with the same flag
@@ -72,81 +73,6 @@ compressions with one labelled flag form a torsor*.
 -/
 
 open scoped Matrix
-
-namespace Matrix
-
-variable {o : Type*} [Fintype o] [DecidableEq o] {n : o → ℕ}
-
-/-- The rows of `blockProj n k * X` are the rows of `X` at the coordinates of the block `k`. -/
-theorem blockProj_mul_apply {m : Type*} (X : Matrix (Σ k, Fin (n k)) m ℂ) (k : o)
-    (i : Fin (n k)) (y : m) : (blockProj n k * X) i y = X ⟨k, i⟩ y := by
-  simp only [Matrix.mul_apply, blockProj, Matrix.transpose_apply]
-  rw [Finset.sum_eq_single ⟨k, i⟩]
-  · rw [blockEmbed_apply_fst_eq]
-    simp
-  · intro x _ hx
-    rw [blockEmbed_apply_of_ne hx, zero_mul]
-  · intro h
-    exact absurd (Finset.mem_univ _) h
-
-/-- The columns of `X * blockEmbed n k` are the columns of `X` at the coordinates of the block
-`k`. -/
-theorem mul_blockEmbed_apply {m : Type*} (X : Matrix m (Σ k, Fin (n k)) ℂ) (k : o) (x : m)
-    (j : Fin (n k)) : (X * blockEmbed n k) x j = X x ⟨k, j⟩ := by
-  simp only [Matrix.mul_apply]
-  rw [Finset.sum_eq_single ⟨k, j⟩]
-  · rw [blockEmbed_apply_fst_eq]
-    simp
-  · intro y _ hy
-    rw [blockEmbed_apply_of_ne hy, mul_zero]
-  · intro h
-    exact absurd (Finset.mem_univ _) h
-
-/-- The rows of `X` at the block `k`, expanded over the blocks of its columns. -/
-theorem blockProj_mul_eq_sum_submatrix_mul_blockProj
-    (X : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) (k : o) :
-    blockProj n k * X = ∑ l, X.submatrix (Sigma.mk k) (Sigma.mk l) * blockProj n l := by
-  ext i ⟨l, j⟩
-  rw [blockProj_mul_apply, Matrix.sum_apply, Finset.sum_eq_single l]
-  · simp [Matrix.mul_apply, blockProj, Matrix.transpose_apply, blockEmbed_apply_fst_eq]
-  · intro l' _ hl'
-    simp only [Matrix.mul_apply]
-    exact Finset.sum_eq_zero fun j' _ => by
-      have h0 : blockProj n l' j' ⟨l, j⟩ = 0 := by
-        simp only [blockProj, Matrix.transpose_apply]
-        exact blockEmbed_apply_of_fst_ne (Ne.symm hl') j'
-      rw [h0, mul_zero]
-  · intro h
-    exact absurd (Finset.mem_univ _) h
-
-/-- The columns of `X` at the block `k`, expanded over the blocks of its rows. -/
-theorem mul_blockEmbed_eq_sum_blockEmbed_mul_submatrix
-    (X : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) (k : o) :
-    X * blockEmbed n k = ∑ l, blockEmbed n l * X.submatrix (Sigma.mk l) (Sigma.mk k) := by
-  ext ⟨l, i⟩ j
-  rw [mul_blockEmbed_apply, Matrix.sum_apply, Finset.sum_eq_single l]
-  · simp [Matrix.mul_apply, blockEmbed_apply_fst_eq]
-  · intro l' _ hl'
-    simp only [Matrix.mul_apply]
-    exact Finset.sum_eq_zero fun j' _ => by
-      rw [blockEmbed_apply_of_fst_ne (x := ⟨l, i⟩) (Ne.symm hl') j', zero_mul]
-  · intro h
-    exact absurd (Finset.mem_univ _) h
-
-/-- A square matrix that is a scalar multiple of the identity is the multiple by its normalized
-trace. -/
-theorem eq_trace_smul_one_of_exists_eq_smul_one {m : ℕ} {M : Matrix (Fin m) (Fin m) ℂ}
-    (h : ∃ c : ℂ, M = c • 1) : M = ((m : ℂ)⁻¹ * M.trace) • 1 := by
-  obtain ⟨c, rfl⟩ := h
-  rcases Nat.eq_zero_or_pos m with rfl | hm
-  · ext i
-    exact i.elim0
-  · have hm' : (m : ℂ) ≠ 0 := by exact_mod_cast hm.ne'
-    congr 1
-    rw [Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
-    field_simp
-
-end Matrix
 
 namespace MPSTensor
 
@@ -535,7 +461,6 @@ theorem gaugeMatrix_conjTriangularGauge :
     gaugeMatrix (P.conjTriangularGauge ht hμ hdiag) = h * gaugeMatrix P.gauge := by
   rw [gaugeMatrix, gaugeMatrix, conjTriangularGauge, LinearEquiv.coe_trans,
     LinearMap.toMatrix'_comp, Matrix.toLinearEquiv'_apply, LinearMap.toMatrix'_toLin']
-
 
 theorem gaugeMatrixInv_conjTriangularGauge :
     gaugeMatrixInv (P.conjTriangularGauge ht hμ hdiag) = gaugeMatrixInv P.gauge * h⁻¹ := by

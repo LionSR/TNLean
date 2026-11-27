@@ -41,6 +41,8 @@ of the transported fusion tensors is literally the old one.
   `MPOTensor.GroupFamily.FusionData.omega_smulTensor`: invariance under a character.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 /-! ### Normality from a spanning family of letters -/
@@ -71,12 +73,14 @@ theorem isNormal_of_forall_mem_span {A : MPSTensor d D} {B : MPSTensor d' D}
   unfold Kraus.IsNBlkInjective at hA ⊢
   exact eq_top_iff.2 (hA.symm.le.trans (wordSpan_le_of_forall_mem_span h N))
 
-namespace IsDressedProportional
+section IsDressedProportional
+
+open MPTensor.IsDressedProportional
 
 variable {m : ℕ} {B : MPSTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
 /-- Dressed proportionality persists when every letter is multiplied by the same scalar. -/
-theorem smul (h : IsDressedProportional B X Y z) (c : ℂ) :
+theorem _root_.MPTensor.IsDressedProportional.smul (h : IsDressedProportional B X Y z) (c : ℂ) :
     IsDressedProportional (fun i ↦ c • B i) X Y z := by
   simpa [ite_smul] using h.recombine fun i a ↦ if i = a then c else 0
 
@@ -215,7 +219,7 @@ noncomputable def physicalTwist (fd : FusionData F) (hu : star u * u = 1)
   V := fd.V
   W := fd.W
   isReduction g h := by
-    change MPSTensor.IsReduction (mulTensor (T g) (T h)).toMPSTensor (T (g * h)).toMPSTensor
+    change MPTensor.IsReduction (mulTensor (T g) (T h)).toMPSTensor (T (g * h)).toMPSTensor
       (fd.V g h) (fd.W g h)
     simp only [hT]
     rw [mulTensor_pairTwist_map_star hu, toMPSTensor_pairTwist, toMPSTensor_pairTwist]
@@ -225,7 +229,7 @@ noncomputable def physicalTwist (fd : FusionData F) (hu : star u * u = 1)
 theorem isAssociator_physicalTwist {fd : FusionData F} (hu : star u * u = 1)
     (hT : ∀ g, T g = pairTwist u (u.map (starRingEnd ℂ)) (F.tensor g)) {g h k : G} {z : ℂ}
     (hz : fd.IsAssociator g h k z) : (fd.physicalTwist hu hT).IsAssociator g h k z := by
-  change MPSTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k)).toMPSTensor
+  change MPTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k)).toMPSTensor
     (fd.leftV g h k) (fd.rightV g h k) z
   simp only [hT]
   rw [mulTensor_pairTwist_map_star hu, mulTensor_pairTwist_map_star hu, toMPSTensor_pairTwist]
@@ -276,7 +280,7 @@ noncomputable def smulTensor (fd : FusionData F) (hχ : ∀ g h, χ g * χ h = �
   V := fd.V
   W := fd.W
   isReduction g h := by
-    change MPSTensor.IsReduction (mulTensor (T g) (T h)).toMPSTensor (T (g * h)).toMPSTensor
+    change MPTensor.IsReduction (mulTensor (T g) (T h)).toMPSTensor (T (g * h)).toMPSTensor
       (fd.V g h) (fd.W g h)
     simp only [hT]
     rw [mulTensor_smul_smul, hχ]
@@ -286,7 +290,7 @@ noncomputable def smulTensor (fd : FusionData F) (hχ : ∀ g h, χ g * χ h = �
 theorem isAssociator_smulTensor {fd : FusionData F} (hχ : ∀ g h, χ g * χ h = χ (g * h))
     (hT : ∀ g, T g = χ g • F.tensor g) {g h k : G} {z : ℂ} (hz : fd.IsAssociator g h k z) :
     (fd.smulTensor hχ hT).IsAssociator g h k z := by
-  change MPSTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k)).toMPSTensor
+  change MPTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k)).toMPSTensor
     (fd.leftV g h k) (fd.rightV g h k) z
   simp only [hT]
   rw [mulTensor_smul_smul, mulTensor_smul_smul]

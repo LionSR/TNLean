@@ -54,6 +54,8 @@ of the fundamental theorem for canonical forms.
   Schuch, Cirac, arXiv:1706.07329 (the same form for canonical forms of matrix product states).
 -/
 
+open MPTensor
+
 section ClassForm
 
 /-!

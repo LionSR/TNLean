@@ -18,8 +18,8 @@ state of `A`.  This is the tensor whose local decomposition is described by the 
 of Garre-Rubio--Lootens--Molnár, arXiv:2203.12563, equation `mpoMPSsten`, lines 1070--1090.
 
 The contraction convention is the one already used for the bond-one instance
-`MPOTensor.CZX.actedSector` in `TNLean/MPS/MPDO/CZXActionTensors.lean`, where the Kronecker
-factor of the state bond space is trivial.
+`MPOTensor.CZX.actedSector` in `TNLean/MPS/Examples/CZX/Gauging/CZXActionTensors.lean`, where
+the Kronecker factor of the state bond space is trivial.
 
 ## Main definitions
 
@@ -109,9 +109,9 @@ Source: arXiv:2203.12563, Section "Periodic boundary condition case", lines 1070
 (the relation `U_g |ψ_{A_x}⟩ = |ψ_{A_y}⟩` whose local form is `mpoMPSsten`). -/
 theorem mpv_actTensor (T : MPOTensor d D₁) (A : MPSTensor d D₂) {L : ℕ}
     (σ : Fin L → Fin d) :
-    MPSTensor.mpv (actTensor T A) σ =
-      ∑ τ : Fin L → Fin d, mpo T L σ τ * MPSTensor.mpv A τ := by
-  simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry]
+    MPTensor.mpv (actTensor T A) σ =
+      ∑ τ : Fin L → Fin d, mpo T L σ τ * MPTensor.mpv A τ := by
+  simp only [MPTensor.mpv, MPTensor.coeff, mpo_apply, mpoMatrixEntry]
   rw [evalWord_actTensor, Matrix.trace_submatrix_equiv, Matrix.trace_sum]
   simp_rw [Matrix.trace_kronecker]
 
@@ -121,8 +121,8 @@ tensor.
 
 Source: arXiv:2203.12563, Section "Periodic boundary condition case", lines 1070--1078. -/
 theorem mpo_mulVec_mpv (T : MPOTensor d D₁) (A : MPSTensor d D₂) (L : ℕ) :
-    mpo T L *ᵥ (fun τ : Fin L → Fin d => MPSTensor.mpv A τ) =
-      fun σ : Fin L → Fin d => MPSTensor.mpv (actTensor T A) σ := by
+    mpo T L *ᵥ (fun τ : Fin L → Fin d => MPTensor.mpv A τ) =
+      fun σ : Fin L → Fin d => MPTensor.mpv (actTensor T A) σ := by
   funext σ
   rw [mpv_actTensor]
   rfl

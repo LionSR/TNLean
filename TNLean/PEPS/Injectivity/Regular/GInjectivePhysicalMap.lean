@@ -7,7 +7,7 @@ import TNLean.PEPS.Injectivity.GInjective.GInjectiveVirtualComparison
 import TNLean.PEPS.Tensor.GraphState.RegularOpenRegion
 import TNLean.PEPS.Injectivity.Regular.RegularSiteGram
 import TNLean.PEPS.Injectivity.Closure.TorusPhysicalMap
-import TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation
+import TNLean.PEPS.Tensor.Region.RegionPhysicalMap
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

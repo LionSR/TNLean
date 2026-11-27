@@ -74,6 +74,8 @@ length with nonzero periodic state, using uniformly bounded physical leaves chos
 * arXiv:2307.01696, paragraphs "The tree-RG circuit" (eq. (16)) and "Connection to MERA".
 -/
 
+open MPTensor
+
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open Kraus (blockTensor)

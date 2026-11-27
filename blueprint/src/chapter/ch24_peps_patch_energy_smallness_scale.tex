@@ -10,7 +10,7 @@ not establish the energy estimate itself.
 
 \begin{definition}[The filter exponent]
     \label{def:peps_patch_filter_exponent}
-    \lean{TNLean.PEPS.patchFilterExponent}
+    \lean{Real.patchFilterExponent}
     \leanok
     For an integer $q\ge0$ and reals $J,\Delta$, put $C_E=36q^2J$ and
     \begin{align}
@@ -23,11 +23,11 @@ not establish the energy estimate itself.
 
 \begin{lemma}[A uniformly small energy parameter]
     \label{lem:peps_patch_energy_parameter_choice}
-    \lean{TNLean.PEPS.patchFilterExponent_le_half,
-        TNLean.PEPS.patchFilterExponent_pos,
-        TNLean.PEPS.patchFilterExponent_pos_of_pos,
-        TNLean.PEPS.mul_sq_le_div_1024_of_le_patchFilterExponent,
-        TNLean.PEPS.mul_patchFilterExponent_sq_le}
+    \lean{Real.patchFilterExponent_le_half,
+        Real.patchFilterExponent_pos,
+        Real.patchFilterExponent_pos_of_pos,
+        Real.mul_sq_le_div_1024_of_le_patchFilterExponent,
+        Real.mul_patchFilterExponent_sq_le}
     \leanok
     \uses{def:peps_patch_filter_exponent}
     Let $J\ge0$ and $\Delta\ge0$, and let $\kappa=\kappa(q,J,\Delta)$ be the

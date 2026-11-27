@@ -7,6 +7,10 @@ generated ancestor imports both that module and the uncovered descendant
 frontier.  This handles legacy file/directory name collisions without renames.
 
 ``TNLean/Archive`` is intentionally outside the production library manifest.
+
+A generated aggregator may end with a hand-written module docstring
+(``/-! ... -/``) after its imports, such as the description of a model that a
+directory of worked examples carries.  Regeneration keeps that docstring.
 """
 
 from __future__ import annotations
@@ -37,6 +41,21 @@ GENERATED_NOTICE = (
     "-- Import architecture: docs/import_structure.md.\n"
 )
 EXCLUDED_TOP_LEVEL_DIRECTORIES = frozenset({"Archive"})
+
+
+MODULE_DOC_RE = re.compile(r"(?s)\n(/-!.*-/)\n*\Z")
+
+
+def kept_module_doc(path: Path) -> str:
+    """Return the trailing module docstring of an existing aggregator, with a blank line."""
+    try:
+        content = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return ""
+    if GENERATED_MARKER_RE.search(content[:1024]) is None:
+        return ""
+    match = MODULE_DOC_RE.search(content)
+    return f"\n{match.group(1)}\n" if match else ""
 
 
 def generated_notice(module: str) -> str:
@@ -204,7 +223,7 @@ def build_expected_files(repository_root: Path) -> tuple[dict[Path, str], list[P
         target_module = module_name(target, repository_root)
         names = {module_name(path, repository_root) for path in imports}
         body = "".join(f"import {name}\n" for name in sorted(names))
-        expected[target] = f"{generated_notice(target_module)}\n{body}"
+        expected[target] = f"{generated_notice(target_module)}\n{body}{kept_module_doc(target)}"
 
     return expected, sources
 

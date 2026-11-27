@@ -10,3 +10,38 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.ControlledZ.ControlledZ
 import TNLean.MPS.Examples.ControlledZ.ControlledZGauging
+
+/-!
+# Controlled-Z matrix product unitaries
+
+Two matrix product unitaries built from controlled-`Z` gates. The next-nearest-neighbour tensor
+of Example 4.9 of the matrix-product-unitary chapter of the lecture notes
+(`docs/lecture-notes/mpu/MPU.tex`), with bond index `(α₁, α₂) ∈ {0,1}²`, generates on every ring
+the diagonal operator `∏_n (-1)^{i_{n-2} i_n}`; it is not simple, its blocking of two sites is
+simple, and all four cut ranks equal `4`. The nearest-neighbour symmetry `U = ∏_j CZ_{j,j+1}` of
+FBC25 (arXiv:2502.20257, subsection `sec:CZ`, lines 3794–3968) is a bond-two tensor squaring to
+the identity, a nonanomalous representation of `ℤ₂`; the modules verify the defect identities
+`eq:Z2_def`, the Gauss law of the gauged tensor, and the split-index factorization of lines
+3970–4209, on whose bond `U` and `∏_j Z_j` are implemented by anticommuting matrices. That this
+nontrivial projective class labels the symmetry-protected phase (arXiv:2404.15883) is a scope
+restriction recorded in `docs/paper-gaps/fbc25_controlled_z_split_index_class_scope.tex`.
+
+## General theorems instantiated
+
+* `MPOTensor.IsMPUSimple` (simplicity of matrix product unitaries): the next-nearest-neighbour
+  tensor fails it and its two-site blocking satisfies it; arXiv:1703.09188, Definition III.2.
+* `Matrix.rank_eq_card_of_eq_mul_of_submatrix_eq_one` (ranks from factorizations): the cut
+  ranks `MPOTensor.rightRank` and `MPOTensor.leftRank` of the tensor and of its blocking are `4`;
+  arXiv:1703.09188, definition `defnrl`.
+* `MPOTensor.mpo_apply_eq_prod_of_forced_bond` (monomial periodic operators): the diagonal
+  entries of the next-nearest-neighbour operator on every ring.
+* `MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant` and
+  `MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff` (anomaly obstruction): the
+  invariant product state `|0 ⋯ 0⟩` makes the anomaly class of `{1, U}` vanish;
+  arXiv:2502.20257, line 1545.
+* `MPSTensor.isNormal_of_forced_column` (normality from a forced bond): the displayed state
+  tensor `A` and the product-state tensor are normal.
+* `MPSTensor.mpv_eq_trace_prod_ofFn_of_eq_mul` (split-index presentation): the amplitude of `A`
+  is the trace of the ring of split-index tensors `S^{ab} = X^a Z^{ab}`; arXiv:2502.20257,
+  lines 3970–4001.
+-/

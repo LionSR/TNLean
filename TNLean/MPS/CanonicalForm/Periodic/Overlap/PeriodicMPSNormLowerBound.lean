@@ -20,7 +20,11 @@ import TNLean.MPS.CanonicalForm.FixedPointApproximation.SecondOrderOverlap
 import QICLean.Channel.KrausMap.KrausMap
 import Mathlib.Analysis.SpecificLimits.Basic
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.FixedLineLimitSimplicity
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+import Mathlib.Analysis.Normed.Operator.Bilinear
+import Mathlib.LinearAlgebra.Eigenspace.Matrix
+import Mathlib.Topology.Instances.Matrix
+import QICLean.Spectral.Eigenvalue.EigenspaceMap
 
 /-!
 # Uniform lower bounds for periodic MPS norms
@@ -40,6 +44,8 @@ squared norm at least one half. A single physical blocking therefore makes every
 positive ring nonzero. These are auxiliary transfer-spectrum statements; no
 implication from a physical Hamiltonian gap to their hypotheses is asserted.
 -/
+
+open MPTensor
 
 /-!
 # Uniform periodic tensor norm estimates from transfer spectra
@@ -94,23 +100,6 @@ private theorem norm_trace_pow_le_of_spectrum_norm_le
     obtain ⟨w, hw, rfl⟩ := hz
     simpa only [norm_pow] using
       pow_le_pow_left₀ (norm_nonneg w) (hspec w hw) (n + 1)
-
-/-- Wolf Proposition 6.2 identifies geometric and algebraic multiplicity at one
-for a positive unital map. -/
-theorem simple_fixedEigenvalue_of_unital_positive
-    {D : ℕ} [NeZero D]
-    (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
-    (hPos : IsPositiveMap T) (hOne : T 1 = 1)
-    (hDim : Module.finrank ℂ (Module.End.eigenspace T 1) = 1) :
-    T.charpoly.rootMultiplicity 1 = 1 := by
-  have hEq : Module.End.maxGenEigenspace T 1 = Module.End.eigenspace T 1 := by
-    apply le_antisymm _ Module.End.eigenspace_le_maxGenEigenspace
-    intro X hX
-    obtain ⟨k, hk⟩ := (Module.End.mem_maxGenEigenspace T 1 X).mp hX
-    have h := hPos.peripheral_Jordan_trivial_of_unital hOne 1 (by simp) k X hk
-    rw [LinearMap.sub_apply, LinearMap.smul_apply, Module.End.one_apply] at h
-    exact Module.End.mem_eigenspace_iff.mpr (sub_eq_zero.mp h)
-  rw [← LinearMap.finrank_maxGenEigenspace_eq, hEq, hDim]
 
 /-- A fixed nonzero vector contributes one to every trace power; the remaining
 contribution is the trace power of the quotient by its line. -/
@@ -271,7 +260,7 @@ private theorem norm_mpvState_blockTensor_sq {d D : ℕ} [NeZero D]
   change LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
       ((Kraus.transferMap (blockTensor A L)) ^ N) =
     LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) ((Kraus.transferMap A) ^ (L * N))
-  rw [transferMap_blockTensor, ← pow_mul]
+  rw [Kraus.transferMap_blockTensor, ← pow_mul]
 
 /-- A single physical blocking length makes every positive periodic ring
 nonzero, uniformly over any family with a common spectral bound below one. -/

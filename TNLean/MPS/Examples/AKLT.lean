@@ -21,3 +21,50 @@ import TNLean.MPS.Examples.AKLT.AKLTSpinSectors
 import TNLean.MPS.Examples.AKLT.AKLTStringOrder
 import TNLean.MPS.Examples.AKLT.AKLTTimeReversal
 import TNLean.MPS.Examples.AKLT.PeriodicStringExamples
+
+/-!
+# AKLT state
+
+The spin-1 AKLT state of Affleck, Kennedy, Lieb and Tasaki, the bond-dimension-two matrix
+product state `A⁰ = σz/√3`, `A¹ = √(2/3) σ⁺`, `A² = -√(2/3) σ⁻`, which is normal but not
+injective, together with the review's singlet-bond tensor and its Pauli form (arXiv:2011.12127,
+Appendix A, lines 2372–2393; the printed basis gives the Pauli form only up to a virtual gauge and
+the sign `(-1)^N`, a local fix). The modules prove the unique periodic ground state of the
+two-site parent Hamiltonian by the hand check `𝒢₁₂ ∩ 𝒢₂₃ = 𝒢₁₂₃` (arXiv:2011.12127, line 2095),
+its identification with the Hamiltonian `∑ S_i·S_{i+1} + (1/3)(S_i·S_{i+1})²` with ground energy
+`-2N/3` (arXiv:quant-ph/0608197, lines 340–349; periodic chains of `N ≥ 3` sites), and the
+fourfold open-boundary ground space with one singlet and three triplet states for `N ≥ 2`
+(arXiv:2011.12127, lines 1171–1174). They also give the correlation length `1/log 3`, string
+order (arXiv:0802.0447, Example 1, value `-4/9` with the normalized stationary density `I/2`), and
+the nontrivial projective classes of the `Z₂ × Z₂`, `SO(3)`, time-reversal and reflection
+symmetries (arXiv:2011.12127, §III.A, line 1159).
+
+## General theorems instantiated
+
+* `MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal` (unique ground state of the parent
+  Hamiltonian of a normal tensor): the three-site periodic ground space is the AKLT line, and the
+  two-site intersection property lowers this to the two-site parent Hamiltonian;
+  arXiv:2011.12127, Section IV.C, lines 2078–2090.
+* `MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective` (open-chain
+  parent Hamiltonian): the four-dimensional kernel of the open three-site parent Hamiltonian;
+  Nachtergaele, arXiv:cond-mat/9410110, and arXiv:quant-ph/0608197, lines 1211–1233.
+* `MPSTensor.groundSpace_eq_span_openState` (open-boundary ground space): the two-site open
+  kernel is spanned by the boundary-vector states; arXiv:2011.12127, line 1174.
+* `MPSTensor.eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian` and
+  `MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian` (shifted parent
+  Hamiltonians): from `H + 2N/3 = 2 H_parent`, the bound `H ≥ -2N/3` and the unique ground state
+  of the polynomial Hamiltonian.
+* `MPSTensor.groundSpaceMap_injective_of_isNBlkInjective` (boundary map of an injective block):
+  the singlet and triplet sectors as images of scalar and traceless boundary matrices.
+* `MPSTensor.hasStringOrder_of_symmetric_injective` (string order of symmetric injective
+  tensors): virtual-boundary nondecay for every `Z₂ × Z₂` twist of the two-site blocked tensor.
+* `MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges` (entanglement spectrum): even
+  degeneracy from the anticommuting virtual gauges; arXiv:2011.12127, §III.A, line 1171.
+* `MPSTensor.mul_map_star_eq_of_timeReversal_gauges` and
+  `MPSTensor.mul_map_star_eq_of_reflection_gauges` (time-reversal and reflection indices): the
+  index `X X* = -1` does not depend on the gauge; arXiv:2011.12127, §III.A, lines 1117–1120.
+* `SpinCover.spinHalfCover_surjective_onto_SO3` (spin double cover, companion library): passes
+  from the `SU(2)` symmetry of the Pauli form to the `SO(3)` symmetry.
+* `MPSTensor.mpvExpectation_piKronecker_const_eq_phase_pow` (full-ring string expectations): the
+  exact periodic symmetry overlaps; arXiv:0802.0447, Lemma 1 and display `RL`.
+-/

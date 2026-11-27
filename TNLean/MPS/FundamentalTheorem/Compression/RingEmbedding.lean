@@ -48,6 +48,8 @@ certificate that every worked example over such a ring reads off a decided table
   whose letters realise every matrix unit up to a coefficient with nonzero image.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 namespace MPSTensor

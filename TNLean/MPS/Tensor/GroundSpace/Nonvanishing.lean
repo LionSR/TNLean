@@ -17,6 +17,8 @@ length-\(N-L_0\) product to vanish, and strong induction on word length gives a
 contradiction.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -35,7 +37,7 @@ private theorem allZero_contradiction [NeZero D]
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {k : ℕ} (hk : 0 < k)
     (hzero : ∀ w : List (Fin d), w.length = k → Kraus.evalWord A w = 0) : False := by
-  have hws : Kraus.wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  have hws : Kraus.wordSpan A L₀ = ⊤ := hInj
   -- Strong induction on k.
   suffices ∀ k, 0 < k → (∀ w : List (Fin d), w.length = k → Kraus.evalWord A w = 0) → False from
     this k hk hzero
@@ -101,7 +103,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     (mpv A : NSiteSpace d N) ≠ 0 := by
-  have hws : Kraus.wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  have hws : Kraus.wordSpan A L₀ = ⊤ := hInj
   intro hzero
   -- mpv = 0 means tr(Kraus.evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → Fin d.
   have htr_zero : ∀ σ : Fin N → Fin d,

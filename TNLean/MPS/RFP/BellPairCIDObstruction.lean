@@ -56,6 +56,8 @@ entangled pair `|φ⟩ = (|00⟩ + |11⟩)/√2` is shared between `bₙ` and `a
 See `docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

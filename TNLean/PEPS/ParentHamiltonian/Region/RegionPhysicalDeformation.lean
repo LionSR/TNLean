@@ -36,38 +36,6 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d e : ℕ}
 
-/-- Apply a physical linear map at every vertex, keeping every virtual bond.
-Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
-noncomputable def physicalDeform (A : Tensor Γ d)
-    (F : V → Matrix (Fin e) (Fin d) ℂ) : Tensor Γ e where
-  bondDim := A.bondDim
-  component v η t := ∑ s, F v t s * A.component v η s
-
-/-- Physical deformation of an open-region tensor is the regional product map.
-Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
-theorem openRegionWeight_physicalDeform (A : Tensor Γ d) (R : Finset V)
-    (F : V → Matrix (Fin e) (Fin d) ℂ) (μ : RegionBoundaryConfig A R) :
-    openRegionWeight (physicalDeform A F) R μ =
-      regionPhysicalMap R F (openRegionWeight A R μ) := by
-  funext τ
-  rw [regionPhysicalMap_openRegionWeight]
-  rfl
-
-/-- The genuine open-region maps commute with physical deformation.
-Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
-theorem openRegionMap_physicalDeform (A : Tensor Γ d) (R : Finset V)
-    (F : V → Matrix (Fin e) (Fin d) ℂ) :
-    openRegionMap (physicalDeform A F) R =
-      regionPhysicalMap R F ∘ₗ openRegionMap A R := by
-  classical
-  apply LinearMap.ext
-  intro x
-  change (∑ μ : RegionBoundaryConfig A R, x μ • openRegionWeight (physicalDeform A F) R μ) =
-    regionPhysicalMap R F (∑ μ : RegionBoundaryConfig A R, x μ • openRegionWeight A R μ)
-  simp only [map_sum, map_smul]
-  exact Finset.sum_congr rfl fun μ _ => congrArg (fun ψ => x μ • ψ)
-    (openRegionWeight_physicalDeform A R F μ)
-
 /-- The regional ground space is transported by the product physical map.
 Source: SCP10, Observation `obs:iso:accessible-virt`, lines 1765–1820. -/
 theorem regionGroundSpace_physicalDeform (A : Tensor Γ d) (R : Finset V)

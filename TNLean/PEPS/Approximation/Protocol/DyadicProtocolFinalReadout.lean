@@ -45,6 +45,7 @@ and the final reference vector are arbitrary data satisfying the stated identiti
   and the final reference (lines 669–681).
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -90,7 +91,8 @@ theorem exists_reference_changes_of_readoutCircuit [NeZero q]
     (W : P → Type) [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
     (hown : Function.Injective M.owner) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
     (hsite : ∀ v, D.site v = M.owner v) (epriv : ∀ p, D.privateOutput p ≃ readoutPrivate M Fs W p)
-    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) (hL : 0 < L) {C : ℝ}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩ : ‖Ω‖ = 1) (hL : 0 < L)
+    {C : ℝ}
     (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
     {ξ : EuclideanSpace ℂ (Config W)} (hξ : ‖ξ‖ = 1)
@@ -226,7 +228,7 @@ theorem DyadicProtocol.exists_reference_changes_unitLevel [NeZero q]
     (haux : ∀ x ∈ (protocolSchedule k large).filter fun x => x.2.IsAuxInit,
       (aux x).holes.length ≤
         {c | IsTrueVertex (frozenAuxGuide (Fr x).1 (Fr x).2.1 (Fr x).2.2) c}.ncard)
-    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) {B₀ C c : ℝ}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩ : ‖Ω‖ = 1) {B₀ C c : ℝ}
     (supply : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
     (hsupply : ∀ x ∈ (protocolSchedule k large).filter fun x => x.2.IsAuxInit,
       ∀ h ∈ (aux x).holes, IsSuppliedPatch supply h.patch)

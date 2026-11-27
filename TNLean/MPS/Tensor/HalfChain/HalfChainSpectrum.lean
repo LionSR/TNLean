@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.HalfChain.HalfChainSchmidt
-import TNLean.MPS.Tensor.HalfChain.HalfChainSpectralComparison
+import QICLean.Analysis.Order.WeylMonotonicity
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Data.List.GetD
 import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
 
@@ -21,6 +23,8 @@ Schmidt calculation, lines 970–993 of MPSarchive.tex. The transfer map here is
 trace preserving; the diagonal fixed point is its right fixed point. This is
 the conjugate-transposed Kraus convention relative to the source.
 -/
+
+open MPTensor
 
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 open Filter Polynomial

@@ -28,6 +28,8 @@ The peripheral-root correction used in the period proof is documented in
 docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockTensor)
 

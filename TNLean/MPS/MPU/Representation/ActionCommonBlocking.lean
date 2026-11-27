@@ -69,17 +69,17 @@ theorem CarriesMPV.blockTensor {D₃ : ℕ} {T : MPOTensor d D₁}
   rw [mpo_mulVec_mpv]
   funext σ
   rw [← blockTensor_actTensor]
-  have hSame := h.sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl B)
-    (N * L) (Nat.mul_pos hN hL) (MPSTensor.blockedConfigEquiv d N L σ)
-  simpa only [MPSTensor.mpv, MPSTensor.coeff, Kraus.evalWord_blockTensor,
-    MPSTensor.ofFn_blockedConfigEquiv] using hSame
+  have hSame := h.sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl B)
+    (N * L) (Nat.mul_pos hN hL) (Kraus.blockedConfigEquiv d N L σ)
+  simpa only [MPTensor.mpv, MPTensor.coeff, Kraus.evalWord_blockTensor,
+    Kraus.ofFn_blockedConfigEquiv] using hSame
 
 namespace BlockActionData
 
 /-- The MGSC18 residual nilpotency length of the selected action reduction.
 Source: arXiv:1706.07329v2, Definition 8; arXiv:2502.20257, line 1870. -/
 noncomputable def nilpotencyLength (ad : BlockActionData F A) (g : G) (x : X) : ℕ :=
-  MPSTensor.reductionResidualNilpotencyLength (actTensor (F.tensor g) (A x))
+  MPTensor.reductionResidualNilpotencyLength (actTensor (F.tensor g) (A x))
     (A (g • x)) (ad.V g x) (ad.W g x)
 
 /-- Exterior action identity with buffers of at least `m` sites and a nonempty
@@ -96,7 +96,7 @@ noncomputable def block (ad : BlockActionData F A) (L : ℕ) :
   V := ad.V
   W := ad.W
   isReduction g x := by
-    change MPSTensor.IsReduction
+    change MPTensor.IsReduction
       (actTensor (blockTensor (F.tensor g) L) (Kraus.blockTensor (A x) L))
       (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x)
     rw [← blockTensor_actTensor]
@@ -134,7 +134,7 @@ theorem block_hasExteriorBufferLength_one (ad : BlockActionData F A)
     (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x) 1
   rw [← blockTensor_actTensor]
   exact ((ad.isReduction g x).isReductionExteriorBufferLength_nilpotencyLength
-    ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))).blockTensor hL
+    ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))).blockTensor hL
       (by have := hN g x; change ad.nilpotencyLength g x - 1 ≤ 1 * L; omega)
 
 section Finite
@@ -249,7 +249,7 @@ theorem exists_block_blockActionData_one_of_isPretransitive [Finite G]
   refine ⟨L, hL, hF.block F L hL, ?_, fun g x ↦ (hperm g x).blockTensor hL, ad, had⟩
   intro x
   apply (Kraus.isNBlkInjective_iff_blockTensor_isInjective (A x) L).1
-  simpa using MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (A x) hL
+  simpa using MPTensor.isNBlkInjective_mul_of_isNBlkInjective (A x) hL
     (Kraus.isNBlkInjective_one_of_isInjective (hA x))
 
 end GroupFamily

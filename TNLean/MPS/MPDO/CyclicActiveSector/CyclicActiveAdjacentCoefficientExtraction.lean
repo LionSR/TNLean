@@ -738,7 +738,7 @@ theorem exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_
 
 end MPOTensor.PhysicalSectorFactorization
 
-namespace MPOTensor.EtaLocalStructureData
+namespace MPOTensor.CommutingForm
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
@@ -749,15 +749,15 @@ normalized reduced states.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1597--1613. -/
 theorem selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
-    (data : EtaLocalStructureData K)
+    (data : CommutingForm K)
     (N L : ℕ) (hN : 2 ≤ N) (hL : L ≤ N) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     F.sectorCoordinateTensor.reducedBlockState N L hL =
       (PhysicalSectorFactorization.changePhysicalBasis
         F.physicalCoordinateMatrix K).reducedBlockState N L hL := by
   let F :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    data.fixedProductTensorDataPhysicalSectorFactorization
   let M :=
     PhysicalSectorFactorization.changePhysicalBasis
       F.physicalCoordinateMatrix K
@@ -768,18 +768,18 @@ theorem selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
     (Complex.ofReal_ne_zero.mpr (ne_of_gt hc)) hclosed).symm
 
 private theorem selectedFixedProduct_reducedBlockState_eq_of_source_eq
-    (data : EtaLocalStructureData K)
+    (data : CommutingForm K)
     (N₁ N₂ L : ℕ) (hN₁ : 2 ≤ N₁) (hN₂ : 2 ≤ N₂)
     (hL₁ : L ≤ N₁) (hL₂ : L ≤ N₂)
     (hsource :
       K.reducedBlockState N₁ L hL₁ =
         K.reducedBlockState N₂ L hL₂) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     F.sectorCoordinateTensor.reducedBlockState N₁ L hL₁ =
       F.sectorCoordinateTensor.reducedBlockState N₂ L hL₂ := by
   let F :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    data.fixedProductTensorDataPhysicalSectorFactorization
   let U := F.physicalCoordinateMatrix
   let M := PhysicalSectorFactorization.changePhysicalBasis U K
   calc
@@ -808,10 +808,10 @@ coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1603--1613. -/
 theorem selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
-    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (data : CommutingForm K) (hZCL : K.IsSourceZCL)
     (L : ℕ) (hL : 0 < L) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
       F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
   apply data.selectedFixedProduct_reducedBlockState_eq_of_source_eq
@@ -828,10 +828,10 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 replacement used to expose the two-step cyclic-active coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL
-    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (data : CommutingForm K) (hZCL : K.IsSourceZCL)
     (L : ℕ) (hL : 0 < L) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     F.sectorCoordinateTensor.reducedBlockState (L + 3) L (by omega) =
       F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
   apply data.selectedFixedProduct_reducedBlockState_eq_of_source_eq
@@ -844,19 +844,19 @@ a strictly positive real trace under source zero correlation length.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1597--1613. -/
 theorem exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL
-    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (data : CommutingForm K) (hZCL : K.IsSourceZCL)
     (N : ℕ) (hN : 2 ≤ N) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     ∃ z : ℝ, 0 < z ∧
       Matrix.trace (mpo F.sectorCoordinateTensor N) = (z : ℂ) := by
   let F :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    data.fixedProductTensorDataPhysicalSectorFactorization
   let U := F.physicalCoordinateMatrix
   let M := PhysicalSectorFactorization.changePhysicalBasis U K
   let : NeZero N := ⟨by omega⟩
   have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
+    data.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
   obtain ⟨c, _, hclosed⟩ :=
     data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected N hN
   have hsourceTraceNe : Matrix.trace (mpo K N) ≠ 0 :=
@@ -882,8 +882,8 @@ theorem exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL
   · rfl
   · simpa using him.symm
 
-/-- For the selected fixed-product realization of an eta-local source-ZCL
-tensor, the cyclic-active trace matrix admits a positive normalization whose
+/-- For the selected fixed-product realization of a source-ZCL tensor with a commuting form,
+the cyclic-active trace matrix admits a positive normalization whose
 square equals its cube.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
@@ -895,18 +895,18 @@ coefficient identity preceding the rank-one conclusion of Proposition
 the selected tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three
-    (hK : K.IsInjective) (data : EtaLocalStructureData K)
+    (hK : Kraus.IsInjective K.toMPSTensor) (data : CommutingForm K)
     (hZCL : K.IsSourceZCL) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     ∃ lam : ℝ, 0 < lam ∧
       (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
         (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 3 := by
   classical
   let F :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    data.fixedProductTensorDataPhysicalSectorFactorization
   have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
+    data.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
   have hreach : ∀ q h : F.CyclicActiveSector,
       Relation.ReflTransGen
         (fun a b : F.CyclicActiveSector ↦ F.neighboringOperator a b ≠ 0) q h := by
@@ -926,4 +926,4 @@ theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow
   exact F.exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals
     hpos hreach hmarg htrace
 
-end MPOTensor.EtaLocalStructureData
+end MPOTensor.CommutingForm

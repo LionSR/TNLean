@@ -18,6 +18,8 @@ lines 1139--1176. The finite-ring phase correction is documented in
 `docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex`.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix Kronecker
 
 namespace MPSTensor.QuadraticReconstructionSolution

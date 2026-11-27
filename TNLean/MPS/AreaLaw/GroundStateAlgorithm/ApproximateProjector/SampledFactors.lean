@@ -30,6 +30,7 @@ proof of Claim `c:errorreduction`, lines 584--592.
 
 open Matrix
 open scoped Kronecker ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -52,7 +53,7 @@ noncomputable def sampledLeftFactor
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) (t : Fin ℓ)
     (j : Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L i) (bondComplementWord Φ (I t))))) : LeftBlockMatrix L q i :=
+      (interval L 0 i) (bondComplementWord Φ (I t))))) : LeftBlockMatrix L q i :=
   sampledScale L E₀ ℓ m • cutLeftFactor (bondComplementWord Φ (I t)) j
 
 /-- **The left factors of the sampled projector** at the cut after `i` sites: the scaled
@@ -67,15 +68,15 @@ of its words. -/
 theorem cutOperator_sampledProjector_eq_sum
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
-    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector Φ E₀ I) =
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) (sampledProjector Φ E₀ I) =
       ∑ p : (t : Fin ℓ) × Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L i) (bondComplementWord Φ (I t)))),
+        (interval L 0 i) (bondComplementWord Φ (I t)))),
         sampledLeftFactor Φ E₀ I i p.1 p.2 ⊗ₖ
           cutRightFactor (bondComplementWord Φ (I p.1)) p.2 := by
   rw [Fintype.sum_sigma]
-  have hlin : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+  have hlin : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
       (sampledProjector Φ E₀ I) = ∑ t, sampledScale L E₀ ℓ m •
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
           (bondComplementWord Φ (I t)) := by
     rw [sampledProjector_eq_sum_smul]
     ext a b
@@ -94,7 +95,7 @@ theorem card_sampledFactors_le
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) {D : ℕ}
     (hrank : ∀ t, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L i) (bondComplementWord Φ (I t))) ≤ D) :
+      (interval L 0 i) (bondComplementWord Φ (I t))) ≤ D) :
     (sampledFactors Φ E₀ I i).card ≤ ℓ * D := by
   classical
   calc
@@ -113,9 +114,9 @@ theorem operatorSchmidtRank_of_mem_sampledFactors {i : ℕ} (hi : i ≤ L)
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ}
     (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ D)
+      (interval L 0 k) (bondComplementWord Φ (I t))) ≤ D)
     {A : LeftBlockMatrix L q i} (hA : A ∈ sampledFactors Φ E₀ I i) (k : ℕ) (hki : k < i) :
-    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D := by
   classical
   simp only [sampledFactors, Finset.mem_biUnion, Finset.mem_univ, true_and,
@@ -123,18 +124,18 @@ theorem operatorSchmidtRank_of_mem_sampledFactors {i : ℕ} (hi : i ≤ L)
   obtain ⟨t, j, -, rfl⟩ := hA
   have hbase := operatorSchmidtRank_cutLeftFactor_le hi (bondComplementWord Φ (I t)) (hrank t)
     j k hki
-  have hsmul : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+  have hsmul : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
       ((sampledLeftFactor Φ E₀ I i t j).submatrix leftConfigOfFin leftConfigOfFin) =
-      sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+      sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
         ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin
           leftConfigOfFin) := by
     ext a b
     simp [sampledLeftFactor]
   rw [hsmul]
-  have hcoe : sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+  have hcoe : sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
       ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin leftConfigOfFin) =
       ((sampledScale L E₀ ℓ m : ℝ) : ℂ) • ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock i k) ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin
+        (interval i 0 k) ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin
           leftConfigOfFin) := by
     ext a b
     simp [Complex.real_smul]
@@ -148,7 +149,7 @@ theorem errorReductionSet_sampledFactors
     (I : Fin ℓ → Fin m → Fin L) {i : ℕ} (S : Finset (LeftBlockVector L q i)) :
     errorReductionSet (sampledFactors Φ E₀ I i) id S =
       errorReductionSet (Finset.univ : Finset ((t : Fin ℓ) × Fin (operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
           (bondComplementWord Φ (I t))))))
         (fun p ↦ sampledLeftFactor Φ E₀ I i p.1 p.2) S := by
   classical
@@ -171,7 +172,7 @@ theorem isViableMPS_errorReductionSet_sampledFactors {i : ℕ} (hi : i ≤ L)
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ}
     (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ D)
+      (interval L 0 k) (bondComplementWord Φ (I t))) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
     (hKP : ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
@@ -192,7 +193,7 @@ theorem isViableMPS_errorReductionSet_sampledFactors {i : ℕ} (hi : i ≤ L)
   calc
     (Finset.univ : Finset ((t : Fin ℓ) × Fin _)).card
         = ∑ t : Fin ℓ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-            (leftBlock L i) (bondComplementWord Φ (I t))) := by
+            (interval L 0 i) (bondComplementWord Φ (I t))) := by
           rw [Finset.card_univ, Fintype.card_sigma]
           simp only [Fintype.card_fin]
     _ ≤ ∑ _t : Fin ℓ, D := Finset.sum_le_sum fun t _ ↦ hrank t i

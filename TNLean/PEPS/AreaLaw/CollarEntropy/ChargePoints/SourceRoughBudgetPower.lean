@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.SelectedSchmidtEntropyBounds
+import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
+import QICLean.ManyBody.Entropy.Typical.CompressedTypicalSiteCoordinates
 import TNLean.PEPS.AreaLaw.Collar.Defs
 import TNLean.PEPS.AreaLaw.Collar.Scales.SourceDensityScale
 

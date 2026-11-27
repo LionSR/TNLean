@@ -17,6 +17,8 @@ This module contracts a cycle of matched normal sectors into a single
 repeated-block gauge relation.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
 open Filter Matrix Module
 open Kraus (blockPhysDim wordOfBlock decodeBlockEquiv blockTensor)

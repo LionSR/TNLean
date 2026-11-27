@@ -37,6 +37,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 equations (3.12)--(3.14), lines 1547--1570, and Theorem 1.2.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim blockTensor)
 open ManyBody.Interaction (chainTranslates)
@@ -62,13 +64,13 @@ theorem hamiltonian_chainTranslates_gap_of_blocked_gap
   obtain ⟨hLower, hUpper⟩ :=
     hamiltonian_chainTranslates_blockedInteractionMatrix_comparison h hh hKN hcover
   have hLower' : Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) ≤
-      Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
-        (blockedConfigEquiv d N L)
+      Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+        (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) := by
     rw [LinearMap.le_def, ← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hLower
-  have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
-      (blockedConfigEquiv d N L)
+  have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+      (Kraus.blockedConfigEquiv d N L)
       ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) ≤
       ((K * L + 1 - R : ℕ) : ℂ) •
         Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) := by
@@ -82,10 +84,10 @@ theorem hamiltonian_chainTranslates_gap_of_blocked_gap
     have hL := NeZero.pos L
     exact_mod_cast (show 0 < K * L + 1 - R by omega)
   have hGap' : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-      (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+      (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ := fun μ hμ ↦
-    hGap μ ((Matrix.hasEigenvalue_toEuclideanLin_reindex_iff (blockedConfigEquiv d N L)
+    hGap μ ((Matrix.hasEigenvalue_toEuclideanLin_reindex_iff (Kraus.blockedConfigEquiv d N L)
       ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) μ).mp hμ)
   have hTransfer := hP.forall_hasEigenvalue_of_smul_le_of_le_smul hQ
     zero_lt_one hM hM hγ

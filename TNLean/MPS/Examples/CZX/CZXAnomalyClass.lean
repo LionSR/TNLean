@@ -164,19 +164,19 @@ def czxFusionData : czxFamily.FusionData where
   isReduction := by
     refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
       (Multiplicative.forall_zmod_two ?_ ?_)
-    · change MPSTensor.IsReduction
+    · change MPTensor.IsReduction
         (mulTensor (MPOTensor.idTensor 2) (MPOTensor.idTensor 2)).toMPSTensor
         ((MPOTensor.idTensor 2 : MPOTensor 2 (1 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_idTensor])
-    · change MPSTensor.IsReduction
+    · change MPTensor.IsReduction
         (mulTensor (MPOTensor.idTensor 2) czxDecoratedTensor).toMPSTensor
         ((czxDecoratedTensor : MPOTensor 2 (1 * 2))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_left]; rfl)
-    · change MPSTensor.IsReduction
+    · change MPTensor.IsReduction
         (mulTensor czxDecoratedTensor (MPOTensor.idTensor 2)).toMPSTensor
         ((czxDecoratedTensor : MPOTensor 2 (2 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_right]; rfl)
-    · change MPSTensor.IsReduction czxDecoratedSquare (MPOTensor.idTensor 2).toMPSTensor
+    · change MPTensor.IsReduction czxDecoratedSquare (MPOTensor.idTensor 2).toMPSTensor
         czxFusionVHat czxFusionV
       refine ⟨czxFusionVHat_mul_czxFusionV, fun w ↦ ?_⟩
       rw [czxFusion_contract, evalWord_idTensor_toMPSTensor]
@@ -290,7 +290,7 @@ theorem czxFusionData_isAssociator_gen_gen_gen :
     czxFusionData.IsAssociator czxGen czxGen czxGen (-1) := by
   unfold GroupFamily.FusionData.IsAssociator
   rw [czxFusionData_leftV_gen_gen_gen, czxFusionData_rightV_gen_gen_gen]
-  exact MPSTensor.IsDressedProportional.of_forall_mul_mul (czx_pair _ czx_left_pair_int)
+  exact MPTensor.IsDressedProportional.of_forall_mul_mul (czx_pair _ czx_left_pair_int)
     (czx_pair _ czx_right_pair_int) czx_letter
 
 /-- `ω(g,g,g) = -1` for the fusion tensors of `czxFusionData`.
@@ -317,7 +317,7 @@ theorem czxFusionData_omega_gen_one_gen : czxFusionData.omega czxGen 1 czxGen = 
   have h : czxFusionData.IsAssociator czxGen 1 czxGen 1 := by
     unfold GroupFamily.FusionData.IsAssociator
     rw [hR, ← hL]
-    exact MPSTensor.IsDressedProportional.refl _ _
+    exact MPTensor.IsDressedProportional.refl _ _
   apply Units.ext
   rw [← GroupFamily.FusionData.eq_omega_of_isAssociator czxFamily_isNormalRepresentation h]
   simp

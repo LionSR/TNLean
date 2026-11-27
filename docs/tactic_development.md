@@ -90,7 +90,7 @@ The core `grind` tactic (congruence closure, E-matching over annotated
 lemmas, case splitting, linear-arithmetic and commutative-ring solvers) is
 available on this toolchain. The worked usage examples moved to the
 companion QICLean library in the quantum-channel extraction
-(`QICLean/Channel/Schwarz/OperatorJensenAux.lean`,
+(`QICLean/Channel/Convexity/OperatorJensenAux.lean`,
 `QICLean/Channel/Convexity/LiebConcavity.lean`); there it serves chiefly as a
 side-condition discharger, e.g. `fun_prop (disch := grind)` and
 spectrum-membership arithmetic, and the same patterns apply here. It

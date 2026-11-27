@@ -66,6 +66,8 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 open ManyBody (Edge SquareInteraction)
@@ -89,7 +91,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     [LinearOrder ↥(ManyBody.rectangularDomain L L)]
-    {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.hamiltonian E₀ Δ)
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩn : ‖Ω‖ = 1)
+    (hΩg : IsGapped h.hamiltonian E₀ Δ)
     (hΩs : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (D : ℕ → Finset ↥(ManyBody.rectangularDomain L L))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
@@ -108,11 +111,11 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
           (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ,
         (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
         ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K' fun _ ↦ True))
-            (AreaLaw.rectangleAreaLawState Ω)‖ ≤
+            (ManyBody.rectangleAreaLawState Ω)‖ ≤
           ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-            (AreaLaw.rectangleAreaLawState Ω)‖) ∧
+            (ManyBody.rectangleAreaLawState Ω)‖) ∧
       let ψ := toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-        (AreaLaw.rectangleAreaLawState Ω)
+        (ManyBody.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
         |(⟪φ, toEuclideanLin
@@ -121,62 +124,62 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 *
               (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j)).card ∧
-        Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
+        Δ * (1 - ‖⟪ManyBody.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 *
               (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
   obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩn hΩg hΩs
-  have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
+  have hΩ0 : ManyBody.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
   have hsplit : ∀ i : ↥(ManyBody.rectangularDomain L L) ⊕
       Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
-      ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m,
-      ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m, j = k := by
+      ∀ j ∈ Entropy.splitIndices (ManyBody.nearestNeighborSupport i) D m,
+      ∀ k ∈ Entropy.splitIndices (ManyBody.nearestNeighborSupport i) D m, j = k := by
     intro i j hj k hk
     have hc (l : Fin m)
-        (hl : l ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m) :
-        i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D l) :=
+        (hl : l ∈ Entropy.splitIndices (ManyBody.nearestNeighborSupport i) D m) :
+        i ∈ ManyBody.crossingTerms ManyBody.nearestNeighborSupport (D l) :=
       by
         simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         exact Entropy.mem_splitIndices.mp hl
     cases i with
-    | inl v => exact False.elim (AreaLaw.inl_not_mem_crossingTerms (D j) v (hc j hj))
+    | inl v => exact False.elim (ManyBody.inl_not_mem_crossingTerms (D j) v (hc j hj))
     | inr e =>
       exact hsingle e j k
-        ((AreaLaw.inr_mem_crossingTerms_iff (D j) e).mp (hc j hj))
-        ((AreaLaw.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk))
-  have heig : toEuclideanLin (∑ i, T i) (AreaLaw.rectangleAreaLawState Ω) =
-      (E₀ : ℂ) • AreaLaw.rectangleAreaLawState Ω := by
+        ((ManyBody.inr_mem_crossingTerms_iff (D j) e).mp (hc j hj))
+        ((ManyBody.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk))
+  have heig : toEuclideanLin (∑ i, T i) (ManyBody.rectangleAreaLawState Ω) =
+      (E₀ : ℂ) • ManyBody.rectangleAreaLawState Ω := by
     rw [hsum]
     exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨K, hK, hmax, hpos, hunit, henergy⟩ :=
     Entropy.exists_max_feasible_chain_zero_floor_normalized_abs_energy_sharp
-      D hD a ha ha1 hΩ0 T AreaLaw.nearestNeighborSupport hT hTH hTJ hsplit heig
+      D hD a ha ha1 hΩ0 T ManyBody.nearestNeighborSupport hT hTH hTJ hsplit heig
   have hbudget :
       (∑ j : Fin m, a j ^ 2 *
-        ∑ i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D j),
+        ∑ i ∈ ManyBody.crossingTerms ManyBody.nearestNeighborSupport (D j),
           (Fintype.card (ManyBody.InnerConfig
             (fun _ : ↥(ManyBody.rectangularDomain L L) ↦ q)
-            (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
+            (D j) (ManyBody.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
           a j ^ 2 *
             (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j)).card := by
     simp_rw [ManyBody.card_innerConfig]
     simpa only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
-      AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a
+      ManyBody.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a
   rw [hsum, hbudget] at henergy
   refine ⟨K, hK, hmax, hpos, hunit, henergy, ?_⟩
-  have hgap := Matrix.PosSemidef.gap_le (Ω := AreaLaw.rectangleAreaLawState Ω)
+  have hgap := Matrix.PosSemidef.gap_le (Ω := ManyBody.rectangleAreaLawState Ω)
     (hgs.posSemidef_sub_smul_one
         (ManyBody.Interaction.isHermitian_hamiltonian
         h.isHermitian_toPlaneInteraction_hermitianPart_term) hΩ hspan)
     (((‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-      (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
+      (ManyBody.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
       toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-        (AreaLaw.rectangleAreaLawState Ω))
+        (ManyBody.rectangleAreaLawState Ω))
   rw [hunit, one_pow, mul_one] at hgap
   exact hgap.trans ((le_abs_self _).trans henergy)
 
@@ -289,43 +292,48 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
     exact mul_comm _ _
   rw [hs]
 
-private theorem rectangleAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
-    ⟪AreaLaw.rectangleAreaLawState φ, AreaLaw.rectangleAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
+private theorem rectangleAreaLawState_inner {L q : ℕ}
+    (φ ψ : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) :
+    ⟪ManyBody.rectangleAreaLawState φ, ManyBody.rectangleAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (AreaLaw.rectangleConfigurationEquiv L L q)).inner_map_map φ ψ
+    (ManyBody.rectangleConfigurationEquiv L L q)).inner_map_map φ ψ
 
 private theorem rectangleAreaLawState_operator {L q : ℕ}
-    (H : Matrix (Configuration L q) (Configuration L q) ℂ) (ψ : StateSpace L q) :
-    AreaLaw.rectangleAreaLawState (toEuclideanLin H ψ) =
-      toEuclideanLin (reindex (AreaLaw.rectangleConfigurationEquiv L L q)
-        (AreaLaw.rectangleConfigurationEquiv L L q) H) (AreaLaw.rectangleAreaLawState ψ) := by
+    (H : Matrix (Config (Qudits (SquareLatticeVertex L L) q))
+      (Config (Qudits (SquareLatticeVertex L L) q)) ℂ)
+    (ψ : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) :
+    ManyBody.rectangleAreaLawState (toEuclideanLin H ψ) =
+      toEuclideanLin (reindex (ManyBody.rectangleConfigurationEquiv L L q)
+        (ManyBody.rectangleConfigurationEquiv L L q) H) (ManyBody.rectangleAreaLawState ψ) := by
   ext σ
-  exact (congrFun (reindex_mulVec (AreaLaw.rectangleConfigurationEquiv L L q)
+  exact (congrFun (reindex_mulVec (ManyBody.rectangleConfigurationEquiv L L q)
     H (WithLp.ofLp ψ)) σ).symm
 
 /-- Transport supplied canonical conclusions for the explicitly pulled-back
 family. This helper makes no optimizer choice. -/
 private theorem fromCanonical_physical_estimates
     {L q m : ℕ} {E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-    {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    {X : Fin m → Finset (Vertex L)}
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (K : CanonicalFamily q X) (hK : ∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j))
     (hmax : ∀ K' : CanonicalFamily q X,
       (∀ j, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
       ‖toEuclideanLin (Entropy.liftProd
         (Entropy.chainList (canonicalRegions X) K' fun _ ↦ True))
-            (AreaLaw.rectangleAreaLawState Ω)‖ ≤
+            (ManyBody.rectangleAreaLawState Ω)‖ ≤
       ‖toEuclideanLin (Entropy.liftProd
-        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)‖)
+        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True))
+          (ManyBody.rectangleAreaLawState Ω)‖)
     (hresult :
       let ψ := toEuclideanLin (Entropy.liftProd
-        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)
+        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (ManyBody.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
         |(⟪φ, toEuclideanLin
             (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian
               φ⟫_ℂ).re - E₀| ≤ B ∧
-        Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
+        Δ * (1 - ‖⟪ManyBody.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
     IsMaximizer Ω a (fromCanonical K hK) ∧
       0 < ‖output (fromCanonical K hK) Ω‖ ∧
       ‖normalizedOutput (fromCanonical K hK) Ω‖ = 1 ∧
@@ -338,7 +346,7 @@ private theorem fromCanonical_physical_estimates
   dsimp only at hnorm hresult
   rw [← hnorm, ← hout, h.hamiltonian_toPlaneInteraction_hermitianPart hh,
     ← rectangleAreaLawState_operator] at hresult
-  simp only [AreaLaw.norm_rectangleAreaLawState, rectangleAreaLawState_inner] at hresult
+  simp only [ManyBody.norm_rectangleAreaLawState, rectangleAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
   apply (isMaximizer_iff Ω a ha (fromCanonical K hK)).mpr
   simpa only [canonicalMatrices_fromCanonical] using And.intro hK hmax

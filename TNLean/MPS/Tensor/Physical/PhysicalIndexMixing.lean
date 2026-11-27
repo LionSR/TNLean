@@ -18,6 +18,8 @@ preserves the transfer map and left-canonical normalization, while arbitrary
 mixing preserves a common virtual gauge.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -159,7 +161,7 @@ preserves their virtual gauge.  No isometry hypothesis is needed.
 This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this lemma. -/
-theorem GaugeEquiv.sum_smul
+theorem _root_.MPTensor.GaugeEquiv.sum_smul
     {m : ℕ} {A B : MPSTensor d D}
     (hAB : GaugeEquiv A B) (W : Matrix (Fin m) (Fin d) ℂ) :
     GaugeEquiv

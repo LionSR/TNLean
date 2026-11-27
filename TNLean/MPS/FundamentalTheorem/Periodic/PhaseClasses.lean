@@ -19,6 +19,8 @@ These are the blockwise data for the grouping in arXiv:1708.00029,
 `def:repeated` and `eq:bdnr`, lines 276–305.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix
 
 namespace MPSTensor

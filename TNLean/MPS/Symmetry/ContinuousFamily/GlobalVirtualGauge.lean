@@ -27,6 +27,8 @@ Appendix C, are recorded in
 `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open MPTensor
+
 open scoped ScalarCohomology
 open scoped Matrix
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.RegularRegionCycleHolonomy
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion
+import TNLean.PEPS.Graph.Region.InjectiveRegion
 
 /-!
 # Actual boundary routes through two region trees

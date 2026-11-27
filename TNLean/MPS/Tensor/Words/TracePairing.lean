@@ -17,8 +17,8 @@ trace pairing on square matrices.
 * `MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top` — exact-length
   two-sided products through a nonzero matrix span the full matrix algebra
 * `MPSTensor.traceMulRightPi` — the linear map `M ↦ (i ↦ trace (M * A i))`
-* `MPSTensor.SameMPV.trace_evalWord` — `SameMPV` implies trace agreement on all words
-* `MPSTensor.SameMPV₂Pos.trace_evalWord` — positive-length, mixed-bond trace transport
+* `MPTensor.SameMPV.trace_evalWord` — `SameMPV` implies trace agreement on all words
+* `MPTensor.SameMPV₂Pos.trace_evalWord` — positive-length, mixed-bond trace transport
 * `MPSTensor.sameMPV_trace_word2` — auxiliary length-2 specialisation
   used in linear-extension proofs
 * `MPSTensor.traceMulRightPi_ker_eq_bot` — injectivity of `traceMulRightPi`
@@ -28,6 +28,8 @@ trace pairing on square matrices.
 * `MPSTensor.ker_bot_of_range_le` — auxiliary finrank transfer:
   range inclusion + injectivity ⟹ injectivity
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators
 
@@ -113,16 +115,17 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
 
 /-- If `A` and `B` generate the same MPV family, then
 $\tr(A^w) = \tr(B^w)$ for every word~$w$. -/
-lemma SameMPV.trace_evalWord {A B : MPSTensor d D} (h : SameMPV A B) (w : List (Fin d)) :
+lemma _root_.MPTensor.SameMPV.trace_evalWord {α : Type*} {A B : MPTensor α (Fin D)}
+    (h : SameMPV A B) (w : List α) :
     Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   -- Use the `SameMPV` equality on the configuration `σ := w.get`.
   simpa [mpv, coeff, List.ofFn_get] using h w.length w.get
 
 /-- Positive-length MPV equality transports the trace of every nonempty word,
 even when the two tensors have different bond dimensions. -/
-lemma SameMPV₂Pos.trace_evalWord {D₁ D₂ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : SameMPV₂Pos A B) (w : List (Fin d)) (hw : w ≠ []) :
+lemma _root_.MPTensor.SameMPV₂Pos.trace_evalWord {α : Type*} {D₁ D₂ : ℕ}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
+    (h : SameMPV₂Pos A B) (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   simpa [mpv, coeff, List.ofFn_get] using h w.length (List.length_pos_of_ne_nil hw) w.get
 

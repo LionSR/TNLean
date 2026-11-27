@@ -39,6 +39,8 @@ cross-correlations between distinct blocks decay exponentially.
   Source: `Papers/0802.0447/`
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Kraus
@@ -99,7 +101,7 @@ theorem mpvOverlap_tendsto_zero [NeZero D]
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hAB : ¬ GaugePhaseEquiv A B) :
-    Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) :=
+    Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A B N) Filter.atTop (nhds 0) :=
   mpvOverlap_tendsto_zero_of_irreducible_TP A B
     (irreducibleTensor_of_injective A hA)
     (irreducibleTensor_of_injective B hB) hA_norm hB_norm hAB
@@ -125,7 +127,7 @@ theorem mpvOverlap_tendsto_zero_of_dim_ne
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hD : D₁ ≠ D₂) :
-    Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) :=
+    Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A B N) Filter.atTop (nhds 0) :=
   mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP A B
     (irreducibleTensor_of_injective A hA)
     (irreducibleTensor_of_injective B hB) hA_norm hB_norm hD

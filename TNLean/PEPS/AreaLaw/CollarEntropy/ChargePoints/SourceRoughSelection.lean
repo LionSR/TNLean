@@ -9,7 +9,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughLowerPrevect
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.GenericChargeEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectionBudget
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -36,6 +36,9 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 Validation and inherited-dependency scope:
 `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
+
+open ManyBody (designatedSupport exists_global_schmidtBellPrevector
+  latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -93,7 +96,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
           (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
@@ -354,7 +357,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFami
           (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
@@ -499,7 +502,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_
           (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
@@ -640,7 +643,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
           (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →

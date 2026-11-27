@@ -6,6 +6,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.Graph.Cell.TorusRegionLiftRealization
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 import Mathlib.Combinatorics.SimpleGraph.Cayley
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Analysis.CStarAlgebra.Classes
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Topology.Algebra.Module.ModuleTopology
 
 /-!
 # No finite holes in simply connected integer cell domains

@@ -43,6 +43,8 @@ not detect arbitrary off-diagonal matrices between repeated sectors.
   lines 1909--1919.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

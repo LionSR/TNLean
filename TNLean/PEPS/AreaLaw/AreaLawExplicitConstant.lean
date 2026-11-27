@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.TwoFamilyAssembly
 import TNLean.PEPS.AreaLaw.RectangularSpecialization
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -45,6 +46,8 @@ The explicit constant is recorded in `docs/notes/arealaw2d_explicit_constant.tex
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (latticeTruncationRadiusConstant)
 
 open scoped Matrix.Norms.L2Operator
 

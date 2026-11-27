@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 
 /-!
 # Opposing corners on fine-cell sides
@@ -30,16 +32,12 @@ It also contains the following results.
   dyadic-cell sides.
 -/
 
+open ManyBody (convex_closure_dyadicCell dyadicCell dyadicCellCorner dyadicCellCorner_mem_closure
+  dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices dyadicLayer fineLayerIndices integerPoint)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 section SideSubdivision
-
-/-- A corner of the actual translated dyadic cell, with each endpoint chosen by
-a binary coordinate. Source: area-law Section 11, lines 299–306 and 352–356. -/
-def dyadicCellCorner (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
-    (ε : Fin 2 × Fin 2) : ℝ × ℝ :=
-  (o.1 + (2 : ℝ) ^ ℓ * ((z.1 : ℝ) + ε.1.val),
-    o.2 + (2 : ℝ) ^ ℓ * ((z.2 : ℝ) + ε.2.val))
 
 private theorem half_parameter_trichotomy {q θ : ℝ} (hq : 0 < q)
     (hθ : θ ∈ Set.Icc (0 : ℝ) 1) (n : ℤ)
@@ -88,19 +86,6 @@ private theorem halfMesh_on_side (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     module
   · right; right
     simpa [ht] using he.symm
-
-private theorem dyadicCellCorner_mem_closure (o : ℝ × ℝ) (ℓ : ℕ)
-    (z : ℤ × ℤ) (ε : Fin 2 × Fin 2) :
-    dyadicCellCorner o ℓ z ε ∈ closure (dyadicCell o ℓ z) := by
-  have hbound (a : ℝ) (i : ℤ) (e : Fin 2) :
-      a + (2 : ℝ) ^ ℓ * ((i : ℝ) + e.val) ∈
-        Set.Icc (a + (2 : ℝ) ^ ℓ * i) (a + (2 : ℝ) ^ ℓ * (i + 1)) := by
-    have he0 : (0 : ℝ) ≤ e.val := Nat.cast_nonneg _
-    have he1 : (e.val : ℝ) ≤ 1 := by exact_mod_cast (show e.val ≤ 1 by omega)
-    have ht : 0 < (2 : ℝ) ^ ℓ := by positivity
-    constructor <;> nlinarith
-  rw [closure_dyadicCell]
-  exact ⟨hbound o.1 z.1 ε.1, hbound o.2 z.2 ε.2⟩
 
 private theorem wholeSide_mem_closure (o : ℝ × ℝ) (ℓ : ℕ)
     (z : ℤ × ℤ) (s : Fin 4) (x : ℝ × ℝ)

@@ -39,23 +39,11 @@ lines 1236--1320; Molnár et al., arXiv:2204.05940v1, Section 5.5, following
 Proposition 5.4.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder BigOperators
-
-namespace Matrix
-
-/-- Expansion of a boundary-weighted trace through a product of linear combinations. -/
-theorem trace_mul_prod_ofFn_sum_smul {n J : Type*} [Fintype n] [DecidableEq n]
-    [Fintype J] {L : ℕ} (X : Matrix n n ℂ)
-    (f : Fin L → J → ℂ) (B : Fin L → J → Matrix n n ℂ) :
-    trace (X * (List.ofFn fun l => ∑ j, f l j • B l j).prod) =
-      ∑ ch : Fin L → J, (∏ l, f l (ch l)) *
-        trace (X * (List.ofFn fun l => B l (ch l)).prod) := by
-  rw [List.prod_ofFn_sum, Matrix.mul_sum, trace_sum]
-  simp only [List.prod_ofFn_smul, Matrix.mul_smul, trace_smul, smul_eq_mul]
-
-end Matrix
 
 namespace MPSTensor
 

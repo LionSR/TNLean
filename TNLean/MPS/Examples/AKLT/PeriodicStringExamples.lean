@@ -33,6 +33,8 @@ not an additional nonvanishing hypothesis.
   display `RL` and Examples 1–2, lines 380–411.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators InnerProductSpace
 
 noncomputable section

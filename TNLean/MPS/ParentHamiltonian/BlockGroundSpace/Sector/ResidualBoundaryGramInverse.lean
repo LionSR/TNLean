@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGram
-import QICLean.Analysis.Norm.NeumannInverse
+import QICLean.Analysis.Calculus.NeumannInverse
 /-!
 # Supported inverses of correlated residual Gram operators
 
@@ -182,7 +182,6 @@ theorem correlatedTailMapES_comp_rowProjection
   apply comp_support_of_gram_comp_eq
   rw [correlatedTailMapES_adjoint_comp_eq_rowProjection A V r Q hGram]
   exact (rectangularRowProjection_isStarProjection (E := E) hQ).isIdempotentElem.eq
-
 
 /-- The residual boundary map vanishes outside the row corner determined by the correlated tail. -/
 theorem blockedResidualBoundaryMapES_comp_rowProjection
@@ -502,11 +501,24 @@ theorem norm_residualBoundaryGramInverse_sub_limit_le [NeZero D] [NeZero E]
         (mul_le_mul hInvBound hError (norm_nonneg _) (by positivity)) (norm_nonneg _)
     _ = _ := by ring
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D E L : ℕ}
+local instance : HasSummableGeomSeries
+    (EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D)) :=
+  have : CompleteSpace
+      (EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D)) :=
+    FiniteDimensional.complete ℂ _
+  inferInstance
+
 /-- The supported inverse converges to the fixed inverse restricted to the row corner along
 every diverging prefix length, with arbitrary tail lengths. This is an intermediate estimate
 for Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.residualBoundaryGramInverse_sub_limit_tendsto_zero
+theorem residualBoundaryGramInverse_sub_limit_tendsto_zero
     [NeZero D] [NeZero E]
     {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
@@ -536,4 +548,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualBoundaryGramInverse_s
   exact norm_residualBoundaryGramInverse_sub_limit_le A B V hρ (Q (r i)) (hQ (r i))
     (N i) (r i) (hGram (r i)) hi.le
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

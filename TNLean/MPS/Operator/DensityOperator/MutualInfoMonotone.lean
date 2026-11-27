@@ -23,10 +23,17 @@ state equals the entropy of the original, by reindex invariance). `traceC_corr`
 identifies the tripartite trace over the last factor with the contiguous-block
 reduction keeping the first `a + b` spins.
 
+Translation invariance of the block reduced state (`window_block_entropy`) also
+identifies the two marginals of the normalized state across a contiguous cut
+with block reduced states. This gives `MPOTensor.mutualInfoChain_eq`: the
+mutual information `MPOTensor.mutualInfoChain`, defined as a bipartite mutual
+information, equals the source formula `I_L = S_L + S_{N-L} - S_N`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Proposition
-  (`PropILILp1`, line 801), Appendix proof (line 1319).
+  (`PropILILp1`, line 801), Appendix proof (line 1319), and the mutual
+  information of lines 792--797.
 -/
 
 open Matrix
@@ -38,17 +45,11 @@ strong-subadditivity theorem: split into the three contiguous segments, then
 flatten each. -/
 noncomputable def tripartiteSplitEquiv (d a b c : ℕ) :
     (Fin (a + b + c) → Fin d) ≃ Fin (d ^ a) × Fin (d ^ b) × Fin (d ^ c) :=
-  (blockSplitEquiv d (a + b) c).trans
-    (((blockSplitEquiv d a b).prodCongr (Equiv.refl _)).trans
+  (MPOTensor.blockSplitEquiv d (a + b) c).trans
+    (((MPOTensor.blockSplitEquiv d a b).prodCongr (Equiv.refl _)).trans
       ((Equiv.prodAssoc _ _ _).trans
         (finFunctionFinEquiv.prodCongr
           (finFunctionFinEquiv.prodCongr finFunctionFinEquiv))))
-
-/-- The cast carrying a configuration on `a + b` contiguous spins onto the flat
-product `Fin (d^a) × Fin (d^b)`. -/
-noncomputable def biSplitEquiv (d a b : ℕ) :
-    (Fin (a + b) → Fin d) ≃ Fin (d ^ a) × Fin (d ^ b) :=
-  (blockSplitEquiv d a b).trans (finFunctionFinEquiv.prodCongr finFunctionFinEquiv)
 
 /-- **Strong subadditivity through the contiguous-block cast.** For a trace-one
 positive semidefinite state `σ` on `a + b + c` spins, casting to the flat
@@ -82,10 +83,10 @@ theorem traceC_corr {d a b c : ℕ}
     (σ : Matrix (Fin (a + b + c) → Fin d) (Fin (a + b + c) → Fin d) ℂ) :
     Matrix.traceC_ABC (σ.submatrix (tripartiteSplitEquiv d a b c).symm
         (tripartiteSplitEquiv d a b c).symm)
-      = (blockReducedState d (a + b) c σ).submatrix
+      = (MPOTensor.blockReducedState d (a + b) c σ).submatrix
           (biSplitEquiv d a b).symm (biSplitEquiv d a b).symm := by
   ext ab1 ab2
-  simp only [Matrix.traceC_ABC, Matrix.submatrix_apply, blockReducedState,
+  simp only [Matrix.traceC_ABC, Matrix.submatrix_apply, MPOTensor.blockReducedState,
     Matrix.partialTraceRight_apply, tripartiteSplitEquiv, biSplitEquiv,
     Equiv.symm_trans_apply, Equiv.prodCongr_symm, Equiv.refl_symm,
     Equiv.prodAssoc_symm_apply, Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq]
@@ -98,11 +99,11 @@ those agrees with directly keeping the first `a + b` spins. This identifies the
 block) with the `a + b` block entropy. -/
 theorem reducedBlockState_prefix {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ}
     (h3 : a + b + c ≤ N) :
-    blockReducedState d (a + b) c (MPOTensor.reducedBlockState M N (a + b + c) h3)
+    MPOTensor.blockReducedState d (a + b) c (MPOTensor.reducedBlockState M N (a + b + c) h3)
       = MPOTensor.reducedBlockState M N (a + b) ((Nat.le_add_right _ c).trans h3) := by
-  rw [MPOTensor.reducedBlockState, blockReducedState_comp]
+  rw [MPOTensor.reducedBlockState, MPOTensor.blockReducedState_comp]
   have h : (a + b) + (c + (N - (a + b + c))) = (a + b) + (N - (a + b)) := by omega
-  rw [← blockReducedState_submatrix_finCongr h, MPOTensor.reducedBlockState]
+  rw [← MPOTensor.blockReducedState_submatrix_finCongr h, MPOTensor.reducedBlockState]
   congr 1
 
 /-! ## Translation invariance of the block reduced state -/
@@ -140,25 +141,178 @@ theorem window_block_entropy {d D : ℕ} (M : MPOTensor d D) {N p m s : ℕ} (hB
         M.normalizedMPO N (Fin.append (Fin.append x u) z ∘ Fin.cast hB)
           (Fin.append (Fin.append x v) z ∘ Fin.cast hB)
       = M.reducedBlockState N m (by omega) u v := by
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   set E : (Fin p → Fin d) × (Fin s → Fin d) ≃ (Fin (N - m) → Fin d) :=
     (Equiv.prodComm _ _).trans
-      ((blockSplitEquiv d s p).symm.trans
+      ((MPOTensor.blockSplitEquiv d s p).symm.trans
         (Equiv.arrowCongr (finCongr (show s + p = N - m by omega)) (Equiv.refl (Fin d)))) with hE
   rw [← Equiv.sum_comp E, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl (fun x _ => Finset.sum_congr rfl (fun z _ => ?_))
   have hEval : E (x, z) = (Fin.append z x) ∘ Fin.cast (show N - m = s + p by omega) := by
     simp only [hE, Equiv.trans_apply, Equiv.prodComm_apply, Prod.swap_prod_mk,
-      blockSplitEquiv_symm_apply]
+      MPOTensor.blockSplitEquiv_symm_apply]
     rfl
   rw [hEval,
     append_glue u (Fin.append z x) (show N - m = s + p by omega)
       (show N = m + (N - m) by omega) (show N = m + (s + p) by omega),
     append_glue v (Fin.append z x) (show N - m = s + p by omega)
       (show N = m + (N - m) by omega) (show N = m + (s + p) by omega),
-    window_eq_prefix_rotate x u z (show N = m + (s + p) by omega) hB,
-    window_eq_prefix_rotate x v z (show N = m + (s + p) by omega) hB,
+    MPOTensor.window_eq_prefix_rotate x u z (show N = m + (s + p) by omega) hB,
+    MPOTensor.window_eq_prefix_rotate x v z (show N = m + (s + p) by omega) hB,
     normalizedMPO_comp_finRotate_pow]
+
+/-! ## The mutual information as a sum of block entropies -/
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+private theorem append_sub_self {K : ℕ} {n : Type*} (u : Fin K → n)
+    (g : Fin (K - K) → n) (h : K = K + (K - K)) :
+    Fin.append u g ∘ Fin.cast h = u := by
+  rw [Fin.append_right_nil u g (Nat.sub_self K)]
+  funext i
+  simp
+
+/-- Keeping all `N` sites of the normalized MPO leaves the state unchanged. -/
+theorem reducedBlockState_full (M : MPOTensor d D) (N : ℕ) :
+    reducedBlockState M N N (le_refl N) = normalizedMPO M N := by
+  ext i j
+  simp only [reducedBlockState, MPOTensor.blockReducedState, Matrix.partialTraceRight_apply,
+    Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply, blockReindexEquiv,
+    Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
+  let : Unique (Fin (N - N) → Fin d) :=
+    { default := fun i ↦ (Fin.cast (Nat.sub_self N) i).elim0
+      uniq := fun _ ↦ funext fun i ↦ (Fin.cast (Nat.sub_self N) i).elim0 }
+  rw [Fintype.sum_unique]
+  have hi :
+      ((finCongr (Nat.add_sub_cancel' (le_refl N))).arrowCongr (Equiv.refl (Fin d)))
+          (Fin.append i default) =
+        Fin.append i default ∘ Fin.cast (Nat.add_sub_cancel' (le_refl N)).symm := rfl
+  have hj :
+      ((finCongr (Nat.add_sub_cancel' (le_refl N))).arrowCongr (Equiv.refl (Fin d)))
+          (Fin.append j default) =
+        Fin.append j default ∘ Fin.cast (Nat.add_sub_cancel' (le_refl N)).symm := rfl
+  rw [hi, hj, append_sub_self, append_sub_self]
+
+/-- The first marginal at the contiguous cut is the first-`L` reduced state,
+up to the standard flattening of configurations.
+
+Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
+theorem bipartitionedNormalizedMPO_traceRight (M : MPOTensor d D) (N L : ℕ)
+    (hL : L ≤ N) :
+    Matrix.traceRight
+        (bipartitionedNormalizedMPO M N L (N - L) (by omega)) =
+      (reducedBlockState M N L hL).submatrix finFunctionFinEquiv.symm
+        finFunctionFinEquiv.symm := by
+  ext i j
+  simp only [Matrix.traceRight_apply, bipartitionedNormalizedMPO, Matrix.submatrix_apply,
+    chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
+    Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, MPOTensor.blockSplitEquiv_symm_apply,
+    Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
+  rw [MPOTensor.reducedBlockState_eq_sum]
+  let f : (Fin (N - L) → Fin d) → ℂ := fun w ↦
+    M.normalizedMPO N
+      ((Fin.append (finFunctionFinEquiv.symm i) w) ∘
+        Fin.cast (show N = L + (N - L) by omega))
+      ((Fin.append (finFunctionFinEquiv.symm j) w) ∘
+        Fin.cast (show N = L + (N - L) by omega))
+  change (∑ x : Fin (d ^ (N - L)), f (finFunctionFinEquiv.symm x)) = ∑ w, f w
+  exact Fintype.sum_equiv finFunctionFinEquiv.symm _ f (fun _ ↦ rfl)
+
+/-- The second marginal at the contiguous cut is the reduced state on `N-L`
+sites, up to the standard flattening of configurations. Translation invariance
+moves the final `N-L` sites to the beginning of the periodic chain.
+
+Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
+theorem bipartitionedNormalizedMPO_traceLeft (M : MPOTensor d D) (N L : ℕ)
+    (hL : L ≤ N) :
+    Matrix.traceLeft
+        (bipartitionedNormalizedMPO M N L (N - L) (by omega)) =
+      (reducedBlockState M N (N - L) (Nat.sub_le N L)).submatrix
+        finFunctionFinEquiv.symm finFunctionFinEquiv.symm := by
+  ext i j
+  simp only [Matrix.traceLeft_apply, bipartitionedNormalizedMPO, Matrix.submatrix_apply,
+    chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
+    Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, MPOTensor.blockSplitEquiv_symm_apply,
+    Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
+  let f : (Fin L → Fin d) → ℂ := fun x ↦
+    M.normalizedMPO N
+      ((Fin.append x (finFunctionFinEquiv.symm i)) ∘
+        Fin.cast (show N = L + (N - L) by omega))
+      ((Fin.append x (finFunctionFinEquiv.symm j)) ∘
+        Fin.cast (show N = L + (N - L) by omega))
+  change (∑ x : Fin (d ^ L), f (finFunctionFinEquiv.symm x)) = _
+  rw [Fintype.sum_equiv finFunctionFinEquiv.symm _ f (fun _ ↦ rfl)]
+  have key :=
+    window_block_entropy M (p := L) (m := N - L) (s := 0)
+      (show N = L + (N - L) + 0 by omega)
+      (finFunctionFinEquiv.symm i) (finFunctionFinEquiv.symm j)
+  rw [← key]
+  refine Finset.sum_congr rfl (fun x _ ↦ ?_)
+  rw [Fintype.sum_unique]
+  dsimp only [f]
+  congr 1 <;> funext k
+  all_goals rw [Fin.append_right_nil _ _ rfl]
+  all_goals simp only [Function.comp_apply, Fin.cast_eq_self]
+
+/-- **The mutual information as block entropies**, the source formula
+`I_L = S_L + S_{N-L} - S_N` (arXiv:1606.00608, line 797).
+
+The bipartite mutual information of `MPOTensor.mutualInfoChain` has the entropy
+of the last `N - L` spins as its second term; translation invariance of the
+periodic operator identifies it with the block entropy `S_{N-L}` of the first
+`N - L` spins.
+
+Source: arXiv:1606.00608, lines 792--797 and Appendix C, lines 1338--1340. -/
+theorem mutualInfoChain_eq (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    mutualInfoChain M N L hL hM
+      = blockEntropy M N L hL hM
+        + blockEntropy M N (N - L) (Nat.sub_le N L) hM
+        - blockEntropy M N N (le_refl N) hM := by
+  simp only [mutualInfoChain, blockEntropy, _root_.mutualInformation]
+  have hright :
+      vonNeumannEntropy
+          (Matrix.traceRight
+            (bipartitionedNormalizedMPO M N L (N - L) (by omega)))
+          (Matrix.traceRight_isHermitian
+            ((normalizedMPO_isHermitian M N hM).submatrix
+              (chainBipartitionEquiv d N L (N - L) (by omega)).symm)) =
+        vonNeumannEntropy (reducedBlockState M N L hL)
+          (reducedBlockState_isHermitian M N L hL hM) := by
+    rw [vonNeumannEntropy_congr (bipartitionedNormalizedMPO_traceRight M N L hL) _
+      ((reducedBlockState_isHermitian M N L hL hM).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+  have hleft :
+      vonNeumannEntropy
+          (Matrix.traceLeft
+            (bipartitionedNormalizedMPO M N L (N - L) (by omega)))
+          (Matrix.traceLeft_isHermitian
+            ((normalizedMPO_isHermitian M N hM).submatrix
+              (chainBipartitionEquiv d N L (N - L) (by omega)).symm)) =
+        vonNeumannEntropy (reducedBlockState M N (N - L) (Nat.sub_le N L))
+          (reducedBlockState_isHermitian M N (N - L) (Nat.sub_le N L) hM) := by
+    rw [vonNeumannEntropy_congr (bipartitionedNormalizedMPO_traceLeft M N L hL) _
+      ((reducedBlockState_isHermitian M N (N - L) (Nat.sub_le N L) hM).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+  have hfull :
+      vonNeumannEntropy (reducedBlockState M N N (le_refl N))
+          (reducedBlockState_isHermitian M N N (le_refl N) hM) =
+        vonNeumannEntropy (normalizedMPO M N) (normalizedMPO_isHermitian M N hM) :=
+    vonNeumannEntropy_congr (reducedBlockState_full M N) _ _
+  have hjoint :
+      vonNeumannEntropy
+          (bipartitionedNormalizedMPO M N L (N - L) (by omega))
+          ((normalizedMPO_isHermitian M N hM).submatrix
+            (chainBipartitionEquiv d N L (N - L) (by omega)).symm) =
+        vonNeumannEntropy (normalizedMPO M N) (normalizedMPO_isHermitian M N hM) :=
+    vonNeumannEntropy_submatrix_equiv
+      (chainBipartitionEquiv d N L (N - L) (by omega)).symm
+      (normalizedMPO M N) (normalizedMPO_isHermitian M N hM)
+  rw [hright, hleft, hfull, hjoint]
+
+end MPOTensor
 
 /-! ## Block-entropy correspondences and Proposition 4.5 -/
 
@@ -172,8 +326,8 @@ theorem collapse_last {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + 
     ∑ y : Fin c → Fin d,
         M.reducedBlockState N (a + b + c) h3 (Fin.append U y) (Fin.append V y)
       = M.reducedBlockState N (a + b) ((Nat.le_add_right _ c).trans h3) U V := by
-  rw [← reducedBlockState_prefix M h3, blockReducedState, partialTraceRight_apply]
-  simp only [Matrix.submatrix_apply, blockSplitEquiv_symm_apply]
+  rw [← reducedBlockState_prefix M h3, MPOTensor.blockReducedState, partialTraceRight_apply]
+  simp only [Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply]
 
 /-- Flattened-index form of `collapse_last`: the sum ranges over `Fin (d ^ c)`. -/
 theorem collapse_last' {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
@@ -201,7 +355,7 @@ theorem collapse_first {d D : ℕ} (M : MPOTensor d D) {N a b : ℕ} (hab : a + 
     (fun x => M.reducedBlockState N (a + b) hab (Fin.append x B1) (Fin.append x B2))
     (fun _ => rfl)]
   refine Finset.sum_congr rfl (fun x _ => ?_)
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
 
 /-- **traceC correspondence.** Tracing the third tripartite factor of the cast
 reduced state recovers the `(a+b)`-block reduced state. -/
@@ -256,7 +410,7 @@ theorem traceAC_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b 
   ext b1 b2
   simp only [Matrix.submatrix_apply, Matrix.traceAC_ABC, tripartiteSplitEquiv,
     Equiv.symm_trans_apply, Equiv.prodCongr_symm, Equiv.refl_symm, Equiv.prodAssoc_symm_apply,
-    Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq, blockSplitEquiv_symm_apply]
+    Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq, MPOTensor.blockSplitEquiv_symm_apply]
   rw [Finset.sum_congr rfl (fun a' _ => collapse_last' M h3
     (Fin.append (finFunctionFinEquiv.symm a') (finFunctionFinEquiv.symm b1))
     (Fin.append (finFunctionFinEquiv.symm a') (finFunctionFinEquiv.symm b2)))]
@@ -307,13 +461,13 @@ theorem traceA_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b +
         (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm)
       = (M.reducedBlockState N (b + c) (le_trans (by omega) h3)).submatrix e e := by
   refine ⟨(finFunctionFinEquiv.symm.prodCongr finFunctionFinEquiv.symm).trans
-    (blockSplitEquiv d b c).symm, ?_⟩
+    (MPOTensor.blockSplitEquiv d b c).symm, ?_⟩
   ext bc1 bc2
   obtain ⟨b1, c1⟩ := bc1
   obtain ⟨b2, c2⟩ := bc2
   simp only [Matrix.submatrix_apply, Matrix.traceA_ABC, tripartiteSplitEquiv,
     Equiv.symm_trans_apply, Equiv.prodCongr_symm, Equiv.refl_symm, Equiv.prodAssoc_symm_apply,
-    Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq, blockSplitEquiv_symm_apply,
+    Equiv.prodCongr_apply, Equiv.coe_refl, Prod.map, id_eq, MPOTensor.blockSplitEquiv_symm_apply,
     Equiv.trans_apply]
   rw [Finset.sum_congr rfl (fun a' _ => by
     rw [reducedBlockState_cast M (show a + (b + c) = a + b + c by omega),
@@ -356,7 +510,7 @@ theorem ssa_block_entropy {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : 
         + M.blockEntropy N (b + c) (le_trans (by omega) h3) hM := by
   set σ := M.reducedBlockState N (a + b + c) h3 with hσdef
   have hσ : σ.PosSemidef := reducedBlockState_posSemidef M N (a + b + c) h3 hM
-  have htr1 : σ.trace = 1 := reducedBlockState_trace M N (a + b + c) h3 htr
+  have htr1 : σ.trace = 1 := MPOTensor.reducedBlockState_trace M N (a + b + c) h3 htr
   have ssa := ssa_cast_ineq σ hσ htr1
   have hEσ : vonNeumannEntropy σ hσ.1 = M.blockEntropy N (a + b + c) h3 hM :=
     vonNeumannEntropy_congr rfl _ _
@@ -380,7 +534,7 @@ theorem mutualInfoChain_monotone {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hN
       blockEntropy_congr M N (show (1 : ℕ) + L = L + 1 by omega) _ (by omega) hM,
       blockEntropy_congr M N (show L + (N - 2 * L - 1) = N - (L + 1) by omega) _
         (Nat.sub_le N (L + 1)) hM] at key
-  simp only [MPOTensor.mutualInfoChain]
+  simp only [MPOTensor.mutualInfoChain_eq]
   linarith [key]
 
 /-- Block entropies are nonnegative. -/
@@ -389,7 +543,7 @@ theorem blockEntropy_nonneg {d D : ℕ} (M : MPOTensor d D) {N m : ℕ} (hm : m 
     0 ≤ M.blockEntropy N m hm hM :=
   vonNeumannEntropy_nonneg_of_posSemidef_trace_one
     (reducedBlockState_posSemidef M N m hm hM)
-    (reducedBlockState_trace M N m hm htr)
+    (MPOTensor.reducedBlockState_trace M N m hm htr)
 
 /-- **Nonnegativity of the mutual information.** For a normalizable periodic MPDO state,
 the mutual information of any block is nonnegative, $0 \le I_L$. This is subadditivity of
@@ -403,16 +557,16 @@ theorem mutualInfoChain_nonneg {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL :
     blockEntropy_congr M N (show L + 0 = L by omega) _ hL hM,
     blockEntropy_congr M N (show 0 + (N - L) = N - L by omega) _ (Nat.sub_le N L) hM] at key
   have hS0 : 0 ≤ M.blockEntropy N 0 (Nat.zero_le N) hM := blockEntropy_nonneg M _ hM htr
-  simp only [MPOTensor.mutualInfoChain]
+  simp only [MPOTensor.mutualInfoChain_eq]
   linarith [key, hS0]
 
 /-- **Symmetry of the mutual information across the cut.** The mutual information of the
 first `L` spins equals that of their complement: `I_L = I_{N-L}`. Immediate from the
-symmetric definition `I_L = S_L + S_{N-L} - S_N`. -/
+symmetric formula `I_L = S_L + S_{N-L} - S_N` of `MPOTensor.mutualInfoChain_eq`. -/
 theorem mutualInfoChain_symm {d D : ℕ} (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef) :
     M.mutualInfoChain N L hL hM = M.mutualInfoChain N (N - L) (Nat.sub_le N L) hM := by
-  simp only [MPOTensor.mutualInfoChain]
+  simp only [MPOTensor.mutualInfoChain_eq]
   rw [blockEntropy_congr M N (show N - (N - L) = L by omega) (Nat.sub_le N (N - L)) hL hM]
   ring
 
@@ -424,7 +578,7 @@ theorem blockEntropy_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
   have hPSD : (reducedBlockState M N 0 (Nat.zero_le N)).PosSemidef :=
     reducedBlockState_posSemidef M N 0 (Nat.zero_le N) hM
   have hTr : (reducedBlockState M N 0 (Nat.zero_le N)).trace = 1 :=
-    reducedBlockState_trace M N 0 (Nat.zero_le N) htr
+    MPOTensor.reducedBlockState_trace M N 0 (Nat.zero_le N) htr
   apply vonNeumannEntropy_eq_zero_of_rank_le_one hPSD hTr
   simpa using Matrix.rank_le_card_width (reducedBlockState M N 0 (Nat.zero_le N))
 
@@ -432,7 +586,7 @@ theorem blockEntropy_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
 theorem mutualInfoChain_zero {d D : ℕ} (M : MPOTensor d D) (N : ℕ)
     (hM : (mpo M N).PosSemidef) (htr : (mpo M N).trace ≠ 0) :
     M.mutualInfoChain N 0 (Nat.zero_le N) hM = 0 := by
-  simp only [MPOTensor.mutualInfoChain, Nat.sub_zero]
+  simp only [MPOTensor.mutualInfoChain_eq, Nat.sub_zero]
   rw [blockEntropy_zero M N hM htr]
   ring
 

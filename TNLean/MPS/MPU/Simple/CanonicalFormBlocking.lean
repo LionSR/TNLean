@@ -60,8 +60,8 @@ noncomputable def IsMPUCanonicalFormII.blockTensor
   ρ_isDiag := hU.ρ_isDiag
   ρ_trace := hU.ρ_trace
   ρ_fixed := by
-    rw [normalizedFlattening_blockTensor, MPSTensor.transferMap_reindexPhysical_equiv]
-    exact MPSTensor.transferMap_blockTensor_fixedPoint U.normalizedFlattening p hU.ρ hU.ρ_fixed
+    rw [normalizedFlattening_blockTensor, Kraus.transferMap_reindexPhysical_equiv]
+    exact Kraus.transferMap_blockTensor_fixedPoint U.normalizedFlattening p hU.ρ hU.ρ_fixed
 
 /-- If a positive block is simple, its source gate is an isometry for the
 original canonical-form-II weight. All source-cut factors here belong to the

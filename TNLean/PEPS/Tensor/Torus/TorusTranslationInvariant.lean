@@ -27,10 +27,10 @@ transitively on each orientation class — every horizontal edge is the translat
 every other, and likewise for vertical edges — this is the constant-bond content
 that makes the reduction to one horizontal and one vertical matrix well-defined.  The
 transitivity is supported by the normal-form characterization
-`isHorizontalTorusEdge_eq_rightEdge` writing each horizontal edge as the right edge
-of its left endpoint; the full orientation-class constancy is `TorusUniformBondDim`
-below, recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, remaining
-obligation 6.
+`isHorizontalTorusEdge_eq_rightEdge` of `TNLean/PEPS/Graph/Torus/TorusLatticeGraph.lean`,
+writing each horizontal edge as the right edge of its left endpoint; the full
+orientation-class constancy is `TorusUniformBondDim` below, recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, remaining obligation 6.
 
 ## References
 
@@ -125,148 +125,6 @@ theorem bondDim_translateEdge_of_translationInvariant
   -- Edge.map (translate a b).symm (translateEdge a b e) = e
   change ManyBody.Edge.map (translate a b).symm (ManyBody.Edge.map (translate a b) e) = e
   exact ManyBody.Edge.map_symm_map (translate a b) e
-
-/-! ### Normal form of horizontal and vertical torus edges
-
-Each horizontal edge is the right edge of a well-defined left endpoint `p`, the
-edge with unordered endpoints `p` and `p + (1, 0)`.  The lexicographic order may
-place either of these first (the coordinate value wraps around the torus), so the
-left endpoint is read from whichever incidence carries the `+1` step.  This normal
-form gives the transitivity of the translation action on the horizontal class:
-translating the left endpoint of one horizontal edge to the left
-endpoint of another carries the whole edge across. -/
-
-/-- The horizontal torus edge with left endpoint `p`, i.e. the edge on the adjacent
-pair `(p, p + (1, 0))`. -/
-def torusRightEdge (p : TorusVertex width height) : Edge (torusGraph width height) :=
-  ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)
-
-/-- The vertical torus edge with lower endpoint `p`, i.e. the edge on the adjacent
-pair `(p, p + (0, 1))`. -/
-def torusUpEdge (p : TorusVertex width height) : Edge (torusGraph width height) :=
-  ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)
-
-/-- Every horizontal torus edge is the right edge of a left endpoint `p`: its
-unordered endpoints are `p` and `p + (1, 0)`.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem isHorizontalTorusEdge_eq_rightEdge {e : Edge (torusGraph width height)}
-    (he : IsHorizontalTorusEdge e) :
-    ∃ p : TorusVertex width height, e = torusRightEdge p := by
-  have hc : e.1.1.2 = e.1.2.2 := he.1
-  rcases he.2 with h2 | h2
-  · refine ⟨e.1.1, ?_⟩
-    rw [torusRightEdge]
-    symm
-    apply ManyBody.Edge.ofAdj_eq_of_endpoints
-    exact Or.inl ⟨rfl, Prod.ext (by exact h2) (by simpa using hc)⟩
-  · refine ⟨e.1.2, ?_⟩
-    rw [torusRightEdge]
-    symm
-    apply ManyBody.Edge.ofAdj_eq_of_endpoints
-    exact Or.inr ⟨rfl, Prod.ext (by exact h2) (by simpa using hc.symm)⟩
-
-/-- Every vertical torus edge is the up edge of a lower endpoint `p`: its unordered
-endpoints are `p` and `p + (0, 1)`.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem isVerticalTorusEdge_eq_upEdge {e : Edge (torusGraph width height)}
-    (he : IsVerticalTorusEdge e) :
-    ∃ p : TorusVertex width height, e = torusUpEdge p := by
-  have hc : e.1.1.1 = e.1.2.1 := he.1
-  rcases he.2 with h2 | h2
-  · refine ⟨e.1.1, ?_⟩
-    rw [torusUpEdge]
-    symm
-    apply ManyBody.Edge.ofAdj_eq_of_endpoints
-    exact Or.inl ⟨rfl, Prod.ext (by simpa using hc) (by exact h2)⟩
-  · refine ⟨e.1.2, ?_⟩
-    rw [torusUpEdge]
-    symm
-    apply ManyBody.Edge.ofAdj_eq_of_endpoints
-    exact Or.inr ⟨rfl, Prod.ext (by simpa using hc.symm) (by exact h2)⟩
-
-/-! ### Orientation and injectivity of right and up edges -/
-
-/-- A right edge is horizontal. -/
-theorem isHorizontalTorusEdge_torusRightEdge (p : TorusVertex width height) :
-    IsHorizontalTorusEdge (torusRightEdge p) := by
-  unfold IsHorizontalTorusEdge torusRightEdge
-  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
-    rw [h1, h2]
-  · exact ⟨rfl, Or.inl rfl⟩
-  · exact ⟨rfl, Or.inr rfl⟩
-
-/-- An up edge is vertical. -/
-theorem isVerticalTorusEdge_torusUpEdge (p : TorusVertex width height) :
-    IsVerticalTorusEdge (torusUpEdge p) := by
-  unfold IsVerticalTorusEdge torusUpEdge
-  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
-    rw [h1, h2]
-  · exact ⟨rfl, Or.inl rfl⟩
-  · exact ⟨rfl, Or.inr rfl⟩
-
-/-- In `ZMod n` with `2 < n`, no two elements are each the successor of the other. -/
-theorem zmod_not_add_one_eq_and_add_one_eq {n : ℕ} [Fact (2 < n)] (x y : ZMod n) :
-    ¬ (x = y + 1 ∧ x + 1 = y) := by
-  rintro ⟨h1, h2⟩
-  have h : ((2 : ℕ) : ZMod n) = 0 := by
-    calc ((2 : ℕ) : ZMod n) = (y + 1 + 1) - y := by push_cast; ring
-      _ = 0 := by rw [← h1, h2, sub_self]
-  have := Nat.le_of_dvd two_pos ((ZMod.natCast_eq_zero_iff 2 n).mp h)
-  exact absurd (Fact.out : 2 < n) (not_lt.mpr this)
-
-/-- On a torus of width at least three, distinct vertices have distinct right edges. -/
-theorem torusRightEdge_injective [Fact (2 < width)] :
-    Function.Injective (torusRightEdge (width := width) (height := height)) := by
-  intro p q h
-  have hp := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
-  have hq := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
-  change ManyBody.Edge.ofAdj _ = ManyBody.Edge.ofAdj _ at h
-  rw [h] at hp
-  rcases hp with ⟨a1, a2⟩ | ⟨a1, a2⟩ <;> rcases hq with ⟨b1, b2⟩ | ⟨b1, b2⟩
-  · exact (a1.symm.trans b1)
-  · exfalso
-    have e1 := a1.symm.trans b1
-    have e2 := a2.symm.trans b2
-    simp only [Prod.mk.injEq] at e1 e2
-    exact zmod_not_add_one_eq_and_add_one_eq _ _ ⟨e1.1, e2.1⟩
-  · exfalso
-    have e1 := a1.symm.trans b1
-    have e2 := a2.symm.trans b2
-    simp only [Prod.mk.injEq] at e1 e2
-    exact zmod_not_add_one_eq_and_add_one_eq _ _ ⟨e2.1, e1.1⟩
-  · exact (a2.symm.trans b2)
-
-/-- On a torus of height at least three, distinct vertices have distinct up edges. -/
-theorem torusUpEdge_injective [Fact (2 < height)] :
-    Function.Injective (torusUpEdge (width := width) (height := height)) := by
-  intro p q h
-  have hp := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
-  have hq := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
-  change ManyBody.Edge.ofAdj _ = ManyBody.Edge.ofAdj _ at h
-  rw [h] at hp
-  rcases hp with ⟨a1, a2⟩ | ⟨a1, a2⟩ <;> rcases hq with ⟨b1, b2⟩ | ⟨b1, b2⟩
-  · exact (a1.symm.trans b1)
-  · exfalso
-    have e1 := a1.symm.trans b1
-    have e2 := a2.symm.trans b2
-    simp only [Prod.mk.injEq] at e1 e2
-    exact zmod_not_add_one_eq_and_add_one_eq _ _ ⟨e1.2, e2.2⟩
-  · exfalso
-    have e1 := a1.symm.trans b1
-    have e2 := a2.symm.trans b2
-    simp only [Prod.mk.injEq] at e1 e2
-    exact zmod_not_add_one_eq_and_add_one_eq _ _ ⟨e2.2, e1.2⟩
-  · exact (a2.symm.trans b2)
-
-/-- No right edge is an up edge. -/
-theorem torusRightEdge_ne_torusUpEdge (p q : TorusVertex width height) :
-    torusRightEdge p ≠ torusUpEdge q := fun h =>
-  torusEdge_not_horizontal_and_vertical (torusUpEdge q)
-    ⟨h ▸ isHorizontalTorusEdge_torusRightEdge p, isVerticalTorusEdge_torusUpEdge q⟩
 
 /-! ### Transitivity of translations on each orientation class
 

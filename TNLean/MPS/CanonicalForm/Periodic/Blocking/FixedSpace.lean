@@ -31,6 +31,8 @@ conclusion of arXiv:1708.00029, Lemma `lem:blocking-arbitrary`.
 * `IsPeriodic.isIrreducibleFamily_compressed_stepOrbit`: the compressed blocks are irreducible.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Fin.NatCast
 open Kraus (blockPhysDim blockTensor)
@@ -272,7 +274,7 @@ theorem IsPeriodic.isIrreducibleFamily_compressed_stepOrbit
   let f := Kraus.transferMap (fun i => (A i)ᴴ)
   let g := Kraus.transferMap (fun i => (C i)ᴴ)
   have hpow : Kraus.transferMap (fun i => (blockTensor A p i)ᴴ) = f ^ p := by
-    have h := congrArg Matrix.traceAdjointMap (transferMap_blockTensor A p)
+    have h := congrArg Matrix.traceAdjointMap (Kraus.transferMap_blockTensor A p)
     simpa only [Kraus.transferMap, Matrix.traceAdjointMap_pow,
       Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose] using h
   have hint (i) : (blockTensor A p i)ᴴ * V = V * (C i)ᴴ := by

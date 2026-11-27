@@ -10,7 +10,7 @@ before closures are taken; see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 \begin{lemma}[Fine cells lie in their layer]
     \label{thm:area_law_fine_cell_containment}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices}
+    \lean{ManyBody.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices}
     \leanok
     \uses{def:area_law_fine_layer_indices}
     For any origin $o$, finite endpoint set $Z$, and integer $C_0\ge0$, if
@@ -23,7 +23,7 @@ before closures are taken; see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 \begin{lemma}[Pairwise disjoint half-open layers]
     \label{thm:area_law_layer_pairwise_disjoint}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_pairwiseDisjoint}
+    \lean{ManyBody.dyadicLayer_pairwiseDisjoint}
     \leanok
     \uses{def:area_law_dyadic_layers}
     For any origin $o$, finite endpoint set $Z$, and integer $C_0\ge0$,
@@ -39,7 +39,7 @@ before closures are taken; see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 \begin{lemma}[The dummy region is disjoint from later layers]
     \label{thm:area_law_dummy_layer_disjoint}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_disjoint_later_layer}
+    \lean{ManyBody.dyadicNeighborhood_disjoint_later_layer}
     \leanok
     \uses{def:area_law_dyadic_layers}
     Under the same hypotheses, for every initial layer index $k_0$ and every
@@ -52,7 +52,7 @@ before closures are taken; see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 \begin{lemma}[Unique layer outside the dummy region]
     \label{thm:area_law_unique_layer}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_layer_of_not_mem_dyadicNeighborhood}
+    \lean{ManyBody.exists_unique_layer_of_not_mem_dyadicNeighborhood}
     \leanok
     \uses{def:area_law_dyadic_layers}
     Suppose that $Z$ is nonempty and $C_0\ge2$. For every initial layer
@@ -70,7 +70,7 @@ before closures are taken; see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 \begin{lemma}[Exact cover by the dummy region and later layers]
     \label{thm:area_law_dummy_layers_cover}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_layers_eq_univ}
+    \lean{ManyBody.dyadicNeighborhood_union_iUnion_layers_eq_univ}
     \leanok
     \uses{def:area_law_dyadic_layers}
     For nonempty $Z$, integer $C_0\ge2$, and every initial layer index $k_0$,

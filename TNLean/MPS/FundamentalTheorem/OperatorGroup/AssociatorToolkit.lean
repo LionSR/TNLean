@@ -8,6 +8,7 @@ import QICLean.Algebra.Matrix.ComplexOfRing
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Operator.Defs
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
+import QICLean.Algebra.Combinatorics.ZModIntCast
 
 /-!
 # Tools for computing anomaly three-cochains of explicit representations
@@ -30,7 +31,7 @@ the phase-decorated shift representation of `ℤ₃`.
 * Two-letter intertwining identities of two fusion trees with the target tensor,
   together with a one-letter relation, give the dressed identity of the anomaly
   three-cochain on every nonempty word
-  (`MPSTensor.IsDressedProportional.of_forall_mul_mul`). For explicit tensors
+  (`MPTensor.IsDressedProportional.of_forall_mul_mul`). For explicit tensors
   these finitely many identities can be checked by `decide`, over `ℤ` for integer
   tensors (`MPSTensor.isDressedProportional_complexOfInt`,
   `MPSTensor.isDressedProportional_complexOfInt_of_mem`).
@@ -42,6 +43,8 @@ the phase-decorated shift representation of `ℤ₃`.
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535, for the dressed identity defining the three-cochain.
 -/
+
+open MPTensor
 
 open scoped Matrix Kronecker
 
@@ -82,7 +85,8 @@ theorem mul_evalWord_eq_smul_of_forall_mul_mul {T : MPSTensor d D} {A : MPSTenso
             _ = _ := by simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
 
 /-- The dressed-proportionality form of `mul_evalWord_eq_smul_of_forall_mul_mul`. -/
-theorem IsDressedProportional.of_forall_mul_mul {T : MPSTensor d D} {A : MPSTensor d m}
+theorem _root_.MPTensor.IsDressedProportional.of_forall_mul_mul {T : MPSTensor d D}
+    {A : MPSTensor d m}
     {L R : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
     (hL : ∀ a b, L * T a * T b = A a * L * T b) (hR : ∀ a b, R * T a * T b = A a * R * T b)
     (h1 : ∀ a, L * T a = z • (R * T a)) : IsDressedProportional T L R z :=
@@ -172,35 +176,6 @@ theorem idKron_complexOfRing {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R
 end ComplexOfRing
 
 end MPOTensor
-
-namespace Multiplicative
-
-/-- A statement about every element of `ℤ₂`, written multiplicatively, follows from its
-two instances. -/
-theorem forall_zmod_two {P : Multiplicative (ZMod 2) → Prop}
-    (h0 : P (ofAdd 0)) (h1 : P (ofAdd 1)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1]
-
-/-- A statement about every element of `ℤ₂ × ℤ₂`, written multiplicatively, follows from its
-four instances. -/
-theorem forall_zmod_two_prod {P : Multiplicative (ZMod 2 × ZMod 2) → Prop}
-    (h00 : P (ofAdd (0, 0))) (h01 : P (ofAdd (0, 1))) (h10 : P (ofAdd (1, 0)))
-    (h11 : P (ofAdd (1, 1))) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h00, h01, h10, h11]
-
-/-- A statement about every element of `ℤ₃`, written multiplicatively, follows from its
-three instances. -/
-theorem forall_zmod_three {P : Multiplicative (ZMod 3) → Prop}
-    (h0 : P (ofAdd 0)) (h1 : P (ofAdd 1)) (h2 : P (ofAdd 2)) : ∀ x, P x := by
-  intro x
-  fin_cases x
-  exacts [h0, h1, h2]
-
-end Multiplicative
 
 namespace MPOTensor
 
@@ -361,7 +336,7 @@ theorem FusionData.omega_eq_one_of_leftV_eq_rightV {F : GroupFamily G d} {fd : F
   have h1 : fd.IsAssociator g h k 1 := by
     unfold FusionData.IsAssociator
     rw [hLR]
-    exact MPSTensor.IsDressedProportional.refl _ _
+    exact MPTensor.IsDressedProportional.refl _ _
   exact Units.ext (by rw [← FusionData.eq_omega_of_isAssociator hF h1, Units.val_one])
 
 /-- **The anomaly three-cochain of the bond-one fusion tensors is trivial**: all fusion trees

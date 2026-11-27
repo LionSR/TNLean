@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.RegularRegionCoordinates
-import TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion
+import TNLean.PEPS.Graph.Holonomy.RegularRegionConnectivity
 
 /-!
 # Removing regular bond operators on a spanning tree
@@ -20,6 +20,9 @@ These reversible group-coordinate identities accompany the accessible virtual
 systems and blocking argument of Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, local source lines 1765–1920. They do not assume a factorization
 of a twisted region contraction or assert a parent-Hamiltonian theorem.
+
+The assignment `regularTreeCycleAssignment` prescribes operators on the internal bonds
+outside a spanning tree and the identity on every other bond.
 
 ## References
 
@@ -191,5 +194,31 @@ theorem regularTwistedLabels_gauge (u : Edge Γ → G) (k : V → G) (v : V)
     group
   · have ht : f.1.1.1 = v := f.2.resolve_right (fun h => hh h.symm)
     simp only [regularTwistedLabels, ite_eq_right hh, ht]
+
+/-! ### Operators on the bonds outside a spanning tree -/
+
+section TreeCycleAssignment
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+private abbrev RV (R : Finset V) := {v : V // v ∈ R}
+private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
+private abbrev RC (R : Finset V) (T : SimpleGraph (RV R)) :=
+  {e : RI (Γ := Γ) R // ¬ T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩}
+
+variable (R : Finset V) (T : SimpleGraph (RV R)) [DecidableRel T.Adj]
+
+/-- Assign prescribed operators to the internal bonds outside the tree and the
+identity to every other native bond. Source: SCP10, flux-moving construction,
+Theorem 6.16, lines 2270–2301. -/
+def regularTreeCycleAssignment (ω : RC (Γ := Γ) R T → G) : Edge Γ → G := fun e =>
+  if ht : e.1.1 ∈ R then
+    if hh : e.1.2 ∈ R then
+      if hnt : ¬ T.Adj ⟨e.1.1, ht⟩ ⟨e.1.2, hh⟩ then ω ⟨⟨e, ht, hh⟩, hnt⟩ else 1
+    else 1
+  else 1
+
+end TreeCycleAssignment
 
 end TNLean.PEPS

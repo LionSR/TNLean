@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import Mathlib.Algebra.BigOperators.Fin
 import TNLean.MPS.FundamentalTheorem.Compression.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
+import QICLean.Algebra.Matrix.DependentBlockDiagonal
 
 /-!
 # The direct sum of one-slot compression data
@@ -50,24 +51,6 @@ The compression theorem is Theorem 7.7 (`thm:p5-asymmetric-compression`, §7.5) 
 -/
 
 open scoped Matrix
-
-namespace Matrix
-
-variable {ι : Type*} [DecidableEq ι] {m : ι → Type*} {α : Type*} [Zero α]
-
-/-- The block-diagonal part of a matrix on a sigma type keeps the entries whose row and column
-lie in the same block. -/
-theorem blockDiagonal'_blockDiag'_apply (M : Matrix (Σ i, m i) (Σ i, m i) α)
-    (x y : Σ i, m i) :
-    blockDiagonal' M.blockDiag' x y = if x.1 = y.1 then M x y else 0 := by
-  obtain ⟨i, p⟩ := x
-  obtain ⟨j, q⟩ := y
-  by_cases h : i = j
-  · subst h
-    simp [blockDiag'_apply]
-  · simp [blockDiagonal'_apply_ne _ _ _ h, h]
-
-end Matrix
 
 namespace MPSTensor
 

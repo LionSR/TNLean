@@ -23,6 +23,8 @@ It also contains the following results.
   canonical-form blocking.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 open Kraus (blockPhysDim blockTensor)
@@ -134,7 +136,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
           (sectorBlocks k s) (extra k)) := by
     intro k s
     have : NeZero (sectorDim k s) := ⟨Nat.ne_of_gt (sector_dim_pos k s)⟩
-    exact tp_primitive_irreducible_extra_blocking
+    exact Kraus.tp_primitive_irreducible_extra_blocking
       (d := blockPhysDim d (period k)) (D := sectorDim k s)
       (A := sectorBlocks k s) (sector_tp k s) (sector_primitive k s)
       (sector_irreducible k s) (hk := extra_pos k)

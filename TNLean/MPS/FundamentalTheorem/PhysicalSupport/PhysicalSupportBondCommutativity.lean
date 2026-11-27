@@ -515,7 +515,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 `generateMPDO`, lines 1733--1770. -/
 theorem liftedBond_three_zero_one_comm
     (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim) :
+    (data : CommutingBond F.supportDim) :
     placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
           (F.liftedBond data.bond) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
@@ -555,7 +555,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 `generateMPDO`, lines 1733--1770. -/
 theorem liftedBond_two_zero_one_comm
     (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim) :
+    (data : CommutingBond F.supportDim) :
     placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 2) (0 : Fin 2))
           (F.liftedBond data.bond) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 2) (1 : Fin 2))
@@ -595,7 +595,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 `generateMPDO`, lines 1733--1770. -/
 theorem liftedBond_zero_one_comm
     (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim)
+    (data : CommutingBond F.supportDim)
     {N : ℕ} (hN : 2 ≤ N) :
     placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩)
           (F.liftedBond data.bond) *
@@ -651,10 +651,10 @@ space.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 `generateMPDO`, lines 1733--1770. -/
-noncomputable def liftedTranslationInvariantBondData
+noncomputable def liftedCommutingBond
     (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim) :
-    TranslationInvariantBondData d where
+    (data : CommutingBond F.supportDim) :
+    CommutingBond d where
   bond := F.liftedBond data.bond
   bond_pos := F.liftedBond_pos data.bond_pos
   bond_comm := by

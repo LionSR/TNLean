@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.SideSeparation
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateEntropy
+import QICLean.ManyBody.Entropy.Template.TemplateEntropy
 
 /-!
 # Entropy of the actual positive terminal regions
@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 868--877, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (abs_regionEntropy_union_sub_le)
 
 noncomputable section
 

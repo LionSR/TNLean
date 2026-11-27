@@ -77,15 +77,11 @@ The commutant acts complementarily on the left tensor factors.
 
 \section{Present formal distinction}
 
-The predicate \leanid{MPOTensor.HasCommutingForm} is chainwise: for each
-$N\geq2$, it permits a new two-site bond $B_N$. This predicate is weaker than
-the source hypothesis and does not support the comparison of chains of lengths
-$N$, $N+1$, and $N+2$ used in the source trace-factorization argument.
-
-The formal model instead fixes one bond whose commuting translates realize
-every finite chain.\footnote{The bond family is
-\leanid{MPOTensor.TranslationInvariantBondData}; the realization equalities
-are fields of \leanid{MPOTensor.EtaLocalStructureData}.}
+The formal commuting form fixes one bond whose commuting translates realize
+every finite chain, as needed for the comparison of chains of lengths $N$,
+$N+1$, and $N+2$ used in the source trace-factorization argument.\footnote{The bond family is
+\leanid{MPOTensor.CommutingBond}; the realization equalities
+are fields of \leanid{MPOTensor.CommutingForm}.}
 
 The source ZCL hypothesis is \leanid{MPOTensor.IsSourceZCL}, the
 scale-invariant idempotence condition for the physical-trace transfer. The
@@ -154,17 +150,17 @@ The cyclic three-site coordinate identification is also available. The
 equivalence \leanid{MPOTensor.threeSiteOverlappingEquiv} sends a three-site
 configuration to the ordered left-associated triple. Under this common
 equivalence,
-\leanid{MPOTensor.TranslationInvariantBondData.reindex_bondAt_zero_eq_leftOverlappingLift}
+\leanid{MPOTensor.CommutingBond.reindex_bondAt_zero_eq_leftOverlappingLift}
 and
-\leanid{MPOTensor.TranslationInvariantBondData.reindex_bondAt_one_eq_rightOverlappingLift}
+\leanid{MPOTensor.CommutingBond.reindex_bondAt_one_eq_rightOverlappingLift}
 identify the first two adjacent translates with the left and right overlapping
 lifts of the same pair-indexed bond. Positivity makes this bond Hermitian, and
-\leanid{MPOTensor.TranslationInvariantBondData.overlappingLifts_pairBond_comm}
+\leanid{MPOTensor.CommutingBond.overlappingLifts_pairBond_comm}
 transports length-three commutation to the abstract lifts. The formal
 hypotheses of the cited lemma therefore require no additional assumption.
 
 The application to the pair-indexed bond is
-\leanid{MPOTensor.TranslationInvariantBondData.exists_unitary_blockActions_of_pairBond}.
+\leanid{MPOTensor.CommutingBond.exists_unitary_blockActions_of_pairBond}.
 It supplies one unitary middle-space identification and the two Hermitian
 block actions required by the cited lemma.\footnote{The application theorem and
 its coordinate and commutation hypotheses are in
@@ -174,7 +170,7 @@ its coordinate and commutation hypotheses are in
 
 The local neighboring operators are extracted without assuming a Hayashi
 decomposition. The theorem
-\leanid{MPOTensor.EtaLocalStructureData.exists_positive_eta_pairBond_decomposition}
+\leanid{MPOTensor.CommutingBond.exists_positive_eta_pairBond_decomposition}
 uses the same one-site unitary $U$ at both ends of the fixed bond and proves
 \begin{align}
     (U^*\otimes U^*)B(U\otimes U)
@@ -215,7 +211,7 @@ orders $(0,1)$ and $(1,0)$.
 
 Tensor-power conjugation and the positive realization scalar are then combined
 with the cyclic product. The theorem
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 exists_positive_cyclic_eta_block_decomposition}
 chooses the unitary, sector dimensions, and positive neighboring family once
 and proves, for every $N\geq2$,
@@ -289,18 +285,18 @@ fixed-product tensor with those of the source tensor.
 The tensor \leanid{MPOTensor.cyclicEdgeWeightTensor} has virtual dimension
 $d^2$ and generates one prescribed cyclic nearest-neighbor scalar weight at
 every positive length. The datum
-\leanid{MPOTensor.TranslationInvariantBondData.FixedProductTensorData}
+\leanid{MPOTensor.CommutingBond.FixedProductTensorData}
 records one positive-dimensional tensor whose operator family equals the
 product of translates of the fixed bond for every $N\geq2$. Given this datum,
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
 derives eventual nonzero proportionality to the source tensor without a
 length-one hypothesis.
 
 The theorem
-\leanid{MPOTensor.TranslationInvariantBondData.fixedProductTensorData}
+\leanid{MPOTensor.CommutingBond.fixedProductTensorData}
 constructs the fixed tensor directly from arbitrary
-\leanid{MPOTensor.TranslationInvariantBondData}. It assembles the
+\leanid{MPOTensor.CommutingBond}. It assembles the
 chain-independent sector coordinates and neighboring operators into a cyclic
 scalar weight in transformed one-site coordinates, then conjugates the tensor
 back through the same one-site unitary. The construction uses only positivity
@@ -308,10 +304,10 @@ and commutation of the periodic translates.
 
 The selected tensor retains the positive physical-sector factorization used
 in its construction. Specifically,
-\leanid{MPOTensor.TranslationInvariantBondData.%
+\leanid{MPOTensor.CommutingBond.%
 exists_positive_physicalSectorFactorization_fixedProductTensorData}
 factorizes the exact tensor in
-\leanid{MPOTensor.TranslationInvariantBondData.fixedProductTensorData}.
+\leanid{MPOTensor.CommutingBond.fixedProductTensorData}.
 Its neighboring operators are positive semidefinite, and its reconstructed
 physical bond is the original commuting bond. No equality of closed
 matrix-product operators is used to replace one local tensor by another.
@@ -350,7 +346,7 @@ the entry $a^N$, so lengths two and three would require
 \end{align}
 These equalities are incompatible. An arbitrary fixed bond therefore need not
 satisfy
-\leanid{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm} in the
+\leanid{MPOTensor.CommutingBond.CyclicEdgeWeightForm} in the
 original coordinates. The source equation labelled \emph{sigmaNK2} in
 Ref.~\cite{Cirac2016MPDO_arXiv} gives the scalar form only after the
 one-site unitary coordinate change.
@@ -373,7 +369,7 @@ source-selected presentation therefore has rescaling $s=1$.
 
 For a different proportional commuting-bond presentation, the conditional
 theorem
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 mpo_eq_positive_power_product_of_normal_smul}
 shows that if $sC$ is normal for one $s>0$, then
 \begin{align}
@@ -640,7 +636,7 @@ the factorization and therefore does not by itself prove
     \label{eq:cpsv16_commuting_form_to_sal_source_implication}
 \end{align}
 For the source theorem, formalized by
-\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}, the required
+\leanid{MPOTensor.CommutingForm.isSAL_of_isSourceZCL}, the required
 positive physical-sector factorization is constructed on the selected fixed
 tensor obtained from the bond in the source equation labelled
 \emph{sigmaNK2}, at lines~1581--1605 of
@@ -660,7 +656,7 @@ sector. The length-three identity sends every zero neighboring operator to a
 zero ordered product of the corresponding two sector spaces. A proper
 reachability cut would then split the full matrix algebra into two nonzero
 subspaces whose products vanish in one order, which is impossible. The theorem
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}
 therefore proves that the cyclic-active sectors of the selected factorization
 form one recurrent component. It does not assert injectivity, normality, or a
@@ -684,7 +680,7 @@ length three for every ordered pair, and comparison at that fixed length gives
 \end{align}
 Here the common normalization is the ratio of the selected length-five and
 length-four traces. This result is
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}.
 It uses source ZCL and injectivity of the original tensor, not of the selected
 fixed-product tensor. This closes the adjacent coefficient-extraction step
@@ -708,12 +704,12 @@ then gives strictly positive vectors $a$ and $b$ such that
 
 The one-step and iterated marginal identities, together with positivity of the
 selected traces, are transported separately by
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL},
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL},
 and
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}.
 
 Substituting
@@ -722,9 +718,9 @@ three-suffix formula and regrouping at an arbitrary distinguished site gives
 the Hayashi direct sum. Positive proportionality identifies the selected
 normalized marginal with the corresponding marginal of the original source
 tensor in the same one-site physical coordinates. This is
-\leanid{MPOTensor.EtaLocalStructureData.%
+\leanid{MPOTensor.CommutingForm.%
 exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
-It assumes injectivity of the source tensor, an eta-local structure, and source
+It assumes injectivity of the source tensor, a commuting form, and source
 ZCL. It assumes neither MPDO positivity at this intermediate stage nor
 injectivity, normality, or zero correlation length for the selected
 fixed-product tensor. MPDO positivity enters only in the final SAL theorem,
@@ -733,12 +729,12 @@ coordinates.
 
 Applying the all-cut Markov criterion to these physical-coordinate marginals
 and transporting saturation through the one-site isometry gives
-\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}. Positivity of
+\leanid{MPOTensor.CommutingForm.isSAL_of_isSourceZCL}. Positivity of
 the physical-coordinate periodic operators follows from the MPDO hypothesis
 by isometric conjugation. Their traces equal the original traces, which source
 ZCL makes nonzero at every positive length. The theorem assumes precisely the
-source tensor, its MPDO and injectivity hypotheses, the fixed eta-local
-structure, and source ZCL. It assumes no injectivity, normality, ZCL, or SAL
+source tensor, its MPDO and injectivity hypotheses, the commuting form,
+and source ZCL. It assumes no injectivity, normality, ZCL, or SAL
 property of the selected fixed-product tensor.
 
 \subsection{Scope restriction for sectorwise source ZCL}
@@ -888,7 +884,7 @@ simultaneous span required for injectivity at every original cut.
 \section{Verdict}
 
 Proposition \emph{4to2} of Ref.~\cite{Cirac2016MPDO_arXiv} is formalized by
-\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}. The positive
+\leanid{MPOTensor.CommutingForm.isSAL_of_isSourceZCL}. The positive
 fixed-product representative, its cyclic-active recurrent component, the
 normalized square--cube identity, and the positive rank-one factorization of
 the two-step coefficient are derived from the source tensor. The resulting
@@ -920,14 +916,14 @@ available implication.
 
 \begin{enumerate}
     \item Apply the all-cut Markov criterion to the decompositions supplied by
-    \leanid{MPOTensor.EtaLocalStructureData.%
+    \leanid{MPOTensor.CommutingForm.%
     exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
     Positivity and nonvanishing of the physical-coordinate periodic operators
     follow from the MPDO and source-ZCL hypotheses.
 
     \item Transport SAL through the selected one-site physical isometry back
     to the original coordinates. These two steps are formalized by
-    \leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}, whose
+    \leanid{MPOTensor.CommutingForm.isSAL_of_isSourceZCL}, whose
     blueprint entry carries a \texttt{\string\leanok} marker.
 \end{enumerate}
 

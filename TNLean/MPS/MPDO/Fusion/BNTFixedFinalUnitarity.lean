@@ -38,50 +38,12 @@ namespace Matrix
 
 universe u
 
-/-- A diagonal corner of a right-unitary matrix over dependent direct sums is
-right-unitary when all off-diagonal corners in the same row vanish.
-
-Source: direct-sum matrix bookkeeping for the fixed-output-channel argument in
-arXiv:1511.08090, lines 247--277. -/
-theorem sigmaDiagonal_mul_conjTranspose_eq_one
-    {ι : Type u} [Fintype ι] [DecidableEq ι]
-    {L R : ι → Type*} [∀ i, DecidableEq (L i)] [∀ i, Fintype (R i)]
-    (C : Matrix ((i : ι) × L i) ((i : ι) × R i) ℂ)
-    (hunit : C * Cᴴ = 1)
-    (hoff : ∀ i j, j ≠ i →
-      C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R j => ⟨j, y⟩) = 0)
-    (i : ι) :
-    C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R i => ⟨i, y⟩) *
-        (C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R i => ⟨i, y⟩))ᴴ = 1 := by
-  ext x y
-  have hentry := Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
-    C hunit ⟨i, x⟩ ⟨i, y⟩
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-    Matrix.submatrix_apply, Fintype.sum_sigma] at hentry ⊢
-  rw [Finset.sum_eq_single i] at hentry
-  · by_cases hxy : x = y
-    · subst y
-      simpa using hentry
-    · have hsigma : Sigma.mk i x ≠ Sigma.mk i y := by
-        intro h
-        cases h
-        exact hxy rfl
-      simp only [hxy, hsigma, ↓reduceIte] at hentry ⊢
-      exact hentry
-  · intro j _ hji
-    apply Finset.sum_eq_zero
-    intro z _
-    have hz := congrArg (fun M => M x z) (hoff i j hji)
-    simp only [Matrix.submatrix_apply, Matrix.zero_apply] at hz
-    simp [hz]
-  · simp
-
 /-- A diagonal corner of a left-unitary matrix over dependent direct sums is
 left-unitary when all off-diagonal corners in the same column vanish.
 
 Source: direct-sum matrix bookkeeping for the fixed-output-channel argument in
 arXiv:1511.08090, lines 247--277. -/
-theorem sigmaDiagonal_conjTranspose_mul_eq_one
+theorem _root_.TNLean.MPS.MPDO.sigmaDiagonal_conjTranspose_mul_eq_one
     {ι : Type u} [Fintype ι] [DecidableEq ι]
     {L R : ι → Type*} [∀ i, Fintype (L i)] [∀ i, DecidableEq (R i)]
     (C : Matrix ((i : ι) × L i) ((i : ι) × R i) ℂ)
@@ -253,7 +215,7 @@ theorem conjTranspose_mul_tripleFusionComparison_finalSector_eq_one
         c hχ hLI hSel α β γ j i hji.symm
   simpa only [C', Matrix.submatrix_submatrix,
     leftTripleFinalEquiv_symm_comp, rightTripleFinalEquiv_symm_comp] using
-    Matrix.sigmaDiagonal_conjTranspose_mul_eq_one C' hunit hoff ε
+    TNLean.MPS.MPDO.sigmaDiagonal_conjTranspose_mul_eq_one C' hunit hoff ε
 
 /-- **Conditional unitarity of the fixed-final multiplicity matrix.**
 

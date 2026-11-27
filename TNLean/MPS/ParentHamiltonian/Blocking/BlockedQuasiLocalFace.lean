@@ -35,6 +35,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836,
 Theorem 1.1, lines 854--926, and Section 3.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open SpinChain
 open Kraus (blockPhysDim blockTensor)

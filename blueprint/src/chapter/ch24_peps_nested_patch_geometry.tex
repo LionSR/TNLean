@@ -12,10 +12,10 @@ adding edges to the induced graph.
 \begin{definition}[Closed square sample]
     \label{def:peps_closed_square_sample}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.closedSquareSample,
-        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample,
-        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_int,
-        TNLean.PEPS.AreaLaw.Geometry.closedSquareSample_mono
+        ManyBody.closedSquareSample,
+        ManyBody.mem_closedSquareSample,
+        ManyBody.mem_closedSquareSample_iff_int,
+        ManyBody.closedSquareSample_mono
     }
     \leanok
     \uses{def:area_law_domain}
@@ -32,8 +32,8 @@ adding edges to the induced graph.
 \begin{definition}[Distance from the square centre]
     \label{def:peps_square_radius}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.squareRadius,
-        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_radius
+        ManyBody.squareRadius,
+        ManyBody.mem_closedSquareSample_iff_radius
     }
     \leanok
     \uses{def:peps_closed_square_sample}
@@ -43,11 +43,11 @@ adding edges to the induced graph.
 \begin{lemma}[Nearest neighbours and closed-square crossing]
     \label{thm:peps_square_crossing_interval}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.abs_coordinate_sub_le_one_of_adj,
-        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_of_adj,
-        TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_one_of_adj,
+        ManyBody.abs_coordinate_sub_le_one_of_adj,
+        ManyBody.mem_closedSquareSample_of_adj,
+        ManyBody.abs_squareRadius_sub_le_one_of_adj,
         ManyBody.mk_mem_edgeBoundary_iff,
-        TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_closedSquareSample_iff
+        ManyBody.mem_edgeBoundary_closedSquareSample_iff
     }
     \leanok
     \uses{def:peps_square_radius,def:area_law_hamiltonian}
@@ -66,8 +66,8 @@ adding edges to the induced graph.
 \begin{lemma}[Number of sites in a sampled square]
     \label{thm:peps_closed_square_card}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le_eightyOne
+        ManyBody.card_closedSquareSample_le,
+        ManyBody.card_closedSquareSample_le_eightyOne
     }
     \leanok
     \uses{def:peps_closed_square_sample}
@@ -79,7 +79,7 @@ adding edges to the induced graph.
 
 \begin{lemma}[Crossing edges of a sampled square]
     \label{thm:peps_closed_square_boundary}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le}
+    \lean{ManyBody.card_edgeBoundary_closedSquareSample_le}
     \leanok
     \uses{def:peps_closed_square_sample,def:area_law_hamiltonian}
     For every $r\ge0$, $|\partial_\Lambda K(c,r)|\le8r+4$.
@@ -91,9 +91,9 @@ adding edges to the induced graph.
 \begin{definition}[Nested square patches]
     \label{def:peps_nested_patches}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatch
+        ManyBody.nestedPatchCount,
+        ManyBody.nestedPatchRadius,
+        ManyBody.nestedPatch
     }
     \leanok
     \uses{def:peps_closed_square_sample}
@@ -107,13 +107,13 @@ adding edges to the induced graph.
 \begin{lemma}[Number, radii, and boundary size of the patches]
     \label{thm:peps_nested_patch_sizes}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount_pos,
-        TNLean.PEPS.AreaLaw.Geometry.half_lt_nestedPatchCount,
-        TNLean.PEPS.AreaLaw.Geometry.le_nestedPatchRadius,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_le_two_mul,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_add_two_le,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_mono,
-        TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_nestedPatch_le
+        ManyBody.nestedPatchCount_pos,
+        ManyBody.half_lt_nestedPatchCount,
+        ManyBody.le_nestedPatchRadius,
+        ManyBody.nestedPatchRadius_le_two_mul,
+        ManyBody.nestedPatchRadius_add_two_le,
+        ManyBody.nestedPatch_mono,
+        ManyBody.card_edgeBoundary_nestedPatch_le
     }
     \leanok
     \uses{def:peps_nested_patches,def:area_law_hamiltonian}
@@ -133,8 +133,8 @@ adding edges to the induced graph.
 \begin{lemma}[Supports of crossing edges under radius separation]
     \label{thm:peps_square_crossing_support}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_disjoint_of_add_one_le,
-        TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_subset_of_add_one_le
+        ManyBody.edgeBoundary_support_disjoint_of_add_one_le,
+        ManyBody.edgeBoundary_support_subset_of_add_one_le
     }
     \leanok
     \uses{def:peps_closed_square_sample,def:area_law_hamiltonian}
@@ -148,10 +148,10 @@ adding edges to the induced graph.
 \begin{lemma}[A single crossing among nested patches]
     \label{thm:peps_nested_patch_crossing}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_disjoint_earlier,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_subset_later,
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_unique,
-        TNLean.PEPS.AreaLaw.Geometry.disjoint_edgeBoundary_nestedPatch
+        ManyBody.nestedPatch_crossing_disjoint_earlier,
+        ManyBody.nestedPatch_crossing_subset_later,
+        ManyBody.nestedPatch_crossing_unique,
+        ManyBody.disjoint_edgeBoundary_nestedPatch
     }
     \leanok
     \uses{def:peps_nested_patches,def:area_law_hamiltonian}
@@ -175,8 +175,8 @@ and $e\subseteq K_2$ (the rounded outlines enclose the clipped sets of physical 
 \begin{lemma}[Uniform quadratic boundary sum]
     \label{thm:peps_nested_patch_quadratic_sum}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_quadratic_budget,
-        TNLean.PEPS.AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le
+        ManyBody.nestedPatch_quadratic_budget,
+        ManyBody.sum_card_edgeBoundary_nestedPatch_mul_sq_le
     }
     \leanok
     \uses{def:peps_nested_patches,def:area_law_hamiltonian}
@@ -203,10 +203,10 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
 \begin{definition}[Nested square patches at range $R$]
     \label{def:peps_range_nested_patches}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.rangePatchSpacing,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchCount,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch
+        ManyBody.rangePatchSpacing,
+        ManyBody.rangeNestedPatchCount,
+        ManyBody.rangeNestedPatchRadius,
+        ManyBody.rangeNestedPatch
     }
     \leanok
     \uses{def:peps_closed_square_sample}
@@ -220,20 +220,20 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
 \begin{lemma}[Spacing, number and radii of the range-$R$ patches]
     \label{thm:peps_range_nested_patch_sizes}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.le_rangePatchSpacing,
-        TNLean.PEPS.AreaLaw.Geometry.rangePatchSpacing_le,
-        TNLean.PEPS.AreaLaw.Geometry.two_le_rangePatchSpacing,
-        TNLean.PEPS.AreaLaw.Geometry.rangePatchSpacing_one,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchCount_one,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_one,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_one,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchCount_pos,
-        TNLean.PEPS.AreaLaw.Geometry.div_lt_rangeNestedPatchCount,
-        TNLean.PEPS.AreaLaw.Geometry.le_rangeNestedPatchRadius,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_le_two_mul,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_add_spacing_le,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_mono
+        ManyBody.le_rangePatchSpacing,
+        ManyBody.rangePatchSpacing_le,
+        ManyBody.two_le_rangePatchSpacing,
+        ManyBody.rangePatchSpacing_one,
+        ManyBody.rangeNestedPatchCount_one,
+        ManyBody.rangeNestedPatchRadius_one,
+        ManyBody.rangeNestedPatch_one,
+        ManyBody.rangeNestedPatchCount_pos,
+        ManyBody.div_lt_rangeNestedPatchCount,
+        ManyBody.le_rangeNestedPatchRadius,
+        ManyBody.rangeNestedPatchRadius_le_two_mul,
+        ManyBody.rangeNestedPatchRadius_add_spacing_le,
+        ManyBody.rangeNestedPatchRadius_mono,
+        ManyBody.rangeNestedPatch_mono
     }
     \leanok
     \uses{def:peps_range_nested_patches,def:peps_nested_patches}
@@ -251,9 +251,9 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
 \begin{lemma}[A range-$R$ support is split by at most one patch]
     \label{thm:peps_range_nested_patch_split}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_length,
-        TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport,
-        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_split_unique
+        ManyBody.abs_squareRadius_sub_le_length,
+        ManyBody.abs_squareRadius_sub_le_of_isAdmissibleSupport,
+        ManyBody.rangeNestedPatch_split_unique
     }
     \leanok
     \uses{def:peps_range_nested_patches,def:peps_square_radius,def:area_law_hamiltonian}
@@ -267,8 +267,8 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
 \begin{definition}[Inner layer of a square]
     \label{def:peps_square_layer}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.squareLayer,
-        TNLean.PEPS.AreaLaw.Geometry.mem_squareLayer
+        ManyBody.squareLayer,
+        ManyBody.mem_squareLayer
     }
     \leanok
     \uses{def:peps_square_radius}
@@ -278,10 +278,10 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
 \begin{lemma}[Size of the inner layer]
     \label{thm:peps_square_layer}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.mem_squareLayer_of_split,
-        TNLean.PEPS.AreaLaw.Geometry.card_integerInterval_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_squareLayer_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_squareLayer_rangeNestedPatch_le
+        ManyBody.mem_squareLayer_of_split,
+        ManyBody.card_integerInterval_le,
+        ManyBody.card_squareLayer_le,
+        ManyBody.card_squareLayer_rangeNestedPatch_le
     }
     \leanok
     \uses{def:peps_closed_square_sample,def:peps_square_layer,def:peps_range_nested_patches}
@@ -298,7 +298,7 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
 
 \begin{lemma}[Quadratic coefficient at range $R$]
     \label{thm:peps_range_nested_patch_quadratic_sum}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_quadratic_budget}
+    \lean{ManyBody.rangeNestedPatch_quadratic_budget}
     \leanok
     \uses{def:peps_range_nested_patches}
     For $R\ge1$, $u\ge0$, $\kappa\in\mathbb R$, and $t_j=\kappa/m_R$ ($0\le j<m_R$),
@@ -316,7 +316,7 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \label{lem:peps_closed_square_entropy_explicit}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.closedSquareSample_entropy_le}
     \leanok
-    \uses{def:square_entropy_area_law_at,def:area_law_ground_entropy,def:square_area_law_state,def:peps_closed_square_sample}
+    \uses{def:square_entropy_area_law_at,def:area_law_ground_entropy,thm:rectangular_domain_hamiltonian,def:peps_closed_square_sample}
     Under the square-grid entropy area law with constant $C_A$ (Definition~\ref{def:square_entropy_area_law_at}), put $C_S:=\max\{1,16C_A\}$. For every $L$, family state $\Omega$, centre $c$, and $0\le r\le2u$,
     \begin{align}
         S_{U\Omega}(K(c,r)) & \le C_S(1+u). \notag
@@ -332,7 +332,7 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \label{thm:peps_nested_patch_entropy_explicit}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.nestedPatch_entropy_le}
     \leanok
-    \uses{def:square_entropy_area_law_at,def:polynomial_peps_model,def:area_law_ground_entropy,def:square_area_law_state,def:peps_nested_patches}
+    \uses{def:square_entropy_area_law_at,def:polynomial_peps_model,def:area_law_ground_entropy,thm:rectangular_domain_hamiltonian,def:peps_nested_patches}
     Under the square-grid entropy area law with constant $C_A$ and $C_S=\max\{1,16C_A\}$, every $L$, family state $\Omega$, centre $c$, $u\ge0$, and nested patch $K_j$ ($0\le j<m$) of Definition~\ref{def:peps_nested_patches} satisfy $S_{U\Omega}(K_j)\le C_S(1+u)$ (as in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L368}{proof of Proposition 4.1}).
 \end{lemma}
@@ -346,7 +346,7 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \label{thm:peps_nested_patch_entropy}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_nestedPatch_entropy_le}
     \leanok
-    \uses{def:square_entropy_area_law,def:polynomial_peps_model,def:area_law_ground_entropy,def:square_area_law_state,def:peps_nested_patches}
+    \uses{def:square_entropy_area_law,def:polynomial_peps_model,def:area_law_ground_entropy,thm:rectangular_domain_hamiltonian,def:peps_nested_patches}
     Assume the square-grid entropy area law (Definition~\ref{def:square_entropy_area_law}). For every integer $q\ge2$ and $J,\Delta>0$, there exists $C_S\ge1$ such that for every $L$, square Hamiltonian $H$ with interaction bound $J$, unit ground vector $\Omega$ with $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, centre $c$, $u\ge0$, and $0\le j<m$,
     \begin{align}
         S_{U\Omega}(K_j) & \le C_S(1+u),

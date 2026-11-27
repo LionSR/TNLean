@@ -8,13 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.RegionalStates.Regions
 
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ConditionalEstimates
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.Cylinder
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.NestedCylinderOrthogonalization
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalReindex
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RotatedChainRule
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.SelectedSchmidtEntropyBounds
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements

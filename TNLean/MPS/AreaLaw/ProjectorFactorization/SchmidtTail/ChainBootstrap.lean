@@ -68,21 +68,20 @@ variable {L q : ℕ}
 /-- In cut coordinates the inner product of two chain vectors is the dot product of their
 reindexed coefficient vectors. -/
 theorem star_cutVector_dotProduct (j : ℕ) (x y : EuclideanSpace ℂ (Fin L → Fin q)) :
-    star (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x)) ⬝ᵥ
-        WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) y) =
+    star (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) x)) ⬝ᵥ
+        WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) y) =
       ⟪x, y⟫_ℂ := by
   rw [EuclideanSpace.inner_eq_star_dotProduct]
   simp only [dotProduct]
-  rw [← Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm]
+  rw [← Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 j)).symm]
   exact Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _
 
 /-- The entropy of the first `j` sites is the entropy of `C Cᴴ`, where `C` is the cut matrix
 across the cut after `j` sites. -/
 theorem regionEntropy_interval_eq (j : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) =
-      _root_.vonNeumannEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian := by
-  rw [← leftBlock_eq_interval]
+      _root_.vonNeumannEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian := by
   unfold ManyBody.regionEntropy
   exact vonNeumannEntropy_congr
     (ManyBody.regionState_eq_cutMatrix_mul_conjTranspose _ _) _ _
@@ -90,10 +89,10 @@ theorem regionEntropy_interval_eq (j : ℕ) (Ω : EuclideanSpace ℂ (Fin L → 
 /-- If `j + s` exceeds the length of the chain, the cut matrix after `j` sites has rank at most
 `q^{2s}`: it has at most `q^{L - j}` columns. -/
 theorem rank_cutMatrix_le_pow_of_lt (hq : 1 ≤ q) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
-    {j s : ℕ} (hjs : L < j + s) : (cutMatrix (leftBlock L j) Ω).rank ≤ q ^ (2 * s) := by
+    {j s : ℕ} (hjs : L < j + s) : (cutMatrix (interval L 0 j) Ω).rank ≤ q ^ (2 * s) := by
   rcases le_or_gt j L with hjL | hLj
-  · calc (cutMatrix (leftBlock L j) Ω).rank ≤
-          q ^ (L - j) * (cutMatrix (leftBlock L (j + (L - j))) Ω).rank :=
+  · calc (cutMatrix (interval L 0 j) Ω).rank ≤
+          q ^ (L - j) * (cutMatrix (interval L 0 (j + (L - j))) Ω).rank :=
           rank_cutMatrix_le_add Ω j (L - j) (by omega)
       _ ≤ q ^ (L - j) * 1 :=
           Nat.mul_le_mul_left _ (rank_cutMatrix_le_one_of_le (by omega) Ω)
@@ -111,19 +110,19 @@ theorem exists_mixture_rank_cutMatrix_le_overlap_of_factorization (hq : 1 ≤ q)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L 0 (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) {s : ℕ}
     (hs : 2 * C₁ ^ 2 / P * Real.exp (-(2 * s / ξ')) < 1) :
     ∃ (r' : ℕ) (w' : Fin r' → ℝ) (ψ' : Fin r' → EuclideanSpace ℂ (Fin L → Fin q)),
       (∀ i, 0 ≤ w' i) ∧
-      (∀ i, (cutMatrix (leftBlock L j) (ψ' i)).rank ≤ k * q ^ (2 * s)) ∧
+      (∀ i, (cutMatrix (interval L 0 j) (ψ' i)).rank ≤ k * q ^ (2 * s)) ∧
       0 < ∑ i, w' i * ‖ψ' i‖ ^ 2 ∧
       (1 - 2 * C₁ ^ 2 / P * Real.exp (-(2 * s / ξ'))) * ∑ i, w' i * ‖ψ' i‖ ^ 2 ≤
         ∑ i, w' i * ‖⟪Ω, ψ' i⟫_ℂ‖ ^ 2 := by
@@ -143,18 +142,18 @@ theorem exists_mixture_rank_cutMatrix_le_overlap_of_factorization (hq : 1 ≤ q)
       exact (Real.lt_sqrt hnn).mpr h2
     obtain ⟨hpos, hineq⟩ := Matrix.overlap_ge_of_norm_sub_vecMulVec_le hΩ w ψ hw hnorm hPdef' hP hO
     refine ⟨r, w, fun i ↦ toEuclideanLin (OB * OL * OR) (ψ i), hw, fun i ↦ ?_, hpos hεP, ?_⟩
-    · change (cutMatrix (leftBlock L j) (toEuclideanLin (OB * OL * OR) (ψ i))).rank ≤
+    · change (cutMatrix (interval L 0 j) (toEuclideanLin (OB * OL * OR) (ψ i))).rank ≤
         k * q ^ (2 * s)
       rw [Matrix.toEuclideanLin_mul_apply, Matrix.toEuclideanLin_mul_apply]
-      calc _ ≤ q ^ (2 * s) * (cutMatrix (leftBlock L j)
+      calc _ ≤ q ^ (2 * s) * (cutMatrix (interval L 0 j)
               (toEuclideanLin OL (toEuclideanLin OR (ψ i)))).rank :=
             rank_cutMatrix_toEuclideanLin_le_pow hq hOB hSB hjs _
-        _ ≤ q ^ (2 * s) * (cutMatrix (leftBlock L j) (toEuclideanLin OR (ψ i))).rank :=
+        _ ≤ q ^ (2 * s) * (cutMatrix (interval L 0 j) (toEuclideanLin OR (ψ i))).rank :=
             Nat.mul_le_mul_left _
-              (rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock hq hOL hSL _)
-        _ ≤ q ^ (2 * s) * (cutMatrix (leftBlock L j) (ψ i)).rank :=
+              (rank_cutMatrix_toEuclideanLin_le_of_subset_interval hq hOL hSL _)
+        _ ≤ q ^ (2 * s) * (cutMatrix (interval L 0 j) (ψ i)).rank :=
             Nat.mul_le_mul_left _
-              (rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock hq hOR hSR _)
+              (rank_cutMatrix_toEuclideanLin_le_of_disjoint_interval hq hOR hSR _)
         _ ≤ q ^ (2 * s) * k := Nat.mul_le_mul_left _ (hrank i)
         _ = k * q ^ (2 * s) := Nat.mul_comm _ _
     · rw [← hε2]; exact hineq
@@ -190,13 +189,13 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_factorization (hq : 2 ≤ q
     (hC₁ : 1 ≤ C₁)
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L 0 (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
@@ -205,7 +204,7 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_factorization (hq : 2 ≤ q
   classical
   have hq1 : 1 ≤ q := by omega
   set cv : EuclideanSpace ℂ (Fin L → Fin q) → _ := fun x ↦
-    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x) with hcv
+    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) x) with hcv
   have hdot : ∀ x y, star (cv x) ⬝ᵥ cv y = ⟪x, y⟫_ℂ := fun x y ↦ star_cutVector_dotProduct j x y
   have hnormsq : ∀ x : EuclideanSpace ℂ (Fin L → Fin q), (star (cv x) ⬝ᵥ cv x).re = ‖x‖ ^ 2 := by
     intro x
@@ -268,7 +267,7 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq : 2 �
     (hfact : ∀ m : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
@@ -307,7 +306,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        (∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k) →
         ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤

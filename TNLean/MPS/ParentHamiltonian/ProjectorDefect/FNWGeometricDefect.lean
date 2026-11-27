@@ -49,6 +49,8 @@ This correction is documented in `docs/paper-gaps/cpgsv21_martingale_overlap.tex
 * `Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric`
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder ENNReal Matrix NNReal
 
 namespace MPSTensor
@@ -99,7 +101,19 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
         ρ hρ htr A hA hρfix hInj hL hLm r ℓ hℓ
     _ ≤ c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by gcongr
 
-set_option linter.style.longLine false in
+end
+
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+
 /-- A primitive matrix-product state satisfies display (6.1) of Nachtergaele,
 arXiv:cond-mat/9410110, lines 2401--2412, with a rate strictly below one and a positive
 prefactor: there is a positive interaction length beyond which the whole-increment ground
@@ -109,7 +123,7 @@ between the rho-weighted spectral radius of the transfer remainder and one; the 
 exports only that the chosen rate is positive and below one. A caller that needs a
 particular admissible rate uses the rate-parameterized mixing estimate together with the
 fixed-length geometric bound instead. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
+theorem exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
@@ -140,6 +154,16 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundP
   exact wholeIncrement_groundProjection_defect_le_fnw_geometric σ hσ htr A hP.norm
     hPσ.fixedPoint_is_fixed hInj hL hLm (hbound m (le_trans hL hLm)) hsmall r ℓ hℓ
 
+end Kraus.HasComplementaryFixedPointGap
+
+namespace MPSTensor
+
+noncomputable section
+
+variable {d D : ℕ}
+
+attribute [local instance] groundSpaceES_hasOrthogonalProjection
+
 /-- The open-chain projector defect at overlap length \(l\) is the whole-increment defect
 with a one-site suffix. -/
 theorem openChain_groundProjection_defect_eq_wholeIncrement
@@ -153,14 +177,26 @@ theorem openChain_groundProjection_defect_eq_wholeIncrement
   simp only [openChainTailGroundProjectionES, openChainLeftGroundProjectionES,
     reassocTailBoundaryMapES_one, range_tailBoundaryMapES, range_leftBoundaryMapES_one]
 
-set_option linter.style.longLine false in
+end
+
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+
 /-- The open-chain form of display (6.1) of Nachtergaele, arXiv:cond-mat/9410110,
 lines 1180--1194: any prefix length and an overlap length beyond the interaction
 length give the projector defect
 \(\lVert G_{\Lambda_n}G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}-G_{\Lambda_{n+1}}\rVert\)
 at most \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\). The one-site suffix supplies
 the source's positive spectator length, so no restriction on the prefix remains. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric
+theorem exists_openChain_groundProjection_defect_le_fnw_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
@@ -176,6 +212,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjec
   rw [openChain_groundProjection_defect_eq_wholeIncrement]
   exact hDefect l hLl hsmall K 1 one_pos
 
-end
+end Kraus.HasComplementaryFixedPointGap
 
-end MPSTensor

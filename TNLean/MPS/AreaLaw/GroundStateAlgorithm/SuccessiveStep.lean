@@ -72,7 +72,7 @@ lines 549--592. -/
 theorem isLeftOpenMPS_of_mem_successiveStep (hi : i ≤ L) {m D : ℕ} {J : Finset ι}
     {A : ι → LeftBlockMatrix L q i}
     (hA : ∀ j ∈ J, ∀ k, 0 < k → k < i → operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
         ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     (T₀ : Finset (LeftBlockVector L q i)) {v : LeftBlockVector L q i}
     (hv : v ∈ successiveStep hi m J A T₀) : IsLeftOpenMPS (D * max 1 m) v :=

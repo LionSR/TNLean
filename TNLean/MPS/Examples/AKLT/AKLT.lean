@@ -39,6 +39,8 @@ and proves its key properties.
 * RMP review (arXiv:2011.12127) Section III.A
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ScalarCohomology
 open Matrix Finset MPSTensor
 

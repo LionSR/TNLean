@@ -26,6 +26,8 @@ and 620--649; the finite-prefix issue in SPWC10, arXiv:0909.5347,
 Theorem 5, lines 850--880.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 /-- A nonzero, exactly cyclic-invariant finite vector has an actual

@@ -24,6 +24,8 @@ It also contains the following results.
   blocks.
 -/
 
+open MPTensor
+
 section BlockWordSpanNormalization
 
 open scoped BigOperators ComplexOrder

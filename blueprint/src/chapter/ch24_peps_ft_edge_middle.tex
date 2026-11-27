@@ -398,75 +398,19 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     linearly independent.
 \end{definition}
 
-\begin{definition}[Singleton blocked region]%
-    \label{def:peps_singletonRegionTensor}
-    \lean{TNLean.PEPS.SingletonRegionPhysicalConfig,
-        TNLean.PEPS.singletonRegionTensorFamily,
-        TNLean.PEPS.SingletonRegionTensorInjective,
-        TNLean.PEPS.SingletonRegionInjectivityComparison}
-    \leanok
-    \uses{def:peps_regionInjectivityData}
-    For a singleton block $\{v\}$, the blocked tensor is
-    $T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma)$ with injectivity predicate
-    $\inj(T_{A,\{v\}})$, and singleton comparison for a region-injectivity
-    predicate $\kappa$ is $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
-\end{definition}
-
-\begin{lemma}[Singleton comparison for a vertex-injective tensor]%
-    \label{thm:peps_singletonRegionInjectivityComparison_of_isVertexInjective}
-    \lean{TNLean.PEPS.singletonRegionInjectivityComparison_of_isVertexInjective}
-    \leanok
-    \uses{def:IsVertexInjective,def:peps_singletonRegionTensor,def:peps_regionInjectivityDataOf,thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
-    If $A$ is vertex-injective and every bond dimension is positive, then the
-    concrete predicate $\kappa(R)=\inj(T_{A,R})$ of
-    Definition~\ref{def:peps_regionInjectivityDataOf} satisfies
-    $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
-\end{lemma}
-\begin{proof}\leanok
-    By Lemma~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective},
-    $\kappa(\{v\})$ holds unconditionally for every $v\in V$.
-\end{proof}
-
-\begin{lemma}[Vertex injectivity gives singleton-block injectivity]%
-    \label{thm:peps_singletonRegionTensorInjective}
-    \lean{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}
-    \leanok
-    \uses{def:IsVertexInjective,def:peps_singletonRegionTensor}
-    If $A$ is vertex-injective, then $\inj(T_{A,\{v\}})$ holds for every $v\in V$.
-\end{lemma}
-\begin{proof}\leanok
-    By Definition~\ref{def:peps_singletonRegionTensor},
-    $T_{A,\{v\}}=A_v$, so $\inj(T_{A,\{v\}})\iff\inj(A_v)$, which holds by
-    Definition~\ref{def:IsVertexInjective}.
-\end{proof}
-
-\begin{lemma}[Singleton comparison gives the region base case]%
-    \label{thm:peps_singletonRegionInjectivityFromVertexInjectivity}
-    \lean{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity,
-        TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}
-    \leanok
-    \uses{def:IsVertexInjective,def:peps_singletonRegionTensor,thm:peps_singletonRegionTensorInjective}
-    If $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$, then
-    vertex injectivity of $A$ implies $\forall v,\ \kappa(\{v\})$.
-\end{lemma}
-\begin{proof}\leanok
-    Compose Lemma~\ref{thm:peps_singletonRegionTensorInjective} with the
-    hypothesis $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
-\end{proof}
-
 \begin{lemma}[Finite regions from singleton regions and union closure]%
     \label{thm:peps_finiteRegionInjectivityFromSingletons}
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}
     \leanok
-    \uses{thm:peps_singletonRegionInjectivityFromVertexInjectivity,lem:peps_regionInjectivityUnionClosure_finite}
-    If $\kappa$ satisfies $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$
+    \uses{def:IsVertexInjective,lem:peps_regionInjectivityUnionClosure_finite}
+    For a singleton block $\{v\}$ the blocked tensor is the local tensor $A_v$.
+    If $\kappa$ satisfies $\forall v,\ \inj(A_v)\Longrightarrow\kappa(\{v\})$
     and $\kappa(R)\wedge\kappa(S)\Longrightarrow\kappa(R\cup S)$, and $A$ is
     vertex-injective, then $\kappa(R)$ holds for every finite $R\ne\varnothing$.
 \end{lemma}
 \begin{proof}\leanok
-    Writing $R=\bigcup_{v\in R}\{v\}$,
-    Lemma~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} gives
-    $\kappa(\{v\})$ for all $v\in R$, and
+    Writing $R=\bigcup_{v\in R}\{v\}$, vertex injectivity gives $\inj(A_v)$, hence
+    $\kappa(\{v\})$, for all $v\in R$, and
     Lemma~\ref{lem:peps_regionInjectivityUnionClosure_finite} yields $\kappa(R)$.
 \end{proof}
 

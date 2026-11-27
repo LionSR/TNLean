@@ -8,6 +8,7 @@ import TNLean.MPS.MPU.Simple.SourceFactorChoice
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardForm
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGatesBlocked
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # The gate statements for every choice of compact decompositions
@@ -43,139 +44,6 @@ proposal, `ME.tex`, Corollary 1.4).
 
 open scoped Matrix Kronecker ComplexOrder
 open Matrix
-
-namespace Matrix
-
-variable {m n o m' n' : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-
-/-- A member of the unitary group is unitary between its coordinate spaces. -/
-theorem isUnitaryBetween_coe_unitaryGroup (x : unitaryGroup m ℂ) :
-    (x : Matrix m m ℂ).IsUnitaryBetween :=
-  (isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.2
-
-/-- The adjoint of a member of the unitary group is unitary between its coordinate spaces. -/
-theorem isUnitaryBetween_star_coe_unitaryGroup (x : unitaryGroup m ℂ) :
-    (star (x : Matrix m m ℂ)).IsUnitaryBetween :=
-  (isUnitaryBetween_iff_mem_unitaryGroup _).mpr (Unitary.star_mem x.2)
-
-/-- Left multiplication by a unitary-between matrix preserves and reflects unitarity. -/
-theorem isUnitaryBetween_mul_iff_of_left [Fintype o] [DecidableEq o] {K : Matrix m n ℂ}
-    (hK : K.IsUnitaryBetween) (u : Matrix n o ℂ) :
-    (K * u).IsUnitaryBetween ↔ u.IsUnitaryBetween :=
-  ⟨IsUnitaryBetween.of_mul_left K u hK, fun hu ↦ hK.mul K u hu⟩
-
-/-- Right multiplication by a unitary-between matrix preserves and reflects unitarity. -/
-theorem isUnitaryBetween_mul_iff_of_right [Fintype o] [DecidableEq o] {K : Matrix n o ℂ}
-    (hK : K.IsUnitaryBetween) (v : Matrix m n ℂ) :
-    (v * K).IsUnitaryBetween ↔ v.IsUnitaryBetween :=
-  ⟨IsUnitaryBetween.of_mul_right v K hK, fun hv ↦ hv.mul v K hK⟩
-
-omit [DecidableEq m] [DecidableEq n] in
-/-- Reindexing the rows of a product with a Kronecker left factor. -/
-theorem reindex_kronecker_mul [Fintype m'] [Fintype n'] (el : m ≃ m') (er : n ≃ n')
-    (A : Matrix m m ℂ) (B : Matrix n n ℂ) (w : Matrix (m × n) o ℂ) :
-    Matrix.reindex (el.prodCongr er) (Equiv.refl o) ((A ⊗ₖ B) * w) =
-      (Matrix.reindex el el A ⊗ₖ Matrix.reindex er er B) *
-        Matrix.reindex (el.prodCongr er) (Equiv.refl o) w := by
-  rw [Matrix.kroneckerMap_reindex, Matrix.reindex_apply, Matrix.reindex_apply,
-    Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
-
-omit [DecidableEq m] [DecidableEq n] in
-/-- Reindexing the columns of a product with a Kronecker right factor. -/
-theorem reindex_mul_kronecker [Fintype m'] [Fintype n'] (er : m ≃ m') (el : n ≃ n')
-    (A : Matrix m m ℂ) (B : Matrix n n ℂ) (w : Matrix o (m × n) ℂ) :
-    Matrix.reindex (Equiv.refl o) (er.prodCongr el) (w * (A ⊗ₖ B)) =
-      Matrix.reindex (Equiv.refl o) (er.prodCongr el) w *
-        (Matrix.reindex er er A ⊗ₖ Matrix.reindex el el B) := by
-  rw [Matrix.kroneckerMap_reindex, Matrix.reindex_apply, Matrix.reindex_apply,
-    Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
-
-/-- A common coordinate relabeling preserves the local adjoint gate equation.
-Source context: CPSV17, `UUdaggertrick`, lines 1214–1252; this is its
-physical-pair coordinate transport. -/
-theorem reindex_adjoint_certificate
-    {ι κ : Type*} [Fintype ι] [Fintype κ]
-    (e : ι ≃ κ) {A B : Matrix (ι × ι) (ι × ι) ℂ}
-    {x : Matrix ι ι ℂ} {σ : ℂ}
-    (h : A = σ • (x ⊗ₖ xᴴ) * Bᴴ) :
-    Matrix.reindex (e.prodCongr e) (e.prodCongr e) A =
-      σ • (Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᴴ) *
-        (Matrix.reindex (e.prodCongr e) (e.prodCongr e) B)ᴴ := by
-  let p := e.prodCongr e
-  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
-  have h' := congrArg E h
-  rw [Matrix.smul_mul, map_smul] at h'
-  conv_rhs at h' => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
-  have hx : E (x ⊗ₖ xᴴ) = Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᴴ := by
-    simp only [E, p, Matrix.coe_reindexLinearEquiv]
-    rw [Matrix.conjTranspose_reindex]
-    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e x xᴴ).symm
-  rw [hx] at h'
-  simp only [E, p, Matrix.coe_reindexLinearEquiv, Matrix.conjTranspose_reindex] at h'
-  rw [Matrix.smul_mul]
-  exact h'
-
-/-- A common coordinate relabeling preserves the local transposition gate equation.
-Source context: CPSV17, `UUtransposetrick`, lines 1258–1288; this is its
-physical-pair coordinate transport. -/
-theorem reindex_transposition_certificate
-    {ι κ : Type*} [Fintype ι] [Fintype κ]
-    (e : ι ≃ κ) {A B : Matrix (ι × ι) (ι × ι) ℂ}
-    {x : Matrix ι ι ℂ} {σ : ℂ}
-    (h : A = σ • (x ⊗ₖ xᵀ) * Bᵀ) :
-    Matrix.reindex (e.prodCongr e) (e.prodCongr e) A =
-      σ • (Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᵀ) *
-        (Matrix.reindex (e.prodCongr e) (e.prodCongr e) B)ᵀ := by
-  let p := e.prodCongr e
-  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
-  have h' := congrArg E h
-  rw [Matrix.smul_mul, map_smul] at h'
-  conv_rhs at h' => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
-  have hx : E (x ⊗ₖ xᵀ) = Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᵀ := by
-    simp only [E, p, Matrix.coe_reindexLinearEquiv]
-    rw [Matrix.transpose_reindex]
-    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e x xᵀ).symm
-  rw [hx] at h'
-  simp only [E, p, Matrix.coe_reindexLinearEquiv, Matrix.transpose_reindex] at h'
-  rw [Matrix.smul_mul]
-  exact h'
-
-omit [DecidableEq m] [DecidableEq n] in
-/-- A product vector times a Kronecker product is the product of the two vector-matrix
-products. -/
-theorem vecMul_kronecker (p : m → ℂ) (w : n → ℂ) (A : Matrix m m' ℂ) (B : Matrix n n' ℂ) :
-    (fun q : m × n ↦ p q.1 * w q.2) ᵥ* (A ⊗ₖ B) = fun q ↦ (p ᵥ* A) q.1 * (w ᵥ* B) q.2 := by
-  funext q
-  simp only [Matrix.vecMul, dotProduct, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
-    Finset.sum_mul_sum]
-  exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦ by ring
-
-/-- Contracting a gauged gate against gauged half factors: the unitaries cancel on the
-contracted legs (ME.tex, proof of Corollary 1.4(c)). -/
-theorem sum_sum_vecMul_star_mul_kronecker_mul (a : m → ℂ) (b : n → ℂ)
-    (u : Matrix (m × n) o ℂ) (x : unitaryGroup m ℂ) (y : unitaryGroup n ℂ) (j : o) :
-    ∑ t, ∑ s, (a ᵥ* star (x : Matrix m m ℂ)) t *
-        (((x : Matrix m m ℂ) ⊗ₖ (y : Matrix n n ℂ)) * u) (t, s) j *
-          (b ᵥ* star (y : Matrix n n ℂ)) s =
-      ∑ t, ∑ s, a t * u (t, s) j * b s := by
-  set c' : m × n → ℂ := fun q ↦ (a ᵥ* star (x : Matrix m m ℂ)) q.1 *
-    (b ᵥ* star (y : Matrix n n ℂ)) q.2
-  have hx : (a ᵥ* star (x : Matrix m m ℂ)) ᵥ* (x : Matrix m m ℂ) = a := by
-    rw [Matrix.vecMul_vecMul, Unitary.coe_star_mul_self, Matrix.vecMul_one]
-  have hy : (b ᵥ* star (y : Matrix n n ℂ)) ᵥ* (y : Matrix n n ℂ) = b := by
-    rw [Matrix.vecMul_vecMul, Unitary.coe_star_mul_self, Matrix.vecMul_one]
-  have hc : c' ᵥ* ((x : Matrix m m ℂ) ⊗ₖ (y : Matrix n n ℂ)) = fun q ↦ a q.1 * b q.2 := by
-    rw [vecMul_kronecker, hx, hy]
-  calc
-    _ = (c' ᵥ* (((x : Matrix m m ℂ) ⊗ₖ (y : Matrix n n ℂ)) * u)) j := by
-      simp only [c', Matrix.vecMul, dotProduct, Fintype.sum_prod_type]
-      exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦ by ring
-    _ = ((fun q : m × n ↦ a q.1 * b q.2) ᵥ* u) j := by rw [← Matrix.vecMul_vecMul, hc]
-    _ = _ := by
-      simp only [Matrix.vecMul, dotProduct, Fintype.sum_prod_type]
-      exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦ by ring
-
-end Matrix
 
 namespace MPOTensor
 

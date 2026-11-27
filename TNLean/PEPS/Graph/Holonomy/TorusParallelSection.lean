@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Tactic.Group
-import TNLean.PEPS.Tensor.Torus.TorusSiteTensor
+import TNLean.PEPS.Graph.Torus.TorusLatticeGraph
 
 /-!
 # Group-valued transports on the torus and their parallel sections

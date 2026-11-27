@@ -491,7 +491,7 @@ theorem reducedBlockState_apply_eq_internal_mul_pow {N L : ℕ} [NeZero N] (hL :
   have hN : N = L + K := by omega
   subst N
   have hsub : L + K - L = K := Nat.add_sub_cancel_left L K
-  rw [reducedBlockState_eq_sum, normalizedMPO]
+  rw [MPOTensor.reducedBlockState_eq_sum, normalizedMPO]
   simp only [Matrix.smul_apply, smul_eq_mul, mpo_M_apply]
   by_cases hxy : x = y
   · subst y

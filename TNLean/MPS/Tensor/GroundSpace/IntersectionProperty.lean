@@ -268,7 +268,7 @@ theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D}
     {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) :
     Function.Injective (groundSpaceMap A L₀) := by
   apply groundSpaceMap_injective_of_wordSpan_eq_top
-  exact (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  exact hInj
 
 /-- Under block injectivity at length \(L\), the ground space \(G_L(A)\) has
 dimension \(D^2\): the map \(Γ_L\) is injective on \(M_D(ℂ)\). -/

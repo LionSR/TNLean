@@ -45,7 +45,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 lines 1434--1439. -/
 noncomputable def inverseMapPhysicalSectorFactorization
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0) :
     PhysicalSectorFactorization K where
@@ -77,7 +77,7 @@ No positivity or normalization is part of this identification.
 Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
 theorem inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
     (k h : Fin hη.m) :
@@ -104,7 +104,7 @@ later in Proposition C.8.  The remaining steps are recorded in
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1411, and equations `formK` and `etarl`, lines 1434--1445. -/
 theorem nonempty_physicalSectorFactorization_of_isSAL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
     Nonempty (PhysicalSectorFactorization K) := by
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨β₃, α₁, hm⟩ :=

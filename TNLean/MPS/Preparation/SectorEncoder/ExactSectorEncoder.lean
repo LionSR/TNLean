@@ -28,6 +28,8 @@ linear combination of periodic states.
   and outlook. The whole-encoder factorization is an additional coherent consequence.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation
 open scoped BigOperators
 open Kraus (decodeBlockEquiv blockTensor)

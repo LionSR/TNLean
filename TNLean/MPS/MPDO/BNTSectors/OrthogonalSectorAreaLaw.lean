@@ -129,10 +129,9 @@ private theorem ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_
   obtain ⟨c, _, hreal⟩ := F.realizes_mpo s (n + 1) hN
   have hproduct :
       firstSiteMatrix (F.projection s) n *
-          ((F.bondData s).toCommutingFormData hN).product =
-        ((F.bondData s).toCommutingFormData hN).product := by
-    simp only [CommutingFormData.product,
-      TranslationInvariantBondData.toCommutingFormData_bondAt]
+          (F.bondData s).product hN =
+        (F.bondData s).product hN := by
+    simp only [CommutingBond.product, CommutingBond.bondAt]
     change firstSiteMatrix (F.projection s) n *
         (List.ofFn fun i : Fin (n + 1) ↦
           placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod = _
@@ -297,15 +296,15 @@ theorem
       mpo M N =
         (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hMPDO : ∀ s, IsMPDO (K s))
-    (hK : ∀ s, (K s).IsInjective)
+    (hK : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
     (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
   apply isSAL_of_proportionalOrthogonalCommutingSectorFamily M K multiplicity
     hmultiplicity F hM
   intro s
-  let data : EtaLocalStructureData (K s) := by
+  let data : CommutingForm (K s) := by
     exact ⟨F.bondData s, F.realizes_mpo s⟩
-  exact EtaLocalStructureData.isSAL_of_isSourceZCL
+  exact CommutingForm.isSAL_of_isSourceZCL
     (hMPDO s) (hK s) data (hZCL s)
 
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
@@ -327,7 +326,7 @@ Source: CPSV16, Appendix C.2, lines 1660--1665 and Proposition `prop4to2`,
 lines 1801--1808. -/
 theorem isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     [Nonempty (Fin S.basisCount)]
@@ -380,7 +379,7 @@ theorem
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

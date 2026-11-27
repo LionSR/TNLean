@@ -25,6 +25,8 @@ This is the nonsingular gauge asserted in arXiv:1606.00608, Appendix A,
 lines 1058--1077 and eq. `II_XAX`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

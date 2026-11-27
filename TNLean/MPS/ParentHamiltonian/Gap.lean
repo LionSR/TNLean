@@ -20,4 +20,3 @@ import TNLean.MPS.ParentHamiltonian.Gap.PrescribedOpenGap
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGap
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGapThreshold
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockOpenGapAllLengths
-import TNLean.MPS.ParentHamiltonian.Gap.Spectator

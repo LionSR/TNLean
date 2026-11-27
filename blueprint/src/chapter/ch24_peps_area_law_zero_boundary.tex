@@ -7,7 +7,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[Supports and components]
     \label{thm:area_law_support_components}
-    \lean{ManyBody.IsAdmissibleSupport.reachable, ManyBody.subset_or_disjoint_of_edgeBoundary_eq_empty, ManyBody.edgeBoundary_filter_connectedComponentMk_mem, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
+    \lean{ManyBody.IsAdmissibleSupport.reachable, ManyBody.subset_or_disjoint_of_edgeBoundary_eq_empty, ManyBody.edgeBoundary_filter_connectedComponentMk_mem, ManyBody.edgeBoundary_connectedComponent_eq_empty}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     Every support of finite induced-graph diameter lies in one connected
@@ -22,26 +22,10 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
     are joined by such a walk. Adjacent sites lie in the same component.
 \end{proof}
 
-\begin{lemma}[A cut splitting no support]
-    \label{thm:area_law_unsplit_supports}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_forall_subset_or_disjoint}
-    \leanok
-    \uses{def:area_law_ground_entropy}
-    Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if every
-    admissible support $X$ satisfies $X\subseteq A$ or $X\cap A=\varnothing$,
-    then $S_\Omega(A)=0$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:zero_entropy_cut}
-    Every term of the Hamiltonian acts inside $A$ or inside its complement.
-    This is the hypothesis of Lemma~\ref{lem:zero_entropy_cut} for the finite
-    set of sites $\Lambda$, which gives $S_\Omega(A)=0$.
-\end{proof}
 
 \begin{lemma}[A cut with no crossing edge]
     \label{thm:area_law_zero_boundary}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_edgeBoundary_eq_empty}
+    \lean{ManyBody.regionEntropy_eq_zero_of_edgeBoundary_eq_empty}
     \leanok
     \uses{def:area_law_ground_entropy}
     Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if
@@ -51,15 +35,15 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_unsplit_supports,thm:area_law_support_components}
+    \uses{lem:zero_entropy_cut,thm:area_law_support_components}
     By Lemma~\ref{thm:area_law_support_components}, every admissible support
     lies in $A$ or in $\Lambda\setminus A$, so
-    Lemma~\ref{thm:area_law_unsplit_supports} applies.
+    Lemma~\ref{lem:zero_entropy_cut} applies.
 \end{proof}
 
 \begin{lemma}[Degenerate cases]
     \label{thm:area_law_degenerate_cases}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_domain_eq_empty, TNLean.PEPS.AreaLaw.regionEntropy_connectedComponents_eq_zero}
+    \lean{ManyBody.regionEntropy_eq_zero_of_range_eq_zero, ManyBody.regionEntropy_eq_zero_of_domain_eq_empty, ManyBody.regionEntropy_connectedComponents_eq_zero}
     \leanok
     \uses{def:area_law_ground_entropy}
     For range $R=0$ every regional entropy of the gapped ground vector vanishes.
@@ -70,9 +54,9 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_unsplit_supports,thm:area_law_zero_boundary,thm:area_law_support_components,thm:chain_entropy_dim_one}
+    \uses{lem:zero_entropy_cut,thm:area_law_zero_boundary,thm:area_law_support_components,thm:chain_entropy_dim_one}
     For $R=0$ every support is a single site and so is never split by a cut,
-    so Lemma~\ref{thm:area_law_unsplit_supports} applies.
+    so Lemma~\ref{lem:zero_entropy_cut} applies.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is
     one-dimensional, and a unit-trace state on it has zero entropy. A union of
     connected components has no crossing edge by

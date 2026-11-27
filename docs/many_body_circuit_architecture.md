@@ -786,12 +786,12 @@ model is ported.
 | Module | Verdict | Action |
 |---|---|---|
 | `Lattice/RegionalEntropyBridge` | two definitions of regional state and entropy | deleted at step 4.0 |
-| `MPS/MPDO/Entropy/MutualInfoBridge` | `mutualInfoChain` beside QICLean's mutual information | deleted in F2 |
+| `MPS/MPDO/Entropy/MutualInfoBridge` | `mutualInfoChain` beside QICLean's mutual information | dissolved: `mutualInfoChain` is defined as QICLean's bipartite mutual information; the bound is `MPS/MPDO/Entropy/MutualInfoBondDimBound` |
 | QICLean `Channel/Wigner/ProjectiveCarrierBridge` | two representations of vectors | deleted with the single representation |
 | QICLean `Channel/CompletelyPositiveBridge` | a local notion beside Mathlib's `CompletelyPositiveMap`; imported by no module | build on Mathlib's type or delete |
 | `Wielandt/Primitivity/PrimitiveBridge` | several predicates for primitivity | F4 |
 | `MPS/CanonicalForm/BNTPresentation/Bridge`, `MPS/CanonicalForm/BNTPresentation/CanonicalFormBridge` | several predicates for a basis of normal tensors and for a canonical form | F4 |
-| `MPS/Operator/PhysicalSector/CommutingFormBridge` | three data structures for one commuting form | F2 |
+| `MPS/Operator/PhysicalSector/CommutingFormBridge` | three data structures for one commuting form | deleted: one structure `MPOTensor.CommutingForm` extending `MPOTensor.CommutingBond`, in `MPS/Operator/Simple/CommutingForm` |
 | QICLean `Channel/Semigroup/LindbladForm/TraceBridge`, `MPS/CanonicalForm/Periodic/CyclicSectors/CornerBridge`, `MPS/MPDO/Purification/PureStateRFPEquivalence`, `MPS/Examples/Z3/Z3AnomalousCocycleBridge`, `PEPS/Approximation/Guides/AngularSeparationBridges` | theorems | renamed for what they prove |
 | `PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion`, `GaugeBridgeExpansion` | one computation in two modules | merged and renamed in F1 |
 | `MPS/Examples/Weyl/ShortOverlapBridges`, `PEPS/Injectivity/Region/OverlapUnion` | "bridge" is the mathematical object or a proof step | none; the second is renamed with its family in F1 |

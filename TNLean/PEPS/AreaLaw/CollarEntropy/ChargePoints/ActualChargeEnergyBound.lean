@@ -32,6 +32,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 416–440 and 492–511, at `openai/math@adc7f124`.
 -/
 
+open ManyBody (designatedSupport)
+
 open scoped BigOperators Matrix
 open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
@@ -62,7 +64,7 @@ theorem actualCharge_energyError_le_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {a : ℝ} (ha : 0 ≤ a) (k : ℕ)
     (pre : (r : ℕ) → Config r

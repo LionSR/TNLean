@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Region.RegionReducedDensity
 import TNLean.PEPS.Injectivity.Region.RegionKernelDescent
+import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.OutRegionEndpoint
 
 /-!
 # Regional supports of ordinary injective PEPS

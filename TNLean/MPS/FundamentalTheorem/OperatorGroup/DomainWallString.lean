@@ -370,10 +370,10 @@ theorem twoWallChain_append {D D' k l n : ℕ} (B : MPSTensor d D)
 /-- The coefficient of a periodic matrix product state on a split configuration. -/
 theorem mpv_wallConfig {D' : ℕ} (B : MPSTensor d D') {k l n L : ℕ} (h : k + 1 + l + 1 + n = L)
     (p : Fin k → Fin d) (a : Fin d) (μ : Fin l → Fin d) (b : Fin d) (q : Fin n → Fin d) :
-    MPSTensor.mpv B (wallConfig h (p, a, μ, b, q)) =
+    MPTensor.mpv B (wallConfig h (p, a, μ, b, q)) =
       (Kraus.evalWord B (List.ofFn p) * B a * Kraus.evalWord B (List.ofFn μ) * B b *
         Kraus.evalWord B (List.ofFn q)).trace := by
-  rw [MPSTensor.mpv_eq, MPSTensor.coeff, ofFn_wallConfig]
+  rw [MPTensor.mpv_eq, MPTensor.coeff, ofFn_wallConfig]
   simp [Kraus.evalWord_append, Kraus.evalWord_cons, Matrix.mul_assoc]
 
 end StringOperator
@@ -474,7 +474,7 @@ on the periodic chain of every length `L ≥ 2`. The left inverses turn the endp
 them to `B`. -/
 theorem wallString_mulVec_mpv_left (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y))
     {k l n L : ℕ} (h : k + 1 + l + 1 + n = L) :
-    ad.wallString g hxy hyx Âx Ây eAB eBA k l n h *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+    ad.wallString g hxy hyx Âx Ây eAB eBA k l n h *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
       fun τ ↦ twoWallMPV (A x) eAB (A y) eBA (τ ∘ Fin.cast h) := by
   funext τ
   obtain ⟨⟨p, a, μ, b, q⟩, rfl⟩ := (wallConfig h).surjective τ
@@ -493,7 +493,7 @@ theorem wallString_mulVec_mpv_left (hÂ : IsSeparatingLeftInverse Âx Ây (A x) 
 `O^{[i,j]} |ψ_B⟩ = |ψ(B-A-B)⟩`, with the domain wall `e_{BA}` at `i` and `e_{AB}` at `j`. -/
 theorem wallString_mulVec_mpv_right (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y))
     {k l n L : ℕ} (h : k + 1 + l + 1 + n = L) :
-    ad.wallString g hxy hyx Âx Ây eAB eBA k l n h *ᵥ (fun σ ↦ MPSTensor.mpv (A y) σ) =
+    ad.wallString g hxy hyx Âx Ây eAB eBA k l n h *ᵥ (fun σ ↦ MPTensor.mpv (A y) σ) =
       fun τ ↦ twoWallMPV (A y) eBA (A x) eAB (τ ∘ Fin.cast h) := by
   funext τ
   obtain ⟨⟨p, a, μ, b, q⟩, rfl⟩ := (wallConfig h).surjective τ

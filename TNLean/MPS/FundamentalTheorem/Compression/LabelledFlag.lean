@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
-import TNLean.MPS.FundamentalTheorem.WordModule.StarSemisimple
+import TNLean.MPS.FundamentalTheorem.WordModule.GaugeWordModule
+import QICLean.Spectral.Eigenvalue.WordAlgebra
 
 /-!
 # Multi-block compressions are labelled invariant flags
@@ -57,38 +58,6 @@ Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetr
 -/
 
 open scoped Matrix
-
-namespace WordAlgebra
-
-variable {d : ℕ} {M N : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
-  [IsScalarTower ℂ (WordAlgebra d) M] [AddCommGroup N] [Module ℂ N] [Module (WordAlgebra d) N]
-  [IsScalarTower ℂ (WordAlgebra d) N]
-
-/-- A complex-linear map between word-algebra modules that commutes with the action of every
-one-letter word commutes with the action of the whole word algebra. -/
-def linearMapOfLetter (f : M →ₗ[ℂ] N)
-    (hf : ∀ (i : Fin d) (x : M), f ((ofWord [i] : WordAlgebra d) • x) =
-      (ofWord [i] : WordAlgebra d) • f x) : M →ₗ[WordAlgebra d] N where
-  toFun := f
-  map_add' := f.map_add
-  map_smul' p x := by
-    have hword : ∀ (w : List (Fin d)) (y : M),
-        f ((ofWord w : WordAlgebra d) • y) = (ofWord w : WordAlgebra d) • f y := by
-      intro w
-      induction w with
-      | nil => intro y; rw [ofWord_nil, one_smul, one_smul]
-      | cons i w ih => intro y; rw [ofWord_cons, mul_smul, mul_smul, hf, ih]
-    change f (p • x) = p • f x
-    induction p using MonoidAlgebra.induction_on with
-    | of g => exact hword (FreeMonoid.toList g) x
-    | add p q hp hq => rw [add_smul, add_smul, f.map_add, hp, hq]
-    | smul r p hp => rw [smul_assoc, f.map_smul, hp, smul_assoc]
-
-@[simp] theorem linearMapOfLetter_apply (f : M →ₗ[ℂ] N)
-    (hf : ∀ (i : Fin d) (x : M), f ((ofWord [i] : WordAlgebra d) • x) =
-      (ofWord [i] : WordAlgebra d) • f x) (x : M) : linearMapOfLetter f hf x = f x := rfl
-
-end WordAlgebra
 
 namespace MPSTensor
 

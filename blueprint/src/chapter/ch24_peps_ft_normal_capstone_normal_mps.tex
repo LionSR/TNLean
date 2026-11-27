@@ -159,6 +159,21 @@ chains, one tensor per site, which is the setting of
     bond label on $e_v$.
 \end{proof}
 
+\begin{lemma}[Vertex injectivity of the cycle tensor]%
+    \label{lem:isVertexInjective_cycleTensorOfMPS_iff}
+    \lean{TNLean.PEPS.isVertexInjective_cycleTensorOfMPS_iff}
+    \leanok
+    \uses{def:cycleTensorOfMPS,def:IsVertexInjective,def:injective}
+    For $n\ge 3$, the cycle tensor of $A$ is vertex injective if and only if
+    $A$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    At each site $v$ the local tensor of the cycle tensor, read through the two
+    incident bond labels, is the family
+    $(\alpha,\beta)\mapsto\bigl((A^i)_{\alpha\beta}\bigr)_i$. Its linear independence is equivalent to
+    $\spn\{A^i\}=\MN{D}$, the same condition at every site.
+\end{proof}
+
 \begin{lemma}[Arc injectivity of the cycle tensor from block injectivity]%
     \label{lem:regionBlockedTensorInjective_cycleTensorOfMPS}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_cycleArcFrom_iff}

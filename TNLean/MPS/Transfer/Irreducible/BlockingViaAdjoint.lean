@@ -169,6 +169,6 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily
   -- Convert the power into a physical blocking.
   -- `Kraus.transferMap (blockTensor A p) = (Kraus.transferMap A) ^ p`.
   -- Then use `hprim_pow`.
-  simpa only [MPSTensor.transferMap_blockTensor (A := A) (L := p)] using hprim_pow
+  simpa only [Kraus.transferMap_blockTensor (A := A) (L := p)] using hprim_pow
 
 end MPSTensor

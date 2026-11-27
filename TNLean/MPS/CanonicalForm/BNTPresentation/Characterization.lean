@@ -31,6 +31,8 @@ This module constructs a basis of normal tensors from literal CPSV canonical-for
 choosing one representative from each MPV phase-equivalence class of the displayed blocks.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators
@@ -130,14 +132,14 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
           dimB x))
       (fun j => P.basis j.1) B
   have hSelf : ∀ x,
-      Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N) atTop
+      Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C x) N) atTop
         (𝓝 (1 : ℂ)) := by
     intro x
     cases x with
     | inl j => simpa [C] using (hPNormal j.1).selfOverlap_tendsto_one
     | inr k => simpa [C] using (hBNormal k).selfOverlap_tendsto_one
   have hCross : ∀ x y, x ≠ y →
-      Tendsto (fun N => mpvOverlap (d := d) (C x) (C y) N) atTop
+      Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C y) N) atTop
         (𝓝 (0 : ℂ)) := by
     intro x y hxy
     cases x with

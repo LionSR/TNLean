@@ -34,6 +34,8 @@ injectivity hypothesis after blocking.  No right-unital normalization or
 period-window hypothesis is used.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
@@ -85,14 +87,14 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
   have hBlkPos : ∀ (j : Fin P.basisCount) (n : ℕ), 0 < n →
       Kraus.IsNBlkInjective (P.basis j) n := by
     intro j n hn
-    exact (wordSpan_eq_top_iff_isNBlkInjective (P.basis j) n).mp
-      (wordSpan_eq_top_of_isInjective (hInj j) hn)
-  have hIrr : HasIrreducibleBlocks (d := d) P.basis :=
-    HasIrreducibleBlocks.ofForall hCF.basis_irreducible
-  have hLeft : IsLeftCanonicalBlockFamily (d := d) P.basis :=
-    IsLeftCanonicalBlockFamily.ofForall hCF.basis_left_canonical
-  have hOverlap : HasNormalizedSelfOverlap (d := d) P.basis :=
-    HasNormalizedSelfOverlap.ofForall hCF.basis_normalized_self_overlap
+    exact wordSpan_eq_top_of_isInjective (hInj j) hn
+  have hIrr : ∀ k, Kraus.IsIrreducibleFamily (P.basis k) :=
+    hCF.basis_irreducible
+  have hLeft : ∀ k, ∑ i : Fin d, (P.basis k i)ᴴ * (P.basis k i) = 1 :=
+    hCF.basis_left_canonical
+  have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
+      Filter.atTop (nhds (1 : ℂ)) :=
+    hCF.basis_normalized_self_overlap
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
     hCF.basis_distinct
   have hPair : HasPairBlockSeparatingWords P.basis 6 := by
@@ -143,12 +145,13 @@ private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
     apply hAtLeastP j
     dsimp [L₀]
     omega
-  have hIrr : HasIrreducibleBlocks (d := d) P.basis :=
-    HasIrreducibleBlocks.ofForall hCF.basis_irreducible
-  have hLeft : IsLeftCanonicalBlockFamily (d := d) P.basis :=
-    IsLeftCanonicalBlockFamily.ofForall hCF.basis_left_canonical
-  have hOverlap : HasNormalizedSelfOverlap (d := d) P.basis :=
-    HasNormalizedSelfOverlap.ofForall hCF.basis_normalized_self_overlap
+  have hIrr : ∀ k, Kraus.IsIrreducibleFamily (P.basis k) :=
+    hCF.basis_irreducible
+  have hLeft : ∀ k, ∑ i : Fin d, (P.basis k i)ᴴ * (P.basis k i) = 1 :=
+    hCF.basis_left_canonical
+  have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
+      Filter.atTop (nhds (1 : ℂ)) :=
+    hCF.basis_normalized_self_overlap
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
     hCF.basis_distinct
   have hL₀ : 0 < L₀ := by
@@ -213,9 +216,7 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
       Kraus.IsNBlkInjective ((P.blockTensor p).basis j) n := by
     intro j n hn
     change Kraus.IsNBlkInjective (Kraus.blockTensor (P.basis j) p) n
-    exact (wordSpan_eq_top_iff_isNBlkInjective
-      (Kraus.blockTensor (P.basis j) p) n).mp
-      (wordSpan_eq_top_of_isInjective (hInj j) hn)
+    exact wordSpan_eq_top_of_isInjective (hInj j) hn
   change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop (P.blockTensor p).basis L
   exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
     (P.blockTensor p).basis (p := 1) hSelectors (by omega)

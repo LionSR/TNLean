@@ -518,7 +518,7 @@ theorem mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_po
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
     {N : ℕ} [NeZero N] :
-    MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
+    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
       Complex.ofReal (Matrix.trace ((activeSectorTraceSqMatrix K F p) ^ N)) := by
   have hK : IsMPDO K := F.isMPDO_of_neighboringOperator_pos hpos
   rw [mpvOverlap_toMPSTensor_self_eq_trace_sq K hK (NeZero.pos N)]
@@ -638,7 +638,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
       hShat_le
     simpa only [hShat_trace] using this
   have htendsto_one : Filter.Tendsto (fun N => Matrix.trace (S ^ N)) Filter.atTop (nhds 1) := by
-    have hoverlap : Filter.Tendsto (fun N => MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N)
+    have hoverlap : Filter.Tendsto (fun N => MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N)
         Filter.atTop (nhds (1 : ℂ)) := hK_normal.selfOverlap_tendsto_one
     have hcongr : Filter.Tendsto (fun N => ((Matrix.trace (S ^ N) : ℝ) : ℂ))
         Filter.atTop (nhds (1 : ℂ)) := by

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.PhysicalSector.CommutingOverlappingCoordinates
 
 /-!
-# Neighboring operators from a translation-invariant commuting bond
+# Neighboring operators from a commuting bond
 
 This file extracts the positive neighboring operators in the spatial decomposition of a
 single translation-invariant commuting bond.  The same one-site unitary is used at both
@@ -17,8 +17,7 @@ finite chain.
 
 * `Matrix.etaPairSpatialBlockEquiv`
 * `Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute`
-* `MPOTensor.TranslationInvariantBondData.exists_positive_eta_pairBond_decomposition`
-* `MPOTensor.EtaLocalStructureData.exists_positive_eta_pairBond_decomposition`
+* `MPOTensor.CommutingBond.exists_positive_eta_pairBond_decomposition`
 
 ## References
 
@@ -281,7 +280,7 @@ theorem exists_positive_etaPair_decomposition_of_overlappingLifts_commute
 
 end Matrix
 
-namespace MPOTensor.TranslationInvariantBondData
+namespace MPOTensor.CommutingBond
 
 variable {d : ℕ}
 
@@ -291,7 +290,7 @@ eta-pair decomposition.
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
 lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem exists_positive_eta_pairBond_decomposition
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
       (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d)
       (U : Matrix (Fin d) (Fin d) ℂ)
@@ -309,39 +308,10 @@ theorem exists_positive_eta_pairBond_decomposition
                 (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ) := by
   have hpair : data.pairBond.PosSemidef := by
     have hsub := data.bond_pos.submatrix (finTwoArrowEquiv (Fin d)).symm
-    simpa [TranslationInvariantBondData.pairBond, pairBondMatrix,
+    simpa [CommutingBond.pairBond, pairBondMatrix,
       Matrix.reindex_apply] using hsub
   exact Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute
     data.pairBond hpair data.overlappingLifts_pairBond_comm
 
-end MPOTensor.TranslationInvariantBondData
+end MPOTensor.CommutingBond
 
-namespace MPOTensor.EtaLocalStructureData
-
-variable {d D : ℕ} {M : MPOTensor d D}
-
-/-- A positive bond carried by an eta-local structure has one chain-independent unitary
-sector decomposition with positive neighboring operators.
-
-Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
-lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
-theorem exists_positive_eta_pairBond_decomposition
-    (data : EtaLocalStructureData M) :
-    ∃ (K : ℕ) (dl dr : Fin K → ℕ)
-      (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d)
-      (U : Matrix (Fin d) (Fin d) ℂ)
-      (η : (q h : Fin K) →
-        Matrix (Fin (dr q) × Fin (dl h)) (Fin (dr q) × Fin (dl h)) ℂ),
-      U ∈ Matrix.unitaryGroup (Fin d) ℂ ∧
-        (∀ q, 0 < dl q) ∧ (∀ q, 0 < dr q) ∧
-        (∀ q h, (η q h).PosSemidef) ∧
-        Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
-            (Matrix.etaPairSpatialBlockEquiv e).symm
-            (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) =
-          Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
-            ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
-              η qh.1 qh.2) ⊗ₖ
-                (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ) := by
-  exact data.bondData.exists_positive_eta_pairBond_decomposition
-
-end MPOTensor.EtaLocalStructureData

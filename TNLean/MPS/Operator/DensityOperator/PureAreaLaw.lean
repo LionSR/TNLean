@@ -24,6 +24,8 @@ mixed-state block-entropy results apply to pure-state block entropies.
   (line 752), Section 3 (pure-state area law, line 599).
 -/
 
+open MPTensor
+
 open Matrix MPOTensor
 open scoped Matrix Kronecker ComplexOrder
 
@@ -69,8 +71,8 @@ theorem mpo_doubledTensor (A : MPSTensor d D) (N : ℕ) :
   rw [mpo_apply, MPOTensor.mpoMatrixEntry, evalWord_doubledTensor,
     Matrix.trace_submatrix_equiv, Matrix.trace_kronecker,
     ← AddMonoidHom.map_trace (starRingEnd ℂ)]
-  simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, MPSTensor.mpv,
-    MPSTensor.coeff, Complex.star_def]
+  simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, MPTensor.mpv,
+    MPTensor.coeff, Complex.star_def]
 
 /-- The normalized MPDO of the doubled tensor is the normalized pure state. -/
 theorem normalizedMPO_doubledTensor (A : MPSTensor d D) (N : ℕ) :
@@ -102,7 +104,7 @@ theorem blockEntropy_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N
 /-- The wavefunction (Schmidt) matrix of the first `L` spins. -/
 noncomputable def schmidtMat (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     Matrix (Fin L → Fin d) (Fin (N - L) → Fin d) ℂ :=
-  fun u w => MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
+  fun u w => MPTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
 
 /-- The reduced pure-state block density matrix is the trace-normalized Gram
 matrix of the Schmidt matrix `schmidtMat A N L`: the inverse pure-state trace
@@ -112,8 +114,8 @@ theorem reducedPureBlockState_eq_gram (A : MPSTensor d D) (N L : ℕ) (hL : L �
       = (Matrix.trace (MPSTensor.pureState A N))⁻¹ •
         (schmidtMat A N L hL * (schmidtMat A N L hL)ᴴ) := by
   ext u v
-  simp only [MPSTensor.reducedPureBlockState, blockReducedState, partialTraceRight_apply,
-    Matrix.submatrix_apply, blockSplitEquiv_symm_apply, MPSTensor.normalizedPureState,
+  simp only [MPSTensor.reducedPureBlockState, MPOTensor.blockReducedState, partialTraceRight_apply,
+    Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply, MPSTensor.normalizedPureState,
     Matrix.smul_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtMat,
     MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, smul_eq_mul, RCLike.star_def,
     Finset.mul_sum]
@@ -130,15 +132,15 @@ theorem trace_evalWord_rotate_mps (A : MPSTensor d D) (l : List (Fin d)) :
 /-- **Cyclic invariance of the MPV.** `mpv A` is invariant under a cyclic shift of
 the configuration. -/
 theorem mpv_comp_finRotate (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    MPSTensor.mpv A (σ ∘ finRotate N) = MPSTensor.mpv A σ := by
+    MPTensor.mpv A (σ ∘ finRotate N) = MPTensor.mpv A σ := by
   cases N with
   | zero => rfl
   | succ n =>
-    simp only [MPSTensor.mpv, MPSTensor.coeff, ofFn_comp_finRotate, trace_evalWord_rotate_mps]
+    simp only [MPTensor.mpv, MPTensor.coeff, ofFn_comp_finRotate, trace_evalWord_rotate_mps]
 
 /-- The MPV is invariant under a `p`-fold cyclic shift. -/
 theorem mpv_comp_finRotate_pow (A : MPSTensor d D) {N : ℕ} (p : ℕ) (σ : Fin N → Fin d) :
-    MPSTensor.mpv A (σ ∘ (finRotate N : Fin N → Fin N)^[p]) = MPSTensor.mpv A σ := by
+    MPTensor.mpv A (σ ∘ (finRotate N : Fin N → Fin N)^[p]) = MPTensor.mpv A σ := by
   induction p with
   | zero => simp
   | succ k ih =>
@@ -157,9 +159,9 @@ theorem blockReindexEquiv_symm_apply {N L : ℕ} (hL : L ≤ N) (c : Fin (L + (N
 first, by cyclic invariance. -/
 theorem schmidt_swap (A : MPSTensor d D) {N L : ℕ} (hL : L ≤ N)
     (w : Fin (N - L) → Fin d) (u'' : Fin (N - (N - L)) → Fin d) :
-    MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm
+    MPTensor.mpv A ((MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm
         (Fin.append w u''))
-      = MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm
+      = MPTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm
         (Fin.append (u'' ∘ Fin.cast (by omega : L = N - (N - L))) w)) := by
   have hcfg : (MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm (Fin.append w u'')
       = ((MPOTensor.blockReindexEquiv d N L hL).symm
@@ -289,12 +291,12 @@ theorem pureBlockEntropy_monotone (A : MPSTensor d D) {N L : ℕ} (hN : 2 * L + 
 reindexed along the trivial length identity L + 0 = L. -/
 theorem blockReducedState_zero {L : ℕ}
     (Z : Matrix (Fin (L + 0) → Fin d) (Fin (L + 0) → Fin d) ℂ) :
-    blockReducedState d L 0 Z
+    MPOTensor.blockReducedState d L 0 Z
       = Z.submatrix (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d)))
           (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d))) := by
   ext u v
-  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
-    blockSplitEquiv_symm_apply, Fintype.sum_unique, Fin.append_right_nil]
+  simp only [MPOTensor.blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
+    MPOTensor.blockSplitEquiv_symm_apply, Fintype.sum_unique, Fin.append_right_nil]
   rfl
 
 /-- The full-system pure block entropy vanishes: the whole-chain reduced state
@@ -311,14 +313,14 @@ theorem pureBlockEntropy_full (A : MPSTensor d D) (N : ℕ)
   set κ := Equiv.arrowCongr (finCongr (Nat.add_zero N).symm) (Equiv.refl (Fin d)) with hκ
   have ekey : MPSTensor.reducedPureBlockState A N N (le_refl N)
       = (Y.submatrix g.symm g.symm).submatrix κ κ :=
-    (blockReducedState_submatrix_finCongr hN0 Y).symm.trans
+    (MPOTensor.blockReducedState_submatrix_finCongr hN0 Y).symm.trans
       (blockReducedState_zero (Y.submatrix g.symm g.symm))
   have hσH := MPSTensor.normalizedPureState_isHermitian A N
   rw [MPSTensor.pureBlockEntropy,
     vonNeumannEntropy_congr ekey _ (((hσH.submatrix _).submatrix _).submatrix _),
     vonNeumannEntropy_submatrix_equiv, vonNeumannEntropy_submatrix_equiv,
     vonNeumannEntropy_submatrix_equiv]
-  · exact vonNeumannEntropy_normalizedPureState A N htr
+  · exact MPOTensor.vonNeumannEntropy_normalizedPureState A N htr
   · exact (hσH.submatrix _).submatrix _
   · exact hσH.submatrix _
 
@@ -328,7 +330,7 @@ theorem mutualInfoChain_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L �
     (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
     (doubledTensor A).mutualInfoChain N L hL (doubledTensor_posSemidef A N)
       = 2 * MPSTensor.pureBlockEntropy A N L hL := by
-  rw [MPOTensor.mutualInfoChain, blockEntropy_doubledTensor, blockEntropy_doubledTensor,
+  rw [MPOTensor.mutualInfoChain_eq, blockEntropy_doubledTensor, blockEntropy_doubledTensor,
     blockEntropy_doubledTensor, pureBlockEntropy_full A N htr,
     ← pureBlockEntropy_complement A N L hL]
   ring

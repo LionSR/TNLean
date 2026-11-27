@@ -290,7 +290,7 @@
 
 \begin{lemma}[Exact open-boundary support under gauge and phase equivalence]
     \label{thm:primitive_representative_support_gauge}
-    \lean{MPSTensor.GaugePhaseEquiv.groundSpaceES_eq,
+    \lean{MPTensor.GaugePhaseEquiv.groundSpaceES_eq,
         MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor}
     \leanok
     Gauge-equivalent MPS tensors, including a common nonzero scalar factor
@@ -3684,7 +3684,7 @@
 
 \begin{lemma}[Trace preservation of an isometric corner]
     \label{thm:trace_preserving_isometric_corner}
-    \lean{MPSTensor.IsLeftCanonical.of_isometry_intertwine}
+    \lean{MPTensor.IsLeftCanonical.of_isometry_intertwine}
     \leanok
     Let $A$ be trace preserving, let $V^*V=I$, and suppose
     $A_iV=VB_i$ for every letter $i$. Then $B$ is trace preserving.
@@ -3957,7 +3957,7 @@
 
 \begin{lemma}[Positive physical dimension of a normalized tensor]
     \label{thm:left_canonical_physical_dimension}
-    \lean{MPSTensor.IsLeftCanonical.physDim_ne_zero}
+    \lean{MPTensor.IsLeftCanonical.physDim_ne_zero}
     \leanok
     A tensor of positive bond dimension satisfying
     $\sum_iA_i^*A_i=I$ has positive physical dimension.

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Flux.RegularCycleFluxMeasurement
-import TNLean.PEPS.Graph.Region.EdgeMapSubgraph
+import TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry
 import TNLean.PEPS.Tensor.GraphState.RegularOpenRegion
 import TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Subgraph
@@ -54,30 +54,7 @@ local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); 
 local notation "X" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
 
-/-- The positively oriented four-step walk around a native torus plaquette.
-Source: SCP10, flux detection, Theorem 6.15, lines 2217–2267. -/
-def torusPlaquetteWalk (v : X) : (Γₜ).Walk v v :=
-  .cons (torusGraph_adj_right v.1 v.2)
-    (.cons (torusGraph_adj_up (v.1 + 1) v.2)
-      (.cons (torusGraph_adj_right v.1 (v.2 + 1)).symm
-        (.cons (torusGraph_adj_up v.1 v.2).symm .nil)))
-
 variable {G : Type*} [Group G]
-
-/-- Counterclockwise plaquette transport is the reverse-ordered product of its
-four directed steps. Source: SCP10, Theorem 6.15, lines 2217–2267. -/
-theorem regularWalkHolonomy_torusPlaquetteWalk (u : Edge Γₜ → G) (v : X) :
-    regularWalkHolonomy u (torusPlaquetteWalk v) =
-      (regularDirectedTransport u (torusGraph_adj_up v.1 v.2))⁻¹ *
-        (regularDirectedTransport u (torusGraph_adj_right v.1 (v.2 + 1)))⁻¹ *
-        regularDirectedTransport u (torusGraph_adj_up (v.1 + 1) v.2) *
-        regularDirectedTransport u (torusGraph_adj_right v.1 v.2) := by
-  change (((1 * regularDirectedTransport u (torusGraph_adj_up v.1 v.2).symm) *
-    regularDirectedTransport u (torusGraph_adj_right v.1 (v.2 + 1)).symm) *
-    regularDirectedTransport u (torusGraph_adj_up (v.1 + 1) v.2)) *
-    regularDirectedTransport u (torusGraph_adj_right v.1 v.2) = _
-  rw [regularDirectedTransport_symm u (torusGraph_adj_up v.1 v.2),
-    regularDirectedTransport_symm u (torusGraph_adj_right v.1 (v.2 + 1)), one_mul]
 
 /-- Clockwise plaquette transport is the inverse of the counterclockwise
 transport. Source: SCP10, fluxon-braiding figure, lines 2361–2395. -/
@@ -89,11 +66,6 @@ theorem regularWalkHolonomy_torusPlaquetteWalk_reverse (u : Edge Γₜ → G) (v
         regularDirectedTransport u (torusGraph_adj_up v.1 v.2) := by
   rw [regularWalkHolonomy_reverse, regularWalkHolonomy_torusPlaquetteWalk]
   group
-
-/-- The four physical sites surrounding a native torus plaquette. Source:
-SCP10, the detection tweezer in Theorem 6.15, lines 2225–2258. -/
-def torusPlaquetteRegion (v : X) : Finset X :=
-  (torusPlaquetteWalk v).support.toFinset
 
 /-- A native plaquette has exactly four physical sites. Source: SCP10,
 Theorem 6.15, lines 2225–2258. -/

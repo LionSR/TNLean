@@ -28,6 +28,8 @@ and Skolem–Noether.
 * [arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Lemma 1
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

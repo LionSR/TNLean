@@ -19,11 +19,11 @@ of the September 24, 2026 polynomial-PEPS manuscript.
 \begin{definition}[Feasible densities and ordered filters]
     \label{def:peps_regularized_patch_objective}
     \lean{
-        TNLean.PEPS.regularizedPatchDomain,
-        TNLean.PEPS.regularizedPatchFilter,
-        TNLean.PEPS.regularizedPatchOperator,
-        TNLean.PEPS.regularizedPatchOutput,
-        TNLean.PEPS.regularizedPatchObjective
+        ManyBody.regularizedPatchDomain,
+        ManyBody.regularizedPatchFilter,
+        ManyBody.regularizedPatchOperator,
+        ManyBody.regularizedPatchOutput,
+        ManyBody.regularizedPatchObjective
     }
     \leanok
     \uses{def:peps_regional_operator_extension}
@@ -91,10 +91,10 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 \begin{lemma}[Compactness and continuity]
     \label{lem:peps_regularized_patch_compact_continuous}
     \lean{
-        TNLean.PEPS.isCompact_regularizedPatchDomain,
-        TNLean.PEPS.regularizedPatchDomain_nonempty,
-        TNLean.PEPS.continuousOn_regularizedPatchFilter,
-        TNLean.PEPS.continuousOn_regularizedPatchObjective
+        ManyBody.isCompact_regularizedPatchDomain,
+        ManyBody.regularizedPatchDomain_nonempty,
+        ManyBody.continuousOn_regularizedPatchFilter,
+        ManyBody.continuousOn_regularizedPatchObjective
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
@@ -113,9 +113,9 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 \begin{lemma}[Bounds for every feasible tuple]
     \label{thm:peps_regularized_patch_bounds}
     \lean{
-        TNLean.PEPS.regularizedPatchFilter_norm_bounds,
-        TNLean.PEPS.regularizedPatchObjective_bounds,
-        TNLean.PEPS.regularizedPatchObjective_pos
+        ManyBody.regularizedPatchFilter_norm_bounds,
+        ManyBody.regularizedPatchObjective_bounds,
+        ManyBody.regularizedPatchObjective_pos
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
@@ -144,8 +144,8 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 \begin{definition}[Minimum and normalization]
     \label{def:peps_regularized_patch_minimum}
     \lean{
-        TNLean.PEPS.regularizedPatchMinimum,
-        TNLean.PEPS.normalizedRegularizedPatchOutput
+        ManyBody.regularizedPatchMinimum,
+        ManyBody.normalizedRegularizedPatchOutput
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
@@ -160,12 +160,12 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 \begin{lemma}[Attainment and common value]
     \label{thm:peps_regularized_patch_minimum}
     \lean{
-        TNLean.PEPS.exists_isMinOn_regularizedPatchObjective,
-        TNLean.PEPS.regularizedPatchObjective_eq_minimum,
-        TNLean.PEPS.regularizedPatchMinimum_bounds,
-        TNLean.PEPS.regularizedPatchMinimum_pos,
-        TNLean.PEPS.norm_normalizedRegularizedPatchOutput,
-        TNLean.PEPS.normalizedRegularizedPatchOutput_eq_minimum_smul
+        ManyBody.exists_isMinOn_regularizedPatchObjective,
+        ManyBody.regularizedPatchObjective_eq_minimum,
+        ManyBody.regularizedPatchMinimum_bounds,
+        ManyBody.regularizedPatchMinimum_pos,
+        ManyBody.norm_normalizedRegularizedPatchOutput,
+        ManyBody.normalizedRegularizedPatchOutput_eq_minimum_smul
     }
     \leanok
     \uses{def:peps_regularized_patch_minimum}
@@ -187,8 +187,8 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 \begin{corollary}[Exponential regularization]
     \label{cor:peps_regularized_patch_exp_bounds}
     \lean{
-        TNLean.PEPS.regularizedPatchObjective_exp_bounds,
-        TNLean.PEPS.regularizedPatchMinimum_exp_bounds
+        ManyBody.regularizedPatchObjective_exp_bounds,
+        ManyBody.regularizedPatchMinimum_exp_bounds
     }
     \leanok
     \uses{def:peps_regularized_patch_minimum}
@@ -210,7 +210,7 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 
 \begin{lemma}[The logarithmic minimum]
     \label{thm:peps_regularized_patch_log_minimum}
-    \lean{TNLean.PEPS.isLeast_log_regularizedPatchObjective}
+    \lean{ManyBody.isLeast_log_regularizedPatchObjective}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
     If $a_j\ge0$ for all $j$, then $\log N=\min_{x\in\mathcal D}\log F(x)$.
@@ -224,7 +224,7 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 
 \begin{lemma}[Cylinder approximation from ordered inverse filters]
     \label{thm:peps_patch_inverse_cylinder}
-    \lean{TNLean.PEPS.exists_mem_iSup_dependentRegionCylinder_norm_sub_le}
+    \lean{ManyBody.exists_mem_iSup_dependentRegionCylinder_norm_sub_le}
     \leanok
     \uses{def:peps_regularized_patch_objective,def:peps_regional_cylinder}
     In the first-head expansion of the

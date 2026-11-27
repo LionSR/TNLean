@@ -18,7 +18,7 @@ inequality, and assumes no area law.
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder
-open ManyBody (cutMatrix)
+open ManyBody (cutMatrix interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -27,14 +27,14 @@ unit vector of bounded rank at that cut. -/
 theorem one_sub_kyFanNorm_le_of_unit_cut_rank_approximation {L q D k : ℕ}
     (Ω y : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1) (hy : ‖y‖ = 1)
     {rho : ℝ} (herror : ‖y - Ω‖ ^ 2 ≤ rho)
-    (hrank : (cutMatrix (leftBlock L k) y).rank ≤ D) :
+    (hrank : (cutMatrix (interval L 0 k) y).rank ≤ D) :
     1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-      (leftBlock L k) Ω).kyFanNorm D ≤ rho := by
+      (interval L 0 k) Ω).kyFanNorm D ≤ rho := by
   classical
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k))
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k))
   let H := (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-    (leftBlock L k) Ω)
+    (interval L 0 k) Ω)
   have hoverlap : 1 - rho ≤ ‖⟪Ω, y⟫_ℂ‖ ^ 2 := by
     have hdist := norm_sub_sq (𝕜 := ℂ) y Ω
     rw [hy, hΩ] at hdist
@@ -42,23 +42,23 @@ theorem one_sub_kyFanNorm_le_of_unit_cut_rank_approximation {L q D k : ℕ}
     rw [norm_inner_symm] at hre
     change ‖y - Ω‖ ^ 2 = 1 ^ 2 - 2 * (⟪y, Ω⟫_ℂ).re + 1 ^ 2 at hdist
     nlinarith [sq_nonneg (‖⟪Ω, y⟫_ℂ‖ - 1)]
-  by_cases hD : D < Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))
+  by_cases hD : D < Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))
   · have h := Matrix.normSq_inner_le_kyFanNorm_mul_normSq (U Ω) (U y) hD hrank
     rw [U.inner_map_map, U.norm_map, hy, one_pow, mul_one] at h
     have heq : H.kyFanNorm D =
         (posSemidef_self_mul_conjTranspose
-          (cutMatrix (leftBlock L k) Ω)).isHermitian.kyFanNorm D := by
+          (cutMatrix (interval L 0 k) Ω)).isHermitian.kyFanNorm D := by
       congr 1
     change ‖⟪Ω, y⟫_ℂ‖ ^ 2 ≤
       (posSemidef_self_mul_conjTranspose
-        (cutMatrix (leftBlock L k) Ω)).isHermitian.kyFanNorm D at h
+        (cutMatrix (interval L 0 k) Ω)).isHermitian.kyFanNorm D at h
     rw [← heq] at h
     linarith
   · have htrace : (ManyBody.regionState (X := fun _ ↦ Fin q)
-        Ω (leftBlock L k)).trace.re = 1 := by
+        Ω (interval L 0 k)).trace.re = 1 := by
       rw [ManyBody.trace_regionState_eq_one hΩ, Complex.one_re]
     have hmass := (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
-      (leftBlock L k) Ω).kyFanNorm_mono (Nat.le_of_not_gt hD)
+      (interval L 0 k) Ω).kyFanNorm_mono (Nat.le_of_not_gt hD)
     rw [Matrix.IsHermitian.kyFanNorm_card_eq_trace_re, htrace] at hmass
     have hrho : 0 ≤ rho := (sq_nonneg _).trans herror
     linarith

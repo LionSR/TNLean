@@ -149,7 +149,7 @@ theorem old_split_anchor_bounds_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (h
     (hn : 0 < S.n) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hsplit : (S.ball i ∩ receiving (S.oldChargeState h g) side).Nonempty ∧
       (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty) :
@@ -173,7 +173,7 @@ theorem state_split_anchor_bounds_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} 
     (hn : 0 < S.n) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hsplit : (S.ball i ∩ receiving (S.state h g) side).Nonempty ∧
       (S.ball i ∩ middle (S.state h g)).Nonempty) :

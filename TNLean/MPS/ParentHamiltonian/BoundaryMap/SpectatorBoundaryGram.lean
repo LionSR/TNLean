@@ -305,7 +305,7 @@ theorem leftVirtualMapES_norm_map_of_leftCanonical
     rw [← Matrix.mul_sum]
     simp_rw [← Matrix.mul_assoc]
     rw [← Matrix.sum_mul,
-      sum_evalWord_conjTranspose_mul_evalWord A hLeft L]
+      Kraus.sum_evalWord_conjTranspose_mul_evalWord A hLeft L]
     simp
   have hsquares : ‖leftVirtualMapES A L
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)‖ ^ 2 =

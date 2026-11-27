@@ -107,17 +107,12 @@ theorem isNBlkInjective_of_le {A : MPSTensor d D} {L m : ℕ}
       exact isNBlkInjective_succ_of_isNBlkInjective A
         (lt_of_lt_of_le hLpos hLm) ih
 
-/-- Exact word-span fullness is block injectivity. -/
-theorem wordSpan_eq_top_iff_isNBlkInjective (A : MPSTensor d D) (N : ℕ) :
-    Kraus.wordSpan A N = ⊤ ↔ Kraus.IsNBlkInjective A N :=
-  Iff.rfl
-
 /-- Normality implies fullness of a cumulative word span. -/
 theorem cumulativeSpan_eq_top_of_isNormal (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) : ∃ N, Kraus.cumulativeSpan A N = ⊤ := by
   obtain ⟨N, _hNpos, hN⟩ := hN
   exact ⟨N, eq_top_iff.mpr (le_trans
-    (eq_top_iff.mp ((wordSpan_eq_top_iff_isNBlkInjective A N).mpr hN))
+    (eq_top_iff.mp (show Kraus.wordSpan A N = ⊤ from hN))
     (Kraus.wordSpan_le_cumulativeSpan A le_rfl))⟩
 
 /-- Zero-block injectivity forces one-dimensional bond space. -/
@@ -128,8 +123,7 @@ theorem bondDim_eq_one_of_isNBlkInjective_zero [NeZero D]
   have hD_pos : 0 < D := NeZero.pos D
   have hD_ge : 2 ≤ D := by omega
   have htop : Kraus.wordSpan A 0 =
-      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
-    (wordSpan_eq_top_iff_isNBlkInjective A 0).mpr hA
+      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := hA
   exact Kraus.wordSpan_zero_ne_top_of_two_le A hD_ge htop
 
 end MPSTensor
@@ -226,7 +220,6 @@ theorem isNBlkInjective_of_ge_of_unital
     (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
     {L m : ℕ} (hL : Kraus.IsNBlkInjective A L) (hm : L ≤ m) :
     Kraus.IsNBlkInjective A m := by
-  rw [← wordSpan_eq_top_iff_isNBlkInjective] at hL ⊢
   exact Kraus.wordSpan_eq_top_of_ge_of_unital A hUnital hL hm
 
 /-- If `Kraus.cumulativeSpan A N = ⊤` and the identity belongs to the one-letter span,
@@ -237,7 +230,7 @@ theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1) :
     Kraus.IsNormal A := by
   refine ⟨N + 1, Nat.zero_lt_succ N, ?_⟩
-  rw [← wordSpan_eq_top_iff_isNBlkInjective]
+  change Kraus.wordSpan A (N + 1) = ⊤
   rw [← Kraus.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone]
   exact eq_top_iff.mpr (hcs.ge.trans (Kraus.cumulativeSpan_mono A N))
 

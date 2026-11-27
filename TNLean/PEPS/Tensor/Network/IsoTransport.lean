@@ -12,7 +12,8 @@ import TNLean.PEPS.Tensor.Network.Defs
 
 A graph isomorphism `φ : G ≃g G'` carries the combinatorial data of a PEPS on `G`
 to a PEPS on `G'`: each edge maps to an edge (`Edge.map`), each edge incident to
-`v` maps to an edge incident to `φ v` (`IncidentEdge.equiv`), and a tensor `A` on
+`v` maps to an edge incident to `φ v` (`IncidentEdge.equiv`), both in
+`TNLean/PEPS/Graph/Region/EdgeMapSubgraph.lean`, and a tensor `A` on
 `G` transports to a tensor `A.transport φ` on `G'` whose bond dimensions and
 components are those of `A` reindexed by `φ` (`Tensor.transport`). Transport
 turns the state coefficient into the precomposed coefficient
@@ -42,130 +43,6 @@ namespace PEPS
 
 variable {V W : Type*} [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
   {G : SimpleGraph V} {G' : SimpleGraph W} {d : ℕ}
-
-/-! ### The edge action of a graph isomorphism -/
-
-/-- The edge of `G'` obtained by pushing an edge of `G` through the graph
-isomorphism `φ`: apply `φ` to both endpoints and reorder them into the `Edge`
-convention with `Edge.ofAdj`.  The isomorphism may swap the order of the two
-endpoints, which `Edge.ofAdj` corrects. -/
-def _root_.ManyBody.Edge.map (φ : G ≃g G') (e : Edge G) : Edge G' :=
-  ManyBody.Edge.ofAdj ((φ.map_rel_iff').mpr e.2.2)
-
-omit [Fintype V] [Fintype W] in
-/-- The unordered endpoints of `Edge.map φ e` are the `φ`-images of the endpoints
-of `e`. -/
-theorem _root_.ManyBody.Edge.map_endpoints (φ : G ≃g G') (e : Edge G) :
-    ((ManyBody.Edge.map φ e).1.1 = φ e.1.1 ∧ (ManyBody.Edge.map φ e).1.2 = φ e.1.2) ∨
-      ((ManyBody.Edge.map φ e).1.1 = φ e.1.2 ∧ (ManyBody.Edge.map φ e).1.2 = φ e.1.1) :=
-  ManyBody.Edge.ofAdj_endpoints ((φ.map_rel_iff').mpr e.2.2)
-
-omit [Fintype V] [Fintype W] in
-/-- Successive graph isomorphisms transport an edge by their composition. -/
-theorem _root_.ManyBody.Edge.map_trans {Z : Type*} [LinearOrder Z] {G'' : SimpleGraph Z}
-    (φ : G ≃g G') (ψ : G' ≃g G'') (e : Edge G) :
-    ManyBody.Edge.map ψ (ManyBody.Edge.map φ e) = ManyBody.Edge.map (φ.trans ψ) e := by
-  apply ManyBody.Edge.ofAdj_eq_ofAdj
-  rcases ManyBody.Edge.map_endpoints φ e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
-  · exact Or.inl ⟨by rw [h₁]; rfl, by rw [h₂]; rfl⟩
-  · exact Or.inr ⟨by rw [h₁]; rfl, by rw [h₂]; rfl⟩
-
-omit [Fintype V] [Fintype W] in
-/-- Pushing an edge through `φ` and then through `φ.symm` recovers the original
-edge.  The two passes return to the original unordered endpoint pair, and
-`Edge.ofAdj` re-imposes the same `<`-order, so the round trip is the identity. -/
-@[simp] theorem _root_.ManyBody.Edge.map_symm_map (φ : G ≃g G') (e : Edge G) :
-    ManyBody.Edge.map φ.symm (ManyBody.Edge.map φ e) = e := by
-  apply ManyBody.Edge.ofAdj_eq_of_endpoints
-  rcases ManyBody.Edge.map_endpoints φ e with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · exact Or.inl ⟨by rw [h1]; simp, by rw [h2]; simp⟩
-  · exact Or.inr ⟨by rw [h1]; simp, by rw [h2]; simp⟩
-
-omit [Fintype V] [Fintype W] in
-/-- Pushing an edge through `φ.symm` and then through `φ` recovers it. -/
-@[simp] theorem _root_.ManyBody.Edge.map_map_symm (φ : G ≃g G') (e : Edge G') :
-    ManyBody.Edge.map φ (ManyBody.Edge.map φ.symm e) = e :=
-  ManyBody.Edge.map_symm_map φ.symm e
-
-/-- The edge action of `φ` as a bijection `Edge G ≃ Edge G'`. -/
-def _root_.ManyBody.Edge.equiv (φ : G ≃g G') : Edge G ≃ Edge G' where
-  toFun := ManyBody.Edge.map φ
-  invFun := ManyBody.Edge.map φ.symm
-  left_inv := ManyBody.Edge.map_symm_map φ
-  right_inv := ManyBody.Edge.map_map_symm φ
-
-omit [Fintype V] [Fintype W] in
--- restored: fired by the bare `simpa` in `IncidentEdge.equiv` below
-@[simp] theorem _root_.ManyBody.Edge.equiv_apply (φ : G ≃g G') (e : Edge G) :
-    ManyBody.Edge.equiv φ e = ManyBody.Edge.map φ e :=
-  rfl
-
-/-! ### The incident-edge correspondence -/
-
-omit [Fintype V] [Fintype W] in
-/-- An edge incident to `v` maps, under `φ`, to an edge incident to `φ v`. -/
-theorem _root_.ManyBody.Edge.map_incident (φ : G ≃g G') {v : V} {e : Edge G}
-    (h : e.1.1 = v ∨ e.1.2 = v) :
-    (ManyBody.Edge.map φ e).1.1 = φ v ∨ (ManyBody.Edge.map φ e).1.2 = φ v := by
-  rcases ManyBody.Edge.map_endpoints φ e with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · rcases h with hv | hv
-    · exact Or.inl (by rw [h1, hv])
-    · exact Or.inr (by rw [h2, hv])
-  · rcases h with hv | hv
-    · exact Or.inr (by rw [h2, hv])
-    · exact Or.inl (by rw [h1, hv])
-
-/-- The correspondence between edges incident to `v` and edges incident to `φ v`,
-as a bijection.  The underlying map is the edge action `Edge.map φ`; the incidence
-is preserved because `φ` sends the endpoint equal to `v` to one equal to `φ v`. -/
-def IncidentEdge.equiv (φ : G ≃g G') (v : V) :
-    IncidentEdge G v ≃ IncidentEdge G' (φ v) :=
-  (ManyBody.Edge.equiv φ).subtypeEquiv fun e => by
-    constructor
-    · intro h
-      exact ManyBody.Edge.map_incident φ h
-    · intro h
-      have h' := ManyBody.Edge.map_incident φ.symm (v := φ v) h
-      simpa using h'
-
-/-- The edge incident to `φ.symm w` carried to an edge incident to `w` (not merely
-to `φ (φ.symm w)`).  The membership at `w` is recomputed from `Edge.map_incident`
-through `φ (φ.symm w) = w`, avoiding a transport across the incidence-vertex index.
-This is the form consumed in the transported tensor's component, where the vertex
-of `G'` is `w` and its `G`-preimage is `φ.symm w`. -/
-def IncidentEdge.toSymm (φ : G ≃g G') (w : W) (ie : IncidentEdge G (φ.symm w)) :
-    IncidentEdge G' w :=
-  ⟨ManyBody.Edge.map φ ie.1, by
-    have h := ManyBody.Edge.map_incident φ ie.2
-    rwa [φ.apply_symm_apply] at h⟩
-
-/-- The inverse of `IncidentEdge.toSymm`: carry an edge incident to `w` back
-through `φ.symm`, obtaining an edge incident to `φ.symm w`. -/
-def IncidentEdge.fromSymm (φ : G ≃g G') (w : W) (ie' : IncidentEdge G' w) :
-    IncidentEdge G (φ.symm w) :=
-  ⟨ManyBody.Edge.map φ.symm ie'.1, ManyBody.Edge.map_incident φ.symm ie'.2⟩
-
-omit [Fintype V] [Fintype W] in
-@[simp] theorem IncidentEdge.toSymm_coe (φ : G ≃g G') (w : W)
-    (ie : IncidentEdge G (φ.symm w)) :
-    (IncidentEdge.toSymm φ w ie).1 = ManyBody.Edge.map φ ie.1 :=
-  rfl
-
-omit [Fintype V] [Fintype W] in
-@[simp] theorem IncidentEdge.fromSymm_coe (φ : G ≃g G') (w : W)
-    (ie' : IncidentEdge G' w) :
-    (IncidentEdge.fromSymm φ w ie').1 = ManyBody.Edge.map φ.symm ie'.1 :=
-  rfl
-
-omit [Fintype V] [Fintype W] in
-/-- Every edge incident to `w` comes from an edge incident to `φ.symm w`. -/
-theorem IncidentEdge.toSymm_surjective (φ : G ≃g G') (w : W) :
-    Function.Surjective (IncidentEdge.toSymm φ w) := by
-  intro ie'
-  refine ⟨IncidentEdge.fromSymm φ w ie', ?_⟩
-  apply Subtype.ext
-  simp only [IncidentEdge.toSymm_coe, IncidentEdge.fromSymm_coe,
-    ManyBody.Edge.map_map_symm]
 
 /-! ### Transport of a tensor along a graph isomorphism -/
 

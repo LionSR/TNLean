@@ -180,6 +180,37 @@ theorem cycleTensorOfMPS_component_pair (hn : 3 ≤ n) (B : MPSTensor d D) (v : 
   rw [cycleTensorOfMPS_component, cycleIncidentPairEquiv_symm_left,
     cycleIncidentPairEquiv_symm_right]
 
+/-- **MPS injectivity is vertex injectivity on the cycle graph.** The cycle-graph tensor
+carrying one copy of `A` at every site is vertex injective iff `A` is injective, with no
+hypothesis beyond `3 ≤ n`, which is needed to form the cycle tensor. Source:
+arXiv:1804.04964, injective MPS (`Papers/1804.04964/paper_normal.tex:196-205`) and
+injective PEPS (`:979-981`). -/
+theorem isVertexInjective_cycleTensorOfMPS_iff (hn : 3 ≤ n) (A : MPSTensor d D) :
+    IsVertexInjective (cycleTensorOfMPS hn A) ↔ Kraus.IsInjective A := by
+  have key : ∀ v : Fin n,
+      LinearIndependent ℂ ((cycleTensorOfMPS hn A).component v) ↔ Kraus.IsInjective A := by
+    intro v
+    let q := cycleIncidentPairEquiv (D := D) hn v
+    let f : Fin D × Fin D → Fin d → ℂ := fun p σ => A σ p.1 p.2
+    have hf : (cycleTensorOfMPS hn A).component v ∘ q.symm = f := by
+      funext p σ
+      exact cycleTensorOfMPS_component_pair hn A v p σ
+    let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] ((Fin D × Fin D) → ℂ) :=
+      (LinearEquiv.curry ℂ ℂ (Fin D) (Fin D)).symm
+    have hcomp :
+        (⇑(e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ((Fin D × Fin D) → ℂ))) ∘ A = flip f := by
+      funext i p
+      rfl
+    have h1 : LinearIndependent ℂ ((cycleTensorOfMPS hn A).component v) ↔
+        LinearIndependent ℂ f := by
+      rw [← hf]
+      exact (linearIndependent_equiv
+        (f := (cycleTensorOfMPS hn A).component v) q.symm).symm
+    rw [h1, ← span_flip_eq_top_iff_linearIndependent,
+      Kraus.IsInjective, ← Submodule.map_eq_top_iff (e := e), Submodule.map_span,
+      ← Set.range_comp, hcomp]
+  exact ⟨fun h => (key 0).1 (h 0), fun h v => (key v).2 h⟩
+
 /-- **Per-site component identity in matrix form.**  At a site of the closed
 chain, the gauge-equivalence component identity between the cycle tensors of
 `B` and `A` holds for all bond assignments exactly when the matrix identity
@@ -381,7 +412,7 @@ theorem fundamentalTheorem_normalMPS {n L d D : ℕ} [NeZero n] (hL : 0 < L)
     (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D) (hA : Kraus.IsNBlkInjective A L)
     (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) :=
   fundamentalTheorem_normalMPS_of_overlap hL hn hD A B hA hB hAB
@@ -598,7 +629,7 @@ Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZero n]
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
     (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) :=
   fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn hD A B hA hB hAB

@@ -53,9 +53,9 @@ variable {d D : ℕ}
 
 private theorem mpvOverlap_two_eq_zero_of_bondDim_eq_zero
     {e E : ℕ} (A : MPSTensor e E) (hE : E = 0) :
-    MPSTensor.mpvOverlap A A 2 = 0 := by
+    MPTensor.mpvOverlap A A 2 = 0 := by
   subst E
-  simp [MPSTensor.mpvOverlap, MPSTensor.mpv, MPSTensor.coeff, Matrix.trace]
+  simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, Matrix.trace]
 
 /-- The unit shifted transfer traces of a matrix product unitary pass to every
 tensor generating the same positive-length matrix product vectors as its
@@ -65,15 +65,15 @@ Source: arXiv:1703.09188, lines 344--356. -/
 private theorem trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : U.IsMPU)
     {E : ℕ} [NeZero E] {A : MPSTensor (d * d) E}
-    (hSame : MPSTensor.SameMPV₂Pos U.normalizedFlattening A)
+    (hSame : MPTensor.SameMPV₂Pos U.normalizedFlattening A)
     (N : ℕ) (hN : 1 < N) :
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1 := by
   calc
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) =
-        MPSTensor.mpvOverlap A A N :=
+        MPTensor.mpvOverlap A A N :=
       MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap A N
-    _ = MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N :=
-      (MPSTensor.mpvOverlap_eq_of_pos_mpv_eq
+    _ = MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N :=
+      (MPTensor.mpvOverlap_eq_of_pos_mpv_eq
         (fun {N} hN => hSame N hN) (fun {N} hN => hSame N hN)
         (Nat.zero_lt_of_lt hN)).symm
     _ = Matrix.trace
@@ -128,7 +128,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
       (cfii : MPSTensor.CPSVCanonicalFormIIData Ared)
       (ρ : Matrix (Fin Dred) (Fin Dred) ℂ),
       Dred ≤ D ∧
-      MPSTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
+      MPTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
       MPSTensor.IsNormalTensor Ared ∧
       cfii.toCPSVCanonicalFormData.HasFullSupport ∧
       ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
@@ -140,14 +140,14 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   let Ared : MPSTensor (d * d) Dred :=
     MPSTensor.toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) blocks
   have hOriginalOverlap :
-      MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
+      MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
     rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
     exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one (by omega)
-  have hReducedOverlap : MPSTensor.mpvOverlap Ared Ared 2 = 1 := by
+  have hReducedOverlap : MPTensor.mpvOverlap Ared Ared 2 = 1 := by
     calc
-      MPSTensor.mpvOverlap Ared Ared 2 =
-          MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 :=
-        (MPSTensor.mpvOverlap_eq_of_pos_mpv_eq
+      MPTensor.mpvOverlap Ared Ared 2 =
+          MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 :=
+        (MPTensor.mpvOverlap_eq_of_pos_mpv_eq
           (fun {N} hN => hSame N hN) (fun {N} hN => hSame N hN) (by omega)).symm
       _ = 1 := hOriginalOverlap
   have hDred : 0 < Dred := by
@@ -209,9 +209,9 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
     rfl
   obtain ⟨B, dataB, hGauge, hTotalDim⟩ :=
     data.exists_gaugeEquiv_canonicalFormIIData
-  have hGaugePos : MPSTensor.SameMPV₂Pos Ared B :=
-    MPSTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => hGauge.sameMPV N σ)
-  have hSameB : MPSTensor.SameMPV₂Pos U.normalizedFlattening B :=
+  have hGaugePos : MPTensor.SameMPV₂Pos Ared B :=
+    MPTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => hGauge.sameMPV N σ)
+  have hSameB : MPTensor.SameMPV₂Pos U.normalizedFlattening B :=
     hSame.trans hGaugePos
   have hTraceB : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap B) ^ N) = 1 :=
@@ -319,7 +319,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
           ← Matrix.mul_assoc W Wᴴ, hWWstar, Matrix.one_mul, dataB.coisometric]
       reconstruct := hrecC }
   have hFullC : dataC.toCPSVCanonicalFormData.HasFullSupport := hFullB
-  have hSameBC : MPSTensor.SameMPV₂Pos B C :=
+  have hSameBC : MPTensor.SameMPV₂Pos B C :=
     MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction B C Wᴴ
       (by rw [Matrix.conjTranspose_conjTranspose, hWstarW])
       (fun i => by
@@ -328,7 +328,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
           B i = (W * Wᴴ) * B i * (W * Wᴴ) := by
             rw [hWWstar, Matrix.one_mul, Matrix.mul_one]
           _ = W * C i * Wᴴ := by rw [hCdef]; simp only [Matrix.mul_assoc])
-  have hSameC : MPSTensor.SameMPV₂Pos U.normalizedFlattening C :=
+  have hSameC : MPTensor.SameMPV₂Pos U.normalizedFlattening C :=
     hSameB.trans hSameBC
   have hTraceC : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap C) ^ N) = 1 :=
@@ -403,7 +403,7 @@ theorem IsMPU.exists_reduced_cfii_representative
   let Ured : MPOTensor d Dred := ofNormalizedFlattening Ared
   have hFlat : Ured.normalizedFlattening = Ared :=
     normalizedFlattening_ofNormalizedFlattening Ared
-  have hRaw : MPSTensor.SameMPV₂Pos U.toMPSTensor Ured.toMPSTensor := by
+  have hRaw : MPTensor.SameMPV₂Pos U.toMPSTensor Ured.toMPSTensor := by
     mpv_ext
     rw [← sqrt_smul_normalizedFlattening U,
       toMPSTensor_ofNormalizedFlattening, MPSTensor.mpv_smul,
@@ -449,7 +449,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
       (∀ N : ℕ, 0 < N → mpo V N = mpo U N) := by
   let : NeZero D := hU.neZero_bond
   obtain ⟨E, _hE, V, hV, hED, hMpo⟩ := hU.exists_reduced_cfii_representative
-  have hSame : MPSTensor.SameMPV₂Pos V.toMPSTensor U.toMPSTensor := by
+  have hSame : MPTensor.SameMPV₂Pos V.toMPSTensor U.toMPSTensor := by
     intro N hN σ
     have hσ : σ = (fun n => finProdFinEquiv ((σ n).divNat, (σ n).modNat)) := by
       funext n

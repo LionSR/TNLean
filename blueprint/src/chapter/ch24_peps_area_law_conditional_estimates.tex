@@ -13,9 +13,9 @@ its kernel.
 
 \begin{lemma}[Entropy exponent of a regional move]
     \label{thm:area_law_movement_eta}
-    \lean{TNLean.PEPS.AreaLaw.movementEta_eq_condMutualInfo_left,
-        TNLean.PEPS.AreaLaw.movementEta_eq_condMutualInfo_right,
-        TNLean.PEPS.AreaLaw.movementEta_nonneg}
+    \lean{Entropy.regionalMovementEta_eq_cmi_left,
+        Entropy.regionalMovementEta_eq_cmi_right,
+        Entropy.regionalMovementEta_nonneg}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $P,x,Y,F$ partition $\Lambda$ and let $\theta$ be a unit vector. Then
@@ -34,7 +34,7 @@ its kernel.
 
 \begin{lemma}[Conditional movement estimate on lattice regions]
     \label{thm:area_law_lattice_movement}
-    \lean{TNLean.PEPS.AreaLaw.exists_norm_movement_le}
+    \lean{Entropy.regionalMovement_norm_le}
     \leanok
     \uses{thm:area_law_movement_eta}
     There are universal constants $C,c>0$ such that the following holds. Let
@@ -58,7 +58,7 @@ its kernel.
 
 \begin{lemma}[Conditional skew estimate on lattice regions]
     \label{thm:area_law_lattice_skew}
-    \lean{TNLean.PEPS.AreaLaw.skewSymbol, TNLean.PEPS.AreaLaw.skewSymbol_skew_le}
+    \lean{TensorPower.markedScalarSymbol, TensorPower.SkewPartition.markedScalarSymbol_skew_le}
     \leanok
     \uses{thm:area_law_movement_eta}
     Let $P_0,P_1,x,U,F$ partition a finite domain with local dimension $q$, put

@@ -27,6 +27,10 @@ states*, Proposition 4.1, `03-patches.tex`, lines 26–54 and 534–603, revisio
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (dependentRegionCylinder)
+open Real (mul_rpow_le_succ_rpow_of_le_log)
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 open scoped BigOperators
 namespace TNLean.PEPS.Approximation
 open EncodedFrame
@@ -76,7 +80,7 @@ Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`, lines 26�
 534–603, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem adaptivePatchSupply_of_closedSquare_cylinders
     {q : ℕ} (hq : 1 ≤ q) {B₀ p R₀ : ℝ} (hB₀ : 0 < B₀) (hR₀ : 0 ≤ R₀)
-    {L : ℕ} (hL : 2 ≤ L) (Ω : StateSpace L q)
+    {L : ℕ} (hL : 2 ≤ L) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
     (m : ℝ → ℕ) (r : (u : ℝ) → Fin (m u) → ℝ)
     (hr : ∀ u, Monotone (r u)) (hle : ∀ u j, u ≤ r u j)
     (hle₂ : ∀ u, 0 ≤ u → ∀ j, r u j ≤ 2 * u)
@@ -85,29 +89,29 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
       letI : LinearOrder ↥(ManyBody.rectangularDomain L L) :=
         (Fintype.equivFin ↥(ManyBody.rectangularDomain L L)).linearOrder
       ∃ (S : (j : Fin (m u)) → Submodule ℂ
-          ((AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z (r u j) →
+          ((ManyBody.closedSquareSample (ManyBody.rectangularDomain L L) z (r u j) →
             Fin q) → ℂ))
         (v : EuclideanSpace ℂ
           ((v : ↥(ManyBody.rectangularDomain L L)) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q)
-          (AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z (r u j))
+          (ManyBody.closedSquareSample (ManyBody.rectangularDomain L L) z (r u j))
           (S j)) ∧
-        ‖(AreaLaw.rectangleAreaLawState Ω) - v‖ ≤
+        ‖(ManyBody.rectangleAreaLawState Ω) - v‖ ≤
             (L : ℝ) ^ (-p)) :
     AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀) (R₀ + 1) p L := by
   classical
   intro z u hu huL
   suffices hpatch : HasAdaptivePatch
       (fun x : ↥(ManyBody.rectangularDomain L L) ↦
-        ((x.1.1 : ℝ), (x.1.2 : ℝ))) (AreaLaw.rectangleAreaLawState Ω)
+        ((x.1.1 : ℝ), (x.1.2 : ℝ))) (ManyBody.rectangleAreaLawState Ω)
       (adaptivePatchPrefactor q B₀) (R₀ + 1) p L (z - (1, 1)) u by
     have ht := (hpatch.relabel (ManyBody.rectangleSiteEquiv L L).symm).translate (1, 1)
     have hΩ : (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         (Equiv.arrowCongr (ManyBody.rectangleSiteEquiv L L).symm (Equiv.refl (Fin q))))
-        (AreaLaw.rectangleAreaLawState Ω) = Ω := by
+        (ManyBody.rectangleAreaLawState Ω) = Ω := by
       ext σ
-      simp [AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv,
+      simp [ManyBody.rectangleAreaLawState, ManyBody.rectangleConfigurationEquiv,
         LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft',
         Equiv.arrowCongr, Function.comp_def]
     simpa only [Equiv.symm_symm, integerCoordinates_add_one_eq_latticePos,
@@ -122,14 +126,14 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
           ((v : ↥(ManyBody.rectangularDomain L L)) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q) (regions j) (S j)) ∧
-        ‖(AreaLaw.rectangleAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
+        ‖(ManyBody.rectangleAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
     have hc : P (fun j ↦ squareSample
         (fun x : ↥(ManyBody.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) (r u j)) := by
       rw [show (fun j : Fin (m u) ↦ squareSample
           (fun x : ↥(ManyBody.rectangularDomain L L) ↦
             ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) (r u j)) =
-          (fun j ↦ AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L)
+          (fun j ↦ ManyBody.closedSquareSample (ManyBody.rectangularDomain L L)
             (z - (1, 1)) (r u j)) from
         funext (fun _ ↦ squareSample_integerCoordinates _ _ _)]
       exact hcyl (z - (1, 1)) u hu4 huL
@@ -139,7 +143,7 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
         (fun x : ↥(ManyBody.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) hu (r u)
         (fun i j hij ↦ hr u hij) (hle u) (hle₂ u hu.le)
-        S ((AreaLaw.rectangleAreaLawState Ω)) v hv
+        S ((ManyBody.rectangleAreaLawState Ω)) v hv
     refine ⟨Q, hz, hs, ?_, by simpa only [LinearIsometryEquiv.apply_symm_apply] using he.trans herr⟩
     have htotal : ((∑ j, Q.dim j : ℕ) : ℝ) ≤ (m u : ℝ) * (L : ℝ) ^ R₀ := by
       calc
@@ -153,7 +157,7 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
   · obtain ⟨Q, hz, hs, hd, he⟩ :=
       exists_squarePatch_integerCoordinates_of_radius_le_four
         (ManyBody.rectangularDomain L L) hq (z - (1, 1)) hu
-        (lt_of_not_ge hu4).le ((AreaLaw.rectangleAreaLawState Ω))
+        (lt_of_not_ge hu4).le ((ManyBody.rectangleAreaLawState Ω))
     refine ⟨Q, hz, hs, ?_, ?_⟩
     · exact (show ((∑ j, Q.dim j : ℕ) : ℝ) ≤ (q : ℝ) ^ 81 by exact_mod_cast hd).trans
         ((le_max_left _ _).trans (le_mul_of_one_le_right (adaptivePatchPrefactor_pos q hB₀.le).le
@@ -173,24 +177,25 @@ lines 26–54 and 534–603, revision
 theorem SquareEntropyAreaLawAt.adaptivePatchSupply
     {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A)
     (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
-    ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+    ∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsSquareGroundState q J Δ L Ω →
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
   intro L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩
   refine adaptivePatchSupply_of_closedSquare_cylinders (by omega) hB₀
     (nestedPatchRadiusExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le).le hL Ω
-    AreaLaw.Geometry.nestedPatchCount (fun u j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
+    ManyBody.nestedPatchCount (fun u j ↦ ManyBody.nestedPatchRadius u j.val)
     (fun u i j hij ↦ add_le_add_right
       (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij) (by norm_num : (0 : ℝ) ≤ 2)) u)
-    (fun u j ↦ AreaLaw.Geometry.le_nestedPatchRadius u j.val)
-    (fun u hu j ↦ AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
+    (fun u j ↦ ManyBody.le_nestedPatchRadius u j.val)
+    (fun u hu j ↦ ManyBody.nestedPatchRadius_le_two_mul hu j.isLt)
     (fun u hu huL ↦ ?_)
     (fun z u hu4 huL ↦ hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp L hL h hh hhJ E₀
         Ω hΩ hgap hspan
       z u hu4 huL)
   have hf : (⌊u / 2⌋₊ : ℝ) ≤ u / 2 :=
     Nat.floor_le (R := ℝ) (a := u / 2) (div_nonneg hu zero_le_two)
-  simp only [AreaLaw.Geometry.nestedPatchCount, Nat.cast_add, Nat.cast_one]
+  simp only [ManyBody.nestedPatchCount, Nat.cast_add, Nat.cast_one]
   linarith only [hf, huL]
 
 /-- Conditional assembly of the adaptive patch constraint from the square

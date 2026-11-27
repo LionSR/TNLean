@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
 import QICLean.ManyBody.Sites.Lattice.SupDistance
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateCutBoundary
-import TNLean.PEPS.AreaLaw.Polygons.Templates.AmbientBoundary
+import QICLean.ManyBody.Sites.Template.CutBoundary
+import QICLean.ManyBody.Sites.Template.AmbientBoundary
 
 /-!
 # Physical edge boundaries of deterministic depth prefixes
@@ -22,6 +22,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), lines 243–257, at `openai/math@adc7f124`.
 -/
 
+open ManyBody (ambientBoundary card_ambientBoundary_dilation_le_layer
+  card_ambientBoundary_le_outer_layer mem_ambientDilation_iff)
+
 open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
   planeDomainGraph ambientDepth ambientDepth_le_iff_mem_ambientDilation ambientDepth_nonneg supDist
   natCast_supDist)
@@ -32,10 +35,10 @@ namespace TNLean.PEPS.AreaLaw.Scan
 Source: `08-scanner.tex`, lines 43–48 and 254–255. -/
 theorem disjoint_ambientDilation_boundaryEndpoints_of_clearance
     (Λ T : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (L r₀ : ℕ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {j : ℕ} (hj : j ≤ L) :
-    Disjoint (ambientDilation T j) (Geometry.boundaryEndpoints Λ A) := by
+    Disjoint (ambientDilation T j) (ManyBody.boundaryEndpoints Λ A) := by
   apply Finset.disjoint_left.mpr
   intro z hz hzcut
   obtain ⟨t, ht, hdist⟩ := mem_ambientDilation_iff.mp hz
@@ -68,7 +71,7 @@ theorem card_edgeBoundary_depthPrefix_le (Λ T : Finset (ℤ × ℤ))
     (hT : T.Nonempty) (A : Finset ↥Λ) {n L r₀ : ℕ} (hL : 1 ≤ L)
     (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {j : ℤ} (hj : j ≤ L) :
     (edgeBoundary (planeDomainGraph Λ)
@@ -81,7 +84,7 @@ theorem card_edgeBoundary_depthPrefix_le (Λ T : Finset (ℤ × ℤ))
       ext x
       simp only [depthPrefix, Finset.mem_filter, ambientDepth_le_iff_mem_ambientDilation]
     rw [heq]
-    exact (Geometry.card_edgeBoundary_filter_le_ambientBoundary Λ A _
+    exact (ManyBody.card_edgeBoundary_filter_le_ambientBoundary Λ A _
       (disjoint_ambientDilation_boundaryEndpoints_of_clearance Λ T A L r₀ hclear hjL)).trans
       (card_ambientBoundary_dilation_le_of_rows T hL hrow hjL)
   · have heq : depthPrefix A (fun x ↦ ambientDepth T hT x.val) j = ∅ := by
@@ -127,7 +130,7 @@ theorem card_edgeBoundary_positiveDepthPrefix_le (Λ T : Finset (ℤ × ℤ))
     (hT : T.Nonempty) (A : Finset ↥Λ) {n L r₀ : ℕ} (hL : 1 ≤ L)
     (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {j : ℤ} (hj : j ≤ L) :
     (edgeBoundary (planeDomainGraph Λ)

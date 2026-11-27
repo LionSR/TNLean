@@ -88,7 +88,7 @@ variable {A : (a : ι) → MPOTensor d (dim a)} {dual : ι → ι}
 /-- Periodic physical adjoint equality is positive-length MPV equality for
 the flattened physical-adjoint and dual tensors. -/
 theorem sameMPV₂Pos (h : IsPeriodicAdjointFamily A dual) (a : ι) :
-    MPSTensor.SameMPV₂Pos (physicalAdjointTensor (A a)).toMPSTensor
+    MPTensor.SameMPV₂Pos (physicalAdjointTensor (A a)).toMPSTensor
       (A (dual a)).toMPSTensor := by
   intro N hN ρ
   let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat

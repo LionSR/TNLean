@@ -48,6 +48,8 @@ decomposition. That comparison is carried out for sector decompositions, where
 the sums `Σ_q μ_{j,q}^N` and their multiplicities remain visible.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter
 
@@ -89,12 +91,12 @@ namespace IsNormalCanonicalFormBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
+/-- Rebuild `IsNormalCanonicalFormBNT` from the separated blockwise hypotheses plus
 the BNT separation assumption. -/
 theorem ofSeparatedData
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hPrim : HasPrimitiveBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k)))
     (hμ : HasOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
@@ -110,9 +112,10 @@ family are not proportional at arbitrarily large chain lengths. -/
 theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k) (Nmin : ℕ) :
     ∃ N : ℕ, Nmin ≤ N ∧
@@ -121,10 +124,10 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
   have hA_self_cast :
       Tendsto
         (fun N =>
-          mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) (A j))
+          mpvOverlap (α := Fin d) (cast (congr_arg (MPSTensor d) hdim) (A j))
             (cast (congr_arg (MPSTensor d) hdim) (A j)) N)
         atTop (nhds (1 : ℂ)) := by
-    refine (hOverlap.overlap_tendsto_one j).congr ?_
+    refine (hOverlap j).congr ?_
     intro N
     unfold mpvOverlap
     apply Finset.sum_congr rfl
@@ -132,11 +135,11 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
     rw [mpv_cast_dim hdim (A j) N σ]
   exact exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
     (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
-    ((isIrreducibleFamily_cast_dim hdim (A j)).mpr (hIrr.block_irreducible j))
-    (hIrr.block_irreducible k)
-    ((leftCanonical_cast_dim hdim (A j)).mpr (hLeft.leftCanonical j))
-    (hLeft.leftCanonical k)
-    hA_self_cast (hOverlap.overlap_tendsto_one k)
+    ((isIrreducibleFamily_cast_dim hdim (A j)).mpr (hIrr j))
+    (hIrr k)
+    ((leftCanonical_cast_dim hdim (A j)).mpr (hLeft j))
+    (hLeft k)
+    hA_self_cast (hOverlap k)
     (hBlocks j k hjk hdim) Nmin
 
 /-- The block-diagonal tensor `toTensorFromBlocks μ A` carries the obvious coefficient
@@ -161,9 +164,9 @@ lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSelf : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hOff : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N) := by
   have hOrtho := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hSelf hOff
@@ -184,24 +187,24 @@ Only injectivity, left-canonical normalization, and the BNT non-equivalence assu
 theorem cross_overlap_tendsto_zero_of_separated_bnt_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hInj : HasInjectiveBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hInj : ∀ k, Kraus.IsInjective (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
   · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := A j) (B := A k)
-      (hA_irr := irreducibleTensor_of_injective (A j) (hInj.block_injective j))
-      (hB_irr := irreducibleTensor_of_injective (A k) (hInj.block_injective k))
-      (hA_norm := hLeft.leftCanonical j)
-      (hB_norm := hLeft.leftCanonical k)
+      (hA_irr := irreducibleTensor_of_injective (A j) (hInj j))
+      (hB_irr := irreducibleTensor_of_injective (A k) (hInj k))
+      (hA_norm := hLeft j)
+      (hB_norm := hLeft k)
       (hNot := hBlocks j k hjk hdim)
   · exact mpvOverlap_tendsto_zero_of_dim_ne (A j) (A k)
-      (hInj.block_injective j)
-      (hInj.block_injective k)
-      (hLeft.leftCanonical j)
-      (hLeft.leftCanonical k)
+      (hInj j)
+      (hInj k)
+      (hLeft j)
+      (hLeft k)
       hdim
 
 /-- Separated-hypotheses construction of an `IsBNT` witness.
@@ -211,16 +214,17 @@ obvious coefficient decomposition.  Strict weight ordering is not used here. -/
 lemma isBNT_of_separated_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hInj : HasInjectiveBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hInj : ∀ k, Kraus.IsInjective (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A where
-  normal := fun j => (hInj.block_injective j).isNormal
+  normal := fun j => (hInj j).isNormal
   spans_mpv := fun N _ => spans_mpv_toTensorFromBlocks μ A N
   eventually_li :=
     exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-      hOverlap.overlap_tendsto_one
+      hOverlap
       (fun i j hij =>
         cross_overlap_tendsto_zero_of_separated_bnt_data A hInj hLeft hBlocks i j hij)
 
@@ -240,24 +244,24 @@ assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
   · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := A j) (B := A k)
-      (hA_irr := hIrr.block_irreducible j)
-      (hB_irr := hIrr.block_irreducible k)
-      (hA_norm := hLeft.leftCanonical j)
-      (hB_norm := hLeft.leftCanonical k)
+      (hA_irr := hIrr j)
+      (hB_irr := hIrr k)
+      (hA_norm := hLeft j)
+      (hB_norm := hLeft k)
       (hNot := hBlocks j k hjk hdim)
   · exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP (A j) (A k)
-      (hIrr.block_irreducible j)
-      (hIrr.block_irreducible k)
-      (hLeft.leftCanonical j)
-      (hLeft.leftCanonical k)
+      (hIrr j)
+      (hIrr k)
+      (hLeft j)
+      (hLeft k)
       hdim
 
 end SeparatedNormalBNT
@@ -288,8 +292,8 @@ lemma isBNT [∀ k, NeZero (dim k)]
       (fun j => hNCF.toIsNormalCanonicalForm.overlap_tendsto_one j)
       (fun i j hij =>
         cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
-          hNCF.toIsNormalCanonicalForm.toHasIrreducibleBlocks
-          hNCF.toIsNormalCanonicalForm.toIsLeftCanonicalBlockFamily
+          hNCF.toIsNormalCanonicalForm.block_irreducible
+          hNCF.toIsNormalCanonicalForm.leftCanonical
           hNCF.blocks_not_equiv i j hij)
 
 end IsNormalCanonicalFormBNT

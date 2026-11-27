@@ -170,7 +170,7 @@ noncomputable def IsMPUCanonicalFormII.tensorProduct
     rw [Matrix.trace_reindex, Matrix.trace_kronecker, hU.ρ_trace, hV.ρ_trace, one_mul]
   ρ_fixed := by
     rw [normalizedFlattening_tensorProduct,
-      MPSTensor.transferMap_reindexPhysical_equiv,
+      Kraus.transferMap_reindexPhysical_equiv,
       MPSTensor.transferMap_tensorProduct_kronecker,
       hU.ρ_fixed, hV.ρ_fixed]
 

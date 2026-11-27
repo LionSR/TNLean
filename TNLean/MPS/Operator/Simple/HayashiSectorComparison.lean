@@ -60,7 +60,7 @@ density matrix in a Hayashi sector.
 Source: arXiv:1606.00608, Appendix C.2, equation `Qketc`, lines 1415--1428. -/
 noncomputable def hayashiInverseLeft {d D : ℕ}
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
     (α β : Fin D) (k : Fin hη.m) (l l' : Fin (hη.dL k)) : ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
     inverseTensor K hK (finProdFinEquiv (i, j)) α β *
@@ -72,7 +72,7 @@ density matrix in a Hayashi sector.
 Source: arXiv:1606.00608, Appendix C.2, equation `Qketc`, lines 1415--1428. -/
 noncomputable def hayashiInverseRight {d D : ℕ}
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
     (α β : Fin D) (k : Fin hη.m) (r r' : Fin (hη.dR k)) : ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
     inverseTensor K hK (finProdFinEquiv (i, j)) α β *
@@ -83,7 +83,7 @@ outer inverse tensors with the corresponding three-site inverse-map
 contraction. This is the contraction used in arXiv:1606.00608, Appendix C.2,
 lines 1421--1430. -/
 private lemma sum_inverseTensor_threeSiteClosure_eq {d D : ℕ}
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
@@ -141,7 +141,7 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1434. -/
 theorem inverseMap_threeSite_closure_collapse {d D : ℕ}
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
@@ -172,7 +172,7 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1434. -/
 theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D)
@@ -290,7 +290,7 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, equation `Qketc` and lines 1415--1438. -/
 theorem inverseMap_hayashi_sector_comparison {d D : ℕ}
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)

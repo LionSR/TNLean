@@ -22,6 +22,8 @@ vectors, and the finite family of normal tensors may be relabelled.
 These invariances concern the definition in arXiv:1606.00608, lines 271--274.
 -/
 
+open MPTensor
+
 open scoped BigOperators
 
 namespace MPSTensor

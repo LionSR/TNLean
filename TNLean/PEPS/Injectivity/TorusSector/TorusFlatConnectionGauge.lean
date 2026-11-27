@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Graph.Holonomy.TorusParallelSection
 import TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy
 import TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut
+import TNLean.PEPS.Tensor.GraphState.RegularClosedGauge
 
 /-!
 # Reduction of a flat torus connection to two commuting seams

@@ -5,26 +5,21 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Chain.BlockTensor
 import TNLean.MPS.Tensor.VaryingBond.IsometricChain
+import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 
 /-!
 # Cut ranks of open-chain states and minimal bond dimensions
 
-For a vector `ψ` on `N` sites and a cut `k ≤ N`, the cut matrix
-`(σ, τ) ↦ ψ(σ τ)` has rows indexed by the configurations `σ` of the first `k`
-sites and columns indexed by the configurations `τ` of the remaining `N - k`
-sites. Its rank is the Schmidt rank of `ψ` across the cut, the rank of the
-reduced density operator `ρ_k` of arXiv:quant-ph/0608197, lines 456--458. In the
-bipartite language of QICLean, `cutRank ψ k` is `Matrix.schmidtRank` of the vector
-`(σ, τ) ↦ ψ(σ τ)` on the product of the two configuration spaces; the chain-indexed
-form is kept here because the cut moves along the chain.
-
-## Main definitions
-
-* `MPSPreparation.cutConfig` — the configuration `σ τ` of `N` sites.
-* `MPSPreparation.cutMatrix`, `MPSPreparation.cutRank` — the cut matrix and its rank.
+For a vector `ψ` on `N` sites and a cut after `k` sites, the cut matrix
+`ManyBody.cutMatrix (interval N 0 k) ψ` of QICLean has rows indexed by the configurations of the
+left block `interval N 0 k` of the sites `p < k` and columns indexed by the configurations of the
+remaining sites; its entry at `(σ, τ)` is the coefficient of `ψ` at the configuration glued from
+`σ` and `τ`. Its rank `ManyBody.cutRank (interval N 0 k) ψ` is the Schmidt rank of `ψ` across the
+cut, the rank of the reduced density operator `ρ_k` of arXiv:quant-ph/0608197, lines 456--458.
 
 ## Main results
 
+* `MPSPreparation.eval_cutEquiv_symm` — an ordered matrix product splits at the cut.
 * `OBCChainTensor.cutRank_coeff_le` — every open-boundary representation has bond `k` at least
   the cut rank at `k`.
 * `OBCChainTensor.exists_coeff_eq_of_cutRank_le` — conversely, a nonzero vector on a chain of
@@ -32,8 +27,8 @@ form is kept here because the cut moves along the chain.
   common bound `D` whose bond `k` is exactly the cut rank at `k`, and in which every site except
   the last satisfies `∑_i A_i^† A_i = 1` (every site, when the vector is normalized).
 * `MPSPreparation.cutRank_le_pow`, `MPSPreparation.cutRank_le_pow_sub`,
-  `MPSPreparation.cutRank_le_pow_half` — the cut rank at `k` is at most `d^k`, `d^{N-k}` and
-  `d^{⌊N/2⌋}`.
+  `MPSPreparation.cutRank_le_pow_half` — the cut rank at `k` is at most `d^{min(N, k)}`,
+  `d^{N-k}` and `d^{⌊N/2⌋}`.
 
 The representation of `exists_coeff_eq_of_cutRank_le` is built by successive Schmidt
 decompositions of `ψ` itself (arXiv:quant-ph/0608197, lines 444--447): bond `k` is an
@@ -58,106 +53,81 @@ open scoped BigOperators Matrix ComplexConjugate
 namespace MPSPreparation
 
 open MPSChainTensor (eval)
+open ManyBody (interval mem_interval)
 
 variable {d N : ℕ}
 
-/-- The configuration of `N` sites whose first `k` sites carry `σ` and whose remaining
-`N - k` sites carry `τ`. -/
-def cutConfig {k : ℕ} (σ : Fin k → Fin d) (τ : Fin (N - k) → Fin d) : Fin N → Fin d :=
-  fun p => if h : p.val < k then σ ⟨p.val, h⟩ else τ ⟨p.val - k, by have := p.isLt; omega⟩
+/-- The cut after `k` sites has `min N k` sites before it. -/
+private theorem card_interval_zero (N k : ℕ) : (interval N 0 k).card = min N k := by
+  rw [← Fin.card_filter_val_lt]
+  simp [interval]
 
-/-- The cut matrix of `ψ` at the cut `k`: its entry at the configuration `σ` of the first `k`
-sites and the configuration `τ` of the remaining `N - k` sites is `ψ(σ τ)`. Its rank is the rank
-of the reduced density operator `ρ_k` of arXiv:quant-ph/0608197, lines 456--458. -/
-def cutMatrix (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    Matrix (Fin k → Fin d) (Fin (N - k) → Fin d) ℂ :=
-  fun σ τ => ψ (cutConfig σ τ)
-
-/-- The rank of the cut matrix of `ψ` at the cut `k`, the Schmidt rank of `ψ` across the cut
-(arXiv:quant-ph/0608197, lines 456--458: the rank of `ρ_k`). -/
-noncomputable def cutRank (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) : ℕ :=
-  (cutMatrix ψ k).rank
-
-/-- The cut rank at `k` is at most `d^k`, the number of configurations of the first `k` sites. -/
-theorem cutRank_le_pow (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) : cutRank ψ k ≤ d ^ k := by
-  simpa [cutRank] using (cutMatrix ψ k).rank_le_card_height
+/-- The cut rank at `k` is at most `d^{min(N, k)}`, the number of configurations of the left
+block. -/
+theorem cutRank_le_pow (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
+    ManyBody.cutRank (interval N 0 k) ψ ≤ d ^ min N k := by
+  simpa [card_interval_zero] using ManyBody.cutRank_le_pow_card (D := interval N 0 k) ψ
 
 /-- The cut rank at `k` is at most `d^{N-k}`, the number of configurations of the last
 `N - k` sites. -/
-theorem cutRank_le_pow_sub (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) : cutRank ψ k ≤ d ^ (N - k) := by
-  simpa [cutRank] using (cutMatrix ψ k).rank_le_card_width
+theorem cutRank_le_pow_sub (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
+    ManyBody.cutRank (interval N 0 k) ψ ≤ d ^ (N - k) := by
+  have h := ManyBody.cutRank_le_pow_card_compl (D := interval N 0 k) ψ
+  rwa [Finset.card_compl, Fintype.card_fin, card_interval_zero,
+    show N - min N k = N - k by omega] at h
 
 /-- Every cut rank of a vector on `N` sites is at most `d^{⌊N/2⌋}`, the bound of
 arXiv:quant-ph/0608197, Theorem `thm:OBC-Vidal` (lines 431--434). -/
 theorem cutRank_le_pow_half [NeZero d] (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    cutRank ψ k ≤ d ^ (N / 2) := by
+    ManyBody.cutRank (interval N 0 k) ψ ≤ d ^ (N / 2) := by
   have hd : 0 < d := NeZero.pos d
   by_cases h : k ≤ N / 2
-  · exact (cutRank_le_pow ψ k).trans (Nat.pow_le_pow_right hd h)
+  · exact (cutRank_le_pow ψ k).trans (Nat.pow_le_pow_right hd (by omega))
   · exact (cutRank_le_pow_sub ψ k).trans (Nat.pow_le_pow_right hd (by omega))
 
-/-- Splitting an ordered matrix product at the cut `k`. -/
-theorem eval_cutConfig {D : ℕ} (M : MPSChainTensor d D N) {k : ℕ} (hk : k ≤ N)
-    (σ : Fin k → Fin d) (τ : Fin (N - k) → Fin d) :
-    eval M (cutConfig σ τ) =
-      (List.ofFn fun p : Fin k => M (Fin.castLE hk p) (σ p)).prod *
-        (List.ofFn fun q : Fin (N - k) => M ⟨k + q.val, by omega⟩ (τ q)).prod := by
+/-- **Splitting an ordered matrix product at the cut after `k` sites.** At the configuration
+glued from `σ` on the left block and `τ` on the remaining sites, the product is the product of
+the first `k` factors, read from `σ`, times the product of the last `N - k`, read from `τ`. -/
+theorem eval_cutEquiv_symm {D : ℕ} (M : MPSChainTensor d D N) {k : ℕ} (hk : k ≤ N)
+    (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k))
+    (τ : ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
+    eval M ((ManyBody.cutEquiv _ (interval N 0 k)).symm (σ, τ)) =
+      (List.ofFn fun p : Fin k =>
+          M (Fin.castLE hk p)
+            (σ ⟨Fin.castLE hk p, mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩⟩)).prod *
+        (List.ofFn fun q : Fin (N - k) => M ⟨k + q.val, by omega⟩
+          (τ ⟨⟨k + q.val, by omega⟩, fun h => by
+            have := (mem_interval.mp h).2
+            simp at this⟩)).prod := by
   rw [MPSChainTensor.eval_eq_prod_ofFn, List.ofFn_congr (show N = k + (N - k) by omega),
     List.ofFn_add, List.prod_append]
   refine congrArg₂ _ (congrArg _ (congrArg List.ofFn (funext fun p => ?_)))
     (congrArg _ (congrArg List.ofFn (funext fun q => ?_)))
   · have hp : (Fin.cast (show N = k + (N - k) by omega).symm
         (Fin.castLE (Nat.le_add_right k (N - k)) p)) = Fin.castLE hk p := Fin.ext rfl
-    rw [hp]
-    simp [cutConfig, p.isLt]
+    rw [hp, ManyBody.cutEquiv_symm_apply_mem (v := Fin.castLE hk p) _ _
+      (mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩)]
   · have hq : (Fin.cast (show N = k + (N - k) by omega).symm (Fin.natAdd k q)) =
         ⟨k + q.val, by omega⟩ := Fin.ext rfl
-    rw [hq]
-    simp [cutConfig]
-
-/-- Every configuration of `N` sites is cut at `k ≤ N` into its first `k` and its last
-`N - k` sites. -/
-theorem cutConfig_restrict {k : ℕ} (hk : k ≤ N) (c : Fin N → Fin d) :
-    cutConfig (fun p : Fin k => c (Fin.castLE hk p)) (fun q => c ⟨k + q.val, by omega⟩) = c := by
-  funext p
-  by_cases hp : p.val < k
-  · simp [cutConfig, hp]
-  · simp only [cutConfig, hp, dite_false]
-    congr 1
-    ext
-    simp only
-    omega
-
-/-- Nonzero vectors have positive cut ranks at every cut `k ≤ N`. -/
-theorem cutRank_pos {ψ : (Fin N → Fin d) → ℂ} (hψ : ψ ≠ 0) {k : ℕ} (hk : k ≤ N) :
-    0 < cutRank ψ k := by
-  obtain ⟨c, hc⟩ : ∃ c, ψ c ≠ 0 := by
-    by_contra h
-    push Not at h
-    exact hψ (funext h)
-  have hne : cutMatrix ψ k ≠ 0 := by
-    intro h0
-    have := congrFun (congrFun h0 fun p => c (Fin.castLE hk p)) fun q => c ⟨k + q.val, by omega⟩
-    simp only [cutMatrix, cutConfig_restrict, Matrix.zero_apply] at this
-    exact hc this
-  rw [cutRank, Nat.pos_iff_ne_zero, Matrix.rank_eq_finrank_span_cols]
-  intro h
-  rw [Submodule.finrank_eq_zero, Submodule.span_eq_bot] at h
-  exact hne (funext fun σ => funext fun τ => congrFun (h _ ⟨τ, rfl⟩) σ)
+    rw [hq, ManyBody.cutEquiv_symm_apply_not_mem (v := (⟨k + q.val, by omega⟩ : Fin N)) _ _
+      (fun h => by have := (mem_interval.mp h).2; simp at this)]
 
 /-- A nonzero vector has cut rank one at the cut `0`. -/
-theorem cutRank_zero_eq_one {ψ : (Fin N → Fin d) → ℂ} (hψ : ψ ≠ 0) : cutRank ψ 0 = 1 :=
-  le_antisymm (by simpa using cutRank_le_pow ψ 0) (cutRank_pos hψ (Nat.zero_le N))
+theorem cutRank_zero_eq_one {ψ : (Fin N → Fin d) → ℂ} (hψ : ψ ≠ 0) :
+    ManyBody.cutRank (interval N 0 0) ψ = 1 :=
+  le_antisymm (by simpa using cutRank_le_pow ψ 0) (ManyBody.cutRank_pos hψ)
 
 /-- A nonzero vector has cut rank one at the cut `N`. -/
-theorem cutRank_self_eq_one {ψ : (Fin N → Fin d) → ℂ} (hψ : ψ ≠ 0) : cutRank ψ N = 1 :=
-  le_antisymm (by simpa using cutRank_le_pow_sub ψ N) (cutRank_pos hψ le_rfl)
+theorem cutRank_self_eq_one {ψ : (Fin N → Fin d) → ℂ} (hψ : ψ ≠ 0) :
+    ManyBody.cutRank (interval N 0 N) ψ = 1 :=
+  le_antisymm (by simpa using cutRank_le_pow_sub ψ N) (ManyBody.cutRank_pos hψ)
 
 end MPSPreparation
 
 namespace OBCChainTensor
 
 open MPSPreparation
+open ManyBody (interval mem_interval)
 
 variable {d D N : ℕ}
 
@@ -185,14 +155,18 @@ MPS of bond dimension `D`" of arXiv:quant-ph/0608197 (lines 456--458), which the
 state; together with that item it gives the "minimal resources" of the recipe (lines
 1574--1577). -/
 theorem cutRank_coeff_le (B : OBCChainTensor d D N) (k : Fin (N + 1)) :
-    cutRank B.coeff k ≤ B.bondDim k := by
+    ManyBody.cutRank (interval N 0 k) B.coeff ≤ B.bondDim k := by
   classical
   have hD := B.bondBound_pos
   have hk : (k : ℕ) ≤ N := Nat.lt_succ_iff.mp k.isLt
-  let L : (Fin k → Fin d) → Matrix (Fin D) (Fin D) ℂ := fun σ =>
-    (List.ofFn fun p : Fin k => zeroPad B (Fin.castLE hk p) (σ p)).prod
-  let R : (Fin (N - k) → Fin d) → Matrix (Fin D) (Fin D) ℂ := fun τ =>
-    (List.ofFn fun q : Fin (N - k) => zeroPad B ⟨k + q.val, by omega⟩ (τ q)).prod
+  let L : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) →
+      Matrix (Fin D) (Fin D) ℂ := fun σ =>
+    (List.ofFn fun p : Fin k => zeroPad B (Fin.castLE hk p)
+      (σ ⟨Fin.castLE hk p, mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩⟩)).prod
+  let R : ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) →
+      Matrix (Fin D) (Fin D) ℂ := fun τ =>
+    (List.ofFn fun q : Fin (N - k) => zeroPad B ⟨k + q.val, by omega⟩
+      (τ ⟨⟨k + q.val, by omega⟩, fun h => by have := (mem_interval.mp h).2; simp at this⟩)).prod
   have hR : ∀ τ (γ : Fin D), B.bondDim k ≤ γ.val → R τ γ ⟨0, hD⟩ = 0 := by
     intro τ γ hγ
     refine prod_ofFn_apply_eq_zero _ _ (B.bondDim k) (fun h α β hα => ?_) (fun h => ?_) γ _ hγ rfl
@@ -202,18 +176,18 @@ theorem cutRank_coeff_le (B : OBCChainTensor d D N) (k : Fin (N + 1)) :
       omega
     · have hkN : k = Fin.last N := Fin.ext (by simp; omega)
       rw [hkN, B.right_dim]
-  have hfac : cutMatrix B.coeff k =
+  have hfac : ManyBody.cutMatrix (interval N 0 k) B.coeff =
       Matrix.of (fun σ (β : Fin (B.bondDim k)) => L σ ⟨0, hD⟩ (Fin.castLE (B.bondDim_le k) β)) *
         Matrix.of fun β τ => R τ (Fin.castLE (B.bondDim_le k) β) ⟨0, hD⟩ := by
     ext σ τ
     rw [Matrix.mul_apply, Fin.sum_castLE_extend_zero _ (B.bondDim_le k)]
-    simp only [cutMatrix, coeff_eq_eval_zeroPad, eval_cutConfig _ hk, Matrix.mul_apply,
-      Matrix.of_apply]
+    simp only [ManyBody.cutMatrix_apply, coeff_eq_eval_zeroPad, eval_cutEquiv_symm _ hk,
+      Matrix.mul_apply, Matrix.of_apply]
     refine Finset.sum_congr rfl fun γ _ => ?_
     split_ifs with hγ
     · rfl
     · exact mul_eq_zero_of_right _ (hR τ γ (not_lt.mp hγ))
-  rw [cutRank, hfac]
+  rw [ManyBody.cutRank, hfac]
   exact (Matrix.rank_mul_le_left _ _).trans
     ((Matrix.rank_le_card_width _).trans (Fintype.card_fin _).le)
 
@@ -223,57 +197,117 @@ end OBCChainTensor
 
 namespace MPSPreparation
 
+open ManyBody (interval mem_interval)
+
 variable {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 
-/-- The column space of the cut matrix at `k`, in the Euclidean space of the first `k` sites. -/
-private noncomputable def cutSpace (k : ℕ) : Submodule ℂ (EuclideanSpace ℂ (Fin k → Fin d)) :=
-  Submodule.span ℂ (Set.range fun τ => WithLp.toLp 2 fun σ => cutMatrix ψ k σ τ)
+/-- No site lies before the cut `0`. -/
+private instance isEmpty_interval_zero : IsEmpty {v : Fin N // v ∈ interval N 0 0} :=
+  ⟨fun v ↦ absurd (mem_interval.mp v.2).2 (Nat.not_lt_zero _)⟩
 
-private theorem finrank_cutSpace (k : ℕ) : Module.finrank ℂ (cutSpace ψ k) = cutRank ψ k := by
-  rw [cutRank, Matrix.rank_eq_finrank_span_cols, cutSpace,
-    ← LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ ((Fin k → Fin d) → ℂ)),
+/-- The column space of the cut matrix at `k`, in the Euclidean space of the left block. -/
+private noncomputable def cutSpace (k : ℕ) : Submodule ℂ
+    (EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k))) :=
+  Submodule.span ℂ (Set.range fun τ =>
+    WithLp.toLp 2 fun σ => ManyBody.cutMatrix (interval N 0 k) ψ σ τ)
+
+private theorem finrank_cutSpace (k : ℕ) :
+    Module.finrank ℂ (cutSpace ψ k) = ManyBody.cutRank (interval N 0 k) ψ := by
+  rw [ManyBody.cutRank, Matrix.rank_eq_finrank_span_cols, cutSpace,
+    ← LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ
+      (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) → ℂ)),
     Submodule.map_span, ← Set.range_comp]
   rfl
 
-/-- Restriction of a vector on `k + 1` sites to the first `k` sites, at a fixed letter on the
-last of them. -/
+omit ψ in
+/-- The configuration of the left block after `k + 1` sites that agrees with `σ` before the
+site `k` and carries `i` at it. -/
+private def extendLeft {k : ℕ}
+    (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (i : Fin d) :
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)) :=
+  fun v => if h : v.1.val < k then σ ⟨v.1, mem_interval.mpr ⟨Nat.zero_le _, h⟩⟩ else i
+
+omit ψ in
+/-- For `k < N`, the configurations of the left block after `k + 1` sites are the pairs of a
+letter at the site `k` and a configuration of the left block after `k` sites. -/
+private def extendLeftEquiv {k : ℕ} (hk : k < N) :
+    Fin d × ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃
+      ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)) where
+  toFun x := extendLeft x.2 x.1
+  invFun w := (w ⟨⟨k, hk⟩, mem_interval.mpr ⟨Nat.zero_le _, Nat.lt_succ_self k⟩⟩,
+    fun v => w ⟨v.1, mem_interval.mpr ⟨Nat.zero_le _, by
+      have := (mem_interval.mp v.2).2
+      omega⟩⟩)
+  left_inv x := by
+    refine Prod.ext ?_ (funext fun v => ?_)
+    · simp [extendLeft]
+    · have hv := (mem_interval.mp v.2).2
+      simp [extendLeft, hv]
+  right_inv w := by
+    funext v
+    simp only [extendLeft]
+    split_ifs with h
+    · rfl
+    · exact congrArg w (Subtype.ext (Fin.ext (by
+        have := (mem_interval.mp v.2).2
+        change k = v.1.val
+        omega)))
+
+/-- Restriction of a vector on the left block after `k + 1` sites to the left block after `k`
+sites, at a fixed letter on the site `k`. -/
 private def sliceLast {k : ℕ} (i : Fin d) :
-    EuclideanSpace ℂ (Fin (k + 1) → Fin d) →ₗ[ℂ] EuclideanSpace ℂ (Fin k → Fin d) where
-  toFun w := WithLp.toLp 2 fun σ => w (Fin.snoc σ i)
+    EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) →ₗ[ℂ]
+      EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) where
+  toFun w := WithLp.toLp 2 fun σ => w (extendLeft σ i)
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-/-- The configuration of the last `N - k` sites with first letter `i` followed by `τ`. -/
-private def consTail {k : ℕ} (i : Fin d) (τ : Fin (N - (k + 1)) → Fin d) : Fin (N - k) → Fin d :=
-  fun q => if h : q.val = 0 then i else τ ⟨q.val - 1, by have := q.isLt; omega⟩
+omit ψ in
+/-- The configuration of the sites `p ≥ k` with letter `i` at `k` followed by `τ`. -/
+private def consTail {k : ℕ} (i : Fin d)
+    (τ : ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) :
+    ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) :=
+  fun v => if h : v.1.val = k then i else τ ⟨v.1, fun hv => by
+    have h1 := (mem_interval.mp hv).2
+    have h2 : ¬ v.1.val < k := fun h' => v.2 (mem_interval.mpr ⟨Nat.zero_le _, h'⟩)
+    omega⟩
 
 omit ψ in
-private theorem cutConfig_snoc {k : ℕ} (σ : Fin k → Fin d) (i : Fin d)
-    (τ : Fin (N - (k + 1)) → Fin d) :
-    cutConfig (Fin.snoc σ i : Fin (k + 1) → Fin d) τ = cutConfig σ (consTail i τ) := by
+private theorem cutEquiv_symm_extendLeft {k : ℕ}
+    (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (i : Fin d)
+    (τ : ManyBody.ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) :
+    (ManyBody.cutEquiv _ (interval N 0 (k + 1))).symm (extendLeft σ i, τ) =
+      (ManyBody.cutEquiv _ (interval N 0 k)).symm (σ, consTail i τ) := by
   funext p
-  simp only [cutConfig, consTail]
   by_cases h1 : p.val < k
-  · have h2 : p.val < k + 1 := by omega
-    simp [h1, h2, Fin.snoc]
-  · by_cases h3 : p.val = k
-    · simp [h3, Fin.snoc]
-    · have h2 : ¬ p.val < k + 1 := by omega
-      have h4 : p.val - k ≠ 0 := by omega
-      simp only [h1, h2, h4, dite_false, Nat.sub_sub]
+  · rw [ManyBody.cutEquiv_symm_apply_mem (v := p) _ _ (mem_interval.mpr ⟨Nat.zero_le _, by omega⟩),
+      ManyBody.cutEquiv_symm_apply_mem (v := p) _ _ (mem_interval.mpr ⟨Nat.zero_le _, h1⟩)]
+    simp [extendLeft, h1]
+  · have h1' : p ∉ interval N 0 k := fun h => h1 ((mem_interval.mp h).2)
+    rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ h1']
+    by_cases h3 : p.val = k
+    · rw [ManyBody.cutEquiv_symm_apply_mem (v := p) _ _
+        (mem_interval.mpr ⟨Nat.zero_le _, by omega⟩)]
+      simp [extendLeft, consTail, h3]
+    · have h2 : p ∉ interval N 0 (k + 1) := fun h => by have := (mem_interval.mp h).2; omega
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ h2]
+      simp [consTail, h3]
 
 /-- The column space at `k + 1`, restricted to a fixed last letter, lies in the column space at
 `k`: a column of the cut matrix at `k + 1` at fixed letter `i` on site `k` is a column of the cut
 matrix at `k`. -/
-private theorem sliceLast_mem {k : ℕ} (i : Fin d) {w : EuclideanSpace ℂ (Fin (k + 1) → Fin d)}
+private theorem sliceLast_mem {k : ℕ} (i : Fin d)
+    {w : EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)))}
     (hw : w ∈ cutSpace ψ (k + 1)) : sliceLast i w ∈ cutSpace ψ k := by
   have hle : cutSpace ψ (k + 1) ≤ (cutSpace ψ k).comap (sliceLast i) := by
     refine Submodule.span_le.mpr ?_
     rintro _ ⟨τ, rfl⟩
     refine Submodule.subset_span ⟨consTail i τ, ?_⟩
-    change (WithLp.toLp 2 fun σ => ψ (cutConfig σ (consTail i τ))) =
-      WithLp.toLp 2 fun σ => ψ (cutConfig (Fin.snoc σ i : Fin (k + 1) → Fin d) τ)
-    simp only [cutConfig_snoc]
+    change (WithLp.toLp 2 fun σ => ψ ((ManyBody.cutEquiv _ (interval N 0 k)).symm
+        (σ, consTail i τ))) =
+      WithLp.toLp 2 fun σ => ψ ((ManyBody.cutEquiv _ (interval N 0 (k + 1))).symm
+        (extendLeft σ i, τ))
+    simp only [cutEquiv_symm_extendLeft]
   exact hle hw
 
 /-- The orthonormal basis of the column space at `k`. -/
@@ -284,38 +318,42 @@ private noncomputable abbrev cutBasis (k : ℕ) := stdOrthonormalBasis ℂ (cutS
 private noncomputable def cutSite (k : ℕ) (i : Fin d) :
     Matrix (Fin (Module.finrank ℂ (cutSpace ψ k))) (Fin (Module.finrank ℂ (cutSpace ψ (k + 1))))
       ℂ :=
-  fun β β' => inner ℂ (cutBasis ψ k β : EuclideanSpace ℂ (Fin k → Fin d))
-    (sliceLast i (cutBasis ψ (k + 1) β' : EuclideanSpace ℂ (Fin (k + 1) → Fin d)))
+  fun β β' => inner ℂ (cutBasis ψ k β).1 (sliceLast i (cutBasis ψ (k + 1) β').1)
 
 /-- Expansion of a basis vector at `k + 1` in the basis at `k`. -/
-private theorem cutBasis_snoc (k : ℕ) (i : Fin d) (β' : Fin (Module.finrank ℂ (cutSpace ψ (k + 1))))
-    (σ : Fin k → Fin d) :
-    (cutBasis ψ (k + 1) β' : EuclideanSpace ℂ (Fin (k + 1) → Fin d)) (Fin.snoc σ i) =
-      ∑ β, (cutBasis ψ k β : EuclideanSpace ℂ (Fin k → Fin d)) σ * cutSite ψ k i β β' := by
-  let x : cutSpace ψ k := ⟨sliceLast i (cutBasis ψ (k + 1) β' : _), sliceLast_mem ψ i (by simp)⟩
-  have h := congrArg (fun w : cutSpace ψ k => (w : EuclideanSpace ℂ (Fin k → Fin d)) σ)
-    ((cutBasis ψ k).sum_repr' x)
+private theorem cutBasis_extendLeft (k : ℕ) (i : Fin d)
+    (β' : Fin (Module.finrank ℂ (cutSpace ψ (k + 1))))
+    (σ : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
+    (cutBasis ψ (k + 1) β').1 (extendLeft σ i) =
+      ∑ β, (cutBasis ψ k β).1 σ * cutSite ψ k i β β' := by
+  let x : cutSpace ψ k := ⟨sliceLast i (cutBasis ψ (k + 1) β').1,
+    sliceLast_mem ψ i (cutBasis ψ (k + 1) β').2⟩
+  have h := congrArg (fun w : cutSpace ψ k => w.1 σ) ((cutBasis ψ k).sum_repr' x)
   simp only [Submodule.coe_sum, Submodule.coe_smul, Submodule.coe_inner] at h
   rw [WithLp.ofLp_sum, Finset.sum_apply] at h
-  calc (cutBasis ψ (k + 1) β' : EuclideanSpace ℂ (Fin (k + 1) → Fin d)) (Fin.snoc σ i)
-      = (x : EuclideanSpace ℂ (Fin k → Fin d)) σ := rfl
+  calc (cutBasis ψ (k + 1) β').1 (extendLeft σ i)
+      = x.1 σ := rfl
     _ = _ := h.symm
     _ = _ := Finset.sum_congr rfl fun β _ => by simp [cutSite, x, mul_comm]
 
-private theorem sum_inner_sliceLast {k : ℕ} (a b : EuclideanSpace ℂ (Fin (k + 1) → Fin d)) :
+omit ψ in
+private theorem sum_inner_sliceLast {k : ℕ} (hk : k < N)
+    (a b : EuclideanSpace ℂ
+      (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)))) :
     ∑ i, inner ℂ (sliceLast i a) (sliceLast i b) = inner ℂ a b := by
   simp only [PiLp.inner_apply]
-  rw [← (Fin.snocEquiv fun _ => Fin d).sum_comp, Fintype.sum_prod_type]
+  rw [← (extendLeftEquiv hk).sum_comp, Fintype.sum_prod_type]
   rfl
 
-/-- The site matrices of the successive Schmidt decompositions satisfy `∑_i A_i^† A_i = 1`. -/
-private theorem sum_conjTranspose_mul_cutSite (k : ℕ) :
+/-- The site matrices of the successive Schmidt decompositions before the last site satisfy
+`∑_i A_i^† A_i = 1`. -/
+private theorem sum_conjTranspose_mul_cutSite {k : ℕ} (hk : k < N) :
     ∑ i, (cutSite ψ k i)ᴴ * cutSite ψ k i = 1 := by
   ext β' β''
   simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
   have hi : ∀ i, ∑ β, star (cutSite ψ k i β β') * cutSite ψ k i β β'' =
-      inner ℂ (sliceLast i (cutBasis ψ (k + 1) β' : EuclideanSpace ℂ (Fin (k + 1) → Fin d)))
-        (sliceLast i (cutBasis ψ (k + 1) β'' : EuclideanSpace ℂ (Fin (k + 1) → Fin d))) := by
+      inner ℂ (sliceLast i (cutBasis ψ (k + 1) β').1)
+        (sliceLast i (cutBasis ψ (k + 1) β'').1) := by
     intro i
     let x' : cutSpace ψ k := ⟨_, sliceLast_mem ψ i (cutBasis ψ (k + 1) β').2⟩
     let x'' : cutSpace ψ k := ⟨_, sliceLast_mem ψ i (cutBasis ψ (k + 1) β'').2⟩
@@ -325,10 +363,9 @@ private theorem sum_conjTranspose_mul_cutSite (k : ℕ) :
     refine Finset.sum_congr rfl fun β _ => ?_
     simp only [cutSite, Submodule.coe_inner, RCLike.star_def, inner_conj_symm]
     rfl
-  simp only [hi, sum_inner_sliceLast]
+  simp only [hi, sum_inner_sliceLast hk]
   rw [← Submodule.coe_inner, orthonormal_iff_ite.mp (cutBasis ψ (k + 1)).orthonormal,
     Matrix.one_apply]
-
 
 variable {ψ}
 
@@ -337,8 +374,7 @@ private theorem finrank_cutSpace_zero (hψ : ψ ≠ 0) : Module.finrank ℂ (cut
 
 /-- The value of the unit basis vector of the one-dimensional column space at the cut `0`. -/
 private noncomputable def cutPhase (hψ : ψ ≠ 0) : ℂ :=
-  (cutBasis ψ 0 ⟨0, by rw [finrank_cutSpace_zero hψ]; exact one_pos⟩ :
-    EuclideanSpace ℂ (Fin 0 → Fin d)) Fin.elim0
+  (cutBasis ψ 0 ⟨0, by rw [finrank_cutSpace_zero hψ]; exact one_pos⟩).1 default
 
 private theorem star_cutPhase_mul_self (hψ : ψ ≠ 0) : star (cutPhase hψ) * cutPhase hψ = 1 := by
   have h := (orthonormal_iff_ite.mp (cutBasis ψ 0).orthonormal)
@@ -346,14 +382,14 @@ private theorem star_cutPhase_mul_self (hψ : ψ ≠ 0) : star (cutPhase hψ) * 
     ⟨0, by rw [finrank_cutSpace_zero hψ]; exact one_pos⟩
   simp only [↓reduceIte, Submodule.coe_inner, PiLp.inner_apply, Fintype.sum_unique,
     RCLike.inner_apply] at h
-  rw [cutPhase, show (Fin.elim0 : Fin 0 → Fin d) = default from Subsingleton.elim _ _]
-  rw [mul_comm]
+  rw [cutPhase, mul_comm]
   exact h
 
 /-- The open chain of the successive Schmidt decompositions of a nonzero vector, with bond `k`
 the column space of the cut matrix at `k`. -/
 private noncomputable def cutChain {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) → ℂ} (hψ : ψ ≠ 0)
-    (hD : ∀ k : Fin (n + 2), cutRank ψ k ≤ D) : OBCChainTensor d D (n + 1) where
+    (hD : ∀ k : Fin (n + 2), ManyBody.cutRank (interval (n + 1) 0 k) ψ ≤ D) :
+    OBCChainTensor d D (n + 1) where
   bondDim k := Module.finrank ℂ (cutSpace ψ k)
   bondDim_le k := (finrank_cutSpace ψ k).trans_le (hD k)
   left_dim := finrank_cutSpace_zero hψ
@@ -363,13 +399,13 @@ private noncomputable def cutChain {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) →
 /-- The prefix products of the chain of successive Schmidt decompositions are the basis vectors
 of the column spaces, up to the phase at the cut `0`. -/
 private theorem cutChain_prefix {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) → ℂ} (hψ : ψ ≠ 0)
-    (hD : ∀ k : Fin (n + 2), cutRank ψ k ≤ D) (σ : Fin (n + 1) → Fin d) :
+    (hD : ∀ k : Fin (n + 2), ManyBody.cutRank (interval (n + 1) 0 k) ψ ≤ D)
+    (σ : Fin (n + 1) → Fin d) :
     ∀ (k : ℕ) (hk : k ≤ n + 1) (γ : Fin D),
       (List.ofFn fun p : Fin k => OBCChainTensor.zeroPad (cutChain hψ hD) (Fin.castLE hk p)
           (σ (Fin.castLE hk p))).prod ⟨0, (cutChain hψ hD).bondBound_pos⟩ γ =
         if h : γ.val < Module.finrank ℂ (cutSpace ψ k) then
-          star (cutPhase hψ) * (cutBasis ψ k ⟨γ.val, h⟩ : EuclideanSpace ℂ (Fin k → Fin d))
-            fun p => σ (Fin.castLE hk p)
+          star (cutPhase hψ) * (cutBasis ψ k ⟨γ.val, h⟩).1 fun v => σ v.1
         else 0
   | 0, hk, γ => by
     have h1 := finrank_cutSpace_zero hψ
@@ -387,14 +423,16 @@ private theorem cutChain_prefix {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) → �
   | k + 1, hk, γ' => by
     have ih := cutChain_prefix hψ hD σ k (by omega)
     rw [List.ofFn_succ', List.prod_concat, Matrix.mul_apply]
-    have hσ : (fun p : Fin (k + 1) => σ (Fin.castLE hk p)) =
-        Fin.snoc (fun p : Fin k => σ (Fin.castLE (by omega) p)) (σ ⟨k, by omega⟩) := by
-      funext p
-      refine Fin.lastCases ?_ (fun p => ?_) p
-      · simp only [Fin.snoc_last]
-        rfl
-      · simp only [Fin.snoc_castSucc]
-        rfl
+    have hσ : (fun v : {v // v ∈ interval (n + 1) 0 (k + 1)} => σ v.1) =
+        extendLeft (fun v : {v // v ∈ interval (n + 1) 0 k} => σ v.1) (σ ⟨k, by omega⟩) := by
+      funext v
+      simp only [extendLeft]
+      split_ifs with h
+      · rfl
+      · exact congrArg σ (Fin.ext (by
+          have := (mem_interval.mp v.2).2
+          change v.1.val = k
+          omega))
     have ih' : ∀ γ : Fin D, (List.ofFn fun p : Fin k => OBCChainTensor.zeroPad (cutChain hψ hD)
         (Fin.castLE hk p.castSucc) (σ (Fin.castLE hk p.castSucc))).prod
           ⟨0, (cutChain hψ hD).bondBound_pos⟩ γ = _ := ih
@@ -404,7 +442,7 @@ private theorem cutChain_prefix {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) → �
           Matrix.zeroPad D (cutSite ψ k (σ ⟨k, by omega⟩)) x γ' := fun x => rfl
     simp only [hZ]
     split_ifs with hγ'
-    · rw [hσ, cutBasis_snoc, Finset.mul_sum, Fin.sum_castLE_extend_zero _
+    · rw [hσ, cutBasis_extendLeft, Finset.mul_sum, Fin.sum_castLE_extend_zero _
         ((finrank_cutSpace ψ k).trans_le (hD ⟨k, by omega⟩))]
       refine Finset.sum_congr rfl fun x _ => ?_
       split_ifs with hx
@@ -418,6 +456,7 @@ end MPSPreparation
 namespace OBCChainTensor
 
 open MPSPreparation
+open ManyBody (interval mem_interval)
 
 variable {d : ℕ}
 
@@ -433,36 +472,47 @@ a MPS of bond dimension `D`" (lines 456--458); with `OBCChainTensor.cutRank_coef
 dimensions are the least possible at every cut simultaneously, the "minimal resources" of
 lines 1574--1577. -/
 theorem exists_coeff_eq_of_cutRank_le {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) → ℂ} (hψ : ψ ≠ 0)
-    (hD : ∀ k : Fin (n + 2), cutRank ψ k ≤ D) :
-    ∃ B : OBCChainTensor d D (n + 1), B.coeff = ψ ∧ (∀ k, B.bondDim k = cutRank ψ k) ∧
+    (hD : ∀ k : Fin (n + 2), ManyBody.cutRank (interval (n + 1) 0 k) ψ ≤ D) :
+    ∃ B : OBCChainTensor d D (n + 1), B.coeff = ψ ∧
+      (∀ k, B.bondDim k = ManyBody.cutRank (interval (n + 1) 0 k) ψ) ∧
       (∀ p : Fin (n + 1), p ≠ Fin.last n → ∑ i, (B.tensor p i)ᴴ * B.tensor p i = 1) ∧
       (star ψ ⬝ᵥ ψ = 1 → ∑ i, (B.tensor (Fin.last n) i)ᴴ * B.tensor (Fin.last n) i = 1) := by
   classical
-  let E := EuclideanSpace ℂ (Fin (n + 1) → Fin d)
+  -- The configurations of `n + 1` sites are the configurations of the full left block.
+  let ρ : (Fin (n + 1) → Fin d) ≃
+      ManyBody.RegionConfig (fun _ : Fin (n + 1) ↦ Fin d) (interval (n + 1) 0 (n + 1)) :=
+    { toFun := fun σ v => σ v.1
+      invFun := fun x p => x ⟨p, mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩⟩
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl }
   have hr : Module.finrank ℂ (cutSpace ψ (n + 1)) = 1 :=
     (finrank_cutSpace ψ (n + 1)).trans (cutRank_self_eq_one hψ)
   have h1 : 0 < Module.finrank ℂ (cutSpace ψ (n + 1)) := by omega
-  let e : E := cutBasis ψ (n + 1) ⟨0, h1⟩
+  let e := (cutBasis ψ (n + 1) ⟨0, h1⟩).1
   -- The coefficient of the chain of successive Schmidt decompositions.
-  have hC : ∀ σ, (cutChain hψ hD).coeff σ = star (cutPhase hψ) * e σ := fun σ => by
+  have hC : ∀ σ, (cutChain hψ hD).coeff σ = star (cutPhase hψ) * e (ρ σ) := fun σ => by
     have h := cutChain_prefix hψ hD σ (n + 1) le_rfl ⟨0, (cutChain hψ hD).bondBound_pos⟩
     rw [dite_eq_left h1] at h
     rw [coeff_eq_eval_zeroPad, MPSChainTensor.eval_eq_prod_ofFn]
     exact h
   -- The vector is a multiple of the unit vector spanning the column space at the cut `n + 1`.
-  have hmem : WithLp.toLp 2 ψ ∈ cutSpace ψ (n + 1) := by
-    refine Submodule.subset_span ⟨fun q => (by have := q.isLt; omega : False).elim, ?_⟩
-    dsimp only
-    congr 1
-    funext σ
-    simp only [cutMatrix]
+  let τ₀ : ManyBody.ComplConfig (fun _ : Fin (n + 1) ↦ Fin d) (interval (n + 1) 0 (n + 1)) :=
+    fun v => absurd (mem_interval.mpr ⟨Nat.zero_le _, v.1.isLt⟩) v.2
+  let ψ' : EuclideanSpace ℂ
+      (ManyBody.RegionConfig (fun _ : Fin (n + 1) ↦ Fin d) (interval (n + 1) 0 (n + 1))) :=
+    WithLp.toLp 2 fun σ =>
+    ManyBody.cutMatrix (interval (n + 1) 0 (n + 1)) ψ σ τ₀
+  have hmem : ψ' ∈ cutSpace ψ (n + 1) := Submodule.subset_span ⟨τ₀, rfl⟩
+  have hρ : ∀ σ, ψ σ = ψ' (ρ σ) := fun σ => by
+    change ψ σ = ψ ((ManyBody.cutEquiv _ (interval (n + 1) 0 (n + 1))).symm (ρ σ, τ₀))
     congr 1
     funext p
-    simp [cutConfig, p.isLt]
-  let c₀ : ℂ := inner ℂ e (WithLp.toLp 2 ψ)
-  have hψσ : ∀ σ, ψ σ = c₀ * e σ := fun σ => by
-    have h := congrArg (fun w : cutSpace ψ (n + 1) => (w : E) σ)
-      ((cutBasis ψ (n + 1)).sum_repr' ⟨WithLp.toLp 2 ψ, hmem⟩)
+    exact (ManyBody.cutEquiv_symm_apply_mem (ρ σ) τ₀
+      (mem_interval.mpr ⟨Nat.zero_le _, p.isLt⟩)).symm
+  let c₀ : ℂ := inner ℂ e ψ'
+  have hψσ : ∀ σ, ψ' σ = c₀ * e σ := fun σ => by
+    have h := congrArg (fun w : cutSpace ψ (n + 1) => w.1 σ)
+      ((cutBasis ψ (n + 1)).sum_repr' ⟨ψ', hmem⟩)
     simp only [Submodule.coe_sum, Submodule.coe_smul, Submodule.coe_inner] at h
     rw [WithLp.ofLp_sum, Finset.sum_apply, Finset.sum_eq_single ⟨0, h1⟩] at h
     · exact h.symm
@@ -474,21 +524,22 @@ theorem exists_coeff_eq_of_cutRank_le {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) 
     fun p hp => ?_, fun hn => ?_⟩
   · rw [coeff_smulSite]
     funext σ
-    rw [Pi.smul_apply, hC, hψσ, smul_eq_mul]
-    linear_combination (c₀ * e σ) * star_cutPhase_mul_self hψ
+    rw [Pi.smul_apply, hC, hρ, hψσ, smul_eq_mul]
+    linear_combination (c₀ * e (ρ σ)) * star_cutPhase_mul_self hψ
   · change ∑ i, (if p = Fin.last n then c • cutSite ψ p i else cutSite ψ p i)ᴴ *
       (if p = Fin.last n then c • cutSite ψ p i else cutSite ψ p i) = 1
     simp only [hp, ↓reduceIte]
-    exact sum_conjTranspose_mul_cutSite ψ p
-  · have he : ∑ σ, star (e σ) * e σ = 1 := by
+    exact sum_conjTranspose_mul_cutSite ψ p.isLt
+  · have he : ∑ σ, star (e (ρ σ)) * e (ρ σ) = 1 := by
       have h := (orthonormal_iff_ite.mp (cutBasis ψ (n + 1)).orthonormal) ⟨0, h1⟩ ⟨0, h1⟩
       simp only [↓reduceIte, Submodule.coe_inner, PiLp.inner_apply, RCLike.inner_apply] at h
       rw [← h]
-      exact Finset.sum_congr rfl fun σ _ => mul_comm _ _
+      exact (ρ.sum_comp fun x => star (e x) * e x).trans
+        (Finset.sum_congr rfl fun x _ => mul_comm _ _)
     have hcc : star c * c = 1 := by
       have hn' : star c₀ * c₀ = 1 := by
         rw [← hn, dotProduct]
-        simp only [Pi.star_apply, hψσ, star_mul']
+        simp only [Pi.star_apply, hρ, hψσ, star_mul']
         rw [← mul_one (star c₀ * c₀), ← he, Finset.mul_sum]
         exact Finset.sum_congr rfl fun σ _ => by ring
       simp only [c, star_mul']
@@ -496,7 +547,7 @@ theorem exists_coeff_eq_of_cutRank_le {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) 
     change ∑ i, (if Fin.last n = Fin.last n then c • cutSite ψ n i else cutSite ψ n i)ᴴ *
       (if Fin.last n = Fin.last n then c • cutSite ψ n i else cutSite ψ n i) = 1
     simp only [↓reduceIte, Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
-      smul_smul, ← Finset.smul_sum, sum_conjTranspose_mul_cutSite]
+      smul_smul, ← Finset.smul_sum, sum_conjTranspose_mul_cutSite ψ (Nat.lt_succ_self n)]
     rw [mul_comm, hcc, one_smul]
 
 end OBCChainTensor

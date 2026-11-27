@@ -95,7 +95,7 @@ theorem blockwise_insert_eq_of_mpv_agree
     -- blockwise trace pairing against `insertedTensor W (A k) s`.
     have htrans : ∀ W : Matrix (Fin d) (Fin d) ℂ,
         ∑ i : Fin d, W s i *
-            MPSTensor.mpv
+            MPTensor.mpv
               (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
               (Fin.cons i w : Fin (L + 1) → Fin d) =
           ∑ k : Fin r, Matrix.trace
@@ -105,7 +105,7 @@ theorem blockwise_insert_eq_of_mpv_agree
       -- Expand the assembled-tensor MPV block-by-block and fold
       -- `mpv (A k) (Fin.cons i w)` into `trace (A k i * Kraus.evalWord (A k) (List.ofFn w))`.
       have hExp : ∀ i : Fin d,
-          MPSTensor.mpv
+          MPTensor.mpv
               (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
               (Fin.cons i w : Fin (L + 1) → Fin d) =
             ∑ k : Fin r, (μ k) ^ (L + 1) *
@@ -116,7 +116,7 @@ theorem blockwise_insert_eq_of_mpv_agree
         have hof : List.ofFn (Fin.cons i w : Fin (L + 1) → Fin d)
             = i :: List.ofFn w := by
           simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
-        simp only [smul_eq_mul, MPSTensor.mpv, MPSTensor.coeff, hof,
+        simp only [smul_eq_mul, MPTensor.mpv, MPTensor.coeff, hof,
           Kraus.evalWord_cons]
       simp_rw [hExp, Finset.mul_sum]
       rw [Finset.sum_comm]

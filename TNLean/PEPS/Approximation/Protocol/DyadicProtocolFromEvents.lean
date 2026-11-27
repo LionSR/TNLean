@@ -31,6 +31,8 @@ from these changes and from the changes of the large-scale repaintings, which ar
   `06-geometry.tex`, lines 12–53, and its proof, lines 82–241, 507–541 and 572–681.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -110,7 +112,7 @@ def largeSquare (K₀ t : ℝ) (S : DyadicSquare k) : Bool :=
 
 section State
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R₀ : RepaintedSquare k) {ε₀ t : ℝ} (hε : 0 < ε₀) (ht : 0 < t)
   (hB : ε₀ * t ≤ B₀ * Real.log L) (large : DyadicSquare k → Bool)
@@ -164,7 +166,8 @@ theorem exists_isDistributionProtocol_of_largeRepaintings_of_le {ε₀ : ℝ} (h
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, IsDirectRepaintingRatio K₀ ε₀ ν →
-      ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
+      ∀ {L q : ℕ} [NeZero q] {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+          {C c : ℝ}
         (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
         (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k)
@@ -332,7 +335,8 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, IsDirectRepaintingRatio K₀ ε₀ ν →
-      ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
+      ∀ {L q : ℕ} [NeZero q] {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+          {C c : ℝ}
         (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
         (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k)

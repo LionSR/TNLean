@@ -22,6 +22,8 @@ states the conversions.
   dimensions.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d : ℕ}

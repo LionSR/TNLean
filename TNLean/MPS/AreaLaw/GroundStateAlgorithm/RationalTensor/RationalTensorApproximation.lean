@@ -14,6 +14,7 @@ Landau, Vazirani and Vidick, arXiv:1307.5143v1, equation `eq:conv`.
 
 open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -100,7 +101,7 @@ theorem tensor_snoc_rational {D n : ℕ} (A : OBCChainTensor q D n) (f : Fin q �
 Gaussian rational complex number. -/
 theorem coordinate_rational {b k : ℕ} {v : LeftBlockVector L q k}
     (R : RationalLeftOpenMPSRepresentation b v) (hk : k ≤ L)
-    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
     HasRationalComplexCoordinates (v x) := by
   let y := (leftConfigOfFinEquiv (q := q) hk).symm x
   have hxy : leftConfigOfFin y = x := (leftConfigOfFinEquiv hk).apply_symm_apply x

@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy
-import TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove
 
 /-!
 # Directed transport of reconstructed internal operators
@@ -13,6 +12,9 @@ Reconstruction by vertex labels changes a directed operator by left
 multiplication at its target and inverse right multiplication at its source.
 This elementary group identity is auxiliary to the accessible-coordinate
 construction of SCP10, arXiv:1001.3807, lines 1765–1920.
+
+The bond assignment `regularRegionBondExtension` prescribes operators on the internal
+bonds of a region and keeps a common assignment on all other bonds.
 -/
 
 open ManyBody (Edge)
@@ -20,6 +22,11 @@ open ManyBody (Edge)
 namespace TNLean.PEPS
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
 variable {G : Type*} [Group G]
+
+/-- Prescribe operators on internal region bonds and retain the common assignment
+on all other bonds, including crossings. Source: SCP10, Theorem 6.16, lines 2270–2301. -/
+def regularRegionBondExtension (R : Finset V) (inside outside : Edge Γ → G) : Edge Γ → G :=
+  fun e => if e.1.1 ∈ R ∧ e.1.2 ∈ R then inside e else outside e
 
 /-- An internal reconstruction determines transport in either traversal
 orientation. This is an auxiliary algebraic identity for SCP10, lines 1765–1920. -/

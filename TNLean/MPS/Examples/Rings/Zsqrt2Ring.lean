@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import Mathlib.NumberTheory.Zsqrtd.ToReal
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
+import QICLean.Algebra.Matrix.ComplexOfRing
 
 /-!
 # Exact arithmetic for the Ising twist: matrices over `ℤ[√2]` and their complex images
@@ -49,26 +50,6 @@ instances at this embedding of the general statements of
 -/
 
 open scoped Matrix Kronecker
-
-/-- Two is not the square of an integer. -/
-theorem two_ne_int_mul_self (n : ℤ) : (2 : ℤ) ≠ n * n := by
-  intro hn
-  refine Nat.not_exists_sq (m := 1) (n := 2) (by norm_num) (by norm_num) ⟨n.natAbs, ?_⟩
-  exact_mod_cast (Int.natAbs_mul_self (a := n)).trans hn.symm
-
-/-- The embedding of `ℤ√2` into the complex numbers sending `√2` to the positive real square
-root of two. -/
-noncomputable def zsqrt2ToComplex : ℤ√2 →+* ℂ :=
-  Complex.ofRealHom.comp (Zsqrtd.toReal (by norm_num))
-
-theorem zsqrt2ToComplex_injective : Function.Injective zsqrt2ToComplex :=
-  fun _ _ h => Zsqrtd.toReal_injective _ two_ne_int_mul_self (Complex.ofReal_injective h)
-
-theorem zsqrt2ToComplex_ne_zero {x : ℤ√2} (hx : x ≠ 0) : zsqrt2ToComplex x ≠ 0 :=
-  fun h => hx (zsqrt2ToComplex_injective (h.trans (map_zero _).symm))
-
-@[simp] theorem zsqrt2ToComplex_sqrtd : zsqrt2ToComplex Zsqrtd.sqrtd = (Real.sqrt 2 : ℂ) := by
-  simp [zsqrt2ToComplex, Zsqrtd.sqrtd]
 
 namespace MPSTensor
 

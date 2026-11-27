@@ -28,10 +28,11 @@ lines 246–267, proof in the appendix, lines 766–907), for a gapped chain Ham
 `R` and term norm `J`.
 
 At a cut `c` and length `l`, the construction chains:
-* the cut-offs `O_L`, `O_R` of the centered localized parts (`exists_cutoffPair`);
+* the cut-offs `O_L`, `O_R` of the centered localized parts
+  (`TNLean.MPS.AreaLaw.exists_cutoffPair`);
 * the Gaussian time average next to the cut-offs, eq. `moved`
   (`norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le`);
-* the boundary operator `O_B` (`exists_boundaryOperator_factorization`);
+* the boundary operator `O_B` (`TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization`);
 
 with the parameters of `lemmaOne_errorBudget`. That gives the error
 `(a + b √l) e^{-l/(6ξ)}` with `ξ = 8 max(2v/ΔE, 1)`, for `v` the chain Lieb–Robinson velocity.
@@ -232,7 +233,7 @@ with error `1`. -/
 theorem isFactorizationAt_zero_one_one {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (c l : ℕ) : IsFactorizationAt Ω c l 1 0 1 1 := by
   have h1 : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (leftBlock L c) :=
+      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (interval L 0 c) :=
     one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
   refine ⟨IsStarProjection.one _, IsStarProjection.one _, Commute.one_left 1, by simp,
     zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _), h1,
@@ -291,7 +292,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
   have hlk : 3 * R + 2 * k ≤ l := by omega
   set ℓn := l - 3 * R - 2 * k with hℓn
   obtain ⟨H₀, OL, OR, hH₀, hOL, hOR, hcomm, hsL, hsR, hθ', hη, hZ, hν⟩ :=
-    h.exists_cutoffPair hh hhJ hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
+    exists_cutoffPair h hh hhJ hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
   have hE : ((E₀ : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).IsHermitian := by
     simp [IsHermitian, conjTranspose_smul]
   have hH' : (h.hamiltonian - (E₀ : ℂ) • 1).IsHermitian :=
@@ -300,7 +301,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
     hΩ hgap.sub_smul_one_self ((ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan) hΔ hOL hOR
       hcomm s (δ := 0) (by simp) hη
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
-    ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hh hhJ hH₀ E₀ _ hZ hOL hOR
+    TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization hq1 h hh hhJ hH₀ E₀ _ hZ hOL hOR
       ((s / ΔE ^ 2).toNNReal) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
   rw [Nat.floor_natCast] at hOBs
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩

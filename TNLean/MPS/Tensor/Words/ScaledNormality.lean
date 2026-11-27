@@ -27,6 +27,8 @@ rescaling.
   proof lines 765--767 (the scalar normalization taken without loss of generality).
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

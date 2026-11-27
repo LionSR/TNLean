@@ -44,6 +44,7 @@ of states `G` for which the angular scale holds; the ground vectors of the model
   lines 635–658.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -53,7 +54,8 @@ namespace TNLean.PEPS.Approximation
 open Set EncodedFrame Matrix QuantumCircuit.Party
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
   {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} [Fintype Party]
   [DecidableEq Party]
   {V : Finset (ℝ × ℝ)} {n : ℝ}

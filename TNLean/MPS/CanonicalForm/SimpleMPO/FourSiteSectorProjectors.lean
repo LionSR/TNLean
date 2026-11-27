@@ -120,7 +120,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1666--1676 and equations
 theorem exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
     (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

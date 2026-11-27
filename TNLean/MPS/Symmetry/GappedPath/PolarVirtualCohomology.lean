@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.GappedPath.PreparedPolarGappedPath
-import TNLean.MPS.Symmetry.OnSite.ProjectiveGaugeTransport
+import TNLean.MPS.Symmetry.OnSite.CompactSupportVirtualTransport
 
 /-!
 # Virtual cohomology along the symmetric polar deformation
@@ -22,6 +22,8 @@ exact symmetry of the periodic MPS vectors.
 gap are proved in the single-block, one-site injective case. The several-block
 case is documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
+
+open MPTensor
 
 open scoped Matrix ScalarCohomology
 

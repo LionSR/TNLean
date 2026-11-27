@@ -171,7 +171,7 @@ Source: arXiv:2203.12563, lines 2224–2225, with the fusion tensors of `ftexam`
 fusion tensors, so the identity holds at every length. -/
 theorem isReduction_fusion {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
     (g h : G) :
-    MPSTensor.IsReduction (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
+    MPTensor.IsReduction (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
       (tensor e ω (g * h)).toMPSTensor (fusionV e ω g h) (fusionW e ω g h) := by
   refine ⟨fusionV_mul_fusionW ω g h, fun w ↦ ?_⟩
   have hw := Kraus.evalWord_intertwine (tensor e ω (g * h)).toMPSTensor
@@ -267,7 +267,7 @@ theorem exists_evalWord_tensor_ne_zero (ω : ScalarThreeCochain G) (g : G) (N : 
     funext k
     simp [ρ]
   rw [hdiv, hmod, mpo_tensor_apply] at hmpv
-  simp only [↓reduceIte, MPSTensor.mpv, MPSTensor.coeff, h0, Matrix.trace_zero] at hmpv
+  simp only [↓reduceIte, MPTensor.mpv, MPTensor.coeff, h0, Matrix.trace_zero] at hmpv
   exact (Units.ne_zero (∏ i, ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i))))
     (by rw [Units.coe_prod]; exact hmpv.symm)
 

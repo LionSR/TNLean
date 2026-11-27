@@ -14,3 +14,36 @@ import TNLean.MPS.Examples.MajumdarGhosh.MajumdarGhoshGroundSpace
 import TNLean.MPS.Examples.MajumdarGhosh.MajumdarGhoshHamiltonian
 import TNLean.MPS.Examples.MajumdarGhosh.MajumdarGhoshLowerBound
 import TNLean.MPS.Examples.MajumdarGhosh.MajumdarGhoshTotalSpin
+
+/-!
+# Majumdar–Ghosh state
+
+The dimer ground state of the spin-`½` chain `H = ∑ S_i·S_{i+1} + ½ ∑ S_i·S_{i+2}`
+(arXiv:2011.12127, Appendix A, lines 2397–2405), as a bond-dimension-three tensor that is
+left-canonical and not normal. The review's literal shorthand, read as a Kronecker product,
+has bond dimension six and does not give the Majumdar–Ghosh state; the three-level bond carrying
+the singlet on its two spin levels does, a recorded local fix. The modules prove that the periodic
+vector on every even ring is the sum of the two singlet coverings, that the three-site parent
+interaction is the projector onto total spin `3/2` with `H + 3N/8 = (3/4) H_parent`, that the
+ground space is two-dimensional on even rings of `N ≥ 4` sites, and that `-3N/8` is not an
+eigenvalue on odd rings of `N ≥ 5` sites.
+
+## General theorems instantiated
+
+* `MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules` (cyclic-local
+  part of PGVWC07, Theorem 12): the chain ground space lies in the graded local spaces.
+* `MPSTensor.groundSpaceMap_mul_eq_of_restrict` and `MPSTensor.mem_groundSpace_succ_of_intertwine`
+  (inverting and growing back without injectivity): the intersection property from the
+  left-canonical equation; arXiv:2011.12127, Section IV.C, lines 2013–2078.
+* `MPSTensor.groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq` (change of cut): the
+  boundary matrix lies in `span{1, G}` on even rings and vanishes on odd rings;
+  arXiv:2011.12127, Section IV.C, lines 2078–2079.
+* `MPSTensor.twistedMPV_mem_chainGroundSpace` (twisted periodic vectors): with the grading
+  `G = diag(1, -1, -1)`, both singlet coverings lie in the chain ground space.
+* `MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace` (periodic parent kernel): the kernel of
+  the range-three parent Hamiltonian is the chain ground space.
+* `MPSTensor.isPositive_conj_of_add_eq_smul_parentHamiltonian`,
+  `MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian` and
+  `MPSTensor.eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian` (shifted parent
+  Hamiltonians): the bound `H ≥ -3N/8` and the identification of its eigenspace.
+-/

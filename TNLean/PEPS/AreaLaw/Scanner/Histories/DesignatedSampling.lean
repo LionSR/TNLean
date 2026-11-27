@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.ExpectedMoveCost
-import TNLean.PEPS.AreaLaw.Operators.Constraints.CrossingBudget
+import QICLean.ManyBody.Hamiltonian.Constraint.CrossingBudget
 
 /-!
 # Actual sampling of the truncated designated supports
@@ -19,6 +19,8 @@ truncated support has the base radius.
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 225–233 and 331–337, at `openai/math@adc7f124`.
 -/
+
+open ManyBody (designatedSupport truncationRadius_eq_of_mem_crossingTerms)
 
 open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
@@ -98,7 +100,7 @@ theorem good_designated_split_sampling_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hgood : S.IsGoodOldHistory h)
     (hsplit :

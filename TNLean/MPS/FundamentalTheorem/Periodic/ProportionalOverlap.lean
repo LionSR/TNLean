@@ -40,6 +40,8 @@ the nonzero complex multiplicity weights.
   arXiv:1708.00029, theorem `thm:bd`, lines 613--623.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 
@@ -88,25 +90,25 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     (hProp : NonzeroProportionalMPV₂ X Y)
     (j₀ : Fin rA) :
     ∃ k₀ : Fin rB,
-      ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0) := by
+      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j₀) (B k₀) N) atTop (nhds 0) := by
   classical
   by_contra hNo
   push Not at hNo
   let T : Finset (Fin rA) := Finset.univ.filter fun j : Fin rA ↦
     ∀ k : Fin rB,
-      Tendsto (fun N ↦ mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)
+      Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0)
   have hj₀T : j₀ ∈ T := by
     simp [T, hNo]
   have hTQ : ∀ (j : Fin rA), j ∈ T → ∀ k : Fin rB,
-      Tendsto (fun N ↦ mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
+      Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0) := by
     intro j hj k
     simpa [T] using (Finset.mem_filter.mp hj).2 k
   have hNotT_nondecay : ∀ j : Fin rA, j ∉ T →
       ∃ k : Fin rB,
-        ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
+        ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0) := by
     intro j hjT
     have hNot : ¬ ∀ k : Fin rB,
-        Tendsto (fun N ↦ mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
+        Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0) := by
       intro hAll
       exact hjT (by simp [T, hAll])
     push Not at hNot
@@ -154,7 +156,7 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
         simpa [periodC, p] using dvd_mul_of_dvd_right
           (Finset.dvd_prod_of_mem periodB (Finset.mem_univ k)) pA
   have hCrossC : ∀ x y, x ≠ y →
-      Tendsto (fun N ↦ mpvOverlap (d := d) (C x) (C y) N) atTop (nhds 0) := by
+      Tendsto (fun N ↦ mpvOverlap (α := Fin d) (C x) (C y) N) atTop (nhds 0) := by
     intro x y hxy
     cases x with
     | inl i =>
@@ -301,7 +303,7 @@ theorem PeriodicOverlapHypothesis.ofSectorDecompositions
   let : ∀ j, NeZero (P.basisDim j) := fun j ↦ ⟨(hPerP j).bondDim_ne_zero⟩
   let : ∀ k, NeZero (Q.basisDim k) := fun k ↦ ⟨(hPerQ k).bondDim_ne_zero⟩
   have hExP : ∀ j₀ : Fin P.basisCount, ∃ k₀ : Fin Q.basisCount,
-      ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N)
         atTop (nhds 0) := fun j₀ ↦
     exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
       P.basis Q.basis periodP periodQ hPerP hPerQ hNonRepP hNonRepQ
@@ -310,7 +312,7 @@ theorem PeriodicOverlapHypothesis.ofSectorDecompositions
       (fun σ ↦ Q.mpv_toTensor_eq_sum_coeff σ)
       (fun p hp j ↦ P.coeff_mul_not_eventually_zero p hp j) hProp j₀
   have hExQ : ∀ k₀ : Fin Q.basisCount, ∃ j₀ : Fin P.basisCount,
-      ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N)
         atTop (nhds 0) := by
     intro k₀
     obtain ⟨j₀, hNondecay⟩ :=
@@ -448,7 +450,7 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
       _ = c * mpv (toTensorFromBlocks (d := d) hB.μ hB.blocks) σ := by
         rw [hB.sameMPV N σ]
   have hExA : ∀ j₀ : Fin hA.r, ∃ k₀ : Fin hB.r,
-      ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (hA.blocks j₀) (hB.blocks k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (hA.blocks j₀) (hB.blocks k₀) N)
         atTop (nhds 0) := fun j₀ ↦
     exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
       hA.blocks hB.blocks hA.period hB.period hA.periodic hB.periodic
@@ -466,7 +468,7 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
         exact pow_ne_zero (p * M) (hμA j) (hM M le_rfl))
       hPropAssemblies j₀
   have hExB : ∀ k₀ : Fin hB.r, ∃ j₀ : Fin hA.r,
-      ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (hA.blocks j₀) (hB.blocks k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (hA.blocks j₀) (hB.blocks k₀) N)
         atTop (nhds 0) := by
     intro k₀
     obtain ⟨j₀, hNondecay⟩ :=

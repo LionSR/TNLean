@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Hermitian.HermitianPartSum
-import TNLean.PEPS.AreaLaw.Operators.Constraints.FiniteSetTruncationGap
+import QICLean.ManyBody.Hamiltonian.Constraint.FiniteSetTruncationGap
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
 import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedSampling
 import QICLean.ManyBody.Replica.BandMetric.Setup
@@ -27,6 +28,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `03-quasilocal.tex`, lines 417–426, and `06-transport.tex`, lines 335–358,
 at `openai/math@adc7f124`.
 -/
+
+open ManyBody (designatedSupport positiveConstraint_mem_supportedOperators_component
+  truncatedConstraint truncatedConstraint_mem_Icc truncatedConstraint_mem_supportedOperators)
 
 open scoped BigOperators Matrix Matrix.Norms.L2Operator MatrixOrder ComplexOrder Kronecker
 

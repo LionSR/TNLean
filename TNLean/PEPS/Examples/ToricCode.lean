@@ -17,3 +17,46 @@ import TNLean.PEPS.Examples.ToricCode.KitaevPhysicalSupportReduction
 import TNLean.PEPS.Examples.ToricCode.ToricCodePrimal
 import TNLean.PEPS.Examples.ToricCode.ToricCodeTorusAmplitudes
 import TNLean.PEPS.Examples.ToricCode.ToricCodeTorusSectors
+
+/-!
+# The toric code
+
+The toric code, the quantum double of `ℤ₂` (Kitaev, arXiv:quant-ph/9707021, lines 189–226), in
+two PEPS forms: the primal tensor of the review arXiv:2011.12127 (Appendix A, equation
+`eq:app:tcode-rep-primal`, lines 2451–2465) and Kitaev's binary tensor of SCP10
+(arXiv:1001.3807, equations `eq:ex:kitaev-tens` and `eq:ex:kitaev-colordiff-rep`,
+lines 2718–2827). The primal tensor `P` satisfies `P†P = 2 Π_even` for the virtual parity
+`Z^{⊗4}`, so it is `ℤ₂`-isometric with factor `2`; on every positive rectangular torus its four
+closures with `I` or `Z` on the two seams have explicit seam-parity amplitudes and are linearly
+independent. The four-site checkerboard blocking of Kitaev's tensor is computed exactly on one
+block, on one native plaquette of the torus, and globally on the torus of doubled periods, where
+it is the network of the dual quantum-double tensor; boundary CNOTs and a physical parity
+permutation reduce a block to its color support. The factor `2` is kept rather than normalized
+(Local fix, `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`); no physical
+renormalization operation is asserted, and the span of the four closures is not identified with
+a parent-Hamiltonian ground space.
+
+## General theorems instantiated
+
+* `TNLean.PEPS.IsGIsometric` (`G`-isometry, SCP10, arXiv:1001.3807, Definition
+  `def:iso:isopeps`): the primal tensor is `ℤ₂`-injective and `ℤ₂`-isometric with factor `2`.
+* `Representation.isSemiRegular_of_linearIndependent` (semi-regular representations): the bond
+  representation `g ↦ I, Z` is semi-regular, the hypothesis of SCP10, Theorem 5.9; the converse
+  criterion to SCP10, Definition 4.5 and Lemma 4.6.
+* `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular`
+  and `TNLean.PEPS.IsGInjective.finrank_span_torusGClosureClass_commuting_of_isSemiRegular`
+  (torus sectors of `G`-injective PEPS): the four closures `TNLean.PEPS.torusGClosure` are
+  linearly independent and span a space of dimension four; SCP10, Definition 5.6 and
+  Theorem 5.9, lines 1582–1621.
+* `TNLean.PEPS.card_commutingPairConjugacyClass_of_commGroup` (closure labels): the sectors are
+  labelled by the `|ℤ₂|² = 4` commuting pair classes.
+* `TNLean.PEPS.graphOpenRegionNetwork_eq_sum_internal` (open-region contraction): the actual
+  contraction on a native torus plaquette `TNLean.PEPS.torusPlaquetteRegion` is the four-site
+  checkerboard block; SCP10, lines 1765–1920.
+* `TNLean.PEPS.card_regionBoundaryEdge_torusRectangle` (crossing bonds of rectangles): the eight
+  crossing bonds of a native block are enumerated, so the boundary CNOTs act on every boundary
+  configuration; SCP10, Corollary 6.10.
+* `TNLean.PEPS.kitaevPeriodicTilingEquiv` and `TNLean.PEPS.torusBondNetwork_one` (periodic
+  checkerboard tiling and torus networks): the elementary checkerboard PEPS on the doubled-period
+  torus is the dual network on the coarse torus; SCP10, Section 7.1.
+-/

@@ -65,6 +65,8 @@ Paper anchors:
   $X = \bigoplus_k (𝟙_{r_k} \otimes X_k)$ and the global conjugation equation.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

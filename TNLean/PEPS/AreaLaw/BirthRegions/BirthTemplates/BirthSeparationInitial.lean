@@ -8,12 +8,12 @@ import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationRepair
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInduction
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationAtoms
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanFrontiers
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplatePolygons
+import QICLean.ManyBody.Sites.Template.Polygons
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanSideContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
+import QICLean.ManyBody.Sites.Template.Rows
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.InitialStars
 
 /-!
@@ -55,6 +55,9 @@ identifiers, lines 563–571.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (boundaryEndpoints dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer fineLayerIndices)
 
 noncomputable section
 

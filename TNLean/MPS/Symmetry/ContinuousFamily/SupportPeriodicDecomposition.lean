@@ -56,6 +56,8 @@ It also contains the following results.
   of a transient periodic component.
 -/
 
+open MPTensor
+
 section SupportPeriodicDecomposition
 
 set_option relaxedAutoImplicit false

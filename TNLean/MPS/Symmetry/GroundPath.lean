@@ -12,7 +12,6 @@ import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathGaussianFilter
 import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathTransferClass
 import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathWindowClustering
 import TNLean.MPS.Symmetry.GroundPath.FixedBondPhysicalPathInvariance
-import TNLean.MPS.Symmetry.GroundPath.GroundLineSymmetryCharacter
 import TNLean.MPS.Symmetry.GroundPath.InjectiveTracePreservingGauge
 import TNLean.MPS.Symmetry.GroundPath.PhysicalSchmidtSupport
 import TNLean.MPS.Symmetry.GroundPath.VaryingBondPhysicalCharacter

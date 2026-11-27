@@ -66,9 +66,9 @@ structure OrthogonalCommutingSectorFamily
   /-- Distinct outer sectors have orthogonal one-site spaces.
   Source: arXiv:1606.00608, lines 838--842. -/
   projection_orthogonal : ∀ {s t}, s ≠ t → projection s * projection t = 0
-  /-- The positive translation-invariant bond of each sector.
+  /-- The commuting bond of each sector.
   Source: arXiv:1606.00608, lines 843--850 and 1786--1796. -/
-  bondData : Fin g → TranslationInvariantBondData d
+  bondData : Fin g → CommutingBond d
   /-- Each bond acts on the tensor square of its one-site sector.
   Source: arXiv:1606.00608, lines 838--850. -/
   bond_supported : ∀ s,
@@ -81,7 +81,7 @@ structure OrthogonalCommutingSectorFamily
   here from the five hypotheses of CPSV16 Proposition `prop3to4`.  See
   `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
-    mpo (K s) N = ((bondData s).toCommutingFormData hN).product
+    mpo (K s) N = (bondData s).product hN
 
 /-- A finite family of positive commuting bond products supported on pairwise
 orthogonal one-site subspaces, with positive proportional realization of each
@@ -106,9 +106,9 @@ structure ProportionalOrthogonalCommutingSectorFamily
   /-- Distinct outer sectors have orthogonal one-site spaces.
   Source: arXiv:1606.00608, lines 838--842. -/
   projection_orthogonal : ∀ {s t}, s ≠ t → projection s * projection t = 0
-  /-- The positive translation-invariant bond of each sector.
+  /-- The commuting bond of each sector.
   Source: arXiv:1606.00608, lines 843--850 and 1641--1665. -/
-  bondData : Fin g → TranslationInvariantBondData d
+  bondData : Fin g → CommutingBond d
   /-- Each bond acts on the tensor square of its one-site sector.
   Source: arXiv:1606.00608, lines 838--850. -/
   bond_supported : ∀ s,
@@ -118,7 +118,7 @@ structure ProportionalOrthogonalCommutingSectorFamily
   of its translated bond.
   Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
-    ((bondData s).toCommutingFormData hN).Realizes (mpo (K s) N)
+    ∃ c : ℝ, 0 < c ∧ mpo (K s) N = (c : ℂ) • (bondData s).product hN
 
 namespace ProportionalOrthogonalCommutingSectorFamily
 
@@ -133,10 +133,12 @@ theorem mpo_posSemidef_of_two_le
     (F : ProportionalOrthogonalCommutingSectorFamily K)
     (s : Fin g) (N : ℕ) (hN : 2 ≤ N) :
     (mpo (K s) N).PosSemidef := by
-  let form := (F.bondData s).toCommutingFormData hN
-  have hproduct : form.product.PosSemidef := by
-    rw [← GSNNCHData.ofCommutingFormData_unnormalizedState]
-    exact (GSNNCHData.ofCommutingFormData form).unnormalizedState_posSemidef
+  let B := F.bondData s
+  have hproduct : (B.product hN).PosSemidef := by
+    have h := (GSNNCHData.ofBond hN B.bond B.bond_pos
+      (B.bond_comm hN _ _)).unnormalizedState_posSemidef
+    rw [GSNNCHData.ofBond_unnormalizedState] at h
+    exact h
   obtain ⟨c, hc, hreal⟩ := F.realizes_mpo s N hN
   rw [hreal]
   exact hproduct.smul (by exact_mod_cast hc.le)
@@ -209,7 +211,7 @@ Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
     (F : OrthogonalCommutingSectorFamily K) (multiplicity : Fin g → ℕ)
     (N : ℕ) (hN : 2 ≤ N) (s : Fin g) :
     (F.toGSNNCHData multiplicity N hN).sectorProduct s =
-      ((F.bondData s).toCommutingFormData hN).product := by
+      (F.bondData s).product hN := by
   rfl
 
 /-- The unnormalized state of the induced GSNNCH decomposition is the
@@ -226,7 +228,7 @@ theorem toGSNNCHData_unnormalizedState
     (F.toGSNNCHData multiplicity N hN).unnormalizedState =
       ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N := by
   change (∑ s : Fin g, (multiplicity s : ℂ) •
-      ((F.bondData s).toCommutingFormData hN).product) =
+      (F.bondData s).product hN) =
     ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N
   apply Finset.sum_congr rfl
   intro s _
@@ -270,7 +272,7 @@ Proposition `prop3to4`, lines 1786--1796.  See
 theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (s : Fin S.basisCount) (q q' : Fin (S.copies s)),
       S.weight s q = S.weight s q')
     (F : OrthogonalCommutingSectorFamily

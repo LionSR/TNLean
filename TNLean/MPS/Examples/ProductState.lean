@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Words.CyclicTrace
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import TNLean.MPS.Tensor.OpenBoundary
 
 /-!
@@ -42,6 +42,8 @@ states of the one-site tensor are the same product vector.
   Verstraete, *Matrix product states and projected entangled pair states: Concepts,
   symmetries, theorems*
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators
 open Matrix

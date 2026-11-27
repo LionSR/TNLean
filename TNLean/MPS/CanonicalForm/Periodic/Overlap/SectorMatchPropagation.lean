@@ -30,6 +30,8 @@ whole periodic orbit.
   arXiv:1708.00029, Appendix A.
 -/
 
+open MPTensor
+
 section SectorOverlapTransport
 
 /-!
@@ -143,18 +145,18 @@ private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero m]
     (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
       mpv (blocksB k) σ = (PB k * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace)
     (u v : Fin m) (N : ℕ) :
-    mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N =
+    mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N =
       ∑ τ : Fin (N * m) → Fin d,
         (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
           star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace) := by
   classical
   rw [mpvOverlap]
-  rw [← Equiv.sum_comp (blockedConfigEquiv d N m)
+  rw [← Equiv.sum_comp (Kraus.blockedConfigEquiv d N m)
     (fun τ : Fin (N * m) → Fin d =>
       (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
         star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedConfigEquiv]
+  rw [hTraceA u N σ, hTraceB v N σ, Kraus.ofFn_blockedConfigEquiv]
   rw [← evalWord_blockTensor, ← evalWord_blockTensor]
 
 /-- **One-step transport of the cross sector overlap** (positive lengths,
@@ -180,8 +182,8 @@ private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero m]
     (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
       mpv (blocksB k) σ = (PB k * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace)
     (u v : Fin m) (N : ℕ) (hN : 0 < N) :
-    mpvOverlap (d := blockPhysDim d m) (blocksA (u + 1)) (blocksB (v + 1)) N =
-      mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA (u + 1)) (blocksB (v + 1)) N =
+      mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := by
   have hLetterA := offDiag_shift_of_adjoint_cyclic_shift A hA_lc hPAproj hShiftA
   have hLetterB := offDiag_shift_of_adjoint_cyclic_shift B hB_lc hPBproj hShiftB
   rw [sectorOverlap_eq_physical_sum A B blocksA blocksB PA PB hTraceA hTraceB,
@@ -206,8 +208,8 @@ lemma sectorOverlap_succ_eq_of_cyclicSectorDecomp {m : ℕ} [NeZero m]
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (u v : Fin m) (N : ℕ) (hN : 0 < N) :
-    mpvOverlap (d := blockPhysDim d m) (blocksA (u + 1)) (blocksB (v + 1)) N =
-      mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA (u + 1)) (blocksB (v + 1)) N =
+      mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := by
   obtain ⟨PA, _φA, hPAproj, _hPAsum, hShiftA, _hCommA, hTraceA, _⟩ := hA_cyclic
   obtain ⟨PB, _φB, hPBproj, _hPBsum, hShiftB, _hCommB, hTraceB, _⟩ := hB_cyclic
   exact sectorOverlap_succ_eq A B hA_lc hB_lc blocksA blocksB PA PB
@@ -243,13 +245,13 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
     (hCA_prim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DA) CA))
     (hCB_prim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DB) CB))
     (hMatch : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) CA) CB) :
-    Tendsto (fun N => ‖mpvOverlap (d := d) CA CB N‖) atTop (nhds (1 : ℝ)) := by
+    Tendsto (fun N => ‖mpvOverlap (α := Fin d) CA CB N‖) atTop (nhds (1 : ℝ)) := by
   classical
   subst hdim
   simp only [cast_eq] at hMatch
-  have hCA_self : Tendsto (fun N => mpvOverlap (d := d) CA CA N) atTop (nhds (1 : ℂ)) :=
+  have hCA_self : Tendsto (fun N => mpvOverlap (α := Fin d) CA CA N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible CA hCA_irr hCA_norm hCA_prim
-  have hCB_self : Tendsto (fun N => mpvOverlap (d := d) CB CB N) atTop (nhds (1 : ℂ)) :=
+  have hCB_self : Tendsto (fun N => mpvOverlap (α := Fin d) CB CB N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible CB hCB_irr hCB_norm hCB_prim
   obtain ⟨X, ζ, _hζ, hX⟩ := hMatch
   have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv CB σ = ζ ^ N * mpv CA σ :=
@@ -259,11 +261,11 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
       (by simpa using hCA_self.norm) (by simpa using hCB_self.norm)
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := CA) (B := CB) (ζ := ζ) hmpv)
   have hCrossNormEq : ∀ N,
-      ‖mpvOverlap (d := d) CA CB N‖ = ‖mpvOverlap (d := d) CA CA N‖ := by
+      ‖mpvOverlap (α := Fin d) CA CB N‖ = ‖mpvOverlap (α := Fin d) CA CA N‖ := by
     intro N
     rw [mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul (A := CA) (B := CB) (ζ := ζ) hmpv N]
     simp [norm_pow, hζnorm]
-  have hCA_self_norm : Tendsto (fun N => ‖mpvOverlap (d := d) CA CA N‖) atTop (nhds (1 : ℝ)) := by
+  have hCA_self_norm : Tendsto (fun N => ‖mpvOverlap CA CA N‖) atTop (nhds (1 : ℝ)) := by
     simpa using hCA_self.norm
   exact hCA_self_norm.congr fun N => (hCrossNormEq N).symm
 
@@ -408,19 +410,19 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     primitive_and_irreducible_sectorBlocks_of_cyclicDecomp B hB blocksB hB_blocks_lc hB_mpv
       hB_cyclic (v + 1) hNondegB_succ
   -- Step A: cross overlap norm at `(u, v)` tends to `1`.
-  have hNorm_uv : Tendsto (fun N => ‖mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N‖)
+  have hNorm_uv : Tendsto (fun N => ‖mpvOverlap (blocksA u) (blocksB v) N‖)
       atTop (nhds (1 : ℝ)) :=
     overlap_norm_tendsto_one_of_gaugePhase_cast (blocksA u) (blocksB v) hdim
       hIrrA_u hIrrB_v (hA_blocks_lc u) (hB_blocks_lc v) hPrimA_u hPrimB_v hMatch
   -- Step B: the cross overlap is invariant under `(u, v) → (u+1, v+1)` at positive lengths.
   have hShiftEq : ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := blockPhysDim d m) (blocksA (u + 1)) (blocksB (v + 1)) N =
-        mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := fun N hN =>
+      mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA (u + 1)) (blocksB (v + 1)) N =
+        mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := fun N hN =>
     sectorOverlap_succ_eq_of_cyclicSectorDecomp A B hA.leftCanonical hB.leftCanonical
       blocksA blocksB hA_cyclic hB_cyclic u v N hN
   -- Step C: transport the norm limit, then conclude gauge-phase equivalence at `(u+1, v+1)`.
   have hNorm_succ :
-      Tendsto (fun N => ‖mpvOverlap (d := blockPhysDim d m)
+      Tendsto (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m))
         (blocksA (u + 1)) (blocksB (v + 1)) N‖) atTop (nhds (1 : ℝ)) := by
     refine hNorm_uv.congr' ?_
     filter_upwards [eventually_gt_atTop 0] with N hN
@@ -428,12 +430,12 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
   -- The dimensions must agree, else the overlap would decay to zero.
   have hdim' : dimA (u + 1) = dimB (v + 1) := by
     by_contra hne
-    have hZero : Tendsto (fun N => mpvOverlap (d := blockPhysDim d m)
+    have hZero : Tendsto (fun N => mpvOverlap (α := Fin (blockPhysDim d m))
         (blocksA (u + 1)) (blocksB (v + 1)) N) atTop (nhds (0 : ℂ)) :=
       mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
         (blocksA (u + 1)) (blocksB (v + 1)) hIrrA_su hIrrB_sv
         (hA_blocks_lc (u + 1)) (hB_blocks_lc (v + 1)) hne
-    have hZeroNorm : Tendsto (fun N => ‖mpvOverlap (d := blockPhysDim d m)
+    have hZeroNorm : Tendsto (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m))
         (blocksA (u + 1)) (blocksB (v + 1)) N‖) atTop (nhds (0 : ℝ)) := by
       simpa using hZero.norm
     exact one_ne_zero (tendsto_nhds_unique hNorm_succ hZeroNorm)
@@ -447,7 +449,7 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
         (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)) i) = 1 :=
     (leftCanonical_cast_dim hdim' (blocksA (u + 1))).mpr (hA_blocks_lc (u + 1))
   have hNorm_succ_cast :
-      Tendsto (fun N => ‖mpvOverlap (d := blockPhysDim d m)
+      Tendsto (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m))
         (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)))
         (blocksB (v + 1)) N‖) atTop (nhds (1 : ℝ)) := by
     refine hNorm_succ.congr fun N => ?_

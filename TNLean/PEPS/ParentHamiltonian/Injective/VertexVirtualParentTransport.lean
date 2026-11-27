@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexInverseRegionSlice
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Exact physical and virtual common regional conditions
@@ -26,31 +27,14 @@ the common virtual conditions with the global paired-bond space.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (assembleDependentRegionConfig dependentRegionConfigEquiv)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V] {d : ℕ}
 variable {Out : V → Type*}
-
-/-- Split an independent dependent configuration into regional coordinates
-and complementary coordinates. -/
-def dependentRegionConfigEquiv (R : Finset V) :
-    ((w : {w : V // w ∈ Finset.univ}) → Out w.1) ≃
-      (((w : {w : V // w ∈ R}) → Out w.1) ×
-        ((w : {w : V // w ∈ Finset.univ \ R}) → Out w.1)) where
-  toFun η := (fun w => η ⟨w.1, Finset.mem_univ w.1⟩,
-    fun w => η ⟨w.1, Finset.mem_univ w.1⟩)
-  invFun p := assembleDependentRegionConfig R p.1 p.2
-  left_inv η := by
-    funext w
-    by_cases hw : w.1 ∈ R <;> simp [assembleDependentRegionConfig, hw]
-  right_inv p := by
-    apply Prod.ext
-    · funext w
-      simp [assembleDependentRegionConfig, w.2]
-    · funext w
-      simp [assembleDependentRegionConfig, (Finset.mem_sdiff.mp w.2).2]
 
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 

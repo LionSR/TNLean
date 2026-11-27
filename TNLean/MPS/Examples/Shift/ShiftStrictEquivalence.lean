@@ -6,7 +6,11 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.CanonicalForm.MPUCanonicalForm
 import TNLean.MPS.MPU.Equivalence.Equivalence
 import TNLean.MPS.Examples.Shift.Shift
-import TNLean.MPS.Examples.Shift.SwapPath
+import Mathlib.Algebra.Star.StarProjection
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.LinearAlgebra.UnitaryGroup
+import Mathlib.Topology.Instances.Matrix
+import QICLean.Algebra.Kronecker.MaximallyEntangled
 import TNLean.MPS.Examples.Shift.ShiftPublicIndex
 import TNLean.MPS.MPU.Simple.AdjointSimpleContraction
 import TNLean.MPS.MPU.CanonicalForm.TensorProductCanonicalForm

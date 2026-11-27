@@ -62,6 +62,8 @@ arXiv:1307.5143v1, `algo53.tex`, Claim `c:2`, lines 520–527. It is independent
 Hamiltonian and of any choice of a viable witness.
 -/
 
+open ManyBody (interval mem_interval)
+
 section
 
 open scoped BigOperators
@@ -133,38 +135,39 @@ private theorem joinBondPath_of_ge {L : ℕ} (B : Fin (L + 1) → Type*)
 
 /-- Contract the tensors strictly to the left of the cut, keeping its bond index fixed. -/
 private noncomputable def leftContraction {L q D : ℕ} (A : OBCChainTensor q D L)
-    (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
+    (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ interval L 0 k}) → Fin q)
     (z : Fin (A.bondDim k)) : ℂ :=
   ∑ l : (j : {j : Fin (L + 1) // j < k}) → Fin (A.bondDim j),
-    ∏ i : {i : Fin L // i ∈ leftBlock L k},
+    ∏ i : {i : Fin L // i ∈ interval L 0 k},
       A.tensor i (a i)
         (leftBondPath (fun j ↦ Fin (A.bondDim j)) k z l i.1.castSucc
           (by simpa only [Fin.le_def, Fin.val_castSucc, Fin.val_succ] using
-            (Nat.le_of_lt (mem_leftBlock.mp i.2))))
+            (Nat.le_of_lt (mem_interval.mp i.2).2)))
         (leftBondPath (fun j ↦ Fin (A.bondDim j)) k z l i.1.succ
           (by simpa only [Fin.le_def, Fin.val_castSucc, Fin.val_succ] using
-            (Nat.succ_le_of_lt (mem_leftBlock.mp i.2))))
+            (Nat.succ_le_of_lt (mem_interval.mp i.2).2)))
 
 /-- Contract the tensors on the right of the cut, keeping its bond index fixed. -/
 private noncomputable def rightContraction {L q D : ℕ} (A : OBCChainTensor q D L)
-    (k : Fin (L + 1)) (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)
+    (k : Fin (L + 1)) (b : (v : {v : Fin L // v ∉ interval L 0 k}) → Fin q)
     (z : Fin (A.bondDim k)) : ℂ :=
   ∑ r : (j : {j : Fin (L + 1) // k < j}) → Fin (A.bondDim j),
-    ∏ i : {i : Fin L // i ∉ leftBlock L k},
+    ∏ i : {i : Fin L // i ∉ interval L 0 k},
       A.tensor i (b i)
         (rightBondPath (fun j ↦ Fin (A.bondDim j)) k z r i.1.castSucc
           (by simpa only [Fin.le_def, Fin.val_castSucc, Fin.val_succ] using
-            (Nat.le_of_not_lt (mt mem_leftBlock.mpr i.2))))
+            (Nat.le_of_not_lt (fun h ↦ i.2 (mem_interval.mpr ⟨Nat.zero_le _, h⟩)))))
         (rightBondPath (fun j ↦ Fin (A.bondDim j)) k z r i.1.succ
           (by simpa only [Fin.le_def, Fin.val_castSucc, Fin.val_succ] using
-            (Nat.le_succ_of_le (Nat.le_of_not_lt (mt mem_leftBlock.mpr i.2)))))
+            (Nat.le_succ_of_le (Nat.le_of_not_lt
+              fun h ↦ i.2 (mem_interval.mpr ⟨Nat.zero_le _, h⟩)))))
 
 /-- The full contraction is the sum over the cut bond of the two partial contractions.
 This is the bond splitting underlying SWVC07, arXiv:0705.0292v2, lines 234–264. -/
 private theorem coeff_eq_sum_left_mul_right {L q D : ℕ} (A : OBCChainTensor q D L)
-    (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
-    (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) :
-    A.coeff ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b)) =
+    (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ interval L 0 k}) → Fin q)
+    (b : (v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) :
+    A.coeff ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)).symm (a, b)) =
       ∑ z, leftContraction A k a z * rightContraction A k b z := by
   classical
   rw [OBCChainTensor.coeff, ← (bondPathEquiv (fun j ↦ Fin (A.bondDim j)) k).symm.sum_comp]
@@ -172,7 +175,7 @@ private theorem coeff_eq_sum_left_mul_right {L q D : ℕ} (A : OBCChainTensor q 
     leftContraction, rightContraction, Finset.sum_mul_sum]
   refine Finset.sum_congr rfl fun z _ ↦ Finset.sum_congr rfl fun l _ ↦
     Finset.sum_congr rfl fun r _ ↦ ?_
-  rw [← Fintype.prod_subtype_mul_prod_subtype (fun i : Fin L ↦ i ∈ leftBlock L k)]
+  rw [← Fintype.prod_subtype_mul_prod_subtype (fun i : Fin L ↦ i ∈ interval L 0 k)]
   congr 1
   · refine Finset.prod_congr (congrArg (@Finset.univ _) (Subsingleton.elim _ _)) fun i _ ↦ ?_
     rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) a b i.2]
@@ -189,11 +192,11 @@ private theorem exists_cutMatrix_factorization {L q D : ℕ}
     (A : OBCChainTensor q D L) (c : ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ∀ x, ψ x = c * A.coeff x)
     (k : Fin (L + 1)) :
-    ∃ (U : Matrix ((v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
+    ∃ (U : Matrix ((v : {v : Fin L // v ∈ interval L 0 k}) → Fin q)
         (Fin (A.bondDim k)) ℂ)
       (V : Matrix (Fin (A.bondDim k))
-        ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) ℂ),
-      cutMatrix (leftBlock L k) ψ = U * V := by
+        ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) ℂ),
+      cutMatrix (interval L 0 k) ψ = U * V := by
   classical
   refine ⟨Matrix.of (fun a z ↦ c * leftContraction A k a z),
     Matrix.of (fun z b ↦ rightContraction A k b z), ?_⟩
@@ -208,7 +211,7 @@ Source: SWVC07, arXiv:0705.0292v2, lines 234–264; the one-dimensional note,
 Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem rank_cutMatrix_le_bondDim {L q D : ℕ} (A : OBCChainTensor q D L) (c : ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ∀ x, ψ x = c * A.coeff x)
-    (k : Fin (L + 1)) : (cutMatrix (leftBlock L k) ψ).rank ≤ A.bondDim k := by
+    (k : Fin (L + 1)) : (cutMatrix (interval L 0 k) ψ).rank ≤ A.bondDim k := by
   obtain ⟨U, V, hUV⟩ := exists_cutMatrix_factorization A c ψ hψ k
   rw [hUV]
   simpa using (rank_mul_le_left U V).trans (rank_le_card_width U)
@@ -220,7 +223,7 @@ Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem IsOpenMPS.rank_cutMatrix_le {L q D : ℕ}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : IsOpenMPS L q D (fun x ↦ ψ x)) {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
-    (cutMatrix (leftBlock L k) ψ).rank ≤ D := by
+    (cutMatrix (interval L 0 k) ψ).rank ≤ D := by
   obtain ⟨A, c, hD, hA⟩ := hψ
   exact (rank_cutMatrix_le_bondDim A c ψ hA ⟨k, by omega⟩).trans
     (hD ⟨k, by omega⟩ hk0 hkL)
@@ -232,7 +235,7 @@ Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem isOpenMPS_iff_internal_cutMatrix_rank_le {L q D : ℕ}
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     IsOpenMPS L q D (fun x ↦ ψ x) ↔
-      ∀ k : ℕ, 0 < k → k < L → (cutMatrix (leftBlock L k) ψ).rank ≤ D := by
+      ∀ k : ℕ, 0 < k → k < L → (cutMatrix (interval L 0 k) ψ).rank ≤ D := by
   exact ⟨fun h k hk0 hkL ↦ h.rank_cutMatrix_le hk0 hkL,
     isOpenMPS_of_internal_cutMatrix_rank_le ψ⟩
 
@@ -259,22 +262,24 @@ theorem IsOpenMPS.snoc {n q b : ℕ} (hb : 0 < b) {w : (Fin n → Fin q) → ℂ
     WithLp.toLp 2 fun x ↦ w (Fin.init x) * f (x (Fin.last n))
   have hW : IsOpenMPS n q b fun x ↦ W x := hw
   refine isOpenMPS_of_internal_cutMatrix_rank_le W' fun j hj0 hjn ↦ ?_
-  have hlast : Fin.last n ∉ leftBlock (n + 1) j := by
-    simp only [mem_leftBlock, Fin.val_last]
+  have hlast : Fin.last n ∉ interval (n + 1) 0 j := by
+    simp only [mem_interval, Fin.val_last, Nat.zero_le, true_and]
     omega
-  let ra : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (n + 1) j)) →
-      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock n j)) :=
-    fun a v ↦ a ⟨v.1.castSucc, by simpa only [mem_leftBlock, Fin.val_castSucc] using v.2⟩
-  let rb : ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) →
-      ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q) :=
-    fun b v ↦ b ⟨v.1.castSucc, by simpa only [mem_leftBlock, Fin.val_castSucc] using v.2⟩
-  let Lm : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (n + 1) j))
-      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock n j)) ℂ :=
+  let ra : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval (n + 1) 0 j)) →
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval n 0 j)) :=
+    fun a v ↦ a ⟨v.1.castSucc,
+        by simpa only [mem_interval, Fin.val_castSucc, Nat.zero_le, true_and] using v.2⟩
+  let rb : ((v : {v : Fin (n + 1) // v ∉ interval (n + 1) 0 j}) → Fin q) →
+      ((v : {v : Fin n // v ∉ interval n 0 j}) → Fin q) :=
+    fun b v ↦ b ⟨v.1.castSucc,
+        by simpa only [mem_interval, Fin.val_castSucc, Nat.zero_le, true_and] using v.2⟩
+  let Lm : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval (n + 1) 0 j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval n 0 j)) ℂ :=
     Matrix.of fun a a' ↦ if a' = ra a then 1 else 0
-  let R : Matrix ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q)
-      ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) ℂ :=
+  let R : Matrix ((v : {v : Fin n // v ∉ interval n 0 j}) → Fin q)
+      ((v : {v : Fin (n + 1) // v ∉ interval (n + 1) 0 j}) → Fin q) ℂ :=
     Matrix.of fun c b ↦ if c = rb b then f (b ⟨Fin.last n, hlast⟩) else 0
-  have hcut : cutMatrix (leftBlock (n + 1) j) W' = Lm * cutMatrix (leftBlock n j) W * R := by
+  have hcut : cutMatrix (interval (n + 1) 0 j) W' = Lm * cutMatrix (interval n 0 j) W * R := by
     ext a b
     rw [Matrix.mul_apply, Finset.sum_eq_single (rb b) (fun c _ hc ↦ by simp [R, hc]) (by simp),
       Matrix.mul_apply, Finset.sum_eq_single (ra a) (fun a' _ ha ↦ by simp [Lm, ha]) (by simp)]
@@ -283,8 +288,8 @@ theorem IsOpenMPS.snoc {n q b : ℕ} (hb : 0 < b) {w : (Fin n → Fin q) → ℂ
     congr 1
     · congr 1
       funext v
-      simp only [Fin.init, Equiv.piEquivPiSubtypeProd_symm_apply, mem_leftBlock,
-        Fin.val_castSucc, ra, rb]
+      simp only [Fin.init, Equiv.piEquivPiSubtypeProd_symm_apply, mem_interval,
+        Nat.zero_le, true_and, Fin.val_castSucc, ra, rb]
     · simp [Equiv.piEquivPiSubtypeProd_symm_apply, hlast]
   rw [hcut]
   refine ((rank_mul_le_left _ _).trans (rank_mul_le_right _ _)).trans ?_
@@ -325,29 +330,29 @@ theorem IsOpenMPS.extend_interval_by_configuration {T L q D : ℕ}
     change r.val < min L (j - a) ↔ a + r.val < j
     rw [lt_min_iff]
     omega
-  let f : ((v : {v : Fin T // v ∈ leftBlock T j}) → Fin q) →
-      ((v : {v : Fin L // v ∈ leftBlock L k}) → Fin q) := fun x r ↦
+  let f : ((v : {v : Fin T // v ∈ interval T 0 j}) → Fin q) →
+      ((v : {v : Fin L // v ∈ interval L 0 k}) → Fin q) := fun x r ↦
     x ⟨⟨a + r.val.val, by omega⟩,
-      mem_leftBlock.mpr ((hcut r.val).mp (mem_leftBlock.mp r.property))⟩
-  let g : ((v : {v : Fin T // v ∉ leftBlock T j}) → Fin q) →
-      ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) := fun y r ↦
+      mem_interval.mpr ⟨Nat.zero_le _, (hcut r.val).mp (mem_interval.mp r.property).2⟩⟩
+  let g : ((v : {v : Fin T // v ∉ interval T 0 j}) → Fin q) →
+      ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) := fun y r ↦
     y ⟨⟨a + r.val.val, by omega⟩, by
       intro hr
-      exact r.property (mem_leftBlock.mpr ((hcut r.val).mpr (mem_leftBlock.mp hr)))⟩
-  let P := fun x : ((v : {v : Fin T // v ∈ leftBlock T j}) → Fin q) ↦
+      exact r.property (mem_interval.mpr ⟨Nat.zero_le _, (hcut r.val).mpr (mem_interval.mp hr).2⟩)⟩
+  let P := fun x : ((v : {v : Fin T // v ∈ interval T 0 j}) → Fin q) ↦
     ∀ (v : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)})
-      (hv : v.val ∈ leftBlock T j), x ⟨v.val, hv⟩ = η v
-  let Q := fun y : ((v : {v : Fin T // v ∉ leftBlock T j}) → Fin q) ↦
+      (hv : v.val ∈ interval T 0 j), x ⟨v.val, hv⟩ = η v
+  let Q := fun y : ((v : {v : Fin T // v ∉ interval T 0 j}) → Fin q) ↦
     ∀ (v : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)})
-      (hv : v.val ∉ leftBlock T j), y ⟨v.val, hv⟩ = η v
+      (hv : v.val ∉ interval T 0 j), y ⟨v.val, hv⟩ = η v
   let u := fun x ↦ if P x then (1 : ℂ) else 0
   let v := fun y ↦ if Q y then (1 : ℂ) else 0
-  let M := (cutMatrix (leftBlock L k) ψ).submatrix f g
-  have hfactor : cutMatrix (leftBlock T j) χ = Matrix.diagonal u * M * Matrix.diagonal v := by
+  let M := (cutMatrix (interval L 0 k) ψ).submatrix f g
+  have hfactor : cutMatrix (interval T 0 j) χ = Matrix.diagonal u * M * Matrix.diagonal v := by
     ext x y
     have hmatch :
         (fun w : {w : Fin T // ¬(a ≤ w.val ∧ w.val < a + L)} ↦
-          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y) w.val) = η
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval T 0 j)).symm (x, y) w.val) = η
         ↔ P x ∧ Q y := by
       constructor
       · intro h
@@ -362,42 +367,42 @@ theorem IsOpenMPS.extend_interval_by_configuration {T L q D : ℕ}
           exact he
       · rintro ⟨hp, hq⟩
         funext w
-        by_cases hw : w.val ∈ leftBlock T j
+        by_cases hw : w.val ∈ interval T 0 j
         · rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) x y hw]
           exact hp w hw
         · rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) x y hw]
           exact hq w hw
     have hcore :
         (fun r : Fin L ↦
-          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y)
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval T 0 j)).symm (x, y)
             ⟨a + r.val, by omega⟩) =
-          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (f x, g y) := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)).symm (f x, g y) := by
       funext r
-      by_cases hr : r ∈ leftBlock L k
-      · have hv : (⟨a + r.val, by omega⟩ : Fin T) ∈ leftBlock T j :=
-          mem_leftBlock.mpr ((hcut r).mp (mem_leftBlock.mp hr))
+      by_cases hr : r ∈ interval L 0 k
+      · have hv : (⟨a + r.val, by omega⟩ : Fin T) ∈ interval T 0 j :=
+          mem_interval.mpr ⟨Nat.zero_le _, (hcut r).mp (mem_interval.mp hr).2⟩
         rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) x y hv,
           ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) (f x) (g y) hr]
-      · have hv : (⟨a + r.val, by omega⟩ : Fin T) ∉ leftBlock T j := by
+      · have hv : (⟨a + r.val, by omega⟩ : Fin T) ∉ interval T 0 j := by
           intro hv
-          exact hr (mem_leftBlock.mpr ((hcut r).mpr (mem_leftBlock.mp hv)))
+          exact hr (mem_interval.mpr ⟨Nat.zero_le _, (hcut r).mpr (mem_interval.mp hv).2⟩)
         rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) x y hv,
           ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) (f x) (g y) hr]
     rw [Matrix.mul_diagonal, Matrix.diagonal_mul, ManyBody.cutMatrix_apply]
     change (if
       (fun w : {w : Fin T // ¬(a ≤ w.val ∧ w.val < a + L)} ↦
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y) w.val) = η
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval T 0 j)).symm (x, y) w.val) = η
       then ψ (fun r : Fin L ↦
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval T 0 j)).symm (x, y)
           ⟨a + r.val, by omega⟩) else 0) =
-        (if P x then 1 else 0) * (cutMatrix (leftBlock L k) ψ) (f x) (g y) * (if Q y then 1 else 0)
+        (if P x then 1 else 0) * (cutMatrix (interval L 0 k) ψ) (f x) (g y) * (if Q y then 1 else 0)
     simp only [hmatch, hcore, ManyBody.cutMatrix_apply]
     by_cases hp : P x <;> by_cases hq : Q y <;> simp [hp, hq]
-  have hrank : (cutMatrix (leftBlock T j) χ).rank ≤ (cutMatrix (leftBlock L k) ψ).rank := by
+  have hrank : (cutMatrix (interval T 0 j) χ).rank ≤ (cutMatrix (interval L 0 k) ψ).rank := by
     rw [hfactor]
     exact ((Matrix.rank_mul_le_left (Matrix.diagonal u * M) (Matrix.diagonal v)).trans
       (Matrix.rank_mul_le_right (Matrix.diagonal u) M)).trans
-        (Matrix.rank_submatrix_le (cutMatrix (leftBlock L k) ψ) f g)
+        (Matrix.rank_submatrix_le (cutMatrix (interval L 0 k) ψ) f g)
   apply hrank.trans
   by_cases hk0 : k = 0
   · rw [hk0]
@@ -423,9 +428,9 @@ LVV13, arXiv:1307.5143v1, `algo53.tex`, Claim `c:errorreduction`, lines 584–59
 theorem rank_cutMatrix_toEuclideanLin_le_operatorSchmidtRank_mul {L q : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    (cutMatrix (leftBlock L k) (toEuclideanLin K ψ)).rank ≤
-      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) *
-        (cutMatrix (leftBlock L k) ψ).rank := by
+    (cutMatrix (interval L 0 k) (toEuclideanLin K ψ)).rank ≤
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K) *
+        (cutMatrix (interval L 0 k) ψ).rank := by
   rw [cutMatrix_toEuclideanLin]
   exact Matrix.schmidtRank_mulVec_le _ _
 
@@ -438,7 +443,7 @@ theorem IsOpenMPS.toEuclideanLin {L q b D : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hK : ∀ k : ℕ, 0 < k → k < L →
       operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) ≤ D) :
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K) ≤ D) :
     IsOpenMPS L q (D * b) (fun x ↦ toEuclideanLin K ψ x) := by
   apply isOpenMPS_of_internal_cutMatrix_rank_le
   intro k hk0 hkL
@@ -469,8 +474,8 @@ theorem isOpenMPS_of_mem_span {L q D : ℕ}
   apply (isOpenMPS_iff_internal_cutMatrix_rank_le
     (WithLp.toLp 2 (∑ w ∈ S, a w • w))).mpr
   intro k hk0 hkL
-  let A := fun w : (Fin L → Fin q) → ℂ ↦ a w • cutMatrix (leftBlock L k) (WithLp.toLp 2 w)
-  have hcut : cutMatrix (leftBlock L k) (WithLp.toLp 2 (∑ w ∈ S, a w • w)) =
+  let A := fun w : (Fin L → Fin q) → ℂ ↦ a w • cutMatrix (interval L 0 k) (WithLp.toLp 2 w)
+  have hcut : cutMatrix (interval L 0 k) (WithLp.toLp 2 (∑ w ∈ S, a w • w)) =
       ∑ w ∈ S, A w := by
     ext p r
     simp [A, ManyBody.cutMatrix_apply, Finset.sum_apply, Matrix.sum_apply]

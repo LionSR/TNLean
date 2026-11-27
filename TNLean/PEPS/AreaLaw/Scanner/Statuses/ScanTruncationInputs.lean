@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusMarginalBudget
 import TNLean.PEPS.AreaLaw.Collar.Scales.StatusScaleSeparation
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
+import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -42,6 +43,9 @@ The source's estimate `t = O(n^(-500))` (`08-scanner.tex`, lines 400–403) is s
   `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. Independently formalized from
   the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (abs_regionEntropy_sub_le_sqrt_traceDistance_card designatedSupport
+  exists_latticeCutBudget_le_log)
 
 open Filter Matrix
 
@@ -156,7 +160,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
         (T.card : ℝ) ≤ CT * (n : ℝ) ^ 2 →
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤

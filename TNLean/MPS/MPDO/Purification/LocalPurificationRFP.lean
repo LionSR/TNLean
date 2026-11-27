@@ -427,12 +427,12 @@ spin-ancilla amplitudes. -/
 private theorem mpv_purificationTensor {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) {N : ℕ}
     (σ : Fin N → Fin d) (κ : Fin N → Fin dK) :
-    MPSTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (σ n, κ n))
+    MPTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (σ n, κ n))
       = Matrix.trace ((List.ofFn fun l => A (σ l) (κ l)).prod) := by
   have hfun : (fun l : Fin N => purificationTensor A (finProdFinEquiv (σ l, κ l)))
       = fun l => A (σ l) (κ l) :=
     funext fun l => purificationTensor_finProdFinEquiv A (σ l) (κ l)
-  simp only [MPSTensor.mpv_eq, MPSTensor.coeff_eq,
+  simp only [MPTensor.mpv_eq, MPTensor.coeff_eq,
     MPSTensor.evalWord_ofFn_eq_prod, hfun]
 
 /-- **The tensor purification identity propagates to the global density

@@ -13,6 +13,8 @@ Shared overlap and linear-independence lemmas used by both exact and
 proportional matching of BNT canonical-form sectors.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 
@@ -27,7 +29,7 @@ lemma dim_and_gaugePhase_of_nondecaying_overlap
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (hnd : ¬ Tendsto (fun N : ℕ =>
-      mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
+      mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
     ∃ h : P.basisDim j = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j)) (Q.basis k) := by
   have hjdim : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
@@ -62,7 +64,7 @@ lemma exists_state_scalar_of_nondecaying_overlap
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (hnd : ¬ Tendsto (fun N : ℕ =>
-      mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
+      mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
     ∃ α : ℕ → ℂ, ∀ N : ℕ,
       mpvState (d := d) (P.basis j) N =
         α N • mpvState (d := d) (Q.basis k) N := by
@@ -96,7 +98,7 @@ lemma restricted_combined_family_eventually_li
     (T : Finset (Fin P.basisCount))
     (hTQ : ∀ (j : Fin P.basisCount), j ∈ T → ∀ k : Fin Q.basisCount,
       Tendsto (fun N : ℕ =>
-        mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
+        mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
     ∀ᶠ N in atTop,
       LinearIndependent ℂ
         (Sum.elim
@@ -115,14 +117,14 @@ lemma restricted_combined_family_eventually_li
           (fun k : Fin Q.basisCount => Q.basisDim k) x))
       (fun j => P.basis j.1) (fun k => Q.basis k)
   have h_self : ∀ x,
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) (C x) (C x) N) atTop
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (C x) (C x) N) atTop
         (𝓝 (1 : ℂ)) := by
     intro x
     cases x with
     | inl j => simpa [C] using hP.basis_normalized_self_overlap j.1
     | inr k => simpa [C] using hQ.basis_normalized_self_overlap k
   have h_cross : ∀ x y, x ≠ y →
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) (C x) (C y) N) atTop
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (C x) (C y) N) atTop
         (𝓝 (0 : ℂ)) := by
     intro x y hxy
     cases x with
@@ -140,7 +142,7 @@ lemma restricted_combined_family_eventually_li
         cases y with
         | inl i =>
             simpa [C] using
-              (tendsto_mpvOverlap_zero_swap (d := d) (A := P.basis i.1)
+              (tendsto_mpvOverlap_zero_swap (α := Fin d) (A := P.basis i.1)
                 (B := Q.basis k) (N := id) (hTQ i.1 i.2 k))
         | inr l =>
             have hkl : k ≠ l := by
@@ -174,15 +176,15 @@ lemma bijection_from_matches {P Q : SectorDecomposition d}
     (hFwd : ∀ k : Fin Q.basisCount,
       ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
         GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j)) (Q.basis k) ∧
-        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0))
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0))
     (hBwd : ∀ j : Fin P.basisCount,
       ∃ (k : Fin Q.basisCount) (h : Q.basisDim k = P.basisDim j),
         GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (Q.basis k)) (P.basis j) ∧
-        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (Q.basis k) (P.basis j) N) atTop (𝓝 0)) :
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (Q.basis k) (P.basis j) N) atTop (𝓝 0)) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
         GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) ∧
-        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N) atTop (𝓝 0) := by
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (P.basis (β k)) (Q.basis k) N) atTop (𝓝 0) := by
   classical
   let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
   have φ₀_spec : ∀ k : Fin Q.basisCount,
@@ -191,7 +193,7 @@ lemma bijection_from_matches {P Q : SectorDecomposition d}
             (cast (congr_arg (MPSTensor d) h) (P.basis (φ₀ k)))
             (Q.basis k) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis (φ₀ k)) (Q.basis k) N)
+            mpvOverlap (α := Fin d) (P.basis (φ₀ k)) (Q.basis k) N)
           atTop (𝓝 0) := fun k => (hFwd k).choose_spec
   have rebase_centre_P :
       ∀ (j j' : Fin P.basisCount) (_hj : j = j')
@@ -226,7 +228,7 @@ lemma bijection_from_matches {P Q : SectorDecomposition d}
             (cast (congr_arg (MPSTensor d) h) (Q.basis (ψ₀ j)))
             (P.basis j) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (Q.basis (ψ₀ j)) (P.basis j) N)
+            mpvOverlap (α := Fin d) (Q.basis (ψ₀ j)) (P.basis j) N)
           atTop (𝓝 0) := fun j => (hBwd j).choose_spec
   have rebase_centre_Q :
       ∀ (k k' : Fin Q.basisCount) (_hk : k = k')

@@ -8,7 +8,7 @@ import QICLean.Kraus.Transfer
 import TNLean.MPS.Operator.Simple.CommutingForm
 import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.CanonicalForm.Correlation.ZeroCorrelationLength
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!
@@ -33,6 +33,8 @@ on virtual matrices.
   tensor product of block observables is the composition of the two maps.
 * `inner_mpvState_placeAlong_chainWindow_mul`: the two-window trace formula.
 -/
+
+open MPTensor
 
 open scoped Matrix BigOperators InnerProductSpace Kronecker
 

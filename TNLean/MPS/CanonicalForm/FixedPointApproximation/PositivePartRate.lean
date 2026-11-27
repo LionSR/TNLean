@@ -51,6 +51,8 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 * arXiv:2606.24475, App. B3, eqs. (S27)–(S38), for the Lipschitz step.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Kraus (blockTensor)
 
@@ -331,7 +333,7 @@ theorem exists_norm_gram_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNo
     (fun (a b : Fin D × Fin D) => Matrix.single b.2 a.2 (1 : ℂ))
     (fun _ b => b.1) (fun a _ => a.1)
   refine ⟨K, hK, fun q => h q _ fun a b => ?_⟩
-  rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, transferMap_blockTensor,
+  rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, Kraus.transferMap_blockTensor,
     transpose_kronecker_one_apply, Matrix.sub_apply]
 
 /-- The fixed-point tensor `P_∞`, read as a `D² × D²` matrix, is the square root of

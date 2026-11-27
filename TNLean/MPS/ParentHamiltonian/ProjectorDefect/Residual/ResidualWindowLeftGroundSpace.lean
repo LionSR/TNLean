@@ -42,9 +42,9 @@ theorem residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES
   change Matrix.trace ((Kraus.evalWord (blockTensor A L) (List.ofFn u) *
     Kraus.evalWord (blockTensor A L) (List.ofFn v)) * boundaryFamilyEquiv (Cfg d r) x τ) =
       leftBoundaryMap A ((K + M) * L) r (boundaryFamilyEquiv (Cfg d r) x)
-        (Fin.append (blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
+        (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
   rw [leftBoundaryMap_append, groundSpaceMap_apply, ← Kraus.evalWord_append,
-    ← List.ofFn_fin_append, evalWord_blockTensor, ← ofFn_blockedConfigEquiv]
+    ← List.ofFn_fin_append, evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv]
 
 /-- An exact blocked-sector ground-space presentation identifies the joint aligned left window
 with the original prefix boundary range in the common physical coordinates.

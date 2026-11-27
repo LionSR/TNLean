@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PositivePrefixEntropyTransfer
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualTerminalPrefixEntropy
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualTerminalCollarGeometry
 import Mathlib.Tactic.FieldSimp
@@ -28,6 +29,8 @@ It also contains the following results.
   `TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_preEntropy_max_average_bounds`: uniform
   bounds on the actual sharp pre-comparison entropy.
 -/
+
+open ManyBody (regionEntropy_nonneg)
 
 section ActualTerminalEntropyBounds
 
@@ -114,7 +117,7 @@ theorem terminalPartition_preEntropy_bounds
   have hF := ManyBody.regionEntropy_union_le β Ωt hΩt X (U ∪ Y) hXUY
   obtain ⟨hU, hUY⟩ := terminalPartition_positiveEntropy_le hT S hgraph hdepth hn hr
     hDpos hD L hL hrows Ωt hΩt Bsh hsh j g
-  have hY := regionEntropy_nonneg Λ q Ωt hΩt Y
+  have hY := regionEntropy_nonneg hΩt Y
   rw [← hUYeq] at hUY
   constructor
   · have hV : ManyBody.regionEntropy Ωt V = ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ := by

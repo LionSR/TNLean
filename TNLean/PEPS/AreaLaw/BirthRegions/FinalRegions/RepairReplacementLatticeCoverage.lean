@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicOrigin
+import QICLean.ManyBody.Sites.Dyadic.DyadicOrigin
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairChildStarStep
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.SimultaneousRepair
@@ -32,6 +32,10 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh`:
   integral coordinates of the recursive repair marks.
 -/
+
+open ManyBody (IsAllowedSlope TemplatePolygon boundaryEndpoints dyadicOrigin
+  dyadicOrigin_supporting_lines_avoid_lattice integerPoint
+  mem_boundaryEndpoints_of_mem_edgeBoundary)
 
 section RepairReplacementLatticeCoverage
 

@@ -76,7 +76,7 @@ The following boundaries remain statements about arbitrary cochains:
 
 - The determinant/path primitive does not establish the cocycle condition
   for its individual factors, so it concludes a coboundary ratio.
-- `ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous` has no
+- `TNLean.Algebra.exists_unitary_rephase_of_cohomologous` has no
   positive-dimension assumption and concerns the included phase factors;
   its input is a coboundary ratio.
 - `MPSTensor.IsSameSPTPhase` permits zero bond dimension and retains a

@@ -373,7 +373,7 @@ sector coordinates of the restricted decomposition. See
     (r : Fin (F.rightDim j) × Fin (Fintype.card (SectorSiteIndex F) ^ C)) :
     ((F.retainedCutEquiv A C).symm ⟨j, (l, r)⟩).1 ⟨A, by omega⟩ = j := by
   simp [retainedCutEquiv, sectorCoordinateMiddleEquiv,
-    HayashiMarkov.sigmaAssoc, tripartiteSplitEquiv, blockSplitEquiv,
+    HayashiMarkov.sigmaAssoc, tripartiteSplitEquiv, MPOTensor.blockSplitEquiv,
     show (⟨A, by omega⟩ : Fin (A + 1 + C)) =
       Fin.castAdd C (Fin.last A) by ext; simp,
     finSumFinEquiv_symm_apply_castAdd,
@@ -397,7 +397,7 @@ sector coordinates of the restricted decomposition. See
     ((F.retainedCutEquiv A C).symm ⟨j, (l, r)⟩).1 ⟨i, by omega⟩ =
       (F.sectorCoordinateChainEquiv A (finFunctionFinEquiv.symm l.1)).1 i := by
   simp [retainedCutEquiv, sectorCoordinateMiddleEquiv,
-    HayashiMarkov.sigmaAssoc, tripartiteSplitEquiv, blockSplitEquiv,
+    HayashiMarkov.sigmaAssoc, tripartiteSplitEquiv, MPOTensor.blockSplitEquiv,
     show (⟨i, by omega⟩ : Fin (A + 1 + C)) =
       Fin.castAdd C (Fin.castAdd 1 i) by ext; simp,
     finSumFinEquiv_symm_apply_castAdd,
@@ -422,7 +422,7 @@ sector coordinates of the restricted decomposition. See
         ⟨A + 1 + i, by omega⟩ =
       (F.sectorCoordinateChainEquiv C (finFunctionFinEquiv.symm r.2)).1 i := by
   simp [retainedCutEquiv, sectorCoordinateMiddleEquiv,
-    HayashiMarkov.sigmaAssoc, tripartiteSplitEquiv, blockSplitEquiv,
+    HayashiMarkov.sigmaAssoc, tripartiteSplitEquiv, MPOTensor.blockSplitEquiv,
     show (⟨A + 1 + i, by omega⟩ : Fin (A + 1 + C)) =
       Fin.natAdd (A + 1) i by ext; simp,
     finSumFinEquiv_symm_apply_natAdd,
@@ -506,7 +506,7 @@ theorem retainedCutEquiv_symm_left_fiber_heq
   refine HEq.trans ?_ hL.symm
   have hx : xG ⟨i, by omega⟩ = xL i := by
     simp [xG, sectorCoordinateMiddleEquiv, HayashiMarkov.sigmaAssoc,
-      tripartiteSplitEquiv, blockSplitEquiv,
+      tripartiteSplitEquiv, MPOTensor.blockSplitEquiv,
       show (⟨i, by omega⟩ : Fin (A + 1 + C)) =
         Fin.castAdd C (Fin.castAdd 1 i) by ext; simp,
       finSumFinEquiv_symm_apply_castAdd,
@@ -595,7 +595,7 @@ theorem retainedCutEquiv_symm_right_fiber_heq
   refine HEq.trans ?_ hR.symm
   have hx : xG ⟨A + 1 + i, by omega⟩ = xR i := by
     simp [xG, sectorCoordinateMiddleEquiv, HayashiMarkov.sigmaAssoc,
-      tripartiteSplitEquiv, blockSplitEquiv,
+      tripartiteSplitEquiv, MPOTensor.blockSplitEquiv,
       show (⟨A + 1 + i, by omega⟩ : Fin (A + 1 + C)) =
         Fin.natAdd (A + 1) i by ext; simp,
       finSumFinEquiv_symm_apply_natAdd,
@@ -656,7 +656,7 @@ theorem retainedCutEquiv_symm_middle_fiber_heq
   have hx : xG ⟨A, by omega⟩ =
       F.sectorFinEquiv.symm ⟨j, (l.2, r.1)⟩ := by
     simp [xG, sectorCoordinateMiddleEquiv, HayashiMarkov.sigmaAssoc,
-      tripartiteSplitEquiv, blockSplitEquiv,
+      tripartiteSplitEquiv, MPOTensor.blockSplitEquiv,
       show (⟨A, by omega⟩ : Fin (A + 1 + C)) =
         Fin.castAdd C (Fin.last A) by ext; simp,
       finSumFinEquiv_symm_apply_castAdd,

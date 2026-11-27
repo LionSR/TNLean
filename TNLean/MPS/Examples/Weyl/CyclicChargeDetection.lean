@@ -24,6 +24,8 @@ It also contains the following results.
   Weyl boundary spaces.
 -/
 
+open MPTensor
+
 namespace MPSTensor.ShortMomentum
 
 section CyclicChargeDetection

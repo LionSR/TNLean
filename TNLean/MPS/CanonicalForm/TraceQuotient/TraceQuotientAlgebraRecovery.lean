@@ -5,12 +5,17 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Topology.ContinuousIdempotentFrames
 import QICLean.Algebra.MatrixAlgebra.MatrixAlgebraCoordinates
-import TNLean.MPS.CanonicalForm.TraceQuotient.ContinuousTraceQuotientMultiplication
+import Mathlib.Analysis.Normed.Ring.Units
+import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.Topology.Instances.Matrix
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.LinearAlgebra.Dimension.Free
 import TNLean.MPS.Tensor.Words.TracePairing
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.SesquilinearForm
 import Mathlib.Algebra.Algebra.Bilinear
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import QICLean.Analysis.Topology.TraceQuotientCoordinates
 
 /-!
 # Matrix-algebra recovery from finite-ring trace data
@@ -41,16 +46,9 @@ set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 open scoped Matrix BigOperators ComplexOrder
 
-namespace Matrix
-/-- The raw three-site trace vector contracted with two columns of a physical
-coefficient section.
-Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
-noncomputable def traceQuotientTripleColumns {d r D : ℕ}
-    (B : MPSTensor d D) (F : Matrix (Fin d) (Fin r) ℂ) :
-    Matrix (Fin d) (Fin r × Fin r) ℂ :=
-  Matrix.of fun j ab => Matrix.trace
-    (Fintype.linearCombination ℂ B (F *ᵥ Pi.single ab.1 1) *
-      Fintype.linearCombination ℂ B (F *ᵥ Pi.single ab.2 1) * B j)
+namespace TNLean.MPS.CanonicalForm
+
+open Matrix
 
 /-- Contracting the two-site trace form with a physical coefficient section
 is trace pairing against the corresponding bond matrix.
@@ -67,25 +65,6 @@ theorem traceQuotientSection_pair {d r D : ℕ} (A : MPSTensor d D)
     Fintype.linearCombination_apply, MPSTensor.traceMulRightPi_apply,
     Matrix.sum_mul, Matrix.trace_sum, Matrix.smul_mul, Matrix.trace_smul,
     Pi.smul_apply, smul_eq_mul, Finset.mul_sum, mul_comm, mul_left_comm]
-
-/-- The three-site proportionality identity persists after contracting its
-first two physical indices with arbitrary coefficient vectors.
-Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
-theorem traceQuotientSection_triple {d D E : ℕ}
-    (A : MPSTensor d D) (B : MPSTensor d E) (α₃ : ℂ)
-    (hTriple : ∀ i k j, Matrix.trace (B i * B k * B j) =
-      α₃ * Matrix.trace (A i * A k * A j)) :
-    ∀ u v j, Matrix.trace
-      (Fintype.linearCombination ℂ B u * Fintype.linearCombination ℂ B v * B j) =
-      α₃ * Matrix.trace
-        (Fintype.linearCombination ℂ A u * Fintype.linearCombination ℂ A v * A j) := by
-  intro u v j
-  have hTriple' : ∀ i k j, Matrix.trace (B i * (B k * B j)) =
-      α₃ * Matrix.trace (A i * (A k * A j)) := by
-    simpa only [Matrix.mul_assoc] using hTriple
-  simp only [Fintype.linearCombination_apply, Matrix.sum_mul,
-    Matrix.smul_mul, Matrix.mul_smul, Matrix.trace_sum, Matrix.trace_smul,
-    smul_eq_mul, hTriple', Finset.mul_sum, mul_assoc, mul_left_comm]
 
 /-- Contracted three-site columns determine the full bilinear product data.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
@@ -218,4 +197,4 @@ theorem traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq
     exact fun a b j => traceQuotientSection_triple A B α₃ hTriple
       (F *ᵥ Pi.single a 1) (F *ᵥ Pi.single b 1) j
 
-end Matrix
+end TNLean.MPS.CanonicalForm

@@ -13,3 +13,31 @@ import TNLean.MPS.Examples.CorrelatedFlip.EntropyArithmetic
 import TNLean.MPS.Examples.CorrelatedFlip.FlipWeights
 import TNLean.MPS.Examples.CorrelatedFlip.Operator
 import TNLean.MPS.Examples.CorrelatedFlip.Spectrum
+
+/-!
+# The correlated flip density operator
+
+The density operator of CPSV16 Example 4.10 (arXiv:1606.00608, lines 897–905): a ring of Bell
+pairs, one on each bond, to which an independent correlated bit flip of probability one quarter
+is applied at every spin. **Local fix (left-right correlated flip):** the printed channel repeats
+the left-qubit label at lines 901–902; the modules flip the left and right qubits of the same
+spin, as the Bell-pair network and the entropies printed at line 904 require. The four-site
+state is a mixture of orthonormal products of Bell states, whose exact spectra and entropies on
+the ring of four sites show that the operator has zero correlation length but does not
+saturate the area law, at `p = 1/4` only; see
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
+
+## General theorems instantiated
+
+* `MPOTensor.IsLPDO` and `MPOTensor.IsLPDO.isMPDO` (local purifications): the operator has a
+  two-outcome local purification, hence is a matrix product density operator;
+  arXiv:1606.00608, Section 4.3.
+* `MPOTensor.isSourceZCL_of_physTraceTransfer_sq` (zero correlation length): the idempotent
+  nonzero physical-trace transfer gives `MPOTensor.IsSourceZCL`; arXiv:1606.00608,
+  Definition 4.2.
+* `MPOTensor.blockEntropy_of_charpoly_roots_eq` (block entropies from spectra): the four block
+  entropies on the ring of four sites.
+* `MPOTensor.mutualInfoChain_eq_of_isSAL` (saturation of the area law): the strictly positive
+  mutual-information difference shows that the operator is not `MPOTensor.IsSAL`;
+  arXiv:1606.00608, Definition 4.6.
+-/

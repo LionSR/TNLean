@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.BlockSum.OrthogonalBlockSum
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.PositivePartRate
 import QICLean.Analysis.Isometry.FramePerturbation
+import QICLean.Analysis.FunctionalCalculus.SqrtHolder
 
 /-!
 # The positive part of a direct sum of blocks with overlapping states
@@ -76,6 +77,8 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   transformations and phases of matter*,
   arXiv:2103.13367, Supplemental Material, eq. (26) (the Hölder bound for square roots).
 -/
+
+open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
@@ -589,21 +592,6 @@ theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosD
   · exact (posSemidef_offBlockProj hι hdisj).smul (sub_nonneg.2 hc₀1)
 
 end Limits
-
-open scoped Matrix.Norms.L2Operator in
-/-- **Hölder bound for positive parts.** For every matrix `B` and every positive semidefinite
-`P`, `‖(Bᴴ B)^{1/2} - P‖ ≤ ‖Bᴴ B - P²‖^{1/2}`: the bound `‖√a - √b‖ ≤ √‖a - b‖`
-(`CFC.norm_sqrt_sub_sqrt_le`; arXiv:2103.13367, Supplemental Material, eq. (26)) at `b = P²`. -/
-theorem _root_.Matrix.norm_polarPos_sub_le_sqrt {m n : Type*} [Fintype m] [Fintype n]
-    [DecidableEq n] (B : Matrix m n ℂ) {P : Matrix n n ℂ} (hP : P.PosSemidef) :
-    ‖Matrix.polarPos B - P‖ ≤ Real.sqrt ‖Bᴴ * B - P * P‖ := by
-  have hsq : CFC.sqrt (P * P) = P := CFC.sqrt_unique rfl hP.nonneg
-  have hnn : 0 ≤ P * P := by
-    have h := Matrix.posSemidef_conjTranspose_mul_self P
-    rw [hP.isHermitian.eq] at h
-    exact h.nonneg
-  have h := CFC.norm_sqrt_sub_sqrt_le (Matrix.posSemidef_conjTranspose_mul_self B).nonneg hnn
-  rwa [hsq] at h
 
 /-! ### The rate of the positive part -/
 

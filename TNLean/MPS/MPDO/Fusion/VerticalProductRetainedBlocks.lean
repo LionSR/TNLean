@@ -560,7 +560,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
       (∀ ab : Fin (D * D),
         weightedVerticalProductBlock dim mult weight B p ab =
           ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
-      MPSTensor.SameMPV₂Pos
+      MPTensor.SameMPV₂Pos
         (weightedVerticalProductBlock dim mult weight B p)
         (MPSTensor.toTensorFromBlocks (d := D * D)
           (μ := coefficient) blocks) ∧
@@ -612,7 +612,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
       (∀ ab : Fin (D * D),
         weightedVerticalProductBlock dim mult weight B p ab =
           ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
-      MPSTensor.SameMPV₂Pos
+      MPTensor.SameMPV₂Pos
         (weightedVerticalProductBlock dim mult weight B p)
         (MPSTensor.toTensorFromBlocks (d := D * D)
           (μ := coefficient) blocks) ∧

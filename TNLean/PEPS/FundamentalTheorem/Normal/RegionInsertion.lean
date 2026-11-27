@@ -24,7 +24,6 @@ import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.InsertionAlgebra
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.OutRegionEndpoint
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.ProportionalityFromAbsorbed
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Realization
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.RegionFibers
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.RegionTransferMatrix
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.ResonateIdentity
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.ResonateReconcile

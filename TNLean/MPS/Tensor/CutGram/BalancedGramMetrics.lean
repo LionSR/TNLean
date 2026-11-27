@@ -6,8 +6,16 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Defs
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import TNLean.MPS.Tensor.CutGram.AffineGramCompactness
-import TNLean.MPS.Tensor.CutGram.DeterminantStationarity
+import QICLean.Channel.Basic
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
+import Mathlib.Topology.Algebra.AffineSubspace
+import QICLean.Analysis.FunctionalCalculus.SqrtHolder
+import Mathlib.Analysis.Calculus.Deriv.Polynomial
+import Mathlib.Analysis.Calculus.LocalExtr.Basic
+import Mathlib.Analysis.Complex.RealDeriv
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+import QICLean.Analysis.Optimization.HermitianMatrixCone
 
 /-!
 # Dual positive metrics for MPU interval isometries

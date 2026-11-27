@@ -62,7 +62,7 @@ include the literal bond-space gauge of equation `eq:II_ABasicTensors`,
 lines 283--297. -/
 def HasHorizontalCFMPVRepresentation (M : MPOTensor d D) : Prop :=
   ∃ P : MPSTensor.SectorDecomposition (d * d),
-    MPSTensor.IsBNTCanonicalForm P ∧ MPSTensor.SameMPV₂Pos M.toMPSTensor P.toTensor
+    MPSTensor.IsBNTCanonicalForm P ∧ MPTensor.SameMPV₂Pos M.toMPSTensor P.toTensor
 
 end MPOTensor
 
@@ -106,7 +106,7 @@ representative-grouped Lemma L at Appendix C.3, lines 1835--1858. -/
 theorem basis_opposite_insert_eq_of_rotated_mpo_entries
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
       (∑ i : Fin d, P (ρ 0).divNat i *

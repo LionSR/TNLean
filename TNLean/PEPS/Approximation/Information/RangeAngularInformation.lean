@@ -49,6 +49,9 @@ with `angularScale` and `angularThresholdClosed`, are unchanged.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (rectangleConfigurationEquiv)
+open ManyBody (Config Qudits)
+
 open ManyBody (SquareLatticeVertex rectangleEmbedding rectangularDomain rectangleSiteEquiv
   rectangleSiteEquiv_val)
 
@@ -59,7 +62,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry AngularGrid
+open TNLean.PEPS.AreaLaw AngularGrid
 
 /-! ### The two estimates at range `R` -/
 
@@ -75,17 +78,18 @@ theorem IsRangeSquareGroundState.squareCellInformationBound {q R : ℕ} (hq : 1 
   obtain ⟨H, hH, hHJ, E₀, hΩ', hgap, hspan⟩ := hΩ
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (cell_conditionalMutualInformation_le_closed hq hJ hΔ hc s hs (o - (1, 1)) m₀ A hm₀
-      (rectangularDomain L L) H hH hHJ E₀ (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap hspan)
+      (rectangularDomain L L) H hH hHJ E₀ (ManyBody.rectangleAreaLawState Ω) hΩ' hgap hspan)
 
 /-- The mutual information of a state of the square equals that of its placement on the integer
 square, for the corresponding sets of sites. -/
-theorem mutualInformation_rectangleAreaLawState {q L : ℕ} (Ω : StateSpace L q)
+theorem mutualInformation_rectangleAreaLawState {q L : ℕ}
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
     (X Y : Finset (SquareLatticeVertex L L)) :
     ManyBody.regionMutualInformation
-        (AreaLaw.rectangleAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)
+        (ManyBody.rectangleAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)
         (Y.map (rectangleSiteEquiv L L).toEmbedding) =
       ManyBody.regionMutualInformation Ω X Y := by
-  simp only [ManyBody.regionMutualInformation, AreaLaw.rectangleAreaLawState,
+  simp only [ManyBody.regionMutualInformation, ManyBody.rectangleAreaLawState,
     show rectangleConfigurationEquiv L L q =
       (rectangleSiteEquiv L L).arrowCongr (Equiv.refl (Fin q)) from rfl,
     ← Finset.map_union, finiteProductEntropy_relabel]
@@ -114,7 +118,7 @@ theorem IsRangeSquareGroundState.squareResetBound {q R : ℕ} (hq : 1 ≤ q) {J 
     have hv : v ∉ T := fun h ↦ hy (Finset.mem_map_of_mem _ h)
     simpa only [Equiv.toEmbedding_apply, hval] using hT u hu v hv
   have h := H.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL hH hHJ E₀
-    (AreaLaw.rectangleAreaLawState Ω) hgap.1 hgap.2.1 hgap.2.2 (Rg.map σ.toEmbedding)
+    (ManyBody.rectangleAreaLawState Ω) hgap.1 hgap.2.1 hgap.2.2 (Rg.map σ.toEmbedding)
         (C.map σ.toEmbedding)
     (R₀.map σ.toEmbedding) (C₀.map σ.toEmbedding)
     ((Finset.disjoint_map σ.toEmbedding).mpr hRC) (Finset.map_subset_map.mpr hR₀)

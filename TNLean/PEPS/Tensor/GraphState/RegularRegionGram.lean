@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Tensor.GraphState.RegularRegionGramExpansion
 import TNLean.PEPS.Graph.Holonomy.RegularRegionConnectivity
 import TNLean.PEPS.Graph.Holonomy.RegularRegionCounting
-import TNLean.PEPS.Injectivity.Regular.RegularSiteGram
+import TNLean.PEPS.Tensor.GraphState.RegularBoundaryState
 import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
 
 /-!
@@ -76,7 +76,6 @@ theorem prod_regularSiteGram_eq_sum_compatible
   · exact (ite_eq_left h).symm
   · exact (ite_eq_right h).symm
 
-
 /-- An ordered boundary translation sum is the group order times its averaging projector. -/
 theorem sum_regularBoundary_translation_eq_card_mul_projector
     (R : Finset V) {b : ℕ}
@@ -88,8 +87,14 @@ theorem sum_regularBoundary_translation_eq_card_mul_projector
     simpa only [Function.comp_def, Pi.smul_apply, smul_eq_mul] using
       e.surjective.right_cancellable (g₁ := x) (g₂ := g • y)
   simp only [he]
-  rw [← regularLegProjector_fin, regularLegProjector_apply]
-  rw [← mul_assoc, mul_inv_cancel₀ (Nat.cast_ne_zero.mpr Fintype.card_ne_zero), one_mul]
+  have hproj : regularBoundaryProjector (G := G) b x y = (Fintype.card G : ℂ)⁻¹ *
+      ∑ g : G, if x = g • y then 1 else 0 := by
+    rw [regularBoundaryProjector, LinearMap.toMatrix'_apply,
+      Representation.averageMap_apply_eq_sum]
+    simp only [Pi.smul_apply, Finset.sum_apply, regularBoundaryRepresentation_apply,
+      Pi.single_apply, invOf_eq_inv, smul_eq_mul]
+    simp only [inv_smul_eq_iff]
+  rw [hproj, ← mul_assoc, mul_inv_cancel₀ (Nat.cast_ne_zero.mpr Fintype.card_ne_zero), one_mul]
 
 /-- The scalar from unnormalized regular-bond contraction on a connected region.
 Its ratio form equals the group order to the cycle rank times the product of

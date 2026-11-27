@@ -262,8 +262,8 @@ compare the traces of two identity matrices and therefore force equality of
 the bond dimensions, although the stacked tensor $B_{g,x}$ and the reduced
 tensor $A_{g\mathbin{\cdot}x}$ need not have equal bond dimensions.  Thus the
 correct formal input is
-\leanid{MPSTensor.SameMPV₂Pos}, not
-\leanid{MPSTensor.SameMPV₂}.
+\leanid{MPTensor.SameMPV₂Pos}, not
+\leanid{MPTensor.SameMPV₂}.
 
 \section{The arbitrary-boundary route is different}
 
@@ -515,7 +515,7 @@ The existing library separates the following layers.
           MPU on an MPS.  Those notions must precede the reduction theorem;
           they should not be inferred from the scalar $L$-symbol API.
 
-    \item \leanid{MPSTensor.SameMPV₂Pos}
+    \item \leanid{MPTensor.SameMPV₂Pos}
           expresses the global
           equality in
           (\ref{eq:fbc25_action_audit_positive_length_symmetry}) across

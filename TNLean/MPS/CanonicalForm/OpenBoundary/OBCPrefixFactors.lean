@@ -170,11 +170,11 @@ theorem cutCoefficientMatrix_eq_physicalPrefix_mul_suffix (k : Fin (N + 1)) :
     cutCoefficientMatrix B.coeff k.val = physicalPrefixMatrix B k * physicalSuffixMatrix B k := by
   classical
   have hk : k.val ≤ N := Nat.lt_succ_iff.mp k.isLt
-  rw [cutCoefficientMatrix_eq_reindex_cutMatrix B.coeff hk]
+  rw [cutCoefficientMatrix_eq_reindex_cutMatrix B.coeff k.val]
   ext u v
-  change cutMatrix B.coeff k.val ((cutPrefixConfigEquiv hk).symm u)
-    ((cutSuffixConfigEquiv hk).symm v) = _
-  rw [cutMatrix, coeff_eq_eval_zeroPad, eval_cutConfig _ hk]
+  change B.coeff ((ManyBody.cutEquiv _ (ManyBody.interval N 0 k.val)).symm
+    ((intervalConfigEquiv d N k.val).symm u, (intervalComplConfigEquiv d N k.val).symm v)) = _
+  rw [coeff_eq_eval_zeroPad, eval_cutEquiv_symm _ hk]
   simp only [Matrix.mul_apply]
   rw [Fin.sum_castLE_extend_zero _ (B.bondDim_le k)]
   apply Finset.sum_congr rfl

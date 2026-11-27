@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.CornerContraction
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.FixedLineLimitSimplicity
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.GlobalGauge
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NoSectorMatch
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap

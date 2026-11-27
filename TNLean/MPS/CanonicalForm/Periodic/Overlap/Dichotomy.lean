@@ -27,6 +27,8 @@ This module contains the statement of the source proposition
   and Appendix A.
 -/
 
+open MPTensor
+
 section Dichotomy
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
@@ -158,7 +160,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   have hGram : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j)) := by
     intro i j
     have hreduce : (fun N => ⟪v i N, v j N⟫_ℂ)
-        = fun N => star (mpvOverlap (d := d) (A i) (A j) (p * N)) := by
+        = fun N => star (mpvOverlap (α := Fin d) (A i) (A j) (p * N)) := by
       funext N
       simp only [hv]
       rw [lp.inner_single_left, lp.single_apply_self, mpvOverlap_eq_star_mpvInner, star_star]
@@ -175,7 +177,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
         · exact h
       have hmap : Tendsto (fun N : ℕ => c * N) atTop atTop :=
         tendsto_atTop_mono (fun n => le_mul_of_one_le_left (Nat.zero_le n) hcpos) tendsto_id
-      have hcomp : Tendsto (fun N => mpvOverlap (d := d) (A i) (A i) (p * N)) atTop
+      have hcomp : Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A i) (p * N)) atTop
           (nhds (period i : ℂ)) :=
         ((periodicSelfOverlap_tendsto (A i) (hPer i)).comp hmap).congr fun N => by
           simp only [Function.comp]; rw [hc, mul_assoc]

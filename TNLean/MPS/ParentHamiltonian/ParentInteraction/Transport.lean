@@ -46,6 +46,8 @@ It also contains the following results.
   Hamiltonians.
 -/
 
+open MPTensor
+
 section Transport
 
 section

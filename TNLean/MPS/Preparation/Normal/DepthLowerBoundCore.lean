@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.Norm.ExpectationOverlap
 import TNLean.MPS.Preparation.Correlations.BlockVariance
 import QICLean.Circuit.Model.UnitaryRing
+import QICLean.Analysis.Norm.MatrixToEuclidean
 
 /-!
 # The averaging step of the depth lower bound
@@ -149,23 +150,6 @@ theorem star_mpvExpectation_of_isHermitian (A : MPSTensor d D) {N : ℕ}
   change star ⟪_, _⟫_ℂ = ⟪_, _⟫_ℂ
   rw [← h]
   exact Complex.conj_ofReal _
-
-/-- A Hermitian matrix minus a real multiple of the identity is Hermitian. -/
-theorem _root_.Matrix.IsHermitian.sub_smul_one {n : Type*} [DecidableEq n]
-    {X : Matrix n n ℂ} (hX : X.IsHermitian) {e : ℂ} (he : star e = e) :
-    (X - e • (1 : Matrix n n ℂ)).IsHermitian := by
-  rw [Matrix.IsHermitian, Matrix.conjTranspose_sub, Matrix.conjTranspose_smul,
-    Matrix.conjTranspose_one, hX.eq, he]
-
-/-- Subtracting `e` times the identity changes the operator norm by at most `‖e‖`. -/
-theorem _root_.Matrix.norm_toEuclideanCLM_sub_smul_one_le {n : Type*} [Fintype n]
-    [DecidableEq n] (X : Matrix n n ℂ) (e : ℂ) :
-    ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (X - e • 1)‖ ≤
-      ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) X‖ + ‖e‖ := by
-  rw [map_sub, map_smul, map_one]
-  refine (norm_sub_le _ _).trans (add_le_add le_rfl ?_)
-  rw [norm_smul]
-  exact mul_le_of_le_one_right (norm_nonneg _) ContinuousLinearMap.norm_id_le
 
 /-! ### Pair expectations -/
 

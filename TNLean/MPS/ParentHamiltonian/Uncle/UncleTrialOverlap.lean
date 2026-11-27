@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleTrialTransferNorm
 import TNLean.MPS.Tensor.Overlap
 import QICLean.Spectral.Radius.PowerDecay
-import QICLean.Channel.Peripheral.Spectrum.UnitalKraus
+import QICLean.Channel.Schwarz.RussoDye
 import QICLean.Kraus.MixedMap.SpectralRadius
 import Mathlib.Analysis.SpecificLimits.Normed
 
@@ -22,6 +22,8 @@ Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2,
 lines 1278–1288. The numbered source trial has separations 2N−1 in B
 and 2N in A after joining the exterior intervals.
 -/
+
+open MPTensor
 
 noncomputable section
 

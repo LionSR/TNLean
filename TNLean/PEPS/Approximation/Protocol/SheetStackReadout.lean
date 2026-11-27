@@ -39,6 +39,7 @@ of the final memory, read on the configurations of the square, is the readout of
   653–681 (the frozen-hole count, the main reference at level one and the discarded factors).
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -176,7 +177,8 @@ private registers and with the physical configurations of the parties, is `Ω' �
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 4, `06-geometry.tex`,
 lines 43–51. -/
 theorem readout_eq_euclideanTensorVector (x : EuclideanSpace ℂ (Config (D.system D.changes)))
-    (Ω : StateSpace L q) (Ξ : EuclideanSpace ℂ (Config D.privateOutput))
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
+    (Ξ : EuclideanSpace ℂ (Config D.privateOutput))
     (h : toEuclideanLin (physicalReadout D.physicalDimension D.privateOutput)
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight D.finalSystemEquiv) x) =
       euclideanTensorVector (WithLp.toLp 2 fun σ ↦ Ω (D.physicalConfigEquiv σ)) Ξ) :

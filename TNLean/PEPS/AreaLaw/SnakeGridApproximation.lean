@@ -7,7 +7,8 @@ import QICLean.ManyBody.Sites.Lattice.SnakeOrder
 import TNLean.MPS.Tensor.VaryingBond.SnakeGridParameters
 import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
 import QICLean.ManyBody.Sites.Relabel
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
@@ -48,6 +49,7 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction snakeEquiv snakePrefix
   card_edgeBoundary_snakePrefix_le)
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -158,9 +160,9 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   let ρ := fun k ↦ ManyBody.regionState Ω (A k)
   let e := (snakeEquiv L L).symm
   have hA (k : ℕ) (v : ↥(ManyBody.rectangularDomain L L)) :
-      v ∈ A k ↔ e v ∈ leftBlock (L * L) k := by simp [A, e]
+      v ∈ A k ↔ e v ∈ interval (L * L) 0 k := by simp [A, e]
   let f := fun k ↦ ManyBody.regionConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
-    (A k) (leftBlock (L * L) k) e (hA k) (fun _ ↦ Equiv.refl _)
+    (A k) (interval (L * L) 0 k) e (hA k) (fun _ ↦ Equiv.refl _)
   let Q := fun k ↦ spectralProjectionGE (ρ k) (Real.exp (-(S k + w)))
   let P : ∀ k, LeftBlockMatrix (L * L) q k :=
     fun k ↦ (Q k).submatrix (f k).symm (f k).symm
@@ -168,7 +170,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     (ManyBody.regionState_isHermitian (A k) Ω).isStarProjection_spectralProjectionGE _
   have hP (k : ℕ) : IsStarProjection (P k) :=
     (hQ k).map (Matrix.reindexStarAlgEquiv (f k))
-  have hρ (k : ℕ) : ManyBody.regionState ψ (leftBlock (L * L) k) =
+  have hρ (k : ℕ) : ManyBody.regionState ψ (interval (L * L) 0 k) =
       (ρ k).submatrix (f k).symm (f k).symm := by
     rw [show ρ k = ManyBody.regionState Ω (A k) from rfl]
     exact ManyBody.regionState_relabel _ _ e (hA k) _ Ω
@@ -187,9 +189,9 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     exact mul_le_mul_of_nonneg_left (cutLogBudget_snakeGridPrefix_le hq R L k)
       (by positivity)
   have hmass (k : ℕ) :
-      (((1 - P k) * ManyBody.regionState ψ (leftBlock (L * L) k)).trace.re) ≤
+      (((1 - P k) * ManyBody.regionState ψ (interval (L * L) 0 k)).trace.re) ≤
         2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s))) := by
-    have htrace : ((1 - P k) * ManyBody.regionState ψ (leftBlock (L * L) k)).trace =
+    have htrace : ((1 - P k) * ManyBody.regionState ψ (interval (L * L) 0 k)).trace =
         ((1 - Q k) * ρ k).trace := by
       rw [hρ]
       exact trace_reindexed_complement_mul (f k) (Q k) (ρ k)
@@ -227,7 +229,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   have hsum : ‖ψ - Ψ‖ ≤ ε / 2 := by
     refine herr.trans ?_
     have hterm (k : ℕ) (_ : k ∈ Finset.Ico 1 (L * L)) :
-        Real.sqrt (((1 - P k) * ManyBody.regionState ψ (leftBlock (L * L) k)).trace.re)
+        Real.sqrt (((1 - P k) * ManyBody.regionState ψ (interval (L * L) 0 k)).trace.re)
           ≤ ε / (2 * ((L * L : ℕ) : ℝ)) := by
       rw [← hone]
       exact Real.sqrt_le_sqrt (hmass k)
@@ -261,7 +263,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     apply isOpenMPS_of_internal_cutMatrix_rank_le
     intro k hk hkN
     apply Nat.le_floor
-    have hr : ((ManyBody.cutMatrix (leftBlock (L * L) k) Ψ).rank : ℝ) ≤ ((P k).rank : ℝ) := by
+    have hr : ((ManyBody.cutMatrix (interval (L * L) 0 k) Ψ).rank : ℝ) ≤ ((P k).rank : ℝ) := by
       exact_mod_cast hrank k hk hkN
     refine hr.trans ?_
     have htrace : (ρ k).trace = 1 := by

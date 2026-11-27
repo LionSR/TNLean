@@ -40,14 +40,14 @@ as a variable until its identification with the full left block. Supporting
 ALVV, arXiv:1602.08828v2, `def:trimming`, lines 646–655; LVV13,
 arXiv:1307.5143v1, `def:viable`, lines 240–244. -/
 private theorem rank_cutMatrix_full_region {L q : ℕ} {J : Finset (Fin L)}
-    (hJ : J = leftBlock L L) (u : EuclideanSpace ℂ (J → Fin q)) (k : ℕ) :
-    (cutMatrix (leftBlock L k)
+    (hJ : J = interval L 0 L) (u : EuclideanSpace ℂ (J → Fin q)) (k : ℕ) :
+    (cutMatrix (interval L 0 k)
       (WithLp.toLp 2 (fun x : Fin L → Fin q ↦ u (fun v ↦ x v.val)))).rank =
       Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (Finset.univ.filter fun v : J ↦ v.val.val < k) u)) := by
   subst J
   have hconfig (x : Fin L → Fin q) : leftConfigOfFin (L := L) x =
-      (fun v : {v : Fin L // v ∈ leftBlock L L} ↦ x v.val) := by
+      (fun v : {v : Fin L // v ∈ interval L 0 L} ↦ x v.val) := by
     funext v
     apply congrArg x
     apply Fin.ext
@@ -60,24 +60,16 @@ Supporting ALVV, arXiv:1602.08828v2, collective trimming,
 lines 660–697, and its final full-chain merge, lines 1777–1817. -/
 theorem rank_cutMatrix_fullIntervalRead {L q : ℕ}
     (u : EuclideanSpace ℂ (interval L 0 L → Fin q)) (k : ℕ) (hk : 0 < k) :
-    (cutMatrix (leftBlock L k) (WithLp.toLp 2 (fullIntervalRead L q u))).rank =
+    (cutMatrix (interval L 0 k) (WithLp.toLp 2 (fullIntervalRead L q u))).rank =
       Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (intervalTrimCut L 0 L (k - 1)) u)) := by
-  have hJ : interval L 0 L = leftBlock L L := by
-    rw [interval_zero_eq_univ (L := L) le_rfl]
-    ext v
-    constructor
-    · intro _
-      exact mem_leftBlock.mpr v.isLt
-    · intro _
-      exact Finset.mem_univ v
   have hcut : (Finset.univ.filter fun v : interval L 0 L ↦ v.val.val < k) =
       intervalTrimCut L 0 L (k - 1) := by
     ext v
     simp only [Finset.mem_filter, Finset.mem_univ, true_and,
       intervalTrimCut, Entropy.mem_subregionCut, mem_interval]
     omega
-  have h := rank_cutMatrix_full_region hJ u k
+  have h := rank_cutMatrix_full_region rfl u k
   rw [hcut] at h
   exact h
 

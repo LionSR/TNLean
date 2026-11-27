@@ -11,6 +11,7 @@ import TNLean.QCA.State.StateSpace
 import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalParentExpectation
+import QICLean.Analysis.Order.PosSemidefCommute
 
 /-!
 # Uniqueness of the state supported in primitive MPS ground spaces
@@ -52,34 +53,6 @@ section
 
 open Filter
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology
-
-namespace PositiveLinearMap
-variable {E : Type*} [Ring E] [PartialOrder E] [Module ℂ E] [StarRing E]
-  [StarOrderedRing E] [SelfAdjointDecompose E] [StarModule ℂ E] [IsScalarTower ℂ E E]
-
-/-- A positive functional supported in a projection evaluates every observable
-by its compression to that projection. This is the algebraic Cauchy--Schwarz
-support argument used for local state uniqueness. -/
-theorem apply_projection_compression_eq (f : E →ₚ[ℂ] ℂ) (p X : E)
-    (hpstar : star p = p) (hp : p * p = p) (hfp : f p = f 1) :
-    f (p * X * p) = f X := by
-  have hqstar : star (1 - p) = 1 - p := by simp only [star_sub, star_one, hpstar]
-  have hq : (1 - p) * (1 - p) = 1 - p := by noncomm_ring [hp]
-  have hfq : f (1 - p) = 0 := by rw [map_sub, hfp, sub_self]
-  have hL (Y : E) : f ((1 - p) * Y) = 0 :=
-    norm_eq_zero.mp (le_antisymm
-      (by simpa only [hqstar, hq, hfq, norm_zero, Real.sqrt_zero, zero_mul] using
-        PositiveLinearMap.norm_map_star_mul_le f (1 - p) Y) (norm_nonneg _))
-  have hR (Y : E) : f (Y * (1 - p)) = 0 :=
-    norm_eq_zero.mp (le_antisymm
-      (by simpa only [star_star, hqstar, hq, hfq, norm_zero, Real.sqrt_zero, mul_zero] using
-        PositiveLinearMap.norm_map_star_mul_le f (star Y) (1 - p)) (norm_nonneg _))
-  have hPL (Y : E) : f (p * Y) = f Y :=
-    (sub_eq_zero.mp (by simpa only [sub_mul, one_mul, map_sub] using hL Y)).symm
-  exact (sub_eq_zero.mp
-    (by simpa only [mul_sub, mul_one, map_sub] using hR (p * X))).symm.trans (hPL X)
-
-end PositiveLinearMap
 
 open SpinChain
 namespace MPSTensor
@@ -157,12 +130,21 @@ theorem norm_quasiLocalState_interval_sub_scalar_le_projection_compression
     CStarMatrix.ofMatrixStarAlgEquiv (EquivLike.injective _)
       (p * X * p - c • p)
 
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+variable [NeZero d]
+
 set_option linter.style.longLine false in
 /-- Every normalized positive state supported in all finite-interval primitive
 MPS spaces has the prescribed insertion expectations on every local interval.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3 and the boundary
 convergence argument in Section 6, lines 2649--2675. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.quasiLocalState_interval_eq_insertion_of_groundSpace_support
+theorem _root_.TNLean.MPS.ParentHamiltonian.quasiLocalState_interval_eq_insertion_of_groundSpace_support
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
@@ -184,7 +166,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.quasiLocalState_interval_eq_i
       (bulkObservable X n n) (isStarProjection_groundSpaceProjectionMatrix A _)
       (hSupport (a - n) _) (observableInsertionExpectation A ρ X)
     simpa only [quasiLocalIntervalObservable_bulkObservable, groundSpaceProjectionMatrix,
-      map_sub, map_mul, map_smul, StarAlgEquiv.apply_symm_apply,
+      map_sub, map_mul, _root_.map_smul, StarAlgEquiv.apply_symm_apply,
       ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc] using h
   have hzero := squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _)
     (Eventually.of_forall hbound) hlim
@@ -195,7 +177,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.quasiLocalState_interval_eq_i
 supported in its finite-interval MPS spaces. The competing state need not be
 translation invariant. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Section 3, lines 1469--1490, and Section 6, lines 2649--2675. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eq_quasiLocalExpectation_of_groundSpace_support
+theorem _root_.TNLean.MPS.ParentHamiltonian.eq_quasiLocalExpectation_of_groundSpace_support
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
@@ -210,14 +192,15 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eq_quasiLocalExpectation_of_g
   unfold localObservableExpectation
   dsimp only [LinearMap.comp_apply, observableInsertionExpectationₗ]
   change φ (quasiLocalObservable d Λ X) = observableInsertionExpectation A ρ _
-  rw [← hP.quasiLocalState_interval_eq_insertion_of_groundSpace_support hρ φ hφ hSupport
+  rw [← TNLean.MPS.ParentHamiltonian.quasiLocalState_interval_eq_insertion_of_groundSpace_support
+    hP hρ φ hφ hSupport
     (-((Λ.sup Int.natAbs : ℕ) : ℤ))]
   simp only [quasiLocalIntervalObservable_apply, LinearEquiv.coe_coe,
     AlgEquiv.coe_toLinearEquiv, StarAlgEquiv.coe_toAlgEquiv, AlgHom.toLinearMap_apply,
     StarAlgHom.coe_toAlgHom,
     StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
 
 end
 
@@ -259,7 +242,7 @@ determines a pure state of the quasi-local algebra. Extremality is taken
 among all states, with no translation-invariance restriction.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 1469--1482
 and Section 3. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.isPureQuasiLocalState_quasiLocalExpectation
+theorem _root_.TNLean.MPS.ParentHamiltonian.isPureQuasiLocalState_quasiLocalExpectation
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     IsPureQuasiLocalState d
@@ -275,7 +258,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.isPureQuasiLocalState_quasiLo
     (fun i => quasiLocalExpectation_groundSpaceProjection_eq_one A hP.norm
       hP.fixedPoint_psd hP.fixedPoint_is_fixed hP.trace_ne_zero i.1 i.2) ?_
   intro φ hφ hSupport
-  exact hP.eq_quasiLocalExpectation_of_groundSpace_support hρ φ hφ
+  exact TNLean.MPS.ParentHamiltonian.eq_quasiLocalExpectation_of_groundSpace_support hP hρ φ hφ
     (fun a N => hSupport (a, N))
 
 end MPSTensor

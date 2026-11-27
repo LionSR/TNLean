@@ -181,10 +181,10 @@ private noncomputable def IsMPU.canonicalFormIIOfTransferPowerWithRho
       _ = Matrix.trace X := by
         rw [hleftE]
         exact Matrix.vec_one_dotProduct_vec_eq_trace X
-  have hTP : MPSTensor.IsLeftCanonical A := by
+  have hTP : MPTensor.IsLeftCanonical A := by
     have hAdj := isTracePreservingMap_iff_traceAdjointMap_one.mp htracePres
     rw [Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose] at hAdj
-    simpa [MPSTensor.IsLeftCanonical, Kraus.IsTP, Kraus.mapLM_apply] using hAdj
+    simpa [MPTensor.IsLeftCanonical, Kraus.IsTP, Kraus.mapLM_apply] using hAdj
   have huniq : ∀ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosSemidef → T σ = σ → ∃ c : ℂ, σ = c • ρ := by
     intro σ _hσ hσfix

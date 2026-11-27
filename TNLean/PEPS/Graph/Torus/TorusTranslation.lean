@@ -27,6 +27,9 @@ These automorphisms are the symmetry under which a translation-invariant tensor
 is fixed (`TNLean/PEPS/TorusTranslationInvariant.lean`); their edge action is the
 input to that invariance and to the covariance of the blocked machinery.
 
+The graph isomorphism `torusCoordinateSwap` exchanges the two coordinates, and with
+them the two edge directions.
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
@@ -202,6 +205,39 @@ def translateIncidentEdge (a : ZMod width) (b : ZMod height) (v : TorusVertex wi
     · rcases ie.2 with hv | hv
       · exact Or.inr (by rw [h2, hv])
       · exact Or.inl (by rw [h1, hv])⟩
+
+/-! ### Exchange of the torus coordinates -/
+
+section CoordinateSwap
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (1 < width)] [Fact (1 < height)]
+
+/-- Exchange the horizontal and vertical coordinates of the torus. -/
+def torusCoordinateSwap : torusGraph width height ≃g torusGraph height width where
+  toEquiv := Equiv.prodComm (ZMod width) (ZMod height)
+  map_rel_iff' := by
+    intro v w
+    simp only [torusGraph_adj, torusHorizontalNeighbor, torusVerticalNeighbor,
+      Equiv.prodComm_apply]
+    exact or_comm
+
+/-- Coordinate exchange sends `(x, y)` to `(y, x)`. -/
+@[simp] theorem torusCoordinateSwap_apply (v : TorusVertex width height) :
+    torusCoordinateSwap v = (v.2, v.1) := rfl
+
+/-- The inverse coordinate exchange is the exchange in the opposite direction. -/
+@[simp] theorem torusCoordinateSwap_symm :
+    (torusCoordinateSwap (width := width) (height := height)).symm =
+      torusCoordinateSwap (width := height) (height := width) := rfl
+
+/-- Coordinate exchange intertwines translations after exchanging their displacements. -/
+theorem torusCoordinateSwap_translate (a : ZMod width) (b : ZMod height) :
+    (translate a b).trans torusCoordinateSwap =
+      torusCoordinateSwap.trans (translate b a) := by
+  ext v <;> rfl
+
+end CoordinateSwap
 
 end PEPS
 end TNLean

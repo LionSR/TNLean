@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingMeasurable
-import QICLean.Probability.Haar.RankUnitaryProductHaar
-import QICLean.Probability.Measurable.VariableRankSampleProjection
+import QICLean.Probability.Sampling.RankUnitaryProductHaar
+import QICLean.Probability.Haar.VariableRankSampleProjection
 import QICLean.Analysis.Subspace.ViableSubspaceTensorTransport
 
 /-!

@@ -67,6 +67,8 @@ protocol with the bounds of §8.
   (lines 658–667) and the final reference (lines 669–681).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 noncomputable section
@@ -285,7 +287,7 @@ Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, 
 and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
 theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2 ≤ L)
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
-    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩ : ‖Ω‖ = 1)
     (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
@@ -692,7 +694,7 @@ Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, 
 and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
 theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL : 2 ≤ L)
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
-    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩ : ‖Ω‖ = 1)
     (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)

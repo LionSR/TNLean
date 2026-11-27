@@ -79,8 +79,8 @@ theorem czx_carriesMPV (g x : Multiplicative (Fin 2)) :
     | (change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
        rw [mpo_idTensor, Matrix.one_mulVec]; rfl)
     | (change mpo czxDecoratedTensor N *ᵥ
-          (fun σ ↦ MPSTensor.mpv (ghzSectorTensor _) σ) =
-          fun σ ↦ MPSTensor.mpv (ghzSectorTensor _) σ
+          (fun σ ↦ MPTensor.mpv (ghzSectorTensor _) σ) =
+          fun σ ↦ MPTensor.mpv (ghzSectorTensor _) σ
        rw [mpv_ghzSectorTensor, mpv_ghzSectorTensor, mpo_czxDecoratedTensor,
          Matrix.monomial_mulVec_single]
        have hflip : ∀ c : Fin 2, spinFlip N (fun _ ↦ c) = fun _ ↦ c.rev := fun c ↦ rfl
@@ -129,20 +129,20 @@ def czxActW : (a s : Fin 2) → Matrix (Fin (czxLabelBondDim a * 1)) (Fin 1) ℂ
   | _, ⟨n + 2, h⟩ => absurd h (by omega)
 
 private theorem isReduction_gen (s : Fin 2) :
-    MPSTensor.IsReduction (actTensor czxDecoratedTensor (ghzSectorTensor s))
+    MPTensor.IsReduction (actTensor czxDecoratedTensor (ghzSectorTensor s))
       (ghzSectorTensor s.rev) (czxActV 1 s) (czxActW 1 s) := by
   have hB : actTensor czxDecoratedTensor (ghzSectorTensor s) = czxActLetter s :=
     funext (actTensor_czxDecoratedTensor_ghzSectorTensor s)
   rw [hB]
   fin_cases s <;> dsimp only <;>
-    refine MPSTensor.IsReduction.of_local_compression ?_ (fun i ↦ ?_) (fun i j ↦ ?_) <;>
+    refine MPTensor.IsReduction.of_local_compression ?_ (fun i ↦ ?_) (fun i j ↦ ?_) <;>
     (try fin_cases i) <;> (try fin_cases j) <;>
     ext r c <;> fin_cases r <;> fin_cases c <;>
     simp [czxActV, czxActW, czxActLetter, ghzSectorTensor, Matrix.mul_apply,
       Fin.sum_univ_succ, Fin.rev]
 
 private theorem isReduction_one (s : Fin 2) :
-    MPSTensor.IsReduction (actTensor (MPOTensor.idTensor 2) (ghzSectorTensor s))
+    MPTensor.IsReduction (actTensor (MPOTensor.idTensor 2) (ghzSectorTensor s))
       (ghzSectorTensor s) (czxActV 0 s) (czxActW 0 s) := by
   fin_cases s <;> exact isReduction_actTensor_idTensor _
 

@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.IntervalStateProjection
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.MultiblockQuasiLocalGroundStates
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.MultiblockQuasiLocalSupport
-import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalEventualKernelGap

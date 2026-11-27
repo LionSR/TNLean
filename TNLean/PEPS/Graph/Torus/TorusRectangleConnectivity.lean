@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Torus.TorusRectangleRegion
-import TNLean.PEPS.Tensor.Torus.TorusTranslationInvariant
-import TNLean.PEPS.Tensor.Region.RegionBlock
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 /-!
@@ -201,7 +199,6 @@ theorem torusNonseamGraph_compl_rectangle_connected
     have hr := row v.1.2.val hy hOutY ⟨cx, hcx.1⟩ ⟨v.1.1.val, hx⟩
     simpa only [ZMod.natCast_zmod_val] using hc.trans hr
 
-
 /-- The same rectangle complement is connected in the actual torus graph.
 Auxiliary lemma proved here, not stated in the source; motivated by the rectangular
 partition of SCP10, lines 1935–1957. -/
@@ -212,7 +209,6 @@ theorem torusGraph_compl_rectangle_connected [Fact (1 < width)] [Fact (1 < heigh
         Finset (TorusVertex width height)) : Set (TorusVertex width height))).Connected := by
   exact (torusNonseamGraph_compl_rectangle_connected xStart yStart xLen yLen hxLen hyLen).mono
     (fun _ _ h => torusNonseamGraph_le_torusGraph h)
-
 
 /-- A positive-length bounded coordinate rectangle is connected without using
 wrap bonds. Auxiliary lemma proved here, not stated in the source; motivated by the
@@ -325,7 +321,6 @@ theorem torusUpEdge_not_incident_rectangle_of_wrap
   unfold ManyBody.IsRegionIncidentEdge torusUpEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, or_self, not_false_eq_true]
-
 
 /-- A positive bounded rectangle with a nonzero starting column has an actual
 left boundary edge. Auxiliary lemma proved here; motivated by the boundary bonds of

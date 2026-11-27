@@ -47,6 +47,8 @@ empty chain, where both sides equal `d`.
   symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix
 

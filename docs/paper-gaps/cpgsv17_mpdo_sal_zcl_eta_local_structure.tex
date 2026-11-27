@@ -92,13 +92,12 @@ separately for each $N$.\footnote{The formal statements are
 the partial-trace preservation result is
 \leanid{Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong}.}
 
-The desired commuting product form is recorded as an eta-local structure for
+The desired commuting product form is recorded as the commuting form of
 $\mathcal K$.\footnote{The formal structure is
-\leanid{MPOTensor.EtaLocalStructureData}.} This structure contains a positive,
-translation-invariant two-site bond and its realization of the finite-chain
-MPO. The development derives the commuting-form property from this structure
-and, after assuming zero correlation length (ZCL) separately, proves the
-GSNNCH--ZCL consequence.
+\leanid{MPOTensor.CommutingForm}.} This structure contains one positive
+two-site bond with commuting translates and its realization of the finite-chain
+MPO at every length. After assuming zero correlation length (ZCL) separately,
+the development proves the GSNNCH--ZCL consequence.
 
 Earlier versions introduced a structure that combined unrelated local,
 commuting-form, and doubled-index hypotheses. They then used the doubled-index
@@ -1002,7 +1001,7 @@ cyclic neighboring product unchanged by
 \leanid{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}.
 Combining the positive rephased factorization with the conditional bond
 construction gives
-\leanid{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}.
+\leanid{MPOTensor.nonempty_commutingForm_of_recurrentSupport}.
 
 This general theorem is explicitly scope-restricted because recurrence is not
 a hypothesis of Lemma C.4 of Ref.~\cite{Cirac2016MPDO_arXiv}. The restriction
@@ -1078,9 +1077,9 @@ Here the canonical bond is determined by the physical-sector factorization.
 \footnote{The formal declaration is
 \leanid{MPOTensor.PhysicalSectorFactorization.mpo_eq_product_physicalBond}.}
 Together with positivity of the neighboring operators, this gives the data
-required to construct \leanid{MPOTensor.EtaLocalStructureData}. The
+required to construct \leanid{MPOTensor.CommutingForm}. The
 conditional construction is
-\leanid{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}, and its
+\leanid{MPOTensor.PhysicalSectorFactorization.commutingForm}, and its
 normalization scalar is one. The raw inverse-map physical-sector factorization
 and its coherently positive normalization are constructed for every injective
 tensor satisfying SAL; ZCL is not needed.
@@ -1098,7 +1097,7 @@ The positive commuting bond, its exact all-length product realization, and the
 eta-local structure asserted by Proposition \texttt{3to4} follow from the
 coherently positive physical-sector factorization. Their composition with the
 SAL theorem is
-\leanid{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}. Thus the eta-local
+\leanid{MPOTensor.nonempty_commutingForm_of_isSAL}. Thus the eta-local
 conclusion of Proposition C.8 of Ref.~\cite{Cirac2016MPDO_arXiv} is formalized
 from its source hypotheses.
 
@@ -1133,7 +1132,7 @@ equivalence and hence the complete Hilbert space.
 
 This note records a resolved coherent-positive-choice and primitivity gap in
 the SAL-to-positive-bond construction of
-\leanid{MPOTensor.EtaLocalStructureData}. Zero-weight sectors are
+\leanid{MPOTensor.CommutingForm}. Zero-weight sectors are
 reparameterized without changing the physical decomposition. Injectivity then
 implies recurrence, and a coherent vertex rephasing makes every neighboring
 operator positive semidefinite. The general recurrence theorem remains useful

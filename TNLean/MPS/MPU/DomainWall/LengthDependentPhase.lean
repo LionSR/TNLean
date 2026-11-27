@@ -45,12 +45,12 @@ then `c_N = λ^N` for a phase `λ`. The source's assumptions that `U` is a matri
 and that `A` is injective are not needed. -/
 theorem exists_eq_pow_of_mpo_mulVec_mpv_eq_smul [NeZero DB] (U : MPOTensor d DU)
     (A : MPSTensor d DA) {B : MPSTensor d DB} (hB : Kraus.IsInjective B) (c : ℕ → ℂ)
-    (hc : ∀ N, 0 < N → mpo U N *ᵥ (fun τ : Fin N → Fin d ↦ MPSTensor.mpv A τ) =
-      c N • fun σ : Fin N → Fin d ↦ MPSTensor.mpv B σ)
+    (hc : ∀ N, 0 < N → mpo U N *ᵥ (fun τ : Fin N → Fin d ↦ MPTensor.mpv A τ) =
+      c N • fun σ : Fin N → Fin d ↦ MPTensor.mpv B σ)
     (hnorm : ∀ N, 0 < N → ‖c N‖ = 1) :
     ∃ lam : ℂ, ‖lam‖ = 1 ∧ ∀ N, 0 < N → c N = lam ^ N := by
   have hC : ∀ N, 0 < N → ∀ σ : Fin N → Fin d,
-      MPSTensor.mpv (actTensor U A) σ = c N * MPSTensor.mpv B σ := by
+      MPTensor.mpv (actTensor U A) σ = c N * MPTensor.mpv B σ := by
     intro N hN σ
     have := congrFun ((mpo_mulVec_mpv U A N).symm.trans (hc N hN)) σ
     simpa using this

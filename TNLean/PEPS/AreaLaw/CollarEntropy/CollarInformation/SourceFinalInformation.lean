@@ -8,7 +8,8 @@ import TNLean.PEPS.AreaLaw.Collar.Scales.FinalSharpErrorPower
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FinalSharpTransportSmallness
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 
 /-!
 # Conditional final-scale information for the concrete physical source
@@ -33,6 +34,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card`: the physical dimension in the
   collar information continuity cost.
 -/
+
+open ManyBody (latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
 
 section PhysicalInformationDimension
 
@@ -165,7 +168,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
@@ -314,7 +317,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
@@ -374,7 +377,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤

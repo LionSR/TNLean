@@ -27,6 +27,8 @@ Source: PGVWC07, arXiv:quant-ph/0608197, the normalization in the proof of
 Theorem 4, lines 765--770, and first clause of Theorem 8, lines 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation
 open scoped BigOperators Kronecker
 
@@ -57,7 +59,7 @@ theorem exists_unital_gauge_of_isNBlkInjective [NeZero D] (A : MPSTensor d D)
     dsimp [ζ]
     exact_mod_cast (inv_ne_zero hsqrt)
   have hBL : Kraus.IsNBlkInjective B L :=
-    isNBlkInjective_of_gaugeEquiv (isNBlkInjective_smul ζ hζ hC1) hgauge
+    isNBlkInjective_of_gaugeEquiv ((isNBlkInjective_smul_iff hζ A L).2 hC1) hgauge
   refine ⟨B, ζ, hζ, hrow, hgauge, fun n hn ↦ ?_⟩
   exact (isNBlkInjective_smul_iff hζ A n).mp
     (isNBlkInjective_of_gaugeEquiv (isNBlkInjective_of_le_of_unital hrow hBL hn) hgauge.symm)
@@ -86,7 +88,7 @@ theorem quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective [NeZero D]
     cutCoefficientRank (mpv A (N := N)) (L + j.val) = D * D := by
   obtain ⟨_, _, _, _, _, hlong⟩ := exists_unital_gauge_of_isNBlkInjective A hC1 hletter
   have hj := j.isLt
-  rw [cutCoefficientRank_eq_cutRank _ (by omega)]
+  rw [cutCoefficientRank_eq_cutRank]
   exact cutRank_mpv_eq_of_isNBlkInjective (by omega) (hlong _ (by omega)) (hlong _ (by omega))
 
 /-- Any actual physical cut-basis window of a nonzero condition-C1 tensor

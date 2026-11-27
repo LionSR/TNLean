@@ -57,6 +57,11 @@ rather than by their imports. Two come from unused imports
 (`PEPS/Approximation`–`PEPS/AreaLaw`, `PEPS/Examples`–`PEPS/Graph`). One is in
 MPS (`MPS/FundamentalTheorem`–`MPS/ParentHamiltonian`, one gauge lemma).
 
+*Status:* the declaration moves among the PEPS layers are done. The import
+check records one upward import (`QCA/LocalAlgebra/Blocking`, which waits for
+`MPSTensor.blockedConfigEquiv` to move to QICLean) and no pair of directories
+that import each other.
+
 ## Method
 
 Each module was classified by its statements, not by its name:
@@ -283,7 +288,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 | `PEPS/RegionBlock` | 48 | `PEPS/FundamentalTheorem/Normal/RegionInsertion` 24, `PEPS/FundamentalTheorem/Normal/CoarseThreeSite` 10, `PEPS/Injectivity/Region` 10, `PEPS/Tensor/Region` 2, `PEPS/FundamentalTheorem/Torus/Window` 2 |
 | `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` | 6 | `PEPS/FundamentalTheorem/Injective` 6 |
 | `MPS/Tensor/Defs`, `MPS/Tensor/OpenBoundary` (files) | 2 | `MPS/Tensor` |
-| `Archive` | 4 | Not in the map (outside the production build); see the questions. |
+| `Archive` | 4 | No layer: outside the production build, kept in place (see the status below and question 5). |
 
 The top-level directories `Spectral`, `Wielandt` and `PiAlgebra` disappear. So
 do the MPS directories `Core`, `Chain`, `SharedInfra`, `Overlap`,
@@ -355,7 +360,7 @@ No library module imports an example after the map.
 | `MPS/Examples/Fibonacci` | 20 | Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`: MPO algebra, action on normal states, anomaly (no single normal invariant state), NIM-representations, L-symbol equals F-symbol, golden chain, string-net F- and G-symbols |
 | `MPS/Examples/Z3` | 18 | `ℤ₃` MPO symmetries: anomalous representation `{1, U, U†}` (fusion and inverse-fusion blocks, condensation defect, anomaly class, domain-wall phase) and the non-anomalous clock symmetry (trivial class) |
 | `MPS/Examples/Z2Z2` | 13 | `ℤ₂ × ℤ₂` symmetries: anomalous condensation with the mixed three-cocycle (split and non-split blocks, blocked anomaly) and the Klein-four spin-chain symmetry and its anomaly |
-| `MPS/Examples/CZX` | 17 | CZX matrix product unitary (decorated and undecorated): fusion tensors, anomaly class from L-symbols, domain walls with semionic exchange, no invariant normal state, CZX plus identity; the `ℤ₂` group-cocycle operator as a symmetry of spin-chain Hamiltonians |
+| `MPS/Examples/CZX` | 32 | CZX matrix product unitary (decorated and undecorated): fusion tensors, anomaly class from L-symbols, domain walls with semionic exchange, no invariant normal state, CZX plus identity; the `ℤ₂` group-cocycle operator as a symmetry of spin-chain Hamiltonians; in `Gauging` (15), the once-blocked decorated CZX unitary of arXiv:2502.20257 and its gauging: dagger gauge, source factors, GHZ action, fusion and action tensors, permuted blocks and anomaly, defect maps, Gauss circuit tuples, gauge-invariant subspace, completions, gauged MPS |
 | `MPS/Examples/CZY` | 4 | CZY operator of the Levin–Gu edge: reduced tensor, fusion maps, stacked square as non-split compression |
 | `MPS/Examples/KramersWannier` | 8 | Kramers–Wannier duality: fusion `D² = 2^L(1+η)T`, action on product and GHZ states, MPO bimodule, circuit, sectors |
 | `MPS/Examples/Shift` | 24 | Shift matrix product unitaries and the physical swap: index at every blocking, source factors and ranks, standard forms, strict and stabilized equivalence, symmetry transport by the swap, conjugation and time-reversal phases |
@@ -458,120 +463,105 @@ section):
 - `PEPS/Injectivity <-> PEPS/ParentHamiltonian`: `PEPS.Injectivity.Regular.GInjectivePhysicalMap` → `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation`; `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Injectivity.Region.CycleMPSInjectivity`
 - `PEPS/Injectivity <-> PEPS/Tensor`: `PEPS.Injectivity.Boundary.BoundaryIsometry` → `PEPS.Tensor.GraphState.RegularBoundaryState`; `PEPS.Tensor.GraphState.RegularClosedGauge` → `PEPS.Injectivity.Regular.RegularRegionGaugeContraction`
 
+*Status:* all eight are gone; the declarations responsible were moved to the
+layer of their statements (see "Imports that remain" below).
+
 ## Declaration-level work
 
 ### Imports that remain
 
-Each of these 47 imports points outside the allowed layers after the map. The
-map records them, and `--check` fails on any other violation and on a recorded
-one that no longer occurs. Each is removed in one of two ways:
-
-- moving the named declarations to a module of the importer's layer;
-- dropping an import the importer does not use.
+The 45 PEPS imports recorded after the map are repaired: every module of
+`PEPS/Graph`, `PEPS/Tensor`, `PEPS/Injectivity`, `PEPS/FundamentalTheorem` and
+`PEPS/ParentHamiltonian` now imports only modules of its own or a lower layer, and
+no two PEPS directories import each other. One recorded import remains:
 
 | Importer | Imported | Declarations used, or remedy |
 |---|---|---|
-| `PEPS.Graph.Cell.TorusPlaquetteRealization` | `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement` | uses torusPlaquetteWalk, torusPlaquetteRegion |
-| `PEPS.Graph.Cell.TorusSimplyConnectedComplement` | `PEPS.Injectivity.Normal.NormalPairBlocking` | uses nonempty_regionBoundaryEdge_of_connected |
-| `PEPS.Graph.Holonomy.RegularBoundaryRoute` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBoundaryEdgeComplEquiv |
-| `PEPS.Graph.Holonomy.RegularInternalGaugeTransport` | `PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove` | uses regularRegionBondExtension |
-| `PEPS.Graph.Holonomy.RegularRegionConnectivity` | `PEPS.Tensor.GraphState.RegularOpenRegion` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Graph.Holonomy.RegularRegionCoordinates` | `PEPS.Tensor.GraphState.RegularRegionCycleRank` | uses orderedEdgeEquivEdgeSet |
-| `PEPS.Graph.Holonomy.RegularRegionCounting` | `PEPS.Tensor.GraphState.RegularOpenRegion` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Graph.Holonomy.RegularRegionTreeGauge` | `PEPS.Tensor.GraphState.RegularTwistedRegion` | uses regularTwistedLabels |
-| `PEPS.Graph.Holonomy.RegularTorusBondCounting` | `PEPS.Injectivity.Closure.RegularTorusGramExpansion` | uses torusPermutationSiteLabels |
-| `PEPS.Graph.Holonomy.RegularTorusCompatibility` | `PEPS.Injectivity.Closure.TorusGClosure` | uses torusHorizontalClosure, torusVerticalClosure |
-| `PEPS.Graph.Holonomy.RegularTwistedRegionConnectivity` | `PEPS.Tensor.GraphState.RegularTwistedRegion` | uses regularTwistedLabels, IsTwistedRegionLabelCompatible |
-| `PEPS.Graph.Holonomy.RegularWalkHolonomy` | `PEPS.Tensor.GraphState.RegularClosedGauge` | uses regularVertexGaugeOperators |
-| `PEPS.Graph.Holonomy.TorusDirectedBondUpdate` | `PEPS.Tensor.Torus.TorusTranslationInvariant` | uses torusRightEdge_injective, torusUpEdge_injective, torusRightEdge_ne_torusUpEdge |
-| `PEPS.Graph.Holonomy.TorusParallelSection` | `PEPS.Tensor.Torus.TorusSiteTensor` | uses torusVertex_apply_eq_apply_zero_of_shift |
-| `PEPS.Graph.Holonomy.TorusRegionLiftGauge` | `PEPS.Injectivity.TorusSector.RegularTorusCut` | uses torusClosureEdgeAssignment, torusClosureEdgeAssignment_right, torusClosureEdgeAssignment_up, torusRightEdge_head_of_wrap, torusUpEdge_head_of_wrap |
-| `PEPS.Graph.Plaquette.TorusJointFluxGeometry` | `PEPS.Injectivity.Flux.TorusTranslatedFluxMove` | uses up_lt_iff, horizontal_ne_vertical |
-| `PEPS.Graph.Plaquette.TorusSweptPatchEndpointGeometry` | `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement` | uses torusPlaquetteWalk |
-| `PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry` | `PEPS.FundamentalTheorem.Torus.Window.WindowComplement` | uses torusArcRectangle, mem_torusArcRectangle |
-| `PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry` | `PEPS.Tensor.Region.RegionTransport` | uses mem_Region_map |
-| `PEPS.Graph.Plaquette.TwoPlaquetteGeometry` | `PEPS.Tensor.GraphState.RegularRegionCycleRank` | uses orderedEdgeEquivEdgeSet, inducedRegionEdgeEquiv |
-| `PEPS.Graph.Plaquette.TwoPlaquetteGeometry` | `PEPS.Tensor.Network.IsoTransport` | uses equiv |
-| `PEPS.Graph.Plaquette.VerticalTwoPlaquetteGeometry` | `PEPS.FundamentalTheorem.Torus.TorusCoordinateSwap` | uses torusCoordinateSwap |
-| `PEPS.Graph.Region.EdgeMapSubgraph` | `PEPS.Tensor.Network.IsoTransport` | uses map_endpoints |
-| `PEPS.Graph.Region.EdgeScalarSolve` | `PEPS.Tensor.Network.Defs` | uses IncidentEdge, symm |
-| `PEPS.Graph.Region.SquareLatticeEdgeCount` | `PEPS.Injectivity.Normal.NormalBlocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Graph.Torus.KitaevPeriodicTiling` | `PEPS.Examples.ToricCode.KitaevCheckerboardBlocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Graph.Torus.TorusLabelledBondGeometry` | `PEPS.Injectivity.TorusSector.TorusBondClosureSeamMovement` | uses torusBondClosureLabelsAt, exists_torusBondGauge_eq_closureAt |
-| `PEPS.Graph.Torus.TorusLabelledBondGeometry` | `PEPS.Injectivity.TorusSector.TorusBondFlatConnection` | uses torusBondGauge, IsTorusBondFlat, torusBondClosureLabels, exists_torusBondGauge_eq_closure |
-| `PEPS.Graph.Torus.TorusLatticeGraph` | `PEPS.Tensor.Network.Defs` | uses symm |
-| `PEPS.Graph.Torus.TorusRectangleBoundaryCard` | `PEPS.Tensor.Torus.TorusSiteTensor` | uses torusEdgeEquiv |
-| `PEPS.Graph.Torus.TorusRectangleConnectivity` | `PEPS.Tensor.Region.RegionBlock` | uses ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge |
-| `PEPS.Graph.Torus.TorusRectangleConnectivity` | `PEPS.Tensor.Torus.TorusTranslationInvariant` | uses torusRightEdge, torusUpEdge |
-| `PEPS.Graph.Torus.TorusSingletonRegion` | `PEPS.Injectivity.Entropy.RegularTorusEntropy` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Graph.Walk.TorusWalkWinding` | `PEPS.Injectivity.TorusSector.RegularTorusCut` | uses torusClosureEdgeAssignment, torusRightEdge_head_of_wrap, torusUpEdge_head_of_wrap |
-| `PEPS.Injectivity.Charge.RegularTwistedStateNonzero` | `PEPS.FundamentalTheorem.Normal.NormalComparisonScalar` | uses regionBlockedWeight_univ |
-| `PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity` | uses prod_region_incident_eq_prod_edge |
-| `PEPS.Injectivity.Region.DisjointUnionSetup` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Injectivity.Region.ReindexInjectivity` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBlockedWeight_reindexTensor |
-| `PEPS.Injectivity.Regular.GInjectivePhysicalMap` | `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation` | uses physicalDeform |
-| `PEPS.Tensor.GraphState.GraphBondContraction` | `PEPS.FundamentalTheorem.Injective.GaugeAction` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Tensor.GraphState.RegularClosedGauge` | `PEPS.Injectivity.Regular.RegularRegionGaugeContraction` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Tensor.GraphState.RegularRegionGram` | `PEPS.Injectivity.Regular.RegularSiteGram` | uses regularLegProjector_fin, regularLegProjector_apply |
-| `PEPS.Tensor.Region.OpenRegionContraction` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence` | uses sum_regionBlockedWeight_mul_complement |
-| `PEPS.Tensor.Region.OpenRegionContraction` | `PEPS.Injectivity.Normal.NormalBlocking` | uses squareLatticeContiguousRectangle |
-| `PEPS.Tensor.SquareLattice.Basic` | `PEPS.Injectivity.Normal.NormalBlocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Tensor.SquareLattice.SquareGridSource` | `PEPS.Injectivity.Normal.NormalBlocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `QCA.LocalAlgebra.Blocking` | `MPS.Tensor.Physical.Blocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
+| `QCA.LocalAlgebra.Blocking` | `MPS.Tensor.Physical.Blocking` | names only `Kraus.blockPhysDim` and `Kraus.decodeBlockEquiv` of `QICLean.Kraus.Blocking`, but `QCA.QuasiLocal.BlockingIntervalCoordinates` reaches `MPSTensor.blockedConfigEquiv` through it. The import is dropped once `MPSTensor.blockedConfigEquiv` and `ofFn_blockedConfigEquiv`, which mention no tensor, move to QICLean's `Kraus/Blocking`. |
 
-Remedies by host module (the declarations to move and where):
+The PEPS declarations moved to the module of the lower layer about the same
+object. Names, statements and namespaces are unchanged.
 
-- **`PEPS/Tensor/Network/Defs`:**
-  - `IncidentEdge` and its `Fintype` instance go to `Graph/Region`.
-  - `IsVertexInjective` and `Tensor.IsInjective` go to `Injectivity/Region`.
-- **`PEPS/Tensor/Network/IsoTransport`:**
-  - The edge maps `Edge.map`, `Edge.map_endpoints`, `Edge.equiv` and
-    `IncidentEdge.equiv` go to QICLean beside `ManyBody.Edge`, or to
-    `Graph/Region`.
-  - The transport of injectivity goes to `Injectivity/Region`.
-- **`PEPS/Tensor/Region/RegionBlock`:**
-  - `ManyBody.IsRegionBoundaryEdge`, `ManyBody.IsRegionIncidentEdge` and
-    `ManyBody.isRegionBoundaryEdge_touches` go to `Graph/Region`.
-  - `RegionBlockedTensorInjective` goes to `Injectivity/Region`.
-- **`PEPS/Tensor/Torus/TorusTranslationInvariant`:** `torusRightEdge`,
-  `torusUpEdge` and their lemmas go to `Graph/Torus`.
-- **`TorusSiteTensor`:** `torusEdgeEquiv` and the shift lemma go to
-  `Graph/Torus`.
-- **`RegularClosedGauge`:** `regularVertexGaugeOperators` goes to
-  `Graph/Holonomy`.
-- **`RegularTwistedRegion`:** the twisted labels go to `Graph/Holonomy`.
-- **`RegularRegionCycleRank`:** `inducedRegionEdgeEquiv` and
-  `orderedEdgeEquivEdgeSet` go to `Graph/Region`.
-- **`RegularTorusGramExpansion`, `TorusGClosure`, `RegularTorusCut`,
-  `TorusBondFlatConnection`, `TorusBondClosureSeamMovement`:** the label maps,
-  closures and flat connections of bond labels go to `Graph/Holonomy`.
-- **`TorusPlaquetteFluxMeasurement`, `TorusTranslatedFluxMove`:** the plaquette
-  region and walk go to `Graph/Plaquette`.
-- **`NormalBlocking`, `NormalPairBlocking`, `Insertion`, `GaugeInjectivity`,
-  `WindowComplement`, `TorusCoordinateSwap`:** the region and torus geometry
-  each contains goes to `Graph`.
-- **`RegionFibers`, `BlockRangeCoincidence`, `NormalComparisonScalar`,
-  `Insertion`:** the blocked-weight identities go to `Tensor/Region`.
-- **`RegularSiteGram`:** `regularLegProjector` goes to `Tensor/GraphState`.
-- **`RegionPhysicalDeformation`:** `physicalDeform` and its two lemmas go to
-  `Tensor/Region`.
-- **`QCA/LocalAlgebra/Blocking`:** the import of `MPS/Tensor/Physical/Blocking` is replaced by
-  `QICLean.Kraus.Blocking`, since only `Kraus.blockPhysDim` and
-  `Kraus.decodeBlockEquiv` are used. `MPSTensor.blockedConfigEquiv` and
-  `ofFn_blockedConfigEquiv` mention no tensor and go to QICLean's
-  `Kraus/Blocking`.
+- **`Graph/Region/EdgeMapSubgraph`:** `IncidentEdge` and its `Fintype` instance
+  (from `Tensor/Network/Defs`); the edge action `Edge.map`, `Edge.equiv` and
+  their lemmas, `IncidentEdge.equiv`, `toSymm`, `fromSymm` (from
+  `Tensor/Network/IsoTransport`); `edgeLeftIncident`, `edgeRightIncident` (from
+  `Tensor/Network/Blocking`); `Region.map`, `mem_Region_map`,
+  `mem_Region_map_apply` (from `Tensor/Region/RegionTransport`);
+  `prod_incident_eq_prod_edge` (from `FundamentalTheorem/Injective/GaugeAction`)
+  and `prod_region_incident_eq_prod_edge` (from
+  `FundamentalTheorem/Normal/RegionInsertion/GaugeInjectivity`).
+- **`Graph/Region/InjectiveRegion`:** `isRegionIncidentEdge_of_regionVertex`
+  (from `Tensor/Region/OpenRegionContraction`); `isRegionBoundaryEdge_compl_iff`,
+  `regionBoundaryEdgeToCompl`, `regionBoundaryEdgeComplEquiv` (from
+  `RegionInsertion/Insertion`); `nonempty_regionBoundaryEdge_of_connected` (from
+  `Injectivity/Normal/NormalPairBlocking`); `orderedEdgeEquivEdgeSet`,
+  `inducedRegionEdgeEquiv` (from `Tensor/GraphState/RegularRegionCycleRank`).
+- **`Graph/Region/SquareLatticeEdgeCount`:** the coordinate rectangles
+  `squareLatticeRectangle`, `squareLatticeCoordinateInterval`,
+  `squareLatticeContiguousRectangle` and their lemmas (from
+  `Injectivity/Normal/NormalBlocking`).
+- **`Graph/Torus/TorusLatticeGraph`:** `torusRightEdge`, `torusUpEdge` and their
+  orientation and injectivity lemmas (from `Tensor/Torus/TorusTranslationInvariant`);
+  `torusVertex_apply_eq_apply_zero_of_shift`, the four legs and `torusEdgeEquiv`
+  (from `Tensor/Torus/TorusSiteTensor`); `torusIncidentLeg` and
+  `torusIncidentLegEquiv` (from `Tensor/Torus/TorusIncidentCoordinates`);
+  `torusRightEdge_head_of_wrap`, `torusUpEdge_head_of_wrap` (from
+  `Injectivity/TorusSector/RegularTorusCut`).
+- **`Graph/Torus/TorusRectangleRegion`:** `torusArcRectangle` (from
+  `FundamentalTheorem/Torus/Window/WindowComplement`).
+- **`Graph/Torus/TorusTranslation`:** `torusCoordinateSwap` and its three lemmas
+  (from `FundamentalTheorem/Torus/TorusCoordinateSwap`).
+- **`Graph/Holonomy`:** `regularVertexGaugeOperators` to `RegularWalkHolonomy`
+  (from `Tensor/GraphState/RegularClosedGauge`); `regularTwistedLabels` and
+  `IsTwistedRegionLabelCompatible` to `RegularRegionConnectivity` (from
+  `Tensor/GraphState/RegularTwistedRegion`); `regularRegionBondExtension` to
+  `RegularInternalGaugeTransport` (from `Injectivity/Flux/RegularTwoCycleGlobalFluxMove`);
+  `regularTreeCycleAssignment` to `RegularRegionTreeGauge` (from
+  `Injectivity/Flux/RegularTwoCycleFluxMove`); `torusPermutationSiteLabels` to
+  `RegularTorusBondCounting` (from `Injectivity/Closure/RegularTorusGramExpansion`);
+  `torusHorizontalClosure`, `torusVerticalClosure` (from
+  `Injectivity/Closure/TorusGClosure`) and `torusClosureEdgeAssignment` (from
+  `RegularTorusCut`) to `RegularTorusCompatibility`.
+- **`Graph/Plaquette/TwoPlaquetteGeometry`:** `torusPlaquetteWalk`,
+  `torusPlaquetteRegion`, `regularWalkHolonomy_torusPlaquetteWalk` (from
+  `Injectivity/Flux/TorusPlaquetteFluxMeasurement`).
+- **`Tensor/Network/Defs`:** `reindexTensor` and its two lemmas (from
+  `FundamentalTheorem/Injective/OneVertexComparison`).
+- **`Tensor/Region/RegionBlock`:** `regionComplementBoundaryConfig` (from
+  `RegionInsertion/Insertion`), `regionBlockedWeight_univ` (from
+  `Normal/NormalComparisonScalar`), `regionBlockedWeight_reindexTensor` (from
+  `RegionInsertion/Insertion`), `regionBlockedTensorMap` and two lemmas (from
+  `RegionInsertion/OutRegionEndpoint`).
+- **`Tensor/Region/ConfigurationCalculus`:** the region/complement decomposition
+  of the closed state coefficient, `regionInteriorBondProd` through
+  `stateCoeff_eq_regionComplement` (from `RegionInsertion/RegionFibers`),
+  `sum_regionBlockedWeight_mul_complement` (from
+  `RegionInsertion/BlockRangeCoincidence`) and `regionInteriorBondProd_pos` (from
+  `RegionInsertion/ResonateReconcile`). The two theorems left in `RegionFibers`
+  (`regionInsertedCoeff_identity_eq_doubleSum`, `regionInsertedCoeff_one_eq_stateCoeff`)
+  joined `regionInsertedCoeff_identity` in `Normal/NormalFundamentalTheorem`, and the
+  module `RegionInsertion/RegionFibers` is gone.
+- **`Tensor/Region/RegionPhysicalMap`:** `physicalDeform` and its two lemmas (from
+  `ParentHamiltonian/Region/RegionPhysicalDeformation`).
 
-Imports that name no declaration of the target, and should be dropped or
-replaced by the lower module actually used:
+One repair went the other way, because the statements belong to the higher
+layer: the four declarations of `Graph/Torus/TorusLabelledBondGeometry` about the
+bond labels `TorusBondLabels` (`torusLabelledBondPair`,
+`exists_torusLabelledClosureGauge`, `exists_torusLabelledBondGauge_eq_closure`,
+`torusPlaquette_flat_of_uncut_relative`) moved up to
+`Injectivity/TorusSector/TorusBondClosureSeamMovement`.
 
-- `KitaevPeriodicTiling` → `KitaevCheckerboardBlocking`
-- `SquareLatticeEdgeCount` → `NormalBlocking`
-- `SquareGridSource` → `NormalBlocking`
-- `Basic` → `NormalBlocking`
-- `GraphBondContraction` → `GaugeAction` (import `Blocking`)
-- `RegularClosedGauge` → `RegularRegionGaugeContraction` (import
-  `RegularRegionTreeGauge`)
-- `TorusLatticeGraph` → `Defs`
+Two proofs changed so that no declaration had to move: `torusIncidentLeg_surjective`
+is proved from the four legs directly, and `torusIncidentCoordinates_injective`
+(which stays in `Tensor/Torus/TorusIncidentCoordinates`) from it, instead of the
+reverse; `sum_regularBoundary_translation_eq_card_mul_projector` in
+`Tensor/GraphState/RegularRegionGram` is proved from `regularBoundaryProjector`
+directly, instead of through `regularLegProjector` of `Injectivity/Regular/RegularSiteGram`.
+
+The other recorded imports named no declaration of the target, or none after the
+moves, and were dropped or replaced by the lower module used. Modules that had
+reached a higher module only through a dropped import now import it directly.
 
 One pair of sibling directories inside a layer also imports each other:
 `MPS/AreaLaw/Chain` and `MPS/AreaLaw/Entropy`. Three domain-geometry modules
@@ -1196,6 +1186,22 @@ rewritten by hand in the same change, from this document.
    kept as documentary?
    *Recommendation:* delete it, keeping the counterexamples that are still
    cited as `Examples` modules.
+   *Status (recorded, not moved):* `TNLean/Archive` belongs to no layer. It is
+   excluded from the root import `TNLean.lean` and from the generated
+   aggregators, and the checks of imports, small modules and pass-through
+   declarations skip it. Its four modules sit on top of the library: they
+   import Mathlib, QICLean and the production modules
+   `MPS/Tensor/Words/Basic`, `MPS/Transfer/Irreducible` (three modules),
+   `MPS/Tensor/Physical/BlockingTransfer` and
+   `MPS/Operator/DensityOperator/ZCL`, and no production module imports any of
+   them. Two are the Perron--Frobenius counterexamples cited in
+   `docs/counterexamples.md` and in the docstring of
+   `MPS/Operator/Simple/SimpleLocalStructure`; one is the separation
+   counterexample `BlockSepCounterexample`; one is the alternate periodicity
+   proof `BlockingPeriodicityCFII2`, whose live counterpart is
+   `MPS/Transfer/Irreducible/BlockingViaAdjoint`. CI builds a changed Archive
+   module explicitly (`docs/ci-automation.md`). Deleting it or moving the cited
+   counterexamples into `Examples` remains the maintainer's decision.
 6. **When to apply.** The map was computed on `e8f8dd3202`, during a
    compile-fix pass, and touches about 4,400 modules.
    *Recommendation:* apply it on a quiet main right after that pass lands. Run
@@ -1204,9 +1210,11 @@ rewritten by hand in the same change, from this document.
    test.
 7. **Symmetry content inside `MPS/MPDO`.** `MPDO/MPOAction` (L-symbols) and
    `MPDO/CZX` are about MPO symmetries, and no `MPDO` module imports them.
-   *Recommendation:* move them to `MPS/Symmetry/MPOSymmetry` and
-   `MPS/Examples/CZX` in the same change. They were left in `MPDO` because the
-   statements also mention density operators.
+   *Done for `MPDO/CZX`:* its fifteen CZX modules (the once-blocked decorated
+   CZX unitary of arXiv:2502.20257 and its gauging) are the worked example
+   `MPS/Examples/CZX/Gauging`; the two modules about gauging for an arbitrary
+   group, `GaugeInvariantSubspace` and `GaussProjectorPlacement`, stay in the
+   library at the top level of `MPS/MPDO`. `MPDO/MPOAction` is still to move.
 8. **Merging of compile-heavy modules.** Several one-declaration modules are
    single large decided computations, split for parallel compilation (the
    Ising letter sectors). The map leaves them unmerged.
@@ -1390,7 +1398,7 @@ consequences).
 | `SharedInfra.CoisometryGauge` | QICLean / Tensor | `unitaryGL`, `coisometryExtendGL` and lemmas (8 of 9) | to QICLean matrix |
 | `Chain.VaryingBondOBC` (+ merged `MinimalCutRepresentationPadding`) | QICLean / Tensor | `Matrix.zeroPad`, `zeroPad_mul`, `zeroPad_mulVec` | to QICLean matrix |
 | `Preparation.CutRank` | sites / Tensor | `cutConfig`, `cutMatrix`, `cutRank` of a vector | to Sites; minimal bond dimension stays |
-| `AreaLaw.OpenMPS` | sites / Tensor | `leftBlock` and lemmas | to Sites |
+| `AreaLaw.OpenMPS` | sites / Tensor | the cut after `k` sites, now QICLean's `ManyBody.interval L 0 k` | done |
 | `Symmetry.MPDO.Defs` | QICLean / Operator | `Matrix.IsStrongSymmetry`, `Matrix.IsWeakSymmetry` | to QICLean matrix |
 | `MPDO.MutualInfoMonotone` | QICLean / Operator | `tripartiteSplitEquiv`, `biSplitEquiv`, `ssa_cast_ineq` | to QICLean entropy |
 | `Core.MultiBlock` | dual system | `MPSTensor.CanonicalForm` (block-diagonal tensor with injective blocks) beside `toTensorFromBlocks`, `SectorDecomposition`, `IsBNTCanonicalForm` | one structure (F4) |
@@ -1678,7 +1686,7 @@ BNTSectors; MPOAction; CZX; Examples last. No two siblings import each other.
 | `MPS/MPDO/CyclicActiveSector` | cyclic-active sectors: restriction, retained coordinates, fourth-region marginals, cut coordinates and states, Markov (Hayashi) decomposition, area law, coefficient extraction, Case I of Lemma C.5, visibility of fixed-product sectors | 15 | Entropy, PhysicalSector, CommutingForm |
 | `MPS/MPDO/BNTSectors` | BNT sectors of a simple tensor: sector probabilities, SAL and ZCL of sectors, separating projectors, coefficient positivity, blocked channels across sectors, boundary decomposition, commuting products and GSNNCH form on the sectors | 10 (12) | Entropy, PhysicalSector, CyclicActiveSector, CommutingForm |
 | `MPS/MPDO/MPOAction` | action of an MPO algebra on MPS: L- and F-matrices, their gauge law and differentiable paths, group specialization, single-block obstruction, triangular padding of operator and state tensors, mixed pentagon, blocked zipper families, exact-ring fusion and action trees, power sums of operator closure | 12 (16) | none (only `MPS/Operator/Fusion`) |
-| `MPS/MPDO/CZX` | the CZX matrix product unitary of FBC25: tensor, dagger gauge, source factors, GHZ action, action and fusion tensors, permuted blocks and anomaly, defect maps, Gauss projectors, gauge-invariant subspace, circuit tuples and completions, gauged MPS | 18 (20) | none |
+| `MPS/MPDO` (top level: `GaugeInvariantSubspace`, `GaussProjectorPlacement`) | the placed local Gauss projectors of state-level gauging and the gauge-invariant subspace of a completion, for an arbitrary finite group; the CZX modules that sat beside them are the worked example `MPS/Examples/CZX/Gauging` | 2 | none |
 | `MPS/MPDO/Examples` | explicit counterexamples: thermodynamic limit, repeated copies, coefficient absorption, algebra fusion, positive minimal realization and linear extension, vertical coefficient presentation, Kato deformation, nonminimal sector factorization | 9 | all of the above except MPOAction, CZX |
 | `MPS/MPDO/Examples/CorrelatedFlip` | source Example 4.10 (corrected correlated flip): weights, operator, spectra, entropy, exact arithmetic | 5 | Entropy, Purification |
 | `MPS/MPDO/Examples/BinaryCycle` | source Example 4.11: binary-support model, ambient model, spectra, entropy, non-ZCL | 5 | Entropy, Examples/CorrelatedFlip |
@@ -1739,9 +1747,10 @@ examples layer prefers (the twisted dimer then joins `MPS/Examples/Dimer`).
   `CommutingFormFromAreaLaw`.
 
 Modules named for a bridge (`docs/many_body_circuit_architecture.md`):
-`MutualInfoBridge` → `Entropy/MutualInfoBridge`, kept until it is deleted in
-F2 for QICLean's mutual information (importers `MutualInfoAreaLaw`,
-`LocalPurificationAreaLaw`, `RFPViaTSSAL` then use QICLean's notion);
+`MutualInfoBridge` is dissolved: `mutualInfoChain` is defined as QICLean's
+bipartite mutual information in `DensityOperator/AreaLaw`, the block-entropy
+formula and the two marginals moved to `DensityOperator/MutualInfoMonotone`,
+and the operator-bond bound is `Entropy/MutualInfoBondDimBound`;
 `PureRFPBridge` is a theorem and is renamed for what it proves,
 `Purification/PureStateRFPEquivalence`; `CommutingFormBridge` (three data
 structures for one commuting form, F2) is not here (the operator
@@ -1752,7 +1761,7 @@ part places it in `MPS/Operator/PhysicalSector`).
 |---|---|---|---|
 | `Vertical/VerticalCoisometry` | base (matrix) / MPDO | `Matrix.sigmaBlockRow`, `_conjTranspose`, `blockDiagonal'_mul_sigmaBlockRow`, `sigmaBlockRow_conjTranspose_mul`, `sigmaBlockRow_mul_conjTranspose`, `sigmaBlockRow_isCoisometry` and two more (8 of 10) | block-row coisometries to QICLean matrix; one tensor theorem stays |
 | `MPOAction/BoundaryActionLMatrixPath` | base (analysis) / MPDO | `MPOTensor.hasDerivAt_idKron_entries`, `hasDerivAt_kronId_entries`, `hasDerivAt_const_entries` | to `Algebra/MatrixEntrywiseDeriv` |
-| `Fusion/BNTFixedFinalUnitarity` | base / MPDO | `Matrix.sigmaDiagonal_mul_conjTranspose_eq_one`, `Matrix.sigmaDiagonal_conjTranspose_mul_eq_one` | to a QICLean matrix module |
+| `Fusion/BNTFixedFinalUnitarity` | base / MPDO | `Matrix.sigmaDiagonal_mul_conjTranspose_eq_one`, `TNLean.MPS.MPDO.sigmaDiagonal_conjTranspose_mul_eq_one` | to a QICLean matrix module |
 | `Fusion/BNTFusionIsometries` | base / MPDO | `Matrix.blockDiagonal'_conj`, `Matrix.submatrix_left_conj_equiv` | same |
 | `Operator/Periodic/DiagonalCutRank` | base / Operator | `Matrix.traceMulMatrix`, `Matrix.rank_traceMulMatrix_le` | same |
 | `Operator/Product/DirectSum` | base / Operator | `Matrix.trace_fromBlocks_submatrix_finSumFinEquiv` | same |
@@ -2118,7 +2127,7 @@ approximation statements), by the decision recorded in question 3 of Part I.
 |---|---|---|---|
 | `EntropyInequalities` | sites / entropy | the boundary-edge lemmas `card_boundaryEdges_prefix_le`, `exists_interval_subset_boundaryEdges_sdiff_ssubset`, `card_crossingTerms_le_mul_card_boundaryEdges` (the definition `boundaryEdges` and its basic lemmas are QICLean's); `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary-edge lemmas in `Chain`, the entropy lemma into `Entropy` |
 | `ComponentReduction` | sites / entropy | `domainBoundaryEdges`, `domainRegion`, `IsDomainEdge`, `card_domainBoundaryEdges`, `boundaryEdges_symmDiff_interval`; versus `domainAreaLaw`, `regionEntropy_le_mul_card_domainBoundaryEdges` | domain geometry to `Chain`, domain area law stays in `Entropy` |
-| `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_leftBlock_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_leftBlock_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
+| `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_interval_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_interval_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
 | `StripApproximation` | entropy / TN | `regionEntropy_stripSnakePrefix_le`; versus the two MPS statements | the snake ordering is QICLean's `ManyBody.Sites.Lattice.SnakeOrder` (`ManyBody.snakeFlip`, `snakeEquiv`, `snakePrefix`, `card_snakePrefix_sdiff_le`) |
 | `CutMatrixGrowth` | matrix / TN | `rank_regroup_left`, `rank_regroup_right`, `prefixConfigurations`, `suffixConfigurations`, `coefficient_matrix_eq_reindex`; versus the MPS bond statements | rank regrouping to QICLean; then `SupportedCutRank` needs no TN import and can follow |
 | `ViableSet.Basic` | sites, matrix / TN | `LeftBlockVector`, `cutColumn`, `leftSupportSubmodule`, `spanProjection`; versus `IsViableMPS`, `IsLeftOpenMPS` and the viable-MPS lemmas | cut columns and left supports to QICLean (sites), viable MPS stay |
@@ -2285,7 +2294,7 @@ this part points upward.
 | `RegularTwoCycleGlobalFluxMove` (`Injectivity/Flux`) | Graph, Injectivity | `regularRegionBondExtension` | to `Graph/Holonomy` |
 | `NormalBlocking` (`Injectivity/Normal`) | Graph, Injectivity | `squareLatticeContiguousRectangle` and its membership lemma | to `Graph/Region` (beside QICLean's square lattice) |
 | `NormalPairBlocking` (`Injectivity/Normal`) | Graph, Injectivity | `nonempty_regionBoundaryEdge_of_connected` | to `Graph/Region` |
-| `RegionFibers` (formerly `RegionBlock/Recovery`) | Tensor, FundamentalTheorem | `regionInteriorBondProd`, `regionFiber`, `regionFiber_card` | to `Tensor/Region/RegionBlock` |
+| `RegionFibers` (formerly `RegionBlock/Recovery`) | Tensor, FundamentalTheorem | `regionInteriorBondProd`, `regionFiber`, `regionFiber_card` | to `Tensor/Region/RegionBlock`; done: the module is gone, its two remaining theorems are in `Normal/NormalFundamentalTheorem` |
 | `Insertion` (formerly `RegionBlock/Insertion`) | Graph, Tensor, FundamentalTheorem | `regionBoundaryEdgeComplEquiv`; `regionBlockedWeight_reindexTensor` | to `Graph/Region`; to `Tensor/Region/RegionBlock` |
 | `BlockRangeCoincidence` (`…/RegionInsertion`) | Tensor, FundamentalTheorem | `sum_regionBlockedWeight_mul_complement` | to `Tensor/Region/RegionBlock` |
 | `GaugeInjectivity` (`…/RegionInsertion`) | Graph, FundamentalTheorem | `prod_region_incident_eq_prod_edge` | to `Graph/Region` |
@@ -2563,6 +2572,20 @@ most 37 parts.
   Proposition 11.2: `Layers`, `Fans`, `InitialRegions`, `RepairStages`, `Stars`,
   `BirthTemplates`, `FinalRegions`; `Exponents` and `ScaleSeparation` go to `Scales` and
   `Layers`.
+* The generic geometry, operators and regional states then followed to QICLean in one move
+  (2026-11-26): the dyadic squares (`ManyBody/Sites/Dyadic`, with the distances and partitions
+  of dyadic layers and the corners of a cell from `BirthRegions`), the templates
+  (`ManyBody/Sites/Template`), the plane-lattice counts, patches and colourings
+  (`ManyBody/Sites/Lattice`), the plane Hamiltonians and positive constraints
+  (`ManyBody/Hamiltonian`, `Hamiltonian/Constraint`), the channel words
+  (`ManyBody/Dynamics/ChannelWord`, `ManyBody/PoissonWord`), the template and plane-boundary
+  entropies (`ManyBody/Entropy/Template`, `Entropy/PlaneBoundaryEntropy`), the regularized
+  patch filters (`ManyBody/Entropy/Filter/Regularized`), the cylinders
+  (`ManyBody/Sites/Cylinder`), the placements of `PEPS/ParentHamiltonian/Placement` except
+  `ProductSiteProjectorCommutation` (`ManyBody/Sites/Placement`), and their scalar and matrix
+  lemmas. What stays is the argument: `Scanner`, `Collar`, `CollarEntropy`, `BirthRegions`,
+  `RestoringOperator`, `SafeRectangles` and the statements of the theorems
+  (`RegionalStates/Regions/TheoremStatements`).
 * `Amplification` (34), named for Proposition 10.2, disappears. Generic part:
   `ChannelWords` (22, channels), `LocalRootChannels` (to `Constraints`),
   `GoodRealizationUnitary` with `SupportedPolarCorrection` (matrix). The argument:

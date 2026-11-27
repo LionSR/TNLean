@@ -29,6 +29,8 @@ of Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`,
 equation `eq:conv` and Claim `c:trim`, lines 472–478 and 549–559.
 -/
 
+open ManyBody (interval)
+
 section
 
 open scoped InnerProductSpace
@@ -79,7 +81,7 @@ theorem exists_close_supported_vector_of_orthonormal_rounding
       ψ ∈ leftSupportSubmodule (Set.range w) ∧
       ‖φ - ψ‖ ≤ (r : ℝ) * θ * ‖φ‖ := by
   classical
-  let e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)
+  let e := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)
   let T : LeftBlockVector L q k → LeftBlockVector L q k :=
     fun x ↦ ∑ j, ⟪u j, x⟫_ℂ • w j
   let ψ : EuclideanSpace ℂ (Fin L → Fin q) :=

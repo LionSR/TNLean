@@ -42,6 +42,8 @@ valid for all positive numbers of blocks at its first-order rate.
 * `MPSTensor.exists_blockApproximationError_le_exp` — a common positive exponential rate.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
@@ -125,7 +127,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
       ‖sqrtWeightLM σ (polarPosTensor (blockTensor A (L j))) -
         sqrtWeightLM σ (fixedPointTensor σ)‖ ^ 2 / 2 := fun j =>
     mixedMapLM_polarPosTensor_fixedPointTensor_trace_geometry _ hσ.posSemidef htr (by
-      rw [transferMap_blockTensor, Module.End.pow_apply, Function.iterate_fixed hfix]
+      rw [Kraus.transferMap_blockTensor, Module.End.pow_apply, Function.iterate_fixed hfix]
       exact htr)
   have hαre : ∀ j, α j = ((α j).re : ℂ) := fun j =>
     Complex.ext rfl (by simp [(Complex.nonneg_iff.1 (hαpos j)).2])

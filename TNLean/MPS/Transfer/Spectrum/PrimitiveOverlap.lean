@@ -9,7 +9,9 @@ import QICLean.Kraus.Transfer
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
 import Mathlib.Analysis.Matrix.PosDef
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint
+import TNLean.MPS.Tensor
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 
 /-!
@@ -57,6 +59,8 @@ self-overlap `mpvOverlap A A N` converges to `1` as `N → ∞`.
   `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Kraus
@@ -88,7 +92,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
                 intro htr0
                 have : ρ = 0 := (Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0
                 exact hρ_ne this))) < 1) :
-    Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)) := by
+    Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A A N) Filter.atTop (nhds (1 : ℂ)) := by
   -- First derive `trace((Kraus.transferMap A)^N) → 1`.
   have hTP : IsTracePreservingMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
     intro X
@@ -137,7 +141,7 @@ from `PrimitiveOverlap.lean`, using the hypotheses recorded in the
 theorem _root_.Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one {d D : ℕ} [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
-    Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) :=
+    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) :=
   mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one A
     hP.norm ρ hP.fixedPoint_is_fixed hP.fixedPoint_ne_zero hP.fixedPoint_psd
     hP.complementary_transfer_map_gap
@@ -150,7 +154,7 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     (hIrr : Kraus.IsIrreducibleFamily A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) :
-    Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   obtain ⟨_, hP⟩ : Kraus.HasPrimitiveFixedPoint A :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hNorm hPrim

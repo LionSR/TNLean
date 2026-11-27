@@ -28,6 +28,8 @@ It also contains the following results.
   the bond space.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -292,7 +294,7 @@ theorem mpv_toTensorFromBlocks_eq_sum
   classical
   set w := List.ofFn σ with hw
   have hwlen : w.length = N := by simp [w]
-  simp only [MPSTensor.mpv, MPSTensor.coeff, hw.symm, smul_eq_mul]
+  simp only [MPTensor.mpv, MPTensor.coeff, hw.symm, smul_eq_mul]
   rw [evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal μ A w, Matrix.trace_reindex]
   rw [Matrix.trace_blockDiagonal']
   exact Finset.sum_congr rfl fun k _ => by simp [Matrix.trace_smul, hwlen]
@@ -338,8 +340,8 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
       SameMPV₂ T₂
         (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocksB))
     (N : ℕ) :
-    mpvOverlap (d := d) T₁ T₂ N =
-      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := Fin d) T₁ T₂ N =
+      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (α := Fin d) (blocksA u) (blocksB v) N := by
   classical
   have hDecompA : ∀ σ : Fin N → Fin d, mpv T₁ σ =
       ∑ u : Fin r, mpv (blocksA u) σ := by
@@ -350,7 +352,7 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
     intro σ
     exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one T₂ blocksB hSameB σ
   calc
-    mpvOverlap (d := d) T₁ T₂ N =
+    mpvOverlap (α := Fin d) T₁ T₂ N =
         ∑ σ : Cfg d N, mpv T₁ σ * star (mpv T₂ σ) := rfl
     _ = ∑ σ : Cfg d N,
           (∑ u : Fin r, mpv (blocksA u) σ) *
@@ -376,7 +378,7 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
             intro u _
             rw [Finset.sum_comm]
     _ = ∑ u : Fin r, ∑ v : Fin r,
-          mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
+          mpvOverlap (α := Fin d) (blocksA u) (blocksB v) N := by
             simp [mpvOverlap]
 
 end BlockAssembly

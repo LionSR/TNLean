@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.SimpleMPO.BNTLayerOrthogonality
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductRealization
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
-import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.Matrix.KroneckerEmbed
 import QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization
-import QICLean.Channel.SupportCompletion
+import QICLean.Channel.KrausMap.SupportCompletion
 import QICLean.Channel.KrausMap.ProjectiveResolution
 import TNLean.MPS.MPDO.BNTSectors.BNTBoundaryDecomposition
 import TNLean.MPS.Operator.Periodic.FirstSite

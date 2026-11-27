@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity
-import TNLean.PEPS.Tensor.Torus.TorusSiteTensor
 
 /-!
 # Crossing-bond count for native torus rectangles

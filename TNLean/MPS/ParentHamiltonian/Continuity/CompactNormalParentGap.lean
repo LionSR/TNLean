@@ -27,28 +27,13 @@ blocked source path in `IsometricDeformation`, remove this restriction;
 documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- A normal tensor of bond dimension \(D>0\) is injective at length
-\(D^4\), without assuming a trace-preserving normalization. A nonzero
-rescaling and a virtual gauge reduce to the normalized quantum Wielandt
-bound, and injectivity is invariant under both operations. Source:
-arXiv:0909.5347, Theorem 1; arXiv:1606.00608, line 332. -/
-theorem isNBlkInjective_pow_four_of_isNormal [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
-    Kraus.IsNBlkInjective A (D ^ 4) := by
-  obtain ⟨B, ζ, ρ, hζ, hGauge, _hMPV, hP, _hρ, _hGS, _hPI, _hChain⟩ :=
-    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
-  have hNormalB : Kraus.IsNormal B :=
-    isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
-  have hInjB : Kraus.IsNBlkInjective B (D ^ 4) :=
-    isNBlkInjective_pow_four_of_isNormal_leftCanonical B hP.norm hNormalB
-  exact (isNBlkInjective_smul_iff hζ A (D ^ 4)).1
-    (isNBlkInjective_of_gaugeEquiv hInjB hGauge.symm)
 
 /-- A tensor injective after \(p\) sites has a positive uniform open-chain
 gap at the fixed interaction range \(p+1\), for every sufficiently long

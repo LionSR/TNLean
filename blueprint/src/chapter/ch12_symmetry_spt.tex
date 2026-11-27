@@ -343,10 +343,10 @@ parent interaction along the path commutes with $U^{\otimes L}$.
 
 \begin{definition}[Three-sector coordinates for the common physical space]
     \label{def:spt_physical_spectator_coordinates}
-    \lean{Matrix.physicalSpectatorEquiv,
-        Matrix.physicalSpectatorEquiv_active,
-        Matrix.physicalSpectatorEquiv_left,
-        Matrix.physicalSpectatorEquiv_right}
+    \lean{TNLean.MPS.Symmetry.physicalSpectatorEquiv,
+        TNLean.MPS.Symmetry.physicalSpectatorEquiv_active,
+        TNLean.MPS.Symmetry.physicalSpectatorEquiv_left,
+        TNLean.MPS.Symmetry.physicalSpectatorEquiv_right}
     \leanok
     The space $\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$ has three
     sectors with left dimensions $(K,d_0,d_1)$ and right dimensions
@@ -359,7 +359,7 @@ parent interaction along the path commutes with $U^{\otimes L}$.
 \begin{definition}[Sector-decomposed neighboring interactions]
     \label{def:spt_sector_bond_interaction}
     \lean{MPSTensor.sectorBondInteraction,
-        Matrix.physicalSpectatorEdgeInteraction,
+        TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction,
         MPSTensor.physicalSpectatorBondInteraction}
     \leanok
     \uses{def:spt_physical_spectator_coordinates}
@@ -381,7 +381,7 @@ parent interaction along the path commutes with $U^{\otimes L}$.
         MPSTensor.sectorBondInteraction_isStarProjection,
         MPSTensor.sectorBondInteraction_translate_commute,
         MPSTensor.sectorBondInteraction_eigenvalue_gap_one,
-        Matrix.physicalSpectatorEdgeInteraction_isStarProjection,
+        TNLean.MPS.Symmetry.physicalSpectatorEdgeInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_translate_commute,
         MPSTensor.physicalSpectatorBondInteraction_eigenvalue_gap_one,
@@ -1265,7 +1265,7 @@ and the regrouping of physical registers into bonds.
 \begin{lemma}[Gauge preparation preserves the exact MPS phase condition]
     \label{thm:spt_exact_phase_gauge_invariance}
     \lean{MPSTensor.blockTensor_smul,
-        MPSTensor.GaugeEquiv.rotatePhysical,
+        MPTensor.GaugeEquiv.rotatePhysical,
         MPSTensor.rotatePhysical_smul,
         MPSTensor.samePositiveMpvRay_of_smul_gaugeEquiv,
         MPSTensor.parentInteraction_matrix_rotatePhysical_eq_of_smul_gaugeEquiv,

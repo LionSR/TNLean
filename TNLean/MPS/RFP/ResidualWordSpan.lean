@@ -18,6 +18,8 @@ Gram matrix. Consequently these vectors are linearly independent, and the
 one-site word tuples span the product of the block matrix algebras.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
