@@ -71,20 +71,20 @@ theorem exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbed
       S.weight j q = S.weight j q')
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (F : (s : Fin S.basisCount) → PhysicalSectorFactorization
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (S.commonWeightAbsorbedBasis hWeight s))
     (hNeighbor : ∀ s q h, ((F s).neighboringOperator q h).PosSemidef)
     (hLayer : IsBNTLayerOrthogonal
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s)) :
     ∃ P : Fin S.basisCount → Matrix (Fin d) (Fin d) ℂ,
       (∀ s, IsOrthogonalProjection (P s)) ∧
       (∀ {s t}, s ≠ t → P s * P t = 0) ∧
       (∀ s (β α : Fin (S.basisDim s)),
-        P s * physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α =
-            physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α ∧
-          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α * P s =
-            physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α) := by
+        P s * physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α =
+            physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α ∧
+          physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α * P s =
+            physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α) := by
   apply exists_pairwise_orthogonal_twoSided_physicalSupport
-  · exact fun s ↦ commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s
+  · exact fun s ↦ commonWeightAbsorbedBasis_isInjective S hWeight hSpan s
   · exact fun s ↦ (F s).isMPDO_of_neighboringOperator_pos (hNeighbor s)
   · exact hLayer
 
@@ -798,15 +798,15 @@ theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels
     (hPsum : ∑ s, P s = 1)
     (hOrth : ∀ {s t}, s ≠ t → P s * P t = 0)
     (hSupport : ∀ s (β α : Fin (S.basisDim s)),
-      P s * physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α =
-          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α ∧
-        physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α * P s =
-          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α)
+      P s * physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α =
+          physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α ∧
+        physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α * P s =
+          physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α)
     (hRFP : ∀ s, IsRFPViaTS
-      (blockTwo (commonWeightAbsorbedBasisMPOTensor S hWeight s))) :
+      (blockTwo (S.commonWeightAbsorbedBasis hWeight s))) :
     IsRFPViaTS (blockTwo M) := by
   let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
-    fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s
+    fun s ↦ S.commonWeightAbsorbedBasis hWeight s
   let boundary : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ →
       (s : Fin S.basisCount) →
         Matrix (Fin (S.basisDim s)) (Fin (S.basisDim s)) ℂ :=
@@ -849,12 +849,12 @@ theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupp
     (hProj : ∀ s, IsOrthogonalProjection (P s))
     (hOrth : ∀ {s t}, s ≠ t → P s * P t = 0)
     (hSupport : ∀ s (β α : Fin (S.basisDim s)),
-      P s * physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α =
-          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α ∧
-        physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α * P s =
-          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α)
+      P s * physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α =
+          physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α ∧
+        physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α * P s =
+          physicalSlice (S.commonWeightAbsorbedBasis hWeight s) β α)
     (hRFP : ∀ s, IsRFPViaTS
-      (blockTwo (commonWeightAbsorbedBasisMPOTensor S hWeight s))) :
+      (blockTwo (S.commonWeightAbsorbedBasis hWeight s))) :
     IsRFPViaTS (blockTwo M) := by
   classical
   by_cases hd : d = 0
@@ -873,7 +873,7 @@ theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupp
     let ρFour : Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ :=
       Matrix.normalizePosSemidef xFour 1
     let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
-      fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s
+      fun s ↦ S.commonWeightAbsorbedBasis hWeight s
     let boundary : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ →
         (s : Fin S.basisCount) →
           Matrix (Fin (S.basisDim s)) (Fin (S.basisDim s)) ℂ :=

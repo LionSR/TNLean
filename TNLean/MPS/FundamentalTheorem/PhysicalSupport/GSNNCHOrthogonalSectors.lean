@@ -269,18 +269,18 @@ This is a sufficient-condition theorem using a supplied
 than the five blockwise identities printed in CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
-theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
+theorem hasGSNNCHForm_of_commonWeightAbsorbedBasis
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (s : Fin S.basisCount) (q q' : Fin (S.copies s)),
       S.weight s q = S.weight s q')
     (F : OrthogonalCommutingSectorFamily
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s)) :
     HasGSNNCHForm M := by
   apply hasGSNNCHForm_of_orthogonalCommutingSectorFamily M _ S.copies F
   intro N hN
-  exact mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+  exact mpo_eq_sum_copies_smul_commonWeightAbsorbedBasis
     M S hM hWeight (by omega)
 
 end MPOTensor

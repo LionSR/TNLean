@@ -591,7 +591,7 @@ The global unit-modulus witness selects a basis block and one of its copies.
 Left canonicity makes that basis tensor nonzero, while the selected copy has a
 nonzero weight. -/
 private theorem bntCanonicalForm_toTensor_ne_zero
-    (P : MPSTensor.SectorDecomposition d)
+    (P : MPSTensor.SectorDecomposition (Fin d))
     (hP : MPSTensor.IsBNTCanonicalForm P) : P.toTensor ≠ 0 := by
   classical
   obtain ⟨j, q, _hq⟩ := hP.weight_unit_exists

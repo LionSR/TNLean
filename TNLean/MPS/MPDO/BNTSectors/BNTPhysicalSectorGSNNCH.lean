@@ -215,7 +215,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     ext u v
     rw [Matrix.sum_apply]
     simp only [Matrix.smul_apply, smul_eq_mul, K]
-    exact S.mpo_eq_sum_coeff_basisMPOTensor M hM (by omega) u v
+    exact S.mpo_eq_sum_coeff_basis M hM (by omega) u v
   have hSectorNe : ∀ s, mpo (K s) N ≠ 0 := by
     intro s hzero
     let : NeZero (S.basisDim s) := ⟨Nat.ne_of_gt (hBasisDim s)⟩

@@ -27,20 +27,20 @@ copy index.
 
 ## Main results
 
-* `commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection`:
+* `commonWeightAbsorbedBasis_isMPDO_of_projectorSelection`:
   the positive compression formula makes every absorbed representative an
   MPDO.
-* `commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL`:
+* `commonWeightAbsorbedBasis_isMPDO_of_sameMPV₂Pos_isSAL`:
   the source projector construction supplies the required compression.
-* `commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL`:
+* `commonWeightAbsorbedBasis_physTraceTransfer_sq_of_literal_ZCL`:
   literal zero correlation length restricts to every absorbed BNT representative.
-* `commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
+* `commonWeightAbsorbedBasis_isSourceZCL`:
   scale-invariant source zero correlation length restricts to every absorbed BNT
   representative.
-* `IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
+* `IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasis_isSourceZCL`:
   simple canonical data package copy-independent weights and sectorwise source
   zero correlation length.
-* `trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos`:
+* `trace_mpo_commonWeightAbsorbedBasis_pos`:
   every nonempty-chain sector normalization is strictly positive.
 
 ## References
@@ -59,13 +59,14 @@ variable {d : ℕ}
 \(\mathcal K_s=\mu_s A_s\) is \(\mu_s\mathcal B_s\).
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1759. -/
-theorem physTraceTransfer_commonWeightAbsorbedBasisMPOTensor
+theorem physTraceTransfer_commonWeightAbsorbedBasis
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (s : Fin S.basisCount) :
-    physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
+    physTraceTransfer (S.commonWeightAbsorbedBasis hWeight s) =
       S.commonWeight hWeight s • physTraceTransfer (S.basis s) := by
-  simp only [physTraceTransfer, commonWeightAbsorbedBasisMPOTensor, Finset.smul_sum]
+  simp only [physTraceTransfer, MPSTensor.SectorDecomposition.commonWeightAbsorbedBasis,
+    Finset.smul_sum]
 
 /-- Literal zero correlation length restricts to each common-weight-absorbed BNT
 representative:
@@ -81,7 +82,7 @@ yet be applied sectorwise. The remaining boundary is recorded in
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
-theorem commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
+theorem commonWeightAbsorbedBasis_physTraceTransfer_sq_of_literal_ZCL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
@@ -99,10 +100,10 @@ theorem commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
     (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (s : Fin S.basisCount) :
-    physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) *
-        physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
-      physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
-  rw [physTraceTransfer_commonWeightAbsorbedBasisMPOTensor]
+    physTraceTransfer (S.commonWeightAbsorbedBasis hWeight s) *
+        physTraceTransfer (S.commonWeightAbsorbedBasis hWeight s) =
+      physTraceTransfer (S.commonWeightAbsorbedBasis hWeight s) := by
+  rw [physTraceTransfer_commonWeightAbsorbedBasis]
   have hsquare := weighted_basis_physTraceTransfer_sq_of_literal_ZCL
     S hTotal X hEq hZCL_sq s ⟨0, S.copies_pos s⟩
   rw [S.weight_eq_commonWeight hWeight] at hsquare
@@ -116,7 +117,7 @@ quadratic equation itself is the corresponding diagonal block of the
 zero-correlation-length equation for the full canonical-form tensor.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1657 and 1781. -/
-theorem commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+theorem commonWeightAbsorbedBasis_isSourceZCL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
@@ -135,12 +136,12 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSourceZCL
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (s : Fin S.basisCount)
     (hnonNil : ¬ IsNilpotent (physTraceTransfer (S.basis s))) :
-    IsSourceZCL (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+    IsSourceZCL (S.commonWeightAbsorbedBasis hWeight s) := by
   obtain ⟨lam, hlam, hSq⟩ :=
     exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL
       S hTotal X hEq hZCL
   have htransfer :=
-    physTraceTransfer_commonWeightAbsorbedBasisMPOTensor S hWeight s
+    physTraceTransfer_commonWeightAbsorbedBasis S hWeight s
   have hbasis : physTraceTransfer (S.basis s) ≠ 0 := by
     intro hzero
     exact hnonNil (by rw [hzero]; exact IsNilpotent.zero)
@@ -161,7 +162,7 @@ sectorwise zero-correlation-length theorem applies without an additional
 hypothesis.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1628, 1646--1661, and 1781. -/
-theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasis_isSourceZCL
     {D : ℕ} {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsSourceZCL M) :
     ∃ S : MPSTensor.SectorDecomposition (Fin d × Fin d),
@@ -183,11 +184,11 @@ theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSource
         ∃ hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q',
           ∀ s : Fin S.basisCount,
-            IsSourceZCL (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+            IsSourceZCL (S.commonWeightAbsorbedBasis hWeight s) := by
   obtain ⟨S, hCF, ⟨hTotal, X, hEq⟩, hnonNil, hWeight⟩ :=
     hM.exists_weight_copy_independent_of_isSourceZCL hZCL
   refine ⟨S, hCF, ⟨hTotal, X, hEq⟩, hnonNil, hWeight, fun s ↦ ?_⟩
-  exact commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+  exact commonWeightAbsorbedBasis_isSourceZCL
     M S hTotal X hEq hZCL hWeight s (hnonNil s)
 
 /-- If the tensor-power BNT projection selects an absorbed representative,
@@ -195,7 +196,7 @@ then that representative generates positive semidefinite operators on every
 nonempty chain.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1753--1759. -/
-theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
+theorem commonWeightAbsorbedBasis_isMPDO_of_projectorSelection
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M S.toTensor)
@@ -210,11 +211,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hMpdo : IsMPDO M) (s : Fin S.basisCount) :
-    IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+    IsMPDO (S.commonWeightAbsorbedBasis hWeight s) := by
   intro N hN
   let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
   have heq : P * mpo M N * P =
-      (S.copies s : ℂ) • mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N :=
+      (S.copies s : ℂ) • mpo (S.commonWeightAbsorbedBasis hWeight s) N :=
     sitewise_bntSectorProjection_mul_mpo_mul_self
       M S hM hWeight hC hρ hη hR hN s
   have hP : P.IsHermitian := Matrix.IsHermitian.piKronecker fun _ : Fin N ↦
@@ -244,7 +245,7 @@ Hayashi--Ruskai--Hayden--Jozsa--Petz--Winter characterization of equality in
 strong subadditivity, `hayashi_ssa_equality_characterization_forward`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1680--1759. -/
-theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
+theorem commonWeightAbsorbedBasis_isMPDO_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M S.toTensor)
@@ -254,11 +255,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) (s : Fin S.basisCount) :
-    IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+    IsMPDO (S.commonWeightAbsorbedBasis hWeight s) := by
   obtain ⟨W, _hlocal, _hcompression⟩ :=
     exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
-  exact commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
+  exact commonWeightAbsorbedBasis_isMPDO_of_projectorSelection
     M S hM hWeight W.hC W.hρ W.hη W.hR (Classical.choose hSAL) s
 
 /-- Every absorbed BNT representative has strictly positive trace on each
@@ -277,7 +278,7 @@ the source proof.  Its relation with finite physical blocking is recorded in
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780. -/
-theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
+theorem trace_mpo_commonWeightAbsorbedBasis_pos
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
@@ -301,11 +302,11 @@ theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) (s : Fin S.basisCount)
     {N : ℕ} (hN : 0 < N) :
-    0 < Matrix.trace (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by
+    0 < Matrix.trace (mpo (S.commonWeightAbsorbedBasis hWeight s) N) := by
   exact trace_mpo_pos_of_isMPDO_isSourceZCL _
-    (commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
+    (commonWeightAbsorbedBasis_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL s)
-    (commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+    (commonWeightAbsorbedBasis_isSourceZCL
       M S hTotal X hEq hZCL hWeight s (hnonNil s)) hN
 
 end MPOTensor

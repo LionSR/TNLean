@@ -112,7 +112,7 @@ pairwise orthogonal BNT projectors.
 The hypotheses preceding `hSectorSAL` are precisely the data selecting the
 BNT physical projectors. The sectorwise SAL hypothesis is established from
 the simple-MPDO hypotheses in
-`commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos`.
+`commonWeightAbsorbedBasis_isSAL_of_sameMPV₂Pos`.
 
 This constructs the sector family used in the later GSNNCH direct sum.
 
@@ -134,19 +134,19 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSectorSAL : ∀ s : Fin S.basisCount,
-      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      IsSAL (S.commonWeightAbsorbedBasis hWeight s)) :
     Nonempty (OrthogonalCommutingSectorFamily
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)) := by
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s)) := by
   classical
   let restriction : (s : Fin S.basisCount) →
       PhysicalSupportRestrictionData
         (bntSectorProjection hC hρ hη hR s)
-        (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+        (S.commonWeightAbsorbedBasis hWeight s) :=
     fun s ↦ Classical.choice
       (nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
         S hWeight hC hρ hη hR hSpan s)
   let data : (s : Fin S.basisCount) → CommutingForm
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+      (S.commonWeightAbsorbedBasis hWeight s) :=
     fun s ↦ Classical.choose
       ((restriction s).exists_commutingForm_lifted_supported
         (hSectorSAL s))
@@ -156,7 +156,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
           twoSiteSectorProjection (bntSectorProjection hC hρ hη hR s) =
             (data s).bond ∧
         ∀ N (hN : 2 ≤ N),
-          mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N =
+          mpo (S.commonWeightAbsorbedBasis hWeight s) N =
             (data s).product hN :=
     fun s ↦ Classical.choose_spec
       ((restriction s).exists_commutingForm_lifted_supported
@@ -198,12 +198,12 @@ theorem hasGSNNCHForm_of_bntSectorSAL
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSectorSAL : ∀ s : Fin S.basisCount,
-      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      IsSAL (S.commonWeightAbsorbedBasis hWeight s)) :
     HasGSNNCHForm M := by
   obtain ⟨F⟩ :=
     nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
       S hWeight hC hρ hη hR hSpan hSectorSAL
-  exact hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
+  exact hasGSNNCHForm_of_commonWeightAbsorbedBasis
     M S hM hWeight F
 
 end MPOTensor

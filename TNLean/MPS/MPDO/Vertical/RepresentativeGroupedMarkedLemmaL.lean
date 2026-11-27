@@ -62,7 +62,7 @@ arXiv:1606.00608, Appendix C.3, lines 1848--1858.  The source states the
 physical-insertion case; the unrestricted marked matrices here are an
 auxiliary consequence of the same calculation. -/
 theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
-    (P : SectorDecomposition d)
+    (P : SectorDecomposition (Fin d))
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     {L : ℕ} (hSpan : P.RepresentativeWordTupleSpanAt L)
     (hTrace : ∀ (s : Fin e) (w : Fin L → Fin d),
@@ -114,7 +114,7 @@ lines 1835--1858.  The source states the physical-insertion case; the
 unrestricted marked matrices here are an auxiliary consequence of its
 trace-separation proof. -/
 theorem markedTensor_basis_eq_of_trace_agree
-    (P : SectorDecomposition d)
+    (P : SectorDecomposition (Fin d))
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
@@ -151,7 +151,7 @@ end MPSTensor.SectorDecomposition
 
 namespace MPSTensor.IsBNTCanonicalForm
 
-variable {d e : ℕ} {P : SectorDecomposition d}
+variable {d e : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- Equality of closed marked chains at every positive tail length identifies
 arbitrary marked letters on every representative of a BNT canonical form.

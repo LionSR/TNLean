@@ -117,7 +117,7 @@ the corresponding marks on its minimal representatives.
 This is the representative-grouped form of the first-site decomposition in
 arXiv:1606.00608, Appendix C.3, lines 1842--1858. -/
 theorem linearMarkedTensor_toTensor_eq_markedTensor
-    (S : SectorDecomposition d) (f : Fin e → Fin d → ℂ) :
+    (S : SectorDecomposition (Fin d)) (f : Fin e → Fin d → ℂ) :
     linearMarkedTensor f S.toTensor =
       S.markedTensor (fun j ↦ linearMarkedTensor f (S.basis j)) := by
   rw [S.toTensor_eq_toTensorFromBlocks_flat,

@@ -96,7 +96,7 @@ theorem physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
     (N : ℕ) (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) :
     physCloseN M N X =
       ∑ j : Fin S.basisCount,
-        physCloseN (commonWeightAbsorbedBasisMPOTensor S hWeight j) N
+        physCloseN (S.commonWeightAbsorbedBasis hWeight j) N
           (representativeBoundary S
             ((↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * X *
               (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) j) := by
@@ -106,7 +106,7 @@ theorem physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
   let Y := (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * X *
     (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)
   let f : ((j : Fin S.basisCount) × Fin (S.copies j)) → ℂ := fun jq ↦
-    physCloseN (commonWeightAbsorbedBasisMPOTensor S hWeight jq.1) N
+    physCloseN (S.commonWeightAbsorbedBasis hWeight jq.1) N
       (cast (by rw [S.flatDim_flatIndexEquiv jq] :
         Matrix
             (Fin (S.flatDim (S.flatIndexEquiv jq)))

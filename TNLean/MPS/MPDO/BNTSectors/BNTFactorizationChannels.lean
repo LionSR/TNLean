@@ -102,9 +102,9 @@ theorem blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_physicalSectorFactorization
         (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hLayer : IsBNTLayerOrthogonal
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s))
     (F : (s : Fin S.basisCount) → PhysicalSectorFactorization
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (S.commonWeightAbsorbedBasis hWeight s))
     (hTrace : ∀ s,
       PhysicalSectorFactorization.NeighboringTraceFactorization (F s)) :
     IsRFPViaTS (blockTwo M) := by
@@ -151,9 +151,9 @@ theorem blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_oneSectorFactorization_of_c
         (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hLayer : IsBNTLayerOrthogonal
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s))
     (F : (s : Fin S.basisCount) → PhysicalSectorFactorization
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (S.commonWeightAbsorbedBasis hWeight s))
     (hOne : ∀ s, (F s).sectorCount = 1)
     (hPos : ∀ s k h, ((F s).neighboringOperator k h).PosSemidef)
     (hUnit : ∀ s k h, ((F s).neighboringOperator k h).trace = 1) :
