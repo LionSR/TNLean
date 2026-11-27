@@ -70,7 +70,7 @@ namespace MPSTensor
 
 section MPV
 
-variable {d D : ℕ} [NeZero D]
+variable {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
 
 /-- **Primitive overlap limit** (complementary transfer-map gap formulation).
 
@@ -79,22 +79,22 @@ complement of the fixed-point projection has spectral radius less than `1`,
 then the MPV self-overlap converges to `1`.
 -/
 theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ)
+    (A : MPTensor α (Fin D))
+    (hNorm : ∑ i : α, (A i)ᴴ * A i = 1)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Kraus.transferMap (ι := α) (n := Fin D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0) (hρ_psd : ρ.PosSemidef)
     (hSpect :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) - fixedPointProj (D := D) ρ
+            ((Kraus.transferMap (ι := α) (n := Fin D) A) - fixedPointProj (D := D) ρ
               (by
                 -- `trace ρ ≠ 0` for PSD nonzero `ρ`.
                 intro htr0
                 have : ρ = 0 := (Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0
                 exact hρ_ne this))) < 1) :
-    Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A A N) Filter.atTop (nhds (1 : ℂ)) := by
+    Filter.Tendsto (fun N => mpvOverlap (α := α) A A N) Filter.atTop (nhds (1 : ℂ)) := by
   -- First derive `trace((Kraus.transferMap A)^N) → 1`.
-  have hTP : IsTracePreservingMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+  have hTP : IsTracePreservingMap (Kraus.transferMap (ι := α) (n := Fin D) A) := by
     intro X
     exact Kraus.isTracePreservingMap_mapLM_of_isTP A hNorm X
   have htrρ : Matrix.trace ρ ≠ 0 := by
@@ -103,15 +103,15 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
   have hTrace :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
-          ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ N))
+          ((Kraus.transferMap (ι := α) (n := Fin D) A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) :=
     LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one (D := D)
-      (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
+      (E := Kraus.transferMap (ι := α) (n := Fin D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
   -- Rewrite the transfer-map trace as a mixed-transfer trace (self-case).
   have hTrace' :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
-          ((Kraus.mixedMapLM (ι := Fin d) (D₁ := D) (D₂ := D) A A) ^ N))
+          ((Kraus.mixedMapLM (ι := α) (D₁ := D) (D₂ := D) A A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) := by
     simpa [Kraus.mixedMapLM_self] using hTrace
   -- Now convert the trace identity to the MPV-overlap identity.
@@ -138,10 +138,10 @@ namespace MPSTensor
 This is a direct application of `mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one`
 from `PrimitiveOverlap.lean`, using the hypotheses recorded in the
 `Kraus.HasComplementaryFixedPointGap` structure. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one {d D : ℕ} [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+theorem _root_.Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
+    {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
-    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) :=
+    Tendsto (fun N ↦ mpvOverlap (α := α) A A N) atTop (nhds (1 : ℂ)) :=
   mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one A
     hP.norm ρ hP.fixedPoint_is_fixed hP.fixedPoint_ne_zero hP.fixedPoint_psd
     hP.complementary_transfer_map_gap
@@ -149,12 +149,12 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one {d D : �
 /-- As a corollary, peripheral primitivity plus irreducibility implies
 self-overlap convergence to `1`. -/
 theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
+    (A : MPTensor α (Fin D))
     (hIrr : Kraus.IsIrreducibleFamily A)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) :
-    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
+    (hNorm : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin D) A)) :
+    Tendsto (fun N ↦ mpvOverlap (α := α) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   obtain ⟨_, hP⟩ : Kraus.HasPrimitiveFixedPoint A :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hNorm hPrim

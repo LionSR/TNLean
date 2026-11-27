@@ -341,38 +341,38 @@ theorem mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one {α : Type*}
 /-- The overlap of two tensors with unit-weight block diagonal MPV
 decompositions is the finite double sum of the overlaps of their blocks. -/
 theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-    {D₁ D₂ r : ℕ} {dimA dimB : Fin r → ℕ}
-    (T₁ : MPSTensor d D₁) (T₂ : MPSTensor d D₂)
-    (blocksA : (k : Fin r) → MPSTensor d (dimA k))
-    (blocksB : (k : Fin r) → MPSTensor d (dimB k))
+    {α : Type*} [Fintype α] {D₁ D₂ r : ℕ} {dimA dimB : Fin r → ℕ}
+    (T₁ : MPTensor α (Fin D₁)) (T₂ : MPTensor α (Fin D₂))
+    (blocksA : (k : Fin r) → MPTensor α (Fin (dimA k)))
+    (blocksB : (k : Fin r) → MPTensor α (Fin (dimB k)))
     (hSameA :
       SameMPV₂ T₁
-        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocksA))
+        (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocksA))
     (hSameB :
       SameMPV₂ T₂
-        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocksB))
+        (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocksB))
     (N : ℕ) :
-    mpvOverlap (α := Fin d) T₁ T₂ N =
-      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (α := Fin d) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := α) T₁ T₂ N =
+      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (α := α) (blocksA u) (blocksB v) N := by
   classical
-  have hDecompA : ∀ σ : Fin N → Fin d, mpv T₁ σ =
+  have hDecompA : ∀ σ : Fin N → α, mpv T₁ σ =
       ∑ u : Fin r, mpv (blocksA u) σ := by
     intro σ
     exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one T₁ blocksA hSameA σ
-  have hDecompB : ∀ σ : Fin N → Fin d, mpv T₂ σ =
+  have hDecompB : ∀ σ : Fin N → α, mpv T₂ σ =
       ∑ v : Fin r, mpv (blocksB v) σ := by
     intro σ
     exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one T₂ blocksB hSameB σ
   calc
-    mpvOverlap (α := Fin d) T₁ T₂ N =
-        ∑ σ : Cfg d N, mpv T₁ σ * star (mpv T₂ σ) := rfl
-    _ = ∑ σ : Cfg d N,
+    mpvOverlap (α := α) T₁ T₂ N =
+        ∑ σ : Fin N → α, mpv T₁ σ * star (mpv T₂ σ) := rfl
+    _ = ∑ σ : Fin N → α,
           (∑ u : Fin r, mpv (blocksA u) σ) *
             star (∑ v : Fin r, mpv (blocksB v) σ) := by
             refine Finset.sum_congr rfl ?_
             intro σ _
             rw [hDecompA σ, hDecompB σ]
-    _ = ∑ σ : Cfg d N,
+    _ = ∑ σ : Fin N → α,
           ∑ u : Fin r, ∑ v : Fin r,
             mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
             refine Finset.sum_congr rfl ?_
@@ -381,16 +381,16 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
             refine Finset.sum_congr rfl ?_
             intro u _
             rw [Finset.mul_sum]
-    _ = ∑ u : Fin r, ∑ σ : Cfg d N,
+    _ = ∑ u : Fin r, ∑ σ : Fin N → α,
           ∑ v : Fin r, mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
             rw [Finset.sum_comm]
-    _ = ∑ u : Fin r, ∑ v : Fin r, ∑ σ : Cfg d N,
+    _ = ∑ u : Fin r, ∑ v : Fin r, ∑ σ : Fin N → α,
           mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
             refine Finset.sum_congr rfl ?_
             intro u _
             rw [Finset.sum_comm]
     _ = ∑ u : Fin r, ∑ v : Fin r,
-          mpvOverlap (α := Fin d) (blocksA u) (blocksB v) N := by
+          mpvOverlap (α := α) (blocksA u) (blocksB v) N := by
             simp [mpvOverlap]
 
 end BlockAssembly
