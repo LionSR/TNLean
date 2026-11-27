@@ -137,7 +137,15 @@ private theorem coe_interval_subset_left {L c x y : ℕ} (hyc : y ≤ c) :
     (interval L x y : Set (Fin L)) ⊆ (interval L 0 c : Finset (Fin L)) :=
   Finset.coe_subset.mpr (interval_mono (Nat.zero_le x) hyc)
 
-attribute [local instance] configurationDecidableEq alphabetDecidableEq
+/-- Equality of configurations in the coordinate calculation for ALVV,
+arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. -/
+private local instance configurationDecidableEq {ι : Type*} (q : ℕ) :
+    DecidableEq (ι → Fin q) := Classical.decEq _
+
+/-- Equality of the original window and bulk labels in ALVV,
+arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. -/
+private local instance alphabetDecidableEq (ℓ : ℕ) :
+    DecidableEq ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) := Classical.decEq _
 
 open Classical in
 /-- **Theorem 4.2, item 4, at a cut inside `J_M`** (ALVV, arXiv:1602.08828v2,

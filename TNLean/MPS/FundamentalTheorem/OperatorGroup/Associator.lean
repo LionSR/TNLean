@@ -528,7 +528,7 @@ theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionDat
         (sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
           simp only [mpo_mulTensor, ← hS N hN]))).of_intertwine
       (mulTensorAssocMatrix_mul_invMatrix _ _ _) (mulTensorAssocInvMatrix_mul_matrix _ _ _)
-      (fun i ↦ mulTensor_mul_assocMatrix _ _ _ i.divNat i.modNat) |>.mul_left _
+      (fun i : Fin (d * d) ↦ mulTensor_mul_assocMatrix _ _ _ i.divNat i.modNat) |>.mul_left _
   have hne : ((fd.relativeScalar fd' (h, k) * fd.relativeScalar fd' (g, h * k) : ℂˣ) : ℂ) ≠ 0 :=
     Units.ne_zero _
   have key := eq_omega_of_isAssociator (fd := fd) hF

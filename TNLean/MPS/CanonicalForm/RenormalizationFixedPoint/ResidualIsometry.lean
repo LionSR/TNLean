@@ -7,6 +7,7 @@ import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.BNTOrthogonality
 import TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.StructuralFull
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # Residual-isometry form of the renormalization fixed-point structure

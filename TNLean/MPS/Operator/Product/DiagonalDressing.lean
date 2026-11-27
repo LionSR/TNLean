@@ -70,6 +70,6 @@ theorem isNormal_toMPSTensor_mulDiagonal_iff (M : MPOTensor d D) {c : Fin d → 
     (hc : ∀ j, c j ≠ 0) :
     Kraus.IsNormal (M.mulDiagonal c).toMPSTensor ↔ Kraus.IsNormal M.toMPSTensor := by
   rw [toMPSTensor_mulDiagonal]
-  exact MPSTensor.isNormal_letterSmul_iff (fun a ↦ hc a.modNat) _
+  exact MPSTensor.isNormal_letterSmul_iff (fun a : Fin (d * d) ↦ hc a.modNat) _
 
 end MPOTensor

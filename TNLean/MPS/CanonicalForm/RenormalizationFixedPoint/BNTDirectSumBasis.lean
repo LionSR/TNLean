@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.BNTOrthogonality
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # BNT basis data for the unit-weight direct sum

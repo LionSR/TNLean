@@ -7,6 +7,7 @@ import TNLean.MPS.CanonicalForm.BNT.Construction
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumUniqueness
 import TNLean.MPS.CanonicalForm.BlockSeparation.Selectors
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # Direct-sum selectors for bases of normal tensors

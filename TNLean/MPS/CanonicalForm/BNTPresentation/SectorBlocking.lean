@@ -288,6 +288,7 @@ theorem IsLeftCanonicalBNTPresentation.blockTensor
         (Kraus.blockTensor (P.basis j) p)
         (Kraus.blockTensor (P.basis j) p) N) atTop (nhds 1)
     intro j
+    let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     have hMul : Tendsto (fun a : ℕ ↦ a * p) atTop atTop := by
       refine tendsto_atTop.2 fun b ↦ ?_
       filter_upwards [eventually_ge_atTop b] with a ha

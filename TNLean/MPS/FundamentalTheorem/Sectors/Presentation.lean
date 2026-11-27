@@ -80,7 +80,7 @@ private lemma gaugeEquiv_toTensor_withBasis (P : SectorDecomposition d)
     GaugeEquiv P.toTensor (P.withBasis B).toTensor := by
   change GaugeEquiv (toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis)
     (toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) (P.withBasis B).flatBasis)
-  exact gaugeEquiv_toTensorFromBlocks_of_blockGauge fun s => hB (P.flatIndexEquiv.symm s).1
+  exact gaugeEquiv_toTensorFromBlocks_of_blockGauge _ _ _ fun s => hB (P.flatIndexEquiv.symm s).1
 
 /-- **Fundamental Theorem of matrix product vectors, proportional case**
 (arXiv:1606.00608, Theorem 2.10, lines 349--352; arXiv:2011.12127, Theorem 4.4).
