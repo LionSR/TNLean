@@ -29,8 +29,8 @@ open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
-variable {ι : Type*} [Fintype ι] {d d' D : ℕ} {δ : ι → ℕ}
-  {B : MPSTensor d D} {A : ∀ c : ι, MPSTensor d (δ c)}
+variable {ι : Type*} [Fintype ι] {α α' : Type*} {D : ℕ} {δ : ι → ℕ}
+  {B : MPTensor α (Fin D)} {A : ∀ c : ι, MPTensor α (Fin (δ c))}
   {V : ∀ c : ι, Matrix (Fin (δ c)) (Fin D) ℂ}
   {W : ∀ c : ι, Matrix (Fin D) (Fin (δ c)) ℂ}
 
@@ -38,9 +38,9 @@ variable {ι : Type*} [Fintype ι] {d d' D : ℕ} {δ : ι → ℕ}
 of nonempty words, with the same rectangular maps. Source: GLM23 Appendix A,
 `decompopen`, at arbitrary positive lengths. -/
 theorem ofWords (h : IsBiorthogonalDecomposition B A V W)
-    (u : Fin d' → List (Fin d)) (hu : ∀ j, u j ≠ [])
-    {B' : MPSTensor d' D} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
-    {A' : ∀ c : ι, MPSTensor d' (δ c)}
+    (u : α' → List α) (hu : ∀ j, u j ≠ [])
+    {B' : MPTensor α' (Fin D)} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
+    {A' : ∀ c : ι, MPTensor α' (Fin (δ c))}
     (hA' : ∀ c j, A' c j = Kraus.evalWord (A c) (u j)) :
     IsBiorthogonalDecomposition B' A' V W where
   retract := h.retract
