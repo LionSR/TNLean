@@ -257,8 +257,8 @@ relation:
 
 The cyclic three-site restriction transports this commutator to every adjacent
 pair on every chain with $N>2$.\footnote{Formal declarations:
-\leanid{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
-and \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.}
+\leanid{MPSTensor.parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+and \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_parentRingInteraction_terms_commute}.}
 The resulting nearest-neighbor commutation is verified.\footnote{Formal theorem:
 \leanid{MPSTensor.AppendixBStructuralData.isNNCPH}.}
 
@@ -414,7 +414,7 @@ likewise addresses only $N>2$.
 
 The project adopts the local convention that an $L$-site interaction vanishes
 when $L>N$. Thus $H_2^{(1)}=0$,\footnote{Formal theorem:
-\leanid{MPSTensor.parentHamiltonian_two_one_eq_zero}.} and the length-one ground
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_two_one}.} and the length-one ground
 space is full:\footnote{Formal theorem:
 \leanid{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_two_one_eq_top}.}
 \begin{align}

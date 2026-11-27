@@ -477,8 +477,8 @@ out.
 #### `TNLean.PEPS.Approximation.RepaintingUses` and `JunctionUses`
 
 - **Defined in:** `TNLean/PEPS/Approximation/Guides/DyadicActiveLabelParties.lean`,
-  together with `OwnsLevelBlock` and the hierarchy forms `DyadicSquare.Uses` and
-  `DyadicJunction.Uses`.
+  together with `OwnsLevelBlock` and the hierarchy forms `TNLean.PEPS.Approximation.DyadicSquare.Uses` and
+  `TNLean.PEPS.Approximation.DyadicJunction.Uses`.
 - **Meaning:** the block parties an event of the dyadic protocol uses.
   `OwnsLevelBlock j' Q x` says that `x` is the new party of the `2 ^ j'`-block `Q`
   or the old party of its parent block. A repainting uses the owners of the blocks
@@ -1108,7 +1108,7 @@ model different levels of data and different sources.
   `MPSTensor.fundamentalTheorem_proportional_of_isBNTSectorPresentation` and
   `MPSTensor.fundamentalTheorem_equal_of_isBNTSectorPresentation`; see
   `docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`.
-  `IsLeftCanonicalBNTPresentation.blockTensor` requires a strictly positive
+  `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor` requires a strictly positive
   blocking length `0 < p`.
   `exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` assumes a
   nonzero positive-length MPV family and states the line-246 weight
@@ -1453,7 +1453,7 @@ The following notions use different transfer objects and are not interchangeable
   $\mathcal K_{a,b}$.
 - **Source:** arXiv:2502.20257, modified-fusion Lemma `lemma:modif` and the
   nonuniqueness observation at lines 4215--4326.
-- **Sanctioned bridges:** `DefectMaps.mem_completionClass_iff` identifies the
+- **Sanctioned bridges:** `GaussLaw.DefectMaps.mem_completionClass_iff` identifies the
   predicate with membership in the full completion class. The transport
   theorems in the same module use exact prescribed-map covariance before
   applying the target completion's adjoint.
@@ -1470,7 +1470,7 @@ The following notions use different transfer objects and are not interchangeable
   subspace selected by the adjacent labels, and the prescribed defect maps
   carry these slices covariantly under $(a,b)\mapsto(ag^{-1},gb)$.
 - **Source:** arXiv:2502.20257, lines 4325--4335.
-- **Sanctioned bridge:** together with `DefectMaps.IsCompletion`, these
+- **Sanctioned bridge:** together with `GaussLaw.DefectMaps.IsCompletion`, these
   predicates imply invariance of the gauged vector under every placed Gauss
   operator and averaged projector through
   `MPOTensor.placedGaussOperator_mulVec_gaugedVector` and
@@ -1789,10 +1789,10 @@ placed operators, permutations of configurations and of sites, onsite
 channels) are stated for any finite type of sites `ι`. Layers, unitary circuits,
 products of gates and light cones are QICLean's (`QICLean/Circuit/Core`,
 `QICLean/Circuit/Model/Unitary*`, `QICLean/Circuit/Compile`), stated for a geometry
-`Γ : QuantumCircuit.Geometry S` of cells with costs; the ring is `Geometry.ring N`
+`Γ : QuantumCircuit.Geometry S` of cells with costs; the ring is `QuantumCircuit.Geometry.ring N`
 (cells `{k, k + 1}`, addition modulo `N`), the open chain is
-`Geometry.graph (SimpleGraph.pathGraph n)`, and the edges of a simple graph are
-`Geometry.graph G`. TNLean keeps no copy of them.
+`QuantumCircuit.Geometry.graph (SimpleGraph.pathGraph n)`, and the edges of a simple graph are
+`QuantumCircuit.Geometry.graph G`. TNLean keeps no copy of them.
 Measurement circuits, teleportation, GHZ-type states and the zero-register reflections are also
 QICLean's (`QICLean/Circuit/Model/Measurement.lean`, `QICLean/Circuit/Protocol/`); TNLean uses
 them on the ring. The blueprint chapter is
@@ -1833,9 +1833,9 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
   LOCC" and the graph distance before Proposition `propQCA2`.
-- **Sanctioned bridges:** `Geometry.iterate_neighbourhood_ring` (on the ring, the
-  ring neighbourhood of radius `r`), `Geometry.iterate_neighbourhood_pathGraph_subset`,
-  `Geometry.iterate_neighbourhood_graph` and their disjointness forms.
+- **Sanctioned bridges:** `QuantumCircuit.Geometry.iterate_neighbourhood_ring` (on the ring, the
+  ring neighbourhood of radius `r`), `QuantumCircuit.Geometry.iterate_neighbourhood_pathGraph_subset`,
+  `QuantumCircuit.Geometry.iterate_neighbourhood_graph` and their disjointness forms.
 - **Caveat:** for the open chain only the inclusion in the metric ball is
   proved; on the ring and on a graph the equality holds.
 
@@ -1957,7 +1957,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsOneRoundConversion (Γ : Geometry S) (T₁ T₂ : ℕ) (φ ψ : Config X → ℂ) : Prop`,
-  used here at the ring `Geometry.ring N` with `X = Qudits (Fin N) d`.
+  used here at the ring `QuantumCircuit.Geometry.ring N` with `X = Qudits (Fin N) d`.
 - **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
 - **Meaning:** `φ ≠ 0`, and a unitary circuit `U` of depth at most `T₁`, the
   measurement of a region `D` in the computational basis, single-site
@@ -2040,7 +2040,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsMeasurementConversion (Γ : Geometry S) (T : ℕ) (φ : Config X → ℂ) (ψ : Config Z → ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
 - **Meaning:** `φ ≠ 0`, and some measurement circuit `c` (its gates and onsite
   families satisfy `KrausFamily.IsUnitaryOrMeasurement`; later layers may
@@ -2048,19 +2048,19 @@ in `MPS/Preparation/` uses it.
   to a scalar multiple of `ψ`. A preparation with measurement rounds in depth
   `T` is
   `∃ v, IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ s, v s (σ s)) ψ`;
-  a list of rounds is one circuit composed by `Circuit.comp`.
+  a list of rounds is one circuit composed by `QuantumCircuit.Circuit.comp`.
 - **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
   LOCC" (one round, and "a more general scheme with multiple rounds of
   LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
 - **Sanctioned bridges:** `QuantumCircuit.IsMeasurementConversion.trans` (depths add),
   `QuantumCircuit.IsMeasurementConversion.mono`, `QuantumCircuit.IsMeasurementConversion.ne_zero`,
-  `Circuit.IsImplementationOn.isMeasurementConversion`,
+  `QuantumCircuit.Circuit.IsImplementationOn.isMeasurementConversion`,
   `QuantumCircuit.IsMeasurementConversion.isAdaptiveConversion`, and
   `MPSPreparation.exists_isMeasurementConversion_treeOp` (binary trees
   of two-site gates with `k` levels in depth `5k`).
 - **Caveat:** the depth counts the layers with a cell of positive cost;
   measurements, classical processing and single-site corrections are free.
-  The number of rounds of measurements (`Circuit.rounds`) is not bounded (the
+  The number of rounds of measurements (`QuantumCircuit.Circuit.rounds`) is not bounded (the
   tree of `k` levels uses `2k` rounds), whereas in the class `QCcc^{(k)}_ℓ` of
   the paragraph "Phases of matter" of arXiv:2103.13367 the number `k` of
   composed transformations does not depend on the system size.
@@ -2075,8 +2075,8 @@ in `MPS/Preparation/` uses it.
   `p` maps `v` to a scalar multiple of `W v`.
 - **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
   ("correcting (without postselection) based on the measurement outcomes").
-- **Sanctioned bridges:** `Circuit.IsImplementationOn.comp` (implementations
-  compose), `Circuit.IsImplementationOn.exists_smul_of_isometry` (one scalar
+- **Sanctioned bridges:** `QuantumCircuit.Circuit.IsImplementationOn.comp` (implementations
+  compose), `QuantumCircuit.Circuit.IsImplementationOn.exists_smul_of_isometry` (one scalar
   per branch on a subspace), `QuantumCircuit.TeleportHop.isImplementationOn_round`
   (teleportation along chains of hops in one round of depth at most `2`),
   `QuantumCircuit.LongRangeGate.isImplementationOn_rounds` (a layer of two-site
@@ -2091,7 +2091,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsProtocol (Γ : Geometry S) (T : ℕ) (Φ : Matrix (Config X) (Config X) ℂ →ₗ[ℂ] Matrix (Config Z) (Config Z) ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
 - **Meaning:** `Φ` is the map of an unbranched circuit on `Γ` of depth at most
   `T` whose gates and onsite families are trace preserving. On the ring this is
@@ -2132,7 +2132,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsAdaptiveProtocol (Γ : Geometry S) (T : ℕ) (Φ : Matrix (Config X) (Config X) ℂ →ₗ[ℂ] Matrix (Config Z) (Config Z) ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
 - **Meaning:** `Φ` is the map of a circuit of trace-preserving plain gates and
   onsite families, of depth at most `T`, whose later layers may depend on the
@@ -2142,10 +2142,10 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
   LOCC", motivates finite adaptive operations. The formal predicate uses
   enlarged-site gate costs rather than the source's fixed physical-qudit costs.
-- **Sanctioned bridges:** `IsAdaptiveProtocol.isKrausCPTP`,
-  `IsAdaptiveProtocol.comp` (additive depth bounds), `IsAdaptiveProtocol.step`
+- **Sanctioned bridges:** `QuantumCircuit.IsAdaptiveProtocol.isKrausCPTP`,
+  `QuantumCircuit.IsAdaptiveProtocol.comp` (additive depth bounds), `QuantumCircuit.IsAdaptiveProtocol.step`
   (classical feedforward), `QuantumCircuit.IsProtocol.adaptive` (deterministic protocols are
-  included), and `Circuit.isAdaptiveProtocol_map` (the average map of a
+  included), and `QuantumCircuit.Circuit.isAdaptiveProtocol_map` (the average map of a
   measurement circuit has the same depth bound).
 - **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
   gate on the enlarged spaces still costs one layer. No uniform-depth
@@ -2167,9 +2167,9 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
   LOCC", with the enlarged-site and finite-round scope of
   `IsAdaptiveProtocol`.
-- **Sanctioned bridges:** `IsAdaptiveConversion.refl`,
-  `IsAdaptiveConversion.mono`, `IsAdaptiveConversion.trans`,
-  `IsAdaptiveConversion.density`, and `IsConversion.adaptive`.
+- **Sanctioned bridges:** `QuantumCircuit.IsAdaptiveConversion.refl`,
+  `QuantumCircuit.IsAdaptiveConversion.mono`, `QuantumCircuit.IsAdaptiveConversion.trans`,
+  `QuantumCircuit.IsAdaptiveConversion.density`, and `QuantumCircuit.IsConversion.adaptive`.
 - **Caveat:** exact, directed conversion on arbitrary input operators;
   positivity and unit trace of the output follow from those of the input.
   No symmetry or asymptotic phase classification is asserted.
@@ -2178,16 +2178,16 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsConversion (Γ : Geometry S) (T : ℕ) (ρ : Matrix (Config X) (Config X) ℂ) (σ : Matrix (Config Z) (Config Z) ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
 - **Meaning:** `σ = Φ ρ` for a map `Φ` with `IsProtocol Γ T Φ`.
 - **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
   LOCC" (circuits with ancillas attached to each site) and paragraph "Phases
   of matter" (a protocol "where ancillas are traced out at the end, defines a
   quantum channel"), without measurements or classical communication.
-- **Sanctioned bridges:** `IsConversion.refl` (depth `0`),
-  `IsConversion.mono`, `IsConversion.trans` (depths add),
-  `IsConversion.density` (a conversion of a density matrix is a density
+- **Sanctioned bridges:** `QuantumCircuit.IsConversion.refl` (depth `0`),
+  `QuantumCircuit.IsConversion.mono`, `QuantumCircuit.IsConversion.trans` (depths add),
+  `QuantumCircuit.IsConversion.density` (a conversion of a density matrix is a density
   matrix), `QuantumCircuit.IsConversion.ofOnsite_seq` (attach, run a sequence
   of channel layers, discard), and
   `QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isGraphSeparated` (vanishing
@@ -2195,7 +2195,7 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
   matrix; positivity and unit trace of `σ` follow from those of `ρ` by
-  `IsConversion.density`. Conversions are exact; the approximate
+  `QuantumCircuit.IsConversion.density`. Conversions are exact; the approximate
   and asymptotic local-channel relations below extend this relation without
   classical feedforward. The full phase equivalence in arXiv:2103.13367 and
   blocking of sites are not formalized here.
@@ -2206,7 +2206,7 @@ Approximate conversion in trace norm, asymptotic conversion in polylogarithmic d
 equivalence of local channel protocols are QICLean's `QuantumCircuit.IsApproxConversion`,
 `QuantumCircuit.IsAsymptoticConversion` and `QuantumCircuit.IsPhaseEquivalent`, defined in
 `QICLean/Circuit/Model/Approximate.lean` (QICLean dependency) for a circuit geometry and used
-here at the ring `Geometry.ring N`, with the trace norm `Matrix.rectangularTraceNorm` of
+here at the ring `QuantumCircuit.Geometry.ring N`, with the trace norm `Matrix.rectangularTraceNorm` of
 operators on the configurations. The scope of the local channel model relative to the source
 `QCcc` relation is recorded in `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
@@ -2578,7 +2578,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 The periodic-boundary layer of non-invertible matrix product operator symmetry.
 The operator-level predicates `IsMPOFusionAlgebra`, `IsMPOSymmetricFamily`,
-`IsMPOSymmetric` and `GroupFamily.IsNormalRepresentation` impose their
+`IsMPOSymmetric` and `MPOTensor.GroupFamily.IsNormalRepresentation` impose their
 identities only with identity boundaries; for the symmetric-state predicates that
 restriction is recorded in `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 The remaining entries are conditions on structure constants or on words and
@@ -2724,7 +2724,7 @@ involve no boundary.
   lines 1403–1497; arXiv:2203.12563, equation `fusiontensorG2`.
 - **Sanctioned bridges:** `MPOTensor.GroupFamily.IsNormalRepresentation.nonempty_fusionData`
   (existence); `MPOTensor.GroupFamily.FusionData.omega` is the anomaly
-  three-cochain, and `FusionData.omega_cohomologousTo` shows its class does not
+  three-cochain, and `MPOTensor.GroupFamily.FusionData.omega_cohomologousTo` shows its class does not
   depend on the choice.
 - **Caveat:** data, not a proposition; the nilpotent-remainder clause of the
   existence theorem is not stored.
@@ -2757,8 +2757,8 @@ involve no boundary.
 - **Source:** arXiv:2203.12563, line 1064, the relation
   $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ with $y=x$.
 - **Sanctioned bridges:** it is the single-operator, unit-eigenvalue case of
-  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `FixesMPV.mulTensor` closes
-  it under operator products, and `FixesMPV.sameMPV₂Pos_actTensor` turns it into
+  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `MPOTensor.GroupFamily.FixesMPV.mulTensor` closes
+  it under operator products, and `MPOTensor.GroupFamily.FixesMPV.sameMPV₂Pos_actTensor` turns it into
   positive-length vector equality of the action tensor with `A`, which is the
   input of `MPOTensor.GroupFamily.nonempty_actionData`.
 - **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
@@ -2775,7 +2775,7 @@ involve no boundary.
 - **Source:** arXiv:2203.12563, line 1064, the relation
   $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ for blocks permuted by the group.
 - **Sanctioned bridges:** `FixesMPV T A` is the case $B=B'=A$, by unfolding.
-  `CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
+  `MPOTensor.GroupFamily.CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
   equality of the action tensor with $B'$, the input of
   `MPOTensor.GroupFamily.nonempty_blockActionData`.
 - **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
@@ -2809,7 +2809,7 @@ involve no boundary.
   case of the reduction.
 - **Source:** arXiv:2203.12563, equation `fusiontensorG`, lines 641--656, with
   the fusion tensors of `fusiontensorG2`, lines 1002--1026.
-- **Sanctioned bridge:** `FusionData.IsClosed.mulTensor_apply` restates it in
+- **Sanctioned bridge:** `MPOTensor.GroupFamily.FusionData.IsClosed.mulTensor_apply` restates it in
   the two physical indices of the operator tensors.
 - **Caveat:** for an injective representation with $U_e=\Id$ it forces bond
   dimension one (`MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`), so
@@ -2855,10 +2855,10 @@ involve no boundary.
   the relation with one site on each side of the wall at the renormalization fixed point and
   does not state the nonzero conditions. Both conventions are recorded in
   `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
-- **Sanctioned bridges:** `IsDomainWallAction.physAct_eq` (configuration-indexed form),
-  `IsDomainWallAction.mul` (composition, with L-symbols), `IsDomainWallAction.phase_eq`
-  (uniqueness of the phase), `IsDomainWallAction.pair` (a string over a pair of walls),
-  `IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.physAct_eq` (configuration-indexed form),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul` (composition, with L-symbols), `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.phase_eq`
+  (uniqueness of the phase), `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair` (a string over a pair of walls),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
 
 ### `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily`
 
@@ -2869,9 +2869,9 @@ involve no boundary.
   `IsDomainWallAction`; in particular all walls and phases are nonzero.
 - **Source boundary:** arXiv:2405.00439, line 1894 and `eq:localcdefG`, with the conventions of
   `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
-- **Sanctioned bridges:** `IsDomainWallFamily.mul_eq` (`PentLB`),
-  `IsDomainWallFamily.prod_eq_inv_cyclicInvariant` (`Intequiv`),
-  `IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq` (`PentLB`),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant` (`Intequiv`),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
   blocks).
 
 ### `MPOTensor.GroupFamily.IsSeparatingLeftInverse`
@@ -2885,11 +2885,11 @@ involve no boundary.
   the other tensor.
 - **Source boundary:** arXiv:2405.00439, lines 1422--1425 (the left inverses `Â`, `B̂` in the
   endpoint tensors of `eq:defEndT`, with orthogonal supports at the renormalization fixed point).
-- **Sanctioned bridges:** `BlockActionData.wallString_mulVec_mpv_left` and
-  `BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_left` and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
   half-chains), the last three in `TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallStringExchange.lean`.
 
 ## Symmetries of matrix product density operators
@@ -3118,7 +3118,7 @@ involve no boundary.
 - **Source:** the physical-qudit/onsite-ancilla distinction in arXiv:2103.13367, Supplement
   pp. 7–8 (proof of Proposition 2).
 - **Sanctioned bridges:** `isUnitaryDilation_id`, `QuantumCircuit.IsUnitaryDilation.mono`,
-  `QuantumCircuit.IsUnitaryDilation.comp`, `QuantumCircuit.Layer.isUnitaryDilation`, `Circuit.isUnitaryDilation`,
+  `QuantumCircuit.IsUnitaryDilation.comp`, `QuantumCircuit.Layer.isUnitaryDilation`, `QuantumCircuit.Circuit.isUnitaryDilation`,
   `QuantumCircuit.IsProtocol.isUnitaryDilation`, `QuantumCircuit.Layer.exists_portRing_sites` (operations on whole sites are
   free), `QuantumCircuit.Layer.exists_portRing` (one matching layer costs `2k`), and the pure-output estimate
   `QuantumCircuit.IsUnitaryDilation.exists_unit_product_approx`.
@@ -3156,9 +3156,9 @@ involve no boundary.
   register with its workspace initialized, this identity says that the
   workspace returns to its initialized state on every logical input.
 - **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
-- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+- **Sanctioned constructions:** `QuantumCircuit.IsCleanImplementation.mul` composes
   implementations using the same workspace; TNLean's
-  `IsCleanImplementation.placeAlong` places one in a larger register; `exists_isGateProduct_isCleanImplementation`
+  `QuantumCircuit.IsCleanImplementation.placeAlong` places one in a larger register; `exists_isGateProduct_isCleanImplementation`
   constructs a product of gates for an included logical unitary, given that
   every unitary on the register is such a product.
 - **Caveat:** the identity alone does not assert unitarity. It specifies the
@@ -3230,12 +3230,12 @@ involve no boundary.
 - **Sanctioned bridges:** `isBoundaryClosed_iff_exists_linearMap` derives
   one linear boundary map on the full stacked matrix space, valid at all
   positive lengths; `mpoWithBoundary_eq_physCloseN` identifies the existing
-  physical closure; `IsBoundaryClosed.mul_mem_range` gives closure of its
+  physical closure; `MPOTensor.IsBoundaryClosed.mul_mem_range` gives closure of its
   range at each positive length. Exact biorthogonal data imply the predicate
   through `isBoundaryClosed_of_biorthogonalDecomposition`.
 - **Caveat:** closure at each length alone does not supply a common boundary
   choice. No converse from independent lengthwise range closure is asserted.
-  `IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective` now
+  `MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective` now
   constructs exact fusion decompositions from an unweighted block presentation
   with positive-dimensional, individually injective, gauge-scalar-separated
   blocks. The common positive spanning length is derived, not assumed.
@@ -3252,12 +3252,12 @@ involve no boundary.
 - **Sanctioned bridges:** `isBoundaryCompatible_iff_exists_linearMap`
   supplies a length-independent linear map on the complete product boundary
   matrix space. `MPSTensor.mpvWithBoundary_eq_groundSpaceMap` and
-  `IsBoundaryCompatible.mulVec_mem_groundSpace` identify the boundary state
+  `MPOTensor.IsBoundaryCompatible.mulVec_mem_groundSpace` identify the boundary state
   map and prove ground-space invariance. Exact action data give compatibility
   through `isBoundaryCompatible_of_biorthogonalDecomposition`.
 - **Caveat:** separate ground-space invariance at each length does not assert
   a common boundary transport.
-  `IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective`
+  `MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective`
   constructs exact action tensors from unweighted operator/state block
   presentations and positive-dimensional, individually injective,
   gauge-scalar-separated target state blocks. Operator-block injectivity is
@@ -3288,7 +3288,7 @@ involve no boundary.
   The source-block construction is in `BoundarySourceDecomposition.lean`;
   `BoundaryZipperBlocked.lean` retains its exact unblocked maps and packages
   the same maps into a complete zipper family after a derived common blocking.
-  `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
+  `MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
   of multiplicities under positive dimensions and injective block separation.
 
 ## Finite-domain area law and open-grid PEPS approximation
@@ -3627,7 +3627,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   chooses the corresponding constant before the template and scales. This is
   the conditional entropy component of Lemma 9.4, not a derivation of the
   arbitrary-exponent input or a completion marker for the full source lemma.
-- `Geometry.template_entropy_bounds_of_real_safe_box`
+- `ManyBody.template_entropy_bounds_of_real_safe_box`
   (`TemplateBoxEntropyReal.lean`) assumes the box estimate at one exponent
   `e > 0` and for one real clearance `D₀ ≥ 1`, for every integer rectangle
   `Q` with `dist_∞(Q, Z) > D₀ size(Q)`. It proves the core, shell and prefix
@@ -3697,10 +3697,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 The [nested-square patch geometry](formalization/peps-nested-patch-geometry.md)
 records the geometric part of the polynomial-PEPS patch construction. For the
-existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
+existing finite induced lattice domain, `ManyBody.closedSquareSample Λ c r`
 samples the closed coordinate square at any real centre and clips it to `Λ`.
-`Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
-`Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
+`ManyBody.nestedPatch Λ c u j` uses radius `u + 2j`, with
+`ManyBody.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
 These patches use `ManyBody.planeDomainGraph` and the unordered `ManyBody.edgeBoundary`;
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
