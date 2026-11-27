@@ -83,8 +83,8 @@ letters, rather than a zero-tensor summand. Source: GLM23 `fusiontensors`,
 theorem isBiorthogonalDecomposition_triangularTensor
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
     (hF : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (hA : ∀ a x,
       MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -92,9 +92,9 @@ theorem isBiorthogonalDecomposition_triangularTensor
         (fun q ↦ VA a x q.1 q.2) (fun q ↦ WA a x q.1 q.2))
     (a b : Fin r ⊕ Fin s) :
     MPSTensor.IsBiorthogonalDecomposition
-      (mulTensor (triangularTensor O A a) (triangularTensor O A b)).toMPSTensor
+      (mulTensor (triangularTensor O A a) (triangularTensor O A b))
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
-        (triangularTensor O A q.1).toMPSTensor)
+        (triangularTensor O A q.1))
       (fun q ↦ triangularFusionAnalysis VF VA a b q.1 q.2)
       (fun q ↦ triangularFusionSynthesis WF WA a b q.1 q.2) := by
   classical
@@ -121,20 +121,20 @@ theorem isBiorthogonalDecomposition_triangularTensor
             rfl
       · intro p
         have hp : (mulTensor (operatorPhysicalPadding (O a))
-            (operatorPhysicalPadding (O b))).toMPSTensor p =
+            (operatorPhysicalPadding (O b))) p =
             ∑ q : (c : Fin r) × Fin (N a b c),
-              WF a b q.1 q.2 * (operatorPhysicalPadding (O q.1)).toMPSTensor p *
+              WF a b q.1 q.2 * (operatorPhysicalPadding (O q.1)) p *
                 VF a b q.1 q.2 := by
           rw [mulTensor_operatorPhysicalPadding]
           exact ((hF a b).operatorPhysicalPadding).letter p
         rw [Fintype.sum_sigma, Fintype.sum_sum_type]
         change (mulTensor (operatorPhysicalPadding (O a))
-            (operatorPhysicalPadding (O b))).toMPSTensor p =
+            (operatorPhysicalPadding (O b))) p =
           (∑ c : Fin r, ∑ mu : Fin (N a b c),
-            WF a b c mu * (operatorPhysicalPadding (O c)).toMPSTensor p * VF a b c mu) +
+            WF a b c mu * (operatorPhysicalPadding (O c)) p * VF a b c mu) +
           ∑ x : Fin s, ∑ mu : Fin 0,
             (Fin.elim0 mu : Matrix (Fin (χ a * χ b)) (Fin (D x)) ℂ) *
-              (statePhysicalPadding (A x)).toMPSTensor p *
+              (statePhysicalPadding (A x)) p *
               (Fin.elim0 mu : Matrix (Fin (D x)) (Fin (χ a * χ b)) ℂ)
         simpa only [Fintype.sum_sigma, Finset.univ_eq_empty, Finset.sum_empty,
           Finset.sum_const_zero, add_zero] using hp
@@ -158,21 +158,21 @@ theorem isBiorthogonalDecomposition_triangularTensor
             rfl
       · intro p
         have hp : (mulTensor (operatorPhysicalPadding (O a))
-            (statePhysicalPadding (A x))).toMPSTensor p =
+            (statePhysicalPadding (A x))) p =
             ∑ q : (y : Fin s) × Fin (M a x y),
-              WA a x q.1 q.2 * (statePhysicalPadding (A q.1)).toMPSTensor p *
+              WA a x q.1 q.2 * (statePhysicalPadding (A q.1)) p *
                 VA a x q.1 q.2 := by
           rw [mulTensor_operatorPhysicalPadding_statePhysicalPadding]
           exact ((hA a x).statePhysicalPadding).letter p
         rw [Fintype.sum_sigma, Fintype.sum_sum_type]
         change (mulTensor (operatorPhysicalPadding (O a))
-            (statePhysicalPadding (A x))).toMPSTensor p =
+            (statePhysicalPadding (A x))) p =
           (∑ c : Fin r, ∑ mu : Fin 0,
             (Fin.elim0 mu : Matrix (Fin (χ a * D x)) (Fin (χ c)) ℂ) *
-              (operatorPhysicalPadding (O c)).toMPSTensor p *
+              (operatorPhysicalPadding (O c)) p *
               (Fin.elim0 mu : Matrix (Fin (χ c)) (Fin (χ a * D x)) ℂ)) +
           ∑ y : Fin s, ∑ mu : Fin (M a x y),
-            WA a x y mu * (statePhysicalPadding (A y)).toMPSTensor p * VA a x y mu
+            WA a x y mu * (statePhysicalPadding (A y)) p * VA a x y mu
         simpa only [Fintype.sum_sigma, Finset.univ_eq_empty, Finset.sum_empty,
           Finset.sum_const_zero, zero_add] using hp
   | inr x =>
@@ -185,12 +185,12 @@ theorem isBiorthogonalDecomposition_triangularTensor
     cases b with
     | inl b =>
       change (mulTensor (statePhysicalPadding (A x))
-        (operatorPhysicalPadding (O b))).toMPSTensor p = 0
+        (operatorPhysicalPadding (O b))) p = 0
       rw [mulTensor_statePhysicalPadding_operatorPhysicalPadding]
       rfl
     | inr y =>
       change (mulTensor (statePhysicalPadding (A x))
-        (statePhysicalPadding (A y))).toMPSTensor p = 0
+        (statePhysicalPadding (A y))) p = 0
       rw [mulTensor_statePhysicalPadding_statePhysicalPadding]
       rfl
 

@@ -42,13 +42,13 @@ theorem blockMPO {p g : ℕ} {D : Fin g → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Fin g → ℕ} {a b : Fin g}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
     {W : ∀ c, Fin (N c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ}
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b)).toMPSTensor
-      (fun q : (c : Fin g) × Fin (N c) ↦ (T q.1).toMPSTensor)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b))
+      (fun q : (c : Fin g) × Fin (N c) ↦ T q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
     {L : ℕ} (hL : 0 < L) :
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor (MPOTensor.blockTensor (T a) L)
-        (MPOTensor.blockTensor (T b) L)).toMPSTensor
+        (MPOTensor.blockTensor (T b) L))
       (fun q : (c : Fin g) × Fin (N c) ↦ (MPOTensor.blockTensor (T q.1) L).toMPSTensor)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
   h.ofWords (MPOTensor.blockedPairWord p L) (MPOTensor.blockedPairWord_ne_nil hL)
@@ -65,12 +65,12 @@ variable {p g : ℕ} {D : Fin g → ℕ} {T : ∀ c, MPOTensor p (D c)}
   {N : Fin g → Fin g → Fin g → ℕ}
 
 variable (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c)
-  (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (T c).toMPSTensor))
+  (hne : MPSTensor.BlocksNotGaugePhaseEquiv T)
   (V : ∀ a b c, Fin (N a b c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ)
   (W : ∀ a b c, Fin (N a b c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ)
   (hVW : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
-      (fun q : (c : Fin g) × Fin (N a b c) ↦ (T q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
+      (fun q : (c : Fin g) × Fin (N a b c) ↦ T q.1)
       (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2))
 
 /-- Common blocking supplies the simultaneous inverse for an exact
@@ -119,12 +119,12 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
     (A : (c : Fin g) → MPOTensor p (D c))
     (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     (hInj : ∀ c, Kraus.IsInjective (A c)) (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (A c).toMPSTensor)) :
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv A) :
     ∃ (N : Fin g → Fin g → Fin g → ℕ)
       (V : ∀ a b c, Fin (N a b c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ)
       (W : ∀ a b c, Fin (N a b c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ),
-      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b)).toMPSTensor
-        (fun q : (c : Fin g) × Fin (N a b c) ↦ (A q.1).toMPSTensor)
+      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b))
+        (fun q : (c : Fin g) × Fin (N a b c) ↦ A q.1)
         (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2)) ∧
       ∃ L : ℕ, 0 < L ∧ ∃ F : CompleteZipperFusionFamily (Fin g) (Kraus.blockPhysDim p L),
         F.bondDim = D ∧ F.fusionMultiplicity = N ∧
@@ -135,7 +135,7 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
           (fun a b ↦ CompleteZipperFusionFamily.biorthogonalAnalysis (V a b)) := by
   classical
   have hBlocks' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun c ↦ (A c).toMPSTensor) := congrArg toMPSTensor hBlocks
+      A := congrArg toMPSTensor hBlocks
   have hInj' : ∀ c, Kraus.IsInjective (A c).toMPSTensor :=
     hInj
   choose N V W hVW using

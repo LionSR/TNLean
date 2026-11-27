@@ -317,19 +317,19 @@ theorem exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective
     (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
     {VF VF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ}
     {WF WF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ}
     {VA VA' : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ}
     {WA WA' : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ}
     (hF : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (hF' : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF' a b q.1 q.2) (fun q ↦ WF' a b q.1 q.2))
     (hA : ∀ a x,
       MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))

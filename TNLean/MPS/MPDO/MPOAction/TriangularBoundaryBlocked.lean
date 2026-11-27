@@ -37,13 +37,13 @@ theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Λ → ℕ} {a b : Λ}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
     {W : ∀ c, Fin (N c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ}
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b)).toMPSTensor
-      (fun q : (c : Λ) × Fin (N c) ↦ (T q.1).toMPSTensor)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b))
+      (fun q : (c : Λ) × Fin (N c) ↦ T q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
     {L : ℕ} (hL : 0 < L) :
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor (MPOTensor.blockTensor (T a) L)
-        (MPOTensor.blockTensor (T b) L)).toMPSTensor
+        (MPOTensor.blockTensor (T b) L))
       (fun q : (c : Λ) × Fin (N c) ↦ (MPOTensor.blockTensor (T q.1) L).toMPSTensor)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
   h.ofWords (MPOTensor.blockedPairWord p L) (MPOTensor.blockedPairWord_ne_nil hL)
@@ -158,7 +158,7 @@ variable {d r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (hInjO : ∀ a, Kraus.IsInjective (O a))
   (hInjA : ∀ x, Kraus.IsInjective (A x))
   (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-  (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+  (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
   (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
 
 include hInjO hInjA hχ hD hneO hneA in
@@ -234,8 +234,8 @@ variable {N : Fin r → Fin r → Fin r → ℕ} {M : Fin r → Fin s → Fin s 
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hAct : ∀ a x,
     MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
