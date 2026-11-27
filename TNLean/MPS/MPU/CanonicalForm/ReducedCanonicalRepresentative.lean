@@ -434,9 +434,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
   obtain ⟨E, _hE, V, hV, hED, hMpo⟩ := hU.exists_reduced_cfii_representative
   have hSame : MPTensor.SameMPV₂Pos V U := sameMPV₂Pos_iff_mpo_eq.2 hMpo
   obtain ⟨P, Q, hRed⟩ :=
-    MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos
-      U.toMPSTensor V.toMPSTensor ((isInjective_toMPSTensor_iff U).2 hInj)
-      ((sameMPV₂Pos_toMPSTensor_iff V U).2 hSame)
+    MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos U V hInj hSame
   have hE : E = D := Nat.le_antisymm hED hRed.bondDim_le
   subst E
   have hQP : Q * P = 1 := mul_eq_one_comm.mp hRed.mul_eq_one
@@ -444,7 +442,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
   refine ⟨V, hV, X, fun i j => ?_, hMpo⟩
   change V (i, j) = Q * U (i, j) * P
   have hij : P * V (i, j) * Q = U (i, j) := by
-    simpa [Kraus.evalWord, toMPSTensor] using hRed.evalWord [finProdFinEquiv (i, j)]
+    simpa [Kraus.evalWord] using hRed.evalWord [(i, j)]
   calc
     V (i, j) = (Q * P) * V (i, j) * (Q * P) := by
       rw [hQP, Matrix.one_mul, Matrix.mul_one]

@@ -8,7 +8,7 @@ import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import QICLean.Channel.KrausMap.KrausSupportAbsorption
 import QICLean.Kraus.Word
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 import TNLean.MPS.MPU.Index.FactorFreeSandwich
 import TNLean.MPS.MPU.Index.IndexContinuity
 import TNLean.MPS.MPU.Index.IndexOfCanonicalForm
@@ -78,13 +78,8 @@ theorem mpo_rectangularSandwich_of_absorb {m : ℕ}
     (M : MPOTensor n D) (Lf : Matrix (Fin m) (Fin D) ℂ) (Rt : Matrix (Fin D) (Fin m) ℂ)
     (hright : ∀ i j, M (i, j) * (Rt * Lf) = M (i, j)) {N : ℕ} (hN : 0 < N) :
     mpo (fun ij => Lf * M ij * Rt) N = mpo M N := by
-  refine mpo_eq_of_forall_trace_evalWord (fun w hw ↦ ?_) hN
-  have h := Kraus.trace_evalWord_compress_of_right_absorb M.toMPSTensor Lf Rt
-    (fun _ => hright _ _) (w.map finProdFinEquiv) (by simpa using hw)
-  change Matrix.trace (Kraus.evalWord
-    (MPOTensor.toMPSTensor (D := m) fun ij => Lf * M ij * Rt) _) = _ at h
-  rwa [evalWord_toMPSTensor, evalWord_toMPSTensor, List.map_map, Equiv.symm_comp_self,
-    List.map_id] at h
+  exact mpo_eq_of_forall_trace_evalWord (fun w hw ↦
+    Kraus.trace_evalWord_compress_of_right_absorb M Lf Rt (fun ij => hright ij.1 ij.2) w hw) hN
 
 /-- **Canonical form II of a tensor with a rank-one transfer map.** Let `V`
 generate MPU and let its normalized transfer map be `X ↦ tr(L X) R` with
