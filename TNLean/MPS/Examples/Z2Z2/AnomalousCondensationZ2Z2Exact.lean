@@ -28,7 +28,7 @@ dressing, since `(Z^{(2)})² = 1`. The dressed tensor `M'_g` multiplies the lett
 input label `i` by the sign `(−1)^{g₁ i₂}`. It has the bond dimension of `M_g`, its periodic
 operators are exactly the operators `U_g^{ω}` of the construction for `ω = (−1)^{a₁ b₂ c₂}`,
 and these multiply exactly as `ℤ₂ × ℤ₂` on every nonempty ring. Rescaling letters by signs
-does not change the spans of words, so the dressed doubled-index tensors are normal. The four
+does not change the spans of words, so the dressed tensors are normal. The four
 dressed tensors are therefore an exact normal representation of `ℤ₂ × ℤ₂`, to which the
 anomaly three-cochain of arXiv:2502.20257 applies. Normality is proved for the dressed tensors
 themselves, of bond dimensions one and two, not for the bond-four tensor of the construction.
@@ -43,7 +43,7 @@ themselves, of bond dimensions one and two, not for the bond-four tensor of the 
 
 * `Z2Z2Condensation.mpo_kleinTensor`: the periodic operators of `M'_g` are those of the
   construction for `(−1)^{a₁ b₂ c₂}`.
-* `Z2Z2Condensation.kleinTensor_isNormal`: the dressed doubled-index tensors are normal.
+* `Z2Z2Condensation.kleinTensor_isNormal`: the dressed tensors are normal.
 * `Z2Z2Condensation.kleinFamily_isNormalRepresentation`: the dressed tensors are an exact
   representation of `ℤ₂ × ℤ₂` by normal tensors.
 
@@ -112,12 +112,11 @@ theorem mpo_kleinTensor (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ} [NeZer
   rw [kleinTensor, mpo_mulDiagonal, diagonal_prod_secondZSign, mpo_symTensor_eq_groupCocycle,
     Matrix.mul_assoc, secondZDressing_mul_self, Matrix.mul_one]
 
-/-- **The dressed doubled-index tensors are normal**: dressing rescales every letter of the
-normal tensor `symMPS g` by a sign, which leaves the spans of words unchanged. -/
+/-- **The dressed tensors are normal**: dressing rescales every letter of the normal tensor
+`symTensor g` by a sign, which leaves the spans of words unchanged. -/
 theorem kleinTensor_isNormal (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    Kraus.IsNormal (kleinTensor g).toMPSTensor := by
-  rw [kleinTensor, isNormal_toMPSTensor_mulDiagonal_iff _ (secondZSign_ne_zero g),
-    ← symMPS_eq_toMPSTensor]
+    Kraus.IsNormal (kleinTensor g) := by
+  rw [kleinTensor, isNormal_mulDiagonal_iff _ (secondZSign_ne_zero g)]
   exact symMPS_isNormal _
 
 /-- The family `g ↦ M'_g` of dressed two-qubit tensors indexed by `ℤ₂ × ℤ₂`, with bond
@@ -128,7 +127,7 @@ def kleinFamily : GroupFamily (Multiplicative (ZMod 2 × ZMod 2)) 4 where
   tensor := kleinTensor
 
 /-- **The dressed tensors are an exact representation of `ℤ₂ × ℤ₂` by normal tensors**: every
-doubled-index tensor is normal, and `U'_g U'_h = U'_{gh}` on every nonempty periodic chain.
+tensor is normal, and `U'_g U'_h = U'_{gh}` on every nonempty periodic chain.
 
 Source: arXiv:2203.12563, lines 2200--2224 (the construction represents `G` exactly), for the
 cocycle of line 1848; the representation law is that of arXiv:2502.20257, lines 1403--1407. -/

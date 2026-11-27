@@ -224,8 +224,8 @@ end Gauge
 
 section ProjectorSum
 
-variable {d m DC DB zz : ℕ} {ι : Type*} [DecidableEq ι] {S : Finset ι} {μ : ι → ℂ}
-  {C : ι → MPSTensor d DC} {B : MPSTensor d DB} {j : ι → Fin m}
+variable {α : Type*} {m DC DB zz : ℕ} {ι : Type*} [DecidableEq ι] {S : Finset ι} {μ : ι → ℂ}
+  {C : ι → MPTensor α (Fin DC)} {B : MPTensor α (Fin DB)} {j : ι → Fin m}
   {U Uinv : Matrix (Fin m) (Fin m) ℂ}
 
 /-- The one-site matrices of a projector-weighted direct sum, in the block coordinates: the
@@ -234,7 +234,7 @@ theorem conjMatrix_projGauge (hU : U * Uinv = 1) (hU' : Uinv * U = 1)
     (ρ : {s // s ∈ S} ⊕ Fin zz ≃ Fin m) (σ : Fin m × Fin DC ≃ Fin DB)
     (hB : ∀ i, B i =
       (∑ s ∈ S, μ s • (basisProj U Uinv (j s) ⊗ₖ C s i)).submatrix σ.symm σ.symm)
-    (i : Fin d) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) :
+    (i : α) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) :
     conjMatrix (projGauge S ρ σ hU hU') (B i) x y =
       ∑ s ∈ S, μ s * (if j s = ρ (projBlockEquiv S DC zz x).1 ∧
           j s = ρ (projBlockEquiv S DC zz y).1 then (1 : ℂ) else 0) *
@@ -263,7 +263,7 @@ include hU hU' hj in
 private theorem conjMatrix_projGauge_eq_zero
     (hB : ∀ i, B i =
       (∑ s ∈ S, μ s • (basisProj U Uinv (j s) ⊗ₖ C s i)).submatrix σ.symm σ.symm)
-    (i : Fin d) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) (hxy : x.1 ≠ y.1) :
+    (i : α) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) (hxy : x.1 ≠ y.1) :
     conjMatrix (projGauge S ρ σ hU hU') (B i) x y = 0 := by
   rw [conjMatrix_projGauge hU hU' ρ σ hB i x y]
   refine Finset.sum_eq_zero fun s hs => ?_

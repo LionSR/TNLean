@@ -36,7 +36,7 @@ the one-label candidate of the P6 work
 The one-site matrices of the candidate are the four scaled matrix units
 `A⁰ = (4/5) E₀₀`, `A¹ = (4/5) E₁₁`, `A² = (3/5) E₀₁`, `A³ = (3/5) E₁₀`, a Pythagorean point at
 which `c₊² = (1 + λ)/2` and `c₋² = (1 - λ)/2` for `λ = 7/25`. The vertical tensor is the
-doubled family `M₀^{(i,j)} = A^i ⊗ A^j` on the sixteen-letter pair alphabet, and its stacked
+doubled family `M₀^{(i,j)} = A^i ⊗ A^j` on the pair alphabet `Fin 4 × Fin 4`, and its stacked
 product has the bond dimension sixteen. That stacked product factorises as
 `B^{(i,k)} = A^i ⊗ T ⊗ A^k` with the inner-bond matrix `T = ∑_j A^j ⊗ A^j`, whose spectrum is
 `{1, 7/25, 0, 0}`: the whole compression is the spectral decomposition of one four-by-four
@@ -56,7 +56,7 @@ they are verification records, not the source.
 
 ## Main definitions
 
-* `P6Compression.oneLabelTarget`: the vertical tensor of the candidate on the pair alphabet.
+* `P6Compression.oneLabelM`: the vertical tensor of the candidate.
 * `P6Compression.oneLabelStacked`: its stacked product, of bond dimension sixteen.
 
 ## Main results
@@ -88,43 +88,34 @@ def oneLabelAInt : Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
   | 3 => !![0, 0; 3, 0]
 
 /-- Twenty-five times the vertical tensor `M₀^{(i,j)} = A^i ⊗ A^j` of the one-label candidate. -/
-def oneLabelMInt (i j : Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
-  (oneLabelAInt i ⊗ₖ oneLabelAInt j).submatrix
+def oneLabelMInt (ij : Fin 4 × Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
+  (oneLabelAInt ij.1 ⊗ₖ oneLabelAInt ij.2).submatrix
     (finProdFinEquiv (m := 2) (n := 2)).symm (finProdFinEquiv (m := 2) (n := 2)).symm
 
 /-- The vertical tensor of the one-label candidate, as a matrix product operator tensor. -/
 noncomputable def oneLabelM : MPOTensor 4 4 :=
-  fun (i, j) => (25 : ℂ)⁻¹ • complexOfInt (oneLabelMInt i j)
-
-/-- The vertical tensor of the one-label candidate on the sixteen-letter pair alphabet. -/
-noncomputable def oneLabelTarget : MPSTensor 16 4 := oneLabelM.toMPSTensor
+  fun ij => (25 : ℂ)⁻¹ • complexOfInt (oneLabelMInt ij)
 
 /-- The stacked product of the vertical tensor with itself, of bond dimension sixteen
 (`p6_examples_compression_data.md`, §4.2). -/
-noncomputable def oneLabelStacked : MPSTensor 16 16 :=
-  (MPOTensor.mulTensor oneLabelM oneLabelM).toMPSTensor
-
-/-- Twenty-five times the pair-alphabet vertical tensor. -/
-def oneLabelTargetInt (a : Fin 16) : Matrix (Fin 4) (Fin 4) ℤ :=
-  oneLabelMInt (Fin.divNat (m := 4) (n := 4) a) (Fin.modNat (m := 4) (n := 4) a)
+noncomputable def oneLabelStacked : MPOTensor 4 16 := MPOTensor.mulTensor oneLabelM oneLabelM
 
 /-- Six hundred and twenty-five times the stacked product. -/
-def oneLabelStackedInt (a : Fin 16) : Matrix (Fin 16) (Fin 16) ℤ :=
-  mulIntTensor oneLabelMInt oneLabelMInt (Fin.divNat (m := 4) (n := 4) a)
-    (Fin.modNat (m := 4) (n := 4) a)
+def oneLabelStackedInt (a : Fin 4 × Fin 4) : Matrix (Fin 16) (Fin 16) ℤ :=
+  mulIntTensor oneLabelMInt oneLabelMInt a
 
-theorem oneLabelTarget_eq (a : Fin 16) :
-    oneLabelTarget a = (25 : ℂ)⁻¹ • complexOfInt (oneLabelTargetInt a) := rfl
+theorem oneLabelTarget_eq (a : Fin 4 × Fin 4) :
+    oneLabelM a = (25 : ℂ)⁻¹ • complexOfInt (oneLabelMInt a) := rfl
 
-theorem oneLabelStacked_eq (a : Fin 16) :
+theorem oneLabelStacked_eq (a : Fin 4 × Fin 4) :
     oneLabelStacked a = ((25 : ℂ)⁻¹ * (25 : ℂ)⁻¹) • complexOfInt (oneLabelStackedInt a) :=
-  mulTensor_smul_complexOfRing _ (25 : ℂ)⁻¹ oneLabelMInt oneLabelMInt _ _
+  mulTensor_smul_complexOfRing _ (25 : ℂ)⁻¹ oneLabelMInt oneLabelMInt a
 
 /-! ### The two weighted slots -/
 
 /-- The two target blocks of the one-label candidate: the same vertical tensor twice
 (`p6_examples_compression_data.md`, §4.2). -/
-noncomputable def oneLabelBlocks : Fin 2 → MPSTensor 16 4 := fun _ => oneLabelTarget
+noncomputable def oneLabelBlocks : Fin 2 → MPOTensor 4 4 := fun _ => oneLabelM
 
 /-- The two weights of the one-label candidate, the eigenvalues `1` and `λ = 7/25` of the
 inner-bond matrix. -/
@@ -133,9 +124,9 @@ noncomputable def oneLabelWeights : Fin 2 → ℂ := ![1, 7 / 25]
 /-- Twenty-five times the two weights, the integer coefficients of the letter identity. -/
 def oneLabelCoefInt : Fin 2 → ℤ := ![25, 7]
 
-private theorem oneLabel_letter_int (a : Fin 16) :
+private theorem oneLabel_letter_int (a : Fin 4 × Fin 4) :
     (2 : ℤ) • oneLabelStackedInt a =
-      ∑ s, oneLabelCoefInt s • pairBlockInt (fun _ => oneLabelTargetInt) s a := by
+      ∑ s, oneLabelCoefInt s • pairBlockInt (fun _ => oneLabelMInt) s a := by
   revert a
   decide +kernel
 
@@ -144,7 +135,7 @@ private theorem oneLabel_scalar (s : Fin 2) :
       ((oneLabelCoefInt s : ℤ) : ℂ) * ((25 : ℂ)⁻¹ * (25 : ℂ)⁻¹) := by
   fin_cases s <;> norm_num [oneLabelWeights, oneLabelCoefInt]
 
-private theorem oneLabel_hB (a : Fin 16) :
+private theorem oneLabel_hB (a : Fin 4 × Fin 4) :
     oneLabelStacked a = (∑ s ∈ pairSlots, oneLabelWeights s •
       (basisProj pairU pairUinv (pairJ s) ⊗ₖ oneLabelBlocks s a)).submatrix
         pairReorder.symm pairReorder.symm :=
@@ -171,9 +162,9 @@ theorem oneLabel_remainder : oneLabelCompression.remainder = 0 :=
 
 /-- **The word-trace identity of the one-label candidate**: the periodic power sum
 `1 + λ^L` at `λ = 7/25` (`p6_examples_compression_data.md`, §4.3). -/
-theorem oneLabel_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
+theorem oneLabel_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord oneLabelStacked w) =
-      (1 + (7 / 25 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord oneLabelTarget w) := by
+      (1 + (7 / 25 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord oneLabelM w) := by
   rw [oneLabelCompression.trace_evalWord_eq_sum_smul w hw, show pairSlots = Finset.univ from rfl,
     Fin.sum_univ_two]
   simp only [oneLabelWeights, oneLabelBlocks, Matrix.cons_val_zero, Matrix.cons_val_one, one_pow]
@@ -190,23 +181,24 @@ theorem oneLabel_dim_eq : (16 : ℕ) = ∑ _s ∈ pairSlots, 4 + 8 :=
 /-! ### Normality of the target -/
 
 /-- The letter realising each matrix unit of the bond algebra of the target. -/
-def oneLabelUnitLetter : Fin 4 → Fin 4 → Fin 16 :=
-  ![![0, 2, 8, 10], ![3, 1, 11, 9], ![12, 14, 4, 6], ![15, 13, 7, 5]]
+def oneLabelUnitLetter : Fin 4 → Fin 4 → Fin 4 × Fin 4 :=
+  ![![(0, 0), (0, 2), (2, 0), (2, 2)], ![(0, 3), (0, 1), (2, 3), (2, 1)],
+    ![(3, 0), (3, 2), (1, 0), (1, 2)], ![(3, 3), (3, 1), (1, 3), (1, 1)]]
 
 /-- The nonzero integer factor relating that letter to its matrix unit. -/
 def oneLabelUnitCoef : Fin 4 → Fin 4 → ℤ :=
   ![![16, 12, 12, 9], ![12, 16, 9, 12], ![12, 9, 16, 12], ![9, 12, 12, 16]]
 
 private theorem oneLabelTargetInt_unit (x y : Fin 4) :
-    oneLabelTargetInt (oneLabelUnitLetter x y) = oneLabelUnitCoef x y • Matrix.single x y 1 := by
+    oneLabelMInt (oneLabelUnitLetter x y) = oneLabelUnitCoef x y • Matrix.single x y 1 := by
   revert x y
   decide +kernel
 
 /-- **The target of the one-label candidate is normal at blocking length one**: its sixteen
 letters are scaled matrix units covering every position, so they span the four-by-four matrix
 algebra (`p6_examples_compression_data.md`, §4.3). -/
-theorem oneLabelTarget_isNormal : Kraus.IsNormal oneLabelTarget :=
-  isNormal_of_single_eq_smul oneLabelTargetInt (by norm_num) oneLabelTarget_eq
+theorem oneLabelTarget_isNormal : Kraus.IsNormal oneLabelM :=
+  isNormal_of_single_eq_smul oneLabelMInt (by norm_num) oneLabelTarget_eq
     oneLabelUnitLetter oneLabelUnitCoef (by decide) oneLabelTargetInt_unit
 
 end P6Compression
