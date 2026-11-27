@@ -321,12 +321,10 @@ lemma retainedBlock_transferMap (X : Matrix (Fin 4) (Fin 4) ℂ) :
 /-- **`retainedBlock`'s transfer map is exactly idempotent.** Chasing the scalar through
 `retainedBlock_transferMap` and `transferMap_R_idem`, the composite scalar
 `(weight⁻¹)^2 * (weight⁻¹)^2 * (337/512)` equals `(weight⁻¹)^2` exactly because
-`weight^2 = 337/512` (`weight_sq_C`). The idempotence predicate is stated on the
-doubled-index alphabet `Fin (4 * 4)`. -/
+`weight^2 = 337/512` (`weight_sq_C`). -/
 lemma retainedBlock_isTransferIdempotent :
-    MPSTensor.IsTransferIdempotent retainedBlock.toMPSTensor := by
+    MPSTensor.IsTransferIdempotent retainedBlock := by
   unfold MPSTensor.IsTransferIdempotent
-  rw [MPOTensor.kraus_transferMap_toMPSTensor]
   apply LinearMap.ext
   intro X
   rw [LinearMap.comp_apply]
@@ -354,9 +352,12 @@ lemma retainedBlock_isInjective : Kraus.IsInjective retainedBlock := by
 
 /-- **`retainedBlock` is a CPSV normal tensor.** -/
 lemma retainedBlock_isNormalTensor : MPTensor.IsNormalTensor retainedBlock := by
+  -- The normality criterion for transfer-idempotent tensors is stated on a `Fin` alphabet.
   have h := (MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock.toMPSTensor
     ((MPOTensor.isNormal_toMPSTensor_iff _).2 retainedBlock_isInjective.isNormal)
-    retainedBlock_isTransferIdempotent).reindexPhysical finProdFinEquiv
+    (by
+      rw [MPSTensor.IsTransferIdempotent, MPOTensor.kraus_transferMap_toMPSTensor]
+      exact retainedBlock_isTransferIdempotent)).reindexPhysical finProdFinEquiv
   have he : Kraus.reindexPhysical finProdFinEquiv retainedBlock.toMPSTensor = retainedBlock :=
     funext fun i ↦ congrArg retainedBlock (finProdFinEquiv.symm_apply_apply i)
   rwa [he] at h
