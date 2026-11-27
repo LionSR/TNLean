@@ -4,9 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.IdempotentTracePerturbation
-import TNLean.MPS.Tensor.InjectivityCutoff
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import QICLean.Analysis.Real.PowerExponential
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.PositivePartRate
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
+import QICLean.Analysis.Norm.UnitNormalizationDistance
 
 /-!
 # The overlap of the positive part with the fixed point, to second order
@@ -51,22 +54,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Kraus (blockTensor)
-
-/-- For two unit vectors, the deficit of the real inner product is half their
-squared distance. This project identity underlies the second-order refinement
-of the overlap estimate in arXiv:2307.01696, Supplemental Material, `eq:app_error`. -/
-theorem one_sub_re_inner_eq_norm_sub_sq_div_two
-    {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    {x y : E} (hx : ‖x‖ = 1) (hy : ‖y‖ = 1) :
-    1 - RCLike.re ⟪x, y⟫_𝕜 = ‖x - y‖ ^ 2 / 2 := by
-  have h := @norm_sub_sq 𝕜 E _ _ _ x y
-  rw [hx, hy] at h
-  linarith
-
-/-- A square matrix of trace one has a nonempty index: `Tr σ = 1` forces `D ≠ 0`. -/
-theorem Matrix.neZero_of_trace_eq_one {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ}
-    (h : σ.trace = 1) : NeZero D :=
-  ⟨by rintro rfl; simp at h⟩
 
 namespace MPSTensor
 

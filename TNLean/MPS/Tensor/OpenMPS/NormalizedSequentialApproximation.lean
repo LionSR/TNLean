@@ -33,6 +33,8 @@ This supplies the simultaneous approximation reading of ALVV,
 arXiv:1602.08828v2, Theorem `thm:al-ld`, lines 1096–1105.
 -/
 
+open ManyBody (interval)
+
 section
 
 open ManyBody (interval)
@@ -40,12 +42,6 @@ open ManyBody (interval)
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
 namespace TNLean.MPS.AreaLaw
-
-/-- The left block of `k` sites is the interval `[0, k)`. -/
-theorem leftBlock_eq_interval (L k : ℕ) : leftBlock L k = interval L 0 k := by
-  ext i
-  simp
-
 
 /-- The actual normalized regional rank approximant controls the original
 marginal's missing leading mass. The coordinate map is constructed internally.
@@ -93,7 +89,7 @@ theorem exists_unit_mps_of_uniform_prefix_mass
     (D : ℕ) (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
     (htail : ∀ k ∈ Finset.Ico 1 L,
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).kyFanNorm D ≤ delta / (8 * ((L : ℝ) + 1))) :
+        (interval L 0 k) ψ).kyFanNorm D ≤ delta / (8 * ((L : ℝ) + 1))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q D (fun x ↦ Φ x) ∧ 1 - delta ≤ ‖⟪Φ, ψ⟫_ℂ‖ ∧
       ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
@@ -103,7 +99,7 @@ theorem exists_unit_mps_of_uniform_prefix_mass
     exact_mod_cast (show (Finset.Ico 1 L).card ≤ L + 1 by rw [Nat.card_Ico]; omega)
   have hsum : (∑ k ∈ Finset.Ico 1 L,
       (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).kyFanNorm D)) ≤ delta / 8 := by
+        (interval L 0 k) ψ).kyFanNorm D)) ≤ delta / 8 := by
     calc
       _ ≤ (Finset.Ico 1 L).card • (delta / (8 * ((L : ℝ) + 1))) :=
         Finset.sum_le_card_nsmul _ _ _ htail
@@ -138,19 +134,19 @@ theorem exists_unit_mps_of_designated_prefix_mass
     (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
     (hspecial : k0 ∈ Finset.Ico 1 L →
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k0) ψ).kyFanNorm Ds ≤ delta / 32)
+        (interval L 0 k0) ψ).kyFanNorm Ds ≤ delta / 32)
     (hother : ∀ k ∈ Finset.Ico 1 L, k ≠ k0 →
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).kyFanNorm Dg ≤ delta / (32 * ((L : ℝ) + 1))) :
+        (interval L 0 k) ψ).kyFanNorm Dg ≤ delta / (32 * ((L : ℝ) + 1))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
-      IsOpenMPS L q Dg (fun x ↦ Φ x) ∧ (cutMatrix (leftBlock L k0) Φ).rank ≤ Ds ∧
+      IsOpenMPS L q Dg (fun x ↦ Φ x) ∧ (cutMatrix (interval L 0 k0) Φ).rank ≤ Ds ∧
       1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   let D : ℕ → ℕ := fun k ↦ if k = k0 then Ds else Dg
   have hsmall : 0 ≤ delta / (32 * ((L : ℝ) + 1)) := by positivity
   have hpt (k : ℕ) (hk : k ∈ Finset.Ico 1 L) :
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).kyFanNorm (D k) ≤
+        (interval L 0 k) ψ).kyFanNorm (D k) ≤
         delta / (32 * ((L : ℝ) + 1)) + (if k = k0 then delta / 32 else 0) := by
     by_cases heq : k = k0
     · subst k
@@ -172,13 +168,13 @@ theorem exists_unit_mps_of_designated_prefix_mass
       _ = _ := by field_simp
   have hsum : (∑ k ∈ Finset.Ico 1 L,
       (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).kyFanNorm (D k))) ≤ delta / 8 := by
+        (interval L 0 k) ψ).kyFanNorm (D k))) ≤ delta / 8 := by
     refine (Finset.sum_le_sum hpt).trans ?_
     rw [Finset.sum_add_distrib]
     linarith only [hsingle, hconstant, hdelta]
   let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
     (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-      (leftBlock L k) ψ).leadingEigenprojection (D k)
+      (interval L 0 k) ψ).leadingEigenprojection (D k)
   let Φ0 := sequentialTruncation P (L - 1) ψ
   let Φ := (‖Φ0‖ : ℂ)⁻¹ • Φ0
   obtain ⟨_hpos, hΦ, hrank, hoverlap, hsq⟩ :=

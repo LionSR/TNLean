@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Compression
 
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
 import TNLean.MPS.FundamentalTheorem.Compression.AdmissibleBlock
 import TNLean.MPS.FundamentalTheorem.Compression.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge

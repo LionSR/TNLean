@@ -62,7 +62,7 @@ companion library, with the truncation constant `latticeTruncationRadiusConstant
 Source: area-law Proposition 9.6, `08-scanner.tex`, lines 808–827 and 942–943. -/
 noncomputable def collarThresholdClosed (q R : ℕ) (J Δ : ℝ) : ℕ :=
   AreaLaw.sublinearCollarThreshold q R J Δ (collarBoxConstantClosed q R J Δ)
-    (AreaLaw.latticeTruncationRadiusConstant R J Δ 10)
+    (ManyBody.latticeTruncationRadiusConstant R J Δ 10)
     TensorPower.ReplicaTransport.transportThreshold
     TensorPower.ReplicaTransport.transportEntropyConst
     TensorPower.ReplicaTransport.transportEntropyExponent
@@ -193,19 +193,19 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ d : ℝ × ℝ,
           ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T,
-            dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) ≤ A₀ * u) →
+            dist (ManyBody.integerPoint x + d) (ManyBody.integerPoint y + d) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v ∈ T),
           ∀ E : Finset (Vertex L),
             (∀ t ∈ T, ∀ v ∈ E, u ^ β <
-              dist (Geometry.integerPoint t + d)
-                (Geometry.integerPoint (rectangleEmbedding v) + d)) →
+              dist (ManyBody.integerPoint t + d)
+                (ManyBody.integerPoint (rectangleEmbedding v) + d)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   obtain ⟨β, hβ, C, u₀, hmain⟩ := coarse_mutualInformation_le_square hq hJ hΔ N₀ A₀
   refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan d T hT hdiam X hX E hE ↦ ?_⟩
   have hdist (x y : ℤ × ℤ) :
-      dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) =
+      dist (ManyBody.integerPoint x + d) (ManyBody.integerPoint y + d) =
         ((supDist x y : ℤ) : ℝ) := by
-    simp only [dist_add_right, natCast_supDist, Geometry.integerPoint,
+    simp only [dist_add_right, natCast_supDist, ManyBody.integerPoint,
       Prod.dist_eq, Real.dist_eq, Int.cast_max, Int.cast_abs, Int.cast_sub]
   exact hmain u hu L h hh hhJ E₀ Ω hΩ hgap hspan 0 T hT
     (fun x hx y hy ↦ by simpa only [hdist] using hdiam x hx y hy)

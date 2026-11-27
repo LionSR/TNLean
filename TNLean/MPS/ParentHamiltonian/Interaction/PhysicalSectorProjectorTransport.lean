@@ -189,23 +189,6 @@ namespace Function.Embedding
 
 variable {I J K : Type*} [Fintype I] [Fintype J] [Fintype K]
 
-/-- Extensions from disjoint coordinate ranges are orthogonal, with no
-normalization factor. This is the finite Euclidean orthogonality used by
-physical-sector sums in SPWC10's finite-prefix investigation. -/
-theorem inner_extendByZero_eq_zero_of_disjoint (e : I ↪ K) (f : J ↪ K)
-    (h : Disjoint (Set.range e) (Set.range f))
-    (x : EuclideanSpace ℂ I) (y : EuclideanSpace ℂ J) :
-    ⟪e.euclideanExtendByZero x, f.euclideanExtendByZero y⟫_ℂ = 0 := by
-  classical
-  rw [EuclideanSpace.inner_eq_star_dotProduct]
-  change (∑ k, f.euclideanExtendByZero y k * star (e.euclideanExtendByZero x k)) = 0
-  apply Finset.sum_eq_zero
-  intro k _
-  by_cases hk : k ∈ Set.range e
-  · have hfk : k ∉ Set.range f := fun hf ↦ Set.disjoint_left.mp h hk hf
-    rw [euclideanExtendByZero_apply_not_mem_range f y k hfk, zero_mul]
-  · rw [euclideanExtendByZero_apply_not_mem_range e x k hk, star_zero, mul_zero]
-
 private theorem euclideanExtendByZero_reindex
     {I' J' : Type*} [Fintype I'] [Fintype J']
     (e : I ↪ J) (f : I' ↪ J') (s : I ≃ I') (t : J ≃ J')

@@ -436,7 +436,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
   · intro ψ hψG hψ
     have htail : ∀ k ∈ Finset.Ico 1 L,
         1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-          (leftBlock L k) ψ).kyFanNorm (Module.finrank ℂ G * B) ≤
+          (interval L 0 k) ψ).kyFanNorm (Module.finrank ℂ G * B) ≤
             delta / (8 * ((L : ℝ) + 1)) := by
       intro k hk
       have hkL : k ≤ L := (Finset.mem_Ico.mp hk).2.le
@@ -447,7 +447,6 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
       have hregional := one_sub_regional_kyFanNorm_le_twice_error
         (interval L 0 k) ψ φ hφ deltaCut hcut1 (Module.finrank ℂ G * B)
         (Nat.le_mul_ceil_exp_of_log_le hrG E hlogrank) hoverlap
-      rw [leftBlock_eq_interval]
       convert hregional using 1
       dsimp only [deltaCut]
       field_simp; ring

@@ -25,7 +25,7 @@ Schuch, Wolf, Verstraete and Cirac, arXiv:0705.0292v2,
 
 open Matrix
 open scoped BigOperators InnerProductSpace
-open ManyBody (cutMatrix)
+open ManyBody (cutMatrix interval mem_interval)
 
 namespace TNLean.MPS.AreaLaw.EntropyScaling
 
@@ -245,39 +245,40 @@ theorem charpoly_qutritFamily_middle {N : ℕ} (hN : 0 < N) :
 
 /-- The native left-block configurations at the middle cut, numbered from zero. -/
 def qutritLeftConfigurationEquiv (N : ℕ) :
-    (ManyBody.RegionConfig (fun _ ↦ Fin 3) (leftBlock (N + N) N)) ≃
+    (ManyBody.RegionConfig (fun _ ↦ Fin 3) (interval (N + N) 0 N)) ≃
       (Fin N → Fin 3) where
-  toFun a i := a ⟨Fin.castAdd N i, mem_leftBlock.mpr i.isLt⟩
-  invFun a v := a ⟨v.1.val, mem_leftBlock.mp v.2⟩
+  toFun a i := a ⟨Fin.castAdd N i, mem_interval.mpr ⟨Nat.zero_le _, i.isLt⟩⟩
+  invFun a v := a ⟨v.1.val, (mem_interval.mp v.2).2⟩
   left_inv _ := rfl
   right_inv _ := rfl
 
 /-- The native right-block configurations at the middle cut, numbered from zero. -/
 def qutritRightConfigurationEquiv (N : ℕ) :
-    ((v : {v : Fin (N + N) // v ∉ leftBlock (N + N) N}) → Fin 3) ≃
+    ((v : {v : Fin (N + N) // v ∉ interval (N + N) 0 N}) → Fin 3) ≃
       (Fin N → Fin 3) where
   toFun a i := a ⟨Fin.natAdd N i, by
-    simpa only [mem_leftBlock, Fin.val_natAdd, not_lt] using Nat.le_add_right N i.val⟩
+    simpa only [mem_interval, Fin.val_natAdd, not_lt, Nat.zero_le,
+        true_and] using Nat.le_add_right N i.val⟩
   invFun a v := a ⟨v.1.val - N, by omega⟩
   left_inv a := funext fun v ↦ congrArg a (Subtype.ext (Fin.ext
-    (Nat.add_sub_of_le (Nat.le_of_not_lt (mt mem_leftBlock.mpr v.2)))))
+    (Nat.add_sub_of_le (Nat.le_of_not_lt (fun h ↦ v.2 (mem_interval.mpr ⟨Nat.zero_le _, h⟩))))))
   right_inv a := funext fun i ↦ congrArg a (Fin.ext (Nat.add_sub_cancel_left N i.val))
 
 /-- The numbered half-chain coordinates agree with the native middle-cut decomposition. -/
 @[simp] theorem qutritConfigurations_cutEquiv (N : ℕ) (σ : Fin (N + N) → Fin 3) :
     ((qutritLeftConfigurationEquiv N).prodCongr (qutritRightConfigurationEquiv N))
-      (ManyBody.cutEquiv (fun _ ↦ Fin 3) (leftBlock (N + N) N) σ) =
+      (ManyBody.cutEquiv (fun _ ↦ Fin 3) (interval (N + N) 0 N) σ) =
         qutritHalves N σ := rfl
 
 /-- The native chain cut matrix is the explicit middle coefficient matrix after relabelling.
 Source: arXiv:0705.0292v2, `eq:magicstate`, lines 382–386. -/
 theorem cutMatrix_qutritState_reindex (N : ℕ) (p : ℝ) :
-    (cutMatrix (leftBlock (N + N) N) (qutritState N p)).reindex
+    (cutMatrix (interval (N + N) 0 N) (qutritState N p)).reindex
       (qutritLeftConfigurationEquiv N) (qutritRightConfigurationEquiv N) =
         qutritMiddleMatrix N p := by
   ext a b
   change qutritState N p
-      ((ManyBody.cutEquiv (fun _ ↦ Fin 3) (leftBlock (N + N) N)).symm
+      ((ManyBody.cutEquiv (fun _ ↦ Fin 3) (interval (N + N) 0 N)).symm
         ((qutritLeftConfigurationEquiv N).symm a, (qutritRightConfigurationEquiv N).symm b)) =
     qutritState N p ((qutritHalves N).symm (a, b))
   apply congrArg (qutritState N p)
@@ -290,20 +291,20 @@ with its configurations numbered from zero. No normalization hypothesis is neede
 Source: arXiv:0705.0292v2, `eq:magicstate`, lines 382–386. -/
 theorem regionState_qutritState_reindex (N : ℕ) (p : ℝ) :
     (ManyBody.regionState (X := fun _ ↦ Fin 3)
-      (qutritState N p) (leftBlock (N + N) N)).reindex
+      (qutritState N p) (interval (N + N) 0 N)).reindex
         (qutritLeftConfigurationEquiv N) (qutritLeftConfigurationEquiv N) =
           qutritMiddleMarginal N p := by
   rw [ManyBody.regionState_eq_partialTraceRight_cutVector, qutritMiddleMarginal,
     partialTraceRight_vecMulVec_eq, partialTraceRight_vecMulVec_eq]
-  change (cutMatrix (leftBlock (N + N) N) (qutritState N p) *
-      (cutMatrix (leftBlock (N + N) N) (qutritState N p))ᴴ).reindex
+  change (cutMatrix (interval (N + N) 0 N) (qutritState N p) *
+      (cutMatrix (interval (N + N) 0 N) (qutritState N p))ᴴ).reindex
       (qutritLeftConfigurationEquiv N) (qutritLeftConfigurationEquiv N) =
     qutritMiddleMatrix N p * (qutritMiddleMatrix N p)ᴴ
   have hmul := Matrix.reindexLinearEquiv_mul ℂ ℂ
     (qutritLeftConfigurationEquiv N) (qutritRightConfigurationEquiv N)
     (qutritLeftConfigurationEquiv N)
-    (cutMatrix (leftBlock (N + N) N) (qutritState N p))
-    (cutMatrix (leftBlock (N + N) N) (qutritState N p))ᴴ
+    (cutMatrix (interval (N + N) 0 N) (qutritState N p))
+    (cutMatrix (interval (N + N) 0 N) (qutritState N p))ᴴ
   simpa only [Matrix.coe_reindexLinearEquiv, ← Matrix.conjTranspose_reindex,
     cutMatrix_qutritState_reindex] using hmul.symm
 
@@ -312,7 +313,7 @@ Source: arXiv:0705.0292v2, `eq:magicstate`, lines 382–386. -/
 theorem charpoly_regionState_qutritState {N : ℕ} (hN : 0 < N) {p : ℝ}
     (hp : 0 ≤ p) (hp' : p ≤ 1) :
     (ManyBody.regionState (X := fun _ ↦ Fin 3)
-      (qutritState N p) (leftBlock (N + N) N)).charpoly =
+      (qutritState N p) (interval (N + N) 0 N)).charpoly =
       Polynomial.X ^ (3 ^ N - (1 + 2 ^ N)) *
         ((Polynomial.X - Polynomial.C ((1 - p : ℝ) : ℂ)) *
           (Polynomial.X - Polynomial.C ((p / (2 : ℝ) ^ N : ℝ) : ℂ)) ^ (2 ^ N)) := by

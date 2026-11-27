@@ -15,6 +15,7 @@ Landau, Vazirani and Vidick, arXiv:1307.5143v1, equation `eq:conv`.
 
 open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
+open ManyBody (interval interval_mono)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -34,7 +35,7 @@ theorem boundarySupportMatrixOfCoordinates_hasRationalEntries
   intro s
   exact (hc j p.2 s).mul <| (hS s).coordinate_rational hk
     ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
-      (leftBlock_mono (Nat.sub_le k 1))).symm p.1)
+      (interval_mono (le_refl 0) (Nat.sub_le k 1))).symm p.1)
 
 /-- A structured rational input decodes to an ambient rational support matrix once the
 retained family itself carries rational open-chain tensor data. -/
@@ -67,7 +68,7 @@ theorem boundarySupportMatrixOfCoordinates_hasRationalEntriesOfHeight
     (s := Finset.univ) (fun s _hs ↦
       (hc j p.2 s).mul <| (hS s).coordinate_height_le hHv hk
         ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
-          (leftBlock_mono (Nat.sub_le k 1))).symm p.1))
+          (interval_mono (le_refl 0) (Nat.sub_le k 1))).symm p.1))
 
 /-- A structured rational encoding over height-bounded rational MPS data therefore
 decodes to an ambient support matrix with an explicit uniform height bound. -/
@@ -141,7 +142,7 @@ noncomputable def
     (hΓ : ‖Γ‖ = 1) (hθ : 0 ≤ θ) (hsmall : Real.sqrt m * θ < 1)
     (j : Fin n) (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)) × Fin m))
     (hunit : ‖physicalRightApply W u‖ = 1)
     (hoverlap : 1 - δ ≤ ‖⟪physicalRightApply W u, Γ⟫_ℂ‖)
     (hclose : ∀ a,
@@ -196,8 +197,10 @@ theorem exists_rationalSpanViableMPSData_of_mulVec
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -263,8 +266,10 @@ theorem exists_rationalSpanViableMPSData_of_mulVec_atError
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -334,8 +339,10 @@ theorem exists_rationalSpanViableMPSData_of_mulVec_atTarget
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -373,8 +380,10 @@ theorem exists_rationalCoordinateViableMPSData_of_mulVec_atError
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -443,8 +452,10 @@ theorem exists_rationalCoordinateViableMPSData_of_mulVec_atTarget
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)

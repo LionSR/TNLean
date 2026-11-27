@@ -11,11 +11,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.Polar.BlockGateUnitary
 import TNLean.MPS.Preparation.Polar.BondEmbedding
 import TNLean.MPS.Preparation.Polar.ExactFixedPointPolar
-import TNLean.MPS.Preparation.Polar.IsometricExtension
 import TNLean.MPS.Preparation.Polar.MixedPolarFullInputCounterexample
 import TNLean.MPS.Preparation.Polar.MixedSequentialFactorization
 import TNLean.MPS.Preparation.Polar.MixedSequentialSupport
-import TNLean.MPS.Preparation.Polar.OrthogonalSumPolar
 import TNLean.MPS.Preparation.Polar.PolarCompression
-import TNLean.MPS.Preparation.Polar.PolarFrame
 import TNLean.MPS.Preparation.Polar.SequentialFactorization

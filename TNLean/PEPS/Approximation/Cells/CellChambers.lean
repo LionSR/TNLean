@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
+import QICLean.ManyBody.Sites.Template.Rows
 import Mathlib.Topology.MetricSpace.Pseudo.Constructions
 import Mathlib.Data.Int.Interval
 
@@ -41,11 +41,12 @@ one: a vertical line at `x` puts a point `p` on its right side exactly when
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (finset_eq_Icc_min'_max'_of_between integerPoint)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Lines in one coordinate -/
 

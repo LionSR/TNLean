@@ -51,7 +51,7 @@ theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (j : Fin (huangEnergyCount c Delta L)) :
     (∀ cut, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut)
         (huangFilterApproximant Φ h0 c Delta j)) ≤ huangFilterRankBound q c Delta L) ∧
     ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
       (Φ.hamiltonian - (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 -
@@ -85,7 +85,7 @@ theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ j cut, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (Q j)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (Q j)) ≤
           huangFilterRankBound q c Delta L) ∧
       ∀ j, ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
         (Φ.hamiltonian - (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1)
@@ -167,7 +167,7 @@ theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ j cut, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (Q j)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (Q j)) ≤
           huangFilterRankBound q c Delta L) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
         Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →

@@ -195,7 +195,7 @@ theorem isSAL_of_quantumMarkovDecomposition_tripartite_m
     · exact (reducedBlockState_posSemidef M N
         ((m - 1) + 1 + (N - m - 1)) (by omega) (hMpdo N (by omega))).submatrix _
     · rw [Matrix.trace_submatrix_equiv]
-      exact reducedBlockState_trace M N ((m - 1) + 1 + (N - m - 1))
+      exact MPOTensor.reducedBlockState_trace M N ((m - 1) + 1 + (N - m - 1))
         (by omega) (htrace N (by omega))
   · exact hMarkov N m hm1 hmN
 

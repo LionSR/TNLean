@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import QICLean.Channel.KrausMap.KrausSupportAbsorption
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 import TNLean.MPS.MPU.Index.FactorFreeSandwich
 import TNLean.MPS.MPU.Index.IndexContinuity
@@ -15,6 +15,7 @@ import TNLean.MPS.MPU.Index.ReducedToHatTransport
 import TNLean.MPS.MPU.Simple.RectangularSourceRanks
 import TNLean.MPS.MPU.CanonicalForm.ReducedRepresentative
 import TNLean.MPS.MPU.CanonicalForm.TransferStabilizationConverse
+import QICLean.Kraus.Transfer
 
 /-!
 # Constancy of the MPU index along arbitrary continuous paths
@@ -61,134 +62,6 @@ Proposition `prop:continuity-index`, lines 733--818.
 -/
 
 open scoped Matrix ComplexOrder BigOperators MatrixOrder
-
-namespace Matrix
-
-variable {m : ℕ}
-
-/-- Two positive definite matrices are simultaneously brought to normal form by
-one congruence: there is an invertible `S` with `Sᴴ S = L` and `S R Sᴴ`
-positive definite and diagonal. Take `S = Uᴴ L^{1/2}` for a unitary `U`
-diagonalizing `L^{1/2} R L^{1/2}`.
-
-Source: arXiv:1703.09188, Proposition IV.5, lines 798--804 (the
-square-root gauge of the reduced representative). The unitary diagonalization of
-the right fixed point is implicit there; it is the step that reaches canonical form II
-as defined at lines 272--294. -/
-theorem PosDef.exists_congruence_isDiag {L R : Matrix (Fin m) (Fin m) ℂ}
-    (hL : L.PosDef) (hR : R.PosDef) :
-    ∃ S : Matrix (Fin m) (Fin m) ℂ, IsUnit S ∧ Sᴴ * S = L ∧
-      (S * R * Sᴴ).PosDef ∧ (S * R * Sᴴ).IsDiag := by
-  classical
-  set G := CFC.sqrt L with hGdef
-  have hGh : Gᴴ = G := conjTranspose_cfc_sqrt L
-  have hGG : G * G = L := CFC.sqrt_mul_sqrt_self L hL.posSemidef.nonneg
-  have hGu : IsUnit G := (isUnit_iff_isUnit_det G).2 hL.isUnit_det_cfc_sqrt
-  have hM : (G * R * G).PosDef := by
-    simpa only [hGh] using hR.conjTranspose_mul_mul_same (mulVec_injective_of_isUnit hGu)
-  let U := hM.isHermitian.eigenvectorUnitary
-  have hUU : (U : Matrix (Fin m) (Fin m) ℂ) * (U : Matrix (Fin m) (Fin m) ℂ)ᴴ = 1 :=
-    Matrix.mem_unitaryGroup_iff.mp U.2
-  have hdiag := hM.isHermitian.conjStarAlgAut_star_eigenvectorUnitary
-  rw [Unitary.conjStarAlgAut_apply, Unitary.coe_star, star_star] at hdiag
-  refine ⟨star (U : Matrix (Fin m) (Fin m) ℂ) * G, ?_, ?_, ?_, ?_⟩
-  · exact Unitary.isUnit_coe.star.mul hGu
-  · rw [conjTranspose_mul, hGh, star_eq_conjTranspose, conjTranspose_conjTranspose,
-      Matrix.mul_assoc, ← Matrix.mul_assoc (U : Matrix (Fin m) (Fin m) ℂ),
-      hUU, Matrix.one_mul, hGG]
-  · have hS : IsUnit (star (U : Matrix (Fin m) (Fin m) ℂ) * G) :=
-      Unitary.isUnit_coe.star.mul hGu
-    exact hR.mul_mul_conjTranspose_same (vecMul_injective_of_isUnit hS)
-  · have : star (U : Matrix (Fin m) (Fin m) ℂ) * G * R *
-        (star (U : Matrix (Fin m) (Fin m) ℂ) * G)ᴴ =
-        star (U : Matrix (Fin m) (Fin m) ℂ) * (G * R * G) * U := by
-      rw [conjTranspose_mul, hGh, star_eq_conjTranspose, conjTranspose_conjTranspose]
-      simp only [Matrix.mul_assoc]
-    rw [this, hdiag]
-    exact isDiag_diagonal _
-
-end Matrix
-
-namespace Kraus
-
-variable {n D : ℕ}
-
-/-- A Kraus family whose transfer matrix is a rank-one matrix `|ρ)(Φ|` with
-`(Φ|ρ) = 1` has transfer map `X ↦ tr(L X) R` with positive semidefinite
-`L` and `R`. The factors are `R = T(1) = ∑ₐ Aₐ Aₐ†` and
-`L = tr(R)⁻¹ ∑ₐ Aₐ† Aₐ`.
-
-Source: arXiv:1703.09188, Proposition IV.5, lines 747--752. -/
-theorem exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec
-    (A : MPSTensor n D) (ρ Φ : Fin D × Fin D → ℂ)
-    (hE : transferMatrix (transferMap A) = Matrix.vecMulVec ρ Φ)
-    (hpair : Φ ⬝ᵥ ρ = 1) :
-    ∃ L R : Matrix (Fin D) (Fin D) ℂ, L.PosSemidef ∧ R.PosSemidef ∧
-      ∀ X, transferMap A X = Matrix.trace (L * X) • R := by
-  classical
-  set T := transferMap A with hTdef
-  have hvec : ∀ X : Matrix (Fin D) (Fin D) ℂ, (T X).vec = (Φ ⬝ᵥ X.vec) • ρ := by
-    intro X
-    rw [← transferMatrix_mulVec_eq, hE, Matrix.vecMulVec_mulVec]
-    simp only [op_smul_eq_smul]
-  set R := T 1 with hRdef
-  have hRsum : R = ∑ a, A a * (A a)ᴴ := by
-    simp only [hRdef, hTdef, transferMap_apply, Matrix.mul_one]
-  have hRpsd : R.PosSemidef := by
-    rw [hRsum]
-    exact Matrix.posSemidef_sum _ fun a _ => Matrix.posSemidef_self_mul_conjTranspose (A a)
-  -- the matrix whose vectorization is `ρ`
-  let X₀ : Matrix (Fin D) (Fin D) ℂ := Matrix.of fun i j => ρ (j, i)
-  have hX₀ : X₀.vec = ρ := by
-    ext ⟨j, i⟩
-    rfl
-  have hRne : R ≠ 0 := by
-    intro hR0
-    have hA0 : ∀ a, A a = 0 :=
-      Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero A (hRsum ▸ hR0)
-    have hT0 : T X₀ = 0 := by
-      simp [hTdef, hA0]
-    have h := hvec X₀
-    rw [hT0, hX₀, hpair, one_smul] at h
-    have : Φ ⬝ᵥ ρ = 0 := by
-      rw [← h]
-      simp
-    rw [hpair] at this
-    exact one_ne_zero this
-  have htrR : 0 < Matrix.trace R := by
-    refine lt_of_le_of_ne hRpsd.trace_nonneg (Ne.symm ?_)
-    intro h
-    exact hRne ((hRpsd.trace_eq_zero_iff).mp h)
-  have hc : Φ ⬝ᵥ (1 : Matrix (Fin D) (Fin D) ℂ).vec ≠ 0 := by
-    intro h0
-    apply hRne
-    apply Matrix.vec_inj.mp
-    rw [hRdef, hvec, h0, zero_smul]
-    rfl
-  set c := Φ ⬝ᵥ (1 : Matrix (Fin D) (Fin D) ℂ).vec with hcdef
-  have hscalar : ∀ X, T X = ((Φ ⬝ᵥ X.vec) * c⁻¹) • R := by
-    intro X
-    apply Matrix.vec_inj.mp
-    rw [Matrix.vec_smul, hvec, hRdef, hvec, ← hcdef, smul_smul, inv_mul_cancel_right₀ hc]
-  have htrT : ∀ X, Matrix.trace (T X) = Matrix.trace ((∑ a, (A a)ᴴ * A a) * X) := by
-    intro X
-    simp only [hTdef, transferMap_apply, Matrix.trace_sum, Finset.sum_mul]
-    refine Finset.sum_congr rfl fun a _ => ?_
-    rw [Matrix.trace_mul_comm, ← Matrix.mul_assoc]
-  refine ⟨(Matrix.trace R)⁻¹ • ∑ a, (A a)ᴴ * A a, R, ?_, hRpsd, ?_⟩
-  · exact (Matrix.posSemidef_sum _ fun a _ =>
-      Matrix.posSemidef_conjTranspose_mul_self (A a)).smul
-      (RCLike.inv_pos_of_pos htrR).le
-  · intro X
-    have hsX := hscalar X
-    have htr := congrArg Matrix.trace hsX
-    rw [Matrix.trace_smul, htrT, smul_eq_mul] at htr
-    have hs : (Φ ⬝ᵥ X.vec) * c⁻¹ =
-        Matrix.trace ((∑ a, (A a)ᴴ * A a) * X) * (Matrix.trace R)⁻¹ := by
-      rw [htr, mul_inv_cancel_right₀ htrR.ne']
-    rw [hsX, hs, Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul, mul_comm]
-
-end Kraus
 
 namespace MPOTensor
 

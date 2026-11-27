@@ -8,6 +8,7 @@ import Mathlib.RingTheory.Noetherian.Basic
 import QICLean.Algebra.Module.TraceInvariantSubmodule
 import TNLean.MPS.FundamentalTheorem.WordModule.FlagData
 import TNLean.MPS.FundamentalTheorem.WordModule.SimpleSeparation
+import QICLean.Spectral.Eigenvalue.WordAlgebra
 
 /-!
 # The composition-series flag of the asymmetric compression theorem
@@ -43,89 +44,6 @@ Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetr
 open MPTensor
 
 universe u
-
-namespace WordAlgebra
-
-variable {d : ℕ}
-
-section Congr
-
-variable {M N : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
-  [IsScalarTower ℂ (WordAlgebra d) M] [AddCommGroup N] [Module ℂ N] [Module (WordAlgebra d) N]
-  [IsScalarTower ℂ (WordAlgebra d) N]
-
-/-- Word traces are invariant under isomorphism of word-algebra modules. -/
-lemma traceWord_congr (e : M ≃ₗ[WordAlgebra d] N) (w : List (Fin d)) :
-    traceWord M w = traceWord N w := by
-  have : Algebra.lsmul ℂ ℂ N (ofWord w) =
-      (e.restrictScalars ℂ).conj (Algebra.lsmul ℂ ℂ M (ofWord w)) := by
-    ext n
-    simp [LinearEquiv.conj_apply, map_smul]
-  rw [traceWord_def, traceWord_def, this, LinearMap.trace_conj']
-
-/-- Word traces of a product module add. -/
-lemma traceWord_prod [FiniteDimensional ℂ M] [FiniteDimensional ℂ N] (w : List (Fin d)) :
-    traceWord (M × N) w = traceWord M w + traceWord N w := by
-  have : Algebra.lsmul ℂ ℂ (M × N) (ofWord w) =
-      (Algebra.lsmul ℂ ℂ M (ofWord w)).prodMap (Algebra.lsmul ℂ ℂ N (ofWord w)) := by
-    ext m <;> simp
-  rw [traceWord_def, this, LinearMap.trace_prodMap', traceWord_def, traceWord_def]
-
-end Congr
-
-section Quotient
-
-variable {M : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
-  [IsScalarTower ℂ (WordAlgebra d) M] [FiniteDimensional ℂ M]
-
-/-- Word traces are additive over an invariant submodule: the trace on `M` is the trace on `K`
-plus the trace on `M ⧸ K`. -/
-lemma traceWord_eq_add_quotient (K : Submodule (WordAlgebra d) M) (w : List (Fin d)) :
-    traceWord M w = traceWord K w + traceWord (M ⧸ K) w := by
-  have hf : ∀ x ∈ K.restrictScalars ℂ, Algebra.lsmul ℂ ℂ M (ofWord w) x ∈ K.restrictScalars ℂ :=
-    fun x hx => K.smul_mem _ hx
-  rw [traceWord_def, LinearMap.trace_eq_trace_restrict_add_trace_quotient (K.restrictScalars ℂ)
-    (Algebra.lsmul ℂ ℂ M (ofWord w)) hf, traceWord_def, traceWord_def]
-  congr 1
-
-/-- Word traces are additive over a step `A ≤ B` of invariant subspaces: the trace on `B` is the
-trace on `A` plus the trace on `B / A` (blueprint `lem:asym_trace_additivity`, *Trace additivity
-over an invariant submodule*). -/
-lemma traceWord_eq_add_subquot {A B : Submodule (WordAlgebra d) M} (hAB : A ≤ B)
-    (w : List (Fin d)) :
-    traceWord B w = traceWord A w + traceWord (Submodule.subquot A B) w := by
-  have : FiniteDimensional ℂ B :=
-    Module.Finite.of_injective (B.subtype.restrictScalars ℂ) B.subtype_injective
-  rw [traceWord_eq_add_quotient (A.comap B.subtype) w,
-    traceWord_congr (Submodule.comapSubtypeEquivOfLe hAB) w]
-
-omit [FiniteDimensional ℂ M] in
-/-- Word traces vanish on the zero subspace. -/
-lemma traceWord_bot (w : List (Fin d)) :
-    traceWord (⊥ : Submodule (WordAlgebra d) M) w = 0 := by
-  rw [traceWord_def, Subsingleton.elim (Algebra.lsmul ℂ ℂ (⊥ : Submodule (WordAlgebra d) M)
-    (ofWord w : WordAlgebra d)) 0, map_zero]
-
-/-- **Traces along an invariant flag** (*The asymmetric fundamental theorem of matrix product
-states*, Lemma 4.1), module form: for a chain `0 = N_0 ≤ N_1 ≤ ⋯ ≤ N_r` of invariant subspaces, the
-word trace on `N_r` is the sum of the word traces on the steps `N_k / N_{k-1}`. -/
-lemma traceWord_eq_sum_subquot {r : ℕ} (N : Fin (r + 1) → Submodule (WordAlgebra d) M)
-    (h0 : N 0 = ⊥) (hmono : Monotone N) (w : List (Fin d)) :
-    traceWord (N (Fin.last r)) w =
-      ∑ k : Fin r, traceWord (Submodule.subquot (N k.castSucc) (N k.succ)) w := by
-  induction r with
-  | zero =>
-    rw [Fin.last_zero, h0, traceWord_bot, Finset.univ_eq_empty, Finset.sum_empty]
-  | succ r ih =>
-    rw [Fin.sum_univ_castSucc]
-    have h := ih (N ∘ Fin.castSucc) h0 (hmono.comp Fin.strictMono_castSucc.monotone)
-    simp only [Function.comp_apply] at h
-    simp only [Fin.succ_castSucc]
-    rw [← h, ← Fin.succ_last, traceWord_eq_add_subquot (hmono (Fin.castSucc_le_succ _))]
-
-end Quotient
-
-end WordAlgebra
 
 namespace MPSTensor
 

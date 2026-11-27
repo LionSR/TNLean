@@ -59,10 +59,10 @@ theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 �
       ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
       ∀ n : ℕ, n + 1 ≤ L → ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q (n + 1))
         (B : Fin N → RightBlockMatrix L q (n + 1)),
-        N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (n + 1))
+        N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (n + 1))
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B j ∧
         (∀ j k, 0 < k → k < n + 1 → operatorSchmidtRank
-          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock (n + 1) k)
+          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval (n + 1) 0 k)
             ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) ∧
         ∀ (s b : ℕ) (S : Finset (LeftBlockVector L q (n + 1))),
           IsViableMPS Γ s b (1 / 2) S →

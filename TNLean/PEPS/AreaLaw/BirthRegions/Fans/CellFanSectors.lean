@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivisionMask
 import Mathlib.Analysis.Convex.Topology
 import Mathlib.Analysis.Normed.Operator.Banach
@@ -39,6 +40,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_nonempty_and_closure_eq`: nonempty interiors
   of dyadic fan triangles.
 -/
+
+open ManyBody (IsAllowedSlope TemplatePolygon)
 
 section CellFanSectors
 

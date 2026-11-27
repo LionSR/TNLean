@@ -9,5 +9,3 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Polygons
 
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles
-import TNLean.PEPS.AreaLaw.Polygons.Squares
-import TNLean.PEPS.AreaLaw.Polygons.Templates

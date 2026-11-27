@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.GroundState.PinnedNestedFilters
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
+import QICLean.ManyBody.Hamiltonian.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import QICLean.ManyBody.Entropy.Filter.OutputCovariance
@@ -121,7 +121,7 @@ theorem admissible_fromCanonical (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
 
 /-- The existing physical isometry is the generic site relabelling with identity basis maps. -/
 theorem rectangleAreaLawState_eq_relabelVector (Ω : State L q) :
-    AreaLaw.rectangleAreaLawState Ω = ManyBody.relabelVector
+    ManyBody.rectangleAreaLawState Ω = ManyBody.relabelVector
       (X := fun _ : Vertex L ↦ Fin q)
       (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
       (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
@@ -169,10 +169,10 @@ private theorem output_eq_extended_chain (F : FilterFamily q m X) (Ω : State L 
 /-- The actual adapted ascending output equals the canonical reverse-product action.
 Every matrix occurrence is retained; no commutation or nesting is assumed. -/
 theorem rectangleAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
-    AreaLaw.rectangleAreaLawState (output F Ω) =
+    ManyBody.rectangleAreaLawState (output F Ω) =
       toEuclideanLin (Entropy.liftProd
         (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
-        (AreaLaw.rectangleAreaLawState Ω) := by
+        (ManyBody.rectangleAreaLawState Ω) := by
   rw [output_eq_extended_chain, rectangleAreaLawState_eq_relabelVector,
     rectangleAreaLawState_eq_relabelVector]
   have hD (k : ℕ) (v : Vertex L) :
@@ -191,18 +191,18 @@ including zero output. -/
 theorem rectangleAreaLawState_normalizedOutput (F : FilterFamily q m X) (Ω : State L q) :
     let ψ := toEuclideanLin (Entropy.liftProd
       (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
-      (AreaLaw.rectangleAreaLawState Ω)
-    AreaLaw.rectangleAreaLawState (normalizedOutput F Ω) = ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ := by
+      (ManyBody.rectangleAreaLawState Ω)
+    ManyBody.rectangleAreaLawState (normalizedOutput F Ω) = ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ := by
   dsimp only
-  rw [← rectangleAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
+  rw [← rectangleAreaLawState_output, ManyBody.norm_rectangleAreaLawState]
   exact (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (AreaLaw.rectangleConfigurationEquiv L L q)).map_smul _ _
+    (ManyBody.rectangleConfigurationEquiv L L q)).map_smul _ _
 
 private theorem norm_canonical_output (F : FilterFamily q m X) (Ω : State L q) :
     ‖toEuclideanLin (Entropy.liftProd
       (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
-      (AreaLaw.rectangleAreaLawState Ω)‖ = ‖output F Ω‖ := by
-  rw [← rectangleAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
+      (ManyBody.rectangleAreaLawState Ω)‖ = ‖output F Ω‖ := by
+  rw [← rectangleAreaLawState_output, ManyBody.norm_rectangleAreaLawState]
 
 /-- Source maximality is equivalent to canonical feasibility and comparison with
 every feasible matrix family. The inverse conversion supplies all competitors. -/
@@ -214,10 +214,10 @@ theorem isMaximizer_iff (Ω : State L q) (a : Fin m → ℝ) (ha : ∀ j, 0 < a 
         (∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j)) →
         ‖toEuclideanLin (Entropy.liftProd
           (Entropy.chainList (canonicalRegions X) K fun _ ↦ True))
-          (AreaLaw.rectangleAreaLawState Ω)‖ ≤
+          (ManyBody.rectangleAreaLawState Ω)‖ ≤
         ‖toEuclideanLin (Entropy.liftProd
           (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
-          (AreaLaw.rectangleAreaLawState Ω)‖) := by
+          (ManyBody.rectangleAreaLawState Ω)‖) := by
   constructor
   · rintro ⟨hF, hmax⟩
     refine ⟨(admissible_iff_feasible a ha F).mp hF, ?_⟩

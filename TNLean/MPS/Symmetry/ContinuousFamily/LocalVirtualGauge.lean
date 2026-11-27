@@ -7,6 +7,7 @@ import QICLean.Algebra.MatrixAlgebra.MatrixUnitConjugator
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
 import TNLean.MPS.Tensor.Physical.BlockedPolar
 import Mathlib.Topology.Instances.Matrix
+import QICLean.Algebra.MatrixAlgebra.MatrixUnitFactorization
 
 /-!
 # Local continuous virtual gauges
@@ -33,42 +34,6 @@ remaining parts of the separation argument are recorded in
 open MPTensor
 
 open scoped Matrix ComplexOrder
-
-namespace Matrix
-
-variable {D : ℕ}
-
-/-- A continuous family of inner matrix actions has continuous conjugators
-near a prescribed invertible conjugator. Their matrix entries are defined
-on the whole parameter space, while invertibility holds in a neighborhood
-of the base point. Source context: arXiv:1010.3732, Section II.F.2,
-lines 1000–1018. -/
-theorem exists_continuous_local_matrixConjugator
-    {T : Type*} [TopologicalSpace T] (hD : 0 < D)
-    (α : T → Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ)
-    (hα : ∀ M, Continuous fun t => α t M)
-    (hinner : ∀ t, ∃ Y : GL (Fin D) ℂ, ∀ M, α t M = Y * M * Y⁻¹)
-    (t₀ : T) (X₀ : GL (Fin D) ℂ)
-    (hbase : ∀ M, α t₀ M = X₀ * M * X₀⁻¹) :
-    ∃ X : T → Matrix (Fin D) (Fin D) ℂ,
-      Continuous X ∧ X t₀ = X₀ ∧
-      (∀ᶠ t in nhds t₀, (X t).det ≠ 0) ∧
-      ∀ t M, α t M * X t = X t * M := by
-  let a : Fin D := ⟨0, hD⟩
-  let X : T → Matrix (Fin D) (Fin D) ℂ :=
-    fun t => matrixUnitConjugator (α t) X₀ a
-  have hX : Continuous X := by
-    exact continuous_matrix fun i j =>
-      ((hα (single j a 1)).matrix_mul continuous_const).matrix_elem i a
-  have hXbase : X t₀ = X₀ := by
-    simpa using matrixUnitConjugator_eq_smul (α t₀) X₀ a X₀ hbase
-  have hdet : (X t₀).det ≠ 0 := hXbase ▸ X₀.det_ne_zero
-  refine ⟨X, hX, hXbase, hX.matrix_det.continuousAt.eventually_ne hdet, ?_⟩
-  intro t M
-  obtain ⟨Y, hY⟩ := hinner t
-  exact matrixUnitConjugator_intertwines (α t) X₀ a Y hY M
-
-end Matrix
 
 namespace MPSTensor
 

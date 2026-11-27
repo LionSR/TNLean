@@ -51,7 +51,7 @@ private theorem physical_status_cut_bounds {Λ T : Finset (ℤ × ℤ)}
     (σ : PhysicalPartition ↥Λ) {n D L r₀ : ℕ} (hL : 1 ≤ L) (hD : 1 ≤ D)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (jN jF : ℤ) (hjN : jN ≤ L) (hjF : jF ≤ L)
     (hpos : ∀ x, σ x = none → 0 < depth x)
@@ -120,7 +120,7 @@ theorem state_cut_bounds_planeDomainGraph
     (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.state h g))).card ≤
       20 * S.n * S.D ∧
@@ -157,7 +157,7 @@ theorem oldChargeState_cut_bounds_planeDomainGraph
     (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.oldChargeState h g))).card ≤
       20 * S.n * S.D ∧

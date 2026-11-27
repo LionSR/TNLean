@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramConvergence
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 
 /-!
 # Local observable insertions in the MPS transfer map
@@ -55,32 +56,10 @@ theorem fixedPointProj_physicalObservableTransfer_fixedPointProj
     LinearMap.smul_apply, observableInsertionExpectation]
   ring
 
-/-- The powers of a normalized primitive transfer map converge in operator norm
- to its rank-one fixed-point projection. Source: Nachtergaele,
-arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and Section 6. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.transferMap_pow_tendsto_fixedPointProj
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
-    let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D) (Fin D) ℂ)
-    Tendsto (fun n : ℕ => Φ ((Kraus.transferMap A) ^ n)) atTop
-      (nhds (Φ (fixedPointProj ρ hP.trace_ne_zero))) := by
-  let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D) (Fin D) ℂ)
-  have hlim : Tendsto (fun n : ℕ => Φ (fixedPointProj ρ hP.trace_ne_zero) +
-      (Φ (Kraus.transferMap A - fixedPointProj ρ hP.trace_ne_zero)) ^ n) atTop
-      (nhds (Φ (fixedPointProj ρ hP.trace_ne_zero) + 0)) :=
-    tendsto_const_nhds.add hP.complement_pow_tendsto_zero
-  simp only [add_zero] at hlim
-  apply hlim.congr'
-  filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
-  rw [pow_eq_fixedPointProj_add_compl_pow (Kraus.transferMap A) hP.trace_ne_zero
-    (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed hn,
-    map_add, map_pow]
-
-
 /-- An observable insertion between two expanding primitive transfer intervals
 converges to its scalar local expectation times the limiting transfer projection.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.physicalObservableTransfer_sandwich_tendsto
+theorem _root_.TNLean.MPS.ParentHamiltonian.physicalObservableTransfer_sandwich_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
@@ -114,7 +93,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.physicalObservableTransfer_sa
     rw [fixedPointProj_physicalObservableTransfer_fixedPointProj, map_smul]
   simpa only [map_mul, hlimit] using hlim
 
-
 /-- The boundary-map compression of a physical observable is exactly the Choi
 reshuffling of its insertion transfer map. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and lines 2649--2675. -/
@@ -147,7 +125,6 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
   have h' := h.trans
     (Matrix.inner_single_gramReshuffle_single (physicalObservableTransfer A k X) a b c e).symm
   simpa [PiLp.inner_apply] using h'
-
 
 /-- A fixed observable supported between free physical intervals of lengths
 \(\ell\) and \(r\). Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -184,7 +161,6 @@ theorem adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES
   rw [adjoint_groundSpaceMapES_observable_groundSpaceMapES,
     physicalObservableTransfer_bulkObservable]
 
-
 private noncomputable def transferReshuffleLinear :
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
       (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
@@ -213,7 +189,7 @@ set_option linter.style.longLine false in
 its scalar expectation times the limiting boundary Gram operator. Both free
 intervals may expand along any common filter. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservable_compression_tendsto
+theorem _root_.TNLean.MPS.ParentHamiltonian.groundSpaceMapES_bulkObservable_compression_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
@@ -230,7 +206,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservab
       physicalObservableTransfer A k X * (Kraus.transferMap A) ^ r n)) f
       (nhds (observableInsertionExpectation A ρ X •
         Φ (fixedPointProj ρ hP.trace_ne_zero))) :=
-    hP.physicalObservableTransfer_sandwich_tendsto X hℓ hr
+    TNLean.MPS.ParentHamiltonian.physicalObservableTransfer_sandwich_tendsto hP X hℓ hr
   have hlim : Tendsto (fun n => transferReshuffleLinear
       (Φ ((Kraus.transferMap A) ^ ℓ n * physicalObservableTransfer A k X *
         (Kraus.transferMap A) ^ r n))) f

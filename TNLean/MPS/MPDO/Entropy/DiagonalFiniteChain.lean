@@ -164,9 +164,9 @@ theorem diagonalCutMass_eq_trace_re (M : MPOTensor d D) (L R : ℕ) :
           mpo M (L + R) (Fin.append p.1 p.2) (Fin.append p.1 p.2) :=
         (Fintype.sum_prod_type' _).symm
       _ = ∑ σ, mpo M (L + R) σ σ := by
-        apply Fintype.sum_equiv (blockSplitEquiv d L R).symm
+        apply Fintype.sum_equiv (MPOTensor.blockSplitEquiv d L R).symm
         rintro ⟨x, y⟩
-        simp only [blockSplitEquiv_symm_apply]
+        simp only [MPOTensor.blockSplitEquiv_symm_apply]
       _ = (mpo M (L + R)).trace := rfl
   rw [diagonalCutMass]
   simp only [diagonalCutRealMatrix, Matrix.map_apply, diagonalCutMatrix_apply_eq_mpo]

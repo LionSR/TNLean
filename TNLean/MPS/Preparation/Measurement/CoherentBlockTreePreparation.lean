@@ -8,7 +8,9 @@ import TNLean.MPS.Preparation.Circuit.GHZSeedCircuit
 import TNLean.MPS.Preparation.Circuit.SparseWindowGHZ
 import TNLean.MPS.Preparation.Circuit.UnequalRegisterTreeState
 import TNLean.MPS.Preparation.Circuit.UnequalTreePreparation
-import TNLean.MPS.Tensor.InjectivityCutoff
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import QICLean.Analysis.Real.PowerExponential
 import TNLean.MPS.Preparation.Circuit.LogLogDepthBound
 import TNLean.MPS.Preparation.Circuit.ShortChainPreparation
 import TNLean.MPS.Preparation.Circuit.RemainderBlocks

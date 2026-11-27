@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.Matrix.ColumnRowPartitioned
 import Mathlib.LinearAlgebra.Matrix.Rank
 import TNLean.MPS.FundamentalTheorem.Compression.UniquenessCommonBasis
+import QICLean.Algebra.Matrix.MatrixMulRange
 
 /-!
 # The matching and the comparison of two compressions in matrices
@@ -50,26 +51,6 @@ asymmetric fundamental theorem of matrix product states*, Remark 5.3 and Corolla
 -/
 
 open scoped Matrix
-
-namespace Matrix
-
-variable {m n₁ n₂ R : Type*} [CommSemiring R] [Fintype n₁] [Fintype n₂]
-
-/-- The column span of a matrix with two column blocks is the sum of the column spans of the
-blocks. -/
-theorem range_mulVecLin_fromCols (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R) :
-    LinearMap.range (fromCols A₁ A₂).mulVecLin =
-      LinearMap.range A₁.mulVecLin ⊔ LinearMap.range A₂.mulVecLin := by
-  ext v
-  constructor
-  · rintro ⟨w, rfl⟩
-    rw [mulVecLin_apply, fromCols_mulVec]
-    exact Submodule.add_mem_sup ⟨_, rfl⟩ ⟨_, rfl⟩
-  · intro hv
-    obtain ⟨_, ⟨a₁, rfl⟩, _, ⟨a₂, rfl⟩, rfl⟩ := Submodule.mem_sup.1 hv
-    exact ⟨Sum.elim a₁ a₂, fromCols_mulVec_sumElim A₁ A₂ a₁ a₂⟩
-
-end Matrix
 
 namespace MPSTensor
 

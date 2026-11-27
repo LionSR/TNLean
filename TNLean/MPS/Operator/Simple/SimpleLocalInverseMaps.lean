@@ -96,7 +96,7 @@ theorem reducedBlockState_four_three_apply
     K.reducedBlockState 4 3 (by omega) u v =
       Matrix.trace
         (K.evalWord (List.ofFn u) (List.ofFn v) * normalizedFourSiteTail K) := by
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   rw [normalizedMPO, normalizedFourSiteTail, physTraceTransfer]
   simp only [Matrix.smul_apply, mpo_apply, mpoMatrixEntry]
   have hwords (a : Fin 3 → Fin d) (x : Fin 1 → Fin d) :
@@ -147,7 +147,7 @@ theorem normalizedFourSiteTail_ne_zero
     ext u v
     rw [reducedBlockState_four_three_apply, htail]
     simp
-  have hunit := reducedBlockState_trace K 4 3 (by omega) htrace
+  have hunit := MPOTensor.reducedBlockState_trace K 4 3 (by omega) htrace
   rw [hred] at hunit
   simp at hunit
 

@@ -28,6 +28,8 @@ especially line 714, and the primary error sum, lines 791–795.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (boundaryEndpoints)
+
 noncomputable section
 
 open ManyBody (edgeBoundary planeDomainGraph)

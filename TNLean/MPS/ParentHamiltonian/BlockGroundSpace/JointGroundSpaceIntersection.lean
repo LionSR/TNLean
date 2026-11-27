@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.GroundSpace.IntersectionProperty
 import TNLean.MPS.Tensor.GroundSpace.ParentHamiltonian
 import Mathlib.LinearAlgebra.DFinsupp
+import QICLean.Analysis.Projection.OverlapMatrix
 
 /-!
 # Joint intersection from independent middle support spaces
@@ -33,48 +34,7 @@ namespace Submodule
 
 variable {𝕜 E ι : Type*} [Ring 𝕜] [AddCommGroup E] [Module 𝕜 E]
 
-/-- Two finite sums contained sectorwise in an independent family intersect
-as the sum of the corresponding intersections. This is the decomposition
-argument underlying Nachtergaele, arXiv:cond-mat/9410110, Section 4,
-Lemma intersectionequivalence. -/
-theorem iSup_inf_iSup_eq_of_le_independent [Finite ι]
-    (U V W : ι → Submodule 𝕜 E) (hW : iSupIndep W)
-    (hU : ∀ i, U i ≤ W i) (hV : ∀ i, V i ≤ W i) :
-    (⨆ i, U i) ⊓ (⨆ i, V i) = ⨆ i, U i ⊓ V i := by
-  classical
-  let := Fintype.ofFinite ι
-  apply le_antisymm
-  · intro x hx
-    obtain ⟨u, hu, hux⟩ := (mem_iSup_iff_exists_finsupp U x).mp hx.1
-    obtain ⟨v, hv, hvx⟩ := (mem_iSup_iff_exists_finsupp V x).mp hx.2
-    have huv : ∀ i, u i = v i := by
-      intro i
-      exact (iSupIndep_iff_finsetSum_eq_imp_eq W).mp hW Finset.univ u v
-        (fun j _ => ⟨hU j (hu j), hV j (hv j)⟩)
-        (by simpa [Finsupp.sum_fintype] using hux.trans hvx.symm) i (Finset.mem_univ i)
-    rw [← hux]
-    exact Submodule.sum_mem _ fun i _ => Submodule.mem_iSup_of_mem i
-      ⟨hu i, (huv i).symm ▸ hv i⟩
-  · exact iSup_le fun i => le_inf
-      ((inf_le_left.trans (le_iSup U i))) ((inf_le_right.trans (le_iSup V i)))
-
 variable {F τ : Type*} [AddCommGroup F] [Module 𝕜 F]
-
-/-- Independence is preserved when all vectors are determined by a family
-of linear restrictions, and each restriction lies in the same sector.
-Source: the middle-interval restriction argument of Nachtergaele,
-arXiv:cond-mat/9410110, Section 4, Proposition forintersection. -/
-theorem iSupIndep_iInf_comap_of_separating
-    (W : ι → Submodule 𝕜 F) (hW : iSupIndep W) (f : τ → E →ₗ[𝕜] F)
-    (hSep : ∀ x, (∀ t, f t x = 0) → x = 0) :
-    iSupIndep (fun i => ⨅ t, (W i).comap (f t)) := by
-  rw [iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero]
-  intro s v hv hsum i hi
-  apply hSep
-  intro t
-  exact (iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero W).mp hW s
-    (fun j => f t (v j)) (fun j hj => (Submodule.mem_iInf _).mp (hv j hj) t)
-    (by rw [← map_sum, hsum, map_zero]) i hi
 
 private theorem iInf_comap_iSup_of_linearEquiv [Finite ι]
     (U : ι → Submodule 𝕜 F) (e : E ≃ₗ[𝕜] (τ → F)) :
@@ -229,4 +189,3 @@ theorem groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep
     (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)).symm
 
 end MPSTensor
-

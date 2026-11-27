@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Sites.PairSwapPermutation
@@ -15,7 +15,7 @@ import QICLean.ManyBody.Sites.ThreeRegion.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap
 import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import QICLean.Analysis.Norm.L2OpNormReindex
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
+import QICLean.ManyBody.Hamiltonian.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.ConfigurationMap
@@ -338,7 +338,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
     (R : Finset (SquareLatticeVertex L L)) :
     let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
     let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
-    let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+    let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
     let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp R))
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
     ∃ g : ManyBody.PlaneInteraction (ManyBody.rectangularDomain L L) (q * q) 1,
@@ -438,7 +438,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
         (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
         (D' := (ManyBody.rectangleSupport i).val)
         (fun v ↦ (ManyBody.mem_rectangleSupport_iff i v).symm) (hBsupport i)
-      rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+      rw [ManyBody.siteConfigurationEquiv_rectangleSiteEquiv] at hs
       exact hs
     · rw [Function.extend_apply' _ _ _ hx]
       exact zero_mem _

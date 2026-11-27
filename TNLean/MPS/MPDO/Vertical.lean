@@ -22,5 +22,4 @@ import TNLean.MPS.MPDO.Vertical.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.Vertical.VerticalBNT
 import TNLean.MPS.MPDO.Vertical.VerticalBNTConstruction
 import TNLean.MPS.MPDO.Vertical.VerticalCanonicalForm
-import TNLean.MPS.MPDO.Vertical.VerticalCoisometry
 import TNLean.MPS.MPDO.Vertical.VerticalReduction

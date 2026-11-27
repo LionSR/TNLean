@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import TNLean.MPS.Tensor.Defs
+import QICLean.Algebra.Matrix.KroneckerEmbed
 
 /-!
 # Quadratic reconstruction system for the translation-invariant canonical form
@@ -43,7 +44,8 @@ theorem `thm-uniq`, the two lemmas formalized below: the chain-combination lemma
 
 * `MPSTensor.QuadraticReconstructionSolution` - a solution of the PGVWC07
   system (S) over a supplied window of open-boundary matrices.
-* `pgvwc07ChainCoeff`, `pgvwc07_chainCoeff_combination_spec` - the coefficient
+* `TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff`,
+  `TNLean.MPS.FundamentalTheorem.pgvwc07_chainCoeff_combination_spec` - the coefficient
   sequence and conclusion of PGVWC07 Lemma `lem-same-matr`.
 * `Matrix.kronecker_one_intertwines_iff_kroneckerSlice_intertwines`,
   `Matrix.exists_nonzero_intertwiner_of_kronecker_one_intertwines` - PGVWC07
@@ -58,6 +60,8 @@ theorem `thm-uniq`, the two lemmas formalized below: the chain-combination lemma
 open scoped Matrix Kronecker
 
 /-! ## The chain-combination lemma `lem-same-matr` -/
+
+namespace TNLean.MPS.FundamentalTheorem
 
 /-- The coefficient sequence of PGVWC07, Lemma `lem-same-matr`
 (arXiv:quant-ph/0608197, MPSarchive.tex lines 1022-1049). With the source's
@@ -144,65 +148,9 @@ theorem pgvwc07_chainCoeff_combination_spec
         ring
     rw [step1, step2, map_smul]
 
+end TNLean.MPS.FundamentalTheorem
+
 /-! ## The Kronecker intertwiner lemma `lem-horn` -/
-
-namespace Matrix
-
-variable {n m : Type*} [Fintype n] [Fintype m] [DecidableEq m]
-variable {R : Type*} [CommRing R]
-
-/-- The multiplicity slice of a matrix on a doubled index: the `(a, b)` slice
-of `W` is the matrix of entries `W (p, a) (q, b)`. This realizes the tensor
-factorization `M_{nm} = M_n ⊗ M_m` used in PGVWC07, Lemma `lem-horn`
-(arXiv:quant-ph/0608197, MPSarchive.tex lines 1053-1058). -/
-def kroneckerSlice (W : Matrix (n × m) (n × m) R) (a b : m) : Matrix n n R :=
-  fun p q ↦ W (p, a) (q, b)
-
-/-- **PGVWC07, Lemma `lem-horn`** (arXiv:quant-ph/0608197, MPSarchive.tex
-lines 1053-1058) in multiplicity-slice form: `W` solves the amplified matrix
-equation `W (C ⊗ 1) = (B ⊗ 1) W` if and only if every multiplicity slice of
-`W` solves the unamplified equation `X C = B X`. The source phrases this as
-the solution space of the amplified equation being `S ⊗ M_n` for `S` the
-solution space of `X C = B X`; the slice decomposition realizes exactly that
-tensor factorization. -/
-theorem kronecker_one_intertwines_iff_kroneckerSlice_intertwines
-    (B C : Matrix n n R) (W : Matrix (n × m) (n × m) R) :
-    W * (C ⊗ₖ (1 : Matrix m m R)) = (B ⊗ₖ (1 : Matrix m m R)) * W ↔
-      ∀ a b, kroneckerSlice W a b * C = B * kroneckerSlice W a b := by
-  constructor
-  · intro h a b
-    ext p q
-    have h' := congrFun (congrFun h (p, a)) (q, b)
-    simpa [kroneckerSlice, Matrix.mul_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
-      Fintype.sum_prod_type, mul_comm] using h'
-  · intro h
-    ext ⟨p, a⟩ ⟨q, b⟩
-    have h' := congrFun (congrFun (h a b) p) q
-    simpa [kroneckerSlice, Matrix.mul_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
-      Fintype.sum_prod_type, mul_comm] using h'
-
-/-- The consequence of PGVWC07 Lemma `lem-horn` used in the uniqueness and
-reconstruction proofs (arXiv:quant-ph/0608197, MPSarchive.tex lines 1094-1095): a
-nonzero simultaneous solution `W` of the amplified equations
-`W (C i ⊗ 1) = (B i ⊗ 1) W` yields a nonzero matrix `X` with `X * C i = B i * X`
-for every `i`. -/
-theorem exists_nonzero_intertwiner_of_kronecker_one_intertwines
-    {ι : Type*} (B C : ι → Matrix n n R) (W : Matrix (n × m) (n × m) R)
-    (hW : W ≠ 0)
-    (h : ∀ i, W * (C i ⊗ₖ (1 : Matrix m m R)) = (B i ⊗ₖ (1 : Matrix m m R)) * W) :
-    ∃ X : Matrix n n R, X ≠ 0 ∧ ∀ i, X * C i = B i * X := by
-  have hslice : ∃ a b, kroneckerSlice W a b ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    refine hW ?_
-    ext ⟨p, a⟩ ⟨q, b⟩
-    have := congrFun (congrFun (hall a b) p) q
-    simpa [kroneckerSlice] using this
-  obtain ⟨a, b, hab⟩ := hslice
-  exact ⟨kroneckerSlice W a b, hab, fun i ↦
-    (kronecker_one_intertwines_iff_kroneckerSlice_intertwines (B i) (C i) W).mp (h i) a b⟩
-
-end Matrix
 
 /-! ## The quadratic system (S) -/
 

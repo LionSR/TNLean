@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionalProjectorRange
-import TNLean.PEPS.ParentHamiltonian.Placement.CoordinateRangeProjector
+import QICLean.Analysis.Projection.CoordinateRangeProjector
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexVirtualParentTransport
-import TNLean.PEPS.ParentHamiltonian.Placement.DependentRegionCoordinates
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Actual canonical regular regional range projectors commute
@@ -19,6 +19,11 @@ projectors commute on arbitrary overlapping graph regions.
 This is SCP10, arXiv:1001.3807, Theorem 6.12 in canonical regular half-edge
 physical coordinates. Transport to arbitrary G-isometric site maps is separate.
 -/
+
+open ManyBody (assembleDependentRegionConfig dependentGlobalConfigEquiv isStarProjection_place
+  placeSlice place_mulVec_eq_self_iff)
+open Matrix (coordinateRangeProjector coordinateRangeProjector_isStarProjection
+  coordinateRangeProjector_mulVec_eq_self_iff matrix_eq_of_isStarProjection_range_eq)
 
 open scoped Matrix Kronecker
 

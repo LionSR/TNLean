@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.GroundPath.FixedBondPhysicalPathInvariance
+import QICLean.Analysis.Topology.ContinuousEigenline
 
 /-!
 # A common physical character when the minimal bond dimension varies
@@ -23,23 +24,6 @@ see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 open MPTensor
 
 open scoped Matrix
-
-namespace LinearMap
-
-/-- Equality of vector spans transfers a scalar eigenvalue. Source context:
-arXiv:1010.3732, Appendix B, lines 2614–2632. -/
-theorem map_eq_smul_of_span_singleton_eq
-    {M : Type*} [AddCommGroup M] [Module ℂ M]
-    (f : M →ₗ[ℂ] M) (x y : M) (c : ℂ)
-    (hspan : Submodule.span ℂ {x} = Submodule.span ℂ {y}) (hx : f x = c • x) :
-    f y = c • y := by
-  have hy : y ∈ Submodule.span ℂ {x} := by
-    rw [hspan]
-    exact Submodule.mem_span_singleton_self y
-  obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.mp hy
-  rw [← ha, map_smul, hx, smul_comm]
-
-end LinearMap
 
 namespace MPSTensor
 

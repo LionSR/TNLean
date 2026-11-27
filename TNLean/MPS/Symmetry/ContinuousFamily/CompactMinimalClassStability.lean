@@ -3,7 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.FixedLineLimitSimplicity
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+import Mathlib.Analysis.Normed.Operator.Bilinear
+import Mathlib.LinearAlgebra.Quotient.Basic
+import Mathlib.LinearAlgebra.Eigenspace.Matrix
+import Mathlib.LinearAlgebra.Eigenspace.Zero
+import Mathlib.LinearAlgebra.Eigenspace.Charpoly
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import QICLean.Spectral.Eigenvalue.EigenspaceMap
 import TNLean.MPS.Symmetry.PeriodicRay.MpvRayLimit
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.OnSite.BlockingVirtualCovariance

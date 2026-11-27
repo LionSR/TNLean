@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Uncle.UncleBoundaryProduct
 import TNLean.MPS.Tensor.GroundSpace.IntersectionProperty
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import QICLean.Channel.Schwarz.Basic
-import QICLean.Channel.Peripheral.Spectrum.UnitalKraus
+import QICLean.Channel.Schwarz.RussoDye
 import QICLean.Kraus.MixedMap.SpectralRadius
 import QICLean.Channel.OperatorMean.BlockDiagonal
 import QICLean.Spectral.Radius.PowerDecay

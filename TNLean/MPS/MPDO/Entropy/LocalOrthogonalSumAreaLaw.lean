@@ -65,7 +65,7 @@ theorem firstSiteMatrix_mul_reducedBlockState_of_mul_normalizedMPO
     ⟨v 0, v ∘ Fin.succ, (Fin.cons_self_tail v).symm⟩
   rw [firstSiteMatrix_mul_apply]
   simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ]
-  simp_rw [reducedBlockState_eq_sum]
+  simp_rw [MPOTensor.reducedBlockState_eq_sum]
   simp_rw [Finset.mul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -259,9 +259,9 @@ private theorem
     normalizedMPO_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
       M K multiplicity hc hM hMtrace hSectorTrace
   ext u v
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   simp_rw [hfull, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-  simp_rw [reducedBlockState_eq_sum]
+  simp_rw [MPOTensor.reducedBlockState_eq_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro s _
@@ -301,7 +301,7 @@ private theorem blockEntropy_eq_sum_proportionalLocalOrthogonalSectorProbability
   have hρpos : ∀ s, (ρ s).PosSemidef := fun s ↦
     reducedBlockState_posSemidef (K s) N (L + 1) hL (hSectorMpdo s N hN)
   have hρtrace : ∀ s, Matrix.trace (ρ s) = 1 := fun s ↦
-    reducedBlockState_trace (K s) N (L + 1) hL (ne_of_gt (hSectorTrace s))
+    MPOTensor.reducedBlockState_trace (K s) N (L + 1) hL (ne_of_gt (hSectorTrace s))
   have hQherm : ∀ s, (Q s).IsHermitian := fun s ↦
     firstSiteMatrix_isHermitian (hP s).1 L
   have hQρ : ∀ s, Q s * ρ s = ρ s := by

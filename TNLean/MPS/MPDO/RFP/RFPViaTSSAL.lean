@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.MutualInformation.DataProcessing
+import QICLean.Entropy.StrongSubadditivity.MutualInformationDataProcessing
 import TNLean.MPS.MPDO.Entropy.MutualInfoBridge
 import TNLean.MPS.MPDO.RFP.RFPViaTSGlobal
 import TNLean.MPS.MPDO.Entropy.SALTraceTransfer
@@ -100,7 +100,7 @@ private theorem splitMPO_slice
   ext x y
   simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
     Matrix.reindex_apply, chainBipartitionEquiv, biSplitEquiv,
-    Matrix.bipartiteSlice, blockSplitEquiv_symm_apply, mpoMatrixEntry,
+    Matrix.bipartiteSlice, MPOTensor.blockSplitEquiv_symm_apply, mpoMatrixEntry,
     List.ofFn_fin_append, evalWord_append]
 
 /-- The preceding slice identity for the normalized periodic MPO. -/

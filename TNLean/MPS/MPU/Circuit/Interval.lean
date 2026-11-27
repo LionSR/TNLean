@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPU.Circuit.Interval
 
 import TNLean.MPS.MPU.Circuit.Interval.BasisEncodingCoordinates
-import TNLean.MPS.MPU.Circuit.Interval.ColumnCoordinateTransport
 import TNLean.MPS.MPU.Circuit.Interval.EncodedJointColumns
 import TNLean.MPS.MPU.Circuit.Interval.IntervalInputRegrouping
 import TNLean.MPS.MPU.Circuit.Interval.IntervalJointOutputReset

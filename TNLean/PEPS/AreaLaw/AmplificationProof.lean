@@ -4,18 +4,26 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AmplificationProofSteps
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordLists
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordTruncation
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelSpatialOmission
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeConstraints
+import QICLean.Probability.PoissonWord.ContractionWord
+import QICLean.ManyBody.PoissonWord.LocalConstraintProducts
+import QICLean.ManyBody.PoissonWord.LatticeOmission
+import QICLean.ManyBody.Hamiltonian.Constraint.LatticeConstraints
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary
+import QICLean.Analysis.Isometry.PolarUnitaryCorrection
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.RadiusBound
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.Analysis.TraceNorm.PureStateTraceDistance
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
+import QICLean.ManyBody.Sites.Template.Rows
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Dynamics.ChannelWord.LocalRootChannel
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
+import QICLean.ManyBody.Hamiltonian.Constraint.PositiveConstraints
+import QICLean.ManyBody.Hamiltonian.Constraint.FiniteSetTruncationGap
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
+import QICLean.Probability.PoissonWord.PoissonContractionDecay
 
 /-!
 # Proposition 10.2: amplification
@@ -61,6 +69,87 @@ the output bound, with `K = 4(M + 2)`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+section LatticeExcitedDecay
+
+/-!
+## Excited-state decay for the exact lattice constraints
+
+The fresh exact positive constraints of a finite induced-domain Hamiltonian
+annihilate its original ground vector. Their sum has gap `Δ / c_*`, with
+`c_*` the normalization of the positive replacement. Chronological products of their
+complementary square roots therefore suppress the component orthogonal to
+that ground vector in squared-norm expectation, with any finite spectator.
+The expectation uses the concrete fixed-time Poisson-word probability law.
+
+### References
+
+* OpenAI, *A two-dimensional area law from a global spectral gap*,
+  September 24, 2026, `09-amplification.tex`, lines 237–253,
+  `eq:amplification-excited-decay`, at revision
+  `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+  The exact positive replacement is `03-quasilocal.tex`, lines 220–246,
+  Proposition 4.3. Independently formalized from the manuscript;
+  no upstream Lean text is reused.
+-/
+
+noncomputable section
+
+open Matrix MeasureTheory SpectralFilter
+open scoped Kronecker NNReal MatrixOrder ComplexOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- The literal exact lattice constraint product has an integrable squared
+excited-component norm and the original full-gap exponential decay rate,
+including arbitrary entangled finite spectators.
+Source: area law, `09-amplification.tex`, lines 237–253,
+`eq:amplification-excited-decay`. -/
+theorem latticeConstraintWord_excitedProjection_decay
+    {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ} (_hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+    {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
+    (ζ : EuclideanSpace ℂ ((↥Λ → Fin q) × Aux)) (t : ℝ≥0) :
+    let cs := positiveNormalization p (Δ / 2) J
+    let k := fun i : AdmissibleSupport Λ R =>
+      positiveConstraint cs (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
+    let ξ := toEuclideanLin
+      ((1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ⊗ₖ
+        (1 : Matrix Aux Aux ℂ)) ζ
+    Integrable (poissonContractionWordEnergy k ξ)
+        (PoissonWord.measure (AdmissibleSupport Λ R) t) ∧
+      (∫ w, poissonContractionWordEnergy k ξ w
+        ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
+        Real.exp (-(Δ / cs) * (t : ℝ)) * ‖ξ‖ ^ 2 := by
+  have hHΩ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
+  obtain ⟨hk, hsum, hgapk⟩ :=
+    positive_replacement hp hΔ hΩ hHΩ hgap h.term hh hhJ rfl
+  exact Matrix.poissonContractionWord_excitedProjection_decay _
+    (fun i => (hk i).2.1) hΩ
+    (fun i => WithLp.ofLp_injective 2 (hk i).2.2)
+    (hgapk.trans hsum) ζ t
+
+end TNLean.PEPS.AreaLaw
+
+end
+
+end LatticeExcitedDecay
+
+open ManyBody (channelOmissionExponent_pos channelOmissionPrefactor_nonneg channelOmissionRate_pos
+  constraintWordTruncationPrefactor constraintWordTruncationPrefactor_nonneg
+  latticeConstraintWord_omission_of_positiveConstraints
+  latticeConstraintWord_truncation_of_positiveConstraints latticeOmissionExponent
+  latticeOmissionPrefactor latticeOmissionRate latticePositiveConstraintConst
+  latticePositiveConstraintConst_nonneg latticePositiveConstraintRate
+  latticePositiveConstraintRate_pos latticePositiveConstraints_of_locality localizationPrefactor
+  localizationVelocity mem_ambientDilation_iff norm_latticePositiveConstraint_sub_map_le)
 
 open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
@@ -194,7 +283,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   amplificationConstant q R J Δ C₀ C₃ c₃ M * ((n : ℝ) ^ M)⁻¹) ∧
-              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     ((supDist t z : ℤ) : ℝ)) →
@@ -622,7 +711,7 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   amplificationConstantExplicit q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
-              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     ((supDist t z : ℤ) : ℝ)) →

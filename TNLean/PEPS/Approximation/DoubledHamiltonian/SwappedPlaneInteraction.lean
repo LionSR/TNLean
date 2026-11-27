@@ -8,7 +8,7 @@ import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Dynamics.SwappedDoubledInteraction
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RegionOperatorLocalization
+import QICLean.ManyBody.Hamiltonian.PlaneLocalization
 import QICLean.ManyBody.Sites.Lattice.Plane
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
@@ -111,63 +111,6 @@ namespace ManyBody.PlaneInteraction
 open TNLean.PEPS.Approximation
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
-
-theorem doubledHamiltonian_isHermitian {n : Type*} [DecidableEq n]
-    {A : Matrix n n ℂ} (hA : A.IsHermitian) : (doubledHamiltonian A).IsHermitian := by
-  simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
-    Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one, hA.eq]
-
-/-- The doubling map is additive. -/
-private theorem doubledHamiltonian_sum {n ι : Type*} [DecidableEq n]
-    (s : Finset ι) (f : ι → Matrix n n ℂ) :
-    doubledHamiltonian (∑ i ∈ s, f i) = ∑ i ∈ s, doubledHamiltonian (f i) := by
-  let D : Matrix n n ℂ →ₗ[ℂ] Matrix (n × n) (n × n) ℂ :=
-    (Matrix.kroneckerBilinear (R := ℂ)).flip (1 : Matrix n n ℂ) +
-      Matrix.kroneckerBilinear (R := ℂ) (1 : Matrix n n ℂ)
-  change D (∑ i ∈ s, f i) = ∑ i ∈ s, D (f i)
-  exact map_sum D f s
-
-/-- **Only the crossing supports contribute to the partial-swap perturbation.** The difference
-between the doubled Hamiltonian and its conjugate by the swap on `A` is the sum of the
-corresponding differences for the terms whose support crosses `A`.
-Source: polynomial-PEPS `02-information.tex`, lines 416–424 and 513–524, at range `R`. -/
-theorem pairSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing (h : PlaneInteraction Λ q R)
-    (A : Finset ↥Λ) :
-    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
-    let F := reindex pr pr (ManyBody.pairSwapOp A)
-    F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
-      ∑ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A,
-        (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
-  classical
-  intro pr F
-  have hcancel (X : AdmissibleSupport Λ R)
-      (hX : X ∉ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A) :
-      F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X) = 0 := by
-    have hX : X.1 ⊆ A ∨ Disjoint X.1 A := by
-      simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and, not_and,
-        not_exists, not_not] at hX
-      by_cases hXA : ∃ v ∈ X.1, v ∈ A
-      · exact Or.inl fun v hv ↦ hX hXA v hv
-      · push Not at hXA
-        exact Or.inr (Finset.disjoint_left.mpr hXA)
-    -- on paired sites the exchange on `A` fixes a doubled term supported inside or outside `A`
-    have hfix : ManyBody.pairSwapOp A * reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) *
-        (ManyBody.pairSwapOp A)ᴴ = reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) :=
-      hX.elim (fun hs ↦ ManyBody.pairSwapOp_conj_doubled_of_subset hs (h.mem X))
-        (fun hs ↦ ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint hs
-          (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators (h.mem X)))
-    have hY : doubledHamiltonian (h.term X) =
-        reindex pr pr (reindex pr.symm pr.symm (doubledHamiltonian (h.term X))) := by
-      rw [← reindex_symm, Equiv.apply_symm_apply]
-    rw [sub_eq_zero, hY]
-    conv_rhs => rw [← hfix]
-    simp only [F, reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv]
-  have hsum : F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
-      ∑ X, (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
-    rw [ManyBody.Interaction.hamiltonian, doubledHamiltonian_sum, Finset.mul_sum, Finset.sum_mul,
-      ← Finset.sum_sub_distrib]
-  rw [hsum]
-  exact (Finset.sum_subset (Finset.subset_univ _) fun X _ hX ↦ hcancel X hX).symm
 
 /-- **The partial-swap perturbation at range `R`.** In paired-site coordinates, `F K Fᴴ - K` is
 supported on the sites of the supports crossing `A`, and has norm at most `4 μ_R J |Λ|`
@@ -312,15 +255,15 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
             M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
             ‖M‖ ≤ ‖W‖ ∧
             ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
-              ‖W‖ * (2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
+              ‖W‖ * (2 * ManyBody.graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
                 (1 + swapBoundaryCoefficient R * J * (Λ.card : ℝ) * T) *
                 Real.exp
-                  (TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity R (2 * J) * T -
+                  (ManyBody.graphBallLocalizationVelocity R (2 * J) * T -
                       1 / 2 * l) := by
   classical
   intro Q P s g pr p K F K' Z W V l B
-  have hC : 0 < 2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R :=
-    mul_pos two_pos (TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor_pos R)
+  have hC : 0 < 2 * ManyBody.graphBallLocalizationPrefactor R :=
+    mul_pos two_pos (ManyBody.graphBallLocalizationPrefactor_pos R)
   let gH : PlaneInteraction Λ (q * q) R :=
     (h.doubled.conj (ManyBody.pairSwapOp (X := fun _ ↦ Fin q) A) fun X ↦
         ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators A
@@ -352,7 +295,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans p) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    TNLean.PEPS.AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) R
+    ManyBody.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) R
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH hgHh hgHn K V hDK Q Z hV hD l
   rw [hK'] at hU hM
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.CanonicalForm.Correlation.CorrelatorFiniteSize
+import QICLean.Analysis.Norm.MatrixOperatorSpace
 
 /-!
 # Inserted transfer maps are bounded independently of the block length
@@ -112,21 +113,6 @@ theorem norm_physicalObservableTransfer_single_apply_le {A : MPSTensor d D}
         refine ((Matrix.toEuclideanCLM (n := Fin m → Fin d) (𝕜 := ℂ) X).le_opNorm q).trans ?_
         exact mul_le_mul_of_nonneg_left (norm_toLp_evalWord_apply_le hA m b c) (norm_nonneg _)
     _ = ‖Matrix.toEuclideanCLM (n := Fin m → Fin d) (𝕜 := ℂ) X‖ := by ring
-
-/-- The `ℓ^∞` operator norm of a matrix is at most `D` times a bound on its entries. -/
-theorem _root_.Matrix.linfty_opNorm_le_of_forall_norm_apply_le {M : Matrix (Fin D) (Fin D) ℂ}
-    {B : ℝ} (hB : 0 ≤ B) (h : ∀ p q, ‖M p q‖ ≤ B) : ‖M‖ ≤ D * B := by
-  have hDB : 0 ≤ (D : ℝ) * B := by positivity
-  have hrow : ∀ i, (∑ j, ‖M i j‖₊) ≤ Real.toNNReal (D * B) := fun i ↦ by
-    rw [← NNReal.coe_le_coe, NNReal.coe_sum, Real.coe_toNNReal _ hDB]
-    calc ∑ j, (‖M i j‖₊ : ℝ) ≤ ∑ _j : Fin D, B :=
-          Finset.sum_le_sum fun j _ ↦ by rw [coe_nnnorm]; exact h i j
-      _ = D * B := by simp
-  have hsup : ‖M‖₊ ≤ Real.toNNReal (D * B) := by
-    rw [Matrix.linfty_opNNNorm_def]
-    exact Finset.sup_le fun i _ ↦ hrow i
-  rw [← coe_nnnorm, ← Real.coe_toNNReal _ hDB]
-  exact_mod_cast hsup
 
 /-- **Uniform operator bound on inserted transfer maps.** For a left-canonical tensor and
 an operator `X` on `m` sites, `‖E_X‖ ≤ D³ ‖X‖` for the `ℓ^∞` operator norm on `D × D`

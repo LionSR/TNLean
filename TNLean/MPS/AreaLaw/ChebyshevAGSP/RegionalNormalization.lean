@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import Mathlib.Order.Interval.Finset.Nat
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 
 /-!
 # The three regional minima in AKLV normalization

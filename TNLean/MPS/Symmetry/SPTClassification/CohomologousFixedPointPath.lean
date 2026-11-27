@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
 import TNLean.MPS.Symmetry.Projective.ProjectiveRephasing
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import QICLean.Analysis.Cohomology.ProjectiveUnitary
 
 /-!
 # Fixed-point paths for cohomologous virtual factor systems
@@ -30,35 +31,10 @@ limit `D₁`. See `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 
 open scoped Matrix Matrix.Norms.L2Operator ScalarCohomology
 
-/-- A factor system of a unitary projective representation has unit modulus.
-Source: arXiv:1010.3732, Section II.F.2, lines 886--896, the unitary virtual
-representations in the fixed-point symmetry. -/
-theorem ProjectiveRepresentation.norm_factorSystem
-    {G : Type} [Group G] {D : ℕ} [NeZero D] {ω : ScalarCocycle G}
-    (ρ : ProjectiveRepresentation (D := D) ω)
-    (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
-    (g h : G) : ‖(ω (g, h) : ℂ)‖ = 1 := by
-  have hp := CStarRing.norm_of_mem_unitary
-    ((Matrix.unitaryGroup (Fin D) ℂ).mul_mem (hρ g) (hρ h))
-  rwa [ρ.map_mul, norm_smul, CStarRing.norm_of_mem_unitary (hρ (g * h)),
-    mul_one] at hp
-
-/-- The factor system of a unitary virtual action equals its pointwise unit
-phase. Source: arXiv:1010.3732, Section II.F.2, lines 886--896. -/
-theorem ProjectiveRepresentation.circlePhaseInclusion_eq
-    {G : Type} [Group G] {D : ℕ} [NeZero D] {ω : ScalarCocycle G}
-    (ρ : ProjectiveRepresentation (D := D) ω)
-    (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
-    ω.circlePhaseInclusion = ω := by
-  funext ⟨g, h⟩
-  apply Units.ext
-  change (ω (g, h) : ℂ) / ‖(ω (g, h) : ℂ)‖ = (ω (g, h) : ℂ)
-  simp only [ρ.norm_factorSystem hρ, Complex.ofReal_one, div_one]
-
 /-- Unitary virtual actions with cohomologous factor systems can be rephased
 so that their factor systems agree exactly. Source: arXiv:1010.3732,
 Section II.F.2, lines 886--921. -/
-theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
+theorem TNLean.MPS.Symmetry.exists_unitary_rephase_with_factorSystem
     {G : Type} [Group G] {D₀ D₁ : ℕ} [NeZero D₀] [NeZero D₁]
     {ω₀ ω₁ : ScalarCocycle G}
     (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
@@ -73,7 +49,7 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
       (∀ g, (ρ₀'.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ) ∧
       (∀ g, ρ₀'.X g = Matrix.GeneralLinearGroup.scalar (Fin D₀)
         (Circle.toUnits (φ g)) * ρ₀.X g) := by
-  have hRephase := @ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
+  have hRephase := @TNLean.Algebra.exists_unitary_rephase_of_cohomologous
     G _ D₀ ω₀ ω₁
   rw [ρ₀.circlePhaseInclusion_eq h₀, ρ₁.circlePhaseInclusion_eq h₁] at hRephase
   exact hRephase ρ₀ ((ScalarCohomology.H2π_eq_iff_isMulCoboundary₂_div _ _).mp h) h₀
@@ -121,7 +97,7 @@ theorem exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint
         (normalizedBondInteraction D₀ D₁ 0)
         (normalizedBondInteraction D₀ D₁ 1)) := by
   obtain ⟨ρ₀', φ, h₀', hX⟩ :=
-    ρ₀.exists_unitary_rephase_with_factorSystem ρ₁ h h₀ h₁
+    TNLean.MPS.Symmetry.exists_unitary_rephase_with_factorSystem ρ₀ ρ₁ h h₀ h₁
   refine ⟨ρ₀', h₀', ?_, ⟨normalizedBondFixedPointGappedPath ρ₀' ρ₁
     (Nat.pos_of_ne_zero (NeZero.ne D₀)) (Nat.pos_of_ne_zero (NeZero.ne D₁)) h₀' h₁⟩⟩
   apply sptFixedPointAction_eq_of_forall_eq_smul ρ₀ ρ₀'

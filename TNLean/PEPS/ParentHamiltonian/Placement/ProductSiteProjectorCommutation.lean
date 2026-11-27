@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexVirtualParentTransport
-import TNLean.PEPS.ParentHamiltonian.Placement.RegionPlacement
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
+import QICLean.ManyBody.Sites.Placement.RegionPlacement
 
 /-!
 # Regional projector commutation through product site maps
@@ -14,6 +15,8 @@ commutation from intertwiners on the virtual coordinates. The argument
 cancels only the nonzero complementary product of site projections; it does
 not require the full product site map to be surjective.
 -/
+
+open ManyBody (exists_place_commutator_union)
 
 open scoped BigOperators Matrix Kronecker
 

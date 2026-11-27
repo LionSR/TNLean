@@ -12,6 +12,5 @@ import TNLean.QCA.Automorphism
 import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.Margolus
 import TNLean.QCA.QuasiLocal
-import TNLean.QCA.StarSubalgebra
 import TNLean.QCA.State
 import TNLean.QCA.SupportAlgebra

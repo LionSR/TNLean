@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.KrausGauge
-import QICLean.Channel.PerronFrobenius.Existence
+import QICLean.Channel.Irreducible.KrausSetup
 import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Gauge.TPGauge

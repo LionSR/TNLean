@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Circuit.CutMetrics.BalancedIntervalMerging
 import QICLean.Circuit.Gate.PartialIsometryDilation
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
+import QICLean.Algebra.Matrix.RankOneSandwich
 
 /-!
 # An explicit unitary dilation of the normalized bond contraction
@@ -23,23 +24,6 @@ identities do not assert the complete recursive circuit construction.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- A normalized row functional followed by a reset to a basis vector is a
-partial isometry.
-Source: `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5. -/
-theorem vecMulVec_single_mul_conjTranspose_mul (z : n) (w : n → ℂ)
-    (hw : star w ⬝ᵥ w = 1) :
-    vecMulVec (Pi.single z 1) w * (vecMulVec (Pi.single z 1) w)ᴴ *
-      vecMulVec (Pi.single z 1) w = vecMulVec (Pi.single z 1) w := by
-  have hw' : w ⬝ᵥ star w = 1 := by simpa only [dotProduct_comm] using hw
-  simp only [conjTranspose_vecMulVec, vecMulVec_mul_vecMulVec, hw', one_smul,
-    ← Pi.single_star, star_one, single_one_dotProduct, Pi.single_eq_same]
-
-end Matrix
 
 namespace MPUCircuit
 

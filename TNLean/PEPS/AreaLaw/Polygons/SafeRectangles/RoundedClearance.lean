@@ -24,6 +24,8 @@ and `scanner:scales` / `scanner:test-geometry`, lines 32–49, at
 Original proof from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (cappedDyadicPartition latticeDyadicRect)
+
 open ManyBody (IntRect IsSafe supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -135,7 +137,6 @@ theorem ScannerExponents.exists_rounded_clearance_threshold (X : ScannerExponent
         (D₀ + 1) * X.L n ≤ D₀ * s ∧ 2 * X.L n + 10 * r₀ ≤ D₀ * s :=
   Scan.exists_rounded_clearance_threshold hC₂ hCr X.ell_pos X.ell_lt_one
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-- One rounded-scale threshold gives scanner clearance and safe actual shell
 cells uniformly in the domain, cut, safety parameter and parent rectangle.

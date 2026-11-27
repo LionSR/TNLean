@@ -10,11 +10,11 @@ with marginals taken in the final normalized vector of
 
 \begin{definition}[One-coordinate variation and insertion]
     \label{def:peps_patch_coordinate_insertion}
-    \lean{TNLean.PEPS.regularizedPatchCoordinateUpdate,
-        TNLean.PEPS.regularizedPatchInsertion,
-        TNLean.PEPS.regularizedPatchInsertion_apply,
-        TNLean.PEPS.regularizedPatchInsertion_self,
-        TNLean.PEPS.regularizedPatchUnitaryCurve}
+    \lean{ManyBody.regularizedPatchCoordinateUpdate,
+        ManyBody.regularizedPatchInsertion,
+        ManyBody.regularizedPatchInsertion_apply,
+        ManyBody.regularizedPatchInsertion_self,
+        ManyBody.regularizedPatchUnitaryCurve}
     \leanok
     \uses{def:peps_regularized_patch_objective}
     Fix $0\le j<m$ and a unitary $U$ on $\mathcal H_{X_j}$.
@@ -31,9 +31,9 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Feasibility and covariance]
     \label{thm:peps_patch_coordinate_covariance}
-    \lean{TNLean.PEPS.regularizedPatchCoordinateUpdate_mem,
-        TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow,
-        TNLean.PEPS.regularizedPatchOutput_coordinateUpdate}
+    \lean{ManyBody.regularizedPatchCoordinateUpdate_mem,
+        ManyBody.regularizedPatchCoordinateUpdate_rpow,
+        ManyBody.regularizedPatchOutput_coordinateUpdate}
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
     For $x\in\mathcal D$, $b>0$, $a_j\in\R$, and a unitary $U$
@@ -54,8 +54,8 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Ordered first variation]
     \label{thm:peps_patch_first_variation}
-    \lean{TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate,
-        TNLean.PEPS.regularizedPatchFirstVariation_eq_zero}
+    \lean{ManyBody.hasDerivAt_regularizedPatchOutput_coordinateUpdate,
+        ManyBody.regularizedPatchFirstVariation_eq_zero}
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
     Let $x\in\mathcal D$, $b>0$, $a_j\in\R$, and $B^*=-B$ on $\mathcal H_{X_j}$. Then
@@ -87,7 +87,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Radius derivative of the ordered patch output]
     \label{thm:peps_patch_radius_derivative}
-    \lean{TNLean.PEPS.hasDerivAt_regularizedPatchOutput_exp_neg}
+    \lean{ManyBody.hasDerivAt_regularizedPatchOutput_exp_neg}
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
     Let $V$ be a finite ordered set with finite local alphabets $A_v$
@@ -122,7 +122,7 @@ with marginals taken in the final normalized vector of
 
 \begin{definition}[Regional marginals of the patch state]
     \label{def:peps_patch_canonical_marginal}
-    \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal}
+    \lean{ManyBody.normalizedRegularizedPatchMarginal}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
     For $\phi=\widehat\Psi(x)$ from Definition~\ref{def:peps_regularized_patch_minimum} and $X\subseteq V$, define
@@ -137,7 +137,7 @@ with marginals taken in the final normalized vector of
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{definition}[The ordered list of patch factors]
     \label{def:peps_ordered_patch_factor_list}
-    \lean{TNLean.PEPS.regularizedPatchFactorList}
+    \lean{ManyBody.regularizedPatchFactorList}
     \leanok
     For a finite ordered set $V$, $n_v\in\N$, $\mathcal H_X=\ell^2(\prod_{v\in X}[n_v];\C)$,
     $X_0,\ldots,X_{m-1}\subseteq V$, $a_j\in\R$,
@@ -149,7 +149,7 @@ with marginals taken in the final normalized vector of
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{lemma}[The ordered list of regularized filters]
     \label{thm:peps_patch_factor_chain_list}
-    \lean{TNLean.PEPS.map_filter_regularizedPatchFactorList_eq_chainList}
+    \lean{ManyBody.map_filter_regularizedPatchFactorList_eq_chainList}
     \leanok
     \uses{def:peps_ordered_patch_factor_list}
     For finite $D_j\subseteq V$ ($0\le j<m$), $a_j,b\in\R$, and $x_j\in\operatorname{End}(\mathcal H_{D_j})$, set
@@ -166,8 +166,8 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[The ordered output as a list product]
     \label{thm:peps_ordered_patch_output_coordinates}
-    \lean{TNLean.PEPS.regularizedPatchOutput_eq_patchOutput,
-        TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput}
+    \lean{ManyBody.regularizedPatchOutput_eq_patchOutput,
+        ManyBody.regularizedPatchObjective_eq_norm_patchOutput}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,def:peps_regularized_patch_objective}
     For $b\in\R$, $\Omega\in\mathcal H_V$, and $K_j=(x_j+bI)^{-a_j/2}$ with identity extensions $\widehat K_j$, write $P_b(\mathcal L)$ for the ordered product of the extended filters of a factor list $\mathcal L$. Then
@@ -188,7 +188,7 @@ with marginals taken in the final normalized vector of
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{lemma}[Minimization over ordered patch lists]
     \label{thm:peps_ordered_patch_minimizer}
-    \lean{TNLean.PEPS.isPatchMinimizer_regularizedPatchFactorList}
+    \lean{ManyBody.isPatchMinimizer_regularizedPatchFactorList}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_regularized_patch_objective}
     Fix $X_0,\ldots,X_{m-1}\subseteq V$, $a_j,b\in\R$, $\Omega\in\mathcal H_V$, and $x_j\in\operatorname{End}(\mathcal H_{X_j})$ with $F(x)\le F(y)$ for all $y\in\mathcal D$.
@@ -207,7 +207,7 @@ with marginals taken in the final normalized vector of
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
 \begin{lemma}[The normalized output as a list state]
     \label{thm:peps_ordered_patch_normalized_coordinates}
-    \lean{TNLean.PEPS.normalizedRegularizedPatchOutput_eq_patchState}
+    \lean{ManyBody.normalizedRegularizedPatchOutput_eq_patchState}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,def:peps_regularized_patch_minimum}
     The normalization $\widehat\Psi=\|\Psi\|^{-1}\Psi$ of the ordered output $\Psi=\widehat K_{m-1}\cdots\widehat K_0\Omega$ (set to $0$ when the output vanishes) is the normalization of $P_b(\mathcal L(x))\Omega$.
@@ -221,7 +221,7 @@ with marginals taken in the final normalized vector of
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99 and 130--205.
 \begin{lemma}[Regional marginals of the list state]
     \label{thm:peps_ordered_patch_marginal_coordinates}
-    \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
+    \lean{ManyBody.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
     \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,def:peps_patch_canonical_marginal}
     For every $R\subseteq V$, the canonical marginal (\ref{eq:peps_canonical_marginal}) satisfies
@@ -235,10 +235,10 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Regional expectation and density properties]
     \label{thm:peps_patch_marginal_expectation}
-    \lean{TNLean.PEPS.inner_place_eq_trace_reducedPure,
-        TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef,
-        TNLean.PEPS.trace_normalizedRegularizedPatchMarginal,
-        TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace}
+    \lean{ManyBody.inner_place_eq_trace_reducedPure,
+        ManyBody.normalizedRegularizedPatchMarginal_posSemidef,
+        ManyBody.trace_normalizedRegularizedPatchMarginal,
+        ManyBody.inner_normalizedRegularizedPatchOutput_lift_eq_trace}
     \leanok
     \uses{def:peps_patch_canonical_marginal}
     For every $\xi\in\mathcal H_V$, $X\subseteq V$, and $K\in\operatorname{End}(\mathcal H_X)$,
@@ -259,7 +259,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Relabelling the final-state marginal]
     \label{thm:peps_patch_basis_relabelling}
-    \lean{TNLean.PEPS.reindex_normalizedRegularizedPatchMarginal}
+    \lean{ManyBody.reindex_normalizedRegularizedPatchMarginal}
     \leanok
     \uses{def:peps_patch_canonical_marginal,thm:peps_regional_basis_relabelling}
     Under the sitewise relabellings $E_X$ of Lemma~\ref{thm:peps_regional_basis_relabelling}, the marginal $\rho_X$ of the same final vector $\phi=\widehat\Psi(x)$ satisfies
@@ -285,7 +285,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Trace pairing for an insertion in a nested product]
     \label{thm:peps_patch_insertion_trace}
-    \lean{TNLean.PEPS.inner_regularizedPatchInsertion_eq_trace_of_outer_commute}
+    \lean{ManyBody.inner_regularizedPatchInsertion_eq_trace_of_outer_commute}
     \leanok
     \uses{def:peps_patch_coordinate_insertion,def:peps_patch_canonical_marginal}
     Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, $x_k\ge0$ on
@@ -325,7 +325,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Logarithmic radius derivative under outer commutations]
     \label{thm:peps_patch_log_radius_derivative_of_outer_commute}
-    \lean{TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute}
+    \lean{ManyBody.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute}
     \leanok
     \uses{thm:peps_patch_radius_derivative,thm:peps_patch_insertion_trace,def:peps_patch_canonical_marginal}
     Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, $a_j\ge0$,
@@ -352,7 +352,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Uniform bound for the logarithmic radius derivative]
     \label{thm:peps_patch_uniform_log_radius_derivative}
-    \lean{TNLean.PEPS.exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform}
+    \lean{ManyBody.exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform}
     Fix $X_0,\ldots,X_{m-1}\subseteq V$, $a_j\ge0$ with $\kappa=\sum_j a_j$,
     and a unit vector $\Omega\in\mathcal H_V$.
     For $x\in\mathcal D$, set
@@ -385,8 +385,8 @@ with marginals taken in the final normalized vector of
 
 \begin{definition}[Diagonal coordinate objective]
     \label{def:peps_patch_diagonal_objective}
-    \lean{TNLean.PEPS.regularizedPatchDiagonalUpdate,
-        TNLean.PEPS.regularizedPatchDiagonalObjective}
+    \lean{ManyBody.regularizedPatchDiagonalUpdate,
+        ManyBody.regularizedPatchDiagonalObjective}
     \leanok
     \uses{def:peps_regularized_patch_objective}
     Fix $0\le j<m$ and a unitary $U$ on $\mathcal H_{X_j}$.
@@ -403,7 +403,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Restriction of a patch minimum to the diagonal simplex]
     \label{thm:peps_patch_diagonal_minimum}
-    \lean{TNLean.PEPS.isMinOn_regularizedPatchDiagonalObjective}
+    \lean{ManyBody.isMinOn_regularizedPatchDiagonalObjective}
     \leanok
     \uses{def:peps_patch_diagonal_objective}
     If $b>0$, $x\in\mathcal D$ minimizes $F$ on $\mathcal D$, and
@@ -424,7 +424,7 @@ with marginals taken in the final normalized vector of
 \begin{lemma}[Clipped spectra at a regularized patch minimum]
     \label{thm:peps_patch_minimum_clipped}
     \leanok
-    \lean{TNLean.PEPS.exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective}
+    \lean{ManyBody.exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective}
     \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
     Let $X_0\subseteq\cdots\subseteq X_{m-1}$, $a_j>0$, $b>0$,
     and $\|\Omega\|=1$. If $x\in\mathcal D$
@@ -453,7 +453,7 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Logarithmic filter ratios at a patch minimum]
     \label{thm:peps_patch_minimum_filter_log_ratio}
-    \lean{TNLean.PEPS.exists_clipped_filter_of_isMinOn_regularizedPatchObjective}
+    \lean{ManyBody.exists_clipped_filter_of_isMinOn_regularizedPatchObjective}
     \leanok
     \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
     Under the hypotheses of Lemma~\ref{thm:peps_patch_minimum_clipped},

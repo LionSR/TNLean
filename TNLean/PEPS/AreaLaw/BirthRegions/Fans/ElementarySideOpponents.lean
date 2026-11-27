@@ -3,10 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.DummyCorners
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import Mathlib.Analysis.Convex.Topology
 import Mathlib.Order.Interval.Set.Disjoint
 
@@ -31,6 +33,12 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent`: uniqueness of the region
   opposing an elementary side.
 -/
+
+open ManyBody (closure_dyadicCell_eq_corners convex_closure_dyadicCell dyadicCell dyadicCellCorner
+  dyadicCellCorner_lt dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer_exists_dist_le dyadicNeighborhood dyadicNeighborhood_disjoint_later_layer
+  fineLayerIndices interior_dyadicCell_eq_corners rectangleCorner
+  rectangleCorner_eq_dyadicCellCorner)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -63,12 +71,6 @@ private theorem rectangle_normal_boundary {p q a b : ℝ × ℝ} {ξ η : ℝ}
       lt_of_lt_of_le hu.2 (min_le_right _ _)⟩,
       ⟨lt_of_le_of_lt (le_max_left _ _) hv.1,
         lt_of_lt_of_le hv.2 (min_le_left _ _)⟩⟩
-
-/-- The corner of the closed axis-parallel rectangle with opposite corners `a`
-and `b` selected by `ε`, where the coordinate `0` picks `a` and `1` picks `b`.
-Source: area-law Section 11, lines 299–316. -/
-def rectangleCorner (a b : ℝ × ℝ) (ε : Fin 2 × Fin 2) : ℝ × ℝ :=
-  (if ε.1.val = 0 then a.1 else b.1, if ε.2.val = 0 then a.2 else b.2)
 
 private theorem rectangle_vertical_containment {p q a b : ℝ × ℝ} {ξ η l u : ℝ}
     (hp : p.1 < q.1 ∧ p.2 < q.2) (ha : a.1 < b.1 ∧ a.2 < b.2)
@@ -190,39 +192,6 @@ private theorem rectangle_axis_segment {p q a b u v x : ℝ × ℝ}
     intro x hxS
     have hr := hsub (swap_mem_segment hxS)
     exact ⟨hr.2, hr.1⟩
-
-/-- The lower-left corner of a dyadic cell lies strictly below and to the left
-of its upper-right corner. Source: area-law Section 11, lines 299–310. -/
-theorem dyadicCellCorner_lt (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
-    (dyadicCellCorner o ℓ z (0, 0)).1 < (dyadicCellCorner o ℓ z (1, 1)).1 ∧
-      (dyadicCellCorner o ℓ z (0, 0)).2 < (dyadicCellCorner o ℓ z (1, 1)).2 := by
-  have ht : 0 < (2 : ℝ) ^ ℓ := by positivity
-  constructor <;> norm_num [dyadicCellCorner]
-
-/-- The interior of a dyadic cell is the open rectangle spanned by its extreme
-corners. Source: area-law Section 11, lines 299–310. -/
-theorem interior_dyadicCell_eq_corners (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
-    interior (dyadicCell o ℓ z) =
-      Set.Ioo (dyadicCellCorner o ℓ z (0, 0)).1 (dyadicCellCorner o ℓ z (1, 1)).1 ×ˢ
-        Set.Ioo (dyadicCellCorner o ℓ z (0, 0)).2 (dyadicCellCorner o ℓ z (1, 1)).2 := by
-  simp [dyadicCell, interior_prod_eq, interior_Ico, dyadicCellCorner]
-
-/-- The closure of a dyadic cell is the closed rectangle spanned by its extreme
-corners. Source: area-law Section 11, lines 299–310. -/
-theorem closure_dyadicCell_eq_corners (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
-    closure (dyadicCell o ℓ z) =
-      Set.Icc (dyadicCellCorner o ℓ z (0, 0)).1 (dyadicCellCorner o ℓ z (1, 1)).1 ×ˢ
-        Set.Icc (dyadicCellCorner o ℓ z (0, 0)).2 (dyadicCellCorner o ℓ z (1, 1)).2 := by
-  simp [closure_dyadicCell, dyadicCellCorner]
-
-/-- The rectangle corners spanned by the extreme corners of a dyadic cell are
-its four corners. Source: area-law Section 11, lines 299–310. -/
-theorem rectangleCorner_eq_dyadicCellCorner (o : ℝ × ℝ) (ℓ : ℕ)
-    (z : ℤ × ℤ) (ε : Fin 2 × Fin 2) :
-    rectangleCorner (dyadicCellCorner o ℓ z (0, 0)) (dyadicCellCorner o ℓ z (1, 1)) ε =
-      dyadicCellCorner o ℓ z ε := by
-  rcases ε with ⟨i, j⟩
-  fin_cases i <;> fin_cases j <;> norm_num [rectangleCorner, dyadicCellCorner]
 
 private theorem unsplit_geometry (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (s : Fin 4) :
     let a := cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩

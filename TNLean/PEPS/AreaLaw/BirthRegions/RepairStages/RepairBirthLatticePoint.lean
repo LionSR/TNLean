@@ -47,6 +47,8 @@ generation.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (integerPoint)
+
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

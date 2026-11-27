@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.OriginalNestedPatchEntropy
 import TNLean.PEPS.Approximation.NestedPatches.NestedPatchEnergy
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimizerStationarity
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchRadiusChoice
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimum
+import QICLean.ManyBody.Entropy.Filter.Regularized.MinimizerStationarity
+import QICLean.Analysis.Parameter.PatchFilterParameters
+import QICLean.ManyBody.Entropy.Filter.Regularized.Minimum
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -30,6 +30,15 @@ states*, Proposition 4.1, `03-patches.tex`, lines 335–563,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
+
+open ManyBody (dependentRegionCylinder exists_isMinOn_regularizedPatchObjective
+  exists_mem_iSup_dependentRegionCylinder_norm_sub_le
+  log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance normalizedRegularizedPatchMarginal
+  regularizedPatchDomain regularizedPatchMinimum regularizedPatchMinimum_pos
+  regularizedPatchObjective regularizedPatchObjective_eq_minimum)
+open Real (mul_patchFilterExponent_sq_le patchFilterExponent patchFilterExponent_le_half
+  patchFilterExponent_pos_of_pos regularizedPatchRadiusExponent
+  regularizedPatchRadiusExponent_bounds)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -81,12 +90,12 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
     (center : ℝ × ℝ) {u : ℝ} (hu : 0 ≤ u) (huL : u ≤ B₀ * Real.log L)
     {m : ℕ} (hm : 0 < m) (r : Fin m → ℝ) (hr : Monotone r)
     (hS : ∀ j, ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-      Ψ (AreaLaw.Geometry.closedSquareSample Λ center (r j)) ≤ C * (1 + u))
+      Ψ (ManyBody.closedSquareSample Λ center (r j)) ≤ C * (1 + u))
     (hclose : ∀ b : ℝ, 0 < b →
       letI : LinearOrder ↥Λ :=
         (Fintype.equivFin ↥Λ).linearOrder
       let regions : Fin m → Finset ↥Λ :=
-        fun j ↦ AreaLaw.Geometry.closedSquareSample Λ center (r j)
+        fun j ↦ ManyBody.closedSquareSample Λ center (r j)
       let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
       let Ψᵤ := Ψ
       ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
@@ -105,7 +114,7 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
     letI : LinearOrder ↥Λ :=
       (Fintype.equivFin ↥Λ).linearOrder
     let regions : Fin m → Finset ↥Λ :=
-      fun j ↦ AreaLaw.Geometry.closedSquareSample Λ center (r j)
+      fun j ↦ ManyBody.closedSquareSample Λ center (r j)
     let Ψᵤ := Ψ
     ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
       (v : EuclideanSpace ℂ
@@ -122,7 +131,7 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
   let R : ℝ := regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ * Real.log L
   have hdata : (0 : ℝ) < m ∧ ‖Ψᵤ‖ = 1 ∧ Monotone regions :=
     ⟨Nat.cast_pos.mpr hm, hΨ,
-      fun i j hij ↦ AreaLaw.Geometry.closedSquareSample_mono Λ center (hr hij)⟩
+      fun i j hij ↦ ManyBody.closedSquareSample_mono Λ center (hr hij)⟩
   have ha : (∀ j, 0 < a j) ∧ ∑ j, a j = κ :=
     ⟨fun _ ↦ div_pos hκ hdata.1, by simp [a, div_eq_mul_inv, mul_left_comm, hdata.1.ne']⟩
   have hbounds := regularizedPatchRadiusExponent_bounds (C₀ := 16 * C + Real.log 8)
@@ -185,10 +194,10 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
           let Λ := ManyBody.rectangularDomain L L
           letI : LinearOrder ↥Λ :=
             (Fintype.equivFin ↥Λ).linearOrder
-          let m := AreaLaw.Geometry.nestedPatchCount u
+          let m := ManyBody.nestedPatchCount u
           let regions : Fin m → Finset ↥Λ :=
-            fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
-          let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
+            fun j ↦ ManyBody.nestedPatch Λ center u j.val
+          let Ωᵤ := ManyBody.rectangleAreaLawState Ω
           ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
             (v : EuclideanSpace ℂ
               ((v : ↥Λ) → Fin q)),
@@ -201,10 +210,10 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan center u hu huL
   have hκ : 0 < patchFilterExponent q J Δ := patchFilterExponent_pos_of_pos (by omega) hJ hΔ
   exact exists_closedSquare_cylinders_of_marginal_closeness hL hB₀ hp hκ
-    (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (AreaLaw.rectangleAreaLawState Ω)
-    ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ) center (by linarith) huL
-    (AreaLaw.Geometry.nestedPatchCount_pos u)
-    (fun j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
+    (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (ManyBody.rectangleAreaLawState Ω)
+    ((ManyBody.norm_rectangleAreaLawState Ω).trans hΩ) center (by linarith) huL
+    (ManyBody.nestedPatchCount_pos u)
+    (fun j ↦ ManyBody.nestedPatchRadius u j.val)
     (fun i j hij ↦ add_le_add_right (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij)
       (by norm_num : (0 : ℝ) ≤ 2)) u)
     (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ center u
@@ -239,10 +248,10 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
             let Λ := ManyBody.rectangularDomain L L
             letI : LinearOrder ↥Λ :=
               (Fintype.equivFin ↥Λ).linearOrder
-            let m := AreaLaw.Geometry.nestedPatchCount u
+            let m := ManyBody.nestedPatchCount u
             let regions : Fin m → Finset ↥Λ :=
-              fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
-            let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
+              fun j ↦ ManyBody.nestedPatch Λ center u j.val
+            let Ωᵤ := ManyBody.rectangleAreaLawState Ω
             ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
               (v : EuclideanSpace ℂ
                 ((v : ↥Λ) → Fin q)),

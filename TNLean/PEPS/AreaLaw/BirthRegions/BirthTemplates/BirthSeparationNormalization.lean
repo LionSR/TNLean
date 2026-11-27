@@ -5,12 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationAtoms
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanFrontiers
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplatePolygons
+import QICLean.ManyBody.Sites.Template.Polygons
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanSideContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
+import QICLean.ManyBody.Sites.Template.Rows
 
 /-!
 # Normalization of a belt cell
@@ -31,6 +31,9 @@ construction, lines 299–330.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (closure_dyadicCell convex_closure_dyadicCell dyadicCell dyadicCellCorner_lt
+  interior_dyadicCell_eq_corners)
 
 noncomputable section
 
@@ -222,7 +225,7 @@ theorem exists_beltAtom_subset_cellFanPolygon (hℓ : ℓ ≤ ℓ' + 1) (split :
   refine exists_beltAtom_subset ((beltNormalize o ℓ z).isClosed_image.mpr
     (isClosed_cellFanPolygon_region split i)) (convex_beltNormalize_image ?_) ?_ ?_
     (Set.mem_image_of_mem _ hp)
-  · rw [TemplatePolygon.region_eq_convexHull_vertices]; exact convex_convexHull ℝ _
+  · rw [ManyBody.TemplatePolygon.region_eq_convexHull_vertices]; exact convex_convexHull ℝ _
   · rw [← Homeomorph.image_interior]
     exact (cellFanPolygon_interior_nonempty_and_closure_eq o ℓ' w split i).1.image _
   · rw [← Homeomorph.image_frontier]

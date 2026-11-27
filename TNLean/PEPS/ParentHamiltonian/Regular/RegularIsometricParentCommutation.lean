@@ -29,6 +29,9 @@ although its stated parent interaction is the complement. See
 `docs/paper-gaps/scp10_g_isometric_commuting_parent_hamiltonian.tex`.
 -/
 
+open Matrix (coordinateRangeProjector coordinateRangeProjector_isStarProjection
+  eq_coordinateRangeProjector_of_range)
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder
 
 namespace TNLean.PEPS

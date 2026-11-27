@@ -66,6 +66,8 @@ lines 399–533; scales and geometry, lines 21–59; Proposition 8.1
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (card_anchor_fiber_le designatedSupport)
+
 open scoped Matrix.Norms.L2Operator
 
 open Filter Topology Set Matrix
@@ -130,7 +132,7 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (Δ CT Ctr C₁ Ce 
   rows_le : ∀ d : ℕ, 1 ≤ d → d ≤ X.L n →
     (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n
   /-- `dist_∞(T, Z) > 2L + 10 r₀` (line 46). -/
-  clearance : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+  clearance : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
     ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)
   /-- `S_Ω(X) ≤ C_e n^{1+e}` (line 355). -/
   entropy_target : ManyBody.regionEntropy Ω (S.target T) ≤ Ce * (n : ℝ) ^ (1 + X.e)

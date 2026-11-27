@@ -26,6 +26,8 @@ at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. Independently
 formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (designatedSupport)
+
 open scoped Matrix.Norms.L2Operator
 
 open scoped BigOperators
@@ -62,7 +64,7 @@ theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_planeDomainGra
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {t : ℝ} (ht : 0 ≤ t) (k : ℕ)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (hne : pre ≠ 0)
@@ -154,7 +156,7 @@ theorem actualCharges_integral_bound_planeDomainGraph_of_finiteFamilyTransportBo
       (∀ d : ℕ, 1 ≤ d → d ≤ L →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
@@ -218,7 +220,7 @@ theorem actualCharges_integral_bound_planeDomainGraph :
         (∀ d : ℕ, 1 ≤ d → d ≤ L →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega

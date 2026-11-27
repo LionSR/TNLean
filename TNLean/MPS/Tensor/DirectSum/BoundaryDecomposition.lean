@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.DependentBlockDiagonal
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
+import QICLean.Algebra.Matrix.MatrixTracePairing
 
 /-!
 # Virtual-boundary decomposition for finite block sums
@@ -25,20 +26,6 @@ open MPTensor
 open scoped Matrix BigOperators
 
 noncomputable section
-
-namespace Matrix
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-
-/-- The diagonal block of a matrix written on a flattened finite dependent
-direct sum. -/
-def finSigmaDiagonalBlock
-    (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ)
-    (j : Fin r) : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-  (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X).submatrix
-    (fun a ↦ ⟨j, a⟩) (fun a ↦ ⟨j, a⟩)
-
-end Matrix
 
 namespace MPSTensor
 

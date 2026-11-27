@@ -18,6 +18,8 @@ Source: Schuch, Wolf, Verstraete, and Cirac, arXiv:0705.0292v2,
 replacement separates a chain into consecutive blocks.
 -/
 
+open ManyBody (interval mem_interval)
+
 noncomputable section
 open ManyBody (cutMatrix)
 namespace TNLean.MPS.AreaLaw
@@ -35,58 +37,64 @@ def intervalSlice (ψ : EuclideanSpace ℂ (Fin T → Fin q)) (a : ℕ)
 
 /-- Extend prefix coordinates by the fixed exterior configuration. -/
 private def prefixMap (a j : ℕ) (hj : j ≤ L) (σ₀ : Fin T → Fin q)
-    (x : (v : {v : Fin L // v ∈ leftBlock L j}) → Fin q) :
-    (v : {v : Fin T // v ∈ leftBlock T (a + j)}) → Fin q :=
+    (x : (v : {v : Fin L // v ∈ interval L 0 j}) → Fin q) :
+    (v : {v : Fin T // v ∈ interval T 0 (a + j)}) → Fin q :=
   fun v ↦ if ha : a ≤ v.1.val then
-    x ⟨⟨v.1.val - a, by have := mem_leftBlock.mp v.2; omega⟩,
-      mem_leftBlock.mpr (by dsimp only; have := mem_leftBlock.mp v.2; omega)⟩
+    x ⟨⟨v.1.val - a, by have := (mem_interval.mp v.2).2; omega⟩,
+      mem_interval.mpr ⟨Nat.zero_le _, by dsimp only; have := (mem_interval.mp v.2).2; omega⟩⟩
   else σ₀ v.1
 
 /-- Extend suffix coordinates by the fixed exterior configuration. -/
 private def suffixMap (a j : ℕ) (σ₀ : Fin T → Fin q)
-    (x : (v : {v : Fin L // v ∉ leftBlock L j}) → Fin q) :
-    (v : {v : Fin T // v ∉ leftBlock T (a + j)}) → Fin q :=
+    (x : (v : {v : Fin L // v ∉ interval L 0 j}) → Fin q) :
+    (v : {v : Fin T // v ∉ interval T 0 (a + j)}) → Fin q :=
   fun v ↦ if hb : v.1.val < a + L then
-    x ⟨⟨v.1.val - a, by have := mt mem_leftBlock.mpr v.2; omega⟩,
-      (by have := mt mem_leftBlock.mpr v.2; simp only [mem_leftBlock]; omega)⟩
+    x ⟨⟨v.1.val - a, by
+        have := v.2; simp only [mem_interval, Nat.zero_le, true_and] at this; omega⟩,
+      (by
+        have := v.2
+        simp only [mem_interval, Nat.zero_le, true_and] at this ⊢
+        omega)⟩
   else σ₀ v.1
 
 /-- An interval slice at a local cut is a submatrix at the corresponding full cut. -/
 private theorem cutMatrix_intervalSlice (ψ : EuclideanSpace ℂ (Fin T → Fin q))
     (a j : ℕ) (hj : j ≤ L) (σ₀ : Fin T → Fin q) :
-    cutMatrix (leftBlock L j) (intervalSlice (L := L) ψ a σ₀) =
-      (cutMatrix (leftBlock T (a + j)) ψ).submatrix (prefixMap a j hj σ₀)
+    cutMatrix (interval L 0 j) (intervalSlice (L := L) ψ a σ₀) =
+      (cutMatrix (interval T 0 (a + j)) ψ).submatrix (prefixMap a j hj σ₀)
         (suffixMap a j σ₀) := by
   ext x y
   change ψ (insertInterval a σ₀
-    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm (x, y))) =
-      ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T (a + j))).symm
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 j)).symm (x, y))) =
+      ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval T 0 (a + j))).symm
         (prefixMap a j hj σ₀ x, suffixMap a j σ₀ y))
   apply congrArg ψ
   funext i
   by_cases hi : i.val < a + j
-  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, hi⟩)]
     by_cases ha : a ≤ i.val
     · have hb : i.val < a + L := lt_of_lt_of_le hi (Nat.add_le_add_left hj a)
       simp only [insertInterval,
         dite_eq_left (show a ≤ i.val ∧ i.val < a + L from ⟨ha, hb⟩),
         prefixMap, dite_eq_left ha]
-      rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr (by dsimp only; omega))]
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _
+          (mem_interval.mpr ⟨Nat.zero_le _, by dsimp only; omega⟩)]
     · simp [insertInterval, prefixMap, ha]
-  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (fun h ↦ hi (mem_interval.mp h).2)]
     by_cases hb : i.val < a + L
     · have ha : a ≤ i.val := by omega
       simp only [insertInterval,
         dite_eq_left (show a ≤ i.val ∧ i.val < a + L from ⟨ha, hb⟩),
         suffixMap, dite_eq_left hb]
-      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (by simp only [mem_leftBlock]; omega)]
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _
+          (by simp only [mem_interval, Nat.zero_le, true_and]; omega)]
     · simp [insertInterval, suffixMap, hb]
 
 /-- Fixing the coordinates outside an interval cannot increase its internal cut ranks. -/
 theorem rank_cutMatrix_intervalSlice_le (ψ : EuclideanSpace ℂ (Fin T → Fin q))
     (a j : ℕ) (hj : j ≤ L) (σ₀ : Fin T → Fin q) :
-    (cutMatrix (leftBlock L j) (intervalSlice (L := L) ψ a σ₀)).rank ≤
-      (cutMatrix (leftBlock T (a + j)) ψ).rank := by
+    (cutMatrix (interval L 0 j) (intervalSlice (L := L) ψ a σ₀)).rank ≤
+      (cutMatrix (interval T 0 (a + j)) ψ).rank := by
   rw [cutMatrix_intervalSlice ψ a j hj σ₀]
   exact Matrix.rank_submatrix_le _ _ _
 

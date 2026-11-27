@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingMeasurable
 import QICLean.Analysis.Parameter.ViableNodeParameters
-import QICLean.Probability.Measurable.VariableRankSampleProjection
+import QICLean.Probability.Haar.VariableRankSampleProjection
 
 /-!
 # A Borel canonical sample followed by the literal interleaved iteration

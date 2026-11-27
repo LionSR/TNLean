@@ -3,16 +3,17 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.Template.BoundaryEntropyAssembly
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Lattice.SupDistance
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.Analysis.TraceNorm.PureStateTraceDistance
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateCutBoundary
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
+import QICLean.ManyBody.Sites.Template.CutBoundary
+import QICLean.ManyBody.Sites.Template.Layers
 
 /-!
 # The deterministic steps of the sublinear collar bound
@@ -66,6 +67,9 @@ Consequently `SublinearCollarBound` reduces to its mutual-information inequality
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (Template boundaryEndpoints template_card_le template_core_boundary_card_le
+  template_cut_boundary_card_le template_layer_card_le template_shell_cut_boundary_card_le)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -253,8 +257,8 @@ def SublinearCollarBound (q R : ℕ) (J Δ D₀ Ctpl : ℝ) : Prop :=
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
       ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-          T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+        ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+          T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
           ManyBody.regionMutualInformation Ω
               (A.filter fun x ↦ x.val ∈ T.points)
@@ -285,8 +289,8 @@ def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
       ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-          T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+        ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+          T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
           ManyBody.regionMutualInformation Ω
               (A.filter fun x ↦ x.val ∈ T.points)
@@ -321,7 +325,7 @@ edges, and `|S₀| ≤ 10 n²`. The constants are universal; `24 ≤ Ctpl` is th
 template constant of Lemma 9.4, and `1 ≤ D₀` follows from the standing choice
 `D₀ > 2R + 10`.
 Source: `08-scanner.tex`, lines 824–826 and 942–943, from Lemma 9.4, lines 571–590. -/
-theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
+theorem _root_.ManyBody.Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
     (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
@@ -381,8 +385,8 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+            T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
@@ -394,8 +398,8 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+            T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
@@ -454,8 +458,8 @@ theorem sublinearCollarBound_of_mutualInformation_le {q R : ℕ} {J Δ D₀ Ctpl
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+            T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)

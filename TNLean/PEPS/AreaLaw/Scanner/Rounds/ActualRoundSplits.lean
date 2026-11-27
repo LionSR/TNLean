@@ -27,6 +27,8 @@ the energy operators themselves do not enter.
   formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (designatedSupport)
+
 open scoped BigOperators
 open Set
 open TensorPower TensorPower.ReplicaTransport
@@ -77,7 +79,7 @@ theorem actualChargeScanRound_splitOld_incidence
     (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {i : I}
     (hi : (S.actualChargeScanRound hm hM s n E a pre).splitOld i hist) :
@@ -105,7 +107,7 @@ theorem actualChargeScanRound_splitNew_incidence
     (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {c : ChargeChoices S.K S.M} {i : I}
     (hi : (S.actualChargeScanRound hm hM s n E a pre).splitNew i hist c) :
@@ -133,7 +135,7 @@ theorem actualFillScanRound_splitOld_incidence
     (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {i : I}
     (hi : (S.actualFillScanRound hm hM s n E a pre).splitOld i hist) :
@@ -160,7 +162,7 @@ theorem actualFillScanRound_splitNew_incidence
     (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {c : Unit} {i : I}
     (hi : (S.actualFillScanRound hm hM s n E a pre).splitNew i hist c) :
@@ -188,7 +190,7 @@ theorem actualChargeScanRound_card_splitOld_le
     (hDpos : 1 ≤ S.D) (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) :
@@ -214,7 +216,7 @@ theorem actualChargeScanRound_card_splitNew_le
     (hDpos : 1 ≤ S.D) (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) (c : ChargeChoices S.K S.M) :
@@ -240,7 +242,7 @@ theorem actualFillScanRound_card_splitOld_le
     (hDpos : 1 ≤ S.D) (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) :
@@ -266,7 +268,7 @@ theorem actualFillScanRound_card_splitNew_le
     (hDpos : 1 ≤ S.D) (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) (c : Unit) :
@@ -293,7 +295,7 @@ theorem actualChargeScanRound_splitWeight_le
     (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) (i : I) :
     (S.actualChargeScanRound hm hM s n E a pre).splitWeight p i ≤ 10 * (S.D : ℝ) / S.m := by
@@ -361,7 +363,7 @@ theorem actualFillScanRound_splitWeight_le
     (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) (i : I) :
     (S.actualFillScanRound hm hM s n E a pre).splitWeight p i ≤ 10 * (S.D : ℝ) / S.m := by

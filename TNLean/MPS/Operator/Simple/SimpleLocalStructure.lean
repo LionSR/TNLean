@@ -291,7 +291,7 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
   have hρflatTrace : ρflat.trace = 1 := by
     dsimp only [ρflat]
     rw [Matrix.trace_submatrix_equiv]
-    exact reducedBlockState_trace K N (1 + 1 + (N - 3)) hNm1
+    exact MPOTensor.reducedBlockState_trace K N (1 + 1 + (N - 3)) hNm1
       ((Classical.choose_spec hSAL).1 N (by omega))
   have hEqFlat : IsSSAEquality ρflat hρflatPos.isHermitian := by
     simpa [ρflat, hM] using isSSAEquality_tripartite_of_isSAL K hSAL hN
@@ -308,7 +308,7 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
   let eC : Fin (d ^ (N - 3)) ≃ Fin d × (Fin (N - 4) → Fin d) :=
     finFunctionFinEquiv.symm |>.trans
       (Equiv.arrowCongr (finCongr (show N - 3 = 1 + (N - 4) by omega)) (Equiv.refl _)) |>.trans
-      (blockSplitEquiv d 1 (N - 4)) |>.trans
+      (MPOTensor.blockSplitEquiv d 1 (N - 4)) |>.trans
       (finFunctionFinEquiv.prodCongr (Equiv.refl _)) |>.trans
       (eSite.symm.prodCongr (Equiv.refl _))
   have hηSmall := Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong
@@ -331,8 +331,8 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
         Equiv.trans_apply, Equiv.prodAssoc_symm_apply, Function.comp_apply,
         Equiv.symm_apply_apply, Equiv.symm_symm, Equiv.coe_refl, Prod.map_apply,
         id_eq, Nat.succ_eq_add_one]
-      rw [blockSplitEquiv_symm_apply, blockSplitEquiv_symm_apply,
-        blockSplitEquiv_symm_apply]
+      rw [MPOTensor.blockSplitEquiv_symm_apply, MPOTensor.blockSplitEquiv_symm_apply,
+        MPOTensor.blockSplitEquiv_symm_apply]
       funext i
       refine Fin.addCases (fun j : Fin 3 ↦ ?_) (fun j : Fin (N - 4) ↦ ?_) i
       · fin_cases j <;>

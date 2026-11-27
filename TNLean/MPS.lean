@@ -31,7 +31,6 @@ import TNLean.MPS.Tensor.Gauge
 import TNLean.MPS.Tensor.GlobalSymmetry
 import TNLean.MPS.Tensor.GroundSpace
 import TNLean.MPS.Tensor.HalfChain
-import TNLean.MPS.Tensor.InjectivityCutoff
 import TNLean.MPS.Tensor.IsometricBondCompression
 import TNLean.MPS.Tensor.OpenBoundary
 import TNLean.MPS.Tensor.OpenMPS
@@ -40,7 +39,6 @@ import TNLean.MPS.Tensor.PeriodicProjectiveRep
 import TNLean.MPS.Tensor.Physical
 import TNLean.MPS.Tensor.Reduction
 import TNLean.MPS.Tensor.Tactic
-import TNLean.MPS.Tensor.TruncationCommutator
 import TNLean.MPS.Tensor.VarianceOfAverages
 import TNLean.MPS.Tensor.VaryingBond
 import TNLean.MPS.Tensor.Words

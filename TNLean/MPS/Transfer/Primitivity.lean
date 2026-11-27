@@ -14,7 +14,6 @@ import TNLean.MPS.Transfer.Primitivity.Equivalence
 import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.Transfer.Primitivity.InvertibleWordSpan
 import TNLean.MPS.Transfer.Primitivity.Normal
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
 import TNLean.MPS.Transfer.Primitivity.RectangularSpan
 import TNLean.MPS.Transfer.Primitivity.Stochastic
 import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank

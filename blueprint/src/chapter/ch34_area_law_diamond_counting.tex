@@ -93,7 +93,7 @@ on $V$, and let $w_X\in\R$.
 
 \begin{definition}[Chain weight at a target]
     \label{def:area_target_chain}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum}
+    \lean{ManyBody.interactionChainTargetWeightSum}
     \leanok
     For $y\in V$ and finite $X\subseteq V$, define recursively
     \begin{align}
@@ -108,8 +108,8 @@ on $V$, and let $w_X\in\R$.
 \begin{lemma}[Nonnegative target weights]
     \label{thm:area_target_domination}
     \uses{def:area_target_chain,def:area_chain_weight}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_nonneg,
-        TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le}
+    \lean{ManyBody.interactionChainTargetWeightSum_nonneg,
+        ManyBody.interactionChainTargetWeightSum_le}
     \leanok
     If $w_Y\ge0$ for all $Y\in\mathcal F$, then $0\le T_n^y(X)\le W_n(X)$ for
     every finite $X\subseteq V$ and $n\ge0$.
@@ -125,9 +125,9 @@ on $V$, and let $w_X\in\R$.
 \begin{lemma}[Exact exclusion of distant targets]
     \label{thm:area_target_zero}
     \uses{def:area_target_chain}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_no_walk,
-        TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_lt_edist,
-        TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_edist_eq_top}
+    \lean{ManyBody.interactionChainTargetWeightSum_eq_zero_of_no_walk,
+        ManyBody.interactionChainTargetWeightSum_eq_zero_of_lt_edist,
+        ManyBody.interactionChainTargetWeightSum_eq_zero_of_edist_eq_top}
     \leanok
     Suppose every pair of sites in each $X\in\mathcal F$ is joined by a
     $G$-walk of length at most $R\ge0$. For $X\in\mathcal F$, $a\in X$, and
@@ -148,7 +148,7 @@ on $V$, and let $w_X\in\R$.
 \begin{lemma}[Graph-distance indicator bound]
     \label{thm:area_target_indicator}
     \uses{def:area_target_chain}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_indicator_pow}
+    \lean{ManyBody.interactionChainTargetWeightSum_le_indicator_pow}
     \leanok
     Under the range hypothesis of Lemma~\ref{thm:area_target_zero}, suppose
     $w_Y\ge0$, $|Y|\le v\in\N$ for all $Y\in\mathcal F$, and
@@ -175,7 +175,7 @@ on $V$, and let $w_X\in\R$.
 \begin{lemma}[Exponential coefficient bound]
     \label{thm:area_chain_exponential}
     \uses{def:area_target_chain}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential}
+    \lean{ManyBody.interactionChainTargetWeightSum_le_exponential}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:area_target_indicator}, for
     $d_G(a,y)=D\in\N$, $\mu\ge0$, and $\kappa=vb$,
@@ -196,7 +196,7 @@ on $V$, and let $w_X\in\R$.
 \begin{definition}[Interaction-chain series]
     \label{def:area_chain_series}
     \uses{def:area_target_chain}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries}
+    \lean{ManyBody.interactionChainPropagationSeries}
     \leanok
     For $t\in\R$, define the exponential generating series
     \begin{align}
@@ -208,7 +208,7 @@ on $V$, and let $w_X\in\R$.
 \begin{theorem}[Summability and spatial decay]
     \label{thm:area_chain_series_bound}
     \uses{def:area_chain_series}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le}
+    \lean{ManyBody.interactionChainPropagationSeries_summable_and_le}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:area_chain_exponential}, the
     series~(\ref{eq:area_chain_series}) from the proof of
@@ -236,7 +236,7 @@ on $V$, and let $w_X\in\R$.
 \begin{lemma}[Series vanishing between components]
     \label{thm:area_chain_series_zero}
     \uses{def:area_chain_series}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top}
+    \lean{ManyBody.interactionChainPropagationSeries_eq_zero_of_edist_eq_top}
     \leanok
     Under the range hypothesis of Lemma~\ref{thm:area_target_zero}, if
     $d_G(a,y)=\infty$, then $S_t^y(X)=0$ for all $t\in\R$ and $w_Y\in\R$.

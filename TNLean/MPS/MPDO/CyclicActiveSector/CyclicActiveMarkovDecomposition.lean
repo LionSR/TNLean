@@ -339,7 +339,7 @@ private theorem sum_cyclicActiveCutProbability_eq_one
   have hstateTrace : Matrix.trace
       (F.sectorCoordinateTensor.reducedBlockState
         (A + C + 2) (A + 1 + C) (by omega)) = 1 :=
-    reducedBlockState_trace F.sectorCoordinateTensor
+    MPOTensor.reducedBlockState_trace F.sectorCoordinateTensor
       (A + C + 2) (A + 1 + C) (by omega) htraceShort
   have htr := congrArg Matrix.trace hnormalized
   rw [Matrix.trace_reindex, hstateTrace, Matrix.trace_blockDiagonal'] at htr

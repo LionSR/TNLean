@@ -9,15 +9,12 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian.BoundaryMap
 
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockGroundSpaceOverlap
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockSubspaceOverlap
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockedGroundSpaceTransport
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.C3CorrectionBounds
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.CenteredOverlapFactor
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramConvergence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceGram
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.MixedGram

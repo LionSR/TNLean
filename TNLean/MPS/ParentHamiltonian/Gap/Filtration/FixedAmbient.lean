@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.InnerProductSpace.Semisimple
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import QICLean.ManyBody.Hamiltonian.Martingale.ProjectionCancellation
+import QICLean.Analysis.Projection.CommutingProjectionProduct
 
 /-!
 # Fixed-ambient open-chain ground projections
@@ -30,89 +31,6 @@ proof of Theorem 2.1(i).
 
 open scoped BigOperators InnerProductSpace
 open FrustrationFree.NestedGroundProjections
-
-namespace LinearMap
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-  [FiniteDimensional ℂ E]
-
-/-- The kernel projection of a linear map commutes with the kernel projection
-of a commuting symmetric operator.
-
-Commutation makes \(\ker S\) invariant under \(T\); symmetry of \(T\) makes its
-orthogonal complement invariant as well. Hence the orthogonal projection onto
-\(\ker S\) commutes with \(T\), and the same invariant-subspace argument applied
-to \(\ker T\) gives commutation of the two kernel projections. -/
-theorem IsSymmetric.kernelProjection_commute_of_commute {S T : E →ₗ[ℂ] E}
-    (hT : T.IsSymmetric)
-    (hcomm : S.comp T = T.comp S) :
-    (LinearMap.ker S).starProjection.toLinearMap.comp
-        (LinearMap.ker T).starProjection.toLinearMap =
-      (LinearMap.ker T).starProjection.toLinearMap.comp
-        (LinearMap.ker S).starProjection.toLinearMap := by
-  let PS := (LinearMap.ker S).starProjection.toLinearMap
-  let PT := (LinearMap.ker T).starProjection.toLinearMap
-  have hkerS : LinearMap.ker S ∈ Module.End.invtSubmodule T := by
-    rw [Module.End.mem_invtSubmodule_iff_forall_mem_of_mem]
-    intro x hx
-    rw [LinearMap.mem_ker] at hx ⊢
-    simpa [hx] using congrArg (fun f : E →ₗ[ℂ] E => f x) hcomm
-  have hkerSperp : (LinearMap.ker S)ᗮ ∈ Module.End.invtSubmodule T :=
-    hT.orthogonalComplement_mem_invtSubmodule hkerS
-  have hPST : Commute PS T := by
-    apply (LinearMap.IsIdempotentElem.commute_iff
-      (Submodule.isSymmetricProjection_starProjection
-        (LinearMap.ker S)).isIdempotentElem).mpr
-    simpa only [PS, Submodule.range_starProjection, Submodule.ker_starProjection] using
-      And.intro hkerS hkerSperp
-  have hkerT : LinearMap.ker T ∈ Module.End.invtSubmodule PS := by
-    rw [Module.End.mem_invtSubmodule_iff_forall_mem_of_mem]
-    intro x hx
-    rw [LinearMap.mem_ker] at hx ⊢
-    simpa [hx] using congrArg (fun f : E →ₗ[ℂ] E => f x) hPST.eq.symm
-  have hkerTperp : (LinearMap.ker T)ᗮ ∈ Module.End.invtSubmodule PS :=
-    (Submodule.isSymmetricProjection_starProjection (LinearMap.ker S)).isSymmetric
-      |>.orthogonalComplement_mem_invtSubmodule hkerT
-  have hPTPS : Commute PT PS := by
-    apply (LinearMap.IsIdempotentElem.commute_iff
-      (Submodule.isSymmetricProjection_starProjection
-        (LinearMap.ker T)).isIdempotentElem).mpr
-    simpa only [PT, Submodule.range_starProjection, Submodule.ker_starProjection] using
-      And.intro hkerT hkerTperp
-  simpa only [PS, PT, Module.End.mul_eq_comp] using hPTPS.eq.symm
-
-end LinearMap
-
-/-- Orthogonal projections onto nested submodules commute. -/
-theorem Submodule.starProjection_commute_of_le {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    {U V : Submodule ℂ E}
-    (hUV : U ≤ V) :
-    U.starProjection.toLinearMap.comp V.starProjection.toLinearMap =
-      V.starProjection.toLinearMap.comp U.starProjection.toLinearMap := by
-  have hleft : U.starProjection.toLinearMap.comp V.starProjection.toLinearMap =
-      U.starProjection.toLinearMap := by
-    apply LinearMap.ext
-    intro x
-    change U.starProjection (V.starProjection x) = U.starProjection x
-    exact congrArg (fun f : E →L[ℂ] E => f x)
-      (Submodule.starProjection_comp_starProjection_of_le hUV)
-  have hright : V.starProjection.toLinearMap.comp U.starProjection.toLinearMap =
-      U.starProjection.toLinearMap := by
-    ext x
-    apply ext_inner_left ℂ
-    intro y
-    calc
-      ⟪y, V.starProjection (U.starProjection x)⟫_ℂ =
-          ⟪V.starProjection y, U.starProjection x⟫_ℂ :=
-        (V.starProjection_isSymmetric y (U.starProjection x)).symm
-      _ = ⟪U.starProjection (V.starProjection y), x⟫_ℂ :=
-        (U.starProjection_isSymmetric (V.starProjection y) x).symm
-      _ = ⟪U.starProjection y, x⟫_ℂ := by
-        rw [← ContinuousLinearMap.comp_apply,
-          Submodule.starProjection_comp_starProjection_of_le hUV]
-      _ = ⟪y, U.starProjection x⟫_ℂ := U.starProjection_isSymmetric y x
-  exact hleft.trans hright.symm
 
 namespace MPSTensor
 

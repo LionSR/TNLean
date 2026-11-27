@@ -16,6 +16,11 @@ intertwining, without surjectivity onto the physical space.
 Source: SCP10, arXiv:1001.3807, Theorem 6.12, lines 2131–2153.
 -/
 
+open Matrix (coordinateRangeProjector coordinateRangeProjector_isStarProjection
+  eq_coordinateRangeProjector_of_range isStarProjection_smul_mul_mul_conjTranspose_of_gram
+  matrix_mul_eq_right_of_fixes_range range_coordinateRangeProjector
+  range_smul_mul_mul_conjTranspose_of_gram smul_mul_mul_conjTranspose_mul_of_gram)
+
 open ManyBody (Edge)
 
 open scoped BigOperators Matrix

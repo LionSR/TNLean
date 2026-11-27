@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 225–233, at `openai/math@adc7f124`.
 -/
 
+open ManyBody (designatedSupport)
+
 noncomputable section
 
 open ManyBody (planeDomainGraph)

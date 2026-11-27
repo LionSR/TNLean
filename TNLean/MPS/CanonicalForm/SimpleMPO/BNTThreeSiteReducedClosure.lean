@@ -212,7 +212,7 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
         (Matrix.trace (M.mpo (L + 3)))⁻¹ *
           ∑ w : Fin L → Fin d,
             M.mpo (3 + L) (Fin.append u w) (Fin.append v w) := by
-    rw [reducedBlockState_eq_sum]
+    rw [MPOTensor.reducedBlockState_eq_sum]
     simp only [normalizedMPO, Matrix.smul_apply, smul_eq_mul]
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl

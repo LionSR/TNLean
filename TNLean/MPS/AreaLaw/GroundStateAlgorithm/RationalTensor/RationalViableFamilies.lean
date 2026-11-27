@@ -14,6 +14,7 @@ Landau, Vazirani and Vidick, arXiv:1307.5143v1, equation `eq:conv`.
 
 open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -133,7 +134,7 @@ structure RationalCoordinateViableMPSDataOfHeight (H : ℕ)
   card_le : S.card ≤ s
   isLeftOpenMPS : ∀ v : S, IsLeftOpenMPS b v.1
   coordinate_height : ∀ v : S,
-    ∀ x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)),
+    ∀ x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 i)),
       HasRationalComplexCoordinatesOfHeight H (v.1 x)
   viable : IsViable Γ δ (S : Set (LeftBlockVector L q i))
 

@@ -8,6 +8,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointZeroSectorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointActiveHamiltonian
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointCoreHamiltonianSpectators
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointRightOpenTransport
+import QICLean.Spectral.Gap.PositiveComparisonGap
 
 /-!
 # A derived uniform open gap at the first mixed endpoint

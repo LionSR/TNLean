@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeConstraints
+import QICLean.ManyBody.Hamiltonian.Constraint.LatticeConstraints
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ActualEnergyTerms
 import QICLean.Analysis.Norm.RootChannel
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -34,6 +34,13 @@ Lemma 3.1 (`02-initial.tex`, lines 34–69), applied to the truncation in
 `03-quasilocal.tex`, lines 417–426, as in `08-scanner.tex`, lines 400–414.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (designatedSupport latticeFiniteSetTruncationConstant
+  latticeFiniteSetTruncation_of_locality latticePositiveConstraintConst
+  latticePositiveConstraintConst_nonneg latticePositiveConstraintRate
+  latticePositiveConstraintRate_pos latticeTruncationRadiusConstant
+  latticeTruncationRadiusConstant_pos localizationPrefactor localizationVelocity
+  norm_latticePositiveConstraint_sub_map_le truncatedConstraint)
 
 open Matrix
 

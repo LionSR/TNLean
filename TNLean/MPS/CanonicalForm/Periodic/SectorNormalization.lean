@@ -19,6 +19,8 @@ import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
 import QICLean.Channel.Peripheral.Irreducible.GroupStructure
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import TNLean.MPS.Transfer.Scaling
+import QICLean.Algebra.Combinatorics.ZModCyclicSums
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 
 /-!
 # Sectorwise Perron normalization of periodic blocks
@@ -281,20 +283,6 @@ spectrum obtained is that of the original block.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator Kraus
-
-/-- The powers of a primitive `m`-th root of unity in `ℂ` are exactly the
-solutions of `μ ^ m = 1`. -/
-theorem IsPrimitiveRoot.powRange_eq_setOf_pow_eq_one {m : ℕ} [NeZero m] {γ : ℂ}
-    (hγ : IsPrimitiveRoot γ m) :
-    {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} = {μ : ℂ | μ ^ m = 1} := by
-  ext z
-  simp only [Set.mem_ofPred_eq]
-  constructor
-  · rintro ⟨k, rfl⟩
-    rw [← pow_mul, mul_comm, pow_mul, hγ.pow_eq_one, one_pow]
-  · intro hz
-    obtain ⟨i, hi, hip⟩ := hγ.eq_pow_of_pow_eq_one hz
-    exact ⟨⟨i, hi⟩, hip.symm⟩
 
 namespace MPSTensor
 

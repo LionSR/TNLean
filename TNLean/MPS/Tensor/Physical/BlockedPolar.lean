@@ -6,7 +6,11 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Tensor.Physical.PhysicalMatrix
-import TNLean.MPS.Tensor.Physical.MatrixPolar
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
 
 /-!
 # Polar decomposition of a blocked matrix product state tensor

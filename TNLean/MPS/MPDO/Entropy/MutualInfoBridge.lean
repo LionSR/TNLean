@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.OperatorSchmidt.Basic
-import QICLean.Entropy.MutualInformation.MutualInformation
+import QICLean.Entropy.StrongSubadditivity.MutualInformationMonotone
 import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
 import QICLean.Entropy.MutualInformation.OperatorSchmidt
 
@@ -91,7 +91,7 @@ theorem bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition
   ext ⟨x, y⟩ ⟨x', y'⟩
   rw [← finProdFinEquiv.sum_comp]
   simp [bipartitionedNormalizedMPO, normalizedMPO, chainBipartitionEquiv,
-    biSplitEquiv, blockSplitEquiv_symm_apply, Matrix.sum_apply,
+    biSplitEquiv, MPOTensor.blockSplitEquiv_symm_apply, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, periodicCutLeftFactor, periodicCutRightFactor,
     mpoMatrixEntry, List.ofFn_fin_append, evalWord_append, Matrix.trace,
     Matrix.mul_apply, Fintype.sum_prod_type, Finset.mul_sum, mul_assoc]
@@ -131,8 +131,8 @@ private theorem append_sub_self {K : ℕ} {n : Type*} (u : Fin K → n)
 theorem reducedBlockState_full (M : MPOTensor d D) (N : ℕ) :
     reducedBlockState M N N (le_refl N) = normalizedMPO M N := by
   ext i j
-  simp only [reducedBlockState, blockReducedState, Matrix.partialTraceRight_apply,
-    Matrix.submatrix_apply, blockSplitEquiv_symm_apply, blockReindexEquiv,
+  simp only [reducedBlockState, MPOTensor.blockReducedState, Matrix.partialTraceRight_apply,
+    Matrix.submatrix_apply, MPOTensor.blockSplitEquiv_symm_apply, blockReindexEquiv,
     Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
   let : Unique (Fin (N - N) → Fin d) :=
     { default := fun i ↦ (Fin.cast (Nat.sub_self N) i).elim0
@@ -161,9 +161,9 @@ theorem bipartitionedNormalizedMPO_traceRight (M : MPOTensor d D) (N L : ℕ)
   ext i j
   simp only [Matrix.traceRight_apply, bipartitionedNormalizedMPO, Matrix.submatrix_apply,
     chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
-    Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, blockSplitEquiv_symm_apply,
+    Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, MPOTensor.blockSplitEquiv_symm_apply,
     Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
-  rw [reducedBlockState_eq_sum]
+  rw [MPOTensor.reducedBlockState_eq_sum]
   let f : (Fin (N - L) → Fin d) → ℂ := fun w ↦
     M.normalizedMPO N
       ((Fin.append (finFunctionFinEquiv.symm i) w) ∘
@@ -187,7 +187,7 @@ theorem bipartitionedNormalizedMPO_traceLeft (M : MPOTensor d D) (N L : ℕ)
   ext i j
   simp only [Matrix.traceLeft_apply, bipartitionedNormalizedMPO, Matrix.submatrix_apply,
     chainBipartitionEquiv, biSplitEquiv, Equiv.symm_trans_apply,
-    Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, blockSplitEquiv_symm_apply,
+    Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map, MPOTensor.blockSplitEquiv_symm_apply,
     Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
   let f : (Fin L → Fin d) → ℂ := fun x ↦
     M.normalizedMPO N

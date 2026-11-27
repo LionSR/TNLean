@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
-import QICLean.Probability.Haar.RankUnitaryProductHaar
+import QICLean.Probability.Sampling.RankUnitaryProductHaar
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.CanonicalSampledIntervalInterleaved
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators

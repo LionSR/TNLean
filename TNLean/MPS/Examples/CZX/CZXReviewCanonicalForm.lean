@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import QICLean.Algebra.Hermitian.OrthogonalProjection
-import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
+import QICLean.Kraus.Word
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
@@ -284,7 +284,7 @@ theorem mpo_mulTensor_reviewCZXTensor {N : ℕ} [NeZero N] :
       ((-1 : ℂ) ^ N) • 1 := by
   have hid : identityTensor = MPOTensor.idTensor 2 := by
     funext i j
-    ext p q
+    ext p
     fin_cases i <;> fin_cases j <;>
       simp [identityTensor, identityIntTensor, MPOTensor.idTensor, Matrix.one_apply]
   have hneg : ((-1 : ℂ) • identityTensor).toMPSTensor = fun a => (-1 : ℂ) • identityMPS a := rfl

@@ -36,11 +36,11 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
 
 \begin{theorem}[Positive replacement of the Hamiltonian]
     \label{thm:al_positive_replacement}
-    \lean{TNLean.PEPS.AreaLaw.commute_filterIntegral_of_forall_commute,
-        TNLean.PEPS.AreaLaw.positiveConstraint_mem_supportedOperators_component,
-        TNLean.PEPS.AreaLaw.localizationPrefactor,
-        TNLean.PEPS.AreaLaw.localizationPrefactor_nonneg,
-        TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints}
+    \lean{ManyBody.commute_filterIntegral_of_forall_commute,
+        ManyBody.positiveConstraint_mem_supportedOperators_component,
+        ManyBody.localizationPrefactor,
+        ManyBody.localizationPrefactor_nonneg,
+        ManyBody.exists_positiveQuasilocalConstraints}
     \leanok
     \uses{thm:qc_graph_ball_localization,lem:al_site_expectation_order,lem:qc_lr_closed_region}
     There are constants $C\ge0$ and $c>0$, depending only on
@@ -75,7 +75,7 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
 
 \begin{lemma}[Square roots and local channels]
     \label{lem:al_quasilocal_roots}
-    \lean{TNLean.PEPS.AreaLaw.sqrt_mul_exp_neg, TNLean.PEPS.AreaLaw.quasilocalRoots}
+    \lean{ManyBody.sqrt_mul_exp_neg, ManyBody.quasilocalRoots}
     \leanok
     \uses{thm:al_positive_replacement,lem:al_site_expectation_order,thm:al_root_channel_commutant}
     Set $G_i=(I-k_i)^{1/2}$, $K_i=k_i^{1/2}$, $G_{i,l}=(I-k_{i,l})^{1/2}$, and
@@ -119,12 +119,12 @@ at most $\mu$ labels share any anchor.
 
 \begin{lemma}[Volume-free truncation error]
     \label{lem:al_truncation_error}
-    \lean{TNLean.PEPS.AreaLaw.exists_one_add_pow_mul_exp_neg_rpow_le,
-        TNLean.PEPS.AreaLaw.exists_sum_shell_le, ManyBody.setEdist,
+    \lean{Real.exists_one_add_pow_mul_exp_neg_rpow_le,
+        Real.exists_sum_shell_le, ManyBody.setEdist,
         ManyBody.exists_mem_edist_eq_setEdist,
-        TNLean.PEPS.AreaLaw.truncationRadius, TNLean.PEPS.AreaLaw.truncatedConstraint,
-        TNLean.PEPS.AreaLaw.card_label_shell_le,
-        TNLean.PEPS.AreaLaw.norm_sum_truncatedConstraint_sub_le}
+        ManyBody.truncationRadius, ManyBody.truncatedConstraint,
+        ManyBody.card_label_shell_le,
+        ManyBody.norm_sum_truncatedConstraint_sub_le}
     \leanok
     \uses{thm:al_positive_replacement}
     If $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$ for all $l$, then
@@ -145,12 +145,12 @@ at most $\mu$ labels share any anchor.
 
 \begin{lemma}[Truncation near a finite set]
     \label{thm:al_truncation}
-    \lean{TNLean.PEPS.AreaLaw.half_le_two_rpow,
-        TNLean.PEPS.AreaLaw.exists_truncationConstant,
-        TNLean.PEPS.AreaLaw.truncatedConstraint_mem_Icc,
-        TNLean.PEPS.AreaLaw.exists_finiteSetTruncation,
-        TNLean.PEPS.AreaLaw.kernelExponent_one,
-        TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_of_gap,
+    \lean{Real.half_le_two_rpow,
+        Real.exists_truncationConstant,
+        ManyBody.truncatedConstraint_mem_Icc,
+        ManyBody.exists_finiteSetTruncation,
+        ManyBody.kernelExponent_one,
+        ManyBody.exists_finiteSetTruncation_of_gap,
         Matrix.PosSemidef.eq_inner_smul_of_gap}
     \leanok
     \uses{lem:al_truncation_error,thm:al_positive_replacement,thm:area_law_ground_eigenspace}
@@ -190,7 +190,7 @@ at most $\mu$ labels share any anchor.
 
 \begin{lemma}[A common auxiliary label in physical coordinates]
     \label{thm:al_global_schmidt_bell_prevector}
-    \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector}
+    \lean{ManyBody.exists_global_schmidtBellPrevector}
     \leanok
     Let $V$ be a finite site set of local dimension $q>0$, and let $\Omega$ be a
     unit vector with $H\Omega=E\Omega$. Fix $X\subseteq V$, select a subset $F$
@@ -245,7 +245,7 @@ at most $\mu$ labels share any anchor.
 
 \begin{lemma}[One physical label sequence for the rough lower comparison]
     \label{thm:al_global_schmidt_bell_rough_lower}
-    \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector_rough_lower}
+    \lean{ManyBody.exists_global_schmidtBellPrevector_rough_lower}
     \leanok
     \uses{thm:al_global_schmidt_bell_prevector}
     In the setting of Lemma~\ref{thm:al_global_schmidt_bell_prevector},
@@ -298,7 +298,7 @@ at most $\mu$ labels share any anchor.
 
 \begin{lemma}[The initial vector for the truncated Hamiltonian]
     \label{thm:al_truncation_schmidt_bell_prevector}
-    \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
+    \lean{ManyBody.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
     \leanok
     \uses{thm:al_truncation,thm:al_global_schmidt_bell_prevector}
     Combining \cite[Sections~4 and~8]{OpenAI2026AreaLaw}, under the hypotheses
@@ -322,18 +322,18 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
 \begin{lemma}[Crossing count and cut parameter]
     \label{thm:al_crossing_budget}
-    \lean{SimpleGraph.interedges, TNLean.PEPS.AreaLaw.componentFinset,
-        TNLean.PEPS.AreaLaw.designatedSupport, ManyBody.crossingTerms,
+    \lean{SimpleGraph.interedges, ManyBody.componentFinset,
+        ManyBody.designatedSupport, ManyBody.crossingTerms,
         ManyBody.exists_edgeBoundary_near,
-        TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingTerms,
-        TNLean.PEPS.AreaLaw.card_crossingTerms_designatedSupport_le,
-        TNLean.PEPS.AreaLaw.log_dim_le_of_mem_crossingTerms,
-        TNLean.PEPS.AreaLaw.cutLogBudget_designatedSupport_le,
-        TNLean.PEPS.AreaLaw.le_of_cutBudget_le,
-        TNLean.PEPS.AreaLaw.truncatedConstraint_empty,
+        ManyBody.truncationRadius_eq_of_mem_crossingTerms,
+        ManyBody.card_crossingTerms_designatedSupport_le,
+        ManyBody.log_dim_le_of_mem_crossingTerms,
+        ManyBody.cutLogBudget_designatedSupport_le,
+        ManyBody.le_of_cutBudget_le,
+        ManyBody.truncatedConstraint_empty,
         ManyBody.crossingTerms_empty,
-        TNLean.PEPS.AreaLaw.truncatedConstraint_of_setEdist_eq_top,
-        TNLean.PEPS.AreaLaw.truncatedConstraint_mem_supportedOperators}
+        ManyBody.truncatedConstraint_of_setEdist_eq_top,
+        ManyBody.truncatedConstraint_mem_supportedOperators}
     \leanok
     \uses{thm:al_truncation,def:area_law_cut_log_budget}
     Each $\widetilde h_i$ acts on $\widetilde X_i$. For $i\in\mathcal C_X$,
@@ -406,9 +406,9 @@ only on the parameters named below.
 
 \begin{lemma}[Counting on an induced lattice domain]
     \label{thm:al_lattice_counts}
-    \lean{TNLean.PEPS.AreaLaw.card_graphBall_planeDomainGraph_le,
-        TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
-        TNLean.PEPS.AreaLaw.card_interedges_compl_le_card_edgeBoundary}
+    \lean{ManyBody.card_graphBall_planeDomainGraph_le,
+        ManyBody.card_anchor_fiber_le,
+        ManyBody.card_interedges_compl_le_card_edgeBoundary}
     \leanok
     \uses{def:area_law_hamiltonian,thm:area_diamond_count,thm:area_diamond_budget,lem:area_domain_graph_counts,thm:area_law_crossing_supports}
     In $\Lambda$, $|N_d(x)|\le2(d+1)^2$, at most $\mu_R$ supports contain a
@@ -427,7 +427,7 @@ only on the parameters named below.
 
 \begin{theorem}[Positive replacement on an induced lattice domain]
     \label{thm:al_lattice_positive_replacement}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints}
+    \lean{ManyBody.exists_latticePositiveConstraints}
     \leanok
     \uses{thm:al_positive_replacement,lem:area_domain_graph_counts,def:area_law_ground_entropy}
     Fix $p\in\mathbb N_{\ge1}$, $\alpha=p/(p+1)$, $R,J\ge0$, and $\Delta>0$.
@@ -453,7 +453,7 @@ only on the parameters named below.
 
 \begin{lemma}[Square roots and local channels on an induced lattice domain]
     \label{thm:al_lattice_quasilocal_roots}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
+    \lean{ManyBody.exists_latticeQuasilocalRoots}
     \leanok
     \uses{lem:al_quasilocal_roots,thm:al_lattice_positive_replacement,thm:al_root_channel_commutant}
     With $p,R,J,\Delta$ as in Theorem~\ref{thm:al_lattice_positive_replacement},
@@ -477,8 +477,8 @@ only on the parameters named below.
 
 \begin{lemma}[Truncation near a finite set on an induced lattice domain]
     \label{thm:al_lattice_truncation}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation,
-        TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span}
+    \lean{ManyBody.exists_latticeFiniteSetTruncation,
+        ManyBody.exists_latticeFiniteSetTruncation_eigenspace_eq_span}
     \leanok
     \uses{thm:al_truncation,thm:al_lattice_counts,lem:area_domain_graph_counts,def:area_law_ground_entropy,thm:area_law_ground_eigenspace}
     Take $p=1$ ($\alpha=1/2$) in
@@ -508,8 +508,8 @@ only on the parameters named below.
 
 \begin{lemma}[Crossing count and cut parameter on an induced lattice domain]
     \label{thm:al_lattice_crossing_budget}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
-        TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
+    \lean{ManyBody.exists_latticeCrossingBudget,
+        ManyBody.exists_latticeCutBudget_le_log}
     \leanok
     \uses{thm:al_crossing_budget,thm:al_lattice_counts}
     For $q\ge1$ there is $C\ge0$, depending only on $q,R$, such that for every

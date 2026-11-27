@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.PeriodicRay.PositiveRayFiniteTraceData
 import TNLean.MPS.Symmetry.PeriodicRay.FiniteRingReconstruction
-import TNLean.MPS.Symmetry.OnSite.ProjectiveGaugeTransport
+import TNLean.MPS.Symmetry.OnSite.CompactSupportVirtualTransport
 import TNLean.MPS.Symmetry.OnSite.PhysicalCharacterTwist
 
 /-!

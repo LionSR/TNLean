@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Parameter.LocalizationParameters
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedPlaneInteraction
+import QICLean.ManyBody.Hamiltonian.PlaneLocalization
 import TNLean.PEPS.Approximation.DoubledHamiltonian.TwoSheetBufferFilter
 import QICLean.Spectral.Perturbation.ResidualComparison
 import QICLean.ManyBody.Entropy.RegionalReset
@@ -72,14 +73,14 @@ rate `μ = 1/2` and the cutoff `T₀ = resetCutoff Δ r`. The range-one coeffici
 square is `resetRadius J Δ r`.
 Source: `K_loc` of `02-information.tex`, lines 551–554, at range `R`. -/
 def rangeResetRadius (R : ℕ) (J Δ r : ℝ) : ℝ :=
-  (AreaLaw.graphBallLocalizationVelocity R (2 * J) * resetCutoff Δ r + 15 + r) / (1 / 2)
+  (ManyBody.graphBallLocalizationVelocity R (2 * J) * resetCutoff Δ r + 15 + r) / (1 / 2)
 
 /-- The prefactor `2 C₀(R) (1 + 4 μ_R J) (1 + T₀) + 3` of the two residuals of the localized
 filter of the information reset at range `R`. The summand `3` bounds the Gaussian and
 truncation errors, the rest the localization error.
 Source: `02-information.tex`, lines 551–562, equation `eq:info-local-two-sided`, at range `R`. -/
 def rangeResetFilterPrefactor (R : ℕ) (J Δ r : ℝ) : ℝ :=
-  2 * AreaLaw.graphBallLocalizationPrefactor R * (1 + swapBoundaryCoefficient R * J) *
+  2 * ManyBody.graphBallLocalizationPrefactor R * (1 + swapBoundaryCoefficient R * J) *
     (1 + resetCutoff Δ r) + 3
 
 /-- The prefactor `2 C` of the error `‖U Ψ - Φ‖ ≤ 2 C L^(-r)` of the unitary of the information
@@ -89,13 +90,13 @@ def rangeResetUnitaryPrefactor (R : ℕ) (J Δ r : ℝ) : ℝ := 2 * rangeResetF
 
 theorem rangeResetRadius_pos (R : ℕ) {J Δ r : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     0 < rangeResetRadius R J Δ r := by
-  have := AreaLaw.graphBallLocalizationVelocity_nonneg R (by linarith : (0 : ℝ) ≤ 2 * J)
+  have := ManyBody.graphBallLocalizationVelocity_nonneg R (by linarith : (0 : ℝ) ≤ 2 * J)
   have := resetCutoff_pos hΔ hr
   unfold rangeResetRadius; positivity
 
 theorem rangeResetFilterPrefactor_pos (R : ℕ) {J Δ r : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hr : 0 ≤ r) : 0 < rangeResetFilterPrefactor R J Δ r := by
-  have := AreaLaw.graphBallLocalizationPrefactor_pos R
+  have := ManyBody.graphBallLocalizationPrefactor_pos R
   have := resetCutoff_pos hΔ hr
   have := swapBoundaryCoefficient_nonneg R
   unfold rangeResetFilterPrefactor; positivity
@@ -146,14 +147,14 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
         rangeResetFilterPrefactor R J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by
   intro pr p F ψ B
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
-  set Cg := 2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R with hCgdef
-  set v := TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity R (2 * J) with hvdef
+  set Cg := 2 * ManyBody.graphBallLocalizationPrefactor R with hCgdef
+  set v := ManyBody.graphBallLocalizationVelocity R (2 * J) with hvdef
   set T₀ := resetCutoff Δ r with hT₀def
   set K := rangeResetRadius R J Δ r with hKdef
   set c := swapBoundaryCoefficient R with hcdef
   have hcoef : v * T₀ + 15 + r ≤ 1 / 2 * K := by
     rw [hKdef, rangeResetRadius]; apply le_of_eq; ring
-  have hCg : 0 < Cg := mul_pos two_pos (TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor_pos R)
+  have hCg : 0 < Cg := mul_pos two_pos (ManyBody.graphBallLocalizationPrefactor_pos R)
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
   have hc : 0 ≤ c := swapBoundaryCoefficient_nonneg R
   have hcJ : 0 ≤ c * J := mul_nonneg hc hJ

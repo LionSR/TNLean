@@ -12,7 +12,7 @@ import TNLean.Algebra.TwoMarkerMiddleFactors
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Data.List.OfFn

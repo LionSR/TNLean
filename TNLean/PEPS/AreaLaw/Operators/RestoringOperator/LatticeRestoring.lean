@@ -4,12 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.TypicalProjectors
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import QICLean.Channel.Dilation.RestoringNorm
 import QICLean.Channel.Dilation.RestoringGroundComponent
 import QICLean.Analysis.Isometry.RestoringVectors
 import QICLean.ManyBody.Entropy.Filter.SchmidtPinning
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.PartialTrace
+import QICLean.Entropy.Typical.Density
 
 /-!
 # The restoring operator of the amplification proposition on the lattice
@@ -69,167 +72,6 @@ open scoped Kronecker ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace Matrix
-
-section PartialTrace
-
-variable {α β : Type*} [Fintype α] [Fintype β] [DecidableEq β]
-
-/-- Conjugating the first factor commutes with the partial trace over the second:
-`tr₂((A ⊗ 1) M (B ⊗ 1)) = A tr₂(M) B`. -/
-theorem partialTraceRight_kronecker_one_mul_mul (A B : Matrix α α ℂ)
-    (M : Matrix (α × β) (α × β) ℂ) :
-    partialTraceRight ((A ⊗ₖ (1 : Matrix β β ℂ)) * M * (B ⊗ₖ (1 : Matrix β β ℂ))) =
-      A * partialTraceRight M * B := by
-  ext i j
-  simp only [partialTraceRight_apply, mul_apply, Fintype.sum_prod_type, kroneckerMap_apply,
-    one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Finset.sum_mul, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun a _ ↦ ?_
-  rw [Finset.sum_comm]
-
-/-- The partial trace over the first factor is invariant under a similarity of that
-factor: `tr₁((A ⊗ 1) M (B ⊗ 1)) = tr₁(M)` when `B A = 1`. -/
-theorem partialTraceLeft_kronecker_one_conj [DecidableEq α] {A B : Matrix α α ℂ}
-    (hBA : B * A = 1) (M : Matrix (α × β) (α × β) ℂ) :
-    partialTraceLeft ((A ⊗ₖ (1 : Matrix β β ℂ)) * M * (B ⊗ₖ (1 : Matrix β β ℂ))) =
-      partialTraceLeft M := by
-  ext i j
-  simp only [partialTraceLeft_apply, mul_apply, Fintype.sum_prod_type, kroneckerMap_apply,
-    one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Finset.sum_mul]
-  calc ∑ k, ∑ x, ∑ y, A k y * M (y, i) (x, j) * B x k
-      = ∑ x, ∑ y, M (y, i) (x, j) * (B * A) x y := by
-        simp only [mul_apply, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun x _ ↦ ?_
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun y _ ↦ Finset.sum_congr rfl fun k _ ↦ ?_
-        ring
-    _ = _ := by simp [hBA, one_apply]
-
-end PartialTrace
-
-/-- A Kronecker product of orthogonal projections is an orthogonal projection. -/
-theorem isStarProjection_kronecker {A B : Type*} [Fintype A] [Fintype B]
-    {P : Matrix A A ℂ} {Q : Matrix B B ℂ}
-    (hP : IsStarProjection P) (hQ : IsStarProjection Q) : IsStarProjection (P ⊗ₖ Q) where
-  isIdempotentElem := by
-    change (P ⊗ₖ Q) * (P ⊗ₖ Q) = P ⊗ₖ Q
-    rw [← mul_kronecker_mul, hP.isIdempotentElem.eq, hQ.isIdempotentElem.eq]
-  isSelfAdjoint := by
-    change (P ⊗ₖ Q)ᴴ = P ⊗ₖ Q
-    rw [conjTranspose_kronecker, show Pᴴ = P from hP.isSelfAdjoint,
-      show Qᴴ = Q from hQ.isSelfAdjoint]
-
-/-- The squared distance by which an orthogonal projection moves a vector is its squared
-norm minus the expectation of the projection: `‖P ψ - ψ‖² = ‖ψ‖² - Re tr(|ψ⟩⟨ψ| P)`. -/
-theorem norm_projection_mulVec_sub_sq {ι : Type*} [Fintype ι]
-    {P : Matrix ι ι ℂ} (hP : IsStarProjection P) (ψ : EuclideanSpace ℂ ι) :
-    ‖WithLp.toLp 2 (P *ᵥ ψ.ofLp) - ψ‖ ^ 2 =
-      ‖ψ‖ ^ 2 - (vecMulVec ψ.ofLp (star ψ.ofLp) * P).trace.re := by
-  classical
-  have hY : (1 - P)ᴴ * (1 - P) = 1 - P := by
-    rw [conjTranspose_sub, conjTranspose_one, ← star_eq_conjTranspose,
-      hP.isSelfAdjoint.star_eq, Matrix.sub_mul, Matrix.one_mul, Matrix.mul_sub,
-      Matrix.mul_one, hP.isIdempotentElem.eq, sub_self, sub_zero]
-  have h1P : toEuclideanLin (1 - P) ψ = ψ - toEuclideanLin P ψ := by
-    ext i
-    simp [toLpLin_apply]
-  have hv : WithLp.toLp 2 (P *ᵥ ψ.ofLp) - ψ = -toEuclideanLin (1 - P) ψ := by
-    rw [h1P, neg_sub, toLpLin_apply]
-  have htr : (vecMulVec ψ.ofLp (star ψ.ofLp) * P).trace = ⟪ψ, toEuclideanLin P ψ⟫_ℂ := by
-    rw [EuclideanSpace.inner_eq_star_dotProduct, toLpLin_apply]
-    simp only [trace, diag, mul_apply, vecMulVec_apply, dotProduct, mulVec, Pi.star_apply,
-      Finset.sum_mul]
-    rw [Finset.sum_comm]
-    exact Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun j _ ↦ by ring
-  rw [hv, norm_neg, Entropy.norm_toEuclideanLin_sq, hY, h1P, htr, inner_sub_right,
-    Complex.sub_re, inner_self_eq_norm_sq_to_K]
-  norm_cast
-
-section Spectral
-
-variable {n : Type*} [Fintype n] [DecidableEq n] {ρ : Matrix n n ℂ}
-
-private theorem IsHermitian.spectralSelection_eq_conj (hρ : ρ.IsHermitian) (E : Finset n) :
-    hρ.spectralSelection E = (hρ.eigenvectorUnitary : Matrix n n ℂ) *
-      diagonal (fun i ↦ if i ∈ E then (1 : ℂ) else 0) *
-        (hρ.eigenvectorUnitary : Matrix n n ℂ)ᴴ := by
-  rw [IsHermitian.spectralSelection, Unitary.conjStarAlgAut_apply, star_eq_conjTranspose]
-
-private theorem IsHermitian.eq_conj (hρ : ρ.IsHermitian) :
-    ρ = (hρ.eigenvectorUnitary : Matrix n n ℂ) *
-      diagonal (fun i ↦ ((hρ.eigenvalues i : ℝ) : ℂ)) *
-        (hρ.eigenvectorUnitary : Matrix n n ℂ)ᴴ := by
-  conv_lhs => rw [hρ.spectral_theorem]
-  rw [Unitary.conjStarAlgAut_apply, star_eq_conjTranspose]
-  rfl
-
-/-- A spectral selection of a positive matrix is at most `c ρ` when every selected
-eigenvalue is at least `1 / c`. -/
-theorem PosSemidef.spectralSelection_le_smul (hρ : ρ.PosSemidef) {E : Finset n} {c : ℝ}
-    (hc : 0 ≤ c) (h : ∀ i ∈ E, 1 ≤ c * hρ.isHermitian.eigenvalues i) :
-    hρ.isHermitian.spectralSelection E ≤ c • ρ := by
-  rw [Matrix.le_iff]
-  set U := (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-  have hd : c • ρ - hρ.isHermitian.spectralSelection E = U * diagonal (fun i ↦
-      ((c * hρ.isHermitian.eigenvalues i : ℝ) : ℂ) - if i ∈ E then 1 else 0) * Uᴴ := by
-    rw [hρ.isHermitian.spectralSelection_eq_conj]
-    conv_lhs => arg 1; rw [hρ.isHermitian.eq_conj]
-    rw [← Matrix.smul_mul, ← Matrix.mul_smul, ← Matrix.sub_mul, ← Matrix.mul_sub]
-    congr 2
-    ext i j
-    by_cases hij : i = j
-    · subst hij; simp
-    · simp [diagonal_apply_ne _ hij]
-  rw [hd]
-  refine PosSemidef.mul_mul_conjTranspose_same (PosSemidef.diagonal fun i ↦ ?_) U
-  change (0 : ℂ) ≤ _
-  by_cases hi : i ∈ E
-  · simp only [hi, ↓reduceIte]
-    exact_mod_cast sub_nonneg.mpr (h i hi)
-  · simp only [hi, ↓reduceIte, sub_zero]
-    exact_mod_cast mul_nonneg hc (hρ.eigenvalues_nonneg i)
-
-/-- A spectral selection compresses `ρ` below `b` times itself when every selected
-eigenvalue is at most `b`. -/
-theorem IsHermitian.spectralSelection_mul_mul_le_smul (hρ : ρ.IsHermitian) {E : Finset n}
-    {b : ℝ} (h : ∀ i ∈ E, hρ.eigenvalues i ≤ b) :
-    hρ.spectralSelection E * ρ * hρ.spectralSelection E ≤ b • hρ.spectralSelection E := by
-  rw [Matrix.le_iff]
-  set U := (hρ.eigenvectorUnitary : Matrix n n ℂ)
-  have hU : Uᴴ * U = 1 := by
-    simp only [U, ← star_eq_conjTranspose]; exact Unitary.coe_star_mul_self _
-  have hd : b • hρ.spectralSelection E - hρ.spectralSelection E * ρ * hρ.spectralSelection E =
-      U * diagonal (fun i ↦ if i ∈ E then ((b - hρ.eigenvalues i : ℝ) : ℂ) else 0) * Uᴴ := by
-    rw [hρ.spectralSelection_eq_conj]
-    conv_lhs => arg 2; arg 1; arg 2; rw [hρ.eq_conj]
-    have hcollapse : U * diagonal (fun i ↦ if i ∈ E then (1 : ℂ) else 0) * Uᴴ *
-        (U * diagonal (fun i ↦ ((hρ.eigenvalues i : ℝ) : ℂ)) * Uᴴ) *
-        (U * diagonal (fun i ↦ if i ∈ E then (1 : ℂ) else 0) * Uᴴ) =
-        U * (diagonal (fun i ↦ if i ∈ E then (1 : ℂ) else 0) *
-          diagonal (fun i ↦ ((hρ.eigenvalues i : ℝ) : ℂ)) *
-          diagonal (fun i ↦ if i ∈ E then (1 : ℂ) else 0)) * Uᴴ := by
-      simp only [Matrix.mul_assoc]
-      rw [← Matrix.mul_assoc Uᴴ U, hU, Matrix.one_mul, ← Matrix.mul_assoc Uᴴ U, hU,
-        Matrix.one_mul]
-    rw [hcollapse, diagonal_mul_diagonal, diagonal_mul_diagonal, ← Matrix.smul_mul,
-      ← Matrix.mul_smul, ← Matrix.sub_mul, ← Matrix.mul_sub]
-    congr 2
-    ext i j
-    by_cases hij : i = j
-    · subst hij; by_cases hi : i ∈ E <;> simp [hi]
-    · simp [diagonal_apply_ne _ hij]
-  rw [hd]
-  refine PosSemidef.mul_mul_conjTranspose_same (PosSemidef.diagonal fun i ↦ ?_) U
-  change (0 : ℂ) ≤ _
-  by_cases hi : i ∈ E
-  · simp only [hi, ↓reduceIte]
-    exact_mod_cast sub_nonneg.mpr (h i hi)
-  · simp only [hi, ↓reduceIte, le_refl]
-
-end Spectral
 
 end Matrix
 

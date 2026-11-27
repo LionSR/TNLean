@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import QICLean.Algebra.Matrix.MatrixTracePairing
 import QICLean.Spectral.Radius.PowerDecay
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWLimitMap
-import TNLean.MPS.ParentHamiltonian.ProjectorDefect.WeightedVirtualHilbert
+import QICLean.Analysis.Norm.FrobeniusHilbert
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!
 # FNW transfer-remainder decay

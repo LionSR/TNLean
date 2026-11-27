@@ -19,6 +19,7 @@ size trimming, bond trimming or sampled error reduction.
 -/
 
 open scoped InnerProductSpace
+open ManyBody (interval mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -35,6 +36,8 @@ theorem mem_leftSupportSubmodule_emptyLeftVector
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     ψ ∈ leftSupportSubmodule {emptyLeftVector L q} := by
   classical
+  have : IsEmpty {v : Fin L // v ∈ interval L 0 0} :=
+    ⟨fun v ↦ absurd (ManyBody.mem_interval.mp v.2).2 (Nat.not_lt_zero _)⟩
   intro b
   apply Submodule.mem_span_singleton.mpr
   refine ⟨cutColumn ψ 0 b default, ?_⟩
@@ -67,14 +70,14 @@ noncomputable def fullLeftEquiv (L q : ℕ) :
 /-- At the final cut every cut column is the chain vector in full-left coordinates.
 Source: LVV13, `algo53.tex`, the final cut of the induction, lines 652–678. -/
 theorem cutColumn_full (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (b : (v : {v : Fin L // v ∉ leftBlock L L}) → Fin q) :
+    (b : (v : {v : Fin L // v ∉ interval L 0 L}) → Fin q) :
     cutColumn ψ L b = fullLeftEquiv L q ψ := by
   ext a
-  change ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L L)).symm (a, b)) =
+  change ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 L)).symm (a, b)) =
     ψ ((leftConfigOfFinEquiv (le_refl L)).symm a)
   apply congrArg ψ
   funext v
-  rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr v.isLt)]
+  rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩)]
   rfl
 
 /-- A viable final family contains a unit vector of the asserted overlap in its span.
@@ -84,8 +87,8 @@ theorem IsViable.exists_fullLeftVector {Γ : EuclideanSpace ℂ (Fin L → Fin q
     ∃ v ∈ Submodule.span ℂ S, ‖v‖ = 1 ∧
       1 - δ ≤ ‖⟪v, fullLeftEquiv L q Γ⟫_ℂ‖ := by
   obtain ⟨φ, hφ, hoverlap, hsupport⟩ := h
-  let b : (v : {v : Fin L // v ∉ leftBlock L L}) → Fin q :=
-    fun v ↦ False.elim (v.2 (mem_leftBlock.mpr v.1.isLt))
+  let b : (v : {v : Fin L // v ∉ interval L 0 L}) → Fin q :=
+    fun v ↦ False.elim (v.2 (mem_interval.mpr ⟨Nat.zero_le _, v.1.isLt⟩))
   refine ⟨fullLeftEquiv L q φ, ?_, ?_, ?_⟩
   · simpa only [cutColumn_full] using hsupport b
   · simpa only [LinearIsometryEquiv.norm_map] using hφ

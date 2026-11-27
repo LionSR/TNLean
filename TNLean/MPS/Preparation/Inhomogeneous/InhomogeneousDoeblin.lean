@@ -9,7 +9,7 @@ import TNLean.MPS.CanonicalForm.FixedPointApproximation.PositivePartRate
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.BlockIsometryState
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.SecondOrderOverlap
 import QICLean.Channel.Semigroup.CPClosure
-import QICLean.Channel.Choi.Residual
+import QICLean.Channel.KrausMap.ChoiResidual
 
 /-!
 # Uniform contraction along an inhomogeneous chain

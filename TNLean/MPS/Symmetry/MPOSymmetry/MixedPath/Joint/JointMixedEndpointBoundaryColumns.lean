@@ -6,7 +6,11 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointFamily
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.MixedEndpointBoundaryFactors
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockGroundSpaceContinuity
-import TNLean.MPS.Tensor.Physical.MatrixPolar
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
 
 /-!
 # Joint boundary columns of the actual mixed endpoint

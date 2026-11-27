@@ -4,9 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.Circuit.GHZSeedCircuit
-import TNLean.MPS.Preparation.Polar.PolarFrame
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.SqrtLipschitz
+import QICLean.Analysis.Isometry.FramePerturbation
 import QICLean.Circuit.Compile.ImageReflection
-import TNLean.MPS.Tensor.InjectivityCutoff
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import QICLean.Analysis.Real.PowerExponential
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.CanonicalBoundedRangeGroundSpace
 
 /-!

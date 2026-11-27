@@ -20,6 +20,7 @@ argument is algebraic and does not use an independent area-law approximation the
 -/
 
 open scoped InnerProductSpace
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -39,7 +40,7 @@ theorem isOpenMPS_leftChain_of_mem_span {L q i b : ℕ}
     subst v
     apply isOpenMPS_of_internal_cutMatrix_rank_le (WithLp.toLp 2 fun _ ↦ 0)
     intro k _ _
-    have hzero : ManyBody.cutMatrix (leftBlock i k)
+    have hzero : ManyBody.cutMatrix (interval i 0 k)
         (WithLp.toLp 2 (fun _ : (Fin i → Fin q) ↦ (0 : ℂ))) = 0 := by
       ext x y
       rfl

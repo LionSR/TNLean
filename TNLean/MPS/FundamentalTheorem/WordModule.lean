@@ -8,11 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.WordModule
 
-import TNLean.MPS.FundamentalTheorem.WordModule.FiniteTraceTest
 import TNLean.MPS.FundamentalTheorem.WordModule.Flag
 import TNLean.MPS.FundamentalTheorem.WordModule.FlagData
 import TNLean.MPS.FundamentalTheorem.WordModule.GaugeWordModule
 import TNLean.MPS.FundamentalTheorem.WordModule.ReachableSubspace
 import TNLean.MPS.FundamentalTheorem.WordModule.SimpleSeparation
-import TNLean.MPS.FundamentalTheorem.WordModule.StarSemisimple
 import TNLean.MPS.FundamentalTheorem.WordModule.WordModule

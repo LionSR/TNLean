@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.Inhomogeneous.PartialIsometryPreparation
 import TNLean.MPS.Preparation.Circuit.ShortChainPreparation
-import TNLean.MPS.Tensor.InjectivityCutoff
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import QICLean.Analysis.Real.PowerExponential
 
 /-!
 # Inhomogeneous preparation with finitely many short rings

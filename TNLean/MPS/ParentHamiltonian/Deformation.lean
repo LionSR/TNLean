@@ -13,7 +13,6 @@ import TNLean.MPS.ParentHamiltonian.Deformation.InjectiveIsometricDeformationSym
 import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformation
 import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformationCovariance
 import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformationSymmetry
-import TNLean.MPS.ParentHamiltonian.Deformation.LeftPolar
 import TNLean.MPS.ParentHamiltonian.Deformation.OpenIsometricDeformationGap
 import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
 import TNLean.MPS.ParentHamiltonian.Deformation.PhysicalActionWordTupleSpan

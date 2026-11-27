@@ -3,7 +3,16 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.QCA.StarSubalgebra.BipartiteSupportAlgebra
+import Mathlib.Algebra.Star.Subalgebra
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Dimension.Free
+import QICLean.Algebra.Matrix.KroneckerEmbed
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.Algebra.Kronecker.TensorMap
+import QICLean.Algebra.StarSubalgebra.CommutingProduct
+import QICLean.Algebra.Kronecker.CommutingDecomposition
+import QICLean.Algebra.Kronecker.SupportAlgebra
+import QICLean.Algebra.Kronecker.SupportAlgebraCommutant
 import TNLean.QCA.Automorphism.FiniteLocalRestriction
 
 /-!

@@ -43,6 +43,8 @@ Manuscript file:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (fineLayerIndices)
+
 section InitialActiveRays
 
 open scoped Topology

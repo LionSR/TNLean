@@ -55,27 +55,27 @@ theorem renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq 
     (hfact : ∀ m : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
-    renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+    renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
       Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q + 4 * Real.log q -
         Real.log (1 - ((q : ℝ) ^ 2) ^ (1 - α) * Real.exp (-(2 * α / ξ'))) / (1 - α) := by
   classical
   have hq1 : 1 ≤ q := by omega
   have hfact' : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L 0 (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')) := fun m _ ↦ by
     obtain ⟨OB, OL, OR, hF⟩ := hfact m
     obtain ⟨SB, SL, SR, h⟩ := exists_factorization_of_isFactorizationAt hF
     exact ⟨OB, OL, OR, SB, SL, SR, h⟩
   set cv : EuclideanSpace ℂ (Fin L → Fin q) → _ := fun x ↦
-    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x) with hcv
+    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) x) with hcv
   have hdot : ∀ x y, star (cv x) ⬝ᵥ cv y = ⟪x, y⟫_ℂ := fun x y ↦ star_cutVector_dotProduct j x y
   have hnormsq : ∀ x : EuclideanSpace ℂ (Fin L → Fin q), (star (cv x) ⬝ᵥ cv x).re = ‖x‖ ^ 2 := by
     intro x
@@ -104,10 +104,10 @@ theorem renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq 
 unit vector is at most zero: the reduced density matrix acts on a space of dimension one. -/
 theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L → Fin 1)} (hΩ : ‖Ω‖ = 1)
     (j : ℕ) {α : ℝ} (hα0 : 0 < α) (hα1 : α < 1) :
-    renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+    renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
           0 := by
-  set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin 1) (leftBlock L j) Ω)
+  set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin 1) (interval L 0 j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
   obtain ⟨hp0, hpsum⟩ := Matrix.eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
@@ -117,7 +117,7 @@ theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L →
   have hsum :=
     Entropy.sum_rpow_le_card_rpow_mul_sum_rpow Finset.univ _ (fun a _ ↦ hp0 a) hα0.le hα1.le
   rw [hpsum, Real.one_rpow, mul_one, Finset.card_univ, Fintype.card_fin] at hsum
-  have hc : ((Fintype.card ((leftBlock L j) → Fin 1) : ℕ) : ℝ) ^ (1 - α) = 1 := by simp
+  have hc : ((Fintype.card ((interval L 0 j) → Fin 1) : ℕ) : ℝ) ^ (1 - α) = 1 := by simp
   have hsum' := hsum.trans hc.le
   have hlog : Real.log (∑ a, (posSemidef_self_mul_conjTranspose
       (schmidtCoeffMatrix Ψ)).isHermitian.eigenvalues₀ a ^ α) ≤ 0 :=
@@ -128,10 +128,10 @@ theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L →
 its von Neumann entropy. -/
 theorem renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (j : ℕ) {α : ℝ} (hα : 1 < α) :
-    renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+    renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) := by
-  set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω)
+  set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
   obtain ⟨hp0, hpsum⟩ := Matrix.eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
@@ -173,11 +173,11 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
       ((q : ℝ) ^ 2) ^ (1 - α) * Real.exp (-(2 * α / (6 * lemmaOneEndpointLength R J ΔE))) < 1 →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        (∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k) →
         ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-            (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+        renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             4 * Real.log q -
@@ -230,11 +230,11 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ
       ∀ {α : ℝ}, 1 < α →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        (∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k) →
         ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-            (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+        renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             Entropy.tailEntropyRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by

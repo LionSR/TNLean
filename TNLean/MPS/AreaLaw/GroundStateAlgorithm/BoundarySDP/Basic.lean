@@ -11,7 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.Endpoints
 import TNLean.MPS.Tensor.VaryingBond.IsometricChain
 import QICLean.Algebra.Combinatorics.FiniteCauchySchwarz
 import QICLean.Analysis.TraceNorm.TraceNormContractivity
-import QICLean.Channel.TraceNormNet
+import QICLean.Channel.Choi.TraceNormNet
 import QICLean.Analysis.TraceNorm.RectangularTraceNorm
 import QICLean.Algebra.Unitary.MatrixIsometryEntries
 import Mathlib.Basic.Complex.BigOperators

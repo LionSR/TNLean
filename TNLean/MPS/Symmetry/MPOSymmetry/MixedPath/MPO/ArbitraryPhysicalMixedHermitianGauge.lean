@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.Boundary.NormalAdjointBoundary
 import TNLean.MPS.Transfer.Correlation.EntanglementSpectrum
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.MPO.ArbitraryPhysicalMixedMPO
+import QICLean.Algebra.Unitary.UnitaryFactorizationComparison
 
 /-!
 # Adjoint closure of the mixed boundary range for Hermitian action gauges
@@ -97,15 +98,6 @@ theorem physicalAdjointTensor_eq_self_of_isHermitian {M : MPOTensor d 1}
   exact congrFun (congrFun hM i) j
 
 end MPOTensor
-
-/-- A unitary matrix squaring to the identity is Hermitian. -/
-theorem Matrix.isHermitian_of_mem_unitaryGroup_of_mul_self_eq_one {n : Type*} [Fintype n]
-    [DecidableEq n] {u : Matrix n n ℂ} (hu : u ∈ Matrix.unitaryGroup n ℂ) (hu2 : u * u = 1) :
-    u.IsHermitian := by
-  have h : star u * u = 1 := Matrix.mem_unitaryGroup_iff'.mp hu
-  calc uᴴ = uᴴ * (u * u) := by rw [hu2, Matrix.mul_one]
-    _ = (star u * u) * u := by rw [Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
-    _ = u := by rw [h, Matrix.one_mul]
 
 namespace MPSTensor.MPOSymmetry
 

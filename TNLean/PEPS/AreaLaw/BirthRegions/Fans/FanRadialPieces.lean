@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSectors
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRadialConvexity
 import Mathlib.Analysis.Normed.Module.Convex
 
@@ -24,6 +24,8 @@ with the elementary fan of `prop:two-families`, lines 299–310.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (isAllowedSlope_sub_of_mem_affineSpan_pair)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

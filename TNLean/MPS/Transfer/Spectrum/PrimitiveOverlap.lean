@@ -9,7 +9,9 @@ import QICLean.Kraus.Transfer
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
 import Mathlib.Analysis.Matrix.PosDef
-import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
+import QICLean.Kraus.PrimitiveFixedPoint
+import TNLean.MPS.Tensor
+import QICLean.Kraus.PrimitiveFixedPoint.Basic
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 
 /-!

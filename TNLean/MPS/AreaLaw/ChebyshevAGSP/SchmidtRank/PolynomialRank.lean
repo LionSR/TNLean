@@ -83,7 +83,7 @@ theorem operatorSchmidtRank_aklv_polynomial_le {L q a s ell : ℕ}
     (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (a + s / 2))
+      (interval L 0 (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * (ell + 1)) ^ (16 * (ell / s + Nat.sqrt ell + 1)) := by
   obtain ⟨m, b, hm, hwidth, hsub, hcenter, hexp⟩ :=
@@ -110,7 +110,7 @@ theorem operatorSchmidtRank_aklv_polynomial_le_max {L q a s ell : ℕ}
     (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (a + s / 2))
+      (interval L 0 (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * (ell + 1)) ^ (48 * max (ell / s) (Nat.sqrt ell)) := by
   refine (operatorSchmidtRank_aklv_polynomial_le hq hs hspace H hH HL HR hL hR P hP).trans ?_
@@ -132,7 +132,7 @@ theorem operatorSchmidtRank_aklv_polynomial_le_source_base {L q a s ell : ℕ}
     (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (a + s / 2))
+      (interval L 0 (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * ell) ^ (96 * max (ell / s) (Nat.sqrt ell)) := by
   by_cases hlarge : 2 ≤ q * ell
@@ -194,7 +194,7 @@ theorem exists_aklv_chebyshev_filter {L q a s : ℕ}
       ‖K - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
         2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt (gap / (u - E0))) ∧
       operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L (a + s / 2)) K) ≤
+        (interval L 0 (a + s / 2)) K) ≤
           (q * (ell + 1)) ^ (16 * (ell / s + Nat.sqrt ell + 1)) ∧
       ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪Γ, ψ⟫_ℂ = 0 →
         ⟪Γ, toEuclideanLin K ψ⟫_ℂ = 0 ∧

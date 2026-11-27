@@ -10,7 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.Entropy.AreaLaw
 import TNLean.MPS.AreaLaw.Entropy.BufferDiscount
-import TNLean.MPS.AreaLaw.Entropy.ComponentReduction
 import TNLean.MPS.AreaLaw.Entropy.LogarithmicAreaLaw
-import TNLean.MPS.AreaLaw.Entropy.RenyiEntropy
 import TNLean.MPS.AreaLaw.Entropy.StripBufferDiscount

@@ -53,7 +53,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        (∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k) →
         ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
@@ -102,11 +102,11 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
         Real.exp (-(2 * α / (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)))) < 1 →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        (∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k) →
         ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-            (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+        renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
           Real.log k + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
             Real.log
               (2 * (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3) ^ 2 / P) *
@@ -159,11 +159,11 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (
       ∀ {α : ℝ}, 1 < α →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        (∀ i, (cutMatrix (interval L 0 j) (ψ i)).rank ≤ k) →
         ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
-            (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+        renyiEntropy (cutMatrix (interval L 0 j) Ω * (cutMatrix (interval L 0 j) Ω)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix (interval L 0 j) Ω)).isHermitian α ≤
           Real.log k + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
             Real.log
               (2 * (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3) ^ 2 / P) *
@@ -246,7 +246,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
       ∀ {k' : ℕ}, ⌈exp (2 * Smax) / 2⌉₊ ≤ k' →
         let k₀ := ⌈exp (2 * Smax) / 2⌉₊
         let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
             Ω).leadingEigenprojection k'
         let Φ := sequentialTruncation P (L - 1) Ω
         IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -265,8 +265,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
     exact ⟨OB, OL, OR, hfac.mono
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (exp_pos _).le)⟩
   · have hj := hS hJ hΔ h hh hhJ hΩ hgap hspan j
-    rw [← leftBlock_eq_interval] at hj
-    calc exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2
+    calc exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j)) / 2
         ≤ exp (2 * Smax) / 2 := by gcongr
       _ ≤ ⌈exp (2 * Smax) / 2⌉₊ := Nat.le_ceil _
 

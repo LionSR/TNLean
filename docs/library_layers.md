@@ -1390,7 +1390,7 @@ consequences).
 | `SharedInfra.CoisometryGauge` | QICLean / Tensor | `unitaryGL`, `coisometryExtendGL` and lemmas (8 of 9) | to QICLean matrix |
 | `Chain.VaryingBondOBC` (+ merged `MinimalCutRepresentationPadding`) | QICLean / Tensor | `Matrix.zeroPad`, `zeroPad_mul`, `zeroPad_mulVec` | to QICLean matrix |
 | `Preparation.CutRank` | sites / Tensor | `cutConfig`, `cutMatrix`, `cutRank` of a vector | to Sites; minimal bond dimension stays |
-| `AreaLaw.OpenMPS` | sites / Tensor | `leftBlock` and lemmas | to Sites |
+| `AreaLaw.OpenMPS` | sites / Tensor | the cut after `k` sites, now QICLean's `ManyBody.interval L 0 k` | done |
 | `Symmetry.MPDO.Defs` | QICLean / Operator | `Matrix.IsStrongSymmetry`, `Matrix.IsWeakSymmetry` | to QICLean matrix |
 | `MPDO.MutualInfoMonotone` | QICLean / Operator | `tripartiteSplitEquiv`, `biSplitEquiv`, `ssa_cast_ineq` | to QICLean entropy |
 | `Core.MultiBlock` | dual system | `MPSTensor.CanonicalForm` (block-diagonal tensor with injective blocks) beside `toTensorFromBlocks`, `SectorDecomposition`, `IsBNTCanonicalForm` | one structure (F4) |
@@ -1752,7 +1752,7 @@ part places it in `MPS/Operator/PhysicalSector`).
 |---|---|---|---|
 | `Vertical/VerticalCoisometry` | base (matrix) / MPDO | `Matrix.sigmaBlockRow`, `_conjTranspose`, `blockDiagonal'_mul_sigmaBlockRow`, `sigmaBlockRow_conjTranspose_mul`, `sigmaBlockRow_mul_conjTranspose`, `sigmaBlockRow_isCoisometry` and two more (8 of 10) | block-row coisometries to QICLean matrix; one tensor theorem stays |
 | `MPOAction/BoundaryActionLMatrixPath` | base (analysis) / MPDO | `MPOTensor.hasDerivAt_idKron_entries`, `hasDerivAt_kronId_entries`, `hasDerivAt_const_entries` | to `Algebra/MatrixEntrywiseDeriv` |
-| `Fusion/BNTFixedFinalUnitarity` | base / MPDO | `Matrix.sigmaDiagonal_mul_conjTranspose_eq_one`, `Matrix.sigmaDiagonal_conjTranspose_mul_eq_one` | to a QICLean matrix module |
+| `Fusion/BNTFixedFinalUnitarity` | base / MPDO | `Matrix.sigmaDiagonal_mul_conjTranspose_eq_one`, `TNLean.MPS.MPDO.sigmaDiagonal_conjTranspose_mul_eq_one` | to a QICLean matrix module |
 | `Fusion/BNTFusionIsometries` | base / MPDO | `Matrix.blockDiagonal'_conj`, `Matrix.submatrix_left_conj_equiv` | same |
 | `Operator/Periodic/DiagonalCutRank` | base / Operator | `Matrix.traceMulMatrix`, `Matrix.rank_traceMulMatrix_le` | same |
 | `Operator/Product/DirectSum` | base / Operator | `Matrix.trace_fromBlocks_submatrix_finSumFinEquiv` | same |
@@ -2118,7 +2118,7 @@ approximation statements), by the decision recorded in question 3 of Part I.
 |---|---|---|---|
 | `EntropyInequalities` | sites / entropy | the boundary-edge lemmas `card_boundaryEdges_prefix_le`, `exists_interval_subset_boundaryEdges_sdiff_ssubset`, `card_crossingTerms_le_mul_card_boundaryEdges` (the definition `boundaryEdges` and its basic lemmas are QICLean's); `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary-edge lemmas in `Chain`, the entropy lemma into `Entropy` |
 | `ComponentReduction` | sites / entropy | `domainBoundaryEdges`, `domainRegion`, `IsDomainEdge`, `card_domainBoundaryEdges`, `boundaryEdges_symmDiff_interval`; versus `domainAreaLaw`, `regionEntropy_le_mul_card_domainBoundaryEdges` | domain geometry to `Chain`, domain area law stays in `Entropy` |
-| `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_leftBlock_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_leftBlock_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
+| `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_interval_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_interval_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
 | `StripApproximation` | entropy / TN | `regionEntropy_stripSnakePrefix_le`; versus the two MPS statements | the snake ordering is QICLean's `ManyBody.Sites.Lattice.SnakeOrder` (`ManyBody.snakeFlip`, `snakeEquiv`, `snakePrefix`, `card_snakePrefix_sdiff_le`) |
 | `CutMatrixGrowth` | matrix / TN | `rank_regroup_left`, `rank_regroup_right`, `prefixConfigurations`, `suffixConfigurations`, `coefficient_matrix_eq_reindex`; versus the MPS bond statements | rank regrouping to QICLean; then `SupportedCutRank` needs no TN import and can follow |
 | `ViableSet.Basic` | sites, matrix / TN | `LeftBlockVector`, `cutColumn`, `leftSupportSubmodule`, `spanProjection`; versus `IsViableMPS`, `IsLeftOpenMPS` and the viable-MPS lemmas | cut columns and left supports to QICLean (sites), viable MPS stay |
@@ -2563,6 +2563,20 @@ most 37 parts.
   Proposition 11.2: `Layers`, `Fans`, `InitialRegions`, `RepairStages`, `Stars`,
   `BirthTemplates`, `FinalRegions`; `Exponents` and `ScaleSeparation` go to `Scales` and
   `Layers`.
+* The generic geometry, operators and regional states then followed to QICLean in one move
+  (2026-11-26): the dyadic squares (`ManyBody/Sites/Dyadic`, with the distances and partitions
+  of dyadic layers and the corners of a cell from `BirthRegions`), the templates
+  (`ManyBody/Sites/Template`), the plane-lattice counts, patches and colourings
+  (`ManyBody/Sites/Lattice`), the plane Hamiltonians and positive constraints
+  (`ManyBody/Hamiltonian`, `Hamiltonian/Constraint`), the channel words
+  (`ManyBody/Dynamics/ChannelWord`, `ManyBody/PoissonWord`), the template and plane-boundary
+  entropies (`ManyBody/Entropy/Template`, `Entropy/PlaneBoundaryEntropy`), the regularized
+  patch filters (`ManyBody/Entropy/Filter/Regularized`), the cylinders
+  (`ManyBody/Sites/Cylinder`), the placements of `PEPS/ParentHamiltonian/Placement` except
+  `ProductSiteProjectorCommutation` (`ManyBody/Sites/Placement`), and their scalar and matrix
+  lemmas. What stays is the argument: `Scanner`, `Collar`, `CollarEntropy`, `BirthRegions`,
+  `RestoringOperator`, `SafeRectangles` and the statements of the theorems
+  (`RegionalStates/Regions/TheoremStatements`).
 * `Amplification` (34), named for Proposition 10.2, disappears. Generic part:
   `ChannelWords` (22, channels), `LocalRootChannels` (to `Constraints`),
   `GoodRealizationUnitary` with `SupportedPolarCorrection` (matrix). The argument:

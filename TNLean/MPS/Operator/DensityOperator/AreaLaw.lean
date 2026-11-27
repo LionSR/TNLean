@@ -8,6 +8,8 @@ import Mathlib.Logic.Equiv.Fin.Rotate
 import QICLean.Entropy.VonNeumann.EntropyDecomposition
 import QICLean.Algebra.Combinatorics.IndexInduction
 import TNLean.MPS.Operator.Defs
+import QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization
+import QICLean.Entropy.VonNeumann.Entropy
 
 /-!
 # Saturation of the area law for MPDO and MPS tensors
@@ -32,7 +34,7 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 
 ## Main definitions
 
-* `blockReducedState`: the reduced state of the first `L` of `L + K` contiguous
+* `MPOTensor.blockReducedState`: the reduced state of the first `L` of `L + K` contiguous
   spins, using the general right partial trace `Matrix.partialTraceRight`.
 * `MPOTensor.reducedBlockState`: the reduced state of the first `L` spins of
   `σ^{(N)}(M)`.
@@ -64,21 +66,6 @@ The periodic MPO density operator $\rho^{(N)}(M)$ closes the MPO word with a bon
 trace, hence is invariant under the simultaneous cyclic shift of bra and ket
 configurations. This is the translation invariance required for the
 mutual-information monotonicity. -/
-
-/-- `List.ofFn` precomposed with `finRotate` is the one-step list rotation. A
-general fact about `List.ofFn`, `finRotate`, and `List.rotate`. -/
-theorem ofFn_comp_finRotate {α : Type*} {n : ℕ} (σ : Fin (n + 1) → α) :
-    List.ofFn (σ ∘ finRotate (n + 1)) = (List.ofFn σ).rotate 1 := by
-  apply List.ext_getElem
-  · simp
-  · intro i h1 _
-    simp only [List.getElem_ofFn, Function.comp_apply, List.getElem_rotate,
-      List.length_ofFn]
-    congr 1
-    have : finRotate (n + 1) ⟨i, by simpa using h1⟩
-        = ⟨(i + 1) % (n + 1), Nat.mod_lt _ (Nat.succ_pos n)⟩ := by
-      rw [finRotate_apply]; ext; simp [Fin.add_def]
-    rw [this]
 
 namespace MPOTensor
 
@@ -155,20 +142,12 @@ end MPOTensor
 
 /-! ## Cyclic shift on configurations -/
 
-/-- The value of the `p`-fold cyclic shift is `(i + p) mod N`. -/
-theorem coe_finRotate_pow {N : ℕ} (p : ℕ) (i : Fin N) :
-    (((finRotate N : Fin N → Fin N)^[p]) i : ℕ) = (i.val + p) % N := by
-  induction p with
-  | zero => simp [Nat.mod_eq_of_lt i.isLt]
-  | succ k ih =>
-    rw [Function.iterate_succ_apply', coe_finRotate_mod, ih, Nat.mod_add_mod, Nat.add_assoc]
-
 /-- **Window-to-prefix configuration identity.** Placing the `m`-block `u` at the
 front (with `z, x` after) equals placing it in the middle (with `x` before and
 `z` after) composed with the `p`-fold cyclic shift, where `p = |x|`. This is the
 configuration form of translation invariance: a block in the middle of the chain
 is the same as a block at the front after a cyclic shift. -/
-theorem window_eq_prefix_rotate {d N p m s : ℕ}
+theorem MPOTensor.window_eq_prefix_rotate {d N p m s : ℕ}
     (x : Fin p → Fin d) (u : Fin m → Fin d) (z : Fin s → Fin d)
     (hA : N = m + (s + p)) (hB : N = p + m + s) :
     (Fin.append u (Fin.append z x)) ∘ Fin.cast hA
@@ -206,90 +185,49 @@ theorem window_eq_prefix_rotate {d N p m s : ℕ}
 
 /-! ## Trace normalization -/
 
-namespace Matrix
-
-/-- Normalizing a positive semidefinite matrix by the inverse of its
-(nonnegative real) trace preserves positive semidefiniteness. -/
-theorem PosSemidef.smul_inv_trace {n : Type*} [Fintype n]
-    {P : Matrix n n ℂ} (hP : P.PosSemidef) : (P.trace⁻¹ • P).PosSemidef := by
-  have htr_nonneg : (0 : ℂ) ≤ P.trace := hP.trace_nonneg
-  have hre : 0 ≤ P.trace.re := (RCLike.nonneg_iff.mp htr_nonneg).1
-  have him : P.trace.im = 0 := (RCLike.nonneg_iff.mp htr_nonneg).2
-  set r : ℝ := P.trace.re with hr
-  have htr_eq : P.trace = (r : ℂ) := Complex.ext rfl (by simp [him, hr])
-  have hinv_eq : (P.trace)⁻¹ = ((r⁻¹ : ℝ) : ℂ) := by rw [htr_eq, Complex.ofReal_inv]
-  rw [hinv_eq]
-  exact hP.smul (a := ((r⁻¹ : ℝ) : ℂ)) (by exact_mod_cast inv_nonneg.mpr hre)
-
-/-- A maximally mixed state on a finite basis of cardinality $d$ has entropy
-$\log d$.
-
-Source: Wolf, *Quantum Channels & Operations*, Section 8.2. -/
-theorem vonNeumannEntropy_inv_card_smul_one
-    {n : Type*} [Fintype n] [DecidableEq n] (d : ℕ)
-    (hcard : Fintype.card n = d) (hd : 0 < d)
-    (hρ : (((d : ℂ)⁻¹) • (1 : Matrix n n ℂ)).IsHermitian) :
-    vonNeumannEntropy (((d : ℂ)⁻¹) • (1 : Matrix n n ℂ)) hρ =
-      Real.log d := by
-  have heq : ((d : ℂ)⁻¹) • (1 : Matrix n n ℂ) =
-      Matrix.diagonal (fun _ : n => (((d : ℝ)⁻¹ : ℝ) : ℂ)) := by
-    rw [Matrix.smul_one_eq_diagonal]
-    ext i j
-    simp
-  let hdiag : (Matrix.diagonal fun _ : n => (((d : ℝ)⁻¹ : ℝ) : ℂ)).IsHermitian :=
-    Matrix.isHermitian_diagonal_of_self_adjoint _ (by
-      rw [isSelfAdjoint_iff]
-      ext i
-      simp)
-  rw [vonNeumannEntropy_congr heq hρ hdiag, Matrix.vonNeumannEntropy_diagonal]
-  rw [Finset.sum_const, Finset.card_univ, hcard, nsmul_eq_mul]
-  simp [Real.negMulLog, hd.ne', Real.log_inv]
-
-end Matrix
-
 /-! ## Contiguous-block reduced state -/
 
 /-- The identification splitting a configuration on `L + K` contiguous spins into
 its first `L` and last `K` parts:
 `(Fin (L + K) → Fin d) ≃ (Fin L → Fin d) × (Fin K → Fin d)`. -/
-def blockSplitEquiv (d L K : ℕ) :
+def MPOTensor.blockSplitEquiv (d L K : ℕ) :
     (Fin (L + K) → Fin d) ≃ (Fin L → Fin d) × (Fin K → Fin d) :=
   (Equiv.arrowCongr finSumFinEquiv.symm (Equiv.refl (Fin d))).trans
     (Equiv.sumArrowEquivProdArrow (Fin L) (Fin K) (Fin d))
 
 /-- The reduced state of the first `L` of `L + K` contiguous spins, obtained by
-tracing out the last `K` spins after splitting the index via `blockSplitEquiv`. -/
-noncomputable def blockReducedState (d L K : ℕ)
+tracing out the last `K` spins after splitting the index via `MPOTensor.blockSplitEquiv`. -/
+noncomputable def MPOTensor.blockReducedState (d L K : ℕ)
     (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
     Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
   Matrix.partialTraceRight
-    (ρ.submatrix (blockSplitEquiv d L K).symm (blockSplitEquiv d L K).symm)
+    (ρ.submatrix (MPOTensor.blockSplitEquiv d L K).symm (MPOTensor.blockSplitEquiv d L K).symm)
 
 /-- The block reduced state preserves Hermiticity. -/
-theorem blockReducedState_isHermitian {d L K : ℕ}
+theorem MPOTensor.blockReducedState_isHermitian {d L K : ℕ}
     {ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ}
-    (hρ : ρ.IsHermitian) : (blockReducedState d L K ρ).IsHermitian :=
+    (hρ : ρ.IsHermitian) : (MPOTensor.blockReducedState d L K ρ).IsHermitian :=
   Matrix.partialTraceRight_isHermitian (hρ.submatrix _)
 
 /-- The block reduced state preserves positive semidefiniteness. -/
-theorem blockReducedState_posSemidef {d L K : ℕ}
+theorem MPOTensor.blockReducedState_posSemidef {d L K : ℕ}
     {ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ}
-    (hρ : ρ.PosSemidef) : (blockReducedState d L K ρ).PosSemidef :=
+    (hρ : ρ.PosSemidef) : (MPOTensor.blockReducedState d L K ρ).PosSemidef :=
   (hρ.submatrix _).partialTraceRight
 
 /-- The block reduced state preserves the trace. -/
-theorem blockReducedState_trace {d L K : ℕ}
+theorem MPOTensor.blockReducedState_trace {d L K : ℕ}
     (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
-    (blockReducedState d L K ρ).trace = ρ.trace := by
-  rw [blockReducedState, Matrix.trace_partialTraceRight]
+    (MPOTensor.blockReducedState d L K ρ).trace = ρ.trace := by
+  rw [MPOTensor.blockReducedState, Matrix.trace_partialTraceRight]
   simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
-  exact (blockSplitEquiv d L K).symm.sum_comp (fun p => ρ p p)
+  exact (MPOTensor.blockSplitEquiv d L K).symm.sum_comp (fun p => ρ p p)
 
 /-- The inverse block split is concatenation of the two parts via `Fin.append`. -/
-theorem blockSplitEquiv_symm_apply {d L K : ℕ} (a : Fin L → Fin d) (b : Fin K → Fin d) :
-    (blockSplitEquiv d L K).symm (a, b) = Fin.append a b := by
+theorem MPOTensor.blockSplitEquiv_symm_apply {d L K : ℕ} (a : Fin L → Fin d) (b : Fin K → Fin d) :
+    (MPOTensor.blockSplitEquiv d L K).symm (a, b) = Fin.append a b := by
   funext i
-  simp only [blockSplitEquiv, Equiv.symm_trans_apply, Equiv.sumArrowEquivProdArrow,
+  simp only [MPOTensor.blockSplitEquiv, Equiv.symm_trans_apply, Equiv.sumArrowEquivProdArrow,
     Equiv.coe_fn_symm_mk, Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply,
     Equiv.coe_refl, Function.comp, id_eq]
   refine Fin.addCases (fun j => ?_) (fun j => ?_) i
@@ -298,34 +236,37 @@ theorem blockSplitEquiv_symm_apply {d L K : ℕ} (a : Fin L → Fin d) (b : Fin 
 
 /-- Concatenating the two parts of a block split recovers the original
 configuration. -/
-theorem append_blockSplitEquiv {d K₁ K₂ : ℕ} (k : Fin (K₁ + K₂) → Fin d) :
-    Fin.append (blockSplitEquiv d K₁ K₂ k).1 (blockSplitEquiv d K₁ K₂ k).2 = k := by
-  rw [← blockSplitEquiv_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
+theorem MPOTensor.append_blockSplitEquiv {d K₁ K₂ : ℕ} (k : Fin (K₁ + K₂) → Fin d) :
+    Fin.append (MPOTensor.blockSplitEquiv d K₁ K₂ k).1
+      (MPOTensor.blockSplitEquiv d K₁ K₂ k).2 = k := by
+  rw [← MPOTensor.blockSplitEquiv_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
 
 /-- **Composition of contiguous-block reductions.** Tracing out the last `K₁`
 spins of the reduced state on the first `L + K₁` of `L + K₁ + K₂` spins equals
 tracing out the last `K₁ + K₂` spins directly (after reassociating the index).
 This is the prefix-consistency step: reducing a prefix and then a shorter prefix
 agrees with reducing to the shorter prefix in one step. -/
-theorem blockReducedState_comp {d L K₁ K₂ : ℕ}
+theorem MPOTensor.blockReducedState_comp {d L K₁ K₂ : ℕ}
     (X : Matrix (Fin (L + K₁ + K₂) → Fin d) (Fin (L + K₁ + K₂) → Fin d) ℂ) :
-    blockReducedState d L K₁ (blockReducedState d (L + K₁) K₂ X)
-      = blockReducedState d L (K₁ + K₂)
+    MPOTensor.blockReducedState d L K₁ (MPOTensor.blockReducedState d (L + K₁) K₂ X)
+      = MPOTensor.blockReducedState d L (K₁ + K₂)
           (X.submatrix
             (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂))
               (Equiv.refl (Fin d))).symm
             (Equiv.arrowCongr (finCongr (Nat.add_assoc L K₁ K₂))
               (Equiv.refl (Fin d))).symm) := by
-  rw [blockReducedState, blockReducedState, Matrix.partialTraceRight_submatrix_left,
+  rw [MPOTensor.blockReducedState, MPOTensor.blockReducedState,
+      Matrix.partialTraceRight_submatrix_left,
     Matrix.submatrix_submatrix, Matrix.partialTraceRight_partialTraceRight,
-    Matrix.partialTraceRight_submatrix_right (blockSplitEquiv d K₁ K₂),
-    blockReducedState, Matrix.submatrix_submatrix, Matrix.submatrix_submatrix]
+    Matrix.partialTraceRight_submatrix_right (MPOTensor.blockSplitEquiv d K₁ K₂),
+    MPOTensor.blockReducedState, Matrix.submatrix_submatrix, Matrix.submatrix_submatrix]
   ext p i
   simp only [partialTraceRight_apply, Matrix.submatrix_apply]
   refine Finset.sum_congr rfl fun k _ => ?_
   congr 1 <;>
-  · simp only [Function.comp, Prod.map, blockSplitEquiv_symm_apply, id_eq, Fin.append_assoc,
-      append_blockSplitEquiv]
+  · simp only [Function.comp, Prod.map, MPOTensor.blockSplitEquiv_symm_apply, id_eq,
+      Fin.append_assoc,
+      MPOTensor.append_blockSplitEquiv]
     funext x
     simp only [Equiv.arrowCongr_symm, Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,
       id_eq, finCongr_symm, finCongr_apply, Function.comp_apply]
@@ -334,12 +275,12 @@ theorem blockReducedState_comp {d L K₁ K₂ : ℕ}
 on the suffix length leaves the reduced state unchanged: it only relabels the
 traced-out spins. The suffix-length equality is `subst`ed away, after which the
 reindex collapses to the identity. -/
-theorem blockReducedState_submatrix_finCongr {d L K K' : ℕ} (h : L + K = L + K')
+theorem MPOTensor.blockReducedState_submatrix_finCongr {d L K K' : ℕ} (h : L + K = L + K')
     (ρ : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
-    blockReducedState d L K'
+    MPOTensor.blockReducedState d L K'
         (ρ.submatrix (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).symm
           (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).symm)
-      = blockReducedState d L K ρ := by
+      = MPOTensor.blockReducedState d L K ρ := by
   have hKK' : K = K' := by omega
   subst hKK'
   simp
@@ -378,19 +319,19 @@ def blockReindexEquiv (d N L : ℕ) (hL : L ≤ N) :
 `σ^{(N)}(M)`, for `L ≤ N`. -/
 noncomputable def reducedBlockState (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N) :
     Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
-  blockReducedState d L (N - L)
+  MPOTensor.blockReducedState d L (N - L)
     ((normalizedMPO M N).submatrix (blockReindexEquiv d N L hL).symm
       (blockReindexEquiv d N L hL).symm)
 
 /-- The reduced block state is Hermitian when `M` generates an MPDO. -/
 theorem reducedBlockState_isHermitian (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef) : (reducedBlockState M N L hL).IsHermitian :=
-  blockReducedState_isHermitian ((normalizedMPO_isHermitian M N hM).submatrix _)
+  MPOTensor.blockReducedState_isHermitian ((normalizedMPO_isHermitian M N hM).submatrix _)
 
 /-- The reduced block state is positive semidefinite when `M` generates an MPDO. -/
 theorem reducedBlockState_posSemidef (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef) : (reducedBlockState M N L hL).PosSemidef :=
-  blockReducedState_posSemidef ((normalizedMPO_posSemidef M N hM).submatrix _)
+  MPOTensor.blockReducedState_posSemidef ((normalizedMPO_posSemidef M N hM).submatrix _)
 
 /-- The **block entropy** `S_L`: the von Neumann entropy of the reduced state of
 the first `L` spins of the normalized state `σ^{(N)}(M)`.
@@ -502,7 +443,7 @@ theorem mutualInfoChain_eq_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
 end MPOTensor
 
 /-- Closed-form entrywise expansion of the reduced block state. -/
-theorem reducedBlockState_eq_sum {d D : ℕ} (M : MPOTensor d D) {N L : ℕ}
+theorem MPOTensor.reducedBlockState_eq_sum {d D : ℕ} (M : MPOTensor d D) {N L : ℕ}
     (hL : L ≤ N) (u v : Fin L → Fin d) :
     M.reducedBlockState N L hL u v =
       ∑ w : Fin (N - L) → Fin d,
@@ -510,16 +451,16 @@ theorem reducedBlockState_eq_sum {d D : ℕ} (M : MPOTensor d D) {N L : ℕ}
           (Fin.append u w ∘ Fin.cast (show N = L + (N - L) by omega))
           (Fin.append v w ∘ Fin.cast (show N = L + (N - L) by omega)) := by
   rw [MPOTensor.reducedBlockState]
-  simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
-    blockSplitEquiv_symm_apply, MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm,
+  simp only [MPOTensor.blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
+    MPOTensor.blockSplitEquiv_symm_apply, MPOTensor.blockReindexEquiv, Equiv.arrowCongr_symm,
     Equiv.refl_symm, finCongr_symm]
   rfl
 
 /-- The reduced block state of the normalized MPO has unit trace. -/
-theorem reducedBlockState_trace {d D : ℕ} (M : MPOTensor d D) (N L : ℕ)
+theorem MPOTensor.reducedBlockState_trace {d D : ℕ} (M : MPOTensor d D) (N L : ℕ)
     (hL : L ≤ N) (htr : (MPOTensor.mpo M N).trace ≠ 0) :
     (M.reducedBlockState N L hL).trace = 1 := by
-  rw [MPOTensor.reducedBlockState, blockReducedState_trace,
+  rw [MPOTensor.reducedBlockState, MPOTensor.blockReducedState_trace,
     Matrix.trace_submatrix_equiv, MPOTensor.normalizedMPO_trace M N htr]
 
 /-! ## Pure-state analogue -/
@@ -567,7 +508,7 @@ theorem normalizedPureState_isHermitian (A : MPSTensor d D) (N : ℕ) :
 `σ^{(N)}(A)`, for `L ≤ N`. -/
 noncomputable def reducedPureBlockState (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
-  blockReducedState d L (N - L)
+  MPOTensor.blockReducedState d L (N - L)
     ((normalizedPureState A N).submatrix
       (MPOTensor.blockReindexEquiv d N L hL).symm
       (MPOTensor.blockReindexEquiv d N L hL).symm)
@@ -575,18 +516,18 @@ noncomputable def reducedPureBlockState (A : MPSTensor d D) (N L : ℕ) (hL : L 
 /-- The reduced pure block state is Hermitian. -/
 theorem reducedPureBlockState_isHermitian (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     (reducedPureBlockState A N L hL).IsHermitian :=
-  blockReducedState_isHermitian ((normalizedPureState_isHermitian A N).submatrix _)
+  MPOTensor.blockReducedState_isHermitian ((normalizedPureState_isHermitian A N).submatrix _)
 
 /-- The reduced pure block state is positive semidefinite. -/
 theorem reducedPureBlockState_posSemidef (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     (reducedPureBlockState A N L hL).PosSemidef :=
-  blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
+  MPOTensor.blockReducedState_posSemidef ((normalizedPureState_posSemidef A N).submatrix _)
 
 /-- The reduced pure block state has unit trace when the pure state is normalizable. -/
 theorem reducedPureBlockState_trace (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N)
     (htr : Matrix.trace (pureState A N) ≠ 0) :
     (reducedPureBlockState A N L hL).trace = 1 := by
-  rw [reducedPureBlockState, blockReducedState_trace, Matrix.trace_submatrix_equiv,
+  rw [reducedPureBlockState, MPOTensor.blockReducedState_trace, Matrix.trace_submatrix_equiv,
     normalizedPureState, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr]
 
 /-- The **pure block entropy** `S_L^{(N)}(A)`: the von Neumann entropy of the
@@ -615,7 +556,7 @@ open Polynomial in
 arXiv:1606.00608, Section 3, line 599). The state `|V⟩⟨V| / ‖V‖²` is a rank-one
 projector, so its characteristic polynomial is `X^{n-1}(X - 1)` and the entropy
 sum over the eigenvalues of -λ log λ vanishes. -/
-theorem vonNeumannEntropy_normalizedPureState {d D : ℕ} (A : MPSTensor d D) (N : ℕ)
+theorem MPOTensor.vonNeumannEntropy_normalizedPureState {d D : ℕ} (A : MPSTensor d D) (N : ℕ)
     (htr : Matrix.trace (MPSTensor.pureState A N) ≠ 0) :
     vonNeumannEntropy (MPSTensor.normalizedPureState A N)
         (MPSTensor.normalizedPureState_isHermitian A N) = 0 := by

@@ -3,7 +3,7 @@
 
 \begin{definition}[On-site and nearest-neighbor supports]
     \label{def:area_law_nearest_neighbor_support}
-    \lean{TNLean.PEPS.AreaLaw.nearestNeighborSupport}
+    \lean{ManyBody.nearestNeighborSupport}
     \leanok
     \uses{def:area_law_domain}
     For finite $\Lambda\subset\mathbb Z^2$ with unordered nearest-neighbor edges $E_\Lambda$, index supports by $I=\Lambda\sqcup E_\Lambda$ with $S_v=\{v\}$ and $S_{\{x,y\}}=\{x,y\}$, and for $A\subseteq\Lambda$ set
@@ -16,9 +16,9 @@
 \begin{lemma}[One inside endpoint]
     \label{thm:area_law_crossing_inside_endpoint}
     \lean{
-        TNLean.PEPS.AreaLaw.not_mem_crossingTerms_singleton,
-        TNLean.PEPS.AreaLaw.pair_inter_eq_singleton_of_crossing,
-        TNLean.PEPS.AreaLaw.card_pair_insideConfig_of_crossing
+        ManyBody.not_mem_crossingTerms_singleton,
+        ManyBody.pair_inter_eq_singleton_of_crossing,
+        ManyBody.card_pair_insideConfig_of_crossing
     }
     \leanok
     No singleton $\{v\}$ meets both $A$ and $\Lambda\setminus A$. If $\{x,y\}$ meets both $A$ and $\Lambda\setminus A$, then $\{x,y\}\cap A=\{v\}$ is a singleton, and for a $q$-element alphabet ($q\ge0$), the configuration set on $\{x,y\}\cap A$ has cardinality $q$.
@@ -31,10 +31,10 @@
 \begin{lemma}[Crossing supports and unordered edges]
     \label{thm:area_law_crossing_support_count}
     \lean{
-        TNLean.PEPS.AreaLaw.inl_not_mem_crossingTerms,
-        TNLean.PEPS.AreaLaw.inr_mem_crossingTerms_iff,
-        TNLean.PEPS.AreaLaw.card_nearestNeighbor_insideConfig,
-        TNLean.PEPS.AreaLaw.card_crossingTerms_nearestNeighbor
+        ManyBody.inl_not_mem_crossingTerms,
+        ManyBody.inr_mem_crossingTerms_iff,
+        ManyBody.card_nearestNeighbor_insideConfig,
+        ManyBody.card_crossingTerms_nearestNeighbor
     }
     \leanok
     \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
@@ -48,7 +48,7 @@
 
 \begin{lemma}[Exact weighted crossing sum]
     \label{thm:area_law_nearest_neighbor_budget}
-    \lean{TNLean.PEPS.AreaLaw.nearestNeighbor_crossing_budget}
+    \lean{ManyBody.nearestNeighbor_crossing_budget}
     \leanok
     \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
     For integers $m,q\ge0$, $A_j\subseteq\Lambda$ ($0\le j<m$), $a_j,J\in\mathbb R$, and $d_{ij}=q^{|S_i\cap A_j|}$,

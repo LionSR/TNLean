@@ -189,7 +189,7 @@ private lemma reducedBlockState_M_apply {N L : ℕ} (hL : L ≤ N) (hN : 0 < N)
   set K := N - L with hK
   have hNK : N = L + K := by omega
   have hcard : Fintype.card (Fin K → Fin 2) = 2 ^ K := by simp
-  rw [reducedBlockState_eq_sum M hL u v, normalizedMPO_M_eq N hN,
+  rw [MPOTensor.reducedBlockState_eq_sum M hL u v, normalizedMPO_M_eq N hN,
     rho_eq_diagonal N]
   by_cases huv : u = v
   · subst v

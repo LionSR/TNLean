@@ -10,6 +10,7 @@ import TNLean.MPS.ParentHamiltonian.Gap.BlockOpenGroundSpaceAtSimultaneousInject
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalParentGroundStateFace
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedQuasiLocalSupport
+import QICLean.Analysis.Order.PosSemidefCommute
 
 /-!
 # Local zero energy implies finite-interval ground-space support
@@ -44,34 +45,6 @@ section QuasiLocalGroundStateSupport
 
 open scoped ComplexOrder
 open ManyBody.Interaction (chainTranslates)
-
-namespace PositiveLinearMap
-variable {E : Type*} [Ring E] [PartialOrder E] [Module ℂ E] [StarRing E]
-  [StarOrderedRing E]
-
-/-- A normalized positive functional annihilating an operator which dominates
-a positive multiple of a projection complement has full projection expectation.
-This is the finite-dimensional support implication used in Nachtergaele,
-arXiv:cond-mat/9410110, Theorem 1.1 and Section 3. -/
-theorem apply_projection_eq_one_of_le_of_apply_eq_zero
-    (f : E →ₚ[ℂ] ℂ) (p H : E) (hp : IsStarProjection p)
-    (hf1 : f 1 = 1) (hfH : f H = 0) {κ : ℝ} (hκ : 0 < κ)
-    (hLower : (κ : ℂ) • (1 - p) ≤ H) : f p = 1 := by
-  have hLower' := f.monotone hLower
-  have hq : 0 ≤ f (1 - p) := f.map_nonneg hp.one_sub_nonneg
-  change f ((κ : ℂ) • (1 - p)) ≤ f H at hLower'
-  have hscale : (κ : ℂ) * f (1 - p) ≤ 0 := by
-    simpa only [map_smul, smul_eq_mul, hfH] using hLower'
-  have hreal : κ * (f (1 - p)).re ≤ 0 := by
-    simpa only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
-      zero_mul, sub_zero, Complex.zero_re] using (Complex.le_def.mp hscale).1
-  have hqzero : f (1 - p) = 0 := by
-    apply Complex.ext
-    · change (f (1 - p)).re = 0
-      nlinarith [(Complex.nonneg_iff.mp hq).1]
-    · exact (Complex.nonneg_iff.mp hq).2.symm
-  exact (sub_eq_zero.mp (by simpa only [map_sub, hf1] using hqzero)).symm
-end PositiveLinearMap
 
 open SpinChain
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology

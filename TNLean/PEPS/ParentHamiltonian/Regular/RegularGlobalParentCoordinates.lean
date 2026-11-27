@@ -8,6 +8,7 @@ import TNLean.PEPS.ParentHamiltonian.Injective.RegionVertexImageSupport
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionBondRightInvariance
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionFlatness
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexInverseRegionSlice
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Global regular coordinates of arbitrary parent ground vectors
@@ -28,6 +29,8 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 5.1,
 Theorems 5.5 and 5.7, and the accessible regular coordinates in Section 6. The
 results here concern the regular representation on finite simple graphs.
 -/
+
+open ManyBody (assembleDependentRegionConfig)
 
 open ManyBody (Edge)
 

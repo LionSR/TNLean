@@ -98,7 +98,7 @@ theorem exists_aklv_sharp_physical_per_cut_approximation :
       ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
         ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
         1 - rho / 2 ≤ ‖⟪y, Ω⟫_ℂ‖ ∧
-        (cutMatrix (leftBlock L k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (cutMatrix (interval L 0 k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
         (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
   obtain ⟨A, hA, _hA21, haccuracy⟩ := exists_aklv_physical_accuracy_window
   have hC : 0 < aklvAccuracyLogCoefficient A := by
@@ -151,7 +151,7 @@ theorem exists_aklv_fixed_gap_physical_per_cut_approximation :
       ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
         ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
         1 - rho / 2 ≤ ‖⟪y, Ω⟫_ℂ‖ ∧
-        (cutMatrix (leftBlock L k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (cutMatrix (interval L 0 k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
         (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
   obtain ⟨A, C, hA, hC, hphysical⟩ := exists_aklv_sharp_physical_per_cut_approximation
   refine ⟨A, C, hA, hC, ?_⟩

@@ -14,11 +14,11 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
 
 \begin{definition}[Coordinate orthogonal projectors]%
     \label{def:peps_coordinate_projector}
-    \lean{TNLean.PEPS.coordinateSubspaceES,
-        TNLean.PEPS.coordinateRangeProjector,
-        TNLean.PEPS.coordinateRangeProjector_isStarProjection,
-        TNLean.PEPS.coordinateRangeProjector_mulVec_eq_self_iff,
-        TNLean.PEPS.range_coordinateRangeProjector}
+    \lean{Matrix.coordinateSubspaceES,
+        Matrix.coordinateRangeProjector,
+        Matrix.coordinateRangeProjector_isStarProjection,
+        Matrix.coordinateRangeProjector_mulVec_eq_self_iff,
+        Matrix.range_coordinateRangeProjector}
     \leanok
     Equip $\C^I$ with $\langle x,y\rangle=\sum_i\overline{x_i}y_i$.
     For a subspace $S\subseteq\C^I$, its orthogonal projector $\Pi_S$ in the
@@ -28,10 +28,10 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
 
 \begin{lemma}[Range characterization of projections]%
     \label{thm:peps_projection_range_unique}
-    \lean{TNLean.PEPS.matrix_mul_eq_right_of_fixes_range,
-        TNLean.PEPS.matrix_mul_eq_right_of_range_le,
-        TNLean.PEPS.matrix_eq_of_isStarProjection_range_eq,
-        TNLean.PEPS.eq_coordinateRangeProjector_of_range}
+    \lean{Matrix.matrix_mul_eq_right_of_fixes_range,
+        Matrix.matrix_mul_eq_right_of_range_le,
+        Matrix.matrix_eq_of_isStarProjection_range_eq,
+        Matrix.eq_coordinateRangeProjector_of_range}
     \leanok
     \uses{def:peps_coordinate_projector}
     If $Px=x$ for all $x\in\operatorname{ran}Q$ (in particular, if $P^2=P$ and
@@ -49,7 +49,7 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
     \label{def:peps_regional_operator_extension}
     \lean{ManyBody.place,
         ManyBody.subregionPlace,
-        TNLean.PEPS.place_cutEquiv_symm_apply}
+        ManyBody.place_cutEquiv_symm_apply}
     \leanok
     For finite coordinate sets $X_v$, put $X_R=\prod_{v\in R}X_v$,
     $\mathcal H_R=\C^{X_R}$, and write $(\alpha,\tau)\in X_R\times X_{V\setminus R}$.
@@ -67,13 +67,12 @@ notation below.
 % adc7f1241b42e322a6451854ab7e4b4c146bf78a; no new source theorem is asserted.
 \begin{lemma}[Local basis relabelling]
     \label{thm:peps_regional_basis_relabelling}
-    \lean{TNLean.PEPS.dependentRegionFinEquiv,
-        TNLean.PEPS.dependentGlobalFinEquiv,
-        TNLean.PEPS.dependentGlobalFinIsometry,
-        TNLean.PEPS.dependentGlobalFinIsometry_apply,
-        TNLean.PEPS.reindex_place,
-        TNLean.PEPS.dependentGlobalFinIsometry_place,
-        TNLean.PEPS.reindex_reducedPure_eq_regionState}
+    \lean{ManyBody.dependentRegionFinEquiv,
+        ManyBody.dependentGlobalFinIsometry,
+        ManyBody.dependentGlobalFinIsometry_apply,
+        ManyBody.reindex_place,
+        ManyBody.dependentGlobalFinIsometry_place,
+        ManyBody.reindex_reducedPure_eq_regionState}
     \leanok
     \uses{def:peps_regional_operator_extension}
     Let $V$ be any finite ordered site set with finite alphabets $Y_v$,
@@ -179,15 +178,15 @@ notation below.
     \lean{ManyBody.place_one,
         ManyBody.place_mul,
         ManyBody.place_conjTranspose,
-        TNLean.PEPS.isStarProjection_place,
+        ManyBody.isStarProjection_place,
         ManyBody.place_sub,
-        TNLean.PEPS.placeSlice_mulVec_place,
-        TNLean.PEPS.place_mulVec_eq_self_iff,
+        ManyBody.placeSlice_mulVec_place,
+        ManyBody.place_mulVec_eq_self_iff,
         ManyBody.place_subregionPlace,
         ManyBody.exists_place_eq_place_of_subset,
-        TNLean.PEPS.exists_place_mul_union,
-        TNLean.PEPS.exists_place_sub_union,
-        TNLean.PEPS.exists_place_commutator_union}
+        ManyBody.exists_place_mul_union,
+        ManyBody.exists_place_sub_union,
+        ManyBody.exists_place_commutator_union}
     \leanok
     \uses{def:peps_regional_operator_extension}
     The map $K\mapsto\widehat K_R$ is a unital $*$-algebra homomorphism
@@ -210,8 +209,8 @@ notation below.
 
 \begin{lemma}[Continuity and norm bound for regional extensions]%
     \label{thm:peps_regional_extension_norm}
-    \lean{TNLean.PEPS.norm_place_mulVec_le,
-        TNLean.PEPS.continuous_place}
+    \lean{ManyBody.norm_place_mulVec_le,
+        ManyBody.continuous_place}
     \leanok
     \uses{def:peps_regional_operator_extension}
     For every region $R$, $K\mapsto\widehat K_R$ is continuous and
@@ -346,9 +345,9 @@ notation below.
 
 \begin{lemma}[Projectors conjugated by scaled partial isometries]%
     \label{thm:peps_scaled_partial_isometry_projector_transport}
-    \lean{TNLean.PEPS.isStarProjection_smul_mul_mul_conjTranspose_of_gram,
-        TNLean.PEPS.smul_mul_mul_conjTranspose_mul_of_gram,
-        TNLean.PEPS.range_smul_mul_mul_conjTranspose_of_gram}
+    \lean{Matrix.isStarProjection_smul_mul_mul_conjTranspose_of_gram,
+        Matrix.smul_mul_mul_conjTranspose_mul_of_gram,
+        Matrix.range_smul_mul_mul_conjTranspose_of_gram}
     \leanok
     Let $A$ be rectangular, $c\in\R\setminus\{0\}$, and $A^*A=cE$.
     If $Q^2=Q=Q^*$ and $EQ=Q$, then $c^{-1}AQA^*$ is an orthogonal projector.

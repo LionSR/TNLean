@@ -45,7 +45,7 @@ $\mathcal X$ that commutes with every tensor letter~\cite{Sun2025Anomalous}.
 \end{proof}
 
 \begin{definition}[Strong and weak symmetry]\label{def:mpdo_strong_weak_symmetry}
-    \lean{Matrix.IsStrongSymmetry, Matrix.IsWeakSymmetry,
+    \lean{Matrix.IsStrongSymmetry,
         MPOTensor.IsStrongMPOSymmetry, MPOTensor.IsWeakMPOSymmetry}
     \leanok
     \uses{def:mpo_family,def:mpdo_commuting_boundary}
@@ -134,8 +134,8 @@ one tensor with entries $(U_g)_{ij}$.
 \end{tenkzequation}
 
 \begin{lemma}[Strong symmetry implies weak symmetry]\label{thm:mpdo_strong_implies_weak}
-    \lean{Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose,
-        Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary,
+    \lean{Matrix.IsStrongSymmetry.commute_of_conjTranspose,
+        Matrix.IsStrongSymmetry.commute_of_unitary,
         MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry,
         MPOTensor.IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry}
     \leanok

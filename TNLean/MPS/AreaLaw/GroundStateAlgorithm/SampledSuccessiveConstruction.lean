@@ -89,7 +89,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
         (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
           (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
@@ -197,7 +197,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a :
         (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
@@ -234,7 +234,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
             (B' : Fin N → RightBlockMatrix L q (i + 1)),
             ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
               lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-            ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
+            ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (i + 1))
               (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
@@ -272,7 +272,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
         (B' : Fin N → RightBlockMatrix L q (i + 1)),
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (i + 1))
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
           (ManyBody.ChainInteraction.sizeTrimmingSelection
@@ -371,7 +371,7 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
             (B' : Fin N → RightBlockMatrix L q (i + 1)),
             ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
               lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-            ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
+            ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (i + 1))
               (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
@@ -514,7 +514,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
           Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
             (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ (AreaLaw.extend (n + 1) S))
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (n + 1))
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (n + 1))
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T.card ≤ V.card ∧
         (∀ v ∈ T, Nonempty (RationalLeftOpenMPSRepresentationOfHeight
@@ -681,7 +681,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
                 (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
                 (AreaLaw.extend (i + 1) (S i)))
             ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
-            ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
+            ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (i + 1))
               (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             (S (i + 1)).card ≤ V.card ∧
             ∀ (Γ' : EuclideanSpace ℂ (Fin L → Fin q)) (ε : ℝ),
@@ -724,7 +724,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
           Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
             (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ (AreaLaw.extend (i + 1) S))
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (i + 1))
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T.card ≤ V.card ∧
         ∀ (Γ' : EuclideanSpace ℂ (Fin L → Fin q)) (ε : ℝ),

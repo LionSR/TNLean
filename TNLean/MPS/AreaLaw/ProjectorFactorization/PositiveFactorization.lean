@@ -7,7 +7,7 @@ import QICLean.Analysis.Projection.HermitianFactorRepair
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 
@@ -62,8 +62,8 @@ def IsFactorizationAt (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (c l : ℕ) (�
     (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) : Prop :=
   IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧ ‖OB‖ ≤ 1 ∧
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB (interval L (c - l) (c + l)) ∧
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c) ∧
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ ∧
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (interval L 0 c) ∧
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (interval L 0 c)ᶜ ∧
     ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε
 
 /-- A factorization with error `ε` is one with every larger error. -/
@@ -164,13 +164,13 @@ theorem exists_factorization_of_isFactorizationAt {Ω : EuclideanSpace ℂ (Fin 
     {j m : ℕ} {ε : ℝ} {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hF : IsFactorizationAt Ω j m ε OB OL OR) :
     ∃ (SB SL SR : Finset (Fin L)),
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L 0 (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε := by
   obtain ⟨-, -, -, -, hBs, hLs, hRs, hBLR⟩ := hF
   refine ⟨_, _, _, hBs, fun i hi ↦ ?_, hLs, subset_rfl, hRs, disjoint_compl_left, hBLR⟩
   rw [mem_interval] at hi
-  exact mem_leftBlock.mpr hi.2
+  exact mem_interval.mpr ⟨Nat.zero_le _, hi.2⟩
 
 end TNLean.MPS.AreaLaw.Hastings

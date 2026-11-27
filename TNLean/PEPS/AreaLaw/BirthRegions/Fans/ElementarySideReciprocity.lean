@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.ElementarySideOpponents
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivisionMask
 
 /-!
@@ -25,6 +26,8 @@ September 24, 2026, Section 11, `prop:two-families`, lines 299–323.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (convex_closure_dyadicCell dyadicCell fineLayerIndices)
 
 noncomputable section
 

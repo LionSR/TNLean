@@ -43,6 +43,8 @@ one closing matrix at the same virtual dimension. This closing matrix is
 chosen for the whole operator before the physical configurations.
 -/
 
+open ManyBody (interval)
+
 section
 
 open Matrix
@@ -661,7 +663,7 @@ private theorem retainedStackCore_naturalInsertion_isOpenMPS
     apply isOpenMPS_of_internal_cutMatrix_rank_le
     intro k hk0 hkT
     have hcut :
-        cutMatrix (leftBlock T k) (0 : EuclideanSpace ℂ (Fin T → Fin (q * q))) = 0 := by
+        cutMatrix (interval T 0 k) (0 : EuclideanSpace ℂ (Fin T → Fin (q * q))) = 0 := by
       ext x y
       simp [ManyBody.cutMatrix_apply]
     rw [hcut, Matrix.rank_zero]

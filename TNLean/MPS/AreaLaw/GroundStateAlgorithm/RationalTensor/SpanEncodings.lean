@@ -15,6 +15,7 @@ Landau, Vazirani and Vidick, arXiv:1307.5143v1, equation `eq:conv`.
 
 open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
+open ManyBody (interval interval_mono)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -195,9 +196,9 @@ theorem coordinate_height_of_input
     {H Hv : ℕ} {S T : Finset (LeftBlockVector L q k)}
     (E : RationalSpanFamilyEncodingOfHeight H S T)
     (hS : ∀ s : S,
-      ∀ x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)),
+      ∀ x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)),
         HasRationalComplexCoordinatesOfHeight Hv (s.1 x))
-    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
+    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
     HasRationalComplexCoordinatesOfHeight
       (linearCombinationCoordinateHeight H Hv S.card) (t.1 x) := by
   rw [E.linearCombination_eq t]
@@ -210,7 +211,7 @@ number with a uniform explicit height bound. -/
 theorem coordinate_height {H Hv b : ℕ} {S T : Finset (LeftBlockVector L q k)}
     (E : RationalSpanFamilyEncodingOfHeight H S T) (hHv : 0 < Hv) (hk : k ≤ L)
     (hS : ∀ s : S, RationalLeftOpenMPSRepresentationOfHeight Hv b s.1)
-    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
+    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
     HasRationalComplexCoordinatesOfHeight
       (outputCoordinateHeight H Hv b k S.card) (t.1 x) := by
   exact E.coordinate_height_of_input
@@ -221,7 +222,7 @@ Gaussian rational. -/
 theorem coordinate_rational {H Hv b : ℕ} {S T : Finset (LeftBlockVector L q k)}
     (E : RationalSpanFamilyEncodingOfHeight H S T) (hHv : 0 < Hv) (hk : k ≤ L)
     (hS : ∀ s : S, RationalLeftOpenMPSRepresentationOfHeight Hv b s.1)
-    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
+    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
     HasRationalComplexCoordinates (t.1 x) :=
   (E.coordinate_height hHv hk hS t x).forget
 
@@ -442,7 +443,7 @@ theorem coordinate_height
     (E : RationalIndexedSpanEncodingOfHeight H I J input output)
     (hinput : ∀ a x,
       HasRationalComplexCoordinatesOfHeight Hv (input a x))
-    (j : J) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
+    (j : J) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
     HasRationalComplexCoordinatesOfHeight
       (RationalSpanFamilyEncodingOfHeight.linearCombinationCoordinateHeight
         H Hv (Fintype.card I)) (output j x) := by
@@ -548,8 +549,10 @@ theorem exists_rational_spanColumnFamily
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {δ : ℝ} (hδ : 0 < δ) :
@@ -604,7 +607,7 @@ theorem coordinate_height
     {S T : Finset (LeftBlockVector L q k)}
     (D : RationalSpanViableMPSDataOfHeight H Hv Γ s b δ S T)
     (hHv : 0 < Hv) (hk : k ≤ L) (t : T)
-    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
     HasRationalComplexCoordinatesOfHeight
       (RationalSpanFamilyEncodingOfHeight.outputCoordinateHeight H Hv b k S.card)
       (t.1 x) :=

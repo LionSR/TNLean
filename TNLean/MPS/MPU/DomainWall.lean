@@ -12,7 +12,6 @@ import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorCircuit
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorClock
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorConstruction
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorDomainWall
-import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorEndpoint
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorPhase
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorSpatial
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorTensor

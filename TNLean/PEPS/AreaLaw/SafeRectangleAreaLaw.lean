@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBufferReal
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateCutBoundary
+import QICLean.ManyBody.Sites.Template.CutBoundary
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -30,6 +30,8 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized; no upstream Lean proof text reused.
 -/
 
+open ManyBody (ambientBoundary card_ambientBoundary_le_outer_layer regionEntropy_nonneg)
+
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
@@ -46,12 +48,12 @@ Source: the safe rectangles of `02-initial.tex`, lines 223–228, together with
 the physical-to-ambient boundary comparison in Lemma 9.4. -/
 theorem card_edgeBoundary_rectRegion_le_of_disjoint
     (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (Q : IntRect)
-    (hdisj : Disjoint Q.toFinset (Geometry.boundaryEndpoints Λ A)) :
+    (hdisj : Disjoint Q.toFinset (ManyBody.boundaryEndpoints Λ A)) :
     (edgeBoundary (planeDomainGraph Λ) (rectRegion A Q)).card ≤ 48 * Q.size := by
   classical
   have hboundary : (edgeBoundary (planeDomainGraph Λ) (rectRegion A Q)).card ≤
       (ambientBoundary Q.toFinset).card :=
-    Geometry.card_edgeBoundary_filter_le_ambientBoundary Λ A Q.toFinset hdisj
+    ManyBody.card_edgeBoundary_filter_le_ambientBoundary Λ A Q.toFinset hdisj
   have houter := card_ambientBoundary_le_outer_layer Q.toFinset
   have hlayer : (ambientDilation Q.toFinset 1 \ Q.toFinset).card ≤ 4 * (Q.size + 2) := by
     simpa only [Nat.sub_self, IntRect.dilate_zero, IntRect.toFinset_dilate,
@@ -72,14 +74,14 @@ theorem exists_regionEntropy_safe_rect_le_linear
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset ↥Λ) (Q : IntRect),
-          (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+          (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
             d * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ManyBody.regionEntropy Ω (rectRegion A Q) ≤ K * (Q.size : ℝ) := by
   classical
   obtain ⟨C, hC, harea⟩ := uniformAreaLaw q hq R (J + 1) Δ (by linarith) hΔ
   refine ⟨48 * C, mul_nonneg (by norm_num) hC, ?_⟩
   intro d hd Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hclear
-  have hdisj : Disjoint Q.toFinset (Geometry.boundaryEndpoints Λ A) := by
+  have hdisj : Disjoint Q.toFinset (ManyBody.boundaryEndpoints Λ A) := by
     apply Finset.disjoint_left.mpr
     intro z hz hzcut
     have hbad : d * (Q.size : ℝ) < 0 := by
@@ -112,7 +114,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset ↥Λ) (Q : IntRect),
-            (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+            (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
               d * (Q.size : ℝ) < (supDist t z : ℝ)) →
             ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
               (Q₀.dilate (c * r)).toFinset ⊆ Q.toFinset →
@@ -127,7 +129,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
             (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (A : Finset ↥Λ) (Q : IntRect),
             ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
               groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} ∧
-              (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              (∀ t ∈ Q.toFinset, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                 d * (Q.size : ℝ) < (supDist t z : ℝ)) ∧
               Q.size ≤ r ∧ s = ManyBody.regionEntropy Ω (rectRegion A Q)}
         let p₀ : ℝ := 1 / (2 * (c : ℝ) + 5) ^ 2
@@ -151,7 +153,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
     have hF0 (t : ℕ) : 0 ≤ F t := by
       apply Real.sSup_nonneg
       rintro s ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, _, _, rfl⟩
-      exact regionEntropy_nonneg Λ q Ω hΩ _
+      exact regionEntropy_nonneg hΩ _
     have hFle (t : ℕ) : F t ≤ K * (t : ℝ) := by
       refine Real.sSup_le (fun s hs ↦ ?_) (mul_nonneg hK (Nat.cast_nonneg t))
       obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hclear, hQ, rfl⟩ := hs

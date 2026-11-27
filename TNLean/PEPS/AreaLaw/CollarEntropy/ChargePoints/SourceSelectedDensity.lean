@@ -13,7 +13,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.GenericChargeEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectionBudget
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
 
 /-!
 # Physical selected density for arbitrary scanner exponents
@@ -46,6 +46,9 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_density_energy`:
   physical charge selection at arbitrary total metric weight.
 -/
+
+open ManyBody (abs_log_card_and_selectedSchmidtEntropy_sub_le designatedSupport
+  exists_global_schmidtBellPrevector)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -114,7 +117,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
           (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
@@ -402,7 +405,7 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
           (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + F.e) →

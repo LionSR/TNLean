@@ -35,7 +35,7 @@ estimate.
 
 open Matrix
 open scoped BigOperators Kronecker
-open ManyBody (cutMatrix)
+open ManyBody (cutMatrix interval mem_interval)
 
 noncomputable section
 
@@ -68,45 +68,43 @@ theorem isOpenMPS_trace_closed_chain {L q D : ℕ}
     Matrix.trace (C * Fin.prod (fun v ↦ A v (w v))))
   apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
   intro k hk0 hkL
-  let P (a : {v : Fin L // v ∈ leftBlock L k} → Fin q) :
+  let P (a : {v : Fin L // v ∈ interval L 0 k} → Fin q) :
       Matrix (Fin D) (Fin D) ℂ :=
     (List.ofFn (fun v : Fin k ↦
-      A (v.castLE hkL.le) (a ⟨v.castLE hkL.le, mem_leftBlock.mpr v.isLt⟩))).prod
-  let Q (b : {v : Fin L // v ∉ leftBlock L k} → Fin q) :
+      A (v.castLE hkL.le) (a ⟨v.castLE hkL.le, mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩⟩))).prod
+  let Q (b : {v : Fin L // v ∉ interval L 0 k} → Fin q) :
       Matrix (Fin D) (Fin D) ℂ :=
     (List.ofFn (fun v : Fin (L - k) ↦
       A ⟨k + v.val, by omega⟩ (b ⟨⟨k + v.val, by omega⟩, by
-        rw [mem_leftBlock]
-        change ¬ k + v.val < k
+        simp only [mem_interval, Nat.zero_le, true_and]
         omega⟩))).prod
-  let U : Matrix ({v : Fin L // v ∈ leftBlock L k} → Fin q)
+  let U : Matrix ({v : Fin L // v ∈ interval L 0 k} → Fin q)
       (Fin D × Fin D) ℂ := fun a ij ↦ (C * P a) ij.1 ij.2
   let V : Matrix (Fin D × Fin D)
-      ({v : Fin L // v ∉ leftBlock L k} → Fin q) ℂ := fun ij b ↦ Q b ij.2 ij.1
-  have hfactor : cutMatrix (leftBlock L k) ψ = U * V := by
+      ({v : Fin L // v ∉ interval L 0 k} → Fin q) ℂ := fun ij b ↦ Q b ij.2 ij.1
+  have hfactor : cutMatrix (interval L 0 k) ψ = U * V := by
     ext a b
     rw [ManyBody.cutMatrix_apply]
     change Matrix.trace (C * Fin.prod (fun v ↦ A v
-      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b) v))) = _
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)).symm (a, b) v))) = _
     rw [Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map,
       orderedProduct_split _ k hkL.le]
     have hP : (List.ofFn (fun v : Fin k ↦ A (v.castLE hkL.le)
-        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)).symm
           (a, b) (v.castLE hkL.le)))).prod = P a := by
       apply congrArg List.prod
       apply congrArg List.ofFn
       funext v
-      have hv : v.castLE hkL.le ∈ leftBlock L k := mem_leftBlock.mpr v.isLt
+      have hv : v.castLE hkL.le ∈ interval L 0 k := mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩
       rw [ManyBody.cutEquiv_symm_apply_mem _ _ hv]
     have hQ : (List.ofFn (fun v : Fin (L - k) ↦ A ⟨k + v.val, by omega⟩
-        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)).symm
           (a, b) ⟨k + v.val, by omega⟩))).prod = Q b := by
       apply congrArg List.prod
       apply congrArg List.ofFn
       funext v
-      have hv : (⟨k + v.val, by omega⟩ : Fin L) ∉ leftBlock L k := by
-        rw [mem_leftBlock]
-        change ¬ k + v.val < k
+      have hv : (⟨k + v.val, by omega⟩ : Fin L) ∉ interval L 0 k := by
+        simp only [mem_interval, Nat.zero_le, true_and]
         omega
       rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv]
     rw [hP, hQ, ← Matrix.mul_assoc]

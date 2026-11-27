@@ -9,8 +9,8 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
 
 \begin{lemma}[Distances between closed cells]
     \label{thm:area_law_dyadic_cell_distance}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_le,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_lower}
+    \lean{ManyBody.dyadicCell_dist_le,
+        ManyBody.dyadicCell_dist_lower}
     \leanok
     \uses{def:area_law_dyadic_cells}
     Let $u,v\in\mathbb Z^2$, $x\in\overline{C_{k,u}}$, and
@@ -37,9 +37,9 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
 % Source: geometry:layer-distance in Section 11.
 \begin{lemma}[Distance from a layer to the endpoints]
     \label{thm:area_law_dyadic_layer_distance}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_lower,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_exists_dist_le,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds}
+    \lean{ManyBody.dyadicLayer_dist_lower,
+        ManyBody.dyadicLayer_exists_dist_le,
+        ManyBody.dyadicLayer_infDist_bounds}
     \leanok
     \uses{def:area_law_dyadic_layers}
     For every $x\in\overline{D_k}$ and every $z\in Z$,
@@ -74,8 +74,8 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
 % Source: geometry:nonadjacent in Section 11.
 \begin{lemma}[Separation of nonadjacent layers]
     \label{thm:area_law_dyadic_nonadjacent}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_separation,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent}
+    \lean{ManyBody.dyadicLayer_dist_separation,
+        ManyBody.dyadicLayer_dist_nonadjacent}
     \leanok
     \uses{def:area_law_dyadic_layers}
     For every pair of scales $k,h$, every $x\in\overline{D_k}$, and every

@@ -30,6 +30,8 @@ revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
+
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
@@ -78,8 +80,8 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
           ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-              T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+            ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+              T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
               ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T.points)
@@ -117,7 +119,7 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
     linarith [show (0 : ℝ) ≤ (R : ℝ) from Nat.cast_nonneg R]
   refine sublinearCollarBound_of_mutualInformation_le_at hCtpl hD₀1 _ _ ?_
   intro n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan A T hsep hL
-  have hsep' : T.IsSeparated (d : ℝ) (Geometry.boundaryEndpoints Λ A) := by
+  have hsep' : T.IsSeparated (d : ℝ) (ManyBody.boundaryEndpoints Λ A) := by
     intro t ht z hz
     exact lt_of_le_of_lt
       (mul_le_mul_of_nonneg_right
@@ -151,8 +153,8 @@ theorem sublinearCollarBound_real_of_boxEntropy
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
           ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-              T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+            ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+              T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
               ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T.points)
@@ -205,8 +207,8 @@ theorem sublinearCollarBound_real_of_initial
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
           ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-              T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+            ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+              T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
               ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T.points)
@@ -287,8 +289,8 @@ theorem sublinearCollarBound_real_explicit
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+            T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)

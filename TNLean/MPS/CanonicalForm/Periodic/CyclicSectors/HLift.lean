@@ -498,7 +498,7 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
   · have hRfix : T (orbitSumProjection (D := D) (m := m) T Q) =
         orbitSumProjection (D := D) (m := m) T Q :=
       orbitSumProjection_fixed_of_pow_fix (T := T) (Q := Q) (m := m) hQfix
-    exact preservesCorner_of_adjoint_fixed_projection (A := A) hTP
+    exact TNLean.MPS.CanonicalForm.preservesCorner_of_adjoint_fixed_projection (A := A) hTP
       (P := orbitSumProjection (D := D) (m := m) T Q) hRproj (hFix := hRfix)
   · have hRQ : (orbitSumProjection (D := D) (m := m) T Q) * Q = Q := by
       simp only [orbitSumProjection, Finset.sum_mul]

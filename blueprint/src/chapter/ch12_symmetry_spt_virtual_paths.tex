@@ -10,11 +10,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_unitary_rephasing}
     \lean{ProjectiveRepresentation.rephase,
         TNLean.Algebra.circleScalar_mem_unitaryGroup,
-        ProjectiveRepresentation.rephase_mem_unitaryGroup,
-        ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
+        TNLean.Algebra.rephase_mem_unitaryGroup,
+        TNLean.Algebra.exists_unitary_rephase_of_cohomologous,
         ProjectiveRepresentation.norm_factorSystem,
         ProjectiveRepresentation.circlePhaseInclusion_eq,
-        ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
+        TNLean.MPS.Symmetry.exists_unitary_rephase_with_factorSystem}
     \leanok
     \uses{def:projective_rep,def:cohomologous_to}
     Multiplying each matrix $V_g$ of a projective representation with factor system
@@ -407,7 +407,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_unitary_factor_alignment}
     \lean{ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
         ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
-        ProjectiveRepresentation.exists_unitary_rephase_of_unitary_cohomologous}
+        TNLean.MPS.Symmetry.exists_unitary_rephase_of_unitary_cohomologous}
     \leanok
     A unitary projective representation on a nonzero finite-dimensional
     space has a unit-modulus factor system. Two such representations with
@@ -1049,9 +1049,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Contraction of finite-ring trace data]
     \label{thm:spt_trace_quotient_contraction}
-    \lean{Matrix.traceQuotientSection_pair,
+    \lean{TNLean.MPS.CanonicalForm.traceQuotientSection_pair,
         Matrix.traceQuotientSection_triple,
-        Matrix.traceQuotientProductColumns_triple,
+        TNLean.MPS.CanonicalForm.traceQuotientProductColumns_triple,
         Matrix.continuous_traceQuotientTripleColumns}
     \leanok
     \uses{def:spt_trace_quotient_triple_columns}
@@ -1077,10 +1077,10 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Recovery of the minimal matrix algebra]
     \label{thm:spt_trace_quotient_matrix_algebra_recovery}
-    \lean{Matrix.traceQuotientProductCoordinates_recover,
-        Matrix.exists_linearEquiv_traceQuotientSection,
-        Matrix.traceQuotientProductCoordinates_algebraRecovery,
-        Matrix.traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq}
+    \lean{TNLean.MPS.CanonicalForm.traceQuotientProductCoordinates_recover,
+        TNLean.MPS.CanonicalForm.exists_linearEquiv_traceQuotientSection,
+        TNLean.MPS.CanonicalForm.traceQuotientProductCoordinates_algebraRecovery,
+        TNLean.MPS.CanonicalForm.traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq}
     \leanok
     \uses{def:spt_trace_quotient_product_coordinates,thm:spt_trace_quotient_contraction}
     Suppose $r=D^2$, $GF$ is injective, and the preceding trace
@@ -1112,7 +1112,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Local continuous algebra from an ambient tensor family]
     \label{thm:spt_trace_quotient_continuous_algebra}
-    \lean{Matrix.exists_local_continuous_traceQuotientAlgebra}
+    \lean{TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientAlgebra}
     \leanok
     \uses{thm:spt_trace_quotient_continuous_product,thm:spt_trace_quotient_matrix_algebra_recovery}
     Let $B(t)$ be continuous in a fixed ambient bond dimension.
@@ -1145,7 +1145,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[A continuous unit for the local trace quotient]
     \label{thm:spt_trace_quotient_continuous_unit}
-    \lean{Matrix.exists_local_continuous_traceQuotientUnit}
+    \lean{TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientUnit}
     \leanok
     \uses{thm:spt_trace_quotient_continuous_algebra}
     Under the hypotheses of the preceding theorem, the section and
@@ -1892,7 +1892,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Continuous primitive left ideals of a trace quotient]
     \label{thm:spt_continuous_trace_quotient_primitive}
-    \lean{Matrix.exists_local_continuous_traceQuotientPrimitive}
+    \lean{TNLean.MPS.CanonicalForm.exists_local_continuous_traceQuotientPrimitive}
     \leanok
     Suppose a continuous ambient tensor family has two-site and three-site
     traces proportional, with nonzero factors, to those of pointwise
@@ -1958,9 +1958,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Recovery of the letters]
     \label{thm:spt_trace_quotient_letter_recovery}
-    \lean{Matrix.traceQuotientLetterCoordinates_recover,
+    \lean{TNLean.MPS.CanonicalForm.traceQuotientLetterCoordinates_recover,
         MPSTensor.gaugeEquiv_traceQuotientLetters,
-        Matrix.traceQuotientLetters_of_normalized_linearEquiv}
+        TNLean.MPS.CanonicalForm.traceQuotientLetters_of_normalized_linearEquiv}
     \leanok
     \uses{def:spt_trace_quotient_letter_coordinates}
     If $G_{ji}=\alpha_2\tr(A^iA^j)$ and the normalized

@@ -6,11 +6,39 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.GappedPath.PolarDeformation
 import Mathlib.Analysis.Normed.Ring.Units
 import QICLean.Analysis.Isometry.SupportedIsometricCompression
-import TNLean.MPS.Symmetry.ContinuousFamily.LocalSpectralSupport
-import TNLean.MPS.Symmetry.ContinuousFamily.UniformProjectiveRigidity
+import QICLean.Analysis.Projection.PosSemidefSupport
+import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
+import Mathlib.Topology.Instances.Matrix
+import Mathlib.Topology.LocallyConstant.Basic
+import QICLean.Analysis.FunctionalCalculus.ContinuousProjectionFrames
+import QICLean.Entropy.StrongSubadditivity.TripartiteDecorrelation
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Analysis.FunctionalCalculus.MatrixPolar
+import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
+import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
+import Mathlib.Analysis.Convex.Topology
+import Mathlib.Analysis.Normed.Operator.LinearIsometry
+import Mathlib.Analysis.Normed.Module.Convex
+import Mathlib.Analysis.Normed.Module.RCLike.Real
+import Mathlib.Tactic.Linarith
+import QICLean.Algebra.Matrix.MatrixAux
+import TNLean.MPS.Symmetry.OnSite.CompactSupportVirtualTransport
+import TNLean.MPS.Symmetry.ContinuousFamily.NearbyInjectiveAdjointActions
+import TNLean.MPS.Symmetry.Projective.ProjectiveRephasing
+import Mathlib.LinearAlgebra.Matrix.Kronecker
+import QICLean.Analysis.Cohomology.ProjectiveUnitary
+import Mathlib.Algebra.Star.Module
+import Mathlib.LinearAlgebra.Matrix.Vec
+import QICLean.Analysis.Cohomology.ProjectiveRigidity
 import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 import TNLean.MPS.Symmetry.ContinuousFamily.GlobalVirtualGauge
-import TNLean.MPS.Symmetry.ContinuousFamily.VaryingSupportPhaseInvariance
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
+import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
 # Local constancy under invariant bond compression
@@ -76,32 +104,6 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix
 
 open scoped ScalarCohomology
-
-namespace Matrix
-
-/-- Conjugation descends through an invariant isometric corner without
-requiring the tensor letters themselves to preserve that corner.
-Source context: arXiv:1010.3732, Appendix C, lines 2712–2717. -/
-theorem isometry_compression_conj_of_commute {D r : ℕ}
-    (J : Matrix (Fin D) (Fin r) ℂ) (hJ : J.IsIsometry)
-    (X M : Matrix (Fin D) (Fin D) ℂ) (hX : Commute X (J * Jᴴ)) :
-    Jᴴ * (X * M * Xᴴ) * J =
-      (Jᴴ * X * J) * (Jᴴ * M * J) * (Jᴴ * X * J)ᴴ := by
-  have hleft := congrArg (fun Y => Jᴴ * Y) hX.eq
-  have hL : Jᴴ * X = (Jᴴ * X * J) * Jᴴ := by
-    simpa only [← Matrix.mul_assoc, show Jᴴ * J = 1 from hJ, Matrix.one_mul]
-      using hleft.symm
-  have hR : Xᴴ * J = J * (Jᴴ * X * J)ᴴ := by
-    simpa only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-      using congrArg Matrix.conjTranspose hL
-  calc
-    Jᴴ * (X * M * Xᴴ) * J = (Jᴴ * X) * M * (Xᴴ * J) := by
-      simp only [Matrix.mul_assoc]
-    _ = (Jᴴ * X * J) * (Jᴴ * M * J) * (Jᴴ * X * J)ᴴ := by
-      rw [hL, hR]
-      simp only [Matrix.mul_assoc, show Jᴴ * J = 1 from hJ, Matrix.mul_one]
-
-end Matrix
 
 namespace MPSTensor
 
@@ -209,26 +211,6 @@ theorem eventually_isInjective_of_continuousAt
     Matrix.nonsing_inv_mul ((M t)ᴴ * M t) ((Matrix.isUnit_iff_isUnit_det _).mp ht)
 
 end MPSTensor
-
-namespace Set.Icc
-
-/-- A property holding near a point of the unit interval holds along every
-sufficiently short affine subinterval issuing from that point. -/
-theorem eventually_forall_convexComb {p : unitInterval → Prop}
-    (t₀ : unitInterval) (hp : ∀ᶠ t in 𝓝 t₀, p t) :
-    ∀ᶠ t in 𝓝 t₀, ∀ s : unitInterval, p (Set.Icc.convexComb t₀ t s) := by
-  obtain ⟨ε, hε, hpε⟩ := Metric.eventually_nhds_iff.mp hp
-  filter_upwards [Metric.ball_mem_nhds t₀ hε] with t ht
-  intro s
-  apply hpε
-  have hdist : dist (Set.Icc.convexComb t₀ t s) t₀ ≤ dist t t₀ := by
-    change |(1 - (s : ℝ)) * (t₀ : ℝ) + s * t - t₀| ≤ |(t : ℝ) - t₀|
-    rw [show (1 - (s : ℝ)) * (t₀ : ℝ) + s * t - t₀ =
-      (s : ℝ) * (t - t₀) by ring, abs_mul, abs_of_nonneg s.2.1]
-    exact mul_le_of_le_one_left (abs_nonneg _) s.2.2
-  exact hdist.trans_lt ht
-
-end Set.Icc
 
 namespace MPSTensor
 

@@ -236,11 +236,15 @@ private theorem sameMPV₂Pos_of_exists_equiv_forall_nonempty_linearEquiv {ι κ
   refine sameMPV₂Pos_iff_forall_trace_evalWord_eq.2 fun w hw => ?_
   rw [← traceWord_wordModule, ← traceWord_wordModule]
   have hz : ∑ j : {j // ¬ p j}, traceWord (N j.1) w = 0 :=
-    Finset.sum_eq_zero fun j _ => traceWord_eq_zero_of_forall_smul_eq_zero
-      (fun i x => by_contra fun hx => j.2 ⟨i, x, hx⟩) hw
+    Finset.sum_eq_zero fun j _ => traceWord_eq_zero_of_forall_ofWord_smul_eq_zero (n := 1)
+      (fun w hw x => by
+        obtain ⟨i, rfl⟩ := List.length_eq_one_iff.mp hw
+        exact by_contra fun hx => j.2 ⟨i, x, hx⟩) hw
   have hz' : ∑ k : {k // ¬ p' k}, traceWord (N' k.1) w = 0 :=
-    Finset.sum_eq_zero fun k _ => traceWord_eq_zero_of_forall_smul_eq_zero
-      (fun i x => by_contra fun hx => k.2 ⟨i, x, hx⟩) hw
+    Finset.sum_eq_zero fun k _ => traceWord_eq_zero_of_forall_ofWord_smul_eq_zero (n := 1)
+      (fun w hw x => by
+        obtain ⟨i, rfl⟩ := List.length_eq_one_iff.mp hw
+        exact by_contra fun hx => k.2 ⟨i, x, hx⟩) hw
   rw [traceWord_eq_sum_of_iSupIndep N hN hNtop hNsimple w,
     traceWord_eq_sum_of_iSupIndep N' hN' hN'top hN'simple w,
     ← Fintype.sum_subtype_add_sum_subtype p, ← Fintype.sum_subtype_add_sum_subtype p', hz, hz',

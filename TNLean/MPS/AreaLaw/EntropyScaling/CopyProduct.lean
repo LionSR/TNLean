@@ -24,6 +24,8 @@ It also contains the following results.
   a block product.
 -/
 
+open ManyBody (interval mem_interval)
+
 section CopyProduct
 
 noncomputable section
@@ -57,9 +59,9 @@ theorem norm_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) :
     (fun σ ↦ ‖EuclideanSpace.piTensor η σ‖ ^ 2)
 
 /-- A site lies before a copy boundary exactly when its block does. -/
-private theorem copySite_mem_leftBlock_iff (i : Fin K) (j : Fin L) (t : ℕ) :
-    finProdFinEquiv (i, j) ∈ leftBlock (K * L) (t * L) ↔ i.val < t := by
-  rw [mem_leftBlock]
+private theorem copySite_mem_interval_iff (i : Fin K) (j : Fin L) (t : ℕ) :
+    finProdFinEquiv (i, j) ∈ interval (K * L) 0 (t * L) ↔ i.val < t := by
+  simp only [mem_interval, Nat.zero_le, true_and]
   change j.val + L * i.val < t * L ↔ i.val < t
   constructor
   · intro h
@@ -75,26 +77,26 @@ Source: arXiv:0705.0292v2, lines 421–470. -/
 theorem copyProduct_factors_at_boundary
     (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) (t : ℕ) :
     ∃ (a : EuclideanSpace ℂ
-        (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (K * L) (t * L))))
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval (K * L) 0 (t * L))))
       (b : EuclideanSpace ℂ
-        ((i : {i : Fin (K * L) // i ∉ leftBlock (K * L) (t * L)}) → Fin q)),
-      ManyBody.cutVector (leftBlock (K * L) (t * L)) (copyProduct η) =
+        ((i : {i : Fin (K * L) // i ∉ interval (K * L) 0 (t * L)}) → Fin q)),
+      ManyBody.cutVector (interval (K * L) 0 (t * L)) (copyProduct η) =
         Matrix.euclideanTensorVector a b := by
   classical
   let a : EuclideanSpace ℂ
-      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (K * L) (t * L))) :=
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval (K * L) 0 (t * L))) :=
     WithLp.toLp 2 fun σ ↦ ∏ i : Fin K, if h : i.val < t then
-      η i (fun j ↦ σ ⟨finProdFinEquiv (i, j), (copySite_mem_leftBlock_iff i j t).mpr h⟩)
+      η i (fun j ↦ σ ⟨finProdFinEquiv (i, j), (copySite_mem_interval_iff i j t).mpr h⟩)
     else 1
   let b : EuclideanSpace ℂ
-      ((i : {i : Fin (K * L) // i ∉ leftBlock (K * L) (t * L)}) → Fin q) :=
+      ((i : {i : Fin (K * L) // i ∉ interval (K * L) 0 (t * L)}) → Fin q) :=
     WithLp.toLp 2 fun σ ↦ ∏ i : Fin K, if h : i.val < t then 1 else
       η i (fun j ↦ σ ⟨finProdFinEquiv (i, j),
-        fun hm ↦ h ((copySite_mem_leftBlock_iff i j t).mp hm)⟩)
+        fun hm ↦ h ((copySite_mem_interval_iff i j t).mp hm)⟩)
   refine ⟨a, b, ?_⟩
   ext xy
   change (∏ i : Fin K, η i (fun j ↦
-    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock (K * L) (t * L))).symm xy
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval (K * L) 0 (t * L))).symm xy
       (finProdFinEquiv (i, j)))) = _
   change _ = a xy.1 * b xy.2
   dsimp only [a, b]
@@ -106,12 +108,12 @@ theorem copyProduct_factors_at_boundary
     apply congrArg (η i)
     funext j
     exact ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) xy.1 xy.2
-      ((copySite_mem_leftBlock_iff i j t).mpr h)
+      ((copySite_mem_interval_iff i j t).mpr h)
   · simp only [dite_eq_right h, one_mul]
     apply congrArg (η i)
     funext j
     exact ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) xy.1 xy.2
-      (fun hm ↦ h ((copySite_mem_leftBlock_iff i j t).mp hm))
+      (fun hm ↦ h ((copySite_mem_interval_iff i j t).mp hm))
 
 /-- Inner products of literal block products factor over the blocks. -/
 theorem inner_copyProduct (η θ : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) :
@@ -131,13 +133,13 @@ theorem IsOpenMPS.exists_rank_one_at_copy_boundaries {D : ℕ}
     ∃ χ : EuclideanSpace ℂ (Fin (K * L) → Fin q),
       IsOpenMPS (K * L) q D (fun x ↦ χ x) ∧ ‖χ‖ = 1 ∧
       ‖inner ℂ (copyProduct η) ψ‖ ≤ ‖inner ℂ (copyProduct η) χ‖ ∧
-      (∀ j, (cutMatrix (leftBlock (K * L) j) χ).rank ≤
-        (cutMatrix (leftBlock (K * L) j) ψ).rank) ∧
-      ∀ t ≤ K, (cutMatrix (leftBlock (K * L) (t * L)) χ).rank ≤ 1 := by
+      (∀ j, (cutMatrix (interval (K * L) 0 j) χ).rank ≤
+        (cutMatrix (interval (K * L) 0 j) ψ).rank) ∧
+      ∀ t ≤ K, (cutMatrix (interval (K * L) 0 (t * L)) χ).rank ≤ 1 := by
   classical
   let S := (Finset.range (K + 1)).image (fun t ↦ t * L)
   have hf : ∀ k ∈ S,
-      ∃ a b, ManyBody.cutVector (leftBlock (K * L) k) (copyProduct η) =
+      ∃ a b, ManyBody.cutVector (interval (K * L) 0 k) (copyProduct η) =
         Matrix.euclideanTensorVector a b := by
     intro k hk
     obtain ⟨t, _, rfl⟩ := Finset.mem_image.mp hk
@@ -261,22 +263,22 @@ private def spliceSites {T q : ℕ} (k : ℕ) (σ τ : Fin T → Fin q) : Fin T 
 /-- A cut matrix entry is the coefficient of the corresponding joined configuration. -/
 private theorem cutMatrix_restrictions {T q : ℕ} (ψ : EuclideanSpace ℂ (Fin T → Fin q))
     (k : ℕ) (σ τ : Fin T → Fin q) :
-    cutMatrix (leftBlock T k) ψ (fun i ↦ σ i.1) (fun i ↦ τ i.1) =
+    cutMatrix (interval T 0 k) ψ (fun i ↦ σ i.1) (fun i ↦ τ i.1) =
       ψ (spliceSites k σ τ) := by
   rw [ManyBody.cutMatrix_apply]
   apply congrArg ψ
   funext i
   by_cases hi : i.val < k
-  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, hi⟩)]
     simp [spliceSites, hi]
-  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (fun h ↦ hi (mem_interval.mp h).2)]
     simp [spliceSites, hi]
 
 /-- A rank-one physical cut gives the cross-multiplication identity for joined words. -/
 private theorem cross_mul_eq_of_cut_rank_le_one {T q : ℕ} (ψ : EuclideanSpace ℂ (Fin T → Fin q))
-    (k : ℕ) (hk : (cutMatrix (leftBlock T k) ψ).rank ≤ 1) (σ τ : Fin T → Fin q) :
+    (k : ℕ) (hk : (cutMatrix (interval T 0 k) ψ).rank ≤ 1) (σ τ : Fin T → Fin q) :
     ψ σ * ψ τ = ψ (spliceSites k σ τ) * ψ (spliceSites k τ σ) := by
-  have hc := cross_mul_eq_of_rank_le_one (cutMatrix (leftBlock T k) ψ) hk
+  have hc := cross_mul_eq_of_rank_le_one (cutMatrix (interval T 0 k) ψ) hk
     (fun i ↦ σ i.1) (fun i ↦ τ i.1) (fun i ↦ σ i.1) (fun i ↦ τ i.1)
   have hself : ∀ x : Fin T → Fin q, spliceSites k x x = x := by
     intro x
@@ -292,8 +294,8 @@ private theorem spliceSites_blockConfig {K L q : ℕ} (n : ℕ)
       (copyConfigurationEquiv K L q).symm (spliceBlocks n x y) := by
   funext s
   obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective s
-  have hboundary := copySite_mem_leftBlock_iff i j n
-  simp only [mem_leftBlock] at hboundary
+  have hboundary := copySite_mem_interval_iff i j n
+  simp only [mem_interval, Nat.zero_le, true_and] at hboundary
   simp only [spliceSites, copyConfigurationEquiv, Equiv.coe_fn_symm_mk,
     Equiv.symm_apply_apply, spliceBlocks, hboundary]
   split <;> rfl
@@ -303,7 +305,7 @@ product of normalized block vectors. The block length may be zero.
 Source: arXiv:0705.0292v2, lines 421–470. -/
 theorem exists_unit_block_factors {K L q : ℕ} (hK : 0 < K)
     (ψ : EuclideanSpace ℂ (Fin (K * L) → Fin q)) (hψ : ‖ψ‖ = 1)
-    (hcuts : ∀ n, 0 < n → n < K → (cutMatrix (leftBlock (K * L) (n * L)) ψ).rank ≤ 1) :
+    (hcuts : ∀ n, 0 < n → n < K → (cutMatrix (interval (K * L) 0 (n * L)) ψ).rank ≤ 1) :
     ∃ u : Fin K → EuclideanSpace ℂ (Fin L → Fin q),
       (∀ i, ‖u i‖ = 1) ∧ ψ = copyProduct u := by
   let Ψ : EuclideanSpace ℂ (Fin K → Fin L → Fin q) :=
@@ -315,7 +317,7 @@ theorem exists_unit_block_factors {K L q : ℕ} (hK : 0 < K)
         congr 1
         exact Equiv.sum_comp (copyConfigurationEquiv K L q).symm (fun σ ↦ ‖ψ σ‖ ^ 2)
       _ = 1 := hψ
-  have hr : ∀ n, (cutMatrix (leftBlock (K * L) (n * L)) ψ).rank ≤ 1 := by
+  have hr : ∀ n, (cutMatrix (interval (K * L) 0 (n * L)) ψ).rank ≤ 1 := by
     intro n
     by_cases hn0 : n = 0
     · subst n

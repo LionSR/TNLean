@@ -53,7 +53,7 @@ theorem sum_chargePathWeight_bad_completed_planeDomainGraph_le
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (offsets : Fin S.K → Fin S.m) (hn : 0 < S.n) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :
     (∑ c : Fin k → ChargeChoices S.K S.M,
@@ -115,7 +115,7 @@ theorem sum_historyWeight_bad_completed_planeDomainGraph_le
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :
     (∑ h : History S.K S.m S.M k, if ¬ S.IsGoodCompletedHistory h then historyWeight h else 0) ≤
@@ -147,7 +147,7 @@ theorem sum_historyWeight_bad_old_planeDomainGraph_le
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :
     (∑ h : History S.K S.m S.M k, if ¬ S.IsGoodOldHistory h then historyWeight h else 0) ≤

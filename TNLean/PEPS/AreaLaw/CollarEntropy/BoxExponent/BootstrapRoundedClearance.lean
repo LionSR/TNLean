@@ -9,7 +9,8 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Collar.Scales.RoundedScalePower
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import Mathlib.Data.Nat.Log
 
 /-!
@@ -76,6 +77,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 shell estimate in the proof of `prop:small-box`, lines 705–729, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (regionEntropy_nonneg)
 
 open ManyBody (IntRect IsSafe rectRegion)
 
@@ -280,7 +283,7 @@ theorem exists_regionEntropy_rounded_shell_le_uniform_rpow
     exact_mod_cast (show 0 < Q.size by omega)
   have hC : 0 ≤ C :=
     (mul_nonneg_iff_of_pos_right (Real.rpow_pos_of_pos hspos (1 + e))).mp
-      ((regionEntropy_nonneg Λ q Ω hΩ (rectRegion A Q)).trans (hbox Q hsafe))
+      ((regionEntropy_nonneg hΩ (rectRegion A Q)).trans (hbox Q hsafe))
   obtain ⟨hLpos, htwo, hclearance⟩ := hN Q.size hs
   have hL : L ≤ Q.size := (Nat.le_mul_of_pos_left L zero_lt_two).trans htwo
   have hbudget : D₀ * L + L ≤ D₀ * Q.size := hclearance D₀ hD₀
