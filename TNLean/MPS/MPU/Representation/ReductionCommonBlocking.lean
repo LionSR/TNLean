@@ -163,7 +163,7 @@ pair `(g, h)`.
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/
 noncomputable def nilpotencyLength (R : F.ReductionFamily) (g h : G) : ℕ :=
-  MPSTensor.reductionResidualNilpotencyLength (F.productTensor g h)
+  MPTensor.reductionResidualNilpotencyLength (F.productTensor g h)
     (F.targetTensor g h) (R.V g h) (R.W g h)
 
 /-- Every selected reduction satisfies the exterior identity with exterior

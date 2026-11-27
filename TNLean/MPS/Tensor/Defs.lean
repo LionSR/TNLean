@@ -44,11 +44,11 @@ physical alphabet. Source: DCCSP17, arXiv:1708.00029, Section 2.1,
 left-canonical normalization.
 -/
 
+universe u u' v v₁ v₂ v₃
+
 section
 
 open scoped Matrix
-
-universe u u' v v₁ v₂ v₃
 
 namespace MPTensor
 

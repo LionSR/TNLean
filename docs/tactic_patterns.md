@@ -2905,7 +2905,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   ```
 - **Seen:** three declarations across three files (2026-09-04):
   `MPTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Tensor/Reduction/Reduction.lean`
-  (two goals), `MPSTensor.reductionResidual_reciprocal_smul` in
+  (two goals), `MPTensor.reductionResidual_reciprocal_smul` in
   `TNLean/MPS/Tensor/Reduction/ReductionResidual.lean`, and
   `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
   `TNLean/MPS/Tensor/Reduction/ReductionBlocking.lean`.

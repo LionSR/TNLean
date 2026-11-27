@@ -440,10 +440,10 @@ theorem daggerZeta_defzeta (g h : G) :
     hleft.eq_of_forall_exists_ne_zero hζ
       (hD.exists_mul_evalWord_ne_zero (hN.isNormal _) (F.bondDim_pos _))
   refine ⟨hζ, 2 * max
-    (MPSTensor.reductionResidualNilpotencyLength
+    (MPTensor.reductionResidualNilpotencyLength
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
       (fd.daggerFusionV hF hc g h) (fd.daggerFusionW hF hc g h))
-    (MPSTensor.reductionResidualNilpotencyLength
+    (MPTensor.reductionResidualNilpotencyLength
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
       (fd.V g h) (fd.W g h)) + 1, fun w hlen ↦ ?_⟩
   rw [← hzζ]

@@ -21,22 +21,24 @@ use a pure residual term and a nonempty central window, as documented in
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor
+namespace MPTensor
 
-variable {d D_A D_B : ℕ}
+open MPSTensor
+
+variable {α : Type*} {D_A D_B : ℕ}
 
 /-- The reduction-specific residual letter $N^i=B^i-WA^iV$.
 
 Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 21,
 `cornerproblem.tex` lines 3142--3144. -/
-noncomputable def reductionResidual (B : MPSTensor d D_B) (A : MPSTensor d D_A)
+noncomputable def reductionResidual (B : MPTensor α (Fin D_B)) (A : MPTensor α (Fin D_A))
     (V : Matrix (Fin D_A) (Fin D_B) ℂ) (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
-    MPSTensor d D_B :=
+    MPTensor α (Fin D_B) :=
   fun i ↦ B i - W * A i * V
 
 /-- The set of residual letters belonging to one selected reduction. -/
-noncomputable def reductionResidualGeneratorSet (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionResidualGeneratorSet (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) : Set (Matrix (Fin D_B) (Fin D_B) ℂ) :=
   Set.range (reductionResidual B A V W)
 
@@ -44,8 +46,8 @@ noncomputable def reductionResidualGeneratorSet (B : MPSTensor d D_B)
 
 Source: arXiv:1706.07329v2, Proposition 21 and its proof,
 `cornerproblem.tex` lines 3972--3986. -/
-noncomputable def reductionResidualAlgebra (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionResidualAlgebra (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
     NonUnitalSubalgebra ℂ (Matrix (Fin D_B) (Fin D_B) ℂ) :=
   NonUnitalAlgebra.adjoin ℂ (reductionResidualGeneratorSet B A V W)
@@ -57,10 +59,10 @@ by splitting a longer word after the bounded prefix.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/
-def IsReductionResidualNilpotencyBound (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+def IsReductionResidualNilpotencyBound (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) : Prop :=
-  ∀ w : List (Fin d), w.length = N →
+  ∀ w : List α, w.length = N →
     Kraus.evalWord (reductionResidual B A V W) w = 0
 
 /-- The least exact-length residual-word bound.  Prefix factorization identifies
@@ -68,8 +70,8 @@ it with the nilpotency length of the selected reduction in MGSC18.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/
-noncomputable def reductionResidualNilpotencyLength (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionResidualNilpotencyLength (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) : ℕ :=
   sInf {N | IsReductionResidualNilpotencyBound B A V W N}
 
@@ -80,10 +82,10 @@ central word exactly once.
 Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
 `cornerproblem.tex` lines 3993--4005.  The correction is documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
-noncomputable def reductionInitialWindowSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionInitialWindowSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
-    List (Fin d) → Matrix (Fin D_B) (Fin D_B) ℂ
+    List α → Matrix (Fin D_B) (Fin D_B) ℂ
   | [] => 0
   | i :: w => W * A i * V *
       (Kraus.evalWord (reductionResidual B A V W) w +
@@ -98,10 +100,10 @@ therefore collects `0 < r < s`.
 Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
 `cornerproblem.tex` lines 3993--4005.  The correction is documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
-noncomputable def reductionStrictWindowSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionStrictWindowSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
-    List (Fin d) → Matrix (Fin D_B) (Fin D_B) ℂ
+    List α → Matrix (Fin D_B) (Fin D_B) ℂ
   | [] => 0
   | i :: w => reductionInitialWindowSum B A V W (i :: w) +
       reductionResidual B A V W i * reductionStrictWindowSum B A V W w
@@ -112,9 +114,9 @@ The index `k : Fin w.length` gives the nonempty central length `k + 1`.
 Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
 `cornerproblem.tex` lines 3993--4005.  The correction is documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
-noncomputable def reductionInitialWindowRangeSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
-    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+noncomputable def reductionInitialWindowRangeSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List α) :
     Matrix (Fin D_B) (Fin D_B) ℂ :=
   ∑ k : Fin w.length,
     W * Kraus.evalWord A (w.take (k.1 + 1)) * V *
@@ -129,9 +131,9 @@ $N^{w_{<r}} W A^{w_{[r,s)}} V N^{w_{\geq s}}$.
 Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
 `cornerproblem.tex` lines 3993--4005.  The correction is documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
-noncomputable def reductionStrictWindowRangeSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
-    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+noncomputable def reductionStrictWindowRangeSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List α) :
     Matrix (Fin D_B) (Fin D_B) ℂ :=
   ∑ r : Fin w.length, ∑ k : Fin (w.drop r.1).length,
     Kraus.evalWord (reductionResidual B A V W) (w.take r.1) * W *
@@ -147,10 +149,10 @@ Lemma `B_expand`.
 
 Source: derived all-cut precursor to the first contracted formula in
 arXiv:1706.07329v2, `cornerproblem.tex` line 3997. -/
-noncomputable def reductionLeftContractedSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionLeftContractedSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
-    List (Fin d) → Matrix (Fin D_A) (Fin D_B) ℂ
+    List α → Matrix (Fin D_A) (Fin D_B) ℂ
   | [] => V
   | i :: w => V * reductionResidual B A V W i *
       Kraus.evalWord (reductionResidual B A V W) w +
@@ -164,10 +166,10 @@ Lemma `B_expand`.
 
 Source: derived all-cut precursor to the second contracted formula in
 arXiv:1706.07329v2, `cornerproblem.tex` line 3998. -/
-noncomputable def reductionRightContractedSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+noncomputable def reductionRightContractedSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
-    List (Fin d) → Matrix (Fin D_B) (Fin D_A) ℂ
+    List α → Matrix (Fin D_B) (Fin D_A) ℂ
   | [] => W
   | i :: w => W * A i * Kraus.evalWord A w +
       reductionResidual B A V W i * reductionRightContractedSum B A V W w
@@ -178,9 +180,9 @@ $|w|-N\leq s\leq |w|$.  The endpoint with residual suffix of length exactly
 
 Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, the first contracted formula
 in `cornerproblem.tex` line 3997. -/
-noncomputable def reductionLeftContractedRangeSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
-    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List (Fin d)) :
+noncomputable def reductionLeftContractedRangeSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List α) :
     Matrix (Fin D_A) (Fin D_B) ℂ :=
   ∑ s ∈ Finset.Icc (w.length - N) w.length,
     Kraus.evalWord A (w.take s) * V *
@@ -192,9 +194,9 @@ exactly `N` is retained; it vanishes when `N` is a residual nilpotency bound.
 
 Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, the second contracted formula
 in `cornerproblem.tex` line 3998. -/
-noncomputable def reductionRightContractedRangeSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
-    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List (Fin d)) :
+noncomputable def reductionRightContractedRangeSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) (w : List α) :
     Matrix (Fin D_B) (Fin D_A) ℂ :=
   ∑ r ∈ Finset.Icc 0 (min N w.length),
     Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
@@ -202,9 +204,9 @@ noncomputable def reductionRightContractedRangeSum (B : MPSTensor d D_B)
 
 /-- Every selected-reduction residual letter belongs to its generated algebra. -/
 theorem reductionResidual_mem_reductionResidualAlgebra
-    (B : MPSTensor d D_B) (A : MPSTensor d D_A)
+    (B : MPTensor α (Fin D_B)) (A : MPTensor α (Fin D_A))
     (V : Matrix (Fin D_A) (Fin D_B) ℂ) (W : Matrix (Fin D_B) (Fin D_A) ℂ)
-    (i : Fin d) :
+    (i : α) :
     reductionResidual B A V W i ∈ reductionResidualAlgebra B A V W := by
   apply NonUnitalAlgebra.subset_adjoin ℂ
   exact ⟨i, rfl⟩
@@ -215,8 +217,8 @@ the product $WA^iV$ and cancel.
 
 Under the identification $F^<=V$, $F^>=W$ this is the scalar gauge freedom of
 arXiv:2502.20257, `eq:scalar_fus_ten`, `main.tex` lines 1500--1504. -/
-theorem reductionResidual_reciprocal_smul (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+theorem reductionResidual_reciprocal_smul (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) :
     reductionResidual B A (β⁻¹ • V) (β • W) = reductionResidual B A V W := by
   funext i
@@ -224,8 +226,8 @@ theorem reductionResidual_reciprocal_smul (B : MPSTensor d D_B)
 
 /-- The reciprocal scalar rescaling preserves every exact-length residual-word
 nilpotency bound, in both directions. -/
-theorem isReductionResidualNilpotencyBound_reciprocal_smul (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+theorem isReductionResidualNilpotencyBound_reciprocal_smul (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) (N : ℕ) :
     IsReductionResidualNilpotencyBound B A (β⁻¹ • V) (β • W) N ↔
       IsReductionResidualNilpotencyBound B A V W N := by
@@ -234,8 +236,8 @@ theorem isReductionResidualNilpotencyBound_reciprocal_smul (B : MPSTensor d D_B)
 
 /-- The MGSC18 nilpotency length of a reduction is unchanged by the reciprocal
 scalar rescaling. -/
-theorem reductionResidualNilpotencyLength_reciprocal_smul (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+theorem reductionResidualNilpotencyLength_reciprocal_smul (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
     (W : Matrix (Fin D_B) (Fin D_A) ℂ) {β : ℂ} (hβ : β ≠ 0) :
     reductionResidualNilpotencyLength B A (β⁻¹ • V) (β • W) =
       reductionResidualNilpotencyLength B A V W := by
@@ -246,4 +248,4 @@ theorem reductionResidualNilpotencyLength_reciprocal_smul (B : MPSTensor d D_B)
   unfold reductionResidualNilpotencyLength
   rw [hset]
 
-end MPSTensor
+end MPTensor

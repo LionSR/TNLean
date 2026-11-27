@@ -52,6 +52,8 @@ the full CPSV16 BNT multiplicity data with repeated copies inside one sector.
 matrix product states, canonical form, normality, blocking
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
@@ -402,7 +404,7 @@ theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
   refine ⟨LA * LB, Nat.mul_pos hLA_pos hLB_pos, ?_, ?_⟩
   · intro j
     have hmulN : Kraus.IsNBlkInjective (blocksA j) (LB * LA) :=
-      MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
+      MPTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
         ((Kraus.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
           (hLA j))
     have hmulN' : Kraus.IsNBlkInjective (blocksA j) (LA * LB) := by

@@ -79,7 +79,7 @@ namespace BlockActionData
 /-- The MGSC18 residual nilpotency length of the selected action reduction.
 Source: arXiv:1706.07329v2, Definition 8; arXiv:2502.20257, line 1870. -/
 noncomputable def nilpotencyLength (ad : BlockActionData F A) (g : G) (x : X) : ℕ :=
-  MPSTensor.reductionResidualNilpotencyLength (actTensor (F.tensor g) (A x))
+  MPTensor.reductionResidualNilpotencyLength (actTensor (F.tensor g) (A x))
     (A (g • x)) (ad.V g x) (ad.W g x)
 
 /-- Exterior action identity with buffers of at least `m` sites and a nonempty
@@ -249,7 +249,7 @@ theorem exists_block_blockActionData_one_of_isPretransitive [Finite G]
   refine ⟨L, hL, hF.block F L hL, ?_, fun g x ↦ (hperm g x).blockTensor hL, ad, had⟩
   intro x
   apply (Kraus.isNBlkInjective_iff_blockTensor_isInjective (A x) L).1
-  simpa using MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (A x) hL
+  simpa using MPTensor.isNBlkInjective_mul_of_isNBlkInjective (A x) hL
     (Kraus.isNBlkInjective_one_of_isInjective (hA x))
 
 end GroupFamily

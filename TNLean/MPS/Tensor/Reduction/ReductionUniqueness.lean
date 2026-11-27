@@ -22,9 +22,11 @@ open MPTensor
 
 open scoped Matrix
 
-namespace MPSTensor
+namespace MPTensor
 
-variable {d D_A D_B : ℕ}
+open MPSTensor
+
+variable {α : Type*} {D_A D_B : ℕ}
 
 private theorem mul_single_mul_apply {D : ℕ}
     (P Q : Matrix (Fin D) (Fin D) ℂ) (i j a b : Fin D) :
@@ -42,9 +44,9 @@ private theorem mul_single_mul_apply {D : ℕ}
 of the injectivity length, since otherwise the words of that length would span
 zero rather than the full matrix algebra. -/
 theorem exists_evalWord_ne_zero_of_isNBlkInjective
-    {A : MPSTensor d D_A} {L : ℕ} (hD : D_A ≠ 0)
+    {A : MPTensor α (Fin D_A)} {L : ℕ} (hD : D_A ≠ 0)
     (hA : Kraus.IsNBlkInjective A L) :
-    ∃ σ : Fin L → Fin d, Kraus.evalWord A (List.ofFn σ) ≠ 0 := by
+    ∃ σ : Fin L → α, Kraus.evalWord A (List.ofFn σ) ≠ 0 := by
   classical
   by_contra h
   push Not at h
@@ -68,13 +70,13 @@ theorem exists_evalWord_ne_zero_of_isNBlkInjective
   simp at this
 
 private theorem cross_mul_evalWord_mul_cross
-    {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+    {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
     {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
     {V' : Matrix (Fin D_A) (Fin D_B) ℂ} {W' : Matrix (Fin D_B) (Fin D_A) ℂ}
     (h : IsReduction B A V W) (h' : IsReduction B A V' W') {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
     (hBound' : IsReductionResidualNilpotencyBound B A V' W' N)
-    (p c q : List (Fin d)) (hc : c ≠ [])
+    (p c q : List α) (hc : c ≠ [])
     (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1) :
     (V * Kraus.evalWord B p * W') * Kraus.evalWord A c * Kraus.evalWord A q =
       Kraus.evalWord A p * Kraus.evalWord A c *
@@ -104,14 +106,14 @@ private theorem cross_mul_evalWord_mul_cross
   exact hleft.trans hright.symm
 
 private theorem cross_mul_matrix_mul_cross
-    {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+    {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
     {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
     {V' : Matrix (Fin D_A) (Fin D_B) ℂ} {W' : Matrix (Fin D_B) (Fin D_A) ℂ}
     (h : IsReduction B A V W) (h' : IsReduction B A V' W') {N L : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
     (hBound' : IsReductionResidualNilpotencyBound B A V' W' N)
     (hLpos : 0 < L) (hA : Kraus.IsNBlkInjective A L)
-    (p q : List (Fin d)) (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1)
+    (p q : List α) (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1)
     (M : Matrix (Fin D_A) (Fin D_A) ℂ) :
     (V * Kraus.evalWord B p * W') * M * Kraus.evalWord A q =
       Kraus.evalWord A p * M * (V * Kraus.evalWord B q * W') := by
@@ -128,14 +130,14 @@ private theorem cross_mul_matrix_mul_cross
       simp only [Matrix.mul_smul, Matrix.smul_mul, hX]
 
 private theorem exists_cross_scalar
-    {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+    {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
     {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
     {V' : Matrix (Fin D_A) (Fin D_B) ℂ} {W' : Matrix (Fin D_B) (Fin D_A) ℂ}
     (hD : D_A ≠ 0) (hNormal : Kraus.IsNormal A)
     (h : IsReduction B A V W) (h' : IsReduction B A V' W') {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
     (hBound' : IsReductionResidualNilpotencyBound B A V' W' N) :
-    ∃ z : ℂ, ∀ u : List (Fin d), N ≤ u.length + 1 →
+    ∃ z : ℂ, ∀ u : List α, N ≤ u.length + 1 →
       V * Kraus.evalWord B u * W' = z • Kraus.evalWord A u := by
   classical
   obtain ⟨L, hLpos, hL⟩ := hNormal
@@ -174,11 +176,9 @@ private theorem exists_cross_scalar
   apply (eq_div_iff hden).2
   simpa only [mul_comm] using hsingle
 
-section IsReduction
+namespace IsReduction
 
-open MPTensor.IsReduction
-
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
   {V' : Matrix (Fin D_A) (Fin D_B) ℂ} {W' : Matrix (Fin D_B) (Fin D_A) ℂ}
 
@@ -189,12 +189,12 @@ Theorem 22; no bare equality between boundary matrices is asserted.
 
 Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22,
 `cornerproblem.tex` lines 3156--3162 and 4007--4035. -/
-theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional
+theorem exists_boundary_dressed_proportional
     (h : IsReduction B A V W) (h' : IsReduction B A V' W')
     (hNormal : Kraus.IsNormal A) {N₀ : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N₀)
     (hBound' : IsReductionResidualNilpotencyBound B A V' W' N₀) :
-    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List (Fin d), 2 * N₀ < w.length →
+    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List α, 2 * N₀ < w.length →
       V * Kraus.evalWord B w = z • (V' * Kraus.evalWord B w) ∧
         Kraus.evalWord B w * W = z⁻¹ • (Kraus.evalWord B w * W') := by
   classical
@@ -341,12 +341,12 @@ inequalities then promote those bounds to the common threshold `N₀`.
 
 Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22,
 `cornerproblem.tex` lines 3156--3162 and 4007--4035. -/
-theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le
+theorem exists_boundary_dressed_proportional_of_nilpotencyLength_le
     (h : IsReduction B A V W) (h' : IsReduction B A V' W')
     (hNormal : Kraus.IsNormal A) (hSame : SameMPV₂Pos B A) {N₀ : ℕ}
     (hLength : reductionResidualNilpotencyLength B A V W ≤ N₀)
     (hLength' : reductionResidualNilpotencyLength B A V' W' ≤ N₀) :
-    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List (Fin d), 2 * N₀ < w.length →
+    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List α, 2 * N₀ < w.length →
       V * Kraus.evalWord B w = z • (V' * Kraus.evalWord B w) ∧
         Kraus.evalWord B w * W = z⁻¹ • (Kraus.evalWord B w * W') := by
   have hBound : IsReductionResidualNilpotencyBound B A V W N₀ := by
@@ -361,4 +361,4 @@ theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional_of_nilp
 
 end IsReduction
 
-end MPSTensor
+end MPTensor

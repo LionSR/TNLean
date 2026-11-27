@@ -263,8 +263,8 @@ theorem exists_evalWord_mul_mul_evalWord_ne_zero (hA : Kraus.IsNormal A)
       Kraus.evalWord A (List.ofFn σ) * e i * Kraus.evalWord B (List.ofFn σ') ≠ 0 := by
   obtain ⟨L, hL, hinj⟩ := hA
   obtain ⟨L', hL', hinj'⟩ := hB
-  have hk := MPSTensor.isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj
-  have hl := MPSTensor.isNBlkInjective_mul_of_isNBlkInjective B (Nat.succ_pos N) hinj'
+  have hk := MPTensor.isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj
+  have hl := MPTensor.isNBlkInjective_mul_of_isNBlkInjective B (Nat.succ_pos N) hinj'
   obtain ⟨i, hi⟩ := Function.ne_iff.mp he
   by_contra hcon
   push Not at hcon

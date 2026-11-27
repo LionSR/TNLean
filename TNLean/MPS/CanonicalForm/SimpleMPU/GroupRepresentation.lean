@@ -216,7 +216,7 @@ private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
   have hOne : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor 1 :=
     Kraus.isNBlkInjective_one_of_isInjective h
   have hMul : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor (L * 1) :=
-    MPSTensor.isNBlkInjective_mul_of_isNBlkInjective
+    MPTensor.isNBlkInjective_mul_of_isNBlkInjective
       (F.tensor g).toMPSTensor hL hOne
   exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective
     (F.tensor g).toMPSTensor L).1 (by simpa using hMul)

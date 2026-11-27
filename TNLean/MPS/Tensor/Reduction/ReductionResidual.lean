@@ -34,17 +34,19 @@ open MPTensor
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor
+namespace MPTensor
 
-variable {d D_A D_B : ℕ}
+open MPSTensor
+
+variable {α : Type*} {D_A D_B : ℕ}
 
 /-- The explicit all-cut left-contracted sum from which the first range in
 MGSC18 Lemma `lem:B_expand` is obtained by deleting nilpotent suffixes.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` line 3997. -/
-noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
-    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+noncomputable def reductionLeftContractedAllCutSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List α) :
     Matrix (Fin D_A) (Fin D_B) ℂ :=
   ∑ s : Fin (w.length + 1),
     Kraus.evalWord A (w.take s) * V *
@@ -54,30 +56,24 @@ noncomputable def reductionLeftContractedAllCutSum (B : MPSTensor d D_B)
 MGSC18 Lemma `lem:B_expand` is obtained by deleting nilpotent prefixes.
 
 Source: arXiv:1706.07329v2, `cornerproblem.tex` line 3998. -/
-noncomputable def reductionRightContractedAllCutSum (B : MPSTensor d D_B)
-    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
-    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List (Fin d)) :
+noncomputable def reductionRightContractedAllCutSum (B : MPTensor α (Fin D_B))
+    (A : MPTensor α (Fin D_A)) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (w : List α) :
     Matrix (Fin D_B) (Fin D_A) ℂ :=
   ∑ r : Fin (w.length + 1),
     Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
       Kraus.evalWord A (w.drop r)
 
-end MPSTensor
+namespace IsReduction
 
-namespace MPTensor.IsReduction
-
-open MPSTensor
-
-variable {d D_A D_B : ℕ}
-
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
-private theorem eq_reductionResidual_add (i : Fin d) :
+private theorem eq_reductionResidual_add (i : α) :
     B i = reductionResidual B A V W i + W * A i * V := by
   simp [reductionResidual]
 
-private lemma evalWord_eq_prod_map (K : MPSTensor d D_B) (w : List (Fin d)) :
+private lemma evalWord_eq_prod_map (K : MPTensor α (Fin D_B)) (w : List α) :
     Kraus.evalWord K w = (w.map K).prod := by
   induction w with
   | nil => simp
@@ -90,7 +86,7 @@ private lemma evalWord_eq_prod_map (K : MPSTensor d D_B) (w : List (Fin d)) :
 words.  The exterior words in this statement are a TNLean consequence of the
 same reduction identities and are not part of the cited lemma. -/
 theorem evalWord_mul_reductionResidual_mul_evalWord_eq_zero
-    (h : IsReduction B A V W) (p u q : List (Fin d)) (hu : u ≠ []) :
+    (h : IsReduction B A V W) (p u q : List α) (hu : u ≠ []) :
     V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
         Kraus.evalWord B q * W = 0 := by
   induction u generalizing p with
@@ -145,12 +141,12 @@ by the reduction matrices: $V N^{i_1}\cdots N^{i_m}W=0$.
 Source: arXiv:1706.07329v2, Lemma `lem:VNW=0`,
 `cornerproblem.tex` lines 3946--3970. -/
 theorem evalWord_reductionResidual_sandwich_eq_zero
-    (h : IsReduction B A V W) (u : List (Fin d)) (hu : u ≠ []) :
+    (h : IsReduction B A V W) (u : List α) (hu : u ≠ []) :
     V * Kraus.evalWord (reductionResidual B A V W) u * W = 0 := by
   simpa using h.evalWord_mul_reductionResidual_mul_evalWord_eq_zero [] u [] hu
 
 private theorem evalWord_reductionResidual_mul_strictWindowSum_eq_zero
-    (h : IsReduction B A V W) (u w : List (Fin d)) (hu : u ≠ []) :
+    (h : IsReduction B A V W) (u w : List α) (hu : u ≠ []) :
     V * Kraus.evalWord (reductionResidual B A V W) u *
       reductionStrictWindowSum B A V W w = 0 := by
   induction w generalizing u with
@@ -178,7 +174,7 @@ private theorem evalWord_reductionResidual_mul_strictWindowSum_eq_zero
       simp
 
 private theorem mul_strictWindowSum_eq_mul_initialWindowSum
-    (h : IsReduction B A V W) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (w : List α) :
     V * reductionStrictWindowSum B A V W w =
       V * reductionInitialWindowSum B A V W w := by
   cases w with
@@ -189,7 +185,7 @@ private theorem mul_strictWindowSum_eq_mul_initialWindowSum
       simpa [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_assoc] using hzero
 
 private theorem letter_mul_strictWindowSum_eq_letter_mul_initialWindowSum
-    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (i : α) (w : List α) :
     W * A i * V * reductionStrictWindowSum B A V W w =
       W * A i * V * reductionInitialWindowSum B A V W w := by
   simpa only [Matrix.mul_assoc] using
@@ -204,7 +200,7 @@ of arXiv:1706.07329v2, Lemma `lem:B_expand`, `cornerproblem.tex` lines
 3993--4005; it is not itself a formula printed in the source.  See
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 theorem evalWord_eq_reductionResidual_add_strictWindowSum
-    (h : IsReduction B A V W) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (w : List α) :
     Kraus.evalWord B w = Kraus.evalWord (reductionResidual B A V W) w +
       reductionStrictWindowSum B A V W w := by
   induction w with
@@ -217,7 +213,7 @@ theorem evalWord_eq_reductionResidual_add_strictWindowSum
       noncomm_ring [hmerge']
 
 private theorem reductionInitialWindowSum_cons
-    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (i : α) (w : List α) :
     reductionInitialWindowSum B A V W (i :: w) =
       W * A i * V * Kraus.evalWord B w := by
   rw [reductionInitialWindowSum, h.evalWord_eq_reductionResidual_add_strictWindowSum w]
@@ -228,7 +224,7 @@ private theorem reductionInitialWindowSum_cons
 /-- Derived all-cut left-contracted expansion.  This is the untruncated
 precursor of the formula printed in MGSC18 Lemma `lem:B_expand`. -/
 theorem mul_evalWord_eq_reductionLeftContractedSum
-    (h : IsReduction B A V W) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (w : List α) :
     V * Kraus.evalWord B w = reductionLeftContractedSum B A V W w := by
   induction w with
   | nil => simp [reductionLeftContractedSum]
@@ -274,7 +270,7 @@ theorem mul_evalWord_eq_reductionLeftContractedSum
 /-- Derived all-cut right-contracted expansion.  This is the untruncated
 precursor of the formula printed in MGSC18 Lemma `lem:B_expand`. -/
 theorem evalWord_mul_eq_reductionRightContractedSum
-    (h : IsReduction B A V W) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (w : List α) :
     Kraus.evalWord B w * W = reductionRightContractedSum B A V W w := by
   induction w with
   | nil => simp [reductionRightContractedSum]
@@ -293,13 +289,9 @@ theorem evalWord_mul_eq_reductionRightContractedSum
       simp only [Matrix.mul_assoc]
       ac_rfl
 
-end MPTensor.IsReduction
+end IsReduction
 
-namespace MPSTensor
-
-variable {d D_A D_B : ℕ}
-
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
 /-- The recursive left-contracted sum agrees with the explicit sum over all
@@ -310,7 +302,7 @@ formula of arXiv:1706.07329v2, Lemma `lem:B_expand`, at `cornerproblem.tex`
 line 3997.  Its equality with the recursive definition is not stated in the
 source. -/
 theorem reductionLeftContractedSum_eq_allCutSum
-    (w : List (Fin d)) :
+    (w : List α) :
     reductionLeftContractedSum B A V W w =
       reductionLeftContractedAllCutSum B A V W w := by
   induction w with
@@ -345,7 +337,7 @@ formula of arXiv:1706.07329v2, Lemma `lem:B_expand`, at `cornerproblem.tex`
 line 3998.  Its equality with the recursive definition is not stated in the
 source. -/
 theorem reductionRightContractedSum_eq_allCutSum
-    (w : List (Fin d)) :
+    (w : List α) :
     reductionRightContractedSum B A V W w =
       reductionRightContractedAllCutSum B A V W w := by
   induction w with
@@ -373,15 +365,9 @@ theorem reductionRightContractedSum_eq_allCutSum
         simpa only [Matrix.mul_assoc] using hsum
       rw [hsum']
 
-end MPSTensor
+namespace IsReduction
 
-namespace MPTensor.IsReduction
-
-open MPSTensor
-
-variable {d D_A D_B : ℕ}
-
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
 /-- The explicit sum of terms beginning with the first letter agrees with its
@@ -391,7 +377,7 @@ Source: the corrected expansion of arXiv:1706.07329v2, Lemma
 `lem:B_expand`, `cornerproblem.tex` lines 3993--4005; see
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 private theorem reductionInitialWindowRangeSum_eq_reductionInitialWindowSum
-    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (i : α) (w : List α) :
     reductionInitialWindowRangeSum B A V W (i :: w) =
       reductionInitialWindowSum B A V W (i :: w) := by
   rw [reductionInitialWindowRangeSum]
@@ -402,7 +388,7 @@ private theorem reductionInitialWindowRangeSum_eq_reductionInitialWindowSum
       rw [reductionLeftContractedAllCutSum, Matrix.mul_sum]
       simp only [Matrix.mul_assoc]
     _ = W * A i * reductionLeftContractedSum B A V W w := by
-      rw [MPSTensor.reductionLeftContractedSum_eq_allCutSum]
+      rw [MPTensor.reductionLeftContractedSum_eq_allCutSum]
     _ = W * A i * (V * Kraus.evalWord B w) := by
       rw [← h.mul_evalWord_eq_reductionLeftContractedSum]
     _ = reductionInitialWindowSum B A V W (i :: w) := by
@@ -416,7 +402,7 @@ Source: the corrected expansion of arXiv:1706.07329v2, Lemma
 `lem:B_expand`, `cornerproblem.tex` lines 3993--4005; see
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 private theorem reductionStrictWindowRangeSum_cons
-    (i : Fin d) (w : List (Fin d)) :
+    (i : α) (w : List α) :
     reductionStrictWindowRangeSum B A V W (i :: w) =
       reductionInitialWindowRangeSum B A V W (i :: w) +
         reductionResidual B A V W i * reductionStrictWindowRangeSum B A V W w := by
@@ -443,7 +429,7 @@ Source: arXiv:1706.07329v2, corrected form of Lemma `lem:B_expand`,
 `cornerproblem.tex` lines 3993--4005.  The correction is documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 theorem reductionStrictWindowSum_eq_reductionStrictWindowRangeSum
-    (h : IsReduction B A V W) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (w : List α) :
     reductionStrictWindowSum B A V W w =
       reductionStrictWindowRangeSum B A V W w := by
   induction w with
@@ -461,14 +447,14 @@ Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3993--4005.
 The corrected range is documented in
 `docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex`. -/
 theorem evalWord_eq_reductionResidual_add_strictWindowRangeSum
-    (h : IsReduction B A V W) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (w : List α) :
     Kraus.evalWord B w = Kraus.evalWord (reductionResidual B A V W) w +
       reductionStrictWindowRangeSum B A V W w := by
   rw [← h.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum]
   exact h.evalWord_eq_reductionResidual_add_strictWindowSum w
 
 private theorem trace_evalWord_reductionResidual_mul_strictWindowSum_eq_zero
-    (h : IsReduction B A V W) (u w : List (Fin d)) (hu : u ≠ []) :
+    (h : IsReduction B A V W) (u w : List α) (hu : u ≠ []) :
     Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u *
       reductionStrictWindowSum B A V W w) = 0 := by
   induction w generalizing u with
@@ -504,7 +490,7 @@ private theorem trace_evalWord_reductionResidual_mul_strictWindowSum_eq_zero
       rw [hinitial, hshift', add_zero]
 
 private theorem trace_reductionInitialWindowSum_cons_eq_trace_evalWord
-    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    (h : IsReduction B A V W) (i : α) (w : List α) :
     Matrix.trace (reductionInitialWindowSum B A V W (i :: w)) =
       Matrix.trace (Kraus.evalWord A (i :: w)) := by
   rw [h.reductionInitialWindowSum_cons]
@@ -518,7 +504,7 @@ private theorem trace_reductionInitialWindowSum_cons_eq_trace_evalWord
     _ = _ := by rw [Kraus.evalWord_cons]
 
 private theorem trace_reductionStrictWindowSum_eq_trace_evalWord
-    (h : IsReduction B A V W) (w : List (Fin d)) (hw : w ≠ []) :
+    (h : IsReduction B A V W) (w : List α) (hw : w ≠ []) :
     Matrix.trace (reductionStrictWindowSum B A V W w) =
       Matrix.trace (Kraus.evalWord A w) := by
   obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
@@ -535,7 +521,7 @@ the pure $A$-word and pure residual word remain.
 Source: arXiv:1706.07329v2, Proposition 21 proof,
 `cornerproblem.tex` lines 3973--3979. -/
 theorem trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual
-    (h : IsReduction B A V W) (w : List (Fin d)) (hw : w ≠ []) :
+    (h : IsReduction B A V W) (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) =
       Matrix.trace (Kraus.evalWord A w) +
         Matrix.trace (Kraus.evalWord (reductionResidual B A V W) w) := by
@@ -552,31 +538,24 @@ Source: arXiv:1706.07329v2, Proposition 21 proof,
 `cornerproblem.tex` lines 3973--3981. -/
 theorem trace_evalWord_reductionResidual_eq_zero
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
-    (u : List (Fin d)) (hu : u ≠ []) :
+    (u : List α) (hu : u ≠ []) :
     Matrix.trace (Kraus.evalWord (reductionResidual B A V W) u) = 0 := by
   have hdecomp := h.trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual u hu
   rw [hSame.trace_evalWord u hu] at hdecomp
   exact add_left_cancel (by simpa only [add_zero] using hdecomp.symm)
 
-end MPTensor.IsReduction
-
-namespace MPSTensor
-
-variable {d D_A D_B : ℕ}
-
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
-  {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
+end IsReduction
 
 private theorem exists_reductionResiduals_eq_list_of_mem_generatorSet
-    (B : MPSTensor d D_B) (A : MPSTensor d D_A)
+    (B : MPTensor α (Fin D_B)) (A : MPTensor α (Fin D_A))
     (V : Matrix (Fin D_A) (Fin D_B) ℂ) (W : Matrix (Fin D_B) (Fin D_A) ℂ)
     (l : List (Matrix (Fin D_B) (Fin D_B) ℂ))
     (hl : ∀ X ∈ l, X ∈ reductionResidualGeneratorSet B A V W) :
-    ∃ letters : Fin l.length → Fin d,
+    ∃ letters : Fin l.length → α,
       l = List.ofFn (fun k ↦ reductionResidual B A V W (letters k)) := by
   classical
   have hletter : ∀ k : Fin l.length,
-      ∃ i : Fin d, l[k] = reductionResidual B A V W i := by
+      ∃ i : α, l[k] = reductionResidual B A V W i := by
     intro k
     obtain ⟨i, hi⟩ := hl l[k] (List.get_mem l k)
     exact ⟨i, hi.symm⟩
@@ -602,15 +581,9 @@ private theorem pow_mem_nonUnitalSubalgebra_of_pos_reductionResidual
       | zero => simpa using hx
       | succ N ih => simpa [pow_succ] using S.mul_mem ih hx
 
-end MPSTensor
+namespace IsReduction
 
-namespace MPTensor.IsReduction
-
-open MPSTensor
-
-variable {d D_A D_B : ℕ}
-
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
 /-- Every element of the selected-reduction residual algebra has zero trace.
@@ -715,7 +688,7 @@ Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/
 theorem evalWord_reductionResidual_eq_zero_of_bound_le_length
     {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (w : List (Fin d)) (hlen : N ≤ w.length) :
+    (w : List α) (hlen : N ≤ w.length) :
     Kraus.evalWord (reductionResidual B A V W) w = 0 := by
   rw [← w.take_append_drop N, Kraus.evalWord_append]
   have htake := hBound (w.take N)
@@ -734,10 +707,10 @@ Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, displayed formula at
 theorem mul_evalWord_eq_reductionLeftContractedRangeSum
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (w : List (Fin d)) :
+    (w : List α) :
     V * Kraus.evalWord B w = reductionLeftContractedRangeSum B A V W N w := by
   rw [h.mul_evalWord_eq_reductionLeftContractedSum,
-    MPSTensor.reductionLeftContractedSum_eq_allCutSum,
+    MPTensor.reductionLeftContractedSum_eq_allCutSum,
     reductionLeftContractedAllCutSum, reductionLeftContractedRangeSum]
   let term : ℕ → Matrix (Fin D_A) (Fin D_B) ℂ := fun s ↦
     Kraus.evalWord A (w.take s) * V *
@@ -778,10 +751,10 @@ Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, displayed formula at
 theorem evalWord_mul_eq_reductionRightContractedRangeSum
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (w : List (Fin d)) :
+    (w : List α) :
     Kraus.evalWord B w * W = reductionRightContractedRangeSum B A V W N w := by
   rw [h.evalWord_mul_eq_reductionRightContractedSum,
-    MPSTensor.reductionRightContractedSum_eq_allCutSum,
+    MPTensor.reductionRightContractedSum_eq_allCutSum,
     reductionRightContractedAllCutSum, reductionRightContractedRangeSum]
   let term : ℕ → Matrix (Fin D_B) (Fin D_A) ℂ := fun r ↦
     Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
@@ -813,7 +786,7 @@ theorem evalWord_mul_eq_reductionRightContractedRangeSum
 private theorem mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (p u q : List (Fin d)) (hu : u ≠ [])
+    (p u q : List α) (hu : u ≠ [])
     (hlen : N ≤ u.length + q.length) :
     V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
       Kraus.evalWord B q = 0 := by
@@ -849,7 +822,7 @@ private theorem mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
 private theorem strictWindowSum_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (p u q : List (Fin d)) (hu : u ≠ [])
+    (p u q : List α) (hu : u ≠ [])
     (hlen : N ≤ u.length + q.length) :
     reductionStrictWindowSum B A V W p *
       Kraus.evalWord (reductionResidual B A V W) u * Kraus.evalWord B q = 0 := by
@@ -873,7 +846,7 @@ private theorem strictWindowSum_mul_reductionResidual_mul_evalWord_eq_zero_of_bo
 private theorem evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_buffers
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (p q : List (Fin d)) (i : Fin d)
+    (p q : List α) (i : α)
     (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1) :
     Kraus.evalWord B p * reductionResidual B A V W i * Kraus.evalWord B q = 0 := by
   rw [h.evalWord_eq_reductionResidual_add_strictWindowSum p, Matrix.add_mul]
@@ -906,7 +879,7 @@ private theorem evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_buffers
 private theorem mul_evalWord_append_eq_mul_evalWord_of_right_buffer
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (c q : List (Fin d)) (hq : N ≤ q.length + 1) :
+    (c q : List α) (hq : N ≤ q.length + 1) :
     V * Kraus.evalWord B (c ++ q) =
       Kraus.evalWord A c * V * Kraus.evalWord B q := by
   induction c with
@@ -946,7 +919,7 @@ bound. -/
 theorem evalWord_mul_reduced_exterior_eq_evalWord_append
     (h : IsReduction B A V W) {N : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N)
-    (p c q : List (Fin d)) (hc : c ≠ [])
+    (p c q : List α) (hc : c ≠ [])
     (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1) :
     Kraus.evalWord B p * W * Kraus.evalWord A c * V * Kraus.evalWord B q =
       Kraus.evalWord B (p ++ c ++ q) := by
@@ -978,9 +951,11 @@ the bond dimension, not its square.  This is the derived numerical consequence
 of the finite-dimensional nil-matrix theorem. -/
 theorem evalWord_reductionResidual_eq_zero_of_bondDim_le_length
     (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
-    (w : List (Fin d)) (hlen : D_B ≤ w.length) :
+    (w : List α) (hlen : D_B ≤ w.length) :
     Kraus.evalWord (reductionResidual B A V W) w = 0 := by
   exact evalWord_reductionResidual_eq_zero_of_bound_le_length
     (h.bondDim_isReductionResidualNilpotencyBound hSame) w hlen
 
-end MPTensor.IsReduction
+end IsReduction
+
+end MPTensor

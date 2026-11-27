@@ -442,9 +442,9 @@ nilpotency length of the resulting residual algebra.
 
 \begin{definition}[Residual algebra of a selected reduction]
     \label{def:mps_reduction_residual_algebra}
-    \lean{MPSTensor.reductionResidual,
-        MPSTensor.reductionResidualGeneratorSet,
-        MPSTensor.reductionResidualAlgebra}
+    \lean{MPTensor.reductionResidual,
+        MPTensor.reductionResidualGeneratorSet,
+        MPTensor.reductionResidualAlgebra}
     \leanok
     \uses{def:mps_rectangular_reduction}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For each physical letter
@@ -488,7 +488,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Residual letters belong to the residual algebra]
     \label{thm:mps_reduction_residual_mem_algebra}
-    \lean{MPSTensor.reductionResidual_mem_reductionResidualAlgebra}
+    \lean{MPTensor.reductionResidual_mem_reductionResidualAlgebra}
     \leanok
     \uses{def:mps_reduction_residual_algebra}
     For every physical letter $i$, one has
@@ -502,8 +502,8 @@ nilpotency length of the resulting residual algebra.
 
 \begin{definition}[Residual nilpotency length]
     \label{def:mps_reduction_residual_nilpotency_length}
-    \lean{MPSTensor.IsReductionResidualNilpotencyBound,
-        MPSTensor.reductionResidualNilpotencyLength}
+    \lean{MPTensor.IsReductionResidualNilpotencyBound,
+        MPTensor.reductionResidualNilpotencyLength}
     \leanok
     \uses{def:mps_reduction_residual_algebra}
     A natural number $L$ is a \emph{residual-word nilpotency bound} if
@@ -570,10 +570,10 @@ nilpotency length of the resulting residual algebra.
 
 \begin{definition}[Strict residual-window sums]
     \label{def:mps_reduction_strict_window_sums}
-    \lean{MPSTensor.reductionInitialWindowSum,
-        MPSTensor.reductionStrictWindowSum,
-        MPSTensor.reductionInitialWindowRangeSum,
-        MPSTensor.reductionStrictWindowRangeSum}
+    \lean{MPTensor.reductionInitialWindowSum,
+        MPTensor.reductionStrictWindowSum,
+        MPTensor.reductionInitialWindowRangeSum,
+        MPTensor.reductionStrictWindowRangeSum}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra,def:eval_word}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For a word $\mathbf w$, set
@@ -632,12 +632,12 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[All-cut contracted residual identities]
     \label{thm:mps_reduction_all_cut_contracted}
-    \lean{MPSTensor.reductionLeftContractedAllCutSum,
-        MPSTensor.reductionRightContractedAllCutSum,
-        MPSTensor.reductionLeftContractedSum,
-        MPSTensor.reductionRightContractedSum,
-        MPSTensor.reductionLeftContractedSum_eq_allCutSum,
-        MPSTensor.reductionRightContractedSum_eq_allCutSum,
+    \lean{MPTensor.reductionLeftContractedAllCutSum,
+        MPTensor.reductionRightContractedAllCutSum,
+        MPTensor.reductionLeftContractedSum,
+        MPTensor.reductionRightContractedSum,
+        MPTensor.reductionLeftContractedSum_eq_allCutSum,
+        MPTensor.reductionRightContractedSum_eq_allCutSum,
         MPTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
         MPTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
     \leanok
@@ -838,8 +838,8 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Bound-truncated contracted residual expansions]
     \label{thm:mps_reduction_contracted_expansions}
-    \lean{MPSTensor.reductionLeftContractedRangeSum,
-        MPSTensor.reductionRightContractedRangeSum,
+    \lean{MPTensor.reductionLeftContractedRangeSum,
+        MPTensor.reductionRightContractedRangeSum,
         MPTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedRangeSum,
         MPTensor.IsReduction.evalWord_mul_eq_reductionRightContractedRangeSum}
     \leanok

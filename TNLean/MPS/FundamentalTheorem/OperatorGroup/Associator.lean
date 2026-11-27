@@ -101,8 +101,8 @@ nilpotency bound (arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 31
 theorem isReductionResidualNilpotencyBound_castIndex {ι : Type*} {f : ι → ℕ} {d' n : ℕ}
     {A : (i : ι) → MPSTensor d' (f i)} {B : MPSTensor d' n} {a b : ι}
     {V : Matrix (Fin (f a)) (Fin n) ℂ} {W : Matrix (Fin n) (Fin (f a)) ℂ} {K : ℕ}
-    (hK : MPSTensor.IsReductionResidualNilpotencyBound B (A a) V W K) (e : a = b) :
-    MPSTensor.IsReductionResidualNilpotencyBound B (A b) (castIndex f e * V)
+    (hK : MPTensor.IsReductionResidualNilpotencyBound B (A a) V W K) (e : a = b) :
+    MPTensor.IsReductionResidualNilpotencyBound B (A b) (castIndex f e * V)
       (W * castIndex f e.symm) K := by
   subst e
   simpa using hK
@@ -231,10 +231,10 @@ Source: arXiv:2203.12563, lines 1026--1060 (nilpotent off-diagonal tails of the 
 product and the associator on long words); the fusion trees are those of arXiv:2502.20257,
 display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
 theorem isReductionResidualNilpotencyBound_left {K : ℕ}
-    (hK : ∀ g h, MPSTensor.IsReductionResidualNilpotencyBound
+    (hK : ∀ g h, MPTensor.IsReductionResidualNilpotencyBound
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
       (fd.V g h) (fd.W g h) K) (g h k : G) :
-    MPSTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
+    MPTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor (fd.leftV g h k) (fd.leftW g h k) (3 * K) := by
   have hb := MPTensor.IsReduction.isReductionResidualNilpotencyBound_trans
     ((fd.isReduction g h).mulTensor_kronId (F.tensor k))
@@ -248,10 +248,10 @@ with `k` first, at length `3 K`.
 Source: arXiv:2203.12563, lines 1026--1060; the fusion trees are those of arXiv:2502.20257,
 display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
 theorem isReductionResidualNilpotencyBound_right {K : ℕ}
-    (hK : ∀ g h, MPSTensor.IsReductionResidualNilpotencyBound
+    (hK : ∀ g h, MPTensor.IsReductionResidualNilpotencyBound
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
       (fd.V g h) (fd.W g h) K) (g h k : G) :
-    MPSTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
+    MPTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor (fd.rightV g h k) (fd.rightW g h k) (3 * K) := by
   have hb := MPTensor.IsReduction.isReductionResidualNilpotencyBound_trans
     ((fd.isReduction h k).mulTensor_idKron (F.tensor g))

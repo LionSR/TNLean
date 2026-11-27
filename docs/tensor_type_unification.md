@@ -18,7 +18,9 @@ T.1c is done in part. The definitions of `MPS/Tensor/Defs` (`coeff`, `mpv`, `Gau
 `SameMPV`, `SameMPV₂`, `SameMPV₂Pos`, the two proportionality predicates, `GaugePhaseEquiv`,
 `UnitGaugePhaseEquiv`, `IsLeftCanonical`) and their lemmas are stated on `MPTensor α β` and live
 in the namespace `MPTensor`; so are `IsReduction` (on `MPTensor α β`), `IsDressedProportional`
-(on `MPTensor α β` with boundaries `Matrix μ β ℂ`) and `mpvOverlap` (on `MPTensor α (Fin D)`).
+(on `MPTensor α β` with boundaries `Matrix μ β ℂ`), `mpvOverlap` (on `MPTensor α (Fin D)`), and
+the residual of a reduction with its nilpotency bounds and window sums, with the lemmas of
+`MPS/Tensor/Reduction/ReductionResidual` and `ReductionUniqueness` (on `MPTensor α (Fin D)`).
 Their dot lemmas elsewhere moved with them, still at `Fin d`, `Fin D`; files that named them
 without a prefix open `MPTensor`. Two Kraus heads of the scan, `IsInjective` and `IsNormal`, and
 `evalWord`, `transferMap` were already general after T.1a. The bond of `mpvOverlap` stays `Fin D`:

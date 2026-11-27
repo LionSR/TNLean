@@ -115,17 +115,17 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
 
 /-- If `A` and `B` generate the same MPV family, then
 $\tr(A^w) = \tr(B^w)$ for every word~$w$. -/
-lemma _root_.MPTensor.SameMPV.trace_evalWord {A B : MPSTensor d D} (h : SameMPV A B)
-    (w : List (Fin d)) :
+lemma _root_.MPTensor.SameMPV.trace_evalWord {α : Type*} {A B : MPTensor α (Fin D)}
+    (h : SameMPV A B) (w : List α) :
     Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   -- Use the `SameMPV` equality on the configuration `σ := w.get`.
   simpa [mpv, coeff, List.ofFn_get] using h w.length w.get
 
 /-- Positive-length MPV equality transports the trace of every nonempty word,
 even when the two tensors have different bond dimensions. -/
-lemma _root_.MPTensor.SameMPV₂Pos.trace_evalWord {D₁ D₂ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : SameMPV₂Pos A B) (w : List (Fin d)) (hw : w ≠ []) :
+lemma _root_.MPTensor.SameMPV₂Pos.trace_evalWord {α : Type*} {D₁ D₂ : ℕ}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
+    (h : SameMPV₂Pos A B) (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   simpa [mpv, coeff, List.ofFn_get] using h w.length (List.length_pos_of_ne_nil hw) w.get
 

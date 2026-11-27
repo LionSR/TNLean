@@ -187,7 +187,7 @@ theorem uMPS_not_isInjective : ¬ Kraus.IsInjective uMPS := by
 private theorem repTensor_isNBlkInjective_two (a : Fin 3) :
     Kraus.IsNBlkInjective (repTensor a).toMPSTensor 2 := by
   fin_cases a
-  · exact MPSTensor.isNBlkInjective_mul_of_isNBlkInjective identityMPS (m := 2) two_pos
+  · exact MPTensor.isNBlkInjective_mul_of_isNBlkInjective identityMPS (m := 2) two_pos
       identityMPS_isNBlkInjective_one
   · exact uMPS_isNBlkInjective_two
   · exact uDagMPS_isNBlkInjective_two
