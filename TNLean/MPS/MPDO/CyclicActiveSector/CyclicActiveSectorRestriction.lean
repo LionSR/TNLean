@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSector.ActiveSectorTraceMatrixZCL
 import QICLean.Algebra.PerronFrobenius.Idempotent
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Cyclic-active physical sectors
@@ -249,7 +249,7 @@ theorem sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector
     F.sectorVirtualMatrix k x y = 0 := by
   by_contra hxy
   exact hk (F.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero
-    (F.sectorVirtualMatrixFamily_span_eq_top ((isInjective_toMPSTensor_iff _).2 hK)) hxy)
+    (F.sectorVirtualMatrixFamily_span_eq_top hK) hxy)
 
 /-- Replace the left tensor outside cyclic-active support by zero.
 
@@ -469,7 +469,7 @@ theorem cyclicActiveSectorOneSiteMatrixFamily_span_eq_top
     Submodule.span ℂ
       (Set.range (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight)) = ⊤ := by
   apply F.activeSectorOneSiteMatrixFamily_span_eq_top F.cyclicActiveWeight
-    (F.sectorVirtualMatrixFamily_span_eq_top ((isInjective_toMPSTensor_iff _).2 hK))
+    (F.sectorVirtualMatrixFamily_span_eq_top hK)
   intro k hk x y
   apply F.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector hK
   intro hactive
@@ -487,7 +487,7 @@ theorem nonempty_cyclicActiveSector
     (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K) :
     Nonempty F.CyclicActiveSector := by
   classical
-  have hspan := F.sectorVirtualMatrixFamily_span_eq_top ((isInjective_toMPSTensor_iff _).2 hK)
+  have hspan := F.sectorVirtualMatrixFamily_span_eq_top hK
   have hone_mem : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) := by
     rw [hspan]
@@ -536,7 +536,7 @@ theorem exists_cyclicActive_two_edge_return
       F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0 := by
   obtain ⟨j, hhj, hjk⟩ :=
     F.exists_two_edge_return_of_neighboringOperator_ne_zero_of_endpoints
-      (F.sectorVirtualMatrixFamily_span_eq_top ((isInjective_toMPSTensor_iff _).2 hK))
+      (F.sectorVirtualMatrixFamily_span_eq_top hK)
       (F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero k)
       (F.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero h) hkh
   have hjactive : F.IsCyclicActiveSector j :=

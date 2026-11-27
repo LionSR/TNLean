@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Simple.SectorFactorization
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Closed sector tensors and the physical-trace transfer
@@ -112,8 +112,8 @@ right sector tensor with the closed left sector tensor:
 
 Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1478--1481. -/
 noncomputable def closedSectorTraceMatrix : Matrix (Fin hη.m) (Fin hη.m) ℂ :=
-  fun k h ↦ closedSectorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃ k ⬝ᵥ
-    closedSectorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃ h
+  fun k h ↦ closedSectorR K hK hη β₃ k ⬝ᵥ
+    closedSectorL K hK hη R α₁ β₃ h
 
 /-- The entries of the concrete closed-sector trace matrix are the traces of
 the neighboring operators:
@@ -125,7 +125,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `etarl` and `Tkn`,
 lines 1446--1455 and 1478--1481. -/
 theorem closedSectorTraceMatrix_apply (k h : Fin hη.m) :
     closedSectorTraceMatrix K hK hη R α₁ β₃ k h =
-      (sectorEta K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃ k h).trace := by
+      (sectorEta K hK hη R α₁ β₃ k h).trace := by
   rw [closedSectorTraceMatrix, trace_sectorEta]
 
 include hρ hm
@@ -138,12 +138,12 @@ This supplies the concrete closed-tensor operator used immediately before
 Lemma C.5 in arXiv:1606.00608, Appendix C.2, lines 1473--1493. -/
 theorem concrete_physTraceTransfer_eq_sum_closedSector
     : physTraceTransfer K = closedSectorPairingOperator
-        (sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃)
-        (sectorTensorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃) := by
+        (sectorTensorL K hK hη R α₁ β₃)
+        (sectorTensorR K hK hη β₃) := by
   apply physTraceTransfer_eq_sum_closedSector K hη.decompB hη.U_B
-      (sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃)
-      (sectorTensorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃)
-  exact physicalSlice_sector_factorization K ((isInjective_toMPSTensor_iff K).2 hK) R ρ hρ hη hm
+      (sectorTensorL K hK hη R α₁ β₃)
+      (sectorTensorR K hK hη β₃)
+  exact physicalSlice_sector_factorization K hK R ρ hρ hη hm
 
 /-- The positive-real up-to-scalar physical-trace relation makes the concrete
 closed-sector pairing operator quasi-idempotent:
@@ -159,8 +159,8 @@ theorem closedSector_operator_quasi_idempotent
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
       let S := closedSectorPairingOperator
-        (sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃)
-        (sectorTensorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃)
+        (sectorTensorL K hK hη R α₁ β₃)
+        (sectorTensorR K hK hη β₃)
       S * S = (lam : ℂ) • S := by
   obtain ⟨_, lam, hlam, hmul⟩ := hZCL
   refine ⟨lam, hlam, ?_⟩
@@ -176,8 +176,8 @@ theorem closedSector_operator_normalized_idempotent
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
       let S := closedSectorPairingOperator
-        (sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃)
-        (sectorTensorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃)
+        (sectorTensorL K hK hη R α₁ β₃)
+        (sectorTensorR K hK hη β₃)
       IsIdempotentElem ((lam : ℂ)⁻¹ • S) := by
   obtain ⟨lam, hlam, hidem⟩ := hZCL.normalized_idempotent
   refine ⟨lam, hlam, ?_⟩
@@ -211,19 +211,19 @@ theorem closedSectorTraceMatrix_normalized_relations
   obtain ⟨lam, hlam, hidem⟩ :=
     closedSector_operator_normalized_idempotent K hK hη R hρ α₁ β₃ hm hZCL
   let L : Matrix (Fin D) (Fin hη.m) ℂ :=
-    fun β h ↦ closedSectorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃ h β
+    fun β h ↦ closedSectorL K hK hη R α₁ β₃ h β
   let Q : Matrix (Fin hη.m) (Fin D) ℂ :=
-    fun k α ↦ closedSectorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃ k α
+    fun k α ↦ closedSectorR K hK hη β₃ k α
   have hS : closedSectorPairingOperator
-      (sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃)
-      (sectorTensorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃) = L * Q := by
+      (sectorTensorL K hK hη R α₁ β₃)
+      (sectorTensorR K hK hη β₃) = L * Q := by
     ext β α
     simp only [closedSectorPairingOperator, Matrix.sum_apply, Matrix.vecMulVec_apply]
     exact (Matrix.mul_apply (M := L) (N := Q) (i := β) (k := α)).symm
   have hT : closedSectorTraceMatrix K hK hη R α₁ β₃ = Q * L := by
     ext k h
-    change (closedSectorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃ k ⬝ᵥ
-      closedSectorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃ h) = (Q * L) k h
+    change (closedSectorR K hK hη β₃ k ⬝ᵥ
+      closedSectorL K hK hη R α₁ β₃ h) = (Q * L) k h
     exact (Matrix.mul_apply (M := Q) (N := L) (i := k) (k := h)).symm
   refine ⟨lam, hlam, ?_⟩
   dsimp only
@@ -247,8 +247,8 @@ arXiv:1606.00608, Appendix C.2, lines 1489--1493. -/
 theorem closedSector_operator_idempotent_of_physTraceTransfer_sq
     (hT_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
     let S := closedSectorPairingOperator
-      (sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R α₁ β₃)
-      (sectorTensorR K ((isInjective_toMPSTensor_iff K).2 hK) hη β₃)
+      (sectorTensorL K hK hη R α₁ β₃)
+      (sectorTensorR K hK hη β₃)
     S * S = S := by
   dsimp only
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]

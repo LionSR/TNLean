@@ -255,7 +255,7 @@ theorem exists_blocked_completeZipperFusionFamily
     { bondDim := Fam.bondDim
       bondDim_pos := hBNT.blocks_dim_pos
       tensor := fun γ ↦ blockTensor (Fam.tensor γ) L
-      tensor_injective := fun γ ↦ (isInjective_toMPSTensor_iff _).2 (hInjective γ)
+      tensor_injective := fun γ ↦ (hInjective γ)
       fusionMultiplicity := Fam.chi.dim
       fusionSynthesis := Fam.blockedFusionSynthesis
       fusionAnalysis := Fam.blockedFusionAnalysis

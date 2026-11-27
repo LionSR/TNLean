@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.CommutingForm.FixedBondProductEtaTensor
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Visibility of selected fixed-product sectors
@@ -74,8 +74,8 @@ See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem changePhysicalBasis_physicalCoordinateMatrix_isInjective
     (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K) :
     Kraus.IsInjective (changePhysicalBasis F.physicalCoordinateMatrix K) := by
-  refine (isInjective_toMPSTensor_iff _).1 <| MPOTensor.isInjective_of_eq_changePhysicalBasis
-    F.physicalCoordinateMatrixᴴ _ K ?_ ((isInjective_toMPSTensor_iff K).2 hK)
+  refine MPOTensor.isInjective_of_eq_changePhysicalBasis
+    F.physicalCoordinateMatrixᴴ _ K ?_ hK
   rw [changePhysicalBasis_changePhysicalBasis,
     F.physicalCoordinateMatrix_isometry]
   ext ⟨i, j⟩ beta alpha
@@ -160,7 +160,7 @@ theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero ((isInjective_toMPSTensor_iff M).2 hM)
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -200,7 +200,7 @@ theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero ((isInjective_toMPSTensor_iff M).2 hM)
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -243,7 +243,7 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero ((isInjective_toMPSTensor_iff M).2 hM)
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat

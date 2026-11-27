@@ -548,16 +548,16 @@ structure OriginalCornerFamily
 
   Source: CPSV16, Appendix C.4, lines 2025--2029. -/
   intertwine : ∀ p k ab,
-    (mulTensor (verticalBNTMPO (B p.1.1))
-        (verticalBNTMPO (B p.2.1))).toMPSTensor ab * inclusion p k =
+    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
+        (verticalBNTMPO (B p.2.1)))) ab * inclusion p k =
       inclusion p k * (coefficient p k • B (label p k) ab)
   /-- The original-label corners reconstruct every letter of the raw product
   tensor.
 
   Source: CPSV16, Appendix C.4, lines 2025--2029. -/
   reconstruction : ∀ p ab,
-    (mulTensor (verticalBNTMPO (B p.1.1))
-        (verticalBNTMPO (B p.2.1))).toMPSTensor ab =
+    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
+        (verticalBNTMPO (B p.2.1)))) ab =
       ∑ k, inclusion p k * (coefficient p k • B (label p k) ab) *
         (inclusion p k)ᴴ
 

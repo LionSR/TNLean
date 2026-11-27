@@ -9,7 +9,7 @@ import TNLean.MPS.MPDO.Entropy.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.Entropy.SALTraceTransfer
 import TNLean.MPS.Operator.Simple.SimpleLocalStructure
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Saturated area law for the BNT sectors

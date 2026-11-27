@@ -69,10 +69,9 @@ theorem mpv_verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) {N : ℕ}
 /-- Separating and then recombining the doubled physical index recovers the
 original tensor. -/
 @[simp]
-theorem verticalBNTMPO_toMPSTensor {D n : ℕ} (A : MPSTensor (D * D) n) :
-    (verticalBNTMPO A).toMPSTensor = A := by
+theorem reindexPhysical_verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) :
+    Kraus.reindexPhysical finProdFinEquiv.symm (verticalBNTMPO A) = A := by
   funext ab
-  change A (finProdFinEquiv (ab.divNat, ab.modNat)) = A ab
   exact congrArg A (finProdFinEquiv.apply_symm_apply ab)
 
 /-- The concrete operator family \(O_L(M_\alpha)\) of a chosen vertical BNT

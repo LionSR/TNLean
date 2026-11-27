@@ -94,7 +94,7 @@ theorem exists_operatorProduct_powerSum_coeff_unique
   obtain ⟨n, μ, hμ, hexp, ⟨L₀, hL₀, hrig⟩, hbound, huniq⟩ :=
     MPSTensor.exists_unblocked_powerSum_coeff_unique
       (mulTensor (M a) (M b)).toMPSTensor (fun γ => (M γ).toMPSTensor)
-      (fun γ ↦ (isNormal_toMPSTensor_iff _).2 (hM γ)) hD
+      (fun γ ↦ (hM γ)) hD
       (fun γ δ hγδ h ↦ (gaugePhaseEquiv_cast_toMPSTensor_iff h _ _).not.2
         (hdistinct γ δ hγδ h)) (by
         intro L hL

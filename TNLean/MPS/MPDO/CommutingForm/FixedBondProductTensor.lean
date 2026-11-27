@@ -144,11 +144,10 @@ variable {M : MPOTensor d D}
 private theorem fixedProduct_ne_zero_of_mpvOverlap_ne_zero
     (data : CommutingForm M)
     {N : ℕ} (hN : 2 ≤ N)
-    (hOverlap : MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0) :
+    (hOverlap : MPTensor.mpvOverlap M M N ≠ 0) :
     data.product hN ≠ 0 := by
   classical
-  have hExists : ∃ ρ : Fin N → Fin (d * d),
-      MPTensor.mpv M.toMPSTensor ρ ≠ 0 := by
+  have hExists : ∃ ρ : Fin N → Fin d × Fin d, MPTensor.mpv M ρ ≠ 0 := by
     by_contra h
     push Not at h
     apply hOverlap
@@ -157,7 +156,7 @@ private theorem fixedProduct_ne_zero_of_mpvOverlap_ne_zero
     intro ρ _hρ
     rw [h ρ, zero_mul]
   obtain ⟨ρ, hρ⟩ := hExists
-  rw [mpv_toMPSTensor_eq, mpv_eq_mpo] at hρ
+  rw [mpv_eq_mpo] at hρ
   obtain ⟨c, hc, hReal⟩ := data.realizes_mpo N hN
   intro hProduct
   apply hρ
@@ -268,19 +267,19 @@ theorem mpo_eq_positive_power_product_of_normal_smul
   have : NeZero D := ⟨hM.bondDim_ne_zero⟩
   rcases data.exists_unit_phase_power_mpo_eq_product_of_normal_smul
       repr s hs hM hRepr with ⟨ζ, hζ, hGeo⟩
-  have hSelf : Filter.Tendsto (fun N ↦ MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N)
-      Filter.atTop (nhds 1) := (hM.reindexPhysical finProdFinEquiv.symm).selfOverlap_tendsto_one
+  have hSelf : Filter.Tendsto (fun N ↦ MPTensor.mpvOverlap M M N)
+      Filter.atTop (nhds 1) := hM.selfOverlap_tendsto_one
   obtain ⟨K, hK⟩ := Metric.tendsto_atTop.mp hSelf (1 / 2) (by norm_num)
   let N := max K 2
   have hKN : K ≤ N := le_max_left K 2
   have hN : 2 ≤ N := le_max_right K 2
-  have hOverlapN : MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0 := by
+  have hOverlapN : MPTensor.mpvOverlap M M N ≠ 0 := by
     intro hZero
     have hDist := hK N hKN
     rw [hZero] at hDist
     norm_num at hDist
   have hOverlapSucc :
-      MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor (N + 1) ≠ 0 := by
+      MPTensor.mpvOverlap M M (N + 1) ≠ 0 := by
     intro hZero
     have hDist := hK (N + 1) (by omega)
     rw [hZero] at hDist
@@ -392,7 +391,7 @@ theorem exists_normal_fixedProductTensorData_of_isSAL
           mpo K N =
             (F.commutingBond hη).product hN := by
   obtain ⟨F, hη⟩ := exists_positive_physicalSectorFactorization_of_isSAL K
-    ((isInjective_toMPSTensor_iff K).2 hK) hSAL
+    hK hSAL
   let repr := F.fixedProductTensorData hη (bondDim_pos_of_isSAL K hSAL)
   refine ⟨F, hη, ?_, ?_⟩
   · exact hNormal
