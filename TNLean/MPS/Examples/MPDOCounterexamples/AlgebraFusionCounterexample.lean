@@ -141,21 +141,19 @@ private theorem phaseFlipTensor_transferMap_pow_fixed_iff
 
 private theorem phaseFlipMPO_isTP :
     Kraus.IsTP phaseFlipTensor.toMPOTensor := by
-  rw [← MPOTensor.isTP_toMPSTensor_iff]
   suffices hAdjointOne :
-      Kraus.adjointMap phaseFlipTensor.toMPOTensor.toMPSTensor 1 = 1 by
+      Kraus.adjointMap phaseFlipTensor.toMPOTensor 1 = 1 by
     simpa [Kraus.IsTP, Kraus.adjointMap, Matrix.mul_one] using hAdjointOne
   have hadj :
-      (Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor).adjoint =
-        Kraus.adjointMapLM phaseFlipTensor.toMPOTensor.toMPSTensor := by
+      (Kraus.transferMap phaseFlipTensor.toMPOTensor).adjoint =
+        Kraus.adjointMapLM phaseFlipTensor.toMPOTensor := by
     rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
     ext X
     simp [Kraus.mapLM_apply, Kraus.adjointMapLM_apply, Kraus.adjointMap]
   rw [← Kraus.adjointMapLM_apply, ← hadj]
-  have hMap : Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor =
+  have hMap : Kraus.transferMap phaseFlipTensor.toMPOTensor =
       Kraus.transferMap phaseFlipTensor := by
-    rw [← MPOTensor.transferMap_eq_toMPSTensor,
-      MPSTensor.toMPOTensor_transferMap]
+    rw [← MPOTensor.transferMap_eq_kraus_transferMap, MPSTensor.toMPOTensor_transferMap]
   rw [hMap, phaseFlipTensor_transferMap_adjoint]
   apply Matrix.ext
   intro i j

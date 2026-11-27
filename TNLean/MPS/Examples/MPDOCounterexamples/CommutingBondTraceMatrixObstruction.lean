@@ -251,14 +251,8 @@ lemma kraus_transferMap_tensor :
 
 /-- The source tensor is normal. -/
 lemma tensor_isNormalTensor : MPTensor.IsNormalTensor tensor := by
-  have h := MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    tensor.toMPSTensor ((kraus_transferMap_toMPSTensor tensor).trans kraus_transferMap_tensor)
-  have hRound : Kraus.reindexPhysical finProdFinEquiv tensor.toMPSTensor = tensor := by
-    funext ab
-    change tensor (finProdFinEquiv.symm (finProdFinEquiv ab)) = _
-    rw [Equiv.symm_apply_apply]
-  rw [← hRound]
-  exact h.reindexPhysical finProdFinEquiv
+  exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id tensor
+    kraus_transferMap_tensor
 
 /-- The product tensor is already injective before blocking. -/
 lemma tensor_isInjective : Kraus.IsInjective tensor := by
