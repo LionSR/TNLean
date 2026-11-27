@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
+import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalConfigurations
 import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationFactorization
 import Mathlib.LinearAlgebra.Basis.VectorSpace
@@ -36,26 +36,28 @@ section
 open Matrix
 open scoped BigOperators
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace OBCChainTensor
 
 open MPSPreparation
 
 variable {d D N : ℕ} (B : OBCChainTensor d D N)
 
-private def prefixProduct (k : Fin (N + 1)) (u : CutPrefixConfig d N k.val) :
+private def prefixProduct (k : Fin (N + 1)) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) :
     Matrix (Fin D) (Fin D) ℂ :=
   (List.ofFn fun p : Fin k.val ↦ B.zeroPad (Fin.castLE (Nat.lt_succ_iff.mp k.isLt) p)
-    (u ⟨Fin.castLE (Nat.lt_succ_iff.mp k.isLt) p, p.isLt⟩)).prod
+    (u ⟨Fin.castLE (Nat.lt_succ_iff.mp k.isLt) p, mem_interval_zero_iff.mpr p.isLt⟩)).prod
 
 /-- The actual physical prefix matrix of the supplied representation,
 with columns indexed by its original virtual bond.
 Source: PGVWC07, free-OBC, lines 461--522. -/
 def physicalPrefixMatrix (k : Fin (N + 1)) :
-    Matrix (CutPrefixConfig d N k.val) (Fin (B.bondDim k)) ℂ :=
+    Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) (Fin (B.bondDim k)) ℂ :=
   fun u a ↦ prefixProduct B k u ⟨0, B.bondBound_pos⟩ (Fin.castLE (B.bondDim_le k) a)
 
 private theorem prefixProduct_outside (k : Fin (N + 1))
-    (u : CutPrefixConfig d N k.val) (γ : Fin D) (hγ : B.bondDim k ≤ γ.val) :
+    (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) (γ : Fin D) (hγ : B.bondDim k ≤ γ.val) :
     prefixProduct B k u ⟨0, B.bondBound_pos⟩ γ = 0 := by
   classical
   rcases k with ⟨k, hk⟩
@@ -82,7 +84,7 @@ private theorem prefixProduct_outside (k : Fin (N + 1))
       rw [heq] at hcol
       exact (not_lt_of_ge hγ) hcol
 
-private theorem prefixProduct_step (p : Fin N) (u : CutPrefixConfig d N p.val) (i : Fin d) :
+private theorem prefixProduct_step (p : Fin N) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 p.val)) (i : Fin d) :
     prefixProduct B p.succ (extendCutPrefix p.val u i) =
       prefixProduct B p.castSucc u * B.zeroPad p i := by
   classical
@@ -99,7 +101,7 @@ private theorem prefixProduct_step (p : Fin N) (u : CutPrefixConfig d N p.val) (
 /-- The actual arbitrary-representation prefix factors propagate by the
 original site matrices. Source: PGVWC07, free-OBC, local maps in
 lines 475--486 and the factorization proof in lines 490--522. -/
-theorem physicalPrefixMatrix_step (p : Fin N) (u : CutPrefixConfig d N p.val)
+theorem physicalPrefixMatrix_step (p : Fin N) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 p.val))
     (i : Fin d) (q : Fin (B.bondDim p.succ)) :
     physicalPrefixMatrix B p.succ (extendCutPrefix p.val u i) q =
       (physicalPrefixMatrix B p.castSucc * B.tensor p i) u q := by
@@ -120,7 +122,7 @@ theorem physicalPrefixMatrix_step (p : Fin N) (u : CutPrefixConfig d N p.val)
 /-- The left endpoint prefix factor is the scalar identity in the
 one-dimensional endpoint bond coordinates.
 Source: PGVWC07, endpoint convention preceding Theorem thm:OBC-Vidal. -/
-theorem physicalPrefixMatrix_zero (u : CutPrefixConfig d N 0) (q : Fin (B.bondDim 0)) :
+theorem physicalPrefixMatrix_zero (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) (q : Fin (B.bondDim 0)) :
     physicalPrefixMatrix B 0 u q = 1 := by
   have hq : q.val = 0 := by have h := q.isLt; have hd := B.left_dim; omega
   have h0 : prefixProduct B 0 u = 1 := by
@@ -136,7 +138,7 @@ theorem physicalPrefixMatrix_zero (u : CutPrefixConfig d N 0) (q : Fin (B.bondDi
 /-- The right endpoint prefix factor is the actual represented physical
 state, including its complete complex amplitude.
 Source: PGVWC07, the OBC contraction in free-OBC, lines 461--486. -/
-theorem physicalPrefixMatrix_last (u : CutPrefixConfig d N N)
+theorem physicalPrefixMatrix_last (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N))
     (q : Fin (B.bondDim (Fin.last N))) :
     physicalPrefixMatrix B (Fin.last N) u q = B.coeff (finalCutPrefixEquiv d N u) := by
   have hq : q.val = 0 := by have h := q.isLt; have hd := B.right_dim; omega
@@ -157,23 +159,22 @@ theorem physicalPrefixMatrix_last (u : CutPrefixConfig d N N)
 with rows indexed by its original virtual bond.
 Source: PGVWC07, free-OBC, actual boundary contractions in lines 461--522. -/
 def physicalSuffixMatrix (k : Fin (N + 1)) :
-    Matrix (Fin (B.bondDim k)) (CutSuffixConfig d N k.val) ℂ :=
+    Matrix (Fin (B.bondDim k)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) ℂ :=
   fun a v ↦ (List.ofFn fun q : Fin (N - k.val) ↦
     B.zeroPad ⟨k.val + q.val, by have := q.isLt; omega⟩
-      (v ⟨⟨k.val + q.val, by have := q.isLt; omega⟩, Nat.le_add_right _ _⟩)).prod
+      (v ⟨⟨k.val + q.val, by have := q.isLt; omega⟩,
+        notMem_interval_zero_iff.mpr (Nat.le_add_right _ _)⟩)).prod
         (Fin.castLE (B.bondDim_le k) a) ⟨0, B.bondBound_pos⟩
 
 /-- Every actual physical cut coefficient matrix factors through the
 original virtual bond by the actual prefix and suffix contractions.
 Source: PGVWC07, the OBC contraction in free-OBC, lines 461--486. -/
-theorem cutCoefficientMatrix_eq_physicalPrefix_mul_suffix (k : Fin (N + 1)) :
-    cutCoefficientMatrix B.coeff k.val = physicalPrefixMatrix B k * physicalSuffixMatrix B k := by
+theorem cutMatrix_eq_physicalPrefix_mul_suffix (k : Fin (N + 1)) :
+    cutMatrix (interval N 0 k.val) B.coeff = physicalPrefixMatrix B k * physicalSuffixMatrix B k := by
   classical
   have hk : k.val ≤ N := Nat.lt_succ_iff.mp k.isLt
-  rw [cutCoefficientMatrix_eq_reindex_cutMatrix B.coeff k.val]
   ext u v
-  change B.coeff ((ManyBody.cutEquiv _ (ManyBody.interval N 0 k.val)).symm
-    ((intervalConfigEquiv d N k.val).symm u, (intervalComplConfigEquiv d N k.val).symm v)) = _
+  change B.coeff ((ManyBody.cutEquiv _ (interval N 0 k.val)).symm (u, v)) = _
   rw [coeff_eq_eval_zeroPad, eval_cutEquiv_symm _ hk]
   simp only [Matrix.mul_apply]
   rw [Fin.sum_castLE_extend_zero _ (B.bondDim_le k)]
@@ -191,7 +192,7 @@ Source: PGVWC07, free-OBC, lines 461--522. -/
 theorem cutColumnSpace_le_range_physicalPrefixMatrix (k : Fin (N + 1)) :
     cutColumnSpace B.coeff k.val ≤ LinearMap.range (physicalPrefixMatrix B k).mulVecLin := by
   rw [cutColumnSpace, ← Matrix.range_mulVecLin,
-    cutCoefficientMatrix_eq_physicalPrefix_mul_suffix B k, Matrix.mulVecLin_mul]
+    cutMatrix_eq_physicalPrefix_mul_suffix B k, Matrix.mulVecLin_mul]
   exact LinearMap.range_comp_le_range _ _
 
 end OBCChainTensor
@@ -209,8 +210,8 @@ namespace MPSPreparation
 from its basis independence. Source: PGVWC07, free-OBC, left inverses
 of retained cut factors in lines 494--508. -/
 theorem exists_cutPrefixMatrix_leftInverse {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (C : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    ∃ T : Matrix (Fin (cutCoefficientRank ψ k)) (CutPrefixConfig d N k) ℂ,
+    (C : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    ∃ T : Matrix (Fin (cutRank (interval N 0 k) ψ)) (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ℂ,
       T * cutPrefixMatrix ψ C k = 1 := by
   classical
   have hli : LinearIndependent ℂ (cutPrefixMatrix ψ C k).col :=
@@ -236,19 +237,19 @@ No full-rank or square-gauge hypothesis is supplied.
 Source: PGVWC07, Theorem free-OBC and Eq. eq.lem.II.9, lines 461--522. -/
 theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
     (B : OBCChainTensor d D N) (ψ : (Fin N → Fin d) → ℂ) (hcoeff : B.coeff = ψ)
-    (C : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (C : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
     (hC0 : ∀ q, (C 0 q).val = 1) (hCN : ∀ q, (C N q).val = fullCutVector ψ) :
     ∃ Y : (k : Fin (N + 1)) →
-      Matrix (Fin (cutCoefficientRank ψ k.val)) (Fin (B.bondDim k)) ℂ,
+      Matrix (Fin (cutRank (interval N 0 k.val) ψ)) (Fin (B.bondDim k)) ℂ,
     ∃ Z : (k : Fin (N + 1)) →
-      Matrix (Fin (B.bondDim k)) (Fin (cutCoefficientRank ψ k.val)) ℂ,
+      Matrix (Fin (B.bondDim k)) (Fin (cutRank (interval N 0 k.val) ψ)) ℂ,
       (∀ k, Y k * Z k = 1) ∧
       (∀ q r, Y 0 q r = 1) ∧ (∀ q r, Z (Fin.last N) q r = 1) ∧
       ∀ (p : Fin N) (i : Fin d),
         cutSiteMatrix ψ C p.val i = Y p.castSucc * B.tensor p i * Z p.succ := by
   classical
   have hlift : ∀ k : Fin (N + 1),
-      ∃ Z : Matrix (Fin (B.bondDim k)) (Fin (cutCoefficientRank ψ k.val)) ℂ,
+      ∃ Z : Matrix (Fin (B.bondDim k)) (Fin (cutRank (interval N 0 k.val) ψ)) ℂ,
         physicalPrefixMatrix B k * Z = cutPrefixMatrix ψ C k.val := by
     intro k
     have hmem : ∀ q, (C k.val q).val ∈ LinearMap.range (physicalPrefixMatrix B k).mulVecLin := by
@@ -262,7 +263,7 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
     exact congrFun (hz q) u
   choose Z₀ hZ₀ using hlift
   let Z : (k : Fin (N + 1)) →
-      Matrix (Fin (B.bondDim k)) (Fin (cutCoefficientRank ψ k.val)) ℂ := fun k ↦
+      Matrix (Fin (B.bondDim k)) (Fin (cutRank (interval N 0 k.val) ψ)) ℂ := fun k ↦
     if k = Fin.last N then Matrix.of fun _ _ ↦ 1 else Z₀ k
   have hZ : ∀ k, physicalPrefixMatrix B k * Z k = cutPrefixMatrix ψ C k.val := by
     intro k
@@ -278,7 +279,7 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
     · simpa only [Z, hk, ↓reduceIte] using hZ₀ k
   choose T hT using fun k : Fin (N + 1) ↦ exists_cutPrefixMatrix_leftInverse ψ C k.val
   let Y : (k : Fin (N + 1)) →
-      Matrix (Fin (cutCoefficientRank ψ k.val)) (Fin (B.bondDim k)) ℂ :=
+      Matrix (Fin (cutRank (interval N 0 k.val) ψ)) (Fin (B.bondDim k)) ℂ :=
     fun k ↦ T k * physicalPrefixMatrix B k
   have hYZ : ∀ k, Y k * Z k = 1 := by
     intro k
@@ -303,7 +304,7 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
         _ = (physicalPrefixMatrix B p.succ * Z p.succ) (extendCutPrefix p.val u i) q :=
           congrArg (fun M ↦ M (extendCutPrefix p.val u i) q) (hZ p.succ).symm
         _ = _ := by simp only [Matrix.mul_apply, physicalPrefixMatrix_step]
-    let Tp : Matrix (Fin (cutCoefficientRank ψ p.val)) (CutPrefixConfig d N p.val) ℂ :=
+    let Tp : Matrix (Fin (cutRank (interval N 0 p.val) ψ)) (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 p.val)) ℂ :=
       T p.castSucc
     have hTp : Tp * cutPrefixMatrix ψ C p.val = 1 := hT p.castSucc
     calc
@@ -312,7 +313,7 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
         rw [hTp, Matrix.one_mul]
       _ = Tp * (cutPrefixMatrix ψ C p.val * cutSiteMatrix ψ C p.val i) :=
         Matrix.mul_assoc _ _ _
-      _ = Tp * (show Matrix (CutPrefixConfig d N p.val) (Fin (cutCoefficientRank ψ (p.val + 1))) ℂ
+      _ = Tp * (show Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 p.val)) (Fin (cutRank (interval N 0 (p.val + 1)) ψ)) ℂ
             from physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ) :=
         congrArg (fun M ↦ Tp * M) hstep
       _ = _ := by simp only [Y, Tp, Matrix.mul_assoc]

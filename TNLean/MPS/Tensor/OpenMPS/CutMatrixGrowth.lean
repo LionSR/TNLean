@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
-import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
+import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Logic.Equiv.Basic
@@ -24,15 +24,12 @@ network, ground state, or physical endpoint-rank theorem is constructed here.
 
 Source: the one-dimensional note, Part II, proof of Theorem B, internal
 block cuts in `part2b_mps_protocol.tex`, lines 605–614. The coefficients are
-those of the cut matrix `ManyBody.cutMatrix (interval L 0 k)` of QICLean; their identification
-with the physical coefficient matrix is `MPSPreparation.cutCoefficientMatrix_eq_reindex_cutMatrix`.
+those of the cut matrix `cutMatrix (interval L 0 k)` of QICLean.
 -/
-
-open ManyBody (interval)
 
 noncomputable section
 open scoped BigOperators
-open ManyBody (cutMatrix)
+open ManyBody (interval cutMatrix RegionConfig ComplConfig)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -78,93 +75,29 @@ private theorem rank_regroup_right
 
 variable {L q : ℕ}
 
-/-- The cut matrix across the left block and the physical coefficient matrix have the same rank:
-they differ only by reindexing the configurations of each side. -/
-private theorem rank_cutMatrix_eq_coefficientRank
-    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    (cutMatrix (interval L 0 k) ψ).rank = MPSPreparation.cutCoefficientRank (fun x ↦ ψ x) k :=
-  (MPSPreparation.cutCoefficientRank_eq_cutRank _ k).symm
-
-/-! Splitting off the actual site k. The existing extension functions preserve
-its literal physical index; their inverse maps are restrictions and evaluation
-at that site. These constructions require only k<L. -/
-private def prefixStepEquiv {k : ℕ} (hk : k < L) :
-    (MPSPreparation.CutPrefixConfig q L k × Fin q) ≃
-      MPSPreparation.CutPrefixConfig q L (k + 1) where
-  toFun x := MPSPreparation.extendCutPrefix k x.1 x.2
-  invFun u := ((fun v ↦ u ⟨v.1, Nat.lt_succ_of_lt v.2⟩),
-    u ⟨⟨k, hk⟩, Nat.lt_succ_self k⟩)
-  left_inv x := by
-    rcases x with ⟨a, i⟩
-    apply Prod.ext
-    · funext v
-      simp [MPSPreparation.extendCutPrefix, v.property]
-    · simp [MPSPreparation.extendCutPrefix]
-  right_inv u := by
-    funext v
-    change (if h : v.1.val < k then u ⟨v.1, Nat.lt_succ_of_lt h⟩
-      else u ⟨⟨k, hk⟩, Nat.lt_succ_self k⟩) = u v
-    by_cases hv : v.1.val < k
-    · simp only [dite_eq_left hv]
-    · simp only [dite_eq_right hv]
-      apply congrArg u
-      apply Subtype.ext
-      apply Fin.ext
-      change k = v.1.val
-      have := v.property
-      omega
-
-private def suffixStepEquiv {k : ℕ} (hk : k < L) :
-    (Fin q × MPSPreparation.CutSuffixConfig q L (k + 1)) ≃
-      MPSPreparation.CutSuffixConfig q L k where
-  toFun x := MPSPreparation.extendCutSuffix k x.1 x.2
-  invFun u := (u ⟨⟨k, hk⟩, le_refl k⟩,
-    fun v ↦ u ⟨v.1, (Nat.le_succ k).trans v.2⟩)
-  left_inv x := by
-    rcases x with ⟨i, b⟩
-    apply Prod.ext
-    · simp [MPSPreparation.extendCutSuffix]
-    · funext v
-      simp [MPSPreparation.extendCutSuffix, v.property]
-  right_inv u := by
-    funext v
-    change (if h : k + 1 ≤ v.1.val then u ⟨v.1, (Nat.le_succ k).trans h⟩
-      else u ⟨⟨k, hk⟩, le_refl k⟩) = u v
-    by_cases hv : k + 1 ≤ v.1.val
-    · simp only [dite_eq_left hv]
-    · simp only [dite_eq_right hv]
-      apply congrArg u
-      apply Subtype.ext
-      apply Fin.ext
-      change k = v.1.val
-      have := v.property
-      omega
-
 private theorem rank_cutMatrix_step_bounds
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) {k : ℕ} (hk : k < L) :
     (cutMatrix (interval L 0 (k + 1)) ψ).rank ≤ q * (cutMatrix (interval L 0 k) ψ).rank ∧
       (cutMatrix (interval L 0 k) ψ).rank ≤ q * (cutMatrix (interval L 0 (k + 1)) ψ).rank := by
-  let f : MPSPreparation.CutPrefixConfig q L k → Fin q →
-      MPSPreparation.CutSuffixConfig q L (k + 1) → ℂ := fun a i b ↦
-    MPSPreparation.cutCoefficientMatrix (fun x ↦ ψ x) (k + 1)
-      (MPSPreparation.extendCutPrefix k a i) b
+  let f : RegionConfig (fun _ : Fin L ↦ Fin q) (interval L 0 k) → Fin q →
+      ComplConfig (fun _ : Fin L ↦ Fin q) (interval L 0 (k + 1)) → ℂ := fun a i b ↦
+    cutMatrix (interval L 0 (k + 1)) ψ (MPSPreparation.extendCutPrefix k a i) b
   have hleft :
-      ((fun a ib ↦ f a ib.1 ib.2) : Matrix (MPSPreparation.CutPrefixConfig q L k)
-        (Fin q × MPSPreparation.CutSuffixConfig q L (k + 1)) ℂ) =
-      (MPSPreparation.cutCoefficientMatrix (fun x ↦ ψ x) k).submatrix
-        (Equiv.refl _) (suffixStepEquiv (q := q) hk) := by
+      ((fun a ib ↦ f a ib.1 ib.2) : Matrix (RegionConfig (fun _ : Fin L ↦ Fin q) (interval L 0 k))
+        (Fin q × ComplConfig (fun _ : Fin L ↦ Fin q) (interval L 0 (k + 1))) ℂ) =
+      (cutMatrix (interval L 0 k) ψ).submatrix
+        (Equiv.refl _) (MPSPreparation.extendCutSuffixEquiv (d := q) hk) := by
     ext a ib
-    exact MPSPreparation.cutCoefficientMatrix_adjacent (fun x ↦ ψ x) k a ib.1 ib.2
+    exact MPSPreparation.cutMatrix_adjacent (fun x ↦ ψ x) k a ib.1 ib.2
   have hright :
       ((fun ai b ↦ f ai.1 ai.2 b) : Matrix
-        (MPSPreparation.CutPrefixConfig q L k × Fin q)
-        (MPSPreparation.CutSuffixConfig q L (k + 1)) ℂ) =
-      (MPSPreparation.cutCoefficientMatrix (fun x ↦ ψ x) (k + 1)).submatrix
-        (prefixStepEquiv (q := q) hk) (Equiv.refl _) := rfl
+        (RegionConfig (fun _ : Fin L ↦ Fin q) (interval L 0 k) × Fin q)
+        (ComplConfig (fun _ : Fin L ↦ Fin q) (interval L 0 (k + 1))) ℂ) =
+      (cutMatrix (interval L 0 (k + 1)) ψ).submatrix
+        (MPSPreparation.extendCutPrefixEquiv (d := q) hk) (Equiv.refl _) := rfl
   have hf := rank_regroup_left f
   have hb := rank_regroup_right f
   simp only [hleft, hright, Matrix.rank_submatrix, Fintype.card_fin] at hf hb
-  simp only [rank_cutMatrix_eq_coefficientRank]
   exact ⟨hf, hb⟩
 
 private theorem rank_cutMatrix_add_bounds

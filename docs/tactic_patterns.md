@@ -5693,11 +5693,14 @@ no additional helper is proposed.
 - **Pattern:** The inverse of the one-site extension restricts the configuration
   and evaluates it at the cut site. Its inverse proof separates sites before
   the cut from the cut site and reduces subtype equality to the site value.
-- **Seen:** `prefixStepEquiv` and `suffixStepEquiv` in
-  `MPS/Tensor/OpenMPS/CutMatrixGrowth.lean`.
-- **Abstraction:** Two occurrences in one file do not meet the promotion
-  threshold. The coefficient identity itself reuses the existing
-  `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
+- **Seen:** the former `prefixStepEquiv` and `suffixStepEquiv` of
+  `MPS/Tensor/OpenMPS/CutMatrixGrowth.lean`, copies of the extension
+  equivalences of `MPS/CanonicalForm/OpenBoundary/OBCCanonicalConfigurations.lean`.
+- **Abstraction:** Since both files index cut configurations by the blocks of
+  `ManyBody.cutMatrix (interval N 0 k)`, the copies were deleted; both files use
+  `MPSPreparation.extendCutPrefixEquiv` and `MPSPreparation.extendCutSuffixEquiv`
+  (`MPS/Tensor/VaryingBond/MinimalCutRepresentationCuts.lean`). The coefficient
+  identity is `MPSPreparation.cutMatrix_adjacent`.
 
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
@@ -11107,13 +11110,14 @@ removed after the dependency audit exposed it.
 
 ### Physical cut-basis changes — reused Mathlib (2026-10-29)
 
-- **Seen:** `MPS/FundamentalTheorem/FixedLength/PeriodicCutBasisCoordinates.lean` and
-  `QuadraticPhysicalCutWindow.lean`.
+- **Seen:** `MPS/FundamentalTheorem/FixedLength/InjectivePeriodicCuts.lean` (which absorbed
+  the former `PeriodicCutBasisCoordinates.lean`) and `QuadraticPhysicalCutWindow.lean`.
 - **Pattern:** transport an actual cut basis along a configuration equivalence,
   then multiply matrices of physical slicing and identity maps in successive bases.
-- **Reuse:** `LinearEquiv.ofSubmodules`, `Module.Basis.map`,
-  `LinearMap.toMatrix_comp` and `LinearMap.toMatrix_id` give the physical
-  coordinate change and both quadratic-system gauge equations directly.
+- **Reuse:** `Module.Basis.map`, `LinearMap.toMatrix_comp` and
+  `LinearMap.toMatrix_id` give both quadratic-system gauge equations directly;
+  the cut bases already live on the column spaces of `ManyBody.cutMatrix`, so no
+  coordinate change is needed.
 - **Decision:** use these existing mathematical identities rather than expanding
   virtual matrix entries or introducing a parallel window-gauge predicate.
 

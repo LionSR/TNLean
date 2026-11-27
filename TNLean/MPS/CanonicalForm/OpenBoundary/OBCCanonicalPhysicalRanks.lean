@@ -25,6 +25,8 @@ canonical window in Theorem 8, lines 1139--1169.
 open Matrix MPSPreparation
 open scoped BigOperators ComplexOrder
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace OBCChainTensor
 
 variable {d Q N : ℕ} (B : OBCChainTensor d Q N)
@@ -44,8 +46,8 @@ Source: PGVWC07, Theorem thm:OBC-Vidal, condition 3, lines 449--456. -/
 theorem physicalPrefixMatrix_zero_gram :
     (physicalPrefixMatrix B 0)ᴴ * physicalPrefixMatrix B 0 = 1 := by
   classical
-  let : IsEmpty {s : Fin N // s.val < (0 : Fin (N + 1)).val} :=
-    ⟨fun s ↦ Nat.not_lt_zero _ s.property⟩
+  let : IsEmpty {s : Fin N // s ∈ interval N 0 (0 : Fin (N + 1)).val} :=
+    ⟨fun s ↦ Nat.not_lt_zero _ (mem_interval_zero_iff.mp s.property)⟩
   let : Unique (Fin (B.bondDim 0)) := Equiv.unique (finCongr B.left_dim)
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
@@ -70,7 +72,7 @@ theorem physicalPrefixMatrix_gram_eq_density
 /-- The actual suffix factors recurse by the original first site matrix.
 Source: PGVWC07, the OBC contraction in lines 419--429. -/
 theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
-    (v : CutSuffixConfig d N (p.val + 1)) (a : Fin (B.bondDim p.castSucc)) :
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (p.val + 1))) (a : Fin (B.bondDim p.castSucc)) :
     physicalSuffixMatrix B p.castSucc a (extendCutSuffix p.val i v) =
       (B.tensor p i * physicalSuffixMatrix B p.succ) a v := by
   classical
@@ -79,11 +81,12 @@ theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
       List.ofFn (fun q : Fin (N - p.val) ↦
         B.zeroPad ⟨p.val + q.val, by have := q.isLt; omega⟩
           (extendCutSuffix p.val i v
-            ⟨⟨p.val + q.val, by have := q.isLt; omega⟩, Nat.le_add_right _ _⟩)) =
+            ⟨⟨p.val + q.val, by have := q.isLt; omega⟩,
+            notMem_interval_zero_iff.mpr (Nat.le_add_right _ _)⟩)) =
         B.zeroPad p i :: List.ofFn (fun q : Fin (N - (p.val + 1)) ↦
           B.zeroPad ⟨p.val + 1 + q.val, by have := q.isLt; omega⟩
             (v ⟨⟨p.val + 1 + q.val, by have := q.isLt; omega⟩,
-              Nat.le_add_right _ _⟩)) := by
+              notMem_interval_zero_iff.mpr (Nat.le_add_right _ _)⟩)) := by
     rw [List.ofFn_congr hlen, List.ofFn_succ]
     apply congrArg₂ List.cons
     · simp [extendCutSuffix]
@@ -99,7 +102,8 @@ theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
   change (List.ofFn (fun q : Fin (N - p.val) ↦
       B.zeroPad ⟨p.val + q.val, by have := q.isLt; omega⟩
         (extendCutSuffix p.val i v
-          ⟨⟨p.val + q.val, by have := q.isLt; omega⟩, Nat.le_add_right _ _⟩))).prod
+          ⟨⟨p.val + q.val, by have := q.isLt; omega⟩,
+            notMem_interval_zero_iff.mpr (Nat.le_add_right _ _)⟩))).prod
     (Fin.castLE (B.bondDim_le p.castSucc) a) ⟨0, B.bondBound_pos⟩ = _
   rw [hword, List.prod_cons, Matrix.mul_apply]
   change ∑ j, Matrix.zeroPad Q (B.tensor p i) (Fin.castLE (B.bondDim_le p.castSucc) a) j * _ = _
@@ -116,7 +120,7 @@ theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
 /-- The actual suffix factor at the scalar right endpoint has every
 entry equal to one. Source: PGVWC07, scalar OBC boundaries, lines 419--429. -/
 theorem physicalSuffixMatrix_last (a : Fin (B.bondDim (Fin.last N)))
-    (v : CutSuffixConfig d N N) : physicalSuffixMatrix B (Fin.last N) a v = 1 := by
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) : physicalSuffixMatrix B (Fin.last N) a v = 1 := by
   have ha : a.val = 0 := by have := a.isLt; have := B.right_dim; omega
   simp only [physicalSuffixMatrix, Fin.val_last, Nat.sub_self, List.ofFn_zero,
     List.prod_nil]
@@ -141,7 +145,8 @@ theorem physicalSuffixMatrix_coisometry
     (k : Fin (N + 1)) : physicalSuffixMatrix B k * (physicalSuffixMatrix B k)ᴴ = 1 := by
   classical
   refine Fin.reverseInduction ?_ (fun p ih ↦ ?_) k
-  · let : IsEmpty {s : Fin N // N ≤ s.val} := ⟨fun s ↦ by have := s.val.isLt; omega⟩
+  · let : IsEmpty {s : Fin N // s ∉ interval N 0 N} := ⟨fun s ↦ by
+      have := s.val.isLt; have := notMem_interval_zero_iff.mp s.property; omega⟩
     let : Unique (Fin (B.bondDim (Fin.last N))) := Equiv.unique (finCongr B.right_dim)
     ext q r
     have hqr : q = r := Subsingleton.elim _ _
@@ -154,13 +159,13 @@ theorem physicalSuffixMatrix_coisometry
 is the actual physical cut rank. All rank information is derived from
 its source density and row-normalization equations.
 Source: PGVWC07, Theorem thm:OBC-Vidal, conditions 1--3, lines 444--458. -/
-theorem bondDim_eq_cutCoefficientRank_of_canonical
+theorem bondDim_eq_cutRank_of_canonical
     (Λ : (k : Fin (N + 1)) → Matrix (Fin (B.bondDim k)) (Fin (B.bondDim k)) ℂ)
     (hzero : Λ 0 = 1)
     (hstep : ∀ p : Fin N, ∑ i, (B.tensor p i)ᴴ * Λ p.castSucc * B.tensor p i = Λ p.succ)
     (hfaithful : ∀ k, (Λ k).PosDef)
     (hrow : ∀ p : Fin N, ∑ i, B.tensor p i * (B.tensor p i)ᴴ = 1)
-    (k : Fin (N + 1)) : B.bondDim k = cutCoefficientRank B.coeff k.val := by
+    (k : Fin (N + 1)) : B.bondDim k = cutRank (interval N 0 k.val) B.coeff := by
   classical
   let F := physicalPrefixMatrix B k
   let G := physicalSuffixMatrix B k
@@ -173,14 +178,13 @@ theorem bondDim_eq_cutCoefficientRank_of_canonical
   have hRankF : F.rank = B.bondDim k := by
     have h := (show LinearIndependent ℂ Fᵀ.row from hli).rank_matrix
     simpa only [Matrix.rank_transpose, Fintype.card_fin] using h
-  have hrecover : cutCoefficientMatrix B.coeff k.val * Gᴴ = F := by
-    rw [cutCoefficientMatrix_eq_physicalPrefix_mul_suffix B k, Matrix.mul_assoc,
+  have hrecover : cutMatrix (interval N 0 k.val) B.coeff * Gᴴ = F := by
+    rw [cutMatrix_eq_physicalPrefix_mul_suffix B k, Matrix.mul_assoc,
       physicalSuffixMatrix_coisometry B hrow k, Matrix.mul_one]
   apply le_antisymm
   · rw [← hRankF, ← hrecover]
     exact Matrix.rank_mul_le_left _ _
-  · rw [cutCoefficientRank_eq_cutRank _ k.val]
-    exact B.cutRank_coeff_le k
+  · exact B.cutRank_coeff_le k
 
 /-- Faithfulness of the final canonical density proves that the actual
 represented vector is nonzero. No nonvanishing premise is supplied.

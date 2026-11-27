@@ -18,6 +18,8 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 
 open MPSTensor Matrix
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace MPUCircuit
 
 variable {d D N r : ℕ} [NeZero d]
@@ -68,13 +70,13 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutRank_eq_one_of_endpoint (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
     (j : Fin (N + 1)) (hend : j.val = 0 ∨ j.val = N) :
-    MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val = 1 := by
+    cutRank (interval N 0 j.val) (operatorCoefficientTensor U) = 1 := by
   have hψ := operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU
   rcases hend with hj | hj
   · rw [hj]
-    exact MPSPreparation.cutCoefficientRank_zero _ hψ
+    exact (MPSPreparation.cutRank_zero_eq_one hψ)
   · rw [hj]
-    exact MPSPreparation.cutCoefficientRank_last _ hψ
+    exact (MPSPreparation.cutRank_self_eq_one hψ)
 
 /-- The actual minimal cut label space of a finite unitary embeds in its allocated cut register.
 Endpoint rank one follows from the unitary itself.
@@ -82,14 +84,13 @@ Endpoint rank one follows from the unitary itself.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def minimalCutBondRegisterEncoding (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (j : Fin (N + 1)) :
-    Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val) ↪
+    Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)) ↪
       Cfg d (cutBondRegisterWidth d D N j) :=
   cutBondRegisterEncoding hd
-    (MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero (by omega) U
-        hU) j.val)
+    ((ManyBody.cutRank_pos (D := interval N 0 j.val) (operatorCoefficientTensor_ne_zero (by omega) U
+        hU)))
     (hbound j) j (minimalCutRank_eq_one_of_endpoint hd U hU j)
 
 /-- The actual minimal-cut encoding preserves zero at every cut.
@@ -97,12 +98,11 @@ noncomputable def minimalCutBondRegisterEncoding (hd : 2 ≤ d)
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutBondRegisterEncoding_zero (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (j : Fin (N + 1)) :
     minimalCutBondRegisterEncoding hd U hU hbound j
-      ⟨0, MPSPreparation.cutCoefficientRank_pos _
-        (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val⟩ = 0 :=
+      ⟨0, ManyBody.cutRank_pos (D := interval N 0 j.val)
+        (operatorCoefficientTensor_ne_zero (by omega) U hU)⟩ = 0 :=
   cutBondRegisterEncoding_zero hd _ (hbound j) j _
 
 
@@ -113,10 +113,9 @@ endpoint registers.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutBondDim_le_registerCapacity (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (j : Fin (N + 1)) :
-    MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤
+    cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤
       d ^ cutBondRegisterWidth d D N j :=
   cutBondDim_le_registerCapacity hd (hbound j) j (minimalCutRank_eq_one_of_endpoint hd U hU j)
 
@@ -126,13 +125,12 @@ configuration.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutBondRegisterEncoding_endpoint (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (j : Fin (N + 1)) (hend : j.val = 0 ∨ j.val = N)
-    (q : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) :
+    (q : Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) :
     minimalCutBondRegisterEncoding hd U hU hbound j q = 0 := by
-  have hq : q = ⟨0, MPSPreparation.cutCoefficientRank_pos _
-      (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val⟩ := by
+  have hq : q = ⟨0, ManyBody.cutRank_pos (D := interval N 0 j.val)
+      (operatorCoefficientTensor_ne_zero (by omega) U hU)⟩ := by
     apply Fin.ext
     have h : q.val < 1 := by
       simpa only [minimalCutRank_eq_one_of_endpoint hd U hU j hend] using q.isLt
@@ -147,13 +145,12 @@ encodings with no endpoint rank witnesses supplied.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem exists_minimalCut_bondEncodings_of_unitary (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) j.val ≤ D) :
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D) :
     ∃ e : ∀ j : Fin (N + 1),
-        Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val) ↪
+        Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)) ↪
           Cfg d (cutBondRegisterWidth d D N j),
-      ∀ j, e j ⟨0, MPSPreparation.cutCoefficientRank_pos _
-        (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val⟩ = 0 :=
+      ∀ j, e j ⟨0, ManyBody.cutRank_pos (D := interval N 0 j.val)
+        (operatorCoefficientTensor_ne_zero (by omega) U hU)⟩ = 0 :=
   ⟨minimalCutBondRegisterEncoding hd U hU hbound,
     minimalCutBondRegisterEncoding_zero hd U hU hbound⟩
 

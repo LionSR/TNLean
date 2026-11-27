@@ -33,6 +33,8 @@ open MPTensor
 open Matrix MPSPreparation
 open scoped BigOperators Kronecker
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace MPSTensor
 
 variable {d D N L m : ℕ}
@@ -84,13 +86,12 @@ theorem exists_apply_ne_zero_of_mpv_ne_zero (A : MPSTensor d D) (hN : 0 < N)
 virtual rank for any C1 tensor with a nonzero letter. Perron normalization
 is internal; canonical form is not required of the original tensor.
 Source: PGVWC07, MPSarchive.tex lines 911--931 and 1139--1169. -/
-theorem quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective [NeZero D]
+theorem quadraticWindow_cutRank_eq_of_isNBlkInjective [NeZero D]
     (A : MPSTensor d D) (hC1 : Kraus.IsNBlkInjective A L) (hletter : ∃ i, A i ≠ 0)
     (hN : 2 * L + D ^ 4 < N) (j : Fin (D ^ 4 + 1)) :
-    cutCoefficientRank (mpv A (N := N)) (L + j.val) = D * D := by
+    cutRank (interval N 0 (L + j.val)) (mpv A (N := N)) = D * D := by
   obtain ⟨_, _, _, _, _, hlong⟩ := exists_unital_gauge_of_isNBlkInjective A hC1 hletter
   have hj := j.isLt
-  rw [cutCoefficientRank_eq_cutRank]
   exact cutRank_mpv_eq_of_isNBlkInjective (by omega) (hlong _ (by omega)) (hlong _ (by omega))
 
 /-- Any actual physical cut-basis window of a nonzero condition-C1 tensor

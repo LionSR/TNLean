@@ -10,7 +10,7 @@ import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 
 Sitewise pairing identifies an operator coefficient configuration with its
 output and input configurations. Splitting these configurations at a cut
-commutes with pairing. These equivalences preserve the coefficients when
+along `ManyBody.cutEquiv` commutes with pairing. These equivalences preserve the coefficients when
 an open-boundary representation is regrouped as an operator factorization.
 
 Source: Section 5 of
@@ -18,6 +18,9 @@ Source: Section 5 of
 -/
 
 open Matrix
+
+open ManyBody (interval RegionConfig ComplConfig cutEquiv cutEquiv_symm_apply_mem
+  cutEquiv_symm_apply_not_mem)
 
 namespace MPUCircuit
 
@@ -42,41 +45,20 @@ def physicalPairConfigEquiv (ι : Type*) (d : ℕ) :
   right_inv xy := by
     apply Prod.ext <;> funext s <;> simp [pairPhysicalConfig]
 
-/-- A physical configuration is equivalent to its prefix and suffix
-configurations at any cut.
-Source: Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-def physicalCutConfigEquiv (d N k : ℕ) : (Fin N → Fin d) ≃
-    (MPSPreparation.CutPrefixConfig d N k × MPSPreparation.CutSuffixConfig d N k) where
-  toFun σ := (MPSPreparation.cutPrefixRestriction σ k,
-    MPSPreparation.cutSuffixRestriction σ k)
-  invFun uv := fun s ↦ if h : s.val < k then uv.1 ⟨s, h⟩
-    else uv.2 ⟨s, Nat.le_of_not_lt h⟩
-  left_inv σ := by
-    funext s
-    change (if _h : s.val < k then σ s else σ s) = σ s
-    split_ifs <;> rfl
-  right_inv uv := by
-    apply Prod.ext
-    · funext s
-      simp [MPSPreparation.cutPrefixRestriction, s.2]
-    · funext s
-      simp [MPSPreparation.cutSuffixRestriction, Nat.not_lt_of_ge s.2]
-
-/-- Splitting a physical configuration and pairing its two letters
+/-- Splitting a physical configuration at the cut after `k` sites and pairing its two letters
 commute. This preserves the operator input and output coordinates at a cut.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem physicalCutConfigEquiv_pair {d N k : ℕ}
-    (x₁ y₁ : MPSPreparation.CutPrefixConfig d N k)
-    (x₂ y₂ : MPSPreparation.CutSuffixConfig d N k) :
-    (physicalCutConfigEquiv (d * d) N k).symm
+theorem cutEquiv_symm_pairPhysicalConfig {d N k : ℕ}
+    (x₁ y₁ : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k))
+    (x₂ y₂ : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
+    (cutEquiv (fun _ : Fin N ↦ Fin (d * d)) (interval N 0 k)).symm
       (pairPhysicalConfig x₁ y₁, pairPhysicalConfig x₂ y₂) =
-      pairPhysicalConfig ((physicalCutConfigEquiv d N k).symm (x₁, x₂))
-        ((physicalCutConfigEquiv d N k).symm (y₁, y₂)) := by
+      pairPhysicalConfig ((cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)).symm (x₁, x₂))
+        ((cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)).symm (y₁, y₂)) := by
   funext s
-  change (if h : s.val < k then finProdFinEquiv (x₁ ⟨s, h⟩, y₁ ⟨s, h⟩)
-    else finProdFinEquiv (x₂ ⟨s, Nat.le_of_not_lt h⟩, y₂ ⟨s, Nat.le_of_not_lt h⟩)) = _
-  by_cases h : s.val < k <;> simp [physicalCutConfigEquiv, pairPhysicalConfig, h]
+  by_cases h : s ∈ interval N 0 k
+  · simp only [pairPhysicalConfig, cutEquiv_symm_apply_mem _ _ h]
+  · simp only [pairPhysicalConfig, cutEquiv_symm_apply_not_mem _ _ h]
 
 end MPUCircuit

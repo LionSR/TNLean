@@ -32,6 +32,8 @@ open MPTensor
 open Matrix MPSPreparation OBCChainTensor
 open scoped BigOperators
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace MPSTensor
 
 variable {d D N L : ℕ} {A : MPSTensor d D}
@@ -62,9 +64,9 @@ theorem prescribedOBC_window_bondDim_eq (hletter : ∃ i, A i ≠ 0)
     (j : Fin (D ^ 4 + 1)) : B.bondDim (reconstructionCut hN j) = D * D := by
   have : NeZero D := prescribedOBCBondNeZero B
   have hrank :
-      ManyBody.cutRank (ManyBody.interval N 0 (L + j.val)) B.coeff = D * D := by
-    rw [hcoeff, ← cutCoefficientRank_eq_cutRank]
-    exact quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective A hC1 hletter hN j
+      cutRank (ManyBody.interval N 0 (L + j.val)) B.coeff = D * D := by
+    rw [hcoeff]
+    exact quadraticWindow_cutRank_eq_of_isNBlkInjective A hC1 hletter hN j
   apply le_antisymm (B.bondDim_le _)
   exact hrank.symm.le.trans (B.cutRank_coeff_le (reconstructionCut hN j))
 
@@ -72,10 +74,10 @@ private theorem prescribedOBC_window_minimal (hletter : ∃ i, A i ≠ 0)
     (hC1 : Kraus.IsNBlkInjective A L) (hN : 2 * L + D ^ 4 < N)
     (B : OBCChainTensor d (D * D) N) (hcoeff : B.coeff = mpv A)
     (j : Fin (D ^ 4 + 1)) :
-    B.bondDim (reconstructionCut hN j) = cutCoefficientRank B.coeff (L + j.val) := by
+    B.bondDim (reconstructionCut hN j) = cutRank (interval N 0 (L + j.val)) B.coeff := by
   have : NeZero D := prescribedOBCBondNeZero B
   rw [prescribedOBC_window_bondDim_eq hletter hC1 hN B hcoeff, hcoeff,
-    quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective A hC1 hletter hN j]
+    quadraticWindow_cutRank_eq_of_isNBlkInjective A hC1 hletter hN j]
 
 /-- The original window bonds, identified with the doubled virtual
 coordinates by their derived dimension equality.
@@ -124,9 +126,9 @@ theorem quadraticPrescribedOBCWindow_eq_physicalCutWindow
   classical
   funext j i
   let p : Fin N := ⟨L + j.val, by have := j.isLt; omega⟩
-  have hprev : B.bondDim p.castSucc = cutCoefficientRank B.coeff p.val :=
+  have hprev : B.bondDim p.castSucc = cutRank (interval N 0 p.val) B.coeff :=
     prescribedOBC_window_minimal hletter hC1 hN B hcoeff j.castSucc
-  have hnext : B.bondDim p.succ = cutCoefficientRank B.coeff (p.val + 1) :=
+  have hnext : B.bondDim p.succ = cutRank (interval N 0 (p.val + 1)) B.coeff :=
     prescribedOBC_window_minimal hletter hC1 hN B hcoeff j.succ
   have hsite := toMatrix_cutSlice_physicalPrefixBasis B p hprev hnext i
   ext a b

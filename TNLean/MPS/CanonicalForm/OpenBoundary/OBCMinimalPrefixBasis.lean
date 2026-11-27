@@ -23,6 +23,8 @@ Theorem 8, lines 1139--1169.
 open Matrix MPSPreparation
 open scoped BigOperators
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace OBCChainTensor
 
 variable {d Q N : ℕ} (B : OBCChainTensor d Q N)
@@ -30,17 +32,17 @@ variable {d Q N : ℕ} (B : OBCChainTensor d Q N)
 /-- The actual prefix factor of a minimal bond has independent columns.
 Source: PGVWC07, minimal Schmidt ranks, MPSarchive.tex lines 444--458. -/
 theorem linearIndependent_physicalPrefixMatrix (k : Fin (N + 1))
-    (hmin : B.bondDim k = cutCoefficientRank B.coeff k.val) :
+    (hmin : B.bondDim k = cutRank (interval N 0 k.val) B.coeff) :
     LinearIndependent ℂ (physicalPrefixMatrix B k).col := by
   classical
   have hrank : (physicalPrefixMatrix B k).rank = B.bondDim k := by
     apply le_antisymm
     · simpa only [Fintype.card_fin] using
         Matrix.rank_le_card_width (physicalPrefixMatrix B k)
-    · calc B.bondDim k = cutCoefficientRank B.coeff k.val := hmin
-        _ = (cutCoefficientMatrix B.coeff k.val).rank := rfl
+    · calc B.bondDim k = cutRank (interval N 0 k.val) B.coeff := hmin
+        _ = (cutMatrix (interval N 0 k.val) B.coeff).rank := rfl
         _ ≤ _ := ?_
-      rw [cutCoefficientMatrix_eq_physicalPrefix_mul_suffix B k]
+      rw [cutMatrix_eq_physicalPrefix_mul_suffix B k]
       exact Matrix.rank_mul_le_left _ _
   apply linearIndependent_iff_card_eq_finrank_span.mpr
   rw [Set.finrank, ← Matrix.rank_eq_finrank_span_cols, hrank, Fintype.card_fin]
@@ -49,7 +51,7 @@ theorem linearIndependent_physicalPrefixMatrix (k : Fin (N + 1))
 range and the actual cut column space, not only their inclusion.
 Source: PGVWC07, MPSarchive.tex lines 444--458 and 1139--1169. -/
 theorem cutColumnSpace_eq_span_physicalPrefixMatrix (k : Fin (N + 1))
-    (hmin : B.bondDim k = cutCoefficientRank B.coeff k.val) :
+    (hmin : B.bondDim k = cutRank (interval N 0 k.val) B.coeff) :
     cutColumnSpace B.coeff k.val =
       Submodule.span ℂ (Set.range (physicalPrefixMatrix B k).col) := by
   classical
@@ -66,7 +68,7 @@ theorem cutColumnSpace_eq_span_physicalPrefixMatrix (k : Fin (N + 1))
 bond of the prescribed OBC representation. Source: PGVWC07, actual
 Schmidt cut bases, MPSarchive.tex lines 444--458. -/
 noncomputable def physicalPrefixBasis (k : Fin (N + 1))
-    (hmin : B.bondDim k = cutCoefficientRank B.coeff k.val) :
+    (hmin : B.bondDim k = cutRank (interval N 0 k.val) B.coeff) :
     Module.Basis (Fin (B.bondDim k)) ℂ (cutColumnSpace B.coeff k.val) :=
   (Module.Basis.span (linearIndependent_physicalPrefixMatrix B k hmin)).map
     (LinearEquiv.ofEq _ _ (cutColumnSpace_eq_span_physicalPrefixMatrix B k hmin).symm)
@@ -74,8 +76,8 @@ noncomputable def physicalPrefixBasis (k : Fin (N + 1))
 /-- The derived basis retains exactly the original supplied prefix
 coefficients. Source: PGVWC07, MPSarchive.tex lines 444--458. -/
 @[simp] theorem physicalPrefixBasis_apply (k : Fin (N + 1))
-    (hmin : B.bondDim k = cutCoefficientRank B.coeff k.val)
-    (a : Fin (B.bondDim k)) (u : CutPrefixConfig d N k.val) :
+    (hmin : B.bondDim k = cutRank (interval N 0 k.val) B.coeff)
+    (a : Fin (B.bondDim k)) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) :
     (physicalPrefixBasis B k hmin a).val u = physicalPrefixMatrix B k u a := by
   simp only [physicalPrefixBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
     Module.Basis.coe_span_apply]
@@ -86,8 +88,8 @@ is the matrix of the actual physical-coordinate slice. This identifies
 the given window rather than selecting a different representation.
 Source: PGVWC07, MPSarchive.tex lines 1139--1152. -/
 theorem toMatrix_cutSlice_physicalPrefixBasis (p : Fin N)
-    (hprev : B.bondDim p.castSucc = cutCoefficientRank B.coeff p.val)
-    (hnext : B.bondDim p.succ = cutCoefficientRank B.coeff (p.val + 1)) (i : Fin d) :
+    (hprev : B.bondDim p.castSucc = cutRank (interval N 0 p.val) B.coeff)
+    (hnext : B.bondDim p.succ = cutRank (interval N 0 (p.val + 1)) B.coeff) (i : Fin d) :
     LinearMap.toMatrix (physicalPrefixBasis B p.succ hnext)
       (physicalPrefixBasis B p.castSucc hprev) (cutSlice B.coeff p.val i) = B.tensor p i := by
   classical

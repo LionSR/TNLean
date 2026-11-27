@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Tensor.VaryingBond
 
 import TNLean.MPS.Tensor.VaryingBond.BlockUnitary
-import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
 import TNLean.MPS.Tensor.VaryingBond.CutRank
 import TNLean.MPS.Tensor.VaryingBond.IsometricChain
 import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentation

@@ -31,10 +31,12 @@ section OBCCanonicalEndpoints
 open Matrix
 open scoped BigOperators
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 namespace MPSPreparation
 
 variable {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
 
 include hψ
 
@@ -43,9 +45,10 @@ Source: PGVWC07, Theorem thm:OBC-Vidal, condition 3. -/
 theorem cutPrefixMatrix_zero_gram (hB0 : ∀ q, (B 0 q).val = 1) :
     (cutPrefixMatrix ψ B 0)ᴴ * cutPrefixMatrix ψ B 0 = 1 := by
   classical
-  let : IsEmpty {s : Fin N // s.val < 0} := ⟨fun s ↦ Nat.not_lt_zero _ s.property⟩
-  let : Unique (Fin (cutCoefficientRank ψ 0)) :=
-    Equiv.unique (finCongr (cutCoefficientRank_zero ψ hψ))
+  let : IsEmpty {s : Fin N // s ∈ interval N 0 0} :=
+    ⟨fun s ↦ Nat.not_lt_zero _ (mem_interval_zero_iff.mp s.property)⟩
+  let : Unique (Fin (cutRank (interval N 0 0) ψ)) :=
+    Equiv.unique (finCongr ((MPSPreparation.cutRank_zero_eq_one hψ)))
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
   subst r
@@ -57,8 +60,8 @@ theorem cutPrefixMatrix_last_gram (hBN : ∀ q, (B N q).val = fullCutVector ψ)
     (hnorm : ∑ σ, star (ψ σ) * ψ σ = 1) :
     (cutPrefixMatrix ψ B N)ᴴ * cutPrefixMatrix ψ B N = 1 := by
   classical
-  let : Unique (Fin (cutCoefficientRank ψ N)) :=
-    Equiv.unique (finCongr (cutCoefficientRank_last ψ hψ))
+  let : Unique (Fin (cutRank (interval N 0 N) ψ)) :=
+    Equiv.unique (finCongr ((MPSPreparation.cutRank_self_eq_one hψ)))
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
   subst r
@@ -75,9 +78,10 @@ Source: PGVWC07, Theorem thm:OBC-Vidal, conditions 1 and 3. -/
 theorem cutSuffixMatrix_last_coisometry (hBN : ∀ q, (B N q).val = fullCutVector ψ) :
     cutSuffixMatrix ψ B N * (cutSuffixMatrix ψ B N)ᴴ = 1 := by
   classical
-  let : IsEmpty {s : Fin N // N ≤ s.val} := ⟨fun s ↦ (not_le_of_gt s.val.isLt) s.property⟩
-  let : Unique (Fin (cutCoefficientRank ψ N)) :=
-    Equiv.unique (finCongr (cutCoefficientRank_last ψ hψ))
+  let : IsEmpty {s : Fin N // s ∉ interval N 0 N} :=
+    ⟨fun s ↦ (not_le_of_gt s.val.isLt) (notMem_interval_zero_iff.mp s.property)⟩
+  let : Unique (Fin (cutRank (interval N 0 N) ψ)) :=
+    Equiv.unique (finCongr ((MPSPreparation.cutRank_self_eq_one hψ)))
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
   subst r
@@ -90,18 +94,19 @@ theorem cutSuffixMatrix_zero_coisometry (hB0 : ∀ q, (B 0 q).val = 1)
     (hnorm : ∑ σ, star (ψ σ) * ψ σ = 1) :
     cutSuffixMatrix ψ B 0 * (cutSuffixMatrix ψ B 0)ᴴ = 1 := by
   classical
-  let : IsEmpty {s : Fin N // s.val < 0} := ⟨fun s ↦ Nat.not_lt_zero _ s.property⟩
-  let : Unique (Fin (cutCoefficientRank ψ 0)) :=
-    Equiv.unique (finCongr (cutCoefficientRank_zero ψ hψ))
+  let : IsEmpty {s : Fin N // s ∈ interval N 0 0} :=
+    ⟨fun s ↦ Nat.not_lt_zero _ (mem_interval_zero_iff.mp s.property)⟩
+  let : Unique (Fin (cutRank (interval N 0 0) ψ)) :=
+    Equiv.unique (finCongr ((MPSPreparation.cutRank_zero_eq_one hψ)))
   have hG : ∀ q v, cutSuffixMatrix ψ B 0 q v = ψ (initialCutSuffixEquiv d N v) := by
     intro q v
-    have h := congrArg (fun M ↦ M (default : CutPrefixConfig d N 0) v)
-      (cutCoefficientMatrix_eq_prefix_mul_suffix ψ B 0)
+    have h := congrArg (fun M ↦ M (default : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) v)
+      (cutMatrix_eq_prefix_mul_suffix ψ B 0)
     simp only [Matrix.mul_apply, cutPrefixMatrix_zero ψ B hB0, one_mul,
       Fintype.sum_unique] at h
-    have hq : (default : Fin (cutCoefficientRank ψ 0)) = q := Subsingleton.elim _ _
+    have hq : (default : Fin (cutRank (interval N 0 0) ψ)) = q := Subsingleton.elim _ _
     rw [hq] at h
-    exact h.symm.trans (by simp [cutCoefficientMatrix, initialCutSuffixEquiv])
+    exact h.symm.trans (by simp [ManyBody.cutMatrix_apply, cutEquiv_symm_interval_zero, initialCutSuffixEquiv])
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
   subst r
@@ -154,18 +159,18 @@ basis whose weighted prefix Gram matrix is positive diagonal and whose
 suffix coordinates are row-coisometric. No density matrix is an input.
 Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458. -/
 theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    ∃ B : Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k),
-    ∃ s : Fin (cutCoefficientRank ψ k) → ℝ,
+    ∃ B : Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k),
+    ∃ s : Fin (cutRank (interval N 0 k) ψ) → ℝ,
       (∀ q, 0 < s q) ∧
-      (let F : Matrix (CutPrefixConfig d N k) (Fin (cutCoefficientRank ψ k)) ℂ :=
+      (let F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (Fin (cutRank (interval N 0 k) ψ)) ℂ :=
         fun u q ↦ (B q).val u
        Fᴴ * F = Matrix.diagonal (fun q ↦ ((s q : ℂ) ^ 2))) ∧
-      (let G : Matrix (Fin (cutCoefficientRank ψ k)) (CutSuffixConfig d N k) ℂ :=
+      (let G : Matrix (Fin (cutRank (interval N 0 k) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ℂ :=
         fun q v ↦ B.repr
-          ⟨(cutCoefficientMatrix ψ k).col v, Submodule.subset_span ⟨v, rfl⟩⟩ q
+          ⟨(cutMatrix (interval N 0 k) ψ).col v, Submodule.subset_span ⟨v, rfl⟩⟩ q
        G * Gᴴ = 1) := by
   classical
-  let M := cutCoefficientMatrix ψ k
+  let M := cutMatrix (interval N 0 k) ψ
   let S := Classical.choice (Matrix.exists_compactSVD M)
   let F := S.Vᴴ * S.diagonal
   let T := S.inverseDiagonal * S.V
@@ -187,7 +192,7 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
     refine ⟨S.Uᴴ.col q, ?_⟩
     change M *ᵥ S.Uᴴ.col q = F.col q
     rw [← Matrix.col_mul_eq_mulVec_col, ← hF]
-  let b : Fin (cutCoefficientRank ψ k) → cutColumnSpace ψ k :=
+  let b : Fin (cutRank (interval N 0 k) ψ) → cutColumnSpace ψ k :=
     fun q ↦ ⟨F.col q, hmem q⟩
   have hinj : Function.Injective F.mulVec := by
     intro x y hxy
@@ -205,7 +210,7 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
   have hrepr : ∀ v,
       B.equivFun ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ = S.U.col v := by
     intro v
-    let c : Fin (cutCoefficientRank ψ k) → ℂ := fun q ↦ S.U q v
+    let c : Fin (cutRank (interval N 0 k) ψ) → ℂ := fun q ↦ S.U q v
     have hsum : (⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ : cutColumnSpace ψ k)
         = ∑ q, c q • B q := by
       apply Subtype.val_injective
@@ -259,10 +264,10 @@ Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458. -/
 theorem exists_canonicalCutBasisFamily {d N : ℕ} (hN : 0 < N)
     (ψ : (Fin N → Fin d) → ℂ)
     (hnorm : ∑ σ, star (ψ σ) * ψ σ = 1) :
-    ∃ B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k),
+    ∃ B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k),
       (∀ q, (B 0 q).val = 1) ∧ (∀ q, (B N q).val = fullCutVector ψ) ∧
       ∀ k,
-        (∃ lam : Fin (cutCoefficientRank ψ k) → ℝ,
+        (∃ lam : Fin (cutRank (interval N 0 k) ψ) → ℝ,
           (∀ q, 0 < lam q) ∧
           (cutPrefixMatrix ψ B k)ᴴ * cutPrefixMatrix ψ B k =
             Matrix.diagonal (fun q ↦ (lam q : ℂ))) ∧
@@ -274,7 +279,7 @@ theorem exists_canonicalCutBasisFamily {d N : ℕ} (hN : 0 < N)
     exact zero_ne_one hnorm
   obtain ⟨E, hE0, hEN⟩ := exists_cutBasisFamily_with_endpoints ψ hψ hN
   choose C s hs hGram hG using fun k ↦ exists_weightedSchmidtCutBasis ψ k
-  let B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k) := fun k ↦
+  let B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k) := fun k ↦
     if h0 : k = 0 then by subst k; exact E 0
     else if hlast : k = N then by subst k; exact E N
     else C k
