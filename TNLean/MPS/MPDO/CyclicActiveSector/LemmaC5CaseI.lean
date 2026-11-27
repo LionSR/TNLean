@@ -21,6 +21,7 @@ import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorTraceMatrix
 import TNLean.MPS.CanonicalForm.VerticalForm.Purity
 import TNLean.MPS.Operator.Simple.SectorEtaPositivity
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components
@@ -42,11 +43,9 @@ project-derived inputs.
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
   (`trace_pow_similarity_diagonal`),
 * the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`
-  (`mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`),
-* the active sector is unique
-  (`card_activeSector_eq_one_of_literal_ZCL`),
-* the Case-I relation `T² = T`
-  (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`),
+  (`mpvOverlap_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`),
+* the active sector is unique (`card_activeSector_eq_one_of_literal_ZCL`),
+* the Case-I relation `T² = T` (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`),
 * the normalized Case-I coefficients `T_{kh} = a_k b_h` and `∑ₖ a_k b_k = 1`
   (`activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL`),
 * the rectangular form `Q(1−LQ)L = 0`
@@ -81,8 +80,7 @@ print the rectangular identity as a separate displayed theorem.
 ## Main declarations
 
 * `activeSectorTraceSqMatrix`: the matrix `S_{kh} = Re(tr(η_{kh}²))`
-* `activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq`:
-  `S_{kh} ≤ T_{kh}²` entrywise
+* `activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq`: `S_{kh} ≤ T_{kh}²` entrywise
 * `activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`:
   literal ZCL `physTraceTransfer² = physTraceTransfer` forces `T² = T³`
 * `activeSectorTraceMatrix_pow_two_pos`:
@@ -94,12 +92,10 @@ print the rectangular identity as a separate displayed theorem.
   products indexed by labelings `k : Fin N → n`
 * `sum_prod_traceSq_eq_sum_active`: the full-sector cyclic-product sum
   reduces to the active-sector sum
-* `mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`:
+* `mpvOverlap_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`:
   **the overlap formula** `mpvOverlap = Complex.ofReal(tr(S^N))`
-* `card_activeSector_eq_one_of_literal_ZCL`:
-  **the active sector is unique**
-* `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`:
-  **the Case-I relation** `T² = T`
+* `card_activeSector_eq_one_of_literal_ZCL`: **the active sector is unique**
+* `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`: **the Case-I relation** `T² = T`
 * `activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL`:
   **the normalized Case-I coefficients** `T_{kh} = a_k b_h` and `∑ₖ a_k b_k = 1`
 * `caseI_rectangular_remainder_eq_zero_of_literal_ZCL`:
@@ -513,15 +509,17 @@ theorem sum_prod_traceSq_eq_sum_active
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; the self-overlap
 formulation `<V_alpha|V_alpha> = tr(E_alpha^N)` is in Appendix A, proof of Lemma
 `equalMPS`, line 1099. -/
-theorem mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
+theorem mpvOverlap_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
     {N : ℕ} [NeZero N] :
-    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
+    MPTensor.mpvOverlap K K N =
       Complex.ofReal (Matrix.trace ((activeSectorTraceSqMatrix K F p) ^ N)) := by
   have hK : IsMPDO K := F.isMPDO_of_neighboringOperator_pos hpos
-  rw [mpvOverlap_toMPSTensor_self_eq_trace_sq K hK (NeZero.pos N)]
+  rw [show MPTensor.mpvOverlap K K N = MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N from
+      Fintype.sum_equiv (.arrowCongr (.refl _) finProdFinEquiv) _ _ fun _ ↦ by
+        simp [mpv_toMPSTensor_eq], mpvOverlap_toMPSTensor_self_eq_trace_sq K hK (NeZero.pos N)]
   rw [← trace_mpo_conjugatePhysical_mul_self K F.physicalIsometry
     F.physicalIsometry_isometry (N := N)]
   rw [← Matrix.trace_mul_self_eq_of_reindex_eq (F.physicalConfigEquiv N) _ _
@@ -591,7 +589,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K)
     [hne : Nonempty (F.ActiveSector p)] :
     Fintype.card (F.ActiveSector p) = 1 := by
   have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
@@ -638,14 +636,17 @@ theorem card_activeSector_eq_one_of_literal_ZCL
       hShat_le
     simpa only [hShat_trace] using this
   have htendsto_one : Filter.Tendsto (fun N => Matrix.trace (S ^ N)) Filter.atTop (nhds 1) := by
-    have hoverlap : Filter.Tendsto (fun N => MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N)
-        Filter.atTop (nhds (1 : ℂ)) := hK_normal.selfOverlap_tendsto_one
+    have hoverlap : Filter.Tendsto (fun N => MPTensor.mpvOverlap K K N)
+        Filter.atTop (nhds (1 : ℂ)) :=
+      (hK_normal.reindexPhysical finProdFinEquiv.symm).selfOverlap_tendsto_one.congr fun N ↦
+        Fintype.sum_equiv (.arrowCongr (.refl _) finProdFinEquiv.symm) _ _ fun _ ↦ by
+          simp [toMPSTensor_eq_reindexPhysical, MPTensor.mpv_reindexPhysical]
     have hcongr : Filter.Tendsto (fun N => ((Matrix.trace (S ^ N) : ℝ) : ℂ))
         Filter.atTop (nhds (1 : ℂ)) := by
       apply hoverlap.congr'
       filter_upwards [Filter.eventually_gt_atTop 0] with N hN
       have : NeZero N := ⟨hN.ne'⟩
-      exact mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
+      exact mpvOverlap_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
         K F p hpos hinactive
     exact Filter.tendsto_ofReal_iff.mp hcongr
   have := tendsto_nhds_unique htendsto_zero htendsto_one
@@ -666,7 +667,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K)
     [hne : Nonempty (F.ActiveSector p)] :
     (F.activeSectorTraceMatrix p) ^ 2 = F.activeSectorTraceMatrix p := by
   have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
@@ -714,7 +715,7 @@ theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K)
     [hne : Nonempty (F.ActiveSector p)] :
     ∃ a b : F.ActiveSector p → ℝ,
       (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
@@ -765,7 +766,7 @@ theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K)
     [hne : Nonempty (F.ActiveSector p)] :
     let L : Matrix (Fin D) (F.ActiveSector p) ℂ :=
       fun beta h ↦ (F.leftTensor h beta).trace

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.CommutingForm.FixedBondProductEtaTensor
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Visibility of selected fixed-product sectors
@@ -71,10 +72,10 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 on the physical space; no virtual map between the two tensor carriers is used.
 See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem changePhysicalBasis_physicalCoordinateMatrix_isInjective
-    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K.toMPSTensor) :
-    Kraus.IsInjective (changePhysicalBasis F.physicalCoordinateMatrix K).toMPSTensor := by
-  apply MPOTensor.isInjective_of_eq_changePhysicalBasis
-    F.physicalCoordinateMatrixᴴ _ K ?_ hK
+    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K) :
+    Kraus.IsInjective (changePhysicalBasis F.physicalCoordinateMatrix K) := by
+  refine (isInjective_toMPSTensor_iff _).1 <| MPOTensor.isInjective_of_eq_changePhysicalBasis
+    F.physicalCoordinateMatrixᴴ _ K ?_ ((isInjective_toMPSTensor_iff K).2 hK)
   rw [changePhysicalBasis_changePhysicalBasis,
     F.physicalCoordinateMatrix_isometry]
   ext ⟨i, j⟩ beta alpha
@@ -148,7 +149,7 @@ length-two closed operator and trace-pairing nondegeneracy. No virtual
 comparison is assumed. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
-    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K.toMPSTensor) (c : ℂ)
+    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K) (c : ℂ)
     (hmpo : mpo (changePhysicalBasis F.physicalCoordinateMatrix K) 2 =
       c • mpo F.sectorCoordinateTensor 2)
     {k h : Fin F.sectorCount} (hkh : k ≠ h)
@@ -156,10 +157,10 @@ theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
     changePhysicalBasis F.physicalCoordinateMatrix K
         (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
-  have hM : Kraus.IsInjective M.toMPSTensor :=
+  have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero ((isInjective_toMPSTensor_iff M).2 hM)
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -188,7 +189,7 @@ delete sectors outside cyclic support, and injectivity of the original tensor
 separates the remaining trace pairing. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
-    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K.toMPSTensor) (c : ℂ)
+    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K) (c : ℂ)
     (hmpo : mpo (changePhysicalBasis F.physicalCoordinateMatrix K) 2 =
       c • mpo F.sectorCoordinateTensor 2)
     (k : Fin F.sectorCount) (hk : ¬ F.IsCyclicActiveSector k)
@@ -196,10 +197,10 @@ theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
     changePhysicalBasis F.physicalCoordinateMatrix K
         (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0 := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
-  have hM : Kraus.IsInjective M.toMPSTensor :=
+  have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero ((isInjective_toMPSTensor_iff M).2 hM)
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -230,7 +231,7 @@ transfers only an edge which is already zero in the selected factorization.
 It does not infer the vanishing of nonrecurrent edges from closed operators.
 See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
-    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K.toMPSTensor) (c : ℂ)
+    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K) (c : ℂ)
     (hmpo : mpo (changePhysicalBasis F.physicalCoordinateMatrix K) 3 =
       c • mpo F.sectorCoordinateTensor 3)
     (k h : Fin F.sectorCount) (hkh : F.neighboringOperator k h = 0)
@@ -240,9 +241,9 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
       changePhysicalBasis F.physicalCoordinateMatrix K
         (F.sectorFinEquiv.symm ⟨h, a⟩, F.sectorFinEquiv.symm ⟨h, b⟩) = 0 := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
-  have hM : Kraus.IsInjective M.toMPSTensor :=
+  have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero ((isInjective_toMPSTensor_iff M).2 hM)
   intro p
   set u := p.divNat
   set v := p.modNat
@@ -344,27 +345,27 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 remove cross-sector entries and sectors outside cyclic support. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top
-    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K.toMPSTensor) (c : ℂ)
+    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K) (c : ℂ)
     (hmpo : mpo (changePhysicalBasis F.physicalCoordinateMatrix K) 2 =
       c • mpo F.sectorCoordinateTensor 2) :
     Submodule.span ℂ
       (Set.range (F.cyclicActiveOriginalOneSiteMatrixFamily K)) = ⊤ := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
-  have hM : Kraus.IsInjective M.toMPSTensor :=
+  have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   apply top_unique
   rw [← hM.span_eq_top]
   apply Submodule.span_le.2
   rintro A ⟨p, rfl⟩
-  change M (p.divNat, p.modNat) ∈ _
-  generalize hi : F.sectorFinEquiv p.divNat = si
-  generalize hj : F.sectorFinEquiv p.modNat = sj
+  change M (p.1, p.2) ∈ _
+  generalize hi : F.sectorFinEquiv p.1 = si
+  generalize hj : F.sectorFinEquiv p.2 = sj
   obtain ⟨k, x⟩ := si
   obtain ⟨h, y⟩ := sj
-  have hi' : p.divNat = F.sectorFinEquiv.symm ⟨k, x⟩ := by
+  have hi' : p.1 = F.sectorFinEquiv.symm ⟨k, x⟩ := by
     apply F.sectorFinEquiv.injective
     rw [Equiv.apply_symm_apply, hi]
-  have hj' : p.modNat = F.sectorFinEquiv.symm ⟨h, y⟩ := by
+  have hj' : p.2 = F.sectorFinEquiv.symm ⟨h, y⟩ := by
     apply F.sectorFinEquiv.injective
     rw [Equiv.apply_symm_apply, hj]
   rw [hi', hj']
@@ -471,7 +472,7 @@ neighboring edges. The directed-cut contradiction is carried out in the
 original injective tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActive_reflTransGen_neighboringOperator_ne_zero_of_closed_mpo
-    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization C) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hclosed : ∀ N : ℕ, 2 ≤ N → ∃ c : ℂ, c ≠ 0 ∧
       mpo (changePhysicalBasis F.physicalCoordinateMatrix K) N =
@@ -517,7 +518,7 @@ injective tensor in the selected physical coordinates, and does not assert
 injectivity or normality of the selected fixed-product tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero
-    (hK : Kraus.IsInjective K.toMPSTensor) (data : CommutingForm K)
+    (hK : Kraus.IsInjective K) (data : CommutingForm K)
     (q h :
       data.fixedProductTensorDataPhysicalSectorFactorization
         |>.CyclicActiveSector) :

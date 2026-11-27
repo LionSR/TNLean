@@ -9,6 +9,7 @@ import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
 import TNLean.MPS.Operator.PhysicalSector.InverseMapActiveSectorRecurrence
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTransport
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Fixed matrix-product representations of commuting-bond products
@@ -180,22 +181,13 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 theorem eventuallyNonzeroProportionalMPV₂_fixedProductTensor
     (data : CommutingForm M)
     (repr : CommutingBond.FixedProductTensorData data.toCommutingBond) :
-    MPTensor.EventuallyNonzeroProportionalMPV₂
-      M.toMPSTensor repr.tensor.toMPSTensor := by
+    MPTensor.EventuallyNonzeroProportionalMPV₂ M repr.tensor := by
   filter_upwards [Filter.eventually_ge_atTop 2] with N hN
   obtain ⟨c, hc, hreal⟩ := data.realizes_mpo N hN
   refine ⟨(c : ℂ), ?_, ?_⟩
   · exact_mod_cast ne_of_gt hc
   · intro rho
-    let sigma : Fin N → Fin d := fun n ↦ (rho n).divNat
-    let tau : Fin N → Fin d := fun n ↦ (rho n).modNat
-    have hrho : (fun n ↦ finProdFinEquiv (sigma n, tau n)) = rho := by
-      funext n
-      simpa [sigma, tau] using (finProdFinEquiv.apply_symm_apply (rho n))
-    rw [← hrho]
-    rw [MPSTensor.mpv_toMPSTensor_pairConfig,
-      MPSTensor.mpv_toMPSTensor_pairConfig]
-    rw [hreal, repr.mpo_eq_product N hN]
+    rw [mpv_eq_mpo, mpv_eq_mpo, hreal, repr.mpo_eq_product N hN]
     rfl
 
 /-- If one positive rescaling of a fixed product tensor is normal, then its
@@ -221,9 +213,8 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
     (data : CommutingForm M)
     (repr : CommutingBond.FixedProductTensorData data.toCommutingBond)
     (s : ℝ) (hs : 0 < s)
-    (hM : MPTensor.IsNormalTensor M.toMPSTensor)
-    (hRepr : MPTensor.IsNormalTensor
-      (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
+    (hM : MPTensor.IsNormalTensor M)
+    (hRepr : MPTensor.IsNormalTensor (fun i ↦ (s : ℂ) • repr.tensor i)) :
     ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((ζ * (s : ℂ)) ^ N) • data.product hN := by
   have : NeZero D := ⟨hM.bondDim_ne_zero⟩
@@ -237,9 +228,10 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
     rcases hN with ⟨c, hc, hEq⟩
     refine ⟨c / (s : ℂ) ^ N, div_ne_zero hc (pow_ne_zero N hsℂ), ?_⟩
     intro σ
-    rw [MPSTensor.mpv_smul, hEq σ]
+    rw [MPSTensor.mpv_smul, mpv_toMPSTensor_eq, mpv_toMPSTensor_eq, hEq]
     field_simp
-  rcases hProp.exists_unit_phase_power_of_isNormalTensor hM hRepr with
+  rcases hProp.exists_unit_phase_power_of_isNormalTensor
+      (hM.reindexPhysical finProdFinEquiv.symm) (hRepr.reindexPhysical finProdFinEquiv.symm) with
     ⟨ζ, hζ, hPhase⟩
   refine ⟨ζ, hζ, ?_⟩
   intro N hN
@@ -274,16 +266,16 @@ theorem mpo_eq_positive_power_product_of_normal_smul
     (data : CommutingForm M)
     (repr : CommutingBond.FixedProductTensorData data.toCommutingBond)
     (s : ℝ) (hs : 0 < s)
-    (hM : MPTensor.IsNormalTensor M.toMPSTensor)
-    (hRepr : MPTensor.IsNormalTensor
-      (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
+    (hM : MPTensor.IsNormalTensor M)
+    (hRepr : MPTensor.IsNormalTensor (fun i ↦ (s : ℂ) • repr.tensor i)) :
     ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((s : ℂ) ^ N) • data.product hN := by
   have : NeZero D := ⟨hM.bondDim_ne_zero⟩
   rcases data.exists_unit_phase_power_mpo_eq_product_of_normal_smul
       repr s hs hM hRepr with ⟨ζ, hζ, hGeo⟩
-  obtain ⟨K, hK⟩ := Metric.tendsto_atTop.mp hM.selfOverlap_tendsto_one
-    (1 / 2) (by norm_num)
+  have hSelf : Filter.Tendsto (fun N ↦ MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N)
+      Filter.atTop (nhds 1) := (hM.reindexPhysical finProdFinEquiv.symm).selfOverlap_tendsto_one
+  obtain ⟨K, hK⟩ := Metric.tendsto_atTop.mp hSelf (1 / 2) (by norm_num)
   let N := max K 2
   have hKN : K ≤ N := le_max_left K 2
   have hN : 2 ≤ N := le_max_right K 2
@@ -395,16 +387,17 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1570--1593. The positive physical-sector factorization is constructed in
 Lemma C.4 (`propSN`), lines 1406--1450. -/
 theorem exists_normal_fixedProductTensorData_of_isSAL
-    {d D : ℕ} (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
-    (hNormal : MPTensor.IsNormalTensor K.toMPSTensor) :
+    {d D : ℕ} (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
+    (hNormal : MPTensor.IsNormalTensor K) :
     ∃ (F : PhysicalSectorFactorization K)
       (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef),
       let repr := F.fixedProductTensorData hη (bondDim_pos_of_isSAL K hSAL)
-      MPTensor.IsNormalTensor repr.tensor.toMPSTensor ∧
+      MPTensor.IsNormalTensor repr.tensor ∧
         ∀ (N : ℕ) (hN : 2 ≤ N),
           mpo K N =
             (F.commutingBond hη).product hN := by
-  obtain ⟨F, hη⟩ := exists_positive_physicalSectorFactorization_of_isSAL K hK hSAL
+  obtain ⟨F, hη⟩ := exists_positive_physicalSectorFactorization_of_isSAL K
+    ((isInjective_toMPSTensor_iff K).2 hK) hSAL
   let repr := F.fixedProductTensorData hη (bondDim_pos_of_isSAL K hSAL)
   refine ⟨F, hη, ?_, ?_⟩
   · exact hNormal

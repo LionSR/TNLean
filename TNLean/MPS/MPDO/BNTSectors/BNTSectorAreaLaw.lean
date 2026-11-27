@@ -9,6 +9,7 @@ import TNLean.MPS.MPDO.Entropy.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.Entropy.SALTraceTransfer
 import TNLean.MPS.Operator.Simple.SimpleLocalStructure
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Saturated area law for the BNT sectors
@@ -375,7 +376,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     (hSAL : IsSAL M)
     (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M)
     (s : Fin S.basisCount) :
-    Kraus.IsInjective (commonWeightAbsorbedBasisMPOTensor S hWeight s).toMPSTensor ∧
+    Kraus.IsInjective (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
       IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
       IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
       physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) *
@@ -390,7 +391,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
   have hSourceZCL : IsSourceZCL M :=
     hSAL.isSourceZCL_of_physTraceTransfer_sq hZCL_sq
-  exact ⟨commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s,
+  exact ⟨(isInjective_toMPSTensor_iff _).1
+      (commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s),
     commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL s,
     commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos

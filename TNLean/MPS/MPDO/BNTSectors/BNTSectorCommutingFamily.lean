@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportProductTransport
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Commuting products on the BNT physical sectors
@@ -85,7 +86,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
     (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
+    (hInjective : ∀ s, Kraus.IsInjective (K s))
     (hSupport : ∀ s β α,
       P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
         physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
@@ -93,13 +94,14 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
       (PhysicalSectorFactorization.changePhysicalBasis
         (Matrix.conjTranspose
           ((physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
-            (P s) (K s) (hP s) (hInjective s) (hSupport s)).inclusion))
+            (P s) (K s) (hP s) ((isInjective_toMPSTensor_iff _).2 (hInjective s))
+              (hSupport s)).inclusion))
         (K s)))
     (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
     Nonempty (OrthogonalCommutingSectorFamily K) := by
   let restriction : (s : Fin g) → PhysicalSupportRestrictionData (P s) (K s) :=
     fun s ↦ physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
-      (P s) (K s) (hP s) (hInjective s) (hSupport s)
+      (P s) (K s) (hP s) ((isInjective_toMPSTensor_iff _).2 (hInjective s)) (hSupport s)
   exact nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFactorization
     K P hP hPorth restriction G hη
 

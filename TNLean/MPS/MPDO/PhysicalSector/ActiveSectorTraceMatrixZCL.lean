@@ -8,6 +8,7 @@ import QICLean.Algebra.Combinatorics.FinSum
 import TNLean.MPS.MPDO.PhysicalSector.NeighboringTraceObstruction
 import TNLean.MPS.MPDO.PhysicalSector.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.Entropy.SALTraceTransfer
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Zero correlation length on an active-sector trace matrix
@@ -183,12 +184,12 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497.  No idempotence, rank-one, or semisimplicity
 conclusion is made. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) (hZCL : IsSourceZCL K) :
     let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K hK R hρ hη alpha beta hm
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
     ∃ (z : Fin F.sectorCount → Circle) (lam : ℝ), 0 < lam ∧
       (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
         Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) ∧
@@ -197,7 +198,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
             ∀ N : ℕ, 0 < N →
               Matrix.trace ((lam⁻¹ • T) ^ N) = Matrix.trace (lam⁻¹ • T) := by
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K hK R hρ hη alpha beta hm
+    K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
   change ∃ (z : Fin F.sectorCount → Circle) (lam : ℝ), 0 < lam ∧
     (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
       Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) ∧
@@ -236,7 +237,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497.  The conclusion does not include the invalid
 rank-one inference at lines 1498--1499. -/
 theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
     (hZCL : IsSourceZCL K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ) (lam : ℝ),
       0 < lam ∧
@@ -254,7 +255,7 @@ theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
     exists_normalizedFourSiteTail_entry_ne_zero
       K ((Classical.choose_spec hSAL).1 4 (by omega))
   let F₀ := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K hK (normalizedFourSiteTail K)
+    K ((isInjective_toMPSTensor_iff K).2 hK) (normalizedFourSiteTail K)
       (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
   obtain ⟨z, lam, hlam, hpos, hprim, hrel⟩ :=
     exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
@@ -285,7 +286,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497. The conclusion stops before the invalid rank-one
 inference at lines 1498--1499. -/
 theorem exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ) (lam : ℝ),
       0 < lam ∧

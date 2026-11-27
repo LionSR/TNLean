@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.PhysicalSector.InverseMapActiveSectorRecurrence
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorRephasing
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorTraceMatrix
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Primitivity of the active inverse-map sector trace matrix
@@ -36,22 +37,23 @@ zero-weight reparameterization.
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1445. -/
 theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (k : Fin hη.m) (hk : hη.p k = 0)
     (x y : (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K hK R hρ hη alpha beta hm).SectorIndex k) :
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm).SectorIndex k) :
     (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K hK R hρ hη alpha beta hm).sectorVirtualMatrix k x y = 0 := by
+      K ((isInjective_toMPSTensor_iff K).2 hK)
+          R hρ hη alpha beta hm).sectorVirtualMatrix k x y = 0 := by
   ext gamma delta
   unfold PhysicalSectorFactorization.sectorVirtualMatrix
   have hleft :
       (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-        K hK R hρ hη alpha beta hm).leftTensor k gamma = 0 := by
-    change sectorTensorL K hK hη R alpha beta k gamma = 0
+        K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm).leftTensor k gamma = 0 := by
+    change sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK) hη R alpha beta k gamma = 0
     exact sectorTensorL_eq_zero_of_weight_eq_zero
-      K hK hη R alpha beta k gamma hk
+      K ((isInjective_toMPSTensor_iff K).2 hK) hη R alpha beta k gamma hk
   rw [hleft, Matrix.zero_apply, zero_mul, Matrix.zero_apply]
 
 /-- Every neighboring operator incident to a zero-weight sector vanishes after
@@ -67,16 +69,16 @@ neighboring operators vanish.
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1445. -/
 theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_incident
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (z : Fin hη.m → Circle) (k h : Fin hη.m)
     (hzero : hη.p k = 0 ∨ hη.p h = 0) :
     let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K hK R hρ hη alpha beta hm
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
     ((F.rephase z).neighboringOperator k h) = 0 := by
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K hK R hρ hη alpha beta hm
+    K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
   change (F.rephase z).neighboringOperator k h = 0
   have hvanish : F.neighboringOperator k h = 0 := by
     rcases hzero with hk | hh
@@ -86,7 +88,7 @@ theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_inciden
     · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
       split
       · exact sectorEta_eq_zero_of_target_weight_eq_zero
-          K hK hη R alpha beta k h hh
+          K ((isInjective_toMPSTensor_iff K).2 hK) hη R alpha beta k h hh
       · rfl
   have hscaled : ((((z k)⁻¹ * z h : Circle) : ℂ) • F.neighboringOperator k h) = 0 := by
     rw [hvanish, smul_zero]
@@ -107,12 +109,12 @@ See the same paper-gap note.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) :
     let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K hK R hρ hη alpha beta hm
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
     ∃ z : Fin F.sectorCount → Circle,
       (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
         Submodule.span ℂ
@@ -128,7 +130,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
         (∀ k, hη.p k = 0 → ∀ gamma, (F.rephase z).leftTensor k gamma = 0) ∧
         Nonempty ((F.rephase z).ActiveSector hη.p) := by
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K hK R hρ hη alpha beta hm
+    K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
   change ∃ z : Fin F.sectorCount → Circle,
     (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
       Submodule.span ℂ
@@ -144,10 +146,10 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
       (∀ k, hη.p k = 0 → ∀ gamma, (F.rephase z).leftTensor k gamma = 0) ∧
       Nonempty ((F.rephase z).ActiveSector hη.p)
   obtain ⟨z, hpos⟩ := exists_rephase_zeroWeightInverseMap_posSemidef
-    K hK R hρ hη alpha beta hm hM
+    K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm hM
   have hspanAll :
       Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤ :=
-    F.sectorVirtualMatrixFamily_span_eq_top hK
+    F.sectorVirtualMatrixFamily_span_eq_top ((isInjective_toMPSTensor_iff _).2 hK)
   have hinactiveVirtual : ∀ k, hη.p k = 0 →
       ∀ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y = 0 := by
     intro k hk x y
@@ -173,7 +175,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
         (F.rephase z).sectorVirtualMatrix k x y ≠ 0 := by
     intro k
     obtain ⟨x, y, hxy⟩ := exists_active_sectorVirtualMatrix_ne_zero
-      K hK R hρ hη alpha beta hm k.1 k.property
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm k.1 k.property
     refine ⟨x, y, fun hz => ?_⟩
     exact hxy ((F.rephase_sectorVirtualMatrix z k.1 x y).symm.trans hz)
   have hedgeNonzero : ∀ {k h}, F.neighboringOperator k h ≠ 0 →
@@ -182,11 +184,11 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
     intro k h hkh
     obtain ⟨hk, hh⟩ :=
       probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
-        K hK R hρ hη alpha beta hm hkh
+        K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm hkh
     exact ⟨exists_active_sectorVirtualMatrix_ne_zero
-      K hK R hρ hη alpha beta hm k hk,
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm k hk,
       exists_active_sectorVirtualMatrix_ne_zero
-        K hK R hρ hη alpha beta hm h hh⟩
+        K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm h hh⟩
   have htriangle : ∀ {k h : (F.rephase z).ActiveSector hη.p},
       (F.rephase z).neighboringOperator k h ≠ 0 →
         ∃ j : (F.rephase z).ActiveSector hη.p,
@@ -200,15 +202,17 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
         hspanAll hedgeNonzero hkhF
     have hj : hη.p j ≠ 0 :=
       (probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
-        K hK R hρ hη alpha beta hm hhj).2
+        K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm hhj).2
     exact ⟨⟨j, hj⟩,
       (F.rephase_neighboringOperator_ne_zero_iff z h.1 j).2 hhj,
       (F.rephase_neighboringOperator_ne_zero_iff z j k.1).2 hjk⟩
   have hinactive : ∀ k, hη.p k = 0 →
       ∀ gamma, (F.rephase z).leftTensor k gamma = 0 := by
     intro k hk gamma
-    change (z k : ℂ) • sectorTensorL K hK hη R alpha beta k gamma = 0
-    rw [sectorTensorL_eq_zero_of_weight_eq_zero K hK hη R alpha beta k gamma hk,
+    change (z k : ℂ) • sectorTensorL K ((isInjective_toMPSTensor_iff K).2 hK)
+        hη R alpha beta k gamma = 0
+    rw [sectorTensorL_eq_zero_of_weight_eq_zero K ((isInjective_toMPSTensor_iff K).2 hK)
+        hη R alpha beta k gamma hk,
       smul_zero]
   have hactive : ∃ k, hη.p k ≠ 0 := by
     by_contra h
@@ -237,18 +241,18 @@ paper-gap note.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) :
     let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-      K hK R hρ hη alpha beta hm
+      K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
     ∃ z : Fin F.sectorCount → Circle,
       (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
         Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) := by
   classical
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K hK R hρ hη alpha beta hm
+    K ((isInjective_toMPSTensor_iff K).2 hK) R hρ hη alpha beta hm
   obtain ⟨z, hpos, hspan, hnonzero, htriangle, _, _⟩ :=
     exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
       K hK R hρ hη alpha beta hm hM
@@ -272,7 +276,7 @@ paper-gap note.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ),
       (∀ k, 0 ≤ p k) ∧
         (∑ k, p k) = 1 ∧
@@ -283,7 +287,7 @@ theorem exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPr
     exists_normalizedFourSiteTail_entry_ne_zero
       K ((Classical.choose_spec hSAL).1 4 (by omega))
   let F₀ := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    K hK (normalizedFourSiteTail K)
+    K ((isInjective_toMPSTensor_iff K).2 hK) (normalizedFourSiteTail K)
       (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
   obtain ⟨z, hpos, hprim⟩ :=
     exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
