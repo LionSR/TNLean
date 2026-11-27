@@ -41,7 +41,7 @@ remark and the coherent unitary stage of "Long-range MPS using measurements".
 The compatibility equation concerns full normalized vectors, not reduced
 states or measurement outcomes. -/
 theorem exists_isUnitaryCircuit_of_compatible_seeds
-    {a b χA χB a' b' : MPVSpace d N}
+    {a b χA χB a' b' : MPVSpace (Fin d) N}
     (ha : ‖a‖ = 1) (hb : ‖b‖ = 1) (hχA : ‖χA‖ = 1)
     {UA UB R : Matrix (Cfg d N) (Cfg d N) ℂ} {TA TB TR : ℕ}
     (hUA : IsUnitaryCircuit (Geometry.ring N) TA UA)
@@ -51,7 +51,7 @@ theorem exists_isUnitaryCircuit_of_compatible_seeds
     (hseed : (fun s => χB s) = R *ᵥ fun s => χA s)
     {εA εB : ℝ} (herrA : 1 - ‖⟪a', a⟫_ℂ‖ ≤ εA)
     (herrB : 1 - ‖⟪b', b⟫_ℂ‖ ≤ εB) :
-    ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (ψ : MPVSpace d N),
+    ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (ψ : MPVSpace (Fin d) N),
       U = UB * R * UAᴴ ∧ IsUnitaryCircuit (Geometry.ring N) (TA + TR + TB) U ∧
       (fun s => ψ s) = U *ᵥ (fun s => a s) ∧
       1 - ‖⟪ψ, b⟫_ℂ‖ ≤ 2 * (εA + εB) := by
@@ -64,7 +64,7 @@ theorem exists_isUnitaryCircuit_of_compatible_seeds
     change (UB * R * UAᴴ) *ᵥ (fun s => a' s) = fun s => b' s
     rw [hA, mulVec_mulVec, Matrix.mul_assoc, Matrix.mul_assoc, hUA', Matrix.mul_one,
       ← mulVec_mulVec, ← hseed, ← hB]
-  let ψ : MPVSpace d N := WithLp.toLp 2 (U *ᵥ fun s => a s)
+  let ψ : MPVSpace (Fin d) N := WithLp.toLp 2 (U *ᵥ fun s => a s)
   have hψ : (fun s => ψ s) = U *ᵥ fun s => a s := rfl
   have hψn : ‖ψ‖ = 1 := (Matrix.norm_eq_of_mulVec_eq hU.mem_unitaryGroup hψ).trans ha
   have hχB : ‖χB‖ = 1 := (Matrix.norm_eq_of_mulVec_eq hR.mem_unitaryGroup hseed).trans hχA
@@ -80,7 +80,7 @@ omit [NeZero N] in
 Source context: arXiv:2307.01696, discussion remark, with a common coherent
 GHZ seed supplied to both unitary preparation stages. -/
 theorem exists_isUnitaryCircuit_of_common_seed
-    {a b χ a' b' : MPVSpace d N}
+    {a b χ a' b' : MPVSpace (Fin d) N}
     (ha : ‖a‖ = 1) (hb : ‖b‖ = 1) (hχ : ‖χ‖ = 1)
     {UA UB : Matrix (Cfg d N) (Cfg d N) ℂ} {TA TB : ℕ}
     (hUA : IsUnitaryCircuit (Geometry.ring N) TA UA)
@@ -89,7 +89,7 @@ theorem exists_isUnitaryCircuit_of_common_seed
     (hB : (fun s => b' s) = UB *ᵥ fun s => χ s)
     {εA εB : ℝ} (herrA : 1 - ‖⟪a', a⟫_ℂ‖ ≤ εA)
     (herrB : 1 - ‖⟪b', b⟫_ℂ‖ ≤ εB) :
-    ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (ψ : MPVSpace d N),
+    ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (ψ : MPVSpace (Fin d) N),
       U = UB * UAᴴ ∧ IsUnitaryCircuit (Geometry.ring N) (TA + TB) U ∧
       (fun s => ψ s) = U *ᵥ (fun s => a s) ∧
       1 - ‖⟪ψ, b⟫_ℂ‖ ≤ 2 * (εA + εB) := by
@@ -104,9 +104,9 @@ approximations. The constants precede both length and accuracy; circuits and
 seeds may depend on them. Source context: arXiv:2307.01696, discussion remark,
 with the explicit sufficient seed-compatibility restriction of this module. -/
 theorem exists_isUnitaryCircuit_le_log_of_compatible_seeds
-    (a b : ∀ N : ℕ, MPVSpace d N) (cA cB cR : ℝ) (N₀ : ℕ)
+    (a b : ∀ N : ℕ, MPVSpace (Fin d) N) (cA cB cR : ℝ) (N₀ : ℕ)
     (hprepare : ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (χA χB a' b' : MPVSpace d N)
+      ∃ (χA χB a' b' : MPVSpace (Fin d) N)
         (UA UB R : Matrix (Cfg d N) (Cfg d N) ℂ) (TA TB TR : ℕ),
         ‖a N‖ = 1 ∧ ‖b N‖ = 1 ∧ ‖χA‖ = 1 ∧
         IsUnitaryCircuit (Geometry.ring N) TA UA ∧ IsUnitaryCircuit (Geometry.ring N) TB UB ∧
@@ -120,7 +120,7 @@ theorem exists_isUnitaryCircuit_le_log_of_compatible_seeds
         1 - ‖⟪a', a N⟫_ℂ‖ ≤ ε / 4 ∧
         1 - ‖⟪b', b N⟫_ℂ‖ ≤ ε / 4) :
     ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ) (ψ : MPVSpace d N),
+      ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ) (ψ : MPVSpace (Fin d) N),
         IsUnitaryCircuit (Geometry.ring N) T U ∧
         (T : ℝ) ≤ (cA + cB + cR) * Real.log (N / ε) ∧
         (fun s => ψ s) = U *ᵥ (fun s => a N s) ∧

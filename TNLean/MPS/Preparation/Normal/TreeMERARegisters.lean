@@ -85,7 +85,7 @@ variable (𝓜 : BinaryMERA (blockPhysDim d s) D k)
 
 /-- The **state of a MERA on registers of `s` sites**, read on the `N = M s 2^{k+1}` sites: the
 state of the MERA on `M 2^{k+1}` sites of dimension `d^s`, each site a register of `s` sites. -/
-noncomputable def registerState [NeZero D] (M : ℕ) : MPVSpace d (M * (s * 2 ^ (k + 1))) :=
+noncomputable def registerState [NeZero D] (M : ℕ) : MPVSpace (Fin d) (M * (s * 2 ^ (k + 1))) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (registerCfgEquiv d s (2 ^ (k + 1)) M).symm
     (𝓜.state M)
 

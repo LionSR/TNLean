@@ -244,7 +244,8 @@ theorem exists_blocked_completeZipperFusionFamily
   classical
   obtain ⟨L, hL, hSpan, hInjective, hFusion⟩ :=
     Fam.exists_positive_block_with_injective_fusion hBNT c hχ hLI
-  obtain ⟨C, hC⟩ := hSpan.exists_mpo_block_left_inverse
+  obtain ⟨C, hC⟩ := ((MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm
+    (fun γ ↦ blockTensor (Fam.tensor γ) L) 1).1 hSpan).exists_mpo_block_left_inverse
   have hCoisometry : ∀ α β : Fin g,
       Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 :=
     fun α β ↦

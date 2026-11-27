@@ -108,7 +108,7 @@ theorem repeatedCopyDecomposition_isLeftCanonicalBNTPresentation :
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
     have h := congrArg
-      (fun v : MPSTensor.MPVSpace 1 N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
+      (fun v : MPSTensor.MPVSpace (Fin 1) N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
     simp [MPSTensor.mpvState_apply, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
       Matrix.trace] at h
 

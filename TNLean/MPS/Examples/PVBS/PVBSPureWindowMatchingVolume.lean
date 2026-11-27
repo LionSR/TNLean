@@ -126,12 +126,12 @@ with a single first excitation is one. Together with
 `pvbsPureWindowHamiltonian_apply_pvbsEdge` it is a nonzero vector of the
 matching-volume kernel. Source: PVBS coefficients, arXiv:1112.4097, Section II. -/
 theorem pvbsEdge_ne_zero_matching_volume (q : ℂ) {R : ℕ} (hR : 0 < R) :
-    (WithLp.toLp 2 (pvbsEdge q R) : MPVSpace 2 R) ≠ 0 := by
+    (WithLp.toLp 2 (pvbsEdge q R) : MPVSpace (Fin 2) R) ≠ 0 := by
   intro hzero
   cases R with
   | zero => omega
   | succ N =>
-    have h := congrArg (fun v : MPVSpace 2 (N + 1) ↦ v (Fin.cons 1 0)) hzero
+    have h := congrArg (fun v : MPVSpace (Fin 2) (N + 1) ↦ v (Fin.cons 1 0)) hzero
     have hentry : (1 : ℂ) = 0 := by
       simpa only [pvbsEdge_first, PiLp.zero_apply] using h
     exact one_ne_zero hentry
@@ -142,7 +142,7 @@ is stated on the original coefficient vector, not only its line.
 Source: the PVBS cyclic phase, arXiv:1112.4097, Section II; finite-prefix
 context SPWC10, arXiv:0909.5347, Theorem 5, lines 850–880. -/
 theorem eq_zero_of_pvbsPureWindow_matching_volume_fixed (q : ℂ) {R : ℕ}
-    (hR : 0 < R) (hq : q ^ R = 1) (hqone : q ≠ 1) (ψ : MPVSpace 2 R)
+    (hR : 0 < R) (hq : q ^ R = 1) (hqone : q ≠ 1) (ψ : MPVSpace (Fin 2) R)
     (hzero : haveI : NeZero R := ⟨by omega⟩;
       Matrix.toEuclideanLin (translationInvariant R (pvbsPureWindowInteraction q R)).hamiltonian
         ψ = 0)

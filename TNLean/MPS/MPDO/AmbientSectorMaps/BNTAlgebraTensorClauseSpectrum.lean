@@ -501,57 +501,57 @@ noncomputable def toTwoSiteExactSectorGauge
   have hLI : ∀ᶠ L in atTop,
       LinearIndependent ℂ
         (fun γ : Fin H.labelCount ↦
-          MPSTensor.mpvState (d := D * D) (H.tensor γ) L) := by
+          MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L) := by
     obtain ⟨L₀, hL₀⟩ := H.isCPSVBNT.eventually_li
     exact Filter.eventually_atTop.mpr
       ⟨L₀ + 1, fun L hL ↦ hL₀ L (by omega)⟩
   have hStateExpansionEq : ∀ᶠ L in atTop,
       ∑ γ : Fin H.labelCount,
-          a L γ • MPSTensor.mpvState (d := D * D) (H.tensor γ) L =
+          a L γ • MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L =
         ∑ γ : Fin H.labelCount,
-          b L γ • MPSTensor.mpvState (d := D * D) (H.tensor γ) L := by
+          b L γ • MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
     refine Filter.eventually_atTop.mpr ⟨1, ?_⟩
     intro L hL
     have hLPos : 0 < L := Nat.zero_lt_of_lt hL
-    have hPState : MPSTensor.mpvState (d := D * D) P.toTensor L =
+    have hPState : MPSTensor.mpvState (α := Fin (D * D)) P.toTensor L =
         ∑ γ : Fin H.labelCount, P.coeff L γ •
-          MPSTensor.mpvState (d := D * D) (H.tensor γ) L := by
-      refine MPSTensor.mpvState_eq_sum_of_decomp (d := D * D)
+          MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
+      refine MPSTensor.mpvState_eq_sum_of_decomp (α := Fin (D * D))
         P.toTensor H.tensor (N := L) (P.coeff L) ?_
       intro σ
       simpa [smul_eq_mul] using P.mpv_toTensor_eq_sum_coeff σ
-    have hQState : MPSTensor.mpvState (d := D * D) Q.toTensor L =
+    have hQState : MPSTensor.mpvState (α := Fin (D * D)) Q.toTensor L =
         ∑ δ : Fin D₂.labelCount, Q.coeff L δ •
-          MPSTensor.mpvState (d := D * D) (D₂.tensor δ) L := by
-      refine MPSTensor.mpvState_eq_sum_of_decomp (d := D * D)
+          MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L := by
+      refine MPSTensor.mpvState_eq_sum_of_decomp (α := Fin (D * D))
         Q.toTensor D₂.tensor (N := L) (Q.coeff L) ?_
       intro σ
       simpa [smul_eq_mul] using Q.mpv_toTensor_eq_sum_coeff σ
-    have hPQState : MPSTensor.mpvState (d := D * D) P.toTensor L =
-        MPSTensor.mpvState (d := D * D) Q.toTensor L := by
+    have hPQState : MPSTensor.mpvState (α := Fin (D * D)) P.toTensor L =
+        MPSTensor.mpvState (α := Fin (D * D)) Q.toTensor L := by
       apply PiLp.ext
       intro σ
       simpa [MPSTensor.mpvState_apply] using
         (hPBlocked.symm.trans hQBlocked) L hLPos σ
     have hQSubst :
         (∑ δ : Fin D₂.labelCount, Q.coeff L δ •
-            MPSTensor.mpvState (d := D * D) (D₂.tensor δ) L) =
+            MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L) =
           ∑ γ : Fin H.labelCount,
             (zeta γ ^ L * Q.coeff L (sigma γ)) •
-              MPSTensor.mpvState (d := D * D) (H.tensor γ) L := by
+              MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
       calc
         (∑ δ : Fin D₂.labelCount, Q.coeff L δ •
-            MPSTensor.mpvState (d := D * D) (D₂.tensor δ) L) =
+            MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L) =
           ∑ δ : Fin D₂.labelCount,
             (zeta (sigma.symm δ) ^ L * Q.coeff L δ) •
-              MPSTensor.mpvState (d := D * D)
+              MPSTensor.mpvState (α := Fin (D * D))
                 (H.tensor (sigma.symm δ)) L := by
             apply Finset.sum_congr rfl
             intro δ _
-            have hMpvState : MPSTensor.mpvState (d := D * D)
+            have hMpvState : MPSTensor.mpvState (α := Fin (D * D))
                 (D₂.tensor δ) L =
               zeta (sigma.symm δ) ^ L •
-                MPSTensor.mpvState (d := D * D)
+                MPSTensor.mpvState (α := Fin (D * D))
                   (H.tensor (sigma.symm δ)) L := by
               apply PiLp.ext
               intro σ
@@ -564,26 +564,26 @@ noncomputable def toTwoSiteExactSectorGauge
             ring
         _ = ∑ γ : Fin H.labelCount,
             (zeta γ ^ L * Q.coeff L (sigma γ)) •
-              MPSTensor.mpvState (d := D * D) (H.tensor γ) L := by
+              MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
             simpa only [Equiv.apply_symm_apply] using
               (Equiv.sum_comp sigma.symm
                 (fun γ : Fin H.labelCount ↦
                   (zeta γ ^ L * Q.coeff L (sigma γ)) •
-                    MPSTensor.mpvState (d := D * D) (H.tensor γ) L))
+                    MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L))
     calc
-      ∑ γ, a L γ • MPSTensor.mpvState (d := D * D) (H.tensor γ) L =
-          MPSTensor.mpvState (d := D * D) P.toTensor L := by
+      ∑ γ, a L γ • MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L =
+          MPSTensor.mpvState (α := Fin (D * D)) P.toTensor L := by
         simpa [a] using hPState.symm
-      _ = MPSTensor.mpvState (d := D * D) Q.toTensor L := hPQState
+      _ = MPSTensor.mpvState (α := Fin (D * D)) Q.toTensor L := hPQState
       _ = ∑ δ, Q.coeff L δ •
-          MPSTensor.mpvState (d := D * D) (D₂.tensor δ) L := hQState
+          MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L := hQState
       _ = ∑ γ, b L γ •
-          MPSTensor.mpvState (d := D * D) (H.tensor γ) L := by
+          MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
         simpa [b] using hQSubst
   have hCoeff : ∀ᶠ L in atTop, ∀ γ : Fin H.labelCount,
       a L γ = b L γ := by
     exact MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent
-      (v := fun L γ ↦ MPSTensor.mpvState (d := D * D) (H.tensor γ) L)
+      (v := fun L γ ↦ MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L)
       (a := a) (b := b) hLI hStateExpansionEq
   let hCoeffWitness := Filter.eventually_atTop.mp hCoeff
   let L₀ := Classical.choose hCoeffWitness

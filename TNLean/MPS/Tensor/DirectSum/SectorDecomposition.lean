@@ -578,9 +578,9 @@ basis-block MPV states.
 This is the state-vector lift of the pointwise expansion above, used in
 arXiv:1606.00608, Appendix MPV proof, lines 1182--1188. -/
 lemma mpvState_toTensor_eq_sum_coeff {d : ℕ} (P : SectorDecomposition (Fin d)) (N : ℕ) :
-    mpvState (d := d) P.toTensor N =
-      ∑ j : Fin P.basisCount, P.coeff N j • mpvState (d := d) (P.basis j) N := by
-  refine mpvState_eq_sum_of_decomp (d := d) P.toTensor P.basis
+    mpvState (α := Fin d) P.toTensor N =
+      ∑ j : Fin P.basisCount, P.coeff N j • mpvState (α := Fin d) (P.basis j) N := by
+  refine mpvState_eq_sum_of_decomp (α := Fin d) P.toTensor P.basis
     (N := N) (fun j => P.coeff N j) ?_
   intro σ
   simpa [smul_eq_mul] using P.mpv_toTensor_eq_sum_coeff (N := N) σ

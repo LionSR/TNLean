@@ -66,8 +66,8 @@ lemma exists_state_scalar_of_nondecaying_overlap
     (hnd : ¬ Tendsto (fun N : ℕ =>
       mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
     ∃ α : ℕ → ℂ, ∀ N : ℕ,
-      mpvState (d := d) (P.basis j) N =
-        α N • mpvState (d := d) (Q.basis k) N := by
+      mpvState (α := Fin d) (P.basis j) N =
+        α N • mpvState (α := Fin d) (Q.basis k) N := by
   classical
   obtain ⟨hDim, hGPE⟩ := dim_and_gaugePhase_of_nondecaying_overlap hP hQ hnd
   obtain ⟨X, ζ, hζ, hConj⟩ := hGPE
@@ -103,9 +103,9 @@ lemma restricted_combined_family_eventually_li
       LinearIndependent ℂ
         (Sum.elim
           (fun j : {j : Fin P.basisCount // j ∈ T} =>
-            mpvState (d := d) (P.basis j.1) N)
+            mpvState (α := Fin d) (P.basis j.1) N)
           (fun k : Fin Q.basisCount =>
-            mpvState (d := d) (Q.basis k) N)) := by
+            mpvState (α := Fin d) (Q.basis k) N)) := by
   classical
   let C : (x : Sum {j : Fin P.basisCount // j ∈ T} (Fin Q.basisCount)) →
       MPSTensor d
@@ -156,12 +156,12 @@ lemma restricted_combined_family_eventually_li
   intro N hN
   have key :
       (fun x : Sum {j : Fin P.basisCount // j ∈ T} (Fin Q.basisCount) =>
-        mpvState (d := d) (C x) N) =
+        mpvState (α := Fin d) (C x) N) =
         Sum.elim
           (fun j : {j : Fin P.basisCount // j ∈ T} =>
-            mpvState (d := d) (P.basis j.1) N)
+            mpvState (α := Fin d) (P.basis j.1) N)
           (fun k : Fin Q.basisCount =>
-            mpvState (d := d) (Q.basis k) N) := by
+            mpvState (α := Fin d) (Q.basis k) N) := by
     funext x
     cases x <;> rfl
   rw [← key]

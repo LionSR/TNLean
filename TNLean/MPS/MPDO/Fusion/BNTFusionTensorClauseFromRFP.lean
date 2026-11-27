@@ -61,7 +61,7 @@ theorem eventuallyLinearIndependent_verticalBNTOperatorFamily
   apply Fintype.linearIndependent_iff.mpr
   intro c hc γ
   have hzero : ∑ j : Fin g, c j •
-      MPSTensor.mpvState (d := D * D) (A j) L = 0 := by
+      MPSTensor.mpvState (α := Fin (D * D)) (A j) L = 0 := by
     apply PiLp.ext
     intro σ
     let ket : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).1

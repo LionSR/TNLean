@@ -79,7 +79,7 @@ theorem exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
       ‖μ‖ < 1) (β : ℕ → Fin b → ℂ)
     (hφ : ∀ (N : ℕ) [NeZero N] (x : Fin N → Fin d), mpv A x = ∑ j, β N j * mpv (Aj j) x) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
         (∃ v : Fin N → Fin d → ℂ,
           IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
@@ -176,7 +176,7 @@ theorem exists_isMeasurementConversion_repeatedBlockSum_le_log_log
       ‖μ'‖ < 1) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
         (∃ v : Fin N → Fin d → ℂ,
           IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
@@ -201,7 +201,7 @@ theorem exists_isMeasurementConversion_repeatedBlockSum_le_log_log_of_inequivale
       ¬ GaugePhaseEquiv (h ▸ Aj j) (Aj j')) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
         (∃ v : Fin N → Fin d → ℂ,
           IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
@@ -233,7 +233,7 @@ theorem exists_isOneRoundConversion_blockTensor_le_log
     ∃ p : ℕ, 0 < p ∧ ∃ c : ℝ,
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (M : ℕ) [NeZero M], 2 ≤ M →
         mpvState (blockTensor A p) M ≠ 0 →
-        ∃ (ψ : MPVSpace (blockPhysDim d p) M) (T : ℕ), ‖ψ‖ = 1 ∧
+        ∃ (ψ : MPVSpace (Fin (blockPhysDim d p)) M) (T : ℕ), ‖ψ‖ = 1 ∧
           (T : ℝ) ≤ c * Real.log (M / ε) ∧
           (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin M → Fin (blockPhysDim d p) → ℂ,
             IsOneRoundConversion (Geometry.ring M) T₁ T₂ (fun σ ↦ ∏ i, v i (σ i))
@@ -257,7 +257,7 @@ theorem exists_isMeasurementConversion_blockTensor_le_log_log
     ∃ p : ℕ, 0 < p ∧ ∃ c : ℝ,
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (M : ℕ) [NeZero M], 2 ≤ M →
         mpvState (blockTensor A p) M ≠ 0 →
-        ∃ (ψ : MPVSpace (blockPhysDim d p) M) (T : ℕ), ‖ψ‖ = 1 ∧
+        ∃ (ψ : MPVSpace (Fin (blockPhysDim d p)) M) (T : ℕ), ‖ψ‖ = 1 ∧
           (T : ℝ) ≤ c * Real.log (Real.log (M / ε) + 1) ∧
           (∃ v : Fin M → Fin (blockPhysDim d p) → ℂ, IsMeasurementConversion (Geometry.ring M) T
             (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧

@@ -116,7 +116,7 @@ theorem mpvState_threeLetterTensor_ne_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 
   subst hm
   intro hzero
   apply htrace
-  have hcoeff := congrArg (fun v : MPVSpace 3 m ↦ v σ) hzero
+  have hcoeff := congrArg (fun v : MPVSpace (Fin 3) m ↦ v σ) hzero
   change mpvState (threeLetterTensor ζ) m σ = 0 at hcoeff
   simpa only [mpvState_apply, mpv, coeff] using hcoeff
 

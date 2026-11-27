@@ -487,7 +487,7 @@ lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     (hOff : ∀ i j, i ≠ j →
       Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N) := by
+      LinearIndependent ℂ (fun j : Fin r => mpvState (α := Fin d) (A j) N) := by
   have hOrtho := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hSelf hOff
   rw [Filter.Eventually] at hOrtho
   obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho

@@ -80,7 +80,7 @@ variable {d D M N : ℕ} {ℓ : Fin M → ℕ}
 
 /-- The unnormalized state `|φ_N⟩` of a chain of site-dependent tensors on a ring of `N` sites:
 the coefficient of `s` is `Tr(A_0^{s_0} ⋯ A_{N-1}^{s_{N-1}})`. -/
-noncomputable def chainState (A : MPSChainTensor d D N) : MPVSpace d N :=
+noncomputable def chainState (A : MPSChainTensor d D N) : MPVSpace (Fin d) N :=
   (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s => MPSChainTensor.coeff A s
 
 @[simp] theorem chainState_apply (A : MPSChainTensor d D N) (s : Cfg d N) :
@@ -95,7 +95,7 @@ tensor of physical dimension `D²`, and the coefficient of `τ` is
 arXiv:2307.01696, eq. `eq:phi_pos`: the state that "arises after blocking `q` sites and keeping
 the positive part of the decomposition of `|φ_N⟩`". -/
 noncomputable def chainPosState (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) :
-    MPVSpace (D * D) M :=
+    MPVSpace (Fin (D * D)) M :=
   (EuclideanSpace.equiv (ι := Cfg (D * D) M) (𝕜 := ℂ)).symm fun τ =>
     mpvFamily (n := fun _ => D * D) (fun k => polarPosTensor (chainBlockTensor A hN k)) τ
 
@@ -122,7 +122,7 @@ theorem chainState_eq_blockIsoVector (A : MPSChainTensor d D N) (hN : ∑ k, ℓ
 
 /-- The isometries on the blocks commute with scalars. -/
 theorem blockIsoVector_smul {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
-    (c : ℂ) (x : MPVSpace (D * D) M) :
+    (c : ℂ) (x : MPVSpace (Fin (D * D)) M) :
     blockIsoVector B hN (c • x) = c • blockIsoVector B hN x := by
   ext s
   simp only [blockIsoVector_apply, PiLp.smul_apply, smul_eq_mul, Finset.mul_sum]

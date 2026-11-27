@@ -164,7 +164,7 @@ next one, cyclically.
 arXiv:2307.01696, eq. (10), where `ω` is the pair of the fixed point and all blocks have the same
 length `q`; Supplemental Material, proof of Theorem 1, where the last block "may be larger". -/
 noncomputable def blockIsometryState (A : MPSTensor d D) (ω : Fin D × Fin D → ℂ) {N : ℕ}
-    {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N) : MPVSpace d N :=
+    {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N) : MPVSpace (Fin d) N :=
   (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s =>
     ∑ τ : Fin M → Fin (D * D),
       (∏ k, polarIsoMatrix (blockTensor A (ℓ k)) (blockIndexEquiv d hN s k) (τ k)) *
@@ -268,7 +268,7 @@ theorem coeff_eq_mpvFamily_chainBlockTensor {N : ℕ} {ℓ : Fin M → ℕ} (A :
 
 /-- The product of site-dependent pairs as a vector on `M` sites of dimension `D²`, the site `k`
 carrying the pair of indices `(l_k, r_k)`. -/
-noncomputable def pairFamilyVector (ω : Fin M → Fin D × Fin D → ℂ) : MPVSpace (D * D) M :=
+noncomputable def pairFamilyVector (ω : Fin M → Fin D × Fin D → ℂ) : MPVSpace (Fin (D * D)) M :=
   (EuclideanSpace.equiv (ι := Cfg (D * D) M) (𝕜 := ℂ)).symm fun τ =>
     pairFamilyState ω fun k => finProdFinEquiv.symm (τ k)
 
@@ -300,12 +300,12 @@ arXiv:2307.01696, eq. (10) and the paragraph "Inhomogeneous short-range correlat
 isometry" `⊗ᵢ V_i` applied to `|Ω⟩`. -/
 noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N)
-    (x : MPVSpace (D * D) M) : MPVSpace d N :=
+    (x : MPVSpace (Fin (D * D)) M) : MPVSpace (Fin d) N :=
   (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s =>
     ∑ τ : Fin M → Fin (D * D), (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ
 
 @[simp] theorem blockIsoVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
-    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (x : MPVSpace (D * D) M)
+    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (x : MPVSpace (Fin (D * D)) M)
     (s : Cfg d N) :
     blockIsoVector B hN x s = ∑ τ : Fin M → Fin (D * D),
       (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ := by
@@ -321,20 +321,21 @@ arXiv:2307.01696, eq. (10) and the paragraph "Inhomogeneous short-range correlat
 isometries on the blocks applied to `|Ω⟩`. -/
 noncomputable def blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
     (W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ) (hN : ∑ k, ℓ k = N)
-    (x : MPVSpace (D * D) M) : MPVSpace d N :=
+    (x : MPVSpace (Fin (D * D)) M) : MPVSpace (Fin d) N :=
   (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s =>
     ∑ τ : Fin M → Fin (D * D), (∏ k, W k (blockIndexEquiv d hN s k) (τ k)) * x τ
 
 @[simp] theorem blockMatVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
     (W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ) (hN : ∑ k, ℓ k = N)
-    (x : MPVSpace (D * D) M) (s : Cfg d N) :
+    (x : MPVSpace (Fin (D * D)) M) (s : Cfg d N) :
     blockMatVector W hN x s = ∑ τ : Fin M → Fin (D * D),
       (∏ k, W k (blockIndexEquiv d hN s k) (τ k)) * x τ := by
   simp [blockMatVector, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- The isometric factors on the blocks are the matrices `V_k` on the blocks. -/
 theorem blockIsoVector_eq_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
-    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (x : MPVSpace (D * D) M) :
+    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (Fin (D * D)) M) :
     blockIsoVector B hN x = blockMatVector (fun k => polarIsoMatrix (B k)) hN x := by
   ext s
   simp
@@ -346,7 +347,7 @@ arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the
 the blocks do not change norms or overlaps. -/
 theorem inner_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
     {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ} (hN : ∑ k, ℓ k = N)
-    (hW : ∀ k, (W k).IsIsometry) (x y : MPVSpace (D * D) M) :
+    (hW : ∀ k, (W k).IsIsometry) (x y : MPVSpace (Fin (D * D)) M) :
     ⟪blockMatVector W hN x, blockMatVector W hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
   classical
   simp only [PiLp.inner_apply, RCLike.inner_apply, blockMatVector_apply]
@@ -358,7 +359,7 @@ theorem inner_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
 /-- Isometries on the blocks preserve norms: `‖(⊗ₖ W_k) x‖ = ‖x‖`. -/
 theorem norm_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
     {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ} (hN : ∑ k, ℓ k = N)
-    (hW : ∀ k, (W k).IsIsometry) (x : MPVSpace (D * D) M) :
+    (hW : ∀ k, (W k).IsIsometry) (x : MPVSpace (Fin (D * D)) M) :
     ‖blockMatVector W hN x‖ = ‖x‖ := by
   have h := inner_blockMatVector hN hW x x
   rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
@@ -374,7 +375,7 @@ arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-
 theorem inner_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
     {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (B k) (S k))
-    (x y : MPVSpace (D * D) M)
+    (x y : MPVSpace (Fin (D * D)) M)
     (hxy : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → star (x τ) * y τ = 0) :
     ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
   classical
@@ -393,7 +394,7 @@ arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for i
 `V†V = 1`. -/
 theorem inner_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
-    (hB : ∀ k, Kraus.IsInjective (B k)) (x y : MPVSpace (D * D) M) :
+    (hB : ∀ k, Kraus.IsInjective (B k)) (x y : MPVSpace (Fin (D * D)) M) :
     ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ :=
   inner_blockIsoVector_of_isInjectiveOn hN (fun k => isInjectiveOn_univ_iff.mpr (hB k)) x y
     fun _ ⟨_, hk⟩ => absurd (Set.mem_univ _) hk
@@ -402,7 +403,7 @@ theorem inner_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
 theorem norm_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
     {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (B k) (S k))
-    (x : MPVSpace (D * D) M) (hx : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → x τ = 0) :
+    (x : MPVSpace (Fin (D * D)) M) (hx : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → x τ = 0) :
     ‖blockIsoVector B hN x‖ = ‖x‖ := by
   have h := inner_blockIsoVector_of_isInjectiveOn hN hB x x fun τ hτ => by rw [hx τ hτ, mul_zero]
   rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
@@ -412,7 +413,7 @@ theorem norm_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
 injective. -/
 theorem norm_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
-    (hB : ∀ k, Kraus.IsInjective (B k)) (x : MPVSpace (D * D) M) :
+    (hB : ∀ k, Kraus.IsInjective (B k)) (x : MPVSpace (Fin (D * D)) M) :
     ‖blockIsoVector B hN x‖ = ‖x‖ :=
   norm_blockIsoVector_of_isInjectiveOn hN (fun k => isInjectiveOn_univ_iff.mpr (hB k)) x
     fun _ ⟨_, hk⟩ => absurd (Set.mem_univ _) hk
@@ -424,7 +425,7 @@ factor of the polar decomposition of the blocked tensor of block `k`.
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "preparing `|Ω⟩` and
 implementing the isometry". -/
 noncomputable def chainBlockIsometryState {N : ℕ} {ℓ : Fin M → ℕ} (A : MPSChainTensor d D N)
-    (ω : Fin M → Fin D × Fin D → ℂ) (hN : ∑ k, ℓ k = N) : MPVSpace d N :=
+    (ω : Fin M → Fin D × Fin D → ℂ) (hN : ∑ k, ℓ k = N) : MPVSpace (Fin d) N :=
   blockIsoVector (chainBlockTensor A hN) hN (pairFamilyVector ω)
 
 @[simp] theorem chainBlockIsometryState_apply {N : ℕ} {ℓ : Fin M → ℕ}

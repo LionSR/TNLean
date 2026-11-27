@@ -85,7 +85,7 @@ the Local fix of the module docstring. -/
 theorem exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero {D : ℕ}
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
         (∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) T
           (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
@@ -149,14 +149,14 @@ theorem exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero {D : ℕ}
       linarith
   -- The error is unchanged by the gauge and the rescaling.
   have hphase := norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv N)
-  have hself : ∀ v : MPVSpace d N, ‖v‖ = 1 → 1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun v hv => by
+  have hself : ∀ v : MPVSpace (Fin d) N, ‖v‖ = 1 → 1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun v hv => by
     rw [inner_self_eq_norm_sq_to_K, hv]
     norm_num [hε.le]
   have hB0 : mpvState B N ≠ 0 := by
     intro h
     apply h0
     ext x
-    have := congrArg (fun v : MPVSpace d N => v x) h
+    have := congrArg (fun v : MPVSpace (Fin d) N => v x) h
     simp only [mpvState_apply, hmpv, PiLp.zero_apply] at this
     simpa [pow_ne_zero N hζ] using this
   set Q := a * Real.log (N / ε) + b with hQ
@@ -253,7 +253,7 @@ with `exists_mpvState_ne_zero_of_le`. -/
 theorem exists_isMeasurementConversion_le_log_log {D : ℕ} [NeZero D]
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
         (∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) T
           (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧

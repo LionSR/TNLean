@@ -177,7 +177,7 @@ theorem exists_matching_of_span
         (fun γ => (∑ j ∈ Finset.univ.filter (fun j => lab j = some γ),
             (∑ q : Fin (copies j), (α j q) ^ (p * n)) * (θ j)⁻¹ ^ (p * n))
           - c γ * (τ0 γ)⁻¹ ^ (p * n)) with hgW_def
-      have hzero : ∑ x : U ⊕ Γ, gW x • mpvState (d := d) (F x) (p * n) = 0 := by
+      have hzero : ∑ x : U ⊕ Γ, gW x • mpvState (α := Fin d) (F x) (p * n) = 0 := by
         apply sum_smul_mpvState_eq_zero
         intro σ
         have hBσ := hBeq (p * n) hpn_pos σ

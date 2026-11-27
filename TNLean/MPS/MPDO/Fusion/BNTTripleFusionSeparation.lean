@@ -83,22 +83,9 @@ def HasFinalLabelSelectorWords (S : ℕ) : Prop :=
 final-label selectors for their fusion family. -/
 theorem hasFinalLabelSelectorWords_of_hasBlockSelectorWords
     {g : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p) {S : ℕ}
-    (hSel : MPSTensor.HasBlockSelectorWords
-      (fun ε ↦ (Fam.tensor ε).toMPSTensor) S) :
-    Fam.HasFinalLabelSelectorWords S := by
-  intro ε
-  obtain ⟨c, hSelf, hOther⟩ := hSel ε
-  let e : (Fin S → Fin p × Fin p) ≃ (Fin S → Fin (p * p)) :=
-    Equiv.arrowCongr (Equiv.refl _) finProdFinEquiv
-  have hSum : ∀ γ : Fin g,
-      (∑ w : Fin S → Fin p × Fin p, c (e w) • Kraus.evalWord (Fam.tensor γ) (List.ofFn w)) =
-        ∑ w : Fin S → Fin (p * p),
-          c w • Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w) := by
-    intro γ
-    refine Fintype.sum_equiv e _ _ fun w ↦ ?_
-    rw [evalWord_toMPSTensor, List.map_ofFn]
-    simp [e, Equiv.arrowCongr_apply, Function.comp_def]
-  exact ⟨fun w ↦ c (e w), (hSum ε).trans hSelf, fun ε' hε' ↦ (hSum ε').trans (hOther ε' hε')⟩
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) :
+    Fam.HasFinalLabelSelectorWords S :=
+  hSel
 
 /-- A word of a finite length evaluates to the ordered product of its letters. -/
 private theorem kraus_evalWord_ofFn_eq_prod {α κ : Type*} [Fintype κ] [DecidableEq κ]
@@ -285,9 +272,8 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
     (hLI : c.LengthIndependent) (α β : Fin g) :
     Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 := by
   obtain ⟨S, hS, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
-  have hBlockSelectors :=
-    MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop
-      (fun γ ↦ (Fam.tensor γ).toMPSTensor) hSpan
+  have hBlockSelectors := MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop Fam.tensor
+    ((MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm Fam.tensor S).1 hSpan)
   exact Fam.fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
     c hχ hLI hS
       (Fam.hasFinalLabelSelectorWords_of_hasBlockSelectorWords hBlockSelectors)

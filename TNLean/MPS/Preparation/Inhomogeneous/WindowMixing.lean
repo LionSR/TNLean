@@ -265,7 +265,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domin
           ((η : ℂ) / D) • (τ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) :
     ∃ N₀ : ℕ, s ≤ N₀ ∧ ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun x => ψ x) ∧
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   classical

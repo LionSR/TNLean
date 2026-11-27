@@ -157,7 +157,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_refe
         transferMatrix (Kraus.transferMap (fixedPointTensor
           (σ N (blockSite hN j ⟨0, hj⟩))))‖ ≤ K * Real.exp (-(r * ℓ j))) :
     ∃ N₀ : ℕ, ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   classical
@@ -344,7 +344,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing
             Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne N))⟩))‖ ≤
         K * Real.exp (-(r * ℓ j))) :
     ∃ N₀ : ℕ, ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   classical
@@ -517,7 +517,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_dominat
                 (Fin (bondDimAt (A N) (a + s))) ℂ))) :
     ∃ N₀ : ℕ, s ≤ N₀ ∧ ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun x => ψ x) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   classical

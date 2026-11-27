@@ -86,7 +86,7 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
   · have : 0 < 1 - r := by linarith
     positivity
   intro w Δ n N hw hwΔ hn hne X hX hXM c γ hc
-  set χ : MPVSpace d N := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
+  set χ : MPVSpace (Fin d) N := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
   have hχ : ‖χ‖ = 1 := norm_normalizedMPVState hne
   have hwin := fun k : Fin n ↦ MPSPreparation.window_lt_and_le (N := N) hw hwΔ.le hn k.isLt
   set Xk : Fin n → Matrix (Cfg d N) (Cfg d N) ℂ := fun k ↦

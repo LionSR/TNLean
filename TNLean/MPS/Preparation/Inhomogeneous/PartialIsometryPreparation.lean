@@ -231,7 +231,7 @@ variable {M N : ℕ} {ℓ : Fin M → ℕ}
 
 /-- Matrices on the blocks commute with scalars. -/
 theorem blockMatVector_smul {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ}
-    (hN : ∑ k, ℓ k = N) (c : ℂ) (x : MPVSpace (D * D) M) :
+    (hN : ∑ k, ℓ k = N) (c : ℂ) (x : MPVSpace (Fin (D * D)) M) :
     blockMatVector W hN (c • x) = c • blockMatVector W hN x := by
   ext s
   simp only [blockMatVector_apply, PiLp.smul_apply, smul_eq_mul, Finset.mul_sum]
@@ -416,7 +416,7 @@ theorem exists_isPreparedInDepth_of_isPairApproximable (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : VaryingBondChain d D N) (L : ℕ) (δ : ℝ),
         (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsPairApproximable A hN δ →
-          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+          ∃ ψ : MPVSpace (Fin d) N, ‖ψ‖ = 1 ∧
             IsPreparedInDepth (Geometry.ring N) (C * L) (fun s => ψ s) ∧
             1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ δ := by
   rcases Nat.lt_or_ge d 2 with hd1 | hd2

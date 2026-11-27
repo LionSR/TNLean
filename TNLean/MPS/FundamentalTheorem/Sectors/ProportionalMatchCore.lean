@@ -117,8 +117,8 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
     exact hnot
   have hScalar : ∀ c : {j : Fin P.basisCount // j ∉ T},
       ∃ k : Fin Q.basisCount, ∃ α : ℕ → ℂ, ∀ N : ℕ,
-        mpvState (d := d) (P.basis c.1) N =
-          α N • mpvState (d := d) (Q.basis k) N := by
+        mpvState (α := Fin d) (P.basis c.1) N =
+          α N • mpvState (α := Fin d) (Q.basis k) N := by
     intro c
     obtain ⟨k, hk⟩ := hNotT_nondecay c.1 c.2
     obtain ⟨α, hα⟩ := exists_state_scalar_of_nondecaying_overlap hP hQ hk
@@ -130,9 +130,9 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
       LinearIndependent ℂ
         (Sum.elim
           (fun j : {j : Fin P.basisCount // j ∈ T} =>
-            mpvState (d := d) (P.basis j.1) N)
+            mpvState (α := Fin d) (P.basis j.1) N)
           (fun k : Fin Q.basisCount =>
-            mpvState (d := d) (Q.basis k) N)) :=
+            mpvState (α := Fin d) (Q.basis k) N)) :=
     restricted_combined_family_eventually_li hP hQ T hTQ
   have hCoeff_eventually_zero :
       ∀ᶠ N : ℕ in atTop, P.coeff N j₀ = 0 := by
@@ -143,29 +143,29 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
     have hPstate := P.mpvState_toTensor_eq_sum_coeff N
     have hQstate := Q.mpvState_toTensor_eq_sum_coeff N
     have hStateEq :
-        mpvState (d := d) P.toTensor N =
-          c • mpvState (d := d) Q.toTensor N :=
+        mpvState (α := Fin d) P.toTensor N =
+          c • mpvState (α := Fin d) Q.toTensor N :=
       mpvState_eq_smul_of_mpv_eq_mul (d := d) P.toTensor Q.toTensor hEq
     have hPQsum :
         (∑ j : Fin P.basisCount, P.coeff N j •
-            mpvState (d := d) (P.basis j) N) =
+            mpvState (α := Fin d) (P.basis j) N) =
           ∑ k : Fin Q.basisCount, (c * Q.coeff N k) •
-            mpvState (d := d) (Q.basis k) N := by
+            mpvState (α := Fin d) (Q.basis k) N := by
       calc
         (∑ j : Fin P.basisCount, P.coeff N j •
-            mpvState (d := d) (P.basis j) N)
-            = mpvState (d := d) P.toTensor N := hPstate.symm
-        _ = c • mpvState (d := d) Q.toTensor N := hStateEq
+            mpvState (α := Fin d) (P.basis j) N)
+            = mpvState (α := Fin d) P.toTensor N := hPstate.symm
+        _ = c • mpvState (α := Fin d) Q.toTensor N := hStateEq
         _ = c • (∑ k : Fin Q.basisCount, Q.coeff N k •
-            mpvState (d := d) (Q.basis k) N) := by rw [hQstate]
+            mpvState (α := Fin d) (Q.basis k) N) := by rw [hQstate]
         _ = ∑ k : Fin Q.basisCount, (c * Q.coeff N k) •
-            mpvState (d := d) (Q.basis k) N := by
+            mpvState (α := Fin d) (Q.basis k) N := by
               simp [Finset.smul_sum, smul_smul]
     exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T) (a := fun j => P.coeff N j)
-      (u := fun j => mpvState (d := d) (P.basis j) N)
+      (u := fun j => mpvState (α := Fin d) (P.basis j) N)
       (b := fun k => c * Q.coeff N k)
-      (v := fun k => mpvState (d := d) (Q.basis k) N)
+      (v := fun k => mpvState (α := Fin d) (Q.basis k) N)
       (kOf := kOf) (α := fun c' => αOf c' N)
       (hComplement := fun c' => hStateOf c' N)
       (hSum := hPQsum) (hLI := hLIN) (i₀ := j₀) hj₀T

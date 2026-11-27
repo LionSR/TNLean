@@ -68,7 +68,7 @@ def coeff (A : VaryingBondChain d D N) (s : Fin N → Fin d) : ℂ :=
   ∑ α : (k : Fin N) → Fin (A.bondDim k), ∏ k, A.tensor k (s k) (α k) (α (finRotate N k))
 
 /-- The state `|φ_N⟩ = ∑_s Tr(A_0^{s_0} ⋯ A_{N-1}^{s_{N-1}}) |s⟩` of the chain. -/
-noncomputable def state (A : VaryingBondChain d D N) : MPVSpace d N :=
+noncomputable def state (A : VaryingBondChain d D N) : MPVSpace (Fin d) N :=
   (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s => coeff A s
 
 @[simp] theorem state_apply (A : VaryingBondChain d D N) (s : Cfg d N) :

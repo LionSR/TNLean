@@ -317,7 +317,7 @@ theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
         dim ((mpvPhaseClassData blocks).repr j) := by
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  let classes := mpvPhaseClassData (d := d) blocks
+  let classes := mpvPhaseClassData (α := Fin d) blocks
   intro j q
   have hEq :
       dim (classes.repr j) = dim (classes.enum j q) :=
@@ -379,7 +379,7 @@ theorem isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_
     IsLeftCanonicalBNTPresentation (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  set classes := mpvPhaseClassData (d := d) blocks with hclasses
+  set classes := mpvPhaseClassData (α := Fin d) blocks with hclasses
   set P := collapsedBntSectorDecomp (d := d) μ blocks hμne with hP
   have hBNT : HasBNTSectorData P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne

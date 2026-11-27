@@ -198,7 +198,7 @@ theorem clusterTensorRMP_mpvState_ne_zero (L : ℕ) :
   cases L with
   | zero =>
     intro h
-    have heval := congrArg (fun v : MPVSpace 2 0 => v Fin.elim0) h
+    have heval := congrArg (fun v : MPVSpace (Fin 2) 0 => v Fin.elim0) h
     norm_num [mpvState_apply] at heval
   | succ L =>
     intro h

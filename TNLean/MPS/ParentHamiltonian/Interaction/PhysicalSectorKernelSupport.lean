@@ -32,7 +32,7 @@ The extension is Mathlib's extension by zero on the actual word embedding.
 Source: physical-sector separation for SPWC10, Theorem 5, lines 850--880. -/
 theorem embedded_physical_vector_apply_eq_zero_of_labels_ne
     {a : ℕ} (e : Fin a ↪ Fin d) (label : Fin d → κ) (c : κ)
-    (he : ∀ i, label (e i) = c) (v : MPVSpace a R) (ω : Cfg d R)
+    (he : ∀ i, label (e i) = c) (v : MPVSpace (Fin a) R) (ω : Cfg d R)
     (i j : Fin R) (hij : label (ω i) ≠ label (ω j)) :
     (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero v ω = 0 := by
   apply Function.Embedding.euclideanExtendByZero_apply_not_mem_range
@@ -46,8 +46,8 @@ Source: physical-sector separation for SPWC10, Theorem 5, lines 850--880. -/
 theorem coeff_eq_zero_of_mem_two_embedded_physical_sectors
     {a b : ℕ} (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (label : Fin d → κ)
     (c₁ c₂ : κ) (he : ∀ i, label (e i) = c₁) (hf : ∀ i, label (f i) = c₂)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace d R)
+    (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (v : MPVSpace (Fin d) R)
     (hv : v ∈ S.map
         (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero.toLinearMap ⊔
       T.map
@@ -74,11 +74,11 @@ support is assumed; all local annihilation and global support conclusions are de
 Hamiltonian equation. Source: physical-sector separation in the finite-prefix investigation of
 SPWC10, Theorem 5, lines 850--880. -/
 theorem physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
-    (S : Submodule ℂ (MPVSpace d R)) (label : Fin d → κ)
+    (S : Submodule ℂ (MPVSpace (Fin d) R)) (label : Fin d → κ)
     (hR : 2 ≤ R) (hRM : R ≤ M)
     (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
-    (ψ : MPVSpace d M)
+    (ψ : MPVSpace (Fin d) M)
     (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
     (σ : Cfg d M) (hσ : ψ σ ≠ 0) :
@@ -131,11 +131,11 @@ of the Hamiltonian of the translates on the ring of the complementary projection
 physical-sector separation in the finite-prefix investigation of SPWC10, Theorem 5,
 lines 850--880. -/
 theorem coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne
-    (S : Submodule ℂ (MPVSpace d R)) (label : Fin d → κ)
+    (S : Submodule ℂ (MPVSpace (Fin d) R)) (label : Fin d → κ)
     (hR : 2 ≤ R) (hRM : R ≤ M)
     (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
-    (ψ : MPVSpace d M)
+    (ψ : MPVSpace (Fin d) M)
     (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
     (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
@@ -152,8 +152,8 @@ the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880. -/
 theorem coeff_eq_zero_of_two_sector_translationInvariant_projector
     {a b : ℕ} (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (label : Fin d → κ)
     (c₁ c₂ : κ) (he : ∀ i, label (e i) = c₁) (hf : ∀ i, label (f i) = c₂)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace d M)
+    (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (Fin d) M)
     (hzero : haveI : NeZero M := ⟨by omega⟩;
       Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map
@@ -174,8 +174,8 @@ local spaces has no mixed-alphabet ground coefficients. The inclusions are exact
 \(\mathrm{Fin}(a)\sqcup\mathrm{Fin}(b)\simeq\mathrm{Fin}(a+b)\). Source: physical-sector
 assembly in the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880. -/
 theorem coeff_eq_zero_of_physical_sum_translationInvariant_projector
-    {a b : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (a + b) M)
+    {a b : ℕ} (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
+    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (Fin (a + b)) M)
     (hzero : haveI : NeZero M := ⟨by omega⟩;
       Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map

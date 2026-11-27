@@ -112,7 +112,7 @@ chapter's version of arXiv:2307.01696, Supplemental Material, proof of Theorem 1
 theorem norm_mpvExpectation_le (A : MPSTensor d D) (N : ℕ)
     (O : Matrix (Cfg d N) (Cfg d N) ℂ) :
     ‖mpvExpectation A N O‖ ≤ ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O‖ := by
-  set u : MPVSpace d N := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
+  set u : MPVSpace (Fin d) N := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
   have hu : ‖u‖ ≤ 1 := by
     simp only [u, norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm]
     exact inv_mul_le_one_of_le₀ le_rfl (norm_nonneg _)

@@ -155,6 +155,6 @@ theorem mpvState_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
   intro h
   refine mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN ?_
   ext σ
-  simpa using congrArg (fun v : MPVSpace d N ↦ v σ) h
+  simpa using congrArg (fun v : MPVSpace (Fin d) N ↦ v σ) h
 
 end MPSTensor

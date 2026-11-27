@@ -176,9 +176,9 @@ theorem norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
     (j : Fin (collapsedBntSectorDecomp (d := d) μ blocks hμne).basisCount)
     (q : Fin ((collapsedBntSectorDecomp (d := d) μ blocks hμne).copies j)) :
     ‖(collapsedBntSectorDecomp (d := d) μ blocks hμne).weight j q‖ =
-      ‖μ ((mpvPhaseClassData (d := d) blocks).enum j q)‖ := by
+      ‖μ ((mpvPhaseClassData (α := Fin d) blocks).enum j q)‖ := by
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  set classes := mpvPhaseClassData (d := d) blocks
+  set classes := mpvPhaseClassData (α := Fin d) blocks
   change ‖(classes.enum_phase j q).choose * μ (classes.enum j q)‖ = _
   rw [norm_mul, norm_choose_MPVBlockPhaseEquiv_eq_one
     (hTP (classes.repr j)) (hTP (classes.enum j q))
@@ -251,7 +251,7 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
       ν blocks hDim hTP hPrim hIrr hne hr,
     fun j q => (hNormP j q).trans_le (hLe _), ?_, ?_⟩
   · obtain ⟨k₀, hk₀⟩ := hUnit
-    obtain ⟨j, q, hjq⟩ := (mpvPhaseClassData (d := blockPhysDim d p) blocks).exists_enum_eq k₀
+    obtain ⟨j, q, hjq⟩ := (mpvPhaseClassData (α := Fin (blockPhysDim d p)) blocks).exists_enum_eq k₀
     exact ⟨j, q, (hNormP j q).trans (by rw [hjq]; exact hk₀)⟩
   intro N hN σ
   have hμeq : (fun k => (m : ℂ) * (μ k / (m : ℂ))) = μ := by

@@ -424,14 +424,14 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
 /-- The periodic state of `B' = V P_∞` on `M` blocks of `q` sites, read on the `Mq` sites
 through the regrouping of sites into blocks (arXiv:2307.01696, eqs. (9) and (10)). -/
 noncomputable def approximatingMPVStateRaw (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
-    (q M : ℕ) : MPVSpace d (M * q) :=
+    (q M : ℕ) : MPVSpace (Fin d) (M * q) :=
   (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm fun s =>
     mpv (approximatingTensor (blockTensor A q) σ) ((Kraus.blockedConfigEquiv d M q).symm s)
 
 /-- The **approximating state** `|φ'_N⟩ = |φ_M(V P_∞)⟩ / ‖φ_M(V P_∞)‖` on `N = Mq` sites
 (arXiv:2307.01696, eqs. (9) and (10)). -/
 noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
-    (q M : ℕ) : MPVSpace d (M * q) :=
+    (q M : ℕ) : MPVSpace (Fin d) (M * q) :=
   ((‖approximatingMPVStateRaw A σ q M‖ : ℂ)⁻¹) • approximatingMPVStateRaw A σ q M
 
 @[simp] lemma approximatingMPVStateRaw_apply (A : MPSTensor d D)
@@ -480,7 +480,7 @@ theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
     approximatingMPVState A σ q M = approximatingMPVStateRaw A σ q M ∧
       ⟪approximatingMPVState A σ q M, mpvState A (M * q)⟫_ℂ =
         mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M := by
-  have hinner : ∀ w : MPVSpace d (M * q),
+  have hinner : ∀ w : MPVSpace (Fin d) (M * q),
       ⟪approximatingMPVStateRaw A σ q M, w⟫_ℂ =
         ∑ τ : Fin M → Fin (blockPhysDim d q),
           star (mpv (approximatingTensor (blockTensor A q) σ) τ) *

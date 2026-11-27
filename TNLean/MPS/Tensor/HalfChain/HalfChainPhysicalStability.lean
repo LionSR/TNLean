@@ -34,18 +34,18 @@ variable {d D E L : ℕ}
 
 /-- The actual coefficients of a ring vector, separated into its two
 halves. Source: PGVWC07, arXiv:quant-ph/0608197, lines 970–976. -/
-def ringBipartiteKernel (ψ : MPVSpace d (L + L)) : Matrix (Cfg d L) (Cfg d L) ℂ :=
+def ringBipartiteKernel (ψ : MPVSpace (Fin d) (L + L)) : Matrix (Cfg d L) (Cfg d L) ℂ :=
   fun σ τ ↦ ψ (Fin.append σ τ)
 
 /-- The reduced matrix of the actual ring vector after tracing out the
 second half. Source: PGVWC07, arXiv:quant-ph/0608197, lines 979–985. -/
-def ringVectorReducedMatrix (ψ : MPVSpace d (L + L)) : Matrix (Cfg d L) (Cfg d L) ℂ :=
+def ringVectorReducedMatrix (ψ : MPVSpace (Fin d) (L + L)) : Matrix (Cfg d L) (Cfg d L) ℂ :=
   ringBipartiteKernel ψ * (ringBipartiteKernel ψ)ᴴ
 
 /-- Reshaping the actual coefficient vector is contractive from its
 Euclidean norm to the matrix operator norm. No dimension factor occurs.
 Source: PGVWC07, arXiv:quant-ph/0608197, lines 970–976. -/
-theorem norm_ringBipartiteKernel_le (ψ : MPVSpace d (L + L)) :
+theorem norm_ringBipartiteKernel_le (ψ : MPVSpace (Fin d) (L + L)) :
     ‖ringBipartiteKernel ψ‖ ≤ ‖ψ‖ := by
   have hsum : (∑ p : Cfg d L × Cfg d L, ‖ringBipartiteKernel ψ p.1 p.2‖ ^ 2) =
       ‖ψ‖ ^ 2 := by
@@ -59,7 +59,7 @@ theorem norm_ringBipartiteKernel_le (ψ : MPVSpace d (L + L)) :
 /-- The reduced matrices of two actual ring vectors are close whenever
 the vectors are close, uniformly in chain length and physical dimension.
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 6, lines 970–993. -/
-theorem norm_ringVectorReducedMatrix_sub_le (ψ φ : MPVSpace d (L + L)) :
+theorem norm_ringVectorReducedMatrix_sub_le (ψ φ : MPVSpace (Fin d) (L + L)) :
     ‖ringVectorReducedMatrix ψ - ringVectorReducedMatrix φ‖ ≤
       (‖ψ‖ + ‖φ‖) * ‖ψ - φ‖ := by
   have hsub : ringBipartiteKernel ψ - ringBipartiteKernel φ =

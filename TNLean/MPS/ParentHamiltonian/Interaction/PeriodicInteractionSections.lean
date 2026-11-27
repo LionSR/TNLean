@@ -43,7 +43,7 @@ open ManyBody.Interaction (translationInvariant)
 /-- Restricting a term of the translates of `h` to its own window gives `h` applied to that same
 section. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
 theorem cyclicRestrictES_toEuclideanLin_translationInvariant_term (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (τ : Cfg d N) (ψ : MPVSpace d N) :
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (τ : Cfg d N) (ψ : MPVSpace (Fin d) N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     cyclicRestrictES (Fin.pos i) R i τ
         (Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ) =
@@ -64,7 +64,7 @@ theorem cyclicRestrictES_toEuclideanLin_translationInvariant_term (hRN : R ≤ N
 /-- A term of the translates of `h` annihilates a vector precisely when `h` kills every actual
 coefficient section on its window. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
 theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (ψ : MPVSpace d N) :
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (ψ : MPVSpace (Fin d) N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ = 0 ↔
       ∀ τ : Cfg d N, Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i τ ψ) = 0 := by
@@ -75,13 +75,13 @@ theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R �
   · intro hzero
     ext σ
     rw [toEuclideanLin_translationInvariant_term_apply hRN]
-    exact congrArg (fun v : MPVSpace d R ↦ v (extractWindow R i σ)) (hzero σ)
+    exact congrArg (fun v : MPVSpace (Fin d) R ↦ v (extractWindow R i σ)) (hzero σ)
 
 /-- For a positive semidefinite `h`, the kernel equation of the Hamiltonian of the translates of
 `h` on the ring is equivalent to every local section equation. Source: SPWC10, Theorem 5 proof,
 lines 869--880. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections [NeZero N]
-    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace d N) :
+    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace (Fin d) N) :
     Matrix.toEuclideanLin (translationInvariant N h).hamiltonian ψ = 0 ↔
       ∀ (i : Fin N) (τ : Cfg d N),
         Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i τ ψ) = 0 := by
@@ -101,7 +101,7 @@ of `h` on that interval annihilates the section. The interaction range stays fix
 finite-range identity extension in Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
 theorem toEuclideanLin_translationInvariant_term_rightFiber_eq_zero_of_eq_zero
     {W : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hWN : W ≤ N) (s : Fin N) (q : Fin W)
-    (hqR : q.val + R ≤ W) (ψ : MPVSpace d N)
+    (hqR : q.val + R ≤ W) (ψ : MPVSpace (Fin d) N)
     (hzero : haveI : NeZero N := ⟨by omega⟩; Matrix.toEuclideanLin ((translationInvariant N h).term
       (cyclicForwardSite s q.val)) ψ = 0)
     (τ : Cfg d (N - W)) :

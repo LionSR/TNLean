@@ -353,13 +353,14 @@ the word with one bond index $(0, 0, 1)$.
 
 Project example; not from CPSV16. -/
 theorem linearIndependent_mpvState_flagFamily (N : ℕ) (hN : 0 < N) :
-    LinearIndependent ℂ fun f : Fin 2 => MPSTensor.mpvState (d := 8 * 8) (flagFamily f) N := by
+    LinearIndependent ℂ fun f : Fin 2 =>
+      MPSTensor.mpvState (α := Fin (8 * 8)) (flagFamily f) N := by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
   rw [Fintype.linearIndependent_iff]
   intro g hg
-  have h₁ := congrArg (fun v : MPSTensor.MPVSpace (8 * 8) (n + 1) =>
+  have h₁ := congrArg (fun v : MPSTensor.MPVSpace (Fin (8 * 8)) (n + 1) =>
     v fun _ => finProdFinEquiv (physIdx 0 0 0, physIdx 0 0 0)) hg
-  have h₂ := congrArg (fun v : MPSTensor.MPVSpace (8 * 8) (n + 1) =>
+  have h₂ := congrArg (fun v : MPSTensor.MPVSpace (Fin (8 * 8)) (n + 1) =>
     v fun m => finProdFinEquiv (signWord n m, signWord n m)) hg
   simp only [Fin.sum_univ_two, PiLp.add_apply, PiLp.smul_apply, PiLp.zero_apply,
     MPSTensor.mpvState_apply, smul_eq_mul, mpv_flagFamily_const, mpv_flagFamily_signWord] at h₁ h₂

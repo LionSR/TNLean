@@ -181,7 +181,7 @@ theorem BlocksNotGaugePhaseEquiv.reindexPhysical {α α' : Type*} {r : ℕ} {dim
     (e : α' ≃ α) : BlocksNotGaugePhaseEquiv fun k ↦ Kraus.reindexPhysical e (A k) := by
   intro j k hjk h hG
   apply hA j k hjk h
-  rw [← gaugePhaseEquiv_reindexPhysical_equiv e, reindexPhysical_cast_dim]
+  rw [← gaugePhaseEquiv_reindexPhysical_equiv e, reindexPhysical_cast_dim e h]
   exact hG
 
 end MPSTensor
@@ -257,8 +257,9 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
     rw [hFamily]
     exact (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv
       (blockedDoubledIndexEquiv p L) _ 1).2 hSpan1
-  exact ⟨L, hL, fun c ↦ (isInjective_toMPSTensor_iff _).1 (hSpanBlocked.isInjective_one c),
-    hSpanBlocked.exists_mpo_block_left_inverse⟩
+  have hSpanPair : MPSTensor.WordTupleSpanTop (fun c ↦ blockTensor (T c) L) 1 :=
+    (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm _ 1).1 hSpanBlocked
+  exact ⟨L, hL, fun c ↦ hSpanPair.isInjective_one c, hSpanPair.exists_mpo_block_left_inverse⟩
 
 namespace CompleteZipperFusionFamily
 

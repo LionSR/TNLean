@@ -91,7 +91,7 @@ the Local fix of the module docstring. -/
 theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
           1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
@@ -146,7 +146,7 @@ theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTe
     rcases hT with h | h | h <;> linarith
   -- The error is unchanged by the gauge and the rescaling.
   have hphase := norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv N)
-  have hself : ∀ v : MPVSpace d N, ‖v‖ = 1 → 1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun v hv => by
+  have hself : ∀ v : MPVSpace (Fin d) N, ‖v‖ = 1 → 1 - ‖⟪v, v⟫_ℂ‖ ≤ ε := fun v hv => by
     rw [inner_self_eq_norm_sq_to_K, hv]
     norm_num [hε.le]
   set q := ⌈Q⌉₊ with hqdef
@@ -197,7 +197,7 @@ theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTe
       intro h
       apply h0
       ext s
-      have := congrArg (fun v : MPVSpace d N => v s) h
+      have := congrArg (fun v : MPVSpace (Fin d) N => v s) h
       simp only [mpvState_apply, hmpv, PiLp.zero_apply] at this
       simpa [pow_ne_zero N hζ] using this
     by_cases hNL : L + 3 * D ≤ N
@@ -236,7 +236,7 @@ theorem exists_mpvState_ne_zero_of_le {D : ℕ} [NeZero D] (A : MPSTensor d D)
   have hB0 : mpvState B N = 0 := by
     ext s
     rw [mpvState_apply, hmpv]
-    have := congrArg (fun v : MPVSpace d N => v s) h0
+    have := congrArg (fun v : MPVSpace (Fin d) N => v s) h0
     simp only [mpvState_apply, PiLp.zero_apply] at this
     rw [this, mul_zero, PiLp.zero_apply]
   have h1 := hc N
@@ -261,7 +261,7 @@ This is `exists_isPreparedInDepth_le_log_of_mpvState_ne_zero` together with
 theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
           1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   obtain ⟨c, hc⟩ := exists_isPreparedInDepth_le_log_of_mpvState_ne_zero A hA
@@ -340,7 +340,7 @@ theorem exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero {D D' : ℕ} (A : MPS
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
       mpvState B N ≠ 0 → ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
         IsUnitaryCircuit (Geometry.ring N) T U ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        ∃ ψ : MPVSpace d N, (fun s => ψ s) = U *ᵥ (fun s => normalizedMPVState A N s) ∧
+        ∃ ψ : MPVSpace (Fin d) N, (fun s => ψ s) = U *ᵥ (fun s => normalizedMPVState A N s) ∧
           1 - ‖⟪ψ, normalizedMPVState B N⟫_ℂ‖ ≤ ε := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · refine ⟨0, fun ε _ _ N _ _ h0 _ => absurd ?_ h0⟩
@@ -354,7 +354,7 @@ theorem exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero {D D' : ℕ} (A : MPS
   obtain ⟨ψA, TA, hψA, hTA, hpA, herrA⟩ := hcA (ε / 4) hε4 (by linarith) N hN h0A
   obtain ⟨ψB, TB, hψB, hTB, hpB, herrB⟩ := hcB (ε / 4) hε4 (by linarith) N hN h0B
   -- Both preparations start from `|0⋯0⟩`, up to scalars.
-  have hne : ∀ v : MPVSpace d N, ‖v‖ = 1 → (fun s => v s) ≠ 0 := fun v hv h0 => by
+  have hne : ∀ v : MPVSpace (Fin d) N, ‖v‖ = 1 → (fun s => v s) ≠ 0 := fun v hv h0 => by
     have : v = 0 := by ext s; exact congrFun h0 s
     rw [this, norm_zero] at hv
     exact zero_ne_one hv
@@ -378,7 +378,7 @@ theorem exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero {D D' : ℕ} (A : MPS
   have hnB := norm_normalizedMPVState h0B
   set φA := normalizedMPVState A N
   set φB := normalizedMPVState B N
-  set ψ : MPVSpace d N := WithLp.toLp 2 (U *ᵥ fun s => φA s)
+  set ψ : MPVSpace (Fin d) N := WithLp.toLp 2 (U *ᵥ fun s => φA s)
   have hψ : (fun s => ψ s) = U *ᵥ fun s => φA s := rfl
   have hχ := Matrix.norm_eq_of_mulVec_eq hUu hUψ.symm
   have hκ : ‖(a / b) • ψB‖ = 1 := hχ.trans hψA
@@ -439,7 +439,7 @@ theorem exists_isUnitaryCircuit_le_log {D D' : ℕ} [NeZero D] [NeZero D']
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
         IsUnitaryCircuit (Geometry.ring N) T U ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        ∃ ψ : MPVSpace d N, (fun s => ψ s) = U *ᵥ (fun s => normalizedMPVState A N s) ∧
+        ∃ ψ : MPVSpace (Fin d) N, (fun s => ψ s) = U *ᵥ (fun s => normalizedMPVState A N s) ∧
           1 - ‖⟪ψ, normalizedMPVState B N⟫_ℂ‖ ≤ ε := by
   obtain ⟨c, hc⟩ := exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero A B hA hB
   obtain ⟨NA, hNA⟩ := exists_mpvState_ne_zero_of_le A hA

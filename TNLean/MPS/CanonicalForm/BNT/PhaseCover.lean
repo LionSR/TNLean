@@ -29,7 +29,7 @@ open Filter
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-! ### Section 4. MPV phase-class representatives -/
 
@@ -40,7 +40,7 @@ scalar power times the finite-chain MPV of `A`, uniformly in every positive
 chain length and physical word.  The bond dimensions of `A` and `B` may differ.
 
 Source: CPSV16, Proposition `prop:char-BNT`, lines 1135–1148. -/
-def MPVBlockPhaseEquiv {α : Type*} {DA DB : ℕ} (A : MPTensor α (Fin DA))
+def MPVBlockPhaseEquiv {DA DB : ℕ} (A : MPTensor α (Fin DA))
     (B : MPTensor α (Fin DB)) : Prop :=
   ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
     mpv B σ = ζ ^ N * mpv A σ
@@ -48,7 +48,7 @@ def MPVBlockPhaseEquiv {α : Type*} {DA DB : ℕ} (A : MPTensor α (Fin DA))
 namespace MPVBlockPhaseEquiv
 
 /-- A bijective relabelling of the physical alphabet preserves MPV phase equivalence. -/
-lemma reindexPhysical {α α' : Type*} {DA DB : ℕ} {A : MPTensor α (Fin DA)}
+lemma reindexPhysical {α' : Type*} {DA DB : ℕ} {A : MPTensor α (Fin DA)}
     {B : MPTensor α (Fin DB)} (h : MPVBlockPhaseEquiv A B) (e : α' ≃ α) :
     MPVBlockPhaseEquiv (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) := by
   obtain ⟨ζ, hζ, hmpv⟩ := h
@@ -57,11 +57,11 @@ lemma reindexPhysical {α α' : Type*} {DA DB : ℕ} {A : MPTensor α (Fin DA)}
   exact hmpv N hN _
 
 /-- Reflexivity of MPV phase equivalence for different bond dimensions. -/
-lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A :=
+lemma refl {D : ℕ} (A : MPTensor α (Fin D)) : MPVBlockPhaseEquiv A A :=
   ⟨1, one_ne_zero, fun N _hN σ => by simp⟩
 
 /-- Symmetry of MPV phase equivalence for different bond dimensions. -/
-lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+lemma symm {DA DB : ℕ} {A : MPTensor α (Fin DA)} {B : MPTensor α (Fin DB)}
     (h : MPVBlockPhaseEquiv A B) : MPVBlockPhaseEquiv B A := by
   rcases h with ⟨ζ, hζ, hmpv⟩
   refine ⟨ζ⁻¹, inv_ne_zero hζ, ?_⟩
@@ -70,8 +70,8 @@ lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
   rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero N hζ), one_mul]
 
 /-- Transitivity of MPV phase equivalence for different bond dimensions. -/
-lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
-    {C : MPSTensor d DC} (hAB : MPVBlockPhaseEquiv A B)
+lemma trans {DA DB DC : ℕ} {A : MPTensor α (Fin DA)} {B : MPTensor α (Fin DB)}
+    {C : MPTensor α (Fin DC)} (hAB : MPVBlockPhaseEquiv A B)
     (hBC : MPVBlockPhaseEquiv B C) : MPVBlockPhaseEquiv A C := by
   rcases hAB with ⟨ζ, hζ, hζmpv⟩
   rcases hBC with ⟨η, hη, hηmpv⟩
@@ -81,16 +81,16 @@ lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
   ring
 
 /-- Gauge-phase equivalence after a dimension cast gives rectangular MPV phase equivalence. -/
-lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
+lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPTensor α (Fin DA)) (B : MPTensor α (Fin DB))
     (hdim : DA = DB)
-    (hGPE : GaugePhaseEquiv (α := Fin d)
-      (cast (congr_arg (MPSTensor d) hdim) A) B) :
+    (hGPE : GaugePhaseEquiv
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) B) :
     MPVBlockPhaseEquiv A B := by
   rcases hGPE with ⟨X, ζ, hζ, hX⟩
   refine ⟨ζ, hζ, ?_⟩
   intro N _hN σ
   rw [mpv_eq_pow_mul_of_gaugePhase
-    (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hX N σ,
+    (A := cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) (B := B) X ζ hX N σ,
     mpv_cast_dim hdim A N σ]
 
 end MPVBlockPhaseEquiv
@@ -102,13 +102,13 @@ families to it, the MPV-phase equivalences between each block and its chosen
 common block, and surjectivity of both class maps.  These are the CPSV comparison
 data needed by the span comparison result; constructing them from the full
 structural `SameMPV₂` data is a separate comparison step. -/
-structure MPVCommonPhaseCover {d rA rB : ℕ}
+structure MPVCommonPhaseCover {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
-    (blocksB : (k : Fin rB) → MPSTensor d (dimB k)) where
+    (blocksA : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (blocksB : (k : Fin rB) → MPTensor α (Fin (dimB k))) where
   rC : ℕ
   dimC : Fin rC → ℕ
-  common : (c : Fin rC) → MPSTensor d (dimC c)
+  common : (c : Fin rC) → MPTensor α (Fin (dimC c))
   classA : Fin rA → Fin rC
   classB : Fin rB → Fin rC
   phaseA : ∀ j : Fin rA, MPVBlockPhaseEquiv (common (classA j)) (blocksA j)
@@ -128,12 +128,12 @@ This is the family-indexed specialization of `MPVBlockPhaseEquiv`, so the
 fixed-family phase-class relation shares the block-level relation for different
 bond dimensions rather than duplicating it. -/
 def MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) (j k : Fin r) : Prop :=
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) (j k : Fin r) : Prop :=
   MPVBlockPhaseEquiv (blocks j) (blocks k)
 
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) : Setoid (Fin r) where
   r := MPVPhaseEquiv blocks
   iseqv := {
     refl := fun j => MPVBlockPhaseEquiv.refl (blocks j)
@@ -143,12 +143,12 @@ def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Quotient set of MPV phase equivalence classes. -/
 abbrev MPVPhaseClass {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) :=
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) :=
   Quotient (mpvPhaseSetoid blocks)
 
 /-- The finite quotient by MPV phase classes is finite. -/
 noncomputable instance instFintypeMPVPhaseClass {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) : Fintype (MPVPhaseClass blocks) := by
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) : Fintype (MPVPhaseClass blocks) := by
   dsimp [MPVPhaseClass]
   exact Fintype.ofFinite _
 
@@ -159,21 +159,21 @@ representative per class, the scalar-power relation from each representative to
 each member, the separation property for the representatives, and the regrouping
 identity for finite sums over the original blocks. -/
 structure MPVPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) where
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) where
   g : ℕ
   copies : Fin g → ℕ
   copies_pos : ∀ j, 0 < copies j
   enum : (j : Fin g) → Fin (copies j) → Fin r
   repr : Fin g → Fin r
   enum_phase : ∀ j q, MPVPhaseEquiv blocks (repr j) (enum j q)
-  blocks_not_equiv : BlocksNotGaugePhaseEquiv (α := Fin d) (fun j => blocks (repr j))
+  blocks_not_equiv : BlocksNotGaugePhaseEquiv (fun j => blocks (repr j))
   regroup : ∀ f : Fin r → ℂ,
     ∑ j : Fin g, ∑ q : Fin (copies j), f (enum j q) = ∑ k : Fin r, f k
 
 namespace MPVPhaseClassData
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
+variable {blocks : (k : Fin r) → MPTensor α (Fin (dim k))}
 
 /-- Every original block index occurs in the finite enumeration of MPV phase classes. -/
 lemma exists_enum_eq (classes : MPVPhaseClassData blocks) (k : Fin r) :
@@ -249,7 +249,7 @@ of that class.  If two representatives were gauge-phase equivalent, then they
 would be MPV-phase equivalent and hence lie in the same quotient class; this
 proves that distinct representatives are pairwise not gauge-phase equivalent. -/
 noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) : MPVPhaseClassData blocks := by
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) : MPVPhaseClassData blocks := by
   classical
   let cls := MPVPhaseClass blocks
   let e : cls ≃ Fin (Fintype.card cls) := Fintype.equivFin cls
@@ -294,7 +294,7 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     have henum : Quotient.mk (mpvPhaseSetoid blocks) (enumFn j q) = classOf j :=
       (Finset.mem_filter.mp ((classFinset j).orderEmbOfFin_mem rfl q)).2
     exact Quotient.exact (hrepr.trans henum.symm)
-  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) (fun j => blocks (reprFn j)) := by
+  have hBlocks : BlocksNotGaugePhaseEquiv (fun j => blocks (reprFn j)) := by
     intro j k hjk hdim hGPE
     have hphase : MPVPhaseEquiv blocks (reprFn j) (reprFn k) :=
       MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (blocks (reprFn j)) (blocks (reprFn k)) hdim hGPE
@@ -337,7 +337,7 @@ This is the normalization used for the copy labelled $k=1$ in the proof of
 Proposition 4.13 of arXiv:1606.00608, line 1898. -/
 @[simp] theorem mpvPhaseClassData_enum_zero_eq_repr
     {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (j : Fin (mpvPhaseClassData blocks).g) :
     (mpvPhaseClassData blocks).enum j
         ⟨0, (mpvPhaseClassData blocks).copies_pos j⟩ =

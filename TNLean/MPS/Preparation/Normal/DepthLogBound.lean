@@ -85,7 +85,7 @@ variable {d N : ℕ}
 so the error `1 - |⟨ψ|φ_N⟩|` is unchanged. -/
 theorem norm_inner_normalizedMPVState_of_mpv_eq {D D' : ℕ} {A : MPSTensor d D}
     {B : MPSTensor d D'} {ζ : ℂ} (hζ : ζ ≠ 0)
-    (h : ∀ σ : Cfg d N, mpv B σ = ζ ^ N * mpv A σ) (ψ : MPVSpace d N) :
+    (h : ∀ σ : Cfg d N, mpv B σ = ζ ^ N * mpv A σ) (ψ : MPVSpace (Fin d) N) :
     ‖⟪ψ, normalizedMPVState B N⟫_ℂ‖ = ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ := by
   have hv : mpvState B N = ζ ^ N • mpvState A N := by
     ext σ
@@ -197,7 +197,7 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
       ∀ a : ℝ, correlationLength t / 2 < a →
         ∃ b : ℝ, 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
           ∀ (N q : ℕ) [NeZero N], q ∣ N → a * Real.log (N / ε) + b ≤ q →
-            ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+            ∃ ψ : MPVSpace (Fin d) N, ‖ψ‖ = 1 ∧
               IsPreparedInDepth (Geometry.ring N) (C * q) (fun s => ψ s) ∧
               1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
@@ -250,7 +250,7 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     ∃ C : ℕ, ∀ A : MPSTensor d D, Kraus.IsNormal A →
       ∃ a b : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
         ∀ (N q : ℕ) [NeZero N], q ∣ N → a * Real.log (N / ε) + b ≤ q →
-          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+          ∃ ψ : MPVSpace (Fin d) N, ‖ψ‖ = 1 ∧
             IsPreparedInDepth (Geometry.ring N) (C * q) (fun s => ψ s) ∧
             1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_approximationError_le_of_slope d D
@@ -306,7 +306,7 @@ theorem exists_isPreparedInDepth_le_log_of_dvd {D : ℕ} [NeZero D] (A : MPSTens
     ∃ a b c : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N q : ℕ) [NeZero N], 2 ≤ N → q ∣ N → a * Real.log (N / ε) + b ≤ q →
         (q : ℝ) ≤ 2 * (a * Real.log (N / ε) + b) →
-          ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+          ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
             IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
               1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_approximationError_le d D
@@ -346,7 +346,7 @@ theorem exists_isPreparedInDepth_allLength_of_slope (d D : ℕ) (hd : 0 < d) :
         ∃ b : ℝ, 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
           ∀ (N q : ℕ) [NeZero N], mpvState A N ≠ 0 →
             a * Real.log (N / ε) + b ≤ q →
-              ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧
+              ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧
                 IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
                 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical

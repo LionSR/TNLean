@@ -127,8 +127,8 @@ lemma combined_family_eventually_li
     ∀ᶠ N in atTop,
       LinearIndependent ℂ
         (Sum.elim
-          (fun j : Fin P.basisCount => mpvState (d := d) (P.basis j) N)
-          (fun k : Fin Q.basisCount => mpvState (d := d) (Q.basis k) N)) :=
+          (fun j : Fin P.basisCount => mpvState (α := Fin d) (P.basis j) N)
+          (fun k : Fin Q.basisCount => mpvState (α := Fin d) (Q.basis k) N)) :=
   eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     (A := P.basis) (B := Q.basis)
     (hA_self := hP.basis_normalized_self_overlap)

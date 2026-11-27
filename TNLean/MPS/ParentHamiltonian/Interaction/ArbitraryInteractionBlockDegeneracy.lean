@@ -139,7 +139,7 @@ theorem linearIndependent_mpvState_of_wordTupleSpanTop
   have hMatrices := block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan
     (fun k => c k • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) (by
       intro w
-      have hw := congrArg (fun v : MPVSpace d N => v w) hc
+      have hw := congrArg (fun v : MPVSpace (Fin d) N => v w) hc
       simpa only [WithLp.ofLp_sum, Finset.sum_apply, PiLp.smul_apply,
         mpvState_apply, mpv_eq, coeff_eq, Matrix.smul_mul, Matrix.one_mul,
         Matrix.trace_smul, smul_eq_mul, PiLp.zero_apply] using hw)
@@ -166,7 +166,7 @@ theorem weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
   let T : ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ]
-      MPVSpace d L :=
+      MPVSpace (Fin d) L :=
     LinearMap.lsum ℂ (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
       (fun j => c j • (Matrix.toEuclideanLin h).comp (e.toLinearMap.comp (groundSpaceMap (A j) L)))
   have hT : T = 0 := by

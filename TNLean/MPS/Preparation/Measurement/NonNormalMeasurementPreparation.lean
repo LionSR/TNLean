@@ -370,7 +370,7 @@ theorem copyApproxVector_eq_sum (hι : ∀ j k, Function.Injective (ι j k))
       ∑ j, α j * blockIsometryState (Aj j) (fixedPointPair (σ j)) hN s := by
   rw [copyApproxVector_repeatedBlockSum hι hdisj hq horth σ M α]
   refine Finset.sum_congr rfl fun j _ => ?_
-  have h := congrArg (fun v : MPVSpace d (M * q) => v s)
+  have h := congrArg (fun v : MPVSpace (Fin d) (M * q) => v s)
     (approximatingMPVState_eq_blockIsometryState (Aj j) (hB j) (hσ j) (htr j) M hN)
   simp only [(inner_approximatingMPVState_mpvState (Aj j) (hB j) (hσ j) (htr j) M).1,
     approximatingMPVStateRaw_apply] at h
@@ -501,7 +501,7 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
         (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
           physicalMatrix (blockTensor (Aj j') q) = 0) →
         bntWeight μ N ≠ 0 →
-        ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+        ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
           (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
             IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun x ↦ ∏ i, v i (x i))
               (fun s => ψ s)) ∧
@@ -568,7 +568,7 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   have hprep := hCp Aj ι hι hdisj μ σ (fun j => (hσ j).posSemidef) htr q hLq hB horth M α hα
   set v : Cfg d (M * q) → ℂ := fun s => copyApproxVector (repeatedBlockSum Aj ι μ) q M α
     (copyIsometry ι μ q) σ ((Kraus.blockedConfigEquiv d M q).symm s) with hv
-  set ψ : MPVSpace d (M * q) := (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm v
+  set ψ : MPVSpace (Fin d) (M * q) := (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm v
   have hψ : (fun s => ψ s) = v := funext fun s => by
     simp [ψ, PiLp.toLp_apply]
   have hsq := sum_norm_sq_copyApproxVector hι hdisj (μ := μ) (fun j => (hσ j).posSemidef) htr

@@ -225,7 +225,7 @@ theorem verticalComponent_isCPSVBasisOfNormalTensors :
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
     have hcomponent := congrArg
-      (fun v : MPSTensor.MPVSpace 16 N ↦ v (fun _ : Fin N ↦ verticalZeroLetter)) hzero
+      (fun v : MPSTensor.MPVSpace (Fin 16) N ↦ v (fun _ : Fin N ↦ verticalZeroLetter)) hzero
     have hpow : (16 / 25 : ℂ) ^ N ≠ 0 := pow_ne_zero N (by norm_num)
     apply hpow
     simpa only [MPSTensor.mpvState_apply, verticalComponent_mpv_zeroLoop N hN,

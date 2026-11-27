@@ -110,7 +110,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_of_log_lower (d D : ℕ) (hd : 0 
     ∃ C N₀ : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N]
       (hN : ∑ k, ℓ k = N) (A : VaryingBondChain d D N) (L : ℕ) (δ : ℝ),
       (∀ k, c * Real.log N ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsPairApproximable A hN δ →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ T ≤ C * L ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ T ≤ C * L ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ δ ∧
         (N < N₀ → ψ = (‖state A‖ : ℂ)⁻¹ • state A) := by
@@ -177,7 +177,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_sequence (d D : ℕ) (hd : 0 < d)
     (hδ : Filter.Tendsto δ Filter.atTop (nhds 0))
     (hL : Asymptotics.IsBigO Filter.atTop (fun n => (L n : ℝ))
       (fun n => Real.log (n + 1 : ℕ))) :
-    ∃ (C N₀ : ℕ) (ψ : ∀ n, MPVSpace d (n + 1)) (T : ℕ → ℕ),
+    ∃ (C N₀ : ℕ) (ψ : ∀ n, MPVSpace (Fin d) (n + 1)) (T : ℕ → ℕ),
       (∀ n, ‖ψ n‖ = 1 ∧ T n ≤ C * L n ∧
         IsPreparedInDepth (Geometry.ring (n + 1)) (T n) (fun s => ψ n s) ∧
         1 - ‖⟪ψ n, (‖state (A n)‖ : ℂ)⁻¹ • state (A n)⟫_ℂ‖ ≤ δ n ∧
@@ -248,7 +248,7 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
       inv_mul_cancel₀ (norm_ne_zero_iff.mpr hA)]
   by_cases hN : 3 * D ≤ N
   · have hsum : ∑ _ : Fin 1, N = N := by simp
-    let Y : MPVSpace (D * D) 1 := (‖chainState A‖ : ℂ)⁻¹ • chainPosState A hsum
+    let Y : MPVSpace (Fin (D * D)) 1 := (‖chainState A‖ : ℂ)⁻¹ • chainPosState A hsum
     have hY : ‖Y‖ = 1 := by
       dsimp only [Y]
       rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
@@ -340,7 +340,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
         (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
         IsPairApproximable (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
     ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   classical
@@ -448,7 +448,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
         (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
         IsPairApproximable (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
     ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N],
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from

@@ -151,9 +151,9 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   -- `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
   classical
   let : Fintype ι := Fintype.ofFinite ι
-  set V := lp (fun N : ℕ => MPVSpace d N) 2 with hV
+  set V := lp (fun N : ℕ => MPVSpace (Fin d) N) 2 with hV
   set v : ι → ℕ → V :=
-    fun k N => lp.single 2 (p * N) (mpvState (d := d) (A k) (p * N)) with hv
+    fun k N => lp.single 2 (p * N) (mpvState (α := Fin d) (A k) (p * N)) with hv
   set L : Matrix ι ι ℂ := Matrix.diagonal (fun k => (period k : ℂ)) with hLdef
   have hLdet : L.det ≠ 0 := by
     rw [hLdef, Matrix.det_diagonal]
@@ -194,9 +194,9 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   rw [Filter.eventually_atTop] at hLI
   obtain ⟨N₀, hN₀⟩ := hLI
   refine ⟨N₀, fun N hN => ?_⟩
-  let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
-    lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 (p * N)
-  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (d := d) (A k) (p * N))) := by
+  let fN : MPVSpace (Fin d) (p * N) →ₗ[ℂ] V :=
+    lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace (Fin d) N) 2 (p * N)
+  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (α := Fin d) (A k) (p * N))) := by
     convert hN₀ N hN using 1
     ext k L i
     rfl
@@ -312,7 +312,7 @@ theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ
-        (fun j : {j : Fin g // period j ∣ N} => mpvState (d := d) (A ↑j) N) := by
+        (fun j : {j : Fin g // period j ∣ N} => mpvState (α := Fin d) (A ↑j) N) := by
   classical
   -- Positive bond dimensions, needed as instances by the overlap dichotomy.
   -- Every period is positive, so every least common multiple of periods is.
@@ -325,7 +325,7 @@ theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
   have key : ∀ S : Finset (Fin g), ∃ M : ℕ, ∀ n ≥ M,
       LinearIndependent ℂ
         (fun k : {j : Fin g // j ∈ S} =>
-          mpvState (d := d) (A ↑k) (S.lcm period * n)) := by
+          mpvState (α := Fin d) (A ↑k) (S.lcm period * n)) := by
     intro S
     have : NeZero (S.lcm period) := ⟨(hlcmPos S).ne'⟩
     refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero

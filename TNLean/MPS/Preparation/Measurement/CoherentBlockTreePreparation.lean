@@ -262,7 +262,7 @@ theorem exists_log_log_preparation_of_supported_block_approximation
     (hω : ∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0)
     (hωS : ∀ j {M : ℕ} (x : Fin M → Fin D × Fin D),
       pairProductState (ω j) x ≠ 0 → ∀ k, x k ∈ S)
-    (target : ∀ N, MPVSpace d N) (admissible : ℕ → Prop)
+    (target : ∀ N, MPVSpace (Fin d) N) (admissible : ℕ → Prop)
     (htarget : ∀ N, admissible N → ‖target N‖ = 1)
     (K r : ℝ) (hK : 0 < K) (hr : 0 < r)
     (happrox : ∀ N [NeZero N], admissible N → ∃ α : Fin b → ℂ,
@@ -278,7 +278,7 @@ theorem exists_log_log_preparation_of_supported_block_approximation
         (∀ x : Fin 1 → Fin D × Fin D, pairProductState ω₁ x ≠ 0 → ∀ k, x k ∈ S) ∧
         blockIsometryState A ω₁ hN = target N) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → admissible N →
-      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
+      ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
         (∃ v : Fin N → Fin d → ℂ,
           IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
