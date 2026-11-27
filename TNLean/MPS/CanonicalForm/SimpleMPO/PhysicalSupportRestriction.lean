@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SimpleMPO.BNTProjectorSelection
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Simple.SimpleLocalStructure
 
 /-!
@@ -36,22 +37,17 @@ coordinate change, then injectivity of the ambient tensor implies injectivity
 of the smaller tensor. -/
 theorem isInjective_of_eq_changePhysicalBasis
     (V : Matrix (Fin d) (Fin e) ℂ) (K : MPOTensor e D) (M : MPOTensor d D)
-    (hM : M = changePhysicalBasis V K) (hInjective : Kraus.IsInjective M.toMPSTensor) :
-    Kraus.IsInjective K.toMPSTensor := by
+    (hM : M = changePhysicalBasis V K) (hInjective : Kraus.IsInjective M) :
+    Kraus.IsInjective K := by
   rw [Kraus.IsInjective, eq_top_iff]
   rw [← hInjective]
   apply Submodule.span_le.mpr
-  rintro X ⟨ij, rfl⟩
-  rw [hM]
-  change changePhysicalBasis V K (ij.divNat, ij.modNat) ∈
-    Submodule.span ℂ (Set.range K.toMPSTensor)
-  rw [changePhysicalBasis_apply_eq_sum]
+  rintro X ⟨⟨i, j⟩, rfl⟩
+  rw [hM, changePhysicalBasis_apply_eq_sum]
   apply Submodule.sum_mem
   intro p _
   apply Submodule.smul_mem
-  exact Submodule.subset_span ⟨finProdFinEquiv (p.1, p.2), by
-    simp only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat]⟩
+  exact Submodule.subset_span ⟨(p.1, p.2), rfl⟩
 
 /-- Data identifying an MPO tensor with its restriction to the range of an
 orthogonal one-site projection. -/
@@ -68,7 +64,7 @@ structure PhysicalSupportRestrictionData
   inclusion_range : inclusion * inclusionᴴ = P
   /-- The tensor restricted to the sector range is injective. -/
   restricted_injective :
-    Kraus.IsInjective (changePhysicalBasis inclusionᴴ K).toMPSTensor
+    Kraus.IsInjective (changePhysicalBasis inclusionᴴ K)
   /-- Restriction followed by inclusion recovers the ambient tensor exactly. -/
   reembed :
     changePhysicalBasis inclusion (changePhysicalBasis inclusionᴴ K) = K
@@ -81,7 +77,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem exists_physicalSupportRestrictionData
     (P : Matrix (Fin d) (Fin d) ℂ) (K : MPOTensor d D)
     (hP : IsOrthogonalProjection P) (hSupport : changePhysicalBasis P K = K)
-    (hInjective : Kraus.IsInjective K.toMPSTensor) :
+    (hInjective : Kraus.IsInjective K) :
     Nonempty (PhysicalSupportRestrictionData P K) := by
   obtain ⟨n, V, _hn, hV, hRange⟩ := hP.exists_support_isometry
   have hreembed : changePhysicalBasis V (changePhysicalBasis Vᴴ K) = K := by
@@ -118,7 +114,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and `generateMPDO`,
 lines 1680--1691 and 1733--1770. -/
 theorem nonempty_physicalSupportRestrictionData_of_twoSided_physicalSlice
     (P : Matrix (Fin d) (Fin d) ℂ) (K : MPOTensor d D)
-    (hP : IsOrthogonalProjection P) (hInjective : Kraus.IsInjective K.toMPSTensor)
+    (hP : IsOrthogonalProjection P) (hInjective : Kraus.IsInjective K)
     (hSupport : ∀ β α, P * physicalSlice K β α = physicalSlice K β α ∧
       physicalSlice K β α * P = physicalSlice K β α) :
     Nonempty (PhysicalSupportRestrictionData P K) :=
@@ -133,7 +129,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and `generateMPDO`,
 lines 1680--1691 and 1733--1770. -/
 noncomputable def physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
     (P : Matrix (Fin d) (Fin d) ℂ) (K : MPOTensor d D)
-    (hP : IsOrthogonalProjection P) (hInjective : Kraus.IsInjective K.toMPSTensor)
+    (hP : IsOrthogonalProjection P) (hInjective : Kraus.IsInjective K)
     (hSupport : ∀ β α, P * physicalSlice K β α = physicalSlice K β α ∧
       physicalSlice K β α * P = physicalSlice K β α) :
     PhysicalSupportRestrictionData P K :=
@@ -151,8 +147,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_isInjective
       S.weight j q = S.weight j q')
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (s : Fin S.basisCount) :
-    Kraus.IsInjective (commonWeightAbsorbedBasisMPOTensor S hWeight s).toMPSTensor := by
-  rw [commonWeightAbsorbedBasisMPOTensor_toMPSTensor]
+    Kraus.IsInjective (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+  rw [← isInjective_toMPSTensor_iff, commonWeightAbsorbedBasisMPOTensor_toMPSTensor]
   exact (hSpan.isInjective_one s).smul (S.commonWeight_ne_zero hWeight s)
 
 /-- Each common-weight-absorbed BNT representative has an injective

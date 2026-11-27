@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Unitary.MatrixIsometryEntries
 import TNLean.MPS.Tensor.Physical.PhysicalIndexMixing
 import TNLean.MPS.CanonicalForm.SimpleMPO.BNTLayerOrthogonality
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportSALTransport
 
 /-!
@@ -29,7 +30,14 @@ decomposition in lines 217--246 and the per-sector reduction in lines
 * `MPOTensor.doubledPhysicalMatrix_isometry`: a physical isometry induces an
   isometry on the doubled index.
 * `MPOTensor.toMPSTensor_changePhysicalBasis`: exact identification with
-  isometric Kraus mixing.
+  isometric Kraus mixing on the doubled index, the bridge to the doubled-index
+  isometric-mixing lemmas.
+* `MPOTensor.transferMap_changePhysicalBasis`,
+  `MPOTensor.isInjective_changePhysicalBasis_iff`,
+  `MPOTensor.isLeftCanonical_changePhysicalBasis`,
+  `MPOTensor.isNormalTensor_changePhysicalBasis_iff`,
+  `MPOTensor.gaugeEquiv_changePhysicalBasis`: the consequences for the tensor on the pair
+  alphabet.
 
 ## References
 
@@ -112,73 +120,75 @@ theorem toMPSTensor_changePhysicalBasis
   rintro ⟨p, q⟩ _
   simp [doubledPhysicalMatrix]
 
-/-! ### Doubled-index MPS consequences -/
+/-! ### Tensor consequences on the pair alphabet -/
 
 /-- An isometric embedding of the one-site physical space leaves the
-doubled-index MPS transfer map unchanged.
+transfer map of the tensor on the pair alphabet unchanged.
 
 This is a project-derived coordinate identity used in the setting of
 arXiv:1606.00608, lines 217--246 and 1628--1665; the paper does not state it. -/
-theorem transferMap_toMPSTensor_changePhysicalBasis
+theorem transferMap_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) :
-    Kraus.transferMap (changePhysicalBasis V K).toMPSTensor =
-      Kraus.transferMap K.toMPSTensor := by
-  rw [toMPSTensor_changePhysicalBasis]
+    Kraus.transferMap (changePhysicalBasis V K) = Kraus.transferMap K := by
+  rw [← kraus_transferMap_toMPSTensor, ← kraus_transferMap_toMPSTensor,
+    toMPSTensor_changePhysicalBasis]
   exact MPSTensor.transferMap_kraus_isometry K.toMPSTensor
     (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV)
 
 /-- Isometric physical embedding preserves and reflects one-site
-injectivity of the doubled-index MPS tensor.
+injectivity of the tensor on the pair alphabet.
 
 This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this equivalence. -/
-theorem isInjective_toMPSTensor_changePhysicalBasis_iff
+theorem isInjective_changePhysicalBasis_iff
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) :
-    Kraus.IsInjective (changePhysicalBasis V K).toMPSTensor ↔
-      Kraus.IsInjective K.toMPSTensor := by
-  rw [toMPSTensor_changePhysicalBasis]
+    Kraus.IsInjective (changePhysicalBasis V K) ↔ Kraus.IsInjective K := by
+  rw [← isInjective_toMPSTensor_iff, ← isInjective_toMPSTensor_iff,
+    toMPSTensor_changePhysicalBasis]
   exact MPSTensor.isInjective_kraus_isometry_iff K.toMPSTensor
     (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV)
 
 /-- An isometric physical embedding preserves left-canonical normalization
-of the doubled-index MPS tensor.
+of the tensor on the pair alphabet.
 
 This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this lemma. -/
-theorem isLeftCanonical_toMPSTensor_changePhysicalBasis
+theorem isLeftCanonical_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
-    (K : MPOTensor d D) (hK : MPTensor.IsLeftCanonical K.toMPSTensor) :
-    MPTensor.IsLeftCanonical (changePhysicalBasis V K).toMPSTensor := by
+    (K : MPOTensor d D) (hK : MPTensor.IsLeftCanonical K) :
+    MPTensor.IsLeftCanonical (changePhysicalBasis V K) := by
+  have hK' : MPTensor.IsLeftCanonical K.toMPSTensor := (isTP_toMPSTensor_iff K).2 hK
+  refine (isTP_toMPSTensor_iff _).1 ?_
+  change MPTensor.IsLeftCanonical (changePhysicalBasis V K).toMPSTensor
   rw [toMPSTensor_changePhysicalBasis]
   exact MPSTensor.isLeftCanonical_kraus_isometry K.toMPSTensor
-    (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV) hK
+    (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV) hK'
 
 /-- Isometric physical embedding preserves and reflects normality of the
-doubled-index MPS tensor.
+tensor on the pair alphabet.
 
 The proof only transports the transfer map and the equivalence between
 irreducibility of a Kraus family and of its transfer map; it introduces no
 new Perron--Frobenius argument.  This is project-derived coordinate algebra
 used for the normal-block construction surrounding arXiv:1606.00608, lines
 217--246 and 1628--1665, not a theorem asserted in the paper. -/
-theorem isNormalTensor_toMPSTensor_changePhysicalBasis_iff
+theorem isNormalTensor_changePhysicalBasis_iff
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) :
-    MPTensor.IsNormalTensor (changePhysicalBasis V K).toMPSTensor ↔
-      MPTensor.IsNormalTensor K.toMPSTensor := by
-  have hTransfer := transferMap_toMPSTensor_changePhysicalBasis V hV K
+    MPTensor.IsNormalTensor (changePhysicalBasis V K) ↔ MPTensor.IsNormalTensor K := by
+  have hTransfer := transferMap_changePhysicalBasis V hV K
   constructor
   · intro hC
     refine ⟨?_, ?_, ?_⟩
     · apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM
       have hIrr := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily
-        (changePhysicalBasis V K).toMPSTensor hC.no_invariant_proj
+        (changePhysicalBasis V K) hC.no_invariant_proj
       change IsIrreducibleMap
-        (Kraus.transferMap (changePhysicalBasis V K).toMPSTensor) at hIrr
+        (Kraus.transferMap (changePhysicalBasis V K)) at hIrr
       rw [hTransfer] at hIrr
       exact hIrr
     · rw [← hTransfer]
@@ -189,10 +199,10 @@ theorem isNormalTensor_toMPSTensor_changePhysicalBasis_iff
     refine ⟨?_, ?_, ?_⟩
     · apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM
       have hIrr := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily
-        K.toMPSTensor hB.no_invariant_proj
-      change IsIrreducibleMap (Kraus.transferMap K.toMPSTensor) at hIrr
+        K hB.no_invariant_proj
+      change IsIrreducibleMap (Kraus.transferMap K) at hIrr
       change IsIrreducibleMap
-        (Kraus.transferMap (changePhysicalBasis V K).toMPSTensor)
+        (Kraus.transferMap (changePhysicalBasis V K))
       rw [hTransfer]
       exact hIrr
     · rw [hTransfer]
@@ -201,17 +211,16 @@ theorem isNormalTensor_toMPSTensor_changePhysicalBasis_iff
       exact hB.primitive_transfer
 
 /-- Applying the same physical-coordinate matrix to two MPO tensors
-preserves gauge equivalence of their doubled-index MPS representatives.  No
+preserves gauge equivalence of the tensors on the pair alphabet.  No
 isometry hypothesis is needed.
 
 This is project-derived coordinate algebra used in the setting of
 arXiv:1606.00608, lines 217--246 and 1628--1665; the paper does not state it. -/
-theorem gaugeEquiv_toMPSTensor_changePhysicalBasis
+theorem gaugeEquiv_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) {K L : MPOTensor d D}
-    (hKL : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
-    MPTensor.GaugeEquiv
-      (changePhysicalBasis V K).toMPSTensor
-      (changePhysicalBasis V L).toMPSTensor := by
+    (hKL : MPTensor.GaugeEquiv K L) :
+    MPTensor.GaugeEquiv (changePhysicalBasis V K) (changePhysicalBasis V L) := by
+  rw [← gaugeEquiv_toMPSTensor_iff] at hKL ⊢
   simp only [toMPSTensor_changePhysicalBasis]
   exact hKL.sum_smul (doubledPhysicalMatrix V)
 

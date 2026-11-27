@@ -644,7 +644,7 @@ theorem exists_commutingForm_lifted_supported
         mpo K N = data.product hN := by
   obtain ⟨G, hG⟩ := exists_positive_physicalSectorFactorization_of_isSAL
     (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)
-    F.restricted_injective (F.restricted_isSAL hSAL)
+    ((isInjective_toMPSTensor_iff _).2 F.restricted_injective) (F.restricted_isSAL hSAL)
   exact F.exists_commutingForm_lifted_supported_of_physicalSectorFactorization
     G hG
 
