@@ -34,49 +34,40 @@ produces the global gauge family that relates the two tensors.
     $K(S)\Longrightarrow K(\varnothing)$.
 \end{proof}
 
-\begin{definition}[Edge-middle kernel descent data]%
-    \label{def:peps_edgeMiddleKernelDescentData}
-    \lean{TNLean.PEPS.EdgeMiddleBoundaryLabel,
-        TNLean.PEPS.EdgeMiddleKernelDescentData}
+\begin{definition}[Residual endpoint boundary labels]%
+    \label{def:peps_edgeMiddleBoundaryLabel}
+    \lean{TNLean.PEPS.EdgeMiddleBoundaryLabel}
     \leanok
-    \uses{def:peps_edgeMiddleTensorFamily,def:peps_finiteRegionKernelDescent}
-    At $e=(u,v)$ with $M_e=V\setminus\{u,v\}$, an edge-middle kernel descent
-    datum assigns to each finitely supported family $c=(c_{\rho})_{\rho}$ on
-    residual endpoint boundary labels a finite kernel descent datum $K_c$ such that
-    \begin{align}
-        \left(\forall\tau,\
-        \sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0\right)
-         & \Longrightarrow K_c(M_e),                 &
-        K_c(\varnothing)
-         & \Longrightarrow \forall\rho,\ c_{\rho}=0.
-        \notag
-    \end{align}
+    \uses{def:peps_edgeMiddleTensorFamily}
+    At $e=(u,v)$ with $M_e=V\setminus\{u,v\}$, a boundary label of the middle
+    tensor $T_{A,M_e}$ assigns a virtual index to every edge $f\neq e$ joining
+    $M_e$ to $u$ or to $v$.
 \end{definition}
 
-\begin{lemma}[Kernel descent gives edge-middle injectivity]%
-    \label{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
-    \lean{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective,
-        TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
+\begin{lemma}[Injectivity of the edge-middle tensor]%
+    \label{thm:peps_edgeMiddleTensorInjective_of_isVertexInjective}
+    \lean{TNLean.PEPS.edgeMiddleTensorInjective_of_isVertexInjective}
     \leanok
-    \uses{def:peps_edgeMiddleKernelDescentData,lem:peps_finiteRegionKernelDescent,thm:peps_edgeBlockedThreeSiteInjective_of_middle}
-    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. Given an edge-middle kernel
-    descent datum, $\inj(T_{A,M_e})$ holds; if $A$ is also vertex-injective,
-    then $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
+    \uses{def:IsVertexInjective,def:peps_edgeMiddleTensorFamily,def:peps_edgeMiddleBoundaryLabel,thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    Let $A$ be vertex-injective with $\dim A_f>0$ for every edge $f$, and let
+    $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. Then $\inj(T_{A,M_e})$.
 \end{lemma}
 \begin{proof}\leanok
-    If $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0$ for all $\tau$, then
-    Definition~\ref{def:peps_edgeMiddleKernelDescentData} and
-    Lemma~\ref{lem:peps_finiteRegionKernelDescent} give
-    $K_c(M_e)\Longrightarrow K_c(\varnothing)\Longrightarrow\forall\rho,\ c_{\rho}=0$,
-    proving $\inj(T_{A,M_e})$. Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
-    then gives the three-site claim.
+    The boundary edges of the region $M_e$ are the edges $f\neq e$ joining $M_e$
+    to $u$ or $v$, so a boundary label of $T_{A,M_e}$ determines a boundary
+    configuration of the blocked region $M_e$, injectively. Under this
+    identification $T_{A,M_e}$ is the blocked-region tensor of $M_e$ divided by
+    $\dim A_e$, which is nonzero. The blocked-region tensor is injective by
+    Lemma~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}, and
+    injectivity survives restriction along an injective relabelling and
+    rescaling by nonzero scalars.
 \end{proof}
 
 \begin{lemma}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
     \leanok
-    \uses{def:IsVertexInjective,def:peps_edgeBlockedThreeSiteInjective,thm:peps_edgeMiddleTensorInjective_of_kernelDescent,lem:peps_localCoeff_eq_zero_of_contract_zero,lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
+    \uses{def:IsVertexInjective,def:peps_edgeBlockedThreeSiteInjective,thm:peps_edgeMiddleTensorInjective_of_isVertexInjective,thm:peps_edgeBlockedThreeSiteInjective_of_middle,lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
     If $A$ is vertex-injective and $\forall f\in E,\ \dim A_f>0$, then for every
     edge $e=(u,v)$,
     $\inj(T_{A,u})\wedge\inj(T_{A,V\setminus\{u,v\}})\wedge\inj(T_{A,v})$
@@ -86,17 +77,11 @@ produces the global gauge family that relates the two tensors.
     and~\ref{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent,lem:peps_localCoeff_eq_zero_of_contract_zero}
-    Fix $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. For any relation
-    $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}=0$, define $K_c(S)$ to mean that the
-    partial contraction over $S\subseteq M_e$ vanishes. For $j\in S$, splitting
-    the complement virtual space as
-    $\mc C_e\cong\mc V_j\times\prod_{f\ne e,\,f\not\ni j}\{0,\ldots,\dim A_f-1\}$
-    and applying Lemma~\ref{lem:peps_localCoeff_eq_zero_of_contract_zero} at $j$
-    gives $K_c(S)\Longrightarrow K_c(S\setminus\{j\})$. Since $\dim A_f>0$,
-    residual boundary configurations lift to $\mc C_e$, giving
-    $K_c(\varnothing)\Longrightarrow\forall\rho,\ c_{\rho}=0$.
-    Lemma~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent} concludes.
+    \uses{thm:peps_edgeMiddleTensorInjective_of_isVertexInjective,thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    Lemma~\ref{thm:peps_edgeMiddleTensorInjective_of_isVertexInjective} gives
+    $\inj(T_{A,V\setminus\{u,v\}})$, and
+    Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} adds the two
+    endpoint injectivities.
 \end{proof}
 
 \begin{lemma}[Local virtual insertion realized physically on either endpoint]%

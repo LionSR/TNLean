@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAlgebra.SkolemNoether
 import TNLean.PEPS.Tensor.Network.Defs
-import TNLean.PEPS.FundamentalTheorem.Injective.EdgeMiddleKernelDescent
+import TNLean.PEPS.FundamentalTheorem.Injective.EdgeMiddlePhysical
 import TNLean.PEPS.FundamentalTheorem.Injective.InsertionAlgebra
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
