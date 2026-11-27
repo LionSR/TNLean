@@ -112,8 +112,8 @@ theorem isCPSVBasisOfNormalTensors_shortRangeHeisenbergTensor :
     shortRangeHeisenbergBlock
     (fun j => tendsto_mpvOverlap_self_of_dim_one _ (shortRangeHeisenbergBlock_normalization j))
     (cross_overlap_tendsto_zero_of_separated_normal_bnt_data shortRangeHeisenbergBlock
-      ⟨fun j => isIrreducibleFamily_of_bondDim_one (shortRangeHeisenbergBlock j)⟩
-      ⟨fun j => isLeftCanonical_of_dim_one _ (shortRangeHeisenbergBlock_normalization j)⟩
+      (fun j => isIrreducibleFamily_of_bondDim_one (shortRangeHeisenbergBlock j))
+      (fun j => isLeftCanonical_of_dim_one _ (shortRangeHeisenbergBlock_normalization j))
       shortRangeHeisenbergBlock_blocksNotGaugePhaseEquiv)
 
 /-- Evaluation of the joint two-site boundary map. Its range is the symmetric

@@ -7,7 +7,6 @@ import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Tensor.DirectSum.GaugeEquiv
 import TNLean.MPS.Transfer.Irreducible.BlockingViaAdjoint
 import TNLean.MPS.Tensor.Tactic
-import QICLean.Kraus.PrimitiveFixedPoint.Blocking
 
 import Mathlib.Algebra.GCDMonoid.Finset
 
