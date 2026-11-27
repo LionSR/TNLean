@@ -38,19 +38,19 @@ noncomputable section
 
 namespace MPSTensor
 
-variable {d D r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} {D r : ℕ} {dim : Fin r → ℕ}
 
 /-- Arbitrary-boundary transport determines every nonempty word matrix by
 trace duality. This is the exact open-chain identity of GLM23 Appendix A,
 `decompopen`; equality only for periodic traces would not suffice. -/
 theorem familyTraceAdjoint_wordTuple
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (hb : ∀ (L : ℕ), 0 < L → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin L → Fin d,
+      ∀ w : Fin L → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b X c) w)
-    {L : ℕ} (hL : 0 < L) (w : Fin L → Fin d) :
+    {L : ℕ} (hL : 0 < L) (w : Fin L → α) :
     Matrix.familyTraceAdjoint b (wordTuple A L w) =
       Kraus.evalWord B (List.ofFn w) := by
   apply Matrix.ext_iff_trace_mul_right.mpr
@@ -73,11 +73,11 @@ Source: GLM23, Appendix A, the comparison following `decompopen` and before
 `eq:ortho`, lines 2360--2453. This statement derives multiplicativity and
 does not assume biorthogonal fusion or action tensors. -/
 theorem familyTraceAdjoint_map_mul
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (hb : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b X c) w)
     {L : ℕ} (hL : 0 < L) (hSpan : WordTupleSpanTop A L)
     (M N : (c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) :
@@ -115,11 +115,11 @@ produce a representation of the product of the target matrix algebras.
 The representation is not required to preserve the ambient identity.
 Source: GLM23, Appendix A, `decompopen` and `eq:ortho`. -/
 def boundaryRepresentation
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (hb : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b X c) w)
     {L : ℕ} (hL : 0 < L) (hSpan : WordTupleSpanTop A L) :
     ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₙₐ[ℂ]
@@ -134,13 +134,13 @@ def boundaryRepresentation
 the source letter, with no remainder. Source: GLM23, `fusiontensors`,
 `fusiontensors2`, and Appendix A at length one. -/
 theorem boundaryRepresentation_letter
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (hb : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b X c) w)
-    {L : ℕ} (hL : 0 < L) (hSpan : WordTupleSpanTop A L) (i : Fin d) :
+    {L : ℕ} (hL : 0 < L) (hSpan : WordTupleSpanTop A L) (i : α) :
     boundaryRepresentation B A b hb hL hSpan (fun c ↦ A c i) = B i := by
   change Matrix.familyTraceAdjoint b (fun c ↦ A c i) = B i
   have h := familyTraceAdjoint_wordTuple B A b hb (by omega : 0 < 1) (fun _ ↦ i)
@@ -154,9 +154,9 @@ theorem boundaryRepresentation_letter
 block boundaries. Source: GLM23, Appendix A, the block-projector expansion
 preceding `decompopen`. -/
 theorem mpvWithBoundary_toTensorFromBlocks_one
-    (A : (c : Fin r) → MPSTensor d (dim c))
+    (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (X : Matrix (Fin (∑ c : Fin r, dim c)) (Fin (∑ c : Fin r, dim c)) ℂ)
-    {L : ℕ} (w : Fin L → Fin d) :
+    {L : ℕ} (w : Fin L → α) :
     mpvWithBoundary (toTensorFromBlocks (fun _ ↦ 1) A) X w =
       ∑ c : Fin r, mpvWithBoundary (A c) (Matrix.finSigmaDiagonalBlocks X c) w := by
   rw [mpvWithBoundary, Matrix.trace_mul_comm, trace_evalWord_toTensorFromBlocks_mul]

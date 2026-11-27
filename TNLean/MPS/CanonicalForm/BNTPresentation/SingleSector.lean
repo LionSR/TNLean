@@ -100,7 +100,7 @@ theorem _root_.MPTensor.IsNormalTensor.exists_gaugeEquiv_singleSectorDecompositi
       SameMPV₂Pos A (singleSectorDecomposition B).toTensor := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B := Kraus.tpGauge (d := d) (D := D) A σ
+  let B := Kraus.tpGauge (ι := Fin d) (D := D) A σ
   have hSelf :
       Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) B B N) atTop (𝓝 1) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible B hIrr hLeft hPrim
