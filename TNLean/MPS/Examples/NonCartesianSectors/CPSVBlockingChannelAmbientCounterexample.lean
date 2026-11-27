@@ -35,8 +35,8 @@ open NeighboringTraceObstructionAmbientCounterexample
 /-- A channel between ambient closure families restricts, through the boundary
 isolating the first sector, to a channel between the embedded closure families. -/
 private theorem exists_embeddedMap_of_exists_ambientMap (N : ℕ)
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0)
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction (mu • B))
     (h : ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
         Matrix (Fin N → Fin 5) (Fin N → Fin 5) ℂ,
       IsKrausCPTP T ∧
@@ -64,8 +64,8 @@ The same ambient boundary is used at lengths two and three.  Thus this is a
 universal obstruction to the refinement map asserted by CPSV16, Appendix C.2,
 Proposition `prop2to5`, lines 1628--1665 and 1810--1817. -/
 theorem not_exists_ambient_two_to_three_site_map
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0)
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction (mu • B)) :
     ¬ ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
         Matrix (Fin 3 → Fin 5) (Fin 3 → Fin 5) ℂ,
       IsKrausCPTP T ∧
@@ -83,8 +83,8 @@ This is the twice-applied refinement obstruction used in the logical
 implication `(ii) ⇒ (v)` of CPSV16, Theorem 4.9.  Its closing proof prints the
 cyclic label `(iii) ⇒ (v)` at lines 1821--1825. -/
 theorem not_exists_ambient_two_to_four_site_map
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0)
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction (mu • B)) :
     ¬ ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
         Matrix (Fin 4 → Fin 5) (Fin 4 → Fin 5) ℂ,
       IsKrausCPTP T ∧
@@ -104,8 +104,8 @@ coordinates to a two-to-four-site map for the unblocked tensor, contradicting
 the preceding theorem.  This is the conclusion used in CPSV16, Theorem 4.9,
 lines 851--893 and 1821--1825. -/
 theorem ambient_blockTwo_not_isRFPViaTS
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0)
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction (mu • B)) :
     ¬ IsRFPViaTS (blockTwo (ambient mu B hmu)) := by
   intro hRFP
   obtain ⟨_S, T, _hS, hT, _hSclose, hTclose⟩ := hRFP
@@ -137,12 +137,12 @@ hypotheses and common-weight absorption at lines 1628--1665, Proposition
 calculation are documented in
 `docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex`. -/
 theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
-    ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
+    ∃ (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0),
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
       MPTensor.IsNormalTensor B ∧
-      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv embeddedObstruction (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
       (IsMPDO K ∧
@@ -153,7 +153,7 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
         MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
-        K.toMPSTensor = S.toTensor ∧
+        K = S.toTensor ∧
         (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q') ∧
         S.basisCount = 2 ∧
@@ -162,7 +162,7 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
         S.basisDim 0 = 2 ∧
         S.basisDim (Fin.succ 0) = 1 ∧
         S.basis 0 = B ∧
-        S.basis (Fin.succ 0) = terminalBlock.toMPSTensor ∧
+        S.basis (Fin.succ 0) = terminalBlock ∧
         S.weight 0 0 = mu ∧
         S.weight (Fin.succ 0) 0 = 1 ∧
         physicalSupportProj embeddedObstruction = obstructionPhysicalSupport ∧
