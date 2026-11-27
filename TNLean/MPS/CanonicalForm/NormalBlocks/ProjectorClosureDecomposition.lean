@@ -148,19 +148,19 @@ agree with those of the unit-weight direct sum of the corner tensors.
 
 This is the trace decomposition along the partition of unity used in the
 direct-sum step of arXiv:1606.00608, eq:II_CF1, lines 237--241. -/
-theorem sameMPV₂_toTensorFromBlocks_of_isometry_family
-    {r : ℕ} {dim : Fin r → ℕ} (A : MPSTensor d D)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+theorem sameMPV₂_toTensorFromBlocks_of_isometry_family [Fintype α]
+    {r : ℕ} {dim : Fin r → ℕ} (A : MPTensor α (Fin D))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (V : (k : Fin r) → Matrix (Fin D) (Fin (dim k)) ℂ)
     (hiso : ∀ k, (V k)ᴴ * V k = 1)
     (hsum : ∑ k : Fin r, V k * (V k)ᴴ = 1)
-    (hint : ∀ (k : Fin r) (i : Fin d), A i * V k = V k * blocks k i) :
-    SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+    (hint : ∀ (k : Fin r) (i : α), A i * V k = V k * blocks k i) :
+    SameMPV₂ A (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum]
   simp only [one_pow, one_smul]
   simp only [mpv, coeff]
-  set w : List (Fin d) := List.ofFn σ with hw
+  set w : List α := List.ofFn σ with hw
   calc Matrix.trace (Kraus.evalWord A w)
       = Matrix.trace ((∑ k : Fin r, V k * (V k)ᴴ) * Kraus.evalWord A w) := by
         rw [hsum, Matrix.one_mul]
@@ -184,16 +184,16 @@ invariant-projector closure (arXiv:1606.00608, lines 253--254): every tensor wit
 closure carries a family of isometries with pairwise orthogonal ranges summing
 to the identity whose corner tensors are irreducible and intertwine the tensor
 matrices. -/
-private theorem exists_irreducible_isometry_family_aux :
-    ∀ (D : ℕ) (A : MPSTensor d D), HasInvariantProjectorClosure A →
-      ∃ (r : ℕ) (dim : Fin r → ℕ) (blocks : (k : Fin r) → MPSTensor d (dim k))
+private theorem exists_irreducible_isometry_family_aux [Fintype α] :
+    ∀ (D : ℕ) (A : MPTensor α (Fin D)), HasInvariantProjectorClosure A →
+      ∃ (r : ℕ) (dim : Fin r → ℕ) (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
         (V : (k : Fin r) → Matrix (Fin D) (Fin (dim k)) ℂ),
         (∀ k, 0 < dim k) ∧
         (∀ k, (V k)ᴴ * V k = 1) ∧
         (∑ k : Fin r, V k * (V k)ᴴ = 1) ∧
         (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
-        (∀ (k : Fin r) (i : Fin d), A i * V k = V k * blocks k i) ∧
-        (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
+        (∀ (k : Fin r) (i : α), A i * V k = V k * blocks k i) ∧
+        (∀ (k : Fin r) (i : α), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) := by
   intro D
   induction D using Nat.strong_induction_on with
@@ -216,7 +216,7 @@ private theorem exists_irreducible_isometry_family_aux :
   -- Inductive step: split along a reducing projection and recurse on the corners.
   rw [Kraus.IsIrreducibleFamily, not_not] at hirrA
   obtain ⟨P, hPproj, hP0, hP1, hLower⟩ := hirrA
-  have hCommP : ∀ i : Fin d, P * A i = A i * P :=
+  have hCommP : ∀ i : α, P * A i = A i * P :=
     commutes_of_hasInvariantProjectorClosure_of_lowerZero A P hClosure hPproj hLower
   obtain ⟨n, V₁, hn_tr, hV₁iso, hV₁range⟩ := hPproj.exists_support_isometry
   obtain ⟨m, V₂, hm_tr, hV₂iso, hV₂range⟩ := hPproj.one_sub.exists_support_isometry
@@ -247,11 +247,11 @@ private theorem exists_irreducible_isometry_family_aux :
   have hn_lt : n < D := by omega
   have hm_lt : m < D := by omega
   -- The two range projections commute with every tensor matrix.
-  have hComm₁ : ∀ i : Fin d, A i * (V₁ * V₁ᴴ) = (V₁ * V₁ᴴ) * A i := by
+  have hComm₁ : ∀ i : α, A i * (V₁ * V₁ᴴ) = (V₁ * V₁ᴴ) * A i := by
     intro i
     rw [hV₁range]
     exact (hCommP i).symm
-  have hComm₂ : ∀ i : Fin d, A i * (V₂ * V₂ᴴ) = (V₂ * V₂ᴴ) * A i := by
+  have hComm₂ : ∀ i : α, A i * (V₂ * V₂ᴴ) = (V₂ * V₂ᴴ) * A i := by
     intro i
     rw [hV₂range, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
       hCommP i]
@@ -264,21 +264,21 @@ private theorem exists_irreducible_isometry_family_aux :
       hirr₁⟩ := ih n hn_lt (fun i => V₁ᴴ * A i * V₁) hClosure₁
   obtain ⟨r₂, dim₂, blocks₂, W₂, hpos₂, hiso₂, hsum₂, horth₂, hint₂raw, hintstar₂raw,
       hirr₂⟩ := ih m hm_lt (fun i => V₂ᴴ * A i * V₂) hClosure₂
-  have hint₁ : ∀ (a : Fin r₁) (i : Fin d),
+  have hint₁ : ∀ (a : Fin r₁) (i : α),
       V₁ᴴ * A i * V₁ * W₁ a = W₁ a * blocks₁ a i := hint₁raw
-  have hint₂ : ∀ (a : Fin r₂) (i : Fin d),
+  have hint₂ : ∀ (a : Fin r₂) (i : α),
       V₂ᴴ * A i * V₂ * W₂ a = W₂ a * blocks₂ a i := hint₂raw
-  have hintstar₁ : ∀ (a : Fin r₁) (i : Fin d),
+  have hintstar₁ : ∀ (a : Fin r₁) (i : α),
       (W₁ a)ᴴ * (V₁ᴴ * A i * V₁) = blocks₁ a i * (W₁ a)ᴴ := hintstar₁raw
-  have hintstar₂ : ∀ (a : Fin r₂) (i : Fin d),
+  have hintstar₂ : ∀ (a : Fin r₂) (i : α),
       (W₂ a)ᴴ * (V₂ᴴ * A i * V₂) = blocks₂ a i * (W₂ a)ᴴ := hintstar₂raw
-  have hAmb₁ : ∀ i : Fin d, A i * V₁ = V₁ * (V₁ᴴ * A i * V₁) :=
+  have hAmb₁ : ∀ i : α, A i * V₁ = V₁ * (V₁ᴴ * A i * V₁) :=
     mul_isometry_of_commutes A V₁ hV₁iso hComm₁
-  have hAmb₂ : ∀ i : Fin d, A i * V₂ = V₂ * (V₂ᴴ * A i * V₂) :=
+  have hAmb₂ : ∀ i : α, A i * V₂ = V₂ * (V₂ᴴ * A i * V₂) :=
     mul_isometry_of_commutes A V₂ hV₂iso hComm₂
-  have hAmbStar₁ : ∀ i : Fin d, V₁ᴴ * A i = (V₁ᴴ * A i * V₁) * V₁ᴴ :=
+  have hAmbStar₁ : ∀ i : α, V₁ᴴ * A i = (V₁ᴴ * A i * V₁) * V₁ᴴ :=
     conjTranspose_isometry_mul_of_commutes A V₁ hV₁iso hComm₁
-  have hAmbStar₂ : ∀ i : Fin d, V₂ᴴ * A i = (V₂ᴴ * A i * V₂) * V₂ᴴ :=
+  have hAmbStar₂ : ∀ i : α, V₂ᴴ * A i = (V₂ᴴ * A i * V₂) * V₂ᴴ :=
     conjTranspose_isometry_mul_of_commutes A V₂ hV₂iso hComm₂
   -- Cross-orthogonality of the two support isometries.
   have hV₁V₂ : V₁ᴴ * V₂ = 0 := by
@@ -295,8 +295,8 @@ private theorem exists_irreducible_isometry_family_aux :
     simpa [Matrix.conjTranspose_mul] using h
   -- Combine the two recursive families over the sum index type.
   let dimS : Fin r₁ ⊕ Fin r₂ → ℕ := Sum.elim dim₁ dim₂
-  let blocksS : (s : Fin r₁ ⊕ Fin r₂) → MPSTensor d (dimS s) := fun s =>
-    Sum.rec (motive := fun s => MPSTensor d (dimS s))
+  let blocksS : (s : Fin r₁ ⊕ Fin r₂) → MPTensor α (Fin (dimS s)) := fun s =>
+    Sum.rec (motive := fun s => MPTensor α (Fin (dimS s)))
       (fun a => blocks₁ a) (fun a => blocks₂ a) s
   let VS : (s : Fin r₁ ⊕ Fin r₂) → Matrix (Fin D) (Fin (dimS s)) ℂ := fun s =>
     Sum.rec (motive := fun s => Matrix (Fin D) (Fin (dimS s)) ℂ)
@@ -372,7 +372,7 @@ private theorem exists_irreducible_isometry_family_aux :
             rw [Matrix.conjTranspose_mul]; simp only [Matrix.mul_assoc]
         _ = (W₂ a)ᴴ * W₂ b := by rw [hV₂iso, Matrix.one_mul]
         _ = 0 := horth₂ a b hab
-  have hintS : ∀ (s : Fin r₁ ⊕ Fin r₂) (i : Fin d),
+  have hintS : ∀ (s : Fin r₁ ⊕ Fin r₂) (i : α),
       A i * VS s = VS s * blocksS s i := by
     rintro (a | a) i
     · change A i * (V₁ * W₁ a) = (V₁ * W₁ a) * blocks₁ a i
@@ -395,7 +395,7 @@ private theorem exists_irreducible_isometry_family_aux :
         _ = V₂ * (B * W₂ a) := Matrix.mul_assoc _ _ _
         _ = V₂ * (W₂ a * blocks₂ a i) := by rw [h2]
         _ = (V₂ * W₂ a) * blocks₂ a i := (Matrix.mul_assoc _ _ _).symm
-  have hintStarS : ∀ (s : Fin r₁ ⊕ Fin r₂) (i : Fin d),
+  have hintStarS : ∀ (s : Fin r₁ ⊕ Fin r₂) (i : α),
       (VS s)ᴴ * A i = blocksS s i * (VS s)ᴴ := by
     rintro (a | a) i
     · change (V₁ * W₁ a)ᴴ * A i = blocks₁ a i * (V₁ * W₁ a)ᴴ
@@ -458,22 +458,22 @@ assumed.  The spectral steps — rescaling every block to spectral radius one
 and deducing blockwise primitivity from the absence of nontrivial periodic
 vectors — are carried out in
 `TNLean.MPS.CanonicalForm.ProjectorClosureSpectral`. -/
-theorem exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
-    (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A) :
-    ∃ (r : ℕ) (dim : Fin r → ℕ) (blocks : (k : Fin r) → MPSTensor d (dim k))
+theorem exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure [Fintype α]
+    (A : MPTensor α (Fin D)) (hClosure : HasInvariantProjectorClosure A) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ) (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
       (V : (k : Fin r) → Matrix (Fin D) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∑ k : Fin r, V k * (V k)ᴴ = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
-      (∀ (k : Fin r) (i : Fin d), A i * V k = V k * blocks k i) ∧
-      (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
-      (∀ (k : Fin r) (i : Fin d), blocks k i = (V k)ᴴ * A i * V k) ∧
+      (∀ (k : Fin r) (i : α), A i * V k = V k * blocks k i) ∧
+      (∀ (k : Fin r) (i : α), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
+      (∀ (k : Fin r) (i : α), blocks k i = (V k)ᴴ * A i * V k) ∧
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+      SameMPV₂ A (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   obtain ⟨r, dim, blocks, V, hpos, hiso, hsum, horth, hint, hintstar, hirr⟩ :=
     exists_irreducible_isometry_family_aux D A hClosure
-  have hcorner : ∀ (k : Fin r) (i : Fin d), blocks k i = (V k)ᴴ * A i * V k := by
+  have hcorner : ∀ (k : Fin r) (i : α), blocks k i = (V k)ᴴ * A i * V k := by
     intro k i
     calc blocks k i
         = ((V k)ᴴ * V k) * blocks k i := by rw [hiso k, Matrix.one_mul]
