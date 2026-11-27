@@ -72,9 +72,7 @@ For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist
 positive definite matrix `σ` and a positive real `r` with
 `∑ (A i)ᴴ * σ * A i = r • σ` (the adjoint eigenvector equation).
 
-This is the transfer-map form of `Kraus.exists_posDef_adjoint_eigenvector`, which is stated only
-for families indexed by `Fin d`; the proof relabels the physical alphabet along
-`Fintype.equivFin`. -/
+This is the transfer-map form of `Kraus.exists_posDef_adjoint_eigenvector`. -/
 theorem exists_posDef_adjoint_eigenvector {α : Type*} [Fintype α]
     [NeZero D]
     (A : MPTensor α (Fin D))
@@ -83,19 +81,10 @@ theorem exists_posDef_adjoint_eigenvector {α : Type*} [Fintype α]
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
       Kraus.transferMap (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
-  classical
-  let e := (Fintype.equivFin α).symm
-  have hIrr' : IsIrreducibleMap (Kraus.transferMap (Kraus.reindexPhysical e A)) := by
-    rw [Kraus.transferMap_reindexPhysical_equiv]
-    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
-  obtain ⟨i, hi⟩ := hA
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
-    Kraus.exists_posDef_adjoint_eigenvector (K := Kraus.reindexPhysical e A) hIrr'
-      ⟨e.symm i, by simpa [Kraus.reindexPhysical, e] using hi⟩
-  have h : Kraus.transferMap (Kraus.reindexPhysical e fun i => (A i)ᴴ) σ = (r : ℂ) • σ :=
-    hσ_eig
-  rw [Kraus.transferMap_reindexPhysical_equiv] at h
-  exact ⟨σ, r, hσ_pd, hr_pos, h⟩
+    Kraus.exists_posDef_adjoint_eigenvector (K := A)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) hA
+  exact ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩
 
 /-- **TP / left-canonical gauge data for an irreducible MPS tensor.**
 

@@ -214,7 +214,7 @@ noncomputable def toTwoSiteExactSectorGauge
       change (0 : ℂ) < verticalMultiplicityTrace H.weight γ
       exact verticalMultiplicityTrace_pos H.multiplicity_pos H.weight_pos γ
     exact hTracePos.ne' ((hProductSum γ).symm.trans hsumZero)
-  let P : MPSTensor.SectorDecomposition (D * D) := {
+  let P : MPSTensor.SectorDecomposition (Fin (D * D)) := {
     basisCount := H.labelCount
     basisDim := H.bondDim
     basis := H.tensor
@@ -365,7 +365,7 @@ noncomputable def toTwoSiteExactSectorGauge
   let D₂ : CPSVVerticalDecomposition (blockTwo M) := Classical.choice
     ((isCPSVCanonicalForm_blockTwo hCanonical).hasVerticalBNTGroupingInputs
       (blockTwo M) hM.blockTwo).exists_cpsvVerticalDecomposition
-  let Q : MPSTensor.SectorDecomposition (D * D) := {
+  let Q : MPSTensor.SectorDecomposition (Fin (D * D)) := {
     basisCount := D₂.labelCount
     basisDim := D₂.bondDim
     basis := D₂.tensor

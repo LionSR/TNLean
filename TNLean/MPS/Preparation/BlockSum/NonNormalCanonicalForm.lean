@@ -233,16 +233,18 @@ theorem mpv_toTensorFromBlocks_fixedPointTensor {m : ℕ} (μ : Fin m → ℂ)
 
 namespace SectorDecomposition
 
+variable {α : Type*}
+
 /-- The bond coordinate, in the assembled tensor `P.toTensor`, of the coordinate `a` of the
 copy `k` of the block `j`: the position of the block `μ_{j,k} A_j` in the direct sum
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` of arXiv:2307.01696, eq. (S2)
 (`toTensor_copyCoord`). -/
-noncomputable def copyCoord (P : SectorDecomposition d) (j : Fin P.basisCount)
+noncomputable def copyCoord (P : SectorDecomposition α) (j : Fin P.basisCount)
     (k : Fin (P.copies j)) (a : Fin (P.basisDim j)) : Fin P.totalDim :=
   finSigmaFinEquiv ⟨P.flatIndexEquiv ⟨j, k⟩, Fin.cast (P.flatDim_flatIndexEquiv ⟨j, k⟩).symm a⟩
 
 /-- The coordinates of one copy of one block are distinct. -/
-theorem copyCoord_injective (P : SectorDecomposition d) (j : Fin P.basisCount)
+theorem copyCoord_injective (P : SectorDecomposition α) (j : Fin P.basisCount)
     (k : Fin (P.copies j)) : Function.Injective (P.copyCoord j k) := by
   intro a b h
   have h' := Sigma.mk.inj_iff.1 (finSigmaFinEquiv.injective h)
@@ -250,7 +252,7 @@ theorem copyCoord_injective (P : SectorDecomposition d) (j : Fin P.basisCount)
 
 /-- Coordinates of distinct blocks are distinct, whatever copies are used: the blocks of
 arXiv:2307.01696, eq. (S2), have orthogonal supports in the bond space. -/
-theorem copyCoord_ne_of_ne (P : SectorDecomposition d) {j j' : Fin P.basisCount}
+theorem copyCoord_ne_of_ne (P : SectorDecomposition α) {j j' : Fin P.basisCount}
     (hj : j ≠ j') (k : Fin (P.copies j)) (k' : Fin (P.copies j'))
     (a : Fin (P.basisDim j)) (a' : Fin (P.basisDim j')) :
     P.copyCoord j k a ≠ P.copyCoord j' k' a' := by
@@ -261,7 +263,7 @@ theorem copyCoord_ne_of_ne (P : SectorDecomposition d) {j j' : Fin P.basisCount}
 /-- The assembled tensor restricted to the coordinates of the copy `k` of the block `j` is
 the weighted block `μ_{j,k} A_j`: `copyCoord` is the position of that block in
 arXiv:2307.01696, eq. (S2). -/
-theorem toTensor_copyCoord (P : SectorDecomposition d) (i : Fin d) (j : Fin P.basisCount)
+theorem toTensor_copyCoord (P : SectorDecomposition α) (i : α) (j : Fin P.basisCount)
     (k : Fin (P.copies j)) (a b : Fin (P.basisDim j)) :
     P.toTensor i (P.copyCoord j k a) (P.copyCoord j k b) = P.weight j k * P.basis j i a b := by
   have key : ∀ (s : Fin P.totalCopies) (jk : (j : Fin P.basisCount) × Fin (P.copies j))
@@ -284,7 +286,7 @@ The source does not say where the pair sits when the block has several copies; t
 is the parameter `κ`. Every choice gives an orthonormal family
 (`inner_embeddedFixedPointPair`), but when some block has several copies no choice makes
 eq. (S7) approximate the state (`docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`). -/
-noncomputable def embeddedFixedPointPair (P : SectorDecomposition d)
+noncomputable def embeddedFixedPointPair (P : SectorDecomposition α)
     (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (j : Fin P.basisCount) :
     Fin P.totalDim × Fin P.totalDim → ℂ :=
@@ -295,7 +297,7 @@ canonical form, the property asserted in arXiv:2307.01696 after eq. (S7): distin
 occupy disjoint bond coordinates, and each pair has norm `Tr σ_j = 1`. The proof uses only
 the placement and `σ_j ≥ 0`, `Tr σ_j = 1`, not normality or the basis-of-normal-tensors
 property the source invokes. -/
-theorem inner_embeddedFixedPointPair (P : SectorDecomposition d)
+theorem inner_embeddedFixedPointPair (P : SectorDecomposition α)
     {σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (j j' : Fin P.basisCount) :
@@ -311,7 +313,7 @@ theorem inner_embeddedFixedPointPair (P : SectorDecomposition d)
 
 /-- The map `W : |j⟩ ↦ |ω_j⟩` of arXiv:2307.01696, the paragraph after eq. (19), formed
 from the embedded fixed-point pairs of a canonical form, is an isometry. -/
-theorem isIsometry_pairIsometry_embeddedFixedPointPair (P : SectorDecomposition d)
+theorem isIsometry_pairIsometry_embeddedFixedPointPair (P : SectorDecomposition α)
     {σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) :
@@ -324,7 +326,7 @@ theorem isIsometry_pairIsometry_embeddedFixedPointPair (P : SectorDecomposition 
 eq. (19), for a canonical form of eq. (S2): the pairs are the embedded fixed-point pairs of
 the blocks, and the coefficients are `αⱼ^{(N)} = βⱼ / (∑ₗ |βₗ|²)^{1/2}` with
 `βⱼ = ∑ₖ μ_{j,k}^N` (the display following eq. (S7)), on a ring of `M` blocked sites. -/
-noncomputable def canonicalFixedPointState (P : SectorDecomposition d)
+noncomputable def canonicalFixedPointState (P : SectorDecomposition α)
     (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (N M : ℕ) :
     (Fin M → Fin P.totalDim × Fin P.totalDim) → ℂ :=
@@ -333,7 +335,7 @@ noncomputable def canonicalFixedPointState (P : SectorDecomposition d)
 /-- The GHZ form of the fixed-point state of a canonical form, arXiv:2307.01696, the
 paragraph after eq. (19): `|Ω'⟩ = W^{⊗M} |χ_M⟩` in the bond coordinates `R_k L_{k+1}`, with
 `W : |j⟩ ↦ |ω_j⟩` an isometry (`isIsometry_pairIsometry_embeddedFixedPointPair`). -/
-theorem canonicalFixedPointState_eq_piKronecker_mulVec_ghzState (P : SectorDecomposition d)
+theorem canonicalFixedPointState_eq_piKronecker_mulVec_ghzState (P : SectorDecomposition α)
     (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (N M : ℕ)
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
@@ -346,7 +348,7 @@ theorem canonicalFixedPointState_eq_piKronecker_mulVec_ghzState (P : SectorDecom
 of `M ≥ 1` blocked sites at a length `N` where some weight `βₗ` is nonzero
 (arXiv:2307.01696, eq. (19) and the display following eq. (S7), whose denominator is
 nonzero exactly then). -/
-theorem canonicalFixedPointState_norm_sq (P : SectorDecomposition d)
+theorem canonicalFixedPointState_norm_sq (P : SectorDecomposition α)
     {σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) {N M : ℕ} (hM : M ≠ 0)

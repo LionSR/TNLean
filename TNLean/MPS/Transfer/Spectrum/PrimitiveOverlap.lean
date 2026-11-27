@@ -111,7 +111,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
   have hTrace' :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
-          ((Kraus.mixedMapLM (D₁ := D) (D₂ := D) A A) ^ N))
+          ((Kraus.mixedMapLM (ι := Fin d) (D₁ := D) (D₂ := D) A A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) := by
     simpa [Kraus.mixedMapLM_self] using hTrace
   -- Now convert the trace identity to the MPV-overlap identity.

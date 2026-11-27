@@ -547,7 +547,7 @@ theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
       (stackedTensor_ketLeftMul_invariant M hword) 1
     rwa [mpo_stackedTensor] at h
   exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M
-    ((isInjective_toMPSTensor_iff M).2 hInj) hQidem
+    hInj hQidem
     (mpo_commute_of_commute_pow M hM 2 (by omega) hp hCommPow)
 
 /-- The vertically viewed tensor of an MPDO has no nontrivial periodic vectors whenever

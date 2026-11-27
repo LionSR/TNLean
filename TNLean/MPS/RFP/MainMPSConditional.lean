@@ -25,7 +25,7 @@ namespace MPSTensor
 
 namespace IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- Positive-gap BNT zero correlation length implies the all-chain
 nearest-neighbor commuting parent-Hamiltonian ground-space condition at the

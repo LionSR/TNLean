@@ -177,11 +177,11 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
     (hSpect :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap V)
-            (Kraus.mixedMapLM (D₁ := D₁) (D₂ := D₂) A B)) < 1) :
+            (Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B)) < 1) :
     Tendsto (fun N => mpvOverlap (α := Fin d) A B N) atTop (nhds (0 : ℂ)) := by
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (Kraus.mixedMapLM (D₁ := D₁) (D₂ := D₂) A B)
+  let F' : V →L[ℂ] V := Φ (Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B)
   let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
   let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
   let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
@@ -193,7 +193,7 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)
-        (Kraus.mixedMapLM (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
+        (Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
     simpa only [] using hSpect
   have hpow0 : Tendsto (fun n => F' ^ n) atTop (nhds 0) :=
     @_root_.pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
@@ -207,17 +207,17 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
   have htr0' :
       Tendsto
         (fun n => LinearMap.trace ℂ V
-          ((Kraus.mixedMapLM (D₁ := D₁) (D₂ := D₂) A B) ^ n))
+          ((Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B) ^ n))
         atTop (nhds (0 : ℂ)) := by
     refine Tendsto.congr (fun n => ?_) htr0
     -- `Φ` preserves powers; `((Φ M : V →L[ℂ] V) : V →ₗ[ℂ] V) = M` by definition.
     have hpow : (F' ^ n) =
-        Φ ((Kraus.mixedMapLM (D₁ := D₁) (D₂ := D₂) A B) ^ n) :=
+        Φ ((Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) :=
       (map_pow Φ (Kraus.mixedMapLM A B) n).symm
     -- Pass to underlying linear maps.
     have hlin :
         ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V) =
-          (Kraus.mixedMapLM (D₁ := D₁) (D₂ := D₂) A B) ^ n :=
+          (Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B) ^ n :=
       (congrArg (fun F : V →L[ℂ] V => (F : V →ₗ[ℂ] V)) hpow).trans rfl
     exact congrArg (fun F : V →ₗ[ℂ] V => LinearMap.trace ℂ V F) hlin
   -- Convert trace to overlap using `trace_mixedMapLM_rect_pow_eq_mpvOverlap`.

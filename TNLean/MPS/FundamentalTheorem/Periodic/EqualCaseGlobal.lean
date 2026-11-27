@@ -308,7 +308,7 @@ theorem toTensorFromBlocks_conj_of_matched_blocks_smul
       simp [permMatrixOfEquiv, Matrix.conjTranspose_apply, Matrix.transpose_apply]
     rw [Matrix.conjTranspose_mul, hGadj, hEadj]
   · intro c i
-    have hconj := toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (d := d)
+    have hconj := toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (α := Fin d)
       (μ := fun t => c (e.symm t) * μ' t) (A := B) (B := B') X (fun t i => rfl)
     have hblocks : ∀ (k : Fin r) (i : Fin d),
         (c k * μ k) • A k i =
@@ -395,7 +395,7 @@ theorem reindex_trans_finCongr {n m k : ℕ} (h₁ : n = m) (h₂ : m = k)
   subst h₂
   rfl
 
-@[simp] theorem matched_block_gauge_apply {Q : SectorDecomposition d}
+@[simp] theorem matched_block_gauge_apply {Q : SectorDecomposition (Fin d)}
     (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
     (t : Fin Q.totalCopies) :
     matched_block_gauge (Q := Q) Xblock t = Xblock (Q.flatIndexEquiv.symm t).1 := rfl
@@ -408,7 +408,7 @@ family of multiplicity scalars.
 This flattens `(j, q) ↦ z_{j,q}`, so that the block-scalar matrix built from it
 is the direct sum `⊕_j Z_j ⊗ 1_{D_j}` with `Z_j` the diagonal matrix of the
 `z_{j,q}`, as at arXiv:1708.00029, line 653. -/
-noncomputable def SectorDecomposition.flatCopyScalar (P : SectorDecomposition d)
+noncomputable def SectorDecomposition.flatCopyScalar (P : SectorDecomposition (Fin d))
     (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ) : Fin P.totalCopies → ℂ :=
   fun s => z (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
 
@@ -470,7 +470,7 @@ the zero vector.
 
 Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 655 and 661--663. -/
 theorem sameMPV₂Pos_blockScalarMatrix_mul_toTensor
-    (P : SectorDecomposition d)
+    (P : SectorDecomposition (Fin d))
     (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ)
     (period : Fin P.basisCount → ℕ)
     (hzm : ∀ j q, z j q ^ period j = 1)
@@ -519,7 +519,7 @@ unity is the one between the multiplicity entries of the second tensor and the
 arXiv:1708.00029, lines 667--671 and 681--688. Unitary blockwise
 similarities give a unitary global similarity, as used at lines 747--756. -/
 theorem equalCase_global_zgauge_of_blockwise
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (hDim : ∀ j, P.basisDim j = Q.basisDim (perm j))
     (τ : (j : Fin P.basisCount) → Fin (P.copies j) ≃ Fin (Q.copies (perm j)))

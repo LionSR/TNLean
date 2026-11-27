@@ -35,6 +35,7 @@ section GaugePhase
 
 variable {α : Type*} [Fintype α] {d D : ℕ}
 
+omit [Fintype α] in
 /-- If `B i = ζ • (X * A i * X⁻¹)` then `mpv B σ = ζ^N * mpv A σ`. -/
 theorem mpv_eq_pow_mul_of_gaugePhase
     (A B : MPTensor α (Fin D))

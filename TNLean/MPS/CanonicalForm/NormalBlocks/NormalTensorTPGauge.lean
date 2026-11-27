@@ -7,7 +7,6 @@ import QICLean.Channel.Irreducible.KrausGauge
 import QICLean.Channel.Irreducible.SpectralRadius
 import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Channel.Peripheral.Spectrum.Conjugation
-import QICLean.Kraus.PrimitiveFixedPoint.Blocking
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.PhysicalReindex
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
@@ -52,57 +51,6 @@ open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder Kraus
 namespace MPSTensor
 
 variable {α : Type*} [Fintype α] {D : ℕ}
-
-/-- The trace-adjoint identity for the transfer map of a tensor.
-
-**Local bridge (QICLean `Kraus.trace_mul_mapLM_adjoint`):** the QICLean statement is stated only
-for families indexed by `Fin n`; this lemma relabels the physical alphabet along
-`Fintype.equivFin` and is removed when that statement is generalized. -/
-private theorem trace_mul_transferMap_adjoint (A : MPTensor α (Fin D))
-    (σ ρ : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.trace (σ * Kraus.transferMap A ρ) =
-      Matrix.trace (Kraus.transferMap (fun i => (A i)ᴴ) σ * ρ) := by
-  classical
-  let e := (Fintype.equivFin α).symm
-  have h : Matrix.trace (σ * Kraus.transferMap (Kraus.reindexPhysical e A) ρ) =
-      Matrix.trace (Kraus.transferMap (Kraus.reindexPhysical e fun i => (A i)ᴴ) σ * ρ) :=
-    Kraus.trace_mul_mapLM_adjoint (Kraus.reindexPhysical e A) rfl σ ρ
-  rwa [Kraus.transferMap_reindexPhysical_equiv, Kraus.transferMap_reindexPhysical_equiv] at h
-
-/-- Trace-preserving gauging by a positive-definite matrix preserves irreducibility of a tensor
-whose transfer map is irreducible.
-
-**Local bridge (QICLean `Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap`):** the QICLean
-statement is stated only for families indexed by `Fin d`; this lemma relabels the physical
-alphabet along `Fintype.equivFin` and is removed when that statement is generalized. -/
-private theorem isIrreducibleFamily_tpGauge_of_isIrreducibleMap (A : MPTensor α (Fin D))
-    (σ : Matrix (Fin D) (Fin D) ℂ) (hσ : σ.PosDef)
-    (hIrr : IsIrreducibleMap (Kraus.transferMap A)) :
-    Kraus.IsIrreducibleFamily (Kraus.tpGauge A σ) := by
-  classical
-  let e := (Fintype.equivFin α).symm
-  have hIrr' : IsIrreducibleMap (Kraus.transferMap (Kraus.reindexPhysical e A)) := by
-    rwa [Kraus.transferMap_reindexPhysical_equiv]
-  have h : Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e (Kraus.tpGauge A σ)) :=
-    Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap (Kraus.reindexPhysical e A) σ hσ hIrr'
-  exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).1 h
-
-/-- Trace-preserving gauging by a positive-definite matrix preserves primitivity of the transfer
-map.
-
-**Local bridge (QICLean `Kraus.isPrimitive_mapLM_tpGauge_iff`):** the QICLean statement is stated
-only for families indexed by `Fin d`; this lemma relabels the physical alphabet along
-`Fintype.equivFin` and is removed when that statement is generalized. -/
-private theorem isPrimitive_transferMap_tpGauge_iff (A : MPTensor α (Fin D))
-    (σ : Matrix (Fin D) (Fin D) ℂ) (hσ : σ.PosDef) :
-    _root_.IsPrimitive (Kraus.transferMap (Kraus.tpGauge A σ)) ↔
-      _root_.IsPrimitive (Kraus.transferMap A) := by
-  classical
-  let e := (Fintype.equivFin α).symm
-  have h : _root_.IsPrimitive (Kraus.transferMap (Kraus.reindexPhysical e (Kraus.tpGauge A σ))) ↔
-      _root_.IsPrimitive (Kraus.transferMap (Kraus.reindexPhysical e A)) :=
-    Kraus.isPrimitive_mapLM_tpGauge_iff (Kraus.reindexPhysical e A) σ hσ
-  rwa [Kraus.transferMap_reindexPhysical_equiv, Kraus.transferMap_reindexPhysical_equiv] at h
 
 /-- The transfer maps of gauge-equivalent tensors are related by the standard
 congruence similarity of completely positive maps.
@@ -285,7 +233,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
   have htrace : Matrix.trace (σ * Kraus.transferMap (ι := α) (n := Fin D) A ρ) =
       Matrix.trace
         (Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) σ * ρ) :=
-    trace_mul_transferMap_adjoint A σ ρ
+    Kraus.trace_mul_mapLM_adjoint A rfl σ ρ
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     exact ne_of_gt (hσ.trace_mul_pos_of_posSemidef_of_ne_zero
       hρ.posSemidef (Matrix.PosDef.isUnit hρ).ne_zero)
@@ -312,7 +260,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
   have hGauge : GaugeEquiv A (Kraus.tpGauge (ι := α) (D := D) A σ) :=
     gaugeEquiv_tpGauge A σ hσ
   have hGaugeIrr : Kraus.IsIrreducibleFamily (Kraus.tpGauge (ι := α) (D := D) A σ) :=
-    isIrreducibleFamily_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
+    Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hGaugeIrr⟩
 
 /-- A normal tensor admits a trace-preserving gauge with no scalar rescaling.
@@ -337,7 +285,7 @@ theorem _root_.MPTensor.IsNormalTensor.exists_tpGauge
       h.no_invariant_proj h.spectral_radius_one
   have hPrim : _root_.IsPrimitive
       (Kraus.transferMap (ι := α) (n := Fin D) (Kraus.tpGauge (ι := α) (D := D) A σ)) :=
-    (isPrimitive_transferMap_tpGauge_iff A σ hσ).2 h.primitive_transfer
+    (Kraus.isPrimitive_mapLM_tpGauge_iff A σ hσ).2 h.primitive_transfer
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hPrim, hIrr⟩
 
 
