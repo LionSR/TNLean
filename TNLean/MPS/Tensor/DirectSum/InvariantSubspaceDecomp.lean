@@ -220,13 +220,14 @@ end ReindexEval
 /-! ## Unitary conjugation preserves MPVs -/
 
 /-- Conjugating all letters by a unitary matrix does not change the MPV family. -/
-theorem sameMPV_conj_unitary (A : MPSTensor d D) (U : ↥(Matrix.unitaryGroup (Fin D) ℂ)) :
+theorem sameMPV_conj_unitary {α : Type*} (A : MPTensor α (Fin D))
+    (U : ↥(Matrix.unitaryGroup (Fin D) ℂ)) :
     SameMPV A (fun i => (star (U : Matrix (Fin D) (Fin D) ℂ)) * A i * (U : Matrix _ _ ℂ)) := by
   classical
   intro N σ
   -- Expand the MPV coefficient.
   simp only [MPTensor.mpv, MPTensor.coeff]
-  set w : List (Fin d) := List.ofFn σ
+  set w : List α := List.ofFn σ
   -- Unitary identities.
   have h_star_mul : (star (U : Matrix (Fin D) (Fin D) ℂ)) * (U : Matrix _ _ ℂ) = 1 := by
     simp

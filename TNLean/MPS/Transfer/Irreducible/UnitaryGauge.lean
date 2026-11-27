@@ -87,7 +87,7 @@ the tensor is.
 through `Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose`, is stated only for families indexed
 by `Fin d`; this lemma relabels the physical alphabet along `Fintype.equivFin` and is removed when
 that statement is generalized. -/
-private theorem isIrreducibleMap_transferMap_conjTranspose (A : MPTensor α (Fin D))
+theorem isIrreducibleMap_transferMap_conjTranspose (A : MPTensor α (Fin D))
     (hA : IsIrreducibleMap (Kraus.transferMap A)) :
     IsIrreducibleMap (Kraus.transferMap fun i => (A i)ᴴ) := by
   classical
