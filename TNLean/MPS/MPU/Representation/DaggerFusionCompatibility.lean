@@ -76,13 +76,13 @@ noncomputable def reindexBondMatrix {m n : ℕ} (h : m = n) : Matrix (Fin n) (Fi
 @[simp] theorem reindexBondMatrix_rfl (m : ℕ) : reindexBondMatrix (rfl : m = m) = 1 := by
   simp [reindexBondMatrix]
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-- A bond-dimension identification composed with a unitary gauge intertwines a
 tensor with its gauge transform: if `Y i = T† (reindex h A) i T`, then
 `A i C = C Y i` for `C = E T`, where `E` is the permutation matrix of `h`. -/
-theorem mul_reindexBondMatrix_mul_gauge {m n : ℕ} (h : m = n) (A : MPSTensor d m)
-    (T : Matrix.unitaryGroup (Fin n) ℂ) (Y : MPSTensor d n)
+theorem mul_reindexBondMatrix_mul_gauge {m n : ℕ} (h : m = n) (A : MPTensor α (Fin m))
+    (T : Matrix.unitaryGroup (Fin n) ℂ) (Y : MPTensor α (Fin n))
     (hY : ∀ i, Y i = (T : Matrix (Fin n) (Fin n) ℂ)ᴴ * reindex h A i * T) (i) :
     A i * (reindexBondMatrix h.symm * (T : Matrix (Fin n) (Fin n) ℂ)) =
       (reindexBondMatrix h.symm * (T : Matrix (Fin n) (Fin n) ℂ)) * Y i := by
@@ -219,10 +219,9 @@ namespace MPOTensor.GroupFamily
 variable {d : ℕ}
 
 /-- Bond reindexings of the tensors of two equal group elements agree. -/
-theorem reindex_toMPSTensor_congr {G : Type*} (F : GroupFamily G d) {x y : G} (hxy : x = y)
+theorem reindex_tensor_congr {G : Type*} (F : GroupFamily G d) {x y : G} (hxy : x = y)
     {n : ℕ} (h₁ : F.bondDim x = n) (h₂ : F.bondDim y = n) :
-    MPSTensor.reindex h₁ (F.tensor x).toMPSTensor =
-      MPSTensor.reindex h₂ (F.tensor y).toMPSTensor := by
+    MPSTensor.reindex h₁ (F.tensor x) = MPSTensor.reindex h₂ (F.tensor y) := by
   subst hxy
   rfl
 
@@ -272,14 +271,12 @@ theorem tensor_mul_daggerLegGaugeInv (x : G) (i j : Fin d) :
     F.tensor x (i, j) * hF.daggerLegGaugeInv hc x =
       hF.daggerLegGaugeInv hc x * physicalAdjointTensor (F.tensor x⁻¹) (i, j) := by
   have hinv : inverseFlattening F hF x⁻¹ =
-      MPSTensor.reindex (hF.bondDim_inv F x) (F.tensor x).toMPSTensor :=
-    reindex_toMPSTensor_congr F (inv_inv x) _ _
-  have h := MPSTensor.mul_reindexBondMatrix_mul_gauge (hF.bondDim_inv F x) (F.tensor x).toMPSTensor
-    (hF.daggerInverseGauge F hc x⁻¹) (physicalAdjointTensor (F.tensor x⁻¹)).toMPSTensor
+      MPSTensor.reindex (hF.bondDim_inv F x) (F.tensor x) :=
+    reindex_tensor_congr F (inv_inv x) _ _
+  exact MPSTensor.mul_reindexBondMatrix_mul_gauge (hF.bondDim_inv F x) (F.tensor x)
+    (hF.daggerInverseGauge F hc x⁻¹) (physicalAdjointTensor (F.tensor x⁻¹))
     (fun ij ↦ by rw [← hinv]; exact hF.physicalAdjointTensor_eq_daggerInverseGauge F hc x⁻¹ ij)
-    (finProdFinEquiv (i, j))
-  simpa only [daggerLegGaugeInv, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] using h
+    (i, j)
 
 /-- The target gauge $T_{(gh)^{-1}}$ of a daggered fusion tensor, from the bond
 space of $\mathcal U_{h^{-1}g^{-1}}$ to that of $\mathcal U_{gh}$, including the
@@ -309,15 +306,13 @@ theorem tensor_mul_daggerTargetGauge (g h : G) (i j : Fin d) :
     F.tensor (g * h) (i, j) * hF.daggerTargetGauge hc g h =
       hF.daggerTargetGauge hc g h * physicalAdjointTensor (F.tensor (h⁻¹ * g⁻¹)) (i, j) := by
   have hinv : inverseFlattening F hF (h⁻¹ * g⁻¹) =
-      MPSTensor.reindex (hF.bondDim_mul_inv_rev g h) (F.tensor (g * h)).toMPSTensor :=
-    reindex_toMPSTensor_congr F (by rw [mul_inv_rev, inv_inv, inv_inv]) _ _
-  have hgauge := MPSTensor.mul_reindexBondMatrix_mul_gauge (hF.bondDim_mul_inv_rev g h)
-    (F.tensor (g * h)).toMPSTensor (hF.daggerInverseGauge F hc (h⁻¹ * g⁻¹))
-    (physicalAdjointTensor (F.tensor (h⁻¹ * g⁻¹))).toMPSTensor
+      MPSTensor.reindex (hF.bondDim_mul_inv_rev g h) (F.tensor (g * h)) :=
+    reindex_tensor_congr F (by rw [mul_inv_rev, inv_inv, inv_inv]) _ _
+  exact MPSTensor.mul_reindexBondMatrix_mul_gauge (hF.bondDim_mul_inv_rev g h)
+    (F.tensor (g * h)) (hF.daggerInverseGauge F hc (h⁻¹ * g⁻¹))
+    (physicalAdjointTensor (F.tensor (h⁻¹ * g⁻¹)))
     (fun ij ↦ by rw [← hinv]; exact hF.physicalAdjointTensor_eq_daggerInverseGauge F hc _ ij)
-    (finProdFinEquiv (i, j))
-  simpa only [daggerTargetGauge, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] using hgauge
+    (i, j)
 
 /-- The target gauge and its inverse compose to the identity on the bond space
 of $\mathcal U_{gh}$. -/
