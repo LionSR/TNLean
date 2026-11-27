@@ -290,7 +290,7 @@ with the source. This theorem constructs the three fields of
 source theorem `thm:bd`. This restriction is recorded in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem PeriodicOverlapHypothesis.ofSectorDecompositions
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (periodP : Fin P.basisCount → ℕ)
     (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
@@ -344,7 +344,7 @@ Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; normalization by block-diagonal similarity, lines 313--332; and
 theorem `thm:bd`, lines 613--623. -/
 theorem PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (periodP : Fin P.basisCount → ℕ)
     (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))
@@ -524,7 +524,7 @@ irreducibility and spectral radius one at lines 257--258. This is the working
 form; the source statement, with the periods produced, is
 `fundamentalTheorem_periodic_proportional_irreducibleForm`. -/
 theorem fundamentalTheorem_periodic_proportional_sectorDecomposition
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (periodP : Fin P.basisCount → ℕ)
     (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))

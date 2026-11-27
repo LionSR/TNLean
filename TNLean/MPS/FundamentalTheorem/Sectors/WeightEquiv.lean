@@ -69,7 +69,7 @@ from eventual to all positive exponents) with
 `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card`
 (unequal-cardinality power-sum recovery). -/
 theorem matched_sector_weight_multiset_eq
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (j₀ : Fin P.basisCount) (k₀' : Fin Q.basisCount)
     (ζ : ℂ) (hζ : ζ ≠ 0)
     {N₀ : ℕ}
@@ -256,7 +256,7 @@ Paper anchor: CPSV16 appendix power-sum lemma, lines 1155--1163, and the
 equal-MPV corollary proof in the Appendix MPV proof, lines 1184--1188
 (arXiv:1606.00608). -/
 theorem matched_sector_weight_equiv
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (j₀ : Fin P.basisCount) (k₀' : Fin Q.basisCount)
     (ζ : ℂ) (hζ : ζ ≠ 0)
     {N₀ : ℕ}
@@ -301,7 +301,7 @@ Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 681--684, where the
 conclusion is `μ_{j,l}^{m_j} = ν_{j,π(l)}^{m_j}`; the underlying power-sum
 recovery is lemma `lem:momentsN0`, lines 537--569. -/
 theorem matched_sector_weight_pow_equiv_of_period_multiple
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (j₀ : Fin P.basisCount) (k₀' : Fin Q.basisCount)
     (m : ℕ) (ζ : ℂ) (hζ : ζ ≠ 0)
     {n₀ : ℕ}

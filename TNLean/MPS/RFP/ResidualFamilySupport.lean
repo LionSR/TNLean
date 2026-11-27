@@ -264,7 +264,7 @@ end ResidualFamilyAppendixBData
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- Whole-direct-sum transfer idempotence supplies simultaneous Appendix B
 data on the disjoint union of the within-sector residual-pair spaces.

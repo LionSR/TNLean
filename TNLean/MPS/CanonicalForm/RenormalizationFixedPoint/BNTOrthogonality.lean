@@ -453,7 +453,7 @@ private lemma mixedMapLM_eq_zero_of_isIdempotentElem
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)
-        (Kraus.mixedMapLM (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
+        (Kraus.mixedMapLM (ι := Fin d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
     rw [Kraus.mixedTransferSpectralRadius₂_eq] at hsr
     exact hsr
   have hidem' : IsIdempotentElem F' := hidem.map Φ
