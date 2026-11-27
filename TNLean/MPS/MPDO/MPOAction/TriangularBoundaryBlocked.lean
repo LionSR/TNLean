@@ -32,7 +32,10 @@ open Kraus (blockTensor)
 namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- Positive physical blocking preserves an exact pairwise decomposition
-over any finite label type, with its rectangular matrices unchanged. -/
+over any finite label type, with its rectangular matrices unchanged. 
+**Bridge (T.2b):** the blocked tensors are compared through their doubled-index views, since the
+pair-alphabet blocking of an operator tensor along `Kraus.block` is a T.2b item; removed with
+`toMPSTensor`. -/
 theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Λ → ℕ} {a b : Λ}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
@@ -43,14 +46,16 @@ theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
     {L : ℕ} (hL : 0 < L) :
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor (MPOTensor.blockTensor (T a) L)
-        (MPOTensor.blockTensor (T b) L))
+        (MPOTensor.blockTensor (T b) L)).toMPSTensor
       (fun q : (c : Λ) × Fin (N c) ↦ (MPOTensor.blockTensor (T q.1) L).toMPSTensor)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
-  h.ofWords (MPOTensor.blockedPairWord p L) (MPOTensor.blockedPairWord_ne_nil hL)
+  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L I).map finProdFinEquiv.symm)
+    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL I)
     (fun I ↦ by
-      rw [← MPOTensor.blockTensor_mulTensor]
-      exact MPOTensor.toMPSTensor_blockTensor_apply _ L I)
-    (fun q I ↦ MPOTensor.toMPSTensor_blockTensor_apply (T q.1) L I)
+      rw [← MPOTensor.blockTensor_mulTensor, MPOTensor.toMPSTensor_blockTensor_apply,
+        MPOTensor.evalWord_toMPSTensor])
+    (fun q I ↦ by
+      rw [MPOTensor.toMPSTensor_blockTensor_apply, MPOTensor.evalWord_toMPSTensor])
 
 end MPSTensor.IsBiorthogonalDecomposition
 
