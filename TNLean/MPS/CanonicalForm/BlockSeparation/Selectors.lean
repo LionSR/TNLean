@@ -704,7 +704,7 @@ theorem horizontalCFData_of_wordTupleSpanTop
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     (hSpan : ∃ L : ℕ, MPSTensor.WordTupleSpanTop A L) :
-    HorizontalCFData (d := d) μ A := by
+    HorizontalCFData μ A := by
   rcases hSpan with ⟨L, hL⟩
   refine {
     block_injective := hInj
@@ -724,7 +724,7 @@ theorem horizontalCFData_of_wordEntryFamily_linearIndependent
     (hμne : ∀ k, μ k ≠ 0)
     {L : ℕ}
     (hLI : LinearIndependent ℂ (MPSTensor.wordEntryFamily A L)) :
-    HorizontalCFData (d := d) μ A :=
+    HorizontalCFData μ A :=
   horizontalCFData_of_wordTupleSpanTop A hInj hLeft hμne
     ⟨L, MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI⟩
 
@@ -736,7 +736,7 @@ theorem horizontalCFData_of_propBlockInjective
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     (hProp : MPSTensor.PropBlockInjective A) :
-    HorizontalCFData (d := d) μ A := by
+    HorizontalCFData μ A := by
   refine {
     block_injective := hInj
     left_canonical := hLeft

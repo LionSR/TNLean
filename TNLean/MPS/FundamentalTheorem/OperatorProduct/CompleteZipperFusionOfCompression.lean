@@ -199,7 +199,7 @@ noncomputable def ofCompression (hD : ∀ a, 0 < D a)
   bondDim := D
   bondDim_pos := hD
   tensor := T
-  tensor_injective a := (isInjective_toMPSTensor_iff _).2 (hT a)
+  tensor_injective := hT
   fusionMultiplicity := N
   fusionSynthesis a b := compressionSynthesis (P a b)
   fusionAnalysis a b := compressionAnalysis (P a b)

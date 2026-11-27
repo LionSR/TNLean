@@ -287,8 +287,7 @@ theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block
   have : NeZero N := ⟨by omega⟩
   apply h.commute_hamiltonian_parentRingInteraction_mpo_block hL hLN ?_ a
   intro X
-  obtain ⟨Y, hY⟩ := hAdjoint.isBoundaryAdjointClosed_blockSum hdual
-    (fun a ↦ (isNormal_toMPSTensor_iff (O a)).2 (hNormal a)) hDim X
+  obtain ⟨Y, hY⟩ := hAdjoint.isBoundaryAdjointClosed_blockSum hdual hNormal hDim X
   exact ⟨Y, hY L hL⟩
 
 end MPOTensor

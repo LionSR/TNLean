@@ -32,12 +32,12 @@ variable {d D : ℕ}
 This is the stronger flattened hypothesis used by the older per-copy results
 in this file: injective blocks, the left-canonical normalization, nonzero block
 weights, and finite-word trace separation for the ungrouped block family. -/
-structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+structure HorizontalCFData {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k))) : Prop where
   /-- Each block is algebraically injective. -/
   block_injective : ∀ k, Kraus.IsInjective (A k)
   /-- Each block is left-canonical. -/
-  left_canonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
+  left_canonical : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1
   /-- No block weight vanishes. -/
   weight_ne_zero : ∀ k, μ k ≠ 0
   /-- There is a length `L` such that trace pairing against homogeneous
@@ -52,7 +52,7 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
   finiteWordTraceSeparation : ∃ L : ℕ,
     ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-    (∀ w : Fin L → Fin d,
+    (∀ w : Fin L → α,
         (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
@@ -66,7 +66,7 @@ pairs to zero against every block word, so it vanishes on each block. -/
 theorem blockwise_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : HorizontalCFData (d := d) μ A)
+    (hCF : HorizontalCFData μ A)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct :
       MPSTensor.FirstSiteActionAgree
