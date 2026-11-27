@@ -40,11 +40,21 @@ scalar power times the finite-chain MPV of `A`, uniformly in every positive
 chain length and physical word.  The bond dimensions of `A` and `B` may differ.
 
 Source: CPSV16, Proposition `prop:char-BNT`, lines 1135–1148. -/
-def MPVBlockPhaseEquiv {d DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB) : Prop :=
-  ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+def MPVBlockPhaseEquiv {α : Type*} {DA DB : ℕ} (A : MPTensor α (Fin DA))
+    (B : MPTensor α (Fin DB)) : Prop :=
+  ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
     mpv B σ = ζ ^ N * mpv A σ
 
 namespace MPVBlockPhaseEquiv
+
+/-- A bijective relabelling of the physical alphabet preserves MPV phase equivalence. -/
+lemma reindexPhysical {α α' : Type*} {DA DB : ℕ} {A : MPTensor α (Fin DA)}
+    {B : MPTensor α (Fin DB)} (h : MPVBlockPhaseEquiv A B) (e : α' ≃ α) :
+    MPVBlockPhaseEquiv (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) := by
+  obtain ⟨ζ, hζ, hmpv⟩ := h
+  refine ⟨ζ, hζ, fun N hN σ ↦ ?_⟩
+  simp only [MPTensor.mpv_reindexPhysical]
+  exact hmpv N hN _
 
 /-- Reflexivity of MPV phase equivalence for different bond dimensions. -/
 lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A :=

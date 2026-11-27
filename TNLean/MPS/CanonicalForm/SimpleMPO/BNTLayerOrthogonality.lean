@@ -73,18 +73,13 @@ theorem exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO
       (physicalSlice K β α)ᴴ =
         ∑ ν : Fin D, ∑ μ : Fin D,
           (X β μ * (X⁻¹ : Matrix (Fin D) (Fin D) ℂ) ν α) • physicalSlice K μ ν := by
-  have hSame : MPTensor.SameMPV K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
-    intro N ρ
-    rw [mpv_toMPSTensor_eq, mpv_toMPSTensor_eq]
-    exact hK.sameMPV_physicalAdjointTensor N _
-  obtain ⟨X, hX⟩ :=
-    MPSTensor.fundamentalTheorem_singleBlock ((isInjective_toMPSTensor_iff K).2 hInj) hSame
+  obtain ⟨X, hX⟩ := MPSTensor.fundamentalTheorem_singleBlock hInj hK.sameMPV_physicalAdjointTensor
   refine ⟨X, fun β α ↦ ?_⟩
   ext i j
   have hEntry := congrArg
     (fun A : Matrix (Fin D) (Fin D) ℂ ↦ A β α)
-    (hX (finProdFinEquiv (i, j)))
-  simpa [toMPSTensor, physicalAdjointTensor, physicalSlice, Matrix.mul_apply,
+    (hX (i, j))
+  simpa [physicalAdjointTensor, physicalSlice, Matrix.mul_apply,
     Matrix.sum_apply, Pi.smul_apply, smul_eq_mul, Finset.mul_sum, Finset.sum_mul,
     mul_assoc, mul_left_comm, mul_comm] using hEntry
 
