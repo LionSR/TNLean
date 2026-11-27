@@ -59,6 +59,43 @@ namespace MPOTensor
 
 variable {d : ℕ}
 
+/-! ### Temporary bridges to the doubled-index view
+
+Reductions and dressed proportionalities of the doubled-index view `M.toMPSTensor` are those of
+`M` on the pair alphabet. These two statements serve the calls of
+`TNLean.MPS.Operator.ActionTensorReduction`, which is still stated on the doubled index, and
+are removed together with `MPOTensor.toMPSTensor` (`docs/tensor_type_unification.md`, step
+T.2a). -/
+
+private theorem map_map_finProdFinEquiv (w : List (Fin d × Fin d)) :
+    (w.map finProdFinEquiv).map finProdFinEquiv.symm = w := by
+  simp only [List.map_map, Equiv.symm_comp_self, List.map_id]
+
+/-- A reduction of doubled-index views is a reduction on the pair alphabet. -/
+theorem isReduction_toMPSTensor_iff {D₁ D₂ : ℕ} {X : MPOTensor d D₂} {Y : MPOTensor d D₁}
+    {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ} :
+    MPTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W ↔ MPTensor.IsReduction X Y V W := by
+  refine ⟨fun h ↦ ⟨h.mul_eq_one, fun w ↦ ?_⟩, fun h ↦ ⟨h.mul_eq_one, fun w ↦ ?_⟩⟩
+  · have hw := h.evalWord (w.map finProdFinEquiv)
+    rwa [evalWord_toMPSTensor, evalWord_toMPSTensor, map_map_finProdFinEquiv] at hw
+  · rw [evalWord_toMPSTensor, evalWord_toMPSTensor]
+    exact h.evalWord _
+
+/-- A dressed proportionality of a doubled-index view is one on the pair alphabet. -/
+theorem isDressedProportional_toMPSTensor_iff {D m : ℕ} {X : MPOTensor d D}
+    {V V' : Matrix (Fin m) (Fin D) ℂ} {z : ℂ} :
+    MPTensor.IsDressedProportional X.toMPSTensor V V' z ↔
+      MPTensor.IsDressedProportional X V V' z := by
+  constructor
+  · rintro ⟨N, h⟩
+    refine ⟨N, fun w hw ↦ ?_⟩
+    have h' := h (w.map finProdFinEquiv) (by rwa [List.length_map])
+    rwa [evalWord_toMPSTensor, map_map_finProdFinEquiv] at h'
+  · rintro ⟨N, h⟩
+    refine ⟨N, fun w hw ↦ ?_⟩
+    rw [evalWord_toMPSTensor]
+    exact h _ (by rwa [List.length_map])
+
 namespace GroupFamily
 
 universe u

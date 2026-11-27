@@ -189,15 +189,15 @@ theorem physAct_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂)
 reduces the physical action of `X` onto that of `Y`. -/
 theorem physAct_kronId {X : MPOTensor d D₂} {Y : MPOTensor d D₁}
     {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (h : MPTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W)
+    (h : MPTensor.IsReduction X Y V W)
     (P : (Fin L → Fin d) → Matrix (Fin m) (Fin n) ℂ) (σ : Fin L → Fin d) :
     kronId V m * physAct X P σ * kronId W n = physAct Y P σ := by
   rw [physAct, physAct, kronId, kronId, Matrix.submatrix_mul_equiv,
     Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul]
   congr 1
   refine Finset.sum_congr rfl fun τ _ ↦ ?_
-  have hw := h.evalWord (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
-  simp only [evalWord_toMPSTensor_pairConfig] at hw
+  have hw := h.evalWord (List.ofFn fun k ↦ (σ k, τ k))
+  simp only [kraus_evalWord_ofFn_pair] at hw
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hw, Matrix.one_mul,
     Matrix.mul_one]
 

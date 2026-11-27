@@ -145,7 +145,8 @@ theorem exists_isReduction_actV (g h : G) : ∃ W, MPTensor.IsReduction
 with left boundary `fuseV g h`. -/
 theorem exists_isReduction_fuseV (g h : G) : ∃ W, MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.fuseV fd g h) W :=
-  ⟨_, ((fd.isReduction g h).actTensor_kronId A).trans (ad.isReduction (g * h))⟩
+  ⟨_, ((isReduction_toMPSTensor_iff.2 (fd.isReduction g h)).actTensor_kronId A).trans
+    (ad.isReduction (g * h))⟩
 
 end ActionData
 
@@ -291,12 +292,14 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   have hS : MPTensor.IsReduction B3
       (actTensor (mulTensor (F.tensor (g * h)) (F.tensor k)) A)
       (kronId (kronId (fd.V g h) (F.bondDim k)) D) _ :=
-    ((fd.isReduction g h).mulTensor_kronId (F.tensor k)).actTensor_kronId A
+    (isReduction_toMPSTensor_iff.2
+      ((fd.isReduction g h).mulTensor_kronId (F.tensor k))).actTensor_kronId A
   have hK : MPTensor.IsReduction B3
       (actTensor (mulTensor (F.tensor g) (F.tensor (h * k))) A)
       (kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) D) _ :=
-    ((fd.isReduction h k).mulTensor_idKron (F.tensor g)).mulTensor_assoc_left.actTensor_kronId A
+    (isReduction_toMPSTensor_iff.2
+      ((fd.isReduction h k).mulTensor_idKron (F.tensor g)).mulTensor_assoc_left).actTensor_kronId A
   -- the L-symbol relations pulled back to `B3`
   have H3 := (isDressedProportional_lSymbol (fd := fd) (ad := ad) hA hinv x g h).pullback hR
     (hSame3C g h)
@@ -316,7 +319,8 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
       (by rw [kronId_mul, mulTensorAssocInvMatrix_mul_matrix, kronId_one])
       (actTensor_mul_kronId_of_intertwine A fun i l ↦
         mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (F.tensor k) i l)
-  have H5 := ((fd.isAssociator_omega hF g h k).actTensor_kronId A).mul_left (ad.V (g * h * k))
+  have H5 := ((isDressedProportional_toMPSTensor_iff.2
+    (fd.isAssociator_omega hF g h k)).actTensor_kronId A).mul_left (ad.V (g * h * k))
   -- rewrite all boundaries into the five canonical ones
   have H1'' : MPTensor.IsDressedProportional B3
       (ad.actV g h * (idKron (F.bondDim g * F.bondDim h) (ad.V k) *

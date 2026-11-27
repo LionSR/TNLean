@@ -91,7 +91,7 @@ theorem isMPOFusionAlgebra_of_biorthogonalDecompositions
     (B := (mulTensor (O a) (O b)).toMPSTensor)
     (A := fun c ↦ (O c).toMPSTensor) (V := V a b) (W := W a b) (h a b) hL
     (fun n ↦ finProdFinEquiv (σ n, τ n))
-  simpa [mpv_toMPSTensor, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
+  simpa [mpv_toMPSTensor_eq, kraus_evalWord_ofFn, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
     MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat, Matrix.sum_apply, Matrix.smul_apply,
     smul_eq_mul] using hh
@@ -138,7 +138,7 @@ theorem linearIndependent_mpo_of_wordTupleSpanTop
   funext w
   have hw := congrArg
     (fun X ↦ X (fun n ↦ (w n).divNat) (fun n ↦ (w n).modNat)) hz
-  simpa [mpv_toMPSTensor, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
+  simpa [mpv_toMPSTensor_eq, kraus_evalWord_ofFn, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
     Finset.sum_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hw
 
 /-- Associativity of physical operators implies associativity of their
@@ -168,12 +168,12 @@ theorem IsMPOFusionAlgebra.associative_of_linearIndependent
 to read fusion associativity from physical matrix associativity. -/
 theorem IsMPOFusionAlgebra.associative_of_isInjective
     (hfus : IsMPOFusionAlgebra O N)
-    (hInj : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInj : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
     (a b c q : Fin r) :
     ∑ e, N a b e * N e c q = ∑ f, N b c f * N a f q := by
-  obtain ⟨L, hL, hSpan⟩ :=
-    MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective hInj hχ hne
+  obtain ⟨L, hL, hSpan⟩ := MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective
+    (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInj a)) hχ hne
   exact hfus.associative_of_linearIndependent hL
     (linearIndependent_mpo_of_wordTupleSpanTop hSpan hχ) a b c q
 
@@ -190,7 +190,7 @@ theorem IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible
     (hOp : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun a ↦ (O a).toMPSTensor))
     (hState : B = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
-    (hInjOp : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInjOp : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hneOp : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
     (hInjState : ∀ x, Kraus.IsInjective (A x)) (hD : ∀ x, 0 < D x)
     (hneState : MPSTensor.BlocksNotGaugePhaseEquiv A) :

@@ -103,10 +103,10 @@ Source: arXiv:2502.20257, equations `eq:fusion_1` and `eq:fusion_2`, `main.tex`
 lines 1403--1497. -/
 def FusionData.orderTwo (E : MPOTensor d 1) (A : MPOTensor d 2)
     (V : Matrix (Fin 1) (Fin (2 * 2)) ℂ) (W : Matrix (Fin (2 * 2)) (Fin 1) ℂ)
-    (hEE : (mulTensor E E).toMPSTensor = E.toMPSTensor)
-    (hEA : (mulTensor E A).toMPSTensor = A.toMPSTensor)
-    (hAE : (mulTensor A E).toMPSTensor = A.toMPSTensor)
-    (hAA : MPTensor.IsReduction (mulTensor A A).toMPSTensor E.toMPSTensor V W) :
+    (hEE : mulTensor E E = E)
+    (hEA : mulTensor E A = A)
+    (hAE : mulTensor A E = A)
+    (hAA : MPTensor.IsReduction (mulTensor A A) E V W) :
     (orderTwoFamily E A).FusionData where
   V x y := orderTwoLabelV V x.toAdd y.toAdd
   W x y := orderTwoLabelW W x.toAdd y.toAdd
@@ -122,10 +122,10 @@ namespace FusionData
 
 variable {E : MPOTensor d 1} {A : MPOTensor d 2} {V : Matrix (Fin 1) (Fin (2 * 2)) ℂ}
   {W : Matrix (Fin (2 * 2)) (Fin 1) ℂ}
-  {hEE : (mulTensor E E).toMPSTensor = E.toMPSTensor}
-  {hEA : (mulTensor E A).toMPSTensor = A.toMPSTensor}
-  {hAE : (mulTensor A E).toMPSTensor = A.toMPSTensor}
-  {hAA : MPTensor.IsReduction (mulTensor A A).toMPSTensor E.toMPSTensor V W}
+  {hEE : mulTensor E E = E}
+  {hEA : mulTensor E A = A}
+  {hAE : mulTensor A E = A}
+  {hAA : MPTensor.IsReduction (mulTensor A A) E V W}
 
 private theorem assocInv_two_two_two :
     mulTensorAssocInvMatrix 2 2 2 = (1 : Matrix (Fin 8) (Fin 8) ℂ) := by
