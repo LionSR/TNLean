@@ -30,6 +30,8 @@ dimension. See `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex` and
 * `MPTensor.IsMPUCanonicalBlock`: irreducibility and transfer spectral radius one.
 * `MPTensor.MPUCanonicalFormData`: a weighted retained-block reconstruction.
 * `MPTensor.IsMPUCanonicalForm`: existence of such reconstruction data.
+* `MPTensor.isMPUCanonicalForm_reindexPhysical_iff`: the canonical form is invariant under a
+  bijective relabelling of the physical alphabet.
 * `MPOTensor.exists_canonicalFormII_positiveGauge`,
   `MPOTensor.IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm`: positive gauges and
   canonical representatives of normal MPUs.
@@ -40,7 +42,7 @@ An MPU tensor in canonical form II is in canonical form. Canonical form II
 writes the normalized flattening `d^{-1/2} U` as a weighted retained-block
 reconstruction with normal blocks; a normal block is irreducible and has
 transfer spectral radius one, so the same blocks, with weights multiplied by
-`d^{1/2}`, give canonical-form data for the flattening of `U` itself.
+`d^{1/2}`, give canonical-form data for `U` itself on the pair alphabet.
 
 ### Main results
 
@@ -98,6 +100,45 @@ reconstruction whose blocks are irreducible and transfer-normalized.
 Source: arXiv:1703.09188, lines 259--267. -/
 def IsMPUCanonicalForm {α : Type u} [Fintype α] {D : ℕ} (A : MPTensor α (Fin D)) : Prop :=
   Nonempty (MPUCanonicalFormData A)
+
+/-- Relabel the physical alphabet in MPU canonical-form data. The retained dimensions, weights
+and ambient coisometry are unchanged; each block is relabelled, which leaves its
+irreducibility and its transfer map unchanged.
+
+Source: arXiv:1703.09188, lines 259--267. -/
+noncomputable def MPUCanonicalFormData.reindexPhysical {α₁ α₂ : Type*} [Fintype α₁]
+    [Fintype α₂] {D : ℕ} {A : MPTensor α₂ (Fin D)} (data : MPUCanonicalFormData A)
+    (e : α₁ ≃ α₂) : MPUCanonicalFormData (Kraus.reindexPhysical e A) where
+  r := data.r
+  dim := data.dim
+  dim_pos := data.dim_pos
+  weights := data.weights
+  weights_ne_zero := data.weights_ne_zero
+  blocks := fun k ↦ Kraus.reindexPhysical e (data.blocks k)
+  blocks_canonical := fun k ↦
+    ⟨(MPSTensor.isIrreducibleFamily_reindexPhysical_equiv e _).2
+        (data.blocks_canonical k).irreducible, by
+      rw [Kraus.transferMap_reindexPhysical_equiv]
+      exact (data.blocks_canonical k).spectral_radius_one⟩
+  total_dim_eq := data.total_dim_eq
+  ambient_coisometry := data.ambient_coisometry
+  coisometric := data.coisometric
+  reconstruct := by
+    intro i
+    simpa [Kraus.reindexPhysical, toTensorFromBlocks] using data.reconstruct (e i)
+
+/-- A bijective relabelling of the physical alphabet preserves the MPU canonical form.
+
+Source: arXiv:1703.09188, lines 259--267. -/
+theorem isMPUCanonicalForm_reindexPhysical_iff {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂]
+    {D : ℕ} {A : MPTensor α₂ (Fin D)} (e : α₁ ≃ α₂) :
+    IsMPUCanonicalForm (Kraus.reindexPhysical e A) ↔ IsMPUCanonicalForm A := by
+  refine ⟨fun ⟨data⟩ ↦ ?_, fun ⟨data⟩ ↦ ⟨data.reindexPhysical e⟩⟩
+  have h : Kraus.reindexPhysical e.symm (Kraus.reindexPhysical e A) = A := by
+    funext i
+    simp [Kraus.reindexPhysical]
+  rw [← h]
+  exact ⟨data.reindexPhysical e.symm⟩
 
 end MPTensor
 
@@ -277,15 +318,17 @@ normalization multiplies each nonzero block weight by $d^{-1/2}$.
 Source: arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. -/
 theorem IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
-    (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor) :
+    (hcf : MPTensor.IsMPUCanonicalForm U) :
     MPTensor.IsNormalTensor U.normalizedFlattening := by
   have hd : (0 : ℝ) < d := by exact_mod_cast NeZero.pos d
   have hscale : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 :=
     inv_ne_zero (Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hd).ne')
   have hcfNormalized : MPTensor.IsMPUCanonicalForm U.normalizedFlattening := by
+    have hcf' := (MPTensor.isMPUCanonicalForm_reindexPhysical_iff
+      (A := U) finProdFinEquiv.symm).2 hcf
     change Nonempty (MPTensor.MPUCanonicalFormData
-      (fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij))
-    exact ⟨(Classical.choice hcf).smul _ hscale⟩
+      (fun ij => ((Real.sqrt d : ℂ)⁻¹) • Kraus.reindexPhysical finProdFinEquiv.symm U ij))
+    exact ⟨(Classical.choice hcf').smul _ hscale⟩
   exact hU.isNormalTensor_normalizedFlattening_of_normalized_mpuCanonicalForm
     hcfNormalized
 
@@ -320,19 +363,17 @@ noncomputable def normalizedFlatteningCanonicalFormData {U : MPOTensor d D}
 
 /-- An MPU tensor in canonical form II is in canonical form: the normal blocks of
 the normalized flattening `d^{-1/2} U`, with weights multiplied by `d^{1/2}`,
-reconstruct the flattening of `U`.
+reconstruct `U` on the pair alphabet.
 
 Source: arXiv:1703.09188, canonical form, lines 259--267, and canonical form II,
 lines 269--281 and 344--356. -/
 theorem isMPUCanonicalForm [NeZero d] {U : MPOTensor d D}
-    (hU : IsMPUCanonicalFormII U) : MPTensor.IsMPUCanonicalForm U.toMPSTensor := by
+    (hU : IsMPUCanonicalFormII U) : MPTensor.IsMPUCanonicalForm U := by
   have hc : (Real.sqrt d : ℂ) ≠ 0 := by
     have hd : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
     exact_mod_cast (Real.sqrt_pos.mpr hd).ne'
-  have hU' : (fun i => (Real.sqrt d : ℂ) • U.normalizedFlattening i) = U.toMPSTensor := by
-    funext i
-    simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
-  rw [← hU']
+  refine (MPTensor.isMPUCanonicalForm_reindexPhysical_iff finProdFinEquiv.symm).1 ?_
+  rw [← sqrt_smul_normalizedFlattening]
   exact ⟨hU.normalizedFlatteningCanonicalFormData.smul _ hc⟩
 
 end IsMPUCanonicalFormII
@@ -401,8 +442,7 @@ private theorem normalizedFlattening_conj {d D : ℕ}
     MPOTensor.normalizedFlattening (fun ij ↦ X * U ij * Y : MPOTensor d D) =
       fun ij ↦ X * U.normalizedFlattening ij * Y := by
   funext ij
-  simp only [MPOTensor.normalizedFlattening, MPOTensor.toMPSTensor,
-    Matrix.mul_smul, Matrix.smul_mul]
+  simp only [MPOTensor.normalizedFlattening, Matrix.mul_smul, Matrix.smul_mul]
 
 /-- Unitary bond conjugation preserves every periodic operator. -/
 private theorem unitary_conj_mpo_eq {d D : ℕ}
@@ -566,7 +606,7 @@ canonical form II taken without loss of generality); the chapter's Lemma "Canoni
 similarity". The proof follows the left-canonical gauge `σ^{1/2} A σ^{-1/2}` of the normal tensor
 `A = d^{-1/2} U` by a unitary diagonalization of its fixed point. -/
 theorem IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor) :
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U) :
     ∃ X : GL (Fin D) ℂ, Nonempty (IsMPUCanonicalFormII (virtualSandwich
       (X : Matrix (Fin D) (Fin D) ℂ) U ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
   have hNormal := hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf

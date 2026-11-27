@@ -9,6 +9,7 @@ import TNLean.MPS.MPU.CanonicalForm.CanonicalFormAncillaBlocking
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import QICLean.Channel.Schmidt.Rank
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # A tensor in canonical form for given standard-form gates
@@ -157,7 +158,7 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ) (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween) :
     ∃ (K : ℕ) (W : MPOTensor (d * d) K),
-      MPTensor.IsMPUCanonicalForm W.toMPSTensor ∧ Nonempty (TwoSiteStandardFormData W u v) ∧
+      MPTensor.IsMPUCanonicalForm W ∧ Nonempty (TwoSiteStandardFormData W u v) ∧
         ∀ N : ℕ, 0 < N → mpo W N = mpo (standardFormTensorOfGates u v) N := by
   classical
   set V := shiftedGateCut v
@@ -216,14 +217,12 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
       _ ≤ B.rank := Matrix.rank_mul_le_left B C
       _ = Bᵀ.rank := (Matrix.rank_transpose B).symm
   -- The letters span every matrix unit.
-  have hinj : Kraus.IsInjective W.toMPSTensor := by
+  have hinj : Kraus.IsInjective W := by
     refine Submodule.eq_top_of_forall_single_mem _ fun a b ↦ ?_
-    set T := Submodule.span ℂ (Set.range W.toMPSTensor)
+    set T := Submodule.span ℂ (Set.range W)
     have hletter : ∀ (i₁ i₂ : Fin d) (j : Fin d × Fin d),
-        W (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) ∈ T := fun i₁ i₂ j ↦ by
-      refine Submodule.subset_span ⟨finProdFinEquiv (finProdFinEquiv (i₁, i₂),
-        finProdFinEquiv j), ?_⟩
-      simp [toMPSTensor]
+        W (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) ∈ T := fun _ _ _ ↦
+      Submodule.subset_span ⟨_, rfl⟩
     -- Each outer product of a column of `X₂` with a row of `X₁` is in the span.
     have houter : ∀ (i₁ i₂ : Fin d) (t : Fin ℓ) (s : Fin r),
         Matrix.vecMulVec (fun α => X₂ (α, i₁) t) (fun γ => X₁ (i₂, γ) s) ∈ T := by
@@ -257,20 +256,24 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     rw [hunit]
     exact Submodule.sum_mem _ fun p _ ↦ Submodule.sum_mem _ fun q _ ↦
       Submodule.smul_mem _ _ (houter p.1 q.1 p.2 q.2)
-  have hne : ∃ i, W.toMPSTensor i ≠ 0 := by
+  have hne : ∃ i, W i ≠ 0 := by
     by_contra h
     simp only [not_exists, not_not] at h
-    have hspan : Submodule.span ℂ (Set.range W.toMPSTensor) = ⊥ := by
+    have hspan : Submodule.span ℂ (Set.range W) = ⊥ := by
       rw [Submodule.span_eq_bot]
       rintro _ ⟨i, rfl⟩
       exact h i
-    have h1 : (1 : Matrix (Fin K) (Fin K) ℂ) ∈ Submodule.span ℂ (Set.range W.toMPSTensor) := by
+    have h1 : (1 : Matrix (Fin K) (Fin K) ℂ) ∈ Submodule.span ℂ (Set.range W) := by
       rw [hinj.span_eq_top]
       exact Submodule.mem_top
     rw [hspan, Submodule.mem_bot] at h1
     exact one_ne_zero h1
+  obtain ⟨⟨i, j⟩, hij⟩ := hne
+  refine (MPTensor.isMPUCanonicalForm_reindexPhysical_iff finProdFinEquiv.symm).1 ?_
+  rw [← toMPSTensor_eq_reindexPhysical]
   exact MPSTensor.isMPUCanonicalForm_of_isIrreducibleFamily _
     (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-      (Kraus.injective_implies_irreducibleCP _ hinj)) hne
+      (Kraus.injective_implies_irreducibleCP _ ((isInjective_toMPSTensor_iff W).2 hinj)))
+    ⟨finProdFinEquiv (i, j), by simpa [toMPSTensor] using hij⟩
 
 end MPOTensor

@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.SimpleMPU.DoubleLayerContraction
 import TNLean.MPS.CanonicalForm.SimpleMPU.FullSupport
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
+import TNLean.MPS.CanonicalForm.SimpleMPU.PhysicalRelabelling
 import TNLean.MPS.CanonicalForm.SimpleMPU.ResidualAlgebra
 import TNLean.MPS.CanonicalForm.SimpleMPU.SimpleBlocking
 import TNLean.MPS.CanonicalForm.SimpleMPU.ThreeFormInsertion

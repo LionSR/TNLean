@@ -49,7 +49,7 @@ noncomputable def IsMPUCanonicalFormII.reindexPhysical
     subst d'
     ext i α β
     simp [normalizedFlattening, MPOTensor.reindexPhysical, Kraus.reindexPhysical,
-      ep, toMPSTensor, Matrix.smul_apply]
+      ep, Matrix.smul_apply]
   let data := hU.cfii.reindexPhysical ep
   have hfull : data.toCPSVCanonicalFormData.HasFullSupport := by
     change ∑ k, hU.cfii.toCPSVCanonicalFormData.dim k = D

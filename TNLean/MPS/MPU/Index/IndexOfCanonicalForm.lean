@@ -46,7 +46,7 @@ variable {d D : ℕ}
 /-- A tensor in canonical form with a simple positive blocking is similar to a tensor `V` in
 canonical form II whose blocking of the same length is simple. -/
 private theorem IsMPU.exists_gauge_isMPUSimple_blockTensor [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hS : IsMPUSimple (MPOTensor.blockTensor U L)) :
     ∃ X : GL (Fin D) ℂ,
       ∃ _ : IsMPUCanonicalFormII (MPOTensor.virtualSandwich (X : Matrix (Fin D) (Fin D) ℂ) U
@@ -66,7 +66,7 @@ Source: arXiv:1703.09188, Proposition IV.2, lines 690--704, with the exponent `2
 **Local fix** of the module docstring); the chapter's Lemma 7.1(b) restated for canonical form;
 MD.tex Theorem 1.3. -/
 theorem IsMPU.rightRank_mul_leftRank_blockTensor_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hL : 0 < L) (hS : IsMPUSimple (MPOTensor.blockTensor U L)) :
     r[MPOTensor.blockTensor U L] * ℓ[MPOTensor.blockTensor U L] = d ^ (2 * L) := by
   obtain ⟨X, hV, hSV⟩ := hU.exists_gauge_isMPUSimple_blockTensor hcf hS
@@ -80,7 +80,7 @@ blocking `U_L`, `L ≥ 1`, is simple, then `ind U = ½ (log₂ r_L - log₂ ℓ_
 Source: arXiv:1703.09188, Definition IV.1 and Proposition IV.2, lines 681--704; the chapter's
 Definition 7.2 restated for canonical form; MD.tex Theorem 1.3. -/
 theorem IsMPU.index_eq_logb_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hL : 0 < L) (hS : IsMPUSimple (MPOTensor.blockTensor U L)) :
     hU.index = (1 / 2 : ℝ) *
       (Real.logb 2 r[MPOTensor.blockTensor U L] - Real.logb 2 ℓ[MPOTensor.blockTensor U L]) := by
@@ -96,7 +96,7 @@ blocking `U_L`, `L ≥ 1`, is simple, then `ind U = log₂ (r_L / d^L)`.
 Source: arXiv:1703.09188, Definition IV.1, lines 681--688, and Proposition IV.2,
 lines 690--704; the chapter's Definition 7.2 restated for canonical form; MD.tex Theorem 1.3. -/
 theorem IsMPU.index_eq_logb_rightRank_div_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hL : 0 < L) (hS : IsMPUSimple (MPOTensor.blockTensor U L)) :
     hU.index = Real.logb 2 ((r[MPOTensor.blockTensor U L] : ℝ) / (d ^ L : ℕ)) := by
   obtain ⟨X, hV, hSV⟩ := hU.exists_gauge_isMPUSimple_blockTensor hcf hS
@@ -112,7 +112,7 @@ Source: arXiv:1703.09188, Proposition IV.2, lines 690--704, with the exponent `2
 **Local fix** of the module docstring); the chapter's Lemma 7.1(b) restated for canonical form;
 MD.tex Theorem 1.3. -/
 theorem IsMPU.blockTensor_add_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hL : 0 < L) (hS : IsMPUSimple (MPOTensor.blockTensor U L)) (s : ℕ) :
     IsMPUSimple (MPOTensor.blockTensor U (L + s)) ∧
       r[MPOTensor.blockTensor U (L + s)] = d ^ s * r[MPOTensor.blockTensor U L] ∧
@@ -132,7 +132,7 @@ form and its blocking `U_L`, `L ≥ 1`, is simple, then `U_{L+s}` is simple for 
 Source: arXiv:1703.09188, corollary following Proposition III.3, lines 442--446, used in
 Proposition IV.2, lines 690--704; MD.tex Theorem 1.3. -/
 theorem IsMPU.blockTensor_isMPUSimple_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hL : 0 < L) (hS : IsMPUSimple (MPOTensor.blockTensor U L)) (s : ℕ) :
     IsMPUSimple (MPOTensor.blockTensor U (L + s)) :=
   (hU.blockTensor_add_of_isMPUCanonicalForm hcf hL hS s).1
@@ -144,7 +144,7 @@ Source: arXiv:1703.09188, Proposition IV.2, lines 690--704, with the exponent `2
 **Local fix** of the module docstring); the chapter's Lemma 7.1(b) restated for canonical form;
 MD.tex Theorem 1.3. -/
 theorem IsMPU.leftRank_blockTensor_add_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U)
     {L : ℕ} (hL : 0 < L) (hS : IsMPUSimple (MPOTensor.blockTensor U L)) (s : ℕ) :
     ℓ[MPOTensor.blockTensor U (L + s)] = d ^ s * ℓ[MPOTensor.blockTensor U L] :=
   (hU.blockTensor_add_of_isMPUCanonicalForm hcf hL hS s).2.2

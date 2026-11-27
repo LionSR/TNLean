@@ -47,7 +47,8 @@ This is the nonzero-dimensional convention of arXiv:2502.20257, lines 198–209,
 derived here from its injective representation hypotheses. -/
 theorem IsRawRepresentation.neZero_phys (F : GroupFamily G d)
     (hF : F.IsRawRepresentation) : NeZero d := by
-  have h : NeZero (d * d) := Kraus.neZero_d_of_isInjective (hF.isInjective 1)
+  have h : NeZero (d * d) := Kraus.neZero_d_of_isInjective
+    ((MPOTensor.isInjective_toMPSTensor_iff _).2 (hF.isInjective 1))
   exact ⟨fun hd => h.out (by simp [hd])⟩
 
 /-- The identity element has public MPU index zero.
