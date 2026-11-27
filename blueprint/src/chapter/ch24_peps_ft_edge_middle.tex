@@ -398,22 +398,6 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     linearly independent.
 \end{definition}
 
-\begin{lemma}[Finite regions from singleton regions and union closure]%
-    \label{thm:peps_finiteRegionInjectivityFromSingletons}
-    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}
-    \leanok
-    \uses{def:IsVertexInjective,lem:peps_regionInjectivityUnionClosure_finite}
-    For a singleton block $\{v\}$ the blocked tensor is the local tensor $A_v$.
-    If $\kappa$ satisfies $\forall v,\ \inj(A_v)\Longrightarrow\kappa(\{v\})$
-    and $\kappa(R)\wedge\kappa(S)\Longrightarrow\kappa(R\cup S)$, and $A$ is
-    vertex-injective, then $\kappa(R)$ holds for every finite $R\ne\varnothing$.
-\end{lemma}
-\begin{proof}\leanok
-    Writing $R=\bigcup_{v\in R}\{v\}$, vertex injectivity gives $\inj(A_v)$, hence
-    $\kappa(\{v\})$, for all $v\in R$, and
-    Lemma~\ref{lem:peps_regionInjectivityUnionClosure_finite} yields $\kappa(R)$.
-\end{proof}
-
 \begin{lemma}[Endpoint injectivity in the edge-blocked chain]%
     \label{thm:peps_edgeBlockedEndpointTensorMaps_injective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}

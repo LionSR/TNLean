@@ -244,7 +244,7 @@ the merged tree.
 | Job | Checks |
 |-----|--------|
 | `plan` | Finds the last commit of `main` that passed this workflow. A scheduled run on that same commit is skipped; otherwise the commit is the base of the changed-file checks and the ratchets. |
-| `build` | Root `lake build` and the linter executable; saves the Lean build cache (main only); strict elaboration of every production file changed since the base; the text linter; `checkdecls` on the blueprint and paper-gap declaration lists; a table of the slowest modules in the job summary. |
+| `build` | Root `lake build` and the linter executable; saves the Lean build cache (main only); strict elaboration of every production file changed since the base; the text linter; `checkdecls` on the blueprint declaration list and on one list of the paper-gap `\leanid` heads and the qualified declaration names of `docs/glossary.md`; a table of the slowest modules in the job summary. |
 | `policies` | Generated import aggregators, the docbuild manifest, the oversized-file guard, and the import-layer, pass-through and small-module ratchets against the base. |
 | `site` | Calls `blueprint.yml`, the one blueprint build: the paper-gap reference check, both print volumes, the web pages, the diagram tests, the event-stream sweep and the browser tests, then, on `main`, the Pages deployment. |
 
