@@ -51,7 +51,8 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   have hCF' : MPSTensor.IsLeftCanonicalBNTPresentation S' :=
     MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical
       (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor
-        (hCF.reindexPhysical e₀) (by omega)) e
+        (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF e₀)
+        (by omega)) e
   refine ⟨S', hCF', ?_⟩
   refine ⟨by rfl, ?_⟩
   simp only [S', S₀, MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,
@@ -61,19 +62,22 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   rw [← MPSTensor.SectorDecomposition.blockTensor_toTensor]
   refine ⟨Xcopy, ?_⟩
   let X := MPSTensor.globalGaugeOfBlocks Xcopy
-  have hGauge : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
-        (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S₀.toTensor i *
+  have hGauge : ∀ k : Fin (d * d),
+      M.toMPSTensor k =
+        (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * Kraus.reindexPhysical e₀ S.toTensor k *
           (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
-            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
-    intro i
-    simpa [X] using hX (e₀ i)
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) :=
+    fun k ↦ (hX (e₀ k)).trans (cast_eq _ _)
   intro i
-  change (MPOTensor.blockTwo M).toMPSTensor (finProdFinEquiv i) = _
-  rw [toMPSTensor_blockTwo]
+  have hLHS : MPOTensor.blockTwo M i = Kraus.blockTensor M.toMPSTensor 2 (e i) := by
+    have h := congrFun (toMPSTensor_blockTwo M) (finProdFinEquiv i)
+    change MPOTensor.blockTwo M (finProdFinEquiv.symm (finProdFinEquiv i)) =
+      Kraus.blockTensor M.toMPSTensor 2 (e i) at h
+    rwa [Equiv.symm_apply_apply] at h
+  rw [hLHS]
   change Kraus.blockTensor M.toMPSTensor 2 (e i) =
     (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
-      Kraus.blockTensor S₀.toTensor 2 (e i) *
+      Kraus.blockTensor (Kraus.reindexPhysical e₀ S.toTensor) 2 (e i) *
         (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)
   exact MPTensor.evalWord_gauge X hGauge

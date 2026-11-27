@@ -48,10 +48,9 @@ theorem kwTensor_mpo_eq_prod {L : ℕ} [NeZero L] (a b : Fin L → Fin 2) :
       ∏ j : Fin L, (-1 : ℂ) ^ ((a j).val * ((b j).val + (b (j + 1)).val)) := by
   classical
   change Matrix.trace (MPOTensor.evalWord kwTensor (List.ofFn a) (List.ofFn b)) = _
-  rw [← MPOTensor.evalWord_toMPSTensor_pairConfig,
-    MPSTensor.trace_evalWord_eq_sum_cyclic]
+  rw [← MPOTensor.kraus_evalWord_ofFn_pair, MPSTensor.trace_evalWord_eq_sum_cyclic]
   have hlocal (j : Fin L) (g : Fin L → Fin 2) :
-      kwTensor.toMPSTensor (finProdFinEquiv (a j, b j)) (g j) (g (j + 1)) =
+      kwTensor (a j, b j) (g j) (g (j + 1)) =
         if g j = b j then
           (-1 : ℂ) ^ ((a j).val * ((b j).val + (g (j + 1)).val)) else 0 := by
     generalize a j = x, b j = y
