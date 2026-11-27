@@ -104,7 +104,7 @@ support projection is a nontrivial invariant orthogonal projection of `B`.
 This is the normalization step of arXiv:1606.00608, lines 224--225, for the
 corner tensors: the rescaled unital gauge of an irreducible corner is again
 irreducible. -/
-theorem isIrreducibleFamily_smul_conj (B : MPSTensor d D)
+theorem isIrreducibleFamily_smul_conj {α : Type*} (B : MPTensor α (Fin D))
     (hIrr : Kraus.IsIrreducibleFamily B) {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X)
     {c : ℂ} (hc : c ≠ 0) :
     Kraus.IsIrreducibleFamily (fun v => c • (X⁻¹ * B v * X)) := by
