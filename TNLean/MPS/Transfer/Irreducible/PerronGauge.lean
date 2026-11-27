@@ -209,7 +209,7 @@ theorem fixed_eq_scalar_of_isIrreducibleFamily_unital
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · exact ⟨0, Subsingleton.elim _ _⟩
   have : NeZero D := ⟨hD.ne'⟩
-  have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by
+  have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) A := by
     simpa [Kraus.transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital
   have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) :=

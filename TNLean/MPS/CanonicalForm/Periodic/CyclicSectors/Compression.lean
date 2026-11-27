@@ -47,7 +47,7 @@ open Matrix Finset Complex
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 section Compression
 
@@ -64,24 +64,24 @@ adjoint transfer map with the ambient adjoint transfer map restricted to the
 corner.  The strengthened form returns a rectangular support isometry
 V : ℂ^n → ℂ^D with Vᴴ V = 1, V Vᴴ = P, and φ(X) = V X Vᴴ. -/
 theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
-    (A : MPSTensor d D) (P : MatrixAlg D)
+    (A : MPTensor α (Fin D)) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
-    (hSupp : ∀ i : Fin d, P * A i * P = A i)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
-    ∃ (n : ℕ) (C : MPSTensor d n)
+    (hSupp : ∀ i : α, P * A i * P = A i)
+    (hTP : ∑ i : α, (A i)ᴴ * A i = P) :
+    ∃ (n : ℕ) (C : MPTensor α (Fin n))
       (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
       (V : Matrix (Fin D) (Fin n) ℂ),
       ((n : ℂ) = Matrix.trace P) ∧
-      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
+      (∑ i : α, (C i)ᴴ * C i = 1) ∧
+      (∀ (N : ℕ) (σ : Fin N → α),
         mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (Kraus.transferMap (ι := Fin d) (n := Fin n) (fun i => (C i)ᴴ) X)).1 =
-          Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+        (φ (Kraus.transferMap (ι := α) (n := Fin n) (fun i => (C i)ᴴ) X)).1 =
+          Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
-      (∀ i : Fin d, (φ (C i)).1 = A i) ∧
+      (∀ i : α, (φ (C i)).1 = A i) ∧
       Vᴴ * V = 1 ∧
       V * Vᴴ = P ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ X).1 = V * X * Vᴴ) := by
@@ -90,7 +90,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
     Kraus.exists_corner_compression_of_supported_projection A P hP hSupp hTP
   have hPV : P * V = V := by
     rw [← hVVt, Matrix.mul_assoc, hVtV, Matrix.mul_one]
-  have hIntertwineLetter : ∀ i : Fin d, A i * V = V * C i := by
+  have hIntertwineLetter : ∀ i : α, A i * V = V * C i := by
     intro i
     calc
       A i * V = (P * A i * P) * V := by rw [hSupp i]
@@ -99,7 +99,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       _ = (V * Vᴴ) * A i * V := by rw [hVVt]
       _ = V * (Vᴴ * A i * V) := by simp only [Matrix.mul_assoc]
       _ = V * C i := by rw [hCompression i]
-  have hEvalCompression (w : List (Fin d)) :
+  have hEvalCompression (w : List (α)) :
       Kraus.evalWord C w = Vᴴ * Kraus.evalWord A w * V := by
     calc
       Kraus.evalWord C w = 1 * Kraus.evalWord C w := (Matrix.one_mul _).symm
@@ -136,7 +136,7 @@ open Matrix Finset Complex
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 section CompressionPositiveMPV
 
@@ -147,19 +147,19 @@ compression changes the `N = 0` coefficient from `trace 1 = D` to `trace P`,
 so exact all-length equality is false in general, but every positive-length MPV
 is preserved. -/
 theorem exists_compressedTensor_of_supported_projection_pos_mpv
-    (A : MPSTensor d D) (P : MatrixAlg D)
+    (A : MPTensor α (Fin D)) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
-    (hSupp : ∀ i : Fin d, P * A i * P = A i)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
-    ∃ (n : ℕ) (C : MPSTensor d n),
+    (hSupp : ∀ i : α, P * A i * P = A i)
+    (hTP : ∑ i : α, (A i)ᴴ * A i = P) :
+    ∃ (n : ℕ) (C : MPTensor α (Fin n)),
       ((n : ℂ) = Matrix.trace P) ∧
-      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
-      (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv C σ) := by
+      (∑ i : α, (C i)ᴴ * C i = 1) ∧
+      (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → α, mpv A σ = mpv C σ) := by
   obtain ⟨dim, C, _φ, _V, hdim, hCtp, hCmpv, _hIntertwine, _hMul, _hStar, _hLetter,
     _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_compressedTensor_of_supported_projection_with_letter_and_isometry A P hP hSupp hTP
   refine ⟨dim, C, hdim, hCtp, ?_⟩
-  have hleft : ∀ i : Fin d, P * A i = A i := by
+  have hleft : ∀ i : α, P * A i = A i := by
     intro i
     calc
       P * A i = P * (P * A i * P) := by rw [hSupp i]
@@ -167,7 +167,7 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
       _ = P * A i * P := by rw [hP.2]
       _ = A i := by simpa [Matrix.mul_assoc] using hSupp i
   have hword :
-      ∀ {w : List (Fin d)}, w ≠ [] → P * Kraus.evalWord A w = Kraus.evalWord A w := by
+      ∀ {w : List (α)}, w ≠ [] → P * Kraus.evalWord A w = Kraus.evalWord A w := by
     intro w hw
     cases w with
     | nil =>

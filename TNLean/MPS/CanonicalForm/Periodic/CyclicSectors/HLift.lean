@@ -278,7 +278,7 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
     ∃ c : ℂ, X = c • P k := by
   let T : MatrixEnd D := Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+  have hUnital : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
   have hIrrAdjLM : IsIrreducibleMap (Kraus.mapLM K) := hIrrAdj
   have hOrbitFix :
@@ -619,7 +619,7 @@ theorem cyclic_projection_mem_multiplicativeDomain
         Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain (fun i : Fin d => (A i)ᴴ) := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+  have hUnital : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
   have hK_apply :
       ∀ X : MatrixAlg D,

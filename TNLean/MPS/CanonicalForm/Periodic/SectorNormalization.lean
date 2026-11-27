@@ -378,7 +378,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
     simp
   -- The conjugate-transposed family of the normalized block is unital, and its
   -- map is the trace adjoint of the transfer map.
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (fun i => (B i)ᴴ) := by
+  have hUnital : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) (fun i => (B i)ᴴ) := by
     change ∑ i : Fin d, (B i)ᴴ * ((B i)ᴴ)ᴴ = 1
     simpa using hLeft'
   have hIrrAdj : IsIrreducibleMap (Kraus.mapLM (fun i => (B i)ᴴ)) :=

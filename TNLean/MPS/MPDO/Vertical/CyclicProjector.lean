@@ -86,14 +86,14 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     (B : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily B)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ) (hρ : ρ.PosDef) (hrad : 0 < rad)
     (hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) B ρ = (rad : ℂ) • ρ) :
-    KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) ∧
+    KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) ∧
     Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) ∧
     IsIrreducibleMap
       (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ)) ∧
     ∃ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosDef ∧
       Kraus.adjointMap (Kraus.spectralUnitalGauge B rad ρ) σ = σ := by
   classical
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D)
+  have hUnital : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D)
       (Kraus.spectralUnitalGauge B rad ρ) := by
     simpa [KadisonSchwarz.IsUnitalKraus, Kraus.IsUnital] using
       Kraus.spectralUnitalGauge_isUnital_of_map_eigenvector B ρ rad hρ hrad hfix

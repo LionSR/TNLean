@@ -307,7 +307,7 @@ theorem conjTranspose_kraus_setup
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ (K : MPSTensor d D)
-      (_ : IsUnitalKraus (d := d) (D := D) K)
+      (_ : IsUnitalKraus (ι := Fin d) (D := D) K)
       (_ : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K))
       (ρ : Matrix (Fin D) (Fin D) ℂ)
       (_ : ρ.PosDef)
@@ -317,8 +317,8 @@ theorem conjTranspose_kraus_setup
   have hDpos : 0 < D := NeZero.pos D
   let K : MPSTensor d D := fun i => (A i)ᴴ
   have hTP' : Kraus.IsTP A := hTP
-  have h_unitalK : IsUnitalKraus (d := d) (D := D) K :=
-    isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
+  have h_unitalK : IsUnitalKraus (ι := Fin d) (D := D) K :=
+    isUnitalKraus_conjTranspose (ι := Fin d) (D := D) (K := A) hTP'
   have hIrrK : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
