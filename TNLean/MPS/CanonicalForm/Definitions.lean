@@ -33,10 +33,8 @@ The line-246 normalization convention is the separate predicate
 CF membership.  None of these definitions adds weight ordering or BNT
 separation.
 
-The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
-`TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
-(left-canonical normalization and a basis of gauge-phase-distinct representatives).
-The predicates in this file are the CPSV formulations.
+The predicates in this file are the CPSV formulations; statements needing left-canonical
+normalization or gauge-phase separated blocks take those as separate hypotheses.
 
 ## Paper anchors
 
@@ -109,9 +107,7 @@ Clause (ii) is encoded by an explicit spectral-radius-one field together with
 one form exactly `{1}`.  The explicit field is essential: unit-circle
 uniqueness alone does not exclude eigenvalues of norm greater than one.
 
-This predicate is intentionally *weaker* than the TNLean strong predicate
-`MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` (it does not require
-left-canonical normalization or weight ordering).
+This predicate does not require left-canonical normalization.
 -/
 structure IsNormalTensor (A : MPSTensor d D) : Prop where
   /-- (i) no nontrivial invariant orthogonal projection. -/

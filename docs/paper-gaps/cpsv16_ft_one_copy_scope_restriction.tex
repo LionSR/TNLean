@@ -105,7 +105,18 @@ from finitely many polynomial identities. It does not use a limiting argument.
 
 \section{The basis-of-representatives restriction}
 
-The surviving formal normal-CF-BNT structure is
+\textbf{Update (2026-11-27).} The one-representative structure discussed below,
+\leanid{MPSTensor.IsNormalCanonicalFormBNT}, has been deleted together with its
+constructor and its two common-blocking theorems. The common blocking is now
+stated for any finite family of normal tensors
+(\leanid{MPSTensor.exists_common_blockTensor_isInjective_of_isNormal} and
+\leanid{MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormal}), and the
+basis-of-normal-tensors statement for any weighted direct sum of normal tensors
+(\leanid{MPSTensor.isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff}); none of
+these carries a one-copy restriction. The remainder of this note records the
+restriction as it stood before the deletion.
+
+The formal normal-CF-BNT structure was
 \leanid{MPSTensor.IsNormalCanonicalFormBNT}.\footnote{Defined in
 \path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}. The earlier non-normal wrapper was
 retired after its downstream consumers were replaced by explicit
@@ -233,14 +244,10 @@ SectorBNT hypothesis, for example through the corresponding field of
 
 The downstream CPSV16 surfaces that consume the restricted normal-CF-BNT
 predicate have been audited against the basis-of-representatives
-boundary.\footnote{The relevant \Lean{} surfaces are
-\leanid{MPSTensor.IsNormalCanonicalFormBNT},
-\leanid{MPSTensor.IsNormalCanonicalFormBNT.ofSeparatedData},
-\leanid{MPSTensor.cross_overlap_tendsto_zero_of_separated_normal_bnt_data},
-\leanid{MPSTensor.IsNormalCanonicalFormBNT.isCPSVBasisOfNormalTensors},
-\leanid{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective},
-and
-\leanid{MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}.}
+boundary.\footnote{The relevant \Lean{} surfaces were the deleted structure
+\leanid{MPSTensor.IsNormalCanonicalFormBNT}, its constructor and common-blocking theorems,
+and the surviving lemma
+\leanid{MPSTensor.cross_overlap_tendsto_zero_of_separated_normal_bnt_data}.}
 
 Each public surface assumes or constructs an already selected representative
 family whose weights are ordered non-increasingly by modulus. Equal moduli are

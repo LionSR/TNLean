@@ -22,15 +22,14 @@ import Mathlib.Data.Fin.Tuple.Sort
 A weighted block family may be studied through separate hypotheses: blockwise
 injectivity, irreducibility, primitive transfer maps, left-canonical
 normalization, non-increasing nonzero weight moduli, and self-overlap
-normalization. The canonical-form conditions collect exactly these hypotheses in
-the non-strict, ties-allowed order used in the reduction to canonical form.
+normalization. Statements take exactly these hypotheses, with weights in the
+non-strict, ties-allowed order used in the reduction to canonical form.
 
 ## Main conditions
 
 - Weight condition: `HasOrderedNonzeroWeights`. The blockwise conditions (injectivity,
   irreducibility, primitivity, left-canonical normalization, self-overlap normalization) are
   stated directly as `∀ k, P (A k)`.
-- Canonical-form conditions: `IsNormalCanonicalForm`.
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`: normal canonical form from
   primitive weighted block decompositions.
 -/
@@ -75,80 +74,6 @@ structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
-
-/-! ### Canonical form conditions -/
-
-/-! ### Normal canonical form conditions -/
-
-/-- Normal-canonical-form conditions: each block is irreducible, left-canonical, and
-peripheral-spectrum primitive, with non-increasing nonzero weights and positive bond dimensions.
-
-Source context: arXiv:1606.00608, lines 233--246 and eq. `II_CF1`, and
-arXiv:2011.12127, lines 1828--1836. This is the weaker “normal tensor” block notion:
-each block is irreducible and its transfer map has peripheral spectrum `{1}`.
-The weight ordering is `Antitone` (non-increasing by modulus), matching the paper
-definitions which allow blocks with equal moduli. The BNT-level predicate
-`IsNormalCanonicalFormBNT` adds only gauge-phase separation of distinct blocks;
-it does not impose strict modulus ordering either.
-
-The irreducibility field is stored separately on purpose: the repository's peripheral-spectrum
-primitive condition does not by itself imply irreducibility for arbitrary transfer maps.
-The self-overlap normalization is intended to be derived from primitivity rather than stored as a
-field. -/
-structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block is irreducible in the invariant-projection sense. -/
-  block_irreducible : ∀ k, Kraus.IsIrreducibleFamily (A k)
-  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
-  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
-  /-- Each block transfer map is primitive in the peripheral-spectrum sense. -/
-  block_primitive : ∀ k,
-    _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))
-  /-- Non-increasing ordering of the block weights by modulus. -/
-  mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
-  /-- No block weight vanishes. -/
-  mu_ne_zero : ∀ k, μ k ≠ 0
-  /-- All block bond dimensions are positive. -/
-  dim_pos : ∀ k, 0 < dim k
-
-namespace IsNormalCanonicalForm
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- The separated hypotheses imply `IsNormalCanonicalForm` with non-strict ordering. -/
-theorem ofSeparatedData
-    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k)))
-    (hμ : HasOrderedNonzeroWeights μ)
-    (hDim : ∀ k, 0 < dim k) :
-    IsNormalCanonicalForm μ A where
-  block_irreducible := hIrr
-  leftCanonical := hLeft
-  block_primitive := hPrim
-  mu_antitone := hμ.mu_antitone
-  mu_ne_zero := hμ.mu_ne_zero
-  dim_pos := hDim
-
-/-- In a normal canonical form, each block's self-overlap converges to `1`.
-
-This is a direct re-use of
-`MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
-theorem overlap_tendsto_one
-    (hNCF : IsNormalCanonicalForm μ A) (k : Fin r) :
-    Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
-      Filter.atTop (nhds (1 : ℂ)) := by
-  let : NeZero (dim k) := ⟨Nat.ne_of_gt (hNCF.dim_pos k)⟩
-  simpa using
-    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (A := A k)
-      (hIrr := hNCF.block_irreducible k)
-      (hNorm := hNCF.leftCanonical k)
-      (hPrim := hNCF.block_primitive k)
-
-end IsNormalCanonicalForm
-
 
 end MPSTensor
 
@@ -343,8 +268,7 @@ private theorem sort_blocks_by_weight_norm
   · intro i
     exact hDim2 (e i)
 
-/-- Collect a primitive weighted block family into separated blocked data for
-`IsNormalCanonicalForm`. -/
+/-- Collect a primitive weighted block family into separated blocked normal data. -/
 private theorem exists_blocked_normal_data_of_primitive_blockDecomp
     (A : MPSTensor d D)
     {r1 : ℕ} {dim1 : Fin r1 → ℕ}
@@ -403,8 +327,9 @@ Hypotheses:
 
 Conclusion: after a common blocking (currently `p = 1`) and reordering by
 non-increasing weight modulus (ties allowed),
-`blockTensor A p` is `SameMPV₂`-equivalent to a weighted block family in
-`IsNormalCanonicalForm`.
+`blockTensor A p` is `SameMPV₂`-equivalent to a weighted block family whose blocks
+are irreducible, left-canonical and primitive (hence normal tensors), with nonzero
+weights ordered by non-increasing modulus and positive bond dimensions.
 
 Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
 Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
@@ -441,24 +366,18 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
         SameMPV₂
           (blockTensor (d := d) (n := Fin D) A p)
           (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
-        IsNormalCanonicalForm (d := blockPhysDim d p) μ blocks := by
+        (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
+        (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks k i)ᴴ * blocks k i = 1) ∧
+        (∀ k,
+          _root_.IsPrimitive
+            (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
+        HasOrderedNonzeroWeights μ ∧
+        (∀ k, 0 < dim k) := by
   obtain ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=
     exists_blocked_normal_data_of_primitive_blockDecomp
       (A := A) (r1 := r1) (dim1 := dim1) (μ1 := μ1) blocks1
       hSame1 hIrr1 hLeft1 hPrim1 hμne1 hDim1
-  refine ⟨p, hp, r, dim, μ, blocks, hSame, ?_⟩
-  let hμ : HasOrderedNonzeroWeights μ := {
-    mu_antitone := hμanti
-    mu_ne_zero := hμne
-  }
-  exact
-    IsNormalCanonicalForm.ofSeparatedData
-      (d := blockPhysDim d p)
-      (A := blocks)
-      (μ := μ)
-      hIrr hLeft hPrim
-      hμ
-      hDim
+  exact ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, ⟨hμanti, hμne⟩, hDim⟩
 
 
 end MPSTensor

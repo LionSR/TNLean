@@ -1062,45 +1062,6 @@ model different levels of data and different sources.
   their optional ambient complement. The PGVWC07 form has a distinct
   reconstruction using a bond-index equivalence and real weights.
 
-### `MPSTensor.IsNormalCanonicalForm`
-
-- **Declaration:** `MPSTensor.IsNormalCanonicalForm μ A : Prop`.
-- **Defined in:** `TNLean/MPS/CanonicalForm/BlockFamily.lean`.
-- **Meaning:** a stronger prepared specialization with irreducible,
-  left-canonical, peripherally primitive blocks, non-increasing nonzero weights,
-  and positive block dimensions.
-- **Source:** its direct-sum shape is based on arXiv:1606.00608, lines 233--246
-  and equation `II_CF1`, and arXiv:2011.12127, lines 1828--1836. The
-  left-canonical, ordered-weight, and positive-dimension fields are additional
-  prepared-data hypotheses rather than part of the paper's bare CF definition.
-- **Sanctioned bridges:**
-  `MPSTensor.IsNormalCanonicalForm.ofSeparatedData` builds the form from the
-  pointwise hypotheses `∀ k, P (A k)` (irreducibility, left-canonical
-  normalization, peripheral primitivity) and `HasOrderedNonzeroWeights`; the
-  fields `block_irreducible`, `leftCanonical`, and `block_primitive` give the
-  pointwise hypotheses back.
-- **Caveat:** this does not encode the source's modulus-bound and unit-witness
-  normalization for copy weights. The positive dimensions are explicit and are
-  used to obtain the needed `NeZero` instances.
-
-### `MPSTensor.IsNormalCanonicalFormBNT`
-
-- **Declaration:** `MPSTensor.IsNormalCanonicalFormBNT μ A : Prop`.
-- **Defined in:** `TNLean/MPS/CanonicalForm/BNT/Construction.lean`.
-- **Meaning:** `IsNormalCanonicalForm` plus gauge-phase separation between
-  distinct blocks.
-- **Source:** the separated-representative reading of arXiv:1606.00608 §II.C,
-  especially lines 264--301.
-- **Sanctioned bridges:**
-  `MPSTensor.IsNormalCanonicalFormBNT.toIsNormalCanonicalForm`,
-  `MPSTensor.IsNormalCanonicalFormBNT.ofSeparatedData`, and
-  `MPSTensor.IsNormalCanonicalFormBNT.isCPSVBasisOfNormalTensors` (its blocks
-  are a basis of normal tensors of their weighted direct sum).
-- **Caveat:** this is a one-representative-per-gauge-phase-class surface. It
-  suppresses repeated copies and their power-sum coefficients; see
-  `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. It is not equivalent by
-  renaming to `MPSTensor.IsBNTCanonicalForm`.
-
 ### `MPSTensor.IsBNTCanonicalForm`
 
 - **Declaration:**
@@ -1127,8 +1088,7 @@ model different levels of data and different sources.
   positive-length MPV family (the standing convention of arXiv:1606.00608,
   line 246) and realizes the weight normalization itself, at the cost of a
   per-site scalar. This is the canonical predicate when
-  multiplicities and raw sector weights matter. It is not equivalent to the
-  flattened `IsNormalCanonicalFormBNT`; multiplicity recovery is genuine
+  multiplicities and raw sector weights matter; multiplicity recovery is genuine
   mathematical content, not a change of packaging.
 
 ### MPDO canonical-form predicates

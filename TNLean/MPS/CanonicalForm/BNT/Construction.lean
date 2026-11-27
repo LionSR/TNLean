@@ -35,9 +35,10 @@ separated finite block families.
 3. **`exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal`**: asymptotically
    orthonormal overlaps give eventual linear independence of the matrix product vectors.
 
-4. **`IsNormalCanonicalFormBNT`**: normal-canonical separated hypotheses retained for
-   the primitive-transfer-map route. That its blocks form a basis of normal tensors of their
-   weighted direct sum is `IsNormalCanonicalFormBNT.isCPSVBasisOfNormalTensors` in
+4. **`cross_overlap_tendsto_zero_of_separated_normal_bnt_data`**: the same decay for
+   separated irreducible left-canonical blocks. That normal tensors form a basis of normal
+   tensors of their weighted direct sum exactly when they are gauge-phase separated is
+   `isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff` in
    `TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge`.
 
 ## Design note on coefficients
@@ -58,55 +59,6 @@ open Filter
 namespace MPSTensor
 
 variable {d : ℕ}
-
-/-! ### `IsNormalCanonicalFormBNT` hypotheses -/
-
-/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm`
-with the requirement that distinct blocks are not gauge-phase equivalent, so the
-block family is a basis of normal tensors. The block weight moduli are
-non-increasing (inherited from `IsNormalCanonicalForm`); equal-modulus blocks are
-allowed. Grouping into a basis of normal tensors is governed by gauge-phase
-equivalence of the block tensors, not by distinctness of weight moduli.
-
-**Scope restriction (basis of representatives).** The `blocks_not_equiv` field
-keeps one representative per gauge-phase class, so this surface still suppresses
-the repeated equal-class copies of the full arXiv:1606.00608 BNT decomposition.
-The raw multiplicity data (weights `μ_{j,q}` with multiplicities, contributing the
-power sum `c_N^{(j)} = ∑_q μ_{j,q}^N`) is carried instead by `SectorDecomposition`
-and the SectorBNT comparison theorems; see
-`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`.
-
-`IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
-(`IsNormalCanonicalForm`): irreducible, primitive, left-canonical blocks, hence normal
-tensors. -/
-structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
-    IsNormalCanonicalForm μ A where
-  /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
-  blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
-    ∀ (h : dim j = dim k),
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
-
-namespace IsNormalCanonicalFormBNT
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Rebuild `IsNormalCanonicalFormBNT` from the separated blockwise hypotheses plus
-the BNT separation assumption. -/
-theorem ofSeparatedData
-    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k)))
-    (hμ : HasOrderedNonzeroWeights μ)
-    (hDim : ∀ k, 0 < dim k)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
-    IsNormalCanonicalFormBNT μ A where
-  toIsNormalCanonicalForm :=
-    IsNormalCanonicalForm.ofSeparatedData hIrr hLeft hPrim hμ hDim
-  blocks_not_equiv := hBlocks
-
-end IsNormalCanonicalFormBNT
 
 /-- Distinct same-dimension blocks in a separated irreducible trace-preserving
 family are not proportional at arbitrarily large chain lengths. -/

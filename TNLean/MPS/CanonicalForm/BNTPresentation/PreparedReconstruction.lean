@@ -17,9 +17,8 @@ import TNLean.MPS.Tensor.DirectSum.GaugeEquiv
 This module strengthens the prepared-block SectorBNT supplier from positive-length
 matrix-product-vector equality to a letterwise reconstruction. It retains the precise
 phase-class scalar, assembles the resulting block gauges, and reindexes the heterogeneous
-block sum by an equivalence of flattened bond coordinates. The bundled
-`PreparedBNTBlocks.exists_isBNTCanonicalForm_exact` method exposes this reconstruction
-without repeating the prepared family and its invariants.
+block sum by an equivalence of flattened bond coordinates
+(`exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks`).
 
 It also contains the following results.
 
@@ -267,20 +266,6 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
   exact toTensorFromBlocks_eq_reindex_of_equiv μ blocks P.flatWeight gaugedFlat
     blockEquiv hBlockDim hBlock i
 
-/-- Normalized prepared blocks have an exact, dimension-preserving BNT reconstruction. -/
-theorem PreparedBNTBlocks.exists_isBNTCanonicalForm_exact
-    (data : PreparedBNTBlocks d) (hNorm : data.IsWeightNormalized) :
-    ∃ P : SectorDecomposition d,
-      IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin data.r, data.dim k ∧
-      ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin data.r, data.dim k),
-      ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
-        toTensorFromBlocks (d := d) data.weight data.blocks i =
-          Matrix.reindex e e
-            ((X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)) :=
-  exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
-    data.weight data.blocks data.dim_pos data.leftCanonical data.primitive data.irreducible
-      data.weight_ne_zero hNorm.norm_le_one hNorm.unit_exists
-
 end PreparedReconstruction
 
 section CanonicalFormBridge
@@ -441,20 +426,10 @@ theorem exists_isBNTCanonicalForm_exact
     intro k
     exact hGauge k
   obtain ⟨Y, hY⟩ := hDirectGauge
-  let preparedData : PreparedBNTBlocks d :=
-    { r := data.r
-      dim := data.dim
-      weight := data.weights
-      blocks := prepared
-      dim_pos := data.dim_pos
-      leftCanonical := hTP
-      primitive := hPrim
-      irreducible := hIrr
-      weight_ne_zero := data.weights_ne_zero }
   obtain ⟨P, hBNT, hTotal, e, X, hExact⟩ :=
-    preparedData.exists_isBNTCanonicalForm_exact
-      { norm_le_one := hNorm.weight_norm_le_one
-        unit_exists := hNorm.weight_unit_exists hA }
+    exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks data.weights prepared
+      data.dim_pos hTP hPrim hIrr data.weights_ne_zero hNorm.weight_norm_le_one
+      (hNorm.weight_unit_exists hA)
   let Q : Matrix (Fin P.totalDim) (Fin (∑ k, data.dim k)) ℂ :=
     equivalenceCoisometry e
   let W := transportGL e Y
