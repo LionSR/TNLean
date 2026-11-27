@@ -422,7 +422,8 @@ variable {d D : ℕ}
 already in one-block canonical form II in its given bond coordinates.
 
 Source: arXiv:1606.00608, Appendix A, lines 1054–1077. -/
-noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {A : MPSTensor d D}
+noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)}
     (hNormal : MPTensor.IsNormalTensor A)
     (hLeft : MPTensor.IsLeftCanonical A)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρpd : ρ.PosDef) (hρdiag : ρ.IsDiag)

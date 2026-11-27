@@ -245,7 +245,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     simp [hroot_ne]
   have hIrr_scaled :
       Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) (fun i => c • A i) :=
-    isIrreducibleFamily_smul (d := d) (D := D) hc_ne A hIrr
+    isIrreducibleFamily_smul (D := D) hc_ne A hIrr
   have hActionScaled :
       Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
     Kraus.isIrreducibleAction_of_isIrreducibleFamily
@@ -629,7 +629,7 @@ theorem exists_tp_gauge_blockwise
       simp [hroot_ne]
     have hIrr_scaled :
         Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin (dim0 k)) (fun i => c • blocks0 k i) :=
-      isIrreducibleFamily_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
+      isIrreducibleFamily_smul (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
     have hIrr_gauge :
         Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin (dim0 k))
           (Kraus.tpGauge (fun i => c • blocks0 k i) (σ1 k)) :=

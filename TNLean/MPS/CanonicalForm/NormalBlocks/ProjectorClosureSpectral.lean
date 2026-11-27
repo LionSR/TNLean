@@ -258,15 +258,16 @@ map of a nonzero irreducible tensor has a positive eigenvalue with a
 positive-definite eigenvector (Wolf Theorem 6.3(2), specialized to transfer
 maps).  This is the eigenvalue used for the spectral-radius normalization of
 arXiv:1606.00608, lines 224--225. -/
-theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ} [NeZero n]
-    (B : MPSTensor d n) (hIrr : Kraus.IsIrreducibleFamily B) (hB : ∃ i, B i ≠ 0) :
+theorem exists_posDef_transferMap_eigenvector_of_irreducible {α : Type*} [Fintype α] {n : ℕ}
+    [NeZero n] (B : MPTensor α (Fin n)) (hIrr : Kraus.IsIrreducibleFamily B)
+    (hB : ∃ i, B i ≠ 0) :
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
-      ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (ι := Fin d) (n := Fin n) B ρ = (r : ℂ) • ρ := by
-  have hne : Kraus.transferMap (ι := Fin d) (n := Fin n) B ≠ 0 := by
+      ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (ι := α) (n := Fin n) B ρ = (r : ℂ) • ρ := by
+  have hne : Kraus.transferMap (ι := α) (n := Fin n) B ≠ 0 := by
     simpa only using
       Kraus.mapLM_ne_zero_of_exists_ne_zero B hB
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
-    exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (ι := Fin d) (n := Fin n) B)
+    exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (ι := α) (n := Fin n) B)
       (Kraus.transferMap_isCPMap B)
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hIrr) hne
   exact ⟨ρ, r, hρ, hr, hEig⟩

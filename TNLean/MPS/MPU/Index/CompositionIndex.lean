@@ -565,14 +565,9 @@ theorem exists_isReduction_of_mpo_eq_cfii
   have hζ : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 := inv_ne_zero hsqrt
   have hNormalNorm : Kraus.IsNormal V.normalizedFlattening :=
     hV.isNormalTensor_normalizedFlattening.isNormal
-  have hNormalRaw : Kraus.IsNormal V.toMPSTensor := by
-    apply (MPSTensor.isNormal_smul_iff hζ V.toMPSTensor).mp
-    exact hNormalNorm
-  have hSame : MPTensor.SameMPV₂Pos U.toMPSTensor V.toMPSTensor :=
-    (sameMPV₂Pos_toMPSTensor_iff U V).2 (sameMPV₂Pos_iff_mpo_eq.2 hEq)
-  obtain ⟨A, B, hred⟩ := MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
-    V.toMPSTensor U.toMPSTensor hNormalRaw hSame
-  exact ⟨A, B, (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).1 hred⟩
+  have hNormalRaw : Kraus.IsNormal V := (MPSTensor.isNormal_smul_iff hζ V).mp hNormalNorm
+  exact MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos V U hNormalRaw
+    (sameMPV₂Pos_iff_mpo_eq.2 hEq)
 
 /-- A canonical representative of a composition has the sum of the indices
 of its canonical factors. CPSV17, arXiv:1703.09188, Theorem `IndexTh` (ii),

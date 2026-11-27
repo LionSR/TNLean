@@ -58,6 +58,17 @@ private theorem mpvOverlap_two_eq_zero_of_bondDim_eq_zero
   subst E
   simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, Matrix.trace]
 
+/-- The normalized tensor relabelled to the alphabet `Fin (d * d)`, on which the irreducible
+block decomposition used below is stated. -/
+private noncomputable abbrev flat (U : MPOTensor d D) : MPSTensor (d * d) D :=
+  Kraus.reindexPhysical finProdFinEquiv.symm U.normalizedFlattening
+
+private theorem trace_transferMatrix_flat_pow_eq_one [NeZero d] [NeZero D]
+    {U : MPOTensor d D} (hU : U.IsMPU) {N : ℕ} (hN : 1 < N) :
+    Matrix.trace (transferMatrix (Kraus.transferMap (flat U)) ^ N) = 1 := by
+  rw [Kraus.transferMap_reindexPhysical_equiv]
+  exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
+
 /-- The unit shifted transfer traces of a matrix product unitary pass to every
 tensor generating the same positive-length matrix product vectors as its
 normalized flattening.
@@ -66,29 +77,28 @@ Source: arXiv:1703.09188, lines 344--356. -/
 private theorem trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : U.IsMPU)
     {E : ℕ} [NeZero E] {A : MPSTensor (d * d) E}
-    (hSame : MPTensor.SameMPV₂Pos U.normalizedFlattening A)
+    (hSame : MPTensor.SameMPV₂Pos (flat U) A)
     (N : ℕ) (hN : 1 < N) :
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1 := by
   calc
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) =
         MPTensor.mpvOverlap A A N :=
       MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap A N
-    _ = MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N :=
+    _ = MPTensor.mpvOverlap (flat U) (flat U) N :=
       (MPTensor.mpvOverlap_eq_of_pos_mpv_eq
         (fun {N} hN => hSame N hN) (fun {N} hN => hSame N hN)
         (Nat.zero_lt_of_lt hN)).symm
     _ = Matrix.trace
-        (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) :=
-      (MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap
-        U.normalizedFlattening N).symm
-    _ = 1 := hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
+        (transferMatrix (Kraus.transferMap (flat U)) ^ N) :=
+      (MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap (flat U) N).symm
+    _ = 1 := trace_transferMatrix_flat_pow_eq_one hU hN
 
 /-- Assemble a canonical-form-II presentation of a matrix product unitary from
 canonical data for a tensor equal to its normalized flattening.
 
 Source: arXiv:1703.09188, lines 269--281 and 344--356. -/
 private def mpuCanonicalFormIIOfNormalizedFlatteningEq
-    {E : ℕ} {V : MPOTensor d E} {A : MPSTensor (d * d) E}
+    {E : ℕ} {V : MPOTensor d E} {A : MPOTensor d E}
     (hA : V.normalizedFlattening = A) (hV : V.IsMPU)
     (cfii : MPSTensor.CPSVCanonicalFormIIData A)
     (hfull : cfii.toCPSVCanonicalFormData.HasFullSupport)
@@ -106,48 +116,32 @@ private def mpuCanonicalFormIIOfNormalizedFlatteningEq
       ρ_trace := hρtrace
       ρ_fixed := hρfix }
 
-/-- Every matrix product unitary has a positive-dimensional, normal,
-full-support canonical-form-II representative of its normalized flattening,
-written in ambient bond coordinates whose right fixed matrix is positive,
-diagonal, and of trace one. The representative has no larger bond dimension
-and generates the same matrix product vectors at every positive length.
-
-The canonical-form convention in arXiv:1703.09188, lines 257--294 and 319--326,
-replaces a tensor by one generating the same matrix product vectors. For a
-matrix product unitary, lines 344--356 then use the shifted transfer traces to
-obtain a normal representative in canonical form II. Lines 269--294 record the
-further gauge transformation placing the right fixed matrix `ρ` of equation
-`Erightleft` in the diagonal positive trace-one form; here that gauge is the
-inclusion of the unique retained block, which carries its own diagonal fixed
-matrix into the ambient coordinates. The dimension-bounded irreducible
-reduction and canonical-form-II gauge are those of arXiv:1606.00608, lines
-195--255 and 1058--1077. This theorem combines those steps; it is not a
-separately stated theorem of either paper. -/
-theorem IsMPU.exists_reduced_normalizedFlattening_cfii
+/-- The reduced canonical-form-II representative of the relabelled normalized tensor. -/
+private theorem IsMPU.exists_reduced_flat_cfii
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : U.IsMPU) :
     ∃ (Dred : ℕ) (_hDred : 0 < Dred) (Ared : MPSTensor (d * d) Dred)
       (cfii : MPSTensor.CPSVCanonicalFormIIData Ared)
       (ρ : Matrix (Fin Dred) (Fin Dred) ℂ),
       Dred ≤ D ∧
-      MPTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
+      MPTensor.SameMPV₂Pos (flat U) Ared ∧
       MPTensor.IsNormalTensor Ared ∧
       cfii.toCPSVCanonicalFormData.HasFullSupport ∧
       ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
       Kraus.transferMap Ared ρ = ρ := by
   classical
   obtain ⟨r, dim, blocks, hIrr, hNonzero, hDim, hSame, hDimLe⟩ :=
-    MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks U.normalizedFlattening
+    MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks (flat U)
   let Dred : ℕ := ∑ k : Fin r, dim k
   let Ared : MPSTensor (d * d) Dred :=
     MPTensor.toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) blocks
   have hOriginalOverlap :
-      MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
+      MPTensor.mpvOverlap (flat U) (flat U) 2 = 1 := by
     rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
-    exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one (by omega)
+    exact trace_transferMatrix_flat_pow_eq_one hU (by omega)
   have hReducedOverlap : MPTensor.mpvOverlap Ared Ared 2 = 1 := by
     calc
       MPTensor.mpvOverlap Ared Ared 2 =
-          MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 :=
+          MPTensor.mpvOverlap (flat U) (flat U) 2 :=
         (MPTensor.mpvOverlap_eq_of_pos_mpv_eq
           (fun {N} hN => hSame N hN) (fun {N} hN => hSame N hN) (by omega)).symm
       _ = 1 := hOriginalOverlap
@@ -212,7 +206,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
     data.exists_gaugeEquiv_canonicalFormIIData
   have hGaugePos : MPTensor.SameMPV₂Pos Ared B :=
     MPTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => hGauge.sameMPV N σ)
-  have hSameB : MPTensor.SameMPV₂Pos U.normalizedFlattening B :=
+  have hSameB : MPTensor.SameMPV₂Pos (flat U) B :=
     hSame.trans hGaugePos
   have hTraceB : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap B) ^ N) = 1 :=
@@ -329,7 +323,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
           B i = (W * Wᴴ) * B i * (W * Wᴴ) := by
             rw [hWWstar, Matrix.one_mul, Matrix.mul_one]
           _ = W * C i * Wᴴ := by rw [hCdef]; simp only [Matrix.mul_assoc])
-  have hSameC : MPTensor.SameMPV₂Pos U.normalizedFlattening C :=
+  have hSameC : MPTensor.SameMPV₂Pos (flat U) C :=
     hSameB.trans hSameBC
   have hTraceC : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap C) ^ N) = 1 :=
@@ -343,21 +337,59 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   exact ⟨Dred, hDred, C, dataC, ρ, by simpa [Dred] using hDimLe,
     hSameC, hCNormal, hFullC, hρpd, hρdiag, hρtrace, hCfix⟩
 
+/-- Every matrix product unitary has a positive-dimensional, normal,
+full-support canonical-form-II representative of its normalized flattening,
+written in ambient bond coordinates whose right fixed matrix is positive,
+diagonal, and of trace one. The representative has no larger bond dimension
+and generates the same matrix product vectors at every positive length.
+
+The canonical-form convention in arXiv:1703.09188, lines 257--294 and 319--326,
+replaces a tensor by one generating the same matrix product vectors. For a
+matrix product unitary, lines 344--356 then use the shifted transfer traces to
+obtain a normal representative in canonical form II. Lines 269--294 record the
+further gauge transformation placing the right fixed matrix `ρ` of equation
+`Erightleft` in the diagonal positive trace-one form; here that gauge is the
+inclusion of the unique retained block, which carries its own diagonal fixed
+matrix into the ambient coordinates. The dimension-bounded irreducible
+reduction and canonical-form-II gauge are those of arXiv:1606.00608, lines
+195--255 and 1058--1077. This theorem combines those steps; it is not a
+separately stated theorem of either paper. -/
+theorem IsMPU.exists_reduced_normalizedFlattening_cfii
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : U.IsMPU) :
+    ∃ (Dred : ℕ) (_hDred : 0 < Dred) (Ared : MPOTensor d Dred)
+      (cfii : MPSTensor.CPSVCanonicalFormIIData Ared)
+      (ρ : Matrix (Fin Dred) (Fin Dred) ℂ),
+      Dred ≤ D ∧
+      MPTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
+      MPTensor.IsNormalTensor Ared ∧
+      cfii.toCPSVCanonicalFormData.HasFullSupport ∧
+      ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
+      Kraus.transferMap Ared ρ = ρ := by
+  obtain ⟨Dred, hDred, A₀, cfii, ρ, hle, hSame, hNormal, hfull, hpd, hdiag, htr, hfix⟩ :=
+    hU.exists_reduced_flat_cfii
+  refine ⟨Dred, hDred, Kraus.reindexPhysical finProdFinEquiv A₀,
+    cfii.reindexPhysical finProdFinEquiv, ρ, hle, ?_, hNormal.reindexPhysical _, hfull,
+    hpd, hdiag, htr, ?_⟩
+  · intro N hN σ
+    rw [MPTensor.mpv_reindexPhysical, ← hSame N hN, MPTensor.mpv_reindexPhysical]
+    simp
+  · rw [Kraus.transferMap_reindexPhysical_equiv]
+    exact hfix
+
 private noncomputable def ofNormalizedFlattening
-    (A : MPSTensor (d * d) D) : MPOTensor d D :=
-  fun ij => (Real.sqrt d : ℂ) • A (finProdFinEquiv ij)
+    (A : MPOTensor d D) : MPOTensor d D :=
+  fun ij => (Real.sqrt d : ℂ) • A ij
 
 private theorem normalizedFlattening_ofNormalizedFlattening [NeZero d]
-    (A : MPSTensor (d * d) D) :
+    (A : MPOTensor d D) :
     (ofNormalizedFlattening A).normalizedFlattening = A := by
   have hd : (0 : ℝ) < d := by
     exact_mod_cast NeZero.pos d
   have hsqrt : (Real.sqrt d : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hd).ne'
   funext ij
-  change ((Real.sqrt d : ℂ)⁻¹) •
-    ((Real.sqrt d : ℂ) • A (finProdFinEquiv (finProdFinEquiv.symm ij))) = A ij
-  rw [Equiv.apply_symm_apply, smul_smul, inv_mul_cancel₀ hsqrt, one_smul]
+  change ((Real.sqrt d : ℂ)⁻¹) • ((Real.sqrt d : ℂ) • A ij) = A ij
+  rw [smul_smul, inv_mul_cancel₀ hsqrt, one_smul]
 
 /-- Every matrix product unitary has a positive-dimensional
 canonical-form-II matrix product unitary representative of no larger bond
@@ -386,15 +418,15 @@ theorem IsMPU.exists_reduced_cfii_representative
     normalizedFlattening_ofNormalizedFlattening Ared
   have hRaw : MPTensor.SameMPV₂Pos U Ured := by
     intro N hN σ
-    have h1 : MPTensor.mpv U σ = MPTensor.mpv (Kraus.reindexPhysical finProdFinEquiv.symm U)
-        (fun n ↦ finProdFinEquiv (σ n)) := by
-      rw [MPTensor.mpv_reindexPhysical]
-      simp
-    have h2 : MPTensor.mpv Ured σ = MPTensor.mpv (fun ij ↦ (Real.sqrt d : ℂ) • Ared ij)
-        (fun n ↦ finProdFinEquiv (σ n)) :=
-      MPTensor.mpv_reindexPhysical (⇑finProdFinEquiv) (fun ij ↦ (Real.sqrt d : ℂ) • Ared ij) σ
-    rw [h1, h2, ← sqrt_smul_normalizedFlattening U, MPSTensor.mpv_smul, MPSTensor.mpv_smul,
-      hSame N hN]
+    have hU' : MPTensor.mpv U σ =
+        MPTensor.mpv (fun ij ↦ (Real.sqrt d : ℂ) • U.normalizedFlattening ij) σ := by
+      rw [sqrt_smul_normalizedFlattening]
+    rw [hU']
+    change _ = MPTensor.mpv (fun ij ↦ (Real.sqrt d : ℂ) • Ared ij) σ
+    simp only [MPTensor.mpv, MPTensor.coeff, Kraus.evalWord_smul, List.length_ofFn,
+      Matrix.trace_smul, smul_eq_mul]
+    congr 1
+    exact hSame N hN σ
   have hMpo : ∀ N : ℕ, 0 < N → mpo Ured N = mpo U N := fun N hN ↦
     (sameMPV₂Pos_iff_mpo_eq.1 hRaw N hN).symm
   have hUred : Ured.IsMPU := by
@@ -434,9 +466,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
   obtain ⟨E, _hE, V, hV, hED, hMpo⟩ := hU.exists_reduced_cfii_representative
   have hSame : MPTensor.SameMPV₂Pos V U := sameMPV₂Pos_iff_mpo_eq.2 hMpo
   obtain ⟨P, Q, hRed⟩ :=
-    MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos
-      U.toMPSTensor V.toMPSTensor ((isInjective_toMPSTensor_iff U).2 hInj)
-      ((sameMPV₂Pos_toMPSTensor_iff V U).2 hSame)
+    MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos U V hInj hSame
   have hE : E = D := Nat.le_antisymm hED hRed.bondDim_le
   subst E
   have hQP : Q * P = 1 := mul_eq_one_comm.mp hRed.mul_eq_one
@@ -444,7 +474,7 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
   refine ⟨V, hV, X, fun i j => ?_, hMpo⟩
   change V (i, j) = Q * U (i, j) * P
   have hij : P * V (i, j) * Q = U (i, j) := by
-    simpa [Kraus.evalWord, toMPSTensor] using hRed.evalWord [finProdFinEquiv (i, j)]
+    simpa [Kraus.evalWord] using hRed.evalWord [(i, j)]
   calc
     V (i, j) = (Q * P) * V (i, j) * (Q * P) := by
       rw [hQP, Matrix.one_mul, Matrix.mul_one]

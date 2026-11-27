@@ -31,9 +31,9 @@ and the transfer-map fixed-point equations used in canonical forms.
 open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder Kraus
-open Kraus (isNBlkInjective_iff_blockTensor_isInjective)
+open Kraus (isNBlkInjective_iff_isInjective_block)
 
-variable {α : Type*} {D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 namespace MPSTensor
 
@@ -48,7 +48,7 @@ def mapStar (A : MPTensor α (Fin D)) : MPTensor α (Fin D) :=
 /-- Entrywise conjugation is an involution on MPS tensors. -/
 @[simp] theorem mapStar_mapStar (A : MPTensor α (Fin D)) :
     mapStar (mapStar A) = A := by
-  ext i β α
+  ext i β γ
   simp [mapStar, Matrix.map_apply]
 
 end MPSTensor
@@ -108,20 +108,18 @@ theorem IsNormal.mapStar {A : MPTensor α (Fin D)} (hA : IsNormal A) :
     IsNormal (MPSTensor.mapStar A) := by
   obtain ⟨N, hN, hInj⟩ := hA
   refine ⟨N, hN, ?_⟩
-  change IsNBlkInjective A N at hInj
   rw [isNBlkInjective_iff_isInjective_block] at hInj ⊢
   have hConj := hInj.mapStar
   convert hConj using 1
-  ext σ b c
-  simp [Kraus.block, MPSTensor.evalWord_mapStar]
+  funext σ
+  simp only [Kraus.block_apply, MPSTensor.mapStar_apply, MPSTensor.evalWord_mapStar]
 
 end Kraus
 
 namespace MPSTensor
 
 /-- Left-canonical normalization is preserved by entrywise complex conjugation. -/
-theorem _root_.MPTensor.IsLeftCanonical.mapStar [Fintype α] {A : MPTensor α (Fin D)}
-    (hA : IsLeftCanonical A) :
+theorem _root_.MPTensor.IsLeftCanonical.mapStar {A : MPTensor α (Fin D)} (hA : IsLeftCanonical A) :
     IsLeftCanonical (mapStar A) := by
   classical
   rw [IsLeftCanonical] at hA ⊢
@@ -165,7 +163,7 @@ theorem map_star_eq_self_of_posDef_isDiag
 original transfer map: as operators on the matrix space, conjugating the tensor conjugates
 the transfer map of arXiv:1606.00608, lines 219--225, by the entrywise-conjugation
 involution on both sides. -/
-theorem transferMap_mapStar_eq_entrywiseConjTransport [Fintype α] (A : MPTensor α (Fin D)) :
+theorem transferMap_mapStar_eq_entrywiseConjTransport (A : MPTensor α (Fin D)) :
     Kraus.transferMap (mapStar A) =
       entrywiseConjTransport (Kraus.transferMap (ι := α) (n := Fin D) A) := by
   classical
@@ -185,7 +183,7 @@ theorem transferMap_mapStar_eq_entrywiseConjTransport [Fintype α] (A : MPTensor
 /-- The transfer map of an entrywise-conjugated tensor is the conjugate of the original
 transfer map on conjugated inputs: the pointwise form of the operator identity
 `transferMap_mapStar_eq_entrywiseConjTransport` (arXiv:1606.00608, lines 219--225). -/
-theorem transferMap_mapStar [Fintype α] (A : MPTensor α (Fin D))
+theorem transferMap_mapStar (A : MPTensor α (Fin D))
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Kraus.transferMap (mapStar A) (X.map (starRingEnd ℂ)) =
       (Kraus.transferMap A X).map (starRingEnd ℂ) := by
@@ -229,8 +227,7 @@ transfer map anti-linearly, which conjugates its spectrum, preserves its spectra
 preserves primitivity, and preserves irreducibility. This transports both clauses of the
 normal-tensor definition of arXiv:1606.00608, lines 224--235, across entrywise
 conjugation. -/
-theorem _root_.MPTensor.IsNormalTensor.mapStar [Fintype α] {A : MPTensor α (Fin D)}
-    (hA : IsNormalTensor A) :
+theorem _root_.MPTensor.IsNormalTensor.mapStar {A : MPTensor α (Fin D)} (hA : IsNormalTensor A) :
     IsNormalTensor (mapStar A) where
   no_invariant_proj := hA.no_invariant_proj.mapStar
   spectral_radius_one := by
