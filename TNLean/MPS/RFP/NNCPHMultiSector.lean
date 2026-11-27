@@ -33,7 +33,7 @@ section
 
 namespace MPSTensor.IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- A multiplicity-one BNT family whose direct sum is a renormalization fixed
 point has its nearest-neighbor parent-Hamiltonian ground space spanned by the
@@ -114,7 +114,7 @@ namespace MPSTensor
 
 namespace IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- The multiplicity-one direct sum of the distinct sectors of an RFP BNT
 canonical form satisfies the all-chain nearest-neighbor commuting

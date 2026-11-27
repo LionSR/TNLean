@@ -105,7 +105,7 @@ CPSV16 §II.C lines 354–361 and Appendix MPV proof lines 1172–1179 state the
 equal-MPV corollary; Appendix MPV proof lines 1182–1192 supply the block
 matching, copy-weight comparison, and global-gauge construction used here. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnesses
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -160,7 +160,7 @@ form (CPSV16 §II.C lines 354–361). -/
 /-- Coordinate identification of `matched_p_basis` with a cast of `P.flatBasis`
 at the matched flat sector. -/
 private lemma matched_p_basis_eq_cast_flatBasis
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -214,7 +214,7 @@ private lemma matched_p_basis_eq_cast_flatBasis
 `s` equals the `P`-basis at the matched flattened sector, after reindexing the
 inner bond-dimension `Fin`s by `flatDim_sectorFlatEquiv`. -/
 private lemma matched_p_basis_apply
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -235,7 +235,7 @@ private lemma matched_p_basis_apply
 
 /-- `matched_p_weight β τ s = P.flatWeight (sectorFlatEquiv β τ s)`. -/
 private lemma matched_p_weight_eq_flatWeight
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
     (s : Fin Q.totalCopies) :
@@ -253,7 +253,7 @@ private lemma matched_p_weight_eq_flatWeight
 /-- The matched-coordinate tensor equals the submatrix of `P.toTensor` along
 `sectorFlatDimEquiv` (the sector permutation between flat bond-dim indices). -/
 private lemma matched_toTensor_eq_submatrix
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -391,7 +391,7 @@ sector permutation.
 
 CPSV16 §II.C lines 354–361. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
@@ -506,7 +506,7 @@ after identifying their equal total bond dimensions.  The gauge is the product
 of the block-diagonal direct sum of the matched sector unitaries and the
 unitary permutation that restores the original sector coordinates. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
@@ -612,7 +612,7 @@ length are globally conjugate: their total bond dimensions agree, and a single
 invertible gauge `Y` carries one total tensor to the other.
 -/
 theorem fundamentalTheorem_equal_canonicalForm
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
@@ -637,7 +637,7 @@ canonical forms matches the normal-tensor sectors bijectively.  For each
 `P.basis (β k)` by a unit phase and gauge conjugation.
 -/
 theorem fundamentalTheorem_proportional_canonicalForm
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)

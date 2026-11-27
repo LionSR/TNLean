@@ -239,7 +239,7 @@ end Eigenvectors
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- The literal two-point calculation in arXiv:1606.00608, lines 1250--1268:
 a selected block with a nonzero subleading left/right eigenvector pair is

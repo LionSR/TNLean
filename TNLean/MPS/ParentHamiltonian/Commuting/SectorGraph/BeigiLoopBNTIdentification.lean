@@ -500,7 +500,7 @@ theorem nncph_implies_rfp
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- The all-chain NNCPH ground-space condition for the distinct BNT basis
 sectors implies transfer idempotence of their unit-weight direct sum.

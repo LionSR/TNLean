@@ -271,8 +271,8 @@ Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (s : Fin S.basisCount) (q q' : Fin (S.copies s)),
       S.weight s q = S.weight s q')
     (F : OrthogonalCommutingSectorFamily

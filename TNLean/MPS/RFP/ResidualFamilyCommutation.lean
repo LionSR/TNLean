@@ -589,7 +589,7 @@ end ResidualFamilyAppendixBData
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- A multiplicity-one direct sum of the distinct sectors of an RFP BNT
 canonical form has commuting nearest-neighbor parent interactions on every

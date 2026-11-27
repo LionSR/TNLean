@@ -108,7 +108,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 private theorem sum_dim_eq_of_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
-    (Q : SectorDecomposition d) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition (Fin d)) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos (toTensorFromBlocks μ A) Q.toTensor) :
@@ -133,7 +133,7 @@ theorem weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos (μ : Fin r → ℂ) (h�
     (A : (k : Fin r) → MPSTensor d (dim k))
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
     {p : ℕ} (hp : 0 < p)
-    (Q : SectorDecomposition (blockPhysDim d p)) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition (Fin (blockPhysDim d p))) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos (blockTensor (toTensorFromBlocks μ A) p) Q.toTensor)
@@ -190,7 +190,7 @@ unitary similarity of the original arbitrary tensor; the corrected forward proof
 continues with the presented blocks. -/
 theorem exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos
     (A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
-    (Q : SectorDecomposition (blockPhysDim d p)) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition (Fin (blockPhysDim d p))) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos (blockTensor A p) Q.toTensor)
