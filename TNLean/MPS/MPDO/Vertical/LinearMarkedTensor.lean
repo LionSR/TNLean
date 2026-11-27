@@ -70,7 +70,7 @@ theorem linearMarkedTensor_reindexPhysical {α α' β : Type*} [Fintype α] [Fin
       linearMarkedTensor (fun u z ↦ f u (e'.symm z)) A := by
   funext u
   simp only [linearMarkedTensor, Kraus.reindexPhysical]
-  exact (e'.sum_comp fun z ↦ f u (e'.symm z) • A z).trans (by simp)
+  exact (Finset.sum_congr rfl fun x _ ↦ by simp).trans (e'.sum_comp fun z ↦ f u (e'.symm z) • A z)
 
 /-- Linear marking commutes with a weighted block-diagonal direct sum.
 

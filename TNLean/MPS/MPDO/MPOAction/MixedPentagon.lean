@@ -102,7 +102,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
       else 0)
 
 local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
-  (fun q ↦ (isInjective_toMPSTensor_iff _).2 (hT q))
+  (fun q ↦ Iff.mpr (isInjective_toMPSTensor_iff _) (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The auxiliary forward F comparison is literally the original action L
@@ -180,7 +180,7 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
       else 0)
 
 local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
-  (fun q ↦ (isInjective_toMPSTensor_iff _).2 (hT q))
+  (fun q ↦ Iff.mpr (isInjective_toMPSTensor_iff _) (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The operator-only inverse comparison in the auxiliary family is the
