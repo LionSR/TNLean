@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.Vertical.LinearMarkedTensor
 import TNLean.MPS.MPDO.Vertical.ReflectedMarkedChain
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.MPS.Operator.Product.PhysicalBlocking
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Pairwise Gram comparison for vertical corners
@@ -229,8 +230,8 @@ Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and
 lines 1909--1919. -/
 noncomputable def twoSidedCompressionCoefficients
     (L R : Matrix (Fin d) (Fin n) ℂ) (c : ℂ) :
-    Fin (n * n) → Fin (d * d) → ℂ :=
-  fun u z ↦ c⁻¹ * star (L z.divNat u.divNat) * R z.modNat u.modNat
+    Fin (n * n) → Fin d × Fin d → ℂ :=
+  fun u z ↦ c⁻¹ * star (L z.1 u.divNat) * R z.2 u.modNat
 
 /-- A two-sided compression by `L` and `R`, scaled by a nonzero scalar, has
 horizontal slices in the span of the physical letters with coefficients
@@ -243,8 +244,7 @@ theorem linearMarkedTensor_twoSidedCompressionCoefficients
     (L R : Matrix (Fin d) (Fin n) ℂ) (c : ℂ) (hc : c ≠ 0)
     (hcompression : ∀ v, Lᴴ * verticalTensor M v * R = c • A v)
     (u : Fin (n * n)) :
-    MPSTensor.linearMarkedTensor (twoSidedCompressionCoefficients L R c)
-        M.toMPSTensor u =
+    MPSTensor.linearMarkedTensor (twoSidedCompressionCoefficients L R c) M u =
       horizontalSlice A u.divNat u.modNat := by
   have hRecover : A = fun v ↦ c⁻¹ • (Lᴴ * verticalTensor M v * R) := by
     funext v
@@ -252,10 +252,8 @@ theorem linearMarkedTensor_twoSidedCompressionCoefficients
     simp [hc]
   rw [hRecover, horizontalSlice_smul, horizontalSlice_twoSidedCompression]
   rw [MPSTensor.linearMarkedTensor]
-  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
-  dsimp only [twoSidedCompressionCoefficients, MPOTensor.toMPSTensor]
-  simp only [MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat]
+  rw [Fintype.sum_prod_type]
+  dsimp only [twoSidedCompressionCoefficients]
   rw [Finset.smul_sum]
   apply Finset.sum_congr rfl
   intro i _
@@ -270,7 +268,7 @@ theorem linearMarkedTensor_twoSidedCompressionCoefficients
 span of the horizontal tensor. -/
 noncomputable def cornerGramCoefficients
     (V : Matrix (Fin d) (Fin n) ℂ) (X : GL (Fin n) ℂ) (c : ℂ) :
-    Fin (n * n) → Fin (d * d) → ℂ :=
+    Fin (n * n) → Fin d × Fin d → ℂ :=
   twoSidedCompressionCoefficients
     (V * (X : Matrix (Fin n) (Fin n) ℂ))
     (V * ((↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))ᴴ) c
@@ -286,8 +284,7 @@ theorem linearMarkedTensor_cornerGramCoefficients
         c • ((X : Matrix (Fin n) (Fin n) ℂ) * A v *
           (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)))
     (u : Fin (n * n)) :
-    MPSTensor.linearMarkedTensor (cornerGramCoefficients V X c)
-        M.toMPSTensor u =
+    MPSTensor.linearMarkedTensor (cornerGramCoefficients V X c) M u =
       horizontalSlice (gramDressing X A) u.divNat u.modNat := by
   let Xi : Matrix (Fin n) (Fin n) ℂ :=
     (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)
@@ -357,28 +354,26 @@ theorem gramDressing_eq_of_two_grouped_corners
   let fX := cornerGramCoefficients VX X cX
   let fY := cornerGramCoefficients VY Y cY
   have hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin (n * n))
-      (w : Fin L → Fin (d * d)),
+      (w : Fin L → Fin d × Fin d),
       Matrix.trace
-          (MPSTensor.linearMarkedTensor fX M.toMPSTensor u *
-            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
+          (MPSTensor.linearMarkedTensor fX M u * Kraus.evalWord M (List.ofFn w)) =
         Matrix.trace
-          (MPSTensor.linearMarkedTensor fY M.toMPSTensor u *
-            Kraus.evalWord M.toMPSTensor (List.ofFn w)) := by
+          (MPSTensor.linearMarkedTensor fY M u * Kraus.evalWord M (List.ofFn w)) := by
     intro L _hL u w
-    rw [show MPSTensor.linearMarkedTensor fX M.toMPSTensor u =
+    rw [show MPSTensor.linearMarkedTensor fX M u =
         horizontalSlice (gramDressing X A) u.divNat u.modNat by
       exact linearMarkedTensor_cornerGramCoefficients
         A VX X cX hcX hcornerX u]
-    rw [show MPSTensor.linearMarkedTensor fY M.toMPSTensor u =
+    rw [show MPSTensor.linearMarkedTensor fY M u =
         horizontalSlice (gramDressing Y A) u.divNat u.modNat by
       exact linearMarkedTensor_cornerGramCoefficients
         A VY Y cY hcY hcornerY u]
-    rw [evalWord_toMPSTensor_ofFn]
+    rw [kraus_evalWord_ofFn]
     exact hM.markedChainCoefficient_gramDressing_eq_of_two_corners
       A VX VY X Y cX cY hcX hcY hcornerX hcornerY L
-        u.divNat u.modNat (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat)
-  have hMarks : MPSTensor.linearMarkedTensor fX M.toMPSTensor =
-      MPSTensor.linearMarkedTensor fY M.toMPSTensor :=
+        u.divNat u.modNat (fun k ↦ (w k).1) (fun k ↦ (w k).2)
+  have hMarks : MPSTensor.linearMarkedTensor fX M =
+      MPSTensor.linearMarkedTensor fY M :=
     hHorizontal.linearMarkedTensor_eq_of_trace_agree M fX fY hTrace
   funext v
   obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective v

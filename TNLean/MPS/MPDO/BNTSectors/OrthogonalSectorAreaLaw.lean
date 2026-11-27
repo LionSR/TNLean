@@ -8,6 +8,7 @@ import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveMarkovDecomposition
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorAnalyticProperties
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Saturated area law for orthogonal commuting sectors
@@ -296,7 +297,7 @@ theorem
       mpo M N =
         (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hMPDO : ∀ s, IsMPDO (K s))
-    (hK : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
+    (hK : ∀ s, Kraus.IsInjective (K s))
     (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
   apply isSAL_of_proportionalOrthogonalCommutingSectorFamily M K multiplicity
@@ -405,8 +406,8 @@ theorem
         mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
           M S hM hWeight hN⟩
   · exact hMPDO
-  · exact fun s ↦
-      commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s
+  · exact fun s ↦ (isInjective_toMPSTensor_iff _).1
+      (commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s)
   · exact fun s ↦
       commonWeightAbsorbedBasisMPOTensor_isSourceZCL
         M S hTotal X hEq hZCL hWeight s (hnonNil s)

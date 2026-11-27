@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Algebra.Module.Submodule.LinearMap
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Operator.DensityOperator.ZCL
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Transfer retracts and fusion coisometries
@@ -61,20 +62,17 @@ abbrev FusionBondSpace (D : ℕ) : Type :=
 
 /-! ## Transfer-map-level retract data -/
 
-/-- The blocked transfer map of an MPO tensor, obtained by viewing `M` as a
-Doubled-index MPS tensor and blocking `n` physical sites. -/
+/-- The blocked transfer map of an MPO tensor: the transfer map of the tensor `M` on the pair
+alphabet blocked over `n` physical sites. -/
 noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
     FusionBondSpace D →ₗ[ℂ] FusionBondSpace D :=
-  Kraus.transferMap
-    (ι := Fin (Kraus.blockPhysDim (d * d) n)) (n := Fin D)
-    (Kraus.blockTensor (d := d * d) (n := Fin D) M.toMPSTensor n)
+  Kraus.transferMap (Kraus.block M n)
 
-/-- Blocking an MPO tensor in the doubled-index MPS picture raises the transfer
-map to the corresponding power. -/
+/-- Blocking an MPO tensor on the pair alphabet raises the transfer map to the corresponding
+power. -/
 @[simp] theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
     blockedTransferMap M n = (transferMap M) ^ n := by
-  simpa only [blockedTransferMap, transferMap_eq_toMPSTensor] using
-    (Kraus.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
+  rw [blockedTransferMap, Kraus.transferMap_block, transferMap_eq_kraus_transferMap]
 
 /-- At blocked size `1`, the blocked transfer map is the original transfer map. -/
 @[simp] theorem blockedTransferMap_one (M : MPOTensor d D) :

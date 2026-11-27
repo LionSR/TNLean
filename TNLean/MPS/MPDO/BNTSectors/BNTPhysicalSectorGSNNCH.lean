@@ -9,6 +9,7 @@ import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTranspor
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorCoefficientPositivity
 import TNLean.MPS.MPDO.CommutingForm.GSNNCHSectorRescaling
 import TNLean.MPS.Operator.PhysicalSector.NeighboringPreparation
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Positive bonds from the active physical compression
@@ -67,7 +68,7 @@ theorem exists_commutingForm_supported_of_twoSidedPhysicalSlice
     {K : MPOTensor d D} (F : PhysicalSectorFactorization K)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hP : IsOrthogonalProjection P)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hSupport : ∀ β α,
       P * physicalSlice K β α = physicalSlice K β α ∧
         physicalSlice K β α * P = physicalSlice K β α)
@@ -117,7 +118,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactori
     (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
+    (hInjective : ∀ s, Kraus.IsInjective (K s))
     (hSupport : ∀ s β α,
       P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
         physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
@@ -210,7 +211,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
       K hInjective hSectorMPDO hLayer
   obtain ⟨family⟩ :=
     nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization
-      K P hP hPorth hInjective hSupport F
+      K P hP hPorth (fun s ↦ (isInjective_toMPSTensor_iff _).1 (hInjective s)) hSupport F
       (fun s k h ↦ (hTrace s).neighboringOperator_pos k h)
   intro N hN
   have hsum : mpo M N = ∑ s : Fin S.basisCount,
@@ -229,13 +230,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
       omega
     apply hmpv
     funext ρ
-    let u : Fin N → Fin d := fun n ↦ (ρ n).divNat
-    let v : Fin N → Fin d := fun n ↦ (ρ n).modNat
-    have hρ : ρ = fun n ↦ finProdFinEquiv (u n, v n) := by
-      funext n
-      exact (finProdFinEquiv.apply_symm_apply (ρ n)).symm
-    rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
-    rw [hzero]
+    rw [MPOTensor.mpv_toMPSTensor_eq, MPOTensor.mpv_eq_mpo, hzero]
     rfl
   obtain ⟨coefficient, hCoefficient, hCoefficientEq⟩ :=
     exists_nonnegative_real_eq_sectorCoefficient_of_orthogonalSupport
