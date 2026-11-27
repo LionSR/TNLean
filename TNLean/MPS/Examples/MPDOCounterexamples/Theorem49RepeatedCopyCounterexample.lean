@@ -100,7 +100,7 @@ theorem repeatedCopyDecomposition_isLeftCanonicalBNTPresentation :
     (fun _ ↦ MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT) ?_ ?_ ?_
   · intro j
     simp [MPTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
-      scalarBNT, Fintype.sum_prod_type]
+      scalarBNT]
   · intro j
     simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
       Matrix.trace]
