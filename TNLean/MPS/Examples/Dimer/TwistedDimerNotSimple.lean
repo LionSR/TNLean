@@ -68,8 +68,9 @@ theorem physTraceTransfer_blockTensor (M : MPOTensor d D) (L : ℕ) :
 
 /-- The identification of the blocked pair alphabet with the blocks of the relabelled one-site
 alphabet `Fin (d * d)`: a pair of blocked words is read as one word of pairs, each pair
-numbered by `finProdFinEquiv`. -/
-noncomputable def blockedPairFinEquiv (d L : ℕ) :
+numbered by `finProdFinEquiv`.  This is a bridge for the Fin-only canonical-form blocking, to be
+removed when the blocking heads move to `Kraus.block` (T.2b). -/
+private noncomputable def blockedPairFinEquiv (d L : ℕ) :
     Fin (Kraus.blockPhysDim d L) × Fin (Kraus.blockPhysDim d L) ≃
       Fin (Kraus.blockPhysDim (d * d) L) :=
   (blockedPairIndexEquiv d L).trans
