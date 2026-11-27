@@ -33,13 +33,13 @@ a zero length-\(k\) prefix. If \(k>L_0\), use the span equality
 \]
 with the identity matrix to show that every product of length \(k-L_0\) is zero,
 then recurse. -/
-private theorem allZero_contradiction [NeZero D]
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+private theorem allZero_contradiction {α : Type*} [Fintype α] [NeZero D]
+    {A : MPTensor α (Fin D)} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {k : ℕ} (hk : 0 < k)
-    (hzero : ∀ w : List (Fin d), w.length = k → Kraus.evalWord A w = 0) : False := by
+    (hzero : ∀ w : List α, w.length = k → Kraus.evalWord A w = 0) : False := by
   have hws : Kraus.wordSpan A L₀ = ⊤ := hInj
   -- Strong induction on k.
-  suffices ∀ k, 0 < k → (∀ w : List (Fin d), w.length = k → Kraus.evalWord A w = 0) → False from
+  suffices ∀ k, 0 < k → (∀ w : List α, w.length = k → Kraus.evalWord A w = 0) → False from
     this k hk hzero
   intro k
   induction k using Nat.strongRecOn with
@@ -70,7 +70,7 @@ private theorem allZero_contradiction [NeZero D]
       apply ih (k - L₀) (by omega) hkL₀_pos
       intro w₂ hw₂
       -- For each σ₁ of length L₀: Kraus.evalWord A (ofFn σ₁) * Kraus.evalWord A w₂ = 0.
-      have hmul_zero : ∀ σ₁ : Fin L₀ → Fin d,
+      have hmul_zero : ∀ σ₁ : Fin L₀ → α,
           Kraus.evalWord A (List.ofFn σ₁) * Kraus.evalWord A w₂ = 0 := by
         intro σ₁
         have hlen : (List.ofFn σ₁ ++ w₂).length = k := by simp [hw₂]; omega
@@ -79,7 +79,7 @@ private theorem allZero_contradiction [NeZero D]
       -- The map M ↦ M * Kraus.evalWord A w₂ vanishes on Kraus.wordSpan A L₀ = ⊤.
       have hright : LinearMap.mulRight ℂ (Kraus.evalWord A w₂) = 0 := by
         apply LinearMap.ext_on_range
-          (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
+          (v := fun σ : Fin L₀ → α => Kraus.evalWord A (List.ofFn σ))
           (hv := by simpa only [Kraus.wordSpan] using hws)
         intro σ₁
         simp [LinearMap.mulRight_apply, hmul_zero σ₁]
@@ -99,18 +99,19 @@ block-injectivity span identity
 \]
 forces every suffix product of length \(N-L_0\) to vanish. Strong induction on
 the word length then gives a contradiction. -/
-theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
+theorem mpv_ne_zero_of_isNBlkInjective {α : Type*} [Fintype α] {A : MPTensor α (Fin D)}
+    [NeZero D]
     {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
-    (mpv A : NSiteSpace d N) ≠ 0 := by
+    (mpv A : (Fin N → α) → ℂ) ≠ 0 := by
   have hws : Kraus.wordSpan A L₀ = ⊤ := hInj
   intro hzero
-  -- mpv = 0 means tr(Kraus.evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → Fin d.
-  have htr_zero : ∀ σ : Fin N → Fin d,
+  -- mpv = 0 means tr(Kraus.evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → α.
+  have htr_zero : ∀ σ : Fin N → α,
       Matrix.trace (Kraus.evalWord A (List.ofFn σ)) = 0 := by
     intro σ; simpa [mpv, coeff] using congrFun hzero σ
   -- All products of length (N - L₀) are zero by trace nondegeneracy.
-  have hprod_zero : ∀ w₂ : List (Fin d), w₂.length = N - L₀ →
+  have hprod_zero : ∀ w₂ : List α, w₂.length = N - L₀ →
       Kraus.evalWord A w₂ = 0 := by
     intro w₂ hw₂
     -- Show ∀ M, tr(Kraus.evalWord A w₂ * M) = 0 to get Kraus.evalWord A w₂ = 0.
@@ -120,7 +121,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
     have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
         (LinearMap.mulRight ℂ (Kraus.evalWord A w₂)) = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
+        (v := fun σ : Fin L₀ → α => Kraus.evalWord A (List.ofFn σ))
         (hv := by simpa only [Kraus.wordSpan] using hws)
       intro σ₁
       simp only [LinearMap.comp_apply, LinearMap.mulRight_apply,
@@ -129,7 +130,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
       rw [← Kraus.evalWord_append]
       -- This is a trace of a length-N word product, hence 0.
       have hlen : (List.ofFn σ₁ ++ w₂).length = N := by simp [hw₂]; omega
-      let σ' : Fin N → Fin d :=
+      let σ' : Fin N → α :=
         fun i => (List.ofFn σ₁ ++ w₂).get ⟨i.val, hlen.symm ▸ i.isLt⟩
       have hw_eq : List.ofFn σ' = List.ofFn σ₁ ++ w₂ := by
         apply List.ext_get
