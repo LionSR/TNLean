@@ -204,7 +204,7 @@ theorem fibStringNetEdgeTau_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) :
 /-- Bridge: the trivial block `fibOneGolden` is built from the F-symbols in the same way as the
 `τ` block (`fibTauGolden_eq_fSymbol`), with the bond letters `(1, 1)`, `(τ, τ)`. -/
 theorem fibOneGolden_eq_fSymbol (x' x : Fin 2) :
-    fibOneGolden x' x = Matrix.of fun p q : Fin 2 =>
+    fibOneGolden (x', x) = Matrix.of fun p q : Fin 2 =>
       if fibBondLetter 0 p = (x', x) then
         fibFSymbolGolden 0 x 1 (fibBondLetter 0 q).1 x' (fibBondLetter 0 q).2
       else 0 := by
@@ -212,7 +212,7 @@ theorem fibOneGolden_eq_fSymbol (x' x : Fin 2) :
 
 /-- The entrywise form of `fibOneGolden_eq_fSymbol`. -/
 theorem fibOneGolden_apply_eq_fSymbol (x' x p q : Fin 2) :
-    fibOneGolden x' x p q =
+    fibOneGolden (x', x) p q =
       if fibBondLetter 0 p = (x', x) then
         fibFSymbolGolden 0 x 1 (fibBondLetter 0 q).1 x' (fibBondLetter 0 q).2
       else 0 := by
@@ -220,7 +220,7 @@ theorem fibOneGolden_apply_eq_fSymbol (x' x p q : Fin 2) :
 
 /-- The entrywise form of `fibTauGolden_eq_fSymbol`. -/
 theorem fibTauGolden_apply_eq_fSymbol (x' x : Fin 2) (p q : Fin 3) :
-    fibTauGolden x' x p q =
+    fibTauGolden (x', x) p q =
       if fibLetter p = (x', x) then
         fibFSymbolGolden 1 x 1 (fibLetter q).1 x' (fibLetter q).2
       else 0 := by
@@ -315,54 +315,54 @@ edge label: `T (x', x)` at edge label `τ`, `U (x', x)` at edge label `1`, and z
 label changes, as for the source's tensor `fibStringNetTensor`. As everywhere in this development
 the label `0 : Fin 2` is the trivial label `1` and `1 : Fin 2` is `τ`, so the test
 `(fibSiteLetter j).2 = 1` selects the edge label `τ`. -/
-def fibEdgeGraded {α : Type*} [Zero α] (T U : Fin 2 → Fin 2 → α) (i j : Fin 4) : α :=
-  if (fibSiteLetter i).2 = (fibSiteLetter j).2 then
-    if (fibSiteLetter j).2 = 1 then T (fibSiteLetter i).1 (fibSiteLetter j).1
-    else U (fibSiteLetter i).1 (fibSiteLetter j).1
+def fibEdgeGraded {α : Type*} [Zero α] (T U : Fin 2 × Fin 2 → α) (a : Fin 4 × Fin 4) : α :=
+  if (fibSiteLetter a.1).2 = (fibSiteLetter a.2).2 then
+    if (fibSiteLetter a.2).2 = 1 then T ((fibSiteLetter a.1).1, (fibSiteLetter a.2).1)
+    else U ((fibSiteLetter a.1).1, (fibSiteLetter a.2).1)
   else 0
 
 section EdgeGraded
 
-variable {α : Type*} [Zero α] (T U : Fin 2 → Fin 2 → α)
+variable {α : Type*} [Zero α] (T U : Fin 2 × Fin 2 → α)
 
 theorem fibEdgeGraded_edgeTau (x' x : Fin 2) :
-    fibEdgeGraded T U (fibEdgeTauLetter x') (fibEdgeTauLetter x) = T x' x := by
+    fibEdgeGraded T U (fibEdgeTauLetter x', fibEdgeTauLetter x) = T (x', x) := by
   simp [fibEdgeGraded, fibSiteLetter_fibEdgeTauLetter]
 
 theorem fibEdgeGraded_edgeOne (x' x : Fin 2) :
-    fibEdgeGraded T U (fibEdgeOneLetter x') (fibEdgeOneLetter x) = U x' x := by
+    fibEdgeGraded T U (fibEdgeOneLetter x', fibEdgeOneLetter x) = U (x', x) := by
   simp [fibEdgeGraded, fibSiteLetter_fibEdgeOneLetter]
 
 theorem fibEdgeGraded_edgeOne_edgeTau (x' x : Fin 2) :
-    fibEdgeGraded T U (fibEdgeOneLetter x') (fibEdgeTauLetter x) = 0 := by
+    fibEdgeGraded T U (fibEdgeOneLetter x', fibEdgeTauLetter x) = 0 := by
   simp [fibEdgeGraded, fibSiteLetter_fibEdgeOneLetter, fibSiteLetter_fibEdgeTauLetter]
 
 theorem fibEdgeGraded_edgeTau_edgeOne (x' x : Fin 2) :
-    fibEdgeGraded T U (fibEdgeTauLetter x') (fibEdgeOneLetter x) = 0 := by
+    fibEdgeGraded T U (fibEdgeTauLetter x', fibEdgeOneLetter x) = 0 := by
   simp [fibEdgeGraded, fibSiteLetter_fibEdgeOneLetter, fibSiteLetter_fibEdgeTauLetter]
 
 end EdgeGraded
 
 /-- The letter at edge label `1` of a block with bond letters `bond`: the diagonal matrix unit
 `E_{pp}` at the bond letter `p = (x', x)`, and zero when `(x', x)` is not a bond letter. -/
-def fibEdgeOneGolden {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (x' x : Fin 2) :
+def fibEdgeOneGolden {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (a : Fin 2 × Fin 2) :
     Matrix (Fin D) (Fin D) GoldenInt :=
-  Matrix.diagonal fun p => if bond p = (x', x) then 1 else 0
+  Matrix.diagonal fun p => if bond p = a then 1 else 0
 
 /-- The trivial block on the four physical letters over `ℤ[σ]`: the letters of `fibOneGolden` at
 edge label `τ` and the diagonal matrix units at edge label `1`. -/
-def fibOneFullGolden : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) GoldenInt :=
+def fibOneFullGolden : Fin 4 × Fin 4 → Matrix (Fin 2) (Fin 2) GoldenInt :=
   fibEdgeGraded fibOneGolden (fibEdgeOneGolden (fibBondLetter 0))
 
 /-- The `τ` block on the four physical letters over `ℤ[σ]`. -/
-def fibTauFullGolden : Fin 4 → Fin 4 → Matrix (Fin 3) (Fin 3) GoldenInt :=
+def fibTauFullGolden : Fin 4 × Fin 4 → Matrix (Fin 3) (Fin 3) GoldenInt :=
   fibEdgeGraded fibTauGolden (fibEdgeOneGolden fibLetter)
 
 /-- The trivial block on the four physical letters. -/
-def fibOneFull : MPOTensor 4 2 := Function.uncurry fun i j => complexOfGolden (fibOneFullGolden i j)
+def fibOneFull : MPOTensor 4 2 := fun ij => complexOfGolden (fibOneFullGolden ij)
 
 /-- The `τ` block on the four physical letters. -/
-def fibTauFull : MPOTensor 4 3 := Function.uncurry fun i j => complexOfGolden (fibTauFullGolden i j)
+def fibTauFull : MPOTensor 4 3 := fun ij => complexOfGolden (fibTauFullGolden ij)
 
 /-- The F-symbol blocks `B_1`, `B_τ` extended to the four physical letters (plaquette, edge
 label): at edge label `τ` their letters are those of `fibBlock`, at edge label `1` the diagonal
@@ -381,7 +381,7 @@ theorem fibBlockFull_edgeTau (f x' x : Fin 2) :
 /-- The entries of the edge-label-`1` letter `fibEdgeOneGolden`. -/
 theorem goldenToComplex_fibEdgeOneGolden {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (x' x : Fin 2)
     (p q : Fin D) :
-    goldenToComplex (fibEdgeOneGolden bond x' x p q) =
+    goldenToComplex (fibEdgeOneGolden bond (x', x) p q) =
       if p = q ∧ bond p = (x', x) then 1 else 0 := by
   rw [fibEdgeOneGolden, Matrix.diagonal_apply]
   by_cases hpq : p = q
@@ -395,11 +395,11 @@ theorem fibBlockFull_edgeOne_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) 
       if p = q ∧ fibBondLetter f p = (x', x) then 1 else 0 := by
   match f, p, q with
   | 0, p, q =>
-    change goldenToComplex (fibOneFullGolden (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q) = _
+    change goldenToComplex (fibOneFullGolden (fibEdgeOneLetter x', fibEdgeOneLetter x) p q) = _
     rw [fibOneFullGolden, fibEdgeGraded_edgeOne]
     exact goldenToComplex_fibEdgeOneGolden _ x' x p q
   | 1, p, q =>
-    change goldenToComplex (fibTauFullGolden (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q) = _
+    change goldenToComplex (fibTauFullGolden (fibEdgeOneLetter x', fibEdgeOneLetter x) p q) = _
     rw [fibTauFullGolden, fibEdgeGraded_edgeOne]
     exact goldenToComplex_fibEdgeOneGolden _ x' x p q
 

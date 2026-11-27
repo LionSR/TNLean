@@ -105,9 +105,9 @@ letters with `ρ(h) ≠ ρ(h')` vanish on both sides.
 every letter of the stacked product is block diagonal with the blocks `5 (√2 A_σ)`, `3 (√2 A_σ)`
 and sixteen zeros. -/
 theorem isingGaugeZ_conj (h h' : Fin 10) :
-    (isingGaugeZ * mulZsqrt2Tensor thetaTwoZ isingSigmaZ h h' * isingGaugeZᵀ).submatrix
+    (isingGaugeZ * mulZsqrt2Tensor thetaTwoZ isingSigmaZ (h, h') * isingGaugeZᵀ).submatrix
         isingTau isingTau =
-      Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
   rw [isingGaugeZ, signedPermMatrix_mul_mul_transpose]
   rcases eq_or_ne (isingRho h) (isingRho h') with hρ | hρ
   · rw [stack_eq_sector]
@@ -124,10 +124,10 @@ theorem isingGaugeZ_conj (h h' : Fin 10) :
     refine Matrix.ext fun x y => ?_
     simp
 
-theorem isingBondObject_conjMatrix (a : Fin 100) :
+theorem isingBondObject_conjMatrix (a : Fin 10 × Fin 10) :
     conjMatrix isingGauge (isingBondObject a) =
       complexOfZsqrt2 (Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ
-        (Fin.divNat (m := 10) (n := 10) a) (Fin.modNat (m := 10) (n := 10) a)))) := by
+        a))) := by
   rw [isingGauge, conjMatrix_gaugeOfMatrix, isingBondObject_eq, ← complexOfZsqrt2_mul,
     ← complexOfZsqrt2_mul, ← complexOfZsqrt2_submatrix, isingBondObjectZ, isingGaugeZ_conj]
 
@@ -139,11 +139,9 @@ with the weights `5` and `3`, and sixteen zero slots. -/
 noncomputable def isingCompression :
     MultiBlockCompression isingBondObject isingSlots isingTargets :=
   MultiBlockCompression.ofRingBlockDiagonal zsqrt2ToComplex isingOrd isingTau isingGauge
-    (fun a => isingBlockZ (isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
-      (Fin.modNat (m := 10) (n := 10) a)))
+    (fun a => isingBlockZ (isingSigmaZ a))
     isingBondObject_conjMatrix
-    (fun s a => isingWeightsZ s • isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
-      (Fin.modNat (m := 10) (n := 10) a))
+    (fun s a => isingWeightsZ s • isingSigmaZ a)
     (fun s a => by
       rw [Matrix.complexOfRing_smul, zsqrt2ToComplex_isingWeightsZ]
       rfl)
@@ -162,17 +160,17 @@ theorem isingBondObject_remainder : isingCompression.remainder = 0 := by
 the periodic coefficient of the `σ` strand is the power sum `5^L + 3^L` of the two weights, the
 sitewise origin of the length-dependent coefficient `λ_1^L + λ_ψ^L` of the P6 twist
 (`thm:p6-round45-fusion` (v)–(vi)). -/
-theorem isingBondObject_trace_evalWord (w : List (Fin 100)) (hw : w ≠ []) :
+theorem isingBondObject_trace_evalWord (w : List (Fin 10 × Fin 10)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord isingBondObject w) =
       ((5 : ℂ) ^ w.length + 3 ^ w.length) *
-        Matrix.trace (Kraus.evalWord isingSigma.toMPSTensor w) := by
+        Matrix.trace (Kraus.evalWord isingSigma w) := by
   have h := isingCompression.trace_evalWord_eq_sum w hw
   have hs : ∀ s : Fin 2,
       Matrix.trace (Kraus.evalWord (isingTargets s) w) =
-        isingWeights s ^ w.length * Matrix.trace (Kraus.evalWord isingSigma.toMPSTensor w) := by
+        isingWeights s ^ w.length * Matrix.trace (Kraus.evalWord isingSigma w) := by
     intro s
-    rw [isingTargets, show isingWeights s • isingSigma.toMPSTensor =
-        fun i => isingWeights s • isingSigma.toMPSTensor i from rfl,
+    rw [isingTargets, show isingWeights s • isingSigma =
+        fun i => isingWeights s • isingSigma i from rfl,
       Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   rw [h, show isingSlots = Finset.univ from rfl, Fin.sum_univ_two, hs 0, hs 1]
   simp only [isingWeights, Matrix.cons_val_zero, Matrix.cons_val_one]
@@ -188,10 +186,10 @@ theorem isingTwist_mpo (L : ℕ) (hL : 0 < L) :
       ((5 : ℂ) ^ L + 3 ^ L) • MPOTensor.mpo isingSigma L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  have h := isingBondObject_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)
+  have h := isingBondObject_trace_evalWord _ (MPOTensor.ofFn_pair_ne_nil hL σ τ)
   rw [List.length_ofFn] at h
-  rw [Matrix.smul_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
-    smul_eq_mul]
+  rw [Matrix.smul_apply, MPOTensor.mpo_apply_eq_trace_kraus_evalWord,
+    MPOTensor.mpo_apply_eq_trace_kraus_evalWord, smul_eq_mul]
   exact h
 
 /-- The Ising bond-object compression has sixteen zero slots. -/

@@ -43,14 +43,12 @@ def idKronEis {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) EisensteinInt) :
     finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- The letters of the triple product `(U U) U` over `ℤ[ω]`. -/
-def tripleUUUEis (a : Fin 9) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  mulTensorR (mulTensorR uEis uEis) uEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
+def tripleUUUEis (a : Fin 3 × Fin 3) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
+  mulTensorR (mulTensorR uEis uEis) uEis a
 
 /-- The letters of the triple product `(U U†) U` over `ℤ[ω]`. -/
-def tripleUDUEis (a : Fin 9) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  mulTensorR (mulTensorR uEis uDagEis) uEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
+def tripleUDUEis (a : Fin 3 × Fin 3) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
+  mulTensorR (mulTensorR uEis uDagEis) uEis a
 
 /-- The tree of `(g,g,g)` fusing the first two factors first. -/
 def leftUUUEis : Matrix (Fin 1) (Fin 8) EisensteinInt := scalarLeftEis * kronIdEis uuLeftEis 2
@@ -65,8 +63,8 @@ def leftUDUEis : Matrix (Fin 2) (Fin 8) EisensteinInt := kronIdEis scalarLeftEis
 def rightUDUEis : Matrix (Fin 2) (Fin 8) EisensteinInt := idKronEis 2 scalarLeftEis
 
 /-- The letters of the triple product, as explicit matrices over `ℤ[ω]`. -/
-def tripleUUUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
-  | 0 =>
+def tripleUUUTable : Fin 3 × Fin 3 → Matrix (Fin 8) (Fin 8) EisensteinInt
+  | (0, 0) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩;
@@ -75,10 +73,10 @@ def tripleUUUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩]
-  | 1 => 0
-  | 2 => 0
-  | 3 => 0
-  | 4 =>
+  | (0, 1) => 0
+  | (0, 2) => 0
+  | (1, 0) => 0
+  | (1, 1) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
@@ -87,10 +85,10 @@ def tripleUUUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 5 => 0
-  | 6 => 0
-  | 7 => 0
-  | 8 =>
+  | (1, 2) => 0
+  | (2, 0) => 0
+  | (2, 1) => 0
+  | (2, 2) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
@@ -101,10 +99,10 @@ def tripleUUUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
 
 /-- The letters of the triple product, as explicit matrices over `ℤ[ω]`. -/
-def tripleUDUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
-  | 0 => 0
-  | 1 => 0
-  | 2 =>
+def tripleUDUTable : Fin 3 × Fin 3 → Matrix (Fin 8) (Fin 8) EisensteinInt
+  | (0, 0) => 0
+  | (0, 1) => 0
+  | (0, 2) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
@@ -113,7 +111,7 @@ def tripleUDUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩]
-  | 3 =>
+  | (1, 0) =>
     !![⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
@@ -122,10 +120,10 @@ def tripleUDUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 4 => 0
-  | 5 => 0
-  | 6 => 0
-  | 7 =>
+  | (1, 1) => 0
+  | (1, 2) => 0
+  | (2, 0) => 0
+  | (2, 1) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
@@ -134,7 +132,7 @@ def tripleUDUTable : Fin 9 → Matrix (Fin 8) (Fin 8) EisensteinInt
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩]
-  | 8 => 0
+  | (2, 2) => 0
 
 set_option maxRecDepth 8000 in
 /-- The letters of `(U U) U` are the explicit table `tripleUUUTable`. -/

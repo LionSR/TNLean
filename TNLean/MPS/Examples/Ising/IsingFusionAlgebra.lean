@@ -116,14 +116,14 @@ def isingPsiFuse : Fin 10 → Fin 10 := ![3, 4, 5, 0, 1, 2, 6, 7, 9, 8]
 /-- Every letter of `A_1` over `ℤ√2` is the matrix unit `E_{x' x}` on the diagonal of the
 physical labels. -/
 theorem isingOneZ_eq_smul_single : ∀ h h' : Fin 10,
-    isingOneZ h h' =
+    isingOneZ (h, h') =
       (if h' = h then 1 else 0 : ℤ√2) • Matrix.single (isingLeft h) (isingRight h) 1 := by
   decide +kernel
 
 /-- Every letter of `A_ψ` over `ℤ√2` is a signed matrix unit between the label and its fusion
 with `ψ`. -/
 theorem isingPsiZ_eq_smul_single : ∀ h h' : Fin 10,
-    isingPsiZ h h' = (if h' = isingPsiFuse h then (if h = 7 then -1 else 1) else 0 : ℤ√2) •
+    isingPsiZ (h, h') = (if h' = isingPsiFuse h then (if h = 7 then -1 else 1) else 0 : ℤ√2) •
       Matrix.single (isingPsiFlip (isingLeft h)) (isingPsiFlip (isingRight h)) 1 := by
   decide +kernel
 
@@ -155,7 +155,7 @@ def isingSigmaCol : Fin 10 → Fin 10 → Fin 4
 
 /-- Every letter of `√2 A_σ` over `ℤ√2` is a scaled matrix unit. -/
 theorem isingSigmaZ_eq_smul_single : ∀ h h' : Fin 10,
-    isingSigmaZ h h' =
+    isingSigmaZ (h, h') =
       isingSigmaCoefZ h h' • Matrix.single (isingSigmaRow h h') (isingSigmaCol h h') 1 := by
   decide +kernel
 
@@ -191,18 +191,18 @@ theorem isingSigmaCoef_eq_zero : ∀ h h' : Fin 10, h' ∉ isingSigmaNext h →
 middle label `ρ`, a letter identity of the stacked tensor holds for all letters once it holds for
 the letters whose two labels carry the same `ρ`. -/
 theorem isingConj_of_rho_eq {D₁ D₂ k z : ℕ}
-    {XZ : Fin 10 → Fin 10 → Matrix (Fin D₁) (Fin D₁) (ℤ√2)}
-    {YZ : Fin 10 → Fin 10 → Matrix (Fin D₂) (Fin D₂) (ℤ√2)}
-    {TZ : Fin 10 → Fin 10 → Matrix (Fin k) (Fin k) (ℤ√2)}
-    (hX : ∀ h h', isingRho h ≠ isingRho h' → XZ h h' = 0)
-    (hY : ∀ h h', isingRho h ≠ isingRho h' → YZ h h' = 0)
-    (hT : ∀ h h', isingRho h ≠ isingRho h' → TZ h h' = 0)
+    {XZ : Fin 10 × Fin 10 → Matrix (Fin D₁) (Fin D₁) (ℤ√2)}
+    {YZ : Fin 10 × Fin 10 → Matrix (Fin D₂) (Fin D₂) (ℤ√2)}
+    {TZ : Fin 10 × Fin 10 → Matrix (Fin k) (Fin k) (ℤ√2)}
+    (hX : ∀ h h', isingRho h ≠ isingRho h' → XZ (h, h') = 0)
+    (hY : ∀ h h', isingRho h ≠ isingRho h' → YZ (h, h') = 0)
+    (hT : ∀ h h', isingRho h ≠ isingRho h' → TZ (h, h') = 0)
     {G : Matrix (Fin (k + z)) (Fin (D₁ * D₂)) (ℤ√2)}
     {H : Matrix (Fin (D₁ * D₂)) (Fin (k + z)) (ℤ√2)}
     {c : ℤ√2}
     (hdiag : ∀ h h', isingRho h' = isingRho h →
-      G * mulZsqrt2Tensor XZ YZ h h' * H = c • padZsqrt2 z (TZ h h'))
-    (h h' : Fin 10) : G * mulZsqrt2Tensor XZ YZ h h' * H = c • padZsqrt2 z (TZ h h') := by
+      G * mulZsqrt2Tensor XZ YZ (h, h') * H = c • padZsqrt2 z (TZ (h, h')))
+    (h h' : Fin 10) : G * mulZsqrt2Tensor XZ YZ (h, h') * H = c • padZsqrt2 z (TZ (h, h')) := by
   by_cases hr : isingRho h' = isingRho h
   · exact hdiag h h' hr
   · have hne : isingRho h ≠ isingRho h' := fun e => hr e.symm
@@ -216,19 +216,19 @@ by a zero block gives `O_L(X) O_L(Y) = O_L(T)` at every positive length. The sta
 the short sums of `MPSTensor.mul_mulTensorR_mul_transpose_eq_list`, so the sector identity
 `hdiag` is decided over `ℤ√2`. -/
 theorem isingFusion_of_signedPerm {DX DY k z : ℕ}
-    (XZ : Fin 10 → Fin 10 → Matrix (Fin DX) (Fin DX) (ℤ√2))
-    (YZ : Fin 10 → Fin 10 → Matrix (Fin DY) (Fin DY) (ℤ√2))
-    (TZ : Fin 10 → Fin 10 → Matrix (Fin k) (Fin k) (ℤ√2)) {a b t : Fin 10 → Fin 10 → ℤ√2}
+    (XZ : Fin 10 × Fin 10 → Matrix (Fin DX) (Fin DX) (ℤ√2))
+    (YZ : Fin 10 × Fin 10 → Matrix (Fin DY) (Fin DY) (ℤ√2))
+    (TZ : Fin 10 × Fin 10 → Matrix (Fin k) (Fin k) (ℤ√2)) {a b t : Fin 10 → Fin 10 → ℤ√2}
     {l r : Fin 10 → Fin 10 → Fin DX} {l' r' : Fin 10 → Fin 10 → Fin DY}
     {lt rt : Fin 10 → Fin 10 → Fin k}
-    (hX : ∀ h h', XZ h h' = a h h' • Matrix.single (l h h') (r h h') 1)
-    (hY : ∀ h h', YZ h h' = b h h' • Matrix.single (l' h h') (r' h h') 1)
-    (hT : ∀ h h', TZ h h' = t h h' • Matrix.single (lt h h') (rt h h') 1)
+    (hX : ∀ h h', XZ (h, h') = a h h' • Matrix.single (l h h') (r h h') 1)
+    (hY : ∀ h h', YZ (h, h') = b h h' • Matrix.single (l' h h') (r' h h') 1)
+    (hT : ∀ h h', TZ (h, h') = t h h' • Matrix.single (lt h h') (rt h h') 1)
     (next : Fin 10 → List (Fin 10)) (hnext : ∀ h, (next h).Nodup)
     (hzero : ∀ h h', h' ∉ next h → a h h' = 0)
-    (hXρ : ∀ h h', isingRho h ≠ isingRho h' → XZ h h' = 0)
-    (hYρ : ∀ h h', isingRho h ≠ isingRho h' → YZ h h' = 0)
-    (hTρ : ∀ h h', isingRho h ≠ isingRho h' → TZ h h' = 0)
+    (hXρ : ∀ h h', isingRho h ≠ isingRho h' → XZ (h, h') = 0)
+    (hYρ : ∀ h h', isingRho h ≠ isingRho h' → YZ (h, h') = 0)
+    (hTρ : ∀ h h', isingRho h ≠ isingRho h' → TZ (h, h') = 0)
     (G : Matrix (Fin (k + z)) (Fin (DX * DY)) (ℤ√2)) (hGG : G * Gᵀ = 1) (hGG' : Gᵀ * G = 1)
     (hdiag : ∀ h h', isingRho h' = isingRho h →
       (Matrix.of fun x y => ((next h).map fun j =>
@@ -236,9 +236,9 @@ theorem isingFusion_of_signedPerm {DX DY k z : ℕ}
           G y (finProdFinEquiv (r h j, r' j h'))).sum) =
         t h h' • Matrix.single (Fin.castAdd z (lt h h')) (Fin.castAdd z (rt h h')) 1)
     {L : ℕ} (hL : 0 < L) :
-    MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (XZ i j)) L *
-        MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (YZ i j)) L =
-      MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (TZ i j)) L :=
+    MPOTensor.mpo (fun hh => complexOfZsqrt2 (XZ hh)) L *
+        MPOTensor.mpo (fun hh => complexOfZsqrt2 (YZ hh)) L =
+      MPOTensor.mpo (fun hh => complexOfZsqrt2 (TZ hh)) L :=
   mpo_mul_eq_of_zsqrt2_conj XZ YZ TZ G Gᵀ 1 one_ne_zero (by rw [one_smul, hGG])
     (by rw [one_smul, hGG'])
     (isingConj_of_rho_eq hXρ hYρ hTρ fun h h' hρ => by
@@ -255,7 +255,7 @@ theorem isingOne_eq_smul_single (h h' : Fin 10) :
       Matrix.single (isingLeft h) (isingRight h) 1 := by
   ext a b
   simp only [isingOne, isingOneZ_eq_smul_single h h', complexOfZsqrt2_apply, Matrix.smul_apply,
-    Matrix.single_apply, smul_eq_mul, Function.uncurry_apply_pair]
+    Matrix.single_apply, smul_eq_mul]
   split_ifs <;> simp
 
 /-- Every letter of `A_ψ` is a signed matrix unit between the label and its fusion with `ψ`. -/
@@ -264,7 +264,7 @@ theorem isingPsi_eq_smul_single (h h' : Fin 10) :
       Matrix.single (isingPsiFlip (isingLeft h)) (isingPsiFlip (isingRight h)) 1 := by
   ext a b
   simp only [isingPsi, isingPsiZ_eq_smul_single h h', complexOfZsqrt2_apply, Matrix.smul_apply,
-    Matrix.single_apply, smul_eq_mul, Function.uncurry_apply_pair]
+    Matrix.single_apply, smul_eq_mul]
   split_ifs <;> simp
 
 /-- **The vacuum operator is the projector onto the closed fusion paths.** Project result: the

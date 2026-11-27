@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Rings.GoldenRing
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
-import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Example F: the Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`
@@ -132,71 +132,42 @@ open GoldenInt MPSTensor
 one-site matrix at the letter `p` carries the row of the reduced vertex weight
 `[[0, φ⁻¹, σ], [1, 0, 1], [1, σ, -φ⁻¹]]` indexed by `p`. The placement of these entries is the
 Local fix (provenance) of the module header. -/
-def fibTauGolden : Fin 2 → Fin 2 → Matrix (Fin 3) (Fin 3) GoldenInt
-  | 0, 1 => !![0, sigma ^ 2, sigma; 0, 0, 0; 0, 0, 0]
-  | 1, 0 => !![0, 0, 0; 1, 0, 1; 0, 0, 0]
-  | 1, 1 => !![0, 0, 0; 0, 0, 0; 1, sigma, -sigma ^ 2]
-  | _, _ => 0
+def fibTauGolden : Fin 2 × Fin 2 → Matrix (Fin 3) (Fin 3) GoldenInt
+  | (0, 1) => !![0, sigma ^ 2, sigma; 0, 0, 0; 0, 0, 0]
+  | (1, 0) => !![0, 0, 0; 1, 0, 1; 0, 0, 0]
+  | (1, 1) => !![0, 0, 0; 0, 0, 0; 1, sigma, -sigma ^ 2]
+  | _ => 0
 
 /-- The trivial tensor of the Fibonacci string-net matrix product operator, of bond dimension
 two: the projector onto the admissible configurations, carrying the admissibility matrix
 `[[0, 1], [1, 1]]` on its diagonal letters (data file §3.2). -/
-def fibOneGolden : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) GoldenInt
-  | 0, 0 => !![0, 1; 0, 0]
-  | 1, 1 => !![0, 0; 1, 1]
-  | _, _ => 0
+def fibOneGolden : Fin 2 × Fin 2 → Matrix (Fin 2) (Fin 2) GoldenInt
+  | (0, 0) => !![0, 1; 0, 0]
+  | (1, 1) => !![0, 0; 1, 1]
+  | _ => 0
 
 /-- The `τ` block as a matrix product operator tensor. -/
-def fibTau : MPOTensor 2 3 := Function.uncurry fun i j => complexOfGolden (fibTauGolden i j)
+def fibTau : MPOTensor 2 3 := fun ij => complexOfGolden (fibTauGolden ij)
 
 /-- The trivial block as a matrix product operator tensor. -/
-def fibOne : MPOTensor 2 2 := Function.uncurry fun i j => complexOfGolden (fibOneGolden i j)
-
-/-- The `τ` block read as a tensor over the pair alphabet `Fin 4`. -/
-def fibTauMPS : MPSTensor 4 3 := fibTau.toMPSTensor
-
-/-- The trivial block read as a tensor over the pair alphabet `Fin 4`. -/
-def fibOneMPS : MPSTensor 4 2 := fibOne.toMPSTensor
-
-/-- The golden matrices of the pair-alphabet `τ` block, in the letter order
-`(0,0), (0,1), (1,0), (1,1)`. -/
-def fibTauGoldenMPS : Fin 4 → Matrix (Fin 3) (Fin 3) GoldenInt
-  | 0 => 0
-  | 1 => !![0, sigma ^ 2, sigma; 0, 0, 0; 0, 0, 0]
-  | 2 => !![0, 0, 0; 1, 0, 1; 0, 0, 0]
-  | 3 => !![0, 0, 0; 0, 0, 0; 1, sigma, -sigma ^ 2]
-
-/-- The golden matrices of the pair-alphabet trivial block. -/
-def fibOneGoldenMPS : Fin 4 → Matrix (Fin 2) (Fin 2) GoldenInt
-  | 0 => !![0, 1; 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 0; 1, 1]
-
-theorem fibTauMPS_eq (a : Fin 4) : fibTauMPS a = complexOfGolden (fibTauGoldenMPS a) := by
-  fin_cases a <;> rfl
-
-theorem fibOneMPS_eq (a : Fin 4) : fibOneMPS a = complexOfGolden (fibOneGoldenMPS a) := by
-  fin_cases a <;> rfl
+def fibOne : MPOTensor 2 2 := fun ij => complexOfGolden (fibOneGolden ij)
 
 /-- The complex one-site matrices of the `τ` block are the recorded ones: the letter `(1, τ)`
 carries the first row `[0, φ⁻¹, φ^{-1/2}]` of the reduced vertex weight, with
 `φ^{-1/2} = √((√5 - 1)/2)` (data file §3.2). -/
 theorem fibTauMPS_apply_one :
-    fibTauMPS 1 =
+    fibTau (0, 1) =
       !![0, goldenSigmaComplex ^ 2, goldenSigmaComplex; 0, 0, 0; 0, 0, 0] := by
-  rw [fibTauMPS_eq]
   ext a b
-  fin_cases a <;> fin_cases b <;> simp [complexOfGolden, fibTauGoldenMPS]
+  fin_cases a <;> fin_cases b <;> simp [fibTau, complexOfGolden, fibTauGolden]
 
 /-- The letter `(τ, τ)` of the `τ` block carries the third row `[1, φ^{-1/2}, -φ⁻¹]` of the
 reduced vertex weight (data file §3.2). -/
 theorem fibTauMPS_apply_three :
-    fibTauMPS 3 =
+    fibTau (1, 1) =
       !![0, 0, 0; 0, 0, 0; 1, goldenSigmaComplex, -goldenSigmaComplex ^ 2] := by
-  rw [fibTauMPS_eq]
   ext a b
-  fin_cases a <;> fin_cases b <;> simp [complexOfGolden, fibTauGoldenMPS]
+  fin_cases a <;> fin_cases b <;> simp [fibTau, complexOfGolden, fibTauGolden]
 
 /-! ### Normality of the two blocks
 
@@ -222,11 +193,11 @@ def fibTauUnitCoeff : Fin 3 → Fin 3 → Fin 3 → GoldenInt
 
 /-- The four length-three words of the trivial block used to span the two-by-two matrix
 algebra. -/
-def fibOneWord : Fin 4 → Fin 3 → Fin 4
-  | 0 => ![0, 3, 3]
-  | 1 => ![0, 3, 0]
-  | 2 => ![3, 0, 3]
-  | 3 => ![3, 3, 0]
+def fibOneWord : Fin 4 → Fin 3 → Fin 2 × Fin 2
+  | 0 => ![(0, 0), (1, 1), (1, 1)]
+  | 1 => ![(0, 0), (1, 1), (0, 0)]
+  | 2 => ![(1, 1), (0, 0), (1, 1)]
+  | 3 => ![(1, 1), (1, 1), (0, 0)]
 
 /-- The coefficients expressing the matrix unit `E_{ij}` of the trivial block as a combination of
 the four words of `fibOneWord`. -/
@@ -238,15 +209,16 @@ def fibOneUnitCoeff : Fin 2 → Fin 2 → Fin 4 → GoldenInt
 
 /-- **The `τ` block is normal.** Its length-three words span the full three-by-three matrix
 algebra (data file §3.2). -/
-theorem fibTauMPS_isNormal : Kraus.IsNormal fibTauMPS :=
-  isNormal_of_complexOfRing_single goldenToComplex fibTauGoldenMPS fibTauMPS_eq
+theorem fibTauMPS_isNormal : Kraus.IsNormal fibTau :=
+  isNormal_of_complexOfRing_single goldenToComplex fibTauGolden (fun _ => rfl)
     (by norm_num : 0 < 3)
-    (fun i _ k => ![i.succ, 3, k.succ]) fibTauUnitCoeff (by decide +kernel)
+    (fun i _ k => ![![(0, 1), (1, 0), (1, 1)] i, (1, 1), ![(0, 1), (1, 0), (1, 1)] k])
+    fibTauUnitCoeff (by decide +kernel)
 
 /-- **The trivial block is normal.** Its length-three words span the full two-by-two matrix
 algebra (data file §3.2). -/
-theorem fibOneMPS_isNormal : Kraus.IsNormal fibOneMPS :=
-  isNormal_of_complexOfRing_single goldenToComplex fibOneGoldenMPS fibOneMPS_eq
+theorem fibOneMPS_isNormal : Kraus.IsNormal fibOne :=
+  isNormal_of_complexOfRing_single goldenToComplex fibOneGolden (fun _ => rfl)
     (by norm_num : 0 < 3)
     (fun _ _ k => fibOneWord k) fibOneUnitCoeff (by decide +kernel)
 
@@ -254,11 +226,11 @@ theorem fibOneMPS_isNormal : Kraus.IsNormal fibOneMPS :=
 
 /-- The stacked product tensor `B^{(x', x)} = ∑_m B_τ^{(x', m)} ⊗ B_τ^{(m, x)}` of the square of
 the `τ` family, of bond dimension nine (data file §3.3). -/
-def fibStack : MPSTensor 4 9 := (MPOTensor.mulTensor fibTau fibTau).toMPSTensor
+def fibStack : MPOTensor 2 9 := MPOTensor.mulTensor fibTau fibTau
 
 /-- The golden matrices of the stacked product tensor, in the bond order `3 i + j`. -/
-def fibStackGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
-  | 0 =>
+def fibStackGolden : Fin 2 × Fin 2 → Matrix (Fin 9) (Fin 9) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 1, 0⟩,
@@ -277,7 +249,7 @@ def fibStackGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -296,7 +268,7 @@ def fibStackGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -315,7 +287,7 @@ def fibStackGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
          ⟨0, 0, -1, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, -1, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -335,12 +307,11 @@ def fibStackGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
        ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 0, 0, -1⟩,
          ⟨0, 0, -1, 0⟩, ⟨0, 0, 0, -1⟩, ⟨1, 0, -1, 0⟩]
 
-theorem fibStack_eq (a : Fin 4) : fibStack a = complexOfGolden (fibStackGolden a) := by
-  have h : fibStack a = complexOfGolden (mulGoldenTensor fibTauGolden fibTauGolden
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfGolden fibTauGolden fibTauGolden _ _
-  have hgolden : ∀ b : Fin 4, mulGoldenTensor fibTauGolden fibTauGolden
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) = fibStackGolden b := by
+theorem fibStack_eq (a : Fin 2 × Fin 2) :
+    fibStack a = complexOfGolden (fibStackGolden a) := by
+  have h : fibStack a = complexOfGolden (mulGoldenTensor fibTauGolden fibTauGolden a) :=
+    mulTensor_complexOfGolden fibTauGolden fibTauGolden a
+  have hgolden : ∀ b, mulGoldenTensor fibTauGolden fibTauGolden b = fibStackGolden b := by
     decide +kernel
   rw [h, hgolden]
 
@@ -405,20 +376,19 @@ def fibBlockDim : Fin 2 → ℕ
 
 /-- The two target blocks of the fusion `τ ⊗ τ = 1 ⊕ τ`, each with multiplicity one and
 weight one. -/
-def fibTargets : (s : Fin 2) → MPSTensor 4 (fibBlockDim s)
-  | 0 => fibOneMPS
-  | 1 => fibTauMPS
+def fibTargets : (s : Fin 2) → MPOTensor 2 (fibBlockDim s)
+  | 0 => fibOne
+  | 1 => fibTau
 
 /-- The golden matrices of the two target blocks. -/
 def fibTargetsGolden :
-    (s : Fin 2) → Fin 4 → Matrix (Fin (fibBlockDim s)) (Fin (fibBlockDim s)) GoldenInt
-  | 0 => fibOneGoldenMPS
-  | 1 => fibTauGoldenMPS
+    (s : Fin 2) → Fin 2 × Fin 2 → Matrix (Fin (fibBlockDim s)) (Fin (fibBlockDim s)) GoldenInt
+  | 0 => fibOneGolden
+  | 1 => fibTauGolden
 
-theorem fibTargets_eq (s : Fin 2) (a : Fin 4) :
+theorem fibTargets_eq (s : Fin 2) (a : Fin 2 × Fin 2) :
     fibTargets s a = complexOfGolden (fibTargetsGolden s a) := by
-  fin_cases s
-  exacts [fibOneMPS_eq a, fibTauMPS_eq a]
+  fin_cases s <;> rfl
 
 /-- The slots of the fusion: both target blocks. -/
 abbrev fibSlots : Finset (Fin 2) := Finset.univ
@@ -465,8 +435,8 @@ def fibCoord : BlockSpace fibBlockDim fibSlots 4 ≃ Fin 9 where
 
 /-- The letters of the stacked tensor in the block coordinates: block diagonal, with the trivial
 block, the `τ` block and four one-by-one zero blocks on the diagonal (data file §3.3). -/
-def fibConjGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
-  | 0 =>
+def fibConjGolden : Fin 2 × Fin 2 → Matrix (Fin 9) (Fin 9) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -485,7 +455,7 @@ def fibConjGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -504,7 +474,7 @@ def fibConjGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -523,7 +493,7 @@ def fibConjGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
          ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩,
@@ -546,25 +516,26 @@ def fibConjGolden : Fin 4 → Matrix (Fin 9) (Fin 9) GoldenInt
 /-- Every letter of the stacked tensor carries the adapted basis into itself, block by block: the
 core identity of the example, from which the compression datum and the sitewise intertwiners both
 follow. -/
-theorem fibStack_mul_gaugeInv (i : Fin 4) :
+theorem fibStack_mul_gaugeInv (i : Fin 2 × Fin 2) :
     fibStackGolden i * fibGaugeInvGolden = fibGaugeInvGolden * fibConjGolden i := by
   revert i
   decide +kernel
 
 /-! ### The compression datum -/
 
-private theorem fibStack_matched_golden (i : Fin 4) (s : Fin 2) (p q : Fin (fibBlockDim s)) :
+private theorem fibStack_matched_golden (i : Fin 2 × Fin 2) (s : Fin 2)
+    (p q : Fin (fibBlockDim s)) :
     fibConjGolden i (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
         (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) = fibTargetsGolden s i p q := by
   revert i
   fin_cases s <;> revert p q <;> decide +kernel
 
-private theorem fibStack_unmatched_golden (i : Fin 4) (t : Fin 4) (p q : Fin 1) :
+private theorem fibStack_unmatched_golden (i : Fin 2 × Fin 2) (t : Fin 4) (p q : Fin 1) :
     fibConjGolden i (fibCoord ⟨Sum.inr t, p⟩) (fibCoord ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide +kernel
 
-private theorem fibStack_offDiagonal_golden (i : Fin 4)
+private theorem fibStack_offDiagonal_golden (i : Fin 2 × Fin 2)
     (x y : BlockSpace fibBlockDim fibSlots 4) (h : x.1 ≠ y.1) :
     fibConjGolden i (fibCoord x) (fibCoord y) = 0 := by
   revert i x y
@@ -585,9 +556,9 @@ def fibonacci_compression : MultiBlockCompression fibStack fibSlots fibTargets :
 /-- **The fusion rule `O_τ O_τ = O_1 + O_τ` at the level of word traces** (data file §3.3): at
 every positive length the periodic operator of the stacked tensor is the sum of the periodic
 operators of the two blocks. -/
-theorem fibStack_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
+theorem fibStack_trace_evalWord (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord fibStack w) =
-      Matrix.trace (Kraus.evalWord fibOneMPS w) + Matrix.trace (Kraus.evalWord fibTauMPS w) := by
+      Matrix.trace (Kraus.evalWord fibOne w) + Matrix.trace (Kraus.evalWord fibTau w) := by
   have h := fibonacci_compression.trace_evalWord_eq_sum w hw
   rw [show fibSlots = Finset.univ from rfl, Fin.sum_univ_two] at h
   exact h
@@ -601,14 +572,14 @@ theorem fibonacci_fusion_rule (L : ℕ) (hL : 0 < L) :
       MPOTensor.mpo fibOne L + MPOTensor.mpo fibTau L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  rw [Matrix.add_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
-    MPOTensor.mpo_apply_toMPSTensor]
-  exact fibStack_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)
+  rw [Matrix.add_apply, MPOTensor.mpo_apply_eq_trace_kraus_evalWord,
+    MPOTensor.mpo_apply_eq_trace_kraus_evalWord, MPOTensor.mpo_apply_eq_trace_kraus_evalWord]
+  exact fibStack_trace_evalWord _ (MPOTensor.ofFn_pair_ne_nil hL σ τ)
 
 /-- The matrix-product-vector form of the fusion rule: at every positive system size the vector
 of the stacked tensor is the sum of the vectors of the two blocks. -/
-theorem fibStack_mpv (N : ℕ) (hN : 0 < N) (σ : Fin N → Fin 4) :
-    mpv fibStack σ = mpv fibOneMPS σ + mpv fibTauMPS σ := by
+theorem fibStack_mpv (N : ℕ) (hN : 0 < N) (σ : Fin N → Fin 2 × Fin 2) :
+    mpv fibStack σ = mpv fibOne σ + mpv fibTau σ := by
   have h := fibonacci_compression.mpv_eq_sum N hN σ
   rw [show fibSlots = Finset.univ from rfl, Fin.sum_univ_two] at h
   exact h
@@ -619,7 +590,7 @@ theorem fibonacci_dim_eq : (9 : ℕ) = ∑ s ∈ fibSlots, fibBlockDim s + 4 :=
 
 /-- **Nilpotency of the remainder** (P5 note, Theorem 7.7(vi)): a product of six remainder
 matrices vanishes. -/
-theorem fibonacci_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 6 ≤ w.length) :
+theorem fibonacci_evalWord_remainder_eq_zero (w : List (Fin 2 × Fin 2)) (hw : 6 ≤ w.length) :
     Kraus.evalWord fibonacci_compression.remainder w = 0 := by
   refine fibonacci_compression.evalWord_remainder_eq_zero w ?_
   change (2 : ℕ) + 4 ≤ w.length
@@ -627,7 +598,8 @@ theorem fibonacci_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 6 ≤ w.le
 
 /-- **The remainder vanishes**: the conjugated letters are block diagonal, not merely block
 triangular, so the extension splits completely (data file §3.3). -/
-theorem fibonacci_remainder_eq_zero (i : Fin 4) : fibonacci_compression.remainder i = 0 := by
+theorem fibonacci_remainder_eq_zero (i : Fin 2 × Fin 2) :
+    fibonacci_compression.remainder i = 0 := by
   unfold fibonacci_compression
   exact MultiBlockCompression.remainder_ofRing fibStack_offDiagonal_golden i
 
@@ -695,26 +667,26 @@ theorem fibonacci_left_eq (s : {s // s ∈ fibSlots}) :
   rw [h, ← hgolden s.1]
   rfl
 
-private theorem fibStack_mul_fusionRight_golden (i : Fin 4) (s : Fin 2) :
+private theorem fibStack_mul_fusionRight_golden (i : Fin 2 × Fin 2) (s : Fin 2) :
     fibStackGolden i * fibFusionRight s = fibFusionRight s * fibTargetsGolden s i := by
   revert i
   fin_cases s <;> decide +kernel
 
-private theorem fusionLeft_mul_fibStack_golden (i : Fin 4) (s : Fin 2) :
+private theorem fusionLeft_mul_fibStack_golden (i : Fin 2 × Fin 2) (s : Fin 2) :
     fibFusionLeft s * fibStackGolden i = fibTargetsGolden s i * fibFusionLeft s := by
   revert i
   fin_cases s <;> decide +kernel
 
 /-- **The fusion tensors are sitewise right intertwiners** (data file §3.3): each letter of the
 stacked tensor carries the fusion tensor of a block through to the same letter of that block. -/
-theorem fibStack_mul_fusionRight (i : Fin 4) (s : {s // s ∈ fibSlots}) :
+theorem fibStack_mul_fusionRight (i : Fin 2 × Fin 2) (s : {s // s ∈ fibSlots}) :
     fibStack i * fibonacci_compression.right s =
       fibonacci_compression.right s * fibTargets s.1 i := by
   rw [fibonacci_right_eq, fibStack_eq, fibTargets_eq, ← complexOfGolden_mul,
     ← complexOfGolden_mul, fibStack_mul_fusionRight_golden]
 
 /-- **The compression maps are sitewise left intertwiners** (data file §3.3). -/
-theorem fusionLeft_mul_fibStack (i : Fin 4) (s : {s // s ∈ fibSlots}) :
+theorem fusionLeft_mul_fibStack (i : Fin 2 × Fin 2) (s : {s // s ∈ fibSlots}) :
     fibonacci_compression.left s * fibStack i =
       fibTargets s.1 i * fibonacci_compression.left s := by
   rw [fibonacci_left_eq, fibStack_eq, fibTargets_eq, ← complexOfGolden_mul,

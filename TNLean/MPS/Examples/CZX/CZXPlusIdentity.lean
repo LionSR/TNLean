@@ -65,21 +65,21 @@ open MPSTensor
 
 /-- The integer tensor `N^{ij} = δ^{ij} ⊕ M^{ij}` of bond dimension three, generating
 `O_L = id + U_L` (P5 note, `ex:p5ft-oscillating`). -/
-def plusIntTensor : Fin 2 → Fin 2 → Matrix (Fin 3) (Fin 3) ℤ
-  | 0, 0 => !![1, 0, 0; 0, 0, 0; 0, 0, 0]
-  | 0, 1 => !![0, 0, 0; 0, 0, 1; 0, 0, -1]
-  | 1, 0 => !![0, 0, 0; 0, 1, 0; 0, 1, 0]
-  | 1, 1 => !![1, 0, 0; 0, 0, 0; 0, 0, 0]
+def plusIntTensor : Fin 2 × Fin 2 → Matrix (Fin 3) (Fin 3) ℤ
+  | (0, 0) => !![1, 0, 0; 0, 0, 0; 0, 0, 0]
+  | (0, 1) => !![0, 0, 0; 0, 0, 1; 0, 0, -1]
+  | (1, 0) => !![0, 0, 0; 0, 1, 0; 0, 1, 0]
+  | (1, 1) => !![1, 0, 0; 0, 0, 0; 0, 0, 0]
 
 /-- The bond-three tensor generating `O_L = id + U_L`. -/
-def plusTensor : MPOTensor 2 3 := Function.uncurry fun i j => complexOfInt (plusIntTensor i j)
+def plusTensor : MPOTensor 2 3 := fun ij => complexOfInt (plusIntTensor ij)
 
 /-- The stacked product tensor of Example E, of bond dimension nine. -/
-def czxPlusIdentity : MPSTensor 4 9 := (MPOTensor.mulTensor plusTensor plusTensor).toMPSTensor
+def czxPlusIdentity : MPOTensor 2 9 := MPOTensor.mulTensor plusTensor plusTensor
 
 /-- The integer matrices of the stacked product tensor of Example E. -/
-def czxPlusIdentityInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
-  | 0 =>
+def czxPlusIdentityInt : Fin 2 × Fin 2 → Matrix (Fin 9) (Fin 9) ℤ
+  | (0, 0) =>
     !![1, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
@@ -89,7 +89,7 @@ def czxPlusIdentityInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, -1, 0;
        0, 0, 0, 0, 0, 0, 0, -1, 0]
-  | 1 =>
+  | (0, 1) =>
     !![0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 1, 0, 0, 0, 0, 0, 0;
        0, 0, -1, 0, 0, 0, 0, 0, 0;
@@ -99,7 +99,7 @@ def czxPlusIdentityInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 0, -1, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0]
-  | 2 =>
+  | (1, 0) =>
     !![0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 1, 0, 0, 0, 0, 0, 0, 0;
        0, 1, 0, 0, 0, 0, 0, 0, 0;
@@ -109,7 +109,7 @@ def czxPlusIdentityInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 1, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0]
-  | 3 =>
+  | (1, 1) =>
     !![1, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
@@ -120,14 +120,11 @@ def czxPlusIdentityInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 1, 0, 0, 0;
        0, 0, 0, 0, 0, -1, 0, 0, 0]
 
-theorem czxPlusIdentity_eq (a : Fin 4) :
+theorem czxPlusIdentity_eq (a : Fin 2 × Fin 2) :
     czxPlusIdentity a = complexOfInt (czxPlusIdentityInt a) := by
-  have h : czxPlusIdentity a = complexOfInt (mulIntTensor plusIntTensor plusIntTensor
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfRing _ plusIntTensor plusIntTensor _ _
-  have hint : ∀ b : Fin 4, mulIntTensor plusIntTensor plusIntTensor
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) =
-        czxPlusIdentityInt b := by
+  have h : czxPlusIdentity a = complexOfInt (mulIntTensor plusIntTensor plusIntTensor a) :=
+    mulTensor_complexOfRing _ plusIntTensor plusIntTensor a
+  have hint : ∀ b, mulIntTensor plusIntTensor plusIntTensor b = czxPlusIdentityInt b := by
     decide
   rw [h, hint]
 
@@ -142,24 +139,24 @@ def plusBlockDim : Fin 4 → ℕ
 
 /-- The four target blocks of Example E: the bond-one identity tensor with weight `+1`, the
 same tensor with weight `-1`, and the CZX block twice (P5 note, `ex:p5ft-oscillating`). -/
-def plusTargets : (s : Fin 4) → MPSTensor 4 (plusBlockDim s)
-  | 0 => identityMPS
-  | 1 => (-1 : ℂ) • identityMPS
-  | 2 => czxMPS
-  | 3 => czxMPS
+def plusTargets : (s : Fin 4) → MPOTensor 2 (plusBlockDim s)
+  | 0 => identityTensor
+  | 1 => (-1 : ℂ) • identityTensor
+  | 2 => czxTensor
+  | 3 => czxTensor
 
 /-- The integer matrices of the four target blocks. -/
 def plusTargetsInt :
-    (s : Fin 4) → Fin 4 → Matrix (Fin (plusBlockDim s)) (Fin (plusBlockDim s)) ℤ
-  | 0 => identityIntMPS
+    (s : Fin 4) → Fin 2 × Fin 2 → Matrix (Fin (plusBlockDim s)) (Fin (plusBlockDim s)) ℤ
+  | 0 => identityIntTensor
   | 1 => negIdentityIntMPS
-  | 2 => czxIntMPS
-  | 3 => czxIntMPS
+  | 2 => czxIntTensor
+  | 3 => czxIntTensor
 
-theorem plusTargets_eq (s a : Fin 4) :
+theorem plusTargets_eq (s : Fin 4) (a : Fin 2 × Fin 2) :
     plusTargets s a = complexOfInt (plusTargetsInt s a) := by
   fin_cases s
-  exacts [identityMPS_eq a, negIdentityMPS_eq a, czxMPS_eq a, czxMPS_eq a]
+  exacts [rfl, negIdentityMPS_eq a, rfl, rfl]
 
 /-! ### The flag -/
 
@@ -252,8 +249,8 @@ def plusGauge : (Fin 9 → ℂ) ≃ₗ[ℂ] (BlockSpace plusBlockDim plusSlots 3
 
 /-- The letters of Example E in the block coordinates: block upper triangular, with the four
 target blocks on the diagonal and zero on the three remaining slots. -/
-def plusConjInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
-  | 0 =>
+def plusConjInt : Fin 2 × Fin 2 → Matrix (Fin 9) (Fin 9) ℤ
+  | (0, 0) =>
     !![1, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
@@ -263,7 +260,7 @@ def plusConjInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 0, -1, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0]
-  | 1 =>
+  | (0, 1) =>
     !![0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 1, 0, 0, 0, 0, 0, 0;
        0, 0, -1, 0, 0, 0, 0, 0, 0;
@@ -273,7 +270,7 @@ def plusConjInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0]
-  | 2 =>
+  | (1, 0) =>
     !![0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 1, 0, 0, 0, 0, 0, 0, 0;
        0, 1, 0, 0, 0, 0, 0, 0, 0;
@@ -283,7 +280,7 @@ def plusConjInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0]
-  | 3 =>
+  | (1, 1) =>
     !![1, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0;
@@ -294,12 +291,12 @@ def plusConjInt : Fin 4 → Matrix (Fin 9) (Fin 9) ℤ
        0, 0, 0, 0, 0, 0, 0, 0, 0;
        0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-theorem czxPlusIdentity_conj_int (i : Fin 4) :
+theorem czxPlusIdentity_conj_int (i : Fin 2 × Fin 2) :
     plusGaugeInt * czxPlusIdentityInt i * plusGaugeInvInt = plusConjInt i := by
   revert i
   decide
 
-theorem czxPlusIdentity_conjMatrix (i : Fin 4) :
+theorem czxPlusIdentity_conjMatrix (i : Fin 2 × Fin 2) :
     conjMatrix plusGauge (czxPlusIdentity i) =
       (complexOfInt (plusConjInt i)).submatrix plusTau plusTau := by
   rw [plusGauge, conjMatrix_gaugeOfMatrix, czxPlusIdentity_eq, ← complexOfInt_mul,
@@ -307,20 +304,20 @@ theorem czxPlusIdentity_conjMatrix (i : Fin 4) :
 
 /-! ### The compression datum -/
 
-private theorem czxPlusIdentity_triangular_int (i : Fin 4)
+private theorem czxPlusIdentity_triangular_int (i : Fin 2 × Fin 2)
     (x y : BlockSpace plusBlockDim plusSlots 3) (h : plusOrd y.1 < plusOrd x.1) :
     plusConjInt i (plusTau x) (plusTau y) = 0 := by
   revert i x y
   decide
 
-private theorem czxPlusIdentity_matched_int (i : Fin 4) (s : Fin 4)
+private theorem czxPlusIdentity_matched_int (i : Fin 2 × Fin 2) (s : Fin 4)
     (p q : Fin (plusBlockDim s)) :
     plusConjInt i (plusTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
         (plusTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) = plusTargetsInt s i p q := by
   revert i
   fin_cases s <;> revert p q <;> decide
 
-private theorem czxPlusIdentity_unmatched_int (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
+private theorem czxPlusIdentity_unmatched_int (i : Fin 2 × Fin 2) (t : Fin 3) (p q : Fin 1) :
     plusConjInt i (plusTau ⟨Sum.inr t, p⟩) (plusTau ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide
@@ -337,24 +334,24 @@ def czxPlusIdentity_compression :
 
 /-- **The word-trace identity of Example E**: at every positive length the stacked tensor has
 the word traces of `(1 + (-1)^L) id + 2 U_L` (P5 note, `ex:p5ft-oscillating`). -/
-theorem czxPlusIdentity_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
+theorem czxPlusIdentity_trace_evalWord (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord czxPlusIdentity w) =
-      (1 + (-1 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord identityMPS w) +
-        2 * Matrix.trace (Kraus.evalWord czxMPS w) := by
+      (1 + (-1 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord identityTensor w) +
+        2 * Matrix.trace (Kraus.evalWord czxTensor w) := by
   have h := czxPlusIdentity_compression.trace_evalWord_eq_sum w hw
   rw [show plusSlots = Finset.univ from rfl, Fin.sum_univ_four] at h
   have h0 : Matrix.trace (Kraus.evalWord (plusTargets 0) w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := rfl
+      Matrix.trace (Kraus.evalWord identityTensor w) := rfl
   have h2 : Matrix.trace (Kraus.evalWord (plusTargets 2) w) =
-      Matrix.trace (Kraus.evalWord czxMPS w) := rfl
+      Matrix.trace (Kraus.evalWord czxTensor w) := rfl
   have h3 : Matrix.trace (Kraus.evalWord (plusTargets 3) w) =
-      Matrix.trace (Kraus.evalWord czxMPS w) := rfl
-  have hneg : ∀ T : MPSTensor 4 1, Matrix.trace (Kraus.evalWord (fun i => (-1 : ℂ) • T i) w) =
+      Matrix.trace (Kraus.evalWord czxTensor w) := rfl
+  have hneg : ∀ T : MPOTensor 2 1, Matrix.trace (Kraus.evalWord (fun i => (-1 : ℂ) • T i) w) =
       (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord T w) := by
     intro T
     rw [Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   have h1 : Matrix.trace (Kraus.evalWord (plusTargets 1) w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityMPS w) := hneg identityMPS
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityTensor w) := hneg identityTensor
   rw [h, h0, h1, h2, h3]
   ring
 
@@ -365,7 +362,7 @@ theorem czxPlusIdentity_dim_eq : (9 : ℕ) = ∑ s ∈ plusSlots, plusBlockDim s
 
 /-- **Nilpotency of the remainder of Example E** (P5 note, Theorem 7.7(vi)): a product of
 seven remainder matrices vanishes. -/
-theorem czxPlusIdentity_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 7 ≤ w.length) :
+theorem czxPlusIdentity_evalWord_remainder_eq_zero (w : List (Fin 2 × Fin 2)) (hw : 7 ≤ w.length) :
     Kraus.evalWord czxPlusIdentity_compression.remainder w = 0 := by
   refine czxPlusIdentity_compression.evalWord_remainder_eq_zero w ?_
   change (4 : ℕ) + 3 ≤ w.length

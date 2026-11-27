@@ -126,22 +126,22 @@ def z3FusionData : family.FusionData where
   isReduction := by
     refine Multiplicative.forall_zmod_three (Multiplicative.forall_zmod_three ?_ ?_ ?_)
       (Multiplicative.forall_zmod_three ?_ ?_ ?_) (Multiplicative.forall_zmod_three ?_ ?_ ?_)
-    · change MPTensor.IsReduction (mulTensor identityTensor identityTensor).toMPSTensor
-        ((identityTensor : MPOTensor 3 (1 * 1))).toMPSTensor 1 1
+    · change MPTensor.IsReduction (mulTensor identityTensor identityTensor)
+        (identityTensor : MPOTensor 3 (1 * 1)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_identityTensor])
-    · change MPTensor.IsReduction (mulTensor identityTensor uTensor).toMPSTensor
-        ((uTensor : MPOTensor 3 (1 * 2))).toMPSTensor 1 1
+    · change MPTensor.IsReduction (mulTensor identityTensor uTensor)
+        (uTensor : MPOTensor 3 (1 * 2)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_left])
-    · change MPTensor.IsReduction (mulTensor identityTensor uDagTensor).toMPSTensor
-        ((uDagTensor : MPOTensor 3 (1 * 2))).toMPSTensor 1 1
+    · change MPTensor.IsReduction (mulTensor identityTensor uDagTensor)
+        (uDagTensor : MPOTensor 3 (1 * 2)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_left])
-    · change MPTensor.IsReduction (mulTensor uTensor identityTensor).toMPSTensor
-        ((uTensor : MPOTensor 3 (2 * 1))).toMPSTensor 1 1
+    · change MPTensor.IsReduction (mulTensor uTensor identityTensor)
+        (uTensor : MPOTensor 3 (2 * 1)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_right])
     · exact uu_compression.isReduction oneSlotMem
     · exact ud_compression.isReduction oneSlotMem
-    · change MPTensor.IsReduction (mulTensor uDagTensor identityTensor).toMPSTensor
-        ((uDagTensor : MPOTensor 3 (2 * 1))).toMPSTensor 1 1
+    · change MPTensor.IsReduction (mulTensor uDagTensor identityTensor)
+        (uDagTensor : MPOTensor 3 (2 * 1)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_right])
     · exact du_compression.isReduction oneSlotMem
     · exact dd_compression.isReduction oneSlotMem
@@ -174,27 +174,26 @@ private theorem assocInv_two_one_two :
 
 private theorem mulTensor_uTensor_uTensor :
     mulTensor uTensor uTensor =
-      fun (i, j) ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
-  funext fun p ↦ mulTensor_complexOfRing _ uEis uEis p.1 p.2
+      fun ij ↦ complexOfEisenstein (mulTensorR uEis uEis ij) :=
+  funext fun p ↦ mulTensor_complexOfRing _ uEis uEis p
 
 private theorem mulTensor_uTensor_uDagTensor :
     mulTensor uTensor uDagTensor =
-      fun (i, j) ↦ complexOfEisenstein (mulTensorR uEis uDagEis i j) :=
-  funext fun p ↦ mulTensor_complexOfRing _ uEis uDagEis p.1 p.2
+      fun ij ↦ complexOfEisenstein (mulTensorR uEis uDagEis ij) :=
+  funext fun p ↦ mulTensor_complexOfRing _ uEis uDagEis p
 
-private theorem tripleUUU_eq (a : Fin 9) :
-    (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a =
-      complexOfEisenstein (tripleUUUTable a) := by
-  change (mulTensor (mulTensor uTensor uTensor) uTensor).toMPSTensor a = _
+private theorem tripleUUU_eq (a : Fin 3 × Fin 3) :
+    family.tripleTensor z3Gen z3Gen z3Gen a = complexOfEisenstein (tripleUUUTable a) := by
+  change mulTensor (mulTensor uTensor uTensor) uTensor a = _
   rw [mulTensor_uTensor_uTensor, ← tripleUUUEis_eq_table]
-  exact mulTensor_complexOfRing _ _ uEis _ _
+  exact mulTensor_complexOfRing _ _ uEis _
 
-private theorem tripleUDU_eq (a : Fin 9) :
-    (family.tripleTensor z3Gen (z3Gen * z3Gen) z3Gen).toMPSTensor a =
+private theorem tripleUDU_eq (a : Fin 3 × Fin 3) :
+    family.tripleTensor z3Gen (z3Gen * z3Gen) z3Gen a =
       complexOfEisenstein (tripleUDUTable a) := by
-  change (mulTensor (mulTensor uTensor uDagTensor) uTensor).toMPSTensor a = _
+  change mulTensor (mulTensor uTensor uDagTensor) uTensor a = _
   rw [mulTensor_uTensor_uDagTensor, ← tripleUDUEis_eq_table]
-  exact mulTensor_complexOfRing _ _ uEis _ _
+  exact mulTensor_complexOfRing _ _ uEis _
 
 theorem z3FusionData_leftV_gen_gen_gen :
     z3FusionData.leftV z3Gen z3Gen z3Gen = complexOfEisenstein leftUUUEis := by
@@ -240,14 +239,16 @@ theorem z3FusionData_isAssociator_gen_gen_gen :
     z3FusionData.IsAssociator z3Gen z3Gen z3Gen (eisensteinToComplex ⟨-1, -1⟩) := by
   unfold GroupFamily.FusionData.IsAssociator
   rw [z3FusionData_leftV_gen_gen_gen, z3FusionData_rightV_gen_gen_gen]
-  refine MPTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := identityMPS)
+  refine MPTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := identityTensor)
     (fun a b ↦ ?_) (fun a b ↦ ?_) (fun a ↦ ?_)
-  · rw [tripleUUU_eq, tripleUUU_eq, identityMPS_eq, ← complexOfEisenstein_mul,
+  · rw [tripleUUU_eq, tripleUUU_eq,
+      show identityTensor a = complexOfEisenstein (identityEis a) from rfl,
       ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul,
-      leftUUU_pair]
-  · rw [tripleUUU_eq, tripleUUU_eq, identityMPS_eq, ← complexOfEisenstein_mul,
+      ← complexOfEisenstein_mul, leftUUU_pair]
+  · rw [tripleUUU_eq, tripleUUU_eq,
+      show identityTensor a = complexOfEisenstein (identityEis a) from rfl,
       ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul,
-      rightUUU_pair]
+      ← complexOfEisenstein_mul, rightUUU_pair]
   · rw [tripleUUU_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, UUU_letter,
       complexOfEisenstein_smul]
 
@@ -256,14 +257,14 @@ theorem z3FusionData_isAssociator_gen_sq_gen :
     z3FusionData.IsAssociator z3Gen (z3Gen * z3Gen) z3Gen 1 := by
   unfold GroupFamily.FusionData.IsAssociator
   rw [z3FusionData_leftV_gen_sq_gen, z3FusionData_rightV_gen_sq_gen]
-  refine MPTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := uMPS)
+  refine MPTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := uTensor)
     (fun a b ↦ ?_) (fun a b ↦ ?_) (fun a ↦ ?_)
-  · rw [tripleUDU_eq, tripleUDU_eq, uMPS_eq, ← complexOfEisenstein_mul,
+  · rw [tripleUDU_eq, tripleUDU_eq, show uTensor a = complexOfEisenstein (uEis a) from rfl,
       ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul,
-      leftUDU_pair]
-  · rw [tripleUDU_eq, tripleUDU_eq, uMPS_eq, ← complexOfEisenstein_mul,
+      ← complexOfEisenstein_mul, leftUDU_pair]
+  · rw [tripleUDU_eq, tripleUDU_eq, show uTensor a = complexOfEisenstein (uEis a) from rfl,
       ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul,
-      rightUDU_pair]
+      ← complexOfEisenstein_mul, rightUDU_pair]
   · rw [tripleUDU_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, UDU_letter,
       one_smul]
 

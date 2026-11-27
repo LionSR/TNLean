@@ -47,71 +47,70 @@ namespace FibonacciCompression
 open GoldenInt MPSTensor MPOTensor
 
 /-- The golden letters of the extended blocks, indexed by the label. -/
-def fibBlockFullGolden : (s : Fin 2) → Fin 4 → Fin 4 →
+def fibBlockFullGolden : (s : Fin 2) → Fin 4 × Fin 4 →
     Matrix (Fin (fibBlockDim s)) (Fin (fibBlockDim s)) GoldenInt
   | 0 => fibOneFullGolden
   | 1 => fibTauFullGolden
 
-theorem fibBlockFull_toMPSTensor_eq (s : Fin 2) (a : Fin (4 * 4)) :
-    (fibBlockFull s).toMPSTensor a = complexOfGolden (fibBlockFullGolden s a.divNat a.modNat) := by
+theorem fibBlockFull_eq (s : Fin 2) (a : Fin 4 × Fin 4) :
+    fibBlockFull s a = complexOfGolden (fibBlockFullGolden s a) := by
   fin_cases s <;> rfl
 
 /-- The stacked letters of `τ ⊗ τ` on the four physical letters over `ℤ[σ]`. -/
-def fibTauTauFullStackGolden (a : Fin (4 * 4)) : Matrix (Fin 9) (Fin 9) GoldenInt :=
-  mulGoldenTensor fibTauFullGolden fibTauFullGolden a.divNat a.modNat
+def fibTauTauFullStackGolden (a : Fin 4 × Fin 4) : Matrix (Fin 9) (Fin 9) GoldenInt :=
+  mulGoldenTensor fibTauFullGolden fibTauFullGolden a
 
 /-- The conjugated letters of `τ ⊗ τ` on the four physical letters. -/
-def fibTauTauFullConjGolden (a : Fin (4 * 4)) : Matrix (Fin 9) (Fin 9) GoldenInt :=
-  fibConjFull fibConjGolden fibTauTauEdgeOneConjGolden a.divNat a.modNat
+def fibTauTauFullConjGolden (a : Fin 4 × Fin 4) : Matrix (Fin 9) (Fin 9) GoldenInt :=
+  fibConjFull fibConjGolden fibTauTauEdgeOneConjGolden a
 
 /-- The stacked letters of `τ ⊗ τ` at edge label `1`: diagonal matrix units. -/
-def fibTauTauEdgeOneStackGolden : Fin 2 → Fin 2 → Matrix (Fin 9) (Fin 9) GoldenInt
-  | 0, 0 => Matrix.single 1 1 1
-  | 0, 1 => Matrix.single 2 2 1
-  | 1, 0 => Matrix.single 7 7 1
-  | 1, 1 => Matrix.single 3 3 1 + Matrix.single 8 8 1
+def fibTauTauEdgeOneStackGolden : Fin 2 × Fin 2 → Matrix (Fin 9) (Fin 9) GoldenInt
+  | (0, 0) => Matrix.single 1 1 1
+  | (0, 1) => Matrix.single 2 2 1
+  | (1, 0) => Matrix.single 7 7 1
+  | (1, 1) => Matrix.single 3 3 1 + Matrix.single 8 8 1
 
 /-- The stacked letters of `τ ⊗ τ` on the four physical letters are the recorded letters
 `fibStackGolden` at edge label `τ` and the diagonal matrix units
 `fibTauTauEdgeOneStackGolden` at edge label `1`. -/
-theorem fibTauTauFullStack_eq (a : Fin (4 * 4)) :
+theorem fibTauTauFullStack_eq (a : Fin 4 × Fin 4) :
     fibTauTauFullStackGolden a =
-      fibConjFull fibStackGolden fibTauTauEdgeOneStackGolden a.divNat a.modNat := by
+      fibConjFull fibStackGolden fibTauTauEdgeOneStackGolden a := by
   revert a
   decide +kernel
 
-theorem fibTauTauFullStack_mul_gaugeInv (a : Fin (4 * 4)) :
+theorem fibTauTauFullStack_mul_gaugeInv (a : Fin 4 × Fin 4) :
     fibTauTauFullStackGolden a * fibGaugeInvGolden =
       fibGaugeInvGolden * fibTauTauFullConjGolden a := by
   rw [fibTauTauFullStack_eq]
-  exact fibConjFull_mul_eq fibStack_mul_gaugeInv (by decide +kernel) _ _
+  exact fibConjFull_mul_eq fibStack_mul_gaugeInv (by decide +kernel) _
 
-private theorem fibTauTauFull_triangular (a : Fin (4 * 4))
+private theorem fibTauTauFull_triangular (a : Fin 4 × Fin 4)
     (x y : BlockSpace fibBlockDim fibSlots 4) (h : fibOrd y.1 < fibOrd x.1) :
     fibTauTauFullConjGolden a (fibCoord x) (fibCoord y) = 0 := by
   revert a x y
   decide +kernel
 
-private theorem fibTauTauFull_matched (a : Fin (4 * 4)) (s : Fin 2)
+private theorem fibTauTauFull_matched (a : Fin 4 × Fin 4) (s : Fin 2)
     (p q : Fin (fibBlockDim s)) :
     fibTauTauFullConjGolden a (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
         (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) =
-      fibBlockFullGolden s a.divNat a.modNat p q := by
+      fibBlockFullGolden s a p q := by
   revert a
   fin_cases s <;> revert p q <;> decide +kernel
 
-private theorem fibTauTauFull_unmatched (a : Fin (4 * 4)) (t : Fin 4) (p q : Fin 1) :
+private theorem fibTauTauFull_unmatched (a : Fin 4 × Fin 4) (t : Fin 4) (p q : Fin 1) :
     fibTauTauFullConjGolden a (fibCoord ⟨Sum.inr t, p⟩) (fibCoord ⟨Sum.inr t, q⟩) = 0 := by
   revert a t p q
   decide +kernel
 
 /-- The compression datum of `τ ⊗ τ` on the four physical letters, onto both extended blocks. -/
 def fibTauTauFull_compression :
-    MultiBlockCompression (MPOTensor.mulTensor fibTauFull fibTauFull).toMPSTensor fibSlots
-      (fun s => (fibBlockFull s).toMPSTensor) :=
+    MultiBlockCompression (MPOTensor.mulTensor fibTauFull fibTauFull) fibSlots fibBlockFull :=
   MultiBlockCompression.ofGolden 4 fibOrd fibCoord fibTauTauFullStackGolden
-    (fun _ => mulTensor_complexOfGolden fibTauFullGolden fibTauFullGolden _ _)
-    (fun s a => fibBlockFullGolden s a.divNat a.modNat) fibBlockFull_toMPSTensor_eq
+    (fun a => mulTensor_complexOfGolden fibTauFullGolden fibTauFullGolden a)
+    fibBlockFullGolden fibBlockFull_eq
     fibGaugeGolden fibGaugeInvGolden fibGauge_mul_inv fibGaugeInv_mul fibTauTauFullConjGolden
     fibTauTauFullStack_mul_gaugeInv fibTauTauFull_triangular
     (fun a s _ p q => fibTauTauFull_matched a s p q) fibTauTauFull_unmatched

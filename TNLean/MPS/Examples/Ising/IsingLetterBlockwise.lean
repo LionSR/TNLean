@@ -49,11 +49,11 @@ open MPSTensor Zsqrtd
 only label `j` for which the letter `(h, j)` of `A_ψ` can be nonzero. -/
 def isingPsiPartner : Fin 10 → Fin 10 := ![3, 4, 5, 0, 1, 2, 6, 7, 9, 8]
 
-theorem isingOneZ_eq_zero_of_ne : ∀ h j : Fin 10, j ≠ h → isingOneZ h j = 0 := by
+theorem isingOneZ_eq_zero_of_ne : ∀ h j : Fin 10, j ≠ h → isingOneZ (h, j) = 0 := by
   decide +kernel
 
 theorem isingPsiZ_eq_zero_of_ne :
-    ∀ h j : Fin 10, j ≠ isingPsiPartner h → isingPsiZ h j = 0 := by
+    ∀ h j : Fin 10, j ≠ isingPsiPartner h → isingPsiZ (h, j) = 0 := by
   decide +kernel
 
 theorem isingRho_isingPsiPartner : ∀ h : Fin 10, isingRho (isingPsiPartner h) = isingRho h := by
@@ -62,9 +62,9 @@ theorem isingRho_isingPsiPartner : ∀ h : Fin 10, isingRho (isingPsiPartner h) 
 /-- One entry of the stacked letter `(h, h')`, indexed by the block coordinates of `Θ_2` and the
 coordinates of `P_σ`: a single product on each diagonal block of `Θ_2`, zero off them. -/
 def blockwiseEntry (h h' : Fin 10) : Fin 3 ⊕ Fin 3 → Fin 3 ⊕ Fin 3 → Fin 4 → Fin 4 → ℤ√2
-  | .inl i, .inl i', k, k' => 5 * isingOneZ h h i i' * isingSigmaZ h h' k k'
+  | .inl i, .inl i', k, k' => 5 * isingOneZ (h, h) i i' * isingSigmaZ (h, h') k k'
   | .inr i, .inr i', k, k' =>
-      3 * isingPsiZ h (isingPsiPartner h) i i' * isingSigmaZ (isingPsiPartner h) h' k k'
+      3 * isingPsiZ (h, isingPsiPartner h) i i' * isingSigmaZ (isingPsiPartner h, h') k k'
   | _, _, _, _ => 0
 
 /-- The stacked letter `(h, h')` in the bond order of `stackSector`, one product per entry. -/
@@ -87,10 +87,10 @@ theorem stackSector_eq_stackBlockwise {r : Fin 3} {h : Fin 10} (hr : isingRho h 
   obtain ⟨s, rfl⟩ := (finSumFinEquiv (m := 3) (n := 3)).surjective i
   obtain ⟨s', rfl⟩ := (finSumFinEquiv (m := 3) (n := 3)).surjective i'
   have hterm : ∀ j : Fin 10, (if isingRho j = r then
-      Matrix.kronecker (thetaTwoZ h j) (isingSigmaZ j h') else 0) (finSumFinEquiv s, k)
+      Matrix.kronecker (thetaTwoZ (h, j)) (isingSigmaZ (j, h')) else 0) (finSumFinEquiv s, k)
         (finSumFinEquiv s', k') = if isingRho j = r then
-      Matrix.fromBlocks ((5 : ℤ√2) • isingOneZ h j) 0 0 ((3 : ℤ√2) • isingPsiZ h j) s s' *
-        isingSigmaZ j h' k k' else 0 := by
+      Matrix.fromBlocks ((5 : ℤ√2) • isingOneZ (h, j)) 0 0 ((3 : ℤ√2) • isingPsiZ (h, j)) s s' *
+        isingSigmaZ (j, h') k k' else 0 := by
     intro j
     split_ifs <;> simp [thetaTwoZ, Matrix.kronecker]
   simp only [Matrix.kronecker] at hterm

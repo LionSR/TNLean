@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Rings.EisensteinCertificates
 import TNLean.MPS.Operator.Defs
-import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The anomalous `ℤ/3` matrix product operator symmetry
@@ -54,8 +54,7 @@ verifications are decided over that ring. An Eisenstein integer is written in th
 * `Z3Anomalous.uEis`, `Z3Anomalous.uDagEis`, `Z3Anomalous.identityEis`: the tensors of `U`,
   `U†` and the identity over `ℤ[ω]`, of bond dimensions two, two and one.
 * `Z3Anomalous.uTensor`, `Z3Anomalous.uDagTensor`, `Z3Anomalous.identityTensor`: the same as
-  matrix product operator tensors; `Z3Anomalous.uMPS`, `Z3Anomalous.uDagMPS`,
-  `Z3Anomalous.identityMPS`: the pair-alphabet views over `Fin 9`.
+  matrix product operator tensors on the pair alphabet `Fin 3 × Fin 3`.
 * `Z3Anomalous.uuStack`, `Z3Anomalous.udStack`, `Z3Anomalous.duStack`,
   `Z3Anomalous.ddStack`: the stacked product tensors of `U ⊗ U`, `U ⊗ U†`, `U† ⊗ U`, `U† ⊗ U†`,
   of bond dimension four.
@@ -92,62 +91,33 @@ open EisensteinInt MPSTensor
 
 /-- The tensor of the anomalous `ℤ/3` symmetry `U` over `ℤ[ω]` (data file §2.0): the letter
 `(s + 1, s)` carries the column `(1, ω^s)ᵀ` in position `[s ≠ 0]`, all other letters vanish. -/
-def uEis : Fin 3 → Fin 3 → Matrix (Fin 2) (Fin 2) EisensteinInt
-  | 1, 0 => !![1, 0; 1, 0]
-  | 2, 1 => !![0, 1; 0, omega]
-  | 0, 2 => !![0, 1; 0, omega ^ 2]
-  | _, _ => 0
+def uEis : Fin 3 × Fin 3 → Matrix (Fin 2) (Fin 2) EisensteinInt
+  | (1, 0) => !![1, 0; 1, 0]
+  | (2, 1) => !![0, 1; 0, omega]
+  | (0, 2) => !![0, 1; 0, omega ^ 2]
+  | _ => 0
 
 /-- The tensor of `U† = U²` over `ℤ[ω]` (data file §2.0): the letter `(s, s + 1)` carries the
 column `(1, ω^{-s})ᵀ` in position `[s ≠ 0]`. -/
-def uDagEis : Fin 3 → Fin 3 → Matrix (Fin 2) (Fin 2) EisensteinInt
-  | 0, 1 => !![1, 0; 1, 0]
-  | 1, 2 => !![0, 1; 0, omega ^ 2]
-  | 2, 0 => !![0, 1; 0, omega]
-  | _, _ => 0
+def uDagEis : Fin 3 × Fin 3 → Matrix (Fin 2) (Fin 2) EisensteinInt
+  | (0, 1) => !![1, 0; 1, 0]
+  | (1, 2) => !![0, 1; 0, omega ^ 2]
+  | (2, 0) => !![0, 1; 0, omega]
+  | _ => 0
 
 /-- The tensor of the identity operator over `ℤ[ω]`, of bond dimension one. -/
-def identityEis : Fin 3 → Fin 3 → Matrix (Fin 1) (Fin 1) EisensteinInt :=
-  fun i j => if i = j then 1 else 0
+def identityEis : Fin 3 × Fin 3 → Matrix (Fin 1) (Fin 1) EisensteinInt :=
+  fun ij => if ij.1 = ij.2 then 1 else 0
 
-/-- The symmetry `U` as a matrix product operator tensor. -/
-def uTensor : MPOTensor 3 2 := Function.uncurry fun i j => complexOfEisenstein (uEis i j)
+/-- The symmetry `U` as a matrix product operator tensor, the first physical index being the
+output label. -/
+def uTensor : MPOTensor 3 2 := fun ij => complexOfEisenstein (uEis ij)
 
 /-- The inverse symmetry `U†` as a matrix product operator tensor. -/
-def uDagTensor : MPOTensor 3 2 := Function.uncurry fun i j => complexOfEisenstein (uDagEis i j)
+def uDagTensor : MPOTensor 3 2 := fun ij => complexOfEisenstein (uDagEis ij)
 
 /-- The identity operator as a matrix product operator tensor of bond dimension one. -/
-def identityTensor : MPOTensor 3 1 :=
-    Function.uncurry fun i j => complexOfEisenstein (identityEis i j)
-
-/-- The symmetry `U` read as a tensor over the pair alphabet `Fin 9`, letter `a = 3 i + j` with
-`i` the output and `j` the input label. -/
-def uMPS : MPSTensor 9 2 := uTensor.toMPSTensor
-
-/-- The inverse symmetry `U†` read as a tensor over the pair alphabet `Fin 9`. -/
-def uDagMPS : MPSTensor 9 2 := uDagTensor.toMPSTensor
-
-/-- The identity tensor `δ` read as a tensor over the pair alphabet `Fin 9`. -/
-def identityMPS : MPSTensor 9 1 := identityTensor.toMPSTensor
-
-/-- The Eisenstein matrices of the pair-alphabet symmetry `U`. -/
-def uEisMPS : Fin 9 → Matrix (Fin 2) (Fin 2) EisensteinInt :=
-  fun a => uEis (Fin.divNat (m := 3) (n := 3) a) (Fin.modNat (m := 3) (n := 3) a)
-
-/-- The Eisenstein matrices of the pair-alphabet inverse symmetry `U†`. -/
-def uDagEisMPS : Fin 9 → Matrix (Fin 2) (Fin 2) EisensteinInt :=
-  fun a => uDagEis (Fin.divNat (m := 3) (n := 3) a) (Fin.modNat (m := 3) (n := 3) a)
-
-/-- The Eisenstein matrices of the pair-alphabet identity tensor. -/
-def identityEisMPS : Fin 9 → Matrix (Fin 1) (Fin 1) EisensteinInt :=
-  fun a => identityEis (Fin.divNat (m := 3) (n := 3) a) (Fin.modNat (m := 3) (n := 3) a)
-
-theorem uMPS_eq (a : Fin 9) : uMPS a = complexOfEisenstein (uEisMPS a) := rfl
-
-theorem uDagMPS_eq (a : Fin 9) : uDagMPS a = complexOfEisenstein (uDagEisMPS a) := rfl
-
-theorem identityMPS_eq (a : Fin 9) : identityMPS a = complexOfEisenstein (identityEisMPS a) :=
-  rfl
+def identityTensor : MPOTensor 3 1 := fun ij => complexOfEisenstein (identityEis ij)
 
 /-! ### Normality of the three blocks
 
@@ -159,8 +129,9 @@ at length one.
 -/
 
 /-- The four length-two words of `U` used to span the two-by-two matrix algebra: the letters
-`2 = (0, 2)` and `3 = (1, 0)` in every order. -/
-def uUnitWord : Fin 4 → Fin 2 → Fin 9 := ![![2, 2], ![2, 3], ![3, 2], ![3, 3]]
+`(0, 2)` and `(1, 0)` in every order. -/
+def uUnitWord : Fin 4 → Fin 2 → Fin 3 × Fin 3 :=
+  ![![(0, 2), (0, 2)], ![(0, 2), (1, 0)], ![(1, 0), (0, 2)], ![(1, 0), (1, 0)]]
 
 /-- The coefficients expressing `(ω - 1) E_{ij}` as a combination of the words `uUnitWord`. -/
 def uUnitCoeff : Fin 2 → Fin 2 → Fin 4 → EisensteinInt
@@ -170,8 +141,9 @@ def uUnitCoeff : Fin 2 → Fin 2 → Fin 4 → EisensteinInt
   | 1, 1 => ![⟨1, 1⟩, ⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩]
 
 /-- The four length-two words of `U†` used to span the two-by-two matrix algebra: the letters
-`1 = (0, 1)` and `5 = (1, 2)` in every order. -/
-def uDagUnitWord : Fin 4 → Fin 2 → Fin 9 := ![![1, 1], ![1, 5], ![5, 1], ![5, 5]]
+`(0, 1)` and `(1, 2)` in every order. -/
+def uDagUnitWord : Fin 4 → Fin 2 → Fin 3 × Fin 3 :=
+  ![![(0, 1), (0, 1)], ![(0, 1), (1, 2)], ![(1, 2), (0, 1)], ![(1, 2), (1, 2)]]
 
 /-- The coefficients expressing `(ω - 1) E_{ij}` as a combination of the words `uDagUnitWord`. -/
 def uDagUnitCoeff : Fin 2 → Fin 2 → Fin 4 → EisensteinInt
@@ -181,104 +153,100 @@ def uDagUnitCoeff : Fin 2 → Fin 2 → Fin 4 → EisensteinInt
   | 1, 1 => ![⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩, ⟨1, 1⟩]
 
 private theorem uUnit_single (i j : Fin 2) :
-    ∑ k, uUnitCoeff i j k • evalWordR uEisMPS (List.ofFn (uUnitWord k)) =
+    ∑ k, uUnitCoeff i j k • evalWordR uEis (List.ofFn (uUnitWord k)) =
       (omega - 1) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 private theorem uDagUnit_single (i j : Fin 2) :
-    ∑ k, uDagUnitCoeff i j k • evalWordR uDagEisMPS (List.ofFn (uDagUnitWord k)) =
+    ∑ k, uDagUnitCoeff i j k • evalWordR uDagEis (List.ofFn (uDagUnitWord k)) =
       (omega - 1) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 private theorem identityUnit_single (i j : Fin 1) :
     ∑ k : Fin 1, (1 : EisensteinInt) •
-        evalWordR identityEisMPS (List.ofFn (![![0]] k)) =
+        evalWordR identityEis (List.ofFn (![![(0, 0)]] k)) =
       (1 : EisensteinInt) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 /-- **The symmetry `U` is injective after blocking two sites.** Its length-two words span the
 full two-by-two matrix algebra (data file §2.0). -/
-theorem uMPS_isNBlkInjective_two : Kraus.IsNBlkInjective uMPS 2 :=
-  isNBlkInjective_of_scaled_single uEisMPS uMPS_eq (fun _ _ => uUnitWord) uUnitCoeff
+theorem uMPS_isNBlkInjective_two : Kraus.IsNBlkInjective uTensor 2 :=
+  isNBlkInjective_of_scaled_single uEis (fun _ => rfl) (fun _ _ => uUnitWord) uUnitCoeff
     omega_sub_one_ne_zero uUnit_single
 
 /-- **The inverse symmetry `U†` is injective after blocking two sites.** Its length-two words
 span the full two-by-two matrix algebra (data file §2.0). -/
-theorem uDagMPS_isNBlkInjective_two : Kraus.IsNBlkInjective uDagMPS 2 :=
-  isNBlkInjective_of_scaled_single uDagEisMPS uDagMPS_eq (fun _ _ => uDagUnitWord)
+theorem uDagMPS_isNBlkInjective_two : Kraus.IsNBlkInjective uDagTensor 2 :=
+  isNBlkInjective_of_scaled_single uDagEis (fun _ => rfl) (fun _ _ => uDagUnitWord)
     uDagUnitCoeff omega_sub_one_ne_zero uDagUnit_single
 
 /-- **The identity tensor is injective** at word length one. -/
-theorem identityMPS_isNBlkInjective_one : Kraus.IsNBlkInjective identityMPS 1 :=
-  isNBlkInjective_of_scaled_single identityEisMPS identityMPS_eq (fun _ _ => ![![0]])
+theorem identityMPS_isNBlkInjective_one : Kraus.IsNBlkInjective identityTensor 1 :=
+  isNBlkInjective_of_scaled_single identityEis (fun _ => rfl) (fun _ _ => ![![(0, 0)]])
     (fun _ _ _ => 1) (by decide) identityUnit_single
 
 /-- **The symmetry `U` is normal**, at word length two. -/
-theorem uMPS_isNormal : Kraus.IsNormal uMPS := ⟨2, two_pos, uMPS_isNBlkInjective_two⟩
+theorem uMPS_isNormal : Kraus.IsNormal uTensor := ⟨2, two_pos, uMPS_isNBlkInjective_two⟩
 
 /-- **The inverse symmetry `U†` is normal**, at word length two. -/
-theorem uDagMPS_isNormal : Kraus.IsNormal uDagMPS := ⟨2, two_pos, uDagMPS_isNBlkInjective_two⟩
+theorem uDagMPS_isNormal : Kraus.IsNormal uDagTensor := ⟨2, two_pos, uDagMPS_isNBlkInjective_two⟩
 
 /-- **The identity tensor is normal** at word length one. -/
-theorem identityMPS_isNormal : Kraus.IsNormal identityMPS :=
+theorem identityMPS_isNormal : Kraus.IsNormal identityTensor :=
   ⟨1, one_pos, identityMPS_isNBlkInjective_one⟩
 
 /-! ### The stacked product tensors -/
 
 /-- The stacked product tensor of `U ⊗ U`, of bond dimension four (data file §2.1). -/
-def uuStack : MPSTensor 9 4 := (MPOTensor.mulTensor uTensor uTensor).toMPSTensor
+def uuStack : MPOTensor 3 4 := MPOTensor.mulTensor uTensor uTensor
 
 /-- The stacked product tensor of `U ⊗ U†`, of bond dimension four (data file §2.2). -/
-def udStack : MPSTensor 9 4 := (MPOTensor.mulTensor uTensor uDagTensor).toMPSTensor
+def udStack : MPOTensor 3 4 := MPOTensor.mulTensor uTensor uDagTensor
 
 /-- The stacked product tensor of `U† ⊗ U`, of bond dimension four (data file §2.3). -/
-def duStack : MPSTensor 9 4 := (MPOTensor.mulTensor uDagTensor uTensor).toMPSTensor
+def duStack : MPOTensor 3 4 := MPOTensor.mulTensor uDagTensor uTensor
 
 /-- The stacked product tensor of `U† ⊗ U†`, of bond dimension four (data file §2.4). -/
-def ddStack : MPSTensor 9 4 := (MPOTensor.mulTensor uDagTensor uDagTensor).toMPSTensor
+def ddStack : MPOTensor 3 4 := MPOTensor.mulTensor uDagTensor uDagTensor
 
 /-- The Eisenstein matrices of the stacked product tensor of `U ⊗ U`, in the bond order
 `2 p₁ + p₂`. -/
-def uuStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulTensorR uEis uEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
+def uuStackEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
+  mulTensorR uEis uEis
 
 /-- The Eisenstein matrices of the stacked product tensor of `U ⊗ U†`. -/
-def udStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulTensorR uEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
+def udStackEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
+  mulTensorR uEis uDagEis
 
 /-- The Eisenstein matrices of the stacked product tensor of `U† ⊗ U`. -/
-def duStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulTensorR uDagEis uEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
+def duStackEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
+  mulTensorR uDagEis uEis
 
 /-- The Eisenstein matrices of the stacked product tensor of `U† ⊗ U†`. -/
-def ddStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulTensorR uDagEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
-    (Fin.modNat (m := 3) (n := 3) a)
+def ddStackEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
+  mulTensorR uDagEis uDagEis
 
-theorem uuStack_eq (a : Fin 9) : uuStack a = complexOfEisenstein (uuStackEis a) :=
-  mulTensor_complexOfRing _ uEis uEis _ _
+theorem uuStack_eq (a : Fin 3 × Fin 3) : uuStack a = complexOfEisenstein (uuStackEis a) :=
+  mulTensor_complexOfRing _ uEis uEis a
 
-theorem udStack_eq (a : Fin 9) : udStack a = complexOfEisenstein (udStackEis a) :=
-  mulTensor_complexOfRing _ uEis uDagEis _ _
+theorem udStack_eq (a : Fin 3 × Fin 3) : udStack a = complexOfEisenstein (udStackEis a) :=
+  mulTensor_complexOfRing _ uEis uDagEis a
 
-theorem duStack_eq (a : Fin 9) : duStack a = complexOfEisenstein (duStackEis a) :=
-  mulTensor_complexOfRing _ uDagEis uEis _ _
+theorem duStack_eq (a : Fin 3 × Fin 3) : duStack a = complexOfEisenstein (duStackEis a) :=
+  mulTensor_complexOfRing _ uDagEis uEis a
 
-theorem ddStack_eq (a : Fin 9) : ddStack a = complexOfEisenstein (ddStackEis a) :=
-  mulTensor_complexOfRing _ uDagEis uDagEis _ _
+theorem ddStack_eq (a : Fin 3 × Fin 3) : ddStack a = complexOfEisenstein (ddStackEis a) :=
+  mulTensor_complexOfRing _ uDagEis uDagEis a
 
 /-! ### The identity operator -/
 
 /-- Bridge: the identity tensor is the general identity tensor `MPOTensor.idTensor`. -/
 theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
   funext ⟨i, j⟩
-  simp only [identityTensor, identityEis, MPOTensor.idTensor, Function.uncurry_apply_pair]
+  simp only [identityTensor, identityEis, MPOTensor.idTensor]
   split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
 
 /-- **The periodic operator of the identity tensor is the identity** at every length. -/

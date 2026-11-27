@@ -146,56 +146,56 @@ theorem udGaugeInv_mul : udGaugeInvEis * udGaugeEis = 1 := by decide +kernel
 /-- The letters of the stacked tensor of `U ⊗ U†` in the block coordinates: block upper triangular,
 with the letters of `δ` on the diagonal block of the target and zero on the zero slots (data file
 §2.2). -/
-def udConjEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
-  | 0 =>
+def udConjEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt
+  | (0, 0) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 1 => 0
-  | 2 => 0
-  | 3 => 0
-  | 4 =>
+  | (0, 1) => 0
+  | (0, 2) => 0
+  | (1, 0) => 0
+  | (1, 1) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 5 => 0
-  | 6 => 0
-  | 7 => 0
-  | 8 =>
+  | (1, 2) => 0
+  | (2, 0) => 0
+  | (2, 1) => 0
+  | (2, 2) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 2⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
 
-theorem ud_conj_eq (i : Fin 9) :
+theorem ud_conj_eq (i : Fin 3 × Fin 3) :
     udGaugeEis * udStackEis i * udGaugeInvEis = udConjEis i := by
   revert i
   decide +kernel
 
 /-- The single target of the block `U ⊗ U† → δ`. -/
-def udTarget : (s : Unit) → MPSTensor 9 (scalarDim s) := fun _ => identityMPS
+def udTarget : (s : Unit) → MPOTensor 3 (scalarDim s) := fun _ => identityTensor
 
-theorem udTarget_eq (s : Unit) (a : Fin 9) :
-    udTarget s a = complexOfEisenstein (identityEisMPS a) :=
-  identityMPS_eq a
+theorem udTarget_eq (s : Unit) (a : Fin 3 × Fin 3) :
+    udTarget s a = complexOfEisenstein (identityEis a) :=
+  rfl
 
-private theorem ud_triangular (i : Fin 9) (x y : BlockSpace scalarDim oneSlot 3)
+private theorem ud_triangular (i : Fin 3 × Fin 3) (x y : BlockSpace scalarDim oneSlot 3)
     (h : scalarOrd y.1 < scalarOrd x.1) :
     (udGaugeEis * udStackEis i * udGaugeInvEis) (scalarCoord x) (scalarCoord y) = 0 := by
   rw [ud_conj_eq]
   revert i x y h
   decide +kernel
 
-private theorem ud_matched (i : Fin 9) :
+private theorem ud_matched (i : Fin 3 × Fin 3) :
     (Matrix.of fun p q : Fin 1 =>
       udConjEis i (scalarCoord ⟨Sum.inl oneSlotMem, p⟩) (scalarCoord ⟨Sum.inl oneSlotMem, q⟩)) =
-      identityEisMPS i := by
+      identityEis i := by
   revert i
   decide +kernel
 
-private theorem ud_unmatched (i : Fin 9) (t : Fin 3) :
+private theorem ud_unmatched (i : Fin 3 × Fin 3) (t : Fin 3) :
     (Matrix.of fun p q : Fin 1 =>
       udConjEis i (scalarCoord ⟨Sum.inr t, p⟩) (scalarCoord ⟨Sum.inr t, q⟩)) = 0 := by
   revert i t
@@ -205,7 +205,7 @@ private theorem ud_unmatched (i : Fin 9) (t : Fin 3) :
 7.7, clauses (i)–(iii); data file §2.2): the stacked tensor of `U ⊗ U†` compresses onto `δ` with `3`
 zero slots. -/
 def ud_compression : MultiBlockCompression udStack oneSlot udTarget :=
-  MultiBlockCompression.ofEisenstein udStackEis udStack_eq (fun _ => identityEisMPS)
+  MultiBlockCompression.ofEisenstein udStackEis udStack_eq (fun _ => identityEis)
     udTarget_eq 3 scalarOrd scalarCoord udGaugeEis udGaugeInvEis udGauge_mul_inv udGaugeInv_mul
     ud_triangular
     (fun i s p q => by
@@ -218,9 +218,9 @@ def ud_compression : MultiBlockCompression udStack oneSlot udTarget :=
 
 /-- **The word-trace form of `U ⊗ U† → δ`** (data file §2.2): at every positive length the stacked
 tensor of `U ⊗ U†` has the word traces of `δ`. -/
-theorem ud_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
+theorem ud_trace_evalWord (w : List (Fin 3 × Fin 3)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord udStack w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := by
+      Matrix.trace (Kraus.evalWord identityTensor w) := by
   have h := ud_compression.trace_evalWord_eq_sum w hw
   rwa [Finset.sum_singleton] at h
 
@@ -250,30 +250,30 @@ theorem ud_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, scalarDim s + 3 :=
   ud_compression.dim_eq
 
 /-- The remainder letters `R^i = B^i - V C^i W` of the block `U ⊗ U† → δ` (data file §2.2). -/
-def udRemainderEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
-  | 0 =>
+def udRemainderEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt
+  | (0, 0) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 1 => 0
-  | 2 => 0
-  | 3 => 0
-  | 4 =>
+  | (0, 1) => 0
+  | (0, 2) => 0
+  | (1, 0) => 0
+  | (1, 1) =>
     !![⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩]
-  | 5 => 0
-  | 6 => 0
-  | 7 => 0
-  | 8 =>
+  | (1, 2) => 0
+  | (2, 0) => 0
+  | (2, 1) => 0
+  | (2, 2) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
 
-theorem ud_remainder_eq (i : Fin 9) :
+theorem ud_remainder_eq (i : Fin 3 × Fin 3) :
     ud_compression.remainder i = complexOfEisenstein (udRemainderEis i) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, ud_left_eq, ud_right_eq, udStack_eq,
     udTarget_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
@@ -282,9 +282,9 @@ theorem ud_remainder_eq (i : Fin 9) :
   decide +kernel
 
 /-- The three letters carrying the nonzero remainder matrices of `U ⊗ U† → δ`. -/
-def udRemainderSupport : Fin 3 → Fin 9 := ![0, 4, 8]
+def udRemainderSupport : Fin 3 → Fin 3 × Fin 3 := ![(0, 0), (1, 1), (2, 2)]
 
-private theorem udRemainder_support (a : Fin 9) :
+private theorem udRemainder_support (a : Fin 3 × Fin 3) :
     udRemainderEis a = 0 ∨ ∃ j, udRemainderSupport j = a := by
   revert a
   decide +kernel
@@ -295,7 +295,7 @@ private theorem udRemainder_triple_support (i j l : Fin 3) :
   revert i j l
   decide +kernel
 
-private theorem udRemainder_triple (a b c : Fin 9) :
+private theorem udRemainder_triple (a b c : Fin 3 × Fin 3) :
     udRemainderEis a * udRemainderEis b * udRemainderEis c = 0 :=
   triple_mul_eq_zero_of_support _ udRemainderSupport udRemainder_support
     udRemainder_triple_support a b c
@@ -303,22 +303,22 @@ private theorem udRemainder_triple (a b c : Fin 9) :
 /-- **Nilpotency of the remainder of `U ⊗ U† → δ`** (data file §2.2): every word of length three in
 the remainder vanishes, so the nilpotency order is at most three, one less than the bound `4` of
 Theorem 7.7(vi). -/
-theorem ud_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 3 ≤ w.length) :
+theorem ud_evalWord_remainder_eq_zero (w : List (Fin 3 × Fin 3)) (hw : 3 ≤ w.length) :
     Kraus.evalWord ud_compression.remainder w = 0 := by
   refine evalWord_eq_zero_of_triple_mul_eq_zero _ (fun a b c => ?_) w hw
   rw [ud_remainder_eq, ud_remainder_eq, ud_remainder_eq, ← complexOfEisenstein_mul,
     ← complexOfEisenstein_mul, udRemainder_triple, complexOfEisenstein_zero]
 
 /-- The nilpotency order of the remainder of `U ⊗ U† → δ` is exactly three, as recorded in the data
-file (§2.2): the product of the remainder letters `0` and `4` does not vanish. -/
+file (§2.2): the product of the remainder letters `(0, 0)` and `(1, 1)` does not vanish. -/
 theorem ud_remainder_mul_ne_zero :
-    ud_compression.remainder 0 * ud_compression.remainder 4 ≠ 0 := by
+    ud_compression.remainder (0, 0) * ud_compression.remainder (1, 1) ≠ 0 := by
   rw [ud_remainder_eq, ud_remainder_eq, ← complexOfEisenstein_mul]
   exact complexOfEisenstein_ne_zero (by decide)
 
 /-- The selected sitewise intertwining equations of the right certificate of `U ⊗ U† → δ`. -/
-def udRightRows : Fin 4 → Fin 9 × Fin 4 × Fin 1 :=
-  ![(0, 0, 0), (0, 1, 0), (0, 2, 0), (4, 1, 0)]
+def udRightRows : Fin 4 → (Fin 3 × Fin 3) × Fin 4 × Fin 1 :=
+  ![((0, 0), 0, 0), ((0, 0), 1, 0), ((0, 0), 2, 0), ((1, 1), 1, 0)]
 
 /-- The left inverse, up to the scalar `⟨-1, 1⟩`, of the coefficient matrix of the selected
 equations of the right certificate of `U ⊗ U† → δ`. -/
@@ -330,20 +330,20 @@ def udRightCert : Matrix (Fin 4) (Fin 4) EisensteinInt :=
 
 private theorem udRight_certificate :
     (Matrix.of fun rs j => udRightCert (finProdFinEquiv (m := 4) (n := 1) rs) j) *
-        (sitewiseEqMatrix udStackEis identityEisMPS).submatrix udRightRows id =
+        (sitewiseEqMatrix udStackEis identityEis).submatrix udRightRows id =
       (⟨-1, 1⟩ : EisensteinInt) • 1 := by
   decide +kernel
 
 /-- **No nonzero right sitewise intertwiner for `U ⊗ U† → δ`** (data file §2.2): the compression
 exists at the level of words but not site by site. -/
 theorem ud_right_intertwiner_eq_zero (X : Matrix (Fin 4) (Fin 1) ℂ)
-    (hX : ∀ i, udStack i * X = X * identityMPS i) : X = 0 :=
-  right_intertwiner_eq_zero_of_eisenstein udStackEis udStack_eq identityEisMPS identityMPS_eq
+    (hX : ∀ i, udStack i * X = X * identityTensor i) : X = 0 :=
+  right_intertwiner_eq_zero_of_eisenstein udStackEis udStack_eq identityEis (fun _ => rfl)
     udRightRows _ (by decide) udRight_certificate X hX
 
 /-- The selected sitewise intertwining equations of the left certificate of `U ⊗ U† → δ`. -/
-def udLeftRows : Fin 4 → Fin 9 × Fin 4 × Fin 1 :=
-  ![(0, 0, 0), (0, 1, 0), (0, 2, 0), (4, 3, 0)]
+def udLeftRows : Fin 4 → (Fin 3 × Fin 3) × Fin 4 × Fin 1 :=
+  ![((0, 0), 0, 0), ((0, 0), 1, 0), ((0, 0), 2, 0), ((1, 1), 3, 0)]
 
 /-- The left inverse, up to the scalar `⟨1, 0⟩`, of the coefficient matrix of the selected equations
 of the left certificate of `U ⊗ U† → δ`. -/
@@ -356,21 +356,21 @@ def udLeftCert : Matrix (Fin 4) (Fin 4) EisensteinInt :=
 private theorem udLeft_certificate :
     (Matrix.of fun rs j => udLeftCert (finProdFinEquiv (m := 4) (n := 1) rs) j) *
         (sitewiseEqMatrix (fun i => (udStackEis i)ᵀ)
-          fun i => (identityEisMPS i)ᵀ).submatrix udLeftRows id =
+          fun i => (identityEis i)ᵀ).submatrix udLeftRows id =
       (⟨1, 0⟩ : EisensteinInt) • 1 := by
   decide +kernel
 
 /-- **No nonzero left sitewise intertwiner for `U ⊗ U† → δ`** (data file §2.2). -/
 theorem ud_left_intertwiner_eq_zero (Y : Matrix (Fin 1) (Fin 4) ℂ)
-    (hY : ∀ i, Y * udStack i = identityMPS i * Y) : Y = 0 :=
-  left_intertwiner_eq_zero_of_eisenstein udStackEis udStack_eq identityEisMPS identityMPS_eq
+    (hY : ∀ i, Y * udStack i = identityTensor i * Y) : Y = 0 :=
+  left_intertwiner_eq_zero_of_eisenstein udStackEis udStack_eq identityEis (fun _ => rfl)
     udLeftRows _ (by decide) udLeft_certificate Y hY
 
 /-- **The fusion rule `U ⊗ U† → δ` as an identity of periodic operators** at every positive length
 (data file §2.2). -/
 theorem mpo_ud (L : ℕ) (hL : 0 < L) :
     MPOTensor.mpo uTensor L * MPOTensor.mpo uDagTensor L = MPOTensor.mpo identityTensor L :=
-  MPOTensor.mpo_mul_eq_of_trace_evalWord uTensor uDagTensor identityTensor ud_trace_evalWord L hL
+  MPOTensor.mpo_mul_eq_of_forall_trace_evalWord ud_trace_evalWord hL
 
 /-! ### The block `U† ⊗ U → δ` (data file §2.3)
 
@@ -401,56 +401,56 @@ theorem duGaugeInv_mul : duGaugeInvEis * duGaugeEis = 1 := by decide +kernel
 /-- The letters of the stacked tensor of `U† ⊗ U` in the block coordinates: block upper triangular,
 with the letters of `δ` on the diagonal block of the target and zero on the zero slots (data file
 §2.3). -/
-def duConjEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
-  | 0 =>
+def duConjEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt
+  | (0, 0) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨1, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 1 => 0
-  | 2 => 0
-  | 3 => 0
-  | 4 =>
+  | (0, 1) => 0
+  | (0, 2) => 0
+  | (1, 0) => 0
+  | (1, 1) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 5 => 0
-  | 6 => 0
-  | 7 => 0
-  | 8 =>
+  | (1, 2) => 0
+  | (2, 0) => 0
+  | (2, 1) => 0
+  | (2, 2) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 2⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
 
-theorem du_conj_eq (i : Fin 9) :
+theorem du_conj_eq (i : Fin 3 × Fin 3) :
     duGaugeEis * duStackEis i * duGaugeInvEis = duConjEis i := by
   revert i
   decide +kernel
 
 /-- The single target of the block `U† ⊗ U → δ`. -/
-def duTarget : (s : Unit) → MPSTensor 9 (scalarDim s) := fun _ => identityMPS
+def duTarget : (s : Unit) → MPOTensor 3 (scalarDim s) := fun _ => identityTensor
 
-theorem duTarget_eq (s : Unit) (a : Fin 9) :
-    duTarget s a = complexOfEisenstein (identityEisMPS a) :=
-  identityMPS_eq a
+theorem duTarget_eq (s : Unit) (a : Fin 3 × Fin 3) :
+    duTarget s a = complexOfEisenstein (identityEis a) :=
+  rfl
 
-private theorem du_triangular (i : Fin 9) (x y : BlockSpace scalarDim oneSlot 3)
+private theorem du_triangular (i : Fin 3 × Fin 3) (x y : BlockSpace scalarDim oneSlot 3)
     (h : scalarOrd y.1 < scalarOrd x.1) :
     (duGaugeEis * duStackEis i * duGaugeInvEis) (scalarCoord x) (scalarCoord y) = 0 := by
   rw [du_conj_eq]
   revert i x y h
   decide +kernel
 
-private theorem du_matched (i : Fin 9) :
+private theorem du_matched (i : Fin 3 × Fin 3) :
     (Matrix.of fun p q : Fin 1 =>
       duConjEis i (scalarCoord ⟨Sum.inl oneSlotMem, p⟩) (scalarCoord ⟨Sum.inl oneSlotMem, q⟩)) =
-      identityEisMPS i := by
+      identityEis i := by
   revert i
   decide +kernel
 
-private theorem du_unmatched (i : Fin 9) (t : Fin 3) :
+private theorem du_unmatched (i : Fin 3 × Fin 3) (t : Fin 3) :
     (Matrix.of fun p q : Fin 1 =>
       duConjEis i (scalarCoord ⟨Sum.inr t, p⟩) (scalarCoord ⟨Sum.inr t, q⟩)) = 0 := by
   revert i t
@@ -460,7 +460,7 @@ private theorem du_unmatched (i : Fin 9) (t : Fin 3) :
 7.7, clauses (i)–(iii); data file §2.3): the stacked tensor of `U† ⊗ U` compresses onto `δ` with `3`
 zero slots. -/
 def du_compression : MultiBlockCompression duStack oneSlot duTarget :=
-  MultiBlockCompression.ofEisenstein duStackEis duStack_eq (fun _ => identityEisMPS)
+  MultiBlockCompression.ofEisenstein duStackEis duStack_eq (fun _ => identityEis)
     duTarget_eq 3 scalarOrd scalarCoord duGaugeEis duGaugeInvEis duGauge_mul_inv duGaugeInv_mul
     du_triangular
     (fun i s p q => by
@@ -473,9 +473,9 @@ def du_compression : MultiBlockCompression duStack oneSlot duTarget :=
 
 /-- **The word-trace form of `U† ⊗ U → δ`** (data file §2.3): at every positive length the stacked
 tensor of `U† ⊗ U` has the word traces of `δ`. -/
-theorem du_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
+theorem du_trace_evalWord (w : List (Fin 3 × Fin 3)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord duStack w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := by
+      Matrix.trace (Kraus.evalWord identityTensor w) := by
   have h := du_compression.trace_evalWord_eq_sum w hw
   rwa [Finset.sum_singleton] at h
 
@@ -505,30 +505,30 @@ theorem du_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, scalarDim s + 3 :=
   du_compression.dim_eq
 
 /-- The remainder letters `R^i = B^i - V C^i W` of the block `U† ⊗ U → δ` (data file §2.3). -/
-def duRemainderEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
-  | 0 =>
+def duRemainderEis : Fin 3 × Fin 3 → Matrix (Fin 4) (Fin 4) EisensteinInt
+  | (0, 0) =>
     !![⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨1, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩]
-  | 1 => 0
-  | 2 => 0
-  | 3 => 0
-  | 4 =>
+  | (0, 1) => 0
+  | (0, 2) => 0
+  | (1, 0) => 0
+  | (1, 1) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
-  | 5 => 0
-  | 6 => 0
-  | 7 => 0
-  | 8 =>
+  | (1, 2) => 0
+  | (2, 0) => 0
+  | (2, 1) => 0
+  | (2, 2) =>
     !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, -1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 1⟩;
        ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩]
 
-theorem du_remainder_eq (i : Fin 9) :
+theorem du_remainder_eq (i : Fin 3 × Fin 3) :
     du_compression.remainder i = complexOfEisenstein (duRemainderEis i) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, du_left_eq, du_right_eq, duStack_eq,
     duTarget_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
@@ -537,9 +537,9 @@ theorem du_remainder_eq (i : Fin 9) :
   decide +kernel
 
 /-- The three letters carrying the nonzero remainder matrices of `U† ⊗ U → δ`. -/
-def duRemainderSupport : Fin 3 → Fin 9 := ![0, 4, 8]
+def duRemainderSupport : Fin 3 → Fin 3 × Fin 3 := ![(0, 0), (1, 1), (2, 2)]
 
-private theorem duRemainder_support (a : Fin 9) :
+private theorem duRemainder_support (a : Fin 3 × Fin 3) :
     duRemainderEis a = 0 ∨ ∃ j, duRemainderSupport j = a := by
   revert a
   decide +kernel
@@ -550,7 +550,7 @@ private theorem duRemainder_triple_support (i j l : Fin 3) :
   revert i j l
   decide +kernel
 
-private theorem duRemainder_triple (a b c : Fin 9) :
+private theorem duRemainder_triple (a b c : Fin 3 × Fin 3) :
     duRemainderEis a * duRemainderEis b * duRemainderEis c = 0 :=
   triple_mul_eq_zero_of_support _ duRemainderSupport duRemainder_support
     duRemainder_triple_support a b c
@@ -558,22 +558,22 @@ private theorem duRemainder_triple (a b c : Fin 9) :
 /-- **Nilpotency of the remainder of `U† ⊗ U → δ`** (data file §2.3): every word of length three in
 the remainder vanishes, so the nilpotency order is at most three, one less than the bound `4` of
 Theorem 7.7(vi). -/
-theorem du_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 3 ≤ w.length) :
+theorem du_evalWord_remainder_eq_zero (w : List (Fin 3 × Fin 3)) (hw : 3 ≤ w.length) :
     Kraus.evalWord du_compression.remainder w = 0 := by
   refine evalWord_eq_zero_of_triple_mul_eq_zero _ (fun a b c => ?_) w hw
   rw [du_remainder_eq, du_remainder_eq, du_remainder_eq, ← complexOfEisenstein_mul,
     ← complexOfEisenstein_mul, duRemainder_triple, complexOfEisenstein_zero]
 
 /-- The nilpotency order of the remainder of `U† ⊗ U → δ` is exactly three, as recorded in the data
-file (§2.3): the product of the remainder letters `0` and `0` does not vanish. -/
+file (§2.3): the product of the remainder letter `(0, 0)` with itself does not vanish. -/
 theorem du_remainder_mul_ne_zero :
-    du_compression.remainder 0 * du_compression.remainder 0 ≠ 0 := by
+    du_compression.remainder (0, 0) * du_compression.remainder (0, 0) ≠ 0 := by
   rw [du_remainder_eq, ← complexOfEisenstein_mul]
   exact complexOfEisenstein_ne_zero (by decide)
 
 /-- The selected sitewise intertwining equations of the right certificate of `U† ⊗ U → δ`. -/
-def duRightRows : Fin 4 → Fin 9 × Fin 4 × Fin 1 :=
-  ![(0, 1, 0), (0, 2, 0), (0, 3, 0), (4, 1, 0)]
+def duRightRows : Fin 4 → (Fin 3 × Fin 3) × Fin 4 × Fin 1 :=
+  ![((0, 0), 1, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 1, 0)]
 
 /-- The left inverse, up to the scalar `⟨-1, 1⟩`, of the coefficient matrix of the selected
 equations of the right certificate of `U† ⊗ U → δ`. -/
@@ -585,20 +585,20 @@ def duRightCert : Matrix (Fin 4) (Fin 4) EisensteinInt :=
 
 private theorem duRight_certificate :
     (Matrix.of fun rs j => duRightCert (finProdFinEquiv (m := 4) (n := 1) rs) j) *
-        (sitewiseEqMatrix duStackEis identityEisMPS).submatrix duRightRows id =
+        (sitewiseEqMatrix duStackEis identityEis).submatrix duRightRows id =
       (⟨-1, 1⟩ : EisensteinInt) • 1 := by
   decide +kernel
 
 /-- **No nonzero right sitewise intertwiner for `U† ⊗ U → δ`** (data file §2.3): the compression
 exists at the level of words but not site by site. -/
 theorem du_right_intertwiner_eq_zero (X : Matrix (Fin 4) (Fin 1) ℂ)
-    (hX : ∀ i, duStack i * X = X * identityMPS i) : X = 0 :=
-  right_intertwiner_eq_zero_of_eisenstein duStackEis duStack_eq identityEisMPS identityMPS_eq
+    (hX : ∀ i, duStack i * X = X * identityTensor i) : X = 0 :=
+  right_intertwiner_eq_zero_of_eisenstein duStackEis duStack_eq identityEis (fun _ => rfl)
     duRightRows _ (by decide) duRight_certificate X hX
 
 /-- The selected sitewise intertwining equations of the left certificate of `U† ⊗ U → δ`. -/
-def duLeftRows : Fin 4 → Fin 9 × Fin 4 × Fin 1 :=
-  ![(0, 1, 0), (0, 2, 0), (0, 3, 0), (4, 0, 0)]
+def duLeftRows : Fin 4 → (Fin 3 × Fin 3) × Fin 4 × Fin 1 :=
+  ![((0, 0), 1, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 0, 0)]
 
 /-- The left inverse, up to the scalar `⟨-1, 0⟩`, of the coefficient matrix of the selected
 equations of the left certificate of `U† ⊗ U → δ`. -/
@@ -611,21 +611,21 @@ def duLeftCert : Matrix (Fin 4) (Fin 4) EisensteinInt :=
 private theorem duLeft_certificate :
     (Matrix.of fun rs j => duLeftCert (finProdFinEquiv (m := 4) (n := 1) rs) j) *
         (sitewiseEqMatrix (fun i => (duStackEis i)ᵀ)
-          fun i => (identityEisMPS i)ᵀ).submatrix duLeftRows id =
+          fun i => (identityEis i)ᵀ).submatrix duLeftRows id =
       (⟨-1, 0⟩ : EisensteinInt) • 1 := by
   decide +kernel
 
 /-- **No nonzero left sitewise intertwiner for `U† ⊗ U → δ`** (data file §2.3). -/
 theorem du_left_intertwiner_eq_zero (Y : Matrix (Fin 1) (Fin 4) ℂ)
-    (hY : ∀ i, Y * duStack i = identityMPS i * Y) : Y = 0 :=
-  left_intertwiner_eq_zero_of_eisenstein duStackEis duStack_eq identityEisMPS identityMPS_eq
+    (hY : ∀ i, Y * duStack i = identityTensor i * Y) : Y = 0 :=
+  left_intertwiner_eq_zero_of_eisenstein duStackEis duStack_eq identityEis (fun _ => rfl)
     duLeftRows _ (by decide) duLeft_certificate Y hY
 
 /-- **The fusion rule `U† ⊗ U → δ` as an identity of periodic operators** at every positive length
 (data file §2.3). -/
 theorem mpo_du (L : ℕ) (hL : 0 < L) :
     MPOTensor.mpo uDagTensor L * MPOTensor.mpo uTensor L = MPOTensor.mpo identityTensor L :=
-  MPOTensor.mpo_mul_eq_of_trace_evalWord uDagTensor uTensor identityTensor du_trace_evalWord L hL
+  MPOTensor.mpo_mul_eq_of_forall_trace_evalWord du_trace_evalWord hL
 
 /-! ### The exact `ℤ/3` representation -/
 

@@ -95,100 +95,79 @@ open MPSTensor MPOTensor
 
 /-! ### The periodic fusion rules -/
 
-/-- Word-trace identities of the compression data, read over the pair alphabet `Fin 16`,
-are word-trace identities of the tensors on the pair alphabet `Fin 4 × Fin 4`. -/
-private theorem trace_evalWord_pair {D₁ D₂ : ℕ} {M : MPOTensor 4 D₁} {N : MPOTensor 4 D₂}
-    (c : ℂ) (h : ∀ w : List (Fin 16), w ≠ [] →
-      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
-        c ^ w.length * Matrix.trace (Kraus.evalWord N.toMPSTensor w))
-    (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord M w) = c ^ w.length * Matrix.trace (Kraus.evalWord N w) := by
-  have h' := h (w.map finProdFinEquiv) (by simpa using hw)
-  rwa [MPOTensor.evalWord_toMPSTensor, MPOTensor.evalWord_toMPSTensor, List.map_map,
-    Equiv.symm_comp_self, List.map_id, List.length_map] at h'
-
-/-- The unweighted form of `trace_evalWord_pair`. -/
-private theorem trace_evalWord_pair_one {D₁ D₂ : ℕ} {M : MPOTensor 4 D₁} {N : MPOTensor 4 D₂}
-    (h : ∀ w : List (Fin 16), w ≠ [] →
-      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
-        Matrix.trace (Kraus.evalWord N.toMPSTensor w))
-    (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord M w) = Matrix.trace (Kraus.evalWord N w) := by
-  simpa using trace_evalWord_pair 1 (by simpa using h) w hw
-
 /-- **`U_e U_e = U_e`.** -/
 theorem mpo_e_mul_e (L : ℕ) (hL : 0 < L) : mpo eTensor L * mpo eTensor L = mpo eTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eE_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord eE_trace_evalWord hL
 
 /-- **`U_e U_y = U_y`.** -/
 theorem mpo_e_mul_y (L : ℕ) (hL : 0 < L) : mpo eTensor L * mpo yTensor L = mpo yTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eY_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord eY_trace_evalWord hL
 
 /-- **`U_e U_x = U_x`.** -/
 theorem mpo_e_mul_x (L : ℕ) (hL : 0 < L) : mpo eTensor L * mpo xTensor L = mpo xTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eX_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord eX_trace_evalWord hL
 
 /-- **`U_e U_xy = U_xy`.** -/
 theorem mpo_e_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo eTensor L * mpo xyTensor L = mpo xyTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eXy_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord eXy_trace_evalWord hL
 
 /-- **`U_y U_e = U_y`.** -/
 theorem mpo_y_mul_e (L : ℕ) (hL : 0 < L) : mpo yTensor L * mpo eTensor L = mpo yTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yE_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord yE_trace_evalWord hL
 
 /-- **`U_y U_y = U_e`.** -/
 theorem mpo_y_mul_y (L : ℕ) (hL : 0 < L) : mpo yTensor L * mpo yTensor L = mpo eTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yY_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord yY_trace_evalWord hL
 
 /-- **`U_y U_x = U_xy`.** -/
 theorem mpo_y_mul_x (L : ℕ) (hL : 0 < L) :
     mpo yTensor L * mpo xTensor L = mpo xyTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yX_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord yX_trace_evalWord hL
 
 /-- **`U_y U_xy = U_x`.** -/
 theorem mpo_y_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo yTensor L * mpo xyTensor L = mpo xTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yXy_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord yXy_trace_evalWord hL
 
 /-- **`U_x U_e = U_x`.** -/
 theorem mpo_x_mul_e (L : ℕ) (hL : 0 < L) : mpo xTensor L * mpo eTensor L = mpo xTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xE_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord xE_trace_evalWord hL
 
 /-- **`U_x U_y = (-1)^L U_xy`** (data file, Section 2). -/
 theorem mpo_x_mul_y (L : ℕ) (hL : 0 < L) :
     mpo xTensor L * mpo yTensor L = (-1 : ℂ) ^ L • mpo xyTensor L := by
   rw [← mpo_mulTensor]
   exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
-    (trace_evalWord_pair (-1) xY_trace_evalWord) hL
+    xY_trace_evalWord hL
 
 /-- **`U_x U_x = U_e`.** -/
 theorem mpo_x_mul_x (L : ℕ) (hL : 0 < L) : mpo xTensor L * mpo xTensor L = mpo eTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xX_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord xX_trace_evalWord hL
 
 /-- **`U_x U_xy = (-1)^L U_y`** (data file, Section 2). -/
 theorem mpo_x_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo xTensor L * mpo xyTensor L = (-1 : ℂ) ^ L • mpo yTensor L := by
   rw [← mpo_mulTensor]
   exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
-    (trace_evalWord_pair (-1) xXy_trace_evalWord) hL
+    xXy_trace_evalWord hL
 
 /-- **`U_xy U_e = U_xy`.** -/
 theorem mpo_xy_mul_e (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo eTensor L = mpo xyTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xyE_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord xyE_trace_evalWord hL
 
 /-- **`U_xy U_y = (-1)^L U_x`** (data file, Section 2). -/
 theorem mpo_xy_mul_y (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo yTensor L = (-1 : ℂ) ^ L • mpo xTensor L := by
   rw [← mpo_mulTensor]
   exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
-    (trace_evalWord_pair (-1) xyY_trace_evalWord) hL
+    xyY_trace_evalWord hL
 
 /-- **`U_xy U_x = U_y`.** -/
 theorem mpo_xy_mul_x (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo xTensor L = mpo yTensor L := by
-  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xyX_trace_evalWord) hL
+  exact mpo_mul_eq_of_forall_trace_evalWord xyX_trace_evalWord hL
 
 /-- **`U_xy U_xy = (-1)^L U_e`** (data file, Section 2): the restriction of the symmetry to the
 diagonal element `xy` is the CZX symmetry of Example D of the P5 note. -/
@@ -196,7 +175,7 @@ theorem mpo_xy_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo xyTensor L = (-1 : ℂ) ^ L • mpo eTensor L := by
   rw [← mpo_mulTensor]
   exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
-    (trace_evalWord_pair (-1) xyXy_trace_evalWord) hL
+    xyXy_trace_evalWord hL
 
 /-- **On odd rings the operators `U_x` and `U_y` anticommute**: `U_x U_y = -U_y U_x`, so the
 four operators form a projective representation of `ℤ/2 × ℤ/2` (data file, Section 2). -/
@@ -234,17 +213,17 @@ contributes to it. -/
 theorem mpo_condensationTensor_apply_zero (L : ℕ) (hL : 0 < L) :
     mpo condensationTensor L (fun _ => 0) (fun _ => 0) = 1 := by
   have he : eTensor (0, 0) = 1 := by
-    have h0 : eIntTensor 0 0 = 1 := by decide
-    rw [eTensor, Function.uncurry_apply_pair, h0, complexOfInt_one]
+    have h0 : eIntTensor (0, 0) = 1 := by decide
+    rw [eTensor, h0, complexOfInt_one]
   have hx : xTensor (0, 0) = 0 := by
-    have h0 : xIntTensor 0 0 = 0 := by decide
-    rw [xTensor, Function.uncurry_apply_pair, h0, complexOfInt_zero]
+    have h0 : xIntTensor (0, 0) = 0 := by decide
+    rw [xTensor, h0, complexOfInt_zero]
   have hy : yTensor (0, 0) = 0 := by
-    have h0 : yIntTensor 0 0 = 0 := by decide
-    rw [yTensor, Function.uncurry_apply_pair, h0, complexOfInt_zero]
+    have h0 : yIntTensor (0, 0) = 0 := by decide
+    rw [yTensor, h0, complexOfInt_zero]
   have hxy : xyTensor (0, 0) = 0 := by
-    have h0 : xyIntTensor 0 0 = 0 := by decide
-    rw [xyTensor, Function.uncurry_apply_pair, h0, complexOfInt_zero]
+    have h0 : xyIntTensor (0, 0) = 0 := by decide
+    rw [xyTensor, h0, complexOfInt_zero]
   rw [mpo_condensationTensor]
   simp only [Matrix.add_apply, mpo_apply, mpoMatrixEntry]
   rw [evalWord_ofFn, evalWord_ofFn, evalWord_ofFn, evalWord_ofFn]
@@ -296,16 +275,6 @@ def symTensor : (g : Fin 4) → MPOTensor 4 (bondDim g)
   | 2 => xTensor
   | 3 => xyTensor
 
-/-- The four symmetry tensors over the pair alphabet, indexed by the group elements. -/
-def symMPS : (g : Fin 4) → MPSTensor 16 (bondDim g)
-  | 0 => eMPS
-  | 1 => yMPS
-  | 2 => xMPS
-  | 3 => xyMPS
-
-theorem symMPS_eq_toMPSTensor (g : Fin 4) : symMPS g = (symTensor g).toMPSTensor := by
-  fin_cases g <;> rfl
-
 /-- The group law of `ℤ/2 × ℤ/2` on the site labels: the bitwise sum. -/
 def gmul : Fin 4 → Fin 4 → Fin 4
   | 0, h => h
@@ -334,7 +303,7 @@ theorem fusionSign_ne_zero (g h : Fin 4) : fusionSign g h ≠ 0 := by
   fin_cases g <;> fin_cases h <;> simp [fusionSign]
 
 /-- Every symmetry tensor is normal. -/
-theorem symMPS_isNormal (g : Fin 4) : Kraus.IsNormal (symMPS g) := by
+theorem symMPS_isNormal (g : Fin 4) : Kraus.IsNormal (symTensor g) := by
   fin_cases g
   exacts [eMPS_isNormal, yMPS_isNormal, xMPS_isNormal, xyMPS_isNormal]
 
@@ -356,10 +325,9 @@ theorem mpo_condensationTensor_eq_sum (L : ℕ) :
     mpo eTensor L + mpo yTensor L + mpo xTensor L + mpo xyTensor L
   abel
 
-/-- The stacked tensor `N ⊗ N` of the condensation defect, of bond dimension thirty-six, over
-the pair alphabet. -/
-def condensationSquare : MPSTensor 16 36 :=
-  (mulTensor condensationTensor condensationTensor).toMPSTensor
+/-- The stacked tensor `N ⊗ N` of the condensation defect, of bond dimension thirty-six. -/
+def condensationSquare : MPOTensor 4 36 :=
+  mulTensor condensationTensor condensationTensor
 
 /-- The sixteen slots of the assembled datum: the pairs `(g, h)` of group elements. -/
 abbrev pairSlots : Finset (Fin 4 × Fin 4) := Finset.univ
@@ -369,8 +337,8 @@ def pairDim (p : Fin 4 × Fin 4) : ℕ := bondDim (gmul p.1 p.2)
 
 /-- The target of the pair `(g, h)`: the tensor of `U_{gh}` carried with the weight `λ(g,h)`
 (data file, Section 4). -/
-def pairTarget (p : Fin 4 × Fin 4) : MPSTensor 16 (pairDim p) :=
-  fusionSign p.1 p.2 • symMPS (gmul p.1 p.2)
+def pairTarget (p : Fin 4 × Fin 4) : MPOTensor 4 (pairDim p) :=
+  fusionSign p.1 p.2 • symTensor (gmul p.1 p.2)
 
 /-- Every target of the assembled datum is normal. -/
 theorem pairTarget_isNormal (p : Fin 4 × Fin 4) : Kraus.IsNormal (pairTarget p) :=
@@ -379,18 +347,20 @@ theorem pairTarget_isNormal (p : Fin 4 × Fin 4) : Kraus.IsNormal (pairTarget p)
 /-- **The word-trace identity of the stacked defect tensor** (data file, Section 4): the trace
 of every nonempty word of `N ⊗ N` is the sum over the sixteen pairs of `λ(g,h)^L` times the
 trace of the word of `M_{gh}`. -/
-theorem condensationSquare_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
+theorem condensationSquare_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord condensationSquare w) =
       ∑ p ∈ pairSlots, Matrix.trace (Kraus.evalWord (pairTarget p) w) := by
   have hL : 0 < w.length := List.length_pos_of_ne_nil hw
-  rw [condensationSquare, trace_evalWord_toMPSTensor, mpo_mulTensor,
+  rw [condensationSquare, trace_kraus_evalWord, mpo_mulTensor,
     mpo_condensationTensor_eq_sum, Finset.sum_mul_sum]
   simp only [Matrix.sum_apply]
   rw [show pairSlots = Finset.univ from rfl, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun g _ => Finset.sum_congr rfl fun h _ => ?_
-  have h1 := trace_evalWord_toMPSTensor (symTensor (gmul g h)) w
-  rw [← symMPS_eq_toMPSTensor] at h1
-  have h2 := trace_evalWord_smul (fusionSign g h) (symMPS (gmul g h)) w
+  have h1 := trace_kraus_evalWord (symTensor (gmul g h)) w
+  have h2 : Matrix.trace (Kraus.evalWord (fusionSign g h • symTensor (gmul g h)) w) =
+      fusionSign g h ^ w.length * Matrix.trace (Kraus.evalWord (symTensor (gmul g h)) w) := by
+    rw [show fusionSign g h • symTensor (gmul g h) = fun i => fusionSign g h • symTensor _ i
+      from rfl, Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   rw [mpo_symTensor_mul g h w.length hL, Matrix.smul_apply, smul_eq_mul]
   exact (congrArg (fun t => fusionSign g h ^ w.length * t) h1.symm).trans h2.symm
 
@@ -400,9 +370,24 @@ Theorem 7.7; data file, Section 4): `N ⊗ N` compresses onto the sixteen weight
 theorem exists_condensationSquare_compression :
     Nonempty (MultiBlockCompression condensationSquare pairSlots pairTarget) := by
   have hD : ∀ p : Fin 4 × Fin 4, 0 < pairDim p := by decide
-  exact exists_multiBlockCompression_of_isNormal pairSlots pairTarget
-    (fun p _ => pairTarget_isNormal p) (fun p _ => hD p) condensationSquare
-    condensationSquare_trace_evalWord
+  -- The compression theorem is stated on the letters `Fin (4 * 4)` (it runs through the word
+  -- algebra of `Fin d`); it is applied to the doubled-index views and the datum is read back.
+  obtain ⟨P⟩ := exists_multiBlockCompression_of_isNormal pairSlots
+    (fun p => (pairTarget p).toMPSTensor)
+    (fun p _ => (isNormal_toMPSTensor_iff _).2 (pairTarget_isNormal p)) (fun p _ => hD p)
+    condensationSquare.toMPSTensor (fun w hw => by
+      simp only [evalWord_toMPSTensor]
+      exact condensationSquare_trace_evalWord _ (by simpa using hw))
+  exact ⟨{ z := P.z, ord := P.ord, gauge := P.gauge
+           triangular := fun i => by
+             simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+               Equiv.symm_apply_apply] using P.triangular (finProdFinEquiv i)
+           matched := fun i s => by
+             simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+               Equiv.symm_apply_apply] using P.matched (finProdFinEquiv i) s
+           unmatched := fun i t => by
+             simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+               Equiv.symm_apply_apply] using P.unmatched (finProdFinEquiv i) t }⟩
 
 /-- **The number of zero slots of the assembled datum is twelve**: `36 = 4 (1 + 2 + 1 + 2) + 12`
 (data file, Section 4; P5 note, Theorem 7.7(vii)). -/
