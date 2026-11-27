@@ -126,31 +126,6 @@ theorem isInjective_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fi
     (Kraus.isNBlkInjective_one_of_isInjective hA)
     (Kraus.isNBlkInjective_one_of_isInjective hB)
 
-/-- A bijective relabelling of the physical alphabet does not change the homogeneous word
-spans. -/
-private theorem wordSpan_reindexPhysical_equiv {ι ι' : Type*} {n : ℕ} (e : ι' ≃ ι)
-    (A : MPTensor ι (Fin n)) (N : ℕ) :
-    Kraus.wordSpan (Kraus.reindexPhysical e A) N = Kraus.wordSpan A N := by
-  unfold Kraus.wordSpan
-  congr 1
-  ext X
-  constructor
-  · rintro ⟨σ, rfl⟩
-    exact ⟨fun i ↦ e (σ i), by
-      simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
-  · rintro ⟨σ, rfl⟩
-    exact ⟨fun i ↦ e.symm (σ i), by
-      simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
-
-/-- A full homogeneous word span at length `N` stays full at every positive multiple of `N`.
-The QICLean statement `Kraus.wordSpan_top_of_mul` is on a `Fin` alphabet; the alphabet is
-relabelled along `Fintype.equivFin`. -/
-private theorem wordSpan_top_of_mul {ι : Type*} [Fintype ι] {n : ℕ} (A : MPTensor ι (Fin n))
-    {N : ℕ} (h : Kraus.wordSpan A N = ⊤) (k : ℕ) (hk : 1 ≤ k) :
-    Kraus.wordSpan A (k * N) = ⊤ := by
-  rw [← wordSpan_reindexPhysical_equiv (Fintype.equivFin ι).symm] at h ⊢
-  exact Kraus.wordSpan_top_of_mul _ h k hk
-
 /-- Algebraic normality is preserved by independent tensor products.
 
 If `S_{N_A}(A)` and `S_{N_B}(B)` are full at positive lengths `N_A` and
@@ -171,12 +146,12 @@ theorem isNormal_tensorProduct [Fintype α] [Fintype β]
   refine ⟨NA * NB, Nat.mul_pos hNA hNB, ?_⟩
   have hAcommon : Kraus.IsNBlkInjective A (NA * NB) := by
     change Kraus.wordSpan A (NA * NB) = ⊤
-    have h := wordSpan_top_of_mul A hA NB
+    have h := Kraus.wordSpan_top_of_mul A hA NB
       (Nat.one_le_iff_ne_zero.mpr hNB.ne')
     simpa [Nat.mul_comm] using h
   have hBcommon : Kraus.IsNBlkInjective B (NA * NB) := by
     change Kraus.wordSpan B (NA * NB) = ⊤
-    exact wordSpan_top_of_mul B hB NA
+    exact Kraus.wordSpan_top_of_mul B hB NA
       (Nat.one_le_iff_ne_zero.mpr hNA.ne')
   exact isNBlkInjective_tensorProduct A B hAcommon hBcommon
 

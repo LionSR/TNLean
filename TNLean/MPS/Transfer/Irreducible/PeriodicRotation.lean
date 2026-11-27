@@ -54,16 +54,16 @@ theorem transferMap_rotatePhysical [DecidableEq α] (A : MPTensor α (Fin D)) (u
 
 /-- A common unitary rotation of the physical index leaves the rectangular
 mixed transfer map unchanged. -/
-theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) :
+theorem mixedMapLM_rotatePhysical [DecidableEq α] {D₁ D₂ : ℕ}
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
+    (u : Matrix α α ℂ) (hu : u * uᴴ = 1) :
     Kraus.mixedMapLM (rotatePhysical u A) (rotatePhysical u B) =
       Kraus.mixedMapLM A B := by
   ext X : 1
   simp only [Kraus.mixedMapLM_apply, rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU : ∀ j k : Fin d,
-      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+  have hU : ∀ j k : α,
+      ∑ i : α, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
     exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
@@ -73,8 +73,8 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
   apply Finset.sum_congr rfl
   intro j _
   rw [Finset.sum_comm]
-  have factor : ∀ k : Fin d,
-      ∑ i : Fin d, (u i j * starRingEnd ℂ (u i k)) •
+  have factor : ∀ k : α,
+      ∑ i : α, (u i j * starRingEnd ℂ (u i k)) •
           (A j * X * (B k)ᴴ) =
         (if k = j then (1 : ℂ) else 0) • (A j * X * (B k)ᴴ) := by
     intro k
@@ -82,9 +82,9 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
     convert congrArg (fun c : ℂ => c • (A j * X * (B k)ᴴ)) (hU k j) using 1
     simp [mul_comm]
   have hExpand :
-      (∑ k : Fin d, ∑ i : Fin d,
+      (∑ k : α, ∑ i : α,
         u i j • A j * X * starRingEnd ℂ (u i k) • (B k)ᴴ) =
-      ∑ k : Fin d, ∑ i : Fin d,
+      ∑ k : α, ∑ i : α,
         (u i j * starRingEnd ℂ (u i k)) • (A j * X * (B k)ᴴ) := by
     refine Finset.sum_congr₂ fun k _ i _ ↦ ?_
     ext a b
