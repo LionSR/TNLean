@@ -12,4 +12,5 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.NormalBlockInjectiveBlocking
 import TNLean.MPS.FundamentalTheorem.SectorBNT.NormalGauge
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PrimitiveBlockWordSpan
+import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPeriodicExpansion
 import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
