@@ -96,7 +96,7 @@ theorem approximatingMPVState_eq_state_treeMERA [NeZero D] (A : MPSTensor d D)
     (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ) (hu0 : ∀ p, u p (0, 0) = fixedPointPair σ p) :
     approximatingMPVState A σ (2 ^ (k + 1)) M = (treeMERA A hA k u hu).state M := by
   have hq : Kraus.IsInjective (blockTensor A (2 ^ (k + 1))) := by
-    have := blockTensor_isInjective_mul_of_blockTensor_isInjective A
+    have := block_isInjective_mul_of_block_isInjective A
       (pow_pos two_pos k) hA
     rwa [← pow_succ] at this
   rw [(inner_approximatingMPVState_mpvState A hq hσ htr M).1]

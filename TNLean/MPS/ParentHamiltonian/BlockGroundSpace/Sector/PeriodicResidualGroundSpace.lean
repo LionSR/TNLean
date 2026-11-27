@@ -204,7 +204,7 @@ theorem IsPeriodic.exists_stepOrbit_residualGroundSpaceDecomposition {m : ℕ}
   have hCoInt (a : Fin (m.gcd L)) (i : Fin (blockPhysDim d L)) :
       (V a)ᴴ * blockTensor A L i = B a i * (V a)ᴴ := by
     rw [hC, Matrix.mul_assoc, Matrix.mul_assoc, hV,
-      ← stepOrbitProjection_mul_blockTensor P A hshift, ← hV,
+      ← stepOrbitProjection_mul_block P A hshift, ← hV,
       ← Matrix.mul_assoc, ← Matrix.mul_assoc, hiso, Matrix.one_mul]
   have hResolution : (∑ a, V a * (V a)ᴴ) = 1 := by
     simp only [hV, sum_stepOrbitProjection, hsum]

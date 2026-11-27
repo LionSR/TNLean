@@ -40,7 +40,7 @@ theorem IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor
     apply hIrr
     refine ⟨Q j, hQproj j, stepOrbitProjection_ne_zero P hproj hsum hne p j, hj, ?_⟩
     intro i
-    rw [Matrix.mul_assoc, ← stepOrbitProjection_mul_blockTensor P A hshift p j i,
+    rw [Matrix.mul_assoc, ← stepOrbitProjection_mul_block P A hshift p j i,
       ← Matrix.mul_assoc, sub_mul, Matrix.one_mul, (hQproj j).2, sub_self, Matrix.zero_mul]
   have hsub : Subsingleton (Fin (m.gcd p)) := by
     constructor

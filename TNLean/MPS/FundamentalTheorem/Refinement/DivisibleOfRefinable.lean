@@ -154,7 +154,7 @@ theorem weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos (μ : Fin r → ℂ) (h�
   let e := (finSigmaFinEquiv (n := n)).symm
   have hflat := sameMPV₂_toTensorFromBlocks_refinement (fun k ↦ μ k ^ p)
     (fun k ↦ blockTensor (A k) p) n sd B hSameB
-  have hbase := sameMPV₂_blockTensor_toTensorFromBlocks μ A p
+  have hbase := sameMPV₂_block_toTensorFromBlocks μ A p
   have hPQ : SameMPV₂Pos
       (toTensorFromBlocks (fun j ↦ μ (e j).1 ^ p) (fun j ↦ B (e j).1 (e j).2))
       Q.toTensor := by
@@ -203,7 +203,7 @@ theorem exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos
   obtain ⟨r, dim, μ, B, period, hper, hμpos, _, hAB, hbound⟩ :=
     exists_periodic_blockDecomposition A
   have hμ (k : Fin r) : μ k ≠ 0 := (hμpos k).ne'
-  have hBlock := sameMPV₂Pos_blockTensor A (toTensorFromBlocks μ B) hAB p hp
+  have hBlock := sameMPV₂Pos_block A (toTensorFromBlocks μ B) hAB p hp
   obtain ⟨hw, hdim⟩ := weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos
     μ hμ B period hper hp Q periodQ hPerQ hNonRepQ
     (hBlock.symm.trans hSame) hQweight
@@ -330,7 +330,7 @@ theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
     have hPV : stepOrbitProjection P p a * V a = V a := by
       rw [← hrange, Matrix.mul_assoc, hiso, Matrix.mul_one]
     rw [hB, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hrange,
-      stepOrbitProjection_mul_blockTensor P A hshift, Matrix.mul_assoc, hPV]
+      stepOrbitProjection_mul_block P A hshift, Matrix.mul_assoc, hPV]
   obtain ⟨U, hco, hU, hinc, hconj⟩ :=
     exists_unitary_toTensorFromBlocks_of_resolution (blockTensor A p) B V
       (by simp only [hrange, sum_stepOrbitProjection, hsum]) hdim hinter
@@ -481,7 +481,7 @@ theorem exists_unitary_stepOrbit_decomposition_toTensorFromBlocks
   have hT (i : Fin (blockPhysDim d p)) :
       blockTensor (toTensorFromBlocks (fun _ ↦ 1) A) p i =
         toTensorFromBlocks (fun _ ↦ 1) (fun k ↦ blockTensor (A k) p) i := by
-    rw [blockTensor_toTensorFromBlocks_apply]
+    rw [block_toTensorFromBlocks_apply]
     simp only [one_pow]
   have hinter (s : Fin (∑ k, n k)) (i : Fin (blockPhysDim d p)) :
       blockTensor (toTensorFromBlocks (fun _ ↦ 1) A) p i * W s = W s * C s i := by
@@ -505,7 +505,7 @@ theorem exists_unitary_stepOrbit_decomposition_toTensorFromBlocks
     rw [← hYinc]
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Yᴴ Y, hY'Y, Matrix.one_mul, toTensorFromBlocks_mul_blockInclusion]
-  rw [hYW, blockTensor_toTensorFromBlocks_apply]
+  rw [hYW, block_toTensorFromBlocks_apply]
   simp only [one_pow]
   exact hblock (fun k ↦ blockTensor (A' k) p) c
     (fun k a i ↦ hblockV k a _ _ (hA'block k) i) s i
@@ -549,7 +549,7 @@ theorem exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks
         (by simpa only [Matrix.conjTranspose_conjTranspose] using hY'Y)
       intro i
       simpa only [Matrix.conjTranspose_conjTranspose] using hYconj i
-    exact hCY.symm.trans ((sameMPV₂Pos_blockTensor A _ hSameA p hp).symm.trans hSame)
+    exact hCY.symm.trans ((sameMPV₂Pos_block A _ hSameA p hp).symm.trans hSame)
   -- match the orbit blocks with the target up to roots of unity
   obtain ⟨c, W, hc, hWW, hW'W, hMatch⟩ :=
     exists_unitary_matching_of_periodic_block_families C (fun _ ↦ 1) (fun _ ↦ one_ne_zero)

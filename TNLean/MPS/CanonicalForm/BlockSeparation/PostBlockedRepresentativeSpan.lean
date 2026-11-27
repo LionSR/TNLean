@@ -288,7 +288,7 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     (L + 1) (by omega) hInjSucc
   have hActBlocked : FirstSiteActionAgree (P.blockTensor (L + 1)).toTensor
       (firstSiteActionOnBlock L Y) (firstSiteActionOnBlock L Z) :=
-    (hAct.blockTensor L).of_sameMPV (P.sameMPV₂_blockTensor_toTensor (L + 1))
+    (hAct.blockTensor L).of_sameMPV (P.sameMPV₂_block_toTensor (L + 1))
   have hEq := (P.blockTensor (L + 1)).insertedTensor_basis_eq_of_firstSiteActionAgree
     hSpan hActBlocked
   intro j

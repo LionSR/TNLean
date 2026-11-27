@@ -122,7 +122,7 @@ theorem approximatingMPVState_eq_registerState_treeMERA [NeZero D] (A : MPSTenso
       (treeMERA (blockTensor A s) (isInjective_blockTensor_two hs) k u hu).registerState M := by
   have hq : Kraus.IsInjective (blockTensor A (s * 2 ^ (k + 1))) := by
     rw [mul_comm]
-    exact blockTensor_isInjective_mul_of_blockTensor_isInjective A (pow_pos two_pos _) hs
+    exact block_isInjective_mul_of_block_isInjective A (pow_pos two_pos _) hs
   rw [(inner_approximatingMPVState_mpvState A hq hσ htr M).1]
   set 𝓜 := treeMERA (blockTensor A s) (isInjective_blockTensor_two hs) k u hu
   have htop : 𝓜.topPair = fixedPointPair σ := funext hu0

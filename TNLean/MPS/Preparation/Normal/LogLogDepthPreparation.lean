@@ -99,7 +99,7 @@ end Pairs
 private theorem isInjective_blockTensor_mul_two_pow {d D s : ℕ} {A : MPSTensor d D}
     (hA : Kraus.IsInjective (blockTensor A s)) (k : ℕ) :
     Kraus.IsInjective (blockTensor A (s * 2 ^ (k + 1))) := by
-  have := blockTensor_isInjective_mul_of_blockTensor_isInjective A
+  have := block_isInjective_mul_of_block_isInjective A
     (m := 2 ^ (k + 1)) (pow_pos two_pos _) hA
   rwa [mul_comm] at this
 

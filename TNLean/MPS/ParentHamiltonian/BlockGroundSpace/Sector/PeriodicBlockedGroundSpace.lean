@@ -126,7 +126,7 @@ theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
   have hInt (a : Fin (m.gcd p)) (i : Fin (blockPhysDim d p)) :
       blockTensor A p i * V a = V a * blocks a i := by
     simp only [hC, ← Matrix.mul_assoc, hV]
-    rw [stepOrbitProjection_mul_blockTensor P A hshift,
+    rw [stepOrbitProjection_mul_block P A hshift,
       ← hV, Matrix.mul_assoc, Matrix.mul_assoc, hiso, Matrix.mul_one]
   refine ⟨P, dim, blocks, V, hproj, hsum, hne, hshift, hdim, htotal, hcan,
     hiso, hV, hC, hInt, ?_, hperiod hp⟩

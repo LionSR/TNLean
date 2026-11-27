@@ -21,16 +21,16 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
 
 ## Main definitions
 
-* `MPTensor.CPSVCanonicalFormData.blockTensor`: literal canonical-form data
+* `MPTensor.CPSVCanonicalFormData.block`: literal canonical-form data
   block exactly.
-* `MPSTensor.CPSVCanonicalFormIIData.blockTensor`: blockwise canonical-form-II data block
+* `MPSTensor.CPSVCanonicalFormIIData.block`: blockwise canonical-form-II data block
   exactly.
 
 ## Main results
 
-* `MPTensor.IsNormalTensor.blockTensor`: positive blocking preserves normal
+* `MPTensor.IsNormalTensor.block`: positive blocking preserves normal
   tensors.
-* `MPTensor.IsCPSVCanonicalForm.blockTensor`: positive blocking preserves
+* `MPTensor.IsCPSVCanonicalForm.block`: positive blocking preserves
   literal CPSV canonical form.
 * `MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family`: one positive
   blocking length makes every member of a finite trace-preserving, primitive,

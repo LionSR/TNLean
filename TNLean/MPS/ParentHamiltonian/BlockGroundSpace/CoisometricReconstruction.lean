@@ -165,7 +165,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_re
       groundSpace_eq_of_coisometry_reconstruction blocked.ambient_coisometry
         blocked.coisometric blocked.reconstruct hL
     _ = ⨆ k : Fin data.r, groundSpace (Kraus.blockTensor (data.blocks k) p) L := by
-      simpa [blocked, CPSVCanonicalFormData.blockTensor] using
+      simpa [blocked, CPSVCanonicalFormData.block] using
         groundSpace_toTensorFromBlocks_eq_iSup
           blocked.weights blocked.blocks blocked.weights_ne_zero L
     _ = _ := hCopies

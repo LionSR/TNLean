@@ -332,12 +332,12 @@ theorem exists_commonBlock_primitive_sector_resolution_of_isPeriodic
     simp only [hSupport, Fintype.sum_sigma, hInner, sum_blockInclusion_mul_conjTranspose]
   have hGlobalInt (s) (i) :
       blockTensor (toTensorFromBlocks (fun _ => 1) A) L i * V s = V s * B s i := by
-    simp only [V, B, blockTensor_toTensorFromBlocks_apply, one_pow, ← Matrix.mul_assoc,
+    simp only [V, B, block_toTensorFromBlocks_apply, one_pow, ← Matrix.mul_assoc,
       toTensorFromBlocks_mul_blockInclusion, one_smul]
     rw [Matrix.mul_assoc, hInt, ← Matrix.mul_assoc]
   have hGlobalCoInt (s) (i) :
       (V s)ᴴ * blockTensor (toTensorFromBlocks (fun _ => 1) A) L i = B s i * (V s)ᴴ := by
-    simp only [V, B, Matrix.conjTranspose_mul, blockTensor_toTensorFromBlocks_apply,
+    simp only [V, B, Matrix.conjTranspose_mul, block_toTensorFromBlocks_apply,
       one_pow, Matrix.mul_assoc, blockInclusion_conjTranspose_mul_toTensorFromBlocks, one_smul]
     rw [← Matrix.mul_assoc, hCoInt, Matrix.mul_assoc]
   let Q : ((j : Fin r) × Fin (m j)) → ℕ →

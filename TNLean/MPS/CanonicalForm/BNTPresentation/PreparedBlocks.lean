@@ -586,7 +586,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
             (blockTensor (d := d) (n := Fin D) A p₀) L)
           (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
             (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L) :=
-      sameMPV₂Pos_blockTensor
+      sameMPV₂Pos_block
         (d := blockPhysDim d p₀)
         (blockTensor (d := d) (n := Fin D) A p₀)
         (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA)
@@ -600,7 +600,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
           (fun k => (μA k) ^ L)
           (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) :=
-      sameMPV₂_blockTensor_toTensorFromBlocks
+      sameMPV₂_block_toTensorFromBlocks
         (d := blockPhysDim d p₀) (dim := dimA) μA blocksA L
     -- (iii) combine the two on the iterated phys-dim alphabet:
     have hIter : SameMPV₂Pos
