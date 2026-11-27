@@ -18,8 +18,8 @@ state of `A`.  This is the tensor whose local decomposition is described by the 
 of Garre-Rubio--Lootens--Molnár, arXiv:2203.12563, equation `mpoMPSsten`, lines 1070--1090.
 
 The contraction convention is the one already used for the bond-one instance
-`MPOTensor.CZX.actedSector` in `TNLean/MPS/Examples/CZX/Gauging/CZXActionTensors.lean`, where the Kronecker
-factor of the state bond space is trivial.
+`MPOTensor.CZX.actedSector` in `TNLean/MPS/Examples/CZX/Gauging/CZXActionTensors.lean`, where
+the Kronecker factor of the state bond space is trivial.
 
 ## Main definitions
 
