@@ -261,8 +261,7 @@ lemma neighboringOperator_pos (k h : Fin 4) :
 /-- The candidate tensor satisfies saturation of the area law. -/
 lemma tensor_isSAL : tensor.IsSAL := by
   let _ : NeZero 2 := ⟨by omega⟩
-  exact factorization.isSAL_of_isSourceZCL
-    ((isInjective_toMPSTensor_iff tensor).2 tensor_isInjective)
+  exact factorization.isSAL_of_isSourceZCL tensor_isInjective
     neighboringOperator_pos tensor_isSourceZCL
 
 end MPOTensor.NonCartesianActiveSectorCandidate
