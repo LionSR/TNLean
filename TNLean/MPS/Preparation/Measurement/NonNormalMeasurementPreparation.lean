@@ -70,6 +70,8 @@ multiplicity `m_j ≥ 2`. Documented in `docs/paper-gaps/mswc24_repeated_block_c
   Material, eqs. (S2)–(S7) and Lemma 1'(ii).
 -/
 
+open MPTensor
+
 open Matrix MPSTensor
 
 section MeasurementPreparation

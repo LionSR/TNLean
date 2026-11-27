@@ -27,6 +27,8 @@ All coefficient identities concern the original unblocked tensors.
   and the multiplicity equations at lines 564--568.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

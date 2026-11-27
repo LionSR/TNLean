@@ -248,10 +248,10 @@ Source: arXiv:2502.20257, `eq:fusion_2`, `main.tex` lines 1458--1498
 (all-word identity); `eq:Fgg`, lines 2000--2037, specialized by the CZX
 display in lines 4671--4689 (caps). -/
 theorem fusion_isReduction :
-    MPSTensor.IsReduction
+    MPTensor.IsReduction
       (MPOTensor.mulTensor tensor tensor).toMPSTensor
       (identityMPUTensor 4).toMPSTensor fusionV fusionW :=
-  MPSTensor.IsReduction.of_local_compression fusionV_mul_fusionW
+  MPTensor.IsReduction.of_local_compression fusionV_mul_fusionW
     fusion_letter_compression fusion_projection_insertion
 
 set_option maxHeartbeats 2000000 in

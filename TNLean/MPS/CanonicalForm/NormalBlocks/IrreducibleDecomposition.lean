@@ -120,6 +120,8 @@ completely positive maps (Wolf Chapter 6), formalized in
 The complementary transfer-map gap connection to peripheral primitivity is supplied by
 `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral` (Wolf Proposition 6.8).
 -/
+
+open MPTensor
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 

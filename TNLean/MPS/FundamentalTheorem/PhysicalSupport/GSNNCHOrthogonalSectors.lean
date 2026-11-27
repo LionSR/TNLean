@@ -270,7 +270,7 @@ Proposition `prop3to4`, lines 1786--1796.  See
 theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (s : Fin S.basisCount) (q q' : Fin (S.copies s)),
       S.weight s q = S.weight s q')
     (F : OrthogonalCommutingSectorFamily

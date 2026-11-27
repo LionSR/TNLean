@@ -68,6 +68,8 @@ overlap estimate, not a claim that the optimal physical circuit depth has been h
   The prescribed slope is a refinement using the quadratic overlap estimate.
 -/
 
+open MPTensor
+
 section
 
 open Matrix MPSTensor

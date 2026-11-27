@@ -31,6 +31,8 @@ This module establishes algebraic representative support, independently of
 infinite-volume state classification.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder
 namespace MPSTensor
 variable {d DA DB : ℕ}
@@ -38,7 +40,7 @@ variable {d DA DB : ℕ}
 /-- Gauge and nonzero phase rescaling preserve the open-boundary MPS space
 at every length. Source: arXiv:1606.00608, Theorem thm1, gauge relation;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem GaugePhaseEquiv.groundSpaceES_eq {A B : MPSTensor d DA}
+theorem _root_.MPTensor.GaugePhaseEquiv.groundSpaceES_eq {A B : MPSTensor d DA}
     (h : GaugePhaseEquiv A B) (N : ℕ) : groundSpaceES A N = groundSpaceES B N := by
   obtain ⟨X, ζ, hζ, hX⟩ := h
   let C : MPSTensor d DA := fun i =>

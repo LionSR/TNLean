@@ -24,6 +24,8 @@ lines 2442--2531; DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
+open MPTensor
+
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
 open Kraus (blockPhysDim)
 namespace MPSTensor

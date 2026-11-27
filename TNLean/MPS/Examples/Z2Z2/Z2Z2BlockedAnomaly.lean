@@ -37,6 +37,8 @@ fusion choice, and `KleinCocycleCompleteness` identifies the class.
 * `raw_odd_square_ne_identity`: the retained obstruction on raw odd rings.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix Kronecker

@@ -44,6 +44,8 @@ the parent formula equals the number of loops.
   Hamiltonians*, J. Phys. A 45 (2012) 025306, Section IV, equations (7)--(13).
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor

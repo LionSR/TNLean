@@ -45,6 +45,8 @@ It also contains the following results.
   finite-volume gaplessness of the actual uncle Hamiltonian.
 -/
 
+open MPTensor
+
 section UncleNormGrowth
 
 section

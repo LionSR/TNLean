@@ -71,6 +71,8 @@ correlation lengths of the mixed transfer maps, in place of the block form (S5) 
   arXiv:2103.13367, Supplemental Material, eqs. `final_eq` to `finished`.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
 open Kraus (blockTensor)

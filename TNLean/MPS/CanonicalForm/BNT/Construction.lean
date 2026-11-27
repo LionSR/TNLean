@@ -48,6 +48,8 @@ decomposition. That comparison is carried out for sector decompositions, where
 the sums `Σ_q μ_{j,q}^N` and their multiplicities remain visible.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter
 
@@ -121,7 +123,7 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
   have hA_self_cast :
       Tendsto
         (fun N =>
-          mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) (A j))
+          mpvOverlap (α := Fin d) (cast (congr_arg (MPSTensor d) hdim) (A j))
             (cast (congr_arg (MPSTensor d) hdim) (A j)) N)
         atTop (nhds (1 : ℂ)) := by
     refine (hOverlap.overlap_tendsto_one j).congr ?_
@@ -161,9 +163,9 @@ lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSelf : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hOff : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N) := by
   have hOrtho := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hSelf hOff
@@ -188,7 +190,7 @@ theorem cross_overlap_tendsto_zero_of_separated_bnt_data
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
   · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := A j) (B := A k)
@@ -244,7 +246,7 @@ theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
   · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := A j) (B := A k)

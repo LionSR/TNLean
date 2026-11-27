@@ -18,13 +18,15 @@ eventually when the matrix-product vectors are eventually nonzero proportional.
 
 * `MPOTensor.normalizedMPO_eq_of_nonzeroProportionalMPV₂_at`
 * `MPOTensor.reducedBlockState_eq_of_nonzeroProportionalMPV₂_at`
-* `MPSTensor.EventuallyNonzeroProportionalMPV₂.eventually_normalizedMPO_eq`
-* `MPSTensor.EventuallyNonzeroProportionalMPV₂.eventually_reducedBlockState_eq`
+* `MPTensor.EventuallyNonzeroProportionalMPV₂.eventually_normalizedMPO_eq`
+* `MPTensor.EventuallyNonzeroProportionalMPV₂.eventually_reducedBlockState_eq`
 
 ## References
 
 * arXiv:1606.00608, Theorem `thm1`, lines 1167--1182.
 -/
+
+open MPTensor
 
 open scoped Matrix
 
@@ -43,7 +45,7 @@ transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
 theorem normalizedMPO_eq_of_nonzeroProportionalMPV₂_at
     (M : MPOTensor d D₁) (K : MPOTensor d D₂)
     (h : ∃ c : ℂ, c ≠ 0 ∧ ∀ ρ : Fin N → Fin (d * d),
-      MPSTensor.mpv M.toMPSTensor ρ = c * MPSTensor.mpv K.toMPSTensor ρ) :
+      MPTensor.mpv M.toMPSTensor ρ = c * MPTensor.mpv K.toMPSTensor ρ) :
     normalizedMPO M N = normalizedMPO K N := by
   obtain ⟨c, hc, hmpv⟩ := h
   have hmpo : mpo M N = c • mpo K N := by
@@ -62,7 +64,7 @@ transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
 theorem reducedBlockState_eq_of_nonzeroProportionalMPV₂_at
     (M : MPOTensor d D₁) (K : MPOTensor d D₂) (hL : L ≤ N)
     (h : ∃ c : ℂ, c ≠ 0 ∧ ∀ ρ : Fin N → Fin (d * d),
-      MPSTensor.mpv M.toMPSTensor ρ = c * MPSTensor.mpv K.toMPSTensor ρ) :
+      MPTensor.mpv M.toMPSTensor ρ = c * MPTensor.mpv K.toMPSTensor ρ) :
     reducedBlockState M N L hL = reducedBlockState K N L hL := by
   unfold reducedBlockState
   rw [normalizedMPO_eq_of_nonzeroProportionalMPV₂_at M K h]
@@ -76,7 +78,7 @@ identifies the normalized MPO matrices at every sufficiently large length.
 
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1167--1182; this
 transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
-theorem EventuallyNonzeroProportionalMPV₂.eventually_normalizedMPO_eq
+theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.eventually_normalizedMPO_eq
     {d D₁ D₂ : ℕ} {M : MPOTensor d D₁} {K : MPOTensor d D₂}
     (h : EventuallyNonzeroProportionalMPV₂ M.toMPSTensor K.toMPSTensor) :
     ∀ᶠ N in Filter.atTop, MPOTensor.normalizedMPO M N = MPOTensor.normalizedMPO K N :=
@@ -87,7 +89,7 @@ state once the total chain length is sufficiently large.
 
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1167--1182; this
 transport is used in Appendix C.2, Proposition `4to2`, lines 1571--1619. -/
-theorem EventuallyNonzeroProportionalMPV₂.eventually_reducedBlockState_eq
+theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.eventually_reducedBlockState_eq
     {d D₁ D₂ : ℕ} {M : MPOTensor d D₁} {K : MPOTensor d D₂}
     (h : EventuallyNonzeroProportionalMPV₂ M.toMPSTensor K.toMPSTensor)
     (L : ℕ) :

@@ -30,6 +30,8 @@ mixed transfer map because their sector-coordinate supports are disjoint.
   lines 1293--1300.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder Kronecker Matrix Matrix.Norms.Frobenius
 
 namespace Matrix

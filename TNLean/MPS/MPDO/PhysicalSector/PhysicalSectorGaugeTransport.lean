@@ -39,7 +39,7 @@ Background for the factorization: arXiv:1606.00608, Appendix C.2, equation
 transport; the present construction is the direct algebraic transport of its
 two virtual factors. -/
 noncomputable def ofGaugeEquiv (F : PhysicalSectorFactorization K)
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     PhysicalSectorFactorization L :=
   F.ofVirtualMatrices
     ((Classical.choose hGauge : GL (Fin D) ℂ) :
@@ -52,7 +52,7 @@ noncomputable def ofGaugeEquiv (F : PhysicalSectorFactorization K)
 inverse. -/
 theorem ofGaugeEquiv_eq_ofVirtualMatrices
     (F : PhysicalSectorFactorization K)
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     F.ofGaugeEquiv hGauge =
       F.ofVirtualMatrices
         ((Classical.choose hGauge : GL (Fin D) ℂ) :
@@ -65,7 +65,7 @@ theorem ofGaugeEquiv_eq_ofVirtualMatrices
 /-- Virtual-gauge transport leaves every neighboring operator unchanged. -/
 @[simp] theorem ofGaugeEquiv_neighboringOperator
     (F : PhysicalSectorFactorization K)
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor)
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor)
     (k h : Fin F.sectorCount) :
     (F.ofGaugeEquiv hGauge).neighboringOperator k h =
       F.neighboringOperator k h := by
@@ -96,7 +96,7 @@ theorem ofGaugeEquiv_eq_ofVirtualMatrices
 transport. -/
 theorem ofGaugeEquiv_neighboringOperator_posSemidef
     (F : PhysicalSectorFactorization K)
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor)
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     ∀ k h,
       ((F.ofGaugeEquiv hGauge).neighboringOperator k h).PosSemidef := by
@@ -115,7 +115,7 @@ stated in that source. -/
 noncomputable def NeighboringTraceFactorization.ofGaugeEquiv
     {F : PhysicalSectorFactorization K}
     (H : NeighboringTraceFactorization F)
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     NeighboringTraceFactorization (F.ofGaugeEquiv hGauge) where
   neighboringOperator_pos :=
     F.ofGaugeEquiv_neighboringOperator_posSemidef hGauge H.neighboringOperator_pos
@@ -136,7 +136,7 @@ Section 2.3, lines 187--195, applied to the data of Theorem 4.9(iv) and
 Appendix C.2, lines 864--889 and 1381--1450; the source does not state this
 equivalence. -/
 theorem exists_neighboringTraceFactorization_iff_of_gaugeEquiv
-    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     (∃ F : PhysicalSectorFactorization K,
         Nonempty F.NeighboringTraceFactorization) ↔
       ∃ F : PhysicalSectorFactorization L,

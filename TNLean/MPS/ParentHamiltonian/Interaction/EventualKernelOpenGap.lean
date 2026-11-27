@@ -35,6 +35,8 @@ has its source scope within that family. See
 `docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex`.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder MatrixOrder
 open ManyBody.Interaction (chainTranslates)
 

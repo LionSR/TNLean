@@ -54,6 +54,8 @@ clause of the blueprint lemma, that both vectors are fixed by the vacuum operato
   operator algebras*
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix BigOperators

@@ -58,6 +58,8 @@ only \(m\le D^2\).
   periodic vector at lengths not divisible by the period.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
@@ -662,9 +664,9 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
 the original tensor at length `N * L`. -/
 theorem mpvOverlap_blockTensor_self_eq
     [NeZero D] (A : MPSTensor d D) (L N : ℕ) :
-    mpvOverlap (d := blockPhysDim d L) (blockTensor (d := d) (n := Fin D) A L)
+    mpvOverlap (α := Fin (blockPhysDim d L)) (blockTensor (d := d) (n := Fin D) A L)
         (blockTensor (d := d) (n := Fin D) A L) N =
-      mpvOverlap (d := d) A A (N * L) := by
+      mpvOverlap (α := Fin d) A A (N * L) := by
   rw [← trace_mixedMapLM_pow_eq_mpvOverlap
       (A := blockTensor (d := d) (n := Fin D) A L)
       (B := blockTensor (d := d) (n := Fin D) A L) N]

@@ -65,6 +65,8 @@ with the singlet attached to its two spin levels does. Documented in
   states: Concepts, symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Kronecker
 open Matrix Finset
 

@@ -43,6 +43,8 @@ seed is only an intermediate isometry; no product-state preparation cost is assi
   "Long-range MPS using measurements", and discussion and outlook.
 -/
 
+open MPTensor
+
 section SectorEncoderRates
 
 section

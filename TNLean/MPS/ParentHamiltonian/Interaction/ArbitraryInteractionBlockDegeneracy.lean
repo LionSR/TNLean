@@ -59,6 +59,8 @@ lines 1407–1422 and its standing hypotheses at lines 1314–1330 of
 `Papers/quant-ph_0608197/MPSarchive.tex`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators

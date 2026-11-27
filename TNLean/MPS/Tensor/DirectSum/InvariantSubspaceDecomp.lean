@@ -22,7 +22,7 @@ import QICLean.Channel.Peripheral.Irreducible.CornerRestriction
 # Projection-triangular trace bridge
 
 This file connects the generic projection-triangular word-trace theorem to
-`MPSTensor.SameMPV`.
+`MPTensor.SameMPV`.
 
 ## Basic lemmas for invariant subspace decompositions
 
@@ -77,6 +77,8 @@ The formal statements:
   (both block dimensions strictly smaller than `D`), which is the key ingredient for
   proving termination of the canonical-form recursion
 -/
+
+open MPTensor
 
 section
 
@@ -223,7 +225,7 @@ theorem sameMPV_conj_unitary (A : MPSTensor d D) (U : ↥(Matrix.unitaryGroup (F
   classical
   intro N σ
   -- Expand the MPV coefficient.
-  simp only [MPSTensor.mpv, MPSTensor.coeff]
+  simp only [MPTensor.mpv, MPTensor.coeff]
   set w : List (Fin d) := List.ofFn σ
   -- Unitary identities.
   have h_star_mul : (star (U : Matrix (Fin D) (Fin D) ℂ)) * (U : Matrix _ _ ℂ) = 1 := by
@@ -491,7 +493,7 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
   have hTrace_diagPart :
       mpv (Kraus.diagPart (d := d) (D := D) Aconj Pdiag) σ = mpv A₁ σ + mpv A₂ σ := by
     -- Expand mpv and use the trace computation above.
-    simp only [MPSTensor.mpv, MPSTensor.coeff]
+    simp only [MPTensor.mpv, MPTensor.coeff]
     have htr_blocks :
         Matrix.trace (Kraus.evalWord (fun i => Matrix.reindex eST eST
             ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i)) w)

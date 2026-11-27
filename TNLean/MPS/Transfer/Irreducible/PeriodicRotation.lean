@@ -28,6 +28,8 @@ The symmetry corollary of arXiv:1708.00029, Section 4.2, lines 834--845, is
 `MPS/Periodic/Symmetry/PhysicalSymmetry.lean`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

@@ -28,6 +28,8 @@ claimed at source line 1157. The deviation is documented in
 `docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 open SymmetryParity ConjugateProjectiveRepresentation
 

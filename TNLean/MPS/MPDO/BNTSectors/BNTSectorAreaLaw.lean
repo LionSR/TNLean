@@ -71,7 +71,7 @@ normalized absorbed BNT sectors.
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1770. -/
 theorem normalizedMPO_eq_sum_bntSectorProbability_smul
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N : ℕ} (hN : 0 < N)
     (hMtrace : 0 < Matrix.trace (mpo M N))
@@ -92,7 +92,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `entropiesj`,
 lines 1760--1770. -/
 theorem reducedBlockState_eq_sum_bntSectorProbability_smul
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N L : ℕ} (hN : 0 < N)
     (_hLpos : 0 < L) (hL : L ≤ N)
@@ -116,7 +116,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `entropiesj`,
 lines 1760--1770. -/
 theorem blockEntropy_eq_sum_bntSectorProbability
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -163,7 +163,7 @@ absorbed BNT sector.  The four regions have lengths
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780. -/
 theorem blockEntropy_add_blockEntropy_eq_bntSector
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -253,7 +253,7 @@ normalizations are available.
 Source: arXiv:1606.00608, Appendix C.2, lines 1753--1781. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -314,7 +314,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -382,11 +382,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
           physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
         physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
   subst D
-  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
     simpa using hEq i
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
     fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
   have hSourceZCL : IsSourceZCL M :=
     hSAL.isSourceZCL_of_physTraceTransfer_sq hZCL_sq

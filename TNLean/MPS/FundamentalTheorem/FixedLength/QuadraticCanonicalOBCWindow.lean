@@ -27,6 +27,8 @@ MPSarchive.tex lines 431--458, and the first clause of Theorem 8,
 lines 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation OBCChainTensor
 open scoped BigOperators ComplexOrder
 

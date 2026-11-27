@@ -23,6 +23,8 @@ gap are proved in the single-block, one-site injective case. The several-block
 case is documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix ScalarCohomology
 
 namespace MPSTensor

@@ -45,6 +45,8 @@ This gives the **decomposition property**: for any `X ∈ M_D(ℂ)`, there exist
 * [arXiv:1804.04964](https://arxiv.org/abs/1804.04964)
 -/
 
+open MPTensor
+
 section OneSidedInverse
 
 open scoped Matrix BigOperators

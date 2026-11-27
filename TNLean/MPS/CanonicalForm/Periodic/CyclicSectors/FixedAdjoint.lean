@@ -40,6 +40,8 @@ projections fixed by the adjoint transfer map.
 * [Wolf, *Quantum Channels & Operations*, Chapter 6]
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 section Basic

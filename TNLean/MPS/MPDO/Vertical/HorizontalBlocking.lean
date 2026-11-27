@@ -68,7 +68,7 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
       Kraus.blockTensor S.toTensor 2 (e i) *
         (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)
-  exact MPSTensor.evalWord_gauge X hGauge
+  exact MPTensor.evalWord_gauge X hGauge
     (Kraus.wordOfBlock (d * d) 2 (e i))
 
 end MPOTensor

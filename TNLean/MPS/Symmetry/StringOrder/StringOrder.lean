@@ -51,6 +51,8 @@ string-order universality theorems that use them.
   arXiv:1010.3732, Section II.F — SPT classification (not formalized here)
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus ScalarCohomology
 
 namespace MPSTensor

@@ -53,6 +53,8 @@ It also contains the following results.
   compactness of unital tensors and stationary densities.
 -/
 
+open MPTensor
+
 section CompactSupportedSequenceClass
 
 /-!

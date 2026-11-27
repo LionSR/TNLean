@@ -33,6 +33,8 @@ This file proves that reduction and records what it leaves unchanged.
   rescaling.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators InnerProductSpace ComplexOrder ComplexConjugate
 
 namespace MPSTensor

@@ -23,6 +23,8 @@ MPO rank is one, whereas `periodicTransitionCount 0 = 2`.
   Appendix D, lines 2116--2176.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Matrix Finset
 

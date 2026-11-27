@@ -29,6 +29,8 @@ blocks or exact preparation. Zero correlation length remains outside that constr
 see `docs/paper-gaps/mswc24_polynomial_accuracy_uniform_blocks.tex`.
 -/
 
+open MPTensor
+
 private theorem mul_exp_le_polynomial (a : ℝ) {ξ η : ℝ} (hξ : 0 < ξ) {q M : ℕ}
     (hN : 2 ≤ M * q)
     (hblock : ξ * (1 + η) * Real.log (M * q) ≤ a * q) :

@@ -91,6 +91,8 @@ Documented in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
   arXiv:2307.01696, Supplemental Material, Lemma 1'(ii) (`eq:fid_err_gen_non_normal`).
 -/
 
+open MPTensor
+
 section
 
 open scoped BigOperators Matrix ComplexOrder Kronecker

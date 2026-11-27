@@ -78,6 +78,8 @@ point of the P6 numerics. The exact data are recorded in
 the source.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 namespace IsingTwist

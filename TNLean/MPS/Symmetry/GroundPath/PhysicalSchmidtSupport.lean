@@ -19,6 +19,8 @@ lines 2653–2717. They do not identify a single-bond canonical support or
 derive continuous canonical data from a physical gap.
 -/
 
+open MPTensor
+
 open scoped Matrix Topology
 
 namespace MPSTensor

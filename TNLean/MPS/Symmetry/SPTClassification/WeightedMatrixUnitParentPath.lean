@@ -26,6 +26,8 @@ on-site action with trivial scalar character; see
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor

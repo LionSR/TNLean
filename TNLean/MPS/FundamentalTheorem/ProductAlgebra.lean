@@ -48,6 +48,8 @@ it is implemented by unitary conjugation.
 * [Wolf--Perez-Garcia 2010] arXiv:1005.4545, Theorem 8
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators

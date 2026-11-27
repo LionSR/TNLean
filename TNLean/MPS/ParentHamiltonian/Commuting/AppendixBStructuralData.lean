@@ -27,6 +27,8 @@ equality of its physical image with \(G_2(\Lambda U)\), and the orthogonal suppo
 projector are constructed in `TNLean.MPS.RFP.AppendixBTwoSiteBasicSupport`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

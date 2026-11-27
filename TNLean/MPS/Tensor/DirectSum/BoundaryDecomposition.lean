@@ -20,6 +20,8 @@ corresponding covariance under an invertible virtual gauge.
   Appendix C.2, lines 1646--1665 and 1810--1825.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 noncomputable section

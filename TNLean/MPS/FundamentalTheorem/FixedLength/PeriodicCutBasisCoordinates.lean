@@ -19,6 +19,8 @@ Source: PGVWC07, arXiv:quant-ph/0608197, MPSarchive.tex lines 921--931,
 1080--1086 and 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation
 open scoped BigOperators Kronecker
 

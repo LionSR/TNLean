@@ -20,6 +20,8 @@ The quadratic contribution remains separate from equation (6.5) until the final
 theorem in this module, where the two coefficients are added without factoring.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder Matrix
 
 namespace MPSTensor

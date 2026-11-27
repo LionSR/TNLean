@@ -23,6 +23,8 @@ lines 1278–1288. The numbered source trial has separations 2N−1 in B
 and 2N in A after joining the exterior intervals.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix BigOperators InnerProductSpace

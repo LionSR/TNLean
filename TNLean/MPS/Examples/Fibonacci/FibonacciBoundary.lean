@@ -41,6 +41,8 @@ print; documented in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenanc
   product states*
 -/
 
+open MPTensor
+
 open scoped goldenRatio Matrix
 
 open MPSTensor MPOTensor

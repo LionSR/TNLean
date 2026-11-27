@@ -71,7 +71,7 @@ the simplicity definition.
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and the normal-tensor gauge theorem,
 lines 1080--1117. -/
 theorem isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv
-    {A B : MPSTensor (d * d) D} (h : MPSTensor.GaugePhaseEquiv A B)
+    {A B : MPSTensor (d * d) D} (h : MPTensor.GaugePhaseEquiv A B)
     (hNil : IsNilpotent (doubledPhysTraceTransfer d A)) :
     IsNilpotent (doubledPhysTraceTransfer d B) := by
   classical
@@ -107,7 +107,7 @@ equivalence.
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and the normal-tensor gauge theorem,
 lines 1080--1117. -/
 theorem isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv
-    {A B : MPSTensor (d * d) D} (h : MPSTensor.GaugePhaseEquiv A B) :
+    {A B : MPSTensor (d * d) D} (h : MPTensor.GaugePhaseEquiv A B) :
     IsNilpotent (doubledPhysTraceTransfer d A) ↔
       IsNilpotent (doubledPhysTraceTransfer d B) :=
   ⟨isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv h,

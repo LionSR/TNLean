@@ -30,7 +30,7 @@ the phase-decorated shift representation of `ℤ₃`.
 * Two-letter intertwining identities of two fusion trees with the target tensor,
   together with a one-letter relation, give the dressed identity of the anomaly
   three-cochain on every nonempty word
-  (`MPSTensor.IsDressedProportional.of_forall_mul_mul`). For explicit tensors
+  (`MPTensor.IsDressedProportional.of_forall_mul_mul`). For explicit tensors
   these finitely many identities can be checked by `decide`, over `ℤ` for integer
   tensors (`MPSTensor.isDressedProportional_complexOfInt`,
   `MPSTensor.isDressedProportional_complexOfInt_of_mem`).
@@ -42,6 +42,8 @@ the phase-decorated shift representation of `ℤ₃`.
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535, for the dressed identity defining the three-cochain.
 -/
+
+open MPTensor
 
 open scoped Matrix Kronecker
 
@@ -82,7 +84,8 @@ theorem mul_evalWord_eq_smul_of_forall_mul_mul {T : MPSTensor d D} {A : MPSTenso
             _ = _ := by simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
 
 /-- The dressed-proportionality form of `mul_evalWord_eq_smul_of_forall_mul_mul`. -/
-theorem IsDressedProportional.of_forall_mul_mul {T : MPSTensor d D} {A : MPSTensor d m}
+theorem _root_.MPTensor.IsDressedProportional.of_forall_mul_mul {T : MPSTensor d D}
+    {A : MPSTensor d m}
     {L R : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
     (hL : ∀ a b, L * T a * T b = A a * L * T b) (hR : ∀ a b, R * T a * T b = A a * R * T b)
     (h1 : ∀ a, L * T a = z • (R * T a)) : IsDressedProportional T L R z :=
@@ -361,7 +364,7 @@ theorem FusionData.omega_eq_one_of_leftV_eq_rightV {F : GroupFamily G d} {fd : F
   have h1 : fd.IsAssociator g h k 1 := by
     unfold FusionData.IsAssociator
     rw [hLR]
-    exact MPSTensor.IsDressedProportional.refl _ _
+    exact MPTensor.IsDressedProportional.refl _ _
   exact Units.ext (by rw [← FusionData.eq_omega_of_isAssociator hF h1, Units.val_one])
 
 /-- **The anomaly three-cochain of the bond-one fusion tensors is trivial**: all fusion trees

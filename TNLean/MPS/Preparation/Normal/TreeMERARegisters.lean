@@ -59,6 +59,8 @@ positive length with nonzero periodic state, with a physical leaf bound fixed be
   and "Connection to MERA".
 -/
 
+open MPTensor
+
 open Matrix MPSTensor
 open scoped ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim blockTensor)

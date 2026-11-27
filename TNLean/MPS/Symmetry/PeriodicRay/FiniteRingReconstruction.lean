@@ -29,6 +29,8 @@ realization through a changing minimal bond dimension remains a separate
 problem; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

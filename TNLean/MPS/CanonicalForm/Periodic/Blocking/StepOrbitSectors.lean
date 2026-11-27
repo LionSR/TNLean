@@ -30,6 +30,8 @@ compressed blocks are separate from these algebraic identities.
   States: Theory and Applications*, arXiv:1708.00029, Lemma `lem:blocking-arbitrary`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Fin.NatCast
 open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)

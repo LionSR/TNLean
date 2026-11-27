@@ -37,6 +37,8 @@ The correct peripheral roots satisfy z^(m/gcd(m,p)) = 1; see
   States: Theory and Applications*, arXiv:1708.00029, Lemma 6.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Fin.NatCast
 open Kraus (blockPhysDim blockTensor)

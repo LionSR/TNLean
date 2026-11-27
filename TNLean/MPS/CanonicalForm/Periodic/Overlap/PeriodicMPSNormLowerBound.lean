@@ -41,6 +41,8 @@ positive ring nonzero. These are auxiliary transfer-spectrum statements; no
 implication from a physical Hamiltonian gap to their hypotheses is asserted.
 -/
 
+open MPTensor
+
 /-!
 # Uniform periodic tensor norm estimates from transfer spectra
 

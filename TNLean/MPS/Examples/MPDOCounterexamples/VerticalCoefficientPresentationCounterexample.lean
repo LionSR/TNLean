@@ -116,7 +116,7 @@ This project-derived identity uses the gauge relation of CPSV16, lines
 literal horizontal CPSV canonical form for `rightMPO`, as assumed in CPSV16,
 Proposition 4.13 and Theorem 4.14, lines 943--985. -/
 theorem leftMPO_gaugeEquiv_rightMPO :
-    MPSTensor.GaugeEquiv leftMPO.toMPSTensor rightMPO.toMPSTensor := by
+    MPTensor.GaugeEquiv leftMPO.toMPSTensor rightMPO.toMPSTensor := by
   refine ⟨horizontalGauge, fun _ ↦ ?_⟩
   change rightMatrix =
     (horizontalGauge : Matrix I I ℂ) * leftMatrix *
@@ -146,7 +146,7 @@ cross-presentation assertion.  It uses the gauge mechanism of CPSV16, lines
 187--195, and does not by itself identify the vertical normalizations appearing
 in Proposition 4.13 and Theorem 4.14(ii), lines 943--985. -/
 theorem leftMPO_sameMPV₂Pos_rightMPO :
-    MPSTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor := by
+    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor := by
   intro L hL σ
   have hσ : σ = fun _ ↦ (0 : Fin (1 * 1)) := by
     funext n
@@ -336,7 +336,7 @@ private theorem rightVerticalRepresentative_isNormalTensor :
 
 private theorem leftVerticalRepresentative_mpv_zero
     (L : ℕ) :
-    MPSTensor.mpv leftVerticalRepresentative
+    MPTensor.mpv leftVerticalRepresentative
       (fun _ : Fin L ↦ (0 : Fin (2 * 2))) = 1 := by
   rw [MPSTensor.mpv_const_eq_trace_pow]
   have hzero :
@@ -354,7 +354,7 @@ private theorem leftVerticalRepresentative_mpv_zero
 
 private theorem rightVerticalRepresentative_mpv_zero
     (L : ℕ) :
-    MPSTensor.mpv rightVerticalRepresentative
+    MPTensor.mpv rightVerticalRepresentative
       (fun _ : Fin L ↦ (0 : Fin (2 * 2))) = (4 / 5 : ℂ) ^ L := by
   rw [MPSTensor.mpv_const_eq_trace_pow]
   have hzero :
@@ -409,7 +409,7 @@ private theorem right_isCPSVBasis :
     refine ⟨fun _ ↦ (5 / 4 : ℂ) ^ L, ?_⟩
     intro σ
     rw [verticalTensor_rightMPO_eq]
-    change MPSTensor.mpv
+    change MPTensor.mpv
       (fun i ↦ (5 / 4 : ℂ) • rightVerticalRepresentative i) σ = _
     rw [MPSTensor.mpv_smul]
     simp
@@ -674,7 +674,7 @@ already give coefficients \(1\) and \(4/5\) at length one.  This project-derived
 counterexample refutes the extra assertion, not CPSV16,
 Proposition 4.13 or Theorem 4.14(ii), lines 943--985. -/
 theorem sameMPV₂Pos_and_no_relabelled_coefficient_equality :
-    MPSTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
+    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
       ¬ ∃ e : Fin rightClause.labelCount ≃ Fin leftClause.labelCount,
         ∀ L : ℕ, 0 < L → ∀ α β γ,
           rightClause.coeffs.coeff L α β γ =
@@ -696,7 +696,7 @@ left coefficients are constant and the right coefficients equal \((4/5)^L\).
 This project-derived counterexample refutes the extra assertion, not CPSV16,
 Proposition 4.13 or Theorem 4.14(ii), lines 943--985. -/
 theorem sameMPV₂Pos_and_lengthIndependent_mismatch :
-    MPSTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
+    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
       leftClause.coeffs.LengthIndependent ∧
         ¬ rightClause.coeffs.LengthIndependent :=
   ⟨leftMPO_sameMPV₂Pos_rightMPO, leftClause_lengthIndependent,

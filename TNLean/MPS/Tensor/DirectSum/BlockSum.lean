@@ -21,6 +21,8 @@ These identities do not assume orthogonality of physical sector states.
   equations (S2)–(S4), with one retained copy of each labelled tensor.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
 open Kraus (blockTensor)

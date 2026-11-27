@@ -28,6 +28,8 @@ The linear equation (6.5) estimate built from these coordinates remains separate
 from the later quadratic contribution to the projector defect.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder Matrix
 
 namespace MPSTensor

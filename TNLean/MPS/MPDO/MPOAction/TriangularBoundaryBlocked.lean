@@ -62,7 +62,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
     (e : Λ ≃ Fin g) (T : ∀ c, MPOTensor p (D c))
     (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c)
     (hne : ∀ a b : Λ, a ≠ b → ∀ h : D a = D b,
-      ¬ MPSTensor.GaugePhaseEquiv
+      ¬ MPTensor.GaugePhaseEquiv
         (cast (congrArg (MPSTensor (p * p)) h) (T a).toMPSTensor) (T b).toMPSTensor) :
     ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L).toMPSTensor) ∧
       ∃ K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c)))
@@ -103,29 +103,29 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
 
 private theorem gaugePhaseEquiv_of_operatorPhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hD : D₁ = D₂) {O : MPOTensor d D₁} {P : MPOTensor d D₂}
-    (h : MPSTensor.GaugePhaseEquiv
+    (h : MPTensor.GaugePhaseEquiv
       (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hD)
         (operatorPhysicalPadding O).toMPSTensor)
       (operatorPhysicalPadding P).toMPSTensor) :
-    MPSTensor.GaugePhaseEquiv
+    MPTensor.GaugePhaseEquiv
       (cast (congrArg (MPSTensor (d * d)) hD) O.toMPSTensor) P.toMPSTensor := by
   subst D₂
   exact gaugePhaseEquiv_of_operatorPhysicalPadding h
 
 private theorem gaugePhaseEquiv_of_statePhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hD : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : MPSTensor.GaugePhaseEquiv
+    (h : MPTensor.GaugePhaseEquiv
       (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hD)
         (statePhysicalPadding A).toMPSTensor)
       (statePhysicalPadding B).toMPSTensor) :
-    MPSTensor.GaugePhaseEquiv (cast (congrArg (MPSTensor d) hD) A) B := by
+    MPTensor.GaugePhaseEquiv (cast (congrArg (MPSTensor d) hD) A) B := by
   subst D₂
   exact gaugePhaseEquiv_of_statePhysicalPadding h
 
 private theorem not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hDim : D₁ = D₂) (O : MPOTensor d D₁) {A : MPSTensor d D₂}
     (hD : 0 < D₂) (hA : Kraus.IsInjective A) :
-    ¬ MPSTensor.GaugePhaseEquiv
+    ¬ MPTensor.GaugePhaseEquiv
       (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hDim)
         (operatorPhysicalPadding O).toMPSTensor)
       (statePhysicalPadding A).toMPSTensor := by
@@ -135,7 +135,7 @@ private theorem not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding
 private theorem not_gaugePhaseEquiv_statePhysicalPadding_operatorPhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hDim : D₁ = D₂) (A : MPSTensor d D₁) {O : MPOTensor d D₂}
     (hD : 0 < D₂) (hO : Kraus.IsInjective O.toMPSTensor) :
-    ¬ MPSTensor.GaugePhaseEquiv
+    ¬ MPTensor.GaugePhaseEquiv
       (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hDim)
         (statePhysicalPadding A).toMPSTensor)
       (operatorPhysicalPadding O).toMPSTensor := by
@@ -154,7 +154,7 @@ include hInjO hInjA hχ hD hneO hneA in
 private theorem triangularTensor_separated
     (a b : Fin r ⊕ Fin s) (hab : a ≠ b)
     (hDim : triangularBondDim χ D a = triangularBondDim χ D b) :
-    ¬ MPSTensor.GaugePhaseEquiv
+    ¬ MPTensor.GaugePhaseEquiv
       (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hDim)
         (triangularTensor O A a).toMPSTensor) (triangularTensor O A b).toMPSTensor := by
   cases a with

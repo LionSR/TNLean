@@ -24,6 +24,8 @@ vector identity, not the period or quantitative injectivity estimate
 needed for the review's general bond-dimension bound.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim decodeBlock wordOfBlock decodeBlockEquiv
   decodeBlock_decodeBlockEquiv_symm blockTensor flattenBlockedWord_cons evalWord_blockTensor)

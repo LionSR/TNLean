@@ -49,6 +49,8 @@ It also contains the following results.
   compression.
 -/
 
+open MPTensor
+
 section PointwiseInvariantCompression
 
 /-!

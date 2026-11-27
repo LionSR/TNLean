@@ -77,6 +77,8 @@ and its finite-family consequence, lines 919--924. The open-kernel threshold
 is PGVWC07, arXiv:quant-ph/0608197, Theorem 12, lines 1430--1454.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators

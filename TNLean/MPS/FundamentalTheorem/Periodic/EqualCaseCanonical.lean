@@ -22,6 +22,8 @@ It also contains the following results.
   theorems over the source's irreducible form.
 -/
 
+open MPTensor
+
 section EqualCaseCanonical
 
 open scoped Matrix BigOperators

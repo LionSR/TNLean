@@ -66,6 +66,8 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   arXiv:2103.13367, Supplemental Material, eq. (34) (the first-order overlap estimate).
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Matrix
 open Kraus (blockTensor)

@@ -42,6 +42,8 @@ It also contains the following results.
   convex decomposition of states with joint MPS support.
 -/
 
+open MPTensor
+
 section MultiblockQuasiLocalFace
 
 /-!

@@ -45,6 +45,8 @@ primitive simultaneously.
 * [arXiv:2011.12127, Section IV — canonical form construction]
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock wordOfBlock length_wordOfBlock
   blockTensor flattenBlockedWord evalWord_blockTensor length_flattenBlockedWord)
@@ -181,7 +183,7 @@ theorem sameMPV₂Pos_blockTensor
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
 /-- Eventual nonzero MPV proportionality is preserved by positive physical blocking. -/
-theorem EventuallyNonzeroProportionalMPV₂.blockTensor
+theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.blockTensor
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : EventuallyNonzeroProportionalMPV₂ A B) (p : ℕ) (hp : 0 < p) :
     EventuallyNonzeroProportionalMPV₂

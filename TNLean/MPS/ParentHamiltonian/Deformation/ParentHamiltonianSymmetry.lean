@@ -25,6 +25,8 @@ The commutation is stated for the matrix of the canonical parent projection
 the Hamiltonian of the parent interaction on the ring (`parentRingInteraction`).
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 open ManyBody

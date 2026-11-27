@@ -23,6 +23,8 @@ before the rho-weighted Hilbert-space estimate. It does not define the
 weighted inner product of equation (5.6) or any quantitative decay bound.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

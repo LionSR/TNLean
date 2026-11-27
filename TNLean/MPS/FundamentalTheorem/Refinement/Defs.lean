@@ -20,6 +20,8 @@ This module contains the \(p\)-divisibility and \(p\)-refinement definitions use
 arXiv:1708.00029, Theorem 4.1, lines 717--731.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockTensor)
 

@@ -17,6 +17,8 @@ entrywise multipliers. Its transfer map is not idempotent, so it has no
 physical blocking isometry and is not a renormalization fixed point.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 open Complex (invSqrtTwo invSqrtTwo_sq star_invSqrtTwo)

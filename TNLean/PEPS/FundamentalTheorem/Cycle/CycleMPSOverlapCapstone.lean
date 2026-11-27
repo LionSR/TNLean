@@ -47,6 +47,8 @@ the rigidity lemma `MPSTensor.proportional_of_evalWord_eq`.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open MPTensor
+
 open scoped Matrix
 open scoped Fin.NatCast
 
@@ -454,7 +456,7 @@ theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D)
     (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ Z : GL (Fin D) ℂ,
       ∀ w : List (Fin d), w.length = n →
         Kraus.evalWord B w =
@@ -477,8 +479,8 @@ theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
         rw [MPSChainTensor.coeff_eq_trace_arcEval]
       _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ)) := by
         rw [hA', MPSChainTensor.arcEval_const]
-      _ = MPSTensor.mpv A σ := by simp
-      _ = MPSTensor.mpv B σ := hAB σ
+      _ = MPTensor.mpv A σ := by simp
+      _ = MPTensor.mpv B σ := hAB σ
       _ = Matrix.trace (Kraus.evalWord B (List.ofFn σ)) := by simp
       _ = Matrix.trace (MPSChainTensor.arcEval B' 0 (List.ofFn σ)) := by
         rw [hB', MPSChainTensor.arcEval_const]
@@ -693,7 +695,7 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
     {n L d D : ℕ} (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D)
     (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
   have : NeZero n := ⟨by omega⟩
@@ -706,7 +708,7 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
   have hCw : ∀ w : List (Fin d), Kraus.evalWord C w =
       (Q : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B w *
         ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-    MPSTensor.evalWord_gauge Q (fun i => rfl)
+    MPTensor.evalWord_gauge Q (fun i => rfl)
   have hCA : ∀ w : List (Fin d), w.length = n →
       Kraus.evalWord C w = Kraus.evalWord A w := by
     intro w hwlen
@@ -748,7 +750,7 @@ lines 2256--2295 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
     (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) := by
   obtain ⟨Z₀, lam, hlamn, hZ₀⟩ :=

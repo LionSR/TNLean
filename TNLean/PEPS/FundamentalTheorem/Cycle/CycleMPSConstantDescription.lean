@@ -446,7 +446,7 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond
     (hA : A.IsInjective) (hTI : IsCycleShiftInvariantState A hn) :
     ∃ D : ℕ, 0 < D ∧ (∀ e, A.bondDim e = D) ∧
       ∃ B : MPSTensor d D, Kraus.IsInjective B ∧
-        ∀ sigma : Fin n → Fin d, stateCoeff A sigma = MPSTensor.mpv B sigma := by
+        ∀ sigma : Fin n → Fin d, stateCoeff A sigma = MPTensor.mpv B sigma := by
   let e₀ := cycleSuccEdge hn (0 : Fin n)
   let D := A.bondDim e₀
   have hD : 0 < D := hA.bondDim_pos e₀
@@ -468,9 +468,9 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond
     stateCoeff A sigma = MPSChainTensor.coeff C sigma :=
       A.stateCoeff_reindexMPSChain hn hDim' sigma
     _ = MPSChainTensor.coeff (fun _ : Fin n => B) sigma := hBC sigma
-    _ = MPSTensor.mpv B sigma := by
+    _ = MPTensor.mpv B sigma := by
       rw [MPSChainTensor.coeff_eq_trace_arcEval, MPSChainTensor.arcEval_const,
-        MPSTensor.mpv_eq, MPSTensor.coeff_eq]
+        MPTensor.mpv_eq, MPTensor.coeff_eq]
 
 end PEPS
 end TNLean

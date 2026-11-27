@@ -218,9 +218,9 @@ private theorem mulTensor_tensorA_tensorA (a : Fin (2 * 2)) :
 /-- **Fusion tensors of two copies of the diagonal tensor**: `⟨00|` and `|00⟩ + |11⟩` reduce
 the stacked square of `A` to the identity tensor. -/
 theorem tensorA_isReduction :
-    MPSTensor.IsReduction (mulTensor tensorA tensorA).toMPSTensor (idTensor 2).toMPSTensor
+    MPTensor.IsReduction (mulTensor tensorA tensorA).toMPSTensor (idTensor 2).toMPSTensor
       (complexOfInt aFusionVInt) (complexOfInt aFusionWInt) := by
-  refine MPSTensor.IsReduction.of_local_compression ?_ (fun i ↦ ?_) (fun i j ↦ ?_)
+  refine MPTensor.IsReduction.of_local_compression ?_ (fun i ↦ ?_) (fun i j ↦ ?_)
   · rw [← complexOfInt_mul, ← complexOfInt_one]
     congr 1
     decide

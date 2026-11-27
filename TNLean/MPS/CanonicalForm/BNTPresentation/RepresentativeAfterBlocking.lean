@@ -36,6 +36,8 @@ arXiv:1606.00608, lines 249--251.
 matrix product states, canonical form, blocking, normal tensor
 -/
 
+open MPTensor
+
 section RepresentativeAfterBlocking
 
 open scoped BigOperators

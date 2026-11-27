@@ -17,6 +17,8 @@ implication is proved in `Theorem41ForwardBlockForm`; the refuted legacy
 canonicalization premises are not retained.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockTensor)
 

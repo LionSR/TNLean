@@ -67,6 +67,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2,
 lines 933--947, and Section 6, lines 2593--2675.
 -/
 
+open MPTensor
+
 section
 
 open SpinChain Filter

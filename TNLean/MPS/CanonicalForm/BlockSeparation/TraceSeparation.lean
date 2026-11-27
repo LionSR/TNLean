@@ -67,6 +67,8 @@ The result is the finite-word transport used in the block-injectivity argument
 of arXiv:1606.00608, lines 318--344.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators

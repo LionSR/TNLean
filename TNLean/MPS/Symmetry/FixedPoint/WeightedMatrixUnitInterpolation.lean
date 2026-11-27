@@ -26,6 +26,8 @@ Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2, equation
 `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

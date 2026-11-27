@@ -61,11 +61,11 @@ private theorem normalizedFlattening_mpv_eq_of_mpo_eq_gt_one
     {d D₁ D₂ : ℕ} {U : MPOTensor d D₁} {V : MPOTensor d D₂}
     (hEq : ∀ N : ℕ, 1 < N → mpo U N = mpo V N) :
     ∀ N : ℕ, 1 < N → ∀ σ : Fin N → Fin (d * d),
-      MPSTensor.mpv U.normalizedFlattening σ =
-        MPSTensor.mpv V.normalizedFlattening σ := by
+      MPTensor.mpv U.normalizedFlattening σ =
+        MPTensor.mpv V.normalizedFlattening σ := by
   intro N hN σ
-  change MPSTensor.mpv (fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij) σ =
-    MPSTensor.mpv (fun ij => ((Real.sqrt d : ℂ)⁻¹) • V.toMPSTensor ij) σ
+  change MPTensor.mpv (fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij) σ =
+    MPTensor.mpv (fun ij => ((Real.sqrt d : ℂ)⁻¹) • V.toMPSTensor ij) σ
   rw [MPSTensor.mpv_smul, MPSTensor.mpv_smul]
   congr 1
   rw [MPOTensor.mpv_toMPSTensor, MPOTensor.mpv_toMPSTensor, hEq N hN]
@@ -77,12 +77,12 @@ private theorem normalizedFlattening_exists_phase_of_mpo_eq_gt_one
     (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V)
     (hEq : ∀ N : ℕ, 1 < N → mpo U N = mpo V N) :
     ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin (d * d),
-      MPSTensor.mpv U.normalizedFlattening σ =
-        a ^ N * MPSTensor.mpv V.normalizedFlattening σ := by
+      MPTensor.mpv U.normalizedFlattening σ =
+        a ^ N * MPTensor.mpv V.normalizedFlattening σ := by
   let : NeZero d := hU.neZero_phys
   let : NeZero D₁ := hU.neZero_bond
   let : NeZero D₂ := hV.neZero_bond
-  have hProp : MPSTensor.EventuallyNonzeroProportionalMPV₂
+  have hProp : MPTensor.EventuallyNonzeroProportionalMPV₂
       U.normalizedFlattening V.normalizedFlattening := by
     filter_upwards [Filter.eventually_gt_atTop 1] with N hN
     exact ⟨1, one_ne_zero, fun σ => by
@@ -94,15 +94,15 @@ private theorem normalizedFlattening_exists_phase_of_mpo_eq_gt_one
 private theorem normalizedFlattening_exists_mpv_ne_zero
     {d D : ℕ} {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) {N : ℕ} (hN : 1 < N) :
-    ∃ σ : Fin N → Fin (d * d), MPSTensor.mpv U.normalizedFlattening σ ≠ 0 := by
+    ∃ σ : Fin N → Fin (d * d), MPTensor.mpv U.normalizedFlattening σ ≠ 0 := by
   let : NeZero d := hU.neZero_phys
   let : NeZero D := hU.neZero_bond
   by_contra hzero
   push Not at hzero
-  have hOverlap : MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N = 1 := by
+  have hOverlap : MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N = 1 := by
     rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
     exact hU.isMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
-  simp only [MPSTensor.mpvOverlap, hzero, star_zero, mul_zero, Finset.sum_const_zero] at hOverlap
+  simp only [MPTensor.mpvOverlap, hzero, star_zero, mul_zero, Finset.sum_const_zero] at hOverlap
   exact zero_ne_one hOverlap
 
 /-- Equality beyond one site extends to every positive length for full-support
@@ -111,13 +111,13 @@ private theorem normalizedFlattening_sameMPV₂Pos_of_mpo_eq_gt_one
     {d D₁ D₂ : ℕ} {U : MPOTensor d D₁} {V : MPOTensor d D₂}
     (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V)
     (hEq : ∀ N : ℕ, 1 < N → mpo U N = mpo V N) :
-    MPSTensor.SameMPV₂Pos U.normalizedFlattening V.normalizedFlattening := by
+    MPTensor.SameMPV₂Pos U.normalizedFlattening V.normalizedFlattening := by
   obtain ⟨a, ha, hphase⟩ := normalizedFlattening_exists_phase_of_mpo_eq_gt_one hU hV hEq
   have hpow : ∀ N : ℕ, 1 < N → a ^ N = 1 := by
     intro N hN
     obtain ⟨σ, hσ⟩ := normalizedFlattening_exists_mpv_ne_zero hU hN
     have hEqσ := normalizedFlattening_mpv_eq_of_mpo_eq_gt_one hEq N hN σ
-    have hVσ : MPSTensor.mpv V.normalizedFlattening σ ≠ 0 := by
+    have hVσ : MPTensor.mpv V.normalizedFlattening σ ≠ 0 := by
       rw [← hEqσ]
       exact hσ
     have hrel := hphase N (by omega) σ
@@ -138,7 +138,7 @@ private theorem normalizedFlattening_exists_gauge_of_mpo_eq_gt_one
     (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V)
     (hEq : ∀ N : ℕ, 1 < N → mpo U N = mpo V N) :
     ∃ hdim : D₁ = D₂,
-      MPSTensor.GaugeEquiv
+      MPTensor.GaugeEquiv
         (cast (congrArg (MPSTensor (d * d)) hdim) U.normalizedFlattening)
         V.normalizedFlattening := by
   let : NeZero d := hU.neZero_phys
@@ -174,7 +174,7 @@ private theorem leftCanonical_of_unitary_block_intertwining
     (W : Matrix (Fin D) (Fin m) ℂ)
     (hWstarW : Wᴴ * W = 1) (hWWstar : W * Wᴴ = 1)
     (hInter : ∀ i, A i * W = W * B i)
-    (hB : MPSTensor.IsLeftCanonical B) : MPSTensor.IsLeftCanonical A := by
+    (hB : MPTensor.IsLeftCanonical B) : MPTensor.IsLeftCanonical A := by
   have hA : ∀ i, A i = W * B i * Wᴴ := by
     intro i
     have h := congrArg (· * Wᴴ) (hInter i)
@@ -196,7 +196,7 @@ block's weight has unit modulus, so the ambient normalized flattening is
 left-canonical. Source: CPSV17, lines 269–281 and 344–356. -/
 theorem IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
-    MPSTensor.IsLeftCanonical U.normalizedFlattening := by
+    MPTensor.IsLeftCanonical U.normalizedFlattening := by
   let : NeZero d := hU.neZero_phys
   let : NeZero D := hU.neZero_bond
   let data := hU.cfii.toCPSVCanonicalFormData
@@ -217,7 +217,7 @@ theorem IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening
   have hWstarW : Wᴴ * W = 1 := data.ambientBlockInclusion_conjTranspose_mul_self k
   have hWWstar : W * Wᴴ = 1 :=
     data.ambientBlockInclusion_mul_conjTranspose_eq_one hr hU.hasFullSupport k
-  have hB : MPSTensor.IsLeftCanonical (fun i => data.weights k • data.blocks k i) :=
+  have hB : MPTensor.IsLeftCanonical (fun i => data.weights k • data.blocks k i) :=
     MPSTensor.leftCanonical_smul_of_norm_one _ hnorm _ (hU.cfii.blocks_left_canonical k)
   exact leftCanonical_of_unitary_block_intertwining U.normalizedFlattening
     (fun i => data.weights k • data.blocks k i) W hWstarW hWWstar
@@ -248,11 +248,11 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq
   let : NeZero D₂ := hV.neZero_bond
   obtain ⟨hdim, X, hGauge⟩ :=
     normalizedFlattening_exists_gauge_of_mpo_eq_gt_one hU hV hEq
-  have hLeftU : MPSTensor.IsLeftCanonical
+  have hLeftU : MPTensor.IsLeftCanonical
       (cast (congrArg (MPSTensor (d * d)) hdim) U.normalizedFlattening) :=
     (MPSTensor.leftCanonical_cast_dim hdim U.normalizedFlattening).2
       hU.isLeftCanonical_normalizedFlattening
-  have hLeftV : MPSTensor.IsLeftCanonical V.normalizedFlattening :=
+  have hLeftV : MPTensor.IsLeftCanonical V.normalizedFlattening :=
     hV.isLeftCanonical_normalizedFlattening
   have hIrrU : Kraus.IsIrreducibleFamily
       (cast (congrArg (MPSTensor (d * d)) hdim) U.normalizedFlattening) :=
@@ -308,11 +308,11 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
   let : NeZero D₁ := hU.neZero_bond
   let : NeZero D₂ := hV.neZero_bond
   have hMPV : ∀ N : ℕ, 1 < N → Even N → ∀ w : Fin N → Fin (d * d),
-      MPSTensor.mpv U.normalizedFlattening w =
-        MPSTensor.mpv V.normalizedFlattening w := by
+      MPTensor.mpv U.normalizedFlattening w =
+        MPTensor.mpv V.normalizedFlattening w := by
     intro N hN heven w
-    change MPSTensor.mpv (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij) w =
-      MPSTensor.mpv (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • V.toMPSTensor ij) w
+    change MPTensor.mpv (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij) w =
+      MPTensor.mpv (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • V.toMPSTensor ij) w
     rw [MPSTensor.mpv_smul, MPSTensor.mpv_smul]
     congr 1
     rw [MPOTensor.mpv_toMPSTensor, MPOTensor.mpv_toMPSTensor, hEq N hN heven]
@@ -324,10 +324,10 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
   obtain ⟨_, hzero | ⟨_, hdim, X, η, hη, hrel⟩⟩ := hA.overlap_dichotomy hB
   · exfalso
     have hCrossSelf : ∀ᶠ n : ℕ in Filter.atTop,
-        MPSTensor.mpvOverlap U.normalizedFlattening V.normalizedFlattening (2 * n) =
-          MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening (2 * n) := by
+        MPTensor.mpvOverlap U.normalizedFlattening V.normalizedFlattening (2 * n) =
+          MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening (2 * n) := by
       filter_upwards [Filter.eventually_gt_atTop 0] with n hn
-      unfold MPSTensor.mpvOverlap
+      unfold MPTensor.mpvOverlap
       apply Finset.sum_congr rfl
       intro w _
       rw [← hMPV (2 * n) (by omega) (even_two_mul n) w]
@@ -336,14 +336,14 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
     exact zero_ne_one (tendsto_nhds_unique (hzero.comp hEvenTop) hone)
   · have hη0 : η ≠ 0 := Complex.ne_zero_of_norm_eq_one hη
     have hηsq : η ^ 2 = 1 := by
-      have hSelf : MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
+      have hSelf : MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
         rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
         exact hU.isMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one (by omega)
       have hNonzero : ∃ w : Fin 2 → Fin (d * d),
-          MPSTensor.mpv U.normalizedFlattening w ≠ 0 := by
+          MPTensor.mpv U.normalizedFlattening w ≠ 0 := by
         by_contra hall
         push Not at hall
-        simp only [MPSTensor.mpvOverlap, hall, star_zero, mul_zero,
+        simp only [MPTensor.mpvOverlap, hall, star_zero, mul_zero,
           Finset.sum_const_zero] at hSelf
         exact zero_ne_one hSelf
       obtain ⟨w, hw⟩ := hNonzero
@@ -354,7 +354,7 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
         ← hMPV 2 (by omega) (by decide) w] at hphase
       apply mul_right_cancel₀ hw
       simpa only [one_mul] using hphase.symm
-    have hLeftU : MPSTensor.IsLeftCanonical
+    have hLeftU : MPTensor.IsLeftCanonical
         (cast (congrArg (MPSTensor (d * d)) hdim) U.normalizedFlattening) :=
       (MPSTensor.leftCanonical_cast_dim hdim U.normalizedFlattening).2
         hU.isLeftCanonical_normalizedFlattening

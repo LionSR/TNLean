@@ -242,7 +242,7 @@ theorem printedAction_empty_ne (x : Fin 2) :
 
 /-- Consequently the literal printed pair is not an all-word reduction. -/
 theorem printedAction_not_isReduction (x : Fin 2) :
-    ¬ MPSTensor.IsReduction (actedSector x) (actionTarget x)
+    ¬ MPTensor.IsReduction (actedSector x) (actionTarget x)
       (printedActionBra x) (printedActionKet x) :=
   fun h ↦ printedAction_empty_ne x (h.evalWord [])
 
@@ -265,7 +265,7 @@ theorem dressedActionBra_absorption (x : Fin 2) (b : List (Fin 4)) (hb : b ≠ [
 reduction. This algebraic construction does not assert the printed
 empty-word equation of arXiv:2502.20257, `eq:action_interior`. -/
 theorem dressedAction_isReduction (x : Fin 2) :
-    MPSTensor.IsReduction (actedSector x) (actionTarget x)
+    MPTensor.IsReduction (actedSector x) (actionTarget x)
       (dressedActionBra x) (printedActionKet x) := by
   refine ⟨(printedAction_finite_identities x).2.2.1, fun w ↦ ?_⟩
   by_cases hw : w = []

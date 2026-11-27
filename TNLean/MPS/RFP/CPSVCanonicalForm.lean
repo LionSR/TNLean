@@ -31,6 +31,8 @@ normal-tensor block of a renormalization fixed point is itself a
 renormalization fixed point.
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor

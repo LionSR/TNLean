@@ -22,6 +22,8 @@ Proposition 6.11 (subharmonic projections), followed by Theorem 6.13 (fixed
 projections commute with the Kraus operators).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Matrix
 

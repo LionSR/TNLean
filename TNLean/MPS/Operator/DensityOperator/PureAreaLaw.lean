@@ -24,6 +24,8 @@ mixed-state block-entropy results apply to pure-state block entropies.
   (line 752), Section 3 (pure-state area law, line 599).
 -/
 
+open MPTensor
+
 open Matrix MPOTensor
 open scoped Matrix Kronecker ComplexOrder
 
@@ -69,8 +71,8 @@ theorem mpo_doubledTensor (A : MPSTensor d D) (N : ℕ) :
   rw [mpo_apply, MPOTensor.mpoMatrixEntry, evalWord_doubledTensor,
     Matrix.trace_submatrix_equiv, Matrix.trace_kronecker,
     ← AddMonoidHom.map_trace (starRingEnd ℂ)]
-  simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, MPSTensor.mpv,
-    MPSTensor.coeff, Complex.star_def]
+  simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply, MPTensor.mpv,
+    MPTensor.coeff, Complex.star_def]
 
 /-- The normalized MPDO of the doubled tensor is the normalized pure state. -/
 theorem normalizedMPO_doubledTensor (A : MPSTensor d D) (N : ℕ) :
@@ -102,7 +104,7 @@ theorem blockEntropy_doubledTensor (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N
 /-- The wavefunction (Schmidt) matrix of the first `L` spins. -/
 noncomputable def schmidtMat (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     Matrix (Fin L → Fin d) (Fin (N - L) → Fin d) ℂ :=
-  fun u w => MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
+  fun u w => MPTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm (Fin.append u w))
 
 /-- The reduced pure-state block density matrix is the trace-normalized Gram
 matrix of the Schmidt matrix `schmidtMat A N L`: the inverse pure-state trace
@@ -130,15 +132,15 @@ theorem trace_evalWord_rotate_mps (A : MPSTensor d D) (l : List (Fin d)) :
 /-- **Cyclic invariance of the MPV.** `mpv A` is invariant under a cyclic shift of
 the configuration. -/
 theorem mpv_comp_finRotate (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    MPSTensor.mpv A (σ ∘ finRotate N) = MPSTensor.mpv A σ := by
+    MPTensor.mpv A (σ ∘ finRotate N) = MPTensor.mpv A σ := by
   cases N with
   | zero => rfl
   | succ n =>
-    simp only [MPSTensor.mpv, MPSTensor.coeff, ofFn_comp_finRotate, trace_evalWord_rotate_mps]
+    simp only [MPTensor.mpv, MPTensor.coeff, ofFn_comp_finRotate, trace_evalWord_rotate_mps]
 
 /-- The MPV is invariant under a `p`-fold cyclic shift. -/
 theorem mpv_comp_finRotate_pow (A : MPSTensor d D) {N : ℕ} (p : ℕ) (σ : Fin N → Fin d) :
-    MPSTensor.mpv A (σ ∘ (finRotate N : Fin N → Fin N)^[p]) = MPSTensor.mpv A σ := by
+    MPTensor.mpv A (σ ∘ (finRotate N : Fin N → Fin N)^[p]) = MPTensor.mpv A σ := by
   induction p with
   | zero => simp
   | succ k ih =>
@@ -157,9 +159,9 @@ theorem blockReindexEquiv_symm_apply {N L : ℕ} (hL : L ≤ N) (c : Fin (L + (N
 first, by cyclic invariance. -/
 theorem schmidt_swap (A : MPSTensor d D) {N L : ℕ} (hL : L ≤ N)
     (w : Fin (N - L) → Fin d) (u'' : Fin (N - (N - L)) → Fin d) :
-    MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm
+    MPTensor.mpv A ((MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm
         (Fin.append w u''))
-      = MPSTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm
+      = MPTensor.mpv A ((MPOTensor.blockReindexEquiv d N L hL).symm
         (Fin.append (u'' ∘ Fin.cast (by omega : L = N - (N - L))) w)) := by
   have hcfg : (MPOTensor.blockReindexEquiv d N (N - L) (Nat.sub_le N L)).symm (Fin.append w u'')
       = ((MPOTensor.blockReindexEquiv d N L hL).symm

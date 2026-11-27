@@ -44,6 +44,8 @@ see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
 (https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker BigOperators ComplexOrder
 
 namespace MPSTensor

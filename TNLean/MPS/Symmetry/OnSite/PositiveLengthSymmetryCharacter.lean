@@ -19,6 +19,8 @@ Source context: Schuch–Pérez-García–Cirac, arXiv:1010.3732, Appendix B,
 lines 2614–2632. No additional chain-length threshold is assumed.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective
   evalWord_blockTensor)

@@ -39,6 +39,8 @@ lines 1236--1320; Molnár et al., arXiv:2204.05940v1, Section 5.5, following
 Proposition 5.4.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix ComplexOrder BigOperators

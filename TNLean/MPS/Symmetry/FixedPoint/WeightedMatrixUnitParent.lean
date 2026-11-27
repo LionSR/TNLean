@@ -20,6 +20,8 @@ Source: arXiv:1010.3732, Section II.F.2, equation `eq:sym:omega-gamma`.
 The argument includes the endpoints, where some bond coefficients vanish.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder
 
 open ManyBody

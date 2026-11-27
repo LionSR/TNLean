@@ -78,6 +78,8 @@ in `Notes/OpenProblemsTN/checks/asym_fibonacci_categorical_data.md`, §0, §5 an
 verification record, not the source.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix

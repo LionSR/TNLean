@@ -19,6 +19,8 @@ record reindexing, flattening, and common-alphabet transport.  They are
 not independent results of 1606.00608 or 2011.12127.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Kraus (blockPhysDim blockPhysDim_eq_pow wordOfBlock blockTensor flattenBlockedWord)
 
@@ -263,8 +265,9 @@ private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
             (finSigmaFinEquiv.symm :
               Fin (∑ k : Fin r, F.period k) ≃ ((k : Fin r) × Fin (F.period k)))
             gSigma).symm
-          simpa [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
-            smul_eq_mul] using h
+          simp only [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
+            smul_eq_mul] at h ⊢
+          exact h
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ :=
           (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm

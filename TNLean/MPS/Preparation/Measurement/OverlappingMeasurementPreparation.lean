@@ -136,6 +136,8 @@ presupposes. Documented in `docs/paper-gaps/psc21_mps_classification_scope.tex`.
   paragraph "Long-range MPS using measurements".
 -/
 
+open MPTensor
+
 section
 
 open Matrix MPSTensor

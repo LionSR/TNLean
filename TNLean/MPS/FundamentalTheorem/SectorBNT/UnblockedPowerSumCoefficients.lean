@@ -45,6 +45,8 @@ of the periods, and reads the canonical weights off the resulting matching.
   uniqueness of the finite nonzero weight multisets.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 

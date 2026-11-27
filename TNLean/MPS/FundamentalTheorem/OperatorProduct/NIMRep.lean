@@ -45,6 +45,8 @@ subspace (lines 431–434), the form evaluated at lines 567–568; documented in
   product states*
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPOTensor

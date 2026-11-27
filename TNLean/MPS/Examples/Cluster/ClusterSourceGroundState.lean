@@ -35,6 +35,8 @@ sum-of-squares argument.
   TeX lines 374--387.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexConjugate
 
 namespace MPSTensor

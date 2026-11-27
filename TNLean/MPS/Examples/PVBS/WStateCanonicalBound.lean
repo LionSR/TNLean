@@ -96,6 +96,8 @@ needs both pieces to have at least `L₀` sites to apply condition C1. The bound
   symmetries, theorems*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

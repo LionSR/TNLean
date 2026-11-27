@@ -46,6 +46,8 @@ It also contains the following results.
   the positive canonical interaction from exact open kernels.
 -/
 
+open MPTensor
+
 section OpenInteraction
 
 /-!

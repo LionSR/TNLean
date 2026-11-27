@@ -36,6 +36,8 @@ equation and are not covered.
   direct-sum lemma used there.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor

@@ -25,6 +25,8 @@ sectors used later to construct the physical projectors.
   lines 1756--1759.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor.SectorDecomposition

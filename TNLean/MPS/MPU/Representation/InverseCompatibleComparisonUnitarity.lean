@@ -142,7 +142,7 @@ and the inverse-compatible construction at lines 5444–5487. -/
 theorem IsRepresentation.inverseCompatibleComparison_unitary_of_inv_eq
     {G : Type*} [Group G] (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) (hU : IsMPUCanonicalFormII (F.tensor g)) :
     let T := hF.daggerInverseGauge F hcanonical g
     let K := inverseCompatibleComparisonK (F.tensor g) T hU.ρ hU.ρ_posDef

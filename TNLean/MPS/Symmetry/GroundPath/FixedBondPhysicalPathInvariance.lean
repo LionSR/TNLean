@@ -34,6 +34,8 @@ see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`. The preceding
 finite-chain character results do not carry this restriction.
 -/
 
+open MPTensor
+
 open scoped ScalarCohomology
 open scoped Matrix Matrix.Norms.L2Operator ComplexConjugate
 

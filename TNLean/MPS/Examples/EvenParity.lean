@@ -36,6 +36,8 @@ lies in a non-trivial SPT phase.
 * `evenParity_isOnSiteSymmetric_Z2` : the tensor is on-site symmetric under Z₂
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset MPSTensor
 

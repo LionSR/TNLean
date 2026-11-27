@@ -43,7 +43,7 @@ one supplied directly by `IsMPDO`; no assertion at length zero is used.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1634--1689. -/
 theorem IsMPDO.sameMPV₂Pos_physicalAdjointTensor {K : MPOTensor d D} (hK : IsMPDO K) :
-    MPSTensor.SameMPV₂Pos K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
+    MPTensor.SameMPV₂Pos K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
   intro N hN ρ
   let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
   let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
@@ -51,18 +51,18 @@ theorem IsMPDO.sameMPV₂Pos_physicalAdjointTensor {K : MPOTensor d D} (hK : IsM
     funext n
     exact (finProdFinEquiv.apply_symm_apply (ρ n)).symm
   calc
-    MPSTensor.mpv K.toMPSTensor ρ = mpo K N σ τ := by
+    MPTensor.mpv K.toMPSTensor ρ = mpo K N σ τ := by
       rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
     _ = star (mpo K N τ σ) := ((hK N hN).isHermitian.apply σ τ).symm
     _ = mpo (physicalAdjointTensor K) N σ τ :=
       (mpo_physicalAdjointTensor K N σ τ).symm
-    _ = MPSTensor.mpv (physicalAdjointTensor K).toMPSTensor ρ := by
+    _ = MPTensor.mpv (physicalAdjointTensor K).toMPSTensor ρ := by
       rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
 
 /-- Since the two tensors have the same bond dimension, the positive-length equality extends
 at length zero by the universal zero-length MPV formula. -/
 theorem IsMPDO.sameMPV_physicalAdjointTensor {K : MPOTensor d D} (hK : IsMPDO K) :
-    MPSTensor.SameMPV K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
+    MPTensor.SameMPV K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
   intro N ρ
   by_cases hN : 0 < N
   · exact hK.sameMPV₂Pos_physicalAdjointTensor N hN ρ

@@ -28,6 +28,8 @@ It also contains the following results.
   decompositions.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

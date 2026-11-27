@@ -35,6 +35,8 @@ lines 1436--1450. These are identities for supplied matrix generators;
 constructing them from an arbitrary GVBS presentation remains separate.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix Kronecker BigOperators

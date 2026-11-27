@@ -34,6 +34,8 @@ on virtual matrices.
 * `inner_mpvState_placeAlong_chainWindow_mul`: the two-window trace formula.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators InnerProductSpace Kronecker
 
 namespace MPSTensor

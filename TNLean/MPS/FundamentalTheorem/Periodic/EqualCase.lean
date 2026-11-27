@@ -32,6 +32,8 @@ at every large chain length that the corresponding period divides.
   arXiv:1708.00029, theorem `thm:bdequal`, lines 643--693.
 -/
 
+open MPTensor
+
 open scoped BigOperators
 
 namespace MPSTensor

@@ -22,6 +22,8 @@ trace preserving; the diagonal fixed point is its right fixed point. This is
 the conjugate-transposed Kraus convention relative to the source.
 -/
 
+open MPTensor
+
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 open Filter Polynomial
 open scoped Topology

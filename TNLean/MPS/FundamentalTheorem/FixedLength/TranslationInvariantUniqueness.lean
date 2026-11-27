@@ -77,6 +77,8 @@ printed proof treats only this single-block case, since it uses
   same conclusion as a unit-modulus gauge-phase equivalence.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker BigOperators ComplexOrder
 
 namespace MPSTensor

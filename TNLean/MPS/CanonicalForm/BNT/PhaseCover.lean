@@ -22,6 +22,8 @@ canonical-form equal-norm and sector comparisons.
   phase classes and their copies.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter
 
@@ -71,7 +73,7 @@ lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
 /-- Gauge-phase equivalence after a dimension cast gives rectangular MPV phase equivalence. -/
 lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
     (hdim : DA = DB)
-    (hGPE : GaugePhaseEquiv (d := d)
+    (hGPE : GaugePhaseEquiv (α := Fin d)
       (cast (congr_arg (MPSTensor d) hdim) A) B) :
     MPVBlockPhaseEquiv A B := by
   rcases hGPE with ⟨X, ζ, hζ, hX⟩

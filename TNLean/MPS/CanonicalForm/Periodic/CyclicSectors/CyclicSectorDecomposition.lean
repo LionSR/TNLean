@@ -47,6 +47,8 @@ It also contains the following results.
 * [Wolf, Quantum Channels & Operations (2012), §6.5–6.6]
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 section CornerBridge

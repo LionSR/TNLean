@@ -22,6 +22,8 @@ Source: arXiv:1010.3732, Appendix A, lines 2575--2578; arXiv:2011.12127,
 Section IV.C, lines 2114--2129.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix Topology ComplexOrder
 
 namespace MPSTensor

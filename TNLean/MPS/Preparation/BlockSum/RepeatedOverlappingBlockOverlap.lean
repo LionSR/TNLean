@@ -60,6 +60,8 @@ mixed transfer maps of distinct blocks, in place of the block form (S5) and the 
   arXiv:2103.13367, Supplemental Material, eq. (26) and eqs. `final_eq` to `finished`.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
 open Kraus (blockTensor)

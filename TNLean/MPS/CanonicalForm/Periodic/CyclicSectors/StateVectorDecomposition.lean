@@ -34,6 +34,8 @@ It also contains the following results.
   printed canonical hypotheses.
 -/
 
+open MPTensor
+
 section StateVectorDecomposition
 
 open scoped Matrix BigOperators

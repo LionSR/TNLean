@@ -76,7 +76,7 @@ abbrev czxWallString {L : ℕ} (k l n : ℕ) (h : k + 1 + l + 1 + n = L) :
 `Papers/2405.00439/MPU-DW.tex` lines 1365--1388): on `|0⟩^{⊗ L}` the string creates the state
 with the domain wall `e_{AB}` at its left end and `e_{BA}` at its right end. -/
 theorem czx_wallString_mulVec_mpv {k l n L : ℕ} (h : k + 1 + l + 1 + n = L) :
-    czxWallString k l n h *ᵥ (fun σ ↦ MPSTensor.mpv (czxBlock x₀) σ) =
+    czxWallString k l n h *ᵥ (fun σ ↦ MPTensor.mpv (czxBlock x₀) σ) =
       fun τ ↦ twoWallMPV (czxBlock x₀) czxWallAB (czxBlock x₁) czxWallBA (τ ∘ Fin.cast h) :=
   czxBlockActionData.wallString_mulVec_mpv_left czx_isSeparatingLeftInverse h
 
@@ -88,10 +88,10 @@ theorem czx_wallString_exchange :
     ∃ N : ℕ, ∀ (u u' v w' w L : ℕ) (h₁ : u + 1 + u' + 1 + v + 1 + (w' + 1 + w) = L)
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (czxWallString (u + 1 + u') v (w' + 1 + w) h₁ * czxWallString u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (czxBlock x₀) σ) =
+          (fun σ ↦ MPTensor.mpv (czxBlock x₀) σ) =
         (-1 : ℂ) • ((czxWallString u (u' + 1 + v + 1 + w') w h₂ *
           czxWallString (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (czxBlock x₀) σ)) := by
+            (fun σ ↦ MPTensor.mpv (czxBlock x₀) σ)) := by
   obtain ⟨N, hN⟩ := czxBlockActionData.wallString_mul_wallString_mulVec_mpv czx_carriesMPV
     czx_isSeparatingLeftInverse czx_isDomainWallAction_ab czx_isDomainWallAction_ba
   refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' ↦ ?_⟩

@@ -18,6 +18,8 @@ These are consequences of the lower Gram estimate in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma overlapestimate, lines 2109--2175.
 -/
 
+open MPTensor
+
 open Filter
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
 

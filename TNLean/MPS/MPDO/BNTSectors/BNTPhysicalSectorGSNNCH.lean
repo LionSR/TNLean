@@ -184,7 +184,7 @@ Source: arXiv:1606.00608, Appendix C.2, Case II and equation `biCFK`, lines
 theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hMPDO : IsMPDO M)
     (hBasisDim : ∀ s, 0 < S.basisDim s)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
@@ -223,7 +223,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
   have hSectorNe : ∀ s, mpo (K s) N ≠ 0 := by
     intro s hzero
     let : NeZero (S.basisDim s) := ⟨Nat.ne_of_gt (hBasisDim s)⟩
-    have hmpv : (MPSTensor.mpv (K s).toMPSTensor :
+    have hmpv : (MPTensor.mpv (K s).toMPSTensor :
         MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective
         (Kraus.isNBlkInjective_one_of_isInjective (hInjective s)) Nat.one_pos

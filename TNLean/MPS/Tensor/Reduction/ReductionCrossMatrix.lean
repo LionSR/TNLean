@@ -35,6 +35,8 @@ unscaled conclusion is false for unrestricted `λ ≠ 1`; see
 `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker BigOperators
 open Kraus (blockPhysDim blockTensor flattenBlockedWord evalWord_blockTensor
   length_flattenBlockedWord)

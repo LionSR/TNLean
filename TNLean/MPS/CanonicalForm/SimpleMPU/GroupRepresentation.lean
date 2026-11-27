@@ -188,10 +188,10 @@ matching the orientation used by the later rectangular reduction interface.
 Source: arXiv:2502.20257, lines 1403--1407. -/
 theorem IsRepresentation.sameMPV₂Pos_mulTensor [Group G]
     (F : GroupFamily G d) (hF : F.IsRepresentation) (g h : G) :
-    MPSTensor.SameMPV₂Pos
+    MPTensor.SameMPV₂Pos
       (F.tensor (g * h)).toMPSTensor
       (MPOTensor.mulTensor (F.tensor g) (F.tensor h)).toMPSTensor := by
-  apply MPSTensor.SameMPV₂Pos.symm
+  apply MPTensor.SameMPV₂Pos.symm
   intro N hN ρ
   let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
   let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
@@ -216,7 +216,7 @@ private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
   have hOne : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor 1 :=
     Kraus.isNBlkInjective_one_of_isInjective h
   have hMul : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor (L * 1) :=
-    MPSTensor.isNBlkInjective_mul_of_isNBlkInjective
+    MPTensor.isNBlkInjective_mul_of_isNBlkInjective
       (F.tensor g).toMPSTensor hL hOne
   exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective
     (F.tensor g).toMPSTensor L).1 (by simpa using hMul)

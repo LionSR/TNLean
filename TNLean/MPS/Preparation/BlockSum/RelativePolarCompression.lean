@@ -39,6 +39,8 @@ It also contains the following results.
   polar rows.
 -/
 
+open MPTensor
+
 section RelativePolarCompression
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Kronecker InnerProductSpace

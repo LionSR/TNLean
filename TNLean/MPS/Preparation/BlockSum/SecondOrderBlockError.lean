@@ -57,6 +57,8 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   (`eq:fid_err_gen_non_normal`).
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Matrix
 open Kraus (blockTensor)

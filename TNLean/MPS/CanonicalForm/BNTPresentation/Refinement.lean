@@ -22,6 +22,8 @@ permutation gives exact letterwise direct-sum and ambient-reconstruction identit
 The phase classes follow arXiv:1606.00608, lines 265--301 and 1135--1146; the gauge witnesses
 follow lines 1080--1117.  Proposition 4.13, lines 1863--1921, uses these data downstream.
 -/
+
+open MPTensor
 open scoped Matrix BigOperators
 
 namespace MPSTensor

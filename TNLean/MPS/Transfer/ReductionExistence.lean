@@ -38,6 +38,8 @@ The unscaled conclusion printed in Proposition 20 is false for unrestricted
 `λ ≠ 1`; see `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 

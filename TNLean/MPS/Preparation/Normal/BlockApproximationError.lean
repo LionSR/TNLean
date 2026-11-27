@@ -42,6 +42,8 @@ valid for all positive numbers of blocks at its first-order rate.
 * `MPSTensor.exists_blockApproximationError_le_exp` — a common positive exponential rate.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace

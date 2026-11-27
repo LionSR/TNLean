@@ -36,7 +36,7 @@ open NeighboringTraceObstructionAmbientCounterexample
 isolating the first sector, to a channel between the embedded closure families. -/
 private theorem exists_embeddedMap_of_exists_ambientMap (N : ℕ)
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
     (h : ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
         Matrix (Fin N → Fin 5) (Fin N → Fin 5) ℂ,
       IsKrausCPTP T ∧
@@ -65,7 +65,7 @@ universal obstruction to the refinement map asserted by CPSV16, Appendix C.2,
 Proposition `prop2to5`, lines 1628--1665 and 1810--1817. -/
 theorem not_exists_ambient_two_to_three_site_map
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     ¬ ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
         Matrix (Fin 3 → Fin 5) (Fin 3 → Fin 5) ℂ,
       IsKrausCPTP T ∧
@@ -84,7 +84,7 @@ implication `(ii) ⇒ (v)` of CPSV16, Theorem 4.9.  Its closing proof prints the
 cyclic label `(iii) ⇒ (v)` at lines 1821--1825. -/
 theorem not_exists_ambient_two_to_four_site_map
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     ¬ ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
         Matrix (Fin 4 → Fin 5) (Fin 4 → Fin 5) ℂ,
       IsKrausCPTP T ∧
@@ -105,7 +105,7 @@ the preceding theorem.  This is the conclusion used in CPSV16, Theorem 4.9,
 lines 851--893 and 1821--1825. -/
 theorem ambient_blockTwo_not_isRFPViaTS
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    (hGauge : MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
     ¬ IsRFPViaTS (blockTwo (ambient mu B hmu)) := by
   intro hRFP
   obtain ⟨_S, T, _hS, hT, _hSclose, hTclose⟩ := hRFP
@@ -140,9 +140,9 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
-      MPSTensor.IsLeftCanonical B ∧
+      MPTensor.IsLeftCanonical B ∧
       MPSTensor.IsNormalTensor B ∧
-      MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
       (IsMPDO K ∧

@@ -24,6 +24,8 @@ relabelling its physical index; when `G` is a group, each element acts by a perm
 twist by a product is the composite of the twists, and the twist by the identity is trivial.
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor

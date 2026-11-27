@@ -32,6 +32,8 @@ basis tensors have been matched, all remaining terms are expressed in the
 same BNT basis tensor family and separated by its eventual linear independence.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 
@@ -52,11 +54,11 @@ theorem IsBNTCanonicalForm.norm_phase_of_matched_mpv
     (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv (Q.basis k) σ = ζ ^ N * mpv (P.basis j) σ) :
     ‖ζ‖ = 1 := by
-  have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis j) (P.basis j) N‖)
+  have hAA : Tendsto (fun N => ‖mpvOverlap (α := Fin d) (P.basis j) (P.basis j) N‖)
       atTop (𝓝 (1 : ℝ)) := by
     have h1 := (hP.basis_normalized_self_overlap j).norm
     simpa using h1
-  have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
+  have hBB : Tendsto (fun N => ‖mpvOverlap (α := Fin d) (Q.basis k) (Q.basis k) N‖)
       atTop (𝓝 (1 : ℝ)) := by
     have h1 := (hQ.basis_normalized_self_overlap k).norm
     simpa using h1

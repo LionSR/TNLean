@@ -69,8 +69,8 @@ noncomputable def purificationDensity {d dK D' : ℕ}
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   Matrix.of fun σ τ =>
     ∑ κ : Fin N → Fin dK,
-      MPSTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (σ n, κ n)) *
-      star (MPSTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (τ n, κ n)))
+      MPTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (σ n, κ n)) *
+      star (MPTensor.mpv (purificationTensor A) (fun n => finProdFinEquiv (τ n, κ n)))
 
 /-- The partial trace over the ancillary physical index. For a matrix on
 spin--ancilla degrees of freedom it is the spin matrix

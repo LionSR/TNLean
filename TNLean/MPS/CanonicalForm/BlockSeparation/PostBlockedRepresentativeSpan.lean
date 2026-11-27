@@ -34,6 +34,8 @@ injectivity hypothesis after blocking.  No right-unital normalization or
 period-window hypothesis is used.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 

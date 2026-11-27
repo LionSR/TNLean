@@ -43,6 +43,8 @@ This lower-layer module converts a spectral-radius bound for a rectangular mixed
 transfer map into decay of the corresponding MPV overlap.
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor
@@ -58,7 +60,7 @@ theorem trace_mixedMapLM_rect_pow_eq_mpvOverlap
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
     (LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)) ((Kraus.mixedMapLM A B) ^ N)
-      = mpvOverlap (d := d) A B N := by
+      = mpvOverlap (α := Fin d) A B N := by
   classical
   -- Expand the operator trace as a sum over matrix units.
   rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((Kraus.mixedMapLM A B) ^ N))]
@@ -91,7 +93,7 @@ theorem trace_mixedMapLM_rect_pow_eq_mpvOverlap
   -- Apply the helper equalities.
   rw [h1, hswap]
   -- Unfold `mpvOverlap`/`mpv`/`coeff` so both sides are sums over σ.
-  simp only [mpvOverlap, MPSTensor.mpv, MPSTensor.coeff]
+  simp only [mpvOverlap, MPTensor.mpv, MPTensor.coeff]
   -- Now compute the inner double sum termwise in σ.
   refine Fintype.sum_congr _ _ (fun σ => ?_)
   calc
@@ -121,7 +123,7 @@ This is the square case \(D_1 = D_2 = D\) of `trace_mixedMapLM_rect_pow_eq_mpvOv
 theorem trace_mixedMapLM_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D) (N : ℕ) :
     (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) ((Kraus.mixedMapLM A B) ^ N)
-      = mpvOverlap (d := d) A B N :=
+      = mpvOverlap (α := Fin d) A B N :=
   trace_mixedMapLM_rect_pow_eq_mpvOverlap A B N
 
 end Main
@@ -130,7 +132,7 @@ end Main
 theorem trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap
     {d D : ℕ} [NeZero D] (A B : MPSTensor d D) (N : ℕ) :
     Matrix.trace (transferMatrix (Kraus.mixedMapLM A B) ^ N) =
-      mpvOverlap (d := d) A B N := by
+      mpvOverlap (α := Fin d) A B N := by
   rw [← transferMatrix_pow, trace_transferMatrix_eq_linearMap_trace]
   exact trace_mixedMapLM_pow_eq_mpvOverlap A B N
 
@@ -138,8 +140,8 @@ theorem trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap
 theorem trace_transferMatrix_transferMap_pow_eq_mpvOverlap
     {d D : ℕ} [NeZero D] (A : MPSTensor d D) (N : ℕ) :
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) =
-      mpvOverlap (d := d) A A N := by
-  change Matrix.trace (transferMatrix (Kraus.mapLM A) ^ N) = mpvOverlap (d := d) A A N
+      mpvOverlap (α := Fin d) A A N := by
+  change Matrix.trace (transferMatrix (Kraus.mapLM A) ^ N) = mpvOverlap (α := Fin d) A A N
   rw [← Kraus.mixedMapLM_self]
   exact trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap A A N
 
@@ -176,7 +178,7 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap V)
             (Kraus.mixedMapLM (d := d) (D₁ := D₁) (D₂ := D₂) A B)) < 1) :
-    Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds (0 : ℂ)) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) A B N) atTop (nhds (0 : ℂ)) := by
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (Kraus.mixedMapLM (d := d) (D₁ := D₁) (D₂ := D₂) A B)

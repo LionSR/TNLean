@@ -82,6 +82,8 @@ It also contains the following results.
   (in `MPSTensor`): physical residual covers from a primitive-sector resolution.
 -/
 
+open MPTensor
+
 section PeriodicBlockFamilyGap
 
 /-!

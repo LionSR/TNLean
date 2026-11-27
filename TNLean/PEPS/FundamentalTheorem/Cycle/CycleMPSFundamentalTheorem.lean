@@ -381,7 +381,7 @@ theorem fundamentalTheorem_normalMPS {n L d D : ℕ} [NeZero n] (hL : 0 < L)
     (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D) (hA : Kraus.IsNBlkInjective A L)
     (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) :=
   fundamentalTheorem_normalMPS_of_overlap hL hn hD A B hA hB hAB
@@ -598,7 +598,7 @@ Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZero n]
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
     (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    (hAB : ∀ σ : Fin n → Fin d, MPTensor.mpv A σ = MPTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) :=
   fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn hD A B hA hB hAB

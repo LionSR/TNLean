@@ -52,6 +52,8 @@ fusion tensors at $(g,h,k)$ with $\overline{\omega(k^{-1},h^{-1},g^{-1})}^{\,-1}
 taking the dagger of the two fusion trees, is not proved here.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 /-! ### Permutation matrices of bond identifications -/
@@ -99,7 +101,7 @@ end MPSTensor
 
 /-! ### Dressed proportionality under the dagger -/
 
-namespace MPSTensor.IsDressedProportional
+namespace MPTensor.IsDressedProportional
 
 variable {d D m : ℕ} {B : MPSTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
@@ -153,7 +155,7 @@ theorem of_reindexBond_source {d D₂ D₂' m : ℕ} {K : MPOTensor d D₂}
     ext x y
     simp [MPOTensor.toMPSTensor, MPOTensor.reindexBond]
 
-end MPSTensor.IsDressedProportional
+end MPTensor.IsDressedProportional
 
 /-! ### Entrywise conjugation of Kronecker boundaries -/
 
@@ -241,7 +243,7 @@ theorem castMat_eq_reindexBondMatrix {a b : G} (e : a = b) :
 namespace IsRepresentation
 
 variable (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- The dagger-inverse gauges of two equal group elements agree after the bond
 identification. -/
@@ -388,9 +390,9 @@ This is the boundary-dressed form of "taking the dagger of
 arXiv:2502.20257, lines 1675--1677. -/
 theorem isDressedProportional_daggerBoundary (g h : G)
     {X Y : Matrix (Fin (F.bondDim (h⁻¹ * g⁻¹))) (Fin (F.bondDim h⁻¹ * F.bondDim g⁻¹)) ℂ}
-    {z : ℂ} (hXY : MPSTensor.IsDressedProportional
+    {z : ℂ} (hXY : MPTensor.IsDressedProportional
       (mulTensor (F.tensor h⁻¹) (F.tensor g⁻¹)).toMPSTensor X Y z) :
-    MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (hF.daggerBoundary hc g h X) (hF.daggerBoundary hc g h Y) (starRingEnd ℂ z) := by
   have h₀ := hXY.physicalAdjointTensor
   rw [physicalAdjointTensor_mulTensor] at h₀
@@ -419,7 +421,7 @@ namespace MPOTensor.GroupFamily.FusionData
 
 variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
   (fd : FusionData F) (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- The daggered left fusion tensor is the dagger of $F^<_{h^{-1},g^{-1}}$. -/
 theorem daggerFusionV_eq_daggerBoundary (g h : G) :
@@ -538,7 +540,7 @@ theorem daggerZeta_mul_star_daggerZeta_inv (g h : G) :
     (fd.daggerZeta_defzeta hF hc h⁻¹ g⁻¹).1
   rw [fd.daggerBoundary_daggerFusionV hF hc g h, ← fd.daggerFusionV_eq_daggerBoundary] at ht
   have hcomp := ht.trans (fd.daggerZeta_defzeta hF hc g h).1
-  have hscalar : MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+  have hscalar : MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (c • fd.V g h) (fd.V g h) c :=
     ⟨0, fun w _ ↦ by rw [Matrix.smul_mul]⟩
   have key := hcomp.eq_of_forall_exists_ne_zero hscalar fun N ↦ by

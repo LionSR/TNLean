@@ -20,6 +20,8 @@ These are finite-dimensional auxiliary statements for arXiv:1010.3732,
 Appendix C, lines 2653–2717. No physical-gap implication is asserted.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

@@ -42,6 +42,8 @@ not imported here.
   `μ_{j,q}` and per-block spectral-radius-one normalization).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Filter Topology
 
@@ -85,7 +87,7 @@ dichotomy):
   (CPSV16 lines 264–279 gauge-phase sector grouping). -/
 lemma cross_overlap_basis_tendsto_zero
     (h : IsBNTCanonicalForm P) {j k : Fin P.basisCount} (hjk : j ≠ k) :
-    Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis k) N)
+    Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis k) N)
       atTop (𝓝 0) := by
   have hjpos : NeZero (P.basisDim j) := ⟨(h.basis_dim_pos j).ne'⟩
   have hkpos : NeZero (P.basisDim k) := ⟨(h.basis_dim_pos k).ne'⟩
@@ -121,7 +123,7 @@ lemma combined_family_eventually_li
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hAB : ∀ (j : Fin P.basisCount) (k : Fin Q.basisCount),
       Tendsto (fun N : ℕ =>
-        mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
+        mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
     ∀ᶠ N in atTop,
       LinearIndependent ℂ
         (Sum.elim

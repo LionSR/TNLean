@@ -43,6 +43,8 @@ It also contains the following results.
   finite-chain and pure ground-state commutator gaps.
 -/
 
+open MPTensor
+
 open Filter SpinChain
 
 section QuasiLocalEventualKernelGap

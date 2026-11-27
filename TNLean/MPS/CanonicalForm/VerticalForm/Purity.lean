@@ -16,7 +16,7 @@ project derivation identifying the self-overlap of that doubled-index MPS
 family at chain length `N` with the Hilbert--Schmidt trace of the MPO:
 
 ```
-MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
+MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
   = Matrix.trace (mpo K N * (mpo K N)ᴴ)
 ```
 
@@ -83,7 +83,7 @@ def pairCfgEquiv (d N : ℕ) :
 MPS family of an MPO tensor at chain length `N` equals the Hilbert--Schmidt
 trace of the MPO:
 ```
-MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
+MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
   = Matrix.trace (mpo K N * (mpo K N)ᴴ).
 ```
 
@@ -101,7 +101,7 @@ a claim from CPSV16.  Before trace normalization is established, the right
 side is the raw squared Hilbert--Schmidt norm of the MPO family, not a
 normalized-state purity. -/
 theorem mpvOverlap_toMPSTensor_self (K : MPOTensor d D) (N : ℕ) :
-    MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
+    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
       Matrix.trace (mpo K N * (mpo K N)ᴴ) := by
   have htrace : Matrix.trace (mpo K N * (mpo K N)ᴴ)
       = ∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
@@ -112,21 +112,21 @@ theorem mpvOverlap_toMPSTensor_self (K : MPOTensor d D) (N : ℕ) :
   calc ∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
           mpo K N σ τ * star (mpo K N σ τ)
       = ∑ p : (Fin N → Fin d) × (Fin N → Fin d),
-          MPSTensor.mpv K.toMPSTensor (pairCfgEquiv d N p) *
-            star (MPSTensor.mpv K.toMPSTensor (pairCfgEquiv d N p)) := by
+          MPTensor.mpv K.toMPSTensor (pairCfgEquiv d N p) *
+            star (MPTensor.mpv K.toMPSTensor (pairCfgEquiv d N p)) := by
         rw [Fintype.sum_prod_type]
         exact Finset.sum_congr rfl fun σ _ ↦ Finset.sum_congr rfl fun τ _ ↦ by
           rw [pairCfgEquiv_apply, MPSTensor.mpv_toMPSTensor_pairConfig]
     _ = ∑ ρ : Fin N → Fin (d * d),
-          MPSTensor.mpv K.toMPSTensor ρ * star (MPSTensor.mpv K.toMPSTensor ρ) :=
+          MPTensor.mpv K.toMPSTensor ρ * star (MPTensor.mpv K.toMPSTensor ρ) :=
         Fintype.sum_equiv (pairCfgEquiv d N) _ _ fun _ ↦ rfl
-    _ = MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N := rfl
+    _ = MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N := rfl
 
 /-- **Hermitian corollary.**  For an MPDO, positivity on every nonempty chain
 makes the density operator Hermitian, so the raw squared Hilbert--Schmidt norm
 identifies with the trace of the square:
 ```
-MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
+MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
   = Matrix.trace (mpo K N * mpo K N).
 ```
 
@@ -137,7 +137,7 @@ structure paper-gap note
 a claim from CPSV16. -/
 theorem mpvOverlap_toMPSTensor_self_eq_trace_sq (K : MPOTensor d D) (hK : IsMPDO K)
     {N : ℕ} (hN : 0 < N) :
-    MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
+    MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
       Matrix.trace (mpo K N * mpo K N) := by
   rw [mpvOverlap_toMPSTensor_self K N, (hK N hN).isHermitian.eq]
 
@@ -150,7 +150,7 @@ structure paper-gap note
 (<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>); it
 is not a claim from CPSV16. -/
 theorem mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq (K : MPOTensor d D) (N : ℕ) :
-    (MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N).re = ‖mpo K N‖ ^ 2 := by
+    (MPTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N).re = ‖mpo K N‖ ^ 2 := by
   rw [mpvOverlap_toMPSTensor_self K N, Matrix.trace_mul_comm]
   exact Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq (mpo K N)
 

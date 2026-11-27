@@ -28,6 +28,8 @@ invertible as linear maps. The singular case remains the selection problem
 recorded in `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators

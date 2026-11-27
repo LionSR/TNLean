@@ -142,15 +142,15 @@ variable {M : MPOTensor d D}
 private theorem fixedProduct_ne_zero_of_mpvOverlap_ne_zero
     (data : EtaLocalStructureData M)
     {N : ℕ} (hN : 2 ≤ N)
-    (hOverlap : MPSTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0) :
+    (hOverlap : MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0) :
     (data.bondData.toCommutingFormData hN).product ≠ 0 := by
   classical
   have hExists : ∃ ρ : Fin N → Fin (d * d),
-      MPSTensor.mpv M.toMPSTensor ρ ≠ 0 := by
+      MPTensor.mpv M.toMPSTensor ρ ≠ 0 := by
     by_contra h
     push Not at h
     apply hOverlap
-    simp only [MPSTensor.mpvOverlap]
+    simp only [MPTensor.mpvOverlap]
     apply Finset.sum_eq_zero
     intro ρ _hρ
     rw [h ρ, zero_mul]
@@ -180,7 +180,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 theorem eventuallyNonzeroProportionalMPV₂_fixedProductTensor
     (data : EtaLocalStructureData M)
     (repr : TranslationInvariantBondData.FixedProductTensorData data.bondData) :
-    MPSTensor.EventuallyNonzeroProportionalMPV₂
+    MPTensor.EventuallyNonzeroProportionalMPV₂
       M.toMPSTensor repr.tensor.toMPSTensor := by
   filter_upwards [Filter.eventually_ge_atTop 2] with N hN
   obtain ⟨c, hc, hreal⟩ := data.realizes_mpo N hN
@@ -230,7 +230,7 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
   let : NeZero repr.bondDim := ⟨Nat.ne_of_gt repr.bondDim_pos⟩
   have hsℂ : (s : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt hs
-  have hProp : MPSTensor.EventuallyNonzeroProportionalMPV₂ M.toMPSTensor
+  have hProp : MPTensor.EventuallyNonzeroProportionalMPV₂ M.toMPSTensor
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i) := by
     filter_upwards [data.eventuallyNonzeroProportionalMPV₂_fixedProductTensor repr]
       with N hN
@@ -287,13 +287,13 @@ theorem mpo_eq_positive_power_product_of_normal_smul
   let N := max K 2
   have hKN : K ≤ N := le_max_left K 2
   have hN : 2 ≤ N := le_max_right K 2
-  have hOverlapN : MPSTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0 := by
+  have hOverlapN : MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor N ≠ 0 := by
     intro hZero
     have hDist := hK N hKN
     rw [hZero] at hDist
     norm_num at hDist
   have hOverlapSucc :
-      MPSTensor.mpvOverlap M.toMPSTensor M.toMPSTensor (N + 1) ≠ 0 := by
+      MPTensor.mpvOverlap M.toMPSTensor M.toMPSTensor (N + 1) ≠ 0 := by
     intro hZero
     have hDist := hK (N + 1) (by omega)
     rw [hZero] at hDist

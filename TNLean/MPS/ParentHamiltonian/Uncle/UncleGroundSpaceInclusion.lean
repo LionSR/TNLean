@@ -22,6 +22,8 @@ thm:gs-subspace-uncle, lines 1050–1065. The reverse containment requires
 the source's intersection and closure properties and is not asserted here.
 -/
 
+open MPTensor
+
 open Kraus (decodeBlock blockTensor)
 
 noncomputable section

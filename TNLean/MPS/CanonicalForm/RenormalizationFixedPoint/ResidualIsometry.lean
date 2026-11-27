@@ -55,6 +55,8 @@ $(\alpha,\alpha')$ entry of the operator applied to the matrix unit
 $j = j'$ case is already `IsIsometryCanonicalForm`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

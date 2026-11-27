@@ -85,8 +85,8 @@ theorem exists_twoWallMPV_ne_zero {D D' : ℕ} (A : MPSTensor d D)
       ∃ τ : Fin (k + 1 + l + 1 + n) → Fin d, twoWallMPV A e B f τ ≠ 0 := by
   obtain ⟨L, hL, hinj⟩ := hA
   obtain ⟨L', hL', hinj'⟩ := hB
-  have hk := MPSTensor.isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj
-  have hl := MPSTensor.isNBlkInjective_mul_of_isNBlkInjective B (Nat.succ_pos N) hinj'
+  have hk := MPTensor.isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj
+  have hl := MPTensor.isNBlkInjective_mul_of_isNBlkInjective B (Nat.succ_pos N) hinj'
   obtain ⟨i, hi⟩ := Function.ne_iff.mp he
   obtain ⟨j, hj⟩ := Function.ne_iff.mp hf
   suffices h : ∃ (σ : Fin ((N + 1) * L) → Fin d) (σ' : Fin ((N + 1) * L') → Fin d),
@@ -234,7 +234,7 @@ theorem pair (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {z z
   obtain ⟨N₁, H₁⟩ := he.eq
   obtain ⟨N₂, H₂⟩ := hf.eq
   have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
-    ((hperm g y).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
+    ((hperm g y).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))
   set M := N₁ + N₂ + F.bondDim g * D y
   refine ⟨2 * M + 1, fun u v w i j hu hv hw ↦ ?_⟩
   obtain ⟨p, c₁, q, hsplit, hp, hq, hc₁⟩ :=

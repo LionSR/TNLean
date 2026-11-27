@@ -23,6 +23,8 @@ formalized here. Source context: arXiv:1010.3732, Section II.F.2, the paragraph
 following `eq:inj-sym:gs-smooth`.
 -/
 
+open MPTensor
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

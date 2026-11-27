@@ -32,6 +32,8 @@ Source: Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.C,
 Appendix A, and Section II.F.2, lines 930–954.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator

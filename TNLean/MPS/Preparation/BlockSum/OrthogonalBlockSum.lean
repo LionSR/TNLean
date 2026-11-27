@@ -59,6 +59,8 @@ source does not assume and without which eq. (S5) fails. Documented in
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S7).
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
 open Kraus (blockPhysDim blockTensor)

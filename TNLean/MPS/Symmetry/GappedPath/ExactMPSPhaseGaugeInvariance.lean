@@ -25,6 +25,8 @@ the independently defined physical relation, rather than equality of
 virtual factor systems.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Kraus (blockTensor)
 
@@ -41,7 +43,7 @@ theorem blockTensor_smul {d D : ℕ} (c : ℂ) (A : MPSTensor d D) (k : ℕ) :
 
 /-- Physical inclusion preserves an invertible bond gauge. Source context:
 arXiv:1010.3732, Section II.C.2, lines 440–466. -/
-theorem GaugeEquiv.rotatePhysical {d m D : ℕ} {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.rotatePhysical {d m D : ℕ} {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (E : Matrix (Fin m) (Fin d) ℂ) :
     GaugeEquiv (rotatePhysical E A) (rotatePhysical E B) := by
   exact h.sum_smul E

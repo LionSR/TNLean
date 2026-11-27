@@ -42,6 +42,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, Section 5,
 `Agammasym`, lines 1586–1665, and the fusion discussion at lines 1667–1685.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 open MPOTensor.PhysicalSectorFactorization (changePhysicalBasis)

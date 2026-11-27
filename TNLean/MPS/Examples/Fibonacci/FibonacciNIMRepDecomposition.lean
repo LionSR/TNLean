@@ -44,6 +44,8 @@ their gauge equivalence to the Fibonacci F-symbols.
 of lines 567--568, as documented in `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 -/
 
+open MPTensor
+
 section
 
 open MPSTensor MPOTensor

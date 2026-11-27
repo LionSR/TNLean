@@ -584,7 +584,7 @@ theorem mpo_commonWeightAbsorbedBasisMPOTensor
       (S.commonWeight hWeight j) ^ N * mpo (S.basisMPOTensor j) N u v := by
   rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
     commonWeightAbsorbedBasisMPOTensor_toMPSTensor]
-  change MPSTensor.mpv
+  change MPTensor.mpv
       (fun i => S.commonWeight hWeight j • S.basis j i)
       (fun n => finProdFinEquiv (u n, v n)) = _
   rw [MPSTensor.mpv_smul, ← MPSTensor.mpv_toMPSTensor_pairConfig,
@@ -597,7 +597,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1770. -/
 theorem mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {N : ℕ} (hN : 0 < N) :
@@ -624,7 +624,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -
 theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -676,7 +676,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -
 theorem sitewise_bntSectorProjection_mul_mpo_mul_self
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -730,7 +730,7 @@ and `sigmaNKj`, lines 1680--1759. -/
 theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

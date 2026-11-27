@@ -369,7 +369,7 @@ from canonical form II.  **Local fix (complementary length):** as in
 theorem IsRepresentation.exists_inverseCompatible_pleasantProperties_of_inv_eq
     {G : Type*} [Group G] {d : ℕ} (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
     (hcanonical : ∀ g : G,
-      MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+      MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) (hU : IsMPUCanonicalFormII (F.tensor g)) :
     let T := hF.daggerInverseGauge F hcanonical g
     let hT := hF.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq F hcanonical g hg

@@ -21,6 +21,8 @@ and equation boundXm. It concerns finite-chain compressions and does not
 assume or assert a classification of quasi-local ground states.
 -/
 
+open MPTensor
+
 open Filter
 open scoped Topology Matrix ComplexOrder BigOperators
 

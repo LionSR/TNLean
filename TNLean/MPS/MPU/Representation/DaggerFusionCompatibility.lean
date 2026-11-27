@@ -29,7 +29,7 @@ nonzero scalar $\zeta_{g,h}$, which is `eq:defzeta`.
 This file proves exactly these two steps.
 
 * The dagger of a reduction is a reduction of the physical adjoints
-  (`MPSTensor.IsReduction.physicalAdjointTensor`); the dagger here is entrywise
+  (`MPTensor.IsReduction.physicalAdjointTensor`); the dagger here is entrywise
   conjugation together with exchange of the two physical legs, as in the source
   (line 1662: "complex conjugating every entry and swapping the legs on the
   same side").
@@ -58,6 +58,8 @@ carry the corresponding permutation matrices explicitly.
 The identity `eq:zeta` of the same proposition is proved in
 `TNLean.MPS.MPU.DaggerFusionScalars`.
 -/
+
+open MPTensor
 
 open scoped Matrix Kronecker
 
@@ -122,7 +124,9 @@ end MPSTensor
 
 /-! ### Transport of reductions -/
 
-namespace MPSTensor.IsReduction
+namespace MPTensor.IsReduction
+
+open MPSTensor
 
 variable {d D₁ D₁' D₂ : ℕ} {B : MPSTensor d D₂} {A : MPSTensor d D₁}
   {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ}
@@ -130,7 +134,7 @@ variable {d D₁ D₁' D₂ : ℕ} {B : MPSTensor d D₂} {A : MPSTensor d D₁}
 /-- A reduction transports along an intertwiner of the target letters with a
 right inverse: if `A' i Q = Q A i` and `Q R = 1`, then `(Q V, W R)` reduces `B`
 onto `A'`.  This is the target counterpart of
-`MPSTensor.IsReduction.of_intertwine`, used to apply the gauge equation
+`MPTensor.IsReduction.of_intertwine`, used to apply the gauge equation
 `eq:defT` of arXiv:2502.20257 (lines 1552--1557) to the target of a fusion
 tensor. -/
 theorem of_target_intertwine {A' : MPSTensor d D₁'} {Q : Matrix (Fin D₁') (Fin D₁) ℂ}
@@ -168,7 +172,7 @@ theorem of_reindexBond_source {D₂' : ℕ} {K : MPOTensor d D₂} {A : MPSTenso
     ext x y
     simp [MPOTensor.toMPSTensor, MPOTensor.reindexBond]
 
-end MPSTensor.IsReduction
+end MPTensor.IsReduction
 
 namespace MPOTensor
 
@@ -187,7 +191,9 @@ theorem toMPSTensor_physicalAdjointTensor {D : ℕ} (U : MPOTensor d D) :
 
 end MPOTensor
 
-namespace MPSTensor.IsReduction
+namespace MPTensor.IsReduction
+
+open MPSTensor
 
 /-- **The dagger of a reduction.** If `(V, W)` reduces the doubled-index tensor
 of `K` onto that of `M`, then the entrywise conjugates `(V.map star, W.map star)` reduce the
@@ -206,7 +212,7 @@ theorem physicalAdjointTensor {d D₁ D₂ : ℕ} {K : MPOTensor d D₂} {M : MP
   rw [MPOTensor.toMPSTensor_physicalAdjointTensor, MPOTensor.toMPSTensor_physicalAdjointTensor]
   exact h.mapStar.reindexPhysical _
 
-end MPSTensor.IsReduction
+end MPTensor.IsReduction
 
 namespace MPOTensor.GroupFamily
 
@@ -225,7 +231,7 @@ variable {G : Type} [Group G] {F : GroupFamily G d}
 namespace IsRepresentation
 
 variable (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- The bond dimension of the tensor of `g h` equals that of `h⁻¹ g⁻¹ = (g h)⁻¹`. -/
 theorem bondDim_mul_inv_rev (hF : F.IsRepresentation) (g h : G) :
@@ -321,7 +327,7 @@ end IsRepresentation
 namespace FusionData
 
 variable (fd : FusionData F) (hF : F.IsRepresentation)
-  (hc : ∀ g : G, MPSTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
+  (hc : ∀ g : G, MPTensor.IsLeftCanonical (F.tensor g).normalizedFlattening)
 
 /-- **The daggered left fusion tensor**
 $T_{(gh)^{-1}}\bigl(F^<_{h^{-1},g^{-1}}\bigr)^\dagger
@@ -366,7 +372,7 @@ $T_g$, is a valid fusion tensor for $\mathcal U_g,\mathcal U_h$"
 the product reversal under the physical adjoint, and `eq:defT` at $g^{-1}$,
 $h^{-1}$ and $(gh)^{-1}$. -/
 theorem isReduction_daggerFusion (g h : G) :
-    MPSTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (F.tensor (g * h)).toMPSTensor (fd.daggerFusionV hF hc g h) (fd.daggerFusionW hF hc g h) := by
   have h₀ := (fd.isReduction h⁻¹ g⁻¹).physicalAdjointTensor
   rw [physicalAdjointTensor_mulTensor] at h₀
@@ -410,7 +416,7 @@ Source: arXiv:2502.20257, Proposition `prop:zetas`, `eq:defzeta`
 (lines 1570--1637), with the proof at lines 1675--1677 through the
 boundary-dressed uniqueness of reductions (arXiv:1706.07329v2, Theorem 22). -/
 theorem daggerZeta_defzeta (g h : G) :
-    MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
         (fd.daggerFusionV hF hc g h) (fd.V g h) (fd.daggerZeta hF hc (g, h)) ∧
       ∃ N : ℕ, ∀ w : List (Fin (d * d)), N ≤ w.length →
         Kraus.evalWord (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor w *
@@ -422,11 +428,11 @@ theorem daggerZeta_defzeta (g h : G) :
   obtain ⟨z, hz, hw⟩ := hD.exists_boundary_dressed_proportional_of_nilpotencyLength_le
     (fd.isReduction g h) (hN.isNormal _) (hN.sameMPV₂Pos_mulTensor g h)
     (le_max_left _ _) (le_max_right _ _)
-  have hleft : MPSTensor.IsDressedProportional
+  have hleft : MPTensor.IsDressedProportional
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (fd.daggerFusionV hF hc g h) (fd.V g h) z :=
     ⟨_, fun w hlen ↦ (hw w (Nat.lt_of_succ_le hlen)).1⟩
-  have hζ : MPSTensor.IsDressedProportional
+  have hζ : MPTensor.IsDressedProportional
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (fd.daggerFusionV hF hc g h) (fd.V g h) (fd.daggerZeta hF hc (g, h)) :=
     MPSTensor.isDressedProportional_dressedScalar ⟨z, hz, hleft⟩
@@ -434,10 +440,10 @@ theorem daggerZeta_defzeta (g h : G) :
     hleft.eq_of_forall_exists_ne_zero hζ
       (hD.exists_mul_evalWord_ne_zero (hN.isNormal _) (F.bondDim_pos _))
   refine ⟨hζ, 2 * max
-    (MPSTensor.reductionResidualNilpotencyLength
+    (MPTensor.reductionResidualNilpotencyLength
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
       (fd.daggerFusionV hF hc g h) (fd.daggerFusionW hF hc g h))
-    (MPSTensor.reductionResidualNilpotencyLength
+    (MPTensor.reductionResidualNilpotencyLength
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
       (fd.V g h) (fd.W g h)) + 1, fun w hlen ↦ ?_⟩
   rw [← hzζ]

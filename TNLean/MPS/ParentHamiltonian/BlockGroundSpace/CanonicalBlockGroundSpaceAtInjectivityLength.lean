@@ -31,6 +31,8 @@ It also contains the following results.
   original-lattice parent-Hamiltonian range for CPSV canonical form.
 -/
 
+open MPTensor
+
 section CPSVOriginalRange
 
 /-!

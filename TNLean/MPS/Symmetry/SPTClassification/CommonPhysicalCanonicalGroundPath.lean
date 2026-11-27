@@ -20,6 +20,8 @@ fixed-point constructors below use trivial endpoint characters, as recorded
 in `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder
 
 open ManyBody

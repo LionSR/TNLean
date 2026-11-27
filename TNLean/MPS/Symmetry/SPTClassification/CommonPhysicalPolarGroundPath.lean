@@ -29,6 +29,8 @@ trivial scalar character, as documented in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

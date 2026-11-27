@@ -419,7 +419,7 @@ theorem flat_reconstruction
 active normal corners have the same positive-length closed chains. -/
 theorem flat_sameMPV₂Pos
     (S : RetainedProductSpectralFamily dim mult weight B) :
-    MPSTensor.SameMPV₂Pos (retainedVerticalProductTensor dim mult weight B)
+    MPTensor.SameMPV₂Pos (retainedVerticalProductTensor dim mult weight B)
       (MPSTensor.toTensorFromBlocks (d := D * D)
         (μ := S.flatCoefficient) S.flatBlock) :=
   MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
@@ -464,7 +464,7 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
     ⟨(S.flatDim_pos j).ne'⟩
   have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
     M (verticalAssembledTensor dim mult weight B) U hU hReconstruct
-  have hSame : MPSTensor.SameMPV₂Pos (verticalTensor (blockTwo M))
+  have hSame : MPTensor.SameMPV₂Pos (verticalTensor (blockTwo M))
       (retainedVerticalProductTensor dim mult weight B) :=
     MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
       (verticalTensor (blockTwo M))

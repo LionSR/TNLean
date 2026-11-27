@@ -62,6 +62,8 @@ case.
 * arXiv:2103.13367, the mixed transfer matrices after eq. `eq:a_tensor`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 

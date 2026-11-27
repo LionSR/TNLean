@@ -114,6 +114,8 @@ datum and its exact-arithmetic verification are recorded in §3.2–§3.3 of tha
 source.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix

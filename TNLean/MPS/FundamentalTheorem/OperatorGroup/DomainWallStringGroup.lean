@@ -195,7 +195,7 @@ periodic state with the domain wall `e_{x,gx}` at `i`, the block `A_{gx}` betwee
 `e_{gx,x}` at `j`, on the periodic chain of every length `L ≥ 2`. -/
 theorem groupWallString_mulVec_mpv (hÂ : IsSeparatingLeftInverseFamily Â A) {k l n L : ℕ}
     (h : k + 1 + l + 1 + n = L) (x : X) :
-    ad.groupWallString g Â e k l n h *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ) =
+    ad.groupWallString g Â e k l n h *ᵥ (fun σ ↦ MPTensor.mpv (A x) σ) =
       fun τ ↦ twoWallMPV (A x) (e x (g • x)) (A (g • x)) (e (g • x) x) (τ ∘ Fin.cast h) := by
   funext τ
   obtain ⟨⟨p, a, μ, b, q⟩, rfl⟩ := (wallConfig h).surjective τ
@@ -228,7 +228,7 @@ theorem groupWallString_outer_mul_inner_mulVec_mpv_apply
       ∀ p a μ₁ i ν j μ₃ b q,
       ((ad.groupWallString g Â e u (u' + 1 + v + 1 + w') w h₂ *
           ad.groupWallString g Â e (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ))
+          (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
         (B g x (g • x) * B g (g • x) x) *
           nestedWallCoeff (A x) (e x (g • x)) (A (g • x)) (e (g • x) (g • g • x)) (A (g • g • x))
@@ -278,7 +278,7 @@ theorem groupWallString_inner_mul_outer_mulVec_mpv_apply
     (b : Fin d) (q : Fin w → Fin d) :
     ((ad.groupWallString g Â e (u + 1 + u') v (w' + 1 + w) h₁ *
         ad.groupWallString g Â e u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-        (fun σ ↦ MPSTensor.mpv (A x) σ))
+        (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
       nestedWallCoeff (A x) (e x (g • x)) (A (g • x)) (e (g • x) (g • g • x)) (A (g • g • x))
         (e (g • g • x) (g • x)) (e (g • x) x) p a μ₁ i ν j μ₃ b q := by
@@ -318,11 +318,11 @@ theorem groupWallString_mul_groupWallString_mulVec_mpv
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (ad.groupWallString g Â e u (u' + 1 + v + 1 + w') w h₂ *
           ad.groupWallString g Â e (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
+          (fun σ ↦ MPTensor.mpv (A x) σ) =
         (B g x (g • x) * B g (g • x) x) •
           ((ad.groupWallString g Â e (u + 1 + u') v (w' + 1 + w) h₁ *
             ad.groupWallString g Â e u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-              (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+              (fun σ ↦ MPTensor.mpv (A x) σ)) := by
   obtain ⟨N, hN⟩ := ad.groupWallString_outer_mul_inner_mulVec_mpv_apply hperm hÂ hB x
   refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' ↦ funext fun τ ↦ ?_⟩
   obtain ⟨p, a, μ₁, i, ν, j, μ₃, b, q, rfl⟩ := exists_wallConfig_wallSplit u' v w' h₂ τ
@@ -346,7 +346,7 @@ theorem groupWallString_cross_mulVec_mpv_apply (hÂ : IsSeparatingLeftInverseFam
       ∀ p a μ₁ i ν j μ₃ b q,
       ((ad.groupWallString g Â e (u + 1 + u') (v + 1 + w') w h₄ *
           ad.groupWallString g Â e u (u' + 1 + v) (w' + 1 + w) h₃) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ))
+          (fun σ ↦ MPTensor.mpv (A x) σ))
           (wallConfig h₂ (p, a, wallSplit u' v w' (μ₁, i, ν, j, μ₃), b, q)) =
         B g (g • x) x *
           nestedWallCoeff (A x) (e x (g • x)) (A (g • x)) (e (g • x) (g • g • x)) (A (g • g • x))
@@ -408,10 +408,10 @@ theorem groupWallString_mul_groupWallString_mulVec_mpv_swap_left
       (h₄ : u + 1 + u' + 1 + (v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (ad.groupWallString g Â e u (u' + 1 + v + 1 + w') w h₂ *
           ad.groupWallString g Â e (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
+          (fun σ ↦ MPTensor.mpv (A x) σ) =
         B g x (g • x) • ((ad.groupWallString g Â e (u + 1 + u') (v + 1 + w') w h₄ *
           ad.groupWallString g Â e u (u' + 1 + v) (w' + 1 + w) h₃) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+            (fun σ ↦ MPTensor.mpv (A x) σ)) := by
   obtain ⟨N₁, hN₁⟩ := ad.groupWallString_outer_mul_inner_mulVec_mpv_apply hperm hÂ hB x
   obtain ⟨N₂, hN₂⟩ := ad.groupWallString_cross_mulVec_mpv_apply hÂ hB x
   refine ⟨N₁ + N₂, fun u u' v w' w L h₁ h₂ h₃ h₄ hu' hv hw' ↦ funext fun τ ↦ ?_⟩

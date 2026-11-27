@@ -20,6 +20,8 @@ construct continuous canonical virtual supports across changing dimension;
 see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace LinearMap

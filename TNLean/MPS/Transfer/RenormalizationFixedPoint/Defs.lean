@@ -20,6 +20,8 @@ index. The equivalent predicate `IsTransferIdempotent A` says that the associate
 positive transfer map is idempotent.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Matrix Finset
 
@@ -171,7 +173,7 @@ theorem isTransferIdempotent_iff_hasPhysicalBlockingIsometry (A : MPSTensor d D)
 
 This is the gauge covariance of equation \(AA=A\) and the RFP definition in
 arXiv:1606.00608, lines 398--424. -/
-theorem GaugeEquiv.hasPhysicalBlockingIsometry {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.hasPhysicalBlockingIsometry {A B : MPSTensor d D}
     (h : GaugeEquiv A B) :
     HasPhysicalBlockingIsometry A → HasPhysicalBlockingIsometry B := by
   rintro ⟨U, hU, hprod⟩
@@ -187,13 +189,13 @@ theorem GaugeEquiv.hasPhysicalBlockingIsometry {A B : MPSTensor d D}
     _ = ∑ j : Fin d, U (i₁, i₂) j • B j := by simp_rw [hX]
 
 /-- Gauge-equivalent tensors satisfy the physical RFP relation simultaneously. -/
-theorem GaugeEquiv.hasPhysicalBlockingIsometry_iff {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.hasPhysicalBlockingIsometry_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) :
     HasPhysicalBlockingIsometry A ↔ HasPhysicalBlockingIsometry B :=
   ⟨h.hasPhysicalBlockingIsometry, h.symm.hasPhysicalBlockingIsometry⟩
 
 /-- Transfer-map idempotence is invariant under a virtual gauge change. -/
-theorem GaugeEquiv.isTransferIdempotent_iff {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.isTransferIdempotent_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) :
     IsTransferIdempotent A ↔ IsTransferIdempotent B := by
   rw [isTransferIdempotent_iff_hasPhysicalBlockingIsometry,

@@ -38,6 +38,8 @@ Source: the trace-MPS definition in SPWC10, arXiv:0909.5347, and the
 finite-prefix boundary of Theorem 5, local main.tex lines 850--880.
 -/
 
+open MPTensor
+
 section CyclicTraceForcedBond
 
 section

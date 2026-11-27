@@ -28,6 +28,8 @@ several-block normal forms. Documented in
   states and projected entangled pair states*, Sections II.C and II.F.2
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

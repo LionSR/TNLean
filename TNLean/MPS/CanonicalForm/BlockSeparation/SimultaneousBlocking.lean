@@ -21,6 +21,8 @@ lines 317--345, applied to the basis of normal tensors defined at lines
 271--274.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim flattenBlockedWord evalWord_blockTensor)
 

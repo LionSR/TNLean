@@ -16,6 +16,8 @@ gauge preparation preceding the polar deformation.
 Source: arXiv:1010.3732, Sections II.C and II.F.2.
 -/
 
+open MPTensor
+
 open scoped Matrix ScalarCohomology
 
 namespace ProjectiveRepresentation

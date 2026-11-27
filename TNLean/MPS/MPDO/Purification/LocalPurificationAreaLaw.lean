@@ -162,9 +162,9 @@ theorem blockAncillaryTraceMap_pureState_purificationTensor
   simp_rw [hdecode]
   exact ((finFunctionFinEquiv (m := dK) (n := N)).symm.sum_comp
     (fun κ : Fin N → Fin dK ↦
-      MPSTensor.mpv (purificationTensor A)
+      MPTensor.mpv (purificationTensor A)
           (fun n ↦ finProdFinEquiv (finFunctionFinEquiv.symm i n, κ n)) *
-        star (MPSTensor.mpv (purificationTensor A)
+        star (MPTensor.mpv (purificationTensor A)
           (fun n ↦ finProdFinEquiv (finFunctionFinEquiv.symm j n, κ n)))))
 
 /-- The finite-chain purification density and its purifying pure state have the
@@ -203,7 +203,7 @@ theorem purifyingBondDimension_pos_of_trace_ne_zero
   have hDP0 : DP = 0 := Nat.eq_zero_of_not_pos hDP
   subst DP
   apply htr
-  simp [MPSTensor.pureState, MPSTensor.mpv, MPSTensor.coeff, Matrix.trace,
+  simp [MPSTensor.pureState, MPTensor.mpv, MPTensor.coeff, Matrix.trace,
     Matrix.vecMulVec_apply]
 
 /-- The normalized-form finite-chain operator of an explicit local purification

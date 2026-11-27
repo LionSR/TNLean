@@ -409,7 +409,7 @@ Source: CPSV17, canonical form II, lines 269–281. -/
 private noncomputable def canonicalFormII_of_normal_leftCanonical
     (U : MPOTensor d D) (hU : U.IsMPU)
     (hNormal : MPSTensor.IsNormalTensor U.normalizedFlattening)
-    (hLeft : MPSTensor.IsLeftCanonical U.normalizedFlattening)
+    (hLeft : MPTensor.IsLeftCanonical U.normalizedFlattening)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρpd : ρ.PosDef) (hρdiag : ρ.IsDiag)
     (hρtrace : Matrix.trace ρ = 1)
     (hρfix : Kraus.transferMap U.normalizedFlattening ρ = ρ) :
@@ -435,7 +435,7 @@ private theorem unitary_conj_normal {r D : ℕ} (A : MPSTensor r D)
       (fun i ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
         (V : Matrix (Fin D) (Fin D) ℂ)) := by
   apply hA.of_gaugeEquiv
-  exact (show MPSTensor.GaugeEquiv A
+  exact (show MPTensor.GaugeEquiv A
     (fun i ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
       (V : Matrix (Fin D) (Fin D) ℂ)) from
     ⟨(MPSTensor.unitaryGL V)⁻¹, fun i ↦ by simp [MPSTensor.unitaryGL]⟩).symm
@@ -452,8 +452,8 @@ private theorem positive_gauge_exists_diagonal_fixedPoint
     ∃ (V : Matrix.unitaryGroup (Fin D) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ),
       let B : MPSTensor (d * d) D := fun i ↦
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (V : Matrix (Fin D) (Fin D) ℂ)
-      MPSTensor.SameMPV₂ A B ∧ ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
-        MPSTensor.IsLeftCanonical B ∧ Kraus.transferMap B ρ = ρ := by
+      MPTensor.SameMPV₂ A B ∧ ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
+        MPTensor.IsLeftCanonical B ∧ Kraus.transferMap B ρ = ρ := by
   have hNormalTP : MPSTensor.IsNormalTensor (Kraus.tpGauge U.normalizedFlattening L) :=
     hNormal.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge U.normalizedFlattening L hL).symm
   obtain ⟨V, Λ, hSame, hΛ, hdiag, hTP, hΛfix⟩ :=

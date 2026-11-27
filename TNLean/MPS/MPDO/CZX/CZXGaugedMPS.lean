@@ -87,7 +87,7 @@ def gaugedTensor : MPSTensor (Fintype.card (Fin 4 × Multiplicative (ZMod 2))) 2
 
 /-- The periodic vector of the gauged CZX tensor on a chain of `N` sites. -/
 def gaugedMPS (N : ℕ) : (Fin N → Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2)))) → ℂ :=
-  fun σ ↦ MPSTensor.mpv gaugedTensor σ
+  fun σ ↦ MPTensor.mpv gaugedTensor σ
 
 /-- The matter state attached to a configuration `α` of gauge labels: the periodic GHZ state
 with the gauge matrix of `α k` inserted on the bond to the left of the site `k`. -/
@@ -108,7 +108,7 @@ Source: arXiv:2502.20257, `eq:gauged_tensor_dw`, `main.tex` lines 3511--3530, an
 theorem gaugedMPS_eq_gaugedVector (N : ℕ) :
     gaugedMPS N = gaugedVector 4 (Multiplicative (ZMod 2)) gaugedDefectState := by
   funext σ
-  rw [gaugedMPS, MPSTensor.mpv, MPSTensor.coeff, evalWord_eq_prod_map, List.map_ofFn,
+  rw [gaugedMPS, MPTensor.mpv, MPTensor.coeff, evalWord_eq_prod_map, List.map_ofFn,
     gaugedVector_apply, gaugedDefectState]
   rfl
 

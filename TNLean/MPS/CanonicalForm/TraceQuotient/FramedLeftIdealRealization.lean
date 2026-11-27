@@ -36,6 +36,8 @@ lines 953–993 of the local source. The frame and left inverse are explicit inp
 no continuous pointwise matrix-algebra identification or physical-gap implication is assumed.
 -/
 
+open MPTensor
+
 section
 
 set_option relaxedAutoImplicit false

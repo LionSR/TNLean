@@ -47,6 +47,8 @@ Source: arXiv:1708.00029, equation Aoffdiag; Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, lines 2649--2675.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder

@@ -40,6 +40,8 @@ Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetr
 `def:asym_flag_data`, *Labelled invariant flag*, and `thm:asym_flag_theorem`, *The flag theorem*.
 -/
 
+open MPTensor
+
 universe u
 
 namespace WordAlgebra

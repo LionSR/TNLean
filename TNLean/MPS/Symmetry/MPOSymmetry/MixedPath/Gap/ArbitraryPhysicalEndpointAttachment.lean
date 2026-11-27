@@ -26,6 +26,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5,
 limiting parent interactions (lines 1690–1692).
 -/
 
+open MPTensor
+
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 open ManyBody

@@ -62,10 +62,10 @@ private theorem evalWord_blockedGHZTensor {N : ℕ} (s : Fin N → Fin 4) :
 /-- The MPV of the actual once-blocked GHZ tensor is the sum of the constant
 $00$ and $11$ configurations. Source: arXiv:2502.20257, lines 4660–4670. -/
 theorem mpv_blockedGHZTensor {N : ℕ} :
-    (MPSTensor.mpv blockedGHZTensor : (Fin N → Fin 4) → ℂ) =
+    (MPTensor.mpv blockedGHZTensor : (Fin N → Fin 4) → ℂ) =
       Pi.single (fun _ ↦ 0) 1 + Pi.single (fun _ ↦ 3) 1 := by
   funext s
-  rw [MPSTensor.mpv, MPSTensor.coeff, evalWord_blockedGHZTensor, Matrix.trace_diagonal]
+  rw [MPTensor.mpv, MPTensor.coeff, evalWord_blockedGHZTensor, Matrix.trace_diagonal]
   simp only [Fin.sum_univ_two, Fintype.prod_boole, Pi.add_apply, Pi.single_apply]
   have h0 : finProdFinEquiv ((0 : Fin 2), (0 : Fin 2)) = (0 : Fin 4) := rfl
   have h3 : finProdFinEquiv ((1 : Fin 2), (1 : Fin 2)) = (3 : Fin 4) := rfl
@@ -89,16 +89,16 @@ the maintained two-site blocking equivalence, not a numerical cast.
 Source: arXiv:2502.20257, lines 4660–4670. -/
 theorem mpo_tensor_mulVec_blockedGHZ {N : ℕ} [NeZero N] :
     mpo tensor N *ᵥ (fun s : Fin N → Fin 4 ↦
-      MPSTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
+      MPTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
         (fun n ↦ twoSiteBlockEquiv 2 (s n))) =
       (fun s : Fin N → Fin 4 ↦
-        MPSTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
+        MPTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
           (fun n ↦ twoSiteBlockEquiv 2 (s n))) := by
   have hv : (fun s : Fin N → Fin 4 ↦
-      MPSTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
-        (fun n ↦ twoSiteBlockEquiv 2 (s n))) = MPSTensor.mpv blockedGHZTensor := by
+      MPTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
+        (fun n ↦ twoSiteBlockEquiv 2 (s n))) = MPTensor.mpv blockedGHZTensor := by
     funext s
-    exact (MPSTensor.mpv_reindexPhysical _ _ s).symm
+    exact (MPTensor.mpv_reindexPhysical _ _ s).symm
   rw [hv, mpv_blockedGHZTensor, Matrix.mulVec_add, mpo_tensor,
     Matrix.monomial_mulVec_single, Matrix.monomial_mulVec_single]
   have hc0 : complement N (fun _ ↦ 0) = (fun _ ↦ 3) := by

@@ -49,12 +49,14 @@ A tensor with a reduction onto `(C_s)` has the states of `⨁_s C_s`
   `MPSTensor.isIrreducibleAction_stepTensor`, `MPSTensor.exists_stepTensor_apply_ne_zero`,
   `MPSTensor.isGaugeRelated_stepTensor`.
 * `MPSTensor.tfae_sameMPV₂Pos_compositionSeries`.
-* `MPSTensor.SameMPV₂Pos.exists_equiv_isGaugeRelated_stepTensor`: matched steps of any two
+* `MPTensor.SameMPV₂Pos.exists_equiv_isGaugeRelated_stepTensor`: matched steps of any two
   invariant flags have gauge equivalent tensors.
 * `MPSTensor.exists_multiBlockCompression_mem_iff_and_flag_eq_and_ord_eq`.
 * `MPSTensor.MultiBlockCompression.exists_isUnit_and_tendsto_mul_zeroPad_mul_inv`,
   `MPSTensor.sameMPV₂Pos_of_tendsto_mul_zeroPad_mul_inv`.
 -/
+
+open MPTensor
 
 open scoped Matrix Topology
 open Filter
@@ -494,7 +496,7 @@ theorem tfae_sameMPV₂Pos_compositionSeries {B : MPSTensor d DB} {B' : MPSTenso
 every invariant flag `s` of `B` and every invariant flag `s'` of `B'` there is a bijection `e`
 between their nonzero steps such that, in any coordinates `ψ` of a nonzero step `k` of `s` and `ψ'`
 of the step `e k` of `s'`, the tensors of the two steps are gauge equivalent. -/
-theorem SameMPV₂Pos.exists_equiv_isGaugeRelated_stepTensor {B : MPSTensor d DB}
+theorem _root_.MPTensor.SameMPV₂Pos.exists_equiv_isGaugeRelated_stepTensor {B : MPSTensor d DB}
     {B' : MPSTensor d DB'} (h : SameMPV₂Pos B B')
     (s : CompositionSeries (Submodule (WordAlgebra d) B.WordModule))
     (s' : CompositionSeries (Submodule (WordAlgebra d) B'.WordModule))

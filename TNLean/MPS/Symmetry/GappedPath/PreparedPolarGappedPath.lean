@@ -32,6 +32,8 @@ is derived rather than assumed. The several-block case is documented in
   Verstraete, Wolf, Cirac, *Matrix Product State Representations*
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

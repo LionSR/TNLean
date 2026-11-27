@@ -50,6 +50,8 @@ clause from Definition 3.9.
   Hamiltonians in 1D (consumed only in the NNCPH \(\Longrightarrow\) RFP direction)
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -80,7 +82,7 @@ def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
 
 /-- Gauge-equivalent tensors have the same nearest-neighbor parent-Hamiltonian
 commutation equations. -/
-theorem GaugeEquiv.isNNCPH {A B : MPSTensor d D} (h : GaugeEquiv A B) {N : ℕ} :
+theorem _root_.MPTensor.GaugeEquiv.isNNCPH {A B : MPSTensor d D} (h : GaugeEquiv A B) {N : ℕ} :
     IsNNCPH A N → IsNNCPH B N := by
   intro hA i j
   rw [← h.localTerm_eq 2 N i, ← h.localTerm_eq 2 N j]

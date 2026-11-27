@@ -41,6 +41,8 @@ idempotent operator with spectral radius `< 1` is `0`.  The diagonal lemma
 blocks and is not used here.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
 open Filter Topology
 

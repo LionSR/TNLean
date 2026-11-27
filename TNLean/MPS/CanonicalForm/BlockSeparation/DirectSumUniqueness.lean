@@ -31,6 +31,8 @@ equal-size collapse.
 matrix product states, canonical form, direct sum, parent Hamiltonian
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor

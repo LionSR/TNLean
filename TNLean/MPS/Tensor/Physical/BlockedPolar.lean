@@ -48,6 +48,8 @@ operators of `B` and `P` coincide, and for `M` blocks of `q` sites of a tensor `
   (`B = V P` with `V†V = Π`, and `|φ_N⟩ = (⊗ᵢ Vᵢ) ∑ⱼ βⱼ |v_{pos,j}⟩`).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 

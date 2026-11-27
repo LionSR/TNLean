@@ -65,6 +65,8 @@ The source also treats several-block normal forms. Documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix MatrixOrder ComplexOrder Kronecker

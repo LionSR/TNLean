@@ -29,6 +29,8 @@ lines 907--925, Theorem 1.2, lines 933--947, and Section 3,
 lines 1394--1483.
 -/
 
+open MPTensor
+
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open Kraus (blockPhysDim blockTensor)

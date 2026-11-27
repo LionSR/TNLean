@@ -109,7 +109,7 @@ noncomputable def sigmaDimerBasis : MPSTensor 16 4 :=
   sigmaDimerNormalizingScalar • sigmaDimer.toMPSTensor
 
 /-- The normalized representative is left-canonical. -/
-lemma sigmaDimerBasis_isLeftCanonical : MPSTensor.IsLeftCanonical sigmaDimerBasis := by
+lemma sigmaDimerBasis_isLeftCanonical : MPTensor.IsLeftCanonical sigmaDimerBasis := by
   change (∑ i, (sigmaDimerBasis i)ᴴ * sigmaDimerBasis i) = 1
   simp only [sigmaDimerBasis, Pi.smul_apply, Matrix.conjTranspose_smul,
     smul_mul_smul_comm]
@@ -206,9 +206,9 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
       rw [hBlock, P.mpv_toTensor_eq_sum_coeff]
       simp only [P, MPSTensor.SectorDecomposition.coeff,
         MPSTensor.SectorWeightData.coeff, Fin.sum_univ_one]
-      change MPSTensor.mpv (Kraus.reindexPhysical e sigmaDimer.toMPSTensor) σ =
-        sigmaDimerNormalizingScalar⁻¹ ^ N * MPSTensor.mpv B σ
-      simp only [B, MPSTensor.mpv_reindexPhysical, sigmaDimerBasis]
+      change MPTensor.mpv (Kraus.reindexPhysical e sigmaDimer.toMPSTensor) σ =
+        sigmaDimerNormalizingScalar⁻¹ ^ N * MPTensor.mpv B σ
+      simp only [B, MPTensor.mpv_reindexPhysical, sigmaDimerBasis]
       rw [show sigmaDimerNormalizingScalar • sigmaDimer.toMPSTensor =
         (fun i => sigmaDimerNormalizingScalar • sigmaDimer.toMPSTensor i) from rfl,
         MPSTensor.mpv_smul]

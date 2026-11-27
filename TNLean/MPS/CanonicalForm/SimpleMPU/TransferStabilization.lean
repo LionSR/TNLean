@@ -189,8 +189,8 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
       (fun i => cfii.weights k • cfii.blocks k i) V
       (base.mul_ambientBlockInclusion k) Λ, hweightedFix]
   have hweightedLeft :
-      MPSTensor.IsLeftCanonical (fun i => cfii.weights k • cfii.blocks k i) := by
-    unfold MPSTensor.IsLeftCanonical
+      MPTensor.IsLeftCanonical (fun i => cfii.weights k • cfii.blocks k i) := by
+    unfold MPTensor.IsLeftCanonical
     have hweightStar : cfii.weights k * star (cfii.weights k) = 1 := by
       simpa using hweight'
     have hweightStarComm : star (cfii.weights k) * cfii.weights k = 1 := by
@@ -215,8 +215,8 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
       _ = (U.normalizedFlattening i * V) * Vᴴ := by rw [Matrix.mul_assoc]
       _ = V * (cfii.weights k • cfii.blocks k i) * Vᴴ := by
         rw [base.mul_ambientBlockInclusion k]
-  have hAleft : MPSTensor.IsLeftCanonical U.normalizedFlattening := by
-    unfold MPSTensor.IsLeftCanonical at hweightedLeft ⊢
+  have hAleft : MPTensor.IsLeftCanonical U.normalizedFlattening := by
+    unfold MPTensor.IsLeftCanonical at hweightedLeft ⊢
     calc
       ∑ i, (U.normalizedFlattening i)ᴴ * U.normalizedFlattening i =
           ∑ i, V * ((cfii.weights k • cfii.blocks k i)ᴴ *

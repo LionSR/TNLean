@@ -15,6 +15,8 @@ at length $S$ gives a full simultaneous span at length $(r-1)S$, without
 adding a positive-length padding or an injective prefix.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

@@ -34,6 +34,8 @@ dimension are admissible.
 * `MPSTensor.forall_trace_evalWord_eq_sum_iff_nonempty_multiBlockCompression_of_isNormal`.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d DB : ℕ}

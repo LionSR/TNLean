@@ -233,8 +233,8 @@ is $\mu^N$ times the sum of the matrix product vectors of the two flag sectors.
 
 Project example; not from CPSV16. -/
 theorem mpv_verticalTensor_T {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin (8 * 8)) :
-    MPSTensor.mpv (verticalTensor T) σ =
-      ∑ f : Fin 2, ((mu : ℝ) : ℂ) ^ N * MPSTensor.mpv (flagFamily f) σ := by
+    MPTensor.mpv (verticalTensor T) σ =
+      ∑ f : Fin 2, ((mu : ℝ) : ℂ) ^ N * MPTensor.mpv (flagFamily f) σ := by
   rw [MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
       (verticalTensor T)
       (verticalAssembledTensor sectorDim sectorMult sectorWeight flagFamily)
@@ -320,7 +320,7 @@ private lemma isCyclicBondMatched_const (n : ℕ) :
 /-- The sector matrix product vector on the doubled constant word of bond index
 $(0, 0, 0)$ is $(2/5)^{N}$. -/
 private lemma mpv_flagFamily_const (f : Fin 2) (n : ℕ) :
-    MPSTensor.mpv (flagFamily f)
+    MPTensor.mpv (flagFamily f)
       (fun _ : Fin (n + 1) => finProdFinEquiv (physIdx 0 0 0, physIdx 0 0 0)) =
       (2 / 5 : ℂ) ^ (n + 1) := by
   unfold flagFamily
@@ -331,7 +331,7 @@ private lemma mpv_flagFamily_const (f : Fin 2) (n : ℕ) :
 /-- The sector matrix product vector on the doubled word with one bond index
 $(0, 0, 1)$ is $\tfrac{3}{10} (\tau_1)_{ff} (2/5)^{N-1}$. -/
 private lemma mpv_flagFamily_signWord (f : Fin 2) (n : ℕ) :
-    MPSTensor.mpv (flagFamily f) (fun m => finProdFinEquiv (signWord n m, signWord n m)) =
+    MPTensor.mpv (flagFamily f) (fun m => finProdFinEquiv (signWord n m, signWord n m)) =
       (3 / 10 : ℂ) * ((tau 1 f : ℝ) : ℂ) * (2 / 5 : ℂ) ^ n := by
   unfold flagFamily
   rw [MPSTensor.mpv_toMPSTensor_pairConfig, mpo_flagMPO_apply f n.succ_pos,

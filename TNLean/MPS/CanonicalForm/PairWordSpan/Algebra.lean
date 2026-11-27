@@ -17,6 +17,8 @@ subdirect-product dichotomy.  It is part of the pair-span homogenization
 layer for MPDO biCF.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

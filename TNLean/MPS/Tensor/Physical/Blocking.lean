@@ -24,6 +24,8 @@ Kronecker lifts of physical operators, configuration equivalences, canonical
 normalization, and matrix-product-vector statements.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Kraus (blockPhysDim blockPhysDim_eq_pow singleBlockEquiv decodeBlock wordOfBlock
   decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm blockTensor flattenBlockedWord
@@ -34,8 +36,8 @@ namespace MPSTensor
 variable {d D L : ℕ}
 
 /-- Fixed-length injectivity persists at positive multiples of the length. -/
-theorem isNBlkInjective_mul_of_isNBlkInjective
-    (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m) (hN : Kraus.IsNBlkInjective A N) :
+theorem _root_.MPTensor.isNBlkInjective_mul_of_isNBlkInjective {α : Type*}
+    (A : MPTensor α (Fin D)) {N m : ℕ} (hm : 0 < m) (hN : Kraus.IsNBlkInjective A N) :
     Kraus.IsNBlkInjective A (m * N) := by
   -- Use word-span factorization here rather than importing the higher-level
   -- Wielandt theorem `Kraus.wordSpan_top_of_mul` into basic blocking.
@@ -376,7 +378,7 @@ variable {d D : ℕ}
   rfl
 
 /-- Physical blocking preserves the `SameMPV` relation. -/
-theorem SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ) :
+theorem _root_.MPTensor.SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ) :
     SameMPV (Kraus.blockTensor (d := d) (n := Fin D) A L)
       (Kraus.blockTensor (d := d) (n := Fin D) B L) := by
   intro N σ

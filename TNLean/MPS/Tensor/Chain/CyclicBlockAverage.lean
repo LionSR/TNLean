@@ -219,7 +219,7 @@ invariance, injectivity, purity, or canonical-form assumption, and asserts no
 equality at lengths other than `N`. -/
 theorem mpv_cyclicBlockTensor_eq_average [NeZero N]
     (A : MPSChainTensor d D N) (σ : Fin N → Fin d) :
-    MPSTensor.mpv (cyclicBlockTensor A) σ =
+    MPTensor.mpv (cyclicBlockTensor A) σ =
       (N : ℂ)⁻¹ * ∑ k : Fin N, coeff (cyclicRotation A k) σ := by
   change Matrix.trace
       (Kraus.evalWord

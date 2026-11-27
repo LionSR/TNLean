@@ -51,6 +51,8 @@ of its unique block.
   sum produced by the existence theorem is in canonical form.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor

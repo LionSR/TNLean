@@ -27,6 +27,8 @@ Source: PGVWC07, arXiv:quant-ph/0608197, the normalization in the proof of
 Theorem 4, lines 765--770, and first clause of Theorem 8, lines 1139--1169.
 -/
 
+open MPTensor
+
 open Matrix MPSPreparation
 open scoped BigOperators Kronecker
 

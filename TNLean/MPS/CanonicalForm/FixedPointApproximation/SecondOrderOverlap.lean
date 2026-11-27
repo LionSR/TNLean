@@ -47,6 +47,8 @@ the residual.
 * arXiv:2606.24475, App. B4, eq. (S52).
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Kraus (blockTensor)
 

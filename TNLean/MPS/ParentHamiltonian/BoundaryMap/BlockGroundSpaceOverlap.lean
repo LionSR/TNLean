@@ -16,6 +16,8 @@ This follows Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma `disjoint`,
 equations `C1C2` and `limP12`.
 -/
 
+open MPTensor
+
 open scoped Matrix InnerProductSpace ComplexOrder
 
 namespace MPSTensor

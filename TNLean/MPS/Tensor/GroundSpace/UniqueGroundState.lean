@@ -44,6 +44,8 @@ conclusion after blocking.
 * [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

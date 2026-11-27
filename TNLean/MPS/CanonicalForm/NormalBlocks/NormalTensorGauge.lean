@@ -81,6 +81,8 @@ by transport through this gauge.
 Source context: arXiv:1606.00608, lines 318–344, and quantum Wielandt theory.
 -/
 
+open MPTensor
+
 section NormalTensorGauge
 
 section
@@ -92,14 +94,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-namespace GaugeEquiv
-
 /-- The transfer maps of gauge-equivalent tensors are related by the standard
 congruence similarity of completely positive maps.
 
 Source: arXiv:1606.00608, lines 219--223 define the transfer map and lines
 264--268 give the invertible gauge relation. -/
-theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+theorem _root_.MPTensor.GaugeEquiv.transferMap_eq_similarityMap {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) :
     ∃ C : Matrix (Fin D) (Fin D) ℂ, C.det ≠ 0 ∧
       Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         similarityMap (D := D) C (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
@@ -151,7 +152,7 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
               hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
 
 /-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
-theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (c : ℂ) :
     Kraus.transferMap (ι := Fin d) (n := Fin D) B ∘ₗ Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         c • Kraus.transferMap (ι := Fin d) (n := Fin D) B ↔
@@ -176,8 +177,6 @@ theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
   · intro hPoly
     rw [← Module.End.mul_eq_comp] at hPoly ⊢
     simpa using congrArg e hPoly
-
-end GaugeEquiv
 
 namespace IsNormalTensor
 
@@ -408,11 +407,11 @@ primitive trace-preserving overlap limit.  This is the normalization used in
 the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097. -/
 theorem IsNormalTensor.selfOverlap_tendsto_one
     {A : MPSTensor d D} (hA : IsNormalTensor A) :
-    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let A' := Kraus.tpGauge (d := d) (D := D) A σ
-  have hPrepared : Tendsto (fun N => mpvOverlap (d := d) A' A' N)
+  have hPrepared : Tendsto (fun N => mpvOverlap (α := Fin d) A' A' N)
       atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A' hIrr hTP hPrim
   apply hPrepared.congr'
@@ -448,10 +447,10 @@ theorem norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
   have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   subst D₂
-  have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖)
+  have hAA : Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖)
       atTop (nhds (1 : ℝ)) := by
     simpa using hA.selfOverlap_tendsto_one.norm
-  have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖)
+  have hBB : Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖)
       atTop (nhds (1 : ℝ)) := by
     simpa using hB.selfOverlap_tendsto_one.norm
   exact norm_eq_one_of_selfOverlap_scale hAA hBB
@@ -493,37 +492,37 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       _ = ζ ^ N * mpv X w := hmpv N hN w
       _ = ζ ^ N * mpv X' w := by rw [GaugeEquiv.sameMPV hGaugeX N w]
   have hSelf : Tendsto
-      (fun N => mpvOverlap (d := d) X' X' N) atTop (nhds (1 : ℂ)) :=
+      (fun N => mpvOverlap (α := Fin d) X' X' N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       X' hIrrX hTPX hPrimX
   have hSelfY : Tendsto
-      (fun N => mpvOverlap (d := d) Y' Y' N) atTop (nhds (1 : ℂ)) :=
+      (fun N => mpvOverlap (α := Fin d) Y' Y' N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       Y' hIrrY hTPY hPrimY
   have hSelfNorm : Tendsto
-      (fun N => ‖mpvOverlap (d := d) X' X' N‖) atTop (nhds (1 : ℝ)) := by
+      (fun N => ‖mpvOverlap (α := Fin d) X' X' N‖) atTop (nhds (1 : ℝ)) := by
     simpa using hSelf.norm
   have hSelfYNorm : Tendsto
-      (fun N => ‖mpvOverlap (d := d) Y' Y' N‖) atTop (nhds (1 : ℝ)) := by
+      (fun N => ‖mpvOverlap (α := Fin d) Y' Y' N‖) atTop (nhds (1 : ℝ)) := by
     simpa using hSelfY.norm
   have hζ : ‖hPhase.choose‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale_pos hSelfNorm hSelfYNorm
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos hPhase.choose_spec.2)
   have hCrossEq : ∀ N, 0 < N →
-      mpvOverlap (d := d) X' Y' N =
-        (star hPhase.choose) ^ N * mpvOverlap (d := d) X' X' N :=
+      mpvOverlap (α := Fin d) X' Y' N =
+        (star hPhase.choose) ^ N * mpvOverlap (α := Fin d) X' X' N :=
     mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_pos hPhase.choose_spec.2
   have hCrossNormEq : ∀ N, 0 < N →
-      ‖mpvOverlap (d := d) X' Y' N‖ = ‖mpvOverlap (d := d) X' X' N‖ := by
+      ‖mpvOverlap (α := Fin d) X' Y' N‖ = ‖mpvOverlap (α := Fin d) X' X' N‖ := by
     intro N hN
     rw [hCrossEq N hN, norm_mul, norm_pow]
     calc
-      ‖star hPhase.choose‖ ^ N * ‖mpvOverlap (d := d) X' X' N‖ =
-          ‖hPhase.choose‖ ^ N * ‖mpvOverlap (d := d) X' X' N‖ := by
+      ‖star hPhase.choose‖ ^ N * ‖mpvOverlap (α := Fin d) X' X' N‖ =
+          ‖hPhase.choose‖ ^ N * ‖mpvOverlap (α := Fin d) X' X' N‖ := by
             rw [norm_star]
-      _ = ‖mpvOverlap (d := d) X' X' N‖ := by rw [hζ, one_pow, one_mul]
+      _ = ‖mpvOverlap (α := Fin d) X' X' N‖ := by rw [hζ, one_pow, one_mul]
   have hCrossNorm : Tendsto
-      (fun N => ‖mpvOverlap (d := d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
+      (fun N => ‖mpvOverlap (α := Fin d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
     hSelfNorm.congr' (by
       filter_upwards [eventually_ge_atTop 1] with N hN
       exact (hCrossNormEq N hN).symm)

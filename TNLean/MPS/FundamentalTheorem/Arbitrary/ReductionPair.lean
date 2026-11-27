@@ -50,10 +50,12 @@ letter of `C`; when `C` is irreducible these are the nonzero scalars by Schur's 
   `MPSTensor.IsSubquotExtension.isSubquotExtension_iff_forall_sub_mulVec_eq_zero`,
   `MPSTensor.exists_isUnit_and_forall_commute_and_forall_asModuleEquiv_eq_mulVec`,
   `MPSTensor.exists_linearEquiv_forall_asModuleEquiv_eq_mulVec`.
-* `MPSTensor.IsReduction.exists_compositionSeries_map_eq_reachableKer_and_map_eq_reachable`,
-  `MPSTensor.IsReduction.exists_multiBlockCompression_map_flag_eq_and_left_eq_and_right_eq`,
+* `MPTensor.IsReduction.exists_compositionSeries_map_eq_reachableKer_and_map_eq_reachable`,
+  `MPTensor.IsReduction.exists_multiBlockCompression_map_flag_eq_and_left_eq_and_right_eq`,
   `IsReduction.exists_multiBlockCompression_map_flag_eq_and_leftRow_inr_eq_and_rightCol_inr_eq`.
 -/
+
+open MPTensor
 
 open scoped Matrix
 
@@ -677,7 +679,13 @@ end FlagAux
 
 /-! ### Every reduction pair sits in a flag -/
 
-namespace IsReduction
+end MPSTensor
+
+namespace MPTensor.IsReduction
+
+open MPSTensor WordAlgebra
+
+variable {d D c : ℕ} {B : MPSTensor d D} {C : MPSTensor d c}
 
 variable {P : Matrix (Fin c) (Fin D) ℂ} {E : Matrix (Fin D) (Fin c) ℂ}
 
@@ -944,6 +952,4 @@ theorem exists_multiBlockCompression_map_flag_eq_and_leftRow_inr_eq_and_rightCol
       ((MultiBlockCompression.conjTriangular_flag (P := Q₀) (ht := ht) (hμ := hμ)
         (hdiag := hdiag) _).trans hflagU)).trans hU
 
-end IsReduction
-
-end MPSTensor
+end MPTensor.IsReduction

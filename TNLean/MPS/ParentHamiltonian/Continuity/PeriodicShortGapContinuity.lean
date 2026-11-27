@@ -19,6 +19,8 @@ vector. The line projection varies continuously with the tensor. This
 controls the finitely many lengths below a large-chain uniform gap threshold.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 open scoped Topology

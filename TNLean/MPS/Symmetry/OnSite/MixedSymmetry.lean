@@ -19,6 +19,8 @@ Source: arXiv:2011.12127, Section III.A, `Papers/2011.12127/TN-Review-main.tex`
 lines 1120–1130 and 1147–1157.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open SymmetryParity
 

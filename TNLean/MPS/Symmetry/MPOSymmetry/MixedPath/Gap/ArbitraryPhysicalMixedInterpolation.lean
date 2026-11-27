@@ -25,6 +25,8 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5,
 the tensor polar decomposition of arXiv:2307.01696, `eq:key_approximation`.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix Topology
 
 namespace MPSTensor
