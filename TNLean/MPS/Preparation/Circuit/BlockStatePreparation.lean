@@ -596,7 +596,7 @@ theorem blockedConfigEquiv_symm_eq_blockIndexEquiv (q : ℕ) (hN : ∑ _ : Fin M
   funext j
   conv_rhs => rw [← (Kraus.blockedConfigEquiv d M q).apply_symm_apply s]
   rw [Function.comp_apply, blockSite_const]
-  simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry]
+  simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply]
 
 end MPSPreparation
 
