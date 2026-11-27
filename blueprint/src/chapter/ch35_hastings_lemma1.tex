@@ -140,12 +140,12 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 \begin{lemma}[Commutators of the parts with the Hamiltonian]
     \label{thm:hastings_part_commutators}
     \lean{
-        ManyBody.ChainInteraction.norm_commutator_partialHamiltonian_cutLeftSupports_le,
-        ManyBody.ChainInteraction.norm_commutator_partialHamiltonian_cutRightSupports_le,
-        ManyBody.ChainInteraction.commutator_partialHamiltonian_cutBufferSupports_eq,
-        ManyBody.ChainInteraction.norm_commutator_partialHamiltonian_cutBufferSupports_le,
-        ManyBody.ChainInteraction.isSupportedOn_commutator_partialHamiltonian_cutLeftSupports,
-        ManyBody.ChainInteraction.isSupportedOn_commutator_partialHamiltonian_cutRightSupports
+        ManyBody.ChainInteraction.norm_commutator_leftPart_le,
+        ManyBody.ChainInteraction.norm_commutator_rightPart_le,
+        ManyBody.ChainInteraction.commutator_bufferPart_eq,
+        ManyBody.ChainInteraction.norm_commutator_bufferPart_le,
+        ManyBody.ChainInteraction.isSupportedOn_commutator_leftPart,
+        ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
