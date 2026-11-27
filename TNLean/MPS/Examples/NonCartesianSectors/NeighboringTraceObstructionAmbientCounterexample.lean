@@ -534,7 +534,7 @@ private theorem exists_physTraceTransfer_eq_conj_of_gaugeEquiv
   refine ⟨X, ?_⟩
   rw [physTraceTransfer, physTraceTransfer,
     Matrix.mul_sum, Matrix.sum_mul]
-  exact Finset.sum_congr rfl fun i _ ↦ hX (finProdFinEquiv (i, i))
+  exact Finset.sum_congr rfl fun i _ ↦ hX (i, i)
 
 /-- The absorbed obstruction block inherits literal transfer idempotence from
 the actual embedded obstruction by virtual gauge similarity. -/
@@ -604,7 +604,7 @@ theorem sectors_basis_physTraceTransfer_not_isNilpotent
       (obstructionTerminalDecomposition_basisDim mu B hmu).2
     intro hNil
     have hCast : IsNilpotent
-        (physTraceTransfer 5
+        (physTraceTransfer
           (cast (congr_arg (MPOTensor 5) hDim) (S.basis (Fin.succ 0)))) :=
       (isNilpotent_physTraceTransfer_cast_iff hDim
         (S.basis (Fin.succ 0))).mpr hNil
@@ -622,7 +622,7 @@ private theorem isIdempotentElem_smul_physTraceTransfer_cast_iff
     {d D₁ D₂ : ℕ} (hdim : D₁ = D₂) (c : ℂ)
     (A : MPOTensor d D₁) :
     IsIdempotentElem
-        (c • physTraceTransfer d
+        (c • physTraceTransfer
           (cast (congr_arg (MPOTensor d) hdim) A)) ↔
       IsIdempotentElem (c • physTraceTransfer A) := by
   subst D₂
