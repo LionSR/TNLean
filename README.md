@@ -90,7 +90,7 @@ theorem MPSTensor.cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
 
 ### 1D and 2D area laws, tensor-network approximation, and preparation
 
-- **Two-dimensional area law and polynomial PEPS approximation:** a uniform entanglement area law for gapped local Hamiltonians on finite domains of `ℤ × ℤ` (`TNLean.PEPS.AreaLaw.uniformAreaLaw`, via collar scanning, information amplification, and dyadic cell partitions) and polynomial-bond-dimension PEPS approximation of gapped ground states on the `L × L` square grid (`TNLean.PEPS.Approximation.polynomialPEPSApproximation`, via dyadic frames and distributed circuit compression). See [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md) for manuscript provenance and Apache-2.0 attribution.
+- **Two-dimensional area law and polynomial PEPS approximation:** a uniform entanglement area law for gapped local Hamiltonians on finite domains of `ℤ × ℤ` (`TNLean.PEPS.AreaLaw.uniformAreaLaw`, via collar scanning, information amplification, and dyadic cell partitions) and polynomial-bond-dimension PEPS approximation of gapped ground states on the `L × L` square grid (`TNLean.PEPS.Approximation.polynomialPEPSApproximation`, via dyadic frames and distributed circuit compression). The manuscripts and the adapted code are listed under [License](#license).0 attribution.
 - **One-dimensional area laws and gapped-chain algorithms:** global-gap 1D area laws (`chainAreaLaw`, `domainAreaLaw`), Hastings' approximate ground-state projector factorization, Hastings' 1D area law and thermal-state cluster expansion, entropy scaling for MPS approximation, and ALVV / AKLV polynomial-filter constructions and frustration-free improving families.
 - **Quantum state preparation:** sequential ancilla generation and log-depth circuit preparation of normal, inhomogeneous, and non-normal MPS (`TNLean/MPS/Preparation`).
 
@@ -166,7 +166,6 @@ The standalone FT-MPS volume is built by `scripts/blueprint/build_blueprint_ch01
 | [`docs/getting_started.md`](docs/getting_started.md) | Setup, source tour, and making a first contribution |
 | [`docs/library_layers.md`](docs/library_layers.md) · [`docs/import_structure.md`](docs/import_structure.md) | Acyclic layer map, import rules, and Archive policy |
 | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) · [`docs/project_conventions.md`](docs/project_conventions.md) | Contributor workflow, proof standards, and local addenda |
-| [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md) | Provenance and Apache-2.0 attribution for 2D area-law / PEPS modules |
 | [`AGENTS.md`](AGENTS.md) · [`CLAUDE.md`](CLAUDE.md) | Agent conventions, cache rules, and CI workflows |
 
 ## References
@@ -187,10 +186,20 @@ The standalone FT-MPS volume is built by `scripts/blueprint/build_blueprint_ch01
 - J. I. Cirac, J. Garre-Rubio, D. Pérez-García, *Mathematical open problems in projected entangled pair states*, [arXiv:1903.09439](https://arxiv.org/abs/1903.09439), Rev. Mat. Complut. **32**, 579–599 (2019).
 - J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product States and Projected Entangled Pair States*, [arXiv:2011.12127](https://arxiv.org/abs/2011.12127), Rev. Mod. Phys. **93**, 045003 (2021).
 - D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac, *Preparation of Matrix Product States with Log-Depth Quantum Circuits*, [arXiv:2307.01696](https://arxiv.org/abs/2307.01696), Phys. Rev. Lett. **132**, 040404 (2024).
-- OpenAI Math, *Two-dimensional area law* and *Polynomial PEPS approximation* manuscripts in [`openai/math`](https://github.com/openai/math) (September 2026; see [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md)).
+- OpenAI Math, *Two-dimensional area law* and *Polynomial PEPS approximation* manuscripts in [`openai/math`](https://github.com/openai/math), revision [`adc7f124`](https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a) (September 24, 2026).
 - S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network Theory*, [arXiv:2607.07857](https://arxiv.org/abs/2607.07857) (2026).
 - [Mathlib4](https://github.com/leanprover-community/mathlib4), the Lean 4 mathematics library.
 
 ## License
 
-The Lean source, the blueprint, and the other original content of this repository are released under the Apache License 2.0 (see [`LICENSE`](LICENSE)). Adapted definitions from `openai/math` carry Apache-2.0 notices per [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md) and [`LICENSES/openai-math-Apache-2.0.txt`](LICENSES/openai-math-Apache-2.0.txt). The `Papers/` directory contains the arXiv sources of third-party papers that remain under their authors' copyright and are **not** covered by the repository license (see [`Papers/NOTICE.md`](Papers/NOTICE.md)).
+The Lean source, the blueprint, and the other original content of this repository are released under the Apache License 2.0 (see [`LICENSE`](LICENSE)). Code adapted from `openai/math` (Apache-2.0; its license is [`LICENSES/openai-math-Apache-2.0.txt`](LICENSES/openai-math-Apache-2.0.txt), byte for byte, and that revision has no `NOTICE` file) carries a module-header notice naming the upstream file, the pinned revision and the changes (Apache-2.0 §4(b)), and keeps any upstream notice verbatim (§4(c)). The adapted modules are:
+
+| TNLean module | Upstream file | Declarations |
+| --- | --- | --- |
+| `TNLean/PEPS/Tensor/SquareLattice/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Vertex`, `Pinned.IncidentEdge`, `Pinned.State`, `Pinned.LocalTensor`, `Pinned.contractPEPS` |
+| `TNLean/PEPS/Tensor/SquareLattice/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.IncidentEdge`, `Vector.State`, `Vector.Tensor`, `Vector.Tensor.contract`, `Vector.Tensor.maxBondDim` |
+| `TNLean/PEPS/Approximation/GroundState/PinnedRegionalState.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.RegionConfiguration`, `Pinned.joinConfigurations`, `Pinned.coefficientMatrix`, `Pinned.reducedDensity` |
+| `TNLean/PEPS/Approximation/GroundState/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.HasPEPSApproximation` |
+| `TNLean/PEPS/Approximation/GroundState/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.PhaseErrorAtMost` |
+
+A module that copies or adapts further upstream code is added to this table; modules that only cite the manuscripts contain original proofs and need no notice. The `Papers/` directory contains the arXiv sources of third-party papers that remain under their authors' copyright and are **not** covered by the repository license (see [`Papers/NOTICE.md`](Papers/NOTICE.md)).

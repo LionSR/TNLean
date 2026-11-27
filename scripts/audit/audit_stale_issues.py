@@ -23,7 +23,6 @@ Typical workflow::
       --json number,title,body,url,labels > issues.json
     python scripts/audit/audit_stale_issues.py --issues issues.json
 
-See ``docs/stale_issue_audit.md`` for the documented workflow.
 """
 
 from __future__ import annotations

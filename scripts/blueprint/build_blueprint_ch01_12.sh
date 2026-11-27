@@ -25,7 +25,7 @@ mkdir -p "$WORK_DIR/blueprint/src" "$WORK_DIR/.deps/tenkz/tex"
 rsync -a --exclude='.tenkz_svg_cache/' \
   "$REPO_ROOT/blueprint/src/" "$WORK_DIR/blueprint/src/"
 if [ -z "${TENKZ_ROOT:-}" ]; then
-  python3 "$REPO_ROOT/scripts/fetch_tenkz.py"
+  python3 "$REPO_ROOT/scripts/tenkz/fetch_tenkz.py"
 fi
 TENKZ_TEX="$(PYTHONPATH="$REPO_ROOT/scripts" python3 -c \
   'from tenkz_paths import tenkz_tex; print(tenkz_tex())')"

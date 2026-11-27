@@ -105,7 +105,7 @@ forked variants, degenerate-case admission) rather than by the theorems.
    proofs, parallel theories — verifies each candidate adversarially
    (safety: nothing blueprint-cited is lost; arithmetic: the net count
    survives recounting), and ranks by verified net deletable lines. Results
-   land in the ledger's Demolition section.
+   land in the ledger as open entries.
 4. **Deletion outranks abstraction.** When a ledger entry can be resolved
    either by abstracting the duplication or by deleting one side, prefer
    deletion: the general route stays, the superseded route goes, and the
@@ -125,8 +125,9 @@ forked variants, degenerate-case admission) rather than by the theorems.
 ```
 
 Entries stay ranked: the ledger lists open debts in current tournament
-order. Burned-down and retired entries move to the bottom section with
-their outcome recorded, so the same debt is not re-proposed later.
+order. A burned-down, retired or rejected entry is removed from the ledger;
+its outcome is recorded in the closing pull request and issue, which git
+history and the tracker keep.
 
 ## Rules
 
