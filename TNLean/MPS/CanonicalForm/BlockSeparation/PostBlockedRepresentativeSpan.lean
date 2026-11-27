@@ -92,7 +92,7 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
     hCF.basis_irreducible
   have hLeft : ∀ k, ∑ i : Fin d, (P.basis k i)ᴴ * (P.basis k i) = 1 :=
     hCF.basis_left_canonical
-  have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis k) (P.basis k) N)
+  have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
@@ -149,7 +149,7 @@ private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
     hCF.basis_irreducible
   have hLeft : ∀ k, ∑ i : Fin d, (P.basis k i)ᴴ * (P.basis k i) = 1 :=
     hCF.basis_left_canonical
-  have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis k) (P.basis k) N)
+  have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=

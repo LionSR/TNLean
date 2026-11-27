@@ -30,6 +30,8 @@ proves Proposition `propblockinj` of arXiv:1606.00608.
 * arXiv:1606.00608, lines 317--345.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -123,7 +125,7 @@ theorem exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalT
       intro j
       exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
     have hOverlap : ∀ k,
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (prepared k) (prepared k) N)
+        Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (prepared k) (prepared k) N)
           Filter.atTop (nhds (1 : ℂ)) :=
       fun j =>
         overlap_tendsto_one_of_peripheralPrimitive_of_irreducible

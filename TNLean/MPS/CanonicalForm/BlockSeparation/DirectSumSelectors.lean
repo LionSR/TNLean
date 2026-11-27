@@ -23,6 +23,8 @@ It also contains the following results.
   for the equal-size direct-sum branch.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -45,7 +47,7 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
@@ -76,7 +78,7 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
@@ -112,7 +114,7 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
@@ -139,7 +141,7 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
@@ -175,7 +177,7 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
@@ -208,7 +210,7 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
@@ -248,7 +250,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
@@ -274,7 +276,7 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
@@ -297,7 +299,7 @@ theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
@@ -316,7 +318,7 @@ theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
@@ -344,7 +346,7 @@ theorem wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
@@ -448,7 +450,7 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
       hCF.basis_irreducible
     have hLeft : ∀ k, ∑ i : Fin d, (P.basis k i)ᴴ * (P.basis k i) = 1 :=
       hCF.basis_left_canonical
-    have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis k) (P.basis k) N)
+    have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
         Filter.atTop (nhds (1 : ℂ)) :=
       hCF.basis_normalized_self_overlap
     have hSpan : WordTupleSpanTop P.basis

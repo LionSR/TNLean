@@ -160,6 +160,8 @@ to `n` increase inside a space of dimension `D₁ ^ 2 + D₂ ^ 2`, and a single 
 * `MPSTensor.sameMPV₂Pos_of_forall_trace_evalWord_eq`
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d : ℕ}

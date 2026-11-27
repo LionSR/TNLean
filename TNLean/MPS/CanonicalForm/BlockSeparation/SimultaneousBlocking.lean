@@ -223,7 +223,7 @@ theorem exists_positive_wordTupleSpanTop_of_isNormal
     intro j n hpn
     exact isNBlkInjective_of_le hp (hAtP j) hpn
   have hPreparedOverlap : ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (prepared k) (prepared k) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (prepared k) (prepared k) N)
         Filter.atTop (nhds (1 : ℂ)) :=
     fun j =>
       overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
