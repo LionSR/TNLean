@@ -511,7 +511,7 @@ private lemma sectorMatch_succ_of_cyclicSectorDecomp
     hMatch'⟩
 
 /-- Transport a sector `GaugePhaseEquiv` across equalities of both sector indices. -/
-private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
+private lemma gaugePhaseEquiv_cast_indices {gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
     (A : (j : Fin gA) → MPTensor α (Fin (dimA j)))
     (B : (k : Fin gB) → MPTensor α (Fin (dimB k)))

@@ -724,6 +724,29 @@ theorem exists_pgvwc07_positiveLengthWitness
       sameMPV_pos := hSame
       bondDim_le := hBound }⟩
 
+private theorem exists_tp_gauge_from_arbitrary_fin (A : MPSTensor d D) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
+      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      (∀ k, 0 < μ k) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
+    exists_irreducible_blockDecomp_nonzeroBlocks (D := D) A
+  let A_nonzero := toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_nonzero
+      (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
+    fun _ _ => rfl
+  obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμPos, hDim⟩ :=
+    exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
+  exact ⟨r, dim, μ, blocks, hIrr, hLeft, hμPos, hDim,
+    hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
+
+
 /-- **Arbitrary-input trace-preserving gauge reduction.**
 
 This combines the invariant-subspace splitting of arXiv:1606.00608,
@@ -753,28 +776,27 @@ The PGVWC07 unital-orientation analogue is
 theorem remains useful as a TP-gauge reduction, but it is not the canonical-form
 statement matching PGVWC07 Theorem Th:TIcanonical.  The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
+theorem exists_tp_gauge_from_arbitrary {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (blocks : (k : Fin r) → MPTensor α (Fin (dim k))),
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      (∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1) ∧
       (∀ k, 0 < μ k) ∧
       (∀ k, 0 < dim k) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := α) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
-  classical
-  obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
-    exists_irreducible_blockDecomp_nonzeroBlocks (D := D) A
-  let A_nonzero := toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
-  have hSame_refl : SameMPV₂ A_nonzero
-      (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
-    fun _ _ => rfl
-  obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμPos, hDim⟩ :=
-    exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
-  exact ⟨r, dim, μ, blocks, hIrr, hLeft, hμPos, hDim,
-    hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
-
+  let f : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨r, dim, μ, blocks, hIrr, hTP, hμ, hDim, hPos, hBound⟩ :=
+    exists_tp_gauge_from_arbitrary_fin (Kraus.reindexPhysical f A)
+  refine ⟨r, dim, μ, fun k ↦ Kraus.reindexPhysical f.symm (blocks k),
+    fun k ↦ (Kraus.isIrreducibleFamily_reindexPhysical_equiv f.symm _).2 (hIrr k),
+    fun k ↦ (Kraus.isTP_reindexPhysical_iff f.symm _).2 (hTP k), hμ, hDim, ?_, hBound⟩
+  intro N hN σ
+  have h := hPos N hN (fun n ↦ f.symm (σ n))
+  simp only [MPTensor.mpv_reindexPhysical, Equiv.apply_symm_apply,
+    mpv_toTensorFromBlocks_eq_sum] at h ⊢
+  exact h
 
 end MPSTensor
 

@@ -78,9 +78,9 @@ blocked word `σ` is `(List.ofFn σ).flatMap List.ofFn`. -/
 theorem ofFn_blockFlattenEquiv (m L : ℕ) (σ : Fin L → (Fin m → α)) :
     List.ofFn (blockFlattenEquiv m L σ) = (List.ofFn σ).flatMap List.ofFn := by
   rw [← Kraus.ofFn_blockConfigEquiv]
-  simp only [blockFlattenEquiv, Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.coe_refl,
-    Function.comp_id, finCongr_symm]
-  exact (List.ofFn_congr (Nat.mul_comm L m) _).symm
+  change List.ofFn (fun i : Fin (m * L) =>
+      Kraus.blockConfigEquiv α L m σ (Fin.cast (Nat.mul_comm m L) i)) = _
+  exact (List.ofFn_congr (Nat.mul_comm m L).symm _).symm
 
 /-! ## Telescoping identity for flattened words -/
 

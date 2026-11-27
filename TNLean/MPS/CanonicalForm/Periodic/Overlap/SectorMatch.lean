@@ -68,8 +68,8 @@ lemma exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
 This is equation `eq:blockedABprop` in ambient form, hence the input to
 `eq:BCmprop`, in arXiv:1708.00029, Appendix A, lines 985--1024. -/
 lemma exists_ambient_corner_gauge_of_gaugePhase
-    {e nA nB : ℕ} [NeZero nA]
-    (CA : MPSTensor e nA) (CB : MPSTensor e nB)
+    {β : Type*} [Fintype β] {nA nB : ℕ} [NeZero nA]
+    (CA : MPTensor β (Fin nA)) (CB : MPTensor β (Fin nB))
     (hdim : nA = nB)
     (P Q : MatrixAlg D)
     (φP : MatrixAlg nA ≃ₗ[ℂ] cornerSubmodule P)
@@ -84,19 +84,19 @@ lemma exists_ambient_corner_gauge_of_gaugePhase
     (hCA_lc : IsLeftCanonical CA) (hCB_lc : IsLeftCanonical CB)
     (hCA_normal : Kraus.IsNormal CA)
     (hMatch : GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor e) hdim) CA) CB) :
+      (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) hdim) CA) CB) :
     ∃ (U : MatrixAlg D) (c : ℂ),
       U = P * U * Q ∧
       Uᴴ * U = Q ∧
       U * Uᴴ = P ∧
       ‖c‖ = 1 ∧
-      ∀ i : Fin e, (φP (CA i)).1 =
+      ∀ i : β, (φP (CA i)).1 =
         c • (U * (φQ (CB i)).1 * Uᴴ) := by
   classical
   subst nB
   simp only [cast_eq] at hMatch
   obtain ⟨X, z, hz, hCB⟩ := hMatch
-  let CB' : MPSTensor e nA := fun i => z⁻¹ • CB i
+  let CB' : MPTensor β (Fin nA) := fun i => z⁻¹ • CB i
   have hGauge : GaugeEquiv CA CB' := by
     refine ⟨X, fun i => ?_⟩
     simp only [CB', hCB i, smul_smul, inv_mul_cancel₀ hz, one_smul]
@@ -180,13 +180,13 @@ lemma exists_ambient_corner_gauge_of_gaugePhase
   have hW_star_W : (W : MatrixAlg nA)ᴴ * (W : MatrixAlg nA) = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
       Matrix.UnitaryGroup.star_mul_self W
-  have hgCB (i : Fin e) : g (CB i) = c₀ • CA i := by
+  have hgCB (i : β) : g (CB i) = c₀ • CA i := by
     simp only [g, hW i, Matrix.unitaryReindexLinearEquiv_apply, Equiv.refl_symm,
       Matrix.reindex_refl_refl, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc,
       hW_star_W, Matrix.mul_one]
     rw [Matrix.star_eq_conjTranspose, ← Matrix.mul_assoc,
       hW_star_W, Matrix.one_mul]
-  have htransport (i : Fin e) :
+  have htransport (i : β) :
       c₀ • (φP (CA i)).1 = U * (φQ (CB i)).1 * Uᴴ := by
     calc
       c₀ • (φP (CA i)).1 = (φP (c₀ • CA i)).1 := by

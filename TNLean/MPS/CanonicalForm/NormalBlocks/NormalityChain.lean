@@ -263,7 +263,7 @@ The proof first uses the bounded positive blocking theorem for each block, and t
 the product of the finitely many individual lengths. Exact block-injectivity persists at
 positive multiples, so this product is a common length for all sectors. -/
 theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
-    {r d : ℕ} {dim : Fin r → ℕ}
+    {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hLeft : ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
     (hNonzero : ∀ k, dim k ≠ 0)

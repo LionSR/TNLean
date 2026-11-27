@@ -34,7 +34,7 @@ namespace MPSTensor
 when both vectors vanish. Source context: arXiv:1010.3732, Appendix C,
 lines 2653–2717, comparison of the limiting periodic lines. -/
 theorem norm_mpvOverlap_eq_mul_norm_of_span_eq
-    {d D E N : ℕ} (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
+    {D E N : ℕ} (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
     (hspan : Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} =
       Submodule.span ℂ {(mpv B : (Fin N → α) → ℂ)}) :
     ‖mpvOverlap A B N‖ = ‖mpvState A N‖ * ‖mpvState B N‖ := by
@@ -77,7 +77,7 @@ theorem norm_mpvState_tendsto_one_of_transfer_spectrum
 to one imply a unit limiting overlap modulus. No proportionality scalars
 are chosen. Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. -/
 theorem norm_mpvOverlap_tendsto_one_of_eventual_span_eq
-    {d D E : ℕ} (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
+    {D E : ℕ} (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
     (hspan : ∀ᶠ N in atTop,
       Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} =
         Submodule.span ℂ {(mpv B : (Fin N → α) → ℂ)})
