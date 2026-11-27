@@ -9,7 +9,7 @@ import QICLean.Algebra.Matrix.MatrixSingleSpan
 import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.SimpleMPO.Simple
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.CanonicalForm.VerticalForm.SectorTrace
 import TNLean.MPS.CanonicalForm.PhysicalReindex
 import TNLean.MPS.Operator.PairAlphabetBridge

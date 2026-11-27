@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 import TNLean.MPS.Operator.Fusion.MPOSymmetry
 import TNLean.MPS.Operator.PairAlphabetBridge
