@@ -70,8 +70,8 @@ theorem exists_clean_exact_circuit_of_bounded_cutRank_of_two_le
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, hP0, hPN, hfull, hLeaves⟩ :=
     exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_unitary
       hd hN U hU hbound
-  have hD : 0 < D := (cutRank_pos (operatorCoefficientTensor U)
-    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) 0).trans_le (hbound 0)
+  have hD : 0 < D := (ManyBody.cutRank_pos (D := interval N 0 0)
+    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU)).trans_le (hbound 0)
   let K := uniformNodeGateCount d D N
   let F := uniformReflectionGateCount d D N
   let M := amplificationTreeOverhead D K F F

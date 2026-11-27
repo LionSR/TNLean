@@ -34,7 +34,8 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutSiteMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
-    (k : ℕ) (i : Fin d) : Matrix (Fin (cutRank (interval N 0 k) ψ)) (Fin (cutRank (interval N 0 (k + 1)) ψ)) ℂ :=
+    (k : ℕ) (i : Fin d) : Matrix (Fin (cutRank (interval N 0 k) ψ)) (Fin (cutRank (interval N 0
+        (k + 1)) ψ)) ℂ :=
   LinearMap.toMatrix (B (k + 1)) (B k) (cutSlice ψ k i)
 
 /-- Evaluation of a cut-space vector at the prefix of a global configuration.

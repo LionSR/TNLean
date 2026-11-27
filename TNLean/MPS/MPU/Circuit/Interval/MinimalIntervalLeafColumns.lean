@@ -258,7 +258,8 @@ theorem minimalLeafInterval_reindex {d N : ℕ}
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ) (i : Fin N) :
     Matrix.reindex
       (Equiv.prodCongr (singleSiteIntervalConfigEquiv d N i) (Equiv.refl _))
@@ -279,7 +280,8 @@ theorem isMinimalIntervalColumnImplementation_leaf_of_columns {d D N : ℕ} [NeZ
     (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (i : Fin N)
     (Z : Matrix

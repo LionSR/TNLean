@@ -202,7 +202,8 @@ Source: arXiv:2508.08160v2, lines 812--816 of the local source, and Section 5
 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutRank_operatorCoefficientTensor_mpo_le_all {d D N : ℕ}
     (M : MPOTensor d D) :
-    ∀ k : Fin (N + 1), cutRank (interval N 0 k.val) (operatorCoefficientTensor (M.mpo N)) ≤ D * D := by
+    ∀ k : Fin (N + 1), cutRank (interval N 0 k.val) (operatorCoefficientTensor (M.mpo N)) ≤ D *
+        D := by
   intro k
   exact cutRank_operatorCoefficientTensor_mpo_le M (by omega)
 

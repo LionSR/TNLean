@@ -73,7 +73,8 @@ theorem factorizedOperator_minimalOperatorFactors {d N : ℕ}
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) (k : ℕ) :
     MPUPrefixGram.factorizedOperator
       (minimalOperatorPrefixFactor U B k) (minimalOperatorSuffixFactor U B k) =
-      Matrix.reindex (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) U := by
+      Matrix.reindex (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k))
+          (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) U := by
   classical
   ext ⟨x₁, x₂⟩ ⟨y₁, y₂⟩
   change (MPSPreparation.cutPrefixMatrix (operatorCoefficientTensor U) B k *
@@ -82,7 +83,8 @@ theorem factorizedOperator_minimalOperatorFactors {d N : ℕ}
     U ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)).symm (x₁, x₂))
       ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)).symm (y₁, y₂))
   rw [← MPSPreparation.cutMatrix_eq_prefix_mul_suffix]
-  change operatorCoefficientTensor U ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin (d * d)) (interval N 0 k)).symm
+  change operatorCoefficientTensor U ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin (d * d))
+      (interval N 0 k)).symm
     (pairPhysicalConfig x₁ y₁, pairPhysicalConfig x₂ y₂)) = _
   rw [cutEquiv_symm_pairPhysicalConfig]
   exact operatorCoefficientTensor_apply U _ _
@@ -101,7 +103,8 @@ theorem minimalOperatorFactors_isIsometry {d N : ℕ}
   classical
   rw [factorizedOperator_minimalOperatorFactors]
   exact ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup U).mpr hU).1.reindex U
-    (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k))
+    (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (ManyBody.cutEquiv
+        (fun _ : Fin N ↦ Fin d) (interval N 0 k))
 
 /-- Both constructed bond-space spans follow from the physical cut rank
 and the equivalence between paired configurations and separate output-input
@@ -172,9 +175,11 @@ theorem exists_simultaneous_balanced_minimalOperator_metrics {d N : ℕ}
       Nonempty (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦
     ⟨fun _ ↦ ⟨0, hd⟩⟩
   let : ∀ j : Fin (N + 1),
-      DecidableEq (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦ inferInstance
+      DecidableEq (RegionConfig (fun _ : Fin N ↦ Fin d)
+          (interval N 0 j.val)) := fun _ ↦ inferInstance
   let : ∀ j : Fin (N + 1),
-      DecidableEq (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦ inferInstance
+      DecidableEq (ComplConfig (fun _ : Fin N ↦ Fin d)
+          (interval N 0 j.val)) := fun _ ↦ inferInstance
   let : ∀ j : Fin (N + 1),
       Nonempty (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
           := fun j ↦

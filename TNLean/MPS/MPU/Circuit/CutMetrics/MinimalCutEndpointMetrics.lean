@@ -104,7 +104,8 @@ theorem prefixInputGram_minimalOperatorPrefix_zero {d N : ℕ}
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
   let : Unique (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) := Classical.choice
-    (Fintype.card_eq_one_iff_nonempty_unique.mp (MPSPreparation.card_regionConfig_interval_zero_zero d N))
+    (Fintype.card_eq_one_iff_nonempty_unique.mp
+        (MPSPreparation.card_regionConfig_interval_zero_zero d N))
   let : Unique (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
     Equiv.unique (finCongr (MPSPreparation.cutRank_zero_eq_one hψ))
   apply prefixInputGram_eq_trace_smul_one_of_empty_cap
@@ -130,7 +131,8 @@ theorem prefixInputGram_minimalOperatorPrefix_last {d N : ℕ}
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
   let : Unique (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) := Classical.choice
-    (Fintype.card_eq_one_iff_nonempty_unique.mp (MPSPreparation.card_complConfig_interval_zero_self d N))
+    (Fintype.card_eq_one_iff_nonempty_unique.mp
+        (MPSPreparation.card_complConfig_interval_zero_self d N))
   let : Unique (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :=
     Equiv.unique (finCongr (MPSPreparation.cutRank_self_eq_one hψ))
   apply prefixInputGram_eq_trace_smul_one_of_suffix_cap

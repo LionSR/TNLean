@@ -43,7 +43,8 @@ def joinCutPrefix {d N : ℕ} (j k : ℕ) (u : RegionConfig (fun _ : Fin N ↦ F
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def joinCutSuffix {d N : ℕ} (j k : ℕ) (w : CutIntervalConfig d N j k)
-    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) :=
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) : ComplConfig
+        (fun _ : Fin N ↦ Fin d) (interval N 0 j) :=
   fun s ↦ if h : s.val < k then w ⟨s.1, notMem_interval_zero_iff.mp s.2, h⟩
     else v ⟨s.1, notMem_interval_zero_iff.mpr (Nat.le_of_not_lt h)⟩
 
@@ -52,7 +53,8 @@ is a bijection on physical configurations.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def cutPrefixIntervalConfigEquiv (d N j k : ℕ) (hjk : j ≤ k) :
-    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) × CutIntervalConfig d N j k) where
+    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ (RegionConfig (fun _ : Fin N ↦ Fin d)
+        (interval N 0 j) × CutIntervalConfig d N j k) where
   toFun v := (fun s ↦ v ⟨s.1, ManyBody.interval_mono le_rfl hjk s.2⟩,
     fun s ↦ v ⟨s.1, mem_interval_zero_iff.mpr s.2.2⟩)
   invFun uw := joinCutPrefix j k uw.1 uw.2
@@ -91,7 +93,8 @@ prefix to vectors on an earlier prefix.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def cutIntervalSliceLinearMap {d N : ℕ} (j k : ℕ) (w : CutIntervalConfig d N j k) :
-    (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) → ℂ) →ₗ[ℂ] (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) → ℂ) :=
+    (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) → ℂ) →ₗ[ℂ] (RegionConfig
+        (fun _ : Fin N ↦ Fin d) (interval N 0 j) → ℂ) :=
   LinearMap.funLeft ℂ ℂ (fun u ↦ joinCutPrefix j k u w)
 
 /-- Middle-coordinate restriction maps the later physical coefficient

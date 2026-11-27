@@ -36,7 +36,8 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutPrefixMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (Fin (cutRank (interval N 0 k) ψ)) ℂ :=
+    Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (Fin (cutRank
+        (interval N 0 k) ψ)) ℂ :=
   fun u q ↦ (B k q).val u
 
 /-- The suffix factor whose columns are the coordinates of the physical
@@ -45,7 +46,8 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutSuffixMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    Matrix (Fin (cutRank (interval N 0 k) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ℂ :=
+    Matrix (Fin (cutRank (interval N 0 k) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d)
+        (interval N 0 k)) ℂ :=
   fun q v ↦ (B k).repr
     ⟨(cutMatrix (interval N 0 k) ψ).col v, Submodule.subset_span ⟨v, rfl⟩⟩ q
 
@@ -115,7 +117,8 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_step {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
-    (k : ℕ) (i : Fin d) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (q : Fin (cutRank (interval N 0 (k + 1)) ψ)) :
+    (k : ℕ) (i : Fin d) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (q : Fin
+        (cutRank (interval N 0 (k + 1)) ψ)) :
     cutPrefixMatrix ψ B (k + 1) (extendCutPrefix k u i) q =
       (cutPrefixMatrix ψ B k * cutSiteMatrix ψ B k i) u q := by
   classical
@@ -190,7 +193,8 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutSuffixMatrix_last {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
-    (hBN : ∀ q, (B N q).val = fullCutVector ψ) (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N))
+    (hBN : ∀ q, (B N q).val = fullCutVector ψ) (v : ComplConfig (fun _ : Fin N ↦ Fin d)
+        (interval N 0 N))
     (q : Fin (cutRank (interval N 0 N) ψ)) : cutSuffixMatrix ψ B N q v = 1 := by
   have hw : (⟨(cutMatrix (interval N 0 N) ψ).col v,
       Submodule.subset_span ⟨v, rfl⟩⟩ : cutColumnSpace ψ N) = B N q := by
@@ -213,8 +217,10 @@ theorem exists_obcChainTensor_minimal_factorizations {d N D : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d D N,
       (∀ k, A.bondDim k = cutRank (interval N 0 k.val) ψ) ∧ (∀ σ, A.coeff σ = ψ σ) ∧
       ∀ k : Fin (N + 1),
-        ∃ F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) (Fin (A.bondDim k)) ℂ,
-        ∃ G : Matrix (Fin (A.bondDim k)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) ℂ,
+        ∃ F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) (Fin
+            (A.bondDim k)) ℂ,
+        ∃ G : Matrix (Fin (A.bondDim k)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val))
+            ℂ,
           cutMatrix (interval N 0 k.val) A.coeff = F * G ∧
           F.rank = A.bondDim k ∧ G.rank = A.bondDim k ∧
           Submodule.span ℂ (Set.range F.row) = ⊤ ∧
@@ -223,8 +229,10 @@ theorem exists_obcChainTensor_minimal_factorizations {d N D : ℕ} (hN : 0 < N)
   refine ⟨minimalCutChain ψ hψ B hbound, (fun _ ↦ rfl),
     minimalCutChain_coeff ψ hψ B hB0 hBN hbound, ?_⟩
   intro k
-  change ∃ F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) (Fin (cutRank (interval N 0 k.val) ψ)) ℂ,
-    ∃ G : Matrix (Fin (cutRank (interval N 0 k.val) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) ℂ,
+  change ∃ F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k.val)) (Fin (cutRank
+      (interval N 0 k.val) ψ)) ℂ,
+    ∃ G : Matrix (Fin (cutRank (interval N 0 k.val) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d)
+        (interval N 0 k.val)) ℂ,
       cutMatrix (interval N 0 k.val) (minimalCutChain ψ hψ B hbound).coeff = F * G ∧
       F.rank = cutRank (interval N 0 k.val) ψ ∧ G.rank = cutRank (interval N 0 k.val) ψ ∧
       Submodule.span ℂ (Set.range F.row) = ⊤ ∧

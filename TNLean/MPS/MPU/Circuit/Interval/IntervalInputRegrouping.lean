@@ -411,7 +411,8 @@ theorem minimalIntervalJointInitializedChildColumns_of_supported_individual {d D
     (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
     (X Y : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
@@ -479,6 +480,7 @@ section
 
 open Matrix MPSPreparation MPSTensor QuantumCircuit
 open scoped Kronecker Matrix ComplexOrder MatrixOrder
+open ManyBody (interval cutRank)
 
 namespace MPUCircuit
 
@@ -493,7 +495,8 @@ theorem isMinimalIntervalColumnImplementation_of_joint_initialized_columns
     (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (B : ∀ t, Module.Basis (Fin (cutRank (interval N 0 t) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) t))
-    (P : ∀ t : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 t.val) (operatorCoefficientTensor U)))
+    (P : ∀ t : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 t.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 t.val) (operatorCoefficientTensor U))) ℂ)
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
     (Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)

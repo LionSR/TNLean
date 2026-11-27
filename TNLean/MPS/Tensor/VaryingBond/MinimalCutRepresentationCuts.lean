@@ -108,7 +108,8 @@ theorem cutMatrix_adjacent {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 /-- Adjoining a last prefix letter enumerates the next physical prefix
 exactly once. Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458. -/
 def extendCutPrefixEquiv {d N k : ℕ} (hk : k < N) :
-    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) × Fin d ≃ RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)) where
+    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) × Fin d ≃ RegionConfig
+        (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)) where
   toFun ui := extendCutPrefix k ui.1 ui.2
   invFun w := (fun s ↦ w ⟨s.val, ManyBody.interval_mono le_rfl (Nat.le_succ k) s.2⟩,
     w ⟨⟨k, hk⟩, mem_interval_zero_iff.mpr (Nat.lt_succ_self k)⟩)
@@ -133,7 +134,8 @@ def extendCutPrefixEquiv {d N k : ℕ} (hk : k < N) :
 /-- Adjoining a first suffix letter enumerates the preceding physical
 suffix exactly once. Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458. -/
 def extendCutSuffixEquiv {d N k : ℕ} (hk : k < N) :
-    Fin d × ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)) ≃ ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) where
+    Fin d × ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1)) ≃ ComplConfig
+        (fun _ : Fin N ↦ Fin d) (interval N 0 k) where
   toFun iv := extendCutSuffix k iv.1 iv.2
   invFun w := (w ⟨⟨k, hk⟩, notMem_interval_zero_iff.mpr le_rfl⟩,
     fun s ↦ w ⟨s.val, fun h ↦ s.2 (ManyBody.interval_mono le_rfl (Nat.le_succ k) h)⟩)

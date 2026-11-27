@@ -142,9 +142,7 @@ doubled-window data.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 noncomputable def periodicCutBasis {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k)) :
-    Module.Basis (Fin D × Fin D) ℂ
-      (Submodule.span ℂ
-        (Set.range (cutMatrix (interval N 0 k) (mpv A (N := N))).col)) :=
+    Module.Basis (Fin D × Fin D) ℂ (cutColumnSpace (mpv A (N := N)) k) :=
   (Module.Basis.span (linearIndependent_leftCutVector_interval hk hleft)).map
     (LinearEquiv.ofEq _ _ (span_cutMatrix_mpv_cols_eq hk hright).symm)
 
@@ -155,8 +153,8 @@ Source: PGVWC07, MPSarchive.tex lines 921--931. -/
     (a : Fin D × Fin D) (σ : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
     (periodicCutBasis hk hleft hright a).val σ =
       leftCutVector A k a ((cutPrefixConfigEquiv hk).symm σ) := by
-  simp only [periodicCutBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
-    Module.Basis.coe_span_apply]
+  simp only [periodicCutBasis, Module.Basis.map_apply]
+  exact congrFun (Module.Basis.span_apply (linearIndependent_leftCutVector_interval hk hleft) a) σ
 
 private theorem cutPrefixConfigEquiv_extend (hk : k + 1 ≤ N)
     (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (i : Fin d) :
@@ -166,14 +164,17 @@ private theorem cutPrefixConfigEquiv_extend (hk : k + 1 ≤ N)
   funext p
   refine Fin.addCases (fun j ↦ ?_) (fun j ↦ ?_) p
   · rw [Fin.append_left]
-    change (if _h : j.val < k then u _ else i) = u _
+    change extendCutPrefix k u i (cutPrefixSiteEquiv hk (Fin.castAdd 1 j)) =
+      u (cutPrefixSiteEquiv (by omega) j)
+    unfold extendCutPrefix
     split_ifs with h
-    · congr 1
+    · rfl
     · exact absurd j.isLt h
   · rw [Fin.append_right]
-    change (if _h : k + j.val < k then u _ else i) = i
+    change extendCutPrefix k u i (cutPrefixSiteEquiv hk (Fin.natAdd k j)) = i
+    unfold extendCutPrefix
     split_ifs with h
-    · exact absurd h (by omega)
+    · exact absurd h (by simp [cutPrefixSiteEquiv])
     · rfl
 
 /-- Actual coordinate slicing in the virtual cut bases has the

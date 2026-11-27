@@ -165,8 +165,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
   intro i
   obtain ⟨Z, C, hZ, hcolumns, hC, hclean⟩ := hLeaves i
   have hplaced := placed_leaf_circuit_isCleanImplementation hN i hC hclean
-  have hD : 0 < D := (cutRank_pos (operatorCoefficientTensor U)
-    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) 0).trans_le (hbound 0)
+  have hD : 0 < D := (ManyBody.cutRank_pos (D := interval N 0 0)
+    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU)).trans_le (hbound 0)
   have hdim := leaf_workspace_dimension_le_of_width_le hd hD
     (cutBondRegisterWidth_le d D N i.succ) (cutBondRegisterWidth_le d D N i.castSucc)
   have hcost := Nat.mul_le_mul_left 38 (Nat.pow_le_pow_left hdim 6)

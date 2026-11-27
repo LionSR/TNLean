@@ -29,13 +29,14 @@ in Theorem thm:OBC-Vidal, MPSarchive.tex lines 444--456.
 
 section
 
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+open ManyBody (interval RegionConfig ComplConfig)
 
 namespace MPSPreparation
 
 /-- The suffix at the initial cut is the complete physical configuration.
 Source: PGVWC07, endpoint condition 3 of Theorem thm:OBC-Vidal. -/
-def initialCutSuffixEquiv (d N : ℕ) : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0) ≃ (Fin N → Fin d) where
+def initialCutSuffixEquiv (d N : ℕ) :
+    ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0) ≃ (Fin N → Fin d) where
   toFun v s := v ⟨s, notMem_interval_zero_iff.mpr (Nat.zero_le s.val)⟩
   invFun σ s := σ s.val
   left_inv _ := rfl
@@ -43,7 +44,8 @@ def initialCutSuffixEquiv (d N : ℕ) : ComplConfig (fun _ : Fin N ↦ Fin d) (i
 
 /-- The prefix at the final cut is the complete physical configuration.
 Source: PGVWC07, endpoint condition 3 of Theorem thm:OBC-Vidal. -/
-def finalCutPrefixEquiv (d N : ℕ) : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N) ≃ (Fin N → Fin d) where
+def finalCutPrefixEquiv (d N : ℕ) :
+    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N) ≃ (Fin N → Fin d) where
   toFun u s := u ⟨s, mem_interval_zero_iff.mpr s.isLt⟩
   invFun σ s := σ s.val
   left_inv _ := rfl
@@ -57,6 +59,7 @@ section
 
 open Matrix
 open scoped BigOperators
+open ManyBody (interval RegionConfig ComplConfig)
 
 namespace MPSPreparation
 
@@ -68,7 +71,8 @@ recursion for arbitrary adjacent-cut factors.
 Source: PGVWC07, MPSarchive.tex lines 444--456, condition 2. -/
 theorem prefixGram_eq_sum_of_extendCutPrefix (hk : k < N)
     (F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ι ℂ)
-    (F' : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) κ ℂ) (M : Fin d → Matrix ι κ ℂ)
+    (F' : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) κ ℂ) (M : Fin d →
+        Matrix ι κ ℂ)
     (hstep : ∀ u i q, F' (extendCutPrefix k u i) q = (F * M i) u q) :
     ∑ i, (M i)ᴴ * (Fᴴ * F) * M i = F'ᴴ * F' := by
   classical
@@ -92,7 +96,8 @@ recursion for arbitrary adjacent-cut factors.
 Source: PGVWC07, MPSarchive.tex lines 444--456, condition 1. -/
 theorem suffixGram_eq_sum_of_extendCutSuffix (hk : k < N)
     (G : Matrix ι (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ℂ)
-    (G' : Matrix κ (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) ℂ) (M : Fin d → Matrix ι κ ℂ)
+    (G' : Matrix κ (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (k + 1))) ℂ) (M : Fin d →
+        Matrix ι κ ℂ)
     (hstep : ∀ i v q, G q (extendCutSuffix k i v) = (M i * G') q v) :
     G * Gᴴ = ∑ i, M i * (G' * G'ᴴ) * (M i)ᴴ := by
   classical

@@ -134,8 +134,8 @@ variable (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
   (hmk : (internalCutEmbedding N c).val < k.val)
 
 local notation "m" => internalCutEmbedding N c
-local notation "hr" => cutRank_pos (operatorCoefficientTensor U)
-  (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) (Fin.val (internalCutEmbedding N c))
+local notation "hr" => ManyBody.cutRank_pos (D := interval N 0 (internalCutEmbedding N c).val)
+  (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU)
 local notation "em" => minimalCutBondRegisterEncoding hd U hU hbound m
 local notation "ej" => minimalCutBondRegisterEncoding hd U hU hbound j
 local notation "ek" => minimalCutBondRegisterEncoding hd U hU hbound k
@@ -148,7 +148,8 @@ local notation "OuterLabels" => (Fin (cutRank (interval N 0 k.val) (operatorCoef
   Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
 local notation "ChildRows" => (((ChildPhysical × OuterLabels) × RemainingCfg) ×
   (Fin (cutRank (interval N 0 (Fin.val (internalCutEmbedding N c))) (operatorCoefficientTensor U)) ×
-    Fin (cutRank (interval N 0 (Fin.val (internalCutEmbedding N c))) (operatorCoefficientTensor U))))
+    Fin (cutRank (interval N 0 (Fin.val (internalCutEmbedding N c)))
+        (operatorCoefficientTensor U))))
 local notation "ChildColumns" => (ChildPhysical × RemainingCfg)
 local notation "child" => balancedIntervalChildren
   (minimalOperatorInterval U B (Nat.le_of_lt hjm))

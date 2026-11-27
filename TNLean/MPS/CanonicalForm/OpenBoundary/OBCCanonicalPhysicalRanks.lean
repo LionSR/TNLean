@@ -72,7 +72,8 @@ theorem physicalPrefixMatrix_gram_eq_density
 /-- The actual suffix factors recurse by the original first site matrix.
 Source: PGVWC07, the OBC contraction in lines 419--429. -/
 theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
-    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (p.val + 1))) (a : Fin (B.bondDim p.castSucc)) :
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 (p.val + 1))) (a : Fin
+        (B.bondDim p.castSucc)) :
     physicalSuffixMatrix B p.castSucc a (extendCutSuffix p.val i v) =
       (B.tensor p i * physicalSuffixMatrix B p.succ) a v := by
   classical
@@ -120,7 +121,8 @@ theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
 /-- The actual suffix factor at the scalar right endpoint has every
 entry equal to one. Source: PGVWC07, scalar OBC boundaries, lines 419--429. -/
 theorem physicalSuffixMatrix_last (a : Fin (B.bondDim (Fin.last N)))
-    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) : physicalSuffixMatrix B (Fin.last N) a v = 1 := by
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) : physicalSuffixMatrix B
+        (Fin.last N) a v = 1 := by
   have ha : a.val = 0 := by have := a.isLt; have := B.right_dim; omega
   simp only [physicalSuffixMatrix, Fin.val_last, Nat.sub_self, List.ofFn_zero,
     List.prod_nil]

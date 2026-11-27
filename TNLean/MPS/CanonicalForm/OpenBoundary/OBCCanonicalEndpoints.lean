@@ -100,13 +100,15 @@ theorem cutSuffixMatrix_zero_coisometry (hB0 : ∀ q, (B 0 q).val = 1)
     Equiv.unique (finCongr ((MPSPreparation.cutRank_zero_eq_one hψ)))
   have hG : ∀ q v, cutSuffixMatrix ψ B 0 q v = ψ (initialCutSuffixEquiv d N v) := by
     intro q v
-    have h := congrArg (fun M ↦ M (default : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) v)
+    have h := congrArg (fun M ↦ M (default : RegionConfig (fun _ : Fin N ↦ Fin d)
+        (interval N 0 0)) v)
       (cutMatrix_eq_prefix_mul_suffix ψ B 0)
     simp only [Matrix.mul_apply, cutPrefixMatrix_zero ψ B hB0, one_mul,
       Fintype.sum_unique] at h
     have hq : (default : Fin (cutRank (interval N 0 0) ψ)) = q := Subsingleton.elim _ _
     rw [hq] at h
-    exact h.symm.trans (by simp [ManyBody.cutMatrix_apply, cutEquiv_symm_interval_zero, initialCutSuffixEquiv])
+    exact h.symm.trans
+        (by simp [ManyBody.cutMatrix_apply, cutEquiv_symm_interval_zero, initialCutSuffixEquiv])
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
   subst r
@@ -162,10 +164,12 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
     ∃ B : Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k),
     ∃ s : Fin (cutRank (interval N 0 k) ψ) → ℝ,
       (∀ q, 0 < s q) ∧
-      (let F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (Fin (cutRank (interval N 0 k) ψ)) ℂ :=
+      (let F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (Fin (cutRank
+          (interval N 0 k) ψ)) ℂ :=
         fun u q ↦ (B q).val u
        Fᴴ * F = Matrix.diagonal (fun q ↦ ((s q : ℂ) ^ 2))) ∧
-      (let G : Matrix (Fin (cutRank (interval N 0 k) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ℂ :=
+      (let G : Matrix (Fin (cutRank (interval N 0 k) ψ)) (ComplConfig (fun _ : Fin N ↦ Fin d)
+          (interval N 0 k)) ℂ :=
         fun q v ↦ B.repr
           ⟨(cutMatrix (interval N 0 k) ψ).col v, Submodule.subset_span ⟨v, rfl⟩⟩ q
        G * Gᴴ = 1) := by

@@ -150,7 +150,8 @@ theorem minimalIntervalRootColumns_eq_physical_of_fullInterval {d D N : ℕ} [Ne
     (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (hfull : ∀ (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
         (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
@@ -241,7 +242,8 @@ theorem minimalIntervalRootColumns_eq_physical {d D N : ℕ} [NeZero d]
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = fullCutVector (operatorCoefficientTensor U))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (hP0 : P 0 ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q))
@@ -324,7 +326,8 @@ theorem minimalIntervalRootColumns_eq_physical_global {d D N : ℕ} [NeZero d]
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = fullCutVector (operatorCoefficientTensor U))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (hP0 : P 0 ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q))

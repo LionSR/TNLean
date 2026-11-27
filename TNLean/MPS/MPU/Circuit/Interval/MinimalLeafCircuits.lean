@@ -51,7 +51,8 @@ noncomputable def minimalLeafInterval {d N : ℕ}
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ) (i : Fin N) :
     Matrix (Fin d × (Fin (cutRank (interval N 0 (i.val + 1)) (operatorCoefficientTensor U)) ×
       Fin (cutRank (interval N 0 i.val) (operatorCoefficientTensor U)))) (Fin d) ℂ :=
@@ -68,7 +69,8 @@ theorem minimalLeafInterval_isometry_of_interval_isometry {d N : ℕ}
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ) (i : Fin N)
     (hV : (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.le_succ i.val))
       (CFC.sqrt (P i.castSucc)) (CFC.sqrt (dualGramMetric (P i.succ)))).IsIsometry) :
