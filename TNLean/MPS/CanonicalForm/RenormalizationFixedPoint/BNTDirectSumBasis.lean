@@ -32,7 +32,7 @@ theorem toTensorFromBlocks_one_eq_directSumTensor
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- The multiplicity-one unit-weight direct sum of the distinct basis tensors
 is in literal CPSV canonical form.

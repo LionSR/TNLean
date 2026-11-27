@@ -31,14 +31,14 @@ noncomputable section
 
 namespace MPSTensor.SectorDecomposition
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-- The canonical isometric inclusion of a flattened sector block into the
 full virtual space.
 
 Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -/
 def flatBlockInclusion
-    (P : SectorDecomposition d) (s : Fin P.totalCopies) :
+    (P : SectorDecomposition α) (s : Fin P.totalCopies) :
     Matrix (Fin P.totalDim) (Fin (P.flatDim s)) ℂ :=
   blockInclusion P.flatDim s
 
@@ -47,7 +47,7 @@ def flatBlockInclusion
 Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -/
 @[simp]
 theorem flatBlockInclusion_isometry
-    (P : SectorDecomposition d) (s : Fin P.totalCopies) :
+    (P : SectorDecomposition α) (s : Fin P.totalCopies) :
     (P.flatBlockInclusion s)ᴴ * P.flatBlockInclusion s = 1 :=
   blockInclusion_conjTranspose_mul_self P.flatDim s
 
@@ -56,7 +56,7 @@ projection onto that block.
 
 Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -/
 theorem flatBlockInclusion_mul_conjTranspose
-    (P : SectorDecomposition d) (s : Fin P.totalCopies) :
+    (P : SectorDecomposition α) (s : Fin P.totalCopies) :
     P.flatBlockInclusion s * (P.flatBlockInclusion s)ᴴ =
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
         (Matrix.blockProjection
@@ -83,17 +83,17 @@ weighted selected block on the right.
 
 Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -/
 theorem toTensor_mul_flatBlockInclusion
-    (P : SectorDecomposition d) (s : Fin P.totalCopies) (i : Fin d) :
+    (P : SectorDecomposition α) (s : Fin P.totalCopies) (i : α) :
     P.toTensor i * P.flatBlockInclusion s =
       P.flatBlockInclusion s * (P.flatWeight s • P.flatBasis s i) :=
-  toTensorFromBlocks_mul_blockInclusion (α := Fin d) P.flatWeight P.flatBasis s i
+  toTensorFromBlocks_mul_blockInclusion (α := α) P.flatWeight P.flatBasis s i
 
 /-- The adjoint flattened block inclusion intertwines the ambient tensor with
 the weighted selected block on the left.
 
 Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -/
 theorem flatBlockInclusion_conjTranspose_mul_toTensor
-    (P : SectorDecomposition d) (s : Fin P.totalCopies) (i : Fin d) :
+    (P : SectorDecomposition α) (s : Fin P.totalCopies) (i : α) :
     (P.flatBlockInclusion s)ᴴ * P.toTensor i =
       (P.flatWeight s • P.flatBasis s i) *
         (P.flatBlockInclusion s)ᴴ := by
@@ -120,7 +120,7 @@ weighted block.
 Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219.
 Application context: Appendix C.2, Case I, lines 1571--1619. -/
 theorem flatWeight_smul_flatBasis_eq_compression
-    (P : SectorDecomposition d) (s : Fin P.totalCopies) (i : Fin d) :
+    (P : SectorDecomposition α) (s : Fin P.totalCopies) (i : α) :
     P.flatWeight s • P.flatBasis s i =
       (P.flatBlockInclusion s)ᴴ * P.toTensor i *
         P.flatBlockInclusion s := by

@@ -400,7 +400,7 @@ scalar `ζ` such that `B i = ζ • (X * A i * X⁻¹)` for every physical
 index `i`.  Conjugating by `X⁻¹` and scaling by `ζ⁻¹` gives the
 reversed identity `A i = ζ⁻¹ • (X⁻¹ * B i * X)`, i.e.
 `GaugePhaseEquiv B A`. -/
-theorem gaugePhaseEquiv_symm_same_dim {d D : ℕ} {A B : MPSTensor d D}
+theorem gaugePhaseEquiv_symm_same_dim {α : Type*} {D : ℕ} {A B : MPTensor α (Fin D)}
     (h : GaugePhaseEquiv A B) : GaugePhaseEquiv B A := by
   classical
   obtain ⟨X, ζ, hζ, hrel⟩ := h

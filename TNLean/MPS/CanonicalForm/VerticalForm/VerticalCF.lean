@@ -7,7 +7,7 @@ import QICLean.Algebra.Combinatorics.FinSumPermutation
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import TNLean.MPS.CanonicalForm.BNT.Basic
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 
@@ -55,7 +55,7 @@ construction (arXiv:1606.00608, lines 214--225).
   for every bond pair $(a, b)$, with positive diagonal matrices $\mu_\alpha$ and a
   BNT $\{M_\alpha\}$ for the vertically viewed tensor.
 * `MPSTensor.diagBlock`:
-  the diagonal restriction `B ↦ (i ↦ B (i, i))` of a doubled-index block.
+  the diagonal restriction `B ↦ (i ↦ B (i, i))` of a pair-alphabet block.
 
 ## Main results (toward Proposition 4.13)
 
@@ -137,19 +137,19 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A "first-site insertion" on an MPS tensor. The resulting local tensor is the
+/-- A "first-site insertion" on a tensor. The resulting local tensor is the
 one obtained by contracting the physical index with `Y` at a single site. -/
-noncomputable def insertedTensor
-    (Y : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
-  fun i => ∑ j : Fin d, Y i j • A j
+noncomputable def insertedTensor {α β : Type*} [Fintype α]
+    (Y : Matrix α α ℂ) (A : MPTensor α β) : MPTensor α β :=
+  fun i => ∑ j : α, Y i j • A j
 
 /-- Coefficient-level formulation of "acting with `Y` on the first spin" of an
 MPV. This is the hypothesis used in the paper's Lemma L. -/
-def FirstSiteActionAgree (A : MPSTensor d D)
-    (Y Z : Matrix (Fin d) (Fin d) ℂ) : Prop :=
-  ∀ (N : ℕ) (σ : Fin (N + 1) → Fin d),
-    ∑ i : Fin d, Y (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
-      ∑ i : Fin d, Z (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
+def FirstSiteActionAgree {α β : Type*} [Fintype α] [Fintype β] [DecidableEq β]
+    (A : MPTensor α β) (Y Z : Matrix α α ℂ) : Prop :=
+  ∀ (N : ℕ) (σ : Fin (N + 1) → α),
+    ∑ i : α, Y (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
+      ∑ i : α, Z (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
 
 /-- Equality of all positive-length matrix product vectors transports a
 first-site action identity between tensors of possibly different bond dimensions.
@@ -158,195 +158,206 @@ Every coefficient in `FirstSiteActionAgree` has length `N + 1`, so no
 length-zero coefficient is involved.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
-theorem FirstSiteActionAgree.of_sameMPVPos {D' : ℕ} {A : MPSTensor d D}
-    {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
+theorem FirstSiteActionAgree.of_sameMPVPos {α β β' : Type*} [Fintype α] [Fintype β]
+    [DecidableEq β] [Fintype β'] [DecidableEq β'] {A : MPTensor α β}
+    {B : MPTensor α β'} {Y Z : Matrix α α ℂ}
     (hAB : MPTensor.SameMPV₂Pos A B) (h : FirstSiteActionAgree A Y Z) :
     FirstSiteActionAgree B Y Z := by
   intro N σ
   calc
-    ∑ i : Fin d, Y (σ 0) i * MPTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) =
-        ∑ i : Fin d, Y (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
+    ∑ i : α, Y (σ 0) i * MPTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) =
+        ∑ i : α, Y (σ 0) i * MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
       apply Finset.sum_congr rfl
       intro i _
       rw [hAB (N + 1) (by omega) (Fin.cons i (σ ∘ Fin.succ))]
-    _ = ∑ i : Fin d, Z (σ 0) i *
+    _ = ∑ i : α, Z (σ 0) i *
         MPTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := h N σ
-    _ = ∑ i : Fin d, Z (σ 0) i *
+    _ = ∑ i : α, Z (σ 0) i *
         MPTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) := by
       apply Finset.sum_congr rfl
       intro i _
       rw [hAB (N + 1) (by omega) (Fin.cons i (σ ∘ Fin.succ))]
 
 /-- Full MPV equality transports a first-site action identity. -/
-theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
-    {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
+theorem FirstSiteActionAgree.of_sameMPV {α β β' : Type*} [Fintype α] [Fintype β]
+    [DecidableEq β] [Fintype β'] [DecidableEq β'] {A : MPTensor α β}
+    {B : MPTensor α β'} {Y Z : Matrix α α ℂ}
     (hAB : MPTensor.SameMPV₂ A B) (h : FirstSiteActionAgree A Y Z) :
     FirstSiteActionAgree B Y Z :=
   h.of_sameMPVPos hAB.toSameMPV₂Pos
 
-/-! ### Doubled-index form of the three contractions in Proposition 4.13 -/
+/-- A first-site action identity transports along a relabelling of the physical alphabet,
+the actions being relabelled on both indices. -/
+theorem FirstSiteActionAgree.reindexPhysical {α α' β : Type*} [Fintype α] [Fintype α']
+    [Fintype β] [DecidableEq β] (e : α' ≃ α) {A : MPTensor α β} {Y Z : Matrix α α ℂ}
+    (h : FirstSiteActionAgree A Y Z) :
+    FirstSiteActionAgree (Kraus.reindexPhysical e A) (Y.submatrix e e) (Z.submatrix e e) := by
+  intro N σ
+  have hsum : ∀ W : Matrix α α ℂ,
+      ∑ i : α', W.submatrix e e (σ 0) i *
+          MPTensor.mpv (Kraus.reindexPhysical e A) (Fin.cons i (σ ∘ Fin.succ)) =
+        ∑ i : α, W (e (σ 0)) i *
+          MPTensor.mpv A (Fin.cons i ((fun n => e (σ n)) ∘ Fin.succ)) := by
+    intro W
+    refine Fintype.sum_equiv e _ _ fun i => ?_
+    rw [MPTensor.mpv_reindexPhysical, Matrix.submatrix_apply]
+    congr 2
+    funext n
+    refine Fin.cases rfl (fun k => rfl) n
+  rw [hsum Y, hsum Z]
+  exact h N fun n => e (σ n)
 
-/-- The doubled-index action obtained by multiplying the ket index by `P`.
+/-- Inserting a relabelled action into a relabelled tensor relabels the insertion. -/
+theorem insertedTensor_reindexPhysical {α α' β : Type*} [Fintype α] [Fintype α']
+    (e : α' ≃ α) (Y : Matrix α α ℂ) (A : MPTensor α β) :
+    insertedTensor (Y.submatrix e e) (Kraus.reindexPhysical e A) =
+      Kraus.reindexPhysical e (insertedTensor Y A) := by
+  funext i
+  exact Fintype.sum_equiv e _ _ fun j => rfl
+
+/-! ### Pair-alphabet form of the three contractions in Proposition 4.13 -/
+
+/-- The pair-alphabet action obtained by multiplying the ket index by `P`.
 
 For the horizontal MPO contraction this is the first-site form of
 $PH^{(N)}$.  It is the leftmost contraction in the displayed equation of
 the proof of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887. -/
 noncomputable def ketLeftAction (P : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
-  fun p q => if p.modNat = q.modNat then P p.divNat q.divNat else 0
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  fun p q => if p.2 = q.2 then P p.1 q.1 else 0
 
-/-- The doubled-index action obtained by multiplying the bra index by `P` on
+/-- The pair-alphabet action obtained by multiplying the bra index by `P` on
 the right.  For the horizontal MPO contraction this is the first-site form of
 $H^{(N)}P$ in the displayed equation of the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1873--1887. -/
 noncomputable def braRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
-  fun p q => if p.divNat = q.divNat then P q.modNat p.modNat else 0
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  fun p q => if p.1 = q.1 then P q.2 p.2 else 0
 
-/-- The doubled-index action obtained by multiplying the ket index by `P` and
+/-- The pair-alphabet action obtained by multiplying the ket index by `P` and
 the bra index by `P` on the right.  For the horizontal MPO contraction this is
 the first-site form of $PH^{(N)}P$ in the displayed equation of the proof of
 Proposition 4.13 of arXiv:1606.00608, lines 1873--1887. -/
 noncomputable def ketLeftBraRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
-  fun p q => P p.divNat q.divNat * P q.modNat p.modNat
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  fun p q => P p.1 q.1 * P q.2 p.2
 
-/-- Reading the doubled physical index as a ket--bra pair recovers the
-corresponding matrix entry of the horizontal MPO contraction.  This is the bridge from the
-doubled-index view to `MPOTensor.mpv_pair`, used where the horizontal canonical form is still
-stated on the doubled index. -/
-theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
-    (σ τ : Fin N → Fin d) :
-    MPTensor.mpv M.toMPSTensor (fun n => finProdFinEquiv (σ n, τ n)) =
-      MPOTensor.mpo M N σ τ := by
-  rw [MPOTensor.mpv_toMPSTensor_eq]
-  simp only [Equiv.symm_apply_apply]
-  exact MPOTensor.mpv_pair M σ τ
+/-- The coefficient of an operator tensor with one pair letter separated from an arbitrary
+pair-alphabet tail is a matrix entry of the periodic operator. -/
+theorem mpv_cons_pair (M : MPOTensor d D) {N : ℕ}
+    (i j : Fin d) (ρ : Fin N → Fin d × Fin d) :
+    MPTensor.mpv M (Fin.cons (i, j) ρ) =
+      MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ n).1))
+        (Fin.cons j (fun n => (ρ n).2)) := by
+  rw [MPOTensor.mpv_eq_mpo]
+  congr 1 <;> funext n <;> refine Fin.cases rfl (fun k => rfl) n
 
-/-- One doubled index separated from an arbitrary doubled-index tail: the coefficient of
-the doubled-index view is the corresponding matrix entry of the horizontal MPO
-contraction. -/
-theorem mpv_toMPSTensor_cons_pair (M : MPOTensor d D) {N : ℕ}
-    (i j : Fin d) (ρ : Fin N → Fin (d * d)) :
-    MPTensor.mpv M.toMPSTensor (Fin.cons (finProdFinEquiv (i, j)) ρ) =
-      MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ n).divNat))
-        (Fin.cons j (fun n => (ρ n).modNat)) := by
-  rw [MPOTensor.mpv_toMPSTensor_eq, MPOTensor.mpv_eq_mpo]
-  congr 1 <;> funext n <;> refine Fin.cases (by simp) (fun k => rfl) n
-
-/-- Coefficient identity identifying the first-site doubled-index ket action
+/-- Coefficient identity identifying the first-site pair-alphabet ket action
 with the matrix entries of $PH^{(N)}$. -/
 theorem ketLeftAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
-    ∑ q : Fin (d * d), ketLeftAction P (ρ 0) q *
-        MPTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
-      ∑ i : Fin d, P (ρ 0).divNat i *
-        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) := by
-  rw [← finProdFinEquiv.sum_comp]
+    {N : ℕ} (ρ : Fin (N + 1) → Fin d × Fin d) :
+    ∑ q : Fin d × Fin d, ketLeftAction P (ρ 0) q *
+        MPTensor.mpv M (Fin.cons q (ρ ∘ Fin.succ)) =
+      ∑ i : Fin d, P (ρ 0).1 i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n => (ρ (Fin.succ n)).2)) := by
   rw [Fintype.sum_prod_type]
-  simp only [ketLeftAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
+  simp only [ketLeftAction]
   apply Finset.sum_congr rfl
   intro i _
-  rw [Fintype.sum_eq_single (ρ 0).modNat]
+  rw [Fintype.sum_eq_single (ρ 0).2]
   · simp only [ite_true]
-    rw [mpv_toMPSTensor_cons_pair]
+    rw [mpv_cons_pair]
     rfl
   · intro j hj
     simp only [hj.symm, ite_false, zero_mul]
 
-/-- Coefficient identity identifying the first-site doubled-index bra action
+/-- Coefficient identity identifying the first-site pair-alphabet bra action
 with the matrix entries of $H^{(N)}P$. -/
 theorem braRightAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
-    ∑ q : Fin (d * d), braRightAction P (ρ 0) q *
-        MPTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+    {N : ℕ} (ρ : Fin (N + 1) → Fin d × Fin d) :
+    ∑ q : Fin d × Fin d, braRightAction P (ρ 0) q *
+        MPTensor.mpv M (Fin.cons q (ρ ∘ Fin.succ)) =
       ∑ j : Fin d,
         MPOTensor.mpo M (N + 1)
-          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat := by
-  rw [← finProdFinEquiv.sum_comp]
+          (Fin.cons (ρ 0).1 (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).2)) * P j (ρ 0).2 := by
   rw [Fintype.sum_prod_type]
-  simp only [braRightAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat,
-    ite_mul]
-  rw [Fintype.sum_eq_single (ρ 0).divNat]
+  simp only [braRightAction, ite_mul]
+  rw [Fintype.sum_eq_single (ρ 0).1]
   · apply Finset.sum_congr rfl
     intro j _
     simp only [ite_true]
-    rw [mpv_toMPSTensor_cons_pair]
+    rw [mpv_cons_pair]
     simp only [Function.comp_apply, mul_comm]
   · intro i hi
     simp only [hi.symm, ite_false, zero_mul, Finset.sum_const_zero]
 
-/-- Coefficient identity identifying the two-sided first-site doubled-index
+/-- Coefficient identity identifying the two-sided first-site pair-alphabet
 action with the matrix entries of $PH^{(N)}P$. -/
 theorem ketLeftBraRightAction_mpv (M : MPOTensor d D)
-    (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
-    ∑ q : Fin (d * d), ketLeftBraRightAction P (ρ 0) q *
-        MPTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
-      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
-        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat := by
-  rw [← finProdFinEquiv.sum_comp]
+    (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (ρ : Fin (N + 1) → Fin d × Fin d) :
+    ∑ q : Fin d × Fin d, ketLeftBraRightAction P (ρ 0) q *
+        MPTensor.mpv M (Fin.cons q (ρ ∘ Fin.succ)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).1 i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).2)) * P j (ρ 0).2 := by
   rw [Fintype.sum_prod_type]
-  simp only [ketLeftBraRightAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
+  simp only [ketLeftBraRightAction]
   apply Finset.sum_congr₂
   intro i _ j _
-  rw [mpv_toMPSTensor_cons_pair]
+  rw [mpv_cons_pair]
   simp only [Function.comp_apply]
   ring
 
 /-- Entrywise equality $PH^{(N)} = PH^{(N)}P$ gives the first of
-the two doubled-index first-site equalities used in Lemma L. -/
+the two pair-alphabet first-site equalities used in Lemma L. -/
 theorem firstSiteActionAgree_ketLeft_ketLeftBraRight
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, P (ρ 0).divNat i *
-        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
-      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
-        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat)) :
-    MPSTensor.FirstSiteActionAgree M.toMPSTensor
+    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),
+      (∑ i : Fin d, P (ρ 0).1 i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n => (ρ (Fin.succ n)).2)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).1 i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).2)) * P j (ρ 0).2)) :
+    MPSTensor.FirstSiteActionAgree M
       (ketLeftAction P) (ketLeftBraRightAction P) := by
   intro N ρ
   rw [ketLeftAction_mpv, ketLeftBraRightAction_mpv]
   exact hInv N ρ
 
 /-- Entrywise equality $PH^{(N)} = H^{(N)}P$ gives the second of the
-two doubled-index first-site equalities used in Lemma L. -/
+two pair-alphabet first-site equalities used in Lemma L. -/
 theorem firstSiteActionAgree_ketLeft_braRight
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, P (ρ 0).divNat i *
-        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),
+      (∑ i : Fin d, P (ρ 0).1 i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n => (ρ (Fin.succ n)).2)) =
       ∑ j : Fin d,
         MPOTensor.mpo M (N + 1)
-          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat)) :
-    MPSTensor.FirstSiteActionAgree M.toMPSTensor
+          (Fin.cons (ρ 0).1 (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).2)) * P j (ρ 0).2)) :
+    MPSTensor.FirstSiteActionAgree M
       (ketLeftAction P) (braRightAction P) := by
   intro N ρ
   rw [ketLeftAction_mpv, braRightAction_mpv]
   exact hComm N ρ
 
-/-- The diagonal restriction of a doubled-index block: `diagBlock B i = B (i, i)`. -/
-def diagBlock {dim : ℕ} (B : MPSTensor (d * d) dim) : MPSTensor d dim :=
-  fun i => B (finProdFinEquiv (i, i))
+/-- The diagonal restriction of a pair-alphabet block: `diagBlock B i = B (i, i)`. -/
+def diagBlock {β : Type*} (B : MPTensor (Fin d × Fin d) β) : MPTensor (Fin d) β :=
+  fun i => B (i, i)
 
-/-- Evaluating a block-diagonal assembly of doubled-index blocks on a diagonal-paired
+/-- Evaluating a block-diagonal assembly of pair-alphabet blocks on a diagonal-paired
 configuration equals evaluating the assembly of the diagonally-restricted blocks on the
 original configuration. -/
 theorem mpv_toTensorFromBlocks_diag {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor (Fin d × Fin d) (Fin (dim k)))
     {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (α := Fin (d * d)) (μ := μ) A) (fun k => finProdFinEquiv (σ k, σ k))
-      = mpv (toTensorFromBlocks (α := Fin d) (μ := μ) (fun k => diagBlock (A k))) σ := by
-  rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
-  refine Finset.sum_congr rfl fun k _ => ?_
-  congr 1
-  exact (mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) (A k) σ).symm
+    mpv (toTensorFromBlocks (α := Fin d × Fin d) (μ := μ) A) (fun k => (σ k, σ k))
+      = mpv (toTensorFromBlocks (α := Fin d) (μ := μ) (fun k => diagBlock (A k))) σ :=
+  (mpv_reindexPhysical (fun i => (i, i)) (toTensorFromBlocks (μ := μ) A) σ).symm
 
 end MPSTensor
 
@@ -412,7 +423,7 @@ theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) 
     MPTensor.mpv (diagonalTensor M) σ = MPTensor.mpv M (fun k => (σ k, σ k)) :=
   MPTensor.mpv_reindexPhysical (fun i => (i, i)) M σ
 
-/-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
+/-- Under a horizontal canonical-form decomposition of `M`, the diagonal
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
 physical index `Fin d`, of the diagonally-restricted blocks.  This is a preliminary
 coefficient identity for arXiv:1606.00608, Proposition 4.13, not the vertical
@@ -420,18 +431,14 @@ canonical decomposition: diagonal restriction need not preserve normality, and
 the horizontal weights need not be positive. -/
 theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor (d * d) (dim k))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor
-      (MPTensor.toTensorFromBlocks (α := Fin (d * d)) (μ := μ) A))
+    (A : (k : Fin r) → MPTensor (Fin d × Fin d) (Fin (dim k)))
+    (hM : MPTensor.SameMPV₂Pos M
+      (MPTensor.toTensorFromBlocks (α := Fin d × Fin d) (μ := μ) A))
     {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
     MPTensor.mpv (diagonalTensor M) σ
       = MPTensor.mpv (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
-  have hpair : MPTensor.mpv M (fun k => (σ k, σ k)) =
-      MPTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
-    rw [MPOTensor.mpv_toMPSTensor_eq]
-    simp only [Equiv.symm_apply_apply]
-  rw [mpv_diagonalTensor, hpair, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
+  rw [mpv_diagonalTensor, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
 
 /-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal
 ket and bra words. -/

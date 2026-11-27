@@ -470,7 +470,10 @@ theorem hasFullSupport_blockTensorCFIIData {U : MPOTensor d D}
     (p : ℕ) (hp : 0 < p) :
     (blockTensorCFIIData U data p hp).toCPSVCanonicalFormData.HasFullSupport := by
   unfold blockTensorCFIIData
-  exact MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_cast _ hfull _
+  refine MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_cast _ ?_
+    ((normalizedFlattening_blockTensor U p).trans
+      (blockTensor_eq_reindexPhysical U.normalizedFlattening p))
+  exact hfull
 
 /-- The normalized tensor of an MPU is normal when the chosen CPSV canonical-form
 representative has full support.

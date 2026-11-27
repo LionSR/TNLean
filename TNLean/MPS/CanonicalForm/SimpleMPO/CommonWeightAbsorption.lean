@@ -31,14 +31,14 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.SectorDecomposition
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-- The common weight $\mu_j$ of the copies of sector $j$, chosen from its
 distinguished first copy. The hypothesis ensures that this choice represents
 every copy.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665. -/
-noncomputable def commonWeight (S : SectorDecomposition d)
+noncomputable def commonWeight (S : SectorDecomposition α)
     (_hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) : ℂ :=
   S.weight j ⟨0, S.copies_pos j⟩
@@ -47,10 +47,10 @@ noncomputable def commonWeight (S : SectorDecomposition d)
 common copy weight into the $j$-th canonical-form representative.
 
 Source: arXiv:1606.00608, Appendix C.2, equation CFK, lines 1660--1665. -/
-noncomputable def commonWeightAbsorbedBasis (S : SectorDecomposition d)
+noncomputable def commonWeightAbsorbedBasis (S : SectorDecomposition α)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
-    MPSTensor d (S.basisDim j) :=
+    MPTensor α (Fin (S.basisDim j)) :=
   fun i => S.commonWeight hWeight j • S.basis j i
 
 /-- Every copy weight is the chosen common weight when the weights are
@@ -58,7 +58,7 @@ copy-independent.
 
 Source: arXiv:1606.00608, Appendix C.2, the argument labelled lemmus,
 lines 1646--1658. -/
-theorem weight_eq_commonWeight (S : SectorDecomposition d)
+theorem weight_eq_commonWeight (S : SectorDecomposition α)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount)
     (q : Fin (S.copies j)) :
@@ -71,7 +71,7 @@ This is the coefficient nonvanishing used when the source forms
 \(m_j=q_j\widetilde m_j\) in the proof of the Markov-sector assignment.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1714--1718. -/
-theorem commonWeight_ne_zero (S : SectorDecomposition d)
+theorem commonWeight_ne_zero (S : SectorDecomposition α)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
     S.commonWeight hWeight j ≠ 0 :=
@@ -85,7 +85,7 @@ the natural copy multiplicity $r_j$ times $\mu_j^N$:
 
 Source: arXiv:1606.00608, Appendix C.2, equations CFK and sigmaNKj,
 lines 1660--1665 and 1756--1759. -/
-theorem coeff_eq_copies_mul_commonWeight_pow (S : SectorDecomposition d)
+theorem coeff_eq_copies_mul_commonWeight_pow (S : SectorDecomposition α)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (N : ℕ) (j : Fin S.basisCount) :
     S.coeff N j = (S.copies j : ℂ) * (S.commonWeight hWeight j) ^ N := by
@@ -105,7 +105,7 @@ The independent choice of a nonzero virtual tail contraction remains a
 separate step.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1714--1718. -/
-theorem coeff_ne_zero_of_weight_copy_independent (S : SectorDecomposition d)
+theorem coeff_ne_zero_of_weight_copy_independent (S : SectorDecomposition α)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (N : ℕ) (j : Fin S.basisCount) :
     S.coeff N j ≠ 0 := by
@@ -113,6 +113,20 @@ theorem coeff_ne_zero_of_weight_copy_independent (S : SectorDecomposition d)
   apply mul_ne_zero
   · exact_mod_cast (Nat.ne_of_gt (S.copies_pos j))
   · exact pow_ne_zero N (S.commonWeight_ne_zero hWeight j)
+
+/-- The coefficients of an absorbed representative are those of the representative scaled by
+the `N`-th power of the common weight.
+
+Source: arXiv:1606.00608, Appendix C.2, equation CFK, lines 1660--1665. -/
+theorem mpv_commonWeightAbsorbedBasis (S : SectorDecomposition α)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q') (j : Fin S.basisCount) {N : ℕ} (σ : Fin N → α) :
+    mpv (S.commonWeightAbsorbedBasis hWeight j) σ =
+      (S.commonWeight hWeight j) ^ N * mpv (S.basis j) σ := by
+  change mpv (fun i ↦ S.commonWeight hWeight j • S.basis j i) σ = _
+  simp only [MPTensor.mpv, MPTensor.coeff]
+  rw [Kraus.evalWord_smul]
+  simp [List.length_ofFn, Matrix.trace_smul]
 
 /-- Absorbing the common weight into each representative leaves precisely its
 natural horizontal copy count as the coefficient of its matrix product
@@ -125,9 +139,9 @@ vector:
 Source: arXiv:1606.00608, Appendix C.2, equation CFK, lines 1660--1665;
 the multiplicity convention is used in equation sigmaNKj, lines 1756--1759. -/
 theorem mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis
-    (S : SectorDecomposition d)
+    (S : SectorDecomposition α)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
-      S.weight j q = S.weight j q') {N : ℕ} (σ : Fin N → Fin d) :
+      S.weight j q = S.weight j q') {N : ℕ} (σ : Fin N → α) :
     mpv S.toTensor σ =
       ∑ j : Fin S.basisCount,
         (S.copies j : ℂ) * mpv (S.commonWeightAbsorbedBasis hWeight j) σ := by
@@ -135,9 +149,7 @@ theorem mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis
   apply Finset.sum_congr rfl
   intro j _
   rw [S.coeff_eq_copies_mul_commonWeight_pow hWeight N j]
-  rw [show mpv (S.commonWeightAbsorbedBasis hWeight j) σ =
-      (S.commonWeight hWeight j) ^ N * mpv (S.basis j) σ by
-    exact mpv_smul (S.commonWeight hWeight j) (S.basis j) σ]
+  rw [S.mpv_commonWeightAbsorbedBasis hWeight j σ]
   ring
 
 end MPSTensor.SectorDecomposition

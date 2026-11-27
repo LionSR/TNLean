@@ -139,9 +139,9 @@ diagonal entry of $R_j$ unchanged.
 
 Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the
 blockwise similarities at lines 313--332. -/
-def replaceBasis (P : SectorDecomposition d)
-    (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j)) :
-    SectorDecomposition d where
+def replaceBasis {α : Type*} (P : SectorDecomposition α)
+    (B : (j : Fin P.basisCount) → MPTensor α (Fin (P.basisDim j))) :
+    SectorDecomposition α where
   basisCount := P.basisCount
   basisDim := P.basisDim
   basis := B
@@ -152,8 +152,8 @@ def replaceBasis (P : SectorDecomposition d)
 Source context: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305,
 with the representativewise similarities at lines 313--332. -/
 @[simp]
-theorem replaceBasis_basis (P : SectorDecomposition d)
-    (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j))
+theorem replaceBasis_basis {α : Type*} (P : SectorDecomposition α)
+    (B : (j : Fin P.basisCount) → MPTensor α (Fin (P.basisDim j)))
     (j : Fin P.basisCount) :
     (P.replaceBasis B).basis j = B j :=
   rfl
@@ -164,8 +164,8 @@ $\sum_q \mu_{j,q}^N$ unchanged.
 Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the pure
 blockwise similarities at lines 313--332. -/
 @[simp]
-theorem replaceBasis_coeff (P : SectorDecomposition d)
-    (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j))
+theorem replaceBasis_coeff {α : Type*} (P : SectorDecomposition α)
+    (B : (j : Fin P.basisCount) → MPTensor α (Fin (P.basisDim j)))
     (N : ℕ) (j : Fin P.basisCount) :
     (P.replaceBasis B).coeff N j = P.coeff N j :=
   rfl
@@ -179,14 +179,14 @@ the coefficients $\sum_q \mu_{j,q}^N$.
 
 Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the
 block-diagonal similarity at lines 313--332. -/
-theorem gaugeEquiv_toTensor_replaceBasis (P : SectorDecomposition d)
-    (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j))
+theorem gaugeEquiv_toTensor_replaceBasis {α : Type*} (P : SectorDecomposition α)
+    (B : (j : Fin P.basisCount) → MPTensor α (Fin (P.basisDim j)))
     (hGauge : ∀ j, GaugeEquiv (P.basis j) (B j)) :
     GaugeEquiv P.toTensor (P.replaceBasis B).toTensor := by
   classical
   choose X hX using hGauge
   let Xflat := matched_block_gauge (Q := P) X
-  have hXflat : ∀ (s : Fin P.totalCopies) (i : Fin d),
+  have hXflat : ∀ (s : Fin P.totalCopies) (i : α),
       (P.replaceBasis B).flatBasis s i =
         (Xflat s : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ) *
           P.flatBasis s i *
@@ -199,11 +199,11 @@ theorem gaugeEquiv_toTensor_replaceBasis (P : SectorDecomposition d)
         (((X (P.flatIndexEquiv.symm s).1)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
     exact hX (P.flatIndexEquiv.symm s).1 i
   refine ⟨globalGaugeOfBlocks Xflat, ?_⟩
-  change ∀ i : Fin d,
-    toTensorFromBlocks (α := Fin d) (P.flatWeight)
+  change ∀ i : α,
+    toTensorFromBlocks (α := α) (P.flatWeight)
         (P.replaceBasis B).flatBasis i =
       (globalGaugeOfBlocks Xflat : Matrix _ _ ℂ) *
-        toTensorFromBlocks (α := Fin d) (P.flatWeight) P.flatBasis i *
+        toTensorFromBlocks (α := α) (P.flatWeight) P.flatBasis i *
         (((globalGaugeOfBlocks Xflat)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
   exact toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     (P.flatWeight) P.flatBasis (P.replaceBasis B).flatBasis Xflat hXflat
@@ -220,7 +220,7 @@ unchanged.
 
 Source: arXiv:1708.00029, lines 313--332, applied to the multiplicity-bearing
 form `eq:bdnr` at lines 286--305. -/
-theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition d)
+theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition (Fin d))
     (period : Fin P.basisCount → ℕ)
     (hP : ∀ j, IsSpectrallyPeriodic (period j) (P.basis j)) :
     ∃ B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j),

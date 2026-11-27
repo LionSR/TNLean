@@ -112,13 +112,13 @@ theorem IsMPUCanonicalFormII.mul_map_star_eq_one_or_neg_one_of_conjugation_gauge
         -1 := by
   let : NeZero d := hV.neZero_phys
   let : NeZero D := hV.neZero_bond
-  have hN : Kraus.IsNormal (MPOTensor.blockTwo V).normalizedFlattening :=
-    hV.blockTwo.isNormalTensor_normalizedFlattening.isNormal
+  have hN : Kraus.IsNormal (MPOTensor.blockTwo V).normalizedFlattening.toMPSTensor :=
+    (isNormal_toMPSTensor_iff _).2 hV.blockTwo.isNormalTensor_normalizedFlattening.isNormal
   exact MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge hN
     (P := 1) (by simp) X (ζ := ζ) (fun i => by
       simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
         Finset.mem_univ, ite_true]
-      simp only [normalizedFlattening, map_star_smul, hg, Matrix.mul_smul,
+      simp only [toMPSTensor, normalizedFlattening, map_star_smul, hg, Matrix.mul_smul,
         Matrix.smul_mul, smul_comm ζ]
       congr 1
       simp)

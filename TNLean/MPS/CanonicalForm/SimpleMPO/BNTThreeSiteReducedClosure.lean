@@ -40,60 +40,19 @@ namespace MPSTensor.SectorDecomposition
 
 variable {d : ℕ}
 
-/-- Read a doubled-index BNT representative as an MPO tensor:
-
-\[
-  (\mathcal A_j)^{ab}=A_j^{(a,b)}.
-\]
-
-Source: arXiv:1606.00608, Appendix C.2, the BNT convention at lines
-1628--1632 and the canonical-form display at lines 1660--1665. -/
-def basisMPOTensor (S : SectorDecomposition (d * d))
-    (j : Fin S.basisCount) : MPOTensor d (S.basisDim j) :=
-  fun ab ↦ S.basis j (finProdFinEquiv ab)
-
-/-- Converting the representative MPO back to a doubled-index MPS tensor
-recovers the original BNT representative.
-
-Source: arXiv:1606.00608, Appendix C.2, the doubled-index convention at lines
-1628--1632. -/
-@[simp] theorem basisMPOTensor_toMPSTensor
-    (S : SectorDecomposition (d * d)) (j : Fin S.basisCount) :
-    (S.basisMPOTensor j).toMPSTensor = S.basis j := by
-  funext ab
-  change S.basis j (finProdFinEquiv (ab.divNat, ab.modNat)) = S.basis j ab
-  exact congrArg (S.basis j) (finProdFinEquiv.apply_symm_apply ab)
-
-/-- The physical trace transfer of a representative MPO is its doubled-index
-physical trace transfer.
-
-Source: arXiv:1606.00608, Appendix C.2, the traced physical legs in the
-closing construction at lines 1714--1718. -/
-@[simp] theorem basisMPOTensor_verticalLoop
-    (S : SectorDecomposition (d * d)) (j : Fin S.basisCount) :
-    MPOTensor.verticalLoop (S.basisMPOTensor j) =
-    MPOTensor.doubledPhysTraceTransfer d (S.basis j) := by
-  simp [MPOTensor.verticalLoop, MPOTensor.physTraceTransfer,
-    MPOTensor.doubledPhysTraceTransfer, basisMPOTensor]
-
-/-- Equality of the positive-length doubled-index matrix-product-vector
-families gives the representative expansion of every physical MPO matrix entry.
+/-- Equality of the positive-length matrix-product-vector families on the pair alphabet
+gives the representative expansion of every physical MPO matrix entry.
 
 Source: arXiv:1606.00608, equations `decBSV` and `CFK`, lines 298--301 and
 1660--1665. -/
-theorem mpo_eq_sum_coeff_basisMPOTensor
-    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
-    (hM : SameMPV₂Pos M.toMPSTensor S.toTensor) {N : ℕ} (hN : 0 < N)
+theorem mpo_eq_sum_coeff_basis
+    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (Fin d × Fin d))
+    (hM : SameMPV₂Pos M S.toTensor) {N : ℕ} (hN : 0 < N)
     (u v : Fin N → Fin d) :
     MPOTensor.mpo M N u v =
-      ∑ j : Fin S.basisCount,
-        S.coeff N j * MPOTensor.mpo (S.basisMPOTensor j) N u v := by
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig, hM N hN,
-    S.mpv_toTensor_eq_sum_coeff]
-  apply Finset.sum_congr rfl
-  intro j _
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    S.basisMPOTensor_toMPSTensor]
+      ∑ j : Fin S.basisCount, S.coeff N j * MPOTensor.mpo (S.basis j) N u v := by
+  rw [← MPOTensor.mpv_pair, hM N hN, S.mpv_toTensor_eq_sum_coeff]
+  simp only [MPOTensor.mpv_pair]
 
 /-- The normalized closing matrix of sector (j) after tracing a tail of
 length (L):
@@ -111,7 +70,7 @@ in the density operator (sigma^{(L+3)}).
 Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines
 1714--1732. -/
 noncomputable def normalizedThreeSiteClosingMatrix
-    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
+    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (Fin d × Fin d))
     (L : ℕ) (j : Fin S.basisCount) :
     Matrix (Fin (S.basisDim j)) (Fin (S.basisDim j)) ℂ :=
   (Matrix.trace (MPOTensor.mpo M (L + 3)))⁻¹ •
@@ -123,7 +82,7 @@ normalization, provided the total state has nonzero trace.
 Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines
 1714--1718. -/
 theorem normalizedThreeSiteClosingMatrix_ne_zero
-    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
+    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (Fin d × Fin d))
     (L : ℕ) (j : Fin S.basisCount)
     (htrace : Matrix.trace (MPOTensor.mpo M (L + 3)) ≠ 0)
     (hR : S.threeSiteClosingMatrix L j ≠ 0) :
@@ -137,15 +96,15 @@ chain length four, the length used by the formal SAL-to-Markov theorem.
 Source: arXiv:1606.00608, simplicity at lines 815--822 and Appendix C.2,
 lines 1646--1665 and 1714--1718. -/
 theorem threeSiteClosingMatrix_one_ne_zero
-    (S : SectorDecomposition (d * d))
+    (S : SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (MPOTensor.physTraceTransfer (S.basis j)))
     (j : Fin S.basisCount) :
     S.threeSiteClosingMatrix 1 j ≠ 0 := by
   have hTail :
-      (MPOTensor.doubledPhysTraceTransfer d (S.basis j)) ^ 1 ≠ 0 := by
+      (MPOTensor.physTraceTransfer (S.basis j)) ^ 1 ≠ 0 := by
     intro hzero
     exact hnonNil j ⟨1, hzero⟩
   exact smul_ne_zero
@@ -194,10 +153,10 @@ Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, equations `CFK`,
 `sigma3bka`, and `keyformula`, lines 1660--1665 and 1714--1732. -/
 theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor) (L : ℕ) :
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor) (L : ℕ) :
     IsThreeSiteFamilyClosure
-      (fun j ↦ S.basisMPOTensor j)
+      (fun j ↦ S.basis j)
       (S.normalizedThreeSiteClosingMatrix M L)
       (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
         (_root_.finThreeArrowEquiv (Fin d))
@@ -234,8 +193,8 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
   rw [hReduced]
   have hMpoExpand (u' v' : Fin (3 + L) → Fin d) :
       mpo M (3 + L) u' v' = ∑ j : Fin S.basisCount,
-        S.coeff (3 + L) j * mpo (S.basisMPOTensor j) (3 + L) u' v' :=
-    S.mpo_eq_sum_coeff_basisMPOTensor M hM (by omega) u' v'
+        S.coeff (3 + L) j * mpo (S.basis j) (3 + L) u' v' :=
+    S.mpo_eq_sum_coeff_basis M hM (by omega) u' v'
   simp_rw [hMpoExpand]
   rw [Finset.mul_sum]
   simp_rw [Finset.mul_sum]
@@ -245,35 +204,35 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
   calc
     (∑ w, (Matrix.trace (M.mpo (L + 3)))⁻¹ *
           (S.coeff (3 + L) j *
-            mpo (S.basisMPOTensor j) (3 + L) (Fin.append u w) (Fin.append v w))) =
+            mpo (S.basis j) (3 + L) (Fin.append u w) (Fin.append v w))) =
         ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j) *
-          ∑ w, mpo (S.basisMPOTensor j) (3 + L)
+          ∑ w, mpo (S.basis j) (3 + L)
             (Fin.append u w) (Fin.append v w) := by
       simpa only [mul_comm, mul_left_comm, mul_assoc, mul_one, one_mul] using
         Fintype.sum_mul_mul_eq_mul_sum_mul
           ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j)
-          (fun w => mpo (S.basisMPOTensor j) (3 + L)
+          (fun w => mpo (S.basis j) (3 + L)
             (Fin.append u w) (Fin.append v w))
           (fun _ => 1)
     _ = ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j) *
           Matrix.trace
-            ((S.basisMPOTensor j).evalWord (List.ofFn u) (List.ofFn v) *
-              (S.basisMPOTensor j).verticalLoop ^ L) := by
+            (MPOTensor.evalWord (S.basis j) (List.ofFn u) (List.ofFn v) *
+              MPOTensor.verticalLoop (S.basis j) ^ L) := by
       rw [sum_mpo_threeSite_prefix_diagonal_tail]
     _ = Matrix.trace
-          (S.basisMPOTensor j (i₁, j₁) * S.basisMPOTensor j (i₂, j₂) *
-            S.basisMPOTensor j (i₃, j₃) *
+          (S.basis j (i₁, j₁) * S.basis j (i₂, j₂) *
+            S.basis j (i₃, j₃) *
               S.normalizedThreeSiteClosingMatrix M L j) := by
       simp only [MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix,
         MPSTensor.SectorDecomposition.threeSiteClosingMatrix,
-        MPSTensor.SectorDecomposition.basisMPOTensor_verticalLoop,
+        MPOTensor.verticalLoop,
         Matrix.mul_smul, Matrix.trace_smul,
         smul_smul, smul_eq_mul]
       have hcoeff : S.coeff (L + 3) j = S.coeff (3 + L) j := by
         congr 1
         omega
       rw [hcoeff]
-      simp [MPSTensor.SectorDecomposition.basisMPOTensor, u, v,
+      simp [u, v,
         evalWord, Matrix.mul_assoc]
 
 /-- At chain length four, the normalized three-site reduced state is a BNT
@@ -288,15 +247,15 @@ Source: arXiv:1606.00608, simplicity and SAL at lines 815--822, and Appendix
 C.2, lines 1646--1665 and 1714--1732. -/
 theorem reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSAL : IsSAL M) :
     IsThreeSiteFamilyClosure
-        (fun j ↦ S.basisMPOTensor j)
+        (fun j ↦ S.basis j)
         (S.normalizedThreeSiteClosingMatrix M 1)
         (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
           (_root_.finThreeArrowEquiv (Fin d))

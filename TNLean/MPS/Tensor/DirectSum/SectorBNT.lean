@@ -12,7 +12,7 @@ import TNLean.MPS.Tensor.Overlap
 # BNT canonical form on a `SectorDecomposition`
 
 This module introduces the canonical-form predicate
-`IsBNTCanonicalForm` over a `SectorDecomposition d`.
+`IsBNTCanonicalForm` over a `SectorDecomposition α`.
 
 The structure is the minimal CPSV16/CPSV21 BNT canonical-form data on top of
 a `SectorDecomposition`.  It records:
@@ -82,12 +82,12 @@ open Filter Topology
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /--
 **BNT canonical form (core predicate `IsBNTCanonicalForm`).**
 
-Given `P : SectorDecomposition d`, this captures the minimal CPSV16/CPSV21
+Given `P : SectorDecomposition α`, this captures the minimal CPSV16/CPSV21
 BNT canonical-form data without any equal-modulus or strict-ordering
 assumption on the raw sector weights.  The MPV expansion that flows from
 this predicate is
@@ -106,7 +106,7 @@ The equal-modulus layer (`HasEqualModulusWeightLayer`) is therefore kept
 outside this core predicate and assumed only by theorems that genuinely require
 it.
 -/
-structure IsBNTCanonicalForm (P : SectorDecomposition d) where
+structure IsBNTCanonicalForm (P : SectorDecomposition α) where
   /-- Every basis bond dimension is positive (needed for `NeZero` typeclass
   inference on `Fin (P.basisDim j)`; cf. CPSV21 lines 1815–1830 where the
   primitive transfer map lives on a positive-dimension block). -/
@@ -123,7 +123,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   periodic generalization at CPSV21 lines 1905–1908 is deliberately not
   included here). -/
   basis_normalized_self_overlap : ∀ j : Fin P.basisCount,
-    Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis j) N)
+    Tendsto (fun N : ℕ => mpvOverlap (α := α) (P.basis j) (P.basis j) N)
       atTop (𝓝 1)
   /-- **BNT eventual linear independence** of the basis MPV states
   (CPSV21 Definition 4.2, lines 1846–1850; combined-family LI input at
@@ -137,7 +137,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   basis_distinct : ∀ j k : Fin P.basisCount, j ≠ k →
     ∀ h : P.basisDim j = P.basisDim k,
       ¬ GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor d) h) (P.basis j)) (P.basis k)
+          (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) h) (P.basis j)) (P.basis k)
   /-- **CPSV16 line-246 normalization, modulus bound.**  Every raw sector
   weight has modulus at most one.  CPSV16 §II.C line 246: "we can always
   choose `|μ_k| ≤ 1`"; reinvoked in the body of the FT proof at line 1244

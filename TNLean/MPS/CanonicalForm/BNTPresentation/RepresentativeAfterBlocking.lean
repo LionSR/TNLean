@@ -142,7 +142,7 @@ inequivalent left-canonical normal sectors. The coefficients are the actual copy
 `P.coeff N j`; no coefficient is required to survive at every length.
 Source: arXiv:1606.00608, Section II.C; arXiv:2307.01696, eqs. (S2)--(S4). -/
 theorem exists_blockTensor_normal_sectors (A : MPSTensor d D) :
-    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (blockPhysDim d p),
+    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (Fin (blockPhysDim d p)),
       SameMPV₂Pos (blockTensor A p) P.toTensor ∧
       (∀ j, IsNormalTensor (P.basis j)) ∧
       (∀ j, IsLeftCanonical (P.basis j)) ∧
@@ -163,7 +163,7 @@ and a strict mixed-transfer gap. All the analytic hypotheses used by overlapping
 measurement preparation follow from the canonical reduction.
 Source: arXiv:2307.01696, eq. (5), eq. (S2), and the proof of Lemma 1'(ii). -/
 theorem exists_blockTensor_normal_sectors_fixedPoints (A : MPSTensor d D) :
-    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (blockPhysDim d p),
+    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (Fin (blockPhysDim d p)),
       ∃ σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ,
         SameMPV₂Pos (blockTensor A p) P.toTensor ∧
         (∀ j, Kraus.IsNormal (P.basis j)) ∧

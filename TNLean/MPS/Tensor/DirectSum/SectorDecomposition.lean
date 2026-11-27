@@ -31,7 +31,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /--
 Sector multiplicity and weight data over a family of basis blocks.
@@ -142,36 +142,36 @@ A sector decomposition: a basis of normal tensors together with per-copy sector 
 This bundles the basis-block family `A_j` with the multiplicity and weight structure
 `SectorWeightData`.
 -/
-structure SectorDecomposition (d : ℕ) where
+structure SectorDecomposition (α : Type*) where
   /-- Number of basis blocks `A_j`. -/
   basisCount : ℕ
   /-- Bond dimension of each basis block. -/
   basisDim : Fin basisCount → ℕ
   /-- The basis-block family `A_j`. -/
-  basis : (j : Fin basisCount) → MPSTensor d (basisDim j)
+  basis : (j : Fin basisCount) → MPTensor α (Fin (basisDim j))
   /-- Multiplicities and sector weights lying over the basis blocks. -/
   sectors : SectorWeightData basisCount
 
 namespace SectorDecomposition
 
 /-- The multiplicity `r_j` of the basis block `j`. -/
-abbrev copies (P : SectorDecomposition d) : Fin P.basisCount → ℕ :=
+abbrev copies (P : SectorDecomposition α) : Fin P.basisCount → ℕ :=
   P.sectors.copies
 
 /-- Positivity of the multiplicities. -/
-abbrev copies_pos (P : SectorDecomposition d) : ∀ j, 0 < P.copies j :=
+abbrev copies_pos (P : SectorDecomposition α) : ∀ j, 0 < P.copies j :=
   P.sectors.copies_pos
 
 /-- The sector weight `μ_{j,q}`. -/
-abbrev weight (P : SectorDecomposition d) : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ :=
+abbrev weight (P : SectorDecomposition α) : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ :=
   P.sectors.weight
 
 /-- Nonvanishing of the sector weights. -/
-abbrev weight_ne_zero (P : SectorDecomposition d) : ∀ j q, P.weight j q ≠ 0 :=
+abbrev weight_ne_zero (P : SectorDecomposition α) : ∀ j q, P.weight j q ≠ 0 :=
   P.sectors.weight_ne_zero
 
 /-- The coefficient `coeff N j = ∑_q (μ_{j,q})^N`. -/
-noncomputable def coeff (P : SectorDecomposition d) (N : ℕ) (j : Fin P.basisCount) : ℂ :=
+noncomputable def coeff (P : SectorDecomposition α) (N : ℕ) (j : Fin P.basisCount) : ℂ :=
   P.sectors.coeff N j
 
 /-- A sector coefficient with nonzero copy weights cannot vanish at all
@@ -181,7 +181,7 @@ This is the coefficient nonvanishing used in the CPSV16 Appendix MPV argument,
 lines 1182--1188. If the coefficient vanished eventually, geometric
 extrapolation would make it vanish at exponent zero, where it equals the
 positive number of copies in the sector. -/
-lemma coeff_not_eventually_zero (P : SectorDecomposition d)
+lemma coeff_not_eventually_zero (P : SectorDecomposition α)
     (j : Fin P.basisCount) :
     ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) := by
   classical
@@ -214,7 +214,7 @@ This is what lets a power-sum comparison available only along the multiples of a
 period be fed to a comparison theorem asking for every large exponent, as in
 arXiv:1708.00029, theorem `thm:bdequal`, lines 681--684.
 -/
-def powWeights (P : SectorDecomposition d) (m : ℕ) : SectorDecomposition d where
+def powWeights (P : SectorDecomposition α) (m : ℕ) : SectorDecomposition α where
   basisCount := P.basisCount
   basisDim := P.basisDim
   basis := P.basis
@@ -227,41 +227,41 @@ def powWeights (P : SectorDecomposition d) (m : ℕ) : SectorDecomposition d whe
 /-- The coefficients of the `m`-th power weights read the original coefficients
 along the multiples of `m`. -/
 @[simp]
-theorem coeff_powWeights (P : SectorDecomposition d) (m n : ℕ)
+theorem coeff_powWeights (P : SectorDecomposition α) (m n : ℕ)
     (j : Fin P.basisCount) : (P.powWeights m).coeff n j = P.coeff (m * n) j := by
   simp only [coeff, SectorWeightData.coeff, powWeights, pow_mul]
   rfl
 
 /-- Total number of sectors after flattening the pairs `(j, q)`. -/
-def totalCopies (P : SectorDecomposition d) : ℕ :=
+def totalCopies (P : SectorDecomposition α) : ℕ :=
   ∑ j : Fin P.basisCount, P.copies j
 
 /-- Flatten the sector index `(j, q)` to a single `Fin totalCopies` index. -/
-noncomputable def flatIndexEquiv (P : SectorDecomposition d) :
+noncomputable def flatIndexEquiv (P : SectorDecomposition α) :
     ((j : Fin P.basisCount) × Fin (P.copies j)) ≃ Fin P.totalCopies :=
   finSigmaFinEquiv
 
 /-- Bond dimension of the flattened sector block indexed by `s`. -/
-noncomputable def flatDim (P : SectorDecomposition d) : Fin P.totalCopies → ℕ :=
+noncomputable def flatDim (P : SectorDecomposition α) : Fin P.totalCopies → ℕ :=
   fun s ↦ P.basisDim (P.flatIndexEquiv.symm s).1
 
 /-- Weight of the flattened sector block indexed by `s`. -/
-noncomputable def flatWeight (P : SectorDecomposition d) : Fin P.totalCopies → ℂ :=
+noncomputable def flatWeight (P : SectorDecomposition α) : Fin P.totalCopies → ℂ :=
   fun s ↦ P.weight (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
 
 /-- Basis tensor carried by the flattened sector block indexed by `s`. -/
-noncomputable def flatBasis (P : SectorDecomposition d) :
-    (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
+noncomputable def flatBasis (P : SectorDecomposition α) :
+    (s : Fin P.totalCopies) → MPTensor α (Fin (P.flatDim s)) :=
   fun s ↦ P.basis (P.flatIndexEquiv.symm s).1
 
 /-- Flattening and then recovering a sector-copy index preserves its bond dimension. -/
-@[simp] theorem flatDim_flatIndexEquiv (P : SectorDecomposition d)
+@[simp] theorem flatDim_flatIndexEquiv (P : SectorDecomposition α)
     (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
     P.flatDim (P.flatIndexEquiv jq) = P.basisDim jq.1 := by
   simp [flatDim]
 
 /-- Flattening and then recovering a sector-copy index preserves its weight. -/
-@[simp] theorem flatWeight_flatIndexEquiv (P : SectorDecomposition d)
+@[simp] theorem flatWeight_flatIndexEquiv (P : SectorDecomposition α)
     (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
     P.flatWeight (P.flatIndexEquiv jq) = P.weight jq.1 jq.2 := by
   exact congrArg (fun x => P.weight x.1 x.2)
@@ -269,7 +269,7 @@ noncomputable def flatBasis (P : SectorDecomposition d) :
 
 /-- Flattening and then recovering a sector-copy index preserves its basis tensor,
 with heterogeneous equality recording the definitionally equal bond dimensions. -/
-theorem flatBasis_flatIndexEquiv_heq (P : SectorDecomposition d)
+theorem flatBasis_flatIndexEquiv_heq (P : SectorDecomposition α)
     (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
     P.flatBasis (P.flatIndexEquiv jq) ≍ P.basis jq.1 := by
   unfold flatBasis
@@ -282,12 +282,12 @@ Marked `@[reducible]` so that `Fin P.totalDim` and `Fin (∑ s, P.flatDim s)`
 unify during type-class instance synthesis (needed for the literal
 `GaugeEquiv` statement that compares matrices indexed by both forms). -/
 @[reducible]
-noncomputable def totalDim (P : SectorDecomposition d) : ℕ :=
+noncomputable def totalDim (P : SectorDecomposition α) : ℕ :=
   ∑ s : Fin P.totalCopies, P.flatDim s
 
 /-- Every representative bond dimension is bounded by the bond dimension of
 the full flattened sector tensor. -/
-theorem basisDim_le_totalDim (P : SectorDecomposition d) (j : Fin P.basisCount) :
+theorem basisDim_le_totalDim (P : SectorDecomposition α) (j : Fin P.basisCount) :
     P.basisDim j ≤ P.totalDim := by
   let q : Fin (P.copies j) := ⟨0, P.copies_pos j⟩
   let s : Fin P.totalCopies := P.flatIndexEquiv ⟨j, q⟩
@@ -300,7 +300,7 @@ theorem basisDim_le_totalDim (P : SectorDecomposition d) (j : Fin P.basisCount) 
 /-- If every representative has positive bond dimension, then the number of
 representatives is at most the total bond dimension of the flattened sector
 tensor. -/
-theorem basisCount_le_totalDim (P : SectorDecomposition d)
+theorem basisCount_le_totalDim (P : SectorDecomposition α)
     (hDim : ∀ j : Fin P.basisCount, 0 < P.basisDim j) :
     P.basisCount ≤ P.totalDim := by
   have hFlatDim : ∀ s : Fin P.totalCopies, 0 < P.flatDim s := by
@@ -317,8 +317,8 @@ theorem basisCount_le_totalDim (P : SectorDecomposition d)
     _ = P.totalDim := rfl
 
 /-- The total tensor, obtained by flattening `(j, q)` and applying `toTensorFromBlocks`. -/
-noncomputable def toTensor (P : SectorDecomposition d) : MPSTensor d P.totalDim :=
-  toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis
+noncomputable def toTensor (P : SectorDecomposition α) : MPTensor α (Fin P.totalDim) :=
+  toTensorFromBlocks (α := α) (μ := P.flatWeight) P.flatBasis
 
 /-- Multiply every copy weight in a sector decomposition by the same nonzero scalar.
 
@@ -326,8 +326,8 @@ The representative tensors and their multiplicities are unchanged.  Nonvanishing
 new weights is the reason for the hypothesis on the scalar.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-noncomputable def scaleWeights (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
-    SectorDecomposition d where
+noncomputable def scaleWeights (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0) :
+    SectorDecomposition α where
   basisCount := P.basisCount
   basisDim := P.basisDim
   basis := P.basis
@@ -342,7 +342,7 @@ noncomputable def scaleWeights (P : SectorDecomposition d) (c : ℂ) (hc : c ≠
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
-theorem scaleWeights_basisCount (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
+theorem scaleWeights_basisCount (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0) :
     (P.scaleWeights c hc).basisCount = P.basisCount :=
   rfl
 
@@ -350,7 +350,7 @@ theorem scaleWeights_basisCount (P : SectorDecomposition d) (c : ℂ) (hc : c �
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
-theorem scaleWeights_basisDim (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+theorem scaleWeights_basisDim (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) :
     (P.scaleWeights c hc).basisDim j = P.basisDim j :=
   rfl
@@ -359,7 +359,7 @@ theorem scaleWeights_basisDim (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
-theorem scaleWeights_basis (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+theorem scaleWeights_basis (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) :
     (P.scaleWeights c hc).basis j = P.basis j :=
   rfl
@@ -368,7 +368,7 @@ theorem scaleWeights_basis (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
-theorem scaleWeights_copies (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+theorem scaleWeights_copies (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) :
     (P.scaleWeights c hc).copies j = P.copies j :=
   rfl
@@ -377,7 +377,7 @@ theorem scaleWeights_copies (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
-theorem scaleWeights_weight (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+theorem scaleWeights_weight (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) (q : Fin (P.copies j)) :
     (P.scaleWeights c hc).weight j q = c * P.weight j q :=
   rfl
@@ -385,7 +385,7 @@ theorem scaleWeights_weight (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
 /-- Scaling all copy weights scales the assembled tensor by the same scalar.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-theorem scaleWeights_toTensor (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
+theorem scaleWeights_toTensor (P : SectorDecomposition α) (c : ℂ) (hc : c ≠ 0) :
     (P.scaleWeights c hc).toTensor = c • P.toTensor := by
   classical
   change toTensorFromBlocks (fun s => c * P.flatWeight s) P.flatBasis =
@@ -403,8 +403,8 @@ theorem scaleWeights_toTensor (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 
     (finSigmaFinEquiv.symm y)
 
 /-- `toTensor` is `toTensorFromBlocks` for the flattened sector data. -/
-theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition d) :
-    P.toTensor = toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis :=
+theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition α) :
+    P.toTensor = toTensorFromBlocks (α := α) (μ := P.flatWeight) P.flatBasis :=
   rfl
 
 /-! ## Direct sums with one marked letter -/
@@ -416,9 +416,9 @@ inserted separately by `markedTensor`.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, and the marked chains in the
 proof of Proposition 4.13, lines 1909--1919. -/
-noncomputable def flatMarked {e : ℕ} (P : SectorDecomposition d)
-    (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j)) :
-    (s : Fin P.totalCopies) → MPSTensor e (P.flatDim s) :=
+noncomputable def flatMarked {β : Type*} (P : SectorDecomposition α)
+    (C : (j : Fin P.basisCount) → MPTensor β (Fin (P.basisDim j))) :
+    (s : Fin P.totalCopies) → MPTensor β (Fin (P.flatDim s)) :=
   fun s ↦ C (P.flatIndexEquiv.symm s).1
 
 /-- The weighted direct sum with one arbitrary marked letter in each representative.
@@ -430,10 +430,10 @@ may differ from the alphabet of the unmarked tail.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, and the marked chains in the
 proof of Proposition 4.13, lines 1909--1919. -/
-noncomputable def markedTensor {e : ℕ} (P : SectorDecomposition d)
-    (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j)) :
-    MPSTensor e P.totalDim :=
-  toTensorFromBlocks (α := Fin e) P.flatWeight (P.flatMarked C)
+noncomputable def markedTensor {β : Type*} (P : SectorDecomposition α)
+    (C : (j : Fin P.basisCount) → MPTensor β (Fin (P.basisDim j))) :
+    MPTensor β (Fin P.totalDim) :=
+  toTensorFromBlocks (α := β) P.flatWeight (P.flatMarked C)
 
 /-- Trace expansion for a weighted direct sum with one marked letter.
 
@@ -443,9 +443,9 @@ site.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, and the marked chains in the
 proof of Proposition 4.13, lines 1909--1919. -/
-theorem trace_markedTensor_mul_evalWord {e : ℕ} (P : SectorDecomposition d)
-    (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
-    (s : Fin e) (w : List (Fin d)) :
+theorem trace_markedTensor_mul_evalWord {β : Type*} (P : SectorDecomposition α)
+    (C : (j : Fin P.basisCount) → MPTensor β (Fin (P.basisDim j)))
+    (s : β) (w : List α) :
     Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor w) =
       ∑ j : Fin P.basisCount, P.coeff (w.length + 1) j *
         Matrix.trace (C j s * Kraus.evalWord (P.basis j) w) := by
@@ -507,8 +507,8 @@ theorem trace_markedTensor_mul_evalWord {e : ℕ} (P : SectorDecomposition d)
 /--
 Intermediate expansion: first sum over the basis index `j`, then over its copies `q`.
 -/
-theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition d) {N : ℕ}
-    (σ : Fin N → Fin d) :
+theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition α) {N : ℕ}
+    (σ : Fin N → α) :
     mpv P.toTensor σ =
       ∑ j : Fin P.basisCount, ∑ q : Fin (P.copies j),
         (P.weight j q) ^ N * mpv (P.basis j) σ := by
@@ -519,7 +519,7 @@ theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition d) {N : ℕ}
     mpv P.toTensor σ
       = ∑ s : Fin P.totalCopies, (P.flatWeight s) ^ N * mpv (P.flatBasis s) σ := by
           simpa [SectorDecomposition.toTensor, smul_eq_mul] using
-            (mpv_toTensorFromBlocks_eq_sum (α := Fin d) (μ := P.flatWeight)
+            (mpv_toTensorFromBlocks_eq_sum (α := α) (μ := P.flatWeight)
               (A := P.flatBasis) (σ := σ))
     _ = ∑ x : ((j : Fin P.basisCount) × Fin (P.copies j)),
           (P.weight x.1 x.2) ^ N * mpv (P.basis x.1) σ := by
@@ -552,8 +552,8 @@ theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition d) {N : ℕ}
 Decomposition formula: the MPV of the assembled tensor expands with coefficients
 `coeff N j = ∑_q (μ_{j,q})^N` against the basis MPVs.
 -/
-lemma mpv_toTensor_eq_sum_coeff (P : SectorDecomposition d) {N : ℕ}
-    (σ : Fin N → Fin d) :
+lemma mpv_toTensor_eq_sum_coeff (P : SectorDecomposition α) {N : ℕ}
+    (σ : Fin N → α) :
     mpv P.toTensor σ =
       ∑ j : Fin P.basisCount, P.coeff N j * mpv (P.basis j) σ := by
   calc
@@ -577,7 +577,7 @@ basis-block MPV states.
 
 This is the state-vector lift of the pointwise expansion above, used in
 arXiv:1606.00608, Appendix MPV proof, lines 1182--1188. -/
-lemma mpvState_toTensor_eq_sum_coeff (P : SectorDecomposition d) (N : ℕ) :
+lemma mpvState_toTensor_eq_sum_coeff {d : ℕ} (P : SectorDecomposition (Fin d)) (N : ℕ) :
     mpvState (d := d) P.toTensor N =
       ∑ j : Fin P.basisCount, P.coeff N j • mpvState (d := d) (P.basis j) N := by
   refine mpvState_eq_sum_of_decomp (d := d) P.toTensor P.basis
@@ -606,7 +606,7 @@ $P$-sector index $\leftrightarrow (βk, τ_k q)$.
 
 CPSV16 §II.C lines 1184–1192 (matched flattened-copy reindexing). -/
 noncomputable def sectorFlatEquiv
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
     Fin Q.totalCopies ≃ Fin P.totalCopies :=
@@ -614,7 +614,7 @@ noncomputable def sectorFlatEquiv
 
 @[simp]
 theorem sectorFlatEquiv_apply
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
     (s : Fin Q.totalCopies) :
@@ -629,7 +629,7 @@ using the matched per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$.
 
 CPSV16 §II.C lines 1184–1192. -/
 theorem flatDim_sectorFlatEquiv
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -646,7 +646,7 @@ $\sum_s D_s$ coincide.
 
 CPSV16 §II.C lines 1184–1192. -/
 theorem totalDim_eq_of_match
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
@@ -690,7 +690,7 @@ matched bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$.
 
 CPSV16 §II.C lines 354–361 / 1184–1192. -/
 noncomputable def sectorFlatSigmaEquiv
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
@@ -702,7 +702,7 @@ noncomputable def sectorFlatSigmaEquiv
 
 @[simp]
 theorem sectorFlatSigmaEquiv_apply
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -717,7 +717,7 @@ matched flattened sector data.
 
 CPSV16 §II.C lines 354–361 / 1184–1192. -/
 noncomputable def sectorFlatDimEquiv
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
@@ -727,7 +727,7 @@ noncomputable def sectorFlatDimEquiv
       (finSigmaFinEquiv (m := P.totalCopies) (n := P.flatDim)))
 
 theorem sectorFlatDimEquiv_apply
-    {d : ℕ} {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition α}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -746,8 +746,10 @@ end SectorDecomposition
 `HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
 a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127,
 lines 1846–1850: for all sufficiently large system sizes `N`, the MPV states
-`mpvState (P.basis j) N` are linearly independent.  The statement records only
-the eventual condition; no witness is included.
+of the basis blocks, the coefficient vectors `σ ↦ mpv (P.basis j) σ` in the `ℓ²` space over the
+configurations `Fin N → α`, are linearly independent.  On the alphabet `Fin d` these are the
+states `mpvState (P.basis j) N`, by definition.  The statement records only the eventual
+condition; no witness is included.
 
 Mathematically, this is the eventual linear-independence hypothesis on the basis
 sector MPV families. In comparison theorems for two sector decompositions, it
@@ -758,8 +760,9 @@ This definition lives in the shared infrastructure layer so that
 canonical-form modules (e.g. `TNLean.MPS.CanonicalForm.PhaseClassSectorData`)
 can certify the predicate without importing the FT-side coefficient comparison
 theorems that historically hosted it. -/
-def HasBNTSectorData {d : ℕ} (P : SectorDecomposition d) : Prop :=
+def HasBNTSectorData [Fintype α] (P : SectorDecomposition α) : Prop :=
   ∃ N0 : ℕ, ∀ N > N0,
-    LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N)
+    LinearIndependent ℂ (fun j : Fin P.basisCount =>
+      (EuclideanSpace.equiv (ι := Fin N → α) (𝕜 := ℂ)).symm fun σ => mpv (P.basis j) σ)
 
 end MPSTensor

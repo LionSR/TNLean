@@ -125,12 +125,12 @@ distinguishes the block label and both matrix indices.
 This is the simultaneous inverse used after blocking in arXiv:1511.08090,
 lines 269--277 and 427--431. -/
 theorem WordTupleSpanTop.exists_one_letter_simultaneous_left_inverse
-    {A : (k : Fin r) → MPSTensor d (dim k)}
+    {α : Type*} [Fintype α] {A : (k : Fin r) → MPTensor α (Fin (dim k))}
     (hSpan : WordTupleSpanTop A 1) :
-    ∃ C : Matrix (BlockEntryIndex dim) (Fin d) ℂ,
+    ∃ C : Matrix (BlockEntryIndex dim) α ℂ,
       ∀ (k j : Fin r) (x y : Fin (dim k))
         (x' y' : Fin (dim j)),
-        (∑ i : Fin d, C ⟨k, x, y⟩ i * A j i x' y') =
+        (∑ i : α, C ⟨k, x, y⟩ i * A j i x' y') =
           if h : k = j then
             if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
           else 0 := by
@@ -146,18 +146,18 @@ theorem WordTupleSpanTop.exists_one_letter_simultaneous_left_inverse
     rw [hSpan]
     exact Submodule.mem_top
   have hcoeff (k : Fin r) (x y : Fin (dim k)) :
-      ∃ c : (Fin 1 → Fin d) → ℂ,
+      ∃ c : (Fin 1 → α) → ℂ,
         ∑ w, c w • wordTuple A 1 w = target k x y :=
     (Submodule.mem_span_range_iff_exists_fun ℂ).mp (htarget k x y)
   choose coeff hcoeff_eq using hcoeff
-  let e := (Equiv.funUnique (Fin 1) (Fin d)).symm
+  let e := (Equiv.funUnique (Fin 1) α).symm
   refine ⟨fun z i ↦ coeff z.1 z.2.1 z.2.2 (e i), ?_⟩
   intro k j x y x' y'
-  change (∑ i : Fin d, coeff k x y (e i) * A j i x' y') = _
-  rw [show (∑ i : Fin d, coeff k x y (e i) * A j i x' y') =
-      ∑ w : Fin 1 → Fin d, coeff k x y w * A j (w 0) x' y' by
+  change (∑ i : α, coeff k x y (e i) * A j i x' y') = _
+  rw [show (∑ i : α, coeff k x y (e i) * A j i x' y') =
+      ∑ w : Fin 1 → α, coeff k x y w * A j (w 0) x' y' by
     simpa [e] using Equiv.sum_comp e
-      (fun w : Fin 1 → Fin d ↦ coeff k x y w * A j (w 0) x' y')]
+      (fun w : Fin 1 → α ↦ coeff k x y w * A j (w 0) x' y')]
   have hentry := congrArg (fun M ↦ M j x' y') (hcoeff_eq k x y)
   simpa [wordTuple, target, Fintype.linearCombination_apply,
     Matrix.sum_apply, Matrix.smul_apply, List.ofFn_succ] using hentry
@@ -185,29 +185,12 @@ Source: arXiv:1511.08090, simultaneous inverse at lines 269--277, after the
 common blocking at lines 427--431. -/
 theorem WordTupleSpanTop.exists_mpo_block_left_inverse
     {p : ℕ} {M : (k : Fin r) → MPOTensor p (dim k)}
-    (hSpan : WordTupleSpanTop (fun k ↦ (M k).toMPSTensor) 1) :
+    (hSpan : WordTupleSpanTop M 1) :
     ∃ C : Matrix (BlockEntryIndex dim) (Fin p × Fin p) ℂ,
       IsMPOBlockLeftInverse M C := by
   obtain ⟨C, hC⟩ := hSpan.exists_one_letter_simultaneous_left_inverse
-  refine ⟨fun z il ↦ C z (finProdFinEquiv il), ?_⟩
-  intro k j x y x' y'
-  change (∑ i : Fin p, ∑ l : Fin p,
-    C ⟨k, x, y⟩ (finProdFinEquiv (i, l)) * M j (i, l) x' y') = _
-  have hpair (il : Fin p × Fin p) :
-      (M j).toMPSTensor (finProdFinEquiv il) x' y' =
-        M j (il.1, il.2) x' y' := by
-    rcases il with ⟨i, l⟩
-    simp [MPOTensor.toMPSTensor]
-  calc
-    _ = ∑ il : Fin p × Fin p,
-        C ⟨k, x, y⟩ (finProdFinEquiv il) * M j (il.1, il.2) x' y' :=
-      (Fintype.sum_prod_type _).symm
-    _ = ∑ q : Fin (p * p),
-        C ⟨k, x, y⟩ q * (M j).toMPSTensor q x' y' := by
-      simpa only [hpair] using
-          Equiv.sum_comp finProdFinEquiv
-            (fun q ↦ C ⟨k, x, y⟩ q * (M j).toMPSTensor q x' y')
-    _ = _ := hC k j x y x' y'
+  refine ⟨C, fun k j x y x' y' ↦ ?_⟩
+  rw [← hC k j x y x' y', Fintype.sum_prod_type]
 
 /-- The scalar word family obtained by reading off one chosen matrix entry of the
 block-word tuple. -/

@@ -52,7 +52,7 @@ it does **not** assert the basis-of-normal-tensors linear-independence condition
 not the paper's minimal BNT representative construction. -/
 def trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition d where
+    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition (Fin d) where
   basisCount := r
   basisDim   := dim
   basis      := blocks

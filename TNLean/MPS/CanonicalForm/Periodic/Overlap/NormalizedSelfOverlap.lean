@@ -176,7 +176,7 @@ end MPSTensor
 
 namespace MPSTensor.IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- Every basis tensor in BNT canonical form is algebraically normal.
 
