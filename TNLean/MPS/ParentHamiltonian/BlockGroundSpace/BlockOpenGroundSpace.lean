@@ -228,8 +228,8 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlo
         ((hP j).isIrreducibleFamily_of_posDef (hρ j)) (hP j).norm (hP j).isPrimitive)
     (show BlocksNotGaugePhaseEquiv A from fun i j hij hdim ↦ by
       simpa only [eqRec_eq_cast] using hDistinct j i hij.symm hdim)
-    hBlk (fun j ↦ isNBlkInjective_of_le hL₀ (hBlk j) (Nat.le_succ L₀))
-    (fun j ↦ isNBlkInjective_of_le hL₀ (hBlk j) (by omega)) hL₀ hr
+    hBlk (fun j ↦ Kraus.isNBlkInjective_of_le hL₀ (hBlk j) (Nat.le_succ L₀))
+    (fun j ↦ Kraus.isNBlkInjective_of_le hL₀ (hBlk j) (by omega)) hL₀ hr
   exact ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
     μ A hμ (fun j ↦ (hP j).norm)
     (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving A hSpan

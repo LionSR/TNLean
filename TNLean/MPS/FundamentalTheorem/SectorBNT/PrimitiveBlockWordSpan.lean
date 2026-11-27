@@ -50,8 +50,8 @@ theorem exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap
         ((hP j).isIrreducibleFamily_of_posDef (hρ j)) (hP j).norm (hP j).isPrimitive)
     (show BlocksNotGaugePhaseEquiv A from fun i j hij hdim ↦ by
       simpa only [eqRec_eq_cast] using hDistinct j i hij.symm hdim)
-    hAtP (fun j ↦ isNBlkInjective_of_le hp (hAtP j) (Nat.le_succ p))
-    (fun j ↦ isNBlkInjective_of_le hp (hAtP j) (by omega)) hp
+    hAtP (fun j ↦ Kraus.isNBlkInjective_of_le hp (hAtP j) (Nat.le_succ p))
+    (fun j ↦ Kraus.isNBlkInjective_of_le hp (hAtP j) (by omega)) hp
   exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
     A (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair) hp hAtP
 

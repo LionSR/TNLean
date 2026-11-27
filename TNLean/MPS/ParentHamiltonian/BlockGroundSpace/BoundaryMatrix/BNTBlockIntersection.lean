@@ -110,7 +110,7 @@ theorem wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSe
   let q : ℕ := (r - 1) * S
   have hInjTail : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (n - q) := by
     intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hInj k) (by omega)
+    exact Kraus.wordSpan_eq_top_of_ge_of_unital (A k) (hUnital k) (hInj k) (by omega)
   have hSpan :
       WordTupleSpanTop A ((n - q) + (r - 1) * S) :=
     wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
@@ -129,7 +129,7 @@ private theorem isNBlkInjective_succ_and_three_mul_succ_of_unital
       ∀ k : Fin r,
         Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
   constructor <;> intro k <;>
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+    exact Kraus.wordSpan_eq_top_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
 
 /-- Length-\(L_0\) injectivity form of the BNT product span at all sufficiently
 large lengths.

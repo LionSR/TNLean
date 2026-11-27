@@ -168,34 +168,6 @@ theorem linearIndependent_rightCutVector {A : MPSTensor d D} {L : ℕ}
     · intro h
       exact absurd (Finset.mem_univ a) h
 
-/-- Condition C1 propagates to every longer length for a unital family,
-PGVWC07 (arXiv:quant-ph/0608197, MPSarchive.tex lines 895-897): if
-`∑ A_i A_i† = 1`, then every matrix is `∑ A_i (A_i† M)`, and each factor
-`A_i† M` is a combination of words of the previous length. -/
-theorem isNBlkInjective_of_le_of_unital {A : MPSTensor d D}
-    (hU : ∑ i, A i * (A i)ᴴ = 1) {L m : ℕ}
-    (hL : Kraus.IsNBlkInjective A L) (hLm : L ≤ m) :
-    Kraus.IsNBlkInjective A m := by
-  induction m, hLm using Nat.le_induction with
-  | base => exact hL
-  | succ m _ ih =>
-    change Kraus.wordSpan A (m + 1) = ⊤
-    rw [eq_top_iff]
-    intro M _
-    have hM : M = ∑ i, A i * ((A i)ᴴ * M) := by
-      calc M = (∑ i, A i * (A i)ᴴ) * M := by rw [hU, Matrix.one_mul]
-        _ = ∑ i, A i * ((A i)ᴴ * M) := by
-          rw [Finset.sum_mul]
-          simp only [Matrix.mul_assoc]
-    rw [hM]
-    refine Submodule.sum_mem _ fun i _ => ?_
-    have hmem : (A i)ᴴ * M ∈ Kraus.wordSpan A m := by
-      change Kraus.wordSpan A m = ⊤ at ih
-      rw [ih]
-      exact Submodule.mem_top
-    rw [Kraus.wordSpan_succ_eq_mul_left]
-    exact Submodule.mul_mem_mul (Submodule.subset_span ⟨i, rfl⟩) hmem
-
 /-! ## The intertwiner at one cut and the chain relation -/
 
 /-- **The intertwiner at one cut.** Two representations `B`, `C` of the same
@@ -501,10 +473,10 @@ theorem exists_intertwiner_of_fixedLength_mpv_eq [NeZero D] {B C : MPSTensor d D
     by_cases hj : j ≤ D ^ 4
     · have hΦ : LinearIndependent ℂ (leftCutVector B (L₀ + j)) :=
         linearIndependent_leftCutVector
-          (isNBlkInjective_of_le_of_unital hB_unital hC1 (by omega))
+          (Kraus.wordSpan_eq_top_of_ge_of_unital _ hB_unital hC1 (by omega))
       have hΨ : LinearIndependent ℂ (rightCutVector B (N - (L₀ + j))) :=
         linearIndependent_rightCutVector
-          (isNBlkInjective_of_le_of_unital hB_unital hC1 (by omega))
+          (Kraus.wordSpan_eq_top_of_ge_of_unital _ hB_unital hC1 (by omega))
       obtain ⟨W, hW, hWrel⟩ := exists_cutGauge_of_coeff_eq hΦ hΨ
         (fun σ τ => hlist _ (by simp only [List.length_append, List.length_ofFn]; omega))
       exact ⟨W, fun _ => ⟨hW, hWrel⟩⟩
@@ -517,7 +489,7 @@ theorem exists_intertwiner_of_fixedLength_mpv_eq [NeZero D] {B C : MPSTensor d D
     intro j hj i
     have hΦ : LinearIndependent ℂ (leftCutVector B (L₀ + j)) :=
       linearIndependent_leftCutVector
-        (isNBlkInjective_of_le_of_unital hB_unital hC1 (by omega))
+        (Kraus.wordSpan_eq_top_of_ge_of_unital _ hB_unital hC1 (by omega))
     exact cutGauge_chain hΦ (hW j (by omega)).2 (hW (j + 1) (by omega)).2 i
   exact exists_intertwiner_of_kronecker_chain W (fun j hj ↦ (hW j hj).1.ne_zero) hchain
 

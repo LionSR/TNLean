@@ -355,7 +355,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
     omega
   obtain ⟨ψ, hg, hu⟩ := hP.exists_eventually_unit_groundSpaceES hρ N hN
   have hInj : Kraus.IsNBlkInjective A (R - 1) :=
-    isNBlkInjective_of_le hD (isNBlkInjective_pow_four_of_isNormal A hNormal) (by omega)
+    Kraus.isNBlkInjective_of_le hD (isNBlkInjective_pow_four_of_isNormal A hNormal) (by omega)
   have hRange : R - 1 + 1 = R := by omega
   apply hP.localCommutator_gap_of_open_gap hρ X hRpos hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by

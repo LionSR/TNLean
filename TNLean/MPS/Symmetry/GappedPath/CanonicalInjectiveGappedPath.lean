@@ -81,7 +81,7 @@ noncomputable def canonicalInjectiveGappedPath
       (fun γ : Set.Icc (0 : ℝ) 1 => A γ)
       (continuousOn_iff_continuous_domRestrict.mp hA) 2
     intro γ
-    exact isNBlkInjective_of_le zero_lt_one
+    exact Kraus.isNBlkInjective_of_le zero_lt_one
       (Kraus.isNBlkInjective_one_of_isInjective (hInj γ γ.property)) one_le_two
   gap := by
     let B : Set.Icc (0 : ℝ) 1 → MPSTensor d D := fun γ => A γ

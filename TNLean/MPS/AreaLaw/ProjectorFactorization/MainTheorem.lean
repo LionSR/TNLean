@@ -166,20 +166,13 @@ theorem maxEntropyBound_le_of_one_le {ξ' C₁ C₂ D : ℝ} (hξ' : 0 < ξ') (h
   have hc : 0 ≤ 6 * Real.log D * (doublingStartLength ξ' C₁ + 1) := by positivity
   exact mul_le_mul_of_nonneg_left hpow hc
 
-/-- The complement of the initial segment `[0, i)` is the final segment `[i, L)`. -/
-theorem compl_interval_zero (L i : ℕ) : (interval L 0 i)ᶜ = interval L i L := by
-  ext x
-  simp only [Finset.mem_compl, mem_interval]
-  have := x.2
-  omega
-
 /-- For a unit vector, the entropy of an initial segment `[0, i)` is at most `(L - i) ln q`,
 the dimension bound for the complementary final segment. -/
 theorem regionEntropy_interval_zero_le {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hq : 1 ≤ q) (i : ℕ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
       ((L - i : ℕ) : ℝ) * Real.log q := by
-  rw [← ManyBody.regionEntropy_compl, compl_interval_zero]
+  rw [← ManyBody.regionEntropy_compl, ManyBody.compl_interval_zero]
   refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
   have := Real.log_nonneg (by exact_mod_cast hq : (1 : ℝ) ≤ q)
   gcongr

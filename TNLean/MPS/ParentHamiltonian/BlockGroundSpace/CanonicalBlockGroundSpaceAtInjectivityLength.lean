@@ -328,7 +328,7 @@ private theorem IsNormalTensor.isNBlkInjective_cap_pow_four
     isNBlkInjective_pow_four_of_isNormal_leftCanonical B hTP hBNormal
   have hAOwn : Kraus.IsNBlkInjective A (n ^ 4) :=
     isNBlkInjective_of_gaugeEquiv hOwn hGauge.symm
-  exact isNBlkInjective_of_le
+  exact Kraus.isNBlkInjective_of_le
     (Nat.pow_pos (Nat.pos_of_ne_zero hA.bondDim_ne_zero)) hAOwn
     (Nat.pow_le_pow_left hnK 4)
 

@@ -127,7 +127,7 @@ theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
   refine ⟨B, ζ, (Matrix.trace ρ)⁻¹ • ρ, t, L, hζ, hmpv, ⟨L, hLpos, hL⟩, hLC,
     hρ.inv_trace_smul, Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos),
     hPσ.fixedPoint_is_fixed, ht0, ht1, fun μ hμ hne => ?_, hnorm, fun n hn =>
-      (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)⟩
+      (isNBlkInjective_iff_blockTensor_isInjective B n).1 (Kraus.isNBlkInjective_of_le hLpos hL hn)⟩
   rw [hnorm]; exact hgap μ hμ hne
 
 /-- **The error at block length `q ≥ a log(Mq/ε) + b₀` for every slope `a > ξ/2`.** Let `B` be a
@@ -211,7 +211,7 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
     ht0 ht1 hlam ha
   obtain ⟨L, hLpos, hL⟩ := hNB
   have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := fun n hn =>
-    (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)
+    (isNBlkInjective_iff_blockTensor_isInjective B n).1 (Kraus.isNBlkInjective_of_le hLpos hL hn)
   refine ⟨b₀ + L + 3 * D + 1, by linarith, fun ε hε hε1 N q _ hqN hq => ?_⟩
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne N)
   have hlog0 : 0 ≤ Real.log (N / ε) :=
@@ -365,7 +365,7 @@ theorem exists_isPreparedInDepth_allLength_of_slope (d D : ℕ) (hd : 0 < d) :
     ((div_lt_one (by positivity)).2 (by linarith))
   obtain ⟨L, hLpos, hL⟩ := hNB
   have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := fun n hn =>
-    (isNBlkInjective_iff_blockTensor_isInjective B n).mp (isNBlkInjective_of_le hLpos hL hn)
+    (isNBlkInjective_iff_blockTensor_isInjective B n).mp (Kraus.isNBlkInjective_of_le hLpos hL hn)
   let b : ℝ := a * max (Real.log K) 0 + L + 3 * D + 1
   have hb : 1 ≤ b := by
     have : 0 ≤ a * max (Real.log K) 0 + L + 3 * D := by positivity

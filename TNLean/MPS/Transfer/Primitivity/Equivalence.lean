@@ -29,7 +29,7 @@ part of clause (c) is `IsPrimitive (Kraus.transferMap A)`.
 The three implications closing the cycle are **(b) → (a)**
 (`exists_vectorSpreadSpan_eq_top_of_isNormal`), **(a) → (c)** (the finite-Kraus
 results of `QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive`), and
-**(c) → (b)** (`isNormal_of_isIrreducibleMap_of_isPrimitive`, after
+**(c) → (b)** (`Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive`, after
 `isIrreducibleMap_of_channel_posDef_fixedPoint_unique` derives irreducibility
 from the literal clause).
 
@@ -117,7 +117,7 @@ theorem primitivity_tfae [NeZero D]
       fun σ hσ ↦ ⟨Matrix.trace σ / Matrix.trace ρ, hP.fixedPoint_unique σ hσ⟩, hPrim⟩
   tfae_have 3 → 2 := by
     rintro ⟨ρ, hρ, hfix, hunique, hPrim⟩
-    exact isNormal_of_isIrreducibleMap_of_isPrimitive A hNorm
+    exact Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive A hNorm
       (isIrreducibleMap_of_channel_posDef_fixedPoint_unique
         (Kraus.transferMap A) (Kraus.isChannel_mapLM A hNorm) ρ hρ hfix
         (fun σ _ hσ ↦ hunique σ hσ)) hPrim

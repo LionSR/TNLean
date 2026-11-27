@@ -101,7 +101,7 @@ theorem isInjective_of_isInjective_rotatePhysical {m : ℕ} (W : Matrix (Fin m) 
 theorem isInjective_blockTensor_two {B : MPSTensor n D} (h : Kraus.IsInjective B) :
     Kraus.IsInjective (blockTensor B 2) :=
   (isNBlkInjective_iff_blockTensor_isInjective B 2).1
-    (isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective h) one_le_two)
+    (Kraus.isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective h) one_le_two)
 
 /-- If the two-site blocked tensor of `A` is injective, so is that of `T₁`: blocking
 `B₂ = V⁽¹⁾ T₁` twice gives `(V⁽¹⁾)^{⊗2}` applied to `T₁` blocked twice. -/

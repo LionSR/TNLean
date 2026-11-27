@@ -115,10 +115,10 @@ theorem IsSameExactMPSGappedPhase.cohomologousTo
     hE₀, hE₁, _, hCov₀, hCov₁, P, Q, hQ₀, hQ₁⟩ := hPhase
   have hBlock₀ : Kraus.IsInjective (blockTensor A₀ k) :=
     (isNBlkInjective_iff_blockTensor_isInjective A₀ k).mp
-      (isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective hA₀) hk)
+      (Kraus.isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective hA₀) hk)
   have hBlock₁ : Kraus.IsInjective (blockTensor A₁ k) :=
     (isNBlkInjective_iff_blockTensor_isInjective A₁ k).mp
-      (isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective hA₁) hk)
+      (Kraus.isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective hA₁) hk)
   exact Q.cohomologousTo_endpoints
     (isInjective_kraus_isometry _ E₀ hE₀ hBlock₀)
     (isInjective_kraus_isometry _ E₁ hE₁ hBlock₁) hQ₀ hQ₁ χ₀ χ₁ hχ₀ hχ₁ ρ₀ ρ₁

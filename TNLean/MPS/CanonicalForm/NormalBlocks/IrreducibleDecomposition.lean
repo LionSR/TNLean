@@ -82,7 +82,7 @@ positive length.
 The formal statement:
 
 > `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves
-> `isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
+> `Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
 > transfer map is irreducible with peripheral spectrum `{1}` is normal.  This
 > is the hardest direction in the Sanz–Pérez-García–Wolf–Cirac primitivity
 > equivalence.

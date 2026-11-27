@@ -185,7 +185,7 @@ private theorem exists_evalWord_ne_zero {A : MPSTensor d D} {L n : ℕ}
   by_contra hall
   push Not at hall
   have hspan : Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
-      Kraus.evalWord A (List.ofFn σ)) = ⊤ := isNBlkInjective_of_le hL hA hn
+      Kraus.evalWord A (List.ofFn σ)) = ⊤ := Kraus.isNBlkInjective_of_le hL hA hn
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Submodule.span ℂ
       (Set.range fun σ : Fin n → Fin d => Kraus.evalWord A (List.ofFn σ)) :=
     hspan ▸ Submodule.mem_top
@@ -215,20 +215,20 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
   set k₁ : ℕ := n - 1 - L with hk₁def
   have hk₁L : L ≤ k₁ := by omega
   obtain ⟨ΛL, hΛL⟩ := exists_evalWordTransport (k := L) (q := n - L) (by omega)
-    hA (isNBlkInjective_of_le hL hA (by omega)) hw
+    hA (Kraus.isNBlkInjective_of_le hL hA (by omega)) hw
   obtain ⟨ΛL1, hΛL1⟩ := exists_evalWordTransport (k := L + 1) (q := n - (L + 1))
-    (by omega) (isNBlkInjective_of_le hL hA (by omega))
-    (isNBlkInjective_of_le hL hA (by omega)) hw
+    (by omega) (Kraus.isNBlkInjective_of_le hL hA (by omega))
+    (Kraus.isNBlkInjective_of_le hL hA (by omega)) hw
   obtain ⟨Λk, hΛk⟩ := exists_evalWordTransport (k := k₁) (q := n - k₁) (by omega)
-    (isNBlkInjective_of_le hL hA hk₁L) (isNBlkInjective_of_le hL hA (by omega)) hw
+    (Kraus.isNBlkInjective_of_le hL hA hk₁L) (Kraus.isNBlkInjective_of_le hL hA (by omega)) hw
   obtain ⟨Λk1, hΛk1⟩ := exists_evalWordTransport (k := k₁ + 1) (q := n - (k₁ + 1))
-    (by omega) (isNBlkInjective_of_le hL hA (by omega))
-    (isNBlkInjective_of_le hL hA (by omega)) hw
+    (by omega) (Kraus.isNBlkInjective_of_le hL hA (by omega))
+    (Kraus.isNBlkInjective_of_le hL hA (by omega)) hw
   -- The transported identities are nonzero scalars.
   obtain ⟨cL, hcL0, hcL⟩ := transport_one_eq_smul_one hD hA
-    (isNBlkInjective_of_le hL hC le_rfl) hC hΛL hΛL1
+    (Kraus.isNBlkInjective_of_le hL hC le_rfl) hC hΛL hΛL1
   obtain ⟨ck, hck0, hck⟩ := transport_one_eq_smul_one hD
-    (isNBlkInjective_of_le hL hA hk₁L) (isNBlkInjective_of_le hL hC hk₁L) hC
+    (Kraus.isNBlkInjective_of_le hL hA hk₁L) (Kraus.isNBlkInjective_of_le hL hC hk₁L) hC
     hΛk hΛk1
   -- Peel one letter off the full-length equality.
   have hc0 : ∀ (i : Fin d) (v : Fin k₁ → Fin d) (w : Fin L → Fin d),
@@ -265,7 +265,7 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
     intro i
     have hext := LinearMap.ext_on_range
       (v := fun v : Fin k₁ → Fin d => Kraus.evalWord A (List.ofFn v))
-      (hv := isNBlkInjective_of_le hL hA hk₁L)
+      (hv := Kraus.isNBlkInjective_of_le hL hA hk₁L)
       (f := (LinearMap.mulLeft ℂ (C i)) ∘ₗ Λk)
       (g := cL⁻¹ • LinearMap.mulLeft ℂ (A i))
       (fun v => by

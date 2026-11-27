@@ -157,7 +157,7 @@ theorem exists_uniform_wholeIncrement_defect_le_seven_sixteenths
     ((eventually_ge_atTop (max 1 L)).and
       (hP.eventually_wholeIncrement_groundProjection_defect_le hρ
         (ε := 7 / 16) (by norm_num))).exists
-  exact ⟨p, by omega, isNBlkInjective_of_le hLpos hLinj (by omega),
+  exact ⟨p, by omega, Kraus.isNBlkInjective_of_le hLpos hLinj (by omega),
     fun K ↦ hDefect K p (by omega)⟩
 
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
@@ -208,7 +208,7 @@ theorem eventually_openChain_groundProjection_defect_mul_sqrt_lt
   let ε := c * lam ^ l * (1 + c * lam ^ l) / (1 - c * lam ^ l)
   have hl : 1 < l := lt_of_lt_of_le (by omega) hl_large
   have hLle : L ≤ l := le_trans (le_max_right 2 L) hl_large
-  have hInj : Kraus.IsNBlkInjective A l := isNBlkInjective_of_le hLpos hLinj hLle
+  have hInj : Kraus.IsNBlkInjective A l := Kraus.isNBlkInjective_of_le hLpos hLinj hLle
   have hden : 0 < 1 - c * lam ^ l := sub_pos.mpr hl_small
   have hε : 0 ≤ ε := by
     have hnum : 0 ≤ c * lam ^ l * (1 + c * lam ^ l) := by positivity

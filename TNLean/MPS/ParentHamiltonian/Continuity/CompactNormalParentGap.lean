@@ -75,7 +75,7 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (l + 1) N).hamiltonian) =
           groundSpaceES A N :=
     fun N hN => ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-      (isNBlkInjective_of_le hp hA hlp) hl.le hN
+      (Kraus.isNBlkInjective_of_le hp hA hlp) hl.le hN
   obtain ⟨κ, C, hκ, _hC, hLocal, _hUpper⟩ :=
     exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
       A (hShortKer (l + 1) le_rfl)
@@ -140,12 +140,12 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_is
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
   have hnear := ManyBody.eventually_forall_hasEigenvalue
     (continuous_hamiltonian_parentChainInteraction_family A hA (N := m + p) fun x ↦
-      isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ p + 1)).continuousAt
+      Kraus.isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ p + 1)).continuousAt
     (Filter.Eventually.of_forall fun x ↦
       posSemidef_hamiltonian_parentChainInteraction (A x) (p + 1) (m + p))
     (by
       refine (continuous_groundSpaceES_starProjection_family A hA (m + p) fun x ↦
-        isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ m + p)).continuousAt.congr
+        Kraus.isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ m + p)).continuousAt.congr
         (Filter.Eventually.of_forall fun x ↦ ?_)
       dsimp only
       rw [ManyBody.groundSpace_zero,
@@ -299,7 +299,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isN
     groundSpace_hamiltonian_parentRingInteraction_ne_bot_of_isNBlkInjective (A x) hp (hInj x)
       hR hRN
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) R :=
-    isNBlkInjective_of_le hp (hInj x) hR.le
+    Kraus.isNBlkInjective_of_le hp (hInj x) hR.le
   have hK := continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective
     A hA hp hInj hR hRN
   simp only [← ManyBody.groundSpace_zero] at hK
@@ -371,7 +371,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkIn
       ManyBody.IsGapped (parentRingInteraction (A x) R N).hamiltonian 0 δ := by
   obtain ⟨R, rfl⟩ : ∃ q, R = q + 1 := ⟨R - 1, by omega⟩
   exact exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_all_lengths
-    A hA (by omega) (fun x => isNBlkInjective_of_le hp (hInj x) (by omega)) hS
+    A hA (by omega) (fun x => Kraus.isNBlkInjective_of_le hp (hInj x) (by omega)) hS
 
 /-- Every compact continuous family of normal tensors has a positive
 gap at every fixed range \(R\ge D^4+1\), uniformly over the rings of \(N\ge R\) sites: the

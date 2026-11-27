@@ -658,7 +658,7 @@ theorem IsNormalTensor.blockTensor_isInjective_of_bondDim_le
     Kraus.IsInjective (Kraus.blockTensor A (K ^ 4)) := by
   have hD : 0 < D := Nat.pos_of_ne_zero hA.bondDim_ne_zero
   exact (isNBlkInjective_iff_blockTensor_isInjective A (K ^ 4)).1
-    (isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
+    (Kraus.isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
       (Nat.pow_le_pow_left hDK 4))
 
 end MPSTensor
@@ -811,7 +811,7 @@ theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
   have hD4 : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
   tfae_have 1 → 3 := fun h => isNBlkInjective_pow_four_of_isNormal A h
   tfae_have 3 → 2 := fun h =>
-    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => isNBlkInjective_of_le hD4 h hm⟩
+    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => Kraus.isNBlkInjective_of_le hD4 h hm⟩
   tfae_have 2 → 1 := fun h => by
     obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp h
     exact ⟨max N 1, by omega, hN _ (le_max_left _ _)⟩

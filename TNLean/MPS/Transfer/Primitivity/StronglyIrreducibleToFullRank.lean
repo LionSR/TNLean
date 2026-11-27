@@ -23,7 +23,7 @@ complementary fixed-point gap `Kraus.HasComplementaryFixedPointGap`.
 
 ## Main results
 
-* `isNormal_of_isIrreducibleMap_of_isPrimitive`: an irreducible transfer map with
+* `Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive` (QICLean): an irreducible transfer map with
   peripheral spectrum `{1}` gives normality. This is the direction (c) to (b)
   of Proposition 3 of Sanz, Pérez-García, Wolf, and Cirac, arXiv:0909.5347.
 * `exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive`: the same
@@ -44,22 +44,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- **Proposition 3(c) to (b)**: a left-canonical tensor whose transfer map is
-irreducible and has no eigenvalue of modulus one other than one is normal. This
-is the MPS form of the channel-native Kraus theorem.
-
-Source: arXiv:0909.5347, Proposition 3, proof of (c)⟹(b). -/
-theorem isNormal_of_isIrreducibleMap_of_isPrimitive [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
-    (hPrim : IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) :
-    Kraus.IsNormal A := by
-  have hTP : Kraus.IsTP A := hNorm
-  exact (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP A hTP).mp
-    (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive
-      A hTP hIrr hPrim)
 
 /-- A left-canonical tensor whose transfer map is irreducible and has no
 eigenvalue of modulus one other than one has a complementary fixed-point gap
@@ -93,7 +77,7 @@ theorem isNormal_of_hasComplementaryFixedPointGap_with_posDef [NeZero D]
     (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ_pd : ρ.PosDef) :
     Kraus.IsNormal A :=
-  isNormal_of_isIrreducibleMap_of_isPrimitive A hP.norm
+  Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive A hP.norm
     (hP.isIrreducibleMap_of_posDef hρ_pd) hP.isPrimitive
 
 end MPSTensor

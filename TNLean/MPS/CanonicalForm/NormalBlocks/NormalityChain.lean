@@ -224,7 +224,7 @@ theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
     exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical A hTP hN
   have hL' : Kraus.IsNBlkInjective A L :=
     (isNBlkInjective_iff_blockTensor_isInjective A L).2 hL
-  exact isNBlkInjective_of_le hLpos hL' hLle
+  exact Kraus.isNBlkInjective_of_le hLpos hL' hLle
 
 /-!
 ## Kraus.IsNormal is preserved by blocking
