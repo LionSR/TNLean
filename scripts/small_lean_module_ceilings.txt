@@ -4,18 +4,18 @@
 # directory not listed here has ceiling 0.  The ceilings may only fall: lower
 # them with `python3 scripts/check_small_lean_modules.py --write`, and when a
 # small module moves to another directory, move its ceiling with it.
-Algebra                 5
+Algebra                 1
 MPS                     1
-MPS/AreaLaw             65
+MPS/AreaLaw             63
 MPS/CanonicalForm       16
 MPS/Examples            4
-MPS/FundamentalTheorem  15
+MPS/FundamentalTheorem  14
 MPS/MPDO                13
-MPS/MPU                 12
+MPS/MPU                 11
 MPS/Operator            1
-MPS/ParentHamiltonian   13
-MPS/Preparation         13
-MPS/Symmetry            18
+MPS/ParentHamiltonian   12
+MPS/Preparation         11
+MPS/Symmetry            16
 MPS/Tensor              9
 MPS/Transfer            4
 Network                 3
@@ -26,5 +26,5 @@ PEPS/Graph              1
 PEPS/Injectivity        8
 PEPS/ParentHamiltonian  1
 PEPS/Tensor             1
-QCA                     2
+QCA                     1
 Tactic                  2
