@@ -46,7 +46,7 @@ The physical alphabet is an arbitrary finite type.
 
 open MPTensor
 
-open scoped Matrix BigOperators ComplexOrder Kraus
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder Kraus
 
 namespace MPSTensor
 
@@ -199,8 +199,8 @@ irreducible-map similarity.
 
 Source: arXiv:1606.00608, lines 233--235 define normal tensors and lines
 264--268 give the invertible gauge relation between normal representatives. -/
-theorem _root_.MPTensor.IsNormalTensor.of_gaugeEquiv {A B : MPTensor α (Fin D)} (hB : IsNormalTensor B)
-    (hGauge : GaugeEquiv A B) :
+theorem _root_.MPTensor.IsNormalTensor.of_gaugeEquiv {A B : MPTensor α (Fin D)}
+    (hB : IsNormalTensor B) (hGauge : GaugeEquiv A B) :
     IsNormalTensor A := by
   obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
   refine ⟨?_, ?_, ?_⟩

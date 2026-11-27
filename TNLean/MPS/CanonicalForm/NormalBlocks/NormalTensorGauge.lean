@@ -161,18 +161,21 @@ theorem isNormalTensor_iff_isNormal_and_spectralRadius_eq_one (A : MPSTensor d D
 The trace-preserving Perron gauge is a pure similarity, so it leaves every
 matrix product vector unchanged.  The assertion therefore follows from the
 primitive trace-preserving overlap limit.  This is the normalization used in
-the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097. -/
-theorem _root_.MPTensor.IsNormalTensor.selfOverlap_tendsto_one
-    {A : MPSTensor d D} (hA : IsNormalTensor A) :
-    Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
+the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097.  The physical alphabet is
+relabelled along `Fintype.equivFin`, where the trace-preserving overlap limit is stated. -/
+theorem _root_.MPTensor.IsNormalTensor.selfOverlap_tendsto_one {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (hA : IsNormalTensor A) :
+    Tendsto (fun N => mpvOverlap A A N) atTop (nhds (1 : ℂ)) := by
+  classical
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
-  obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let A' := Kraus.tpGauge (ι := Fin d) (D := D) A σ
-  have hPrepared : Tendsto (fun N => mpvOverlap (α := Fin d) A' A' N)
-      atTop (nhds (1 : ℂ)) :=
+  let e := (Fintype.equivFin α).symm
+  obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := (hA.reindexPhysical e).exists_tpGauge
+  let A' := Kraus.tpGauge (Kraus.reindexPhysical e A) σ
+  have hPrepared : Tendsto (fun N => mpvOverlap A' A' N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A' hIrr hTP hPrim
   apply hPrepared.congr'
   filter_upwards with N
+  rw [← mpvOverlap_reindexPhysical_equiv e A A]
   apply Finset.sum_congr rfl
   intro w _
   rw [GaugeEquiv.sameMPV hGauge N w]
