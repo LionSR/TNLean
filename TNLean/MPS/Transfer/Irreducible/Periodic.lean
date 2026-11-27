@@ -439,7 +439,8 @@ theorem RepeatedBlocks.reindexPhysical {A B : MPTensor α (Fin D)} (h : Repeated
 omit [Fintype α] [Fintype α'] in
 /-- Repeated blocks are invariant under relabelling both tensors by the same bijection of the
 physical alphabet. -/
-theorem repeatedBlocks_reindexPhysical_iff [Finite α] [Finite α'] (e : α' ≃ α) (A B : MPTensor α (Fin D)) :
+theorem repeatedBlocks_reindexPhysical_iff [Finite α] [Finite α'] (e : α' ≃ α)
+    (A B : MPTensor α (Fin D)) :
     RepeatedBlocks (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) ↔
       RepeatedBlocks A B := by
   have := Fintype.ofFinite α
