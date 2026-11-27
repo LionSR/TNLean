@@ -140,7 +140,7 @@ theorem sum_mpo_threeSite_prefix_diagonal_tail
   simp_rw [heval]
   rw [← Matrix.trace_sum]
   congr 1
-  rw [← Finset.mul_sum, K.sum_evalWord_diag_eq_verticalLoop_pow]
+  rw [← Finset.mul_sum, K.sum_evalWord_diag_eq_physTraceTransfer_pow]
 
 /-- The normalized three-site reduced state of an MPO with a horizontal BNT
 representation is the family closure whose virtual boundaries are the

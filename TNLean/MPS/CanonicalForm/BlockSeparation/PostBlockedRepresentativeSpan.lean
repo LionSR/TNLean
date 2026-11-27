@@ -222,15 +222,9 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     (P.blockTensor p).basis (p := 1) hSelectors (by omega)
       (fun j => hBlkPos j 1 (by omega))
 
-/-- The representatives of a BNT canonical form have eventual simultaneous word-tuple span.
-
-Choose a common positive block-injectivity length `p`.  Block injectivity propagates to every
-length at least `p`.  The three-block separation argument then gives pairwise separating words
-of length `6 * p`; multiplying them gives one selector for each representative.  Appending a
-long enough block-injective prefix spans the full product of representative matrix algebras.
-
-Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, lines 1848--1858. -/
-theorem eventuallyRepresentativeWordTupleSpan
+/-- The eventual simultaneous word-tuple span on the alphabet `Fin d`;
+`eventuallyRepresentativeWordTupleSpan` below transports it to an arbitrary finite alphabet. -/
+private theorem eventuallyRepresentativeWordTupleSpan_fin
     (hCF : IsBNTCanonicalForm P) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
@@ -322,6 +316,35 @@ end MPSTensor.IsBNTCanonicalForm
 namespace MPSTensor.IsBNTCanonicalForm
 
 variable {α : Type*} [Fintype α] {Q : SectorDecomposition α}
+
+/-- The representatives of a BNT canonical form have eventual simultaneous word-tuple span.
+
+Choose a common positive block-injectivity length `p`.  Block injectivity propagates to every
+length at least `p`.  The three-block separation argument then gives pairwise separating words
+of length `6 * p`; multiplying them gives one selector for each representative.  Appending a
+long enough block-injective prefix spans the full product of representative matrix algebras.
+
+The physical alphabet is relabelled by `Fin (Fintype.card α)`, on which the blocking argument is
+carried out.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, lines 1848--1858. -/
+theorem eventuallyRepresentativeWordTupleSpan
+    (hCF : IsBNTCanonicalForm Q) :
+    Q.EventuallyRepresentativeWordTupleSpan := by
+  classical
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨L₀, hSpan⟩ := eventuallyRepresentativeWordTupleSpan_fin
+    (SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e)
+  refine ⟨L₀, fun L hL ↦ ?_⟩
+  have hL := hSpan L hL
+  change WordTupleSpanTop Q.basis L
+  change WordTupleSpanTop (fun j ↦ Kraus.reindexPhysical e (Q.basis j)) L at hL
+  rw [WordTupleSpanTop, eq_top_iff, ← hL]
+  apply Submodule.span_mono
+  rintro _ ⟨w, rfl⟩
+  refine ⟨fun n ↦ e (w n), ?_⟩
+  funext k
+  simp [wordTuple, Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
 
 /-- Representative-grouped Lemma L for an unblocked BNT canonical form.
 
