@@ -167,7 +167,7 @@ hypothesis of arXiv:1606.00608, Appendix C.2, Lemma C.4, lines 1406--1450.
 This additional hypothesis and its possible elimination are recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem exists_rephased_inverseMapPhysicalSectorFactorization
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K)
@@ -215,7 +215,7 @@ lines 1406--1450 and 1571--1593. This additional hypothesis and its possible
 elimination are recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem nonempty_commutingForm_of_recurrentSupport
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K)

@@ -409,7 +409,7 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
         (hIrr (classes.repr j)) (hIrr (classes.enum j q))
         hPE
   -- HasBNTSectorData.
-  have hBNT : HasBNTSectorData (d := d) P :=
+  have hBNT : HasBNTSectorData P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
   -- Per-block fields.
   have h_dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j := by
@@ -486,7 +486,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
@@ -510,7 +510,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne

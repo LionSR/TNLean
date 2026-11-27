@@ -40,7 +40,7 @@ variable {d D : ℕ}
 /-- The sector decomposition with one basis block, one copy, and unit weight. -/
 @[reducible]
 noncomputable def singleSectorDecomposition (A : MPSTensor d D) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => A

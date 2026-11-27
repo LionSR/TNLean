@@ -11,6 +11,7 @@ import TNLean.MPS.MPU.CanonicalForm.PhysicalAdjointCanonicalForm
 import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Virtual gauges relating physical adjoints and group inverses
@@ -55,8 +56,8 @@ positive-length matrix product vector levels.
 * `MPOTensor.GroupFamily.IsRepresentation.mpo_physicalAdjointTensor_eq_inv`:
   the physical adjoint for `g` generates the operator represented by `g⁻¹`.
 * `MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv`:
-  the corresponding underlying MPS tensors generate the same positive-length
-  matrix product vectors.
+  the two tensors generate the same positive-length matrix product vectors on the pair
+  alphabet.
 
 Source: arXiv:2502.20257, line 1552.
 -/
@@ -94,18 +95,8 @@ same matrix product vectors at every positive length.
 Source: arXiv:2502.20257, line 1552. -/
 theorem IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv [Group G]
     (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation) (g : G) :
-    MPTensor.SameMPV₂Pos
-      (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor
-      (F.tensor g⁻¹).toMPSTensor := by
-  intro N hN ρ
-  let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
-  let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
-  have hρ : (fun n ↦ finProdFinEquiv (σ n, τ n)) = ρ := by
-    funext n
-    exact finProdFinEquiv.apply_symm_apply (ρ n)
-  rw [← hρ, MPSTensor.mpv_toMPSTensor_pairConfig,
-    MPSTensor.mpv_toMPSTensor_pairConfig,
-    hF.mpo_physicalAdjointTensor_eq_inv F g N hN]
+    MPTensor.SameMPV₂Pos (MPOTensor.physicalAdjointTensor (F.tensor g)) (F.tensor g⁻¹) :=
+  MPOTensor.sameMPV₂Pos_iff_mpo_eq.2 fun N hN ↦ hF.mpo_physicalAdjointTensor_eq_inv F g N hN
 
 end DaggerInverse
 
@@ -127,14 +118,16 @@ theorem IsRepresentation.bondDim_inv [Group G]
     MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos
       (F.tensor g⁻¹).toMPSTensor
       (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor
-      (hF.isInjective g⁻¹)
-      (hF.sameMPV₂Pos_physicalAdjointTensor_inv F g)
+      ((MPOTensor.isInjective_toMPSTensor_iff _).2 (hF.isInjective g⁻¹))
+      ((MPOTensor.sameMPV₂Pos_toMPSTensor_iff _ _).2
+        (hF.sameMPV₂Pos_physicalAdjointTensor_inv F g))
   obtain ⟨V₂, W₂, h₂⟩ :=
     MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos
       (F.tensor (g⁻¹)⁻¹).toMPSTensor
       (MPOTensor.physicalAdjointTensor (F.tensor g⁻¹)).toMPSTensor
-      (hF.isInjective (g⁻¹)⁻¹)
-      (hF.sameMPV₂Pos_physicalAdjointTensor_inv F g⁻¹)
+      ((MPOTensor.isInjective_toMPSTensor_iff _).2 (hF.isInjective (g⁻¹)⁻¹))
+      ((MPOTensor.sameMPV₂Pos_toMPSTensor_iff _ _).2
+        (hF.sameMPV₂Pos_physicalAdjointTensor_inv F g⁻¹))
   exact Nat.le_antisymm (by simpa using h₂.bondDim_le) h₁.bondDim_le
 
 /-- Reindex the tensor for \(g^{-1}\) to the bond coordinates used in the
@@ -162,7 +155,8 @@ private theorem IsRepresentation.sameMPV_physicalAdjointTensor_inverseFlattening
   | zero => simp
   | succ N =>
       rw [inverseFlattening, MPSTensor.reindex_mpv]
-      exact hF.sameMPV₂Pos_physicalAdjointTensor_inv F g (N + 1) (by omega) ρ
+      exact (MPOTensor.sameMPV₂Pos_toMPSTensor_iff _ _).2
+        (hF.sameMPV₂Pos_physicalAdjointTensor_inv F g) (N + 1) (by omega) ρ
 
 private theorem leftCanonical_reindex {D₁ D₂ : ℕ} (h : D₁ = D₂)
     (A : MPSTensor (d * d) D₁) (hA : MPTensor.IsLeftCanonical A) :
@@ -269,14 +263,15 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
     (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor
   have hA : Kraus.IsInjective A := by
     simp only [A, inverseFlattening, MPSTensor.isInjective_reindex]
-    exact hF.isInjective g⁻¹
+    exact (MPOTensor.isInjective_toMPSTensor_iff _).2 (hF.isInjective g⁻¹)
   have hSame : MPTensor.SameMPV A B := by
     intro N ρ
     exact (hF.sameMPV_physicalAdjointTensor_inverseFlattening F g N ρ).symm
   have hGauge : MPTensor.GaugeEquiv A B :=
     MPSTensor.fundamentalTheorem_singleBlock hA hSame
   have hd : d ≠ 0 := by
-    let hdd : NeZero (d * d) := Kraus.neZero_d_of_isInjective (hF.isInjective g)
+    let hdd : NeZero (d * d) := Kraus.neZero_d_of_isInjective
+      ((MPOTensor.isInjective_toMPSTensor_iff _).2 (hF.isInjective g))
     intro hd
     exact hdd.out (Nat.mul_eq_zero.mpr (Or.inl hd))
   have hsqrt : (Real.sqrt d : ℂ) ≠ 0 := by
@@ -531,7 +526,7 @@ theorem IsRepresentation.exists_daggerInverseScalar [Group G]
     Unitary.toUnits (Matrix.UnitaryGroup.map_star S)
   have hA : Kraus.IsInjective A := by
     simp only [A, inverseFlattening, MPSTensor.isInjective_reindex]
-    exact hF.isInjective g⁻¹
+    exact (MPOTensor.isInjective_toMPSTensor_iff _).2 (hF.isInjective g⁻¹)
   have hX : ∀ i, B i =
       (X : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) * A i *
         ((X⁻¹ : GL (Fin (F.bondDim g)) ℂ) :

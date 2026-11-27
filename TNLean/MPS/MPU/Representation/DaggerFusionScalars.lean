@@ -433,7 +433,8 @@ theorem daggerFusionV_eq_daggerBoundary (g h : G) :
 noncomputable def dagger : FusionData F where
   V := fd.daggerFusionV hF hc
   W := fd.daggerFusionW hF hc
-  isReduction := fd.isReduction_daggerFusion hF hc
+  isReduction g h := (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).2
+    (fd.isReduction_daggerFusion hF hc g h)
 
 /-- The scalars $\zeta_{g,h}$ of `eq:defzeta` compare the daggered choice of fusion
 tensors with the original one. -/

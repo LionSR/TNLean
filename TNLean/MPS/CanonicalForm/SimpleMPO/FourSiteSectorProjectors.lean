@@ -77,15 +77,15 @@ theorems below assert their joint existence.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1676. -/
 structure ThreeSiteClosureWitness (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d)) where
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) where
   /-- A simultaneous left inverse of the one-site slices of the BNT
   representatives. -/
   C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ
   /-- The left inverse relation between `C` and the one-site slices. -/
-  hC : MPSTensor.IsMPOBlockLeftInverse (fun j ↦ S.basisMPOTensor j) C
+  hC : MPSTensor.IsMPOBlockLeftInverse (fun j ↦ S.basis j) C
   /-- The normalized three-site marginal is a family closure of the BNT
   representatives with the normalized three-site closing matrices. -/
-  hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j)
+  hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j)
     (S.normalizedThreeSiteClosingMatrix M 1)
     (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
       (_root_.finThreeArrowEquiv (Fin d))
@@ -119,18 +119,18 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1666--1676 and equations
 `QkKjs` and `Pis`, lines 1714--1737. -/
 theorem exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
     (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) :
     ∃ W : ThreeSiteClosureWitness M S,
       (∀ k : {k : Fin W.hη.m // W.hη.p k ≠ 0},
           ∃! s : Fin S.basisCount,
-            BNTMarkovBlockNonzero (S.basisMPOTensor s) W.hη k) ∧
+            BNTMarkovBlockNonzero (S.basis s) W.hη k) ∧
         (∀ s : Fin S.basisCount,
           IsOrthogonalProjection
             (bntSectorProjection W.hC W.hρ W.hη W.hR s)) ∧
@@ -140,10 +140,7 @@ theorem exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
         (∑ s : Fin S.basisCount,
           bntSectorProjection W.hC W.hρ W.hη W.hR s) =
             activeMarkovProjection W.hη := by
-  have hSpan' : MPSTensor.WordTupleSpanTop
-      (fun j ↦ (S.basisMPOTensor j).toMPSTensor) 1 := by
-    simpa using hSpan
-  obtain ⟨C, hC⟩ := hSpan'.exists_mpo_block_left_inverse
+  obtain ⟨C, hC⟩ := hSpan.exists_mpo_block_left_inverse
   obtain ⟨hη⟩ :=
     exists_etaStructure_reducedBlockState_four_reindex_of_isSAL M hSAL
   obtain ⟨hρ, hR⟩ :=

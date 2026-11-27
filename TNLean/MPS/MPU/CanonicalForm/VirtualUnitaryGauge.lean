@@ -55,6 +55,17 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor
 
+/-- A coefficient of the normalized flattening is a scaled matrix element of the periodic
+operator. -/
+private theorem mpv_normalizedFlattening {d D : ℕ} (U : MPOTensor d D) {N : ℕ}
+    (σ : Fin N → Fin (d * d)) :
+    MPTensor.mpv U.normalizedFlattening σ =
+      ((Real.sqrt d : ℂ)⁻¹) ^ N * mpo U N (fun k ↦ (σ k).divNat) (fun k ↦ (σ k).modNat) := by
+  change MPTensor.mpv
+    (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • Kraus.reindexPhysical finProdFinEquiv.symm U ij) σ = _
+  rw [MPSTensor.mpv_smul, MPTensor.mpv_reindexPhysical, mpv_eq_mpo]
+  rfl
+
 /-- Equality of periodic operators beyond one site gives equality of the
 normalized word traces at those lengths. -/
 private theorem normalizedFlattening_mpv_eq_of_mpo_eq_gt_one
@@ -64,11 +75,7 @@ private theorem normalizedFlattening_mpv_eq_of_mpo_eq_gt_one
       MPTensor.mpv U.normalizedFlattening σ =
         MPTensor.mpv V.normalizedFlattening σ := by
   intro N hN σ
-  change MPTensor.mpv (fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij) σ =
-    MPTensor.mpv (fun ij => ((Real.sqrt d : ℂ)⁻¹) • V.toMPSTensor ij) σ
-  rw [MPSTensor.mpv_smul, MPSTensor.mpv_smul]
-  congr 1
-  rw [MPOTensor.mpv_toMPSTensor, MPOTensor.mpv_toMPSTensor, hEq N hN]
+  rw [mpv_normalizedFlattening, mpv_normalizedFlattening, hEq N hN]
 
 /-- The overlap dichotomy upgrades equality beyond one site to a unit-phase
 relation at every positive length. -/
@@ -267,7 +274,7 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq
   intro i j
   have h := hRel (finProdFinEquiv (i, j))
   rw [normalizedFlattening_cast_dim hdim U] at h
-  simp only [normalizedFlattening, toMPSTensor,
+  simp only [normalizedFlattening,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat,
     one_smul] at h
   simp only [Matrix.mul_smul, Matrix.smul_mul] at h
@@ -311,11 +318,7 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
       MPTensor.mpv U.normalizedFlattening w =
         MPTensor.mpv V.normalizedFlattening w := by
     intro N hN heven w
-    change MPTensor.mpv (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij) w =
-      MPTensor.mpv (fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • V.toMPSTensor ij) w
-    rw [MPSTensor.mpv_smul, MPSTensor.mpv_smul]
-    congr 1
-    rw [MPOTensor.mpv_toMPSTensor, MPOTensor.mpv_toMPSTensor, hEq N hN heven]
+    rw [mpv_normalizedFlattening, mpv_normalizedFlattening, hEq N hN heven]
   have hA := hU.isNormalTensor_normalizedFlattening
   have hB := hV.isNormalTensor_normalizedFlattening
   have hEvenTop : Filter.Tendsto (fun n : ℕ ↦ 2 * n) Filter.atTop Filter.atTop :=
@@ -374,7 +377,7 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
       cases hdim
       rfl
     rw [hcast] at h
-    simp only [normalizedFlattening, toMPSTensor,
+    simp only [normalizedFlattening,
       MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] at h
     simp only [Matrix.mul_smul, Matrix.smul_mul, smul_smul] at h
     have hc : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 := by

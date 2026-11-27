@@ -7,6 +7,7 @@ import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 import TNLean.MPS.Tensor.Reduction.ReductionBlocking
 import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Common blocking for the pair reductions of an MPU representation
@@ -149,7 +150,8 @@ theorem IsRepresentation.nonempty_reductionFamily (F : GroupFamily G d)
         (W : Matrix (Fin (F.bondDim g * F.bondDim h)) (Fin (F.bondDim (g * h))) ℂ),
         MPTensor.IsReduction (F.productTensor g h) (F.targetTensor g h) V W :=
     fun g h ↦ MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos _ _
-      (hF.isInjective (g * h)) (hF.sameMPV₂Pos_mulTensor F g h).symm
+      ((isInjective_toMPSTensor_iff _).2 (hF.isInjective (g * h)))
+      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (hF.sameMPV₂Pos_mulTensor F g h).symm)
   choose V W hVW using hpair
   exact ⟨⟨V, W, hVW⟩⟩
 
@@ -185,7 +187,7 @@ theorem isReductionExteriorBufferLength_nilpotencyLength (R : F.ReductionFamily)
     MPSTensor.IsReductionExteriorBufferLength (F.productTensor g h)
       (F.targetTensor g h) (R.V g h) (R.W g h) (R.nilpotencyLength g h - 1) :=
   (R.isReduction g h).isReductionExteriorBufferLength_nilpotencyLength
-    (hF.sameMPV₂Pos_mulTensor F g h).symm
+    ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (hF.sameMPV₂Pos_mulTensor F g h).symm)
 
 /-- The exterior identity `eq:fusion_1` before blocking: any `m` with
 $N_0(g,h)\leq m+1$ for every pair is a common exterior buffer length.

@@ -76,7 +76,7 @@ theorem exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalT
     fun j => (hNormal j).exists_tpGauge
   let prepared : (j : Fin g) → MPSTensor d (dim j) :=
     fun j => Kraus.tpGauge (B j) (σ j)
-  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) prepared := by
     intro j k hjk hdim hGPE
     apply hDistinct j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim

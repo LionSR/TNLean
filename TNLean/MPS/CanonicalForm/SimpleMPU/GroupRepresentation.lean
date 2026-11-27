@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
 import TNLean.MPS.CanonicalForm.SimpleMPU.SimpleBlocking
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Matrix product unitary group representations
@@ -99,7 +100,7 @@ instance (F : GroupFamily G d) (g : G) : NeZero (F.bondDim g) :=
 /-- An exact positive-length MPU representation before simplicity is imposed. -/
 structure IsRawRepresentation [Group G] (F : GroupFamily G d) : Prop where
   isMPUPos : ∀ g, IsMPUPos (F.tensor g)
-  isInjective : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor
+  isInjective : ∀ g, Kraus.IsInjective (F.tensor g)
   operator_one : ∀ N, 0 < N → mpo (F.tensor 1) N = 1
   operator_mul : ∀ g h N, 0 < N →
     mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
@@ -181,26 +182,17 @@ theorem IsRepresentation.operator_pow_orderOf_eq_one [Group G] [Finite G]
   rw [hF.operator_pow F g (orderOf g) N hN, pow_orderOf_eq_one,
     hF.operator_one N hN]
 
-/-- The multiplication law as exact positive-length equality of doubled-index
-matrix product vectors. The chosen injective tensor for `g * h` is placed first,
+/-- The multiplication law as exact positive-length equality of matrix product vectors on the
+pair alphabet. The chosen injective tensor for `g * h` is placed first,
 matching the orientation used by the later rectangular reduction interface.
 
 Source: arXiv:2502.20257, lines 1403--1407. -/
 theorem IsRepresentation.sameMPV₂Pos_mulTensor [Group G]
     (F : GroupFamily G d) (hF : F.IsRepresentation) (g h : G) :
-    MPTensor.SameMPV₂Pos
-      (F.tensor (g * h)).toMPSTensor
-      (MPOTensor.mulTensor (F.tensor g) (F.tensor h)).toMPSTensor := by
-  apply MPTensor.SameMPV₂Pos.symm
-  intro N hN ρ
-  let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
-  let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
-  have hρ : (fun n ↦ finProdFinEquiv (σ n, τ n)) = ρ := by
-    funext n
-    exact finProdFinEquiv.apply_symm_apply (ρ n)
-  rw [← hρ, MPSTensor.mpv_toMPSTensor_pairConfig,
-    MPSTensor.mpv_toMPSTensor_pairConfig, mpo_mulTensor,
-    hF.operator_mul g h N hN]
+    MPTensor.SameMPV₂Pos (F.tensor (g * h))
+      (MPOTensor.mulTensor (F.tensor g) (F.tensor h)) :=
+  sameMPV₂Pos_iff_mpo_eq.2 fun N hN ↦ by
+    rw [mpo_mulTensor, hF.operator_mul g h N hN]
 
 /-- Simultaneously block every tensor in a group family by `L` physical sites. -/
 noncomputable def block (F : GroupFamily G d) (L : ℕ) :
@@ -210,16 +202,12 @@ noncomputable def block (F : GroupFamily G d) (L : ℕ) :
   tensor g := MPOTensor.blockTensor (F.tensor g) L
 
 private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
-    {L : ℕ} (hL : 0 < L) (h : Kraus.IsInjective (F.tensor g).toMPSTensor) :
-    Kraus.IsInjective ((F.block L).tensor g).toMPSTensor := by
-  rw [block, isInjective_toMPSTensor_blockTensor_iff]
-  have hOne : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor 1 :=
+    {L : ℕ} (hL : 0 < L) (h : Kraus.IsInjective (F.tensor g)) :
+    Kraus.IsInjective ((F.block L).tensor g) := by
+  rw [block, isInjective_blockTensor_iff, ← Kraus.isNBlkInjective_iff_isInjective_block]
+  have hOne : Kraus.IsNBlkInjective (F.tensor g) 1 :=
     Kraus.isNBlkInjective_one_of_isInjective h
-  have hMul : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor (L * 1) :=
-    MPTensor.isNBlkInjective_mul_of_isNBlkInjective
-      (F.tensor g).toMPSTensor hL hOne
-  exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective
-    (F.tensor g).toMPSTensor L).1 (by simpa using hMul)
+  simpa using MPTensor.isNBlkInjective_mul_of_isNBlkInjective (F.tensor g) hL hOne
 
 private theorem operator_one_block [Group G] (F : GroupFamily G d)
     (hOne : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
@@ -269,12 +257,11 @@ theorem IsRawRepresentation.of_isNBlkInjective [Group G] (F : GroupFamily G d)
     (hOne : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
     (hMul : ∀ g h N, 0 < N →
       mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
-    {L : ℕ} (hL : 0 < L) (hInj : ∀ g, Kraus.IsNBlkInjective (F.tensor g).toMPSTensor L) :
+    {L : ℕ} (hL : 0 < L) (hInj : ∀ g, Kraus.IsNBlkInjective (F.tensor g) L) :
     (F.block L).IsRawRepresentation where
   isMPUPos g := (hMPU g).blockTensor L hL
-  isInjective g := by
-    rw [GroupFamily.block, isInjective_toMPSTensor_blockTensor_iff]
-    exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective _ L).1 (hInj g)
+  isInjective g := (isInjective_blockTensor_iff _).2
+    ((Kraus.isNBlkInjective_iff_isInjective_block _ L).1 (hInj g))
   operator_one N hN := operator_one_block F hOne hL N hN
   operator_mul g h N hN := operator_mul_block F hMul hL g h N hN
 

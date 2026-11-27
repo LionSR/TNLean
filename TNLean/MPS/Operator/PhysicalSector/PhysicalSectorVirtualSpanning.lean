@@ -72,7 +72,7 @@ noncomputable def sectorCoordinateMatrixFamily (F : PhysicalSectorFactorization 
 /-- If the original MPO tensor is injective, its matrices in sector
 coordinates still span the full virtual matrix algebra. -/
 theorem sectorCoordinateMatrixFamily_span_eq_top
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K) :
     Submodule.span ℂ (Set.range F.sectorCoordinateMatrixFamily) = ⊤ := by
   classical
   let S := Submodule.span ℂ (Set.range F.sectorCoordinateMatrixFamily)
@@ -89,13 +89,13 @@ theorem sectorCoordinateMatrixFamily_span_eq_top
     exact Submodule.subset_span (Set.mem_range_self (x, y))
   rw [Submodule.eq_top_iff']
   intro Y
-  have hY : Y ∈ Submodule.span ℂ (Set.range K.toMPSTensor) := by
+  have hY : Y ∈ Submodule.span ℂ (Set.range K) := by
     rw [hK]
     exact Submodule.mem_top
   induction hY using Submodule.span_induction with
   | mem X hX =>
       obtain ⟨p, rfl⟩ := hX
-      simpa [MPOTensor.toMPSTensor] using hKmem p.divNat p.modNat
+      simpa using hKmem p.1 p.2
   | zero => exact Submodule.zero_mem S
   | add X Y _ _ hX hY => exact Submodule.add_mem S hX hY
   | smul c X _ hX => exact Submodule.smul_mem S c hX
@@ -144,7 +144,7 @@ injective.
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `formK`,
 lines 1383--1387 and 1434--1439. -/
 theorem sectorVirtualMatrixFamily_span_eq_top
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K) :
     Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤ := by
   rw [Submodule.eq_top_iff']
   intro Y

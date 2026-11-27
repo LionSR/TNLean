@@ -44,40 +44,44 @@ namespace MPSTensor.SectorDecomposition
 
 variable {d : ℕ}
 
+section ReindexPhysical
+
+variable {α α' : Type*}
+
 /-- Reindex the physical alphabet of every representative in a sector
 decomposition. The representative labels, multiplicities, weights, and bond
 dimensions are unchanged.
 
 Source: arXiv:1606.00608, the harmless physical-basis identifications used in
 the canonical-form blocking at lines 317--345. -/
-noncomputable def reindexPhysical {d' : ℕ} (P : SectorDecomposition d)
-    (e : Fin d' ≃ Fin d) : SectorDecomposition d' where
+noncomputable def reindexPhysical (P : SectorDecomposition α)
+    (e : α' ≃ α) : SectorDecomposition α' where
   basisCount := P.basisCount
   basisDim := P.basisDim
   basis := fun j ↦ Kraus.reindexPhysical e (P.basis j)
   sectors := P.sectors
 
 @[simp]
-theorem reindexPhysical_basis {d' : ℕ} (P : SectorDecomposition d)
-    (e : Fin d' ≃ Fin d) (j : Fin P.basisCount) :
+theorem reindexPhysical_basis (P : SectorDecomposition α)
+    (e : α' ≃ α) (j : Fin P.basisCount) :
     (P.reindexPhysical e).basis j = Kraus.reindexPhysical e (P.basis j) :=
   rfl
 
 @[simp]
-theorem reindexPhysical_totalDim {d' : ℕ} (P : SectorDecomposition d)
-    (e : Fin d' ≃ Fin d) :
+theorem reindexPhysical_totalDim (P : SectorDecomposition α)
+    (e : α' ≃ α) :
     (P.reindexPhysical e).totalDim = P.totalDim :=
   rfl
 
 @[simp]
-theorem reindexPhysical_totalCopies {d' : ℕ} (P : SectorDecomposition d)
-    (e : Fin d' ≃ Fin d) :
+theorem reindexPhysical_totalCopies (P : SectorDecomposition α)
+    (e : α' ≃ α) :
     (P.reindexPhysical e).totalCopies = P.totalCopies :=
   rfl
 
 @[simp]
-theorem reindexPhysical_flatDim {d' : ℕ} (P : SectorDecomposition d)
-    (e : Fin d' ≃ Fin d) (s : Fin P.totalCopies) :
+theorem reindexPhysical_flatDim (P : SectorDecomposition α)
+    (e : α' ≃ α) (s : Fin P.totalCopies) :
     (P.reindexPhysical e).flatDim s = P.flatDim s :=
   rfl
 
@@ -85,8 +89,8 @@ theorem reindexPhysical_flatDim {d' : ℕ} (P : SectorDecomposition d)
 physically reindexing its assembled tensor.
 
 Source: arXiv:1606.00608, canonical-form blocking at lines 317--345. -/
-theorem reindexPhysical_toTensor {d' : ℕ} (P : SectorDecomposition d)
-    (e : Fin d' ≃ Fin d) :
+theorem reindexPhysical_toTensor (P : SectorDecomposition α)
+    (e : α' ≃ α) :
     (P.reindexPhysical e).toTensor = Kraus.reindexPhysical e P.toTensor :=
   rfl
 
@@ -95,9 +99,9 @@ form.
 
 Source: arXiv:1606.00608, the physical-basis identifications implicit in the
 blocking passage at lines 317--345. -/
-theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
-    {P : SectorDecomposition d} (hCF : IsBNTCanonicalForm P)
-    (e : Fin d' ≃ Fin d) :
+theorem IsBNTCanonicalForm.reindexPhysical [Fintype α] [Fintype α']
+    {P : SectorDecomposition α} (hCF : IsBNTCanonicalForm P)
+    (e : α' ≃ α) :
     IsBNTCanonicalForm (P.reindexPhysical e) where
   basis_dim_pos := hCF.basis_dim_pos
   basis_irreducible := fun j ↦
@@ -116,17 +120,13 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
     filter_upwards with N
     exact (mpvOverlap_reindexPhysical_equiv e (P.basis j) (P.basis j)).symm
   bnt_data := by
-    change ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun j : Fin P.basisCount ↦
-        mpvState (Kraus.reindexPhysical e (P.basis j)) N)
     obtain ⟨N₀, hLI⟩ := hCF.bnt_data
-    refine ⟨N₀, fun N hN ↦ ?_⟩
-    exact linearIndependent_mpvState_reindexPhysical_equiv e P.basis (hLI N hN)
+    exact ⟨N₀, fun N hN ↦ linearIndependent_mpvState_reindexPhysical_equiv e P.basis (hLI N hN)⟩
   basis_distinct := by
     change ∀ j k : Fin P.basisCount, j ≠ k →
       ∀ hdim : P.basisDim j = P.basisDim k,
         ¬ GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor d') hdim)
+          (cast (congr_arg (fun n ↦ MPTensor α' (Fin n)) hdim)
             (Kraus.reindexPhysical e (P.basis j)))
           (Kraus.reindexPhysical e (P.basis k))
     intro j k hjk hdim hGauge
@@ -136,6 +136,8 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
   weight_norm_le_one := hCF.weight_norm_le_one
   weight_unit_exists := hCF.weight_unit_exists
 
+end ReindexPhysical
+
 /-- The sector decomposition obtained by blocking `p` physical sites.
 
 The representative family becomes `A_j^[p]`, while every copy weight becomes
@@ -143,8 +145,8 @@ The representative family becomes `A_j^[p]`, while every copy weight becomes
 arXiv:1606.00608, `eq:II_ABasicTensors` and `decBSV`, lines 283--301.  The
 blocked form is an auxiliary construction for the planned formal proof of
 Appendix C.3, Lemma L, lines 1835--1858. -/
-noncomputable def blockTensor (P : SectorDecomposition d) (p : ℕ) :
-    SectorDecomposition (blockPhysDim d p) where
+noncomputable def blockTensor (P : SectorDecomposition (Fin d)) (p : ℕ) :
+    SectorDecomposition (Fin (blockPhysDim d p)) where
   basisCount := P.basisCount
   basisDim := P.basisDim
   basis := fun j ↦ Kraus.blockTensor (P.basis j) p
@@ -155,45 +157,45 @@ noncomputable def blockTensor (P : SectorDecomposition d) (p : ℕ) :
       weight_ne_zero := fun j q ↦ pow_ne_zero p (P.weight_ne_zero j q) }
 
 @[simp]
-theorem blockTensor_basis (P : SectorDecomposition d) (p : ℕ)
+theorem blockTensor_basis (P : SectorDecomposition (Fin d)) (p : ℕ)
     (j : Fin P.basisCount) :
     (P.blockTensor p).basis j = Kraus.blockTensor (P.basis j) p :=
   rfl
 
 @[simp]
-theorem blockTensor_weight (P : SectorDecomposition d) (p : ℕ)
+theorem blockTensor_weight (P : SectorDecomposition (Fin d)) (p : ℕ)
     (j : Fin P.basisCount) (q : Fin (P.copies j)) :
     (P.blockTensor p).weight j q = (P.weight j q) ^ p :=
   rfl
 
 @[simp]
-theorem blockTensor_copies (P : SectorDecomposition d) (p : ℕ) :
+theorem blockTensor_copies (P : SectorDecomposition (Fin d)) (p : ℕ) :
     (P.blockTensor p).copies = P.copies :=
   rfl
 
 @[simp]
-theorem blockTensor_totalCopies (P : SectorDecomposition d) (p : ℕ) :
+theorem blockTensor_totalCopies (P : SectorDecomposition (Fin d)) (p : ℕ) :
     (P.blockTensor p).totalCopies = P.totalCopies :=
   rfl
 
 @[simp]
-theorem blockTensor_flatDim (P : SectorDecomposition d) (p : ℕ) :
+theorem blockTensor_flatDim (P : SectorDecomposition (Fin d)) (p : ℕ) :
     (P.blockTensor p).flatDim = P.flatDim :=
   rfl
 
 @[simp]
-theorem blockTensor_totalDim (P : SectorDecomposition d) (p : ℕ) :
+theorem blockTensor_totalDim (P : SectorDecomposition (Fin d)) (p : ℕ) :
     (P.blockTensor p).totalDim = P.totalDim :=
   rfl
 
 @[simp]
-theorem blockTensor_flatWeight (P : SectorDecomposition d) (p : ℕ)
+theorem blockTensor_flatWeight (P : SectorDecomposition (Fin d)) (p : ℕ)
     (s : Fin P.totalCopies) :
     (P.blockTensor p).flatWeight s = (P.flatWeight s) ^ p :=
   rfl
 
 @[simp]
-theorem blockTensor_flatBasis (P : SectorDecomposition d) (p : ℕ)
+theorem blockTensor_flatBasis (P : SectorDecomposition (Fin d)) (p : ℕ)
     (s : Fin P.totalCopies) :
     (P.blockTensor p).flatBasis s = Kraus.blockTensor (P.flatBasis s) p :=
   rfl
@@ -202,7 +204,7 @@ theorem blockTensor_flatBasis (P : SectorDecomposition d) (p : ℕ)
 tensor of the blocked representatives with powered copy weights.
 
 Source: arXiv:1606.00608, canonical-form blocking at lines 317--345. -/
-theorem blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
+theorem blockTensor_toTensor (P : SectorDecomposition (Fin d)) (p : ℕ) :
     Kraus.blockTensor P.toTensor p = (P.blockTensor p).toTensor := by
   change Kraus.blockTensor
       (toTensorFromBlocks (α := Fin d) P.flatWeight P.flatBasis) p =
@@ -227,7 +229,7 @@ This is the copy-weight identity
 arXiv:1606.00608, `eq:II_ABasicTensors` and `decBSV`, lines 283--301.  It is an
 auxiliary identity for the planned formal proof of Appendix C.3, Lemma L,
 lines 1835--1858. -/
-theorem coeff_blockTensor (P : SectorDecomposition d) (p N : ℕ)
+theorem coeff_blockTensor (P : SectorDecomposition (Fin d)) (p N : ℕ)
     (j : Fin P.basisCount) :
     (P.blockTensor p).coeff N j = P.coeff (N * p) j := by
   change (∑ q : Fin (P.copies j), ((P.weight j q) ^ p) ^ N) =
@@ -242,7 +244,7 @@ weights.
 The two-layer expansion is arXiv:1606.00608, `eq:II_ABasicTensors` and
 `decBSV`, lines 283--301.  This blocked form is an auxiliary identity for the
 planned formal proof of Appendix C.3, Lemma L, lines 1835--1858. -/
-theorem sameMPV₂_blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
+theorem sameMPV₂_blockTensor_toTensor (P : SectorDecomposition (Fin d)) (p : ℕ) :
     SameMPV₂
       (Kraus.blockTensor P.toTensor p)
       (P.blockTensor p).toTensor := by
@@ -266,7 +268,7 @@ representatives from becoming gauge-phase equivalent.
 Source: arXiv:1606.00608, canonical-form blocking at lines 317--345, and
 arXiv:2011.12127, lines 1815--1850. -/
 theorem IsBNTCanonicalForm.blockTensor
-    {P : SectorDecomposition d} (hCF : IsBNTCanonicalForm P)
+    {P : SectorDecomposition (Fin d)} (hCF : IsBNTCanonicalForm P)
     {p : ℕ} (hp : 0 < p) :
     IsBNTCanonicalForm (P.blockTensor p) := by
   classical

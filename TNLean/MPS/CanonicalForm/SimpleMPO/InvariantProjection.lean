@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Periodic.FirstSite
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalCFMPVRepresentation
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 
@@ -77,48 +78,37 @@ theorem verticalTensor_braRightMul (M : MPOTensor d D)
   simp [verticalTensor, braRightMul, Matrix.mul_apply, Matrix.sum_apply,
     mul_comm]
 
-/-- Inserting the doubled-index left action gives the doubled-index tensor of
-left multiplication of the vertically viewed MPO tensor.
+/-- Inserting the pair-alphabet left action gives left multiplication of the vertically
+viewed MPO tensor.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
-theorem insertedTensor_ketLeftAction_toMPSTensor
+theorem insertedTensor_ketLeftAction
     (M : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
-    MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) M.toMPSTensor =
-      (M.ketLeftMul Q).toMPSTensor := by
-  funext p
-  rw [MPSTensor.insertedTensor]
-  change (∑ q : Fin (d * d),
-      MPSTensor.ketLeftAction Q p q • M (q.divNat, q.modNat)) =
-    ∑ k : Fin d, Q p.divNat k • M (k, p.modNat)
-  rw [← finProdFinEquiv.sum_comp]
+    MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) M = M.ketLeftMul Q := by
+  funext ⟨a, b⟩
+  change (∑ q : Fin d × Fin d, MPSTensor.ketLeftAction Q (a, b) q • M q) =
+    ∑ k : Fin d, Q a k • M (k, b)
   rw [Fintype.sum_prod_type]
-  simp only [MPSTensor.ketLeftAction, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, ite_smul, zero_smul]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [Fintype.sum_eq_single p.modNat]
+  simp only [MPSTensor.ketLeftAction, ite_smul, zero_smul]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [Fintype.sum_eq_single b]
   · simp
   · intro j hj
-    rw [ite_eq_right (Ne.symm hj)]
+    simp [Ne.symm hj]
 
-/-- Inserting the doubled-index two-sided action gives the doubled-index tensor
-of two-sided multiplication of the vertically viewed MPO tensor.
+/-- Inserting the pair-alphabet two-sided action gives two-sided multiplication of the
+vertically viewed MPO tensor.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
-theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
+theorem insertedTensor_ketLeftBraRightAction
     (M : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
-    MPSTensor.insertedTensor
-        (MPSTensor.ketLeftBraRightAction Q) M.toMPSTensor =
-      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
-  funext p
-  rw [MPSTensor.insertedTensor]
-  change (∑ q : Fin (d * d),
-      MPSTensor.ketLeftBraRightAction Q p q • M (q.divNat, q.modNat)) =
-    ∑ j : Fin d, Q j p.modNat • (∑ k : Fin d, Q p.divNat k • M (k, j))
-  rw [← finProdFinEquiv.sum_comp]
+    MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) M =
+      (M.ketLeftMul Q).braRightMul Q := by
+  funext ⟨a, b⟩
+  change (∑ q : Fin d × Fin d, MPSTensor.ketLeftBraRightAction Q (a, b) q • M q) =
+    ∑ j : Fin d, Q j b • (∑ k : Fin d, Q a k • M (k, j))
   rw [Fintype.sum_prod_type]
-  simp only [MPSTensor.ketLeftBraRightAction,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  simp only [MPSTensor.ketLeftBraRightAction]
   simp_rw [Finset.smul_sum, smul_smul]
   rw [Finset.sum_comm]
   refine Finset.sum_congr₂ fun j _ k _ ↦ ?_
@@ -187,7 +177,7 @@ theorem firstSiteMatrix_mul_mpo_comm
   exact (sub_eq_zero.mp hcorner).symm
 
 /-- A one-sided invariant Hermitian matrix gives the opposite-corner first-site identity on the
-original doubled-index tensor.
+original tensor on the pair alphabet.
 
 Positivity turns `P₁ H = P₁ H P₁` into `P₁ H = H P₁`.  Their matrix entries identify the
 first-site actions of `M P` and `P M P` at every positive chain length.
@@ -197,39 +187,39 @@ theorem firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
-    MPSTensor.FirstSiteActionAgree M.toMPSTensor
+    MPSTensor.FirstSiteActionAgree M
       (MPSTensor.braRightAction P) (MPSTensor.ketLeftBraRightAction P) := by
-  have hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, P (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
-      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat) := by
+  have hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),
+      (∑ i : Fin d, P (ρ 0).1 i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n => (ρ (Fin.succ n)).2)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).1 i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).2)) * P j (ρ 0).2) := by
     intro N ρ
     have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
     have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+      (Fin.cons (ρ 0).1 fun n => (ρ (Fin.succ n)).1)
+      (Fin.cons (ρ 0).2 fun n => (ρ (Fin.succ n)).2)
     rw [mul_firstSiteMatrix_apply] at h2
     simp only [firstSiteMatrix_mul_apply] at h2
     simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
     rw [h2]
     simp only [Finset.sum_mul]
     exact Finset.sum_comm
-  have hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, P (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+  have hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),
+      (∑ i : Fin d, P (ρ 0).1 i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n => (ρ (Fin.succ n)).2)) =
       ∑ j : Fin d,
         mpo M (N + 1)
-          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat) := by
+          (Fin.cons (ρ 0).1 (fun n => (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).2)) * P j (ρ 0).2) := by
     intro N ρ
     have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
     have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+      (Fin.cons (ρ 0).1 fun n => (ρ (Fin.succ n)).1)
+      (Fin.cons (ρ 0).2 fun n => (ρ (Fin.succ n)).2)
     rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
     simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
     exact h2
@@ -253,10 +243,9 @@ contradiction is pointwise and only needs the length produced here; see
 Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
 theorem exists_not_commute_of_displaced_of_insertedTensor_eq
     (M : MPOTensor d D)
-    (hInsert : ∀ {Y Z : Matrix (Fin (d * d)) (Fin (d * d)) ℂ},
-      MPSTensor.FirstSiteActionAgree M.toMPSTensor Y Z →
-        MPSTensor.insertedTensor Y M.toMPSTensor =
-          MPSTensor.insertedTensor Z M.toMPSTensor)
+    (hInsert : ∀ {Y Z : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ},
+      MPSTensor.FirstSiteActionAgree M Y Z →
+        MPSTensor.insertedTensor Y M = MPSTensor.insertedTensor Z M)
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)
     (hdisp : M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q) :
     ∃ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1)) := by
@@ -264,7 +253,7 @@ theorem exists_not_commute_of_displaced_of_insertedTensor_eq
   by_contra hnone
   simp only [not_exists, not_not] at hnone
   apply hdisp
-  have hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor
+  have hAct : MPSTensor.FirstSiteActionAgree M
       (MPSTensor.ketLeftAction Q) (MPSTensor.ketLeftBraRightAction Q) := by
     apply MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q
     intro N ρ
@@ -284,24 +273,18 @@ theorem exists_not_commute_of_displaced_of_insertedTensor_eq
         _ = firstSiteMatrix Q N * mpo M (N + 1) *
             firstSiteMatrix Q N := by rw [Matrix.mul_assoc]
     have h2 := Matrix.ext_iff.mpr hOneSided
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+      (Fin.cons (ρ 0).1 fun n => (ρ (Fin.succ n)).1)
+      (Fin.cons (ρ 0).2 fun n => (ρ (Fin.succ n)).2)
     rw [mul_firstSiteMatrix_apply] at h2
     simp only [firstSiteMatrix_mul_apply] at h2
     simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
     rw [h2]
     simp only [Finset.sum_mul]
     exact Finset.sum_comm
-  have hTensor : (M.ketLeftMul Q).toMPSTensor =
-      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
-    rw [← insertedTensor_ketLeftAction_toMPSTensor,
-      ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
-    exact hInsert hAct
-  funext ⟨i, j⟩
-  have hij := congrFun hTensor (finProdFinEquiv (i, j))
-  simpa [toMPSTensor] using hij
+  rw [← insertedTensor_ketLeftBraRightAction, ← insertedTensor_ketLeftAction]
+  exact hInsert hAct
 
-/-- Let the doubled-index tensor of an MPDO have the same positive-length MPV
+/-- Let the tensor of an MPDO on the pair alphabet have the same positive-length MPV
 family as a BNT sector decomposition, and let \(P\) be Hermitian with
 \(P\widetilde M=P\widetilde M P\).  On every minimal BNT representative, the
 insertions of \(\widetilde M P\) and
@@ -318,14 +301,14 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887, and Appendix
 C.3, Lemma L, lines 1835--1858. -/
 theorem basis_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (S.basis k) := by
-  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree M.toMPSTensor hM
+  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree M hM
     (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hP hPM)
 
 /-- **Commutation at a two-site chain forces letter-level invariance, for a

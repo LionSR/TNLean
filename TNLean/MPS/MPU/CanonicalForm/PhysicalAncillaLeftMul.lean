@@ -7,6 +7,7 @@ import TNLean.MPS.MPU.CanonicalForm.PhysicalAncilla
 import TNLean.MPS.Operator.PhysicalSector.SitewisePhysicalMatrix
 import TNLean.MPS.Operator.Unitary.Basic
 import TNLean.MPS.MPU.CanonicalForm.MPUCanonicalForm
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Periodic.FirstSite
 import TNLean.MPS.Transfer.Irreducible.PeriodicRotation
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
@@ -140,18 +141,20 @@ private theorem toMPSTensor_ketLeftMul (M : MPOTensor d D)
 
 /-- Multiplication on the physical output by a unitary preserves MPU canonical form.
 
-Each canonical block is rotated by the doubled physical unitary \(P\otimes I\).
+Each canonical block is rotated by the physical unitary \(P\otimes I\) on the pair alphabet.
 The block dimensions, weights, and ambient coisometry are unchanged; the rotation
 preserves irreducibility and the transfer map.
 
 Source: arXiv:1703.09188, canonical form at lines 259--267 and the symmetry
 transformation in Section `othersymmetries`, lines 1295--1332. -/
 theorem isMPUCanonicalForm_ketLeftMul (M : MPOTensor d D)
-    (hM : MPTensor.IsMPUCanonicalForm M.toMPSTensor)
+    (hM : MPTensor.IsMPUCanonicalForm M)
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P ∈ Matrix.unitaryGroup (Fin d) ℂ) :
-    MPTensor.IsMPUCanonicalForm (M.ketLeftMul P).toMPSTensor := by
-  obtain ⟨data⟩ := hM
-  rw [toMPSTensor_ketLeftMul]
+    MPTensor.IsMPUCanonicalForm (M.ketLeftMul P) := by
+  obtain ⟨data⟩ :=
+    (MPTensor.isMPUCanonicalForm_reindexPhysical_iff (A := M) finProdFinEquiv.symm).2 hM
+  refine (MPTensor.isMPUCanonicalForm_reindexPhysical_iff finProdFinEquiv.symm).1 ?_
+  rw [← toMPSTensor_eq_reindexPhysical, toMPSTensor_ketLeftMul]
   exact ⟨MPSTensor.rotateMPUCanonicalFormData data _
     (ketLeftPhysicalMatrix_mem_unitaryGroup P hP)⟩
 

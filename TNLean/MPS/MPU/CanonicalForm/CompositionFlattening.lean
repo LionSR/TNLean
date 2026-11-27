@@ -54,7 +54,7 @@ lemma normalizedFlattening_mulTensor_apply [NeZero d]
   have hsqrt : (Real.sqrt d : ℂ) ≠ 0 := by
     exact_mod_cast Real.sqrt_ne_zero'.mpr hd
   ext a b
-  simp only [normalizedFlattening, mulTensor_apply, toMPSTensor,
+  simp only [normalizedFlattening, mulTensor_apply,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat,
     Matrix.smul_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, smul_eq_mul]

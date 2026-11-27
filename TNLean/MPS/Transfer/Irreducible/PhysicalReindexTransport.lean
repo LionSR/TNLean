@@ -22,8 +22,8 @@ basic tensor properties used by blocking and canonical-form arguments.
   projections, irreducibility, one-site injectivity, and normality are preserved.
 * `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
   when both tensors are reindexed by the same physical alphabet bijection.
-* `linearIndependent_mpvState_of_configEquiv` transports linear independence
-  through an arbitrary equivalence of configuration spaces.
+* `linearIndependent_mpvState_of_configEquiv` transports linear independence of MPV state
+  vectors through an arbitrary equivalence of configuration spaces.
 * `mpvOverlap_reindexPhysical_equiv` and
   `linearIndependent_mpvState_reindexPhysical_equiv` — closed overlaps and
   linear independence of MPV states are preserved.
@@ -36,10 +36,10 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 /-- Physical reindexing commutes with bond-dimension casts. -/
-theorem reindexPhysical_cast_dim {d₁ d₂ D₁ D₂ : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (h : D₁ = D₂) (A : MPSTensor d₂ D₁) :
-    Kraus.reindexPhysical e (cast (congr_arg (MPSTensor d₂) h) A) =
-      cast (congr_arg (MPSTensor d₁) h) (Kraus.reindexPhysical e A) := by
+theorem reindexPhysical_cast_dim {α₁ α₂ : Type*} {D₁ D₂ : ℕ} (e : α₁ ≃ α₂)
+    (h : D₁ = D₂) (A : MPTensor α₂ (Fin D₁)) :
+    Kraus.reindexPhysical e (cast (congr_arg (fun n ↦ MPTensor α₂ (Fin n)) h) A) =
+      cast (congr_arg (fun n ↦ MPTensor α₁ (Fin n)) h) (Kraus.reindexPhysical e A) := by
   subst h
   rfl
 
@@ -70,8 +70,8 @@ theorem isIrreducibleFamily_reindexPhysical_equiv {α₁ α₂ β : Type*} [Fint
     hasInvariantProj_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves algebraic injectivity. -/
-theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (A : MPSTensor d₂ D) :
+theorem isInjective_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
+    (A : MPTensor α₂ (Fin D)) :
     Kraus.IsInjective (Kraus.reindexPhysical e A) ↔ Kraus.IsInjective A := by
   have hRange : Set.range (Kraus.reindexPhysical e A) = Set.range A := by
     ext X
@@ -84,12 +84,12 @@ theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ 
 
 /-- Reindexing by a physical-index equivalence preserves normality: the words of each length
 range over the same matrices. -/
-theorem isNormal_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (A : MPSTensor d₂ D) :
+theorem isNormal_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
+    (A : MPTensor α₂ (Fin D)) :
     Kraus.IsNormal (Kraus.reindexPhysical e A) ↔ Kraus.IsNormal A := by
-  have hr : ∀ N : ℕ, Set.range (fun σ : Fin N → Fin d₁ ↦
+  have hr : ∀ N : ℕ, Set.range (fun σ : Fin N → α₁ ↦
       Kraus.evalWord (Kraus.reindexPhysical e A) (List.ofFn σ)) =
-      Set.range (fun σ : Fin N → Fin d₂ ↦ Kraus.evalWord A (List.ofFn σ)) := by
+      Set.range (fun σ : Fin N → α₂ ↦ Kraus.evalWord A (List.ofFn σ)) := by
     intro N
     ext X
     constructor
@@ -102,8 +102,8 @@ theorem isNormal_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin
   simp only [Kraus.IsNormal, Kraus.IsNBlkInjective, Kraus.wordSpan, hr]
 
 /-- Reindexing both tensors by a physical-index equivalence preserves gauge-phase equivalence. -/
-theorem gaugePhaseEquiv_reindexPhysical_equiv {d₁ d₂ D : ℕ}
-    (e : Fin d₁ ≃ Fin d₂) (A B : MPSTensor d₂ D) :
+theorem gaugePhaseEquiv_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ}
+    (e : α₁ ≃ α₂) (A B : MPTensor α₂ (Fin D)) :
     GaugePhaseEquiv (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) ↔
       GaugePhaseEquiv A B := by
   constructor
@@ -121,18 +121,19 @@ closed MPV overlap.
 
 Source context: arXiv:1606.00608, the physical-basis identifications used in
 canonical-form blocking at lines 317--345. -/
-theorem mpvOverlap_reindexPhysical_equiv {d₁ d₂ D₁ D₂ N : ℕ}
-    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D₁) (B : MPSTensor d₂ D₂) :
+theorem mpvOverlap_reindexPhysical_equiv {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂]
+    {D₁ D₂ N : ℕ}
+    (e : α₁ ≃ α₂) (A : MPTensor α₂ (Fin D₁)) (B : MPTensor α₂ (Fin D₂)) :
     mpvOverlap (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) N =
       mpvOverlap A B N := by
   classical
-  let E : Cfg d₁ N ≃ Cfg d₂ N :=
+  let E : (Fin N → α₁) ≃ (Fin N → α₂) :=
     Equiv.arrowCongr (Equiv.refl (Fin N)) e
   simp only [mpvOverlap, mpv_reindexPhysical]
   exact Fintype.sum_equiv E
-    (fun σ : Cfg d₁ N ↦
+    (fun σ : Fin N → α₁ ↦
       mpv A (fun n ↦ e (σ n)) * star (mpv B (fun n ↦ e (σ n))))
-    (fun σ : Cfg d₂ N ↦ mpv A σ * star (mpv B σ))
+    (fun σ : Fin N → α₂ ↦ mpv A σ * star (mpv B σ))
     (fun σ ↦ by
       have hσ : (fun n ↦ e (σ n)) = E σ := by
         funext n
@@ -141,29 +142,35 @@ theorem mpvOverlap_reindexPhysical_equiv {d₁ d₂ D₁ D₂ N : ℕ}
 
 /-- An equivalence of finite configuration spaces transports linear
 independence between MPV families whose coefficients correspond under that
-equivalence.
+equivalence.  The families are the coefficient vectors `σ ↦ mpv (A j) σ` in the `ℓ²` spaces over
+the configurations; on the alphabet `Fin d` these are the states `mpvState (A j) N`.
 
 Source context: arXiv:1606.00608, the blocking and physical-basis
 identifications used at lines 317--345 and in Appendix C.4, lines 1951--1956. -/
 theorem linearIndependent_mpvState_of_configEquiv
-    {d₁ d₂ N₁ N₂ : ℕ} {ι : Type*} {dim : ι → ℕ}
-    (e : Cfg d₁ N₁ ≃ Cfg d₂ N₂)
-    (A : (j : ι) → MPSTensor d₁ (dim j))
-    (B : (j : ι) → MPSTensor d₂ (dim j))
-    (hAB : ∀ (j : ι) (σ : Cfg d₂ N₂),
+    {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂] {N₁ N₂ : ℕ} {ι : Type*} {dim : ι → ℕ}
+    (e : (Fin N₁ → α₁) ≃ (Fin N₂ → α₂))
+    (A : (j : ι) → MPTensor α₁ (Fin (dim j)))
+    (B : (j : ι) → MPTensor α₂ (Fin (dim j)))
+    (hAB : ∀ (j : ι) (σ : Fin N₂ → α₂),
       mpv (A j) (e.symm σ) = mpv (B j) σ)
-    (hLI : LinearIndependent ℂ (fun j ↦ mpvState (B j) N₂)) :
-    LinearIndependent ℂ (fun j ↦ mpvState (A j) N₁) := by
-  let F : MPVSpace d₁ N₁ ≃ₗ[ℂ] MPVSpace d₂ N₂ :=
-    (EuclideanSpace.equiv (Cfg d₁ N₁) ℂ).toLinearEquiv |>.trans
-      (LinearEquiv.piCongrLeft' ℂ (fun _ : Cfg d₁ N₁ ↦ ℂ) e) |>.trans
-      (EuclideanSpace.equiv (Cfg d₂ N₂) ℂ).symm.toLinearEquiv
-  have hF : ∀ j : ι, F (mpvState (A j) N₁) = mpvState (B j) N₂ := by
+    (hLI : LinearIndependent ℂ (fun j ↦
+      (EuclideanSpace.equiv (ι := Fin N₂ → α₂) (𝕜 := ℂ)).symm fun σ ↦ mpv (B j) σ)) :
+    LinearIndependent ℂ (fun j ↦
+      (EuclideanSpace.equiv (ι := Fin N₁ → α₁) (𝕜 := ℂ)).symm fun σ ↦ mpv (A j) σ) := by
+  let F : EuclideanSpace ℂ (Fin N₁ → α₁) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N₂ → α₂) :=
+    (EuclideanSpace.equiv (Fin N₁ → α₁) ℂ).toLinearEquiv |>.trans
+      (LinearEquiv.piCongrLeft' ℂ (fun _ : Fin N₁ → α₁ ↦ ℂ) e) |>.trans
+      (EuclideanSpace.equiv (Fin N₂ → α₂) ℂ).symm.toLinearEquiv
+  have hF : ∀ j : ι, F ((EuclideanSpace.equiv (ι := Fin N₁ → α₁) (𝕜 := ℂ)).symm
+      fun σ ↦ mpv (A j) σ) =
+        (EuclideanSpace.equiv (ι := Fin N₂ → α₂) (𝕜 := ℂ)).symm fun σ ↦ mpv (B j) σ := by
     intro j
     ext σ
     exact hAB j σ
   have hMapped : LinearIndependent ℂ
-      (fun j ↦ F (mpvState (A j) N₁)) := by
+      (fun j ↦ F ((EuclideanSpace.equiv (ι := Fin N₁ → α₁) (𝕜 := ℂ)).symm
+        fun σ ↦ mpv (A j) σ)) := by
     simpa only [hF] using hLI
   exact LinearIndependent.of_comp F.toLinearMap hMapped
 
@@ -173,12 +180,14 @@ of MPV states at a fixed chain length.
 Source context: arXiv:1606.00608, the physical-basis identifications used in
 canonical-form blocking at lines 317--345. -/
 theorem linearIndependent_mpvState_reindexPhysical_equiv
-    {d₁ d₂ r N : ℕ} {dim : Fin r → ℕ}
-    (e : Fin d₁ ≃ Fin d₂) (A : (j : Fin r) → MPSTensor d₂ (dim j))
-    (hLI : LinearIndependent ℂ (fun j ↦ mpvState (A j) N)) :
-    LinearIndependent ℂ
-      (fun j ↦ mpvState (Kraus.reindexPhysical e (A j)) N) := by
-  let E : Cfg d₁ N ≃ Cfg d₂ N :=
+    {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂] {r N : ℕ} {dim : Fin r → ℕ}
+    (e : α₁ ≃ α₂) (A : (j : Fin r) → MPTensor α₂ (Fin (dim j)))
+    (hLI : LinearIndependent ℂ (fun j ↦
+      (EuclideanSpace.equiv (ι := Fin N → α₂) (𝕜 := ℂ)).symm fun σ ↦ mpv (A j) σ)) :
+    LinearIndependent ℂ (fun j ↦
+      (EuclideanSpace.equiv (ι := Fin N → α₁) (𝕜 := ℂ)).symm
+        fun σ ↦ mpv (Kraus.reindexPhysical e (A j)) σ) := by
+  let E : (Fin N → α₁) ≃ (Fin N → α₂) :=
     Equiv.arrowCongr (Equiv.refl (Fin N)) e
   apply linearIndependent_mpvState_of_configEquiv E
     (fun j ↦ Kraus.reindexPhysical e (A j)) A

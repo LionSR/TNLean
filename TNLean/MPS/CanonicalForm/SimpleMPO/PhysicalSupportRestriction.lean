@@ -141,14 +141,13 @@ noncomputable def physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
 source's common blocking.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `CFK`, lines 1660--1665. -/
-theorem commonWeightAbsorbedBasisMPOTensor_isInjective
-    (S : MPSTensor.SectorDecomposition (d * d))
+theorem commonWeightAbsorbedBasis_isInjective
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (s : Fin S.basisCount) :
-    Kraus.IsInjective (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
-  rw [← isInjective_toMPSTensor_iff, commonWeightAbsorbedBasisMPOTensor_toMPSTensor]
+    Kraus.IsInjective (S.commonWeightAbsorbedBasis hWeight s) := by
   exact (hSpan.isInjective_one s).smul (S.commonWeight_ne_zero hWeight s)
 
 /-- Each common-weight-absorbed BNT representative has an injective
@@ -167,7 +166,7 @@ in `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`.
 Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj`, `generateMPDO`,
 and `CFK`, lines 1660--1665 and 1733--1770. -/
 theorem nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -175,27 +174,27 @@ theorem nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (s : Fin S.basisCount) :
     Nonempty (PhysicalSupportRestrictionData
       (bntSectorProjection hC hρ hη hR s)
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s)) := by
+      (S.commonWeightAbsorbedBasis hWeight s)) := by
   let P := bntSectorProjection hC hρ hη hR s
-  let K := commonWeightAbsorbedBasisMPOTensor S hWeight s
-  have hBasis : changePhysicalBasis P (S.basisMPOTensor s) =
-      S.basisMPOTensor s := by
+  let K := S.commonWeightAbsorbedBasis hWeight s
+  have hBasis : changePhysicalBasis P (S.basis s) =
+      S.basis s := by
     simpa [P] using
       changePhysicalBasis_bntSectorProjection_basis hC hρ hη hR s s
   have hSupport : changePhysicalBasis P K = K := by
     change changePhysicalBasis P
-        (S.commonWeight hWeight s • S.basisMPOTensor s) =
-      S.commonWeight hWeight s • S.basisMPOTensor s
+        (S.commonWeight hWeight s • S.basis s) =
+      S.commonWeight hWeight s • S.basis s
     rw [changePhysicalBasis_smul, hBasis]
   exact exists_physicalSupportRestrictionData P K
     (bntSectorProjection_isOrthogonal hC hρ hη hR s) hSupport
-    (commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s)
+    (commonWeightAbsorbedBasis_isInjective S hWeight hSpan s)
 
 end MPOTensor

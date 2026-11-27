@@ -62,7 +62,7 @@ end MPSTensor
 
 namespace MPSTensor.IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- The minimal BNT representatives have full simultaneous word-tuple span at
 every sufficiently large length once they have already been made injective by
@@ -95,7 +95,7 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
   have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
     hCF.basis_distinct
   have hPair : HasPairBlockSeparatingWords P.basis 6 := by
     simpa using
@@ -152,7 +152,7 @@ private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
   have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
     hCF.basis_distinct
   have hL₀ : 0 < L₀ := by
     dsimp [L₀]
@@ -305,17 +305,10 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     insertedTensor (firstSiteActionOnBlock L Z) (blockTensor (P.basis j) (L + 1)) at hEqj
   exact hEqj
 
-/-- Representative-grouped Lemma L for an unblocked BNT canonical form.
-
-Irreducibility, left-canonicality, and normalized self-overlap force each basis
-representative to have period one and hence to be normal.  A common positive
-block-injectivity length for the finite representative family then supplies
-the blocking hypothesis of the preceding theorem.
-
-Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
-lines 1835--1858; the period-one characterization is the non-periodic
-canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
-theorem insertedTensor_basis_eq_of_firstSiteActionAgree
+/-- Representative-grouped Lemma L for an unblocked BNT canonical form on the alphabet
+`Fin d`; `insertedTensor_basis_eq_of_firstSiteActionAgree` below transports it to an
+arbitrary finite alphabet. -/
+private theorem insertedTensor_basis_eq_of_firstSiteActionAgree_fin
     (hCF : IsBNTCanonicalForm P)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
@@ -324,17 +317,51 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     L hL hInj hAct
 
+end MPSTensor.IsBNTCanonicalForm
+
+namespace MPSTensor.IsBNTCanonicalForm
+
+variable {α : Type*} [Fintype α] {Q : SectorDecomposition α}
+
+/-- Representative-grouped Lemma L for an unblocked BNT canonical form.
+
+Irreducibility, left-canonicality, and normalized self-overlap force each basis
+representative to have period one and hence to be normal.  A common positive
+block-injectivity length for the finite representative family then supplies
+the blocking hypothesis of the preceding theorem.  The physical alphabet is relabelled by
+`Fin (Fintype.card α)`, on which the blocking is carried out.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
+lines 1835--1858; the period-one characterization is the non-periodic
+canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
+theorem insertedTensor_basis_eq_of_firstSiteActionAgree
+    (hCF : IsBNTCanonicalForm Q)
+    {Y Z : Matrix α α ℂ}
+    (hAct : FirstSiteActionAgree Q.toTensor Y Z) :
+    ∀ j, insertedTensor Y (Q.basis j) = insertedTensor Z (Q.basis j) := by
+  classical
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  have h := insertedTensor_basis_eq_of_firstSiteActionAgree_fin
+    (SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e)
+    (hAct.reindexPhysical e)
+  intro j
+  have hj : insertedTensor (Y.submatrix e e) (Kraus.reindexPhysical e (Q.basis j)) =
+      insertedTensor (Z.submatrix e e) (Kraus.reindexPhysical e (Q.basis j)) := h j
+  rw [insertedTensor_reindexPhysical, insertedTensor_reindexPhysical] at hj
+  funext i
+  simpa only [Kraus.reindexPhysical, Equiv.apply_symm_apply] using congrFun hj (e.symm i)
+
 /-- Same-MPV transport of representative-grouped Lemma L for an unblocked BNT
 canonical form.
 
 Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
-    (hAP : SameMPV₂Pos A P.toTensor)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    {D : ℕ} (A : MPTensor α (Fin D)) (hCF : IsBNTCanonicalForm Q)
+    (hAP : SameMPV₂Pos A Q.toTensor)
+    {Y Z : Matrix α α ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
-    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
+    ∀ j, insertedTensor Y (Q.basis j) = insertedTensor Z (Q.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPVPos hAP)
 
 end MPSTensor.IsBNTCanonicalForm

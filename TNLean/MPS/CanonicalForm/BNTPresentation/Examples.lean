@@ -84,7 +84,7 @@ noncomputable example
 /-- The single-sector two-copy decomposition of `C` with raw weights
 `(1, -1)`. -/
 @[reducible] noncomputable def signFlipDecomp (C : MPSTensor d D) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => C
@@ -139,7 +139,7 @@ noncomputable example
 `(1, e^{iθ})`, illustrating equal-modulus grouping with a non-trivial
 phase. -/
 @[reducible] noncomputable def phaseDecomp (C : MPSTensor d D) (θ : ℝ) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => C
@@ -254,7 +254,7 @@ unit modulus, which fails here because `|1| ≠ |1/2|`. -/
 /-- The single-sector two-copy decomposition of `C` with raw weights
 `(1, 1/2)`, demonstrating admissibility of unequal-modulus copies. -/
 @[reducible] noncomputable def halvedDecomp (C : MPSTensor d D) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => C

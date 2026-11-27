@@ -32,7 +32,7 @@ single-letter consequences, are essential.
 Sources: arXiv:1706.07329v2, Definition following Proposition 20;
 arXiv:1703.09188, the double-layer contractions of Definition III.2. -/
 theorem doubleLayer_evalWord_of_isReduction
-    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B)
+    (h : MPTensor.IsReduction U V A B)
     {N : ℕ} (σ τ : Fin N → Fin d) :
     doubledBondMap A * evalWord (doubleLayerTensor U) (List.ofFn σ) (List.ofFn τ) *
         doubledBondMap B =
@@ -55,7 +55,7 @@ Source: arXiv:1703.09188, equations `simple1`, `simple2`, and `Erightleft`,
 lines 269--281 and 356--374. -/
 theorem IsMPUSimple.normalizedDiagonal_insertion_of_isReduction
     [NeZero d] (hU : IsMPUSimple U)
-    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B)
+    (h : MPTensor.IsReduction U V A B)
     (i j k l : Fin d) :
     doubleLayerTensor V (i, j) * normalizedDiagonal (doubleLayerTensor V) *
         doubleLayerTensor V (k, l) =
@@ -116,7 +116,7 @@ Source: arXiv:1703.09188, canonical-form discussion and Definition III.2,
 lines 269--281 and 319--374. -/
 theorem IsMPUCanonicalFormII.isMPUSimple_of_isReduction
     (hV : IsMPUCanonicalFormII V) (hU : IsMPUSimple U)
-    (h : MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
+    (h : MPTensor.IsReduction U V A B) :
     IsMPUSimple V := by
   let : NeZero d := hV.neZero_phys
   exact hV.isMPU.isMPUSimple_of_simple2 _ _

@@ -94,8 +94,8 @@ transfer map unchanged. In particular, any separately supplied trace normalizati
 
 Source: arXiv:1606.00608, Appendix A, equations `TP` and `Lambda`,
 lines 1054--1077. -/
-noncomputable def reindexPhysical {A : MPSTensor d₂ D}
-    (data : CPSVCanonicalFormIIData A) (e : Fin d₁ ≃ Fin d₂) :
+noncomputable def reindexPhysical {A : MPTensor α₂ (Fin D)}
+    (data : CPSVCanonicalFormIIData A) (e : α₁ ≃ α₂) :
     CPSVCanonicalFormIIData (Kraus.reindexPhysical e A) where
   toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.reindexPhysical e
   blocks_left_canonical := fun k ↦
