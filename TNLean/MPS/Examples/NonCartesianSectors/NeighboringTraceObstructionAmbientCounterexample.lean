@@ -55,7 +55,7 @@ def ambient (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
 @[simp] theorem ambient_toMPSTensor_eq_sectors_toTensor
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     (ambient mu B hmu).toMPSTensor = (sectors mu B hmu).toTensor :=
-  verticalBNTMPO_toMPSTensor _
+  reindexPhysical_verticalBNTMPO _
 
 /-- The two one-copy coefficients are copy independent. -/
 theorem sectors_weight_copy_independent
@@ -414,7 +414,8 @@ theorem exists_ambient_boundary_physCloseN_eq_embeddedObstruction
         (↑((1 : GL (Fin S.totalDim) ℂ)⁻¹) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
     intro i
-    rw [verticalBNTMPO_toMPSTensor]
+    change Kraus.reindexPhysical finProdFinEquiv.symm (verticalBNTMPO S.toTensor) i = _
+    rw [reindexPhysical_verticalBNTMPO]
     simp
   rw [physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
     S (sectors_weight_copy_independent mu B hmu)

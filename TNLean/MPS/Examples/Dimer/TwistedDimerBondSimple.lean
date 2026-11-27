@@ -12,7 +12,6 @@ import TNLean.MPS.CanonicalForm.SimpleMPO.Simple
 import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.CanonicalForm.VerticalForm.SectorTrace
 import TNLean.MPS.CanonicalForm.PhysicalReindex
-import TNLean.MPS.Operator.PairAlphabetBridge
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
 
 /-!
@@ -123,21 +122,12 @@ lemma sigmaDimerBasis_isLeftCanonical : MPTensor.IsLeftCanonical sigmaDimerBasis
   rw [hc, one_smul]
 
 /-- One-site injectivity and left-canonical normalization give source normality.
-The normality criterion is stated on the doubled-index alphabet `Fin (4 * 4)`, so it is
-applied there and transported back along `finProdFinEquiv`.
 
 Source notion: arXiv:1606.00608, lines 224–235. -/
-lemma sigmaDimerBasis_isNormalTensor : MPTensor.IsNormalTensor sigmaDimerBasis := by
-  have hNormal : Kraus.IsNormal sigmaDimerBasis :=
+lemma sigmaDimerBasis_isNormalTensor : MPTensor.IsNormalTensor sigmaDimerBasis :=
+  MPSTensor.isNormalTensor_of_isNormal_leftCanonical sigmaDimerBasis
     (sigmaDimer_isInjective.smul sigmaDimerNormalizingScalar_ne_zero).isNormal
-  have h := (MPSTensor.isNormalTensor_of_isNormal_leftCanonical sigmaDimerBasis.toMPSTensor
-    ((MPOTensor.isNormal_toMPSTensor_iff _).2 hNormal)
-    ((MPOTensor.isTP_toMPSTensor_iff _).2 sigmaDimerBasis_isLeftCanonical)).reindexPhysical
-      finProdFinEquiv
-  have he : Kraus.reindexPhysical finProdFinEquiv sigmaDimerBasis.toMPSTensor =
-      sigmaDimerBasis :=
-    funext fun i ↦ congrArg sigmaDimerBasis (finProdFinEquiv.symm_apply_apply i)
-  rwa [he] at h
+    sigmaDimerBasis_isLeftCanonical
 
 /-- The physical-trace transfer of the representative has nonzero trace.
 This is the nilpotency exclusion of Definition 4.7, lines 815–822. -/
@@ -156,30 +146,22 @@ lemma sigmaDimerBasis_trace_physTransfer :
 
 /-- The ket-bra alphabet of one-site blocking identified with the original pair alphabet. -/
 private noncomputable def singleBlockPairEquiv (d : ℕ) :
-    Fin (Kraus.blockPhysDim d 1 * Kraus.blockPhysDim d 1) ≃ Fin d × Fin d :=
-  finProdFinEquiv.symm.trans
-    (Equiv.prodCongr (Kraus.singleBlockEquiv d) (Kraus.singleBlockEquiv d))
+    Fin (Kraus.blockPhysDim d 1) × Fin (Kraus.blockPhysDim d 1) ≃ Fin d × Fin d :=
+  Equiv.prodCongr (Kraus.singleBlockEquiv d) (Kraus.singleBlockEquiv d)
 
-/-- One-site blocking, read on the doubled-index alphabet of the simplicity predicate, is a
-physical relabelling of the tensor on the pair alphabet. -/
-private lemma blockTensor_one_doubled_eq_reindexPhysical {d D : ℕ} (M : MPOTensor d D) :
-    (blockTensor M 1).toMPSTensor =
-      Kraus.reindexPhysical (singleBlockPairEquiv d) M := by
-  funext ij
-  change
-    M (Kraus.singleBlockEquiv d ij.divNat, Kraus.singleBlockEquiv d ij.modNat) * 1 =
-      M (singleBlockPairEquiv d ij)
-  simp [singleBlockPairEquiv]
+/-- One-site blocking is a physical relabelling of the tensor on the pair alphabet. -/
+private lemma blockTensor_one_eq_reindexPhysical_pair {d D : ℕ} (M : MPOTensor d D) :
+    blockTensor M 1 = Kraus.reindexPhysical (singleBlockPairEquiv d) M := by
+  funext ⟨a, b⟩
+  change M (Kraus.singleBlockEquiv d a, Kraus.singleBlockEquiv d b) * 1 =
+    M (Kraus.singleBlockEquiv d a, Kraus.singleBlockEquiv d b)
+  rw [Matrix.mul_one]
 
-private lemma doubledPhysTraceTransfer_reindex_singleBlock {d D : ℕ} (A : MPOTensor d D) :
-    doubledPhysTraceTransfer (Kraus.blockPhysDim d 1)
-        (Kraus.reindexPhysical (singleBlockPairEquiv d) A) =
+private lemma physTraceTransfer_reindex_singleBlock {d D : ℕ} (A : MPOTensor d D) :
+    physTraceTransfer (Kraus.reindexPhysical (singleBlockPairEquiv d) A) =
       physTraceTransfer A := by
-  rw [doubledPhysTraceTransfer, physTraceTransfer]
-  change (∑ i : Fin (Kraus.blockPhysDim d 1),
-      A (singleBlockPairEquiv d (finProdFinEquiv (i, i)))) = ∑ i : Fin d, A (i, i)
-  simpa [singleBlockPairEquiv] using (Kraus.singleBlockEquiv d).sum_comp
-    (fun i : Fin d => A (i, i))
+  simp only [physTraceTransfer, Kraus.reindexPhysical]
+  exact (Kraus.singleBlockEquiv d).sum_comp (fun i : Fin d => A (i, i))
 
 /-- The exact mixed-Bell bond factor is simple in the sense of CPSV16
 Definition 4.7, arXiv:1606.00608, lines 815–822.
@@ -191,7 +173,7 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
   let e := singleBlockPairEquiv 4
   let B := Kraus.reindexPhysical e sigmaDimerBasis
   let P : MPSTensor.SectorDecomposition
-      (Kraus.blockPhysDim 4 1 * Kraus.blockPhysDim 4 1) := {
+      (Fin (Kraus.blockPhysDim 4 1) × Fin (Kraus.blockPhysDim 4 1)) := {
     basisCount := 1
     basisDim := fun _ => 4
     basis := fun _ => B
@@ -201,7 +183,7 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
       weight := fun _ _ => sigmaDimerNormalizingScalar⁻¹
       weight_ne_zero := fun _ _ => inv_ne_zero sigmaDimerNormalizingScalar_ne_zero } }
   have hB : MPTensor.IsNormalTensor B := sigmaDimerBasis_isNormalTensor.reindexPhysical e
-  have hBlock := blockTensor_one_doubled_eq_reindexPhysical sigmaDimer
+  have hBlock := blockTensor_one_eq_reindexPhysical_pair sigmaDimer
   refine ⟨sigmaDimer_isMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
   · refine ⟨Nat.one_pos, ?_, fun _ => hB, ?_⟩
     · intro N hN σ
@@ -221,8 +203,8 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
           intro j k hjk
           exact (hjk (Subsingleton.elim j k)).elim)
   · intro j hNil
-    have hTransfer := doubledPhysTraceTransfer_reindex_singleBlock (d := 4) sigmaDimerBasis
-    change IsNilpotent (doubledPhysTraceTransfer (Kraus.blockPhysDim 4 1) B) at hNil
+    have hTransfer := physTraceTransfer_reindex_singleBlock (d := 4) sigmaDimerBasis
+    change IsNilpotent (physTraceTransfer B) at hNil
     rw [hTransfer] at hNil
     have hz := (Matrix.isNilpotent_trace_of_isNilpotent hNil).eq_zero
     rw [sigmaDimerBasis_trace_physTransfer] at hz

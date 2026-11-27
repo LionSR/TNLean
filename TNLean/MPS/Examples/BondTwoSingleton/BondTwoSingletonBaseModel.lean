@@ -443,21 +443,9 @@ theorem mpo_verticalBNTMPO_normalizedSingletonTensor
       ((singletonScale : ℂ) ^ L) •
         mpo (verticalBNTMPO singletonTensor) L := by
   ext sigma tau
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    verticalBNTMPO_toMPSTensor]
-  change MPTensor.mpv
-      (fun v ↦ (singletonScale : ℂ) • singletonTensor v)
-      (fun n ↦ finProdFinEquiv (sigma n, tau n)) = _
-  rw [MPSTensor.mpv_smul]
-  change (singletonScale : ℂ) ^ L *
-      MPTensor.mpv singletonTensor
-        (fun n ↦ finProdFinEquiv (sigma n, tau n)) =
-    (singletonScale : ℂ) ^ L *
-      mpo (verticalBNTMPO singletonTensor) L sigma tau
-  congr 1
-  simpa only [verticalBNTMPO_toMPSTensor] using
-    MPSTensor.mpv_toMPSTensor_pairConfig
-      (verticalBNTMPO singletonTensor) sigma tau
+  rw [Matrix.smul_apply, smul_eq_mul, ← MPOTensor.mpv_pair, ← MPOTensor.mpv_pair,
+    mpv_verticalBNTMPO, mpv_verticalBNTMPO]
+  exact MPSTensor.mpv_smul (singletonScale : ℂ) singletonTensor _
 
 /-- The normalized one-label operator algebra has coefficient
 `singletonScale ^ L`. -/

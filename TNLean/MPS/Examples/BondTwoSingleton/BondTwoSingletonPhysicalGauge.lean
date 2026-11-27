@@ -183,9 +183,7 @@ private lemma mpo_verticalBNTMPO_gaugedNormalizedSingletonTensor
     mpo (verticalBNTMPO gaugedNormalizedSingletonTensor) L =
       mpo (verticalBNTMPO normalizedSingletonTensor) L := by
   ext sigma tau
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    ← MPSTensor.mpv_toMPSTensor_pairConfig,
-    verticalBNTMPO_toMPSTensor, verticalBNTMPO_toMPSTensor]
+  rw [← MPOTensor.mpv_pair, ← MPOTensor.mpv_pair, mpv_verticalBNTMPO, mpv_verticalBNTMPO]
   exact (MPTensor.GaugeEquiv.sameMPV
     normalizedSingletonTensor_gaugeEquiv_gauged L
       (fun n ↦ finProdFinEquiv (sigma n, tau n))).symm

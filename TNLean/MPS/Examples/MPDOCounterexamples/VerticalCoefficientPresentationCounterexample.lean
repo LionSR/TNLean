@@ -471,10 +471,9 @@ private theorem mpo_verticalBNTMPO_smul
     mpo (verticalBNTMPO (s • A)) L =
       s ^ L • mpo (verticalBNTMPO A) L := by
   ext σ τ
-  simp only [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    verticalBNTMPO_toMPSTensor, Matrix.smul_apply, smul_eq_mul]
-  exact MPSTensor.mpv_smul s A
-    (fun n ↦ finProdFinEquiv (σ n, τ n))
+  rw [Matrix.smul_apply, smul_eq_mul, ← MPOTensor.mpv_pair, ← MPOTensor.mpv_pair,
+    mpv_verticalBNTMPO, mpv_verticalBNTMPO]
+  exact MPSTensor.mpv_smul s A (fun n ↦ finProdFinEquiv (σ n, τ n))
 
 private theorem leftVerticalRepresentative_localProduct :
     mulTensor (verticalBNTMPO leftVerticalRepresentative)
