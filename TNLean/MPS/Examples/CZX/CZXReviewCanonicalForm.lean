@@ -284,7 +284,7 @@ theorem mpo_mulTensor_reviewCZXTensor {N : ℕ} [NeZero N] :
       ((-1 : ℂ) ^ N) • 1 := by
   have hid : identityTensor = MPOTensor.idTensor 2 := by
     funext i j
-    ext p q
+    ext p
     fin_cases i <;> fin_cases j <;>
       simp [identityTensor, identityIntTensor, MPOTensor.idTensor, Matrix.one_apply]
   have hneg : ((-1 : ℂ) • identityTensor).toMPSTensor = fun a => (-1 : ℂ) • identityMPS a := rfl

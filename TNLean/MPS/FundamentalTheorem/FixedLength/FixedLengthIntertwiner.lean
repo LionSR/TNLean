@@ -434,7 +434,8 @@ theorem exists_intertwiner_of_kronecker_chain {B C : MPSTensor d D}
     exact hW (m + 1) (by omega) hzero
   obtain ⟨x, hx, hxeq⟩ := exists_pgvwc07_chain_root lam' hlam_ne
   -- The nonzero combination and its intertwining relation.
-  set Wc := ∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam' x k • W k
+  set Wc :=
+    ∑ k ∈ Finset.range (m + 1), TNLean.MPS.FundamentalTheorem.pgvwc07ChainCoeff lam' x k • W k
     with hWc_def
   have hWc_ne : Wc ≠ 0 :=
     (TNLean.MPS.FundamentalTheorem.pgvwc07_chainCoeff_combination_spec
