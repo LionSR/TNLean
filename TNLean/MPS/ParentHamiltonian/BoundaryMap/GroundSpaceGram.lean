@@ -88,7 +88,7 @@ theorem groundSpaceMapES_injective_of_isNBlkInjective_of_le
     (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
     Function.Injective (groundSpaceMapES A L) :=
   groundSpaceMapES_injective_of_isNBlkInjective
-    (isNBlkInjective_of_le hL₀ hInj hL)
+    (Kraus.isNBlkInjective_of_le hL₀ hInj hL)
 
 /-- If \(A\) is block-injective at length \(L\), the inverse-Gram range
 projector of \(\Gamma_L^{\mathrm{ES}}\) is the orthogonal projector onto the
@@ -122,7 +122,7 @@ theorem groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_a
           (groundSpaceMapES_injective_of_isNBlkInjective_of_le hL₀ hInj hL)).comp
             (groundSpaceMapES A L).adjoint) := by
   exact (injectiveRangeProjector_groundSpaceMapES_eq_starProjection A L
-    (isNBlkInjective_of_le hL₀ hInj hL)).symm
+    (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).symm
 
 @[simp]
 theorem groundSpaceMapES_single (A : MPSTensor d D) (L : ℕ) (a b : Fin D) :

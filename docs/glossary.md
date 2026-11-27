@@ -154,7 +154,9 @@ is deliberately source-faithful.
   `Kraus.IsInjective.isNormal` and
   `MPTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
   rank" of arXiv:0909.5347, clause (b) of `MPSTensor.primitivity_tfae`.
-  `MPSTensor.normality_tfae` (for `[NeZero D]`, no normalization) gives the
+  `Kraus.isNormal_iff_eventually_isNBlkInjective` (no hypothesis) identifies
+  normality with fullness of every sufficiently long word span; QICLean keeps no
+  separate predicate for eventual fullness. `MPSTensor.normality_tfae` (for `[NeZero D]`, no normalization) gives the
   equivalent forms: every sufficiently long word span is full, the word span of
   length `D ^ 4` is full, and some positive blocking is injective.
 - **Caveat:** `Kraus.IsNormal` is invariant under rescaling of the tensor, so it
@@ -191,28 +193,29 @@ is deliberately source-faithful.
 
 ### Basis-level normality
 
-- **Declarations:**
+- **Declaration:**
   `MPSTensor.IsCPSVBasisOfNormalTensors A blocks` in
-  `TNLean/MPS/CanonicalForm/Definitions.lean`, and
-  `MPSTensor.IsBNT A_total g dim A_bnt` in `TNLean/MPS/CanonicalForm/BNT/Basic.lean`.
-- **Meaning:** both say that a finite family of normal blocks spans every
-  positive-length matrix-product-vector family and is eventually linearly
-  independent. The first uses `IsNormalTensor`; the second uses
-  `Kraus.IsNormal`.
+  `TNLean/MPS/CanonicalForm/Definitions.lean`; it is the only predicate for a
+  basis of normal tensors.
+- **Meaning:** a finite family of normal tensors (`IsNormalTensor`) spans every
+  positive-length matrix-product-vector family of `A` and is eventually linearly
+  independent. The family is a sigma type of varying bond dimensions.
 - **Sources:** arXiv:1606.00608,
   `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`, and arXiv:2011.12127,
-  Definition 4.2, `Papers/2011.12127/TN-Review-main.tex:1846-1850`.
-- **Sanctioned bridges:**
-  `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos` records block positivity
-  explicitly, while `MPTensor.IsNormalTensor.isNormal` now derives it directly
-  from each block's spectral normality.
-  `MPSTensor.IsCPSVBasisOfNormalTensors.isBNT` then forgets the spectral
-  normality data to produce `MPSTensor.IsBNT`.
-- **Caveat:** this is a one-way implication, not an equivalence. Their block
-  index packaging also differs: the CPSV predicate uses a sigma type of varying
-  dimensions, whereas `IsBNT` takes an explicit dimension family. Algebraic
-  eventual block injectivity does not recover spectral-radius-one normalization
-  or peripheral-spectrum data. Do not treat the predicates as aliases.
+  Definition 4.2, `Papers/2011.12127/TN-Review-main.tex:1846-1850` (whose
+  normal tensors have a primitive channel as transfer operator, so the same
+  normalized notion).
+- **Sanctioned characterizations and consequences:**
+  `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos` (positive bond
+  dimensions); `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv`
+  (distinct members are not gauge-phase equivalent);
+  `MPSTensor.isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff` (normal tensors
+  are a basis of normal tensors of any weighted direct sum of themselves exactly
+  when they are gauge-phase separated). A block given only as `Kraus.IsNormal`
+  enters through `MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`.
+- **Caveat:** a statement that uses only the eventual linear independence of a
+  family takes that clause as its hypothesis (as `MPSTensor.nncph_implies_rfp`
+  does), not the whole predicate.
 
 ### `MPSTensor.IsBNTSectorPresentation`
 
@@ -1026,19 +1029,6 @@ the identifier.
 There is no single universal canonical-form predicate. The following declarations
 model different levels of data and different sources.
 
-### `MPSTensor.CanonicalForm`
-
-- **Declaration:** `MPSTensor.CanonicalForm (d : ℕ)`.
-- **Defined in:** `TNLean/MPS/Tensor/DirectSum/MultiBlock.lean`.
-- **Meaning:** lightweight data for a weighted block-diagonal tensor with an
-  injective tensor in each block.
-- **Source:** the block-diagonal shape of Pérez-García--Verstraete--Wolf--Cirac,
-  arXiv:quant-ph/0608197, TI canonical form, and CPSV16 equation `II_CF1`.
-- **Sanctioned bridge:** `MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks`.
-- **Caveat:** it stores no normalization, irreducibility, peripheral
-  primitivity, positivity of block dimensions, ordering of weights, or BNT
-  minimality. It is data, not a proposition equivalent to the predicates below.
-
 ### Retained-block reconstruction and literal CPSV canonical form
 
 - **Declarations:** `MPTensor.RetainedBlockReconstructionData A` and
@@ -1072,68 +1062,6 @@ model different levels of data and different sources.
   their optional ambient complement. The PGVWC07 form has a distinct
   reconstruction using a bond-index equivalence and real weights.
 
-### `MPSTensor.IsCanonicalForm`
-
-- **Declaration:** `MPSTensor.IsCanonicalForm μ A : Prop`.
-- **Defined in:** `TNLean/MPS/CanonicalForm/BlockFamily.lean` despite living in
-  the `MPSTensor` namespace.
-- **Meaning:** a stronger separated biCF/CFII-after-blocking specialization:
-  one-site injective blocks, left-canonical normalization, non-increasing
-  nonzero weights, positive block dimensions, and normalized self-overlap.
-- **Source:** the direct-sum shape comes from arXiv:1606.00608 equation `II_CF1`
-  and `Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`; the additional
-  injectivity, normalization, positivity, and overlap hypotheses implement the
-  stronger separated form used after blocking. Compare arXiv:2011.12127,
-  `Papers/2011.12127/TN-Review-main.tex:1831-1836`.
-- **Sanctioned bridges:** `MPSTensor.IsCanonicalForm.of_peripheral_primitive`
-  constructs the form. Its fields `block_injective`, `leftCanonical`, and
-  `overlap_tendsto_one` are the pointwise blockwise hypotheses `∀ k, P (A k)`
-  taken directly by the block-separation theorems; there are no wrapper
-  structures for them.
-- **Caveat:** this is not the paper's bare direct-sum CF predicate: it assumes
-  one-site injectivity, left-canonical normalization, positive dimensions, and
-  normalized self-overlap. The already-separated family also does not retain
-  repeated-copy multiplicities of the paper's two-layer BNT decomposition.
-
-### `MPSTensor.IsNormalCanonicalForm`
-
-- **Declaration:** `MPSTensor.IsNormalCanonicalForm μ A : Prop`.
-- **Defined in:** `TNLean/MPS/CanonicalForm/BlockFamily.lean`.
-- **Meaning:** a stronger prepared specialization with irreducible,
-  left-canonical, peripherally primitive blocks, non-increasing nonzero weights,
-  and positive block dimensions.
-- **Source:** its direct-sum shape is based on arXiv:1606.00608, lines 233--246
-  and equation `II_CF1`, and arXiv:2011.12127, lines 1828--1836. The
-  left-canonical, ordered-weight, and positive-dimension fields are additional
-  prepared-data hypotheses rather than part of the paper's bare CF definition.
-- **Sanctioned bridges:**
-  `MPSTensor.IsNormalCanonicalForm.ofSeparatedData` builds the form from the
-  pointwise hypotheses `∀ k, P (A k)` (irreducibility, left-canonical
-  normalization, peripheral primitivity) and `HasOrderedNonzeroWeights`; the
-  fields `block_irreducible`, `leftCanonical`, and `block_primitive` give the
-  pointwise hypotheses back.
-- **Caveat:** this does not encode the source's modulus-bound and unit-witness
-  normalization for copy weights. No public theorem identifies this predicate
-  with `MPSTensor.IsCanonicalForm`; the block hypotheses differ. The positive
-  dimensions are explicit and are used to obtain the needed `NeZero` instances.
-
-### `MPSTensor.IsNormalCanonicalFormBNT`
-
-- **Declaration:** `MPSTensor.IsNormalCanonicalFormBNT μ A : Prop`.
-- **Defined in:** `TNLean/MPS/CanonicalForm/BNT/Construction.lean`.
-- **Meaning:** `IsNormalCanonicalForm` plus gauge-phase separation between
-  distinct blocks.
-- **Source:** the separated-representative reading of arXiv:1606.00608 §II.C,
-  especially lines 264--301.
-- **Sanctioned bridges:**
-  `MPSTensor.IsNormalCanonicalFormBNT.toIsNormalCanonicalForm`,
-  `MPSTensor.IsNormalCanonicalFormBNT.ofSeparatedData`, and
-  `MPSTensor.IsNormalCanonicalFormBNT.isBNT`.
-- **Caveat:** this is a one-representative-per-gauge-phase-class surface. It
-  suppresses repeated copies and their power-sum coefficients; see
-  `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. It is not equivalent by
-  renaming to `MPSTensor.IsBNTCanonicalForm`.
-
 ### `MPSTensor.IsBNTCanonicalForm`
 
 - **Declaration:**
@@ -1148,9 +1076,7 @@ model different levels of data and different sources.
   Definition 4.2 and two-layer display, lines 1846--1884.
 - **Sanctioned bridges:**
   `MPSTensor.IsBNTCanonicalForm.basis_isNormal` projects algebraic normality of
-  each basis block, and `MPSTensor.IsBNTCanonicalForm.isBNT` forgets the sector
-  weights and canonical-form data to produce the algebraic basis predicate.
-  Further bridges are
+  each basis block. Further bridges are
   `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor`,
   `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical`, and the
   supplier declarations
@@ -1162,8 +1088,7 @@ model different levels of data and different sources.
   positive-length MPV family (the standing convention of arXiv:1606.00608,
   line 246) and realizes the weight normalization itself, at the cost of a
   per-site scalar. This is the canonical predicate when
-  multiplicities and raw sector weights matter. It is not equivalent to the
-  flattened `IsNormalCanonicalFormBNT`; multiplicity recovery is genuine
+  multiplicities and raw sector weights matter; multiplicity recovery is genuine
   mathematical content, not a change of packaging.
 
 ### MPDO canonical-form predicates

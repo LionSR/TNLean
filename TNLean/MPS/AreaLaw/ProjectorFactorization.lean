@@ -16,7 +16,6 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.CutProductState
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutoffPair
 import TNLean.MPS.AreaLaw.ProjectorFactorization.Doubling
 import TNLean.MPS.AreaLaw.ProjectorFactorization.FactorizationBudget
-import TNLean.MPS.AreaLaw.ProjectorFactorization.InteractionPicture
 import TNLean.MPS.AreaLaw.ProjectorFactorization.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LemmaOneConstant
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LiebRobinson

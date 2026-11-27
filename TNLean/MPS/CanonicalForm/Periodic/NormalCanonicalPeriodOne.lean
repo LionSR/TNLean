@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.Transfer.Scaling
-import TNLean.MPS.CanonicalForm.BlockFamily
+import TNLean.MPS.CanonicalForm.BNT.Construction
 
 /-!
 # Normal canonical forms as period-one irreducible forms
@@ -15,6 +15,8 @@ irreducible form in the period-one case.
 -/
 
 open MPTensor
+
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -70,7 +72,8 @@ theorem sameMPV₂_toTensorFromBlocks_phaseNormalized
     _ = (↑‖μ k‖ : ℂ) ^ N * ((μ k / (‖μ k‖ : ℂ)) ^ N * t) := by
       rw [mul_pow, mul_assoc]
 
-/-- A normal canonical block family gives an irreducible-form witness after
+/-- A weighted family of irreducible, left-canonical, primitive blocks (normal blocks of a
+canonical form) with nonzero weights gives an irreducible-form witness after
 absorbing each block-weight phase into the corresponding block.
 
 Source context: arXiv:1708.00029, lines 252--271. The paper writes the
@@ -79,7 +82,11 @@ decomposition is first written with nonzero complex coefficients, replacing
 `μ_j` by `‖μ_j‖` and `A_j` by `(μ_j / ‖μ_j‖) A_j` gives the paper's convention
 without changing the represented MPV family. -/
 noncomputable def toIsIrreducibleFormOfPhaseNormalized
-    (hNCF : IsNormalCanonicalForm (d := d) μ blocks) :
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
+    (hLeft : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hPrim : ∀ k,
+      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
+    (hμ : ∀ k, μ k ≠ 0) :
     IsIrreducibleForm (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) where
   r := r
   dim := dim
@@ -90,26 +97,30 @@ noncomputable def toIsIrreducibleFormOfPhaseNormalized
     intro k
     have hPeriod : IsPeriodic 1 (blocks k) := by
       rw [IsPeriodic.one_iff_primitive]
-      exact ⟨hNCF.block_irreducible k, hNCF.leftCanonical k, hNCF.block_primitive k⟩
+      exact ⟨hIrr k, hLeft k, hPrim k⟩
     change IsPeriodic 1 (fun i => (μ k / (‖μ k‖ : ℂ)) • blocks k i)
     exact isPeriodic_smul_of_norm_one
-      (phase_norm_one (hNCF.mu_ne_zero k)) (blocks k) hPeriod
+      (phase_norm_one (hμ k)) (blocks k) hPeriod
   weight_pos := by
     intro k
     constructor
-    · simpa [positiveRealWeights] using norm_pos_iff.mpr (hNCF.mu_ne_zero k)
+    · simpa [positiveRealWeights] using norm_pos_iff.mpr (hμ k)
     · simp [positiveRealWeights]
-  sameMPV := sameMPV₂_toTensorFromBlocks_phaseNormalized hNCF.mu_ne_zero
+  sameMPV := sameMPV₂_toTensorFromBlocks_phaseNormalized hμ
 
 /-- In the irreducible-form witness obtained by phase-normalizing a normal
 canonical block family, every block period is `1`.
 
 Source context: arXiv:1708.00029, lines 258--271. -/
 theorem toIsIrreducibleFormOfPhaseNormalized_period_eq_one
-    (hNCF : IsNormalCanonicalForm (d := d) μ blocks) :
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
+    (hLeft : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hPrim : ∀ k,
+      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
+    (hμ : ∀ k, μ k ≠ 0) :
     ∀ k : Fin r,
       (toIsIrreducibleFormOfPhaseNormalized
-        (d := d) (μ := μ) (blocks := blocks) hNCF).period k = 1 := by
+        (d := d) (μ := μ) (blocks := blocks) hIrr hLeft hPrim hμ).period k = 1 := by
   intro k
   rfl
 

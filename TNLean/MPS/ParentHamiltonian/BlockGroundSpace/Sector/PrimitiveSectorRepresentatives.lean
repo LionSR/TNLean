@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockSumIntervalSpaces
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # Primitive representatives with exact open-boundary support

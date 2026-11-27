@@ -262,7 +262,7 @@ theorem not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal [Ne
   set L := 2 * N + 1 with hL
   have hinj : Kraus.IsInjective (blockTensor A L) :=
     (isNBlkInjective_iff_blockTensor_isInjective A L).1
-      (isNBlkInjective_of_le hNpos hN (by omega))
+      (Kraus.isNBlkInjective_of_le hNpos hN (by omega))
   have hgauge {g : Matrix.specialUnitaryGroup (Fin 2) ℂ} (hS : SameMPV A (twistedTensor A U g)) :
       GaugeEquiv (blockTensor A L) (twistedTensor (blockTensor A L) (blockKronAction L U) g) := by
     rw [twistedTensor_blockTensor_comm]

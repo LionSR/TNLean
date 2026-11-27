@@ -15,7 +15,6 @@ import TNLean.MPS.Tensor.DirectSum.BoundaryDecomposition
 import TNLean.MPS.Tensor.DirectSum.GaugeEquiv
 import TNLean.MPS.Tensor.DirectSum.InvariantSubspaceDecomp
 import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
-import TNLean.MPS.Tensor.DirectSum.MultiBlock
 import TNLean.MPS.Tensor.DirectSum.SectorBNT
 import TNLean.MPS.Tensor.DirectSum.SectorCompression
 import TNLean.MPS.Tensor.DirectSum.SectorDecomposition

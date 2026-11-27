@@ -82,23 +82,6 @@ blocks.
     gauge invariance carries this conclusion back to the original tensor.
 \end{proof}
 
-\begin{lemma}[A coefficient-form BNT is an algebraic BNT]
-    \label{thm:cpsv_bnt_is_bnt}
-    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.isBNT}
-    \leanok
-    \uses{def:bnt,def:bnt_cpsv,lem:cpsv_bnt_block_dimensions_positive,thm:cpsv_normal_eventually_injective}
-    If $(A_j)_{j=1}^{g}$ is a coefficient-form basis of normal tensors for
-    $A$, then $(A_j)_{j=1}^{g}$ is an algebraic basis of normal tensors for
-    $A$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:cpsv_bnt_block_dimensions_positive,thm:cpsv_normal_eventually_injective}
-    Every block has positive bond dimension, so spectral normality implies
-    eventual block injectivity for each block. The spanning identities and
-    eventual linear independence are unchanged.
-\end{proof}
-
 \begin{lemma}[Non-decaying rectangular overlap determines the bond dimension]
     \label{thm:rect_overlap_norm_one_dim_eq}
     \lean{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}

@@ -103,7 +103,7 @@ theorem exists_normal_blocks_of_no_small_divisor {d D N : ℕ}
     have hIrrMap := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrB
     have hq := Kraus.wielandtIndex_le_general _ hTP hIrrMap hPrim
     have hFrom := Kraus.hasFullWordSpanFrom_wielandtIndex _
-      (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive _ hTP hIrrMap hPrim)
+      (Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive _ hTP hIrrMap hPrim)
     have hd : dim k ^ 2 ≤ D ^ 2 := Nat.pow_le_pow_left (hdimD k) 2
     have hB : Kraus.IsNBlkInjective (Bp k) ((D ^ 2 + 1) ^ 2) := by
       refine hFrom _ (hq.trans ?_)

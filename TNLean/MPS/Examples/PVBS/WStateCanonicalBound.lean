@@ -385,7 +385,7 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive {D 
     have hIrr := h.isIrreducibleMap_mapLM_blocks_conjTranspose k
     have hq := Kraus.wielandtIndex_le_general _ hTP hIrr (hPrim k)
     have hFrom := Kraus.hasFullWordSpanFrom_wielandtIndex _
-      (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive _ hTP hIrr (hPrim k))
+      (Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive _ hTP hIrr (hPrim k))
     refine Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose (hFrom _ ?_)
     refine hq.trans ?_
     have hd : h.dim k ^ 2 ≤ D ^ 2 := Nat.pow_le_pow_left (hdimD k) 2
@@ -423,8 +423,7 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit {D : ℕ
     have hinj' : Kraus.IsNBlkInjective (fun i => (h.blocks k i)ᴴ) L :=
       Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose (K := fun i => (h.blocks k i)ᴴ)
         (by simpa only [Matrix.conjTranspose_conjTranspose] using hinj)
-    have hFull : Kraus.HasEventuallyFullWordSpan fun i => (h.blocks k i)ᴴ :=
-      (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP _ hTP).mpr ⟨L, hL, hinj'⟩
+    have hFull : Kraus.IsNormal fun i => (h.blocks k i)ᴴ := ⟨L, hL, hinj'⟩
     have hq := Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_isUnit _ hFull
       (Kraus.apply_mem_wordSpan_one _ 0) (isUnit_star.mpr (hA0 k))
     refine Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose
@@ -544,12 +543,11 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenva
     intro k
     have : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
     obtain ⟨L, hL, hinj⟩ := hC1 k
-    have hFull : Kraus.HasEventuallyFullWordSpan (h.blocks k) :=
-      Filter.eventually_atTop.mpr ⟨L, fun n hn ↦ isNBlkInjective_of_le hL hinj hn⟩
+    have hFull : Kraus.IsNormal (h.blocks k) := ⟨L, hL, hinj⟩
     obtain ⟨X, μ, φ, hX, hμ, hφ, heig⟩ := hEigen k
     have hq := Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_nonzero_eigenvalue
       (h.blocks k) hFull hX hμ hφ heig
-    exact isNBlkInjective_of_le (Nat.pow_pos (h.dim_pos k)) hq
+    exact Kraus.isNBlkInjective_of_le (Nat.pow_pos (h.dim_pos k)) hq
       ((Nat.pow_le_pow_left (hdimD k) 2).trans (le_max_right 1 (D ^ 2)))
   refine (h.lt_of_mpv_eq_smul_wIndicator_asymmetric
     (by omega) hC1' hDistinct hc hW).trans_le ?_

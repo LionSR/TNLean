@@ -130,7 +130,7 @@ theorem exists_isPreparedInDepth_allLengthPolynomialState {d D : ℕ} (A : MPSTe
   obtain ⟨Nz, hNz⟩ := exists_mpvState_ne_zero_of_le A hNormal
   obtain ⟨L, hLpos, hL⟩ := hNormal
   have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor A n) := fun n hn =>
-    (isNBlkInjective_iff_blockTensor_isInjective A n).mp (isNBlkInjective_of_le hLpos hL hn)
+    (isNBlkInjective_iff_blockTensor_isInjective A n).mp (Kraus.isNBlkInjective_of_le hLpos hL hn)
   set R := L + 3 * D
   set ξ := correlationLength lam₂
   set a := 2 * ξ + 1 / Real.log 2

@@ -73,7 +73,7 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨q, rfl⟩ : ∃ q, R = q + 1 := ⟨R - 1, by omega⟩
   exact exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective_all_lengths A
-    (by omega : 0 < q) (isNBlkInjective_of_le hp hA (by omega))
+    (by omega : 0 < q) (Kraus.isNBlkInjective_of_le hp hA (by omega))
 
 /-- Every fixed interaction range \(R\ge D^4+1\) gives a uniform
 positive open-chain gap for an arbitrary normal tensor of bond dimension

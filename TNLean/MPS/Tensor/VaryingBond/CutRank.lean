@@ -57,23 +57,18 @@ open ManyBody (interval mem_interval)
 
 variable {d N : ℕ}
 
-/-- The cut after `k` sites has `min N k` sites before it. -/
-private theorem card_interval_zero (N k : ℕ) : (interval N 0 k).card = min N k := by
-  rw [← Fin.card_filter_val_lt]
-  simp [interval]
-
 /-- The cut rank at `k` is at most `d^{min(N, k)}`, the number of configurations of the left
 block. -/
 theorem cutRank_le_pow (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
     ManyBody.cutRank (interval N 0 k) ψ ≤ d ^ min N k := by
-  simpa [card_interval_zero] using ManyBody.cutRank_le_pow_card (D := interval N 0 k) ψ
+  simpa [ManyBody.card_interval_zero] using ManyBody.cutRank_le_pow_card (D := interval N 0 k) ψ
 
 /-- The cut rank at `k` is at most `d^{N-k}`, the number of configurations of the last
 `N - k` sites. -/
 theorem cutRank_le_pow_sub (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
     ManyBody.cutRank (interval N 0 k) ψ ≤ d ^ (N - k) := by
   have h := ManyBody.cutRank_le_pow_card_compl (D := interval N 0 k) ψ
-  rwa [Finset.card_compl, Fintype.card_fin, card_interval_zero,
+  rwa [Finset.card_compl, Fintype.card_fin, ManyBody.card_interval_zero,
     show N - min N k = N - k by omega] at h
 
 /-- Every cut rank of a vector on `N` sites is at most `d^{⌊N/2⌋}`, the bound of

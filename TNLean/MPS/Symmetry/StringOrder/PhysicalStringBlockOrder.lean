@@ -58,8 +58,7 @@ theorem isNormal_of_pureCanonical [NeZero D]
       show peripheralEigenvalues (Kraus.mapLM A) = {1} from hPrim]
     simp
   obtain ⟨n, hn, hInj⟩ :=
-    (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP B hTP).mp
-      (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive B hTP hIrrB hPrimB)
+    Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive B hTP hIrrB hPrimB
   exact ⟨n, hn, Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose hInj⟩
 
 /-- In the source pure canonical regime, both virtual boundaries have physical

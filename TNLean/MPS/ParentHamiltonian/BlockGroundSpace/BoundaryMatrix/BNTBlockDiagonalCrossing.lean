@@ -7,6 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BNTBlockDiag
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BoundaryMatrixIdentities
 import TNLean.MPS.Tensor.GroundSpace.BlockStrip
 import TNLean.MPS.Tensor.GroundSpace.WrappingWindow
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Boundary-crossing cyclic interval equations for block-diagonal parent spaces

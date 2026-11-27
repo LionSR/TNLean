@@ -112,7 +112,7 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
       normalizedCutBlock_sum Φ a b hab 0 0 0
   have hH : X + (N + A) + Y = H := by rw [← hsum]; abel
   have ht0 : 0 < t := (div_pos (by norm_num : (0 : ℝ) < 1024) hg).trans_le ht
-  obtain ⟨hK, hKle⟩ := twoSidedEnergyTruncation_posSemidef_le X (N + A) Y
+  obtain ⟨hK, hKle⟩ := Matrix.twoSidedEnergyTruncation_posSemidef_le X (N + A) Y
     hX (hN.add hA) hY t ht0.le
   rw [hH] at hKle
   have hKzero : K *ᵥ WithLp.ofLp Ω = 0 := by
@@ -127,7 +127,7 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
     have htg := (div_le_iff₀ hg).mp ht
     have hmul := mul_le_mul_of_nonneg_right htg hg.le
     nlinarith
-  have horth := orthogonal_clipped_energy_ge X N Y A hX hN hY hA hXN hXY hNY hAcap
+  have horth := Matrix.orthogonal_clipped_energy_ge X N Y A hX hN hY hA hXN hXY hNY hAcap
     Ω hΩ 0 g t (by norm_num) (by norm_num) hg hg1 ht0 hcut
     (by
       intro v

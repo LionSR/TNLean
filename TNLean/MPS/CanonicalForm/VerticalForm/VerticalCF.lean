@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import TNLean.MPS.CanonicalForm.BNT.Basic
+import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 
@@ -109,7 +110,7 @@ The relative Gram algebra is formalized in
 `QICLean.Kraus.NormalCommutant`; its application to the grouped
 sectors is carried out in `TNLean.MPS.MPDO.GroupedSectorGram` and
 `TNLean.MPS.MPDO.GroupedGramNormalization`.  The normalized physical maps and
-the algebraic vertical BNT are constructed in
+the vertical basis of normal tensors are constructed in
 `TNLean.MPS.MPDO.NormalizedGroupedSectors` and
 `TNLean.MPS.MPDO.VerticalBNTConstruction`.  Their final coisometry assembly is
 proved in `TNLean.MPS.MPDO.VerticalCanonicalForm`.
@@ -600,7 +601,7 @@ def IsVerticalCF (M : MPOTensor d D) : Prop :=
     (∀ α, 0 < mult α) ∧
       (∀ α k, (0 : ℂ) < ω α k) ∧
       U * Uᴴ = 1 ∧
-      MPSTensor.IsBNT (verticalTensor M) g dim A ∧
+      MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M) (fun α ↦ ⟨dim α, A α⟩) ∧
       (∀ v : Fin (D * D),
         U * verticalTensor M v * Uᴴ = verticalAssembledTensor dim mult ω A v) ∧
       ∀ v : Fin (D * D),

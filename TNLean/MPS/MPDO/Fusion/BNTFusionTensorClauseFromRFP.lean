@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSum
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.MPDO.Coefficients.BNTAssociativity
 import TNLean.MPS.MPDO.Fusion.BNTFusionTensorClause
 import TNLean.MPS.MPDO.Coefficients.BNTMultiplicityNormalization

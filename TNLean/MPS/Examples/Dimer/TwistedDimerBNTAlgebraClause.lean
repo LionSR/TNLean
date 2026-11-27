@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Examples.Dimer.TwistedDimerProductLaw
 import TNLean.MPS.Examples.Dimer.TwistedDimerVerticalCF
 
@@ -33,11 +32,6 @@ asserted here.
 
 ## Main results
 
-* `flagFamily_isLeftCanonical` — each flag sector is left-canonical;
-* `flagFamily_isNormalTensor` — each flag sector is a normal tensor in the
-  sense of arXiv:1606.00608, lines 231--235;
-* `flagFamily_isCPSVBasisOfNormalTensors` — the flag sectors form the basis of
-  normal tensors of the vertically viewed tensor in the source's sense;
 * `sectorWeight_hasIdempotentCoefficientForm` — the length-one idempotent law
   of the trace scalars;
 * `T_bntAlgebraTensorClause` — the tensor-attached algebra clause of `T`.
@@ -55,95 +49,6 @@ open scoped BigOperators Matrix ComplexOrder
 noncomputable section
 
 namespace MPOTensor.TwistedDimer
-
-/-! ### Left-canonical normalization of the flag sectors -/
-
-/-- The letter of a flag sector, multiplied on the left by its adjoint, is a
-diagonal matrix unit at the right bits with the squared modulus of the
-coefficient. -/
-lemma conjTranspose_flagMPO_mul_self (f : Fin 2) (a b : Fin 8) :
-    (flagMPO f (a, b))ᴴ * flagMPO f (a, b) =
-      Matrix.single (finProdFinEquiv (bitR a, bitR b)) (finProdFinEquiv (bitR a, bitR b))
-        (star (flagCoef f a b) * flagCoef f a b) := by
-  simp [flagMPO, unitTensor, Matrix.conjTranspose_single, Matrix.single_mul_single_same]
-
-/-- The squared modulus of the sector coefficient: the flag sign squares to
-one, leaving the squared bond-matrix entry over $(2\mu)^2$ when the block
-labels agree. -/
-lemma star_flagCoef_mul_self (f p p' k q q' k' : Fin 2) :
-    star (flagCoef f (physIdx p p' k) (physIdx q q' k')) *
-        flagCoef f (physIdx p p' k) (physIdx q q' k') =
-      if k = k' then (((Cmat k p p' / (2 * mu)) ^ 2 : ℝ) : ℂ) else 0 := by
-  simp only [flagCoef, bitF_physIdx, flagWeight_physIdx]
-  split_ifs
-  · rw [Complex.star_def, Complex.conj_ofReal, ← Complex.ofReal_mul]
-    congr 1
-    have ht : tau k f * tau k f = 1 := by fin_cases k <;> fin_cases f <;> norm_num [tau]
-    calc Cmat k p p' * tau k f / (2 * mu) * (Cmat k p p' * tau k f / (2 * mu))
-        = (Cmat k p p' / (2 * mu)) ^ 2 * (tau k f * tau k f) := by ring
-      _ = _ := by rw [ht, mul_one]
-  · simp
-
-/-- Expanding a double sum over the bond indices along their bit encodings. -/
-private lemma sum_bits (F : Fin 8 → Fin 8 → ℂ) :
-    (∑ a, ∑ b, F a b) =
-      ∑ p, ∑ p', ∑ k, ∑ q, ∑ q', ∑ k', F (physIdx p p' k) (physIdx q q' k') := by
-  rw [← physEquiv.sum_comp]
-  simp only [Fintype.sum_prod_type]
-  refine Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun p' _ =>
-    Finset.sum_congr rfl fun k _ => ?_
-  rw [← physEquiv.sum_comp]
-  simp only [Fintype.sum_prod_type]
-  rfl
-
-/-- **The flag sectors are left-canonical.**  The sum over the bond pairs of
-the adjoint of a sector letter times the letter is the identity: at each
-right-bit pair, the sum of the squared coefficients is
-$2 \sum_{k, p} C_k[p, p']^2 / (2\mu)^2 = 4 \cdot \tfrac{25}{64} / \tfrac{100}{64} = 1$.
-
-Project example; not from CPSV16. -/
-theorem flagFamily_isLeftCanonical (f : Fin 2) : (flagFamily f).IsLeftCanonical := by
-  unfold MPTensor.IsLeftCanonical Kraus.IsTP
-  rw [← (finProdFinEquiv (m := 8) (n := 8)).sum_comp, Fintype.sum_prod_type]
-  simp only [flagFamily_finProdFinEquiv, conjTranspose_flagMPO_mul_self]
-  ext i j
-  simp only [Matrix.sum_apply, Matrix.single_apply, Matrix.one_apply]
-  by_cases hij : i = j
-  · subst hij
-    simp only [and_self, ite_true]
-    obtain ⟨⟨i₁, i₂⟩, rfl⟩ := (finProdFinEquiv (m := 2) (n := 2)).surjective i
-    rw [sum_bits fun a b =>
-      if finProdFinEquiv (bitR a, bitR b) = finProdFinEquiv (i₁, i₂) then
-        star (flagCoef f a b) * flagCoef f a b else 0]
-    simp only [bitR_physIdx, finProdFinEquiv.injective.eq_iff, Prod.mk.injEq,
-      star_flagCoef_mul_self]
-    fin_cases i₁ <;> fin_cases i₂ <;>
-      simp [Fin.sum_univ_two, Cmat, cDiag_eq, cOff_eq, mu] <;> norm_num
-  · rw [ite_eq_right hij]
-    refine Finset.sum_eq_zero fun a _ => Finset.sum_eq_zero fun b _ => ?_
-    rw [ite_eq_right]
-    rintro ⟨h₁, h₂⟩
-    exact hij (h₁.symm.trans h₂)
-
-/-- **The flag sectors are normal tensors** in the sense of arXiv:1606.00608,
-lines 231--235: injective at one site and left-canonical.
-
-Project example; not from CPSV16. -/
-theorem flagFamily_isNormalTensor (f : Fin 2) : (flagFamily f).IsNormalTensor :=
-  MPSTensor.isNormalTensor_of_isNormal_leftCanonical (flagFamily f) (flagFamily_isNormal f)
-    (flagFamily_isLeftCanonical f)
-
-/-- **The flag sectors form the source's basis of normal tensors of the
-vertically viewed tensor** (arXiv:1606.00608, Proposition 4.13, lines
-945--959).
-
-Project example; not from CPSV16. -/
-theorem flagFamily_isCPSVBasisOfNormalTensors :
-    MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor T)
-      (fun f : Fin 2 => ⟨sectorDim f, flagFamily f⟩) where
-  blocks_normal := flagFamily_isNormalTensor
-  spans_mpv N hN := ⟨fun _ => ((mu : ℝ) : ℂ) ^ N, mpv_verticalTensor_T hN⟩
-  eventually_li := ⟨0, fun N hN => linearIndependent_mpvState_flagFamily N hN⟩
 
 /-! ### The algebra clause -/
 

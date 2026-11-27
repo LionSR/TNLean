@@ -148,7 +148,7 @@ theorem aklt_finrank_ker_hamiltonian_parentChainInteraction_two {N : ℕ} (hN : 
       (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian)) = 4 := by
   rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
     groundSpaceES_finrank_eq_of_isNBlkInjective
-      (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)]
+      (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)]
   norm_num
 
 /-- Source: arXiv:2011.12127, line 1174 ("we can define boundary vectors on both

@@ -9,7 +9,7 @@ import TNLean.MPS.Transfer.Irreducible.PerronGauge
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Transfer.Scaling
 import TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition
-import TNLean.MPS.CanonicalForm.BlockFamily
+import TNLean.MPS.CanonicalForm.BNT.Construction
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
@@ -18,7 +18,7 @@ import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import QICLean.Channel.Peripheral.Irreducible.GroupStructure
 import TNLean.MPS.Tensor.Words.WordSpan
 import TNLean.MPS.Transfer.Primitivity.RectangularSpan
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # TP-gauge reduction for normal canonical-form construction
@@ -81,7 +81,7 @@ canonical-form reduction.  It imports four Wielandt modules:
    Lemma 2(b): `Kraus.wielandt_lemma2b_conditional` reduces the full-rank conclusion
    to finding a rank-one element in the word span.
 
-4. **`Wielandt.Primitivity.StronglyIrreducibleToFullRank`** — the hardest direction
+4. **`TNLean.MPS.Transfer.Primitivity.Definitions`** — the hardest direction
    of the primitivity equivalence (Proposition 3(a)→(c) of arXiv:0909.5347): strong
    irreducibility of the transfer map implies `krausRank A = D`.
 

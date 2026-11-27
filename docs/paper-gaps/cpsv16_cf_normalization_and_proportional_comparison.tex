@@ -83,12 +83,13 @@ powers, without invoking the convergence of any quantity indexed by $N$.
 
 \section{The formal canonical form}
 
-The auxiliary one-copy counterpart used in the separated-block route is the
+The auxiliary one-copy counterpart used in the separated-block route was the
 normal canonical form structure with BNT separation.\footnote{%
-    Formal structure: \leanid{MPSTensor.IsNormalCanonicalFormBNT} in
-    \path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}, lines 81--87. The inherited
-    ordering field is \leanid{MPSTensor.IsNormalCanonicalForm.mu_antitone} in
-    \path{TNLean/MPS/CanonicalForm/BlockFamily.lean}, lines 268--282.}
+    Former formal structure: \leanid{MPSTensor.IsNormalCanonicalFormBNT}, now
+    deleted; separated-block statements take gauge-phase separation of normal
+    blocks as an explicit hypothesis. The ordering condition is the field
+    \leanid{MPSTensor.HasOrderedNonzeroWeights.mu_antitone} in
+    \path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}.}
 Its data include a weight family $\mu:\mathrm{Fin}\,r\to\C$ whose moduli are
 non-increasing, nonzero weights $\mu_k\neq 0$, and blockwise normality inherited
 from the underlying normal canonical form. Equal-modulus weights are allowed.
@@ -387,7 +388,7 @@ weights.\footnote{%
     \path{TNLean/MPS/Tensor/DirectSum/SectorBNT.lean}, lines 139--162.
     The one-copy ordering field is
     \leanid{MPSTensor.HasOrderedNonzeroWeights.mu_antitone} in
-    \path{TNLean/MPS/CanonicalForm/BlockFamily.lean}, lines 142--146. There is
+    \path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}. There is
     no field named \texttt{mu\_strict\_anti} or
     \texttt{mu\_dom\_norm\_one}.}
 
@@ -519,8 +520,8 @@ the fields
 \leanid{MPSTensor.IsBNTCanonicalForm.weight_unit_exists},\footnote{%
     Formal structure: \leanid{MPSTensor.IsBNTCanonicalForm} in
     \path{TNLean/MPS/Tensor/DirectSum/SectorBNT.lean}, lines 107--162.}
-and its constructors propagate these fields. The auxiliary one-copy structure
-\leanid{MPSTensor.IsNormalCanonicalFormBNT} has no dominant-normalization field.
+and its constructors propagate these fields. The former auxiliary one-copy structure
+\leanid{MPSTensor.IsNormalCanonicalFormBNT} had no dominant-normalization field.
 The convergence-to-nonzero-limit fields and the per-$N$ coefficient package
 have been removed. Until a source-faithful
 residual comparison theorem is established, the formal boundary retains the

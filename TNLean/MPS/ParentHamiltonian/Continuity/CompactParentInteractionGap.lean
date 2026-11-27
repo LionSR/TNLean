@@ -105,7 +105,7 @@ theorem exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
         (ManyBody.Interaction.translationInvariant N (H x)).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
   have hInj (x : X) : Kraus.IsNBlkInjective (A x) R :=
-    isNBlkInjective_of_le (pow_pos (NeZero.pos D) 4)
+    Kraus.isNBlkInjective_of_le (pow_pos (NeZero.pos D) 4)
       (isNBlkInjective_pow_four_of_isNormal (A x) (hNormal x)) (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_at_range

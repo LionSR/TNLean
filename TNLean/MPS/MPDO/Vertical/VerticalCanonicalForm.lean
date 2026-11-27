@@ -189,7 +189,7 @@ theorem isVerticalCF_of_grouped_orthogonal_sectors
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (hω : ∀ α q, (0 : ℂ) < ω α q)
     (A : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (hBNT : MPSTensor.IsBNT (verticalTensor M) g dim A)
+    (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M) (fun α ↦ ⟨dim α, A α⟩))
     (W : (p : (α : Fin g) × Fin (mult α)) →
       Matrix (Fin d) (Fin (dim p.1)) ℂ)
     (hiso : ∀ p, (W p)ᴴ * W p = 1)
@@ -366,9 +366,9 @@ theorem verticalCF_of_grouping_and_gramDressing (M : MPOTensor d D)
     hCoeffPos, hGroupedIso, hGroupedOrth, hGroupedInter, _, hGroupedCorner,
     hGroupedReconstruct⟩ := hGrouping
   let C := MPSTensor.mpvPhaseClassData blocks
-  have hBNT : MPSTensor.IsBNT (verticalTensor M) C.g
-      (fun j ↦ dim (C.repr j)) (fun j ↦ blocks (C.repr j)) :=
-    isBNT_verticalTensor_of_grouping M mu blocks V hIso
+  have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+      (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
+    isCPSVBasisOfNormalTensors_verticalTensor_of_grouping M mu blocks V hIso
       hInterStar hReconstruct hSpectralBNT
   have hGram : ∀ j q, ∃ omega : ℝ, 0 < omega ∧
       (X j q : Matrix (Fin (dim (C.enum j q))) (Fin (dim (C.enum j q))) ℂ)ᴴ *

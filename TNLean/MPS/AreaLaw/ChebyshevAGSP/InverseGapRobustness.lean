@@ -86,7 +86,7 @@ theorem orthogonal_clipped_energy_ge_of_inverse_gap_cutoff
     dsimp only [p]
     rw [← mul_apply_eq_comp, ← mul_apply_eq_comp, ← map_mul, ← map_mul]
     exact congrArg (fun M : Matrix n n ℂ ↦ ι M x)
-      (twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
+      (Matrix.twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
         L N R A hL hN hR hLN hLR hNR t).symm
   have hlowenergy : (e + g) * ‖p‖ ^ 2 - g * ‖q‖ ^ 2 ≤ (⟪p, ι K p⟫_ℂ).re := by
     have h := hgap p
@@ -94,7 +94,7 @@ theorem orthogonal_clipped_energy_ge_of_inverse_gap_cutoff
     have hmul := mul_le_mul_of_nonneg_left hover hg.le
     nlinarith
   have hhighenergy : t * ‖q‖ ^ 2 ≤ (⟪q, ι K q⟫_ℂ).re := by
-    have h := cutoff_mul_sq_norm_highProjection_le_energy
+    have h := Matrix.cutoff_mul_sq_norm_highProjection_le_energy
       L N R A hL hN hR hA hLN hLR hNR t ht q
     have hQq : ι Q q = q := by
       dsimp only [q]
@@ -108,7 +108,7 @@ theorem orthogonal_clipped_energy_ge_of_inverse_gap_cutoff
     rw [ContinuousLinearMap.IsStarProjection.inner_apply_left hP,
       ContinuousLinearMap.IsStarProjection.inner_apply_left hP]
     simp only [← mul_apply_eq_comp, ← map_mul]
-    rw [← Matrix.mul_assoc, lowProjection_mul_clipped_mul_highProjection_eq
+    rw [← Matrix.mul_assoc, Matrix.lowProjection_mul_clipped_mul_highProjection_eq
       L N R A hL.isHermitian hN.isHermitian hR.isHermitian hLN hLR hNR t]
     simp only [Matrix.mul_assoc]
     rfl
@@ -122,7 +122,7 @@ theorem orthogonal_clipped_energy_ge_of_inverse_gap_cutoff
           (mul_le_mul_of_nonneg_right hnormA (norm_nonneg q))) (norm_nonneg p)
       _ = _ := by ring
   have hKpos : (ι K).IsPositive :=
-    (twoSidedEnergyTruncation_posSemidef_le L (N + A) R hL (hN.add hA) hR t ht).1
+    (Matrix.twoSidedEnergyTruncation_posSemidef_le L (N + A) R hL (hN.add hA) hR t ht).1
       |>.isPositive_toEuclideanCLM
   have hsym : (⟪q, ι K p⟫_ℂ).re = (⟪p, ι K q⟫_ℂ).re := by
     calc
@@ -169,7 +169,7 @@ theorem exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff
           (⟪x, ι K x⟫_ℂ).re - e' * ‖x‖ ^ 2) ∧
       (∀ x : EuclideanSpace ℂ n, ⟪φ, x⟫_ℂ = 0 →
         (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) :=
-  exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal L N R A hL hN hR hA Ω hΩ e g t hg ht
+  Matrix.exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal L N R A hL hN hR hA Ω hΩ e g t hg ht
     heig (orthogonal_clipped_energy_ge_of_inverse_gap_cutoff L N R A hL hN hR hA hLN hLR hNR
       hAcap Ω hΩ e g t hg ht hcut hgap)
 

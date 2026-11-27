@@ -93,8 +93,9 @@
 
 ### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
 
-- **Seen:** `MPS/AreaLaw/ChebyshevAGSP/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
-  `LowSpectrumGap.lean`, and `Robustness.lean`.
+- **Seen:** QICLean `Spectral/Filter/ExteriorClippingGap.lean` (moved from
+  `MPS/AreaLaw/ChebyshevAGSP/HighEnergyMass.lean`, `ProjectionEnergy.lean` and
+  `LowSpectrumGap.lean`) and `MPS/AreaLaw/ChebyshevAGSP/Robustness.lean`.
 - **Pattern:** Combine `Matrix.isPositive_toEuclideanLin_iff` and
   `ContinuousLinearMap.isPositive_toLinearMap_iff` to transport a matrix order bound.
 - **Abstraction:** `Matrix.PosSemidef.isPositive_toEuclideanCLM` in
@@ -5455,8 +5456,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ### Boundary operator norm from its positive cap — promoted (2026-10-30)
 
-- **Seen:** `MPS/AreaLaw/ChebyshevAGSP/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
-  and `InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
+- **Seen:** QICLean `Spectral/Filter/ExteriorClippingGap.lean` (moved from
+  `MPS/AreaLaw/ChebyshevAGSP/HighEnergyMass.lean` and `ProjectionEnergy.lean`) and
+  `MPS/AreaLaw/ChebyshevAGSP/InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
 - **Pattern:** Convert `0 ≤ A ≤ 2I` to `‖A‖ ≤ 2` with
   `CStarAlgebra.norm_le_iff_le_algebraMap` and the scalar-matrix identity.
 - **Abstraction:** `Matrix.PosSemidef.norm_le_of_le_smul_one`

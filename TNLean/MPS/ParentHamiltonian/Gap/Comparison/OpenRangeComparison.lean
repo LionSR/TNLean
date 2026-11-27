@@ -239,7 +239,7 @@ theorem exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective
     (LinearMap.toMatrix' (parentInteraction A 2)) (posSemidef_toMatrix'_parentInteraction A 2)
     (by omega) hκ hLocal (hShortKer N (by omega))
     (ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-      (isNBlkInjective_of_le (by norm_num : 0 < 1) hInjOne (by omega)) (by omega) hN) ?_
+      (Kraus.isNBlkInjective_of_le (by norm_num : 0 < 1) hInjOne (by omega)) (by omega) hN) ?_
   rw [parentChainInteraction_eq_of_groundSpace_eq (hGS (l + 1)) N]
   exact hOpenB N hN
 

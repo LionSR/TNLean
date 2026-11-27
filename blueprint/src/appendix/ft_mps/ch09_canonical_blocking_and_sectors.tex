@@ -622,25 +622,6 @@ weights and positive bond dimensions, the asymptotic overlap condition
 $O_{A_kA_k}(N)\to1$ is a derived consequence, and ordering the blocks by
 non-increasing weight modulus produces a normal canonical form.
 
-\begin{lemma}[Self-overlap is derived in normal canonical form]%
-    \label{thm:ncf_overlap_tendsto_one}
-    \lean{MPSTensor.IsNormalCanonicalForm.overlap_tendsto_one}\leanok
-    \uses{def:is_normal_canonical_form,def:mpv_overlap}
-    If $(\mu_k,A_k)$ satisfies the normal canonical form conditions, then
-    $O_{A_kA_k}(N)\to1$ for every block~$k$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:is_normal_canonical_form,thm:primitive_overlap}
-    For each block~$k$, irreducibility and the TP normalization give a nonzero
-    positive semidefinite fixed point $\rho$ of $\E_{A_k}$ with fixed-point
-    projector $P$, while primitivity gives the complementary gap
-    $\rho_{\spec}(\E_{A_k}-P)<1$ by the corresponding theorem in the companion
-    quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
-    Theorem~\ref{thm:primitive_overlap} then yields
-    $O_{A_kA_k}(N)\to1$.
-\end{proof}
-
 \begin{lemma}[Reordering prepared primitive blocks into normal canonical form]%
     \label{thm:exists_normal_canonical_form}
     \lean{MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp}

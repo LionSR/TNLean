@@ -7,7 +7,7 @@ import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # Canonical form existence reductions from the source proofs
@@ -63,7 +63,7 @@ fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 
-This file imports `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`,
+This file imports `TNLean.MPS.Transfer.Primitivity.Definitions`,
 which supplies the hardest direction of the Quantum Wielandt primitivity equivalence:
 
 > **Proposition 3(c)→(b) of arXiv:0909.5347 / Wolf Theorem 6.7 case (iii).**
@@ -81,8 +81,8 @@ positive length.
 
 The formal statement:
 
-> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves
-> `isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
+> `TNLean.MPS.Transfer.Primitivity.Definitions` proves
+> `Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
 > transfer map is irreducible with peripheral spectrum `{1}` is normal.  This
 > is the hardest direction in the Sanz–Pérez-García–Wolf–Cirac primitivity
 > equivalence.
@@ -252,7 +252,7 @@ Subsequent stages toward a complete canonical-form existence theorem are:
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
   sector bookkeeping and weight normalization needed for non-increasing nonzero weight moduli.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
-  the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
+  the normal-canonical-form lemmas.
 -/
 
 /-!

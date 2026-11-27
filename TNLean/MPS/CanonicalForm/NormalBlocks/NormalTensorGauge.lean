@@ -629,6 +629,26 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
   rw [← hFamily]
   exact hLI N hN
 
+/-- **Bases of normal tensors of a weighted direct sum.** A finite family of normal tensors is a
+basis of normal tensors of the weighted direct sum `⊕_k μ_k A_k` exactly when distinct members
+are not gauge-phase equivalent; the weights are arbitrary.
+
+The spanning clause is the block expansion `V^{(N)}(⊕_k μ_k A_k) = ∑_k μ_k^N V^{(N)}(A_k)`;
+eventual linear independence is equivalent to gauge-phase separation by the corollary to
+Lemma `equalMPS` and by condition (ii) of Proposition 2.7 of arXiv:1606.00608
+(`prop:char-BNT`, lines 271--280 and 1121--1142). -/
+theorem isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff
+    {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    {A : (k : Fin r) → MPSTensor d (dim k)} (hNormal : ∀ k, IsNormalTensor (A k)) :
+    IsCPSVBasisOfNormalTensors (toTensorFromBlocks μ A) (fun k => ⟨dim k, A k⟩) ↔
+      BlocksNotGaugePhaseEquiv (d := d) A := by
+  refine ⟨fun h => h.blocks_not_gaugePhaseEquiv, fun hDistinct => ?_⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hNormal k).bondDim_ne_zero⟩
+  refine ⟨hNormal, fun N _ => ⟨fun k => μ k ^ N, fun σ => ?_⟩,
+    exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv A hNormal
+      hDistinct⟩
+  simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
+
 end MPSTensor
 
 end
@@ -660,7 +680,7 @@ theorem _root_.MPTensor.IsNormalTensor.blockTensor_isInjective_of_bondDim_le
     Kraus.IsInjective (Kraus.blockTensor A (K ^ 4)) := by
   have hD : 0 < D := Nat.pos_of_ne_zero hA.bondDim_ne_zero
   exact (isNBlkInjective_iff_blockTensor_isInjective A (K ^ 4)).1
-    (isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
+    (Kraus.isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
       (Nat.pow_le_pow_left hDK 4))
 
 end MPSTensor
@@ -813,7 +833,7 @@ theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
   have hD4 : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
   tfae_have 1 → 3 := fun h => isNBlkInjective_pow_four_of_isNormal A h
   tfae_have 3 → 2 := fun h =>
-    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => isNBlkInjective_of_le hD4 h hm⟩
+    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => Kraus.isNBlkInjective_of_le hD4 h hm⟩
   tfae_have 2 → 1 := fun h => by
     obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp h
     exact ⟨max N 1, by omega, hN _ (le_max_left _ _)⟩

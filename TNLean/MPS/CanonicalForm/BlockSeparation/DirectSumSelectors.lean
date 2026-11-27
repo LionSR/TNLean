@@ -439,13 +439,13 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
     have hBlk1 : ∀ j : Fin P.basisCount,
         Kraus.IsNBlkInjective (P.basis j) (P.totalDim ^ 4 + 1) := by
       intro j
-      exact isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
+      exact Kraus.isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
     have hBlk3 : ∀ j : Fin P.basisCount,
         Kraus.IsNBlkInjective (P.basis j)
           ((P.totalDim ^ 4 + 1) +
             ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) := by
       intro j
-      exact isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
+      exact Kraus.isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
     have hIrr : ∀ k, Kraus.IsIrreducibleFamily (P.basis k) :=
       hCF.basis_irreducible
     have hLeft : ∀ k, ∑ i : Fin d, (P.basis k i)ᴴ * (P.basis k i) = 1 :=

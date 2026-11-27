@@ -311,7 +311,7 @@ theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
   obtain ⟨hpos, hupper, hnorm⟩ :=
     normalized_chain_truncation_bounds Φ h0 h1 a b 0 0 0 t hX hN hY ht0
   have hbelow : Ht ≤ H := by
-    have hb := (twoSidedEnergyTruncation_posSemidef_le _ _ _ hX
+    have hb := (Matrix.twoSidedEnergyTruncation_posSemidef_le _ _ _ hX
       (hN.add (Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b)))) hY t ht0).2
     have hsum := normalizedCutBlock_sum Φ a b hab 0 0 0
     simp only [zero_add, Complex.ofReal_zero, zero_smul, sub_zero] at hsum

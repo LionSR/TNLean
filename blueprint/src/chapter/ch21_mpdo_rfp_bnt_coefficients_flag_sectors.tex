@@ -449,10 +449,14 @@
     \lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_zero_zero}
     \lean{MPOTensor.TwistedDimer.flagWeight_physIdx_zero_zero_one}
     \lean{MPOTensor.TwistedDimer.linearIndependent_mpvState_flagFamily}
-    \lean{MPOTensor.TwistedDimer.flagFamily_isBNT}
+    \lean{MPOTensor.TwistedDimer.conjTranspose_flagMPO_mul_self}
+    \lean{MPOTensor.TwistedDimer.star_flagCoef_mul_self}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isLeftCanonical}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isNormalTensor}
+    \lean{MPOTensor.TwistedDimer.flagFamily_isCPSVBasisOfNormalTensors}
     \lean{MPOTensor.TwistedDimer.T_isVerticalCF}
     \leanok
-    \uses{def:mpdo_twisted_dimer_flag_sectors,def:vertical_cf_mpdo,def:vertical_tensor_mpdo,def:bnt}
+    \uses{def:mpdo_twisted_dimer_flag_sectors,def:vertical_cf_mpdo,def:vertical_tensor_mpdo,def:bnt_cpsv}
     The twisted quantum dimer $M$ of
     Definition~\ref{def:mpdo_twisted_dimer_tensor} has a vertical
     decomposition in the sense of
@@ -514,16 +518,21 @@
                         180:virtual:$a$, 0:virtual:$b$}]{\widehat M_1}
         \end{tenkz}
     \end{tenkzequation}
-    Each flag sector is injective at one site and therefore proportional to
-    a normal tensor with spectral radius one. At every positive length $N$,
+    Each flag sector is injective at one site and left-canonical,
+    \begin{align}
+        \sum_{a,b}(\widehat M_f^{ab})^\dagger\widehat M_f^{ab}
+         & =\Id,
+        \notag
+    \end{align}
+    so it is a normal tensor in the sense of
+    \cite[lines~231--235]{Cirac2016MPDO_arXiv}. At every positive length $N$,
     the matrix product vector of the vertically viewed tensor is
     $\mu^N$ times the sum of those of the two sectors, and the matrix product
-    vectors of the two sectors are linearly independent. The fact that these
-    sectors already have the normalization required of normal tensors in the
-    CPSV sense is verified below.
+    vectors of the two sectors are linearly independent, so the two sectors
+    form a basis of normal tensors of the vertically viewed tensor.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_flag_sectors,lem:mpdo_twisted_dimer_flag_sector_operators,def:vertical_cf_mpdo}
+    \uses{def:mpdo_twisted_dimer_flag_sectors,lem:mpdo_twisted_dimer_flag_sector_operators,def:vertical_cf_mpdo,thm:is_normal_tensor_of_is_normal_left_canonical}
     The matrix of the twisted dimer between two physical indices with
     different flag values vanishes, because its coefficient contains
     $\delta_{ff'}$. Between two indices with common flag value $f$, it is
@@ -553,15 +562,25 @@
     $g_0\ket{V^{(N)}(\widehat M_0)}
         +g_1\ket{V^{(N)}(\widehat M_1)}=0$
     thus forces $g_0+g_1=0$ and $g_0-g_1=0$.
+
+    The adjoint of a sector matrix times that matrix is the diagonal matrix
+    unit at the right bits $(p',q')$ of the bond pair with the squared modulus
+    of the coefficient, and the flag sign squares to one. Summing over the
+    bond pairs $((p,p',k),(q,q',k))$ with the right bits fixed gives, at each
+    diagonal entry,
+    \begin{align}
+        \frac{1}{(2\mu)^2}\sum_{k}\sum_{p,q}C_k[p,p']^2
+         & =\frac{2\cdot2\cdot(\tfrac14+\tfrac9{64})}{4\cdot\tfrac{25}{64}}
+        =1,
+        \notag
+    \end{align}
+    and the off-diagonal entries vanish. Together with one-site injectivity,
+    this makes each sector a normal tensor by
+    Lemma~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}.
 \end{proof}
 
 \begin{lemma}[Vertical BNT algebra of the twisted quantum dimer]%
     \label{thm:mpdo_twisted_dimer_bnt_algebra_tensor_clause}
-    \lean{MPOTensor.TwistedDimer.conjTranspose_flagMPO_mul_self}
-    \lean{MPOTensor.TwistedDimer.star_flagCoef_mul_self}
-    \lean{MPOTensor.TwistedDimer.flagFamily_isLeftCanonical}
-    \lean{MPOTensor.TwistedDimer.flagFamily_isNormalTensor}
-    \lean{MPOTensor.TwistedDimer.flagFamily_isCPSVBasisOfNormalTensors}
     \lean{MPOTensor.TwistedDimer.twoLabelChiTracePowerForm}
     \lean{MPOTensor.TwistedDimer.sectorWeight_hasIdempotentCoefficientForm}
     \lean{MPOTensor.TwistedDimer.flagAlgebraClause}
@@ -576,17 +595,8 @@
     decomposition of Lemma~\ref{thm:mpdo_twisted_dimer_vertical_cf} and
     the structure coefficients of
     Lemma~\ref{thm:mpdo_twisted_dimer_two_label_rescaling_stable}.
-    The two flag sectors are normal tensors in the sense of
-    \cite[lines~231--235]{Cirac2016MPDO_arXiv}: each is injective at one site
-    and left-canonical,
-    \begin{align}
-        \sum_{a,b}(\widehat M_f^{ab})^\dagger\widehat M_f^{ab}
-         & =\Id,
-        \notag
-    \end{align}
-    so its transfer map has spectral radius one. Together with the spanning
-    and linear independence already proved, this gives a basis of normal
-    tensors of the vertically viewed tensor, as in
+    The two flag sectors form a basis of normal tensors of the vertically
+    viewed tensor by Lemma~\ref{thm:mpdo_twisted_dimer_vertical_cf}, as in
     \cite[Proposition~4.13, lines~945--959]{Cirac2016MPDO_arXiv}.
     The positive diagonal matrices
     $\chi_{ff',f+f'}=\alpha$, $\chi_{ff',f+f'+1}=\beta$ give
@@ -605,23 +615,8 @@
     coefficients length independent.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_vertical_cf,thm:mpdo_twisted_dimer_flag_sector_product_law,thm:is_normal_tensor_of_is_normal_left_canonical}
-    The adjoint of a sector matrix times that matrix is the diagonal matrix
-    unit at the right bits $(p',q')$ of the bond pair with the squared modulus
-    of the coefficient, and the flag sign squares to one. Summing over the
-    bond pairs $((p,p',k),(q,q',k))$ with the right bits fixed gives, at each
-    diagonal entry,
-    \begin{align}
-        \frac{1}{(2\mu)^2}\sum_{k}\sum_{p,q}C_k[p,p']^2
-         & =\frac{2\cdot2\cdot(\tfrac14+\tfrac9{64})}{4\cdot\tfrac{25}{64}}
-        =1,
-        \notag
-    \end{align}
-    and the off-diagonal entries vanish. Together with one-site injectivity
-    from Lemma~\ref{thm:mpdo_twisted_dimer_vertical_cf}, this makes each
-    sector a normal tensor with spectral radius one by
-    Lemma~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}.
-    The spanning and linear independence are those of
+    \uses{thm:mpdo_twisted_dimer_vertical_cf,thm:mpdo_twisted_dimer_flag_sector_product_law}
+    The basis of normal tensors is that of
     Lemma~\ref{thm:mpdo_twisted_dimer_vertical_cf}. The product law is
     Lemma~\ref{thm:mpdo_twisted_dimer_flag_sector_product_law}.
     For each output label $g$, two pairs $(f,f')$ contribute $\alpha$ and

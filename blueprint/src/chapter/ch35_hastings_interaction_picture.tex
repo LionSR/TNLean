@@ -9,8 +9,8 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
 
 \begin{definition}[Interaction-picture propagator]
     \label{def:hastings_interaction_propagator}
-    \lean{TNLean.MPS.AreaLaw.Hastings.interactionGenerator,
-        TNLean.MPS.AreaLaw.Hastings.interactionPropagator}
+    \lean{Matrix.interactionGenerator,
+        Matrix.interactionPropagator}
     \leanok
     For square matrices $A,B$ and $t\in\R$, set
     \begin{align}
@@ -21,10 +21,10 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
 
 \begin{lemma}[Interaction-picture factorization]
     \label{thm:hastings_interaction_picture}
-    \lean{TNLean.MPS.AreaLaw.Hastings.interactionPropagator_hasDerivAt,
-        TNLean.MPS.AreaLaw.Hastings.eq_interactionPropagator_of_hasDerivAt,
-        TNLean.MPS.AreaLaw.Hastings.interactionPropagator_mem_unitaryGroup,
-        TNLean.MPS.AreaLaw.Hastings.hermitianUnitaryPath_add_eq_interactionPropagator_mul}
+    \lean{Matrix.interactionPropagator_hasDerivAt,
+        Matrix.eq_interactionPropagator_of_hasDerivAt,
+        Matrix.interactionPropagator_mem_unitaryGroup,
+        Matrix.hermitianUnitaryPath_add_eq_interactionPropagator_mul}
     \leanok
     \uses{def:hastings_interaction_propagator}
     The path $U$ is the unique differentiable solution of
@@ -51,7 +51,7 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
 
 \begin{lemma}[Cut-off commutation estimate]
     \label{thm:hastings_cutoff_commutation}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_hermitianUnitaryPath_mul_sub_le}
+    \lean{Matrix.norm_hermitianUnitaryPath_mul_sub_le}
     \leanok
     For $K=K^\dagger$, any $X$ of the same size, and $t\in\R$,
     \begin{align}
@@ -68,8 +68,8 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
 
 \begin{definition}[Gaussian average of the propagator]
     \label{def:hastings_interaction_average}
-    \lean{TNLean.MPS.AreaLaw.Hastings.interactionAverage,
-        TNLean.MPS.AreaLaw.Hastings.interactionAverage_eq_integral}
+    \lean{Matrix.interactionAverage,
+        Matrix.interactionAverage_eq_integral}
     \leanok
     \uses{def:hastings_interaction_propagator}
     For $h\ge0$ and the centered Gaussian measure $\gamma_h$ of variance $h$,
@@ -84,7 +84,7 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
 
 \begin{lemma}[The Gaussian average is a contraction]
     \label{thm:hastings_interaction_average_norm}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_le}
+    \lean{Matrix.norm_interactionAverage_le}
     \leanok
     \uses{def:hastings_interaction_average}
     If $A=A^\dagger$ and $B=B^\dagger$, then $\|P_B\|\leq1$ for every $h\ge0$.
@@ -97,8 +97,8 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
 
 \begin{lemma}[Moving the cut-off past the boundary evolution]
     \label{thm:hastings_interaction_average_last}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_mul_sub_le,
-        TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_mul_mul_sub_le}
+    \lean{Matrix.norm_interactionAverage_mul_sub_le,
+        Matrix.norm_interactionAverage_mul_mul_sub_le}
     \leanok
     \uses{def:hastings_interaction_average}
     For $A=A^\dagger$, $B=B^\dagger$, matrices $X,P_0$, and $h\geq0$,

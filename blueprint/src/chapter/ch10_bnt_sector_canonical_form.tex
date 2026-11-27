@@ -408,7 +408,7 @@ single family.
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
-    \uses{def:sector_weight_data,def:bnt,def:bnt_cpsv}
+    \uses{def:sector_weight_data,def:bnt_cpsv}
     Let $P$ be a sector decomposition. In addition to spanning and eventual
     linear independence, the canonical form specifies irreducible
     left-canonical representatives, self-overlap normalization, pairwise
@@ -551,23 +551,6 @@ single family.
     Each basis block has positive bond dimension, is irreducible and
     left-canonical, and has normalized self-overlap converging to $1$.
     Lemma~\ref{thm:bnt_normality_from_self_overlap} applies to each block.
-\end{proof}
-
-\begin{lemma}[A BNT canonical form determines an algebraic BNT]
-    \label{thm:sector_bnt_cf_is_bnt}
-    \lean{MPSTensor.IsBNTCanonicalForm.isBNT}
-    \leanok
-    \uses{def:bnt,def:sector_bnt_cf,cor:sector_bnt_cf_basis_normal}
-    If $P$ is in BNT canonical form, then its basis blocks form an algebraic
-    basis of normal tensors for the total tensor associated with $P$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal,def:sector_weight_data}
-    The preceding corollary gives normality of every basis block. The sector
-    coefficient formula (\ref{eq:bnt_sector_decomp}) expresses the total MPV
-    as a linear combination of the basis MPVs at each positive length, and the
-    BNT sector data give their eventual linear independence.
 \end{proof}
 
 \begin{lemma}[Positive blocking preserves BNT canonical form]

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.GaussianFilter
 import QICLean.Spectral.Filter.Gaussian.MatrixIntegral
-import TNLean.MPS.AreaLaw.ProjectorFactorization.InteractionPicture
+import QICLean.ManyBody.Hamiltonian.InteractionPicture
 import QICLean.ManyBody.Dynamics.GraphLocalization
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Dynamics.ProjectedRelativeEvolution
@@ -85,15 +85,15 @@ the propagator of Hastings, arXiv:0705.2024v4, `law16.tex`, lines 891–897, wit
 relative evolution of the finite-range Hamiltonian. -/
 theorem norm_interactionPropagator_sub_le {A B H H₀ : Matrix n n ℂ} (hA : A.IsHermitian)
     (hB : B.IsHermitian) (hH : H.IsHermitian) (hH₀ : H₀.IsHermitian) (t : ℝ) :
-    ‖interactionPropagator A B t - hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t)‖ ≤
+    ‖Matrix.interactionPropagator A B t - hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t)‖ ≤
       |t| * (‖A + B - H‖ + ‖A - H₀‖) := by
-  have hsplit : interactionPropagator A B t -
+  have hsplit : Matrix.interactionPropagator A B t -
         hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) =
       (hermitianUnitaryPath (A + B) t - hermitianUnitaryPath H t) *
           hermitianUnitaryPath A (-t) +
         hermitianUnitaryPath H t *
           (hermitianUnitaryPath A (-t) - hermitianUnitaryPath H₀ (-t)) := by
-    simp only [interactionPropagator, sub_mul, mul_sub]
+    simp only [Matrix.interactionPropagator, sub_mul, mul_sub]
     abel
   rw [hsplit]
   refine (norm_add_le _ _).trans ?_
@@ -115,7 +115,7 @@ Let `H` be a chain Hamiltonian of range `R` and term norm `J`, let `H₀` be Her
 radius `ℓ` and cutoff `T ≥ 0` there is an operator `O` supported on the path-graph
 neighborhood of radius `⌊ℓ⌋₊` of `Z` (the `ℓ`-neighborhood when `ℓ ≥ 0`) with `‖O‖ ≤ 1` and
 `‖P_B - O‖ ≤ √η (‖(A + B) - H‖ + ‖A - H₀‖ + a |Z|² ‖H - H₀‖ e^{vT - ℓ/2}) + 4 e^{-T²/2η}`,
-where `P_B = interactionAverage η A B`, `b₀ = 2^{2R+1} J`,
+where `P_B = Matrix.interactionAverage η A B`, `b₀ = 2^{2R+1} J`,
 `a = 2 (2 + 4 |b₀| e^{2R}) e / (1 - e^{-1/2})` and `v = 2 (R+1) |b₀| e^{2R} + 1` are the
 Lieb–Robinson constants of `ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le`.
 
@@ -137,7 +137,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (ManyBody.graphNeighborhood
           (SimpleGraph.pathGraph L) Z ⌊ℓ⌋₊) ∧
           ‖O‖ ≤ 1 ∧
-      ‖interactionAverage η A B - O‖ ≤
+      ‖Matrix.interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (v * T - ℓ / 2)) +
           4 * Real.exp (-T ^ 2 / (2 * (η : ℝ))) := by
@@ -174,7 +174,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   set ε : ℝ := ‖A + B - H‖ + ‖A - H₀‖ + E₃ with hε
   have hε0 : 0 ≤ ε := by positivity
   let g : ℝ → ℝ := fun t ↦ |t| * ε + (Set.Icc (-T) T)ᶜ.indicator (fun _ ↦ (2 : ℝ)) t
-  have hpoint (t : ℝ) : ‖interactionPropagator A B t - U t‖ ≤ g t := by
+  have hpoint (t : ℝ) : ‖Matrix.interactionPropagator A B t - U t‖ ≤ g t := by
     have h1 := norm_interactionPropagator_sub_le hA hB hH hH₀ t
     have h2 : ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ ≤
         |t| * E₃ + (Set.Icc (-T) T)ᶜ.indicator (fun _ ↦ (2 : ℝ)) t := by
@@ -188,8 +188,8 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
         have hUt := Matrix.l2_opNorm_unitary_le_one (hunit t)
         have := norm_sub_le (hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t)) (U t)
         nlinarith [abs_nonneg t]
-    calc ‖interactionPropagator A B t - U t‖
-        ≤ ‖interactionPropagator A B t -
+    calc ‖Matrix.interactionPropagator A B t - U t‖
+        ≤ ‖Matrix.interactionPropagator A B t -
             hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t)‖ +
           ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ :=
           norm_sub_le_norm_sub_add_norm_sub _ _ _
@@ -200,9 +200,9 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   have hUint : Integrable U (gaussianReal 0 η) :=
     (integrable_const (1 : ℝ)).mono' hUcont.aestronglyMeasurable
       (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
-  have hPint : Integrable (interactionPropagator A B) (gaussianReal 0 η) := by
+  have hPint : Integrable (Matrix.interactionPropagator A B) (gaussianReal 0 η) := by
     have := GaussianFilter.integrable_intertwinerIntegrand η (hA.add hB) hA 1
-    unfold interactionPropagator
+    unfold Matrix.interactionPropagator
     simpa using this
   have habs : Integrable (fun t : ℝ ↦ |t|) (gaussianReal 0 η) :=
     (memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1)).abs
@@ -222,7 +222,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     exact hMint ▸ (ManyBody.regionExpectation_mem_supportedOperators N _)
   · simpa using norm_integral_le_of_norm_le_const (μ := gaussianReal 0 η)
       (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
-  · rw [interactionAverage_eq_integral, ← integral_sub hPint hUint]
+  · rw [Matrix.interactionAverage_eq_integral, ← integral_sub hPint hUint]
     refine (norm_integral_le_of_norm_le hgint (Filter.Eventually.of_forall hpoint)).trans ?_
     rw [integral_add (habs.mul_const ε) hind, integral_mul_const,
       integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul]
@@ -255,7 +255,7 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
       O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (ManyBody.graphNeighborhood
           (SimpleGraph.pathGraph L) Z ⌊ℓ⌋₊) ∧
           ‖O‖ ≤ 1 ∧
-      ‖interactionAverage η A B - O‖ ≤
+      ‖Matrix.interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (-(ℓ / 4))) +
           4 * Real.exp (-ℓ ^ 2 / (32 * v ^ 2 * (η : ℝ))) := by

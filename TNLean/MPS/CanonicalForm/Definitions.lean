@@ -33,10 +33,8 @@ The line-246 normalization convention is the separate predicate
 CF membership.  None of these definitions adds weight ordering or BNT
 separation.
 
-The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
-`TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
-(left-canonical normalization and a basis of gauge-phase-distinct representatives).
-The predicates in this file are the CPSV formulations.
+The predicates in this file are the CPSV formulations; statements needing left-canonical
+normalization or gauge-phase separated blocks take those as separate hypotheses.
 
 ## Paper anchors
 
@@ -65,12 +63,11 @@ duplicated.
 
 ## Connections to existing predicates
 
-The separate module `TNLean.MPS.BNT.Bridge` provides the source-faithful one-way
-implication `IsCPSVBasisOfNormalTensors.isBNT`, using the proved implication
-`IsNormalTensor.isNormal` on each positive-dimensional block.  The converse is
-intentionally absent: algebraic eventual block injectivity does not by itself
-supply the spectral-radius-one normalization and peripheral-spectrum data stored
-by `IsNormalTensor`.
+`IsCPSVBasisOfNormalTensors` is the only basis-of-normal-tensors predicate.  Its
+normality clause is `IsNormalTensor`; algebraic normality `Kraus.IsNormal` together
+with transfer spectral radius one is equivalent to it
+(`isNormalTensor_iff_isNormal_and_spectralRadius_eq_one` in
+`TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge`).
 
 ## Style
 
@@ -110,9 +107,7 @@ Clause (ii) is encoded by an explicit spectral-radius-one field together with
 one form exactly `{1}`.  The explicit field is essential: unit-circle
 uniqueness alone does not exclude eigenvalues of norm greater than one.
 
-This predicate is intentionally *weaker* than the TNLean strong predicate
-`MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` (it does not require
-left-canonical normalization or weight ordering).
+This predicate does not require left-canonical normalization.
 -/
 structure IsNormalTensor {α : Type u} {β : Type v} [Fintype α] [Fintype β] [DecidableEq β]
     (A : MPTensor α β) : Prop where
@@ -397,6 +392,17 @@ structure IsCPSVBasisOfNormalTensors {g : ℕ} (A : MPSTensor d D)
   /-- (iii) eventually, the MPV states of the basis are linearly independent. -/
   eventually_li : ∃ N₀ : ℕ, ∀ N > N₀,
     LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (blocks j).2 N)
+
+/-- Every tensor in a basis of normal tensors has positive bond dimension, since a normal tensor
+has transfer spectral radius one.
+
+Source: arXiv:1606.00608, lines 233--235 and 271--274. -/
+theorem IsCPSVBasisOfNormalTensors.blocks_dim_pos
+    {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
+    ∀ j, 0 < dim j :=
+  fun j => Nat.pos_of_ne_zero (hBNT.blocks_normal j).bondDim_ne_zero
 
 end MPSTensor
 

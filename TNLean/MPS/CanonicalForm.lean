@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.CanonicalForm.BNT
 import TNLean.MPS.CanonicalForm.BNTPresentation
-import TNLean.MPS.CanonicalForm.BlockFamily
 import TNLean.MPS.CanonicalForm.BlockPermutation
 import TNLean.MPS.CanonicalForm.BlockSeparation
 import TNLean.MPS.CanonicalForm.Correlation

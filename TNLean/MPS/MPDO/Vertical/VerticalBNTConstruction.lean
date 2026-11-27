@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
+import TNLean.MPS.CanonicalForm.BNT.Transport
 import TNLean.MPS.MPDO.Vertical.VerticalBNT
 
 /-!
-# Algebraic BNT construction for grouped vertical sectors
+# Basis of normal tensors for grouped vertical sectors
 
-The representatives selected by the vertical grouping theorem form an
-algebraic basis of normal tensors for the vertically viewed
+The representatives selected by the vertical grouping theorem form a
+basis of normal tensors for the vertically viewed
 tensor itself.  At positive chain length, the intertwining and literal
 reconstruction identities identify its matrix product vector with that of the
 weighted sector sum.
@@ -19,8 +19,8 @@ weighted sector sum.
 
 * `MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction`: an exact
   isometric decomposition gives equality of positive-length closed chains.
-* `isBNT_verticalTensor_of_grouping`: the grouped sector
-  decomposition furnishes an `IsBNT` witness for the vertical tensor.
+* `isCPSVBasisOfNormalTensors_verticalTensor_of_grouping`: the grouped sector
+  representatives are a basis of normal tensors of the vertical tensor.
 
 ## References
 
@@ -115,7 +115,7 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- The BNT representatives in a particular grouped vertical decomposition
-form an algebraic BNT for the vertical tensor.
+form a basis of normal tensors of the vertical tensor.
 
 The hypotheses are precisely the isometry, intertwining, reconstruction, and
 spectral-BNT clauses returned by
@@ -124,7 +124,7 @@ block dimensions follows from the spectral BNT hypothesis, so it is not an
 independent assumption.  The proof does not choose a second vertical grouping.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-theorem isBNT_verticalTensor_of_grouping
+theorem isCPSVBasisOfNormalTensors_verticalTensor_of_grouping
     (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
@@ -139,14 +139,14 @@ theorem isBNT_verticalTensor_of_grouping
         (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
         (fun j => ⟨dim (C.repr j), blocks (C.repr j)⟩)) :
     let C := MPSTensor.mpvPhaseClassData blocks
-    MPSTensor.IsBNT (verticalTensor M) C.g
-      (fun j => dim (C.repr j)) (fun j => blocks (C.repr j)) := by
+    MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+      (fun j => ⟨dim (C.repr j), blocks (C.repr j)⟩) := by
   classical
   let C := MPSTensor.mpvPhaseClassData blocks
   have hPositive : MPTensor.SameMPV₂Pos (verticalTensor M)
       (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks) :=
     MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) μ blocks V hiso hinter hreconstruct
-  exact hBNT.isBNT.of_sameMPV₂Pos hPositive.symm
+  exact hBNT.of_sameMPV₂Pos hPositive.symm
 
 end MPOTensor

@@ -148,10 +148,7 @@ strictly before the cut site. -/
 @[simp]
 theorem card_cutLeft (L q k : ℕ) :
     Fintype.card (CutLeft L q k) = q ^ min L (k - 1) := by
-  have hcard : (interval L 0 (k - 1)).card = min L (k - 1) := by
-    rw [← Fin.card_filter_val_lt]
-    simp [interval]
-  rw [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe, hcard]
+  rw [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe, ManyBody.card_interval_zero]
 
 /-- The configurations of site `k - 1`, the last site left of the cut. -/
 abbrev CutSite (L q k : ℕ) := (v : {v // v ∈ interval L 0 k \ interval L 0 (k - 1)}) → Fin q

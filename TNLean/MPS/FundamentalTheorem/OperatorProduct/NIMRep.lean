@@ -63,7 +63,7 @@ hence a nonnegative integer. Here it is derived from the periodic-boundary actio
 action tensor `T_a · A_x` has the word traces `∑_y M_{a,x}^y tr(A_y^w)`, and the blocks are
 normal with linearly independent periodic vectors at one positive length, a consequence of the
 source's standing assumption of injective blocks orthogonal to each other in the thermodynamic
-limit (line 317; compare `MPSTensor.IsBNT.eventually_li`). -/
+limit (line 317; compare `MPSTensor.IsCPSVBasisOfNormalTensors.eventually_li`). -/
 theorem exists_nat_eq_of_isMPOSymmetricFamily (O : ∀ a, MPOTensor d (χ a))
     (A : ∀ x, MPSTensor d (D x)) (M : ι → κ → κ → ℂ) (hsym : IsMPOSymmetricFamily O A M)
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x) {L₀ : ℕ}

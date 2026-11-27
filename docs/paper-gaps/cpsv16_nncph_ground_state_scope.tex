@@ -320,8 +320,10 @@ This settles the multiplicity-one, distinct-sector forward case, excluding
 repeated copies and arbitrary raw weights.
 
 The reverse theorem for a single normal tensor\footnote{Formal theorem:
-\leanid{MPSTensor.nncph_implies_rfp}.} assumes both the explicit BNT
-relation\footnote{Formal predicate: \leanid{MPSTensor.IsBNT}.} and the all-chain
+\leanid{MPSTensor.nncph_implies_rfp}.} assumes eventual linear independence
+of the matrix product vectors of the spanning family, the last clause of a basis
+of normal tensors,\footnote{Formal predicate: the clause
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.eventually_li}.} and the all-chain
 condition.\footnote{Formal predicate: \leanid{MPSTensor.HasNNCPHGroundSpaces}.}
 It also assumes that the represented tensor is normal and left-canonical.
 These hypotheses select a normal representative and fix its normalization, but

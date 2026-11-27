@@ -455,9 +455,12 @@
     \label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
-    \uses{def:mps_transfer_idempotence,def:bnt,def:has_nncph_ground_spaces,def:normal,thm:beigi_loop_product_states_span_ground_space,thm:beigi_normalized_minimal_loop_tensor_rfp}
-    Let $B$ be normal and in left-canonical form. Suppose that the family
-    $A_j$ is a BNT for $B$, and that the nearest-neighbor parent Hamiltonian
+    \uses{def:mps_transfer_idempotence,def:bnt_cpsv,def:has_nncph_ground_spaces,def:normal,thm:beigi_loop_product_states_span_ground_space,thm:beigi_normalized_minimal_loop_tensor_rfp}
+    Let $B$ be normal and in left-canonical form. Suppose that the matrix
+    product vectors $V^{(N)}(A_j)$ of a finite family $(A_j)_{j=1}^g$ are
+    linearly independent for all sufficiently large $N$ (as for a basis of
+    normal tensors of $B$, Definition~\ref{def:bnt_cpsv}), and that the
+    nearest-neighbor parent Hamiltonian
     of $B$ has the all-chain ground-space property of
     Definition~\ref{def:has_nncph_ground_spaces}: for every $N>2$, the
     length-two translated parent interactions commute,

@@ -14,20 +14,18 @@ import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 /-!
 # Prepared-block SectorBNT constructor
 
-The `PreparedBNTBlocks` structure packages a finite family of **already prepared**
-TP / primitive / irreducible blocks and their nonzero weights. Its nested
-`IsWeightNormalized` proposition records the CPSV16 §II.C line-246 normalization
-(`|μ_k| ≤ 1` and at least one `|μ_k| = 1`). The suppliers in this file take the
-block family, the weights, and those hypotheses as separate arguments, and
-produce a `SectorDecomposition` `P` together with a proof that
+The suppliers in this file take a finite family of **already prepared**
+TP / primitive / irreducible blocks, their nonzero weights, and the CPSV16 §II.C
+line-246 normalization (`|μ_k| ≤ 1` and at least one `|μ_k| = 1`) as separate
+arguments, and produce a `SectorDecomposition` `P` together with a proof that
 
 * `P.toTensor` has the same MPV at every positive length as the original
   `toTensorFromBlocks μ blocks`, and
 * `P` satisfies `IsBNTCanonicalForm`.
 
-The bundled method taking a `PreparedBNTBlocks` value directly is
-`PreparedBNTBlocks.exists_isBNTCanonicalForm_exact` in
-`TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction`.
+The letterwise exact reconstruction is
+`exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks` in
+`TNLean.MPS.CanonicalForm.BNTPresentation.PreparedReconstruction`.
 
 The route is to quotient the block indices by MPV phase equivalence (the
 existing one-sided BNT construction of
@@ -361,39 +359,6 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
     (mpvPhaseClassData_dim_eq_of_tp_primitive_irr blocks hDim hTP hPrim hIrr)
 
 /-! ### Prepared-block SectorBNT constructor -/
-
-/-- A finite family of positive-dimensional, left-canonical, primitive, irreducible blocks
-with nonzero weights, ready for phase-class collapse into BNT sectors. -/
-structure PreparedBNTBlocks (d : ℕ) where
-  /-- Number of prepared blocks. -/
-  r : ℕ
-  /-- Bond dimension of each prepared block. -/
-  dim : Fin r → ℕ
-  /-- Scalar weight of each prepared block. -/
-  weight : Fin r → ℂ
-  /-- Prepared tensor blocks. -/
-  blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- Every prepared block has positive bond dimension. -/
-  dim_pos : ∀ k, 0 < dim k
-  /-- Every prepared block is left-canonical. -/
-  leftCanonical : ∀ k, IsLeftCanonical (blocks k)
-  /-- Every prepared block has primitive transfer map. -/
-  primitive : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k))
-  /-- Every prepared block is an irreducible Kraus family. -/
-  irreducible : ∀ k, Kraus.IsIrreducibleFamily (blocks k)
-  /-- Every prepared-block weight is nonzero. -/
-  weight_ne_zero : ∀ k, weight k ≠ 0
-
-namespace PreparedBNTBlocks
-
-/-- CPSV16 §II.C normalization of the weights of prepared blocks. -/
-structure IsWeightNormalized (data : PreparedBNTBlocks d) : Prop where
-  /-- Every prepared-block weight has norm at most one. -/
-  norm_le_one : ∀ k, ‖data.weight k‖ ≤ 1
-  /-- Some prepared-block weight has unit norm. -/
-  unit_exists : ∃ k, ‖data.weight k‖ = 1
-
-end PreparedBNTBlocks
 
 /--
 **Prepared-block SectorBNT constructor.**

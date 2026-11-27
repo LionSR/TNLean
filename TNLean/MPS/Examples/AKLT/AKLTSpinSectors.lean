@@ -139,7 +139,7 @@ theorem aklt_totalSpinSq_groundSpaceMap_eq_zero_iff {N : ℕ} (hN : 2 ≤ N)
     totalSpinSq spinOneOperator (groundSpaceMap akltTensor N X) = 0 ↔
       ∃ c : ℂ, X = c • 1 := by
   have hinj := groundSpaceMap_injective_of_isNBlkInjective
-    (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
+    (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
   rw [aklt_totalSpinSq_groundSpaceMap]
   constructor
   · intro h
@@ -178,7 +178,7 @@ theorem aklt_finrank_groundSpace_inf_ker_totalSpinSq {N : ℕ} (hN : 2 ≤ N) :
   rw [aklt_groundSpace_inf_ker_totalSpinSq hN]
   apply finrank_span_singleton
   have hinj := groundSpaceMap_injective_of_isNBlkInjective
-    (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
+    (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
   exact fun h => one_ne_zero (hinj (by simpa using h))
 
 /-- The spin-one edge states are precisely the traceless boundary matrices.
@@ -189,7 +189,7 @@ theorem aklt_groundSpace_inf_eigenspace_totalSpinSq_two {N : ℕ} (hN : 2 ≤ N)
       (LinearMap.ker (Matrix.traceLinearMap (Fin 2) ℂ ℂ)).map
         (groundSpaceMap akltTensor N) := by
   have hinj := groundSpaceMap_injective_of_isNBlkInjective
-    (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
+    (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
   ext ψ
   constructor
   · rintro ⟨⟨X, rfl⟩, hX⟩
@@ -214,7 +214,7 @@ theorem aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two {N : ℕ} (hN : 
         Submodule ℂ (NSiteSpace 3 N)) = 3 := by
   rw [aklt_groundSpace_inf_eigenspace_totalSpinSq_two hN]
   have hinj := groundSpaceMap_injective_of_isNBlkInjective
-    (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
+    (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
   rw [← (Submodule.equivMapOfInjective (groundSpaceMap akltTensor N) hinj
     (LinearMap.ker (Matrix.traceLinearMap (Fin 2) ℂ ℂ))).finrank_eq]
   have hsurj : Function.Surjective (Matrix.traceLinearMap (Fin 2) ℂ ℂ) := by

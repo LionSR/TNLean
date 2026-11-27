@@ -632,7 +632,7 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   have hδy : δ ^ 2 ≤ y := by rw [← hδ2]; exact le_mul_of_one_le_left (by positivity) hM
   have hexp : 1 ≤ Real.exp (C * y) := Real.one_le_exp (by positivity)
   have hB : Kraus.IsInjective (blockTensor A q) :=
-    (isNBlkInjective_iff_blockTensor_isInjective A q).1 (isNBlkInjective_of_le hLpos hL hLq)
+    (isNBlkInjective_iff_blockTensor_isInjective A q).1 (Kraus.isNBlkInjective_of_le hLpos hL hLq)
   obtain ⟨-, hz⟩ := inner_approximatingMPVState_mpvState A hB hσ.posSemidef htr M
   have hφt := (norm_approximatingMPVState A hB hσ.posSemidef htr M).le
   -- It suffices to bound `‖φ_N(A)‖² - |⟨φ_M(P_∞)|φ_M(P_q)⟩|²`.
