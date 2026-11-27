@@ -63,27 +63,27 @@ original MPO at every length at least two.
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`,
 `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines 1383--1450 and
 1680--1770, and Proposition `3to4`, lines 1570--1594. -/
-theorem exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
+theorem exists_commutingForm_supported_of_twoSidedPhysicalSlice
     {K : MPOTensor d D} (F : PhysicalSectorFactorization K)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hP : IsOrthogonalProjection P)
-    (hK : K.IsInjective)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hSupport : ∀ β α,
       P * physicalSlice K β α = physicalSlice K β α ∧
         physicalSlice K β α * P = physicalSlice K β α)
     (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    ∃ data : EtaLocalStructureData K,
-      twoSiteSectorProjection P * data.bondData.bond *
-          twoSiteSectorProjection P = data.bondData.bond ∧
+    ∃ data : CommutingForm K,
+      twoSiteSectorProjection P * data.bond *
+          twoSiteSectorProjection P = data.bond ∧
       ∀ N (hN : 2 ≤ N),
-        mpo K N = (data.bondData.toCommutingFormData hN).product := by
+        mpo K N = data.product hN := by
   let A := F.activeFactorSupportData
   let restriction := F.activePhysicalSupportRestrictionData A hK hη
   let G : PhysicalSectorFactorization
       (changePhysicalBasis restriction.inclusionᴴ K) :=
     F.activeRestrictedPhysicalSectorFactorization A
   obtain ⟨data, hdata, hrealizes⟩ :=
-    restriction.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+    restriction.exists_commutingForm_lifted_supported_of_physicalSectorFactorization
       G (fun k h ↦
         F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef
           A hη k h)
@@ -99,7 +99,7 @@ theorem exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
     have h := congrArg Matrix.conjTranspose hPQ
     rwa [Matrix.conjTranspose_mul, hQ.1.eq, hP.1.eq] at h
   exact twoSiteSectorProjection_supported_of_supported_of_absorbs
-    P Q hPQ hQP data.bondData.bond hdata
+    P Q hPQ hQP data.bond hdata
 
 end PhysicalSectorFactorization
 
@@ -117,7 +117,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactori
     (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hInjective : ∀ s, (K s).IsInjective)
+    (hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
     (hSupport : ∀ s β α,
       P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
         physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
@@ -125,23 +125,23 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactori
     (hη : ∀ s k h, ((F s).neighboringOperator k h).PosSemidef) :
     Nonempty (OrthogonalCommutingSectorFamily K) := by
   classical
-  let data : (s : Fin g) → EtaLocalStructureData (K s) :=
+  let data : (s : Fin g) → CommutingForm (K s) :=
     fun s ↦ Classical.choose
-      ((F s).exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
+      ((F s).exists_commutingForm_supported_of_twoSidedPhysicalSlice
         (P s) (hP s) (hInjective s) (hSupport s) (hη s))
   have hdata : ∀ s : Fin g,
-      twoSiteSectorProjection (P s) * (data s).bondData.bond *
-          twoSiteSectorProjection (P s) = (data s).bondData.bond ∧
+      twoSiteSectorProjection (P s) * (data s).bond *
+          twoSiteSectorProjection (P s) = (data s).bond ∧
         ∀ N (hN : 2 ≤ N),
-          mpo (K s) N = ((data s).bondData.toCommutingFormData hN).product :=
+          mpo (K s) N = (data s).product hN :=
     fun s ↦ Classical.choose_spec
-      ((F s).exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
+      ((F s).exists_commutingForm_supported_of_twoSidedPhysicalSlice
         (P s) (hP s) (hInjective s) (hSupport s) (hη s))
   exact ⟨{
     projection := P
     projection_isOrthogonal := hP
     projection_orthogonal := fun hst ↦ hPorth hst
-    bondData := fun s ↦ (data s).bondData
+    bondData := fun s ↦ (data s).toCommutingBond
     bond_supported := fun s ↦ (hdata s).1
     realizes_mpo := fun s N hN ↦ (hdata s).2 N hN }⟩
 
@@ -196,9 +196,8 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     HasGSNNCHForm M := by
   let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
     fun s ↦ S.basisMPOTensor s
-  have hInjective : ∀ s, (K s).IsInjective := by
+  have hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor := by
     intro s
-    change Kraus.IsInjective (K s).toMPSTensor
     dsimp only [K]
     rw [S.basisMPOTensor_toMPSTensor]
     exact hSpan.isInjective_one s

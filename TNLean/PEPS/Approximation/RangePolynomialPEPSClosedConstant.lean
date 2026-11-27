@@ -59,6 +59,8 @@ Theorem 1.1, at revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 namespace TNLean.PEPS.Approximation
@@ -74,7 +76,7 @@ interactions of range `R` as in area-law Theorem 1.1. -/
 def RangePolynomialPEPSApproximation : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ R : ℕ, 1 ≤ R → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
-      ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q,
+      ∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
         IsRangeSquareGroundState q R J Δ L Ω → HasPEPSApproximation C c L q Ω
 
 /-- The range-`R` polynomial-PEPS target implies the nearest-neighbour target of the source:
@@ -155,7 +157,8 @@ Source: polynomial-PEPS Theorem 1.1 and its proof in §8 (`07-assembly.tex`, lin
 with interactions of range `R`. -/
 theorem rangePolynomialPEPSApproximation_explicit {q R : ℕ} (hq : 2 ≤ q) (hR : 1 ≤ R)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
-    ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsRangeSquareGroundState q R J Δ L Ω →
+    ∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
+        IsRangeSquareGroundState q R J Δ L Ω →
       HasPEPSApproximation (rangePEPSBondPrefactor q R J Δ) (rangePEPSBondExponent q R J Δ)
         L q Ω := by
   have hA := AreaLaw.squareEntropyAreaLawAt_range_closed q R (by omega) hJ.le hΔ

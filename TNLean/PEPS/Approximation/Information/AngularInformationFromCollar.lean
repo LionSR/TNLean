@@ -42,6 +42,7 @@ Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits)
 open scoped Matrix.Norms.L2Operator
 
 
@@ -153,8 +154,10 @@ with width `C_p > 0` and threshold `L₀`, then every slope
 `L₁ ≥ max (angularCellResetThreshold a' d C_p C₁ (angularCellCount a A₀ m₀) K) L₀` satisfy the
 conclusion of Proposition 3.4 for `G`.
 Source: `02-information.tex`, Proposition 3.4 (`prop:angular`), lines 635–785. -/
-theorem angularInformation_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
-    (hnorm : ∀ L (Ω : StateSpace L q), G L Ω → ‖Ω‖ = 1) {a A₀ Cp L₀ C₁ K : ℝ} (ha : 0 < a)
+theorem angularInformation_of_bounds {q : ℕ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hnorm : ∀ L (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
+      G L Ω → ‖Ω‖ = 1) {a A₀ Cp L₀ C₁ K : ℝ} (ha : 0 < a)
     (m₀ : ℕ) {p : ℝ} (hp : 0 < p)
     (hcell : SquareCellInformationBound q G
       (angularClearance a (angularMargin a) (angularCellSide a)) C₁ K)
@@ -162,7 +165,7 @@ theorem angularInformation_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q 
     {D L₁ : ℝ} (hD : angularCellResetSlope Cp (angularMargin a) (angularCellSide a) ≤ D)
     (hL₁ : max (angularCellResetThreshold (angularMargin a) (angularCellSide a) Cp C₁
       (angularCellCount a A₀ m₀) K) L₀ ≤ L₁) :
-    ∀ L : ℕ, L₁ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    ∀ L : ℕ, L₁ ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
       ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
       ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
       ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
@@ -199,8 +202,10 @@ estimates:** the slopes and thresholds of `angularInformation_of_bounds` form an
 for `G`.
 Source: `02-information.tex`, Proposition 3.4 (`prop:angular`), lines 635–785;
 `06-geometry.tex`, lines 62–63 and 440–445. -/
-theorem isAngularScale_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
-    (hnorm : ∀ L (Ω : StateSpace L q), G L Ω → ‖Ω‖ = 1) {a A₀ Cp L₀ C₁ K : ℝ} (ha : 0 < a)
+theorem isAngularScale_of_bounds {q : ℕ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hnorm : ∀ L (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
+      G L Ω → ‖Ω‖ = 1) {a A₀ Cp L₀ C₁ K : ℝ} (ha : 0 < a)
     (m₀ : ℕ) {p : ℕ} (hp : 0 < p)
     (hcell : SquareCellInformationBound q G
       (angularClearance a (angularMargin a) (angularCellSide a)) C₁ K)
@@ -233,7 +238,7 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na ≤ L₀) :
     ∀ L : ℕ, L₀ ≤ L →
       ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace L q,
+          ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →

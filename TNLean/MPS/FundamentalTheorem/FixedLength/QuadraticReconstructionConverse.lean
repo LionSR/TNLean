@@ -445,7 +445,8 @@ theorem exists_unitary_phase {A : MPSTensor d D} {L₀ N Q : ℕ}
   have hlam0 : (lam : ℂ) ≠ 0 := by exact_mod_cast hlam.ne'
   let A₁ : MPSTensor d D := fun i ↦ (lam : ℂ)⁻¹ • A i
   have hA₁ : ∑ i, A₁ i * (A₁ i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlam hsum
-  have hC1₁ : Kraus.IsNBlkInjective A₁ L₀ := isNBlkInjective_smul _ (inv_ne_zero hlam0) hC1
+  have hC1₁ : Kraus.IsNBlkInjective A₁ L₀ :=
+    (isNBlkInjective_smul_iff (inv_ne_zero hlam0) A L₀).2 hC1
   have hy : x * (lam : ℂ)⁻¹ ≠ 0 := mul_ne_zero hx (inv_ne_zero hlam0)
   have hrel₁ : ∀ i, R * s.tensor i = (x * (lam : ℂ)⁻¹)⁻¹ • (A₁ i * R) := by
     intro i

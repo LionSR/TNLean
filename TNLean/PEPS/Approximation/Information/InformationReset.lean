@@ -54,6 +54,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open ManyBody (rectangleConfigurationEquiv)
+open ManyBody (Config Qudits)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -232,7 +233,8 @@ open square, supported on a set `B` containing no site of the cores `R₀ ⊆ R`
 `I_Ω(R₀ : C₀) ≤ 8 √δ log (e q^|R₀|)`.
 Source: `02-information.tex`, lines 612–630. -/
 theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ}
-    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) {R C R₀ C₀ : Finset (SquareLatticeVertex L L)}
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩ : ‖Ω‖ = 1)
+    {R C R₀ C₀ : Finset (SquareLatticeVertex L L)}
     (hRC : Disjoint R C)
     (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset ↥(rectangularDomain L L))
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
@@ -334,7 +336,7 @@ theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le
     (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
       ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace L q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
@@ -389,7 +391,8 @@ theorem _root_.ManyBody.SquareInteraction.information_reset (q : ℕ) (hq : 1 �
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →

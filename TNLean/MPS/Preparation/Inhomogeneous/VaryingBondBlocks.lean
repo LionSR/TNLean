@@ -126,6 +126,16 @@ theorem IsBlockInjective.isInjectiveOn [NeZero N] {A : VaryingBondChain d D N}
     (k : Fin M) : IsInjectiveOn (chainBlockTensor (zeroPad A) hN k) (blockCorner A ℓ k) :=
   ⟨fun t _ hp => chainBlockTensor_zeroPad_eq_zero A hN (hℓ k) t hp, hA k⟩
 
+/-- For blocks of positive length, block injectivity of a varying-bond chain is injectivity
+of every padded blocked tensor on the rectangle of its block (arXiv:2307.01696, footnote to the
+paragraph "Approximation through the fixed-point state": the blocked tensors are assumed
+injective). Positive block lengths are part of that standing assumption. -/
+theorem isBlockInjective_iff_forall_isInjectiveOn [NeZero N] {A : VaryingBondChain d D N}
+    {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N) (hℓ : ∀ k, 0 < ℓ k) :
+    IsBlockInjective A hN ↔
+      ∀ k, IsInjectiveOn (chainBlockTensor (zeroPad A) hN k) (blockCorner A ℓ k) :=
+  ⟨fun h => h.isInjectiveOn hℓ, fun h k => (h k).2⟩
+
 /-! ### Pairs on the bonds between blocks -/
 
 /-- A vector on `ℂ^r ⊗ ℂ^r`, padded with zeros to a vector on `ℂ^D ⊗ ℂ^D`. -/

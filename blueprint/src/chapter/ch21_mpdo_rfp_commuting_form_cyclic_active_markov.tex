@@ -583,7 +583,7 @@
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Trace-visible recurrence of selected fixed-product sectors]
     \label{thm:mpdo_selected_fixed_product_cyclic_recurrence}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         changePhysicalBasis_physicalCoordinateMatrix_isInjective}
@@ -614,11 +614,11 @@
         cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         cyclicActive_reflTransGen_neighboringOperator_ne_zero_of_closed_mpo}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}
     \leanok
     \uses{def:injective,def:mpdo_eta_local_structure_data,thm:mpdo_eta_fixed_bond_product_tensor,thm:mpdo_fixed_bond_positive_physical_sector_representative,def:mpdo_physical_sector_factorization,def:mpdo_cyclic_active_sector}
-    Let $K$ be an injective tensor with an eta-local structure. Let $C$ be the
+    Let $K$ be an injective tensor with a commuting form. Let $C$ be the
     exact fixed-product tensor selected from its commuting bond, and let $F$ be
     the associated positive physical-sector factorization. Then any two sectors
     in the positive-length cyclic support of $F$ are joined by a directed path
@@ -651,11 +651,11 @@
 
 \begin{lemma}[Selected fixed-product reduced states]
     \label{thm:mpdo_selected_fixed_product_reduced_states}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,thm:mpdo_fixed_bond_positive_physical_sector_representative}
-    Let $K$ have an eta-local structure, let $F$ be the positive
+    Let $K$ have a commuting form, let $F$ be the positive
     physical-sector factorization of its selected fixed-product tensor, and
     express $K$ in the physical coordinates of $F$. For every $N\geq2$ and
     $L\leq N$, the selected sector-coordinate tensor and the transformed
@@ -675,11 +675,11 @@
 
 \begin{lemma}[Adjacent selected fixed-product marginals]
     \label{thm:mpdo_selected_fixed_product_adjacent_marginals}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl,def:mpdo_eta_local_structure_data,thm:mpdo_selected_fixed_product_reduced_states}
-    Let $K$ have an eta-local structure and source zero correlation length,
+    Let $K$ have a commuting form and source zero correlation length,
     and let $C$ be the selected fixed-product tensor in its physical-sector
     coordinates. For every $L>0$, the normalized $L$-site reduced states of
     $C$ obtained from chain lengths $L+2$ and $L+1$ are equal.
@@ -696,7 +696,7 @@
 
 \begin{lemma}[Iterated selected fixed-product marginals]
     \label{thm:mpdo_selected_fixed_product_iterated_marginals}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl,def:mpdo_eta_local_structure_data,thm:mpdo_selected_fixed_product_reduced_states,thm:mpdo_source_zcl_iterated_marginal_stability}
@@ -714,11 +714,11 @@
 
 \begin{lemma}[Positive traces of the selected fixed product]
     \label{thm:mpdo_selected_fixed_product_positive_traces}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl,def:mpdo_eta_local_structure_data,thm:mpdo_fixed_bond_positive_physical_sector_representative}
-    Let $K$ have an eta-local structure and source zero correlation length.
+    Let $K$ have a commuting form and source zero correlation length.
     For every $N\geq2$, the trace of the selected fixed-product periodic
     operator is a strictly positive real number.
 \end{lemma}
@@ -839,11 +839,11 @@
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Selected fixed-product square--cube identity]
     \label{thm:mpdo_selected_fixed_product_square_cube}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
     \leanok
     \uses{def:injective,def:mpo_source_zcl,def:mpdo_eta_local_structure_data,def:mpdo_physical_sector_factorization,thm:mpdo_eta_fixed_bond_product_tensor,thm:mpdo_fixed_bond_positive_physical_sector_representative,def:mpdo_cyclic_active_sector}
-    Let $K$ be an injective tensor with an eta-local structure and source zero
+    Let $K$ be an injective tensor with a commuting form and source zero
     correlation length. Let $F$ be the
     positive physical-sector factorization of the selected fixed-product
     tensor, and let $T_C$ be its trace matrix on cyclic-active sectors. There
@@ -869,13 +869,13 @@
 
 \begin{lemma}[Markov cuts from the selected fixed product]
     \label{thm:mpdo_selected_fixed_product_markov_cuts}
-    \lean{MPOTensor.EtaLocalStructureData.%
+    \lean{MPOTensor.CommutingForm.%
         exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
     \leanok
     \uses{def:injective,def:mpo_source_zcl,def:mpdo_eta_local_structure_data,thm:mpdo_fixed_bond_positive_physical_sector_representative}
-    Let $K$ be an injective tensor with an eta-local structure and source zero
+    Let $K$ be an injective tensor with a commuting form and source zero
     correlation length. Express $K$ in the one-site physical coordinates of the
-    positive fixed-product factorization selected by the eta-local structure.
+    positive fixed-product factorization selected by the commuting form.
     For arbitrary $A,C\geq0$, the normalized marginal on consecutive regions of
     lengths $A$, $1$, and $C$, obtained from the periodic chain of length
     $A+C+2$, admits a Hayashi Markov decomposition.
@@ -1210,9 +1210,9 @@
     which the physical isometry of $F$ carries back to $\mathcal K$.
 \end{proof}
 
-\begin{lemma}[A translation-invariant commuting bond and ZCL imply SAL]
+\begin{lemma}[The commuting form and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
-    \lean{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}
+    \lean{MPOTensor.CommutingForm.isSAL_of_isSourceZCL}
     \leanok
     \uses{def:mpdo_eta_local_structure_data,def:mpo_source_zcl,def:is_sal,def:mpdo,def:injective}
     Let $\mathcal K$ be an injective tensor generating MPDOs. Suppose
@@ -1253,20 +1253,37 @@
     saturation back to $\mathcal K$.
 \end{proof}
 
-\begin{lemma}[$\eta$-local structure gives the one-sector GSNNCH form]
+\begin{lemma}[The commuting form gives the one-sector GSNNCH form]
     \label{thm:mpdo_eta_local_structure_has_gsnnch_form}
-    \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}
-    \lean{MPOTensor.hasGSNNCHForm_of_etaLocalStructure}
+    \lean{MPOTensor.CommutingForm.hasGSNNCHForm}
     \leanok
-    \uses{thm:mpdo_eta_local_structure_has_commuting_form,thm:mpdo_commuting_form_data_has_gsnnch_form}
-    The single positive bond determined by the $\eta$-local structure gives
-    the one-sector instance of the explicit GSNNCH decomposition.
+    \uses{def:mpdo_eta_local_structure_data,thm:mpdo_commuting_form_data_has_gsnnch_form}
+    The single positive bond of a commuting form gives, at every chain length
+    $N\ge2$, the one-sector instance of the explicit GSNNCH decomposition.
 \end{lemma}
 
 \begin{proof}\leanok
-    At each chain length, applying the one-sector GSNNCH construction to the
-    commuting-form data carried by the $\eta$-local structure yields the
-    explicit GSNNCH decomposition.
+    At each chain length, the commuting bond is positive, its first two
+    translates commute, and the operator is a positive multiple of their
+    product; Lemma~\ref{thm:mpdo_commuting_form_data_has_gsnnch_form} gives the
+    explicit one-sector GSNNCH decomposition.
+\end{proof}
+
+\begin{theorem}[SAL is equivalent to the commuting form]
+    \label{thm:mpdo_sal_iff_commuting_form}
+    \lean{MPOTensor.isSAL_iff_nonempty_commutingForm}
+    \leanok
+    \uses{cor:mpdo_eta_local_structure_of_is_sal,thm:mpdo_translation_invariant_commuting_form_zcl_sal}
+    Let $\mathcal K$ be an injective tensor generating MPDOs whose
+    physical-trace transfer has zero correlation length. Then $\mathcal K$
+    saturates the area law if and only if it has a commuting form, as
+    announced in \cite[Appendix~C.2, line~1567]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The forward direction is Theorem~\ref{cor:mpdo_eta_local_structure_of_is_sal}
+    and the converse is
+    Lemma~\ref{thm:mpdo_translation_invariant_commuting_form_zcl_sal}.
 \end{proof}
 
 \begin{lemma}[Injective SAL tensors generate GSNNCH states]
@@ -1286,7 +1303,7 @@
 
 \begin{proof}\leanok
     Theorem~\ref{cor:mpdo_eta_local_structure_of_is_sal} gives the
-    $\eta$-local structure, whose single positive bond gives the one-sector
+    commuting form, whose single positive bond gives the one-sector
     form by Lemma~\ref{thm:mpdo_eta_local_structure_has_gsnnch_form}. SAL
     includes the nonvanishing of every positive-length trace, so
     Lemma~\ref{thm:mpdo_gsnnch_of_sector_form} applies.
@@ -1317,10 +1334,9 @@
     \end{align}
     Under this hypothesis,
     Lemma~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
-    gives the $\eta$-local structure and proves
+    gives the commuting form and proves
     (\ref{eq:mpdo_eta_bond_assembly})--(\ref{eq:mpdo_eta_product_form}) with
-    $c_N=1$. Lemma~\ref{thm:mpdo_eta_local_structure_has_commuting_form}
-    then gives the commuting-form conclusion. Adjacent translates commute on every
+    $c_N=1$, which is the commuting-form conclusion. Adjacent translates commute on every
     periodic chain of length at least three by
     Lemma~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm}, and the
     crossed two-site case is

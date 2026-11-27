@@ -30,6 +30,7 @@ the treated guides after it, conditional on Proposition 3.4 through `IsAngularSc
   389–430); Lemma 6.6 `lem:exchange`, `05-frames.tex`.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -229,7 +230,8 @@ end PairChanges
 section Exchange
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {ε₀ B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {ε₀ B₀ C c : ℝ}
 
 /-- **The lens exchange for sampled guides, conditional on Proposition 3.4.** Assume `q ≥ 1`, a
 unit state of the family `G`, and the exponent-`60` angular-scale condition with `L₀' ≤ L`,

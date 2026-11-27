@@ -44,7 +44,12 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 * `Matrix.vonNeumannEntropy_inv_card_smul_one` and
   `MPOTensor.blockEntropy_eq_of_reducedBlockState_eq_smul_one`: a maximally mixed
   state has entropy `log d`, so a maximally mixed `L`-qubit block has entropy `L log 2`.
-* `MPOTensor.mutualInfoChain`: the mutual information `I_L = S_L + S_{N-L} - S_N`.
+* `MPOTensor.bipartitionedNormalizedMPO`: the normalized state as a bipartite
+  matrix across the contiguous cut after the first `L` spins.
+* `MPOTensor.mutualInfoChain`: the mutual information `I_L`, the bipartite mutual
+  information of the normalized state across that cut. The formula
+  `I_L = S_L + S_{N-L} - S_N` is `MPOTensor.mutualInfoChain_eq` in
+  `TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone`.
 * `MPOTensor.IsSAL`: the saturation-of-the-area-law predicate for MPDO.
 * `MPSTensor.normalizedPureState`, `MPSTensor.pureBlockEntropy`,
   `MPSTensor.IsSAL`: the pure-state analogues.
@@ -372,31 +377,61 @@ theorem blockEntropy_eq_of_reducedBlockState_eq_smul_one (M : MPOTensor 2 D)
   push_cast
   rw [Real.log_pow]
 
-/-- The **mutual information** `I_L = S_L + S_{N-L} - S_N` between a block of `L`
-spins and the rest of the chain, for the normalized state `σ^{(N)}(M)`.
+/-- The cast carrying a configuration on `a + b` contiguous spins onto the flat
+product `Fin (d^a) × Fin (d^b)`. -/
+noncomputable def _root_.biSplitEquiv (d a b : ℕ) :
+    (Fin (a + b) → Fin d) ≃ Fin (d ^ a) × Fin (d ^ b) :=
+  (blockSplitEquiv d a b).trans (finFunctionFinEquiv.prodCongr finFunctionFinEquiv)
 
-The complement term `S_{N-L}` is taken as the entropy of the *first* `N-L` spins
-(`blockEntropy M N (N - L)`). This is the entropy of the complement of the
-`L`-block because `mpo M N` is a trace of a product of the `M` tensors, hence
-cyclically (translationally) invariant, so the reduced state of the first `N-L`
-spins and that of the last `N-L` spins have equal entropy.
+/-- Split a length-`N` configuration into consecutive blocks of lengths `L`
+and `K`, and flatten each block to a finite index. -/
+noncomputable def chainBipartitionEquiv (d N L K : ℕ) (h : N = L + K) :
+    (Fin N → Fin d) ≃ Fin (d ^ L) × Fin (d ^ K) :=
+  (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d))).trans
+    (biSplitEquiv d L K)
 
-Source: arXiv:1606.00608, eq. line 797. -/
+/-- The normalized `N`-site MPO, viewed as a bipartite matrix across the
+contiguous cut after `L` sites.
+
+Source: arXiv:1606.00608, lines 792--797. -/
+noncomputable def bipartitionedNormalizedMPO (M : MPOTensor d D)
+    (N L K : ℕ) (h : N = L + K) :
+    Matrix (Fin (d ^ L) × Fin (d ^ K)) (Fin (d ^ L) × Fin (d ^ K)) ℂ :=
+  (normalizedMPO M N).submatrix (chainBipartitionEquiv d N L K h).symm
+    (chainBipartitionEquiv d N L K h).symm
+
+/-- Positivity of the normalized state is preserved by the bipartition
+reindexing. -/
+theorem bipartitionedNormalizedMPO_posSemidef (M : MPOTensor d D)
+    (N L K : ℕ) (h : N = L + K) (hM : (mpo M N).PosSemidef) :
+    (bipartitionedNormalizedMPO M N L K h).PosSemidef :=
+  (normalizedMPO_posSemidef M N hM).submatrix _
+
+/-- A normalized periodic MPO has unit trace whenever its unnormalized trace
+is nonzero. -/
+theorem bipartitionedNormalizedMPO_trace (M : MPOTensor d D)
+    (N L K : ℕ) (h : N = L + K) (htr : (mpo M N).trace ≠ 0) :
+    (bipartitionedNormalizedMPO M N L K h).trace = 1 := by
+  rw [bipartitionedNormalizedMPO, Matrix.trace_submatrix_equiv,
+    normalizedMPO_trace M N htr]
+
+/-- The **mutual information** `I_L` between the first `L` spins and the
+remaining `N - L` spins of the normalized state `σ^{(N)}(M)`: the bipartite
+mutual information `S(ρ_A) + S(ρ_B) - S(ρ_{AB})` of `σ^{(N)}(M)` across the
+contiguous cut after the first `L` spins.
+
+The source's displayed formula `I_L = S_L + S_{N-L} - S_N` is the theorem
+`MPOTensor.mutualInfoChain_eq`; it identifies the entropy of the last `N - L`
+spins with that of the first `N - L` spins by translation invariance.
+
+Source: arXiv:1606.00608, lines 792--797 (the mutual information between a
+part of the chain and the rest) and Appendix C, lines 1338--1340 (data
+processing between the two parts). -/
 noncomputable def mutualInfoChain (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef) : ℝ :=
-  blockEntropy M N L hL hM
-    + blockEntropy M N (N - L) (Nat.sub_le N L) hM
-    - blockEntropy M N N (le_refl N) hM
-
-/-- The mutual information equals `S_L + S_{N-L} - S_N`, the source formula
-(arXiv:1606.00608, eq. line 797). This holds by definition. -/
-theorem mutualInfoChain_eq (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
-    (hM : (mpo M N).PosSemidef) :
-    mutualInfoChain M N L hL hM
-      = blockEntropy M N L hL hM
-        + blockEntropy M N (N - L) (Nat.sub_le N L) hM
-        - blockEntropy M N N (le_refl N) hM :=
-  rfl
+  mutualInformation (bipartitionedNormalizedMPO M N L (N - L) (Nat.add_sub_cancel' hL).symm)
+    (bipartitionedNormalizedMPO_posSemidef M N L (N - L) (Nat.add_sub_cancel' hL).symm
+      hM).isHermitian
 
 /-- A tensor `M` **verifies saturation of the area law** (SAL) if it generates
 MPDO, every positive-length density operator has nonzero trace (so the normalized

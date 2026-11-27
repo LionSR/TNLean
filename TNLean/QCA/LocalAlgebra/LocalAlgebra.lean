@@ -51,10 +51,14 @@ open scoped ComplexOrder
 
 namespace SpinChain
 
-/-- Configurations of \(d\)-level spins on the finite region \(\Lambda\).
+/-- Configurations of \(d\)-level spins on the finite region \(\Lambda\): the
+configurations `ManyBody.RegionConfig (ManyBody.Qudits ℤ d) Λ` of the region \(\Lambda\) of the
+chain of qudits on \(\mathbb Z\), to which this abbreviation is reducibly equal. It is written
+as a nondependent function type, so that rewriting a site under a configuration needs no
+dependent motive.
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
-def Config (d : ℕ) (Λ : Finset ℤ) := Λ → Fin d
+abbrev Config (d : ℕ) (Λ : Finset ℤ) := Λ → Fin d
 
 /-- The local observable C⋆-algebra on a finite region \(\Lambda\).
 
@@ -63,10 +67,15 @@ Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 abbrev LocalAlgebra (d : ℕ) (Λ : Finset ℤ) :=
   CStarMatrix (Config d Λ) (Config d Λ) ℂ
 
-/-- Configurations on a finite region form a finite type. -/
-instance instFintypeConfig (d : ℕ) (Λ : Finset ℤ) : Fintype (Config d Λ) := by
-  change Fintype (Λ → Fin d)
-  infer_instance
+/-- Configurations on a finite region form a finite type. The named instance keeps one
+instance term for the index type of every local algebra, which keeps the unification of the
+algebra structures cheap. -/
+instance instFintypeConfig (d : ℕ) (Λ : Finset ℤ) : Fintype (Config d Λ) :=
+  inferInstanceAs (Fintype (Λ → Fin d))
+
+/-- Equality of finite-region configurations is decidable. -/
+instance instDecidableEqConfig (d : ℕ) (Λ : Finset ℤ) : DecidableEq (Config d Λ) :=
+  inferInstanceAs (DecidableEq (Λ → Fin d))
 
 /-- A finite region has one independent physical coordinate per site,
 so its configuration cardinality is the corresponding power of the
@@ -74,20 +83,7 @@ on-site size. Source: GNVW, arXiv:0910.3675v2, finite cell products
 in lines 1251--1258. This also holds for zero on-site size. -/
 theorem card_config (d : ℕ) (Λ : Finset ℤ) :
     Fintype.card (Config d Λ) = d ^ Λ.card := by
-  change Fintype.card (Λ → Fin d) = _
-  rw [Fintype.card_fun]
   simp
-
-/-- Equality of finite-region configurations is decidable. -/
-instance instDecidableEqConfig (d : ℕ) (Λ : Finset ℤ) :
-    DecidableEq (Config d Λ) := by
-  change DecidableEq (Λ → Fin d)
-  infer_instance
-
-/-- A positive on-site dimension supplies configurations on every finite region. -/
-instance instNonemptyConfig (d : ℕ) [NeZero d] (Λ : Finset ℤ) : Nonempty (Config d Λ) := by
-  change Nonempty (Λ → Fin d)
-  exact ⟨fun _ ↦ ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩⟩
 
 namespace Config
 

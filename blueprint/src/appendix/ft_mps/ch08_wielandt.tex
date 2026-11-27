@@ -63,12 +63,12 @@ bounds in low dimensions.
     \label{cor:blk_inj_zero_dim_one}
     \lean{MPSTensor.bondDim_eq_one_of_isNBlkInjective_zero}
     \leanok
-    \uses{lem:wordspan_blk_inj}
+    \uses{def:l_blk_injective}
     If $D\ge1$ and $A$ is $0$-block injective, then $D=1$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:wordspan_blk_inj,lem:wordspan_zero_ne_top}
-    By Lemma~\ref{lem:wordspan_blk_inj}, $0$-block injectivity gives
+\begin{proof}\leanok\uses{def:l_blk_injective,lem:wordspan_zero_ne_top}
+    By Definition~\ref{def:l_blk_injective}, $0$-block injectivity gives
     $S_0(A)=\MN{D}$. Lemma~\ref{lem:wordspan_zero_ne_top} excludes
     $D\ge2$, so the nonzero bond dimension must be~$1$.
 \end{proof}

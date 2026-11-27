@@ -158,7 +158,7 @@ theorem trace_stationaryBlockDensity (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
     Matrix.trace (stationaryBlockDensity A Λ N) =
       Matrix.trace (Λ * (Kraus.transferMap A ^ N) 1) := by
-  rw [← transferMap_blockTensor_apply]
+  rw [← Kraus.transferMap_blockTensor_apply]
   change (∑ s, stationaryBlockDensity A Λ N s s) = _
   simp only [stationaryBlockDensity_apply, Kraus.transferMap_apply,
     Matrix.mul_one, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
@@ -169,8 +169,8 @@ theorem trace_stationaryBlockDensity_eq_one (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : Kraus.transferMap A 1 = 1) (N : ℕ) :
     Matrix.trace (stationaryBlockDensity A Λ N) = 1 := by
-  rw [trace_stationaryBlockDensity, ← transferMap_blockTensor_apply,
-    transferMap_blockTensor_fixedPoint A N 1 hNorm, Matrix.mul_one, hΛtr]
+  rw [trace_stationaryBlockDensity, ← Kraus.transferMap_blockTensor_apply,
+    Kraus.transferMap_blockTensor_fixedPoint A N 1 hNorm, Matrix.mul_one, hΛtr]
 
 /-- Physical rotation conjugates each physical density by the corresponding
 Kronecker power. Source: arXiv:0802.0447, local symmetry, lines 297–304. -/

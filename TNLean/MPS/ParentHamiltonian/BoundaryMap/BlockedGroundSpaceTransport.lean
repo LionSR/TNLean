@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceGram
 
 Physical blocking groups \(p\) consecutive original sites into one blocked site.  A chain of
 \(N\) blocked sites therefore has the same configuration basis as a chain of \(N p\) original
-sites, through `blockedConfigEquiv`.  This file defines the corresponding Euclidean linear
+sites, through `Kraus.blockedConfigEquiv`.  This file defines the corresponding Euclidean linear
 isometry and proves exact transport identities for the boundary map, its range, and its
 orthogonal projector.
 
@@ -43,7 +43,7 @@ boundary-map ranges on \(3p\) original sites, rather than with an original one-s
 * arXiv:2011.12127, lines 1815–1820 (blocking consecutive physical sites).
 * arXiv:2011.12127, lines 1985–1992 (local parent ground spaces).
 
-The equivalence `blockedConfigEquiv` is the project's explicit realization of the
+The equivalence `Kraus.blockedConfigEquiv` is the project's explicit realization of the
 configuration-basis identification implicit in this blocking convention.
 -/
 
@@ -59,20 +59,20 @@ of \(p\) to the corresponding chain of \(N p\) original sites. -/
 noncomputable def blockedConfigLinearIsometryEquiv (d N p : ℕ) :
     EuclideanSpace ℂ (Cfg (blockPhysDim d p) N) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Cfg d (N * p)) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (blockedConfigEquiv d N p)
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Kraus.blockedConfigEquiv d N p)
 
 @[simp]
 theorem blockedConfigLinearIsometryEquiv_apply_apply (d N p : ℕ)
     (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)) (σ : Cfg d (N * p)) :
     blockedConfigLinearIsometryEquiv d N p v σ =
-      v ((blockedConfigEquiv d N p).symm σ) :=
+      v ((Kraus.blockedConfigEquiv d N p).symm σ) :=
   rfl
 
 @[simp]
 theorem blockedConfigLinearIsometryEquiv_symm_apply_apply (d N p : ℕ)
     (v : EuclideanSpace ℂ (Cfg d (N * p))) (σ : Cfg (blockPhysDim d p) N) :
     (blockedConfigLinearIsometryEquiv d N p).symm v σ =
-      v (blockedConfigEquiv d N p σ) := by
+      v (Kraus.blockedConfigEquiv d N p σ) := by
   rw [blockedConfigLinearIsometryEquiv, LinearIsometryEquiv.piLpCongrLeft_symm]
   rfl
 
@@ -82,10 +82,10 @@ canonical configuration reindexing. -/
 theorem groundSpaceMap_blockTensor_blockedConfigEquiv
     (A : MPSTensor d D) (p N : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
     (σ : Cfg d (N * p)) :
-    groundSpaceMap (blockTensor A p) N X ((blockedConfigEquiv d N p).symm σ) =
+    groundSpaceMap (blockTensor A p) N X ((Kraus.blockedConfigEquiv d N p).symm σ) =
       groundSpaceMap A (N * p) X σ := by
   simp only [groundSpaceMap_apply, evalWord_blockTensor]
-  rw [← ofFn_blockedConfigEquiv d N p ((blockedConfigEquiv d N p).symm σ)]
+  rw [← Kraus.ofFn_blockedConfigEquiv d N p ((Kraus.blockedConfigEquiv d N p).symm σ)]
   simp
 
 /-- The Euclidean boundary map of the blocked tensor intertwines with the canonical

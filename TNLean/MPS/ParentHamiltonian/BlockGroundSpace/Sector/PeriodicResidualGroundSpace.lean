@@ -50,7 +50,7 @@ noncomputable def blockedResidualBoundaryMap (A : MPSTensor d D)
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) :
     Matrix (Fin D) (Fin E) ℂ →ₗ[ℂ] NSiteSpace d (N * L + r) where
   toFun Y σ := Matrix.trace
-    (Kraus.evalWord B (List.ofFn ((blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
+    (Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
       Vᴴ * Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd (N * L))) * Y)
   map_add' Y Z := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c Y := by ext σ; simp [Matrix.trace_smul]
@@ -68,16 +68,16 @@ theorem blockedResidualBoundaryMap_eq_groundSpaceMap_mul_conjTranspose
     blockedResidualBoundaryMap A L B V N r Y =
       groundSpaceMap A (N * L + r) (Y * Vᴴ) := by
   have hWord (u : Cfg d (N * L)) :
-      Kraus.evalWord B (List.ofFn ((blockedConfigEquiv d N L).symm u)) * Vᴴ =
+      Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm u)) * Vᴴ =
         Vᴴ * Kraus.evalWord A (List.ofFn u) := by
     have h := Kraus.evalWord_intertwine B (blockTensor A L) Vᴴ (fun i => (hInt i).symm)
-      (List.ofFn ((blockedConfigEquiv d N L).symm u))
-    rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv, Equiv.apply_symm_apply] at h
+      (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm u))
+    rw [evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv, Equiv.apply_symm_apply] at h
     exact h
   ext σ
   rw [← leftBoundaryMap_factorization A (N * L) r, leftBoundaryMap_apply]
   change Matrix.trace
-    (Kraus.evalWord B (List.ofFn ((blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
+    (Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
       Vᴴ * Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd (N * L))) * Y) = _
   rw [hWord]
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm Vᴴ

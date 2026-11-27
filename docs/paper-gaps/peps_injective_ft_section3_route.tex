@@ -121,19 +121,20 @@ contractions are \leanid{TNLean.PEPS.edgeMiddleWeightOn} and
 injectivity statement
 \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}.
 
-For a one-vertex region $\{v\}$, the tensor family
-\leanid{TNLean.PEPS.singletonRegionTensorFamily} satisfies
+For a one-vertex region $\{v\}$, blocking performs no contraction:
 \begin{align}
     T_{A,\{v\}}(\eta,\sigma)
         &= A_v(\eta,\sigma).
     \label{eq:peps_injective_ft_section3_route_singleton_region_tensor}
 \end{align}
-Hence vertex injectivity gives injectivity of the singleton-region tensor.
-This base case is formalized by
-\leanid{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}. The
-passage to the abstract region-injectivity predicate is recorded by
-\leanid{TNLean.PEPS.SingletonRegionInjectivityComparison} and
-\leanid{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}.
+Hence the injectivity of the singleton-region tensor is the vertex clause of
+\leanid{TNLean.PEPS.IsVertexInjective}, linear independence of the local tensor
+\(A_v\). The passage to an abstract region-injectivity predicate \(\kappa\) is
+the hypothesis that this linear independence implies \(\kappa(\{v\})\); for the
+concrete predicate of a tensor with positive bond dimensions it follows from
+the theorem
+\leanid{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective} at
+\(\{v\}\).
 
 The abstract union-closure lemma
 \leanid{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}

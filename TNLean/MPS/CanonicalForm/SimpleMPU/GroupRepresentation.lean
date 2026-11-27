@@ -76,7 +76,7 @@ theorem blockTensor {U : MPOTensor d D} (hU : IsMPUPos U)
   intro N hN
   rw [mpo_blockTensor_eq_reindex U L N]
   apply Matrix.reindex_mem_unitaryGroup
-    (MPSTensor.blockedConfigEquiv d N L).symm (mpo U (N * L))
+    (Kraus.blockedConfigEquiv d N L).symm (mpo U (N * L))
   exact hU (N * L) (Nat.mul_pos hN hL)
 
 end IsMPUPos
@@ -229,8 +229,8 @@ private theorem operator_one_block [Group G] (F : GroupFamily G d)
   rw [mpo_blockTensor_eq_reindex,
     hOne (N * L) (Nat.mul_pos hN hL)]
   change (Matrix.reindexLinearEquiv ℂ ℂ
-    (MPSTensor.blockedConfigEquiv d N L).symm
-    (MPSTensor.blockedConfigEquiv d N L).symm) 1 = 1
+    (Kraus.blockedConfigEquiv d N L).symm
+    (Kraus.blockedConfigEquiv d N L).symm) 1 = 1
   exact Matrix.reindexLinearEquiv_one ℂ ℂ _
 
 private theorem operator_mul_block [Group G] (F : GroupFamily G d)
@@ -243,11 +243,11 @@ private theorem operator_mul_block [Group G] (F : GroupFamily G d)
   rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex,
     mpo_blockTensor_eq_reindex]
   change
-    (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv d N L).symm)
+    (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L).symm)
           (mpo (F.tensor g) (N * L)) *
-        (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv d N L).symm)
+        (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L).symm)
           (mpo (F.tensor h) (N * L)) =
-      (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv d N L).symm)
+      (Matrix.reindexAlgEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L).symm)
         (mpo (F.tensor (g * h)) (N * L))
   rw [← map_mul, hMul g h (N * L) (Nat.mul_pos hN hL)]
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalBlocks.PrimitiveBlocks
+import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
 
 /-!
 # Common blocked cyclic-sector families
@@ -158,7 +158,7 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
         (F.commonSectorBlock k s)) ∧
     Kraus.IsIrreducibleFamily (F.commonSectorBlock k s) := by
   have : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
-  have hExtra := tp_primitive_irreducible_extra_blocking
+  have hExtra := Kraus.tp_primitive_irreducible_extra_blocking
     (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
     (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
     (F.sector_irreducible k s) (hk := F.extra_pos k)

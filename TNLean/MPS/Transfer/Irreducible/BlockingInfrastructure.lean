@@ -27,7 +27,6 @@ primitive simultaneously.
   is preserved by positive physical blocking.
 
 ### Part B: Primitivity under multiples
-* `isPrimitive_pow_of_isPrimitive` — primitive channels remain primitive under positive powers.
 * `isPrimitive_transferMap_blockTensor_of_dvd` — transfer-map primitivity is monotone
   in the blocking period (for multiples).
 
@@ -652,48 +651,18 @@ theorem isIrreducibleFamily_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
 ## Part B: Primitivity under multiples
 
 If the transfer map of `blockTensor A p` is primitive and `p ∣ q`, then the
-transfer map of `blockTensor A q` is also primitive.
-
-The mathematical content: peripheral eigenvalues of `E^m` are `{μ^m | μ ∈ periph(E)}`,
-so if `periph(E) = {1}` then `periph(E^m) = {1}`.
+transfer map of `blockTensor A q` is also primitive, by `isPrimitive_pow_of_isPrimitive`:
+if `periph(E) = {1}` then `periph(E^m) = {1}`.
 -/
 
 section PrimitivityMultiples
 
 variable {D : ℕ}
 
-/-- Primitive channels remain primitive under positive powers.
-
-If `peripheralEigenvalues E = {1}` and `m > 0`, then `peripheralEigenvalues (E^m) = {1}`.
-This follows because the only peripheral eigenvalue `1` satisfies `1^m = 1`, and
-spectral mapping ensures no new peripheral eigenvalues arise. -/
-theorem isPrimitive_pow_of_isPrimitive
-    [NeZero D]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (m : ℕ) (hm : 0 < m)
-    (hPrim : _root_.IsPrimitive E) :
-    _root_.IsPrimitive (E ^ m) := by
-  -- Extract a nonzero fixed point from IsPrimitive.
-  -- IsPrimitive says peripheralEigenvalues E = {1}, so 1 is an eigenvalue.
-  have h1_mem : (1 : ℂ) ∈ peripheralEigenvalues E := by
-    rw [hPrim]; exact rfl
-  obtain ⟨ρ, hρ_ev⟩ := h1_mem.1.exists_hasEigenvector
-  have hρ_ne : ρ ≠ 0 := (Module.End.hasEigenvector_iff.mp hρ_ev).2
-  have hρ_fix : E ρ = ρ := by
-    have := Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hρ_ev).1
-    simpa using this
-  -- All peripheral eigenvalues of E are 1, so μ^m = 1 for any peripheral eigenvalue μ.
-  have hper : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ^ m = 1 := by
-    intro μ hμ
-    have hμ1 : μ = 1 := by rw [hPrim] at hμ; exact hμ
-    simp [hμ1]
-  -- Apply the existing periodicity removal theorem.
-  exact peripheralEigenvalues_pow_eq_singleton E hm hper ρ hρ_fix hρ_ne
-
 /-- Transfer-map primitivity is monotone in the blocking period (for multiples).
 
 If `blockTensor A p` has a primitive transfer map and `p ∣ q` with `q > 0`, then
-`blockTensor A q` also has a primitive transfer map. The proof uses `transferMap_blockTensor`
+`blockTensor A q` also has a primitive transfer map. The proof uses `Kraus.transferMap_blockTensor`
 to convert between blocking levels. -/
 theorem isPrimitive_transferMap_blockTensor_of_dvd
     [NeZero D]
@@ -709,10 +678,10 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
   -- m > 0 since p * m > 0 and p > 0
   have hm : 0 < m := Nat.pos_of_mul_pos_left hq
   -- Rewrite transfer maps as iterates of the original transfer map.
-  rw [transferMap_blockTensor]          -- goal: IsPrimitive ((Kraus.transferMap A) ^ (p * m))
+  rw [Kraus.transferMap_blockTensor]    -- goal: IsPrimitive ((Kraus.transferMap A) ^ (p * m))
   rw [pow_mul]                          -- goal: IsPrimitive (((Kraus.transferMap A) ^ p) ^ m)
   -- goal: IsPrimitive ((Kraus.transferMap (blockTensor A p)) ^ m)
-  rw [← transferMap_blockTensor]
+  rw [← Kraus.transferMap_blockTensor]
   exact isPrimitive_pow_of_isPrimitive _ m hm hPrim
 
 end PrimitivityMultiples

@@ -44,7 +44,7 @@ length or injectivity assumption is required. Source: arXiv:2011.12127,
 lines 1815--1820 and 1985--1992, physical blocking and local support spaces. -/
 theorem groundSpaceProjectionMatrix_blockTensor_reindex
     (A : MPSTensor d D) (L N : ℕ) :
-    Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+    Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         (groundSpaceProjectionMatrix (blockTensor A L) N) =
       groundSpaceProjectionMatrix A (N * L) := by
   ext σ τ
@@ -57,12 +57,12 @@ theorem groundSpaceProjectionMatrix_blockTensor_reindex
     simpa only [groundSpaceProjectionMatrix, Matrix.toEuclideanCLM_toLp,
       Matrix.mulVec_single_one, Matrix.col_apply] using h
   change groundSpaceProjectionMatrix (blockTensor A L) N
-    ((blockedConfigEquiv d N L).symm σ) ((blockedConfigEquiv d N L).symm τ) =
+    ((Kraus.blockedConfigEquiv d N L).symm σ) ((Kraus.blockedConfigEquiv d N L).symm τ) =
       groundSpaceProjectionMatrix A (N * L) σ τ
   rw [hcol, hcol, starProjection_groundSpaceES_blockTensor_map_apply]
   have hsingle : (blockedConfigLinearIsometryEquiv d N L).symm
       (toLp 2 (Pi.single τ 1)) =
-      toLp 2 (Pi.single ((blockedConfigEquiv d N L).symm τ) 1) := by
+      toLp 2 (Pi.single ((Kraus.blockedConfigEquiv d N L).symm τ) 1) := by
     ext ν
     simp only [blockedConfigLinearIsometryEquiv_symm_apply_apply,
       Pi.single_apply, ← Equiv.eq_symm_apply]

@@ -40,7 +40,7 @@ theorem choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred
     Channel.choiRank (Kraus.transferMap A) ≤
       Channel.choiRank (Kraus.transferMap B) := by
   have hBblock : Kraus.transferMap B = Kraus.transferMap (blockTensor A p) := by
-    rw [transferMap_blockTensor]
+    rw [Kraus.transferMap_blockTensor]
     exact hpow
   calc
     Channel.choiRank (Kraus.transferMap A) =

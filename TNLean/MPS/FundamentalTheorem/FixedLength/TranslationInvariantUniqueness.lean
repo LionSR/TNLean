@@ -289,35 +289,6 @@ theorem mpv_eq_pow_mul_mpv_of_unitaryConj {B C : MPSTensor d D} {x : ℂ} (hx : 
 
 /-! ## Scalar rescalings -/
 
-/-- Nonzero scalar multiplication preserves injectivity at a fixed blocking
-length: every word of the scaled tensor is the word of the original tensor
-times a nonzero power of the scalar. This converts condition C1 for the
-weighted representation `λ B` of Theorem 4 into condition C1 for its block
-`B` (PGVWC07, arXiv:quant-ph/0608197, MPSarchive.tex lines 742-763). -/
-theorem isNBlkInjective_smul {A : MPSTensor d D} {N : ℕ} (z : ℂ) (hz : z ≠ 0)
-    (hA : Kraus.IsNBlkInjective A N) :
-    Kraus.IsNBlkInjective (fun i => z • A i) N := by
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan, eq_top_iff] at hA ⊢
-  intro X hXtop
-  clear hXtop
-  have hX : X ∈ Submodule.span ℂ
-      (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)) :=
-    hA (Submodule.mem_top : X ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)))
-  induction hX using Submodule.span_induction with
-  | mem X hX =>
-      obtain ⟨σ, rfl⟩ := hX
-      change Kraus.evalWord A (List.ofFn σ) ∈ _
-      rw [← inv_smul_smul₀ (pow_ne_zero N hz) (Kraus.evalWord A (List.ofFn σ))]
-      apply Submodule.smul_mem
-      have hscaled : Kraus.evalWord (fun i => z • A i) (List.ofFn σ) ∈
-          Submodule.span ℂ (Set.range fun τ : Fin N → Fin d =>
-            Kraus.evalWord (fun i => z • A i) (List.ofFn τ)) :=
-        Submodule.subset_span (Set.mem_range_self σ)
-      simpa only [Kraus.evalWord_smul, List.length_ofFn] using hscaled
-  | zero => exact Submodule.zero_mem _
-  | add X Y _ _ hX hY => exact Submodule.add_mem _ hX hY
-  | smul z X _ hX => exact Submodule.smul_mem _ z hX
-
 /-- Scaling a family by a scalar `c` scales the sum `∑_i A_i A_i†` by `conj c * c`. -/
 theorem sum_smul_mul_conjTranspose_smul (A : MPSTensor d D) (c : ℂ) :
     ∑ i, (c • A i) * (c • A i)ᴴ = (star c * c) • ∑ i, A i * (A i)ᴴ := by
@@ -421,7 +392,8 @@ theorem pgvwc07_uniqueness_of_weighted {B C : MPSTensor d D} {L₀ N : ℕ} {lam
   set C₂ : MPSTensor d D := fun i => (lamC : ℂ)⁻¹ • C i with hC₂
   have hB₁_unital : ∑ i, B₁ i * (B₁ i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlamB hB_sum
   have hC₂_unital : ∑ i, C₂ i * (C₂ i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlamC hC_sum
-  have hC1₁ : Kraus.IsNBlkInjective B₁ L₀ := isNBlkInjective_smul _ (inv_ne_zero hlamB0) hC1
+  have hC1₁ : Kraus.IsNBlkInjective B₁ L₀ :=
+    (isNBlkInjective_smul_iff (inv_ne_zero hlamB0) B L₀).2 hC1
   have hstate₁ : ∀ σ : Fin N → Fin d, mpv B₁ σ = mpv C₁ σ := by
     intro σ
     simp only [hB₁, hC₁, mpv_smul, hstate σ]
@@ -521,7 +493,8 @@ theorem pgvwc07_uniqueness_of_canonical_form {B C : MPSTensor d D} {L₀ N : ℕ
   set B₁ : MPSTensor d D := fun i => (lamB : ℂ)⁻¹ • B i with hB₁
   set C₁ : MPSTensor d D := fun i => (lamB : ℂ)⁻¹ • C i with hC₁
   have hB₁_unital : ∑ i, B₁ i * (B₁ i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlamB hB_sum
-  have hC1₁ : Kraus.IsNBlkInjective B₁ L₀ := isNBlkInjective_smul _ (inv_ne_zero hlamB0) hC1
+  have hC1₁ : Kraus.IsNBlkInjective B₁ L₀ :=
+    (isNBlkInjective_smul_iff (inv_ne_zero hlamB0) B L₀).2 hC1
   have hstate₁ : ∀ σ : Fin N → Fin d, mpv B₁ σ = mpv C₁ σ := by
     intro σ
     simp only [hB₁, hC₁, mpv_smul, hstate σ]
@@ -536,11 +509,11 @@ theorem pgvwc07_uniqueness_of_canonical_form {B C : MPSTensor d D} {L₀ N : ℕ
     rw [inv_inv, Matrix.coe_units_inv, IsUnit.unit_spec, Matrix.mul_assoc, hBR, Matrix.mul_smul,
       ← Matrix.mul_assoc, Matrix.nonsing_inv_mul R hRdet, Matrix.one_mul]
   have hC1_C : Kraus.IsNBlkInjective C L₀ := by
-    have h := isNBlkInjective_smul (x⁻¹ * (lamB : ℂ)) (mul_ne_zero (inv_ne_zero hx) hlamB0)
+    have h := (isNBlkInjective_smul_iff (mul_ne_zero (inv_ne_zero hx) hlamB0) _ _).2
       (isNBlkInjective_of_gaugeEquiv hC1₁ hgauge)
     convert h using 2
     funext i
-    simp only [hC₁, smul_smul]
+    simp only [Pi.smul_apply, hC₁, smul_smul]
     rw [show x⁻¹ * (lamB : ℂ) * (x * (lamB : ℂ)⁻¹) = 1 by field_simp, one_smul]
   -- `C` has a single block as well, and the weighted single-block theorem applies.
   obtain ⟨lamC, hlamC, -, hC_sum⟩ :=

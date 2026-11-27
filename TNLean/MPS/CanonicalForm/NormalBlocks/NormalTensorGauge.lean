@@ -383,6 +383,24 @@ theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical [NeZero D]
     hC.pos.spectralRadius_eq_one_of_tracePreserving hC.tp
   primitive_transfer := hPrim
 
+/-- **Normal tensors are the normal families with spectral radius one.**
+Definition NT of arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:233-235`) asks
+for no nontrivial invariant projection, transfer-map spectral radius one, and `1` as the only
+eigenvalue of modulus one. With no further hypothesis this is algebraic normality
+(arXiv:0909.5347, property (b), `main.tex:416-421`) together with spectral radius one:
+irreducibility follows from normality, and so does the peripheral condition after the
+trace-preserving gauge. -/
+theorem isNormalTensor_iff_isNormal_and_spectralRadius_eq_one (A : MPSTensor d D) :
+    IsNormalTensor A ↔ Kraus.IsNormal A ∧
+      spectralRadius ℂ ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1 := by
+  refine ⟨fun h => ⟨h.isNormal, h.spectral_radius_one⟩, fun ⟨hN, hr⟩ => ?_⟩
+  have : NeZero D := ⟨matrix_dim_ne_zero_of_spectralRadius_eq_one _ hr⟩
+  obtain ⟨σ, _, _, hLeft, hGauge, _⟩ :=
+    exists_tpGauge_of_irreducible_spectralRadius_one (isIrreducibleFamily_of_isNormal A hN) hr
+  exact IsNormalTensor.of_gaugeEquiv
+    (isNormalTensor_of_isNormal_leftCanonical _ (isNormal_of_gaugeEquiv hN hGauge) hLeft) hGauge
+
 /-- A normal tensor has a nonzero letter.
 
 Indeed, if every letter vanished, then its transfer map and hence its spectral
@@ -596,8 +614,8 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
         (prepared k) (hIrr k) (hTP k) (hPrim k))
       (fun j k hjk =>
         cross_overlap_tendsto_zero_of_separated_normal_bnt_data prepared
-          (HasIrreducibleBlocks.ofForall hIrr)
-          (IsLeftCanonicalBlockFamily.ofForall hTP)
+          hIrr
+          hTP
           hPreparedDistinct j k hjk)
   refine ⟨N₀, fun N hN => ?_⟩
   have hFamily :
@@ -757,6 +775,51 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal [NeZero D] {A : M
     simp [List.length_ofFn, Matrix.trace_smul]
   · exact fun L => parentInteraction_eq_of_groundSpace_eq (hGS L)
   · exact fun L N => chainGroundSpace_eq_of_groundSpace_eq (hGS L)
+
+/-- A normal tensor of bond dimension \(D>0\) is injective at length
+\(D^4\), without assuming a trace-preserving normalization. A nonzero
+rescaling and a virtual gauge reduce to the normalized quantum Wielandt
+bound, and injectivity is invariant under both operations. Source:
+arXiv:0909.5347, Theorem 1; arXiv:1606.00608, line 332. -/
+theorem isNBlkInjective_pow_four_of_isNormal [NeZero D]
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    Kraus.IsNBlkInjective A (D ^ 4) := by
+  obtain ⟨B, ζ, ρ, hζ, hGauge, _hMPV, hP, _hρ, _hGS, _hPI, _hChain⟩ :=
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
+  have hNormalB : Kraus.IsNormal B :=
+    isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
+  have hInjB : Kraus.IsNBlkInjective B (D ^ 4) :=
+    isNBlkInjective_pow_four_of_isNormal_leftCanonical B hP.norm hNormalB
+  exact (isNBlkInjective_smul_iff hζ A (D ^ 4)).1
+    (isNBlkInjective_of_gaugeEquiv hInjB hGauge.symm)
+
+/-- **Normality, four equivalent forms.** For bond dimension `D > 0`, with no
+normalization:
+1. `Kraus.IsNormal A`: some positive length has full word span (arXiv:0909.5347,
+   property (b), `Papers/0909.5347/main.tex:416-421`);
+2. all sufficiently long word spans are full;
+3. the word span of length `D ^ 4` is full (arXiv:0909.5347, Theorem 1;
+   arXiv:1606.00608, line 332);
+4. the tensor blocked over some positive number of sites is injective
+   (arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex:1815-1830`). -/
+theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
+    List.TFAE
+      [Kraus.IsNormal A,
+       ∀ᶠ N in Filter.atTop, Kraus.wordSpan A N = ⊤,
+       Kraus.IsNBlkInjective A (D ^ 4),
+       ∃ L, 0 < L ∧ Kraus.IsInjective (Kraus.blockTensor A L)] := by
+  have hD4 : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
+  tfae_have 1 → 3 := fun h => isNBlkInjective_pow_four_of_isNormal A h
+  tfae_have 3 → 2 := fun h =>
+    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => isNBlkInjective_of_le hD4 h hm⟩
+  tfae_have 2 → 1 := fun h => by
+    obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp h
+    exact ⟨max N 1, by omega, hN _ (le_max_left _ _)⟩
+  tfae_have 1 → 4 := fun ⟨N, hN, h⟩ =>
+    ⟨N, hN, (Kraus.isNBlkInjective_iff_blockTensor_isInjective A N).1 h⟩
+  tfae_have 4 → 1 := fun ⟨N, hN, h⟩ =>
+    ⟨N, hN, (Kraus.isNBlkInjective_iff_blockTensor_isInjective A N).2 h⟩
+  tfae_finish
 
 end MPSTensor
 

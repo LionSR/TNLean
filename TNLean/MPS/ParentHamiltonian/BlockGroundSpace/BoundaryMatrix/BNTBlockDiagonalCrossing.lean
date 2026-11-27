@@ -370,8 +370,7 @@ theorem
   refine blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities
     μ A hN hLN X ?_ hIdentity
   intro j
-  exact Kraus.wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
-    ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
+  exact Kraus.wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j) (hBlk j) (by omega)
 
 /-- Source complementary-word comparisons give the periodic constraints for each
 block under block injectivity.
@@ -452,9 +451,10 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -507,9 +507,10 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)

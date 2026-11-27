@@ -53,6 +53,7 @@ open ManyBody (dependentGlobalFinIsometry dependentRegionFinEquiv
   regularizedPatchObjective reindex_reducedPure_eq_regionState)
 open Real (mul_patchFilterExponent_sq_le patchFilterExponent patchFilterExponent_le_half
   patchFilterExponent_pos)
+open ManyBody (Config Qudits SquareLatticeVertex)
 
 section
 
@@ -83,7 +84,8 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (hJ : 0 ≤ J) (_hΔ : 0 < Δ)
-    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) (hΩ : ‖Ω‖ = 1)
+    (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
@@ -216,7 +218,7 @@ theorem nestedPatch_minimizer_marginal_closeness
     (hκ : 0 < κ) (hκhalf : κ ≤ 1 / 2)
     (hsmall : 36 * (q : ℝ) ^ 2 * J * κ ^ 2 ≤ Δ / 1024) :
     ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace L q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
@@ -279,7 +281,8 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
     (q : ℕ) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ κ : ℝ, 0 < κ ∧ κ ≤ 1 / 2 ∧
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →

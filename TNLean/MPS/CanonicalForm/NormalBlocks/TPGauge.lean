@@ -863,7 +863,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   refine ⟨P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (a) TP under blocking.
   · intro k
-    exact leftCanonical_blockTensor (d := d) (D := dim₀ k) (A := blocks₀ k) (L := P) (hTP₀ k)
+    exact Kraus.IsTP.blockTensor (A := blocks₀ k) (hTP₀ k) P
   -- (b) Primitive transfer maps.
   · exact hPrim
   -- (c) Positive bond dimensions (unchanged by blocking).

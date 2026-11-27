@@ -23,6 +23,7 @@ September 24, 2026, `07-assembly.tex`, lines 203–214, at immutable manuscript
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open scoped Matrix.Norms.L2Operator
 
 
@@ -34,7 +35,8 @@ namespace TNLean.PEPS.Approximation
 No sign condition on the exponent is needed. Source: manuscript, assembly,
 lines 203–214, the enlargement of the polynomial-bond prefactor. -/
 theorem HasPEPSApproximation.mono_prefactor {C C' c : ℝ} {L q : ℕ}
-    {Ω : StateSpace L q} (h : HasPEPSApproximation C c L q Ω) (hC : C ≤ C') :
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
+    (h : HasPEPSApproximation C c L q Ω) (hC : C ≤ C') :
     HasPEPSApproximation C' c L q Ω := by
   obtain ⟨A, hpos, hbound, hne, herr⟩ := h
   refine ⟨A, hpos, ?_, hne, herr⟩
@@ -48,7 +50,8 @@ prefactor `max C (q ^ (L₀ * L₀))` and the same exponent `c ≥ 0`: below `L�
 representation of `hasPEPSApproximation_of_small_size` applies. Source: manuscript, assembly,
 lines 203–214. -/
 theorem hasPEPSApproximation_of_sufficiently_large_le {q L L₀ : ℕ} {C c : ℝ}
-    (hq : 0 < q) (hL : 2 ≤ L) (hc : 0 ≤ c) {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
+    (hq : 0 < q) (hL : 2 ≤ L) (hc : 0 ≤ c)
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} (hΩ : ‖Ω‖ = 1)
     (hlarge : L₀ ≤ L → HasPEPSApproximation C c L q Ω) :
     HasPEPSApproximation (max C (q ^ (L₀ * L₀) : ℕ)) c L q Ω := by
   by_cases hsize : L < L₀
@@ -62,12 +65,15 @@ single positive enlarged prefactor `max C (q ^ (L₀ * L₀))` of
 `IsSquareGroundState q J Δ` of gapped ground vectors of the model. Source: manuscript, assembly,
 lines 203–214. -/
 theorem exists_uniform_approximation_of_sufficiently_large {q L₀ : ℕ}
-    {G : ∀ L : ℕ, StateSpace L q → Prop} (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {C c : ℝ}
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {C c : ℝ}
     (hq : 0 < q) (hc : 0 ≤ c)
-    (hlarge : ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q,
+    (hlarge : ∀ L : ℕ, 2 ≤ L → L₀ ≤ L →
+      ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
       G L Ω → HasPEPSApproximation C c L q Ω) :
     ∃ C' : ℝ, 0 < C' ∧ C ≤ C' ∧
-      ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, G L Ω → HasPEPSApproximation C' c L q Ω := by
+      ∀ L : ℕ, 2 ≤ L → ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)), G L Ω →
+          HasPEPSApproximation C' c L q Ω := by
   refine ⟨max C (q ^ (L₀ * L₀) : ℕ), ?_, le_max_left _ _, fun L hL Ω hΩ ↦
     hasPEPSApproximation_of_sufficiently_large_le hq hL hc (hG L Ω hΩ)
       (fun hL₀ ↦ hlarge L hL hL₀ Ω hΩ)⟩
@@ -85,7 +91,7 @@ theorem polynomialPEPSApproximation_iff_sufficiently_large :
         ∃ C c : ℝ, 0 < C ∧ 0 < c ∧ ∃ L₀ : ℕ,
           ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
               (∀ i, ‖h.term i‖ ≤ J) →
-            ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
+            ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)),
               ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
               groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
                 HasPEPSApproximation C c L q Ω := by

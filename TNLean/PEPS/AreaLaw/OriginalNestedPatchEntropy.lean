@@ -31,6 +31,7 @@ revision
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.Approximation
@@ -52,9 +53,10 @@ Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–368 with the b
 lines 323–326; the square entropy area law at `C_A` is the explicit premise supplied by
 Proposition 2.1. -/
 theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
-    {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {C_A : ℝ}
+    {q : ℕ} {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    {C_A : ℝ}
     (hA : SquareEntropyAreaLawAt q G C_A) :
-    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+    ∀ (L : ℕ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))), G L Ω →
       ∀ (z : ℝ × ℝ) (u r : ℝ), 0 ≤ r → r ≤ 2 * u →
         ManyBody.regionEntropy
           (ManyBody.rectangleAreaLawState Ω)
@@ -90,9 +92,10 @@ lattice size, and `u = 0` are included.
 Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–368; the square
 entropy area law at `C_A` is the explicit premise supplied by Proposition 2.1. -/
 theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
-    {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {C_A : ℝ}
+    {q : ℕ} {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    {C_A : ℝ}
     (hA : SquareEntropyAreaLawAt q G C_A) :
-    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+    ∀ (L : ℕ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
         ∀ j : Fin (ManyBody.nestedPatchCount u),
           ManyBody.regionEntropy
@@ -114,7 +117,8 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
     (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C_S : ℝ, 1 ≤ C_S ∧
-      ∀ (L : ℕ) (Ω : StateSpace L q), IsSquareGroundState q J Δ L Ω →
+      ∀ (L : ℕ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
+          IsSquareGroundState q J Δ L Ω →
         ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
           ∀ j : Fin (ManyBody.nestedPatchCount u),
             ManyBody.regionEntropy

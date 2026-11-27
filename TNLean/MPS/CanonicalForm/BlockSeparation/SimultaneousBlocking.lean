@@ -52,9 +52,9 @@ theorem IsCPSVBasisOfNormalTensors.blockTensor
   have hBlock {D' : ℕ} (T : MPSTensor d D') {N : ℕ}
       (σ : Fin N → Fin (blockPhysDim d p)) :
       mpv (Kraus.blockTensor T p) σ =
-        mpv T (blockedConfigEquiv d N p σ) := by
+        mpv T (Kraus.blockedConfigEquiv d N p σ) := by
     simp only [mpv, coeff, evalWord_blockTensor]
-    rw [ofFn_blockedConfigEquiv]
+    rw [Kraus.ofFn_blockedConfigEquiv]
   refine
     { blocks_normal := fun j ↦ (hBNT.blocks_normal j).blockTensor p hp
       spans_mpv := ?_
@@ -64,16 +64,16 @@ theorem IsCPSVBasisOfNormalTensors.blockTensor
     refine ⟨c, fun σ ↦ ?_⟩
     calc
       mpv (Kraus.blockTensor A p) σ =
-          mpv A (blockedConfigEquiv d N p σ) := hBlock A σ
-      _ = ∑ j : Fin g, c j * mpv (B j) (blockedConfigEquiv d N p σ) :=
-        hc (blockedConfigEquiv d N p σ)
+          mpv A (Kraus.blockedConfigEquiv d N p σ) := hBlock A σ
+      _ = ∑ j : Fin g, c j * mpv (B j) (Kraus.blockedConfigEquiv d N p σ) :=
+        hc (Kraus.blockedConfigEquiv d N p σ)
       _ = ∑ j : Fin g, c j * mpv (Kraus.blockTensor (B j) p) σ := by
         apply Finset.sum_congr rfl
         intro j _
         rw [hBlock (B j) σ]
   · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
-    let e := blockedConfigEquiv d N p
+    let e := Kraus.blockedConfigEquiv d N p
     apply linearIndependent_mpvState_of_configEquiv e
       (fun j ↦ Kraus.blockTensor (B j) p) B
     · intro j σ
@@ -97,7 +97,7 @@ theorem wordTupleSpanTop_blockTensor_one
     constructor
     · rintro ⟨σ, rfl⟩
       let τ : Fin L → Fin d := fun i =>
-        blockedConfigEquiv d 1 L σ (Fin.cast (Nat.one_mul L).symm i)
+        Kraus.blockedConfigEquiv d 1 L σ (Fin.cast (Nat.one_mul L).symm i)
       refine ⟨τ, ?_⟩
       funext j
       change Kraus.evalWord (B j) (List.ofFn τ) =
@@ -105,27 +105,27 @@ theorem wordTupleSpanTop_blockTensor_one
       rw [evalWord_blockTensor]
       have hτ : List.ofFn τ = flattenBlockedWord d L (List.ofFn σ) := by
         calc
-          List.ofFn τ = List.ofFn (blockedConfigEquiv d 1 L σ) := by
+          List.ofFn τ = List.ofFn (Kraus.blockedConfigEquiv d 1 L σ) := by
             exact (List.ofFn_congr (Nat.one_mul L)
-              (blockedConfigEquiv d 1 L σ)).symm
+              (Kraus.blockedConfigEquiv d 1 L σ)).symm
           _ = flattenBlockedWord d L (List.ofFn σ) :=
-            ofFn_blockedConfigEquiv d 1 L σ
+            Kraus.ofFn_blockedConfigEquiv d 1 L σ
       rw [hτ]
     · rintro ⟨τ, rfl⟩
       let τ' : Fin (1 * L) → Fin d := fun i =>
         τ (Fin.cast (Nat.one_mul L) i)
       let σ : Fin 1 → Fin (blockPhysDim d L) :=
-        (blockedConfigEquiv d 1 L).symm τ'
+        (Kraus.blockedConfigEquiv d 1 L).symm τ'
       refine ⟨σ, ?_⟩
       funext j
       change Kraus.evalWord (Kraus.blockTensor (B j) L) (List.ofFn σ) =
         Kraus.evalWord (B j) (List.ofFn τ)
       rw [evalWord_blockTensor]
-      have hcfg : blockedConfigEquiv d 1 L σ = τ' := by
+      have hcfg : Kraus.blockedConfigEquiv d 1 L σ = τ' := by
         simp [σ]
       have hlist : List.ofFn τ' = List.ofFn τ := by
         simp [τ']
-      rw [← ofFn_blockedConfigEquiv d 1 L σ, hcfg, hlist]
+      rw [← Kraus.ofFn_blockedConfigEquiv d 1 L σ, hcfg, hlist]
   rw [hRange, hSpan]
 
 private theorem hasBlockSelectorWords_of_family_gaugeEquiv
@@ -222,18 +222,16 @@ theorem exists_positive_wordTupleSpanTop_of_isNormal
   have hAtLeastP : ∀ j n, p ≤ n → Kraus.IsNBlkInjective (prepared j) n := by
     intro j n hpn
     exact isNBlkInjective_of_le hp (hAtP j) hpn
-  have hPreparedIrr : HasIrreducibleBlocks (d := d) prepared :=
-    HasIrreducibleBlocks.ofForall hIrr
-  have hPreparedLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
-    IsLeftCanonicalBlockFamily.ofForall hTP
-  have hPreparedOverlap : HasNormalizedSelfOverlap (d := d) prepared :=
-    HasNormalizedSelfOverlap.ofForall fun j =>
+  have hPreparedOverlap : ∀ k,
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (prepared k) (prepared k) N)
+        Filter.atTop (nhds (1 : ℂ)) :=
+    fun j =>
       overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
         (prepared j) (hIrr j) (hTP j) (hPrim j)
   have hPair : HasPairBlockSeparatingWords prepared
       ((p + 1) + ((p + 1) + (p + 1))) :=
     hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
-      prepared hPreparedIrr hPreparedLeft hPreparedOverlap hPreparedDistinct
+      prepared hIrr hTP hPreparedOverlap hPreparedDistinct
       hAtP
       (fun j => hAtLeastP j (p + 1) (by omega))
       (fun j => hAtLeastP j ((p + 1) + ((p + 1) + (p + 1))) (by omega))

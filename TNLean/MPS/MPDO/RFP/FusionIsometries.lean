@@ -74,7 +74,7 @@ map to the corresponding power. -/
 @[simp] theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
     blockedTransferMap M n = (transferMap M) ^ n := by
   simpa only [blockedTransferMap, transferMap_eq_toMPSTensor] using
-    (MPSTensor.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
+    (Kraus.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
 
 /-- At blocked size `1`, the blocked transfer map is the original transfer map. -/
 @[simp] theorem blockedTransferMap_one (M : MPOTensor d D) :

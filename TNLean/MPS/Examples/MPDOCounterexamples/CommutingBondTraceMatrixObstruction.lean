@@ -253,7 +253,7 @@ lemma tensor_isNormalTensor : MPSTensor.IsNormalTensor tensor.toMPSTensor :=
     tensor.toMPSTensor transferMap_toMPSTensor
 
 /-- The product tensor is already injective before blocking. -/
-lemma tensor_isInjective : tensor.IsInjective := by
+lemma tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
   apply top_unique
   intro X _hX
   have hdiv : (0 : Fin (2 * 2)).divNat = (0 : Fin 2) := by decide
@@ -313,14 +313,14 @@ lemma tensor_isMPDO : tensor.IsMPDO := tensor_isLPDO.isMPDO
 
 /-- The exact fixed commuting-bond presentation assembled from the displayed
 Beigi neighboring operators. -/
-noncomputable def commutingBondData : EtaLocalStructureData tensor :=
-  factorization.etaLocalStructureData neighboringOperator_posSemidef
+noncomputable def commutingBondData : CommutingForm tensor :=
+  factorization.commutingForm neighboringOperator_posSemidef
 
 /-- The fixed commuting-bond product equals the source MPO with coefficient
 one at every length in the source range. -/
 lemma mpo_eq_commutingBondProduct (N : ℕ) (hN : 2 ≤ N) :
     mpo tensor N =
-      (commutingBondData.bondData.toCommutingFormData hN).product := by
+      commutingBondData.product hN := by
   exact factorization.mpo_eq_product_physicalBond hN
 
 /-- A chosen nonminimal factorization of a normal source-ZCL MPDO with an exact
@@ -334,13 +334,13 @@ trace matrix: the explicit one-sector factorization above has trace matrix
 $(1)$. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
-      tensor.IsInjective ∧
+      Kraus.IsInjective tensor.toMPSTensor ∧
       MPSTensor.IsNormalTensor tensor.toMPSTensor ∧
       tensor.IsSourceZCL ∧
       (∀ k h, (factorization.neighboringOperator k h).PosSemidef) ∧
       (∀ (N : ℕ) (hN : 2 ≤ N),
         mpo tensor N =
-          (commutingBondData.bondData.toCommutingFormData hN).product) ∧
+          commutingBondData.product hN) ∧
       traceMatrix = !![1, 0; 0, 0] ∧
       ¬ Matrix.IsPrimitive traceMatrix ∧
       oneSectorFactorization.sectorCount = 1 ∧

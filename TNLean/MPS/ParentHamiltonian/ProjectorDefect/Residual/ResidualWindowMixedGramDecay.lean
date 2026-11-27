@@ -64,7 +64,7 @@ theorem sum_evalWord_frobenius_norm_sq_of_leftCanonical
     (B : MPSTensor d E) (hLeft : ∑ i, (B i)ᴴ * B i = 1) (K : ℕ) :
     (∑ u : Cfg d K, ‖Kraus.evalWord B (List.ofFn u)‖ ^ 2) = (E : ℝ) := by
   have h := congrArg (fun X : Matrix (Fin E) (Fin E) ℂ => (Matrix.trace X).re)
-    (sum_evalWord_conjTranspose_mul_evalWord B hLeft K)
+    (Kraus.sum_evalWord_conjTranspose_mul_evalWord B hLeft K)
   simpa only [Matrix.trace_sum, Complex.re_sum,
     Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq,
     Matrix.trace_one, Fintype.card_fin, Complex.natCast_re] using h

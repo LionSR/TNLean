@@ -421,7 +421,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
         (hV_iso u) (hV_iso v) (hV_range u) (hV_range v)
         hCorner_u hCorner_v hGPE
     refine ⟨U, ζ, hζ, hU_ne, hSupp, ?_⟩
-    simpa [transferMap_blockTensor] using hEig_block
+    simpa [Kraus.transferMap_blockTensor] using hEig_block
   exact hU_ne
     (offDiag_eigenvector_eq_zero_of_isPeriodic A hP hPproj hPsum hCyclic hOrth
       hζ hSupp hEig)

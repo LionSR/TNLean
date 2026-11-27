@@ -40,6 +40,8 @@ on the change being made.
   their tags (lines 102–125), the direct repainting (lines 507–527).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology
@@ -82,7 +84,7 @@ theorem mem_levelVertices {j : ℕ} {done : Set (ℤ × ℤ)} {c : ℝ × ℝ} :
 
 /-! ### The frame -/
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
 
 open Classical in
 /-- **The main frame of a stage of a level.** The encoded frame of the sampled block guide of the

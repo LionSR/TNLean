@@ -154,12 +154,14 @@ is deliberately source-faithful.
   `Kraus.IsInjective.isNormal` and
   `MPSTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
   rank" of arXiv:0909.5347, clause (b) of `MPSTensor.primitivity_tfae`.
-- **Caveat:** `MPSTensor.IsNormalTensor.isNormal` derives nonzero bond dimension
-  from the spectral-radius-one clause; it requires no external positivity
-  assumption. There is no equivalence theorem between `Kraus.IsNormal` and
-  `MPSTensor.IsNormalTensor`, and this glossary makes no such claim. In
-  particular, the reverse direction would have to recover the CPSV
-  spectral-radius normalization, not just eventual block injectivity.
+  `MPSTensor.normality_tfae` (for `[NeZero D]`, no normalization) gives the
+  equivalent forms: every sufficiently long word span is full, the word span of
+  length `D ^ 4` is full, and some positive blocking is injective.
+- **Caveat:** `Kraus.IsNormal` is invariant under rescaling of the tensor, so it
+  is not equivalent to `MPSTensor.IsNormalTensor`, which fixes the spectral
+  radius of the transfer map at one. The exact relation is
+  `MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`, with no
+  hypothesis.
 
 ### `MPSTensor.IsNormalTensor`
 
@@ -168,9 +170,14 @@ is deliberately source-faithful.
 - **Defined in:** `TNLean/MPS/CanonicalForm/Definitions.lean`.
 - **Meaning:** the CPSV normal-tensor condition: no nontrivial invariant
   orthogonal projection, transfer-map spectral radius exactly one, and no
-  unit-modulus eigenvalue other than one.
+  unit-modulus eigenvalue other than one. Equivalently, with no hypothesis,
+  normal (`Kraus.IsNormal`) with transfer-map spectral radius one; the name does
+  not show the normalization.
 - **Source:** Cirac--Pérez-García--Schuch--Verstraete, arXiv:1606.00608,
   Definition NT, `Papers/1606.00608/MPDO-22-12-17-2.tex:231-235`.
+- **Sanctioned characterization:**
+  `MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`, in
+  `TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorGauge.lean`.
 - **Sanctioned bridges:** `MPSTensor.IsNormalTensor.exists_tpGauge`,
   `MPSTensor.IsNormalTensor.isNormal`, and
   `MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, all in
@@ -179,8 +186,8 @@ is deliberately source-faithful.
   internally from spectral normality. Other asymptotic consequences may still
   expose a positive-dimension instance in their signatures. These bridges run
   only from the normalized spectral predicate to downstream algebraic or
-  asymptotic consequences; they do **not** establish an equivalence with
-  `Kraus.IsNormal`.
+  asymptotic consequences. The converse needs the spectral-radius-one clause,
+  as in the characterization above.
 
 ### Basis-level normality
 
@@ -373,6 +380,11 @@ out.
   `Kraus.isNBlkInjective_iff_blockTensor_isInjective`.
 - **Caveat:** this is one-site injectivity. A tensor can fail this predicate and
   satisfy `Kraus.IsNBlkInjective A N` for a larger `N`.
+- **Simple MPO tensors:** injectivity of a simple MPO tensor `K` is written
+  `Kraus.IsInjective K.toMPSTensor`, on the doubled physical index; this is the
+  hypothesis of the inverse tensor of arXiv:1606.00608 Appendix C.2,
+  `Papers/1606.00608/MPDO-22-12-17-2.tex:1628-1658`. It does not mean
+  injectivity of the MPO as an operator on every chain length.
 
 #### `Kraus.IsNBlkInjective`
 
@@ -389,6 +401,12 @@ out.
   `QICLean/Kraus/Blocking.lean`.
 - **Caveat:** no positivity condition on `N` is built into this predicate;
   `Kraus.IsNormal` explicitly requires a positive witness.
+- **Spelling rule:** "injective after blocking `N` sites" is written
+  `Kraus.IsNBlkInjective A N`. Its body is `Kraus.wordSpan A N = ⊤`, used by
+  unfolding, with no translation lemma. The blocked spelling
+  `Kraus.IsInjective (Kraus.blockTensor A N)` appears only where a one-site
+  theorem is applied to the blocked tensor, through
+  `Kraus.isNBlkInjective_iff_blockTensor_isInjective`.
 
 #### `MPSChainTensor.IsInjective` and `MPSChainTensor.IsWindowInjective`
 
@@ -405,20 +423,6 @@ out.
   `MPSChainTensor.isWindowInjective_one_of_isInjective` and
   `MPSChainTensor.isWindowInjective_const`.
 - **Caveat:** window injectivity requires `[NeZero n]`.
-
-#### `MPOTensor.IsInjective`
-
-- **Declaration:** `MPOTensor.IsInjective (K : MPOTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/Operator/Simple/SimpleLocalStructure.lean`.
-- **Meaning:** an abbreviation for
-  `Kraus.IsInjective K.toMPSTensor` on the doubled physical index.
-- **Source:** arXiv:1606.00608 Appendix C.2, where an inverse tensor is used for
-  the blocked simple MPDO tensor; see
-  `Papers/1606.00608/MPDO-22-12-17-2.tex:1628-1658`.
-- **Sanctioned bridge:** this is a definitional abbreviation; unfold it to use
-  the `Kraus.IsInjective` API.
-- **Caveat:** it does not mean injectivity of the MPO as an operator on every
-  chain length.
 
 ### PEPS predicates
 
@@ -490,9 +494,12 @@ out.
   `Papers/1804.04964/paper_normal.tex:979-981`.
 - **Sanctioned bridges:**
   `TNLean.PEPS.IsVertexInjective.localTensorMap_injective`,
-  `TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective`, and
-  `TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective`.
-- **Caveat:** the last bridge requires
+  `TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective`, and, on the
+  cycle graph, `TNLean.PEPS.isVertexInjective_cycleTensorOfMPS_iff`: the cycle
+  tensor carrying one copy of an MPS tensor `A` at every site is vertex injective
+  iff `Kraus.IsInjective A`. The injectivity of a one-vertex region `{v}` is the
+  vertex clause itself, linear independence of `A.component v`.
+- **Caveat:** the region bridge requires
   `∀ e, 0 < A.bondDim e`. Function injectivity of the raw indexing function is
   strictly weaker and is not the sanctioned notion. Vertex injectivity alone
   admits zero-dimensional bonds; source-facing theorems take
@@ -1007,7 +1014,6 @@ out.
   ground space is independent of the chosen terms, but spectral gaps and other
   spectral data are not.
 
-`TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
 geometry-specific formulations used by the PEPS proof. They are not aliases for
@@ -1080,10 +1086,10 @@ model different levels of data and different sources.
   stronger separated form used after blocking. Compare arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:1831-1836`.
 - **Sanctioned bridges:** `MPSTensor.IsCanonicalForm.of_peripheral_primitive`
-  constructs the form. Its `block_injective` field supplies pointwise
-  injectivity directly; its remaining fields feed
-  `IsLeftCanonicalBlockFamily.ofForall` and
-  `HasNormalizedSelfOverlap.ofForall`.
+  constructs the form. Its fields `block_injective`, `leftCanonical`, and
+  `overlap_tendsto_one` are the pointwise blockwise hypotheses `∀ k, P (A k)`
+  taken directly by the block-separation theorems; there are no wrapper
+  structures for them.
 - **Caveat:** this is not the paper's bare direct-sum CF predicate: it assumes
   one-site injectivity, left-canonical normalization, positive dimensions, and
   normalized self-overlap. The already-separated family also does not retain
@@ -1101,10 +1107,11 @@ model different levels of data and different sources.
   left-canonical, ordered-weight, and positive-dimension fields are additional
   prepared-data hypotheses rather than part of the paper's bare CF definition.
 - **Sanctioned bridges:**
-  `MPSTensor.IsNormalCanonicalForm.toHasIrreducibleBlocks`,
-  `MPSTensor.IsNormalCanonicalForm.toIsLeftCanonicalBlockFamily`,
-  `MPSTensor.IsNormalCanonicalForm.ofSeparatedData`, and the direct constructor
-  `HasPrimitiveBlocks.ofForall` applied to the `block_primitive` field.
+  `MPSTensor.IsNormalCanonicalForm.ofSeparatedData` builds the form from the
+  pointwise hypotheses `∀ k, P (A k)` (irreducibility, left-canonical
+  normalization, peripheral primitivity) and `HasOrderedNonzeroWeights`; the
+  fields `block_irreducible`, `leftCanonical`, and `block_primitive` give the
+  pointwise hypotheses back.
 - **Caveat:** this does not encode the source's modulus-bound and unit-witness
   normalization for copy weights. No public theorem identifies this predicate
   with `MPSTensor.IsCanonicalForm`; the block hypotheses differ. The positive
@@ -1413,6 +1420,77 @@ The following notions use different transfer objects and are not interchangeable
   `MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL` shows
   that this tower does not imply doubled-index transfer idempotence.
 
+## Commuting form of a matrix product density operator
+
+### `MPOTensor.CommutingBond` and `MPOTensor.CommutingForm`
+
+- **Declarations:** `MPOTensor.CommutingBond (d : ℕ)` and
+  `MPOTensor.CommutingForm (M : MPOTensor d D)`, a structure extending
+  `CommutingBond d` by the field `realizes_mpo`.
+- **Defined in:** `TNLean/MPS/Operator/Simple/CommutingForm.lean`.
+- **Meaning:** a commuting bond is one positive semidefinite two-site matrix
+  $B$ whose translates $B_{i,i+1}$ pairwise commute on the periodic chain at
+  every length $N\ge2$, with translates `bondAt hN i` and product
+  `product hN` $=\prod_i B_{i,i+1}$. The commuting form of $M$ is a commuting
+  bond with $\sigma^{(N)}(M)=c_N\prod_iB_{i,i+1}$, $c_N>0$, at every $N\ge2$.
+- **Source anchor:** arXiv:1606.00608, Appendix C.2, equation `expression`,
+  lines 1569--1594 (Proposition C.8), read as in Proposition `4to2`, lines
+  1597--1619: one bond for every chain length, recorded in
+  `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+- **Sanctioned results:** `MPOTensor.nonempty_commutingForm_of_isSAL`
+  (Proposition C.8: injectivity and SAL),
+  `MPOTensor.CommutingForm.isSAL_of_isSourceZCL` (Proposition `4to2`: MPDO,
+  injectivity and source ZCL), and their combination
+  `MPOTensor.isSAL_iff_nonempty_commutingForm` (the equivalence announced at
+  line 1567, under MPDO, injectivity and source ZCL).
+  `MPOTensor.CommutingForm.hasGSNNCHForm` gives the one-sector GSNNCH form.
+- **Caveat:** a bond chosen separately at each length is not a commuting form;
+  at one length such a presentation is the one-sector case of Definition 4.8
+  (`MPOTensor.exists_oneSector_gsnnchData_iff`).
+
+### `MPOTensor.GSNNCHData`, `MPOTensor.HasGSNNCHForm` and `MPOTensor.IsGSNNCH`
+
+- **Declarations:** `MPOTensor.GSNNCHData d N`,
+  `MPOTensor.HasGSNNCHFormAt (ρ : ChainOperator d N)`,
+  `MPOTensor.HasGSNNCHForm (M : MPOTensor d D)`, `MPOTensor.IsGSNNCHAt`, and
+  `MPOTensor.IsGSNNCH`.
+- **Defined in:** `TNLean/MPS/Operator/Simple/CommutingForm.lean`.
+- **Meaning:** an orthogonal sector sum
+  $\rho^{(N)}\propto\bigoplus_xn_x\prod_j\tau_j(B^{(x)})$ at one chain length
+  with positive supported bonds whose neighbouring translates commute; the
+  `IsGSNNCH` forms add positivity and unit trace of the normalized operator.
+- **Source anchor:** arXiv:1606.00608, Definition 4.8, lines 829--850.
+- **Sanctioned results:** `MPOTensor.exists_oneSector_gsnnchData_iff`
+  characterizes the one-sector presentations at one length;
+  `MPOTensor.isGSNNCH_of_hasGSNNCHForm` adds the density normalization from
+  nonvanishing traces.
+- **Caveat:** the sector bonds may depend on the chain length; this is a
+  different notion from the commuting form.
+
+## Mutual information on a chain
+
+### `MPOTensor.mutualInfoChain`
+
+- **Declaration:** `MPOTensor.mutualInfoChain M N L hL hM : ℝ`, for
+  `hL : L ≤ N` and `hM : (mpo M N).PosSemidef`.
+- **Defined in:** `TNLean/MPS/Operator/DensityOperator/AreaLaw.lean`.
+- **Meaning:** QICLean's bipartite mutual information
+  $S(\rho_A)+S(\rho_B)-S(\rho_{AB})$ of the normalized state
+  $\sigma^{(N)}(M)$, reindexed by `MPOTensor.bipartitionedNormalizedMPO` across
+  the contiguous cut after the first $L$ spins. It is a named special case of
+  `_root_.mutualInformation`, not a second notion.
+- **Source:** CPSV16 Section 4.4, label `MixedMutual`,
+  `Papers/1606.00608/MPDO-22-12-17-2.tex:789-799`, and Appendix C,
+  lines 1338--1340.
+- **Characterization:** `MPOTensor.mutualInfoChain_eq` (in
+  `TNLean/MPS/Operator/DensityOperator/MutualInfoMonotone.lean`) proves the
+  source's displayed formula $I_L=S_L+S_{N-L}-S_N$ with block entropies of
+  the first $L$, first $N-L$, and all $N$ spins; translation invariance of the
+  periodic operator enters only there.
+- **Caveat:** QICLean's `ManyBody.regionMutualInformation` is a different
+  quantity: it is stated for a vector and arbitrary regions. The two meet only
+  on doubled tensors, through `mutualInfoChain_doubledTensor`.
+
 ## State-level gauging
 
 ### `GaussLaw.DefectMaps.IsCompletion`
@@ -1682,7 +1760,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`,
   `MPSPreparation.isDeterministicallyGenerated_iff`,
   `MPSPreparation.hasOBCRep_iff_cutRank_le` (for `0 < N` and `0 < D`, equivalent
-  to all cut ranks `MPSPreparation.cutRank ψ k` being at most `D`),
+  to all cut ranks `ManyBody.cutRank (ManyBody.interval N 0 k) ψ` being at most `D`),
   `MPSPreparation.hasOBCRep_pow_half` (every vector on `N ≥ 1` sites, with
   `D = d^{⌊N/2⌋}`), `MPSPreparation.HasOBCRep.smul` and
   `MPSPreparation.hasOBCRep_zero` (on chains of positive length the predicate
@@ -1692,7 +1770,7 @@ The following notions use different transfer objects and are not interchangeable
   `OBCChainTensor.exists_coeff_eq_of_cutRank_le` (bond `k` equal to the cut rank
   at `k`).
 - **Caveat:** `D` is a common upper bound, not the least bond dimension; the
-  least bond dimension at the cut `k` is `MPSPreparation.cutRank ψ k`
+  least bond dimension at the cut `k` is `ManyBody.cutRank (ManyBody.interval N 0 k) ψ`
   (`OBCChainTensor.cutRank_coeff_le`). At `N = 0` the predicate holds only for
   the vector `1`, so the sequential-generation component theorems apply it to
   `c • ψ` with `c ≠ 0` to cover that length.
@@ -2292,9 +2370,10 @@ operators on the configurations. The scope of the local channel model relative t
 - **Source:** arXiv:2307.01696, footnote to the paragraph "Approximation
   through the fixed-point state" (the blocked tensors are assumed injective),
   for the chains of the paragraph "Inhomogeneous short-range correlated MPS".
-- **Sanctioned bridges:** `VaryingBondChain.IsBlockInjective.isInjectiveOn`
-  (for blocks of at least one site, each padded blocked tensor is
-  `MPSTensor.IsInjectiveOn` its rectangle).
+- **Sanctioned bridges:** `VaryingBondChain.isBlockInjective_iff_forall_isInjectiveOn`
+  (for blocks of at least one site, the predicate holds iff each padded blocked
+  tensor is `MPSTensor.IsInjectiveOn` its rectangle) and its forward direction
+  `VaryingBondChain.IsBlockInjective.isInjectiveOn`.
 - **Caveat:** the source's condition concerns the rectangular blocked tensor;
   the identification of the corner of the padded blocked tensor with the
   rectangular product is not proved. For a block of length zero the padded

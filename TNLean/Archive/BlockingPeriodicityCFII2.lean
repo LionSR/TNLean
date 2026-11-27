@@ -790,7 +790,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
   refine ⟨p, hp_pos, ?_⟩
   rw [isPrimitive_iff]
   -- Convert from a power to blocking.
-  rw [MPSTensor.transferMap_blockTensor (A := A) (L := p)]
+  rw [Kraus.transferMap_blockTensor (A := A) (L := p)]
   simpa using hprim_pow
 
 end PeriodicityRemoval

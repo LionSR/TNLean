@@ -47,7 +47,7 @@ inverse-map factors. See
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5, lines
 1374--1505. -/
 theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
@@ -95,7 +95,7 @@ coefficient-rescaled Case-II result. See
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
 theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
@@ -125,7 +125,7 @@ claim. See <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
 theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
@@ -200,7 +200,7 @@ scale-invariant ZCL or Case-II claim. See
 Source: arXiv:1606.00608, Appendix C.2, the corollary after Lemma C.5, lines
 1503--1506. -/
 theorem exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ F : PhysicalSectorFactorization K, ∃ a b : Fin F.sectorCount → ℝ,

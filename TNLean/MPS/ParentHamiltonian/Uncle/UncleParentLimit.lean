@@ -66,12 +66,12 @@ noncomputable def uncleInteraction {d a b : ℕ}
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) : Matrix (Cfg d 2) (Cfg d 2) ℂ :=
   (LinearMap.toMatrix' (parentInteraction (uncleTensor A B R L) 1)).submatrix
-    (blockedConfigEquiv d 1 2).symm (blockedConfigEquiv d 1 2).symm
+    (Kraus.blockedConfigEquiv d 1 2).symm (Kraus.blockedConfigEquiv d 1 2).symm
 
 private theorem toEuclideanLin_submatrix_blockedConfigEquiv_apply {d D : ℕ}
     (T : MPSTensor (Kraus.blockPhysDim d 2) D) (v : EuclideanSpace ℂ (Cfg d 2)) :
     Matrix.toEuclideanLin ((LinearMap.toMatrix' (parentInteraction T 1)).submatrix
-        (blockedConfigEquiv d 1 2).symm (blockedConfigEquiv d 1 2).symm) v =
+        (Kraus.blockedConfigEquiv d 1 2).symm (Kraus.blockedConfigEquiv d 1 2).symm) v =
       blockedConfigLinearIsometryEquiv d 1 2
         ((groundSpaceES T 1)ᗮ.starProjection
           ((blockedConfigLinearIsometryEquiv d 1 2).symm v)) := by
@@ -85,7 +85,7 @@ private theorem toEuclideanLin_submatrix_blockedConfigEquiv_apply {d D : ℕ}
   ext σ
   simp only [Matrix.toLpLin_apply, blockedConfigLinearIsometryEquiv_apply_apply, Matrix.mulVec,
     dotProduct, Matrix.submatrix_apply]
-  refine Fintype.sum_equiv (blockedConfigEquiv d 1 2).symm _ _ fun ρ => ?_
+  refine Fintype.sum_equiv (Kraus.blockedConfigEquiv d 1 2).symm _ _ fun ρ => ?_
   rw [blockedConfigLinearIsometryEquiv_symm_apply_apply, Equiv.apply_symm_apply]
 
 /-- The uncle interaction acts as the orthogonal projection onto the complement of the one-site
@@ -106,7 +106,7 @@ private theorem toMatrix'_parentInteraction_eq_uncleInterpolant_submatrix {d a b
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {ε : ℂ} (hε : ε ≠ 0) :
     LinearMap.toMatrix' (parentInteraction (twoBlockPerturbation A P B Q R L ε) 2) =
       (LinearMap.toMatrix' (parentInteraction (uncleTensorInterpolant A P B Q R L ε) 1)).submatrix
-        (blockedConfigEquiv d 1 2).symm (blockedConfigEquiv d 1 2).symm := by
+        (Kraus.blockedConfigEquiv d 1 2).symm (Kraus.blockedConfigEquiv d 1 2).symm := by
   have hG : groundSpace (uncleTensorInterpolant A P B Q R L ε) 1 =
       groundSpace (blockTensor (twoBlockPerturbation A P B Q R L ε) 2) 1 := by
     rw [← twoBlockVirtualScale_blockTensor A P B Q R L hε]
@@ -145,7 +145,7 @@ theorem tendsto_toMatrix'_parentInteraction_twoBlockPerturbation {d a b : ℕ}
   have he : Continuous e := e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional
   have hC : ContinuousAt (fun ε : ℂ => e
       ((LinearMap.toMatrix' (parentInteraction (uncleTensorInterpolant A P B Q R L ε) 1)).submatrix
-        (blockedConfigEquiv d 1 2).symm (blockedConfigEquiv d 1 2).symm)) 0 :=
+        (Kraus.blockedConfigEquiv d 1 2).symm (Kraus.blockedConfigEquiv d 1 2).symm)) 0 :=
     he.continuousAt.comp ((Continuous.matrix_submatrix continuous_id _ _).continuousAt.comp hP)
   have hlim := hC.tendsto.mono_left (nhdsWithin_le_nhds (s := {0}ᶜ))
   simp only [uncleTensorInterpolant_zero] at hlim

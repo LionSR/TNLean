@@ -14,6 +14,10 @@ This file develops the inverse tensor and the induced physical realization
 maps used in the local argument of Appendix C.2 of arXiv:1606.00608. It also
 identifies the normalized virtual tail that closes the three-site marginal of
 the four-site matrix product operator.
+
+A simple MPO tensor `K` is injective when its doubled-index MPS tensor is
+injective, `Kraus.IsInjective K.toMPSTensor`; this is the hypothesis of the
+local inverse-map layer in Appendix C.2.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -24,12 +28,6 @@ section InjectiveInverseMaps
 
 variable {d D : ℕ}
 
-/-- A simple MPO tensor is injective when its doubled-index MPS tensor is
-injective. This is the exact hypothesis needed for the local inverse-map layer
-in Appendix C.2. -/
-abbrev IsInjective (K : MPOTensor d D) : Prop :=
-  Kraus.IsInjective K.toMPSTensor
-
 /-- A concrete inverse tensor `K⁻¹` obtained from a right inverse to the linear
 combination map of the doubled-index MPS tensor.
 
@@ -37,7 +35,7 @@ For each physical index `p : Fin (d * d)`, the matrix `inverseTensor K hK p`
 collects the coefficients of the standard matrix basis under the chosen right
 inverse. Equivalently, its `(α, β)` entry is the coefficient of `K p` in the
 expansion of the matrix unit `|α⟩⟨β|`. -/
-noncomputable def inverseTensor (K : MPOTensor d D) (hK : K.IsInjective) :
+noncomputable def inverseTensor (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) :
     Fin (d * d) → Matrix (Fin D) (Fin D) ℂ :=
   fun p => Matrix.of fun α β =>
     Kraus.decompositionMap (A := K.toMPSTensor) hK (Matrix.single α β (1 : ℂ)) p
@@ -45,7 +43,7 @@ noncomputable def inverseTensor (K : MPOTensor d D) (hK : K.IsInjective) :
 /-- Contracting the chosen inverse tensor with the local MPO tensor recovers the
 matrix units on the virtual bond space. This is the Lean form of the paper's
 inverse-map identity for an injective simple tensor. -/
-theorem inverseTensor_spec (K : MPOTensor d D) (hK : K.IsInjective)
+theorem inverseTensor_spec (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (α β : Fin D) :
     ∑ p : Fin (d * d), inverseTensor K hK p α β • K.toMPSTensor p =
       Matrix.single α β (1 : ℂ) := by
@@ -182,7 +180,7 @@ identity at lines 1415--1438 of arXiv:1606.00608.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1415--1438. -/
 noncomputable def inverseMapThreeSiteContraction
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (α₁ β₁ α₃ β₃ : Fin D) (p₂ : Fin (d * d)) : ℂ :=
   ∑ p₁ : Fin (d * d), ∑ p₃ : Fin (d * d),
@@ -211,7 +209,7 @@ is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1438. -/
 theorem inverseMapThreeSiteContraction_eq
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (α₁ β₁ α₃ β₃ : Fin D) (p₂ : Fin (d * d)) :
     inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃ p₂ =
@@ -242,33 +240,33 @@ theorem inverseMapThreeSiteContraction_eq
 /-- The physical realization map for a right virtual insertion on an injective
 simple MPO tensor. This is the MPO encoding of
 `MPSTensor.physRealize` for the doubled-index tensor. -/
-noncomputable def physRealize (K : MPOTensor d D) (hK : K.IsInjective)
+noncomputable def physRealize (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   MPSTensor.physRealize K.toMPSTensor hK X
 
 /-- Defining property of `MPOTensor.physRealize`. -/
-theorem physRealize_spec (K : MPOTensor d D) (hK : K.IsInjective)
+theorem physRealize_spec (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (X : Matrix (Fin D) (Fin D) ℂ) (p : Fin (d * d)) :
     K.toMPSTensor p * X =
       ∑ q, (physRealize K hK X) p q • K.toMPSTensor q :=
   MPSTensor.physRealize_spec K.toMPSTensor hK X p
 
 /-- `MPOTensor.physRealize` is multiplicative. -/
-theorem physRealize_mul (K : MPOTensor d D) (hK : K.IsInjective)
+theorem physRealize_mul (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
     physRealize K hK (X * Y) = physRealize K hK X * physRealize K hK Y :=
   MPSTensor.physRealize_mul K.toMPSTensor hK X Y
 
 /-- The physical realization map for a left virtual insertion on an injective
 simple MPO tensor. -/
-noncomputable def physRealizeLeft (K : MPOTensor d D) (hK : K.IsInjective)
+noncomputable def physRealizeLeft (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   MPSTensor.physRealizeLeft K.toMPSTensor hK X
 
 /-- Defining property of `MPOTensor.physRealizeLeft`. -/
-theorem physRealizeLeft_spec (K : MPOTensor d D) (hK : K.IsInjective)
+theorem physRealizeLeft_spec (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (X : Matrix (Fin D) (Fin D) ℂ) (p : Fin (d * d)) :
     X * K.toMPSTensor p =
       ∑ q, (physRealizeLeft K hK X) p q • K.toMPSTensor q :=

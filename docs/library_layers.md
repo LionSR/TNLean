@@ -1747,9 +1747,10 @@ examples layer prefers (the twisted dimer then joins `MPS/Examples/Dimer`).
   `CommutingFormFromAreaLaw`.
 
 Modules named for a bridge (`docs/many_body_circuit_architecture.md`):
-`MutualInfoBridge` → `Entropy/MutualInfoBridge`, kept until it is deleted in
-F2 for QICLean's mutual information (importers `MutualInfoAreaLaw`,
-`LocalPurificationAreaLaw`, `RFPViaTSSAL` then use QICLean's notion);
+`MutualInfoBridge` is dissolved: `mutualInfoChain` is defined as QICLean's
+bipartite mutual information in `DensityOperator/AreaLaw`, the block-entropy
+formula and the two marginals moved to `DensityOperator/MutualInfoMonotone`,
+and the operator-bond bound is `Entropy/MutualInfoBondDimBound`;
 `PureRFPBridge` is a theorem and is renamed for what it proves,
 `Purification/PureStateRFPEquivalence`; `CommutingFormBridge` (three data
 structures for one commuting form, F2) is not here (the operator

@@ -99,7 +99,7 @@ theorem physTraceTransfer_eq_sum_closedSector
 section InverseMapSectorTensors
 
 variable {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-variable (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+variable (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
 variable (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
 variable (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
 

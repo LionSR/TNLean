@@ -104,16 +104,16 @@ private theorem vacuum_eq_count_zero {N : ℕ} (σ : Cfg 2 N) :
 
 private theorem ofFn_blockedConfigEquiv_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
-    List.ofFn (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
-      List.ofFn (Fin.append (decodeBlock 2 k I) (blockedConfigEquiv 2 m k σ)) := by
-  simp only [List.ofFn_fin_append, ofFn_blockedConfigEquiv, List.ofFn_succ,
+    List.ofFn (Kraus.blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
+      List.ofFn (Fin.append (decodeBlock 2 k I) (Kraus.blockedConfigEquiv 2 m k σ)) := by
+  simp only [List.ofFn_fin_append, Kraus.ofFn_blockedConfigEquiv, List.ofFn_succ,
     flattenBlockedWord_cons, wordOfBlock, Kraus.wordOfBlock, Fin.cons_zero, Fin.cons_succ]
 
 private theorem vacuum_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
-    pvbsVacuum ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
+    pvbsVacuum ((m + 1) * k) (Kraus.blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
       pvbsVacuum k (decodeBlock 2 k I) *
-        pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
+        pvbsVacuum (m * k) (Kraus.blockedConfigEquiv 2 m k σ) := by
   simp only [vacuum_eq_count_zero, ofFn_blockedConfigEquiv_cons, List.ofFn_fin_append,
     List.count_append, Nat.add_eq_zero_iff]
   split_ifs <;> simp_all
@@ -122,15 +122,15 @@ private theorem vacuum_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
 first block and the remaining blocks. -/
 private theorem wIndicator_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
-    wIndicator ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
+    wIndicator ((m + 1) * k) (Kraus.blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
       wIndicator k (decodeBlock 2 k I) *
-        pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) +
+        pvbsVacuum (m * k) (Kraus.blockedConfigEquiv 2 m k σ) +
       pvbsVacuum k (decodeBlock 2 k I) *
-        wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
+        wIndicator (m * k) (Kraus.blockedConfigEquiv 2 m k σ) := by
   calc
-    wIndicator ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
+    wIndicator ((m + 1) * k) (Kraus.blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
         wIndicator (k + m * k)
-          (Fin.append (decodeBlock 2 k I) (blockedConfigEquiv 2 m k σ)) := by
+          (Fin.append (decodeBlock 2 k I) (Kraus.blockedConfigEquiv 2 m k σ)) := by
       simp only [wIndicator_apply, ofFn_blockedConfigEquiv_cons]
     _ = _ := by
       rw [wIndicator_append]
@@ -224,10 +224,10 @@ theorem piKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
 private theorem product_vacuum_blocks {k : ℕ} (m : ℕ)
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
     (∏ i, pvbsVacuum k (decodeBlock 2 k (σ i))) =
-      pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
+      pvbsVacuum (m * k) (Kraus.blockedConfigEquiv 2 m k σ) := by
   induction m with
   | zero =>
-    have h : blockedConfigEquiv 2 0 k σ = 0 := funext fun i ↦ absurd i.isLt (by simp)
+    have h : Kraus.blockedConfigEquiv 2 0 k σ = 0 := funext fun i ↦ absurd i.isLt (by simp)
     rw [h, pvbsVacuum_zero, Fin.prod_univ_zero]
   | succ m ih =>
     refine Fin.consCases (fun I τ ↦ ?_) σ
@@ -237,7 +237,7 @@ private theorem product_vacuum_blocks {k : ℕ} (m : ℕ)
 private theorem encoding_vacuum {k : ℕ} (m : ℕ)
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
     (Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) σ =
-      pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
+      pvbsVacuum (m * k) (Kraus.blockedConfigEquiv 2 m k σ) := by
   change (∑ x : Cfg 2 m, Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) σ x *
     (Pi.single (0 : Cfg 2 m) (1 : ℂ) : Cfg 2 m → ℂ) x) = _
   rw [Finset.sum_eq_single (0 : Cfg 2 m)]
@@ -253,7 +253,7 @@ of the block length. No blocked-vector equation is supplied as a hypothesis. -/
 theorem piKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
     Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m =
       (Real.sqrt k : ℂ)⁻¹ •
-        fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
+        fun σ => wIndicator (m * k) (Kraus.blockedConfigEquiv 2 m k σ) := by
   induction m with
   | zero =>
     ext σ
@@ -296,7 +296,7 @@ theorem piKronecker_wBlockEncoding_mulVec_normalized (k m : ℕ) :
     Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ
       ((Real.sqrt m : ℂ)⁻¹ • wIndicator m) =
       (Real.sqrt (m * k : ℕ) : ℂ)⁻¹ •
-        fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
+        fun σ => wIndicator (m * k) (Kraus.blockedConfigEquiv 2 m k σ) := by
   rw [Matrix.mulVec_smul, piKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul]
   congr 1
   rw [Nat.cast_mul, Real.sqrt_mul (Nat.cast_nonneg m), Complex.ofReal_mul, mul_inv]
@@ -315,7 +315,7 @@ theorem mpv_wBlockCompression_of_eq_wIndicator {D k m : ℕ} (hk : 0 < k)
     Complex.ofReal_ne_zero.mpr (Real.sqrt_ne_zero'.mpr (by exact_mod_cast hk))
   let E := Matrix.piKronecker fun _ : Fin m => wBlockEncoding k
   let W : (Fin m → Fin (blockPhysDim 2 k)) → ℂ :=
-    fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ)
+    fun σ => wIndicator (m * k) (Kraus.blockedConfigEquiv 2 m k σ)
   have hflat : W = (Real.sqrt k : ℂ) • (E *ᵥ wIndicator m) := by
     dsimp only [E]
     rw [piKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul,
@@ -329,8 +329,8 @@ theorem mpv_wBlockCompression_of_eq_wIndicator {D k m : ℕ} (hk : 0 < k)
   have hblock : ∀ σ : Fin m → Fin (blockPhysDim 2 k),
       mpv (blockTensor A k) σ = c * W σ := by
     intro σ
-    rw [mpv, coeff, evalWord_blockTensor, ← ofFn_blockedConfigEquiv]
-    exact hW (blockedConfigEquiv 2 m k σ)
+    rw [mpv, coeff, evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv]
+    exact hW (Kraus.blockedConfigEquiv 2 m k σ)
   intro τ
   rw [mpv_rotatePhysical]
   simp_rw [hblock]

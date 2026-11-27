@@ -41,6 +41,8 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 section
 
 
@@ -57,7 +59,8 @@ Positive ambient clearance supplies the required physical disjointness.
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 692–732.
 The analytic cell estimate is an explicit premise of this finite summation. -/
 theorem mutualInformation_selectedRegion_le_of_cell_bound
-    {L q : ℕ} (Ω : StateSpace L q) (E : Finset (Vertex L))
+    {L q : ℕ} (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)))
+    (E : Finset (Vertex L))
     {o : ℝ × ℝ} {s r c b₀ Kcell : ℝ} (hs : 0 < s) (hc : 0 < c)
     {Aold A : Set (ℝ × ℝ)} (hA : Aold ⊆ A) (S : Finset (ℤ × ℤ))
     (hS : ∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i)
@@ -184,7 +187,8 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
       Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
         (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
         ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+            (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
@@ -227,7 +231,8 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
         Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
           (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
           ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-              (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+              (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+              (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ (E : Finset (Vertex L)) (b₀ : ℝ),

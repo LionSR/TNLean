@@ -70,9 +70,9 @@ theorem CarriesMPV.blockTensor {D₃ : ℕ} {T : MPOTensor d D₁}
   funext σ
   rw [← blockTensor_actTensor]
   have hSame := h.sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl B)
-    (N * L) (Nat.mul_pos hN hL) (MPSTensor.blockedConfigEquiv d N L σ)
+    (N * L) (Nat.mul_pos hN hL) (Kraus.blockedConfigEquiv d N L σ)
   simpa only [MPTensor.mpv, MPTensor.coeff, Kraus.evalWord_blockTensor,
-    MPSTensor.ofFn_blockedConfigEquiv] using hSame
+    Kraus.ofFn_blockedConfigEquiv] using hSame
 
 namespace BlockActionData
 

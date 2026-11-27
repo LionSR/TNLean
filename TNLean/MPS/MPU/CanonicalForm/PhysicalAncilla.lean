@@ -362,7 +362,7 @@ theorem transferMap_normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
     Kraus.transferMap (tensorPhysicalId U x).normalizedFlattening =
       Kraus.transferMap U.normalizedFlattening := by
   rw [normalizedFlattening_tensorPhysicalId U x hx,
-    MPSTensor.transferMap_reindexPhysical_equiv,
+    Kraus.transferMap_reindexPhysical_equiv,
     transferMap_normalizedDiagonalLift U.normalizedFlattening x hx]
 
 end MPOTensor

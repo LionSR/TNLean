@@ -472,16 +472,15 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     Lemma~\ref{thm:mpdo_exact_physical_sector_bond_product} gives the claim.
 \end{proof}
 
-\begin{lemma}[Positive translation-invariant bond datum]
+\begin{lemma}[The physical bond is a commuting bond]
     \label{thm:mpdo_positive_translation_invariant_bond_data}
-    \lean{MPOTensor.PhysicalSectorFactorization.translationInvariantBondData}
+    \lean{MPOTensor.PhysicalSectorFactorization.commutingBond}
     \leanok
     \uses{thm:mpdo_physical_two_site_bond_pos,thm:mpdo_periodic_pairwise_physical_bonds_comm}
     Suppose that every neighboring operator $\eta_{k,h}$ is positive
     semidefinite. Then the physical bond is positive semidefinite and all of
     its cyclic translates commute on every periodic chain of length at least
-    two. Thus it determines a single translation-invariant positive bond
-    datum.
+    two. Thus it is a commuting bond.
 \end{lemma}
 
 \begin{proof}
@@ -491,16 +490,16 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     is Lemma~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}.
 \end{proof}
 
-\begin{lemma}[$\eta$-local structure from a positive physical-sector factorization]
+\begin{lemma}[Commuting form from a positive physical-sector factorization]
     \label{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
-    \lean{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}
+    \lean{MPOTensor.PhysicalSectorFactorization.commutingForm}
     \lean{MPOTensor.PhysicalSectorFactorization.fixedProductTensorData}
     \leanok
     \uses{thm:mpdo_exact_physical_sector_bond_product,thm:mpdo_positive_translation_invariant_bond_data,def:mpdo_eta_local_structure_data}
     Conditional on a physical-sector factorization of $K$ in which every
     neighboring operator $\eta_{k,h}$ is positive semidefinite (which the
     source derives from SAL), Proposition~C.8 holds: the physical two-site bond
-    determines an $\eta$-local structure for $K$ whose translated copies
+    determines a commuting form of $K$ whose translated copies
     commute pairwise and satisfy
     $\rho_N=B_0B_1\cdots B_{N-1}$ for every $N\geq2$.
     If the virtual dimension of $K$ is positive, then $K$ itself is a fixed
@@ -511,18 +510,18 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 \begin{proof}
     \leanok
     Lemma~\ref{thm:mpdo_positive_translation_invariant_bond_data} gives the
-    positive translation-invariant bond and its pairwise commuting
+    positive commuting bond and its pairwise commuting
     translates. Lemma~\ref{thm:mpdo_exact_physical_sector_bond_product}
     realizes every finite-chain operator with normalization scalar $1$.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure from SAL]%
+\begin{theorem}[Commuting form from SAL]%
     \label{cor:mpdo_eta_local_structure_of_is_sal}
-    \lean{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}
+    \lean{MPOTensor.nonempty_commutingForm_of_isSAL}
     \leanok
     \uses{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization,thm:mpdo_eta_coherent_positive_choice}
     Establishing Proposition~C.8, every injective MPO tensor satisfying SAL
-    admits an $\eta$-local structure: a single positive two-site bond whose
+    admits a commuting form: a single positive two-site bond whose
     cyclic translates commute pairwise and whose ordered product is the
     finite-chain density operator at every length $N\geq2$, with normalization
     scalar one.

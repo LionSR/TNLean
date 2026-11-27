@@ -66,7 +66,7 @@ noncomputable def IsMPUCanonicalFormII.reindexPhysical
   · intro N hN
     rw [mpo_reindexPhysical]
     exact Matrix.reindex_mem_unitaryGroup _ _ (hU.isMPU N hN)
-  · rw [heq, MPSTensor.transferMap_reindexPhysical_equiv]
+  · rw [heq, Kraus.transferMap_reindexPhysical_equiv]
     exact hU.ρ_fixed
 
 /-- Physical adjunction preserves simplicity for the actual reduced

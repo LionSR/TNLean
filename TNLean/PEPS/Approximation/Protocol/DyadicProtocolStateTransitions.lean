@@ -25,6 +25,7 @@ the root party (`mainState_zero`).
   (lines 82–100), the resizes (lines 127–131), and the initial copy (lines 658–661).
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -128,7 +129,7 @@ theorem length_eventSchedule_pos (hk : 1 ≤ k) : 0 < (eventSchedule k).length :
 
 section Transitions
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R₀ : RepaintedSquare k) {ε₀ t : ℝ} (hε : 0 < ε₀) (ht : 0 < t)
   (hB : ε₀ * t ≤ B₀ * Real.log L)

@@ -187,8 +187,8 @@ theorem collapsedBntSectorDecomp_hasBNT
     · intro i j hij
       exact cross_overlap_tendsto_zero_of_separated_normal_bnt_data
         (fun j : Fin classes.g => blocks (classes.repr j))
-        (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
-        (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
+        (fun j => hIrr (classes.repr j))
+        (fun j => hTP (classes.repr j))
         classes.blocks_not_equiv i j hij
   simpa [HasBNTSectorData, P, collapsedBntSectorDecomp, classes] using hLI
 

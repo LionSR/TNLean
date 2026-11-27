@@ -57,6 +57,7 @@ The former scope restriction is resolved in
   These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -161,7 +162,8 @@ theorem exists_participants_toDistributedConstruction_circuit (hL : 0 < L)
 
 namespace IsDistributionProtocol
 
-variable {D} {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
+variable {D} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {C_N C_K C_E : ℝ}
+    {b k r : ℕ}
 
 /-- The protocol circuit has at most `T b` nonprivate gates, for `T` changes with at most `b`
 nonprivate gates each; repeated occurrences of one gate are counted separately.
@@ -286,7 +288,7 @@ def physicalOut (p : P) (i : Fin q) : Fin (D.physicalDimension p) :=
 /-- Reading every party at the fold of its anchor inverts the identification of the physical
 configurations of the parties with the configurations of the square.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:25–26` and `158–159`. -/
-theorem physicalOut_foldVertex (hL : 0 < L) (x : Configuration L q) :
+theorem physicalOut_foldVertex (hL : 0 < L) (x : Config (Qudits (SquareLatticeVertex L L) q)) :
     (fun p ↦ D.physicalOut p (x (foldVertex hL (D.placement.anchor p)))) =
       D.physicalConfigEquiv.symm x := by
   rw [Equiv.eq_symm_apply]
@@ -312,7 +314,8 @@ constant `C_E` of the protocol.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), the conclusion of Theorem 5.2,
 `04-compression.tex:150–175`, applied in §8.1, `07-assembly.tex:53–63`, with the density
 estimate `eq:protocol-density`, `07-assembly.tex:33–41`. -/
-theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace L q}
+theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L)
+    {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
     {C_N C_K C_E : ℝ} {b k r : ℕ} (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r)
     (hC : 0 ≤ C_E) (hΩ : ‖Ω‖ = 1) {Gate : Type} {_ : DecidableEq Gate} (gates : Finset Gate)
     (participants : Gate → Finset P) (root : Gate → P)
@@ -401,7 +404,7 @@ private structure ProtocolInstance (q : ℕ) (C_N C_K C_E : ℝ) (b k r : ℕ) w
   [fintype : Fintype Party]
   [decidableEq : DecidableEq Party]
   protocol : DyadicProtocol size q Party
-  target : StateSpace size q
+  target : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex size size) q))
   norm_target : ‖target‖ = 1
   isDistributionProtocol : protocol.IsDistributionProtocol target C_N C_K C_E b k r
 
@@ -438,7 +441,8 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–6
 Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
 `07-assembly.tex:179–203`. -/
 theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ q)
-    {G : ∀ L : ℕ, StateSpace L q → Prop} (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1)
+    {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+    (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1)
     {C_N C_K C_E : ℝ} {b k r L₀ : ℕ} (hall : DyadicProtocolBoundsAt q G C_N C_K C_E b k r L₀) :
     DyadicOperatorNetworkAt q G (1 + (2 * (C_N * C_E) + 2 * C_E))
       (sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K)

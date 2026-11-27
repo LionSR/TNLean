@@ -183,7 +183,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497.  No idempotence, rank-one, or semisimplicity
 conclusion is made. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) (hZCL : IsSourceZCL K) :
@@ -236,7 +236,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497.  The conclusion does not include the invalid
 rank-one inference at lines 1498--1499. -/
 theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL : IsSourceZCL K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ) (lam : ℝ),
       0 < lam ∧
@@ -285,7 +285,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497. The conclusion stops before the invalid rank-one
 inference at lines 1498--1499. -/
 theorem exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ) (lam : ℝ),
       0 < lam ∧

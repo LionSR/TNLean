@@ -124,20 +124,20 @@ theorem blocked_bufferedMPUQuasiLocalAut_pair_interval [NeZero k]
           (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (Kraus.blockPhysDim d k))
           (MPOTensor.twoLinkOutputObservable u v A)) := by
   have hE₂ : (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm.trans
-      (MPSTensor.blockedConfigEquiv d 2 k) = MPOTensor.originalSiteHeisenbergCentreEquiv d k := by
+      (Kraus.blockedConfigEquiv d 2 k) = MPOTensor.originalSiteHeisenbergCentreEquiv d k := by
     apply Equiv.ext
     intro c
     exact (MPOTensor.originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv d k c).symm
-  have hInput : Matrix.reindex (MPSTensor.blockedConfigEquiv d 2 k)
-      (MPSTensor.blockedConfigEquiv d 2 k)
+  have hInput : Matrix.reindex (Kraus.blockedConfigEquiv d 2 k)
+      (Kraus.blockedConfigEquiv d 2 k)
       (Matrix.reindex (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm
         (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm A) =
       Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
         (MPOTensor.originalSiteHeisenbergCentreEquiv d k) A := by
     rw [← hE₂]
     rfl
-  have hOutput : Matrix.reindex (MPSTensor.blockedConfigEquiv d 4 k)
-      (MPSTensor.blockedConfigEquiv d 4 k)
+  have hOutput : Matrix.reindex (Kraus.blockedConfigEquiv d 4 k)
+      (Kraus.blockedConfigEquiv d 4 k)
       (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputBlockEquiv
         (Kraus.blockPhysDim d k))
         (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (Kraus.blockPhysDim d k))

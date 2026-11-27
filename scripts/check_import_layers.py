@@ -225,7 +225,6 @@ SUBDIRECTORY_ORDERS: dict[str, tuple[str, ...]] = {
 # an entry: move the shared declaration down to the layer both sides may import.
 UPWARD_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.QCA.LocalAlgebra.Blocking -> TNLean.MPS.Tensor.Physical.Blocking",
     }
 )
 
@@ -424,7 +423,10 @@ def examples_imports(sources: Mapping[str, str]) -> set[str]:
 
 
 def tracked_sources(root: Path) -> dict[str, str]:
-    """Read the Git-tracked, non-archive Lean modules below ``TNLean/``."""
+    """Read the Git-tracked, non-archive Lean modules below ``TNLean/``.
+
+    A module that Git still lists but that is deleted in the working tree (removed but
+    not yet committed) is absent: the checks see the tree as it is on disk."""
     result = subprocess.run(
         ["git", "-C", str(root), "ls-files", "-z", "--", "TNLean"],
         check=True,
@@ -436,8 +438,11 @@ def tracked_sources(root: Path) -> dict[str, str]:
             continue
         if not path.endswith(".lean"):
             continue
+        file = root / path
+        if not file.is_file():
+            continue
         module = path[: -len(".lean")].replace("/", ".")
-        sources[module] = (root / path).read_text(encoding="utf-8")
+        sources[module] = file.read_text(encoding="utf-8")
     return sources
 
 

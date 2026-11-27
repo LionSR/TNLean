@@ -27,9 +27,9 @@ the non-strict, ties-allowed order used in the reduction to canonical form.
 
 ## Main conditions
 
-- Additive split conditions: `HasInjectiveBlocks`, `HasIrreducibleBlocks`, `HasPrimitiveBlocks`,
-  `IsLeftCanonicalBlockFamily`, `HasOrderedNonzeroWeights`,
-  `HasNormalizedSelfOverlap`.
+- Weight condition: `HasOrderedNonzeroWeights`. The blockwise conditions (injectivity,
+  irreducibility, primitivity, left-canonical normalization, self-overlap normalization) are
+  stated directly as `∀ k, P (A k)`.
 - Canonical-form conditions: `IsCanonicalForm` and `IsNormalCanonicalForm`.
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`: normal canonical form from
   primitive weighted block decompositions.
@@ -52,82 +52,15 @@ Equivalently, the associated transfer map is trace-preserving. We do **not** ass
 unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 -/
 
-/-! ### Additive split conditions for canonical-form hypotheses
+/-! ### Separated canonical-form hypotheses
 
-The following conditions isolate the separate hypotheses of the canonical-form
-predicates: injectivity, left-canonical normalization, non-increasing weight
-ordering, and self-overlap normalization. `IsCanonicalForm` remains the compact
-mathematical statement, while these records let the canonical-form reduction and
-the RFP/BNT projections expose only the assumptions used at each step.
+The blockwise hypotheses of the canonical-form predicates (injectivity, irreducibility,
+peripheral primitivity, left-canonical normalization, and self-overlap normalization) are
+written directly as `∀ k, P (A k)`; only the weight condition, which couples the ordering and
+the nonvanishing of the weights, is recorded as a structure. `IsCanonicalForm` remains the
+compact mathematical statement, while the separated hypotheses let the canonical-form
+reduction and the RFP/BNT projections expose only the assumptions used at each step.
 -/
-
-/-- Each block in the family is algebraically injective. -/
-structure HasInjectiveBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
-  block_injective : ∀ k, Kraus.IsInjective (A k)
-
-/-- Each block in the family is irreducible in the invariant-projection sense. -/
-structure HasIrreducibleBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block has no nontrivial invariant orthogonal projection. -/
-  block_irreducible : ∀ k, Kraus.IsIrreducibleFamily (A k)
-
-namespace HasIrreducibleBlocks
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Build `HasIrreducibleBlocks` from pointwise irreducibility. -/
-theorem ofForall (hA : ∀ k, Kraus.IsIrreducibleFamily (A k)) : HasIrreducibleBlocks (d := d) A where
-  block_irreducible := hA
-
-end HasIrreducibleBlocks
-
-/-- Each block transfer map is primitive in the peripheral-spectrum sense
-(`peripheralEigenvalues = {1}`).
-
-This is intentionally stored separately from `HasIrreducibleBlocks`: under the repository's
-current definition, peripheral-spectrum primitivity alone does not imply irreducibility for an
-arbitrary transfer map. -/
-structure HasPrimitiveBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block transfer map has `1` as its unique peripheral eigenvalue. -/
-  block_primitive : ∀ k,
-    _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))
-
-namespace HasPrimitiveBlocks
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Build `HasPrimitiveBlocks` from pointwise peripheral primitivity. -/
-theorem ofForall
-    (hA : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))) :
-    HasPrimitiveBlocks (d := d) A where
-  block_primitive := hA
-
-end HasPrimitiveBlocks
-
-/-- Left-canonical block-family normalization: each block satisfies
-`∑ᵢ Aᵢ† Aᵢ = I`. -/
-structure IsLeftCanonicalBlockFamily {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Preferred field name using the project's terminology: left-canonical =
-  `∑ᵢ Aᵢ† Aᵢ = I`. -/
-  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
-
-namespace IsLeftCanonicalBlockFamily
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Build `IsLeftCanonicalBlockFamily` from pointwise left-canonical identities. -/
-theorem ofForall (hA : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
-    IsLeftCanonicalBlockFamily (d := d) A where
-  leftCanonical := hA
-
-end IsLeftCanonicalBlockFamily
 
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
 
@@ -142,30 +75,6 @@ structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
-
-/-- Self-overlap normalization for each block: `mpvOverlap (A k) (A k) N → 1`. -/
-structure HasNormalizedSelfOverlap {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Literature-normalized aperiodicity / overlap normalization. -/
-  overlap_tendsto_one :
-    ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
-        Filter.atTop (nhds (1 : ℂ))
-
-namespace HasNormalizedSelfOverlap
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Build `HasNormalizedSelfOverlap` from pointwise self-overlap convergence. -/
-theorem ofForall
-    (hA : ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
-        Filter.atTop (nhds (1 : ℂ))) :
-    HasNormalizedSelfOverlap (d := d) A where
-  overlap_tendsto_one := hA
-
-end HasNormalizedSelfOverlap
 
 /-! ### Canonical form conditions -/
 
@@ -270,27 +179,17 @@ namespace IsNormalCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- The normal-canonical-form conditions imply blockwise irreducibility data. -/
-theorem toHasIrreducibleBlocks (hNCF : IsNormalCanonicalForm μ A) :
-    HasIrreducibleBlocks (d := d) A :=
-  HasIrreducibleBlocks.ofForall hNCF.block_irreducible
-
-/-- The normal-canonical-form conditions imply left-canonical block-family normalization. -/
-theorem toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
-    IsLeftCanonicalBlockFamily (d := d) A :=
-  IsLeftCanonicalBlockFamily.ofForall hNCF.leftCanonical
-
-/-- The additive split conditions imply `IsNormalCanonicalForm` with non-strict ordering. -/
+/-- The separated hypotheses imply `IsNormalCanonicalForm` with non-strict ordering. -/
 theorem ofSeparatedData
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hPrim : HasPrimitiveBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k)))
     (hμ : HasOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k) :
     IsNormalCanonicalForm μ A where
-  block_irreducible := hIrr.block_irreducible
-  leftCanonical := hLeft.leftCanonical
-  block_primitive := hPrim.block_primitive
+  block_irreducible := hIrr
+  leftCanonical := hLeft
+  block_primitive := hPrim
   mu_antitone := hμ.mu_antitone
   mu_ne_zero := hμ.mu_ne_zero
   dim_pos := hDim
@@ -356,7 +255,7 @@ private theorem leftCanonical_blockTensor_one
     ∑ i : Fin (blockPhysDim d 1),
       (blockTensor (d := d) (n := Fin D) A 1 i)ᴴ *
         blockTensor (d := d) (n := Fin D) A 1 i = 1 := by
-  simpa using leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := 1) hLeft
+  exact Kraus.IsTP.blockTensor (A := A) hLeft 1
 
 /-- A primitive weighted block family is already in common blocking length `p = 1`. -/
 private theorem common_blocking_primitive
@@ -422,7 +321,7 @@ private theorem common_blocking_primitive
   · intro k
     exact leftCanonical_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hLeft1 k)
   · intro k
-    simpa [MPSTensor.transferMap_blockTensor (A := blocks1 k) (L := 1)] using hPrim1 k
+    simpa [Kraus.transferMap_blockTensor (A := blocks1 k) (L := 1)] using hPrim1 k
   · exact hμne1
   · exact hDim1
 
@@ -620,9 +519,7 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
       (d := blockPhysDim d p)
       (A := blocks)
       (μ := μ)
-      (HasIrreducibleBlocks.ofForall hIrr)
-      (IsLeftCanonicalBlockFamily.ofForall hLeft)
-      (HasPrimitiveBlocks.ofForall hPrim)
+      hIrr hLeft hPrim
       hμ
       hDim
 

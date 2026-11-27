@@ -22,8 +22,6 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 
 ## Main declarations
 
-- `MPOTensor.IsInjective`: injectivity of a simple MPO tensor, expressed via the
-  doubled-index MPS tensor.
 - `MPOTensor.inverseTensor` / `MPOTensor.inverseTensor_spec`: the concrete
   inverse tensor `K⁻¹` and its matrix-unit contraction identity.
 - `MPOTensor.normalizedFourSiteTail` /
@@ -119,7 +117,7 @@ Hayashi-sector comparison then gives a factorization of the concrete tensor
     = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
 \]
 The inverse-map factorization has a coherently positive choice, and
-`MPOTensor.nonempty_etaLocalStructureData_of_isSAL` assembles its neighboring
+`MPOTensor.nonempty_commutingForm_of_isSAL` assembles its neighboring
 operators into the common two-site bond of Proposition C.8 from injectivity and
 SAL alone.
 
@@ -200,7 +198,7 @@ theorem isSSAEquality_tripartite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
   have hNpos : 0 < N := by omega
   rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
   have hEq := hstep N 1 (by omega) (by omega)
-  simp only [mutualInfoChain] at hEq
+  simp only [mutualInfoChain_eq] at hEq
   have hEABC := vonNeumannEntropy_tripartiteSplit_eq_blockEntropy M
     (N := N) (a := 1) (b := 1) (c := N - 3) (by omega) (hMpdo N hNpos)
   have hEC := vonNeumannEntropy_traceC_eq_blockEntropy M

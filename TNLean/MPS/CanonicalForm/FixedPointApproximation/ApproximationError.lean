@@ -426,7 +426,7 @@ through the regrouping of sites into blocks (arXiv:2307.01696, eqs. (9) and (10)
 noncomputable def approximatingMPVStateRaw (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
     (q M : ℕ) : MPVSpace d (M * q) :=
   (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm fun s =>
-    mpv (approximatingTensor (blockTensor A q) σ) ((blockedConfigEquiv d M q).symm s)
+    mpv (approximatingTensor (blockTensor A q) σ) ((Kraus.blockedConfigEquiv d M q).symm s)
 
 /-- The **approximating state** `|φ'_N⟩ = |φ_M(V P_∞)⟩ / ‖φ_M(V P_∞)‖` on `N = Mq` sites
 (arXiv:2307.01696, eqs. (9) and (10)). -/
@@ -437,7 +437,7 @@ noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D)
 @[simp] lemma approximatingMPVStateRaw_apply (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ) (q M : ℕ) (s : Cfg d (M * q)) :
     approximatingMPVStateRaw A σ q M s =
-      mpv (approximatingTensor (blockTensor A q) σ) ((blockedConfigEquiv d M q).symm s) := by
+      mpv (approximatingTensor (blockTensor A q) σ) ((Kraus.blockedConfigEquiv d M q).symm s) := by
   simp [approximatingMPVStateRaw, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- For `B_q` injective, the unnormalized approximating state is a unit vector.
@@ -450,7 +450,7 @@ theorem norm_approximatingMPVStateRaw (A : MPSTensor d D) {q : ℕ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
     ‖approximatingMPVStateRaw A σ q M‖ = 1 := by
   have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (approximatingMPVStateRaw A σ q M)).symm
-  rw [PiLp.inner_apply, ← (blockedConfigEquiv d M q).sum_comp] at h
+  rw [PiLp.inner_apply, ← (Kraus.blockedConfigEquiv d M q).sum_comp] at h
   simp only [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply] at h
   refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_injective ?_)
   push_cast
@@ -484,8 +484,8 @@ theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
       ⟪approximatingMPVStateRaw A σ q M, w⟫_ℂ =
         ∑ τ : Fin M → Fin (blockPhysDim d q),
           star (mpv (approximatingTensor (blockTensor A q) σ) τ) *
-            w (blockedConfigEquiv d M q τ) := fun w => by
-    rw [PiLp.inner_apply, ← (blockedConfigEquiv d M q).sum_comp]
+            w (Kraus.blockedConfigEquiv d M q τ) := fun w => by
+    rw [PiLp.inner_apply, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
     refine Finset.sum_congr rfl fun τ _ => ?_
     rw [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply, mul_comm]
     rfl

@@ -65,6 +65,7 @@ label is `l` is owned by the party of `l`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -260,7 +261,8 @@ theorem AngularSeparation.closure_right {X E : Set (ℝ × ℝ)} {n t a : ℝ} {
     (isClosed_le continuous_const (continuous_const.dist continuous_id)) hy
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))}
   {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} [Fintype Party]
   [DecidableEq Party] {κ : Type*} {own : κ → Party} {ph : κ} {rank : κ → ℕ} {V : Finset (ℝ × ℝ)}
   {hole : ℝ × ℝ → SquarePatch pos q}

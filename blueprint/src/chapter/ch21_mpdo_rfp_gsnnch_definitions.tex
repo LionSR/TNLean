@@ -42,52 +42,31 @@ When restricted to a single sector with trivial multiplicity, the two-site bond
 in Definition~\ref{def:mpdo_source_gsnnch} acts on the full two-site space
 without sector projections.
 
-\begin{definition}[Single-bond commuting-form data for an MPDO]
-    \label{def:mpdo_commuting_form_data}
-    \lean{MPOTensor.CommutingFormData}
+\begin{lemma}[One GSNNCH sector is a single positive commuting bond]
+    \label{thm:mpdo_commuting_form_data_has_gsnnch_form}
+    \lean{MPOTensor.GSNNCHData.ofBond}
+    \lean{MPOTensor.GSNNCHData.ofBond_unnormalizedState}
+    \lean{MPOTensor.hasGSNNCHFormAt_of_eq_smul_prod}
+    \lean{MPOTensor.exists_oneSector_gsnnchData_iff}
     \leanok
-    \uses{def:mpo_tensor}
-    For a fixed chain length $N \ge 2$, this consists of one positive
-    semidefinite two-site operator $B\ge0$ whose translated copies commute
-    pairwise on the periodic $N$-site chain:
-    $[B_{i,i+1},B_{j,j+1}]=0$.
-\end{definition}
-
-\begin{definition}[Single-bond commuting form]
-    \label{def:mpdo_has_commuting_form}
-    \lean{MPOTensor.HasCommutingForm}
-    \leanok
-    \uses{def:mpdo_commuting_form_data,def:mpo_tensor}
-    An MPO tensor $M$ has the single-bond commuting-form property if for
-    every $N \ge 2$ there is a two-site operator $B$ as in
-    Definition~\ref{def:mpdo_commuting_form_data} and a constant $c>0$ such
-    that
+    \uses{def:mpdo_source_gsnnch}
+    Fix a chain length $N\ge2$. An operator $\rho$ on the periodic $N$-site
+    chain has a presentation as in Definition~\ref{def:mpdo_source_gsnnch}
+    with a single sector if and only if there are a two-site operator
+    $B\ge0$ with $[\tau_0(B),\tau_1(B)]=0$ and a constant $c>0$ such that
     \begin{align}
-        \rho^{(N)}(M)
-         & =c\prod_{i=0}^{N-1}B_{i,i+1}.
+        \rho
+         & =c\prod_{i=0}^{N-1}\tau_i(B).
         \notag
     \end{align}
-    Allowing the bond $B$ to depend on $N$ formalizes a chainwise version of the
-    single translation-invariant bond in
-    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}; see
-    \cite{gap:cpsv16_commuting_form_to_sal}.
-\end{definition}
-
-\begin{lemma}[A commuting-form realization gives one GSNNCH sector]
-    \label{thm:mpdo_commuting_form_data_has_gsnnch_form}
-    \lean{MPOTensor.GSNNCHData.ofCommutingFormData}
-    \lean{MPOTensor.CommutingFormData.hasGSNNCHFormAt_of_realizes}
-    \leanok
-    \uses{def:mpdo_source_gsnnch,def:mpdo_commuting_form_data}
-    A positive commuting-form bond realizing a finite-chain operator gives
-    the one-sector instance of the explicit GSNNCH decomposition, with sector
-    projection equal to the identity and multiplicity one.
 \end{lemma}
 
 \begin{proof}\leanok
-    Taking a single sector with one-site projection equal to the identity,
-    multiplicity one, and bond equal to the given bond yields the
-    explicit GSNNCH decomposition.
+    Given such a bond, take a single sector with one-site projection equal to
+    the identity, multiplicity one, and bond $B$. Conversely, a single sector
+    with multiplicity $n$ gives $\rho=cn\prod_i\tau_i(B^{(x)})$; for $n>0$ this
+    is the required form with constant $cn$, and for $n=0$ the operator vanishes
+    and the zero bond with constant one presents it.
 \end{proof}
 
 \begin{definition}[Restriction to an orthogonal physical sector]
@@ -378,7 +357,7 @@ without sector projections.
 
 \begin{lemma}[The restricted commuting product has a supported ambient realization]
     \label{thm:mpdo_physical_support_restriction_bond}
-    \lean{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}
+    \lean{MPOTensor.PhysicalSupportRestrictionData.exists_commutingForm_lifted_supported}
     \leanok
     \uses{thm:mpdo_physical_support_restriction_sal}
     Let $K=V K_P V^*$ be a physical support restriction of an MPO tensor
@@ -427,7 +406,7 @@ without sector projections.
     \label{def:mpdo_proportional_orthogonal_commuting_sector_family}
     \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily}
     \leanok
-    \uses{def:mpdo_commuting_form_data}
+    \uses{def:mpdo_translation_invariant_bond_data}
     Let $\{K_x\}_{x=0}^{g-1}$ be MPO tensors on a common one-site space.
     A proportionally realized orthogonal commuting sector family consists of
     pairwise orthogonal one-site projections $P_x$ and positive two-site
@@ -517,7 +496,7 @@ without sector projections.
 \begin{lemma}[Positive factorizations on orthogonal physical restrictions]
     \label{thm:mpdo_restricted_positive_factorizations_commuting_family}
     \lean{MPOTensor.nonempty_physicalSupportRestrictionData_of_twoSided_physicalSlice,
-        MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization,
+        MPOTensor.PhysicalSupportRestrictionData.exists_commutingForm_lifted_supported_of_physicalSectorFactorization,
         MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice}
     \leanok
     \uses{def:mpdo_physical_support_restriction,def:mpdo_physical_sector_factorization,def:mpdo_orthogonal_commuting_sector_family}
@@ -1115,7 +1094,7 @@ without sector projections.
     \label{lem:mpdo_gsnnch_shift_transport}
     \lean{MPOTensor.placeAlong_ringWindow_submatrix_rotateConfig}
     \leanok
-    \uses{def:mpdo_commuting_form_data}
+    \uses{def:mpdo_translation_invariant_bond_data}
     Let $B$ act on $L$ consecutive spins of the periodic $N$-site chain,
     embedded at base site $i$, and let $r$ denote the cyclic shift of
     sites. Reindexing both chain configurations by $r$ carries the embedded
@@ -1159,7 +1138,7 @@ without sector projections.
     \label{lem:mpdo_gsnnch_translate_pos}
     \lean{MPOTensor.GSNNCHData.bondAt_posSemidef}
     \leanok
-    \uses{def:mpdo_source_gsnnch,def:mpdo_commuting_form_data,thm:lvv_placement_order}
+    \uses{def:mpdo_source_gsnnch,def:mpdo_translation_invariant_bond_data,thm:lvv_placement_order}
     Every translate $\tau_i(B^{(x)})$ of a sector bond is positive
     semidefinite.
 \end{lemma}

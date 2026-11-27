@@ -182,7 +182,7 @@ theorem mutualInfoChain_changePhysicalBasis_of_isometry
           exact hM.mul_mul_conjTranspose_same
             (Matrix.piKronecker fun _ : Fin N ↦ V)) =
       mutualInfoChain M N L hL hM := by
-  simp only [mutualInfoChain]
+  simp only [mutualInfoChain_eq]
   rw [blockEntropy_changePhysicalBasis_of_isometry V hV,
     blockEntropy_changePhysicalBasis_of_isometry V hV,
     blockEntropy_changePhysicalBasis_of_isometry V hV]

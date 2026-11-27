@@ -110,7 +110,7 @@ theorem wordSpan_eq_cyclicMatrixSubspace_add
   have hsum : (∑ σ : Fin r → Fin d,
       (X * (Kraus.evalWord A (List.ofFn σ))ᴴ) * Kraus.evalWord A (List.ofFn σ)) = X := by
     simp only [Matrix.mul_assoc, ← Finset.mul_sum,
-      sum_evalWord_conjTranspose_mul_evalWord A hLeft r, Matrix.mul_one]
+      Kraus.sum_evalWord_conjTranspose_mul_evalWord A hLeft r, Matrix.mul_one]
   rw [← hsum]
   refine Submodule.sum_mem _ (fun σ _ => Submodule.mul_mem_mul ?_ ?_)
   · rw [hSpan]

@@ -28,6 +28,8 @@ frames without marks:
   (lines 142–221) and the point treatment (lines 328–339).
 -/
 
+open ManyBody (Config Qudits SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology
@@ -136,7 +138,7 @@ variable {k : ℕ}
 
 /-! ### Treated frames of equal treated guides -/
 
-variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R : RepaintedSquare k)
 

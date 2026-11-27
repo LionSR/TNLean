@@ -671,7 +671,7 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
     Z = 0 :=
   eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)
-    (Kraus.wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    (Kraus.wordSpan_top_of_mul A hInj q hq)
     hkq hzero
 
 /-- A right boundary witness is unique once its products with all one-site
@@ -735,7 +735,7 @@ theorem left_witness_unique_of_isNBlkInjective
     apply LinearMap.ext_on_range
       (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
     · simpa [Kraus.wordSpan] using
-        (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+        (show Kraus.wordSpan A L₀ = ⊤ from hInj)
     · intro σ
       simpa [LinearMap.mulRight_apply] using hword σ
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * Y₁ =

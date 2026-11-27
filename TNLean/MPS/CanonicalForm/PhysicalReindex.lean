@@ -46,7 +46,7 @@ theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsNormalTensor A)
     (e : Fin d₁ ≃ Fin d₂) :
     IsNormalTensor (Kraus.reindexPhysical e A) := by
   refine ⟨(isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
-  · rw [transferMap_reindexPhysical_equiv e A]
+  · rw [Kraus.transferMap_reindexPhysical_equiv e A]
     exact hA.spectral_radius_one
   · exact (isPrimitive_transferMap_reindexPhysical_equiv e A).2 hA.primitive_transfer
 
@@ -93,13 +93,13 @@ noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     CPSVCanonicalFormIIData (Kraus.reindexPhysical e A) where
   toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.reindexPhysical e
   blocks_left_canonical := fun k ↦
-    (leftCanonical_reindexPhysical_equiv e (data.blocks k)).2 (data.blocks_left_canonical k)
+    (Kraus.isTP_reindexPhysical_iff e (data.blocks k)).2 (data.blocks_left_canonical k)
   blocks_fixed_point := by
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
     exact ⟨Λ, hΛpos, hΛdiag, by
       change Kraus.transferMap (Kraus.reindexPhysical e (data.blocks k)) Λ = Λ
-      rw [transferMap_reindexPhysical_equiv]
+      rw [Kraus.transferMap_reindexPhysical_equiv]
       exact hΛfix⟩
 
 end CPSVCanonicalFormIIData

@@ -12,7 +12,7 @@ import TNLean.MPS.MPDO.Entropy.AreaLawScaling
 import TNLean.MPS.MPDO.Entropy.Correlations
 import TNLean.MPS.MPDO.Entropy.DiagonalFiniteChain
 import TNLean.MPS.MPDO.Entropy.LocalOrthogonalSumAreaLaw
-import TNLean.MPS.MPDO.Entropy.MutualInfoBridge
+import TNLean.MPS.MPDO.Entropy.MutualInfoBondDimBound
 import TNLean.MPS.MPDO.Entropy.NormalizedMPOProportionality
 import TNLean.MPS.MPDO.Entropy.SALArbitraryCut
 import TNLean.MPS.MPDO.Entropy.SALTraceTransfer

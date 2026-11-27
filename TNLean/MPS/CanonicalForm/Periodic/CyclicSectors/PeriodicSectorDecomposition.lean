@@ -671,7 +671,7 @@ theorem mpvOverlap_blockTensor_self_eq
       (A := blockTensor (d := d) (n := Fin D) A L)
       (B := blockTensor (d := d) (n := Fin D) A L) N]
   rw [← trace_mixedMapLM_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
-  simp [Kraus.mixedMapLM_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
+  simp [Kraus.mixedMapLM_self, Kraus.transferMap_blockTensor, pow_mul, Nat.mul_comm]
 
 /-- A same-dimension gauge-phase equivalence between two compressed sector blocks
 produces a nonzero off-diagonal eigenvector of the ambient blocked transfer map.

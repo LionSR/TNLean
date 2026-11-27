@@ -36,7 +36,7 @@ zero-weight reparameterization.
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1445. -/
 theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (k : Fin hη.m) (hk : hη.p k = 0)
@@ -67,7 +67,7 @@ neighboring operators vanish.
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1445. -/
 theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_incident
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (z : Fin hη.m → Circle) (k h : Fin hη.m)
@@ -107,7 +107,7 @@ See the same paper-gap note.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) :
@@ -237,7 +237,7 @@ paper-gap note.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
-    (K : MPOTensor d D) (hK : K.IsInjective)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) :
@@ -272,7 +272,7 @@ paper-gap note.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL
-    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ),
       (∀ k, 0 ≤ p k) ∧
         (∑ k, p k) = 1 ∧

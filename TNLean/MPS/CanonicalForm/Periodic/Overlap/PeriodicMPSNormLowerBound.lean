@@ -260,7 +260,7 @@ private theorem norm_mpvState_blockTensor_sq {d D : ℕ} [NeZero D]
   change LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
       ((Kraus.transferMap (blockTensor A L)) ^ N) =
     LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) ((Kraus.transferMap A) ^ (L * N))
-  rw [transferMap_blockTensor, ← pow_mul]
+  rw [Kraus.transferMap_blockTensor, ← pow_mul]
 
 /-- A single physical blocking length makes every positive periodic ring
 nonzero, uniformly over any family with a common spectral bound below one. -/

@@ -57,9 +57,10 @@ This is the equation used in PGVWC07, Theorem 12, proof lines
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -148,9 +149,10 @@ then gives the simultaneous product span for every
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -195,7 +197,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -214,13 +216,13 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
   have hGauge : ∀ j, GaugeEquiv (A j) (prepared j) := by
     intro j
     exact gaugeEquiv_tpGauge (A j) (Λ j) (hΛ j)
-  have hPreparedIrr : HasIrreducibleBlocks (d := d) prepared :=
-    HasIrreducibleBlocks.ofForall fun j =>
+  have hPreparedIrr : ∀ k, Kraus.IsIrreducibleFamily (prepared k) :=
+    fun j =>
       Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
         (A j) (Λ j) (hΛ j)
-        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (A j) (hIrr.block_irreducible j))
-  have hPreparedLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
-    IsLeftCanonicalBlockFamily.ofForall fun j =>
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (A j) (hIrr j))
+  have hPreparedLeft : ∀ k, ∑ i : Fin d, (prepared k i)ᴴ * (prepared k i) = 1 :=
+    fun j =>
       Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint
         (A j) (Λ j) (hΛ j) (hDualFixed j)
   have hPreparedBlk0 : ∀ k, Kraus.IsNBlkInjective (prepared k) L₀ :=
@@ -229,9 +231,11 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     fun j => ⟨L₀, hL₀, hPreparedBlk0 j⟩
   have hPreparedNormalTensor : ∀ j, IsNormalTensor (prepared j) :=
     fun j => isNormalTensor_of_isNormal_leftCanonical
-      (prepared j) (hPreparedNormal j) (hPreparedLeft.leftCanonical j)
-  have hPreparedOverlap : HasNormalizedSelfOverlap (d := d) prepared :=
-    HasNormalizedSelfOverlap.ofForall fun j =>
+      (prepared j) (hPreparedNormal j) (hPreparedLeft j)
+  have hPreparedOverlap : ∀ k,
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (prepared k) (prepared k) N)
+        Filter.atTop (nhds (1 : ℂ)) :=
+    fun j =>
       (hPreparedNormalTensor j).selfOverlap_tendsto_one
   have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
     intro j k hjk hdim hGPE
@@ -261,9 +265,10 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -302,7 +307,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -327,9 +332,10 @@ the block local spaces. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -351,9 +357,10 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -383,7 +390,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -405,9 +412,10 @@ at every length above the BNT block-separation bound. -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -435,9 +443,10 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_p
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -474,7 +483,7 @@ theorem
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
-    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -501,9 +510,10 @@ an internal direct sum. -/
 theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
@@ -544,9 +554,10 @@ then gives the eventual intersection identity. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
     (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
@@ -590,9 +601,10 @@ without a separate one-site injectivity assumption. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)

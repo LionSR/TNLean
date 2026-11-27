@@ -151,12 +151,12 @@ private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero m]
           star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace) := by
   classical
   rw [mpvOverlap]
-  rw [← Equiv.sum_comp (blockedConfigEquiv d N m)
+  rw [← Equiv.sum_comp (Kraus.blockedConfigEquiv d N m)
     (fun τ : Fin (N * m) → Fin d =>
       (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
         star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedConfigEquiv]
+  rw [hTraceA u N σ, hTraceB v N σ, Kraus.ofFn_blockedConfigEquiv]
   rw [← evalWord_blockTensor, ← evalWord_blockTensor]
 
 /-- **One-step transport of the cross sector overlap** (positive lengths,

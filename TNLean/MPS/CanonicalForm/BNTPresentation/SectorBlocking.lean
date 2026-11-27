@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalBlocks.PrimitiveBlocks
+import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
 import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 import TNLean.MPS.Tensor.DirectSum.SectorBNT
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
@@ -104,7 +104,7 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
     (isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
       (hCF.basis_irreducible j)
   basis_left_canonical := fun j ↦
-    (leftCanonical_reindexPhysical_equiv e (P.basis j)).2
+    (Kraus.isTP_reindexPhysical_iff e (P.basis j)).2
       (hCF.basis_left_canonical j)
   basis_normalized_self_overlap := by
     change ∀ j : Fin P.basisCount,
@@ -284,14 +284,14 @@ theorem IsBNTCanonicalForm.blockTensor
     intro N hN
     change LinearIndependent ℂ (fun j : Fin P.basisCount ↦
       mpvState (Kraus.blockTensor (P.basis j) p) N)
-    let e := blockedConfigEquiv d N p
+    let e := Kraus.blockedConfigEquiv d N p
     apply linearIndependent_mpvState_of_configEquiv e
       (fun j ↦ Kraus.blockTensor (P.basis j) p) P.basis
     · intro j σ
       change mpv (Kraus.blockTensor (P.basis j) p) (e.symm σ) =
         mpv (P.basis j) σ
       simp only [mpv, MPTensor.coeff, evalWord_blockTensor]
-      rw [← ofFn_blockedConfigEquiv d N p (e.symm σ)]
+      rw [← Kraus.ofFn_blockedConfigEquiv d N p (e.symm σ)]
       simp [e]
     · have hNp : N₀ < N * p := by
         exact lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)
@@ -307,11 +307,11 @@ theorem IsBNTCanonicalForm.blockTensor
       weight_unit_exists := ?_ }
   · intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-    exact isIrreducibleFamily_blockTensor_of_tp_primitive_irr
+    exact Kraus.isIrreducibleFamily_blockTensor_of_tp_primitive_irr
       (P.basis j) (hCF.basis_left_canonical j) (hPrimitive j)
         (hCF.basis_irreducible j) hp
   · intro j
-    exact leftCanonical_blockTensor (P.basis j) p (hCF.basis_left_canonical j)
+    exact Kraus.IsTP.blockTensor (A := P.basis j) (hCF.basis_left_canonical j) p
   · change ∀ j : Fin P.basisCount,
       Tendsto (fun N : ℕ ↦ mpvOverlap
         (Kraus.blockTensor (P.basis j) p)

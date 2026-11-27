@@ -295,7 +295,7 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
   have hBcanonical : MPTensor.IsLeftCanonical
       (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening := by
     rw [MPOTensor.normalizedFlattening_physicalAdjointTensor]
-    exact (MPSTensor.leftCanonical_reindexPhysical_equiv
+    exact (Kraus.isTP_reindexPhysical_iff
       (MPOTensor.physicalPairSwapEquiv d) _).2 ((hcanonical g).mapStar)
   have hBleft : MPTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • B i) := by

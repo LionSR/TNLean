@@ -126,7 +126,7 @@ theorem sum_word_conjTranspose_cyclic_projection_mul_word
     List.length_ofFn]
   simp_rw [← Matrix.mul_assoc]
   rw [← Matrix.sum_mul,
-    sum_evalWord_conjTranspose_mul_evalWord A hTP r, Matrix.one_mul]
+    Kraus.sum_evalWord_conjTranspose_mul_evalWord A hTP r, Matrix.one_mul]
 
 /-- If the exact tail Gram matrix is an orthogonal projection, the
 correlated tail map is a contraction on the ambient rectangular space. -/

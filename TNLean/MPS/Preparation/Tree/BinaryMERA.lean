@@ -197,10 +197,10 @@ noncomputable def amplitude [NeZero D] {M : ℕ}
 regrouping of the sites into blocks. -/
 noncomputable def state [NeZero D] (M : ℕ) : MPVSpace n (M * 2 ^ (k + 1)) :=
   (EuclideanSpace.equiv (ι := Cfg n (M * 2 ^ (k + 1))) (𝕜 := ℂ)).symm fun s =>
-    𝓜.amplitude ((blockedConfigEquiv n M (2 ^ (k + 1))).symm s)
+    𝓜.amplitude ((Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).symm s)
 
 @[simp] lemma state_apply [NeZero D] (M : ℕ) (s : Cfg n (M * 2 ^ (k + 1))) :
-    𝓜.state M s = 𝓜.amplitude ((blockedConfigEquiv n M (2 ^ (k + 1))).symm s) := by
+    𝓜.state M s = 𝓜.amplitude ((Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).symm s) := by
   simp [state, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- The pair prepared by a unitary from `|0⟩|0⟩` is normalized. -/
@@ -214,7 +214,7 @@ theorem sum_star_topPair_mul [NeZero D] : ∑ p, star (𝓜.topPair p) * 𝓜.to
 top state. -/
 theorem norm_state [NeZero D] (M : ℕ) : ‖𝓜.state M‖ = 1 := by
   have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (𝓜.state M)).symm
-  rw [PiLp.inner_apply, ← (blockedConfigEquiv n M (2 ^ (k + 1))).sum_comp] at h
+  rw [PiLp.inner_apply, ← (Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).sum_comp] at h
   simp only [RCLike.inner_apply, state_apply, Equiv.symm_apply_apply, amplitude] at h
   set ψ : (Fin M → Fin (D * D)) → ℂ :=
     fun τ => pairProductState 𝓜.topPair (fun j => finProdFinEquiv.symm (τ j))

@@ -31,6 +31,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open ManyBody (integerPoint rectangleConfigurationEquiv)
+open ManyBody (Config Qudits SquareLatticeVertex)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -49,10 +50,12 @@ and exponent `K` at the clearance coefficient `c`: for every state `Ω` of the f
 `G` of the grid of side `s ≥ 1`, every union `B` of other cells and every region `E` outside
 `G ∪ B` at distance at least `c s` from the closed cell, `I_Ω(G : E | B) ≤ C₁ (1 + log s)^K`.
 Source: `02-information.tex`, Lemma 3.2, lines 161–178. -/
-def SquareCellInformationBound (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (c C₁ K : ℝ) :
+def SquareCellInformationBound (q : ℕ)
+    (G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop)
+    (c C₁ K : ℝ) :
     Prop :=
   ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)), m₀ ∉ A →
-    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+    ∀ (L : ℕ) (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))), G L Ω →
       let Gc : Finset (Vertex L) :=
         Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
       let B : Finset (Vertex L) := Finset.univ.filter
@@ -71,7 +74,8 @@ translation by `(1, 1)` identifies the two placements of the sites.
 Source: `02-information.tex`, Lemma 3.2, lines 161–178, and its application in
 Proposition 3.4, lines 688–737. -/
 theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
-    (Ω : StateSpace L q) {s c C₀ : ℝ} (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ))
+    (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))) {s c C₀ : ℝ} (o : ℝ × ℝ)
+    (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ))
     (hbound : ∀ E : Finset ↥(rectangularDomain L L),
       E ⊆ (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
           x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀) ∪
@@ -173,7 +177,8 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Vertex L) :=
@@ -213,7 +218,8 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Vertex L) :=
@@ -251,7 +257,8 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
         m₀ ∉ A →
         ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ)
+            (Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           let G : Finset (Vertex L) :=

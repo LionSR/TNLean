@@ -122,7 +122,7 @@ lemma sectorMatrix_span_eq_top : Submodule.span ℂ (Set.range sectorMatrix) = �
     Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_range_self k))
 
 /-- The four diagonal sector matrices make the tensor injective. -/
-lemma tensor_isInjective : tensor.IsInjective := by
+lemma tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
   apply top_unique
   rw [← sectorMatrix_span_eq_top]
   apply Submodule.span_le.2
@@ -562,7 +562,7 @@ source-selected inverse-map identification is proved separately in
 **Scope restriction (non-normal representative):** documented in
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
-    tensor.IsInjective ∧ tensor.IsSourceZCL ∧
+    Kraus.IsInjective tensor.toMPSTensor ∧ tensor.IsSourceZCL ∧
       physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor ∧
       (∀ k, p k = 1 / 4) ∧ (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
       Submodule.span ℂ (Set.range factorization.sectorVirtualMatrixFamily) = ⊤ ∧

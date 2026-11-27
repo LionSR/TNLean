@@ -64,21 +64,21 @@ CPGSV17, arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 theorem placeAlong_chainWindow_blocking_reindex {K N b : ℕ}
     (h : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ)
     (hb : b + K ≤ N) :
-    Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+    Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         (placeAlong (X := fun _ ↦ Fin (blockPhysDim d L)) (chainWindow b hb) h) =
       placeAlong (X := fun _ ↦ Fin d)
         (chainWindow (b * L) (by simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hb))
-        (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h) := by
+        (Matrix.reindex (Kraus.blockedConfigEquiv d K L) (Kraus.blockedConfigEquiv d K L) h) := by
   have hbL : b * L + K * L ≤ N * L := by
     simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hb
   apply (intervalCoordinates d ((0 : ℤ) * L) (N * L)).symm.injective
   apply quasiLocalObservable_injective d (finiteChainRegion ((0 : ℤ) * L) (N * L))
   change quasiLocalIntervalObservable d ((0 : ℤ) * L) (N * L)
-    (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+    (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
       (placeAlong (X := fun _ ↦ Fin (blockPhysDim d L)) (chainWindow b hb) h)) =
     quasiLocalIntervalObservable d ((0 : ℤ) * L) (N * L)
       (placeAlong (X := fun _ ↦ Fin d) (chainWindow (b * L) hbL)
-        (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h))
+        (Matrix.reindex (Kraus.blockedConfigEquiv d K L) (Kraus.blockedConfigEquiv d K L) h))
   rw [← quasiLocalBlocking_quasiLocalIntervalObservable]
   rw [quasiLocalIntervalObservable_placeAlong_chainWindow 0 N b h hb,
     quasiLocalBlocking_quasiLocalIntervalObservable]
@@ -93,15 +93,15 @@ Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), under the site
 regrouping at lines 825--836. -/
 theorem hamiltonian_chainTranslates_blocking_reindex {K : ℕ}
     (h : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ) (N : ℕ) :
-    Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+    Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates _ N h).hamiltonian) =
       ∑ i ∈ Finset.range (N + 1 - K),
         if hi : i * L + K * L ≤ N * L then
           placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi)
-            (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h)
+            (Matrix.reindex (Kraus.blockedConfigEquiv d K L) (Kraus.blockedConfigEquiv d K L) h)
         else 0 := by
-  change (Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d N L)
-    (blockedConfigEquiv d N L)) ((chainTranslates _ N h).hamiltonian) = _
+  change (Matrix.reindexLinearEquiv ℂ ℂ (Kraus.blockedConfigEquiv d N L)
+    (Kraus.blockedConfigEquiv d N L)) ((chainTranslates _ N h).hamiltonian) = _
   rw [hamiltonian_chainTranslates_eq_sum_range, map_sum]
   refine Finset.sum_congr rfl fun i hi => ?_
   have hi' : i + K ≤ N := by
@@ -175,15 +175,15 @@ theorem exists_blocked_quasiLocalIntervalObservable
     Int.toNat_of_nonneg (Int.emod_nonneg a (by exact_mod_cast NeZero.ne L))
   have hcL : c + k ≤ (c + k) * L := Nat.le_mul_of_pos_right (c + k) (NeZero.pos L)
   refine ⟨a / (L : ℤ), c + k, by omega,
-    (Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d (c + k) L)
-      (blockedConfigEquiv d (c + k) L)).symm
+    (Matrix.reindexLinearEquiv ℂ ℂ (Kraus.blockedConfigEquiv d (c + k) L)
+      (Kraus.blockedConfigEquiv d (c + k) L)).symm
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow c hcL) X), ?_⟩
   rw [quasiLocalBlocking_quasiLocalIntervalObservable]
   change quasiLocalIntervalObservable d ((a / (L : ℤ)) * L) ((c + k) * L)
-    ((Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d (c + k) L)
-      (blockedConfigEquiv d (c + k) L))
-      ((Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d (c + k) L)
-        (blockedConfigEquiv d (c + k) L)).symm
+    ((Matrix.reindexLinearEquiv ℂ ℂ (Kraus.blockedConfigEquiv d (c + k) L)
+      (Kraus.blockedConfigEquiv d (c + k) L))
+      ((Matrix.reindexLinearEquiv ℂ ℂ (Kraus.blockedConfigEquiv d (c + k) L)
+        (Kraus.blockedConfigEquiv d (c + k) L)).symm
           (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow c hcL) X))) = _
   rw [LinearEquiv.apply_symm_apply, quasiLocalIntervalObservable_placeAlong_chainWindow _ _ _ X hcL]
   simp only [hc, Int.ediv_mul_add_emod]

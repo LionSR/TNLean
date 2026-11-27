@@ -17,11 +17,11 @@ matrices in the commuting-bond decomposition.
 
 ## Main definitions and statements
 
-* `TranslationInvariantBondData.PositivePhysicalSectorFixedProductTensorData`
+* `CommutingBond.PositivePhysicalSectorFixedProductTensorData`
   packages the exact tensor and its retained positive physical sectors.
-* `TranslationInvariantBondData.nonempty_positivePhysicalSectorFixedProductTensorData`
+* `CommutingBond.nonempty_positivePhysicalSectorFixedProductTensorData`
   constructs the enriched fixed-product witness.
-* `TranslationInvariantBondData.positivePhysicalSectorFixedProductTensorData`
+* `CommutingBond.positivePhysicalSectorFixedProductTensorData`
   selects one enriched witness.
 
 ## References
@@ -32,7 +32,7 @@ matrices in the commuting-bond decomposition.
 
 open scoped BigOperators ComplexOrder Kronecker Matrix
 
-namespace MPOTensor.TranslationInvariantBondData
+namespace MPOTensor.CommutingBond
 
 variable {d : ℕ}
 
@@ -234,7 +234,7 @@ the reindexed Beigi-conjugated bond.
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III; arXiv:1606.00608,
 equation `sigmaNK2`, lines 1581--1589. -/
 private theorem positiveEtaPhysicalSectorFactorization_conjugate_pairBond
-    (data : TranslationInvariantBondData d)
+    (data : CommutingBond d)
     {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (U : Matrix (Fin d) (Fin d) ℂ)
@@ -313,7 +313,7 @@ the physical-sector coordinates.
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589; Beigi,
 J. Phys. A 45 (2012) 025306, Section III. -/
 private theorem positiveEtaPhysicalSectorFactorization_sectorBond_eq
-    (data : TranslationInvariantBondData d)
+    (data : CommutingBond d)
     {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (U : Matrix (Fin d) (Fin d) ℂ)
@@ -378,7 +378,7 @@ recovers the input pair bond exactly.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
 private theorem positiveEtaPhysicalSectorFactorization_physicalPairBond_eq
-    (data : TranslationInvariantBondData d)
+    (data : CommutingBond d)
     {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (U : Matrix (Fin d) (Fin d) ℂ)
@@ -418,7 +418,7 @@ private theorem positiveEtaPhysicalSectorFactorization_physicalPairBond_eq
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
 private theorem positiveEtaPhysicalSectorFactorization_physicalBond_eq
-    (data : TranslationInvariantBondData d)
+    (data : CommutingBond d)
     {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (U : Matrix (Fin d) (Fin d) ℂ)
@@ -478,7 +478,7 @@ transported from a second tensor with the same closed MPOs.
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589; Beigi,
 J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 structure PositivePhysicalSectorFixedProductTensorData
-    (data : TranslationInvariantBondData d) where
+    (data : CommutingBond d) where
   /-- The exact fixed-product representative. -/
   repr : FixedProductTensorData data
   /-- The physical-sector factorization of that exact representative. -/
@@ -495,7 +495,7 @@ It has one virtual state and no physical sectors.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
 private noncomputable def emptyPositivePhysicalSectorFixedProductTensorData
-    (data : TranslationInvariantBondData 0) :
+    (data : CommutingBond 0) :
     PositivePhysicalSectorFixedProductTensorData data := by
   let repr : FixedProductTensorData data := {
     bondDim := 1
@@ -528,7 +528,7 @@ one-dimensional virtual tensor carries the zero-sector factorization.
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1605; Beigi,
 J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem nonempty_positivePhysicalSectorFixedProductTensorData
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     Nonempty (PositivePhysicalSectorFixedProductTensorData data) := by
   classical
   by_cases hd : d = 0
@@ -569,8 +569,8 @@ physical-sector witness.
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1605; Beigi,
 J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 noncomputable def positivePhysicalSectorFixedProductTensorData
-    (data : TranslationInvariantBondData d) :
+    (data : CommutingBond d) :
     PositivePhysicalSectorFixedProductTensorData data :=
   Classical.choice data.nonempty_positivePhysicalSectorFixedProductTensorData
 
-end MPOTensor.TranslationInvariantBondData
+end MPOTensor.CommutingBond

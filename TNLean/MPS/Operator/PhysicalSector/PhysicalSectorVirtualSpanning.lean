@@ -72,7 +72,7 @@ noncomputable def sectorCoordinateMatrixFamily (F : PhysicalSectorFactorization 
 /-- If the original MPO tensor is injective, its matrices in sector
 coordinates still span the full virtual matrix algebra. -/
 theorem sectorCoordinateMatrixFamily_span_eq_top
-    (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
     Submodule.span ℂ (Set.range F.sectorCoordinateMatrixFamily) = ⊤ := by
   classical
   let S := Submodule.span ℂ (Set.range F.sectorCoordinateMatrixFamily)
@@ -144,7 +144,7 @@ injective.
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `formK`,
 lines 1383--1387 and 1434--1439. -/
 theorem sectorVirtualMatrixFamily_span_eq_top
-    (F : PhysicalSectorFactorization K) (hK : K.IsInjective) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
     Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤ := by
   rw [Submodule.eq_top_iff']
   intro Y

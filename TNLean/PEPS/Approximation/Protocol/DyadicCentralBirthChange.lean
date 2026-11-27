@@ -27,6 +27,7 @@ Proposition 3.4 through `IsAngularScale`:
   Lemma 6.5 `lem:birth`, `05-frames.tex`.
 -/
 
+open ManyBody (Config Qudits)
 open ManyBody (SquareLatticeVertex)
 
 noncomputable section
@@ -57,7 +58,8 @@ theorem RepaintingBaseline.central_treated_ne_subset {ι : Type*} (R : Repaintin
 section Changes
 
 variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+  {G : ∀ L : ℕ, EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q)) → Prop}
+  {Ω : EuclideanSpace ℂ (Config (Qudits (SquareLatticeVertex L L) q))} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The central birth for the frames of sampled guides.** Assume `q ≥ 1`, a unit state of the
 family `G`, and the exponent-`60` angular-scale condition with `L₀' ≤ L`, `m₀ ≥ 4`, `A₀ ≥ 1`

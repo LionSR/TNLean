@@ -49,7 +49,7 @@ private theorem finiteChainConfigEquiv_blocking_symm (d L : ℕ) [NeZero L]
     (finiteChainConfigEquiv (Kraus.blockPhysDim d L) N a).symm
       ((Config.blocking d L (finiteChainRegion a N)).symm
         (Config.restrict hs (finiteChainConfigEquiv d (N * L) (a * L) σ))) =
-      (MPSTensor.blockedConfigEquiv d N L).symm σ := by
+      (Kraus.blockedConfigEquiv d N L).symm σ := by
   funext i
   change (Kraus.decodeBlockEquiv d L).symm
       (fun r => Config.restrict hs (finiteChainConfigEquiv d (N * L) (a * L) σ)
@@ -79,8 +79,8 @@ theorem intervalCoordinates_localBlocking (d L : ℕ) [NeZero L] (a : ℤ) (N : 
       (localInclusion (expandedRegion_finiteChainRegion L a N).le
         (localBlocking d L (finiteChainRegion a N)
           ((intervalCoordinates (Kraus.blockPhysDim d L) a N).symm X))) =
-      Matrix.reindex (MPSTensor.blockedConfigEquiv d N L)
-        (MPSTensor.blockedConfigEquiv d N L) X := by
+      Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+        (Kraus.blockedConfigEquiv d N L) X := by
   ext σ τ
   have hcomp :
       (Config.splitEquiv (expandedRegion_finiteChainRegion L a N).le
@@ -94,8 +94,8 @@ theorem intervalCoordinates_localBlocking (d L : ℕ) [NeZero L] (a : ℤ) (N : 
     hcomp, ite_true, mul_one]
   change X ((finiteChainConfigEquiv (Kraus.blockPhysDim d L) N a).symm _)
     ((finiteChainConfigEquiv (Kraus.blockPhysDim d L) N a).symm _) =
-      X ((MPSTensor.blockedConfigEquiv d N L).symm σ)
-        ((MPSTensor.blockedConfigEquiv d N L).symm τ)
+      X ((Kraus.blockedConfigEquiv d N L).symm σ)
+        ((Kraus.blockedConfigEquiv d N L).symm τ)
   rw [finiteChainConfigEquiv_blocking_symm, finiteChainConfigEquiv_blocking_symm]
 
 /-- Quasi-local blocking sends an interval observable to its expanded
@@ -109,8 +109,8 @@ theorem quasiLocalBlocking_quasiLocalIntervalObservable (d L : ℕ)
     quasiLocalBlocking d L
         (quasiLocalIntervalObservable (Kraus.blockPhysDim d L) a N X) =
       quasiLocalIntervalObservable d (a * L) (N * L)
-        (Matrix.reindex (MPSTensor.blockedConfigEquiv d N L)
-          (MPSTensor.blockedConfigEquiv d N L) X) := by
+        (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+          (Kraus.blockedConfigEquiv d N L) X) := by
   rw [quasiLocalIntervalObservable_apply, quasiLocalBlocking_quasiLocalObservable,
     ← quasiLocalObservable_localInclusion d (expandedRegion_finiteChainRegion L a N).le]
   rw [quasiLocalIntervalObservable_apply]

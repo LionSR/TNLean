@@ -8,7 +8,7 @@ import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
 import TNLean.MPS.Operator.DensityOperator.RFPViaTS
 import TNLean.MPS.CanonicalForm.VerticalForm.SectorTrace
-import TNLean.MPS.Operator.DensityOperator.AreaLaw
+import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
 import TNLean.MPS.CanonicalForm.Definitions
 
 /-!
@@ -683,9 +683,9 @@ theorem tensor_isSAL : IsSAL tensor := by
     intro N L hLpos hL_lt_half
     have hM : (mpo tensor N).PosSemidef :=
       tensor_isMPDO N (by omega)
-    -- mutualInfoChain expands to blockEntropy with specific hL proofs.
+    -- `mutualInfoChain_eq` expands to blockEntropy with specific hL proofs.
     -- We use `apply` with blockEntropy_tensor_eq so Lean unifies the proof terms.
-    simp only [mutualInfoChain]
+    simp only [mutualInfoChain_eq]
     have hL_val : blockEntropy tensor N L
         (Nat.le_of_lt (hL_lt_half.trans_le (Nat.div_le_self N 2))) hM =
         (L : ℝ) * Real.log 2 := by

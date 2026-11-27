@@ -613,7 +613,7 @@ theorem exists_isLeftCanonical_transferMap_eq_pow_of_isPRefinable
   obtain ⟨R, hR, hRoot⟩ := exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks A hp C μ hμ
     period (fun k ↦ isPeriodic_kraus_isometry (B k) W hW (hPer k)) hTarget
   refine ⟨R, hR, ?_⟩
-  rw [← transferMap_blockTensor, hRoot, ← hLetters, hTransfer]
+  rw [← Kraus.transferMap_blockTensor, hRoot, ← hLetters, hTransfer]
 
 /-- **Corrected forward implication of Theorem 4.1.** A `p`-refinable direct
 sum of left-canonical periodic blocks with unit-modulus weights has a

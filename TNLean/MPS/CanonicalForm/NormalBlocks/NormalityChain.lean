@@ -171,7 +171,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
   let L : ℕ := iIndex A
   have hNonempty : ({n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}).Nonempty := by
     obtain ⟨N, hNpos, hNblk⟩ := hN
-    exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
+    exact ⟨N, hNpos, hNblk⟩
   have hTop : Kraus.wordSpan A L = ⊤ := by
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
   have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
@@ -205,8 +205,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
   have hLpos : 0 < L := by
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
   refine ⟨L, hLpos, hBound, ?_⟩
-  exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
-    ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
+  exact (isNBlkInjective_iff_blockTensor_isInjective A L).1 hTop
 
 /-- **Left-canonical normal tensor is block injective at length $D^4$.**
 
@@ -302,8 +301,7 @@ theorem isNormal_blockTensor_of_isNormal
     (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
     Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A P) := by
   obtain ⟨N, hNpos, hNblk⟩ := hN
-  have hwordN : Kraus.wordSpan A N = ⊤ :=
-    (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
+  have hwordN : Kraus.wordSpan A N = ⊤ := hNblk
   have hwordNP : Kraus.wordSpan A (P * N) = ⊤ :=
     Kraus.wordSpan_top_of_mul A hwordN P hP
   -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (blockTensor A P) N
@@ -313,8 +311,7 @@ theorem isNormal_blockTensor_of_isNormal
   have hwordNP' : Kraus.wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
   rw [hwordNP'] at hle
   refine ⟨N, hNpos, ?_⟩
-  exact (wordSpan_eq_top_iff_isNBlkInjective
-    (blockTensor (d := d) (n := Fin D) A P) N).mp (eq_top_iff.mpr hle)
+  exact eq_top_iff.mpr hle
 
 
 namespace IsNormalCanonicalFormBNT

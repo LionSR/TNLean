@@ -277,7 +277,7 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     ext ⟨i, j⟩ beta alpha
     change tensor (i, j) beta alpha = mu * (mu⁻¹ * tensor (i, j) beta alpha)
     rw [← mul_assoc, mul_inv_cancel₀ hmu, one_mul]
-  have hAinj : A.IsInjective := by
+  have hAinj : Kraus.IsInjective A.toMPSTensor := by
     exact tensor_isInjective.smul (inv_ne_zero hmu)
   have hANormal : Kraus.IsNormal A.toMPSTensor :=
     Kraus.IsInjective.isNormal hAinj
@@ -376,7 +376,7 @@ implication `(ii) ⇒ (iv)`. See
 theorem full_lowLevel_counterexample :
     ∃ (K A : MPOTensor 4 2) (mu : ℂ),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧
-      K.IsInjective ∧ K.IsSAL ∧
+      Kraus.IsInjective K.toMPSTensor ∧ K.IsSAL ∧
       physTraceTransfer K * physTraceTransfer K = physTraceTransfer K ∧
       (¬∃ F : PhysicalSectorFactorization K,
         Nonempty F.NeighboringTraceFactorization) := by

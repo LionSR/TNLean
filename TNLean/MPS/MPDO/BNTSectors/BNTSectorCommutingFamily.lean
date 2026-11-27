@@ -47,23 +47,23 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFact
     (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
     Nonempty (OrthogonalCommutingSectorFamily K) := by
   classical
-  let data : (s : Fin g) → EtaLocalStructureData (K s) :=
+  let data : (s : Fin g) → CommutingForm (K s) :=
     fun s ↦ Classical.choose
-      ((restriction s).exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+      ((restriction s).exists_commutingForm_lifted_supported_of_physicalSectorFactorization
         (G s) (hη s))
   have hdata : ∀ s : Fin g,
-      twoSiteSectorProjection (P s) * (data s).bondData.bond *
-          twoSiteSectorProjection (P s) = (data s).bondData.bond ∧
+      twoSiteSectorProjection (P s) * (data s).bond *
+          twoSiteSectorProjection (P s) = (data s).bond ∧
         ∀ N (hN : 2 ≤ N),
-          mpo (K s) N = ((data s).bondData.toCommutingFormData hN).product :=
+          mpo (K s) N = (data s).product hN :=
     fun s ↦ Classical.choose_spec
-      ((restriction s).exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+      ((restriction s).exists_commutingForm_lifted_supported_of_physicalSectorFactorization
         (G s) (hη s))
   exact ⟨{
     projection := P
     projection_isOrthogonal := hP
     projection_orthogonal := fun hst ↦ hPorth hst
-    bondData := fun s ↦ (data s).bondData
+    bondData := fun s ↦ (data s).toCommutingBond
     bond_supported := fun s ↦ (hdata s).1
     realizes_mpo := fun s N hN ↦ (hdata s).2 N hN }⟩
 
@@ -85,7 +85,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
     (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hInjective : ∀ s, (K s).IsInjective)
+    (hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
     (hSupport : ∀ s β α,
       P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
         physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
@@ -143,21 +143,21 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     fun s ↦ Classical.choice
       (nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
         S hWeight hC hρ hη hR hSpan s)
-  let data : (s : Fin S.basisCount) → EtaLocalStructureData
+  let data : (s : Fin S.basisCount) → CommutingForm
       (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
     fun s ↦ Classical.choose
-      ((restriction s).exists_etaLocalStructureData_lifted_supported
+      ((restriction s).exists_commutingForm_lifted_supported
         (hSectorSAL s))
   have hdata : ∀ s : Fin S.basisCount,
       twoSiteSectorProjection (bntSectorProjection hC hρ hη hR s) *
-          (data s).bondData.bond *
+          (data s).bond *
           twoSiteSectorProjection (bntSectorProjection hC hρ hη hR s) =
-            (data s).bondData.bond ∧
+            (data s).bond ∧
         ∀ N (hN : 2 ≤ N),
           mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N =
-            ((data s).bondData.toCommutingFormData hN).product :=
+            (data s).product hN :=
     fun s ↦ Classical.choose_spec
-      ((restriction s).exists_etaLocalStructureData_lifted_supported
+      ((restriction s).exists_commutingForm_lifted_supported
         (hSectorSAL s))
   exact ⟨{
     projection := fun s ↦ bntSectorProjection hC hρ hη hR s
@@ -165,7 +165,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
       bntSectorProjection_isOrthogonal hC hρ hη hR s
     projection_orthogonal := fun hst ↦
       bntSectorProjection_mul_eq_zero hC hρ hη hR hst
-    bondData := fun s ↦ (data s).bondData
+    bondData := fun s ↦ (data s).toCommutingBond
     bond_supported := fun s ↦ (hdata s).1
     realizes_mpo := fun s N hN ↦ (hdata s).2 N hN }⟩
 

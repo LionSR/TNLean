@@ -179,7 +179,7 @@ theorem bondDim_eq_cutCoefficientRank_of_canonical
   apply le_antisymm
   · rw [← hRankF, ← hrecover]
     exact Matrix.rank_mul_le_left _ _
-  · rw [cutCoefficientRank_eq_cutRank _ (Nat.lt_succ_iff.mp k.isLt)]
+  · rw [cutCoefficientRank_eq_cutRank _ k.val]
     exact B.cutRank_coeff_le k
 
 /-- Faithfulness of the final canonical density proves that the actual

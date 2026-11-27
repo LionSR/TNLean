@@ -10,23 +10,23 @@ import TNLean.MPS.Tensor.GroundSpace.CyclicWindow
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
-# Commuting-form and GSNNCH data for simple MPDOs
+# Commuting form and GSNNCH data for simple MPDOs
 
 This file states the commuting-form side of the simple MPDO story from
 arXiv:1606.00608 Section 4.4 and Appendix C.2.
 
-For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
-semidefinite two-site matrix `B`, together with proofs that its translated
-copies on the periodic chain pairwise commute and that their product
-reproduces `ρ` up to a positive scalar. The separate `GSNNCHData` follows
-Definition 4.8 by recording the orthogonal one-site
-sectors, their natural multiplicities, and one positive bond in every sector.
-The single-bond presentation gives its one-sector case; the converse comparison
-is not asserted. The
-theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` proves the
-entropy-side implication from SAL; its local structure gives
-`HasCommutingForm` through `MPOTensor.EtaLocalStructureData.hasCommutingForm`.
-This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
+A commuting bond is a positive semidefinite two-site matrix `B` whose translates
+on the periodic chain pairwise commute at every chain length. The commuting form
+of an MPO tensor is a commuting bond whose translate product reproduces the
+operator `σ^{(N)}` up to a positive scalar at every chain length `N ≥ 2`
+(Proposition C.8, equation `expression`, lines 1569--1594). The separate
+`GSNNCHData` follows Definition 4.8 by recording the orthogonal one-site sectors,
+their natural multiplicities, and one positive bond in every sector. At one chain
+length, the single-bond presentation is exactly its one-sector case
+(`MPOTensor.exists_oneSector_gsnnchData_iff`). The theorem
+`MPOTensor.nonempty_commutingForm_of_isSAL` proves the entropy-side implication
+from SAL; this is Proposition C.8 of arXiv:1606.00608, Appendix C.2,
+lines 1569--1594.
 
 ## Main declarations
 
@@ -35,13 +35,13 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
   `MPOTensor.reindex_placeAlong_ringWindow_windowComplement` — an operator placed on
   a window of the ring (`ManyBody.placeAlong` along `ManyBody.ringWindow`) is the
   window operator tensored with the identity on the complement
-* `MPOTensor.CommutingFormData`
-* `MPOTensor.HasCommutingForm`
+* `MPOTensor.CommutingBond`, `MPOTensor.CommutingForm`
 * `MPOTensor.GSNNCHData`
 * `MPOTensor.HasGSNNCHFormAt`
 * `MPOTensor.HasGSNNCHForm`
 * `MPOTensor.IsGSNNCHAt`
 * `MPOTensor.IsGSNNCH`
+* `MPOTensor.exists_oneSector_gsnnchData_iff`
 
 ## References
 
@@ -185,68 +185,52 @@ theorem disjoint_map_ringWindow_of_not_cyclicWindowsOverlap {L : ℕ} (hLN : L �
     (MPSTensor.mem_cyclicWindowSupport_iff hLN j k).mpr
       ((MPSTensor.mem_map_ringWindow_iff hLN j k).mp hkj)⟩
 
-/-- Chain-level commuting-form data for the simple-MPDO theorem.
+/-- A commuting bond: one positive semidefinite two-site matrix `B` whose
+translates `B_{i,i+1}` on the periodic chain pairwise commute at every chain
+length `N ≥ 2`.
 
-The current structure stores the translation-invariant two-site factor `B` together
-with chain-level commutativity of its translated copies. The intended
-nearest-neighbor support is encoded by placing the bond on the windows of two
-consecutive sites of the ring (`ManyBody.placeAlong`, `ManyBody.ringWindow`); no separate
-factorization structure is required later. -/
-structure CommutingFormData (d N : ℕ) where
-  /-- The theorem only makes sense for genuine nearest-neighbor chains. -/
-  hN : 2 ≤ N
-  /-- The positive semidefinite two-site factor `B`. -/
+The bond is placed on the windows of two consecutive sites of the ring
+(`ManyBody.placeAlong`, `ManyBody.ringWindow`). It is the length-independent local
+ingredient of the commuting product `σ^{(N)} ∝ ∏_n B_{n,n+1}`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), equation
+`expression`, lines 1571--1576: `B_{n,n+1} ≥ 0` acts on nearest neighbours and the
+translates commute; the proof builds one bond for every `n` and every `N`. -/
+structure CommutingBond (d : ℕ) where
+  /-- The positive semidefinite two-site bond `B`. -/
   bond : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ
-  /-- Positivity of the local factor. -/
+  /-- Positivity of the bond. -/
   bond_pos : Matrix.PosSemidef bond
-  /-- Pairwise commutativity of the translated factors on the `N`-site chain. -/
+  /-- Pairwise commutativity of the translates of the bond on every finite periodic
+  chain. -/
   bond_comm :
-    ∀ i j : Fin N,
+    ∀ {N : ℕ}, ∀ hN : 2 ≤ N, ∀ i j : Fin N,
       placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) bond
         * placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) bond
       = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) bond
           * placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) bond
 
-namespace CommutingFormData
+namespace CommutingBond
 
-variable {N : ℕ}
-
-/-- The translated copy of the local bond operator at site `i`. -/
-noncomputable def bondAt (data : CommutingFormData d N) (i : Fin N) :
+/-- The translate `B_{i,i+1}` of the bond on the `N`-site periodic chain. -/
+noncomputable def bondAt (B : CommutingBond d) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     ChainOperator d N :=
-  placeAlong (X := fun _ ↦ Fin d) (ringWindow data.hN i) data.bond
+  placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B.bond
 
-/-- Any two translated copies of the local bond commute. -/
-theorem bondAt_comm (data : CommutingFormData d N) (i j : Fin N) :
-    data.bondAt i * data.bondAt j = data.bondAt j * data.bondAt i :=
-  data.bond_comm i j
+/-- Any two translates of the bond commute. -/
+theorem bondAt_comm (B : CommutingBond d) {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
+    B.bondAt hN i * B.bondAt hN j = B.bondAt hN j * B.bondAt hN i :=
+  B.bond_comm hN i j
 
-/-- The commuting product `∏_i B_{i,i+1}` on the periodic chain, taken in the
-natural order of `Fin N`. -/
-noncomputable def product (data : CommutingFormData d N) : ChainOperator d N :=
-  (List.ofFn fun i : Fin N => data.bondAt i).prod
+/-- The commuting product `∏_i B_{i,i+1}` on the `N`-site periodic chain, taken in
+the natural order of `Fin N`.
 
-/-- The commuting-form witness realizes `ρ` when `ρ` equals the commuting product
-up to a positive real normalization factor. -/
-def Realizes (data : CommutingFormData d N) (ρ : ChainOperator d N) : Prop :=
-  ∃ c : ℝ, 0 < c ∧ ρ = (c : ℂ) • data.product
+Source: arXiv:1606.00608, Appendix C.2, equation `expression`, lines 1571--1576. -/
+noncomputable def product (B : CommutingBond d) {N : ℕ} (hN : 2 ≤ N) :
+    ChainOperator d N :=
+  (List.ofFn fun i : Fin N ↦ B.bondAt hN i).prod
 
-end CommutingFormData
-
-/-- Chainwise commuting-form property for an MPO tensor: each finite chain of
-length at least `2` admits a commuting-form witness for the corresponding MPO
-operator. The bond may depend on the chain length.
-
-This is weaker than the hypothesis of source Proposition 4to2 in
-arXiv:1606.00608, lines 1597--1619, which refers back to the single
-translation-invariant bond family in the equation carrying the source label
-expression. That source
-hypothesis is represented by `EtaLocalStructureData`: one bond realizes every
-finite chain. The distinction and the missing Bravyi--Vyalyi decomposition are
-recorded in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-def HasCommutingForm (M : MPOTensor d D) : Prop :=
-  ∀ N : ℕ, 2 ≤ N →
-    ∃ data : CommutingFormData d N, data.Realizes (mpo M N)
+end CommutingBond
 
 /-- The projection onto the two-site sector determined by a one-site
 orthogonal projection.
@@ -354,11 +338,20 @@ Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 def Realizes (data : GSNNCHData d N) (ρ : ChainOperator d N) : Prop :=
   ∃ c : ℝ, 0 < c ∧ ρ = (c : ℂ) • data.unnormalizedState
 
-/-- A single positive commuting bond is the one-sector case of the source
-GSNNCH sector decomposition. -/
-noncomputable def ofCommutingFormData
-    (form : CommutingFormData d N) : GSNNCHData d N where
-  hN := form.hN
+/-- A positive two-site bond whose translates on the first two windows commute is
+the one-sector case of the GSNNCH sector decomposition, with trivial sector
+projection and multiplicity one.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+noncomputable def ofBond (hN : 2 ≤ N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)
+    (hB : B.PosSemidef)
+    (hcomm :
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) B *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) B =
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) B *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) B) :
+    GSNNCHData d N where
+  hN := hN
   sectorCount := 1
   multiplicity := fun _ ↦ 1
   sectorProjection := fun _ ↦ 1
@@ -366,25 +359,20 @@ noncomputable def ofCommutingFormData
   sectorProjection_orthogonal := by
     intro x y hxy
     exact (hxy (Subsingleton.elim x y)).elim
-  bond := fun _ ↦ form.bond
-  bond_pos := fun _ ↦ form.bond_pos
+  bond := fun _ ↦ B
+  bond_pos := fun _ ↦ hB
   bond_supported := by
     intro x
     simp [twoSiteSectorProjection_one]
-  neighboring_comm := fun _ ↦ form.bond_comm _ _
+  neighboring_comm := fun _ ↦ hcomm
 
-@[simp] theorem ofCommutingFormData_unnormalizedState
-    (form : CommutingFormData d N) :
-    (ofCommutingFormData form).unnormalizedState = form.product := by
-  rw [unnormalizedState]
-  change (∑ x : Fin 1, ((ofCommutingFormData form).multiplicity x : ℂ) •
-    (ofCommutingFormData form).sectorProduct x) = form.product
-  rw [Fin.sum_univ_one]
-  unfold sectorProduct bondAt
-  simp only [ofCommutingFormData]
-  rw [Nat.cast_one, one_smul]
-  unfold CommutingFormData.product CommutingFormData.bondAt
-  congr
+@[simp] theorem ofBond_unnormalizedState (hN : 2 ≤ N)
+    (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) (hB : B.PosSemidef) hcomm :
+    (ofBond hN B hB hcomm).unnormalizedState =
+      (List.ofFn fun i : Fin N ↦ placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod := by
+  change ∑ _x : Fin 1, ((1 : ℕ) : ℂ) • (List.ofFn fun i : Fin N ↦
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod = _
+  rw [Fin.sum_univ_one, Nat.cast_one, one_smul]
 
 end GSNNCHData
 
@@ -417,20 +405,87 @@ Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 def IsGSNNCH (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N → IsGSNNCHAt (normalizedMPO M N)
 
-namespace CommutingFormData
+/-- At one chain length, a positive scalar multiple of the product of the translates
+of a positive two-site bond whose first two translates commute has the GSNNCH form.
 
-variable {N : ℕ}
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850, one-sector case. -/
+theorem hasGSNNCHFormAt_of_eq_smul_prod {N : ℕ} (hN : 2 ≤ N)
+    {B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ} (hB : B.PosSemidef)
+    (hcomm :
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) B *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) B =
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) B *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) B)
+    {ρ : ChainOperator d N} {c : ℝ} (hc : 0 < c)
+    (hρ : ρ = (c : ℂ) •
+      (List.ofFn fun i : Fin N ↦ placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod) :
+    HasGSNNCHFormAt ρ :=
+  ⟨GSNNCHData.ofBond hN B hB hcomm, c, hc, by simpa using hρ⟩
 
-/-- A single-bond commuting-form realization gives the one-sector instance
-of the source GSNNCH form.
+/-- At one chain length, the one-sector GSNNCH presentations of `ρ` are exactly the
+positive scalar multiples of the product of the translates of one positive two-site
+bond whose first two translates commute.
 
-Source comparison: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
-theorem hasGSNNCHFormAt_of_realizes (data : CommutingFormData d N)
-    {ρ : ChainOperator d N} (hρ : data.Realizes ρ) : HasGSNNCHFormAt ρ := by
-  rcases hρ with ⟨c, hc, hρ⟩
-  refine ⟨GSNNCHData.ofCommutingFormData data, c, hc, ?_⟩
-  simpa using hρ
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850, one-sector case. -/
+theorem exists_oneSector_gsnnchData_iff {N : ℕ} (hN : 2 ≤ N) (ρ : ChainOperator d N) :
+    (∃ data : GSNNCHData d N, data.sectorCount = 1 ∧ data.Realizes ρ) ↔
+      ∃ B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ, B.PosSemidef ∧
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) B *
+            placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) B =
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) B *
+            placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) B ∧
+        ∃ c : ℝ, 0 < c ∧ ρ = (c : ℂ) •
+          (List.ofFn fun i : Fin N ↦
+            placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod := by
+  constructor
+  · rintro ⟨data, hcount, c, hc, hρ⟩
+    obtain ⟨x⟩ : Nonempty (Fin data.sectorCount) := ⟨⟨0, by omega⟩⟩
+    have hsum : data.unnormalizedState =
+        (data.multiplicity x : ℂ) • data.sectorProduct x := by
+      rw [GSNNCHData.unnormalizedState]
+      refine Fintype.sum_eq_single x fun y hy ↦ ?_
+      exact (hy (Fin.ext (by have := y.isLt; have := x.isLt; omega))).elim
+    rcases Nat.eq_zero_or_pos (data.multiplicity x) with hn | hn
+    · refine ⟨0, Matrix.PosSemidef.zero, by simp only [placeAlong_zero], 1, one_pos, ?_⟩
+      have hprod : (List.ofFn fun i : Fin N ↦
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
+            (0 : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)).prod = 0 := by
+        obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
+        rw [List.ofFn_succ, List.prod_cons, placeAlong_zero, zero_mul]
+      rw [hρ, hsum, hn, hprod, Nat.cast_zero, zero_smul, smul_zero, smul_zero]
+    · refine ⟨data.bond x, data.bond_pos x, data.neighboring_comm x,
+        c * data.multiplicity x, mul_pos hc (by exact_mod_cast hn), ?_⟩
+      rw [hρ, hsum, smul_smul]
+      push_cast
+      rfl
+  · rintro ⟨B, hB, hcomm, c, hc, hρ⟩
+    exact ⟨GSNNCHData.ofBond hN B hB hcomm, rfl, c, hc, by simpa using hρ⟩
 
-end CommutingFormData
+/-- The commuting form of a matrix product operator tensor: one commuting bond `B`
+such that, at every chain length `N ≥ 2`, the operator `σ^{(N)}(M)` is a positive
+scalar multiple of the product `∏_n B_{n,n+1}` of the translates of `B`.
+
+The bond is the same for every chain length, as in the proof of Proposition C.8
+and as read by Proposition `4to2`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), equation
+`expression`, lines 1569--1594; Proposition `4to2`, lines 1597--1619. The reading
+"one bond for every chain length" is recorded in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+structure CommutingForm (M : MPOTensor d D) extends CommutingBond d where
+  /-- The operator on every finite periodic chain is a positive scalar multiple of
+  the commuting bond product. -/
+  realizes_mpo :
+    ∀ N : ℕ, ∀ hN : 2 ≤ N,
+      ∃ c : ℝ, 0 < c ∧ mpo M N = (c : ℂ) • toCommutingBond.product hN
+
+/-- A commuting form gives the one-sector GSNNCH form at every chain length.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850, and Appendix C.2,
+equation `expression`, lines 1571--1576. -/
+theorem CommutingForm.hasGSNNCHForm {M : MPOTensor d D} (F : CommutingForm M) :
+    HasGSNNCHForm M := fun N hN ↦ by
+  obtain ⟨c, hc, h⟩ := F.realizes_mpo N hN
+  exact hasGSNNCHFormAt_of_eq_smul_prod hN F.bond_pos (F.bond_comm hN _ _) hc h
 
 end MPOTensor

@@ -197,7 +197,7 @@ theorem blockEntropy_add_blockEntropy_eq_bntSector
       rw [hzero, Matrix.trace_zero])
   have hGlobal := mutualInfoChain_eq_of_isSAL M hSAL
     (N := N) (L := 1) (L' := m) (by omega) (by omega) hm1 hmN
-  simp only [mutualInfoChain] at hGlobal
+  simp only [mutualInfoChain_eq] at hGlobal
   have hEABC := blockEntropy_eq_sum_bntSectorProbability (L := N - 1)
     M S hM hWeight hC hρ₃ hη hR hMpdo hSectorMpdo hN (by omega)
       (Nat.sub_le N 1) hMtrace (hSectorTrace N hN)
@@ -280,7 +280,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
   have hEqSucc := blockEntropy_add_blockEntropy_eq_bntSector
     M S hM hWeight hC hρ₃ hη hR hSAL hSectorMpdo hSectorTrace
       (N := N) (m := L + 1) (by omega) (by omega) s
-  simp only [mutualInfoChain]
+  simp only [mutualInfoChain_eq]
   dsimp only at hEqL hEqSucc
   linarith [hEqL, hEqSucc]
 
@@ -375,7 +375,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     (hSAL : IsSAL M)
     (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M)
     (s : Fin S.basisCount) :
-    (commonWeightAbsorbedBasisMPOTensor S hWeight s).IsInjective ∧
+    Kraus.IsInjective (commonWeightAbsorbedBasisMPOTensor S hWeight s).toMPSTensor ∧
       IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
       IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
       physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) *

@@ -122,18 +122,16 @@ theorem exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalT
         ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) := by
       intro j
       exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
-    have hIrrBlocks : HasIrreducibleBlocks (d := d) prepared :=
-      HasIrreducibleBlocks.ofForall hIrr
-    have hLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
-      IsLeftCanonicalBlockFamily.ofForall hTP
-    have hOverlap : HasNormalizedSelfOverlap (d := d) prepared :=
-      HasNormalizedSelfOverlap.ofForall fun j =>
+    have hOverlap : ∀ k,
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (prepared k) (prepared k) N)
+          Filter.atTop (nhds (1 : ℂ)) :=
+      fun j =>
         overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
           (prepared j) (hIrr j) (hTP j) (hPrim j)
     have hPreparedSpan : WordTupleSpanTop prepared
         ((g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1)))) :=
       wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
-        prepared hIrrBlocks hLeft hOverlap hPreparedDistinct
+        prepared hIrr hTP hOverlap hPreparedDistinct
         hBlk0 hBlk1 hBlk3 hK4pos hCountTwo
     have hSpan : WordTupleSpanTop B
         ((g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1)))) :=

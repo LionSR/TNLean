@@ -20,7 +20,7 @@ a Hayashi quantum-Markov decomposition at every one-site cut.
 It also contains the following results.
 
 * `MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL`,
-  `MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL`: area law from the cyclic-active Markov
+  `MPOTensor.CommutingForm.isSAL_of_isSourceZCL`: area law from the cyclic-active Markov
   decomposition.
 -/
 
@@ -493,7 +493,7 @@ sectors, and it is obtained after one additional marginal replacement.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL
     (F : PhysicalSectorFactorization K)
-    (hK : K.IsInjective)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) (A C : ℕ) :
     let ρ_ABC :=
@@ -522,7 +522,7 @@ theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL
 
 end MPOTensor.PhysicalSectorFactorization
 
-namespace MPOTensor.EtaLocalStructureData
+namespace MPOTensor.CommutingForm
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
@@ -539,11 +539,11 @@ additional marginal replacement. It assumes no injectivity, normality, or
 zero-correlation-length property of the selected fixed-product tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
-    (hK : K.IsInjective) (data : EtaLocalStructureData K)
+    (hK : Kraus.IsInjective K.toMPSTensor) (data : CommutingForm K)
     (hZCL : K.IsSourceZCL)
     (A C : ℕ) :
     let F :=
-      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+      data.fixedProductTensorDataPhysicalSectorFactorization
     let M :=
       PhysicalSectorFactorization.changePhysicalBasis
         F.physicalCoordinateMatrix K
@@ -557,11 +557,11 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
     Nonempty (HayashiMarkovDecomposition ρ_ABC) := by
   classical
   let F :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    data.fixedProductTensorDataPhysicalSectorFactorization
   let U := F.physicalCoordinateMatrix
   let M := PhysicalSectorFactorization.changePhysicalBasis U K
   have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
+    data.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
   have hreach : ∀ q h : F.CyclicActiveSector,
       Relation.ReflTransGen
         (fun a b : F.CyclicActiveSector ↦ F.neighboringOperator a b ≠ 0) q h := by
@@ -648,8 +648,8 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
     rw [htraceShort]
     exact Complex.ofReal_ne_zero.mpr (ne_of_gt hzShort)
   have hselectedMarkov :=
-    letI : NeZero data.bondData.fixedProductTensorData.bondDim :=
-      ⟨Nat.ne_of_gt data.bondData.fixedProductTensorData.bondDim_pos⟩
+    letI : NeZero data.fixedProductTensorData.bondDim :=
+      ⟨Nat.ne_of_gt data.fixedProductTensorData.bondDim_pos⟩
     F.exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion
       hpos A C lam a b ha hb htC htShort hfour
   have hstate :
@@ -662,7 +662,7 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
   rw [hstate]
   exact hselectedMarkov
 
-end MPOTensor.EtaLocalStructureData
+end MPOTensor.CommutingForm
 
 end CyclicActiveMarkovDecomposition
 
@@ -698,10 +698,10 @@ physical-sector factorization and positivity of its neighboring operators.
 It is therefore a conditional explicit-factorization result, rather than the
 source proposition by itself. The source-faithful implication from a
 translation-invariant commuting bond is
-`EtaLocalStructureData.isSAL_of_isSourceZCL`; see
+`CommutingForm.isSAL_of_isSourceZCL`; see
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K)
-    (hK : K.IsInjective)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) : IsSAL K := by
   have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
@@ -733,7 +733,7 @@ theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K)
 
 end MPOTensor.PhysicalSectorFactorization
 
-namespace MPOTensor.EtaLocalStructureData
+namespace MPOTensor.CommutingForm
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
@@ -752,11 +752,11 @@ resulting normalized marginals from the selected fixed-product tensor to the
 source tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_isSourceZCL
-    (hMPDO : IsMPDO K) (hK : K.IsInjective)
-    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL) :
+    (hMPDO : IsMPDO K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (data : CommutingForm K) (hZCL : K.IsSourceZCL) :
     IsSAL K := by
   let F :=
-    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    data.fixedProductTensorDataPhysicalSectorFactorization
   let U := F.physicalCoordinateMatrix
   let M := PhysicalSectorFactorization.changePhysicalBasis U K
   have hMMPDO : IsMPDO M := by
@@ -786,6 +786,27 @@ theorem isSAL_of_isSourceZCL
     U F.physicalCoordinateMatrix_isometry K
   exact hMSAL
 
-end MPOTensor.EtaLocalStructureData
+end MPOTensor.CommutingForm
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- For an injective tensor generating matrix-product density operators with source
+zero correlation length, saturation of the area law is equivalent to the commuting
+form: one positive two-site bond with commuting translates whose product is
+proportional to the operator at every chain length.
+
+Source: arXiv:1606.00608, Appendix C.2, line 1567 (the announced equivalence),
+Proposition C.8 (`3to4`), lines 1569--1594, and Proposition `4to2`, lines
+1597--1619. The local fixes of the two directions are recorded in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem isSAL_iff_nonempty_commutingForm (K : MPOTensor d D) (hMPDO : IsMPDO K)
+    (hK : Kraus.IsInjective K.toMPSTensor) (hZCL : K.IsSourceZCL) :
+    IsSAL K ↔ Nonempty (CommutingForm K) :=
+  ⟨nonempty_commutingForm_of_isSAL K hK, fun ⟨data⟩ ↦
+    data.isSAL_of_isSourceZCL hMPDO hK hZCL⟩
+
+end MPOTensor
 
 end CyclicActiveAreaLaw

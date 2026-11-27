@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
-import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
+import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
 import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Logic.Equiv.Basic
@@ -24,11 +24,11 @@ network, ground state, or physical endpoint-rank theorem is constructed here.
 
 Source: the one-dimensional note, Part II, proof of Theorem B, internal
 block cuts in `part2b_mps_protocol.tex`, lines 605–614. The coefficients are
-those of the cut matrix `ManyBody.cutMatrix (interval L 0 k)` of QICLean; the coordinate
-identification with the existing physical coefficient matrix is proved below rather than assumed.
+those of the cut matrix `ManyBody.cutMatrix (interval L 0 k)` of QICLean; their identification
+with the physical coefficient matrix is `MPSPreparation.cutCoefficientMatrix_eq_reindex_cutMatrix`.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (interval)
 
 noncomputable section
 open scoped BigOperators
@@ -78,48 +78,12 @@ private theorem rank_regroup_right
 
 variable {L q : ℕ}
 
-/-! These are only the equivalences of equal site predicates. No numbered-cut
-matrix is asserted to equal the AreaLaw cut matrix without a coordinate proof. -/
-private def prefixConfigurations (L q k : ℕ) :
-    ((v : {v : Fin L // v ∈ interval L 0 k}) → Fin q) ≃
-      MPSPreparation.CutPrefixConfig q L k :=
-  Equiv.arrowCongr (Equiv.subtypeEquivRight (fun v : Fin L ↦
-    (show v ∈ interval L 0 k ↔ v.val < k by simp))) (Equiv.refl (Fin q))
-
-private def suffixConfigurations (L q k : ℕ) :
-    ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) ≃
-      MPSPreparation.CutSuffixConfig q L k :=
-  Equiv.arrowCongr (Equiv.subtypeEquivRight (fun v : Fin L ↦
-    (show v ∉ interval L 0 k ↔ k ≤ v.val
-        by simp only [mem_interval, not_lt, Nat.zero_le, true_and])))
-      (Equiv.refl (Fin q))
-
-private theorem coefficient_matrix_eq_reindex
-    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    MPSPreparation.cutCoefficientMatrix (fun x ↦ ψ x) k =
-      (cutMatrix (interval L 0 k) ψ).reindex (prefixConfigurations L q k)
-        (suffixConfigurations L q k) := by
-  classical
-  ext a b
-  change MPSPreparation.cutCoefficientMatrix (fun x ↦ ψ x) k a b =
-    cutMatrix (interval L 0 k) ψ ((prefixConfigurations L q k).symm a)
-      ((suffixConfigurations L q k).symm b)
-  rw [ManyBody.cutMatrix_apply]
-  change ψ (fun v ↦ if h : v.val < k then a ⟨v, h⟩ else b ⟨v, Nat.le_of_not_lt h⟩) = _
-  apply congrArg ψ
-  funext v
-  by_cases hv : v.val < k
-  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, hv⟩),
-      dite_eq_left hv]
-    rfl
-  · have hv' : v ∉ interval L 0 k := fun h ↦ hv (mem_interval.mp h).2
-    rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv', dite_eq_right hv]
-    rfl
-
+/-- The cut matrix across the left block and the physical coefficient matrix have the same rank:
+they differ only by reindexing the configurations of each side. -/
 private theorem rank_cutMatrix_eq_coefficientRank
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    (cutMatrix (interval L 0 k) ψ).rank = MPSPreparation.cutCoefficientRank (fun x ↦ ψ x) k := by
-  rw [MPSPreparation.cutCoefficientRank, coefficient_matrix_eq_reindex, Matrix.rank_reindex]
+    (cutMatrix (interval L 0 k) ψ).rank = MPSPreparation.cutCoefficientRank (fun x ↦ ψ x) k :=
+  (MPSPreparation.cutCoefficientRank_eq_cutRank _ k).symm
 
 /-! Splitting off the actual site k. The existing extension functions preserve
 its literal physical index; their inverse maps are restrictions and evaluation
