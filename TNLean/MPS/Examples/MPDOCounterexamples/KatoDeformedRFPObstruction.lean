@@ -462,13 +462,14 @@ through `finProdFinEquiv`. -/
 private theorem reindexPhysical_toTensorFromBlocks_eq_tensor :
     Kraus.reindexPhysical finProdFinEquiv
       (MPTensor.toTensorFromBlocks (dim := fun _ => 1) katoCFWeights katoCFBlocks) = tensor := by
-  have hflat : tensor.toMPSTensor = MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
+  have hflat : Kraus.reindexPhysical finProdFinEquiv.symm tensor =
+      MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
     let e : (Σ _k : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
     have hflat (k : Fin 2) : e ⟨k, (0 : Fin 1)⟩ = k := by fin_cases k <;> rfl
     have hflat_symm (k : Fin 2) : e.symm k = ⟨k, (0 : Fin 1)⟩ := by
       apply e.injective; rw [e.apply_symm_apply, hflat]
     funext p; ext x y
-    simp only [MPOTensor.toMPSTensor, MPTensor.toTensorFromBlocks,
+    simp only [Kraus.reindexPhysical, MPTensor.toTensorFromBlocks,
       Matrix.reindex_apply, katoCFWeights, katoCFBlocks]
     change tensor (p.divNat, p.modNat) x y =
       (Matrix.blockDiagonal' (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p)))
