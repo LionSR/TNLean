@@ -436,9 +436,8 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
   rw [Kraus.evalWord_smul, List.length_ofFn, hsqrtC, inv_pow]
 
 /-- A blocked operator tensor is the doubled-index blocking of its relabelling, relabelled
-back to the pair alphabet. This bridges to the canonical-form blocking statements that are still
-stated on a `Fin` alphabet. -/
-theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
+back to the pair alphabet. -/
+private theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
     MPOTensor.blockTensor X p = Kraus.reindexPhysical finProdFinEquiv
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
         (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
@@ -471,7 +470,8 @@ theorem hasFullSupport_blockTensorCFIIData {U : MPOTensor d D}
     (blockTensorCFIIData U data p hp).toCPSVCanonicalFormData.HasFullSupport := by
   unfold blockTensorCFIIData
   refine MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_cast _ ?_
-    ((normalizedFlattening_blockTensor U p).trans (blockTensor_eq_reindexPhysical _ p))
+    ((normalizedFlattening_blockTensor U p).trans
+      (blockTensor_eq_reindexPhysical U.normalizedFlattening p))
   exact hfull
 
 /-- The normalized tensor of an MPU is normal when the chosen CPSV canonical-form

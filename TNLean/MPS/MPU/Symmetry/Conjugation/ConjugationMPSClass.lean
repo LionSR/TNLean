@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Symmetry.Conjugation.StandardFormConjugation
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardFormSourceCuts
 import TNLean.MPS.FundamentalTheorem.TimeReversalIndex
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The MPS sign of a conjugation-invariant matrix product unitary
@@ -373,13 +374,13 @@ theorem IsMPUCanonicalFormII.mps_conjugation_sign_iff
     x.property y.property huS.2 hu
   obtain ⟨T⟩ := hV.exists_twoSiteStandardFormData_sourceFactors hsimple S
   -- The MPS sign of the normalized flattening.
-  have hN : Kraus.IsNormal (MPOTensor.blockTwo V).normalizedFlattening :=
-    hV.blockTwo.isNormalTensor_normalizedFlattening.isNormal
+  have hN : Kraus.IsNormal (MPOTensor.blockTwo V).normalizedFlattening.toMPSTensor :=
+    (isNormal_toMPSTensor_iff _).2 hV.blockTwo.isNormalTensor_normalizedFlattening.isNormal
   have hG := MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge hN
     (P := 1) (by simp) G (ζ := ζ) (fun i => by
       simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
         Finset.mem_univ, ite_true]
-      simp only [normalizedFlattening, map_star_smul, hgauge, Matrix.mul_smul,
+      simp only [toMPSTensor, normalizedFlattening, map_star_smul, hgauge, Matrix.mul_smul,
         Matrix.smul_mul, smul_comm ζ]
       congr 1
       simp)
