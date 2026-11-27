@@ -19,7 +19,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeThre
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
 import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ShortRegionViableFamily
-import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialRank
+import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialCutRank
 
 /-!
 # The improving family for a frustration-free chain
