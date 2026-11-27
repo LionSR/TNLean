@@ -364,14 +364,11 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
             actionLMatrix WF VA WA b c x z ⟨t, j, k⟩ ⟨f, l, mu⟩ *
               actionLMatrix WF VA WA a f x y ⟨z, i, l⟩ ⟨e, m, nu⟩ := by
   classical
-  have hT' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      O := congrArg toMPSTensor hT
   choose N VF WF hF using fun a b ↦
-    hClosed.exists_blockFusionDecomposition_of_isInjective O hT'
-      (fun a ↦ (hInjO a)) hχ hneO a b
+    hClosed.exists_blockFusionDecomposition_of_isInjective O hT hInjO hχ hneO a b
   choose M VA WA hA using fun a x ↦
     hCompatible.exists_blockActionDecomposition_of_isInjective
-      O A hT' hB hInjA hD hneA a x
+      O A hT hB hInjA hD hneA a x
   exact ⟨N, M, VF, WF, VA, WA, hF, hA,
     actionLMatrix_mixed_pentagon O A hInjO hInjA hχ hD hneO hneA
       VF WF VA WA hF hA⟩

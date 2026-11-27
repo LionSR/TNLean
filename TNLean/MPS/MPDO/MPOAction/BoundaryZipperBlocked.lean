@@ -139,13 +139,9 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
         HEq F.fusionAnalysis
           (fun a b ↦ CompleteZipperFusionFamily.biorthogonalAnalysis (V a b)) := by
   classical
-  have hBlocks' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      A := congrArg toMPSTensor hBlocks
-  have hInj' : ∀ c, Kraus.IsInjective (A c).toMPSTensor :=
-    hInj
   choose N V W hVW using
     fun a b ↦ h.exists_blockFusionDecomposition_of_isInjective
-      A hBlocks' hInj' hD hne a b
+      A hBlocks hInj hD hne a b
   let hNormal := fun c ↦ (hInj c).isNormal
   let F := CompleteZipperFusionFamily.ofBiorthogonalBlocked hNormal hD hne V W hVW
   exact ⟨N, V, W, hVW, _,

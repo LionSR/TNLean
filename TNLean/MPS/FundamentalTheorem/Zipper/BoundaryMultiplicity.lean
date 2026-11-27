@@ -166,11 +166,11 @@ to read fusion associativity from physical matrix associativity. -/
 theorem IsMPOFusionAlgebra.associative_of_isInjective
     (hfus : IsMPOFusionAlgebra O N)
     (hInj : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (a b c q : Fin r) :
     ∑ e, N a b e * N e c q = ∑ f, N b c f * N a f q := by
   obtain ⟨L, hL, hSpan⟩ := MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective
-    (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInj a)) hχ hne
+    hInj hχ hne
   exact hfus.associative_of_linearIndependent hL
     (linearIndependent_mpo_of_wordTupleSpanTop hSpan hχ) a b c q
 
@@ -184,11 +184,10 @@ theorem IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible
     {B : MPSTensor d (∑ x : Fin s, D x)} (hT : IsBoundaryClosed T)
     (hB : IsBoundaryCompatible T B)
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hOp : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (O a).toMPSTensor))
+    (hOp : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) O)
     (hState : B = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     (hInjOp : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
-    (hneOp : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneOp : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hInjState : ∀ x, Kraus.IsInjective (A x)) (hD : ∀ x, 0 < D x)
     (hneState : MPSTensor.BlocksNotGaugePhaseEquiv A) :
     ∃ (N : Fin r → Fin r → Fin r → ℕ) (M : Fin r → Fin s → Fin s → ℕ),

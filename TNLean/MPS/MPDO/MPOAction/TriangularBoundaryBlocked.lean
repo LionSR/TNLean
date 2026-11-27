@@ -61,20 +61,6 @@ end MPSTensor.IsBiorthogonalDecomposition
 
 namespace MPOTensor
 
-/-- Gauge-phase equivalence of the doubled-index views, after a cast of the bond dimension, is
-gauge-phase equivalence on the pair alphabet. -/
-private theorem gaugePhaseEquiv_cast_toMPSTensor_iff {p D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (M : MPOTensor p D₁) (N : MPOTensor p D₂) :
-    MPTensor.GaugePhaseEquiv (cast (congrArg (MPSTensor (p * p)) h) M.toMPSTensor)
-        N.toMPSTensor ↔
-      MPTensor.GaugePhaseEquiv (cast (congrArg (MPOTensor p) h) M) N := by
-  subst h
-  simp only [cast_eq, MPTensor.GaugePhaseEquiv, toMPSTensor_eq_reindexPhysical,
-    Kraus.reindexPhysical]
-  exact exists_congr fun X ↦ exists_congr fun ζ ↦ and_congr_right fun _ ↦
-    (finProdFinEquiv.forall_congr_left
-      (p := fun i ↦ N i = ζ • ((X : Matrix _ _ ℂ) * M i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)))).symm
-
 /-- The derived common-block inverse is independent of the finite label
 coordinates. Only its row label is transported by the given equivalence. -/
 theorem exists_blockTensor_leftInverse_of_labelEquiv
@@ -95,8 +81,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
   obtain ⟨L, hL, hInj, K, hK⟩ := exists_blockTensor_isMPOBlockLeftInverse
     (fun c ↦ T (e.symm c)) (fun c ↦ (hT (e.symm c)))
     (fun c ↦ hD (e.symm c))
-    (fun a b hab hdim ↦ (gaugePhaseEquiv_cast_toMPSTensor_iff hdim _ _).not.2
-      (hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim))
+    (fun a b hab hdim ↦ hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim)
   let Krow : ∀ c : Λ, Matrix (Fin (D c) × Fin (D c))
       (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ :=
     Equiv.piCongrLeft (fun c ↦ Matrix (Fin (D c) × Fin (D c))
@@ -179,8 +164,7 @@ private theorem triangularTensor_separated
     | inl b =>
       intro h
       exact hneO a b (fun he ↦ hab (congrArg Sum.inl he)) hDim
-        ((gaugePhaseEquiv_cast_toMPSTensor_iff hDim _ _).2
-          (gaugePhaseEquiv_of_operatorPhysicalPadding_cast hDim h))
+        (gaugePhaseEquiv_of_operatorPhysicalPadding_cast hDim h)
     | inr y =>
       exact not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding_cast
         hDim (O a) (hD y) (hInjA y)
