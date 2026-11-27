@@ -81,9 +81,18 @@ theorem isCPSVBasisOfNormalTensors (h : IsBNTSectorPresentation A P) :
 /-- Distinct representatives in a presentation are not gauge-phase equivalent.
 
 Source: arXiv:1606.00608, Proposition 2.7, lines 1135--1148. -/
-theorem blocks_not_gaugePhaseEquiv (h : IsBNTSectorPresentation A P) :
-    BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
-  h.isCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
+theorem blocks_not_gaugePhaseEquiv {α : Type*} [Fintype α] {D₀ : ℕ} {A₀ : MPTensor α (Fin D₀)}
+    {Q : SectorDecomposition α} (h : IsBNTSectorPresentation A₀ Q) :
+    BlocksNotGaugePhaseEquiv Q.basis := by
+  rintro j k hjk hdim ⟨X, ζ, -, hConj⟩
+  obtain ⟨N₀, hLI⟩ := h.eventually_li
+  have hN := hLI (N₀ + 1) (by omega)
+  refine (linearIndepOn_pair_iff _ hjk (hN.ne_zero j)).mp (hN.linearIndepOn {j, k})
+    (ζ ^ (N₀ + 1)) ?_
+  rw [← map_smul]
+  congr 1
+  funext σ
+  rw [Pi.smul_apply, smul_eq_mul, mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hConj, mpv_cast_dim hdim]
 
 /-- Transport a presentation along equality of all positive-length matrix-product vectors.
 
@@ -125,23 +134,6 @@ theorem exists_pos_mpvState_ne_zero (h : IsBNTSectorPresentation A P) :
   rw [hStateExpansion]
   intro hZero
   exact hCoeffN ((Fintype.linearIndependent_iff.mp (hLI N hN)) _ hZero j)
-
-/-- Multiplying every tensor letter and every copy weight by the same nonzero scalar
-preserves a basis-of-normal-tensors presentation.
-
-Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-theorem smul_left (h : IsBNTSectorPresentation A P) (c : ℂ) (hc : c ≠ 0) :
-    IsBNTSectorPresentation (c • A) (P.scaleWeights c hc) := by
-  refine ⟨h.basisCount_pos, ?_, h.basis_normal, h.eventually_li⟩
-  intro N hN σ
-  calc
-    mpv (c • A) σ = c ^ N * mpv A σ := mpv_smul c A σ
-    _ = c ^ N * mpv P.toTensor σ :=
-      congrArg (fun z : ℂ => c ^ N * z) (h.sameMPV₂Pos N hN σ)
-    _ = mpv (P.scaleWeights c hc).toTensor σ := by
-      change c ^ N * mpv P.toTensor σ =
-        mpv (toTensorFromBlocks (fun k => c * P.flatWeight k) P.flatBasis) σ
-      exact (mpv_toTensorFromBlocks_weight_mul_left c P.flatWeight P.flatBasis σ).symm
 
 /-- Presentations for the same positive-length matrix-product vectors have the same normal
 representatives up to a bijection and gauge phases.

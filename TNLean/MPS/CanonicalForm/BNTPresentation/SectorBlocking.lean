@@ -99,9 +99,9 @@ form.
 
 Source: arXiv:1606.00608, the physical-basis identifications implicit in the
 blocking passage at lines 317--345. -/
-theorem IsLeftCanonicalBNTPresentation.reindexPhysical {d' : ℕ}
-    {P : SectorDecomposition (Fin d)} (hCF : IsLeftCanonicalBNTPresentation P)
-    (e : Fin d' ≃ Fin d) :
+theorem IsLeftCanonicalBNTPresentation.reindexPhysical [Fintype α] [Fintype α']
+    {P : SectorDecomposition α} (hCF : IsLeftCanonicalBNTPresentation P)
+    (e : α' ≃ α) :
     IsLeftCanonicalBNTPresentation (P.reindexPhysical e) := by
   refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
     hCF.basisCount_pos hCF.basis_dim_pos
@@ -117,10 +117,7 @@ theorem IsLeftCanonicalBNTPresentation.reindexPhysical {d' : ℕ}
     refine (hCF.basis_normalized_self_overlap j).congr' ?_
     filter_upwards with N
     exact (mpvOverlap_reindexPhysical_equiv e (P.basis j) (P.basis j)).symm
-  · change ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun j : Fin P.basisCount ↦
-        mpvState (Kraus.reindexPhysical e (P.basis j)) N)
-    obtain ⟨N₀, hLI⟩ := hCF.eventually_li
+  · obtain ⟨N₀, hLI⟩ := hCF.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
     exact linearIndependent_mpvState_reindexPhysical_equiv e P.basis (hLI N hN)
 
