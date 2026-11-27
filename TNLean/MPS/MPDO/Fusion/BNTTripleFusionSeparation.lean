@@ -93,12 +93,23 @@ theorem hasFinalLabelSelectorWords_of_hasBlockSelectorWords
   have hSum : ∀ γ : Fin g,
       (∑ w : Fin S → Fin p × Fin p, c (e w) • Kraus.evalWord (Fam.tensor γ) (List.ofFn w)) =
         ∑ w : Fin S → Fin (p * p),
-          c w • Kraus.evalWord (Fam.tensor γ) (List.ofFn w) := by
+          c w • Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w) := by
     intro γ
     refine Fintype.sum_equiv e _ _ fun w ↦ ?_
     rw [evalWord_toMPSTensor, List.map_ofFn]
     simp [e, Equiv.arrowCongr_apply, Function.comp_def]
   exact ⟨fun w ↦ c (e w), (hSum ε).trans hSelf, fun ε' hε' ↦ (hSum ε').trans (hOther ε' hε')⟩
+
+/-- A word of a finite length evaluates to the ordered product of its letters. -/
+private theorem kraus_evalWord_ofFn_eq_prod {α κ : Type*} [Fintype κ] [DecidableEq κ]
+    (X : α → Matrix κ κ ℂ) {m : ℕ} (w : Fin m → α) :
+    Kraus.evalWord X (List.ofFn w) = (List.ofFn fun l => X (w l)).prod := by
+  induction m with
+  | zero => simp only [List.ofFn_zero, Kraus.evalWord, List.prod_nil]
+  | succ m ih =>
+      simp only [List.ofFn_succ, Kraus.evalWord, List.prod_cons]
+      congr 1
+      exact ih (w ∘ Fin.succ)
 
 /-- Finite scalar sums commute with a dependent block diagonal whose blocks
 have a fixed identity Kronecker factor. -/
@@ -167,20 +178,10 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     obtain ⟨i, k⟩ := ij
     simpa [U, A, D, Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI] using
       (Fam.fusion α β i k).symm
-  have evalWord_ofFn_eq_prod : ∀ {κ : Type} [Fintype κ] [DecidableEq κ]
-      (X : Fin p × Fin p → Matrix κ κ ℂ) (m : ℕ) (w : Fin m → Fin p × Fin p),
-      Kraus.evalWord X (List.ofFn w) = (List.ofFn fun l => X (w l)).prod := by
-    intro κ _ _ X m w
-    induction m with
-    | zero => simp only [List.ofFn_zero, Kraus.evalWord, List.prod_nil]
-    | succ m ih =>
-        simp only [List.ofFn_succ, Kraus.evalWord, List.prod_cons]
-        congr 1
-        exact ih (w ∘ Fin.succ)
   have hword (w : Fin (n + 1) → Fin p × Fin p) :
       Kraus.evalWord D (List.ofFn w) =
         U * Kraus.evalWord A (List.ofFn w) * Uᴴ := by
-    rw [evalWord_ofFn_eq_prod, evalWord_ofFn_eq_prod]
+    rw [kraus_evalWord_ofFn_eq_prod, kraus_evalWord_ofFn_eq_prod]
     have hconj := MPOTensor.listProd_conj_of_conjTranspose_mul_self U hU
       (fun l => A (w l))
     simpa only [hletter] using hconj

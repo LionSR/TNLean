@@ -586,7 +586,7 @@ theorem exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry
   have hRestrict : changePhysicalBasis Vᴴ M = K := by
     change changePhysicalBasis Vᴴ (changePhysicalBasis V K) = K
     rw [changePhysicalBasis_changePhysicalBasis, hV]
-    ext i j β α
+    ext i β α
     simp [changePhysicalBasis, physicalSlice]
   let explicitRestriction : PhysicalSupportRestrictionData
       (physicalSupportProj M) M :=
