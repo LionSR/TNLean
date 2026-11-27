@@ -551,13 +551,13 @@ on the three-site chain.
 
 Source: arXiv:1606.00608, Definition 3.9, lines 517--524, Theorem 3.10, lines
 534--541, and Appendix B, lines 1305--1307. -/
-theorem localTerm_two_three_zero_one_commute
+theorem term_two_three_zero_one_commute
     (h : ResidualFamilyAppendixBData B) :
-    localTerm (directSumTensor B) 2 3 (0 : Fin 3) *
-        localTerm (directSumTensor B) 2 3 (1 : Fin 3) =
-      localTerm (directSumTensor B) 2 3 (1 : Fin 3) *
-        localTerm (directSumTensor B) 2 3 (0 : Fin 3) :=
-  localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
+    Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (0 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (1 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (0 : Fin 3)) :=
+  term_two_three_zero_one_commute_of_overlapping_two_site_commutation
     (directSumTensor B) h.hasOverlappingTwoSiteCommutation
 
 /-- The residual-family form gives adjacent two-site commutation on every
@@ -565,14 +565,17 @@ periodic chain of length greater than two.
 
 Source: arXiv:1606.00608, Definition 3.9, lines 517--524, Theorem 3.10, lines
 534--541, and Appendix B, lines 1305--1307. -/
-theorem adjacent_twoSite_localTerms_commute
+theorem adjacent_twoSite_parentRingInteraction_terms_commute
     (h : ResidualFamilyAppendixBData B) {N : ℕ} (hN : 2 < N) (i : Fin N) :
-    localTerm (directSumTensor B) 2 N i *
-        localTerm (directSumTensor B) 2 N (cyclicForwardSite i 1) =
-      localTerm (directSumTensor B) 2 N (cyclicForwardSite i 1) *
-        localTerm (directSumTensor B) 2 N i :=
-  localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute
-    h.localTerm_two_three_zero_one_commute (by omega) i
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 N).term i) *
+        Matrix.toLin'
+          ((parentRingInteraction (directSumTensor B) 2 N).term (cyclicForwardSite i 1)) =
+      Matrix.toLin'
+          ((parentRingInteraction (directSumTensor B) 2 N).term (cyclicForwardSite i 1)) *
+        Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 N).term i) :=
+  parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute
+    h.term_two_three_zero_one_commute (by omega) i
 
 /-- Simultaneous Appendix B data supplies the nearest-neighbor commuting
 parent Hamiltonian on every periodic chain of length greater than two.
@@ -583,11 +586,11 @@ theorem isNNCPH
     (h : ResidualFamilyAppendixBData B) {N : ℕ} (hN : 2 < N) :
     IsNNCPH (directSumTensor B) N :=
   isNNCPH_of_adjacent_twoSite_commute (le_of_lt hN)
-    (h.adjacent_twoSite_localTerms_commute hN)
+    (h.adjacent_twoSite_parentRingInteraction_terms_commute hN)
 
 end ResidualFamilyAppendixBData
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition d}
 
@@ -604,13 +607,13 @@ the direct sum of the BNT basis tensors, with one copy of each distinct
 sector. Repeated copies and arbitrary raw sector weights remain outside this
 statement; see `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_basisDirectSum
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis))
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH (directSumTensor P.basis) N := by
   obtain ⟨h⟩ := hCF.exists_residualFamilyAppendixBData hRFP
   exact h.isNNCPH hN
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

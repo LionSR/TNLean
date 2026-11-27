@@ -84,7 +84,7 @@ theorem _root_.MPTensor.IsNormalTensor.blockTensor {A : MPSTensor d D} (hA : IsN
     IsNormalTensor (Kraus.blockTensor (d := d) (n := Fin D) A p) := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσpos, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B : MPSTensor d D := Kraus.tpGauge (d := d) (D := D) A σ
+  let B : MPSTensor d D := Kraus.tpGauge (ι := Fin d) (D := D) A σ
   have hExtra := Kraus.tp_primitive_irreducible_extra_blocking
     (d := d) (D := D) B hTP hPrim hIrr hp
   have hNormalAlg : Kraus.IsNormal (Kraus.blockTensor (d := d) (n := Fin D) B p) :=

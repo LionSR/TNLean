@@ -23,8 +23,6 @@ trace pairing on square matrices.
   used in linear-extension proofs
 * `MPSTensor.traceMulRightPi_ker_eq_bot` — injectivity of `traceMulRightPi`
   when `A` is injective
-* `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` — zero detection from
-  trace pairings against an injective tensor
 * `MPSTensor.ker_bot_of_range_le` — auxiliary finrank transfer:
   range inclusion + injectivity ⟹ injectivity
 -/
@@ -147,33 +145,13 @@ lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
   simpa [Kraus.evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j]
 
-/-- If `A` is injective, then `traceMulRightPi A` has trivial kernel.
-
-The proof uses nondegeneracy of the trace pairing: if `trace (M * A i) = 0` for all `i`,
-and the `A i` span the full matrix algebra, then `trace (M * N) = 0` for all `N`, hence `M = 0`. -/
+/-- If `A` is injective, then `traceMulRightPi A` has trivial kernel: the trace pairing
+against an injective family detects zero
+(`Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero`). -/
 theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
-    (traceMulRightPi A).ker = ⊥ := by
-  classical
-  apply (LinearMap.ker_eq_bot').2
-  intro M hM
-  -- The linear functional `N ↦ trace (M * N)` vanishes on the spanning set `{A i}`,
-  -- hence is zero.
-  have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M) = 0 := by
-    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
-    intro i
-    simpa using congrArg (· i) hM
-  -- Use trace nondegeneracy.
-  exact (Matrix.ext_iff_trace_mul_right (A := M) (B := 0)).2 fun N => by
-    simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
-
-/-- A matrix whose trace pairing with every one-site matrix of an injective tensor
-vanishes is zero. -/
-theorem eq_zero_of_forall_trace_mul_right_eq_zero {A : MPSTensor d D}
-    (hA : Kraus.IsInjective A) {M : Matrix (Fin D) (Fin D) ℂ}
-    (hM : ∀ i, Matrix.trace (M * A i) = 0) : M = 0 := by
-  apply (LinearMap.ker_eq_bot'.1 (traceMulRightPi_ker_eq_bot hA))
-  funext i
-  simpa using hM i
+    (traceMulRightPi A).ker = ⊥ :=
+  LinearMap.ker_eq_bot'.2 fun M hM =>
+    hA.eq_zero_of_forall_trace_mul_eq_zero fun i => by simpa using congrFun hM i
 
 /-- If `A` is injective and `A`, `B` generate the same MPV family,
 then $\neg(\forall i,\; B^i = 0)$.

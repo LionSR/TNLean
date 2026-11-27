@@ -177,18 +177,14 @@ assumption that `M` generates MPDOs; its canonical-form witness has the shape
 of `MPOTensor.IsHorizontalCF`, with the additional requirement that no basis
 element have nilpotent physical-trace transfer.
 
-**Scope restriction (fixed representative):** The BNT witness includes the
-line-246 global unit-weight convention through
-`MPSTensor.IsBNTCanonicalForm.weight_unit_exists`.
-Thus this predicate is evaluated on the displayed tensor `M`, not modulo a
-nonzero scalar rescaling. The mathematical nilpotency clause is scale invariant,
-but the unit-weight normalization included in the canonical-form witness need
-not be compatible with the scale fixed by Definition 4.1. See
+The BNT witness imposes no normalization of the copy weights (in particular not
+the global unit-weight convention of line 246), so it does not conflict with the
+scale fixed by Definition 4.1; compare
 <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>. -/
 def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧
     ∃ S : MPSTensor.SectorDecomposition (d * d),
-      MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j))) ∧
         ∃ hTotal : S.totalDim = D,
           ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
@@ -529,7 +525,7 @@ theorem IsSimpleCanonicalForm.exists_weight_copy_independent_of_isPhysicalTraceI
     {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsPhysicalTraceIdempotent M) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
-      MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         (∃ hTotal : S.totalDim = D,
           ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
           ∀ i : Fin (d * d),
@@ -560,7 +556,7 @@ theorem IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL
     {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsSourceZCL M) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
-      MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         (∃ hTotal : S.totalDim = D,
           ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
           ∀ i : Fin (d * d),

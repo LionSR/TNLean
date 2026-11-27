@@ -22,7 +22,7 @@ The coefficient two is the trace multiplicity of two identical virtual blocks,
 whose scalar weights are all one. It is independent of chain length. Scaling a
 single virtual block by a fixed scalar `μ` would instead contribute `μ^N`.
 The source-family membership of the repeated-block example is proved by
-`isBNTCanonicalForm_repeatedBlockSector` and `reindex_toTensor_repeatedBlockSector`.
+`isLeftCanonicalBNTPresentation_repeatedBlockSector` and `reindex_toTensor_repeatedBlockSector`.
 
 Despite the distinct periodic weights, the two tensors have identical local
 MPS spaces at every length: the diagonal boundary entries on the repeated
@@ -172,10 +172,9 @@ theorem chainGroundSpace_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
 
 /-- The finite-chain canonical parent Hamiltonians coincide although their
 periodic MPS vectors carry different sector probabilities. -/
-theorem parentHamiltonian_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
-    parentHamiltonian repeatedBlockTensor L N = parentHamiltonian ghzTensor L N := by
-  simp [parentHamiltonian, localTerm, parentRingInteraction,
-    parentInteraction_repeatedBlockTensor_eq_ghzTensor]
+theorem parentRingInteraction_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) [NeZero N] :
+    parentRingInteraction repeatedBlockTensor L N = parentRingInteraction ghzTensor L N := by
+  simp only [parentRingInteraction, parentInteraction_repeatedBlockTensor_eq_ghzTensor L]
 
 /-- The actual normalized periodic vectors of two tensors with identical parent
 Hamiltonians require a linear circuit depth for sufficiently accurate conversion. -/

@@ -47,8 +47,8 @@ theorem canonicalOBC_bondDim_le_of_mpv_eq (B : OBCChainTensor d Q N)
     (hfaithful : ∀ k, (Λ k).PosDef)
     (hrow : ∀ p : Fin N, ∑ i, B.tensor p i * (B.tensor p i)ᴴ = 1)
     (hcoeff : B.coeff = mpv A) (k : Fin (N + 1)) : B.bondDim k ≤ D * D := by
-  rw [bondDim_eq_cutCoefficientRank_of_canonical B Λ hzero hstep hfaithful hrow k, hcoeff]
-  exact MPUCircuit.cutCoefficientRank_mpv_le A (Nat.lt_succ_iff.mp k.isLt)
+  rw [bondDim_eq_cutRank_of_canonical B Λ hzero hstep hfaithful hrow k, hcoeff]
+  exact MPUCircuit.cutRank_mpv_le A (Nat.lt_succ_iff.mp k.isLt)
 
 /-- The prescribed canonical tensor with only its derived common bound
 changed. Its original rectangular tensors and coefficient sum are retained.

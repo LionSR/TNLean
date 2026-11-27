@@ -51,9 +51,9 @@ theorem trace_evalWord_mul_cast_of_heq
 depends only on its diagonal blocks.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1810--1825. -/
-theorem trace_evalWord_toTensorFromBlocks_mul
-    (weight : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
-    (w : List (Fin d))
+theorem trace_evalWord_toTensorFromBlocks_mul {α : Type*}
+    (weight : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
+    (w : List α)
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ) :
     Matrix.trace (Kraus.evalWord (toTensorFromBlocks weight A) w * X) =
       ∑ j : Fin r, Matrix.trace

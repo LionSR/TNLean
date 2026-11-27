@@ -159,65 +159,48 @@ private theorem basis_not_gaugePhaseEquiv :
     exact invSqrtTwo_ne_zero h
   · exact absurd rfl hjk
 
-/-- The two representatives with weights $(1/\sqrt 2,1)$ form a normalized
-basis-of-normal-tensors decomposition. Each representative occurs once, so
-equality of weights within a fixed representative is vacuous and does not
-equate these two displayed weights.
+/-- The two representatives with weights $(1/\sqrt 2,1)$ form a
+basis-of-normal-tensors decomposition in left-canonical gauge; the weights
+satisfy the normalization of line 246 (`weight_globally_normalized`). Each
+representative occurs once, so equality of weights within a fixed representative
+is vacuous and does not equate these two displayed weights.
 
 Source: arXiv:1606.00608, canonical-form normalization at lines 224--246 and
 the BNT decomposition `eq:II_ABasicTensors`, lines 271--301. -/
-theorem sectors_isBNTCanonicalForm :
-    MPSTensor.IsBNTCanonicalForm sectors := by
-  refine {
-    basis_dim_pos := by simp [sectors]
-    basis_irreducible := fun s => (basis_isNormalTensor s).no_invariant_proj
-    basis_left_canonical := by
-      intro s
-      fin_cases s
-      · change MPTensor.IsLeftCanonical firstBasisTensor
-        rw [MPTensor.IsLeftCanonical]
-        ext a b
-        fin_cases a
-        fin_cases b
-        simp only [Matrix.sum_apply, Matrix.mul_apply, Fin.sum_univ_one,
-          Matrix.conjTranspose_apply]
-        simp only [Nat.reduceMul, Fin.isValue, Fin.zero_eta, RCLike.star_def,
-          Matrix.one_apply_eq]
-        have hsum :
-            (∑ x : Fin (3 * 3),
-              starRingEnd ℂ (firstBasisTensor x 0 0) *
-                firstBasisTensor x 0 0) =
-              invSqrtTwo * invSqrtTwo + invSqrtTwo * invSqrtTwo := by
-          simp [firstBasisTensor, Fin.sum_univ_succ]
-        rw [hsum, invSqrtTwo_mul_self]
-        ring
-      · change MPTensor.IsLeftCanonical secondBasisTensor
-        rw [MPTensor.IsLeftCanonical]
-        ext a b
-        fin_cases a
-        fin_cases b
-        simp only [Matrix.sum_apply, Matrix.mul_apply, Fin.sum_univ_one,
-          Matrix.conjTranspose_apply]
-        simp [secondBasisTensor, Fin.sum_univ_succ]
-    basis_normalized_self_overlap := by
-      intro s
-      exact (basis_isNormalTensor s).selfOverlap_tendsto_one
-    bnt_data := by
-      rw [MPSTensor.HasBNTSectorData]
-      simpa [sectors] using
-        (MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
-          basis basis_isNormalTensor basis_not_gaugePhaseEquiv)
-    basis_distinct := by
-      intro j k hjk hdim
-      exact basis_not_gaugePhaseEquiv j k hjk hdim
-    weight_norm_le_one := by
-      change ∀ (s : Fin 2) (_q : Fin 1), ‖weight s‖ ≤ 1
-      intro s q
-      exact weight_globally_normalized.1 s
-    weight_unit_exists := by
-      change ∃ (s : Fin 2) (_q : Fin 1), ‖weight s‖ = 1
-      obtain ⟨s, hs⟩ := weight_globally_normalized.2
-      exact ⟨s, 0, hs⟩ }
+theorem sectors_isLeftCanonicalBNTPresentation :
+    MPSTensor.IsLeftCanonicalBNTPresentation sectors := by
+  refine ⟨⟨by simp [sectors], fun _ _ _ => rfl, basis_isNormalTensor, ?_⟩, ?_⟩
+  · rw [MPSTensor.HasBNTSectorData]
+    simpa [sectors] using
+      (MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+        basis basis_isNormalTensor basis_not_gaugePhaseEquiv)
+  · intro s
+    fin_cases s
+    · change MPTensor.IsLeftCanonical firstBasisTensor
+      rw [MPTensor.IsLeftCanonical]
+      ext a b
+      fin_cases a
+      fin_cases b
+      simp only [Matrix.sum_apply, Matrix.mul_apply, Fin.sum_univ_one,
+        Matrix.conjTranspose_apply]
+      simp only [Nat.reduceMul, Fin.isValue, Fin.zero_eta, RCLike.star_def,
+        Matrix.one_apply_eq]
+      have hsum :
+          (∑ x : Fin (3 * 3),
+            starRingEnd ℂ (firstBasisTensor x 0 0) *
+              firstBasisTensor x 0 0) =
+            invSqrtTwo * invSqrtTwo + invSqrtTwo * invSqrtTwo := by
+        simp [firstBasisTensor, Fin.sum_univ_succ]
+      rw [hsum, invSqrtTwo_mul_self]
+      ring
+    · change MPTensor.IsLeftCanonical secondBasisTensor
+      rw [MPTensor.IsLeftCanonical]
+      ext a b
+      fin_cases a
+      fin_cases b
+      simp only [Matrix.sum_apply, Matrix.mul_apply, Fin.sum_univ_one,
+        Matrix.conjTranspose_apply]
+      simp [secondBasisTensor, Fin.sum_univ_succ]
 
 /-- The letters `0` and `8` independently span the two bond-one
 representatives, so their simultaneous one-letter tuple span is the entire
@@ -446,10 +429,10 @@ theorem ambient_toMPSTensor_eq_sectors_toTensor :
   rw [sectors_toTensor_eq_diagonal]
   exact ambient_eq_weighted_basis_blocks i j
 
-/-- The ambient MPO is in normalized BNT-refined horizontal form, with the
+/-- The ambient MPO is in BNT-refined horizontal form, with the
 displayed sector decomposition and identity gauge on both bond-one blocks. -/
 theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
-  refine ⟨sectors, sectors_isBNTCanonicalForm, ?_⟩
+  refine ⟨sectors, sectors_isLeftCanonicalBNTPresentation, ?_⟩
   have hTotal : sectors.totalDim = 2 := by
     change (∑ _ : Fin 2, 1) = 2
     simp
@@ -516,14 +499,10 @@ theorem sectors_basis_doubledPhysTraceTransfer_not_isNilpotent
 positive periodic operators, its two normal BNT representatives have
 nonnilpotent physical-trace transfer, and their weighted direct sum is exactly
 the ambient doubled-index tensor.
-**Scope restriction (normalized fixed representative):** this is the
-project's fixed-representative predicate, which includes the global
-unit-weight convention of arXiv:1606.00608, line 246. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 Source: arXiv:1606.00608, canonical form at lines 224--246, simplicity at
 lines 815--822, and the Case-II standing hypothesis at line 1628. -/
 theorem ambient_isSimpleCanonicalForm : IsSimpleCanonicalForm ambient := by
-  refine ⟨ambient_isMPDO, sectors, sectors_isBNTCanonicalForm,
+  refine ⟨ambient_isMPDO, sectors, sectors_isLeftCanonicalBNTPresentation,
     sectors_basis_doubledPhysTraceTransfer_not_isNilpotent, ?_⟩
   have hTotal : sectors.totalDim = 2 := by
     change (∑ _ : Fin 2, 1) = 2
@@ -885,10 +864,6 @@ Copy independence here is only within the copies of one representative; it
 does not equate the two weights `1 / √2` and `1`. Thus the conclusion isolates
 the printed coefficient-absorption inference at lines 1646--1665. It does not
 refute the conclusion of Proposition `prop2to3` or Theorem 4.9.
-**Scope restriction (normalized fixed representative):** simplicity is the
-project's fixed-representative predicate, including the line-246 unit-weight
-convention. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 Source: arXiv:1606.00608, canonical normalization at lines 224--246,
 Definition 4.1 at lines 638--660, and the simple Case-II argument at lines
 1628--1665 and 1740--1782. -/
@@ -898,7 +873,7 @@ theorem
       (∀ N, 0 < N → 0 < Matrix.trace (mpo ambient N)) ∧
       IsSAL ambient ∧
       IsSimpleCanonicalForm ambient ∧
-      MPSTensor.IsBNTCanonicalForm sectors ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation sectors ∧
       MPSTensor.WordTupleSpanTop sectors.basis 1 ∧
       ambient.toMPSTensor = sectors.toTensor ∧
       (∀ (s : Fin sectors.basisCount)
@@ -916,7 +891,7 @@ theorem
       ¬ MPTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨ambient_isMPDO, fun N _hN => trace_mpo_ambient_pos N,
     ambient_isSAL, ambient_isSimpleCanonicalForm,
-    sectors_isBNTCanonicalForm, sectors_wordTupleSpanTop_one,
+    sectors_isLeftCanonicalBNTPresentation, sectors_wordTupleSpanTop_one,
     ambient_toMPSTensor_eq_sectors_toTensor, weights_copy_independent,
     rfl, rfl, weight_globally_normalized.1, weight_globally_normalized.2,
     basis_isNormalTensor, basis_disjoint_support, ambient_literal_physTrace_ZCL,

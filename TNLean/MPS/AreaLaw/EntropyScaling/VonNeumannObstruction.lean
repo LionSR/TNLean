@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import TNLean.MPS.Tensor.OpenMPS.CutReducedState
 import QICLean.ManyBody.Entropy.RegionEntropy
-import QICLean.ManyBody.Entropy.Cut.RegionPureApproximationTail
+import QICLean.ManyBody.Entropy.Cut.RegionTraceNorm
 import Mathlib.Analysis.SpecialFunctions.Log.PosLog
 
 /-!

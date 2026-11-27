@@ -20,9 +20,9 @@ applied; no injectivity or nonzero bond-dimension assumption is needed.
 
 ## Main results
 
-* `MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_zero` identifies the
+* `MPSTensor.ker_toEuclideanLin_term_two_three_zero` identifies the
   site-\(0\) kernel with the left open-chain ground space.
-* `MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_one` identifies the
+* `MPSTensor.ker_toEuclideanLin_term_two_three_one` identifies the
   site-\(1\) kernel with the tail open-chain ground space.
 * `MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term`
   and `MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term`
@@ -70,7 +70,7 @@ private theorem range_eq_orthogonal_ker_of_isSymmetricProjection
 
 Source terminology: this is the ground condition on \(Λ_n\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_zero (B : MPSTensor d D) :
+theorem ker_toEuclideanLin_term_two_three_zero (B : MPSTensor d D) :
     LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)) =
       openChainLeftGroundSpaceES B 2 := by
   ext v
@@ -90,7 +90,7 @@ theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_zero (B : MPSTen
 
 Source terminology: this is the tail condition on \(Λ_{n+1} \ Λ_{n-l}\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_one (B : MPSTensor d D) :
+theorem ker_toEuclideanLin_term_two_three_one (B : MPSTensor d D) :
     LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)) =
       openChainTailGroundSpaceES B 1 2 := by
   ext v
@@ -118,7 +118,7 @@ theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingIntera
   apply (Submodule.isSymmetricProjection_starProjection
     ((openChainLeftGroundSpaceES B 2)ᗮ)).ext hP
   rw [Submodule.range_starProjection, range_eq_orthogonal_ker_of_isSymmetricProjection hP,
-    ker_toEuclideanLin_parentRingInteraction_term_two_three_zero]
+    ker_toEuclideanLin_term_two_three_zero]
 
 /-- On the explicit three-site chain, the complementary tail open-chain ground projection is the
 operator of the range-two term at site \(1\) of the parent interaction on the ring: both are
@@ -131,6 +131,6 @@ theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingIntera
   apply (Submodule.isSymmetricProjection_starProjection
     ((openChainTailGroundSpaceES B 1 2)ᗮ)).ext hP
   rw [Submodule.range_starProjection, range_eq_orthogonal_ker_of_isSymmetricProjection hP,
-    ker_toEuclideanLin_parentRingInteraction_term_two_three_one]
+    ker_toEuclideanLin_term_two_three_one]
 
 end MPSTensor

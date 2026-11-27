@@ -9,5 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank
 
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.PolynomialRank
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.WindowFrequencyRank

@@ -152,8 +152,6 @@ at lines 2320--2445 of `Papers/1804.04964/paper_normal.tex`;
 theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : j < L) (g : Edge (torusGraph width height))
@@ -174,7 +172,7 @@ theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq
         (scaledBondInsert (d := d) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
           (regionInteriorBondProd (G := torusGraph width height) B
             (staircaseWindow s L K j)) M₂) := by
-  refine horizontalStaircaseConsecutiveWindow_extend_eq h hUB hpos
+  refine horizontalStaircaseConsecutiveWindow_extend_eq h hpos
       (by omega) (by omega) hxw hyh s hj _ _ ?_
   funext cfg
   -- The two scaled bond inserts have equal assembled deformed states, by window-independence.
@@ -205,8 +203,6 @@ at lines 2320--2445 of `Papers/1804.04964/paper_normal.tex`;
 theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
@@ -228,7 +224,7 @@ theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq
         (scaledBondInsert (d := d) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
           (regionInteriorBondProd (G := torusGraph width height) B
             (staircaseWindow s L K j)) M₂) := by
-  refine verticalConsecutiveWindow_extend_eq h hUB hpos
+  refine verticalConsecutiveWindow_extend_eq h hpos
       (by omega) (by omega) hxw hyh s hj hjK _ _ ?_
   funext cfg
   rw [deformedRegionStateAssembled_scaledBondInsert, deformedRegionStateAssembled_scaledBondInsert]

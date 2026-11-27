@@ -329,7 +329,7 @@ jobs:
 
       - name: Fetch pinned tenkz package
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/fetch_tenkz.py
+        run: python3 scripts/tenkz/fetch_tenkz.py
 
       - name: Detect changed Lean files
         id: changed-lean-files

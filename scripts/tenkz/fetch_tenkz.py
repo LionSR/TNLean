@@ -10,7 +10,7 @@ import sys
 import tomllib
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[1]
+REPO = Path(__file__).resolve().parents[2]
 CONFIG = REPO / "tenkz.toml"
 DEST = REPO / ".deps" / "tenkz"
 

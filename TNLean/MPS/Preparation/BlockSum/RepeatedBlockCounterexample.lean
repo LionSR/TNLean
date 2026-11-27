@@ -29,8 +29,8 @@ rank-one matrix `(1/√2) [[1, 1], [1, 1]]` rather than `diag(1, 1)` times a pos
 (`tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor`) and does not depend on `q`.
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
-canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with weights
-`|μ_{j,k}| ≤ 1`, one of modulus one (`isBNTCanonicalForm_repeatedBlockSector`,
+canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with every
+weight equal to one (`isLeftCanonicalBNTPresentation_repeatedBlockSector`,
 `reindex_toTensor_repeatedBlockSector`), and the pairs and weights of the approximating state
 are those of this canonical form (`embeddedFixedPointPair_repeatedBlockSector`).
 
@@ -50,11 +50,11 @@ fails. Documented in `docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`.
 * `MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor` — the overlap, for all `q, M ≥ 1`.
 * `MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor` — it tends to `1/√5`.
 * `MPSTensor.not_approximationError_le_repeatedBlockTensor` — the bound of Lemma 1'(ii) fails.
-* `MPSTensor.repeatedBlockSector`, `MPSTensor.isBNTCanonicalForm_repeatedBlockSector`,
+* `MPSTensor.repeatedBlockSector`, `MPSTensor.isLeftCanonicalBNTPresentation_repeatedBlockSector`,
   `MPSTensor.reindex_toTensor_repeatedBlockSector` — the tensor is, after ordering its bond
   coordinates, the canonical form of eq. (S2) of a basis of normal tensors.
-* `MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock` — the tensor
-  satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
+* `MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_repeatedBlock` — the
+  tensor satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
 
 ## References
 
@@ -352,29 +352,17 @@ theorem hasBNTSectorData_repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ 
   · exact h1
 
 /-- **The canonical form with the blocks `(1, 0)` and `(0, 1)` is a basis of normal tensors**
-(arXiv:2307.01696, eq. (S2)) whenever every weight has `|μ_{j,k}| ≤ 1` and one has
-`|μ_{j,k}| = 1`: the blocks are irreducible, left-canonical, with normalized self-overlap, their
-states are linearly independent, and they are not related by a gauge transformation and a
-phase. -/
-theorem isBNTCanonicalForm_repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
-    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) (hle : ∀ j k, ‖μ j k‖ ≤ 1)
-    (hone : ∃ j k, ‖μ j k‖ = 1) :
-    IsBNTCanonicalForm (repeatedBlockBasisSector m hm μ hμ) where
-  basis_dim_pos := fun _ => Nat.one_pos
-  basis_irreducible := fun j => isIrreducibleFamily_of_bondDim_one (repeatedBlockBasis j)
-  basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (repeatedBlockBasis_norm j)
-  basis_normalized_self_overlap := fun j =>
-    tendsto_mpvOverlap_self_of_dim_one _ (repeatedBlockBasis_norm j)
-  bnt_data := hasBNTSectorData_repeatedBlockBasisSector m hm μ hμ
-  basis_distinct := fun j k hjk h => by
-    have hc : cast (congr_arg (MPSTensor 2) h) ((repeatedBlockBasisSector m hm μ hμ).basis j) =
-        repeatedBlockBasis j :=
-      cast_eq _ _
-    rw [hc]
-    refine not_gaugePhaseEquiv_of_dim_one 1 ?_
-    fin_cases j <;> fin_cases k <;> simp_all [repeatedBlockBasis]
-  weight_norm_le_one := hle
-  weight_unit_exists := hone
+(arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
+self-overlap, and their states are linearly independent. -/
+theorem isLeftCanonicalBNTPresentation_repeatedBlockBasisSector
+    (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
+    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) :
+    IsLeftCanonicalBNTPresentation (repeatedBlockBasisSector m hm μ hμ) :=
+  IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.two_pos (fun _ => Nat.one_pos)
+    (fun j => isIrreducibleFamily_of_bondDim_one (repeatedBlockBasis j))
+    (fun j => isLeftCanonical_of_dim_one _ (repeatedBlockBasis_norm j))
+    (fun j => tendsto_mpvOverlap_self_of_dim_one _ (repeatedBlockBasis_norm j))
+    (hasBNTSectorData_repeatedBlockBasisSector m hm μ hμ)
 
 /-- The canonical form of arXiv:2307.01696, eq. (S2), of `repeatedBlockTensor`: the basis of
 the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, with multiplicities
@@ -392,11 +380,10 @@ theorem coeff_repeatedBlockSector (N : ℕ) :
 /-- **The canonical form of `repeatedBlockTensor` is a basis of normal tensors**
 (arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
 self-overlap, their states are linearly independent, they are not related by a gauge
-transformation and a phase, every weight has `|μ_{j,k}| ≤ 1`, and one has `|μ_{j,k}| = 1`. -/
-theorem isBNTCanonicalForm_repeatedBlockSector : IsBNTCanonicalForm repeatedBlockSector :=
-  isBNTCanonicalForm_repeatedBlockBasisSector _ _ _ _
-    (fun _ _ => by change ‖(1 : ℂ)‖ ≤ 1; simp)
-    ⟨(0 : Fin 2), ⟨0, by decide⟩, by change ‖(1 : ℂ)‖ = 1; simp⟩
+transformation and a phase. -/
+theorem isLeftCanonicalBNTPresentation_repeatedBlockSector :
+    IsLeftCanonicalBNTPresentation repeatedBlockSector :=
+  isLeftCanonicalBNTPresentation_repeatedBlockBasisSector _ _ _ _
 
 /-- The bond coordinates of the three copies in the canonical form: the two copies of the first
 block, then the copy of the second. -/
@@ -478,8 +465,9 @@ theorem embeddedFixedPointPair_repeatedBlockSector (j : Fin 2) (p : Fin 3 × Fin
 /-- **Lemma 1'(ii) of arXiv:2307.01696 fails for a tensor satisfying all its hypotheses.**
 The tensor `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` is, after ordering its bond coordinates,
 the canonical form `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` of eq. (S2) of a basis of two normal
-blocks in canonical form II, with weights `|μ_{j,k}| ≤ 1`, one of modulus one
-(`IsBNTCanonicalForm`, normality, and the diagonal positive-definite fixed point `1` of each
+blocks in canonical form II, with every weight equal to one, so `|μ_{j,k}| ≤ 1` with one of
+modulus one (`IsLeftCanonicalBNTPresentation`, normality, and the diagonal positive-definite fixed
+point `1` of each
 block), whose states "produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696,
 line 973). The transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` with
 `0 < |λ₂| < 1` bounds their subleading eigenvalues. For the approximating state of eq. (S7),
@@ -487,8 +475,8 @@ built from the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` and the pairs of that sa
 for every `γ > 0` and every constant `C`, there is `M ≥ 1` such that, with `q = M` and `N = M²`
 (so `q = o(N)` along this sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds
 `C y e^{C y}`. -/
-theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
-    IsBNTCanonicalForm repeatedBlockSector ∧
+theorem isLeftCanonicalBNTPresentation_and_not_approximationError_le_repeatedBlock :
+    IsLeftCanonicalBNTPresentation repeatedBlockSector ∧
       (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
         mpvOverlap (repeatedBlockSector.basis j) (repeatedBlockSector.basis k) N) atTop (𝓝 0)) ∧
       (∀ j, IsNormalTensor (repeatedBlockSector.basis j)) ∧
@@ -509,8 +497,9 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
                 (fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ))
                 (fun j => ⟨0, repeatedBlockSector.copies_pos j⟩) j
                 (repeatedBlockEquiv.symm p.1, repeatedBlockEquiv.symm p.2))‖ := by
-  refine ⟨isBNTCanonicalForm_repeatedBlockSector,
-    fun _ _ hjk => isBNTCanonicalForm_repeatedBlockSector.cross_overlap_basis_tendsto_zero hjk,
+  refine ⟨isLeftCanonicalBNTPresentation_repeatedBlockSector,
+    fun _ _ hjk =>
+      isLeftCanonicalBNTPresentation_repeatedBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (repeatedBlockBasis_norm j),
     fun j => posDef_isDiag_transferMap_one_of_dim_one _ (repeatedBlockBasis_norm j),
     reindex_toTensor_repeatedBlockSector,

@@ -162,7 +162,7 @@ theorem sameMPV₂Pos_iff_exists_multiBlockCompression {B : MPSTensor d DB}
         ∑ k ∈ Finset.univ, Matrix.trace (Kraus.evalWord (blocks k) w) := by
       intro w hw
       rw [hsame.trace_evalWord w hw]
-      have := mpv_toTensorFromBlocks_eq_sum (d := d) (fun _ : Fin r => (1 : ℂ)) blocks w.get
+      have := mpv_toTensorFromBlocks_eq_sum (α := Fin d) (fun _ : Fin r => (1 : ℂ)) blocks w.get
       simpa [mpv, coeff, List.ofFn_get] using this
     have htr : ∀ w : List (Fin d), w ≠ [] → Matrix.trace (Kraus.evalWord B w) =
         ∑ k ∈ Finset.univ, Matrix.trace (Kraus.evalWord (blocks k) w) := fun w hw =>

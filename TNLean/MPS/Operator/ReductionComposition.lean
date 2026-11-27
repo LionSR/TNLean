@@ -65,7 +65,7 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {d D₁ D₂ D₃ : ℕ}
+variable {α : Type*} {D₁ D₂ D₃ : ℕ}
 
 /-- Reductions compose: a reduction from `C` to `B` followed by a reduction
 from `B` to `A` is a reduction from `C` to `A`.
@@ -73,8 +73,8 @@ from `B` to `A` is a reduction from `C` to `A`.
 Source: the composition of reductions is implicit in the fusion trees of
 arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
-theorem _root_.MPTensor.IsReduction.trans {C : MPSTensor d D₃} {B : MPSTensor d D₂}
-    {A : MPSTensor d D₁}
+theorem _root_.MPTensor.IsReduction.trans {C : MPTensor α (Fin D₃)} {B : MPTensor α (Fin D₂)}
+    {A : MPTensor α (Fin D₁)}
     {V₁ : Matrix (Fin D₂) (Fin D₃) ℂ} {W₁ : Matrix (Fin D₃) (Fin D₂) ℂ}
     {V₂ : Matrix (Fin D₁) (Fin D₂) ℂ} {W₂ : Matrix (Fin D₂) (Fin D₁) ℂ}
     (h₁ : IsReduction C B V₁ W₁) (h₂ : IsReduction B A V₂ W₂) :
@@ -92,8 +92,8 @@ Source: this is the change of bond basis used when the associator of three
 stacked matrix product operators is inserted in a fusion tree,
 arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
-theorem _root_.MPTensor.IsReduction.of_intertwine {B' : MPSTensor d D₂} {B : MPSTensor d D₃}
-    {A : MPSTensor d D₁} {V : Matrix (Fin D₁) (Fin D₃) ℂ}
+theorem _root_.MPTensor.IsReduction.of_intertwine {B' : MPTensor α (Fin D₂)}
+    {B : MPTensor α (Fin D₃)} {A : MPTensor α (Fin D₁)} {V : Matrix (Fin D₁) (Fin D₃) ℂ}
     {W : Matrix (Fin D₃) (Fin D₁) ℂ} {P : Matrix (Fin D₂) (Fin D₃) ℂ}
     {Q : Matrix (Fin D₃) (Fin D₂) ℂ} (hQP : Q * P = 1)
     (hB : ∀ i, B' i * P = P * B i) (h : IsReduction B A V W) :
@@ -397,12 +397,12 @@ namespace MPTensor.IsDressedProportional
 
 open MPSTensor
 
-variable {d D D' m k : ℕ}
+variable {α : Type*} {D D' m k : ℕ}
 
-variable {B : MPSTensor d D} {X Y Z : Matrix (Fin m) (Fin D) ℂ} {z z' : ℂ}
+variable {B : MPTensor α (Fin D)} {X Y Z : Matrix (Fin m) (Fin D) ℂ} {z z' : ℂ}
 
 /-- Every left boundary is dressed proportional to itself with scalar one. -/
-theorem refl (B : MPSTensor d D) (X : Matrix (Fin m) (Fin D) ℂ) :
+theorem refl (B : MPTensor α (Fin D)) (X : Matrix (Fin m) (Fin D) ℂ) :
     IsDressedProportional B X X 1 :=
   ⟨0, fun w _ ↦ by rw [one_smul]⟩
 
@@ -430,7 +430,7 @@ theorem mul_left (h : IsDressedProportional B X Y z) (C : Matrix (Fin k) (Fin m)
 
 /-- Dressed proportionality transports along an invertible intertwiner of
 letters, in the same way as `MPTensor.IsReduction.of_intertwine`. -/
-theorem of_intertwine {B' : MPSTensor d D'} {P : Matrix (Fin D') (Fin D) ℂ}
+theorem of_intertwine {B' : MPTensor α (Fin D')} {P : Matrix (Fin D') (Fin D) ℂ}
     {Q : Matrix (Fin D) (Fin D') ℂ} (hPQ : P * Q = 1) (hQP : Q * P = 1)
     (hB : ∀ i, B' i * P = P * B i) (h : IsDressedProportional B X Y z) :
     IsDressedProportional B' (X * Q) (Y * Q) z := by
@@ -455,7 +455,7 @@ which is allowed once both exterior buffers exceed the residual nilpotency
 bound (Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Lemma `B_expand`,
 `cornerproblem.tex` lines 3993--4005, in the corrected form of
 `MPTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append`). -/
-theorem pullback {D_A : ℕ} {A : MPSTensor d D_A} {V : Matrix (Fin D_A) (Fin D) ℂ}
+theorem pullback {D_A : ℕ} {A : MPTensor α (Fin D_A)} {V : Matrix (Fin D_A) (Fin D) ℂ}
     {W : Matrix (Fin D) (Fin D_A) ℂ} {X Y : Matrix (Fin m) (Fin D_A) ℂ}
     (hR : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (h : IsDressedProportional A X Y z) :
@@ -493,7 +493,7 @@ with two scalars, and `X B^w` is nonzero for arbitrarily long words, then the
 two scalars agree. -/
 theorem eq_of_forall_exists_ne_zero (h : IsDressedProportional B X Y z)
     (h' : IsDressedProportional B X Y z')
-    (hX : ∀ N : ℕ, ∃ w : List (Fin d), N ≤ w.length ∧ X * Kraus.evalWord B w ≠ 0) :
+    (hX : ∀ N : ℕ, ∃ w : List α, N ≤ w.length ∧ X * Kraus.evalWord B w ≠ 0) :
     z = z' := by
   obtain ⟨N, h⟩ := h
   obtain ⟨N', h'⟩ := h'
@@ -512,7 +512,7 @@ end MPTensor.IsDressedProportional
 
 namespace MPSTensor
 
-variable {d D D' m k : ℕ}
+variable {α : Type*} {D D' m k : ℕ}
 
 open Classical in
 /-- **A chosen dressed scalar.** A nonzero scalar `z` with `X B^w = z Y B^w` for long words,
@@ -520,13 +520,14 @@ chosen when one exists, and one otherwise. Every scalar invariant defined by com
 reductions onto the same normal tensor is of this form: the anomaly three-cochain of
 arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535, the scalar
 gauge freedom of the fusion tensors, `eq:scalar_fus_ten`, and the L-symbols of `eq:defL`. -/
-noncomputable def dressedScalar (B : MPSTensor d D) (X Y : Matrix (Fin m) (Fin D) ℂ) : Units ℂ :=
+noncomputable def dressedScalar (B : MPTensor α (Fin D)) (X Y : Matrix (Fin m) (Fin D) ℂ) :
+    Units ℂ :=
   if hz : ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B X Y z then Units.mk0 hz.choose hz.choose_spec.1
   else 1
 
 /-- The chosen dressed scalar satisfies the dressed proportionality whenever some nonzero
 scalar does. -/
-theorem isDressedProportional_dressedScalar {B : MPSTensor d D}
+theorem isDressedProportional_dressedScalar {B : MPTensor α (Fin D)}
     {X Y : Matrix (Fin m) (Fin D) ℂ} (h : ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B X Y z) :
     IsDressedProportional B X Y (dressedScalar B X Y) := by
   simp only [dressedScalar, h, ↓reduceDIte, Units.val_mk0]
@@ -536,7 +537,7 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {D_A : ℕ} {B : MPSTensor d D} {A : MPSTensor d D_A}
+variable {D_A : ℕ} {B : MPTensor α (Fin D)} {A : MPTensor α (Fin D_A)}
   {V V' : Matrix (Fin D_A) (Fin D) ℂ} {W W' : Matrix (Fin D) (Fin D_A) ℂ}
 
 /-- The left boundary of a reduction onto a normal tensor of positive bond
@@ -545,7 +546,7 @@ normal tensor has nonzero words of every multiple of its injectivity length. -/
 theorem _root_.MPTensor.IsReduction.exists_mul_evalWord_ne_zero (h : IsReduction B A V W)
     (hA : Kraus.IsNormal A)
     (hD : 0 < D_A) (N : ℕ) :
-    ∃ w : List (Fin d), N ≤ w.length ∧ V * Kraus.evalWord B w ≠ 0 := by
+    ∃ w : List α, N ≤ w.length ∧ V * Kraus.evalWord B w ≠ 0 := by
   obtain ⟨L, hL, hinj⟩ := hA
   obtain ⟨σ, hσ⟩ := exists_evalWord_ne_zero_of_isNBlkInjective hD.ne'
     (isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj)

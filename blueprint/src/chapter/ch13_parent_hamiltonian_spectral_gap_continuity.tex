@@ -121,12 +121,15 @@ is recorded in
     \uses{thm:kernel_gap_perturbation,thm:continuous_finite_window_parent_hamiltonian}
     As in the continuity step of \cite[lines~2575--2578]{Schuch2011Phases},
     let $x\mapsto A_x$ be continuous, $R\leq N$, and suppose every $A_x$ is
-    $R$-block and $N$-block injective. If
+    $R$-block and $N$-block injective. If the kernel of
+    $H^{\mathrm{open}}_{N,R}(A_{x_0})$ is $G_N^{\mathrm{ES}}(A_{x_0})$ and every
+    nonzero eigenvalue of $H^{\mathrm{open}}_{N,R}(A_{x_0})$ is at least $\delta$,
+    then for every $\delta'<\delta$ and every $x$ near $x_0$ the kernel of
+    $H^{\mathrm{open}}_{N,R}(A_x)$ is $G_N^{\mathrm{ES}}(A_x)$ and every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{N,R}(A_x)$ is at least $\delta'$. For
+    $\delta>0$ the hypothesis says exactly that
     $\delta\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_{x_0})v\rVert$ for
-    all $v\perp G_N^{\mathrm{ES}}(A_{x_0})$, with $\delta>0$, then for every
-    $\delta'<\delta$ and every $x$ near $x_0$,
-    $\delta'\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_x)v\rVert$ for
-    all $v\perp G_N^{\mathrm{ES}}(A_x)$.
+    all $v\perp G_N^{\mathrm{ES}}(A_{x_0})$.
 \end{lemma}
 
 \begin{proof}

@@ -154,22 +154,6 @@ theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpoWithBo
   Commute.sum_left _ _ _ fun i _ ↦
     h.commute_parentRingInteraction_term_mpoWithBoundary hL hLN hstar i hX
 
-/-- The periodic commutation conclusion in the original function-space
-coordinates. Source: GLM23, arXiv:2203.12563v3, Section 5, lines 1276--1320,
-under compatibility and explicit adjoint closure of the whole boundary range. -/
-theorem IsBoundaryCompatible.parentHamiltonian_commute_mpoWithBoundary
-    (h : IsBoundaryCompatible T A) (hL : 0 < L) (hLN : L ≤ N)
-    (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
-      ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
-        (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
-    {X : Matrix (Fin D₁) (Fin D₁) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
-    Commute (MPSTensor.parentHamiltonian A L N)
-      (Matrix.toLin' (mpoWithBoundary T X N)) := by
-  have : NeZero N := ⟨by omega⟩
-  rw [MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian A L]
-  exact (h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar hX).map
-    Matrix.toLinAlgEquiv'
-
 /-- Compatibility with an adjoint-closed assembled boundary range produces a
 nonzero canonical local interaction and a symmetric periodic parent Hamiltonian
 whenever the local physical dimension exceeds the square of the state bond

@@ -55,7 +55,7 @@ candidates are listed.
 - **Seen:** `MPS/Symmetry/MPOSymmetry/MixedPath/Joint/JointMixedEndpointEdgeFactors.lean`,
   `MixedEndpointEmbedding.lean`, `MixedEndpointSwap.lean`,
   `MPS/MPU/Circuit/Merging/SingleSiteCircuit.lean` and the former `Circuit/ZeroRegisterConjunction.lean`,
-  now QICLean's `Circuit/Protocol/ZeroRegister/Conjunction.lean` (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
+  now QICLean's `Circuit/Protocol/ZeroRegister/Conjunction.lean` (five copies, found by `scripts/audit/tactic_pattern_scan.py` over the MPO-symmetry modules).
 - **Pattern:**
   ```lean
   intro h
@@ -3957,11 +3957,14 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** The inverse of the one-site extension restricts the configuration
   and evaluates it at the cut site. Its inverse proof separates sites before
   the cut from the cut site and reduces subtype equality to the site value.
-- **Seen:** `prefixStepEquiv` and `suffixStepEquiv` in
-  `MPS/Tensor/OpenMPS/CutMatrixGrowth.lean`.
-- **Abstraction:** Two occurrences in one file do not meet the promotion
-  threshold. The coefficient identity itself reuses the existing
-  `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
+- **Seen:** the former `prefixStepEquiv` and `suffixStepEquiv` of
+  `MPS/Tensor/OpenMPS/CutMatrixGrowth.lean`, copies of the extension
+  equivalences of `MPS/CanonicalForm/OpenBoundary/OBCCanonicalConfigurations.lean`.
+- **Abstraction:** Since both files index cut configurations by the blocks of
+  `ManyBody.cutMatrix (interval N 0 k)`, the copies were deleted; both files use
+  `MPSPreparation.extendCutPrefixEquiv` and `MPSPreparation.extendCutSuffixEquiv`
+  (`MPS/Tensor/VaryingBond/MinimalCutRepresentationCuts.lean`). The coefficient
+  identity is `MPSPreparation.cutMatrix_adjacent`.
 
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
@@ -4778,7 +4781,7 @@ currently one occurrence, so no general declaration is warranted.
   `(∑ j, (∑ m, X m ⊗ Y m j).submatrix e e ⊗ Z j)` is the `mulTensorAssocEquiv`-reindex of
   `∑ m, X m ⊗ (∑ j, Y m j ⊗ Z j).submatrix e e`, for arbitrary families of matrices.
 
-Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
+Seeded from `scripts/audit/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
 ### ambient left-canonical normalization from a unique full-support MPU block — candidate
@@ -5190,7 +5193,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseSpectrum.lean` (2026-07-22).
 - **Abstraction (proposed):** generalize `coeff_identity_via_matched_mpv_phase` to accept
   eventual linear independence of the chosen basis directly, while retaining its current
-  `IsBNTCanonicalForm` wrapper for existing consumers.
+  `IsLeftCanonicalBNTPresentation` wrapper for existing consumers.
 
 ### square_interior_edge_translate — candidate
 - **Pattern:** given `NormalSquareInteriorEdgeDatum e`, case-split horizontal/vertical,
@@ -5400,7 +5403,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   arbitrary pair configuration and needs no auxiliary equality of configurations.
 
 ### canonical form of normalized one-dimensional blocks — candidate
-- **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
+- **Pattern:** certify `IsLeftCanonicalBNTPresentation` for a `SectorDecomposition` whose blocks are
   normalized tensors of bond dimension one with unit weights: linear independence of the block
   states from `mpv_of_dim_one` evaluated on constant words, `basis_distinct` by
   `not_gaugePhaseEquiv_of_dim_one` after a `cast_eq`, then `totalDim_*`, bijectivity of the
@@ -5408,7 +5411,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   and `reindex_toTensor_*` by `toTensor_copyCoord` / `toTensor_copyCoord_of_ne`.
 - **Seen:** 2 occurrences, `TNLean/MPS/Preparation/BlockSum/RepeatedBlockCounterexample.lean` and
   `TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample.lean` (recorded 2026-09-27).
-- **Abstraction:** proposed lemma giving `IsBNTCanonicalForm` for a sector decomposition of
+- **Abstraction:** proposed lemma giving `IsLeftCanonicalBNTPresentation` for a sector decomposition of
   normalized one-dimensional blocks with unit weights whose letters are pairwise distinguished
   by their zero patterns.
 
@@ -5445,7 +5448,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `leftAct_leftEndpoint_eq_zero`, `rightAct_rightEndpoint` and
   `rightAct_rightEndpoint_eq_zero`
   (`TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallString.lean`, lines 163, 186, 207 and 227;
-  reported by `scripts/tactic_pattern_scan.py`, recorded 2026-09-27).
+  reported by `scripts/audit/tactic_pattern_scan.py`, recorded 2026-09-27).
 - **Abstraction (proposed):** a lemma rewriting
   `∑ c, (∑ α, ∑ β, x α β * Â c α β) * y c` as `∑ α, ∑ β, x α β * ∑ c, Â c α β * y c`, or
   one endpoint lemma parametrized by the value of the pairing, from which the four

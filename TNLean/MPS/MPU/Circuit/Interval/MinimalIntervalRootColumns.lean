@@ -27,6 +27,8 @@ implementation, used after the recursive circuit construction. See
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped Kronecker Matrix ComplexOrder MatrixOrder
 
@@ -50,12 +52,12 @@ theorem outsidePlacedConfig_full_subsingleton (d D N : ℕ) :
 
 private theorem intervalPhysicalZeroConfig_full {d D N : ℕ} [NeZero d]
     (x : Cfg d N) (s : LogicalSite d D N) :
-    intervalPhysicalZeroConfig (D := D) 0 N (fullCutIntervalConfigEquiv d N x) s =
+    intervalPhysicalZeroConfig (D := D) 0 N ((MPSPreparation.finalCutPrefixEquiv d N).symm x) s =
       workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x
         (logicalSiteEquivFin d D N s) := by
   rcases s with s | s
   · change _ = Fin.append x 0 (Fin.castAdd (auxiliarySiteCount d D N) s)
-    simp [intervalPhysicalZeroConfig, fullCutIntervalConfigEquiv, s.isLt]
+    simp [intervalPhysicalZeroConfig, MPSPreparation.finalCutPrefixEquiv, s.isLt]
   · change _ = Fin.append x 0 (Fin.natAdd N (auxiliarySiteEquivFin d D N s))
     simp [intervalPhysicalZeroConfig]
 
@@ -74,7 +76,8 @@ private theorem placedBasisEmbedding_eq_of_restriction {d a n : ℕ} {α : Type*
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalInputEmbedding_full_apply {d D N : ℕ} [NeZero d]
     (x : Cfg d N) (z : OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :
-    minimalIntervalInputEmbedding (D := D) 0 N (fullCutIntervalConfigEquiv d N x, z) =
+    minimalIntervalInputEmbedding (D := D) 0 N
+        ((MPSPreparation.finalCutPrefixEquiv d N).symm x, z) =
       workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x := by
   let := outsidePlacedConfig_full_subsingleton d D N
   apply placedBasisEmbedding_eq_of_restriction
@@ -84,7 +87,7 @@ theorem minimalIntervalInputEmbedding_full_apply {d D N : ℕ} [NeZero d]
 private theorem intervalBoundaryConfig_full {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N (Fin.last N)))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N 0))
-    (x : CutIntervalConfig d N 0 N × (ρ × σ)) :
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N 0 N) × (ρ × σ)) :
     intervalBoundaryConfig 0 (Fin.last N) eρ eσ x = intervalPhysicalZeroConfig 0 N x.1 := by
   funext s
   unfold intervalBoundaryConfig
@@ -106,25 +109,25 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalOutputEmbedding_full_apply {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (x : Cfg d N)
-    (α : Fin (cutCoefficientRank (operatorCoefficientTensor U) 0))
-    (β : Fin (cutCoefficientRank (operatorCoefficientTensor U) N))
+    (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+    (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)))
     (z : OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :
     minimalIntervalOutputEmbedding hd U hU hbound 0 (Fin.last N)
-      ((fullCutIntervalConfigEquiv d N x, (β, α)), z) =
+      (((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)), z) =
       workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x := by
   let := outsidePlacedConfig_full_subsingleton d D N
   simp only [minimalIntervalOutputEmbedding, Fin.val_zero, Fin.val_last]
   apply placedBasisEmbedding_eq_of_restriction
   funext i
   change intervalBoundaryConfig 0 (Fin.last N) _ _
-    (fullCutIntervalConfigEquiv d N x, (β, α))
+    ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α))
     (intervalPacketLogicalSite d D N 0 N i) = _
   exact (congrFun (intervalBoundaryConfig_full
     (minimalCutBondRegisterEncoding hd U hU hbound (Fin.last N))
     (minimalCutBondRegisterEncoding hd U hU hbound 0)
-    (fullCutIntervalConfigEquiv d N x, (β, α)))
+    ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
     (intervalPacketLogicalSite d D N 0 N i)).trans
       (intervalPhysicalZeroConfig_full x (intervalPacketLogicalSite d D N 0 N i))
 
@@ -145,17 +148,18 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalRootColumns_eq_physical_of_fullInterval {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
-    (hfull : ∀ (α : Fin (cutCoefficientRank (operatorCoefficientTensor U) 0))
-        (β : Fin (cutCoefficientRank (operatorCoefficientTensor U) N)),
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
+    (hfull : ∀ (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+        (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
       (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
         (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-        (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-        (fullCutIntervalConfigEquiv d N) = U)
+        (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+        ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U)
     (X : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (hX : IsMinimalIntervalColumnImplementation hd U hU hbound B P 0 (Fin.last N)
       (by simp) X) :
@@ -166,22 +170,22 @@ theorem minimalIntervalRootColumns_eq_physical_of_fullInterval {d D N : ℕ} [Ne
   let : Unique (OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :=
     { default := 0, uniq := fun _ ↦ Subsingleton.elim _ _ }
   have hψ := operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU
-  let : Unique (Fin (cutCoefficientRank (operatorCoefficientTensor U) 0)) :=
-    Equiv.unique (finCongr (cutCoefficientRank_zero _ hψ))
-  let : Unique (Fin (cutCoefficientRank (operatorCoefficientTensor U) N)) :=
-    Equiv.unique (finCongr (cutCoefficientRank_last _ hψ))
-  let : Unique (Fin (cutCoefficientRank (operatorCoefficientTensor U) N) ×
-      Fin (cutCoefficientRank (operatorCoefficientTensor U) 0)) :=
+  let : Unique (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
+    Equiv.unique (finCongr ((MPSPreparation.cutRank_zero_eq_one hψ)))
+  let : Unique (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :=
+    Equiv.unique (finCongr ((MPSPreparation.cutRank_self_eq_one hψ)))
+  let : Unique (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)) ×
+      Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
     { default := (default, default), uniq := fun _ ↦ Prod.ext
         (Subsingleton.elim _ _) (Subsingleton.elim _ _) }
-  let ei : Cfg d N ≃ CutIntervalConfig d N 0 N ×
+  let ei : Cfg d N ≃ ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N 0 N) ×
       OutsidePlacedConfig d (intervalPacketSites d D N 0 N) :=
-    (fullCutIntervalConfigEquiv d N).trans (Equiv.prodUnique _ _).symm
-  let eo : Cfg d N ≃ (CutIntervalConfig d N 0 N ×
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) N) ×
-        Fin (cutCoefficientRank (operatorCoefficientTensor U) 0))) ×
+    ((MPSPreparation.finalCutPrefixEquiv d N).symm).trans (Equiv.prodUnique _ _).symm
+  let eo : Cfg d N ≃ (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N 0 N) ×
+      (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)) ×
+        Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))) ×
       OutsidePlacedConfig d (intervalPacketSites d D N 0 N) :=
-    ((fullCutIntervalConfigEquiv d N).trans (Equiv.prodUnique _ _).symm).trans
+    (((MPSPreparation.finalCutPrefixEquiv d N).symm).trans (Equiv.prodUnique _ _).symm).trans
       (Equiv.prodUnique _ _).symm
   have hinput : (basisInclusion
         (minimalIntervalInputEmbedding (d := d) (D := D) (N := N) 0 N)).submatrix id ei =
@@ -234,13 +238,14 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalRootColumns_eq_physical {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = fullCutVector (operatorCoefficientTensor U))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (hP0 : P 0 ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q))
     (hPN : P (Fin.last N) ∈ prefixGramAffineHull
@@ -317,13 +322,14 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalRootColumns_eq_physical_global {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = fullCutVector (operatorCoefficientTensor U))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (hP0 : P 0 ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q))
     (hPN : P (Fin.last N) ∈ prefixGramAffineHull

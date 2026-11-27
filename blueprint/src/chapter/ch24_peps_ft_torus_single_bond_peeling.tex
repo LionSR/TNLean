@@ -179,9 +179,8 @@
     \leanok
     \uses{thm:peps_staircase_pair_cancel,thm:peps_corner_extension_linear_transitive}
     Let $S=W_0\cup W_{L+K-1}$. Suppose $B$ satisfies the one-orientation
-    $L\times K$ window-injectivity hypotheses, union closure for injective
-    regions, and positive bond dimensions, with $0<L$, $0<K$, $2L+1\le W$, and
-    $2K+1\le H$. If inserts $C_j$ on $W_j$ all generate the same deformed state,
+    $L\times K$ window-injectivity hypotheses and positive bond dimensions,
+    with $0<L$, $0<K$, $2L+1\le W$, and $2K+1\le H$. If inserts $C_j$ on $W_j$ all generate the same deformed state,
     then
     \begin{align}
         \Ext_{W_0\subseteq S}(C_0)
@@ -398,8 +397,7 @@
     \leanok
     \uses{def:peps_bond_inserted_region_insert,thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted,thm:peps_staircase_end_reference_edge_boundary,thm:peps_staircase_pair_insert_eq_open}
     Suppose $B$ satisfies the one-orientation $L\times K$ window-injectivity
-    hypotheses, union closure for injective regions, and positive bond
-    dimensions on a $W\times H$ torus with $2\le L$, $2\le K$, $1\le a$,
+    hypotheses and positive bond dimensions on a $W\times H$ torus with $2\le L$, $2\le K$, $1\le a$,
     $a+2L\le W$, $b+2K-1\le H$, $2L+1\le W$, and $2K+1\le H$. If inserts $C_j$
     on $W_j$ all generate the same deformed state, with
     $C_0=I_{B,W_0,e,M}$ and $C_{L+K-1}=I_{B,W_{L+K-1},e,M'}$, then for every
@@ -457,8 +455,8 @@
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness_of_hypotheses}
     \leanok
     \uses{def:peps_window_edge_coeff_identity_witness}
-    If every cyclic $L\times K$ window of $B$ is injective, unions of injective
-    regions are injective, all bond dimensions of $B$ are positive, and
+    If every cyclic $L\times K$ window of $B$ is injective, all bond
+    dimensions of $B$ are positive, and
     $0<L$, $0<K$, $2L+1\le W_{\mathrm{torus}}$, $2K+1\le H_{\mathrm{torus}}$,
     $1\le a$, $a+2L\le W_{\mathrm{torus}}$, and $b+2K-1\le H_{\mathrm{torus}}$,
     then both $W=W_{\mathrm{left}}$ and $V\setminus W$ are injective, so any

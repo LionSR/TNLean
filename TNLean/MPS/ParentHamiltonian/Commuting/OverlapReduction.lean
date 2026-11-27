@@ -30,22 +30,31 @@ arXiv:1606.00608, Definition 3.9. -/
 theorem isCommutingParentHam_of_cyclicWindowsOverlap_commute
     {A : MPSTensor d D} {L N : ℕ} (hLN : L ≤ N)
     (hOverlap : ∀ i j : Fin N, cyclicWindowsOverlap N L i j →
-      localTerm A L N i * localTerm A L N j =
-        localTerm A L N j * localTerm A L N i) :
+      haveI : NeZero N := NeZero.of_pos i.pos;
+      Matrix.toLin' ((parentRingInteraction A L N).term i) *
+          Matrix.toLin' ((parentRingInteraction A L N).term j) =
+        Matrix.toLin' ((parentRingInteraction A L N).term j) *
+          Matrix.toLin' ((parentRingInteraction A L N).term i)) :
     IsCommutingParentHam A L N := by
   intro i j
+  have : NeZero N := NeZero.of_pos i.pos
   by_cases hij : cyclicWindowsOverlap N L i j
   · exact hOverlap i j hij
-  · exact localTerm_commute_of_cyclic_windows_disjoint A hLN
-      (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij)
+  · rw [Module.End.mul_eq_comp, Module.End.mul_eq_comp, ← Matrix.toLin'_mul,
+      ← Matrix.toLin'_mul,
+      (commute_parentRingInteraction_term_of_cyclic_windows_disjoint A hLN
+        (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij)).eq]
 
 /-- Nearest-neighbor specialization of the overlap reduction for the source
 NNCPH commutation equations. -/
 theorem isNNCPH_of_twoSite_cyclicWindowsOverlap_commute
     {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
     (hOverlap : ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i) :
+      haveI : NeZero N := NeZero.of_pos i.pos;
+      Matrix.toLin' ((parentRingInteraction A 2 N).term i) *
+          Matrix.toLin' ((parentRingInteraction A 2 N).term j) =
+        Matrix.toLin' ((parentRingInteraction A 2 N).term j) *
+          Matrix.toLin' ((parentRingInteraction A 2 N).term i)) :
     IsNNCPH A N :=
   isCommutingParentHam_of_cyclicWindowsOverlap_commute (A := A) (L := 2) hN hOverlap
 
@@ -57,8 +66,11 @@ the locality lemma for disjoint windows. -/
 theorem isNNCPH_of_adjacent_twoSite_commute
     {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
     (hAdjacent : ∀ i : Fin N,
-      localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
-        localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
+      haveI : NeZero N := NeZero.of_pos i.pos;
+      Matrix.toLin' ((parentRingInteraction A 2 N).term i) *
+          Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) =
+        Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) *
+          Matrix.toLin' ((parentRingInteraction A 2 N).term i)) :
     IsNNCPH A N := by
   refine isNNCPH_of_twoSite_cyclicWindowsOverlap_commute (A := A) hN ?_
   intro i j hOverlap

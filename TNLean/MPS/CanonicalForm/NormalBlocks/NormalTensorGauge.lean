@@ -235,9 +235,9 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ ∧
-      IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) ∧
-      GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
-      Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) := by
+      IsLeftCanonical (Kraus.tpGauge (ι := Fin d) (D := D) A σ) ∧
+      GaugeEquiv A (Kraus.tpGauge (ι := Fin d) (D := D) A σ) ∧
+      Kraus.IsIrreducibleFamily (Kraus.tpGauge (ι := Fin d) (D := D) A σ) := by
   have hD : D ≠ 0 :=
     matrix_dim_ne_zero_of_spectralRadius_eq_one
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
@@ -298,11 +298,11 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
   have ht_one : t = 1 := hrt ▸ hr_one
   have hσfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ := by
     simpa [ht_one] using hσeig
-  have hTP : IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hTP : IsLeftCanonical (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A σ hσ hσfix
-  have hGauge : GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hGauge : GaugeEquiv A (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     gaugeEquiv_tpGauge A σ hσ
-  have hGaugeIrr : Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hGaugeIrr : Kraus.IsIrreducibleFamily (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hGaugeIrr⟩
 
@@ -318,16 +318,16 @@ theorem _root_.MPTensor.IsNormalTensor.exists_tpGauge
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ ∧
-      IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) ∧
-      GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
+      IsLeftCanonical (Kraus.tpGauge (ι := Fin d) (D := D) A σ) ∧
+      GaugeEquiv A (Kraus.tpGauge (ι := Fin d) (D := D) A σ) ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (d := d) (D := D) A σ)) ∧
-      Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) := by
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (ι := Fin d) (D := D) A σ)) ∧
+      Kraus.IsIrreducibleFamily (Kraus.tpGauge (ι := Fin d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hTP, hGauge, hIrr⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one
       h.no_invariant_proj h.spectral_radius_one
   have hPrim : _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (d := d) (D := D) A σ)) :=
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (ι := Fin d) (D := D) A σ)) :=
     (Kraus.isPrimitive_mapLM_tpGauge_iff A σ hσ).2 h.primitive_transfer
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hPrim, hIrr⟩
 
@@ -337,7 +337,7 @@ theorem _root_.MPTensor.IsNormalTensor.isNormal
     {A : MPSTensor d D} (h : IsNormalTensor A) : Kraus.IsNormal A := by
   let : NeZero D := ⟨h.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := h.exists_tpGauge
-  have hNormalGauge : Kraus.IsNormal (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hNormalGauge : Kraus.IsNormal (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     isNormal_of_tp_primitive_irreducible _ hTP hPrim hIrr
   exact isNormal_of_gaugeEquiv hNormalGauge hGauge.symm
 
@@ -431,7 +431,7 @@ theorem _root_.MPTensor.IsNormalTensor.selfOverlap_tendsto_one
     Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let A' := Kraus.tpGauge (d := d) (D := D) A σ
+  let A' := Kraus.tpGauge (ι := Fin d) (D := D) A σ
   have hPrepared : Tendsto (fun N => mpvOverlap (α := Fin d) A' A' N)
       atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A' hIrr hTP hPrim
@@ -502,8 +502,8 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
   classical
   obtain ⟨σX, _hσX, _hσXfix, hTPX, hGaugeX, hPrimX, hIrrX⟩ := hX.exists_tpGauge
   obtain ⟨σY, _hσY, _hσYfix, hTPY, hGaugeY, hPrimY, hIrrY⟩ := hY.exists_tpGauge
-  let X' := Kraus.tpGauge (d := d) (D := DX) X σX
-  let Y' := Kraus.tpGauge (d := d) (D := DY) Y σY
+  let X' := Kraus.tpGauge (ι := Fin d) (D := DX) X σX
+  let Y' := Kraus.tpGauge (ι := Fin d) (D := DY) Y σY
   have hPhase : MPVBlockPhaseEquiv X' Y' := by
     obtain ⟨ζ, hζ, hmpv⟩ := h
     refine ⟨ζ, hζ, ?_⟩
@@ -604,7 +604,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
   choose σ hσ hσfix hTP hGauge hPrim hIrr using
     fun k => (hNormal k).exists_tpGauge
   let prepared : (k : Fin r) → MPSTensor d (dim k) :=
-    fun k => Kraus.tpGauge (d := d) (D := dim k) (A k) (σ k)
+    fun k => Kraus.tpGauge (ι := Fin d) (D := dim k) (A k) (σ k)
   have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
     intro j k hjk hdim hGPE
     apply hDistinct j k hjk hdim
@@ -648,40 +648,6 @@ theorem isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff
     exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv A hNormal
       hDistinct⟩
   simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
-
-end MPSTensor
-
-end
-
-section
-
-open Kraus (isNBlkInjective_iff_blockTensor_isInjective)
-
-set_option relaxedAutoImplicit false
-set_option maxSynthPendingDepth 3
-set_option linter.mathlibStandardSet true
-
-namespace MPSTensor
-
-/-- A normalized normal tensor is block injective at length D^4. Source:
-arXiv:1606.00608, lines 318–344, using the quantum Wielandt bound. -/
-theorem _root_.MPTensor.IsNormalTensor.isNBlkInjective_pow_four {d D : ℕ} {A : MPSTensor d D}
-    (hA : IsNormalTensor A) : Kraus.IsNBlkInjective A (D ^ 4) := by
-  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
-  obtain ⟨σ, _, _, hTP, hGauge, _, _⟩ := hA.exists_tpGauge
-  have hNormal := isNormal_of_gaugeEquiv hA.isNormal hGauge
-  exact isNBlkInjective_of_gaugeEquiv
-    (isNBlkInjective_pow_four_of_isNormal_leftCanonical _ hTP hNormal) hGauge.symm
-
-/-- A bound K on the bond dimension gives the common injective block length K^4.
-Source: arXiv:1606.00608, lines 318–344, bounded common physical blocking. -/
-theorem _root_.MPTensor.IsNormalTensor.blockTensor_isInjective_of_bondDim_le
-    {d D K : ℕ} {A : MPSTensor d D} (hA : IsNormalTensor A) (hDK : D ≤ K) :
-    Kraus.IsInjective (Kraus.blockTensor A (K ^ 4)) := by
-  have hD : 0 < D := Nat.pos_of_ne_zero hA.bondDim_ne_zero
-  exact (isNBlkInjective_iff_blockTensor_isInjective A (K ^ 4)).1
-    (Kraus.isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
-      (Nat.pow_le_pow_left hDK 4))
 
 end MPSTensor
 
@@ -814,6 +780,17 @@ theorem isNBlkInjective_pow_four_of_isNormal [NeZero D]
     isNBlkInjective_pow_four_of_isNormal_leftCanonical B hP.norm hNormalB
   exact (isNBlkInjective_smul_iff hζ A (D ^ 4)).1
     (isNBlkInjective_of_gaugeEquiv hInjB hGauge.symm)
+
+/-- A bound \(K\) on the bond dimension of a normalized normal tensor gives
+the common injective length \(K^4\): products of length \(K^4\) span the full
+matrix algebra. Source: arXiv:1606.00608, lines 318–344, bounded common
+physical blocking; arXiv:0909.5347, Theorem 1. -/
+theorem _root_.MPTensor.IsNormalTensor.isNBlkInjective_of_bondDim_le
+    {K : ℕ} {A : MPSTensor d D} (hA : IsNormalTensor A) (hDK : D ≤ K) :
+    Kraus.IsNBlkInjective A (K ^ 4) := by
+  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  exact Kraus.isNBlkInjective_of_le (pow_pos (NeZero.pos D) 4)
+    (isNBlkInjective_pow_four_of_isNormal A hA.isNormal) (Nat.pow_le_pow_left hDK 4)
 
 /-- **Normality, four equivalent forms.** For bond dimension `D > 0`, with no
 normalization:

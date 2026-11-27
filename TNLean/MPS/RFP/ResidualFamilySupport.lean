@@ -262,7 +262,7 @@ theorem twoSiteBondSupportProjection_idempotent
 
 end ResidualFamilyAppendixBData
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition d}
 
@@ -277,7 +277,7 @@ construction in CPSV16, Corollary `III.cor3`, remains separate; see
 Source: arXiv:1606.00608, equations `III_CFI_RFP` and `eq:III_isometry`, lines
 543--555, and Corollary `III.cor3`, lines 583--589. -/
 theorem exists_residualFamilyAppendixBData
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     Nonempty (ResidualFamilyAppendixBData P.basis) := by
   obtain ⟨X, Λ, U, hX, hΛ, _hTrace, hBasis, hU⟩ :=
@@ -294,6 +294,6 @@ theorem exists_residualFamilyAppendixBData
       hA_eq := hBasis j }
   exact ⟨{ sector := sector, residual := hU }⟩
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

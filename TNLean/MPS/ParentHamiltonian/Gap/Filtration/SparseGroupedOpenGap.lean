@@ -22,28 +22,6 @@ three-interval projector estimate of Section 6, Lemma `commutation` (ii).
 
 open scoped BigOperators ComplexOrder InnerProductSpace MatrixOrder
 
-
-private theorem smul_orthogonal_projection_le_of_energy_bound
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [FiniteDimensional ℂ E] (U : Submodule ℂ E) {H : E →ₗ[ℂ] E}
-    (hH : H.IsPositive) (hU : U ≤ LinearMap.ker H) {γ : ℝ}
-    (hEnergy : ∀ v ∈ Uᗮ, γ * ‖v‖ ^ 2 ≤ (⟪H v, v⟫_ℂ).re) :
-    (γ : ℂ) • Uᗮ.starProjection.toLinearMap ≤ H := by
-  refine ⟨hH.isSymmetric.sub (Uᗮ.starProjection_isSymmetric.smul (by simp)), ?_⟩
-  intro v
-  have hproj : H (U.starProjection v) = 0 :=
-    LinearMap.mem_ker.mp (hU (Submodule.starProjection_apply_mem _ _))
-  have hform : ⟪H v, v⟫_ℂ = ⟪H (Uᗮ.starProjection v), Uᗮ.starProjection v⟫_ℂ := by
-    simp only [Submodule.starProjection_orthogonal_val, map_sub, hproj, sub_zero,
-      hH.isSymmetric v]
-  have hnorm : (⟪Uᗮ.starProjection v, v⟫_ℂ).re = ‖Uᗮ.starProjection v‖ ^ 2 :=
-    Uᗮ.re_inner_starProjection_eq_normSq v
-  have h := hEnergy (Uᗮ.starProjection v) (Submodule.starProjection_apply_mem _ _)
-  change 0 ≤ (⟪H v - (γ : ℂ) • Uᗮ.starProjection v, v⟫_ℂ).re
-  simpa only [inner_sub_left, inner_smul_left, Complex.sub_re, Complex.conj_ofReal,
-    Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero,
-    hnorm, hform, sub_nonneg] using h
-
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -195,8 +173,9 @@ theorem sparseGrouped_projection_bound_of_grouped_c3
         fun i ↦ i.val + 2 * p ≤ p * M).hamiltonian))ᗮ).starProjection.toLinearMap ≤
       Matrix.toEuclideanLin ((parentChainInteraction A (2 * p) N).restrict
         fun i ↦ p ∣ i.val ∧ i.val + 2 * p ≤ p * M).hamiltonian := by
-  apply smul_orthogonal_projection_le_of_energy_bound _ (Matrix.isPositive_toEuclideanLin_iff.mpr
-    (posSemidef_hamiltonian_restrict_parentChainInteraction A (2 * p) N _))
+  refine ((Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A (2 * p) N _)
+    ).smul_starProjection_orthogonal_le_iff ?_).mpr ?_
   · intro v hv
     rw [ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_restrict_iff
       (posSemidef_parentChainInteraction_term A (2 * p) N)] at hv ⊢

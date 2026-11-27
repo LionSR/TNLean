@@ -49,13 +49,13 @@ namespace MPSTensor
 
 /-- The boundary-weighted vector coefficient of a tensor.
 Source: arXiv:2504.16985, lines 175–181. -/
-noncomputable def mpvWithBoundary {d D L : ℕ} (A : MPSTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) (w : Fin L → Fin d) : ℂ :=
+noncomputable def mpvWithBoundary {α : Type*} {D L : ℕ} (A : MPTensor α (Fin D))
+    (X : Matrix (Fin D) (Fin D) ℂ) (w : Fin L → α) : ℂ :=
   Matrix.trace (X * Kraus.evalWord A (List.ofFn w))
 
 /-- Identity-boundary coefficients are ordinary periodic vector coefficients. -/
-@[simp] theorem mpvWithBoundary_one {d D L : ℕ} (A : MPSTensor d D)
-    (w : Fin L → Fin d) : mpvWithBoundary A 1 w = mpv A w := by
+@[simp] theorem mpvWithBoundary_one {α : Type*} {D L : ℕ} (A : MPTensor α (Fin D))
+    (w : Fin L → α) : mpvWithBoundary A 1 w = mpv A w := by
   simp [mpvWithBoundary, mpv, coeff]
 
 end MPSTensor
@@ -75,7 +75,7 @@ noncomputable def mpoWithBoundary (M : MPOTensor d D)
 arXiv:2504.16985, line 182. -/
 def commutingBoundaryAlgebra (M : MPOTensor d D) :
     Subalgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Subalgebra.centralizer ℂ (Set.range M.toMPSTensor)
+  Subalgebra.centralizer ℂ (Set.range M)
 
 /-- Positivity of the boundary-weighted operator at every positive length.
 Source: arXiv:2504.16985, lines 175–182. -/
@@ -100,10 +100,9 @@ def IsMPDOWithBoundary (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) : Pr
   simp only [commutingBoundaryAlgebra, Subalgebra.mem_centralizer_iff, Set.forall_mem_range]
   constructor
   · intro h i j
-    have h' := h (finProdFinEquiv (i, j))
-    simpa [toMPSTensor, Commute, SemiconjBy, eq_comm] using h'
+    simpa [Commute, SemiconjBy, eq_comm] using h (i, j)
   · intro h i
-    exact (h i.divNat i.modNat).eq.symm
+    exact (h i.1 i.2).eq.symm
 
 /-- An admissible boundary commutes with every virtual word. -/
 theorem commute_evalWord_of_mem_commutingBoundaryAlgebra (M : MPOTensor d D)

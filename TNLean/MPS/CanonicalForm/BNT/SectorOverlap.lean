@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 import TNLean.MPS.CanonicalForm.BNT.Basic
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 
 /-!
-# Auxiliary lemmas for the BNT canonical-form predicate `IsBNTCanonicalForm`
+# Auxiliary lemmas for the BNT canonical-form predicate `IsLeftCanonicalBNTPresentation`
 
-Elementary lemmas for the predicate `IsBNTCanonicalForm` introduced in
+Elementary lemmas for the predicate `IsLeftCanonicalBNTPresentation` introduced in
 `SectorBNT/Basic.lean`.  All lemmas here use the **raw** sector coefficients
 `P.weight j q` and `P.coeff N j = ∑_q (P.weight j q)^N`; no equal-modulus
 factorisation is assumed.  The optional `HasEqualModulusWeightLayer`
@@ -22,10 +22,10 @@ not imported here.
 * `SectorDecomposition.coeff_eq_sum_weight_pow` — definitional unfolding
   `P.coeff N j = ∑_q (P.weight j q)^N`
   (CPSV16 lines 287–301; CPSV21 lines 1864–1884).
-* `IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero` — cross-overlap
+* `IsLeftCanonicalBNTPresentation.cross_overlap_basis_tendsto_zero` — cross-overlap
   between distinct basis blocks decays, dispatched by bond-dimension equality
   (CPSV16 lines 1080–1091; CPSV16 lines 264–279).
-* `IsBNTCanonicalForm.combined_family_eventually_li` — combined-family
+* `IsLeftCanonicalBNTPresentation.combined_family_eventually_li` — combined-family
   eventual linear independence for two BNT canonical forms
   with mutually vanishing cross-overlaps (CPSV16 corollary Lem1,
   lines 1121–1132; CPSV21 line 1850 BNT linear-independence input).
@@ -65,14 +65,14 @@ lemma coeff_eq_sum_weight_pow (P : SectorDecomposition d)
 
 end SectorDecomposition
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P Q : SectorDecomposition d}
 
 /-- **Cross-overlap between distinct basis blocks decays.**
 
 For any two distinct basis indices `j ≠ k` of a BNT canonical form
-satisfying `IsBNTCanonicalForm`, the MPV overlap
+satisfying `IsLeftCanonicalBNTPresentation`, the MPV overlap
 `mpvOverlap (P.basis j) (P.basis k) N` tends to `0` as `N → ∞`.
 
 The dispatch follows CPSV16 lines 1080–1091 (the normal-tensor overlap
@@ -81,12 +81,12 @@ dichotomy):
 * if `P.basisDim j ≠ P.basisDim k`, decay follows from
   `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`;
 * if the bond dimensions agree, the `basis_distinct` field of
-  `IsBNTCanonicalForm` rules out gauge-phase equivalence in the
+  `IsLeftCanonicalBNTPresentation` rules out gauge-phase equivalence in the
   cast-compatible shape, and decay follows from
   `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`
   (CPSV16 lines 264–279 gauge-phase sector grouping). -/
 lemma cross_overlap_basis_tendsto_zero
-    (h : IsBNTCanonicalForm P) {j k : Fin P.basisCount} (hjk : j ≠ k) :
+    (h : IsLeftCanonicalBNTPresentation P) {j k : Fin P.basisCount} (hjk : j ≠ k) :
     Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis k) N)
       atTop (𝓝 0) := by
   have hjpos : NeZero (P.basisDim j) := ⟨(h.basis_dim_pos j).ne'⟩
@@ -120,7 +120,7 @@ the inter-family decay hypothesis into
 `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal`
 (`TNLean.MPS.BNT.Basic`, line 195). -/
 lemma combined_family_eventually_li
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hAB : ∀ (j : Fin P.basisCount) (k : Fin Q.basisCount),
       Tendsto (fun N : ℕ =>
         mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
@@ -137,6 +137,6 @@ lemma combined_family_eventually_li
     (hB_off := fun _ _ hk => hQ.cross_overlap_basis_tendsto_zero hk)
     (hAB := hAB)
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

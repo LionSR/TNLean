@@ -207,9 +207,9 @@ private theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
   have hL'N : L' ≤ N := by omega
   have hLN : L ≤ N := hLL'.trans hL'N
   apply hSpan N (lt_of_le_of_lt hLL' hN)
-  rw [ker_parentHamiltonian_eq_chainGroundSpace
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
     (toTensorFromBlocks (α := Fin s) μ C) hNpos hLN]
-  rw [ker_parentHamiltonian_eq_chainGroundSpace
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
     (toTensorFromBlocks (α := Fin s) μ C) hNpos hL'N] at hψ
   exact chainGroundSpace_le_chainGroundSpace_of_le
     (toTensorFromBlocks (α := Fin s) μ C) hNpos hLL' hL'N hψ
@@ -313,24 +313,6 @@ private theorem _root_.MPTensor.CPSVCanonicalFormData.groundSpace_eq_representat
     _ = groundSpace (toTensorFromBlocks (α := Fin s) (fun _ => 1) C) L :=
       (groundSpace_toTensorFromBlocks_eq_iSup
         (fun _ => 1) C (by simp) L).symm
-
-/-- A normal tensor of bond dimension at most \(K\) is block injective at
-length \(K^4\). -/
-private theorem _root_.MPTensor.IsNormalTensor.isNBlkInjective_cap_pow_four
-    {s n K : ℕ} {A : MPSTensor s n} (hA : IsNormalTensor A)
-    (hnK : n ≤ K) : Kraus.IsNBlkInjective A (K ^ 4) := by
-  let : NeZero n := ⟨hA.bondDim_ne_zero⟩
-  obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B := Kraus.tpGauge (d := s) (D := n) A σ
-  have hBNormal : Kraus.IsNormal B :=
-    isNormal_of_tp_primitive_irreducible B hTP hPrim hIrr
-  have hOwn : Kraus.IsNBlkInjective B (n ^ 4) :=
-    isNBlkInjective_pow_four_of_isNormal_leftCanonical B hTP hBNormal
-  have hAOwn : Kraus.IsNBlkInjective A (n ^ 4) :=
-    isNBlkInjective_of_gaugeEquiv hOwn hGauge.symm
-  exact Kraus.isNBlkInjective_of_le
-    (Nat.pow_pos (Nat.pos_of_ne_zero hA.bondDim_ne_zero)) hAOwn
-    (Nat.pow_le_pow_left hnK 4)
 
 /-- Numerical slack needed to absorb the PGVWC07 short-ring window into the
 interaction range while retaining the CPSV16 bound. -/
@@ -454,7 +436,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) C :=
     hCBNT.blocks_not_gaugePhaseEquiv
   have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>
-    (hNormal j).isNBlkInjective_cap_pow_four (hDimLe j)
+    (hNormal j).isNBlkInjective_of_bondDim_le (hDimLe j)
   have hLocal :
       groundSpace A Lmax =
         groundSpace (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) Lmax := by
@@ -568,9 +550,9 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
             hUnital (by simp [R, base, L₀]) hNlarge
       intro ψ hψ
       rw [← hSmall]
-      rw [ker_parentHamiltonian_eq_chainGroundSpace
+      rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
         (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) hNpos hLN] at hψ
-      rw [ker_parentHamiltonian_eq_chainGroundSpace
+      rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
         (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) hNpos hRN]
       exact chainGroundSpace_le_chainGroundSpace_of_le
         (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) hNpos hRleL hLN hψ
@@ -628,7 +610,8 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTu
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian A L N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) =
       bntMPSVectorSpan (fun j ↦ data.blocks (data.representativeIndex j)) N := by
   let B := fun j ↦ data.blocks (data.representativeIndex j)
   let : ∀ j, NeZero (data.dim (data.representativeIndex j)) :=
@@ -636,7 +619,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTu
   have hGS : groundSpace A L =
       groundSpace (toTensorFromBlocks (α := Fin d) (fun _ ↦ 1) B) L :=
     data.groundSpace_eq_toTensorFromBlocks_representatives (by omega)
-  rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hLN,
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hLN,
     chainGroundSpace_eq_of_groundSpace_eq hGS]
   exact chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
     (fun _ ↦ 1) B (by simp) hS hSpan hSL hLN

@@ -113,8 +113,6 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem regionInsertedCoeff_endWindows_eq_of_staircase {a b : ℕ}
     (h : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
@@ -157,7 +155,7 @@ theorem regionInsertedCoeff_endWindows_eq_of_staircase {a b : ℕ}
       (staircaseWindow_last_subset_endPair (by omega) (by omega) _) hpos, ← hClast]
   -- The end-pair equality equates the two corner-extended inserts on `S`; equal inserts give equal
   -- assembled deformed states.
-  rw [staircasePair_insert_eq_open h hUB hpos (by omega) (by omega) hxw hyh _ C common hagree]
+  rw [staircasePair_insert_eq_open h hpos (by omega) (by omega) hxw hyh _ C common hagree]
 
 end Torus
 

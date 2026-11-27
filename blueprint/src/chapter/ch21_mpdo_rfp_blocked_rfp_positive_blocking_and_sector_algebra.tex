@@ -341,18 +341,18 @@ physical indices, as in
 \end{proof}
 
 For a matrix product density operator, either CPSV canonical form
-or normalized BNT-refined horizontal form gives both hypotheses of
+or BNT-refined horizontal form gives both hypotheses of
 Lemma~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}.
 Each canonical form and positivity are preserved by two-site blocking.
 Applying the theorem to $M$ and $M^{[2]}$ therefore gives their vertical
 decompositions simultaneously.
 
-\begin{lemma}[Two-site blocking preserves normalized BNT-refined horizontal form]
+\begin{lemma}[Two-site blocking preserves BNT-refined horizontal form]
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo_two_site_blocking,thm:sector_bnt_cf_block_tensor}
-    If an MPO tensor $K$ is in normalized BNT-refined horizontal form, then its
+    If an MPO tensor $K$ is in BNT-refined horizontal form, then its
     two-site blocking $K^{[2]}$ is again in that form.
 \end{lemma}
 
@@ -372,7 +372,7 @@ decompositions simultaneously.
     original block-diagonal virtual gauge and $S$ its sector tensor, word
     evaluation gives $((K^{[2]})^{\mathrm{MPS}})_i=X(\varphi^*(S^{[2]}))_iX^{-1}$.
     Therefore this blocked decomposition and the same copy gauges establish
-    normalized BNT-refined horizontal form for $K^{[2]}$.
+    BNT-refined horizontal form for $K^{[2]}$.
 \end{proof}
 
 \begin{lemma}[One-site and two-site vertical canonical forms]
@@ -380,7 +380,7 @@ decompositions simultaneously.
     \lean{MPOTensor.verticalCF_and_blockTwo_of_horizontalCF}
     \leanok
     \uses{thm:vertical_cf_of_horizontal_cf,thm:mpdo_block_two_as_positive_blocking,lem:mpdo_horizontal_cf_block_two}
-    Let $K$ be an MPO tensor in normalized BNT-refined horizontal form that
+    Let $K$ be an MPO tensor in BNT-refined horizontal form that
     generates matrix product density operators. Then both $K$ and $K^{[2]}$
     satisfy the
     vertical canonical-form conditions of
@@ -391,7 +391,7 @@ decompositions simultaneously.
 
 \begin{proof}\leanok
     By Lemma~\ref{thm:mpdo_block_two_as_positive_blocking} and
-    Lemma~\ref{lem:mpdo_horizontal_cf_block_two}, $K^{[2]}$ is in normalized
+    Lemma~\ref{lem:mpdo_horizontal_cf_block_two}, $K^{[2]}$ is in
     BNT-refined horizontal form and generates matrix product density operators. Apply
     Lemma~\ref{thm:vertical_cf_of_horizontal_cf} first to $K$ and then to
     $K^{[2]}$.

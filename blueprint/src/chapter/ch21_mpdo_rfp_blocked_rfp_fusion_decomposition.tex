@@ -170,7 +170,7 @@
     Suppose that the vertical reading of $M$ is reconstructed from a retained
     tensor $A$ by a coisometry $U$. The two-site blocking is then reconstructed
     from the product of two copies of $A$ by the Kronecker square of $U$.
-    In addition, if $M$ is in normalized BNT-refined horizontal form and generates
+    In addition, if $M$ is in BNT-refined horizontal form and generates
     positive operators, this retained product tensor has invariant-projector closure
     and has no nontrivial periodic vectors. No full-support assumption is
     imposed on the retained bond space.
@@ -180,7 +180,7 @@
     The Kronecker square of a coisometry is again a coisometry. Expanding a
     blocked vertical letter gives the product of the two one-site
     reconstructions and hence the asserted exact compression formula.
-    Normalized BNT-refined horizontal form and positivity are preserved by
+    BNT-refined horizontal form and positivity are preserved by
     two-site blocking. Invariant-projector closure descends to an exact reducing
     compression, while a periodic vector in the compression would embed
     isometrically as a periodic vector of the blocked vertical tensor.
@@ -274,7 +274,7 @@
               then its sector compression is nonzero at some finite chain length:
               $\mathcal C_N(M^{(2)},P)\ne0$ for some $N$.
     \end{enumerate}
-    Both normalized BNT-refined horizontal form and CPSV canonical
+    Both BNT-refined horizontal form and CPSV canonical
     form, together with positivity of the generated operators, give these
     hypotheses independently.
 \end{definition}
@@ -841,7 +841,7 @@
     \lean{MPOTensor.exists_positiveFusionDecomposition_of_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts,thm:vertical_cf_of_horizontal_cf,thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
-    Let $M$ be in normalized BNT-refined horizontal form, generate matrix
+    Let $M$ be in BNT-refined horizontal form, generate matrix
     product density operators, and satisfy the renormalization fixed-point condition of
     Definition~\ref{def:is_rfp_via_ts}. Then one may choose a vertical basis
     of normal tensors $\{M_\alpha\}_\alpha$ for which there are positive
@@ -865,7 +865,7 @@
         \notag
     \end{align}
     Thus the renormalization fixed-point and matrix-product-density-operator
-    assumptions, together with normalized BNT-refined horizontal form, imply
+    assumptions, together with BNT-refined horizontal form, imply
     the positive fusion decomposition of
     \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv} on the active
     corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient,
@@ -873,7 +873,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Applying the proved normalized BNT-refined specialization of
+    Applying the proved BNT-refined specialization of
     Proposition~4.13 to $M$ and to its two-site blocking gives, in each case,
     the CPSV basis-of-normal-tensors assertion, the positive multiplicity
     matrices, and both coisometric decomposition identities.

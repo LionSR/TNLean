@@ -164,7 +164,7 @@ private theorem common_blocking_primitive
       _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) σ' := hSame1 N σ'
       _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blocks1 k) σ' := by
             simpa [smul_eq_mul] using
-              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ'))
+              (mpv_toTensorFromBlocks_eq_sum (α := Fin d) (μ := μ1) (A := blocks1) (σ := σ'))
       _ = ∑ k : Fin r1, (μ1 k) ^ N *
             mpv (blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1) σ := by
             refine Finset.sum_congr rfl ?_
@@ -177,7 +177,7 @@ private theorem common_blocking_primitive
             symm
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
-                (d := blockPhysDim d 1)
+                (α := Fin (blockPhysDim d 1))
                 (μ := μ1)
                 (A := fun k => blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1)
                 (σ := σ))
@@ -241,7 +241,7 @@ private theorem sort_blocks_by_weight_norm
       _ = ∑ k : Fin r2, (μ2 k) ^ N * mpv (blocks2 k) σ := by
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
-                (d := blockPhysDim d p) (μ := μ2) (A := blocks2) (σ := σ))
+                (α := Fin (blockPhysDim d p)) (μ := μ2) (A := blocks2) (σ := σ))
       _ = ∑ i : Fin r2, (μ2 (e i)) ^ N * mpv (blocks2 (e i)) σ := by
             symm
             simpa using (e.sum_comp (fun k : Fin r2 => (μ2 k) ^ N * mpv (blocks2 k) σ))
@@ -249,7 +249,7 @@ private theorem sort_blocks_by_weight_norm
             symm
             simpa [μ, blocks, smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
-                (d := blockPhysDim d p) (μ := μ) (A := blocks) (σ := σ))
+                (α := Fin (blockPhysDim d p)) (μ := μ) (A := blocks) (σ := σ))
   · intro i
     exact hIrr2 (e i)
   · intro i
@@ -394,7 +394,7 @@ Separated blockwise hypotheses pass from canonical-form and
 normal-canonical-form hypotheses to the basis-of-normal-tensors formulation.
 The source BNT expansion in arXiv:1606.00608, Section II keeps repeated copies
 inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j`; that
-paper-faithful sector structure is represented by `IsBNTCanonicalForm` in the
+paper-faithful sector structure is represented by `IsLeftCanonicalBNTPresentation` in the
 fundamental-theorem files. The results here are auxiliary tools for already
 separated finite block families.
 

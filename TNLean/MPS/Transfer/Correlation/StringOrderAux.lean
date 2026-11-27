@@ -9,7 +9,7 @@ import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import TNLean.MPS.Transfer.Correlation.StringOrderDefs
 import TNLean.MPS.Tensor.Gauge.TPGauge
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Scaling
 import QICLean.Channel.FixedPoint.Weighted.CanonicalGauge
@@ -71,9 +71,9 @@ structure TwistedTPGaugeSetup [NeZero D]
   hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1
   hS_inv_herm : (S⁻¹)ᴴ = S⁻¹
   A' : MPSTensor d D
-  hA'_def : A' = Kraus.tpGauge (d := d) (D := D) A σ
+  hA'_def : A' = Kraus.tpGauge (ι := Fin d) (D := D) A σ
   B' : MPSTensor d D
-  hB'_def : B' = Kraus.tpGauge (d := d) (D := D) B σ
+  hB'_def : B' = Kraus.tpGauge (ι := Fin d) (D := D) B σ
   hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1
   hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1
   hIrrA' : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A'
@@ -138,8 +138,8 @@ noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
   have hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hS_detT
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
-  let A' := Kraus.tpGauge (d := d) (D := D) A σ
-  let B' := Kraus.tpGauge (d := d) (D := D) B σ
+  let A' := Kraus.tpGauge (ι := Fin d) (D := D) A σ
+  let B' := Kraus.tpGauge (ι := Fin d) (D := D) B σ
   have hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1 := by
     simpa [A', Kraus.IsTP] using
       Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint (K := A) (ρ := σ) hσ_pd hσ_fixA

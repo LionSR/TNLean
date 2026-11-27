@@ -23,9 +23,9 @@ Method
 
 Usage
 -----
-    python3 scripts/tactic_pattern_scan.py                # default scan
-    python3 scripts/tactic_pattern_scan.py --min-count 5  # stricter
-    python3 scripts/tactic_pattern_scan.py --top 10 --show-locations 5
+    python3 scripts/audit/tactic_pattern_scan.py                # default scan
+    python3 scripts/audit/tactic_pattern_scan.py --min-count 5  # stricter
+    python3 scripts/audit/tactic_pattern_scan.py --top 10 --show-locations 5
 
 Exit code is always 0; this is a reporting tool, not a lint gate.
 """

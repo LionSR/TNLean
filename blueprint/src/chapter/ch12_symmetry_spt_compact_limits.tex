@@ -1650,29 +1650,18 @@ argument below.
     this quotient is constant throughout the path.
 \end{proof}
 
-\begin{lemma}[A common injective blocking length]
-    \label{lem:spc_aux_normal_fourth_power_blocking}
-    \lean{MPTensor.IsNormalTensor.isNBlkInjective_pow_four}\leanok
-    As used in arXiv:1606.00608, lines 318--344, and the quantum Wielandt
-    bound, for a normalized normal tensor of bond dimension $D$, products of
-    length $D^4$ span the full matrix algebra.
-\end{lemma}
-\begin{proof}\leanok
-    Conjugating to a trace-preserving tensor, applying the quantum Wielandt
-    bound, and carrying the spanning statement through the bond conjugation
-    proves the claim.
-\end{proof}
-
 \begin{lemma}[Bounded bond dimension and common physical blocking]
     \label{lem:spc_aux_bounded_normal_fourth_power_blocking}
-    \lean{MPTensor.IsNormalTensor.blockTensor_isInjective_of_bondDim_le}\leanok
-    \uses{lem:spc_aux_normal_fourth_power_blocking}
-    If a normalized normal tensor has bond dimension $D\le M$, its $M^4$-site
-    blocked tensor is injective.
+    \lean{MPTensor.IsNormalTensor.isNBlkInjective_of_bondDim_le}\leanok
+    \uses{thm:normality_equivalent_forms}
+    As used in arXiv:1606.00608, lines 318--344, if a normalized normal tensor
+    has bond dimension $D\le M$, then products of length $M^4$ span the full
+    matrix algebra; equivalently, its $M^4$-site blocked tensor is injective.
 \end{lemma}
 \begin{proof}\leanok
-    Injectivity at length $D^4$ and preservation of the spanning property
-    at every larger length give injectivity at length $M^4$.
+    By the quantum Wielandt bound, products of length $D^4$ span the full
+    matrix algebra (Theorem~\ref{thm:normality_equivalent_forms}), and the
+    spanning property persists at every larger length.
 \end{proof}
 
 \begin{lemma}[Algebraic simplicity of the fixed eigenvalue]

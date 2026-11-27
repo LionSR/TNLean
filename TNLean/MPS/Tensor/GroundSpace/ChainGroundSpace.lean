@@ -129,9 +129,9 @@ theorem toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace (A : MP
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   rw [ManyBody.Interaction.mem_zeroSpace_iff]
   intro i
-  change localTerm A L N i ψ = 0
+  change (parentRingInteraction A L N).term i *ᵥ ψ = 0
   ext σ
-  rw [localTerm_apply_of_le A L N hLN i]
+  rw [parentRingInteraction_term_mulVec_apply_of_le A L N hLN i]
   have hrestrict :
       (fun τ => ψ (replaceWindow L hLN i σ τ)) =
         cyclicRestrictₗ hN L i σ ψ := by

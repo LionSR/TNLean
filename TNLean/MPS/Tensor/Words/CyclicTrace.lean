@@ -20,13 +20,13 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- Evaluating a tensor on a configuration listed in site order gives the
 ordered product of its local matrices. This is a source-independent expansion
 of the definition of word evaluation. -/
-theorem evalWord_ofFn_eq_prod (A : MPSTensor d D) {N : ℕ}
-    (σ : Fin N → Fin d) :
+theorem evalWord_ofFn_eq_prod (A : MPTensor α (Fin D)) {N : ℕ}
+    (σ : Fin N → α) :
     Kraus.evalWord A (List.ofFn σ) = (List.ofFn fun n => A (σ n)).prod := by
   induction N with
   | zero => simp only [List.ofFn_zero, Kraus.evalWord_nil, List.prod_nil]
@@ -49,8 +49,8 @@ of `Papers/1804.04964/paper_normal.tex`).
 /-- Entry of a word product as a sum over end-pinned paths of bond indices:
 `(A^{x_0} ⋯ A^{x_{N-1}})_{a b}` is the sum over `ρ : Fin (N + 1) → Fin D` with
 `ρ 0 = a` and `ρ N = b` of `∏ j, (A^{x_j})_{ρ_j, ρ_{j+1}}`. -/
-theorem evalWord_ofFn_apply (A : MPSTensor d D) :
-    ∀ (N : ℕ) (x : Fin N → Fin d) (a b : Fin D),
+theorem evalWord_ofFn_apply (A : MPTensor α (Fin D)) :
+    ∀ (N : ℕ) (x : Fin N → α) (a b : Fin D),
       Kraus.evalWord A (List.ofFn x) a b =
         ∑ ρ : Fin (N + 1) → Fin D,
           if ρ 0 = a ∧ ρ (Fin.last N) = b then
@@ -210,8 +210,8 @@ private theorem snoc_head_apply_succ {N : ℕ} (g : Fin (N + 1) → Fin D) (v : 
 
 /-- The trace of a closed word product is the sum over cyclic bond
 configurations of the products of matrix entries around the loop. -/
-theorem trace_evalWord_eq_sum_cyclic {n : ℕ} [NeZero n] (A : MPSTensor d D)
-    (σ : Fin n → Fin d) :
+theorem trace_evalWord_eq_sum_cyclic {n : ℕ} [NeZero n] (A : MPTensor α (Fin D))
+    (σ : Fin n → α) :
     Matrix.trace (Kraus.evalWord A (List.ofFn σ)) =
       ∑ g : Fin n → Fin D, ∏ v : Fin n, A (σ v) (g v) (g (v + 1)) := by
   obtain ⟨N, rfl⟩ : ∃ N, n = N + 1 :=

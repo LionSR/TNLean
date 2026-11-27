@@ -15,7 +15,7 @@ import QICLean.Algebra.Unitary.MatrixGramUnitary
 This file transports the distinguished physical corner of a vertical phase
 class to the bond dimension of any chosen copy.  The construction depends only
 on the grouped corner equations and is shared by the literal CPSV and
-normalized BNT-refined Figure 8 arguments.
+BNT-refined Figure 8 arguments.
 
 ## Main result
 
@@ -57,7 +57,7 @@ be a positive scalar multiple of the identity.
 The grouped-corner Gram-dressing hypothesis makes the Gram matrix of every
 grouped gauge a positive multiple of the identity. Dividing the gauge by the
 square root of that scalar makes it unitary. The argument uses no
-canonical-form hypothesis: literal CPSV canonical form and normalized
+canonical-form hypothesis: literal CPSV canonical form and
 BNT-refined horizontal form each supply the Gram dressing independently.
 
 ### Main result
@@ -187,7 +187,7 @@ variable {d D : ℕ}
 common representative.
 
 This is the exact canonical-form-specific input used by the grouped Figure 8
-argument. Both literal CPSV canonical form and normalized BNT-refined
+argument. Both literal CPSV canonical form and BNT-refined
 horizontal form provide this statement independently.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines

@@ -5,12 +5,12 @@
 % The three examples after Theorem 4.9 are numbered 4.10--4.12; hence
 % `Prop:IV.12` is Proposition 4.13 in the arXiv source.
 
-\begin{definition}[Normalized BNT-refined horizontal form for an MPO]
+\begin{definition}[BNT-refined horizontal form for an MPO]
     \label{def:horizontal_cf_mpdo}
     \lean{MPOTensor.IsHorizontalCF}
     \leanok
     \uses{def:mpo_tensor,def:sector_bnt_cf,def:gauge_equiv}
-    An MPO tensor is in \emph{normalized BNT-refined horizontal form} if its
+    An MPO tensor is in \emph{BNT-refined horizontal form} if its
     doubled-index MPS tensor is a BNT sector decomposition with an independent
     gauge on every repeated copy:
     \begin{align}
@@ -20,11 +20,12 @@
         \label{eq:mpdo_horizontal_cf}
     \end{align}
     Here the $A_j$ are the distinct minimal representatives, $r_j>0$, and
-    every weight $\mu_{j,q}$ is nonzero, $|\mu_{j,q}|\leq1$, and at least
-    one weight has modulus one. The BNT hypotheses include
-    irreducibility, left-canonicality, normalized self-overlap, eventual
-    linear independence of the representative MPV families, and the
-    exclusion of similarity up to phase between distinct representatives.
+    every weight $\mu_{j,q}$ is nonzero; no normalization of the weights is
+    imposed. The BNT hypotheses are those of
+    Definition~\ref{def:sector_bnt_cf}: normal left-canonical
+    representatives with eventually linearly independent MPV families; these
+    are irreducible, have normalized self-overlap, and are not similar up to
+    phase to one another.
     Repeated gauge-equivalent copies are retained over the same representative
     rather than separated as distinct blocks. The total bond dimension of
     the displayed direct sum is exactly $D$. Equivalently, with the
@@ -71,7 +72,7 @@
     \lean{MPOTensor.IsHorizontalCF.hasHorizontalCFMPVRepresentation}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:horizontal_cf_mpv_representation}
-    Every MPO tensor in normalized BNT-refined horizontal form has the
+    Every MPO tensor in BNT-refined horizontal form has the
     associated positive-length BNT matrix-product-vector representation.
 \end{lemma}
 

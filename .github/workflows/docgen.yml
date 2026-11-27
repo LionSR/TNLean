@@ -61,15 +61,15 @@ jobs:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
       - name: Fetch pinned tenkz package
-        run: python3 scripts/fetch_tenkz.py
+        run: python3 scripts/tenkz/fetch_tenkz.py
 
       - name: Build blueprint bibliography
         run: texra-blueprint bbl
 
       - name: Generate paper source aux for paper-gap references
         run: |
-          ./scripts/generate_paper_aux.sh 1606.00608
-          ./scripts/generate_paper_aux.sh 2502.20257
+          ./scripts/blueprint/generate_paper_aux.sh 1606.00608
+          ./scripts/blueprint/generate_paper_aux.sh 2502.20257
 
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
@@ -132,7 +132,7 @@ jobs:
           lake build TNLean:docs
 
       - name: Build FT-MPS blueprint volume
-        run: ./scripts/build_blueprint_ch01_12.sh
+        run: ./scripts/blueprint/build_blueprint_ch01_12.sh
 
       - name: Package site components
         run: |
@@ -144,7 +144,7 @@ jobs:
           fi
           cp -r docbuild/.lake/build/doc site-docs/docs
           texra-blueprint --root . paper-gaps site site-docs/paper-gaps
-          python3 scripts/write_badges.py site-badges
+          python3 scripts/reports/write_badges.py site-badges
 
       # Runs in Docker and produces root-owned output; keep it after the
       # packaging step so it only writes into the pre-created directory.

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.Filter.ChebyshevSpectralProjector
-import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialRank
+import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialCutRank
 
 /-!
 # The Chebyshev spectral projector at two cuts

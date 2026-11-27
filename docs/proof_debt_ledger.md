@@ -10,7 +10,7 @@ each open debt attached as a native sub-issue.
 
 ## Metrics
 
-Weekly snapshot from `python3 scripts/loc_report.py` (see the shrink rhythm
+Weekly snapshot from `python3 scripts/reports/loc_report.py` (see the shrink rhythm
 in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
 
 | Date | Total lines | Dup 10-line windows | Sequel files (lines) | Cap-riding | Degenerate sites | Sorries |

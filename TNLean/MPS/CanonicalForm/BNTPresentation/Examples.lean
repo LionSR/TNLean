@@ -22,8 +22,8 @@ weights.
 * The unequal-modulus pair `C ⊕ (1/2)C`, with coefficient `1 + (1/2)^N`.
 
 The sign-flip and phase pairs have weights of equal modulus.  The final pair
-has one unit weight and one smaller weight, so it remains a BNT canonical form
-without satisfying the equal-modulus condition.
+has weights of different moduli, so it is a presentation without satisfying the
+equal-modulus condition.
 -/
 
 open MPTensor
@@ -76,8 +76,8 @@ noncomputable example
     (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1)) :
-    IsBNTCanonicalForm (singleSectorDecomposition C) :=
-  isBNTCanonicalForm_singleSectorDecomposition hCIrr hCLeft hCSelf
+    IsLeftCanonicalBNTPresentation (singleSectorDecomposition C) :=
+  isLeftCanonicalBNTPresentation_singleSectorDecomposition hCIrr hCLeft hCSelf
 
 /-! ## Example 2 — `C ⊕ (-C)` -/
 
@@ -108,30 +108,11 @@ noncomputable example
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
-    IsBNTCanonicalForm (signFlipDecomp C) where
-  basis_dim_pos := fun _ => hDpos
-  basis_irreducible := fun _ => hCIrr
-  basis_left_canonical := fun _ => hCLeft
-  basis_normalized_self_overlap := fun _ => hCSelf
-  bnt_data := by
-    classical
-    obtain ⟨N0, hN0⟩ := hCNonzero
-    refine ⟨N0, fun N hN => ?_⟩
-    exact LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)
-  basis_distinct := fun j k hjk _ =>
-    absurd (Subsingleton.elim j k) hjk
-  -- CPSV16 line 246: both weights `(1, -1)` have unit modulus.
-  weight_norm_le_one := by
-    intro _ q
-    change ‖(if q = 0 then (1 : ℂ) else -1)‖ ≤ 1
-    split_ifs with hq
-    · simp
-    · simp
-  -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
-  weight_unit_exists := by
-    refine ⟨0, 0, ?_⟩
-    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
-    simp
+    IsLeftCanonicalBNTPresentation (signFlipDecomp C) := by
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.one_pos (fun _ => hDpos)
+    (fun _ => hCIrr) (fun _ => hCLeft) (fun _ => hCSelf) ?_
+  obtain ⟨N0, hN0⟩ := hCNonzero
+  exact ⟨N0, fun N hN => LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)⟩
 
 /-! ## Example 3 — `C ⊕ e^{iθ} C` -/
 
@@ -164,36 +145,11 @@ noncomputable example
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
-    IsBNTCanonicalForm (phaseDecomp C θ) where
-  basis_dim_pos := fun _ => hDpos
-  basis_irreducible := fun _ => hCIrr
-  basis_left_canonical := fun _ => hCLeft
-  basis_normalized_self_overlap := fun _ => hCSelf
-  bnt_data := by
-    classical
-    obtain ⟨N0, hN0⟩ := hCNonzero
-    refine ⟨N0, fun N hN => ?_⟩
-    exact LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)
-  basis_distinct := fun j k hjk _ =>
-    absurd (Subsingleton.elim j k) hjk
-  -- CPSV16 line 246: both weights `(1, exp(I·θ))` have unit modulus.
-  weight_norm_le_one := by
-    intro _ q
-    -- Unfold the `phaseDecomp.weight` to its `if`.
-    change ‖(if q = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ ≤ 1
-    split_ifs with hq
-    · simp
-    · -- `‖exp (I·θ)‖ = 1`; here `θ` is a real (cast to ℂ).
-      rw [Complex.norm_exp]
-      have : (Complex.I * ↑θ).re = 0 := by
-        simp [Complex.mul_re]
-      rw [this]
-      simp
-  -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
-  weight_unit_exists := by
-    refine ⟨0, 0, ?_⟩
-    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
-    simp
+    IsLeftCanonicalBNTPresentation (phaseDecomp C θ) := by
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.one_pos (fun _ => hDpos)
+    (fun _ => hCIrr) (fun _ => hCLeft) (fun _ => hCSelf) ?_
+  obtain ⟨N0, hN0⟩ := hCNonzero
+  exact ⟨N0, fun N hN => LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)⟩
 
 /-! ## Example 4 — equal-modulus weight layer on `signFlipDecomp`
 
@@ -203,7 +159,7 @@ that the equal-modulus subclass is non-empty.
 
 Note (audit §Q4 counter-example): replacing the weight `-1` by `1/2` in
 `signFlipDecomp` would give a decomposition `C ⊕ (1/2)C` that is still a
-valid `IsBNTCanonicalForm` (a single BNT basis tensor with coefficient
+valid `IsLeftCanonicalBNTPresentation` (a single BNT basis tensor with coefficient
 `1 + (1/2)^N` and raw weights `(1, 1/2)`), but it would NOT extend to
 `HasEqualModulusWeightLayer`: the two copies have unequal moduli, so no
 choice of `spectral_level 0` makes both quotients unit-modulus.  The
@@ -237,14 +193,11 @@ noncomputable example
 
 /-! ## Example 5 — `C ⊕ (1/2)C`, unequal-modulus admissibility
 
-This example demonstrates that the strengthened `IsBNTCanonicalForm`
-predicate (with the CPSV16 §II.C line-246 fields `weight_norm_le_one`
-and `weight_unit_exists`) admits decompositions whose copies have
-**unequal** moduli: the construction below has one unit-modulus copy
-and one `1/2`-modulus copy.  This is exactly the
+This example demonstrates that `IsLeftCanonicalBNTPresentation` admits decompositions
+whose copies have **unequal** moduli: the construction below has one
+unit-modulus copy and one `1/2`-modulus copy.  This is the
 `docs/audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
-counter-example, here written as a positive example: the strengthened
-predicate follows line 246 verbatim and admits the example.
+counter-example, here written as a positive example.
 
 The decomposition does NOT admit `HasEqualModulusWeightLayer`: the
 optional equal-modulus layer of `SectorBNT/EqualModulus.lean` would
@@ -270,14 +223,11 @@ unit modulus, which fails here because `|1| ≠ |1/2|`. -/
 
 /-- **Example 5** — `C ⊕ (1/2)C`: a single BNT sector with two copies of
 raw weights `(1, 1/2)`.  The sector coefficient is `1 + (1/2)^N → 1`,
-not a scalar power.  Demonstrates that the strengthened
-`IsBNTCanonicalForm` admits unequal-modulus copies: `weight_norm_le_one`
-holds because `‖1‖ ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`, and `weight_unit_exists`
-is witnessed by the first copy with weight `1`.
+not a scalar power.  Demonstrates that `IsLeftCanonicalBNTPresentation` admits
+unequal-modulus copies.
 
-Paper anchor: CPSV16 §II.C line 246, the line-246 normalization
-convention permits any `|μ_{j,q}| ≤ 1` provided at least one of them
-equals `1`.  See also
+Paper anchor: CPSV16 eq. `II_ABasicTensors` and `decBSV`, lines 281--301,
+with raw copy weights `μ_{j,q}`.  See also
 `docs/audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
 for the original counter-example. -/
 noncomputable example
@@ -286,30 +236,11 @@ noncomputable example
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
-    IsBNTCanonicalForm (halvedDecomp C) where
-  basis_dim_pos := fun _ => hDpos
-  basis_irreducible := fun _ => hCIrr
-  basis_left_canonical := fun _ => hCLeft
-  basis_normalized_self_overlap := fun _ => hCSelf
-  bnt_data := by
-    classical
-    obtain ⟨N0, hN0⟩ := hCNonzero
-    refine ⟨N0, fun N hN => ?_⟩
-    exact LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)
-  basis_distinct := fun j k hjk _ =>
-    absurd (Subsingleton.elim j k) hjk
-  -- CPSV16 line 246: `‖1‖ = 1 ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`.
-  weight_norm_le_one := by
-    intro _ q
-    change ‖(if q = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ ≤ 1
-    split_ifs with hq
-    · simp
-    · simp; norm_num
-  -- CPSV16 line 246: the first copy `q = 0` carries the global unit weight.
-  weight_unit_exists := by
-    refine ⟨0, 0, ?_⟩
-    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
-    simp
+    IsLeftCanonicalBNTPresentation (halvedDecomp C) := by
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.one_pos (fun _ => hDpos)
+    (fun _ => hCIrr) (fun _ => hCLeft) (fun _ => hCSelf) ?_
+  obtain ⟨N0, hN0⟩ := hCNonzero
+  exact ⟨N0, fun N hN => LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)⟩
 
 end SectorBNT.Examples
 end MPSTensor

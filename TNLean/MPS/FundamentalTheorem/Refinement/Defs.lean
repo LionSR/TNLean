@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.Basic
 import QICLean.Channel.KrausMap.KrausRepresentation
 import QICLean.Channel.KrausMap.KrausUnitaryFreedom
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Transfer.Irreducible.PeriodicRotation

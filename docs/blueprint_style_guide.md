@@ -362,7 +362,7 @@ visible.
 
 Tensor-network diagram conventions are recorded in the
 [tenkz](https://github.com/LionSR/tenkz) manual. The blueprint loads `tenkz`
-directly after `python3 scripts/fetch_tenkz.py`. Chapter sources write
+directly after `python3 scripts/tenkz/fetch_tenkz.py`. Chapter sources write
 native picture bodies beside the mathematics they depict; there is no
 central figure catalogue. The generic web bridge captures those same bodies
 verbatim and compiles them against the pinned package.
@@ -393,7 +393,7 @@ the proof sketch should name the regions or inserted tensors appearing in it.
 - **Orange**: `\notready` (needs more blueprint work)
 
 ## Bibliography Workflow
-1. Run `python3 scripts/fetch_tenkz.py` from the repository root.
+1. Run `python3 scripts/tenkz/fetch_tenkz.py` from the repository root.
 2. Edit `blueprint/src/references.bib` (standalone, AuthorYYYYKeyword keys)
 3. Run `cd blueprint/src && latexmk -lualatex -interaction=nonstopmode print.tex` (generates `print.bbl`)
 4. Copy `blueprint/src/print.bbl` → `blueprint/src/web.bbl`  ← **must do this every time bib changes**
@@ -415,7 +415,7 @@ router `blueprint/src/content_ft_mps.tex` and is built by the repository script
 shown below.
 
 ```bash
-python3 scripts/fetch_tenkz.py
+python3 scripts/tenkz/fetch_tenkz.py
 cd blueprint
 leanblueprint pdf     # PDF → blueprint/print/print.pdf
 leanblueprint web     # HTML → blueprint/web/
@@ -424,7 +424,7 @@ leanblueprint all     # pdf + web + checkdecls
 cd ..
 python3 -m pip install 'pagefind[extended]==1.5.2'
 python3 scripts/add_blueprint_search.py --web-root blueprint/web  # search index → blueprint/web/pagefind/
-./scripts/build_blueprint_ch01_12.sh  # FT--MPS PDF → blueprint/print/print12.pdf
+./scripts/blueprint/build_blueprint_ch01_12.sh  # FT--MPS PDF → blueprint/print/print12.pdf
 ```
 
 ## Fact-Check Lessons

@@ -136,9 +136,10 @@ the theorem
 \leanid{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective} at
 \(\{v\}\).
 
-The abstract union-closure lemma
-\leanid{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}
-then proves injectivity for every nonempty finite region $R$. In its notation,
+The finite union-closure lemma
+\leanid{TNLean.PEPS.RegionInjectivityUnionClosure.biUnion_injective}, applied to
+the singleton regions of $R$, then proves injectivity for every nonempty finite
+region $R$:
 \begin{align}
     R
         &= \bigcup_{v\in R}\{v\},

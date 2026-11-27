@@ -46,25 +46,25 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} {r : ℕ} {dim : Fin r → ℕ}
 
 /-- The tuple of length-`L` word evaluations across all blocks. -/
 def wordTuple
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (L : ℕ) (w : Fin L → Fin d) :
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (L : ℕ) (w : Fin L → α) :
     (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
   fun k => Kraus.evalWord (A k) (List.ofFn w)
 
 /-- Finite-length span condition on the product algebra of block matrices. -/
 def WordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (L : ℕ) : Prop :=
   Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤
 
 /-- The tuple-valued span of word evaluations is closed under pointwise matrix
 multiplication, at the cost of adding word lengths. -/
 theorem pointwise_mul_mem_span_wordTuple_add
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     {M N : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ}
     (hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)))
@@ -90,7 +90,7 @@ the simultaneous identity tuple lies in the length-\(S\) word-tuple span, then
 the length-\(L+S\) simultaneous word tuples also span the full product algebra.
 -/
 theorem wordTupleSpanTop_add_of_identity_mem_span_wordTuple
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     (hSpan : WordTupleSpanTop A L)
     (hId : (fun k : Fin r => (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∈
@@ -113,7 +113,7 @@ theorem wordTupleSpanTop_add_of_identity_mem_span_wordTuple
 
 /-- Two homogeneous full word-tuple spans compose by concatenating words. -/
 theorem wordTupleSpanTop_add_of_wordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     (hSpanL : WordTupleSpanTop A L)
     (hSpanS : WordTupleSpanTop A S) :
@@ -126,7 +126,7 @@ theorem wordTupleSpanTop_add_of_wordTupleSpanTop
 /-- A full homogeneous word-tuple span at one period extends any full base
 length along the arithmetic progression obtained by adding that period. -/
 theorem wordTupleSpanTop_add_mul_of_wordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {base period : ℕ}
     (hbase : WordTupleSpanTop A base)
     (hperiod : WordTupleSpanTop A period) :
@@ -143,7 +143,7 @@ theorem wordTupleSpanTop_add_mul_of_wordTupleSpanTop
 one positive period, gives full homogeneous word-tuple spans at every
 sufficiently large length. -/
 theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {start period : ℕ} (hperiod_pos : 0 < period)
     (hperiod : WordTupleSpanTop A period)
     (hwindow : ∀ residue : ℕ, residue < period → WordTupleSpanTop A (start + residue)) :
@@ -169,10 +169,10 @@ theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
 /-- If simultaneous word evaluations span the product algebra, then a block
 matrix family whose trace pairing vanishes on those word evaluations is zero. -/
 theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L : ℕ} (hSpan : WordTupleSpanTop A L)
     (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-    (hΔ : ∀ w : Fin L → Fin d,
+    (hΔ : ∀ w : Fin L → α,
       (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) :
     ∀ k, Δ k = 0 := by
   classical
@@ -191,8 +191,8 @@ simultaneous word-tuple span.
 
 This is the index transport used in the simultaneous BNT blocking of
 arXiv:1606.00608, lines 317--345. -/
-theorem wordTupleSpanTop_reindexPhysical_equiv {d' : ℕ}
-    (e : Fin d' ≃ Fin d) (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) :
+theorem wordTupleSpanTop_reindexPhysical_equiv {α' : Type*}
+    (e : α' ≃ α) (A : (k : Fin r) → MPTensor α (Fin (dim k))) (L : ℕ) :
     WordTupleSpanTop (fun k ↦ Kraus.reindexPhysical e (A k)) L ↔
       WordTupleSpanTop A L := by
   unfold WordTupleSpanTop
@@ -221,10 +221,12 @@ normalization to another while preserving the block-family indices and bond dime
 In the PGVWC07 normalization route it transports the certificate from a left-canonical
 prepared family back to the source unital/dual-fixed-point gauge. -/
 theorem wordTupleSpanTop_of_family_gaugeEquiv
-    {A B : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
+    [Finite α]
+    {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hSpan : WordTupleSpanTop A L)
     (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
     WordTupleSpanTop B L := by
+  have := Fintype.ofFinite α
   classical
   choose X hX using hGauge
   unfold WordTupleSpanTop at hSpan ⊢
@@ -268,7 +270,8 @@ blockwise invertible gauge relation.
 This is the directional form used when the certificate is known in the target gauge and is
 needed in the source gauge carrying the PGVWC07 positive dual fixed point. -/
 theorem wordTupleSpanTop_of_family_gaugeEquiv_symm
-    {A B : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
+    [Finite α]
+    {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hSpan : WordTupleSpanTop B L)
     (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
     WordTupleSpanTop A L :=
@@ -282,7 +285,8 @@ block bond dimension.  It supports transport between a left-canonical prepared g
 the source unital/dual-fixed-point gauge in the PGVWC07 separation argument; further
 normalization-dependent parent-Hamiltonian steps remain separate. -/
 theorem wordTupleSpanTop_iff_of_family_gaugeEquiv
-    {A B : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
+    [Finite α]
+    {A B : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
     WordTupleSpanTop A L ↔ WordTupleSpanTop B L :=
   ⟨fun hSpan ↦ wordTupleSpanTop_of_family_gaugeEquiv hSpan hGauge,

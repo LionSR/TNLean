@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensi
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalPolynomialTensorFamily
 import QICLean.Spectral.LowEnergy.ChebyshevViability
-import QICLean.Analysis.Parameter.LowDensityDyadicScale
+import QICLean.Analysis.Parameter.LowDensityCountParameters
 import QICLean.Analysis.FunctionalCalculus.ViableSubspaceSpectralProjector
 import QICLean.Analysis.TensorProduct.OperatorPower
 import QICLean.Algebra.Module.FinSpanOfFinrank

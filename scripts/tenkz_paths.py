@@ -2,7 +2,7 @@
 """Locate the pinned tenkz companion checkout.
 
 Resolution order: ``TENKZ_ROOT``, then ``.deps/tenkz`` after
-``scripts/fetch_tenkz.py``.
+``scripts/tenkz/fetch_tenkz.py``.
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ def tenkz_root() -> Path:
     if (deps / "tex/tenkz/tikz-tensor-networks.sty").is_file():
         return deps
     raise TenkzMissing(
-        "tenkz is not checked out; run python3 scripts/fetch_tenkz.py"
+        "tenkz is not checked out; run python3 scripts/tenkz/fetch_tenkz.py"
     )
 
 

@@ -18,7 +18,7 @@ global-gauge construction is at lines 1189–1192 of the Appendix MPV proof.
 
 The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
 exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
-`IsBNTCanonicalForm` and generating the same MPV family at every positive
+`IsLeftCanonicalBNTPresentation` and generating the same MPV family at every positive
 length:
 
 * the basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$ between
@@ -76,7 +76,7 @@ variable {d : ℕ}
 
 /-- **BNT equal-MPV global-gauge witness.**
 
-If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
+If two BNT sector decompositions satisfying `IsLeftCanonicalBNTPresentation` generate the
 same MPV family at every positive length, then there exist:
 
 * a basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$,
@@ -106,7 +106,7 @@ equal-MPV corollary; Appendix MPV proof lines 1182–1192 supply the block
 matching, copy-weight comparison, and global-gauge construction used here. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnesses
     {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -374,7 +374,7 @@ lemma permMatrix_conj_eq_submatrix {n : Type*}
 
 /-- **BNT equal-MPV literal global-gauge form.**
 
-If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
+If two BNT sector decompositions satisfying `IsLeftCanonicalBNTPresentation` generate the
 same MPV family at every positive length, then their total bond dimensions
 agree, and there exists an explicit
 $Y \in \mathrm{GL}(Q.\mathrm{totalDim},\mathbb{C})$ realizing the global gauge
@@ -392,7 +392,7 @@ sector permutation.
 CPSV16 §II.C lines 354–361. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,
@@ -507,7 +507,7 @@ of the block-diagonal direct sum of the matched sector unitaries and the
 unitary permutation that restores the original sector coordinates. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
@@ -613,7 +613,7 @@ invertible gauge `Y` carries one total tensor to the other.
 -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
       ∀ i : Fin d,
@@ -638,7 +638,7 @@ canonical forms matches the normal-tensor sectors bijectively.  For each
 -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)

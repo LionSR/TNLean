@@ -278,12 +278,12 @@ theorem torusAbsorbedGauge_unique_scalar
   have hUB := hBn.unionClosure
   rcases torusEdge_horizontal_or_vertical e with he | he
   · obtain ⟨Z, Zref, hE, ⟨w⟩⟩ := exists_edgeCoeffIdentityWitness_horizontalFamily
-      (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr hUA hUB (by omega) (by omega)
+      (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr (by omega) (by omega)
       (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB e he
     exact torusAbsorbedGauge_unique_scalar_of_region hbond w.region ⟨e, w.isBoundary⟩
       w.hRB w.hCB hposB X X' hedgeX hedgeX'
   · obtain ⟨Z, Zref, hE, ⟨w⟩⟩ := exists_edgeCoeffIdentityWitness_verticalFamily
-      (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr hUA hUB (by omega) (by omega)
+      (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr (by omega) (by omega)
       (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB e he
     exact torusAbsorbedGauge_unique_scalar_of_region hbond w.region ⟨e, w.isBoundary⟩
       w.hRB w.hCB hposB X X' hedgeX hedgeX'

@@ -108,8 +108,8 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
   obtain ⟨E, hEspec, hEmin, hline⟩ := Q.ground_line γ hγ N hN
   obtain ⟨E', hE'⟩ := hgap γ hγ N hN
   let H := (Interaction.translationInvariant N (P.interaction γ)).hamiltonian
-  have hmem (μ : ℂ) : μ ∈ spectrum ℂ H ↔ Module.End.HasEigenvalue (Matrix.toEuclideanLin H) μ := by
-    rw [← Matrix.spectrum_toLpLin (p := 2), Module.End.hasEigenvalue_iff_mem_spectrum]
+  have hmem (μ : ℂ) : μ ∈ spectrum ℂ H ↔ Module.End.HasEigenvalue (Matrix.toEuclideanLin H) μ :=
+    Matrix.hasEigenvalue_toEuclideanLin_iff_mem_spectrum.symm
   have hEE : E' = E := by
     refine le_antisymm ?_ ?_
     · rcases hE'.2 E ((hmem E).mp hEspec) with h | h

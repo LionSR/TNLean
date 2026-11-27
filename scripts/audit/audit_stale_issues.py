@@ -21,7 +21,7 @@ Typical workflow::
 
     gh issue list --repo OWNER/REPO --state open --limit 500 \
       --json number,title,body,url,labels > issues.json
-    python scripts/audit_stale_issues.py --issues issues.json
+    python scripts/audit/audit_stale_issues.py --issues issues.json
 
 """
 
@@ -503,7 +503,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "Example:\n"
             "  gh issue list --repo OWNER/REPO --state open --limit 500 \\\n"
             "    --json number,title,body,url > issues.json\n"
-            "  python scripts/audit_stale_issues.py --issues issues.json\n"
+            "  python scripts/audit/audit_stale_issues.py --issues issues.json\n"
         ),
     )
     parser.add_argument(
@@ -517,8 +517,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--repo-root",
         type=Path,
-        default=Path(__file__).resolve().parent.parent,
-        help="Repository root (default: parent of this script's directory).",
+        default=Path(__file__).resolve().parents[2],
+        help="Repository root (default: two levels above this script's directory).",
     )
     parser.add_argument(
         "--format",
@@ -584,7 +584,7 @@ def _self_test(repo_root: Path) -> int:
             "`Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef`.\n"
             "Also cites the structure field "
             "`AppendixBStructuralData.hU_pair`.\n"
-            "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
+            "Also mentions `scripts/audit/audit_stale_issues.py` (should be ignored)."
         ),
     }
     reports = run_audit([synthetic], repo_root)

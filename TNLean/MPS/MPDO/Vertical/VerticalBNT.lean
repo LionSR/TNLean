@@ -48,7 +48,7 @@ coisometry argument at lines 1903--1921 are not included.
 
 The common proof is parameterized by a normal vertical block decomposition and
 finite-chain separation of nonzero corners.  Both literal CPSV canonical form
-and normalized BNT-refined horizontal form supply these interfaces.
+and BNT-refined horizontal form supply these interfaces.
 
 ### Main statements
 
@@ -139,7 +139,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A nonzero vertical corner of a tensor in normalized BNT-refined horizontal
+/-- A nonzero vertical corner of a tensor in BNT-refined horizontal
 form has a nonzero first-site sector compression at some chain length.
 
 This is the separation assertion used in the proof of Proposition 4.13 of
@@ -218,7 +218,7 @@ gauge normalization and coisometry argument at lines 1903--1921 are not
 included.
 
 The proposition records the conclusion shared by the literal CPSV and
-normalized BNT-refined horizontal surfaces. -/
+BNT-refined horizontal surfaces. -/
 def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
@@ -472,7 +472,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
             ∑ k : Fin r, (μ k) ^ N * MPTensor.mpv (blocks k) w := by
               simpa [smul_eq_mul] using
                 (MPSTensor.mpv_toTensorFromBlocks_eq_sum
-                  (d := D * D) μ blocks w)
+                  (α := Fin (D * D)) μ blocks w)
         _ = ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
             (μ (classes.enum j q)) ^ N *
               MPTensor.mpv (blocks (classes.enum j q)) w :=
@@ -536,7 +536,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
                 Finset.sum_congr rfl fun q _ => ?_
               rw [hCornerEq j q v]
 
-/-- Group the normalized vertical corners of an MPDO in normalized BNT-refined
+/-- Group the normalized vertical corners of an MPDO in BNT-refined
 horizontal form by their gauge-phase classes while retaining the physical
 reducing isometries.
 
@@ -563,7 +563,7 @@ section RetainedClass
 ## Nonemptiness of the retained vertical phase classes
 
 This file proves that the vertical decomposition of a matrix product density
-operator in normalized BNT-refined horizontal form contains a nonzero sector.
+operator in BNT-refined horizontal form contains a nonzero sector.
 This horizontal hypothesis is stronger than literal CPSV canonical form.  The
 literal reconstruction of the vertical tensor then shows that the finite
 partition of the retained sectors into matrix-product-vector phase classes is
@@ -575,7 +575,7 @@ This is the nonemptiness observation used in arXiv:1606.00608, Proposition
 ### Main result
 
 * `IsHorizontalCF.exists_nonempty_verticalBNTGrouping`: a matrix product
-  density operator in normalized BNT-refined horizontal form has a retained
+  density operator in BNT-refined horizontal form has a retained
   vertical decomposition whose phase-class family is nonempty.
 -/
 
@@ -587,14 +587,15 @@ variable {d D : ℕ}
 
 /-- A tensor in BNT canonical form is nonzero.
 
-The global unit-modulus witness selects a basis block and one of its copies.
+The nonempty basis supplies a basis block and one of its copies.
 Left canonicity makes that basis tensor nonzero, while the selected copy has a
 nonzero weight. -/
 private theorem bntCanonicalForm_toTensor_ne_zero
     (P : MPSTensor.SectorDecomposition d)
-    (hP : MPSTensor.IsBNTCanonicalForm P) : P.toTensor ≠ 0 := by
+    (hP : MPSTensor.IsLeftCanonicalBNTPresentation P) : P.toTensor ≠ 0 := by
   classical
-  obtain ⟨j, q, _hq⟩ := hP.weight_unit_exists
+  let j : Fin P.basisCount := ⟨0, hP.basisCount_pos⟩
+  let q : Fin (P.copies j) := ⟨0, P.copies_pos j⟩
   have : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
   have hBasis : ∃ i, P.basis j i ≠ 0 := by
     by_contra hzero
@@ -630,7 +631,7 @@ private theorem bntCanonicalForm_toTensor_ne_zero
       Matrix.reindex_apply, Matrix.blockDiagonal'_apply_eq] using hentry.symm
   exact (mul_eq_zero.mp this).resolve_left hweight
 
-/-- The vertical tensor of an MPO tensor in normalized BNT-refined horizontal
+/-- The vertical tensor of an MPO tensor in BNT-refined horizontal
 form is nonzero.
 
 Source: arXiv:1606.00608, canonical form at lines 237--246 and Proposition
@@ -665,7 +666,7 @@ theorem IsHorizontalCF.verticalTensor_ne_zero
         (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) hi
   simpa [Matrix.mul_assoc] using hcancel
 
-/-- A matrix product density operator in normalized BNT-refined horizontal form
+/-- A matrix product density operator in BNT-refined horizontal form
 has a nonempty family of retained vertical phase classes.
 
 The retained normal sectors reconstruct every vertical letter.  Since the

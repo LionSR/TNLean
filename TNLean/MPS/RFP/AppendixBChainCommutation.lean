@@ -80,13 +80,16 @@ length-two parent interactions on every periodic chain of length (N>2).
 Source: arXiv:1606.00608, Definition 3.9, source lines 517--524; Theorem 3.10,
 source lines 534--540; and the structural characterization and basic-vector
 form, source lines 543--578. -/
-theorem AppendixBStructuralData.adjacent_twoSite_localTerms_commute
+theorem AppendixBStructuralData.adjacent_twoSite_parentRingInteraction_terms_commute
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     {N : ℕ} (hN : 2 < N) (i : Fin N) :
-    localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
-      localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i :=
-  localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute
-    (hStruct.localTerm_two_three_zero_one_commute_of_overlapping
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toLin' ((parentRingInteraction A 2 N).term i) *
+        Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) =
+      Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) *
+          Matrix.toLin' ((parentRingInteraction A 2 N).term i) :=
+  parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute
+    (hStruct.term_two_three_zero_one_commute_of_overlapping
       hStruct.hasOverlappingTwoSiteCommutation)
     (by omega) i
 
@@ -101,7 +104,7 @@ theorem AppendixBStructuralData.isNNCPH
     {N : ℕ} (hN : 2 < N) :
     IsNNCPH A N :=
   isNNCPH_of_adjacent_twoSite_commute (le_of_lt hN)
-    (hStruct.adjacent_twoSite_localTerms_commute hN)
+    (hStruct.adjacent_twoSite_parentRingInteraction_terms_commute hN)
 
 /-- A normal left-canonical renormalization fixed-point tensor has commuting
 length-two parent interactions on every periodic chain of length (N>2).
@@ -151,12 +154,12 @@ theorem rfp_implies_nncph (A : MPSTensor d D)
     IsNNCPH A N := by
   have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
-  have hRFP' : IsTransferIdempotent (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hRFP' : IsTransferIdempotent (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     hGauge.isTransferIdempotent_iff.mp hRFP
-  have hNormal' : Kraus.IsNormal (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hNormal' : Kraus.IsNormal (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     isNormal_of_gaugeEquiv hNT.isNormal hGauge
   have hNN := rfp_implies_nncph_of_leftCanonical
-    (Kraus.tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN
+    (Kraus.tpGauge (ι := Fin d) (D := D) A σ) hRFP' hNormal' hLeft N hN
   exact hGauge.symm.isNNCPH hNN
 
 end MPSTensor
@@ -187,7 +190,7 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_single
   have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   intro N hN
   have hInj : Kraus.IsInjective A := rfp_nt_structural A hNT.isNormal hRFP
-  rw [ker_parentHamiltonian_eq_chainGroundSpace A (by omega) (by omega),
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace A (by omega) (by omega),
     chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) (by omega),
     ← iSup_mpvSubmodule_eq_bntMPSVectorSpan (fun _ : Fin 1 ↦ A) N]
   simp

@@ -2,9 +2,9 @@
 
 \begin{definition}[Normalized faithful block fixed points]
     \label{def:ldp_canonical_block_fixed_points}
-    \lean{MPSTensor.IsBNTCanonicalForm.basisFixedPoint,
-        MPSTensor.IsBNTCanonicalForm.basisFixedPoint_spec,
-        MPSTensor.IsBNTCanonicalForm.basisFixedPointPair}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.basisFixedPoint,
+        MPSTensor.IsLeftCanonicalBNTPresentation.basisFixedPoint_spec,
+        MPSTensor.IsLeftCanonicalBNTPresentation.basisFixedPointPair}
     \leanok
     \uses{def:ldp_sector_fixed_point_state}
     Let $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\ldots,\mu_{j,m_j})
@@ -45,8 +45,8 @@
 
 \begin{lemma}[Orthonormal canonical block pairs]
     \label{thm:ldp_canonical_block_pair_isometry}
-    \lean{MPSTensor.IsBNTCanonicalForm.inner_basisFixedPointPair,
-        MPSTensor.IsBNTCanonicalForm.isIsometry_pairIsometry_basisFixedPointPair}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.inner_basisFixedPointPair,
+        MPSTensor.IsLeftCanonicalBNTPresentation.isIsometry_pairIsometry_basisFixedPointPair}
     \leanok
     \uses{def:ldp_canonical_block_fixed_points,thm:ldp_local_orthogonality,thm:ldp_ghz_form}
     The block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
@@ -106,7 +106,7 @@
 
 \begin{definition}[Corrected canonical one-copy state]
     \label{def:ldp_corrected_canonical_one_copy}
-    \lean{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.oneCopyFixedPointState}
     \leanok
     \uses{def:ldp_canonical_block_fixed_points,def:ldp_one_copy_weight}
     At $N=qM$, put $\beta'_j=\beta_j(c_j/\mu_{j,k_j}^q)^M$ and
@@ -123,8 +123,8 @@
 
 \begin{lemma}[Canonical GHZ form and normalization]
     \label{thm:ldp_corrected_canonical_ghz}
-    \lean{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_eq_piKronecker_mulVec_ghzState,
-        MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_norm_sq}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.oneCopyFixedPointState_eq_piKronecker_mulVec_ghzState,
+        MPSTensor.IsLeftCanonicalBNTPresentation.oneCopyFixedPointState_norm_sq}
     \leanok
     \uses{def:ldp_corrected_canonical_one_copy,thm:ldp_canonical_block_pair_isometry,thm:ldp_ghz_form}
     In bond coordinates the corrected state equals
@@ -173,8 +173,8 @@
 
 \begin{lemma}[Physical identification for the canonical tensor]
     \label{thm:ldp_corrected_canonical_physical}
-    \lean{MPSTensor.IsBNTCanonicalForm.nonNormalApproxVector_oneCopyFixedPoint,
-        MPSTensor.IsBNTCanonicalForm.nonNormalApproxOverlap_oneCopyFixedPoint}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.nonNormalApproxVector_oneCopyFixedPoint,
+        MPSTensor.IsLeftCanonicalBNTPresentation.nonNormalApproxOverlap_oneCopyFixedPoint}
     \leanok
     \uses{def:ldp_corrected_canonical_one_copy,thm:ldp_canonical_copy_coordinates,lem:ldp_one_copy_state}
     Let $q\geq1$, let $V$ be the polar factor of the $q$-site blocked

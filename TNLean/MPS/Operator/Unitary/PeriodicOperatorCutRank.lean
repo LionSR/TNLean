@@ -28,25 +28,29 @@ Sources: arXiv:2508.08160v2, `references/2508.08160/main.tex`,
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSPreparation
 open scoped BigOperators
+
+open ManyBody (interval mem_interval cutMatrix cutMatrix_apply cutRank RegionConfig ComplConfig)
 
 namespace MPUCircuit
 
 private def prefixTuple {p N k : ℕ} (hk : k ≤ N)
-    (u : CutPrefixConfig p N k) : Fin k → Fin p :=
-  fun i ↦ u ⟨⟨i.val, Nat.lt_of_lt_of_le i.isLt hk⟩, i.isLt⟩
+    (u : RegionConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) : Fin k → Fin p :=
+  fun i ↦ u ⟨⟨i.val, Nat.lt_of_lt_of_le i.isLt hk⟩, mem_interval.mpr ⟨Nat.zero_le _, i.isLt⟩⟩
 
-private def suffixTuple {p N k : ℕ} (v : CutSuffixConfig p N k) :
+private def suffixTuple {p N k : ℕ} (v : ComplConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) :
     Fin (N - k) → Fin p :=
-  fun i ↦ v ⟨⟨k + i.val, by omega⟩, Nat.le_add_right k i.val⟩
+  fun i ↦ v ⟨⟨k + i.val, by omega⟩, fun h ↦ by have := (mem_interval.mp h).2; dsimp at this; omega⟩
 
 private theorem ofFn_join_cut_eq_append {p N k : ℕ} (hk : k ≤ N)
-    (u : CutPrefixConfig p N k) (v : CutSuffixConfig p N k) :
-    List.ofFn (fun s : Fin N ↦
-      if h : s.val < k then u ⟨s, h⟩ else v ⟨s, Nat.le_of_not_lt h⟩) =
+    (u : RegionConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k))
+    (v : ComplConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) :
+    List.ofFn ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin p) (interval N 0 k)).symm (u, v)) =
       List.ofFn (prefixTuple hk u) ++ List.ofFn (suffixTuple v) := by
-  rw [List.ofFn_congr (show N = k + (N - k) by omega), List.ofFn_add]
+  rw [cutEquiv_symm_interval_zero, List.ofFn_congr (show N = k + (N - k) by omega), List.ofFn_add]
   congr 1
   · apply congrArg List.ofFn
     funext i
@@ -69,25 +73,25 @@ arbitrary fixed trace boundary is at most the number of pairs of virtual
 indices. No nonzero, normalization, or unitarity hypothesis is required.
 Source: arXiv:2508.08160v2, `eq:U_N_hom`, and the representation step in
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutCoefficientRank_traceBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
+theorem cutRank_traceBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
     (b : Matrix (Fin D) (Fin D) ℂ) (hk : k ≤ N) :
-    cutCoefficientRank (fun σ : Fin N → Fin p ↦
-      Matrix.trace (b * Kraus.evalWord A (List.ofFn σ))) k ≤ D * D := by
-  let F : Matrix (CutPrefixConfig p N k) (Fin D × Fin D) ℂ :=
+    cutRank (interval N 0 k) (fun σ : Fin N → Fin p ↦
+      Matrix.trace (b * Kraus.evalWord A (List.ofFn σ))) ≤ D * D := by
+  let F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) (Fin D × Fin D) ℂ :=
     fun u ij ↦ (b * Kraus.evalWord A (List.ofFn (prefixTuple hk u))) ij.1 ij.2
-  let G : Matrix (Fin D × Fin D) (CutSuffixConfig p N k) ℂ :=
+  let G : Matrix (Fin D × Fin D) (ComplConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) ℂ :=
     fun ij v ↦ Kraus.evalWord A (List.ofFn (suffixTuple v)) ij.2 ij.1
-  have hfactor : cutCoefficientMatrix (fun σ : Fin N → Fin p ↦
-      Matrix.trace (b * Kraus.evalWord A (List.ofFn σ))) k = F * G := by
+  have hfactor : cutMatrix (interval N 0 k) (fun σ : Fin N → Fin p ↦
+      Matrix.trace (b * Kraus.evalWord A (List.ofFn σ))) = F * G := by
     ext u v
-    simp only [cutCoefficientMatrix, ofFn_join_cut_eq_append hk u v,
+    simp only [cutMatrix_apply, ofFn_join_cut_eq_append hk u v,
       Kraus.evalWord_append, ← Matrix.mul_assoc]
     change Matrix.trace ((b * Kraus.evalWord A (List.ofFn (prefixTuple hk u))) *
         Kraus.evalWord A (List.ofFn (suffixTuple v))) =
       ∑ ij : Fin D × Fin D, (b * Kraus.evalWord A (List.ofFn (prefixTuple hk u)))
         ij.1 ij.2 * Kraus.evalWord A (List.ofFn (suffixTuple v)) ij.2 ij.1
     simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type]
-  change (cutCoefficientMatrix _ k).rank ≤ D * D
+  change (cutMatrix (interval N 0 k) _).rank ≤ D * D
   rw [hfactor]
   exact (Matrix.rank_mul_le_left F G).trans (by
     simpa only [Fintype.card_prod, Fintype.card_fin] using Matrix.rank_le_card_width F)
@@ -96,11 +100,11 @@ theorem cutCoefficientRank_traceBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
 has consecutive cut rank at most `D * D`, including the endpoint cuts.
 Source: the periodic-to-open-boundary observation in arXiv:2508.08160v2,
 lines 812--816 of `references/2508.08160/main.tex`. -/
-theorem cutCoefficientRank_mpv_le {p D N k : ℕ} (A : MPSTensor p D) (hk : k ≤ N) :
-    cutCoefficientRank (A.mpv (N := N)) k ≤ D * D := by
-  change cutCoefficientRank (fun σ : Fin N → Fin p ↦
-    Matrix.trace (Kraus.evalWord A (List.ofFn σ))) k ≤ D * D
-  simpa only [Matrix.one_mul] using cutCoefficientRank_traceBoundary_le A 1 hk
+theorem cutRank_mpv_le {p D N k : ℕ} (A : MPSTensor p D) (hk : k ≤ N) :
+    cutRank (interval N 0 k) (A.mpv (N := N)) ≤ D * D := by
+  change cutRank (interval N 0 k) (fun σ : Fin N → Fin p ↦
+    Matrix.trace (Kraus.evalWord A (List.ofFn σ))) ≤ D * D
+  simpa only [Matrix.one_mul] using cutRank_traceBoundary_le A 1 hk
 
 /-- Pairing the output and input letters of an ordinary periodic MPO yields
 exactly the periodic coefficient tensor of its doubled-letter MPS view.
@@ -121,35 +125,35 @@ operator and the coefficient flattening used by the finite-unitary circuit
 theorem, without any supplied decomposition witness.
 Source: arXiv:2508.08160v2, lines 812--816 of the local source, and Section 5
 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutCoefficientRank_operatorCoefficientTensor_mpo_le {d D N k : ℕ}
+theorem cutRank_operatorCoefficientTensor_mpo_le {d D N k : ℕ}
     (M : MPOTensor d D) (hk : k ≤ N) :
-    cutCoefficientRank (operatorCoefficientTensor (M.mpo N)) k ≤ D * D := by
+    cutRank (interval N 0 k) (operatorCoefficientTensor (M.mpo N)) ≤ D * D := by
   rw [operatorCoefficientTensor_mpo_eq_mpv]
-  exact cutCoefficientRank_mpv_le M.toMPSTensor hk
+  exact cutRank_mpv_le M.toMPSTensor hk
 
 /-- A uniform square tensor contracted between fixed scalar left and right
 boundary matrices has consecutive coefficient cut rank at most `D`.
 The factorization crosses only the single virtual bond at the cut.
 Source: the scalar open-boundary representation in arXiv:2508.08160v2,
 `eq:U_N_hom`, and Section 5 of the local circuit audit. -/
-theorem cutCoefficientRank_openBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
+theorem cutRank_openBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
     (l : Matrix Unit (Fin D) ℂ) (r : Matrix (Fin D) Unit ℂ) (hk : k ≤ N) :
-    cutCoefficientRank (fun σ : Fin N → Fin p ↦
-      (l * Kraus.evalWord A (List.ofFn σ) * r) () ()) k ≤ D := by
-  let F : Matrix (CutPrefixConfig p N k) (Fin D) ℂ :=
+    cutRank (interval N 0 k) (fun σ : Fin N → Fin p ↦
+      (l * Kraus.evalWord A (List.ofFn σ) * r) () ()) ≤ D := by
+  let F : Matrix (RegionConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) (Fin D) ℂ :=
     fun u i ↦ (l * Kraus.evalWord A (List.ofFn (prefixTuple hk u))) () i
-  let G : Matrix (Fin D) (CutSuffixConfig p N k) ℂ :=
+  let G : Matrix (Fin D) (ComplConfig (fun _ : Fin N ↦ Fin p) (interval N 0 k)) ℂ :=
     fun i v ↦ (Kraus.evalWord A (List.ofFn (suffixTuple v)) * r) i ()
-  have hfactor : cutCoefficientMatrix (fun σ : Fin N → Fin p ↦
-      (l * Kraus.evalWord A (List.ofFn σ) * r) () ()) k = F * G := by
+  have hfactor : cutMatrix (interval N 0 k) (fun σ : Fin N → Fin p ↦
+      (l * Kraus.evalWord A (List.ofFn σ) * r) () ()) = F * G := by
     ext u v
-    simp only [cutCoefficientMatrix, ofFn_join_cut_eq_append hk u v,
+    simp only [cutMatrix_apply, ofFn_join_cut_eq_append hk u v,
       Kraus.evalWord_append, ← Matrix.mul_assoc]
     change ((l * Kraus.evalWord A (List.ofFn (prefixTuple hk u))) *
       Kraus.evalWord A (List.ofFn (suffixTuple v)) * r) () () = (F * G) u v
     rw [Matrix.mul_assoc]
     rfl
-  change (cutCoefficientMatrix _ k).rank ≤ D
+  change (cutMatrix (interval N 0 k) _).rank ≤ D
   rw [hfactor]
   exact (Matrix.rank_mul_le_left F G).trans (by
     simpa only [Fintype.card_fin] using Matrix.rank_le_card_width F)
@@ -159,10 +163,10 @@ cut rank at most `D * D`. In particular, no invertibility condition on the
 boundary matrix is needed for this algebraic upper bound.
 Source: arXiv:2508.08160v2, `eq:U_N_hom`, and Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutCoefficientRank_operatorCoefficientTensor_traceBoundary_le {d D N k : ℕ}
+theorem cutRank_operatorCoefficientTensor_traceBoundary_le {d D N k : ℕ}
     (M : MPOTensor d D) (b : Matrix (Fin D) (Fin D) ℂ) (hk : k ≤ N) :
-    cutCoefficientRank (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
-      Matrix.trace (b * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y)))) k ≤
+    cutRank (interval N 0 k) (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
+      Matrix.trace (b * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y)))) ≤
       D * D := by
   have hcoeff : operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       Matrix.trace (b * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y))) =
@@ -172,18 +176,18 @@ theorem cutCoefficientRank_operatorCoefficientTensor_traceBoundary_le {d D N k :
     exact congrArg (fun X ↦ Matrix.trace (b * X))
       (MPOTensor.evalWord_toMPSTensor_ofFn M N σ).symm
   rw [hcoeff]
-  exact cutCoefficientRank_traceBoundary_le M.toMPSTensor b hk
+  exact cutRank_traceBoundary_le M.toMPSTensor b hk
 
 /-- A uniform MPO contracted with fixed scalar left and right boundary
 matrices has consecutive operator cut rank at most its virtual dimension.
 This statement concerns the displayed uniform square-tensor representation;
 it does not assume or conclude unitarity.
 Source: arXiv:2508.08160v2, `eq:U_N_hom`, and Section 5 of the local circuit audit. -/
-theorem cutCoefficientRank_operatorCoefficientTensor_openBoundary_le {d D N k : ℕ}
+theorem cutRank_operatorCoefficientTensor_openBoundary_le {d D N k : ℕ}
     (M : MPOTensor d D) (l : Matrix Unit (Fin D) ℂ)
     (r : Matrix (Fin D) Unit ℂ) (hk : k ≤ N) :
-    cutCoefficientRank (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
-      (l * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y) * r) () ())) k ≤ D := by
+    cutRank (interval N 0 k) (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
+      (l * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y) * r) () ())) ≤ D := by
   have hcoeff : operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       (l * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y) * r) () ()) =
       fun σ : Fin N → Fin (d * d) ↦
@@ -192,16 +196,17 @@ theorem cutCoefficientRank_operatorCoefficientTensor_openBoundary_le {d D N k : 
     exact congrArg (fun X ↦ (l * X * r) () ())
       (MPOTensor.evalWord_toMPSTensor_ofFn M N σ).symm
   rw [hcoeff]
-  exact cutCoefficientRank_openBoundary_le M.toMPSTensor l r hk
+  exact cutRank_openBoundary_le M.toMPSTensor l r hk
 
 /-- The bound on all consecutive operator cuts of an ordinary periodic MPO,
 in the exact form consumed by the finite-unitary circuit theorem.
 Source: arXiv:2508.08160v2, lines 812--816 of the local source, and Section 5
 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutCoefficientRank_operatorCoefficientTensor_mpo_le_all {d D N : ℕ}
+theorem cutRank_operatorCoefficientTensor_mpo_le_all {d D N : ℕ}
     (M : MPOTensor d D) :
-    ∀ k : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor (M.mpo N)) k.val ≤ D * D := by
+    ∀ k : Fin (N + 1), cutRank (interval N 0 k.val) (operatorCoefficientTensor (M.mpo N)) ≤ D *
+        D := by
   intro k
-  exact cutCoefficientRank_operatorCoefficientTensor_mpo_le M (by omega)
+  exact cutRank_operatorCoefficientTensor_mpo_le M (by omega)
 
 end MPUCircuit

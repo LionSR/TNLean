@@ -135,6 +135,28 @@ a paper-gap note (decision 1.D4).
    density matrices in QICLean); family 1 T9 and T10 (the source-faithful Fundamental Theorem on
    presentations).
 
+## Status after round 3 (2026-11-27)
+
+- **Family 1.** S0–S3 landed in rounds 1–2. S4 and S7: `IsBNTCanonicalForm` is now
+  `IsLeftCanonicalBNTPresentation`, a presentation of `P.toTensor` with left-canonical basis
+  tensors (`extends IsBNTSectorPresentation`), without the two line-246 weight fields; the
+  module `MPS/Tensor/DirectSum/SectorBNT.lean` became
+  `MPS/CanonicalForm/BNTPresentation/LeftCanonical.lean`. S5: T9, T10 and the equal case are
+  proved on presentations (`MPS/FundamentalTheorem/Sectors/Presentation.lean`), and the ch11
+  source entries point to them (decision 1.D4(b)). S6 (the D1 renames) is deferred: the
+  tensor-types lane restates `IsCPSVCanonicalForm` in the same round.
+- **Family 5.** FF9: `regionalTruncationInteraction` with
+  `zeroSpace_regionalTruncationInteraction`. D3: the chain layer (`chainOperator`,
+  `chainReplacement` and their lemmas) is deleted in favour of the truncation on a
+  `BondInteraction`; the three-region lemmas keep the bare family and `chainTerm`.
+- **Family 6.** The `pow_four` copies are deleted and two blocked-spelling theorems restated
+  with `Kraus.IsNBlkInjective`. D6: `isNBlkInjective_of_le_of_canonical` stays, since every
+  caller starts from a length that may be zero. D3: the union-closure hypothesis is stripped
+  from the source-facing PEPS statements whose tensors carry positive bonds; only
+  `regionInjectivityUnionClosure_of_overlap` remains as the concrete provider. D5 stays with
+  the tensor-types plan T.1. In QICLean, `Kraus.isInjective_iff_isNBlkInjective_one` and
+  `Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero` replace the TNLean copies.
+
 ## Open decisions
 
 Each section ends with its decisions; the ones that change a public name or a blueprint status are
@@ -864,7 +886,7 @@ by directory. "pattern" rows count the files matching the quoted text (`rewrite.
 | FF12 | AKLV: `aklv_frustrationFree_dimension_and_gap_bounds` (`AKLV/FrustrationFreeGapBounds.lean:34`), `exists_aklv_frustrationFree_chebyshev_filter` (`AKLV/FrustrationFreeFilter.lean:122`), `…_two_filter_approximant`/`…_per_cut_…`/`…_sequential_mps_approximation` (`AKLV/FrustrationFreeMPSApproximation.lean`), `exists_aklv_frustrationFree_physical_entropy_bound` (`AKLV/FrustrationFreeEntropy.lean:51`), `frustrationFree_twoSidedEnergyTruncation_ground_gap` (`AKLV/FrustrationFreeClipping.lean`), `exists_frustrationFree_chain_chebyshev_filter` (`AKLV/ChebyshevProjector.lean:241`) | inline bundle `(Φ : BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (hΩ : ‖Ω‖ = 1) (hzero : Φ.hamiltonian *ᵥ ofLp Ω = 0) (hgap : …)` | AKLV arXiv:1301.1162v1 §5 before eq. (4), Thm `t:ent` lines 820–846 | pattern `Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0`: 5 files / 8; pattern `toEuclideanLin H Ω = 0` (`H := Φ.hamiltonian`): 1 file / 3 | the bond family is already `BondInteraction` (the audit's H1 sweep has landed: `ManyBody.BondInteraction` in 228 MPS/AreaLaw modules). `hzero ↔ Ω ∈ Φ.zeroSpace` **under `h0`** (`hamiltonian_mulVec_eq_zero_iff_mem_zeroSpace'`, New.lean, elaborated) |
 | FF12′ | physical detectability: `PhysicalDetectability.lean:367,383,394,407`, `PhysicalDetectabilityGap.lean:42,49`, `PhysicalRangeDetectability.lean:40,56,64`, `PhysicalFrustrationFreeTruncation.lean:121` | `toEuclideanCLM Φ.hamiltonian z = 0` with `hp : ∀ i, IsStarProjection (Φ.term i)` | ALVV `def:DLO`, `thm:FF-tH` | 4 files / 10 | same clause: `↔ z ∈ Φ.zeroSpace` under positivity (`zeroVector_tfae` clause 5) |
 | FF13 | PEPS constraint families: `PositiveConstraints.lean:194,285,333`, `LatticeConstraints.lean:99,197,240`, `FiniteSetTruncationGap.lean:78,140`, `AmplificationProof.lean:380,514`, `Amplification/{LocalConstraintProducts:98, LatticeChannelSpatialOmission:152,219,274, ConstraintWordTruncation:397}` | `∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ ofLp Ω = 0` for the filtered constraints `k i`, supported on the connected component of `a i` | OpenAI area law, Prop. 4.3 (`03-quasilocal.tex` lines 220–334) | lattice level 7 files / 15; matrix-level lemmas `Amplification/ConstraintWordLists.lean:80,93`, `ChannelGroundVectors.lean:67,89` on bare `Matrix n n` | the constraints are an `Interaction` with supports the reachable components; then the bundle is `(∀ i, 0 ≤ κ.term i ≤ 1) ∧ Ω ∈ κ.zeroSpace` (definitional, `mem_zeroSpace_iff`). The matrix-level lemmas mention no sites: different (abstract) statements, stay (decision D4) |
-| FF14 | `SweepContraction`, `RangeProjection` | — | ALVV §6.1 | definitions moved to QICLean `main` (`Analysis/SweepContraction.lean`, `Analysis/SupportProjectionOrder.lean`); remaining duplicate `QuantumCircuit.supportProj_mem_supportedOperators`, `Circuit/SupportProjection.lean:27` (Circuit 1, MPS/AreaLaw 1, PEPS/AreaLaw 1) of QICLean `ManyBody.supportProj_mem_supportedOperators` (`Sites/Twirl.lean:505`) | not a frustration-free encoding; tracked by #10939; listed only |
+| FF14 | `SweepContraction`, `RangeProjection` | — | ALVV §6.1 | definitions moved to QICLean `main` (`Analysis/Projection/SweepContraction.lean`, `Analysis/Support/ProjectionOrder.lean`); the duplicate `QuantumCircuit.supportProj_mem_supportedOperators` is gone, and `ManyBody.supportProj_mem_supportedOperators` (`Sites/Twirl.lean`) is the one statement; the sweep hypotheses are required only below `m` (#10940) | not a frustration-free encoding; done (#10939) |
 | FF15 | `regionParentHamiltonian` | — | CPGSV21 lines 2003–2011 | `regionParentHamiltonian` 0 (replaced by `ManyBody.Interaction.ofPlace R h`, `RegionParentInteraction.lean:199–231`). Residual: `ker_regionParentHamiltonian` `:199` (PEPS/ParentHamiltonian 26/43), `place_stateCoeff_eq_zero` `:168` (1/2), `regionParentHamiltonian_stateCoeff_eq_zero` `:225` (1/1) | done for the Hamiltonian; the frustration-free vector statement is `toLp (stateCoeff A) ∈ (ofPlace R h).zeroSpace` (New.lean Part B). `ker_regionParentHamiltonian` names a deleted declaration (rename, decision D5) |
 | FF16 | ring/open parent Hamiltonians: `localTerm` `Defs.lean:311` (17/144), `parentHamiltonian` `:318` (29/70) — now `Matrix.toLin'` of `parentRingInteraction A hLN` (`:290`); Euclidean copies `localTermES` `Martingale/Transport.lean:109` (39/288), `parentHamiltonianES` `:167` (68/286), `openParentHamiltonianES` `Martingale/OpenHamiltonian.lean:46` (79/377), `periodicInteractionHamiltonianES` `Martingale/PeriodicInteraction.lean:57` (30/206), `openInteractionHamiltonianES` `Martingale/OpenInteraction.lean:30` (61/236), `obcParentHamiltonian` `VaryingOBCProjectorKernel.lean:138` (5/14) | sums of placed translates of one positive local term | PGVWC07 Thms 9, 11; Nachtergaele (3.12) | as listed | a second representation of the Hamiltonian, tracked by #10948. The frustration-free step repeated on the copies is "a positive sum kills `x` iff every term does": `ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero` 6/7, `WeightedPositiveKernel.apply_sum_eq_zero_iff` 10/15 — all instances of `zeroVector_tfae` once the copies are `Interaction.hamiltonian` |
 

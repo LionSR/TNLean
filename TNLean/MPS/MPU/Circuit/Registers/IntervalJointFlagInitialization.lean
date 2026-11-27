@@ -72,8 +72,9 @@ theorem intervalJointOutputEmbedding_joiningFlag_zero
     (em : r ↪ Cfg d (cutBondRegisterWidth d D N m))
     (ej : l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : n ↪ Cfg d (cutBondRegisterWidth d D N k))
-    (p : ((CutIntervalConfig d N j.val m.val × (r × l)) ×
-      (CutIntervalConfig d N m.val k.val × (n × r))) ×
+    (p : ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) × (r ×
+        l)) ×
+      (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val) × (n × r))) ×
         ({s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j m k hjm hmk} → Fin d))
     (s : LogicalSite d D N) (hs : s ∈ joiningFlagSupport d D N m.val) :
     intervalJointOutputEmbedding j m k hjm hmk em ej ek

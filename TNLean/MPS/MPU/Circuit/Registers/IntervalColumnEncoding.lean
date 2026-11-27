@@ -113,8 +113,9 @@ physical sites.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def intervalPhysicalZeroConfig {d D N : ℕ} [NeZero d] (j k : ℕ)
-    (x : CutIntervalConfig d N j k) : LogicalSite d D N → Fin d
-  | Sum.inl s => if h : j ≤ s.val ∧ s.val < k then x ⟨s, h⟩ else 0
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j
+        k)) : LogicalSite d D N → Fin d
+  | Sum.inl s => if h : j ≤ s.val ∧ s.val < k then x ⟨s, ManyBody.mem_interval.mpr h⟩ else 0
   | Sum.inr _ => 0
 
 /-- Restriction of the initialized configuration to an interval physical site gives the physical
@@ -122,24 +123,28 @@ input.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPhysicalZeroConfig_physical {d D N : ℕ} [NeZero d] (j k : ℕ)
-    (x : CutIntervalConfig d N j k) (s : Fin N) (hs : j ≤ s.val ∧ s.val < k) :
-    intervalPhysicalZeroConfig (D := D) j k x (Sum.inl s) = x ⟨s, hs⟩ := by
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) (s : Fin N) (hs :
+        j ≤ s.val ∧ s.val < k) :
+    intervalPhysicalZeroConfig (D := D) j k x (Sum.inl s) =
+      x ⟨s, ManyBody.mem_interval.mpr hs⟩ := by
   simp only [intervalPhysicalZeroConfig, dite_eq_left hs]
 
 /-- Encoding of the physical input with every interval auxiliary initialized to zero.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def intervalInputEmbedding {d D N : ℕ} [NeZero d] (j k : ℕ) :
-    CutIntervalConfig d N j k ↪ Cfg d (intervalPacketCard d D N j k) where
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j
+        k) ↪ Cfg d (intervalPacketCard d D N j k) where
   toFun x := intervalPhysicalZeroConfig (D := D) j k x ∘ intervalPacketLogicalSite d D N j k
   inj' x y h := by
     classical
     funext s
-    obtain ⟨i, hi⟩ := intervalPacketLogicalSite_surjective (D := D) (Sum.inl s.val) s.2
+    have hs := ManyBody.mem_interval.mp s.2
+    obtain ⟨i, hi⟩ := intervalPacketLogicalSite_surjective (D := D) (Sum.inl s.val) hs
     have hh := congrFun h i
     change intervalPhysicalZeroConfig j k x (intervalPacketLogicalSite d D N j k i) =
       intervalPhysicalZeroConfig j k y (intervalPacketLogicalSite d D N j k i) at hh
-    simpa only [hi, intervalPhysicalZeroConfig_physical j k _ _ s.2] using hh
+    simpa only [hi, intervalPhysicalZeroConfig_physical j k _ _ hs] using hh
 
 /-- The physical output and the separate right and left boundary bond encodings, with every
 remaining auxiliary zero.
@@ -149,7 +154,8 @@ noncomputable def intervalBoundaryConfig {d D N : ℕ} [NeZero d] {ρ σ : Type*
     (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j))
-    (x : CutIntervalConfig d N j.val k.val × (ρ × σ)) : LogicalSite d D N → Fin d :=
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ ×
+        σ)) : LogicalSite d D N → Fin d :=
   Function.extend (cutBondSiteEmbedding d D N k 0) (eρ x.2.1)
     (Function.extend (cutBondSiteEmbedding d D N j 1) (eσ x.2.2)
       (intervalPhysicalZeroConfig j.val k.val x.1))
@@ -161,7 +167,8 @@ theorem intervalBoundaryConfig_right {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j))
-    (x : CutIntervalConfig d N j.val k.val × (ρ × σ)) :
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ ×
+        σ)) :
     intervalBoundaryConfig j k eρ eσ x ∘ cutBondSiteEmbedding d D N k 0 = eρ x.2.1 :=
   Function.extend_comp (cutBondSiteEmbedding d D N k 0).injective _ _
 
@@ -172,7 +179,8 @@ theorem intervalBoundaryConfig_left {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j))
-    (x : CutIntervalConfig d N j.val k.val × (ρ × σ)) :
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ ×
+        σ)) :
     intervalBoundaryConfig j k eρ eσ x ∘ cutBondSiteEmbedding d D N j 1 = eσ x.2.2 := by
   funext q
   change Function.extend _ _ _ (cutBondSiteEmbedding d D N j 1 q) = _
@@ -189,9 +197,9 @@ theorem intervalBoundaryConfig_physical {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j))
-    (x : CutIntervalConfig d N j.val k.val × (ρ × σ))
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ × σ))
     (s : Fin N) (hs : j.val ≤ s.val ∧ s.val < k.val) :
-    intervalBoundaryConfig j k eρ eσ x (Sum.inl s) = x.1 ⟨s, hs⟩ := by
+    intervalBoundaryConfig j k eρ eσ x (Sum.inl s) = x.1 ⟨s, ManyBody.mem_interval.mpr hs⟩ := by
   unfold intervalBoundaryConfig
   rw [Function.extend_apply' _ _ _ (by rintro ⟨q, hq⟩; cases hq),
     Function.extend_apply' _ _ _ (by rintro ⟨q, hq⟩; cases hq)]
@@ -205,7 +213,7 @@ noncomputable def intervalOutputEmbedding {d D N : ℕ} [NeZero d] {ρ σ : Type
     (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j)) :
-    (CutIntervalConfig d N j.val k.val × (ρ × σ)) ↪
+    (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ × σ)) ↪
       Cfg d (intervalPacketCard d D N j.val k.val) where
   toFun x := intervalBoundaryConfig j k eρ eσ x ∘ intervalPacketLogicalSite d D N j.val k.val
   inj' x y h := by
@@ -217,8 +225,8 @@ noncomputable def intervalOutputEmbedding {d D N : ℕ} [NeZero d] {ρ σ : Type
       exact hi ▸ congrFun h i
     apply Prod.ext
     · funext s
-      simpa only [intervalBoundaryConfig_physical j k _ _ _ _ s.2] using
-        heq (Sum.inl s.val) s.2
+      simpa only [intervalBoundaryConfig_physical j k _ _ _ _ (ManyBody.mem_interval.mp s.2)] using
+        heq (Sum.inl s.val) (ManyBody.mem_interval.mp s.2)
     · apply Prod.ext
       · apply eρ.injective
         funext q
@@ -239,7 +247,8 @@ theorem intervalBoundaryConfig_interior {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     (j k : Fin (N + 1))
     (eρ : ρ ↪ Cfg d (cutBondRegisterWidth d D N k))
     (eσ : σ ↪ Cfg d (cutBondRegisterWidth d D N j))
-    (x : CutIntervalConfig d N j.val k.val × (ρ × σ)) :
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) × (ρ ×
+        σ)) :
     IsIntervalInteriorInitialized j.val k.val (intervalBoundaryConfig j k eρ eσ x) 0 := by
   intro s hs
   have hR : ¬∃ q, cutBondSiteEmbedding d D N k 0 q = s := by

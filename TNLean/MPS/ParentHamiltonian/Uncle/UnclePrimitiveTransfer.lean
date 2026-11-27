@@ -9,7 +9,7 @@ import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
 import QICLean.Channel.Irreducible.CollatzWielandt
 import QICLean.Kraus.Injectivity
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 
@@ -66,24 +66,9 @@ theorem uncleTransfer_isPrimitive_of_injective_unital [NeZero D]
     (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1) :
     _root_.IsPrimitive (Kraus.mapLM A) := by
   classical
-  let S := Submodule.span ℂ (Set.range fun i ↦ (A i)ᴴ)
-  have hstar (Y : Matrix (Fin D) (Fin D) ℂ)
-      (hY : Y ∈ Submodule.span ℂ (Set.range A)) : Yᴴ ∈ S := by
-    induction hY using Submodule.span_induction with
-    | mem Y hY =>
-        obtain ⟨i, rfl⟩ := hY
-        exact Submodule.subset_span ⟨i, rfl⟩
-    | zero => simp
-    | add X Y _ _ hX hY =>
-        simpa only [Matrix.conjTranspose_add] using S.add_mem hX hY
-    | smul c X _ hX =>
-        simpa only [Matrix.conjTranspose_smul] using S.smul_mem (star c) hX
-  have hspan : Kraus.wordSpan (fun i ↦ (A i)ᴴ) 1 = ⊤ := by
-    rw [Kraus.wordSpan_one]
-    apply Submodule.eq_top_iff'.mpr
-    intro X
-    simpa only [Matrix.conjTranspose_conjTranspose] using
-      hstar Xᴴ (by rw [hA.span_eq_top]; exact Submodule.mem_top)
+  have hspan : Kraus.wordSpan (fun i ↦ (A i)ᴴ) 1 = ⊤ :=
+    (Kraus.isNBlkInjective_conjTranspose_iff A 1).mpr
+      ((Kraus.isInjective_iff_isNBlkInjective_one A).mp hA)
   have hTP : Kraus.IsTP (fun i ↦ (A i)ᴴ) := by
     simpa only [Kraus.IsTP, Matrix.conjTranspose_conjTranspose,
       Kraus.mapLM_apply, Kraus.map_apply, Matrix.mul_one] using hU

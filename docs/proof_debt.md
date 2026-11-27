@@ -21,9 +21,9 @@ The process has these artifacts:
 - `.claude/workflows/proof-shrink-tournament.js` — the demolition audit:
   nine lenses hunting mathematically excessive code rankable by *net
   deletable lines* (`name: 'proof-shrink-tournament'`).
-- `scripts/loc_report.py` — the deterministic size snapshot feeding the
+- `scripts/reports/loc_report.py` — the deterministic size snapshot feeding the
   Metrics table.
-- `scripts/zero_reference_scan.py` — the exact-head residue of ledger entry
+- `scripts/audit/zero_reference_scan.py` — the exact-head residue of ledger entry
   S2: every public, unattributed declaration whose final name component
   occurs nowhere but at its own definition across the Lean tree, the
   blueprint, `docs/`, `Notes/`, `Papers/` and `scripts/`, iterated so that
@@ -89,7 +89,7 @@ that removes code the mathematics and physics never needed — code generated
 by the process of formalization (staged exploration, hand-mirroring,
 forked variants, degenerate-case admission) rather than by the theorems.
 
-1. **Measure (weekly, with the audit).** Run `python3 scripts/loc_report.py`
+1. **Measure (weekly, with the audit).** Run `python3 scripts/reports/loc_report.py`
    and append the row to the ledger's Metrics table. The tracked quantities
    — total lines, cross-file duplicated windows, numbered-sequel files,
    cap-riding files, degenerate-case sites, sorries — must trend down or

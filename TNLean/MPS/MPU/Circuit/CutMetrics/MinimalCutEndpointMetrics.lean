@@ -16,6 +16,8 @@ weighted full interval equals the original unitary, with its complex phase.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 open scoped Matrix ComplexOrder
 
@@ -92,20 +94,20 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem prefixInputGram_minimalOperatorPrefix_zero {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
-    (ρ : Matrix (MPSPreparation.CutPrefixConfig d N 0)
-      (MPSPreparation.CutPrefixConfig d N 0) ℂ) :
+    (ρ : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0))
+      (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) ℂ) :
     prefixInputGram (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q) ρ =
       trace ρ • 1 := by
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
-  let : Unique (MPSPreparation.CutPrefixConfig d N 0) := Classical.choice
-    (Fintype.card_eq_one_iff_nonempty_unique.mp (MPSPreparation.card_cutPrefixConfig_zero d N))
-  let : Unique (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) :=
-    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_zero
-        (operatorCoefficientTensor U) hψ))
+  let : Unique (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) := Classical.choice
+    (Fintype.card_eq_one_iff_nonempty_unique.mp
+        (MPSPreparation.card_regionConfig_interval_zero_zero d N))
+  let : Unique (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
+    Equiv.unique (finCongr (MPSPreparation.cutRank_zero_eq_one hψ))
   apply prefixInputGram_eq_trace_smul_one_of_empty_cap
   intro aa bb q
   change (B 0 q).val (pairPhysicalConfig aa bb) = 1
@@ -119,20 +121,20 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem prefixInputGram_minimalOperatorPrefix_last {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hBN : ∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U))
-    (ρ : Matrix (MPSPreparation.CutPrefixConfig d N N)
-      (MPSPreparation.CutPrefixConfig d N N) ℂ) :
+    (ρ : Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N))
+      (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) ℂ) :
     prefixInputGram (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B N aa bb q) ρ =
       trace ρ • 1 := by
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
-  let : Unique (MPSPreparation.CutSuffixConfig d N N) := Classical.choice
-    (Fintype.card_eq_one_iff_nonempty_unique.mp (MPSPreparation.card_cutSuffixConfig_last d N))
-  let : Unique (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) :=
-    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_last
-        (operatorCoefficientTensor U) hψ))
+  let : Unique (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) := Classical.choice
+    (Fintype.card_eq_one_iff_nonempty_unique.mp
+        (MPSPreparation.card_complConfig_interval_zero_self d N))
+  let : Unique (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :=
+    Equiv.unique (finCongr (MPSPreparation.cutRank_self_eq_one hψ))
   apply prefixInputGram_eq_trace_smul_one_of_suffix_cap
     (minimalOperatorPrefixFactor U B N) (minimalOperatorSuffixFactor U B N)
     (minimalOperatorFactors_isIsometry U hU B N)
@@ -146,14 +148,14 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem prefixGramAffineHull_minimalOperatorPrefix_zero {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1) :
     prefixGramAffineHull (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q) =
       ({1} : AffineSubspace ℝ
-        (Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-          (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) ℂ)) := by
-  let : Nonempty (MPSPreparation.CutPrefixConfig d N 0) := ⟨fun _ ↦ ⟨0, hd⟩⟩
+        (Matrix (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+          (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) ℂ)) := by
+  let : Nonempty (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 0)) := ⟨fun _ ↦ ⟨0, hd⟩⟩
   exact prefixGramAffineHull_eq_singleton_one_of_gram_eq_trace _
     (prefixInputGram_minimalOperatorPrefix_zero hd U hU B hB0)
 
@@ -163,14 +165,14 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem prefixGramAffineHull_minimalOperatorPrefix_last {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hBN : ∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) :
     prefixGramAffineHull (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B N aa bb q) =
       ({1} : AffineSubspace ℝ
-        (Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N))
-          (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) ℂ)) := by
-  let : Nonempty (MPSPreparation.CutPrefixConfig d N N) := ⟨fun _ ↦ ⟨0, hd⟩⟩
+        (Matrix (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)))
+          (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) ℂ)) := by
+  let : Nonempty (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N)) := ⟨fun _ ↦ ⟨0, hd⟩⟩
   exact prefixGramAffineHull_eq_singleton_one_of_gram_eq_trace _
     (prefixInputGram_minimalOperatorPrefix_last hd U hU B hBN)
 
@@ -180,11 +182,11 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem eq_one_of_mem_minimalOperatorPrefixHull_zero {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
-    {P : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) ℂ}
+    {P : Matrix (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) ℂ}
     (hP : P ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q)) : P = 1 := by
   rw [prefixGramAffineHull_minimalOperatorPrefix_zero hd U hU B hB0] at hP
@@ -196,25 +198,15 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem eq_one_of_mem_minimalOperatorPrefixHull_last {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hBN : ∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U))
-    {P : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N))
-      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) ℂ}
+    {P : Matrix (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) ℂ}
     (hP : P ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B N aa bb q)) : P = 1 := by
   rw [prefixGramAffineHull_minimalOperatorPrefix_last hd U hU B hBN] at hP
   exact hP
-
-/-- The configurations of the full interval are exactly the configurations of the physical chain.
-
-See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-def fullCutIntervalConfigEquiv (d N : ℕ) :
-    (Fin N → Fin d) ≃ MPSPreparation.CutIntervalConfig d N 0 N where
-  toFun x := fun s ↦ x s.1
-  invFun x := fun s ↦ x ⟨s, Nat.zero_le _, s.isLt⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
 
 /-- The full interval tensor of the endpoint-normalized minimal representation recovers the
 original unitary, including its complex phase.
@@ -223,30 +215,30 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalOperatorInterval_full_apply {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U))
     (x y : Fin N → Fin d)
-    (α : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-    (β : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) :
+    (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+    (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     minimalOperatorInterval U B (Nat.zero_le N)
-      (fullCutIntervalConfigEquiv d N x) (fullCutIntervalConfigEquiv d N y) α β = U x y := by
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm x)
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm y) α β = U x y := by
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
-  let : Unique (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) :=
-    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_zero
-        (operatorCoefficientTensor U) hψ))
-  let u : MPSPreparation.CutPrefixConfig (d * d) N 0 :=
-    fun s ↦ False.elim (Nat.not_lt_zero _ s.2)
-  let w := pairPhysicalConfig (fullCutIntervalConfigEquiv d N x)
-    (fullCutIntervalConfigEquiv d N y)
+  let : Unique (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
+    Equiv.unique (finCongr (MPSPreparation.cutRank_zero_eq_one hψ))
+  let u : RegionConfig (fun _ : Fin N ↦ Fin (d * d)) (interval N 0 0) :=
+    fun s ↦ False.elim (Nat.not_lt_zero _ (MPSPreparation.mem_interval_zero_iff.mp s.2))
+  let w := pairPhysicalConfig ((MPSPreparation.finalCutPrefixEquiv d N).symm x)
+    ((MPSPreparation.finalCutPrefixEquiv d N).symm y)
   have h := MPSPreparation.cutPrefixMatrix_interval (operatorCoefficientTensor U) B
     (Nat.zero_le N) u w β
   have hcfg : MPSPreparation.joinCutPrefix 0 N u w =
       MPSPreparation.cutPrefixRestriction (pairPhysicalConfig x y) N := by
     funext s
-    simp [MPSPreparation.joinCutPrefix, w, fullCutIntervalConfigEquiv,
+    simp [MPSPreparation.joinCutPrefix, w, MPSPreparation.finalCutPrefixEquiv,
       pairPhysicalConfig, MPSPreparation.cutPrefixRestriction]
   rw [hcfg] at h
   simp only [MPSPreparation.cutPrefixMatrix, hB0, hBN, Pi.one_apply, Matrix.mul_apply,
@@ -256,8 +248,7 @@ theorem minimalOperatorInterval_full_apply {d N : ℕ}
   rw [operatorCoefficientTensor_apply] at h
   change U x y = MPSPreparation.cutIntervalMatrix (operatorCoefficientTensor U) B
     (Nat.zero_le N) w default β at h
-  rw [Subsingleton.elim (default : Fin (MPSPreparation.cutCoefficientRank
-      (operatorCoefficientTensor U) 0)) α]
+  rw [Subsingleton.elim (default : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) α]
     at h
   exact h.symm
 
@@ -268,30 +259,31 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem weightedMinimalOperatorInterval_full_apply {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U))
-    {P : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) ℂ}
+    {P : Matrix (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) ℂ}
     (hP : P ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q))
-    {S : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N))
-      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) ℂ}
+    {S : Matrix (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) ℂ}
     (hS : S ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B N aa bb q))
     (x y : Fin N → Fin d)
-    (α : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-    (β : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) :
+    (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+    (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
       (CFC.sqrt P) (CFC.sqrt (dualGramMetric S))
-      (fullCutIntervalConfigEquiv d N x, (β, α)) (fullCutIntervalConfigEquiv d N y) = U x y := by
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α))
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm y) = U x y := by
   rw [eq_one_of_mem_minimalOperatorPrefixHull_zero hd U hU B hB0 hP,
     eq_one_of_mem_minimalOperatorPrefixHull_last hd U hU B hBN hS]
-  have hc : Fintype.card (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor
-      U) N)) = 1 := by
+  have hc : Fintype.card (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor
+      U))) = 1 := by
     simp only [Fintype.card_fin]
-    exact MPSPreparation.cutCoefficientRank_last (operatorCoefficientTensor U)
+    exact MPSPreparation.cutRank_self_eq_one
       (operatorCoefficientTensor_ne_zero hd U hU)
   rw [dualGramMetric_one_of_card_eq_one hc]
   simp only [vectorizedWeightedInterval, CFC.sqrt_one, Matrix.one_mul, Matrix.mul_one]
@@ -304,24 +296,24 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem weightedMinimalOperatorInterval_full_submatrix {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     (hB0 : ∀ q, (B 0 q).val = 1)
     (hBN : ∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U))
-    {P : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) ℂ}
+    {P : Matrix (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) ℂ}
     (hP : P ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B 0 aa bb q))
-    {S : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N))
-      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) ℂ}
+    {S : Matrix (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) ℂ}
     (hS : S ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B N aa bb q))
-    (α : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-    (β : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) :
+    (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+    (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
       (CFC.sqrt P) (CFC.sqrt (dualGramMetric S))).submatrix
-      (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-      (fullCutIntervalConfigEquiv d N) = U := by
+      (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U := by
   ext x y
   exact weightedMinimalOperatorInterval_full_apply hd U hU B hB0 hBN hP hS x y α β
 
@@ -334,14 +326,13 @@ theorem exists_normalized_minimalInterval_family_of_unitary {d N : ℕ}
     (hd : 0 < d) (hN : 0 < N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) k))
+    ∃ B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧
       ∃ P : ∀ j : Fin (N + 1),
-          Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
-            (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ,
+          Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+            (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ,
         (∀ j, P j ∈ prefixGramAffineHull
             (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q) ∧
           (P j).PosDef ∧ (dualGramMetric (P j)).PosDef ∧
@@ -349,19 +340,19 @@ theorem exists_normalized_minimalInterval_family_of_unitary {d N : ℕ}
               (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q),
             trace (X * dualGramMetric (P j)) = 1) ∧
           trace ((dualGramMetric (P j))⁻¹ * (P j)⁻¹) =
-            (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val : ℂ) ^ 2) ∧
+            (cutRank (interval N 0 j.val) (operatorCoefficientTensor U) : ℂ) ^ 2) ∧
         (∀ (j k : Fin (N + 1)) (hjk : j.val ≤ k.val),
           (vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
               (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))))ᴴ *
             vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
               (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))) = 1) ∧
         P 0 = 1 ∧ P (Fin.last N) = 1 ∧
-        ∀ (α : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-          (β : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)),
+        ∀ (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+          (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-            (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-            (fullCutIntervalConfigEquiv d N) = U := by
+            (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+            ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals⟩ :=
     exists_simultaneous_balanced_interval_isometries_of_unitary hd hN U hU
   have h0 := eq_one_of_mem_minimalOperatorPrefixHull_zero hd U hU B hB0 (hP 0).1

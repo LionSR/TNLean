@@ -129,7 +129,7 @@ deliberately deferred.
 - `blueprint/src/chapter/`: `\lean{}` tags pointing at a wrapper rather than
   the theorem, and `\notready` nodes beside a `\leanok` twin.
 
-Rank by `python3 scripts/loc_report.py` (size) and by build cost:
+Rank by `python3 scripts/reports/loc_report.py` (size) and by build cost:
 run the canonical build command from `CLAUDE.md` (`scripts/lake_build_locked.sh`
 on macOS, or cache-fetch plus `lake build` on Linux) piped to `tee /tmp/build.log`,
 then run `python3 scripts/lake_build_hotspots.py /tmp/build.log`.
@@ -154,7 +154,7 @@ then run `python3 scripts/lake_build_hotspots.py /tmp/build.log`.
   route through `scripts/lake_build_locked.sh`; on Linux, fetch and verify the
   cache first before running `lake build`. The dead-code verdict needs the root
   build, not a module target.
-- `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls`
+- `python3 scripts/tenkz/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls`
   after a `\lean{}` redirect; without the fetch the check fails for missing
   setup and that reads like a clean "no tag" verdict.
 - A Lean docstring cites the mathematics, never an issue number.

@@ -56,7 +56,11 @@ and arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {L N : ℕ}
     (hL : 3 * D ^ 5 ≤ L) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian A L N) =
+    haveI : NeZero N := ⟨by
+      obtain ⟨S, hS, hBound, -⟩ :=
+        data.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five
+      omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) =
       bntMPSVectorSpan (fun j ↦ data.blocks (data.representativeIndex j)) N := by
   obtain ⟨S, hS, hBound, hSpan⟩ :=
     data.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five

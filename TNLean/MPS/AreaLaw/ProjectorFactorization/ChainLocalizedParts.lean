@@ -45,15 +45,17 @@ https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pd
 
 ## Main results
 
-* `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localized_le`,
-  `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_localized_le`,
-  `TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_localized_le`: the bounds on
-  `‖H_tilde_• - M_•‖`.
+* `norm_gaussianFilteredTerm_partialHamiltonian_cutLeftSupports_sub_localized_le`,
+  `norm_gaussianFilteredTerm_partialHamiltonian_cutRightSupports_sub_localized_le`,
+  `norm_gaussianFilteredTerm_partialHamiltonian_cutBufferSupports_sub_localized_le`: the bounds
+  on `‖H_tilde_• - M_•‖`.
 * `isSupportedOn_localized_sub_self`: `M - W` acts on `K`.
-* `TNLean.MPS.AreaLaw.isHermitian_leftPart_localized`,
-  `TNLean.MPS.AreaLaw.isHermitian_rightPart_localized`,
-  `TNLean.MPS.AreaLaw.isHermitian_bufferPart_localized`: the operators `M_•` are Hermitian.
-* `ManyBody.ChainInteraction.leftPart_eq_zero_of_le`: the left part vanishes when `j ≤ m`.
+* `isHermitian_partialHamiltonian_cutLeftSupports_localized`,
+  `isHermitian_partialHamiltonian_cutRightSupports_localized`,
+  `isHermitian_partialHamiltonian_cutBufferSupports_localized`: the operators `M_•` are
+  Hermitian.
+* `ManyBody.ChainInteraction.partialHamiltonian_cutLeftSupports_eq_zero_of_le`: the left part
+  vanishes when `j ≤ m`.
 
 ## References
 
@@ -228,7 +230,7 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_sub_localized_le_of_
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. The source bounds
 `‖M_L - H_L‖`; the bound here is on `‖H_tilde_L - M_L‖`, see
 https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf. -/
-theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localized_le
+theorem norm_gaussianFilteredTerm_partialHamiltonian_cutLeftSupports_sub_localized_le
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hT : 0 ≤ T) :
@@ -245,8 +247,9 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localiz
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
   norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_leftPart j m) ((card_interval_le _ _).trans (by omega))
-    (h.norm_commutator_leftPart_le hhJ j m) hT
+    (h.isSupportedOn_commutator_partialHamiltonian_cutLeftSupports j m)
+    ((card_interval_le _ _).trans (by omega))
+    (h.norm_commutator_partialHamiltonian_cutLeftSupports_le hhJ j m) hT
 
 /-- **The localized right part.** With `K` the `ℓ`-neighbourhood of the window
 `[j + m - R, j + m + 2R)` that supports `[H, H_R]`, the operator
@@ -255,7 +258,7 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_leftPart_sub_localiz
 `ε = a (3R)² (ManyBody.cutCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828; see
 https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf. -/
-theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_localized_le
+theorem norm_gaussianFilteredTerm_partialHamiltonian_cutRightSupports_sub_localized_le
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hT : 0 ≤ T) :
@@ -272,8 +275,9 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_rightPart_sub_locali
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
   norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_rightPart j m) ((card_interval_le _ _).trans (by omega))
-    (h.norm_commutator_rightPart_le hhJ j m) hT
+    (h.isSupportedOn_commutator_partialHamiltonian_cutRightSupports j m)
+    ((card_interval_le _ _).trans (by omega))
+    (h.norm_commutator_partialHamiltonian_cutRightSupports_le hhJ j m) hT
 
 /-- **The localized buffer part.** With `K` the `ℓ`-neighbourhood of the union of the two
 windows that supports `[H, H_B]`, the operator `M_B = H_B + E_K(H_tilde_B - H_B)` satisfies
@@ -281,7 +285,7 @@ windows that supports `[H, H_B]`, the operator `M_B = H_B + E_K(H_tilde_B - H_B)
 `ε = a (6R)² (2 ManyBody.cutCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828; see
 https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf. -/
-theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_localized_le
+theorem norm_gaussianFilteredTerm_partialHamiltonian_cutBufferSupports_sub_localized_le
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hT : 0 ≤ T) :
@@ -299,7 +303,8 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_local
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) := by
   refine norm_gaussianFilteredTerm_sub_localized_le_of_commutator h hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hT
+    (h.isSupportedOn_commutator_partialHamiltonian_cutBufferSupports j m) ?_
+    (h.norm_commutator_partialHamiltonian_cutBufferSupports_le hhJ j m) hT
   refine (Finset.card_union_le _ _).trans ?_
   have h1 := card_interval_le (L := L) (j - m - 2 * R) (j - m + R)
   have h2 := card_interval_le (L := L) (j + m - R) (j + m + 2 * R)
@@ -307,7 +312,8 @@ theorem _root_.TNLean.MPS.AreaLaw.norm_gaussianFilteredTerm_bufferPart_sub_local
 
 /-- The localized left part `M_L` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
-theorem _root_.TNLean.MPS.AreaLaw.isHermitian_leftPart_localized (h : ChainInteraction L q R)
+theorem isHermitian_partialHamiltonian_cutLeftSupports_localized
+    (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
     (h.partialHamiltonian (cutLeftSupports L R j m) + regionExpectation K
@@ -318,7 +324,7 @@ theorem _root_.TNLean.MPS.AreaLaw.isHermitian_leftPart_localized (h : ChainInter
 
 /-- The localized right part `M_R` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
-theorem _root_.TNLean.MPS.AreaLaw.isHermitian_rightPart_localized
+theorem isHermitian_partialHamiltonian_cutRightSupports_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
     (h.partialHamiltonian (cutRightSupports L R j m) + regionExpectation K
@@ -329,7 +335,7 @@ theorem _root_.TNLean.MPS.AreaLaw.isHermitian_rightPart_localized
 
 /-- The localized buffer part `M_B` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
-theorem _root_.TNLean.MPS.AreaLaw.isHermitian_bufferPart_localized
+theorem isHermitian_partialHamiltonian_cutBufferSupports_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
     (h.partialHamiltonian (cutBufferSupports L R j m) + regionExpectation K
