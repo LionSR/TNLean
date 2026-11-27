@@ -4,8 +4,7 @@
 Purpose
 -------
 Supports the zero-reference deletion waves of the proof-debt loop
-(``docs/proof_debt.md``, ledger entry S2 in ``docs/proof_debt_ledger.md``,
-tracker #4564).  Every wave so far rewrote this scan from scratch; this
+(``docs/proof_debt.md``, tracker #4564).  Every wave so far rewrote this scan from scratch; this
 module makes the residue re-derivable from an exact checkout.
 
 Method
