@@ -29,7 +29,7 @@ open Matrix QuantumCircuit
 
 namespace MPSTensor.IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- The normalized one-copy fixed-point state at `N = qM`, with the actual canonical block
 fixed points and corrected weights. This is the corrected instance of arXiv:2307.01696,
