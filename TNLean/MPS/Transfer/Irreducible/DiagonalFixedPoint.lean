@@ -158,8 +158,7 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
           (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
   -- Step 1: The transfer map is a channel (from TP hypothesis).
   have hCh : IsChannel (Kraus.transferMap (ι := α) (n := Fin D) A) :=
-    ⟨Kraus.isCPMap_mapLM A,
-      Kraus.isTracePreservingMap_mapLM_of_isTP A (by unfold Kraus.IsTP; convert hTP)⟩
+    Kraus.isChannel_mapLM A (by unfold Kraus.IsTP; convert hTP)
   -- Step 2: Get a PSD fixed point ρ ≠ 0 from the channel.
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := α) (n := Fin D) A) hD
@@ -271,7 +270,7 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleF
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
-      (d := d) (D := D) Aadj hTPadj hIrrAdj hD
+      (D := D) Aadj hTPadj hIrrAdj hD
   refine ⟨U, Λ, ?_⟩
   let B : MPSTensor d D :=
     fun i =>
@@ -326,7 +325,7 @@ theorem conjTranspose_kraus_setup
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hCh : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
-    Kraus.isChannel_mapLM (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
+    Kraus.isChannel_mapLM (ι := Fin d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hDpos
   have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=

@@ -675,7 +675,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
   -- CFII data: a unitary conjugate with a diagonal positive-definite fixed point.
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTPB, hfixB⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
-      (d := d) (D := D) A (by simpa using hTP) hIrrT hDpos
+      (D := D) A (by simpa using hTP) hIrrT hDpos
   let V : Matrix (Fin D) (Fin D) ℂ := (↑U : Matrix (Fin D) (Fin D) ℂ)
   let B : MPSTensor d D := fun i => Vᴴ * A i * V
   -- Unitalize using the diagonal fixed point.

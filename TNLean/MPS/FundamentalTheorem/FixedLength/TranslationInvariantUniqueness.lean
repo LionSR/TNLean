@@ -264,12 +264,12 @@ theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {α : Type*} [Finty
       rwa [← hRinj huv]
   have hBa_irr : Kraus.IsIrreducibleFamily Ba :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-      (isIrreducibleMap_transferMap_conjTranspose B
+      (Kraus.isIrreducibleMap_mapLM_conjTranspose B
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B
           (isIrreducibleFamily_of_forall_eq_bot_or_eq_top B hBact)))
   have hCa_irr : Kraus.IsIrreducibleFamily Ca :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-      (isIrreducibleMap_transferMap_conjTranspose C
+      (Kraus.isIrreducibleMap_mapLM_conjTranspose C
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily C
           (isIrreducibleFamily_of_forall_eq_bot_or_eq_top C hCact)))
   -- The gauge relation for the conjugate-transposed families: `B_i† = conj x (R†)⁻¹ C_i† R†`.

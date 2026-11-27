@@ -367,7 +367,7 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
       by simpa [Matrix.star_eq_conjTranspose] using hUU⟩
   let U : Matrix.unitaryGroup (Fin D) ℂ := ⟨Umat, hUmem⟩
   let Aconj : MPSTensor d D := fun i => Umatᴴ * A i * Umat
-  have hSame_conj : SameMPV A Aconj := sameMPV_conj_unitary (d := d) (D := D) A U
+  have hSame_conj : SameMPV A Aconj := sameMPV_conj_unitary (D := D) A U
   have hPdiag : IsOrthogonalProjection Pdiag := by
     simpa [Pdiag] using
       (IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one

@@ -55,20 +55,20 @@ open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {G : Type*} [Monoid G] {d D : ℕ}
+variable {G : Type*} [Monoid G] {α : Type*} [Fintype α] [DecidableEq α] {d D : ℕ}
 
 /-- Tensor twisted by physical action of `g ∈ G`.
 
-If `U : G →* Matrix (Fin d) (Fin d) ℂ` is an on-site representation, then
+If `U : G →* Matrix α α ℂ` is an on-site representation, then
 `twistedTensor A U g` has components
 `(twistedTensor A U g) i = ∑ j, U g i j • A j`. -/
-noncomputable def twistedTensor (A : MPSTensor d D)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) : MPSTensor d D :=
-  fun i => ∑ j : Fin d, U g i j • A j
+noncomputable def twistedTensor (A : MPTensor α (Fin D))
+    (U : G →* Matrix α α ℂ) (g : G) : MPTensor α (Fin D) :=
+  fun i => ∑ j : α, U g i j • A j
 
 /-- `A` is on-site symmetric under `U` if each group twist has the same MPV as `A`. -/
-def IsOnSiteSymmetric (A : MPSTensor d D)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
+def IsOnSiteSymmetric (A : MPTensor α (Fin D))
+    (U : G →* Matrix α α ℂ) : Prop :=
   ∀ g : G, SameMPV A (twistedTensor A U g)
 
 /-- `A` is on-site symmetric under `U` up to a phase if, for each group element `g` and
@@ -78,19 +78,19 @@ each chain length `N`, the periodic vector of the twisted tensor is a scalar mul
 Source: arXiv:1010.3732, `Papers/1010.3732/paper_v3.tex` lines 655--657 (a symmetry
 \(U_g^{\otimes N}\) of the MPS), lines 1313--1314 and 2590--2593 (an MPS with a
 \(U_g\)-invariant parent Hamiltonian is invariant under \(U_g\) up to a phase). -/
-def IsOnSiteSymmetricUpToPhase (A : MPSTensor d D)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
-  ∀ (g : G) (N : ℕ), ∃ c : ℂ, ∀ s : Fin N → Fin d, mpv (twistedTensor A U g) s = c * mpv A s
+def IsOnSiteSymmetricUpToPhase (A : MPTensor α (Fin D))
+    (U : G →* Matrix α α ℂ) : Prop :=
+  ∀ (g : G) (N : ℕ), ∃ c : ℂ, ∀ s : Fin N → α, mpv (twistedTensor A U g) s = c * mpv A s
 
 /-- Exact on-site symmetry is on-site symmetry up to the trivial phase. -/
-theorem IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase {A : MPSTensor d D}
-    {U : G →* Matrix (Fin d) (Fin d) ℂ} (h : IsOnSiteSymmetric A U) :
+theorem IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase {A : MPTensor α (Fin D)}
+    {U : G →* Matrix α α ℂ} (h : IsOnSiteSymmetric A U) :
     IsOnSiteSymmetricUpToPhase A U :=
   fun g N => ⟨1, fun s => by rw [one_mul, h g N s]⟩
 
 /-- Twisting by the identity group element is trivial. -/
-@[simp] lemma twistedTensor_one (A : MPSTensor d D)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) :
+@[simp] lemma twistedTensor_one (A : MPTensor α (Fin D))
+    (U : G →* Matrix α α ℂ) :
     twistedTensor A U 1 = A := by
   funext i
   simp [twistedTensor, Matrix.one_apply]
@@ -98,23 +98,23 @@ theorem IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase {A : MPSTensor d D}
 /-- Functoriality/composition law for twists:
 
 twisting by `g * h` is the same as first twisting by `h` and then by `g`. -/
-lemma twistedTensor_mul (A : MPSTensor d D)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g h : G) :
+lemma twistedTensor_mul (A : MPTensor α (Fin D))
+    (U : G →* Matrix α α ℂ) (g h : G) :
     twistedTensor A U (g * h) = twistedTensor (twistedTensor A U h) U g := by
   funext i
   calc
     twistedTensor A U (g * h) i
-        = ∑ k : Fin d, (∑ j : Fin d, U g i j * U h j k) • A k := by
+        = ∑ k : α, (∑ j : α, U g i j * U h j k) • A k := by
             simp [twistedTensor, Matrix.mul_apply]
-    _ = ∑ k : Fin d, ∑ j : Fin d, (U g i j * U h j k) • A k := by
+    _ = ∑ k : α, ∑ j : α, (U g i j * U h j k) • A k := by
           simp_rw [Finset.sum_smul]
-    _ = ∑ j : Fin d, ∑ k : Fin d, (U g i j * U h j k) • A k := Finset.sum_comm
+    _ = ∑ j : α, ∑ k : α, (U g i j * U h j k) • A k := Finset.sum_comm
     _ = twistedTensor (twistedTensor A U h) U g i := by
           simp [twistedTensor, Finset.smul_sum, smul_smul]
 
 /-- Twisting commutes with virtual conjugation. -/
 lemma twistedTensor_gaugeEquiv
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (A : MPTensor α (Fin D)) (U : G →* Matrix α α ℂ)
     (Y : GL (Fin D) ℂ) (g : G) :
     twistedTensor (fun j =>
       (Y : Matrix (Fin D) (Fin D) ℂ) * A j *
@@ -131,12 +131,12 @@ lemma twistedTensor_gaugeEquiv
 /-- The product `X(h) * X(g)` intertwines `A` with `twist(g * h)`.
 The supplied gauge matrices are retained, with this order of multiplication. -/
 lemma gauge_product_intertwines
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (A : MPTensor α (Fin D)) (U : G →* Matrix α α ℂ)
     (X : G → GL (Fin D) ℂ)
     (hX : ∀ g i, twistedTensor A U g i =
       (X g : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-    (g h : G) (i : Fin d) :
+    (g h : G) (i : α) :
     twistedTensor A U (g * h) i =
       ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((X h * X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
@@ -157,8 +157,8 @@ On-site symmetry supplies `SameMPV A (twistedTensor A U g)`, and
 `sameMPV_iff_gaugeEquiv_of_injective` converts equal MPV families into
 gauge equivalence for injective tensors. -/
 theorem gaugeEquiv_twistedTensor_of_injective
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
+    (U : G →* Matrix α α ℂ)
     (hSymm : IsOnSiteSymmetric A U) :
     ∀ g : G, GaugeEquiv A (twistedTensor A U g) := by
   intro g

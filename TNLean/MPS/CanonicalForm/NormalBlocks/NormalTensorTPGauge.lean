@@ -7,6 +7,7 @@ import QICLean.Channel.Irreducible.KrausGauge
 import QICLean.Channel.Irreducible.SpectralRadius
 import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Channel.Peripheral.Spectrum.Conjugation
+import QICLean.Kraus.PrimitiveFixedPoint.Blocking
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.PhysicalReindex
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
@@ -84,7 +85,7 @@ private theorem isIrreducibleFamily_tpGauge_of_isIrreducibleMap (A : MPTensor α
     rwa [Kraus.transferMap_reindexPhysical_equiv]
   have h : Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e (Kraus.tpGauge A σ)) :=
     Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap (Kraus.reindexPhysical e A) σ hσ hIrr'
-  exact (isIrreducibleFamily_reindexPhysical_equiv e _).1 h
+  exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).1 h
 
 /-- Trace-preserving gauging by a positive-definite matrix preserves primitivity of the transfer
 map.

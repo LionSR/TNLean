@@ -144,7 +144,7 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrMap
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   exact exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
-    (d := d) (D := D) A hLeft hIrrTensor hD
+    (D := D) A hLeft hIrrTensor hD
 
 /-- **Rank-one classification** (arXiv:1606.00608, Appendix B): for an injective
 left-canonical RFP tensor, the transfer map equals the rank-one fixed-point projection
