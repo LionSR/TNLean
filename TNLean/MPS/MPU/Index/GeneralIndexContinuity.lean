@@ -106,14 +106,23 @@ theorem exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul [NeZero n]
       (Real.sqrt_pos.mpr (by exact_mod_cast NeZero.pos n)).ne')
   have hflat : ∀ i j, V.normalizedFlattening (i, j) = ((Real.sqrt n : ℂ)⁻¹) • V (i, j) :=
     fun _ _ ↦ rfl
+  -- The support-absorption lemmas are stated on a `Fin` alphabet: relabel along
+  -- `finProdFinEquiv`.
+  have hT' : ∀ X,
+      Kraus.map (Kraus.reindexPhysical finProdFinEquiv.symm V.normalizedFlattening) X =
+        Matrix.trace (L * X) • R := fun X ↦
+    (congrArg (fun f ↦ f X) (Kraus.transferMap_reindexPhysical_equiv finProdFinEquiv.symm
+      V.normalizedFlattening)).trans (hT X)
   have hVP : ∀ i j, V (i, j) * P = V (i, j) := by
     intro i j
-    have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT (i, j)
+    have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT' (finProdFinEquiv (i, j))
+    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply] at h
     rw [hflat, Matrix.smul_mul] at h
     exact smul_right_injective _ hc h
   have hQV : ∀ i j, Q * V (i, j) = V (i, j) := by
     intro i j
-    have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT (i, j)
+    have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT' (finProdFinEquiv (i, j))
+    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply] at h
     rw [hflat, Matrix.mul_smul] at h
     exact smul_right_injective _ hc h
   set T := Matrix.reducedProjection P Q with hTdef
@@ -304,7 +313,10 @@ theorem IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich [NeZero d]
   have hk0 : 0 < k := lt_of_lt_of_le (Nat.mul_pos (NeZero.pos D) (NeZero.pos D)) hk
   obtain ⟨ρ, Φ, hpair, hE⟩ := hW.exists_transferMatrix_blockTensor_eq_vecMulVec hk
   obtain ⟨L, R, hL, hR, hT⟩ :=
-    Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec _ ρ Φ hE hpair
+    Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec
+      (Kraus.reindexPhysical finProdFinEquiv.symm (MPOTensor.blockTensor W k).normalizedFlattening)
+      ρ Φ (by rwa [Kraus.transferMap_reindexPhysical_equiv]) hpair
+  rw [Kraus.transferMap_reindexPhysical_equiv] at hT
   obtain ⟨m, B, ⟨hB⟩, hmpoB, hr, hℓ⟩ :=
     exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul (hW.blockTensor k hk0) hL hR hT
   have hEq : ∀ N, 1 < N → mpo (MPOTensor.blockTensor U k) N = mpo B N := by
