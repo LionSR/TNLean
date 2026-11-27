@@ -333,11 +333,11 @@ orthogonal projector is the canonical representative used here.
 
 \begin{lemma}[Boundary map on a matrix unit]
     \label{thm:ground_space_map_es_single}
-    \lean{MPSTensor.groundSpaceMapES_single}
+    \lean{Matrix.frobeniusEquivEuclidean_single}
     \leanok
     \uses{def:ground_space_map_es}
     Let $e_{(b,a)}$ denote the Frobenius coordinate vector representing the
-    virtual matrix unit $E_{ab}$.  Then
+    virtual matrix unit $E_{ab}$, that is, $U(E_{ab})=e_{(b,a)}$.  Then
     $\Gamma_L^{\mathrm{ES}}(e_{(b,a)})=\iota_L(\Gamma_L(E_{ab}))$.
 \end{lemma}
 
@@ -370,7 +370,6 @@ orthogonal projector is the canonical representative used here.
 
 \begin{lemma}[Hilbert-space boundary-map injectivity]
     \label{thm:ground_space_map_es_injective_block}
-    \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective}
     \leanok
     \uses{def:ground_space_map_es,def:l_blk_injective}
     If $A$ is $L$-block injective, then
@@ -389,7 +388,6 @@ orthogonal projector is the canonical representative used here.
 
 \begin{lemma}[Long-length Hilbert-space boundary-map injectivity]
     \label{thm:ground_space_map_es_injective_block_of_le}
-    \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}
     \leanok
     \uses{def:ground_space_map_es,def:l_blk_injective}
     Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that

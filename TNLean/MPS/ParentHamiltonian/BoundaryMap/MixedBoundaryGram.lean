@@ -31,7 +31,9 @@ theorem inner_single_mixed_groundSpaceGram_single
         (EuclideanSpace.single (e, c) 1)⟫_ℂ =
       ((Kraus.mixedMapLM B A) ^ n) (Matrix.single c a 1) e b := by
   rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right,
-    groundSpaceMapES_single, groundSpaceMapES_single]
+    ← Matrix.frobeniusEquivEuclidean_single,
+      ← Matrix.frobeniusEquivEuclidean_single, groundSpaceMapES_frobeniusEquivEuclidean_apply,
+      groundSpaceMapES_frobeniusEquivEuclidean_apply]
   change inner ℂ (WithLp.toLp 2 (groundSpaceMap A n (Matrix.single a b 1)))
     (WithLp.toLp 2 (groundSpaceMap B n (Matrix.single c e 1))) = _
   rw [EuclideanSpace.inner_toLp_toLp, Kraus.mixedMapLM_pow_apply]

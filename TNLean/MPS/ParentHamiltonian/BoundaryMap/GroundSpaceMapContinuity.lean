@@ -63,7 +63,7 @@ theorem continuous_groundSpaceMapES_family
   convert htrace using 1
   ext x
   change (groundSpaceMapES (A x) L (EuclideanSpace.single (b, a) 1)) σ = _
-  rw [groundSpaceMapES_single]
+  rw [← Matrix.frobeniusEquivEuclidean_single, groundSpaceMapES_frobeniusEquivEuclidean_apply]
   change (groundSpaceMap (A x) L (Matrix.single a b 1)) σ = _
   rw [groundSpaceMap_apply]
 
@@ -77,7 +77,9 @@ theorem continuous_map_groundSpace_starProjection_family
     Continuous fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   have hT := continuous_groundSpaceMapES_family A hA L
   have hTinj (x : X) : Function.Injective (groundSpaceMapES (A x) L) :=
-    groundSpaceMapES_injective_of_isNBlkInjective (hInj x)
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
+      ((groundSpaceMap_injective_of_isNBlkInjective (hInj x)).comp
+        (Matrix.frobeniusEquivEuclidean _ _).symm.injective)
   have hproj := ContinuousLinearMap.continuous_injectiveRangeProjector
     (fun x => groundSpaceMapES (A x) L) hT hTinj
   have heq :

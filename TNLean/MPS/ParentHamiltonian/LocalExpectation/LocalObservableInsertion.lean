@@ -112,7 +112,9 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
           (EuclideanSpace.single (e, c) 1)) =
       Matrix.rectangularChoi (physicalObservableTransfer A k X) (c, e) (a, b) := by
     rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right,
-      ContinuousLinearMap.comp_apply, groundSpaceMapES_single, groundSpaceMapES_single]
+      ContinuousLinearMap.comp_apply, ← Matrix.frobeniusEquivEuclidean_single,
+      ← Matrix.frobeniusEquivEuclidean_single, groundSpaceMapES_frobeniusEquivEuclidean_apply,
+      groundSpaceMapES_frobeniusEquivEuclidean_apply]
     change inner ℂ (WithLp.toLp 2 (groundSpaceMap A k (Matrix.single a b 1)))
       (Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X
         (WithLp.toLp 2 (groundSpaceMap A k (Matrix.single c e 1)))) = _

@@ -38,7 +38,9 @@ theorem continuousAt_map_groundSpace_starProjection_of_isNBlkInjective
       (fun B : MPSTensor d D => B) continuous_id L).continuousAt.comp hA
   have hproj := ContinuousLinearMap.continuousAt_range_starProjection_of_injective
     (fun x => groundSpaceMapES (A x) L) hT
-    (groundSpaceMapES_injective_of_isNBlkInjective hInj)
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
+      ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
+        (Matrix.frobeniusEquivEuclidean _ _).symm.injective))
   simpa only [range_groundSpaceMapES] using hproj
 
 /-- The matrix of the actual canonical interaction on \(L\) sites is continuous when the tensor
