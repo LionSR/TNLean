@@ -433,7 +433,8 @@ theorem isReduction_actV (g h : G) (x : X) : MPTensor.IsReduction
 theorem isReduction_fuseV (g h : G) (x : X) : MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (A (g • h • x))
       (ad.fuseV fd g h x) (ad.fuseW fd g h x) :=
-  isReduction_castIndex (((fd.isReduction g h).actTensor_kronId (A x)).trans
+  isReduction_castIndex (((isReduction_toMPSTensor_iff.2 (fd.isReduction g h)).actTensor_kronId
+    (A x)).trans
     (ad.isReduction (g * h) x)) (mul_smul g h x)
 
 variable {fd ad}

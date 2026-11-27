@@ -191,15 +191,15 @@ theorem IsNormalRepresentation.exists_fusionTensors {F : GroupFamily G d}
       (w.map finProdFinEquiv).map finProdFinEquiv.symm = w := fun w ↦ by
     simp only [List.map_map, Equiv.symm_comp_self, List.map_id]
   refine ⟨V, W, ⟨hR.mul_eq_one, fun w ↦ ?_⟩, fun w hw ↦ ?_⟩
-  · have h := hR.evalWord (w.map finProdFinEquiv)
-    rwa [evalWord_toMPSTensor, evalWord_toMPSTensor, hmap] at h
-  · have h := hnil (w.map finProdFinEquiv) (by rwa [List.length_map])
+  · have hev := hR.evalWord (w.map finProdFinEquiv)
+    rwa [evalWord_toMPSTensor, evalWord_toMPSTensor, hmap] at hev
+  · have hzero := hnil (w.map finProdFinEquiv) (by rwa [List.length_map])
     have hr := Kraus.evalWord_reindexPhysical finProdFinEquiv.symm
       (fun i => mulTensor (F.tensor g) (F.tensor h) i - W * F.tensor (g * h) i * V)
       (w.map finProdFinEquiv)
     rw [hmap] at hr
     rw [← hr]
-    exact h
+    exact hzero
 
 end GroupFamily
 

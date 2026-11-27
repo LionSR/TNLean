@@ -336,8 +336,9 @@ theorem isReductionResidualNilpotencyBound_mulTensor_assoc_left {M : MPOTensor d
     MPTensor.IsReductionResidualNilpotencyBound (mulTensor (mulTensor M N) P) A
       (V * mulTensorAssocInvMatrix D₁ D₂ D₃) (mulTensorAssocMatrix D₁ D₂ D₃ * W) K :=
   MPSTensor.isReductionResidualNilpotencyBound_of_intertwine
+    (B' := mulTensor (mulTensor M N) P) (B := mulTensor M (mulTensor N P))
     (mulTensorAssocInvMatrix_mul_matrix D₁ D₂ D₃) (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃)
-    (fun i ↦ mulTensor_mul_assocMatrix M N P i.1 i.2) hK
+    (fun ⟨i, l⟩ ↦ mulTensor_mul_assocMatrix M N P i l) hK
 
 /-- **Reassociation preserves the residual bound, left to right.** The residual bound of a
 reduction of `(M · N) · P` carries over to the reduction of `M · (N · P)` obtained by
@@ -354,8 +355,9 @@ theorem isReductionResidualNilpotencyBound_mulTensor_assoc_right {M : MPOTensor 
     MPTensor.IsReductionResidualNilpotencyBound (mulTensor M (mulTensor N P)) A
       (V * mulTensorAssocMatrix D₁ D₂ D₃) (mulTensorAssocInvMatrix D₁ D₂ D₃ * W) K :=
   MPSTensor.isReductionResidualNilpotencyBound_of_intertwine
+    (B' := mulTensor M (mulTensor N P)) (B := mulTensor (mulTensor M N) P)
     (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃) (mulTensorAssocInvMatrix_mul_matrix D₁ D₂ D₃)
-    (fun i ↦ (assocInvMatrix_mul_mulTensor M N P i.1 i.2).symm) hK
+    (fun ⟨i, l⟩ ↦ (assocInvMatrix_mul_mulTensor M N P i l).symm) hK
 
 /-- **Reducing the state inside an action tensor preserves the residual bound.** If the
 residual words of `(V, W)` from `B` to `A` vanish at length `N`, so do those of

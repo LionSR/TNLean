@@ -219,7 +219,9 @@ theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
     (σ τ : Fin N → Fin d) :
     MPTensor.mpv M.toMPSTensor (fun n => finProdFinEquiv (σ n, τ n)) =
       MPOTensor.mpo M N σ τ := by
-  simp [MPOTensor.mpv_toMPSTensor_eq]
+  rw [MPOTensor.mpv_toMPSTensor_eq]
+  simp only [Equiv.symm_apply_apply]
+  exact MPOTensor.mpv_pair M σ τ
 
 /-- One doubled index separated from an arbitrary doubled-index tail: the coefficient of
 the doubled-index view is the corresponding matrix entry of the horizontal MPO
@@ -427,7 +429,8 @@ theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
   have hpair : MPTensor.mpv M (fun k => (σ k, σ k)) =
       MPTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
-    simp [MPOTensor.mpv_toMPSTensor_eq]
+    rw [MPOTensor.mpv_toMPSTensor_eq]
+    simp only [Equiv.symm_apply_apply]
   rw [mpv_diagonalTensor, hpair, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
 
 /-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal

@@ -205,9 +205,11 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
       rw [(((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
           (MPTensor.SameMPV₂Pos.refl (A x))) N hN σ,
         (hSame (g * h) _ x (MPTensor.SameMPV₂Pos.refl (A x))) N hN σ, mul_smul]
-    have h₁ := ((FusionData.isDressedProportional_relativeScalar hF fd fd' g h).actTensor_kronId
-      (A x)).mul_left (ad.V (g * h) x)
-    have h₂ := (hγ (g * h) x).pullback ((fd'.isReduction g h).actTensor_kronId (A x)) hSameB
+    have h₁ := ((isDressedProportional_toMPSTensor_iff.2
+      (FusionData.isDressedProportional_relativeScalar hF fd fd' g h)).actTensor_kronId
+        (A x)).mul_left (ad.V (g * h) x)
+    have h₂ := (hγ (g * h) x).pullback
+      ((isReduction_toMPSTensor_iff.2 (fd'.isReduction g h)).actTensor_kronId (A x)) hSameB
     exact (h₁.trans h₂).mul_left (castIndex D (mul_smul g h x))
   have key := (hact.trans (isDressedProportional_lSymbol (fd := fd') (ad := ad') hA hperm x g h))
     |>.eq_of_forall_exists_ne_zero

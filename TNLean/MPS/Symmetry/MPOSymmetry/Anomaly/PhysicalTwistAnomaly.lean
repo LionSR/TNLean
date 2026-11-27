@@ -133,8 +133,6 @@ theorem pairTwist_eq_sum_smul (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor 
   funext ⟨i, j⟩
   rw [Fintype.sum_prod_type]
   simp only [pairTwist, Finset.smul_sum, smul_smul]
-  refine Finset.sum_congr rfl fun k _ ↦ Finset.sum_congr rfl fun l _ ↦ ?_
-  simp
 
 /-- **A unitary change of physical basis commutes with stacking**: for a unitary `u`, the
 stacked product of `u M u^†` and `u N u^†` is `u (M N) u^†`, at the level of tensors. -/

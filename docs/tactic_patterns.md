@@ -7480,9 +7480,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/Entropy/NormalizedMPOProportionality.lean`,
   `TNLean/MPS/CanonicalForm/SimpleMPO/BNTLayerOrthogonality.lean`,
   `TNLean/MPS/MPDO/CommutingForm/FixedBondProductTensor.lean` (recorded 2026-09-17).
-- **Abstraction:** `MPOTensor.mpv_toMPSTensor` in
-  `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`, which states the identity for an
-  arbitrary pair configuration and needs no auxiliary equality of configurations.
+- **Abstraction:** `MPOTensor.mpv_eq_mpo` in `TNLean/MPS/Operator/PairAlphabet.lean`, which
+  states the identity on the pair alphabet itself; at a doubled-index site, rewrite first with
+  `MPOTensor.mpv_toMPSTensor_eq`. The earlier `MPOTensor.mpv_toMPSTensor` was removed with the
+  pair-alphabet restatement.
 - **Notes:** above the rule of three, but the existing call sites all sit upstream of the
   module where the general statement is first needed. Promoting means moving the statement
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/Operator/Defs.lean` and refactoring the six sites;

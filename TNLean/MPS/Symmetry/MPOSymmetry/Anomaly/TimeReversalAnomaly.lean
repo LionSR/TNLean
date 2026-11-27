@@ -231,8 +231,6 @@ theorem timeReversal_eq_sum_smul (v : Matrix (Fin d) (Fin d) ℂ) (T : MPOTensor
   funext ⟨i, j⟩
   rw [Fintype.sum_prod_type]
   simp only [timeReversal, pairTwist, Matrix.map_apply, Finset.smul_sum, smul_smul]
-  refine Finset.sum_congr rfl fun k _ ↦ Finset.sum_congr rfl fun l _ ↦ ?_
-  simp
 
 /-- **Time reversal commutes with stacking.** For a unitary `v`, the time-reversed tensor of
 the stacked product of two tensors is the stacked product of their time-reversed tensors:
