@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.KrausGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Normal-tensor overlap dichotomy
@@ -20,6 +21,9 @@ matrix product vectors differ by the corresponding power of the phase at every l
   to zero or has modulus tending to one with gauge-phase equivalence by a unit phase.
 * `IsNormalTensor.mpv_phase_alternative`: the overlap tends to zero, or the matrix product vectors
   differ by a unit phase raised to each chain length.
+
+The statements are on an arbitrary finite physical alphabet; the proofs run on the `Fin` alphabet
+obtained by relabelling along `Fintype.equivFin`.
 * `overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv`: normal tensors that are not MPV-phase
   equivalent have overlap tending to zero.
 * `EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor`: eventually
@@ -38,15 +42,9 @@ open Filter
 
 namespace MPSTensor
 
-variable {d D₁ D₂ : ℕ}
+variable {α : Type*} [Fintype α] {d D₁ D₂ : ℕ}
 
-/-- **Normal-tensor overlap dichotomy** (arXiv:1606.00608, Appendix A,
-Lemma A.2 (equalMPS), lines 1080--1117).
-
-For two normal tensors of positive, possibly different, bond dimensions, both self-overlaps tend
-to one. Their rectangular overlap either tends to zero, or its modulus tends to one and the tensors
-are related by an invertible gauge and a unit phase. -/
-theorem _root_.MPTensor.IsNormalTensor.overlap_dichotomy
+private theorem overlap_dichotomy_fin
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
     (Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds 1) ∧
@@ -111,6 +109,35 @@ theorem _root_.MPTensor.IsNormalTensor.overlap_dichotomy
       A' B' hIrrA hIrrB hTPA hTPB hdim
     exact hPrepared.congr' (Eventually.of_forall fun N ↦ (hOverlapGauge N).symm)
 
+/-- **Normal-tensor overlap dichotomy** (arXiv:1606.00608, Appendix A,
+Lemma A.2 (equalMPS), lines 1080--1117).
+
+For two normal tensors of positive, possibly different, bond dimensions, both self-overlaps tend
+to one. Their rectangular overlap either tends to zero, or its modulus tends to one and the tensors
+are related by an invertible gauge and a unit phase. -/
+theorem _root_.MPTensor.IsNormalTensor.overlap_dichotomy
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
+    (Tendsto (fun N ↦ mpvOverlap A A N) atTop (nhds 1) ∧
+      Tendsto (fun N ↦ mpvOverlap B B N) atTop (nhds 1)) ∧
+        (Tendsto (fun N ↦ mpvOverlap A B N) atTop (nhds 0) ∨
+          (Tendsto (fun N ↦ ‖mpvOverlap A B N‖) atTop (nhds (1 : ℝ)) ∧
+            ∃ hdim : D₁ = D₂,
+              ∃ X : GL (Fin D₂) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+                ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
+                  (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) i *
+                  (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ)))) := by
+  classical
+  let e := (Fintype.equivFin α).symm
+  obtain ⟨⟨hAA, hBB⟩, h⟩ :=
+    overlap_dichotomy_fin (hA.reindexPhysical e) (hB.reindexPhysical e)
+  simp only [mpvOverlap_reindexPhysical_equiv] at hAA hBB h
+  refine ⟨⟨hAA, hBB⟩, h.imp id ?_⟩
+  rintro ⟨hone, hdim, X, ζ, hζ, hrel⟩
+  refine ⟨hone, hdim, X, ζ, hζ, fun i ↦ ?_⟩
+  subst hdim
+  simpa [e, Kraus.reindexPhysical] using hrel (e.symm i)
+
 /-- **Exact phase alternative for normal tensors** (arXiv:1606.00608, Appendix A,
 Corollary A.3 (eqV), lines 1121--1128).
 
@@ -118,22 +145,15 @@ For two normal tensors of positive, possibly different, bond dimensions, either 
 overlap tends to zero, or their matrix product vectors differ at every length by a fixed unit phase
 raised to that length. -/
 theorem _root_.MPTensor.IsNormalTensor.mpv_phase_alternative
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
-    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A B N) atTop (nhds 0) ∨
-      ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ N,
-        mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
-  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
-  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
+    Tendsto (fun N ↦ mpvOverlap A B N) atTop (nhds 0) ∨
+      ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (σ : Fin N → α), mpv B σ = ζ ^ N * mpv A σ := by
   rcases hA.overlap_dichotomy hB with ⟨_hself, hzero | ⟨_hone, hdim, X, ζ, hζ, hrel⟩⟩
   · exact Or.inl hzero
   · right
-    refine ⟨ζ, hζ, fun N ↦ ?_⟩
-    ext w
-    simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
-    rw [mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hrel N w,
-      mpv_cast_dim hdim A N w]
+    subst hdim
+    exact ⟨ζ, hζ, mpv_eq_pow_mul_of_gaugePhase A B X ζ (by simpa using hrel)⟩
 
 /-- Normal tensors which are not MPV-phase equivalent have asymptotically
 vanishing overlap.
@@ -141,20 +161,40 @@ vanishing overlap.
 This is the contrapositive form of arXiv:1606.00608, Corollary `eqV`, lines
 1121--1128. -/
 theorem overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hNot : ¬ MPVBlockPhaseEquiv A B) :
-    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A B N) atTop (nhds 0) := by
+    Tendsto (fun N ↦ mpvOverlap A B N) atTop (nhds 0) := by
+  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hmpv⟩
+  · exact hZero
+  · exact absurd ⟨ζ, Complex.ne_zero_of_norm_eq_one hζ, fun N _ σ ↦ hmpv N σ⟩ hNot
+
+private theorem exists_unit_phase_power_of_isNormalTensor_fin
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hProp : EventuallyNonzeroProportionalMPV₂ A B)
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
+    ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin d,
+      mpv A σ = a ^ N * mpv B σ := by
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
   have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
-  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
-  · exact hZero
+  have hEvent : ∀ᶠ N in atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+      mpv A σ = c * mpv B σ := by
+    exact hProp.mono fun _ hN ↦ ⟨hN.choose, hN.choose_spec.2⟩
+  have hCrossNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖)
+      atTop (nhds (1 : ℝ)) :=
+    mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
+      A B hA.selfOverlap_tendsto_one hB.selfOverlap_tendsto_one hEvent
+  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hmpv⟩
   · exfalso
-    apply hNot
-    refine ⟨ζ, Complex.ne_zero_of_norm_eq_one hζ, ?_⟩
-    intro N _hN σ
-    have hEq := congrArg (fun v : MPVSpace d N ↦ v σ) (hState N)
-    simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq
+    have hZeroNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖)
+        atTop (nhds (0 : ℝ)) := by
+      simpa using hZero.norm
+    exact one_ne_zero (tendsto_nhds_unique hCrossNorm hZeroNorm)
+  · refine ⟨ζ⁻¹, ?_, ?_⟩
+    · rw [norm_inv, hζ, inv_one]
+    · intro N _hN σ
+      have hζ0 : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ
+      rw [hmpv N σ, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]
 
 /-- **Geometric proportionality scalar for two normal blocks.**
 
@@ -173,33 +213,22 @@ Source: CPSV16, Corollary eqV, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem thm1, lines 1167--1182;
 see also arXiv:2011.12127, Theorem IV.4. -/
 theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hProp : EventuallyNonzeroProportionalMPV₂ A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
-    ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin d,
+    ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → α,
       mpv A σ = a ^ N * mpv B σ := by
-  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
-  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
-  have hEvent : ∀ᶠ N in atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
-      mpv A σ = c * mpv B σ := by
-    exact hProp.mono fun _ hN ↦ ⟨hN.choose, hN.choose_spec.2⟩
-  have hCrossNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖)
-      atTop (nhds (1 : ℝ)) :=
-    mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
-      A B hA.selfOverlap_tendsto_one hB.selfOverlap_tendsto_one hEvent
-  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
-  · exfalso
-    have hZeroNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖)
-        atTop (nhds (0 : ℝ)) := by
-      simpa using hZero.norm
-    exact one_ne_zero (tendsto_nhds_unique hCrossNorm hZeroNorm)
-  · refine ⟨ζ⁻¹, ?_, ?_⟩
-    · rw [norm_inv, hζ, inv_one]
-    · intro N _hN σ
-      have hζ0 : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ
-      have hComponent := congrArg (fun v : MPVSpace d N ↦ v σ) (hState N)
-      simp only [mpvState_apply, PiLp.smul_apply, smul_eq_mul] at hComponent
-      rw [hComponent, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]
+  classical
+  let e := (Fintype.equivFin α).symm
+  have hProp' : EventuallyNonzeroProportionalMPV₂
+      (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) :=
+    hProp.mono fun _ ⟨c, hc, h⟩ ↦ ⟨c, hc, fun σ ↦ by
+      simpa only [mpv_reindexPhysical] using h fun n ↦ e (σ n)⟩
+  obtain ⟨a, ha, h⟩ := exists_unit_phase_power_of_isNormalTensor_fin hProp'
+    (hA.reindexPhysical e) (hB.reindexPhysical e)
+  refine ⟨a, ha, fun N hN σ ↦ ?_⟩
+  simpa only [mpv_reindexPhysical, e, Equiv.apply_symm_apply] using
+    h N hN fun n ↦ e.symm (σ n)
 
 /-- Positive-length nonzero proportionality is a sufficient special case of
 the eventual geometric-phase theorem for normal tensors.
@@ -207,10 +236,10 @@ the eventual geometric-phase theorem for normal tensors.
 Source: CPSV16, Corollary eqV, lines 1121--1128, combined with the one-block
 case of the proportionality hypothesis in Theorem thm1, lines 1167--1182. -/
 theorem _root_.MPTensor.NonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hProp : NonzeroProportionalMPV₂ A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
-    ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin d,
+    ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ N : ℕ, 0 < N → ∀ σ : Fin N → α,
       mpv A σ = a ^ N * mpv B σ :=
   hProp.eventually.exists_unit_phase_power_of_isNormalTensor hA hB
 
