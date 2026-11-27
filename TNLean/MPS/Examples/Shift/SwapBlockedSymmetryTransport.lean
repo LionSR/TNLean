@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.Shift.SwapSymmetryTransport
+import TNLean.MPS.MPU.Equivalence.PhysicalMatrixBlocking
 
 /-!
 # Swap symmetry transport after common blocking
@@ -31,21 +32,6 @@ open scoped Matrix BigOperators
 namespace MPOTensor
 
 variable {d D Da Db : ℕ}
-
-private theorem reindex_piKronecker_blockKron
-    (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
-    Matrix.reindex (Kraus.blockedConfigEquiv d N k).symm
-        (Kraus.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
-      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k Q)) := by
-  classical
-  symm
-  exact Matrix.ext fun σ τ => by
-    simpa [Matrix.piKronecker_apply, MPSTensor.blockKron, Matrix.reindex_apply,
-      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply,
-      Function.comp_apply, Fintype.prod_prod_type] using
-      (finProdFinEquiv.prod_comp (fun v : Fin (N * k) =>
-        Q (Kraus.blockedConfigEquiv d N k σ v)
-          (Kraus.blockedConfigEquiv d N k τ v)))
 
 private theorem reindex_mul {α β : Type*} [Fintype α] [Fintype β]
     (e : α ≃ β) (X Y : Matrix α α ℂ) :
