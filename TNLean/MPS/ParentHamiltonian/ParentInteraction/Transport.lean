@@ -17,7 +17,8 @@ import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 The Hilbert-space ingredients of the parent-Hamiltonian martingale method:
 
-* `cyclicRestrictES` — cyclic-window restriction, and the cyclic average of the conjugates
+* `LinearMap.withLpMap 2 (cyclicRestrictₗ …)` — cyclic-window restriction in the Euclidean
+  space, and the cyclic average of the conjugates
   \(R_{i,\tau}^\dagger T R_{i,\tau}\) of an operator on a window;
 * `restrictLast_eq_withLpMap_cyclicRestrictₗ_zero` and
   `restrictFirst_eq_withLpMap_cyclicRestrictₗ_one` — the endpoint coordinate
@@ -56,15 +57,6 @@ open scoped BigOperators ComplexOrder InnerProductSpace Matrix
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ### Cyclic restrictions -/
-
-/-- The cyclic window restriction map transported from `NSiteSpace` to the
-Hilbert-space model `EuclideanSpace`. -/
-noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
-    (τ : Fin N → Fin d) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
-  LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) hN L i τ)
 
 /-! ### Disjoint cyclic windows and the ground space of the parent Hamiltonian -/
 

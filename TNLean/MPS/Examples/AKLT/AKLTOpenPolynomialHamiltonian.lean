@@ -123,9 +123,9 @@ theorem akltOpenHamiltonian_eigenvalue_ge {N : ℕ} (hN : 2 ≤ N) {μ : ℂ}
 the open AKLT matrix-product space. Source: arXiv:2011.12127, lines 1171--1174. -/
 theorem akltOpenHamiltonian_eigenspace_eq_groundSpace {N : ℕ} (hN : 2 ≤ N) :
     Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) =
-      (groundSpaceES akltTensor N).map
+      (((groundSpace akltTensor N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap := by
-  rw [← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN]
+  rw [← aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace hN]
   ext v
   have hv := LinearMap.congr_fun (akltOpenHamiltonian_add_eq_parent hN) v
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply] at hv
@@ -141,7 +141,7 @@ theorem akltOpenHamiltonian_groundSpace_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ)) = 4 := by
   rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN,
-    ← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
+    ← aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace hN,
     LinearEquiv.finrank_map_eq]
   exact aklt_finrank_ker_hamiltonian_parentChainInteraction_two hN
 

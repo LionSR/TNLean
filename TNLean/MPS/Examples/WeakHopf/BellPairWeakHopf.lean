@@ -786,23 +786,25 @@ theorem unitWordEntry_mem_groundSpace (n : ℕ) (p : Fin r × Fin r) :
     Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
   rfl
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- For the Bell-pair state tensor the support projection is the represented
 unit, \(P_n=Q_n\), at every positive length; at two sites
 \(P=Q=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K\), as in
 `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
-theorem starProjection_groundSpaceES_stateTensor {n : ℕ} (hn : 0 < n) :
-    (MPSTensor.groundSpaceES (stateTensor r) n).starProjection.toLinearMap =
+theorem starProjection_map_groundSpace_stateTensor {n : ℕ} (hn : 0 < n) :
+    (((groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)).starProjection.toLinearMap =
       Matrix.toEuclideanLin ((weakHopfRepresentation r).rep n 1) := by
   obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
   have hQP := (weakHopfRepresentation r).toEuclideanLin_rep_one_comp_starProjection
     (isBoundaryCompatible r) (isNBlkInjective_stateTensor r) hn
-  have hPQ : (MPSTensor.groundSpaceES (stateTensor r) (m + 1)).starProjection.toLinearMap ∘ₗ
+  have hPQ : (((groundSpace (stateTensor r) (m + 1)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)).starProjection.toLinearMap ∘ₗ
       Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) =
         Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) := by
     refine LinearMap.ext fun v ↦ Submodule.starProjection_eq_self_iff.mpr ?_
-    rw [MPSTensor.mem_groundSpaceES_iff]
+    rw [MPSTensor.mem_map_groundSpace_iff]
     change (weakHopfRepresentation r).rep (m + 1) 1 *ᵥ
       (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (r * r) (m + 1))) v ∈ _
     rw [rep_one_eq_sum, Matrix.sum_mulVec]
@@ -814,7 +816,8 @@ theorem starProjection_groundSpaceES_stateTensor {n : ℕ} (hn : 0 < n) :
     rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       ← (weakHopfRepresentation r).rep_star, star_one]
   have hP := (Submodule.starProjection_isSymmetric
-    (MPSTensor.groundSpaceES (stateTensor r) (m + 1))).adjoint_eq
+    (((groundSpace (stateTensor r) (m + 1)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))).adjoint_eq
   rw [← hP, ← hQP, LinearMap.adjoint_comp, hP, hQ, hPQ]
 
 /-- The weak-Hopf average fixes the support projection of the Bell-pair state,
@@ -822,8 +825,10 @@ theorem starProjection_groundSpaceES_stateTensor {n : ℕ} (hn : 0 < n) :
 lines 2463--2466. -/
 theorem weakHopfAverage_starProjection_stateTensor {n : ℕ} (hn : 0 < n) :
     (weakHopfRepresentation r).weakHopfAverage n
-        (MPSTensor.groundSpaceES (stateTensor r) n).starProjection.toLinearMap =
-      (MPSTensor.groundSpaceES (stateTensor r) n).starProjection.toLinearMap :=
+        (((groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)).starProjection.toLinearMap =
+      (((groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection.toLinearMap :=
   (weakHopfRepresentation r).weakHopfAverage_starProjection (isBoundaryCompatible r)
     (isNBlkInjective_stateTensor r) hn
 
@@ -838,7 +843,7 @@ theorem weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction_stateTensor {
         (LinearMap.toMatrix' (MPSTensor.parentInteraction (stateTensor r) n))) = 0 := by
   rw [(weakHopfRepresentation r).weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction
     (isBoundaryCompatible r) (isNBlkInjective_stateTensor r) hn,
-    starProjection_groundSpaceES_stateTensor r hn, sub_self]
+    starProjection_map_groundSpace_stateTensor r hn, sub_self]
 
 omit [NeZero r] in
 /-- The canonical parent term \(I-P_n\) of the Bell-pair state is nonzero for
