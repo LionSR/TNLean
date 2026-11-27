@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.KrausGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
-import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Normal-tensor overlap dichotomy

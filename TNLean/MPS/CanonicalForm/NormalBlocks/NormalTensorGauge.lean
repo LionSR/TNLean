@@ -195,9 +195,10 @@ theorem _root_.MPTensor.IsNormalTensor.selfOverlap_tendsto_one {α : Type*} [Fin
   rw [GaugeEquiv.sameMPV hGauge N w]
 
 /-- Identifying equal bond dimensions does not change normality. -/
-theorem isNormalTensor_cast_iff {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
-    (A : MPSTensor d D₁) :
-    IsNormalTensor (cast (congr_arg (MPSTensor d) hdim) A) ↔ IsNormalTensor A := by
+theorem isNormalTensor_cast_iff {α : Type*} [Fintype α] {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
+    (A : MPTensor α (Fin D₁)) :
+    IsNormalTensor (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) ↔
+      IsNormalTensor A := by
   subst D₂
   rfl
 
@@ -210,39 +211,28 @@ self-overlaps tend to one, $\lVert\zeta\rVert=1$.  This is the phase
 normalization following Lemma `equalMPS` of arXiv:1606.00608, lines
 1080--1097. -/
 theorem norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
-    {D₁ D₂ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {α : Type*} [Fintype α] {D₁ D₂ : ℕ}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hdim : D₁ = D₂) {X : GL (Fin D₂) ℂ} {ζ : ℂ}
     (hrel : ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
-      (cast (congr_arg (MPSTensor d) hdim) A) i *
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) i *
       (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ))) :
     ‖ζ‖ = 1 := by
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
   have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   subst D₂
-  have hAA : Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖)
+  have hAA : Tendsto (fun N => ‖mpvOverlap A A N‖)
       atTop (nhds (1 : ℝ)) := by
     simpa using hA.selfOverlap_tendsto_one.norm
-  have hBB : Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖)
+  have hBB : Tendsto (fun N => ‖mpvOverlap B B N‖)
       atTop (nhds (1 : ℝ)) := by
     simpa using hB.selfOverlap_tendsto_one.norm
   exact norm_eq_one_of_selfOverlap_scale hAA hBB
     (mpvOverlap_self_scale_of_mpv_eq_pow_mul
       (mpv_eq_pow_mul_of_gaugePhase A B X ζ hrel))
 
-/-- MPV phase equivalence between normal tensors is realized letterwise by a
-gauge and a nonzero scalar, after identifying their bond dimensions.
-
-This is the grouping implication in arXiv:1606.00608, Lemma `equalMPS`
-(lines 1080--1117) and Proposition `prop:char-BNT` (lines 1135--1148).
-Each tensor is first put into its trace-preserving Perron gauge.  The gauges
-are pure similarities because both tensors have spectral radius one.  The
-rectangular overlap-decay theorem gives equality of the bond dimensions from
-the positive-length overlaps, without using the empty word.  The
-trace-preserving equal-overlap theorem then supplies the gauge-phase relation,
-which is transported back to the original tensors. -/
-theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+private theorem dim_eq_and_gaugePhaseEquiv_of_isNormalTensor_fin
     {DX DY : ℕ}
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hX : IsNormalTensor X) (hY : IsNormalTensor Y)
@@ -309,6 +299,33 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       X' Y' hIrrX hIrrY hTPX hTPY hCrossNorm
   refine ⟨rfl, ?_⟩
   exact gaugePhaseEquiv_of_gaugeEquiv_left_right hGaugeX hGaugePhase hGaugeY
+
+/-- MPV phase equivalence between normal tensors is realized letterwise by a
+gauge and a nonzero scalar, after identifying their bond dimensions.
+
+This is the grouping implication in arXiv:1606.00608, Lemma `equalMPS`
+(lines 1080--1117) and Proposition `prop:char-BNT` (lines 1135--1148).
+Each tensor is first put into its trace-preserving Perron gauge.  The gauges
+are pure similarities because both tensors have spectral radius one.  The
+rectangular overlap-decay theorem gives equality of the bond dimensions from
+the positive-length overlaps, without using the empty word.  The
+trace-preserving equal-overlap theorem then supplies the gauge-phase relation,
+which is transported back to the original tensors. -/
+theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+    {α : Type*} [Fintype α] {DX DY : ℕ}
+    {X : MPTensor α (Fin DX)} {Y : MPTensor α (Fin DY)}
+    (hX : IsNormalTensor X) (hY : IsNormalTensor Y)
+    (h : MPVBlockPhaseEquiv X Y) :
+    ∃ hdim : DX = DY,
+      GaugePhaseEquiv
+        (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) X) Y := by
+  classical
+  -- The proof runs on the `Fin` alphabet obtained by relabelling along `Fintype.equivFin`.
+  let e := (Fintype.equivFin α).symm
+  obtain ⟨hdim, hG⟩ := dim_eq_and_gaugePhaseEquiv_of_isNormalTensor_fin
+    (hX.reindexPhysical e) (hY.reindexPhysical e) (h.reindexPhysical e)
+  subst hdim
+  exact ⟨rfl, (gaugePhaseEquiv_reindexPhysical_equiv e X Y).1 hG⟩
 
 /-- Eventual linear independence excludes gauge-phase-equivalent duplicate
 members of a basis of normal tensors.

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Tensor.Physical.TensorProductSpan
-import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Independent tensor products of CPSV canonical-form-II data
@@ -76,21 +75,11 @@ theorem _root_.MPTensor.IsNormalTensor.tensorProduct_of_leftCanonical
     {B : MPTensor β (Fin E)} (hB : IsNormalTensor B)
     (hLeftA : IsLeftCanonical A) (hLeftB : IsLeftCanonical B) :
     IsNormalTensor (MPSTensor.tensorProduct A B) := by
-  classical
   let _ : NeZero (D * E) :=
     ⟨Nat.mul_ne_zero hA.bondDim_ne_zero hB.bondDim_ne_zero⟩
-  -- `isNormalTensor_of_isNormal_leftCanonical` is stated on a `Fin` alphabet.
-  let e := (Fintype.equivFin (α × β)).symm
-  have h := isNormalTensor_of_isNormal_leftCanonical
-    (Kraus.reindexPhysical e (MPSTensor.tensorProduct A B))
-    ((isNormal_reindexPhysical_equiv e _).2
-      (isNormal_tensorProduct A B hA.isNormal hB.isNormal))
-    ((Kraus.isTP_reindexPhysical_iff e _).2 (leftCanonical_tensorProduct A B hLeftA hLeftB))
-  have hT : Kraus.reindexPhysical e.symm
-      (Kraus.reindexPhysical e (MPSTensor.tensorProduct A B)) = MPSTensor.tensorProduct A B := by
-    funext i
-    simp [Kraus.reindexPhysical]
-  simpa only [hT] using h.reindexPhysical e.symm
+  exact isNormalTensor_of_isNormal_leftCanonical (MPSTensor.tensorProduct A B)
+    (isNormal_tensorProduct A B hA.isNormal hB.isNormal)
+    (leftCanonical_tensorProduct A B hLeftA hLeftB)
 
 /-- The transfer map of an independent tensor product acts on a reindexed
 Kronecker product as the reindexed Kronecker product of the two transfer maps:
