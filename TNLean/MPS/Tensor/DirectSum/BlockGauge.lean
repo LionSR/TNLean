@@ -46,7 +46,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-! ## Repetition over sector copies -/
 
@@ -59,7 +59,7 @@ $\bigoplus_j (I_{r_j} \otimes X_j)$.
 Sources: arXiv:1606.00608, Appendix MPV proof, line 1191; arXiv:1708.00029,
 equation `eq:bdnr`, lines 286--305, and the blockwise similarities at
 lines 313--332. -/
-noncomputable def matched_block_gauge {Q : SectorDecomposition d}
+noncomputable def matched_block_gauge {Q : SectorDecomposition α}
     (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ) :
     (s : Fin Q.totalCopies) → GL (Fin (Q.flatDim s)) ℂ := fun s => by
   change GL (Fin (Q.basisDim (Q.flatIndexEquiv.symm s).1)) ℂ
@@ -120,7 +120,7 @@ section GaugeConjugation
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable (μ : Fin r → ℂ)
-variable (A B : (k : Fin r) → MPSTensor d (dim k))
+variable (A B : (k : Fin r) → MPTensor α (Fin (dim k)))
 
 /-- Direct conjugation formula for weighted direct sums.
 
@@ -132,32 +132,32 @@ Reference: arXiv:1606.00608, Corollary 2.11 (`eq:II_auxcor`, lines 1172--1178)
 and the block-diagonal gauge construction in lines 1189--1192. -/
 theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
-    (hX : ∀ k : Fin r, ∀ i : Fin d,
+    (hX : ∀ k : Fin r, ∀ i : α,
       B k i =
         (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
           (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
-    ∀ i : Fin d,
-      toTensorFromBlocks (α := Fin d) (μ := μ) B i =
+    ∀ i : α,
+      toTensorFromBlocks (α := α) (μ := μ) B i =
         (globalGaugeOfBlocks X : Matrix (Fin (∑ k : Fin r, dim k))
           (Fin (∑ k : Fin r, dim k)) ℂ) *
-          toTensorFromBlocks (α := Fin d) (μ := μ) A i *
+          toTensorFromBlocks (α := α) (μ := μ) A i *
           (((globalGaugeOfBlocks X)⁻¹ : GL (Fin (∑ k : Fin r, dim k)) ℂ) :
             Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) := by
   classical
   intro i
-  let α := (k : Fin r) × Fin (dim k)
-  let e : α ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
-  let f : Matrix α α ℂ →* Matrix (Fin _) (Fin _) ℂ :=
+  let ι := (k : Fin r) × Fin (dim k)
+  let e : ι ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
+  let f : Matrix ι ι ℂ →* Matrix (Fin _) (Fin _) ℂ :=
     (Matrix.reindexAlgEquiv ℂ ℂ e).toRingEquiv.toMonoidHom
-  let BD := fun (T : (k : Fin r) → MPSTensor d (dim k)) =>
+  let BD := fun (T : (k : Fin r) → MPTensor α (Fin (dim k))) =>
     Matrix.blockDiagonal' fun k => (μ k) • T k i
-  let XBD : Matrix α α ℂ :=
+  let XBD : Matrix ι ι ℂ :=
     Matrix.blockDiagonal' fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-  let XBDinv : Matrix α α ℂ :=
+  let XBDinv : Matrix ι ι ℂ :=
     Matrix.blockDiagonal' fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-  have htoA : toTensorFromBlocks (α := Fin d) (μ := μ) A i = f (BD A) := by
+  have htoA : toTensorFromBlocks (α := α) (μ := μ) A i = f (BD A) := by
     simp [toTensorFromBlocks, BD, f, e]
-  have htoB : toTensorFromBlocks (α := Fin d) (μ := μ) B i = f (BD B) := by
+  have htoB : toTensorFromBlocks (α := α) (μ := μ) B i = f (BD B) := by
     simp [toTensorFromBlocks, BD, f, e]
   have hBD : BD B = XBD * BD A * XBDinv := by
     simp only [BD, XBD, XBDinv]
