@@ -441,7 +441,7 @@ lemma neighboringOperator_posSemidef (k h : Fin 4) :
 lemma factorization_sectorVirtualMatrixFamily_span_eq_top :
     Submodule.span ℂ (Set.range factorization.sectorVirtualMatrixFamily) = ⊤ :=
   factorization.sectorVirtualMatrixFamily_span_eq_top
-    ((isInjective_toMPSTensor_iff tensor).2 tensor_isInjective)
+    (tensor_isInjective)
 
 /-- All four sectors are active because their weights are strictly positive. -/
 noncomputable def activeEquiv : factorization.ActiveSector p ≃ Fin 4 where

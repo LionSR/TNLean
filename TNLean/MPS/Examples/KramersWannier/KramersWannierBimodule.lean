@@ -114,7 +114,6 @@ def z2Fusion (a b c : Fin 2) : ℕ := if c = a + b then 1 else 0
 /-- Both blocks of the symmetry algebra are normal: each has a one-site matrix equal to the
 scalar `1`. -/
 theorem z2Tensor_isNormal (a : Fin 2) : Kraus.IsNormal (z2Tensor a) := by
-  rw [← isNormal_toMPSTensor_iff]
   fin_cases a
   · exact isNormal_of_bondOne (idTensor 2) 0 0 (by simp [idTensor])
   · exact isNormal_of_bondOne flipTensor 1 0 (by simp [flipTensor])
@@ -233,15 +232,17 @@ private theorem exists_gauge_of_mpo_eq (M : MPOTensor 2 (2 * 1))
     (hM : ∀ L : ℕ, 0 < L → M.mpo L = kwTensor.mpo L) :
     ∃ (V : Matrix (Fin 2) (Fin (2 * 1)) ℂ) (W : Matrix (Fin (2 * 1)) (Fin 2) ℂ),
       V * W = 1 ∧ W * V = 1 ∧ ∀ i j, M (i, j) = W * kwTensor (i, j) * V := by
+  -- The single-block compression theorem is stated on the letters `Fin (2 * 2)` (it runs through
+  -- the word algebra of `Fin d`); it is applied to the doubled-index views.
   obtain ⟨V, W, hred, hnil⟩ :=
     MPSTensor.exists_isReduction_and_nilpotent_of_isNormal kwTensor.toMPSTensor
       ((isNormal_toMPSTensor_iff _).2 kwTensor_isNormal) two_pos M.toMPSTensor fun L hL σ => by
-        rw [MPOTensor.mpv_toMPSTensor, MPOTensor.mpv_toMPSTensor, hM L hL]
+        rw [mpv_toMPSTensor_eq, mpv_toMPSTensor_eq, mpv_eq_mpo, mpv_eq_mpo, hM L hL]
   refine ⟨V, W, hred.1, (Matrix.mul_eq_one_comm_of_equiv (finCongr (by norm_num))).mp hred.1,
     fun i j => ?_⟩
   have h := hnil [finProdFinEquiv (i, j)] (by simp)
   simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one,
-    toMPSTensor_finProdFinEquiv] at h
+    toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical, Equiv.symm_apply_apply] at h
   exact sub_eq_zero.mp h
 
 /-- **The kernel absorbs `η` on its input at the tensor level.** The stacked tensor
@@ -278,6 +279,28 @@ theorem exists_gauge_mulTensor_flipTensor_kwTensor :
 
 /-! ### Fusion of the kernel with its adjoint: two weighted blocks and two zero slots -/
 
+/-- A multi-block compression of the doubled-index views of two operator tensors is a
+multi-block compression of the tensors on the pair alphabet, with the same gauge and the same
+number of zero slots. The compression theorem behind
+`exists_multiBlockCompression_mulTensor_of_mpo_eq_sum` runs through the word algebra of `Fin d`,
+so it produces the doubled-index form. -/
+private def compressionOfDoubled {DB : ℕ} {D : Fin 2 → ℕ} {B : MPOTensor 2 DB}
+    {C : ∀ s, MPOTensor 2 (D s)}
+    (P : MPSTensor.MultiBlockCompression B.toMPSTensor Finset.univ fun s => (C s).toMPSTensor) :
+    MPSTensor.MultiBlockCompression B Finset.univ C where
+  z := P.z
+  ord := P.ord
+  gauge := P.gauge
+  triangular i := by
+    simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+      Equiv.symm_apply_apply] using P.triangular (finProdFinEquiv i)
+  matched i s := by
+    simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+      Equiv.symm_apply_apply] using P.matched (finProdFinEquiv i) s
+  unmatched i t := by
+    simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+      Equiv.symm_apply_apply] using P.unmatched (finProdFinEquiv i) t
+
 /-- **The stacked tensor `K · Kᵀ` compresses onto `2 · 1 ⊕ 2 · η` with two zero slots.** The
 product of the intertwiner with its adjoint, of bond dimension four, admits a multi-block
 compression onto the two weighted bond-one blocks of the symmetry algebra, and the dimension
@@ -288,16 +311,16 @@ Project result: Theorem 7.12 of
 `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex` applied to
 `kwTensor_mpo_mul_kwTransposeTensor_mpo`. -/
 theorem exists_compression_mulTensor_kwTensor_kwTransposeTensor :
-    ∃ P : MPSTensor.MultiBlockCompression (mulTensor kwTensor kwTransposeTensor).toMPSTensor
-        Finset.univ (fun a => (2 : ℂ) • (z2Tensor a).toMPSTensor), P.z = 2 := by
+    ∃ P : MPSTensor.MultiBlockCompression (mulTensor kwTensor kwTransposeTensor)
+        Finset.univ (fun a => (2 : ℂ) • z2Tensor a), P.z = 2 := by
   obtain ⟨P⟩ := exists_multiBlockCompression_mulTensor_of_mpo_eq_sum kwTensor kwTransposeTensor
     Finset.univ (fun _ => (2 : ℂ)) z2Tensor (fun _ _ => two_ne_zero)
-    (fun a _ => (isNormal_toMPSTensor_iff _).2 (z2Tensor_isNormal a)) (fun _ _ => Nat.one_pos)
+    (fun a _ => z2Tensor_isNormal a) (fun _ _ => Nat.one_pos)
     fun L hL => by
       have : NeZero L := NeZero.of_pos hL
       rw [mpo_mulTensor, kwTensor_mpo_mul_kwTransposeTensor_mpo]
-  refine ⟨P, ?_⟩
-  have h := P.dim_eq
+  refine ⟨compressionOfDoubled (C := fun a => (2 : ℂ) • z2Tensor a) P, ?_⟩
+  have h := (compressionOfDoubled (C := fun a => (2 : ℂ) • z2Tensor a) P).dim_eq
   simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one] at h
   omega
 
@@ -307,16 +330,16 @@ Project result: Theorem 7.12 of
 `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex` applied to the source's
 fusion `D_σ² = 1 + D_ψ` (`kwTransposeTensor_mpo_mul_kwTensor_mpo`). -/
 theorem exists_compression_mulTensor_kwTransposeTensor_kwTensor :
-    ∃ P : MPSTensor.MultiBlockCompression (mulTensor kwTransposeTensor kwTensor).toMPSTensor
-        Finset.univ (fun a => (2 : ℂ) • (z2Tensor a).toMPSTensor), P.z = 2 := by
+    ∃ P : MPSTensor.MultiBlockCompression (mulTensor kwTransposeTensor kwTensor)
+        Finset.univ (fun a => (2 : ℂ) • z2Tensor a), P.z = 2 := by
   obtain ⟨P⟩ := exists_multiBlockCompression_mulTensor_of_mpo_eq_sum kwTransposeTensor kwTensor
     Finset.univ (fun _ => (2 : ℂ)) z2Tensor (fun _ _ => two_ne_zero)
-    (fun a _ => (isNormal_toMPSTensor_iff _).2 (z2Tensor_isNormal a)) (fun _ _ => Nat.one_pos)
+    (fun a _ => z2Tensor_isNormal a) (fun _ _ => Nat.one_pos)
     fun L hL => by
       have : NeZero L := NeZero.of_pos hL
       rw [mpo_mulTensor, kwTransposeTensor_mpo_mul_kwTensor_mpo]
-  refine ⟨P, ?_⟩
-  have h := P.dim_eq
+  refine ⟨compressionOfDoubled (C := fun a => (2 : ℂ) • z2Tensor a) P, ?_⟩
+  have h := (compressionOfDoubled (C := fun a => (2 : ℂ) • z2Tensor a) P).dim_eq
   simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one] at h
   omega
 

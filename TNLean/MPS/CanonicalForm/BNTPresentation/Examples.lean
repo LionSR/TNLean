@@ -47,7 +47,7 @@ def scalarUnitTensor {α : Type*} : MPTensor α (Fin 1) := fun _ => 1
       rw [Kraus.evalWord_cons, ih]
       simp [scalarUnitTensor]
 
-private theorem scalarUnitTensor_transferMap {α : Type*} [Unique α] :
+private theorem scalarUnitTensor_transferMap {α : Type*} [Fintype α] [Unique α] :
     Kraus.transferMap (scalarUnitTensor : MPTensor α (Fin 1)) = LinearMap.id := by
   apply LinearMap.ext
   intro X
@@ -59,7 +59,7 @@ private theorem scalarUnitTensor_transferMap {α : Type*} [Unique α] :
 /-- The one-dimensional scalar unit tensor is normal.
 
 Source: arXiv:1606.00608, canonical-form normal-block condition, lines 233--245. -/
-theorem scalarUnitTensor_isNormalTensor {α : Type*} [Unique α] :
+theorem scalarUnitTensor_isNormalTensor {α : Type*} [Fintype α] [Unique α] :
     IsNormalTensor (scalarUnitTensor : MPTensor α (Fin 1)) :=
   isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     scalarUnitTensor scalarUnitTensor_transferMap

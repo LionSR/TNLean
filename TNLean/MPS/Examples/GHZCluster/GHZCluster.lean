@@ -51,13 +51,15 @@ namespace MPSTensor
 the GHZ tensor tensored with the once-blocked cluster tensor, with the pair
 physical alphabet numbered by `finProdFinEquiv`. -/
 def z4z2GHZClusterTensor : MPSTensor 8 4 :=
-  Kraus.reindexPhysical finProdFinEquiv.symm (tensorProduct ghzTensor clusterBlocked)
+  Kraus.reindexPhysical (finProdFinEquiv (m := 2) (n := 4)).symm
+    (tensorProduct ghzTensor clusterBlocked)
 
 /-- The block labeled by the GHZ value `x`, on the full eight-dimensional
 physical alphabet.  This is the product of the one-dimensional GHZ sector and
 the blocked cluster tensor. -/
 def z4z2GHZClusterBlock (x : Fin 2) : MPSTensor 8 2 :=
-  Kraus.reindexPhysical finProdFinEquiv.symm (tensorProduct (ghzSectorTensor x) clusterBlocked)
+  Kraus.reindexPhysical (finProdFinEquiv (m := 2) (n := 4)).symm
+    (tensorProduct (ghzSectorTensor x) clusterBlocked)
 
 private theorem finProdFinEquiv_zero_two (a : Fin 2) :
     finProdFinEquiv ((0 : Fin 1), a) = a := by
@@ -79,7 +81,7 @@ injectivity theorem applied to a one-dimensional GHZ sector and the existing
 injective blocked cluster tensor. -/
 theorem z4z2GHZClusterBlock_isInjective (x : Fin 2) :
     Kraus.IsInjective (z4z2GHZClusterBlock x) :=
-  (isInjective_reindexPhysical_equiv finProdFinEquiv.symm _).2
+  (isInjective_reindexPhysical_equiv (finProdFinEquiv (m := 2) (n := 4)).symm _).2
     (isInjective_tensorProduct _ _ (ghzSectorTensor_isInjective x) clusterBlocked_isInjective)
 
 /-- The two blocks are locally orthogonal because their GHZ physical supports

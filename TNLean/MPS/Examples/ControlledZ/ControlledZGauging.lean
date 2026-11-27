@@ -221,7 +221,7 @@ private theorem mpo_czRepTensor_mul (hN : 0 < N) (a b : Fin 2) :
 "since it squares to identity, it yields a representation of `ℤ₂`"). -/
 theorem czFamily_isNormalRepresentation : czFamily.IsNormalRepresentation where
   isNormal := Multiplicative.forall_zmod_two (idTensor_isNormal (d := 2))
-    ((isNormal_toMPSTensor_iff _).2 czMPUTensor_isNormal)
+    czMPUTensor_isNormal
   operator_mul g h _ hN :=
     mpo_czRepTensor_mul hN (Multiplicative.toAdd g) (Multiplicative.toAdd h)
 
