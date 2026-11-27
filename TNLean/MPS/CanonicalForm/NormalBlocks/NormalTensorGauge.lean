@@ -363,7 +363,7 @@ This is the corollary to Lemma `equalMPS` at arXiv:1606.00608, lines
 1121--1132.  The proof puts each tensor into its trace-preserving Perron gauge,
 applies the overlap orthogonality criterion there, and uses gauge invariance of
 the matrix product vectors. -/
-theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+private theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv_fin
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNormal : ∀ k, IsNormalTensor (A k))
@@ -398,6 +398,24 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
     exact (GaugeEquiv.sameMPV (hGauge k) N w).symm
   rw [← hFamily]
   exact hLI N hN
+
+/-- **Eventual linear independence of separated normal blocks**, over any finite physical
+alphabet: the statement above, transported along `Fintype.equivFin`. -/
+theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+    {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hNormal : ∀ k, IsNormalTensor (A k))
+    (hDistinct : BlocksNotGaugePhaseEquiv A) :
+    ∃ N₀ : ℕ, ∀ N > N₀, LinearIndependent ℂ (fun k : Fin r => mpvState (A k) N) := by
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨N₀, hLI⟩ :=
+    exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv_fin
+      (fun k ↦ Kraus.reindexPhysical e (A k)) (fun k ↦ (hNormal k).reindexPhysical e)
+      (hDistinct.reindexPhysical e)
+  refine ⟨N₀, fun N hN ↦ ?_⟩
+  exact linearIndependent_mpvState_of_configEquiv (Equiv.arrowCongr (Equiv.refl _) e.symm) A
+    (fun k ↦ Kraus.reindexPhysical e (A k))
+    (fun k σ ↦ by rw [mpv_reindexPhysical]; rfl) (hLI N hN)
 
 /-- **Bases of normal tensors of a weighted direct sum.** A finite family of normal tensors is a
 basis of normal tensors of the weighted direct sum `⊕_k μ_k A_k` exactly when distinct members
