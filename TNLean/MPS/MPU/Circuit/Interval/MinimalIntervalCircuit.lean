@@ -48,6 +48,8 @@ It also contains the following results.
   intervals.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 section MinimalIntervalCircuit
 
 section
@@ -65,11 +67,12 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def IsMinimalIntervalCircuitImplementation {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (j k : Fin (N + 1)) (hjk : j.val ≤ k.val) (K : ℕ)
     (Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (C : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ) :
@@ -92,11 +95,12 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem mono {d D N K L : ℕ} [NeZero d]
     {hd : 2 ≤ d} {U : Matrix (Cfg d N) (Cfg d N) ℂ}
     {hU : U ∈ unitaryGroup (Cfg d N) ℂ}
-    {hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D}
-    {B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    {hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D}
+    {B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k)}
-    {P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ}
+    {P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ}
     {j k : Fin (N + 1)} {hjk : j.val ≤ k.val}
     {Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ}
     {C : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ}
@@ -128,11 +132,12 @@ theorem exists_minimalInterval_circuit_of_partition
     {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (K b M : ℕ)
     (hLeaves : ∀ i : Fin N,
       ∃ Z : Matrix (Cfg d (logicalSiteCount d D N))
@@ -233,11 +238,12 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ t, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) t))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ t, Module.Basis (Fin (cutRank (interval N 0 t) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) t))
-    (P : ∀ t : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val)) ℂ)
+    (P : ∀ t : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 t.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 t.val) (operatorCoefficientTensor U))) ℂ)
     (hPhull : ∀ t, P t ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B t.val aa bb q))
     (hPpos : ∀ t, (P t).PosDef)
@@ -264,9 +270,9 @@ theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
     apply Fin.ext
     change m.val - 1 + 1 = m.val
     omega
-  let r := cutCoefficientRank (operatorCoefficientTensor U) (internalCutEmbedding N c).val
-  have hr : 0 < r := cutCoefficientRank_pos _
-    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) _
+  let r := cutRank (interval N 0 (internalCutEmbedding N c).val) (operatorCoefficientTensor U)
+  have hr : 0 < r := ManyBody.cutRank_pos
+    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU)
   let em := minimalCutBondRegisterEncoding hd U hU hbound (internalCutEmbedding N c)
   let ej := minimalCutBondRegisterEncoding hd U hU hbound j
   let ek := minimalCutBondRegisterEncoding hd U hU hbound k
@@ -276,8 +282,8 @@ theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
     CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × τcfg
   let ρ := (((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
     CutIntervalConfig d N (internalCutEmbedding N c).val k.val) ×
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) k.val) ×
-        Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))) × τcfg)
+      (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
+        Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))) × τcfg)
   let W := balancedIntervalChildren (minimalOperatorInterval U B hjm.le)
     (minimalOperatorInterval U B hmk.le) (CFC.sqrt (P j))
     (CFC.sqrt (dualGramMetric (P k))) (P (internalCutEmbedding N c))
@@ -306,8 +312,9 @@ theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
   let gInv := (outerSpectatorJoiningRegrouping
     ((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
       CutIntervalConfig d N (internalCutEmbedding N c).val k.val) ×
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) k.val) ×
-        Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))) (Fin r × Fin r) τcfg).trans
+      (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
+        Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))) (Fin r ×
+            Fin r) τcfg).trans
     (Equiv.prodCongr intervalChildrenRegrouping.symm (Equiv.refl τcfg))
   let G := intervalJointOutputEmbedding j (internalCutEmbedding N c) k hjm hmk em ej ek
     (intervalJointInitializedOutsideEmbedding (d := d) (D := D) j

@@ -10,6 +10,7 @@ import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Exponential.HermitianUnitaryPath
+import QICLean.ManyBody.Sites.Placement.Basic
 import Mathlib.Data.List.OfFn
 
 /-!
@@ -29,43 +30,6 @@ open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
-
-private theorem hermitianUnitaryPath_add_of_commute
-    {n : Type*} [Fintype n] [DecidableEq n] (A B : Matrix n n ℂ) (hAB : Commute A B)
-    (t : ℝ) : hermitianUnitaryPath (A + B) t =
-      hermitianUnitaryPath A t * hermitianUnitaryPath B t := by
-  unfold hermitianUnitaryPath
-  rw [smul_add, smul_add]
-  exact Matrix.exp_add_of_commute _ _
-    ((((hAB.smul_left Complex.I).smul_right Complex.I).smul_left t).smul_right t)
-
-private theorem hermitianUnitaryPath_fin_sum_of_commute
-    {n : Type*} [Fintype n] [DecidableEq n] {m : ℕ}
-    (A : Fin m → Matrix n n ℂ) (hc : Pairwise fun j k ↦ Commute (A j) (A k)) (t : ℝ) :
-    hermitianUnitaryPath (∑ j, A j) t =
-      (List.ofFn fun j ↦ hermitianUnitaryPath (A j) t).prod := by
-  induction m with
-  | zero => simp [hermitianUnitaryPath]
-  | succ m ih =>
-    have h0 : Commute (A 0) (∑ j : Fin m, A j.succ) :=
-      Commute.sum_right Finset.univ (fun j : Fin m ↦ A j.succ) (A 0)
-        (fun j _ ↦ hc (Fin.succ_ne_zero j).symm)
-    rw [Fin.sum_univ_succ, List.ofFn_succ, List.prod_cons,
-      hermitianUnitaryPath_add_of_commute _ _ h0]
-    rw [ih (fun j ↦ A j.succ) (fun j k h ↦ hc (by simpa using h))]
-
-/-- The exponential path of an operator supported on a region stays in its supported
-operator algebra. This supplies the block factors in Osborne, Figure 2. -/
-theorem hermitianUnitaryPath_mem_supported
-    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) (S : Finset ι)
-    {H : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (t : ℝ) :
-    hermitianUnitaryPath H t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
-  refine ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun B hB ↦ ?_
-  have hB' : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Sᶜ := by
-    simpa only [Finset.coe_compl] using hB
-  have hc := ManyBody.commute_of_mem_supportedOperators_of_disjoint hH hB' disjoint_compl_right
-  exact ((hc.smul_left Complex.I).smul_left t).exp_left
 
 variable {L q w : ℕ}
 
@@ -89,7 +53,7 @@ theorem hermitianUnitaryPath_chainGridRetained_eq_prod (hw : 0 < w)
     (Φ : ManyBody.BondInteraction L q) (t : ℝ) :
     hermitianUnitaryPath (chainGridRetainedHamiltonian hw Φ) t =
       (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw Φ j) t).prod :=
-  hermitianUnitaryPath_fin_sum_of_commute _ (commute_chainGridBlockHamiltonian hw Φ) t
+  Matrix.hermitianUnitaryPath_fin_sum_of_commute _ (commute_chainGridBlockHamiltonian hw Φ) t
 
 /-- Every factor of the exact block evolution is supported on its own grid block.
 Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
@@ -98,6 +62,7 @@ theorem chainGridBlockEvolution_mem_supported [NeZero q] (hw : 0 < w)
     hermitianUnitaryPath (chainGridBlockHamiltonian hw Φ j) t ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q)
         (ManyBody.chainGridBlock L w j.val : Finset (Fin L)) :=
-  hermitianUnitaryPath_mem_supported q _ (chainGridBlockHamiltonian_mem_supported hw Φ j) t
+  ManyBody.hermitianUnitaryPath_mem_supportedOperators
+    (chainGridBlockHamiltonian_mem_supported hw Φ j) t
 
 end TNLean.MPS.AreaLaw

@@ -101,8 +101,7 @@
         MPSTensor.cutRank_mpv_eq_of_isNBlkInjective,
         MPSTensor.isNBlkInjective_of_le_of_canonical,
         MPSTensor.cutRank_mpv_eq_of_canonical,
-        MPSTensor.cutCoefficientRank_mpv_eq_of_canonical,
-        MPSTensor.quadraticWindow_cutCoefficientRank_eq}
+        MPSTensor.quadraticWindow_cutRank_eq}
     \leanok
     \uses{thm:pgvwc07_fixed_length_intertwiner}
     Let $A$ be a canonical tensor of positive bond dimension satisfying
@@ -125,22 +124,16 @@
 
 \begin{lemma}[Physical slicing in the virtual cut bases]
     \label{lem:quadratic_virtual_cut_slicing}
-    \lean{MPSTensor.physicalCutCoordinates,
-        MPSTensor.physicalCutCoordinates_apply,
-        MPSTensor.physicalPeriodicCutBasis,
-        MPSTensor.physicalPeriodicCutBasis_apply,
-        MPSTensor.toMatrix_cutSlice_physicalPeriodicCutBasis}
+    \lean{MPSTensor.toMatrix_cutSlice_periodicCutBasis}
     \leanok
     \uses{lem:quadratic_injective_physical_cut}
-    Transfer the derived cut bases to the original physical-site
-    coordinates. Fixing the next physical letter $i$ has matrix
-    $A_i\otimes I_D$ between the two adjacent virtual cut bases.
+    In the derived cut bases, fixing the next physical letter $i$ has
+    matrix $A_i\otimes I_D$ between the two adjacent virtual cut bases.
 \end{lemma}
 \begin{proof}
     \leanok
-    The configuration bijections identify the numbered and original
-    physical column spaces. Appending the letter $i$ multiplies the
-    virtual product by $A_i$ and leaves the second virtual index fixed.
+    Number the sites before each cut. Appending the letter $i$ multiplies
+    the virtual product by $A_i$ and leaves the second virtual index fixed.
 \end{proof}
 
 \begin{lemma}[A quadratic solution from the actual OBC window]

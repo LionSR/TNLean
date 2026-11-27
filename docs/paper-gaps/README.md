@@ -1382,6 +1382,21 @@ the September 24, 2026 two-dimensional area-law manuscript are read in the
 ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
 orthogonal rectangle sides, as a convention built into the permitted polygons.
 
+### Two-dimensional area law: the frustration-free sweep
+
+[oai26_frustrationfree_sweep_range_projections](https://sirui-lu.com/QICLean/paper-gaps/oai26_frustrationfree_sweep_range_projections.pdf)
+(QICLean, which owns the sweep and the detectability lemma; scope restriction,
+open) records that in the frustration-free specialization of Theorem 1.1 of the
+September 24, 2026 two-dimensional area-law manuscript the amplification stage
+of Section 10 is fed by one sweep of the range projections `Π_i` of the terms,
+`D = (1 - Π_N) ⋯ (1 - Π_1)`, in place of the square-root filters
+`(1 - h_i/J)^{1/2}` of `eq:sweep`. The range projections annihilate the ground
+vector, act on the supports of the terms and dominate `h_i/J`, so the
+contraction factor `θ = (1 + g/(d + 1)²)^{-1/2}` and the area law are
+unchanged. The contraction for general positive contractions is not formalized
+and not needed; the plan is in
+[`docs/formalization/frustration-free-area-law-plan.md`](../formalization/frustration-free-area-law-plan.md).
+
 ### One-dimensional area law: connected domains
 
 [tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)

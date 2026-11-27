@@ -3957,11 +3957,14 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** The inverse of the one-site extension restricts the configuration
   and evaluates it at the cut site. Its inverse proof separates sites before
   the cut from the cut site and reduces subtype equality to the site value.
-- **Seen:** `prefixStepEquiv` and `suffixStepEquiv` in
-  `MPS/Tensor/OpenMPS/CutMatrixGrowth.lean`.
-- **Abstraction:** Two occurrences in one file do not meet the promotion
-  threshold. The coefficient identity itself reuses the existing
-  `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
+- **Seen:** the former `prefixStepEquiv` and `suffixStepEquiv` of
+  `MPS/Tensor/OpenMPS/CutMatrixGrowth.lean`, copies of the extension
+  equivalences of `MPS/CanonicalForm/OpenBoundary/OBCCanonicalConfigurations.lean`.
+- **Abstraction:** Since both files index cut configurations by the blocks of
+  `ManyBody.cutMatrix (interval N 0 k)`, the copies were deleted; both files use
+  `MPSPreparation.extendCutPrefixEquiv` and `MPSPreparation.extendCutSuffixEquiv`
+  (`MPS/Tensor/VaryingBond/MinimalCutRepresentationCuts.lean`). The coefficient
+  identity is `MPSPreparation.cutMatrix_adjacent`.
 
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 

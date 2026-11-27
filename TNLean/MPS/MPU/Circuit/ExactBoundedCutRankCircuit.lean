@@ -38,6 +38,8 @@ alphabet or efficient classical parameter-computation assertion. Source:
 §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 section
 
 open Matrix MPSTensor MPSPreparation QuantumCircuit
@@ -53,11 +55,11 @@ the exact scalar phase. The coefficient is polynomial in the bond bound and
 the length exponent grows logarithmically in that bound.
 
 See §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem exists_clean_exact_circuit_of_bounded_cutCoefficientRank_of_two_le
+theorem exists_clean_exact_circuit_of_bounded_cutRank_of_two_le
     {d D N : ℕ} [NeZero d] (hd : 2 ≤ d) (hN : 2 ≤ N)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D) :
     ∃ C : Matrix (Cfg d (globalSiteCount d D N))
         (Cfg d (globalSiteCount d D N)) ℂ,
       IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (globalSiteCount d D N)))
@@ -68,8 +70,8 @@ theorem exists_clean_exact_circuit_of_bounded_cutCoefficientRank_of_two_le
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, hP0, hPN, hfull, hLeaves⟩ :=
     exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_unitary
       hd hN U hU hbound
-  have hD : 0 < D := (cutCoefficientRank_pos (operatorCoefficientTensor U)
-    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) 0).trans_le (hbound 0)
+  have hD : 0 < D := (ManyBody.cutRank_pos (D := interval N 0 0)
+    (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU)).trans_le (hbound 0)
   let K := uniformNodeGateCount d D N
   let F := uniformReflectionGateCount d D N
   let M := amplificationTreeOverhead D K F F
@@ -130,11 +132,11 @@ assumed separately. Gate parameters are arbitrary complex numbers.
 
 See §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`; the gate model
 is arXiv:2508.08160, local `main.tex`, line 820. -/
-theorem exists_clean_exact_circuit_of_bounded_cutCoefficientRank
+theorem exists_clean_exact_circuit_of_bounded_cutRank
     {d D N : ℕ} (hd : 2 ≤ d) (hN : 0 < N)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D) :
     let : NeZero d := ⟨by omega⟩
     ∃ C : Matrix (Cfg d (completeCircuitSiteCount d D N))
         (Cfg d (completeCircuitSiteCount d D N)) ℂ,
@@ -162,7 +164,7 @@ theorem exists_clean_exact_circuit_of_bounded_cutCoefficientRank
     simpa only [Nat.one_mul] using
       Nat.mul_le_mul (Nat.mul_le_mul hcoeff hpowerD) hpowerN
   · have hN2 : 2 ≤ N := by omega
-    obtain ⟨C, hC, hcolumns⟩ := exists_clean_exact_circuit_of_bounded_cutCoefficientRank_of_two_le
+    obtain ⟨C, hC, hcolumns⟩ := exists_clean_exact_circuit_of_bounded_cutRank_of_two_le
       hd hN2 U hU hbound
     exact exists_complete_clean_pair_circuit_of_global hN2 U C hC hcolumns
 
@@ -187,8 +189,8 @@ theorem exists_clean_exact_circuit_of_periodic_mpo_unitary
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) =
         basisInclusion
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) * M.mpo N :=
-  exists_clean_exact_circuit_of_bounded_cutCoefficientRank hd hN (M.mpo N) hU
-    (cutCoefficientRank_operatorCoefficientTensor_mpo_le_all M)
+  exists_clean_exact_circuit_of_bounded_cutRank hd hN (M.mpo N) hU
+    (cutRank_operatorCoefficientTensor_mpo_le_all M)
 
 end MPUCircuit
 
@@ -210,11 +212,11 @@ error is zero. The norm here is the Euclidean operator norm on the rectangular
 map from physical inputs to the complete physical and auxiliary register.
 
 See §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank
+theorem exists_clean_operatorNorm_approximate_circuit_of_bounded_cutRank
     {d D N : ℕ} (hd : 2 ≤ d) (hN : 0 < N)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (ε : ℝ) (hε : 0 ≤ ε) :
     letI : NeZero d := ⟨by omega⟩
     ∃ C : Matrix (Cfg d (completeCircuitSiteCount d D N))
@@ -232,7 +234,7 @@ theorem exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientR
           (completePhysicalConfigEmbedding (d := d) (D := D) (N := N)) * U‖ ≤ ε := by
   let : NeZero d := ⟨by omega⟩
   obtain ⟨C, hC, hcolumns⟩ :=
-    exists_clean_exact_circuit_of_bounded_cutCoefficientRank hd hN U hU hbound
+    exists_clean_exact_circuit_of_bounded_cutRank hd hN U hU hbound
   refine ⟨C, hC, hcolumns, ?_⟩
   rw [hcolumns, sub_self, norm_zero]
   exact hε
@@ -262,8 +264,8 @@ theorem exists_clean_operatorNorm_approximate_circuit_of_periodic_mpo_unitary
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) -
         basisInclusion
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) * M.mpo N‖ ≤ ε :=
-  exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank hd hN (M.mpo N) hU
-    (cutCoefficientRank_operatorCoefficientTensor_mpo_le_all M) ε hε
+  exists_clean_operatorNorm_approximate_circuit_of_bounded_cutRank hd hN (M.mpo N) hU
+    (cutRank_operatorCoefficientTensor_mpo_le_all M) ε hε
 
 end MPUCircuit
 

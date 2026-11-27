@@ -18,6 +18,8 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 open scoped BigOperators
 
@@ -32,27 +34,29 @@ abbrev CutIntervalConfig (d N j k : ℕ) :=
 /-- Joining a prefix configuration with a middle interval configuration.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-def joinCutPrefix {d N : ℕ} (j k : ℕ) (u : CutPrefixConfig d N j)
-    (w : CutIntervalConfig d N j k) : CutPrefixConfig d N k :=
-  fun s ↦ if h : s.val < j then u ⟨s.1, h⟩
-    else w ⟨s.1, Nat.le_of_not_lt h, s.2⟩
+def joinCutPrefix {d N : ℕ} (j k : ℕ) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j))
+    (w : CutIntervalConfig d N j k) : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) :=
+  fun s ↦ if h : s.val < j then u ⟨s.1, mem_interval_zero_iff.mpr h⟩
+    else w ⟨s.1, Nat.le_of_not_lt h, mem_interval_zero_iff.mp s.2⟩
 
 /-- Joining a middle interval configuration with a suffix configuration.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def joinCutSuffix {d N : ℕ} (j k : ℕ) (w : CutIntervalConfig d N j k)
-    (v : CutSuffixConfig d N k) : CutSuffixConfig d N j :=
-  fun s ↦ if h : s.val < k then w ⟨s.1, s.2, h⟩
-    else v ⟨s.1, Nat.le_of_not_lt h⟩
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) : ComplConfig
+        (fun _ : Fin N ↦ Fin d) (interval N 0 j) :=
+  fun s ↦ if h : s.val < k then w ⟨s.1, notMem_interval_zero_iff.mp s.2, h⟩
+    else v ⟨s.1, notMem_interval_zero_iff.mpr (Nat.le_of_not_lt h)⟩
 
 /-- Splitting a longer prefix into its shorter prefix and middle interval
 is a bijection on physical configurations.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def cutPrefixIntervalConfigEquiv (d N j k : ℕ) (hjk : j ≤ k) :
-    CutPrefixConfig d N k ≃ (CutPrefixConfig d N j × CutIntervalConfig d N j k) where
-  toFun v := (fun s ↦ v ⟨s.1, Nat.lt_of_lt_of_le s.2 hjk⟩,
-    fun s ↦ v ⟨s.1, s.2.2⟩)
+    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ≃ (RegionConfig (fun _ : Fin N ↦ Fin d)
+        (interval N 0 j) × CutIntervalConfig d N j k) where
+  toFun v := (fun s ↦ v ⟨s.1, ManyBody.interval_mono le_rfl hjk s.2⟩,
+    fun s ↦ v ⟨s.1, mem_interval_zero_iff.mpr s.2.2⟩)
   invFun uw := joinCutPrefix j k uw.1 uw.2
   left_inv v := by
     funext s
@@ -61,7 +65,7 @@ def cutPrefixIntervalConfigEquiv (d N j k : ℕ) (hjk : j ≤ k) :
   right_inv uw := by
     apply Prod.ext
     · funext s
-      simp [joinCutPrefix, s.2]
+      simp [joinCutPrefix, mem_interval_zero_iff.mp s.2]
     · funext s
       simp [joinCutPrefix, Nat.not_lt_of_ge s.2.1]
 
@@ -69,11 +73,12 @@ def cutPrefixIntervalConfigEquiv (d N j k : ℕ) (hjk : j ≤ k) :
 configuration is joined to the prefix or to the suffix.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutCoefficientMatrix_interval {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    {j k : ℕ} (hjk : j ≤ k) (u : CutPrefixConfig d N j)
-    (w : CutIntervalConfig d N j k) (v : CutSuffixConfig d N k) :
-    cutCoefficientMatrix ψ k (joinCutPrefix j k u w) v =
-      cutCoefficientMatrix ψ j u (joinCutSuffix j k w v) := by
+theorem cutMatrix_interval {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
+    {j k : ℕ} (hjk : j ≤ k) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j))
+    (w : CutIntervalConfig d N j k) (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
+    cutMatrix (interval N 0 k) ψ (joinCutPrefix j k u w) v =
+      cutMatrix (interval N 0 j) ψ u (joinCutSuffix j k w v) := by
+  simp only [ManyBody.cutMatrix_apply, cutEquiv_symm_interval_zero]
   apply congrArg ψ
   funext s
   by_cases h : s.val < j
@@ -88,7 +93,8 @@ prefix to vectors on an earlier prefix.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def cutIntervalSliceLinearMap {d N : ℕ} (j k : ℕ) (w : CutIntervalConfig d N j k) :
-    (CutPrefixConfig d N k → ℂ) →ₗ[ℂ] (CutPrefixConfig d N j → ℂ) :=
+    (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) → ℂ) →ₗ[ℂ] (RegionConfig
+        (fun _ : Fin N ↦ Fin d) (interval N 0 j) → ℂ) :=
   LinearMap.funLeft ℂ ℂ (fun u ↦ joinCutPrefix j k u w)
 
 /-- Middle-coordinate restriction maps the later physical coefficient
@@ -106,7 +112,7 @@ theorem cutIntervalSliceLinearMap_maps_columnSpace {d N : ℕ}
   apply Submodule.subset_span
   refine ⟨joinCutSuffix j k w ν, ?_⟩
   funext u
-  exact (cutCoefficientMatrix_interval ψ hjk u w ν).symm
+  exact (cutMatrix_interval ψ hjk u w ν).symm
 
 /-- Middle-coordinate restriction between the actual physical cut spaces.
 Source: Section 5 of
@@ -121,9 +127,9 @@ def cutIntervalSlice {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutIntervalMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
     {j k : ℕ} (hjk : j ≤ k) (w : CutIntervalConfig d N j k) :
-    Matrix (Fin (cutCoefficientRank ψ j)) (Fin (cutCoefficientRank ψ k)) ℂ :=
+    Matrix (Fin (cutRank (interval N 0 j) ψ)) (Fin (cutRank (interval N 0 k) ψ)) ℂ :=
   LinearMap.toMatrix (B k) (B j) (cutIntervalSlice ψ hjk w)
 
 /-- The longer prefix factor is the shorter prefix factor multiplied
@@ -131,15 +137,15 @@ by the constructed interval matrix.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_interval {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
-    {j k : ℕ} (hjk : j ≤ k) (u : CutPrefixConfig d N j)
-    (w : CutIntervalConfig d N j k) (q : Fin (cutCoefficientRank ψ k)) :
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
+    {j k : ℕ} (hjk : j ≤ k) (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j))
+    (w : CutIntervalConfig d N j k) (q : Fin (cutRank (interval N 0 k) ψ)) :
     cutPrefixMatrix ψ B k (joinCutPrefix j k u w) q =
       (cutPrefixMatrix ψ B j * cutIntervalMatrix ψ B hjk w) u q := by
   classical
   let E : cutColumnSpace ψ j →ₗ[ℂ] ℂ :=
     (LinearMap.proj (R := ℂ) u).comp (cutColumnSpace ψ j).subtype
-  have h := congrArg (fun M : Matrix (Fin 1) (Fin (cutCoefficientRank ψ k)) ℂ ↦ M 0 q)
+  have h := congrArg (fun M : Matrix (Fin 1) (Fin (cutRank (interval N 0 k) ψ)) ℂ ↦ M 0 q)
     (LinearMap.toMatrix_comp (B k) (B j) (Module.Basis.singleton (Fin 1) ℂ)
       E (cutIntervalSlice ψ hjk w))
   simp only [LinearMap.toMatrix_apply, Module.Basis.singleton_repr, Matrix.mul_apply] at h
@@ -156,27 +162,27 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutIntervalSlice_column {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
     {j k : ℕ} (hjk : j ≤ k) (w : CutIntervalConfig d N j k)
-    (v : CutSuffixConfig d N k) :
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
     cutIntervalSlice ψ hjk w
-      ⟨(cutCoefficientMatrix ψ k).col v, Submodule.subset_span ⟨v, rfl⟩⟩ =
-      ⟨(cutCoefficientMatrix ψ j).col (joinCutSuffix j k w v),
+      ⟨(cutMatrix (interval N 0 k) ψ).col v, Submodule.subset_span ⟨v, rfl⟩⟩ =
+      ⟨(cutMatrix (interval N 0 j) ψ).col (joinCutSuffix j k w v),
         Submodule.subset_span ⟨joinCutSuffix j k w v, rfl⟩⟩ := by
   apply Subtype.ext
   funext u
-  exact cutCoefficientMatrix_interval ψ hjk u w v
+  exact cutMatrix_interval ψ hjk u w v
 
 /-- The shorter suffix factor is the constructed interval matrix
 multiplied by the longer-cut suffix factor.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutSuffixMatrix_interval {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
     {j k : ℕ} (hjk : j ≤ k) (w : CutIntervalConfig d N j k)
-    (v : CutSuffixConfig d N k) :
+    (v : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) :
     (cutSuffixMatrix ψ B j).col (joinCutSuffix j k w v) =
       cutIntervalMatrix ψ B hjk w *ᵥ (cutSuffixMatrix ψ B k).col v := by
   have h := LinearMap.toMatrix_mulVec_repr (B k) (B j) (cutIntervalSlice ψ hjk w)
-    ⟨(cutCoefficientMatrix ψ k).col v, Submodule.subset_span ⟨v, rfl⟩⟩
+    ⟨(cutMatrix (interval N 0 k) ψ).col v, Submodule.subset_span ⟨v, rfl⟩⟩
   rw [cutIntervalSlice_column] at h
   exact h.symm
 
@@ -192,7 +198,7 @@ def joinCutInterval {d N : ℕ} (j k l : ℕ) (w : CutIntervalConfig d N j k)
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem joinCutPrefix_assoc {d N : ℕ} {j k l : ℕ} (hjk : j ≤ k)
-    (u : CutPrefixConfig d N j) (w : CutIntervalConfig d N j k)
+    (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j)) (w : CutIntervalConfig d N j k)
     (z : CutIntervalConfig d N k l) :
     joinCutPrefix j l u (joinCutInterval j k l w z) =
       joinCutPrefix k l (joinCutPrefix j k u w) z := by
@@ -221,7 +227,7 @@ an intermediate cut.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutIntervalMatrix_comp {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
     {j k l : ℕ} (hjk : j ≤ k) (hkl : k ≤ l)
     (w : CutIntervalConfig d N j k) (z : CutIntervalConfig d N k l) :
     cutIntervalMatrix ψ B (hjk.trans hkl) (joinCutInterval j k l w z) =
@@ -235,7 +241,7 @@ the site matrix of the minimal open-boundary chain.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutIntervalMatrix_adjacent {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
     (j : ℕ) (i : Fin d) :
     cutIntervalMatrix ψ B (Nat.le_succ j) (fun _ ↦ i) = cutSiteMatrix ψ B j i := by
   have h : cutIntervalSlice ψ (Nat.le_succ j) (fun _ ↦ i) = cutSlice ψ j i := by

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalConfigurations
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalEndpoints
-import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
+import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCPrefixFactors
 
 /-!
@@ -27,6 +27,8 @@ It also contains the following results.
   of an open-boundary MPS.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 
 section OBCCanonicalRecurrences
@@ -36,12 +38,12 @@ open scoped BigOperators
 namespace MPSPreparation
 
 variable {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k))
 
 /-- The actual bond density is the Gram matrix of the weighted physical
 prefix vectors. Source: PGVWC07, Theorem thm:OBC-Vidal, conditions 2--3. -/
 noncomputable def cutBondDensity (k : ℕ) :
-    Matrix (Fin (cutCoefficientRank ψ k)) (Fin (cutCoefficientRank ψ k)) ℂ :=
+    Matrix (Fin (cutRank (interval N 0 k) ψ)) (Fin (cutRank (interval N 0 k) ψ)) ℂ :=
   (cutPrefixMatrix ψ B k)ᴴ * cutPrefixMatrix ψ B k
 
 /-- Prefix propagation gives the density recursion for the actual site
@@ -125,8 +127,6 @@ open scoped BigOperators ComplexOrder
 namespace OBCChainTensor
 
 open MPSPreparation
-open ManyBody (interval)
-
 /-- Every normalized physical state of positive length has an actual
 simultaneous OBC canonical representation. Bond dimensions are the actual
 Schmidt cut ranks, and the densities are derived positive diagonal Grams.
@@ -137,7 +137,7 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = ψ ∧
-      (∀ k, A.bondDim k = ManyBody.cutRank (interval N 0 k) ψ) ∧
+      (∀ k, A.bondDim k = cutRank (interval N 0 k) ψ) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
@@ -146,9 +146,9 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
           (∀ q, 0 < lam q) ∧ Λ k = Matrix.diagonal (fun q ↦ (lam q : ℂ))) ∧
         Matrix.trace (Λ k) = 1) ∧
       ∃ (hψ : ψ ≠ 0)
-        (C : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)),
+        (C : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) ψ)) ℂ (cutColumnSpace ψ k)),
         (∀ q, (C 0 q).val = 1) ∧ (∀ q, (C N q).val = fullCutVector ψ) ∧
-        ∃ hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ d ^ (N / 2),
+        ∃ hbound : ∀ k : Fin (N + 1), cutRank (interval N 0 k.val) ψ ≤ d ^ (N / 2),
           A = minimalCutChain ψ hψ C hbound := by
   classical
   have hψ : ψ ≠ 0 := by
@@ -162,9 +162,8 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     funext σ
     exact Fin.elim0 (σ ⟨0, hN⟩)⟩
   obtain ⟨B, hB0, hBN, hcuts⟩ := exists_canonicalCutBasisFamily hN ψ hnorm
-  have hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ d ^ (N / 2) := by
+  have hbound : ∀ k : Fin (N + 1), cutRank (interval N 0 k.val) ψ ≤ d ^ (N / 2) := by
     intro k
-    rw [cutCoefficientRank_eq_cutRank ψ k.val]
     exact cutRank_le_pow_half ψ k.val
   let A := minimalCutChain ψ hψ B hbound
   let Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ :=
@@ -177,12 +176,12 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     induction k with
     | zero =>
         rw [cutBondDensity, cutPrefixMatrix_zero_gram ψ hψ B hB0, Matrix.trace_one]
-        simp only [Fintype.card_fin, cutCoefficientRank_zero ψ hψ, Nat.cast_one]
+        simp only [Fintype.card_fin, (MPSPreparation.cutRank_zero_eq_one hψ), Nat.cast_one]
     | succ k ih =>
         rw [trace_cutBondDensity_step ψ B (by omega) (hiso k (by omega)), ih (by omega)]
   refine ⟨A, Λ, funext (minimalCutChain_coeff ψ hψ B hB0 hBN hbound), ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro k
-    exact cutCoefficientRank_eq_cutRank ψ k.val
+    rfl
   · intro p
     exact hiso p.val p.isLt
   · intro p
@@ -208,7 +207,7 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = ψ ∧
-      (∀ k, A.bondDim k = ManyBody.cutRank (interval N 0 k) ψ) ∧
+      (∀ k, A.bondDim k = cutRank (interval N 0 k) ψ) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
@@ -233,7 +232,7 @@ theorem exists_canonical_coeff_eq_rectangular_maps {d D N : ℕ} (hN : 0 < N)
     ∃ Y : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (B.bondDim k)) ℂ,
     ∃ Z : (k : Fin (N + 1)) → Matrix (Fin (B.bondDim k)) (Fin (A.bondDim k)) ℂ,
       A.coeff = B.coeff ∧
-      (∀ k, A.bondDim k = ManyBody.cutRank (interval N 0 k) B.coeff) ∧
+      (∀ k, A.bondDim k = cutRank (interval N 0 k) B.coeff) ∧
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧

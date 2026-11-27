@@ -21,6 +21,8 @@ representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 
 namespace MPUCircuit
@@ -69,13 +71,13 @@ theorem exists_minimal_obcChainTensor_of_unitary {d N D : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
     (hbound : ∀ k : Fin (N + 1),
-      MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k.val ≤ D) :
+      cutRank (interval N 0 k.val) (operatorCoefficientTensor U) ≤ D) :
     ∃ A : OBCChainTensor (d * d) D N,
-      (∀ k, A.bondDim k = MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k.val) ∧
+      (∀ k, A.bondDim k = cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ∧
       ∀ x y : Fin N → Fin d,
         A.coeff (fun s ↦ finProdFinEquiv (x s, y s)) = U x y := by
   obtain ⟨A, hA, hcoeff⟩ :=
-    MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutCoefficientRank hN
+    MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutRank hN
       (operatorCoefficientTensor U) (operatorCoefficientTensor_ne_zero hd U hU) hbound
   refine ⟨A, hA, fun x y ↦ ?_⟩
   rw [hcoeff, operatorCoefficientTensor_apply]
