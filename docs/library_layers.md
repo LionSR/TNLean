@@ -307,29 +307,7 @@ A directory named for a source or a proof stage splits two ways:
   proof's own constructions, with no second use, so it may stay in a
   directory named for the theorem.
 
-| Old directory | Generic part (objects) | The theorem's own argument |
-|---|---|---|
-| `MPS/AreaLaw/Hastings` | `Chain` (`ThreeWaySplitting`, `PartCommutators`), `Spectral` (`SpectralCutoff`, used by four theorems) | `MPS/AreaLaw/ProjectorFactorization` and `ProjectorFactorization/SchmidtTail` (the area law by approximate projector factorization) |
-| `MPS/AreaLaw/AKLV` | `Spectral` (gaps, tails, truncations) | `MPS/AreaLaw/ChebyshevAGSP` with `SchmidtRank` and `FrustrationFree` (the area law from the Chebyshev approximate ground-state projector) |
-| `MPS/AreaLaw/ALVV` and 210 top-level modules | — (all single-use) | `MPS/AreaLaw/LowEnergyAlgorithm` (the algorithm for low-energy subspaces, with degenerate and frustration-free chains) |
-| `MPS/AreaLaw/ViableSet`, `ViableSet/BoundarySDP`, `ViableSet/SizeTrimming`, `Algorithm`, `Huang` | `MPS/AreaLaw/ViableSet` (the object interface of viable sets, used by three theorems) | `MPS/AreaLaw/GroundStateAlgorithm` with `ApproximateProjector`, `BoundaryState`, `BoundarySDP`, `RationalTensor`, `ViableVector`, `GaussianFilter` (from `Huang`) and `QueryProgram` (from `Algorithm`, in the CSLib query model) |
-| `MPS/AreaLaw/LocalSolution` | `Spectral` (hierarchies of supersites and energies) | `MPS/AreaLaw/LocalSolution` (the name states what is proved) |
-| top-level `Protocol*`, `Band*`, `Copy*` | `MPS/AreaLaw/{Chain, Entropy, Approximation}` | `MPS/AreaLaw/SweepPreparation`, `MPS/AreaLaw/EntropyScaling` |
-| `MPS/ParentHamiltonian/Martingale` | `Gap/Spectator` (fibre operators) | `Gap/Filtration` (nested open-chain ground projections and conditions C1–C3), `Gap/Comparison` (finite-size window criteria); the gap theorems in `Gap` |
-| `MPS/ParentHamiltonian/FNW*` | — | `ProjectorDefect/DimensionConstant` (the counterexample to the printed coefficient) |
-| `MPS/MPDO/BiCFDerivation`, `CPSV*` | `MPDO/{SectorMaps, BNTSectors, Coefficients}`; `PairHomogenization` to `MPS/CanonicalForm/PairWordSpan` | `MPDO/PhysicalSector`, `CyclicActiveSector` (the structure theorem of simple density operators, Appendix C of arXiv:1606.00608) |
-| `MPS/Symmetry/MPOSymmetry` (mixed path) | `MPOSymmetry/{Fusion, Anomaly}` | `MPOSymmetry/MixedPath/{Endpoint, Gap, Joint, MPO}` (the classification of paths of MPO-symmetric gapped Hamiltonians) |
-| `MPS/Symmetry` (SPT) | `Symmetry/{OnSite, Projective, StringOrder}` | `Symmetry/SPTClassification` |
-| `PEPS/AreaLaw/Scan`, `Geometry`, `Amplification` | `PEPS/AreaLaw/{Squares, Templates, Regions, Interactions, Constraints, ChannelWords, RegionalFilters, FrustrationFree}`, 147 modules, QICLean-bound | `PEPS/AreaLaw/{Collar, Scales, Histories, Statuses, Rounds, NormComparisons, ChargePoints, CollarInformation, BoxExponent, SafeRectangles, Layers, Fans, InitialRegions, RepairStages, Stars, BirthTemplates, FinalRegions, RestoringOperator}` and the top level (the theorems) |
-| `PEPS/RegionBlock` (numbered stages `CoarseThreeSite4..11`, `Recovery2..9`) | `PEPS/Injectivity/Region`, `PEPS/Tensor/Region` | `PEPS/FundamentalTheorem/Normal/{RegionInsertion, CoarseThreeSite}` (the fundamental theorem for normal PEPS), the stage modules renamed for their content |
-| `PEPS/TorusWindowPeeling` | — | `PEPS/FundamentalTheorem/Torus/Window` |
-| `PEPS/Approximation` | `Frames`, `FrameChanges`, `PartyCircuit`, `Routing`, `PatchRewrite` (with the party calculus of #10958), `Information`, `DoubledHamiltonian` | `Guides`, `Cells`, `NestedPatches`, `DyadicHierarchy`, `Protocol`, `GroundState`, `Exact` (the polynomial PEPS approximation) |
-| `Wielandt` | `MPS/Tensor/Words/WordSpan` (span growth) | `MPS/Transfer/Primitivity` (the inequality is a statement about primitivity indices; no separate theorem directory) |
-
-Theorem directories keep their theorem's name, never a source's:
-`GroundStateAlgorithm`, `LowEnergyAlgorithm`, `ChebyshevAGSP`,
-`SPTClassification`, `MixedPath`, `Refinement`, and the top level of
-`PEPS/AreaLaw`.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 ## Examples
 
@@ -599,423 +577,7 @@ are also left apart, since each is one large decided computation.
 
 ## Single-lemma modules merged
 
-542 modules are merged into 413 modules. A part is merged into the module that defines the object its statement is about, normally a module it imports in the same new directory, and only where no import cycle results. Most parts have one declaration; some have two, merged by judgement when the second is a direct corollary of the first. Module docstrings are combined.
-
-The full list, as target ← parts in the order of concatenation (the first part
-usually defines the object):
-
-- `MPS.AreaLaw.Chain.Counting` ← `MPS.AreaLaw.Counting`, `MPS.AreaLaw.InteractionBudget`
-- `MPS.AreaLaw.Chain.DoubledHamiltonian` ← `MPS.AreaLaw.DoubledHamiltonian`, `MPS.AreaLaw.SwappedDoubledHamiltonian`
-- `MPS.AreaLaw.Chain.EntropyInequalities` ← `MPS.AreaLaw.EntropyInequalities`, `MPS.AreaLaw.BoundaryCounting`
-- `MPS.AreaLaw.Chain.Hamiltonian` ← `MPS.AreaLaw.Hamiltonian`, `MPS.AreaLaw.RangeOneCut`
-- `MPS.AreaLaw.Chain.RangeOneSupport` ← `MPS.AreaLaw.RangeOneSupport`, `MPS.AreaLaw.OverlapEnergy`
-- `MPS.AreaLaw.Chain.TwoCutEdgeSupports` ← `MPS.AreaLaw.TwoCutEdgeSupports`, `MPS.AreaLaw.TwoCutOperatorForms`, `MPS.AreaLaw.TwoWindowOperatorForms`
-- `MPS.AreaLaw.ChebyshevAGSP.ChangingTargetStep` ← `MPS.AreaLaw.AKLV.ChangingTargetStep`, `MPS.AreaLaw.AKLV.ChangingTargets`
-- `MPS.AreaLaw.ChebyshevAGSP.ClippedFilter` ← `MPS.AreaLaw.AKLV.ClippedFilter`, `MPS.AreaLaw.AKLV.FavorableFilter`
-- `MPS.AreaLaw.ChebyshevAGSP.OptimizedTailParameters` ← `MPS.AreaLaw.AKLV.OptimizedTailParameters`, `MPS.AreaLaw.AKLV.AccuracyWindow`
-- `MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.PolynomialRank` ← `MPS.AreaLaw.AKLV.PolynomialRank`, `MPS.AreaLaw.AKLV.ChebyshevFilter`
-- `MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.WindowFrequencyRank` ← `MPS.AreaLaw.AKLV.WindowFrequencyRank`, `MPS.AreaLaw.AKLV.CutTransport`, `MPS.AreaLaw.AKLV.FullFrequencyRank`, `MPS.AreaLaw.AKLV.LowFrequencyPower`, `MPS.AreaLaw.AKLV.ShortWindow`, `MPS.AreaLaw.AKLV.WidthPolynomial`
-- `MPS.AreaLaw.ChebyshevAGSP.SequenceEntropyParameters` ← `MPS.AreaLaw.AKLV.SequenceEntropyParameters`, `MPS.AreaLaw.AKLV.SequenceEntropy`
-- `MPS.AreaLaw.Entropy.IntervalNeighborhoodEntropy` ← `MPS.AreaLaw.IntervalNeighborhoodEntropy`, `MPS.AreaLaw.DomainIntervalNeighborhoodEntropy`
-- `MPS.AreaLaw.GroundStateAlgorithm.ApproximateProjector.SampledCutDecomposition` ← `MPS.AreaLaw.ViableSet.SampledCutDecomposition`, `MPS.AreaLaw.ViableSet.SampledErrorReduction`
-- `MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.Gluing` ← `MPS.AreaLaw.ViableSet.Gluing`, `MPS.AreaLaw.ViableSet.GluingBounds`, `MPS.AreaLaw.ViableSet.GluingSupport`, `MPS.AreaLaw.ViableSet.TrimmedWitness`
-- `MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridLocalization` ← `MPS.AreaLaw.Huang.GridLocalization`, `MPS.AreaLaw.Huang.PositiveChainHamiltonian`
-- `MPS.AreaLaw.GroundStateAlgorithm.OrthonormalRounding` ← `MPS.AreaLaw.ViableSet.OrthonormalRounding`, `MPS.AreaLaw.ViableSet.RationalOrthonormalFamily`
-- `MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.CommonDenominator` ← `MPS.AreaLaw.ViableSet.BoundarySDP.CommonDenominator`, `MPS.AreaLaw.ViableSet.BoundarySDP.RationalLocalEnergyInputBounds`
-- `MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.WeightedTransferBinaryBounds` ← `MPS.AreaLaw.ViableSet.BoundarySDP.WeightedTransferBinaryBounds`, `MPS.AreaLaw.ViableSet.BoundarySDP.LocalEnergyBinaryBounds`
-- `MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.WeightedTransferBounds` ← `MPS.AreaLaw.ViableSet.BoundarySDP.WeightedTransferBounds`, `MPS.AreaLaw.ViableSet.BoundarySDP.WeightedOverlapBounds`
-- `MPS.AreaLaw.GroundStateAlgorithm.SuccessiveConstruction` ← `MPS.AreaLaw.ViableSet.SuccessiveConstruction`, `MPS.AreaLaw.ViableSet.SuccessiveApproximation`, `MPS.AreaLaw.ViableSet.SuccessiveAccuracy`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.IndependentPhysicalDGPower` ← `MPS.AreaLaw.IndependentPhysicalDGPower`, `MPS.AreaLaw.IndependentPhysicalDGViability`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGFilterTrimming` ← `MPS.AreaLaw.PhysicalDGFilterTrimming`, `MPS.AreaLaw.PhysicalDGFilterIteration`, `MPS.AreaLaw.PhysicalDGAutomaticRefinement`, `MPS.AreaLaw.PhysicalSameRootPolynomialRefinement`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration` ← `MPS.AreaLaw.PhysicalDGInterleavedIteration`, `MPS.AreaLaw.PhysicalDGCanonicalParentFailure`, `MPS.AreaLaw.PhysicalDGCanonicalSamplingData`, `MPS.AreaLaw.PhysicalDGCanonicalJointProbability`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedTree` ← `MPS.AreaLaw.PhysicalDGInterleavedTree`, `MPS.AreaLaw.PhysicalDGInterleavedApproximation`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSampledNode` ← `MPS.AreaLaw.PhysicalDGSampledNode`, `MPS.AreaLaw.ALVV.DGConstantNodeEvent`, `MPS.AreaLaw.ALVV.DGCanonicalNodeEvent`, `MPS.AreaLaw.ALVV.DGConstantNodeParent`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeParameters` ← `MPS.AreaLaw.PhysicalDGTreeParameters`, `MPS.AreaLaw.PhysicalDGTreeApproximation`, `MPS.AreaLaw.PhysicalDGTreeMPS`
-- `MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGViability` ← `MPS.AreaLaw.PhysicalDGViability`, `MPS.AreaLaw.PhysicalDGApproximation`, `MPS.AreaLaw.PhysicalDGSharpApproximation`
-- `MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.BalancedRegionalEnergy` ← `MPS.AreaLaw.ALVV.BalancedRegionalEnergy`, `MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment`, `MPS.AreaLaw.ALVV.CalibratedRootEnergy`
-- `MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftResampling` ← `MPS.AreaLaw.ALVV.PhysicalSoftResampling`, `MPS.AreaLaw.ALVV.PhysicalSoftTreeRefinement`
-- `MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy` ← `MPS.AreaLaw.ALVV.SoftParentEnergy`, `MPS.AreaLaw.ALVV.SoftTerminalEnergyEstimate`, `MPS.AreaLaw.ALVV.SoftTerminalEnergyCalibration`, `MPS.AreaLaw.ALVV.SoftWordEnergyEstimate`
-- `MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftWordNodeEnergy` ← `MPS.AreaLaw.ALVV.SoftWordNodeEnergy`, `MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates`, `MPS.AreaLaw.ALVV.RegionalChildEnergyCenter`
-- `MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectability` ← `MPS.AreaLaw.PhysicalDetectability`, `MPS.AreaLaw.PhysicalDetectabilityGap`
-- `MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalFrustrationFreeTruncation` ← `MPS.AreaLaw.PhysicalFrustrationFreeTruncation`, `MPS.AreaLaw.PhysicalParityProductSupport`
-- `MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily` ← `MPS.AreaLaw.ActualClippedPolynomialFamily`, `MPS.AreaLaw.ChebyshevNestedViability`
-- `MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensityBufferedTargets` ← `MPS.AreaLaw.IndependentLowDensityBufferedTargets`, `MPS.AreaLaw.LowDensityBufferedTargets`
-- `MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.LowEnergyFilterParameters` ← `MPS.AreaLaw.LowEnergyFilterParameters`, `MPS.AreaLaw.LowEnergySourceScale`
-- `MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.UniformPhysicalSoftImprovingFamily` ← `MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily`, `MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.BalancedIntervalFailure` ← `MPS.AreaLaw.BalancedIntervalFailure`, `MPS.AreaLaw.BalancedIntervalJointFailure`, `MPS.AreaLaw.BalancedIntervalHistoryFailure`, `MPS.AreaLaw.BalancedIntervalHistoryProbability`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.BalancedIntervalTree` ← `MPS.AreaLaw.BalancedIntervalTree`, `MPS.AreaLaw.BalancedIntervalMergeList`, `MPS.AreaLaw.BalancedIntervalMergeBounds`, `MPS.AreaLaw.BalancedIntervalMergeClosure`, `MPS.AreaLaw.IndependentIntervalOperation`, `MPS.AreaLaw.IndependentIntervalTree`, `MPS.AreaLaw.IntervalMergeChoice`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory` ← `MPS.AreaLaw.CanonicalIntervalRawHistory`, `MPS.AreaLaw.CanonicalIntervalRawProbability`, `MPS.AreaLaw.CanonicalIntervalRawTreeProbability`, `MPS.AreaLaw.CanonicalIntervalResamplingGood`, `MPS.AreaLaw.CanonicalIntervalResamplingSelection`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResampling` ← `MPS.AreaLaw.CanonicalIntervalResampling`, `MPS.AreaLaw.CanonicalIntervalResamplingProfile`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalSamplingTree` ← `MPS.AreaLaw.CanonicalIntervalSamplingTree`, `MPS.AreaLaw.CanonicalIntervalTreeSuccessEvent`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.IndependentIntervalProbability` ← `MPS.AreaLaw.IndependentIntervalProbability`, `MPS.AreaLaw.CanonicalIntervalGuardedProbability`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.IndependentIntervalSections` ← `MPS.AreaLaw.IndependentIntervalSections`, `MPS.AreaLaw.CanonicalIntervalSamplingSections`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.IntervalSamplingChoices` ← `MPS.AreaLaw.IntervalSamplingChoices`, `MPS.AreaLaw.CanonicalIntervalSamplingOperation`, `MPS.AreaLaw.CanonicalIntervalSamplingTreeProfile`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMerge` ← `MPS.AreaLaw.AdjacentIntervalMerge`, `MPS.AreaLaw.AdjacentIntervalMergeMeasurable`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.CanonicalSampledIntervalInterleaved` ← `MPS.AreaLaw.CanonicalSampledIntervalInterleaved`, `MPS.AreaLaw.CanonicalSampledIntervalBounds`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.FullIntervalViability` ← `MPS.AreaLaw.FullIntervalViability`, `MPS.AreaLaw.FullIntervalTrimmingMPS`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalCollectiveTrimming` ← `MPS.AreaLaw.IntervalCollectiveTrimming`, `MPS.AreaLaw.CanonicalHalfSampledIntervalParent`, `MPS.AreaLaw.CanonicalHalfSampledIntervalImage`, `MPS.AreaLaw.IntervalReferenceTrimming`
-- `MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators` ← `MPS.AreaLaw.IntervalGenerators`, `MPS.AreaLaw.CanonicalHalfSampledIntervalProfile`, `MPS.AreaLaw.IntervalFullSpaceProfile`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily` ← `MPS.AreaLaw.DyadicLongIntervalLowDensityFamily`, `MPS.AreaLaw.DyadicIntervalLowDensityFamily`, `MPS.AreaLaw.IntervalLowDensityFamily`, `MPS.AreaLaw.LowDensityAccurateViability`, `MPS.AreaLaw.LowDensityMinimumDimension`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityEntropy` ← `MPS.AreaLaw.DGEntropyParameters`, `MPS.AreaLaw.LowDensityEntropy`, `MPS.AreaLaw.LowDensityEntropyBound`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeNode` ← `MPS.AreaLaw.PhysicalLDTreeNode`, `MPS.AreaLaw.PhysicalLDTree`, `MPS.AreaLaw.PhysicalLDSampledTree`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeRefinement` ← `MPS.AreaLaw.PhysicalLDTreeRefinement`, `MPS.AreaLaw.LowDensityTreeAlgorithm`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily` ← `MPS.AreaLaw.LowDensityFilterParameters`, `MPS.AreaLaw.DyadicRegionalLowDensityFamily`, `MPS.AreaLaw.DyadicRegionalLowDensitySingleStep`, `MPS.AreaLaw.DyadicRegionalLowDensityWordFamily`, `MPS.AreaLaw.RegionalLowDensityFamily`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpApproximationParameters` ← `MPS.AreaLaw.SharpApproximationParameters`, `MPS.AreaLaw.SharpLowDensityParameters`
-- `MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalLowDensityFamily` ← `MPS.AreaLaw.SharpRegionalScalarBudgets`, `MPS.AreaLaw.SharpRegionalLowDensityFamily`, `MPS.AreaLaw.PhysicalLowDensityApproximation`, `MPS.AreaLaw.PhysicalLowDensitySharpApproximation`
-- `MPS.AreaLaw.LowEnergyAlgorithm.MPO.IntervalMPOTransfer` ← `MPS.AreaLaw.IntervalMPOTransfer`, `MPS.AreaLaw.CommonCollarMPOFamily`
-- `MPS.AreaLaw.LowEnergyAlgorithm.MPO.OperatorMPOFromCutRank` ← `MPS.AreaLaw.OperatorMPOFromCutRank`, `MPS.AreaLaw.ClusterTruncationMPO`, `MPS.AreaLaw.LocalSumMPO`, `MPS.AreaLaw.ShiftedHeatMPO`, `MPS.AreaLaw.SoftTruncationMPO`
-- `MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport` ← `MPS.AreaLaw.PhysicalIntervalTransport`, `MPS.AreaLaw.NativeIntervalMPOApproximation`
-- `MPS.AreaLaw.LowEnergyAlgorithm.MPO.RetainedCoreFamilies` ← `MPS.AreaLaw.RetainedCoreFamilies`, `MPS.AreaLaw.RetainedCoreTracePresentation`
-- `MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftTruncationMPOAccuracy` ← `MPS.AreaLaw.SoftTruncationMPOAccuracy`, `MPS.AreaLaw.SoftTruncatedHamiltonianMPO`, `MPS.AreaLaw.RegionalSoftTruncationMPO`, `MPS.AreaLaw.SelectedRegionalSoftMPO`
-- `MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalScaledSoftTruncationResidual` ← `MPS.AreaLaw.PhysicalScaledSoftTruncationResidual`, `MPS.AreaLaw.PhysicalScaledSoftTruncationReverse`, `MPS.AreaLaw.PhysicalScaledSoftTruncationResiduals`, `MPS.AreaLaw.PhysicalScaledSoftTruncationCloseness`, `MPS.AreaLaw.PhysicalSoftTruncationResiduals`
-- `MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFamilyResiduals` ← `MPS.AreaLaw.ALVV.SoftFamilyResiduals`, `MPS.AreaLaw.ALVV.FiveRegionSoftResiduals`, `MPS.AreaLaw.ALVV.FiveRegionSoftClusters`, `MPS.AreaLaw.ALVV.FiveRegionSoftRepresentation`
-- `MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncationResidual` ← `MPS.AreaLaw.ALVV.HardTruncationResidual`, `MPS.AreaLaw.RegionalGroundEnergy`
-- `MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual` ← `MPS.AreaLaw.IndependentFiveRegionResidual`, `MPS.AreaLaw.IndependentFiveRegionCluster`
-- `MPS.AreaLaw.ProjectorFactorization.ChainLocalizedParts` ← `MPS.AreaLaw.Hastings.ChainLocalizedParts`, `MPS.AreaLaw.Hastings.BoundaryFactorization`
-- `MPS.AreaLaw.ProjectorFactorization.ProjectorFactorization` ← `MPS.AreaLaw.Hastings.ProjectorFactorization`, `MPS.AreaLaw.Hastings.ProjectorFactorizationScaling`
-- `MPS.AreaLaw.ProjectorFactorization.RelativeEntropyGain` ← `MPS.AreaLaw.Hastings.RelativeEntropyGain`, `MPS.AreaLaw.Hastings.RelentAssembly`, `MPS.AreaLaw.Hastings.RelentFromBootstrap`, `MPS.AreaLaw.Hastings.RelentGapped`
-- `MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap` ← `MPS.AreaLaw.Hastings.ChainBootstrap`, `MPS.AreaLaw.Hastings.BootstrapLemma`
-- `MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtRankBootstrap` ← `MPS.AreaLaw.Hastings.SchmidtRankBootstrap`, `MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap`; since moved to QICLean as `QICLean.Entropy.Renyi.SchmidtRankMixture`
-- `MPS.AreaLaw.Spectral.CodimensionOneGap` ← `MPS.AreaLaw.AKLV.CodimensionOneGap`, `MPS.AreaLaw.AKLV.ResidualPhase`; since moved to QICLean as `QICLean.Spectral.Gap.CodimensionOneGap`
-- `MPS.AreaLaw.SweepPreparation.ChainStageIncidence` ← `MPS.AreaLaw.ChainStageIncidence`, `MPS.AreaLaw.ProtocolStageArity`
-- `MPS.AreaLaw.SweepPreparation.ProtocolCutCoordinates` ← `MPS.AreaLaw.ProtocolCutCoordinates`, `MPS.AreaLaw.ProtocolPolynomialMPS`
-- `MPS.AreaLaw.SweepPreparation.ProtocolSweepFrames` ← `MPS.AreaLaw.ProtocolSweepFrames`, `MPS.AreaLaw.ProtocolStageInformation`
-- `MPS.AreaLaw.SweepPreparation.ProtocolSweepLocalCircuits` ← `MPS.AreaLaw.ProtocolSweepLocalCircuits`, `MPS.AreaLaw.ProtocolStagePhysicalCircuits`
-- `MPS.AreaLaw.SweepPreparation.ProtocolSweepPlacement` ← `MPS.AreaLaw.ProtocolSweepPlacement`, `MPS.AreaLaw.SharpChainCompression`
-- `MPS.AreaLaw.ViableSet.PrefixColumn` ← `MPS.AreaLaw.ViableSet.PrefixColumn`, `MPS.AreaLaw.ViableSet.PrefixExtraction`
-- `MPS.CanonicalForm.BNTPresentation.Characterization` ← `MPS.CanonicalForm.BNTCharacterization`, `MPS.CanonicalForm.BNTExistence`
-- `MPS.CanonicalForm.BlockSeparation.TraceSeparation` ← `MPS.MPDO.BiCFDerivation.Core`, `MPS.MPDO.BiCFDerivation.Blocking`
-- `MPS.CanonicalForm.Correlation.DecayingCorrelations` ← `MPS.Preparation.DecayingCorrelations`, `MPS.Preparation.TransferSpectrumFromCorrelations`
-- `MPS.CanonicalForm.Definitions` ← `MPS.CanonicalForm.Definitions`, `MPS.CanonicalForm.SingleBlock`
-- `MPS.CanonicalForm.HalfChainCanonicalSpectrum` ← `MPS.ParentHamiltonian.HalfChainCanonicalSpectrum`, `MPS.ParentHamiltonian.HalfChainSourceSpectrum`
-- `MPS.CanonicalForm.NormalBlocks.NormalTensorGauge` ← `MPS.CanonicalForm.NormalTensorGauge`, `MPS.Core.CommonNormalBlocking`
-- `MPS.CanonicalForm.NormalBlocks.TPGauge` ← `MPS.CanonicalForm.NormalReduction.TPGauge`, `MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction`
-- `MPS.CanonicalForm.OpenBoundary.OBCCanonicalConfigurations` ← `MPS.Preparation.OBCCanonicalConfigurations`, `MPS.Preparation.PhysicalCutGramRecurrences`
-- `MPS.CanonicalForm.OpenBoundary.OBCCanonicalCutBases` ← `MPS.Preparation.OBCCanonicalCutBases`, `MPS.Preparation.OBCCanonicalBasisFamily`
-- `MPS.CanonicalForm.OpenBoundary.OBCPrefixFactors` ← `MPS.Preparation.OBCPrefixFactors`, `MPS.Preparation.OBCRectangularCutMaps`
-- `MPS.CanonicalForm.Periodic.CyclicSectors.Compression` ← `MPS.CanonicalForm.CyclicSectors.Compression`, `MPS.CanonicalForm.CyclicSectors.CompressionPositive`
-- `MPS.CanonicalForm.Periodic.CyclicSectors.PeriodicSectorDecomposition` ← `MPS.Periodic.Overlap.SelfOverlapSetup`, `MPS.Periodic.PeriodBound`
-- `MPS.CanonicalForm.TraceQuotient.FramedLeftIdealRealization` ← `MPS.Structure.FramedLeftIdealRealization`, `MPS.Structure.ContinuousFramedLeftIdealAction`
-- `MPS.CanonicalForm.TraceQuotient.TraceQuotientLetterCoordinates` ← `MPS.Structure.TraceQuotientLetterCoordinates`, `MPS.Structure.ContinuousTraceQuotientLetters`, `MPS.Structure.NormalizedTraceQuotientLetters`
-- `MPS.Examples.CZX.CZXAnomalyClass` ← `MPS.Examples.CZX.CZXAnomalyClass`, `MPS.Examples.CZX.CZXNoInvariant`
-- `MPS.Examples.Dimer.RescalingStableExplicitVerticalBNT` ← `MPS.MPDO.RescalingStableExplicitVerticalBNT`, `MPS.MPDO.RescalingStableLengthDependentRFPCapstone`
-- `MPS.Examples.Fibonacci.FibonacciNIMRepDecomposition` ← `MPS.Examples.Fibonacci.FibonacciNIMRepDecomposition`, `MPS.Examples.Fibonacci.FibonacciSymmetricFamilyDecomposition`
-- `MPS.Examples.IdentityPlusZString.NormalizedSummary` ← `MPS.MPDO.CPSVExample412NormalizedGSNNCH`, `MPS.MPDO.CPSVExample412NormalizedSummary`
-- `MPS.Examples.Rings.GoldenRing` ← `MPS.Examples.Rings.GoldenRing`, `MPS.Examples.Rings.GoldenCompression`
-- `MPS.Examples.Weyl.CyclicPhases` ← `MPS.Examples.ShortMomentum.CyclicPhases`, `MPS.Examples.ShortMomentum.OverlapChargeCoefficients`
-- `MPS.Examples.Weyl.WeylSpans` ← `MPS.Examples.ShortMomentum.WeylSpans`, `MPS.Examples.ShortMomentum.LongIntersection`
-- `MPS.Examples.Wielandt.CyclicMatrix` ← `MPS.Examples.CyclicWielandt.Matrix`, `MPS.Examples.CyclicWielandt.WordNormalForm`
-- `MPS.FundamentalTheorem.Arbitrary.Basic` ← `MPS.FundamentalTheorem.Arbitrary.Basic`, `MPS.FundamentalTheorem.Arbitrary.Corollaries.PowerForm`
-- `MPS.FundamentalTheorem.Arbitrary.BlockPermutation` ← `MPS.FundamentalTheorem.Arbitrary.Corollaries.BlockPermutation`, `MPS.FundamentalTheorem.Arbitrary.Corollaries.BlockSumGauge`
-- `MPS.FundamentalTheorem.Arbitrary.GaugeScalars` ← `MPS.FundamentalTheorem.Arbitrary.Corollaries.GaugeScalars`, `MPS.FundamentalTheorem.Arbitrary.Corollaries.NormalBlocks`
-- `MPS.FundamentalTheorem.Compression.IrreducibleTensor` ← `MPS.FundamentalTheorem.Reduction.IrreducibleTensor`, `MPS.FundamentalTheorem.Arbitrary.Corollaries.Schur`
-- `MPS.FundamentalTheorem.Compression.MultiBlock` ← `MPS.FundamentalTheorem.Reduction.MultiBlock`, `MPS.FundamentalTheorem.Reduction.SingleBlock`
-- `MPS.FundamentalTheorem.Compression.UniquenessBlocks` ← `MPS.FundamentalTheorem.Reduction.UniquenessBlocks`, `MPS.FundamentalTheorem.Arbitrary.WordModuleGauge`
-- `MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportProductTransport` ← `MPS.MPDO.PhysicalSupportProductTransport`, `MPS.MPDO.CommutingBondEtaCyclicTransport`
-- `MPS.FundamentalTheorem.ProductAlgebra` ← `MPS.FundamentalTheorem.ProductAlgebra`, `MPS.FundamentalTheorem.PositiveLinearExtension`
-- `MPS.FundamentalTheorem.Refinement.RefinableOfDivisible` ← `MPS.Periodic.Symmetry.Theorem41Reverse`, `MPS.Periodic.Symmetry.RefinementFromInjectiveTransfer`
-- `MPS.FundamentalTheorem.Sectors.ProportionalMatchCore` ← `MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core`, `MPS.FundamentalTheorem.SectorBNT.ExactMatch`
-- `MPS.FundamentalTheorem.Zipper.BoundaryActionCrossTransport` ← `MPS.MPDO.BoundaryActionCrossTransport`, `MPS.MPDO.BoundaryActionCrossFusionEntries`
-- `MPS.FundamentalTheorem.Zipper.CompleteZipperFusionBlocked` ← `MPS.MPDO.CompleteZipperFusionBlocked`, `MPS.MPDO.InjectiveBlockWordSpan`
-- `MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseCorner` ← `MPS.MPDO.BNTAlgebraTensorClauseCorner`, `MPS.MPDO.BNTAlgebraTensorClauseIdentityPhysicalSpan`
-- `MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseSpectrum` ← `MPS.MPDO.BNTAlgebraTensorClauseSpectrum`, `MPS.MPDO.BNTAlgebraTensorClauseConditionalUnitary`
-- `MPS.MPDO.BNTSectors.BNTChannelComposition` ← `MPS.MPDO.CommonWeightAbsorbedBNTSupport`, `MPS.MPDO.BNTChannelComposition`
-- `MPS.MPDO.BNTSectors.BNTPhysicalSectorGSNNCH` ← `MPS.MPDO.PhysicalSectorActiveBond`, `MPS.MPDO.BNTPhysicalSectorGSNNCH`
-- `MPS.MPDO.CZX.CZXCompletion` ← `MPS.MPDO.CZXCompletion`, `MPS.MPDO.CZXUnmodifiedFusion`
-- `MPS.MPDO.CZX.CZXTensor` ← `MPS.MPDO.CZXTensor`, `MPS.MPDO.CZXTensorInjectivity`
-- `MPS.MPDO.Coefficients.LengthIndependentCoefficients` ← `MPS.MPDO.LengthIndependentCoefficients`, `MPS.MPDO.FiniteLengthIndependentCoefficients`
-- `MPS.MPDO.CommutingForm.FixedBondProductEtaTensor` ← `MPS.MPDO.FixedBondProductEtaTensor`, `MPS.MPDO.FixedBondPositivePhysicalSectorRepresentative`
-- `MPS.MPDO.CommutingForm.FixedBondProductTensor` ← `MPS.MPDO.FixedBondProductTensor`, `MPS.MPDO.PhysicalSectorNormalProductRepresentative`
-- `MPS.MPDO.MPOAction.BoundaryActionLMatrixPath` ← `MPS.MPDO.BoundaryActionLMatrixPath`, `MPS.MPDO.BoundaryActionLMatrixPathExistence`
-- `MPS.MPDO.MPOAction.MixedPentagon` ← `MPS.MPDO.TriangularActionLIdentification`, `MPS.MPDO.TriangularMixedPentagon`, `MPS.MPDO.BoundarySourceMixedPentagon`
-- `MPS.MPDO.MPOAction.TriangularPhysicalPadding` ← `MPS.MPDO.TriangularPhysicalPadding`, `MPS.MPDO.TriangularPaddingDecomposition`
-- `MPS.MPDO.PhysicalSector.ActiveSectorTraceMatrixZCL` ← `MPS.MPDO.ActiveSectorTraceMatrixZCL`, `MPS.MPDO.InverseMapActiveSectorZCL`
-- `MPS.MPDO.PhysicalSector.PhysicalSectorActiveNeighboring` ← `MPS.MPDO.PhysicalSectorActiveNeighboring`, `MPS.MPDO.PhysicalIsometricEmbeddingNeighboringTrace`
-- `MPS.MPDO.PhysicalSector.PhysicalSectorVirtualTransport` ← `MPS.MPDO.PhysicalSectorVirtualTransport`, `MPS.MPDO.PhysicalSectorVirtualCompression`
-- `MPS.MPDO.RFP.RFPViaTSGlobal` ← `MPS.MPDO.RFPViaTSGlobal`, `MPS.MPDO.RFPViaTSPositivity`
-- `MPS.MPDO.SectorMaps.VerticalSectorCompletePositivity` ← `MPS.MPDO.VerticalSectorFixedGenerators`, `MPS.MPDO.VerticalSectorTracePreservation`, `MPS.MPDO.VerticalSectorCompletePositivity`
-- `MPS.MPDO.SectorMaps.VerticalSectorIdentity` ← `MPS.MPDO.VerticalSectorInvertibility`, `MPS.MPDO.VerticalSectorIdentity`, `MPS.MPDO.VerticalSectorRelabeling`
-- `MPS.MPDO.SectorMaps.VerticalSectorRetractions` ← `MPS.MPDO.VerticalSectorRetractions`, `MPS.MPDO.VerticalSectorFixedPointProductSpan`
-- `MPS.MPDO.TopologicalForm.TopologicalPhysicalGibbs` ← `MPS.MPDO.TopologicalPhysicalGibbs`, `MPS.MPDO.CPSVTopologicalPhysicalGibbs`
-- `MPS.MPDO.Vertical.CPSVOriginalSpaceLemmaL` ← `MPS.MPDO.CPSVOriginalSpaceLemmaL`, `MPS.MPDO.CPSVFigureEight`
-- `MPS.MPDO.Vertical.CPSVPeriodicExclusion` ← `MPS.MPDO.CPSVPeriodicExclusion`, `MPS.MPDO.CPSVVerticalBNT`
-- `MPS.MPDO.Vertical.GroupedSectorGram` ← `MPS.MPDO.GroupedReferenceCorner`, `MPS.MPDO.GroupedSectorGram`, `MPS.MPDO.GroupedGramNormalization`
-- `MPS.MPDO.Vertical.NormalizedGroupedSectorMaps` ← `MPS.MPDO.NormalizedGroupedSectorMaps`, `MPS.MPDO.NormalizedGroupedSectors`
-- `MPS.MPDO.Vertical.VerticalBNT` ← `MPS.MPDO.SectorCompressionSeparation`, `MPS.MPDO.VerticalBNT`
-- `MPS.MPDO.Vertical.VerticalCanonicalForm` ← `MPS.MPDO.VerticalCanonicalFormConstruction`, `MPS.MPDO.VerticalBNTGrouping`, `MPS.MPDO.VerticalCanonicalForm`, `MPS.MPDO.TwoSiteVerticalCanonicalForm`, `MPS.MPDO.CPSVVerticalCanonicalForm`
-- `MPS.MPDO.Vertical.VerticalReduction` ← `MPS.MPDO.VerticalReduction`, `MPS.MPDO.VerticalSpectral`
-- `MPS.MPU.CanonicalForm.KetLeftMulCanonicalForm` ← `MPS.MPU.KetLeftMul`, `MPS.MPU.KetLeftMulCanonicalForm`
-- `MPS.MPU.CanonicalForm.MPUCanonicalForm` ← `MPS.MPU.MPUCanonicalForm`, `MPS.MPU.CanonicalFormOfCanonicalFormII`
-- `MPS.MPU.CanonicalForm.PositiveCanonicalGauge` ← `MPS.MPU.PositiveCanonicalGauge`, `MPS.MPU.CanonicalFormGauge`
-- `MPS.MPU.CanonicalForm.ReducedCanonicalRepresentative` ← `MPS.MPU.ReducedCanonicalRepresentative`, `MPS.MPU.InjectiveCanonicalRepresentative`
-- `MPS.MPU.CanonicalForm.ReducedRepresentative` ← `MPS.MPU.ReducedRepresentative`, `MPS.MPU.NormalizedCompression`
-- `MPS.MPU.CanonicalForm.VirtualSandwich` ← `MPS.MPU.VirtualSandwich`, `MPS.MPU.WordSandwich`
-- `MPS.MPU.CanonicalForm.VirtualUnitaryGauge` ← `MPS.MPU.VirtualUnitaryGauge`, `MPS.MPU.EvenFamilyVirtualGauge`
-- `MPS.MPU.Circuit.Bounds.UniformCircuitResourceBounds` ← `MPS.MPU.UniformCircuitResourceBounds`, `MPS.MPU.UniformMergingResourceBounds`
-- `MPS.MPU.Circuit.ExactBoundedCutRankCircuit` ← `MPS.MPU.ExactBoundedCutRankCircuit`, `MPS.MPU.ApproximateBoundedCutRankCircuit`
-- `MPS.MPU.Circuit.Gates.FiniteAlphabetRows` ← `MPS.MPU.FiniteAlphabetRows`, `MPS.MPU.PhaseSelectorRows`
-- `MPS.MPU.Circuit.Interval.IntervalInputRegrouping` ← `MPS.MPU.IntervalInputRegrouping`, `MPS.MPU.IntervalParentColumns`
-- `MPS.MPU.Circuit.Interval.IntervalJointSuffixFactorization` ← `MPS.MPU.IntervalJoiningPacketEncoding`, `MPS.MPU.IntervalJointSuffixFactorization`, `MPS.MPU.InitializedEncodingCoordinates`
-- `MPS.MPU.Circuit.Interval.JoiningSpectatorColumns` ← `MPS.MPU.JoiningSpectatorColumns`, `MPS.MPU.JoiningResetColumns`
-- `MPS.MPU.Circuit.Interval.MinimalIntervalCircuit` ← `MPS.MPU.MinimalIntervalCircuit`, `MPS.MPU.MinimalIntervalRecursion`
-- `MPS.MPU.Circuit.Registers.JoiningRegisterCoordinates` ← `MPS.MPU.JoiningRegisterCoordinates`, `MPS.MPU.JoiningPacketSupport`
-- `MPS.MPU.DomainWall.FiniteGroupDetectorDomainWall` ← `MPS.MPU.FiniteGroupDetectorDomainWall`, `MPS.MPU.FiniteGroupDetectorLocalComparison`
-- `MPS.MPU.Index.RepresentativeIndex` ← `MPS.MPU.RepresentativeIndex`, `MPS.MPU.RepresentativeIndexOperations`
-- `MPS.MPU.QuasiLocal.CyclicConjugation` ← `MPS.MPU.CyclicConjugation`, `MPS.MPU.CyclicFinitePropagation`
-- `MPS.MPU.QuasiLocal.FiniteWindowSupport` ← `MPS.MPU.FiniteWindowSupport`, `MPS.MPU.TwoSiteMiddleOutput`
-- `MPS.MPU.QuasiLocal.QuasiLocalAction` ← `MPS.MPU.QuasiLocalAction`, `MPS.MPU.QuasiLocalActionChoice`
-- `MPS.MPU.Representation.GroupIndex` ← `MPS.MPU.GroupIndex`, `MPS.MPU.FiniteGroupSourceRanks`
-- `MPS.MPU.Representation.InverseCompatibleCutComparison` ← `MPS.MPU.InverseCompatibleCutComparison`, `MPS.MPU.InverseCompatibleGateIdentity`, `MPS.MPU.InverseCompatiblePhysicalRanks`
-- `MPS.MPU.Representation.InverseCompatibleSourceFactors` ← `MPS.MPU.InverseCompatibleSourceFactors`, `MPS.MPU.InverseCompatibleSourceTransport`, `MPS.MPU.InverseCompatibleMovement`
-- `MPS.MPU.Representation.InverseCompatibleSourceProperties` ← `MPS.MPU.InverseCompatibleSourceProperties`, `MPS.MPU.InverseCompatibleFamilyProperties`
-- `MPS.MPU.Simple.SourceDecompositionUniqueness` ← `MPS.MPU.SourceDecompositionUniqueness`, `MPS.MPU.NormalizedSourceDecompositionUniqueness`
-- `MPS.MPU.Simple.SourceUCompleteNetwork` ← `MPS.MPU.SourceUCompleteNetwork`, `MPS.MPU.SourceURetainedInterior`
-- `MPS.MPU.Simple.TruncatedSymmetryGrowth` ← `MPS.MPU.TruncatedSymmetryGrowth`, `MPS.MPU.TruncatedSymmetryUnitarity`
-- `MPS.MPU.Symmetry.Phases.ConjugationCaseEquivalence` ← `MPS.MPU.ConjugationCaseEquivalence`, `MPS.MPU.ConjugationMPSPhase`
-- `MPS.MPU.Symmetry.Phases.StandardFormSymmetryCriteria` ← `MPS.MPU.StandardFormSymmetryCriteria`, `MPS.MPU.StandardFormTimeReversalSign`
-- `MPS.Operator.Boundary.Boundary` ← `MPS.MPDO.Boundary`, `MPS.MPDO.BoundaryAdjointClosed`
-- `MPS.Operator.Boundary.BoundaryBiorthogonal` ← `MPS.MPDO.BoundaryBiorthogonal`, `MPS.MPDO.BoundaryRestriction`
-- `MPS.Operator.Boundary.BoundaryBlockFusion` ← `MPS.MPDO.BoundaryBlockFusion`, `MPS.MPDO.BoundaryBlockAction`
-- `MPS.Operator.Defs` ← `MPS.MPDO.Defs`, `MPS.MPDO.IdentityTensor`
-- `MPS.Operator.Fusion.CompleteZipperFusionInverse` ← `MPS.MPDO.CompleteZipperFusionInverse`, `MPS.MPDO.CompleteZipperFusionInverseTrace`
-- `MPS.Operator.Fusion.CompleteZipperFusionMixedOrientation` ← `MPS.MPDO.CompleteZipperFusionMixedOrientation`, `MPS.MPDO.CompleteZipperFusionMixedEntries`
-- `MPS.Operator.Interaction.FiniteRingLiebRobinson` ← `MPS.Preparation.FiniteRingLiebRobinson`, `MPS.Preparation.FiniteRingGaussianFilter`
-- `MPS.Operator.PhysicalSector.PhysicalSectorBondTwoSite` ← `MPS.MPDO.PhysicalSectorBondTwoSite`, `MPS.MPDO.PhysicalSectorBondPairwise`
-- `MPS.Operator.PhysicalSector.PhysicalSectorCoarseGrainingAction` ← `MPS.MPDO.PhysicalSectorCoarseGrainingAction`, `MPS.MPDO.PhysicalSectorCoarseGrainingIdentity`
-- `MPS.Operator.PhysicalSector.PhysicalSectorProductTransport` ← `MPS.MPDO.PhysicalSectorProductTransport`, `MPS.MPDO.PhysicalSectorEtaLocalStructure`
-- `MPS.Operator.PhysicalSector.PhysicalSectorRefinementAction` ← `MPS.MPDO.PhysicalSectorRefinementAction`, `MPS.MPDO.PhysicalSectorRefinementIdentity`
-- `MPS.Operator.Product.PhysicalBlocking` ← `MPS.MPDO.PhysicalBlocking`, `MPS.MPDO.PhysicalBlockingResiduals`
-- `MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization` ← `MPS.ParentHamiltonian.NormalBlockPrimitiveGauges`, `MPS.ParentHamiltonian.BlockDiagonalNormalization`, `MPS.ParentHamiltonian.NormalBlockC1Normalization`
-- `MPS.ParentHamiltonian.BlockGroundSpace.BlockGroundSpaceAtInjectivityLength` ← `MPS.ParentHamiltonian.CyclicBoundaryIntertwining`, `MPS.ParentHamiltonian.BlockPeriodicClosure`, `MPS.ParentHamiltonian.BlockGroundSpaceAtInjectivityLength`
-- `MPS.ParentHamiltonian.BlockGroundSpace.BlockOpenGroundSpace` ← `MPS.ParentHamiltonian.BlockOpenGroundSpace`, `MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace`, `MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace`
-- `MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BNTBlockDiagonalChain` ← `MPS.ParentHamiltonian.BNTBlockDiagonalChain`, `MPS.ParentHamiltonian.BNTBlockDiagonalChainBoundary`
-- `MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BlockIntersectionProperty` ← `MPS.ParentHamiltonian.BlockIntersectionProperty`, `MPS.ParentHamiltonian.PGVWCCDEIdentities`
-- `MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundSpaceIndependence` ← `MPS.ParentHamiltonian.SectorBoundedLifts`, `MPS.ParentHamiltonian.PeriodicGroundSpaceIndependence`
-- `MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace` ← `MPS.ParentHamiltonian.PeriodicPrimitiveGroundSpace`, `MPS.ParentHamiltonian.CyclicPrimitiveSectorDecomposition`
-- `MPS.ParentHamiltonian.BlockGroundSpace.Sector.PoweredCyclicPrimitiveResolution` ← `MPS.ParentHamiltonian.PoweredCyclicPrimitiveResolution`, `MPS.ParentHamiltonian.PeriodicFamilyPrimitiveResolution`
-- `MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGram` ← `MPS.ParentHamiltonian.ResidualBoundaryGram`, `MPS.ParentHamiltonian.PeriodicInverseProjectionSum`
-- `MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryOverlap` ← `MPS.ParentHamiltonian.ResidualBoundaryOverlap`, `MPS.ParentHamiltonian.PeriodicResidualProjectionSum`
-- `MPS.ParentHamiltonian.Blocking.BlockedInteractionWindow` ← `MPS.ParentHamiltonian.BlockedInteractionWindow`, `MPS.ParentHamiltonian.BlockedLocalObservable`
-- `MPS.ParentHamiltonian.Blocking.BlockedQuasiLocalGap` ← `MPS.ParentHamiltonian.BlockedQuasiLocalGap`, `MPS.ParentHamiltonian.BlockedPrimitiveQuasiLocalGap`
-- `MPS.ParentHamiltonian.Blocking.ResidueCoverGapCriterion` ← `MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion`, `MPS.ParentHamiltonian.Martingale.AlignedResidueCoverGapLimit`, `MPS.ParentHamiltonian.Martingale.ResidueCoverGapLimit`
-- `MPS.ParentHamiltonian.BoundaryMap.SpectatorBoundaryGram` ← `MPS.ParentHamiltonian.SpectatorBoundaryGram`, `MPS.ParentHamiltonian.SpectatorBoundaryCoordinates`
-- `MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression` ← `MPS.ParentHamiltonian.BoundaryObservableCompression`, `MPS.ParentHamiltonian.BlockBoundaryObservableCompression`
-- `MPS.ParentHamiltonian.Commuting.SectorGraph.BeigiEventuallyConstantSectorGraph` ← `MPS.RFP.BeigiGroundSpaceDimension`, `MPS.RFP.BeigiEventuallyConstantSectorGraph`
-- `MPS.ParentHamiltonian.Continuity.CompactParentGap` ← `MPS.ParentHamiltonian.OpenGapContinuity`, `MPS.ParentHamiltonian.KnabeGapNeighborhood`, `MPS.ParentHamiltonian.CompactParentGap`
-- `MPS.ParentHamiltonian.Continuity.OpenGapContinuity` ← `MPS.ParentHamiltonian.Martingale.CompactOpenIntervalGap`, `MPS.ParentHamiltonian.Martingale.OpenGapContinuity`
-- `MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap` ← `MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap`, `MPS.ParentHamiltonian.Martingale.PeriodicGapFromDivisibleOpen`
-- `MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison` ← `MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison`, `MPS.ParentHamiltonian.Martingale.FixedRangeGapTransfer`
-- `MPS.ParentHamiltonian.Gap.Filtration.GroupedOpenGap` ← `MPS.ParentHamiltonian.Martingale.GroupedOpenGap`, `MPS.ParentHamiltonian.Martingale.GroupedSpectatorNorm`, `MPS.ParentHamiltonian.Martingale.GroupedProjectorEstimate`
-- `MPS.ParentHamiltonian.Gap.PrimitiveBlockGapThreshold` ← `MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapThreshold`, `MPS.ParentHamiltonian.Martingale.BlockGapAtSimultaneousInjectivity`, `MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapAtC1Range`, `MPS.ParentHamiltonian.Martingale.PrimitiveBlockUniformGap`
-- `MPS.ParentHamiltonian.Gap.PrimitiveBlockOpenGapAllLengths` ← `MPS.ParentHamiltonian.Martingale.PrimitiveBlockOpenGapAllLengths`, `MPS.ParentHamiltonian.Martingale.BlockOpenGapAllLengths`, `MPS.ParentHamiltonian.Martingale.NormalBlockOpenGap`
-- `MPS.ParentHamiltonian.Interaction.ArbitraryInteractionBlockDegeneracy` ← `MPS.ParentHamiltonian.CyclicBlockState`, `MPS.ParentHamiltonian.ArbitraryInteractionBlockDegeneracy`, `MPS.ParentHamiltonian.CanonicalArbitraryInteractionDegeneracy`
-- `MPS.ParentHamiltonian.Interaction.OpenInteraction` ← `MPS.ParentHamiltonian.CanonicalParentInteractionExistence`
-- `MPS.ParentHamiltonian.Interaction.ParentInteractionGap` ← `MPS.ParentHamiltonian.Martingale.ParentInteractionGap`, `MPS.ParentHamiltonian.Martingale.CanonicalGapAtBoundedRange`
-- `MPS.ParentHamiltonian.Interaction.PhysicalSectorProjectorTransport` ← `MPS.ParentHamiltonian.PhysicalSectorProjectorTransport`, `MPS.ParentHamiltonian.PhysicalSectorKernelDecomposition`
-- `MPS.ParentHamiltonian.Interaction.PrimeLengthBondDimensionDichotomy` ← `MPS.ParentHamiltonian.PrimeLengthBondDimensionDichotomy`, `MPS.ParentHamiltonian.FinitePrefixUniformBond`
-- `MPS.ParentHamiltonian.LocalExpectation.LocalDensitySupport` ← `MPS.ParentHamiltonian.LocalDensitySupport`, `MPS.ParentHamiltonian.FaithfulLocalStateSupport`
-- `MPS.ParentHamiltonian.LocalExpectation.SuppliedIsometryInsertion` ← `MPS.ParentHamiltonian.SuppliedIsometryInsertion`, `MPS.ParentHamiltonian.SourceOrderedInsertion`
-- `MPS.ParentHamiltonian.OpenBoundary.PhysicalAlphabetEmbedding` ← `MPS.ParentHamiltonian.PhysicalAlphabetEmbedding`, `MPS.ParentHamiltonian.PhysicalAlphabetLocalTerms`
-- `MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison` ← `MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison`, `MPS.ParentHamiltonian.ParentInteractionComparison`
-- `MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian` ← `MPS.ParentHamiltonian.Martingale.OpenHamiltonian`, `MPS.ParentHamiltonian.OpenKernelOfIntersection`
-- `MPS.ParentHamiltonian.ParentInteraction.Reduction` ← `MPS.ParentHamiltonian.Martingale.Reduction`, `MPS.ParentHamiltonian.Martingale.Gap`
-- `MPS.ParentHamiltonian.ParentInteraction.Transport` ← `MPS.ParentHamiltonian.Martingale.Transport`, `MPS.ParentHamiltonian.NonzeroInteraction`
-- `MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyGroundStates` ← `MPS.ParentHamiltonian.PeriodicBlockFamilyGroundStates`, `MPS.ParentHamiltonian.PeriodicQuasiLocalGroundStates`
-- `MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyOpenParentGap` ← `MPS.ParentHamiltonian.PeriodicBlockFamilyOpenParentGap`, `MPS.ParentHamiltonian.PeriodicBlockFamilyInteractionGap`
-- `MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyQuasiLocalGap` ← `MPS.ParentHamiltonian.PeriodicBlockFamilyQuasiLocalGap`, `MPS.ParentHamiltonian.PeriodicQuasiLocalGroundStateGap`
-- `MPS.ParentHamiltonian.Periodic.PeriodicOpenParentGap` ← `MPS.ParentHamiltonian.PeriodicOpenParentGap`, `MPS.ParentHamiltonian.PeriodicParentGap`, `MPS.ParentHamiltonian.PeriodicParentInteractionGap`
-- `MPS.ParentHamiltonian.ProjectorDefect.BlockIntervalDefectDecay` ← `MPS.ParentHamiltonian.BlockIntervalProjectors`, `MPS.ParentHamiltonian.BlockIntervalDefectDecay`, `MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay`, `MPS.ParentHamiltonian.BlockDiagonalProjectorDecay`
-- `MPS.ParentHamiltonian.ProjectorDefect.DimensionConstant.Counterexample` ← `MPS.ParentHamiltonian.FNWDimensionConstant.CoefficientComparison`, `MPS.ParentHamiltonian.FNWDimensionConstant.Counterexample`
-- `MPS.ParentHamiltonian.ProjectorDefect.DimensionConstant.MarkovChannel` ← `MPS.ParentHamiltonian.FNWDimensionConstant.MarkovChannel`, `MPS.ParentHamiltonian.FNWDimensionConstant.MarkovSpectrum`
-- `MPS.ParentHamiltonian.ProjectorDefect.DimensionConstant.MatrixUnitPaths` ← `MPS.ParentHamiltonian.FNWDimensionConstant.MatrixUnitPaths`, `MPS.ParentHamiltonian.FNWDimensionConstant.MatrixUnitNormalization`, `MPS.ParentHamiltonian.FNWDimensionConstant.PathGroundSpace`, `MPS.ParentHamiltonian.FNWDimensionConstant.PathVectorNorm`
-- `MPS.ParentHamiltonian.ProjectorDefect.DimensionConstant.ProjectorWitness` ← `MPS.ParentHamiltonian.FNWDimensionConstant.MarkedBoundaryVectors`, `MPS.ParentHamiltonian.FNWDimensionConstant.ProjectionWitnessBound`, `MPS.ParentHamiltonian.FNWDimensionConstant.ProjectorWitness`
-- `MPS.ParentHamiltonian.ProjectorDefect.FNWTransferEigenvalueRate` ← `MPS.ParentHamiltonian.FNWTransferEigenvalueRate`, `MPS.ParentHamiltonian.FNWEventualPrefactor`
-- `MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowJointProjectionDecay` ← `MPS.ParentHamiltonian.ResidualWindowJointProjectionDecay`, `MPS.ParentHamiltonian.ResidualCoverProjectionDefect`
-- `MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowMixedGramDecay` ← `MPS.ParentHamiltonian.ResidualWindowVirtualNorm`, `MPS.ParentHamiltonian.ResidualWindowMixedGramDecay`
-- `MPS.ParentHamiltonian.QuasiLocalState.MultiblockQuasiLocalGroundStates` ← `MPS.ParentHamiltonian.MultiblockQuasiLocalGroundStates`, `MPS.ParentHamiltonian.NormalizedQuasiLocalGroundStates`, `MPS.ParentHamiltonian.PrimitiveGroundStateInteractionExistence`
-- `MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness` ← `MPS.ParentHamiltonian.PrimitiveQuasiLocalUniqueness`, `MPS.ParentHamiltonian.PrimitiveQuasiLocalPurity`
-- `MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality` ← `MPS.ParentHamiltonian.QuasiLocalWindowCoordinates`, `MPS.ParentHamiltonian.QuasiLocalCommutatorLocality`
-- `MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalMultiblockGap` ← `MPS.ParentHamiltonian.QuasiLocalPrimitiveGap`, `MPS.ParentHamiltonian.QuasiLocalMultiblockGap`, `MPS.ParentHamiltonian.QuasiLocalMultiblockLimitGap`
-- `MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalOpenInteractionExpectation` ← `MPS.ParentHamiltonian.QuasiLocalOpenInteractionExpectation`, `MPS.ParentHamiltonian.LocalParentExpectationFromOpenKernel`
-- `MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalParentGroundStateFace` ← `MPS.ParentHamiltonian.QuasiLocalParentGroundStateFace`, `MPS.ParentHamiltonian.CanonicalParentGroundState`
-- `MPS.ParentHamiltonian.Stationary.FaithfulParentFiniteGap` ← `MPS.ParentHamiltonian.FaithfulQuasiLocalGap`, `MPS.ParentHamiltonian.FaithfulParentFiniteGap`, `MPS.ParentHamiltonian.FaithfulGivenInteractionGap`
-- `MPS.ParentHamiltonian.Stationary.StationaryParentFiniteGap` ← `MPS.ParentHamiltonian.StationaryParentFiniteGap`, `MPS.ParentHamiltonian.StationaryParentInteractionGap`, `MPS.ParentHamiltonian.SuppliedIsometryParentGap`
-- `MPS.ParentHamiltonian.Stationary.StationarySupportCompression` ← `MPS.ParentHamiltonian.StationarySupportCompression`, `MPS.ParentHamiltonian.StationaryLocalStateSupport`
-- `MPS.ParentHamiltonian.Uncle.UncleVariationalEigenvalue` ← `MPS.ParentHamiltonian.UncleVariationalEigenvalue`, `MPS.ParentHamiltonian.UncleTrialGroundProjection`, `MPS.ParentHamiltonian.UncleVariationalAsymptotics`
-- `MPS.ParentHamiltonian.UncleNormGrowth` ← `MPS.ParentHamiltonian.UncleNormGrowth`, `MPS.ParentHamiltonian.UncleGroundGram`
-- `MPS.ParentHamiltonian.WeightedCanonicalSectors` ← `MPS.ParentHamiltonian.WeightedCanonicalPhysicalLimit`, `MPS.ParentHamiltonian.WeightedCanonicalSectors`, `MPS.ParentHamiltonian.HalfChainGeneralCanonicalSpectrum`
-- `MPS.Preparation.BlockSum.RepeatedBlockSum` ← `MPS.Preparation.RepeatedBlockSum`, `MPS.Preparation.RepeatedBlockError`
-- `MPS.Preparation.Circuit.UnequalRegisterTreeState` ← `MPS.Preparation.UnequalRegisterTreeState`, `MPS.Preparation.IsometryTreePreparation`
-- `MPS.Preparation.Inhomogeneous.CornerReferenceOverlap` ← `MPS.Preparation.CornerReferenceOverlap`, `MPS.Preparation.RectangularTransferEstimate`
-- `MPS.Preparation.Inhomogeneous.ExplicitPreparationScale` ← `MPS.Preparation.ExplicitPreparationScale`, `MPS.Preparation.OrderedMixingScale`
-- `MPS.Preparation.Inhomogeneous.InhomogeneousApproximationError` ← `MPS.Preparation.InhomogeneousApproximationError`, `MPS.Preparation.OrderedMixingPairRate`
-- `MPS.Preparation.Inhomogeneous.InhomogeneousDoeblin` ← `MPS.Preparation.InhomogeneousDoeblin`, `MPS.Preparation.InhomogeneousChoiResidual`, `MPS.Preparation.InhomogeneousPositivePartRate`
-- `MPS.Preparation.Inhomogeneous.InhomogeneousSequence` ← `MPS.Preparation.InhomogeneousSequence`, `MPS.Preparation.InhomogeneousExactPreparation`
-- `MPS.Preparation.Inhomogeneous.RectangularIntervalBlocks` ← `MPS.Preparation.RectangularIntervalBlocks`, `MPS.Preparation.RectangularWindowMixing`
-- `MPS.Preparation.Inhomogeneous.RectangularPreparation` ← `MPS.Preparation.RectangularPreparation`, `MPS.Preparation.RectangularWindowPreparation`
-- `MPS.Preparation.Inhomogeneous.VaryingBondBlocks` ← `MPS.Preparation.VaryingBondBlocks`, `MPS.Preparation.PaddedBondState`
-- `MPS.Preparation.Inhomogeneous.WindowMixing` ← `MPS.Preparation.WindowMixing`, `MPS.Preparation.WindowMixingPreparation`
-- `MPS.Preparation.Measurement.CoherentBlockTreePreparation` ← `MPS.Preparation.CoherentBlockTreePreparation`, `MPS.Preparation.SupportedLogLogPreparation`
-- `MPS.Preparation.Measurement.OverlappingLogLogPreparation` ← `MPS.Preparation.OverlappingLogLogPreparation`, `MPS.Preparation.ArbitraryTensorAfterBlocking`
-- `MPS.Preparation.Measurement.OverlappingMeasurementPreparation` ← `MPS.Preparation.OverlappingMeasurementPreparation`, `MPS.Preparation.QCccClassification`
-- `MPS.Preparation.Normal.BlockApproximationError` ← `MPS.Preparation.OrderedBlockOverlap`, `MPS.Preparation.BlockApproximationError`
-- `MPS.Preparation.Normal.DepthLogBound` ← `MPS.Preparation.DepthLogBound`, `MPS.Preparation.AllLengthPrescribedSlope`
-- `MPS.Preparation.Normal.DepthLowerBound` ← `MPS.Preparation.DepthLowerBound`, `MPS.Preparation.DepthLowerBoundNormal`
-- `MPS.Preparation.Normal.ZeroSubleadingPreparation` ← `MPS.Preparation.ZeroSubleadingSpectrum`, `MPS.Preparation.ZeroSubleadingPreparation`
-- `MPS.Preparation.SectorEncoder.SectorEncoder` ← `MPS.Preparation.SectorEncoder`, `MPS.Preparation.SectorEncoderCompilation`, `MPS.Preparation.SectorEncoderGroundspace`
-- `MPS.Preparation.SectorEncoder.SectorEncoderRates` ← `MPS.Preparation.SectorEncoderRates`, `MPS.Preparation.SectorEncoderPreparation`
-- `MPS.Preparation.Tree.PolarMerge` ← `MPS.Preparation.PolarMerge`, `MPS.Preparation.PolarIsometryTree`
-- `MPS.RFP.AppendixBChainCommutation` ← `MPS.RFP.AppendixBChainCommutation`, `MPS.RFP.NNCPHGroundSpace`
-- `MPS.RFP.CPSVCanonicalForm` ← `MPS.RFP.NormalIsometryCharacterization`, `MPS.RFP.CPSVCanonicalForm`
-- `MPS.RFP.FlowLimit` ← `MPS.RFP.Convergence`, `MPS.RFP.FlowLimit`
-- `MPS.RFP.NNCPHMultiSector` ← `MPS.RFP.NNCPHMultiSector`, `MPS.RFP.NNCPHGroundSpacesMultiSector`
-- `MPS.Symmetry.ContinuousFamily.ContinuousCanonicalNormalization` ← `MPS.Symmetry.ContinuousCanonicalNormalization`, `MPS.Structure.ContinuousMinimalCanonicalRealization`
-- `MPS.Symmetry.ContinuousFamily.LocalInvariantCompression` ← `MPS.Symmetry.LocalInvariantCompression`, `MPS.Symmetry.SupportedDensityPhaseInvariance`
-- `MPS.Symmetry.ContinuousFamily.StationarySupportedDensityPhaseInvariance` ← `MPS.Symmetry.StationarySupportedDensityPhaseInvariance`, `MPS.Symmetry.SupportedCompressionIrreducible`, `MPS.Symmetry.UnitalSupportedPathInvariance`
-- `MPS.Symmetry.FixedPoint.BondProductPhysicalParentHamiltonian` ← `MPS.Symmetry.BondProductPhysicalParentHamiltonian`, `MPS.Symmetry.BondProductPhysicalSymmetry`
-- `MPS.Symmetry.FixedPoint.BondRegrouping` ← `MPS.Symmetry.BondRegrouping`, `MPS.Symmetry.BondRegroupingLocality`
-- `MPS.Symmetry.GappedPath.CanonicalInjectiveGappedPath` ← `MPS.Symmetry.CanonicalInjectiveGappedPath`, `MPS.Symmetry.CanonicalInjectiveGroundPath`
-- `MPS.Symmetry.GappedPath.PhysicalInteractionGap` ← `MPS.Symmetry.PhysicalInteractionGap`, `MPS.Symmetry.IsometricParentInteraction`
-- `MPS.Symmetry.GappedPath.PolarDeformation` ← `MPS.Symmetry.PolarDeformation`, `MPS.Symmetry.PolarDeformationGap`, `MPS.Symmetry.PolarGappedInteractionPath`
-- `MPS.Symmetry.GroundPath.ExactGroundPathGaussianFilter` ← `MPS.Symmetry.ExactGroundPathGaussianFilter`, `MPS.Symmetry.ExactGroundPathGaussianCorrelation`, `MPS.Symmetry.ExactGroundPathClustering`, `MPS.Symmetry.ExactGroundPathFrequencySeparation`
-- `MPS.Symmetry.GroundPath.ExactGroundPathTransferClass` ← `MPS.Symmetry.ExactGroundPathTransferClass`, `MPS.Symmetry.ExactGroundPathPhysicalClass`, `MPS.Symmetry.ExactGroundPathEndpointClass`
-- `MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.MixedEndpointBoundaryFactors` ← `MPS.Symmetry.MPOSymmetry.MixedEndpointBoundaryFactors`, `MPS.Symmetry.MPOSymmetry.MixedEndpointBoundaryCoordinates`
-- `MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.MixedEndpointSectors` ← `MPS.Symmetry.MPOSymmetry.MixedEndpointSectors`, `MPS.Symmetry.MPOSymmetry.MixedEndpointCornerSupport`
-- `MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointActiveHamiltonian` ← `MPS.Symmetry.MPOSymmetry.MixedEndpointActiveHamiltonian`, `MPS.Symmetry.MPOSymmetry.MixedEndpointActiveGapTransfer`
-- `MPS.Symmetry.MPOSymmetry.MixedPath.MPO.MixedEndpointAdjoint` ← `MPS.Symmetry.MPOSymmetry.MixedEndpointAdjoint`, `MPS.Symmetry.MPOSymmetry.MixedEndpointAdjointCommutation`
-- `MPS.Symmetry.MPOSymmetry.ParentHamiltonian.BoundaryParentHamiltonian` ← `MPS.Symmetry.BoundaryParentHamiltonian`, `MPS.Symmetry.BlockBoundaryParentHamiltonian`, `MPS.Symmetry.DualRepresentationParentHamiltonian`, `MPS.Symmetry.NormalBlockBoundaryParentHamiltonian`
-- `MPS.Symmetry.OnSite.OnSiteSymmetry` ← `MPS.Symmetry.Character`, `MPS.Symmetry.OnSiteSymmetry`
-- `MPS.Symmetry.OnSite.VirtualRepresentation` ← `MPS.Symmetry.VirtualRepresentation`, `MPS.Symmetry.CocycleCoboundary`
-- `MPS.Symmetry.Projective.ProjectiveDirectSum` ← `MPS.Symmetry.ProjectiveDirectSum`, `MPS.Symmetry.ProjectiveDirectSumInclusions`
-- `MPS.Symmetry.Projective.ProjectivePathInvariance` ← `MPS.Symmetry.ProjectivePathInvariance`, `MPS.Symmetry.InvertibleProjectivePathInvariance`
-- `MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness` ← `MPS.Symmetry.FixedPointGappedPathWitness`, `MPS.Symmetry.NormalizedBondLocalSymmetry`
-- `MPS.Symmetry.StringOrder.PeriodicFullRingString` ← `MPS.Symmetry.PeriodicFullRingString`, `MPS.Symmetry.PeriodicStringBounds`
-- `MPS.Symmetry.StringOrder.PhysicalStringAsymptotics` ← `MPS.Symmetry.PhysicalStringAsymptotics`, `MPS.Symmetry.PhysicalStringBounds`
-- `MPS.Tensor.BondReindex` ← `MPS.Core.BondReindex`, `MPS.Overlap.CastLemmas`
-- `MPS.Tensor.Defs` ← `MPS.Defs`, `MPS.Core.CanonicalNormalization`, `MPS.Core.PhysicalDimension`
-- `MPS.Tensor.DirectSum.InvariantSubspaceDecomp` ← `MPS.Core.ProjectionTriangularTrace`, `MPS.Structure.InvariantSubspaceDecomp.Basic`, `MPS.Structure.InvariantSubspaceDecomp`
-- `MPS.Tensor.GroundSpace.BoundaryClosingStripping` ← `MPS.ParentHamiltonian.BoundaryClosingStripping`, `MPS.ParentHamiltonian.BoundaryClosingAuxiliary`
-- `MPS.Tensor.OpenMPS.NormalizedSequentialApproximation` ← `MPS.AreaLaw.NormalizedSequentialApproximation`, `MPS.AreaLaw.DesignatedCutTruncation`
-- `MPS.Tensor.OpenMPS.OpenMPSCutRank` ← `MPS.AreaLaw.OpenMPSCutRank`, `MPS.AreaLaw.FixedConfigurationExtension`, `MPS.AreaLaw.OpenMPSOperatorAction`, `MPS.AreaLaw.OpenMPSSpan`
-- `MPS.Tensor.OpenMPS.ProductReplacement` ← `MPS.AreaLaw.ProductReplacement`, `MPS.AreaLaw.ProductCutIteration`
-- `MPS.Tensor.Reduction.ReductionResidual` ← `MPS.Core.ReductionResidual.Basic`, `MPS.Core.ReductionResidual`
-- `MPS.Tensor.VaryingBond.VaryingBondOBC` ← `MPS.Chain.VaryingBondOBC`, `MPS.Preparation.MinimalCutRepresentationPadding`
-- `MPS.Tensor.Words.Basic` ← `MPS.Core.MultiBlockWord`, `MPS.Core.RepeatedWord`, `MPS.Core.WordFactor`, `MPS.Core.WordGrading`
-- `MPS.Tensor.Words.CyclicTraceForcedBond` ← `MPS.Core.CyclicTraceForcedBond`, `MPS.Core.BondOneVector`
-- `MPS.Tensor.Words.WordSpan` ← `Wielandt.SpanGrowth.CumulativeSpan`, `Wielandt.SpanGrowth.EigenvectorSpreading`, `Wielandt.SpanGrowth.VectorToMatrixSpan`, `Wielandt.SpanGrowth.CumulativeToWordSpan`, `Wielandt.SpanGrowth.NonzeroTraceProduct`
-- `MPS.Transfer.Irreducible.DiagonalFixedPoint` ← `MPS.Irreducible.FormII`, `MPS.Irreducible.Adjoint`, `MPS.SharedInfra.KrausAdjointSetup`
-- `MPS.Transfer.Irreducible.PerronGauge` ← `MPS.Irreducible.PerronGauge`, `MPS.Irreducible.ScalarFixedPoint`
-- `MPS.Transfer.Primitivity.Bounds` ← `Wielandt.Inequality.Bounds`, `Wielandt.Inequality.EigenvectorSpreading`
-- `MPS.Transfer.Primitivity.RectangularSpan` ← `Wielandt.RectangularSpan.Basic`, `Wielandt.RankOne.ExtractionFull`, `Wielandt.RectangularSpan.Growth`, `Wielandt.RectangularSpan.Universality`
-- `MPS.Transfer.Spectrum.MPVOverlapTrace` ← `Spectral.MPVOverlapTrace`, `Spectral.MPVOverlapDecayRect`
-- `MPS.Transfer.Spectrum.PrimitiveOverlap` ← `Spectral.PrimitiveOverlap`, `MPS.Overlap.PeripheralToTransferMapGap`
-- `MPS.Transfer.Spectrum.TransferOperatorGapInjective` ← `Spectral.TransferOperatorGapInjective`, `Spectral.CrossCorrelation`
-- `PEPS.Approximation.DoubledHamiltonian.SwappedPlaneInteraction` ← `PEPS.Approximation.SwappedPlaneInteraction`, `PEPS.Approximation.SwappedDoubledEdgeBoundary`
-- `PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian` ← `PEPS.Approximation.SheetSwapBoundaryExpansion`, `PEPS.Approximation.SheetSwapDoubledTermNorm`, `PEPS.Approximation.SwappedSquareHamiltonianBoundary`, `PEPS.Approximation.SwappedSquareHamiltonianInteraction`
-- `PEPS.Approximation.DyadicHierarchy.DyadicRouting` ← `PEPS.Approximation.DyadicRouting`, `PEPS.Approximation.DistributedRoutingDegree`
-- `PEPS.Approximation.Exact.ExactSquareRepresentation` ← `PEPS.Approximation.ExactSquareRepresentation`, `PEPS.Approximation.ExactSmallSizeApproximation`
-- `PEPS.Approximation.FrameChanges.DyadicDirectRepaintingStep` ← `PEPS.Approximation.DyadicDirectRepaintingStep`, `PEPS.Approximation.DyadicDirectRepaintingConstants`
-- `PEPS.Approximation.FrameChanges.DyadicPointTreatmentRewrite` ← `PEPS.Approximation.LocalGuideRewrite`, `PEPS.Approximation.DyadicPointTreatmentRewrite`
-- `PEPS.Approximation.FrameChanges.DyadicResizeStep` ← `PEPS.Approximation.DyadicResizeRewrite`, `PEPS.Approximation.DyadicResizeStep`, `PEPS.Approximation.DyadicResizeReadingStep`
-- `PEPS.Approximation.GroundState.PinnedZeroFloorOptimizer` ← `PEPS.Approximation.SquareZeroFloorOptimizer`, `PEPS.Approximation.PinnedZeroFloorOptimizer`
-- `PEPS.Approximation.GroundState.SquareInteractionTerms` ← `PEPS.Approximation.SquareInteractionSupport`, `PEPS.Approximation.SquareInteractionTerms`
-- `PEPS.Approximation.Information.AngularInformationBound` ← `PEPS.Approximation.AngularInformationBound`, `PEPS.Approximation.AngularAnnularInformationInduction`
-- `PEPS.Approximation.Information.AngularWholeCellInformation` ← `PEPS.Approximation.AngularWholeCellInformation`, `PEPS.Approximation.AngularWholeCellInformationFromCollar`
-- `PEPS.Approximation.NestedPatches.NestedCylinderSquarePatch` ← `PEPS.Approximation.NestedCylinderSquarePatch`, `PEPS.Approximation.SquarePatchIntegerCoordinates`, `PEPS.Approximation.BoundedRadiusSquarePatch`
-- `PEPS.Approximation.NestedPatches.NestedPatchEnergy` ← `PEPS.Approximation.NestedPatchEnergy`, `PEPS.Approximation.NestedPatchMarginalCloseness`
-- `PEPS.Approximation.NestedPatches.RangeNestedPatchEnergy` ← `PEPS.Approximation.RangeNestedPatchEnergy`, `PEPS.Approximation.RangeNestedPatchMarginalCloseness`
-- `PEPS.Approximation.PartyCircuit.EndpointWordRestrictionCongruence` ← `PEPS.Approximation.EndpointWordRestrictionCongruence`, `PEPS.Approximation.ActualSampledEndpointLocality`
-- `PEPS.Approximation.PartyCircuit.PreparedMatrixNorm` ← `PEPS.Approximation.PreparedMatrixNorm`, `PEPS.Approximation.ActualSourceGateDensity`
-- `PEPS.Approximation.PartyCircuit.UniformMessageGateCompression` ← `PEPS.Approximation.UniformMessageGateCompression`, `PEPS.Approximation.UniformExactMessageCompression`
-- `PEPS.Approximation.Protocol.DyadicLargeRepaintingChain` ← `PEPS.Approximation.DyadicBulkOperationChains`, `PEPS.Approximation.DyadicEdgeOperationChains`, `PEPS.Approximation.DyadicEdgeConstructionChain`, `PEPS.Approximation.DyadicLargeRepaintingChain`
-- `PEPS.Approximation.Protocol.DyadicProtocol` ← `PEPS.Approximation.DyadicProtocol`, `PEPS.Approximation.DyadicProtocolRetainedNorm`
-- `PEPS.Approximation.Protocol.DyadicProtocolAssembly` ← `PEPS.Approximation.DyadicProtocolAssembly`, `PEPS.Approximation.DyadicProtocolSegments`
-- `PEPS.Approximation.RangePolynomialPEPSClosedConstant` ← `PEPS.Approximation.RangePolynomialPEPS`, `PEPS.Approximation.RangePolynomialPEPSClosedConstant`
-- `PEPS.Approximation.Routing.PartyColumnRouting` ← `PEPS.Approximation.PartyColumnRouting`, `PEPS.Approximation.DistributedPartyNetwork`
-- `PEPS.Approximation.Routing.SquareGridColumn` ← `PEPS.Approximation.SquareGridColumn`, `PEPS.Approximation.ProductReferenceColumn`
-- `PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly` ← `PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly`, `PEPS.AreaLaw.BirthTargetEntropy`, `PEPS.AreaLaw.BirthTargetNeighborhoodInformation`
-- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters` ← `PEPS.AreaLaw.Scan.BootstrapParameters`, `PEPS.AreaLaw.Scan.BootstrapScannerExponents`
-- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapReplicaAbsorption` ← `PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption`, `PEPS.AreaLaw.Scan.TypicalReplicaAbsorption`
-- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundBound` ← `PEPS.AreaLaw.Scan.BootstrapRoundBound`, `PEPS.AreaLaw.Scan.PhysicalBoxRoundBound`
-- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundedClearance` ← `PEPS.AreaLaw.Scan.BootstrapRoundedClearance`, `PEPS.AreaLaw.InitialRoundedCollarEntropy`, `PEPS.AreaLaw.RoundedShellEntropy`
-- `PEPS.AreaLaw.Operators.ChannelWords.ChannelWordThinning` ← `PEPS.AreaLaw.Amplification.ChannelWordThinning`, `PEPS.AreaLaw.Amplification.LatticeChannelPoissonThinning`
-- `PEPS.AreaLaw.Operators.ChannelWords.ExponentialChannelShells` ← `PEPS.AreaLaw.Amplification.ExponentialChannelShells`, `PEPS.AreaLaw.Amplification.GraphChannelOscillation`
-- `PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualSelectedChargeDensityEnergy` ← `PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy`, `PEPS.AreaLaw.Scan.ActualSelectedSharpComparison`
-- `PEPS.AreaLaw.CollarEntropy.ChargePoints.Selection` ← `PEPS.AreaLaw.Scan.Selection`, `PEPS.AreaLaw.Scan.ActualChargeSelection`
-- `PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceRoughBudgetPower` ← `PEPS.AreaLaw.Scan.SourceRoughBudgetPower`, `PEPS.AreaLaw.Scan.SelectedDensityDelta`, `PEPS.AreaLaw.Scan.SelectedDensityPower`
-- `PEPS.AreaLaw.CollarEntropy.CollarInformation.ActualCollarInformation` ← `PEPS.AreaLaw.Scan.ActualCollarInformation`, `PEPS.AreaLaw.Scan.ActualSelectedCollarInformation`
-- `PEPS.AreaLaw.Operators.Constraints.FiniteSetTruncationGap` ← `PEPS.AreaLaw.FiniteSetTruncationGap`, `PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector`
-- `PEPS.AreaLaw.BirthRegions.Fans.CellContacts` ← `PEPS.AreaLaw.Geometry.CellContacts`, `PEPS.AreaLaw.Geometry.CellSides`
-- `PEPS.AreaLaw.BirthRegions.Fans.CellFanCycle` ← `PEPS.AreaLaw.Geometry.CellFanCycle`, `PEPS.AreaLaw.Geometry.FanRunDisjointness`
-- `PEPS.AreaLaw.BirthRegions.Fans.FanRuns` ← `PEPS.AreaLaw.Geometry.FanRuns`, `PEPS.AreaLaw.Geometry.CellFanRunCount`, `PEPS.AreaLaw.Geometry.FanRunTemplate`
-- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalLatticePartition` ← `PEPS.AreaLaw.Geometry.RepairFinalLatticePartition`, `PEPS.AreaLaw.Geometry.RepairOrderedPartition`
-- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegion` ← `PEPS.AreaLaw.Geometry.RepairFinalRegion`, `PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization`
-- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegionTransport` ← `PEPS.AreaLaw.Geometry.RepairFinalRegionTransport`, `PEPS.AreaLaw.Geometry.RepairOrderedBirthSeparation`
-- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTermination` ← `PEPS.AreaLaw.Geometry.RepairTermination`, `PEPS.AreaLaw.Geometry.RepairTerminalInteriors`, `PEPS.AreaLaw.Geometry.RepairExceptionalSitesCount`
-- `PEPS.AreaLaw.FrustrationFreeAreaLaw` ← `PEPS.AreaLaw.FrustrationFree.AreaLaw`, `PEPS.AreaLaw.FrustrationFree.ViaGeneralTheorem`
-- `PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionBoundaries` ← `PEPS.AreaLaw.Geometry.InitialRegionBoundaries`, `PEPS.AreaLaw.Geometry.InitialLatticePartition`
-- `PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorComponents` ← `PEPS.AreaLaw.Geometry.InitialSectorComponents`, `PEPS.AreaLaw.Geometry.InitialComponentRegions`
-- `PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry` ← `PEPS.AreaLaw.Geometry.MeshGeometry`, `PEPS.AreaLaw.Geometry.MeshSegmentClearance`
-- `PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchListCoordinates` ← `PEPS.AreaLaw.RegularizedPatchListCoordinates`, `PEPS.AreaLaw.RegularizedPatchMinimizerClipping`, `PEPS.AreaLaw.RegularizedPatchMinimizerFilter`
-- `PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimizerStationarity` ← `PEPS.AreaLaw.RegularizedPatchMinimizerStationarity`, `PEPS.AreaLaw.RegularizedPatchMinimizerDerivative`
-- `PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimum` ← `PEPS.AreaLaw.RegularizedPatchMinimum`, `PEPS.AreaLaw.RegularizedPatchLogMinimum`
-- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthRank` ← `PEPS.AreaLaw.Geometry.RepairBirthRank`, `PEPS.AreaLaw.Geometry.RepairCurrentRetention`, `PEPS.AreaLaw.Geometry.RepairInclusionComposition`
-- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairCurrentRegions` ← `PEPS.AreaLaw.Geometry.RepairCurrentRegions`, `PEPS.AreaLaw.Geometry.RepairDummySites`
-- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairDepth` ← `PEPS.AreaLaw.Geometry.RepairDepth`, `PEPS.AreaLaw.Geometry.RepairTerminalSquareCount`
-- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairReplacementRegions` ← `PEPS.AreaLaw.Geometry.RepairReplacementRegions`, `PEPS.AreaLaw.Geometry.RepairRegionDisjointness`, `PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness`
-- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairStage` ← `PEPS.AreaLaw.Geometry.RepairStage`, `PEPS.AreaLaw.Geometry.RepairInitialMarkFacts`
-- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairStageSites` ← `PEPS.AreaLaw.Geometry.RepairStageSites`, `PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount`
-- `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` ← `PEPS.AreaLaw.Amplification.GoodRealizationUnitary`, `PEPS.AreaLaw.Amplification.SupportedPolarCorrection`
-- `PEPS.AreaLaw.Scanner.Rounds.FillTransport` ← `PEPS.AreaLaw.Scan.FillTransport`, `PEPS.AreaLaw.Scan.ActualInitialRootNorm`
-- `PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility` ← `PEPS.AreaLaw.Scan.SupportCompatibility`, `PEPS.AreaLaw.Scan.FillSupportCompatibility`
-- `PEPS.AreaLaw.Polygons.SafeRectangles.InitialBoxEstimate` ← `PEPS.AreaLaw.InitialBoxEstimate`, `PEPS.AreaLaw.InitialSafeRectangleEntropy`
-- `PEPS.AreaLaw.Polygons.SafeRectangles.SafeRectangleDilation` ← `PEPS.AreaLaw.SafeRectangleDilation`, `PEPS.AreaLaw.WeakRectangleShellSafety`, `PEPS.AreaLaw.WeakRectangleShellEntropy`, `PEPS.AreaLaw.InitialWeakRectangleShellEntropy`
-- `PEPS.AreaLaw.SnakeGridApproximation` ← `MPS.AreaLaw.SnakeGridApproximation`, `MPS.AreaLaw.SnakeGridAreaLaw`
-- `PEPS.AreaLaw.BirthRegions.Stars.RepairInductionMetric` ← `PEPS.AreaLaw.Geometry.RepairInductionMetric`, `PEPS.AreaLaw.Geometry.RepairDescendantScales`
-- `PEPS.AreaLaw.Scanner.Statuses.PrefixComparison` ← `PEPS.AreaLaw.Scan.PrefixComparison`, `PEPS.AreaLaw.Scan.OriginalTruncation`
-- `PEPS.AreaLaw.Scanner.Statuses.SideSeparation` ← `PEPS.AreaLaw.Scan.SideSeparation`, `PEPS.AreaLaw.Scan.FrontThresholds`, `PEPS.AreaLaw.Scan.FrontPrefixFamily`
-- `PEPS.AreaLaw.Scanner.Statuses.StatusMarginalMoments` ← `PEPS.AreaLaw.Scan.StatusMarginalMoments`, `PEPS.AreaLaw.Scan.SourceStatusMarginalMoments`, `PEPS.AreaLaw.Scan.SuppliedTargetStatusMoments`
-- `PEPS.AreaLaw.Polygons.Templates.RectangleShellCounts` ← `PEPS.AreaLaw.Geometry.RectangleShellCounts`, `PEPS.AreaLaw.Geometry.RectangleShellWeightedCover`
-- `PEPS.AreaLaw.Polygons.Templates.TemplateCoreCounts` ← `PEPS.AreaLaw.Geometry.TemplateCoreCounts`, `PEPS.AreaLaw.Geometry.TemplateCoreCover`
-- `PEPS.AreaLaw.Polygons.Templates.TemplatePolygons` ← `PEPS.AreaLaw.Geometry.TemplatePolygons`, `PEPS.AreaLaw.Geometry.TemplatePolygonFiniteIntegerPoints`
-- `PEPS.AreaLaw.Polygons.Templates.Templates` ← `PEPS.AreaLaw.Geometry.Templates`, `PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine`
-- `PEPS.FundamentalTheorem.Injective.EdgeGaugeFamily` ← `PEPS.EdgeGaugeExtraction`, `PEPS.EdgeGaugeFamily`
-- `PEPS.FundamentalTheorem.Normal.RegionInsertion.InsertedCoefficientExpansion` ← `PEPS.RegionBlock.GaugeBridgeExpansion`, `PEPS.RegionBlock.GaugeBridge`
-- `PEPS.FundamentalTheorem.Torus.TorusArcWindowFundamentalTheorem` ← `PEPS.TorusArcWindowGaugeExistence`, `PEPS.TorusArcWindowFundamentalTheorem`
-- `PEPS.FundamentalTheorem.Torus.TorusEdgeGaugeCovariance` ← `PEPS.TorusEdgeGaugeCovariance`, `PEPS.TorusConjCovarianceFamily`
-- `PEPS.FundamentalTheorem.Torus.TorusGaugedWeightCovariance` ← `PEPS.TorusGaugedWeightCovariance`, `PEPS.TorusTranslatedScalarComparison`
-- `PEPS.FundamentalTheorem.Torus.TorusReferenceAbsorbedFamily` ← `PEPS.TorusReferenceAbsorbedFamily`, `PEPS.TorusCovariantAbsorbedFamily`
-- `PEPS.FundamentalTheorem.Torus.TorusWitnessCapstone` ← `PEPS.TorusWitnessCapstone`, `PEPS.TorusEdgeAbsorbed`
-- `PEPS.FundamentalTheorem.Torus.TorusWitnessTranslate` ← `PEPS.TorusWitnessTransport`, `PEPS.TorusWitnessTranslate`
-- `PEPS.FundamentalTheorem.Torus.Window.CornerRegion` ← `PEPS.TorusWindowCornerRegion`, `PEPS.TorusWindowScalarComparison`
-- `PEPS.FundamentalTheorem.Torus.Window.CrossTensorAlgebra` ← `PEPS.TorusWindowCrossTensorAlgebra`, `PEPS.TorusWindowCrossTensorGauge`
-- `PEPS.FundamentalTheorem.Torus.Window.CrossTensorTransfer` ← `PEPS.TorusWindowCrossTensorTransfer`, `PEPS.TorusWindowVerticalWitness`
-- `PEPS.FundamentalTheorem.Torus.Window.EndOperation` ← `PEPS.TorusWindowPeeling.EndOperation`, `PEPS.TorusWindowPeeling.EndPhysicalOperation`
-- `PEPS.Graph.Cell.TorusRegionExteriorCollar` ← `PEPS.TorusRegionExteriorCollar`, `PEPS.TorusRegionIntegerCellLift`
-- `PEPS.Graph.Cell.TorusRegionRealization` ← `PEPS.FiniteCellTopology`, `PEPS.TorusRegionRealization`
-- `PEPS.Graph.Holonomy.RegularWalkHolonomy` ← `PEPS.RegularWalkHolonomy`, `PEPS.RegionBondGaugeHolonomy`
-- `PEPS.Injectivity.Boundary.PhysicalStateNormalization` ← `PEPS.PhysicalStateNormalization`, `PEPS.PhysicalStateCoherentNormalization`
-- `PEPS.Injectivity.Charge.RegularEdgeChargeContraction` ← `PEPS.RegularEdgeChargeContraction`, `PEPS.RegularEdgePhysicalChargeMeasurement`
-- `PEPS.Injectivity.Charge.RegularWeightedGaugeTransport` ← `PEPS.RegularWeightedBondContraction`, `PEPS.RegularWeightedGaugeTransport`
-- `PEPS.Injectivity.Charge.RegularWeightedOpenContraction` ← `PEPS.RegularWeightedOpenContraction`, `PEPS.RegularWeightedChargeContraction`
-- `PEPS.Injectivity.Entropy.RegularGInjectiveSimplyConnectedEntropy` ← `PEPS.RegularGInjectiveTorusRank`, `PEPS.RegularGInjectiveSimplyConnectedEntropy`
-- `PEPS.Injectivity.Flux.RegularActualCyclePhysicalPermutation` ← `PEPS.RegularActualCyclePhysicalPermutation`, `PEPS.RegularActualCycleBidirectionalPermutation`
-- `PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove` ← `PEPS.RegularTwoCycleGlobalFluxMove`, `PEPS.RegularInsertedWalkHolonomy`
-- `PEPS.Injectivity.GInjective.GIsometricSupportCoordinates` ← `PEPS.GIsometricSupportCoordinates`, `PEPS.GIsometricCanonicalSupport`
-- `PEPS.Injectivity.Multiplicity.GraphAveragingBondState` ← `PEPS.GraphAveragingBondState`, `PEPS.GraphBondCoordinateTransport`
-- `PEPS.Injectivity.Multiplicity.TorusBlockMultiplicityState` ← `PEPS.TorusBlockMultiplicityState`, `PEPS.GraphMultiplicityBondState`
-- `PEPS.Injectivity.Normal.NormalSquareInjectivity` ← `PEPS.NormalSquareInjectivity`, `PEPS.NormalTorusRectanglePEPS`
-- `PEPS.Injectivity.Regular.GInjectivePhysicalMap` ← `PEPS.GInjectivePhysicalMap`, `PEPS.GInjectivePhysicalEquivalence`
-- `PEPS.Injectivity.Regular.RegularTorusSite` ← `PEPS.RegularTorusSite`, `PEPS.RegularMatrixEquiv`
-- `PEPS.Injectivity.SemiRegular.GraphSemiRegularEquivalence` ← `PEPS.GraphSemiRegularEquivalence`, `PEPS.GraphInsertedSemiRegularEquivalence`, `PEPS.GraphInsertedSemiRegularFactory`
-- `PEPS.Injectivity.SemiRegular.RegularFourierMatrix` ← `PEPS.RegularFourierMatrix`, `PEPS.RegularMatrixCommutativity`
-- `PEPS.Injectivity.SemiRegular.RegularMinimalRepresentation` ← `PEPS.RegularMinimalRepresentation`, `PEPS.RegularMinimalDimension`
-- `PEPS.Injectivity.TorusSector.TorusDualFluxString` ← `PEPS.TorusDualFluxString`, `PEPS.TorusDualRectangleFlux`
-- `PEPS.ParentHamiltonian.Reblocking.RegularTwoByTwoNonzero` ← `PEPS.RegularTwoByTwoNonzero`, `PEPS.RegularFourLegClosure`
-- `PEPS.ParentHamiltonian.Reblocking.RegularTwoByTwoOriginalTensor` ← `PEPS.RegularTwoByTwoOriginalTensor`, `PEPS.RegularGraphInsertedOriginalTensor`
-- `PEPS.ParentHamiltonian.SemiRegular.OrientedCopyWeightPhysicalTransport` ← `PEPS.ParentHamiltonian.OrientedCopyWeightPhysicalTransport`, `PEPS.ParentHamiltonian.OrientedPositiveMultiplicityParentTransport`
-- `PEPS.Tensor.GraphState.RegularOpenRegion` ← `PEPS.RegularOpenRegion`, `PEPS.RegularPhysicalCutColumnAction`
-- `PEPS.Tensor.SquareLattice.SquareLatticeBoundaryMPO` ← `PEPS.SquareLatticeBoundaryMPO`, `PEPS.SquareLatticeBoundaryPositivity`
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 ## QICLean-bound content
 
@@ -1103,56 +665,7 @@ match their directories.
 
 ## How the map was applied
 
-The application script performed these steps:
-
-1. **Moves.** `git mv` for each moved module; a target still occupied by a
-   module that moves later is retried after that module moves.
-2. **Merges.** The parts of a merge are concatenated in the given order. Their
-   imports are unioned, without the parts themselves. The first part's module
-   docstring is followed by the others with their headings demoted. Each part
-   is wrapped in its own `section` with its unclosed namespaces closed, so
-   `variable`, `open`, `set_option` and local attributes stay local to it.
-3. **Imports.** `import` lines are rewritten in `TNLean/` and in
-   `scripts/*.lean`. An import of an aggregator whose members move is replaced
-   by the members' new modules.
-4. **References.** Module names and paths are rewritten in `blueprint/src`,
-   `docs/`, `CLAUDE.md` and `scripts/*.py`. This covers dotted names, paths
-   under `TNLean/`, and short paths in backticks. Text inside
-   `\lean{…}`, `\uses{…}`, `\label{…}` and `\ref{…}` is never rewritten, and
-   neither is a dotted name that is also a declaration name.
-5. **Recorded pairs.** `MUTUAL_LAYER_DIRECTORIES` in
-   `scripts/check_import_layers.py` is replaced by the pairs that remain.
-6. **Aggregators.** They are regenerated with
-   `scripts/generate_import_aggregators.py`.
-
-The application was idempotent: an entry whose old module was gone and whose
-target existed counted as applied.
-
-Its check mode reported:
-
-- entries skipped because the old module is missing;
-- collisions with modules that stay;
-- unresolved imports;
-- import cycles after the map, merges included;
-- merged parts that declare the same private name or anonymous instance;
-- every import outside the allowed layers, each classed as recorded or not;
-- pairs of directories that import each other before and after the map;
-- pairs of sibling subdirectories, at any depth, that import each other;
-- directories over 40 modules.
-
-It exited with an error on anything unrecorded.
-
-On the map's commit, and on the working tree of the same branch when this
-document was written, the check mode reported:
-
-- no errors;
-- 52 recorded layer violations and no unrecorded one;
-- one recorded sibling pair;
-- 11 pairs of directories importing each other.
-
-The application does not edit prose that describes directories rather than
-modules. The layer tables of `CLAUDE.md` and `docs/import_structure.md` are
-rewritten by hand in the same change, from this document.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 ## Questions for the maintainer
 
@@ -1293,92 +806,8 @@ order bottom-up.
 `PhysicalSector` (34) is the largest directory; no directory exceeds 40.
 
 #### Directories in part named for a source, a technique or a proof
-Where each disappearing directory went (modules of these directories outside
-this part are listed with the layer the automatic assignment gave them):
 
-- `MPS/Core` (named for nothing; dissolved). Tensor/root (`Defs`, with
-  `CanonicalNormalization` and `PhysicalDimension` merged in; `BondReindex`;
-  `GHZ`), Tensor/Physical (rotation, matrices, mixing, embedding, tensor
-  products, `Blocking`, `BlockingTransfer`), Tensor/Words (traces, trace
-  pairing, normality criteria, `WordFactor`, `WordGrading`, `RepeatedWord`,
-  `MultiBlockWord`, `BondOneVector` merged), Tensor/Gauge (`TPGauge`),
-  Tensor/DirectSum (`BlockSum`, `MultiBlock`, `ProjectionTriangularTrace`
-  merged), Tensor/Reduction (five `Reduction*` modules), Transfer/root
-  (`TransferMatrix`, `ObservableTransfer`, `ReductionExistence`),
-  Transfer/Correlation (`Correlations`, `CorrelationReduction`,
-  `StationaryPhysical*`), Transfer/Irreducible (`BlockingInfrastructure`,
-  `PhysicalReindexTransport`, `TransferPeripheral`). Outside this part:
-  `CommonNormalBlocking`, `IsometricBondCompression`, `ReductionComposition`
-  (CanonicalForm), `ReductionResidualComposition` (ParentHamiltonian).
-- `MPS/Chain`: Tensor/Chain (11), Tensor/VaryingBond (`VaryingBondOBC`,
-  `VaryingBondChain`, `RectangularIntervals`, `SiteIndependent`), Tensor/Words
-  (`OneSidedInverse`, `VirtualInsertion`, `CrossProductRigidity`,
-  `TensorEquality`, `AlternatingNetwork`).
-- `MPS/SharedInfra` (named for a technique, "shared infrastructure"). By
-  object: Tensor/Gauge (`CoisometryGauge`, `WordTupleGauge`,
-  `JointOneSiteSpan`), Tensor/DirectSum (`BlockAssembly`,
-  `BlockInclusionResolution`, `BlockIsometryAssembly`, `BoundaryDecomposition`,
-  `SectorDecomposition`, `SectorCompression`, `BlockGauge`), Transfer/root
-  (`Scaling`), Transfer/Spectrum (`GaugePhase`), Transfer/Irreducible
-  (`KrausAdjointSetup`, merged into `DiagonalFixedPoint`). Generic part:
-  `unitaryGL` and `coisometryExtendGL` in `CoisometryGauge` (QICLean matrix).
-  No part is one theorem's own argument. Outside this part:
-  `PhysicalObservableGauge` (Preparation).
-- `MPS/Overlap`: Tensor/root (`Overlap`, from `Basic`), Tensor/root
-  (`CastLemmas`, merged into `BondReindex`), Transfer/Spectrum
-  (`AsymptoticDecomposition`, `CastDecay`, `PeripheralToTransferMapGap`
-  merged into `PrimitiveOverlap`). Outside: `NormalTensorDichotomy`
-  (CanonicalForm), `PeriodicRayUnitOverlap` (Symmetry).
-- `MPS/Irreducible`: all six into Transfer/Irreducible (`FormII` and
-  `Adjoint` merged with `KrausAdjointSetup` as `DiagonalFixedPoint`, the
-  source term "Form II" leaving the name; `ScalarFixedPoint` merged into
-  `PerronGauge`).
-- `Spectral` (top level; the name collides with QICLean's `Spectral`):
-  Transfer/Spectrum (its eight modules of this part, six after merging
-  `MPVOverlapDecayRect` into `MPVOverlapTrace` and `CrossCorrelation` into
-  `TransferOperatorGapInjective`). Outside this part: the five
-  `PhysicalCorrelation*` modules (ParentHamiltonian, Preparation).
-- `Wielandt` (named for a theorem, the quantum Wielandt inequality). Generic
-  part, named for its objects: the word-span and cumulative-span results
-  (`SpanGrowth/CumulativeSpan`, `EigenvectorSpreading`, `VectorToMatrixSpan`,
-  `CumulativeToWordSpan`, `NonzeroTraceProduct`) merged into
-  `MPS/Tensor/Words/WordSpan`. Primitivity notions
-  (`Primitivity/*`) and the inequality's own argument (`Inequality/Bounds`
-  with `Inequality/EigenvectorSpreading` merged, `NonzeroTraceWord`,
-  `SpanGrowth/InvertibleWordSpan`, `RectangularSpan/*` with
-  `RankOne/ExtractionFull` merged as `RectangularSpan`) are in
-  `MPS/Transfer/Primitivity`; the inequality is a statement about the
-  primitivity indices, so no separate theorem directory is made.
-  `Wielandt/Primitivity/PrimitiveBridge` no longer exists (one definition each:
-  `_root_.IsPrimitive`, `Kraus.IsNormal`, `Kraus.HasComplementaryFixedPointGap`).
-  The five aggregator files `Wielandt`, `Wielandt/Inequality`, … disappear.
-- `MPS/Tactic`: `MPS/Tensor/Tactic`.
-- `MPS/Structure` (only the four modules of this part): Tensor/Words
-  (`LinearExtension`), Tensor/DirectSum (`InvariantSubspaceDecomp` with its
-  `Basic`), Transfer/Primitivity (`PrimitiveFixedPoint`). The directory
-  survives with its other modules (other parts).
-
-Theorem arguments that stay in object-named directories (all mention tensor
-networks):
-
-- `MPS/Tensor/GroundSpace`: `BoundaryClosing*`, `BoundaryOverlap`,
-  `BoundaryStripping`, `BoundaryMatrixBlock`, `WrappingWindow*`,
-  `ExtendRight`, `BlockStrip`, `PeriodicBoundaryReduction` are the argument of
-  the unique-ground-state theorem for block-injective tensors
-  (`UniqueGroundState`); they could form `GroundSpace/UniqueGroundState/`.
-- `MPS/Operator/PhysicalSector`: almost all 34 modules are the argument of the
-  simple density-operator structure theorem (arXiv:1606.00608, Appendix C,
-  Proposition C.7) over the object "physical-sector factorization".
-- `MPS/Tensor/CutGram`: the determinant normalization of finite MPUs
-  (`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5); see
-  section 4 for why it sits in Tensor.
-
-Module names kept although they name a technique: `BlockingViaAdjoint`
-(could become `PrimitiveBlocking`), `RFPViaTS` (the defining predicate's
-name), `CommutingFormBridge` (listed in the architecture note for F2: three
-data structures for one commuting form; deleted there), `TPGauge` (its
-docstring says "bridges", but it states genuine `GaugeEquiv`/`SameMPV`
-consequences).
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules that mix two layers, or whose imports force them higher
 | module | layers | declarations | proposed split |
@@ -1477,47 +906,11 @@ the check output below; all point down.
 
 ##### Where the dissolved directories went
 
-- `MPS/BNT` (6): `Basic`, `Separation`, `Construction` to `CanonicalForm/BNT`;
-  `Bridge`, `PermutationRigidityPrimitive` to `CanonicalForm/BNTPresentation`;
-  `DirectSumSelectors` to `CanonicalForm/BlockSeparation`.
-- `MPS/Periodic` (76): 6 to `CanonicalForm/Periodic`, 11 to `Periodic/CyclicSectors` (24 parts there
-  with the 6 `CanonicalForm/CyclicSectors`, 6 `SectorComparison` files and
-  `CommonPeriodCyclicSectors`), 8 to
-  `Periodic/Blocking`, 18 to `Periodic/Overlap` (its `Overlap/SectorMatch` subdirectory
-  flattened to `SectorMatch*` files), 10 to `FundamentalTheorem/Periodic`, 20 to
-  `FundamentalTheorem/Refinement` (all of `Periodic/Symmetry` and the `Refinement*`,
-  `RootWordSpan`, `OrbitUnitary` files), 3 down to `MPS/Tensor` (`Applications`,
-  `PhysicalDimension`, `ProjectiveRep`).
-- `MPS/Structure` (12): `BlockPermutation` to the top of `CanonicalForm`; the 11
-  trace-quotient files to `CanonicalForm/TraceQuotient`.
-- `TNLean/PiAlgebra` (2): `CanonicalFormSepAux` to `CanonicalForm/BlockFamily`;
-  `GlobalSymmetry` down to `MPS/Tensor`.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Directories named for a source or a proof stage
-| old directory | generic part (named for objects) | part that is one theorem's argument |
-|---|---|---|
-| `MPDO/BiCFDerivation` (derivation of the bi-canonical form) | all 7 files to `CanonicalForm/BlockSeparation` (trace separation, selectors, direct-sum ground spaces) | none kept apart |
-| `CanonicalForm/SectorComparison` (stage of the existence proof) | `TPPrimitiveReduction`, `NormalityChain`, `PrimitiveBlocks` to `NormalBlocks`; the 6 cyclic-sector files to `Periodic/CyclicSectors` | none |
-| `CanonicalForm/NormalReduction` (stage) | all 3 to `NormalBlocks` (`Main` renamed `NormalCanonicalForm`) | none |
-| `Periodic/SectorIrreducibility` (the "hLift" step) | `ProjectionOrtho`, `HLift` to `Periodic/CyclicSectors` | `OrbitSum` (`proof:CyclicSectorIrreducibility`), kept beside its consumer in the same directory |
-| `Periodic/EqualCaseGlobal` (stage) | flattened into `FundamentalTheorem/Periodic` | the whole directory is the equal-case argument of the periodic theorem |
-| `Periodic/Symmetry` (holds Theorem 4.1, not symmetry) | `FundamentalTheorem/Refinement`, named for the refined tensors | the refinement directory is the theorem's own directory (rule 3 exception): its modules state refinements, channel roots and the cyclic-reset counterexamples, with no second use |
-| `FundamentalTheorem/Reduction` | `WordModule`, `Compression`, `OperatorProduct` | none |
-| `FundamentalTheorem/Arbitrary/Corollaries` | flattened into `FundamentalTheorem/Arbitrary` | `Arbitrary` is the directory of the theorem for arbitrary tensors (named by the tensors it covers) |
-| `FundamentalTheorem/SectorBNT` | `CanonicalForm/BNT` (2), `CanonicalForm/BNTPresentation` (7) | `FundamentalTheorem/Sectors` (12 parts), the sector-matching theorem |
-| `Periodic/Overlap` | `CanonicalForm/Periodic/Overlap` | the directory is the overlap-dichotomy argument; `SectorMatchCyclicTrace` is `proof:PeriodicOverlapDichotomy` |
-| translation-invariant uniqueness files (`PGVWC07*`, `Quadratic*`, `FixedLengthIntertwiner`, cut files at the top of `CanonicalForm`) | the predicate to `CanonicalForm/TranslationInvariant` | `FundamentalTheorem/FixedLength`, the theorem's own directory; `QuadraticReconstruction` is `proof:FixedLengthUniqueness` |
 
-Source names removed from module names: `CPSVBlocking` → `Blocking`, `CPSVPhysicalReindex`
-→ `PhysicalReindex`, `CPSVCanonicalFormII` → `FormII`, `CPSVAfterBlocking` →
-`RepresentativeAfterBlocking`, `CPSVSharpBlocking` → `SharpBlocking`, `SourceBNTBlocking`
-→ `SimultaneousBlocking`, `BNTSourceSectorProjectors` → `FourSiteSectorProjectors`,
-`PGVWC07CanonicalForm` → `TranslationInvariant`, `Theorem41Defs/Forward/ForwardBlockForm/
-Reverse/OneSite` → `Refinement.Defs/IsometryTensor/DivisibleOfRefinable/
-RefinableOfDivisible/OneSite`. `RepresentativeGroupedLemmaL` keeps its name (it names a
-lemma). The F4 modules `BNT/Bridge` → `BNTPresentation.Bridge` and
-`SectorBNT/CanonicalFormBridge` → `BNTPresentation.CanonicalFormBridge` are placed
-unchanged; their predicates are not redesigned here.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules mixing two layers
 | module | layers | responsible declarations | proposed split |
@@ -1606,31 +999,8 @@ existing directory of that layer has the same objects (old `MPS/BNT`, `MPS/Perio
 `MPS/FundamentalTheorem/Reduction`, `MPS/FundamentalTheorem/SectorBNT`), the modules go there.
 
 #### Directories named for a source or a proof technique
-- `MPS/ParentHamiltonian/Martingale` (72 modules, named for the martingale method)
-  disappears. Generic part: `Gap/Spectator` (fibrewise operators over spectator
-  coordinates, all `qiclean:analysis`), the interaction sums now in `ParentInteraction`
-  (`Transport`, `OpenHamiltonian`, `FiniteIntervalGapComparison`, `Reduction`) and `Interaction`
-  (`PeriodicInteraction`, `PeriodicInteractionSections`, `LocalEquivalenceBounds`,
-  `EventualKernelOpenGap`, range comparison for arbitrary interactions), `Commuting`
-  (`OverlapReduction`), `ProjectorDefect` (`C3Threshold`), `Continuity`, `Blocking`
-  (residue covers). The method's own objects are named for themselves: `Gap/Filtration`
-  (nested open-chain ground projections, martingale differences, conditions C1 to C3) and
-  `Gap/Comparison` (finite-size window criteria and comparison across ranges and volumes).
-  The theorems the method proves (gaps for primitive, block and canonical families) are
-  in `Gap`; none of these is the argument of a single theorem, since each is used by
-  several families.
-- `MPS/ParentHamiltonian/FNWDimensionConstant` (13 modules; source name) becomes
-  `ProjectorDefect/DimensionConstant`. It is one theorem's own argument: the theorem that the
-  coefficient printed in Nachtergaele's projector-defect bound (rate 1/1000, auxiliary
-  dimension four) is exceeded by the four-dimensional weighted matrix-unit tensor
-  (`exists_dimensionFour_counterexample`). Its non-tensor parts (`MarkovMatrix`,
-  `ProjectionWitnessBound`, `CoefficientComparison`) are classed `proof:DimensionConstantCounterexample`.
-  The generic projector-defect bound (Fannes-Nachtergaele-Werner Lemma 6.2) is in `ProjectorDefect`
-  under its object name.
-- File names that carry source names stay (rule 8): `FNW*` in `ProjectorDefect`, `BNTBlockDiagonal*`,
-  `PGVWC*`, `CPSVOriginalRange` in `BlockGroundSpace`, `Beigi*` in `Commuting/SectorGraph`,
-  `AppendixB*`, `CPSV*` in `MPS/RFP`. The directories holding them are named for objects
-  (`BoundaryMatrix`, `SectorGraph`), and none of these directories is a single theorem's argument.
+
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules that mix two layers or are forced up by their imports
 | module | statements of | declarations responsible | proposed split |
@@ -1708,53 +1078,8 @@ tensors. Every importer of `MPS/MPDO/Examples/**` is inside it or in
 examples layer prefers (the twisted dimer then joins `MPS/Examples/Dimer`).
 
 #### Directories named for a source or a proof stage
-- `MPS/MPDO/BiCFDerivation` (proof stage of the bi-canonical form). Generic part
-  here: `PairHomogenization/{Algebra, Span, BurnsideJacobson}` state
-  facts about pairs of MPS tensors only (pair algebra spans, homogeneous pair
-  word spans, Burnside–Jacobson separation) and move to
-  `MPS/CanonicalForm/PairWordSpan`; `DiagonalRestrictionCounterexample` (an MPS
-  tensor) moves to `MPS/CanonicalForm`, to sit beside `BiCFDerivation.Selectors`
-  in the canonical-form map. The theorem's own argument (`Core`, `Blocking`,
-  `Selectors`, `DirectSum*`, `BNTDirectSum`) belongs to the canonical-form
-  part; its directory name there should state the theorem, e.g.
-  `BiCanonicalForm`.
-- `MPS/MPDO/GSNNCHFourCycleMarkov` (named for a source predicate). Generic part:
-  `FourCycle` (a four-site Gibbs state of a nearest-neighbour commuting
-  Hamiltonian is quantum Markov; no tensor; `qiclean:hamiltonian`) →
-  `MPDO/CommutingForm/FourCycleMarkov`. The single theorem part
-  `ExampleFourCycleObstruction` (Example 4.12 is not GSNNCH) →
-  `MPDO/Examples/IdentityPlusZString/FourCycleObstruction`.
-- `MPS/Symmetry/MPDO` (this part's two modules): `Purification` →
-  `MPDO/Purification/Symmetry`, `NormalPurification` →
-  `MPDO/Purification/NormalPurification`.
-- `CPSV*` file names. The source examples are renamed by model
-  (`CPSVExample410*` → `Examples/CorrelatedFlip/*`, `CPSVExample411*` →
-  `Examples/BinaryCycle/*`, `CPSVExample412*` → `Examples/IdentityPlusZString/*`).
-  The others name an object, the source's literal canonical form
-  (`IsCPSVCanonicalForm`), and keep their file names: `CPSVBlocking`,
-  `CPSVOriginalSpaceLemmaL` (+`CPSVFigureEight`), `CPSVPeriodicExclusion`
-  (+`CPSVVerticalBNT`), `CPSVRepresentativeGroupedLemmaL` in `Vertical`;
-  `CPSVVerticalCanonicalForm` merged into `Vertical/VerticalCanonicalForm`;
-  `CPSVTopologicalPhysicalGibbs` merged into `TopologicalForm/TopologicalPhysicalGibbs`;
-  `CPSVBlockingChannel*` in `Examples/NonCartesianSectors`;
-  `CPSVBNTTheoremEquivalence` at the top level.
-- No directory is named for a theorem. Two groups are one theorem's own
-  argument and are named here for their objects: `SectorMaps` and
-  `AmbientSectorMaps` are the argument of Thm. 4.14 (ii) ⇒ (i) (the algebra
-  clause gives the fixed-point maps, Appendix C.4); `CyclicActiveSector` is the
-  argument of Case I of Lemma C.5 (SAL and ZCL give a commuting form). If a
-  theorem name is preferred: `FixedPointFromAlgebraClause` and
-  `CommutingFormFromAreaLaw`.
 
-Modules named for a bridge (`docs/many_body_circuit_architecture.md`):
-`MutualInfoBridge` is dissolved: `mutualInfoChain` is defined as QICLean's
-bipartite mutual information in `DensityOperator/AreaLaw`, the block-entropy
-formula and the two marginals moved to `DensityOperator/MutualInfoMonotone`,
-and the operator-bond bound is `Entropy/MutualInfoBondDimBound`;
-`PureRFPBridge` is a theorem and is renamed for what it proves,
-`Purification/PureStateRFPEquivalence`; `CommutingFormBridge` (three data
-structures for one commuting form, F2) is not here (the operator
-part places it in `MPS/Operator/PhysicalSector`).
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules mixing two layers
 | module | layers | declarations | proposed split |
@@ -1830,40 +1155,8 @@ down so that every import points to the left: `SpinChain.QuasiLocalSupportedIn` 
 out of `SupportAlgebra/SupportAlgebraGeneration`.
 
 #### Directories named for a source or a proof stage
-None of the present directories (`MPS/MPU`, `MPS/MPU/Representation/GroupCocycleMPO`, `QCA` and its seven subdirectories) is named for a source or a stage.
-Several module names keep the paper's wording: the prefixes `Source…`, `Printed…`, `Supplied…` and the suffix
-`…PleasantProperties`. Rule 8 keeps these names, but they are candidates for later renaming.
 
-The one directory that is a single theorem's argument is `MPS/MPU/Circuit`. It proves the theorem that every
-unitary whose operator cut coefficient ranks are bounded has an exact clean neighbour-pair circuit with polynomial
-gate count (`MPUCircuit.exists_clean_exact_circuit_of_bounded_cutCoefficientRank`, with an operator-norm
-approximate version). No statement in the subtree mentions a tensor network, except the two corollaries
-`exists_clean_exact_circuit_of_periodic_mpo_unitary` and
-`exists_clean_operatorNorm_approximate_circuit_of_periodic_mpo_unitary`. The statements already use QICLean's
-circuit model: `IsGateProduct`, `IsCleanImplementation`, `ManyBody.placeAlong`, `supportedOperators`
-(architecture step 4.2). The subtree therefore splits in two:
-
-- **Generic part (to QICLean's existing directories):** `Circuit/Merging` (amplification, success attenuation,
-  bond dilation, two-sector merging and orthogonal isometry swap go to Circuits, the matrix facts to Algebra);
-  `Circuit/CutMetrics` (Gram metrics, Algebra); the cost recurrences in `Circuit/Bounds` (`ConstantBranchingBounds`,
-  `PolynomialOverheadBounds`, `TreeDepthBounds`, `BalancedIntervalTree`); and `Circuit/Gates`, which no module
-  imports.
-- **The theorem's own argument:** `Circuit/Registers`, `Circuit/Interval`, the gate-count modules of
-  `Circuit/Bounds`, and the two cut-rank theorems in `Circuit/ExactBoundedCutRankCircuit`. In QICLean they would
-  sit in a directory named for what the theorem proves, such as `Circuit/Compile/BoundedCutRank`. TNLean keeps
-  only the two periodic-MPO corollaries, in `MPS/MPU/Circuit`.
-- **Prerequisites outside this part** that are non-tensor-network and must move to QICLean with it:
-  `MPS/MPU/{AffineFactorizationIsometry, AffineFactorizationRank, AffineGramBalancing, AffineGramCompactness,
-  AffineGramHull, AffineGramTransfer, AffineIntervalIsometry, BalancedGramMetrics, MinimalPhysicalCuts,
-  PrefixGramNormalizer}`, `MPS/Preparation/MinimalCutRepresentation{Cuts, Factorization, Intervals, Bases}`, and
-  `MPSPreparation.twoCfg_injective`. The assignment places all of these in `MPS/Tensor`. Also needed is the
-  configuration type `MPSTensor.Cfg` from `MPS/Tensor/Overlap`, which should become QICLean's site configuration
-  type.
-
-`MPS/MPU/DomainWall` is named for its objects. Only the two domain-wall theorems in it mention a tensor network.
-The detector words and circuit (`FiniteGroupDetector{Circuit, Construction, Endpoint, Clock, Phase, Spatial,
-Tensor}`) go to QICLean, and `FiniteGroupDetectorTransport` stays as an auxiliary of
-`FiniteGroupDetectorDomainWall`.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules that mix two layers
 | module | layers | declarations | proposed split |
@@ -1949,40 +1242,8 @@ The top level keeps `FiniteRingNegativeFrequencyLocality` (QICLean-bound, path k
 | `MPS/ParentHamiltonian` (top level, old names kept; the chain's own division places them) | uncle Hamiltonian norm growth and finite gaplessness; half-chain spectrum of weighted canonical MPS; matrix coordinates of periodic interactions | 4 (7 before merges) |
 
 #### Directories named for a source or a proof stage
-- `MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRepClassification` is named for one
-  classification. Its three modules (with `RepS3SU24NIMRep`) are the NIM-representations of
-  `Rep(S₃)` and `su(2)₄`: no tensor network, QICLean-bound (fusion rings and NIM-reps are on
-  the list of structures to take from Mathlib). They move into `MPOSymmetry/Fusion`; the
-  directory disappears. No part of it is one theorem's own argument.
-- `MPS/SharedInfra` and `Spectral` are technique names; the three modules of this part
-  they hold (`PhysicalObservableGauge`, `PhysicalCorrelationGauge`,
-  `PhysicalCorrelationExpansion`) move to `Preparation/Correlations`.
-- The flat `MPS/Symmetry` held two theorem arguments. They now have directories named for
-  what they prove:
-  - `Symmetry/SPTClassification`: the classification of symmetry-protected phases of
-    injective MPS by the cohomology class of the virtual representation (two injective
-    tensors are in one symmetric exact phase if and only if their classes agree;
-    arXiv:1010.3732). Its modules (the common physical representation, spectator
-    sectors, common-space paths, the obstruction) have no second use except the mixed path
-    below, which reuses the common-space ground paths. Three of them state no tensor network
-    (`PhysicalSpectatorCoordinates`, `FixedPointGappedPathWitness` with
-    `NormalizedBondLocalSymmetry`) and stay as auxiliaries (`proof:SPTClassification`). The
-    generic part is in `FixedPoint`, `GappedPath`, `OnSite` and `Projective`.
-  - `MPOSymmetry/MixedPath`: the interpolation argument of Garre-Rubio, Lootens and Molnár
-    (arXiv:2203.12563, Section 5; "GLM23" in the docstrings) that two MPS with a common MPO symmetry are
-    joined by a symmetric gapped path through the mixed endpoint tensor, with its
-    block-injective, arbitrary-alphabet, weak-Hopf and joint-family versions. Divided by
-    object into `Endpoint`, `Gap`, `MPO`, `Joint`. Three modules state no tensor network
-    (`JointMixedEndpointSpectatorGap`, `MixedEndpointActiveConfigEquiv`,
-    `MixedEndpointTripleMaps`) and stay as auxiliaries (`proof:MixedPath`). The generic part
-    (parent Hamiltonians commuting with MPO symmetries, fusion, anomalies) is in the
-    sibling directories.
-- The flat `MPS/Preparation` held the argument of Malz–Styliaris–Wei–Cirac
-  (arXiv:2307.01696) and of the open-boundary canonical form; it is divided by object
-  (`Polar`, `Tree`, `Circuit`, `Normal`, `BlockSum`, …), not by paper. The open-boundary
-  canonical form leaves the layer (section 3); its six auxiliaries without a tensor network
-  (configurations of a cut, Schmidt cut bases, endpoints, recurrences) stay beside it
-  (`proof:OBCCanonicalForm`).
+
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules that mix two layers
 | module | layers | declarations responsible | proposed split |
@@ -2057,70 +1318,8 @@ one another. Inside `LowEnergyAlgorithm`: `IntervalTrimming`, `RegionalFactors`,
 Layer override target: `TNLean/MPS/Tensor/OpenMPS` (9 modules, 14 parts), see §3.
 
 #### Directories named for a source or a proof stage
-- `Hastings` (53). Generic: `ThreeWaySplitting`, `PartCommutators` → `Chain`;
-  `SpectralCutoff` → `Spectral` (used also by the ground-state algorithm, the
-  low-energy algorithm, the Chebyshev projector and the local solution). The
-  rest is the argument of the area law by approximate projector factorization:
-  `ProjectorFactorization` (Lemma 1, Lemma 3, doubling and main theorem) and
-  `ProjectorFactorization/SchmidtTail` (Lemma 2 and the MPS consequences).
-  Flagged in place: `CutProductState`, `DecaySlack`, `EffectExpectation`,
-  `EffectFromFactorization`, `GaussianTimeAverage`, `SchmidtDiagonalCorrelation`,
-  `SchmidtDiagonalOperators`, `ProjectorOverlap`, `SchmidtRankBootstrap`,
-  `SchmidtRankRenyiBootstrap`, `SchmidtTail`, `TailEntropy`, `TailRenyiEntropy`.
-- `AKLV` (65). Generic: `CodimensionOneGap`, `ResidualPhase`, `GroundStateTail`,
-  `SpectralTail`, `Truncation`, `TwoBlockTruncation` → `Spectral`. The rest is
-  the argument of the area law from the Chebyshev approximate ground-state
-  projector: `ChebyshevAGSP`, with `SchmidtRank` and `FrustrationFree`. Flagged
-  in place: `ApproximateGroundVector`, `ApproximationStep`,
-  `FilteredApproximation`, `NormalizedVector`. `DisjointGroundEnergy` was
-  deleted: its two lemmas are cases of QICLean's
-  `ManyBody.exists_common_unit_ground_of_disjoint_family`, which
-  `ChainNormalization` now calls.
-- `ALVV` (78) together with 210 top-level modules (`Physical*`, `Canonical*`,
-  `BalancedInterval*`, `Independent*`, `LowDensity*`, `LowEnergy*`, `Dyadic*`,
-  `Soft*`, `FiveRegion*`, `Regional*`, `Selected*`, `Common*`, `Interleaved*`,
-  `Sharp*`): all are used by this one theorem only, so all form
-  `LowEnergyAlgorithm`, divided by object as in §1. Flagged in place:
-  `GroundGapUpperBound`, `RegionalEnergyMerge`, `LowDensityTreeExtraction`.
-- `Huang` (18): no generic module by use; it is the Gaussian-filter part of the
-  ground-state algorithm, `GroundStateAlgorithm/GaussianFilter`. Flagged in
-  place: `ApproximateEnergyFilter`, `ChainGrid`, `GaussianQuadrature`,
-  `UnitaryQuadrature`.
-- `Algorithm` (11): `GroundStateAlgorithm/QueryProgram`.
-- `ViableSet` (54), `ViableSet/BoundarySDP` (56), `ViableSet/SizeTrimming` (8).
-  The object API of viable sets (`Basic`, `LeftCoordinates`, `CollectiveTrimming`,
-  `Span`, `Endpoints`, `FinalMPS`, `OperatorAction`, `Trimming`,
-  `SuccessiveTrimming`, `LeftColumns`, `PrefixColumn`, `PrefixExtraction`,
-  `BondTrimming`) stays in `ViableSet`; `Basic`, `LeftCoordinates` and
-  `CollectiveTrimming` are used by the Chebyshev projector and the low-energy
-  algorithm as well. The algorithm-specific part goes to
-  `GroundStateAlgorithm` and its subdirectories `ApproximateProjector`,
-  `BoundaryState`, `BoundarySDP`, `RationalTensor`, `ViableVector` (the stage
-  name `SizeTrimming` is replaced by the object it produces). Flagged in place:
-  the rational-matrix modules `RationalCoordinates`, `RationalMatrixHeights`,
-  `RationalMatrixCodes`, `RationalMatrixMeshes`, `RationalCertificateTests`,
-  `GramMeshes`, `SemidefiniteRepair`, `CertificateRounding` (matrix);
-  `RationalArithmeticTrace`, `RationalArithmeticTraceCost`,
-  `ComplexArithmeticHeights` (other); `LeadingResidual` (matrix).
-- `LocalSolution` (30): the name states what is proved and is kept. Generic:
-  `FinalStateCount`, `HierarchicalEnergy`, `HierarchicalProjection`,
-  `HierarchyLevels`, `SupersiteHierarchy` → `Spectral` (used by the Chebyshev
-  projector and the ground-state algorithm). Flagged in place:
-  `CoordinateSliceBox`, `PeriodicPhysicalMetric`, `RoundedPeriodicGeometry`.
-- `EntropyScaling` (16): kept as a theorem directory, with the block-product
-  modules `CopyProduct`, `CopyErrorAmplification`, `CopyMPSFactor`,
-  `CopyRegionEntropy` from the top level; `CutReducedState` goes down to
-  `MPS/Tensor/OpenMPS`. Flagged in place: `VonNeumannSpectralTail`.
-- Top-level `Protocol*`, `Band*`, `ChainStageIncidence`, `CompressedBlockColumn`,
-  `Sharp*Compression` (27): `SweepPreparation`.
-- Top-level area-law modules: generic, to `Chain`, `Entropy`, `Approximation`.
 
-The theorems of `ProjectorFactorization`, `ChebyshevAGSP`, `LocalSolution` and
-the entropy statements of `LowEnergyAlgorithm` are TN-free; their directories
-carry `proof:` (the modules are single-use stages of those arguments), but the
-theorems themselves would be QICLean material by the rule of this document.
-They stay in TNLean with their proofs, together with the `tn` modules (MPS
-approximation statements), by the decision recorded in question 3 of Part I.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules mixing two layers
 | module | layers | declarations | proposed split |
@@ -2220,49 +1419,8 @@ Modules whose statements belong to a higher layer are placed there:
 Those directories belong to the upper layers, and are subdivided there.
 
 #### Directories named for a proof stage or a source
-| old directory | generic part (named for its objects) | one theorem's own argument |
-|---|---|---|
-| `RegionBlock` (48) | `Tensor/Region` (the blocked region tensor `RegionBlock`, `InsertSplit`); `Injectivity/Region` (union closure, kernel descent, reindexing, the lemmas for disjoint and overlapping unions) | `FundamentalTheorem/Normal/RegionInsertion` (23) and `FundamentalTheorem/Normal/CoarseThreeSite` (10), the argument of the theorem for normal PEPS; two parts used only by the torus argument go to `FundamentalTheorem/Torus/Window` |
-| `TorusWindowPeeling` (7) | none | `FundamentalTheorem/Torus/Window` |
-| `EdgeMiddlePhysical` (2) | none | `FundamentalTheorem/Injective` (`EdgeMiddlePhysical`) |
-| `TwoInjectiveComparison` (2) | none | `FundamentalTheorem/Injective` (`TwoBlockTensor`, `EndOperationComposition`) |
-| `VertexComplement` (2) | `Tensor/Region/VertexComplement`, `Injectivity/Region/VertexComplementInjective` | none |
-| the `TorusWindow*` and `Normal*` modules at the top level | `Injectivity/Normal` (blocking hypotheses and covers) | `FundamentalTheorem/Torus/Window`, `FundamentalTheorem/Normal` |
 
-The theorem directories are named for what they prove: `Injective`, `Normal`,
-`Torus`, `ConnectedGraph` and `Cycle`, each "the Fundamental Theorem for …".
-
-Modules named by stage number are renamed for their content:
-
-- `CoarseThreeSite4` → `FiberCollapse`, `5` → `ThreeRegionMerge`, `6` →
-  `InsertedCoefficientDescent`, `7` → `InsertedCoefficientDescentBundle`, `8` →
-  `SingleCrossingDescent`, `9` → `RelaxedTripleMerge`, `10` →
-  `RelaxedTripleMergeAssembly`, `11` → `SingleEdgeTransfer`;
-  `CoarseThreeSiteCoherentFrame` → `CoherentFrame`.
-- `Recovery` → `RegionFibers`, `Recovery2` → `RegionTransferMatrix`, `Recovery3`
-  → `SpanningStep`, `Recovery4` → `IncidentMatrixForm`, `Recovery7` →
-  `ResonateIdentity`, `Recovery8` → `IncidentMatrixRealization`, `Recovery9` →
-  `ResonateReconcile`; `RecoveryCoefficientTransfer` → `CoefficientTransfer`,
-  `RecoveryOutRegionEndpoint` → `OutRegionEndpoint`, `RegionReconcile` →
-  `BlockEndpointInversion`.
-- `TorusWindowChain2` → `WindowExtension`, `4` → `CornerExtensionTransitivity`,
-  `5` → `CornerExtensionAdditivity`, `6` → `StaircaseChaining`. Inside
-  `Torus/Window` the prefix `TorusWindow` is dropped.
-
-The architecture table names three modules for a bridge.
-`RegionBlock/GaugeBridge` and `RegionBlock/GaugeBridgeExpansion` are merged into
-`FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion`. The
-merged module proves the global-configuration expansion of the region-inserted
-coefficient and how that coefficient behaves under a gauge.
-`UnionInjectivityOverlapBridge` is renamed together with its family:
-
-- the overlapping union: `UnionInjectivityOverlapSetup` → `OverlapUnionGeometry`,
-  `UnionInjectivityOverlap3` → `OverlapUnionBridgeRow`, and
-  `UnionInjectivityOverlapBridge` → `OverlapUnion`, which proves that the
-  overlapping union is injective;
-- the disjoint union: `UnionInjectivityGeneral` → `DisjointUnionSetup`,
-  `UnionInjectivityGeneralBlue` → `DisjointUnionBlueFactorization`, and
-  `UnionInjectivityGeneral2` → `DisjointUnion`.
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules that mix two layers
 Each row gives the host module and its new place, the layers that mix, the
@@ -2550,51 +1708,8 @@ The sibling relation is acyclic (no mutual pair, no longer cycle); every directo
 most 37 parts.
 
 #### Directories named for a technique or proof stage
-* `Scan` (213) disappears. Generic part, flagged and kept beside its consumer:
-  `TimedChargePaths` (combinatorics), `ChargePathCounting` (graph). Two further generic
-  modules are now in QICLean: `ChargeBinomialBound` (in
-  `Analysis/Real/ExcitationSubsetCounts`) and `RegionalMoveEntropy`
-  (`ManyBody/Replica/BandMetric/MoveEntropy`). Eight modules of `Rounds` and
-  `NormComparisons` followed: `OldStateIntegral` and `OldStateParameterIntegral`
-  (`ManyBody/Replica/BandMetric/OldLeafIntegral`), `SplitEntropyBound`
-  (`ManyBody/Replica/BandMetric/SplitEntropy`), `ComparatorData`, `ComparatorBounds` and
-  `SourceComparators` (`ManyBody/Replica/NormComparison`), `ActualRoughLowerRemainder` and
-  `ActualSharpLowerRemainder` (`Representation/Bell/LabelDimensionRemainder`). The rest is
-  the argument of Propositions 9.2–9.6 and is
-  divided by object into `Collar`, `Scales`, `Histories`, `Statuses`, `Rounds`,
-  `NormComparisons`, `ChargePoints`, `CollarInformation`, `BoxExponent`;
-  `PhysicalTemplateInformation` goes to the root.
-* `Geometry` (189) disappears. Generic part: `Squares` (14) and `Templates` (29 with
-  `TwoFamilies`); `SparseBelts` (combinatorics) is now in QICLean
-  (`Algebra/Combinatorics/ZModIntCast`). Directory
-  `Fans` was planned as generic but its defining module `CellFans` states the fans of the
-  actual belt cells (it mentions `BeltMarks`), so it is the argument's. The argument of
-  Proposition 11.2: `Layers`, `Fans`, `InitialRegions`, `RepairStages`, `Stars`,
-  `BirthTemplates`, `FinalRegions`; `Exponents` and `ScaleSeparation` go to `Scales` and
-  `Layers`.
-* The generic geometry, operators and regional states then followed to QICLean in one move
-  (2026-11-26): the dyadic squares (`ManyBody/Sites/Dyadic`, with the distances and partitions
-  of dyadic layers and the corners of a cell from `BirthRegions`), the templates
-  (`ManyBody/Sites/Template`), the plane-lattice counts, patches and colourings
-  (`ManyBody/Sites/Lattice`), the plane Hamiltonians and positive constraints
-  (`ManyBody/Hamiltonian`, `Hamiltonian/Constraint`), the channel words
-  (`ManyBody/Dynamics/ChannelWord`, `ManyBody/PoissonWord`), the template and plane-boundary
-  entropies (`ManyBody/Entropy/Template`, `Entropy/PlaneBoundaryEntropy`), the regularized
-  patch filters (`ManyBody/Entropy/Filter/Regularized`), the cylinders
-  (`ManyBody/Sites/Cylinder`), the placements of `PEPS/ParentHamiltonian/Placement` except
-  `ProductSiteProjectorCommutation` (`ManyBody/Sites/Placement`), and their scalar and matrix
-  lemmas. What stays is the argument: `Scanner`, `Collar`, `CollarEntropy`, `BirthRegions`,
-  `RestoringOperator`, `SafeRectangles` and the statements of the theorems
-  (`RegionalStates/Regions/TheoremStatements`).
-* `Amplification` (34), named for Proposition 10.2, disappears. Generic part:
-  `ChannelWords` (22, channels), `LocalRootChannels` (to `Constraints`),
-  `GoodRealizationUnitary` with `SupportedPolarCorrection` (matrix). The argument:
-  `RestoringOperator`; `RadiusScales` to `Scales`; the proposition itself
-  (`AmplificationProof`) at the root.
-* `FrustrationFree` survives as a name of objects (frustration-free Hamiltonians), holding
-  only its four generic modules; its two proof modules are root theorems.
 
-The theorem's directory is `PEPS/AreaLaw` itself (named for what it proves).
+Applied by commit `3203f27710`; the list of this batch is in the history of this file.
 
 #### Modules mixing two layers or forced up by imports
 * `BoundaryTheorem` (root): defines the statements of the three propositions
