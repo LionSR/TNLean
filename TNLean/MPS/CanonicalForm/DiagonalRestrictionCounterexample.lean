@@ -36,41 +36,29 @@ namespace MPSTensor
 
 section DiagonalRestrictionCounterexample
 
-/-- A doubled-index tensor consisting of the four matrix units. The first row has
+/-- A tensor on the pair alphabet consisting of the four matrix units. The first row has
 coefficient 3/5 and the second row has coefficient 4/5. -/
-private noncomputable def diagonalRestrictionUnits : MPSTensor (2 * 2) 2
-  | 0 => (3 / 5 : ℂ) • Matrix.single 0 0 1
-  | 1 => (3 / 5 : ℂ) • Matrix.single 0 1 1
-  | 2 => (4 / 5 : ℂ) • Matrix.single 1 0 1
-  | 3 => (4 / 5 : ℂ) • Matrix.single 1 1 1
-
-/-- Evaluation at the physical pair (a,b) gives the corresponding matrix unit with
-the row-dependent coefficient. -/
-private theorem diagonalRestrictionUnits_finProd (a b : Fin 2) :
-    diagonalRestrictionUnits (finProdFinEquiv (a, b)) =
-      (if a = 0 then (3 / 5 : ℂ) else 4 / 5) • Matrix.single a b 1 := by
-  fin_cases a <;> fin_cases b <;> norm_num [finProdFinEquiv, diagonalRestrictionUnits]
+private noncomputable def diagonalRestrictionUnits : MPOTensor 2 2 := fun p =>
+  (if p.1 = 0 then (3 / 5 : ℂ) else 4 / 5) • Matrix.single p.1 p.2 1
 
 /-- Every matrix unit lies in the span of the four physical matrices. -/
 private theorem single_mem_span_diagonalRestrictionUnits (a b : Fin 2) :
     Matrix.single a b (1 : ℂ) ∈
       Submodule.span ℂ (Set.range diagonalRestrictionUnits) := by
-  have hmem : diagonalRestrictionUnits (finProdFinEquiv (a, b)) ∈
+  have hmem : diagonalRestrictionUnits (a, b) ∈
       Submodule.span ℂ (Set.range diagonalRestrictionUnits) :=
-    Submodule.subset_span ⟨finProdFinEquiv (a, b), rfl⟩
+    Submodule.subset_span ⟨(a, b), rfl⟩
   fin_cases a
   case «0» =>
     convert Submodule.smul_mem _ (5 / 3 : ℂ) hmem using 1
-    rw [diagonalRestrictionUnits_finProd]
     ext i j
-    simp [Matrix.single]
+    norm_num [diagonalRestrictionUnits, Matrix.single]
   case «1» =>
     convert Submodule.smul_mem _ (5 / 4 : ℂ) hmem using 1
-    rw [diagonalRestrictionUnits_finProd]
     ext i j
-    simp [Matrix.single]
+    norm_num [diagonalRestrictionUnits, Matrix.single]
 
-/-- The doubled-index tensor is injective. -/
+/-- The tensor is injective. -/
 private theorem diagonalRestrictionUnits_isInjective :
     Kraus.IsInjective diagonalRestrictionUnits := by
   rw [Kraus.IsInjective]
@@ -78,8 +66,8 @@ private theorem diagonalRestrictionUnits_isInjective :
 
 /-- The doubled-index tensor is left-canonical. -/
 private theorem diagonalRestrictionUnits_leftCanonical :
-    ∑ i : Fin (2 * 2), (diagonalRestrictionUnits i)ᴴ * diagonalRestrictionUnits i = 1 := by
-  rw [Fin.sum_univ_four]
+    ∑ i : Fin 2 × Fin 2, (diagonalRestrictionUnits i)ᴴ * diagonalRestrictionUnits i = 1 := by
+  rw [Fintype.sum_prod_type, Fin.sum_univ_two, Fin.sum_univ_two, Fin.sum_univ_two]
   ext i j
   fin_cases i <;> fin_cases j
   all_goals
@@ -95,7 +83,7 @@ private theorem diagBlock_diagonalRestrictionUnits_apply (i : Fin 2) :
     diagBlock diagonalRestrictionUnits i =
       (if i = 0 then (3 / 5 : ℂ) • Matrix.single 0 0 1
         else (4 / 5 : ℂ) • Matrix.single 1 1 1) := by
-  fin_cases i <;> norm_num [diagBlock, finProdFinEquiv, diagonalRestrictionUnits]
+  fin_cases i <;> norm_num [diagBlock, diagonalRestrictionUnits]
 
 /-- Every word in the diagonal restriction has vanishing (0,1) entry. -/
 private theorem evalWord_diagBlock_diagonalRestrictionUnits_zero_one (w : List (Fin 2)) :
@@ -124,7 +112,7 @@ private def diagonalRestrictionWeight : Fin 1 → ℂ := fun _ => 1
 
 /-- The single horizontal block formed by the doubled-index matrix-unit tensor. -/
 private noncomputable def diagonalRestrictionBlock :
-    (k : Fin 1) → MPSTensor (2 * 2) (diagonalRestrictionDim k) :=
+    (k : Fin 1) → MPOTensor 2 (diagonalRestrictionDim k) :=
   fun _ => diagonalRestrictionUnits
 
 /-- The doubled-index matrix-unit block satisfies all assumptions in
@@ -148,10 +136,10 @@ private theorem diagonalRestrictionBlock_horizontalCFData :
   · refine ⟨1, ?_⟩
     intro Δ hΔ k
     fin_cases k
-    have hA : ∀ i : Fin (2 * 2),
+    have hA : ∀ i : Fin 2 × Fin 2,
         Matrix.trace (Δ 0 * diagonalRestrictionUnits i) = 0 := by
       intro i
-      let w : Fin 1 → Fin (2 * 2) := fun _ => i
+      let w : Fin 1 → Fin 2 × Fin 2 := fun _ => i
       have h := hΔ w
       simpa [w, diagonalRestrictionBlock, List.ofFn_succ, List.ofFn_zero, Kraus.evalWord] using h
     have hzero : Δ 0 = 0 := (Matrix.trace_mul_right_eq_zero_iff (Δ 0)).mp (by
@@ -177,7 +165,7 @@ assert that the diagonal restrictions of the horizontal blocks are normal. The s
 comparison is documented in
 `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. -/
 theorem horizontalCFData_diagBlock_not_isNormal :
-    ∃ (weight : Fin 1 → ℂ) (block : Fin 1 → MPSTensor (2 * 2) 2),
+    ∃ (weight : Fin 1 → ℂ) (block : Fin 1 → MPOTensor 2 2),
       MPOTensor.HorizontalCFData weight block ∧
         ¬ (∀ k, Kraus.IsNormal (diagBlock (block k))) := by
   refine ⟨diagonalRestrictionWeight, diagonalRestrictionBlock,
