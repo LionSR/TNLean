@@ -162,7 +162,7 @@ private theorem sectorsFin_isLeftCanonicalBNTPresentation :
     MPSTensor.IsLeftCanonicalBNTPresentation sectorsFin := by
   refine ⟨⟨by simp [sectorsFin], fun _ _ _ => rfl, basisFin_isNormalTensor, ?_⟩, ?_⟩
   · rw [MPSTensor.HasBNTSectorData]
-    simpa [sectorsFin, MPSTensor.mpvState] using
+    exact
       (MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
         basisFin basisFin_isNormalTensor basisFin_not_gaugePhaseEquiv)
   · intro s
@@ -471,8 +471,6 @@ same periodic contractions.
 Source: arXiv:1606.00608, canonical form at lines 237--246 and equations
 `eq:II_ABasicTensors` and `Eq19`, lines 271--308. -/
 theorem ambient_eq_sectors_toTensor : ambient = sectors.toTensor := by
-  rw [show sectors = sectorsFin.reindexPhysical finProdFinEquiv from rfl,
-    MPSTensor.SectorDecomposition.reindexPhysical_toTensor]
   funext ⟨i, j⟩
   change ambient (i, j) = sectorsFin.toTensor (finProdFinEquiv (i, j))
   rw [sectorsFin_toTensor_eq_diagonal]
