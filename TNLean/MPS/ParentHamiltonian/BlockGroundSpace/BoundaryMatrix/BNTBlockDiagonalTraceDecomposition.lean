@@ -203,7 +203,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     (hN : 0 < N) (hLN : L ≤ N)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
         ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -285,7 +285,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_bo
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     (hN : 0 < N) (hLN : L ≤ N)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
         ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -359,7 +359,7 @@ theorem
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hTrace :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -423,7 +423,7 @@ theorem
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hTrace :
       let m : ℕ :=
@@ -494,7 +494,7 @@ theorem
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hTrace :
-      ∀ {ψ : NSiteSpace d N},
+      ∀ {ψ : NSiteSpace (Fin d) N},
         ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -555,7 +555,7 @@ theorem
     (hTrace :
       let m : ℕ :=
         (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
-      ∀ {ψ : NSiteSpace d N},
+      ∀ {ψ : NSiteSpace (Fin d) N},
         ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N

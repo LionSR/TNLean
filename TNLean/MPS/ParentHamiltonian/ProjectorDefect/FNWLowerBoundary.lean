@@ -271,7 +271,7 @@ theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective [NeZero D]
     change Function.Injective (fnwBoundaryMapCLM ρ hρ A N)
     rw [fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp]
     exact (physicalSiteReverseES d N).injective.comp
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.injective.comp
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.injective.comp
         (groundSpaceMap_injective_of_isNBlkInjective hInj))
   have hSingular : ∀ i < Module.finrank ℂ Mat, 0 < T.singularValues i :=
     T.injective_iff_forall_lt_finrank_singularValues_pos.mp hT

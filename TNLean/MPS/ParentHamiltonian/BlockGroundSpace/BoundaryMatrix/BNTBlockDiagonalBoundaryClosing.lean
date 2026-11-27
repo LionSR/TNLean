@@ -184,13 +184,13 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
     (hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) L₀)
     (hL₀ : 0 < L₀) [NeZero d]
     (hN : 0 < N) (hLN : L ≤ N) (hL₀N : L₀ ≤ N)
-    (hOpenBoundary : ∀ {φ : NSiteSpace d N},
+    (hOpenBoundary : ∀ {φ : NSiteSpace (Fin d) N},
       φ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           φ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hSpan : WordTupleSpanTop A (N - L₀))
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -288,7 +288,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -338,7 +338,7 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N

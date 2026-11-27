@@ -47,7 +47,7 @@ theorem cyclicTranslateState_pvbsEdge_mem_span (q : ℂ) {R : ℕ} (hR : 0 < R)
       simpa only [finRotate_apply] using pvbsEdge_cyclic_step q N hq σ
     have hone : cyclicTranslateState (1 : Fin (N + 1)) (pvbsEdge q (N + 1)) =
         q⁻¹ • pvbsEdge q (N + 1) := by
-      have h := congrArg (fun f : NSiteSpace 2 (N + 1) ↦ q⁻¹ • f) hphase
+      have h := congrArg (fun f : NSiteSpace (Fin 2) (N + 1) ↦ q⁻¹ • f) hphase
       simpa only [smul_smul, inv_mul_cancel₀ hqzero, one_smul] using h
     apply Fin.cyclic_induction ?_ ?_ s
     · have h0 : cyclicTranslateState (0 : Fin (N + 1)) (pvbsEdge q (N + 1)) =

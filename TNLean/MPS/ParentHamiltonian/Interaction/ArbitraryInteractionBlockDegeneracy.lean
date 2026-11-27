@@ -159,12 +159,12 @@ theorem weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq
       Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
       (∑ j, c j • mpvState (A j) N) = 0) :
     ∀ j (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      c j • Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+      c j • Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
         (groundSpaceMap (A j) L X)) = 0 := by
   have : NeZero N := NeZero.of_pos i.pos
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
-  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
   let T : ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ]
       MPVSpace (Fin d) L :=
     LinearMap.lsum ℂ (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
@@ -224,7 +224,7 @@ theorem toEuclideanLin_translationInvariant_term_smul_mpvState_eq_zero_of_wordTu
   have : NeZero N := NeZero.of_pos i.pos
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
-  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
   have hEach := weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq_zero
     A c h hLN hSpan i hzero
   intro j

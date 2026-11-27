@@ -82,11 +82,11 @@ theorem twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor
     simpa only [Matrix.sub_mulVec, Matrix.one_mulVec, hv', sub_zero] using
       (one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor D v.ofLp).symm
   · rintro ⟨X, hX⟩
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (D * D) 2)).injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (D * D)) 2)).injective
     change (twoSiteBondInteraction
       (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty (matrixUnitBondVector D)))).mulVec
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (D * D) 2)) v) = 0
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (D * D)) 2)) v) = 0
     rw [← hX]
     exact twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor D hD X
 

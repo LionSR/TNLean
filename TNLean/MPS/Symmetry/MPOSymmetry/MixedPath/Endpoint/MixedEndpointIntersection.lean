@@ -32,7 +32,7 @@ variable {d D : ℕ}
 boundary indices. Source: arXiv:2203.12563, Section 5, line 1690. -/
 noncomputable def insertedGroundSpace
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
-    Submodule ℂ (NSiteSpace d N) :=
+    Submodule ℂ (NSiteSpace (Fin d) N) :=
   (insertedGroundSpaceMap A W N).range
 
 /-- Fixing the last physical letter retains an extended boundary vector,
@@ -61,7 +61,7 @@ Source: arXiv:2203.12563, Section 5, line 1690. -/
 theorem insertedGroundSpaceMap_mul_eq_of_restrict
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ)
     {K : ℕ} (hK : 0 < K)
-    {ψ : NSiteSpace d (K + 2)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (K + 2)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hY : ∀ i, restrictFirst ψ i = insertedGroundSpaceMap A W (K + 1) (Y i))
     (hZ : ∀ j, restrictLast ψ j = insertedGroundSpaceMap A W (K + 1) (Z j))
     (i j : Fin d) :
@@ -79,7 +79,7 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mem_insertedGroundSpace_succ_of_intertwine
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ)
     {K : ℕ} (hK : 0 < K)
-    {ψ : NSiteSpace d (K + 1)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (K + 1)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (R : Fin d → Matrix (Fin D) (Fin D) ℂ) (hR : ∑ j, R j * W * A j = 1)
     (hY : ∀ i, restrictFirst ψ i = insertedGroundSpaceMap A W K (Y i))
     (hCompat : ∀ i j, W * A j * Y i = Z j * A i * W) :
@@ -107,7 +107,7 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem insertedGroundSpace_intersection
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (W : Matrix (Fin D) (Fin D) ℂ) (hW : W ≠ 0)
-    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
+    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace (Fin d) (L + 1)}
     (hLeft : ∀ j, restrictLast ψ j ∈ insertedGroundSpace A W L)
     (hRight : ∀ i, restrictFirst ψ i ∈ insertedGroundSpace A W L) :
     ψ ∈ insertedGroundSpace A W (L + 1) := by
@@ -130,7 +130,7 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem insertedGroundSpace_iff_left_right
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (W : Matrix (Fin D) (Fin D) ℂ) (hW : W ≠ 0)
-    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)} :
+    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace (Fin d) (L + 1)} :
     ψ ∈ insertedGroundSpace A W (L + 1) ↔
       (∀ j, restrictLast ψ j ∈ insertedGroundSpace A W L) ∧
       (∀ i, restrictFirst ψ i ∈ insertedGroundSpace A W L) := by

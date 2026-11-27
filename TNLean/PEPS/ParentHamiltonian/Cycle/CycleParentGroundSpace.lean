@@ -64,7 +64,7 @@ theorem assembleRegion_cycleArc_eq_cyclicCfg (hLn : L < n) (s : Fin n)
 /-- Ordering a regional slice is the actual cyclic restriction of the full
 state. Source: arXiv:2011.12127, Section IV.C.1, lines 1987–2011. -/
 theorem cycleArcPhysical_regionSliceMap (hLn : L < n) (s : Fin n)
-    (τ : Fin n → Fin d) (ψ : MPSTensor.NSiteSpace d n) :
+    (τ : Fin n → Fin d) (ψ : MPSTensor.NSiteSpace (Fin d) n) :
     cycleArcPhysicalEquiv hLn s
         (regionSliceMap (cycleArcFrom s L) (fun v ↦ τ v.1) ψ) =
       MPSTensor.cyclicRestrictₗ (NeZero.pos n) L s τ ψ := by

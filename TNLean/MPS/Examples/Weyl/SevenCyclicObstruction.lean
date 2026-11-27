@@ -65,7 +65,7 @@ theorem rootCharacter_injective {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
 /-- Local boundary vectors agreeing across the seven-site cyclic
 cut vanish. There is no assumed boundary or local-kernel classification. -/
 theorem eq_zero_of_seven_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    (f g : NSiteSpace 3 7)
+    (f g : NSiteSpace (Fin 3) 7)
     (hf : f ∈ groundSpace (threeLetterTensor ζ) 7)
     (hg : g ∈ groundSpace (threeLetterTensor ζ) 7)
     (hfg : ∀ (i : Fin 3) (σ : Cfg 3 6), f (Fin.cons i σ) = g (Fin.snoc σ i)) :
@@ -95,7 +95,7 @@ theorem eq_zero_of_seven_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5
 /-- The seven-site main boundary space has zero intersection with the
 space obtained by moving the last physical site to the front. -/
 theorem eq_zero_of_seven_cyclic_local_membership {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    (f : NSiteSpace 3 7) (hf : f ∈ groundSpace (threeLetterTensor ζ) 7)
+    (f : NSiteSpace (Fin 3) 7) (hf : f ∈ groundSpace (threeLetterTensor ζ) 7)
     (hrotate : (fun σ : Cfg 3 7 ↦ f (Fin.cons (σ (Fin.last 6)) (Fin.init σ))) ∈
       groundSpace (threeLetterTensor ζ) 7) : f = 0 := by
   exact (eq_zero_of_seven_cyclic_agreement hζ f _ hf hrotate

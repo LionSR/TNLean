@@ -197,7 +197,7 @@ theorem blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup
     fun j a =>
       Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
         ((μ j) ^ (M + 1) • X j)
-  let ψ : NSiteSpace d (m + 2) :=
+  let ψ : NSiteSpace (Fin d) (m + 2) :=
     ∑ j : Fin r,
       cyclicRestrictₗ (show 0 < M + 1 by omega) (m + 2) ⟨M, by omega⟩ τ
         (groundSpaceMap (A j) (M + 1) ((μ j) ^ (M + 1) • X j))
@@ -270,7 +270,7 @@ theorem blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpa
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
-    {ψ : NSiteSpace d (M + 1)}
+    {ψ : NSiteSpace (Fin d) (M + 1)}
     (hψ : ψ ∈
       chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) (m + 2) (M + 1))
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -309,7 +309,7 @@ theorem
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
-    {ψ : NSiteSpace d (M + 1)}
+    {ψ : NSiteSpace (Fin d) (M + 1)}
     (hψ : ψ ∈
       chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) (m + 2) (M + 1))
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)

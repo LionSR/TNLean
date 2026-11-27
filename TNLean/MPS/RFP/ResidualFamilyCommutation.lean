@@ -263,7 +263,7 @@ theorem sectorSupportProjection_mul_eq_zero
 Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
 noncomputable def sectorSupportSum
     (h : ResidualFamilyAppendixBData B) :
-    NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
+    NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
   ∑ j : Fin r, (h.sector j).twoSiteBasicSupportProjection
 
 /-- The sector support sum is idempotent.
@@ -328,10 +328,10 @@ coordinate equivalence.
 
 Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
 private noncomputable def coefficientEuclideanEnd
-    (T : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (T : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     EuclideanSpace ℂ (Cfg d 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d 2) :=
-  (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm.toLinearMap.comp
-    (T.comp (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).toLinearMap)
+  (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm.toLinearMap.comp
+    (T.comp (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).toLinearMap)
 
 /-- The Euclidean form of the sector support sum.
 
@@ -366,7 +366,7 @@ private theorem sectorSupportSumES_isSymmetricProjection
     intro v
     simpa [sectorSupportSumES, coefficientEuclideanEnd, Module.End.mul_apply] using
       LinearMap.congr_fun h.sectorSupportSum_idempotent
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) v)
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) v)
   isSymmetric := by
     rw [h.sectorSupportSumES_eq]
     exact Finset.sum_induction
@@ -391,20 +391,20 @@ private theorem sectorSupportSumES_range
   · rintro ⟨v, rfl⟩
     apply (mem_groundSpaceES_iff (directSumTensor B) 2 _).2
     change h.sectorSupportSum
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) v) ∈
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) v) ∈
         groundSpace (directSumTensor B) 2
     rw [← h.twoSiteBondEmbedding_range_eq_directSum_groundSpace,
       h.twoSiteBondEmbedding_range, ← h.sectorSupportSum_range]
     exact ⟨_, rfl⟩
   · intro hψ
-    have hraw : (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) ψ ∈
+    have hraw : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) ψ ∈
         LinearMap.range h.sectorSupportSum := by
       rw [h.sectorSupportSum_range, ← h.twoSiteBondEmbedding_range,
         h.twoSiteBondEmbedding_range_eq_directSum_groundSpace]
       exact (mem_groundSpaceES_iff (directSumTensor B) 2 ψ).1 hψ
     obtain ⟨v, hv⟩ := hraw
-    refine ⟨(WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v, ?_⟩
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).injective
+    refine ⟨(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v, ?_⟩
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).injective
     simpa [sectorSupportSumES, coefficientEuclideanEnd] using hv
 
 /-- The canonical support of the direct sum is the sum of the mutually
@@ -425,8 +425,8 @@ theorem sectorSupportSum_eq_twoSiteBondSupportProjection
   apply LinearMap.ext
   intro ψ
   have hψ := LinearMap.congr_fun hEq
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ)
-  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm.injective
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ)
+  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm.injective
   simpa [sectorSupportSumES, coefficientEuclideanEnd,
     twoSiteBondSupportProjection] using hψ
 

@@ -100,7 +100,7 @@ theorem mpv_sectorTensor_of_ne (A : ∀ y, MPSTensor (n y) (D y)) {x y : Fin s}
 linearly independent periodic states, at every positive length. -/
 theorem blockPeriodicMpvMapES_sectorTensor_injective
     (A : ∀ y, MPSTensor (n y) (D y)) {N : ℕ} (hN : 0 < N)
-    (hA : ∀ y, (mpv (A y) : NSiteSpace (n y) N) ≠ 0) :
+    (hA : ∀ y, (mpv (A y) : NSiteSpace (Fin (n y)) N) ≠ 0) :
     Function.Injective (blockPeriodicMpvMapES (sectorTensor A) N) := by
   refine (injective_iff_map_eq_zero _).2 fun c hc => ?_
   apply PiLp.ext
@@ -163,7 +163,7 @@ theorem ker_hamiltonian_parentRingInteraction_blockMixedTensor
     LinearMap.ker (Matrix.toEuclideanLin
       (parentRingInteraction (blockMixedTensor A₀ A₁ γ) 2 N).hamiltonian) =
       (bntMPSVectorSpan (blockMixedInterpolation A₀ A₁ γ) N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (blockMixedPhysicalDim D₀ D₁) N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (blockMixedPhysicalDim D₀ D₁)) N)).symm.toLinearMap := by
   have := neZero_blockMixedPhysicalDim (D₀ := D₀) (D₁ := D₁)
   have := neZero_blockMixedBond (D₀ := D₀) (D₁ := D₁)
   rw [← range_blockPeriodicMpvMapES]
@@ -182,7 +182,7 @@ theorem linearIndependent_mpv_blockMixedInterpolation
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     LinearIndependent ℂ (fun x =>
       (mpv (blockMixedInterpolation A₀ A₁ γ x) :
-        NSiteSpace (blockMixedPhysicalDim D₀ D₁) N)) := by
+        NSiteSpace (Fin (blockMixedPhysicalDim D₀ D₁)) N)) := by
   rw [Fintype.linearIndependent_iff]
   intro g hg x
   have hinj := blockPeriodicMpvMapES_blockMixedInterpolation_injective A₀ A₁ h₀ h₁ γ hN

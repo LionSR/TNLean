@@ -39,7 +39,7 @@ theorem boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_z
       Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
     ∀ j (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+      Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
         (groundSpaceMap (A j) L X)) = 0 := by
   have : NeZero N := ⟨by omega⟩
   have hpos (i : Fin N) :
@@ -75,7 +75,7 @@ theorem groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_
       A c hc h hh hN hLN hSpan hzero
   intro j ψ hψ
   obtain ⟨X, hX⟩ := (mem_groundSpaceES_iff (A j) L ψ).mp hψ
-  have heq : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+  have heq : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
       (groundSpaceMap (A j) L X) = ψ := by
     rw [hX, LinearEquiv.symm_apply_apply]
   rw [LinearMap.mem_ker, ← heq]
@@ -98,7 +98,7 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpace
   apply PiLp.ext
   rintro ⟨σ, τ⟩
   have hfiber : ContinuousLinearMap.rightFiber (U (mpvState A M)) τ =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
         (groundSpaceMap A L (Kraus.evalWord A (List.ofFn τ))) := by
     apply PiLp.ext
     intro σ'

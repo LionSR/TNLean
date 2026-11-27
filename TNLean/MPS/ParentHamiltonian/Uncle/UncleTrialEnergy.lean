@@ -97,7 +97,7 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_eq_sum_endpoints
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) :
-    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     (⟪Matrix.toEuclideanLin
         (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ, φ⟫_ℂ).re =
@@ -105,7 +105,7 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_eq_sum_endpoints
         ∑ τ : Cfg d (6 * N + 1),
           ‖Matrix.toEuclideanLin
               (uncleInteraction A B R L) (cyclicRestrictES (Fin.pos i) 2 i τ φ)‖ ^ 2 := by
-  let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+  let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
     (uncleTwoWallTrialSource A B R L N)
   let c : ℝ := ((d ^ 2 : ℕ) : ℝ)⁻¹
   have hc : (((d ^ 2 : ℕ) : ℂ)⁻¹) = (c : ℂ) := by simp [c]
@@ -130,7 +130,7 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_le_endpoint_norms
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) :
-    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     (⟪Matrix.toEuclideanLin
         (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ, φ⟫_ℂ).re ≤

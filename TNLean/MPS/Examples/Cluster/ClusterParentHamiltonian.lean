@@ -70,7 +70,7 @@ namespace MPSTensor
 /-- The three-site stabilizer \(K = \sigma^z_1\sigma^x_2\sigma^z_3\) of
 arXiv:quant-ph/0608197, local TeX lines 374--387, acting on configuration
 functions by \((K v)(s_1,s_2,s_3) = (-1)^{s_1+s_3}\, v(s_1, s_2+1, s_3)\). -/
-def clusterStabilizer : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3 where
+def clusterStabilizer : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3 where
   toFun v s := (-1 : ℂ) ^ ((s 0).val + (s 2).val) * v ![s 0, s 1 + 1, s 2]
   map_add' v w := by
     ext s
@@ -79,7 +79,7 @@ def clusterStabilizer : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3 where
     ext s
     simp [mul_left_comm]
 
-@[simp] lemma clusterStabilizer_apply (v : NSiteSpace 2 3) (s : Fin 3 → Fin 2) :
+@[simp] lemma clusterStabilizer_apply (v : NSiteSpace (Fin 2) 3) (s : Fin 3 → Fin 2) :
     clusterStabilizer v s =
       (-1 : ℂ) ^ ((s 0).val + (s 2).val) * v ![s 0, s 1 + 1, s 2] := rfl
 
@@ -243,7 +243,7 @@ For \(N \ge 3\) the sites \(i, i+1, i+2\) are distinct and this is the Pauli
 string \(\sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}\); every result below assumes
 \(N \ge 3\). On one site the coordinate formula is \(\sigma^x\), not
 \(\sigma^z\sigma^x\sigma^z = -\sigma^x\). -/
-def clusterChainStabilizer {N : ℕ} (i : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N where
+def clusterChainStabilizer {N : ℕ} (i : Fin N) : NSiteSpace (Fin 2) N →ₗ[ℂ] NSiteSpace (Fin 2) N where
   toFun ψ σ :=
     (-1 : ℂ) ^ ((σ i).val + (σ (cyclicForwardSite i 2)).val) *
       ψ (Function.update σ (cyclicForwardSite i 1) (σ (cyclicForwardSite i 1) + 1))
@@ -254,7 +254,7 @@ def clusterChainStabilizer {N : ℕ} (i : Fin N) : NSiteSpace 2 N →ₗ[ℂ] NS
     ext σ
     simp [mul_left_comm]
 
-@[simp] lemma clusterChainStabilizer_apply {N : ℕ} (i : Fin N) (ψ : NSiteSpace 2 N)
+@[simp] lemma clusterChainStabilizer_apply {N : ℕ} (i : Fin N) (ψ : NSiteSpace (Fin 2) N)
     (σ : Fin N → Fin 2) :
     clusterChainStabilizer i ψ σ =
       (-1 : ℂ) ^ ((σ i).val + (σ (cyclicForwardSite i 2)).val) *
@@ -268,7 +268,7 @@ private lemma update_one_eq (s : Fin 3 → Fin 2) :
 /-- The three-site stabilizer on a cyclic window is the restriction of the
 translated stabilizer. -/
 private lemma clusterStabilizer_cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (hN3 : 3 ≤ N)
-    (i : Fin N) (τ : Fin N → Fin 2) (ψ : NSiteSpace 2 N) :
+    (i : Fin N) (τ : Fin N → Fin 2) (ψ : NSiteSpace (Fin 2) N) :
     clusterStabilizer (cyclicRestrictₗ hN 3 i τ ψ) =
       cyclicRestrictₗ hN 3 i τ (clusterChainStabilizer i ψ) := by
   ext s
@@ -289,7 +289,7 @@ private lemma clusterStabilizer_cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (hN3 : 
 /-- A periodic vector has stabilizer eigenvalue \(\mu\) exactly when all its
 cyclic windows have that eigenvalue for the three-site stabilizer. -/
 private lemma mem_eigenspace_clusterChainStabilizer_iff {N : ℕ} (hN : 0 < N) (hN3 : 3 ≤ N)
-    (i : Fin N) (ψ : NSiteSpace 2 N) (μ : ℂ) :
+    (i : Fin N) (ψ : NSiteSpace (Fin 2) N) (μ : ℂ) :
     ψ ∈ Module.End.eigenspace (clusterChainStabilizer i) μ ↔
       ∀ τ : Fin N → Fin 2,
         cyclicRestrictₗ hN 3 i τ ψ ∈ Module.End.eigenspace clusterStabilizer μ := by

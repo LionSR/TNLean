@@ -95,7 +95,7 @@ theorem insertedTwoSiteMap_first_boundary
     let V := Matrix.coordinateInclusion (Fin.castAddEmb D₁ : Fin D₀ ↪ Fin (D₀ + D₁))
     insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0)
       (WithLp.toLp 2 (fun p => (V * X * Vᴴ) p.1 p.2)) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) 2)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin ((D₀ + D₁) * (D₀ + D₁))) 2)).symm
         (groundSpaceMap (mixedEndpointLeftTensor A₀ D₁) 2 X) := by
   dsimp only
   let V := Matrix.coordinateInclusion (Fin.castAddEmb D₁ : Fin D₀ ↪ Fin (D₀ + D₁))

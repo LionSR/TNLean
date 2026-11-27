@@ -113,7 +113,7 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
     {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
     (hCrossingSpan :
       ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val))
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
@@ -177,7 +177,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hComparison :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -238,7 +238,7 @@ theorem
     (hNlarge : L + L₀ ≤ N)
     (hCrossingSpan :
       ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val))
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -305,7 +305,7 @@ theorem
     (hNlarge : L + L₀ ≤ N)
     (hCrossingSpan :
       ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val))
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -391,7 +391,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bn
       ∀ i : Fin N, N < i.val + L →
         N - i.val < (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) →
         WordTupleSpanTop A (N - i.val))
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -552,7 +552,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_compa
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hComparison :
-      ∀ {ψ : NSiteSpace d N},
+      ∀ {ψ : NSiteSpace (Fin d) N},
         ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -607,7 +607,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hComparison :
-      ∀ {ψ : NSiteSpace d N},
+      ∀ {ψ : NSiteSpace (Fin d) N},
         ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
@@ -660,7 +660,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_co
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hComparison :
-      ∀ {ψ : NSiteSpace d N},
+      ∀ {ψ : NSiteSpace (Fin d) N},
         ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N

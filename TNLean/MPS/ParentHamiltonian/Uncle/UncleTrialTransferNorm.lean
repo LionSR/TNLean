@@ -148,7 +148,7 @@ theorem norm_uncleTwoWallTrial_sq_eq_trace_transfer
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + r + q + s + t))).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + s + t))).symm
         (uncleTwoWallTrial A B R L p r q s t)‖ ^ 2 =
       (LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
         (uncleTwoWallTransfer A B R L p r q s t)).re := by
@@ -172,7 +172,7 @@ theorem norm_uncleTwoWallTrialSource_sq_eq_trace_transfer
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)‖ ^ 2 =
       (LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
         (uncleTwoWallTransfer A B R L (2 * N) (N + 1) (2 * N - 1) (N + 1) 0)).re := by
@@ -405,14 +405,14 @@ theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1) :
     Tendsto (fun N : ℕ ↦
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)‖ ^ 2 / ((N + 1 : ℕ) : ℝ) ^ 2) atTop
       (𝓝 ((uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re)) := by
   obtain ⟨C, z, _, hz, hz1, hbound⟩ := uncleTwoWallTransfer_factorization_bound
     A B R L hIA hIB hUA hUB ρA hρA htrA ρB hρB htrB hFA hFB hAB hBA
   let m := fun N : ℕ ↦ ((N + 1 : ℕ) : ℝ)
   let s := fun N : ℕ ↦
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)‖ ^ 2
   let w := fun N : ℕ ↦
     (uncleWallGramWeight A B R ρA (N + 1) * uncleWallGramWeight B A L ρB (N + 1)).re /
@@ -524,7 +524,7 @@ theorem norm_uncleTwoWallTrial_one_wall_sq_le_mul
     (hρB : Kraus.adjointMap B ρ = ρ)
     (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ p q s t : ℕ,
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + 1 + q + s + t))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + 1 + q + s + t))).symm
           (uncleTwoWallTrial A B R L p 1 q s t)‖ ^ 2 ≤ C * s := by
   obtain ⟨C, hC, hL⟩ := uncleWallGramMap_apply_l2_opNorm_le_mul B A L ρ hρ hρB hA hSpect
   let S := (Matrix.trace (uncleWallGram A B R 1)).re
@@ -584,7 +584,7 @@ theorem norm_uncleTwoWallTrial_second_wall_sq_le_mul
     (hρA : Kraus.adjointMap A ρ = ρ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ p r q t : ℕ,
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + r + q + 1 + t))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + 1 + t))).symm
           (uncleTwoWallTrial A B R L p r q 1 t)‖ ^ 2 ≤ C * r := by
   obtain ⟨C, hC, hR⟩ := uncleWallGramMap_apply_l2_opNorm_le_mul A B R ρ hρ hρA hB hSpect
   let S := (Matrix.trace (uncleWallGram B A L 1)).re

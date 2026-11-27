@@ -164,10 +164,10 @@ private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
     {c : ℕ} (C : MPSTensor d c)
     (hC : ∀ v ∈ groundSpaceES C 2, Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0)
     {N : ℕ} (hN : 2 ≤ N)
-    (ψ : NSiteSpace d N) (hψ : ψ ∈ chainGroundSpace C 2 N) :
+    (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace C 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 := by
   have : NeZero N := ⟨by omega⟩
   have hNpos : 0 < N := by omega
   rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩] at hψ
@@ -175,7 +175,7 @@ private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
   have hlocal (i : Fin N) (τ : Cfg d N) :
       Matrix.toEuclideanLin (uncleInteraction A B R L)
         (cyclicRestrictES (d := d) (Fin.pos i) 2 i τ
-          ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ)) = 0 := by
+          ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ)) = 0 := by
     apply hC
     apply (mem_groundSpaceES_iff C 2 _).mpr
     simpa [cyclicRestrictES, LinearMap.withLpMap] using hψ i τ
@@ -191,10 +191,10 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_left
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
-    (ψ : NSiteSpace d N) (hψ : ψ ∈ chainGroundSpace A 2 N) :
+    (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace A 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 :=
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 :=
   hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows A B R L A
     (uncleInteraction_apply_eq_zero_left A B R L) hN ψ hψ
 
@@ -206,10 +206,10 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_right
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
-    (ψ : NSiteSpace d N) (hψ : ψ ∈ chainGroundSpace B 2 N) :
+    (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace B 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 :=
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 :=
   hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows A B R L B
     (uncleInteraction_apply_eq_zero_right A B R L) hN ψ hψ
 
@@ -224,8 +224,8 @@ theorem span_mpv_le_ker_hamiltonian_uncleInteraction
     {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Submodule.span ℂ
-      {(WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv B)} ≤
+      {(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A),
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv B)} ≤
       LinearMap.ker (Matrix.toEuclideanLin
         (translationInvariant N (uncleInteraction A B R L)).hamiltonian) := by
   apply Submodule.span_le.mpr

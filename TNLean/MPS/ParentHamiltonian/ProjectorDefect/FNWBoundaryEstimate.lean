@@ -57,7 +57,7 @@ noncomputable def fnwBoundaryMapCLM
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     Mat →L[ℂ] EuclideanSpace ℂ (Cfg d N) := by
   exact LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
       (fnwBoundaryMap (fun μ => (A μ)ᴴ) N)
 
 /-- Application of the continuous FNW boundary map is the raw boundary
@@ -79,14 +79,14 @@ theorem fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp
     fnwBoundaryMapCLM ρ hρ A N =
       (physicalSiteReverseES d N).toLinearIsometry.toContinuousLinearMap.comp
         (LinearMap.toContinuousLinearMap <|
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
             (groundSpaceMap A N)) := by
   apply ContinuousLinearMap.ext
   intro B
   ext σ
   simp only [fnwBoundaryMapCLM_apply, ContinuousLinearMap.comp_apply,
     LinearIsometry.coe_toContinuousLinearMap]
-  have hraw := congrArg (fun f : NSiteSpace d N => f σ)
+  have hraw := congrArg (fun f : NSiteSpace (Fin d) N => f σ)
     (LinearMap.congr_fun
       (fnwBoundaryMap_eq_physicalSiteReverse_comp_groundSpaceMap
         (fun μ => (A μ)ᴴ) N) B)

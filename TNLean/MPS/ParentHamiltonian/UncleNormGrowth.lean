@@ -131,9 +131,9 @@ theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
     (hκ : 0 < (uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re) :
     ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∀ᶠ N : ℕ in atTop,
       c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤
-        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)‖ ^ 2 ∧
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
   let κ := (uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re
   have hlim := uncleTwoWallTrialSource_normalized_norm_sq_tendsto
@@ -163,9 +163,9 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
       (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∀ᶠ N : ℕ in atTop,
       c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤
-        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ∧
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
   have : NeZero a := Matrix.neZero_of_trace_eq_one htrA
   have : NeZero b := Matrix.neZero_of_trace_eq_one htrB
@@ -372,7 +372,7 @@ theorem hamiltonian_uncleInteraction_ae_eventually_exists_pos_eigenvalue_lt
     intro hPert
     obtain ⟨c, C, hc, _hC, hBounds⟩ := hP
     let v : (N : ℕ) → EuclideanSpace ℂ (Cfg d (6 * N + 1)) := fun N ↦
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B P.1 P.2 N)
     have hNormLower : ∀ᶠ N : ℕ in atTop,
         c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤ ‖v N‖ ^ 2 :=

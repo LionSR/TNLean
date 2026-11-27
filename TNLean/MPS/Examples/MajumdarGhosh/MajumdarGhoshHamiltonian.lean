@@ -105,7 +105,7 @@ lemma majumdarGhosh_twisted_eq {N : ℕ} (hN : Even N) (hNpos : 0 < N)
 ground space of `majumdarGhoshTensor` for windows of length \(L\). -/
 theorem majumdarGhosh_pairCoveringEven_mem_chainGroundSpace {N L : ℕ} (hN : Even N)
     (hNpos : 0 < N) (hLN : L ≤ N) :
-    (pairCoveringEven majumdarGhoshSinglet : NSiteSpace 2 N) ∈
+    (pairCoveringEven majumdarGhoshSinglet : NSiteSpace (Fin 2) N) ∈
       chainGroundSpace majumdarGhoshTensor L N := by
   have hsum := Submodule.add_mem _ (mpv_mem_chainGroundSpace majumdarGhoshTensor L N hNpos hLN)
     (twistedMPV_mem_chainGroundSpace majumdarGhoshTensor majumdarGhoshGrading (-1)
@@ -122,7 +122,7 @@ theorem majumdarGhosh_pairCoveringEven_mem_chainGroundSpace {N L : ℕ} (hN : Ev
 ground space of `majumdarGhoshTensor` for windows of length \(L\). -/
 theorem majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace {N L : ℕ} (hN : Even N)
     (hNpos : 0 < N) (hLN : L ≤ N) :
-    (pairCoveringOdd majumdarGhoshSinglet : NSiteSpace 2 N) ∈
+    (pairCoveringOdd majumdarGhoshSinglet : NSiteSpace (Fin 2) N) ∈
       chainGroundSpace majumdarGhoshTensor L N := by
   have hsub := Submodule.sub_mem _ (mpv_mem_chainGroundSpace majumdarGhoshTensor L N hNpos hLN)
     (twistedMPV_mem_chainGroundSpace majumdarGhoshTensor majumdarGhoshGrading (-1)
@@ -141,13 +141,13 @@ theorem majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace {N L : ℕ} (hN : Eve
 Summed over the translates of a periodic chain of at least three sites it gives
 the review's Hamiltonian, since each nearest-neighbour bond occurs in two
 translates and each next-nearest-neighbour bond in one. -/
-def majumdarGhoshTerm : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3 :=
+def majumdarGhoshTerm : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3 :=
   (1 / 2 : ℂ) • (spinExchange spinHalfOperator 0 1 + spinExchange spinHalfOperator 1 2 +
     spinExchange spinHalfOperator 0 2)
 
 /-- The three-site term acts as a quarter of the sum of the three transpositions of
 the sites, minus \(\tfrac38\). -/
-lemma majumdarGhoshTerm_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
+lemma majumdarGhoshTerm_apply (v : NSiteSpace (Fin 2) 3) (σ : Cfg 2 3) :
     majumdarGhoshTerm v σ = (1 / 4) * (v (σ ∘ Equiv.swap 0 1) +
       v (σ ∘ Equiv.swap 1 2) + v (σ ∘ Equiv.swap 0 2)) - (3 / 8) * v σ := by
   simp only [majumdarGhoshTerm, LinearMap.smul_apply, LinearMap.add_apply, Pi.smul_apply,
@@ -160,7 +160,7 @@ lemma majumdarGhoshTerm_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
 /-- A three-site vector is a \(-\tfrac38\) eigenvector of the three-site term exactly
 when its three transposition images sum to zero, that is, when it has no
 component of total spin \(\tfrac32\). -/
-private lemma majumdarGhoshTerm_eigen_iff (v : NSiteSpace 2 3) :
+private lemma majumdarGhoshTerm_eigen_iff (v : NSiteSpace (Fin 2) 3) :
     majumdarGhoshTerm v = (-3 / 8 : ℂ) • v ↔
       ∀ σ : Cfg 2 3, v (σ ∘ Equiv.swap 0 1) + v (σ ∘ Equiv.swap 1 2) +
         v (σ ∘ Equiv.swap 0 2) = 0 := by
@@ -177,7 +177,7 @@ private lemma majumdarGhoshTerm_eigen_iff (v : NSiteSpace 2 3) :
 /-- The four linear conditions cutting out the spin-\(\tfrac12\) subspace of three
 spins: no weight on \(|000\rangle\) or \(|111\rangle\), and vanishing sums over the
 states with one or two flipped spins. -/
-lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
+lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace (Fin 2) 3) :
     majumdarGhoshTerm v = (-3 / 8 : ℂ) • v ↔
       v ![0, 0, 0] = 0 ∧ v ![1, 1, 1] = 0 ∧
         v ![0, 0, 1] + v ![0, 1, 0] + v ![1, 0, 0] = 0 ∧
@@ -262,7 +262,7 @@ theorem majumdarGhosh_groundSpace_three_eq_eigenspace :
 The Majumdar-Ghosh Hamiltonian
 \(H=\sum_i\mathbf S_i\cdot\mathbf S_{i+1}+\tfrac12\sum_i\mathbf S_i\cdot\mathbf S_{i+2}\)
 on a periodic chain of \(N\) spin-\(\tfrac12\) sites, indices modulo \(N\). -/
-def majumdarGhoshHamiltonian (N : ℕ) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N :=
+def majumdarGhoshHamiltonian (N : ℕ) : NSiteSpace (Fin 2) N →ₗ[ℂ] NSiteSpace (Fin 2) N :=
   ∑ i : Fin N, spinExchange spinHalfOperator i (cyclicForwardSite i 1) +
     (1 / 2 : ℂ) • ∑ i : Fin N, spinExchange spinHalfOperator i (cyclicForwardSite i 2)
 
@@ -302,7 +302,7 @@ lemma cyclicCfg_extractWindow_comp_swap {N : ℕ} (hN : 0 < N) (hN3 : 3 ≤ N)
 
 /-- Every vector of the periodic three-site chain ground space satisfies, in every
 window, the three-site condition of `majumdarGhoshTerm_eigen_iff`. -/
-private lemma window_swap_sum_eq_zero {N : ℕ} (hN3 : 3 ≤ N) {ψ : NSiteSpace 2 N}
+private lemma window_swap_sum_eq_zero {N : ℕ} (hN3 : 3 ≤ N) {ψ : NSiteSpace (Fin 2) N}
     (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 N) (i : Fin N) (σ : Cfg 2 N) :
     ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 1)) +
       ψ (σ ∘ Equiv.swap (cyclicForwardSite i 1) (cyclicForwardSite i 2)) +
@@ -321,7 +321,7 @@ private lemma window_swap_sum_eq_zero {N : ℕ} (hN3 : 3 ≤ N) {ψ : NSiteSpace
 quarter of the sum, over the windows of three consecutive sites, of the three
 transpositions within the window, minus \(\tfrac{3N}8\). Each nearest-neighbour
 transposition occurs in two windows and each next-nearest-neighbour one in one. -/
-theorem majumdarGhoshHamiltonian_apply {N : ℕ} (hN3 : 3 ≤ N) (ψ : NSiteSpace 2 N)
+theorem majumdarGhoshHamiltonian_apply {N : ℕ} (hN3 : 3 ≤ N) (ψ : NSiteSpace (Fin 2) N)
     (σ : Cfg 2 N) :
     majumdarGhoshHamiltonian N ψ σ =
       (1 / 4) * ∑ i : Fin N, (ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 1)) +
@@ -349,7 +349,7 @@ theorem majumdarGhoshHamiltonian_apply {N : ℕ} (hN3 : 3 ≤ N) (ψ : NSiteSpac
 periodic three-site chain ground space of `majumdarGhoshTensor` is an eigenvector
 of the Majumdar-Ghosh Hamiltonian with eigenvalue \(-\tfrac{3N}8\). -/
 theorem majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace {N : ℕ} (hN3 : 3 ≤ N)
-    {ψ : NSiteSpace 2 N} (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 N) :
+    {ψ : NSiteSpace (Fin 2) N} (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 N) :
     majumdarGhoshHamiltonian N ψ = (-(3 * N / 8) : ℂ) • ψ := by
   ext σ
   rw [majumdarGhoshHamiltonian_apply hN3,
@@ -381,7 +381,7 @@ coverings, is an eigenvector of the Majumdar-Ghosh Hamiltonian with eigenvalue
 \(-\tfrac{3N}8\). -/
 theorem majumdarGhoshHamiltonian_mpv {N : ℕ} (hN3 : 3 ≤ N) :
     majumdarGhoshHamiltonian N (mpv majumdarGhoshTensor) =
-      (-(3 * N / 8) : ℂ) • (mpv majumdarGhoshTensor : NSiteSpace 2 N) :=
+      (-(3 * N / 8) : ℂ) • (mpv majumdarGhoshTensor : NSiteSpace (Fin 2) N) :=
   majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace hN3
     (mpv_mem_chainGroundSpace majumdarGhoshTensor 3 N (by omega) hN3)
 

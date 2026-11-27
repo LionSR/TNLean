@@ -291,7 +291,7 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     (hCoeff : ∀ a b : Fin d, ∀ w : Fin n → Fin d,
       (∑ j : Fin r, Matrix.trace ((A j b * C j a) * Kraus.evalWord (A j) (List.ofFn w))) =
       (∑ j : Fin r, Matrix.trace ((Dmat j b * A j a) * Kraus.evalWord (A j) (List.ofFn w))))
-    (ψ : NSiteSpace d (n + 2))
+    (ψ : NSiteSpace (Fin d) (n + 2))
     (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) :
     ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   rw [hψ]
@@ -327,7 +327,7 @@ proof lines 1442--1452. -/
 theorem pgvwc07_trace_decompositions_of_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
-    {n : ℕ} (ψ : NSiteSpace d (n + 2))
+    {n : ℕ} (ψ : NSiteSpace (Fin d) (n + 2))
     (hLeft : ∀ b : Fin d,
       restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1))
     (hRight : ∀ a : Fin d,
@@ -342,7 +342,7 @@ theorem pgvwc07_trace_decompositions_of_iSup_restrictions
           Matrix.trace ((Dmat j b * A j a) * Kraus.evalWord (A j) (List.ofFn w))) := by
   classical
   have hRightDecomp : ∀ a : Fin d,
-      ∃ φ : (j : Fin r) → NSiteSpace d (n + 1),
+      ∃ φ : (j : Fin r) → NSiteSpace (Fin d) (n + 1),
         (∀ j : Fin r, φ j ∈ groundSpace (A j) (n + 1)) ∧
           restrictFirst ψ a = ∑ j : Fin r, φ j := by
     intro a
@@ -363,7 +363,7 @@ theorem pgvwc07_trace_decompositions_of_iSup_restrictions
     exact ⟨C, hC.symm⟩
   choose C hC using hRightMatrix
   have hLeftDecomp : ∀ b : Fin d,
-      ∃ χ : (j : Fin r) → NSiteSpace d (n + 1),
+      ∃ χ : (j : Fin r) → NSiteSpace (Fin d) (n + 1),
         (∀ j : Fin r, χ j ∈ groundSpace (A j) (n + 1)) ∧
           restrictLast ψ b = ∑ j : Fin r, χ j := by
     intro b
@@ -461,7 +461,7 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
     (A : (j : Fin r) → MPSTensor d (dim j))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    (ψ : NSiteSpace d (n + 2))
+    (ψ : NSiteSpace (Fin d) (n + 2))
     (hLeft : ∀ b : Fin d,
       restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1))
     (hRight : ∀ a : Fin d,
@@ -492,7 +492,7 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
     (A : (j : Fin r) → MPSTensor d (dim j))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    (ψ : NSiteSpace d (n + 2)) :
+    (ψ : NSiteSpace (Fin d) (n + 2)) :
     ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) ↔
       (∀ b : Fin d,
         restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1)) ∧
@@ -511,7 +511,7 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
       · intro j φ hφ
         exact Submodule.mem_iSup_of_mem j
           (groundSpace_inLeftGround (A j) (n + 1) hφ b)
-      · change (0 : NSiteSpace d (n + 1)) ∈
+      · change (0 : NSiteSpace (Fin d) (n + 1)) ∈
           ⨆ j : Fin r, groundSpace (A j) (n + 1)
         exact Submodule.zero_mem _
       · intro φ ξ hφ hξ
@@ -528,7 +528,7 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
       · intro j φ hφ
         exact Submodule.mem_iSup_of_mem j
           (groundSpace_inRightGround (A j) (n + 1) hφ a)
-      · change (0 : NSiteSpace d (n + 1)) ∈
+      · change (0 : NSiteSpace (Fin d) (n + 1)) ∈
           ⨆ j : Fin r, groundSpace (A j) (n + 1)
         exact Submodule.zero_mem _
       · intro φ ξ hφ hξ

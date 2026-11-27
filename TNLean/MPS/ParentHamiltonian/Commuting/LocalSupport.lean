@@ -84,8 +84,8 @@ def replaceXBCfg (σ : Cfg d 3) (β : Cfg d 2) : Cfg d 3 :=
 /-! ### Lifting two-site operators to the overlapping three-site window -/
 
 /-- Embed a two-site operator as acting on the \(AX\) face of \(A,X,B\). -/
-def leftPairLift (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
-    NSiteSpace d 3 →ₗ[ℂ] NSiteSpace d 3 where
+def leftPairLift (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
+    NSiteSpace (Fin d) 3 →ₗ[ℂ] NSiteSpace (Fin d) 3 where
   toFun ψ σ := Q (fun α => ψ (replaceAXCfg σ α)) (axPairCfg σ)
   map_add' ψ φ := by
     funext σ
@@ -105,8 +105,8 @@ def leftPairLift (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
       (axPairCfg σ)
 
 /-- Embed a two-site operator as acting on the \(XB\) face of \(A,X,B\). -/
-def rightPairLift (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
-    NSiteSpace d 3 →ₗ[ℂ] NSiteSpace d 3 where
+def rightPairLift (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
+    NSiteSpace (Fin d) 3 →ₗ[ℂ] NSiteSpace (Fin d) 3 where
   toFun ψ σ := Q (fun β => ψ (replaceXBCfg σ β)) (xbPairCfg σ)
   map_add' ψ φ := by
     funext σ
@@ -126,56 +126,56 @@ def rightPairLift (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
       (xbPairCfg σ)
 
 @[simp] theorem leftPairLift_apply
-    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) (ψ : NSiteSpace d 3) (σ : Cfg d 3) :
+    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) (ψ : NSiteSpace (Fin d) 3) (σ : Cfg d 3) :
     leftPairLift Q ψ σ = Q (fun α => ψ (replaceAXCfg σ α)) (axPairCfg σ) :=
   rfl
 
 @[simp] theorem rightPairLift_apply
-    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) (ψ : NSiteSpace d 3) (σ : Cfg d 3) :
+    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) (ψ : NSiteSpace (Fin d) 3) (σ : Cfg d 3) :
     rightPairLift Q ψ σ = Q (fun β => ψ (replaceXBCfg σ β)) (xbPairCfg σ) :=
   rfl
 
 @[simp] theorem leftPairLift_one :
-    leftPairLift (d := d) (1 : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) = 1 := by
+    leftPairLift (d := d) (1 : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) = 1 := by
   ext ψ σ
   simp
 
 @[simp] theorem rightPairLift_one :
-    rightPairLift (d := d) (1 : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) = 1 := by
+    rightPairLift (d := d) (1 : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) = 1 := by
   ext ψ σ
   simp
 
 @[simp] theorem leftPairLift_mul
-    (Q R : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q R : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     leftPairLift (Q * R) = leftPairLift Q * leftPairLift R := by
   ext ψ σ
   simp [Module.End.mul_apply]
 
 @[simp] theorem rightPairLift_mul
-    (Q R : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q R : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     rightPairLift (Q * R) = rightPairLift Q * rightPairLift R := by
   ext ψ σ
   simp [Module.End.mul_apply]
 
 @[simp] theorem leftPairLift_sub
-    (Q R : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q R : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     leftPairLift (Q - R) = leftPairLift Q - leftPairLift R := by
   ext ψ σ
   simp
 
 @[simp] theorem rightPairLift_sub
-    (Q R : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q R : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     rightPairLift (Q - R) = rightPairLift Q - rightPairLift R := by
   ext ψ σ
   simp
 
 @[simp] theorem leftPairLift_one_sub
-    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     leftPairLift (1 - Q) = 1 - leftPairLift Q := by
   rw [leftPairLift_sub, leftPairLift_one]
 
 @[simp] theorem rightPairLift_one_sub
-    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     rightPairLift (1 - Q) = 1 - rightPairLift Q := by
   rw [rightPairLift_sub, rightPairLift_one]
 
@@ -193,10 +193,10 @@ theorem term_two_three_zero_eq_leftPairLift_parentInteraction
     fin_cases j <;> rfl
   have hPi :
       (fun τ : Cfg d 2 =>
-          (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
+          (Pi.single ω (1 : ℂ) : NSiteSpace (Fin d) 3)
             (replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ)) =
         (fun α : Cfg d 2 =>
-          ((Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceAXCfg σ α))) := by
+          ((Pi.single ω (1 : ℂ) : NSiteSpace (Fin d) 3) (replaceAXCfg σ α))) := by
     funext τ
     have hWindow :
         replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ =
@@ -220,10 +220,10 @@ theorem term_two_three_one_eq_rightPairLift_parentInteraction
     fin_cases j <;> rfl
   have hPi :
       (fun τ : Cfg d 2 =>
-          (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
+          (Pi.single ω (1 : ℂ) : NSiteSpace (Fin d) 3)
             (replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ)) =
         (fun β : Cfg d 2 =>
-          ((Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceXBCfg σ β))) := by
+          ((Pi.single ω (1 : ℂ) : NSiteSpace (Fin d) 3) (replaceXBCfg σ β))) := by
     funext τ
     have hWindow :
         replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ =
@@ -245,7 +245,7 @@ three-site coefficient space.  Orthogonality and the kernel-intersection
 condition are separate source hypotheses, not included in this algebraic
 commutation predicate. -/
 structure HasOverlappingTwoSiteCommutation
-    (QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) : Prop where
+    (QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) : Prop where
   left_idempotent : QAX * QAX = QAX
   right_idempotent : QXB * QXB = QXB
   commute_lifts :
@@ -261,8 +261,8 @@ self-adjointness or identify these maps with the source projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
 \(\mathcal H_X\otimes\mathcal H_B\). -/
 structure HasAppendixD2ParentCommutingHamiltonian
-    (KAXB : Submodule ℂ (NSiteSpace d 3))
-    (QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) : Prop extends
+    (KAXB : Submodule ℂ (NSiteSpace (Fin d) 3))
+    (QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) : Prop extends
     HasOverlappingTwoSiteCommutation QAX QXB where
   kernel_intersection :
     KAXB = LinearMap.ker (leftPairLift QAX) ⊓ LinearMap.ker (rightPairLift QXB)
@@ -270,7 +270,7 @@ structure HasAppendixD2ParentCommutingHamiltonian
 /-- The left complementary projector in arXiv:1606.00608, Appendix D.2, is
 idempotent. -/
 theorem HasOverlappingTwoSiteCommutation.left_complement_idempotent
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
     (1 - QAX) * (1 - QAX) = 1 - QAX := by
   noncomm_ring [h.left_idempotent]
@@ -278,7 +278,7 @@ theorem HasOverlappingTwoSiteCommutation.left_complement_idempotent
 /-- The right complementary projector in arXiv:1606.00608, Appendix D.2, is
 idempotent. -/
 theorem HasOverlappingTwoSiteCommutation.right_complement_idempotent
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
     (1 - QXB) * (1 - QXB) = 1 - QXB := by
   noncomm_ring [h.right_idempotent]
@@ -289,7 +289,7 @@ the complementary ground-space projectors.
 In the source notation, after \(Q_{AX}\) and \(Q_{XB}\) commute, the
 complements \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\) commute as well. -/
 theorem HasOverlappingTwoSiteCommutation.commute_complement_lifts
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
     leftPairLift (1 - QAX) * rightPairLift (1 - QXB) =
       rightPairLift (1 - QXB) * leftPairLift (1 - QAX) := by
@@ -300,7 +300,7 @@ theorem HasOverlappingTwoSiteCommutation.commute_complement_lifts
 of arXiv:1606.00608, Appendix D.2, satisfy the same
 idempotent-and-commutation condition. -/
 theorem HasOverlappingTwoSiteCommutation.complement
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
     HasOverlappingTwoSiteCommutation (d := d) (1 - QAX) (1 - QXB) where
   left_idempotent := h.left_complement_idempotent
@@ -331,7 +331,7 @@ theorem term_two_three_zero_one_commute_of_overlapping_two_site_commutation
 projectors \(Q_{AX}\) and \(Q_{XB}\) before lifting, then the first two
 translated parent terms on the three-site chain commute. -/
 theorem term_two_three_zero_one_commute_of_overlapping_two_site_projectors
-    (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (A : MPSTensor d D) {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
     (hAX : parentInteraction A 2 = QAX)
     (hXB : parentInteraction A 2 = QXB) :
@@ -352,8 +352,8 @@ theorem term_two_three_zero_one_commute_of_overlapping_two_site_projectors
 two translated parent terms, once the canonical two-site parent interaction is
 identified with the projectors \(Q_{AX}\) and \(Q_{XB}\) themselves. -/
 theorem term_two_three_zero_one_commute_of_appendixD2
-    (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace d 3)}
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
     (hAX : parentInteraction A 2 = QAX)
     (hXB : parentInteraction A 2 = QXB) :
@@ -368,7 +368,7 @@ theorem term_two_three_zero_one_commute_of_appendixD2
 Appendix D.2 projectors \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), then the
 first two translated parent terms on the three-site chain commute. -/
 theorem term_two_three_zero_one_commute_of_overlapping_two_site_complement
-    (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (A : MPSTensor d D) {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
     (hAX : parentInteraction A 2 = 1 - QAX)
     (hXB : parentInteraction A 2 = 1 - QXB) :
@@ -389,8 +389,8 @@ theorem term_two_three_zero_one_commute_of_overlapping_two_site_complement
 two translated parent terms, once the canonical two-site parent interaction is
 identified with the complementary projectors \(1-Q_{AX}\) and \(1-Q_{XB}\). -/
 theorem term_two_three_zero_one_commute_of_appendixD2_complement
-    (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace d 3)}
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
+    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
     (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
     (hAX : parentInteraction A 2 = 1 - QAX)
     (hXB : parentInteraction A 2 = 1 - QXB) :

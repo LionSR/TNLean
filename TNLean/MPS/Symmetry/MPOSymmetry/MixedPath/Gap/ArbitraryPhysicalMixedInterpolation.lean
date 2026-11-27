@@ -159,7 +159,7 @@ theorem mpv_arbitraryPhysicalMixedInterpolation_zero
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (hN : 0 < N) :
     (mpv (arbitraryPhysicalMixedInterpolation A₀ A₁ 0) :
-      NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N) =
+      NSiteSpace (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) N) =
       mpv (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) := by
   rw [← rotatePhysical_mixedEndpointLeftTensor_polarPosTensor d₁ D₁ h₀]
   funext σ
@@ -173,7 +173,7 @@ theorem mpv_arbitraryPhysicalMixedInterpolation_one
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₁ : Kraus.IsInjective A₁) (hN : 0 < N) :
     (mpv (arbitraryPhysicalMixedInterpolation A₀ A₁ 1) :
-      NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N) =
+      NSiteSpace (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) N) =
       mpv (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) := by
   rw [← rotatePhysical_mixedEndpointRightTensor_polarPosTensor d₀ D₀ h₁]
   funext σ
@@ -188,7 +188,7 @@ theorem mpv_arbitraryPhysicalMixedInterpolation_ne_zero [NeZero D₀] [NeZero D�
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
     (mpv (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) :
-      NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N) ≠ 0 :=
+      NSiteSpace (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) N) ≠ 0 :=
   mpv_rotatePhysical_isometry_ne_zero _ (commonFixedPointInclusion_isometry _ _ _) _
     (mpv_mixedEndpointInterpolation_ne_zero _ _
       (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁) γ hN)

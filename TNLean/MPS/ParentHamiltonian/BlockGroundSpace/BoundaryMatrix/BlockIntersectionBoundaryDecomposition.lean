@@ -35,7 +35,7 @@ variable {d D : ℕ}
 -/
 noncomputable def pgvwc07LeftBoundaryComponent
     (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
-    NSiteSpace d (n + 2) :=
+    NSiteSpace (Fin d) (n + 2) :=
   fun σ => Matrix.trace
     (A (σ (Fin.last (n + 1))) * C (σ 0) *
       Kraus.evalWord A (List.ofFn (Fin.tail (Fin.init σ))))
@@ -322,7 +322,7 @@ theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
     (A : (j : Fin r) → MPSTensor d (dim j))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (ψ : NSiteSpace d (n + 2))
+    (ψ : NSiteSpace (Fin d) (n + 2))
     (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n)
     (hmem : ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2)) :
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,

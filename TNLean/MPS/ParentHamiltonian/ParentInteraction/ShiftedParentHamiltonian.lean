@@ -28,26 +28,26 @@ open scoped ComplexOrder
 namespace MPSTensor
 
 variable {d D : ℕ} {A : MPSTensor d D} {L N : ℕ} [NeZero N]
-  {H : NSiteSpace d N →ₗ[ℂ] NSiteSpace d N} {c s : ℂ}
+  {H : NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N} {c s : ℂ}
 
 /-- If \(H+c=s\,H_{\mathrm{parent}}\) with \(s\ge0\), then \(H+c\), transported to the
 \(\ell^2\) space of coefficient vectors, is positive. -/
 theorem isPositive_conj_of_add_eq_smul_parentHamiltonian
     (h : H + c • LinearMap.id =
       s • Matrix.toLin' (parentRingInteraction A L N).hamiltonian) (hs : 0 ≤ s) :
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ (H + c • LinearMap.id) ∘ₗ
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap).IsPositive := by
-  have h' : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
-      (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
-      s • ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘ₗ (H + c • LinearMap.id) ∘ₗ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).toLinearMap).IsPositive := by
+  have h' : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘ₗ
+      (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).toLinearMap =
+      s • ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘ₗ
         Matrix.toLin' (parentRingInteraction A L N).hamiltonian ∘ₗ
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap) := by
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).toLinearMap) := by
     rw [h]
     ext v
     simp
-  have hH : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
+  have hH : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘ₗ
       Matrix.toLin' (parentRingInteraction A L N).hamiltonian ∘ₗ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).toLinearMap =
       Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian :=
     rfl
   rw [h', hH]

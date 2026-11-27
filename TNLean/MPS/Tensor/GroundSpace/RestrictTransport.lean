@@ -21,7 +21,7 @@ states indexed by \(K + 1 + L₀\) that have to be viewed as states indexed by
 \(K + (L₀ + 1)\), or states indexed by \(N - (L₀ + 1) + (L₀ + 1)\) that have to be
 viewed as states indexed by \(N\).
 
-Because `NSiteSpace d N = (Fin N → Fin d) → ℂ` depends definitionally on \(N\),
+Because `NSiteSpace (Fin d) N = (Fin N → Fin d) → ℂ` depends definitionally on \(N\),
 two states whose length-witnesses are propositionally but not definitionally
 equal cannot be compared directly. The canonical solution is to reindex via
 `Fin.cast`, which this file represents as a `LinearEquiv`.
@@ -29,7 +29,7 @@ equal cannot be compared directly. The canonical solution is to reindex via
 ## Main contents
 
 * `MPSTensor.reindexSites` — the linear equivalence
-  `NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N` induced by a proof \(h : M = N\).
+  `NSiteSpace (Fin d) M ≃ₗ[ℂ] NSiteSpace (Fin d) N` induced by a proof \(h : M = N\).
 * `MPSTensor.reindexSites_groundSpaceMap` — compatibility of the ground-space
   map with reindexing, so ground-space membership transports through \(h\).
 * `MPSTensor.contiguousRestrictₗ_reindex_window` — transport
@@ -49,15 +49,15 @@ variable {d D : ℕ}
 
 /-! ### Reindexing `NSiteSpace` along an equality of lengths -/
 
-/-- The linear equivalence between `NSiteSpace d M` and `NSiteSpace d N`
+/-- The linear equivalence between `NSiteSpace (Fin d) M` and `NSiteSpace (Fin d) N`
 induced by a proof \(h : M = N\), reindexing configurations via `Fin.cast`. -/
 def reindexSites {d : ℕ} {M N : ℕ} (h : M = N) :
-    NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N :=
+    NSiteSpace (Fin d) M ≃ₗ[ℂ] NSiteSpace (Fin d) N :=
   LinearEquiv.funCongrLeft ℂ ℂ
     (Equiv.arrowCongr (finCongr h.symm) (Equiv.refl (Fin d)))
 
 @[simp] theorem reindexSites_apply {M N : ℕ} (h : M = N)
-    (ψ : NSiteSpace d M) (σ : Fin N → Fin d) :
+    (ψ : NSiteSpace (Fin d) M) (σ : Fin N → Fin d) :
     reindexSites h ψ σ = ψ (σ ∘ Fin.cast h) := rfl
 
 /-! ### Interaction with `groundSpaceMap` -/
@@ -71,7 +71,7 @@ length with the same boundary matrix. -/
 
 /-- Ground-space membership transports along an equality of total lengths. -/
 theorem reindexSites_mem_groundSpace {A : MPSTensor d D} {M N : ℕ} (h : M = N)
-    {ψ : NSiteSpace d M} (hψ : ψ ∈ groundSpace A M) :
+    {ψ : NSiteSpace (Fin d) M} (hψ : ψ ∈ groundSpace A M) :
     reindexSites h ψ ∈ groundSpace A N := by
   rw [groundSpace, LinearMap.mem_range] at hψ ⊢
   obtain ⟨X, rfl⟩ := hψ
@@ -83,7 +83,7 @@ theorem reindexSites_mem_groundSpace {A : MPSTensor d D} {M N : ℕ} (h : M = N)
 \(M = M'\). -/
 theorem contiguousRestrictₗ_reindex_window
     {N : ℕ} {s M M' : ℕ} (hM : M = M') (hsM : s + M ≤ N) (hsM' : s + M' ≤ N)
-    (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) :
     reindexSites hM (contiguousRestrictₗ s M hsM τ ψ) =
       contiguousRestrictₗ s M' hsM' τ ψ := by
   subst hM; rfl
@@ -93,7 +93,7 @@ contiguous \(L\)-window that starts at \(s + K\), with the fixed prefix inserted
 the outside configuration. -/
 theorem tailRestrictₗ_contiguousRestrictₗ
     {N s K L : ℕ} (hsKL : s + (K + L) ≤ N)
-    (u : Fin K → Fin d) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    (u : Fin K → Fin d) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) :
     tailRestrictₗ u (contiguousRestrictₗ s (K + L) hsKL τ ψ) =
       contiguousRestrictₗ (s + K) L (by omega)
         (fun k => if h : s ≤ k.val ∧ k.val < s + K

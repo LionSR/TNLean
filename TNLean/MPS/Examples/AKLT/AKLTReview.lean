@@ -339,7 +339,7 @@ theorem akltTensorRMP_groundSpace_eq (L : ℕ) :
 `akltTensor`. -/
 theorem akltTensorRMP_mpvSubmodule_eq (N : ℕ) :
     mpvSubmodule akltTensorRMP N = mpvSubmodule akltTensor N := by
-  have hmpv : (mpv akltTensorRMP : NSiteSpace 3 N) = rmpScale ^ N • mpv akltTensor := by
+  have hmpv : (mpv akltTensorRMP : NSiteSpace (Fin 3) N) = rmpScale ^ N • mpv akltTensor := by
     funext σ
     rw [← akltTensorRMP_gaugeEquiv.sameMPV N σ]
     exact mpv_smul rmpScale akltTensor σ

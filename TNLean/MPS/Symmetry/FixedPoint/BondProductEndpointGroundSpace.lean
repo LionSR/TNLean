@@ -155,7 +155,7 @@ private theorem twoSiteBondInteraction_kills_groundSpaceES_of_groundSpaceMap
   rw [mem_groundSpaceES_iff, groundSpace, LinearMap.mem_range] at hg
   obtain ⟨X, hX⟩ := hg
   have hgX : g = WithLp.toLp 2 (groundSpaceMap A 2 X) := by
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (D * D) 2)).injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (D * D)) 2)).injective
     simpa using hX.symm
   rw [hgX]
   exact congrArg (WithLp.toLp 2) (hkill X)

@@ -72,7 +72,7 @@ lemma update_update_fin_two {α : Type*} (σ : Fin 2 → α) (a b : α) :
 /-- The exchange of two spin-1 sites,
 \(S^z\otimes S^z+\tfrac12(S^+\otimes S^-+S^-\otimes S^+)\), as an explicit integer
 matrix: row \((p,q)\) lists \((\mathbf S_0\cdot\mathbf S_1\,v)(p,q)\). -/
-lemma spinExchange_spinOneOperator_zero_one_apply (v : NSiteSpace 3 2) (σ : Cfg 3 2) :
+lemma spinExchange_spinOneOperator_zero_one_apply (v : NSiteSpace (Fin 3) 2) (σ : Cfg 3 2) :
     spinExchange spinOneOperator 0 1 v σ =
       !![v ![1, 2] + v ![2, 1], v ![1, 0], v ![2, 0];
         v ![0, 1], v ![1, 1], v ![0, 0] - v ![1, 2];
@@ -88,7 +88,7 @@ lemma spinExchange_spinOneOperator_zero_one_apply (v : NSiteSpace 3 2) (σ : Cfg
 \(\mathbf S_{\mathrm{tot}}^2=\mathbf S_0^2+\mathbf S_1^2+2\,\mathbf S_0\cdot\mathbf S_1
 =4+2\,\mathbf S_0\cdot\mathbf S_1\). -/
 theorem totalSpinSq_spinOneOperator_two :
-    (totalSpinSq spinOneOperator : NSiteSpace 3 2 →ₗ[ℂ] NSiteSpace 3 2) =
+    (totalSpinSq spinOneOperator : NSiteSpace (Fin 3) 2 →ₗ[ℂ] NSiteSpace (Fin 3) 2) =
       (4 : ℂ) • LinearMap.id + (2 : ℂ) • spinExchange spinOneOperator 0 1 := by
   rw [totalSpinSq_eq spinOneOperator spinOneOperator_sum_mul_self]
   simp only [Fin.sum_univ_two, Fin.isValue, ↓reduceIte, Fin.reduceEq]

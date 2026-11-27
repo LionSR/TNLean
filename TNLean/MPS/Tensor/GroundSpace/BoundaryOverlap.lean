@@ -27,7 +27,7 @@ then fixing its first site to \(j\) represents the shifted length-\(L\) window b
 matrix \(YA^j\). -/
 theorem cyclicRestrictₗ_restrictFirst_groundSpaceMap {A : MPSTensor d D}
     {N L : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     {Y : Matrix (Fin D) (Fin D) ℂ}
     (hY : cyclicRestrictₗ hN (L + 1) i τ ψ = groundSpaceMap A (L + 1) Y)
     (j : Fin d) :
@@ -42,7 +42,7 @@ its last site to \(j\) represents the initial length-\(L\) window by the matrix
 \(A^jY\). -/
 theorem cyclicRestrictₗ_restrictLast_groundSpaceMap {A : MPSTensor d D}
     {N L : ℕ} (hN : 0 < N)
-    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     {Y : Matrix (Fin D) (Fin D) ℂ}
     (hY : cyclicRestrictₗ hN (L + 1) i τ ψ = groundSpaceMap A (L + 1) Y)
     (j : Fin d) :
@@ -60,7 +60,7 @@ configurations give the same restricted vector on the common overlap. -/
 theorem adjacent_cyclicRestrictₗ_witness_overlap
     {A : MPSTensor d D} {N L : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i : Fin N) (τ₁ τ₂ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i : Fin N) (τ₁ τ₂ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY₁ : cyclicRestrictₗ hN (L + 1) i τ₁ ψ = groundSpaceMap A (L + 1) Y₁)
     (hY₂ : cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i 1) τ₂ ψ =
@@ -85,7 +85,7 @@ boundary matrices. -/
 theorem adjacent_cyclicRestrictₗ_witness_overlap_common_background
     {A : MPSTensor d D} {N L : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY₁ : cyclicRestrictₗ hN (L + 1) i ρ ψ = groundSpaceMap A (L + 1) Y₁)
     (hY₂ : cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i 1) ρ ψ =
@@ -173,7 +173,7 @@ word-product identity between the endpoint matrices. -/
 theorem adjacent_cyclicRestrictₗ_witness_product
     {A : MPSTensor d D} {N L n : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i₀ : Fin N) (τ : Fin (n + 1) → Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i₀ : Fin N) (τ : Fin (n + 1) → Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
     (a b : Fin n → Fin d)
     (hY : ∀ r : Fin (n + 1),
@@ -211,7 +211,7 @@ configuration gives the corresponding word-product identity. -/
 theorem adjacent_cyclicRestrictₗ_witness_product_common_background
     {A : MPSTensor d D} {N L n : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
     (hY : ∀ r : Fin (n + 1),
       cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i₀ r.val) ρ ψ =
@@ -242,7 +242,7 @@ then the adjacent-window equations give
 theorem adjacent_cyclicRestrictₗ_witness_product_common_background_named
     {A : MPSTensor d D} {N L n : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N)
     (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
     (a b : Fin n → Fin d)
     (hY : ∀ r : Fin (n + 1),

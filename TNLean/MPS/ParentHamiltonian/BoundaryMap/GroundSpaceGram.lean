@@ -36,7 +36,7 @@ the standard \(\ell^2\) inner product. -/
 noncomputable def groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Cfg d L) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap.comp
       ((groundSpaceMap A L).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.toLinearEquiv.toLinearMap)
 
@@ -44,8 +44,8 @@ noncomputable def groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
 theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
     (A : MPSTensor d D) (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMapES A L (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm (groundSpaceMap A L X) := by
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm (groundSpaceMap A L X) := by
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
       (groundSpaceMap A L
         ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X))) = _
@@ -59,7 +59,7 @@ theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
   constructor
   · rintro ⟨x, rfl⟩
     obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
       (groundSpaceMap A L X) ∈ groundSpaceES A L
     exact ⟨groundSpaceMap A L X, ⟨X, rfl⟩, rfl⟩
   · rintro ⟨ψ, ⟨X, rfl⟩, rfl⟩
@@ -76,7 +76,7 @@ theorem groundSpaceMapES_injective_of_isNBlkInjective {A : MPSTensor d D} {L : �
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective y
   apply congrArg (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D))
   apply groundSpaceMap_injective_of_isNBlkInjective hInj
-  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective
+  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
     groundSpaceMapES_frobeniusEquivEuclidean_apply] at hxy
   exact hxy
@@ -127,7 +127,7 @@ theorem groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_a
 @[simp]
 theorem groundSpaceMapES_single (A : MPSTensor d D) (L : ℕ) (a b : Fin D) :
     groundSpaceMapES A L (EuclideanSpace.single (b, a) 1) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
         (groundSpaceMap A L (Matrix.single a b 1)) := by
   rw [← groundSpaceMapES_frobeniusEquivEuclidean_apply A L (Matrix.single a b 1)]
   apply congrArg (groundSpaceMapES A L)

@@ -224,7 +224,7 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
@@ -320,7 +320,7 @@ theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :

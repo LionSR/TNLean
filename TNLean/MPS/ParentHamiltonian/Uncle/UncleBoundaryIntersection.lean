@@ -36,7 +36,7 @@ theorem restrictLast_mem_uncleBoundarySpace
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
-    {ψ : NSiteSpace d (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
+    {ψ : NSiteSpace (Fin d) (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
     (i : Fin d) : restrictLast ψ i ∈ uncleBoundarySpace A B R L n := by
   obtain ⟨X, rfl⟩ := hψ
   let f := (uncleTraceRight X).comp
@@ -58,7 +58,7 @@ theorem restrictFirst_mem_uncleBoundarySpace
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
-    {ψ : NSiteSpace d (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
+    {ψ : NSiteSpace (Fin d) (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
     (i : Fin d) : restrictFirst ψ i ∈ uncleBoundarySpace A B R L n := by
   obtain ⟨X, rfl⟩ := hψ
   let f := (uncleTraceRight X).comp
@@ -84,7 +84,7 @@ theorem mem_uncleBoundarySpace_of_overlap
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ)
-    (ψ : NSiteSpace d (n + 3))
+    (ψ : NSiteSpace (Fin d) (n + 3))
     (hLeft : ∀ i, restrictLast ψ i ∈ uncleBoundarySpace A B R L (n + 2))
     (hRight : ∀ i, restrictFirst ψ i ∈ uncleBoundarySpace A B R L (n + 2)) :
     ψ ∈ uncleBoundarySpace A B R L (n + 3) := by

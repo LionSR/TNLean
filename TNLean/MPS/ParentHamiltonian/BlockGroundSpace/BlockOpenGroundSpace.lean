@@ -80,7 +80,7 @@ theorem mem_iSup_groundSpace_of_iSup_restrictions_of_tracePreserving
     (A : (j : Fin r) → MPSTensor d (dim j))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
-    (ψ : NSiteSpace d (n + 2))
+    (ψ : NSiteSpace (Fin d) (n + 2))
     (hLeft : ∀ b, restrictLast ψ b ∈ ⨆ j, groundSpace (A j) (n + 1))
     (hRight : ∀ a, restrictFirst ψ a ∈ ⨆ j, groundSpace (A j) (n + 1)) :
     ψ ∈ ⨆ j, groundSpace (A j) (n + 2) := by
@@ -125,7 +125,7 @@ theorem contiguous_mem_groundSpace_toTensorFromBlocks
     (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
     {L₀ L N : ℕ} (hSpan : ∀ n ≥ L₀, WordTupleSpanTop A n)
     (hL : L₀ + 1 ≤ L) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s L hs τ ψ ∈
         groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L) :

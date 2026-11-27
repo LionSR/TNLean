@@ -119,7 +119,7 @@ construction.
 Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
 noncomputable def twoSiteBondEmbedding
     (h : ResidualFamilyAppendixBData B) :
-    TwoSiteBoundary dim →ₗ[ℂ] NSiteSpace d 2 where
+    TwoSiteBoundary dim →ₗ[ℂ] NSiteSpace (Fin d) 2 where
   toFun v := ∑ j : Fin r, (h.sector j).twoSiteBasicEmbedding (v j)
   map_add' v w := by
     simp only [Pi.add_apply, map_add, Finset.sum_add_distrib]
@@ -156,7 +156,7 @@ theorem twoSiteBondEmbedding_range
     rw [← (h.sector j).twoSiteBasicEmbedding_range] at hψ'
     obtain ⟨v, rfl⟩ := hψ'
     refine ⟨Pi.single j v, ?_⟩
-    let f : Fin r → NSiteSpace d 2 := fun k ↦
+    let f : Fin r → NSiteSpace (Fin d) 2 := fun k ↦
       (h.sector k).twoSiteBasicEmbedding
         ((Pi.single j v : TwoSiteBoundary dim) k)
     change (∑ k : Fin r, f k) = (h.sector j).twoSiteBasicEmbedding v
@@ -190,8 +190,8 @@ Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578, and the
 parent-space construction, lines 511--524. -/
 noncomputable def twoSiteBondSupportProjection
     (B : (j : Fin r) → MPSTensor d (dim j)) :
-    NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)
+    NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)
   e.toLinearMap.comp
     (((groundSpaceES (directSumTensor B) 2).starProjection.toLinearMap).comp
       e.symm.toLinearMap)
@@ -209,18 +209,18 @@ theorem twoSiteBondSupportProjection_range
   ext ψ
   constructor
   · rintro ⟨v, rfl⟩
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES (directSumTensor B) 2).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v)) ∈
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v)) ∈
           groundSpace (directSumTensor B) 2
     apply (mem_groundSpaceES_iff (directSumTensor B) 2 _).1
     exact Submodule.starProjection_apply_mem _ _
   · intro hψ
     refine ⟨ψ, ?_⟩
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES (directSumTensor B) 2).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ)) = ψ
-    have hψES : (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ ∈
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ)) = ψ
+    have hψES : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ ∈
         groundSpaceES (directSumTensor B) 2 := by
       apply (mem_groundSpaceES_iff (directSumTensor B) 2 _).2
       simpa using hψ
@@ -238,12 +238,12 @@ theorem twoSiteBondSupportProjection_eq_complement
       1 - parentInteraction (directSumTensor B) 2 := by
   apply LinearMap.ext
   intro v
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES (directSumTensor B) 2).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v)) =
-    v - (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v)) =
+    v - (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES (directSumTensor B) 2)ᗮ.starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v))
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v))
   rw [Submodule.starProjection_orthogonal_val]
   simp
 

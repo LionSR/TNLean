@@ -55,7 +55,7 @@ lines 2078--2079, and is documented in
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)}
+    {ψ : NSiteSpace (Fin d) (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
     (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -118,7 +118,7 @@ not display this formula; see
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -178,7 +178,7 @@ lines 2078--2079. Documented in
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -249,7 +249,7 @@ restrictions. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
@@ -311,7 +311,7 @@ in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)}
+    {ψ : NSiteSpace (Fin d) (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
     (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -367,7 +367,7 @@ lines 2078--2079. -/
 theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -422,7 +422,7 @@ combine to give the displayed coordinate comparison. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -493,7 +493,7 @@ and then chooses the corresponding auxiliary boundary conditions. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)

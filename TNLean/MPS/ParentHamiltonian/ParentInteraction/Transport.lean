@@ -276,8 +276,8 @@ This realizes the left open-chain ground projection in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
-    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ (Fin.last L)) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))) v) (τ (Fin.last L)) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L))
         (cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1))
           τ v) := by
   ext σ
@@ -298,8 +298,8 @@ This realizes the tail open-chain ground projection in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
-    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ 0) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))) v) (τ 0) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L))
         (cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1))
           τ v) := by
   ext σ
@@ -513,7 +513,7 @@ theorem mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero
     (hleft : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0)
     (hright : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0) :
     v ∈ groundSpaceES A (L + 1) := by
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
+  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))
   have hLeft : InLeftGround A L (eN v) := by
     intro j
     have hmemNS := (mem_groundSpaceES_iff A L _).1
@@ -643,7 +643,7 @@ is the statement that every MPS is a ground state of a frustration-free parent H
 [PGVWC07] (quant-ph/0608197), `MPSarchive.tex`, lines 311--330, and arXiv:2011.12127,
 `TN-Review-main.tex`, line 537. -/
 theorem isFrustrationFree_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N]
-    (hA : (mpv A : NSiteSpace d N) ≠ 0) : (parentRingInteraction A L N).IsFrustrationFree :=
+    (hA : (mpv A : NSiteSpace (Fin d) N) ≠ 0) : (parentRingInteraction A L N).IsFrustrationFree :=
   ManyBody.Interaction.isFrustrationFree_of_zeroSpace_ne_bot
     (fun i ↦ posSemidef_parentRingInteraction_term A L i)
     ((Submodule.ne_bot_iff _).mpr
@@ -655,7 +655,7 @@ theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_ker
     (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
     ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
       (LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian)).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   ext v
   rw [ManyBody.mem_groundSpace_iff_mulVec, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
     LinearMap.mem_ker, Complex.ofReal_zero, zero_smul]
@@ -691,11 +691,11 @@ variable {d D : ℕ}
 theorem toMatrix'_parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)
     (hDim : d ^ L > D ^ 2) : LinearMap.toMatrix' (parentInteraction A L) ≠ 0 := by
   intro hzero
-  apply groundSpace_ne_top A L hDim
+  apply groundSpace_ne_top A L (by simpa using hDim)
   apply top_unique
   intro v _
   have hmem := (toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff A L
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)).mp
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm v)).mp
       (by simp only [hzero, map_zero, LinearMap.zero_apply])
   simpa using (mem_groundSpaceES_iff A L _).mp hmem
 

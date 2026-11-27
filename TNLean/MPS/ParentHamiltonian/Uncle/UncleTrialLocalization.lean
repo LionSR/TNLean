@@ -86,7 +86,7 @@ theorem uncleInteraction_uniform_slice_left_eq_zero
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (P Q : Matrix (Fin a) (Fin a) ℂ) (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ Matrix.trace (P * Kraus.evalWord A (u ++ List.ofFn σ ++ v) * Q))) = 0 := by
   apply uncleInteraction_apply_eq_zero_left
   rw [mem_groundSpaceES_iff]
@@ -99,7 +99,7 @@ theorem uncleInteraction_uniform_slice_right_eq_zero
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (P Q : Matrix (Fin b) (Fin b) ℂ) (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ Matrix.trace (P * Kraus.evalWord B (u ++ List.ofFn σ ++ v) * Q))) = 0 := by
   apply uncleInteraction_apply_eq_zero_right
   rw [mem_groundSpaceES_iff]
@@ -111,7 +111,7 @@ private theorem uncle_uniform_middle
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (p r u v x y : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p r (u ++ List.ofFn σ ++ v) x y)) = 0 := by
   have hfun :
       (fun σ : Cfg d 2 ↦
@@ -157,7 +157,7 @@ private theorem uncleTrial_contiguous_cancel
     (N : ℕ) (hN : 0 < N) (i : ℕ) (hi : i + 2 ≤ 6 * N + 1)
     (h0 : i ≠ N - 1) (h1 : i ≠ 2 * N) (h2 : i ≠ 4 * N - 1) (h3 : i ≠ 5 * N)
     (τ : Cfg d (6 * N + 1)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (contiguousRestrictₗ i 2 hi τ (uncleTwoWallTrialSource A B R L N))) = 0 := by
   have hcases : i + 2 ≤ N ∨
       (N ≤ i ∧ i + 2 ≤ 2 * N + 1) ∨
@@ -336,7 +336,7 @@ private theorem uncleTrial_wrap_cancel
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (cyclicRestrictₗ (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) τ
         (uncleTwoWallTrialSource A B R L N))) = 0 := by
   let M := Kraus.evalWord A (uncleConfigSegment τ 1 (N - 1) (by omega)) *
@@ -374,14 +374,14 @@ theorem uncleInteraction_trial_cyclicRestrict_eq_zero
     (hi : i ∉ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L)
       (cyclicRestrictES (Fin.pos i) 2 i τ
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N))) = 0 := by
   have hidx : i.val ≠ N - 1 ∧ i.val ≠ 2 * N ∧
       i.val ≠ 4 * N - 1 ∧ i.val ≠ 5 * N := by
     simpa only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton,
       not_or, Fin.ext_iff] using hi
   change Matrix.toEuclideanLin (uncleInteraction A B R L)
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (cyclicRestrictₗ (Fin.pos i) 2 i τ (uncleTwoWallTrialSource A B R L N))) = 0
   by_cases hlast : i.val = 6 * N
   · have heq : i = ⟨6 * N, by omega⟩ := Fin.ext hlast
@@ -401,7 +401,7 @@ theorem hamiltonian_uncleInteraction_trial_eq_sum_endpoints
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) :
-    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     Matrix.toEuclideanLin
         (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ =
@@ -414,7 +414,7 @@ theorem hamiltonian_uncleInteraction_trial_eq_sum_endpoints
     _ = ∑ i : Fin (6 * N + 1), (((d ^ 2 : ℕ) : ℂ)⁻¹) •
         ∑ τ : Cfg d (6 * N + 1), (cyclicRestrictES (Fin.pos i) 2 i τ).adjoint
           (Matrix.toEuclideanLin (uncleInteraction A B R L) (cyclicRestrictES (Fin.pos i) 2 i τ
-            ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+            ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
               (uncleTwoWallTrialSource A B R L N)))) := by
       rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
       refine Finset.sum_congr rfl fun i _ ↦ ?_

@@ -47,7 +47,7 @@ exactly `restrictFirst` at that coordinate.
 This coordinate identity is used to realize the tail open-chain ground
 projection in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
-    (ψ : NSiteSpace d (1 + 2)) :
+    (ψ : NSiteSpace (Fin d) (1 + 2)) :
     tailRestrictₗ u ψ = restrictFirst ψ (u 0) := by
   ext σ
   simp only [tailRestrictₗ_apply, restrictFirst_apply]

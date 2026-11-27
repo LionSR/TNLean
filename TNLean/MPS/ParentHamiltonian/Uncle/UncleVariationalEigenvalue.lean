@@ -149,7 +149,7 @@ theorem uncleTwoWallTrialSource_span_projection_tendsto_zero
     Tendsto (fun N : ℕ ↦
       ‖(Submodule.span ℂ ({mpvState A (6 * N + 1), mpvState B (6 * N + 1)} :
           Set (EuclideanSpace ℂ (Cfg d (6 * N + 1))))).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N))‖ ^ 2) atTop (nhds (0 : ℝ)) := by
   have hlen : Tendsto (fun N : ℕ ↦ 6 * N + 1) atTop atTop := by
     apply tendsto_atTop.mpr

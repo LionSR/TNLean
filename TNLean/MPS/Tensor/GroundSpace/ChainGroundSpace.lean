@@ -31,7 +31,7 @@ On the periodic chain, the MPS vector is
 which corresponds to the ground-space map applied to the identity:
 \(V^{(N)}(A)=Γ_N(1)\). -/
 noncomputable def mpvSubmodule (A : MPSTensor d D) (N : ℕ) :
-    Submodule ℂ (NSiteSpace d N) :=
+    Submodule ℂ (NSiteSpace (Fin d) N) :=
   Submodule.span ℂ {mpv A}
 
 /-- The BNT span of component MPS vectors is the supremum of the corresponding
@@ -42,17 +42,17 @@ theorem iSup_mpvSubmodule_eq_bntMPSVectorSpan
     (⨆ j : Fin r, mpvSubmodule (A j) N) = bntMPSVectorSpan A N := by
   simpa [bntMPSVectorSpan, mpvSubmodule] using
     (Submodule.span_range_eq_iSup (R := ℂ)
-      (v := fun j : Fin r => (mpv (A j) : NSiteSpace d N))).symm
+      (v := fun j : Fin r => (mpv (A j) : NSiteSpace (Fin d) N))).symm
 
 /-- The MPS vector is the ground-space map applied to the identity matrix. -/
 theorem mpv_eq_groundSpaceMap_one (A : MPSTensor d D) (N : ℕ) :
-    (mpv A : NSiteSpace d N) = groundSpaceMap A N 1 := by
+    (mpv A : NSiteSpace (Fin d) N) = groundSpaceMap A N 1 := by
   ext σ
   simp [mpv, coeff, groundSpaceMap_apply]
 
 /-- The MPS vector lies in the ground space \(G_N(A)\) for any \(N\). -/
 theorem mpv_mem_groundSpace (A : MPSTensor d D) (N : ℕ) :
-    (mpv A : NSiteSpace d N) ∈ groundSpace A N := by
+    (mpv A : NSiteSpace (Fin d) N) ∈ groundSpace A N := by
   rw [groundSpace, LinearMap.mem_range]
   exact ⟨1, by ext σ; simp [groundSpaceMap_apply, mpv, coeff]⟩
 
@@ -71,7 +71,7 @@ that every cyclic window of \(L\) consecutive sites restricts into \(G_L(A)\).
 
 When \(N = 0\) or \(L > N\), we return \(\top\) as a degenerate convention. -/
 noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
-    Submodule ℂ (NSiteSpace d N) :=
+    Submodule ℂ (NSiteSpace (Fin d) N) :=
   if hN : 0 < N ∧ L ≤ N then
     ⨅ (i : Fin N) (τ : Fin N → Fin d),
       (groundSpace A L).comap (cyclicRestrictₗ hN.1 L i τ)
@@ -108,7 +108,7 @@ theorem twistedMPV_mem_chainGroundSpace (A : MPSTensor d D)
 `twistedMPV_mem_chainGroundSpace`. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
-    (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
+    (mpv A : NSiteSpace (Fin d) N) ∈ chainGroundSpace A L N := by
   have h := twistedMPV_mem_chainGroundSpace A 1 1 (fun _ => by simp) L N hN hLN
   simp only [Matrix.mul_one] at h
   exact h
@@ -121,7 +121,7 @@ membership in every cyclic \(L\)-site ground-space window implies the
 frustration-free equations for the translated parent interactions. -/
 theorem toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
+    {ψ : NSiteSpace (Fin d) N} (hψ : ψ ∈ chainGroundSpace A L N) :
     haveI : NeZero N := ⟨by omega⟩;
     WithLp.toLp 2 ψ ∈ (parentRingInteraction A L N).zeroSpace := by
   have : NeZero N := ⟨by omega⟩
@@ -152,7 +152,7 @@ theorem toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace (A : MP
 matrix representation in the local MPS ground space. -/
 theorem chainGroundSpace_window_witnesses (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
+    {ψ : NSiteSpace (Fin d) N} (hψ : ψ ∈ chainGroundSpace A L N) :
     ∃ YAt : (i : Fin N) → (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (i : Fin N) (τ : Fin N → Fin d),
         cyclicRestrictₗ hN L i τ ψ = groundSpaceMap A L (YAt i τ) := by

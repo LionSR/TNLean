@@ -140,7 +140,7 @@ private theorem AppendixBStructuralData.physicalIsometryTwoAdjointES_eq_adjoint
   simpa [AppendixBStructuralData.physicalIsometryTwoAdjointES,
     AppendixBStructuralData.physicalIsometryTwoES, coefficientEuclideanMap] using
     (hStruct.physicalIsometryTensorPower_adjoint_inner 2
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) ψ)
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) ψ)
       ((WithLp.linearEquiv 2 ℂ ((Fin 2 → Fin D × Fin D) → ℂ)) v)).symm
 
 /-- The two-site virtual bond projector as a Euclidean endomorphism. -/
@@ -322,7 +322,7 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjectionES_isSym
     simpa [AppendixBStructuralData.transportedTwoSiteBondProjectionES,
       coefficientEuclideanMap, Module.End.mul_apply] using
       LinearMap.congr_fun (hStruct.transportedTwoSiteBondProjection_idempotent hφ)
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) v)
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) v)
   isSymmetric := by
     rw [hStruct.transportedTwoSiteBondProjectionES_eq,
       hStruct.physicalIsometryTwoAdjointES_eq_adjoint]
@@ -341,21 +341,21 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjectionES_range
   · rintro ⟨v, rfl⟩
     apply (mem_groundSpaceES_iff hStruct.coreTensor 2 _).2
     change hStruct.transportedTwoSiteBondProjection
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) v) ∈
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) v) ∈
         groundSpace hStruct.coreTensor 2
     rw [← AppendixBStructuralData.twoSiteBasicSpace]
     rw [← hStruct.twoSiteBasicEmbedding_range,
       ← hStruct.transportedTwoSiteBondProjection_range hφ]
     exact ⟨_, rfl⟩
   · intro hψ
-    have hraw : (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) ψ ∈
+    have hraw : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)) ψ ∈
         LinearMap.range hStruct.transportedTwoSiteBondProjection := by
       rw [hStruct.transportedTwoSiteBondProjection_range hφ,
         hStruct.twoSiteBasicEmbedding_range]
       exact (mem_groundSpaceES_iff hStruct.coreTensor 2 ψ).1 hψ
     obtain ⟨v, hv⟩ := hraw
-    refine ⟨(WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v, ?_⟩
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).injective
+    refine ⟨(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v, ?_⟩
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).injective
     simpa [AppendixBStructuralData.transportedTwoSiteBondProjectionES,
       coefficientEuclideanMap] using hv
 
@@ -376,8 +376,8 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjection_eq_supp
   apply LinearMap.ext
   intro ψ
   have hψ := LinearMap.congr_fun hEq
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ)
-  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm.injective
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ)
+  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm.injective
   simpa [AppendixBStructuralData.transportedTwoSiteBondProjectionES,
     coefficientEuclideanMap,
     AppendixBStructuralData.twoSiteBasicSupportProjection] using hψ

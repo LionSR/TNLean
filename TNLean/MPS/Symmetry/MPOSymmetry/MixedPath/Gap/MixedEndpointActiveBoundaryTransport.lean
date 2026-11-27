@@ -535,7 +535,7 @@ def mixedEndpointActivePhysicalCfg
 /-- Restrict the full physical coefficient space to the explicitly encoded
 active configurations. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 def mixedEndpointActiveRestriction (D₀ D₁ N : ℕ) :
-    NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) (N + 1 + 1) →ₗ[ℂ]
+    NSiteSpace (Fin ((D₀ + D₁) * (D₀ + D₁))) (N + 1 + 1) →ₗ[ℂ]
       (endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ N → ℂ) where
   toFun ψ ξ := ψ (mixedEndpointActivePhysicalCfg ξ)
   map_add' _ _ := rfl

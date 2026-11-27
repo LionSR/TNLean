@@ -28,7 +28,7 @@ multiplication by any length-\(L_0\) word:
 theorem wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
@@ -57,7 +57,7 @@ true after right multiplication by any length-\(L_0\) word:
 theorem mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} (η : Fin d)
+    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
@@ -87,7 +87,7 @@ multiplication by an arbitrary matrix:
 theorem closure_property_boundary_condition_product_of_window_witnesses_mul_right
     {A : MPSTensor d D} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)}
+    {ψ : NSiteSpace (Fin d) (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
     (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -122,7 +122,7 @@ in the periodic-boundary comparison. -/
 theorem closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)

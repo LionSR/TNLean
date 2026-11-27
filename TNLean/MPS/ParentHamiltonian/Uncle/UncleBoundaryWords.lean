@@ -225,7 +225,7 @@ theorem uncleBoundary_span_eq_top_succ
 noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) :
-    Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] NSiteSpace d n where
+    Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] NSiteSpace (Fin d) n where
   toFun X σ := Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X)
   map_add' X Y := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c X := by ext σ; simp [Matrix.trace_smul]
@@ -234,7 +234,7 @@ noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
 arXiv:1210.6613. Its word-block formula separates \(A_n,B_n,R_n,L_n\). -/
 noncomputable def uncleBoundarySpace (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) : Submodule ℂ (NSiteSpace d n) :=
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) : Submodule ℂ (NSiteSpace (Fin d) n) :=
   LinearMap.range (uncleBoundaryMap A B R L n)
 
 @[simp] theorem uncleBoundaryMap_apply (A : MPSTensor d a) (B : MPSTensor d b)
@@ -567,14 +567,14 @@ theorem uncleBoundaryMap_scalar_blocks
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (α β : ℂ) :
     uncleBoundaryMap A B R L N
         (uncleBlockMatrix (Matrix.scalar (Fin a) α) 0 0 (Matrix.scalar (Fin b) β)) =
-      α • (mpv A : NSiteSpace d N) + β • (mpv B : NSiteSpace d N) := by
+      α • (mpv A : NSiteSpace (Fin d) N) + β • (mpv B : NSiteSpace (Fin d) N) := by
   funext σ
   rw [uncleBoundaryMap_apply, uncleBoundaryWord_block, trace_uncleBlockMatrix_mul]
   simp [Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal,
     Matrix.trace_smul, mpv, coeff, smul_eq_mul]
 
 private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
-    cyclicTranslateState (1 : Fin (n + 2)) (mpv A : NSiteSpace d (n + 2)) = mpv A := by
+    cyclicTranslateState (1 : Fin (n + 2)) (mpv A : NSiteSpace (Fin d) (n + 2)) = mpv A := by
   funext σ
   obtain ⟨i, τ, rfl⟩ := Fin.exists_cons σ
   change Matrix.trace (Kraus.evalWord A
@@ -596,7 +596,7 @@ theorem uncleBoundarySpace_inf_cyclicTranslate
     uncleBoundarySpace A B R L (n + 2) ⊓
         (uncleBoundarySpace A B R L (n + 2)).map
           (cyclicTranslateState (1 : Fin (n + 2))) =
-      Submodule.span ℂ {(mpv A : NSiteSpace d (n + 2)), mpv B} := by
+      Submodule.span ℂ {(mpv A : NSiteSpace (Fin d) (n + 2)), mpv B} := by
   apply le_antisymm
   · rintro ψ ⟨⟨X, rfl⟩, hrotate⟩
     obtain ⟨_, ⟨Y, rfl⟩, hY⟩ := hrotate
@@ -622,12 +622,12 @@ theorem uncleBoundarySpace_inf_cyclicTranslate
       (Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_insert_of_mem _ rfl)))
   · apply Submodule.span_le.mpr
     rintro ψ (rfl | rfl)
-    · have hA : (mpv A : NSiteSpace d (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
+    · have hA : (mpv A : NSiteSpace (Fin d) (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
         refine ⟨uncleBlockMatrix (Matrix.scalar (Fin a) 1) 0 0
           (Matrix.scalar (Fin b) 0), ?_⟩
         simpa using uncleBoundaryMap_scalar_blocks A B R L (n + 2) 1 0
       exact ⟨hA, ⟨mpv A, hA, cyclicTranslateState_one_mpv A n⟩⟩
-    · have hB : (mpv B : NSiteSpace d (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
+    · have hB : (mpv B : NSiteSpace (Fin d) (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
         refine ⟨uncleBlockMatrix (Matrix.scalar (Fin a) 0) 0 0
           (Matrix.scalar (Fin b) 1), ?_⟩
         simpa using uncleBoundaryMap_scalar_blocks A B R L (n + 2) 0 1

@@ -39,7 +39,7 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 noncomputable def blockInsertedGroundSpaceMap
     (A : (x : Fin r) → MPSTensor d (dim x))
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ) (N : ℕ) :
-    ((x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ) →ₗ[ℂ] NSiteSpace d N :=
+    ((x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) N :=
   LinearMap.lsum ℂ (fun x => Matrix (Fin (dim x)) (Fin (dim x)) ℂ) ℂ
     (fun x => insertedGroundSpaceMap (A x) (W x) N)
 
@@ -151,7 +151,7 @@ noncomputable def blockInsertedBoundaryMap
     EuclideanSpace ℂ ((x : Fin r) × (Fin (dim x) × Fin (dim x))) →L[ℂ]
       EuclideanSpace ℂ (Cfg d N) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
       ((blockInsertedGroundSpaceMap A W N).comp blockBoundaryEquiv.toLinearMap)
 
 /-- Hilbert and coefficient coordinates describe the same joint extended support.
@@ -161,14 +161,14 @@ theorem mem_range_blockInsertedBoundaryMap_iff
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ) (N : ℕ)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     v ∈ (blockInsertedBoundaryMap A W N).range ↔
-      WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v ∈
+      WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N) v ∈
         (blockInsertedGroundSpaceMap A W N).range := by
   constructor
   · rintro ⟨X, rfl⟩
     exact ⟨blockBoundaryEquiv X, rfl⟩
   · rintro ⟨X, hX⟩
     refine ⟨blockBoundaryEquiv.symm X, ?_⟩
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).injective
     exact hX
 
 /-- Joint Hilbert boundary injectivity at every positive length.
@@ -178,7 +178,7 @@ theorem blockInsertedBoundaryMap_injective
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
     (hW : ∀ x, W x ≠ 0) {N : ℕ} (hN : 0 < N) :
     Function.Injective (blockInsertedBoundaryMap A W N) :=
-  (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.injective.comp
+  (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.injective.comp
     ((blockInsertedGroundSpaceMap_injective A hA W hW hN).comp blockBoundaryEquiv.injective)
 
 /-- The joint extended support has dimension equal to the sum of the squared

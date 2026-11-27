@@ -79,10 +79,10 @@ end Sums
 /-- The adjoint of the boundary parametrization \(\Gamma_n\) for the Hilbert--Schmidt inner product:
 \(\psi \mapsto \sum_\tau \psi(\tau) (A^\tau)^\dagger\). -/
 noncomputable def groundSpaceMapAdjoint (A : MPSTensor d D) (n : ℕ) :
-    NSiteSpace d n →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    NSiteSpace (Fin d) n →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   ∑ τ : Cfg d n, (LinearMap.proj τ).smulRight (Kraus.evalWord A (List.ofFn τ))ᴴ
 
-theorem groundSpaceMapAdjoint_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace d n) :
+theorem groundSpaceMapAdjoint_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace (Fin d) n) :
     groundSpaceMapAdjoint A n ψ = ∑ τ, ψ τ • (Kraus.evalWord A (List.ofFn τ))ᴴ := by
   simp [groundSpaceMapAdjoint]
 
@@ -92,10 +92,10 @@ arXiv:1001.3807, equation "eq:iso:ham-proj-from-A" (`Papers/1001.3807/paper_v3.t
 lines 2103–2107, figure `figs4/ham-proj-from-A.pdf`), in which the tensors \(A^\dagger\) are
 the adjoint matrices. -/
 noncomputable def groundSpaceFrame (A : MPSTensor d D) (n : ℕ) :
-    Module.End ℂ (NSiteSpace d n) :=
+    Module.End ℂ (NSiteSpace (Fin d) n) :=
   groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n
 
-theorem groundSpaceFrame_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace d n)
+theorem groundSpaceFrame_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace (Fin d) n)
     (σ : Cfg d n) :
     groundSpaceFrame A n ψ σ = ∑ τ, ψ τ *
       Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
@@ -149,7 +149,7 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
   classical
   have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
   set P := (c : ℂ)⁻¹ • groundSpaceFrame A n with hP
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)
   -- The Euclidean form of \(P\) is a symmetric projection with range \(G_n(A)\).
   let PES : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n) :=
     e.symm.toLinearMap ∘ₗ P ∘ₗ e.toLinearMap
@@ -187,13 +187,13 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
 /-! ### Three sites -/
 
 /-- The lift to the first pair of sites is linear. -/
-theorem leftPairLift_smul (k : ℂ) (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+theorem leftPairLift_smul (k : ℂ) (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     leftPairLift (k • Q) = k • leftPairLift Q := by
   ext ψ σ
   simp
 
 /-- The lift to the second pair of sites is linear. -/
-theorem rightPairLift_smul (k : ℂ) (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+theorem rightPairLift_smul (k : ℂ) (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
     rightPairLift (k • Q) = k • rightPairLift Q := by
   ext ψ σ
   simp

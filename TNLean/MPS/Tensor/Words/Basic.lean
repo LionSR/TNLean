@@ -113,10 +113,10 @@ section
 namespace MPSTensor
 
 /-- A letter-dependent scalar grading accumulates the product of its scalars along a word. -/
-theorem mul_evalWord_of_mul_eq_smul_letter {d D : ℕ} (A : MPSTensor d D)
-    (G : Matrix (Fin D) (Fin D) ℂ) (c : Fin d → ℂ)
+theorem mul_evalWord_of_mul_eq_smul_letter {α : Type*} {D : ℕ} (A : MPTensor α (Fin D))
+    (G : Matrix (Fin D) (Fin D) ℂ) (c : α → ℂ)
     (hG : ∀ i, G * A i = c i • (A i * G)) :
-    ∀ w : List (Fin d),
+    ∀ w : List α,
       G * Kraus.evalWord A w = (w.map c).prod • (Kraus.evalWord A w * G)
   | [] => by simp
   | i :: w => by
