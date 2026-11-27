@@ -110,7 +110,7 @@ theorem _root_.MPTensor.IsNormalTensor.exists_normalGauge {A : MPSTensor d D}
         ρ.PosDef ∧ Kraus.transferMap B ρ = ρ ∧ ρ.trace = 1 := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, -, -, hTP, hGauge, -, -⟩ := hA.exists_tpGauge
-  set B := Kraus.tpGauge (d := d) (D := D) A σ
+  set B := Kraus.tpGauge (ι := Fin d) (D := D) A σ
   have hNB : Kraus.IsNormal B := isNormal_of_gaugeEquiv hA.isNormal hGauge
   obtain ⟨L, hL0, hL⟩ := hNB
   obtain ⟨ρ, hρ, hfix⟩ := exists_posDef_fixedPoint_of_isNormal B hTP ⟨L, hL0, hL⟩

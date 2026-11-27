@@ -119,7 +119,7 @@ theorem exists_tp_data_of_irreducible
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
   let A' : MPSTensor d D := fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i
-  let B := Kraus.tpGauge (d := d) (D := D) A' σ
+  let B := Kraus.tpGauge (ι := Fin d) (D := D) A' σ
   refine ⟨B, r, σ, hσ_pd, hr_pos, fun i => rfl, ?_, gaugeEquiv_tpGauge A' σ hσ_pd⟩
   exact Kraus.tpGauge_isTP_of_map_conjTranspose_eigenvector A σ r hσ_pd hr_pos hσ_eig
 

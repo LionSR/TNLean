@@ -636,7 +636,7 @@ theorem exists_tp_gauge_blockwise
       (Kraus.isIrreducibleFamily_tpGauge_iff
         (fun i => c • blocks0 k i) (σ1 k) (hσpd1 k)).2 hIrr_scaled
     have hEq :
-        blocks1 k = Kraus.tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k) := by
+        blocks1 k = Kraus.tpGauge (ι := Fin d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k) := by
       funext i
       simpa [Kraus.tpGauge, c] using hform1 k i
     simpa [hEq, Kraus.tpGauge] using hIrr_gauge
