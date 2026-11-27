@@ -69,10 +69,7 @@ theorem sectors_weight_copy_independent
 /-- The terminal block evaluates to the identity at its terminal physical
 letter. -/
 theorem terminalBlock_terminal_letter :
-    terminalBlock.toMPSTensor
-      (finProdFinEquiv ((4 : Fin 5), (4 : Fin 5))) = 1 := by
-  simp only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat]
+    terminalBlock ((4 : Fin 5), (4 : Fin 5)) = 1 := by
   ext a b
   fin_cases a
   fin_cases b
@@ -106,8 +103,11 @@ private theorem pairWordTupleSpanTop_obstruction_terminal
     apply Prod.ext
     · simpa [MPSTensor.pairWordTuple, terminalWord, terminalLetter]
         using hBTerminal
-    · simpa [MPSTensor.pairWordTuple, terminalWord, terminalLetter]
-        using terminalBlock_terminal_letter
+    · have hLetter : terminalBlock.toMPSTensor terminalLetter = 1 := by
+        change terminalBlock (finProdFinEquiv.symm terminalLetter) = 1
+        rw [Equiv.symm_apply_apply]
+        exact terminalBlock_terminal_letter
+      simpa [MPSTensor.pairWordTuple, terminalWord] using hLetter
   have hTerminalMem : (0, 1) ∈ Submodule.span ℂ
       (Set.range
         (MPSTensor.pairWordTuple B terminalBlock.toMPSTensor 1)) := by
@@ -201,7 +201,7 @@ theorem sectors_basis_isNormalTensor
   change Fin 2 at j
   fin_cases j
   · exact hBNormal
-  · exact terminalBlock_isNormalTensor
+  · exact terminalBlock_isNormalTensor.reindexPhysical finProdFinEquiv.symm
 
 /-- Bond dimensions of the two physical sectors. -/
 @[reducible] def sectorDim : Fin 2 → ℕ :=
@@ -261,14 +261,13 @@ theorem physicalSector_reducedBlockState_supported
   rw [← physicalSector_physicalSupportProj s]
   exact ketLeftMul_physicalSupportProj (physicalSector s)
 
-/-- Gauge-equivalent doubled-index tensors have identical closed MPOs. -/
+/-- Gauge-equivalent operator tensors have identical closed MPOs. -/
 private theorem mpo_eq_of_gaugeEquiv {d D : ℕ} {K L : MPOTensor d D}
-    (hGauge : MPTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) (N : ℕ) :
+    (hGauge : MPTensor.GaugeEquiv K L) (N : ℕ) :
     mpo K N = mpo L N := by
   ext σ τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    ← MPSTensor.mpv_toMPSTensor_pairConfig]
-  exact hGauge.sameMPV N (fun n ↦ finProdFinEquiv (σ n, τ n))
+  rw [← mpv_pair, ← mpv_pair]
+  exact hGauge.sameMPV N _
 
 /-- The first common-weight-absorbed BNT sector is the absorbed obstruction
 tensor. -/
@@ -463,17 +462,15 @@ theorem mpo_ambient_eq_sum_physicalSector
   have hFirst :
       mpo (commonWeightAbsorbedBasisMPOTensor (sectors mu B hmu)
         (sectors_weight_copy_independent mu B hmu) 0) N =
-        mpo embeddedObstruction N := by
-    ext σ τ
-    rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-      ← MPSTensor.mpv_toMPSTensor_pairConfig,
-      firstAbsorbedSector_toMPSTensor]
-    exact (hGauge.sameMPV N (fun n ↦ finProdFinEquiv (σ n, τ n))).symm
+        mpo embeddedObstruction N :=
+    (mpo_eq_of_gaugeEquiv ((gaugeEquiv_toMPSTensor_iff _ _).1
+      (by rw [firstAbsorbedSector_toMPSTensor]; exact hGauge)) N).symm
   have hSecond :
       mpo (commonWeightAbsorbedBasisMPOTensor (sectors mu B hmu)
         (sectors_weight_copy_independent mu B hmu) (Fin.succ 0)) N =
         mpo terminalBlock N := by
     apply mpo_eq_of_gaugeEquiv (N := N)
+    apply (gaugeEquiv_toMPSTensor_iff _ _).1
     rw [secondAbsorbedSector_toMPSTensor]
     exact MPTensor.GaugeEquiv.refl _
   rw [Fin.sum_univ_two, Fin.sum_univ_two]
@@ -794,7 +791,8 @@ theorem firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization
     exact
       exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry
         physicalInclusion physicalInclusion_isometry
-        MPOTensor.NonCartesianActiveSectorCandidate.tensor_isInjective
+        ((isInjective_toMPSTensor_iff _).2
+          MPOTensor.NonCartesianActiveSectorCandidate.tensor_isInjective)
         tensor_physicalSupportProj_eq_one hEmbedded
   exact MPOTensor.NonCartesianActiveSectorCandidate.not_exists_neighboringTraceFactorization
     hSource

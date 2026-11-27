@@ -11,6 +11,7 @@ import TNLean.MPS.Examples.Shift.ShiftPaperSourceFactors
 import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 import TNLean.MPS.MPU.CanonicalForm.TransferStabilizationConverse
 import TNLean.MPS.Transfer.Scaling
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Public indices of the shift examples
@@ -29,10 +30,9 @@ open scoped Matrix
 namespace MPOTensor
 
 private theorem transferMap_rightShiftTensor (d : ℕ) (X : Matrix (Fin d) (Fin d) ℂ) :
-    Kraus.transferMap (rightShiftTensor d).toMPSTensor X = X.trace • 1 := by
-  rw [Kraus.transferMap_apply, ← Equiv.sum_comp finProdFinEquiv]
-  simp only [Fintype.sum_prod_type, toMPSTensor, rightShiftTensor,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat, Matrix.conjTranspose_single,
+    Kraus.transferMap (rightShiftTensor d) X = X.trace • 1 := by
+  rw [Kraus.transferMap_apply]
+  simp only [Fintype.sum_prod_type, rightShiftTensor, Matrix.conjTranspose_single,
     star_one, Matrix.single_mul_mul_single, one_mul, mul_one]
   ext i j
   simp [Matrix.sum_apply, Matrix.single, Matrix.trace, Matrix.smul_apply,
@@ -44,7 +44,7 @@ private theorem transferMap_normalized_rightShiftTensor (d : ℕ)
       X.trace • shiftPaperWeight d := by
   change Kraus.transferMap
     (fun i => (Real.sqrt d : ℂ)⁻¹ • (rightShiftTensor d).toMPSTensor i) X = _
-  rw [MPSTensor.transferMap_smul, transferMap_rightShiftTensor]
+  rw [MPSTensor.transferMap_smul, kraus_transferMap_toMPSTensor, transferMap_rightShiftTensor]
   simp only [map_inv₀, Complex.conj_ofReal, smul_smul, shiftPaperWeight]
   simp [Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg d), mul_comm]
 

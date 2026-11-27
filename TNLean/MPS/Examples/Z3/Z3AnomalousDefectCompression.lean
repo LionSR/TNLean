@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import TNLean.MPS.Examples.MultiBlock.OneSlotGauge
 import TNLean.MPS.Examples.Z3.Z3AnomalousDefect
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockDirectSum
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Anomalous `ℤ/3` example: compression of the stacked square of the condensation defect
@@ -272,10 +273,16 @@ theorem mpo_defect_mul_defect (L : ℕ) (hL : 0 < L) :
       (3 : ℂ) • MPOTensor.mpo defectTensor L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  rw [Matrix.smul_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
-    smul_eq_mul]
-  exact (defectSquare_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)).trans
-    (congrArg (fun t => 3 * t) (defectMPS_trace_evalWord _)).symm
+  have key : ∀ {D : ℕ} (M : MPOTensor 3 D),
+      Matrix.trace (Kraus.evalWord M (List.ofFn fun k ↦ (σ k, τ k))) =
+        Matrix.trace (Kraus.evalWord M.toMPSTensor
+          (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))) := fun M ↦ by
+    rw [MPOTensor.evalWord_toMPSTensor, List.map_ofFn]
+    simp only [Function.comp_def, Equiv.symm_apply_apply]
+  rw [Matrix.smul_apply, MPOTensor.mpo_apply_eq_trace_kraus_evalWord,
+    MPOTensor.mpo_apply_eq_trace_kraus_evalWord, key, key, smul_eq_mul]
+  exact (defectSquare_trace_evalWord _ (by simpa using hL.ne')).trans
+    (congrArg (fun t ↦ 3 * t) (defectMPS_trace_evalWord _)).symm
 
 /-- The nine targets have total bond dimension `3 · (1 + 2 + 2) = 15`. -/
 theorem sum_pairTargetDim : ∑ s ∈ squareSlots, pairTargetDim s = 15 := by decide

@@ -10,6 +10,7 @@ import TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
 import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 import TNLean.MPS.Operator.Product.OperatorProduct
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Kramers–Wannier fusion `D~² = 2^L (1 + η) T` on the periodic Ising chain
@@ -107,14 +108,16 @@ open MPSTensor
 
 /-- **The translation tensor is normal.** Its four letters are already the four matrix units of
 `M_2(ℂ)` (construction note, §1.2). -/
-theorem shiftMPS_isNormal : Kraus.IsNormal shiftTensor.toMPSTensor :=
+theorem shiftMPS_isNormal : Kraus.IsNormal shiftTensor :=
+  (MPOTensor.isNormal_toMPSTensor_iff _).1 <|
   isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) shiftIntMPS one_ne_zero
     (fun a => by rw [shiftMPS_eq, one_smul]) ![![0, 2], ![1, 3]] (fun _ _ => 1)
     (fun _ _ => by simp) (by decide)
 
 /-- **The flipped-translation tensor is normal.** Its four letters are already the four matrix
 units of `M_2(ℂ)` (construction note, §1.2). -/
-theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor.toMPSTensor :=
+theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor :=
+  (MPOTensor.isNormal_toMPSTensor_iff _).1 <|
   isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) flipShiftIntMPS one_ne_zero
     (fun a => by rw [flipShiftMPS_eq, one_smul]) ![![2, 0], ![3, 1]] (fun _ _ => 1)
     (fun _ _ => by simp) (by decide)

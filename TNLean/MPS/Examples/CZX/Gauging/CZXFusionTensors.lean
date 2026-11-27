@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.Reduction.ReductionBlocking
 import TNLean.MPS.Examples.CZX.Gauging.CZXDaggerGauge
 import TNLean.MPS.Operator.Unitary.Identity
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The concrete CZX `g,g` fusion tensors
@@ -66,21 +67,18 @@ private def fusionProductDiagonalLetter (i : Fin 4) : Matrix (Fin 4) (Fin 4) ℂ
       if x = 2 then if y = 0 then -1 else if y = 1 then -1 else if y = 2 then 1 else 1
       else 0
 
-/-- Sparse form of one product-tensor letter after converting to the doubled
-MPS index. -/
+/-- Sparse form of the letter `(i, j)` of the product tensor over the pair alphabet. -/
 private def fusionProductLetter (i j : Fin 4) : Matrix (Fin 4) (Fin 4) ℂ :=
   if i = j then fusionProductDiagonalLetter i else 0
 
 private theorem fusion_product_letter_eq (i j : Fin 4) :
-    (MPOTensor.mulTensor tensor tensor).toMPSTensor (finProdFinEquiv (i, j)) =
-      fusionProductLetter i j := by
+    MPOTensor.mulTensor tensor tensor (i, j) = fusionProductLetter i j := by
   have hc : ∀ j : Fin 4, complementSite j = j.rev := by decide
   have hcc : ∀ j : Fin 4, complementSite (complementSite j) = j := by decide
   have hb : ∀ i : Fin 4, siteBits i =
       (show ZMod 2 from Fin.divNat (m := 2) (n := 2) i,
         show ZMod 2 from Fin.modNat (m := 2) (n := 2) i) := by decide
-  simp only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, MPOTensor.mulTensor_apply]
+  simp only [MPOTensor.mulTensor_apply]
   ext x y
   rcases finProdFinEquiv.surjective x with ⟨⟨x₁, x₂⟩, rfl⟩
   rcases finProdFinEquiv.surjective y with ⟨⟨y₁, y₂⟩, rfl⟩
@@ -131,10 +129,7 @@ theorem mulTensor_diagonal_letter_coordinates (x : Fin 2) :
     MPOTensor.mulTensor tensor tensor (finProdFinEquiv (x, x), finProdFinEquiv (x, x)) =
       if x = 0 then !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
       else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] := by
-  have h := fusion_product_letter_eq (finProdFinEquiv (x, x)) (finProdFinEquiv (x, x))
-  simp only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] at h
-  rw [h]
+  rw [fusion_product_letter_eq]
   fin_cases x <;> ext a b <;> fin_cases a <;> fin_cases b <;>
     norm_num +decide [fusionProductLetter, fusionProductDiagonalLetter, finProdFinEquiv,
       Fin.divNat, Fin.modNat, Fin.reduceEq]
@@ -148,31 +143,27 @@ private theorem fusionV_mul_fusionW :
   ring_nf
   simp [Complex.I_sq]
 
-private theorem fusion_letter_compression (ij : Fin (4 * 4)) :
-    fusionV * (MPOTensor.mulTensor tensor tensor).toMPSTensor ij * fusionW =
-      (identityMPUTensor 4).toMPSTensor ij := by
-  obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective ij
+private theorem fusion_letter_compression (ij : Fin 4 × Fin 4) :
+    fusionV * MPOTensor.mulTensor tensor tensor ij * fusionW = identityMPUTensor 4 ij := by
+  obtain ⟨i, j⟩ := ij
   rw [fusion_product_letter_eq]
   ext a b
   fin_cases a
   fin_cases b
   fin_cases i <;> fin_cases j <;>
     simp [fusionV, fusionW, fusionProductLetter, fusionProductDiagonalLetter,
-      identityMPUTensor, idTensor,
-      MPOTensor.toMPSTensor, Matrix.mul_apply, Fin.sum_univ_four, finProdFinEquiv,
-      Fin.divNat, Fin.modNat, Fin.reduceEq] <;>
+      identityMPUTensor, idTensor, Matrix.mul_apply, Fin.sum_univ_four, Fin.reduceEq] <;>
     ring_nf <;>
     simp [Complex.I_sq]
 
 set_option maxHeartbeats 800000 in
 -- The diagonal core is a finite 4-by-4 product-bond calculation with complex `I` entries.
-private theorem fusion_projection_insertion (ij kl : Fin (4 * 4)) :
-    (MPOTensor.mulTensor tensor tensor).toMPSTensor ij * fusionW * fusionV *
-        (MPOTensor.mulTensor tensor tensor).toMPSTensor kl =
-      (MPOTensor.mulTensor tensor tensor).toMPSTensor ij *
-        (MPOTensor.mulTensor tensor tensor).toMPSTensor kl := by
-  obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective ij
-  obtain ⟨⟨k, l⟩, rfl⟩ := finProdFinEquiv.surjective kl
+private theorem fusion_projection_insertion (ij kl : Fin 4 × Fin 4) :
+    MPOTensor.mulTensor tensor tensor ij * fusionW * fusionV *
+        MPOTensor.mulTensor tensor tensor kl =
+      MPOTensor.mulTensor tensor tensor ij * MPOTensor.mulTensor tensor tensor kl := by
+  obtain ⟨i, j⟩ := ij
+  obtain ⟨k, l⟩ := kl
   rw [fusion_product_letter_eq, fusion_product_letter_eq]
   by_cases hij : i = j
   · subst j
@@ -194,11 +185,11 @@ private theorem fusion_projection_insertion (ij kl : Fin (4 * 4)) :
     · simp [fusionProductLetter, hkl]
   · simp [fusionProductLetter, hij]
 
-private theorem evalWord_fusion_projection_insertion (p q : List (Fin (4 * 4)))
+private theorem evalWord_fusion_projection_insertion (p q : List (Fin 4 × Fin 4))
     (hp : p ≠ []) (hq : q ≠ []) :
-    Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor p * fusionW * fusionV *
-        Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor q =
-      Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (p ++ q) := by
+    Kraus.evalWord (MPOTensor.mulTensor tensor tensor) p * fusionW * fusionV *
+        Kraus.evalWord (MPOTensor.mulTensor tensor tensor) q =
+      Kraus.evalWord (MPOTensor.mulTensor tensor tensor) (p ++ q) := by
   induction p with
   | nil => contradiction
   | cons i p ih =>
@@ -208,37 +199,37 @@ private theorem evalWord_fusion_projection_insertion (p q : List (Fin (4 * 4)))
           | nil => contradiction
           | cons j q =>
               calc
-                Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor [i] *
+                Kraus.evalWord (MPOTensor.mulTensor tensor tensor) [i] *
                       fusionW * fusionV *
-                    Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
+                    Kraus.evalWord (MPOTensor.mulTensor tensor tensor)
                       (j :: q) =
-                    ((MPOTensor.mulTensor tensor tensor).toMPSTensor i *
+                    (MPOTensor.mulTensor tensor tensor i *
                         fusionW * fusionV *
-                      (MPOTensor.mulTensor tensor tensor).toMPSTensor j) *
-                        Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor q := by
+                      MPOTensor.mulTensor tensor tensor j) *
+                        Kraus.evalWord (MPOTensor.mulTensor tensor tensor) q := by
                   simp [Matrix.mul_assoc]
-                _ = ((MPOTensor.mulTensor tensor tensor).toMPSTensor i *
-                        (MPOTensor.mulTensor tensor tensor).toMPSTensor j) *
-                      Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor q := by
+                _ = (MPOTensor.mulTensor tensor tensor i *
+                        MPOTensor.mulTensor tensor tensor j) *
+                      Kraus.evalWord (MPOTensor.mulTensor tensor tensor) q := by
                   rw [fusion_projection_insertion]
-                _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
+                _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor)
                     ([i] ++ j :: q) := by
                   simp [Matrix.mul_assoc]
       | cons j p =>
           have hp_tail : j :: p ≠ [] := by simp
           calc
-            Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (i :: j :: p) *
+            Kraus.evalWord (MPOTensor.mulTensor tensor tensor) (i :: j :: p) *
                   fusionW * fusionV *
-                Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor q =
-                (MPOTensor.mulTensor tensor tensor).toMPSTensor i *
-                  (Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
+                Kraus.evalWord (MPOTensor.mulTensor tensor tensor) q =
+                MPOTensor.mulTensor tensor tensor i *
+                  (Kraus.evalWord (MPOTensor.mulTensor tensor tensor)
                     (j :: p) * fusionW * fusionV *
-                    Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor q) := by
+                    Kraus.evalWord (MPOTensor.mulTensor tensor tensor) q) := by
               simp [Matrix.mul_assoc]
-            _ = (MPOTensor.mulTensor tensor tensor).toMPSTensor i *
-                Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
+            _ = MPOTensor.mulTensor tensor tensor i *
+                Kraus.evalWord (MPOTensor.mulTensor tensor tensor)
                   ((j :: p) ++ q) := by rw [ih hp_tail]
-            _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
+            _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor)
                 ((i :: j :: p) ++ q) := by simp
 
 /-- The printed CZX `F^<_{g,g}` and `F^>_{g,g}` caps form an all-word
@@ -248,17 +239,15 @@ Source: arXiv:2502.20257, `eq:fusion_2`, `main.tex` lines 1458--1498
 (all-word identity); `eq:Fgg`, lines 2000--2037, specialized by the CZX
 display in lines 4671--4689 (caps). -/
 theorem fusion_isReduction :
-    MPTensor.IsReduction
-      (MPOTensor.mulTensor tensor tensor).toMPSTensor
-      (identityMPUTensor 4).toMPSTensor fusionV fusionW :=
+    MPTensor.IsReduction (MPOTensor.mulTensor tensor tensor) (identityMPUTensor 4)
+      fusionV fusionW :=
   MPTensor.IsReduction.of_local_compression fusionV_mul_fusionW
     fusion_letter_compression fusion_projection_insertion
 
-set_option maxHeartbeats 2000000 in
--- The proof reassociates three nonempty word insertions around the rectangular caps.
 /-- The concrete CZX fusion reduction satisfies the exterior identity with
 one physical letter on each side. This is only the reduction-buffer statement
-for the concrete `g,g` product slice.
+for the concrete `g,g` product slice. It is stated on the doubled index `Fin (4 * 4)` of the
+pair alphabet, the alphabet of the buffer-length predicate.
 
 Source: arXiv:2502.20257, `eq:fusion_1`, `main.tex` lines 1405--1457,
 with the length conditions in line 1498 (exterior identity); `eq:Fgg`,
@@ -268,36 +257,12 @@ theorem fusion_isReductionExteriorBufferLength_one :
       (MPOTensor.mulTensor tensor tensor).toMPSTensor
       (identityMPUTensor 4).toMPSTensor fusionV fusionW 1 := by
   intro p c q hc hp hq
-  cases p with
-  | nil => simp at hp
-  | cons p₀ p =>
-      cases q with
-      | nil => simp at hq
-      | cons q₀ q =>
-          have hcEval := fusion_isReduction.evalWord c
-          rw [← hcEval]
-          calc
-            Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (p₀ :: p) *
-                  fusionW *
-                (fusionV * Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor c *
-                  fusionW) * fusionV *
-                Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (q₀ :: q) =
-                (Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (p₀ :: p) *
-                    fusionW * fusionV *
-                  Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor c) *
-                    fusionW * fusionV *
-                  Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (q₀ :: q) := by
-              simp only [Matrix.mul_assoc]
-            _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
-                  ((p₀ :: p) ++ c) * fusionW * fusionV *
-                Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor (q₀ :: q) := by
-              rw [evalWord_fusion_projection_insertion (p₀ :: p) c (by simp) hc]
-            _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
-                (((p₀ :: p) ++ c) ++ (q₀ :: q)) := by
-              rw [evalWord_fusion_projection_insertion ((p₀ :: p) ++ c) (q₀ :: q)
-                (by simp) (by simp)]
-            _ = Kraus.evalWord (MPOTensor.mulTensor tensor tensor).toMPSTensor
-                (p₀ :: p ++ c ++ q₀ :: q) := by
-              simp only [List.cons_append, List.append_assoc]
+  simp only [evalWord_toMPSTensor, List.map_append]
+  have hne : ∀ w : List (Fin (4 * 4)), w ≠ [] → w.map finProdFinEquiv.symm ≠ [] := by
+    simp
+  rw [← fusion_isReduction.evalWord, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
+    evalWord_fusion_projection_insertion _ _ (hne p (List.ne_nil_of_length_pos hp)) (hne c hc),
+    evalWord_fusion_projection_insertion _ _ (by simp [hne c hc])
+      (hne q (List.ne_nil_of_length_pos hq))]
 
 end MPOTensor.CZX

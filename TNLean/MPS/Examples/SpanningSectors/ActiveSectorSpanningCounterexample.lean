@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSector.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.Operator.PhysicalSector.NeighboringPreparation
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Virtual spanning does not remove the active-sector nilpotent remainder
@@ -122,16 +123,12 @@ lemma sectorMatrix_span_eq_top : Submodule.span ℂ (Set.range sectorMatrix) = �
     Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_range_self k))
 
 /-- The four diagonal sector matrices make the tensor injective. -/
-lemma tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
+lemma tensor_isInjective : Kraus.IsInjective tensor := by
   apply top_unique
   rw [← sectorMatrix_span_eq_top]
   apply Submodule.span_le.2
   rintro _ ⟨k, rfl⟩
-  apply Submodule.subset_span
-  refine ⟨finProdFinEquiv (k, k), ?_⟩
-  change tensor ((finProdFinEquiv (k, k)).divNat, (finProdFinEquiv (k, k)).modNat) = sectorMatrix k
-  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-  simp [tensor]
+  exact Submodule.subset_span ⟨(k, k), by simp [tensor]⟩
 
 lemma physTraceTransfer_tensor : physTraceTransfer tensor = leftPairing * rightPairing := by
   ext i j
@@ -443,7 +440,8 @@ lemma neighboringOperator_posSemidef (k h : Fin 4) :
 
 lemma factorization_sectorVirtualMatrixFamily_span_eq_top :
     Submodule.span ℂ (Set.range factorization.sectorVirtualMatrixFamily) = ⊤ :=
-  factorization.sectorVirtualMatrixFamily_span_eq_top tensor_isInjective
+  factorization.sectorVirtualMatrixFamily_span_eq_top
+    ((isInjective_toMPSTensor_iff tensor).2 tensor_isInjective)
 
 /-- All four sectors are active because their weights are strictly positive. -/
 noncomputable def activeEquiv : factorization.ActiveSector p ≃ Fin 4 where
@@ -562,7 +560,7 @@ source-selected inverse-map identification is proved separately in
 **Scope restriction (non-normal representative):** documented in
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
-    Kraus.IsInjective tensor.toMPSTensor ∧ tensor.IsSourceZCL ∧
+    Kraus.IsInjective tensor ∧ tensor.IsSourceZCL ∧
       physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor ∧
       (∀ k, p k = 1 / 4) ∧ (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
       Submodule.span ℂ (Set.range factorization.sectorVirtualMatrixFamily) = ⊤ ∧

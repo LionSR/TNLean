@@ -146,7 +146,7 @@
 
 \begin{lemma}[Injectivity of \texorpdfstring{$R^{\bullet\bullet}$}{the doubled-index tensor}]%
     \label{lem:mpdo_bnt_label_rescaling_stable_injective}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isInjective}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isInjective}
     \leanok
     \uses{def:injective,thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The $16$ letters $R^{pq}$ of the doubled-index tensor
@@ -164,7 +164,7 @@
 
 \begin{lemma}[Canonical form of \texorpdfstring{$R$}{R}]%
     \label{thm:mpdo_bnt_label_rescaling_stable_cf}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isCPSVCanonicalForm}
     \leanok
     \uses{def:cpsv_canonical_form,def:nt_cpsv,thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The doubled-index tensor $R^{\bullet\bullet}$, with bond dimension $4$
@@ -202,9 +202,9 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         physTraceTransfer_R_not_isNilpotent}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        doubledPhysTraceTransfer_retainedBlock}
+        physTraceTransfer_retainedBlock}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
+        physTraceTransfer_retainedBlock_not_isNilpotent}
     \leanok
     \uses{def:mpdo_doubled_phys_trace_transfer,def:mpdo_simple_tensor,thm:mpdo_bnt_label_rescaling_stable_length_dependence,thm:mpdo_bnt_label_rescaling_stable_cf}
     Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single normal

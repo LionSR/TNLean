@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.RFP.AlgebraStructure
 import TNLean.MPS.MPDO.RFP.FusionIsometries
 import TNLean.MPS.MPDO.Purification.PureRecovery
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Counterexample to the support-algebra converse
@@ -139,7 +140,8 @@ private theorem phaseFlipTensor_transferMap_pow_fixed_iff
     exact phaseFlipTensor_transferMap_pow_fixed hX n
 
 private theorem phaseFlipMPO_isTP :
-    Kraus.IsTP phaseFlipTensor.toMPOTensor.toMPSTensor := by
+    Kraus.IsTP phaseFlipTensor.toMPOTensor := by
+  rw [← MPOTensor.isTP_toMPSTensor_iff]
   suffices hAdjointOne :
       Kraus.adjointMap phaseFlipTensor.toMPOTensor.toMPSTensor 1 = 1 by
     simpa [Kraus.IsTP, Kraus.adjointMap, Matrix.mul_one] using hAdjointOne
@@ -211,7 +213,7 @@ formula and the length-one idempotent trace identity, neither of which is part
 of `HasBlockedAdjointFixedPointAlgebraTower`. -/
 theorem exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
-      Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
+      Kraus.IsTP M ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
         HasBlockedAdjointFixedPointAlgebraTower M ∧ ¬ IsZCL M :=
   ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,
