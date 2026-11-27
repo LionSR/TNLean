@@ -7,7 +7,7 @@ import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import TNLean.MPS.Operator.Unitary.Basic
 import TNLean.MPS.CanonicalForm.VerticalForm.Purity
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.CanonicalForm.SimpleMPU.PhysicalRelabelling
 
 /-!
 # Normalized transfer matrix of a Matrix Product Unitary
@@ -73,15 +73,6 @@ theorem sqrt_smul_normalizedFlattening [NeZero d] (U : MPOTensor d D) :
   simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
   rfl
 
-/-- Relabelling the physical basis along an equivalence leaves the overlap unchanged. -/
-private theorem mpvOverlap_reindexPhysical_equiv {α α' : Type*} [Fintype α] [Fintype α']
-    {D₁ D₂ : ℕ} (e : α' ≃ α) (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (N : ℕ) :
-    MPTensor.mpvOverlap (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) N =
-      MPTensor.mpvOverlap A B N := by
-  simp only [MPTensor.mpvOverlap, MPTensor.mpv_reindexPhysical]
-  exact (Equiv.arrowCongr (Equiv.refl (Fin N)) e).sum_comp
-    (fun σ ↦ MPTensor.mpv A σ * star (MPTensor.mpv B σ))
-
 /-- The length-`N` self-overlap of the normalized flattening is `d⁻ᴺ` times the raw
 self-overlap. The physical dimension is explicitly nonzero so that division by `sqrt d`
 has the paper's intended meaning.
@@ -92,7 +83,7 @@ theorem mpvOverlap_normalizedFlattening_self [NeZero d]
     (U : MPOTensor d D) (N : ℕ) :
     MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N =
       ((d : ℂ)⁻¹) ^ N * MPTensor.mpvOverlap U U N := by
-  rw [normalizedFlattening_eq_reindexPhysical, mpvOverlap_reindexPhysical_equiv,
+  rw [normalizedFlattening_eq_reindexPhysical, MPTensor.mpvOverlap_reindexPhysical,
     MPTensor.mpvOverlap_smul_self]
   congr 2
   have hd : (0 : ℝ) < d := by
@@ -115,7 +106,7 @@ theorem IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one
     Matrix.trace (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 := by
   rw [MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
   rw [mpvOverlap_normalizedFlattening_self,
-    ← mpvOverlap_reindexPhysical_equiv finProdFinEquiv.symm U U,
+    ← MPTensor.mpvOverlap_reindexPhysical finProdFinEquiv.symm U U,
     ← toMPSTensor_eq_reindexPhysical, mpvOverlap_toMPSTensor_self,
     hU.mpo_mul_conjTranspose_mpo hN, Matrix.trace_one]
   rw [Fintype.card_pi_const]

@@ -201,21 +201,6 @@ noncomputable def block (F : GroupFamily G d) (L : ℕ) :
   bondDim_pos := F.bondDim_pos
   tensor g := MPOTensor.blockTensor (F.tensor g) L
 
-/-- The letters of a blocked operator tensor are the blocked words over the pair alphabet. -/
-private theorem range_blockTensor {D : ℕ} (M : MPOTensor d D) (L : ℕ) :
-    Set.range (MPOTensor.blockTensor M L) = Set.range (Kraus.block M L) := by
-  refine Function.Surjective.range_comp (fun w ↦ ⟨((Kraus.decodeBlockEquiv d L).symm
-    fun k ↦ (w k).1, (Kraus.decodeBlockEquiv d L).symm fun k ↦ (w k).2), ?_⟩) _
-  funext k
-  simp
-
-/-- A blocked operator tensor is injective exactly when the tensor on the pair alphabet is
-block injective at the blocking length. -/
-private theorem isInjective_blockTensor_iff {D : ℕ} (M : MPOTensor d D) (L : ℕ) :
-    Kraus.IsInjective (MPOTensor.blockTensor M L) ↔ Kraus.IsNBlkInjective M L := by
-  rw [Kraus.isNBlkInjective_iff_isInjective_block, Kraus.IsInjective, Kraus.IsInjective,
-    range_blockTensor]
-
 private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
     {L : ℕ} (hL : 0 < L) (h : Kraus.IsInjective (F.tensor g)) :
     Kraus.IsInjective ((F.block L).tensor g) := by
