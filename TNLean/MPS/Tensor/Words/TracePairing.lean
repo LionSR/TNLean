@@ -146,7 +146,8 @@ lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d
   simpa [Kraus.evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j]
 
 /-- If `A` is injective, then `traceMulRightPi A` has trivial kernel: the trace pairing
-against an injective family detects zero (`Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero`). -/
+against an injective family detects zero
+(`Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero`). -/
 theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
     (traceMulRightPi A).ker = ⊥ :=
   LinearMap.ker_eq_bot'.2 fun M hM =>

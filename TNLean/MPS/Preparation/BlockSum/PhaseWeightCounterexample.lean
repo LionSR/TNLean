@@ -35,10 +35,10 @@ approximating state is the target itself (`nonNormalApproxOverlap_phaseBlockTens
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II with weights
 `(1, μ)` (`isLeftCanonicalBNTPresentation_phaseBlockSector`, `reindex_toTensor_phaseBlockSector`),
-and it is the direct sum `⊕ⱼ μⱼ A_j` (`blockSum_phaseBlock`). Both blocks are one-dimensional, so their
-transfer maps have no eigenvalue other than `1`, and the hypothesis on the subleading eigenvalue
-that defines `ξ_diag` holds for every `λ₂`. For `μ = -1` and every `λ₂` with `0 < |λ₂| < 1`,
-along `q = M` odd (`N = q²`, so `q = o(N)`) the error stays `1` while
+and it is the direct sum `⊕ⱼ μⱼ A_j` (`blockSum_phaseBlock`). Both blocks are one-dimensional, so
+their transfer maps have no eigenvalue other than `1`, and the hypothesis on the subleading
+eigenvalue that defines `ξ_diag` holds for every `λ₂`. For `μ = -1` and every `λ₂` with
+`0 < |λ₂| < 1`, along `q = M` odd (`N = q²`, so `q = o(N)`) the error stays `1` while
 `(N/q) e^{-γ q/ξ_diag}` tends to zero (`not_approximationError_le_phaseBlockTensor`).
 
 **False source (eqs. (S5)–(S7), complex weights):** for weights that are not nonnegative real

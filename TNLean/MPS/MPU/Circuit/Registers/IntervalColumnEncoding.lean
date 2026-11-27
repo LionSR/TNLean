@@ -125,7 +125,8 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPhysicalZeroConfig_physical {d D N : ℕ} [NeZero d] (j k : ℕ)
     (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) (s : Fin N) (hs :
         j ≤ s.val ∧ s.val < k) :
-    intervalPhysicalZeroConfig (D := D) j k x (Sum.inl s) = x ⟨s, ManyBody.mem_interval.mpr hs⟩ := by
+    intervalPhysicalZeroConfig (D := D) j k x (Sum.inl s) =
+      x ⟨s, ManyBody.mem_interval.mpr hs⟩ := by
   simp only [intervalPhysicalZeroConfig, dite_eq_left hs]
 
 /-- Encoding of the physical input with every interval auxiliary initialized to zero.

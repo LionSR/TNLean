@@ -223,7 +223,8 @@ theorem minimalOperatorInterval_full_apply {d N : ℕ}
     (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
     (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     minimalOperatorInterval U B (Nat.zero_le N)
-      ((MPSPreparation.finalCutPrefixEquiv d N).symm x) ((MPSPreparation.finalCutPrefixEquiv d N).symm y) α β = U x y := by
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm x)
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm y) α β = U x y := by
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
   let : Unique (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
@@ -275,7 +276,8 @@ theorem weightedMinimalOperatorInterval_full_apply {d N : ℕ}
     (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
       (CFC.sqrt P) (CFC.sqrt (dualGramMetric S))
-      ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)) ((MPSPreparation.finalCutPrefixEquiv d N).symm y) = U x y := by
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α))
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm y) = U x y := by
   rw [eq_one_of_mem_minimalOperatorPrefixHull_zero hd U hU B hB0 hP,
     eq_one_of_mem_minimalOperatorPrefixHull_last hd U hU B hBN hS]
   have hc : Fintype.card (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor

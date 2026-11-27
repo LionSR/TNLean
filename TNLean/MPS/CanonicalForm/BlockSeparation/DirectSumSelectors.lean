@@ -19,9 +19,9 @@ at the BNT layer.
 
 It also contains the following results.
 
-* `MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five`,
-  `MPSTensor.IsLeftCanonicalBNTPresentation.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`:
-  BNT input for the equal-size direct-sum branch.
+* `MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five` and
+  `IsLeftCanonicalBNTPresentation.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`
+  (in `MPSTensor`): BNT input for the equal-size direct-sum branch.
 -/
 
 open MPTensor

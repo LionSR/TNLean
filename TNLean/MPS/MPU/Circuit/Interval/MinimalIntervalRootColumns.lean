@@ -76,7 +76,8 @@ private theorem placedBasisEmbedding_eq_of_restriction {d a n : ℕ} {α : Type*
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalInputEmbedding_full_apply {d D N : ℕ} [NeZero d]
     (x : Cfg d N) (z : OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :
-    minimalIntervalInputEmbedding (D := D) 0 N ((MPSPreparation.finalCutPrefixEquiv d N).symm x, z) =
+    minimalIntervalInputEmbedding (D := D) 0 N
+        ((MPSPreparation.finalCutPrefixEquiv d N).symm x, z) =
       workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x := by
   let := outsidePlacedConfig_full_subsingleton d D N
   apply placedBasisEmbedding_eq_of_restriction

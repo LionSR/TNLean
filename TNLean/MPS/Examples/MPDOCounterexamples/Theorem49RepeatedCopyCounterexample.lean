@@ -95,7 +95,7 @@ the BNT display at lines 271--301. -/
 theorem repeatedCopyDecomposition_isLeftCanonicalBNTPresentation :
     MPSTensor.IsLeftCanonicalBNTPresentation repeatedCopyDecomposition := by
   refine MPSTensor.IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
-    (by simp [repeatedCopyDecomposition]) (by simp [repeatedCopyDecomposition])
+    (by simp) (by simp [repeatedCopyDecomposition])
     (fun _ ↦ MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT.toMPSTensor) ?_ ?_ ?_
   · intro j
     simp [MPTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,

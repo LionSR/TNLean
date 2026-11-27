@@ -354,7 +354,7 @@ theorem hasBNTSectorData_repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ 
 /-- **The canonical form with the blocks `(1, 0)` and `(0, 1)` is a basis of normal tensors**
 (arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
 self-overlap, and their states are linearly independent. -/
-theorem isLeftCanonicalBNTPresentation_repeatedBlockBasisSector 
+theorem isLeftCanonicalBNTPresentation_repeatedBlockBasisSector
     (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
     (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) :
     IsLeftCanonicalBNTPresentation (repeatedBlockBasisSector m hm μ hμ) :=
