@@ -213,7 +213,7 @@ variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal
 projections on its one-dimensional bond space are zero and the identity. -/
-theorem isIrreducibleFamily_of_bondDim_one (A : MPSTensor d 1) :
+theorem isIrreducibleFamily_of_bondDim_one {α : Type*} (A : MPTensor α (Fin 1)) :
     Kraus.IsIrreducibleFamily A := by
   rintro ⟨P, ⟨_, hIdem⟩, hP0, hP1, _⟩
   have h00 := congrFun (congrFun hIdem (0 : Fin 1)) (0 : Fin 1)
@@ -235,8 +235,8 @@ theorem isIrreducibleFamily_of_bondDim_one (A : MPSTensor d 1) :
 
 /-- A bond-dimension-one tensor whose transfer map is the identity is a normal
 tensor. -/
-theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    (A : MPSTensor d 1) (hA : Kraus.transferMap A = LinearMap.id) :
+theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin 1)) (hA : Kraus.transferMap A = LinearMap.id) :
     IsNormalTensor A := by
   refine ⟨isIrreducibleFamily_of_bondDim_one A, ?_, ?_⟩
   · rw [hA]
