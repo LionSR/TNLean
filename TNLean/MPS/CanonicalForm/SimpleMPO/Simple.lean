@@ -51,32 +51,32 @@ theorem bnt_basis_not_isNilpotent_iff
     {P Q : MPSTensor.SectorDecomposition (Fin p × Fin p)}
     (hP : MPSTensor.IsBNTSectorPresentation A P)
     (hQ : MPSTensor.IsBNTSectorPresentation A Q) :
-    (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer p (P.basis j))) ↔
-      ∀ k, ¬ IsNilpotent (doubledPhysTraceTransfer p (Q.basis k)) := by
+    (∀ j, ¬ IsNilpotent (physTraceTransfer (P.basis j))) ↔
+      ∀ k, ¬ IsNilpotent (physTraceTransfer (Q.basis k)) := by
   classical
   obtain ⟨e, hEquiv⟩ := hP.equiv_of_sameMPV₂Pos hQ (fun _ _ _ => rfl)
   constructor
   · intro hPNonNil k hQNil
     let j := e.symm k
     obtain ⟨hdim, hGauge⟩ := hEquiv j
-    have hQNil' : IsNilpotent (doubledPhysTraceTransfer p (Q.basis (e j))) := by
+    have hQNil' : IsNilpotent (physTraceTransfer (Q.basis (e j))) := by
       rw [e.apply_symm_apply]
       exact hQNil
     have hCastNil : IsNilpotent
         (doubledPhysTraceTransfer p
           (cast (congr_arg (MPSTensor (p * p)) hdim) (P.basis j))) :=
-      (isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv
+      (isNilpotent_physTraceTransfer_iff_of_gaugePhaseEquiv
         hGauge.toGaugePhaseEquiv).mpr hQNil'
     exact hPNonNil j
-      ((isNilpotent_doubledPhysTraceTransfer_cast_iff hdim (P.basis j)).mp hCastNil)
+      ((isNilpotent_physTraceTransfer_cast_iff hdim (P.basis j)).mp hCastNil)
   · intro hQNonNil j hPNil
     obtain ⟨hdim, hGauge⟩ := hEquiv j
     have hCastNil : IsNilpotent
         (doubledPhysTraceTransfer p
           (cast (congr_arg (MPSTensor (p * p)) hdim) (P.basis j))) :=
-      (isNilpotent_doubledPhysTraceTransfer_cast_iff hdim (P.basis j)).mpr hPNil
+      (isNilpotent_physTraceTransfer_cast_iff hdim (P.basis j)).mpr hPNil
     exact hQNonNil (e j)
-      ((isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv
+      ((isNilpotent_physTraceTransfer_iff_of_gaugePhaseEquiv
         hGauge.toGaugePhaseEquiv).mp hCastNil)
 
 /-- **Definition 4.7 simplicity.** A tensor is simple when it generates an MPDO and,
@@ -126,11 +126,11 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       (Equiv.prodCongr (Kraus.singleBlockEquiv d) (Kraus.singleBlockEquiv d)) |>.trans
         finProdFinEquiv
   let P := S.reindexPhysical e
-  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
     simpa using hEq i
-  have hSame : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+  have hSame : MPTensor.SameMPV₂Pos M S.toTensor :=
     MPTensor.SameMPV₂.toSameMPV₂Pos (fun N σ => (hGauge.sameMPV N σ).symm)
   have hBlock : (blockTensor M 1).toMPSTensor =
       Kraus.reindexPhysical e M.toMPSTensor := by
@@ -162,7 +162,7 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
     have hTransfer :
         doubledPhysTraceTransfer (Kraus.blockPhysDim d 1)
             (Kraus.reindexPhysical e (S.basis j)) =
-          doubledPhysTraceTransfer d (S.basis j) := by
+          physTraceTransfer (S.basis j) := by
       rw [doubledPhysTraceTransfer, doubledPhysTraceTransfer]
       change (∑ i : Fin (Kraus.blockPhysDim d 1),
           S.basis j (e (finProdFinEquiv (i, i)))) =

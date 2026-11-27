@@ -51,13 +51,13 @@ lines 1714--1718. -/
 theorem exists_common_nonzero_physicalTraceTail_entry
     (S : SectorDecomposition (Fin d × Fin d))
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer d (S.basis j))) :
+      ¬ IsNilpotent (MPOTensor.physTraceTransfer (S.basis j))) :
     ∃ L : ℕ, 0 < L ∧ ∀ j : Fin S.basisCount,
       ∃ α β : Fin (S.basisDim j),
-        ((MPOTensor.doubledPhysTraceTransfer d (S.basis j)) ^ L) α β ≠ 0 := by
+        ((MPOTensor.physTraceTransfer (S.basis j)) ^ L) α β ≠ 0 := by
   refine ⟨1, by omega, ?_⟩
   intro j
-  have hTail : (MPOTensor.doubledPhysTraceTransfer d (S.basis j)) ^ 1 ≠ 0 := by
+  have hTail : (MPOTensor.physTraceTransfer (S.basis j)) ^ 1 ≠ 0 := by
     intro hzero
     exact hnonNil j ⟨1, hzero⟩
   obtain ⟨α, β, hαβ⟩ := Matrix.exists_entry_ne_zero_of_ne_zero _ hTail
@@ -75,7 +75,7 @@ noncomputable def threeSiteClosingMatrix
     (S : SectorDecomposition (Fin d × Fin d)) (L : ℕ) (j : Fin S.basisCount) :
     Matrix (Fin (S.basisDim j)) (Fin (S.basisDim j)) ℂ :=
   S.coeff (L + 3) j •
-    (MPOTensor.doubledPhysTraceTransfer d (S.basis j)) ^ L
+    (MPOTensor.physTraceTransfer (S.basis j)) ^ L
 
 /-- At one common positive tail length, every three-site closing matrix has a
 nonzero entry:
@@ -93,7 +93,7 @@ theorem exists_common_nonzero_threeSiteClosingMatrix_entry
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer d (S.basis j))) :
+      ¬ IsNilpotent (MPOTensor.physTraceTransfer (S.basis j))) :
     ∃ L : ℕ, 0 < L ∧ ∀ j : Fin S.basisCount,
       ∃ α β : Fin (S.basisDim j),
         S.threeSiteClosingMatrix L j α β ≠ 0 := by
@@ -117,7 +117,7 @@ theorem exists_common_threeSiteClosingMatrix_ne_zero
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer d (S.basis j))) :
+      ¬ IsNilpotent (MPOTensor.physTraceTransfer (S.basis j))) :
     ∃ L : ℕ, 0 < L ∧ ∀ j : Fin S.basisCount,
       S.threeSiteClosingMatrix L j ≠ 0 := by
   obtain ⟨L, hL, hEntry⟩ :=
