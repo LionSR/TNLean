@@ -30,6 +30,8 @@ MPSarchive.tex lines 911--931, the window gauges of lines 1080--1086, and Theore
 lines 1139--1169.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open MPTensor
 
 open Matrix MPSPreparation
@@ -154,7 +156,8 @@ Source: PGVWC07, MPSarchive.tex lines 921--931. -/
     (periodicCutBasis hk hleft hright a).val σ =
       leftCutVector A k a ((cutPrefixConfigEquiv hk).symm σ) := by
   simp only [periodicCutBasis, Module.Basis.map_apply]
-  exact congrFun (Module.Basis.span_apply (linearIndependent_leftCutVector_interval hk hleft) a) σ
+  exact congrFun (congrArg Subtype.val
+    (Module.Basis.span_apply (linearIndependent_leftCutVector_interval hk hleft) a)) σ
 
 private theorem cutPrefixConfigEquiv_extend (hk : k + 1 ≤ N)
     (u : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (i : Fin d) :

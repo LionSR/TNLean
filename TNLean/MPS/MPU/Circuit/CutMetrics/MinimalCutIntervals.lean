@@ -25,10 +25,10 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPUCircuit
 

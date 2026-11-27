@@ -20,10 +20,10 @@ Theorem thm:OBC-Vidal, lines 444--458, and the prescribed OBC window in
 Theorem 8, lines 1139--1169.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSPreparation
 open scoped BigOperators
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace OBCChainTensor
 

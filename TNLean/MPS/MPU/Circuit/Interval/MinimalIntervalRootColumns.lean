@@ -27,10 +27,10 @@ implementation, used after the recursive circuit construction. See
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped Kronecker Matrix ComplexOrder MatrixOrder
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPUCircuit
 

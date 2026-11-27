@@ -22,10 +22,10 @@ thm:OBC-Vidal, MPSarchive.tex lines 431--458, and the prescribed OBC
 canonical window in Theorem 8, lines 1139--1169.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSPreparation
 open scoped BigOperators ComplexOrder
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace OBCChainTensor
 

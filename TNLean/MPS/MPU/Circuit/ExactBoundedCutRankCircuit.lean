@@ -38,12 +38,12 @@ alphabet or efficient classical parameter-computation assertion. Source:
 §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 section
 
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped Kronecker Matrix ComplexOrder MatrixOrder
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPUCircuit
 

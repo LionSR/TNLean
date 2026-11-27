@@ -26,12 +26,12 @@ It also contains the following results.
   weighted Schmidt bases at the physical cuts of an open chain.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 section OBCCanonicalEndpoints
 
 open Matrix
 open scoped BigOperators
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPSPreparation
 
@@ -153,6 +153,7 @@ section
 
 open Matrix
 open scoped BigOperators ComplexOrder
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPSPreparation
 
@@ -257,6 +258,7 @@ section
 
 open Matrix
 open scoped BigOperators ComplexOrder
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPSPreparation
 

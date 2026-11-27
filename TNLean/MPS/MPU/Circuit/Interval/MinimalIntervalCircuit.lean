@@ -48,14 +48,14 @@ It also contains the following results.
   intervals.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 section MinimalIntervalCircuit
 
 section
 
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped Kronecker Matrix ComplexOrder MatrixOrder
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPUCircuit
 

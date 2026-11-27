@@ -27,6 +27,8 @@ block cuts in `part2b_mps_protocol.tex`, lines 605–614. The coefficients are
 those of the cut matrix `cutMatrix (interval L 0 k)` of QICLean.
 -/
 
+open ManyBody (interval cutMatrix RegionConfig ComplConfig)
+
 noncomputable section
 open scoped BigOperators
 open ManyBody (interval cutMatrix RegionConfig ComplConfig)

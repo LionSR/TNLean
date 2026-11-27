@@ -27,6 +27,8 @@ It also contains the following results.
   of an open-boundary MPS.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 
 section OBCCanonicalRecurrences
@@ -125,8 +127,6 @@ open scoped BigOperators ComplexOrder
 namespace OBCChainTensor
 
 open MPSPreparation
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
-
 /-- Every normalized physical state of positive length has an actual
 simultaneous OBC canonical representation. Bond dimensions are the actual
 Schmidt cut ranks, and the densities are derived positive diagonal Grams.

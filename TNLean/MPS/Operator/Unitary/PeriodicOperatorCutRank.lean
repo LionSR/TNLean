@@ -28,6 +28,8 @@ Sources: arXiv:2508.08160v2, `references/2508.08160/main.tex`,
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix MPSPreparation
 open scoped BigOperators
 

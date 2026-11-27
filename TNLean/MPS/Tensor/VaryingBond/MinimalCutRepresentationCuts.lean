@@ -28,6 +28,8 @@ It also contains the following results.
   of `k` and of `N - k` sites.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 open scoped BigOperators
 open ManyBody (RegionConfig ComplConfig cutMatrix cutRank interval mem_interval

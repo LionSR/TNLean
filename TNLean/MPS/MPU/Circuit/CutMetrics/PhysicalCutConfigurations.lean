@@ -17,6 +17,8 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval RegionConfig ComplConfig)
+
 open Matrix
 
 open ManyBody (interval RegionConfig ComplConfig cutEquiv cutEquiv_symm_apply_mem

@@ -28,10 +28,10 @@ Source: the finite nonuniform operator definition in arXiv:2508.08160v2,
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 open scoped Matrix ComplexOrder
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPUCircuit
 

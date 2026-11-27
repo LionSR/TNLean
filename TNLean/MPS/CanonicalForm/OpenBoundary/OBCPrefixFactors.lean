@@ -31,12 +31,12 @@ Source: PGVWC07, arXiv:quant-ph/0608197, Theorem free-OBC and
 Eq. eq.lem.II.9, lines 461--522.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 section
 
 open Matrix
 open scoped BigOperators
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace OBCChainTensor
 

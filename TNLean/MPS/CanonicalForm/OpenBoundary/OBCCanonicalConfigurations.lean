@@ -27,6 +27,8 @@ Source: PGVWC07, arXiv:quant-ph/0608197, the canonical recursion conditions
 in Theorem thm:OBC-Vidal, MPSarchive.tex lines 444--456.
 -/
 
+open ManyBody (interval RegionConfig ComplConfig)
+
 section
 
 open ManyBody (interval RegionConfig ComplConfig)

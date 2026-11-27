@@ -27,12 +27,12 @@ canonical OBC window and first clause of Theorem 8, MPSarchive.tex
 lines 1139--1169.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open MPTensor
 
 open Matrix MPSPreparation OBCChainTensor
 open scoped BigOperators
-
-open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
 
 namespace MPSTensor
 
