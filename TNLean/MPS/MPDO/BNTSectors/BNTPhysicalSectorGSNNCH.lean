@@ -9,7 +9,7 @@ import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTranspor
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorCoefficientPositivity
 import TNLean.MPS.MPDO.CommutingForm.GSNNCHSectorRescaling
 import TNLean.MPS.Operator.PhysicalSector.NeighboringPreparation
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Positive bonds from the active physical compression
@@ -219,15 +219,13 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
   have hSectorNe : ∀ s, mpo (K s) N ≠ 0 := by
     intro s hzero
     let : NeZero (S.basisDim s) := ⟨Nat.ne_of_gt (hBasisDim s)⟩
-    have hmpv : (MPTensor.mpv (K s).toMPSTensor :
-        MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
+    have hmpv : (MPTensor.mpv (K s) : (Fin N → Fin d × Fin d) → ℂ) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective
-        (Kraus.isNBlkInjective_one_of_isInjective
-          (hInjective s)) Nat.one_pos
+        (Kraus.isNBlkInjective_one_of_isInjective (hInjective s)) Nat.one_pos
       omega
     apply hmpv
     funext ρ
-    rw [MPOTensor.mpv_toMPSTensor_eq, MPOTensor.mpv_eq_mpo, hzero]
+    rw [MPOTensor.mpv_eq_mpo, hzero]
     rfl
   obtain ⟨coefficient, hCoefficient, hCoefficientEq⟩ :=
     exists_nonnegative_real_eq_sectorCoefficient_of_orthogonalSupport
