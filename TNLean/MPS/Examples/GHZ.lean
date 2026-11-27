@@ -33,7 +33,7 @@ uniqueness theorem, since the GHZ tensor is not normal.
   GHZ, `d`-level GHZ and `G`-injective tensors are fixed points, and every nonzero transfer
   eigenvalue of the `G`-injective tensor is `1`; arXiv:2011.12127, line 1197.
 * `TNLean.PEPS.IsGInjective` (`G`-injectivity): the tensor of `GinjMPS` is `G`-injective for the
-  representation `L_g ⊗ L̄_g`; arXiv:1001.3807, Definition `def:2d-Ug-inj`, lines 1278–1296.
+  representation `g ↦ L_g ⊗ conj L_g`; arXiv:1001.3807, Definition `def:2d-Ug-inj`, lines 1278–1296.
 * `MPSTensor.IsOnSiteSymmetric` (on-site symmetry): the `Z₂`, permutation, cyclic-shift and
   regular-representation symmetries.
 * `Kraus.not_isInjective_of_linearMap` (companion library): non-injectivity of the GHZ tensors
