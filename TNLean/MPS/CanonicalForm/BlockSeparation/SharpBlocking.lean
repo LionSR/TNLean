@@ -227,7 +227,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_th
       ∃ B : (j : Fin g) → MPSTensor d (dim j),
         IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
         ∃ L : ℕ, 0 < L ∧ L ≤ 3 * D ^ 5 ∧
-          WordTupleSpanTop (fun j => Kraus.blockTensor (B j) L) 1 := by
+          WordTupleSpanTop (fun j => Kraus.block (B j) L) 1 := by
   let data := Classical.choice hA
   let ref := data.bntRefinement
   let dim : Fin data.phaseClasses.g → ℕ := fun j =>
@@ -240,6 +240,6 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_th
     hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
       (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
   exact ⟨data.phaseClasses.g, dim, B, hBNT, L, hL, hLbound,
-    wordTupleSpanTop_blockTensor_one B hSpan⟩
+    wordTupleSpanTop_block_one B hSpan⟩
 
 end MPSTensor

@@ -480,14 +480,14 @@ of distinct blocks tend to `0`, then the MPV states are linearly independent for
 every sufficiently large system size.  This is the threshold form of
 `eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal`. -/
 lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
-    {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hSelf : ∀ j,
-      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := α) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hOff : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
+      Tendsto (fun N => mpvOverlap (α := α) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin r => mpvState (α := Fin d) (A j) N) := by
+      LinearIndependent ℂ (fun j : Fin r => mpvState (α := α) (A j) N) := by
   have hOrtho := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hSelf hOff
   rw [Filter.Eventually] at hOrtho
   obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
@@ -532,8 +532,8 @@ end SeparatedBNT
 
 section SeparatedNormalBNT
 
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {A : (k : Fin r) → MPSTensor d (dim k)}
+variable {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+variable {A : (k : Fin r) → MPTensor α (Fin (dim k))}
 
 /-- Separated-hypotheses version of normal BNT cross-overlap decay.
 
@@ -541,12 +541,12 @@ Only irreducibility, left-canonical normalization, and the BNT non-equivalence
 assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
     [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := α) A)
     (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A k) N) atTop (nhds 0) := by
+    Tendsto (fun N => mpvOverlap (α := α) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
   · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := A j) (B := A k)

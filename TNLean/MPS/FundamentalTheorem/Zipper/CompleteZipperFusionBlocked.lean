@@ -247,7 +247,7 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
     (fun j k hjk hdim hGPE => hne' j k hjk hdim
       (MPSTensor.gaugePhaseEquiv_of_smul_smul_cast hdim (hscale j) (hscale k) hGPE))
   replace hSpan := MPSTensor.wordTupleSpanTop_of_smul hscale hSpan
-  have hSpan1 := MPSTensor.wordTupleSpanTop_blockTensor_one _ hSpan
+  have hSpan1 := MPSTensor.wordTupleSpanTop_block_one _ hSpan
   have hSpanBlocked : MPSTensor.WordTupleSpanTop
       (fun c ↦ (blockTensor (T c) L).toMPSTensor) 1 := by
     have hFamily : (fun c ↦ (blockTensor (T c) L).toMPSTensor) =
