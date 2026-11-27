@@ -278,7 +278,8 @@ theorem finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective
     Module.finrank ℂ (LinearMap.ker
       (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian)) = D ^ 2 := by
   rw [ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N]
-  exact groundSpaceES_finrank_eq_of_isNBlkInjective (Kraus.isNBlkInjective_of_le hL₀ hInj (by omega))
+  exact groundSpaceES_finrank_eq_of_isNBlkInjective
+    (Kraus.isNBlkInjective_of_le hL₀ hInj (by omega))
 
 /-- At volume \(N = L\) the Hamiltonian of the parent interaction on the open chain is the local
 parent interaction itself: the only window is the whole chain. -/

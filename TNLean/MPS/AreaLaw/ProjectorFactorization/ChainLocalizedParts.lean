@@ -414,7 +414,8 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization (hq : 1 
   -- the same average with `A` shifted by `E₀`, so that `A + B = H`
   set H₀₂ := H₀ + (E₀ : ℂ) • 1 with hH₀₂
   have hH₀₂h : H₀₂.IsHermitian := hH₀.add hE
-  have hshift : Matrix.interactionAverage η H₀₂ (H' - H₀) = Matrix.interactionAverage η H₀ (H' - H₀) :=
+  have hshift :
+      Matrix.interactionAverage η H₀₂ (H' - H₀) = Matrix.interactionAverage η H₀ (H' - H₀) :=
     interactionAverage_add_smul_one η H₀ (H' - H₀) E₀
   have hsum : H₀₂ + (H' - H₀) = h.hamiltonian := by rw [hH₀₂, hH']; abel
   have hdiff : h.hamiltonian - H₀₂ = H' - H₀ := by rw [hH₀₂, hH']; abel

@@ -518,7 +518,7 @@ private theorem reindexPhysical_toTensorFromBlocks_eq_tensor :
         rw [tensor, ite_eq_right hp_diag]
         simp
   funext p
-  show MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks (finProdFinEquiv p) = tensor p
+  change MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks (finProdFinEquiv p) = tensor p
   rw [← hflat]
   change tensor (finProdFinEquiv.symm (finProdFinEquiv p)) = tensor p
   rw [Equiv.symm_apply_apply]

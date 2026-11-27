@@ -63,7 +63,8 @@ theorem exists_unital_gauge_of_isNBlkInjective [NeZero D] (A : MPSTensor d D)
     isNBlkInjective_of_gaugeEquiv ((isNBlkInjective_smul_iff hζ A L).2 hC1) hgauge
   refine ⟨B, ζ, hζ, hrow, hgauge, fun n hn ↦ ?_⟩
   exact (isNBlkInjective_smul_iff hζ A n).mp
-    (isNBlkInjective_of_gaugeEquiv (Kraus.wordSpan_eq_top_of_ge_of_unital _ hrow hBL hn) hgauge.symm)
+    (isNBlkInjective_of_gaugeEquiv (Kraus.wordSpan_eq_top_of_ge_of_unital _ hrow hBL hn)
+      hgauge.symm)
 
 /-- Nonvanishing of the actual positive-length physical vector supplies
 a nonzero tensor letter, with no injectivity or canonical condition.

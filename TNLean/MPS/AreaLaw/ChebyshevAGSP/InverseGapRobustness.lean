@@ -169,8 +169,8 @@ theorem exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff
           (⟪x, ι K x⟫_ℂ).re - e' * ‖x‖ ^ 2) ∧
       (∀ x : EuclideanSpace ℂ n, ⟪φ, x⟫_ℂ = 0 →
         (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) :=
-  Matrix.exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal L N R A hL hN hR hA Ω hΩ e g t hg ht
-    heig (orthogonal_clipped_energy_ge_of_inverse_gap_cutoff L N R A hL hN hR hA hLN hLR hNR
+  Matrix.exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal L N R A hL hN hR hA Ω hΩ e g t hg
+    ht heig (orthogonal_clipped_energy_ge_of_inverse_gap_cutoff L N R A hL hN hR hA hLN hLR hNR
       hAcap Ω hΩ e g t hg ht hcut hgap)
 
 /-- The normalized energy and gap bounds turn the refined cutoff into
