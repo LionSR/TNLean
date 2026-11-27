@@ -106,7 +106,7 @@ from finitely many polynomial identities. It does not use a limiting argument.
 \section{The basis-of-representatives restriction}
 
 \textbf{Update (2026-11-27).} The one-representative structure discussed below,
-\leanid{MPSTensor.IsNormalCanonicalFormBNT}, has been deleted together with its
+\texttt{MPSTensor.IsNormalCanonicalFormBNT}, has been deleted together with its
 constructor and its two common-blocking theorems. The common blocking is now
 stated for any finite family of normal tensors
 (\leanid{MPSTensor.exists_common_blockTensor_isInjective_of_isNormal} and
@@ -117,7 +117,7 @@ these carries a one-copy restriction. The remainder of this note records the
 restriction as it stood before the deletion.
 
 The formal normal-CF-BNT structure was
-\leanid{MPSTensor.IsNormalCanonicalFormBNT}.\footnote{Defined in
+\texttt{MPSTensor.IsNormalCanonicalFormBNT}.\footnote{Defined in
 \path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}. The earlier non-normal wrapper was
 retired after its downstream consumers were replaced by explicit
 separated-block hypotheses.} This structure no longer requires strict
@@ -127,7 +127,7 @@ Instead of strict modulus separation, its BNT separation field requires
 distinct blocks not to be gauge-phase equivalent.
 
 The remaining restriction is therefore not strict modulus ordering.
-The structure \leanid{MPSTensor.IsNormalCanonicalFormBNT} is a
+The structure \texttt{MPSTensor.IsNormalCanonicalFormBNT} is a
 basis-of-representatives surface: its block family already contains one
 selected representative for each gauge-phase class. It does not retain
 multiple copies of one source BNT tensor as separate summands together with
@@ -139,7 +139,7 @@ their individual weights $\mu_{j,q}$, copy gauges, and coefficient
 \end{align}
 The formalization carries this raw multiplicity data in
 \leanid{MPSTensor.SectorDecomposition} and in the SectorBNT comparison theorems, not in
-\leanid{MPSTensor.IsNormalCanonicalFormBNT}.
+\texttt{MPSTensor.IsNormalCanonicalFormBNT}.
 
 In the one-copy special case, the source decomposition becomes
 \begin{align}
@@ -201,7 +201,7 @@ Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \subsection{Multi-copy sector structure}
 
-The structure \leanid{MPSTensor.IsNormalCanonicalFormBNT} permits equal moduli but does
+The structure \texttt{MPSTensor.IsNormalCanonicalFormBNT} permits equal moduli but does
 not store repeated gauge-phase-equivalent copies with their individual
 weights. The general theorem therefore requires the
 \leanid{MPSTensor.SectorDecomposition}/SectorBNT multiplicity structure, in which every
@@ -235,7 +235,7 @@ already been supplied. Thus no current theorem is presented as deriving the
 source proportional comparison from the discarded coefficient hypotheses.
 
 Neither the old dominant-normalization field nor the old strict-ordering field
-remains in \leanid{MPSTensor.IsNormalCanonicalFormBNT}. When a CPSV argument needs a
+remains in \texttt{MPSTensor.IsNormalCanonicalFormBNT}. When a CPSV argument needs a
 unit-modulus witness for a sector, it carries that datum as an explicit
 SectorBNT hypothesis, for example through the corresponding field of
 \leanid{MPSTensor.SectorDecomposition}.
@@ -245,7 +245,7 @@ SectorBNT hypothesis, for example through the corresponding field of
 The downstream CPSV16 surfaces that consume the restricted normal-CF-BNT
 predicate have been audited against the basis-of-representatives
 boundary.\footnote{The relevant \Lean{} surfaces were the deleted structure
-\leanid{MPSTensor.IsNormalCanonicalFormBNT}, its constructor and common-blocking theorems,
+\texttt{MPSTensor.IsNormalCanonicalFormBNT}, its constructor and common-blocking theorems,
 and the surviving lemma
 \leanid{MPSTensor.cross_overlap_tendsto_zero_of_separated_normal_bnt_data}.}
 
