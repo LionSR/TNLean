@@ -21,7 +21,7 @@ Padding every matrix with zeros to a `D × D` matrix (`VaryingBondChain.zeroPad`
 `Matrix.zeroPad`) gives a chain with the common bond dimension `D` and, on a ring of `N ≥ 1`
 sites, the same state (`VaryingBondChain.coeff_zeroPad`). A product of padded matrices along
 consecutive sites vanishes outside the rectangle of the bonds at its two ends
-(`MPSChainTensor.eval_eq_zero_of_support`, `MPSChainTensor.blockTensor_eq_zero_of_support`).
+(`MPSChainTensor.eval_eq_zero_of_support`, `MPSChainTensor.eval_eq_zero_of_support_of_pos`).
 
 This is the setting of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS",
 for matrix product states "with bond dimension at most `D`".
@@ -134,14 +134,14 @@ theorem eval_eq_zero_of_support {n : ℕ} (C : MPSChainTensor d D (n + 1)) (b : 
     refine Finset.sum_eq_zero fun γ _ => ?_
     rw [hC (Fin.last n) _ γ β fun h' => hβ (by simpa using h'.2), mul_zero]
 
-/-- A blocked tensor of a chain of `q ≥ 1` sites whose site `j` is supported on
+/-- The blocked tensor of a chain of `q ≥ 1` sites whose site `j` is supported on
 `[0, b_j) × [0, b_{j+1})` is supported on `[0, b_0) × [0, b_q)`. -/
-theorem blockTensor_eq_zero_of_support {q : ℕ} (C : MPSChainTensor d D q) (hq : 0 < q)
+theorem eval_eq_zero_of_support_of_pos {q : ℕ} (C : MPSChainTensor d D q) (hq : 0 < q)
     (b : Fin (q + 1) → ℕ)
     (hC : ∀ j i (α β : Fin D), ¬(α.val < b j.castSucc ∧ β.val < b j.succ) → C j i α β = 0)
-    (t : Fin (Kraus.blockPhysDim d q)) {α β : Fin D}
+    (σ : Fin q → Fin d) {α β : Fin D}
     (h : ¬(α.val < b 0 ∧ β.val < b (Fin.last q))) :
-    blockTensor C t α β = 0 := by
+    eval C σ α β = 0 := by
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
   exact eval_eq_zero_of_support C b hC _ h
 

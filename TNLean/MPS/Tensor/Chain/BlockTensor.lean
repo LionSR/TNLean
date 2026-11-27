@@ -11,9 +11,9 @@ import QICLean.Kraus.Transfer
 # Blocking a site-dependent chain
 
 A chain of `n` site-dependent tensors `A₀, …, A_{n-1}` with a common bond dimension `D` blocks
-into one tensor of physical dimension `d^n`: its matrix at the word `σ` is the ordered product
-`A₀^{σ₀} ⋯ A_{n-1}^{σ_{n-1}}`. For a constant chain this is the blocked tensor
-`Kraus.blockTensor A n`.
+into one tensor on the alphabet `Fin n → Fin d`: its matrix at the word `σ` is the ordered
+product `eval A σ = A₀^{σ₀} ⋯ A_{n-1}^{σ_{n-1}}`. For a constant chain this is the blocked
+tensor `Kraus.block A n`.
 
 The inhomogeneous matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous
 short-range correlated MPS", have "bond dimension at most `D`" varying along the ring; padding
@@ -22,10 +22,10 @@ with the common bond dimension `D` and the same state, to which the blocking her
 
 ## Main declarations
 
-* `MPSChainTensor.blockTensor` — the blocked tensor of a site-dependent chain.
-* `MPSChainTensor.blockTensor_const` — for a constant chain it is `Kraus.blockTensor`.
+* `MPSChainTensor.eval_const_eq_block` — for a constant chain the blocked tensor `eval A` is
+  `Kraus.block A n`.
 * `MPSChainTensor.eval_eq_prod_ofFn` — the ordered product along a chain as a list product.
-* `MPSChainTensor.prod_transferMap_apply`, `MPSChainTensor.transferMap_blockTensor`: ordered
+* `MPSChainTensor.prod_transferMap_apply`, `MPSChainTensor.transferMap_eval`: ordered
   transfer products of inhomogeneous chains.
 
 ## References
@@ -55,27 +55,15 @@ theorem eval_const (A : MPSTensor d D) (σ : Fin n → Fin d) :
   | zero => simp
   | succ n ih => rw [eval_succ, ih, List.ofFn_succ, Kraus.evalWord_cons]
 
-/-- **The blocked tensor of a site-dependent chain.** Its matrix at the blocked index of the word
-`σ` is the ordered product `A₀^{σ₀} ⋯ A_{n-1}^{σ_{n-1}}`.
+/-- **The blocked tensor of a site-dependent chain.** Read as a family indexed by the words
+`σ : Fin n → Fin d`, the ordered product `eval A` is the blocked tensor of the chain; for a
+constant chain it is `Kraus.block A n`.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": the tensor obtained
 "after blocking `q`" sites of a matrix product state that is not translation invariant. -/
-noncomputable def blockTensor (A : MPSChainTensor d D n) :
-    MPSTensor (Kraus.blockPhysDim d n) D :=
-  fun t => eval A (Kraus.decodeBlockEquiv d n t)
-
-@[simp] theorem blockTensor_decodeBlockEquiv_symm (A : MPSChainTensor d D n)
-    (σ : Fin n → Fin d) :
-    blockTensor A ((Kraus.decodeBlockEquiv d n).symm σ) = eval A σ := by
-  simp [blockTensor]
-
-/-- The blocked tensor of a constant chain is the blocked tensor of its tensor. -/
-theorem blockTensor_const (A : MPSTensor d D) :
-    blockTensor (fun _ : Fin n => A) = Kraus.blockTensor A n := by
-  funext t
-  obtain ⟨σ, rfl⟩ := (Kraus.decodeBlockEquiv d n).symm.surjective t
-  rw [blockTensor_decodeBlockEquiv_symm, eval_const]
-  simp only [Kraus.blockTensor, Kraus.reindexPhysical, Equiv.apply_symm_apply, Kraus.block_apply]
+theorem eval_const_eq_block (A : MPSTensor d D) :
+    eval (fun _ : Fin n => A) = Kraus.block A n :=
+  funext (eval_const A)
 
 end MPSChainTensor
 
@@ -94,7 +82,7 @@ are not substituted for products of different maps.
 ### Main results
 
 * `MPSChainTensor.prod_transferMap_apply`: expansion in physical words.
-* `MPSChainTensor.transferMap_blockTensor`: the exact ordered transfer product.
+* `MPSChainTensor.transferMap_eval`: the exact ordered transfer product.
 
 ### References
 
@@ -132,14 +120,10 @@ theorem prod_transferMap_apply (A : MPSChainTensor d D n) (X : Matrix (Fin D) (F
 /-- **Blocking an inhomogeneous chain composes its transfer maps in order.** This applies
 also to a contiguous block extracted from a longer ring; the first site's map is the outermost
 map in the composition. -/
-theorem transferMap_blockTensor (A : MPSChainTensor d D n) :
-    Kraus.transferMap (blockTensor A) = (List.ofFn fun i => Kraus.transferMap (A i)).prod := by
-  classical
+theorem transferMap_eval (A : MPSChainTensor d D n) :
+    Kraus.transferMap (eval A) = (List.ofFn fun i => Kraus.transferMap (A i)).prod := by
   ext X : 1
   rw [prod_transferMap_apply, Kraus.transferMap_apply]
-  exact Fintype.sum_equiv (Kraus.decodeBlockEquiv d n)
-    (fun t => blockTensor A t * X * (blockTensor A t)ᴴ)
-    (fun s => eval A s * X * (eval A s)ᴴ) (fun _ => rfl)
 
 end MPSChainTensor
 
