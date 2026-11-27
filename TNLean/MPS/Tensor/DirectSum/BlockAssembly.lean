@@ -108,10 +108,10 @@ theorem blockInclusion_conjTranspose_mul_eq_zero {r : ℕ} (dim : Fin r → ℕ)
 /-- A flattened dependent-block inclusion intertwines the assembled tensor with its
 weighted block. This is the coordinate form of arXiv:1606.00608, eq. `II_CF1`,
 lines 214--225. -/
-theorem toTensorFromBlocks_mul_blockInclusion {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (k : Fin r) (i : Fin d) :
-    toTensorFromBlocks (α := Fin d) μ A i * blockInclusion dim k =
+theorem toTensorFromBlocks_mul_blockInclusion {α : Type*} {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (k : Fin r) (i : α) :
+    toTensorFromBlocks (α := α) μ A i * blockInclusion dim k =
       blockInclusion dim k * (μ k • A k i) := by
   let dim' := fun j : Fin r => Fin (dim j)
   let e : ((j : Fin r) × dim' j) ≃ Fin (∑ j, dim j) := finSigmaFinEquiv
@@ -140,11 +140,11 @@ noncomputable def blockIndexCoordinateEquiv {r : ℕ} {ι : Type*}
 The right side is assembled in the `ι` block order and then permuted into the flattened
 coordinates of the original `Fin r` family. Unlike `mpv_toTensorFromBlocks_reindex`, this is
 an equality of matrices at each letter. -/
-theorem toTensorFromBlocks_eq_reindex_blockDiagonal_equiv
+theorem toTensorFromBlocks_eq_reindex_blockDiagonal_equiv {α : Type*}
     {r : ℕ} {ι : Type*} [DecidableEq ι]
     {dim : Fin r → ℕ} (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k)) (e : ι ≃ Fin r) (i : Fin d) :
-    toTensorFromBlocks (α := Fin d) μ A i =
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (e : ι ≃ Fin r) (i : α) :
+    toTensorFromBlocks (α := α) μ A i =
       Matrix.reindex (blockIndexCoordinateEquiv dim e) (blockIndexCoordinateEquiv dim e)
         (Matrix.blockDiagonal' fun k : ι => μ (e k) • A (e k) i) := by
   classical
@@ -193,10 +193,10 @@ noncomputable def blockDimEquiv {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r
 If an equivalence matches the block indices, matched block dimensions agree, and every
 weighted block agrees after the induced matrix reindexing, then the assembled tensors agree
 after the corresponding total-coordinate reindexing. -/
-theorem toTensorFromBlocks_eq_reindex_of_equiv
+theorem toTensorFromBlocks_eq_reindex_of_equiv {α : Type*}
     {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (μ' : Fin r' → ℂ) (B : (k : Fin r') → MPSTensor d (dim' k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (μ' : Fin r' → ℂ) (B : (k : Fin r') → MPTensor α (Fin (dim' k)))
     (e : Fin r ≃ Fin r') (hDim : ∀ k, dim k = dim' (e k))
     (h : ∀ k i, μ k • A k i =
       Matrix.reindex (finCongr (hDim k)).symm (finCongr (hDim k)).symm
@@ -239,25 +239,25 @@ theorem toTensorFromBlocks_eq_reindex_of_equiv
 /-- Word evaluation of `toTensorFromBlocks` is the reindexed block diagonal of
 the component word evaluations, with the scalar weight `μ k` contributing the
 factor `(μ k) ^ w.length` on block `k`. -/
-theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
+theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal {α : Type*}
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (w : List (Fin d)) :
-    Kraus.evalWord (toTensorFromBlocks (α := Fin d) (μ := μ) A) w =
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k))) (w : List α) :
+    Kraus.evalWord (toTensorFromBlocks (α := α) (μ := μ) A) w =
       (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
         (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • Kraus.evalWord (A k) w) := by
   classical
-  let α := (k : Fin r) × Fin (dim k)
-  let e : α ≃ Fin (∑ k, dim k) := finSigmaFinEquiv
-  let BD : Fin d → Matrix α α ℂ := fun i => Matrix.blockDiagonal' (fun k => μ k • A k i)
-  have hfun : (fun i : Fin d => toTensorFromBlocks (α := Fin d) (μ := μ) A i) =
+  let γ := (k : Fin r) × Fin (dim k)
+  let e : γ ≃ Fin (∑ k, dim k) := finSigmaFinEquiv
+  let BD : α → Matrix γ γ ℂ := fun i => Matrix.blockDiagonal' (fun k => μ k • A k i)
+  have hfun : (fun i : α => toTensorFromBlocks (α := α) (μ := μ) A i) =
       fun i => (Matrix.reindex e e) (BD i) := by
     funext i
     rfl
   calc
-    Kraus.evalWord (toTensorFromBlocks (α := Fin d) (μ := μ) A) w =
+    Kraus.evalWord (toTensorFromBlocks (α := α) (μ := μ) A) w =
         (Matrix.reindex e e) (Kraus.evalWord BD w) := by
       simpa [toTensorFromBlocks, BD, e, hfun] using
-        evalWord_reindex (d := d) (e := e) (A := BD) w
+        evalWord_reindex (e := e) (A := BD) w
     _ = (Matrix.reindex e e)
         (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • Kraus.evalWord (A k) w) := by
       congr 1
@@ -297,11 +297,11 @@ theorem sameMPV₂Pos_of_coisometry_reconstruction
   exact Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one U hU _
 
 /-- MPV of `toTensorFromBlocks` expands as a sum over blocks. -/
-theorem mpv_toTensorFromBlocks_eq_sum
+theorem mpv_toTensorFromBlocks_eq_sum {α : Type*}
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (α := Fin d) (μ := μ) A) σ =
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    {N : ℕ} (σ : Fin N → α) :
+    mpv (toTensorFromBlocks (α := α) (μ := μ) A) σ =
       ∑ k : Fin r, (μ k) ^ N • mpv (A k) σ := by
   classical
   set w := List.ofFn σ with hw
@@ -313,26 +313,26 @@ theorem mpv_toTensorFromBlocks_eq_sum
 
 /-- The MPV of a block-diagonal assembly is invariant under reindexing the block family
 by an equivalence of the block index. -/
-theorem mpv_toTensorFromBlocks_reindex {r r' : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (e : Fin r' ≃ Fin r)
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (α := Fin d) (μ := μ) A) σ
-      = mpv (toTensorFromBlocks (α := Fin d) (μ := fun k => μ (e k)) (fun k => A (e k))) σ := by
+theorem mpv_toTensorFromBlocks_reindex {α : Type*} {r r' : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k))) (e : Fin r' ≃ Fin r)
+    {N : ℕ} (σ : Fin N → α) :
+    mpv (toTensorFromBlocks (α := α) (μ := μ) A) σ
+      = mpv (toTensorFromBlocks (α := α) (μ := fun k => μ (e k)) (fun k => A (e k))) σ := by
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   exact (Equiv.sum_comp e (fun k => (μ k) ^ N • mpv (A k) σ)).symm
 
 /-- If a tensor has the same MPV family as a unit-weight block diagonal
 assembly, then each MPV coefficient is the sum of the block coefficients. -/
-theorem mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
+theorem mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one {α : Type*}
     {D r : ℕ} {dim : Fin r → ℕ}
-    (T : MPSTensor d D) (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (T : MPTensor α (Fin D)) (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hSame :
-      SameMPV₂ T (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks))
-    {N : ℕ} (σ : Fin N → Fin d) :
+      SameMPV₂ T (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocks))
+    {N : ℕ} (σ : Fin N → α) :
     mpv T σ = ∑ k : Fin r, mpv (blocks k) σ := by
   calc
     mpv T σ =
-        mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) σ :=
+        mpv (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocks) σ :=
       hSame N σ
     _ = ∑ k : Fin r, ((1 : ℂ) ^ N) • mpv (blocks k) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]

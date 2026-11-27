@@ -74,12 +74,12 @@ private theorem exists_inverseCorner_eq_kronecker_one (a b c d : Λ) :
           (Fus.leftFinalRow a b c d) (Fus.rightFinalRow a b c d) =
         G ⊗ₖ (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ) := by
   apply Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top
-    (Fus.tensor d).toMPSTensor
+    (Fus.tensor d)
     ((Fus.fullInversePrintedFMatrix a b c).submatrix
       (Fus.leftFinalRow a b c d) (Fus.rightFinalRow a b c d))
     (Fus.tensor_injective d).span_eq_top
   intro ij
-  obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
+  obtain ⟨i, k⟩ := ij
   have hFull := Fus.leftLetter_mul_fullInverse a b c i k
   funext ⟨mL, x⟩ ⟨mR, y⟩
   have hEntry := congrArg
@@ -132,7 +132,7 @@ private theorem exists_inverseCorner_eq_kronecker_one (a b c d : Λ) :
     simp [rightTripleDirectSumLetter, leftFinalRow, rightFinalRow,
       Matrix.blockDiagonal'_apply_eq]
   have hSimple := hLeft.symm.trans (hEntry.trans hRight)
-  simpa [MPOTensor.toMPSTensor, Matrix.submatrix_apply, Matrix.mul_apply,
+  simpa [Matrix.submatrix_apply, Matrix.mul_apply,
     Fintype.sum_prod_type, Matrix.one_apply] using hSimple
 
 /-- The multiplicity matrix in the opposite orientation, obtained from the

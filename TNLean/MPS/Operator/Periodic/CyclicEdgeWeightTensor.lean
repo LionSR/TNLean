@@ -72,17 +72,10 @@ theorem mpo_cyclicEdgeWeightTensor
       ∏ n : Fin N, w (sigma n) (tau n) (sigma (n + 1)) (tau (n + 1)) := by
   rw [mpo_apply, mpoMatrixEntry]
   rw [MPOTensor.evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic
-    (cyclicEdgeWeightTensor w).toMPSTensor
-    (fun n ↦ finProdFinEquiv (sigma n, tau n))
+  have h := MPSTensor.trace_evalWord_eq_sum_cyclic (cyclicEdgeWeightTensor w)
+    (fun n ↦ (sigma n, tau n))
   rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  have h' :
-      (List.ofFn fun i ↦ cyclicEdgeWeightTensor w (sigma i, tau i)).prod.trace =
-        ∑ g : Fin N → Fin (d * d), ∏ v : Fin N,
-          cyclicEdgeWeightTensor w (sigma v, tau v) (g v) (g (v + 1)) := by
-    simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using h
-  rw [h']
+  rw [h]
   let g0 : Fin N → Fin (d * d) :=
     fun n ↦ finProdFinEquiv (sigma n, tau n)
   rw [Fintype.sum_eq_single g0]

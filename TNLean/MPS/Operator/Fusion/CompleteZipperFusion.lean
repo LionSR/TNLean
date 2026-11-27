@@ -301,10 +301,10 @@ theorem exists_printedFMatrixAmplified_eq_kronecker_one (a b c d : Λ) :
       Fus.printedFMatrixAmplified a b c d =
         F ⊗ₖ (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ) := by
   apply Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top
-    (Fus.tensor d).toMPSTensor (Fus.printedFMatrixAmplified a b c d)
+    (Fus.tensor d) (Fus.printedFMatrixAmplified a b c d)
     (Fus.tensor_injective d).span_eq_top
   intro ij
-  obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
+  obtain ⟨i, k⟩ := ij
   have hFull := Fus.rightTripleDirectSumLetter_mul_fullPrintedFMatrix a b c i k
   funext x y
   rcases x with ⟨mR, x⟩
@@ -361,7 +361,7 @@ theorem exists_printedFMatrixAmplified_eq_kronecker_one (a b c d : Λ) :
     simp [leftTripleDirectSumLetter, rightFinalRow, leftFinalRow,
       Matrix.blockDiagonal'_apply_eq]
   have hSimple := hLeft.symm.trans (hEntry.trans hRight)
-  simpa [printedFMatrixAmplified, MPOTensor.toMPSTensor,
+  simpa [printedFMatrixAmplified,
     Matrix.submatrix_apply, Matrix.mul_apply, Fintype.sum_prod_type,
     Matrix.one_apply] using hSimple
 

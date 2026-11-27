@@ -30,13 +30,12 @@ def blockSum (O : (a : Fin r) → MPOTensor d (dim a)) :
   fun ij ↦ Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
     (Matrix.blockDiagonal' fun a ↦ O a ij)
 
-/-- The doubled-index MPS tensor of an MPO direct sum is the unweighted
-assembly of its doubled-index component tensors. -/
-@[simp] theorem blockSum_toMPSTensor (O : (a : Fin r) → MPOTensor d (dim a)) :
-    (blockSum O).toMPSTensor =
-      MPTensor.toTensorFromBlocks (fun _ ↦ 1) (fun a ↦ (O a).toMPSTensor) := by
+/-- An MPO direct sum is the unweighted assembly of its component tensors on the pair
+alphabet. -/
+theorem blockSum_eq_toTensorFromBlocks (O : (a : Fin r) → MPOTensor d (dim a)) :
+    blockSum O = MPTensor.toTensorFromBlocks (fun _ ↦ 1) O := by
   funext ij
-  simp only [toMPSTensor, blockSum, MPTensor.toTensorFromBlocks, one_smul]
+  simp only [blockSum, MPTensor.toTensorFromBlocks, one_smul]
 
 /-- Word evaluation of a finite MPO direct sum is the flattened block
 diagonal of the component word evaluations. -/
@@ -45,9 +44,9 @@ theorem evalWord_blockSum (O : (a : Fin r) → MPOTensor d (dim a))
     evalWord (blockSum O) (List.ofFn σ) (List.ofFn τ) =
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
         (Matrix.blockDiagonal' fun a ↦ evalWord (O a) (List.ofFn σ) (List.ofFn τ)) := by
-  rw [← evalWord_toMPSTensor_pairConfig (blockSum O) σ τ,
-    blockSum_toMPSTensor, MPSTensor.evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
-  simp only [one_pow, one_smul, evalWord_toMPSTensor_pairConfig]
+  rw [← kraus_evalWord_ofFn_pair (blockSum O) σ τ,
+    blockSum_eq_toTensorFromBlocks, MPSTensor.evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
+  simp only [one_pow, one_smul, kraus_evalWord_ofFn_pair]
 
 /-- The virtual boundary projection onto one summand of a flattened
 dependent direct sum. -/

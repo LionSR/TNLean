@@ -62,10 +62,10 @@ noncomputable def fusionFMatrix (a b c d : Fin r) :
     (χ d : ℂ)⁻¹ * Matrix.trace (H * S)
 
 variable {T : ∀ a, MPOTensor p (χ a)}
-  (hD : ∀ a, 0 < χ a) (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
+  (hD : ∀ a, 0 < χ a) (hT : ∀ a, Kraus.IsInjective (T a))
   (hVW : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (T q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ T q.1)
       (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2))
   (K : Matrix ((c : Fin r) × (Fin (χ c) × Fin (χ c))) (Fin p × Fin p) ℂ)
   (hK : ∀ (c d : Fin r) (x y : Fin (χ c)) (x' y' : Fin (χ d)),

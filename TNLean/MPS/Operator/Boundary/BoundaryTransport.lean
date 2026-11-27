@@ -119,7 +119,7 @@ end MPOTensor
 
 namespace MPSTensor
 
-variable {ι : Type*} [Fintype ι] {d D : ℕ} {δ : ι → ℕ}
+variable {ι : Type*} [Fintype ι] {α : Type*} {D : ℕ} {δ : ι → ℕ}
 
 /-- An exact decomposition of the letters into blocks with biorthogonal
 analysis and synthesis matrices. The index may include both a block label
@@ -127,8 +127,8 @@ and its multiplicity index. There is no ambient completeness assumption.
 
 Source: GLM23, arXiv:2203.12563v3, `fusiontensors`, `eq:orthoW`,
 `fusiontensors2`, and `eq:orthoV`, lines 364--391 and 462--490. -/
-structure IsBiorthogonalDecomposition (B : MPSTensor d D)
-    (A : ∀ c : ι, MPSTensor d (δ c))
+structure IsBiorthogonalDecomposition (B : MPTensor α (Fin D))
+    (A : ∀ c : ι, MPTensor α (Fin (δ c)))
     (V : ∀ c : ι, Matrix (Fin (δ c)) (Fin D) ℂ)
     (W : ∀ c : ι, Matrix (Fin D) (Fin (δ c)) ℂ) : Prop where
   /-- Analysis is a left inverse on each summand.
@@ -139,11 +139,11 @@ structure IsBiorthogonalDecomposition (B : MPSTensor d D)
   orthogonal : ∀ c b : ι, c ≠ b → V c * W b = 0
   /-- Exact reconstruction of a single letter.
   Source: GLM23, `fusiontensors` and `fusiontensors2`. -/
-  letter : ∀ i : Fin d, B i = ∑ c : ι, W c * A c i * V c
+  letter : ∀ i : α, B i = ∑ c : ι, W c * A c i * V c
 
 namespace IsBiorthogonalDecomposition
 
-variable {B : MPSTensor d D} {A : ∀ c : ι, MPSTensor d (δ c)}
+variable {B : MPTensor α (Fin D)} {A : ∀ c : ι, MPTensor α (Fin (δ c))}
   {V : ∀ c : ι, Matrix (Fin (δ c)) (Fin D) ℂ}
   {W : ∀ c : ι, Matrix (Fin D) (Fin (δ c)) ℂ}
   (h : IsBiorthogonalDecomposition B A V W)
@@ -172,7 +172,7 @@ theorem sum_mul_sum (F G : ∀ c : ι, Matrix (Fin (δ c)) (Fin (δ c)) ℂ) :
 /-- Exact local reconstruction extends to every nonempty word, without a
 nilpotency threshold. Source: GLM23, arXiv:2203.12563v3, Appendix A,
 `decompopen`, together with `eq:orthoW` or `eq:orthoV`. -/
-theorem evalWord (w : List (Fin d)) (hw : w ≠ []) :
+theorem evalWord (w : List α) (hw : w ≠ []) :
     Kraus.evalWord B w = ∑ c : ι, W c * Kraus.evalWord (A c) w * V c := by
   induction w with
   | nil => exact (hw rfl).elim
@@ -186,7 +186,7 @@ theorem evalWord (w : List (Fin d)) (hw : w ≠ []) :
 /-- Empty-word transport requires the synthesis-analysis sum to be the
 identity on the ambient bond space. -/
 theorem evalWord_of_complete (hcomplete : ∑ c : ι, W c * V c = 1)
-    (w : List (Fin d)) :
+    (w : List α) :
     Kraus.evalWord B w = ∑ c : ι, W c * Kraus.evalWord (A c) w * V c := by
   by_cases hw : w = []
   · subst w
@@ -197,7 +197,7 @@ theorem evalWord_of_complete (hcomplete : ∑ c : ι, W c * V c = 1)
 The transported boundaries \(V_c X W_c\) do not depend on the word length.
 Source: GLM23, arXiv:2203.12563v3, Appendix A, lines 2307--2315. -/
 theorem trace_mul_evalWord (X : Matrix (Fin D) (Fin D) ℂ)
-    (w : List (Fin d)) (hw : w ≠ []) :
+    (w : List α) (hw : w ≠ []) :
     Matrix.trace (X * Kraus.evalWord B w) =
       ∑ c : ι, Matrix.trace ((V c * X * W c) * Kraus.evalWord (A c) w) := by
   rw [h.evalWord w hw, Matrix.mul_sum, Matrix.trace_sum]
@@ -214,7 +214,7 @@ theorem trace_mul_evalWord (X : Matrix (Fin D) (Fin D) ℂ)
 /-- Exact local decomposition transports every boundary at every positive
 length. Source: GLM23, arXiv:2203.12563v3, `eq:compatible` and Appendix A. -/
 theorem mpvWithBoundary (X : Matrix (Fin D) (Fin D) ℂ) {L : ℕ} (hL : 0 < L)
-    (σ : Fin L → Fin d) :
+    (σ : Fin L → α) :
     MPSTensor.mpvWithBoundary B X σ =
       ∑ c : ι, MPSTensor.mpvWithBoundary (A c) (V c * X * W c) σ :=
   h.trace_mul_evalWord X (List.ofFn σ)

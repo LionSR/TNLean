@@ -23,8 +23,8 @@ letter by a scalar, so it preserves normality when `c` has no zero entries.
 ## Main results
 
 * `MPOTensor.mpo_mulDiagonal`: `mpo (M.mulDiagonal c) N = mpo M N * diag(∏_k c (t k))`.
-* `MPOTensor.isNormal_toMPSTensor_mulDiagonal_iff`: for `c` without zero entries, the dressed
-  doubled-index tensor is normal exactly when the original one is.
+* `MPOTensor.isNormal_mulDiagonal_iff`: for `c` without zero entries, the dressed
+  tensor is normal exactly when the original one is.
 
 ## References
 
@@ -59,17 +59,11 @@ theorem mpo_mulDiagonal (M : MPOTensor d D) (c : Fin d → ℂ) (N : ℕ) :
     Matrix.trace_smul, Matrix.mul_diagonal, smul_eq_mul]
   ring
 
-/-- The doubled-index letter `(i, j)` of a dressed tensor is that of the original tensor
-multiplied by `c j`. -/
-theorem toMPSTensor_mulDiagonal (M : MPOTensor d D) (c : Fin d → ℂ) :
-    (M.mulDiagonal c).toMPSTensor = fun a ↦ c a.modNat • M.toMPSTensor a := rfl
-
-/-- **Dressing by an invertible diagonal on-site operator preserves normality** of the
-doubled-index tensor: every letter is rescaled by a nonzero scalar. -/
-theorem isNormal_toMPSTensor_mulDiagonal_iff (M : MPOTensor d D) {c : Fin d → ℂ}
+/-- **Dressing by an invertible diagonal on-site operator preserves normality**: every letter
+`(i, j)` is rescaled by the nonzero scalar `c j`. -/
+theorem isNormal_mulDiagonal_iff (M : MPOTensor d D) {c : Fin d → ℂ}
     (hc : ∀ j, c j ≠ 0) :
-    Kraus.IsNormal (M.mulDiagonal c).toMPSTensor ↔ Kraus.IsNormal M.toMPSTensor := by
-  rw [toMPSTensor_mulDiagonal]
-  exact MPSTensor.isNormal_letterSmul_iff (fun a ↦ hc a.modNat) _
+    Kraus.IsNormal (M.mulDiagonal c) ↔ Kraus.IsNormal M :=
+  MPSTensor.isNormal_letterSmul_iff (fun a ↦ hc a.2) M
 
 end MPOTensor

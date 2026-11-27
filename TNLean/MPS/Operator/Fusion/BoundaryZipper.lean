@@ -77,8 +77,8 @@ def biorthogonalAnalysis {a b : Λ}
 variable {a b : Λ}
   {V : ∀ c, Fin (N a b c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
   {W : ∀ c, Fin (N a b c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ}
-  (h : MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
-    (fun q : (c : Λ) × Fin (N a b c) ↦ (T q.1).toMPSTensor)
+  (h : MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
+    (fun q : (c : Λ) × Fin (N a b c) ↦ T q.1)
     (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
 
 include h
@@ -128,12 +128,11 @@ theorem pairLetter_eq_biorthogonalSynthesis_mul (i k : Fin p) :
   funext x x'
   have hletter := congrArg
     (fun M ↦ M (finProdFinEquiv x) (finProdFinEquiv x'))
-    (h.letter (finProdFinEquiv (i, k)))
+    (h.letter (i, k))
   change _ = ((S * C) * biorthogonalAnalysis V) x x'
   rw [Matrix.mul_apply, Fintype.sum_sigma]
   simp_rw [Fintype.sum_prod_type, hSC]
-  simpa [MPOTensor.toMPSTensor,
-    Matrix.sum_apply, Fintype.sum_sigma, Matrix.mul_apply, biorthogonalAnalysis,
+  simpa [Matrix.sum_apply, Fintype.sum_sigma, Matrix.mul_apply, biorthogonalAnalysis,
     mulTensor_apply, Matrix.submatrix_apply] using hletter
 
 omit h
@@ -143,12 +142,12 @@ when a simultaneous target-letter inverse is supplied. Both zipper identities
 are consequences of reconstruction and the left-inverse identity.
 Source: GLM23 Appendix A; arXiv:1511.08090, lines 181--200 and 269--277. -/
 @[reducible] noncomputable def ofBiorthogonal
-    (hD : ∀ a, 0 < D a) (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
+    (hD : ∀ a, 0 < D a) (hT : ∀ a, Kraus.IsInjective (T a))
     (V : ∀ a b c, Fin (N a b c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ)
     (W : ∀ a b c, Fin (N a b c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ)
     (hVW : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
-        (fun q : (c : Λ) × Fin (N a b c) ↦ (T q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
+        (fun q : (c : Λ) × Fin (N a b c) ↦ T q.1)
         (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2))
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
     (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
