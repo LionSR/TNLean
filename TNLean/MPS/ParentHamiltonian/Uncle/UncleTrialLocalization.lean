@@ -373,7 +373,7 @@ theorem uncleInteraction_trial_cyclicRestrict_eq_zero
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1))
     (hi : i ∉ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L)
-      (cyclicRestrictES (Fin.pos i) 2 i τ
+      (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N))) = 0 := by
   have hidx : i.val ≠ N - 1 ∧ i.val ≠ 2 * N ∧
@@ -406,14 +406,14 @@ theorem hamiltonian_uncleInteraction_trial_eq_sum_endpoints
     Matrix.toEuclideanLin
         (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ =
       ∑ i ∈ uncleTrialEndpointBonds N hN, (((d ^ 2 : ℕ) : ℂ)⁻¹) •
-        ∑ τ : Cfg d (6 * N + 1), (cyclicRestrictES (Fin.pos i) 2 i τ).adjoint
+        ∑ τ : Cfg d (6 * N + 1), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
           (Matrix.toEuclideanLin
-              (uncleInteraction A B R L) (cyclicRestrictES (Fin.pos i) 2 i τ φ)) := by
+              (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) φ)) := by
   dsimp only
   calc
     _ = ∑ i : Fin (6 * N + 1), (((d ^ 2 : ℕ) : ℂ)⁻¹) •
-        ∑ τ : Cfg d (6 * N + 1), (cyclicRestrictES (Fin.pos i) 2 i τ).adjoint
-          (Matrix.toEuclideanLin (uncleInteraction A B R L) (cyclicRestrictES (Fin.pos i) 2 i τ
+        ∑ τ : Cfg d (6 * N + 1), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
+          (Matrix.toEuclideanLin (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
             ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
               (uncleTwoWallTrialSource A B R L N)))) := by
       rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]

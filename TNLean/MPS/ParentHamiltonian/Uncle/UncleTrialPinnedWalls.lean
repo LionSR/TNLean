@@ -233,7 +233,7 @@ theorem uncleInteraction_trial_pin_first_endpoint
     let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (cyclicRestrictES (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) τ) φ) =
       Matrix.toEuclideanLin
           (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
         (fun σ ↦ Matrix.trace (Kraus.evalWord A p * A (σ 0) * R (σ 1) *
@@ -289,7 +289,7 @@ theorem uncleInteraction_trial_pin_second_endpoint
     let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (cyclicRestrictES (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) τ) φ) =
       Matrix.toEuclideanLin
           (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
         (fun σ ↦ Matrix.trace (Kraus.evalWord A p * Kraus.evalWord A r * R (σ 0) *
@@ -346,7 +346,7 @@ theorem uncleInteraction_trial_pin_third_endpoint
     let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (cyclicRestrictES (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) τ) φ) =
       Matrix.toEuclideanLin
           (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
         (fun σ ↦ Matrix.trace (Kraus.evalWord B w * B (σ 0) * L (σ 1) *
@@ -405,7 +405,7 @@ theorem uncleInteraction_trial_pin_fourth_endpoint
     let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (cyclicRestrictES (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) τ) φ) =
       Matrix.toEuclideanLin
           (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
         (fun σ ↦ Matrix.trace (Kraus.evalWord B w * Kraus.evalWord B x * L (σ 0) *
@@ -495,7 +495,7 @@ theorem uncleInteraction_trial_eq_pinnedEndpointState
     (hi : i ∈ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
     let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
-    Matrix.toEuclideanLin (uncleInteraction A B R L) (cyclicRestrictES (Fin.pos i) 2 i τ φ) =
+    Matrix.toEuclideanLin (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) φ) =
       Matrix.toEuclideanLin
           (uncleInteraction A B R L) (uncleTrialPinnedEndpointState A B R L N hN i τ) := by
   have h01 : N - 1 < 2 * N := by omega

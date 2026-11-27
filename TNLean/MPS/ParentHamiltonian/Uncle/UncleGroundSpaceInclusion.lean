@@ -174,11 +174,11 @@ private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   have hlocal (i : Fin N) (τ : Cfg d N) :
       Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (cyclicRestrictES (d := d) (Fin.pos i) 2 i τ
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (Fin.pos i) 2 i τ)
           ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ)) = 0 := by
     apply hC
     apply (mem_groundSpaceES_iff C 2 _).mpr
-    simpa [cyclicRestrictES, LinearMap.withLpMap] using hψ i τ
+    simpa [LinearMap.withLpMap] using hψ i τ
   rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ ↦
     (toEuclideanLin_translationInvariant_term_eq_zero_iff_sections hN _ i _).mpr (hlocal i)

@@ -86,9 +86,9 @@ theorem cyclicCfg_cyclicWindowCfgEquiv {N L : ℕ} {η : Cfg d L} (hN : L ≤ N)
 /-- The actual cyclic restrictions count every full-chain coefficient \(d^L\)
 times. This identity includes zero physical dimension and empty windows;
 the supplied cyclic site already forces the full chain to be nonempty. -/
-theorem sum_norm_sq_cyclicRestrictES {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
+theorem sum_norm_sq_withLpMap_cyclicRestrictₗ {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
-    (∑ τ : Cfg d N, ‖cyclicRestrictES (Fin.pos i) L i τ v‖ ^ 2) =
+    (∑ τ : Cfg d N, ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2) =
       (d : ℝ) ^ L * ‖v‖ ^ 2 := by
   classical
   let e := cyclicWindowCfgEquiv (d := d) hLN i
@@ -99,8 +99,8 @@ theorem sum_norm_sq_cyclicRestrictES {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
       e.sum_comp (fun ξ ↦ ‖v ξ‖ ^ 2)
   calc
     _ = ∑ z : Cfg d L × Cfg d (N - L),
-        ‖cyclicRestrictES (Fin.pos i) L i (e z) v‖ ^ 2 := by
-      exact (e.sum_comp (fun τ ↦ ‖cyclicRestrictES (Fin.pos i) L i τ v‖ ^ 2)).symm
+        ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i (e z)) v‖ ^ 2 := by
+      exact (e.sum_comp (fun τ ↦ ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2)).symm
     _ = ∑ η : Cfg d L, ∑ τ : Cfg d (N - L),
         ∑ σ : Cfg d L, ‖v (e (σ, τ))‖ ^ 2 := by
       simp only [Fintype.sum_prod_type, PiLp.norm_sq_eq_of_L2]
@@ -117,12 +117,12 @@ theorem sum_norm_sq_cyclicRestrictES {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
 /-- Averaging over the redundant exterior-window labels preserves the
 actual full-chain norm. This is the normalization in the periodic parent
 and uncle Hamiltonians, rather than an additional state estimate. -/
-theorem inv_pow_mul_sum_norm_sq_cyclicRestrictES {N L : ℕ}
+theorem inv_pow_mul_sum_norm_sq_withLpMap_cyclicRestrictₗ {N L : ℕ}
     (hd : d ≠ 0) (hLN : L ≤ N) (i : Fin N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     (((d ^ L : ℕ) : ℝ)⁻¹) *
-        (∑ τ : Cfg d N, ‖cyclicRestrictES (Fin.pos i) L i τ v‖ ^ 2) = ‖v‖ ^ 2 := by
-  rw [sum_norm_sq_cyclicRestrictES hLN i v, Nat.cast_pow, ← mul_assoc,
+        (∑ τ : Cfg d N, ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2) = ‖v‖ ^ 2 := by
+  rw [sum_norm_sq_withLpMap_cyclicRestrictₗ hLN i v, Nat.cast_pow, ← mul_assoc,
     inv_mul_cancel₀ (pow_ne_zero L (Nat.cast_ne_zero.mpr hd)), one_mul]
 
 end MPSTensor

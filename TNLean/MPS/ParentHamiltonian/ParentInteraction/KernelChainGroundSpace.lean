@@ -50,8 +50,8 @@ theorem ker_hamiltonian_parentRingInteraction_le_chainGroundSpace
       (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
         (posSemidef_parentRingInteraction_term A _)).mp hH i, WithLp.toLp_zero]
   have hrestrictNS := (mem_groundSpaceES_iff A L _).1
-    (cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero A hLN i hlocal τ)
-  simpa [cyclicRestrictES] using hrestrictNS
+    (withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero A hLN i hlocal τ)
+  simpa [LinearMap.withLpMap] using hrestrictNS
 
 /-- The periodic chain ground space is contained in the kernel of the finite
 periodic parent Hamiltonian.

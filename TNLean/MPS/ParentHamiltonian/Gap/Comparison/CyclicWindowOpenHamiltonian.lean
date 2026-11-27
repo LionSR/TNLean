@@ -300,7 +300,7 @@ theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
     (σ : Cfg d N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) v σ =
-      Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i σ v) (extractWindow R i σ) := by
+      Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i σ) v) (extractWindow R i σ) := by
   have : NeZero N := NeZero.of_pos i.pos
   rw [ManyBody.Interaction.translationInvariant_term_of_le _ hRN i, Matrix.toLpLin_apply,
     Matrix.toLpLin_apply]
@@ -318,12 +318,12 @@ theorem toEuclideanLin_translationInvariant_term_eq_inv_smul_sum (hRN : R ≤ N)
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) =
       (((d ^ R : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
-        (cyclicRestrictES (Fin.pos i) R i τ).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
-          cyclicRestrictES (Fin.pos i) R i τ := by
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ)).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
+          LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) := by
   have : NeZero N := NeZero.of_pos i.pos
   ext v σ
   rw [toEuclideanLin_translationInvariant_term_apply hRN,
-    inv_smul_sum_adjoint_comp_cyclicRestrictES_apply hRN]
+    inv_smul_sum_adjoint_comp_withLpMap_cyclicRestrictₗ_apply hRN]
 
 /-- A term of the translates of `h` on the ring whose window lies inside a cyclic active block
 of `W` sites becomes, in the coordinates of that block, the corresponding term of the translates
@@ -356,11 +356,9 @@ theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
   rw [toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ N),
     toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ W)]
   have hrestrict :
-      cyclicRestrictES (d := d) (Fin.pos (cyclicForwardSite s q.val)) R
-          (cyclicForwardSite s q.val)
-          ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ))
+      LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (Fin.pos (cyclicForwardSite s q.val)) R (cyclicForwardSite s q.val) ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)))
           ((cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm x) =
-        cyclicRestrictES (d := d) (Fin.pos q) R q σ
+        LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (Fin.pos q) R q σ)
           (ContinuousLinearMap.rightFiber x τ) := by
     apply PiLp.ext
     intro ω

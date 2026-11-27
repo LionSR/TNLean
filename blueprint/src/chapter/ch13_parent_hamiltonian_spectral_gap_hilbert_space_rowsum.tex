@@ -31,7 +31,6 @@
 
 \begin{remark}[Local projectors under the canonical $\ell^2$ identification]
     \label{rem:euclidean_local_projector_ingredients}
-    \lean{MPSTensor.cyclicRestrictES}
     \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_apply}
     \leanok
     \uses{def:ground_space_es,rem:cyclic_window_operators}
@@ -46,7 +45,7 @@
 
 \begin{lemma}[Cyclic averaging for the Hilbert-space local terms]
     \label{lem:local_term_es_average}
-    \lean{MPSTensor.inv_smul_sum_adjoint_comp_cyclicRestrictES_apply}
+    \lean{MPSTensor.inv_smul_sum_adjoint_comp_withLpMap_cyclicRestrictₗ_apply}
     \lean{MPSTensor.toEuclideanLin_translationInvariant_term_eq_inv_smul_sum}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients,def:canonical_parent_interaction_matrix}
@@ -138,7 +137,7 @@
 \begin{lemma}[Local-term kernel via cyclic restrictions]
     \label{lem:local_term_es_kernel_restrictions}
     \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_eq_zero_iff}
-    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero}
+    \lean{MPSTensor.withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero}
     \leanok
     \uses{lem:parent_interaction_es_kernel,rem:euclidean_local_projector_ingredients}
     For $L\le N$, a Hilbert-space local term $h_{i,\mathrm{ES}}$ annihilates a
@@ -157,9 +156,9 @@
 
 \begin{lemma}[End-site and cyclic coordinate identifications]
     \label{thm:adjacent_local_term_coordinate_identifications}
-    \lean{MPSTensor.restrictLast_eq_cyclicRestrictES_zero,
+    \lean{MPSTensor.restrictLast_eq_withLpMap_cyclicRestrictₗ_zero,
         MPSTensor.tailRestrictₗ_one_eq_restrictFirst,
-        MPSTensor.restrictFirst_eq_cyclicRestrictES_one}
+        MPSTensor.restrictFirst_eq_withLpMap_cyclicRestrictₗ_one}
     \leanok
     \uses{def:restrict_last,def:restrict_first,def:tail_restrict_parent,rem:euclidean_local_projector_ingredients}
     Let $\iota_L$ denote the coordinate identification of the $L$-site state

@@ -81,7 +81,7 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_iff
         (translationInvariant N (uncleInteraction A B R L)).hamiltonian v = 0 ↔
       ∀ (i : Fin N) (τ : Cfg d N),
         Matrix.toEuclideanLin (uncleInteraction A B R L)
-          (cyclicRestrictES (Fin.pos i) 2 i τ v) = 0 :=
+          (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) v) = 0 :=
   haveI : NeZero N := ⟨by omega⟩
   toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections hN _
     (posSemidef_uncleInteraction A B R L) v
