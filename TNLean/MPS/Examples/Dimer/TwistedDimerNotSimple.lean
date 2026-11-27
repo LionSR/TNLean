@@ -79,7 +79,8 @@ def blockedCanonicalFormData (L : ℕ) (hL : 0 < L) :
     MPTensor.CPSVCanonicalFormData
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv 8 L)
         (Kraus.blockTensor T.toMPSTensor L)) :=
-  (canonicalFormData.blockTensor L hL).reindexPhysical (blockedDoubledIndexEquiv 8 L)
+  ((canonicalFormData.reindexPhysical finProdFinEquiv.symm).blockTensor L hL).reindexPhysical
+    (blockedDoubledIndexEquiv 8 L)
 
 /-- The retained blocks of the blocked canonical form are the doubled-index
 tensors of the blocked rescaled horizontal blocks. -/

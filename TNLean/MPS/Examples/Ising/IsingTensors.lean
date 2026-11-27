@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Rings.Zsqrt2Ring
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The three topological-symmetry tensors of the Ising anyon chain
@@ -177,23 +178,26 @@ private theorem isingSigmaZ_unit (x y : Fin 4) :
   decide +kernel
 
 /-- **`A_1` is normal at blocking length one** (data file §1.1, check 1b). -/
-theorem isingOne_isNormal : Kraus.IsNormal isingOne.toMPSTensor :=
-  isNormal_of_single_eq_smul_zsqrt2 (fun a => isingOneZ (Fin.divNat (m := 10) (n := 10) a)
+theorem isingOne_isNormal : Kraus.IsNormal isingOne :=
+  (MPOTensor.isNormal_toMPSTensor_iff _).1 <|
+    isNormal_of_single_eq_smul_zsqrt2 (fun a => isingOneZ (Fin.divNat (m := 10) (n := 10) a)
       (Fin.modNat (m := 10) (n := 10) a)) (fun _ => rfl)
-    isingOneUnitLetter (fun _ _ => 1) (fun _ _ => one_ne_zero) isingOneZ_unit
+      isingOneUnitLetter (fun _ _ => 1) (fun _ _ => one_ne_zero) isingOneZ_unit
 
 /-- **`A_ψ` is normal at blocking length one** (data file §1.1, check 1b). -/
-theorem isingPsi_isNormal : Kraus.IsNormal isingPsi.toMPSTensor :=
-  isNormal_of_single_eq_smul_zsqrt2 (fun a => isingPsiZ (Fin.divNat (m := 10) (n := 10) a)
+theorem isingPsi_isNormal : Kraus.IsNormal isingPsi :=
+  (MPOTensor.isNormal_toMPSTensor_iff _).1 <|
+    isNormal_of_single_eq_smul_zsqrt2 (fun a => isingPsiZ (Fin.divNat (m := 10) (n := 10) a)
       (Fin.modNat (m := 10) (n := 10) a)) (fun _ => rfl)
-    isingPsiUnitLetter (fun _ _ => 1) (fun _ _ => one_ne_zero) isingPsiZ_unit
+      isingPsiUnitLetter (fun _ _ => 1) (fun _ _ => one_ne_zero) isingPsiZ_unit
 
 /-- **`√2 A_σ` is normal at blocking length one**: its sixteen nonzero letters are scaled
 matrix units covering every position of the four-by-four matrix algebra (data file §1.1,
 check 1b). -/
-theorem isingSigma_isNormal : Kraus.IsNormal isingSigma.toMPSTensor :=
-  isNormal_of_single_eq_smul_zsqrt2 (fun a => isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
+theorem isingSigma_isNormal : Kraus.IsNormal isingSigma :=
+  (MPOTensor.isNormal_toMPSTensor_iff _).1 <|
+    isNormal_of_single_eq_smul_zsqrt2 (fun a => isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
       (Fin.modNat (m := 10) (n := 10) a)) (fun _ => rfl)
-    isingSigmaUnitLetter isingSigmaUnitCoef (by decide) isingSigmaZ_unit
+      isingSigmaUnitLetter isingSigmaUnitCoef (by decide) isingSigmaZ_unit
 
 end IsingTwist

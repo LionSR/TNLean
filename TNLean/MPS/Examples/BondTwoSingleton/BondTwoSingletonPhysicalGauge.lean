@@ -367,22 +367,21 @@ private def gaugeDeformedSymbolCoefficient (p a : Fin 4) : ℂ :=
     if a = 0 then -1 / 8 else if a = 1 then 3 / 8 else
       if a = 2 then -3 / 8 else 9 / 8
 
-private theorem gaugeDeformedBaseMPO_toMPSTensor_apply
-    (p x y : Fin 4) :
-    (gaugeDeformedBaseMPO gauge).toMPSTensor p x y =
-      if x = y then gaugeDeformedSymbolCoefficient p x else 0 := by
+private theorem gaugeDeformedBaseMPO_apply
+    (p : I × I) (x y : Fin 4) :
+    gaugeDeformedBaseMPO gauge p x y =
+      if x = y then gaugeDeformedSymbolCoefficient (finProdFinEquiv p) x else 0 := by
   simp only [gaugeDeformedBaseMPO, gauge_inv_val]
+  obtain ⟨pi, pj⟩ := p
   by_cases hxy : x = y
   · subst y
-    obtain ⟨⟨pi, pj⟩, rfl⟩ :=
-      (finProdFinEquiv : I × I ≃ Fin 4).surjective p
     obtain ⟨⟨xi, xj⟩, rfl⟩ :=
       (finProdFinEquiv : I × I ≃ Fin 4).surjective x
     fin_cases pi <;> fin_cases pj <;> fin_cases xi <;> fin_cases xj <;>
-      norm_num [toMPSTensor, ketLeftMul, braRightMul, baseMPO, gaugeMatrix,
+      norm_num [ketLeftMul, braRightMul, baseMPO, gaugeMatrix,
         gaugeDeformedSymbolCoefficient, Matrix.single, Fin.modNat, Fin.divNat]
   · simp only [ite_eq_right hxy]
-    simp [toMPSTensor, ketLeftMul, braRightMul, baseMPO, Matrix.single]
+    simp [ketLeftMul, braRightMul, baseMPO, Matrix.single]
     aesop
 
 
@@ -413,10 +412,10 @@ theorem gaugeDeformedSymbolTensor_isNormalTensor (a : Fin 4) :
 private def gaugeDeformedSymbolBlocks : (a : Fin 4) → MPSTensor 4 1 :=
   gaugeDeformedSymbolTensor
 
-private theorem gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks :
-    (gaugeDeformedBaseMPO gauge).toMPSTensor =
-      MPTensor.toTensorFromBlocks (fun _ : Fin 4 ↦ (5 / 4 : ℂ))
-        gaugeDeformedSymbolBlocks := by
+private theorem gaugeDeformedBaseMPO_eq_symbolBlocks :
+    gaugeDeformedBaseMPO gauge = Kraus.reindexPhysical (finProdFinEquiv : I × I → Fin 4)
+      (MPTensor.toTensorFromBlocks (dim := fun _ : Fin 4 ↦ 1) (fun _ ↦ (5 / 4 : ℂ))
+        gaugeDeformedSymbolBlocks) := by
   let e : (Σ _k : Fin 4, Fin 1) ≃ Fin 4 := finSigmaFinEquiv
   have hflat (k : Fin 4) : e ⟨k, 0⟩ = k := by
     fin_cases k <;> rfl
@@ -425,33 +424,32 @@ private theorem gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks :
     rw [e.apply_symm_apply, hflat]
   funext p
   ext x y
-  simp only [MPTensor.toTensorFromBlocks, gaugeDeformedSymbolBlocks,
+  simp only [Kraus.reindexPhysical, MPTensor.toTensorFromBlocks, gaugeDeformedSymbolBlocks,
     gaugeDeformedSymbolTensor]
-  change (gaugeDeformedBaseMPO gauge).toMPSTensor p x y =
+  change gaugeDeformedBaseMPO gauge p x y =
     Matrix.blockDiagonal' (fun k : Fin 4 ↦
       (5 / 4 : ℂ) • (((4 / 5 : ℂ) *
-        gaugeDeformedSymbolCoefficient p k) •
+        gaugeDeformedSymbolCoefficient (finProdFinEquiv p) k) •
           (1 : Matrix (Fin 1) (Fin 1) ℂ))) (e.symm x) (e.symm y)
   rw [hflat_symm x, hflat_symm y]
   by_cases hxy : x = y
   · subst y
-    simp [gaugeDeformedBaseMPO_toMPSTensor_apply, Matrix.smul_apply]
+    simp [gaugeDeformedBaseMPO_apply, Matrix.smul_apply]
     ring
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hxy]
-    simp [gaugeDeformedBaseMPO_toMPSTensor_apply, hxy]
+    simp [gaugeDeformedBaseMPO_apply, hxy]
 
-/-- The horizontal doubled-index tensor of the concrete nonunitary deformation
-is in the literal CPSV canonical form of `II_CF1`.
+/-- The concrete nonunitary deformation, a tensor on the pair alphabet, is in the literal
+horizontal CPSV canonical form of `II_CF1`.
 
 Source: CPSV16, Section II.A, lines 214--245, and the use of horizontal
 canonical form in Theorem 4.14(ii). -/
-theorem gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm :
-    MPTensor.IsCPSVCanonicalForm
-      (gaugeDeformedBaseMPO gauge).toMPSTensor := by
-  rw [gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks]
-  exact (MPTensor.CPSVCanonicalFormData.ofBlocks
+theorem gaugeDeformedBaseMPO_isCPSVCanonicalForm :
+    MPTensor.IsCPSVCanonicalForm (gaugeDeformedBaseMPO gauge) := by
+  rw [gaugeDeformedBaseMPO_eq_symbolBlocks]
+  exact MPTensor.IsCPSVCanonicalForm.reindexPhysical (MPTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ : Fin 4 ↦ by simp) (fun _ : Fin 4 ↦ (5 / 4 : ℂ)) (fun _ ↦ by norm_num)
     gaugeDeformedSymbolBlocks
-    (fun a ↦ gaugeDeformedSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
+    (fun a ↦ gaugeDeformedSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm _
 
 end MPOTensor.BondTwoSingletonBaseModel

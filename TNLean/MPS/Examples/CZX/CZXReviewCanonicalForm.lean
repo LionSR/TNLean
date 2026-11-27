@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.Kraus.Word
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
-import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 
@@ -287,10 +287,13 @@ theorem mpo_mulTensor_reviewCZXTensor {N : ℕ} [NeZero N] :
     ext p
     fin_cases i <;> fin_cases j <;>
       simp [identityTensor, identityIntTensor, MPOTensor.idTensor, Matrix.one_apply]
-  have hneg : ((-1 : ℂ) • identityTensor).toMPSTensor = fun a => (-1 : ℂ) • identityMPS a := rfl
-  rw [MPOTensor.mpo_eq_of_trace_evalWord _ ((-1 : ℂ) • identityTensor) (fun w hw => ?_) N
-    (NeZero.pos N), MPOTensor.mpo_smul, hid, MPOTensor.mpo_idTensor]
-  rw [hneg, Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
-  exact reviewCZXSquare_trace_evalWord w hw
+  rw [MPOTensor.mpo_eq_of_forall_trace_evalWord (N := (-1 : ℂ) • identityTensor)
+    (fun w hw => ?_) (NeZero.pos N), MPOTensor.mpo_smul, hid, MPOTensor.mpo_idTensor]
+  have h := reviewCZXSquare_trace_evalWord (w.map finProdFinEquiv) (by simpa using hw)
+  rw [reviewCZXSquare, identityMPS, MPOTensor.evalWord_toMPSTensor,
+    MPOTensor.evalWord_toMPSTensor, List.map_map, Equiv.symm_comp_self, List.map_id,
+    List.length_map] at h
+  rw [h, show (-1 : ℂ) • identityTensor = fun a ↦ (-1 : ℂ) • identityTensor a from rfl,
+    Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
 
 end CZXCompression

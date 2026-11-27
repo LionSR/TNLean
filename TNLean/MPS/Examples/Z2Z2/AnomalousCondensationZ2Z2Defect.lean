@@ -8,6 +8,7 @@ import TNLean.MPS.Examples.Z2Z2.AnomalousCondensationZ2Z2Split
 import TNLean.MPS.Tensor.Words.ScaledNormality
 import TNLean.MPS.Operator.Product.DirectSum
 import TNLean.MPS.Operator.Product.OperatorProduct
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Anomalous `ℤ/2 × ℤ/2` symmetry: the condensation defect and its stacked compression
@@ -49,10 +50,10 @@ extensions of the four blocks with two factors from `{x, xy}`, is the content of
 data of the companion files.
 
 The word-trace identities that turn each pair-block compression datum into a periodic fusion
-rule (`MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor`,
-`MPOTensor.mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor`, and
+rule (`MPOTensor.mpo_mul_eq_of_forall_trace_evalWord`,
+`MPOTensor.mpo_eq_pow_smul_of_forall_trace_evalWord`, and
 `MPSTensor.trace_evalWord_smul`) are general MPO/MPS infrastructure with no reference to this
-example, and live in `TNLean.MPS.MPDO.OperatorProduct`.
+example, and live in `TNLean.MPS.Operator.PairAlphabet`.
 
 ## Main results
 
@@ -94,95 +95,108 @@ open MPSTensor MPOTensor
 
 /-! ### The periodic fusion rules -/
 
+/-- Word-trace identities of the compression data, read over the pair alphabet `Fin 16`,
+are word-trace identities of the tensors on the pair alphabet `Fin 4 × Fin 4`. -/
+private theorem trace_evalWord_pair {D₁ D₂ : ℕ} {M : MPOTensor 4 D₁} {N : MPOTensor 4 D₂}
+    (c : ℂ) (h : ∀ w : List (Fin 16), w ≠ [] →
+      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
+        c ^ w.length * Matrix.trace (Kraus.evalWord N.toMPSTensor w))
+    (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord M w) = c ^ w.length * Matrix.trace (Kraus.evalWord N w) := by
+  have h' := h (w.map finProdFinEquiv) (by simpa using hw)
+  rwa [MPOTensor.evalWord_toMPSTensor, MPOTensor.evalWord_toMPSTensor, List.map_map,
+    Equiv.symm_comp_self, List.map_id, List.length_map] at h'
+
+/-- The unweighted form of `trace_evalWord_pair`. -/
+private theorem trace_evalWord_pair_one {D₁ D₂ : ℕ} {M : MPOTensor 4 D₁} {N : MPOTensor 4 D₂}
+    (h : ∀ w : List (Fin 16), w ≠ [] →
+      Matrix.trace (Kraus.evalWord M.toMPSTensor w) =
+        Matrix.trace (Kraus.evalWord N.toMPSTensor w))
+    (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord M w) = Matrix.trace (Kraus.evalWord N w) := by
+  simpa using trace_evalWord_pair 1 (by simpa using h) w hw
+
 /-- **`U_e U_e = U_e`.** -/
 theorem mpo_e_mul_e (L : ℕ) (hL : 0 < L) : mpo eTensor L * mpo eTensor L = mpo eTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor eE_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eE_trace_evalWord) hL
 
 /-- **`U_e U_y = U_y`.** -/
 theorem mpo_e_mul_y (L : ℕ) (hL : 0 < L) : mpo eTensor L * mpo yTensor L = mpo yTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor eY_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eY_trace_evalWord) hL
 
 /-- **`U_e U_x = U_x`.** -/
 theorem mpo_e_mul_x (L : ℕ) (hL : 0 < L) : mpo eTensor L * mpo xTensor L = mpo xTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor eX_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eX_trace_evalWord) hL
 
 /-- **`U_e U_xy = U_xy`.** -/
 theorem mpo_e_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo eTensor L * mpo xyTensor L = mpo xyTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor eXy_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one eXy_trace_evalWord) hL
 
 /-- **`U_y U_e = U_y`.** -/
 theorem mpo_y_mul_e (L : ℕ) (hL : 0 < L) : mpo yTensor L * mpo eTensor L = mpo yTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor yE_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yE_trace_evalWord) hL
 
 /-- **`U_y U_y = U_e`.** -/
 theorem mpo_y_mul_y (L : ℕ) (hL : 0 < L) : mpo yTensor L * mpo yTensor L = mpo eTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor yY_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yY_trace_evalWord) hL
 
 /-- **`U_y U_x = U_xy`.** -/
 theorem mpo_y_mul_x (L : ℕ) (hL : 0 < L) :
     mpo yTensor L * mpo xTensor L = mpo xyTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor yX_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yX_trace_evalWord) hL
 
 /-- **`U_y U_xy = U_x`.** -/
 theorem mpo_y_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo yTensor L * mpo xyTensor L = mpo xTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor yXy_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one yXy_trace_evalWord) hL
 
 /-- **`U_x U_e = U_x`.** -/
 theorem mpo_x_mul_e (L : ℕ) (hL : 0 < L) : mpo xTensor L * mpo eTensor L = mpo xTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor xE_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xE_trace_evalWord) hL
 
 /-- **`U_x U_y = (-1)^L U_xy`** (data file, Section 2). -/
 theorem mpo_x_mul_y (L : ℕ) (hL : 0 < L) :
     mpo xTensor L * mpo yTensor L = (-1 : ℂ) ^ L • mpo xyTensor L := by
   rw [← mpo_mulTensor]
-  exact mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor (-1) xY_trace_evalWord hL
+  exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
+    (trace_evalWord_pair (-1) xY_trace_evalWord) hL
 
 /-- **`U_x U_x = U_e`.** -/
 theorem mpo_x_mul_x (L : ℕ) (hL : 0 < L) : mpo xTensor L * mpo xTensor L = mpo eTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor xX_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xX_trace_evalWord) hL
 
 /-- **`U_x U_xy = (-1)^L U_y`** (data file, Section 2). -/
 theorem mpo_x_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo xTensor L * mpo xyTensor L = (-1 : ℂ) ^ L • mpo yTensor L := by
   rw [← mpo_mulTensor]
-  exact mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor (-1) xXy_trace_evalWord hL
+  exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
+    (trace_evalWord_pair (-1) xXy_trace_evalWord) hL
 
 /-- **`U_xy U_e = U_xy`.** -/
 theorem mpo_xy_mul_e (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo eTensor L = mpo xyTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor xyE_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xyE_trace_evalWord) hL
 
 /-- **`U_xy U_y = (-1)^L U_x`** (data file, Section 2). -/
 theorem mpo_xy_mul_y (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo yTensor L = (-1 : ℂ) ^ L • mpo xTensor L := by
   rw [← mpo_mulTensor]
-  exact mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor (-1) xyY_trace_evalWord hL
+  exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
+    (trace_evalWord_pair (-1) xyY_trace_evalWord) hL
 
 /-- **`U_xy U_x = U_y`.** -/
 theorem mpo_xy_mul_x (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo xTensor L = mpo yTensor L := by
-  rw [← mpo_mulTensor]
-  exact mpo_eq_of_trace_evalWord_toMPSTensor xyX_trace_evalWord hL
+  exact mpo_mul_eq_of_forall_trace_evalWord (trace_evalWord_pair_one xyX_trace_evalWord) hL
 
 /-- **`U_xy U_xy = (-1)^L U_e`** (data file, Section 2): the restriction of the symmetry to the
 diagonal element `xy` is the CZX symmetry of Example D of the P5 note. -/
 theorem mpo_xy_mul_xy (L : ℕ) (hL : 0 < L) :
     mpo xyTensor L * mpo xyTensor L = (-1 : ℂ) ^ L • mpo eTensor L := by
   rw [← mpo_mulTensor]
-  exact mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor (-1) xyXy_trace_evalWord hL
+  exact mpo_eq_pow_smul_of_forall_trace_evalWord (-1)
+    (trace_evalWord_pair (-1) xyXy_trace_evalWord) hL
 
 /-- **On odd rings the operators `U_x` and `U_y` anticommute**: `U_x U_y = -U_y U_x`, so the
 four operators form a projective representation of `ℤ/2 × ℤ/2` (data file, Section 2). -/

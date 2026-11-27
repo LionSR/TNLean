@@ -6246,7 +6246,7 @@ no additional helper is proposed.
   `TNLean/MPS/CanonicalForm/SimpleMPO/Simple.lean:IsSimpleCanonicalForm.isSimple` and
   `TNLean/MPS/Examples/Dimer/TwistedDimerBondSimple.lean` (2026-10-02).
 - **Abstraction:** the bond-factor proof uses private generic identities
-  `blockTensor_one_toMPSTensor` and
+  `blockTensor_one_doubled_eq_reindexPhysical` and
   `doubledPhysTraceTransfer_reindex_singleBlock`. At a third occurrence,
   move the equivalence and identities to the physical-blocking API and
   refactor the existing simplicity proof.

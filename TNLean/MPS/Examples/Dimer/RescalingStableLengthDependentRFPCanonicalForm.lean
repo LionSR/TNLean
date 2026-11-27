@@ -8,32 +8,34 @@ import TNLean.MPS.Examples.Dimer.RescalingStableLengthDependentRFP
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleTensor
 import TNLean.MPS.ParentHamiltonian.Commuting.SectorGraph.BeigiLoopBNTIdentification
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import TNLean.MPS.CanonicalForm.PhysicalReindex
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
-# The literal CPSV canonical form of `R.toMPSTensor`
+# The literal CPSV canonical form of `R`
 
-This file proves `MPTensor.IsCPSVCanonicalForm R.toMPSTensor` for the rescaling-stable
+This file proves `MPTensor.IsCPSVCanonicalForm R` for the rescaling-stable
 length-dependent example `R` of `TNLean.MPS.MPDO.RescalingStableLengthDependentRFP`
 (arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`).
 
-The doubled-index tensor `R.toMPSTensor` has bond dimension `4` and `16` letters
-`R p q`, `p q : Fin 4`.  Each letter is a rank-one bond matrix
+The tensor `R` on the pair alphabet has bond dimension `4` and `16` letters
+`R (p, q)`, `p q : Fin 4`.  Each letter is a rank-one bond matrix
 `(25/32) • vecMulVec u_{pq} v_{pq}` (`R_eq_vecMulVec`), and as `(p, q)` ranges over all
 `16` pairs the letters range exactly over the `16` scaled matrix units of the bond
 algebra `Matrix (Fin 4) (Fin 4) ℂ` (`R_eq_single`): they span the full matrix algebra,
-so `R.toMPSTensor` is algebraically injective (`R_toMPSTensor_isInjective`).
+so `R` is algebraically injective (`R_isInjective`).
 
 ## The retained weight
 
-The transfer map of `R.toMPSTensor` is rank one: `transferMap R.toMPSTensor X` is
+The transfer map of `R` is rank one: `transferMap R X` is
 always a scalar multiple of the fixed diagonal matrix
 `fixedDiag = diag(sVal 0 ^ 2, sVal 1 ^ 2, sVal 2 ^ 2, sVal 3 ^ 2)`
-(`transferMap_R_toMPSTensor_eq`), and this scalar, evaluated at `fixedDiag` itself, is
-exactly `337/512` (`cFun_fixedDiag`). Consequently `transferMap R.toMPSTensor` is
+(`transferMap_R_eq`), and this scalar, evaluated at `fixedDiag` itself, is
+exactly `337/512` (`cFun_fixedDiag`). Consequently `transferMap R` is
 idempotent up to the scalar `337/512`
-(`transferMap_R_toMPSTensor_idem`), and the tensor
+(`transferMap_R_idem`), and the tensor
 ```
-retainedBlock i = weight⁻¹ • R.toMPSTensor i,  weight = √(337/512)
+retainedBlock i = weight⁻¹ • R i,  weight = √(337/512)
 ```
 has an exactly idempotent transfer map (`retainedBlock_isTransferIdempotent`): `weight`
 is the unique positive real scalar making the retained block's transfer map spectral
@@ -45,27 +47,25 @@ the literal canonical-form weight was `(25/32)^2 = 625/1024` before this computa
 was carried out; the exact value is the irrational `weight = √(337/512)` above.  `R` is
 a project example, not a tensor stated in CPSV16 (see that file's module docstring), so
 this numeric correction is internal bookkeeping (the weight is determined by
-`transferMap R.toMPSTensor`'s own rank-one closed form, not by the already-displayed
+`transferMap R`'s own rank-one closed form, not by the already-displayed
 scalar prefactor of `R`), not a deviation from the cited source.
 
 `retainedBlock` is a CPSV normal tensor
 (`retainedBlock_isNormalTensor`, via `MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent`
 applied to its algebraic injectivity and idempotent transfer map), and
-`R.toMPSTensor = weight • retainedBlock` pointwise (`R_toMPSTensor_eq_weight_smul_block`),
+`R = weight • retainedBlock` pointwise (`R_eq_weight_smul_retainedBlock`),
 giving the literal CPSV canonical-form data with a single retained block occupying the
 full ambient bond dimension `4` and a trivial (identity) coisometry
-(`canonicalFormData`, `R_toMPSTensor_isCPSVCanonicalForm`).
+(`canonicalFormData`, `R_isCPSVCanonicalForm`).
 
 ## Main results
 
-* `R_toMPSTensor_isInjective` : the `16` letters of `R.toMPSTensor` span the full bond
-  matrix algebra.
+* `R_isInjective` : the `16` letters of `R` span the full bond matrix algebra.
 * `retainedBlock_isNormalTensor` : the weight-normalized retained tensor is a CPSV
   normal tensor.
-* `doubledPhysTraceTransfer_retainedBlock_not_isNilpotent` : the retained block's
+* `physTraceTransfer_retainedBlock_not_isNilpotent` : the retained block's
   ket-against-bra contraction is not nilpotent.
-* `R_toMPSTensor_isCPSVCanonicalForm` : `R.toMPSTensor` is in literal CPSV canonical
-  form.
+* `R_isCPSVCanonicalForm` : `R` is in literal CPSV canonical form.
 
 ## References
 
@@ -145,32 +145,21 @@ lemma R_eq_single (a0 b0 : Fin 4) :
   · rw [A_apply_ne_zero a0 a (Ne.symm ha)]
     simp [Ne.symm ha]
 
-/-- The doubled-index letter at `finProdFinEquiv (p, q)` is exactly the MPO letter
-`R p q`. -/
-lemma toMPSTensor_R_apply (p q : Fin 4) :
-    R.toMPSTensor (finProdFinEquiv (p, q)) = R (p, q) := by
-  unfold MPOTensor.toMPSTensor
-  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-
-/-- **`R.toMPSTensor` is algebraically injective.** Its `16` letters span the full bond
+/-- **`R` is algebraically injective.** Its `16` letters span the full bond
 matrix algebra `Matrix (Fin 4) (Fin 4) ℂ`: they are, up to nonzero scalars by
 `R_eq_single`, exactly the standard matrix-unit basis of the bond space. -/
-lemma R_toMPSTensor_isInjective : Kraus.IsInjective R.toMPSTensor := by
+lemma R_isInjective : Kraus.IsInjective R := by
   refine Submodule.eq_top_of_forall_single_mem _ fun a0 b0 => ?_
   have hc : (25/32 : ℂ) * sVal a0 * sVal b0 ≠ 0 := by
     have h25 : (25/32 : ℂ) ≠ 0 := by norm_num
     exact mul_ne_zero (mul_ne_zero h25 (sVal_ne_zero a0)) (sVal_ne_zero b0)
   have hmem : R (bondEquiv (aRow a0, aRow b0), bondEquiv (aCol a0, aCol b0)) ∈
-      Submodule.span ℂ (Set.range R.toMPSTensor) := by
-    have : R (bondEquiv (aRow a0, aRow b0), bondEquiv (aCol a0, aCol b0)) =
-        R.toMPSTensor (finProdFinEquiv (bondEquiv (aRow a0, aRow b0),
-          bondEquiv (aCol a0, aCol b0))) := (toMPSTensor_R_apply _ _).symm
-    rw [this]
-    exact Submodule.subset_span ⟨_, rfl⟩
+      Submodule.span ℂ (Set.range R) :=
+    Submodule.subset_span ⟨_, rfl⟩
   rw [R_eq_single] at hmem
   exact (Submodule.smul_mem_iff _ hc).mp hmem
 
-/-! ### The rank-one closed form of `transferMap R.toMPSTensor` -/
+/-! ### The rank-one closed form of `transferMap R` -/
 
 /-- Conjugating a matrix by a rank-one operator gives another rank-one operator, scaled
 by the bilinear pairing of the second factor against the conjugated matrix. -/
@@ -186,31 +175,28 @@ private lemma vecMulVec_conj (n : Type*) [Fintype n]
   refine Finset.sum_congr₂ fun k _ x _ ↦ ?_
   ring
 
-/-- The fixed diagonal matrix spanning the rank-one image of `transferMap R.toMPSTensor`
-(`transferMap_R_toMPSTensor_eq`). -/
+/-- The fixed diagonal matrix spanning the rank-one image of `transferMap R`
+(`transferMap_R_eq`). -/
 def fixedDiag : Matrix (Fin 4) (Fin 4) ℂ := Matrix.diagonal (fun a => (sVal a) ^ 2)
 
-/-- **The closed form of `transferMap R.toMPSTensor`.** Every image is a scalar
+/-- **The closed form of `transferMap R`.** Every image is a scalar
 multiple of the fixed matrix `fixedDiag`: the outer-product structure of `R p q`
 (`R_eq_vecMulVec`, via `vecMulVec_conj`) reduces the doubled sum over the `16` letters
 to a product of two single-letter Frobenius pairings, one contracting against
 `fixedDiag` and the other against `X`'s diagonal entries. -/
-lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
-    Kraus.transferMap R.toMPSTensor X =
+lemma transferMap_R_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
+    Kraus.transferMap R X =
       ((25/32 : ℂ) ^ 2 * ∑ b : Fin 4, (sVal b) ^ 2 * X b b) • fixedDiag := by
-  rw [Kraus.transferMap_apply]
-  rw [← Equiv.sum_comp (finProdFinEquiv : Fin 4 × Fin 4 ≃ Fin (4 * 4))
-    (fun v => R.toMPSTensor v * X * (R.toMPSTensor v)ᴴ)]
-  rw [Fintype.sum_prod_type]
+  rw [Kraus.transferMap_apply, Fintype.sum_prod_type]
   have hterm : ∀ p q : Fin 4,
-      R.toMPSTensor (finProdFinEquiv (p, q)) * X * (R.toMPSTensor (finProdFinEquiv (p, q)))ᴴ =
+      R (p, q) * X * (R (p, q))ᴴ =
       (25/32 : ℂ) ^ 2 •
         ((fun b => A b (bondBit2 p) (bondBit2 q)) ⬝ᵥ
           (X.mulVec (fun b => A b (bondBit2 p) (bondBit2 q)))) •
         Matrix.vecMulVec (fun a => A a (bondBit1 p) (bondBit1 q))
           (fun a => A a (bondBit1 p) (bondBit1 q)) := by
     intro p q
-    rw [toMPSTensor_R_apply, R_eq_vecMulVec p q, Matrix.conjTranspose_smul]
+    rw [R_eq_vecMulVec p q, Matrix.conjTranspose_smul]
     simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
     rw [vecMulVec_conj (Fin 4) (fun a => A a (bondBit1 p) (bondBit1 q))
       (fun b => A b (bondBit2 p) (bondBit2 q)) X]
@@ -240,21 +226,21 @@ lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
   · fin_cases a <;> fin_cases a' <;> simp_all
 
 /-- The rank-one image scalar, evaluated at the fixed matrix `fixedDiag` itself, is
-exactly `337/512`: `transferMap R.toMPSTensor` is idempotent up to this scalar
-(`transferMap_R_toMPSTensor_idem`). -/
+exactly `337/512`: `transferMap R` is idempotent up to this scalar
+(`transferMap_R_idem`). -/
 lemma cFun_fixedDiag :
     (25/32 : ℂ) ^ 2 * ∑ b : Fin 4, (sVal b) ^ 2 * fixedDiag b b = 337/512 := by
   simp only [fixedDiag, Matrix.diagonal_apply, Fin.sum_univ_four, sVal]
   norm_num
 
-/-- `transferMap R.toMPSTensor` is idempotent up to the scalar `337/512`: applying it
+/-- `transferMap R` is idempotent up to the scalar `337/512`: applying it
 twice to any `X` scales the single-application result by `337/512`, since every
 application returns a scalar multiple of `fixedDiag` and `cFun_fixedDiag` gives the
 scalar of the second application. -/
-lemma transferMap_R_toMPSTensor_idem (X : Matrix (Fin 4) (Fin 4) ℂ) :
-    Kraus.transferMap R.toMPSTensor (Kraus.transferMap R.toMPSTensor X) =
-      (337/512 : ℂ) • Kraus.transferMap R.toMPSTensor X := by
-  rw [transferMap_R_toMPSTensor_eq X, map_smul, transferMap_R_toMPSTensor_eq fixedDiag,
+lemma transferMap_R_idem (X : Matrix (Fin 4) (Fin 4) ℂ) :
+    Kraus.transferMap R (Kraus.transferMap R X) =
+      (337/512 : ℂ) • Kraus.transferMap R X := by
+  rw [transferMap_R_eq X, map_smul, transferMap_R_eq fixedDiag,
     cFun_fixedDiag, smul_smul, smul_smul, mul_comm]
 
 /-! ### The retained normal block -/
@@ -273,8 +259,8 @@ lemma weight_pos : 0 < weight := Real.sqrt_pos.mpr (by norm_num)
 /-- `weight` is nonzero. -/
 lemma weight_ne : weight ≠ 0 := weight_pos.ne'
 
-/-- `weight ^ 2 = 337/512`, the reciprocal of the scalar `transferMap R.toMPSTensor` is
-idempotent up to (`transferMap_R_toMPSTensor_idem`). -/
+/-- `weight ^ 2 = 337/512`, the reciprocal of the scalar `transferMap R` is
+idempotent up to (`transferMap_R_idem`). -/
 lemma weight_sq : weight ^ 2 = 337/512 := Real.sq_sqrt (by norm_num)
 
 /-- `weight_sq`, cast to `ℂ`. -/
@@ -282,20 +268,18 @@ lemma weight_sq_C : (weight : ℂ) ^ 2 = 337/512 := by
   rw [← Complex.ofReal_pow, weight_sq]
   norm_num
 
-/-- The retained normal block: `R.toMPSTensor` rescaled letterwise by `weight⁻¹`, the
+/-- The retained normal block: `R` rescaled letterwise by `weight⁻¹`, the
 single retained block of the literal CPSV canonical form
-(`R_toMPSTensor_isCPSVCanonicalForm`). -/
-def retainedBlock : MPSTensor 16 4 := fun i => (weight⁻¹ : ℂ) • R.toMPSTensor i
+(`R_isCPSVCanonicalForm`). -/
+def retainedBlock : MPOTensor 4 4 := fun i => (weight⁻¹ : ℂ) • R i
 
-/-- The retained block's doubled physical-trace transfer is the inverse-weight
+/-- The retained block's physical-trace transfer is the inverse-weight
 rescaling of the physical-trace transfer of `R`. -/
-lemma doubledPhysTraceTransfer_retainedBlock :
-    MPOTensor.doubledPhysTraceTransfer 4 retainedBlock =
+lemma physTraceTransfer_retainedBlock :
+    MPOTensor.physTraceTransfer retainedBlock =
       (weight⁻¹ : ℂ) • MPOTensor.physTraceTransfer R := by
-  rw [MPOTensor.doubledPhysTraceTransfer]
-  change (∑ i : Fin 4, (weight⁻¹ : ℂ) • R.toMPSTensor (finProdFinEquiv (i, i))) = _
-  rw [← Finset.smul_sum]
-  congr 1
+  rw [MPOTensor.physTraceTransfer, MPOTensor.physTraceTransfer, Finset.smul_sum]
+  rfl
 
 /-- The ket-against-bra contraction of the retained horizontal block is not
 nilpotent.  It is the nonzero scalar multiple `weight⁻¹ • physTraceTransfer R`,
@@ -306,9 +290,9 @@ This is the basis-element non-nilpotency condition of arXiv:1606.00608,
 Definition 4.7, lines 815--822, for the single retained block of this project
 example. It is the nilpotency clause for the displayed one-block presentation
 alone and makes no claim about other presentations or blockings. -/
-theorem doubledPhysTraceTransfer_retainedBlock_not_isNilpotent :
-    ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4 retainedBlock) := by
-  rw [doubledPhysTraceTransfer_retainedBlock]
+theorem physTraceTransfer_retainedBlock_not_isNilpotent :
+    ¬ IsNilpotent (MPOTensor.physTraceTransfer retainedBlock) := by
+  rw [physTraceTransfer_retainedBlock]
   intro hnil
   have hscaled := hnil.smul (weight : ℂ)
   rw [smul_smul] at hscaled
@@ -316,16 +300,16 @@ theorem doubledPhysTraceTransfer_retainedBlock_not_isNilpotent :
   rw [mul_inv_cancel₀ hw, one_smul] at hscaled
   exact physTraceTransfer_R_not_isNilpotent hscaled
 
-/-- `transferMap retainedBlock` is `(weight : ℂ)⁻¹ ^ 2` times `transferMap R.toMPSTensor`,
+/-- `transferMap retainedBlock` is `(weight : ℂ)⁻¹ ^ 2` times `transferMap R`,
 since the transfer map is quadratic in the tensor and `weight⁻¹` is real. -/
 lemma retainedBlock_transferMap (X : Matrix (Fin 4) (Fin 4) ℂ) :
     Kraus.transferMap retainedBlock X =
-      ((weight : ℂ)⁻¹ ^ 2) • Kraus.transferMap R.toMPSTensor X := by
+      ((weight : ℂ)⁻¹ ^ 2) • Kraus.transferMap R X := by
   rw [Kraus.transferMap_apply, Kraus.transferMap_apply, Finset.smul_sum]
   apply Finset.sum_congr rfl
   intro i _
-  change ((weight⁻¹ : ℂ) • R.toMPSTensor i) * X * ((weight⁻¹ : ℂ) • R.toMPSTensor i)ᴴ =
-    ((weight : ℂ)⁻¹ ^ 2) • (R.toMPSTensor i * X * (R.toMPSTensor i)ᴴ)
+  change ((weight⁻¹ : ℂ) • R i) * X * ((weight⁻¹ : ℂ) • R i)ᴴ =
+    ((weight : ℂ)⁻¹ ^ 2) • (R i * X * (R i)ᴴ)
   rw [Matrix.conjTranspose_smul]
   simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
   have hstar : star (weight⁻¹ : ℂ) = (weight⁻¹ : ℂ) := by
@@ -335,18 +319,21 @@ lemma retainedBlock_transferMap (X : Matrix (Fin 4) (Fin 4) ℂ) :
   ring_nf
 
 /-- **`retainedBlock`'s transfer map is exactly idempotent.** Chasing the scalar through
-`retainedBlock_transferMap` and `transferMap_R_toMPSTensor_idem`, the composite scalar
+`retainedBlock_transferMap` and `transferMap_R_idem`, the composite scalar
 `(weight⁻¹)^2 * (weight⁻¹)^2 * (337/512)` equals `(weight⁻¹)^2` exactly because
-`weight^2 = 337/512` (`weight_sq_C`). -/
-lemma retainedBlock_isTransferIdempotent : MPSTensor.IsTransferIdempotent retainedBlock := by
+`weight^2 = 337/512` (`weight_sq_C`). The idempotence predicate is stated on the
+doubled-index alphabet `Fin (4 * 4)`. -/
+lemma retainedBlock_isTransferIdempotent :
+    MPSTensor.IsTransferIdempotent retainedBlock.toMPSTensor := by
   unfold MPSTensor.IsTransferIdempotent
+  rw [MPOTensor.kraus_transferMap_toMPSTensor]
   apply LinearMap.ext
   intro X
   rw [LinearMap.comp_apply]
   show Kraus.transferMap retainedBlock (Kraus.transferMap retainedBlock X) =
     Kraus.transferMap retainedBlock X
   rw [retainedBlock_transferMap, retainedBlock_transferMap, map_smul,
-    transferMap_R_toMPSTensor_idem, smul_smul, smul_smul]
+    transferMap_R_idem, smul_smul, smul_smul]
   congr 1
   have hw : (weight : ℂ) ≠ 0 := by exact_mod_cast weight_ne
   have hc : ((weight : ℂ)⁻¹ ^ 2) * (337/512) = 1 := by
@@ -358,33 +345,37 @@ lemma retainedBlock_isTransferIdempotent : MPSTensor.IsTransferIdempotent retain
     _ = (weight : ℂ)⁻¹ ^ 2 := by ring
 
 /-- `retainedBlock`'s letters span the full bond matrix algebra, since they are nonzero
-scalar multiples of `R.toMPSTensor`'s letters (`R_toMPSTensor_isInjective`). -/
+scalar multiples of `R`'s letters (`R_isInjective`). -/
 lemma retainedBlock_isInjective : Kraus.IsInjective retainedBlock := by
-  have hblock : retainedBlock = fun i => (weight⁻¹ : ℂ) • R.toMPSTensor i := rfl
+  have hblock : retainedBlock = fun i => (weight⁻¹ : ℂ) • R i := rfl
   rw [hblock]
-  refine R_toMPSTensor_isInjective.smul (inv_ne_zero ?_)
+  refine R_isInjective.smul (inv_ne_zero ?_)
   exact_mod_cast weight_ne
 
 /-- **`retainedBlock` is a CPSV normal tensor.** -/
-lemma retainedBlock_isNormalTensor : MPTensor.IsNormalTensor retainedBlock :=
-  MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock
-    retainedBlock_isInjective.isNormal retainedBlock_isTransferIdempotent
+lemma retainedBlock_isNormalTensor : MPTensor.IsNormalTensor retainedBlock := by
+  have h := (MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock.toMPSTensor
+    ((MPOTensor.isNormal_toMPSTensor_iff _).2 retainedBlock_isInjective.isNormal)
+    retainedBlock_isTransferIdempotent).reindexPhysical finProdFinEquiv
+  have he : Kraus.reindexPhysical finProdFinEquiv retainedBlock.toMPSTensor = retainedBlock :=
+    funext fun i ↦ congrArg retainedBlock (finProdFinEquiv.symm_apply_apply i)
+  rwa [he] at h
 
 /-! ### Packaging the literal CPSV canonical form -/
 
-/-- `R.toMPSTensor` is exactly `weight • retainedBlock`: the reconstruction equation of
+/-- `R` is exactly `weight • retainedBlock`: the reconstruction equation of
 the literal CPSV canonical form, with a trivial (identity) coisometry since the
 retained block occupies the full ambient bond dimension. -/
-lemma R_toMPSTensor_eq_weight_smul_retainedBlock (i : Fin 16) :
-    R.toMPSTensor i = (weight : ℂ) • retainedBlock i := by
-  change R.toMPSTensor i = (weight : ℂ) • ((weight⁻¹ : ℂ) • R.toMPSTensor i)
+lemma R_eq_weight_smul_retainedBlock (i : Fin 4 × Fin 4) :
+    R i = (weight : ℂ) • retainedBlock i := by
+  change R i = (weight : ℂ) • ((weight⁻¹ : ℂ) • R i)
   rw [smul_smul]
   have hw : (weight : ℂ) ≠ 0 := by exact_mod_cast weight_ne
   rw [mul_inv_cancel₀ hw, one_smul]
 
 /-- The `r = 1` weighted direct sum used for the literal reconstruction below reduces,
 letter by letter, to the plain scalar multiple `weight • retainedBlock i`. -/
-lemma toTensorFromBlocks_single_eq (i : Fin 16) :
+lemma toTensorFromBlocks_single_eq (i : Fin 4 × Fin 4) :
     MPTensor.toTensorFromBlocks (fun _ : Fin 1 => (weight : ℂ)) (fun _ : Fin 1 => retainedBlock)
         i =
       (weight : ℂ) • retainedBlock i := by
@@ -410,12 +401,12 @@ lemma toTensorFromBlocks_single_eq (i : Fin 16) :
     _ = _ := Matrix.blockDiagonal'_apply_eq
       (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i) 0 a' b'
 
-/-- The literal CPSV canonical-form witness data for `R.toMPSTensor`: a single retained
+/-- The literal CPSV canonical-form witness data for `R`: a single retained
 normal block (`retainedBlock`) occupying the full ambient bond dimension `4`, weight
 `weight`, and the trivial (identity) coisometry.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
-noncomputable def canonicalFormData : MPTensor.CPSVCanonicalFormData R.toMPSTensor where
+noncomputable def canonicalFormData : MPTensor.CPSVCanonicalFormData R where
   r := 1
   dim := fun _ => 4
   dim_pos := fun _ => by norm_num
@@ -430,21 +421,21 @@ noncomputable def canonicalFormData : MPTensor.CPSVCanonicalFormData R.toMPSTens
     simp
   reconstruct := fun i => by
     rw [toTensorFromBlocks_single_eq]
-    change R.toMPSTensor i =
+    change R i =
       (1 : Matrix (Fin 4) (Fin 4) ℂ)ᴴ * ((weight : ℂ) • retainedBlock i) *
         (1 : Matrix (Fin 4) (Fin 4) ℂ)
     rw [Matrix.conjTranspose_one, Matrix.one_mul, Matrix.mul_one]
-    exact R_toMPSTensor_eq_weight_smul_retainedBlock i
+    exact R_eq_weight_smul_retainedBlock i
 
-/-- **The literal CPSV canonical form of `R.toMPSTensor`.**
+/-- **The literal CPSV canonical form of `R`.**
 
 A single retained normal block occupying the full ambient bond dimension `4`, with
 weight `weight = √(337/512)` (the unique positive scalar making the retained block's
 transfer map idempotent, hence spectral-radius one).
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
-theorem R_toMPSTensor_isCPSVCanonicalForm :
-    MPTensor.IsCPSVCanonicalForm R.toMPSTensor :=
+theorem R_isCPSVCanonicalForm :
+    MPTensor.IsCPSVCanonicalForm R :=
   ⟨canonicalFormData⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP

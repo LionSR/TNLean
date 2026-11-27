@@ -505,7 +505,7 @@ standing hypotheses. Documented in
 Source: arXiv:1606.00608, Appendix C.2, Case I at lines 1374--1381 and Lemma
 `SALZCL` at lines 1473--1499. -/
 theorem tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix :
-    Kraus.IsInjective tensor.toMPSTensor ∧ tensor.IsSAL ∧ tensor.IsSourceZCL ∧
+    Kraus.IsInjective tensor ∧ tensor.IsSAL ∧ tensor.IsSourceZCL ∧
       (∀ k h, inverseMapFactorization.neighboringOperator k h =
         factorization.neighboringOperator k h) ∧
       (∀ k h, (inverseMapFactorization.neighboringOperator k h).PosSemidef) ∧
