@@ -114,65 +114,6 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     have hmul_pos : 0 < period k * extra k := by
       simpa [p_eq_period_mul_extra k] using hp
     exact Nat.pos_of_mul_pos_left hmul_pos
-  have hPhys : ∀ k,
-      blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p := by
-    intro k
-    simpa [p_eq_period_mul_extra k] using
-      (blockPhysDim_blockPhysDim d (period k) (extra k))
-  have hExtra : ∀ k s,
-      (∑ i : Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)),
-        (Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-          (sectorBlocks k s) (extra k) i)ᴴ *
-          Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-            (sectorBlocks k s) (extra k) i = 1) ∧
-      _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)))
-          (n := Fin (sectorDim k s))
-          (Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-            (sectorBlocks k s) (extra k))) ∧
-      Kraus.IsIrreducibleFamily
-        (Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-          (sectorBlocks k s) (extra k)) := by
-    intro k s
-    have : NeZero (sectorDim k s) := ⟨Nat.ne_of_gt (sector_dim_pos k s)⟩
-    exact Kraus.tp_primitive_irreducible_extra_blocking
-      (d := blockPhysDim d (period k)) (D := sectorDim k s)
-      (A := sectorBlocks k s) (sector_tp k s) (sector_primitive k s)
-      (sector_irreducible k s) (hk := extra_pos k)
-  have nested_same : ∀ k,
-      SameMPV₂
-        (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (hPhys k))
-          (Kraus.block (d := blockPhysDim d (period k)) (n := Fin (dim k))
-            (Kraus.block (blocks k) (period k)) (extra k)))
-        (toTensorFromBlocks (α := (Fin p → α))
-          (μ := fun _ : Fin (period k) => (1 : ℂ))
-          (fun s => cast
-            (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (hPhys k))
-            (Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-              (sectorBlocks k s) (extra k)))) := by
-    intro k
-    have hNested : SameMPV₂
-        (Kraus.block (d := blockPhysDim d (period k)) (n := Fin (dim k))
-          (Kraus.block (blocks k) (period k)) (extra k))
-        (toTensorFromBlocks (α := Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)))
-          (μ := fun _ : Fin (period k) => (1 : ℂ))
-          (fun s => Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-            (sectorBlocks k s) (extra k))) := by
-      simpa using
-        (sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
-          (d := blockPhysDim d (period k)) (D := dim k)
-          (A := Kraus.block (blocks k) (period k))
-          (μ := fun _ : Fin (period k) => (1 : ℂ))
-          (blocks := sectorBlocks k) (hSame := sector_same k) (p := extra k))
-    have hCast := (sameMPV₂_cast_physDim (hPhys k)
-      (A := Kraus.block (d := blockPhysDim d (period k)) (n := Fin (dim k))
-        (Kraus.block (blocks k) (period k)) (extra k))
-      (B := toTensorFromBlocks (α := Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)))
-        (μ := fun _ : Fin (period k) => (1 : ℂ))
-        (fun s => Kraus.block (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
-          (sectorBlocks k s) (extra k)))).2 hNested
-    rw [toTensorFromBlocks_cast_physDim (h := hPhys k)] at hCast
-    simpa using hCast
   exact ⟨⟨{
     p := p
     p_pos := hp
@@ -187,9 +128,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     sector_same := sector_same
     sector_primitive := sector_primitive
     sector_irreducible := sector_irreducible
-    sector_dim_pos := sector_dim_pos
-    blockPhysDim_nested_eq := hPhys
-    nested_same := nested_same }, rfl⟩⟩
+    sector_dim_pos := sector_dim_pos }, rfl⟩⟩
 
 /-- A finite family of nonzero-weight blocks with per-block primitive irreducible cyclic sectors
 admits one common physical blocking length for all those sectors.
@@ -412,10 +351,10 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
     exists_commonBlockedCyclicSectorFamily_of_commonMultiple
       blocksB hCycB p hp hDvdB
   have hAPosCanon :=
-    sameMPV₂Pos_blockTensor_toTensorFromBlocks
+    sameMPV₂Pos_block_toTensorFromBlocks
       (α := α) A μA blocksA hAPos p hp
   have hBPosCanon :=
-    sameMPV₂Pos_blockTensor_toTensorFromBlocks
+    sameMPV₂Pos_block_toTensorFromBlocks
       (α := α) B μB blocksB hBPos p hp
   have hBook :=
     sameMPV₂Pos_toTensorFromBlocks_blockPower
@@ -582,12 +521,12 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
   have hFlatB_raw := familyB.reindexed_nonzero_part μB₀
   let flatBlocksA : (x : Fin (∑ k : Fin rA₀, familyA.period k)) →
       MPTensor (Fin p → α) (Fin (familyA.commonFlatDim x)) :=
-    fun x => cast (congr_arg (fun q => MPSTensor (blockPhysDim d q)
-      (familyA.commonFlatDim x)) hFamilyA) (familyA.commonFlatBlocks x)
+    fun x => cast (congr_arg (fun q => MPTensor (Fin q → α)
+      (Fin (familyA.commonFlatDim x))) hFamilyA) (familyA.commonFlatBlocks x)
   let flatBlocksB : (x : Fin (∑ k : Fin rB₀, familyB.period k)) →
       MPTensor (Fin p → α) (Fin (familyB.commonFlatDim x)) :=
-    fun x => cast (congr_arg (fun q => MPSTensor (blockPhysDim d q)
-      (familyB.commonFlatDim x)) hFamilyB) (familyB.commonFlatBlocks x)
+    fun x => cast (congr_arg (fun q => MPTensor (Fin q → α)
+      (Fin (familyB.commonFlatDim x))) hFamilyB) (familyB.commonFlatBlocks x)
   let nonzeroA := toTensorFromBlocks (α := (Fin p → α))
     (μ := familyA.commonFlatWeight μA₀) flatBlocksA
   let nonzeroB := toTensorFromBlocks (α := (Fin p → α))

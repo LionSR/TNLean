@@ -166,7 +166,7 @@ noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPSTensor d D}
       apply Complex.ext <;> simp [(h.weight_pos (e j).1).2]
     rw [he, ← Complex.ofReal_pow]
     exact ⟨pow_pos (h.weight_pos (e j).1).1 p, rfl⟩
-  · have hbase := sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
+  · have hbase := sameMPV₂_block_of_sameMPV₂_toTensorFromBlocks
       A h.μ h.blocks h.sameMPV p
     have hflat := sameMPV₂_toTensorFromBlocks_refinement (fun k ↦ h.μ k ^ p)
       (fun k ↦ blockTensor (h.blocks k) p) n sd B hSame

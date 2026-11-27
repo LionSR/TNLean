@@ -10,8 +10,8 @@ import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
 # Common-period cyclic-sector blocking
 
 The common-period blocking operation sends each cyclic-sector block to the
-period `lcmPeriod periods`, giving a family with physical dimension
-`blockPhysDim d (lcmPeriod periods)` and the same block-dependent bond
+period `lcmPeriod periods`, giving a family on the physical alphabet
+`Fin (lcmPeriod periods) → α` and the same block-dependent bond
 dimensions. Per-block primitivity witnesses are transported along the
 divisibility `periods i ∣ lcmPeriod periods`.
 -/
@@ -51,7 +51,7 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
   intro i
   let : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
   simpa [commonPeriodBlocking] using
-    isPrimitive_transferMap_blockTensor_of_dvd
+    isPrimitive_transferMap_block_of_dvd
       (α := α) (D := dim i)
       (A := blocks i)
       (p := periods i) (q := lcmPeriod periods)

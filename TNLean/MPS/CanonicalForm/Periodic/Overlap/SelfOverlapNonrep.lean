@@ -716,7 +716,7 @@ theorem periodicSelfOverlap_tendsto
       hIntertwine hMul hStar hLetterRaw hV_iso hV_range hEmbed hNondeg
   refine hBlocked.congr' ?_
   filter_upwards with k
-  rw [mpvOverlap_blockTensor_self_eq]
+  rw [mpvOverlap_block_self_eq]
   simp [Nat.mul_comm]
 
 

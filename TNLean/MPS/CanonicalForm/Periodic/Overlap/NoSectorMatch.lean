@@ -278,7 +278,7 @@ private theorem blockTensor_selfOverlap_tendsto_of_isPeriodic
     periodicSelfOverlap_tendsto A hP
   refine hSelf.congr' ?_
   filter_upwards with N
-  rw [mpvOverlap_blockTensor_self_eq]
+  rw [mpvOverlap_block_self_eq]
   simp [Nat.mul_comm]
 
 /-- A gauge-phase equivalence between the period-blocked tensors of two
