@@ -277,8 +277,8 @@ def akltHamiltonian (N : ℕ) : NSiteSpace 3 N →ₗ[ℂ] NSiteSpace 3 N :=
 /-- On a periodic chain of \(N\ge2\) sites, the two-site local term of the parent
 Hamiltonian of `akltTensor` at the window \(i,i+1\) is
 \(\tfrac12(h_i+\tfrac23)\), with \(h_i\) the AKLT term of that bond. -/
-lemma aklt_parentRingInteraction_term_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N) (ψ : NSiteSpace 3 N)
-    (σ : Cfg 3 N) :
+lemma aklt_parentRingInteraction_term_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N)
+    (ψ : NSiteSpace 3 N) (σ : Cfg 3 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toLin' ((parentRingInteraction akltTensor 2 N).term i) ψ σ =
       (1 / 2) * (spinExchange spinOneOperator i (cyclicForwardSite i 1) ψ σ +
@@ -306,7 +306,8 @@ theorem akltHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN2 : 2 ≤ N) :
   simp only [akltHamiltonian, ManyBody.Interaction.hamiltonian, map_sum, LinearMap.add_apply,
     LinearMap.smul_apply,
     LinearMap.id_apply, LinearMap.sum_apply, LinearMap.comp_apply, Finset.sum_apply,
-    Pi.add_apply, Pi.smul_apply, smul_eq_mul, aklt_parentRingInteraction_term_two_apply hN2, Finset.mul_sum,
+    Pi.add_apply, Pi.smul_apply, smul_eq_mul, aklt_parentRingInteraction_term_two_apply hN2,
+    Finset.mul_sum,
     Finset.sum_add_distrib]
   simp only [show ∀ x y z : ℂ, 2 * (1 / 2 * (x + y + z)) = x + y + z from
       fun x y z => by ring, Finset.sum_add_distrib, Finset.sum_const, Finset.card_univ,
