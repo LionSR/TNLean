@@ -511,7 +511,7 @@ private theorem originalWindowMiddleEquiv_block (d k : ℕ)
     originalWindowMiddleEquiv d k w (finProdFinEquiv (i, j)) =
       Kraus.decodeBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm (w i)) j := by
   simp [originalWindowMiddleEquiv, Kraus.blockedConfigEquiv,
-    Equiv.arrowCongr, Equiv.curry, Function.comp]
+    Equiv.arrowCongr, Kraus.blockConfigEquiv_apply, Function.comp_apply]
 
 /-- The numbered middle interval reads exactly the complete central input
 configuration; arXiv:1703.09188, StandardForm, lines 603--622. -/
@@ -595,7 +595,8 @@ private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
     originalSiteHeisenbergCentreEquiv d k c (finProdFinEquiv (b, j)) =
       Kraus.decodeBlock d k (![c.1, c.2] b) j := by
   rw [originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv]
-  simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+  simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply,
+    Function.comp_apply]
 
 /-- Four consecutive output half-block indices in their actual word order.
 Source: CPSV17, StandardForm and Appendix index comparison,
@@ -652,7 +653,8 @@ theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
       Kraus.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
     change Kraus.blockedConfigEquiv d 4 k ![c.1.1, c.1.2, c.2.1, c.2.2]
       (finProdFinEquiv (t, j)) = _
-    simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+    simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply,
+    Function.comp_apply]
   rw [hcentre]
   fin_cases t
   · exact hread 0 1 (by change k + (j.val + k * 0) = j.val + k * 1 + (2 * k) * 0; omega)

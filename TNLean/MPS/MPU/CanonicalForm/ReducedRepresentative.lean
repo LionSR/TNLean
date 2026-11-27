@@ -368,7 +368,7 @@ theorem transferMap_normalizedFlattening_virtualSandwich
       A * Kraus.transferMap W.normalizedFlattening (B * X * Bᴴ) * Aᴴ := by
   have h : (virtualSandwich A W B).normalizedFlattening =
       fun ij ↦ A * W.normalizedFlattening ij * B := by
-    funext ij
+    funext ⟨i, j⟩
     simp only [normalizedFlattening,
       virtualSandwich_apply, Matrix.mul_smul, Matrix.smul_mul]
   simp only [h, Kraus.transferMap_apply, Matrix.conjTranspose_mul,

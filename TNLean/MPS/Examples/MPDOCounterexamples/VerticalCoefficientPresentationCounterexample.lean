@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.Coefficients.LengthIndependentCoefficients
 import TNLean.MPS.Operator.Product.OperatorProduct
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
 import TNLean.MPS.Transfer.Scaling
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Horizontal equivalence does not determine vertical BNT coefficients
@@ -148,12 +148,12 @@ cross-presentation assertion.  It uses the gauge mechanism of CPSV16, lines
 in Proposition 4.13 and Theorem 4.14(ii), lines 943--985. -/
 theorem leftMPO_sameMPV₂Pos_rightMPO :
     MPTensor.SameMPV₂Pos leftMPO rightMPO := by
-  refine (sameMPV₂Pos_toMPSTensor_iff leftMPO rightMPO).1 fun L hL σ ↦ ?_
-  have hσ : σ = fun _ ↦ (0 : Fin (1 * 1)) := by
+  intro L hL σ
+  have hσ : σ = fun _ ↦ ((0 : Fin 1), (0 : Fin 1)) := by
     funext n
-    exact Fin.eq_zero (σ n)
+    exact Subsingleton.elim _ _
   subst σ
-  rw [MPSTensor.mpv_const_eq_trace_pow, MPSTensor.mpv_const_eq_trace_pow]
+  simp only [MPTensor.mpv, MPTensor.coeff, List.ofFn_const, Kraus.evalWord_replicate]
   change Matrix.trace (leftMatrix ^ L) = Matrix.trace (rightMatrix ^ L)
   rw [leftMatrix_isIdempotent.pow_eq (Nat.ne_of_gt hL),
     rightMatrix_isIdempotent.pow_eq (Nat.ne_of_gt hL)]
@@ -164,13 +164,13 @@ private theorem leftMPO_mpo_eq_one (N : ℕ) (hN : 0 < N) :
   ext σ τ
   have hστ : σ = τ := Subsingleton.elim _ _
   subst τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
+  rw [← MPOTensor.mpv_pair]
   have hconfig :
-      (fun n ↦ finProdFinEquiv (σ n, σ n)) =
-        (fun _ ↦ (0 : Fin (1 * 1))) := by
+      (fun n ↦ (σ n, σ n)) = (fun _ ↦ ((0 : Fin 1), (0 : Fin 1))) := by
     funext n
-    exact Fin.eq_zero _
-  rw [hconfig, MPSTensor.mpv_const_eq_trace_pow]
+    exact Subsingleton.elim _ _
+  rw [hconfig]
+  simp only [MPTensor.mpv, MPTensor.coeff, List.ofFn_const, Kraus.evalWord_replicate]
   have hOne :
       (1 : Matrix (Fin N → Fin 1) (Fin N → Fin 1) ℂ) σ σ = 1 := by
     simp
@@ -184,13 +184,13 @@ private theorem rightMPO_mpo_eq_one (N : ℕ) (hN : 0 < N) :
   ext σ τ
   have hστ : σ = τ := Subsingleton.elim _ _
   subst τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
+  rw [← MPOTensor.mpv_pair]
   have hconfig :
-      (fun n ↦ finProdFinEquiv (σ n, σ n)) =
-        (fun _ ↦ (0 : Fin (1 * 1))) := by
+      (fun n ↦ (σ n, σ n)) = (fun _ ↦ ((0 : Fin 1), (0 : Fin 1))) := by
     funext n
-    exact Fin.eq_zero _
-  rw [hconfig, MPSTensor.mpv_const_eq_trace_pow]
+    exact Subsingleton.elim _ _
+  rw [hconfig]
+  simp only [MPTensor.mpv, MPTensor.coeff, List.ofFn_const, Kraus.evalWord_replicate]
   have hOne :
       (1 : Matrix (Fin N → Fin 1) (Fin N → Fin 1) ℂ) σ σ = 1 := by
     simp

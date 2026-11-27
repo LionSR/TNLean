@@ -142,15 +142,23 @@ def dimerTargetInt (f : Fin 2) (a : Fin 64) : Matrix (Fin 4) (Fin 4) ℤ :=
 
 /-- Two hundred and fifty-six times the stacked product. -/
 def dimerStackedInt (f f' : Fin 2) (a : Fin 64) : Matrix (Fin 16) (Fin 16) ℤ :=
-  mulIntTensor (dimerMInt f) (dimerMInt f') (Fin.divNat (m := 8) (n := 8) a)
-    (Fin.modNat (m := 8) (n := 8) a)
+  mulIntTensor (Function.uncurry (dimerMInt f)) (Function.uncurry (dimerMInt f'))
+    (Fin.divNat (m := 8) (n := 8) a, Fin.modNat (m := 8) (n := 8) a)
 
 theorem dimerTarget_eq (f : Fin 2) (a : Fin 64) :
     dimerTarget f a = (16 : ℂ)⁻¹ • complexOfInt (dimerTargetInt f a) := rfl
 
 theorem dimerStacked_eq (f f' : Fin 2) (a : Fin 64) :
-    dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) :=
-  mulTensor_smul_complexOfRing _ (16 : ℂ)⁻¹ (dimerMInt f) (dimerMInt f') _ _
+    dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) := by
+  have hM : ∀ g : Fin 2, dimerM g = fun ij ↦
+      (16 : ℂ)⁻¹ • Matrix.complexOfRing (Int.castRingHom ℂ) (Function.uncurry (dimerMInt g) ij) := by
+    intro g
+    funext ⟨i, j⟩
+    rfl
+  change MPOTensor.mulTensor (dimerM f) (dimerM f')
+      (Fin.divNat (m := 8) (n := 8) a, Fin.modNat (m := 8) (n := 8) a) = _
+  rw [hM f, hM f', mulTensor_smul_complexOfRing]
+  rfl
 
 /-- **The sector tensors are the flag sectors of the twisted dimer**: the sector-`f` tensor is
 `μ = 5/8` times the normalized flag sector `MPOTensor.TwistedDimer.flagMPO f`
@@ -205,13 +213,14 @@ private theorem dimerMInt_eq_zero (f : Fin 2) {a b : Fin 8} (h : bitF a ≠ bitF
   simp [dimerMInt, h]
 
 private theorem dimerStackedInt_eq_zero (f f' : Fin 2) {i k : Fin 8}
-    (h : bitF i ≠ bitF k) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = 0 := by
+    (h : bitF i ≠ bitF k) :
+    mulIntTensor (Function.uncurry (dimerMInt f)) (Function.uncurry (dimerMInt f')) (i, k) = 0 := by
   have hj : ∀ j : Fin 8, dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j
     rcases eq_or_ne (bitF i) (bitF j) with hij | hij
     · rw [dimerMInt_eq_zero f' fun hjk => h (hij.trans hjk), Matrix.kronecker_zero]
     · rw [dimerMInt_eq_zero f hij, Matrix.zero_kronecker]
-  simp [mulIntTensor, mulTensorR, hj]
+  simp [mulIntTensor, mulTensorR, Function.uncurry_apply_pair, hj]
 
 /-- The sector-`f` tensor is the sector-`0` tensor with the sign `τ_k[f]` of its sector label. -/
 private theorem dimerMInt_eq_sign_smul (f : Fin 2) (a b : Fin 8) :
@@ -242,7 +251,7 @@ theorem dimerStackedInt_eq_add (f f' : Fin 2) :
     · rw [dimerMInt_eq_zero f h, dimerMInt_eq_zero 0 h, Matrix.zero_kronecker,
         Matrix.zero_kronecker]
   funext a
-  simp only [dimerStackedInt, mulIntTensor, mulTensorR, hkron]
+  simp only [dimerStackedInt, mulIntTensor, mulTensorR, Function.uncurry_apply_pair, hkron]
 
 /-- The two target blocks of the fusion of `f` and `f'` are those of the fusion of `0` and
 `f + f'`. -/
@@ -278,21 +287,29 @@ def dimerStackOdd (f f' : Fin 2) (i k : Fin 8) : Matrix (Fin 16) (Fin 16) ℤ :=
 
 /-- On a left bond index of sector label zero the stacked product is its even restriction. -/
 private theorem dimerStackedInt_even (f f' : Fin 2) {i : Fin 8} (hi : bitF i = 0)
-    (k : Fin 8) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = dimerStackEven f f' i k := by
+    (k : Fin 8) :
+    mulIntTensor (Function.uncurry (dimerMInt f)) (Function.uncurry (dimerMInt f')) (i, k) =
+      dimerStackEven f f' i k := by
   have hz : ∀ j : Fin 8, bitF j = 1 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
     rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
-  rw [mulIntTensor, mulTensorR, Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide),
+  rw [mulIntTensor, mulTensorR]
+  simp only [Function.uncurry_apply_pair]
+  rw [Fin.sum_univ_eight, hz 1 (by decide), hz 3 (by decide),
     hz 5 (by decide), hz 7 (by decide)]
   simp only [add_zero, dimerStackEven]
 
 /-- On a left bond index of sector label one the stacked product is its odd restriction. -/
 private theorem dimerStackedInt_odd (f f' : Fin 2) {i : Fin 8} (hi : bitF i = 1)
-    (k : Fin 8) : mulIntTensor (dimerMInt f) (dimerMInt f') i k = dimerStackOdd f f' i k := by
+    (k : Fin 8) :
+    mulIntTensor (Function.uncurry (dimerMInt f)) (Function.uncurry (dimerMInt f')) (i, k) =
+      dimerStackOdd f f' i k := by
   have hz : ∀ j : Fin 8, bitF j = 0 → dimerMInt f i j ⊗ₖ dimerMInt f' j k = 0 := by
     intro j hj
     rw [dimerMInt_eq_zero f (by rw [hi, hj]; decide), Matrix.zero_kronecker]
-  rw [mulIntTensor, mulTensorR, Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide),
+  rw [mulIntTensor, mulTensorR]
+  simp only [Function.uncurry_apply_pair]
+  rw [Fin.sum_univ_eight, hz 0 (by decide), hz 2 (by decide),
     hz 4 (by decide), hz 6 (by decide)]
   simp only [zero_add, add_zero, dimerStackOdd]
 
