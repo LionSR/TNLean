@@ -364,8 +364,8 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 /-- The interaction-picture average is unchanged when `A` is shifted by a real scalar: the
 phases of `e^{i(A+B)t}` and `e^{-iAt}` cancel. -/
 theorem interactionAverage_add_smul_one (η : ℝ≥0) (A B : Matrix n n ℂ) (c : ℝ) :
-    interactionAverage η (A + (c : ℂ) • 1) B = interactionAverage η A B := by
-  unfold interactionAverage
+    Matrix.interactionAverage η (A + (c : ℂ) • 1) B = Matrix.interactionAverage η A B := by
+  unfold Matrix.interactionAverage
   rw [show A + (c : ℂ) • 1 + B = A + B + (c : ℂ) • 1 by abel]
   exact GaussianFilter.gaussianIntertwiner_add_smul_one η (A + B) A 1 c
 
@@ -409,12 +409,12 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization (hq : 1 
   have hB : (H' - H₀).IsHermitian := (hH.sub hE).sub hH₀
   have hAB : H₀ + (H' - H₀) = H' := add_sub_cancel H₀ H'
   -- eq. `last`: `‖P_B O_L O_R − P‖ ≤ ε₀ + √η θ`
-  have hlast := norm_interactionAverage_mul_mul_sub_le η hH₀ hB OL OR P (δ := θ) (ε := ε₀) hθ
+  have hlast := Matrix.norm_interactionAverage_mul_mul_sub_le η hH₀ hB OL OR P (δ := θ) (ε := ε₀) hθ
     (by rw [hAB]; exact hε₀)
   -- the same average with `A` shifted by `E₀`, so that `A + B = H`
   set H₀₂ := H₀ + (E₀ : ℂ) • 1 with hH₀₂
   have hH₀₂h : H₀₂.IsHermitian := hH₀.add hE
-  have hshift : interactionAverage η H₀₂ (H' - H₀) = interactionAverage η H₀ (H' - H₀) :=
+  have hshift : Matrix.interactionAverage η H₀₂ (H' - H₀) = Matrix.interactionAverage η H₀ (H' - H₀) :=
     interactionAverage_add_smul_one η H₀ (H' - H₀) E₀
   have hsum : H₀₂ + (H' - H₀) = h.hamiltonian := by rw [hH₀₂, hH']; abel
   have hdiff : h.hamiltonian - H₀₂ = H' - H₀ := by rw [hH₀₂, hH']; abel
@@ -422,7 +422,7 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_boundaryOperator_factorization (hq : 1 
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
     exists_supported_interactionAverage_approx_exp hq h hh hhJ hH₀₂h hH₀₂h hB Z (hdiff ▸ hZ) η hℓ'
   refine ⟨OB, hOBs, hOB1, ?_⟩
-  set PB := interactionAverage η H₀ (H' - H₀)
+  set PB := Matrix.interactionAverage η H₀ (H' - H₀)
   have hloc : ‖PB - OB‖ ≤ √(η : ℝ) * (chainLRPrefactor R J * (Z.card : ℝ) ^ 2 *
       ‖H' - H₀‖ * Real.exp (-(ℓ' / 4))) +
         4 * Real.exp (-ℓ' ^ 2 / (32 * chainLRVelocity R J ^ 2 * (η : ℝ))) := by
