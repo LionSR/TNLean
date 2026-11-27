@@ -89,7 +89,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
   suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (1 + k.val / p), by
       rw [hindex]
       omega⟩) ≍ fun k : Fin (p + p) => σ (k.addNat p) by
-    simpa [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+    simpa [Kraus.blockedConfigEquiv, Kraus.blockConfigEquiv, Equiv.arrowCongr, Equiv.curry,
       decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
   apply (Fin.heq_fun_iff (by omega)).2
   intro k
@@ -122,7 +122,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
     suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (k.val / p), by
         rw [Nat.mod_add_div]
         omega⟩) ≍ fun k : Fin (p + p) => σ (Fin.castAdd p k) by
-      simpa [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+      simpa [Kraus.blockedConfigEquiv, Kraus.blockConfigEquiv, Equiv.arrowCongr, Equiv.curry,
         decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
     apply (Fin.heq_fun_iff (by omega)).2
     intro k
@@ -141,7 +141,8 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
         (fun k => (decodeBlockEquiv d p).symm
           (Function.curry (fun ij => σ (Fin.natAdd (p + p) ij.2)) k), b, a) by
     simpa [blockSpectatorLinearIsometryEquiv, boundaryFamilyEquiv_apply_apply,
-      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp_def,
+      Kraus.blockedConfigEquiv, Kraus.blockConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+      Function.comp_def,
       finProdFinEquiv]
   apply congrArg x.1
   congr 1
