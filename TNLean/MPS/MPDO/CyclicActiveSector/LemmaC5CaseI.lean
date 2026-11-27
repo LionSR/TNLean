@@ -37,8 +37,7 @@ The active sector set reduces to a singleton (`card(ActiveSector p) = 1`),
 from which the Case-I relation `T² = T` and its normalized rank-one coefficient
 form follow.  On the explicit normal Case-I hypothesis surface, the coefficient
 theorem reproves the two equations asserted by Lemma `SALZCL`; it does not use
-the source's trace-power argument.  Singletonness and `T² = T` are the
-project-derived inputs.
+the source's trace-power argument.  Singletonness and `T² = T` are the project-derived inputs.
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
   (`trace_pow_similarity_diagonal`),
@@ -120,8 +119,7 @@ variable {d D : ℕ} (K : MPOTensor d D)
 `S_{kh} = Re(tr(η_{kh}²))`.
 
 This is the matrix `S` defined in the Lemma C.5 Case-I proof.
-Each entry is bounded above by `T_{kh}²`, where `T` is the
-active-sector trace matrix.
+Each entry is bounded above by `T_{kh}²`, where `T` is the active-sector trace matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
 noncomputable def activeSectorTraceSqMatrix
@@ -169,8 +167,7 @@ theorem activeSectorTraceSqMatrix_nonneg
 
 /-- The product of the theorem-local Case-I trace factors is the complexification of
 `activeSectorTraceMatrix`.  In the project's rectangular notation this is `QL = T`,
-built from the tensors $l_h$ and $r_k$ of CPSV16, Appendix C.2, Lemma C.5,
-lines 1473--1499. -/
+built from the tensors $l_h$ and $r_k$ of CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499. -/
 private theorem trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceMatrix
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
@@ -295,8 +292,7 @@ theorems complete the Case-I argument:
    `Q(1−LQ)L = 0`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (`SALZCL`), lines
-1473--1499; Case-I assumptions at lines 1374--1381; self-overlap limit at
-lines 1080--1100.
+1473--1499; Case-I assumptions at lines 1374--1381; self-overlap limit at lines 1080--1100.
 -/
 
 open Matrix
@@ -312,8 +308,7 @@ preserved under the diagonal similarity `M = D⁻¹ * S * D`:
 
 This is the telescoping used in the Lemma C.5 Case-I route
 (arXiv:1606.00608, Appendix C.2, lines 1473--1499): conjugate `S` by the
-squared Perron-weight diagonal matrix `D_{v²}`, and the trace of every power
-is unchanged.
+squared Perron-weight diagonal matrix `D_{v²}`, and the trace of every power is unchanged.
 
 The proof expands `(D⁻¹·S·D)^N = D⁻¹·S^N·D` by the diagonal similarity
 telescoping, then applies trace cyclicity `tr(D⁻¹·T·D) = tr(T)`. -/
