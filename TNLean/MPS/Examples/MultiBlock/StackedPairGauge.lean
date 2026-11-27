@@ -192,9 +192,9 @@ theorem stackedPair_letter_identity {B : MPSTensor d 16} {C : Fin 2 → MPSTenso
 /-- **Normality from a table of scaled matrix units.** A tensor whose letters are rescaled
 integer matrices and which realises every matrix unit as a nonzero integer multiple of one of
 its letters spans the full matrix algebra, hence is normal at blocking length one. -/
-theorem isNormal_of_single_eq_smul {D : ℕ} {A : MPSTensor d D}
-    (AInt : Fin d → Matrix (Fin D) (Fin D) ℤ) {c : ℂ} (hc : c ≠ 0)
-    (hA : ∀ a, A a = c • complexOfInt (AInt a)) (ℓ : Fin D → Fin D → Fin d)
+theorem isNormal_of_single_eq_smul {α : Type*} {D : ℕ} {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AInt : α → Matrix (Fin D) (Fin D) ℤ) {c : ℂ} (hc : c ≠ 0)
+    (hA : ∀ a, A a = c • complexOfInt (AInt a)) (ℓ : Fin D → Fin D → α)
     (w : Fin D → Fin D → ℤ) (hw : ∀ x y, w x y ≠ 0)
     (h : ∀ x y, AInt (ℓ x y) = w x y • Matrix.single x y 1) :
     Kraus.IsNormal A :=

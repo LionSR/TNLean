@@ -31,7 +31,7 @@ def czyDim : Fin 2 → ℕ
   | 1 => 2
 
 /-- The existing integer tensors of arXiv:2509.03600, Section II, main.tex lines 203–240. -/
-def czyFamilyInt (a : Fin 2) : Fin 2 → Fin 2 → Matrix (Fin (czyDim a)) (Fin (czyDim a)) ℤ :=
+def czyFamilyInt (a : Fin 2) : Fin 2 × Fin 2 → Matrix (Fin (czyDim a)) (Fin (czyDim a)) ℤ :=
   match a with
   | 0 => czyReducedIntTensor
   | 1 => czyIntTensor
@@ -54,7 +54,7 @@ def czyTripleInt (a b c i k : Fin 2) :
     Matrix ((Fin (czyDim a) × Fin (czyDim b)) × Fin (czyDim c))
       ((Fin (czyDim a) × Fin (czyDim b)) × Fin (czyDim c)) ℤ :=
   ∑ j : Fin 2, ∑ l : Fin 2,
-    (czyFamilyInt a i j ⊗ₖ czyFamilyInt b j l) ⊗ₖ czyFamilyInt c l k
+    (czyFamilyInt a (i, j) ⊗ₖ czyFamilyInt b (j, l)) ⊗ₖ czyFamilyInt c (l, k)
 
 /-- The left fusion `Fₐ₊ᵦ,𝒸 (Fₐ,ᵦ ⊗ I𝒸)` in the product bond coordinates. -/
 def czyLeftInt (a b c : Fin 2) :
