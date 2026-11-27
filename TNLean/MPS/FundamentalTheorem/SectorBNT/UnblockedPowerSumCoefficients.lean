@@ -549,7 +549,7 @@ theorem exists_unblocked_powerSum_coeff_unique {β : Type*} [Fintype β]
       (fun γ ↦ Kraus.reindexPhysical f (M γ))
       (fun γ ↦ (isNormal_reindexPhysical_equiv f _).2 (hM γ)) hD
       (fun γ δ hγδ h hG ↦ hdistinct γ δ hγδ h <| (gaugePhaseEquiv_reindexPhysical_equiv f _ _).1
-        (by rw [reindexPhysical_cast_dim]; exact hG))
+        (by rw [reindexPhysical_cast_dim f h (M γ)]; exact hG))
       (fun N hN ↦ by
         obtain ⟨c, hc⟩ := hspan N hN
         exact ⟨c, fun σ ↦ by simp only [MPTensor.mpv_reindexPhysical]; exact hc _⟩)

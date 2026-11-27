@@ -236,7 +236,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
           Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (C i)ᴴ) Λ = Λ) := by
   classical
   obtain ⟨B, r, ρ, hρ, hr, hB_form, hB_unital, hGauge⟩ :=
-    exists_unital_data_of_irreducible (d := d) (D := D) A hIrr hA
+    exists_unital_data_of_irreducible (D := D) A hIrr hA
   let c : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ)
   have hroot_ne : (↑(Real.sqrt r) : ℂ) ≠ 0 := by
     exact_mod_cast (Real.sqrt_ne_zero'.mpr hr)
@@ -249,9 +249,9 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
   have hActionScaled :
       Matrix.IsIrreducibleAction (ι := Fin d) (D := D) (fun i => c • A i) :=
     Kraus.isIrreducibleAction_of_isIrreducibleFamily
-      (d := d) (D := D) (fun i => c • A i) hIrr_scaled
+      (D := D) (fun i => c • A i) hIrr_scaled
   have hActionB : Matrix.IsIrreducibleAction (ι := Fin d) (D := D) B :=
-    isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
+    isIrreducibleAction_gaugeEquiv (D := D) hGauge hActionScaled
   have hIrrB : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B :=
     Kraus.isIrreducibleFamily_of_isIrreducibleAction (ι := Fin d) (D := D) B hActionB
   have hB_unital_map : Kraus.transferMap (ι := Fin d) (n := Fin D) B 1 = 1 := by
@@ -263,10 +263,10 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
           ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     intro X hX
     exact fixed_eq_scalar_of_isIrreducibleFamily_unital
-      (d := d) (D := D) B hIrrB hB_unital_map X hX
+      (D := D) B hIrrB hB_unital_map X hX
   obtain ⟨U, Λ, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
-      (d := d) (D := D) B hB_unital hIrrB (NeZero.pos D)
+      (D := D) B hB_unital hIrrB (NeZero.pos D)
   let C : MPSTensor d D :=
     fun i =>
       (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * B i *
@@ -372,7 +372,7 @@ private theorem gauge_blockwise_shared
   have hdim0_ne : ∀ k : Fin r0, dim0 k ≠ 0 := by
     intro k
     exact bond_dim_ne_zero_of_exists_nonzero
-      (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)
+      (D := dim0 k) (blocks0 k) (hNonzero0 k)
   have hSameBlocks :
       SameMPV₂
         (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
@@ -505,7 +505,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
     intro k
     let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
-        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
+        (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     exact exists_pgvwc07_unital_dualDiag_data_of_irreducible
       (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
   choose blocksB blocks1 r1 ρ1 Λ1 U1 hρpd1 hrpos1 hform1 hGauge1 hUnitalB1
@@ -547,7 +547,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
     intro k
     have hCeq := (hFinal1 k).1
     rw [hCeq]
-    exact scalar_fixedPoints_unitaryConj (d := d) (D := dim0 k)
+    exact scalar_fixedPoints_unitaryConj (D := dim0 k)
       (blocksB k) (U1 k) (hScalarB1 k)
   have hμpos1 : ∀ k : Fin r0, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ) := by
     intro k
@@ -601,7 +601,7 @@ theorem exists_tp_gauge_blockwise
     intro k
     let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
-        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
+        (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     exact
       exists_tp_data_of_irreducible
         (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
@@ -620,7 +620,7 @@ theorem exists_tp_gauge_blockwise
     intro k
     let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
-        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
+        (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
     have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
       exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
@@ -683,7 +683,7 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
-    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
+    exists_irreducible_blockDecomp_nonzeroBlocks (D := D) A
   let A_nonzero := toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_nonzero
       (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
@@ -708,10 +708,10 @@ The positive-length convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_positiveLengthWitness
     (A : MPSTensor d D) :
-    Nonempty (PGVWC07PositiveLengthWitness (d := d) (D := D) A) := by
+    Nonempty (PGVWC07PositiveLengthWitness (D := D) A) := by
   classical
   obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, hSame, hBound⟩ :=
-    exists_pgvwc07_unital_dualDiag_from_arbitrary (d := d) (D := D) A
+    exists_pgvwc07_unital_dualDiag_from_arbitrary (D := D) A
   exact ⟨
     { r := r
       dim := dim
@@ -765,7 +765,7 @@ theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
-    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
+    exists_irreducible_blockDecomp_nonzeroBlocks (D := D) A
   let A_nonzero := toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_nonzero
       (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
@@ -850,7 +850,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
   obtain ⟨r₀, dim₀, μ₀, blocks₀,
       hIrr₀, hTP₀, hμPos₀, hDim₀, hPos₀, hDimBound₀⟩ :=
-    exists_tp_gauge_from_arbitrary (d := d) (D := D) A
+    exists_tp_gauge_from_arbitrary (D := D) A
   have hμNe₀ : ∀ k, μ₀ k ≠ 0 := fun k => ne_of_gt (hμPos₀ k)
   -- Step B: Find a common blocking period making all transfer maps primitive.
   obtain ⟨P, hP, hPrim⟩ :=
@@ -874,7 +874,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   -- (e) Positive-length MPV relationship.
   · simpa [μ₁_def, blocks₁_def] using
       sameMPV₂Pos_blockTensor_toTensorFromBlocks
-        (d := d) (D := D) (r := r₀) (dim := dim₀)
+        (D := D) (r := r₀) (dim := dim₀)
         A μ₀ blocks₀ hPos₀ P hP
   -- (f) Bond dimensions are unchanged by blocking.
   · exact hDimBound₀

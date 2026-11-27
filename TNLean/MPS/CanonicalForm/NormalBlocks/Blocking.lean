@@ -94,7 +94,7 @@ theorem _root_.MPTensor.IsNormalTensor.blockTensor {A : MPSTensor d D} (hA : IsN
   have hBlockedGaugeNormal :
       IsNormalTensor (Kraus.blockTensor (d := d) (n := Fin D) B p) :=
     isNormalTensor_of_isNormal_leftCanonical
-      (d := blockPhysDim d p) (D := D)
+      (α := Fin (blockPhysDim d p)) (D := D)
       (Kraus.blockTensor (d := d) (n := Fin D) B p) hNormalAlg hExtra.1
   exact hBlockedGaugeNormal.of_gaugeEquiv (hGauge.blockTensor p)
 
