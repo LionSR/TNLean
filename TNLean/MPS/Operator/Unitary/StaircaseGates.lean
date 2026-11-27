@@ -46,9 +46,9 @@ theorem staircaseMiddle_mul {A B C B' C' B'' C'' E : Type*}
     staircaseMiddle (A := A) (E := E) M * staircaseMiddle N =
       staircaseMiddle (M * N) := by
   ext ⟨⟨a, b⟩, c, e⟩ ⟨⟨a', b'⟩, c', e'⟩
+  rw [Matrix.mul_apply]
   simp [staircaseMiddle, Matrix.mul_apply, Fintype.sum_prod_type,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, mul_ite, ite_mul,
-    Finset.sum_ite_irrel]
+    Matrix.kroneckerMap_apply, Matrix.one_apply, mul_ite, ite_mul]
 
 /-- The middle identity layer is the four-leg identity, in the reshuffle of
 arXiv:2502.20257, proof of `cor:mpu`, lines 968–974. -/
