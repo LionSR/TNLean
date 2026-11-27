@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.NumberTheory.Zsqrtd.GaussianInt
 import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
-import TNLean.MPS.MPDO.CZX.CZXGHZAction
-import TNLean.MPS.MPDO.CZX.CZXGaussInvariantSubspace
+import TNLean.MPS.Examples.CZX.Gauging.CZXGHZAction
+import TNLean.MPS.Examples.CZX.Gauging.CZXGaussInvariantSubspace
 
 /-!
 # The gauged CZX matrix product state and its modified Gauss law

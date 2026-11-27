@@ -24,3 +24,58 @@ import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.CZX.CZXTensor
 import TNLean.MPS.Examples.CZX.CZXUnitary
 import TNLean.MPS.Examples.CZX.ClusterIsingSymmetry
+import TNLean.MPS.Examples.CZX.Gauging
+
+/-!
+# The CZX symmetry
+
+The boundary symmetry `∏ CZ_{i,i+1} ∏ X_i` of the CZX model of Chen, Liu and Wen
+(arXiv:1106.4752), as a matrix product unitary in two conventions. The undecorated bond-two
+tensor of the review (arXiv:2011.12127, Appendix A) generates `U_L = X^{⊗ L} D_L`, unitary with
+`U_L² = (-1)^L I`; its stacked square compresses onto `-δ` only at the level of words, and the
+review's two-step canonical form of that square is checked. The decorated tensor of
+Garre-Rubio and Schuch (arXiv:2405.00439, Section III.D) carries Pauli `Z` factors, squares to
+the identity and represents `ℤ₂` with anomaly `ω = -1`; its domain walls between `|0⟩^{⊗ N}`
+and `|1⟩^{⊗ N}` satisfy `c_{AB} c_{BA} = -1` and exchange semionically, with the printed left
+action vectors replaced as recorded in `docs/paper-gaps/gs24_czx_action_left_vectors.tex`.
+Further modules treat the non-simple family `id + U_L` (a construction of this development), the
+normalization obstruction in the printed tensor of arXiv:1703.09188, and the cluster–Ising and
+Roose Hamiltonians commuting with these operators (arXiv:2203.12563, line 1843). The
+subdirectory `Gauging` treats the once-blocked decorated CZX unitary of FBC25
+(arXiv:2502.20257) and its gauging, and its aggregator carries its own summary.
+
+## General theorems instantiated
+
+* `MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator` (anomaly three-cochain): the
+  printed fusion tensors give `ω(g,g,g) = -1` and `ω(g,1,g) = 1`; arXiv:2502.20257, display
+  preceding `eq:3-cocycle`.
+* `ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one` and
+  `MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff` (anomaly class): the cyclic
+  invariant `ω(g,1,g) ω(g,g,g) = -1` makes the anomaly class nonzero in `H³(ℤ₂, ℂˣ)` for every
+  choice of fusion tensors.
+* `MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass`
+  (anomaly obstruction): no normal matrix product state is invariant under the decorated CZX
+  operator; arXiv:2502.20257, line 1545, and arXiv:2203.12563, line 738.
+* `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` and
+  `LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one` (L-symbols of permuted blocks): the anomaly
+  is recovered as the ratio `-1` of L-symbols of the two product states; arXiv:2502.20257,
+  `eq:omega_and_Ls`.
+* `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one`
+  (domain-wall phases): `c_{AB} c_{BA} = -1` for every choice of action tensors and walls;
+  arXiv:2405.00439, `eq:CC-LL`.
+* `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.exists_eq_of_mul_self` and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` (domain-wall
+  statistics): the phases `c_{AB} = c_{BA} = i`, and two nested strings anticommute on
+  `|0⟩^{⊗ N}`; arXiv:2405.00439, line 1664 and `signphysop`.
+* `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum` (multi-block compression): the word
+  traces of `U_L² = (-1)^L id` and of `(id + U_L)² = (1 + (-1)^L) id + 2 U_L` from explicit
+  compression data.
+* `MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero`
+  (nonsplitting compressions): the virtual algebra of the stacked square is not closed under
+  conjugate transposition, although `U_L` is unitary.
+* `Kraus.trace_evalWord_compress_of_left_absorb` and `MPOTensor.mpo_eq_of_trace_evalWord`
+  (invariant-subspace reduction): the review's two projection steps preserve word traces and
+  give `O(A)² = (-1)^N I`; arXiv:2011.12127, Section IV, lines 1784–1797.
+* `MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo` (group-cocycle operators): the decorated operator
+  is the operator of the nontrivial three-cocycle of `ℤ₂`; arXiv:2203.12563, line 2224.
+-/

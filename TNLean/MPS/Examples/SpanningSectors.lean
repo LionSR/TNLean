@@ -12,3 +12,40 @@ import TNLean.MPS.Examples.SpanningSectors.ActiveSectorInverseMaps
 import TNLean.MPS.Examples.SpanningSectors.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.Examples.SpanningSectors.ActiveSectorSpanningCounterexample
 import TNLean.MPS.Examples.SpanningSectors.ActiveSectorSpanningRFP
+
+/-!
+# The four-sector spanning example
+
+An explicit classical tensor of bond dimension two with four physical sectors, built against
+the proof of Lemma C.5 of CPSV16 (arXiv:1606.00608, Appendix C.2, lines 1413–1555). Its sector
+matrices span the full matrix algebra, its physical-trace transfer is idempotent, it saturates
+the area law and its neighbouring operators are positive, yet its active sector trace matrix is
+primitive and not idempotent, so the rectangular remainder `Q(1 - LQ)L` does not vanish. Lemma
+C.5 assumes an injective normal tensor and this representative is not normalized, so the
+example records a normalization obstruction to one intermediate step, not a counterexample to
+the lemma; **Scope restriction (non-normal representative):** see
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. The raw tensor satisfies
+the channel equations of Definition 4.1, while its normalized two-site blocking does not.
+
+## General theorems instantiated
+
+* `MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m` (saturation from quantum Markov
+  decompositions): explicit Hayashi decompositions at every cut give `MPOTensor.IsSAL`;
+  arXiv:1606.00608, Appendix C.2, lines 1606–1612.
+* `MPOTensor.isSourceZCL_of_physTraceTransfer_sq` (zero correlation length): the idempotent
+  physical-trace transfer gives `MPOTensor.IsSourceZCL`.
+* `MPOTensor.PhysicalSectorFactorization.neighboringTraceMatrix_eq_pow_three_of_pairwise_coarsening`
+  and its refinement analogue (sector-preserving renormalization maps): the four-site sector
+  maps cannot preserve the sectors pairwise; arXiv:1606.00608, Appendix C.2, lines 1522–1555.
+* `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS` (fixed points have idempotent transfer): the
+  normalized two-site blocking, with transfer `(16/5) P`, is not `MPOTensor.IsRFPViaTS`.
+* `MPOTensor.inverseTensor_spec` (inverse maps of injective tensors): the inverse-map tensors
+  selected from a Hayashi decomposition of the three-site marginal leave the same nonzero
+  remainder; arXiv:1606.00608, Appendix C.2, lines 1413–1499.
+
+## General statements whose hypotheses are shown necessary
+
+* The step of the proof of Lemma C.5 asserting that the rectangular remainder vanishes needs
+  the normalized, injective normal tensor of its Case I; full virtual spanning alone does not
+  suffice.
+-/

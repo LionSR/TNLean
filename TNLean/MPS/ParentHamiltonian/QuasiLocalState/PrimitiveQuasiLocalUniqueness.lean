@@ -130,7 +130,15 @@ theorem norm_quasiLocalState_interval_sub_scalar_le_projection_compression
     CStarMatrix.ofMatrixStarAlgEquiv (EquivLike.injective _)
       (p * X * p - c • p)
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+variable [NeZero d]
+
 /-- Every normalized positive state supported in all finite-interval primitive
 MPS spaces has the prescribed insertion expectations on every local interval.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3 and the boundary
@@ -157,7 +165,7 @@ theorem _root_.TNLean.MPS.ParentHamiltonian.quasiLocalState_interval_eq_insertio
       (bulkObservable X n n) (isStarProjection_groundSpaceProjectionMatrix A _)
       (hSupport (a - n) _) (observableInsertionExpectation A ρ X)
     simpa only [quasiLocalIntervalObservable_bulkObservable, groundSpaceProjectionMatrix,
-      map_sub, map_mul, map_smul, StarAlgEquiv.apply_symm_apply,
+      map_sub, map_mul, _root_.map_smul, StarAlgEquiv.apply_symm_apply,
       ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc] using h
   have hzero := squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _)
     (Eventually.of_forall hbound) hlim
@@ -191,7 +199,7 @@ theorem _root_.TNLean.MPS.ParentHamiltonian.eq_quasiLocalExpectation_of_groundSp
     StarAlgHom.coe_toAlgHom,
     StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
 
 end
 

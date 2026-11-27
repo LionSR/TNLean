@@ -136,25 +136,6 @@ purpose. The interior of the region/complement split is empty, so there is no
 middle tensor to invert; the two endpoint blocks are exactly the region block and
 the complement block, and inverting either is this left inverse. -/
 
-/-- The blocked-region tensor map: the linear combination of the blocked-region
-weight family of `R`, sending a boundary-configuration coefficient to the region
-physical function it produces.
-
-This is the region analogue of `edgeMiddleTensorMap`. Its injectivity is exactly
-the blocked-tensor injectivity of `R`. -/
-noncomputable def regionBlockedTensorMap (A : Tensor G d) (R : Finset V) :
-    (RegionBoundaryConfig (G := G) A R → ℂ) →ₗ[ℂ]
-      (RegionPhysicalConfig (V := V) (d := d) R → ℂ) :=
-  Fintype.linearCombination ℂ (regionBlockedTensorFamily (G := G) A R)
-
-/-- The blocked-region tensor map is injective when the region is blocked-tensor
-injective. This is the region analogue of
-`edgeMiddleTensorMap_injective_of_injective`. -/
-theorem regionBlockedTensorMap_injective_of_injective (A : Tensor G d) (R : Finset V)
-    (hR : RegionBlockedTensorInjective (G := G) A R) :
-    Function.Injective (regionBlockedTensorMap (G := G) A R) :=
-  hR.fintypeLinearCombination_injective
-
 /-- Kernel form of `regionBlockedTensorMap_injective_of_injective`. -/
 theorem regionBlockedTensorMap_ker_eq_bot_of_injective (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R) :
@@ -191,17 +172,6 @@ noncomputable def regionBlockedLeftInverse (A : Tensor G d) (R : Finset V)
   change ((regionBlockedLeftInverse (G := G) A R hR).comp
     (regionBlockedTensorMap (G := G) A R)) c = c
   rw [regionBlockedLeftInverse_comp_regionBlockedTensorMap]
-  rfl
-
-/-- The blocked-region tensor map, expanded as the boundary-configuration sum of
-the blocked-region weights. -/
-theorem regionBlockedTensorMap_apply (A : Tensor G d) (R : Finset V)
-    (c : RegionBoundaryConfig (G := G) A R → ℂ)
-    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
-    regionBlockedTensorMap (G := G) A R c τ =
-      ∑ μ : RegionBoundaryConfig (G := G) A R,
-        c μ • regionBlockedWeight (G := G) A R μ τ := by
-  rw [regionBlockedTensorMap, Fintype.linearCombination_apply, Finset.sum_apply]
   rfl
 
 /-- The blocked-region tensor map sends the standard basis configuration `μ` to the

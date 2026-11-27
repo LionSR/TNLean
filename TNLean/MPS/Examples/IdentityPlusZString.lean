@@ -14,3 +14,32 @@ import TNLean.MPS.Examples.IdentityPlusZString.IdentityPlusZString
 import TNLean.MPS.Examples.IdentityPlusZString.Literal
 import TNLean.MPS.Examples.IdentityPlusZString.NormalizedRFP
 import TNLean.MPS.Examples.IdentityPlusZString.NormalizedSummary
+
+/-!
+# The density operator `I^{⊗N} + σ_z^{⊗N}`
+
+The tensor of CPSV16 Example 4.12 (arXiv:1606.00608, lines 932–939), with `d = D = 2`,
+`M^{00} = I` and `M^{11} = σ_z`, generating `ρ^{(N)} = I^{⊗N} + σ_z^{⊗N}`. The source states that
+it saturates the area law, has zero correlation length, is not of the simple commuting form, and
+is a renormalization fixed point. The printed tensor has the first three properties but is not a
+fixed point in the sense of Definition 4.1, since its physical-trace transfer is not
+idempotent; **Local fix (normalization):** the density-normalized representative `M̂ = M/2` is a
+fixed point, its weights having modulus `1/√2`, as recorded in
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>. The strong
+`σ_z` and weak, even-length `σ_x` symmetries are those of Sun 2025 (arXiv:2504.16985, line 182).
+
+## General theorems instantiated
+
+* `MPOTensor.IsSAL`, `MPOTensor.IsSourceZCL` and `MPOTensor.isSAL_smul_ofReal_iff` (area law
+  and zero correlation length): both properties hold for `M`, and saturation passes to `M̂`;
+  arXiv:1606.00608, Definitions 4.2 and 4.6.
+* `MPOTensor.isSSAEquality_fourCycle_of_isGSNNCHAt` (simple commuting form): the four-site
+  state fails equality in strong subadditivity, so neither `M` nor `M̂` is
+  `MPOTensor.IsGSNNCH`; arXiv:1606.00608, Definition 4.8.
+* `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS` (fixed points have idempotent transfer): the
+  printed tensor is not `MPOTensor.IsRFPViaTS`, while explicit parity channels make `M̂` one;
+  arXiv:1606.00608, Definition 4.1 and Appendix C, lines 1333–1340.
+* `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry` (symmetries of density
+  operators): strong `σ_z` symmetry at every length, and weak `σ_x` symmetry exactly at even
+  length; arXiv:2504.16985, line 182.
+-/

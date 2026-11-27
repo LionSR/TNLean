@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Reduction.ReductionBlocking
-import TNLean.MPS.MPDO.CZX.CZXGHZAction
+import TNLean.MPS.Examples.CZX.Gauging.CZXGHZAction
 
 /-!
 # The printed CZX action tensors on blocked GHZ sectors

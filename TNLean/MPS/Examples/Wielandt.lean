@@ -13,3 +13,25 @@ import TNLean.MPS.Examples.Wielandt.CyclicMatrix
 import TNLean.MPS.Examples.Wielandt.CyclicObstruction
 import TNLean.MPS.Examples.Wielandt.CyclicSpanning
 import TNLean.MPS.Examples.Wielandt.PauliWielandt
+
+/-!
+# Quantum Wielandt examples
+
+Two examples of Sanz–Pérez-García–Wolf–Cirac, arXiv:0909.5347. The cyclic family of the shift
+`S` and the jump `R = |1⟩⟨D-1|` (`main.tex`, lines 691–700) is normal, its full-Kraus-rank index
+is exactly `D(D-1)`, and for `D > 2` this exceeds the classical Wielandt exponent `D² - 2D + 2`;
+the source proof omits one matrix unit, supplied here by the identity word (a local fix). The
+three-Pauli channel `σ^α/√3` (lines 496–499) has primitivity index one and full-Kraus-rank
+index two.
+
+## General theorems instantiated
+
+* `MPSTensor.iIndex` and `MPSTensor.qIndex` (the full-Kraus-rank and primitivity indices of
+  arXiv:0909.5347): both are computed exactly for the examples.
+* `Kraus.wordSpan_eq_top_of_ge_of_isUnit` (permanence of full word span with an invertible
+  letter, companion library): fullness before length `D(D-1)` would persist to the predecessor
+  length, which the two-entry obstruction excludes; arXiv:0909.5347, Theorem 1 case (2), and
+  Wolf, Theorem 6.9.
+* `Kraus.pow_mem_wordSpan'` and `Submodule.eq_top_of_forall_single_mem` (companion library): the
+  full word span at length `D(D-1)` from powers of the shift and every matrix unit.
+-/

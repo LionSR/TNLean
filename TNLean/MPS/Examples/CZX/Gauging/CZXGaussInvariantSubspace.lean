@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.MonomialFixedSubspace
-import TNLean.MPS.MPDO.CZX.CZXGaussCircuitTuple
+import TNLean.MPS.Examples.CZX.Gauging.CZXGaussCircuitTuple
 import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowMonomial
-import TNLean.MPS.MPDO.CZX.GaugeInvariantSubspace
-import TNLean.MPS.MPDO.CZX.GaussProjectorPlacement
+import TNLean.MPS.MPDO.GaugeInvariantSubspace
+import TNLean.MPS.MPDO.GaussProjectorPlacement
 
 /-!
 # The gauge-invariant subspace of the displayed CZX circuit tuple

@@ -136,42 +136,6 @@ def GaugeEquiv (A B : Tensor G d) : Prop :=
 
 /-! ### Gauge invariance of PEPS state -/
 
-/-- Incidences of vertices with edges are the same as choosing an edge and one
-of its two ordered endpoints. -/
-private noncomputable def incidentSigmaEquivEdgeSide :
-    (Sigma fun v : V => IncidentEdge G v) ≃ Edge G × Fin 2 where
-  toFun x :=
-    let e := x.2.1
-    ⟨e, if e.1.1 = x.1 then 0 else 1⟩
-  invFun y :=
-    match y.2 with
-    | 0 => ⟨y.1.1.1, edgeLeftIncident (G := G) y.1⟩
-    | 1 => ⟨y.1.1.2, edgeRightIncident (G := G) y.1⟩
-  left_inv x := by
-    rcases x with ⟨v, ie⟩
-    rcases ie with ⟨e, hinc⟩
-    dsimp
-    by_cases hleft : e.1.1 = v
-    · subst v
-      simp only [↓reduceIte, Fin.isValue, Sigma.mk.injEq, heq_eq_eq, true_and]
-      exact Subtype.ext rfl
-    · have hright : e.1.2 = v := by
-        rcases hinc with h | h
-        · exact False.elim (hleft h)
-        · exact h
-      subst v
-      have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
-      simp only [hne, ↓reduceIte, Fin.isValue, Sigma.mk.injEq, heq_eq_eq, true_and]
-      exact Subtype.ext rfl
-  right_inv y := by
-    rcases y with ⟨e, side⟩
-    fin_cases side
-    · dsimp [edgeLeftIncident]
-      simp
-    · have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
-      dsimp [edgeRightIncident]
-      simp [hne]
-
 /-- A vertex-indexed assignment of virtual indices to each incident edge, before
 imposing any edge compatibility. This is the per-vertex local data summed over in
 the gauged contraction; on the open edge the two endpoints may carry different
@@ -199,42 +163,6 @@ lemma gauge_sum_left_right_matrix_inv {n : Type*} [Fintype n] [DecidableEq n]
     _ = if a = b then 1 else 0 := by
           rw [h]
           simp [Matrix.one_apply, eq_comm]
-
-/-- A product over all incident half-edges factors as the product, over graph
-edges, of the two endpoint contributions. -/
-lemma prod_incident_eq_prod_edge (f : (v : V) → IncidentEdge G v → ℂ) :
-    (∏ v : V, ∏ ie : IncidentEdge G v, f v ie) =
-      ∏ e : Edge G,
-        f e.1.1 (edgeLeftIncident (G := G) e) *
-          f e.1.2 (edgeRightIncident (G := G) e) := by
-  rw [← Fintype.prod_sigma']
-  calc
-    (∏ x : Sigma fun v : V => IncidentEdge G v, f x.1 x.2)
-        = ∏ y : Edge G × Fin 2,
-            f ((incidentSigmaEquivEdgeSide (G := G)).symm y).1
-              ((incidentSigmaEquivEdgeSide (G := G)).symm y).2 := by
-          let e := incidentSigmaEquivEdgeSide (G := G)
-          calc
-            (∏ x : Sigma fun v : V => IncidentEdge G v, f x.1 x.2)
-                = ∏ x : Sigma fun v : V => IncidentEdge G v,
-                    f (e.symm (e x)).1 (e.symm (e x)).2 := by
-                  refine Finset.prod_congr rfl ?_
-                  intro x hx
-                  rw [Equiv.symm_apply_apply]
-            _ = ∏ y : Edge G × Fin 2, f (e.symm y).1 (e.symm y).2 := by
-                  exact e.prod_comp
-                    (fun y : Edge G × Fin 2 => f (e.symm y).1 (e.symm y).2)
-    _ = ∏ e : Edge G, ∏ side : Fin 2,
-            f ((incidentSigmaEquivEdgeSide (G := G)).symm (e, side)).1
-              ((incidentSigmaEquivEdgeSide (G := G)).symm (e, side)).2 := by
-          rw [Fintype.prod_prod_type]
-    _ = ∏ e : Edge G,
-        f e.1.1 (edgeLeftIncident (G := G) e) *
-          f e.1.2 (edgeRightIncident (G := G) e) := by
-          refine Finset.prod_congr rfl ?_
-          intro e he
-          rw [Fin.prod_univ_two]
-          simp [incidentSigmaEquivEdgeSide]
 
 /-- The virtual index that a local configuration assigns to an edge at its left
 (lower) endpoint. -/

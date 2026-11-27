@@ -14,7 +14,6 @@ requirements and State parameter orders are retained. No upstream proofs copied.
 -/
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import QICLean.ManyBody.Sites.Lattice.Square
-import TNLean.PEPS.Injectivity.Normal.NormalBlocking
 
 /-!
 # The two source square-grid PEPS presentations

@@ -7,6 +7,7 @@ import Mathlib.Data.Finset.Prod
 
 import TNLean.PEPS.Injectivity.Region.NormalEdgeBlockingData
 import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 
 /-!
 # Normal PEPS blocking hypotheses
@@ -40,28 +41,6 @@ variable (ι : RegionInjectivityData V)
 
 /-! ### Coordinate regions for the square-lattice normal theorem -/
 
-/-- A coordinate rectangle in a finite square lattice, specified by its
-horizontal and vertical coordinate sets.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
-`Papers/1804.04964/paper_normal.tex`, where the regions \(R\), \(S\), and
-\(T\) are assembled from rectangular \(2\times3\) and \(3\times2\) blocks. -/
-def squareLatticeRectangle {width height : ℕ}
-    (xs : Finset (Fin width)) (ys : Finset (Fin height)) :
-    Finset (SquareLatticeVertex width height) :=
-  xs ×ˢ ys
-
-@[simp] theorem mem_squareLatticeRectangle {width height : ℕ}
-    (xs : Finset (Fin width)) (ys : Finset (Fin height))
-    (v : SquareLatticeVertex width height) :
-    v ∈ squareLatticeRectangle xs ys ↔ v.1 ∈ xs ∧ v.2 ∈ ys := by
-  simp [squareLatticeRectangle]
-
-@[simp] theorem card_squareLatticeRectangle {width height : ℕ}
-    (xs : Finset (Fin width)) (ys : Finset (Fin height)) :
-    (squareLatticeRectangle xs ys).card = xs.card * ys.card := by
-  simp [squareLatticeRectangle]
-
 /-- The full finite rectangular square lattice as a coordinate region.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
@@ -74,40 +53,6 @@ def squareLatticeFull (width height : ℕ) : Finset (SquareLatticeVertex width h
     squareLatticeFull width height = Finset.univ := by
   ext v
   simp [squareLatticeFull]
-
-/-- A contiguous interval of coordinates in one axis of a finite square lattice.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
-`Papers/1804.04964/paper_normal.tex`, where the normal square-lattice theorem
-uses contiguous \(2\times3\) and \(3\times2\) rectangular blocks. -/
-def squareLatticeCoordinateInterval {size : ℕ} (start length : ℕ) : Finset (Fin size) :=
-  Finset.univ.filter fun i ↦ start ≤ i.1 ∧ i.1 < start + length
-
-@[simp] theorem mem_squareLatticeCoordinateInterval {size : ℕ}
-    (start length : ℕ) (i : Fin size) :
-    i ∈ squareLatticeCoordinateInterval start length ↔
-      start ≤ i.1 ∧ i.1 < start + length := by
-  simp [squareLatticeCoordinateInterval]
-
-/-- A contiguous coordinate rectangle in a finite square lattice.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
-`Papers/1804.04964/paper_normal.tex`, where the regions \(R\), \(S\), and
-\(T\) are assembled from contiguous \(2\times3\) and \(3\times2\) rectangles. -/
-def squareLatticeContiguousRectangle {width height : ℕ}
-    (xStart yStart xLength yLength : ℕ) :
-    Finset (SquareLatticeVertex width height) :=
-  squareLatticeRectangle
-    (squareLatticeCoordinateInterval xStart xLength)
-    (squareLatticeCoordinateInterval yStart yLength)
-
-@[simp] theorem mem_squareLatticeContiguousRectangle {width height : ℕ}
-    (xStart yStart xLength yLength : ℕ)
-    (v : SquareLatticeVertex width height) :
-    v ∈ squareLatticeContiguousRectangle xStart yStart xLength yLength ↔
-      xStart ≤ v.1.1 ∧ v.1.1 < xStart + xLength ∧
-        yStart ≤ v.2.1 ∧ v.2.1 < yStart + yLength := by
-  simp [squareLatticeContiguousRectangle, and_assoc]
 
 /-- Coordinate-product regions with two horizontal and three vertical
 coordinates.

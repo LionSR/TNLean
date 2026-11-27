@@ -285,13 +285,20 @@ theorem residualBoundaryGramLimit_apply_of_cyclic_support
   simpa only [hV, sum_word_conjTranspose_cyclic_projection_mul_word A P hTP hShift] using
     residualBoundaryGramLimit_frobeniusEquivEuclidean_apply A V ρ htr r Y
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D E L : ℕ}
+
 /-- Primitive prefix convergence bounds the residual Gram error
 geometrically, uniformly over every original tail length. The cyclic corner
 and contraction are derived from the original trace-preserving tensor.
 This is a quantitative intermediate estimate for Nachtergaele,
 arXiv:cond-mat/9410110, Lemma commutation (i), lines 2442--2531. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.residualBoundaryGram_sub_limit_norm_sq_le_geometric
+theorem residualBoundaryGram_sub_limit_norm_sq_le_geometric
     [NeZero E] {B : MPSTensor (blockPhysDim d L) E}
     {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     {m : ℕ} [NeZero m] (A : MPSTensor d D)
@@ -315,6 +322,12 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualBoundaryGram_sub_limi
     (norm_blockedResidualBoundaryMapES_gram_sub_limit_le A B V ρ _ N r
       (norm_correlatedTailMapES_le_one_of_cyclic_support A P hProj hTP hShift a V hV r)) 2).trans
     (hBound N hN)
+
+end Kraus.HasComplementaryFixedPointGap
+
+namespace MPSTensor
+
+variable {d D E L : ℕ}
 
 /-- Blocking by the period leaves each individual cyclic projection as
 its own step-orbit projection. Source: DCCSP17, arXiv:1708.00029,

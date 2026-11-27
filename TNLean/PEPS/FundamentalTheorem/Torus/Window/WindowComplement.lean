@@ -89,25 +89,6 @@ theorem zmod_val_sub_shift (n : ℕ) [NeZero n] (v s : ZMod n) (L : ℕ) (hL : L
 
 /-! ### The cyclic (seam-wrapping) torus rectangle -/
 
-/-- A cyclic coordinate rectangle on the discrete torus: the vertices whose
-cyclic distances from `s` lie below `xLen` and `yLen` respectively.  Unlike
-`torusContiguousRectangle`, this rectangle may wrap the seam — it is read through
-`ZMod.val` cyclic distance, so the columns `[s.1, s.1 + xLen)` are taken
-cyclically.
-
-Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex` (the complement bands that wrap the seam);
-the filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
-def torusArcRectangle (s : TorusVertex width height) (xLen yLen : ℕ) :
-    Finset (TorusVertex width height) :=
-  Finset.univ.filter fun v => (v.1 - s.1).val < xLen ∧ (v.2 - s.2).val < yLen
-
-@[simp] theorem mem_torusArcRectangle (s : TorusVertex width height) (xLen yLen : ℕ)
-    (v : TorusVertex width height) :
-    v ∈ torusArcRectangle s xLen yLen ↔
-      (v.1 - s.1).val < xLen ∧ (v.2 - s.2).val < yLen := by
-  simp [torusArcRectangle]
-
 /-- A wraparound-free cyclic rectangle is the coordinate rectangle of
 `TNLean/PEPS/TorusRectangleRegion.lean`: when the offsets and positive lengths
 avoid the seam, the cyclic distances are the plain coordinate offsets.

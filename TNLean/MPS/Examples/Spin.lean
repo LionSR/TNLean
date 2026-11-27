@@ -11,3 +11,18 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.Spin.SpinHalf
 import TNLean.MPS.Examples.Spin.SpinOne
 import TNLean.MPS.Examples.Spin.SpinOperator
+
+/-!
+# Spin operators on chains
+
+For a family `S = (Sˣ, Sʸ, Sᶻ)` of `d × d` matrices, the site operators `S^α_j`, the exchange
+`S_j·S_k` and the squared total spin of a chain, specialized to spin `½` (`S^α = σ^α/2`, with
+`S_j·S_k = ½ P_{jk} - ¼` for `j ≠ k`) and to spin `1` in the basis `m = 0, +1, -1` of the AKLT
+tensor. These are the standard spin operators, used by the AKLT and Majumdar–Ghosh examples; the
+modules cite no paper.
+
+## General theorems instantiated
+
+None: the directory is generic spin algebra with no tensor network, and uses only cyclic-window
+bookkeeping lemmas of the library.
+-/

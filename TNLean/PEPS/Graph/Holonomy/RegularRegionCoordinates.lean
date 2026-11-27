@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Tensor.GraphState.RegularRegionCycleRank
+import TNLean.PEPS.Graph.Region.InjectiveRegion
+import Mathlib.Combinatorics.SimpleGraph.Acyclic
+import Mathlib.Tactic.Group
 import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Subtype
 

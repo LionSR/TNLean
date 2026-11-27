@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Basic
-import QICLean.ManyBody.Sites.Lattice.Edge
+import TNLean.PEPS.Graph.Region.EdgeMapSubgraph
 import Mathlib.Basic.Complex.BigOperators
 import Mathlib.LinearAlgebra.LinearIndependent.Defs
 
@@ -12,7 +12,8 @@ import Mathlib.LinearAlgebra.LinearIndependent.Defs
 # PEPS definitions on finite simple graphs
 
 This file introduces the finite-graph PEPS tensor objects.
-The index types (`IncidentEdge`, `VirtualConfig`, and the oriented edges
+The index types (`VirtualConfig`, the incident edges `IncidentEdge` of
+`TNLean/PEPS/Graph/Region/EdgeMapSubgraph.lean`, and the oriented edges
 `ManyBody.Edge` from QICLean) are the combinatorial index sets for PEPS tensors
 on a finite simple graph.
 
@@ -32,14 +33,6 @@ namespace TNLean
 namespace PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-
-/-- Edges incident to a vertex `v`. -/
-abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
-  { e : Edge G // e.1.1 = v ∨ e.1.2 = v }
-
-instance instFintypeIncidentEdge (G : SimpleGraph V) [DecidableRel G.Adj] (v : V) :
-    Fintype (IncidentEdge G v) :=
-  inferInstance
 
 /-- A PEPS tensor family with one physical index per vertex and edge-dependent
 virtual bond dimensions. -/
@@ -109,6 +102,26 @@ structure Tensor.IsInjective (A : Tensor G d) : Prop where
   /-- Every virtual bond space is nonzero, the standing convention of
   arXiv:1804.04964, Section 3. -/
   bondDim_pos : ∀ e : Edge G, 0 < A.bondDim e
+
+/-! ### Reindexing the bond dimensions -/
+
+/-- Reindex a PEPS tensor along a bond-dimension equality, producing a tensor
+whose bond dimensions are the left side of the equality. -/
+noncomputable def reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) : Tensor G d where
+  bondDim := bd
+  component v η σ := B.component v (fun ie => Fin.cast (congr_fun h ie.1) (η ie)) σ
+
+omit [Fintype V] in
+@[simp] theorem reindexTensor_bondDim (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) : (reindexTensor (G := G) B h).bondDim = bd := rfl
+
+omit [Fintype V] in
+@[simp] theorem reindexTensor_component (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (v : V)
+    (η : (ie : IncidentEdge G v) → Fin (bd ie.1)) (σ : Fin d) :
+    (reindexTensor (G := G) B h).component v η σ =
+      B.component v (fun ie => Fin.cast (congr_fun h ie.1) (η ie)) σ := rfl
 
 end PEPS
 end TNLean

@@ -8,6 +8,9 @@ import Mathlib.Data.Finset.SDiff
 import Mathlib.Data.Finset.Union
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Tactic.FinCases
+import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
+import Mathlib.Order.Sym2
+import TNLean.PEPS.Graph.Region.EdgeMapSubgraph
 
 /-!
 # Region decompositions for PEPS injectivity arguments
@@ -25,6 +28,15 @@ four parts:
 
 The elementary identities below are used in the tensor-level proof of the
 injective-union lemma.
+
+The file also records the incident and boundary edges of a region used by the
+region contractions: an edge at a region vertex touches the region
+(`isRegionIncidentEdge_of_regionVertex`), the boundary edges of a region and of its
+complement coincide (`regionBoundaryEdgeComplEquiv`), a proper nonempty region of a
+connected graph has a boundary edge (`nonempty_regionBoundaryEdge_of_connected`), and
+the edges of an induced region graph are the internal edges of the region
+(`inducedRegionEdgeEquiv`, with `orderedEdgeEquivEdgeSet` comparing ordered and
+unordered edges).
 
 ## References
 
@@ -680,6 +692,149 @@ theorem regionUnionPart_pairwise_disjoint [Fintype V] (A B : Finset V) :
   · simpa using (regionOverlap_disjoint_outside A B).symm
   · simpa using (regionOnlyRight_disjoint_outside A B).symm
   · exact (hij rfl).elim
+
+/-! ### Incident and boundary edges of a region -/
+
+section RegionEdges
+
+open ManyBody (Edge)
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
+
+omit [Fintype V] [DecidableRel Γ.Adj] in
+/-- An edge attached to a vertex of the region touches that region. -/
+theorem isRegionIncidentEdge_of_regionVertex (R : Finset V) (w : {w : V // w ∈ R})
+    (e : IncidentEdge Γ w.1) : ManyBody.IsRegionIncidentEdge R e.1 := by
+  rcases e.2 with h | h
+  · exact Or.inl (by rw [h]; exact w.2)
+  · exact Or.inr (by rw [h]; exact w.2)
+
+end RegionEdges
+
+section RegionComplementEdges
+
+open ManyBody (Edge)
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj]
+
+/-! ### Boundary edges of a region and its complement
+
+An edge crosses the boundary of `R` precisely when it crosses the boundary of the
+set complement `univ \ R`: in both cases exactly one endpoint lies in `R`. This
+symmetry lets the complement block reuse the boundary bonds of `R`. -/
+
+omit [DecidableRel G.Adj] in
+/-- An edge crosses the boundary of `R` exactly when it crosses the boundary of
+the set complement `univ \ R`. -/
+theorem isRegionBoundaryEdge_compl_iff (R : Finset V) (f : Edge G) :
+    ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f ↔
+      ManyBody.IsRegionBoundaryEdge (G := G) R f := by
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and]
+  tauto
+
+/-- A boundary edge of `R`, reread as a boundary edge of the complement
+`univ \ R`. -/
+def regionBoundaryEdgeToCompl (R : Finset V)
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
+    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
+  ⟨f.1, (isRegionBoundaryEdge_compl_iff (G := G) R f.1).mpr f.2⟩
+
+/-- The boundary edges of `R` and of its complement `univ \ R` are the same
+edges. -/
+def regionBoundaryEdgeComplEquiv (R : Finset V) :
+    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} ≃
+      {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
+  Equiv.subtypeEquivRight (fun f => (isRegionBoundaryEdge_compl_iff (G := G) R f).symm)
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem regionBoundaryEdgeComplEquiv_symm_apply_coe (R : Finset V)
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f}) :
+    (((regionBoundaryEdgeComplEquiv (G := G) R).symm f) : Edge G) = f.1 := rfl
+
+end RegionComplementEdges
+
+section ConnectedBoundary
+
+open ManyBody (Edge)
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj]
+
+/-! ### Boundary edges of a proper region on a connected graph
+
+A region that is neither empty nor the full vertex set has a boundary edge on a
+connected graph: a walk from a vertex inside the region to a vertex outside it
+crosses the boundary at some step. -/
+
+omit [DecidableRel G.Adj] in
+/-- On a connected graph, a nonempty region different from the full vertex set
+has a boundary edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
+`Papers/1804.04964/paper_normal.tex` (the comparison regions are compared
+through their boundary bonds, which exist because the lattice is connected). -/
+theorem nonempty_regionBoundaryEdge_of_connected (hconn : G.Connected)
+    {R : Finset V} (hR : R.Nonempty) (hRtop : R ≠ Finset.univ) :
+    Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} := by
+  classical
+  obtain ⟨u, hu⟩ := hR
+  obtain ⟨w, hw⟩ : ∃ w : V, w ∉ R := by
+    by_contra hall
+    push Not at hall
+    exact hRtop (Finset.eq_univ_iff_forall.mpr hall)
+  obtain ⟨p⟩ := hconn.preconnected u w
+  obtain ⟨dart, -, hd1, hd2⟩ :=
+    p.exists_boundary_dart (↑R : Set V) (by simpa using hu) (by simpa using hw)
+  have hd1' : dart.fst ∈ R := by simpa using hd1
+  have hd2' : dart.snd ∉ R := by simpa using hd2
+  rcases ManyBody.Edge.ofAdj_endpoints dart.adj with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · exact ⟨⟨ManyBody.Edge.ofAdj dart.adj, Or.inl ⟨h1.symm ▸ hd1', h2.symm ▸ hd2'⟩⟩⟩
+  · exact ⟨⟨ManyBody.Edge.ofAdj dart.adj, Or.inr ⟨h1.symm ▸ hd2', h2.symm ▸ hd1'⟩⟩⟩
+
+end ConnectedBoundary
+
+/-! ### Ordered edges, unordered edges and induced regions -/
+
+section InducedEdges
+
+open ManyBody (Edge)
+
+variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
+
+private theorem adj_inf_sup_of_mem_edgeSet (e : Sym2 V) (he : e ∈ Γ.edgeSet) :
+    Γ.Adj e.inf e.sup := by
+  cases e using Sym2.ind with
+  | _ u v =>
+    change Γ.Adj u v at he
+    rcases le_total u v with h | h
+    · simpa [h] using he
+    · simpa [h] using he.symm
+
+/-- Ordered endpoint pairs and Mathlib's unordered graph edges describe the
+same edges. The inverse sorts the two endpoints. -/
+def orderedEdgeEquivEdgeSet : Edge Γ ≃ Γ.edgeSet where
+  toFun e := ⟨s(e.1.1, e.1.2), e.2.2⟩
+  invFun e := ⟨(e.1.inf, e.1.sup),
+    lt_of_le_of_ne (Sym2.inf_le_sup e.1)
+      (Γ.ne_of_adj (adj_inf_sup_of_mem_edgeSet e.1 e.2)),
+    adj_inf_sup_of_mem_edgeSet e.1 e.2⟩
+  left_inv e := by
+    apply Subtype.ext
+    simp [e.2.1.le]
+  right_inv e := Subtype.ext (Sym2.sortEquiv.left_inv e.1)
+
+/-- An edge of the induced region graph is exactly an edge of the ambient
+graph with both endpoints in the region. -/
+def inducedRegionEdgeEquiv (R : Finset V) :
+    Edge (Γ.induce (R : Set V)) ≃ {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} where
+  toFun e := ⟨⟨(e.1.1.1, e.1.2.1), e.2.1, e.2.2⟩, e.1.1.2, e.1.2.2⟩
+  invFun e := ⟨(⟨e.1.1.1, e.2.1⟩, ⟨e.1.1.2, e.2.2⟩), e.1.2.1, e.1.2.2⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+
+end InducedEdges
 
 end PEPS
 end TNLean

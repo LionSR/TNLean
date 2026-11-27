@@ -11,5 +11,13 @@ The old public modules at the former paths have been removed as part of the
 post-reorganization cleanup.  The archived bi-canonical periodicity
 reformulations were also removed: code should use the current
 positive-fixed-point peripheral theorem and
-`TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint` rather than the old
+`TNLean.MPS.Transfer.Irreducible.BlockingViaAdjoint` rather than the old
 unital-and-trace-preserving formulations.
+
+## Place in the layers
+
+The archive belongs to no layer of `docs/library_layers.md`. Its modules may
+import production modules (they import `MPS/Tensor`, `MPS/Transfer` and
+`MPS/Operator` modules, QICLean and Mathlib), and no production module may
+import an archive module. The import, small-module and pass-through checks
+skip this directory; CI builds a changed archive module explicitly.

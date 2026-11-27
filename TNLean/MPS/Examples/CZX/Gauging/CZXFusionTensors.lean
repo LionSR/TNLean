@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Reduction.ReductionBlocking
-import TNLean.MPS.MPDO.CZX.CZXDaggerGauge
+import TNLean.MPS.Examples.CZX.Gauging.CZXDaggerGauge
 import TNLean.MPS.Operator.Unitary.Identity
 
 /-!

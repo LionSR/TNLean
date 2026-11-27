@@ -184,7 +184,14 @@ private theorem transferReshuffleLinear_apply
   ext p q
   simp [Matrix.gramReshuffleMatrix]
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
 /-- The virtual Gram compression of a fixed interior observable converges to
 its scalar expectation times the limiting boundary Gram operator. Both free
 intervals may expand along any common filter. Source: Nachtergaele,
@@ -231,4 +238,5 @@ theorem _root_.TNLean.MPS.ParentHamiltonian.groundSpaceMapES_bulkObservable_comp
     hlim.congr' (Eventually.of_forall fun n => heq _)
   simpa only [adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES] using hreshaped
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

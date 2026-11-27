@@ -13,6 +13,8 @@ Fundamental-Theorem argument.
 
 First, it uses the decomposition of local virtual configurations into the bond
 index on one singled-out incident edge and the remaining incident-edge indices.
+The two endpoint incidences `edgeLeftIncident` and `edgeRightIncident` of an
+ordered edge are in `TNLean/PEPS/Graph/Region/EdgeMapSubgraph.lean`.
 
 Second, for a fixed graph edge `e = (u, v)`, the vertex set splits into the
 left endpoint `{u}`, the complement of the endpoints, and the right endpoint
@@ -21,8 +23,6 @@ of a PEPS to a three-partite chain.
 
 ## Main results
 
-- `edgeLeftIncident`, `edgeRightIncident`: the two endpoint incidences of an
-  ordered edge.
 - `edgeLeftVertices`, `edgeMiddleVertices`, `edgeRightVertices`: the canonical
   three-region partition attached to an edge.
 - `prod_univ_splitAtEdge`: products over the vertex set factor through the
@@ -45,24 +45,6 @@ namespace PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
-
-/-- The lower-endpoint incidence of an ordered edge. -/
-def edgeLeftIncident (e : Edge G) : IncidentEdge G e.1.1 :=
-  ⟨e, Or.inl rfl⟩
-
-/-- The upper-endpoint incidence of an ordered edge. -/
-def edgeRightIncident (e : Edge G) : IncidentEdge G e.1.2 :=
-  ⟨e, Or.inr rfl⟩
-
-omit [Fintype V] [DecidableRel G.Adj] in
-@[simp] theorem edgeLeftIncident_edge (e : Edge G) :
-    (edgeLeftIncident (G := G) e).1 = e :=
-  rfl
-
-omit [Fintype V] [DecidableRel G.Adj] in
-@[simp] theorem edgeRightIncident_edge (e : Edge G) :
-    (edgeRightIncident (G := G) e).1 = e :=
-  rfl
 
 omit [Fintype V] [DecidableRel G.Adj] in
 theorem edgeLeft_ne_edgeRight (e : Edge G) : e.1.1 ≠ e.1.2 :=

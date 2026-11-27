@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.Tensor.Network.Defs
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.PEPS.Injectivity.Normal.NormalBlocking
 import QICLean.ManyBody.Sites.Product.ProductOperatorTrace
 import QICLean.Circuit.Geometry
 import Mathlib.Data.Finset.NoncommProd

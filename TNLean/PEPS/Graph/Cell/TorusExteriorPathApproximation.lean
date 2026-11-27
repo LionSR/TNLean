@@ -7,6 +7,7 @@ import TNLean.PEPS.Graph.Cell.TorusRegionWalkWinding
 import TNLean.PEPS.Graph.Walk.TorusIntegerStepWinding
 import Mathlib.Algebra.Order.Round
 import Mathlib.Combinatorics.SimpleGraph.Cayley
+import Mathlib.Analysis.Normed.Order.Lattice
 
 /-!
 # Exterior lattice walks from supplied continuous paths

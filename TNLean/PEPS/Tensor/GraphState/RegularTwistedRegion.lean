@@ -36,12 +36,6 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 
-/-- Source: SCP10, bond operators in `eq:2d:peps-with-ug-uh`.
-The head label of an oriented regular bond is its group operator times its tail label. -/
-def regularTwistedLabels (u : Edge Γ → G) (v : V) (η : IncidentEdge Γ v → G) :
-    IncidentEdge Γ v → G :=
-  fun f => if v = f.1.1.2 then u f.1 * η f else η f
-
 /-- The original site coefficient with regular-bond operators inserted at the
 larger endpoints. Source: SCP10, `eq:2d:peps-with-ug-uh`. -/
 def regularTwistedSite
@@ -65,26 +59,6 @@ noncomputable abbrev regularTwistedOpenRegionMatrix
     (R : Finset V) {b : ℕ}
     (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :=
   regularOpenRegionMatrix (regularTwistedSite a u) R e
-
-/-- The local translation equations after the two bond operators are inserted.
-Source: SCP10, twisted-sector contraction, lines 1935–1990. -/
-def IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G)
-    (q : {v : V // v ∈ R} → G)
-    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) : Prop :=
-  ∀ (v : {v : V // v ∈ R}),
-    regularTwistedLabels u v.1
-        (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) =
-      fun f => q v * regularTwistedLabels w v.1
-        (fun f => θ ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) f
-
-instance (R : Finset V) (u w : Edge Γ → G) (q : {v : V // v ∈ R} → G)
-    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
-    Decidable (IsTwistedRegionLabelCompatible R u w q η θ) :=
-  inferInstanceAs (Decidable (∀ (v : {v : V // v ∈ R}),
-    regularTwistedLabels u v.1
-        (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) =
-      fun f => q v * regularTwistedLabels w v.1
-        (fun f => θ ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) f))
 
 open scoped Classical in
 /-- The actual regular-region coefficient, with only incident group labels summed.

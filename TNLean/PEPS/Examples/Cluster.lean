@@ -11,3 +11,37 @@ Authors: TNLean contributors
 import TNLean.PEPS.Examples.Cluster.Cluster
 import TNLean.PEPS.Examples.Cluster.ClusterStabilizer
 import TNLean.PEPS.Examples.Cluster.HoneycombCluster
+
+/-!
+# Cluster states
+
+The two-dimensional cluster state of the review arXiv:2011.12127 (Appendix A, "The cluster
+state", lines 2424–2429): the PEPS on the torus with site tensor
+`|0⟩(00++| + |1⟩(11--|`, whose coefficient is `2^{-N}(-1)^{∑ σ_u σ_v}`, a multiple of the
+controlled-Z circuit state on `|+⟩^{⊗N}`. The honeycomb cluster state of Section IV, line 1445,
+is treated for an arbitrary simple graph, with the copy tensor at each vertex and the Hadamard
+matrix on each bond, and then specialized to a brick-wall honeycomb on the torus. For both, the
+modules derive the stabilizers `X_i ∏_{j∼i} Z_j` from the circuit and show that their common
+fixed space is the line of the PEPS; for the honeycomb the stabilizer Hamiltonian
+`-∑_i X_i ∏_{j∼i} Z_j` has the PEPS as its unique ground state, the sign of the printed
+Hamiltonian being corrected (Local fix, `docs/paper-gaps/rmp_honeycomb_cluster_peps.tex`).
+Tori have width and height at least three (`docs/paper-gaps/rmp_peps_examples_small_torus.tex`),
+and the source's claim that the honeycomb PEPS is injective is refuted
+(`docs/paper-gaps/rmp_honeycomb_cluster_injectivity.tex`).
+
+## General theorems instantiated
+
+* `TNLean.PEPS.stateCoeff_torusSiteTensor` (contraction of a torus site-tensor PEPS): the
+  coefficient of the square-lattice cluster PEPS as a lattice contraction over horizontal and
+  vertical bond arrays; arXiv:2011.12127, Appendix A, line 2415.
+
+The stabilizer and ground-state statements are proved directly from the controlled-Z circuit
+and use no general PEPS theorem.
+
+## General statements whose hypotheses are shown necessary
+
+* `TNLean.PEPS.IsVertexInjective` (injectivity tensor by tensor, arXiv:2011.12127, line 1929):
+  the honeycomb vertex tensor has rank two, so the honeycomb cluster PEPS is not vertex
+  injective, contrary to arXiv:2011.12127, line 1445; injectivity after blocking over hexagonal
+  plaquettes is not formalized.
+-/

@@ -53,57 +53,6 @@ def torusIncidentSite (a : G → G → G → G → Fin d → ℂ)
   a (η (torusTopLeg v)) (η (torusRightLeg v))
     (η (torusDownLeg v)) (η (torusLeftLeg v)) s
 
-/-- Closure operators in the ordered-edge convention. A horizontal seam is
-reversed and hence carries the inverse horizontal element at its ordered head.
-Source: SCP10, `eq:2d:peps-with-ug-uh`. -/
-noncomputable def torusClosureEdgeAssignment (g h : G)
-    (f : Edge (torusGraph width height)) : G :=
-  match torusEdgeEquiv.symm f with
-  | Sum.inl v => (torusHorizontalClosureElement h v)⁻¹
-  | Sum.inr v => torusVerticalClosureElement g v
-
-/-- The horizontal edge value of the closure assignment. -/
-theorem torusClosureEdgeAssignment_right (g h : G) (v : TorusVertex width height) :
-    torusClosureEdgeAssignment g h (torusRightEdge v) =
-      (torusHorizontalClosureElement h v)⁻¹ := by
-  change (match torusEdgeEquiv.symm (torusEdgeEquiv (Sum.inl v)) with
-    | Sum.inl z => (torusHorizontalClosureElement h z)⁻¹
-    | Sum.inr z => torusVerticalClosureElement g z) = _
-  rw [Equiv.symm_apply_apply]
-
-/-- The vertical edge value of the closure assignment. -/
-theorem torusClosureEdgeAssignment_up (g h : G) (v : TorusVertex width height) :
-    torusClosureEdgeAssignment g h (torusUpEdge v) =
-      torusVerticalClosureElement g v := by
-  change (match torusEdgeEquiv.symm (torusEdgeEquiv (Sum.inr v)) with
-    | Sum.inl z => (torusHorizontalClosureElement h z)⁻¹
-    | Sum.inr z => torusVerticalClosureElement g z) = _
-  rw [Equiv.symm_apply_apply]
-
-/-- The ordered head of a horizontal seam is its native rightward origin. -/
-theorem torusRightEdge_head_of_wrap (v : TorusVertex width height) (hv : v.1 + 1 = 0) :
-    (torusRightEdge v).1.2 = v := by
-  have hv0 : v.1 ≠ 0 := by
-    intro h
-    simp [h] at hv
-  have hcmp : ((v.1 + 1, v.2) : TorusVertex width height) < v := by
-    change toLex ((v.1 + 1).val, v.2.val) < toLex (v.1.val, v.2.val)
-    rw [Prod.Lex.toLex_lt_toLex, hv, ZMod.val_zero]
-    exact Or.inl (ZMod.val_pos.mpr hv0)
-  rw [torusRightEdge, ManyBody.Edge.ofAdj_of_gt (torusGraph_adj_right v.1 v.2) hcmp]
-
-/-- The ordered head of a vertical seam is its native upward origin. -/
-theorem torusUpEdge_head_of_wrap (v : TorusVertex width height) (hv : v.2 + 1 = 0) :
-    (torusUpEdge v).1.2 = v := by
-  have hv0 : v.2 ≠ 0 := by
-    intro h
-    simp [h] at hv
-  have hcmp : ((v.1, v.2 + 1) : TorusVertex width height) < v := by
-    change toLex (v.1.val, (v.2 + 1).val) < toLex (v.1.val, v.2.val)
-    rw [Prod.Lex.toLex_lt_toLex, hv, ZMod.val_zero]
-    exact Or.inr ⟨rfl, ZMod.val_pos.mpr hv0⟩
-  rw [torusUpEdge, ManyBody.Edge.ofAdj_of_gt (torusGraph_adj_up v.1 v.2) hcmp]
-
 /-- Horizontal and vertical regular labels describe each actual torus edge once. -/
 noncomputable def torusRegularBondConfigEquiv :
     ((TorusVertex width height → G) × (TorusVertex width height → G)) ≃

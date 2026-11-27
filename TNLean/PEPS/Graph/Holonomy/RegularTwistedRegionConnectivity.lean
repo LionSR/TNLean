@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.RegularRegionConnectivity
-import TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion
+import Mathlib.Tactic.Group
 
 /-!
 # Synchronization through a common untwisted subgraph
@@ -43,7 +43,6 @@ theorem regionLabels_eq_of_subgraph_internalEdge_eq (R : Finset V)
   apply regionLabels_eq_of_internalEdge_eq R hR q
   intro e h₁ h₂
   exact hq ⟨e.1, e.2.1, hΔ e.2.2⟩ e.2.2 h₁ h₂
-
 
 variable [Group G]
 
@@ -127,7 +126,6 @@ theorem isTwistedRegionLabelCompatible_iff_exists_translation
       · have hb := hBoundary f.1 (Or.inr ⟨h₁, h₂⟩)
         simp only [hb.1, hb.2, one_mul]
     · rfl
-
 
 open scoped BigOperators in
 /-- The finite sum over compatible vertex translations reduces to a sum over

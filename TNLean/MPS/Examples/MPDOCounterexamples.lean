@@ -17,3 +17,40 @@ import TNLean.MPS.Examples.MPDOCounterexamples.PositiveMinimalRealizationCounter
 import TNLean.MPS.Examples.MPDOCounterexamples.Theorem49RepeatedCopyCounterexample
 import TNLean.MPS.Examples.MPDOCounterexamples.ThermodynamicLimitCounterexample
 import TNLean.MPS.Examples.MPDOCounterexamples.VerticalCoefficientPresentationCounterexample
+
+/-!
+# Counterexamples to statements about matrix product density operators
+
+Explicit tensors, mostly with bond dimension one to three, that refute printed claims or
+proposed intermediate steps around CPSV16 (arXiv:1606.00608): a periodic density operator whose
+normalized states alternate with the parity of the length, against the unrestricted
+thermodynamic limit of Proposition 4.5 (lines 801–806); one sector with two copies of weights
+`1` and `1/2`, against the literal implication (iv) to (v) of Theorem 4.9 (lines 851–893); a
+two-sector example where absorbing a weight destroys normality, against an intermediate
+inference of the Case II proof (lines 1646–1782); a nonminimal commuting-bond factorization with
+non-primitive trace matrix (Appendix C.2, lines 1603–1613); Kato's example at `p = 1/2`, a
+renormalization flow that changes the tensor and fails Definition 4.1; a nonunitary
+similarity `diag(2, 1)` between injective normal tensors (Appendix C.4, lines 2048–2057, and
+Proposition 4.13, lines 1898–1921); and two horizontally gauge equivalent tensors with different
+vertical coefficients `1` and `(4/5)^L`. Each module states which source statement it does and
+does not contradict.
+
+## General statements whose hypotheses are shown necessary
+
+* `MPOTensor.HasBlockedAdjointFixedPointAlgebraTower` (the algebra tower of the converse of
+  Theorem 4.14(ii), Appendix C.4, lines 2046–2085): the qubit phase-flip channel has the tower
+  without being `MPOTensor.IsZCL`, so the positive coefficient formula and the idempotent trace
+  identity of the converse cannot be dropped.
+* `MPOTensor.IsRFPViaTS` (Definition 4.1): the two-site blocking of the repeated-copy tensor,
+  which meets the printed standing hypotheses and condition (iv) of Theorem 4.9, and Kato's
+  tensor, which is in literal canonical form, are not fixed points.
+* `MPTensor.SameMPV₂Pos` (equal closed vectors): it determines neither an isometric
+  realization of a normal representative nor a positive per-block extension, so these need a
+  common physical tensor.
+* `MPOTensor.BNTAlgebraTensorClause` (vertical algebra clauses, Theorem 4.14(ii)): its
+  coefficients depend on the presentation, not only on the horizontal tensor, outside the
+  horizontal canonical form assumed by Proposition 4.13 and Theorem 4.14.
+* `MPOTensor.PhysicalSectorFactorization` (physical-sector factorizations, Appendix C.2): a
+  chosen factorization of a normal tensor with zero correlation length may keep an inactive
+  sector, so primitivity of the trace matrix requires deleting it.
+-/

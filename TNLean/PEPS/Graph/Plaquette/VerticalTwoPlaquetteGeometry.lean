@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry
-import TNLean.PEPS.FundamentalTheorem.Torus.TorusCoordinateSwap
 
 /-!
 # The translated vertical two-plaquette block
@@ -125,7 +124,6 @@ theorem verticalTwoPlaquetteIso_apply (v : X) (i : Fin 6) :
   change (((![0, 0, 0, 1, 1, 1] i : ℕ) : ZMod width) + v.1,
     ((![0, 1, 2, 2, 1, 0] i : ℕ) : ZMod height) + v.2) = _
   simp only [add_comm]
-
 
 /-- Each selected chord is the actual rightward step, with native sorting retained.
 Source: SCP10, Theorem 6.16, lines 2271–2305. -/

@@ -117,10 +117,17 @@ theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   rw [← tendsto_sub_nhds_zero_iff, tendsto_zero_iff_norm_tendsto_zero]
   exact hnorm
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
 /-- A primitive MPS tensor satisfies the quantitative geometric bound for convergence of
 its ground-space Gram operators to the reshuffled fixed-point projection. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
+theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, 1 ≤ n →
@@ -134,10 +141,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPoin
     A ρ _ (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed
     hP.complementary_transfer_map_gap
 
-set_option linter.style.longLine false in
 /-- The ground-space Gram operators of a primitive MPS tensor converge to the reshuffled
 fixed-point projection. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
+theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop
@@ -150,4 +156,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_tendsto_gramR
     A ρ _ (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed
     hP.complementary_transfer_map_gap
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

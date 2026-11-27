@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionConnectivity
 import TNLean.PEPS.Graph.Holonomy.RegularRegionCounting
 import TNLean.PEPS.Tensor.GraphState.RegularBoundaryTransporter
+import TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion
 
 /-!
 # Cross-Gram operators of twisted regular-bond regions

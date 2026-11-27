@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Region.EdgeMapSubgraph
 import TNLean.PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry
+import Mathlib.Order.UpperLower.CompleteLattice
 
 /-!
 # An actual translated strip of three torus plaquettes

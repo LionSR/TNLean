@@ -9,6 +9,7 @@ import TNLean.PEPS.Tensor.Region.RegionConfigSplit
 import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.PEPS.Graph.Holonomy.RegularBoundaryRoute
+import TNLean.PEPS.Graph.Holonomy.RegularInternalGaugeTransport
 
 /-!
 # The global contraction consequence of the two-cycle flux operation
@@ -132,12 +133,6 @@ theorem exists_unitary_regularTwoCycleGlobalFluxMove
       hmove g (fun f => (Fintype.equivFin G).symm (μ f))
   · intro v hv
     simp only [regularRegionSiteExtension, ite_eq_right hv]
-
-
-/-- Prescribe operators on internal region bonds and retain the common assignment
-on all other bonds, including crossings. Source: SCP10, Theorem 6.16, lines 2270–2301. -/
-def regularRegionBondExtension (R : Finset V) (inside outside : Edge Γ → G) : Edge Γ → G :=
-  fun e => if e.1.1 ∈ R ∧ e.1.2 ∈ R then inside e else outside e
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] in
 private theorem gauge_one_bondExtension

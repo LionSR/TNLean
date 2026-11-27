@@ -30,3 +30,61 @@ import TNLean.MPS.Examples.Shift.SwapAncillaCompatibility
 import TNLean.MPS.Examples.Shift.SwapBlockedSymmetryTransport
 import TNLean.MPS.Examples.Shift.SwapSymmetryStabilization
 import TNLean.MPS.Examples.Shift.SwapSymmetryTransport
+
+/-!
+# Shift matrix product unitaries
+
+The right cyclic shift `T` on `ℂ^d`, a matrix product unitary of bond dimension `d`, its adjoint
+the left shift, and the two-spin families `U₁ = I ⊗ I`, `U₂ = T† ⊗ T`, `U₃ = T ⊗ T†` of CPSV17
+(arXiv:1703.09188, lines 1980–2001), together with the swap-transformed families `𝕊^{⊗N} Uᵢ` of
+equation `threeMPU2` (lines 2046–2062). The modules compute the source ranks at every blocking
+and the indices `log₂ d`, `-log₂ d` and `0` (lines 2037–2041), give two-site decompositions with
+supplied gates realizing `eq:SF_u1_u3`, `eq:uv2_U2` and `eq:uv2_U3` (a scope restriction,
+`docs/paper-gaps/mpu_shift_supplied_standard_forms.tex`), and prove Propositions
+`prop:U2-U3-trivial-conjugation` and `prop:U2-U3-trivial-tr-transpose`, the latter as strict
+equivalence under adjunction and under transposition. Lemma `lemma:sym-trafo-swap` is
+formalized for the one-sided swap of the defining equation rather than the two-sided expression
+of the printed proof (`docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`), and the ancilla
+comparisons are a labelled-spin reading of `def:equivalent-symmetry`, lines 1356–1366, not the
+general predicate (`docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`). Two dimension-only
+readings of swap stabilization are shown to fail, without refuting the source lemma.
+
+## General theorems instantiated
+
+* `MPOTensor.IsMPUSimple.blockTensor` and `MPOTensor.IsMPUSimple.tensorProduct` (simple
+  tensors): every blocking of the two shifts and of `U₁`, `U₂`, `U₃` is simple;
+  arXiv:1703.09188, Definition III.2, Proposition III.3 and Theorem `IndexTh` (ii).
+* `MPOTensor.IsMPU.exists_canonicalFormII_of_supplied_transfer_power` (canonical form II from
+  the transfer map): the normalized transfer map of the right shift is `X ↦ trace X • I/d`, so
+  it has canonical-form-II data with fixed point `I/d`; arXiv:1703.09188, Proposition
+  `prop:normal-tensor` and equation `Erightleft`.
+* `MPOTensor.IsMPUCanonicalFormII.sourceIndexValue_eq_index` and
+  `MPOTensor.IsMPU.index_eq_canonical_representative` (index of a matrix product unitary): the
+  source-rank value `log₂ d` of the blocked right shift is its index; arXiv:1703.09188,
+  Definition IV.1 and Proposition IV.2.
+* `MPOTensor.IsMPU.index_physicalAdjointTensor` and `MPOTensor.IsMPU.index_tensorProduct`
+  (index arithmetic): the left shift has index `-log₂ d`, and `U₁`, `U₂`, `U₃` have index zero;
+  arXiv:1703.09188, lines 1196–1207 and Theorem `IndexTh` (ii).
+* `MPOTensor.IsMPUCanonicalFormII.tensorProduct` and
+  `MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor` (canonical form II of products and
+  adjoints): `U₂` and `U₃` are in canonical form II.
+* `MPOTensor.StrictlyEquivalent.of_fixedBond` and
+  `MPOTensor.StrictlyEquivalentUnderSymmetry.of_fixedBond` (strict equivalence): a physical path
+  to the factor swap followed by a bond path joins `U₂` to `U₃`, also under the swap-combined
+  adjunction and transposition; arXiv:1703.09188, Definitions `def:strictly-equivalent-tensors`
+  and `def:strictly-equivalent-symmetry`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq` and
+  `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even` (conjugation
+  phases): after blocking two sites, `U₂` and `U₃` are strictly equivalent to `U₁` under
+  conjugation, by the odd-rank and the even-rank determinant criteria; arXiv:1703.09188,
+  Theorems `conjphs` and `prop:conjsym-strict-equiv`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul` and
+  `MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul` (transport of
+  symmetries by a physical involution): multiplication by the swap identifies the swap-combined
+  comparisons with ordinary adjunction, transposition and conjugation, at fixed length and after
+  common blocking; arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_blockedDaggerWithPhysicalMatrix_iff` (symmetries
+  with a retained physical matrix): the same transport after adjoining an identity ancilla, for
+  the labelled-spin comparisons; arXiv:1703.09188, `SSymmetries-dagger` and
+  `lemma:sym-trafo-swap`.
+-/

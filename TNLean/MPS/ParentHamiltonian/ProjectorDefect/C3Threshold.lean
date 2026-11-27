@@ -104,11 +104,20 @@ private theorem tendsto_fnw_coefficient
   rw [zero_mul] at h
   exact h.congr fun n ↦ by ring
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
+attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
 uniformly in the prefix length and in every positive suffix length. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_wholeIncrement_groundProjection_defect_le
+theorem eventually_wholeIncrement_groundProjection_defect_le
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
@@ -126,7 +135,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_wholeIncrement_gro
     with L hL hsmallL hcoef K Q hQ
   exact (hDefect L hL hsmallL K Q hQ).trans hcoef.le
 
-set_option linter.style.longLine false in
 /-- There is a positive block-injective length \(p\), measured in sites of the
 input tensor, such that the whole-increment projector defect with overlap and
 suffix lengths \(L=Q=p\) is at most \(7/16\) for every prefix length \(K\),
@@ -135,7 +143,7 @@ including \(K=0\).
 The coefficient decays because it is the rational function
 \(c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)\) of Nachtergaele,
 arXiv:cond-mat/9410110, display (6.1) at lines 2401--2412. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
+theorem exists_uniform_wholeIncrement_defect_le_seven_sixteenths
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
@@ -152,11 +160,10 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement
   exact ⟨p, by omega, isNBlkInjective_of_le hLpos hLinj (by omega),
     fun K ↦ hDefect K p (by omega)⟩
 
-set_option linter.style.longLine false in
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector
 defect at most \(7/16\). -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
+theorem exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
@@ -168,13 +175,12 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrem
     hP.exists_uniform_wholeIncrement_defect_le_seven_sixteenths hρ
   exact ⟨p, hp, hInj, hDefect p⟩
 
-set_option linter.style.longLine false in
 /-- At every sufficiently large overlap length, the uniform open-chain
 projector defect times \(\sqrt{l+1}\) is below any prescribed positive
 number. This retains the decay used in Nachtergaele,
 arXiv:cond-mat/9410110, display (6.1), rather than choosing only the C3
 threshold one. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundProjection_defect_mul_sqrt_lt
+theorem eventually_openChain_groundProjection_defect_mul_sqrt_lt
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {η : ℝ} (hη : 0 < η) :
     ∀ᶠ l : ℕ in atTop, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ ε : ℝ,
@@ -211,7 +217,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundPr
   intro K
   exact hDefect l hLle hl_small K
 
-set_option linter.style.longLine false in
 /-- A primitive MPS with faithful fixed point has a block-injective overlap length
 at which the uniform open-chain ground-projector defect satisfies Nachtergaele's
 condition C3, arXiv:cond-mat/9410110, eq. (2.4).
@@ -220,7 +225,7 @@ The coefficient is the imported Fannes--Nachtergaele--Werner coefficient
 \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\) of arXiv:cond-mat/9410110, lines
 1180--1194 and display (6.1) at lines 2401--2412, evaluated at the chosen overlap
 length. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_lt_c3_threshold
+theorem exists_openChain_groundProjection_defect_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
@@ -235,7 +240,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjec
   exact ⟨l, ε, hl, hInj, hε,
     (lt_div_iff₀ (Real.sqrt_pos.2 (by positivity))).2 hsmall, hDefect⟩
 
-set_option linter.style.longLine false in
 /-- A primitive MPS with faithful fixed point satisfies Nachtergaele's condition C3
 in its literal martingale-difference form
 \[
@@ -247,7 +251,7 @@ and \(\varepsilon_l\) are supplied by
 `exists_openChain_groundProjection_defect_lt_c3_threshold`. This is only the
 exact projector identification following condition C3 in Nachtergaele,
 arXiv:cond-mat/9410110, equation (2.4); no new decay estimate enters. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_martingaleDifference_norm_lt_c3_threshold
+theorem exists_openChain_martingaleDifference_norm_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ hl : 1 < l, ∃ hInj : Kraus.IsNBlkInjective A l,
@@ -261,12 +265,11 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_martingaleDi
   rw [openChainTailGroundProjection_comp_martingaleDifference hInj hl.le hK]
   exact hDefect K
 
-set_option linter.style.longLine false in
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for
 the complementary excitation projections. Nachtergaele's identity following condition
 C3 identifies the projector defect, arXiv:cond-mat/9410110, eq. (2.4); the
 anticommutator estimate is the two-projection consequence proved in this development. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_anticommutator_ge_c3_threshold
+theorem exists_re_inner_openChain_anticommutator_ge_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
@@ -290,4 +293,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_ant
   exact re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
     hInj hl.le (hDefect K) v
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

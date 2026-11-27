@@ -28,13 +28,13 @@ bonds; the bridge is stated for width and height at least three. The resulting r
 on the cluster and CZX examples is documented in
 `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+The four legs (`torusTopLeg`, `torusRightLeg`, `torusDownLeg`, `torusLeftLeg`) and the
+edge equivalence `torusEdgeEquiv` are torus geometry, recorded in
+`TNLean/PEPS/Graph/Torus/TorusLatticeGraph.lean`.
+
 ## Main definitions
 
-* `TNLean.PEPS.torusDownEdge`, `TNLean.PEPS.torusLeftEdge`: the down and left legs of a vertex.
-* `TNLean.PEPS.torusTopLeg`, `torusRightLeg`, `torusDownLeg`, `torusLeftLeg`: the four legs
-  as incident edges.
 * `TNLean.PEPS.torusSiteTensor`: the torus PEPS of a four-leg site tensor.
-* `TNLean.PEPS.torusEdgeEquiv`: edges of the torus are right edges or up edges.
 
 ## Main results
 
@@ -42,8 +42,6 @@ on the cluster and CZX examples is documented in
   labellings.
 * `TNLean.PEPS.stateCoeff_torusSiteTensor`: the coefficient as a sum over horizontal and
   vertical bond arrays.
-* `TNLean.PEPS.torusVertex_apply_eq_apply_zero_of_shift`: a function invariant under the unit
-  shifts in both directions is constant.
 
 ## References
 
@@ -60,34 +58,6 @@ namespace TNLean
 namespace PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
-
-/-- A function on the torus invariant under the unit horizontal and vertical shifts is
-constant. -/
-theorem torusVertex_apply_eq_apply_zero_of_shift {α : Type*}
-    (f : TorusVertex width height → α)
-    (h1 : ∀ v : TorusVertex width height, f (v.1 + 1, v.2) = f v)
-    (h2 : ∀ v : TorusVertex width height, f (v.1, v.2 + 1) = f v)
-    (v : TorusVertex width height) : f v = f 0 := by
-  have hx : ∀ (n : ℕ) (y : ZMod height), f ((n : ZMod width), y) = f (0, y) := by
-    intro n y
-    induction n with
-    | zero => simp
-    | succ n ih =>
-      calc f (((n + 1 : ℕ) : ZMod width), y) = f ((n : ZMod width) + 1, y) := by
-            push_cast; rfl
-        _ = f ((n : ZMod width), y) := h1 ((n : ZMod width), y)
-        _ = f (0, y) := ih
-  have hy : ∀ n : ℕ, f (0, (n : ZMod height)) = f 0 := by
-    intro n
-    induction n with
-    | zero => simp; rfl
-    | succ n ih =>
-      calc f (0, ((n + 1 : ℕ) : ZMod height)) = f (0, (n : ZMod height) + 1) := by
-            push_cast; rfl
-        _ = f (0, (n : ZMod height)) := h2 (0, (n : ZMod height))
-        _ = f 0 := ih
-  obtain ⟨x, y⟩ := v
-  rw [← ZMod.natCast_zmod_val x, hx, ← ZMod.natCast_zmod_val y, hy]
 
 /-- Reindexing a product over the torus by the unit horizontal shift: a product of factors
 joining each site to its left neighbour equals the product of the same factors joining each
@@ -112,68 +82,6 @@ theorem prod_torus_sub_snd {M : Type*} [CommMonoid M]
       add_sub_cancel_right]).symm
 
 variable [Fact (1 < width)] [Fact (1 < height)]
-
-/-! ### The four legs of a vertex -/
-
-/-- The down leg of `v = (x, y)`: the up edge of `(x, y - 1)`. -/
-def torusDownEdge (v : TorusVertex width height) : Edge (torusGraph width height) :=
-  torusUpEdge (v.1, v.2 - 1)
-
-/-- The left leg of `v = (x, y)`: the right edge of `(x - 1, y)`. -/
-def torusLeftEdge (v : TorusVertex width height) : Edge (torusGraph width height) :=
-  torusRightEdge (v.1 - 1, v.2)
-
-/-- The left leg of the right neighbour of `v` is the right edge of `v`. -/
-theorem torusLeftEdge_add_one (v : TorusVertex width height) :
-    torusLeftEdge (v.1 + 1, v.2) = torusRightEdge v := by
-  simp [torusLeftEdge]
-
-/-- The down leg of the upper neighbour of `v` is the up edge of `v`. -/
-theorem torusDownEdge_add_one (v : TorusVertex width height) :
-    torusDownEdge (v.1, v.2 + 1) = torusUpEdge v := by
-  simp [torusDownEdge]
-
-theorem torusRightEdge_incident (v : TorusVertex width height) :
-    (torusRightEdge v).1.1 = v ∨ (torusRightEdge v).1.2 = v := by
-  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h, _⟩ | ⟨_, h⟩
-  · exact Or.inl h
-  · exact Or.inr h
-
-theorem torusUpEdge_incident (v : TorusVertex width height) :
-    (torusUpEdge v).1.1 = v ∨ (torusUpEdge v).1.2 = v := by
-  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h, _⟩ | ⟨_, h⟩
-  · exact Or.inl h
-  · exact Or.inr h
-
-theorem torusLeftEdge_incident (v : TorusVertex width height) :
-    (torusLeftEdge v).1.1 = v ∨ (torusLeftEdge v).1.2 = v := by
-  have hv : ((v.1 - 1 + 1, v.2) : TorusVertex width height) = v := by simp
-  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right (v.1 - 1) v.2) with ⟨_, h⟩ | ⟨h, _⟩
-  · exact Or.inr (h.trans hv)
-  · exact Or.inl (h.trans hv)
-
-theorem torusDownEdge_incident (v : TorusVertex width height) :
-    (torusDownEdge v).1.1 = v ∨ (torusDownEdge v).1.2 = v := by
-  have hv : ((v.1, v.2 - 1 + 1) : TorusVertex width height) = v := by simp
-  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 (v.2 - 1)) with ⟨_, h⟩ | ⟨h, _⟩
-  · exact Or.inr (h.trans hv)
-  · exact Or.inl (h.trans hv)
-
-/-- The top leg of `v`, its up edge, as an incident edge. -/
-def torusTopLeg (v : TorusVertex width height) : IncidentEdge (torusGraph width height) v :=
-  ⟨torusUpEdge v, torusUpEdge_incident v⟩
-
-/-- The right leg of `v`, its right edge, as an incident edge. -/
-def torusRightLeg (v : TorusVertex width height) : IncidentEdge (torusGraph width height) v :=
-  ⟨torusRightEdge v, torusRightEdge_incident v⟩
-
-/-- The down leg of `v` as an incident edge. -/
-def torusDownLeg (v : TorusVertex width height) : IncidentEdge (torusGraph width height) v :=
-  ⟨torusDownEdge v, torusDownEdge_incident v⟩
-
-/-- The left leg of `v` as an incident edge. -/
-def torusLeftLeg (v : TorusVertex width height) : IncidentEdge (torusGraph width height) v :=
-  ⟨torusLeftEdge v, torusLeftEdge_incident v⟩
 
 /-! ### The torus PEPS of a site tensor -/
 
@@ -200,26 +108,7 @@ theorem stateCoeff_torusSiteTensor_eq_sum_edge {D d : ℕ}
           (η (torusLeftEdge v)) (σ v) :=
   rfl
 
-/-! ### Edges as right edges and up edges -/
-
 variable [Fact (2 < width)] [Fact (2 < height)]
-
-/-- On a torus of width and height at least three, the edges are exactly the right edges and
-the up edges of the vertices, each counted once. -/
-noncomputable def torusEdgeEquiv :
-    TorusVertex width height ⊕ TorusVertex width height ≃ Edge (torusGraph width height) :=
-  Equiv.ofBijective (Sum.elim torusRightEdge torusUpEdge) <| by
-    refine ⟨?_, fun e => ?_⟩
-    · rintro (p | p) (q | q) h
-      · exact congrArg Sum.inl (torusRightEdge_injective h)
-      · exact absurd h (torusRightEdge_ne_torusUpEdge p q)
-      · exact absurd h.symm (torusRightEdge_ne_torusUpEdge q p)
-      · exact congrArg Sum.inr (torusUpEdge_injective h)
-    · rcases torusEdge_horizontal_or_vertical e with he | he
-      · obtain ⟨p, rfl⟩ := isHorizontalTorusEdge_eq_rightEdge he
-        exact ⟨Sum.inl p, rfl⟩
-      · obtain ⟨p, rfl⟩ := isVerticalTorusEdge_eq_upEdge he
-        exact ⟨Sum.inr p, rfl⟩
 
 /-- Bridge: on a torus of width and height at least three, the coefficient of a torus
 site-tensor PEPS is the lattice contraction over a horizontal bond array `hb` (the index on

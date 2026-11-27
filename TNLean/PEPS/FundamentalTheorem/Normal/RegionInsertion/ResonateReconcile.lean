@@ -145,19 +145,6 @@ theorem regionInsertionOp_realizes_of_realizes_on_stateVec (A B : Tensor G d)
     exact hstate p.1 p.2
   exact LinearMap.congr_fun hEq c
 
-/-! ### The interior bond product is positive
-
-The bond-dimension product over the non-boundary edges is a product of positive
-bond dimensions, so it is positive. This lets the leg-wise pin cancel the bond
-product when comparing the two endpoint operators on the closed state vectors. -/
-
-/-- The interior bond product is positive when every bond dimension is positive. -/
-theorem regionInteriorBondProd_pos (A : Tensor G d) (R : Finset V)
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e) :
-    0 < regionInteriorBondProd (G := G) A R := by
-  rw [regionInteriorBondProd]
-  exact Finset.prod_pos (fun e _ => hposA e)
-
 /-! ### The state-vector realization from the coefficient transfer
 
 If a matrix `N` on the second tensor matches the region-inserted coefficients of

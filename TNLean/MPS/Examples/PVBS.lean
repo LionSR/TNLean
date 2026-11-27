@@ -24,3 +24,42 @@ import TNLean.MPS.Examples.PVBS.WState
 import TNLean.MPS.Examples.PVBS.WStateBlocking
 import TNLean.MPS.Examples.PVBS.WStateCanonicalBound
 import TNLean.MPS.Examples.PVBS.WStatePeriodic
+
+/-!
+# Product vacua with boundary states and the W state
+
+The one-species product vacua with boundary states of Bachmann–Nachtergaele (arXiv:1112.4097,
+Section II, equations (1)–(8)), the tensor `A⁰ = diag(q, 1)`, `A¹ = |0⟩⟨1|`, whose open space is
+spanned by the vacuum and the one-particle state with amplitude `qᵏ`; at `q = 1` the excitation
+is the W state. The modules prove the open ground space, uniqueness of the periodic vacuum for
+`qᴺ ≠ 1`, the exact periodic gap `(μ - 1)²/(1 + μ²)` (one species, zero phase, a recorded scope
+restriction), gaplessness of the critical parent, and boundary localization (with the
+right-boundary threshold corrected as a local fix). For the W state they prove the open-boundary
+representation and the failure of its periodic closure (arXiv:2011.12127, Appendix A,
+lines 2348–2362), and the bond-dimension bounds of arXiv:quant-ph/0608197, lines 2182–2225, with
+the canonical form and condition C1 as hypotheses or at lengths without small divisors.
+
+## General theorems instantiated
+
+* `MPSTensor.contiguous_mem_of_restriction_intersection_submodules` (open-segment iteration):
+  the open ground space of the nearest-neighbour parent; PGVWC07, Theorem 12.
+* `MPSTensor.groundSpaceES_le_ker_hamiltonian_parentChainInteraction` (open-chain parent
+  Hamiltonian): the open matrix product space lies in the kernel; Nachtergaele,
+  arXiv:cond-mat/9410110, equation (3.12).
+* `MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace` (periodic parent kernel): the periodic
+  kernel is the chain ground space, for vacuum uniqueness and the gap.
+* `ManyBody.isGapped_zero_iff_inner` (gap above the kernel, companion library): the uniform
+  periodic gap.
+* `ZMod.exists_large_cycleFourierGap_pos_lt` (cycle Laplacian, companion library): the critical
+  one-particle energies `1 - cos(2π/N)` tend to zero.
+* `MPSTensor.toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections` and
+  `MPSTensor.eq_zero_of_overlapping_one_dimensional_sections` (local sections): the pure
+  one-particle window Hamiltonian; SPWC10, Theorem 5 proof, lines 850–880.
+* `MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective` and
+  `MPSTensor.sum_sq_dim_le_finrank_of_forall_mem` (direct-sum lemma and cut rank): the W-state
+  inequality `N < 2 max(L₀, 3(b-1)(L₀+1))`; arXiv:quant-ph/0608197, lines 1314–1349.
+* `MPSTensor.exists_normal_blocks_of_no_small_divisor`, `Kraus.wielandtIndex_le_general` and
+  `Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_isUnit` (normal blocks and Wielandt bounds): the
+  bounds at lengths without small divisors and for invertible first letters; SPWC10, Theorem 5
+  proof, and Wolf, Theorem 6.9.
+-/

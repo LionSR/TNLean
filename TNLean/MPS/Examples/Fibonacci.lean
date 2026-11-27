@@ -28,3 +28,54 @@ import TNLean.MPS.Examples.Fibonacci.FibonacciStringNetUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciVacuum
 import TNLean.MPS.Examples.Fibonacci.SiteOperatorKernel
+
+/-!
+# The Fibonacci matrix product operator algebra
+
+The Fibonacci string-net matrix product operator of BMWSHV17 (arXiv:1511.08090, Appendix D.1.1,
+lines 1240–1269): a vacuum block `B_1` of bond dimension two, the admissibility projector, and a
+block `B_τ` of bond dimension three built from the F-symbols, with entries in the golden
+integers `ℤ[σ]`, `σ = φ^{-1/2}`; the source draws the tensor but prints no entries of these
+blocks, and the entries chosen here are the **Local fix** recorded in the block modules.
+Their periodic operators obey `O_τ O_τ = O_1 + O_τ` and the unit laws at every positive length,
+and a pair of normal states realizes the two-block module `τ · x_1 = x_τ`,
+`τ · x_τ = x_1 + x_τ` of GLM23 (arXiv:2203.12563, lines 1991–1993); that module is unique only
+among indecomposable families, the printed uniqueness claim omitting this hypothesis
+(**Local fix**, `docs/paper-gaps/glm23_fibonacci_module_rank_scope.tex`). The operator `O_τ`
+commutes with the golden chain of Feiguin et al. (arXiv:cond-mat/0612341, lines 136–175), and
+the diagonal Fibonacci boundary tensor of CPSV16 (arXiv:1606.00608, Appendix D, lines 2116–2176)
+has a periodic rank that is not geometric in the length.
+
+## General theorems instantiated
+
+* `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum` and
+  `MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression` (multi-block compression of operator
+  products): the stacked products `τ ⊗ τ`, `1 ⊗ 1`, `1 ⊗ τ`, `τ ⊗ 1` compress onto their fusion
+  channels, giving the fusion rules, also for the source's tensor on the full alphabet.
+* `MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression` (action tensors): compressions of
+  the action tensors give `O_τ ψ_A = ψ_C` and `O_τ ψ_C = ψ_A + ψ_C`; arXiv:2203.12563, equation
+  `mpoMPSsten`.
+* `MPOTensor.IsMPOFusionAlgebra` and `MPOTensor.perronFrobeniusDim_eq_of_dimension_relation`
+  (fusion algebras and quantum dimensions): the blocks realize the Fibonacci ring, with
+  `d_τ = φ`; arXiv:2203.12563, lines 361–362, and arXiv:2204.05940, mpo.tex line 6068.
+* `MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric` and
+  `MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter` (fusion-character obstruction):
+  no single normal state carries the Fibonacci symmetry, since `m² = 1 + m` has no solution in
+  `ℕ`.
+* `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily` (integrality of the action): the
+  multiplicities of a symmetric normal family form a nonnegative integer representation, which
+  is classified as a direct sum of regular ones; arXiv:2203.12563, lines 460 and 564–565.
+* `MPOTensor.IsMPOSymmetricFamily.mpo_mulVec_sum_eq_smul` (symmetric boundary states): the
+  positive weights `(1, φ)` give `O_τ ψ = φ ψ`; arXiv:2203.12563, lines 1803–1805.
+* `MPSTensor.IsBiorthogonalDecomposition` and `MPOTensor.actionLMatrix` (exact fusion and
+  action trees, L-symbols): every product and action is an exact biorthogonal decomposition, and
+  for one choice of trees the L-symbol is a gauge transform of the F-symbol; arXiv:2203.12563,
+  `eq:F_symbol2` and lines 593–605.
+* `MPOTensor.mpo_eq_of_diagonal_conj` and `MPOTensor.IsMPOFusionAlgebra.of_mpo_eq_mul_mul`
+  (bond and physical similarities): the source's G-symbol tensor has the periodic operators of
+  the F-symbol blocks extended to the full alphabet, and the review's tensor (arXiv:2011.12127,
+  Appendix A), weighted by the plaquette dimensions, forms the Fibonacci fusion algebra.
+* `MPOTensor.IsStrongRFP.exists_periodic_rank_factor` (rank growth of strong renormalization
+  fixed points): the non-geometric periodic rank shows that the boundary tensor is not
+  `MPOTensor.IsStrongRFP`; arXiv:1606.00608, Appendix D, lines 2109–2117.
+-/

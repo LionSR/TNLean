@@ -180,12 +180,19 @@ theorem norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le
       norm_inner_residualWindowRightMapES_leftMapES_le_of_prefix_bound A B B' V hε hAngle hx hy)
   simpa only [Submodule.starProjection_bot, sub_zero] using h
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D E F L : ℕ}
+
 /-- Inequivalent primitive middle tensors with faithful invariant matrices have uniformly small
 cross-sector window projections once the middle interval is sufficiently long. The bound
 holds simultaneously for every outer blocked-prefix length and original-tail length. Source:
 Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint, lines 1744--1820. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_residualWindow_cross_projection_le_of_inequivalent
+theorem eventually_norm_residualWindow_cross_projection_le_of_inequivalent
     [NeZero E] [NeZero F]
     (A : MPSTensor d D) {B : MPSTensor (blockPhysDim d L) E}
     {B' : MPSTensor (blockPhysDim d L) F} (V : Matrix (Fin D) (Fin E) ℂ)
@@ -193,7 +200,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_residualWindo
     (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
+    (hDistinct : ∀ e : F = E, ¬ MPTensor.GaugePhaseEquiv (e ▸ B') B)
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ M in Filter.atTop, ∀ K r : ℕ,
       ‖(residualWindowRightMapES A B V K M r).range.starProjection.comp
@@ -204,11 +211,10 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_residualWindo
     norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le
       A B B' V (K := K) (r := r) hε.le hM
 
-set_option linter.style.longLine false in
 /-- Cross-sector window projection products tend to zero along any diverging middle interval,
 while both outer lengths may vary arbitrarily. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma disjoint, lines 1744--1820. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_cross_projection_tendsto_zero_of_inequivalent
+theorem residualWindow_cross_projection_tendsto_zero_of_inequivalent
     [NeZero E] [NeZero F]
     (A : MPSTensor d D) {B : MPSTensor (blockPhysDim d L) E}
     {B' : MPSTensor (blockPhysDim d L) F} (V : Matrix (Fin D) (Fin E) ℂ)
@@ -216,7 +222,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_cross_projecti
     (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
+    (hDistinct : ∀ e : F = E, ¬ MPTensor.GaugePhaseEquiv (e ▸ B') B)
     {κ : Type*} {f : Filter κ} {K M r : κ → ℕ}
     (hM : Filter.Tendsto M f Filter.atTop) :
     Filter.Tendsto (fun i =>
@@ -230,4 +236,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_cross_projecti
       (hB.eventually_norm_residualWindow_cross_projection_le_of_inequivalent
         A V hB' hρ hσ hDistinct (half_pos hε))] with i hi
     exact (hi (K i) (r i)).trans_lt (half_lt_self hε)
-end MPSTensor
+
+end Kraus.HasComplementaryFixedPointGap

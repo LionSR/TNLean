@@ -7,6 +7,7 @@ import TNLean.PEPS.ParentHamiltonian.Torus.TorusNativeFluxHolonomy
 import TNLean.PEPS.Injectivity.TorusSector.TorusDualFluxString
 import TNLean.PEPS.Injectivity.Charge.RegularTwistedStateNonzero
 import Mathlib.Logic.Equiv.Option
+import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.AbsorbedEquality
 
 /-!
 # Detecting the endpoints of arbitrary native flux paths
