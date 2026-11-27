@@ -395,15 +395,15 @@
 
 \begin{lemma}[Representative separation after injective blocking]
     \label{thm:postblocked_representative_grouped_insert_eq}
-    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
-    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_blockTensor}
-    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.eventuallyRepresentativeWordTupleSpan_blockTensor}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.eventuallyRepresentativeWordTupleSpan}
     \lean{MPSTensor.pairTraceSeparatingAt_blockTensor}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_common_basis_isNBlkInjective}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.exists_common_basis_isNBlkInjective}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.insertedTensor_basis_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
     \leanok
     \uses{def:sector_bnt_cf,def:sector_decomposition_block_tensor,def:representative_word_tuple_span,thm:representative_grouped_insert_eq}
     Let $P$ be a BNT canonical form with basis representatives
@@ -517,7 +517,7 @@
 
 \begin{lemma}[Marked-letter separation for a BNT canonical form]
     \label{cor:bnt_marked_representative_separation}
-    \lean{MPSTensor.IsBNTCanonicalForm.markedTensor_basis_eq_of_trace_agree}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.markedTensor_basis_eq_of_trace_agree}
     \leanok
     \uses{def:sector_bnt_cf,thm:postblocked_representative_grouped_insert_eq,thm:representative_grouped_marked_separation}
     Let $(C_j^s)$ and $(E_j^s)$ be two marked families over a BNT canonical

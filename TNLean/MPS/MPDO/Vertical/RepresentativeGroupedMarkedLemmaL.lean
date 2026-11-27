@@ -33,7 +33,7 @@ the actual grouped vertical corners.
   separation at one length with a nonzero grouped coefficient.
 * `SectorDecomposition.markedTensor_basis_eq_of_trace_agree`: separation under
   eventual simultaneous representative word-tuple span.
-* `IsBNTCanonicalForm.markedTensor_basis_eq_of_trace_agree`: separation from
+* `IsLeftCanonicalBNTPresentation.markedTensor_basis_eq_of_trace_agree`: separation from
   the BNT canonical-form hypotheses.
 
 ## References
@@ -149,7 +149,7 @@ theorem markedTensor_basis_eq_of_trace_agree
 
 end MPSTensor.SectorDecomposition
 
-namespace MPSTensor.IsBNTCanonicalForm
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 variable {d e : ℕ} {P : SectorDecomposition d}
 
@@ -165,7 +165,7 @@ separation calculation is Appendix C.3, lines 1848--1858.  The source states
 the latter for physical first-site insertions; the arbitrary marked matrices
 are an auxiliary algebraic extension. -/
 theorem markedTensor_basis_eq_of_trace_agree
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
       Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
@@ -174,4 +174,4 @@ theorem markedTensor_basis_eq_of_trace_agree
   exact P.markedTensor_basis_eq_of_trace_agree C E
     hCF.eventuallyRepresentativeWordTupleSpan hTrace
 
-end MPSTensor.IsBNTCanonicalForm
+end MPSTensor.IsLeftCanonicalBNTPresentation

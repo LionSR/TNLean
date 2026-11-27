@@ -224,7 +224,7 @@
     $V^{(N)}(A)=1+2^{-N}$.
 \end{lemma}
 % The theorem above is implemented through the auxiliary
-% `IsBNTCanonicalForm` interface; a duplicate `CPSVCanonicalFormData` package
+% `IsLeftCanonicalBNTPresentation` interface; a duplicate `CPSVCanonicalFormData` package
 % for these matrices has not been added.
 \begin{proof}\leanok
     The unique basis block has bond dimension one. It is irreducible and
@@ -394,7 +394,7 @@
 
 \begin{lemma}[Basis direct sum is in CPSV canonical form]%
     \label{thm:bnt_cf_basis_direct_sum_is_cpsv_cf}
-    \lean{MPSTensor.IsBNTCanonicalForm.isCPSVCanonicalForm_basisDirectSum}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isCPSVCanonicalForm_basisDirectSum}
     \leanok
     \uses{def:cpsv_canonical_form,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
@@ -414,7 +414,7 @@
 
 \begin{lemma}[Auxiliary BNT basis gives a basis for its direct sum]%
     \label{thm:bnt_cf_basis_is_bnt_for_direct_sum}
-    \lean{MPSTensor.IsBNTCanonicalForm.isCPSVBasisOfNormalTensors_basisDirectSum}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isCPSVBasisOfNormalTensors_basisDirectSum}
     \leanok
     \uses{def:bnt_cpsv,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
@@ -443,7 +443,7 @@
 
 \begin{lemma}[Multiplicity-one fixed point implies positive-gap ZCL]%
     \label{thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}
-    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl,def:sector_bnt_cf,def:mps_transfer_idempotence}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
@@ -550,7 +550,7 @@
 
 \begin{lemma}[Multiplicity-one BNT rank-one observables at the sharp blocking length]%
     \label{thm:bnt_rank_one_observables_sharp_length}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
     \leanok
     \uses{def:sector_bnt_cf,def:physical_observable_transfer,thm:bnt_sector_supported_physical_observable}
     Let $P$ be an auxiliary BNT sector decomposition of total bond dimension
@@ -618,7 +618,7 @@
 
 \begin{lemma}[Subleading spectral pair excludes positive-gap CID]%
     \label{thm:zcl_subleading_pair_excludes_cid}
-    \lean{MPSTensor.IsBNTCanonicalForm.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair}
     \leanok
     \uses{def:is_positive_gap_physical_cid,def:sector_bnt_cf,thm:bnt_rank_one_observables_sharp_length}
     Let $P$ be an auxiliary BNT sector decomposition, let
@@ -656,7 +656,7 @@
 
 \begin{lemma}[Sector-supported probes without spectral assumptions]
     \label{lem:positive_gap_bnt_rank_one_probe_expectation}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow}
     \leanok
     \uses{def:sector_bnt_cf,def:physical_two_point_expectation}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form, let
@@ -697,7 +697,7 @@
 
 \begin{lemma}[Unconditional reverse implication at the multiplicity-one representative]%
     \label{thm:positive_gap_bnt_zcl_unconditional_converse}
-    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
@@ -728,7 +728,7 @@
 \begin{lemma}[Positive-gap BNT zero correlation length at the
         multiplicity-one representative]
     \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp}
-    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
@@ -755,7 +755,7 @@
 \begin{lemma}[Physical BNT zero correlation length at the multiplicity-one
         representative]
     \label{thm:physical_bnt_zcl_multiplicity_one_implies_rfp}
-    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL}
     \leanok
     \uses{def:source_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
@@ -776,7 +776,7 @@
 \begin{lemma}[Positive-gap BNT zero correlation length gives commuting
         parent ground spaces]
     \label{thm:positive_gap_bnt_zcl_unconditional_nncph}
-    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum}
     \leanok
     \uses{def:is_positive_gap_bnt_zcl,def:sector_bnt_cf,def:has_nncph_ground_spaces}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
@@ -806,7 +806,7 @@
 \begin{corollary}[Positive-gap zero correlation length and commuting parent
         ground spaces for the basis direct sum]
     \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_nncph_ground_spaces}
-    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}
     \leanok
     \uses{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp,thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical

@@ -587,14 +587,15 @@ variable {d D : ℕ}
 
 /-- A tensor in BNT canonical form is nonzero.
 
-The global unit-modulus witness selects a basis block and one of its copies.
+The nonempty basis supplies a basis block and one of its copies.
 Left canonicity makes that basis tensor nonzero, while the selected copy has a
 nonzero weight. -/
 private theorem bntCanonicalForm_toTensor_ne_zero
     (P : MPSTensor.SectorDecomposition d)
-    (hP : MPSTensor.IsBNTCanonicalForm P) : P.toTensor ≠ 0 := by
+    (hP : MPSTensor.IsLeftCanonicalBNTPresentation P) : P.toTensor ≠ 0 := by
   classical
-  obtain ⟨j, q, _hq⟩ := hP.weight_unit_exists
+  let j : Fin P.basisCount := ⟨0, hP.basisCount_pos⟩
+  let q : Fin (P.copies j) := ⟨0, P.copies_pos j⟩
   have : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
   have hBasis : ∃ i, P.basis j i ≠ 0 := by
     by_contra hzero

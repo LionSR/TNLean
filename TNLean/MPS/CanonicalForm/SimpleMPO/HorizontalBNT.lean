@@ -143,7 +143,7 @@ Source: arXiv:1606.00608, canonical form at lines 237--244 and the BNT
 decomposition `eq:II_ABasicTensors` at lines 281--301. -/
 def IsHorizontalCF (M : MPOTensor d D) : Prop :=
   ∃ S : MPSTensor.SectorDecomposition (d * d),
-    MPSTensor.IsBNTCanonicalForm S ∧
+    MPSTensor.IsLeftCanonicalBNTPresentation S ∧
       ∃ hTotal : S.totalDim = D,
         ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
         ∀ i : Fin (d * d),
@@ -278,7 +278,7 @@ theorem IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQ : Q.IsHermitian)
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
-      MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation S ∧
       MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor ∧
       ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
         MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by

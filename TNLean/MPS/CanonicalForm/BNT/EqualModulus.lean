@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # Optional equal-modulus weight layer for BNT canonical forms
@@ -16,7 +16,7 @@ factoring the raw sector weights as `P.weight j q = λ_j · ν_{j,q}`.
 
 This layer captures the **sub-class** of BNT canonical forms in which every
 sector's copies share a common modulus.  It is NOT part of the
-core BNT predicate `IsBNTCanonicalForm` in
+core BNT predicate `IsLeftCanonicalBNTPresentation` in
 `SectorBNT/Basic.lean`.  The counter-example `C ⊕ (1/2)C` is a single
 BNT basis element with coefficient
 `1 + (1/2)^N` whose copies have unequal moduli, so no `λ_j` factorization
@@ -52,7 +52,7 @@ factoring `P.weight j q = spectral_level j · phase_weight j q`.
 
 It captures the sub-class of BNT canonical forms in which every sector's
 copies share a common modulus.  It is NOT required by, nor part of, the
-core BNT predicate `IsBNTCanonicalForm` (see `SectorBNT/Basic.lean`).  The
+core BNT predicate `IsLeftCanonicalBNTPresentation` (see `SectorBNT/Basic.lean`).  The
 valid CPSV BNT canonical form `C ⊕ (1/2)C` admits no such factorization.
 
 Paper anchors:

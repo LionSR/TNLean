@@ -331,11 +331,11 @@ theorem threeRegion_gap
     (hh : ∀ i, IsStarProjection (h i))
     (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ)
+    (hgap : ∀ y ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap)ᗮ,
+      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) y⟫_ℂ)
     {a b ℓ : ℕ} (hab : a + 2 * ℓ ≤ b) (hbm : b + 2 * ℓ ≤ m)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
-    (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
+    (hxperp : x ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap)ᗮ) :
     γ / (3 * (γ + 4)) ≤ Complex.re ⟪x,
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ α, threeRegionFamily h a b ℓ α) x⟫_ℂ := by
@@ -506,6 +506,19 @@ theorem threeRegion_apply_eq_zero_iff
       · exact (hpair (a + 2 * ℓ) b x).mpr fun i hi _ ↦ hall i hi
       · exact (hpair (b + 2 * ℓ) m x).mpr fun i hi _ ↦ hall i hi
 
+private theorem toEuclideanCLM_sum_apply_eq_zero_iff
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hh : ∀ i, IsStarProjection (h i)) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
+    (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) x = 0 ↔ ∀ i < m, chainTerm h i x = 0 := by
+  have hp (i : Fin m) : (chainTerm h i).toLinearMap.IsPositive :=
+    (ContinuousLinearMap.IsPositive.of_isStarProjection
+      (isStarProjection_chainTerm hh i)).toLinearMap
+  have ht := WeightedPositiveKernel.apply_sum_eq_zero_iff hp x
+  simp only [LinearMap.sum_apply, ContinuousLinearMap.coe_coe, Fin.forall_iff] at ht
+  rw [show (∑ i : Fin m, chainTerm h i x) = ∑ i ∈ Finset.range m, chainTerm h i x from
+    Fin.sum_univ_eq_sum_range (fun i ↦ chainTerm h i x) m] at ht
+  simpa only [← sum_range_chainTerm, _root_.sum_apply] using ht
+
 /-- The three-region replacement has the same kernel as the original chain. -/
 theorem ker_threeRegion
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
@@ -514,10 +527,10 @@ theorem ker_threeRegion
       (interval L i (i + 2))) (a b ℓ : ℕ) :
     LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ α, threeRegionFamily h a b ℓ α)).toLinearMap =
-      LinearMap.ker (chainOperator h).toLinearMap := by
+      LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap := by
   ext x
   exact (threeRegion_apply_eq_zero_iff hh hsupp a b ℓ x).trans
-    (chainOperator_apply_eq_zero_iff hh x).symm
+    (toEuclideanCLM_sum_apply_eq_zero_iff hh x).symm
 
 /-- **Norm of the three-region replacement.** It is a sum of `4 ℓ + 6` projections. The proof of
 ALVV, arXiv:1602.08828v2, Theorem `t:aisff`, line 1599, asserts norm `O(1)`; the windows are not

@@ -104,9 +104,9 @@ noncomputable def translate_verticalReferenceEdge {xStart yStart : ℕ}
 /-- **The horizontal coefficient-identity witness family on the torus from rectangle injectivity.**
 
 For a translation-invariant pair `A`, `B` on the torus with matched bond dimensions, positive
-bonds, the same state, and both satisfying the rectangular-injectivity hypotheses with union
-closure, every horizontal edge carries an `EdgeCoeffIdentityWitness` whose per-edge and reference
-gauges are both the reference horizontal gauge transported to that edge.
+bonds, the same state, and both satisfying the rectangular-injectivity hypotheses, every
+horizontal edge carries an `EdgeCoeffIdentityWitness` whose per-edge and reference gauges are
+both the reference horizontal gauge transported to that edge.
 
 The reference horizontal gauge `Zh` and its coefficient identity come from
 `exists_horizontalReferenceEdgeGauge_coeff` at the reference horizontal edge.  Writing each
@@ -126,10 +126,6 @@ theorem exists_edgeCoeffIdentityWitness_horizontalFamily
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBh : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUAh : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUBh : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 1 ≤ yStart)
     (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
     (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
@@ -139,9 +135,11 @@ theorem exists_edgeCoeffIdentityWitness_horizontalFamily
     ∀ (e : Edge (torusGraph width height)), IsHorizontalTorusEdge e →
       ∃ (Z Zref : GL (Fin (B.bondDim e)) ℂ) (hE : A.bondDim e = B.bondDim e),
         Nonempty (EdgeCoeffIdentityWitness A B e Z Zref hE) := by
+  have hUAh := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUBh := regionInjectivityUnionClosure_of_overlap B hposB
   -- The reference horizontal gauge and its coefficient identity at the reference edge.
   obtain ⟨hEref, Zref, hZref⟩ :=
-    exists_horizontalReferenceEdgeGauge_coeff hAh hBh hUAh hUBh hx0 hy0 hxw hyh
+    exists_horizontalReferenceEdgeGauge_coeff hAh hBh hx0 hy0 hxw hyh
       hbond hAB hd hposA hposB
   intro e he
   -- Write `e` as the translation image of the reference horizontal edge.
@@ -195,10 +193,6 @@ theorem exists_edgeCoeffIdentityWitness_verticalFamily
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hBh : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUAh : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUBh : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hx0 : 1 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 5 = width ∨ xStart + 7 ≤ width)
     (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height)
@@ -208,8 +202,10 @@ theorem exists_edgeCoeffIdentityWitness_verticalFamily
     ∀ (e : Edge (torusGraph width height)), IsVerticalTorusEdge e →
       ∃ (Z Zref : GL (Fin (B.bondDim e)) ℂ) (hE : A.bondDim e = B.bondDim e),
         Nonempty (EdgeCoeffIdentityWitness A B e Z Zref hE) := by
+  have hUAh := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUBh := regionInjectivityUnionClosure_of_overlap B hposB
   obtain ⟨hEref, Zref, hZref⟩ :=
-    exists_verticalReferenceEdgeGauge_coeff hAh hBh hUAh hUBh hx0 hy0 hxw hyh
+    exists_verticalReferenceEdgeGauge_coeff hAh hBh hx0 hy0 hxw hyh
       hbond hAB hd hposA hposB
   intro e he
   obtain ⟨⟨a, b⟩, rfl⟩ := translate_verticalReferenceEdge (xStart := xStart)

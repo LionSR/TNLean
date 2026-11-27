@@ -249,7 +249,7 @@ Ref.~\cite{Cirac2016MPDO_arXiv}. Specifically, the realization theorem selects
 a target BNT sector and realizes the rank-one insertion $|R)(l|$ on that sector
 via a region of length at most $3D^5$, while giving zero on all other sector
 pairs.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}.}
 Because this theorem operates on the unweighted basis direct sum rather than
 the raw weighted repeated-copy tensor,\footnote{Formal declarations:
 \leanid{MPSTensor.directSumTensor P.basis} and
@@ -322,14 +322,14 @@ This repair requires neither diagonalizability nor semisimplicity at zero, and
 it avoids assuming a nonzero subleading eigenvalue. It constitutes a local
 correction to source line~1250 rather than a literal formalization of the
 printed spectral argument.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}.}
 It does not resolve the raw-weight counterexample or lift the positive-gap
 restriction to adjacent sites.
 
 Combining this repair with the fixed-point characterization of commuting parent
 ground spaces on all chain lengths yields the representative equivalence for
 the basis direct sum.\footnote{Formal theorem:
-\leanid{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.}
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.}
 This theorem applies specifically to the multiplicity-one, unit-weight basis
 direct sum with positive complementary gaps, leaving repeated copies, arbitrary
 raw weights, and adjacent zero gaps outside its scope.

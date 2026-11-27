@@ -22,7 +22,7 @@ The coefficient two is the trace multiplicity of two identical virtual blocks,
 whose scalar weights are all one. It is independent of chain length. Scaling a
 single virtual block by a fixed scalar `μ` would instead contribute `μ^N`.
 The source-family membership of the repeated-block example is proved by
-`isBNTCanonicalForm_repeatedBlockSector` and `reindex_toTensor_repeatedBlockSector`.
+`isLeftCanonicalBNTPresentation_repeatedBlockSector` and `reindex_toTensor_repeatedBlockSector`.
 
 Despite the distinct periodic weights, the two tensors have identical local
 MPS spaces at every length: the diagonal boundary entries on the repeated

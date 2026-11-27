@@ -368,7 +368,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 - **Status**: burned down ([#7848](https://github.com/LionSR/TNLean/issues/7848); 2026-09-19 architectural survey)
 - **What**: `MPS/FundamentalTheorem/SectorBNT/PowerSumCoefficients.lean:148-619`
   minus one live helper: `exists_blocking_powerSum_coeff`,
-  `exists_blocking_powerSum_weights`, `exists_matching_data_of_isBNTCanonicalForm`,
+  `exists_blocking_powerSum_weights`, `exists_matching_data_of_isLeftCanonicalBNTPresentation`,
   `exists_blocked_representatives_of_isNormal_distinct`,
   `exists_eventually_linearIndependent_blockTensor_of_normalTensor_distinct`,
   `not_gaugePhaseEquiv_of_exists_eventually_linearIndependent`,
@@ -649,11 +649,11 @@ description of current `main`.
   [PR #4678](https://github.com/LionSR/TNLean/pull/4678) merged 2026-07-23
 - **Evidence**: `IsCPSVBasisOfNormalTensors` (`MPS/CanonicalForm/Definitions.lean:180`,
   18 files), `IsBNT` (`MPS/BNT/Basic.lean:80`, 10 files),
-  `IsBNTCanonicalForm` (`MPS/FundamentalTheorem/SectorBNT/Basic.lean:106`,
+  `IsLeftCanonicalBNTPresentation` (`MPS/FundamentalTheorem/SectorBNT/Basic.lean:106`,
   33 files) coexist with no general bridge — one file converts inline for
   one special case (`MPDO/VerticalBNTConstruction.lean:111-145`). MPDO's
   vertical route builds on `IsBNT` (`VerticalCF.lean:623`) while the
-  horizontal rides `IsBNTCanonicalForm` (`HorizontalBNT.lean:135`), joined
+  horizontal rides `IsLeftCanonicalBNTPresentation` (`HorizontalBNT.lean:135`), joined
   by `HasFiniteWordTraceSeparation` across the missing bridge; `Axioms/Beigi.lean:104` binds the
   axiom-discharge path to one side.
 - **Remediation**: pick one core predicate; define others as abbreviations

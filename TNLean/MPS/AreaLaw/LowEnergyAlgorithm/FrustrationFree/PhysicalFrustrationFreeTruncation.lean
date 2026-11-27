@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectabili
 import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Analysis.Projection.DetectabilityLemma
 import QICLean.ManyBody.Sites.Support
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!
 # The actual regional frustration-free truncation
@@ -22,15 +23,27 @@ without a uniqueness or gap hypothesis.
 A parity product acts on any region containing its selected bond terms.
 This is the support step in ALVV, arXiv:1602.08828v2, `thm:FF-tH`,
 lines 1543–1568. No commutation or projection hypothesis is required.
+
+## The truncation as an interaction
+
+The retained bond terms and the two regional parity complements are the terms of one interaction
+on the chain, `regionalTruncationInteraction`, whose Hamiltonian is the truncation. For
+projection terms its zero space is the zero space of the original interaction
+(`zeroSpace_regionalTruncationInteraction`): ALVV, arXiv:1602.08828v2, `thm:FF-tH`,
+lines 1543–1550.
 -/
 
 section
+
+open ManyBody (interval mem_interval)
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
+
+local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
 
 /-- The actual regional Hamiltonian obtained by replacing the two internal
 parity layers by their complementary products. ALVV, arXiv:1602.08828v2,
@@ -80,85 +93,131 @@ theorem physicalFrustrationFreeTruncation_posSemidef
   exact Matrix.nonneg_iff_posSemidef.mp
     (Finset.sum_nonneg fun i _ ↦ ite_nonneg (le_refl 0) (hp i).nonneg)
 
-private noncomputable def regionalTruncationTerm
-    (Φ : ManyBody.BondInteraction L q) (a b : ℕ) :
-    Fin (L - 1) ⊕ Fin 2 →
-      (EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q))
-  | .inl i => if a ≤ i.val ∧ i.val + 1 < b then 0 else
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i)
-  | .inr p => 1 - physicalParityProduct
-      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val
+/-- The actual parity product retains the common support of its selected terms.
+ALVV, arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`,
+lines 1467–1487 and 1543–1568. -/
+theorem isSupportedOn_physicalParityProduct
+    (Φ : ManyBody.BondInteraction L q)
+    (p : ℕ) (D : Finset (Fin L))
+    (hs : ∀ i, i.val % 2 = p → ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i) D) :
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
+      ((T).symm (physicalParityProduct Φ p)) D := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  apply QuantumCircuit.mem_supportedOperators_complementProd
+  intro k hk
+  change (T).symm (if hk' : k < L - 1 then
+      if k % 2 = p then T (Φ.term ⟨k, hk'⟩) else 0 else 0) ∈
+    ManyBody.supportedOperators (fun _ ↦ Fin q) D
+  rw [dite_eq_left hk]
+  split_ifs with hp
+  · rw [StarAlgEquiv.symm_apply_apply]
+    exact hs ⟨k, hk⟩ hp
+  · simpa only [map_zero] using
+      (zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) D))
 
-private theorem sum_regionalTruncationTerm
+/-- The actual parity product of the interval-restricted family is supported
+on that same site interval. The support is derived from the original
+nearest-neighbour terms. ALVV, arXiv:1602.08828v2, `def:FF-tH`,
+lines 1467--1487. -/
+theorem isSupportedOn_regionalParityProduct
+    (Φ : ManyBody.BondInteraction L q) (a b p : ℕ) :
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
+      ((T).symm (physicalParityProduct (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p))
+      (interval L a b) := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  apply isSupportedOn_physicalParityProduct
+  intro i _
+  rw [ManyBody.Interaction.restrict_term]
+  split_ifs with hi
+  · apply ManyBody.IsSupportedOn.mono (Φ.mem i)
+    intro v hv
+    simp only [mem_interval] at *
+    omega
+  · change _ ∈ ManyBody.supportedOperators _ _
+    exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
+
+/-- The regional truncation as an interaction on the chain: the bond term `h_i` on its bond
+when the bond `{i, i + 1}` is not contained in the site interval `[a, b)`, zero otherwise, and
+the two regional parity complements `I - Q_p` on `[a, b)`. ALVV, arXiv:1602.08828v2,
+`def:FF-tH`, lines 1467–1487. -/
+noncomputable def regionalTruncationInteraction
     (Φ : ManyBody.BondInteraction L q) (a b : ℕ) :
-    (∑ i, regionalTruncationTerm Φ a b i) =
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-        (physicalFrustrationFreeTruncation Φ a b) := by
-  simp only [Fintype.sum_sum_type, regionalTruncationTerm, Fin.sum_univ_two,
-    physicalFrustrationFreeTruncation, map_add, map_sum, apply_ite, map_zero,
-    StarAlgEquiv.apply_symm_apply, Fin.val_zero, Fin.val_one]
+    ManyBody.Interaction (fun _ : Fin L ↦ Fin q)
+      (Sum.elim (fun i : Fin (L - 1) ↦ interval L i.val (i.val + 2))
+        fun _ : Fin 2 ↦ interval L a b) where
+  term := Sum.elim (fun i ↦ if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i)
+    fun p ↦ (T).symm (1 - physicalParityProduct
+      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val)
+  mem := by
+    rintro (i | p)
+    · dsimp only [Sum.elim_inl]
+      split_ifs
+      · exact zero_mem _
+      · exact Φ.mem i
+    · dsimp only [Sum.elim_inr]
+      rw [map_sub, map_one]
+      exact sub_mem (one_mem _) (isSupportedOn_regionalParityProduct Φ a b p.val)
+
+/-- The Hamiltonian of the regional truncation interaction is the regional truncation.
+ALVV, arXiv:1602.08828v2, `def:FF-tH`, lines 1467–1487. -/
+theorem hamiltonian_regionalTruncationInteraction
+    (Φ : ManyBody.BondInteraction L q) (a b : ℕ) :
+    (regionalTruncationInteraction Φ a b).hamiltonian =
+      physicalFrustrationFreeTruncation Φ a b := by
+  simp only [ManyBody.Interaction.hamiltonian, Fintype.sum_sum_type, Fin.sum_univ_two,
+    regionalTruncationInteraction, Sum.elim_inl, Sum.elim_inr, physicalFrustrationFreeTruncation,
+    Fin.val_zero, Fin.val_one]
   exact (add_assoc _ _ _).symm
 
-private theorem regionalTruncationTerm_isStarProjection
+/-- Every term of the regional truncation interaction is an orthogonal projection when the bond
+terms are. ALVV, arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and
+1543–1550. -/
+theorem isStarProjection_regionalTruncationInteraction_term
     (Φ : ManyBody.BondInteraction L q)
     (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
-    (i : Fin (L - 1) ⊕ Fin 2) : IsStarProjection (regionalTruncationTerm Φ a b i) := by
-  cases i <;> dsimp only [regionalTruncationTerm]
-  case inl i =>
-    split_ifs <;> first
-      | exact IsStarProjection.zero _
-      | exact (hp i).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
-  case inr p =>
-    exact (physicalParityProduct_isStarProjection
-      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
-      (restrict_term_isStarProjection Φ hp _) p.val).one_sub
+    (j : Fin (L - 1) ⊕ Fin 2) :
+    IsStarProjection ((regionalTruncationInteraction Φ a b).term j) := by
+  rcases j with i | p
+  · change IsStarProjection (if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i)
+    split_ifs
+    · exact IsStarProjection.zero _
+    · exact hp i
+  · exact regionalParityComplement_isStarProjection Φ hp a b p.val
 
-/-- The actual regional truncation preserves the full kernel of the original
-Hamiltonian. This does not require a ground vector, uniqueness, or a gap.
+/-- **The zero space of the regional truncation.** For projection bond terms, a vector is
+annihilated by every term of the regional truncation interaction exactly when it is annihilated
+by every bond term. This does not require a ground vector, uniqueness, or a gap.
 ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1543–1550. -/
-theorem physicalFrustrationFreeTruncation_kernel_iff
+theorem zeroSpace_regionalTruncationInteraction
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
-    (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-    Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-        (physicalFrustrationFreeTruncation Φ a b) x = 0 ↔
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian x = 0 := by
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ) :
+    (regionalTruncationInteraction Φ a b).zeroSpace = Φ.zeroSpace := by
+  ext x
+  simp only [ManyBody.Interaction.zeroSpace_eq_iInf_ker, Submodule.mem_iInf, LinearMap.mem_ker]
+  change (∀ j, T ((regionalTruncationInteraction Φ a b).term j) x = 0) ↔
+    ∀ i, T (Φ.term i) x = 0
   constructor
-  · intro hx
-    have hsum : (∑ i, (regionalTruncationTerm Φ a b i).toLinearMap) x = 0 := by
-      simpa only [← sum_regionalTruncationTerm, _root_.sum_apply, LinearMap.sum_apply,
-        ContinuousLinearMap.coe_coe] using hx
-    have hterm (i : Fin (L - 1) ⊕ Fin 2) : regionalTruncationTerm Φ a b i x = 0 :=
-      ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero _
-        (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
-          (regionalTruncationTerm_isStarProjection Φ hp a b j)) hsum i
+  · intro hterm
     have hfix (p : Fin 2) :
         physicalParityProduct
           (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val x = x := by
-      exact (sub_eq_zero.mp (hterm (.inr p))).symm
-    have hzero (i : Fin (L - 1)) :
-        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) x = 0 := by
-      by_cases hi : a ≤ i.val ∧ i.val + 1 < b
-      · have hm := (physicalParityProduct_apply_eq_self_iff
-          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
-          (restrict_term_isStarProjection Φ hp _) (i.val % 2) x).mp
-            (hfix ⟨i.val % 2, Nat.mod_lt _ (by decide)⟩) i rfl
-        simpa only [ManyBody.Interaction.restrict_term, ite_eq_left hi] using hm
-      · simpa only [regionalTruncationTerm, ite_eq_right hi] using hterm (.inl i)
-    simp only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply, hzero,
-      Finset.sum_const_zero]
-  · intro hx
-    have hzero (i : Fin (L - 1)) :
-        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) x = 0 :=
-      ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero
-        (fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-          (Φ.term j)).toLinearMap)
-        (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
-          ((hp j).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))))
-        (by simpa only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply,
-          LinearMap.sum_apply, ContinuousLinearMap.coe_coe] using hx) i
-    have hmask : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b).hamiltonian x = 0 := by
+      have hp := hterm (.inr p)
+      change T ((T).symm (1 - physicalParityProduct
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val)) x = 0 at hp
+      rw [StarAlgEquiv.apply_symm_apply] at hp
+      exact (sub_eq_zero.mp hp).symm
+    intro i
+    by_cases hi : a ≤ i.val ∧ i.val + 1 < b
+    · have hm := (physicalParityProduct_apply_eq_self_iff
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
+        (restrict_term_isStarProjection Φ hp _) (i.val % 2) x).mp
+          (hfix ⟨i.val % 2, Nat.mod_lt _ (by decide)⟩) i rfl
+      simpa only [ManyBody.Interaction.restrict_term, ite_eq_left hi] using hm
+    · have hi' := hterm (.inl i)
+      change T (if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i) x = 0 at hi'
+      rwa [ite_eq_right hi] at hi'
+  · intro hzero
+    have hmask : T (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b).hamiltonian x = 0 := by
       simp only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply,
         ManyBody.Interaction.restrict_term, apply_ite,
         map_zero, DFunLike.ite_apply, _root_.zero_apply, hzero, ite_self, Finset.sum_const_zero]
@@ -168,9 +227,15 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
       physicalParityProduct_fixes_kernel
         (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
         (restrict_term_isStarProjection Φ hp _) hmask p.val
-    suffices hterm : ∀ i, regionalTruncationTerm Φ a b i x = 0 by
-      simp only [← sum_regionalTruncationTerm, _root_.sum_apply, hterm, Finset.sum_const_zero]
-    rintro (i | p) <;> simp [regionalTruncationTerm, DFunLike.ite_apply, hzero, hfix]
+    rintro (i | p)
+    · change T (if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i) x = 0
+      split_ifs
+      · simp
+      · exact hzero i
+    · change T ((T).symm (1 - physicalParityProduct
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val)) x = 0
+      rw [StarAlgEquiv.apply_symm_apply, _root_.sub_apply, hfix p,
+        one_apply_eq_self, sub_self]
 
 /-- The two actual regional replacement terms have total operator norm at
 most two. ALVV, arXiv:1602.08828v2, `def:FF-tH` and `def:HLeven-odd`,
@@ -276,8 +341,18 @@ theorem physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
   have hden : 0 < 4 + gamma := by linarith only [hgamma]
   have hconv := one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability
     Φ hp a b hx
+  have hpsd (i : Fin (L - 1)) : (Φ.term i).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (hp i).nonneg
+  have hpsd' (j : Fin (L - 1) ⊕ Fin 2) :
+      ((regionalTruncationInteraction Φ a b).term j).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp
+      (isStarProjection_regionalTruncationInteraction_term Φ hp a b j).nonneg
   have hD := norm_sq_physicalDetectability_le_of_spectral_gap Φ hp hgamma hgap
-    (fun z hz ↦ horth z ((physicalFrustrationFreeTruncation_kernel_iff Φ hp a b z).mpr hz))
+    fun z hz ↦ horth z (by
+      rw [← hamiltonian_regionalTruncationInteraction]
+      refine ((ManyBody.Interaction.zeroVector_tfae hpsd' z).out 1 5).mp ?_
+      rw [zeroSpace_regionalTruncationInteraction Φ hp a b]
+      exact ((ManyBody.Interaction.zeroVector_tfae hpsd z).out 1 5).mpr hz)
   have hDunit : ‖physicalDetectability Φ x‖ ^ 2 ≤ 4 / (4 + gamma) := by
     simpa only [hx, one_pow, mul_one] using hD
   have hmul := (le_div_iff₀ hden).mp (hconv.trans hDunit)
@@ -318,63 +393,6 @@ theorem physicalFrustrationFreeTruncation_spectral_gap
     rw [hH.toEuclideanCLM_eigenvectorBasis, inner_smul_right,
       inner_self_eq_norm_sq_to_K, hH.eigenvectorBasis.norm_eq_one i] at henergy
     simpa using henergy
-
-end TNLean.MPS.AreaLaw
-
-end
-
-section
-
-open ManyBody (interval mem_interval)
-
-namespace TNLean.MPS.AreaLaw
-
-variable {L q : ℕ}
-
-local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-
-/-- The actual parity product retains the common support of its selected terms.
-ALVV, arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`,
-lines 1467–1487 and 1543–1568. -/
-theorem isSupportedOn_physicalParityProduct
-    (Φ : ManyBody.BondInteraction L q)
-    (p : ℕ) (D : Finset (Fin L))
-    (hs : ∀ i, i.val % 2 = p → ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i) D) :
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((T).symm (physicalParityProduct Φ p)) D := by
-  change _ ∈ ManyBody.supportedOperators _ _
-  apply QuantumCircuit.mem_supportedOperators_complementProd
-  intro k hk
-  change (T).symm (if hk' : k < L - 1 then
-      if k % 2 = p then T (Φ.term ⟨k, hk'⟩) else 0 else 0) ∈
-    ManyBody.supportedOperators (fun _ ↦ Fin q) D
-  rw [dite_eq_left hk]
-  split_ifs with hp
-  · rw [StarAlgEquiv.symm_apply_apply]
-    exact hs ⟨k, hk⟩ hp
-  · simpa only [map_zero] using
-      (zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) D))
-
-/-- The actual parity product of the interval-restricted family is supported
-on that same site interval. The support is derived from the original
-nearest-neighbour terms. ALVV, arXiv:1602.08828v2, `def:FF-tH`,
-lines 1467--1487. -/
-theorem isSupportedOn_regionalParityProduct
-    (Φ : ManyBody.BondInteraction L q) (a b p : ℕ) :
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((T).symm (physicalParityProduct (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p))
-      (interval L a b) := by
-  change _ ∈ ManyBody.supportedOperators _ _
-  apply isSupportedOn_physicalParityProduct
-  intro i _
-  rw [ManyBody.Interaction.restrict_term]
-  split_ifs with hi
-  · apply ManyBody.IsSupportedOn.mono (Φ.mem i)
-    intro v hv
-    simp only [mem_interval] at *
-    omega
-  · change _ ∈ ManyBody.supportedOperators _ _
-    exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
 end TNLean.MPS.AreaLaw
 

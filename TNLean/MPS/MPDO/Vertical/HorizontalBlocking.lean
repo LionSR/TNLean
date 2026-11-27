@@ -42,9 +42,9 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   subst D
   let e := twoSiteDoubledIndexEquiv d
   let S' := (S.blockTensor 2).reindexPhysical e
-  have hCF' : MPSTensor.IsBNTCanonicalForm S' :=
-    MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical
-      (MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor hCF (by omega)) e
+  have hCF' : MPSTensor.IsLeftCanonicalBNTPresentation S' :=
+    MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical
+      (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor hCF (by omega)) e
   refine ⟨S', hCF', ?_⟩
   refine ⟨by rfl, ?_⟩
   simp only [S', MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,

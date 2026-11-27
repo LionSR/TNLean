@@ -4525,8 +4525,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### Injective one-site trace-pairing zero detection
 - **Pattern:** put a matrix in the kernel of `MPSTensor.traceMulRightPi`, expand the
   map pointwise, and use `traceMulRightPi_ker_eq_bot` to conclude that the matrix is zero.
-- **Reuse:** `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` in
-  `TNLean/MPS/Tensor/Words/TracePairing.lean` accepts the pointwise vanishing trace pairings directly.
+- **Reuse:** `Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero` in
+  `QICLean/Kraus/Injectivity.lean` (QICLean dependency) accepts the pointwise vanishing trace
+  pairings directly.
 - **Result:** all six known expansions now invoke the shared consequence of injectivity:
   the three public selected-sector visibility proofs, the injective invariant-projection
   argument, the per-block Gram-map injectivity proof, and the one-site boundary block-window
@@ -7202,9 +7203,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseSpectrum.lean` (2026-07-22).
 - **Abstraction (proposed):** generalize `coeff_identity_via_matched_mpv_phase` to accept
   eventual linear independence of the chosen basis directly, while retaining its current
-  `IsBNTCanonicalForm` wrapper for existing consumers.
+  `IsLeftCanonicalBNTPresentation` wrapper for existing consumers.
 - **Notes:** The existing theorem cannot be reused by the MPDO spectrum proof: it requires
-  `IsBNTCanonicalForm`, whose left-canonical and weight-normalization fields are absent from
+  `IsLeftCanonicalBNTPresentation`, whose left-canonical and weight-normalization fields are absent from
   the source-faithful `IsCPSVBasisOfNormalTensors` contract. The MPDO proof already reuses the
   lower-level `coefficient_eventually_eq_of_eventually_linearIndependent` lemma. Keep this as
   a candidate until another consumer justifies widening the public coefficient-identity API;
@@ -7489,7 +7490,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   that rebuild is large enough to deserve its own change.
 
 ### canonical form of normalized one-dimensional blocks — candidate
-- **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
+- **Pattern:** certify `IsLeftCanonicalBNTPresentation` for a `SectorDecomposition` whose blocks are
   normalized tensors of bond dimension one with unit weights: linear independence of the block
   states from `mpv_of_dim_one` evaluated on constant words, `basis_distinct` by
   `not_gaugePhaseEquiv_of_dim_one` after a `cast_eq`, then `totalDim_*`, bijectivity of the
@@ -7497,7 +7498,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   and `reindex_toTensor_*` by `toTensor_copyCoord` / `toTensor_copyCoord_of_ne`.
 - **Seen:** 2 occurrences, `TNLean/MPS/Preparation/BlockSum/RepeatedBlockCounterexample.lean` and
   `TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample.lean` (recorded 2026-09-27).
-- **Abstraction:** proposed lemma giving `IsBNTCanonicalForm` for a sector decomposition of
+- **Abstraction:** proposed lemma giving `IsLeftCanonicalBNTPresentation` for a sector decomposition of
   normalized one-dimensional blocks with unit weights whose letters are pairwise distinguished
   by their zero patterns.
 - **Notes:** below the rule of three; the two copies differ only in the literals.
@@ -12449,7 +12450,7 @@ length-one word indices is needed.
 
 - **Seen:** `MPSTensor.exists_blockTensor_normal_sectors_fixedPoints` (`hfixed`)
   in `TNLean/MPS/CanonicalForm/BNTPresentation/RepresentativeAfterBlocking.lean`, and
-  `MPSTensor.IsBNTCanonicalForm.exists_basisFixedPoint` in
+  `MPSTensor.IsLeftCanonicalBNTPresentation.exists_basisFixedPoint` in
   `TNLean/MPS/Preparation/BlockSum/CanonicalFixedPoint.lean` (two occurrences).
 - **Pattern:** Apply `IsChannel.exists_unique_density_fixedPoint_of_irreducible`
   to the Kraus transfer map, obtaining the channel from left canonicity and

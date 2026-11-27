@@ -26,7 +26,7 @@ matrix product coefficients.
   $\mu_1, \dots, \mu_r$ there is $m > 0$ with $|\mu_k / m| \le 1$ for every $k$, equality for
   some $k$, and $\mu_k / m \ne 0$ for every $k$ (the choice at line 246 of the source, with
   $m = \max_k |\mu_k|$).
-* `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` — for a tensor whose
+* `MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` — for a tensor whose
   matrix product family has a nonzero positive-length coefficient, some blocking length $p$
   admits a basis-of-normal-tensors canonical form $P$ and a scale $m > 0$ with
   $V^{(N)}(A^{[p]}) = m^N V^{(N)}(P)$ at every positive length $N$.
@@ -160,6 +160,31 @@ theorem exists_weight_normalization {r : ℕ} (hr : 0 < r)
   · rw [norm_div, hm_norm, ← hk₀]
     exact div_self hm_pos.ne'
 
+/-- The copy weights of the phase-class-collapsed decomposition of prepared blocks have
+the moduli of the original weights: the phase-class scalar between two
+phase-equivalent left-canonical, primitive, irreducible blocks has unit modulus.
+
+Source: arXiv:1606.00608, lines 246 and 1135--1148. -/
+theorem norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
+    {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hDim : ∀ k, 0 < dim k)
+    (hTP : ∀ k, IsLeftCanonical (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (j : Fin (collapsedBntSectorDecomp (d := d) μ blocks hμne).basisCount)
+    (q : Fin ((collapsedBntSectorDecomp (d := d) μ blocks hμne).copies j)) :
+    ‖(collapsedBntSectorDecomp (d := d) μ blocks hμne).weight j q‖ =
+      ‖μ ((mpvPhaseClassData (d := d) blocks).enum j q)‖ := by
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  set classes := mpvPhaseClassData (d := d) blocks
+  change ‖(classes.enum_phase j q).choose * μ (classes.enum j q)‖ = _
+  rw [norm_mul, norm_choose_MPVBlockPhaseEquiv_eq_one
+    (hTP (classes.repr j)) (hTP (classes.enum j q))
+    (hPrim (classes.repr j)) (hPrim (classes.enum j q))
+    (hIrr (classes.repr j)) (hIrr (classes.enum j q)) (classes.enum_phase j q), one_mul]
+
 /-- **Normalized basis-of-normal-tensors supplier for a nonzero MPV family.**
 
 Source: arXiv:1606.00608, `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 237-246 for the
@@ -187,12 +212,13 @@ an empty weight family cannot contain a unit-modulus weight.  The zero family is
 input the source's standing normalization excludes, so the hypothesis states the source's
 convention rather than a sub-case; see
 `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
-theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
+theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
     {d D : ℕ} (A : MPSTensor d D)
     (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
     ∃ p : ℕ, 0 < p ∧ ∃ m : ℝ, 0 < m ∧
       ∃ P : SectorDecomposition (blockPhysDim d p),
-        IsBNTCanonicalForm P ∧
+        IsLeftCanonicalBNTPresentation P ∧
+        (∀ j q, ‖P.weight j q‖ ≤ 1) ∧ (∃ j q, ‖P.weight j q‖ = 1) ∧
         ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin (blockPhysDim d p),
           mpv (blockTensor (d := d) (n := Fin D) A p) σ = (m : ℂ) ^ N * mpv P.toTensor σ := by
   classical
@@ -213,11 +239,18 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
   have hm0 : (m : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hm.ne'
   -- The block properties do not involve the weights, so the normalized weights feed the
   -- prepared-block constructor directly.
-  obtain ⟨P, hSame, hBNT⟩ :=
-    exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
-      (d := blockPhysDim d p) (r := r) (dim := dim)
-      (fun k => μ k / (m : ℂ)) blocks hDim hTP hPrim hIrr hne hLe hUnit
-  refine ⟨p, hp, m, hm, P, hBNT, ?_⟩
+  let ν : Fin r → ℂ := fun k => μ k / (m : ℂ)
+  let P := collapsedBntSectorDecomp (d := blockPhysDim d p) ν blocks hne
+  have hSame := collapsedBntSectorDecomp_sameMPV₂Pos (d := blockPhysDim d p) ν blocks hne
+  have hNormP := norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
+    ν blocks hDim hTP hPrim hIrr hne
+  refine ⟨p, hp, m, hm, P,
+    isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+      ν blocks hDim hTP hPrim hIrr hne hr,
+    fun j q => (hNormP j q).trans_le (hLe _), ?_, ?_⟩
+  · obtain ⟨k₀, hk₀⟩ := hUnit
+    obtain ⟨j, q, hjq⟩ := (mpvPhaseClassData (d := blockPhysDim d p) blocks).exists_enum_eq k₀
+    exact ⟨j, q, (hNormP j q).trans (by rw [hjq]; exact hk₀)⟩
   intro N hN σ
   have hμeq : (fun k => (m : ℂ) * (μ k / (m : ℂ))) = μ := by
     funext k

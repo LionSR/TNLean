@@ -406,7 +406,7 @@ single family.
 
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
-    \lean{MPSTensor.IsBNTCanonicalForm}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation}
     \leanok
     \uses{def:sector_weight_data,def:bnt_cpsv}
     Let $P$ be a sector decomposition. In addition to spanning and eventual
@@ -445,7 +445,7 @@ single family.
 \begin{lemma}[Physical relabeling preserves BNT canonical form]
     \label{thm:sector_bnt_cf_reindex_physical}
     \lean{MPSTensor.SectorDecomposition.reindexPhysical,
-        MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical}
+        MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical}
     \leanok
     \uses{def:sector_bnt_cf}
     If $P$ is a BNT canonical form and $e$ is a bijection of its physical
@@ -475,7 +475,7 @@ single family.
 
 \begin{lemma}[Single-sector BNT canonical form]
     \label{thm:single_sector_decomposition_bnt}
-    \lean{MPSTensor.isBNTCanonicalForm_singleSectorDecomposition}
+    \lean{MPSTensor.isLeftCanonicalBNTPresentation_singleSectorDecomposition}
     \leanok
     \uses{def:sector_bnt_cf,def:single_sector_decomposition}
     Let $A$ have positive bond dimension, be irreducible and left-canonical,
@@ -525,7 +525,7 @@ single family.
 
 \begin{lemma}[Existence of a unit-modulus weight from the canonical-form normalization]%
     \label{lem:sector_bnt_weight_unit_exists}
-    \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.weight_unit_exists}
     \leanok
     \uses{def:sector_bnt_cf}
     Under the BNT canonical form, the
@@ -539,7 +539,7 @@ single family.
 
 \begin{lemma}[Basis blocks of a BNT canonical form are normal]
     \label{cor:sector_bnt_cf_basis_normal}
-    \lean{MPSTensor.IsBNTCanonicalForm.basis_isNormal}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.basis_isNormal}
     \leanok
     \uses{def:sector_bnt_cf,thm:bnt_normality_from_self_overlap}
     If $P$ is in BNT canonical form, then every basis block $P_j$ is normal
@@ -555,7 +555,7 @@ single family.
 
 \begin{lemma}[Positive blocking preserves BNT canonical form]
     \label{thm:sector_bnt_cf_block_tensor}
-    \lean{MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor}
+    \lean{MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor}
     \leanok
     \uses{def:sector_decomposition_block_tensor,def:sector_bnt_cf,thm:bnt_primitivity_normality_from_self_overlap}
     Let $P$ be a BNT canonical form and let $p\geq1$. Then the blocked
@@ -624,7 +624,7 @@ single family.
 
 \begin{lemma}[Common exact quantum-Wielandt length for BNT representatives]
     \label{thm:bnt_representatives_exact_total_dimension_pow_four}
-    \lean{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.basis_isNBlkInjective_totalDim_pow_four}
     \leanok
     \uses{def:sector_bnt_cf,thm:sector_basis_dimension_le_total_dimension,thm:bnt_normality_from_self_overlap,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:wordspan_blk_inj_succ}
     Let $P$ be a BNT canonical form of total bond dimension $D$, with
@@ -646,7 +646,7 @@ single family.
 
 \begin{lemma}[CPSV simultaneous block-injectivity bound]
     \label{thm:sharp_bnt_block_separation}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
     \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
     \leanok
     \uses{def:sector_bnt_cf,def:blockwise_product_word_span,thm:bnt_representatives_exact_total_dimension_pow_four,lem:bnt_direct_sum_block_separation_word_span}
@@ -701,7 +701,7 @@ and the combined-family linear independence.
 
 \begin{lemma}[Cross-overlap decay between distinct basis blocks]%
     \label{lem:sector_bnt_cross_overlap_basis_tendsto_zero}
-    \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.cross_overlap_basis_tendsto_zero}
     \leanok
     \uses{def:mpv_overlap,def:sector_bnt_cf}
     If $P$ is a BNT canonical form and $j \neq k$, then
@@ -719,7 +719,7 @@ and the combined-family linear independence.
 
 \begin{lemma}[Combined-family eventual linear independence]%
     \label{lem:sector_bnt_combined_family_eventually_li}
-    \lean{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.combined_family_eventually_li}
     \leanok
     \uses{lem:bnt_two_family_overlap_orthonormal_li,lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     % Source: corollary at Cirac2016MPDO_arXiv lines 1121--1132; the BNT
@@ -803,7 +803,7 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
 
 \begin{lemma}[BNT canonical form of the phase-class quotient]%
     \label{thm:paperbnt_collapsed_prepared}
-    \lean{MPSTensor.isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks}
+    \lean{MPSTensor.isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks}
     \leanok
     \uses{def:mpv_phase_class_data,def:sector_bnt_cf}
     Let $(B_k)_{k=1}^r$ have positive bond dimensions and suppose that every
@@ -829,7 +829,7 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
 
 \begin{lemma}[BNT from normal blocks with normalized weights]%
     \label{thm:paperbnt_supplier_prepared}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks}
+    \lean{MPSTensor.exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks}
     \leanok
     Let $r \in \N$, and for each $k = 1,\ldots,r$ let $D_k \in \N$,
     $\mu_k \in \C$, and let $B_k$ be an MPS tensor of physical dimension $d$ and
@@ -946,7 +946,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 
 \begin{lemma}[Dimension-preserving BNT form of prepared blocks]%
     \label{thm:paperbnt_supplier_prepared_total_dim}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim}
+    \lean{MPSTensor.exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks_and_totalDim}
     \leanok
     \uses{thm:paperbnt_collapsed_prepared,thm:prepared_phase_equiv_gauge,def:sector_weight_data}
     Under the hypotheses of
@@ -1008,7 +1008,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 
 \begin{lemma}[Exact BNT reconstruction of prepared normal blocks]%
     \label{thm:paperbnt_supplier_prepared_exact}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks}
+    \lean{MPSTensor.exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks}
     \leanok
     \uses{thm:paperbnt_collapsed_prepared,def:block_diagonal_tensor,def:sector_weight_data}
     Under the hypotheses of
@@ -1082,7 +1082,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 
 \begin{lemma}[Sector BNT form of normalized CPSV canonical data]%
     \label{thm:cpsv_sector_bnt}
-    \lean{MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation}
     \leanok
     \uses{def:cpsv_canonical_form,def:sector_bnt_cf,def:same_mpv2_pos}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
@@ -1113,7 +1113,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 % Source: CPSV16 lines 214--301 and 1080--1148; CPGSV21 lines 1831--1885.
 \begin{lemma}[Exact coisometric BNT reconstruction]%
     \label{thm:cpsv_sector_bnt_exact}
-    \lean{MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation_exact}
     \leanok
     \uses{def:cpsv_canonical_form,def:sector_bnt_cf}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
@@ -1225,7 +1225,7 @@ statement.
 
 \begin{lemma}[Normalized BNT form after blocking for a nonzero MPV family]%
     \label{thm:paperbnt_supplier_after_blocking_normalized}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized}
+    \lean{MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized}
     \leanok
     \uses{thm:prepared_bnt_blocks_after_blocking,thm:paperbnt_supplier_prepared,thm:paperbnt_weight_normalization,lem:mpv_to_tensor_from_blocks_weight_mul_left,thm:mpv_decomposition,lem:eval_word_append,lem:eval_word_block}
     Let $A$ be an MPS tensor whose matrix-product family has a nonzero

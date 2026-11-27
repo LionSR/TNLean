@@ -287,7 +287,7 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isI
     X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) -
       Kraus.evalWord A (List.ofFn α) * Y ν
   have hZzero : Z = 0 := by
-    apply eq_zero_of_forall_trace_mul_right_eq_zero hA
+    apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hA
     intro j
     have hleft : Matrix.trace (A j * Z) = 0 := by
       dsimp [Z]

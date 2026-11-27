@@ -373,8 +373,8 @@ A source-faithful formalization requires two adjustments.
 First, the paper-faithful sector data must include the source's global
 normalization: every retained weight has modulus at most one and at least one
 retained weight has modulus one. The current sector predicate records these as
-\leanid{MPSTensor.IsBNTCanonicalForm.weight_norm_le_one} and
-\leanid{MPSTensor.IsBNTCanonicalForm.weight_unit_exists}. Thus
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_norm_le_one} and
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_unit_exists}. Thus
 \begin{align}
     |\mu_k|
         &\leq 1
@@ -464,7 +464,7 @@ prepared weights are rescaled by their maximal modulus
     \label{eq:cpsv16_cf_normalization_and_proportional_comparison_supplier_maximal_modulus}
 \end{align}
 via weight normalization.\footnote{Formal declarations:
-\leanid{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized}
+\leanid{MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized}
 and \leanid{MPSTensor.exists_weight_normalization}.} The rescaled weights
 satisfy
 \begin{align}
@@ -516,9 +516,9 @@ clause.
 The structural realignment is complete on the paper-faithful sector surface.
 The formal BNT canonical-form predicate now includes the source convention as
 the fields
-\leanid{MPSTensor.IsBNTCanonicalForm.weight_norm_le_one} and
-\leanid{MPSTensor.IsBNTCanonicalForm.weight_unit_exists},\footnote{%
-    Formal structure: \leanid{MPSTensor.IsBNTCanonicalForm} in
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_norm_le_one} and
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_unit_exists},\footnote{%
+    Formal structure: \leanid{MPSTensor.IsLeftCanonicalBNTPresentation} in
     \path{TNLean/MPS/Tensor/DirectSum/SectorBNT.lean}, lines 107--162.}
 and its constructors propagate these fields. The former auxiliary one-copy structure
 \texttt{MPSTensor.IsNormalCanonicalFormBNT} had no dominant-normalization field.

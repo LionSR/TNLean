@@ -1062,10 +1062,10 @@ model different levels of data and different sources.
   their optional ambient complement. The PGVWC07 form has a distinct
   reconstruction using a bond-index equivalence and real weights.
 
-### `MPSTensor.IsBNTCanonicalForm`
+### `MPSTensor.IsLeftCanonicalBNTPresentation`
 
 - **Declaration:**
-  `MPSTensor.IsBNTCanonicalForm (P : MPSTensor.SectorDecomposition d)`.
+  `MPSTensor.IsLeftCanonicalBNTPresentation (P : MPSTensor.SectorDecomposition d)`.
 - **Defined in:** `TNLean/MPS/Tensor/DirectSum/SectorBNT.lean`.
 - **Meaning:** the core paper-faithful two-layer sector canonical form: positive
   basis dimensions, irreducible and left-canonical basis tensors, normalized
@@ -1075,16 +1075,16 @@ model different levels of data and different sources.
 - **Source:** arXiv:1606.00608 §II, lines 271--301, and arXiv:2011.12127
   Definition 4.2 and two-layer display, lines 1846--1884.
 - **Sanctioned bridges:**
-  `MPSTensor.IsBNTCanonicalForm.basis_isNormal` projects algebraic normality of
+  `MPSTensor.IsLeftCanonicalBNTPresentation.basis_isNormal` projects algebraic normality of
   each basis block. Further bridges are
-  `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor`,
-  `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical`, and the
+  `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor`,
+  `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical`, and the
   supplier declarations
-  `MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` and
-  `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized`.
-- **Caveat:** `IsBNTCanonicalForm.blockTensor` requires a strictly positive
+  `MPSTensor.exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks` and
+  `MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized`.
+- **Caveat:** `IsLeftCanonicalBNTPresentation.blockTensor` requires a strictly positive
   blocking length `0 < p`; it does not assert preservation at length zero.
-  `exists_isBNTCanonicalForm_afterBlocking_pos_normalized` assumes a nonzero
+  `exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` assumes a nonzero
   positive-length MPV family (the standing convention of arXiv:1606.00608,
   line 246) and realizes the weight normalization itself, at the cost of a
   per-site scalar. This is the canonical predicate when

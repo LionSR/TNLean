@@ -314,7 +314,7 @@ mechanical. -/
 
 /-- **The window-region witness from the coefficient transfer.**
 
-With the arc-window injectivity hypotheses and union closure for both tensors, the size hypotheses,
+With the arc-window injectivity hypotheses for both tensors, the size hypotheses,
 matched bond dimensions, the same state, positive bonds, and the staircase route's
 coefficient-transfer data on the left end window at the reference edge `e`, the reference edge
 carries an `EdgeCoeffIdentityWitness` whose per-edge and reference gauges are both the gauge `Z`
@@ -334,10 +334,6 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
     (hA : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
-      (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
@@ -412,6 +408,8 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
       Nonempty (EdgeCoeffIdentityWitness A B
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)
         Z Zref hE) := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   -- The window's region injectivity for `A` and `B`, from the arc-window hypotheses.
   have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
@@ -426,7 +424,7 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
       (by omega) (by omega) hxw hyh _)
     hRB (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
     hAB hposA hposB hDim htransferAB htransferBA hmul
-  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB
+  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB
       (by omega) (by omega) ha0 haw hbh
     hxw hyh Z hE hposB ?_⟩⟩
   intro M σ τ
@@ -436,7 +434,7 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
 
 The single-datum form of `exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer`: from a
 `RegionInsertionTransfer` datum on the left end window at the reference edge `e`, with the
-arc-window injectivity hypotheses and union closure for both tensors and the size hypotheses, the
+arc-window injectivity hypotheses for both tensors and the size hypotheses, the
 reference edge carries an `EdgeCoeffIdentityWitness` whose per-edge and reference gauges are both
 the gauge read off the transfer.  The conjugation identity is
 `exists_regionConjCoeffIdentity_of_transfer`; the host injectivity is the single-window complement
@@ -455,10 +453,6 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_transfer
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
@@ -476,6 +470,8 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_transfer
       Nonempty (EdgeCoeffIdentityWitness A B
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)
         Z Zref hE) := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   -- The window's region injectivity for `A` and `B`, from the arc-window hypotheses.
   have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
@@ -492,7 +488,7 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_transfer
       (by omega) (by omega) hxw hyh _)
     hRB (hB.regionBlockedTensorInjective_windowComplement hUB
       (by omega) (by omega) hxw hyh _) hposA hposB
-  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB
+  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB
       (by omega) (by omega) ha0 haw hbh
     hxw hyh Z hE hposB ?_⟩⟩
   intro M σ τ
@@ -594,8 +590,6 @@ theorem windowRegionInsertedCoeff_injective
     {B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
@@ -617,6 +611,7 @@ theorem windowRegionInsertedCoeff_injective
             ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge B (by omega)
               (by omega) ha0 haw hbh⟩ M' σ τ) :
     M = M' := by
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
     hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
@@ -638,7 +633,7 @@ not the statement that the source's staircase argument must supply. -/
 
 /-- **The window-region witness from the single-vertex realization.**
 
-With the arc-window injectivity hypotheses and union closure for both tensors, the size hypotheses,
+With the arc-window injectivity hypotheses for both tensors, the size hypotheses,
 matched bond dimensions, the same state, positive bonds, the single-vertex linear independence
 `hvA`/`hvB` at the reference edge's in-region endpoint, and the region physical-to-virtual
 realization on the left end window in each direction (`hrealAB`/`hrealBA`), the reference edge
@@ -662,10 +657,6 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_realizes
     (hA : NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) A))
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
-      (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
@@ -698,10 +689,11 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_realizes
       Nonempty (EdgeCoeffIdentityWitness A B
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)
         Z Zref hE) := by
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
     hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-  exact exists_windowEdgeCoeffIdentityWitness_of_transfer hA hB hUA hUB hL hK ha0 haw hbh hxw hyh
+  exact exists_windowEdgeCoeffIdentityWitness_of_transfer hA hB hL hK ha0 haw hbh hxw hyh
     hposA hposB
     (regionInsertionTransfer_of_realizes A B
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)

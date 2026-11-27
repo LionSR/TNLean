@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.BlockSum.DiagonalPolar
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 
 /-!

@@ -260,7 +260,7 @@ theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_ind
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hCF : MPSTensor.IsLeftCanonicalBNTPresentation S)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -280,7 +280,7 @@ theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_ind
             completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s *
                 physicalSlice (S.basisMPOTensor i) β α *
               completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ t = 0 := by
-  obtain ⟨s₀, _q₀, _hs₀⟩ := hCF.weight_unit_exists
+  let s₀ : Fin S.basisCount := ⟨0, hCF.basisCount_pos⟩
   obtain ⟨W, _hunique, _hproj, _horth, _hsum⟩ :=
     exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
@@ -318,7 +318,7 @@ Source: arXiv:1606.00608, Appendix C.2, Case II and Lemma `lemmus`, lines
 theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hCF : MPSTensor.IsLeftCanonicalBNTPresentation S)
     (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
     (hEq : ∀ i : Fin (d * d),

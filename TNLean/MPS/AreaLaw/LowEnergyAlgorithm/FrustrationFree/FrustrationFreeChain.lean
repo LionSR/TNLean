@@ -5,12 +5,20 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeRank
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalFrustrationFreeTruncation
+import QICLean.ManyBody.Hamiltonian.FrustrationFreeSweep
 
 /-!
 # The regional replacement on a nearest-neighbor chain
 
 The parity commutations and commutation degree two are derived from the local
-supports. The gap and kernel conclusions concern the literal regional replacement.
+supports. The gap comparison concerns the regional replacement of any even and any odd
+bond set (`parityReplacement_gap`).
+
+The regional truncation `physicalFrustrationFreeTruncation` of a bond interaction is the
+regional replacement of the bonds inside its site interval
+(`physicalFrustrationFreeTruncation_eq_regionalReplacementMatrix`); this gives its
+quadratic-form gap and its prefix and suffix rank bound.
 
 **Local fix:** The all-cut rank bound in ALVV, arXiv:1602.08828v2, Theorem 5.14(2)
 is `d²+3` for interior regions and `d²+2` for prefix/suffix regions. Squared norms
@@ -196,26 +204,6 @@ noncomputable def chainTerm
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
   (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (bondTermExtension h i)
 
-/-- The original nearest-neighbor chain Hamiltonian. -/
-noncomputable def chainOperator
-    (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
-  ∑ i ∈ Finset.range m, chainTerm h i
-
-/-- The regional parity-layer replacement with all exterior bonds retained. -/
-noncomputable def chainReplacement
-    (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ) :
-    EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
-  regionalReplacement (chainTerm h) (evenBonds a b) (oddBonds a b) m
-
-/-- The regional matrix used for the rank theorem is exactly the chain replacement. -/
-theorem toEuclideanCLM_chainReplacementMatrix
-    (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ) :
-    (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
-      (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m) =
-      chainReplacement h a b :=
-  toEuclideanCLM_regionalReplacementMatrix _ _ _ _
-
 /-- Each extended chain term is an orthogonal projection when the supplied terms are. -/
 theorem isStarProjection_chainTerm
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
@@ -228,14 +216,13 @@ theorem isStarProjection_chainTerm
   · rw [map_zero]
     exact IsStarProjection.zero _
 
-/-- The original operator is exactly the finite sum of the supplied bond matrices. -/
-theorem chainOperator_eq_toEuclideanCLM_sum
+/-- The extended chain terms below `m` add up to the operator of the supplied bond sum. -/
+theorem sum_range_chainTerm
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    chainOperator h = (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) := by
+    ∑ i ∈ Finset.range m, chainTerm h i =
+      (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) := by
   classical
-  rw [map_sum]
-  change (∑ i ∈ Finset.range m, chainTerm h i) = _
-  rw [← Fin.sum_univ_eq_sum_range]
+  rw [map_sum, ← Fin.sum_univ_eq_sum_range]
   apply Finset.sum_congr rfl
   intro i _
   simp [chainTerm, bondTermExtension, i.isLt]
@@ -261,53 +248,11 @@ theorem chainTerm_commute_of_not_adjacent
         (bondTermExtension_supported hsupp j) hd.symm
   exact hc.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).toMonoidHom
 
-private theorem chain_parity_commute
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) (a b : ℕ) :
-    (∀ i ∈ evenBonds a b, ∀ j ∈ evenBonds a b, Commute (chainTerm h i) (chainTerm h j)) ∧
-    (∀ i ∈ oddBonds a b, ∀ j ∈ oddBonds a b, Commute (chainTerm h i) (chainTerm h j)) := by
-  constructor
-  · intro i hi j hj
-    have hi := (Finset.mem_filter.mp hi).2
-    have hj := (Finset.mem_filter.mp hj).2
-    apply chainTerm_commute_of_not_adjacent hsupp <;> omega
-  · intro i hi j hj
-    have hi := (Finset.mem_filter.mp hi).2
-    have hj := (Finset.mem_filter.mp hj).2
-    apply chainTerm_commute_of_not_adjacent hsupp <;> omega
-
-/-- A vector is a zero-energy vector of the chain exactly when every term annihilates it.
-ALVV, Theorem 5.14(1). -/
-theorem chainOperator_apply_eq_zero_iff
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, IsStarProjection (h i)) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-    chainOperator h x = 0 ↔ ∀ i < m, chainTerm h i x = 0 := by
-  have hp (i : Fin m) : (chainTerm h i).toLinearMap.IsPositive :=
-    (ContinuousLinearMap.IsPositive.of_isStarProjection
-      (isStarProjection_chainTerm hh i)).toLinearMap
-  have ht := WeightedPositiveKernel.apply_sum_eq_zero_iff hp x
-  simp only [LinearMap.sum_apply, ContinuousLinearMap.coe_coe, Fin.forall_iff] at ht
-  rw [show (∑ i : Fin m, chainTerm h i x) = ∑ i ∈ Finset.range m, chainTerm h i x from
-    Fin.sum_univ_eq_sum_range (fun i ↦ chainTerm h i x) m] at ht
-  simpa only [chainOperator, _root_.sum_apply] using ht
-
-/-- Full kernel equality for the finite chain, with parity commutations derived
-from locality. ALVV, Theorem 5.14(1), including degenerate ground spaces. -/
-theorem ker_chainReplacement
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) (a b : ℕ) :
-    LinearMap.ker (chainReplacement h a b).toLinearMap =
-      LinearMap.ker (chainOperator h).toLinearMap := by
-  obtain ⟨he, ho⟩ := chain_parity_commute hsupp a b
-  exact ker_regionalReplacement (isStarProjection_chainTerm hh) _ _ he ho m
-
 private theorem ker_ordered_chainTerm
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i)) :
-    LinearMap.ker (chainOperator h).toLinearMap =
+    LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i)).toLinearMap =
       ⨅ i : Fin (m + m), LinearMap.ker
         (parityOrderedTerm (colorTerm (chainTerm h) 0)
           (colorTerm (chainTerm h) 1) m i).toLinearMap := by
@@ -318,15 +263,15 @@ private theorem ker_ordered_chainTerm
   have hp (i : Fin (m + m)) : (T i).toLinearMap.IsPositive :=
     (ContinuousLinearMap.IsPositive.of_isStarProjection (hproj i)).toLinearMap
   have hk := WeightedPositiveKernel.ker_sum_eq_iInf hp
-  have hsum : (∑ i : Fin (m + m), (T i).toLinearMap) = (chainOperator h).toLinearMap := by
+  have hsum : (∑ i : Fin (m + m), (T i).toLinearMap) =
+      ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap := by
     apply LinearMap.ext
     intro x
     simp only [LinearMap.sum_apply, ContinuousLinearMap.coe_coe]
     rw [Fin.sum_univ_eq_sum_range (fun i ↦ T i x) (m + m)]
     rw [← _root_.sum_apply]
     dsimp only [T]
-    rw [sum_parityOrderedTerm, sum_colorTerm]
-    rfl
+    rw [sum_parityOrderedTerm, sum_colorTerm, sum_range_chainTerm]
   rwa [hsum] at hk
 
 /-- Explicit gap for a parity-layer replacement collapsing any set `s` of even bonds and any
@@ -340,11 +285,14 @@ theorem parityReplacement_gap
     (hh : ∀ i, IsStarProjection (h i))
     (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) {s t : Finset ℕ}
+    (hgap : ∀ y ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i)).toLinearMap)ᗮ,
+      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i) y⟫_ℂ) {s t : Finset ℕ}
     (hs : ∀ i ∈ s, i % 2 = 0) (ht : ∀ i ∈ t, i % 2 = 1)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
-    (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
+    (hxperp : x ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i)).toLinearMap)ᗮ) :
     γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, regionalReplacement (chainTerm h) s t m x⟫_ℂ := by
   have hc := chainTerm_commute_of_not_adjacent hsupp
   have hproj := isStarProjection_chainTerm hh
@@ -355,7 +303,7 @@ theorem parityReplacement_gap
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y,
         ((∑ i ∈ Finset.range m, colorTerm (chainTerm h) 0 i) +
           ∑ i ∈ Finset.range m, colorTerm (chainTerm h) 1 i) y⟫_ℂ := by
-    rw [← hk, sum_colorTerm]
+    rw [← hk, sum_colorTerm, sum_range_chainTerm]
     exact hgap
   have hxperp' : x ∈ (⨅ i : Fin (m + m), LinearMap.ker
       (parityOrderedTerm (colorTerm (chainTerm h) 0)
@@ -367,105 +315,106 @@ theorem parityReplacement_gap
   norm_num only [Nat.cast_ofNat, show (2 : ℝ) ^ 2 = 4 by norm_num] at hg
   exact hg
 
-/-- Explicit gap for the regional chain replacement. The only gap premise concerns
-the original chain; locality supplies degree two and every collapsed-family identity.
-ALVV, Theorem 5.14(3), with squared norms and the constant-three converse. -/
-theorem chainReplacement_gap
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
-    {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
-    (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
-    γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ :=
-  parityReplacement_gap hh hsupp hγ hgap (fun _ hi ↦ (Finset.mem_filter.mp hi).2)
-    (fun i hi ↦ by have := (Finset.mem_filter.mp hi).2; omega) hx hxperp
-
-/-- Every original zero-energy vector satisfies all replacement constraints separately.
-The global zero-energy premise is equivalent to termwise frustration freeness because
-all original terms are projections. ALVV, Theorem 5.14(1). -/
-theorem chainReplacement_frustrationFree
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, IsStarProjection (h i)) (a b : ℕ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : chainOperator h Ω = 0) :
-    (1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
-    (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
-    ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0 := by
-  exact regionalReplacement_frustrationFree (isStarProjection_chainTerm hh) _ _ m
-    ((chainOperator_apply_eq_zero_iff hh Ω).mp hΩ)
-
-/-- A concrete chain gap parameter at most one yields the uniform lower bound `γ/15`
-for every unit vector orthogonal to the full ground space. ALVV, Theorem 5.14(3). -/
-theorem chainReplacement_gap_linear
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ) (hγ1 : γ ≤ 1)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
-    {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
-    (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
-    γ / 15 ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ := by
-  have hr := gap_ratio_le hγ hγ1
-  norm_num only [show (2 : ℝ) ^ 2 = 4 by norm_num] at hr
-  exact hr.trans (chainReplacement_gap hh hsupp hγ hgap a b hx hxperp)
-
-/-- The corrected ALVV regional-replacement theorem on a finite nearest-neighbor chain.
-It assembles layer projections, positivity, termwise frustration freeness, full
-kernel equality, the corrected all-cut rank bounds, and the explicit gap comparison.
-All parity commutations, degree bounds and detectability-product identities are proved
-from the supplied local terms. No uniqueness assumption is needed; when the original
-ground state is unique, the full kernel equality preserves that uniqueness.
-
-The unrestricted printed rank bound in ALVV, arXiv:1602.08828v2,
-Theorem 5.14(2), is replaced by `q²+3`; prefixes and suffixes retain `q²+2`.
-The source's false unrestricted bound is not asserted. -/
-theorem frustrationFree_regionalReplacement_chain
-    (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hq : 1 ≤ q)
-    (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ)
-    (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩnorm : ‖Ω‖ = 1)
-    (hΩ : chainOperator h Ω = 0) (a b : ℕ) :
-    IsStarProjection (1 - regionalProjection (chainTerm h) (evenBonds a b) m) ∧
-    IsStarProjection (1 - regionalProjection (chainTerm h) (oddBonds a b) m) ∧
-    (chainReplacement h a b).IsPositive ∧
-    LinearMap.ker (chainReplacement h a b).toLinearMap =
-      LinearMap.ker (chainOperator h).toLinearMap ∧
-    (‖Ω‖ = 1 ∧ chainReplacement h a b Ω = 0) ∧
-    ((1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
-      (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
-      ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0) ∧
-    (∀ k, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
-      (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
-        q ^ 2 + 3) ∧
-    ((a = 0 ∨ m ≤ b) → ∀ k, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
-      (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
-        q ^ 2 + 2) ∧
-    (∀ x ∈ (LinearMap.ker (chainReplacement h a b).toLinearMap)ᗮ, ‖x‖ = 1 →
-      γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ) := by
-  obtain ⟨he, ho⟩ := chain_parity_commute hsupp a b
-  have hproj := isStarProjection_chainTerm hh
-  have hk := ker_chainReplacement hh hsupp a b
-  have hΩ' : chainReplacement h a b Ω = 0 := by
-    change Ω ∈ LinearMap.ker (chainReplacement h a b).toLinearMap
-    rw [hk]
-    exact hΩ
-  refine ⟨(isStarProjection_regionalProjection hproj _ he m).one_sub,
-    (isStarProjection_regionalProjection hproj _ ho m).one_sub,
-    isPositive_regionalReplacement hproj _ _ he ho m, hk, ⟨hΩnorm, hΩ'⟩,
-    chainReplacement_frustrationFree hh a b hΩ,
-    (fun k ↦ rank_regionalReplacementMatrix_le_sq_add_three h hq hsupp a b k),
-    (fun hb k ↦ rank_regionalReplacementMatrix_le_sq_add_two_of_boundary h hq hsupp a b k hb),
-    ?_⟩
-  intro x hx hxnorm
-  rw [hk] at hx
-  exact chainReplacement_gap hh hsupp hγ hgap a b hxnorm hx
-
 end Chain
 
 end TNLean.MPS.AreaLaw.ALVV
+
+/-! ### The regional truncation as a regional replacement
+
+The regional truncation of the site interval `[a, b)` replaces the bonds `[a, b - 1)`: it is the
+regional replacement of Definition 5.10 for the even and odd bonds of `[a, b - 1)`. This gives
+the quadratic-form gap comparison and the prefix and suffix rank bound of ALVV,
+arXiv:1602.08828v2, Theorem 5.14 (`thm:FF-tH`, lines 1541–1570), for the truncation. -/
+
+namespace TNLean.MPS.AreaLaw
+
+open ALVV
+open scoped MatrixOrder
+
+variable {L q : ℕ}
+
+private theorem physicalParityProduct_restrict_eq_regionalProjection
+    (Φ : ManyBody.BondInteraction L q) (a b p : ℕ) (s : Finset ℕ)
+    (hs : ∀ k < L - 1, k ∈ s ↔ a ≤ k ∧ k + 1 < b ∧ k % 2 = p) :
+    physicalParityProduct (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p =
+      regionalProjection (chainTerm Φ.term) s (L - 1) := by
+  classical
+  unfold physicalParityProduct regionalProjection
+  refine ContinuousLinearMap.complementProd_congr fun k hk ↦ ?_
+  change (if hk' : k < L - 1 then if k % 2 = p then
+      (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        ((Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b).term ⟨k, hk'⟩) else 0 else 0) =
+    if k ∈ s then (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+      (bondTermExtension Φ.term k) else 0
+  simp only [hk, ↓reduceDIte, bondTermExtension, ManyBody.Interaction.restrict_term, hs k hk]
+  split_ifs <;> first | rfl | (exfalso; omega) | simp
+
+/-- **The regional truncation is a regional replacement.** The truncation of the site interval
+`[a, b)` is the regional replacement, with all exterior bonds retained, of the even and odd
+bonds of `[a, b - 1)`. ALVV, arXiv:1602.08828v2, `def:FF-tH`, lines 1467–1487, and
+Definition 5.10. -/
+theorem physicalFrustrationFreeTruncation_eq_regionalReplacementMatrix
+    (Φ : ManyBody.BondInteraction L q) (a b : ℕ) :
+    physicalFrustrationFreeTruncation Φ a b =
+      regionalReplacementMatrix (bondTermExtension Φ.term) (evenBonds a (b - 1))
+        (oddBonds a (b - 1)) (L - 1) := by
+  classical
+  refine (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).injective ?_
+  change Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) _ =
+    Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) _
+  rw [toEuclideanCLM_regionalReplacementMatrix]
+  change _ = regionalReplacement (chainTerm Φ.term) _ _ _
+  simp only [physicalFrustrationFreeTruncation, regionalReplacement, map_add, map_sum,
+    StarAlgEquiv.apply_symm_apply]
+  rw [physicalParityProduct_restrict_eq_regionalProjection Φ a b 0 (evenBonds a (b - 1))
+      (fun k _ ↦ by simp only [evenBonds, Finset.mem_filter, Finset.mem_Ico]; omega),
+    physicalParityProduct_restrict_eq_regionalProjection Φ a b 1 (oddBonds a (b - 1))
+      (fun k _ ↦ by simp only [oddBonds, Finset.mem_filter, Finset.mem_Ico]; omega),
+    Finset.sum_range]
+  congr 2
+  refine Finset.sum_congr rfl fun i _ ↦ ?_
+  simp only [restrictedTerm, chainTerm, bondTermExtension, Finset.mem_sdiff,
+    Finset.mem_range, i.isLt, Finset.mem_union, evenBonds, oddBonds, Finset.mem_filter,
+    Finset.mem_Ico, true_and, Fin.eta]
+  split_ifs <;> first | rfl | (exfalso; omega) | simp
+
+/-- **Gap of the regional truncation, in quadratic form.** If the original chain of projection
+bond terms has gap `γ > 0` above its zero space in quadratic form, then every unit vector
+orthogonal to that zero space has truncated energy at least `γ / (3 (γ + 4))`, for every site
+interval. ALVV, arXiv:1602.08828v2, `thm:FF-tH`(3), lines 1562–1570, with squared norms and the
+constant-three converse; the zero space of the truncation is the original one by
+`zeroSpace_regionalTruncationInteraction`. -/
+theorem physicalFrustrationFreeTruncation_gap
+    (Φ : ManyBody.BondInteraction L q) (hp : ∀ i, IsStarProjection (Φ.term i))
+    {γ : ℝ} (hγ : 0 < γ)
+    (hgap : ∀ y ∈ Φ.zeroSpaceᗮ, γ * ‖y‖ ^ 2 ≤
+      (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ).re)
+    (a b : ℕ) {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
+    (hxperp : x ∈ Φ.zeroSpaceᗮ) :
+    γ / (3 * (γ + 4)) ≤ (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+      (physicalFrustrationFreeTruncation Φ a b) x⟫_ℂ).re := by
+  have hker : Φ.zeroSpace = LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ)
+      (n := Fin L → Fin q)) (∑ i, Φ.term i)).toLinearMap := by
+    rw [ManyBody.Interaction.zeroSpace_eq_groundSpace
+      fun i ↦ Matrix.nonneg_iff_posSemidef.mp (hp i).nonneg, ManyBody.groundSpace_zero]
+    rfl
+  rw [hker] at hgap hxperp
+  have hg := parityReplacement_gap hp Φ.mem hγ hgap (s := evenBonds a (b - 1))
+    (t := oddBonds a (b - 1)) (fun _ hi ↦ (Finset.mem_filter.mp hi).2)
+    (fun _ hi ↦ by have := (Finset.mem_filter.mp hi).2; omega) hx hxperp
+  rwa [physicalFrustrationFreeTruncation_eq_regionalReplacementMatrix,
+    toEuclideanCLM_regionalReplacementMatrix]
+
+/-- **Rank of a prefix or suffix truncation.** When the site interval starts at the left end of
+the chain or reaches its right end, the regional truncation has operator Schmidt rank at most
+`q² + 2` at every cut. ALVV, arXiv:1602.08828v2, `thm:FF-tH`(2), lines 1555–1562; for interior
+intervals the bound is `q² + 3` (`operatorSchmidtRank_physicalFrustrationFreeTruncation_le`). -/
+theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le_of_boundary (hq : 1 ≤ q)
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) (hboundary : a = 0 ∨ L ≤ b) :
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
+      (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 2 := by
+  rw [physicalFrustrationFreeTruncation_eq_regionalReplacementMatrix]
+  exact rank_regionalReplacementMatrix_le_sq_add_two_of_boundary Φ.term hq Φ.mem a (b - 1) k
+    (by omega)
+
+end TNLean.MPS.AreaLaw

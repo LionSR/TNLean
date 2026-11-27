@@ -319,7 +319,7 @@ C.3, Lemma L, lines 1835--1858. -/
 theorem basis_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hCF : MPSTensor.IsLeftCanonicalBNTPresentation S)
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
@@ -379,7 +379,7 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
   funext ⟨a, b⟩
   change (M.ketLeftMul Q) (a, b) = ((M.ketLeftMul Q).braRightMul Q) (a, b)
   apply sub_eq_zero.mp
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hInj
+  apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hInj
   intro p
   change Matrix.trace
     (((M.ketLeftMul Q) (a, b) - ((M.ketLeftMul Q).braRightMul Q) (a, b)) *

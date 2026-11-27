@@ -1668,7 +1668,7 @@ MPS/FundamentalTheorem 1). Translations between them: `isNBlkInjective_iff_block
 | Relation | Hypotheses | Lemma |
 |---|---|---|
 | `IsInjective A → IsNBlkInjective A 1` | none | `Kraus.isNBlkInjective_one_of_isInjective`, QICLean `Kraus/Injectivity.lean:175` |
-| `IsInjective A ↔ wordSpan A 1 = ⊤` | none | new, `Kraus.isInjective_iff_wordSpan_one_eq_top` (`New.lean`) |
+| `IsInjective A ↔ IsNBlkInjective A 1` | none | `Kraus.isInjective_iff_isNBlkInjective_one` (QICLean) |
 | `IsInjective A → IsNormal A` | none | `Kraus.IsInjective.isNormal`, QICLean `:196` |
 | `IsNBlkInjective A N ↔ IsInjective (blockTensor A N)` | none | `Kraus.isNBlkInjective_iff_blockTensor_isInjective`, QICLean `Kraus/Blocking.lean:108` |
 | `wordSpan A N = ⊤ ↔ IsNBlkInjective A N` | none (`Iff.rfl`) | `MPSTensor.wordSpan_eq_top_iff_isNBlkInjective`, `Wielandt/SpanGrowth/CumulativeSpan.lean:58` |
@@ -1784,7 +1784,7 @@ MPS/FundamentalTheorem 1). Translations between them: `isNBlkInjective_iff_block
 | `IsNormalTensor.isNBlkInjective_pow_four`, private `isNBlkInjective_cap_pow_four` | `isNBlkInjective_pow_four_of_isNormal hA.isNormal` (moved below `MPS/ParentHamiltonian`, next to its TP form in `MPS/CanonicalForm/NormalBlocks/NormalityChain.lean`) | 2 modules / 4 occ; blueprint `lem:spc_aux_normal_fourth_power_blocking` (`ch12_symmetry_spt_compact_limits.tex:1667`) retargeted |
 | `exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical`, `blockTensor_isInjective_mul_of_blockTensor_isInjective`, `IsNormalTensor.blockTensor_isInjective_of_bondDim_le` | restated with `Kraus.IsNBlkInjective` conclusions. Callers that need the blocked tensor apply `isNBlkInjective_iff_blockTensor_isInjective` once | 1 / 4, 5 / 8, 2 / 2; blueprint `thm:bounded_injective_blocking_normal_left_canonical`, `lem:spc_aux_bounded_normal_fourth_power_blocking` |
 
-Added (in `New.lean`, all elaborated): `Kraus.isInjective_iff_wordSpan_one_eq_top`,
+Added (in `New.lean`, all elaborated): `Kraus.isInjective_iff_wordSpan_one_eq_top` (in QICLean as `Kraus.isInjective_iff_isNBlkInjective_one`),
 `Kraus.wordSpan_eq_top_iff_isInjective_blockTensor` (only if D1 is decided the other way),
 `Kraus.isInjective_iff_injective_traceMap`,
 `MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`,

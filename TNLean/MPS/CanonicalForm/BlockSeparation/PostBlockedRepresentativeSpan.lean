@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Gauge.FiniteLength
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 import TNLean.MPS.CanonicalForm.BNTPresentation.SectorBlocking
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumSelectors
 import TNLean.MPS.CanonicalForm.BlockSeparation.TraceSeparation
@@ -60,7 +60,7 @@ theorem eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
 
 end MPSTensor
 
-namespace MPSTensor.IsBNTCanonicalForm
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 variable {d : ℕ} {P : SectorDecomposition d}
 
@@ -78,7 +78,7 @@ step in arXiv:1606.00608, line 332.  This theorem does not transport an
 unblocked first-site action through that blocking.  See
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
 theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hInj : ∀ j, Kraus.IsInjective (P.basis j)) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
@@ -117,7 +117,7 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
 trace separation of distinct representatives at length `6 * p`, by the three-block
 separation argument with Condition C1 at length `2 * p - 1`. -/
 private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
-    (hCF : IsBNTCanonicalForm P) {p : ℕ} (hp : 0 < p)
+    (hCF : IsLeftCanonicalBNTPresentation P) {p : ℕ} (hp : 0 < p)
     (hAtP : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) p) :
     ∀ k j : Fin P.basisCount, j ≠ k →
       PairTraceSeparatingAt (P.basis k) (P.basis j) (6 * p) := by
@@ -185,7 +185,7 @@ This is the representative-level form of the blocking and block-injectivity
 argument in arXiv:1606.00608, lines 318--344, used in Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem eventuallyRepresentativeWordTupleSpan_blockTensor
-    (hCF : IsBNTCanonicalForm P) (p : ℕ) (hp : 0 < p)
+    (hCF : IsLeftCanonicalBNTPresentation P) (p : ℕ) (hp : 0 < p)
     (hInj : ∀ j, Kraus.IsInjective (Kraus.blockTensor (P.basis j) p)) :
     (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
   classical
@@ -231,7 +231,7 @@ long enough block-injective prefix spans the full product of representative matr
 
 Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, lines 1848--1858. -/
 theorem eventuallyRepresentativeWordTupleSpan
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
@@ -257,7 +257,7 @@ but retains the post-blocking injectivity conclusion of arXiv:1606.00608,
 line 332.  The grouping and power-sum argument is Appendix C.3, lines
 1835--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hInj : ∀ j, Kraus.IsInjective (P.basis j))
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
@@ -278,10 +278,10 @@ Appendix C.3, Lemma L, lines 1835--1858.
 
 The common positive length is explicit in this auxiliary theorem.  It is
 derived from the BNT canonical-form hypotheses by
-`IsBNTCanonicalForm.exists_common_basis_isNBlkInjective` and eliminated in
+`IsLeftCanonicalBNTPresentation.exists_common_basis_isNBlkInjective` and eliminated in
 `insertedTensor_basis_eq_of_firstSiteActionAgree` below. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
-    (hCF : IsBNTCanonicalForm P) (L : ℕ) (hL : 0 < L)
+    (hCF : IsLeftCanonicalBNTPresentation P) (L : ℕ) (hL : 0 < L)
     (hInj : ∀ j, Kraus.IsNBlkInjective (P.basis j) L)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
@@ -316,7 +316,7 @@ Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
 lines 1835--1858; the period-one characterization is the non-periodic
 canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
@@ -330,11 +330,11 @@ canonical form.
 Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
+    {D : ℕ} (A : MPSTensor d D) (hCF : IsLeftCanonicalBNTPresentation P)
     (hAP : SameMPV₂Pos A P.toTensor)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPVPos hAP)
 
-end MPSTensor.IsBNTCanonicalForm
+end MPSTensor.IsLeftCanonicalBNTPresentation

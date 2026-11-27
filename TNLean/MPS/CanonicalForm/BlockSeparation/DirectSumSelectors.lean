@@ -19,7 +19,7 @@ at the BNT layer.
 It also contains the following results.
 
 * `MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five`,
-  `MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`: BNT input
+  `MPSTensor.IsLeftCanonicalBNTPresentation.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`: BNT input
   for the equal-size direct-sum branch.
 -/
 
@@ -399,7 +399,7 @@ theorem three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five
       _ = D ^ 5 := by ring
   exact Nat.mul_le_mul_left 3 hCore
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition d}
 
@@ -411,10 +411,10 @@ For two or more representatives, this is the source estimate
 injectivity at \(D^4\) gives the conclusion. This is the sharp
 block-injectivity proposition of arXiv:1606.00608, lines 340--345. -/
 theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     ∃ N : ℕ, 0 < N ∧ N ≤ 3 * P.totalDim ^ 5 ∧ WordTupleSpanTop P.basis N := by
   classical
-  obtain ⟨j₀, _q₀, _hweight⟩ := hCF.weight_unit_exists
+  let j₀ : Fin P.basisCount := ⟨0, hCF.basisCount_pos⟩
   have hDpos : 0 < P.totalDim :=
     lt_of_lt_of_le (hCF.basis_dim_pos j₀) (P.basisDim_le_totalDim j₀)
   have hD4pos : 0 < P.totalDim ^ 4 := Nat.pow_pos hDpos
@@ -485,7 +485,7 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
         _ ≤ 3 * P.totalDim ^ 5 :=
           three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five hDpos
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end BNTDirectSum
 

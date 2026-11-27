@@ -96,47 +96,22 @@ private theorem isPhysicalCID_one {D : ℕ} (A : MPSTensor 1 D) :
   congr 1
   omega
 
-/-- The raw-weight decomposition of `halvedWeightTensor` is a BNT canonical
-form in the line-246 normalization of arXiv:1606.00608. -/
-theorem halvedWeightTensor_isBNTCanonicalForm :
-    IsBNTCanonicalForm (SectorBNT.Examples.halvedDecomp scalarUnitTensor) := by
-  refine {
-    basis_dim_pos := by
-      intro j
-      simp
-    basis_irreducible := by
-      intro j
-      exact isIrreducibleFamily_of_bondDim_one scalarUnitTensor
-    basis_left_canonical := by
-      intro j
-      simp [IsLeftCanonical, Kraus.IsTP, scalarUnitTensor]
-    basis_normalized_self_overlap := by
-      intro j
-      simp [mpvOverlap, mpv, scalarUnitTensor_evalWord, Matrix.trace]
-    bnt_data := by
-      refine ⟨0, ?_⟩
-      intro N hN
-      apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
-      intro hzero
-      have h := congrArg
-        (fun v : MPVSpace 1 N => v (fun _ : Fin N => (0 : Fin 1))) hzero
-      have : (1 : ℂ) = 0 := by
-        simp [mpvState_apply, mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
-      exact one_ne_zero this
-    basis_distinct := by
-      intro j k hjk
-      exact absurd (Subsingleton.elim j k) hjk
-    weight_norm_le_one := by
-      intro j q
-      change ‖(if q = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ ≤ 1
-      split_ifs
-      · simp
-      · simp
-        norm_num
-    weight_unit_exists := by
-      refine ⟨0, 0, ?_⟩
-      change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
-      simp }
+/-- The raw-weight decomposition of `halvedWeightTensor` is a presentation of its
+assembled tensor in left-canonical gauge (arXiv:1606.00608, lines 281--301). -/
+theorem halvedWeightTensor_isLeftCanonicalBNTPresentation :
+    IsLeftCanonicalBNTPresentation (SectorBNT.Examples.halvedDecomp scalarUnitTensor) := by
+  refine ⟨⟨Nat.one_pos, fun _ _ _ => rfl, fun _ => scalarUnitTensor_isNormalTensor, ?_⟩, ?_⟩
+  · refine ⟨0, ?_⟩
+    intro N hN
+    apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
+    intro hzero
+    have h := congrArg
+      (fun v : MPVSpace 1 N => v (fun _ : Fin N => (0 : Fin 1))) hzero
+    have : (1 : ℂ) = 0 := by
+      simp [mpvState_apply, mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
+    exact one_ne_zero this
+  · intro j
+    simp [IsLeftCanonical, Kraus.IsTP, scalarUnitTensor]
 
 /-- `halvedWeightTensor` realizes the MPV family of the raw-weight
 decomposition `halvedDecomp scalarUnitTensor` at every length. -/
@@ -157,7 +132,7 @@ private theorem halvedWeightTensor_isCPSVBasisOfNormalTensors :
       rw [halvedWeightTensor_mpv σ]
       simp [mpv, scalarUnitTensor_evalWord, Matrix.trace]
     eventually_li := by
-      exact halvedWeightTensor_isBNTCanonicalForm.bnt_data }
+      exact halvedWeightTensor_isLeftCanonicalBNTPresentation.eventually_li }
 
 /-- The concrete raw-weight tensor satisfies the source-facing pure-state ZCL
 premises of arXiv:1606.00608, Definitions 3.3, 3.5, and 3.6. -/
@@ -268,14 +243,14 @@ conditions, but it is not a renormalization fixed point.  The source proof's
 inference at lines 1248--1251 misses the eigenvalues introduced by raw copy
 weights. -/
 theorem halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp :
-    IsBNTCanonicalForm (SectorBNT.Examples.halvedDecomp scalarUnitTensor) ∧
+    IsLeftCanonicalBNTPresentation (SectorBNT.Examples.halvedDecomp scalarUnitTensor) ∧
       halvedWeightTensor =
         (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor ∧
       SameMPV₂ halvedWeightTensor
         (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor ∧
       IsPhysicalBNTZCL halvedWeightTensor (fun _ : Fin 1 => scalarUnitTensor) ∧
       ¬ IsTransferIdempotent halvedWeightTensor :=
-  ⟨halvedWeightTensor_isBNTCanonicalForm,
+  ⟨halvedWeightTensor_isLeftCanonicalBNTPresentation,
     halvedWeightTensor_eq_halvedDecomp_toTensor,
     halvedWeightTensor_sameMPV₂_halvedDecomp,
     halvedWeightTensor_isPhysicalBNTZCL,

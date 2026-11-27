@@ -23,7 +23,7 @@ representative.
 
 namespace MPSTensor
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {d : ℕ} {P : SectorDecomposition d}
 
@@ -38,7 +38,7 @@ establish the printed three-way equivalence, treat raw weighted repeated
 copies, or include adjacent complementary gaps. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
     HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis :=
   hCF.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum
@@ -57,7 +57,7 @@ argument is at lines 1305--1307.
 basis tensor. The statement does not cover repeated copies or arbitrary raw
 weights. See `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     IsTransferIdempotent (directSumTensor P.basis) ↔
       HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis :=
   ⟨hCF.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum,
@@ -80,12 +80,12 @@ arbitrary raw weights. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex` and
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis ↔
       HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis :=
   hCF.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent.trans
     hCF.isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor
