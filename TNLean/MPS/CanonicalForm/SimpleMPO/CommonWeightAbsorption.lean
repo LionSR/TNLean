@@ -38,7 +38,7 @@ distinguished first copy. The hypothesis ensures that this choice represents
 every copy.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665. -/
-noncomputable def commonWeight (S : SectorDecomposition d)
+noncomputable def commonWeight (S : SectorDecomposition (Fin d))
     (_hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) : ℂ :=
   S.weight j ⟨0, S.copies_pos j⟩
@@ -47,7 +47,7 @@ noncomputable def commonWeight (S : SectorDecomposition d)
 common copy weight into the $j$-th canonical-form representative.
 
 Source: arXiv:1606.00608, Appendix C.2, equation CFK, lines 1660--1665. -/
-noncomputable def commonWeightAbsorbedBasis (S : SectorDecomposition d)
+noncomputable def commonWeightAbsorbedBasis (S : SectorDecomposition (Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
     MPSTensor d (S.basisDim j) :=
@@ -58,7 +58,7 @@ copy-independent.
 
 Source: arXiv:1606.00608, Appendix C.2, the argument labelled lemmus,
 lines 1646--1658. -/
-theorem weight_eq_commonWeight (S : SectorDecomposition d)
+theorem weight_eq_commonWeight (S : SectorDecomposition (Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount)
     (q : Fin (S.copies j)) :
@@ -71,7 +71,7 @@ This is the coefficient nonvanishing used when the source forms
 \(m_j=q_j\widetilde m_j\) in the proof of the Markov-sector assignment.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1714--1718. -/
-theorem commonWeight_ne_zero (S : SectorDecomposition d)
+theorem commonWeight_ne_zero (S : SectorDecomposition (Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
     S.commonWeight hWeight j ≠ 0 :=
@@ -85,7 +85,7 @@ the natural copy multiplicity $r_j$ times $\mu_j^N$:
 
 Source: arXiv:1606.00608, Appendix C.2, equations CFK and sigmaNKj,
 lines 1660--1665 and 1756--1759. -/
-theorem coeff_eq_copies_mul_commonWeight_pow (S : SectorDecomposition d)
+theorem coeff_eq_copies_mul_commonWeight_pow (S : SectorDecomposition (Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (N : ℕ) (j : Fin S.basisCount) :
     S.coeff N j = (S.copies j : ℂ) * (S.commonWeight hWeight j) ^ N := by
@@ -105,7 +105,7 @@ The independent choice of a nonzero virtual tail contraction remains a
 separate step.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1714--1718. -/
-theorem coeff_ne_zero_of_weight_copy_independent (S : SectorDecomposition d)
+theorem coeff_ne_zero_of_weight_copy_independent (S : SectorDecomposition (Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (N : ℕ) (j : Fin S.basisCount) :
     S.coeff N j ≠ 0 := by
@@ -125,7 +125,7 @@ vector:
 Source: arXiv:1606.00608, Appendix C.2, equation CFK, lines 1660--1665;
 the multiplicity convention is used in equation sigmaNKj, lines 1756--1759. -/
 theorem mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis
-    (S : SectorDecomposition d)
+    (S : SectorDecomposition (Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N : ℕ} (σ : Fin N → Fin d) :
     mpv S.toTensor σ =

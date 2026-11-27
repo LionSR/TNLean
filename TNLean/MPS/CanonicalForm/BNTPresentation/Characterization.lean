@@ -54,7 +54,7 @@ Source: arXiv:1606.00608, Proposition 2.7 and Appendix A, lines 1135--1148
 and 1182 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
-    {P : SectorDecomposition d} [∀ j, NeZero (P.basisDim j)]
+    {P : SectorDecomposition (Fin d)} [∀ j, NeZero (P.basisDim j)]
     (B : (j : Fin g) → MPSTensor d (dimB j))
     (hPNormal : ∀ j, IsNormalTensor (P.basis j))
     (hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P.basis)

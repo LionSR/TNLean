@@ -42,7 +42,7 @@ does not impose the separate modulus normalization of line 246.
 
 Source: arXiv:1606.00608, lines 217--246, 265--301, and 1135--1148. -/
 structure IsBNTSectorPresentation {D' : ℕ} (A : MPSTensor d D')
-    (P : SectorDecomposition d) : Prop where
+    (P : SectorDecomposition (Fin d)) : Prop where
   /-- At least one normal representative occurs.
 
   **Boundary condition (nonzero family):** This retains only the nonemptiness implied by the
@@ -66,7 +66,7 @@ structure IsBNTSectorPresentation {D' : ℕ} (A : MPSTensor d D')
 
 namespace IsBNTSectorPresentation
 
-variable {D' : ℕ} {P : SectorDecomposition d}
+variable {D' : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- Forgetting the sector data gives the literal CPSV basis-of-normal-tensors predicate.
 
@@ -152,7 +152,7 @@ coefficient nonzero.
 Source: arXiv:1606.00608, Proposition 2.7 and Appendix A, lines 1135--1148 and 1182. -/
 theorem equiv_of_sameMPV₂Pos
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTSectorPresentation A P)
     (hQ : IsBNTSectorPresentation B Q)
     (hAB : SameMPV₂Pos A B) :
@@ -632,7 +632,7 @@ that copy to its representative.
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 noncomputable def
     _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition
-    : SectorDecomposition d where
+    : SectorDecomposition (Fin d) where
   basisCount := data.phaseClasses.g
   basisDim := fun j => data.dim (data.representativeIndex j)
   basis := fun j => data.blocks (data.representativeIndex j)

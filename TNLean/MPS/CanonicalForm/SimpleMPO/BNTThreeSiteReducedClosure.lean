@@ -48,7 +48,7 @@ variable {d : ℕ}
 
 Source: arXiv:1606.00608, Appendix C.2, the BNT convention at lines
 1628--1632 and the canonical-form display at lines 1660--1665. -/
-def basisMPOTensor (S : SectorDecomposition (d * d))
+def basisMPOTensor (S : SectorDecomposition (Fin d × Fin d))
     (j : Fin S.basisCount) : MPOTensor d (S.basisDim j) :=
   fun ab ↦ S.basis j (finProdFinEquiv ab)
 
@@ -58,7 +58,7 @@ recovers the original BNT representative.
 Source: arXiv:1606.00608, Appendix C.2, the doubled-index convention at lines
 1628--1632. -/
 @[simp] theorem basisMPOTensor_toMPSTensor
-    (S : SectorDecomposition (d * d)) (j : Fin S.basisCount) :
+    (S : SectorDecomposition (Fin d × Fin d)) (j : Fin S.basisCount) :
     (S.basisMPOTensor j).toMPSTensor = S.basis j := by
   funext ab
   change S.basis j (finProdFinEquiv (ab.divNat, ab.modNat)) = S.basis j ab
@@ -70,7 +70,7 @@ physical trace transfer.
 Source: arXiv:1606.00608, Appendix C.2, the traced physical legs in the
 closing construction at lines 1714--1718. -/
 @[simp] theorem basisMPOTensor_verticalLoop
-    (S : SectorDecomposition (d * d)) (j : Fin S.basisCount) :
+    (S : SectorDecomposition (Fin d × Fin d)) (j : Fin S.basisCount) :
     MPOTensor.verticalLoop (S.basisMPOTensor j) =
     MPOTensor.doubledPhysTraceTransfer d (S.basis j) := by
   simp [MPOTensor.verticalLoop, MPOTensor.physTraceTransfer,
@@ -82,7 +82,7 @@ families gives the representative expansion of every physical MPO matrix entry.
 Source: arXiv:1606.00608, equations `decBSV` and `CFK`, lines 298--301 and
 1660--1665. -/
 theorem mpo_eq_sum_coeff_basisMPOTensor
-    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
+    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (Fin d × Fin d))
     (hM : SameMPV₂Pos M.toMPSTensor S.toTensor) {N : ℕ} (hN : 0 < N)
     (u v : Fin N → Fin d) :
     MPOTensor.mpo M N u v =
@@ -111,7 +111,7 @@ in the density operator (sigma^{(L+3)}).
 Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines
 1714--1732. -/
 noncomputable def normalizedThreeSiteClosingMatrix
-    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
+    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (Fin d × Fin d))
     (L : ℕ) (j : Fin S.basisCount) :
     Matrix (Fin (S.basisDim j)) (Fin (S.basisDim j)) ℂ :=
   (Matrix.trace (MPOTensor.mpo M (L + 3)))⁻¹ •
@@ -123,7 +123,7 @@ normalization, provided the total state has nonzero trace.
 Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines
 1714--1718. -/
 theorem normalizedThreeSiteClosingMatrix_ne_zero
-    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (d * d))
+    {D : ℕ} (M : MPOTensor d D) (S : SectorDecomposition (Fin d × Fin d))
     (L : ℕ) (j : Fin S.basisCount)
     (htrace : Matrix.trace (MPOTensor.mpo M (L + 3)) ≠ 0)
     (hR : S.threeSiteClosingMatrix L j ≠ 0) :
@@ -137,7 +137,7 @@ chain length four, the length used by the formal SAL-to-Markov theorem.
 Source: arXiv:1606.00608, simplicity at lines 815--822 and Appendix C.2,
 lines 1646--1665 and 1714--1718. -/
 theorem threeSiteClosingMatrix_one_ne_zero
-    (S : SectorDecomposition (d * d))
+    (S : SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -194,7 +194,7 @@ Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, equations `CFK`,
 `sigma3bka`, and `keyformula`, lines 1660--1665 and 1714--1732. -/
 theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor) (L : ℕ) :
     IsThreeSiteFamilyClosure
       (fun j ↦ S.basisMPOTensor j)
@@ -288,7 +288,7 @@ Source: arXiv:1606.00608, simplicity and SAL at lines 815--822, and Appendix
 C.2, lines 1646--1665 and 1714--1732. -/
 theorem reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')

@@ -142,7 +142,7 @@ source's common blocking.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `CFK`, lines 1660--1665. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isInjective
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
@@ -167,7 +167,7 @@ in `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`.
 Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj`, `generateMPDO`,
 and `CFK`, lines 1660--1665 and 1733--1770. -/
 theorem nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →

@@ -48,7 +48,7 @@ Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and Proposition 2.7,
 lines 1135--1148. -/
 theorem bnt_basis_not_isNilpotent_iff
     {D' p : ℕ} {A : MPSTensor (p * p) D'}
-    {P Q : MPSTensor.SectorDecomposition (p * p)}
+    {P Q : MPSTensor.SectorDecomposition (Fin p × Fin p)}
     (hP : MPSTensor.IsBNTSectorPresentation A P)
     (hQ : MPSTensor.IsBNTSectorPresentation A Q) :
     (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer p (P.basis j))) ↔

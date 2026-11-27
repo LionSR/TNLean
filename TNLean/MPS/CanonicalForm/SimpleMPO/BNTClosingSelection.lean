@@ -49,7 +49,7 @@ Simplicity says that no \(\mathcal B_j\) is nilpotent.
 Source: arXiv:1606.00608, simplicity at lines 815--822 and Appendix C.2,
 lines 1714--1718. -/
 theorem exists_common_nonzero_physicalTraceTail_entry
-    (S : SectorDecomposition (d * d))
+    (S : SectorDecomposition (Fin d × Fin d))
     (hnonNil : ∀ j,
       ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer d (S.basis j))) :
     ∃ L : ℕ, 0 < L ∧ ∀ j : Fin S.basisCount,
@@ -72,7 +72,7 @@ sites and tracing a tail of length \(L\):
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1714--1718 and 1726--1732. -/
 noncomputable def threeSiteClosingMatrix
-    (S : SectorDecomposition (d * d)) (L : ℕ) (j : Fin S.basisCount) :
+    (S : SectorDecomposition (Fin d × Fin d)) (L : ℕ) (j : Fin S.basisCount) :
     Matrix (Fin (S.basisDim j)) (Fin (S.basisDim j)) ℂ :=
   S.coeff (L + 3) j •
     (MPOTensor.doubledPhysTraceTransfer d (S.basis j)) ^ L
@@ -89,7 +89,7 @@ with an entry of the physical-trace closing matrix \(R_j\).
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1714--1718. -/
 theorem exists_common_nonzero_threeSiteClosingMatrix_entry
-    (S : SectorDecomposition (d * d))
+    (S : SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -113,7 +113,7 @@ is nonzero.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1714--1718. -/
 theorem exists_common_threeSiteClosingMatrix_ne_zero
-    (S : SectorDecomposition (d * d))
+    (S : SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,

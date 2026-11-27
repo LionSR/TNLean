@@ -514,7 +514,7 @@ the BNT representative.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `CFK`, lines 1660--1665. -/
 noncomputable def commonWeightAbsorbedBasisMPOTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
     MPOTensor d (S.basisDim j) :=
@@ -525,7 +525,7 @@ weight has been absorbed into the normal representative.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1733--1770. -/
 theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -561,7 +561,7 @@ theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
 coordinates gives the absorbed representative defined in
 `CommonWeightAbsorption.lean`. -/
 @[simp] theorem commonWeightAbsorbedBasisMPOTensor_toMPSTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount) :
     (commonWeightAbsorbedBasisMPOTensor S hWeight j).toMPSTensor =
@@ -576,7 +576,7 @@ coordinates gives the absorbed representative defined in
 /-- Absorbing the common weight scales the length-`N` MPO by its `N`-th
 power. -/
 theorem mpo_commonWeightAbsorbedBasisMPOTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount)
     {N : ℕ} (u v : Fin N → Fin d) :
@@ -596,7 +596,7 @@ representatives, each multiplied by its copy number.
 Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1770. -/
 theorem mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
@@ -623,7 +623,7 @@ from common blocking and SAL.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -/
 theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
@@ -675,7 +675,7 @@ orthogonal one-site projection has a Hermitian sitewise tensor power.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -/
 theorem sitewise_bntSectorProjection_mul_mpo_mul_self
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
@@ -729,7 +729,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj`, `generateMPDO`,
 and `sigmaNKj`, lines 1680--1759. -/
 theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')

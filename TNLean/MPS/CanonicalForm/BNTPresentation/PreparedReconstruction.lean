@@ -69,7 +69,7 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k ∧
       ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin r, dim k),
       ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
@@ -406,7 +406,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       IsBNTCanonicalForm P ∧
       P.totalDim = ∑ k, data.dim k ∧
       ∃ U : Matrix (Fin P.totalDim) (Fin D) ℂ, U * Uᴴ = 1 ∧
@@ -527,7 +527,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       IsBNTCanonicalForm P ∧
       SameMPV₂Pos A P.toTensor ∧
       P.totalDim = ∑ k, data.dim k := by

@@ -139,9 +139,9 @@ diagonal entry of $R_j$ unchanged.
 
 Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the
 blockwise similarities at lines 313--332. -/
-def replaceBasis (P : SectorDecomposition d)
+def replaceBasis (P : SectorDecomposition (Fin d))
     (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j)) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := P.basisCount
   basisDim := P.basisDim
   basis := B
@@ -152,7 +152,7 @@ def replaceBasis (P : SectorDecomposition d)
 Source context: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305,
 with the representativewise similarities at lines 313--332. -/
 @[simp]
-theorem replaceBasis_basis (P : SectorDecomposition d)
+theorem replaceBasis_basis (P : SectorDecomposition (Fin d))
     (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j))
     (j : Fin P.basisCount) :
     (P.replaceBasis B).basis j = B j :=
@@ -164,7 +164,7 @@ $\sum_q \mu_{j,q}^N$ unchanged.
 Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the pure
 blockwise similarities at lines 313--332. -/
 @[simp]
-theorem replaceBasis_coeff (P : SectorDecomposition d)
+theorem replaceBasis_coeff (P : SectorDecomposition (Fin d))
     (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j))
     (N : ℕ) (j : Fin P.basisCount) :
     (P.replaceBasis B).coeff N j = P.coeff N j :=
@@ -179,7 +179,7 @@ the coefficients $\sum_q \mu_{j,q}^N$.
 
 Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the
 block-diagonal similarity at lines 313--332. -/
-theorem gaugeEquiv_toTensor_replaceBasis (P : SectorDecomposition d)
+theorem gaugeEquiv_toTensor_replaceBasis (P : SectorDecomposition (Fin d))
     (B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j))
     (hGauge : ∀ j, GaugeEquiv (P.basis j) (B j)) :
     GaugeEquiv P.toTensor (P.replaceBasis B).toTensor := by
@@ -220,7 +220,7 @@ unchanged.
 
 Source: arXiv:1708.00029, lines 313--332, applied to the multiplicity-bearing
 form `eq:bdnr` at lines 286--305. -/
-theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition d)
+theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition (Fin d))
     (period : Fin P.basisCount → ℕ)
     (hP : ∀ j, IsSpectrallyPeriodic (period j) (P.basis j)) :
     ∃ B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j),
