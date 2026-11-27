@@ -648,7 +648,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     change Kraus.IsIrreducibleFamily
       (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
         (blocksA k) L)
-    exact (isIrreducibleFamily_reindexPhysical_equiv
+    exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv
       (directIteratedBlockEquiv d p₀ L)
       (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hIrrBlocked
