@@ -33,7 +33,7 @@ namespace MPUCircuit
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def minimalIntervalInputEmbedding {d D N : ℕ} [NeZero d] (j k : ℕ) :
-    (CutIntervalConfig d N j k ×
+    (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k) ×
       OutsidePlacedConfig d (intervalPacketSites d D N j k)) ↪
         Cfg d (logicalSiteCount d D N) :=
   placedBasisEmbedding (intervalPacketSites d D N j k)
@@ -48,7 +48,7 @@ noncomputable def minimalIntervalOutputEmbedding {d D N : ℕ} [NeZero d]
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
     (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
     (j k : Fin (N + 1)) :
-    ((CutIntervalConfig d N j.val k.val ×
+    ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) ×
       (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))) ×
       OutsidePlacedConfig d (intervalPacketSites d D N j.val k.val)) ↪
@@ -124,12 +124,12 @@ theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZer
   unfold IsMinimalIntervalColumnImplementation minimalIntervalInputEmbedding
     minimalIntervalOutputEmbedding at hX hY
   convert jointPlacedColumns_of_supported_individual
-    (α := CutIntervalConfig d N j.val m.val)
-    (β := CutIntervalConfig d N m.val k.val)
-    (γ := CutIntervalConfig d N j.val m.val ×
+    (α := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val))
+    (β := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val))
+    (γ := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
       (Fin (cutRank (interval N 0 m.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))))
-    (δ := CutIntervalConfig d N m.val k.val ×
+    (δ := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val) ×
       (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 m.val) (operatorCoefficientTensor U))))
     (τ := OutsidePlacedConfig d (Fin.Embedding.append

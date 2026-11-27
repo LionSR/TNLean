@@ -208,16 +208,6 @@ theorem eq_one_of_mem_minimalOperatorPrefixHull_last {d N : ℕ}
   rw [prefixGramAffineHull_minimalOperatorPrefix_last hd U hU B hBN] at hP
   exact hP
 
-/-- The configurations of the full interval are exactly the configurations of the physical chain.
-
-See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-def fullCutIntervalConfigEquiv (d N : ℕ) :
-    (Fin N → Fin d) ≃ MPSPreparation.CutIntervalConfig d N 0 N where
-  toFun x := fun s ↦ x s.1
-  invFun x := fun s ↦ x ⟨s, Nat.zero_le _, s.isLt⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
-
 /-- The full interval tensor of the endpoint-normalized minimal representation recovers the
 original unitary, including its complex phase.
 
@@ -233,21 +223,21 @@ theorem minimalOperatorInterval_full_apply {d N : ℕ}
     (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
     (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     minimalOperatorInterval U B (Nat.zero_le N)
-      (fullCutIntervalConfigEquiv d N x) (fullCutIntervalConfigEquiv d N y) α β = U x y := by
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm x) ((MPSPreparation.finalCutPrefixEquiv d N).symm y) α β = U x y := by
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
   let : Unique (Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U))) :=
     Equiv.unique (finCongr (MPSPreparation.cutRank_zero_eq_one hψ))
   let u : RegionConfig (fun _ : Fin N ↦ Fin (d * d)) (interval N 0 0) :=
     fun s ↦ False.elim (Nat.not_lt_zero _ (MPSPreparation.mem_interval_zero_iff.mp s.2))
-  let w := pairPhysicalConfig (fullCutIntervalConfigEquiv d N x)
-    (fullCutIntervalConfigEquiv d N y)
+  let w := pairPhysicalConfig ((MPSPreparation.finalCutPrefixEquiv d N).symm x)
+    ((MPSPreparation.finalCutPrefixEquiv d N).symm y)
   have h := MPSPreparation.cutPrefixMatrix_interval (operatorCoefficientTensor U) B
     (Nat.zero_le N) u w β
   have hcfg : MPSPreparation.joinCutPrefix 0 N u w =
       MPSPreparation.cutPrefixRestriction (pairPhysicalConfig x y) N := by
     funext s
-    simp [MPSPreparation.joinCutPrefix, w, fullCutIntervalConfigEquiv,
+    simp [MPSPreparation.joinCutPrefix, w, MPSPreparation.finalCutPrefixEquiv,
       pairPhysicalConfig, MPSPreparation.cutPrefixRestriction]
   rw [hcfg] at h
   simp only [MPSPreparation.cutPrefixMatrix, hB0, hBN, Pi.one_apply, Matrix.mul_apply,
@@ -285,7 +275,7 @@ theorem weightedMinimalOperatorInterval_full_apply {d N : ℕ}
     (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
       (CFC.sqrt P) (CFC.sqrt (dualGramMetric S))
-      (fullCutIntervalConfigEquiv d N x, (β, α)) (fullCutIntervalConfigEquiv d N y) = U x y := by
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)) ((MPSPreparation.finalCutPrefixEquiv d N).symm y) = U x y := by
   rw [eq_one_of_mem_minimalOperatorPrefixHull_zero hd U hU B hB0 hP,
     eq_one_of_mem_minimalOperatorPrefixHull_last hd U hU B hBN hS]
   have hc : Fintype.card (Fin (cutRank (interval N 0 N) (operatorCoefficientTensor
@@ -320,8 +310,8 @@ theorem weightedMinimalOperatorInterval_full_submatrix {d N : ℕ}
     (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))) :
     (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
       (CFC.sqrt P) (CFC.sqrt (dualGramMetric S))).submatrix
-      (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-      (fullCutIntervalConfigEquiv d N) = U := by
+      (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+      ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U := by
   ext x y
   exact weightedMinimalOperatorInterval_full_apply hd U hU B hB0 hBN hP hS x y α β
 
@@ -359,8 +349,8 @@ theorem exists_normalized_minimalInterval_family_of_unitary {d N : ℕ}
           (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-            (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-            (fullCutIntervalConfigEquiv d N) = U := by
+            (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+            ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals⟩ :=
     exists_simultaneous_balanced_interval_isometries_of_unitary hd hN U hU
   have h0 := eq_one_of_mem_minimalOperatorPrefixHull_zero hd U hU B hB0 (hP 0).1

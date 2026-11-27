@@ -207,7 +207,8 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
       basisInclusion (leafOutputEmbedding eρ eσ) * V) :
     Matrix.reindex (leafIntervalConfigEquiv d D N i) (leafIntervalConfigEquiv d D N i) Z *
         basisInclusion (intervalInputEmbedding (D := D) i.val (i.val + 1)) =
-      basisInclusion (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+      basisInclusion (show (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val
+          (i.val + 1)) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ) *
         Matrix.reindex (Equiv.prodCongr (singleSiteIntervalConfigEquiv d N i) (Equiv.refl _))
@@ -228,11 +229,13 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     simpa only [E, F, Equiv.apply_symm_apply] using
       leafIntervalConfigEquiv_leafInput (D := D) i (F.symm b)
   have hout : Matrix.reindex E G (basisInclusion (leafOutputEmbedding eρ eσ)) =
-      basisInclusion (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+      basisInclusion (show (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val
+          (i.val + 1)) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ) := by
     apply basisInclusion_reindex_of_mapping E G (leafOutputEmbedding eρ eσ)
-      (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+      (show (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val (i.val + 1)) ×
+          (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ)
     rintro ⟨b, labels⟩
@@ -362,8 +365,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_uni
           (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-            (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-            (fullCutIntervalConfigEquiv d N) = U) ∧
+            (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+            ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U) ∧
         ∀ i : Fin N,
           ∃ Z : Matrix
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +

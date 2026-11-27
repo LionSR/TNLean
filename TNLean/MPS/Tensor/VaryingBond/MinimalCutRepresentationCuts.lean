@@ -443,6 +443,15 @@ def cutSuffixConfigEquiv (hk : k ≤ N) :
     (Fin (N - k) → Fin d) ≃ ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) :=
   Equiv.arrowCongr (cutSuffixSiteEquiv hk) (Equiv.refl (Fin d))
 
+/-- The prefix at the final cut is the complete physical configuration.
+Source: PGVWC07, endpoint condition 3 of Theorem thm:OBC-Vidal. -/
+def finalCutPrefixEquiv (d N : ℕ) :
+    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 N) ≃ (Fin N → Fin d) where
+  toFun u s := u ⟨s, mem_interval_zero_iff.mpr s.isLt⟩
+  invFun σ s := σ s.val
+  left_inv _ := rfl
+  right_inv _ := rfl
+
 end CutSiteCoordinates
 
 end MPSPreparation
