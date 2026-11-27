@@ -53,7 +53,7 @@ open GoldenInt MPSTensor MPOTensor
 
 /-- The Fibonacci operator blocks over the golden integers: the admissibility projector at the
 trivial label and the `τ` block at `τ`. -/
-def fibBlockGolden : (a : Fin 2) → Fin 2 → Fin 2 →
+def fibBlockGolden : (a : Fin 2) → Fin 2 × Fin 2 →
     Matrix (Fin (fibBlockDim a)) (Fin (fibBlockDim a)) GoldenInt
   | 0 => fibOneGolden
   | 1 => fibTauGolden
@@ -72,7 +72,7 @@ instance (a b c : Fin 2) : Subsingleton (Fin (fibMult a b c)) :=
   Fin.subsingleton_iff_le_one.mpr (fibMult_le_one a b c)
 
 theorem fibBlock_eq_complexOfGolden (a : Fin 2) :
-    fibBlock a = Function.uncurry fun i j ↦ complexOfGolden (fibBlockGolden a i j) := by
+    fibBlock a = fun ij ↦ complexOfGolden (fibBlockGolden a ij) := by
   fin_cases a <;> rfl
 
 theorem fibNimTargets_eq_complexOfGolden (x : Fin 2) :
@@ -240,21 +240,19 @@ set_option maxRecDepth 8000 in
 operator blocks is the exact sum of its blocks `O_c`, with multiplicity `N_{ab}^c`.
 Source: arXiv:2203.12563, `fusiontensors`, `eq:orthoW`, lines 361–391. -/
 theorem isBiorthogonalDecomposition_fibFusion (a b : Fin 2) :
-    IsBiorthogonalDecomposition (mulTensor (fibBlock a) (fibBlock b)).toMPSTensor
-      (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ (fibBlock q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (mulTensor (fibBlock a) (fibBlock b))
+      (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ fibBlock q.1)
       (fun q ↦ fibFusionAnalysis a b q.1 q.2) (fun q ↦ fibFusionSynthesis a b q.1 q.2) := by
-  have hB : (mulTensor (fibBlock a) (fibBlock b)).toMPSTensor = fun p ↦
-      complexOfGolden (mulGoldenTensor (fibBlockGolden a) (fibBlockGolden b) p.divNat
-        p.modNat) := by
+  have hB : mulTensor (fibBlock a) (fibBlock b) = fun p ↦
+      complexOfGolden (mulGoldenTensor (fibBlockGolden a) (fibBlockGolden b) p) := by
     funext p
     rw [fibBlock_eq_complexOfGolden a, fibBlock_eq_complexOfGolden b]
-    exact mulTensor_complexOfGolden _ _ _ _
-  have hA : (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ (fibBlock q.1).toMPSTensor) =
-      fun (q : (c : Fin 2) × Fin (fibMult a b c)) (p : Fin (2 * 2)) ↦
-        complexOfGolden (fibBlockGolden q.1 p.divNat p.modNat) := by
+    exact mulTensor_complexOfGolden _ _ _
+  have hA : (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ fibBlock q.1) =
+      fun (q : (c : Fin 2) × Fin (fibMult a b c)) (p : Fin 2 × Fin 2) ↦
+        complexOfGolden (fibBlockGolden q.1 p) := by
     funext q p
     rw [fibBlock_eq_complexOfGolden q.1]
-    rfl
   rw [hB, hA]
   refine isBiorthogonalDecomposition_complexOfRing goldenToComplex _ _
     (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ fibFusionAnalysisGolden a b q.1)

@@ -164,8 +164,8 @@ def czyReducedGauge : (Fin 3 → ℂ) ≃ₗ[ℂ] (BlockSpace squareDim oneSlot 
 theorem czyReduced_conjMatrix (i : Fin 2 × Fin 2) :
     conjMatrix czyReducedGauge (czyReducedTensor i) =
       (complexOfInt (czyReducedIntTensor i)).submatrix czyReducedTau czyReducedTau := by
-  rw [czyReducedGauge, conjMatrix_gaugeOfRingMatrix _ _ _ _ (A := czyReducedTensor i) (AR := czyReducedIntTensor i) rfl, Matrix.one_mul,
-    Matrix.mul_one]
+  rw [czyReducedGauge, conjMatrix_gaugeOfRingMatrix _ _ _ _ (A := czyReducedTensor i)
+    (AR := czyReducedIntTensor i) rfl, Matrix.one_mul, Matrix.mul_one]
 
 private theorem czyReduced_triangular_int (i : Fin 2 × Fin 2)
     (x y : BlockSpace squareDim oneSlot 2) (h : czyReducedOrd y.1 < czyReducedOrd x.1) :

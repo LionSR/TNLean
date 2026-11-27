@@ -268,7 +268,8 @@ theorem czxSquare_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, squareDim s + 3 :=
 theorem czxSquare_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
     (h : ∀ i, czxSquare i *ᵥ v = czxSquareTarget () i 0 0 • v) : v = 0 :=
   mulVec_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
-    negIdentityIntMPS (czxSquareTarget_eq ()) ![((0, 0), 0, 0), ((0, 0), 3, 0), ((1, 1), 2, 0), ((1, 1), 3, 0)]
+    negIdentityIntMPS (czxSquareTarget_eq ())
+    ![((0, 0), 0, 0), ((0, 0), 3, 0), ((1, 1), 2, 0), ((1, 1), 3, 0)]
     (Matrix.of fun x => ![![2, 1, -1, -1], ![0, 1, 1, -1], ![0, -1, 1, 1], ![0, 1, 1, 1]] x.1)
     (c := 2) (by norm_num) (by decide) v h
 
@@ -276,7 +277,8 @@ theorem czxSquare_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
 theorem czxSquare_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
     (h : ∀ i, u ᵥ* czxSquare i = czxSquareTarget () i 0 0 • u) : u = 0 :=
   vecMul_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
-    negIdentityIntMPS (czxSquareTarget_eq ()) ![((0, 0), 1, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 2, 0)]
+    negIdentityIntMPS (czxSquareTarget_eq ())
+    ![((0, 0), 1, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 2, 0)]
     (Matrix.of fun x => ![![-1, 1, 1, 0], ![1, 0, 0, 0], ![0, 0, 0, 1], ![0, 0, 1, 0]] x.1)
     (c := 1) (by norm_num) (by decide) u h
 
