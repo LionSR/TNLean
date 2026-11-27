@@ -97,13 +97,15 @@ positive length, with normal tensors `C_c` of positive bond dimension and multip
 
 This is `MPSTensor.exists_multiBlockCompression_of_isNormal` applied to the sigma type of copies;
 no hypothesis relating distinct `C_c` is needed. -/
-theorem exists_multiBlockCompression_sigma_of_isNormal (B : MPSTensor d DB)
-    (C : ∀ c, MPSTensor d (D c)) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
+theorem exists_multiBlockCompression_sigma_of_isNormal {α : Type*} [Finite α]
+    (B : MPTensor α (Fin DB))
+    (C : ∀ c, MPTensor α (Fin (D c))) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
     (hD : ∀ c, 0 < D c)
-    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → Fin d,
+    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → α,
       mpv B σ = ∑ c, (N c : ℂ) * mpv (C c) σ) :
     Nonempty (MultiBlockCompression (D := fun s : Σ c, Fin (N c) => D s.1) B Finset.univ
       fun s => C s.1) := by
+  have := Fintype.ofFinite α
   refine exists_multiBlockCompression_of_isNormal (D := fun s : Σ c, Fin (N c) => D s.1)
     Finset.univ (fun s => C s.1) (fun s _ => hC s.1) (fun s _ => hD s.1) B fun w hw => ?_
   have h := hmpv w.length (List.length_pos_of_ne_nil hw) w.get
@@ -124,18 +126,20 @@ omit [DecidableEq L] in
 These are the relations `W_{ab}^{c,μ} \hat W_{ab}^{d,ν} = δ_{cd} δ_{μν} 1` of arXiv:2203.12563,
 equation `eq:orthoW`, together with the periodic-boundary form of the decomposition, whose
 off-diagonal tails vanish after finitely many sites (lines 1028 and 1131). -/
-theorem exists_multiplicityReductions_of_isNormal (B : MPSTensor d DB)
-    (C : ∀ c, MPSTensor d (D c)) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
+theorem exists_multiplicityReductions_of_isNormal {α : Type*} [Finite α]
+    (B : MPTensor α (Fin DB))
+    (C : ∀ c, MPTensor α (Fin (D c))) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
     (hD : ∀ c, 0 < D c)
-    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → Fin d,
+    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → α,
       mpv B σ = ∑ c, (N c : ℂ) * mpv (C c) σ) :
     ∃ (V : ∀ s : Σ c, Fin (N c), Matrix (Fin (D s.1)) (Fin DB) ℂ)
       (W : ∀ s : Σ c, Fin (N c), Matrix (Fin DB) (Fin (D s.1)) ℂ),
       (∀ s, IsReduction B (C s.1) (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
-        ∀ w : List (Fin d), DB ≤ w.length →
+        ∀ w : List α, DB ≤ w.length →
           Kraus.evalWord (fun i => B i - ∑ s, W s * C s.1 i * V s) w = 0 := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨P⟩ := exists_multiBlockCompression_sigma_of_isNormal B C N hC hD hmpv
   refine ⟨fun s => P.left ⟨s, Finset.mem_univ s⟩, fun s => P.right ⟨s, Finset.mem_univ s⟩,
     fun s => P.isReduction ⟨s, Finset.mem_univ s⟩, fun s t hst => P.left_mul_right_of_ne
@@ -278,12 +282,6 @@ namespace MPOTensor
 
 variable {d : ℕ} {L : Type*} [Fintype L]
 
-/-- A word over the pair alphabet is the relabelled word of the doubled-index view. -/
-private theorem evalWord_toMPSTensor_map {D : ℕ} (X : MPOTensor d D)
-    (w : List (Fin d × Fin d)) :
-    Kraus.evalWord X.toMPSTensor (w.map finProdFinEquiv) = Kraus.evalWord X w := by
-  rw [evalWord_toMPSTensor, List.map_map, Equiv.symm_comp_self, List.map_id]
-
 /-- **Fusion tensors with multiplicity** (Garre-Rubio--Lootens--Molnár, arXiv:2203.12563,
 equations `fusiontensors` and `eq:orthoW`, lines 361--389).  Let the periodic operators of the
 MPO tensors `O_c` obey the fusion rule `O_a O_b = ∑_c N_{ab}^c O_c` at every positive length,
@@ -314,21 +312,13 @@ theorem exists_fusionTensors_of_mpo_mul_eq_sum {χ : L → ℕ} (O : ∀ c, MPOT
           Kraus.evalWord (fun i => mulTensor (O a) (O b) i -
             ∑ s, W s * O s.1 i * V s) w = 0 := by
   classical
-  have hmpv : ∀ n : ℕ, 0 < n → ∀ ρ : Fin n → Fin (d * d),
-      MPTensor.mpv (mulTensor (O a) (O b)).toMPSTensor ρ =
-        ∑ c, (N a b c : ℂ) * MPTensor.mpv (O c).toMPSTensor ρ := by
+  have hmpv : ∀ n : ℕ, 0 < n → ∀ ρ : Fin n → Fin d × Fin d,
+      MPTensor.mpv (mulTensor (O a) (O b)) ρ = ∑ c, (N a b c : ℂ) * MPTensor.mpv (O c) ρ := by
     intro n hn ρ
-    rw [mpv_toMPSTensor_eq, mpv_eq_mpo, mpo_mulTensor, hfus n hn, Matrix.sum_apply]
+    rw [mpv_eq_mpo, mpo_mulTensor, hfus n hn, Matrix.sum_apply]
     refine Finset.sum_congr rfl fun c _ => ?_
-    rw [Matrix.smul_apply, smul_eq_mul, mpv_toMPSTensor_eq, mpv_eq_mpo]
-  obtain ⟨V, W, hred, horth, hnil⟩ := MPSTensor.exists_multiplicityReductions_of_isNormal _
-    (fun c => (O c).toMPSTensor) (N a b) (fun c => (isNormal_toMPSTensor_iff (O c)).2 (hO c))
-    hχ hmpv
-  refine ⟨V, W, fun s => ⟨(hred s).mul_eq_one, fun w => ?_⟩, horth, fun w hw => ?_⟩
-  · simpa only [evalWord_toMPSTensor_map] using (hred s).evalWord (w.map finProdFinEquiv)
-  · exact (evalWord_toMPSTensor_map (D := χ a * χ b)
-      (fun p => mulTensor (O a) (O b) p - ∑ s, W s * O s.1 p * V s) w).symm.trans
-      (hnil (w.map finProdFinEquiv) (by rwa [List.length_map]))
+    rw [Matrix.smul_apply, smul_eq_mul, mpv_eq_mpo]
+  exact MPSTensor.exists_multiplicityReductions_of_isNormal _ O (N a b) hO hχ hmpv
 
 /-- **Fusion tensors of a matrix product operator fusion algebra** (arXiv:2203.12563, lines
 361--389): `MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum` for every pair of labels of an

@@ -375,8 +375,8 @@ theorem hasBlockSelectorWords_of_pairBlockSeparatingWords
 
 /-- Any finite-length product-algebra spanning witness already contains block
 selectors as a special case. -/
-theorem hasBlockSelectorWords_of_wordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k))
+theorem hasBlockSelectorWords_of_wordTupleSpanTop {α : Type*} [Fintype α]
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {S : ℕ} (hSpan : WordTupleSpanTop A S) :
     HasBlockSelectorWords A S := by
   classical

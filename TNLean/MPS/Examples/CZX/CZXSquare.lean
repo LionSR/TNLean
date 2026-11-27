@@ -356,27 +356,15 @@ A star-closed algebra would give a nonzero sitewise right intertwiner with the n
 target `-δ`, contradicting `czxSquare_right_intertwiner_eq_zero`. -/
 theorem czxSquare_not_starClosed :
     ¬ ∀ i, (czxSquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czxSquare) := by
-  -- The splitting criterion is stated on the letters `Fin (2 * 2)` (it runs through the word
-  -- algebra of `Fin d`); it is applied to the doubled-index views.
-  have hrange : Set.range czxSquare.toMPSTensor = Set.range czxSquare :=
-    finProdFinEquiv.symm.surjective.range_comp czxSquare
-  intro hstar
   refine MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    oneSlot (fun s => (czxSquareTarget s).toMPSTensor)
-    (fun s _ => (MPOTensor.isNormal_toMPSTensor_iff _).2 (czxSquareTarget_isNormal s))
-    (fun _ _ => Nat.one_pos) czxSquare.toMPSTensor
-    (fun w hw => by
-      simp only [MPOTensor.evalWord_toMPSTensor]
-      exact czxSquare_compression.trace_evalWord_eq_sum _ (by simpa using hw)) oneSlotMem ?_
-    (fun i => by rw [hrange]; exact hstar _)
+    oneSlot czxSquareTarget (fun s _ => czxSquareTarget_isNormal s) (fun _ _ => Nat.one_pos)
+    czxSquare (fun w hw => czxSquare_compression.trace_evalWord_eq_sum w hw) oneSlotMem ?_
   intro X hX
   have hv : ∀ i, czxSquare i *ᵥ (fun x => X x 0) =
       czxSquareTarget () i 0 0 • (fun x => X x 0) := by
     intro i
     funext x
-    have h := congrFun (congrFun (hX (finProdFinEquiv i)) x) 0
-    simp only [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-      Equiv.symm_apply_apply] at h
+    have h := congrFun (congrFun (hX i) x) 0
     simp only [Matrix.mul_apply, Fin.sum_univ_one] at h
     simp only [Matrix.mulVec, dotProduct, Pi.smul_apply, smul_eq_mul]
     exact h.trans (mul_comm _ _)

@@ -94,6 +94,11 @@ The construction and its exact data were first recorded in
 `Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex`, and
 `Notes/OpenProblemsTN/checks/p6_examples_compression_data.md`, §1, with the exact-arithmetic
 check `checks/round44_p6_z2_twisted_dimer.py`; they are verification records, not the source.
+
+**Bridge (T.2c):** The normality of `dimerM`, read off `flagFamily`, still reads an operator tensor
+through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal tensors
+are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical alphabet
+moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open MPTensor

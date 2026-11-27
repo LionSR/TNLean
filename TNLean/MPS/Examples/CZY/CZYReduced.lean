@@ -243,23 +243,11 @@ theorem czyReduced_remainder_ne_zero
 
 /-- **The virtual algebra of `A_0` is not star closed.** -/
 theorem czyReduced_not_starClosed :
-    ¬ ∀ i, (czyReducedTensor i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czyReducedTensor) := by
-  -- The splitting criterion is stated on the letters `Fin (2 * 2)` (it runs through the word
-  -- algebra of `Fin d`); it is applied to the doubled-index views.
-  have hrange : Set.range czyReducedTensor.toMPSTensor = Set.range czyReducedTensor :=
-    finProdFinEquiv.symm.surjective.range_comp czyReducedTensor
-  intro hstar
-  refine MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    oneSlot (fun s => (czySquareTarget s).toMPSTensor)
-    (fun s _ => (MPOTensor.isNormal_toMPSTensor_iff _).2 (czySquareTarget_isNormal s))
-    (fun _ _ => Nat.one_pos) czyReducedTensor.toMPSTensor
-    (fun w hw => by
-      simp only [MPOTensor.evalWord_toMPSTensor]
-      exact czyReduced_compression.trace_evalWord_eq_sum _ (by simpa using hw)) oneSlotMem
-    (fun X hX => czyReduced_right_intertwiner_eq_zero X fun i => by
-      simpa [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical] using
-        hX (finProdFinEquiv i))
-    (fun i => by rw [hrange]; exact hstar _)
+    ¬ ∀ i, (czyReducedTensor i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czyReducedTensor) :=
+  MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
+    oneSlot czySquareTarget (fun s _ => czySquareTarget_isNormal s) (fun _ _ => Nat.one_pos)
+    czyReducedTensor (fun w hw => czyReduced_compression.trace_evalWord_eq_sum w hw) oneSlotMem
+    czyReduced_right_intertwiner_eq_zero
 
 /-- **The letters of `A_0` do not generate the full matrix algebra** (arXiv:2509.03600, main.tex
 line 240): the generated algebra is not star closed, while the full matrix algebra is. -/

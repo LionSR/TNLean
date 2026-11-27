@@ -56,6 +56,11 @@ operators is proved in `TNLean.MPS.MPDO.TwistedDimerProductLaw`.
   Theorem 4.14(ii), lines 972--985 (the closed operators $O_L(M_\alpha)$ and
   their same-length algebra) and lines 995--1010 (the length-dependence
   question motivating this project example)
+
+**Bridge (T.2c):** The vertical family `flagFamily` still reads an operator tensor through
+`MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal tensors are
+stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical alphabet
+moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped BigOperators Matrix

@@ -118,6 +118,12 @@ maps assemble into the coisometry of the vertical canonical form.
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
   Proposition 4.13, lines 1863--1921.
+
+**Bridge (T.2b):** The blocking lemmas of this module still reads an operator tensor through
+`MPOTensor.toMPSTensor`, because the Fin-encoded blocking `Kraus.blockTensor` (with
+`MPOTensor.toMPSTensor_blockTensor`, `MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet
+`Fin (d * d)`. The bridge is removed when the blocking moves to `Kraus.block` (step T.2b of
+`docs/tensor_type_unification.md`).
 -/
 
 section

@@ -370,24 +370,9 @@ Theorem 7.7; data file, Section 4): `N ⊗ N` compresses onto the sixteen weight
 theorem exists_condensationSquare_compression :
     Nonempty (MultiBlockCompression condensationSquare pairSlots pairTarget) := by
   have hD : ∀ p : Fin 4 × Fin 4, 0 < pairDim p := by decide
-  -- The compression theorem is stated on the letters `Fin (4 * 4)` (it runs through the word
-  -- algebra of `Fin d`); it is applied to the doubled-index views and the datum is read back.
-  obtain ⟨P⟩ := exists_multiBlockCompression_of_isNormal pairSlots
-    (fun p => (pairTarget p).toMPSTensor)
-    (fun p _ => (isNormal_toMPSTensor_iff _).2 (pairTarget_isNormal p)) (fun p _ => hD p)
-    condensationSquare.toMPSTensor (fun w hw => by
-      simp only [evalWord_toMPSTensor]
-      exact condensationSquare_trace_evalWord _ (by simpa using hw))
-  exact ⟨{ z := P.z, ord := P.ord, gauge := P.gauge
-           triangular := fun i => by
-             simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-               Equiv.symm_apply_apply] using P.triangular (finProdFinEquiv i)
-           matched := fun i s => by
-             simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-               Equiv.symm_apply_apply] using P.matched (finProdFinEquiv i) s
-           unmatched := fun i t => by
-             simpa only [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-               Equiv.symm_apply_apply] using P.unmatched (finProdFinEquiv i) t }⟩
+  exact exists_multiBlockCompression_of_isNormal pairSlots pairTarget
+    (fun p _ => pairTarget_isNormal p) (fun p _ => hD p) condensationSquare
+    fun w hw => condensationSquare_trace_evalWord w hw
 
 /-- **The number of zero slots of the assembled datum is twelve**: `36 = 4 (1 + 2 + 1 + 2) + 12`
 (data file, Section 4; P5 note, Theorem 7.7(vii)). -/

@@ -254,15 +254,10 @@ with the length conditions in line 1498 (exterior identity); `eq:Fgg`,
 lines 2000--2037 and the CZX display in lines 4671--4689 (caps). -/
 theorem fusion_isReductionExteriorBufferLength_one :
     MPSTensor.IsReductionExteriorBufferLength
-      (MPOTensor.mulTensor tensor tensor).toMPSTensor
-      (identityMPUTensor 4).toMPSTensor fusionV fusionW 1 := by
+      (MPOTensor.mulTensor tensor tensor) (identityMPUTensor 4) fusionV fusionW 1 := by
   intro p c q hc hp hq
-  simp only [evalWord_toMPSTensor, List.map_append]
-  have hne : ∀ w : List (Fin (4 * 4)), w ≠ [] → w.map finProdFinEquiv.symm ≠ [] := by
-    simp
   rw [← fusion_isReduction.evalWord, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
-    evalWord_fusion_projection_insertion _ _ (hne p (List.ne_nil_of_length_pos hp)) (hne c hc),
-    evalWord_fusion_projection_insertion _ _ (by simp [hne c hc])
-      (hne q (List.ne_nil_of_length_pos hq))]
+    evalWord_fusion_projection_insertion _ _ (List.ne_nil_of_length_pos hp) hc,
+    evalWord_fusion_projection_insertion _ _ (by simp [hc]) (List.ne_nil_of_length_pos hq)]
 
 end MPOTensor.CZX

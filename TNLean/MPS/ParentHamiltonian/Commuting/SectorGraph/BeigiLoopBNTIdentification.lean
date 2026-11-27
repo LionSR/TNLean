@@ -39,16 +39,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A transfer-idempotent algebraically normal tensor is a spectrally normalized normal tensor.
-
-Algebraic normality gives irreducibility by arXiv:0909.5347, Proposition 3. Wolf's
-Perron--Frobenius theorem (Theorem 6.3) supplies a positive-definite eigenvector with positive
-eigenvalue. Transfer idempotence forces that eigenvalue, and every nonzero eigenvalue, to be
-one. The spectral normalization of arXiv:1606.00608, lines 224--235, is therefore trivial.
-This conversion applies in particular to the loop tensors used in the BNT identification at
-arXiv:1606.00608, line 1307.
--/
-theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
+/-- The transfer-idempotent normal-tensor criterion on the alphabet `Fin d`. -/
+private theorem isNormalTensor_of_isNormal_isTransferIdempotent_fin [NeZero D]
     (A : MPSTensor d D) (hNormal : Kraus.IsNormal A)
     (hRFP : IsTransferIdempotent A) : IsNormalTensor A := by
   have hInjective : Kraus.IsInjective A := rfp_nt_structural A hNormal hRFP
@@ -119,6 +111,28 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
     isNormalTensor_invSqrt_smul_of_unique_peripheral A hIrr ρ 1 hρ (by norm_num)
       (by simpa using hρeig) huniq
   simpa using hScaled
+
+/-- A transfer-idempotent algebraically normal tensor is a spectrally normalized normal tensor.
+
+Algebraic normality gives irreducibility by arXiv:0909.5347, Proposition 3. Wolf's
+Perron--Frobenius theorem (Theorem 6.3) supplies a positive-definite eigenvector with positive
+eigenvalue. Transfer idempotence forces that eigenvalue, and every nonzero eigenvalue, to be
+one. The spectral normalization of arXiv:1606.00608, lines 224--235, is therefore trivial.
+This conversion applies in particular to the loop tensors used in the BNT identification at
+arXiv:1606.00608, line 1307.
+
+The alphabet is any finite type: the statement is relabelled along `Fintype.equivFin`. -/
+theorem isNormalTensor_of_isNormal_isTransferIdempotent {α : Type*} [Fintype α] [NeZero D]
+    (A : MPTensor α (Fin D)) (hNormal : Kraus.IsNormal A)
+    (hRFP : IsTransferIdempotent A) : IsNormalTensor A := by
+  classical
+  let e := Fintype.equivFin α
+  have h := isNormalTensor_of_isNormal_isTransferIdempotent_fin (Kraus.reindexPhysical e.symm A)
+    ((isNormal_reindexPhysical_equiv e.symm A).2 hNormal)
+    (by rw [IsTransferIdempotent, Kraus.transferMap_reindexPhysical_equiv]; exact hRFP)
+  have hA : Kraus.reindexPhysical e (Kraus.reindexPhysical e.symm A) = A := by
+    funext i; simp [Kraus.reindexPhysical]
+  exact hA ▸ h.reindexPhysical e
 
 /-- Eventual containment in a finite asymptotically orthonormal family of normal MPV states
 forces phase equivalence with one member of the family.

@@ -28,6 +28,11 @@ The common block length is strictly positive.
 * arXiv:1511.08090, fusion tensors and zipper equations at lines 161--200,
   simultaneous inverse at lines 269--277, and common blocking at lines
   427--431.
+
+**Bridge (T.2c):** The basis-of-normal-tensors hypothesis of this module still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal
+tensors are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical
+alphabet moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix BigOperators Kronecker

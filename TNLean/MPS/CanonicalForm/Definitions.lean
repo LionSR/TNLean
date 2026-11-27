@@ -270,12 +270,13 @@ CPSV canonical form, with the retained coordinates equal to the ambient
 coordinates.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-noncomputable def _root_.MPTensor.CPSVCanonicalFormData.ofBlocks {r : ℕ} {dim : Fin r → ℕ}
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.ofBlocks {α : Type*} [Fintype α]
+    {r : ℕ} {dim : Fin r → ℕ}
     (dim_pos : ∀ k, 0 < dim k) (weights : Fin r → ℂ)
     (weights_ne_zero : ∀ k, weights k ≠ 0)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (blocks_normal : ∀ k, IsNormalTensor (blocks k)) :
-    CPSVCanonicalFormData (toTensorFromBlocks (α := Fin d) weights blocks) where
+    CPSVCanonicalFormData (toTensorFromBlocks (α := α) weights blocks) where
   r := r
   dim := dim
   dim_pos := dim_pos
@@ -316,8 +317,8 @@ membership.  The unit weight is required exactly when the ambient tensor is
 nonzero.
 
 Source: arXiv:1606.00608, Section 2.3, line 246. -/
-structure _root_.MPTensor.CPSVCanonicalFormData.IsWeightNormalized
-    (data : CPSVCanonicalFormData A) : Prop where
+structure _root_.MPTensor.CPSVCanonicalFormData.IsWeightNormalized {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) : Prop where
   /-- Every retained weight has modulus at most one (CPSV16, line 246). -/
   weight_norm_le_one : ∀ k, ‖data.weights k‖ ≤ 1
   /-- A nonzero ambient tensor has a retained unit-modulus weight (CPSV16, line 246). -/

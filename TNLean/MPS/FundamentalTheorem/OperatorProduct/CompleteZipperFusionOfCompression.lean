@@ -69,8 +69,7 @@ variable {D : Λ → ℕ} (T : ∀ a, MPOTensor p (D a)) (N : Λ → Λ → Λ �
 `(c, μ)` with `μ < N_{ab}^c`, the slot `(c, μ)` carrying the block `O_c`. -/
 abbrev PairCompression (a b : Λ) : Type u :=
   MPSTensor.MultiBlockCompression (D := fun s : (c : Λ) × Fin (N a b c) => D s.1)
-    (mulTensor (T a) (T b)).toMPSTensor Finset.univ
-    fun s : (c : Λ) × Fin (N a b c) => (T s.1).toMPSTensor
+    (mulTensor (T a) (T b)) Finset.univ fun s : (c : Λ) × Fin (N a b c) => T s.1
 
 variable {T N}
 
@@ -139,9 +138,8 @@ omit [Fintype Λ] [DecidableEq Λ] in
 the product bond space. -/
 private theorem pairLetter_apply (a b : Λ) (i k : Fin p) (x x' : Fin (D a) × Fin (D b)) :
     (∑ j : Fin p, T a (i, j) ⊗ₖ T b (j, k)) x x' =
-      (mulTensor (T a) (T b)).toMPSTensor (finProdFinEquiv (i, k))
-        (finProdFinEquiv x) (finProdFinEquiv x') := by
-  simp [MPOTensor.toMPSTensor, mulTensor_apply, Matrix.submatrix_apply]
+      mulTensor (T a) (T b) (i, k) (finProdFinEquiv x) (finProdFinEquiv x') := by
+  simp [mulTensor_apply, Matrix.submatrix_apply]
 
 /-- **Reconstruction from a split compression.** If the remainder vanishes, every letter of
 the product is the sum of its compressed blocks, equation `inversegaugeone`.
@@ -153,20 +151,20 @@ theorem pairLetter_eq_compressionSynthesis_mul {a b : Λ} (P : PairCompression T
       compressionSynthesis P * Matrix.blockDiagonal' (fun c =>
         (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c (i, k)) *
         compressionAnalysis P := by
-  have hrec := congrFun hP (finProdFinEquiv (i, k))
+  have hrec := congrFun hP (i, k)
   simp only [MPSTensor.MultiBlockCompression.remainder, Pi.zero_apply, sub_eq_zero] at hrec
   funext x x'
   rw [pairLetter_apply, hrec, Matrix.sum_apply, mul_blockDiagonal_one_kronecker_mul_apply]
   refine (Fintype.sum_equiv (Equiv.subtypeUnivEquiv fun _ => Finset.mem_univ _) _
     (fun t : (c : Λ) × Fin (N a b c) =>
-      (P.right (pairSlot t.1 t.2) * (T t.1).toMPSTensor (finProdFinEquiv (i, k)) *
+      (P.right (pairSlot t.1 t.2) * T t.1 (i, k) *
         P.left (pairSlot t.1 t.2)) (finProdFinEquiv x) (finProdFinEquiv x')) fun _ => rfl).trans ?_
   rw [Fintype.sum_sigma]
   refine Finset.sum_congr rfl fun c _ => Finset.sum_congr rfl fun μ _ => ?_
   simp only [Matrix.mul_apply, Finset.sum_mul]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun y _ => Finset.sum_congr rfl fun y' _ => ?_
-  simp [compressionSynthesis, compressionAnalysis, MPOTensor.toMPSTensor]
+  simp [compressionSynthesis, compressionAnalysis]
 
 /-- **Complete zipper fusion family from split compressions.** Let `O_a` be injective MPO blocks
 of positive bond dimension, with a simultaneous left inverse of their labelled letters, and for
@@ -251,16 +249,8 @@ theorem exists_pairCompression_remainder_eq_zero_of_star (hD : ∀ a, 0 < D a)
     ∃ P : PairCompression T N a b, P.remainder = 0 :=
   MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
     (D := fun s : (c : Λ) × Fin (N a b c) => D s.1) Finset.univ
-    (fun s : (c : Λ) × Fin (N a b c) => (T s.1).toMPSTensor)
-    (fun s _ => ((isInjective_toMPSTensor_iff _).2 (hT s.1)).isNormal) (fun s _ => hD s.1) _
-    (fun w hw => by
-      simpa only [evalWord_toMPSTensor] using
-        htr (w.map finProdFinEquiv.symm) (by simpa using hw))
-    (fun i => by
-      rw [show Set.range (mulTensor (T a) (T b)).toMPSTensor =
-          Set.range (mulTensor (T a) (T b)) from
-        finProdFinEquiv.symm.surjective.range_comp _]
-      exact hstar (finProdFinEquiv.symm i))
+    (fun s : (c : Λ) × Fin (N a b c) => T s.1) (fun s _ => (hT s.1).isNormal)
+    (fun s _ => hD s.1) _ htr hstar
 
 /-- **Complete zipper fusion family in the star-closed case.** Under the fusion rules on word
 traces and the star closure of every product tensor, the split compressions of

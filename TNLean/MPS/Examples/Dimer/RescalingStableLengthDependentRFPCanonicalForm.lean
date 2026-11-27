@@ -351,16 +351,9 @@ lemma retainedBlock_isInjective : Kraus.IsInjective retainedBlock := by
   exact_mod_cast weight_ne
 
 /-- **`retainedBlock` is a CPSV normal tensor.** -/
-lemma retainedBlock_isNormalTensor : MPTensor.IsNormalTensor retainedBlock := by
-  -- The normality criterion for transfer-idempotent tensors is stated on a `Fin` alphabet.
-  have h := (MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock.toMPSTensor
-    ((MPOTensor.isNormal_toMPSTensor_iff _).2 retainedBlock_isInjective.isNormal)
-    (by
-      rw [MPSTensor.IsTransferIdempotent, MPOTensor.kraus_transferMap_toMPSTensor]
-      exact retainedBlock_isTransferIdempotent)).reindexPhysical finProdFinEquiv
-  have he : Kraus.reindexPhysical finProdFinEquiv retainedBlock.toMPSTensor = retainedBlock :=
-    funext fun i ↦ congrArg retainedBlock (finProdFinEquiv.symm_apply_apply i)
-  rwa [he] at h
+lemma retainedBlock_isNormalTensor : MPTensor.IsNormalTensor retainedBlock :=
+  MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock
+    retainedBlock_isInjective.isNormal retainedBlock_isTransferIdempotent
 
 /-! ### Packaging the literal CPSV canonical form -/
 
