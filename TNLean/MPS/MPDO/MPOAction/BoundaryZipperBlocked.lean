@@ -79,9 +79,9 @@ unchanged. Source: GLM23 Appendix A and arXiv:1511.08090, lines 427--431. -/
 @[reducible] noncomputable def ofBiorthogonalBlocked :
     CompleteZipperFusionFamily (Fin g)
       (Kraus.blockPhysDim p
-        (jointBlockLength T (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT c)) hD hne)) :=
+        (jointBlockLength T (fun c ↦ (hT c)) hD hne)) :=
   let hspec := (exists_blockTensor_isMPOBlockLeftInverse T
-    (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT c)) hD hne).choose_spec
+    (fun c ↦ (hT c)) hD hne).choose_spec
   ofBiorthogonal hD hspec.2.1 V W (fun a b ↦ (hVW a b).blockMPO hspec.1)
     hspec.2.2.choose hspec.2.2.choose_spec
 
@@ -89,7 +89,7 @@ unchanged. Source: GLM23 Appendix A and arXiv:1511.08090, lines 427--431. -/
 theorem ofBiorthogonalBlocked_tensor (c : Fin g) :
     (ofBiorthogonalBlocked hT hD hne V W hVW).tensor c =
       blockTensor (T c)
-        (jointBlockLength T (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT c)) hD hne) := rfl
+        (jointBlockLength T (fun c ↦ (hT c)) hD hne) := rfl
 
 /-- Physical blocking preserves every synthesis entry, including its
 unblocked incoming bond coordinates. -/
@@ -137,7 +137,7 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
   have hBlocks' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun c ↦ (A c).toMPSTensor) := congrArg toMPSTensor hBlocks
   have hInj' : ∀ c, Kraus.IsInjective (A c).toMPSTensor :=
-    fun c ↦ (isInjective_toMPSTensor_iff (A c)).2 (hInj c)
+    hInj
   choose N V W hVW using
     fun a b ↦ h.exists_blockFusionDecomposition_of_isInjective
       A hBlocks' hInj' hD hne a b
@@ -145,7 +145,7 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
   let F := CompleteZipperFusionFamily.ofBiorthogonalBlocked hNormal hD hne V W hVW
   exact ⟨N, V, W, hVW, _,
     CompleteZipperFusionFamily.jointBlockLength_pos A
-      (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hNormal c)) hD hne,
+      (fun c ↦ (hNormal c)) hD hne,
     F, rfl, rfl, HEq.rfl, HEq.rfl, HEq.rfl⟩
 
 end MPOTensor

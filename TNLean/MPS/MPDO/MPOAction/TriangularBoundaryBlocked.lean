@@ -88,7 +88,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
             else 0 := by
   classical
   obtain ⟨L, hL, hInj, K, hK⟩ := exists_blockTensor_isMPOBlockLeftInverse
-    (fun c ↦ T (e.symm c)) (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT (e.symm c)))
+    (fun c ↦ T (e.symm c)) (fun c ↦ (hT (e.symm c)))
     (fun c ↦ hD (e.symm c))
     (fun a b hab hdim ↦ (gaugePhaseEquiv_cast_toMPSTensor_iff hdim _ _).not.2
       (hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim))
@@ -102,7 +102,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
   refine ⟨L, hL, ?_, (fun q ↦ Krow q.1 q.2), ?_⟩
   · intro c
     obtain ⟨j, rfl⟩ := e.symm.surjective c
-    exact (isInjective_toMPSTensor_iff _).1 (hInj j)
+    exact (hInj j)
   · intro a b
     obtain ⟨j, rfl⟩ := e.symm.surjective a
     obtain ⟨k, rfl⟩ := e.symm.surjective b
@@ -258,7 +258,7 @@ the disjoint union, and its matrices are the original rectangular maps. -/
     (fun c ↦ by
       cases c with
       | inl a => exact hχ a
-      | inr x => exact hD x) (fun c ↦ (isInjective_toMPSTensor_iff _).2 (hspec.2.1 c))
+      | inr x => exact hD x) (fun c ↦ (hspec.2.1 c))
     (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA)
     (fun a b ↦ (isBiorthogonalDecomposition_triangularTensor VF WF VA WA O A hF hAct
       a b).blockMPO_fintype hspec.1)

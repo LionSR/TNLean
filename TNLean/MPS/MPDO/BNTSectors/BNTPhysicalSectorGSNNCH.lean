@@ -223,7 +223,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
         MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective
         (Kraus.isNBlkInjective_one_of_isInjective
-          ((isInjective_toMPSTensor_iff _).2 (hInjective s))) Nat.one_pos
+          (hInjective s)) Nat.one_pos
       omega
     apply hmpv
     funext ρ

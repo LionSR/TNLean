@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportProductTransport
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Commuting products on the BNT physical sectors

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Matrix.DependentBlockDiagonal
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorActiveCoordinates
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Canonical physical restriction from active sector factors
@@ -644,11 +644,11 @@ theorem activePhysicalSupportRestriction_isInjective
     (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     Kraus.IsInjective (F.activePhysicalSupportRestriction A) :=
-  (isInjective_toMPSTensor_iff _).1 <| isInjective_of_eq_changePhysicalBasis
+  isInjective_of_eq_changePhysicalBasis
     (F.physicalSupportInclusion A)
     (F.activePhysicalSupportRestriction A) K
     (F.changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
-      A hK hpos).symm ((isInjective_toMPSTensor_iff K).2 hK)
+      A hK hpos).symm hK
 
 /-- The explicitly assembled active-factor inclusion gives the canonical
 physical support restriction data.
@@ -674,7 +674,7 @@ noncomputable def activePhysicalSupportRestrictionData
     rw [F.physicalSupportInclusion_range,
       F.activePhysicalSupportProj_eq_physicalSupportProj]
   restricted_injective :=
-    (isInjective_toMPSTensor_iff _).2 (F.activePhysicalSupportRestriction_isInjective A hK hpos)
+    (F.activePhysicalSupportRestriction_isInjective A hK hpos)
   reembed :=
     F.changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
       A hK hpos

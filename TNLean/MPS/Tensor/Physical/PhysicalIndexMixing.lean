@@ -24,37 +24,41 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α β : Type*} [Fintype α] [Fintype β] {D : ℕ}
 
 /-! ### Isometric Kraus mixing -/
 
 /-- For a possibly rectangular isometry `W`, the family
 `C τ = ∑ σ, W τ σ • B σ` has the same transfer map as `B`. -/
 theorem transferMap_kraus_isometry
-    {m : ℕ} (B : MPSTensor d D)
-    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
-    Kraus.transferMap (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ) = Kraus.transferMap B := by
+    [DecidableEq α] (B : MPTensor α (Fin D))
+    (W : Matrix β α ℂ) (hW : Wᴴ * W = 1) :
+    Kraus.transferMap (fun τ : β ↦ ∑ σ : α, W τ σ • B σ) = Kraus.transferMap B := by
   ext X : 1
   simpa [Kraus.transferMap_apply] using
     kraus_same_map_of_isometry_combination
-      (K := fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ)
+      (K := fun τ : β ↦ ∑ σ : α, W τ σ • B σ)
       (K' := B) W hW (fun _ ↦ rfl) X
 
 /-- A physical-index isometry preserves left-canonicality. -/
 theorem isLeftCanonical_kraus_isometry
-    {m : ℕ} (B : MPSTensor d D)
-    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1)
+    [DecidableEq α] (B : MPTensor α (Fin D))
+    (W : Matrix β α ℂ) (hW : Wᴴ * W = 1)
     (hB : IsLeftCanonical B) :
-    IsLeftCanonical (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ) := by
-  let C : MPSTensor m D := fun τ ↦ ∑ σ : Fin d, W τ σ • B σ
-  have hCh : IsChannel (Kraus.transferMap C) := by
-    have hEq : Kraus.transferMap C = Kraus.transferMap B := by
-      simpa [C] using transferMap_kraus_isometry B W hW
-    simpa [hEq] using Kraus.isChannel_mapLM B hB
-  change IsLeftCanonical C
-  rw [IsLeftCanonical]
-  exact kraus_sum_conjTranspose_mul_of_tp C (Kraus.transferMap C)
-    (fun X ↦ by simp) hCh.tp
+    IsLeftCanonical (fun τ : β ↦ ∑ σ : α, W τ σ • B σ) := by
+  let C : MPTensor β (Fin D) := fun τ ↦ ∑ σ : α, W τ σ • B σ
+  have hmap (X : Matrix (Fin D) (Fin D) ℂ) :=
+    kraus_same_map_of_isometry_combination (K := C) (K' := B) W hW (fun _ ↦ rfl) X
+  change ∑ τ, (C τ)ᴴ * C τ = 1
+  refine Matrix.ext_iff_trace_mul_right.2 fun X ↦ ?_
+  have hB' : ∑ σ, (B σ)ᴴ * B σ = 1 := hB
+  have hC : ((∑ τ, (C τ)ᴴ * C τ) * X).trace = (∑ τ, C τ * X * (C τ)ᴴ).trace := by
+    rw [Finset.sum_mul, Matrix.trace_sum, Matrix.trace_sum]
+    exact Finset.sum_congr rfl fun τ _ ↦ by rw [Matrix.trace_mul_cycle, Matrix.trace_mul_cycle]
+  have hB'' : ((∑ σ, (B σ)ᴴ * B σ) * X).trace = (∑ σ, B σ * X * (B σ)ᴴ).trace := by
+    rw [Finset.sum_mul, Matrix.trace_sum, Matrix.trace_sum]
+    exact Finset.sum_congr rfl fun σ _ ↦ by rw [Matrix.trace_mul_cycle, Matrix.trace_mul_cycle]
+  rw [hC, hmap, ← hB'', hB']
 
 /-- An isometric physical-index mixing of an injective matrix family remains
 injective.
@@ -63,18 +67,18 @@ This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this lemma. -/
 theorem isInjective_kraus_isometry
-    {m : ℕ} (B : MPSTensor d D)
-    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1)
+    [DecidableEq α] (B : MPTensor α (Fin D))
+    (W : Matrix β α ℂ) (hW : Wᴴ * W = 1)
     (hB : Kraus.IsInjective B) :
-    Kraus.IsInjective (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ) := by
-  let C : MPSTensor m D := fun τ ↦ ∑ σ : Fin d, W τ σ • B σ
-  have hrecover (sigma : Fin d) :
-      ∑ tau : Fin m, star (W tau sigma) • C tau = B sigma := by
+    Kraus.IsInjective (fun τ : β ↦ ∑ σ : α, W τ σ • B σ) := by
+  let C : MPTensor β (Fin D) := fun τ ↦ ∑ σ : α, W τ σ • B σ
+  have hrecover (sigma : α) :
+      ∑ tau : β, star (W tau sigma) • C tau = B sigma := by
     ext i j
     simp only [C, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     calc
-      ∑ tau : Fin m, star (W tau sigma) * ∑ rho : Fin d, W tau rho * B rho i j =
-          ∑ tau : Fin m, ∑ rho : Fin d,
+      ∑ tau : β, star (W tau sigma) * ∑ rho : α, W tau rho * B rho i j =
+          ∑ tau : β, ∑ rho : α,
             (star (W tau sigma) * W tau rho) * B rho i j := by
               apply Finset.sum_congr rfl
               intro tau _
@@ -82,16 +86,16 @@ theorem isInjective_kraus_isometry
               apply Finset.sum_congr rfl
               intro rho _
               ring
-      _ = ∑ rho : Fin d, ∑ tau : Fin m,
+      _ = ∑ rho : α, ∑ tau : β,
           (star (W tau sigma) * W tau rho) * B rho i j := Finset.sum_comm
-      _ = ∑ rho : Fin d,
-          (∑ tau : Fin m, star (W tau sigma) * W tau rho) * B rho i j := by
+      _ = ∑ rho : α,
+          (∑ tau : β, star (W tau sigma) * W tau rho) * B rho i j := by
             apply Finset.sum_congr rfl
             intro rho _
             rw [Finset.sum_mul]
       _ = B sigma i j := by
-        have hentry (rho : Fin d) :
-            (∑ tau : Fin m, star (W tau sigma) * W tau rho) =
+        have hentry (rho : α) :
+            (∑ tau : β, star (W tau sigma) * W tau rho) =
               if sigma = rho then 1 else 0 := by
           exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
             W hW sigma rho
@@ -112,6 +116,7 @@ theorem isInjective_kraus_isometry
   rw [hB]
   exact Submodule.mem_top
 
+omit [Fintype β] in
 /-- A linearly mixed family can be injective only if the original family is
 injective.  No isometry hypothesis is needed.
 
@@ -119,11 +124,11 @@ This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this lemma. -/
 theorem isInjective_of_kraus_mixing_isInjective
-    {m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ)
+    (B : MPTensor α (Fin D)) (W : Matrix β α ℂ)
     (hC : Kraus.IsInjective
-      (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ)) :
+      (fun τ : β ↦ ∑ σ : α, W τ σ • B σ)) :
     Kraus.IsInjective B := by
-  let C : MPSTensor m D := fun τ ↦ ∑ σ : Fin d, W τ σ • B σ
+  let C : MPTensor β (Fin D) := fun τ ↦ ∑ σ : α, W τ σ • B σ
   rw [Kraus.IsInjective, eq_top_iff]
   intro X _
   have hle : Submodule.span ℂ (Set.range C) ≤
@@ -145,9 +150,9 @@ This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this equivalence. -/
 theorem isInjective_kraus_isometry_iff
-    {m : ℕ} (B : MPSTensor d D)
-    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
-    Kraus.IsInjective (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ) ↔
+    [DecidableEq α] (B : MPTensor α (Fin D))
+    (W : Matrix β α ℂ) (hW : Wᴴ * W = 1) :
+    Kraus.IsInjective (fun τ : β ↦ ∑ σ : α, W τ σ • B σ) ↔
       Kraus.IsInjective B := by
   constructor
   · exact isInjective_of_kraus_mixing_isInjective B W
@@ -155,6 +160,7 @@ theorem isInjective_kraus_isometry_iff
 
 /-! ### Gauge covariance -/
 
+omit [Fintype β] in
 /-- Applying the same physical-index mixing to two gauge-equivalent tensors
 preserves their virtual gauge.  No isometry hypothesis is needed.
 
@@ -162,11 +168,11 @@ This is project-derived coordinate algebra used for the normal-block
 construction surrounding arXiv:1606.00608, lines 217--246 and 1628--1665;
 the paper does not state this lemma. -/
 theorem _root_.MPTensor.GaugeEquiv.sum_smul
-    {m : ℕ} {A B : MPSTensor d D}
-    (hAB : GaugeEquiv A B) (W : Matrix (Fin m) (Fin d) ℂ) :
+    {A B : MPTensor α (Fin D)}
+    (hAB : GaugeEquiv A B) (W : Matrix β α ℂ) :
     GaugeEquiv
-      (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • A σ)
-      (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ) := by
+      (fun τ : β ↦ ∑ σ : α, W τ σ • A σ)
+      (fun τ : β ↦ ∑ σ : α, W τ σ • B σ) := by
   obtain ⟨X, hX⟩ := hAB
   refine ⟨X, fun τ ↦ ?_⟩
   simp_rw [hX]

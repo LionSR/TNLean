@@ -114,16 +114,17 @@ theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
     verticalCoisometrySquare U * (verticalCoisometrySquare U)ᴴ = 1 ∧
       ∀ ab, verticalTensor (blockTwo M) ab =
         (verticalCoisometrySquare U)ᴴ *
-          (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor ab *
+          (Kraus.reindexPhysical finProdFinEquiv.symm
+            (mulTensor (verticalBNTMPO A) (verticalBNTMPO A))) ab *
             verticalCoisometrySquare U := by
   constructor
   · exact verticalCoisometrySquare_isCoisometry U hU
   · intro ab
-    rw [← verticalBNTMPO_toMPSTensor (verticalTensor (blockTwo M)),
+    rw [← reindexPhysical_verticalBNTMPO (verticalTensor (blockTwo M)),
       verticalBNTMPO_verticalTensor_blockTwo]
     obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ab
     unfold verticalCoisometrySquare
-    simp only [toMPSTensor, mulTensor_apply, verticalBNTMPO_apply,
+    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply, mulTensor_apply, verticalBNTMPO_apply,
       MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
     rw [Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
@@ -151,7 +152,7 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockT
     (hClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M)))
     (hPer : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M))) :
     let C :=
-      (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+      (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)))
     MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
   dsimp only
@@ -159,7 +160,7 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockT
     M A U hU hReconstruct
   exact MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
     (verticalTensor (blockTwo M))
-    (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)))
     (verticalCoisometrySquare U) hsquare.1 hsquare.2
     hClosure hPer
 
@@ -174,7 +175,7 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors
     (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     let C :=
-      (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+      (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)))
     MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
   have hHorizontalTwo := hHorizontal.blockTwo
@@ -200,8 +201,8 @@ noncomputable def weightedVerticalProductBlock
       ((α : Fin g) × Fin (mult α))) :
     MPSTensor (D * D) (dim p.1.1 * dim p.2.1) :=
   fun ab ↦ (weight p.1.1 p.1.2 * weight p.2.1 p.2.2) •
-    (mulTensor (verticalBNTMPO (B p.1.1))
-      (verticalBNTMPO (B p.2.1))).toMPSTensor ab
+    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
+      (verticalBNTMPO (B p.2.1)))) ab
 
 /-- The square of the retained assembled vertical tensor, before separating
 its ordered copy-pair blocks. -/
@@ -212,8 +213,9 @@ noncomputable def retainedVerticalProductTensor
     MPSTensor (D * D)
       ((∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) *
         (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q)) :=
-  (mulTensor (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor
+  (Kraus.reindexPhysical finProdFinEquiv.symm
+    (mulTensor (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))))
 
 /-- The product of two assembled vertical tensors is block diagonal over
 pairs of active BNT copies. The block for copies `(α, q)` and `(β, r)` is the
@@ -241,7 +243,8 @@ theorem mulTensor_verticalAssembledTensor_reindex
   rcases x with ⟨⟨⟨α, q⟩, ⟨β, r⟩⟩, ⟨i, j⟩⟩
   rcases y with ⟨⟨⟨α', q'⟩, ⟨β', r'⟩⟩, ⟨i', j'⟩⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-  simp only [retainedVerticalProductTensor, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+  simp only [retainedVerticalProductTensor, Kraus.reindexPhysical, Equiv.symm_apply_apply,
+    MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat, productRetainedEquiv, verticalProductSectorEquiv,
     Equiv.symm_trans, Equiv.symm_mk, Equiv.prodCongr_symm, Equiv.symm_symm,
     Equiv.trans_apply, Equiv.coe_fn_mk, Equiv.prodCongr_apply, Prod.map_apply,
@@ -464,9 +467,9 @@ theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_b
         (weightedVerticalProductBlock dim mult weight B p) ∧
       MPSTensor.HasNoPeriodicVectors
         (weightedVerticalProductBlock dim mult weight B p) := by
-  let C := (mulTensor
+  let C := (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor
     (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))))
   have hCanonical : MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
     simpa only [C] using

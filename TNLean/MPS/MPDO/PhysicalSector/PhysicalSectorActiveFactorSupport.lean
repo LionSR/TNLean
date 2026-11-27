@@ -8,7 +8,7 @@ import TNLean.MPS.CanonicalForm.SimpleMPO.BNTLayerOrthogonality
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductRealization
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorVirtualSpanning
 import QICLean.Algebra.Combinatorics.FinSumPermutation
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Supports of active physical-sector factors
@@ -144,7 +144,7 @@ theorem sectorCoordinateTensor_isInjective
     (hK : Kraus.IsInjective K) :
     Kraus.IsInjective F.sectorCoordinateTensor := by
   change Submodule.span ℂ (Set.range F.sectorCoordinateTensor) = ⊤
-  rw [← F.sectorCoordinateMatrixFamily_span_eq_top ((isInjective_toMPSTensor_iff K).2 hK)]
+  rw [← F.sectorCoordinateMatrixFamily_span_eq_top hK]
   rfl
 
 /-- Positive neighboring operators make the sector-coordinate tensor a
@@ -177,7 +177,7 @@ theorem sectorProductFamily_conjTranspose_mem_span
   obtain ⟨X, hAdjoint⟩ :=
     exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO
       F.sectorCoordinateTensor
-      ((isInjective_toMPSTensor_iff _).2 (F.sectorCoordinateTensor_isInjective hK))
+      (F.sectorCoordinateTensor_isInjective hK)
       (F.sectorCoordinateTensor_isMPDO_of_neighboringOperator_pos hpos)
   rintro ⟨β, α⟩
   refine ⟨fun r ↦

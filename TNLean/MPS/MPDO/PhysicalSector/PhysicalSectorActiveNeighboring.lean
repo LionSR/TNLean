@@ -7,7 +7,7 @@ import TNLean.MPS.Operator.PhysicalSector.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorActiveRestriction
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalIsometricEmbedding
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSupportRestrictionComparison
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Neighboring operators after active physical restriction
@@ -579,10 +579,7 @@ theorem exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry
     ∃ F : PhysicalSectorFactorization K,
       Nonempty F.NeighboringTraceFactorization := by
   let M := changePhysicalBasis V K
-  have hM : Kraus.IsInjective M :=
-    (isInjective_toMPSTensor_iff M).1 <|
-      (isInjective_toMPSTensor_changePhysicalBasis_iff V hV K).2
-        ((isInjective_toMPSTensor_iff K).2 hK)
+  have hM : Kraus.IsInjective M := (isInjective_changePhysicalBasis_iff V hV K).2 hK
   have hRestrict : changePhysicalBasis Vᴴ M = K := by
     change changePhysicalBasis Vᴴ (changePhysicalBasis V K) = K
     rw [changePhysicalBasis_changePhysicalBasis, hV]
@@ -598,7 +595,7 @@ theorem exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry
           (physicalSupportProj_changePhysicalBasis V hV K).symm
       restricted_injective := by
         rw [hRestrict]
-        exact (isInjective_toMPSTensor_iff K).2 hK
+        exact hK
       reembed := by
         rw [hRestrict] }
   obtain ⟨F, ⟨H⟩⟩ := hEmbedded

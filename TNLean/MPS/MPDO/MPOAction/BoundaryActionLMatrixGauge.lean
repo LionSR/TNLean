@@ -360,7 +360,7 @@ theorem exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective
               fusionFMatrix VF WF a b c d ⟨e, mu', nu'⟩ ⟨f, lam', sig'⟩) := by
   choose Y hYV hYW using fun a b ↦
     (hF a b).exists_multiplicityGauge_eq_of_isInjective (hF' a b)
-      (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInjO a)) hχ hneO
+      (fun a ↦ (hInjO a)) hχ hneO
   choose X hXV hXW using fun a x ↦
     (hA a x).exists_multiplicityGauge_eq_of_isInjective (hA' a x) hInjA hD hneA
   refine ⟨X, Y, fun a b c x y z i j k μ ↦ ?_, fun a b c d e f mu nu lam sig ↦ ?_⟩
