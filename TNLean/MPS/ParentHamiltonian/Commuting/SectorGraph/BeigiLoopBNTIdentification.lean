@@ -293,7 +293,7 @@ private theorem BeigiSectorGraphData.mpvState_normalizedMinimalLoopTensor
     {A : MPSTensor d D} (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] :
     mpvState (d := d) (F.normalizedMinimalLoopTensor l) N =
-      (((F.loopBondNorm l : ℂ)⁻¹) ^ N) • F.loopProductStateES l := by
+      (((F.loopBondNorm l : ℂ)⁻¹) ^ N) • WithLp.toLp 2 (F.loopProductState l) := by
   apply PiLp.ext
   intro s
   change mpv (F.normalizedMinimalLoopTensor l) s =
@@ -319,7 +319,7 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
   rw [mpvOverlap_eq_star_mpvInner, mpvInner,
     F.mpvState_normalizedMinimalLoopTensor l,
     F.mpvState_normalizedMinimalLoopTensor m]
-  simp [F.loopProductStateES_inner_eq_zero_of_ne hlm]
+  simp [F.inner_toLp_loopProductState_eq_zero_of_ne hlm]
 
 /-- A periodic MPV state in the parent ground space belongs to the span of the
 normalized minimal-loop MPV states. -/
@@ -335,10 +335,10 @@ private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTens
         mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
   let : NeZero N := ⟨by omega⟩
   have hLoopSpan :=
-    F.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction hparent hN
+    F.span_toLp_loopProductState_eq_groundSpace hparent hN
   have hInLoopSpan : mpvState (d := d) C N ∈
       Submodule.span ℂ
-        (Set.range fun l : Loop F.edgeWeight => F.loopProductStateES l) := by
+        (Set.range fun l : Loop F.edgeWeight => WithLp.toLp 2 (F.loopProductState l)) := by
     rw [hLoopSpan]
     exact hGround
   apply (Submodule.span_le.mpr ?_) hInLoopSpan
@@ -353,10 +353,10 @@ private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTens
   have hScaled := Submodule.smul_mem
     (Submodule.span ℂ (Set.range fun k : Loop F.edgeWeight =>
       mpvState (d := d) (F.normalizedMinimalLoopTensor k) N)) c⁻¹ hNormalized
-  have hEq : F.loopProductStateES l =
+  have hEq : WithLp.toLp 2 (F.loopProductState l) =
       c⁻¹ • mpvState (d := d) (F.normalizedMinimalLoopTensor l) N := by
     rw [F.mpvState_normalizedMinimalLoopTensor l, smul_smul, inv_mul_cancel₀ hc, one_smul]
-  change F.loopProductStateES l ∈
+  change WithLp.toLp 2 (F.loopProductState l) ∈
     Submodule.span ℂ (Set.range fun k : Loop F.edgeWeight =>
       mpvState (d := d) (F.normalizedMinimalLoopTensor k) N)
   rw [hEq]
