@@ -187,7 +187,7 @@ def isingBondLetter : (f : Fin 3) → Fin (isingDim f) → Fin 3 × Fin 3
 
 /-- The letters of the formal blocks over `ℤ[√2]`, the `σ` block stored as `√2 A_σ`. -/
 def isingBlockLetterZ :
-    (f : Fin 3) → Fin 10 → Fin 10 → Matrix (Fin (isingDim f)) (Fin (isingDim f)) (ℤ√2)
+    (f : Fin 3) → Fin 10 × Fin 10 → Matrix (Fin (isingDim f)) (Fin (isingDim f)) (ℤ√2)
   | 0 => isingOneZ
   | 1 => isingPsiZ
   | 2 => isingSigmaZ
@@ -199,7 +199,7 @@ def isingBlockScaleZ : Fin 3 → ℤ√2 := ![sqrtd, sqrtd, 1]
 `(b, e, a)` and the lower label `(c, e, d)`, with bond letters `(b, c)` and `(a, d)`. -/
 private theorem isingBlockLetterZ_eq_fSymbol : ∀ (f : Fin 3) (h h' : Fin 10)
     (p q : Fin (isingDim f)),
-    isingBlockScaleZ f * isingBlockLetterZ f h h' p q =
+    isingBlockScaleZ f * isingBlockLetterZ f (h, h') p q =
       if isingRho h = isingRho h' ∧ isingBondLetter f p = (isingLeft h, isingLeft h') ∧
           isingBondLetter f q = (isingRight h, isingRight h') then
         isingFSymbolZ f (isingLeft h') (isingRho h) (isingRight h) (isingLeft h) (isingRight h')
@@ -217,7 +217,7 @@ theorem isingBlock_apply_eq_fSymbol (f : Fin 3) (h h' : Fin 10) (p q : Fin (isin
       else 0 := by
   have hs : (Real.sqrt 2 : ℂ) ≠ 0 := by simp
   have key : isingBlock f (h, h') p q = (Real.sqrt 2 : ℂ)⁻¹ *
-      zsqrt2ToComplex (isingBlockScaleZ f * isingBlockLetterZ f h h' p q) := by
+      zsqrt2ToComplex (isingBlockScaleZ f * isingBlockLetterZ f (h, h') p q) := by
     match f, p, q with
     | 0, p, q =>
       simp [isingBlock, isingBlockScaleZ, isingBlockLetterZ, isingOne, hs]

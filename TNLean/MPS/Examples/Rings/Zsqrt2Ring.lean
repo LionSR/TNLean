@@ -96,9 +96,9 @@ abbrev actZsqrt2Tensor (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ
 /-- **Normality from a table of scaled matrix units over `ℤ√2`.** A tensor whose letters are the
 images of matrices over `ℤ√2` and which realises every matrix unit as a nonzero multiple of one
 of its letters spans the full matrix algebra, hence is normal at blocking length one. -/
-theorem isNormal_of_single_eq_smul_zsqrt2 {A : MPSTensor d D}
-    (AZ : Fin d → Matrix (Fin D) (Fin D) (ℤ√2)) (hA : ∀ a, A a = complexOfZsqrt2 (AZ a))
-    (ℓ : Fin D → Fin D → Fin d) (w : Fin D → Fin D → ℤ√2) (hw : ∀ x y, w x y ≠ 0)
+theorem isNormal_of_single_eq_smul_zsqrt2 {α : Type*} {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AZ : α → Matrix (Fin D) (Fin D) (ℤ√2)) (hA : ∀ a, A a = complexOfZsqrt2 (AZ a))
+    (ℓ : Fin D → Fin D → α) (w : Fin D → Fin D → ℤ√2) (hw : ∀ x y, w x y ≠ 0)
     (h : ∀ x y, AZ (ℓ x y) = w x y • Matrix.single x y 1) :
     Kraus.IsNormal A :=
   isNormal_of_complexOfRing_letter_eq_smul_single zsqrt2ToComplex AZ one_ne_zero

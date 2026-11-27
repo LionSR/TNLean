@@ -87,8 +87,8 @@ def isingGaugeSigmaSigmaZ : Matrix (Fin 16) (Fin 16) (ℤ√2) :=
   twoTermMatrix isingSigmaSigmaCol isingSigmaSigmaCol' isingSigmaSigmaCoef isingSigmaSigmaCoef'
 
 /-- The direct sum `2 A_1 ⊕ 2 A_ψ` over `ℤ√2`, in the bond order of `MPOTensor.directSum`. -/
-def isingOnePsiZ (h h' : Fin 10) : Matrix (Fin 6) (Fin 6) (ℤ√2) :=
-  (Matrix.fromBlocks ((2 : ℤ√2) • isingOneZ h h') 0 0 ((2 : ℤ√2) • isingPsiZ h h')).submatrix
+def isingOnePsiZ (hh : Fin 10 × Fin 10) : Matrix (Fin 6) (Fin 6) (ℤ√2) :=
+  (Matrix.fromBlocks ((2 : ℤ√2) • isingOneZ hh) 0 0 ((2 : ℤ√2) • isingPsiZ hh)).submatrix
     (finSumFinEquiv (m := 3) (n := 3)).symm (finSumFinEquiv (m := 3) (n := 3)).symm
 
 theorem isingGaugeSigmaSigmaZ_mul_transpose :
@@ -117,15 +117,15 @@ theorem isingGaugeSigmaSigmaZ_transpose_mul :
   decide +kernel
 
 theorem isingOnePsiZ_eq_zero_of_rho_ne (h h' : Fin 10) (hne : isingRho h ≠ isingRho h') :
-    isingOnePsiZ h h' = 0 := by
+    isingOnePsiZ (h, h') = 0 := by
   rw [isingOnePsiZ, isingOneZ_eq_zero_of_rho_ne h h' hne, isingPsiZ_eq_zero_of_rho_ne h h' hne]
   simp
 
 /-- The letter identity of `σ × σ = 1 + ψ` on the letters whose two labels carry the same
 middle label `ρ`, decided over `ℤ√2` from the scaled-matrix-unit form of the stacked letters. -/
 private theorem isingSigmaSigma_conj_of_rho_eq : ∀ h h' : Fin 10, isingRho h' = isingRho h →
-    isingGaugeSigmaSigmaZ * mulZsqrt2Tensor isingSigmaZ isingSigmaZ h h' *
-        isingGaugeSigmaSigmaZᵀ = (2 : ℤ√2) • padZsqrt2 10 (isingOnePsiZ h h') := by
+    isingGaugeSigmaSigmaZ * mulZsqrt2Tensor isingSigmaZ isingSigmaZ (h, h') *
+        isingGaugeSigmaSigmaZᵀ = (2 : ℤ√2) • padZsqrt2 10 (isingOnePsiZ (h, h')) := by
   intro h h'
   rw [mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _ isingSigmaZ_eq_smul_single
     isingSigmaZ_eq_smul_single isingSigmaNext isingSigmaNext_nodup isingSigmaCoef_eq_zero]
@@ -136,13 +136,13 @@ private theorem isingSigmaSigma_conj_of_rho_eq : ∀ h h' : Fin 10, isingRho h' 
 conjugated by the change of bond coordinates, is `2` times the direct sum of `2 A_1`, `2 A_ψ`
 and a zero block. -/
 theorem isingSigmaSigma_conj (h h' : Fin 10) :
-    isingGaugeSigmaSigmaZ * mulZsqrt2Tensor isingSigmaZ isingSigmaZ h h' *
-        isingGaugeSigmaSigmaZᵀ = (2 : ℤ√2) • padZsqrt2 10 (isingOnePsiZ h h') :=
+    isingGaugeSigmaSigmaZ * mulZsqrt2Tensor isingSigmaZ isingSigmaZ (h, h') *
+        isingGaugeSigmaSigmaZᵀ = (2 : ℤ√2) • padZsqrt2 10 (isingOnePsiZ (h, h')) :=
   isingConj_of_rho_eq (z := 10) isingSigmaZ_eq_zero_of_rho_ne isingSigmaZ_eq_zero_of_rho_ne
     isingOnePsiZ_eq_zero_of_rho_ne isingSigmaSigma_conj_of_rho_eq h h'
 
 theorem complexOfZsqrt2_isingOnePsiZ (h h' : Fin 10) :
-    complexOfZsqrt2 (isingOnePsiZ h h') =
+    complexOfZsqrt2 (isingOnePsiZ (h, h')) =
       ((2 : ℂ) • MPOTensor.directSum isingOne isingPsi) (h, h') := by
   ext a b
   simp only [isingOnePsiZ, MPOTensor.directSum, complexOfZsqrt2_apply, Matrix.submatrix_apply,
@@ -159,11 +159,11 @@ operator fusion rules only for the Fibonacci blocks. The square of the periodic 
 theorem isingSigma_mul_isingSigma {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingSigma N * MPOTensor.mpo isingSigma N =
       (2 : ℂ) ^ N • (MPOTensor.mpo isingOne N + MPOTensor.mpo isingPsi N) := by
-  rw [show isingSigma = Function.uncurry fun i j => complexOfZsqrt2 (isingSigmaZ i j) from rfl,
+  rw [show isingSigma = fun hh => complexOfZsqrt2 (isingSigmaZ hh) from rfl,
     mpo_mul_eq_of_zsqrt2_conj isingSigmaZ isingSigmaZ isingOnePsiZ (z := 10) isingGaugeSigmaSigmaZ
       isingGaugeSigmaSigmaZᵀ 2 (by decide) isingGaugeSigmaSigmaZ_mul_transpose
       isingGaugeSigmaSigmaZ_transpose_mul isingSigmaSigma_conj hN]
-  rw [show (Function.uncurry fun i j => complexOfZsqrt2 (isingOnePsiZ i j)) =
+  rw [show (fun hh => complexOfZsqrt2 (isingOnePsiZ hh)) =
       (2 : ℂ) • MPOTensor.directSum isingOne isingPsi from
       funext fun p => complexOfZsqrt2_isingOnePsiZ p.1 p.2,
     MPOTensor.mpo_smul, MPOTensor.mpo_directSum]

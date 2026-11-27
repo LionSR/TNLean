@@ -59,9 +59,9 @@ open MPSTensor Zsqrtd
 the fermion sector is block diagonal with the prescribed blocks. -/
 theorem conjSector_eq_blockDiagonal_of_rho_one :
     ∀ h h' : Fin 10, isingRho h = 1 → isingRho h' = 1 →
-      conjSector 1 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      conjSector 1 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
   have key : ∀ h h' : Fin 10, isingRho h = 1 → isingRho h' = 1 →
-      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
     decide +kernel
   exact fun h h' hh hh' => (conjSector_eq_conjBlockwise hh h').trans (key h h' hh hh')
 

@@ -90,28 +90,27 @@ open MPSTensor Zsqrtd
 
 /-- The weighted bond object `Θ_2 = 5 A_1 ⊕ 3 A_ψ` over `ℤ√2`, on `ℂ^6 = P_1 ⊕ P_ψ`
 (data file §1.2). -/
-def thetaTwoZ (h h' : Fin 10) : Matrix (Fin 6) (Fin 6) (ℤ√2) :=
-  (Matrix.fromBlocks ((5 : ℤ√2) • isingOneZ h h') 0 0 ((3 : ℤ√2) • isingPsiZ h h')).submatrix
+def thetaTwoZ (hh : Fin 10 × Fin 10) : Matrix (Fin 6) (Fin 6) (ℤ√2) :=
+  (Matrix.fromBlocks ((5 : ℤ√2) • isingOneZ hh) 0 0 ((3 : ℤ√2) • isingPsiZ hh)).submatrix
     (finSumFinEquiv (m := 3) (n := 3)).symm (finSumFinEquiv (m := 3) (n := 3)).symm
 
 /-- The weighted bond object `Θ_2 = 5 A_1 ⊕ 3 A_ψ` as a matrix product operator tensor: the
 weights are ten times the generic P6 point `(λ_1, λ_ψ) = (1/2, 3/10)` (data file §1.2). -/
 noncomputable def thetaTwo : MPOTensor 10 6 :=
-    Function.uncurry fun h h' => complexOfZsqrt2 (thetaTwoZ h h')
+    fun hh => complexOfZsqrt2 (thetaTwoZ hh)
 
-/-- The stacked product `Θ_2 ⋆ (√2 A_σ)` on the hundred-letter pair alphabet, of bond dimension
-`24` in the bond order `4 (Θ_2 index) + (P_σ index)` (data file §1.2). -/
-noncomputable def isingBondObject : MPSTensor 100 24 :=
-  (MPOTensor.mulTensor thetaTwo isingSigma).toMPSTensor
+/-- The stacked product `Θ_2 ⋆ (√2 A_σ)` on the pair alphabet, of bond dimension `24`
+in the bond order `4 (Θ_2 index) + (P_σ index)` (data file §1.2). -/
+noncomputable def isingBondObject : MPOTensor 10 24 :=
+  MPOTensor.mulTensor thetaTwo isingSigma
 
 /-- The stacked product over `ℤ√2`. -/
-def isingBondObjectZ (a : Fin 100) : Matrix (Fin 24) (Fin 24) (ℤ√2) :=
-  mulZsqrt2Tensor thetaTwoZ isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
-    (Fin.modNat (m := 10) (n := 10) a)
+def isingBondObjectZ (a : Fin 10 × Fin 10) : Matrix (Fin 24) (Fin 24) (ℤ√2) :=
+  mulZsqrt2Tensor thetaTwoZ isingSigmaZ a
 
-theorem isingBondObject_eq (a : Fin 100) :
+theorem isingBondObject_eq (a : Fin 10 × Fin 10) :
     isingBondObject a = complexOfZsqrt2 (isingBondObjectZ a) :=
-  mulTensor_complexOfRing _ thetaTwoZ isingSigmaZ _ _
+  mulTensor_complexOfRing _ thetaTwoZ isingSigmaZ _
 
 /-! ### The gauge
 
@@ -165,8 +164,8 @@ theorem zsqrt2ToComplex_isingWeightsZ (s : Fin 2) :
   fin_cases s <;> simp [isingWeightsZ, isingWeights, map_ofNat]
 
 /-- The two target blocks: the tensor `√2 A_σ` with the weights `5` and `3`. -/
-noncomputable def isingTargets : Fin 2 → MPSTensor 100 4 :=
-  fun s => isingWeights s • isingSigma.toMPSTensor
+noncomputable def isingTargets : Fin 2 → MPOTensor 10 4 :=
+  fun s => isingWeights s • isingSigma
 
 /-- The block ordering: the two weighted slots, then the sixteen zero slots. -/
 def isingOrd : BlockIndex isingSlots 16 ≃ Fin 18 where
@@ -227,16 +226,16 @@ contribute to the stacked product, and letters with `ρ(h) ≠ ρ(h')` vanish.
 
 /-- The stacked product restricted to the middle labels of the sector `r`. -/
 def stackSector (r : Fin 3) (h h' : Fin 10) : Matrix (Fin 24) (Fin 24) (ℤ√2) :=
-  (∑ j : Fin 10, if isingRho j = r then thetaTwoZ h j ⊗ₖ isingSigmaZ j h' else 0).submatrix
+  (∑ j : Fin 10, if isingRho j = r then thetaTwoZ (h, j) ⊗ₖ isingSigmaZ (j, h') else 0).submatrix
     (finProdFinEquiv (m := 6) (n := 4)).symm (finProdFinEquiv (m := 6) (n := 4)).symm
 
 theorem thetaTwoZ_eq_zero_of_rho_ne {h h' : Fin 10} (hne : isingRho h ≠ isingRho h') :
-    thetaTwoZ h h' = 0 := by
+    thetaTwoZ (h, h') = 0 := by
   rw [thetaTwoZ, isingOneZ_eq_zero_of_rho_ne h h' hne, isingPsiZ_eq_zero_of_rho_ne h h' hne]
   simp
 
 theorem stack_eq_sector (h h' : Fin 10) :
-    mulZsqrt2Tensor thetaTwoZ isingSigmaZ h h' = stackSector (isingRho h) h h' := by
+    mulZsqrt2Tensor thetaTwoZ isingSigmaZ (h, h') = stackSector (isingRho h) h h' := by
   unfold mulZsqrt2Tensor mulTensorR stackSector
   congr 1
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -245,7 +244,7 @@ theorem stack_eq_sector (h h' : Fin 10) :
   · rw [thetaTwoZ_eq_zero_of_rho_ne fun e => hj e.symm, Matrix.zero_kronecker]
 
 theorem stack_eq_zero_of_rho_ne {h h' : Fin 10} (hne : isingRho h ≠ isingRho h') :
-    mulZsqrt2Tensor thetaTwoZ isingSigmaZ h h' = 0 := by
+    mulZsqrt2Tensor thetaTwoZ isingSigmaZ (h, h') = 0 := by
   unfold mulZsqrt2Tensor mulTensorR
   rw [Finset.sum_eq_zero fun j _ => ?_]
   · simp
