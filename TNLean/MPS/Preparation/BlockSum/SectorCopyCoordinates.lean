@@ -24,6 +24,8 @@ matrix and polar factors can be studied using the repeated-block formulas.
 * `MPSTensor.SectorDecomposition.toTensor_eq_repeatedBlockSum` is the exact tensor identity.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix
 open Matrix
 

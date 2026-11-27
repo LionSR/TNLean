@@ -345,7 +345,7 @@ argument. The literal block equation itself is retained separately in the conclu
 
 **Scope restriction (Case-II normality):** This theorem completes one-site injectivity, MPDO
 positivity, SAL, and literal physical-trace idempotence for each absorbed BNT representative.
-It does not assert `MPSTensor.IsNormalTensor`: coefficient absorption rescales the transfer
+It does not assert `MPTensor.IsNormalTensor`: coefficient absorption rescales the transfer
 spectral radius by the squared coefficient modulus, while the global canonical-form normalization
 does not force every coefficient to have modulus one. The normal Case-I structural theorem
 therefore remains unavailable sectorwise. This boundary is recorded in

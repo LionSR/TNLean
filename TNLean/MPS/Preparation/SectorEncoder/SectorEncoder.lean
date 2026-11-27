@@ -370,7 +370,7 @@ namespace MPSTensor
 representatives has exactly the parent kernel. Its raw columns are the actual periodic
 representatives in the supplied data, and the encoder is their fixed polar factor. No separate
 gauge substitution or sector matching is used. -/
-theorem CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian
+theorem _root_.MPTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian
     {d D : ℕ} [NeZero d] [NeZero D] {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A) {L N : ℕ} (hL : 3 * D ^ 5 ≤ L) (hLN : L ≤ N) :
     LinearMap.range

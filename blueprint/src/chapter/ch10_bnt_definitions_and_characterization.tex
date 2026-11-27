@@ -1,34 +1,23 @@
 \section{Bases of normal tensors}
 
-\begin{definition}[Basis of Normal Tensors (BNT)]\label{def:bnt}
-    \lean{MPSTensor.IsBNT}
-    \leanok
-    \uses{def:normal,def:mpv}
-    As in \cite[Definition~IV.2]{Cirac2021Matrix}, a \emph{basis of normal
-        tensors} (BNT) for a total tensor $A_{\mathrm{tot}}$ consists of $g$ block
-    tensors $(A_1, \ldots, A_g)$ with bond dimensions $(D_1, \ldots, D_g)$
-    such that each $A_j$ is normal (Definition~\ref{def:normal}); at each
-    system size~$N\geq1$ the MPV of $A_{\mathrm{tot}}$ lies in the span of the
-    block MPVs $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$
-    those block MPVs are linearly independent.
-    In the canonical-form characterization of
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
-    representatives for $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ among
-    the normal blocks.
-\end{definition}
-
-\begin{definition}[Basis of normal tensors, coefficient form]\label{def:bnt_cpsv}
+\begin{definition}[Basis of normal tensors]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
     \leanok
     \uses{def:nt_cpsv,def:mpv}
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
-    In the coefficient form of a basis of normal tensors
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv}, each block $A_j$ is a
+    As in \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
+    \cite[Definition~IV.2]{Cirac2021Matrix}, a \emph{basis of normal tensors}
+    (BNT) of a tensor $A$ is a finite family $(A_1,\ldots,A_g)$ of tensors with
+    bond dimensions $(D_1,\ldots,D_g)$ such that each block $A_j$ is a
     normal tensor in the spectral sense (Definition~\ref{def:nt_cpsv}), the
     MPV of $A$ is given at every positive length by coefficients
     $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
+    In the canonical-form characterization of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
+    representatives for $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ among
+    the normal blocks.
 \end{definition}
 
 \begin{lemma}[Distinct BNT members are not gauge-phase equivalent]

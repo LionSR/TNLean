@@ -206,11 +206,11 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of
     {ψ : NSiteSpace d N}
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hTrace :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
             (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -229,7 +229,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of
                               Kraus.evalWord (A j) (List.ofFn ρ)) *
                             Kraus.evalWord (A j) (List.ofFn w)))) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -288,11 +288,11 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_bo
     {ψ : NSiteSpace d N}
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hComparison :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
             (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -304,7 +304,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_bo
                       (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
                         Kraus.evalWord (A j) (List.ofFn ρ)) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -360,10 +360,10 @@ theorem
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hTrace :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
             (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -382,7 +382,7 @@ theorem
                               Kraus.evalWord (A j) (List.ofFn ρ)) *
                             Kraus.evalWord (A j) (List.ofFn w)))) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -424,12 +424,12 @@ theorem
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hTrace :
       let m : ℕ :=
         (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
             (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -448,7 +448,7 @@ theorem
                               Kraus.evalWord (A j) (List.ofFn ρ)) *
                             Kraus.evalWord (A j) (List.ofFn w)))) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -495,9 +495,9 @@ theorem
     (hNlarge : L + L₀ ≤ N)
     (hTrace :
       ∀ {ψ : NSiteSpace d N},
-        ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
             ∃ C : ∀ (j : Fin r) (_ : Fin N),
               (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -515,7 +515,7 @@ theorem
                             ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
                                 Kraus.evalWord (A j) (List.ofFn ρ)) *
                               Kraus.evalWord (A j) (List.ofFn w)))) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   exact
@@ -556,9 +556,9 @@ theorem
       let m : ℕ :=
         (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
       ∀ {ψ : NSiteSpace d N},
-        ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
             ∃ C : ∀ (j : Fin r) (_ : Fin N),
               (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -576,7 +576,7 @@ theorem
                             ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
                                 Kraus.evalWord (A j) (List.ofFn ρ)) *
                               Kraus.evalWord (A j) (List.ofFn w)))) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   classical

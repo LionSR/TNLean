@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.KrausGauge
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumSelectors
 import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
@@ -221,7 +221,7 @@ theorem exists_positive_wordTupleSpanTop_of_isNormal
       prepared hTP (fun j => (hdimPos j).ne') hPreparedNormal
   have hAtLeastP : ∀ j n, p ≤ n → Kraus.IsNBlkInjective (prepared j) n := by
     intro j n hpn
-    exact isNBlkInjective_of_le hp (hAtP j) hpn
+    exact Kraus.isNBlkInjective_of_le hp (hAtP j) hpn
   have hPreparedOverlap : ∀ k,
       Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (prepared k) (prepared k) N)
         Filter.atTop (nhds (1 : ℂ)) :=

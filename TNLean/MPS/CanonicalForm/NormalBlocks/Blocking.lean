@@ -21,16 +21,16 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
 
 ## Main definitions
 
-* `MPSTensor.CPSVCanonicalFormData.blockTensor`: literal canonical-form data
+* `MPTensor.CPSVCanonicalFormData.blockTensor`: literal canonical-form data
   block exactly.
 * `MPSTensor.CPSVCanonicalFormIIData.blockTensor`: blockwise canonical-form-II data block
   exactly.
 
 ## Main results
 
-* `MPSTensor.IsNormalTensor.blockTensor`: positive blocking preserves normal
+* `MPTensor.IsNormalTensor.blockTensor`: positive blocking preserves normal
   tensors.
-* `MPSTensor.IsCPSVCanonicalForm.blockTensor`: positive blocking preserves
+* `MPTensor.IsCPSVCanonicalForm.blockTensor`: positive blocking preserves
   literal CPSV canonical form.
 * `MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family`: one positive
   blocking length makes every member of a finite trace-preserving, primitive,
@@ -64,7 +64,9 @@ theorem _root_.MPTensor.GaugeEquiv.blockTensor {A B : MPSTensor d D} (h : GaugeE
     Matrix.GeneralLinearGroup.coe_inv] using
     evalWord_gauge (A := A) (B := B) X hX (Kraus.wordOfBlock d p i)
 
-namespace IsNormalTensor
+section IsNormalTensor
+
+open MPTensor.IsNormalTensor
 
 /-- Positive physical blocking preserves CPSV normal tensors.
 
@@ -77,7 +79,8 @@ blocked tensor.
 Source: arXiv:1606.00608, lines 227--235 define physical blocking and normal
 tensors; the closure under reblocking is used in the normal-block arguments at
 lines 332--345. -/
-theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 0 < p) :
+theorem _root_.MPTensor.IsNormalTensor.blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A)
+    (p : ℕ) (hp : 0 < p) :
     IsNormalTensor (Kraus.blockTensor (d := d) (n := Fin D) A p) := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσpos, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
@@ -133,14 +136,16 @@ theorem blockTensor_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
     (p : ℕ) (i : Fin (blockPhysDim d p)) :
     blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
-        (toTensorFromBlocks (d := d) (μ := μ) blocks) p i =
-      toTensorFromBlocks (d := blockPhysDim d p)
+        (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) p i =
+      toTensorFromBlocks (α := Fin (blockPhysDim d p))
         (fun k ↦ μ k ^ p)
         (fun k ↦ blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) i := by
   simp [Kraus.blockTensor, Kraus.reindexPhysical, toTensorFromBlocks,
     evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- Literal CPSV canonical-form data are preserved by positive physical
 blocking.
@@ -150,7 +155,7 @@ weights are raised to the blocking length and each retained normal tensor is
 blocked by that length.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
-noncomputable def blockTensor {A : MPSTensor d D}
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.blockTensor {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A) (p : ℕ) (hp : 0 < p) :
     CPSVCanonicalFormData (Kraus.blockTensor (d := d) (n := Fin D) A p) where
   r := data.r
@@ -172,7 +177,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
     calc
       Kraus.blockTensor (d := d) (n := Fin D) A p i =
           data.ambient_coisometryᴴ *
-            Kraus.evalWord (toTensorFromBlocks (d := d) data.weights data.blocks)
+            Kraus.evalWord (toTensorFromBlocks (α := Fin d) data.weights data.blocks)
               (Kraus.wordOfBlock d p i) *
             data.ambient_coisometry := by
             simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock] using
@@ -180,7 +185,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
                 data.ambient_coisometry data.coisometric data.reconstruct
                 (Kraus.wordOfBlock d p i) hword_ne
       _ = data.ambient_coisometryᴴ *
-            toTensorFromBlocks (d := blockPhysDim d p)
+            toTensorFromBlocks (α := Fin (blockPhysDim d p))
               (fun k ↦ data.weights k ^ p)
               (fun k ↦ Kraus.blockTensor (d := d) (n := Fin (data.dim k))
                 (data.blocks k) p) i *
@@ -216,13 +221,16 @@ noncomputable def blockTensor {A : MPSTensor d D}
 
 end CPSVCanonicalFormIIData
 
-namespace IsCPSVCanonicalForm
+section IsCPSVCanonicalForm
+
+open MPTensor.IsCPSVCanonicalForm
 
 /-- Positive physical blocking preserves literal CPSV canonical form.
 
 Source: arXiv:1606.00608, lines 227--244 define blocking, normal tensors, and
 canonical form; lines 259--301 give the weight-power expansion under products. -/
-theorem blockTensor {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A)
+theorem _root_.MPTensor.IsCPSVCanonicalForm.blockTensor {A : MPSTensor d D}
+    (hA : IsCPSVCanonicalForm A)
     (p : ℕ) (hp : 0 < p) :
     IsCPSVCanonicalForm (Kraus.blockTensor (d := d) (n := Fin D) A p) := by
   obtain ⟨data⟩ := hA

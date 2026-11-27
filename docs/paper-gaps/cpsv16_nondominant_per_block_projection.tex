@@ -43,7 +43,7 @@ $\mu^A_j,\mu^B_k\in\C$. Their assembled MPVs at length $N$ are
 These expressions are written
 $V^{(N)}(\mathtt{toTensorFromBlocks} \mu\,A)$ in the
 formalization.\footnote{%
-    \leanid{MPSTensor.toTensorFromBlocks};
+    \leanid{MPTensor.toTensorFromBlocks};
     \leanid{MPSTensor.mpv_toTensorFromBlocks_eq_sum}.}
 The cross-overlap
 $\braket{V^{(N)}(A_j)}{V^{(N)}(B_k)}$ is
@@ -69,8 +69,8 @@ $\mu_k$ per sector with the strict ordering
 \end{align}
 Together with the dominant normalization $|\mu_1|=1$, this ordering made every
 sub-dominant block have modulus strictly less than $1$. These fields are not
-part of the current \leanid{MPSTensor.IsNormalCanonicalFormBNT} predicate, which allows
-equal-modulus blocks. The discussion below concerns the deleted strict-modulus
+part of the former \texttt{MPSTensor.IsNormalCanonicalFormBNT} predicate (now
+deleted), which allowed equal-modulus blocks. The discussion below concerns the deleted strict-modulus
 variant. Definition~4.2 and lines~1864--1884 of
 Ref.~\cite{Cirac2021Matrix} state the source structure using repeated copies
 and raw weights $\mu_{j,q}$ with sector multiplicities $r_j\geq 1$. The current

@@ -22,6 +22,8 @@ local word after opening the cut, while \(\rho\) is the complementary outside
 word on the sites not lying in the local interval.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -223,10 +225,10 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (i : Fin N) (hi : N < i.val + L)
     (ρ : Fin (N - L) → Fin d) :
@@ -319,10 +321,10 @@ theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X))) :
     ∃ C : ∀ (j : Fin r) (_ : Fin N),
         (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,

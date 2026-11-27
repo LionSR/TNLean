@@ -33,6 +33,8 @@ It also contains the following results.
   mixed endpoint boundary coordinates.
 -/
 
+open MPTensor
+
 namespace MPSTensor.MPOSymmetry
 
 section JointMixedEndpointSpectatorGap

@@ -7,6 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BNTBlockDiag
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BoundaryMatrixIdentities
 import TNLean.MPS.Tensor.GroundSpace.BlockStrip
 import TNLean.MPS.Tensor.GroundSpace.WrappingWindow
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Boundary-crossing cyclic interval equations for block-diagonal parent spaces
@@ -466,10 +467,10 @@ theorem
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (hIdentity :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
         ∀ (j : Fin r) (i : Fin N),
           N < i.val + L →
@@ -480,7 +481,7 @@ theorem
                       Kraus.evalWord (A j) (List.ofFn ρ) =
                     Kraus.evalWord (A j) (List.ofFn β) * E) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -523,9 +524,9 @@ theorem
     (hNlarge : L + L₀ ≤ N)
     (hIdentity :
       ∀ {ψ : NSiteSpace d N},
-        ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∀ (j : Fin r) (i : Fin N),
             N < i.val + L →
@@ -535,7 +536,7 @@ theorem
                     (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
                         Kraus.evalWord (A j) (List.ofFn ρ) =
                       Kraus.evalWord (A j) (List.ofFn β) * E) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   exact

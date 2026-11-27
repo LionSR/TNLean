@@ -504,7 +504,7 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
           Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
         (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
         SameMPV₂ (blockTensor A m)
-          (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ))
+          (toTensorFromBlocks (α := Fin (blockPhysDim d m)) (μ := fun _ : Fin m => (1 : ℂ))
             blocks) ∧
         (∀ k, IsOrthogonalProjection (P k)) ∧
         (∑ k : Fin m, P k = 1) ∧
@@ -568,7 +568,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleFamily
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ))
+        (toTensorFromBlocks (α := Fin (blockPhysDim d m)) (μ := fun _ : Fin m => (1 : ℂ))
           blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
       (∑ k : Fin m, P k = 1) ∧
@@ -616,7 +616,7 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
       (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+        (toTensorFromBlocks (α := Fin (blockPhysDim d m)) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k, _root_.IsPrimitive
         (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k)) (blocks k))) ∧
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧

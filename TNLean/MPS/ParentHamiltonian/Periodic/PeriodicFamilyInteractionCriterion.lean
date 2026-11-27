@@ -31,6 +31,8 @@ Section 6, lines 2649--2675. No translation invariance of a state being
 classified, supplied interaction, kernel identity, or finite gap is assumed.
 -/
 
+open MPTensor
+
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open ManyBody.Interaction (chainTranslates)

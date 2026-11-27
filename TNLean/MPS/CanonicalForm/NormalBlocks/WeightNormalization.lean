@@ -56,7 +56,7 @@ theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
       (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
         mpv A σ =
           (scale : ℂ) ^ N *
-            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ) := by
+            mpv (toTensorFromBlocks (α := Fin d) (μ := ν) W.blocks) σ) := by
   classical
   let : Nonempty (Fin W.r) := ⟨⟨0, hr⟩⟩
   let a : Fin W.r → ℝ := fun k => Classical.choose (W.weight_pos k)
@@ -110,14 +110,14 @@ theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
       _ = 1 := hratio
   · intro N hN σ
     calc
-      mpv A σ = mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ :=
+      mpv A σ = mpv (toTensorFromBlocks (α := Fin d) (μ := W.weights) W.blocks) σ :=
         W.sameMPV_pos N hN σ
-      _ = mpv (toTensorFromBlocks (d := d) (μ := fun k => (scale : ℂ) * ν k)
+      _ = mpv (toTensorFromBlocks (α := Fin d) (μ := fun k => (scale : ℂ) * ν k)
             W.blocks) σ := by
           have hfun : W.weights = fun k => (scale : ℂ) * ν k := funext hweight_eq
           rw [hfun]
       _ = (scale : ℂ) ^ N *
-            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ :=
+            mpv (toTensorFromBlocks (α := Fin d) (μ := ν) W.blocks) σ :=
           mpv_toTensorFromBlocks_weight_mul_left (d := d) (c := (scale : ℂ))
             (μ := ν) W.blocks σ
 
@@ -138,14 +138,14 @@ theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
   by_contra hnot
   have hr0 : W.r = 0 := Nat.eq_zero_of_not_pos hnot
   have hblock :
-      mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ = 0 := by
+      mpv (toTensorFromBlocks (α := Fin d) (μ := W.weights) W.blocks) σ = 0 := by
     have : IsEmpty (Fin W.r) := Fin.isEmpty_iff.mpr hr0
     rw [mpv_toTensorFromBlocks_eq_sum]
     simp
   have hAeq : mpv A σ = 0 := by
     calc
       mpv A σ =
-          mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ :=
+          mpv (toTensorFromBlocks (α := Fin d) (μ := W.weights) W.blocks) σ :=
             W.sameMPV_pos N hN σ
       _ = 0 := hblock
   exact hσ hAeq
@@ -185,7 +185,7 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_m
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos
         (fun i => (((scale : ℂ)⁻¹) • A i))
-        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+        (toTensorFromBlocks (α := Fin d) (μ := ν) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨W⟩ := exists_pgvwc07_positiveLengthWitness (d := d) (D := D) A
@@ -204,12 +204,12 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_m
         = ((scale : ℂ)⁻¹) ^ N * mpv A σ := mpv_smul ((scale : ℂ)⁻¹) A σ
     _ = ((scale : ℂ)⁻¹) ^ N *
           ((scale : ℂ) ^ N *
-            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ) := by
+            mpv (toTensorFromBlocks (α := Fin d) (μ := ν) W.blocks) σ) := by
         rw [hMPV N hN σ]
     _ = (((scale : ℂ)⁻¹) ^ N * (scale : ℂ) ^ N) *
-          mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
+          mpv (toTensorFromBlocks (α := Fin d) (μ := ν) W.blocks) σ := by
         ring
-    _ = mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
+    _ = mpv (toTensorFromBlocks (α := Fin d) (μ := ν) W.blocks) σ := by
         simp [hpow]
 
 /-- Arbitrary-input zero/nonzero dichotomy for the exact rescaled PGVWC07
@@ -248,7 +248,7 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_e
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos
         (fun i => (((scale : ℂ)⁻¹) • A i))
-        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+        (toTensorFromBlocks (α := Fin d) (μ := ν) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   by_cases hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0
@@ -296,7 +296,7 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos
         (fun i => (((scale : ℂ)⁻¹) • A i))
-        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+        (toTensorFromBlocks (α := Fin d) (μ := ν) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   rcases exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
@@ -321,7 +321,7 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
       calc
         mpv (fun i => (((1 : ℂ)⁻¹) • A i)) σ = mpv A σ := by simp
         _ = 0 := hZero N hN σ
-        _ = mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+        _ = mpv (toTensorFromBlocks (α := Fin d) (μ := ν) blocks) σ := by
           rw [mpv_toTensorFromBlocks_eq_sum]
           simp [ν, blocks]
     · simp [dim]

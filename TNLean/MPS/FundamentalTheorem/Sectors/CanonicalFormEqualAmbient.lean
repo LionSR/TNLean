@@ -24,16 +24,18 @@ namespace MPSTensor
 variable {d D : ℕ}
 variable {A B : MPSTensor d D}
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
 
-private lemma coisometry_cast_rows {n m : ℕ} (h : n = m)
+open MPTensor.CPSVCanonicalFormData
+
+private lemma _root_.MPTensor.CPSVCanonicalFormData.coisometry_cast_rows {n m : ℕ} (h : n = m)
     (U : Matrix (Fin n) (Fin D) ℂ) (hU : U * Uᴴ = 1) :
     let V := cast (congr_arg (fun r => Matrix (Fin r) (Fin D) ℂ) h) U
     V * Vᴴ = 1 := by
   subst h
   exact hU
 
-private lemma reconstruction_cast_rows {n m : ℕ} (h : n = m)
+private lemma _root_.MPTensor.CPSVCanonicalFormData.reconstruction_cast_rows {n m : ℕ} (h : n = m)
     (T : MPSTensor d n) (U : Matrix (Fin n) (Fin D) ℂ)
     (hRec : ∀ i, A i = Uᴴ * T i * U) :
     let T' := cast (congr_arg (MPSTensor d) h) T
@@ -42,7 +44,7 @@ private lemma reconstruction_cast_rows {n m : ℕ} (h : n = m)
   subst h
   exact hRec
 
-private lemma gaugeEquiv_cast_dim {n m : ℕ} (h : n = m)
+private lemma _root_.MPTensor.CPSVCanonicalFormData.gaugeEquiv_cast_dim {n m : ℕ} (h : n = m)
     {S T : MPSTensor d n} (hGauge : GaugeEquiv S T) :
     GaugeEquiv (cast (congr_arg (MPSTensor d) h) S)
       (cast (congr_arg (MPSTensor d) h) T) := by
@@ -67,7 +69,7 @@ the heterogeneous ambient statement of the cited source corollary. See
 
 Source: arXiv:2011.12127v2, lines 1831--1906; arXiv:1606.00608,
 lines 237--301 and 1135--1199. -/
-theorem fundamentalTheorem_equal_ambient_canonicalForm
+theorem _root_.MPTensor.CPSVCanonicalFormData.fundamentalTheorem_equal_ambient_canonicalForm
     (dataA : CPSVCanonicalFormData A)
     (dataB : CPSVCanonicalFormData B)
     (hNormA : dataA.IsWeightNormalized)

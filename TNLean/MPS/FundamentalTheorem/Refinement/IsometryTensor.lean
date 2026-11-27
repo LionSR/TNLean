@@ -114,18 +114,18 @@ private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
     (W : Matrix (Fin m) (Fin d) ℂ) :
     SameMPV₂
       (fun τ : Fin m => ∑ σ : Fin d, W τ σ •
-        toTensorFromBlocks (d := d) (μ := μ) blocks σ)
-      (toTensorFromBlocks (d := m) (μ := μ)
+        toTensorFromBlocks (α := Fin d) (μ := μ) blocks σ)
+      (toTensorFromBlocks (α := Fin m) (μ := μ)
         (fun k : Fin r => fun τ : Fin m => ∑ σ : Fin d, W τ σ • blocks k σ)) := by
   intro N τ
   calc
     mpv (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' •
-        toTensorFromBlocks (d := d) (μ := μ) blocks σ') τ =
+        toTensorFromBlocks (α := Fin d) (μ := μ) blocks σ') τ =
         ∑ σ : Fin N → Fin d,
           (∏ k : Fin N, W (τ k) (σ k)) *
-            mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+            mpv (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) σ := by
           simpa [mpv_eq, coeff_eq] using
-            mpv_sum_smul_ofFn (B := toTensorFromBlocks (d := d) (μ := μ) blocks) W N τ
+            mpv_sum_smul_ofFn (B := toTensorFromBlocks (α := Fin d) (μ := μ) blocks) W N τ
     _ = ∑ σ : Fin N → Fin d,
           (∏ k : Fin N, W (τ k) (σ k)) *
             ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
@@ -171,7 +171,7 @@ private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
           congr 1
           symm
           simpa [mpv_eq, coeff_eq] using mpv_sum_smul_ofFn (B := blocks j) W N τ
-    _ = mpv (toTensorFromBlocks (d := m) (μ := μ)
+    _ = mpv (toTensorFromBlocks (α := Fin m) (μ := μ)
           (fun k : Fin r => fun τ' : Fin m => ∑ σ : Fin d, W τ' σ • blocks k σ)) τ := by
           symm
           rw [mpv_toTensorFromBlocks_eq_sum]
@@ -199,14 +199,14 @@ noncomputable def isIrreducibleForm_kraus_isometry
         SameMPV₂
           (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
           (fun τ : Fin m => ∑ σ : Fin d, W τ σ •
-            toTensorFromBlocks (d := d) (μ := hB.μ) hB.blocks σ) :=
+            toTensorFromBlocks (α := Fin d) (μ := hB.μ) hB.blocks σ) :=
         sameMPV₂_sum_smul_ofFn B
-          (toTensorFromBlocks (d := d) (μ := hB.μ) hB.blocks) W hB.sameMPV
+          (toTensorFromBlocks (α := Fin d) (μ := hB.μ) hB.blocks) W hB.sameMPV
     have hBlocksSame :
         SameMPV₂
           (fun τ : Fin m => ∑ σ : Fin d, W τ σ •
-            toTensorFromBlocks (d := d) (μ := hB.μ) hB.blocks σ)
-          (toTensorFromBlocks (d := m) (μ := hB.μ)
+            toTensorFromBlocks (α := Fin d) (μ := hB.μ) hB.blocks σ)
+          (toTensorFromBlocks (α := Fin m) (μ := hB.μ)
             (fun k : Fin hB.r => fun τ : Fin m => ∑ σ : Fin d, W τ σ • hB.blocks k σ)) :=
         sameMPV₂_toTensorFromBlocks_sum_smul_ofFn hB.μ hB.blocks W
     intro N τ

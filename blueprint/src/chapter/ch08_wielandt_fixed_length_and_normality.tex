@@ -219,28 +219,24 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     exact block injectivity persists under positive multiples.
 \end{proof}
 
-\begin{corollary}[Uniform injective blocking for separated normal-canonical families]%
+\begin{corollary}[Uniform injective blocking for finite normal families]%
     \label{cor:uniform_injective_blocking_normal_bnt}
-    \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
-        MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
+    \lean{MPSTensor.exists_common_blockTensor_isInjective_of_isNormal,
+        MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormal}
     \leanok
-    \uses{thm:normal_tp_primitive_irred,thm:bounded_injective_blocking_normal_left_canonical}
-    Let $(A_x)_{x\in X}$ be a finite separated normal-canonical family
-    (a basis of normal-canonical representatives in the sense of
-    Definition~\ref{def:normal_cf_bnt} with distinct blocks; see
-    \cite{gap:cpsv16_ft_one_copy_scope_restriction}) whose blocks have positive
-    virtual bond dimension. Then there is a positive integer $L$ such that
+    \uses{def:normal}
+    Let $(A_x)_{x\in X}$ be a finite family of normal tensors
+    (Definition~\ref{def:normal}). Then there is a positive integer $L$ such that
     every blocked tensor $A_x^{[L]}$ is one-site injective. The same conclusion
-    holds simultaneously for two finite separated normal-canonical families
-    whose blocks have positive virtual bond dimension.
+    holds simultaneously for two finite families of normal tensors.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    Applying Lemma~\ref{thm:bounded_injective_blocking_normal_left_canonical}
-    to each block and taking the product of the finitely many resulting
-    positive blocking lengths gives a common positive multiple, under which
-    injectivity persists by positive further blocking.
+    Each normal tensor is block injective at some positive length. The
+    product of the finitely many resulting positive lengths is a common
+    positive multiple, under which injectivity persists by positive further
+    blocking.
 \end{proof}
 
 \begin{remark}[Rank-one extraction and fixed-length spanning]

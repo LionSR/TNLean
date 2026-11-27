@@ -92,7 +92,7 @@ theorem isBNTCanonicalForm_singleSectorDecomposition [NeZero D]
 
 The gauge is the pure trace-preserving Perron gauge from arXiv:1606.00608,
 Appendix A, lines 1093--1117. -/
-theorem IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition
+theorem _root_.MPTensor.IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition
     {A : MPSTensor d D} (hA : IsNormalTensor A) :
     ∃ B : MPSTensor d D,
       GaugeEquiv A B ∧

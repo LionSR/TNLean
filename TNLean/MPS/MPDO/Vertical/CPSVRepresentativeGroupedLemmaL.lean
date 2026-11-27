@@ -26,7 +26,9 @@ Proposition 4.13, lines 1874--1887 and 1909--1919.
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor.CPSVCanonicalFormData.BNTRefinement
+namespace MPTensor.CPSVCanonicalFormData.BNTRefinement
+
+open MPSTensor
 
 variable {d D e : ℕ} {A : MPSTensor d D}
 variable {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement)
@@ -70,7 +72,7 @@ noncomputable def groupedMarkedTensor
     (C : (j : Fin data.phaseClasses.g) →
       MPSTensor e (data.dim (data.representativeIndex j))) :
     MPSTensor e (∑ k : Fin data.r, data.dim k) :=
-  toTensorFromBlocks (d := e) (fun _ : Fin data.r => (1 : ℂ)) (ref.groupedMarkedBlocks C)
+  toTensorFromBlocks (α := Fin e) (fun _ : Fin data.r => (1 : ℂ)) (ref.groupedMarkedBlocks C)
 
 private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
     (C : (j : Fin data.phaseClasses.g) →
@@ -82,7 +84,7 @@ private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
           (data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w)) := by
   classical
   have hGrouped : ref.groupedTensor =
-      toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks := by
+      toTensorFromBlocks (α := Fin d) data.weights ref.regroupedBlocks := by
     funext i
     exact (ref.regroupedTensor_eq_groupedTensor i).symm
   rw [hGrouped, groupedMarkedTensor, evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
@@ -227,4 +229,4 @@ theorem insertedTensor_representative_eq_of_firstSiteActionAgree
     ref.eventuallyRepresentativeWordTupleSpan hAct
 
 
-end MPSTensor.CPSVCanonicalFormData.BNTRefinement
+end MPTensor.CPSVCanonicalFormData.BNTRefinement

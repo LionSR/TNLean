@@ -28,13 +28,17 @@ implies its ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder Kraus
 
 namespace MPSTensor
 
 variable {d D : ℕ} {A : MPSTensor d D}
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- The CPSV blocks occupy the entire ambient bond space.
 
@@ -43,20 +47,22 @@ describes the intended reduced representative used in arXiv:1703.09188, Proposit
 `prop:normal-tensor`, lines 319--326 and 344--354, rather than every tensor satisfying
 the paper's literal canonical-form definition. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-def HasFullSupport (data : CPSVCanonicalFormData A) : Prop :=
+def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport (data : CPSVCanonicalFormData A) : Prop :=
   ∑ k, data.dim k = D
 
 /-- Full support is preserved by blocking a positive number of sites.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
-theorem hasFullSupport_blockTensor (data : CPSVCanonicalFormData A)
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor
+    (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullSupport) (p : ℕ) (hp : 0 < p) :
     (data.blockTensor p hp).HasFullSupport := by
   change ∑ k, data.dim k = D
   exact hfull
 
 /-- Full support is unchanged by a bijective relabeling of the physical alphabet. -/
-theorem hasFullSupport_reindexPhysical {d' : ℕ} (data : CPSVCanonicalFormData A)
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical {d' : ℕ}
+    (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullSupport) (e : Fin d' ≃ Fin d) :
     (data.reindexPhysical e).HasFullSupport := by
   change ∑ k, data.dim k = D
@@ -76,10 +82,12 @@ theorem hasFullSupport_cast {A B : MPSTensor d D} (data : CPSVCanonicalFormIIDat
 
 end CPSVCanonicalFormIIData
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
-private theorem isIrreducibleFamily_reindexBond
+private theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_reindexBond
     {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPSTensor d n)
     (hB : Kraus.IsIrreducibleFamily B) :
     Kraus.IsIrreducibleFamily (fun i => Matrix.reindex e e (B i)) := by
@@ -129,7 +137,7 @@ arXiv:1703.09188, lines 344--354, is used for the intended reduced representativ
 after lines 319--326. This theorem assumes the resulting ambient-dimensional
 block directly. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isIrreducibleFamily_of_dim_eq
+theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq
     (data : CPSVCanonicalFormData A) (k : Fin data.r) (hDim : data.dim k = D) :
     Kraus.IsIrreducibleFamily A := by
   classical
@@ -172,7 +180,7 @@ theorem isIrreducibleFamily_of_dim_eq
       (data.blocks_normal k).no_invariant_proj
   have hassembled : ∀ i,
       Matrix.reindex eTotal eTotal
-          (toTensorFromBlocks (d := d) data.weights data.blocks i) =
+          (toTensorFromBlocks (α := Fin d) data.weights data.blocks i) =
         data.weights k • B i := by
     intro i
     ext x y
@@ -242,7 +250,8 @@ theorem isIrreducibleFamily_of_dim_eq
   rw [hrec i, hinv, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
 
 /-- With a single block, every index equals the given one. -/
-private theorem eq_of_r_eq_one (data : CPSVCanonicalFormData A) (hr : data.r = 1)
+private theorem _root_.MPTensor.CPSVCanonicalFormData.eq_of_r_eq_one
+    (data : CPSVCanonicalFormData A) (hr : data.r = 1)
     (j k : Fin data.r) : j = k := by
   apply Fin.ext
   have := j.isLt
@@ -250,7 +259,7 @@ private theorem eq_of_r_eq_one (data : CPSVCanonicalFormData A) (hr : data.r = 1
   omega
 
 /-- Under full support, the unique block has the ambient bond dimension. -/
-theorem dim_eq_of_r_eq_one_of_fullSupport
+theorem _root_.MPTensor.CPSVCanonicalFormData.dim_eq_of_r_eq_one_of_fullSupport
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)
     (hfull : data.HasFullSupport) (k : Fin data.r) :
     data.dim k = D := by
@@ -263,7 +272,7 @@ theorem dim_eq_of_r_eq_one_of_fullSupport
   exact hsum.symm.trans hfull
 
 /-- Under full support, the unique block inclusion is onto as well as isometric. -/
-theorem ambientBlockInclusion_mul_conjTranspose_eq_one
+theorem _root_.MPTensor.CPSVCanonicalFormData.ambientBlockInclusion_mul_conjTranspose_eq_one
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)
     (hfull : data.HasFullSupport) (k : Fin data.r) :
     data.ambientBlockInclusion k * (data.ambientBlockInclusion k)ᴴ = 1 := by
@@ -285,7 +294,7 @@ arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. The theorem
 reduced representative; this lemma supplies its full-support irreducibility
 step and does not assert irreducibility of the original nonminimal tensor. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isIrreducibleFamily_of_r_eq_one_of_fullSupport
+theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_r_eq_one_of_fullSupport
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)
     (hfull : data.HasFullSupport) : Kraus.IsIrreducibleFamily A := by
   let k : Fin data.r := ⟨0, by omega⟩
@@ -303,7 +312,7 @@ constructed by `MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii`; this
 lemma combines its full-support conclusion with supplied spectral data and does
 not make the original nonminimal tensor normal. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isNormalTensor_of_r_eq_one_of_fullSupport
+theorem _root_.MPTensor.CPSVCanonicalFormData.isNormalTensor_of_r_eq_one_of_fullSupport
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)
     (hfull : data.HasFullSupport)
     (hrad : spectralRadius ℂ
@@ -454,9 +463,9 @@ See `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
     [NeZero d] [NeZero D] {U : MPOTensor d D}
     (hU : U.IsMPU)
-    (data : MPSTensor.CPSVCanonicalFormData U.normalizedFlattening)
+    (data : MPTensor.CPSVCanonicalFormData U.normalizedFlattening)
     (hfull : data.HasFullSupport) :
-    MPSTensor.IsNormalTensor U.normalizedFlattening := by
+    MPTensor.IsNormalTensor U.normalizedFlattening := by
   have htrace : ∀ N : ℕ, 1 < N →
       Matrix.trace
         (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 :=
@@ -477,7 +486,7 @@ This is the normality conclusion of CPSV17, Proposition `prop:normal-tensor`,
 `Papers/1703.09188/paper_v2.tex`, lines 344--356. -/
 theorem isNormalTensor_normalizedFlattening
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
-    MPSTensor.IsNormalTensor U.normalizedFlattening :=
+    MPTensor.IsNormalTensor U.normalizedFlattening :=
   hU.isMPU.isNormalTensor_normalizedFlattening_of_cpsv
     hU.cfii.toCPSVCanonicalFormData hU.hasFullSupport
 

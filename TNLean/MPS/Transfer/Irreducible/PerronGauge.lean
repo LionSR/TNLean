@@ -76,7 +76,7 @@ This is the transfer-map form of `Kraus.exists_posDef_adjoint_eigenvector`. -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
@@ -103,7 +103,7 @@ This theorem combines `exists_posDef_adjoint_eigenvector` with the explicit
 theorem exists_tp_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
       σ.PosDef ∧ 0 < r ∧
@@ -134,7 +134,7 @@ rescaled tensor `r^{-1/2} A`. -/
 theorem exists_unital_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B : MPSTensor d D) (r : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ),
       ρ.PosDef ∧ 0 < r ∧
@@ -152,7 +152,7 @@ theorem exists_unital_data_of_irreducible
     simpa [Aadj] using
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
-  have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
+  have hIrrAdj : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) Aadj :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   have hAadj : ∃ i, Aadj i ≠ 0 := by
     rcases hA with ⟨i, hi⟩
@@ -201,7 +201,7 @@ scalar line.  The channel-theoretic input is Wolf Theorem 6.6, formalized as
 theorem fixed_eq_scalar_of_isIrreducibleFamily_unital
     {d D : ℕ}
     (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hUnital : Kraus.transferMap (ι := Fin d) (n := Fin D) A 1 = 1)
     (X : Matrix (Fin D) (Fin D) ℂ)
     (hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A X = X) :

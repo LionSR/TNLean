@@ -7,8 +7,8 @@ import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Transfer.Irreducible.FixedPointProjection
 import TNLean.MPS.Transfer.Irreducible.TransferPeripheral
-import QICLean.Channel.Peripheral.PeriodicityRemoval
-import QICLean.Channel.Peripheral.Conjugation
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 
 import Mathlib.Analysis.Complex.Order
 import Mathlib.Analysis.Real.Sqrt

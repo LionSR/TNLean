@@ -108,9 +108,9 @@ zero, and its word module is a sum of lines. -/
 theorem isSemisimpleModule_wordModule_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) {A : ∀ k, MPSTensor d (dim k)}
     (hirr : ∀ k, Matrix.IsIrreducibleAction (A k)) :
-    IsSemisimpleModule (WordAlgebra d) (toTensorFromBlocks μ A).WordModule := by
+    IsSemisimpleModule (WordAlgebra d) (WordModule (toTensorFromBlocks μ A)) := by
   classical
-  set T := toTensorFromBlocks μ A with hT
+  set T : MPSTensor d (∑ k, dim k) := toTensorFromBlocks μ A with hT
   -- the inclusion of the word module of the weighted block `k`
   let f : ∀ k, (μ k • A k).WordModule →ₗ[WordAlgebra d] T.WordModule := fun k =>
     WordAlgebra.linearMapOfLetter

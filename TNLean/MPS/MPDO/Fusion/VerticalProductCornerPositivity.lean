@@ -62,7 +62,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
     (hU₂ : U₂ * U₂ᴴ = 1)
     (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
       U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ))
+    (hNormal₂ : ∀ γ, MPTensor.IsNormalTensor (A₂ γ))
     (j : Fin (Fintype.card S.ActiveLabel)) :
     (0 : ℂ) < S.flatCoefficient j * C.phase j := by
   let x := S.activeLabelEquiv j
@@ -73,7 +73,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
   let c := S.flatCoefficient j * C.phase j
   let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
   let : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
-  have hA : MPSTensor.IsNormalTensor A :=
+  have hA : MPTensor.IsNormalTensor A :=
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))
   have hVact : Vactᴴ * Vact = 1 := by
@@ -148,7 +148,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
     (hU₂ : U₂ * U₂ᴴ = 1)
     (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
       U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ))
+    (hNormal₂ : ∀ γ, MPTensor.IsNormalTensor (A₂ γ))
     (j : Fin (Fintype.card S.ActiveLabel)) :
     (0 : ℂ) < S.flatCoefficient j * C.phase j := by
   refine C.activeCoefficient_mul_phase_pos_of_sectorCompression_separation M hM
@@ -184,7 +184,7 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
     (hU₂ : U₂ * U₂ᴴ = 1)
     (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
       U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ))
+    (hNormal₂ : ∀ γ, MPTensor.IsNormalTensor (A₂ γ))
     (j : Fin (Fintype.card S.ActiveLabel)) :
     ∃ ω : ℝ, 0 < ω ∧
       (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ)ᴴ *
@@ -201,7 +201,7 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
   let c := S.flatCoefficient j * C.phase j
   let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
   let : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
-  have hA : MPSTensor.IsNormalTensor A :=
+  have hA : MPTensor.IsNormalTensor A :=
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))
   have hc : (0 : ℂ) < c :=

@@ -17,9 +17,7 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedHamiltonian
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CutApproximationTail
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FavorableParameters
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.HighEnergyMass
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.LowSpectrumGap
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.Normalization
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedInitialScale
@@ -29,7 +27,6 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankScale
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedTailParameters
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.PhysicalEntropy
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.PhysicalRobustness
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.ProjectionEnergy
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.RegionalNormalization
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.Robustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank

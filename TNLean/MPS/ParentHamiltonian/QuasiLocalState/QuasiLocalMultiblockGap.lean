@@ -70,6 +70,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947,
 and the infinite-volume commutator argument, lines 2649--2675.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators ComplexOrder
@@ -134,7 +136,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_gap_of_isParentInteraction
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     let ω := fun α => quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
       (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
@@ -167,7 +169,7 @@ theorem exists_primitiveFamily_quasiLocalCommutator_gap_of_wordTupleSpanTop
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     ∃ (B : ∀ i, MPSTensor d (D i))
       (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
@@ -218,7 +220,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     let ω := fun α => quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
       (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
@@ -273,7 +275,7 @@ theorem exists_pure_primitiveFamily_quasiLocalCommutator_limit_gap_of_wordTupleS
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     ∃ (B : ∀ i, MPSTensor d (D i))
       (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)

@@ -393,7 +393,7 @@ Source: arXiv:1703.09188, Example `ex:all-phases-under-conjugation`, lines 1845-
 theorem exists_isMPUCanonicalForm_signGates [NeZero d] [NeZero ℓ] [NeZero r]
     (e : Fin ℓ × Fin r ≃ Fin d × Fin d) (s₁ s₂ : Bool) :
     ∃ (K : ℕ) (W : MPOTensor (d * d) K),
-      MPSTensor.IsMPUCanonicalForm W.toMPSTensor ∧
+      MPTensor.IsMPUCanonicalForm W.toMPSTensor ∧
         Nonempty (TwoSiteStandardFormData W (gateU e (signGate s₁)) (gateV e (signGate s₂))) ∧
           ∀ N : ℕ, 0 < N → mpo W N = (mpo W N).map (starRingEnd ℂ) := by
   obtain ⟨K, W, hcf, hS, hmpo⟩ := exists_isMPUCanonicalForm_twoSiteStandardFormData
@@ -443,7 +443,7 @@ Theorem `conjphs`, lines 1406--1446. -/
 theorem conjugation_oddRank_two_phases [NeZero d] [NeZero ℓ] [NeZero r]
     (e : Fin ℓ × Fin r ≃ Fin d × Fin d) (hodd : Odd ℓ ∨ Odd r) :
     ∃ (Kp Km : ℕ) (Wp : MPOTensor (d * d) Kp) (Wm : MPOTensor (d * d) Km),
-      MPSTensor.IsMPUCanonicalForm Wp.toMPSTensor ∧ MPSTensor.IsMPUCanonicalForm Wm.toMPSTensor ∧
+      MPTensor.IsMPUCanonicalForm Wp.toMPSTensor ∧ MPTensor.IsMPUCanonicalForm Wm.toMPSTensor ∧
       Nonempty (TwoSiteStandardFormData Wp (gateU e (signGate true))
         (gateV e (signGate true))) ∧
       Nonempty (TwoSiteStandardFormData Wm (gateU e (signGate true))
@@ -453,7 +453,7 @@ theorem conjugation_oddRank_two_phases [NeZero d] [NeZero ℓ] [NeZero r]
       ¬ StrictlyEquivalentUnderSymmetry (conjugationSymmetry (d * d)) Wp Wm rfl ∧
       ∀ {D : ℕ} (W : MPOTensor (d * d) D) {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
         {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}, TwoSiteStandardFormData W u v →
-        MPSTensor.IsMPUCanonicalForm W.toMPSTensor →
+        MPTensor.IsMPUCanonicalForm W.toMPSTensor →
         (∀ N : ℕ, 0 < N → mpo W N = (mpo W N).map (starRingEnd ℂ)) →
         StrictlyEquivalentUnderSymmetry (conjugationSymmetry (d * d)) Wp W rfl ∨
           StrictlyEquivalentUnderSymmetry (conjugationSymmetry (d * d)) Wm W rfl := by

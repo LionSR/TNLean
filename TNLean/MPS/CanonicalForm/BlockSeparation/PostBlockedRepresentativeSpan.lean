@@ -55,7 +55,7 @@ theorem eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
   have hs_le : s ≤ L := by omega
   have hp_le : p ≤ L - s := by omega
   have hSpan := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A
-    (fun k => isNBlkInjective_of_le hp (hAtP k) hp_le) hSel
+    (fun k => Kraus.isNBlkInjective_of_le hp (hAtP k) hp_le) hSel
   simpa [Nat.sub_add_cancel hs_le] using hSpan
 
 end MPSTensor
@@ -127,7 +127,7 @@ private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
       Kraus.IsNBlkInjective (P.basis j) n := by
     intro j n hpn
-    exact isNBlkInjective_of_le hp (hAtP j) hpn
+    exact Kraus.isNBlkInjective_of_le hp (hAtP j) hpn
   let L₀ := 2 * p - 1
   have hBlk0 : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) L₀ := by
     intro j
@@ -289,7 +289,7 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
   have hInjSucc : ∀ j, Kraus.IsInjective (blockTensor (P.basis j) (L + 1)) := by
     intro j
     exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) (L + 1)).1
-      (isNBlkInjective_succ_of_isNBlkInjective (P.basis j) hL (hInj j))
+      (Kraus.isNBlkInjective_succ_of_isNBlkInjective (P.basis j) hL (hInj j))
   have hSpan := hCF.eventuallyRepresentativeWordTupleSpan_blockTensor
     (L + 1) (by omega) hInjSucc
   have hActBlocked : FirstSiteActionAgree (P.blockTensor (L + 1)).toTensor

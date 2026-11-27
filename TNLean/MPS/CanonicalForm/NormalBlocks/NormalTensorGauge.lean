@@ -179,7 +179,9 @@ theorem _root_.MPTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff {A B : MPST
     rw [← Module.End.mul_eq_comp] at hPoly ⊢
     simpa using congrArg e hPoly
 
-namespace IsNormalTensor
+section IsNormalTensor
+
+open MPTensor.IsNormalTensor
 
 /-- Transport normal-tensor status backward along a gauge equivalence.
 
@@ -189,7 +191,7 @@ irreducible-map similarity.
 
 Source: arXiv:1606.00608, lines 233--235 define normal tensors and lines
 264--268 give the invertible gauge relation between normal representatives. -/
-theorem of_gaugeEquiv {A B : MPSTensor d D} (hB : IsNormalTensor B)
+theorem _root_.MPTensor.IsNormalTensor.of_gaugeEquiv {A B : MPSTensor d D} (hB : IsNormalTensor B)
     (hGauge : GaugeEquiv A B) :
     IsNormalTensor A := by
   obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
@@ -311,7 +313,7 @@ transfer map has spectral radius one and unique peripheral eigenvalue one.
 The spectral-radius normalization forces positive bond dimension. The
 positive-definite left Perron eigenvector consequently has eigenvalue one, so
 the usual Perron gauge is a pure similarity of the original tensor. -/
-theorem IsNormalTensor.exists_tpGauge
+theorem _root_.MPTensor.IsNormalTensor.exists_tpGauge
     {A : MPSTensor d D} (h : IsNormalTensor A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
@@ -331,7 +333,7 @@ theorem IsNormalTensor.exists_tpGauge
 
 /-- A normal tensor in the spectral sense of arXiv:1606.00608 is eventually
 block-injective. -/
-theorem IsNormalTensor.isNormal
+theorem _root_.MPTensor.IsNormalTensor.isNormal
     {A : MPSTensor d D} (h : IsNormalTensor A) : Kraus.IsNormal A := by
   let : NeZero D := ⟨h.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := h.exists_tpGauge
@@ -406,7 +408,7 @@ theorem isNormalTensor_iff_isNormal_and_spectralRadius_eq_one (A : MPSTensor d D
 Indeed, if every letter vanished, then its transfer map and hence its spectral
 radius would vanish, contradicting the spectral-radius-one normalization of
 arXiv:1606.00608, lines 231--235. -/
-theorem IsNormalTensor.exists_apply_ne_zero
+theorem _root_.MPTensor.IsNormalTensor.exists_apply_ne_zero
     {A : MPSTensor d D} (h : IsNormalTensor A) : ∃ i, A i ≠ 0 := by
   have : NeZero D := ⟨h.bondDim_ne_zero⟩
   by_contra hzero
@@ -424,7 +426,7 @@ The trace-preserving Perron gauge is a pure similarity, so it leaves every
 matrix product vector unchanged.  The assertion therefore follows from the
 primitive trace-preserving overlap limit.  This is the normalization used in
 the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097. -/
-theorem IsNormalTensor.selfOverlap_tendsto_one
+theorem _root_.MPTensor.IsNormalTensor.selfOverlap_tendsto_one
     {A : MPSTensor d D} (hA : IsNormalTensor A) :
     Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ)) := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
@@ -627,6 +629,26 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
   rw [← hFamily]
   exact hLI N hN
 
+/-- **Bases of normal tensors of a weighted direct sum.** A finite family of normal tensors is a
+basis of normal tensors of the weighted direct sum `⊕_k μ_k A_k` exactly when distinct members
+are not gauge-phase equivalent; the weights are arbitrary.
+
+The spanning clause is the block expansion `V^{(N)}(⊕_k μ_k A_k) = ∑_k μ_k^N V^{(N)}(A_k)`;
+eventual linear independence is equivalent to gauge-phase separation by the corollary to
+Lemma `equalMPS` and by condition (ii) of Proposition 2.7 of arXiv:1606.00608
+(`prop:char-BNT`, lines 271--280 and 1121--1142). -/
+theorem isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff
+    {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    {A : (k : Fin r) → MPSTensor d (dim k)} (hNormal : ∀ k, IsNormalTensor (A k)) :
+    IsCPSVBasisOfNormalTensors (toTensorFromBlocks μ A) (fun k => ⟨dim k, A k⟩) ↔
+      BlocksNotGaugePhaseEquiv (d := d) A := by
+  refine ⟨fun h => h.blocks_not_gaugePhaseEquiv, fun hDistinct => ?_⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hNormal k).bondDim_ne_zero⟩
+  refine ⟨hNormal, fun N _ => ⟨fun k => μ k ^ N, fun σ => ?_⟩,
+    exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv A hNormal
+      hDistinct⟩
+  simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
+
 end MPSTensor
 
 end
@@ -643,7 +665,7 @@ namespace MPSTensor
 
 /-- A normalized normal tensor is block injective at length D^4. Source:
 arXiv:1606.00608, lines 318–344, using the quantum Wielandt bound. -/
-theorem IsNormalTensor.isNBlkInjective_pow_four {d D : ℕ} {A : MPSTensor d D}
+theorem _root_.MPTensor.IsNormalTensor.isNBlkInjective_pow_four {d D : ℕ} {A : MPSTensor d D}
     (hA : IsNormalTensor A) : Kraus.IsNBlkInjective A (D ^ 4) := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _, _, hTP, hGauge, _, _⟩ := hA.exists_tpGauge
@@ -653,12 +675,12 @@ theorem IsNormalTensor.isNBlkInjective_pow_four {d D : ℕ} {A : MPSTensor d D}
 
 /-- A bound K on the bond dimension gives the common injective block length K^4.
 Source: arXiv:1606.00608, lines 318–344, bounded common physical blocking. -/
-theorem IsNormalTensor.blockTensor_isInjective_of_bondDim_le
+theorem _root_.MPTensor.IsNormalTensor.blockTensor_isInjective_of_bondDim_le
     {d D K : ℕ} {A : MPSTensor d D} (hA : IsNormalTensor A) (hDK : D ≤ K) :
     Kraus.IsInjective (Kraus.blockTensor A (K ^ 4)) := by
   have hD : 0 < D := Nat.pos_of_ne_zero hA.bondDim_ne_zero
   exact (isNBlkInjective_iff_blockTensor_isInjective A (K ^ 4)).1
-    (isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
+    (Kraus.isNBlkInjective_of_le (Nat.pow_pos hD) hA.isNBlkInjective_pow_four
       (Nat.pow_le_pow_left hDK 4))
 
 end MPSTensor
@@ -749,7 +771,7 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal [NeZero D] {A : M
       (∀ L : ℕ, parentInteraction A L = parentInteraction B L) ∧
       (∀ L N : ℕ, chainGroundSpace A L N = chainGroundSpace B L N) := by
   classical
-  have hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
+  have hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A :=
     isIrreducibleFamily_of_isNormal A hA
   obtain ⟨B, r, σ, _hσ, hr, _hBdef, hBnorm, hBgauge⟩ :=
     exists_tp_data_of_irreducible A hIrr (exists_apply_ne_zero_of_isNormal hA)
@@ -811,7 +833,7 @@ theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
   have hD4 : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
   tfae_have 1 → 3 := fun h => isNBlkInjective_pow_four_of_isNormal A h
   tfae_have 3 → 2 := fun h =>
-    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => isNBlkInjective_of_le hD4 h hm⟩
+    Filter.eventually_atTop.mpr ⟨D ^ 4, fun m hm => Kraus.isNBlkInjective_of_le hD4 h hm⟩
   tfae_have 2 → 1 := fun h => by
     obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp h
     exact ⟨max N 1, by omega, hN _ (le_max_left _ _)⟩

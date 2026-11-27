@@ -17,10 +17,12 @@ Consequently its dyadic transfer-map orbit alternates between the factors `ω` a
 
 This gives an obstruction to the unrestricted convergence assertion in arXiv:1606.00608,
 Appendix B, lines 1211--1244. It does not affect the primitive single-block convergence theorem
-`rg_flow_converges_of_cf`.
+`rg_flow_converges_of_isInjective`.
 
 See `docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex`.
 -/
+
+open MPTensor
 
 open Filter Topology
 open scoped Matrix BigOperators

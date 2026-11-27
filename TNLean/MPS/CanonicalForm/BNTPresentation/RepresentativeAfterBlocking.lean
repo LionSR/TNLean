@@ -73,7 +73,7 @@ theorem exists_leftCanonical_cpsvCanonicalFormData_after_blocking
       hDimA, _hDimB⟩ :=
     unconditional_commonPrimitiveIrreducibleBlocks A A hRefl
   let B : MPSTensor (blockPhysDim d p) (∑ k : Fin rA, dimA k) :=
-    toTensorFromBlocks (d := blockPhysDim d p) μA blocksA
+    toTensorFromBlocks (α := Fin (blockPhysDim d p)) μA blocksA
   have hNormalA : ∀ k, IsNormalTensor (blocksA k) := by
     intro k
     let : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩

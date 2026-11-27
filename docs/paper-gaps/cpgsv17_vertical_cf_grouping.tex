@@ -138,14 +138,14 @@ actual-grouped Figure~8 identity, unitary gauge normalization, normalized
 physical-sector maps, and the final rectangular coisometry.
 
 The periodic-exclusion component is recorded by
-\path{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced},
+\path{MPTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced},
 \path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm}, and
 the stronger-hypothesis variant
 \path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}. Its
 quantifier correction is documented in
 \path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}. The subsequent
 representative-sector decomposition is
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor_sameMPV₂Pos_representativeSectorDecomposition}.
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor_sameMPV₂Pos_representativeSectorDecomposition}.
 
 An earlier auxiliary route compared one scalar $\mu_\alpha$ with several
 weights $\omega_{\alpha,j}$ under the assumptions
@@ -199,7 +199,7 @@ source lines~1874--1887 proves invariant-projector closure for the vertical
 tensor:
 \path{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}.
 Under literal CPSV canonical form, the corresponding result is
-\path{MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}.
+\path{MPTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}.
 
 Under the closure hypothesis, the general decomposition theorem
 \path{MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry}
@@ -220,7 +220,7 @@ removing those corners therefore introduces no false completeness assertion.
 
 The same normal-corner result is complete under literal CPSV canonical form.
 The theorem
-\path{MPSTensor.IsCPSVCanonicalForm.exists_normal_verticalBlockDecomp_with_isometry}
+\path{MPTensor.IsCPSVCanonicalForm.exists_normal_verticalBlockDecomp_with_isometry}
 in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean} combines literal
 invariant-projector closure with literal periodic exclusion. It produces
 positive-dimensional normal blocks $B_k$, positive weights $\nu_k$, and
@@ -246,7 +246,7 @@ subsequent grouping, normalization, and coisometry theorems complete
 Proposition~4.13.
 
 The literal sector-compression separation theorem
-\path{MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner}
+\path{MPTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner}
 is proved in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean}. For every matrix
 $P$, it states
 \begin{align}
@@ -266,7 +266,7 @@ source sectors have actually been grouped.
 
 The normalized corners are grouped by matrix-product-vector phase class under
 literal CPSV canonical form in
-\path{MPSTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry},
+\path{MPTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry},
 proved in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean}. The wrapper under the
 normalized BNT-refined horizontal hypothesis remains
 \path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}.
@@ -349,7 +349,7 @@ tensor with the grouped-corner Gram-dressing property, in
 horizontal form and literal CPSV canonical form each supply that property
 independently, by
 \path{MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing} and
-\path{MPSTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing} in
+\path{MPTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing} in
 \path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean}. Neither proof identifies
 either corner separately with the raw reflected adjoint.
 
@@ -442,8 +442,8 @@ Ref.~\cite{Cirac2016MPDO_arXiv}.
 \section{Explicit BNT refinement and original-space Lemma L}
 
 The preparatory dependency tracked by \ghissue{4956} is complete. The structure
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement} and its constructor
-\path{MPSTensor.CPSVCanonicalFormData.exists_bntRefinement} retain an explicit
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement} and its constructor
+\path{MPTensor.CPSVCanonicalFormData.exists_bntRefinement} retain an explicit
 equivalence between phase-class copies and the originally listed blocks. Each
 copy retains its original nonzero coefficient and bond dimension, together
 with a unit phase, an invertible gauge, and an exact letterwise gauge-phase
@@ -451,20 +451,20 @@ relation to its representative. The representatives form a CPSV basis of
 normal tensors.
 
 The class-copy pairs form
-\path{MPSTensor.CPSVCanonicalFormData.GroupedIndex}. The equivalence
-\path{MPSTensor.CPSVCanonicalFormData.classCopyEquiv} identifies the grouped
+\path{MPTensor.CPSVCanonicalFormData.GroupedIndex}. The equivalence
+\path{MPTensor.CPSVCanonicalFormData.classCopyEquiv} identifies the grouped
 order with the original block list. The equivalence
-\path{MPSTensor.CPSVCanonicalFormData.groupedCoordinateEquiv} identifies the
+\path{MPTensor.CPSVCanonicalFormData.groupedCoordinateEquiv} identifies the
 flattened dependent coordinates with the original retained coordinates, and
-\path{MPSTensor.CPSVCanonicalFormData.groupedTotalDim_eq} records the resulting
+\path{MPTensor.CPSVCanonicalFormData.groupedTotalDim_eq} records the resulting
 total-dimension equality. The reusable underlying results are
 \path{MPSTensor.blockIndexCoordinateEquiv} and
 \path{MPSTensor.toTensorFromBlocks_eq_reindex_blockDiagonal_equiv}.
 
 For a grouped index $x$, let $\widehat\mu_x$ and $\widehat B_x$ be the weight
 and block supplied by
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight} and
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks}. The pair
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight} and
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks}. The pair
 $x=(\alpha,k)$ carries the original nonzero copy weight and the corresponding
 phase multiple of $C_\alpha$. If $\Phi$ is the flattened coordinate
 equivalence, define
@@ -477,10 +477,10 @@ equivalence, define
     \label{eq:cpgsv17_vertical_cf_grouping_completed_grouped_tensor}
 \end{align}
 This is the tensor
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor}.
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor}.
 
 Let $G$ be the block-diagonal gauge on the originally listed blocks. The theorem
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise}
 proves, for every letter $i$,
 \begin{align}
     \bigoplus_k\mu_kA_k^i
@@ -488,10 +488,10 @@ proves, for every letter $i$,
     \label{eq:cpgsv17_vertical_cf_grouping_completed_regrouping}
 \end{align}
 The intermediate result
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor}
 identifies the earlier in-place representative tensor with the explicit
 grouped tensor. The theorem
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.reconstructGrouped} then
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.reconstructGrouped} then
 uses the original ambient coisometry $U$, satisfying
 Eq.~\ref{eq:cpgsv17_vertical_cf_grouping_source_coisometry}, to obtain
 \begin{align}
@@ -512,9 +512,9 @@ is
     \label{eq:cpgsv17_vertical_cf_grouping_representative_effective_weight}
 \end{align}
 This weight is nonzero for every copy. The declaration
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition}
 defines the representatives, copy counts, and weights. The theorem
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor_sameMPV2Pos_representativeSectorDecomposition}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor_sameMPV2Pos_representativeSectorDecomposition}
 identifies the matrix product vectors of the full grouped tensor and the sector
 tensor at every positive length. In this rendered identifier, the ordinary
 digit~$2$ denotes the subscripted character used in the source declaration.
@@ -522,14 +522,14 @@ digit~$2$ denotes the subscripted character used in the source declaration.
 The simultaneous representative word-tuple span and its marked-chain
 consequences are proved in
 \path{TNLean/MPS/MPDO/Vertical/CPSVRepresentativeGroupedLemmaL.lean}. In that file,
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.eventuallyRepresentativeWordTupleSpan}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.eventuallyRepresentativeWordTupleSpan}
 proves simultaneous representative word-tuple span at every sufficiently large
 length.
 
 The full-coordinate marked tensor uses the same listed coordinate space. Each
 copy carries the marked block $\lambda_{\alpha,q}C_\alpha$. The exact trace
 identity
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.trace_groupedMarkedTensor_eq_representative_markedTensor}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.trace_groupedMarkedTensor_eq_representative_markedTensor}
 states
 \begin{align}
     \tr(\widehat C_{\mathrm{grp}}^sT_{\mathrm{grp}}^w)
@@ -541,9 +541,9 @@ states
 \end{align}
 The exponent $|w|+1$ counts the marked site. Eventual representative span then
 proves the retained-coordinate marked and first-site forms of Lemma~L:
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedMarkedTensor_basis_eq_of_trace_agree}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedMarkedTensor_basis_eq_of_trace_agree}
 and
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.insertedTensor_representative_eq_of_firstSiteActionAgree}.
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.insertedTensor_representative_eq_of_firstSiteActionAgree}.
 Neither conclusion requires an additional normalization hypothesis.
 
 The original-space marked argument is complete in
@@ -575,33 +575,33 @@ linear-marked specialization is
 
 Linear marking of $T_{\mathrm{grp}}$ is exactly the full grouped marked tensor,
 as proved by
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor}.
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor}.
 Each copy carries $\lambda_{\alpha,q}$ times the representative mark.
 Combining this identity,
 Eq.~\ref{eq:cpgsv17_vertical_cf_grouping_original_marked_coisometry}, the
 listed gauge, and the retained representative theorem gives literal-CF marked
 Lemma~L on the original bond space:
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.linearMarkedTensor_eq_of_trace_agree}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.linearMarkedTensor_eq_of_trace_agree}
 and
-\path{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}.
+\path{MPTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}.
 
 For physical first-site actions, the same argument yields
-\path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.insertedTensor_eq_of_firstSiteActionAgree}
+\path{MPTensor.CPSVCanonicalFormData.BNTRefinement.insertedTensor_eq_of_firstSiteActionAgree}
 and its predicate-level form
-\path{MPSTensor.IsCPSVCanonicalForm.insertedTensor_eq_of_firstSiteActionAgree}.
+\path{MPTensor.IsCPSVCanonicalForm.insertedTensor_eq_of_firstSiteActionAgree}.
 Positivity provides the required first-site agreement from a one-sided
 invariant orthogonal projection through
 \path{MPOTensor.firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant}.
 Consequently,
-\path{MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}
+\path{MPTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}
 proves invariant-projector closure for the vertical tensor under literal CPSV
 canonical form and \path{MPOTensor.IsMPDO}.
 
 The literal pairwise Figure~8 identity is proved in
 \path{TNLean/MPS/MPDO/Vertical/CPSVOriginalSpaceLemmaL.lean} by
-\path{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}.
+\path{MPTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}.
 For a common normal representative,
-\path{MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}
+\path{MPTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}
 gives a real scalar $\omega>0$ such that
 \begin{align}
     X^\dagger X

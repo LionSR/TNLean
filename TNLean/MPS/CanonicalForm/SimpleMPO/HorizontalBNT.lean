@@ -23,6 +23,8 @@ every representative without a per-copy separation hypothesis.
   Proposition 4.13, lines 1873--1887.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

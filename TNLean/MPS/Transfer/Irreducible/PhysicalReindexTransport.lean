@@ -44,16 +44,15 @@ theorem reindexPhysical_cast_dim {d₁ d₂ D₁ D₂ : ℕ} (e : Fin d₁ ≃ F
   rfl
 
 /-- Reindexing by a physical-index equivalence preserves transfer-map primitivity. -/
-theorem isPrimitive_transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ}
-    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
-    _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A)) ↔
-      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d₂) (n := Fin D) A) := by
+theorem isPrimitive_transferMap_reindexPhysical_equiv {α₁ α₂ β : Type*} [Fintype α₁]
+    [Fintype α₂] [Fintype β] [DecidableEq β] (e : α₁ ≃ α₂) (A : MPTensor α₂ β) :
+    _root_.IsPrimitive (Kraus.transferMap (Kraus.reindexPhysical e A)) ↔
+      _root_.IsPrimitive (Kraus.transferMap A) := by
   rw [Kraus.transferMap_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves invariant projections. -/
-theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (A : MPSTensor d₂ D) :
+theorem hasInvariantProj_reindexPhysical_equiv {α₁ α₂ β : Type*} [Fintype β] [DecidableEq β]
+    (e : α₁ ≃ α₂) (A : MPTensor α₂ β) :
     Kraus.HasInvariantProj (Kraus.reindexPhysical e A) ↔ Kraus.HasInvariantProj A := by
   constructor
   · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
@@ -64,8 +63,8 @@ theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁
     exact ⟨P, hPproj, hP0, hP1, fun i => hLower (e i)⟩
 
 /-- Reindexing by a physical-index equivalence preserves tensor irreducibility. -/
-theorem isIrreducibleFamily_reindexPhysical_equiv {d₁ d₂ D : ℕ}
-    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
+theorem isIrreducibleFamily_reindexPhysical_equiv {α₁ α₂ β : Type*} [Fintype β]
+    [DecidableEq β] (e : α₁ ≃ α₂) (A : MPTensor α₂ β) :
     Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e A) ↔ Kraus.IsIrreducibleFamily A := by
   rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily,
     hasInvariantProj_reindexPhysical_equiv e A]

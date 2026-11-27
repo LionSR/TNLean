@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Chain.BlockTensor
-import QICLean.Channel.Choi.Doeblin
+import QICLean.Channel.Choi.JamiolkowskiSpectrum
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.PositivePartRate
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.BlockIsometryState
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.SecondOrderOverlap

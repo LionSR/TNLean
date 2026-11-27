@@ -128,10 +128,10 @@ theorem contiguous_mem_groundSpace_toTensorFromBlocks
     {ψ : NSiteSpace d N}
     (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s L hs τ ψ ∈
-        groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L) :
-    ψ ∈ groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+        groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L) :
+    ψ ∈ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N := by
   apply contiguous_mem_of_restriction_intersection_submodules
-    (fun M ↦ groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) M)
+    (fun M ↦ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) M)
     (by omega : 0 < L) hLN ?_ hwindow
   rintro (_ | n) hM
   · omega
@@ -228,8 +228,8 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlo
         ((hP j).isIrreducibleFamily_of_posDef (hρ j)) (hP j).norm (hP j).isPrimitive)
     (show BlocksNotGaugePhaseEquiv A from fun i j hij hdim ↦ by
       simpa only [eqRec_eq_cast] using hDistinct j i hij.symm hdim)
-    hBlk (fun j ↦ isNBlkInjective_of_le hL₀ (hBlk j) (Nat.le_succ L₀))
-    (fun j ↦ isNBlkInjective_of_le hL₀ (hBlk j) (by omega)) hL₀ hr
+    hBlk (fun j ↦ Kraus.isNBlkInjective_of_le hL₀ (hBlk j) (Nat.le_succ L₀))
+    (fun j ↦ Kraus.isNBlkInjective_of_le hL₀ (hBlk j) (by omega)) hL₀ hr
   exact ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
     μ A hμ (fun j ↦ (hP j).norm)
     (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving A hSpan

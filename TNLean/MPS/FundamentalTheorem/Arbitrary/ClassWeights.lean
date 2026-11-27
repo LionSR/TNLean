@@ -106,7 +106,7 @@ variable {DA DB : ℕ}
 /-- The weights of one tensor, read from a class decomposition of its blocks. -/
 private theorem hasClassWeights_of_blocks {r g : ℕ} {dimB : Fin r → ℕ} {dim : Fin g → ℕ}
     (blocks : ∀ k, MPSTensor d (dimB k)) (R : ∀ j, MPSTensor d (dim j)) {A : MPSTensor d DA}
-    (hsame : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks))
+    (hsame : SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks))
     (cls : Fin r → Fin g) (lam : Fin r → ℂ) (hlam : ∀ k, lam k ≠ 0)
     (hmpv : ∀ k N (σ : Fin N → Fin d), mpv (blocks k) σ = lam k ^ N * mpv (R (cls k)) σ) :
     HasClassWeights R A fun j => (Finset.univ.filter fun k => cls k = j).val.map lam := by

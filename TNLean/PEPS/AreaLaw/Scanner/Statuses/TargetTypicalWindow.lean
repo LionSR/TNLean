@@ -8,7 +8,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Statuses.ActualMarginalTails
 import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.Analysis.Real.TypicalTailScales
-import QICLean.Entropy.Typical.StateFromTail
+import QICLean.Entropy.Typical.PureState
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryAsymptotics
 import QICLean.ManyBody.Sites.Lattice.SupDistance

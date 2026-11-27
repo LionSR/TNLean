@@ -333,7 +333,7 @@ theorem isPGVWC07CanonicalForm_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ
     (hfixed : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
         ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
-    IsPGVWC07CanonicalForm (toTensorFromBlocks (d := d) (μ := ν) blocks) := by
+    IsPGVWC07CanonicalForm (toTensorFromBlocks (α := Fin d) (μ := ν) blocks) := by
   choose a ha using hν
   refine ⟨⟨r, dim, hdim, a, fun k => (ha k).1, fun k => ?_, blocks, hunital, hdual, hfixed,
     finSigmaFinEquiv, fun i => ?_⟩⟩

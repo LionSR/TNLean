@@ -148,7 +148,7 @@ theorem exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) (Rmin : ℕ) :
     ∃ p : ℕ, Rmin ≤ p ∧ 0 < p ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N).hamiltonian)
+        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian)
           z → z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
@@ -159,7 +159,7 @@ theorem exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_
   obtain ⟨p, hpBound, hp, γ, hγ, hLong⟩ :=
     exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_fixedPointGap
       μ A hμ ρ hP hρ hDistinct (max Rmin (max L₀ L₁))
-  let T := toTensorFromBlocks (d := d) (μ := μ) A
+  let T := toTensorFromBlocks (α := Fin d) (μ := μ) A
   obtain ⟨η, hη, hShort⟩ := exists_pos_finite_open_gap T (2 * p) (3 * p)
   have hAllLarge := open_gap_at_all_large_lengths T hp hγ hη
     (fun N hN ↦ hKernel (2 * p) N (by omega) hN) hLong hShort
@@ -197,11 +197,11 @@ theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_word
     (hμ : ∀ j, μ j ≠ 0) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-      (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+      (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
-  let T := toTensorFromBlocks (d := d) (μ := μ) B
+  let T := toTensorFromBlocks (α := Fin d) (μ := μ) B
   have hKernel : ∀ L N : ℕ, S + 1 ≤ L → L ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T L N).hamiltonian) =
           groundSpaceES T N :=
@@ -227,7 +227,7 @@ theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_word
     (fun N hN ↦ toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length T _
       (posSemidef_toMatrix'_parentInteraction T R) (by omega) hκ hLocal
       (hKernel R N hR (by omega)) (hKernel (2 * p) N (by omega) hN) (hLong N))
-  have hLocalGS : groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) R = groundSpace T R :=
+  have hLocalGS : groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) R = groundSpace T R :=
     groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ μ A B hμ hμ (fun j ↦ hGS j R)
   refine ⟨δ, hδ, fun N _ ↦ ?_⟩
   rw [parentChainInteraction_eq_of_groundSpace_eq hLocalGS N]
@@ -257,7 +257,7 @@ theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_isNo
     (hR : 3 * (max (∑ j, dim j) 1) ^ 5 ≤ R) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-          (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+          (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j ↦ ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨S, hS, hBound, hSpan⟩ :=

@@ -90,7 +90,7 @@ theorem exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalT
     have hOwn : Kraus.IsNBlkInjective (prepared j) ((dim j) ^ 4) :=
       isNBlkInjective_pow_four_of_isNormal_leftCanonical
         (prepared j) (hTP j) (hPreparedNormal j)
-    exact isNBlkInjective_of_le (Nat.pow_pos (hdimPos j)) hOwn
+    exact Kraus.isNBlkInjective_of_le (Nat.pow_pos (hdimPos j)) hOwn
       (Nat.pow_le_pow_left (hdimLe j) 4)
   by_cases hCountZero : g = 0
   · subst g
@@ -119,11 +119,11 @@ theorem exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalT
   · have hCountTwo : 2 ≤ g := by omega
     have hBlk1 : ∀ j, Kraus.IsNBlkInjective (prepared j) (K ^ 4 + 1) := by
       intro j
-      exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
+      exact Kraus.isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
     have hBlk3 : ∀ j, Kraus.IsNBlkInjective (prepared j)
         ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) := by
       intro j
-      exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
+      exact Kraus.isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
     have hOverlap : ∀ k,
         Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (prepared k) (prepared k) N)
           Filter.atTop (nhds (1 : ℂ)) :=
@@ -186,7 +186,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
 
 /-- The representative dimensions in literal CPSV canonical-form data sum to at most
 the ambient bond dimension. -/
-theorem CPSVCanonicalFormData.sum_representative_dim_le
+theorem _root_.MPTensor.CPSVCanonicalFormData.sum_representative_dim_le
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
     ∑ j : Fin data.phaseClasses.g,
       data.dim (data.representativeIndex j) ≤ D := by
@@ -221,7 +221,7 @@ positive number `L ≤ 3 * D ^ 5` of sites.
 The conclusion is the one-letter span of the full product algebra of the chosen BNT.
 
 Source: arXiv:1606.00608, lines 317--345. -/
-theorem IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five
+theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five
     {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
       ∃ B : (j : Fin g) → MPSTensor d (dim j),

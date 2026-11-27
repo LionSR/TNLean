@@ -269,7 +269,7 @@ theorem full_ring_boundary_intertwines_of_chainGroundSpace
             rw [hindex, Matrix.mul_assoc]
   have hYzero : Y 0 = X := by
     apply groundSpaceMap_injective_of_isNBlkInjective
-      (isNBlkInjective_of_le hL₀ hInj (by omega : L₀ ≤ L₀ + 1))
+      (Kraus.isNBlkInjective_of_le hL₀ hInj (by omega : L₀ ≤ L₀ + 1))
     rw [← hY 0, ← hψX]
     ext σ
     change ψ (cyclicTranslateCfg 0 σ) = ψ σ

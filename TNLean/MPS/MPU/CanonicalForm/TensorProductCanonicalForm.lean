@@ -141,7 +141,7 @@ theorem hasFullSupport_tensorProductCFIIData (U : MPOTensor d D)
     (tensorProductCFIIData U V dataU dataV).toCPSVCanonicalFormData.HasFullSupport := by
   have hprod := dataU.hasFullSupport_tensorProduct dataV hU hV
   have hreindex :=
-    MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
+    MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
       (dataU.tensorProduct dataV).toCPSVCanonicalFormData hprod
       (finDoubledProdEquiv d e)
   exact

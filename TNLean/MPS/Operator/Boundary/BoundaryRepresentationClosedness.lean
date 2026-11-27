@@ -21,6 +21,8 @@ acted-on letter, with no nilpotent remainder and no star assumption.
   `eq:compatible`, and Appendix A, lines 2305--2455.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 noncomputable section
@@ -77,7 +79,7 @@ into biorthogonal multiplicity blocks is a further algebraic step. -/
 theorem IsBoundaryClosed.exists_boundaryRepresentation
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPSTensor (d * d) (dim c))
-    (hBlocks : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L) :
     ∃ ρ : ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₙₐ[ℂ]
       Matrix (Fin ((∑ c : Fin r, dim c) * (∑ c : Fin r, dim c)))
@@ -99,7 +101,7 @@ theorem IsBoundaryCompatible.exists_boundaryRepresentation
     {T : MPOTensor d D} {A : MPSTensor d (∑ c : Fin r, dim c)}
     (h : IsBoundaryCompatible T A)
     (B : (c : Fin r) → MPSTensor d (dim c))
-    (hBlocks : A = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) B)
+    (hBlocks : A = MPTensor.toTensorFromBlocks (fun _ ↦ 1) B)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop B L) :
     ∃ ρ : ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₙₐ[ℂ]
       Matrix (Fin (D * ∑ c : Fin r, dim c)) (Fin (D * ∑ c : Fin r, dim c)) ℂ,

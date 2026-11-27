@@ -859,40 +859,7 @@ $A^{-1}A=\Id$.
     Lemma~\ref{thm:blocking_primitivity}.
 \end{remark}
 
-\section{Canonical form}
-
-\begin{definition}[Block-injective canonical form]\label{def:canonical_form}
-    \lean{MPSTensor.CanonicalForm}
-    \leanok
-    \uses{def:mps_tensor,def:injective}
-    Here, a \emph{block-injective canonical form} for a
-    tensor consists of:
-    \begin{enumerate}
-        \item a number of blocks $r \ge 1$,
-        \item bond dimensions $D_1, \ldots, D_r$,
-        \item injective tensors
-              $\{A_k^i\}_{i=0}^{d-1}$ with $A_k^i \in \MN{D_k}$
-              for each block $k \in \{1,\ldots,r\}$,
-        \item scaling factors $\mu_1, \ldots, \mu_r \in \C$.
-    \end{enumerate}
-    The associated tensor is the block-diagonal tensor
-    \begin{align}
-        A^i
-         & = \bigoplus_{k=1}^{r} \mu_k A_k^i.
-        \label{eq:mps_canonical_form}
-    \end{align}
-    This block-injective formulation of the canonical form is used in
-    \cite{PerezGarcia2007Matrix}; see also~\cite{Cirac2021Matrix} for the
-    normal canonical form.
-\end{definition}
-
-\begin{remark}\label{rem:cf_injective_vs_normal}\leanok
-    The block-injective canonical form requires each block to be injective
-    (Definition~\ref{def:injective}), which is stronger than the normal
-    canonical form of \cite{Cirac2021Matrix} where blocks are normal in the
-    spectral sense. Chapter~\ref{ch:canonical} develops the normal canonical
-    form used in the multi-block theory.
-\end{remark}
+\section{Block-diagonal tensors}
 
 \begin{definition}[Block projection]\label{def:block_projection}
     \lean{Matrix.blockProjection}
@@ -941,7 +908,7 @@ $A^{-1}A=\Id$.
 \end{proof}
 
 \begin{definition}[Block-diagonal tensor from blocks]\label{def:block_diagonal_tensor}
-    \lean{MPSTensor.toTensorFromBlocks}
+    \lean{MPTensor.toTensorFromBlocks}
     \leanok
     \uses{def:mps_tensor}
     Given $r$ blocks with bond dimensions $(D_k)_{k=1}^r$,

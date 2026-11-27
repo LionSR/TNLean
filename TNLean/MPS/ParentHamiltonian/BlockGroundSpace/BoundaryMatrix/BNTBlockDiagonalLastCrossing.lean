@@ -14,6 +14,8 @@ This file records the last-cut specialization of the boundary-crossing
 coefficient comparison in arXiv:quant-ph/0608197, Theorem 12.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -270,10 +272,10 @@ theorem blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpa
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
     {ψ : NSiteSpace d (M + 1)}
     (hψ : ψ ∈
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) (m + 2) (M + 1))
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) (m + 2) (M + 1))
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) (M + 1)
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) (M + 1)
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (τ : Fin (M + 1) → Fin d)
     (hSpan : WordTupleSpanTop A m) :
@@ -309,10 +311,10 @@ theorem
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
     {ψ : NSiteSpace d (M + 1)}
     (hψ : ψ ∈
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) (m + 2) (M + 1))
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) (m + 2) (M + 1))
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) (M + 1)
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) (M + 1)
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (τ : Fin (M + 1) → Fin d)
     (hSpan : WordTupleSpanTop A m)

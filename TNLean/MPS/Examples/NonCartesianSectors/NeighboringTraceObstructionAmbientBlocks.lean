@@ -185,7 +185,7 @@ Perron-gauged representative. -/
 theorem exists_embedded_leftCanonical_normal_obstruction_block :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
-        MPTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
+        MPTensor.IsLeftCanonical B ∧ MPTensor.IsNormalTensor B ∧
         MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
         physicalSupportProj (verticalBNTMPO B) = obstructionPhysicalSupport := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hTensorGauge⟩ :=
@@ -199,7 +199,7 @@ theorem exists_embedded_leftCanonical_normal_obstruction_block :
   have hAmbientLeft : MPTensor.IsLeftCanonical Bambient := by
     exact isLeftCanonical_toMPSTensor_changePhysicalBasis
       physicalInclusion physicalInclusion_isometry Bmpo (by simpa [Bmpo] using hBLeft)
-  have hAmbientNormal : MPSTensor.IsNormalTensor Bambient := by
+  have hAmbientNormal : MPTensor.IsNormalTensor Bambient := by
     exact (isNormalTensor_toMPSTensor_changePhysicalBasis_iff
       physicalInclusion physicalInclusion_isometry Bmpo).2 (by simpa [Bmpo] using hBNormal)
   have hAmbientGauge :
@@ -312,7 +312,7 @@ theorem terminalBlock_isLeftCanonical :
 
 /-- The terminal block is a normal tensor. -/
 theorem terminalBlock_isNormalTensor :
-    MPSTensor.IsNormalTensor terminalBlock.toMPSTensor := by
+    MPTensor.IsNormalTensor terminalBlock.toMPSTensor := by
   exact (isNormalTensor_toMPSTensor_changePhysicalBasis_iff
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
       (MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
@@ -480,7 +480,7 @@ basis-family separation is forced by the impossible bond-dimension equality
 theorem obstructionTerminalDecomposition_isBNTCanonicalForm
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) (hmuNorm : ‖mu‖ < 1)
     (hBInj : Kraus.IsInjective B) (hBLeft : MPTensor.IsLeftCanonical B)
-    (hBNormal : MPSTensor.IsNormalTensor B) :
+    (hBNormal : MPTensor.IsNormalTensor B) :
     MPSTensor.IsBNTCanonicalForm (obstructionTerminalDecomposition mu B hmu) := by
   have hTerminalNormal := terminalBlock_isNormalTensor
   have hBSelf : Filter.Tendsto
@@ -581,7 +581,7 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
       ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
-      MPSTensor.IsNormalTensor B ∧
+      MPTensor.IsNormalTensor B ∧
       MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       (obstructionTerminalDecomposition mu B hmu).basisCount = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).copies 0 = 1 ∧

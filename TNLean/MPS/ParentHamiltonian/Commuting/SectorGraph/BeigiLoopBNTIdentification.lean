@@ -254,15 +254,18 @@ theorem _root_.MPTensor.GaugePhaseEquiv.isTransferIdempotent
     norm_eq_one_of_gaugePhase_cast_of_isNormalTensor hA hB rfl (by simpa using hrel)
   exact isTransferIdempotent_of_unit_gaugePhase A B X ζ hζnorm hrel hRFP
 
-/-- Eventual constancy of the Euclidean parent-ground-space dimension under the algebraic BNT
-and all-chain NNCPH hypotheses. -/
-private theorem eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_isBNT
+/-- Eventual constancy of the Euclidean parent-ground-space dimension under eventual linear
+independence of the spanning family and the all-chain NNCPH hypotheses. -/
+private theorem
+    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_eventually_li
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    {B : MPSTensor d D} (hBNT : IsBNT B r dim A)
+    {B : MPSTensor d D}
+    (hLI : ∃ N₀ : ℕ, ∀ N > N₀,
+      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N))
     (hNNCPH : HasNNCPHGroundSpaces B A) :
     ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c := by
-  obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
+  obtain ⟨N₀, hLI⟩ := hLI
   refine ⟨r, max N₀ 2, ?_⟩
   intro N hN
   have : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩
@@ -449,8 +452,10 @@ Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 
 **Scope restriction (normal representative):** CPSV16, Theorem 3.10 is stated for a tensor in
 canonical form. This theorem proves its reverse implication for one explicitly normal and
-left-canonical representative, together with an explicit BNT relation and the all-chain
-ground-space condition. In the source canonical decomposition, normality selects the
+left-canonical representative, together with the all-chain ground-space condition for a family
+`A` whose matrix product vectors are eventually linearly independent. This is the last clause of
+a basis of normal tensors (arXiv:1606.00608, lines 271--274); the normality and spanning
+clauses are not needed. In the source canonical decomposition, normality selects the
 one-sector case \(g=1\), for which a source-level proof need not use Beigi's
 finite-degeneracy classification. The present formal proof nevertheless uses the finite
 sector graph and its loop-span theorem as an intermediate route to the gauge-phase match.
@@ -462,7 +467,8 @@ This restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_sco
 theorem nncph_implies_rfp
     (B : MPSTensor d D) [NeZero D]
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
-    (hBNT : IsBNT B r dim A)
+    (hLI : ∃ N₀ : ℕ, ∀ N > N₀,
+      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N))
     (hNNCPH : HasNNCPHGroundSpaces B A)
     (hNT : Kraus.IsNormal B) (hLeft : IsLeftCanonical B) :
     IsTransferIdempotent B := by
@@ -477,7 +483,7 @@ theorem nncph_implies_rfp
       IsNormalTensor (F.normalizedMinimalLoopTensor l) :=
     F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
-    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_isBNT hBNT hNNCPH
+    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_eventually_li hLI hNNCPH
   have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent
   have hCross : ∀ l m : Loop F.edgeWeight, l ≠ m →
       Filter.Tendsto
@@ -534,8 +540,8 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
       IsNormalTensor (F.normalizedMinimalLoopTensor l) :=
     F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
-    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_isBNT
-      hCF.isBNT_basisDirectSum hNNCPH
+    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_eventually_li
+      hCF.bnt_data hNNCPH
   have hPhaseExists : ∀ j : Fin P.basisCount,
       ∃ l : Loop F.edgeWeight,
         MPVBlockPhaseEquiv (P.basis j) (F.normalizedMinimalLoopTensor l) := by

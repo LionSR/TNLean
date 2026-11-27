@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.FundamentalTheorem.Injective.EdgeGaugeFamily
 import TNLean.PEPS.FundamentalTheorem.Injective.EdgeInsertion
-import TNLean.PEPS.FundamentalTheorem.Injective.EdgeMiddleKernelDescent
 import TNLean.PEPS.FundamentalTheorem.Injective.EdgeMiddlePhysical
 import TNLean.PEPS.FundamentalTheorem.Injective.EndOperationComposition
 import TNLean.PEPS.FundamentalTheorem.Injective.FundamentalTheorem

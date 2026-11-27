@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSum
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.MPDO.Coefficients.BNTAssociativity
 import TNLean.MPS.MPDO.Fusion.BNTFusionTensorClause
 import TNLean.MPS.MPDO.Coefficients.BNTMultiplicityNormalization
@@ -451,7 +452,7 @@ the exact reconstruction. Documented in
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
 lines 1929--2046. -/
 theorem of_isRFPViaTS (M : MPOTensor d D)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
     HasBNTFusionTensorClause M :=
   of_isRFPViaTS_of_productInputs M

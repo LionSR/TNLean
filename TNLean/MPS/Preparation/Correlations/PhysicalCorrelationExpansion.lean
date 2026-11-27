@@ -108,7 +108,7 @@ indices for all supports and observables.
 Source: arXiv:2011.12127, Section II.B.3, source lines 433–441.
 The Jordan correction is documented in
 `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`. -/
-theorem IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion
+theorem _root_.MPTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion
     {d D : ℕ} {A : MPSTensor d D} (hNormal : IsNormalTensor A) :
     ∃ ℓ ρ : Matrix (Fin D) (Fin D) ℂ,
       ℓ.PosDef ∧ ρ.PosDef ∧ Kraus.transferMap (fun i => (A i)ᴴ) ℓ = ℓ ∧

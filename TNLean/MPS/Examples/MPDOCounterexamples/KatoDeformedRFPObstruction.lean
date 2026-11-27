@@ -9,7 +9,7 @@ import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
 import TNLean.MPS.Operator.DensityOperator.RFPViaTS
 import TNLean.MPS.CanonicalForm.VerticalForm.SectorTrace
 import TNLean.MPS.Operator.DensityOperator.MutualInfoMonotone
-import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # A tensor-changing renormalization flow outside the fixed-scale condition
@@ -42,7 +42,7 @@ A completely positive coarse-graining map cannot send the former to the latter.
   $\operatorname{diag}(1,0)$ and is idempotent.
 * `tensor_not_isRFPViaTS`: no fixed-scale channels satisfy the two
   intertwining identities of Definition 4.1.
-* `tensor_toMPSTensor_isCPSVCanonicalForm`: the doubled-index MPS tensor
+* `tensor_isCPSVCanonicalForm`: the tensor, on the pair alphabet,
   is in literal CPSV canonical form (arXiv:1606.00608, eq. `II_CF1`).
 * `tensor_isSAL`: the tensor saturates the area law (Definition 4.6).
 * `exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS`:
@@ -438,7 +438,7 @@ private lemma katoCFBlock1_transferMap_eq_id :
       rw [blockLetterAmplitude_sq]
       norm_num)
 
-private lemma katoCFBlocks_normal (k : Fin 2) : MPSTensor.IsNormalTensor (katoCFBlocks k) := by
+private lemma katoCFBlocks_normal (k : Fin 2) : MPTensor.IsNormalTensor (katoCFBlocks k) := by
   fin_cases k
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       katoCFBlock0 katoCFBlock0_transferMap_eq_id
@@ -457,62 +457,71 @@ private lemma eq_zero_or_eq_three_of_divNat_eq_modNat {p : Fin (2 * 2)}
     exact hp_diag
   · right; rfl
 
-private theorem toMPSTensor_eq_toTensorFromBlocks :
-    MPOTensor.toMPSTensor tensor = MPSTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
-  let e : (Σ _k : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
-  have hflat (k : Fin 2) : e ⟨k, (0 : Fin 1)⟩ = k := by fin_cases k <;> rfl
-  have hflat_symm (k : Fin 2) : e.symm k = ⟨k, (0 : Fin 1)⟩ := by
-    apply e.injective; rw [e.apply_symm_apply, hflat]
-  funext p; ext x y
-  simp only [MPOTensor.toMPSTensor, MPSTensor.toTensorFromBlocks,
-    Matrix.reindex_apply, katoCFWeights, katoCFBlocks]
-  change tensor (p.divNat, p.modNat) x y =
-    (Matrix.blockDiagonal' (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p)))
-      (e.symm x) (e.symm y)
-  rw [hflat_symm x, hflat_symm y]
-  by_cases h : x = y
-  · subst y
-    simp only [Fin.isValue, Matrix.blockDiagonal'_apply_eq, Matrix.smul_apply, smul_eq_mul,
-      katoCFWeights, katoCFBlocks]
-    by_cases hp_diag : p.divNat = p.modNat
-    · have hp_val : p = 0 ∨ p = 3 := eq_zero_or_eq_three_of_divNat_eq_modNat hp_diag
-      rcases hp_val with rfl | rfl
-      · fin_cases x
-        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
-            katoCFBlock0, ← pow_two, blockLetterAmplitude_sq]
-        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
-            katoCFBlock1, block1Weight_times_amplitude]
-      · fin_cases x
-        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
-            katoCFBlock0, ← pow_two, blockLetterAmplitude_sq]
-        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
-            katoCFBlock1, block1Weight_times_amplitude]
-    · -- p.divNat ≠ p.modNat means p is 1 or 2; tensor = 0 and blocks = 0
-      have hp12 : p = (1 : Fin (2*2)) ∨ p = (2 : Fin (2*2)) := by
-        fin_cases p
-        · exfalso; exact hp_diag (by decide : ((0 : Fin (2*2)).divNat = (0 : Fin (2*2)).modNat))
-        · left; rfl
-        · right; rfl
-        · exfalso; exact hp_diag (by decide : ((3 : Fin (2*2)).divNat = (3 : Fin (2*2)).modNat))
-      rcases hp12 with rfl | rfl
-      · -- p = (1 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
-        have h1 : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat) := by decide
-        rw [tensor, ite_eq_right h1]
-        fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
-      · -- p = (2 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
-        have h2 : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat) := by decide
-        rw [tensor, ite_eq_right h2]
-        fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
-  · rw [Matrix.blockDiagonal'_apply_ne (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p))
-      (0 : Fin 1) (0 : Fin 1) h]
-    by_cases hp_diag : p.divNat = p.modNat
-    · have hp_val : p = 0 ∨ p = 3 := eq_zero_or_eq_three_of_divNat_eq_modNat hp_diag
-      rcases hp_val with rfl | rfl
-      · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
-      · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
-    · -- p.divNat ≠ p.modNat: tensor evaluates to 0 because off-diagonal physical letter
-      rw [tensor, ite_eq_right hp_diag]
-      simp
+/-- Kato's tensor is the weighted direct sum of the two bond-one blocks, read on the pair alphabet
+through `finProdFinEquiv`. -/
+private theorem reindexPhysical_toTensorFromBlocks_eq_tensor :
+    Kraus.reindexPhysical finProdFinEquiv
+      (MPTensor.toTensorFromBlocks (dim := fun _ => 1) katoCFWeights katoCFBlocks) = tensor := by
+  have hflat : tensor.toMPSTensor = MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
+    let e : (Σ _k : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
+    have hflat (k : Fin 2) : e ⟨k, (0 : Fin 1)⟩ = k := by fin_cases k <;> rfl
+    have hflat_symm (k : Fin 2) : e.symm k = ⟨k, (0 : Fin 1)⟩ := by
+      apply e.injective; rw [e.apply_symm_apply, hflat]
+    funext p; ext x y
+    simp only [MPOTensor.toMPSTensor, MPTensor.toTensorFromBlocks,
+      Matrix.reindex_apply, katoCFWeights, katoCFBlocks]
+    change tensor (p.divNat, p.modNat) x y =
+      (Matrix.blockDiagonal' (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p)))
+        (e.symm x) (e.symm y)
+    rw [hflat_symm x, hflat_symm y]
+    by_cases h : x = y
+    · subst y
+      simp only [Fin.isValue, Matrix.blockDiagonal'_apply_eq, Matrix.smul_apply, smul_eq_mul,
+        katoCFWeights, katoCFBlocks]
+      by_cases hp_diag : p.divNat = p.modNat
+      · have hp_val : p = 0 ∨ p = 3 := eq_zero_or_eq_three_of_divNat_eq_modNat hp_diag
+        rcases hp_val with rfl | rfl
+        · fin_cases x
+          · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
+              katoCFBlock0, ← pow_two, blockLetterAmplitude_sq]
+          · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
+              katoCFBlock1, block1Weight_times_amplitude]
+        · fin_cases x
+          · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
+              katoCFBlock0, ← pow_two, blockLetterAmplitude_sq]
+          · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
+              katoCFBlock1, block1Weight_times_amplitude]
+      · -- p.divNat ≠ p.modNat means p is 1 or 2; tensor = 0 and blocks = 0
+        have hp12 : p = (1 : Fin (2*2)) ∨ p = (2 : Fin (2*2)) := by
+          fin_cases p
+          · exfalso; exact hp_diag (by decide : ((0 : Fin (2*2)).divNat = (0 : Fin (2*2)).modNat))
+          · left; rfl
+          · right; rfl
+          · exfalso; exact hp_diag (by decide : ((3 : Fin (2*2)).divNat = (3 : Fin (2*2)).modNat))
+        rcases hp12 with rfl | rfl
+        · -- p = (1 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
+          have h1 : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat) := by decide
+          rw [tensor, ite_eq_right h1]
+          fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
+        · -- p = (2 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
+          have h2 : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat) := by decide
+          rw [tensor, ite_eq_right h2]
+          fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
+    · rw [Matrix.blockDiagonal'_apply_ne (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p))
+        (0 : Fin 1) (0 : Fin 1) h]
+      by_cases hp_diag : p.divNat = p.modNat
+      · have hp_val : p = 0 ∨ p = 3 := eq_zero_or_eq_three_of_divNat_eq_modNat hp_diag
+        rcases hp_val with rfl | rfl
+        · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
+        · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
+      · -- p.divNat ≠ p.modNat: tensor evaluates to 0 because off-diagonal physical letter
+        rw [tensor, ite_eq_right hp_diag]
+        simp
+  funext p
+  change MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks (finProdFinEquiv p) = tensor p
+  rw [← hflat]
+  change tensor (finProdFinEquiv.symm (finProdFinEquiv p)) = tensor p
+  rw [Equiv.symm_apply_apply]
 
 /-- The doubled-index MPS tensor of Kato's $p=1/2$ tensor is in literal CPSV
 canonical form (arXiv:1606.00608, Section 2.3, eq. `II_CF1`, lines 214–245):
@@ -520,12 +529,13 @@ a weighted direct sum of two normal bond-one tensors.
 
 Source: the tensor is arXiv:2410.22696 lines 712–721; the canonical form
 verification follows the construction in arXiv:1606.00608 Section 2.3. -/
-theorem tensor_toMPSTensor_isCPSVCanonicalForm :
-    MPSTensor.IsCPSVCanonicalForm (MPOTensor.toMPSTensor tensor) := by
-  rw [toMPSTensor_eq_toTensorFromBlocks]
-  exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
-    (fun _ => by norm_num) katoCFWeights katoCFWeights_ne_zero katoCFBlocks
-    katoCFBlocks_normal).isCPSVCanonicalForm
+theorem tensor_isCPSVCanonicalForm :
+    MPTensor.IsCPSVCanonicalForm tensor := by
+  rw [← reindexPhysical_toTensorFromBlocks_eq_tensor]
+  exact MPTensor.IsCPSVCanonicalForm.reindexPhysical
+    (MPTensor.CPSVCanonicalFormData.ofBlocks (fun _ => by norm_num) katoCFWeights
+      katoCFWeights_ne_zero katoCFBlocks katoCFBlocks_normal).isCPSVCanonicalForm
+    (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin (2 * 2))
 
 /-! ### Saturation of the Area Law (SAL)
 
@@ -718,16 +728,14 @@ admits no fixed-scale renormalization a la arXiv:1606.00608
 Definition 4.1. -/
 theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
     ∃ K : MPOTensor 2 2,
-      MPSTensor.IsCPSVCanonicalForm K.toMPSTensor ∧
+      MPTensor.IsCPSVCanonicalForm K ∧
       IsMPDO K ∧
       (physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) ∧
       IsSAL K ∧
       ¬ IsRFPViaTS K := by
   refine ⟨tensor, ?_, tensor_isMPDO, physTraceTransfer_tensor_idempotent, tensor_isSAL,
     tensor_not_isRFPViaTS⟩
-  -- The canonical form is stated for the MPSTensor, not MPOTensor.toMPSTensor
-  -- But the theorem `tensor_toMPSTensor_isCPSVCanonicalForm` gives exactly this
-  exact tensor_toMPSTensor_isCPSVCanonicalForm
+  exact tensor_isCPSVCanonicalForm
 
 
 end MPOTensor.KatoDeformedRFPObstruction

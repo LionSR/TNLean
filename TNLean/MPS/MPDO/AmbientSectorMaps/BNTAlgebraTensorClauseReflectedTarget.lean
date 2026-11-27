@@ -63,7 +63,7 @@ Source: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, and Appendix C.4, lines 2048--2057. -/
 theorem gramDressing_gauge_eq_one
     (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount) :
     gramDressing (S.gauge γ)
         (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)) =
@@ -175,7 +175,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1898--1921, and
 Appendix C.4, lines 2048--2057. -/
 theorem gauge_gram_eq_pos_smul_one
     (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount) :
     ∃ ω : ℝ, 0 < ω ∧
       (S.gauge γ : Matrix
@@ -186,7 +186,7 @@ theorem gauge_gram_eq_pos_smul_one
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) =
         (ω : ℂ) • 1 := by
   have hDress := S.gramDressing_gauge_eq_one hCanonical hM γ
-  have hNormalTensor : MPSTensor.IsNormalTensor
+  have hNormalTensor : MPTensor.IsNormalTensor
       (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)) :=
     (MPSTensor.isNormalTensor_cast_iff (S.bondDim_eq γ) (H.tensor γ)).2
       (H.isCPSVBNT.blocks_normal γ)
@@ -207,7 +207,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1903--1908, applied at
 Appendix C.4, lines 2048--2057. -/
 theorem exists_unitary_sector_conjugacy
     (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount) :
     ∃ U : Matrix.unitaryGroup
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
@@ -234,7 +234,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1903--1908, and
 Appendix C.4, lines 2048--2057. -/
 noncomputable def UnitarySectorConjugacy.ofAlgebraTensorClause
     (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) : UnitarySectorConjugacy S := by
   have h := S.exists_unitary_sector_conjugacy hCanonical hM
   exact
@@ -261,7 +261,7 @@ the discarded complements as documented in
 Source: arXiv:1606.00608, Theorem 4.14(ii)--(i), lines 972--993, and
 Appendix C.4, lines 2046--2085. -/
 theorem isRFPViaTS {d D : ℕ} {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) : IsRFPViaTS M := by
   let S := H.toTwoSiteExactSectorGauge hCanonical hM
   exact (TwoSiteExactSectorGauge.UnitarySectorConjugacy.ofAlgebraTensorClause
@@ -286,7 +286,7 @@ the discarded complements as documented in
 Source: arXiv:1606.00608, Theorem 4.14(ii)--(i), lines 972--993, and
 Appendix C.4, lines 2046--2085. -/
 theorem isRFPViaTS {d D : ℕ} {M : MPOTensor d D} (h : HasBNTAlgebraTensorClause M)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) : IsRFPViaTS M := by
   obtain ⟨H⟩ := h
   exact H.isRFPViaTS hCanonical hM

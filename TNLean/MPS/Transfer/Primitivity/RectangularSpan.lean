@@ -336,28 +336,6 @@ namespace MPSTensor
 open Module Matrix Wielandt
 variable {d D : ℕ}
 
-/-- Normality rules out stabilization below the maximal rectangular-span dimension. -/
-theorem rectSpan_nilpIndex_strict_growth_of_isNormal
-    (A : MPSTensor d D) (i₀ : Fin d) (hN : Kraus.IsNormal A) (n : ℕ)
-    (hlt : finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
-      D * ((A i₀) ^ D).rank) :
-    finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
-      finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) := by
-  by_contra h
-  push Not at h
-  have hmono := Kraus.rectSpan_nilpIndex_finrank_mono A i₀ n
-  have hfin : finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) := by omega
-  obtain ⟨N, hN_range⟩ := exists_rectSpan_eq_range_of_isNormal
-    ((A i₀) ^ nilpIndex (toLin' (A i₀))) A hN
-  have hN_finrank : finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A N) =
-      D * ((A i₀) ^ D).rank := by
-    rw [hN_range, Matrix.finrank_range_mulLeft, Kraus.rank_pow_nilpIndex_eq A i₀]
-  have hconst := Kraus.rectSpan_nilpIndex_finrank_constant' A i₀ n hfin
-    (max n N) (le_max_left _ _)
-  have hmono_N := Kraus.rectSpan_nilpIndex_finrank_mono_le A i₀ (le_max_right n N)
-  linarith
-
 /-- Under normality, the sharp rank-one conclusion holds at the exact word length. -/
 theorem vecMulVec_eigenvector_exact_wordSpan [NeZero D]
     (A : MPSTensor d D) (i₀ : Fin d) (hN : Kraus.IsNormal A)
@@ -370,7 +348,7 @@ theorem vecMulVec_eigenvector_exact_wordSpan [NeZero D]
       finrank ℂ (Kraus.rectSpan ((A i₀) ^ r) A n) < D * ((A i₀) ^ D).rank →
       finrank ℂ (Kraus.rectSpan ((A i₀) ^ r) A n) <
         finrank ℂ (Kraus.rectSpan ((A i₀) ^ r) A (n + 1)) :=
-    fun n hlt => rectSpan_nilpIndex_strict_growth_of_isNormal A i₀ hN n hlt
+    fun n hlt => Kraus.rectSpan_nilpIndex_strict_growth_of_isNormal A i₀ hN n hlt
   obtain ⟨n₀, hn₀, hstab⟩ :=
     Kraus.rectSpan_nilpIndex_eq_range_of_strict_growth A i₀ hStrict
   have hmem : vecMulVec φ ψ ∈ Kraus.wordSpan A (r + n₀) :=

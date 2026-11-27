@@ -31,6 +31,8 @@ uses any strictly larger rate, with no diagonalizability hypothesis; see
 `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators NNReal ENNReal ComplexOrder Matrix.Norms.Operator
 
 namespace MPSTensor

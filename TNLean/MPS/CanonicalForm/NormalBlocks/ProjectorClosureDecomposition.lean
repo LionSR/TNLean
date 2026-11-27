@@ -155,7 +155,7 @@ theorem sameMPV₂_toTensorFromBlocks_of_isometry_family
     (hiso : ∀ k, (V k)ᴴ * V k = 1)
     (hsum : ∑ k : Fin r, V k * (V k)ᴴ = 1)
     (hint : ∀ (k : Fin r) (i : Fin d), A i * V k = V k * blocks k i) :
-    SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+    SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum]
   simp only [one_pow, one_smul]
@@ -470,7 +470,7 @@ theorem exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClo
       (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
       (∀ (k : Fin r) (i : Fin d), blocks k i = (V k)ᴴ * A i * V k) ∧
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   obtain ⟨r, dim, blocks, V, hpos, hiso, hsum, horth, hint, hintstar, hirr⟩ :=
     exists_irreducible_isometry_family_aux D A hClosure
   have hcorner : ∀ (k : Fin r) (i : Fin d), blocks k i = (V k)ᴴ * A i * V k := by

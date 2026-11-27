@@ -559,7 +559,7 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
   have hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q) := fun j =>
     (isNBlkInjective_iff_blockTensor_isInjective (Aj j) q).1
-      (isNBlkInjective_of_le (hLpos j) (hLinj j) (hLmq j))
+      (Kraus.isNBlkInjective_of_le (hLpos j) (hLinj j) (hLmq j))
   have hq0 : q ≠ 0 := by
     have : (0 : ℝ) < q := by linarith
     exact_mod_cast this.ne'

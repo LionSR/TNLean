@@ -22,6 +22,8 @@ arXiv:1010.3732, Appendix A, lines 2477--2480. The local positive comparison
 is the projector reduction in arXiv:2011.12127, lines 2170--2172.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder MatrixOrder
 
 namespace MPSTensor
@@ -103,7 +105,7 @@ theorem exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
         (ManyBody.Interaction.translationInvariant N (H x)).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
   have hInj (x : X) : Kraus.IsNBlkInjective (A x) R :=
-    isNBlkInjective_of_le (pow_pos (NeZero.pos D) 4)
+    Kraus.isNBlkInjective_of_le (pow_pos (NeZero.pos D) 4)
       (isNBlkInjective_pow_four_of_isNormal (A x) (hNormal x)) (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_at_range
@@ -148,7 +150,7 @@ theorem exists_uniform_block_parentInteraction_gap_of_compact
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
     (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
+      (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
@@ -161,7 +163,7 @@ theorem exists_uniform_block_parentInteraction_gap_of_compact
       μ A hμ hA hS hSpan hR hK
   obtain ⟨δ, hδ, h⟩ :=
     exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap (N₀ := R)
-      (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
+      (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
       (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
       H hH hParent hK hγ fun x hx N _ hN ↦ hGap x hx N hN
   exact ⟨δ, hδ, fun x hx N hN ↦

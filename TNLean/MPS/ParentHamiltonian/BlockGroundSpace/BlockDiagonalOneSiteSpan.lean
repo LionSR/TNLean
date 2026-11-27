@@ -27,6 +27,8 @@ and its boundary-matrix construction are documented in
 `docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -183,7 +185,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_wordTupleSpan
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     (hOne : WordTupleSpanTop A 1) [NeZero d]
     {N : ℕ} (hN : 2 < N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) 2 N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
   obtain ⟨c, hId⟩ := hOne.exists_one_letter_identity_coefficients
@@ -211,9 +213,9 @@ theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_on
     (hOne : WordTupleSpanTop A 1) [NeZero d]
     {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace d N}
     (hψ : ψ ∈ chainGroundSpace
-      (toTensorFromBlocks (d := d) (μ := μ) A) 2 N) :
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' X)) := by
   have hOpen : ψ ∈ ⨆ j : Fin r, groundSpace (A j) N :=
@@ -233,9 +235,9 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
     (hOne : WordTupleSpanTop A 1) [NeZero d]
     {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace d N}
     (hψ : ψ ∈ chainGroundSpace
-      (toTensorFromBlocks (d := d) (μ := μ) A) 2 N) :
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
@@ -248,16 +250,16 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
   let s : Fin N := ⟨N - 1, by omega⟩
   have hTranslate :
       cyclicTranslateState s ψ ∈
-        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) 2 N :=
+        chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N :=
     cyclicTranslateState_mem_chainGroundSpace
-      (toTensorFromBlocks (d := d) (μ := μ) A) (by omega) (by omega) s hψ
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) (by omega) (by omega) s hψ
   obtain ⟨Y, hψY⟩ :=
     exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_one
       μ A hμ hOne hN hTranslate
   have hXsum :
       ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
     calc
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
             (Matrix.blockDiagonal' X)) := hψX
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
@@ -267,7 +269,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
         ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
     calc
       cyclicTranslateState s ψ =
-          groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
               (Matrix.blockDiagonal' Y)) := hψY
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
@@ -323,10 +325,10 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop_one
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     (hOne : WordTupleSpanTop A 1) [NeZero d]
     {N : ℕ} (hN : 2 < N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) 2 N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N =
       ⨆ j : Fin r, chainGroundSpace (A j) 2 N := by
   have hClose :
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) 2 N ≤
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) 2 N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
@@ -348,7 +350,7 @@ theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleS
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     (hOne : WordTupleSpanTop A 1) [NeZero d] [∀ j, NeZero (dim j)] :
     HasParentHamiltonianGroundSpaceSpanning
-      (toTensorFromBlocks (d := d) (μ := μ) A) 2 A := by
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 A := by
   apply hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain
     μ A hμ
   · intro N hN

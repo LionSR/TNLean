@@ -115,13 +115,13 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
   have hnear := ManyBody.eventually_forall_hasEigenvalue
     (continuous_hamiltonian_parentChainInteraction_family A hA (N := m + 1) fun x ↦
-      isNBlkInjective_of_le one_pos
+      Kraus.isNBlkInjective_of_le one_pos
         (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega)).continuousAt
     (Filter.Eventually.of_forall fun x ↦
       posSemidef_hamiltonian_parentChainInteraction (A x) 2 (m + 1))
     (by
       refine (continuous_groundSpaceES_starProjection_family A hA (m + 1) fun x ↦
-        isNBlkInjective_of_le one_pos (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
+        Kraus.isNBlkInjective_of_le one_pos (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
           (by omega)).continuousAt.congr (Filter.Eventually.of_forall fun x ↦ ?_)
       dsimp only
       rw [ManyBody.groundSpace_zero,

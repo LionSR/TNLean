@@ -1142,11 +1142,11 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[A bounded range including the minimal periodic ring]
     \label{thm:canonical_bounded_range_ground_space}
-    \lean{MPSTensor.CPSVCanonicalFormData.%
+    \lean{MPTensor.CPSVCanonicalFormData.%
         exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five,
-        MPSTensor.CPSVCanonicalFormData.%
+        MPTensor.CPSVCanonicalFormData.%
         ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le,
-        MPSTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range}
+        MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range}
     \leanok
     \uses{def:cpsv_canonical_form,def:bnt_cpsv}
     Let $A$ be a canonical tensor with positive physical dimension and
@@ -1174,7 +1174,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[Local spaces of canonical representatives]
     \label{thm:ph_canonical_representative_local_spaces}
-    \lean{MPSTensor.CPSVCanonicalFormData.groundSpace_eq_iSup_representatives}
+    \lean{MPTensor.CPSVCanonicalFormData.groundSpace_eq_iSup_representatives}
     \leanok
     Let $A$ be in canonical form, and let $B^0,\ldots,B^{g-1}$ be its distinct
     normal representatives. As a local-space consequence of the canonical
@@ -1199,9 +1199,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[Canonical ground spaces at a simultaneous injectivity length]
     \label{thm:ph_canonical_block_closure}
-    \lean{MPSTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTupleSpanTop,
-        MPSTensor.CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop,
-        MPSTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_wordTupleSpanTop}
+    \lean{MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTupleSpanTop,
+        MPTensor.CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop,
+        MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a canonical MPS tensor with positive physical dimension,
     including arbitrary multiplicities of its distinct normal blocks

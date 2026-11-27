@@ -14,20 +14,18 @@ import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 /-!
 # Prepared-block SectorBNT constructor
 
-The `PreparedBNTBlocks` structure packages a finite family of **already prepared**
-TP / primitive / irreducible blocks and their nonzero weights. Its nested
-`IsWeightNormalized` proposition records the CPSV16 §II.C line-246 normalization
-(`|μ_k| ≤ 1` and at least one `|μ_k| = 1`). The suppliers in this file take the
-block family, the weights, and those hypotheses as separate arguments, and
-produce a `SectorDecomposition` `P` together with a proof that
+The suppliers in this file take a finite family of **already prepared**
+TP / primitive / irreducible blocks, their nonzero weights, and the CPSV16 §II.C
+line-246 normalization (`|μ_k| ≤ 1` and at least one `|μ_k| = 1`) as separate
+arguments, and produce a `SectorDecomposition` `P` together with a proof that
 
 * `P.toTensor` has the same MPV at every positive length as the original
   `toTensorFromBlocks μ blocks`, and
 * `P` satisfies `IsBNTCanonicalForm`.
 
-The bundled method taking a `PreparedBNTBlocks` value directly is
-`PreparedBNTBlocks.exists_isBNTCanonicalForm_exact` in
-`TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction`.
+The letterwise exact reconstruction is
+`exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks` in
+`TNLean.MPS.CanonicalForm.BNTPresentation.PreparedReconstruction`.
 
 The route is to quotient the block indices by MPV phase equivalence (the
 existing one-sided BNT construction of
@@ -362,39 +360,6 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
 
 /-! ### Prepared-block SectorBNT constructor -/
 
-/-- A finite family of positive-dimensional, left-canonical, primitive, irreducible blocks
-with nonzero weights, ready for phase-class collapse into BNT sectors. -/
-structure PreparedBNTBlocks (d : ℕ) where
-  /-- Number of prepared blocks. -/
-  r : ℕ
-  /-- Bond dimension of each prepared block. -/
-  dim : Fin r → ℕ
-  /-- Scalar weight of each prepared block. -/
-  weight : Fin r → ℂ
-  /-- Prepared tensor blocks. -/
-  blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- Every prepared block has positive bond dimension. -/
-  dim_pos : ∀ k, 0 < dim k
-  /-- Every prepared block is left-canonical. -/
-  leftCanonical : ∀ k, IsLeftCanonical (blocks k)
-  /-- Every prepared block has primitive transfer map. -/
-  primitive : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k))
-  /-- Every prepared block is an irreducible Kraus family. -/
-  irreducible : ∀ k, Kraus.IsIrreducibleFamily (blocks k)
-  /-- Every prepared-block weight is nonzero. -/
-  weight_ne_zero : ∀ k, weight k ≠ 0
-
-namespace PreparedBNTBlocks
-
-/-- CPSV16 §II.C normalization of the weights of prepared blocks. -/
-structure IsWeightNormalized (data : PreparedBNTBlocks d) : Prop where
-  /-- Every prepared-block weight has norm at most one. -/
-  norm_le_one : ∀ k, ‖data.weight k‖ ≤ 1
-  /-- Some prepared-block weight has unit norm. -/
-  unit_exists : ∃ k, ‖data.weight k‖ = 1
-
-end PreparedBNTBlocks
-
 /--
 **Prepared-block SectorBNT constructor.**
 
@@ -522,7 +487,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
     ∃ P : SectorDecomposition d,
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_⟩
@@ -546,7 +511,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
     ∃ P : SectorDecomposition d,
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_, ?_⟩
@@ -630,7 +595,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
       (∀ k, Kraus.IsInjective (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
       SameMPV₂Pos (blockTensor (d := d) (n := Fin D) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) := by
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) := by
   classical
   -- Step 1: arbitrary-input two-sided reduction at `B = A`.
   obtain ⟨p₀, hp₀,
@@ -706,18 +671,18 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
           (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
             (blockTensor (d := d) (n := Fin D) A p₀) L)
           (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
-            (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L) :=
+            (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L) :=
       sameMPV₂Pos_blockTensor
         (d := blockPhysDim d p₀)
         (blockTensor (d := d) (n := Fin D) A p₀)
-        (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA)
         hAPos L hL
     -- (ii) blocking distributes over toTensorFromBlocks (full-length SameMPV₂):
     have hDistr : SameMPV₂
         (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
-          (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L)
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L)
         (toTensorFromBlocks
-          (d := blockPhysDim (blockPhysDim d p₀) L)
+          (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
           (fun k => (μA k) ^ L)
           (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) :=
@@ -728,7 +693,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
         (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
           (blockTensor (d := d) (n := Fin D) A p₀) L)
         (toTensorFromBlocks
-          (d := blockPhysDim (blockPhysDim d p₀) L)
+          (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
           (fun k => (μA k) ^ L)
           (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) := by
@@ -743,7 +708,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
               (blockTensor (d := d) (n := Fin D) A p₀) L))
           (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
             (toTensorFromBlocks
-              (d := blockPhysDim (blockPhysDim d p₀) L)
+              (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
               (fun k => (μA k) ^ L)
               (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
                 (blocksA k) L))) :=
@@ -760,12 +725,12 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     have hRight :
         Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
           (toTensorFromBlocks
-            (d := blockPhysDim (blockPhysDim d p₀) L)
+            (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
             (fun k => (μA k) ^ L)
             (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
               (blocksA k) L)) =
           toTensorFromBlocks
-            (d := blockPhysDim d (p₀ * L))
+            (α := Fin (blockPhysDim d (p₀ * L)))
             (μ := fun k => (μA k) ^ L)
             (fun k => flattenedIteratedBlockTensor (d := d) (p := p₀)
               (D := dimA k) (blocksA k) L) :=

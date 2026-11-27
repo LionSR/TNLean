@@ -65,13 +65,14 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{fig:rfp_renormalization_step}
 \end{figure}
 
-\begin{lemma}[Primitive-transfer convergence for each auxiliary block]%
+\begin{lemma}[Primitive-transfer convergence for each injective block]%
     \label{thm:rg_flow_converges_of_cf}
-    \lean{MPSTensor.rg_flow_converges_of_cf}
+    \lean{MPSTensor.rg_flow_converges_of_isInjective}
     \leanok
-    \uses{def:is_canonical_form,def:transfer_map,thm:exponential_convergence_primitive}
-    Fix one block $A_k$ in a family satisfying
-    Definition~\ref{def:is_canonical_form}. As in the per-block primitive
+    \uses{def:injective,def:transfer_map,thm:exponential_convergence_primitive}
+    Let $A_k$ be an injective tensor of positive bond dimension with
+    $\sum_i(A_k^i)^\dagger A_k^i=\Id$, such as one block of a canonical form.
+    As in the per-block primitive
     convergence of \cite[Appendix~B, lines~1211--1244]{Cirac2016MPDO_arXiv},
     the dyadic powers of its transfer map converge pointwise to an idempotent
     linear map: there exists $\E_{k,\infty}$ with
@@ -80,7 +81,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     virtual matrix $\rho$.
 \end{lemma}
 \begin{proof}\leanok
-    Each block is injective and left-canonical, so its transfer map is a
+    The tensor is injective and left-canonical, so its transfer map is a
     primitive channel with a unique positive-definite fixed point $\rho_0$.
     The exponential convergence bound
     $\lVert \E^n(X)-P(X)\rVert\le C(1-\delta)^n\lVert X\rVert$

@@ -75,7 +75,7 @@ This answers the existential open question in arXiv:1606.00608, lines
 claim presentation independence. -/
 theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients :
     ∃ (M : MPOTensor 2 4) (H : BNTAlgebraTensorClause M),
-      MPSTensor.IsCPSVCanonicalForm M.toMPSTensor ∧
+      MPTensor.IsCPSVCanonicalForm M.toMPSTensor ∧
         IsMPDO M ∧ IsRFPViaTS M ∧ ¬ H.coeffs.LengthIndependent := by
   refine ⟨baseMPO, baseMPOBNTAlgebraTensorClause,
     baseMPO_toMPSTensor_isCPSVCanonicalForm, baseMPO_isMPDO, ?_, ?_⟩

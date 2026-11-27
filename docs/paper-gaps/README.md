@@ -1375,7 +1375,7 @@ threshold `T₀ ≥ 1` is chosen before `S_*`. The note is resolved.
 
 ### Two-dimensional area law: nondegenerate template pieces
 
-[arealaw2d_nondegenerate_templates](https://sirui-lu.com/QICLean/paper-gaps/arealaw2d_nondegenerate_templates.pdf)
+[oai26_nondegenerate_templates](https://sirui-lu.com/QICLean/paper-gaps/oai26_nondegenerate_templates.pdf)
 (QICLean, which owns the template definitions)
 records that the closed convex rectangles and triangles of Definition 9.3 of
 the September 24, 2026 two-dimensional area-law manuscript are read in the

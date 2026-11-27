@@ -24,19 +24,23 @@ intersection and periodic closure theorem of arXiv:2011.12127,
 Section IV.C, lines 2114--2129.
 -/
 
+open MPTensor
+
 open scoped BigOperators
 
 namespace MPSTensor
 
 variable {d D : ℕ} [NeZero D]
 
+set_option linter.style.longLine false in
 /-- The distinct normal representatives of a canonical tensor have a
 positive simultaneous injectivity length \(S\) for which the parent
 interaction range \(S+1\) is at most \(3D^5\).
 
 Source: arXiv:1606.00608, lines 317--345; the additional site is that of
 the intersection argument in arXiv:2011.12127, lines 2087--2094. -/
-theorem CPSVCanonicalFormData.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
     ∃ S : ℕ, 0 < S ∧ S + 1 ≤ 3 * D ^ 5 ∧
       WordTupleSpanTop (fun j ↦ data.blocks (data.representativeIndex j)) S := by
@@ -49,7 +53,7 @@ variable [NeZero d]
 precisely the periodic BNT span as its kernel on every ring \(N\geq L\).
 This includes \(N=L=3D^5\). Source: arXiv:1606.00608, lines 317--345,
 and arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
-theorem CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le
+theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {L N : ℕ}
     (hL : 3 * D ^ 5 ≤ L) (hLN : L ≤ N) :
     LinearMap.ker (parentHamiltonian A L N) =
@@ -67,7 +71,7 @@ ring \(N=L=R\) is included.
 This combines the blocking estimate of arXiv:1606.00608, lines 317--345,
 with the block-injective ground-space theorem of arXiv:2011.12127,
 Section IV.C, lines 2114--2129. -/
-theorem IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range
+theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)) (R : ℕ),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧

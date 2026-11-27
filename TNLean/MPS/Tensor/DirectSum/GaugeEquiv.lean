@@ -55,16 +55,16 @@ lemma gaugeEquiv_toTensorFromBlocks_of_blockConj
       B k i =
         (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
           (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
-    GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
-      (toTensorFromBlocks (d := d) (μ := μ) B) :=
+    GaugeEquiv (toTensorFromBlocks (α := Fin d) (μ := μ) A)
+      (toTensorFromBlocks (α := Fin d) (μ := μ) B) :=
   ⟨globalGaugeOfBlocks X,
     toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (μ := μ) (A := A) (B := B) X hX⟩
 
 /-- Gauge equivalence of weighted direct sums from gauge equivalence of each summand. -/
 lemma gaugeEquiv_toTensorFromBlocks_of_blockGauge
     (hGauge : ∀ k : Fin r, GaugeEquiv (A k) (B k)) :
-    GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
-      (toTensorFromBlocks (d := d) (μ := μ) B) := by
+    GaugeEquiv (toTensorFromBlocks (α := Fin d) (μ := μ) A)
+      (toTensorFromBlocks (α := Fin d) (μ := μ) B) := by
   classical
   choose X hX using hGauge
   exact gaugeEquiv_toTensorFromBlocks_of_blockConj μ A B X hX
@@ -140,33 +140,12 @@ lemma fundamentalTheorem_multiBlock_global
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hSame : ∀ k : Fin r, SameMPV (A k) (B k)) :
-    GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
-      (toTensorFromBlocks (d := d) (μ := μ) B) :=
+    GaugeEquiv (toTensorFromBlocks (α := Fin d) (μ := μ) A)
+      (toTensorFromBlocks (α := Fin d) (μ := μ) B) :=
   gaugeEquiv_toTensorFromBlocks_of_blockGauge μ A B
     (fundamentalTheorem_multiBlock_blocks A B hA hSame)
 
 end FundamentalTheoremMulti
-
-/-! ## Comparison with `CanonicalForm` -/
-
-section CanonicalFormComparison
-
-open CanonicalForm
-
-/-- `CanonicalForm.toTensor` agrees with `toTensorFromBlocks`. -/
-theorem CanonicalForm.toTensor_eq_toTensorFromBlocks (C : CanonicalForm d) :
-    C.toTensor = toTensorFromBlocks C.μ C.blockTensor := rfl
-
-theorem fundamentalTheorem_canonicalForm_sameStructure
-    (C : CanonicalForm d)
-    (B : (k : Fin C.numBlocks) → MPSTensor d (C.blockDim k))
-    (hB_inj : ∀ k, Kraus.IsInjective (C.blockTensor k))
-    (hSame : ∀ k, SameMPV (C.blockTensor k) (B k)) :
-    GaugeEquiv (C.toTensor) (toTensorFromBlocks C.μ B) := by
-  rw [C.toTensor_eq_toTensorFromBlocks]
-  exact fundamentalTheorem_multiBlock_global C.μ C.blockTensor B hB_inj hSame
-
-end CanonicalFormComparison
 
 /-! ## Converse and global `SameMPV` transfer -/
 

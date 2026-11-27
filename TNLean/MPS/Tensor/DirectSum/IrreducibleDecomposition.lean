@@ -226,14 +226,14 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
       ∑ k : Fin r, dim k = D := by
   -- Formulate the statement for all tensors of a given bond dimension (for strong induction).
   suffices h : ∀ (D : ℕ) (A : MPSTensor d D),
       ∃ r : ℕ, ∃ dim : Fin r → ℕ,
       ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-        SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+        SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
         ∑ k : Fin r, dim k = D
     from h D A
   intro D
@@ -298,23 +298,23 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
         mpv_twoBlockTensor_eq A₁ A₂ σ
       -- Step 3: replace mpv A₁ and mpv A₂ by the IH sums.
       have hstep3a : mpv A₁ σ =
-          mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ :=
+          mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ :=
         hIH₁ N σ
       have hstep3b : mpv A₂ σ =
-          mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ :=
+          mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ :=
         hIH₂ N σ
       -- Step 4: expand the IH sums via mpv_toTensorFromBlocks_eq_sum.
       have hexpand₁ :
-          mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ =
+          mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ =
             ∑ k : Fin r₁, (1 : ℂ) ^ N • mpv (blocks₁ k) σ :=
         mpv_toTensorFromBlocks_eq_sum (d := d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁ σ
       have hexpand₂ :
-          mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ =
+          mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ =
             ∑ k : Fin r₂, (1 : ℂ) ^ N • mpv (blocks₂ k) σ :=
         mpv_toTensorFromBlocks_eq_sum (d := d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂ σ
       -- Step 5: expand the combined sum.
       have hexpand_combined :
-          mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ))
+          mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ))
             combinedBlocks) σ =
             ∑ k : Fin (r₁ + r₂), (1 : ℂ) ^ N • mpv (combinedBlocks k) σ :=
         mpv_toTensorFromBlocks_eq_sum (d := d)
@@ -342,14 +342,14 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
       calc mpv A σ
           = mpv (twoBlockTensor A₁ A₂) σ := hstep1
         _ = mpv A₁ σ + mpv A₂ σ := hstep2
-        _ = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ +
-              mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ := by
+        _ = mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₁ => (1 : ℂ)) blocks₁) σ +
+              mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r₂ => (1 : ℂ)) blocks₂) σ := by
                 rw [hstep3a, hstep3b]
         _ = (∑ k : Fin r₁, (1 : ℂ) ^ N • mpv (blocks₁ k) σ) +
               (∑ k : Fin r₂, (1 : ℂ) ^ N • mpv (blocks₂ k) σ) := by
                 rw [hexpand₁, hexpand₂]
         _ = ∑ k : Fin (r₁ + r₂), (1 : ℂ) ^ N • mpv (combinedBlocks k) σ := hsplit.symm
-        _ = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ))
+        _ = mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin (r₁ + r₂) => (1 : ℂ))
               combinedBlocks) σ := hexpand_combined.symm
     -- The dimension identity is inherited directly from the two summands.
     · rw [Fin.sum_univ_add]

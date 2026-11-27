@@ -25,12 +25,16 @@ Their dot lemmas elsewhere moved with them, still at `Fin d`, `Fin D`; files tha
 without a prefix open `MPTensor`. Two Kraus heads of the scan, `IsInjective` and `IsNormal`, and
 `evalWord`, `transferMap` were already general after T.1a. The bond of `mpvOverlap` stays `Fin D`:
 with a general bond, the instances of a bond `Fin (f x)` of a dependent family of blocks stop
-matching after `f x` is unfolded. `IsNormalTensor`, `IsCPSVCanonicalForm` and
-`IsMPUCanonicalForm` cannot be restated in TNLean alone: their irreducibility clause is QICLean's
-`Kraus.IsIrreducibleFamily`, which is stated for `Fin d → Matrix (Fin D) (Fin D) ℂ`; generalizing
-it (with `HasInvariantProj`) in QICLean comes first. T.1c also leaves the 95 consuming
-definitions outside these heads, and the lemmas about the restated heads that are still stated at
-`Fin d`. T.2a can start for the consumers of the restated heads; T.2c, T.3 and T.4 remain.
+matching after `f x` is unfolded. After QICLean stated `Kraus.IsIrreducibleFamily`,
+`Kraus.HasInvariantProj` and `IsOrthogonalProjection` for an arbitrary index type and bond type,
+`IsNormalTensor` and `IsMPUCanonicalBlock` are stated on `MPTensor α β`, and
+`RetainedBlockReconstructionData`, `CPSVCanonicalFormData`, `IsCPSVCanonicalForm`,
+`MPUCanonicalFormData`, `IsMPUCanonicalForm` and the block assembly `toTensorFromBlocks` on
+`MPTensor α (Fin D)`, all in the namespace `MPTensor`; the physical relabellings of normal tensors
+and of canonical-form data take an equivalence of arbitrary alphabets. Canonical form II and the
+basis of normal tensors stay at `Fin d`. T.1c also leaves the consuming definitions outside these
+heads, and the lemmas about the restated heads that are still stated at `Fin d`. T.2a can start
+for the consumers of the restated heads; T.2c, T.3 and T.4 remain.
 
 All counts were measured by the scripts listed in §6 on TNLean `e8f8dd3202` (5,417 modules
 outside `Archive/`) and QICLean `80e0a1782` (1,874 modules). Comments and docstrings are
@@ -189,7 +193,7 @@ state or an operator on a chain, are tensor-network notions and live in TNLean.
 | QICLean `Kraus` (generalized from `{d D : ℕ}` to `{ι n : Type*}`) | TNLean `MPTensor` |
 |---|---|
 | `evalWord (K : ι → Matrix n n ℂ) : List ι → Matrix n n ℂ` and its 8 basic lemmas | `mpv`, `mpo` (the periodic vector and operator) |
-| `reindexPhysical`, `wordSpan`, `cumulativeSpan`, `IsInjective`, `IsNBlkInjective`, `IsNormal`, `HasEventuallyFullWordSpan` | `act`, `mul` (stacking, bond `β × β'`) |
+| `reindexPhysical`, `wordSpan`, `cumulativeSpan`, `IsInjective`, `IsNBlkInjective`, `IsNormal` | `act`, `mul` (stacking, bond `β × β'`) |
 | `transferMap := mapLM` (already general) | `directSum` (bond `β ⊕ β'`) |
 | `block (K : ι → Matrix n n ℂ) (L : ℕ) : (Fin L → ι) → Matrix n n ℂ` | `blockOp` (blocking an operator tensor) |
 | `rectangularEval` with bond *types* (§2.7) | `reindexBond`, `gauge` |

@@ -213,7 +213,7 @@ theorem basis_isNBlkInjective_totalDim_pow_four
     Nat.pow_pos (hCF.basis_dim_pos j)
   have hPow : (P.basisDim j) ^ 4 ≤ P.totalDim ^ 4 :=
     Nat.pow_le_pow_left (P.basisDim_le_totalDim j) 4
-  exact isNBlkInjective_of_le hOwnPos hOwn hPow
+  exact Kraus.isNBlkInjective_of_le hOwnPos hOwn hPow
 
 /-- The finitely many representatives of a BNT canonical form have one common
 positive block-injectivity length.

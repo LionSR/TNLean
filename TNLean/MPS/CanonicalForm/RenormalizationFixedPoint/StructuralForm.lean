@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
-import TNLean.MPS.CanonicalForm.BlockFamily
+import TNLean.MPS.CanonicalForm.BNT.Construction
 
 /-!
 # Structural form of RFP tensors
@@ -140,7 +140,7 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
   have hInj : Kraus.IsInjective A := rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.injective_implies_irreducibleCP A hInj
-  have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
+  have hIrrTensor : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrMap
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   exact exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily

@@ -517,8 +517,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \begin{lemma}[Positive-length propagation of block injectivity]
     \label{thm:wordspan_blk_inj_succ}
     \lean{Kraus.wordSpan_succ_eq_mul_left}
-    \lean{MPSTensor.isNBlkInjective_succ_of_isNBlkInjective}
-    \lean{MPSTensor.isNBlkInjective_of_le}
+    \lean{Kraus.isNBlkInjective_succ_of_isNBlkInjective}
+    \lean{Kraus.isNBlkInjective_of_le}
     \leanok
     \uses{def:word_span,def:l_blk_injective}
     Combining the block-injectivity discussion in
@@ -725,7 +725,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{lemma}[Fixed-length eigenvector spreading]
     \label{thm:eigenvector_spreading_primitive}
-    \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isNormal_of_eigenvector}
+    \lean{Kraus.vectorSpreadSpan_eq_top_of_isNormal_of_eigenvector}
     \leanok
     \uses{def:normal,thm:eigenvector_spreading,lem:eigenvector_padding}
     Following~\cite[Lemma~2(a)]{Sanz2010Quantum}, let $D>0$, suppose
@@ -814,7 +814,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{lemma}[Rank-one extraction from a non-invertible eigenvector]%
     \label{lem:rank_one_noninvertible_eigenvector}
     \lean{MPSTensor.vecMulVec_eigenvector_exact_wordSpan,
-        MPSTensor.rectSpan_nilpIndex_strict_growth_of_isNormal}
+        Kraus.rectSpan_nilpIndex_strict_growth_of_isNormal}
     \leanok
     \uses{def:word_span,def:normal}
     Establishing the quantitative rank-one conclusion of

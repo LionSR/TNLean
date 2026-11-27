@@ -156,7 +156,7 @@ Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toTwoSiteExactSectorGauge
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
     TwoSiteExactSectorGauge H := by
   classical
@@ -699,7 +699,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toTwoSiteMultiplicitySpectrum
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
     TwoSiteMultiplicitySpectrum H :=
   (H.toTwoSiteExactSectorGauge hCanonical hM).toTwoSiteMultiplicitySpectrum

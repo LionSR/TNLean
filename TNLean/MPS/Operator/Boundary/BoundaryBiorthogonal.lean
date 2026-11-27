@@ -115,7 +115,7 @@ The target blocks need only span simultaneously at one positive length. -/
 theorem IsBoundaryClosed.exists_biorthogonalDecomposition
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPSTensor (d * d) (dim c))
-    (hBlocks : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c))
@@ -137,7 +137,7 @@ theorem IsBoundaryCompatible.exists_biorthogonalDecomposition
     {T : MPOTensor d D} {A : MPSTensor d (∑ c : Fin r, dim c)}
     (h : IsBoundaryCompatible T A)
     (B : (c : Fin r) → MPSTensor d (dim c))
-    (hBlocks : A = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) B)
+    (hBlocks : A = MPTensor.toTensorFromBlocks (fun _ ↦ 1) B)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop B L) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c)) (Fin (D * ∑ c, dim c)) ℂ)

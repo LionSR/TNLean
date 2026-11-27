@@ -76,7 +76,7 @@ the blocked ket and bra words.
 Source: arXiv:1606.00608, Section 2.3, lines 214--245, blocked as in lines
 317--345 (project example). -/
 def blockedCanonicalFormData (L : ℕ) (hL : 0 < L) :
-    MPSTensor.CPSVCanonicalFormData
+    MPTensor.CPSVCanonicalFormData
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv 8 L)
         (Kraus.blockTensor T.toMPSTensor L)) :=
   (canonicalFormData.blockTensor L hL).reindexPhysical (blockedDoubledIndexEquiv 8 L)

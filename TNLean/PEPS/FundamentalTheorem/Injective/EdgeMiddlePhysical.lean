@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Tensor.Network.Blocking
-import TNLean.PEPS.Tensor.Network.FiniteKernelDescent
-import TNLean.PEPS.Graph.Region.InjectiveRegion
+import TNLean.PEPS.Injectivity.Region.RegionKernelDescent
 
 /-!
 # Middle physical indices for edge-blocked PEPS
@@ -14,20 +12,27 @@ This file gives the middle tensor in the edge-centered three-site decomposition
 its own physical index. For an edge $e=(u,v)$, the middle physical
 configuration is the family of physical indices on $V\setminus\{u,v\}$.
 
+The middle tensor is the blocked-region tensor of $V\setminus\{u,v\}$, up to
+an identification of the open indices and the factor $\dim A_e$ from the free
+sum over the index on $e$, which meets no middle vertex. Its injectivity is
+therefore the arbitrary-region theorem at that region, with no second
+kernel-descent argument.
+
+## Main results
+
+* `TNLean.PEPS.regionBlockedWeight_edgeMiddleRegionBoundaryConfig` — blocking
+  $V\setminus\{u,v\}$ gives $\dim A_e$ times the edge-middle tensor.
+* `TNLean.PEPS.edgeMiddleTensorInjective_of_isVertexInjective` — the edge-middle
+  tensor of a vertex-injective PEPS with positive bonds is injective.
+* `TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective` — every edge
+  blocking of such a PEPS is an injective three-site chain.
+
 ## References
 
 - [Molnár, Schuch, Verstraete, Cirac, *Fundamental Theorem for injective PEPS*,
   arXiv:1804.04964, Section 3, `eq:block_to_mps`](https://arxiv.org/abs/1804.04964)
 - `Papers/1804.04964/paper_normal.tex`, lines 981--1009.
 - `Papers/1804.04964/paper_normal.tex`, lines 1322--1404.
-
-## Scope note
-
-The singleton-region consequences below still assume that the middle region
-$V\setminus\{u,v\}$ is nonempty. The source comparison and removal plan for
-this hypothesis are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
-mathematical obligations".
 -/
 
 open ManyBody (Edge)
@@ -179,70 +184,6 @@ abbrev EdgeMiddleBoundaryLabel (A : Tensor G d) (e : Edge G) : Type _ :=
   ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) ×
     ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e)
 
-/-- Kernel-descent data for the edge-middle tensor.
-
-This structure records the approach to middle-block injectivity: a contraction
-of injective tensors is injective (arXiv:1804.04964, Section 3,
-`Papers/1804.04964/paper_normal.tex`, lines 205--250). The source proves that
-fact in one step from the one-sided inverse; the kernel conditions $K_c(S)$
-below are the finite-induction device used to formalize it, not a separate
-construction in the source.
-
-For a finitely supported coefficient family $c_{\rho}$, the kernel condition
-$K_c(S)$ for a finite vertex set $S$ in the middle region records the zero
-relation reached after contracting the tensors in $S$. The initial condition
-is, for every middle physical index $\tau$,
-\[
-    \sum_{\rho} c_{\rho} T^{\rho}_{A,V\setminus\{u,v\}}(\tau)=0,
-\]
-which is $K_c(V\setminus\{u,v\})$. The deletion condition
-$K_c(S)\Rightarrow K_c(S\setminus\{j\})$ applies the one-sided inverse at $j$.
-The terminal condition is $K_c(\varnothing)\Rightarrow c=0$.
-
-Source: a contraction of injective tensors is injective, arXiv:1804.04964,
-Section 3, `Papers/1804.04964/paper_normal.tex`, lines 205--250; the middle
-block is that of `eq:block_to_mps`, lines 981--1009. -/
-structure EdgeMiddleKernelDescentData (A : Tensor G d) (e : Edge G) where
-  /-- The finite kernel-descent datum attached to a coefficient family $c_{\rho}$.
-
-  Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-  `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-  kernelDescent :
-    (EdgeMiddleBoundaryLabel (G := G) A e →₀ ℂ) → FiniteRegionKernelDescent V
-  /-- A zero linear relation among the middle tensor vectors gives
-  $K_c(V\setminus\{u,v\})$.
-
-  Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-  `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-  initial_relation :
-    ∀ c : EdgeMiddleBoundaryLabel (G := G) A e →₀ ℂ,
-      Finsupp.linearCombination ℂ (edgeMiddleTensorFamily (G := G) A e) c = 0 →
-        (kernelDescent c).kernelCondition (edgeMiddleVertices e)
-  /-- The empty-region condition gives $c=0$.
-
-  Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-  `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-  terminal_relation :
-    ∀ c : EdgeMiddleBoundaryLabel (G := G) A e →₀ ℂ,
-      (kernelDescent c).kernelCondition ∅ → c = 0
-
-namespace EdgeMiddleKernelDescentData
-
-/-- Kernel descent for the middle block gives injectivity of the edge-middle
-tensor family.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-theorem edgeMiddleTensorInjective {A : Tensor G d} {e : Edge G}
-    (hDescent : EdgeMiddleKernelDescentData (G := G) A e) :
-    EdgeMiddleTensorInjective (G := G) A e := by
-  rw [EdgeMiddleTensorInjective, linearIndependent_iff]
-  intro c hc
-  exact hDescent.terminal_relation c <|
-    (hDescent.kernelDescent c).descend_to_empty (hDescent.initial_relation c hc)
-
-end EdgeMiddleKernelDescentData
-
 /-- Injectivity of the three-site chain obtained by blocking around a
 chosen edge $e=(u,v)$.
 
@@ -256,29 +197,12 @@ structure EdgeBlockedThreeSiteInjective (A : Tensor G d) (e : Edge G) : Prop whe
   middle_injective : EdgeMiddleTensorInjective (G := G) A e
   right_injective : Function.Injective (localTensorMap A e.1.2)
 
-/-- A comparison from finite-region injectivity to the middle tensor in the
-edge-blocked three-site chain.
-
-The source proof uses that contracting injective tensors over a finite region
-gives an injective blocked tensor. This proposition records the part of that
-claim needed for the middle region $V\setminus\{u,v\}$ attached to an edge
-$e=(u,v)$, without asserting the full contraction theorem.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-structure EdgeMiddleRegionInjectivityComparison
-    (κ : RegionInjectivityData V) (A : Tensor G d) : Prop where
-  /-- Region injectivity of $V\setminus\{u,v\}$ gives injectivity of the
-  corresponding edge-middle tensor family. -/
-  middle_tensor_injective :
-    ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e) →
-      EdgeMiddleTensorInjective (G := G) A e
-
 /-- Vertex injectivity supplies the two endpoint injectivity assertions in the
 edge-blocked three-site chain.
 
-The unformalized content is middle-block injectivity: linear independence of the
-middle tensor family over the residual boundary configurations. -/
+The middle assertion, linear independence of the middle tensor family over the
+residual boundary configurations, is
+`edgeMiddleTensorInjective_of_isVertexInjective` below. -/
 theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective {A : Tensor G d}
     (hA : IsVertexInjective A) (e : Edge G) :
     Function.Injective (localTensorMap A e.1.1) ∧
@@ -288,9 +212,9 @@ theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective {A : Tensor G 
 /-- Once the middle block is injective, vertex injectivity gives the full
 edge-blocked three-site injectivity statement.
 
-This isolates the remaining proof obligation in the source argument: injectivity
-is preserved when the vertices away from the chosen edge are blocked into the
-middle tensor. -/
+The middle hypothesis is the injectivity of the tensor obtained by blocking the
+vertices away from the chosen edge; it is supplied by
+`edgeMiddleTensorInjective_of_isVertexInjective` below. -/
 theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle {A : Tensor G d}
     (hA : IsVertexInjective A) (e : Edge G)
     (hMiddle : EdgeMiddleTensorInjective (G := G) A e) :
@@ -301,8 +225,8 @@ theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle {A : Tensor G 
 injective edge-blocked three-site chain at every edge.
 
 This is the middle-tensor version of the assertion following `eq:block_to_mps`.
-The separate comparison theorem below supplies the middle-tensor hypotheses
-from finite-region injectivity.
+Under positive bond dimensions the middle-tensor hypotheses are supplied by
+`edgeMiddleTensorInjective_of_isVertexInjective` below.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
@@ -311,71 +235,6 @@ theorem IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle {A : Tenso
     (hMiddle : ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e) :
     ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
   fun e => hA.edgeBlockedThreeSiteInjective_of_middle e (hMiddle e)
-
-/-- Kernel descent for the middle block supplies the full edge-blocked
-three-site injectivity statement.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent {A : Tensor G d}
-    (hA : IsVertexInjective A) (e : Edge G)
-    (hDescent : EdgeMiddleKernelDescentData (G := G) A e) :
-    EdgeBlockedThreeSiteInjective (G := G) A e :=
-  hA.edgeBlockedThreeSiteInjective_of_middle e hDescent.edgeMiddleTensorInjective
-
-/-- Region injectivity of the edge-middle block, together with the comparison to
-the edge-middle tensor family, gives the edge-blocked three-site injectivity
-statement.
-
-This is a conditional form of the assertion after `eq:block_to_mps`; the
-unconditional paper statement still requires a proof of the finite-region
-contraction theorem.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hA : IsVertexInjective A) (e : Edge G)
-    (hMiddleRegion : κ.IsInjective (edgeMiddleVertices e)) :
-    EdgeBlockedThreeSiteInjective (G := G) A e :=
-  hA.edgeBlockedThreeSiteInjective_of_middle e
-    (hComparison.middle_tensor_injective e hMiddleRegion)
-
-/-- If every edge-middle region is injective after blocking, then every
-edge-middle tensor family is injective.
-
-This is the all-edge form of the finite-region comparison isolated from the
-assertion following `eq:block_to_mps`.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hMiddleRegions : ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e)) :
-    ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e :=
-  fun e => hComparison.middle_tensor_injective e (hMiddleRegions e)
-
-/-- All edge-blocked three-site chains are injective once every edge-middle
-region is injective and region injectivity has been compared with the
-edge-middle tensor family.
-
-This is the all-edge conditional form of the assertion following
-`eq:block_to_mps` in arXiv:1804.04964, Section 3. The remaining source-paper
-step is the contraction theorem showing that vertex injectivity gives
-injectivity of each finite middle region $V\setminus\{u,v\}$.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hA : IsVertexInjective A)
-    (hMiddleRegions : ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e)) :
-    ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
-  hA.edgeBlockedThreeSiteInjective_all_of_middle
-    (hComparison.edgeMiddleTensorInjective_all hMiddleRegions)
 
 omit [Fintype V] in
 /-- Vertex injectivity gives injectivity of every nonempty finite region once
@@ -399,118 +258,6 @@ theorem RegionInjectivityUnionClosure.finset_injective_of_singletons
   classical
   simpa using hUnion.biUnion_injective hR (fun v => ({v} : Finset V))
     (fun v _ => hSingleton v (hA v))
-
-/-- Singleton comparison and finite union closure give the edge-middle tensor
-for a chosen edge whose middle region is nonempty.
-
-This is a restricted consequence of the source argument: it handles the case
-where $V\setminus\{u,v\}$ is a nonempty finite union of singleton regions.
-The remaining comparison from region injectivity to the concrete edge-middle
-tensor is still assumed.
-
-**Scope restriction (nonempty middle):** This theorem assumes
-`(edgeMiddleVertices e).Nonempty`; see the module scope note.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
-`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
-and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hSingleton : ∀ v : V, LinearIndependent ℂ (A.component v) → κ.IsInjective {v})
-    (hA : IsVertexInjective A) (e : Edge G)
-    (hMiddle : (edgeMiddleVertices e).Nonempty) :
-    EdgeMiddleTensorInjective (G := G) A e :=
-  hComparison.middle_tensor_injective e
-    (hUnion.finset_injective_of_singletons hSingleton hA hMiddle)
-
-/-- Singleton comparison and finite union closure give every edge-middle tensor
-when the ambient graph has more than two vertices.
-
-For $2<|V|$, each middle region $V\setminus\{u,v\}$ is nonempty, so the
-nonempty-region singleton theorem applies at every edge.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
-`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
-and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hSingleton : ∀ v : V, LinearIndependent ℂ (A.component v) → κ.IsInjective {v})
-    (hA : IsVertexInjective A)
-    (hcard : 2 < Fintype.card V) :
-    ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e :=
-  fun e =>
-    hComparison.edgeMiddleTensorInjective_of_singletons hUnion hSingleton hA e
-      (edgeMiddleVertices_nonempty_of_two_lt_card e hcard)
-
-/-- Singleton comparison and finite union closure give the edge-blocked
-three-site injectivity statement for an edge whose middle region is nonempty.
-
-**Scope restriction (nonempty middle):** This theorem assumes
-`(edgeMiddleVertices e).Nonempty`; see the module scope note.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
-`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
-and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hSingleton : ∀ v : V, LinearIndependent ℂ (A.component v) → κ.IsInjective {v})
-    (hA : IsVertexInjective A) (e : Edge G)
-    (hMiddle : (edgeMiddleVertices e).Nonempty) :
-    EdgeBlockedThreeSiteInjective (G := G) A e :=
-  hA.edgeBlockedThreeSiteInjective_of_middle e
-    (hComparison.edgeMiddleTensorInjective_of_singletons hUnion hSingleton hA e hMiddle)
-
-/-- Singleton comparison and finite union closure give edge-blocked three-site
-injectivity at every edge whose middle region is nonempty.
-
-This is the all-edge form of the preceding restricted consequence.
-
-**Scope restriction (nonempty middle):** This theorem assumes
-`∀ e : Edge G, (edgeMiddleVertices e).Nonempty`; see the module scope note.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
-`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
-and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hSingleton : ∀ v : V, LinearIndependent ℂ (A.component v) → κ.IsInjective {v})
-    (hA : IsVertexInjective A)
-    (hMiddle : ∀ e : Edge G, (edgeMiddleVertices e).Nonempty) :
-    ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
-  fun e =>
-    hComparison.edgeBlockedThreeSiteInjective_of_singletons
-      hUnion hSingleton hA e (hMiddle e)
-
-/-- Singleton comparison and finite union closure give every edge-blocked
-three-site injectivity statement when the ambient graph has more than two
-vertices.
-
-For $2<|V|$, each edge has a nonempty middle region, and the preceding
-nonempty-middle theorem applies uniformly.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
-`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
-and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card
-    {κ : RegionInjectivityData V} {A : Tensor G d}
-    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hSingleton : ∀ v : V, LinearIndependent ℂ (A.component v) → κ.IsInjective {v})
-    (hA : IsVertexInjective A)
-    (hcard : 2 < Fintype.card V) :
-    ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
-  fun e =>
-    hComparison.edgeBlockedThreeSiteInjective_of_singletons
-      hUnion hSingleton hA e (edgeMiddleVertices_nonempty_of_two_lt_card e hcard)
-
 
 /-! ### Empty complement obstruction
 
@@ -545,6 +292,229 @@ theorem not_edgeMiddleTensorInjective_of_isEmpty (A : Tensor G d) (e : Edge G)
   exact h.ne_zero (Classical.arbitrary (EdgeMiddleBoundaryLabel (G := G) A e))
     (edgeMiddleTensorFamily_eq_zero_of_isEmpty (G := G) A e _)
 
+/-! ### The middle block as a blocked region
+
+The region $V\setminus\{u,v\}$ has as boundary edges exactly the edges other
+than $e=(u,v)$ that meet $u$ or $v$, so its boundary configurations carry the
+two residual endpoint labels of the edge-middle tensor. -/
+
+section EdgeMiddleRegion
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An edge incident to both endpoints of `e` is `e` itself. -/
+theorem eq_of_incident_both (e f : Edge G)
+    (h1 : f.1.1 = e.1.1 ∨ f.1.2 = e.1.1) (h2 : f.1.1 = e.1.2 ∨ f.1.2 = e.1.2) : f = e := by
+  have hflt := f.2.1
+  have helt := e.2.1
+  apply Subtype.ext
+  rcases h1 with h1 | h1 <;> rcases h2 with h2 | h2
+  · exact absurd (h1.symm.trans h2) (ne_of_lt helt)
+  · exact Prod.ext h1 h2
+  · exfalso
+    rw [h2, h1] at hflt
+    exact absurd hflt (not_lt.mpr helt.le)
+  · exact absurd (h1.symm.trans h2) (ne_of_lt helt)
+
+omit [DecidableRel G.Adj] in
+/-- An edge crossing the boundary of $V\setminus\{u,v\}$ is not $e=(u,v)$. -/
+theorem ne_of_isRegionBoundaryEdge_edgeMiddleVertices (e : Edge G) {f : Edge G}
+    (hf : ManyBody.IsRegionBoundaryEdge (G := G) (edgeMiddleVertices e) f) : f ≠ e := by
+  rintro rfl
+  simp [ManyBody.IsRegionBoundaryEdge] at hf
+
+omit [DecidableRel G.Adj] in
+/-- An edge crossing the boundary of $V\setminus\{u,v\}$ that avoids $u$ meets $v$. -/
+theorem incident_right_of_isRegionBoundaryEdge_edgeMiddleVertices (e : Edge G) {f : Edge G}
+    (hf : ManyBody.IsRegionBoundaryEdge (G := G) (edgeMiddleVertices e) f)
+    (hL : ¬ (f.1.1 = e.1.1 ∨ f.1.2 = e.1.1)) : f.1.1 = e.1.2 ∨ f.1.2 = e.1.2 := by
+  simp only [ManyBody.IsRegionBoundaryEdge, mem_edgeMiddleVertices_iff] at hf
+  tauto
+
+omit [DecidableRel G.Adj] in
+/-- An edge other than $e=(u,v)$ meeting $u$ or $v$ crosses the boundary of
+$V\setminus\{u,v\}$. -/
+theorem isRegionBoundaryEdge_edgeMiddleVertices_of_incident (e : Edge G) {f : Edge G}
+    (hne : f ≠ e) (h : (f.1.1 = e.1.1 ∨ f.1.2 = e.1.1) ∨ (f.1.1 = e.1.2 ∨ f.1.2 = e.1.2)) :
+    ManyBody.IsRegionBoundaryEdge (G := G) (edgeMiddleVertices e) f := by
+  have hf : f.1.1 ≠ f.1.2 := ne_of_lt f.2.1
+  have he : e.1.1 ≠ e.1.2 := ne_of_lt e.2.1
+  have hboth : ¬ ((f.1.1 = e.1.1 ∨ f.1.2 = e.1.1) ∧ (f.1.1 = e.1.2 ∨ f.1.2 = e.1.2)) :=
+    fun h' => hne (eq_of_incident_both e f h'.1 h'.2)
+  simp only [ManyBody.IsRegionBoundaryEdge, mem_edgeMiddleVertices_iff]
+  grind
+
+variable (A : Tensor G d) (e : Edge G)
+
+/-- The boundary configuration of the region $V\setminus\{u,v\}$ attached to a
+boundary label of the edge-middle tensor: an edge crossing the boundary carries
+the residual index at whichever endpoint of $e=(u,v)$ it meets.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+noncomputable def edgeMiddleRegionBoundaryConfig (ρ : EdgeMiddleBoundaryLabel (G := G) A e) :
+    RegionBoundaryConfig (G := G) A (edgeMiddleVertices e) := fun f =>
+  if hL : f.1.1.1 = e.1.1 ∨ f.1.1.2 = e.1.1 then
+    ρ.1 ⟨⟨f.1, hL⟩, fun hh =>
+      ne_of_isRegionBoundaryEdge_edgeMiddleVertices e f.2 (congrArg Subtype.val hh)⟩
+  else
+    ρ.2 ⟨⟨f.1, incident_right_of_isRegionBoundaryEdge_edgeMiddleVertices e f.2 hL⟩, fun hh =>
+      ne_of_isRegionBoundaryEdge_edgeMiddleVertices e f.2 (congrArg Subtype.val hh)⟩
+
+/-- A complement configuration restricts to the region boundary configuration
+attached to `ρ` exactly when it carries the residual endpoint labels `ρ`. -/
+theorem edgeMiddleRegionBoundaryConfig_eq_iff (ρ : EdgeMiddleBoundaryLabel (G := G) A e)
+    (ζ : EdgeComplementConfig (G := G) A e) :
+    (fun f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (edgeMiddleVertices e) f} =>
+        ζ ⟨f.1, ne_of_isRegionBoundaryEdge_edgeMiddleVertices e f.2⟩) =
+        edgeMiddleRegionBoundaryConfig (G := G) A e ρ ↔
+      edgeOpenBoundaryMatches (G := G) A e ρ.1 ρ.2 ζ := by
+  constructor
+  · intro h
+    refine ⟨fun ie => ?_, fun ie => ?_⟩
+    · have hb := isRegionBoundaryEdge_edgeMiddleVertices_of_incident e
+        (otherLeft_edge_ne (G := G) e ie) (Or.inl ie.1.2)
+      have := congrFun h ⟨ie.1.1, hb⟩
+      rw [edgeMiddleRegionBoundaryConfig, dite_eq_left ie.1.2] at this
+      exact this
+    · have hb := isRegionBoundaryEdge_edgeMiddleVertices_of_incident e
+        (otherRight_edge_ne (G := G) e ie) (Or.inr ie.1.2)
+      have hL : ¬ (ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1) := fun hL =>
+        otherRight_edge_ne (G := G) e ie (eq_of_incident_both e ie.1.1 hL ie.1.2)
+      have := congrFun h ⟨ie.1.1, hb⟩
+      rw [edgeMiddleRegionBoundaryConfig, dite_eq_right hL] at this
+      exact this
+  · rintro ⟨h1, h2⟩
+    funext f
+    rw [edgeMiddleRegionBoundaryConfig]
+    split_ifs with hL
+    · exact h1 ⟨⟨f.1, hL⟩, _⟩
+    · exact h2 ⟨⟨f.1, _⟩, _⟩
+
+/-- Distinct boundary labels of the edge-middle tensor give distinct boundary
+configurations of $V\setminus\{u,v\}$. -/
+theorem edgeMiddleRegionBoundaryConfig_injective :
+    Function.Injective (edgeMiddleRegionBoundaryConfig (G := G) A e) := by
+  intro ρ ρ' h
+  apply Prod.ext
+  · funext ie
+    have hb := isRegionBoundaryEdge_edgeMiddleVertices_of_incident e
+      (otherLeft_edge_ne (G := G) e ie) (Or.inl ie.1.2)
+    have := congrFun h ⟨ie.1.1, hb⟩
+    rw [edgeMiddleRegionBoundaryConfig, edgeMiddleRegionBoundaryConfig, dite_eq_left ie.1.2,
+      dite_eq_left ie.1.2] at this
+    exact this
+  · funext ie
+    have hb := isRegionBoundaryEdge_edgeMiddleVertices_of_incident e
+      (otherRight_edge_ne (G := G) e ie) (Or.inr ie.1.2)
+    have hL : ¬ (ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1) := fun hL =>
+      otherRight_edge_ne (G := G) e ie (eq_of_incident_both e ie.1.1 hL ie.1.2)
+    have := congrFun h ⟨ie.1.1, hb⟩
+    rw [edgeMiddleRegionBoundaryConfig, edgeMiddleRegionBoundaryConfig, dite_eq_right hL,
+      dite_eq_right hL] at this
+    exact this
+
+/-- Blocking the region $V\setminus\{u,v\}$ gives the edge-middle tensor times the
+dimension of the bond on $e$: the region contraction also sums freely over the
+index on $e$, which meets no vertex of the region. -/
+theorem regionBlockedWeight_edgeMiddleRegionBoundaryConfig
+    (ρ : EdgeMiddleBoundaryLabel (G := G) A e)
+    (τ : EdgeMiddlePhysicalConfig (G := G) (d := d) e) :
+    regionBlockedWeight (G := G) A (edgeMiddleVertices e)
+        (edgeMiddleRegionBoundaryConfig (G := G) A e ρ) τ =
+      (A.bondDim e : ℂ) * edgeMiddleTensorFamily (G := G) A e ρ τ := by
+  classical
+  let E := Equiv.piSplitAt e (fun f : Edge G => Fin (A.bondDim f))
+  have hE : ∀ (a : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e)
+      (f : Edge G) (hf : f ≠ e), E.symm (a, ζ) f = ζ ⟨f, hf⟩ := by
+    intro a ζ f hf
+    simp [E, Equiv.piSplitAt, hf]
+  let P : EdgeComplementConfig (G := G) A e → ℂ := fun ζ =>
+    ∏ v : {v : V // v ∈ edgeMiddleVertices e},
+      A.component v.1 (fun ie => edgeComplementValue (G := G) A e ζ v.2 ie) (τ v)
+  have key : ∀ (a : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e),
+      (if regionBoundaryLabel (G := G) A (edgeMiddleVertices e) (E.symm (a, ζ)) =
+          edgeMiddleRegionBoundaryConfig (G := G) A e ρ then
+        ∏ w : {w : V // w ∈ edgeMiddleVertices e},
+          A.component w.1 (fun ie => E.symm (a, ζ) ie.1) (τ w) else 0) =
+        if edgeOpenBoundaryMatches (G := G) A e ρ.1 ρ.2 ζ then P ζ else 0 := by
+    intro a ζ
+    have hlabel : regionBoundaryLabel (G := G) A (edgeMiddleVertices e) (E.symm (a, ζ)) =
+        fun f : {f : Edge G //
+            ManyBody.IsRegionBoundaryEdge (G := G) (edgeMiddleVertices e) f} =>
+          ζ ⟨f.1, ne_of_isRegionBoundaryEdge_edgeMiddleVertices e f.2⟩ := by
+      funext f
+      exact hE a ζ f.1 _
+    have hprod : (∏ w : {w : V // w ∈ edgeMiddleVertices e},
+        A.component w.1 (fun ie => E.symm (a, ζ) ie.1) (τ w)) = P ζ := by
+      refine Finset.prod_congr rfl fun w _ => ?_
+      congr 1
+      funext ie
+      exact hE a ζ ie.1 (edge_ne_of_middle_incident (G := G) e w.2 ie)
+    rw [hlabel, hprod]
+    exact if_congr (edgeMiddleRegionBoundaryConfig_eq_iff A e ρ ζ) rfl rfl
+  rw [regionBlockedWeight, Finset.sum_filter, ← E.symm.sum_comp, Fintype.sum_prod_type]
+  simp_rw [key]
+  rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+  congr 1
+  rw [edgeMiddleTensorFamily, edgeOpenMiddleWeightOn, ← Finset.sum_filter]
+  exact Finset.sum_subtype _ (fun ζ => by simp) P
+
+/-- The middle tensor of the edge-blocked three-site chain is injective: it is the
+contraction of the injective tensors over $V\setminus\{u,v\}$, a special case of
+the region theorem.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 979--1009; the contraction of
+injective tensors is injective, lines 205--250. -/
+theorem edgeMiddleTensorInjective_of_isVertexInjective (hA : IsVertexInjective A)
+    (hpos : ∀ f : Edge G, 0 < A.bondDim f) :
+    EdgeMiddleTensorInjective (G := G) A e := by
+  have hR := (regionBlockedTensorInjective_of_isVertexInjective (G := G) A
+    (edgeMiddleVertices e) hA hpos).comp (edgeMiddleRegionBoundaryConfig (G := G) A e)
+      (edgeMiddleRegionBoundaryConfig_injective A e)
+  have hne : (A.bondDim e : ℂ) ≠ 0 := by exact_mod_cast (hpos e).ne'
+  have hfam : edgeMiddleTensorFamily (G := G) A e =
+      (fun _ : EdgeMiddleBoundaryLabel (G := G) A e => (Units.mk0 _ hne)⁻¹) •
+        (regionBlockedTensorFamily (G := G) A (edgeMiddleVertices e) ∘
+          edgeMiddleRegionBoundaryConfig (G := G) A e) := by
+    funext ρ τ
+    simp [regionBlockedTensorFamily, regionBlockedWeight_edgeMiddleRegionBoundaryConfig,
+      Units.smul_def, hne]
+  rw [EdgeMiddleTensorInjective, hfam]
+  exact hR.units_smul _
+
+end EdgeMiddleRegion
+
+/-- Vertex injectivity is preserved by the edge blocking to a three-site MPS,
+for a tensor with positive bond dimensions.
+
+For every edge $e=(u,v)$, the two endpoint tensor maps and the middle tensor
+obtained by blocking $V\setminus\{u,v\}$ form an injective three-site chain.
+
+Source: arXiv:1804.04964, Section 3, eq:block_to_mps,
+`Papers/1804.04964/paper_normal.tex`, lines 979--1009. The middle-tensor
+injectivity is the source fact that a contraction of injective tensors is
+injective, with inverse the contraction of the inverses up to the bond
+dimension (lines 205--250); the two endpoint injectivities come directly from
+vertex injectivity.
+
+**Positive-bond hypothesis (faithfulness fix).** The source works with
+injective PEPS, whose virtual bond spaces are nonzero-dimensional. An earlier
+statement dropped that assumption. The preceding empty-complement lemmas
+show that, when the complement configuration space is empty and the
+boundary-label type is nonempty, the middle tensor vanishes and is not
+injective. The paper-gap note explains the corresponding zero-dimensional-bond
+examples. The hypothesis
+\[
+  \forall f,\; \dim A_f>0
+\]
+restores the source assumption. The gap and its restoration are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+theorem IsVertexInjective.edgeBlockedThreeSiteInjective {A : Tensor G d}
+    (hA : IsVertexInjective A) (hpos : ∀ f : Edge G, 0 < A.bondDim f) (e : Edge G) :
+    EdgeBlockedThreeSiteInjective (G := G) A e :=
+  hA.edgeBlockedThreeSiteInjective_of_middle e
+    (edgeMiddleTensorInjective_of_isVertexInjective (G := G) A e hA hpos)
 
 end PEPS
 end TNLean

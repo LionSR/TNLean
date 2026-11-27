@@ -191,14 +191,14 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ α : Fin b, ∀ {k : ℕ}
       (X : Matrix (Cfg d k) (Cfg d k) ℂ),
       0 < k → observableInsertionExpectation (A α) (ρ α) X = 0 →
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
-  let T := toTensorFromBlocks (d := d) (μ := μ) A
+  let T := toTensorFromBlocks (α := Fin d) (μ := μ) A
   have hRpos : 0 < R := by omega
   have hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
@@ -245,9 +245,9 @@ theorem exists_pos_multiblock_localCommutator_gap_of_wordTupleSpanTop
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable
             ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-              (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) R)ᗮ.starProjection)
+              (groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) R)ᗮ.starProjection)
             X)).re := by
-  let T := toTensorFromBlocks (d := d) (μ := μ) A
+  let T := toTensorFromBlocks (α := Fin d) (μ := μ) A
   let h := LinearMap.toMatrix' (parentInteraction T R)
   exact exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     μ A hμ ρ hP hρ hS hSpan hR h

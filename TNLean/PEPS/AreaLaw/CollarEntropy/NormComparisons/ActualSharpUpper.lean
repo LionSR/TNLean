@@ -11,7 +11,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
 import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import QICLean.Algebra.Hermitian.OrthogonalProjection
-import QICLean.ManyBody.Replica.Bell.PrevectorSharpUpper
+import QICLean.ManyBody.Replica.Bell.SelectedBellPostPin
 import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
 
 /-!

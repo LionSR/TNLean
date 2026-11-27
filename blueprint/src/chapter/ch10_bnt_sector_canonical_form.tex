@@ -145,7 +145,7 @@ single family.
 
 \begin{theorem}[BNT existence for CPSV canonical form]
     \label{thm:cpsv_canonical_form_bnt_existence}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors}
     \leanok
     \uses{def:cpsv_canonical_form,def:bnt_cpsv}
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 271--280 and 1137--1146.
@@ -172,20 +172,20 @@ single family.
 % Proposition 4.13, lines 1863--1921, is the downstream application.
 \begin{lemma}[Structured BNT refinement of CPSV canonical form]
     \label{thm:cpsv_canonical_form_bnt_refinement}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement,
-        MPSTensor.CPSVCanonicalFormData.exists_bntRefinement,
-        MPSTensor.CPSVCanonicalFormData.bntRefinement}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.copy}
-    \lean{MPSTensor.CPSVCanonicalFormData.classCopyEquiv,
-        MPSTensor.CPSVCanonicalFormData.GroupedIndex,
-        MPSTensor.CPSVCanonicalFormData.groupedCoordinateEquiv,
-        MPSTensor.CPSVCanonicalFormData.groupedTotalDim_eq}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight,
-        MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks,
-        MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor,
-        MPSTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor,
-        MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise,
-        MPSTensor.CPSVCanonicalFormData.BNTRefinement.reconstructGrouped}
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement,
+        MPTensor.CPSVCanonicalFormData.exists_bntRefinement,
+        MPTensor.CPSVCanonicalFormData.bntRefinement}
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.copy}
+    \lean{MPTensor.CPSVCanonicalFormData.classCopyEquiv,
+        MPTensor.CPSVCanonicalFormData.GroupedIndex,
+        MPTensor.CPSVCanonicalFormData.groupedCoordinateEquiv,
+        MPTensor.CPSVCanonicalFormData.groupedTotalDim_eq}
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight,
+        MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks,
+        MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor,
+        MPTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor,
+        MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise,
+        MPTensor.CPSVCanonicalFormData.BNTRefinement.reconstructGrouped}
     \lean{MPSTensor.blockIndexCoordinateEquiv,
         MPSTensor.toTensorFromBlocks_eq_reindex_blockDiagonal_equiv}
     \leanok
@@ -334,27 +334,27 @@ single family.
 % lines 1835--1858.
 \begin{lemma}[Representative sector decomposition]
     \label{thm:cpsv_representative_sector_decomposition}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_basisCount}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_basisDim}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_basis}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_copies}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_weight}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         eventuallyRepresentativeWordTupleSpan}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedTensor_sameMPV₂Pos_representativeSectorDecomposition}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedTensor_isBNTSectorPresentation}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         source_sameMPV₂Pos_groupedTensor}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         isBNTSectorPresentation}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_bnt_blocked_simultaneous_span,def:cpsv_bnt_sector_presentation}
@@ -408,7 +408,7 @@ single family.
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
-    \uses{def:sector_weight_data,def:bnt,def:bnt_cpsv}
+    \uses{def:sector_weight_data,def:bnt_cpsv}
     Let $P$ be a sector decomposition. In addition to spanning and eventual
     linear independence, the canonical form specifies irreducible
     left-canonical representatives, self-overlap normalization, pairwise
@@ -498,7 +498,7 @@ single family.
 
 \begin{lemma}[Normal tensors have single-sector BNT presentations]
     \label{thm:normal_single_sector_bnt_gauge}
-    \lean{MPSTensor.IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition}
+    \lean{MPTensor.IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition}
     \leanok
     \uses{def:nt_cpsv,def:gauge_equiv,def:sector_bnt_cf,def:single_sector_decomposition,def:same_mpv2_pos}
     Every normal tensor is gauge equivalent to a tensor whose single-sector
@@ -551,23 +551,6 @@ single family.
     Each basis block has positive bond dimension, is irreducible and
     left-canonical, and has normalized self-overlap converging to $1$.
     Lemma~\ref{thm:bnt_normality_from_self_overlap} applies to each block.
-\end{proof}
-
-\begin{lemma}[A BNT canonical form determines an algebraic BNT]
-    \label{thm:sector_bnt_cf_is_bnt}
-    \lean{MPSTensor.IsBNTCanonicalForm.isBNT}
-    \leanok
-    \uses{def:bnt,def:sector_bnt_cf,cor:sector_bnt_cf_basis_normal}
-    If $P$ is in BNT canonical form, then its basis blocks form an algebraic
-    basis of normal tensors for the total tensor associated with $P$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal,def:sector_weight_data}
-    The preceding corollary gives normality of every basis block. The sector
-    coefficient formula (\ref{eq:bnt_sector_decomp}) expresses the total MPV
-    as a linear combination of the basis MPVs at each positive length, and the
-    BNT sector data give their eventual linear independence.
 \end{proof}
 
 \begin{lemma}[Positive blocking preserves BNT canonical form]
@@ -1099,7 +1082,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 
 \begin{lemma}[Sector BNT form of normalized CPSV canonical data]%
     \label{thm:cpsv_sector_bnt}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm}
     \leanok
     \uses{def:cpsv_canonical_form,def:sector_bnt_cf,def:same_mpv2_pos}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
@@ -1130,7 +1113,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 % Source: CPSV16 lines 214--301 and 1080--1148; CPGSV21 lines 1831--1885.
 \begin{lemma}[Exact coisometric BNT reconstruction]%
     \label{thm:cpsv_sector_bnt_exact}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact}
     \leanok
     \uses{def:cpsv_canonical_form,def:sector_bnt_cf}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
@@ -1188,7 +1171,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 % CPSV16 arXiv:1606.00608, lines 237--301 and 1135--1199.
 \begin{lemma}[Equal-ambient gauge equivalence for CPSV canonical forms]%
     \label{thm:cpsv_equal_ambient_gauge}
-    \lean{MPSTensor.CPSVCanonicalFormData.%
+    \lean{MPTensor.CPSVCanonicalFormData.%
         fundamentalTheorem_equal_ambient_canonicalForm}
     \leanok
     \uses{def:cpsv_canonical_form,def:same_mpv2_pos,def:gauge_equiv}

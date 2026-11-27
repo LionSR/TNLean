@@ -50,7 +50,7 @@ def HasPrimitiveIrreducibleCyclicSectors {d D : ℕ} (A : MPSTensor d D) : Prop 
   ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
     (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
     SameMPV₂ (blockTensor (d := d) (n := Fin D) A m)
-      (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (toTensorFromBlocks (α := Fin (blockPhysDim d m)) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
     (∀ k, _root_.IsPrimitive
       (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k)) (blocks k))) ∧
     (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
@@ -82,7 +82,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
       (∀ s, ∑ i : Fin (blockPhysDim d (period k)),
         (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1) ∧
       SameMPV₂ (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
-        (toTensorFromBlocks (d := blockPhysDim d (period k))
+        (toTensorFromBlocks (α := Fin (blockPhysDim d (period k)))
           (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) ∧
       (∀ s, _root_.IsPrimitive
         (Kraus.transferMap (ι := Fin (blockPhysDim d (period k))) (n := Fin (sectorDim k s))
@@ -96,7 +96,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
         (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1 := fun k => (hSector k).1
   have sector_same : ∀ k,
       SameMPV₂ (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
-        (toTensorFromBlocks (d := blockPhysDim d (period k))
+        (toTensorFromBlocks (α := Fin (blockPhysDim d (period k)))
           (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) :=
     fun k => (hSector k).2.1
   have sector_primitive : ∀ k s,
@@ -145,7 +145,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
         (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (hPhys k))
           (blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
             (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k)))
-        (toTensorFromBlocks (d := blockPhysDim d p)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (μ := fun _ : Fin (period k) => (1 : ℂ))
           (fun s => cast
             (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (hPhys k))
@@ -155,7 +155,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     have hNested : SameMPV₂
         (blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
           (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k))
-        (toTensorFromBlocks (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
+        (toTensorFromBlocks (α := Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)))
           (μ := fun _ : Fin (period k) => (1 : ℂ))
           (fun s => blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
             (sectorBlocks k s) (extra k))) := by
@@ -168,7 +168,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     have hCast := (sameMPV₂_cast_physDim (hPhys k)
       (A := blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
         (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k))
-      (B := toTensorFromBlocks (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
+      (B := toTensorFromBlocks (α := Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)))
         (μ := fun _ : Fin (period k) => (1 : ℂ))
         (fun s => blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
           (sectorBlocks k s) (extra k)))).2 hNested
@@ -289,11 +289,11 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂Pos
       (∀ k, μB k ≠ 0) ∧
       (∀ k, 0 < dimA k) ∧
       (∀ k, 0 < dimB k) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μA) blocksA) ∧
-      SameMPV₂Pos B (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA) ∧
+      SameMPV₂Pos B (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB) ∧
       SameMPV₂Pos
-        (toTensorFromBlocks (d := d) (μ := μA) blocksA)
-        (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
+        (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA)
+        (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
   obtain ⟨rA, dimA, μA, blocksA,
@@ -306,8 +306,8 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂Pos
   have hμB : ∀ k, μB k ≠ 0 := fun k => ne_of_gt (hμPosB k)
   -- The two nonzero parts agree at positive length: chain through the common MPV family.
   have hBook : SameMPV₂Pos
-      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
-      (toTensorFromBlocks (d := d) (μ := μB) blocksB) :=
+      (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA)
+      (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB) :=
     (hAPos.symm.trans hSame).trans hBPos
   refine ⟨rA, dimA, μA, blocksA, rB, dimB, μB, blocksB,
     hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB, hAPos, hBPos,
@@ -346,19 +346,19 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
       familyB.p = p ∧
       SameMPV₂Pos
         (blockTensor (d := d) (n := Fin D₁) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (fun k => (μA k) ^ p)
           (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p)) ∧
       SameMPV₂Pos
         (blockTensor (d := d) (n := Fin D₂) B p)
-        (toTensorFromBlocks (d := blockPhysDim d p)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (fun k => (μB k) ^ p)
           (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) ∧
       SameMPV₂Pos
-        (toTensorFromBlocks (d := blockPhysDim d p)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (fun k => (μA k) ^ p)
           (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p))
-        (toTensorFromBlocks (d := blockPhysDim d p)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (fun k => (μB k) ^ p)
           (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) ∧
       (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
@@ -556,12 +556,12 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
     ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
       (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)),
       SameMPV₂Pos (blockTensor (d := d) (n := Fin D₁) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) ∧
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μA) blocksA) ∧
       SameMPV₂Pos (blockTensor (d := d) (n := Fin D₂) B p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μB) blocksB) ∧
       SameMPV₂Pos
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μA) blocksA)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μB) blocksB) ∧
       (∀ x, μA x ≠ 0) ∧
       (∀ x, μB x ≠ 0) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
@@ -589,19 +589,19 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       MPSTensor (blockPhysDim d p) (familyB.commonFlatDim x) :=
     fun x => cast (congr_arg (fun q => MPSTensor (blockPhysDim d q)
       (familyB.commonFlatDim x)) hFamilyB) (familyB.commonFlatBlocks x)
-  let nonzeroA := toTensorFromBlocks (d := blockPhysDim d p)
+  let nonzeroA := toTensorFromBlocks (α := Fin (blockPhysDim d p))
     (μ := familyA.commonFlatWeight μA₀) flatBlocksA
-  let nonzeroB := toTensorFromBlocks (d := blockPhysDim d p)
+  let nonzeroB := toTensorFromBlocks (α := Fin (blockPhysDim d p))
     (μ := familyB.commonFlatWeight μB₀) flatBlocksB
   have hFlatA : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
         (μ := fun k : Fin rA₀ => (μA₀ k) ^ p)
         (fun k => blockTensor (d := d) (n := Fin (dimA₀ k)) (blocksA₀ k) p))
       nonzeroA := by
     cases hFamilyA
     simpa [flatBlocksA, nonzeroA] using hFlatA_raw
   have hFlatB : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
         (μ := fun k : Fin rB₀ => (μB₀ k) ^ p)
         (fun k => blockTensor (d := d) (n := Fin (dimB₀ k)) (blocksB₀ k) p))
       nonzeroB := by
@@ -617,11 +617,11 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
     intro N hN σ
     calc
       mpv nonzeroA σ =
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+          mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
             (fun k : Fin rA₀ => (μA₀ k) ^ p)
             (fun k => blockTensor (d := d) (n := Fin (dimA₀ k)) (blocksA₀ k) p)) σ :=
         (hFlatA N σ).symm
-      _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
+      _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
             (fun k : Fin rB₀ => (μB₀ k) ^ p)
             (fun k => blockTensor (d := d) (n := Fin (dimB₀ k)) (blocksB₀ k) p)) σ :=
         hPosCanon N hN σ

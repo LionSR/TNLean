@@ -438,16 +438,16 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     intro k hzero
     simpa [hzero] using (hB.weight_pos k).1
   have hPropAssemblies : NonzeroProportionalMPV₂
-      (toTensorFromBlocks (d := d) hA.μ hA.blocks)
-      (toTensorFromBlocks (d := d) hB.μ hB.blocks) := by
+      (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks)
+      (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks) := by
     intro N hN
     obtain ⟨c, hc, hEq⟩ := hProp N hN
     refine ⟨c, hc, fun σ ↦ ?_⟩
     calc
-      mpv (toTensorFromBlocks (d := d) hA.μ hA.blocks) σ = mpv A σ :=
+      mpv (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks) σ = mpv A σ :=
         (hA.sameMPV N σ).symm
       _ = c * mpv B σ := hEq σ
-      _ = c * mpv (toTensorFromBlocks (d := d) hB.μ hB.blocks) σ := by
+      _ = c * mpv (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks) σ := by
         rw [hB.sameMPV N σ]
   have hExA : ∀ j₀ : Fin hA.r, ∃ k₀ : Fin hB.r,
       ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (hA.blocks j₀) (hB.blocks k₀) N)
@@ -455,8 +455,8 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
       hA.blocks hB.blocks hA.period hB.period hA.periodic hB.periodic
       hNonRepA hNonRepB
-      (toTensorFromBlocks (d := d) hA.μ hA.blocks)
-      (toTensorFromBlocks (d := d) hB.μ hB.blocks)
+      (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks)
+      (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks)
       (fun N j ↦ (hA.μ j) ^ N) (fun N k ↦ (hB.μ k) ^ N)
       (fun σ ↦ by
         simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum hA.μ hA.blocks σ)
@@ -475,8 +475,8 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
       exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
         hB.blocks hA.blocks hB.period hA.period hB.periodic hA.periodic
         hNonRepB hNonRepA
-        (toTensorFromBlocks (d := d) hB.μ hB.blocks)
-        (toTensorFromBlocks (d := d) hA.μ hA.blocks)
+        (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks)
+        (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks)
         (fun N k ↦ (hB.μ k) ^ N) (fun N j ↦ (hA.μ j) ^ N)
         (fun σ ↦ by
           simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum hB.μ hB.blocks σ)

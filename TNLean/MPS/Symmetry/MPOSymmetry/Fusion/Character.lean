@@ -263,7 +263,7 @@ Source: arXiv:2203.12563, line 683 and lines 1062–1064: if the unit acts trivi
 (line 683), then an invertible label `g` permutes the blocks, `O_g ψ_x = ψ_{g · x}` at every
 positive length for a bijection `x ↦ g · x` of the blocks. The blocks are normal with linearly
 independent periodic vectors at one positive length, a consequence of the standing assumption of
-line 317 (compare `MPSTensor.IsBNT.eventually_li`). -/
+line 317 (compare `MPSTensor.IsCPSVBasisOfNormalTensors.eventually_li`). -/
 theorem exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel [DecidableEq ι] {D : κ → ℕ}
     {O : ∀ a, MPOTensor d (χ a)} {N : ι → ι → ι → ℕ} (hfus : IsMPOFusionAlgebra O N)
     {A : ∀ x, MPSTensor d (D x)} {M : ι → κ → κ → ℂ} (hsym : IsMPOSymmetricFamily O A M)

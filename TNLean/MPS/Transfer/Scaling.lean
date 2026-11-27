@@ -162,8 +162,8 @@ theorem mpv_toTensorFromBlocks_weight_mul_left {r : ℕ} {dim : Fin r → ℕ}
     (c : ℂ) (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (d := d) (μ := fun k => c * μ k) A) σ =
-      c ^ N * mpv (toTensorFromBlocks (d := d) (μ := μ) A) σ := by
+    mpv (toTensorFromBlocks (α := Fin d) (μ := fun k => c * μ k) A) σ =
+      c ^ N * mpv (toTensorFromBlocks (α := Fin d) (μ := μ) A) σ := by
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_

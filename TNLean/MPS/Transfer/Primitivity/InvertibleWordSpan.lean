@@ -13,7 +13,7 @@ import TNLean.MPS.Tensor
 
 This file preserves the established `MPSTensor` interface to finite-family
 word-span growth. The underlying algebra is stated in `namespace Kraus` and
-uses `Kraus.HasEventuallyFullWordSpan` directly. The MPS-specific rank,
+uses `Kraus.IsNormal` directly. The MPS-specific rank,
 normality, and index consequences remain here.
 -/
 
@@ -39,13 +39,6 @@ theorem krausRank_oneStepAugment (A : MPSTensor d D)
   unfold krausRank
   rw [Kraus.wordSpan_oneStepAugment_eq A hX 1]
 
-private theorem hasEventuallyFullWordSpan_of_isNormal_of_isUnit
-    (A : MPSTensor d D) (i₀ : Fin d) (hU : IsUnit (A i₀))
-    (hN : Kraus.IsNormal A) : Kraus.HasEventuallyFullWordSpan A := by
-  obtain ⟨N, _hNpos, hNtop⟩ := hN
-  exact Filter.eventually_atTop.mpr
-    ⟨N, fun m hm => Kraus.wordSpan_eq_top_of_ge_of_isUnit A i₀ hU hNtop hm⟩
-
 /-- If an MPS tensor is normal and has an invertible entry, then the exact
 word span at level `D² - krausRank A + 1` is full.
 
@@ -54,8 +47,7 @@ theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : Kraus.IsNormal A) :
     Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
   unfold krausRank Kraus.wordSpan
-  exact Kraus.wordSpan_eq_top_of_hasEventuallyFullWordSpan_of_isUnit A i₀ hU
-    (hasEventuallyFullWordSpan_of_isNormal_of_isUnit A i₀ hU hN)
+  exact Kraus.wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hU hN
 
 /-- The invertible-case numerical bound on the full-Kraus-rank index.
 

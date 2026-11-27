@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.FixedLength.TranslationInvariantUniqueness
 import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Exact physical cut ranks of injective periodic tensors
@@ -180,7 +181,7 @@ theorem isNBlkInjective_of_le_of_canonical [NeZero D] {A : MPSTensor d D}
   have hB : ∑ i, B i * (B i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlam hsum
   have hBL : Kraus.IsNBlkInjective B L :=
     (isNBlkInjective_smul_iff (inv_ne_zero hlam0) A L).2 hC1
-  have hBm := isNBlkInjective_of_le_of_unital hB hBL hLm
+  have hBm := Kraus.wordSpan_eq_top_of_ge_of_unital _ hB hBL hLm
   exact (isNBlkInjective_smul_iff (inv_ne_zero hlam0) A m).1 hBm
 
 /-- Every interior cut of a canonical C1 tensor has doubled virtual

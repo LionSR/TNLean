@@ -168,7 +168,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume
       ManyBody.IsGapped (parentRingInteraction (A x) 2 N).hamiltonian 0 δ := by
   have : NeZero N := ⟨by omega⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) 2 :=
-    isNBlkInjective_of_le (by omega : 0 < 1)
+    Kraus.isNBlkInjective_of_le (by omega : 0 < 1)
       (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
       (by omega : 1 ≤ 2)
   have hK := continuous_hamiltonian_parentRingInteraction_two_kernelProjection_family

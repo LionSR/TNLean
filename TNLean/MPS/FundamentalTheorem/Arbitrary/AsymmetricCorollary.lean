@@ -30,7 +30,7 @@ dimension are admissible.
 
 ## Main results
 
-* `MPSTensor.CPSVCanonicalFormData.sameMPV₂Pos_iff_exists_multiBlockCompression_z_eq`.
+* `MPTensor.CPSVCanonicalFormData.sameMPV₂Pos_iff_exists_multiBlockCompression_z_eq`.
 * `MPSTensor.forall_trace_evalWord_eq_sum_iff_nonempty_multiBlockCompression_of_isNormal`.
 -/
 
@@ -57,7 +57,8 @@ private theorem trace_evalWord_eq_sum_smul_blocks {D : ℕ} {B' : MPSTensor d D}
 arXiv:1606.00608 with normal blocks `A_k` and nonzero weights `μ_k`, a tensor `B` has the same
 states as `B'` if and only if `B` has a multi-block reduction onto `(μ_k A_k)_k`; it then has `D_B -
 ∑_k D_k` zero blocks. -/
-theorem CPSVCanonicalFormData.sameMPV₂Pos_iff_exists_multiBlockCompression_z_eq {D : ℕ}
+theorem _root_.MPTensor.CPSVCanonicalFormData.sameMPV₂Pos_iff_exists_multiBlockCompression_z_eq
+    {D : ℕ}
     {B' : MPSTensor d D} (data : CPSVCanonicalFormData B') (B : MPSTensor d DB) :
     SameMPV₂Pos B B' ↔
       ∃ P : MultiBlockCompression (D := data.dim) B Finset.univ

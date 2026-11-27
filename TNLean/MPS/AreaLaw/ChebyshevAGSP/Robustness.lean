@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.LowSpectrumGap
+import QICLean.Spectral.Filter.ExteriorClippingGap
 import QICLean.Spectral.Gap.CodimensionOneGap
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.ProjectionEnergy
 import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 import QICLean.Spectral.Projection.ExponentialDrop
 
@@ -147,7 +146,7 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
   have hA : ‖A‖ ≤ 2 := (norm_add_le _ _).trans (by linarith [hnorm a, hnorm b])
   have hherm : B.IsHermitian := (hX.isHermitian.add hN.isHermitian).add hY.isHermitian
   have hagree : K * P = (B + A) * P := by
-    have h := twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
+    have h := Matrix.twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
       X N Y A hX hN hY hXN hXY hNY t
     have hsum : X + (N + A) + Y = B + A := by dsimp [B]; abel
     simpa only [hsum] using h
@@ -279,7 +278,7 @@ theorem robust_ground_of_clipped_ground_gap {L q : ℕ}
   have hA : A.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b))
   have ht0 : 0 < t := by nlinarith
   have hpositive : (ι K).IsPositive :=
-    (twoSidedEnergyTruncation_posSemidef_le X (N + A) Y hX (hN.add hA) hY t ht0.le).1
+    (Matrix.twoSidedEnergyTruncation_posSemidef_le X (N + A) Y hX (hN.add hA) hY t ht0.le).1
       |>.isPositive_toEuclideanCLM
   have hweak (v : EuclideanSpace ℂ (Fin L → Fin q)) :
       (g / 2) * (‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι K v⟫_ℂ).re - e' * ‖v‖ ^ 2 := by
@@ -359,7 +358,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation {L q : ℕ}
   have hcut' : 1024 * (e + g) ≤ t * g ^ 2 := by nlinarith
   have hH : X + (N + A) + Y = X + N + Y + A := by abel
   obtain ⟨e', φ, hφ, hφeig, he'0, he'e, hstrong, horth⟩ :=
-    exists_ground_gap_twoSidedEnergyTruncation X N Y A hX hN hY hA hXN hXY hNY hAcap
+    Matrix.exists_ground_gap_twoSidedEnergyTruncation X N Y A hX hN hY hA hXN hXY hNY hAcap
       Ω hΩ e g t he0 he6 hg hg1 ht0 hcut' (by simpa only [hH] using heig)
       (by simpa only [hH] using hgap)
   have htg : 32768 ≤ t * g := by

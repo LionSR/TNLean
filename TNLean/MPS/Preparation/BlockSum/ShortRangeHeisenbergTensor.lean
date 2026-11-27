@@ -29,6 +29,8 @@ The example and the resulting failure of the unrestricted assertion are
 documented in `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix InnerProductSpace
 
 namespace MPSTensor

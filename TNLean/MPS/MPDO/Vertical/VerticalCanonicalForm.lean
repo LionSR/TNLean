@@ -63,12 +63,12 @@ between them is used or asserted.
 ### Main results
 
 * `MPOTensor.IsHorizontalCF.hasVerticalBNTGroupingInputs` and
-  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs`: each
+  `MPTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs`: each
   canonical form supplies both inputs.
 * `MPOTensor.HasVerticalBNTGroupingInputs.verticalCF`: the two inputs give
   vertical canonical form.
 * `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
-  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs`: each canonical
+  `MPTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs`: each canonical
   form supplies the product inputs directly.
 
 ### References
@@ -189,7 +189,7 @@ theorem isVerticalCF_of_grouped_orthogonal_sectors
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (hω : ∀ α q, (0 : ℂ) < ω α q)
     (A : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (hBNT : MPSTensor.IsBNT (verticalTensor M) g dim A)
+    (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M) (fun α ↦ ⟨dim α, A α⟩))
     (W : (p : (α : Fin g) × Fin (mult α)) →
       Matrix (Fin d) (Fin (dim p.1)) ℂ)
     (hiso : ∀ p, (W p)ᴴ * W p = 1)
@@ -318,8 +318,8 @@ Source: arXiv:1606.00608, lines 636--659 define MPDO coarse graining by
 physical blocking and its two-site tensor maps; arbitrary positive blocking is
 the iterated form of the same operation. -/
 theorem IsCPSVCanonicalForm_toMPSTensor_blockTensor {M : MPOTensor d D}
-    (hM : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) (p : ℕ) (hp : 0 < p) :
-    MPSTensor.IsCPSVCanonicalForm (blockTensor M p).toMPSTensor := by
+    (hM : MPTensor.IsCPSVCanonicalForm M.toMPSTensor) (p : ℕ) (hp : 0 < p) :
+    MPTensor.IsCPSVCanonicalForm (blockTensor M p).toMPSTensor := by
   rw [toMPSTensor_blockTensor]
   exact (hM.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
 
@@ -329,8 +329,8 @@ blocking after passing to the doubled-index MPS tensor.
 Source: arXiv:1606.00608, lines 636--659, especially the two-site maps
 `M_2(X)` and equations `eq:Smap`--`eq:Tmap`. -/
 theorem IsCPSVCanonicalForm_toMPSTensor_blockTwo {M : MPOTensor d D}
-    (hM : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) :
-    MPSTensor.IsCPSVCanonicalForm (blockTwo M).toMPSTensor := by
+    (hM : MPTensor.IsCPSVCanonicalForm M.toMPSTensor) :
+    MPTensor.IsCPSVCanonicalForm (blockTwo M).toMPSTensor := by
   rw [toMPSTensor_blockTwo]
   exact (hM.blockTensor 2 (by norm_num)).reindexPhysical (twoSiteDoubledIndexEquiv d)
 
@@ -366,9 +366,9 @@ theorem verticalCF_of_grouping_and_gramDressing (M : MPOTensor d D)
     hCoeffPos, hGroupedIso, hGroupedOrth, hGroupedInter, _, hGroupedCorner,
     hGroupedReconstruct⟩ := hGrouping
   let C := MPSTensor.mpvPhaseClassData blocks
-  have hBNT : MPSTensor.IsBNT (verticalTensor M) C.g
-      (fun j ↦ dim (C.repr j)) (fun j ↦ blocks (C.repr j)) :=
-    isBNT_verticalTensor_of_grouping M mu blocks V hIso
+  have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+      (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
+    isCPSVBasisOfNormalTensors_verticalTensor_of_grouping M mu blocks V hIso
       hInterStar hReconstruct hSpectralBNT
   have hGram : ∀ j q, ∃ omega : ℝ, 0 < omega ∧
       (X j q : Matrix (Fin (dim (C.enum j q))) (Fin (dim (C.enum j q))) ℂ)ᴴ *
@@ -457,7 +457,9 @@ theorem IsHorizontalCF.hasVerticalBNTGroupingInputs (M : MPOTensor d D)
 
 end MPOTensor
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 variable {d D : ℕ}
 
@@ -483,7 +485,7 @@ theorem hasVerticalBNTGroupingInputs (M : MPOTensor d D)
   ⟨hCanonical.exists_verticalBNTGrouping_with_isometry M hM,
     hCanonical.hasGroupedCornerGramDressing M hM⟩
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 namespace MPOTensor
 
@@ -538,7 +540,9 @@ theorem IsHorizontalCF.hasVerticalBNTProductInputs (M : MPOTensor d D)
 
 end MPOTensor
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 variable {d D : ℕ}
 
@@ -559,7 +563,7 @@ theorem hasVerticalBNTProductInputs (M : MPOTensor d D)
     fun P hP ↦ hTwo.exists_sectorCompression_ne_zero_of_corner
       (MPOTensor.blockTwo M) P hP⟩
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 end
 
@@ -628,7 +632,7 @@ the exact letterwise reconstruction.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem verticalCF_of_cpsvCanonicalForm (M : MPOTensor d D)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
     IsVerticalCF M :=
   (hCanonical.hasVerticalBNTGroupingInputs M hM).verticalCF

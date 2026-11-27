@@ -24,6 +24,8 @@ lines 2499–2503 and 2575–2578. A gap uniform both in the parameter and
 in chain length requires further spectral estimates.
 -/
 
+open MPTensor
+
 open scoped Matrix Topology
 
 namespace MPSTensor
@@ -117,7 +119,7 @@ theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x =>
-      (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L).starProjection := by
+      (groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).starProjection := by
   simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
     continuous_iSup_groundSpaceES_starProjection_of_injective_family A hA L hInj
 

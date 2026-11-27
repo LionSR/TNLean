@@ -148,6 +148,22 @@ then proves injectivity for every nonempty finite region $R$. In its notation,
     \label{eq:peps_injective_ft_section3_route_region_injectivity_union}
 \end{align}
 
+\paragraph{Update (2026-11-27).}
+The edge-middle injectivity is now proved directly as
+\leanid{TNLean.PEPS.edgeMiddleTensorInjective_of_isVertexInjective}: the residual
+endpoint boundary labels of the middle tensor inject into the boundary
+configurations of the blocked region $M_e=V\setminus\{u,v\}$, and the middle
+tensor is the blocked-region tensor of $M_e$ divided by $\dim A_e$, so the
+region theorem
+\leanid{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective} applies
+under the same hypotheses (vertex injectivity and positive bond dimensions).
+The comparison structure \path{EdgeMiddleRegionInjectivityComparison}, its
+theorems, and the separate edge-middle kernel descent
+(\path{EdgeMiddleKernelDescentData}, \path{edgeMiddleKernelDescentData} and their
+helper lemmas) repeated that argument for one region and were deleted. The
+paragraphs below that name them, typeset as paths rather than as Lean
+identifiers, record the former route.
+
 Let the middle region associated with $e=(u,v)$ be
 \begin{align}
     M_e
@@ -172,8 +188,7 @@ every edge with nonempty $M_e$ gives
 \path{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
 
 The graph-cardinality variant
-\leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.%
-edgeBlockedThreeSiteInjective_all_two_lt_card}
+\path{EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card}
 covers $2<|V|$. For every edge, it uses
 \begin{align}
     |M_e|
@@ -192,15 +207,15 @@ reduces the three-site result to middle-block injectivity, and
 is its all-edge form.
 
 The structure
-\leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison} records the
+\path{EdgeMiddleRegionInjectivityComparison} records the
 conditional passage from injectivity of the finite region $V\setminus\{u,v\}$
 to injectivity of the edge-middle tensor family. Its theorem
-\leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
+\path{EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
 combines that comparison with vertex injectivity at one edge. The uniform
 middle-tensor theorem is
-\leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all},
+\path{EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all},
 and the all-edge conditional result is
-\leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
+\path{EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 
 A separate finite-induction route is encoded by
 \leanid{TNLean.PEPS.FiniteRegionKernelDescent}. For kernel conditions $K_c(S)$
@@ -217,7 +232,7 @@ imply
     \label{eq:peps_injective_ft_section3_route_kernel_descent}
 \end{align}
 The edge-middle instance is
-\leanid{TNLean.PEPS.EdgeMiddleKernelDescentData}. A zero relation
+\path{EdgeMiddleKernelDescentData}. A zero relation
 \begin{align}
     \sum_\rho c_\rho T_{A,M_e}^{\rho}(\tau)
         &= 0
@@ -232,9 +247,9 @@ gives $K_c(M_e)$, while $K_c(\varnothing)$ gives
     \label{eq:peps_injective_ft_section3_route_terminal_coefficients}
 \end{align}
 Consequently,
-\leanid{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective}
+\path{EdgeMiddleKernelDescentData.edgeMiddleTensorInjective}
 proves injectivity of $T_{A,M_e}$ from such data, and
-\leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
+\path{IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
 combines this result with endpoint injectivity.
 
 Vertex injectivity alone does not imply middle-block injectivity when a virtual
@@ -286,7 +301,7 @@ vector. Second, the middle tensor is the vertexwise product
 Third, the following formal facts instantiate kernel descent:
 \begin{enumerate}
 \item
-The equivalence \leanid{TNLean.PEPS.edgeComplementConfigSplitAt} splits a
+The equivalence \path{edgeComplementConfigSplitAt} splits a
 complement-bond configuration into the star bonds at $j$, which form the local
 virtual configuration at $j$, and the remaining bonds. Its first-component law
 agrees with $\textsf{edgeComplementValue}$. In particular, the shared bond
@@ -307,7 +322,7 @@ this implication, and positive bond dimensions ensure that the required labels
 exist.
 \end{enumerate}
 These facts assemble into
-\leanid{TNLean.PEPS.edgeMiddleKernelDescentData} and complete the existing
+\path{edgeMiddleKernelDescentData} and complete the existing
 reductions.
 
 \item
@@ -657,7 +672,7 @@ is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}. Endpoint injectivity is
 proved both at one edge and uniformly over all edges. The comparison from
 edge-middle region injectivity to edge-middle tensor injectivity is also
 available uniformly, and its all-edge conditional form is
-\leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
+\path{EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 
 \item
 Identity insertion on the chosen bond is

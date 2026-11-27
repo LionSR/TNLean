@@ -7,7 +7,7 @@ import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # Canonical form existence reductions from the source proofs
@@ -63,7 +63,7 @@ fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 
-This file imports `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`,
+This file imports `TNLean.MPS.Transfer.Primitivity.Definitions`,
 which supplies the hardest direction of the Quantum Wielandt primitivity equivalence:
 
 > **Proposition 3(c)→(b) of arXiv:0909.5347 / Wolf Theorem 6.7 case (iii).**
@@ -81,8 +81,8 @@ positive length.
 
 The formal statement:
 
-> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves
-> `isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
+> `TNLean.MPS.Transfer.Primitivity.Definitions` proves
+> `Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
 > transfer map is irreducible with peripheral spectrum `{1}` is normal.  This
 > is the hardest direction in the Sanz–Pérez-García–Wolf–Cirac primitivity
 > equivalence.
@@ -172,7 +172,7 @@ is related to a CFII representative by a unitary similarity alone. -/
 theorem exists_CFII_data_of_TP_of_isIrreducibleFamily
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
@@ -252,7 +252,7 @@ Subsequent stages toward a complete canonical-form existence theorem are:
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
   sector bookkeeping and weight normalization needed for non-increasing nonzero weight moduli.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
-  the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
+  the normal-canonical-form lemmas.
 -/
 
 /-!
@@ -281,7 +281,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       (∀ k, ∃ i, blocks k i ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨r₀, dim₀, blocks₀, hIrr₀, hSame₀, hDim₀⟩ :=
@@ -314,7 +314,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       rw [h, mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
     have hNonzero :
-        mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
+        mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
           ∑ j : Fin r, mpv (newBlocks j) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
@@ -341,7 +341,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := hA
       _ = nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) := hAllEqNonzero
       _ = ∑ j : Fin r, mpv (newBlocks j) σ := hNonzeroSum
-      _ = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ :=
+      _ = mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ :=
         hNonzero.symm
   · have hSelectedDim : nonzeroSet.sum dim₀ = ∑ j : Fin r, dim j := by
       rw [← nonzeroSet.sum_coe_sort dim₀]

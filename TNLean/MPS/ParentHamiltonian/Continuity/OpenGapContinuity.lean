@@ -36,6 +36,8 @@ these weights is required. This is the finite-window continuity argument in
 arXiv:1010.3732, Appendix A, lines 2575--2578.
 -/
 
+open MPTensor
+
 section
 
 open scoped Topology ComplexOrder

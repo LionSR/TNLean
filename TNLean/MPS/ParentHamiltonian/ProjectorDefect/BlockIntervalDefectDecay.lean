@@ -255,7 +255,7 @@ theorem eventually_toTensorFromBlocks_projector_defect_le
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {η : ℝ} (hη : 0 < η) :
-    let B := toTensorFromBlocks (d := d) (μ := μ) A
+    let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       ‖(groundSpaceES B (K + L + Q)).starProjection -
         (leftBoundaryMapES B (K + L) Q).range.starProjection.comp
