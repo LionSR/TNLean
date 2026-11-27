@@ -11,7 +11,6 @@ import TNLean.MPS.Examples.Shift.ShiftPaperSourceFactors
 import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 import TNLean.MPS.MPU.CanonicalForm.TransferStabilizationConverse
 import TNLean.MPS.Transfer.Scaling
-import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Public indices of the shift examples
@@ -43,8 +42,8 @@ private theorem transferMap_normalized_rightShiftTensor (d : ℕ)
     Kraus.transferMap (rightShiftTensor d).normalizedFlattening X =
       X.trace • shiftPaperWeight d := by
   change Kraus.transferMap
-    (fun i => (Real.sqrt d : ℂ)⁻¹ • (rightShiftTensor d).toMPSTensor i) X = _
-  rw [MPSTensor.transferMap_smul, kraus_transferMap_toMPSTensor, transferMap_rightShiftTensor]
+    (fun i => (Real.sqrt d : ℂ)⁻¹ • rightShiftTensor d i) X = _
+  rw [MPSTensor.transferMap_smul, transferMap_rightShiftTensor]
   simp only [map_inv₀, Complex.conj_ofReal, smul_smul, shiftPaperWeight]
   simp [Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg d), mul_comm]
 

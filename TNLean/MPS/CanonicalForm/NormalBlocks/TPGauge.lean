@@ -305,7 +305,7 @@ private theorem scalar_fixedPoints_unitaryConj
             (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
               (↑U : Matrix (Fin D) (Fin D) ℂ)) X =
         Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V := by
-    simpa [V, Y] using transferMap_unitaryConj (d := d) (D := D) A U X
+    simpa [V, Y] using transferMap_unitaryConj (D := D) A U X
   have hmiddle :
       Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V = X := by
     calc

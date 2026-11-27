@@ -17,7 +17,6 @@ full-active-support condition when it holds for the original data.
 
 ## Main definitions
 
-* `MPOTensor.physicalPairSwapEquiv`: exchange of the two flattened physical coordinates.
 * `MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening`: transformed CFII data.
 
 ## References
@@ -33,23 +32,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPOTensor
 
 variable {d D : ℕ}
-
-/-- Exchange the two coordinates of a flattened physical pair.
-
-This is the existing pair-swap equivalence, named here for its role on the physical alphabet rather
-than its role on a doubled virtual bond. -/
-def physicalPairSwapEquiv (d : ℕ) : Fin (d * d) ≃ Fin (d * d) :=
-  bondPairSwapEquiv d
-
-/-- The physical-pair swap exchanges the two coordinates under `finProdFinEquiv`. -/
-@[simp] theorem physicalPairSwapEquiv_finProdFinEquiv (i j : Fin d) :
-    physicalPairSwapEquiv d (finProdFinEquiv (i, j)) = finProdFinEquiv (j, i) := by
-  rw [physicalPairSwapEquiv, bondPairSwapEquiv_apply, bondPairSwap_finProdFinEquiv]
-
-/-- The physical-pair swap is its own inverse. -/
-@[simp] theorem physicalPairSwapEquiv_symm :
-    (physicalPairSwapEquiv d).symm = physicalPairSwapEquiv d := by
-  rw [physicalPairSwapEquiv, bondPairSwapEquiv_symm]
 
 /-- The normalized tensor of the physical adjoint is obtained by applying entrywise complex
 conjugation to every virtual matrix entry and exchanging the two physical indices of the pair

@@ -208,7 +208,7 @@ theorem trace_mpo_tensor (N : ℕ) (hN : 0 < N) :
   have hIdem : IsIdempotentElem (physTraceTransfer tensor) := by
     rw [isIdempotentElem_iff]
     exact physTraceTransfer_tensor_idempotent
-  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer,
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow,
     hIdem.pow_eq hN.ne', physTraceTransfer_tensor]
   norm_num [Matrix.trace, Fin.sum_univ_two]
 

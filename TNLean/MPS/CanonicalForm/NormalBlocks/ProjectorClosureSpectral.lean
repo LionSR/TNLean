@@ -48,7 +48,7 @@ open scoped Matrix BigOperators ComplexOrder Kraus
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {d D : ℕ}
 
 /-- **Absence of nontrivial `p`-periodic vectors** (arXiv:1606.00608,
 lines 220--230).
@@ -72,12 +72,12 @@ spectral radius of `Kraus.transferMap B` — every eigenvalue of `Kraus.transfer
 modulus `r` equals `r`.  After rescaling by `r^{-1/2}` this says the corner
 transfer map has no peripheral eigenvalue besides `1`, which is the source's
 condition. -/
-def HasNoPeriodicVectors (A : MPSTensor d D) : Prop :=
-  ∀ ⦃n : ℕ⦄ (V : Matrix (Fin D) (Fin n) ℂ) (B : MPSTensor d n)
+def HasNoPeriodicVectors (A : MPTensor α (Fin D)) : Prop :=
+  ∀ ⦃n : ℕ⦄ (V : Matrix (Fin D) (Fin n) ℂ) (B : MPTensor α (Fin n))
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
-    Vᴴ * V = 1 → (∀ i : Fin d, A i * V = V * B i) → Kraus.IsIrreducibleFamily B →
-    ρ.PosDef → 0 < r → Kraus.transferMap (ι := Fin d) (n := Fin n) B ρ = (r : ℂ) • ρ →
-    ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin n) B) μ →
+    Vᴴ * V = 1 → (∀ i : α, A i * V = V * B i) → Kraus.IsIrreducibleFamily B →
+    ρ.PosDef → 0 < r → Kraus.transferMap (ι := α) (n := Fin n) B ρ = (r : ℂ) • ρ →
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap (ι := α) (n := Fin n) B) μ →
       ‖μ‖ = r → μ = (r : ℂ)
 
 /-- Absence of nontrivial periodic vectors passes to an isometric corner.
@@ -89,10 +89,10 @@ conclusion for `C`.
 
 Source: arXiv:1606.00608, lines 220--230. -/
 theorem HasNoPeriodicVectors.of_isometry_intertwine
-    {n : ℕ} {A : MPSTensor d D} {C : MPSTensor d n}
+    {n : ℕ} {A : MPTensor α (Fin D)} {C : MPTensor α (Fin n)}
     (hA : HasNoPeriodicVectors A)
     (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
-    (hint : ∀ i : Fin d, A i * V = V * C i) :
+    (hint : ∀ i : α, A i * V = V * C i) :
     HasNoPeriodicVectors C := by
   intro m W B ρ r hW hintW hirr hρ hr hfix μ hμ hnorm
   apply hA (V * W) B ρ r
@@ -125,7 +125,7 @@ theorem projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
     (dim : ι → ℕ) (blockIndex : ι → Type*)
     [(k : ι) → Finite (blockIndex k)]
     (blockEquiv : (k : ι) → Fin (dim k) ≃ blockIndex k)
-    (A : MPSTensor d D) (B : (k : ι) → MPSTensor d (dim k))
+    (A : MPTensor α (Fin D)) (B : (k : ι) → MPTensor α (Fin (dim k)))
     (e : Fin D ≃ (k : ι) × blockIndex k)
     (hblock : ∀ i, Matrix.reindex e e (A i) =
       Matrix.blockDiagonal' fun k ↦
@@ -208,7 +208,7 @@ every letter, then conjugation by `V` intertwines the transfer maps,
 This is the normalization-free relation between the transfer map of a tensor
 and the transfer maps of the corners of its invariant-subspace decomposition
 (arXiv:1606.00608, eq:II_Aiplusk1, lines 214--219 and eq. Ek, lines 220--223). -/
-theorem transferMap_conj_of_intertwine {α : Type*} [Fintype α] {n : ℕ}
+theorem transferMap_conj_of_intertwine {n : ℕ}
     (A : MPTensor α (Fin D)) (B : MPTensor α (Fin n))
     (V : Matrix (Fin D) (Fin n) ℂ) (hint : ∀ i : α, A i * V = V * B i)
     (X : Matrix (Fin n) (Fin n) ℂ) :
@@ -233,13 +233,13 @@ then every eigenvalue of `E_B` is an eigenvalue of `E_A`.
 In particular the `p`-periodic vectors of arXiv:1606.00608, line 226 — the
 peripheral eigenvectors of the block transfer maps — give eigenvectors of the
 transfer map of the undecomposed tensor. -/
-theorem hasEigenvalue_transferMap_of_intertwine {n : ℕ} (A : MPSTensor d D)
-    (B : MPSTensor d n) (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
-    (hint : ∀ i : Fin d, A i * V = V * B i) {μ : ℂ}
-    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin n) B) μ) :
-    Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) A) μ := by
+theorem hasEigenvalue_transferMap_of_intertwine {n : ℕ} (A : MPTensor α (Fin D))
+    (B : MPTensor α (Fin n)) (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
+    (hint : ∀ i : α, A i * V = V * B i) {μ : ℂ}
+    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := α) (n := Fin n) B) μ) :
+    Module.End.HasEigenvalue (Kraus.transferMap (ι := α) (n := Fin D) A) μ := by
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-  have hX_eq : Kraus.transferMap (ι := Fin d) (n := Fin n) B X = μ • X :=
+  have hX_eq : Kraus.transferMap (ι := α) (n := Fin n) B X = μ • X :=
     Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
   have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
   refine hasEigenvalue_of_eigenvector_eq _ μ (V * X * Vᴴ) ?_ ?_
@@ -258,7 +258,7 @@ map of a nonzero irreducible tensor has a positive eigenvalue with a
 positive-definite eigenvector (Wolf Theorem 6.3(2), specialized to transfer
 maps).  This is the eigenvalue used for the spectral-radius normalization of
 arXiv:1606.00608, lines 224--225. -/
-theorem exists_posDef_transferMap_eigenvector_of_irreducible {α : Type*} [Fintype α] {n : ℕ}
+theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ}
     [NeZero n] (B : MPTensor α (Fin n)) (hIrr : Kraus.IsIrreducibleFamily B)
     (hB : ∃ i, B i ≠ 0) :
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
@@ -286,10 +286,10 @@ eigenvalues are therefore the eigenvalues of modulus one; the uniqueness
 hypothesis forces this set to be `{1}`. Together with irreducibility, these are
 the normal-tensor conditions of arXiv:1606.00608, lines 233--235. -/
 theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
-    (B : MPSTensor d n) (hIrr : Kraus.IsIrreducibleFamily B)
+    (B : MPTensor α (Fin n)) (hIrr : Kraus.IsIrreducibleFamily B)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ) (hρ : ρ.PosDef) (hr : 0 < r)
-    (hEig : Kraus.transferMap (ι := Fin d) (n := Fin n) B ρ = (r : ℂ) • ρ)
-    (huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin n) B) μ →
+    (hEig : Kraus.transferMap (ι := α) (n := Fin n) B ρ = (r : ℂ) • ρ)
+    (huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap (ι := α) (n := Fin n) B) μ →
       ‖μ‖ = r → μ = (r : ℂ)) :
     IsNormalTensor (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) := by
   have hr_ne : (r : ℂ) ≠ 0 := by exact_mod_cast hr.ne'
@@ -300,14 +300,14 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
       starRingEnd ℂ (((Real.sqrt r : ℝ) : ℂ))⁻¹ = (r : ℂ)⁻¹ := by
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
-  have hmap : Kraus.transferMap (ι := Fin d) (n := Fin n)
+  have hmap : Kraus.transferMap (ι := α) (n := Fin n)
       (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i)
-      = (r : ℂ)⁻¹ • Kraus.transferMap (ι := Fin d) (n := Fin n) B := by
+      = (r : ℂ)⁻¹ • Kraus.transferMap (ι := α) (n := Fin n) B := by
     apply LinearMap.ext
     intro X
     rw [transferMap_smul, LinearMap.smul_apply, hcc]
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ).ne_zero
-  have hfix : Kraus.transferMap (ι := Fin d) (n := Fin n)
+  have hfix : Kraus.transferMap (ι := α) (n := Fin n)
       (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) ρ = ρ := by
     rw [hmap, LinearMap.smul_apply, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
   have hIrrScaled : Kraus.IsIrreducibleFamily
@@ -316,7 +316,7 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
   refine ⟨hIrrScaled, ?_, ?_⟩
   · simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-        (Kraus.transferMap (ι := Fin d) (n := Fin n)
+        (Kraus.transferMap (ι := α) (n := Fin n)
           (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i))
         (Kraus.transferMap_isCPMap _)
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrScaled)
@@ -324,21 +324,21 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
   · refine isPrimitive_of_unique_norm_one _ ρ hfix hρ_ne ?_
     intro μ hμ hμnorm
     obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-    have hX_eq : Kraus.transferMap (ι := Fin d) (n := Fin n)
+    have hX_eq : Kraus.transferMap (ι := α) (n := Fin n)
         (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) X = μ • X :=
       Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
     have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
-    have hBX : Kraus.transferMap (ι := Fin d) (n := Fin n) B X = ((r : ℂ) * μ) • X := by
-      have h1 : (r : ℂ)⁻¹ • Kraus.transferMap (ι := Fin d) (n := Fin n) B X = μ • X := by
+    have hBX : Kraus.transferMap (ι := α) (n := Fin n) B X = ((r : ℂ) * μ) • X := by
+      have h1 : (r : ℂ)⁻¹ • Kraus.transferMap (ι := α) (n := Fin n) B X = μ • X := by
         rw [← LinearMap.smul_apply, ← hmap]
         exact hX_eq
-      calc Kraus.transferMap (ι := Fin d) (n := Fin n) B X
-          = (r : ℂ) • ((r : ℂ)⁻¹ • Kraus.transferMap (ι := Fin d) (n := Fin n) B X) := by
+      calc Kraus.transferMap (ι := α) (n := Fin n) B X
+          = (r : ℂ) • ((r : ℂ)⁻¹ • Kraus.transferMap (ι := α) (n := Fin n) B X) := by
             rw [smul_smul, mul_inv_cancel₀ hr_ne, one_smul]
         _ = (r : ℂ) • (μ • X) := by rw [h1]
         _ = ((r : ℂ) * μ) • X := by rw [smul_smul]
     have hBμ : Module.End.HasEigenvalue
-        (Kraus.transferMap (ι := Fin d) (n := Fin n) B) ((r : ℂ) * μ) :=
+        (Kraus.transferMap (ι := α) (n := Fin n) B) ((r : ℂ) * μ) :=
       hasEigenvalue_of_eigenvector_eq _ _ X hBX hX_ne
     have hnorm : ‖(r : ℂ) * μ‖ = r := by
       rw [norm_mul, hμnorm, mul_one, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]

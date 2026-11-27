@@ -1983,10 +1983,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Physical-pair swap]
     \label{def:mpu_physical_pair_swap}
-    \lean{MPOTensor.physicalPairSwapEquiv,
-        MPOTensor.physicalPairSwapEquiv_finProdFinEquiv}
+    \lean{Equiv.prodComm}
     \leanok
-    On the flattened physical alphabet, define the involution
+    On the pair alphabet of physical indices, define the involution
     \begin{align}
         s(i,j) & =(j,i).
     \end{align}
@@ -2157,33 +2156,25 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Independent tensor product of matrix product tensors]
     \label{def:mps_independent_tensor_product}
-    \lean{finTupleProdEquiv, finTupleProdEquiv_apply,
-        MPSTensor.tensorProduct, MPSTensor.tensorProduct_apply}
+    \lean{MPSTensor.tensorProduct, MPSTensor.tensorProduct_apply}
     \leanok
     \uses{def:mps_tensor}
-    Let $A=\{A^i\}_{i\in\Fin d}$ and $B=\{B^k\}_{k\in\Fin e}$ have
+    Let $A=\{A^i\}_{i\in I}$ and $B=\{B^k\}_{k\in K}$ have
     auxiliary dimensions $D$ and $E$, respectively.  Write
     \begin{align}
         \pi_{m,n}:\Fin m\times\Fin n & \longrightarrow\Fin{mn}
     \end{align}
     for the standard finite-product coordinate bijection.  Their independent
-    tensor product $A\boxtimes B$ has physical dimension $de$, auxiliary
+    tensor product $A\boxtimes B$ has physical alphabet $I\times K$, auxiliary
     dimension $DE$, and local matrices determined by
     \begin{align}
-        (A\boxtimes B)^{\pi_{d,e}(i,k)}_{
+        (A\boxtimes B)^{(i,k)}_{
                 \pi_{D,E}(\alpha,\gamma),\pi_{D,E}(\beta,\delta)}
          & =A^i_{\alpha,\beta}B^k_{\gamma,\delta}.
         \label{eq:mps_independent_tensor_product_entries}
     \end{align}
-    For every $N$, the same coordinates give the pointwise splitting
-    \begin{align}
-        (\Fin N\to\Fin{de})
-                  & \simeq(\Fin N\to\Fin d)\times(\Fin N\to\Fin e), \\
-        \sigma    & \longmapsto(\sigma_d,\sigma_e),
-                  &
-        \sigma(n) & =\pi_{d,e}(\sigma_d(n),\sigma_e(n)).
-        \label{eq:mps_tensor_product_tuple_split}
-    \end{align}
+    A word $((i_1,k_1),\dots,(i_N,k_N))$ in the product alphabet is the pair
+    of words $(i_1,\dots,i_N)$ and $(k_1,\dots,k_N)$.
     This is infrastructure for the tensoring clause in the proof of the MPU
     Index Theorem~IV.6(ii)
     \cite[lines~824--845]{Cirac2017MPU}, not a separately stated theorem of
@@ -2198,8 +2189,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \uses{def:mps_independent_tensor_product,def:eval_word}
     If $w$ has length $n$ and
     \begin{align}
-        w   & =\bigl(\pi_{d,e}(i_1,k_1),\ldots,
-        \pi_{d,e}(i_n,k_n)\bigr),               \\
+        w   & =\bigl((i_1,k_1),\ldots,(i_n,k_n)\bigr), \\
         w_d & =(i_1,\ldots,i_n),
             &
         w_e & =(k_1,\ldots,k_n),
@@ -2218,7 +2208,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     By induction on the length of $w$, the empty word uses
     $\Id_D\otimes\Id_E=\Id_{DE}$ and the invariance of the
     identity under the coordinate bijection.  For a leading letter
-    $\pi_{d,e}(i,k)$, equation
+    $(i,k)$, equation
     (\ref{eq:mps_independent_tensor_product_entries}) and the induction
     hypothesis reduce the claim to
     \begin{align}
@@ -3967,25 +3957,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     argument.
 \end{definition}
 
-\begin{definition}[Doubled product-coordinate equivalence]
+\begin{definition}[Regrouping of the pair alphabet]
     \label{def:mpu_doubled_product_coordinate_equiv}
-    \lean{finDoubledProdEquiv, finDoubledProdEquiv_apply,
-        finDoubledProdEquiv_symm_apply}
+    \lean{MPOTensor.tensorProductPairEquiv}
     \leanok
     Write
     $\pi_{m,n}:\Fin m\times\Fin n\to\Fin{mn}$ for the standard product
-    coordinate bijection.  For natural numbers $d,e$, the canonical doubled
-    product-coordinate equivalence
-    $s_{d,e}:\Fin{(de)^2}\to\Fin{d^2e^2}$ and its inverse satisfy
+    coordinate bijection.  For natural numbers $d,e$, the canonical regrouping
+    $s_{d,e}:\Fin{de}\times\Fin{de}\to(\Fin d\times\Fin d)\times(\Fin e\times\Fin e)$
+    of the pair alphabet is
     \begin{align}
-        s_{d,e}\!\left(\pi_{de,de}
-        \bigl(\pi_{d,e}(i,k),\pi_{d,e}(j,\ell)\bigr)\right)
-         & =\pi_{d^2,e^2}
-        \bigl(\pi_{d,d}(i,j),\pi_{e,e}(k,\ell)\bigr), \notag \\
-        s_{d,e}^{-1}\!\left(\pi_{d^2,e^2}
-        \bigl(\pi_{d,d}(i,j),\pi_{e,e}(k,\ell)\bigr)\right)
-         & =\pi_{de,de}
-        \bigl(\pi_{d,e}(i,k),\pi_{d,e}(j,\ell)\bigr).
+        s_{d,e}\bigl(\pi_{d,e}(i,k),\pi_{d,e}(j,\ell)\bigr)
+         & =\bigl((i,j),(k,\ell)\bigr).
         \label{eq:mpu_tensor_flattening_shuffle}
     \end{align}
 \end{definition}

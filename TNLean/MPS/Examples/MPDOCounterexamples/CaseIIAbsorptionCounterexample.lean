@@ -553,8 +553,7 @@ For positive lengths this is the normalization factor implicit in the MPDO
 and SAL standing assumptions of arXiv:1606.00608, lines 623--630, 811--815,
 and 1628. -/
 theorem trace_mpo_ambient (N : ℕ) : Matrix.trace (mpo ambient N) = 2 := by
-  rw [trace_mpo_eq_trace_verticalLoop_pow,
-    verticalLoop_eq_physTraceTransfer, physTraceTransfer_ambient, one_pow]
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow, physTraceTransfer_ambient, one_pow]
   simp [Matrix.trace]
 
 /-- The trace used to normalize every positive-length ambient MPDO is strictly positive.

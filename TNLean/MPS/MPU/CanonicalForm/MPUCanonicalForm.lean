@@ -116,7 +116,7 @@ noncomputable def MPUCanonicalFormData.reindexPhysical {α₁ α₂ : Type*} [Fi
   weights_ne_zero := data.weights_ne_zero
   blocks := fun k ↦ Kraus.reindexPhysical e (data.blocks k)
   blocks_canonical := fun k ↦
-    ⟨(MPSTensor.isIrreducibleFamily_reindexPhysical_equiv e _).2
+    ⟨(Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).2
         (data.blocks_canonical k).irreducible, by
       rw [Kraus.transferMap_reindexPhysical_equiv]
       exact (data.blocks_canonical k).spectral_radius_one⟩

@@ -87,28 +87,67 @@ variable {d D : ℕ}
 
 /-! ## Invertibility of the intertwiner -/
 
+/-- A family without a nontrivial invariant orthogonal projection has no nontrivial invariant
+subspace.
+
+**Local bridge (QICLean `Kraus.isIrreducibleAction_of_isIrreducibleFamily`):** the QICLean
+statement, through `Matrix.IsIrreducibleAction`, is stated only for families indexed by `Fin d`;
+this lemma relabels the index set along `Fintype.equivFin` and is removed when that statement is
+generalized. -/
+private theorem eq_bot_or_eq_top_of_isIrreducibleFamily {ι : Type*} [Fintype ι]
+    (K : ι → Matrix (Fin D) (Fin D) ℂ) (hIrr : Kraus.IsIrreducibleFamily K)
+    (W : Submodule ℂ (Fin D → ℂ)) (hW : ∀ i, ∀ v ∈ W, (K i).mulVec v ∈ W) :
+    W = ⊥ ∨ W = ⊤ := by
+  classical
+  let e := (Fintype.equivFin ι).symm
+  have hMap : IsIrreducibleMap (Kraus.transferMap (Kraus.reindexPhysical e K)) := by
+    rw [Kraus.transferMap_reindexPhysical_equiv]
+    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily K hIrr
+  exact Kraus.isIrreducibleAction_of_isIrreducibleFamily (Kraus.reindexPhysical e K)
+    (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _ hMap) W fun i v hv => hW (e i) v hv
+
+/-- A family with no nontrivial invariant subspace has no nontrivial invariant orthogonal
+projection.
+
+**Local bridge (QICLean `Kraus.isIrreducibleFamily_of_isIrreducibleAction`):** the QICLean
+statement, through `Matrix.IsIrreducibleAction`, is stated only for families indexed by `Fin d`;
+this lemma relabels the index set along `Fintype.equivFin` and is removed when that statement is
+generalized. -/
+private theorem isIrreducibleFamily_of_forall_eq_bot_or_eq_top {ι : Type*} [Fintype ι]
+    (K : ι → Matrix (Fin D) (Fin D) ℂ)
+    (hK : ∀ W : Submodule ℂ (Fin D → ℂ), (∀ i, ∀ v ∈ W, (K i).mulVec v ∈ W) → W = ⊥ ∨ W = ⊤) :
+    Kraus.IsIrreducibleFamily K := by
+  classical
+  let e := (Fintype.equivFin ι).symm
+  have h : Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e K) :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleAction _ fun W hW =>
+      hK W fun i v hv => by simpa [Kraus.reindexPhysical, e] using hW (e.symm i) v hv
+  have hMap : IsIrreducibleMap (Kraus.transferMap K) := by
+    rw [← Kraus.transferMap_reindexPhysical_equiv e K]
+    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ h
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM K hMap
+
 /-- A nonzero matrix `R` with `R C_i = x⁻¹ B_i R` for a block-injective family
 `B` is invertible: its range is invariant under every `B_i`, hence under every
 word of `B`, and block injectivity leaves no nontrivial invariant subspace.
 This is the use of the single-block property of `B` in the proof of Theorem 7
 of PGVWC07 (arXiv:quant-ph/0608197, MPSarchive.tex lines 1105-1108), which the
 source attributes to the proposition on condition C1. -/
-theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {B C : MPSTensor d D}
+theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {α : Type*} [Fintype α]
+    {B C : MPTensor α (Fin D)}
     {L : ℕ} (hB : Kraus.IsNBlkInjective B L) {R : Matrix (Fin D) (Fin D) ℂ} {x : ℂ}
     (hR : R ≠ 0) (hx : x ≠ 0) (hrel : ∀ i, R * C i = x⁻¹ • (B i * R)) :
     IsUnit R := by
   classical
-  have hInj : Kraus.IsInjective (Kraus.blockTensor B L) :=
-    (Kraus.isNBlkInjective_iff_blockTensor_isInjective B L).mp hB
-  have hAct : Matrix.IsIrreducibleAction (Kraus.blockTensor B L) :=
-    Kraus.isIrreducibleAction_of_isIrreducibleFamily _
-      (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-        (Kraus.injective_implies_irreducibleCP _ hInj))
+  have hIrr : Kraus.IsIrreducibleFamily (Kraus.block B L) :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
+      (Kraus.injective_implies_irreducibleCP _
+        ((Kraus.isNBlkInjective_iff_isInjective_block B L).mp hB))
   let Wr : Submodule ℂ (Fin D → ℂ) := LinearMap.range (Matrix.toLin' R)
   have hBR : ∀ i, B i * R = x • (R * C i) := by
     intro i
     rw [hrel i, smul_smul, mul_inv_cancel₀ hx, one_smul]
-  have hword : ∀ w : List (Fin d), ∀ v ∈ Wr, (Kraus.evalWord B w).mulVec v ∈ Wr := by
+  have hword : ∀ w : List α, ∀ v ∈ Wr, (Kraus.evalWord B w).mulVec v ∈ Wr := by
     intro w
     induction w with
     | nil => intro v hv; simpa using hv
@@ -120,9 +159,8 @@ theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {B C : MPSTensor d D
       refine ⟨x • (C i).mulVec u, ?_⟩
       simp only [Matrix.toLin'_apply, Matrix.mulVec_smul, Matrix.mulVec_mulVec, hBR i,
         Matrix.smul_mulVec]
-  have hinv : Matrix.IsInvariantSubmodule (Kraus.blockTensor B L) Wr :=
-    fun I v hv => hword _ v hv
-  rcases hAct Wr hinv with hbot | htop
+  rcases eq_bot_or_eq_top_of_isIrreducibleFamily _ hIrr Wr
+    (fun I v hv => hword (List.ofFn I) v hv) with hbot | htop
   · exfalso
     apply hR
     have : Matrix.toLin' R = 0 := LinearMap.range_eq_bot.mp hbot
@@ -149,7 +187,8 @@ lines 1097-1108 is then the unitary-gauge theorem
 printed proof uses the dual fixed point `Λ` of `B` for `|x| = 1` and the
 single-block property of `B` for `R R† = 1`; here both are consequences of
 condition C1 through the Perron--Frobenius theory of irreducible maps. -/
-theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d D} {L₀ : ℕ}
+theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {α : Type*} [Fintype α]
+    {B C : MPTensor α (Fin D)} {L₀ : ℕ}
     (hB_unital : ∑ i, B i * (B i)ᴴ = 1)
     (hC_unital : ∑ i, C i * (C i)ᴴ = 1)
     (hC1 : Kraus.IsNBlkInjective B L₀)
@@ -171,8 +210,8 @@ theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d 
     rw [← smul_mul_assoc, ← hBR i, Matrix.mul_assoc, Matrix.mul_nonsing_inv R hRdet,
       Matrix.mul_one]
   -- Pass to the conjugate-transposed families, which are left-canonical.
-  let Ba : MPSTensor d D := fun i => (B i)ᴴ
-  let Ca : MPSTensor d D := fun i => (C i)ᴴ
+  let Ba : MPTensor α (Fin D) := fun i => (B i)ᴴ
+  let Ca : MPTensor α (Fin D) := fun i => (C i)ᴴ
   have hBa_left : IsLeftCanonical Ba := by
     change ∑ i, (Ba i)ᴴ * Ba i = 1
     simpa [Ba] using hB_unital
@@ -180,26 +219,27 @@ theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d 
     change ∑ i, (Ca i)ᴴ * Ca i = 1
     simpa [Ca] using hC_unital
   -- Irreducibility of `B` and `C` from condition C1.
-  have hBact : Matrix.IsIrreducibleAction B := by
-    have hInj : Kraus.IsInjective (Kraus.blockTensor B L₀) :=
-      (Kraus.isNBlkInjective_iff_blockTensor_isInjective B L₀).mp hC1
-    have hAct : Matrix.IsIrreducibleAction (Kraus.blockTensor B L₀) :=
-      Kraus.isIrreducibleAction_of_isIrreducibleFamily _
-        (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-          (Kraus.injective_implies_irreducibleCP _ hInj))
+  have hBact : ∀ Wr : Submodule ℂ (Fin D → ℂ), (∀ i, ∀ v ∈ Wr, (B i).mulVec v ∈ Wr) →
+      Wr = ⊥ ∨ Wr = ⊤ := by
+    have hIrr : Kraus.IsIrreducibleFamily (Kraus.block B L₀) :=
+      Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
+        (Kraus.injective_implies_irreducibleCP _
+          ((Kraus.isNBlkInjective_iff_isInjective_block B L₀).mp hC1))
     intro Wr hinv
-    refine hAct Wr fun I v hv => ?_
-    change (Kraus.evalWord B (Kraus.wordOfBlock d L₀ I)).mulVec v ∈ Wr
-    generalize Kraus.wordOfBlock d L₀ I = w
+    refine eq_bot_or_eq_top_of_isIrreducibleFamily _ hIrr Wr fun I v hv => ?_
+    change (Kraus.evalWord B (List.ofFn I)).mulVec v ∈ Wr
+    generalize List.ofFn I = w
     induction w with
     | nil => simpa using hv
     | cons i w ih =>
       rw [Kraus.evalWord_cons, ← Matrix.mulVec_mulVec]
       exact hinv i _ ih
-  have hCact : Matrix.IsIrreducibleAction C := by
+  have hCact : ∀ Wr : Submodule ℂ (Fin D → ℂ), (∀ i, ∀ v ∈ Wr, (C i).mulVec v ∈ Wr) →
+      Wr = ⊥ ∨ Wr = ⊤ := by
     intro Wr hinv
     -- The image of `Wr` under `R` is `B`-invariant.
-    have hmap : Matrix.IsInvariantSubmodule B (Wr.map (Matrix.toLin' R)) := by
+    have hmap : ∀ i, ∀ v ∈ Wr.map (Matrix.toLin' R),
+        (B i).mulVec v ∈ Wr.map (Matrix.toLin' R) := by
       intro i v hv
       obtain ⟨u, hu, rfl⟩ := Submodule.mem_map.mp hv
       refine Submodule.mem_map.mpr ⟨x • (C i).mulVec u, Wr.smul_mem x (hinv i u hu), ?_⟩
@@ -226,12 +266,12 @@ theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d 
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
       (Kraus.isIrreducibleMap_mapLM_conjTranspose B
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B
-          (Kraus.isIrreducibleFamily_of_isIrreducibleAction B hBact)))
+          (isIrreducibleFamily_of_forall_eq_bot_or_eq_top B hBact)))
   have hCa_irr : Kraus.IsIrreducibleFamily Ca :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
       (Kraus.isIrreducibleMap_mapLM_conjTranspose C
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily C
-          (Kraus.isIrreducibleFamily_of_isIrreducibleAction C hCact)))
+          (isIrreducibleFamily_of_forall_eq_bot_or_eq_top C hCact)))
   -- The gauge relation for the conjugate-transposed families: `B_i† = conj x (R†)⁻¹ C_i† R†`.
   have hRH : IsUnit (Rᴴ)⁻¹ := by
     rw [Matrix.isUnit_nonsing_inv_iff, Matrix.isUnit_iff_isUnit_det, Matrix.det_conjTranspose]

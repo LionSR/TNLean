@@ -35,7 +35,7 @@ theorem IsSAL.physTraceTransfer_ne_zero (hSAL : IsSAL M) :
     physTraceTransfer M ≠ 0 := by
   intro hZero
   exact (Classical.choose_spec hSAL).1 1 Nat.zero_lt_one (by
-    rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
+    rw [trace_mpo_eq_trace_physTraceTransfer_pow, hZero]
     simp)
 
 /-- Under saturation of the area law, literal idempotence of the

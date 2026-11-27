@@ -83,8 +83,8 @@ its one-site periodic MPO trace as $2$, so the cyclic trace identity rules out a
 zero physical-trace transfer. -/
 theorem physTraceTransfer_M_ne_zero : physTraceTransfer M ≠ 0 := by
   intro hzero
-  have htrace := trace_mpo_eq_trace_verticalLoop_pow M 1
-  rw [verticalLoop_eq_physTraceTransfer, hzero] at htrace
+  have htrace := trace_mpo_eq_trace_physTraceTransfer_pow M 1
+  rw [hzero] at htrace
   have hclosed : Matrix.trace (mpo M 1) = 2 := by
     rw [mpo_M_eq_diagonal, Matrix.trace_diagonal]
     change partitionFunction 1 = 2
@@ -167,8 +167,8 @@ one-site periodic MPO trace as $2$, so the cyclic trace identity rules out a
 zero physical-trace transfer. -/
 theorem physTraceTransfer_ambientM_ne_zero : physTraceTransfer ambientM ≠ 0 := by
   intro hzero
-  have htrace := trace_mpo_eq_trace_verticalLoop_pow ambientM 1
-  rw [verticalLoop_eq_physTraceTransfer, hzero] at htrace
+  have htrace := trace_mpo_eq_trace_physTraceTransfer_pow ambientM 1
+  rw [hzero] at htrace
   have hclosed : Matrix.trace (mpo ambientM 1) = 2 := by
     rw [trace_mpo_ambientM_closed_form]
     norm_num

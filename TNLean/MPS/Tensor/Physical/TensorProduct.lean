@@ -16,9 +16,9 @@ tensor product has local matrices
 \[
   (A\boxtimes B)^{(i,k)}=A^i\otimes B^k.
 \]
-Both the physical and virtual product indices use Mathlib's canonical
-`finProdFinEquiv` coordinates.  Word evaluation separates into the two
-pointwise component words.
+The physical index is the pair alphabet \(\alpha\times\beta\); the virtual
+product index uses Mathlib's canonical `finProdFinEquiv` coordinates.  Word
+evaluation separates into the two pointwise component words.
 
 This construction is infrastructure for the sentence "The case of tensoring
 is trivial" in arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines
@@ -29,8 +29,8 @@ normality assertion is made here.
 
 ## Main definitions
 
-* `MPSTensor.tensorProduct` is the local Kronecker product in standard finite
-  product coordinates.
+* `MPSTensor.tensorProduct` is the local Kronecker product on the pair
+  alphabet, in standard finite product bond coordinates.
 
 ## Main statements
 
@@ -47,37 +47,29 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {d D e E : ℕ}
+variable {α β : Type*} {D E : ℕ}
 
-/-- The independent tensor product of two matrix product tensors, using
-`finProdFinEquiv` on both physical and virtual indices.
+/-- The independent tensor product of two matrix product tensors, on the pair
+physical alphabet and with `finProdFinEquiv` on the virtual indices.
 
 This is infrastructure for the tensoring clause in arXiv:1703.09188, proof of
 Theorem `IndexTh` (ii), lines 824--845, rather than a separately stated result
 of that paper. -/
-def tensorProduct (A : MPSTensor d D) (B : MPSTensor e E) :
-    MPSTensor (d * e) (D * E) :=
-  fun ik ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv
-    (A ik.divNat ⊗ₖ B ik.modNat)
+def tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E)) :
+    MPTensor (α × β) (Fin (D * E)) :=
+  fun ik ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (A ik.1 ⊗ₖ B ik.2)
 
 /-- Entry formula for the independent tensor product.
 
 This is the coordinate form of the tensoring infrastructure for
 arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--845, not a
 separately stated theorem of the paper. -/
-@[simp] theorem tensorProduct_apply (A : MPSTensor d D) (B : MPSTensor e E)
-    (i : Fin d) (k : Fin e) (α β : Fin D) (γ δ : Fin E) :
-    tensorProduct A B (finProdFinEquiv (i, k))
-        (finProdFinEquiv (α, γ)) (finProdFinEquiv (β, δ)) =
-      A i α β * B k γ δ := by
+@[simp] theorem tensorProduct_apply (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
+    (i : α) (k : β) (a b : Fin D) (c e : Fin E) :
+    tensorProduct A B (i, k) (finProdFinEquiv (a, c)) (finProdFinEquiv (b, e)) =
+      A i a b * B k c e := by
   simp only [tensorProduct, Matrix.reindex_apply, Matrix.submatrix_apply,
-    Matrix.kroneckerMap_apply]
-  simp only [Equiv.symm_apply_apply]
-  change
-    A (finProdFinEquiv.symm (finProdFinEquiv (i, k))).1 α β *
-        B (finProdFinEquiv.symm (finProdFinEquiv (i, k))).2 γ δ =
-      A i α β * B k γ δ
-  rw [Equiv.symm_apply_apply]
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
 
 /-- Evaluating a word in the independent tensor product is the reindexed
 Kronecker product of the evaluations of its two pointwise component words.
@@ -85,12 +77,12 @@ Kronecker product of the evaluations of its two pointwise component words.
 This is the word form of the tensoring construction used in
 arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--845; it is
 infrastructure, not a separately stated theorem of the paper. -/
-theorem evalWord_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
-    (w : List (Fin (d * e))) :
+theorem evalWord_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
+    (w : List (α × β)) :
     Kraus.evalWord (tensorProduct A B) w =
       Matrix.reindex finProdFinEquiv finProdFinEquiv
-        (Kraus.evalWord A (w.map Fin.divNat) ⊗ₖ
-          Kraus.evalWord B (w.map Fin.modNat)) := by
+        (Kraus.evalWord A (w.map Prod.fst) ⊗ₖ
+          Kraus.evalWord B (w.map Prod.snd)) := by
   induction w with
   | nil =>
       simp [Kraus.evalWord]
@@ -120,23 +112,19 @@ in that paper.  The retained-normal-block context is
 arXiv:1606.00608, equation `II_CF1`, lines 214--245; the two left-canonical
 identities are explicit project hypotheses, not an assertion attributed to
 that passage. -/
-theorem leftCanonical_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem leftCanonical_tensorProduct [Fintype α] [Fintype β]
+    (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     (hA : IsLeftCanonical A) (hB : IsLeftCanonical B) :
     IsLeftCanonical (tensorProduct A B) := by
   classical
   unfold IsLeftCanonical Kraus.IsTP
   unfold IsLeftCanonical Kraus.IsTP at hA hB
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  have hterm (i : Fin d) (k : Fin e) :
-      (tensorProduct A B (finProdFinEquiv (i, k)))ᴴ *
-          tensorProduct A B (finProdFinEquiv (i, k)) =
+  rw [Fintype.sum_prod_type]
+  have hterm (i : α) (k : β) :
+      (tensorProduct A B (i, k))ᴴ * tensorProduct A B (i, k) =
         Matrix.reindex finProdFinEquiv finProdFinEquiv
           (((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) := by
-    have hi : (finProdFinEquiv (i, k) : Fin (d * e)).divNat = i :=
-      congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (i, k))
-    have hk : (finProdFinEquiv (i, k) : Fin (d * e)).modNat = k :=
-      congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (i, k))
-    simp only [tensorProduct, hi, hk]
+    simp only [tensorProduct]
     rw [Matrix.conjTranspose_reindex]
     change Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv
           ((A i ⊗ₖ B k)ᴴ) *
@@ -147,18 +135,18 @@ theorem leftCanonical_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
     rw [Matrix.reindexLinearEquiv_mul ℂ ℂ finProdFinEquiv finProdFinEquiv
       finProdFinEquiv, Matrix.conjTranspose_kronecker, Matrix.mul_kronecker_mul]
   simp_rw [hterm]
-  change ∑ i : Fin d, ∑ k : Fin e,
+  change ∑ i : α, ∑ k : β,
       Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv
         (((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) = 1
   apply (Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv).symm.injective
   simp only [map_sum, LinearEquiv.symm_apply_apply]
   rw [Matrix.symm_reindexLinearEquiv, Matrix.reindexLinearEquiv_one]
   have hsum :
-      (∑ i : Fin d, ∑ k : Fin e, ((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) =
-        (∑ i : Fin d, (A i)ᴴ * A i) ⊗ₖ (∑ k : Fin e, (B k)ᴴ * B k) := by
+      (∑ i : α, ∑ k : β, ((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) =
+        (∑ i : α, (A i)ᴴ * A i) ⊗ₖ (∑ k : β, (B k)ᴴ * B k) := by
     symm
     change Matrix.kroneckerBilinear (R := ℂ) (α := ℂ)
-      (∑ i : Fin d, (A i)ᴴ * A i) (∑ k : Fin e, (B k)ᴴ * B k) = _
+      (∑ i : α, (A i)ᴴ * A i) (∑ k : β, (B k)ᴴ * B k) = _
     rw [map_sum]
     simp_rw [map_sum]
     rw [Finset.sum_comm]
