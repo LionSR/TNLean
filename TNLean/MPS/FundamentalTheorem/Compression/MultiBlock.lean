@@ -167,7 +167,7 @@ theorem conjMatrix_injective : Function.Injective (conjMatrix (D := D) g) :=
   (conjMatrixEquiv g).injective
 
 /-- Word evaluation commutes with the change of block coordinates. -/
-theorem evalWord_conjMatrix (B : MPSTensor d DB) (w : List (Fin d)) :
+theorem evalWord_conjMatrix {α : Type*} (B : MPTensor α (Fin DB)) (w : List α) :
     Kraus.evalWord (fun i => conjMatrix g (B i)) w = conjMatrix g (Kraus.evalWord B w) := by
   induction w with
   | nil => simp [Kraus.evalWord]
@@ -179,8 +179,8 @@ end ConjMatrix
 zero slots, an ordering `ord` of the `|S| + z` blocks, and a change of coordinates `gauge` of the
 bond space of `B` in which every `B^i` is block upper triangular, the diagonal block of the slot
 `s` is `C s`, and the diagonal block of each zero slot is the `1 × 1` zero matrix. -/
-structure MultiBlockCompression (B : MPSTensor d DB) (S : Finset ι)
-    (C : ∀ s, MPSTensor d (D s)) where
+structure MultiBlockCompression {α : Type*} (B : MPTensor α (Fin DB)) (S : Finset ι)
+    (C : ∀ s, MPTensor α (Fin (D s))) where
   /-- the number of zero slots -/
   z : ℕ
   /-- the ordering of the blocks -/
@@ -190,14 +190,14 @@ structure MultiBlockCompression (B : MPSTensor d DB) (S : Finset ι)
   /-- every one-site matrix is block upper triangular, clause (i) -/
   triangular : ∀ i, (conjMatrix gauge (B i)).BlockTriangular fun x => ord x.1
   /-- the diagonal block of a target slot is the corresponding block, clause (ii) -/
-  matched : ∀ (i : Fin d) (s : {s // s ∈ S}),
+  matched : ∀ (i : α) (s : {s // s ∈ S}),
     (conjMatrix gauge (B i)).blockDiag' (Sum.inl s) = C s.1 i
   /-- the diagonal block of a zero slot vanishes, clause (iii) -/
-  unmatched : ∀ (i : Fin d) (t : Fin z), (conjMatrix gauge (B i)).blockDiag' (Sum.inr t) = 0
+  unmatched : ∀ (i : α) (t : Fin z), (conjMatrix gauge (B i)).blockDiag' (Sum.inr t) = 0
 
 namespace MultiBlockCompression
 
-variable {B : MPSTensor d DB} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+variable {α : Type*} {B : MPTensor α (Fin DB)} {S : Finset ι} {C : ∀ s, MPTensor α (Fin (D s))}
   (P : MultiBlockCompression B S C)
 
 /-- **The dimension count** (P5 note, Theorem 7.7(vii), `eq:p5-main-dimension`). -/
@@ -237,7 +237,7 @@ theorem left_mul_right_of_ne {s t : {s // s ∈ S}} (h : s ≠ t) : P.left s * P
 
 /-- **The compression identity** (P5 note, `eq:p5-main-compression`). Compressing a word of `B`
 to the slot `s` gives the corresponding word of `C s`. -/
-theorem left_mul_evalWord_mul_right (s : {s // s ∈ S}) (w : List (Fin d)) :
+theorem left_mul_evalWord_mul_right (s : {s // s ∈ S}) (w : List α) :
     P.left s * Kraus.evalWord B w * P.right s = Kraus.evalWord (C s.1) w := by
   rw [P.left_mul_mul_right, Matrix.blockProj_mul_mul_blockEmbed, ← evalWord_conjMatrix,
     Matrix.blockDiag'_evalWord P.ord.injective P.triangular]
@@ -250,7 +250,7 @@ theorem isReduction (s : {s // s ∈ S}) :
 
 /-- **The remainder** `R^i = B^i - ∑_s V_s C_s^i W_s` (P5 note,
 `eq:p5-main-reconstruction`). -/
-noncomputable def remainder : MPSTensor d DB :=
+noncomputable def remainder : MPTensor α (Fin DB) :=
   fun i => B i - ∑ s : {s // s ∈ S}, P.right s * C s.1 i * P.left s
 
 /-- Conjugating a slot-supported operator back to the block coordinates places it in the
@@ -266,7 +266,7 @@ theorem conjMatrix_right_mul_mul_left (s : {s // s ∈ S})
 
 /-- In the block coordinates the remainder is the matrix of `B^i` with its diagonal blocks
 removed. -/
-theorem conjMatrix_remainder (i : Fin d) :
+theorem conjMatrix_remainder (i : α) :
     conjMatrix P.gauge (P.remainder i) =
       conjMatrix P.gauge (B i) -
         Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
@@ -284,7 +284,7 @@ theorem conjMatrix_remainder (i : Fin d) :
 
 /-- **Nilpotency of the remainder** (P5 note, `eq:p5-main-nilpotency`). A product of as many
 remainder matrices as there are blocks vanishes. -/
-theorem evalWord_remainder_eq_zero (w : List (Fin d)) (hw : S.card + P.z ≤ w.length) :
+theorem evalWord_remainder_eq_zero (w : List α) (hw : S.card + P.z ≤ w.length) :
     Kraus.evalWord P.remainder w = 0 := by
   have hstrict : ∀ i, Matrix.StrictBlockTriangular (⇑P.ord)
       (conjMatrix P.gauge (P.remainder i)) := by
@@ -701,10 +701,10 @@ variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ}
 `eq:p5-weighted-word-compression`). Compressing a word of `B` onto the slot `s` of a
 multi-block compression whose blocks are the weighted tensors `μ s • A s` returns the
 corresponding word of `A s` scaled by `μ s` to the length of the word. -/
-theorem MultiBlockCompression.left_mul_evalWord_mul_right_smul {B : MPSTensor d DB}
-    {S : Finset ι} {μ : ι → ℂ} {A : ∀ s, MPSTensor d (D s)}
+theorem MultiBlockCompression.left_mul_evalWord_mul_right_smul {α : Type*} {B : MPTensor α (Fin DB)}
+    {S : Finset ι} {μ : ι → ℂ} {A : ∀ s, MPTensor α (Fin (D s))}
     (P : MultiBlockCompression B S fun s => μ s • A s) (s : {s // s ∈ S})
-    (w : List (Fin d)) :
+    (w : List α) :
     P.left s * Kraus.evalWord B w * P.right s = μ s.1 ^ w.length • Kraus.evalWord (A s.1) w := by
   rw [P.left_mul_evalWord_mul_right s]
   exact Kraus.evalWord_smul (μ s.1) (A s.1) w

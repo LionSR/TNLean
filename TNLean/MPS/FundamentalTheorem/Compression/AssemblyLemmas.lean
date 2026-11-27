@@ -62,8 +62,8 @@ namespace MPSTensor
 
 /-- If every product of three letters of a tensor vanishes, then so does every word of length at
 least three. -/
-theorem evalWord_eq_zero_of_triple_mul_eq_zero {d D : ℕ} (A : MPSTensor d D)
-    (h : ∀ a b c, A a * A b * A c = 0) (w : List (Fin d)) (hw : 3 ≤ w.length) :
+theorem evalWord_eq_zero_of_triple_mul_eq_zero {α : Type*} {D : ℕ} (A : MPTensor α (Fin D))
+    (h : ∀ a b c, A a * A b * A c = 0) (w : List α) (hw : 3 ≤ w.length) :
     Kraus.evalWord A w = 0 := by
   rcases w with _ | ⟨a, _ | ⟨b, _ | ⟨c, rest⟩⟩⟩
   · simp at hw
@@ -91,15 +91,15 @@ theorem triple_mul_eq_zero_of_support {ι κ M : Type*} [MulZeroClass M] (A : ι
 /-- The coefficient matrix of the sitewise intertwining equations `B^i X = X C^i`: the row
 `(i, p, q)` is the equation for the entry `(p, q)` of `B^i X - X C^i`, read as a linear form in
 the entries `(r, s)` of `X`. -/
-def sitewiseEqMatrix {R : Type*} [Ring R] {d m n : ℕ} (B : Fin d → Matrix (Fin m) (Fin m) R)
-    (C : Fin d → Matrix (Fin n) (Fin n) R) :
-    Matrix (Fin d × Fin m × Fin n) (Fin m × Fin n) R :=
+def sitewiseEqMatrix {R : Type*} [Ring R] {α : Type*} {m n : ℕ} (B : α → Matrix (Fin m) (Fin m) R)
+    (C : α → Matrix (Fin n) (Fin n) R) :
+    Matrix (α × Fin m × Fin n) (Fin m × Fin n) R :=
   Matrix.of fun x y =>
     B x.1 x.2.1 y.1 * (if x.2.2 = y.2 then 1 else 0) -
       (if x.2.1 = y.1 then 1 else 0) * C x.1 y.2 x.2.2
 
-theorem sitewiseEqMatrix_map {R S : Type*} [Ring R] [Ring S] (f : R →+* S) {d m n : ℕ}
-    (B : Fin d → Matrix (Fin m) (Fin m) R) (C : Fin d → Matrix (Fin n) (Fin n) R) :
+theorem sitewiseEqMatrix_map {R S : Type*} [Ring R] [Ring S] (f : R →+* S) {α : Type*} {m n : ℕ}
+    (B : α → Matrix (Fin m) (Fin m) R) (C : α → Matrix (Fin n) (Fin n) R) :
     (sitewiseEqMatrix B C).map f =
       sitewiseEqMatrix (fun i => (B i).map f) (fun i => (C i).map f) := by
   ext x y
@@ -107,9 +107,9 @@ theorem sitewiseEqMatrix_map {R S : Type*} [Ring R] [Ring S] (f : R →+* S) {d 
 
 /-- Applying the coefficient matrix to the vector of entries of `X` computes the entries of
 `B^i X - X C^i`. -/
-theorem sitewiseEqMatrix_mulVec {R : Type*} [CommRing R] {d m n : ℕ}
-    (B : Fin d → Matrix (Fin m) (Fin m) R) (C : Fin d → Matrix (Fin n) (Fin n) R)
-    (X : Matrix (Fin m) (Fin n) R) (x : Fin d × Fin m × Fin n) :
+theorem sitewiseEqMatrix_mulVec {R : Type*} [CommRing R] {α : Type*} {m n : ℕ}
+    (B : α → Matrix (Fin m) (Fin m) R) (C : α → Matrix (Fin n) (Fin n) R)
+    (X : Matrix (Fin m) (Fin n) R) (x : α × Fin m × Fin n) :
     (sitewiseEqMatrix B C *ᵥ fun y => X y.1 y.2) x = (B x.1 * X - X * C x.1) x.2.1 x.2.2 := by
   obtain ⟨i, p, q⟩ := x
   simp only [Matrix.mulVec, dotProduct, sitewiseEqMatrix, Matrix.of_apply, Matrix.sub_apply,
@@ -121,9 +121,9 @@ theorem sitewiseEqMatrix_mulVec {R : Type*} [CommRing R] {d m n : ℕ}
 /-- **No nonzero right sitewise intertwiner from a certificate.** If a selection `rows` of the
 sitewise intertwining equations has a coefficient matrix with a left inverse `N` up to the
 nonzero scalar `c`, then the only solution of `B^i X = X C^i` for all `i` is `X = 0`. -/
-theorem right_intertwiner_eq_zero_of_certificate {d m n k : ℕ}
-    (B : Fin d → Matrix (Fin m) (Fin m) ℂ) (C : Fin d → Matrix (Fin n) (Fin n) ℂ)
-    (rows : Fin k → Fin d × Fin m × Fin n) (N : Matrix (Fin m × Fin n) (Fin k) ℂ) {c : ℂ}
+theorem right_intertwiner_eq_zero_of_certificate {α : Type*} {m n k : ℕ}
+    (B : α → Matrix (Fin m) (Fin m) ℂ) (C : α → Matrix (Fin n) (Fin n) ℂ)
+    (rows : Fin k → α × Fin m × Fin n) (N : Matrix (Fin m × Fin n) (Fin k) ℂ) {c : ℂ}
     (hc : c ≠ 0) (hN : N * (sitewiseEqMatrix B C).submatrix rows id = c • 1)
     (X : Matrix (Fin m) (Fin n) ℂ) (hX : ∀ i, B i * X = X * C i) : X = 0 := by
   set v : Fin m × Fin n → ℂ := fun y => X y.1 y.2 with hv
@@ -145,9 +145,9 @@ theorem right_intertwiner_eq_zero_of_certificate {d m n k : ℕ}
 /-- **No nonzero left sitewise intertwiner from a certificate.** The transposed form of
 `right_intertwiner_eq_zero_of_certificate`: a certificate for the transposed letters forces every
 solution of `Y B^i = C^i Y` to vanish. -/
-theorem left_intertwiner_eq_zero_of_certificate {d m n k : ℕ}
-    (B : Fin d → Matrix (Fin m) (Fin m) ℂ) (C : Fin d → Matrix (Fin n) (Fin n) ℂ)
-    (rows : Fin k → Fin d × Fin m × Fin n) (N : Matrix (Fin m × Fin n) (Fin k) ℂ) {c : ℂ}
+theorem left_intertwiner_eq_zero_of_certificate {α : Type*} {m n k : ℕ}
+    (B : α → Matrix (Fin m) (Fin m) ℂ) (C : α → Matrix (Fin n) (Fin n) ℂ)
+    (rows : Fin k → α × Fin m × Fin n) (N : Matrix (Fin m × Fin n) (Fin k) ℂ) {c : ℂ}
     (hc : c ≠ 0)
     (hN : N * (sitewiseEqMatrix (fun i => (B i)ᵀ) (fun i => (C i)ᵀ)).submatrix rows id = c • 1)
     (Y : Matrix (Fin n) (Fin m) ℂ) (hY : ∀ i, Y * B i = C i * Y) : Y = 0 := by
@@ -159,15 +159,15 @@ theorem left_intertwiner_eq_zero_of_certificate {d m n k : ℕ}
 
 section RingCertificate
 
-variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d m n k : ℕ}
+variable {R : Type*} [CommRing R] (f : R →+* ℂ) {α : Type*} {m n k : ℕ}
 
 /-- **No nonzero right sitewise intertwiner from a certificate over a subring.** The form of
 `right_intertwiner_eq_zero_of_certificate` for letters that are images of matrices over `R`
 under a ring homomorphism `f : R →+* ℂ`: the certificate is stated, and decided, over `R`. -/
-theorem right_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
-    {C : Fin d → Matrix (Fin n) (Fin n) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
-    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
+theorem right_intertwiner_eq_zero_of_ringCertificate {B : α → Matrix (Fin m) (Fin m) ℂ}
+    {C : α → Matrix (Fin n) (Fin n) ℂ} (BR : α → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : α → Matrix (Fin n) (Fin n) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → α × Fin m × Fin n)
     (N : Matrix (Fin m × Fin n) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1)
     (X : Matrix (Fin m) (Fin n) ℂ) (hX : ∀ i, B i * X = X * C i) : X = 0 := by
@@ -182,10 +182,10 @@ theorem right_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin 
 
 /-- **No nonzero left sitewise intertwiner from a certificate over a subring**: the transposed
 form of `right_intertwiner_eq_zero_of_ringCertificate`. -/
-theorem left_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
-    {C : Fin d → Matrix (Fin n) (Fin n) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
-    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
+theorem left_intertwiner_eq_zero_of_ringCertificate {B : α → Matrix (Fin m) (Fin m) ℂ}
+    {C : α → Matrix (Fin n) (Fin n) ℂ} (BR : α → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : α → Matrix (Fin n) (Fin n) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → α × Fin m × Fin n)
     (N : Matrix (Fin m × Fin n) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix (fun i => (BR i)ᵀ) (fun i => (CR i)ᵀ)).submatrix rows id =
       c • 1)
@@ -198,10 +198,10 @@ theorem left_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m
 /-- **No nonzero right sitewise intertwiner into a bond-one block, in vector form.** For a
 block with bond dimension one and scalar letters `C^i`, a certificate over `R` forces every
 vector with `B^i v = C^i v` for all `i` to vanish. -/
-theorem mulVec_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
-    {C : Fin d → Matrix (Fin 1) (Fin 1) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
-    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
+theorem mulVec_eq_zero_of_ringCertificate {B : α → Matrix (Fin m) (Fin m) ℂ}
+    {C : α → Matrix (Fin 1) (Fin 1) ℂ} (BR : α → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : α → Matrix (Fin 1) (Fin 1) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → α × Fin m × Fin 1)
     (N : Matrix (Fin m × Fin 1) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1)
     (v : Fin m → ℂ) (hv : ∀ i, B i *ᵥ v = C i 0 0 • v) : v = 0 := by
@@ -215,10 +215,10 @@ theorem mulVec_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) 
 
 /-- **No nonzero left sitewise intertwiner into a bond-one block, in vector form**: the
 transposed form of `mulVec_eq_zero_of_ringCertificate`. -/
-theorem vecMul_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
-    {C : Fin d → Matrix (Fin 1) (Fin 1) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
-    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
+theorem vecMul_eq_zero_of_ringCertificate {B : α → Matrix (Fin m) (Fin m) ℂ}
+    {C : α → Matrix (Fin 1) (Fin 1) ℂ} (BR : α → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : α → Matrix (Fin 1) (Fin 1) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → α × Fin m × Fin 1)
     (N : Matrix (Fin m × Fin 1) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix (fun i => (BR i)ᵀ) (fun i => (CR i)ᵀ)).submatrix rows id =
       c • 1)
@@ -235,12 +235,12 @@ end RingCertificate
 
 /-! ### Words of reindexed block-diagonal tensors -/
 
-variable {κ : Type*} [DecidableEq κ] {n : κ → ℕ} {d DB : ℕ}
+variable {κ : Type*} [DecidableEq κ] {n : κ → ℕ} {α : Type*} {DB : ℕ}
 
 /-- A tensor whose letters are the block-diagonal matrices of a family of tensors, reindexed by
 a common bijection, evaluates words block by block. -/
 theorem evalWord_blockDiagonal'_submatrix [Finite κ] (e : (Σ k, Fin (n k)) ≃ Fin DB)
-    (A : Fin d → ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (w : List (Fin d)) :
+    (A : α → ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (w : List α) :
     Kraus.evalWord (fun a => (Matrix.blockDiagonal' (A a)).submatrix e.symm e.symm) w =
       (Matrix.blockDiagonal' fun k => Kraus.evalWord (fun a => A a k) w).submatrix
         e.symm e.symm := by
@@ -257,7 +257,7 @@ theorem evalWord_blockDiagonal'_submatrix [Finite κ] (e : (Σ k, Fin (n k)) ≃
 /-- The word traces of a reindexed block-diagonal tensor are the sums of the word traces of
 its blocks. -/
 theorem trace_evalWord_blockDiagonal'_submatrix [Fintype κ] (e : (Σ k, Fin (n k)) ≃ Fin DB)
-    (A : Fin d → ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (w : List (Fin d)) :
+    (A : α → ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (w : List α) :
     Matrix.trace
         (Kraus.evalWord (fun a => (Matrix.blockDiagonal' (A a)).submatrix e.symm e.symm) w) =
       ∑ k, Matrix.trace (Kraus.evalWord (fun a => A a k) w) := by

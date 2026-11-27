@@ -45,8 +45,8 @@ theorem trace_eq_sum_blockDiag' {o : Type*} [Fintype o] {n : o → ℕ}
   simp only [Matrix.trace, Matrix.diag_apply, Matrix.blockDiag'_apply]
   rw [← Finset.univ_sigma_univ, Finset.sum_sigma]
 
-variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPSTensor d DB}
-  {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+variable {α : Type*} {DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPTensor α (Fin DB)}
+  {S : Finset ι} {C : ∀ s, MPTensor α (Fin (D s))}
 
 namespace MultiBlockCompression
 
@@ -62,14 +62,14 @@ theorem trace_conjMatrix (A : Matrix (Fin DB) (Fin DB) ℂ) :
 reproduces the word-trace hypothesis of `exists_multiBlockCompression_of_isNormal`: the trace of
 `B^w` is the sum of the traces of the diagonal blocks of the conjugated word, which are the words
 of the blocks. -/
-theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d))
+theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List α)
     (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w) := by
   classical
   have hconj : Matrix.trace (conjMatrix P.gauge (Kraus.evalWord B w)) =
       Matrix.trace (Kraus.evalWord B w) :=
     P.trace_conjMatrix (Kraus.evalWord B w)
-  set T : Fin d → Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
+  set T : α → Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
     fun i => conjMatrix P.gauge (B i) with hTdef
   rw [← hconj, ← evalWord_conjMatrix, trace_eq_sum_blockDiag' (Kraus.evalWord T w),
     Fintype.sum_sum_type]
@@ -86,7 +86,7 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
     intro t
     rw [Matrix.blockDiag'_evalWord P.ord.injective P.triangular w (Sum.inr t)]
     have ht : (fun i => (T i).blockDiag' (Sum.inr t)) =
-        fun _ : Fin d => (0 : Matrix (Fin 1) (Fin 1) ℂ) :=
+        fun _ : α => (0 : Matrix (Fin 1) (Fin 1) ℂ) :=
       funext fun i => P.unmatched i t
     rw [ht]
     obtain ⟨i, w', rfl⟩ := List.exists_cons_of_ne_nil hw
@@ -97,8 +97,8 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
 
 /-- **The word-trace converse for weighted blocks.** When the target blocks are rescaled tensors
 `μ_s • A_s`, the word trace of `B` is the weighted sum `∑_s μ_s^{|w|} tr(A_s^w)`. -/
-theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPSTensor d (D s)}
-    (P : MultiBlockCompression B S fun s => μ s • A s) (w : List (Fin d)) (hw : w ≠ []) :
+theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPTensor α (Fin (D s))}
+    (P : MultiBlockCompression B S fun s => μ s • A s) (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) =
       ∑ s ∈ S, μ s ^ w.length * Matrix.trace (Kraus.evalWord (A s) w) := by
   rw [P.trace_evalWord_eq_sum w hw]
@@ -108,7 +108,7 @@ theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPSTensor d (D 
 
 /-- The matrix-product-vector form of `trace_evalWord_eq_sum`: for every positive system size,
 the MPV of `B` is the sum of the MPVs of the blocks. -/
-theorem mpv_eq_sum (P : MultiBlockCompression B S C) (N : ℕ) (hN : 0 < N) (σ : Fin N → Fin d) :
+theorem mpv_eq_sum (P : MultiBlockCompression B S C) (N : ℕ) (hN : 0 < N) (σ : Fin N → α) :
     mpv B σ = ∑ s ∈ S, mpv (C s) σ := by
   have hword : List.ofFn σ ≠ [] := by
     intro hzero

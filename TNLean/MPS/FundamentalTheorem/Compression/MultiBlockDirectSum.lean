@@ -58,8 +58,8 @@ namespace MultiBlockCompression
 
 section TargetEq
 
-variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPSTensor d DB}
-  {S : Finset ι} {C C' : ∀ s, MPSTensor d (D s)}
+variable {α : Type*} {DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPTensor α (Fin DB)}
+  {S : Finset ι} {C C' : ∀ s, MPTensor α (Fin (D s))}
 
 /-- A compression datum onto a family `C` is a compression datum onto every family equal to it
 letter by letter, with the same gauge and the same zero slots. -/
@@ -84,8 +84,8 @@ noncomputable def ofTargetEq (P : MultiBlockCompression B S C) (h : ∀ s i, C s
 
 end TargetEq
 
-variable {d DB : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ] {n Dt : κ → ℕ}
-  {B : ∀ k, MPSTensor d (n k)} {C : ∀ k, MPSTensor d (Dt k)}
+variable {α : Type*} {DB : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ] {n Dt : κ → ℕ}
+  {B : ∀ k, MPTensor α (Fin (n k))} {C : ∀ k, MPTensor α (Fin (Dt k))}
   (P : ∀ k, MultiBlockCompression (B k) oneSlot (fun _ : Unit => C k))
 
 /-! ### The labels of the assembled blocks -/
@@ -261,12 +261,12 @@ theorem conjMatrix_directSumGauge (e : (Σ k, Fin (n k)) ≃ Fin DB)
 
 /-! ### The assembled datum -/
 
-variable (e : (Σ k, Fin (n k)) ≃ Fin DB) {A : MPSTensor d DB}
+variable (e : (Σ k, Fin (n k)) ≃ Fin DB) {A : MPTensor α (Fin DB)}
   (hA : ∀ i, A i = (Matrix.blockDiagonal' fun k => B k i).submatrix e.symm e.symm)
 
 include hA in
 /-- The letters of `A` in the assembled block coordinates. -/
-theorem conjMatrix_directSumGauge_letter (i : Fin d) :
+theorem conjMatrix_directSumGauge_letter (i : α) :
     conjMatrix (directSumGauge P e) (A i) =
       (Matrix.blockDiagonal' fun k => conjMatrix (P k).gauge (B k i)).submatrix
         (directSumCoordEquiv P) (directSumCoordEquiv P) := by
@@ -310,7 +310,7 @@ noncomputable def directSum : MultiBlockCompression A (Finset.univ : Finset κ) 
 
 /-- **The remainder of the direct sum is the direct sum of the remainders** (P5 note,
 Theorem 7.7(vi)). -/
-theorem remainder_directSum (i : Fin d) :
+theorem remainder_directSum (i : α) :
     (directSum P e hA).remainder i =
       (Matrix.blockDiagonal' fun k => (P k).remainder i).submatrix e.symm e.symm := by
   refine conjMatrix_injective (directSum P e hA).gauge ?_
@@ -345,7 +345,7 @@ theorem remainder_directSum (i : Fin d) :
 
 /-- The words of the remainder of the direct sum are the direct sums of the words of the
 remainders of the blocks. -/
-theorem evalWord_remainder_directSum (w : List (Fin d)) :
+theorem evalWord_remainder_directSum (w : List α) :
     Kraus.evalWord (directSum P e hA).remainder w =
       (Matrix.blockDiagonal' fun k => Kraus.evalWord (P k).remainder w).submatrix e.symm
         e.symm := by
@@ -357,7 +357,7 @@ theorem evalWord_remainder_directSum (w : List (Fin d)) :
 /-- **Nilpotency of the remainder of a direct sum, block by block**: a word vanishing in the
 remainder of every block vanishes in the remainder of the direct sum. The nilpotency order of
 the assembled remainder is therefore the largest nilpotency order of the blocks. -/
-theorem evalWord_remainder_directSum_eq_zero (w : List (Fin d))
+theorem evalWord_remainder_directSum_eq_zero (w : List α)
     (hw : ∀ k, Kraus.evalWord (P k).remainder w = 0) :
     Kraus.evalWord (directSum P e hA).remainder w = 0 := by
   rw [evalWord_remainder_directSum]
@@ -369,7 +369,7 @@ theorem evalWord_remainder_directSum_eq_zero (w : List (Fin d))
 /-- A word that does not vanish in the remainder of one block does not vanish in the remainder
 of the direct sum: the nilpotency order of the assembled remainder is at least that of every
 block. -/
-theorem evalWord_remainder_directSum_ne_zero (w : List (Fin d)) (k : κ)
+theorem evalWord_remainder_directSum_ne_zero (w : List α) (k : κ)
     (hk : Kraus.evalWord (P k).remainder w ≠ 0) :
     Kraus.evalWord (directSum P e hA).remainder w ≠ 0 := by
   rw [evalWord_remainder_directSum]
