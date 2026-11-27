@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
+import QICLean.Kraus.PrimitiveFixedPoint.Blocking
 
 /-!
 # Physical reindexing along alphabet equivalences
@@ -17,9 +18,9 @@ basic tensor properties used by blocking and canonical-form arguments.
 * `isPrimitive_transferMap_reindexPhysical_equiv` — transfer-map primitivity is preserved,
   since the transfer map is unchanged (`Kraus.transferMap_reindexPhysical_equiv`; trace
   preservation is `Kraus.isTP_reindexPhysical_iff`).
-* `hasInvariantProj_reindexPhysical_equiv`, `isIrreducibleFamily_reindexPhysical_equiv`,
-  `isInjective_reindexPhysical_equiv`, and `isNormal_reindexPhysical_equiv` — invariant
-  projections, irreducibility, one-site injectivity, and normality are preserved.
+* `isInjective_reindexPhysical_equiv` and `isNormal_reindexPhysical_equiv` — one-site injectivity
+  and normality are preserved (invariant projections and irreducibility:
+  `Kraus.hasInvariantProj_reindexPhysical_equiv`, `Kraus.isIrreducibleFamily_reindexPhysical_equiv`).
 * `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
   when both tensors are reindexed by the same physical alphabet bijection.
 * `linearIndependent_mpvState_of_configEquiv` transports linear independence of MPV state
@@ -49,25 +50,6 @@ theorem isPrimitive_transferMap_reindexPhysical_equiv {α₁ α₂ β : Type*} [
     _root_.IsPrimitive (Kraus.transferMap (Kraus.reindexPhysical e A)) ↔
       _root_.IsPrimitive (Kraus.transferMap A) := by
   rw [Kraus.transferMap_reindexPhysical_equiv e A]
-
-/-- Reindexing by a physical-index equivalence preserves invariant projections. -/
-theorem hasInvariantProj_reindexPhysical_equiv {α₁ α₂ β : Type*} [Fintype β] [DecidableEq β]
-    (e : α₁ ≃ α₂) (A : MPTensor α₂ β) :
-    Kraus.HasInvariantProj (Kraus.reindexPhysical e A) ↔ Kraus.HasInvariantProj A := by
-  constructor
-  · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
-    refine ⟨P, hPproj, hP0, hP1, ?_⟩
-    intro i
-    simpa [Kraus.reindexPhysical] using hLower (e.symm i)
-  · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
-    exact ⟨P, hPproj, hP0, hP1, fun i => hLower (e i)⟩
-
-/-- Reindexing by a physical-index equivalence preserves tensor irreducibility. -/
-theorem isIrreducibleFamily_reindexPhysical_equiv {α₁ α₂ β : Type*} [Fintype β]
-    [DecidableEq β] (e : α₁ ≃ α₂) (A : MPTensor α₂ β) :
-    Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e A) ↔ Kraus.IsIrreducibleFamily A := by
-  rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily,
-    hasInvariantProj_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves algebraic injectivity. -/
 theorem isInjective_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)

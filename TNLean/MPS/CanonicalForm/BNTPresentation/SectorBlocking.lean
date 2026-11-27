@@ -105,7 +105,7 @@ theorem IsBNTCanonicalForm.reindexPhysical [Fintype α] [Fintype α']
     IsBNTCanonicalForm (P.reindexPhysical e) where
   basis_dim_pos := hCF.basis_dim_pos
   basis_irreducible := fun j ↦
-    (isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
+    (Kraus.isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
       (hCF.basis_irreducible j)
   basis_left_canonical := fun j ↦
     (Kraus.isTP_reindexPhysical_iff e (P.basis j)).2

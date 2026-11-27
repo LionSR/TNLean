@@ -33,10 +33,10 @@ variable {d D r : ℕ} {dim : Fin r → ℕ}
 
 /-- Heterogeneously equal tensors have equal closed word evaluations after
 transporting the virtual boundary across the equality of bond dimensions. -/
-theorem trace_evalWord_mul_cast_of_heq
+theorem trace_evalWord_mul_cast_of_heq {α : Type*}
     {D₁ D₂ : ℕ} (hD : D₁ = D₂)
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hA : A ≍ B)
-    (w : List (Fin d)) (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (hA : A ≍ B)
+    (w : List α) (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
     Matrix.trace (Kraus.evalWord A w * X) =
       Matrix.trace (Kraus.evalWord B w *
         cast (congrArg (fun n ↦ Matrix (Fin n) (Fin n) ℂ) hD) X) := by
@@ -90,12 +90,12 @@ theorem trace_evalWord_toTensorFromBlocks_mul {α : Type*}
 
 Source: arXiv:1606.00608, gauge-matrix similarity convention at lines
 186--195 and Appendix C.2, lines 1646--1665. -/
-theorem trace_evalWord_gauge_mul
-    {A B : MPSTensor d D} (G : GL (Fin D) ℂ)
+theorem trace_evalWord_gauge_mul {α : Type*}
+    {A B : MPTensor α (Fin D)} (G : GL (Fin D) ℂ)
     (hG : ∀ i, B i =
       (G : Matrix (Fin D) (Fin D) ℂ) * A i *
         (↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ))
-    (w : List (Fin d)) (X : Matrix (Fin D) (Fin D) ℂ) :
+    (w : List α) (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (Kraus.evalWord B w * X) =
       Matrix.trace (Kraus.evalWord A w *
         ((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X *
@@ -129,9 +129,9 @@ equations are combined over canonical sectors.
 
 Source: arXiv:1606.00608, gauge-matrix similarity convention at lines
 186--195 and Appendix C.2, lines 1646--1665 and 1810--1825. -/
-theorem trace_evalWord_gauge_toTensorFromBlocks_mul
-    (weight : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
-    (B : MPSTensor d (∑ j : Fin r, dim j))
+theorem trace_evalWord_gauge_toTensorFromBlocks_mul {α : Type*}
+    (weight : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
+    (B : MPTensor α (Fin (∑ j : Fin r, dim j)))
     (G : GL (Fin (∑ j : Fin r, dim j)) ℂ)
     (hG : ∀ i, B i =
       (G : Matrix (Fin (∑ j : Fin r, dim j))
@@ -139,7 +139,7 @@ theorem trace_evalWord_gauge_toTensorFromBlocks_mul
         toTensorFromBlocks weight A i *
         (↑(G⁻¹) : Matrix (Fin (∑ j : Fin r, dim j))
           (Fin (∑ j : Fin r, dim j)) ℂ))
-    (w : List (Fin d))
+    (w : List α)
     (X : Matrix (Fin (∑ j : Fin r, dim j))
       (Fin (∑ j : Fin r, dim j)) ℂ) :
     Matrix.trace (Kraus.evalWord B w * X) =
