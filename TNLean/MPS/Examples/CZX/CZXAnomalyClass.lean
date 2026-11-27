@@ -251,12 +251,12 @@ theorem czxFusionData_rightV_gen_gen_gen :
 private theorem czx_left_pair_int : ∀ i j k l : Fin 2,
     czxAssocLeftInt * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
       czxDecoratedIntTensor (i, j) * czxAssocLeftInt * czxDecoratedCubeInt k l := by
-  decide
+  decide +kernel
 
 private theorem czx_right_pair_int : ∀ i j k l : Fin 2,
     czxRightTreeInt * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
       czxDecoratedIntTensor (i, j) * czxRightTreeInt * czxDecoratedCubeInt k l := by
-  decide
+  decide +kernel
 
 private theorem czx_letter_int : ∀ i j : Fin 2,
     czxAssocLeftInt * czxDecoratedCubeInt i j = -(czxRightTreeInt * czxDecoratedCubeInt i j) := by
