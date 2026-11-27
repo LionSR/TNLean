@@ -393,12 +393,12 @@ theorem exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
         ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
           Module.End.HasEigenvalue (Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+            (parentRingInteraction (Kraus.blockTensor A p) 2 N).hamiltonian) μ →
           μ = 0 ∨ ((1 / 8 : ℝ) : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
   obtain ⟨_, hGap⟩ :=
     hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator
-      (blockTensor A p) 2 (by omega) hAnti
+      (Kraus.blockTensor A p) 2 (by omega) hAnti
   refine ⟨p, hp, hInj, fun N hN μ hμ ↦ ?_⟩
   have hγ : (1 / 8 : ℝ) = 1 / (4 * ((2 : ℕ) : ℝ)) := by norm_num
   rw [hγ]
@@ -417,7 +417,7 @@ theorem exists_blockTensor_hamiltonian_parentRingInteraction_gapped
         ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
           Module.End.HasEigenvalue (Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+            (parentRingInteraction (Kraus.blockTensor A p) 2 N).hamiltonian) μ →
           μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hGap⟩ :=
     hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ
