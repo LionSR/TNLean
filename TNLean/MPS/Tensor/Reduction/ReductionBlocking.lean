@@ -40,13 +40,13 @@ one; see `docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.
 
 * `MPTensor.IsReduction.isReductionExteriorBufferLength_of_bound`: a residual
   nilpotency bound `N` gives exterior buffer length `N - 1`.
-* `MPTensor.IsReduction.blockTensor`,
-  `MPSTensor.IsReductionExteriorBufferLength.blockTensor`: transport through
-  physical blocking.
+* `MPTensor.IsReduction.block`,
+  `MPSTensor.IsReductionExteriorBufferLength.block`: transport through
+  physical blocking `Kraus.block`.
 * `MPTensor.IsReduction.reindexPhysical`,
   `MPSTensor.IsReductionExteriorBufferLength.reindexPhysical`: transport
   through a physical reindexing of both tensors.
-* `MPTensor.IsReduction.blockTensor_commonBufferLength_one`: for a member of
+* `MPTensor.IsReduction.block_commonBufferLength_one`: for a member of
   a finite family of nilpotency bounds, blocking by the common buffer length
   makes one blocked exterior site suffice.
 * `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul`: the reciprocal
@@ -57,11 +57,18 @@ one; see `docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.
 open MPTensor
 
 open scoped Matrix
-open Kraus (blockTensor evalWord_blockTensor length_flattenBlockedWord)
-
 namespace MPSTensor
 
-variable {d d' D_A D_B : ℕ}
+variable {α α' : Type*} {D_A D_B : ℕ}
+
+/-- A word of blocks of length `L` flattens to a word of `L` times as many sites. -/
+private theorem length_flatMap_ofFn {L : ℕ} (ws : List (Fin L → α)) :
+    (ws.flatMap List.ofFn).length = ws.length * L := by
+  induction ws with
+  | nil => simp
+  | cons w ws ih =>
+      rw [List.flatMap_cons, List.length_append, List.length_ofFn, ih, List.length_cons,
+        Nat.succ_mul, Nat.add_comm]
 
 /-- The exterior identity of the first fusion equation with exterior buffers of
 length at least `m`: for every nonempty central word `c` and all words `p`, `q`
@@ -72,16 +79,16 @@ Source: arXiv:2502.20257, `eq:fusion_1`, `main.tex` lines 1409--1498, with
 exterior length $m\geq\ell$; the one-block identity of MGSC18, arXiv:1706.07329v2,
 Lemma `lem:B_expand` with Definition 8, `cornerproblem.tex` lines 3147--3152
 and 3993--4005. -/
-def IsReductionExteriorBufferLength (B : MPSTensor d D_B) (A : MPSTensor d D_A)
+def IsReductionExteriorBufferLength (B : MPTensor α (Fin D_B)) (A : MPTensor α (Fin D_A))
     (V : Matrix (Fin D_A) (Fin D_B) ℂ) (W : Matrix (Fin D_B) (Fin D_A) ℂ)
     (m : ℕ) : Prop :=
-  ∀ p c q : List (Fin d), c ≠ [] → m ≤ p.length → m ≤ q.length →
+  ∀ p c q : List α, c ≠ [] → m ≤ p.length → m ≤ q.length →
     Kraus.evalWord B p * W * Kraus.evalWord A c * V * Kraus.evalWord B q =
       Kraus.evalWord B (p ++ c ++ q)
 
 namespace IsReductionExteriorBufferLength
 
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ} {m : ℕ}
 
 /-- Longer exterior buffers remain exterior buffers. -/
@@ -111,7 +118,7 @@ theorem reciprocal_smul (h : IsReductionExteriorBufferLength B A V W m) {β : �
 /-- Reindexing the physical alphabet of both tensors by the same map preserves
 an exterior buffer length. -/
 theorem reindexPhysical (h : IsReductionExteriorBufferLength B A V W m)
-    (f : Fin d' → Fin d) :
+    (f : α' → α) :
     IsReductionExteriorBufferLength (Kraus.reindexPhysical f B)
       (Kraus.reindexPhysical f A) V W m := by
   intro p c q hc hp hq
@@ -121,22 +128,22 @@ theorem reindexPhysical (h : IsReductionExteriorBufferLength B A V W m)
 /-- Blocking by `L > 0` sites turns an exterior buffer of `m` original sites
 into an exterior buffer of `k` blocked sites once `m ≤ k * L`.  In particular
 one blocked exterior site suffices when `m ≤ L`. -/
-theorem blockTensor (h : IsReductionExteriorBufferLength B A V W m) {L k : ℕ}
+theorem block (h : IsReductionExteriorBufferLength B A V W m) {L k : ℕ}
     (hL : 0 < L) (hk : m ≤ k * L) :
-    IsReductionExteriorBufferLength (blockTensor B L) (blockTensor A L) V W k := by
+    IsReductionExteriorBufferLength (Kraus.block B L) (Kraus.block A L) V W k := by
   intro p c q hc hp hq
-  rw [Kraus.evalWord_append, Kraus.evalWord_append, evalWord_blockTensor,
-    evalWord_blockTensor, evalWord_blockTensor, evalWord_blockTensor,
+  rw [Kraus.evalWord_append, Kraus.evalWord_append, Kraus.evalWord_block,
+    Kraus.evalWord_block, Kraus.evalWord_block, Kraus.evalWord_block,
     ← Kraus.evalWord_append, ← Kraus.evalWord_append]
   refine h _ _ _ ?_ ?_ ?_
   · intro hnil
-    have hlen := length_flattenBlockedWord d L c
+    have hlen := length_flatMap_ofFn c
     rw [hnil, List.length_nil] at hlen
     have hpos := Nat.mul_pos (List.length_pos_of_ne_nil hc) hL
     omega
-  · rw [length_flattenBlockedWord]
+  · rw [length_flatMap_ofFn]
     exact hk.trans (Nat.mul_le_mul_right L hp)
-  · rw [length_flattenBlockedWord]
+  · rw [length_flatMap_ofFn]
     exact hk.trans (Nat.mul_le_mul_right L hq)
 
 end IsReductionExteriorBufferLength
@@ -145,7 +152,7 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+variable {B : MPTensor α (Fin D_B)} {A : MPTensor α (Fin D_A)}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
 /-- A residual nilpotency bound `N` gives exterior buffer length `N - 1`.
@@ -178,27 +185,27 @@ Source: arXiv:2502.20257, `main.tex` line 1498, read as the exterior identity
 of `eq:fusion_1` with $m\geq1$ after blocking; the bound $N_i\leq L+1$ is the
 hypothesis of the exterior-buffer identity, not the vanishing of a blocked
 residual letter. -/
-theorem _root_.MPTensor.IsReduction.blockTensor_commonBufferLength_one (h : IsReduction B A V W)
+theorem _root_.MPTensor.IsReduction.block_commonBufferLength_one (h : IsReduction B A V W)
     {ι : Type*} [Fintype ι] (N : ι → ℕ) {i : ι}
     (hBound : IsReductionResidualNilpotencyBound B A V W (N i)) :
-    IsReductionExteriorBufferLength (blockTensor B (commonBufferLength N))
-      (blockTensor A (commonBufferLength N)) V W 1 :=
-  (h.isReductionExteriorBufferLength_of_bound hBound).blockTensor
+    IsReductionExteriorBufferLength (Kraus.block B (commonBufferLength N))
+      (Kraus.block A (commonBufferLength N)) V W 1 :=
+  (h.isReductionExteriorBufferLength_of_bound hBound).block
     (commonBufferLength_pos N) (by have := le_commonBufferLength_add_one N i; omega)
 
 /-- Reindexing the physical alphabet of both tensors by the same map preserves
 a rectangular reduction. -/
-theorem _root_.MPTensor.IsReduction.reindexPhysical (h : IsReduction B A V W) (f : Fin d' → Fin d) :
+theorem _root_.MPTensor.IsReduction.reindexPhysical (h : IsReduction B A V W) (f : α' → α) :
     IsReduction (Kraus.reindexPhysical f B) (Kraus.reindexPhysical f A) V W := by
   refine ⟨h.mul_eq_one, fun w ↦ ?_⟩
   rw [Kraus.evalWord_reindexPhysical, Kraus.evalWord_reindexPhysical, h.evalWord]
 
 /-- A rectangular reduction between tensors is a rectangular reduction between
 their physical blockings by the same length. -/
-theorem _root_.MPTensor.IsReduction.blockTensor (h : IsReduction B A V W) (L : ℕ) :
-    IsReduction (blockTensor B L) (blockTensor A L) V W := by
+theorem _root_.MPTensor.IsReduction.block (h : IsReduction B A V W) (L : ℕ) :
+    IsReduction (Kraus.block B L) (Kraus.block A L) V W := by
   refine ⟨h.mul_eq_one, fun w ↦ ?_⟩
-  rw [evalWord_blockTensor, evalWord_blockTensor, h.evalWord]
+  rw [Kraus.evalWord_block, Kraus.evalWord_block, h.evalWord]
 
 end IsReduction
 

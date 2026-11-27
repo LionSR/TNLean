@@ -100,7 +100,7 @@ noncomputable def block (ad : BlockActionData F A) (L : ℕ) :
       (actTensor (blockTensor (F.tensor g) L) (Kraus.blockTensor (A x) L))
       (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x)
     rw [← blockTensor_actTensor]
-    exact (ad.isReduction g x).blockTensor L
+    exact ((ad.isReduction g x).block L).reindexPhysical _
 
 /-- The interior action identity, including the empty word.
 Source: arXiv:2502.20257, `eq:action_interior`, lines 1840--1870 (`n ≥ 0`). -/
@@ -133,9 +133,9 @@ theorem block_hasExteriorBufferLength_one (ad : BlockActionData F A)
     (actTensor (blockTensor (F.tensor g) L) (Kraus.blockTensor (A x) L))
     (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x) 1
   rw [← blockTensor_actTensor]
-  exact ((ad.isReduction g x).isReductionExteriorBufferLength_nilpotencyLength
-    ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))).blockTensor hL
-      (by have := hN g x; change ad.nilpotencyLength g x - 1 ≤ 1 * L; omega)
+  exact (((ad.isReduction g x).isReductionExteriorBufferLength_nilpotencyLength
+    ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))).block hL
+      (by have := hN g x; change ad.nilpotencyLength g x - 1 ≤ 1 * L; omega)).reindexPhysical _
 
 section Finite
 

@@ -994,9 +994,9 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_blocking}
     \lean{MPTensor.IsReduction.isReductionExteriorBufferLength_of_bound,
         MPTensor.IsReduction.isReductionExteriorBufferLength_nilpotencyLength,
-        MPTensor.IsReduction.blockTensor,
+        MPTensor.IsReduction.block,
         MPTensor.IsReduction.reindexPhysical,
-        MPSTensor.IsReductionExteriorBufferLength.blockTensor,
+        MPSTensor.IsReductionExteriorBufferLength.block,
         MPSTensor.IsReductionExteriorBufferLength.reindexPhysical}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_exterior_buffer_length,def:mps_reduction_residual_nilpotency_length,def:same_mpv2_pos,def:blocked_tensor}
@@ -1048,7 +1048,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{lemma}[Common blocking of a finite family of reductions]
     \label{thm:mps_reduction_common_blocking}
-    \lean{MPTensor.IsReduction.blockTensor_commonBufferLength_one}
+    \lean{MPTensor.IsReduction.block_commonBufferLength_one}
     \leanok
     \uses{def:mps_rectangular_reduction,def:mps_reduction_exterior_buffer_length,def:mps_reduction_residual_nilpotency_length,def:common_buffer_length,def:blocked_tensor}
     Let $(N_i)_{i\in I}$ be a finite family of natural numbers with common

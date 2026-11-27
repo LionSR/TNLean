@@ -264,8 +264,10 @@ theorem exists_posDef_transferMap_eigenvector_of_irreducible {α : Type*} [Finty
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
       ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (ι := α) (n := Fin n) B ρ = (r : ℂ) • ρ := by
   have hne : Kraus.transferMap (ι := α) (n := Fin n) B ≠ 0 := by
-    simpa only using
-      Kraus.mapLM_ne_zero_of_exists_ne_zero B hB
+    obtain ⟨i, hi⟩ := hB
+    rw [← Kraus.transferMap_reindexPhysical_equiv (Fintype.equivFin α).symm B]
+    exact Kraus.mapLM_ne_zero_of_exists_ne_zero _
+      ⟨Fintype.equivFin α i, by simpa [Kraus.reindexPhysical] using hi⟩
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
     exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (ι := α) (n := Fin n) B)
       (Kraus.transferMap_isCPMap B)

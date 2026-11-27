@@ -144,10 +144,10 @@ namespace GroupFamily
 variable {G : Type*} [Group G]
 
 omit [Group G] in
-private theorem reindex_tensor_toMPSTensor_eq
+private theorem reindex_tensor_eq
     (F : MPOTensor.GroupFamily G d) (x y : G) (hxy : x = y)
     (hD : F.bondDim x = F.bondDim y) :
-    MPSTensor.reindex hD (F.tensor x).toMPSTensor = (F.tensor y).toMPSTensor := by
+    MPSTensor.reindex hD (F.tensor x) = F.tensor y := by
   subst y
   exact MPSTensor.reindex_rfl _
 
@@ -163,13 +163,11 @@ theorem IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq
     let T := hF.daggerInverseGauge F hcanonical g
     physicalAdjointTensor (F.tensor g) (i, j) =
       (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ)ᴴ * F.tensor g (i, j) * T := by
-  have hinv : inverseFlattening F hF g = (F.tensor g).toMPSTensor :=
-    reindex_tensor_toMPSTensor_eq F g⁻¹ g hg (hF.bondDim_inv F g).symm
-  have h := hF.physicalAdjointTensor_eq_daggerInverseGauge F hcanonical g
-    (finProdFinEquiv (i, j))
+  have hinv : inverseFlattening F hF g = F.tensor g :=
+    reindex_tensor_eq F g⁻¹ g hg (hF.bondDim_inv F g).symm
+  have h := hF.physicalAdjointTensor_eq_daggerInverseGauge F hcanonical g (i, j)
   rw [hinv] at h
-  simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] using h
+  exact h
 
 /-- The first algebraic construction and both one-sided inverses, specialized
 to the chosen gauge of an involutive element in a canonical representation family.
