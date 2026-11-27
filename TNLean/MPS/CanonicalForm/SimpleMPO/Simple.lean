@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BNTPresentation.Refinement
 import TNLean.MPS.CanonicalForm.BNTPresentation.SectorBlocking
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleTensor
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Definition 4.7 simplicity
@@ -33,6 +34,30 @@ a defining clause.
   canonical-block convention at lines 217--246 and Definition 4.7 at lines
   815--822
 -/
+
+namespace MPSTensor
+
+open MPTensor
+
+/-- A bijective relabelling of the physical alphabet transports a basis-of-normal-tensors
+presentation.
+
+Source: arXiv:1606.00608, the physical-basis identifications used at lines 317--345. -/
+theorem IsBNTSectorPresentation.reindexPhysical {α α' : Type*} [Fintype α] [Fintype α']
+    {D' : ℕ} {A : MPTensor α (Fin D')} {P : SectorDecomposition α}
+    (h : IsBNTSectorPresentation A P) (e : α' ≃ α) :
+    IsBNTSectorPresentation (Kraus.reindexPhysical e A) (P.reindexPhysical e) where
+  basisCount_pos := h.basisCount_pos
+  sameMPV₂Pos N hN σ := by
+    rw [SectorDecomposition.reindexPhysical_toTensor, MPTensor.mpv_reindexPhysical,
+      MPTensor.mpv_reindexPhysical]
+    exact h.sameMPV₂Pos N hN _
+  basis_normal j := (h.basis_normal j).reindexPhysical e
+  eventually_li := by
+    obtain ⟨N₀, hLI⟩ := h.eventually_li
+    exact ⟨N₀, fun N hN ↦ linearIndependent_mpvState_reindexPhysical_equiv e P.basis (hLI N hN)⟩
+
+end MPSTensor
 
 namespace MPSTensor.IsBNTCanonicalForm
 
