@@ -432,13 +432,14 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
   rw [toMPSTensor_blockTensor]
   simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
   change _ = Kraus.evalWord
-    (fun i => ((Real.sqrt d : ℂ)⁻¹) • U (i.divNat, i.modNat)) _
+    (fun i : Fin (d * d) => ((Real.sqrt d : ℂ)⁻¹) • U (i.divNat, i.modNat)) _
   rw [Kraus.evalWord_smul, List.length_ofFn]
   have hsqrtC : (Real.sqrt (Kraus.blockPhysDim d p) : ℂ) =
       (Real.sqrt d : ℂ) ^ p := by
     rw [sqrt_blockPhysDim]
     exact Complex.ofReal_pow _ _
   rw [hsqrtC, inv_pow]
+  rfl
 
 /-- Construct canonical-form-II data for a positively blocked MPO normalized flattening.
 

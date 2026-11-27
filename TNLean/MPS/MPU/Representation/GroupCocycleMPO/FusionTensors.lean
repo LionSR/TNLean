@@ -343,6 +343,6 @@ normal tensors, so the class-independence results for such representations do no
 it; its three-cochain is taken with the fusion tensors of the source (`fusionData_omega`). -/
 theorem not_isNormalRepresentation [Nontrivial G] {ω : ScalarThreeCochain G}
     (hn : ScalarThreeCochain.IsNormalized ω) : ¬ (family e ω).IsNormalRepresentation :=
-  fun h ↦ not_isNormal_tensor_one e hn (h.isNormal 1)
+  fun h ↦ not_isNormal_tensor_one e hn ((isNormal_toMPSTensor_iff _).1 (h.isNormal 1))
 
 end MPOTensor.GroupCocycle

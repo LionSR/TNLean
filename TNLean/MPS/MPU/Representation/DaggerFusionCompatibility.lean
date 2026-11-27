@@ -321,7 +321,7 @@ theorem tensor_mul_daggerTargetGauge (g h : G) (i j : Fin d) :
     (physicalAdjointTensor (F.tensor (h⁻¹ * g⁻¹))).toMPSTensor
     (fun ij ↦ by rw [← hinv]; exact hF.physicalAdjointTensor_eq_daggerInverseGauge F hc _ ij)
     (finProdFinEquiv (i, j))
-  simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+  simpa only [daggerTargetGauge, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat] using hgauge
 
 /-- The target gauge and its inverse compose to the identity on the bond space

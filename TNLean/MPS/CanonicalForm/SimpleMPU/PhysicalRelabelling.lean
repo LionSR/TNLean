@@ -64,8 +64,9 @@ variable {d D : ℕ}
 /-- The letters of a blocked operator tensor are the blocked words over the pair alphabet. -/
 theorem range_blockTensor (M : MPOTensor d D) (L : ℕ) :
     Set.range (blockTensor M L) = Set.range (Kraus.block M L) := by
-  refine Function.Surjective.range_comp (fun w ↦ ⟨((Kraus.decodeBlockEquiv d L).symm
-    fun k ↦ (w k).1, (Kraus.decodeBlockEquiv d L).symm fun k ↦ (w k).2), ?_⟩) _
+  refine Function.Surjective.range_comp (fun w : Fin L → Fin d × Fin d ↦
+    ⟨((Kraus.decodeBlockEquiv d L).symm fun k ↦ (w k).1,
+      (Kraus.decodeBlockEquiv d L).symm fun k ↦ (w k).2), ?_⟩) _
   funext k
   simp
 

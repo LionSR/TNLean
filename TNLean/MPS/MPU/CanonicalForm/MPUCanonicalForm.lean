@@ -42,7 +42,7 @@ An MPU tensor in canonical form II is in canonical form. Canonical form II
 writes the normalized flattening `d^{-1/2} U` as a weighted retained-block
 reconstruction with normal blocks; a normal block is irreducible and has
 transfer spectral radius one, so the same blocks, with weights multiplied by
-`d^{1/2}`, give canonical-form data for the flattening of `U` itself.
+`d^{1/2}`, give canonical-form data for `U` itself on the pair alphabet.
 
 ### Main results
 
