@@ -186,29 +186,33 @@ theorem exists_embedded_leftCanonical_normal_obstruction_block :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
         MPTensor.IsLeftCanonical B ∧ MPTensor.IsNormalTensor B ∧
-        MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+        MPTensor.GaugeEquiv (Kraus.reindexPhysical finProdFinEquiv.symm embeddedObstruction)
+          (mu • B) ∧
         physicalSupportProj (verticalBNTMPO B) = obstructionPhysicalSupport := by
   obtain ⟨mu, Bsource, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hTensorGauge⟩ :=
     exists_leftCanonical_normalTensor_scalar_representation
   let C : MPOTensor 5 2 := changePhysicalBasis physicalInclusion Bsource
-  let Bambient : MPSTensor (5 * 5) 2 := C.toMPSTensor
+  let Bambient : MPSTensor (5 * 5) 2 := Kraus.reindexPhysical finProdFinEquiv.symm C
   have hAmbientInj : Kraus.IsInjective Bambient :=
-    (isInjective_toMPSTensor_iff C).2
+    (MPSTensor.isInjective_reindexPhysical_equiv finProdFinEquiv.symm C).2
       ((isInjective_changePhysicalBasis_iff
         physicalInclusion physicalInclusion_isometry Bsource).2 hBInj)
   have hAmbientLeft : MPTensor.IsLeftCanonical Bambient :=
-    (isTP_toMPSTensor_iff C).2
+    (Kraus.isTP_reindexPhysical_iff finProdFinEquiv.symm C).2
       (isLeftCanonical_changePhysicalBasis
         physicalInclusion physicalInclusion_isometry Bsource hBLeft)
   have hAmbientNormal : MPTensor.IsNormalTensor Bambient :=
     ((isNormalTensor_changePhysicalBasis_iff
       physicalInclusion physicalInclusion_isometry Bsource).2 hBNormal).reindexPhysical
         finProdFinEquiv.symm
-  have hAmbientGauge :
-      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • Bambient) := by
+  have hPairGauge : MPTensor.GaugeEquiv embeddedObstruction (mu • C) := by
     have h := gaugeEquiv_changePhysicalBasis physicalInclusion hTensorGauge
     rw [changePhysicalBasis_smul] at h
-    exact (gaugeEquiv_toMPSTensor_iff _ _).2 h
+    exact h
+  have hAmbientGauge : MPTensor.GaugeEquiv
+      (Kraus.reindexPhysical finProdFinEquiv.symm embeddedObstruction) (mu • Bambient) := by
+    obtain ⟨X, hX⟩ := hPairGauge
+    exact ⟨X, fun i ↦ hX (finProdFinEquiv.symm i)⟩
   have hC : verticalBNTMPO Bambient = C := by
     funext ab
     change C (finProdFinEquiv.symm (finProdFinEquiv ab)) = C ab
@@ -220,8 +224,7 @@ theorem exists_embedded_leftCanonical_normal_obstruction_block :
       physicalSupportProj C = physicalSupportProj (mu • C) :=
         (physicalSupportProj_smul_of_ne C hmu).symm
       _ = physicalSupportProj embeddedObstruction :=
-        (physicalSupportProj_eq_of_gaugeEquiv
-          ((gaugeEquiv_toMPSTensor_iff _ _).1 hAmbientGauge)).symm
+        (physicalSupportProj_eq_of_gaugeEquiv hPairGauge).symm
       _ = obstructionPhysicalSupport := embeddedObstruction_physicalSupportProj
   exact ⟨mu, Bambient, hmu, hmuNorm, hAmbientInj, hAmbientLeft,
     hAmbientNormal, hAmbientGauge, hAmbientSupport⟩
@@ -437,7 +440,7 @@ coefficient `mu` and terminal-block coefficient exactly one. -/
   basis := Fin.cons
     (α := fun j : Fin 2 ↦ MPSTensor (5 * 5)
       (Fin.cons (α := fun _ : Fin 2 ↦ ℕ) 2 (fun _ : Fin 1 ↦ 1) j))
-    B (fun _ : Fin 1 ↦ terminalBlock.toMPSTensor)
+    B (fun _ : Fin 1 ↦ (Kraus.reindexPhysical finProdFinEquiv.symm terminalBlock))
   sectors :=
     { copies := fun _ ↦ 1
       copies_pos := fun _ ↦ Nat.one_pos
@@ -464,7 +467,7 @@ theorem obstructionTerminalDecomposition_basis
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     (obstructionTerminalDecomposition mu B hmu).basis 0 = B ∧
       (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) =
-        terminalBlock.toMPSTensor := by
+        (Kraus.reindexPhysical finProdFinEquiv.symm terminalBlock) := by
   constructor
   · rfl
   · rfl
@@ -478,12 +481,15 @@ theorem obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
     (hBInj : Kraus.IsInjective B) (hBLeft : MPTensor.IsLeftCanonical B)
     (hBNormal : MPTensor.IsNormalTensor B) :
     MPSTensor.IsLeftCanonicalBNTPresentation (obstructionTerminalDecomposition mu B hmu) := by
-  have hTerminalNormal : MPTensor.IsNormalTensor terminalBlock.toMPSTensor :=
+  let T : MPSTensor (5 * 5) 1 := Kraus.reindexPhysical finProdFinEquiv.symm terminalBlock
+  have hTerminalNormal : MPTensor.IsNormalTensor T :=
     terminalBlock_isNormalTensor.reindexPhysical finProdFinEquiv.symm
-  have hTerminalLeft : MPTensor.IsLeftCanonical terminalBlock.toMPSTensor :=
-    (isTP_toMPSTensor_iff terminalBlock).2 terminalBlock_isLeftCanonical
-  have hTerminalInj : Kraus.IsInjective terminalBlock.toMPSTensor :=
-    (isInjective_toMPSTensor_iff terminalBlock).2 terminalBlock_isInjective
+  have hTerminalLeft : MPTensor.IsLeftCanonical T :=
+    (Kraus.isTP_reindexPhysical_iff finProdFinEquiv.symm terminalBlock).2
+      terminalBlock_isLeftCanonical
+  have hTerminalInj : Kraus.IsInjective T :=
+    (MPSTensor.isInjective_reindexPhysical_equiv finProdFinEquiv.symm terminalBlock).2
+      terminalBlock_isInjective
   have hBSelf : Filter.Tendsto
       (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5)) B B N)
       Filter.atTop (nhds (1 : ℂ)) :=
@@ -491,20 +497,20 @@ theorem obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
       hBNormal.no_invariant_proj hBLeft hBNormal.primitive_transfer
   have hTerminalSelf : Filter.Tendsto
       (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
-        terminalBlock.toMPSTensor terminalBlock.toMPSTensor N)
+        T T N)
       Filter.atTop (nhds (1 : ℂ)) :=
     MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      terminalBlock.toMPSTensor hTerminalNormal.no_invariant_proj
+      T hTerminalNormal.no_invariant_proj
       hTerminalLeft hTerminalNormal.primitive_transfer
   have hCrossBT : Filter.Tendsto
       (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
-        B terminalBlock.toMPSTensor N) Filter.atTop (nhds 0) :=
-    MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne B terminalBlock.toMPSTensor
+        B T N) Filter.atTop (nhds 0) :=
+    MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne B T
       hBInj hTerminalInj hBLeft hTerminalLeft (by omega)
   have hCrossTB : Filter.Tendsto
       (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
-        terminalBlock.toMPSTensor B N) Filter.atTop (nhds 0) :=
-    MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne terminalBlock.toMPSTensor B
+        T B N) Filter.atTop (nhds 0) :=
+    MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne T B
       hTerminalInj hBInj hTerminalLeft hBLeft (by omega)
   refine ⟨⟨Nat.two_pos, fun _ _ _ ↦ rfl, ?_, ?_⟩, ?_⟩
   · intro j
@@ -546,14 +552,16 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
       MPTensor.IsNormalTensor B ∧
-      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv (Kraus.reindexPhysical finProdFinEquiv.symm embeddedObstruction)
+        (mu • B) ∧
       (obstructionTerminalDecomposition mu B hmu).basisCount = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).copies 0 = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).copies (Fin.succ 0) = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).basisDim 0 = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).basisDim (Fin.succ 0) = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).basis 0 = B ∧
-      (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) = terminalBlock.toMPSTensor ∧
+      (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) =
+        Kraus.reindexPhysical finProdFinEquiv.symm terminalBlock ∧
       (obstructionTerminalDecomposition mu B hmu).weight 0 0 = mu ∧
       (obstructionTerminalDecomposition mu B hmu).weight (Fin.succ 0) 0 = 1 ∧
       physicalSupportProj (verticalBNTMPO B) = obstructionPhysicalSupport ∧
