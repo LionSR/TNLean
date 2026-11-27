@@ -9,6 +9,7 @@ import TNLean.MPS.CanonicalForm.BlockSeparation.Selectors
 import TNLean.MPS.CanonicalForm.BlockSeparation.SimultaneousBlocking
 import TNLean.MPS.Tensor.Words.CyclicTrace
 import Mathlib.LinearAlgebra.Matrix.Rank
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Separation of final sectors in the triple-fusion comparison
@@ -62,7 +63,7 @@ variable (Fam : BNTFusionIsometryFamily Λ p)
 
 /-- A common finite family of word polynomials separates every final-label
 tensor from all the others.  This is the arbitrary-finite-label form of
-`MPSTensor.HasBlockSelectorWords`.
+`MPSTensor.HasBlockSelectorWords` on the pair alphabet.
 
 For each `ε`, the same coefficients evaluate to the identity on `tensor ε`
 and to zero on every `tensor ε'` with `ε' ≠ ε`.
@@ -71,12 +72,12 @@ Source: arXiv:1511.08090, simultaneous inverse relation
 `B_d^+ B_{d'} = δ_{d,d'} 1` at line 269, after the common blocking described
 at lines 427--431. -/
 def HasFinalLabelSelectorWords (S : ℕ) : Prop :=
-  ∀ ε : Λ, ∃ c : (Fin S → Fin (p * p)) → ℂ,
-    (∑ w : Fin S → Fin (p * p),
-      c w • Kraus.evalWord (Fam.tensor ε).toMPSTensor (List.ofFn w)) = 1 ∧
+  ∀ ε : Λ, ∃ c : (Fin S → Fin p × Fin p) → ℂ,
+    (∑ w : Fin S → Fin p × Fin p,
+      c w • Kraus.evalWord (Fam.tensor ε) (List.ofFn w)) = 1 ∧
     ∀ ε' : Λ, ε' ≠ ε →
-      (∑ w : Fin S → Fin (p * p),
-        c w • Kraus.evalWord (Fam.tensor ε').toMPSTensor (List.ofFn w)) = 0
+      (∑ w : Fin S → Fin p × Fin p,
+        c w • Kraus.evalWord (Fam.tensor ε') (List.ofFn w)) = 0
 
 /-- Simultaneous block selectors for the labelled MPO tensors are precisely
 final-label selectors for their fusion family. -/
@@ -84,8 +85,20 @@ theorem hasFinalLabelSelectorWords_of_hasBlockSelectorWords
     {g : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p) {S : ℕ}
     (hSel : MPSTensor.HasBlockSelectorWords
       (fun ε ↦ (Fam.tensor ε).toMPSTensor) S) :
-    Fam.HasFinalLabelSelectorWords S :=
-  hSel
+    Fam.HasFinalLabelSelectorWords S := by
+  intro ε
+  obtain ⟨c, hSelf, hOther⟩ := hSel ε
+  let e : (Fin S → Fin p × Fin p) ≃ (Fin S → Fin (p * p)) :=
+    Equiv.arrowCongr (Equiv.refl _) finProdFinEquiv
+  have hSum : ∀ γ : Fin g,
+      (∑ w : Fin S → Fin p × Fin p, c (e w) • Kraus.evalWord (Fam.tensor γ) (List.ofFn w)) =
+        ∑ w : Fin S → Fin (p * p),
+          c w • Kraus.evalWord (Fam.tensor γ) (List.ofFn w) := by
+    intro γ
+    refine Fintype.sum_equiv e _ _ fun w ↦ ?_
+    rw [evalWord_toMPSTensor, List.map_ofFn]
+    simp [e, Equiv.arrowCongr_apply, Function.comp_def]
+  exact ⟨fun w ↦ c (e w), (hSum ε).trans hSelf, fun ε' hε' ↦ (hSum ε').trans (hOther ε' hε')⟩
 
 /-- Finite scalar sums commute with a dependent block diagonal whose blocks
 have a fixed identity Kronecker factor. -/
@@ -142,31 +155,32 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
   classical
   obtain ⟨n, rfl⟩ : ∃ n, S = n + 1 := ⟨S - 1, (Nat.succ_pred_eq_of_pos hS).symm⟩
   let U := Fam.fusionIsometry α β
-  let A := (mulTensor (Fam.tensor α) (Fam.tensor β)).toMPSTensor
-  let D : Fin (p * p) →
+  let A := mulTensor (Fam.tensor α) (Fam.tensor β)
+  let D : Fin p × Fin p →
       Matrix ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
         ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
     fun ij => Matrix.blockDiagonal' fun γ =>
       (1 : Matrix (Fin (Fam.chi.dim α β γ)) (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-        (Fam.tensor γ).toMPSTensor ij
+        Fam.tensor γ ij
   have hU : Uᴴ * U = 1 := Fam.isometry α β
-  have hletter (ij : Fin (p * p)) : D ij = U * A ij * Uᴴ := by
-    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
-    simpa [U, A, D, MPOTensor.toMPSTensor,
-      Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI] using
+  have hletter (ij : Fin p × Fin p) : D ij = U * A ij * Uᴴ := by
+    obtain ⟨i, k⟩ := ij
+    simpa [U, A, D, Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI] using
       (Fam.fusion α β i k).symm
-  have evalWord_ofFn_eq_prod (m : ℕ) (w : Fin m → Fin (p * p)) :
-      Kraus.evalWord D (List.ofFn w) = (List.ofFn fun l => D (w l)).prod := by
+  have evalWord_ofFn_eq_prod : ∀ {κ : Type} [Fintype κ] [DecidableEq κ]
+      (X : Fin p × Fin p → Matrix κ κ ℂ) (m : ℕ) (w : Fin m → Fin p × Fin p),
+      Kraus.evalWord X (List.ofFn w) = (List.ofFn fun l => X (w l)).prod := by
+    intro κ _ _ X m w
     induction m with
     | zero => simp only [List.ofFn_zero, Kraus.evalWord, List.prod_nil]
     | succ m ih =>
         simp only [List.ofFn_succ, Kraus.evalWord, List.prod_cons]
         congr 1
         exact ih (w ∘ Fin.succ)
-  have hword (w : Fin (n + 1) → Fin (p * p)) :
+  have hword (w : Fin (n + 1) → Fin p × Fin p) :
       Kraus.evalWord D (List.ofFn w) =
         U * Kraus.evalWord A (List.ofFn w) * Uᴴ := by
-    rw [evalWord_ofFn_eq_prod, MPSTensor.evalWord_ofFn_eq_prod]
+    rw [evalWord_ofFn_eq_prod, evalWord_ofFn_eq_prod]
     have hconj := MPOTensor.listProd_conj_of_conjTranspose_mul_self U hU
       (fun l => A (w l))
     simpa only [hletter] using hconj
@@ -177,11 +191,11 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
       fun _ => 1 := by
     funext γ
     exact Matrix.one_kronecker_one
-  have hDword : ∀ w : List (Fin (p * p)),
+  have hDword : ∀ w : List (Fin p × Fin p),
       Kraus.evalWord D w = Matrix.blockDiagonal' fun γ =>
         (1 : Matrix (Fin (Fam.chi.dim α β γ))
           (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-          Kraus.evalWord (Fam.tensor γ).toMPSTensor w := by
+          Kraus.evalWord (Fam.tensor γ) w := by
     intro w
     induction w with
     | nil =>
@@ -196,30 +210,30 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
         rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
   choose coeff hSelf hOther using hSel
   have hcoeffTotal (γ : Λ) :
-      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
-        coeff ε w • Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) = 1 := by
+      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin p × Fin p,
+        coeff ε w • Kraus.evalWord (Fam.tensor γ) (List.ofFn w)) = 1 := by
     rw [Finset.sum_eq_single γ]
     · exact hSelf γ
     · intro ε _ hε
       exact hOther ε γ hε.symm
     · simp
   have htotal :
-      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin p × Fin p,
         coeff ε w • Kraus.evalWord D (List.ofFn w)) = 1 := by
     calc
-      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin p × Fin p,
           coeff ε w • Kraus.evalWord D (List.ofFn w)) =
           Matrix.blockDiagonal' fun γ =>
             (1 : Matrix (Fin (Fam.chi.dim α β γ))
               (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-              (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+              (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin p × Fin p,
                 coeff ε w •
-                  Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) := by
+                  Kraus.evalWord (Fam.tensor γ) (List.ofFn w)) := by
         simp_rw [hDword]
         exact sum_sum_smul_blockDiagonal'_one_kronecker
           (fun γ => Fam.chi.dim α β γ) Fam.bondDim coeff
           (fun γ _ w =>
-            Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w))
+            Kraus.evalWord (Fam.tensor γ) (List.ofFn w))
       _ = Matrix.blockDiagonal' fun γ =>
           (1 : Matrix (Fin (Fam.chi.dim α β γ))
             (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
@@ -231,7 +245,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
         rw [hone]
         exact Matrix.blockDiagonal'_one
   let P := U * Uᴴ
-  have hPword (w : Fin (n + 1) → Fin (p * p)) :
+  have hPword (w : Fin (n + 1) → Fin p × Fin p) :
       P * Kraus.evalWord D (List.ofFn w) =
         Kraus.evalWord D (List.ofFn w) := by
     rw [hword]
@@ -240,9 +254,9 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
   calc
     U * Uᴴ = P := rfl
     _ = P * 1 := by rw [Matrix.mul_one]
-    _ = P * (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+    _ = P * (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin p × Fin p,
         coeff ε w • Kraus.evalWord D (List.ofFn w)) := by rw [htotal]
-    _ = ∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+    _ = ∑ ε : Λ, ∑ w : Fin (n + 1) → Fin p × Fin p,
         coeff ε w • Kraus.evalWord D (List.ofFn w) := by
       simp_rw [Matrix.mul_sum, Matrix.mul_smul, hPword]
     _ = 1 := htotal
@@ -465,23 +479,22 @@ private theorem tripleFusionComparison_final_entry_intertwines_of_lengthIndepend
     (μL : Fin (Fam.chi.dim α β δL)) (νL : Fin (Fam.chi.dim δL γ ε))
     (μR : Fin (Fam.chi.dim β γ δR)) (νR : Fin (Fam.chi.dim α δR ε'))
     (bL : Fin (Fam.bondDim ε)) (bR : Fin (Fam.bondDim ε'))
-    (ij : Fin (p * p)) :
-    (∑ b, (Fam.tensor ε).toMPSTensor ij bL b *
+    (ij : Fin p × Fin p) :
+    (∑ b, Fam.tensor ε ij bL b *
         Fam.tripleFusionComparison α β γ
           (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, b⟩)
           (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, bR⟩)) =
       ∑ b, Fam.tripleFusionComparison α β γ
           (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
           (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, b⟩) *
-        (Fam.tensor ε').toMPSTensor ij b bR := by
-  obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
+        Fam.tensor ε' ij b bR := by
+  obtain ⟨i, k⟩ := ij
   have hFull := Fam.tripleFusionComparison_intertwines_of_lengthIndependent
     c hχ hLI α β γ i k
   have hEntry := congrArg
     (fun X => X (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
       (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, bR⟩)) hFull
-  simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, leftFinalRow, rightFinalRow,
+  simpa only [leftFinalRow, rightFinalRow,
     Matrix.mul_apply, Matrix.blockDiagonal'_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, ite_mul, one_mul, zero_mul, mul_ite, mul_zero, dite_mul,
     Fintype.sum_sigma, Finset.sum_dite_irrel, Fintype.sum_prod_type,
@@ -490,16 +503,17 @@ private theorem tripleFusionComparison_final_entry_intertwines_of_lengthIndepend
     Finset.sum_dite_eq', Finset.sum_ite_eq'] using hEntry
 
 private theorem rectangularIntertwiner_eq_zero_of_selectorWords
-    {d D₁ D₂ S : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {α : Type*} [Fintype α] {D₁ D₂ S : ℕ} (A : MPTensor α (Fin D₁))
+    (B : MPTensor α (Fin D₂))
     (C : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (hC : ∀ i : Fin d, A i * C = C * B i)
-    (c : (Fin S → Fin d) → ℂ)
-    (hA : (∑ w : Fin S → Fin d,
+    (hC : ∀ i : α, A i * C = C * B i)
+    (c : (Fin S → α) → ℂ)
+    (hA : (∑ w : Fin S → α,
       c w • Kraus.evalWord A (List.ofFn w)) = 1)
-    (hB : (∑ w : Fin S → Fin d,
+    (hB : (∑ w : Fin S → α,
       c w • Kraus.evalWord B (List.ofFn w)) = 0) :
     C = 0 := by
-  have hWord : ∀ w : List (Fin d),
+  have hWord : ∀ w : List α,
       Kraus.evalWord A w * C = C * Kraus.evalWord B w := by
     intro w
     induction w with
@@ -515,9 +529,9 @@ private theorem rectangularIntertwiner_eq_zero_of_selectorWords
           _ = (C * B i) * Kraus.evalWord B w := by rw [hC i]
           _ = C * (B i * Kraus.evalWord B w) := by rw [Matrix.mul_assoc]
   have hSum :
-      (∑ w : Fin S → Fin d,
+      (∑ w : Fin S → α,
         (c w • Kraus.evalWord A (List.ofFn w)) * C) =
-      ∑ w : Fin S → Fin d,
+      ∑ w : Fin S → α,
         C * (c w • Kraus.evalWord B (List.ofFn w)) := by
     refine Finset.sum_congr rfl fun w _ => ?_
     rw [Matrix.smul_mul, Matrix.mul_smul, hWord]
@@ -558,16 +572,15 @@ theorem tripleFusionComparison_finalSector_submatrix_eq_zero
   let Cblock : Matrix (Fin (Fam.bondDim ε)) (Fin (Fam.bondDim ε')) ℂ :=
     fun b b' => C (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, b⟩)
       (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, b'⟩)
-  have hLetter : ∀ ij : Fin (p * p),
-      (Fam.tensor ε).toMPSTensor ij * Cblock =
-        Cblock * (Fam.tensor ε').toMPSTensor ij := by
+  have hLetter : ∀ ij : Fin p × Fin p,
+      Fam.tensor ε ij * Cblock = Cblock * Fam.tensor ε' ij := by
     intro ij
     ext b b'
     exact Fam.tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
       c hχ hLI α β γ ε ε' δL δR μL νL μR νR b b' ij
   obtain ⟨coeff, hSelf, hOther⟩ := hSel ε
   have hZero := rectangularIntertwiner_eq_zero_of_selectorWords
-    (Fam.tensor ε).toMPSTensor (Fam.tensor ε').toMPSTensor Cblock hLetter
+    (Fam.tensor ε) (Fam.tensor ε') Cblock hLetter
     coeff hSelf (hOther ε' hε)
   exact congrArg (fun X => X bL bR) hZero
 
@@ -599,7 +612,7 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
     (hLI : c.LengthIndependent) {S : ℕ}
     (hSel : Fam.HasFinalLabelSelectorWords S)
     (α β γ ε : Λ)
-    (hε : Kraus.IsInjective (Fam.tensor ε).toMPSTensor) :
+    (hε : Kraus.IsInjective (Fam.tensor ε)) :
     ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
         (Fam.RightFinalMultiplicity α β γ ε) ℂ,
       ((Fam.tripleFusionComparison α β γ).submatrix
@@ -612,17 +625,17 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
             (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε') = 0 := by
   let C := (Fam.tripleFusionComparison α β γ).submatrix
     (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε)
-  have hC : ∀ ij : Fin (p * p),
+  have hC : ∀ ij : Fin p × Fin p,
       ((1 : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
           (Fam.LeftFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
-          (Fam.tensor ε).toMPSTensor ij) *
+          Fam.tensor ε ij) *
           C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
             (Fam.rightFinalIndexEquiv α β γ ε).symm =
         C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
             (Fam.rightFinalIndexEquiv α β γ ε).symm *
           ((1 : Matrix (Fam.RightFinalMultiplicity α β γ ε)
             (Fam.RightFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
-            (Fam.tensor ε).toMPSTensor ij) := by
+            Fam.tensor ε ij) := by
     intro ij
     ext ⟨⟨δL, μL, νL⟩, bL⟩ ⟨⟨δR, μR, νR⟩, bR⟩
     simpa only [C, Matrix.submatrix_submatrix, Matrix.mul_apply,

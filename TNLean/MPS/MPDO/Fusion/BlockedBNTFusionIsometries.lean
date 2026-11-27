@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.Fusion.BNTFusionIsometries
 import TNLean.MPS.Operator.Product.PhysicalBlocking
 import TNLean.MPS.CanonicalForm.BlockSeparation.SimultaneousBlocking
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Blocking the length-independent BNT fusion isometries
@@ -211,8 +212,7 @@ theorem exists_positive_block_with_injective_fusion
     ∃ L : ℕ, 0 < L ∧
       MPSTensor.WordTupleSpanTop
         (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) 1 ∧
-      (∀ γ, Kraus.IsInjective
-        (blockTensor (Fam.tensor γ) L).toMPSTensor) ∧
+      (∀ γ, Kraus.IsInjective (blockTensor (Fam.tensor γ) L)) ∧
       ∀ (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L)),
         (Fam.fusionIsometry α β *
               mulTensor (blockTensor (Fam.tensor α) L)
@@ -249,7 +249,8 @@ theorem exists_positive_block_with_injective_fusion
       (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) 1 := by
     rw [hFamily]
     exact hReindexed
-  refine ⟨L, hL, hSpanBlocked, fun γ ↦ hSpanBlocked.isInjective_one γ, ?_⟩
+  refine ⟨L, hL, hSpanBlocked,
+    fun γ ↦ (isInjective_toMPSTensor_iff _).1 (hSpanBlocked.isInjective_one γ), ?_⟩
   intro α β I J
   exact ⟨Fam.blocked_fusion_of_lengthIndependent c hχ hLI hL α β I J,
     Fam.fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent c hχ hLI hL α β I J,

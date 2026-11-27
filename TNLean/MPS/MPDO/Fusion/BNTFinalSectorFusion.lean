@@ -306,27 +306,27 @@ preceding equation (zippercondition2), and Section "Associativity and the pentag
 the injectivity argument following equation (pentagon3). -/
 theorem exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective
     (α β γ ε : Λ)
-    (hε : Kraus.IsInjective (Fam.tensor ε).toMPSTensor)
+    (hε : Kraus.IsInjective (Fam.tensor ε))
     (C : Matrix (Fam.LeftFinalIndex α β γ ε)
       (Fam.RightFinalIndex α β γ ε) ℂ)
-    (hC : ∀ ij : Fin (p * p),
+    (hC : ∀ ij : Fin p × Fin p,
       ((1 : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
           (Fam.LeftFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
-          (Fam.tensor ε).toMPSTensor ij) *
+          Fam.tensor ε ij) *
           C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
             (Fam.rightFinalIndexEquiv α β γ ε).symm =
         C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
             (Fam.rightFinalIndexEquiv α β γ ε).symm *
           ((1 : Matrix (Fam.RightFinalMultiplicity α β γ ε)
             (Fam.RightFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
-            (Fam.tensor ε).toMPSTensor ij)) :
+            Fam.tensor ε ij)) :
     ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
         (Fam.RightFinalMultiplicity α β γ ε) ℂ,
       C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
           (Fam.rightFinalIndexEquiv α β γ ε).symm =
         F ⊗ₖ (1 : Matrix (Fin (Fam.bondDim ε)) (Fin (Fam.bondDim ε)) ℂ) := by
   exact Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top
-    (Fam.tensor ε).toMPSTensor
+    (Fam.tensor ε)
     (C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
       (Fam.rightFinalIndexEquiv α β γ ε).symm)
     hε.span_eq_top hC

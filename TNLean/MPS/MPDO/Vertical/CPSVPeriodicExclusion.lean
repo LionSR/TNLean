@@ -73,7 +73,7 @@ proved here; see `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
 Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
 theorem exists_not_commute_of_displaced
     (M : MPOTensor d D)
-    (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : IsCPSVCanonicalForm M)
     {Q : Matrix (Fin d) (Fin d) ℂ}
     (hQidem : IsIdempotentElem Q)
     (hdisp : M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q) :
@@ -81,7 +81,8 @@ theorem exists_not_commute_of_displaced
       ¬ Commute (MPOTensor.firstSiteMatrix Q N)
         (MPOTensor.mpo M (N + 1)) := by
   exact exists_not_commute_of_displaced_of_insertedTensor_eq M
-    (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M.toMPSTensor) hQidem hdisp
+    ((hCanonical.reindexPhysical finProdFinEquiv.symm).insertedTensor_eq_of_firstSiteActionAgree
+      M.toMPSTensor) hQidem hdisp
 
 end MPTensor.IsCPSVCanonicalForm
 
@@ -106,7 +107,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm
     (M : MPOTensor d D)
     (hM : M.IsMPDO)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor) :
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
   exact hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced M hM
     fun hQidem hdisp => hCanonical.exists_not_commute_of_displaced M hQidem hdisp
@@ -136,7 +137,7 @@ statement; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem exists_normal_verticalBlockDecomp_with_isometry
     (M : MPOTensor d D)
-    (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : IsCPSVCanonicalForm M)
     (hM : M.IsMPDO) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
@@ -186,12 +187,13 @@ of Proposition 4.13 of arXiv:1606.00608, lines 1898--1902, using Appendix C.3,
 Lemma L, lines 1835--1858. -/
 theorem exists_sectorCompression_ne_zero_of_corner
     (M : MPOTensor d D)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hcorner : ∃ v, P * MPOTensor.verticalTensor M v * P ≠ 0) :
     ∃ N, MPOTensor.sectorCompression M P N ≠ 0 := by
   exact MPOTensor.exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq M
-    (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M.toMPSTensor) P hcorner
+    ((hCanonical.reindexPhysical finProdFinEquiv.symm).insertedTensor_eq_of_firstSiteActionAgree
+      M.toMPSTensor) P hcorner
 
 /-- Group the normal vertical corners of an MPDO in literal CPSV canonical
 form by their gauge-phase classes while retaining their physical isometries.
@@ -208,7 +210,7 @@ without a canonical-form hypothesis in
 `MPOTensor.verticalCF_of_cpsvCanonicalForm`. -/
 theorem exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : MPOTensor.IsMPDO M) :
     MPOTensor.HasVerticalBNTGroupingWithIsometry M := by
   exact MPOTensor.exists_verticalBNTGrouping_with_isometry_of_decomposition M hM
