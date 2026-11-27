@@ -87,7 +87,8 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic
     omega
   · refine ⟨e, ?_⟩
     cases e
-    simpa only [cast_eq] using gaugePhaseEquiv_symm (gaugePhaseEquiv_of_repeatedBlocks hRep)
+    simpa only [cast_eq] using
+      gaugePhaseEquiv_symm_same_dim (gaugePhaseEquiv_of_repeatedBlocks hRep)
 
 /-- Phase-related periodic tensors have identical open-boundary spaces at
 all lengths. The gauge is recovered before passing to open boundaries.
