@@ -33,20 +33,20 @@ open MPTensor
 open scoped Matrix BigOperators ComplexOrder Kraus
 open Kraus (isNBlkInjective_iff_blockTensor_isInjective)
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 namespace MPSTensor
 
 /-- Entrywise complex conjugation of every letter of an MPS tensor. -/
-def mapStar (A : MPSTensor d D) : MPSTensor d D :=
+def mapStar (A : MPTensor α (Fin D)) : MPTensor α (Fin D) :=
   fun i ↦ (A i).map (starRingEnd ℂ)
 
 /-- Entrywise conjugation evaluated at one physical letter. -/
-@[simp] theorem mapStar_apply (A : MPSTensor d D) (i : Fin d) :
+@[simp] theorem mapStar_apply (A : MPTensor α (Fin D)) (i : α) :
     mapStar A i = (A i).map (starRingEnd ℂ) := rfl
 
 /-- Entrywise conjugation is an involution on MPS tensors. -/
-@[simp] theorem mapStar_mapStar (A : MPSTensor d D) :
+@[simp] theorem mapStar_mapStar (A : MPTensor α (Fin D)) :
     mapStar (mapStar A) = A := by
   ext i β α
   simp [mapStar, Matrix.map_apply]
@@ -56,7 +56,7 @@ end MPSTensor
 namespace Kraus
 
 /-- Entrywise conjugation preserves algebraic injectivity. -/
-theorem IsInjective.mapStar {A : MPSTensor d D} (hA : IsInjective A) :
+theorem IsInjective.mapStar {A : MPTensor α (Fin D)} (hA : IsInjective A) :
     IsInjective (MPSTensor.mapStar A) := by
   classical
   rw [IsInjective]
@@ -91,7 +91,7 @@ end Kraus
 namespace MPSTensor
 
 /-- Word evaluation commutes with entrywise complex conjugation. -/
-theorem evalWord_mapStar (A : MPSTensor d D) (w : List (Fin d)) :
+theorem evalWord_mapStar (A : MPTensor α (Fin D)) (w : List α) :
     Kraus.evalWord (mapStar A) w = (Kraus.evalWord A w).map (starRingEnd ℂ) := by
   induction w with
   | nil => simp
@@ -104,24 +104,24 @@ end MPSTensor
 namespace Kraus
 
 /-- Entrywise conjugation preserves positive-length block injectivity, hence normality. -/
-theorem IsNormal.mapStar {A : MPSTensor d D} (hA : IsNormal A) :
+theorem IsNormal.mapStar {A : MPTensor α (Fin D)} (hA : IsNormal A) :
     IsNormal (MPSTensor.mapStar A) := by
   obtain ⟨N, hN, hInj⟩ := hA
   refine ⟨N, hN, ?_⟩
   change IsNBlkInjective A N at hInj
-  rw [isNBlkInjective_iff_blockTensor_isInjective] at hInj ⊢
-  change IsInjective (Kraus.blockTensor A N) at hInj
+  rw [isNBlkInjective_iff_isInjective_block] at hInj ⊢
   have hConj := hInj.mapStar
   convert hConj using 1
-  ext σ β α
-  simp [Kraus.blockTensor, Kraus.reindexPhysical, MPSTensor.evalWord_mapStar]
+  ext σ b c
+  simp [Kraus.block, MPSTensor.evalWord_mapStar]
 
 end Kraus
 
 namespace MPSTensor
 
 /-- Left-canonical normalization is preserved by entrywise complex conjugation. -/
-theorem _root_.MPTensor.IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeftCanonical A) :
+theorem _root_.MPTensor.IsLeftCanonical.mapStar [Fintype α] {A : MPTensor α (Fin D)}
+    (hA : IsLeftCanonical A) :
     IsLeftCanonical (mapStar A) := by
   classical
   rw [IsLeftCanonical] at hA ⊢
@@ -141,7 +141,7 @@ theorem _root_.MPTensor.IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeft
 
 This conjugates the invertible gauge in the relation of arXiv:1606.00608,
 lines 264--268. -/
-theorem _root_.MPTensor.GaugeEquiv.mapStar {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+theorem _root_.MPTensor.GaugeEquiv.mapStar {A B : MPTensor α (Fin D)} (h : GaugeEquiv A B) :
     GaugeEquiv (mapStar A) (mapStar B) := by
   obtain ⟨X, hX⟩ := h
   let f : Matrix (Fin D) (Fin D) ℂ →+* Matrix (Fin D) (Fin D) ℂ :=
@@ -165,9 +165,9 @@ theorem map_star_eq_self_of_posDef_isDiag
 original transfer map: as operators on the matrix space, conjugating the tensor conjugates
 the transfer map of arXiv:1606.00608, lines 219--225, by the entrywise-conjugation
 involution on both sides. -/
-theorem transferMap_mapStar_eq_entrywiseConjTransport (A : MPSTensor d D) :
+theorem transferMap_mapStar_eq_entrywiseConjTransport [Fintype α] (A : MPTensor α (Fin D)) :
     Kraus.transferMap (mapStar A) =
-      entrywiseConjTransport (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+      entrywiseConjTransport (Kraus.transferMap (ι := α) (n := Fin D) A) := by
   classical
   apply LinearMap.ext
   intro X
@@ -185,7 +185,7 @@ theorem transferMap_mapStar_eq_entrywiseConjTransport (A : MPSTensor d D) :
 /-- The transfer map of an entrywise-conjugated tensor is the conjugate of the original
 transfer map on conjugated inputs: the pointwise form of the operator identity
 `transferMap_mapStar_eq_entrywiseConjTransport` (arXiv:1606.00608, lines 219--225). -/
-theorem transferMap_mapStar (A : MPSTensor d D)
+theorem transferMap_mapStar [Fintype α] (A : MPTensor α (Fin D))
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Kraus.transferMap (mapStar A) (X.map (starRingEnd ℂ)) =
       (Kraus.transferMap A X).map (starRingEnd ℂ) := by
@@ -200,7 +200,7 @@ namespace Kraus
 the conjugated tensor conjugates entrywise to an invariant orthogonal projection of the
 original tensor. Transports the no-nontrivial-invariant-projection clause of the
 normal-tensor definition, arXiv:1606.00608, lines 233--235. -/
-theorem IsIrreducibleFamily.mapStar {A : MPSTensor d D} (hA : IsIrreducibleFamily A) :
+theorem IsIrreducibleFamily.mapStar {A : MPTensor α (Fin D)} (hA : IsIrreducibleFamily A) :
     IsIrreducibleFamily (MPSTensor.mapStar A) := by
   rintro ⟨P, ⟨hHerm, hIdem⟩, hP0, hP1, hLower⟩
   refine hA ⟨P.map (starRingEnd ℂ), ⟨?_, ?_⟩, ?_, ?_, fun i ↦ ?_⟩
@@ -229,7 +229,8 @@ transfer map anti-linearly, which conjugates its spectrum, preserves its spectra
 preserves primitivity, and preserves irreducibility. This transports both clauses of the
 normal-tensor definition of arXiv:1606.00608, lines 224--235, across entrywise
 conjugation. -/
-theorem _root_.MPTensor.IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
+theorem _root_.MPTensor.IsNormalTensor.mapStar [Fintype α] {A : MPTensor α (Fin D)}
+    (hA : IsNormalTensor A) :
     IsNormalTensor (mapStar A) where
   no_invariant_proj := hA.no_invariant_proj.mapStar
   spectral_radius_one := by
