@@ -76,7 +76,8 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
       Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant N h).hamiltonian (mpvState A N) = 0) :
     ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀,
-      Kraus.IsNormal B ∧ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h) ∧ ∃ M₀ : ℕ,
+      Kraus.IsNormal B ∧ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h) ∧ ∃ M₀ : ℕ,
       ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
         LinearMap.ker (Matrix.toEuclideanLin
           (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by

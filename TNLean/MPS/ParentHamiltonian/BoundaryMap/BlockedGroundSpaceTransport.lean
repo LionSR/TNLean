@@ -128,18 +128,21 @@ theorem starProjection_map_groundSpace_blockTensor_map_apply
     (v : EuclideanSpace ℂ (Cfg d (N * p))) :
     ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v =
       blockedConfigLinearIsometryEquiv d N p
-        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection
           ((blockedConfigLinearIsometryEquiv d N p).symm v)) := by
   rw [← map_groundSpace_blockTensor_map A p N]
   exact Submodule.starProjection_map_apply
-    (blockedConfigLinearIsometryEquiv d N p) ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) v
+    (blockedConfigLinearIsometryEquiv d N p) ((groundSpace (blockTensor A p) N).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) v
 
 /-- Operator conjugacy of orthogonal ground-space projectors under physical blocking. -/
 theorem starProjection_map_groundSpace_blockTensor_conj
     (A : MPSTensor d D) (p N : ℕ) :
     ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (blockedConfigLinearIsometryEquiv d N p).toContinuousLinearEquiv.toContinuousLinearMap.comp
-        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.comp
           (ContinuousLinearEquiv.toContinuousLinearMap
             (blockedConfigLinearIsometryEquiv d N p).symm.toContinuousLinearEquiv)) := by
   apply ContinuousLinearMap.ext
@@ -155,7 +158,8 @@ theorem starProjection_map_groundSpace_three_blockTensor_conj
     (A : MPSTensor d D) (p : ℕ) :
     ((groundSpace A (3 * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (blockedConfigLinearIsometryEquiv d 3 p).toContinuousLinearEquiv.toContinuousLinearMap.comp
-        (((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+        (((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.comp
           (ContinuousLinearEquiv.toContinuousLinearMap
             (blockedConfigLinearIsometryEquiv d 3 p).symm.toContinuousLinearEquiv)) :=
   starProjection_map_groundSpace_blockTensor_conj A p 3

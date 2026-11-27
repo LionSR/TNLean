@@ -353,7 +353,8 @@ def mixedEndpointInteriorEdgeSupportES
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointInteriorEdgeSupportES_eq_map_groundSpace
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    mixedEndpointInteriorEdgeSupportES A₀ A₁ = ((groundSpace A₀ 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    mixedEndpointInteriorEdgeSupportES A₀ A₁ = ((groundSpace A₀ 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   unfold mixedEndpointInteriorEdgeSupportES
   rw [range_mixedEndpointInteriorEdgeBoundaryMap]
 

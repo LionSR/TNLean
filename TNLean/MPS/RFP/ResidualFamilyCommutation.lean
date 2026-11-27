@@ -348,7 +348,8 @@ Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
 private theorem sectorSupportSumES_eq
     (h : ResidualFamilyAppendixBData B) :
     h.sectorSupportSumES =
-      ∑ j : Fin r, ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
+      ∑ j : Fin r, ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap := by
   classical
   apply LinearMap.ext
   intro v
@@ -371,11 +372,13 @@ private theorem sectorSupportSumES_isSymmetricProjection
     rw [h.sectorSupportSumES_eq]
     exact Finset.sum_induction
       (fun j : Fin r ↦
-        ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap)
+        ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap)
       LinearMap.IsSymmetric
       (fun _ _ ha hb ↦ ha.add hb)
       LinearMap.IsSymmetric.zero
-      (fun j _ ↦ ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_isSymmetric)
+      (fun j _ ↦ ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection_isSymmetric)
 
 /-- The Euclidean sector support sum has the direct-sum two-site ground space
 as its range.
@@ -416,7 +419,8 @@ theorem sectorSupportSum_eq_twoSiteBondSupportProjection
     (h : ResidualFamilyAppendixBData B) :
     h.sectorSupportSum = twoSiteBondSupportProjection B := by
   have hEq : h.sectorSupportSumES =
-      ((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap :=
+      ((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap :=
     h.sectorSupportSumES_isSymmetricProjection.ext
       (Submodule.isSymmetricProjection_starProjection _)
       (by

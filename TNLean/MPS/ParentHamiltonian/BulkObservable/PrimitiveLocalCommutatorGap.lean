@@ -73,7 +73,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundState_no
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
     (ψ : (n : ι) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
-    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hunit : ∀ᶠ n in f, ‖ψ n‖ = 1) :
     Tendsto (fun n =>
       ‖((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
@@ -113,8 +114,10 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.commutator_gap_of_bulkObserva
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
       μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hKernel : ∀ᶠ n in atTop,
-      LinearMap.ker (H n) = ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
-    (hGround : ∀ᶠ n in atTop, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+      LinearMap.ker (H n) = ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
+    (hGround : ∀ᶠ n in atTop, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1)
     (hEnergy :
       let B (n : ℕ) := ((Matrix.toEuclideanCLM
@@ -167,7 +170,8 @@ private theorem reindexChainVector_norm {N M : ℕ} (h : N = M)
 
 private theorem reindexChainVector_mem {N M : ℕ} (h : N = M)
     (A : MPSTensor d D) (v : EuclideanSpace ℂ (Cfg d N)) :
-    reindexChainVector h v ∈ ((groundSpace A M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ↔ v ∈ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    reindexChainVector h v ∈ ((groundSpace A M).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ↔ v ∈ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   subst M
   rfl
 
@@ -193,7 +197,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
     (hR : 0 < R)
     (N : ℕ → ℕ) (hN : ∀ n, N n = (n + ((R - 1 + k) + (R - 1))) + n)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d (N n)))
-    (hGround : ∀ᶠ n in atTop, ψ n ∈ ((groundSpace A (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hGround : ∀ᶠ n in atTop, ψ n ∈ ((groundSpace A (N n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     Tendsto (fun n =>
       let B : Matrix (Cfg d (N n)) (Cfg d (N n)) ℂ := placeAlong (X := fun _ ↦ Fin d)
@@ -205,7 +210,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
       (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
   let ψ' (n : ℕ) := reindexChainVector (hN n) (ψ n)
   have hg : ∀ᶠ n in atTop,
-      ψ' n ∈ ((groundSpace A ((n + ((R - 1 + k) + (R - 1))) + n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ψ' n ∈ ((groundSpace A ((n + ((R - 1 + k) + (R - 1))) + n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
     filter_upwards [hGround] with n hn
     exact (reindexChainVector_mem (hN n) A (ψ n)).mpr hn
   have hu : ∀ᶠ n in atTop, ‖ψ' n‖ = 1 := by
@@ -242,7 +248,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_eventually_unit_map_gr
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     {ι : Type*} {f : Filter ι} (N : ι → ℕ) (hN : Tendsto N f atTop) :
     ∃ ψ : (n : ι) → EuclideanSpace ℂ (Cfg d (N n)),
-      (∀ n, ψ n ∈ ((groundSpace A (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧ (∀ᶠ n in f, ‖ψ n‖ = 1) := by
+      (∀ n, ψ n ∈ ((groundSpace A (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧ (∀ᶠ n
+          in f, ‖ψ n‖ = 1) := by
   let u := (EuclideanSpace.basisFun (Fin D × Fin D) ℂ) (0, 0)
   have hu : u ≠ 0 := (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.ne_zero (0, 0)
   let ψ (n : ι) := (‖groundSpaceMapES A (N n) u‖⁻¹ : ℂ) •
@@ -277,18 +284,21 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
       LinearMap.ker
           (Matrix.toEuclideanLin
               (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian) =
-        ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop,
-      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
       (observableInsertionExpectation A ρ (localCommutatorObservable
         ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-          ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection) X)).re := by
+          ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)ᗮ.starProjection) X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let h := LinearMap.toMatrix' (parentInteraction A R)
   have hEnergy :
@@ -338,7 +348,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
         γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
           (observableInsertionExpectation A ρ (localCommutatorObservable
             ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-              ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection) X)).re := by
+              ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap)ᗮ.starProjection) X)).re := by
   have hNormal := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   obtain ⟨γ, hγ, hgap⟩ :=
     exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le A hNormal hR

@@ -41,7 +41,8 @@ variable {d DA DB : ℕ}
 at every length. Source: arXiv:1606.00608, Theorem thm1, gauge relation;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem _root_.MPTensor.GaugePhaseEquiv.map_groundSpace_eq {A B : MPSTensor d DA}
-    (h : GaugePhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    (h : GaugePhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨X, ζ, hζ, hX⟩ := h
   let C : MPSTensor d DA := fun i =>
     (X : Matrix (Fin DA) (Fin DA) ℂ) * A i *
@@ -56,7 +57,8 @@ Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1. -/
 theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor
     {A : MPSTensor d DA} {B : MPSTensor d DB}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
-    (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have : NeZero DA := ⟨hA.bondDim_ne_zero⟩
   have : NeZero DB := ⟨hB.bondDim_ne_zero⟩
   obtain ⟨e, he⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor hA hB
@@ -74,7 +76,8 @@ theorem MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives
     (classes : MPVPhaseClassData A) (hNormal : ∀ j, IsNormalTensor (A j))
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0) (N : ℕ) :
     ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-      ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1)
       (fun k => A (classes.repr k)) (fun _ => one_ne_zero)]
@@ -84,8 +87,10 @@ theorem MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives
     have hGS := MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor
       (hNormal (classes.repr k)) (hNormal (classes.enum k q)) (classes.enum_phase k q) N
     rw [← hGS]
-    exact le_iSup (fun j => ((groundSpace (A (classes.repr j)) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) k
-  · exact iSup_le fun k => le_iSup (fun j => ((groundSpace (A j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (classes.repr k)
+    exact le_iSup (fun j => ((groundSpace (A (classes.repr j)) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) k
+  · exact iSup_le fun k => le_iSup (fun j => ((groundSpace (A j) N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)) (classes.repr k)
 /-- A finite primitive family admits a literal subfamily of pairwise
 inequivalent representatives with inherited faithful fixed points, a gauge
 cover of every original sector, and exact joint support at all lengths.
@@ -103,8 +108,10 @@ theorem exists_primitive_sector_representatives [∀ j, NeZero (dim j)]
       BlocksNotGaugePhaseEquiv (fun k => A (sel k)) ∧
       (∀ j, ∃ k, ∃ e : dim (sel k) = dim j,
         GaugePhaseEquiv (e ▸ A (sel k)) (A j)) ∧
-      ∀ N, ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (sel k))) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ∀ N, ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (sel k))) N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let classes := mpvPhaseClassData A
   have hNormal : ∀ j, IsNormalTensor (A j) := fun j =>
     isNormalTensor_of_isNormal_leftCanonical (A j)

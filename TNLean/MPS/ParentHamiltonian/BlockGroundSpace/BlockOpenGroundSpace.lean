@@ -151,7 +151,8 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundS
     (hL : L₀ + 1 ≤ L) (hLN : L ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks μ A) L N).hamiltonian) =
-      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   apply le_antisymm ?_ (map_groundSpace_le_ker_hamiltonian_parentChainInteraction _ L N)
   exact fun v hv ↦ (mem_map_groundSpace_iff _ N v).mpr
     (contiguous_mem_groundSpace_toTensorFromBlocks μ A hμ hTP hSpan hL hLN fun s hs τ ↦
@@ -184,7 +185,8 @@ theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_
     ∃ L₀ : ℕ, 0 < L₀ ∧ ∀ L N : ℕ, L₀ ≤ L → L ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin
           (parentChainInteraction (toTensorFromBlocks μ A) L N).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   exact
     (exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap A ρ hP hρ hDistinct).elim
     fun L₀ hSpan ↦ ⟨L₀ + 1, Nat.succ_pos L₀, fun L N hL hLN ↦
@@ -219,7 +221,8 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlo
     (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) (hRN : R ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   have hSpan := wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
     A (fun j ↦ (hP j).isIrreducibleFamily_of_posDef (hρ j))
     (fun j ↦ (hP j).norm)

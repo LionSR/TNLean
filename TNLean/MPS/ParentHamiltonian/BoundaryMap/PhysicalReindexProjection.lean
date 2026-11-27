@@ -103,7 +103,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv
       (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
         (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A N))) := by
   rw [toEuclideanLin_toMatrix'_parentInteraction, toEuclideanLin_toMatrix'_parentInteraction]
-  have hOrth : ((groundSpace (Kraus.reindexPhysical e A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ =
+  have hOrth : ((groundSpace (Kraus.reindexPhysical e A) N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ =
       (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ).map
         (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.toLinearMap := by
     rw [map_groundSpace_reindexPhysical_equiv, Submodule.map_orthogonal_equiv]
@@ -112,6 +113,7 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv
   apply LinearMap.ext
   intro v
   exact Submodule.starProjection_map_apply
-    (physicalReindexLinearIsometryEquiv e N) ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ v
+    (physicalReindexLinearIsometryEquiv e N) ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)ᗮ v
 
 end MPSTensor

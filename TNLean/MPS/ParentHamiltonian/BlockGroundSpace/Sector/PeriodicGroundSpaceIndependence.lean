@@ -86,7 +86,8 @@ theorem eventually_map_groundSpace_iSupIndep_of_primitive
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i)) :
-    ∀ᶠ N in atTop, iSupIndep (fun j => ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+    ∀ᶠ N in atTop, iSupIndep (fun j => ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) := by
   apply Submodule.eventually_iSupIndep_of_pairwise_overlap
   intro ε hε
   filter_upwards [Filter.eventually_all.2 fun i =>
@@ -274,7 +275,8 @@ combined with arXiv:1708.00029, Lemma bdcf. -/
 theorem IsPeriodic.exists_eventually_groundSpaceMapES_preimage_norm_le
     {m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ n in atTop,
-      ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∃ u, groundSpaceMapES A n u = x ∧ ‖u‖ ≤ C * ‖x‖ := by
+      ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap), ∃ u, groundSpaceMapES A n u = x ∧ ‖u‖ ≤ C * ‖x‖ := by
   classical
   let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   let _ : NeZero D := ⟨hA.bondDim_ne_zero⟩
@@ -313,7 +315,8 @@ theorem IsPeriodic.eventually_norm_inner_map_groundSpace_le_of_inequivalent
     (hA : IsPeriodic m A) (hB : IsPeriodic m₂ B)
     (hDistinct : ∀ e : D₂ = D, ¬ GaugePhaseEquiv (e ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
-    ∀ᶠ n in atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    ∀ᶠ n in atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   let _ : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let _ : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
@@ -374,7 +377,8 @@ theorem eventually_map_groundSpace_iSupIndep_of_isPeriodic
     (hA : ∀ j, IsPeriodic (m j) (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
-    ∀ᶠ n in atTop, iSupIndep (fun j => ((groundSpace (A j) n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+    ∀ᶠ n in atTop, iSupIndep (fun j => ((groundSpace (A j) n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) := by
   apply Submodule.eventually_iSupIndep_of_pairwise_overlap
   intro ε hε
   filter_upwards [Filter.eventually_all.2 fun i =>
@@ -423,7 +427,8 @@ Source: arXiv:1708.00029, Lemma bdcf and equation Aoffdiag. -/
 theorem map_groundSpace_le_of_isometric_cointertwiner
     (A : MPSTensor d D) (B : MPSTensor d E) (V : Matrix (Fin D) (Fin E) ℂ)
     (hV : Vᴴ * V = 1) (hInt : ∀ i, Vᴴ * A i = B i * Vᴴ) (N : ℕ) :
-    ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace A N).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hEmbed (Y : Matrix (Fin E) (Fin E) ℂ) :
       groundSpaceMap A N (V * Y * Vᴴ) = groundSpaceMap B N Y := by
     ext σ

@@ -87,7 +87,8 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_of_map_groundSpace_le_ke
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hX : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
+    (hX : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h)) :
     quasiLocalExpectation A hTP hρ hfix htr ∈ parentGroundStateFace h := by
   refine ⟨quasiLocalExpectation_isState A hTP hρ hfix htr, ?_⟩
   exact fun a => quasiLocalExpectation_interval_eq_zero_of_map_groundSpace_le_ker

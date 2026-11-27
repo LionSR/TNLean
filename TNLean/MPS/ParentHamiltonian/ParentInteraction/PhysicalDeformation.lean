@@ -161,7 +161,8 @@ image under the tensor power of the realization for the original tensor. -/
 theorem map_groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
     (L : ℕ) :
     ((groundSpace (rotatePhysical Λ A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin (onSiteTensorPow L Λ)) := by
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin
+          (onSiteTensorPow L Λ)) := by
   simpa only [onSiteTensorPow_eq_piKronecker] using
     map_groundSpace_rotatePhysical_rectangular Λ A L
 
@@ -216,7 +217,8 @@ lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix (Fin d
 tensor: \(\ker h' = \Lambda^{\otimes L}\ker h = \mathcal G_L(\Lambda A)\). -/
 theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
     (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
-    (hker : LinearMap.ker (Matrix.toEuclideanLin h) = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+    (hker : LinearMap.ker (Matrix.toEuclideanLin h) = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) :
     LinearMap.ker (Matrix.toEuclideanLin (deformedInteraction L Λ h)) =
       ((groundSpace (rotatePhysical Λ A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hdet : IsUnit Λ.det := (Matrix.isUnit_iff_isUnit_det Λ).1 hΛ

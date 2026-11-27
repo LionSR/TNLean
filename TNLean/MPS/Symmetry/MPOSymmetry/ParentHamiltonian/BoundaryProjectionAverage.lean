@@ -56,7 +56,8 @@ theorem IsBoundaryCompatible.map_groundSpace_starProjection_commute_mpoWithBound
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X n)ᴴ = mpoWithBoundary T Y n)
     (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    Commute ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap
+    Commute ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.toLinearMap
       (Matrix.toEuclideanLin (mpoWithBoundary T X n)) := by
   apply LinearMap.ext
   intro ψ
@@ -90,9 +91,11 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_map_groundSpace_starProjection
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) :
     (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap *
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
+      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap := by
   have hsum :
       (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
@@ -103,7 +106,8 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_map_groundSpace_starProjection
   calc
     _ = (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
           Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) *
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap := by
       rw [Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro i _
@@ -133,10 +137,12 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_toEuclideanLin_toMatrix'_parent
         Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
       Matrix.toEuclideanLin (mpoWithBoundary T U n) -
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap := by
   rw [MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   change (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-      (1 - ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap) *
+      (1 - ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap) *
       Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) = _
   simp only [mul_sub, mul_one, sub_mul, Finset.sum_sub_distrib]
   rw [h.sum_mpoWithBoundary_map_groundSpace_starProjection hInj hL hU hn hstar X Y hXY]
@@ -161,7 +167,8 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_map_groundSpace_starPro
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) :
     1 - (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap *
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) := by
   rw [h.sum_mpoWithBoundary_map_groundSpace_starProjection hInj hL hU hn hstar X Y hXY,
@@ -184,7 +191,8 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_map_groundSpace_starPro
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) (hDim : d ^ n > D₂ ^ 2) :
     1 - (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap *
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) ≠ 0 := by
   rw [h.one_sub_sum_mpoWithBoundary_map_groundSpace_starProjection
     hInj hL hU hn hstar X Y hXY]

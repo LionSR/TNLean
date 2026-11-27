@@ -53,15 +53,18 @@ in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_le_of_middle_map_groundSpace
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
-    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     (x y : EuclideanSpace ℂ (Cfg d (K + L + Q)))
     (hx : ∀ u : Cfg d K, ∀ v : Cfg d Q,
       (WithLp.toLp 2 (fun w ↦ x (Fin.append (Fin.append u w) v)) :
-        EuclideanSpace ℂ (Cfg d L)) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        EuclideanSpace ℂ (Cfg d L)) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (hy : ∀ u : Cfg d K, ∀ v : Cfg d Q,
       (WithLp.toLp 2 (fun w ↦ y (Fin.append (Fin.append u w) v)) :
-        EuclideanSpace ℂ (Cfg d L)) ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+        EuclideanSpace ℂ (Cfg d L)) ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   apply norm_inner_le_of_reindexed_fibers
     ((Equiv.prodComm (Cfg d Q) (Cfg d (K + L))).trans (Fin.appendEquiv (K + L) Q))
@@ -108,7 +111,8 @@ bound in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_leftBoundaryMapES_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
-    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     (x : BoundaryFamilySpace (D := D₁) (Cfg d Q))
     (y : BoundaryFamilySpace (D := D₂) (Cfg d Q)) :
@@ -123,7 +127,8 @@ bound in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_reassocTailBoundaryMapES_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
-    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     (x : BoundaryFamilySpace (D := D₁) (Cfg d K))
     (y : BoundaryFamilySpace (D := D₂) (Cfg d K)) :
@@ -139,7 +144,8 @@ in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_left_reassocTailBoundaryMapES_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
-    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     (x : BoundaryFamilySpace (D := D₁) (Cfg d Q))
     (y : BoundaryFamilySpace (D := D₂) (Cfg d K)) :

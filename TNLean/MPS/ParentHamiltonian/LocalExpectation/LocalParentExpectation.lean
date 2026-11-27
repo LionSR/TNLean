@@ -31,7 +31,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b)
 and the local support definition in Theorem 1.1. -/
 private theorem physicalObservableTransfer_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X)) :
+    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin X)) :
     physicalObservableTransfer A k X = 0 := by
   have hcomp : (Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X).comp
       (groundSpaceMapES A k) = 0 := by
@@ -54,7 +55,8 @@ and Theorem 1.1, local support spaces. -/
 theorem observableInsertionExpectation_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X)) :
+    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin X)) :
     observableInsertionExpectation A ρ X = 0 := by
   simp [observableInsertionExpectation,
     physicalObservableTransfer_eq_zero_of_map_groundSpace_le_ker A X hX]
@@ -67,7 +69,8 @@ theorem quasiLocalExpectation_interval_eq_zero_of_map_groundSpace_le_ker [NeZero
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X)) :
+    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin X)) :
     quasiLocalExpectation A hTP hρ hfix htr
       (quasiLocalIntervalObservable d a k X) = 0 := by
   rw [quasiLocalExpectation_quasiLocalIntervalObservable]

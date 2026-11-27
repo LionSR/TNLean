@@ -230,7 +230,8 @@ theorem exists_faithful_quasiLocalExpectation_density_support_of_leftCanonical
         (∀ (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ),
           quasiLocalExpectation A hA hρ hFix htr
             (quasiLocalIntervalObservable d a k X) = Matrix.trace (τ * X)) ∧
-        LinearMap.range (Matrix.toEuclideanLin τ) = ((groundSpace B k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        LinearMap.range (Matrix.toEuclideanLin τ) = ((groundSpace B k).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   obtain ⟨E, hE, V, B, σ, hV, hVrange, hCorner, hσEq, hσ, hB,
     hInt, hσFix, hTrace, hInsertion⟩ :=
     exists_faithful_stationary_supportCompression_of_leftCanonical A hA hρ htr hFix

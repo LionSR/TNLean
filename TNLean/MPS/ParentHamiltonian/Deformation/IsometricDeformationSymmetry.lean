@@ -71,7 +71,8 @@ supplied explicitly where required. -/
 theorem toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ) (L : ℕ)
-    (hInv : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+    (hInv : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+        (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) (onSiteTensorPow L U) := by
   refine Commute.of_map (Matrix.toLpLinAlgEquiv 2).injective ?_
@@ -114,7 +115,8 @@ Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
 theorem map_groundSpace_invariant_rotatePhysical_of_commute
     (A : MPSTensor d D) (U Q : Matrix (Fin d) (Fin d) ℂ) (hComm : Commute U Q)
-    (L : ℕ) (hInv : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+    (L : ℕ) (hInv : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+        (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
@@ -139,7 +141,8 @@ theorem map_groundSpace_invariant_rotatePhysical_iff_of_commute
     (((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
         ((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ↔
-      (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+      (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+          (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
         ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
   constructor
   · intro hInv
@@ -209,12 +212,16 @@ supplied explicitly where required. -/
 theorem map_groundSpace_invariant_leftPolarBlocks
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A)) (L : ℕ)
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
-    (((groundSpace (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) :
+    (((groundSpace (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map (WithLp.linearEquiv
+        2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   apply (map_groundSpace_invariant_rotatePhysical_iff_of_commute
     (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) U (leftPolarPhysicalFactor A)
       (leftPolarPhysicalFactor_posDef A).isUnit hComm L).mp
@@ -228,12 +235,16 @@ supplied explicitly where required. -/
 theorem map_groundSpace_invariant_isometricDeformationBlocks
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A)) (L : ℕ)
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (γ : unitInterval) :
-    (((groundSpace (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (γ : unitInterval) :
+    (((groundSpace (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   unfold isometricDeformationBlocks
   simpa only [rotatePhysical_toTensorFromBlocks] using
     map_groundSpace_invariant_rotatePhysical_of_commute
@@ -250,9 +261,11 @@ theorem isometricDeformationInteraction_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (γ : unitInterval) :
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (γ : unitInterval) :
     Commute (isometricDeformationInteraction A γ) (onSiteTensorPow 2 U) := by
   exact deformedInteraction_commute_onSiteTensorPow _ U
     (positivePhysicalDeformation_posDef _ (leftPolarPhysicalFactor_posDef A) γ).isHermitian
@@ -269,9 +282,11 @@ theorem isometricDeformation_hamiltonian_translationInvariant_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (ManyBody.Interaction.translationInvariant N
@@ -289,9 +304,11 @@ theorem isometricDeformation_hamiltonian_chainTranslates_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) (N : ℕ) :
     Commute (ManyBody.Interaction.chainTranslates 2 N
         (isometricDeformationInteraction A γ)).hamiltonian
@@ -309,9 +326,11 @@ theorem map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) (hSymm : IsOnSiteSymmetric A U)
     (g : G) (L : ℕ) :
-    (((groundSpace (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
+    (((groundSpace (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L (U g))) =
-        ((groundSpace (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hCov : GaugeEquiv A (rotatePhysical (U g) A) :=
     gaugeEquiv_twistedTensor_of_injective A hA U hSymm g
   simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup _ _
@@ -443,9 +462,11 @@ theorem toMatrix'_parentInteraction_isometricDeformation_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (γ : unitInterval) :
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (γ : unitInterval) :
     Commute (LinearMap.toMatrix' (parentInteraction
       (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2))
       (onSiteTensorPow 2 U) :=
@@ -460,9 +481,11 @@ theorem hamiltonian_parentRingInteraction_isometricDeformation_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (parentRingInteraction
@@ -481,9 +504,11 @@ theorem hamiltonian_parentChainInteraction_isometricDeformation_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) (N : ℕ) :
     Commute (parentChainInteraction
       (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian

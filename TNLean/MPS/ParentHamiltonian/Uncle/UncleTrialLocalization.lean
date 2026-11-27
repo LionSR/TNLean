@@ -408,12 +408,14 @@ theorem hamiltonian_uncleInteraction_trial_eq_sum_endpoints
       ∑ i ∈ uncleTrialEndpointBonds N hN, (((d ^ 2 : ℕ) : ℂ)⁻¹) •
         ∑ τ : Cfg d (6 * N + 1), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
           (Matrix.toEuclideanLin
-              (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) φ)) := by
+              (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
+                  φ)) := by
   dsimp only
   calc
     _ = ∑ i : Fin (6 * N + 1), (((d ^ 2 : ℕ) : ℂ)⁻¹) •
         ∑ τ : Cfg d (6 * N + 1), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
-          (Matrix.toEuclideanLin (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
+          (Matrix.toEuclideanLin (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ
+              (Fin.pos i) 2 i τ)
             ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
               (uncleTwoWallTrialSource A B R L N)))) := by
       rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]

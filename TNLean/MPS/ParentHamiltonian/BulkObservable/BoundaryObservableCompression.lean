@@ -76,12 +76,15 @@ theorem bulkObservable_groundSpace_compression_tendsto_scalar
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
-      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp
           (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))).comp
-              ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
+              ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection) -
         observableInsertionExpectation A ρ X •
-          ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖) f (nhds 0) := by
+          ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖) f (nhds 0) := by
   let N (n : ι) := (ℓ n + k) + r n
   let η := observableInsertionExpectation A ρ X
   let Iinf := Ring.inverse (Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))
@@ -137,10 +140,12 @@ theorem bulkObservable_groundSpace_compression_tendsto_zero
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
-      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp
           (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))).comp
-              ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)‖) f (nhds 0) := by
+              ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection)‖) f (nhds 0) := by
   simpa only [hcenter, zero_smul, sub_zero] using
     hP.bulkObservable_groundSpace_compression_tendsto_scalar hρ X hℓ hr
 
@@ -154,8 +159,10 @@ theorem bulkObservable_groundSpace_projection_eventually_near_expectation
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
     {ε : ℝ} (hε : 0 < ε) :
-    ∀ᶠ n in f, ∀ ψ ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ‖ψ‖ ≤ 1 →
-      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+    ∀ᶠ n in f, ∀ ψ ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap), ‖ψ‖ ≤ 1 →
+      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
           (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))) ψ) -
         observableInsertionExpectation A ρ X • ψ‖ < ε := by
@@ -164,12 +171,15 @@ theorem bulkObservable_groundSpace_projection_eventually_near_expectation
   intro ψ hψ hnorm
   have hfix := Submodule.starProjection_eq_self_iff.mpr hψ
   calc
-    _ = ‖(((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+    _ = ‖(((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.comp
         (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))).comp
-            ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
+            ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection) -
         observableInsertionExpectation A ρ X •
-          ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) ψ‖ := by
+          ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection) ψ‖ := by
       simp only [sub_apply, ContinuousLinearMap.comp_apply,
         smul_apply, hfix]
     _ ≤ _ := ContinuousLinearMap.le_opNorm _ ψ
@@ -188,14 +198,17 @@ theorem bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
     (ψ : (n : ι) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
-    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hbound : ∀ᶠ n in f, ‖ψ n‖ ≤ 1) :
     Tendsto (fun n =>
-      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖ ^ 2) f (nhds 0) := by
   have hnorm : Tendsto (fun n =>
-      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖) f (nhds 0) := by
     apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
@@ -203,10 +216,12 @@ theorem bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
     filter_upwards [hψ, hbound] with n hn hb
     have hfix := Submodule.starProjection_eq_self_iff.mpr hn
     calc
-      _ = ‖(((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+      _ = ‖(((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp
           (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))).comp
-              ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)) (ψ n)‖ := by
+              ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection)) (ψ n)‖ := by
         simp only [ContinuousLinearMap.comp_apply, hfix]
       _ ≤ _ := ContinuousLinearMap.le_opNorm _ (ψ n)
       _ ≤ _ := mul_le_of_le_one_right (norm_nonneg _) hb
@@ -222,7 +237,8 @@ theorem bulkObservable_groundState_expectation_tendsto
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
     (ψ : (n : ι) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
-    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hunit : ∀ᶠ n in f, ‖ψ n‖ = 1) :
     Tendsto (fun n => inner ℂ (ψ n)
       (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
@@ -266,10 +282,12 @@ theorem bulkObservable_iSup_groundSpace_compression_tendsto_zero
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
-      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.comp
+      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection.comp
         ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))).comp
-            ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)‖) f (𝓝 0) := by
+            ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection)‖) f (𝓝 0) := by
   let N := fun n => (ℓ n + k) + r n
   have hN : Tendsto N f atTop := by
     apply tendsto_atTop.2
@@ -280,7 +298,8 @@ theorem bulkObservable_iSup_groundSpace_compression_tendsto_zero
   refine Submodule.tendsto_norm_iSup_starProjection_comp_zero_of_sector_compressions
     (E := fun n => EuclideanSpace ℂ (Cfg d (N n)))
     (C := ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖)
-    (fun n i => ((groundSpace (A i) (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (fun n => ((groundSpace (A α) (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (fun n i => ((groundSpace (A i) (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (fun n
+        => ((groundSpace (A α) (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (fun n => Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
       (bulkObservable X (ℓ n) (r n))) ?_ ?_ ?_
   · intro ε hε

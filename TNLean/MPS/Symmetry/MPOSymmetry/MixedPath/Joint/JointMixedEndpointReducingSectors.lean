@@ -156,7 +156,8 @@ theorem jointMixedEndpointLeftTensor_starProjection_eq_outerCorner
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
     (((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.toLinearMap =
+      (jointMixedEndpointLeftTensor A₀ d₁
+          D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.toLinearMap =
       jointMixedRowSector d₀ d₁ D₀ D₁ (0 : Fin 2) *
         jointMixedColumnSector d₀ d₁ D₀ D₁ (1 : Fin 2) *
           (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)

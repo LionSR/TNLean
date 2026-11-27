@@ -99,7 +99,8 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_e
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (α := Fin d)
                 (μ := μ) A) R W).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
@@ -127,7 +128,8 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (α := Fin d)
                 (μ := μ) A) R W).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
@@ -193,7 +195,8 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (α := Fin d)
                 (μ := μ) B) R W).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) B) W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) B) W).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) :=
     fun W hRW ↦ ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ B hμ (fun j ↦ (hP j).norm)
       (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving B hSpanB

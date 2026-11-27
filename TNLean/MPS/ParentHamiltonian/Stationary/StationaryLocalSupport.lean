@@ -56,7 +56,8 @@ noncomputable def cornerGroundSpaceES (A : MPSTensor d D)
 
 /-- The corner of the identity gives the full open-boundary space. -/
 theorem cornerGroundSpaceES_one (A : MPSTensor d D) (L : ℕ) :
-    cornerGroundSpaceES A 1 L = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    cornerGroundSpaceES A 1 L = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   have hTop : cornerSubmodule (1 : Matrix (Fin D) (Fin D) ℂ) = ⊤ :=
     eq_top_iff.mpr fun X _ => by
       change (1 : Matrix (Fin D) (Fin D) ℂ) * X * 1 = X
@@ -94,7 +95,8 @@ theorem map_groundSpace_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner
     (A : MPSTensor d D) (B : MPSTensor d E)
     (V : Matrix (Fin D) (Fin E) ℂ) (hV : Vᴴ * V = 1)
     (hInt : ∀ i, A i * V = V * B i) (L : ℕ) :
-    ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = cornerGroundSpaceES A (V * Vᴴ) L := by
+    ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = cornerGroundSpaceES A (V *
+        Vᴴ) L := by
   rw [cornerGroundSpaceES,
     groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner A B V hV hInt L]
 

@@ -77,7 +77,8 @@ theorem exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixe
         (∀ j i, (V j)ᴴ * A i = B j i * (V j)ᴴ) ∧
         (∀ j i, B j i = (V j)ᴴ * A i * V j) ∧
         ∀ N, ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-          ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+          ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨r, dim, B, V, hdim, hiso, hsum, horth, hint, hco, hcorner, hirr, _hmpv⟩ :=
     exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure A
       (hasInvariantProjectorClosure_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix)

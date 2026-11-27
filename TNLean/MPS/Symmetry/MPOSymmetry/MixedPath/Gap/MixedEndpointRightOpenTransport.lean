@@ -47,7 +47,8 @@ reindexing with its shorter-window counterpart. -/
 theorem withLpMap_cyclicRestrictₗ_physicalReindex
     (e : Fin d₁ ≃ Fin d₂) (i : Fin N) (τ : Cfg d₁ N)
     (v : EuclideanSpace ℂ (Cfg d₂ N)) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) (physicalReindexLinearIsometryEquiv e N v) =
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) (physicalReindexLinearIsometryEquiv e
+        N v) =
       physicalReindexLinearIsometryEquiv e R
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i (fun k => e (τ k))) v) := by
   apply PiLp.ext

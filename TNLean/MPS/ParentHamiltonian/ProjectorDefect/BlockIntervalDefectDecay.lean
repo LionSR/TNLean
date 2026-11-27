@@ -65,17 +65,22 @@ theorem norm_iSup_map_groundSpace_sub_comp_le_of_overlapMatrix
     (A : ∀ i, MPSTensor d (D i)) (K L Q : ℕ) (B : Matrix ι ι ℝ)
     (hdiag : ∀ i, B i i = 0) (hB : ‖B‖ < 1 / 2)
     (hBnonneg : ∀ i j, 0 ≤ B i j)
-    (hpair : ∀ i j, i ≠ j → ∀ x ∈ ((groundSpace (A i) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
-      ∀ y ∈ ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ‖⟪x, y⟫_ℂ‖ ≤ B i j * ‖x‖ * ‖y‖) :
+    (hpair : ∀ i j, i ≠ j → ∀ x ∈ ((groundSpace (A i) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap),
+      ∀ y ∈ ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ‖⟪x,
+          y⟫_ℂ‖ ≤ B i j * ‖x‖ * ‖y‖) :
     let U := fun i ↦ (leftBoundaryMapES (A i) (K + L) Q).range
     let V := fun i ↦ (reassocTailBoundaryMapES (A i) K L Q).range
     let δ := ‖B‖ / (1 - ‖B‖)
-    ‖(⨆ i, ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection -
+    ‖(⨆ i, ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)).starProjection -
       (⨆ i, U i).starProjection.comp (⨆ i, V i).starProjection‖ ≤
       4 * δ / (1 - δ) ^ 2 + ∑ i,
-        ‖((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+        ‖((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection -
           (U i).starProjection.comp (V i).starProjection‖ := by
-  have hWU (i : ι) : ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
+  have hWU (i : ι) : ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) ≤
       (leftBoundaryMapES (A i) (K + L) Q).range := by
     rw [← range_groundSpaceMapES,
       ← leftBoundaryMapES_comp_leftVirtualMapES (A i) (K + L) Q]
@@ -83,7 +88,8 @@ theorem norm_iSup_map_groundSpace_sub_comp_le_of_overlapMatrix
   exact Submodule.norm_iSup_starProjection_sub_comp_le_of_overlapMatrix
     (fun i ↦ (leftBoundaryMapES (A i) (K + L) Q).range)
     (fun i ↦ (reassocTailBoundaryMapES (A i) K L Q).range)
-    (fun i ↦ ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) B hdiag hB hWU
+    (fun i ↦ ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) B hdiag hB hWU
     (fun i j hij _ ⟨x, hx⟩ _ ⟨y, hy⟩ ↦ hx ▸ hy ▸
       norm_inner_leftBoundaryMapES_le (A i) (A j) K L Q (hBnonneg i j)
         (hpair i j hij) x y)
@@ -153,16 +159,19 @@ theorem eventually_iSup_map_groundSpace_projector_defect_le
     (A : ∀ i, MPSTensor d (D i))
     (hOverlap : ∀ ε : ℝ, 0 < ε → ∀ᶠ L : ℕ in atTop,
       ∀ i j, i ≠ j → ∀ x ∈ ((groundSpace (A i) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
-        ∀ y ∈ ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ‖inner ℂ x y‖ ≤ ε * ‖x‖ * ‖y‖)
+        ∀ y ∈ ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap), ‖inner ℂ x y‖ ≤ ε * ‖x‖ * ‖y‖)
     (hBlock : ∀ ε : ℝ, 0 < ε → ∀ᶠ L : ℕ in atTop, ∀ i K Q, 0 < Q →
       ‖(reassocTailBoundaryMapES (A i) K L Q).range.starProjection.comp
             (leftBoundaryMapES (A i) (K + L) Q).range.starProjection -
-          ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ ε)
+          ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖ ≤ ε)
     {η : ℝ} (hη : 0 < η) :
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       let U := fun i ↦ (leftBoundaryMapES (A i) (K + L) Q).range
       let V := fun i ↦ (reassocTailBoundaryMapES (A i) K L Q).range
-      ‖(⨆ i, ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection -
+      ‖(⨆ i, ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection -
         (⨆ i, U i).starProjection.comp (⨆ i, V i).starProjection‖ ≤ η := by
   classical
   let := Fintype.ofFinite ι
@@ -179,7 +188,8 @@ theorem eventually_iSup_map_groundSpace_projector_defect_le
       simpa only [hentry, C, mul_ite, mul_zero, mul_one] using
         (ite_nonneg (le_refl (0 : ℝ)) hε.le : 0 ≤ if i = j then 0 else ε))
     (fun i j hij x hx y hy ↦ by simpa [hentry, C, hij] using! hOL i j hij x hx y hy)
-  have herr : (∑ i, ‖((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+  have herr : (∑ i, ‖((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection -
       (leftBoundaryMapES (A i) (K + L) Q).range.starProjection.comp
         (reassocTailBoundaryMapES (A i) K L Q).range.starProjection‖) ≤
         ∑ _i : ι, η / ((Fintype.card ι : ℝ) + 1) :=
@@ -220,7 +230,8 @@ theorem eventually_iSup_map_groundSpace_projector_defect_le_of_inequivalent
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       let U := fun i ↦ (leftBoundaryMapES (A i) (K + L) Q).range
       let V := fun i ↦ (reassocTailBoundaryMapES (A i) K L Q).range
-      ‖(⨆ i, ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection -
+      ‖(⨆ i, ((groundSpace (A i) (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection -
         (⨆ i, U i).starProjection.comp (⨆ i, V i).starProjection‖ ≤ η := by
   refine eventually_iSup_map_groundSpace_projector_defect_le A ?_ ?_ hη
   · exact fun ε hε ↦ eventually_all.2 fun i ↦ eventually_all.2 fun j ↦
@@ -257,7 +268,8 @@ theorem eventually_toTensorFromBlocks_projector_defect_le
     {η : ℝ} (hη : 0 < η) :
     let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
-      ‖((groundSpace B (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace B (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES B (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES B K L Q).range.starProjection‖ ≤ η := by
   filter_upwards [eventually_iSup_map_groundSpace_projector_defect_le_of_inequivalent

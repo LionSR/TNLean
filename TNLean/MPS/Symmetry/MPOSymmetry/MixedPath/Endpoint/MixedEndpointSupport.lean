@@ -147,7 +147,8 @@ the two-site ground space of the right-weighted tensor.
 Source: arXiv:2203.12563, Section 5, line 1690, `Sγ = S′γ`. -/
 theorem range_insertedTwoSiteMap_eq_map_groundSpace
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ) (hW : IsUnit W) :
-    (insertedTwoSiteMap A W).range = ((groundSpace (fun i => A i * W) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    (insertedTwoSiteMap A W).range = ((groundSpace (fun i => A i * W) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   obtain ⟨u, rfl⟩ := hW
   apply le_antisymm
   · rintro ψ ⟨v, rfl⟩
@@ -179,7 +180,8 @@ theorem mixedEndpoint_extendedSupport_eq_map_groundSpace
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
     (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
       (bondInterpolationMatrix D₀ D₁ γ)).range =
-      ((groundSpace (mixedEndpointInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+      ((groundSpace (mixedEndpointInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) :=
   range_insertedTwoSiteMap_eq_map_groundSpace _ _
     (isUnit_bondInterpolationMatrix_of_mem_Ioo hγ)
 

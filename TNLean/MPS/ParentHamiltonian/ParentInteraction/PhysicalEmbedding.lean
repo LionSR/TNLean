@@ -68,7 +68,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
     (A : MPSTensor d D) (L : ℕ) :
     let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) =
-      1 - T ∘ₗ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap ∘ₗ T.adjoint := by
+      1 - T ∘ₗ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap ∘ₗ T.adjoint := by
   let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
@@ -80,12 +81,16 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
     rw [← LinearMap.adjoint_inner_right]
     rw [← LinearMap.comp_apply, hT, LinearMap.id_apply]
   let I := T.isometryOfInner hinner
-  let : CompleteSpace (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map I.toLinearMap) :=
+  let : CompleteSpace (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+      I.toLinearMap) :=
     FiniteDimensional.complete ℂ _
-  let : (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map I.toLinearMap).HasOrthogonalProjection :=
+  let : (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+      I.toLinearMap).HasOrthogonalProjection :=
     Submodule.HasOrthogonalProjection.ofCompleteSpace _
-  have hproj := I.starProjection_map_eq_comp_adjoint ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
-  have hmap : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map I.toLinearMap =
+  have hproj := I.starProjection_map_eq_comp_adjoint ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)
+  have hmap : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).map I.toLinearMap =
       ((groundSpace (rotatePhysical E A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
       (map_groundSpace_rotatePhysical_rectangular E A L).symm

@@ -68,7 +68,8 @@ theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
 /-- The Hilbert-space realization has exactly the physical local ground space
 as its range. -/
 theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
-    (groundSpaceMapES A L).range = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    (groundSpaceMapES A L).range = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   ext v
   constructor
   · rintro ⟨x, rfl⟩

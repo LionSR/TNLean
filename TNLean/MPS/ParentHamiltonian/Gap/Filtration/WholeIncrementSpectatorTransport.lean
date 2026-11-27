@@ -52,7 +52,8 @@ theorem mem_range_leftBoundaryMapES_iff_rightFiber
     (v : EuclideanSpace ℂ (Cfg d (n + r))) :
     v ∈ (leftBoundaryMapES A n r).range ↔ ∀ s : Cfg d r,
       ContinuousLinearMap.rightFiber
-        (rightSpectatorConfigLinearIsometryEquiv d n r v) s ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        (rightSpectatorConfigLinearIsometryEquiv d n r v) s ∈ ((groundSpace A n).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [leftBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
     Submodule.mem_map_equiv, mem_map_groundSpace_iff]
@@ -148,7 +149,8 @@ theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
                   i.val ∧ i.val + (L + Q) ≤ K + L + Q).hamiltonian)).starProjection.toLinearMap.comp
         (openPrefixGroundProjectionES A (L + Q) (K + L + Q) (K + L) -
           openPrefixGroundProjectionES A (L + Q) (K + L + Q) (K + L + Q)))‖ =
-      ‖((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES A K L Q).range.starProjection‖ := by
   have hWV : ((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
@@ -295,7 +297,8 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect
           ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {ε : ℝ} (hε : 0 ≤ ε)
     (hDefect : ∀ K : ℕ,
-      ‖((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + p) p).range.starProjection.comp
           (reassocTailBoundaryMapES A K p p).range.starProjection‖ ≤ ε) :
     ∀ n ∈ Finset.range M,

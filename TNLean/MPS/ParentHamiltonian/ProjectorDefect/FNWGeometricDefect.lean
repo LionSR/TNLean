@@ -78,7 +78,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
     (r ℓ : ℕ) (hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ ≤
       c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by
   have ha0 : 0 ≤ fnwMixingQuantity ρ hρ A htr m :=
     fnwMixingQuantity_nonneg ρ hρ A htr m
@@ -94,7 +95,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
   calc
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ ≤
         fnwMixingQuantity ρ hρ A htr m * (1 + fnwMixingQuantity ρ hρ A htr m) /
           fnwLowerBoundaryConstant ρ hρ A m :=
       wholeIncrement_groundProjection_defect_le_fnw_factored
@@ -131,7 +133,8 @@ theorem exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
         ∀ m : ℕ, L ≤ m → c * lam ^ m < 1 → ∀ r ℓ : ℕ, 0 < ℓ →
           ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
                 (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-              ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤
+              ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection‖ ≤
             c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by
   set σ : Mat := (Matrix.trace ρ)⁻¹ • ρ with hσ_def
   have hσ : σ.PosDef := hρ.inv_trace_smul
@@ -170,10 +173,12 @@ theorem openChain_groundProjection_defect_eq_wholeIncrement
     (A : MPSTensor d D) (K l : ℕ) :
     openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainLeftGroundProjectionES A (K + l) -
-        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection =
       (reassocTailBoundaryMapES A K l 1).range.starProjection ∘L
           (leftBoundaryMapES A (K + l) 1).range.starProjection -
-        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection := by
   simp only [openChainTailGroundProjectionES, openChainLeftGroundProjectionES,
     reassocTailBoundaryMapES_one, range_tailBoundaryMapES, range_leftBoundaryMapES_one]
 
@@ -204,7 +209,8 @@ theorem exists_openChain_groundProjection_defect_le_fnw_geometric
         ∀ l : ℕ, L ≤ l → c * lam ^ l < 1 → ∀ K : ℕ,
           ‖openChainTailGroundProjectionES A K (l + 1) ∘L
                 openChainLeftGroundProjectionES A (K + l) -
-              ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤
+              ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection‖ ≤
             c * lam ^ l * (1 + c * lam ^ l) / (1 - c * lam ^ l) := by
   obtain ⟨c, lam, L, hc, hlam, hlam_one, hL, hInj, hDefect⟩ :=
     hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ

@@ -300,7 +300,8 @@ theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
     (σ : Cfg d N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) v σ =
-      Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i σ) v) (extractWindow R i σ) := by
+      Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i σ)
+          v) (extractWindow R i σ) := by
   have : NeZero N := NeZero.of_pos i.pos
   rw [ManyBody.Interaction.translationInvariant_term_of_le _ hRN i, Matrix.toLpLin_apply,
     Matrix.toLpLin_apply]
@@ -318,7 +319,8 @@ theorem toEuclideanLin_translationInvariant_term_eq_inv_smul_sum (hRN : R ≤ N)
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) =
       (((d ^ R : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
-        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ)).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i
+            τ)).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
           LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) := by
   have : NeZero N := NeZero.of_pos i.pos
   ext v σ
@@ -356,7 +358,8 @@ theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
   rw [toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ N),
     toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ W)]
   have hrestrict :
-      LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (Fin.pos (cyclicForwardSite s q.val)) R (cyclicForwardSite s q.val) ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)))
+      LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (Fin.pos (cyclicForwardSite s q.val)) R
+          (cyclicForwardSite s q.val) ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)))
           ((cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm x) =
         LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (Fin.pos q) R q σ)
           (ContinuousLinearMap.rightFiber x τ) := by

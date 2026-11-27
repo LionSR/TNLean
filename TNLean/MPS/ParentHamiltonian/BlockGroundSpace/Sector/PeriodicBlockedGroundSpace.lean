@@ -89,7 +89,8 @@ theorem map_groundSpace_eq_iSup_of_isometric_sector_resolution
     (hV : ∀ j, (V j)ᴴ * V j = 1)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
     (hInt : ∀ j i, C i * V j = V j * B j i) (N : ℕ) :
-    ((groundSpace C N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ⨆ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    ((groundSpace C N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ⨆ j, ((groundSpace (B j)
+        N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [groundSpace_eq_iSup_of_isometric_sector_resolution C B V hV hSum hInt N,
     Submodule.map_iSup]
 
@@ -117,7 +118,8 @@ theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
       (∀ a i, blocks a i = (V a)ᴴ * blockTensor A p i * V a) ∧
       (∀ a i, blockTensor A p i * V a = V a * blocks a i) ∧
       (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) blocks) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) blocks) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) ∧
       (∀ a, IsPeriodic (m / m.gcd p) (blocks a)) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, blocks, V, hproj, hsum, hne, hshift, hdim, htotal, hcan,

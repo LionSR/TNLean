@@ -77,7 +77,8 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect_of_le
           ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {ε : ℝ} (hε : 0 ≤ ε)
     (hDefect : ∀ K : ℕ,
-      ‖((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + p) p).range.starProjection.comp
           (reassocTailBoundaryMapES A K p p).range.starProjection‖ ≤ ε) :
     ∀ n ∈ Finset.range M,

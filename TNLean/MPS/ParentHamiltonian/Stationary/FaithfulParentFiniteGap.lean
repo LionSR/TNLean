@@ -118,7 +118,8 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fix
       A hA hρ hFix
   have hJointKer : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) :=
     hker.mono fun N hN => hN.trans (hGS N)
   exact exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     (fun _ => 1) B (fun _ => one_ne_zero) m hPeriodic h hR hh hJointKer
@@ -182,7 +183,8 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
         parentGroundStateFace h ∧
       ∃ δ : ℝ, 0 < δ ∧
@@ -249,7 +251,8 @@ theorem exists_given_interaction_gap_of_leftCanonical_of_posDef_fixedPoint
     (hFix : Kraus.map A ρ = ρ)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
       ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
@@ -270,7 +273,8 @@ theorem exists_given_interaction_finite_quasiLocal_gap_of_leftCanonical_of_posDe
     (hFix : Kraus.map A ρ = ρ)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
     ∃ δ : ℝ, 0 < δ ∧
       (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue

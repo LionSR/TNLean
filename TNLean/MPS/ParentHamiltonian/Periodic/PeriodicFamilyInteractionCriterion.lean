@@ -53,7 +53,8 @@ theorem exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_indepen
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   apply exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_eventually_intersection
   have hStep := eventually_iSup_groundSpace_restriction_intersection_of_independent_middle
     A hIndep (fun j => (hPeriodic j).exists_eventually_groundSpace_restriction_intersection.elim
@@ -73,7 +74,8 @@ theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family_ind
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence
       μ A hμ m hPeriodic hIndep
@@ -94,7 +96,8 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →

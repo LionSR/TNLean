@@ -140,7 +140,8 @@ theorem norm_inner_residualWindowRightMapES_leftMapES_le_of_prefix_bound
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (B' : MPSTensor (blockPhysDim d L) F) (V : Matrix (Fin D) (Fin E) ℂ)
     {K M r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
-    (hAngle : ∀ x ∈ ((groundSpace B M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B' M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAngle : ∀ x ∈ ((groundSpace B M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B' M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     {x y : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
       (Cfg (blockPhysDim d L) M × Cfg d r))}
@@ -169,7 +170,8 @@ theorem norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (B' : MPSTensor (blockPhysDim d L) F) (V : Matrix (Fin D) (Fin E) ℂ)
     {K M r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
-    (hAngle : ∀ x ∈ ((groundSpace B M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B' M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAngle : ∀ x ∈ ((groundSpace B M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B' M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖) :
     ‖(residualWindowRightMapES A B V K M r).range.starProjection.comp
       (residualWindowLeftMapES B' K M r).range.starProjection‖ ≤ ε := by

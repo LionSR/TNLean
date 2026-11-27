@@ -102,7 +102,8 @@ theorem continuous_iSup_map_groundSpace_starProjection_of_injective_family
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
-    Continuous fun x => (⨆ j, ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection := by
+    Continuous fun x => (⨆ j, ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)).starProjection := by
   have hT := continuous_blockGroundSpaceMapES_family A hA L
   have hP := ContinuousLinearMap.continuous_injectiveRangeProjector
     (fun x => blockGroundSpaceMapES (A x) L) hT hInj
@@ -119,7 +120,8 @@ theorem continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injectiv
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x =>
-      (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection := by
+      (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2
+          ℂ _).symm.toLinearMap)).starProjection := by
   simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
     continuous_iSup_map_groundSpace_starProjection_of_injective_family A hA L hInj
 

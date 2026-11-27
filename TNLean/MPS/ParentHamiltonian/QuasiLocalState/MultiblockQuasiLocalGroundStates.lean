@@ -102,7 +102,8 @@ theorem mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kern
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     φ ∈ parentGroundStateFace h ↔
       ∃ w : Fin b → ℝ, (∀ j, 0 ≤ w j) ∧ (∑ j, w j = 1) ∧
@@ -134,7 +135,8 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     (φ ∈ parentGroundStateFace h ∧ IsPureQuasiLocalState d φ) ↔
       ∃ j, φ = quasiLocalExpectation (A j) (hP j).norm
@@ -180,14 +182,17 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) :
     ∃ (B : ∀ j, MPSTensor d (D j))
       (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
       (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)),
       (∀ j, (ρ j).PosDef) ∧ WordTupleSpanTop B S ∧
       (∀ j N, groundSpace (A j) N = groundSpace (B j) N) ∧
-      (∀ N, ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-        ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+      (∀ N, ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) ∧
       let ω := fun j => quasiLocalExpectation (B j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero
       (∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -198,14 +203,17 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
           ∃ j, φ = ω j) := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
-  have hJoint : ∀ N, ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+  have hJoint : ∀ N, ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) :=
     fun N => congrArg (fun G => G.map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
       (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
         μ μ A B hμ hμ (fun j => hGS j N))
   have hkerB : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+        ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) :=
     hker.mono fun N hN => hN.trans (hJoint N)
   have hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i) := fun i j hij e => by
@@ -242,7 +250,8 @@ theorem exists_positive_parent_interaction_of_hasComplementaryFixedPointGap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+          ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
@@ -266,10 +275,12 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+          ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)) ∧
       (∀ᶠ N : ℕ in atTop,
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+          ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)) ∧
       let ω := fun j => quasiLocalExpectation (A j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero
       (∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -281,7 +292,8 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
     exists_positive_parent_interaction_of_hasComplementaryFixedPointGap μ A hμ ρ hP hρ hDistinct
   have hEventual : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   refine ⟨R, hR, h, hh, hKernel, hEventual, ?_, ?_⟩
   · exact fun φ => mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel

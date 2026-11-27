@@ -92,7 +92,8 @@ theorem mem_ker_toEuclideanLin_hamiltonian_chainTranslates_iff
     v ∈ LinearMap.ker (Matrix.toEuclideanLin
         (ManyBody.Interaction.chainTranslates R N h).hamiltonian) ↔
       ∀ i : NonwrappingStart R N, ∀ τ : Cfg d N,
-        LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i.1) R i.1 τ) v ∈ LinearMap.ker (Matrix.toEuclideanLin h) := by
+        LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i.1) R i.1
+            τ) v ∈ LinearMap.ker (Matrix.toEuclideanLin h) := by
   have : NeZero N := ⟨by omega⟩
   have hterm (i : NonwrappingStart R N) : (Matrix.toEuclideanLin
       ((ManyBody.Interaction.translationInvariant N h).term i.1)).IsPositive :=

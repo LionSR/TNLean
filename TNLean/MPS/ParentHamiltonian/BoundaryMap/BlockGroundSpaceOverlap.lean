@@ -56,7 +56,8 @@ theorem eventually_norm_inner_map_groundSpace_le_of_mixed_gap
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hgap : Kraus.mixedMapSpectralRadius B A < 1) {ε : ℝ} (hε : 0 < ε) :
-    ∀ᶠ n in Filter.atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    ∀ᶠ n in Filter.atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   let c := fun n ↦ Real.sqrt ‖Ring.inverse (groundSpaceGram A n)‖ *
     ‖(groundSpaceMapES A n).adjoint.comp (groundSpaceMapES B n)‖ *
@@ -94,7 +95,8 @@ theorem eventually_norm_inner_map_groundSpace_le_of_inequivalent
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ h : D₂ = D₁, ¬ MPTensor.GaugePhaseEquiv (h ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
-    ∀ᶠ n in Filter.atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    ∀ᶠ n in Filter.atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   apply hA.eventually_norm_inner_map_groundSpace_le_of_mixed_gap hB hρ hσ _ hε
   by_cases hD : D₂ = D₁

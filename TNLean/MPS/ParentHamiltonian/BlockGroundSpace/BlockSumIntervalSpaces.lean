@@ -35,7 +35,8 @@ Theorem 12, with nonzero block coefficients. -/
 theorem map_groundSpace_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (L : ℕ) :
-    ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+    ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
       ⨆ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     Submodule.map_iSup]
@@ -46,7 +47,9 @@ arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2444--2463. -/
 theorem map_groundSpace_block_le_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (α : Fin r) (L : ℕ) :
-    ((groundSpace (A α) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    ((groundSpace (A α) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace
+        (toTensorFromBlocks (α := Fin d) (μ := μ)
+        A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] using
     (le_iSup (fun β ↦ ((groundSpace (A β) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) α)
 

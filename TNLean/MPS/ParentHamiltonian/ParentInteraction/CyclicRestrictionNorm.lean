@@ -100,7 +100,8 @@ theorem sum_norm_sq_withLpMap_cyclicRestrictₗ {N L : ℕ} (hLN : L ≤ N) (i :
   calc
     _ = ∑ z : Cfg d L × Cfg d (N - L),
         ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i (e z)) v‖ ^ 2 := by
-      exact (e.sum_comp (fun τ ↦ ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2)).symm
+      exact (e.sum_comp (fun τ ↦ ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^
+          2)).symm
     _ = ∑ η : Cfg d L, ∑ τ : Cfg d (N - L),
         ∑ σ : Cfg d L, ‖v (e (σ, τ))‖ ^ 2 := by
       simp only [Fintype.sum_prod_type, PiLp.norm_sq_eq_of_L2]
@@ -121,7 +122,8 @@ theorem inv_pow_mul_sum_norm_sq_withLpMap_cyclicRestrictₗ {N L : ℕ}
     (hd : d ≠ 0) (hLN : L ≤ N) (i : Fin N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     (((d ^ L : ℕ) : ℝ)⁻¹) *
-        (∑ τ : Cfg d N, ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2) = ‖v‖ ^ 2 := by
+        (∑ τ : Cfg d N, ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^
+            2) = ‖v‖ ^ 2 := by
   rw [sum_norm_sq_withLpMap_cyclicRestrictₗ hLN i v, Nat.cast_pow, ← mul_assoc,
     inv_mul_cancel₀ (pow_ne_zero L (Nat.cast_ne_zero.mpr hd)), one_mul]
 

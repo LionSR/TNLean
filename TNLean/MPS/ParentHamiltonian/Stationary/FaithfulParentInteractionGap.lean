@@ -74,7 +74,8 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
         parentGroundStateFace h ∧
       ∃ γ : ℝ, 0 < γ ∧
@@ -101,7 +102,8 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
   let h := LinearMap.toMatrix' (parentInteraction A R)
   have hh : h.PosSemidef := posSemidef_toMatrix'_parentInteraction A R
   have hKernel : ∀ N, R ≤ N → LinearMap.ker
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     intro N hN
     exact hCanonicalKernel R N le_rfl hN
   obtain ⟨γ, hγ, hGap⟩ :=

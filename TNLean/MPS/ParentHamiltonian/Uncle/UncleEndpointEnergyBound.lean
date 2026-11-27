@@ -68,7 +68,8 @@ theorem withLpMap_cyclicRestrictₗ_pinnedGlobalState_eq
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1))
     (hi : i ∈ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) (uncleTrialPinnedGlobalState A B R L N hN i) =
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) (uncleTrialPinnedGlobalState A B R L N
+        hN i) =
       uncleTrialPinnedEndpointState A B R L N hN i τ := by
   have h01 : N - 1 < 2 * N := by omega
   have h12 : 2 * N < 4 * N - 1 := by omega

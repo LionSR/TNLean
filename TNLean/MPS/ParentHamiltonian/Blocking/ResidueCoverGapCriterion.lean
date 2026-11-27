@@ -135,7 +135,8 @@ theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_cover_defec
     (hLeft : ∀ K ≥ K₀, ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
       (parentChainInteraction A R (K * m + M * m)).hamiltonian) μ → μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hDefect : ∀ K ≥ K₀, ∀ r < m,
-      ‖((groundSpace A (K * m + M * m + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K * m + M * m + r)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K * m + M * m) r).range.starProjection.comp
           (reassocTailBoundaryMapES A (K * m) (M * m) r).range.starProjection‖ ≤
         (1 / 2 : ℝ)) :
@@ -191,7 +192,8 @@ theorem leftBoundary_inf_reassocTail_range_eq_map_groundSpace_of_open_kernel
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
           ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     (leftBoundaryMapES A (K + L) r).range ⊓
-      (reassocTailBoundaryMapES A K L r).range = ((groundSpace A (K + L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      (reassocTailBoundaryMapES A K L r).range = ((groundSpace A (K + L + r)).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [← ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES A
       (hKernel (K + L) (by omega)),
     ← ker_hamiltonian_restrict_parentChainInteraction_eq_range_reassocTailBoundaryMapES A hR
@@ -211,7 +213,8 @@ theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_all_of_resi
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
           ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hDefect : ∀ K ≥ K₀, ∀ r < m,
-      ‖((groundSpace A (K * m + M * m + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K * m + M * m + r)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K * m + M * m) r).range.starProjection.comp
           (reassocTailBoundaryMapES A (K * m) (M * m) r).range.starProjection‖ ≤
         (1 / 2 : ℝ)) :
@@ -264,7 +267,8 @@ theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_resi
       (Matrix.toEuclideanLin (parentChainInteraction A R (n * L)).hamiltonian) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hDefect : ∀ K r : ℕ → ℕ, Tendsto (fun M =>
-      ‖((groundSpace A (K M * L + M * L + r M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K M * L + M * L + r M)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K M * L + M * L) (r M)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K M * L) (M * L) (r M)).range.starProjection‖)
       atTop (nhds 0)) :
@@ -273,7 +277,8 @@ theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_resi
         (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let e (M : ℕ) (z : ℕ × ℕ) : ℝ :=
-    ‖((groundSpace A (z.1 * L + M * L + z.2)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+    ‖((groundSpace A (z.1 * L + M * L + z.2)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection -
       (leftBoundaryMapES A (z.1 * L + M * L) z.2).range.starProjection.comp
         (reassocTailBoundaryMapES A (z.1 * L) (M * L) z.2).range.starProjection‖
   have hUniform : ∀ᶠ M in atTop, ∀ z, e M z ≤ (1 / 2 : ℝ) :=
@@ -319,7 +324,8 @@ remains an explicit hypothesis of this auxiliary criterion. -/
 theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit
     [NeZero d] {A : MPSTensor d D} (hA : IsPeriodic m A)
     (hDefect : ∀ K r : ℕ → ℕ, Filter.Tendsto (fun M =>
-      ‖((groundSpace A (K M * m + M * m + r M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K M * m + M * m + r M)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K M * m + M * m) (r M)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K M * m) (M * m) (r M)).range.starProjection‖)
       Filter.atTop (nhds 0)) :
@@ -332,7 +338,8 @@ theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace
   let e (M : ℕ) (z : ℕ × ℕ) : ℝ :=
-    ‖((groundSpace A (z.1 * m + M * m + z.2)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+    ‖((groundSpace A (z.1 * m + M * m + z.2)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection -
       (leftBoundaryMapES A (z.1 * m + M * m) z.2).range.starProjection.comp
         (reassocTailBoundaryMapES A (z.1 * m) (M * m) z.2).range.starProjection‖
   have hUniform : ∀ᶠ M in Filter.atTop, ∀ z, e M z ≤ (1 / 2 : ℝ) :=

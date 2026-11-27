@@ -54,7 +54,8 @@ theorem iSup_range_residualWindowLeftMapES_eq_of_map_groundSpace_eq_iSup
     {ι : Type*} {dim : ι → ℕ}
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (K M r : ℕ)
-    (hGS : ((groundSpace (blockTensor A L) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+    (hGS : ((groundSpace (blockTensor A L) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+        =
       ⨆ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     (⨆ j, (residualWindowLeftMapES (B j) K M r).range) =
       ((leftBoundaryMapES A ((K + M) * L) r).range).map

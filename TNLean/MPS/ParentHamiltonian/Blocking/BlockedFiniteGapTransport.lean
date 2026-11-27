@@ -108,8 +108,10 @@ theorem exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_fami
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
-    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hcover : R + L ≤ K * L + 1)
     (hker : ∀ᶠ n in Filter.atTop,

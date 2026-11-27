@@ -51,7 +51,8 @@ normal bond-one branch. In particular it covers the entire finite prefix.
 Source: SPWC10, Theorem 5 proof, lines 873--880, product-branch specialization. -/
 theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (B : MPSTensor d 1)
-    (hB : Kraus.IsNormal B) (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h))
+    (hB : Kraus.IsNormal B) (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     (M : ℕ) (hM : 0 < M) (hLM : L ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
     ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧
@@ -73,7 +74,8 @@ theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kerne
       Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
       (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     (B : MPSTensor d 1) (hB : Kraus.IsNormal B)
-    (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
+    (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h)) :
     ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; mpvState B M ≠ 0 ∧
       LinearMap.ker (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by

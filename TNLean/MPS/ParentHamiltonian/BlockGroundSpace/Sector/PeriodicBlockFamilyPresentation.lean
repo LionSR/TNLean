@@ -48,8 +48,10 @@ arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem map_groundSpace_blockTensor_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
     (L N : ℕ) :
-    ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-      ⨆ j, ((groundSpace (blockTensor (A j) L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
+      ⨆ j, ((groundSpace (blockTensor (A j) L) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   apply Submodule.map_injective_of_injective
     (blockedConfigLinearIsometryEquiv d N L).injective
   rw [map_groundSpace_blockTensor_map, Submodule.map_iSup]
@@ -75,7 +77,8 @@ theorem exists_primitive_nestedFamilyPresentation
       (∀ a, Kraus.HasComplementaryFixedPointGap (C a) (σ a)) ∧ (∀ a, (σ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv C ∧
       ∀ N, (⨆ j, ⨆ a, ((groundSpace (B j a) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) C) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) C) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   classical
   obtain ⟨e⟩ : Nonempty (Fin (Fintype.card (Σ j : Fin r, Fin (c j))) ≃
       (Σ j : Fin r, Fin (c j))) := ⟨(Fintype.equivFin _).symm⟩
@@ -92,7 +95,8 @@ theorem exists_primitive_nestedFamilyPresentation
   rw [← hselected N, map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1) C
     (fun _ => one_ne_zero)]
   exact (iSup_sigma' (β := Fin r) (κ := fun j => Fin (c j))
-    (fun (j : Fin r) (q : Fin (c j)) => ((groundSpace (B j q) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))).trans
+    (fun (j : Fin r) (q : Fin (c j)) => ((groundSpace (B j q) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))).trans
       (e.iSup_comp (g := fun a : Σ j : Fin r, Fin (c j) =>
         ((groundSpace (B a.1 a.2) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))).symm
 
@@ -112,8 +116,10 @@ theorem exists_primitive_blockFamilyPresentation_of_period_dvd
         (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv B ∧
-      ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-        ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   classical
   choose dims hdims rest using fun j =>
     (hPeriodic j).exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd L hL (hdiv j)
@@ -143,8 +149,10 @@ theorem exists_primitive_blockFamilyPresentation_of_isPeriodic
           (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
         (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
-        ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-          ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) =
+          ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   have hL : 0 < ∏ j, m j := Finset.prod_pos fun j _ => (hPeriodic j).period_pos
   exact ⟨∏ j, m j, hL,
     exists_primitive_blockFamilyPresentation_of_period_dvd μ A hμ m hPeriodic _ hL

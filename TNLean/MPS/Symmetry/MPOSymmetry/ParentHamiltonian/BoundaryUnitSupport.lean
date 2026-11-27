@@ -101,8 +101,10 @@ theorem IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n) :
     Matrix.toEuclideanLin (mpoWithBoundary T U n) ∘ₗ
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap =
+      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap := by
   apply LinearMap.ext
   intro ψ
   apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n)).injective
@@ -121,8 +123,10 @@ theorem IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection_
     {U : Matrix (Fin D₁) (Fin D₁) ℂ} (hU : mpoWithBoundary T U 1 = 1)
     (hn : 0 < n) :
     Matrix.toEuclideanLin (mpoWithBoundary T U n) ∘ₗ
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap :=
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap =
+      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap :=
   h.toEuclideanLin_comp_map_groundSpace_starProjection
     (Kraus.isNBlkInjective_one_of_isInjective hInj) Nat.one_pos hU hn
 

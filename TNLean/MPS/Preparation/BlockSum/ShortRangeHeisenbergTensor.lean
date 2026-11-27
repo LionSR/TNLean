@@ -136,7 +136,8 @@ theorem blockGroundSpaceMapES_shortRangeHeisenbergBlock_apply
 \(|01\rangle\) and \(|10\rangle\) coefficients agree. -/
 theorem mem_map_groundSpace_shortRangeHeisenbergTensor_two_iff
     (v : EuclideanSpace ℂ (Cfg 2 2)) :
-    v ∈ ((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ↔ v ![0, 1] = v ![1, 0] := by
+    v ∈ ((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ↔ v ![0, 1] = v ![1, 0] := by
   rw [shortRangeHeisenbergTensor,
     map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => (1 : ℂ))
       shortRangeHeisenbergBlock (fun _ => one_ne_zero),
@@ -173,7 +174,8 @@ private theorem cfg_two_comp_rev (a b : Fin 2) :
 \((1+\mathrm{Swap})/2\). -/
 theorem map_groundSpace_shortRangeHeisenbergTensor_two_starProjection
     (v : EuclideanSpace ℂ (Cfg 2 2)) :
-    ((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v =
+    ((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection v =
       WithLp.toLp 2 (fun σ => (v σ + v (σ ∘ Fin.rev)) / 2) := by
   apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
   · apply (mem_map_groundSpace_shortRangeHeisenbergTensor_two_iff _).2
@@ -196,7 +198,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_tw
         v σ =
       (v σ - v (σ ∘ Fin.rev)) / 2 := by
   rw [toEuclideanLin_toMatrix'_parentInteraction]
-  change (((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection v) σ = _
+  change (((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection v) σ = _
   rw [Submodule.starProjection_orthogonal_val,
     map_groundSpace_shortRangeHeisenbergTensor_two_starProjection]
   change v σ - (v σ + v (σ ∘ Fin.rev)) / 2 = _

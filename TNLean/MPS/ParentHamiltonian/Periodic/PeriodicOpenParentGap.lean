@@ -114,7 +114,8 @@ theorem IsPeriodic.exists_positive_parent_interaction_uniform_gap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin
-        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) = ((groundSpace A
+            N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R N h).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by

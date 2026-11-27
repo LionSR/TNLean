@@ -96,7 +96,8 @@ theorem IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition
       (∑ a, dim a) = D ∧
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) := by
   classical
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, B, V, _hproj, _hsum, _hne, _hshift, hdim, htotal, _hcan,
@@ -123,7 +124,8 @@ theorem IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition
       (∑ a, dim a) = D ∧
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) := by
   have h := hA.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd
     m hA.period_pos (dvd_refl m)
   rw [Nat.gcd_self] at h
@@ -261,8 +263,10 @@ theorem IsPeriodic.exists_inequivalent_primitive_groundStatePresentation_of_dvd
           (ρ : (a : Fin g) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
           (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
           BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-            ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+          (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+              =
+            ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap)) := by
   classical
   obtain ⟨dim, hdim, B, ρ, _htotal, hP, hρ, hGS⟩ :=
     hA.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd p hp hdiv
@@ -291,8 +295,10 @@ theorem IsPeriodic.exists_inequivalent_primitive_groundStatePresentation
           (ρ : (a : Fin g) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
           (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
           BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-            ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+          (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+              =
+            ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap)) := by
   exact hA.exists_inequivalent_primitive_groundStatePresentation_of_dvd
     m hA.period_pos (dvd_refl m)
 

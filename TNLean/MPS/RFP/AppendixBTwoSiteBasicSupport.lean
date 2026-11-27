@@ -408,7 +408,8 @@ noncomputable def AppendixBStructuralData.twoSiteBasicSupportProjection
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)
-  e.toLinearMap.comp (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap.comp
+  e.toLinearMap.comp (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection.toLinearMap.comp
     e.symm.toLinearMap)
 
 /-- The range of the two-site support projector is the Appendix B basic support.
@@ -422,7 +423,8 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_range
   constructor
   · rintro ⟨v, rfl⟩
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
-      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v)) ∈
         groundSpace hStruct.coreTensor 2
     apply (mem_map_groundSpace_iff hStruct.coreTensor 2 _).1
@@ -430,7 +432,8 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_range
   · intro hψ
     refine ⟨ψ, ?_⟩
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
-      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ)) = ψ
     have hψES : (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ ∈
         ((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
@@ -451,10 +454,12 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_eq_complement
   apply LinearMap.ext
   intro v
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
-      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v)) =
     v - (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
-      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection
+      (((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)ᗮ.starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v))
   rw [Submodule.starProjection_orthogonal_val]
   simp

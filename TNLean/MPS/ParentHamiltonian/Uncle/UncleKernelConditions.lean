@@ -62,7 +62,8 @@ theorem uncleInteraction_apply_eq_zero_iff
     (v : EuclideanSpace ℂ (Cfg d 2)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 ↔
       (blockedConfigLinearIsometryEquiv d 1 2).symm v ∈
-        ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   rw [toEuclideanLin_uncleInteraction_apply, LinearIsometryEquiv.map_eq_zero_iff]
   rw [Submodule.starProjection_apply_eq_zero_iff, Submodule.orthogonal_orthogonal]
 

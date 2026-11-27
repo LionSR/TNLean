@@ -157,12 +157,14 @@ private theorem residualPrefixFiber_mem_map_groundSpace
     (V : Matrix (Fin D) (Fin E) ℂ) {N r : ℕ}
     {x : EuclideanSpace ℂ (Cfg d (N * L + r))}
     (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range) (τ : Cfg d r) :
-    residualPrefixFiber (L := L) x τ ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    residualPrefixFiber (L := L) x τ ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   obtain ⟨z, rfl⟩ := hx
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).surjective z
   change residualPrefixFiber (L := L)
     (blockedResidualBoundaryMapES A L B V N r
-      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ ∈ ((groundSpace B
+          N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   rw [residualPrefixFiber_boundaryMap A B V N r Y τ, ← range_groundSpaceMapES]
   exact ⟨_, rfl⟩
 
@@ -177,7 +179,8 @@ theorem norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound {D₂ : ℕ}
     (B : MPSTensor (blockPhysDim d L) E) (B' : MPSTensor (blockPhysDim d L) F)
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {N r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
-    (hAngle : ∀ x ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B' N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+    (hAngle : ∀ x ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
+        ((groundSpace B' N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     {x y : EuclideanSpace ℂ (Cfg d (N * L + r))}
     (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range)
@@ -287,7 +290,8 @@ theorem IsPeriodic.exists_residual_primitive_projection_sum
           ⨆ j, (blockedResidualBoundaryMapES A m (B j) (V j) N r).range) ∧
         (∀ r : ℕ → ℕ, Tendsto (fun N =>
           ‖(∑ j, ((blockedResidualBoundaryMapES A m (B j) (V j) N (r N)).range).starProjection) -
-            ((groundSpace A (N * m + r N)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖) atTop (nhds 0)) := by
+            ((groundSpace A (N * m + r N)).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection‖) atTop (nhds 0)) := by
   classical
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨dim, hdim, B, P, V, ρ, hP, hρ, hDistinct, hproj, hsum,

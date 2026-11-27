@@ -221,7 +221,8 @@ theorem pathVector_mem_map_groundSpace_orthogonal
     (t z : Matrix (Fin k) (Fin k) ℝ) (a f : Fin k)
     (h : (∑ b, ∑ c, ∑ e, z b e *
       (t a b * t b c * t c e * t e f) ^ 2 : ℝ) = 0) :
-    pathVector t z a f ∈ ((groundSpace (matrixUnitTensor t) 4).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ := by
+    pathVector t z a f ∈ ((groundSpace (matrixUnitTensor t) 4).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)ᗮ := by
   rw [Submodule.mem_orthogonal']
   intro u hu
   obtain ⟨X, hX⟩ := (mem_map_groundSpace_iff (matrixUnitTensor t) 4 u).mp hu

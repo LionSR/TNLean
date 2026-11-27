@@ -399,8 +399,10 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
-    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
-      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
@@ -429,7 +431,8 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
   have hkerB : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin
         (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
-      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) :=
     (eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_map_groundSpace
       A h hh hcover hker).mono fun N hN => hN.trans (hJoint N)
   obtain ⟨γ, hγ, _hFinite, hGap⟩ :=

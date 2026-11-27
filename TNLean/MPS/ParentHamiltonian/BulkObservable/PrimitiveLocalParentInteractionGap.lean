@@ -66,7 +66,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     (hGround : ∀ᶠ n in atTop,
-      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
     let H (n : ℕ) := Matrix.toEuclideanLin (chainTranslates R (N n) h).hamiltonian
@@ -104,13 +105,15 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openIn
     (hKernel : ∀ᶠ n in atTop,
       LinearMap.ker (Matrix.toEuclideanLin
         (chainTranslates R ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) =
-          ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+          ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap))
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (chainTranslates R ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop,
-      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
       (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by

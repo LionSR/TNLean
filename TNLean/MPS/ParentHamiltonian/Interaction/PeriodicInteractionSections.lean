@@ -53,7 +53,8 @@ theorem withLpMap_cyclicRestrictₗ_toEuclideanLin_translationInvariant_term (hR
   change Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ
     (cyclicCfg (Fin.pos i) R i ω τ) = _
   rw [toEuclideanLin_translationInvariant_term_apply hRN]
-  have hrestrict : LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i (cyclicCfg (Fin.pos i) R i ω τ)) ψ = LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) ψ := by
+  have hrestrict : LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i (cyclicCfg (Fin.pos i) R i
+      ω τ)) ψ = LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) ψ := by
     ext ν
     exact congrFun (cyclicRestrictₗ_cyclicCfg_outside (Fin.pos i) i ω τ ψ.ofLp) ν
   have hextract : extractWindow R i (cyclicCfg (Fin.pos i) R i ω τ) = ω :=
@@ -66,11 +67,13 @@ theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R �
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (ψ : MPVSpace d N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ = 0 ↔
-      ∀ τ : Cfg d N, Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) ψ) = 0 := by
+      ∀ τ : Cfg d N, Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i
+          τ) ψ) = 0 := by
   have : NeZero N := NeZero.of_pos i.pos
   constructor
   · intro hzero τ
-    rw [← withLpMap_cyclicRestrictₗ_toEuclideanLin_translationInvariant_term hRN h i τ ψ, hzero, map_zero]
+    rw [← withLpMap_cyclicRestrictₗ_toEuclideanLin_translationInvariant_term hRN h i τ ψ, hzero,
+        map_zero]
   · intro hzero
     ext σ
     rw [toEuclideanLin_translationInvariant_term_apply hRN]
@@ -83,7 +86,8 @@ theorem toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections [Ne
     (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace d N) :
     Matrix.toEuclideanLin (translationInvariant N h).hamiltonian ψ = 0 ↔
       ∀ (i : Fin N) (τ : Cfg d N),
-        Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) ψ) = 0 := by
+        Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ)
+            ψ) = 0 := by
   have hterm (i : Fin N) :
       (Matrix.toEuclideanLin ((translationInvariant N h).term i)).IsPositive :=
     Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.nonneg_iff_posSemidef.mp

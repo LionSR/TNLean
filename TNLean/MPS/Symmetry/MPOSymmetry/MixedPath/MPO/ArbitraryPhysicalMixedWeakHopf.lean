@@ -153,7 +153,8 @@ theorem toEuclideanLin_arbitraryPhysicalMixedInteraction_eq_one_sub_weakHopfAver
     (hW : Wh.tensor = arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
     Matrix.toEuclideanLin (arbitraryPhysicalMixedInteraction A₀ A₁ γ) =
-      1 - Wh.weakHopfAverage 2 ((groundSpace (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
+      1 - Wh.weakHopfAverage 2 ((groundSpace (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) 2).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
   have hcompat : MPOTensor.IsBoundaryCompatible Wh.tensor
       (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) := hW ▸
     isBoundaryCompatible_arbitraryPhysicalMixedInterpolation A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ h₀ h₁ γ

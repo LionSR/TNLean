@@ -71,8 +71,10 @@ theorem mem_map_groundSpace_iff (A : MPSTensor d D) (L : ℕ)
 
 /-- The finite-dimensional local ground space \(G_L(A)\) admits an orthogonal projection. -/
 theorem map_groundSpace_hasOrthogonalProjection
-    (A : MPSTensor d D) (L : ℕ) : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).HasOrthogonalProjection := by
-  let : CompleteSpace ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := FiniteDimensional.complete ℂ _
+    (A : MPSTensor d D) (L : ℕ) : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).HasOrthogonalProjection := by
+  let : CompleteSpace ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) := FiniteDimensional.complete ℂ _
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
 /-! ### Parent interaction -/
@@ -86,7 +88,8 @@ orthogonal projector onto \(G_L(A)\). This is a PSD operator with
 noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  e.toLinearMap.comp (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection.toLinearMap.comp e.symm.toLinearMap)
+  e.toLinearMap.comp (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection.toLinearMap.comp e.symm.toLinearMap)
 
 /-! ### Window extraction and replacement (periodic boundary conditions) -/
 

@@ -171,7 +171,8 @@ theorem dimensionFour_projection_defect_lower :
     (1 / 16 : ℝ) ≤
       ‖(tailBoundaryMapES (matrixUnitTensor markovAmplitude) 1 3).range.starProjection.comp
           (leftBoundaryMapES (matrixUnitTensor markovAmplitude) 3 1).range.starProjection -
-        ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ := by
+        ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ := by
   let x := pathVector markovAmplitude (fun b _ ↦ 2 * realHadamardU b) 0 0
   let y := pathVector markovAmplitude (fun _ e ↦ 2 * realHadamardW e) 0 0
   have hx : x ∈ (tailBoundaryMapES (matrixUnitTensor markovAmplitude) 1 3).range :=
@@ -180,7 +181,8 @@ theorem dimensionFour_projection_defect_lower :
   have hy : y ∈ (leftBoundaryMapES (matrixUnitTensor markovAmplitude) 3 1).range :=
     pathVector_last_mark_mem_leftBoundaryRange markovAmplitude
       (fun e ↦ 2 * realHadamardW e) 0 0
-  have hxW : x ∈ ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ :=
+  have hxW : x ∈ ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ :=
     pathVector_mem_map_groundSpace_orthogonal markovAmplitude
       (fun b _ ↦ 2 * realHadamardU b) 0 0 (marked_path_zero_sum 0 0)
   have hnx : ‖x‖ = 1 := norm_pathVector_eq_one markovAmplitude
@@ -202,7 +204,8 @@ theorem dimensionFour_projection_defect_lower :
   have h := Submodule.norm_inner_le_norm_projection_defect_reverse
     (leftBoundaryMapES (matrixUnitTensor markovAmplitude) 3 1).range
     (tailBoundaryMapES (matrixUnitTensor markovAmplitude) 1 3).range
-    ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) hx hy hxW hnx hny
+    ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) hx hy hxW hnx hny
   rwa [hinner] at h
 
 end MPSTensor.FNWDimensionConstant

@@ -471,7 +471,8 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
         ((openPrefixGroundProjectionES A (L₀ + 1) (n + r) n).comp
           (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection).toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection).toLinearMap := by
   let G := Matrix.toEuclideanLin
       ((parentChainInteraction A (L₀ + 1) (n + r)).restrict fun i ↦ i.val + (L₀ + 1) ≤
           n).hamiltonian
@@ -481,7 +482,8 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
     hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
       A (L := L₀ + 1) (n := n) (r := r) (p := n) le_rfl
   have hproj := ker_starProjection_conj_of_rightFiberwiseMap G H hHamiltonian
-  rw [show LinearMap.ker H = ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) from
+  rw [show LinearMap.ker H = ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+      from
     ker_hamiltonian_prefix_parentChainInteraction_self_eq_map_groundSpace hInj hL₀ hL₀n] at hproj
   exact hproj
 

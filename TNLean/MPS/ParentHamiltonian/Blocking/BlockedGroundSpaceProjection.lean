@@ -50,7 +50,8 @@ theorem groundSpaceProjectionMatrix_blockTensor_reindex
   ext σ τ
   have hcol {d' D' : ℕ} (B : MPSTensor d' D') (n : ℕ) (x y : Cfg d' n) :
       groundSpaceProjectionMatrix B n x y =
-        (((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection (toLp 2 (Pi.single y 1))) x := by
+        (((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection (toLp 2
+            (Pi.single y 1))) x := by
     have h := congrArg (fun T => T (toLp 2 (Pi.single y 1)) x)
       ((Matrix.toEuclideanCLM (n := Cfg d' n) (𝕜 := ℂ)).apply_symm_apply
         ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)

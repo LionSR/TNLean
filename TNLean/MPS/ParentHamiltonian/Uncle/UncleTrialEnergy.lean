@@ -104,7 +104,8 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_eq_sum_endpoints
       (((d ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
         ∑ τ : Cfg d (6 * N + 1),
           ‖Matrix.toEuclideanLin
-              (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) φ)‖ ^ 2 := by
+              (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
+                  φ)‖ ^ 2 := by
   let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
     (uncleTwoWallTrialSource A B R L N)
   let c : ℝ := ((d ^ 2 : ℕ) : ℝ)⁻¹
@@ -135,7 +136,8 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_le_endpoint_norms
     (⟪Matrix.toEuclideanLin
         (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ, φ⟫_ℂ).re ≤
       (((d ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
-        ∑ τ : Cfg d (6 * N + 1), ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) φ‖ ^ 2 := by
+        ∑ τ : Cfg d (6 * N + 1), ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i
+            τ) φ‖ ^ 2 := by
   dsimp only
   rw [re_inner_hamiltonian_uncleInteraction_trial_eq_sum_endpoints A B R L N hN]
   apply mul_le_mul_of_nonneg_left _ (by positivity)

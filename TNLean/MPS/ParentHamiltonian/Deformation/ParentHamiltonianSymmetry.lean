@@ -49,7 +49,8 @@ physical rotation. Source: arXiv:1010.3732, Section II.F.2. -/
 theorem map_groundSpace_invariant_of_gauge_covariance {d D : ℕ}
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hCov : GaugeEquiv A (rotatePhysical U A)) (L : ℕ) :
-    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin
+        (onSiteTensorPow L U)) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [← map_groundSpace_rotatePhysical]
   rw [← hCov.groundSpace_eq L]

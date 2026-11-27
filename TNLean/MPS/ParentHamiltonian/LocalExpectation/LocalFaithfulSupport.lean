@@ -96,7 +96,8 @@ private theorem map_groundSpace_le_ker_of_contracted_words_eq_zero
     (A : MPSTensor d D) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hC : ∀ b : Cfg d k,
       (∑ σ : Cfg d k, X b σ • Kraus.evalWord A (List.ofFn σ)) = 0) :
-    ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
+    ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
   rw [← range_groundSpaceMapES]
   rintro ψ ⟨v, rfl⟩
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective v
@@ -114,7 +115,8 @@ private theorem map_groundSpace_le_ker_of_contracted_words_eq_zero
 
 private theorem contracted_words_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X)) :
+    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin X)) :
     ∀ b : Cfg d k, (∑ σ : Cfg d k, X b σ • Kraus.evalWord A (List.ofFn σ)) = 0 := by
   classical
   intro b
@@ -142,7 +144,8 @@ theorem observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
     observableInsertionExpectation A ρ (Xᴴ * X) = 0 ↔
-      ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
+      ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
   constructor
   · intro hzero
     exact map_groundSpace_le_ker_of_contracted_words_eq_zero A X
@@ -226,10 +229,12 @@ private theorem density_range_eq_map_groundSpace [NeZero D]
     (A : MPSTensor d D) {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     {σ : Matrix (Cfg d k) (Cfg d k) ℂ} (hσ : σ.PosSemidef)
     (hrep : ∀ X, observableInsertionExpectation A ρ X = Matrix.trace (σ * X)) :
-    LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   have hiff (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
       LinearMap.range (Matrix.toEuclideanLin σ) ≤ LinearMap.ker (Matrix.toEuclideanLin X) ↔
-        ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
+        ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
     rw [← density_square_zero_iff_range_le_ker hσ X, ← hrep,
       observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff A hρ X]
   have htest (S : Submodule ℂ (EuclideanSpace ℂ (Cfg d k))) :
@@ -253,7 +258,8 @@ theorem exists_local_density_range_eq_map_groundSpace [NeZero D]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (k : ℕ) :
     ∃ σ : Matrix (Cfg d k) (Cfg d k) ℂ, σ.PosSemidef ∧ Matrix.trace σ = 1 ∧
       (∀ X, observableInsertionExpectation A ρ X = Matrix.trace (σ * X)) ∧
-      LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   let : NeZero d := ⟨IsLeftCanonical.physDim_ne_zero (A := A) hTP⟩
   have hone : observableInsertionExpectationₗ A ρ k 1 = 1 := by
     change Matrix.trace (physicalObservableTransfer A k 1 ρ) / Matrix.trace ρ = 1
@@ -290,7 +296,8 @@ theorem exists_quasiLocalExpectation_density_range_eq_map_groundSpace [NeZero D]
       (∀ (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ),
         quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos)
           (quasiLocalIntervalObservable d a k X) = Matrix.trace (σ * X)) ∧
-      LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   change (∑ i, (A i)ᴴ * A i) = 1 at hA
   obtain ⟨σ, hσ, htr, hrep, hRange⟩ :=

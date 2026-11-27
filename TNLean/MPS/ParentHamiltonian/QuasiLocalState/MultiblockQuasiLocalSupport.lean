@@ -84,12 +84,15 @@ theorem bulkObservable_iSup_groundSpace_column_tendsto_scalar
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
-      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.comp
+      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection.comp
         ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))).comp
-            ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
+            ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection) -
         observableInsertionExpectation (A α) (ρ α) X •
-          ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖) f (𝓝 0) := by
+          ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖) f (𝓝 0) := by
   let c := observableInsertionExpectation (A α) (ρ α) X
   have hcenter : observableInsertionExpectation (A α) (ρ α) (X - c • 1) = 0 := by
     change (observableInsertionExpectationₗ (A α) (ρ α) k) (X - c • 1) = 0
@@ -103,12 +106,17 @@ theorem bulkObservable_iSup_groundSpace_column_tendsto_scalar
     rw [bulkObservable_eq_placeAlong_chainWindow, bulkObservable_eq_placeAlong_chainWindow,
       ManyBody.placeAlong_sub, ManyBody.placeAlong_smul, ManyBody.placeAlong_one]
   have hPP (n : κ) :
-      (⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.comp
-        ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
-          ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection :=
+      (⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection.comp
+        ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection =
+          ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection :=
     ContinuousLinearMap.ext fun v => Submodule.starProjection_eq_self_iff.mpr
-      ((le_iSup (fun i => ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) α)
-        (((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_apply_mem v))
+      ((le_iSup (fun i => ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)) α)
+        (((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection_apply_mem v))
   simpa only [hbulk, map_sub, map_smul, map_one,
     ContinuousLinearMap.sub_comp, ContinuousLinearMap.smul_comp,
     ContinuousLinearMap.comp_sub, ContinuousLinearMap.comp_smul,
@@ -134,12 +142,15 @@ theorem bulkObservable_iSup_groundSpace_sector_decomposition_tendsto_zero
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
-      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.comp
+      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection.comp
         ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))).comp
-            (⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection) -
+            (⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap)).starProjection) -
         ∑ i, observableInsertionExpectation (A i) (ρ i) X •
-          ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖) f (𝓝 0) := by
+          ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖) f (𝓝 0) := by
   let N := fun n => (ℓ n + k) + r n
   have hN : Tendsto N f atTop := tendsto_atTop_mono (fun n => by dsimp [N]; omega) hℓ
   refine Submodule.tendsto_norm_joint_compression_sub_sector_sum_zero

@@ -52,7 +52,8 @@ theorem jointMixedEndpointParentInteraction_zero_le_parentInteraction
         (LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ := fun _ => 1)
         (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2)) := by
   have hle : (((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.toLinearMap ≤
+      (jointMixedEndpointLeftTensor A₀ d₁
+          D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.toLinearMap ≤
       (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
         (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap := by
     apply (Submodule.isSymmetricProjection_starProjection _).le_iff_range_le_range

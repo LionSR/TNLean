@@ -23,7 +23,8 @@ no local term crosses the cut between the last and first sites.
 When the tensor has virtual dimension \(D \ge 1\) and is block-injective at
 length \(L₀\), with \(0 < L₀\) and \(L₀ + 1 \le N\), the kernel of the
 length-\(L₀ + 1\) open Hamiltonian is the open MPS boundary-condition space
-`((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)`. This is the finite-volume ground-space input for
+`((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)`. This is the finite-volume
+ground-space input for
 Nachtergaele's C1--C3 martingale theorem.
 
 It also contains the following results.
@@ -72,7 +73,8 @@ abbrev NonwrappingStart (L N : ℕ) :=
 \(D^2\) under block injectivity at length \(L\). -/
 theorem map_groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) :
-    Module.finrank ℂ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = D ^ 2 := by
+    Module.finrank ℂ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = D ^ 2 := by
   rw [LinearEquiv.finrank_map_eq]
   exact groundSpace_finrank_eq_of_isNBlkInjective hInj
 
@@ -122,7 +124,8 @@ theorem placeAlong_chainWindow_mulVec_apply {L N a : ℕ} (h : a + L ≤ N)
 private theorem toMatrix'_parentInteraction_mulVec_eq_zero_iff (A : MPSTensor d D) {L : ℕ}
     (f : Cfg d L → ℂ) :
     LinearMap.toMatrix' (parentInteraction A L) *ᵥ f = 0 ↔ f ∈ groundSpace A L := by
-  have hf : f ∈ groundSpace A L ↔ WithLp.toLp 2 f ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+  have hf : f ∈ groundSpace A L ↔ WithLp.toLp 2 f ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) :=
     (mem_map_groundSpace_iff A L _).symm
   rw [hf, ← toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff, Matrix.toLpLin_apply,
     WithLp.ofLp_toLp, WithLp.toLp_eq_zero]
@@ -299,9 +302,11 @@ theorem norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_ortho
       (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian))ᗮ) :
     ‖Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian v‖ = ‖v‖ := by
   rw [hamiltonian_parentChainInteraction_self, toEuclideanLin_toMatrix'_parentInteraction] at hv ⊢
-  change ‖((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection v‖ = ‖v‖
+  change ‖((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection v‖ = ‖v‖
   apply Submodule.norm_starProjection_apply
-  have hker : LinearMap.ker (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection.toLinearMap) =
+  have hker : LinearMap.ker (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection.toLinearMap) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     ext w
     rw [LinearMap.mem_ker, ← toEuclideanLin_toMatrix'_parentInteraction,

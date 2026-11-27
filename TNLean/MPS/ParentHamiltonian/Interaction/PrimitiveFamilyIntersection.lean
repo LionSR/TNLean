@@ -158,7 +158,8 @@ theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_p
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin
           (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   apply exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_eventually_intersection
   filter_upwards [
     eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap
@@ -181,7 +182,8 @@ theorem exists_positive_parent_interaction_of_primitive_overlap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_primitive_overlap
       μ A hμ ρ hP hρ hDistinct
@@ -214,7 +216,8 @@ variable {d DA DB R : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
 also for tensors of different bond dimensions. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
 theorem toMatrix'_parentInteraction_eq_of_map_groundSpace_eq
-    (h : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+    (h : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B
+        R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     LinearMap.toMatrix' (parentInteraction A R) = LinearMap.toMatrix' (parentInteraction B R) := by
   apply Matrix.toEuclideanLin.injective
   rw [toEuclideanLin_toMatrix'_parentInteraction, toEuclideanLin_toMatrix'_parentInteraction, h]
@@ -223,7 +226,8 @@ theorem toMatrix'_parentInteraction_eq_of_map_groundSpace_eq
 chain at every volume, independently of the bond dimensions. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
 theorem hamiltonian_parentChainInteraction_eq_of_map_groundSpace_eq
-    (h : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (N : ℕ) :
+    (h : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B
+        R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (N : ℕ) :
     (parentChainInteraction A R N).hamiltonian = (parentChainInteraction B R N).hamiltonian := by
   have hP : parentInteraction A R = parentInteraction B R := by
     simp only [parentInteraction, h]

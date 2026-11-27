@@ -239,7 +239,8 @@ theorem mixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     (insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0)).range.map
       ((mixedEndpointRowSector D₀ D₁ 0).comp (mixedEndpointColumnSector D₀ D₁ 1)) =
-      ((groundSpace (mixedEndpointLeftTensor A₀ D₁) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ((groundSpace (mixedEndpointLeftTensor A₀ D₁) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   let V := Matrix.coordinateInclusion (Fin.castAddEmb D₁ : Fin D₀ ↪ Fin (D₀ + D₁))
   let P := bondInterpolationMatrix D₀ D₁ 0
   have hP : P = V * Vᴴ := coordinateInclusion_first_projection_eq_bondWeight.symm

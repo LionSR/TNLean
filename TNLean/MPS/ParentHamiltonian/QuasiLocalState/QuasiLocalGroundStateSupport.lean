@@ -59,7 +59,8 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
     (A : MPSTensor d D) (φ : QuasiLocalAlgebra d →L[ℂ] ℂ)
     (hφ : φ ∈ quasiLocalStateSpace d) (a : ℤ) {N : ℕ}
     (H : Matrix (Cfg d N) (Cfg d N) ℂ) (hH : H.PosSemidef)
-    (hker : LinearMap.ker (Matrix.toEuclideanLin H) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hker : LinearMap.ker (Matrix.toEuclideanLin H) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hzero : φ (quasiLocalIntervalObservable d a N H) = 0) :
     φ (quasiLocalIntervalObservable d a N (groundSpaceProjectionMatrix A N)) = 1 := by
   obtain ⟨κ, hκ, hLower⟩ :=
@@ -239,7 +240,8 @@ theorem mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
       change Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)
         (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v) = 0
       exact LinearMap.mem_ker.mp
-        (hkerN.symm ▸ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_apply_mem v)
+        (hkerN.symm ▸ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection_apply_mem v)
     let f := intervalStateFunctional φ hφ.2.2 a N
     have hf : f (groundSpaceProjectionMatrix A N) = f 1 := by
       simpa only [f, intervalStateFunctional_apply, map_one, hφ.2.1] using

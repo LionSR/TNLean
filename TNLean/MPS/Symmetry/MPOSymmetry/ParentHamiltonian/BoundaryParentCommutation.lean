@@ -146,7 +146,8 @@ arXiv:2203.12563v3, lines 1276--1320. -/
 theorem commute_toMatrix'_parentInteraction_of_conjTranspose_mem
     {d D L : ℕ} (A : MPSTensor d D) (s : Set (Matrix (Cfg d L) (Cfg d L) ℂ))
     (hs : ∀ B ∈ s, Bᴴ ∈ s)
-    (hq : ∀ B ∈ s, ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈ Module.End.invtSubmodule (Matrix.toEuclideanLin B))
+    (hq : ∀ B ∈ s, ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
+        Module.End.invtSubmodule (Matrix.toEuclideanLin B))
     {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ s) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) B :=
   commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A (StarAlgebra.adjoin ℂ s)

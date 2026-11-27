@@ -68,7 +68,8 @@ theorem map_groundSpace_le_ker_of_toEuclideanLin_hamiltonian_translationInvarian
     (hzero : haveI : NeZero N := ⟨by omega⟩;
       Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
-    ∀ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h) := by
+    ∀ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h) := by
   have : NeZero N := ⟨by omega⟩
   have hboundaries :=
     boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
@@ -86,7 +87,8 @@ annihilates the actual periodic vector at every permitted volume. Source: SPWC10
 proof, lines 877–880. -/
 theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ)
-    (hker : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h))
+    (hker : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h))
     {M : ℕ} (hLM : L ≤ M) (i : Fin M) :
     haveI : NeZero M := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M h).term i)
@@ -105,7 +107,8 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_map_groundS
     simpa only [ContinuousLinearMap.rightFiber, PiLp.toLp_apply,
       WithLp.coe_symm_linearEquiv, U] using
       cyclicActiveBlock_mpvState_apply A hLM i σ' τ
-  have hmem : ContinuousLinearMap.rightFiber (U (mpvState A M)) τ ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  have hmem : ContinuousLinearMap.rightFiber (U (mpvState A M)) τ ∈ ((groundSpace A L).map
+      (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     rw [mem_map_groundSpace_iff, hfiber, LinearEquiv.apply_symm_apply]
     exact ⟨Kraus.evalWord A (List.ofFn τ), rfl⟩
   have hzero := hker hmem
@@ -116,7 +119,8 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_map_groundS
 larger ring. Source: SPWC10, Theorem 5 proof, lines 877–880. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ)
-    (hker : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h))
+    (hker : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h))
     {M : ℕ} [NeZero M] (hLM : L ≤ M) :
     Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M h).hamiltonian
       (mpvState A M) = 0 := by

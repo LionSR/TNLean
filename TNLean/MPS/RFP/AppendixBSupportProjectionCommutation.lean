@@ -367,7 +367,8 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjection_eq_supp
     hStruct.transportedTwoSiteBondProjection =
       hStruct.twoSiteBasicSupportProjection := by
   have hEq : hStruct.transportedTwoSiteBondProjectionES =
-      ((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap :=
+      ((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap :=
     (hStruct.transportedTwoSiteBondProjectionES_isSymmetricProjection hφ).ext
       (Submodule.isSymmetricProjection_starProjection _)
       (by

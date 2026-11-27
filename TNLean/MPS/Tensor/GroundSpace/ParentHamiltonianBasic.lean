@@ -36,7 +36,8 @@ theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
     ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection.toLinearMap
   have hP : P * P = P := by
     simpa [P] using
-      (Submodule.isSymmetricProjection_starProjection (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ)).isIdempotentElem.eq
+      (Submodule.isSymmetricProjection_starProjection (((groundSpace A L).map (WithLp.linearEquiv 2
+          ℂ _).symm.toLinearMap)ᗮ)).isIdempotentElem.eq
   apply LinearMap.ext
   intro v
   change e (P (e.symm (e (P (e.symm v))))) = e (P (e.symm v))
@@ -118,7 +119,8 @@ onto \(G_L(A)^\perp\), so it kills everything in `groundSpace A L`. -/
 lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
     parentInteraction A L v = 0 := by
-  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ ((groundSpace A L).map
+      (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     simp only [Submodule.mem_map]
     exact ⟨v, hv, rfl⟩
   have hkill : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection

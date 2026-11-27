@@ -108,7 +108,8 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_map_groundSpace_le_ker
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hRN : R ≤ N)
-    (hker : ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
+    (hker : ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2
+        ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian))) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
@@ -136,7 +137,8 @@ theorem quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_cha
     {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hker : ∀ᶠ N in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (a : ℤ) :
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
   obtain ⟨N, hN, hRN⟩ := (hker.and (Filter.eventually_ge_atTop R)).exists

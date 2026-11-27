@@ -53,7 +53,8 @@ theorem exists_ker_hamiltonian_parentChainInteraction_of_periodic_family
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   obtain ⟨g, sel, hsel, hD, hP, hDistinct, hCover, hJoint⟩ :=
     exists_periodic_sector_representatives μ A hμ hPeriodic
   let B := fun j => A (sel j)
@@ -78,7 +79,8 @@ theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_of_periodic_family μ A hμ m hPeriodic
   exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R),
@@ -95,7 +97,8 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →

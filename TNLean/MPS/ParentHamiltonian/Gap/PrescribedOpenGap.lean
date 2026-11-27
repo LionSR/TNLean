@@ -45,7 +45,8 @@ theorem hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal
           ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hDefect : ∀ L, p ≤ L → ∀ K Q, 0 < Q →
-      ‖((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES A K L Q).range.starProjection‖ ≤ ε) :
     ∀ z : ℂ, Module.End.HasEigenvalue
@@ -191,7 +192,8 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_
           ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     fun n hn => hKernel (2 * p) n (by omega) hn
   have hD : ∀ L, p ≤ L → ∀ K Q, 0 < Q →
-      ‖((groundSpace B (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
+      ‖((groundSpace B (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES B (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES B K L Q).range.starProjection‖ ≤ ε :=
     fun L hL => hDefect L (by omega)

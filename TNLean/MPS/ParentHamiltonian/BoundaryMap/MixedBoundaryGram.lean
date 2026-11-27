@@ -109,7 +109,8 @@ theorem norm_inner_map_groundSpace_le_mixedGram
     (hA : Function.Injective (groundSpaceMapES A n))
     (hB : Function.Injective (groundSpaceMapES B n))
     {x y : EuclideanSpace ℂ (Cfg d n)}
-    (hx : x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (hy : y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+    (hx : x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (hy : y ∈
+        ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ‖⟪x, y⟫_ℂ‖ ≤
       (Real.sqrt ‖ContinuousLinearMap.inverseGram (groundSpaceMapES A n) hA‖ *
         ‖(groundSpaceMapES A n).adjoint.comp (groundSpaceMapES B n)‖ *

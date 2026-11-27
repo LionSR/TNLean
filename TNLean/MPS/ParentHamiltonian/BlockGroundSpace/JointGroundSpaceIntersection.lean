@@ -184,7 +184,8 @@ to their orthogonal projections. -/
 theorem groundSpace_iSupIndep_iff_map_groundSpace_iSupIndep
     {dim : ι → ℕ} (A : ∀ i, MPSTensor d (dim i)) (N : ℕ) :
     iSupIndep (fun i => groundSpace (A i) N) ↔
-      iSupIndep (fun i => ((groundSpace (A i) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
+      iSupIndep (fun i => ((groundSpace (A i) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)) := by
   exact (iSupIndep_map_orderIso_iff
     (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)).symm
 

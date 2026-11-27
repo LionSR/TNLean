@@ -37,9 +37,11 @@ lines 2649--2675, the finite-volume commutator energy. -/
 theorem observableInsertionExpectation_adjoint_commutator_nonneg
     (A : MPSTensor d D) {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (H B : Matrix (Cfg d N) (Cfg d N) ℂ) (hH : H.PosSemidef)
-    (hker : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin H)) :
+    (hker : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin H)) :
     0 ≤ observableInsertionExpectation A ρ (Bᴴ * (H * B - B * H)) := by
-  have hsecond : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin ((Bᴴ * B) * H)) := by
+  have hsecond : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin ((Bᴴ * B) * H)) := by
     rw [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same]
     exact hker.trans (LinearMap.ker_le_ker_comp _ _)
   have hzero := observableInsertionExpectation_eq_zero_of_map_groundSpace_le_ker

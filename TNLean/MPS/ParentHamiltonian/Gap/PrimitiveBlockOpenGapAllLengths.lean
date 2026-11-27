@@ -79,7 +79,8 @@ private theorem open_gap_at_all_large_lengths (A : MPSTensor d D) {p : ℕ} (hp 
     (hShort : ∀ W, W < 3 * p → ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
       (parentChainInteraction A (2 * p) W).hamiltonian) μ → μ = 0 ∨ (η : ℂ) ≤ μ)
     (hDefect : ∀ (K Q : ℕ), 0 < Q → Q < p →
-      ‖(((groundSpace A (K + 2 * p + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection :
+      ‖(((groundSpace A (K + 2 * p + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection :
         EuclideanSpace ℂ (Cfg d (K + 2 * p + Q)) →L[ℂ]
           EuclideanSpace ℂ (Cfg d (K + 2 * p + Q))) -
         ((leftBoundaryMapES A (K + 2 * p) Q).range.starProjection :

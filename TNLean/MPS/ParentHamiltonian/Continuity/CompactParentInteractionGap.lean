@@ -34,7 +34,8 @@ arXiv:1010.3732, Appendix A; arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_uniform_pos_toMatrix'_parentInteraction_le_of_compact
     {X : Type*} [TopologicalSpace X] {d D R : ℕ}
     (A : X → MPSTensor d D)
-    (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)
+    (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) :
@@ -63,7 +64,8 @@ Source: arXiv:1010.3732, Appendix A, lines 2477--2480 and 2575--2578. -/
 theorem exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap
     {X : Type*} [TopologicalSpace X] {d D R N₀ : ℕ}
     (A : X → MPSTensor d D)
-    (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)
+    (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) {γ : ℝ} (hγ : 0 < γ)

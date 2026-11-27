@@ -73,8 +73,10 @@ theorem norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
     (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j)) (K M r : ℕ) :
     ‖(∑ j, (residualWindowLeftMapES (B j) K M r).range.starProjection) -
       (⨆ j, (residualWindowLeftMapES (B j) K M r).range).starProjection‖ ≤
-      ‖(∑ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
-        (⨆ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection‖ := by
+      ‖(∑ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection) -
+        (⨆ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)).starProjection‖ := by
   simp only [residualWindowLeftMapES_eq_fiberwise]
   have hFiber := ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le
     (S := Cfg d r) (fun j : ι => groundSpaceMapES (B j) (K + M))
@@ -108,8 +110,10 @@ theorem eventually_norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
       ‖(∑ j, (residualWindowLeftMapES (B j) K M r).range.starProjection) -
         (⨆ j, (residualWindowLeftMapES (B j) K M r).range).starProjection‖ ≤ ε := by
   have hPrefix : Filter.Tendsto (fun N =>
-      ‖(∑ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
-        (⨆ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection‖) Filter.atTop (nhds 0) := by
+      ‖(∑ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection) -
+        (⨆ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)).starProjection‖) Filter.atTop (nhds 0) := by
     apply Submodule.tendsto_norm_sum_starProjection_sub_iSup_zero
     intro η hη
     filter_upwards [Filter.eventually_all.2 fun i => Filter.eventually_all.2 fun j =>

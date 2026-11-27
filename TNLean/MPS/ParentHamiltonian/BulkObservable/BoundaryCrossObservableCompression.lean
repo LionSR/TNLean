@@ -63,7 +63,8 @@ private theorem prefixGroundProjection_eq_id_sub_term
 
 private theorem prefixGroundProjection_comp_groundSpaceProjection
     (A : MPSTensor d D₁) {L N : ℕ} (hLN : L ≤ N) :
-    (prefixGroundProjection A hLN).comp ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
+    (prefixGroundProjection A hLN).comp ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection =
       ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   rw [prefixGroundProjection_eq_id_sub_term A hLN]
   apply ContinuousLinearMap.ext
@@ -71,7 +72,8 @@ private theorem prefixGroundProjection_comp_groundSpaceProjection
   have hv := map_groundSpace_le_ker_hamiltonian_parentChainInteraction A L N
     (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_apply_mem v)
   have hkill : Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨0, by omega⟩)
-      (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v) = 0 := by
+      (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+          v) = 0 := by
     rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero]
     exact (parentChainInteraction_term_mulVec_eq_zero_iff A _ _).mpr fun τ ↦
       contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
@@ -83,11 +85,14 @@ private theorem prefixGroundProjection_comp_groundSpaceProjection
 
 private theorem groundSpaceProjection_comp_prefixGroundProjection
     (A : MPSTensor d D₁) {L N : ℕ} (hLN : L ≤ N) :
-    ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp (prefixGroundProjection A hLN) =
+    ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.comp (prefixGroundProjection A hLN) =
       ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   have hp : ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
-      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection).IsHermitian :=
-    (isSelfAdjoint_starProjection ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection).IsHermitian :=
+    (isSelfAdjoint_starProjection ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)).map
       (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
   have hQ : (prefixGroundProjection A hLN).adjoint = prefixGroundProjection A hLN := by
     rw [prefixGroundProjection, ← ContinuousLinearMap.star_eq_adjoint, ← map_star,
@@ -97,7 +102,8 @@ private theorem groundSpaceProjection_comp_prefixGroundProjection
   simpa only [ContinuousLinearMap.adjoint_comp, hQ,
     LinearMap.IsSymmetric.clm_adjoint_eq
       (A := ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)
-      (Submodule.isSymmetricProjection_starProjection ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).isSymmetric] using h
+      (Submodule.isSymmetricProjection_starProjection ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).isSymmetric] using h
 
 /-- The prefix ground projection, extended by the identity, fixes the full-chain
 ground projection on both sides. No injectivity hypothesis is needed. -/
@@ -107,19 +113,22 @@ theorem placeAlong_chainWindow_groundSpaceProjection_comp_groundSpaceProjection
       (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega))
         ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
           ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection))).comp
-            ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection ∧
+            ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection ∧
     ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
       (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
         (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega))
           ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
-            ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection))) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection :=
+            ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection))) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection :=
   ⟨prefixGroundProjection_comp_groundSpaceProjection A hLN,
     groundSpaceProjection_comp_prefixGroundProjection A hLN⟩
 
 private theorem norm_prefixGroundProjection_comp_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {L N : ℕ} (hLN : L ≤ N) :
     ‖(prefixGroundProjection A hLN).comp (prefixGroundProjection B hLN)‖ ≤
-      ‖((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ := by
+      ‖((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ := by
   let pA := (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
     ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
   let pB := (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
@@ -162,13 +171,18 @@ This finite-volume locality estimate requires no normalization or primitivity. -
 theorem norm_map_groundSpace_bulkObservable_cross_compression_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {ℓ k r : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
-    ‖((groundSpace A ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+    ‖((groundSpace A ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.comp
       ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ + k) + r)) (𝕜 := ℂ)
-        (bulkObservable X ℓ r)).comp ((groundSpace B ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)‖ ≤
-      ‖((groundSpace A ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp ((groundSpace B ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ *
+        (bulkObservable X ℓ r)).comp ((groundSpace B ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection)‖ ≤
+      ‖((groundSpace A ℓ).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp ((groundSpace B ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ *
         ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ := by
-  let PA := ((groundSpace A ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
-  let PB := ((groundSpace B ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
+  let PA := ((groundSpace A ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection
+  let PB := ((groundSpace B ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection
   have hℓN : ℓ ≤ (ℓ + k) + r := by omega
   let QA := prefixGroundProjection A hℓN
   let QB := prefixGroundProjection B hℓN
@@ -182,10 +196,13 @@ theorem norm_map_groundSpace_bulkObservable_cross_compression_le
       ← mul_assoc PA Y QB, mul_assoc (PA * Y) QB PB, hB]
   have hn : ‖PA * (QA * QB) * Y * PB‖ ≤ ‖PA‖ * ‖QA * QB‖ * ‖Y‖ * ‖PB‖ := by
     exact norm_mul_le_of_le norm_mul₃_le le_rfl
-  have hPA : ‖PA‖ ≤ 1 := ((groundSpace A ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_norm_le
-  have hPB : ‖PB‖ ≤ 1 := ((groundSpace B ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_norm_le
+  have hPA : ‖PA‖ ≤ 1 := ((groundSpace A ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection_norm_le
+  have hPB : ‖PB‖ ≤ 1 := ((groundSpace B ((ℓ + k) + r)).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection_norm_le
   have hPair : ‖QA * QB‖ ≤
-      ‖((groundSpace A ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp ((groundSpace B ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ :=
+      ‖((groundSpace A ℓ).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp ((groundSpace B ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ :=
     norm_prefixGroundProjection_comp_le A B hℓN
   have hY : ‖Y‖ ≤ ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ :=
     norm_toEuclideanCLM_bulkObservable_le X ℓ r
@@ -193,7 +210,8 @@ theorem norm_map_groundSpace_bulkObservable_cross_compression_le
   rw [← mul_assoc, heq]
   refine hn.trans ?_
   calc
-    _ ≤ 1 * ‖((groundSpace A ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp ((groundSpace B ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ *
+    _ ≤ 1 * ‖((groundSpace A ℓ).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.comp ((groundSpace B ℓ).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ *
         ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ * 1 := by gcongr
     _ = _ := by simp only [one_mul, mul_one]
 
@@ -215,7 +233,8 @@ theorem map_groundSpace_starProjection_comp_tendsto_zero_of_inequivalent
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ h : D₂ = D₁, ¬ MPTensor.GaugePhaseEquiv (h ▸ B) A) :
     Tendsto (fun n =>
-      ‖((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖)
+      ‖((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖)
       atTop (𝓝 0) := by
   apply tendsto_order.2
   constructor
@@ -224,7 +243,8 @@ theorem map_groundSpace_starProjection_comp_tendsto_zero_of_inequivalent
     filter_upwards [hA.eventually_norm_inner_map_groundSpace_le_of_inequivalent
       hB hρ hσ hDistinct (half_pos hε)] with n hn
     have h := Submodule.norm_starProjection_comp_sub_starProjection_le_of_relative_overlap
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ⊥ bot_le bot_le (le_of_lt (half_pos hε))
+      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ((groundSpace B n).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ⊥ bot_le bot_le (le_of_lt (half_pos hε))
       (fun x hx _ y hy _ => hn x hx y hy)
     simp only [Submodule.starProjection_bot, sub_zero] at h
     exact h.trans_lt (half_lt_self hε)
@@ -243,12 +263,16 @@ theorem bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalen
     {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ} (hℓ : Tendsto ℓ f atTop) :
     Tendsto (fun n =>
-      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
+      ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp
         ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))).comp
-            ((groundSpace B ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)‖) f (𝓝 0) := by
+            ((groundSpace B ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
+                _).symm.toLinearMap).starProjection)‖) f (𝓝 0) := by
   have hUpper : Tendsto (fun n =>
-      ‖((groundSpace A (ℓ n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp ((groundSpace B (ℓ n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ *
+      ‖((groundSpace A (ℓ n)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.comp ((groundSpace B (ℓ
+          n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ *
         ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖) f (𝓝 0) := by
     simpa only [zero_mul, Function.comp_def] using
       ((hA.map_groundSpace_starProjection_comp_tendsto_zero_of_inequivalent
