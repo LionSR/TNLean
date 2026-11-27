@@ -94,13 +94,15 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic
 all lengths. The gauge is recovered before passing to open boundaries.
 Source: arXiv:1708.00029, Proposition equal-or-orthogonal-generalized;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem MPVBlockPhaseEquiv.groundSpaceES_eq_of_isPeriodic
+theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isPeriodic
     {A : MPSTensor d DA} {B : MPSTensor d DB}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
-    (h : MPVBlockPhaseEquiv A B) (N : ℕ) : groundSpaceES A N = groundSpaceES B N := by
+    (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨e, he⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isPeriodic hA hB
   cases e
-  exact he.groundSpaceES_eq N
+  exact he.map_groundSpace_eq N
 
 variable {b : ℕ} {dim : Fin b → ℕ} {per : Fin b → ℕ}
 
@@ -109,22 +111,25 @@ its joint open-boundary space at every length. Nonzero weights do not change
 that space. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
 commutation (ii) and Section 4; arXiv:1708.00029, Proposition
 equal-or-orthogonal-generalized. -/
-theorem MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives_of_isPeriodic
+theorem MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives_of_isPeriodic
     (A : ∀ j, MPSTensor d (dim j)) (classes : MPVPhaseClassData A)
     (hA : ∀ j, IsPeriodic (per j) (A j))
     (μ : Fin b → ℂ) (hμ : ∀ j, μ j ≠ 0) (N : ℕ) :
-    groundSpaceES (toTensorFromBlocks μ A) N =
-      groundSpaceES (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N := by
-  rw [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ,
-    groundSpaceES_toTensorFromBlocks_eq_iSup (fun _ => 1)
+    ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  rw [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
+    map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1)
       (fun k => A (classes.repr k)) (fun _ => one_ne_zero)]
   apply le_antisymm
   · refine iSup_le fun j => ?_
     obtain ⟨k, q, rfl⟩ := classes.exists_enum_eq j
-    rw [← (classes.enum_phase k q).groundSpaceES_eq_of_isPeriodic
+    rw [← (classes.enum_phase k q).map_groundSpace_eq_of_isPeriodic
       (hA (classes.repr k)) (hA (classes.enum k q)) N]
-    exact le_iSup (fun j => groundSpaceES (A (classes.repr j)) N) k
-  · exact iSup_le fun k => le_iSup (fun j => groundSpaceES (A j) N) (classes.repr k)
+    exact le_iSup (fun j => ((groundSpace (A (classes.repr j)) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) k
+  · exact iSup_le fun k => le_iSup (fun j => ((groundSpace (A j) N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)) (classes.repr k)
 
 /-- Every finite periodic family admits a literal subfamily of pairwise
 inequivalent periodic representatives, with a gauge cover of the original
@@ -141,8 +146,10 @@ theorem exists_periodic_sector_representatives
       BlocksNotGaugePhaseEquiv (fun k => A (sel k)) ∧
       (∀ j, ∃ k, ∃ e : dim (sel k) = dim j,
         GaugePhaseEquiv (e ▸ A (sel k)) (A j)) ∧
-      ∀ N, groundSpaceES (toTensorFromBlocks μ A) N =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) (fun k => A (sel k))) N := by
+      ∀ N, ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (sel k))) N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let classes := mpvPhaseClassData A
   have hinj : Function.Injective classes.repr := by
     intro i j hij
@@ -154,7 +161,7 @@ theorem exists_periodic_sector_representatives
   refine ⟨classes.g, classes.repr, hinj, (fun k => Nat.pos_of_ne_zero
     (hA (classes.repr k)).bondDim_ne_zero), (fun k => hA (classes.repr k)),
     classes.blocks_not_equiv, ?_,
-    classes.groundSpaceES_toTensorFromBlocks_eq_representatives_of_isPeriodic A hA μ hμ⟩
+    classes.map_groundSpace_toTensorFromBlocks_eq_representatives_of_isPeriodic A hA μ hμ⟩
   intro j
   obtain ⟨k, q, rfl⟩ := classes.exists_enum_eq j
   obtain ⟨e, he⟩ := (classes.enum_phase k q).dim_eq_and_gaugePhaseEquiv_of_isPeriodic

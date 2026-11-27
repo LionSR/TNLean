@@ -235,7 +235,7 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact
       μ A hμ hA hS hSpan hR hK
   exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
-    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
+    (continuous_map_groundSpace_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
     H hH hParent hK hγ hGap
 
 /-- A compact continuous family of pairwise inequivalent normalized normal
@@ -279,7 +279,7 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor
       μ A hμ hA hNormal hDistinct hR hK
   exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
-    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
+    (continuous_map_groundSpace_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
     H hH hParent hK hγ hGap
 
 end CompactOpenParentInteractionGap

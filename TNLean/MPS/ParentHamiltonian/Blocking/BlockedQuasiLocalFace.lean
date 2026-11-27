@@ -65,7 +65,8 @@ translation invariance is assumed. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 825--836 and Section 3. -/
 theorem groundSpace_support_blocked_representation_iff {D' : ℕ}
     (A : MPSTensor d D) (C : MPSTensor (blockPhysDim d L) D')
-    (hJoint : ∀ N, groundSpaceES (blockTensor A L) N = groundSpaceES C N)
+    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = ((groundSpace C N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d) :
     (∀ (a : ℤ) (N : ℕ), 0 < N → φ (quasiLocalIntervalObservable d a N
       (groundSpaceProjectionMatrix A N)) = 1) ↔
@@ -89,8 +90,10 @@ theorem groundSpace_supported_iff_convex_combination_of_blocked_primitive_family
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
-    (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =
-      groundSpaceES (toTensorFromBlocks (μ := μ) B) N)
+    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d) :
     (∀ (a : ℤ) (N : ℕ), 0 < N → φ (quasiLocalIntervalObservable d a N
       (groundSpaceProjectionMatrix A N)) = 1) ↔
@@ -122,8 +125,10 @@ theorem isPure_groundSpace_supported_iff_sector_of_blocked_primitive_family
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
-    (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =
-      groundSpaceES (toTensorFromBlocks (μ := μ) B) N)
+    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d) :
     ((∀ (a : ℤ) (N : ℕ), 0 < N → φ (quasiLocalIntervalObservable d a N
       (groundSpaceProjectionMatrix A N)) = 1) ∧ IsPureQuasiLocalState d φ) ↔

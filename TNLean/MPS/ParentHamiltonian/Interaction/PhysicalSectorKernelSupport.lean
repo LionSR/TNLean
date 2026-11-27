@@ -92,7 +92,7 @@ theorem physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
     hRM _ hh ψ).mp hzero
   have hadj (i : Fin M) : label (σ (i + 1)) = label (σ i) := by
     by_contra hne
-    let v := cyclicRestrictES (Fin.pos i) R i σ ψ
+    let v := LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i σ) ψ
     have hlocal : Sᗮ.starProjection v = 0 := by
       have h := hsections i σ
       rwa [LinearEquiv.apply_symm_apply] at h

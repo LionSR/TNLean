@@ -122,7 +122,7 @@ at least the gap. -/
 theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
     {d D R W : ℕ} (A : MPSTensor d D) (hR : 0 < R) (hRW : 2 * R ≤ W)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
-      groundSpaceES A W)
+      ((groundSpace A W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ᶠ N : ℕ in atTop, ∀ [NeZero N],
       ∀ μ : ℂ, Module.End.HasEigenvalue

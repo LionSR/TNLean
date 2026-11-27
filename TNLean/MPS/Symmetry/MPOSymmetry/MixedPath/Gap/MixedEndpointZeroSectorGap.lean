@@ -82,10 +82,11 @@ theorem mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction
   apply Matrix.toEuclideanLin.injective
   have hsupport :
       (insertedTwoSiteMap (mixedEndpointBase A₀ emptyEndpointTensor)
-        (bondInterpolationMatrix D₀ 0 0)).range = groundSpaceES A₀ 2 := by
+        (bondInterpolationMatrix D₀ 0 0)).range = ((groundSpace A₀ 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
     rw [mixedEndpointBase_emptyEndpointTensor, bondInterpolationMatrix_zeroSector]
     simpa only [Matrix.mul_one] using
-      range_insertedTwoSiteMap_eq_groundSpaceES A₀ (1 : Matrix (Fin D₀) (Fin D₀) ℂ) isUnit_one
+      range_insertedTwoSiteMap_eq_map_groundSpace A₀ (1 : Matrix (Fin D₀) (Fin D₀) ℂ) isUnit_one
   have hproj := congrArg
     (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) => S.starProjection)
     hsupport

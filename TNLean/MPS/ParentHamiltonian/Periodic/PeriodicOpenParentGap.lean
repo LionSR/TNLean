@@ -85,7 +85,7 @@ theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R : ℕ, 0 < R ∧
       (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian)
-          = groundSpaceES A N) ∧
+          = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       ∃ δ : ℝ, 0 < δ ∧
         ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
           (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
@@ -114,7 +114,8 @@ theorem IsPeriodic.exists_positive_parent_interaction_uniform_gap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin
-        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) = groundSpaceES A N) ∧
+        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) = ((groundSpace A
+            N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R N h).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
@@ -149,7 +150,7 @@ theorem IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES A N) ∧
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
     ∃ δ : ℝ, 0 < δ ∧
       (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
@@ -176,7 +177,7 @@ theorem IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap
     hA.exists_positive_parent_interaction_uniform_gap
   have hEventual : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N :=
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hQuasi⟩ :=
     hA.exists_pos_quasiLocalCommutator_limit_gap_of_eventual_kernel h hR hh hEventual
@@ -208,7 +209,7 @@ theorem IsPeriodic.exists_positive_parent_interaction_quasiLocalCommutator_gap
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES A N) ∧
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -228,10 +229,10 @@ theorem IsPeriodic.exists_positive_parent_interaction_quasiLocalCommutator_gap
               quasiLocalIntervalObservable d a k X) ≤ e := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨R, hR, h, hh, hKernel⟩ :=
-    hA.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES
+    hA.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_map_groundSpace
   have hEventual : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N :=
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hGap⟩ :=
     hA.exists_pos_quasiLocalCommutator_limit_gap_of_eventual_kernel h hR hh hEventual

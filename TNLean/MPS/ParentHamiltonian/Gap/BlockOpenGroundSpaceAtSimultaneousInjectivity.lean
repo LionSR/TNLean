@@ -58,7 +58,8 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupl
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
       (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-      groundSpaceES (toTensorFromBlocks μ A) N := by
+      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   have hLocal : ∀ L, groundSpace (toTensorFromBlocks μ A) L =
@@ -66,8 +67,8 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupl
     fun L ↦ groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
       μ μ A B hμ hμ (fun j ↦ hGS j L)
   rw [parentChainInteraction_eq_of_groundSpace_eq (hLocal R) N]
-  simpa only [groundSpaceES, hLocal N] using
-    ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+  simpa only [hLocal N] using
+    ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ B hμ (fun j ↦ (hP j).norm)
       (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving B hSpanB
         (fun j ↦ (hP j).norm) hn) hR hRN

@@ -43,7 +43,7 @@ the canonical form and condition C1 as hypotheses or at lengths without small di
 
 * `MPSTensor.contiguous_mem_of_restriction_intersection_submodules` (open-segment iteration):
   the open ground space of the nearest-neighbour parent; PGVWC07, Theorem 12.
-* `MPSTensor.groundSpaceES_le_ker_hamiltonian_parentChainInteraction` (open-chain parent
+* `MPSTensor.map_groundSpace_le_ker_hamiltonian_parentChainInteraction` (open-chain parent
   Hamiltonian): the open matrix product space lies in the kernel; Nachtergaele,
   arXiv:cond-mat/9410110, equation (3.12).
 * `MPSTensor.ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace` (periodic parent

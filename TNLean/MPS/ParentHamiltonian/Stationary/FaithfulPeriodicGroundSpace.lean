@@ -76,8 +76,9 @@ theorem exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixe
         (∀ j i, A i * V j = V j * B j i) ∧
         (∀ j i, (V j)ᴴ * A i = B j i * (V j)ᴴ) ∧
         (∀ j i, B j i = (V j)ᴴ * A i * V j) ∧
-        ∀ N, groundSpaceES A N =
-          groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N := by
+        ∀ N, ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+          ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨r, dim, B, V, hdim, hiso, hsum, horth, hint, hco, hcorner, hirr, _hmpv⟩ :=
     exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure A
       (hasInvariantProjectorClosure_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix)
@@ -94,7 +95,7 @@ theorem exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixe
   refine ⟨r, hr, dim, hdim, B, V, period, hperiod, hiso, hsum, horth,
     hint, hco, hcorner, ?_⟩
   intro N
-  rw [groundSpaceES_toTensorFromBlocks_eq_iSup _ B (fun _ => one_ne_zero)]
-  exact groundSpaceES_eq_iSup_of_isometric_sector_resolution A B V hiso hsum hint N
+  rw [map_groundSpace_toTensorFromBlocks_eq_iSup _ B (fun _ => one_ne_zero)]
+  exact map_groundSpace_eq_iSup_of_isometric_sector_resolution A B V hiso hsum hint N
 
 end MPSTensor

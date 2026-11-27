@@ -116,7 +116,7 @@ theorem iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES
           (groundSpaceMapES A (M * L + r))).range := by
     simp only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp,
       ← Submodule.map_iSup]
-    rw [← groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES A B V hSum hInt M r,
+    rw [← map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES A B V hSum hInt M r,
       range_groundSpaceMapES]
   rw [hJoint, ← ContinuousLinearMap.rightFiberwiseMap_range_starProjection,
     Submodule.range_starProjection]

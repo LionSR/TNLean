@@ -81,10 +81,10 @@ theorem physicalReindexLinearIsometryEquiv_groundSpaceMapES
 
 /-- Relabeling the physical alphabet sends the local boundary space to its
 isometric image. -/
-theorem groundSpaceES_reindexPhysical_equiv
+theorem map_groundSpace_reindexPhysical_equiv
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) (N : ℕ) :
-    groundSpaceES (Kraus.reindexPhysical e A) N =
-      (groundSpaceES A N).map
+    ((groundSpace (Kraus.reindexPhysical e A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.toLinearMap := by
   rw [← range_groundSpaceMapES, ← range_groundSpaceMapES]
   ext v
@@ -103,15 +103,17 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv
       (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
         (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A N))) := by
   rw [toEuclideanLin_toMatrix'_parentInteraction, toEuclideanLin_toMatrix'_parentInteraction]
-  have hOrth : (groundSpaceES (Kraus.reindexPhysical e A) N)ᗮ =
-      ((groundSpaceES A N)ᗮ).map
+  have hOrth : ((groundSpace (Kraus.reindexPhysical e A) N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ =
+      (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ).map
         (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.toLinearMap := by
-    rw [groundSpaceES_reindexPhysical_equiv, Submodule.map_orthogonal_equiv]
+    rw [map_groundSpace_reindexPhysical_equiv, Submodule.map_orthogonal_equiv]
   refine (congrArg (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg d₁ N)) ↦
     S.starProjection.toLinearMap) hOrth).trans ?_
   apply LinearMap.ext
   intro v
   exact Submodule.starProjection_map_apply
-    (physicalReindexLinearIsometryEquiv e N) (groundSpaceES A N)ᗮ v
+    (physicalReindexLinearIsometryEquiv e N) ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)ᗮ v
 
 end MPSTensor

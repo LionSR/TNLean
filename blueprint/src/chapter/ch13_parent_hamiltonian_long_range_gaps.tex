@@ -1392,7 +1392,7 @@ tensors.
 \begin{lemma}[Normalization and orthogonality of marked paths]
     \label{thm:fnw-path-vector-norm-orthogonal}
     \lean{MPSTensor.FNWDimensionConstant.norm_pathVector_eq_one}
-    \lean{MPSTensor.FNWDimensionConstant.pathVector_mem_groundSpaceES_orthogonal}
+    \lean{MPSTensor.FNWDimensionConstant.pathVector_mem_map_groundSpace_orthogonal}
     \leanok
     For a real weighted matrix-unit tensor, fix external vertices $a,f$ and
     write $p_{bce}=t_{ab}t_{bc}t_{ce}t_{ef}$. The path vector with mark $z_{be}$
@@ -2779,8 +2779,8 @@ shorter interaction range.
         MPSTensor.shortRangeHeisenbergBlock_isNormal,
         MPSTensor.shortRangeHeisenbergBlock_blocksNotGaugePhaseEquiv,
         MPSTensor.isCPSVBasisOfNormalTensors_shortRangeHeisenbergTensor,
-        MPSTensor.mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff,
-        MPSTensor.groundSpaceES_shortRangeHeisenbergTensor_two_starProjection,
+        MPSTensor.mem_map_groundSpace_shortRangeHeisenbergTensor_two_iff,
+        MPSTensor.map_groundSpace_shortRangeHeisenbergTensor_two_starProjection,
         MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply}
     \leanok
     The direct sum of the three bond-one qubit tensors

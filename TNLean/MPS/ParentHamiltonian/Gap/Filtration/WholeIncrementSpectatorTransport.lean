@@ -52,10 +52,11 @@ theorem mem_range_leftBoundaryMapES_iff_rightFiber
     (v : EuclideanSpace ℂ (Cfg d (n + r))) :
     v ∈ (leftBoundaryMapES A n r).range ↔ ∀ s : Cfg d r,
       ContinuousLinearMap.rightFiber
-        (rightSpectatorConfigLinearIsometryEquiv d n r v) s ∈ groundSpaceES A n := by
+        (rightSpectatorConfigLinearIsometryEquiv d n r v) s ∈ ((groundSpace A n).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [leftBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
-    Submodule.mem_map_equiv, mem_groundSpaceES_iff]
+    Submodule.mem_map_equiv, mem_map_groundSpace_iff]
   rw [← SetLike.mem_coe, leftBoundaryMap_range_eq]
   rfl
 
@@ -64,7 +65,7 @@ space identifies the larger-volume prefix kernel with its right extension. -/
 theorem ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES
     (A : MPSTensor d D) {R n r : ℕ}
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) =
-        groundSpaceES A n) :
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     LinearMap.ker
         (Matrix.toEuclideanLin
             ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤ n).hamiltonian) =
@@ -137,10 +138,10 @@ theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
     (A : MPSTensor d D) {K L Q : ℕ} (hR : 0 < L + Q)
     (hleft : LinearMap.ker
         (Matrix.toEuclideanLin (parentChainInteraction A (L + Q) (K + L)).hamiltonian) =
-      groundSpaceES A (K + L))
+      ((groundSpace A (K + L)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hfull : LinearMap.ker
         (Matrix.toEuclideanLin (parentChainInteraction A (L + Q) (K + L + Q)).hamiltonian) =
-      groundSpaceES A (K + L + Q)) :
+      ((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ‖LinearMap.toContinuousLinearMap
       ((LinearMap.ker
           (Matrix.toEuclideanLin
@@ -148,10 +149,11 @@ theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
                   i.val ∧ i.val + (L + Q) ≤ K + L + Q).hamiltonian)).starProjection.toLinearMap.comp
         (openPrefixGroundProjectionES A (L + Q) (K + L + Q) (K + L) -
           openPrefixGroundProjectionES A (L + Q) (K + L + Q) (K + L + Q)))‖ =
-      ‖(groundSpaceES A (K + L + Q)).starProjection -
+      ‖((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES A K L Q).range.starProjection‖ := by
-  have hWV : groundSpaceES A (K + L + Q) ≤
+  have hWV : ((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       (reassocTailBoundaryMapES A K L Q).range := by
     rw [← range_groundSpaceMapES,
       ← reassocTailBoundaryMapES_comp_tailVirtualMapES A K L Q]
@@ -292,10 +294,11 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect
     (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p)
     (hKernel : ∀ n, 2 * p ≤ n →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) n).hamiltonian) =
-          groundSpaceES A n)
+          ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {ε : ℝ} (hε : 0 ≤ ε)
     (hDefect : ∀ K : ℕ,
-      ‖(groundSpaceES A (K + p + p)).starProjection -
+      ‖((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + p) p).range.starProjection.comp
           (reassocTailBoundaryMapES A K p p).range.starProjection‖ ≤ ε) :
     ∀ n ∈ Finset.range M,

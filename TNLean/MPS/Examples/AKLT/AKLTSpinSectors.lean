@@ -225,8 +225,8 @@ theorem aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two {N : ℕ} (hN : 
   norm_num [Module.finrank_matrix] at hdim
   omega
 
-private lemma groundSpaceES_map_withLp (N : ℕ) :
-    (groundSpaceES akltTensor N).map
+private lemma map_groundSpace_map_withLp (N : ℕ) :
+    (((groundSpace akltTensor N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
       (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap = groundSpace akltTensor N :=
   (Submodule.map_symm_eq_iff (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N))).mp rfl
 
@@ -239,8 +239,8 @@ theorem aklt_finrank_openParent_ground_spinZero {N : ℕ} (hN : 2 ≤ N) :
           (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian)).map
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
           LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
-  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
-    groundSpaceES_map_withLp N]
+  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace hN,
+    map_groundSpace_map_withLp N]
   exact aklt_finrank_groundSpace_inf_ker_totalSpinSq hN
 
 /-- The three other ground states of the actual open AKLT parent Hamiltonian
@@ -252,8 +252,8 @@ theorem aklt_finrank_openParent_ground_spinOne {N : ℕ} (hN : 2 ≤ N) :
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
           Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
             Submodule ℂ (NSiteSpace 3 N)) = 3 := by
-  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
-    groundSpaceES_map_withLp N]
+  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace hN,
+    map_groundSpace_map_withLp N]
   exact aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two hN
 
 /-- The physical open bilinear-biquadratic AKLT Hamiltonian has exactly one
@@ -262,7 +262,7 @@ theorem akltOpenHamiltonian_ground_spinZero_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) ⊓
         LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
-  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, groundSpaceES_map_withLp N]
+  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, map_groundSpace_map_withLp N]
   exact aklt_finrank_groundSpace_inf_ker_totalSpinSq hN
 
 /-- The remaining physical open AKLT ground states form a spin-one triplet.
@@ -272,7 +272,7 @@ theorem akltOpenHamiltonian_ground_spinOne_finrank {N : ℕ} (hN : 2 ≤ N) :
       (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) ⊓
         Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
           Submodule ℂ (NSiteSpace 3 N)) = 3 := by
-  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, groundSpaceES_map_withLp N]
+  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, map_groundSpace_map_withLp N]
   exact aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two hN
 
 end MPSTensor

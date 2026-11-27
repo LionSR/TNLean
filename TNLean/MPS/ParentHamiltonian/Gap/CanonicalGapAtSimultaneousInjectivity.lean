@@ -49,7 +49,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.hamiltonian_parentRingInteraction_
   -- `hamiltonian_parentRingInteraction_eq_of_groundSpace_eq` needs equal bond dimensions; the
   -- representative block sum has a different one, so the definitions are unfolded.
   simp only [parentRingInteraction, parentInteraction,
-    groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
+    data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]
 

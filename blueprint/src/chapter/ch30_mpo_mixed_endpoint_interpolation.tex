@@ -141,8 +141,8 @@ physical-support coordinates and $0<\gamma<1$.
     \label{thm:mpo_mixed_support_continuity}
     \lean{MPSTensor.MPOSymmetry.continuous_insertedTwoSiteMap,
         MPSTensor.MPOSymmetry.continuous_range_insertedTwoSiteMap_starProjection,
-        MPSTensor.MPOSymmetry.range_insertedTwoSiteMap_eq_groundSpaceES,
-        MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_eq_groundSpaceES,
+        MPSTensor.MPOSymmetry.range_insertedTwoSiteMap_eq_map_groundSpace,
+        MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_eq_map_groundSpace,
         MPSTensor.MPOSymmetry.finrank_mixedEndpoint_extendedSupport,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedSupport_starProjection,
         MPSTensor.MPOSymmetry.continuous_mixedEndpointParentInteraction,
@@ -278,7 +278,7 @@ physical-support coordinates and $0<\gamma<1$.
         MPSTensor.MPOSymmetry.coordinateInclusion_first_projection_eq_bondWeight,
         MPSTensor.MPOSymmetry.mixedEndpointBase_first_compression,
         MPSTensor.MPOSymmetry.insertedTwoSiteMap_first_boundary,
-        MPSTensor.MPOSymmetry.groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport}
+        MPSTensor.MPOSymmetry.map_groundSpace_mixedEndpointLeftTensor_le_extendedSupport}
     \leanok
     \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_extended_support,def:ground_space_es,def:injective}
     The tensor $B_0$ is injective whenever $A_0$ is injective, and
@@ -308,7 +308,7 @@ physical-support coordinates and $0<\gamma<1$.
 
 \begin{lemma}[The canonical endpoint support is the outer physical corner]
     \label{thm:mpo_mixed_corner_support}
-    \lean{MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace}
     \leanok
     \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,def:mpo_mixed_first_endpoint,def:ground_space_es}
     The image of $\mathcal S'_0$ under $R_0C_1$ is exactly $G_2(B_0)$.

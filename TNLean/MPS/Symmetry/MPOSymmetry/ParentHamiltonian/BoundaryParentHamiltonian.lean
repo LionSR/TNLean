@@ -97,7 +97,7 @@ theorem IsBoundaryCompatible.parentInteraction_matrix_commute_mpoWithBoundary
       (mpoWithBoundary T X L) :=
   MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A
     (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y L)))
-    (h.groundSpaceES_invariant_boundaryStarAlgebra hL hstar)
+    (h.map_groundSpace_invariant_boundaryStarAlgebra hL hstar)
     (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)
 
 /-- The matrix of the canonical local parent commutes with every boundary
@@ -118,7 +118,7 @@ theorem parentInteraction_matrix_commute_mpoWithBoundary_of_forall_isBoundaryCom
     obtain ⟨j, Y, hY⟩ := hstar i X
     exact ⟨j, Y, hY.symm⟩
   · rintro B ⟨i, X, rfl⟩
-    exact (h i).groundSpaceES_mem_invtSubmodule X hL
+    exact (h i).map_groundSpace_mem_invtSubmodule X hL
 
 /-- Every cyclic translate, including a wrapping window, of the canonical local
 parent commutes with each globally commuting-boundary MPO. Source: GLM23,
