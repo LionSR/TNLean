@@ -30,9 +30,10 @@ namespace MPUCircuit
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def singleSiteIntervalConfigEquiv (d N : ℕ) (i : Fin N) :
-    Fin d ≃ CutIntervalConfig d N i.val (i.val + 1) where
+    Fin d ≃ ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val (i.val +
+        1)) where
   toFun a := fun _ ↦ a
-  invFun x := x ⟨i, by omega⟩
+  invFun x := x ⟨i, ManyBody.mem_interval.mpr (by omega)⟩
   left_inv _ := rfl
   right_inv x := by
     funext s
@@ -40,7 +41,7 @@ def singleSiteIntervalConfigEquiv (d N : ℕ) (i : Fin N) :
     apply Subtype.ext
     apply Fin.ext
     change i.val = s.val.val
-    have hs := s.2
+    have hs := ManyBody.mem_interval.mp s.2
     omega
 
 /-- The selected weighted one-site interval, reindexed to one physical output, its right and left
@@ -119,8 +120,8 @@ theorem exists_normalized_minimalInterval_family_with_leaf_circuits_of_unitary
           (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-            (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-            (fullCutIntervalConfigEquiv d N) = U) ∧
+            (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+            ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U) ∧
         ∀ i : Fin N,
           ∃ Z : Matrix
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +

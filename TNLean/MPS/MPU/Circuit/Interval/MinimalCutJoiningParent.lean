@@ -63,11 +63,11 @@ theorem normalizedJoiningParent_balancedIntervalChildren
 /-- Splitting a physical interval at an intermediate cut is a bijection.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def cutIntervalSplitEquiv (d N j m k : ℕ) (hjm : j ≤ m) (hmk : m ≤ k) :
-    MPSPreparation.CutIntervalConfig d N j k ≃
-      (MPSPreparation.CutIntervalConfig d N j m ×
-        MPSPreparation.CutIntervalConfig d N m k) where
-  toFun w := (fun s ↦ w ⟨s.1, s.2.1, s.2.2.trans_le hmk⟩,
-    fun s ↦ w ⟨s.1, hjm.trans s.2.1, s.2.2⟩)
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k) ≃
+      (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j m) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m k)) where
+  toFun w := (fun s ↦ w ⟨s.1, ManyBody.interval_mono le_rfl hmk s.2⟩,
+    fun s ↦ w ⟨s.1, ManyBody.interval_mono hjm le_rfl s.2⟩)
   invFun w := MPSPreparation.joinCutInterval j m k w.1 w.2
   left_inv w := by
     funext s
@@ -76,9 +76,9 @@ def cutIntervalSplitEquiv (d N j m k : ℕ) (hjm : j ≤ m) (hmk : m ≤ k) :
   right_inv w := by
     apply Prod.ext
     · funext s
-      simp [MPSPreparation.joinCutInterval, s.2.2]
+      simp [MPSPreparation.joinCutInterval, (ManyBody.mem_interval.mp s.2).2]
     · funext s
-      simp [MPSPreparation.joinCutInterval, Nat.not_lt_of_ge s.2.1]
+      simp [MPSPreparation.joinCutInterval, Nat.not_lt_of_ge (ManyBody.mem_interval.mp s.2).1]
 
 /-- The product of adjacent minimal intervals is the actual longer weighted
 interval with its physical coordinates split at the joining cut.
@@ -93,10 +93,10 @@ theorem weightedMinimalOperatorInterval_comp_eq_reindex {d N : ℕ}
     (R : Matrix (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U))) ℂ) :
     vectorizedWeightedInterval
-      (fun (a : MPSPreparation.CutIntervalConfig d N j m ×
-            MPSPreparation.CutIntervalConfig d N m k)
-          (b : MPSPreparation.CutIntervalConfig d N j m ×
-            MPSPreparation.CutIntervalConfig d N m k) ↦
+      (fun (a : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j m) ×
+            ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m k))
+          (b : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j m) ×
+            ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m k)) ↦
         minimalOperatorInterval U B hjm a.1 b.1 *
           minimalOperatorInterval U B hmk a.2 b.2) L R =
       reindexLinearEquiv ℂ ℂ

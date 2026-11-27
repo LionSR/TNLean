@@ -125,8 +125,10 @@ theorem intervalJointOutputEmbedding_joiningPacket_active
     (em : Fin r ↪ Cfg d (cutBondRegisterWidth d D N (internalCutEmbedding N c)))
     (ej : Fin l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : Fin n ↪ Cfg d (cutBondRegisterWidth d D N k))
-    (p : (CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-      CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × (Fin n × Fin l))
+    (p : (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+        (internalCutEmbedding N c).val) ×
+      ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+          c).val k.val)) × (Fin n × Fin l))
     (x y : Fin r)
     (z : {s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j
       (internalCutEmbedding N c) k hjm hmk} → Fin d) :
@@ -275,8 +277,10 @@ noncomputable def regroupedIntervalJointOutputEmbedding
     (em : Fin r ↪ Cfg d (cutBondRegisterWidth d D N (internalCutEmbedding N c)))
     (ej : Fin l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : Fin n ↪ Cfg d (cutBondRegisterWidth d D N k)) :
-    ((((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-      CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × (Fin n × Fin l)) ×
+    ((((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+        (internalCutEmbedding N c).val) ×
+      ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+          c).val k.val)) × (Fin n × Fin l)) ×
       ({s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j
         (internalCutEmbedding N c) k hjm hmk} → Fin d)) × (Fin r × Fin r)) ↪
       Cfg d (logicalSiteCount d D N) :=
@@ -297,8 +301,10 @@ theorem regroupedIntervalJointOutputEmbedding_apply
     (em : Fin r ↪ Cfg d (cutBondRegisterWidth d D N (internalCutEmbedding N c)))
     (ej : Fin l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : Fin n ↪ Cfg d (cutBondRegisterWidth d D N k))
-    (p : (((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-      CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × (Fin n × Fin l)) ×
+    (p : (((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+        (internalCutEmbedding N c).val) ×
+      ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+          c).val k.val)) × (Fin n × Fin l)) ×
       ({s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j
         (internalCutEmbedding N c) k hjm hmk} → Fin d)) × (Fin r × Fin r)) :
     regroupedIntervalJointOutputEmbedding c j k hjm hmk em ej ek p =
@@ -324,8 +330,10 @@ theorem exists_regroupedIntervalJointOutput_product_coordinates
         (2 * cutBondRegisterWidth d D N (internalCutEmbedding N c) + 2) =
           logicalSiteCount d D N)
       (τ : Equiv.Perm (Fin (logicalSiteCount d D N)))
-      (f : (((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-        CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × (Fin n × Fin l)) ×
+      (f : (((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+          (internalCutEmbedding N c).val) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+            c).val k.val)) × (Fin n × Fin l)) ×
         ({s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j
           (internalCutEmbedding N c) k hjm hmk} → Fin d)) ↪ Cfg d a),
       (∀ i, τ (Fin.cast hn (Fin.natAdd a i)) = joiningPacketSites d D N c i) ∧

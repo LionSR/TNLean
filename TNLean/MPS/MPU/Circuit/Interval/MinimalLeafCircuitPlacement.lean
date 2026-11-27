@@ -122,8 +122,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
           (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-            (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-            (fullCutIntervalConfigEquiv d N) = U) ∧
+            (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+            ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U) ∧
         ∀ i : Fin N,
           ∃ Z : Matrix
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +

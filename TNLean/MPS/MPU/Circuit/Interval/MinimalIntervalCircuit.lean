@@ -278,10 +278,14 @@ theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
   let ek := minimalCutBondRegisterEncoding hd U hU hbound k
   let τcfg := {s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j
     (internalCutEmbedding N c) k hjm hmk} → Fin d
-  let α := (CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-    CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × τcfg
-  let ρ := (((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-    CutIntervalConfig d N (internalCutEmbedding N c).val k.val) ×
+  let α := (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+      (internalCutEmbedding N c).val) ×
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+        c).val k.val)) × τcfg
+  let ρ := (((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+      (internalCutEmbedding N c).val) ×
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+        c).val k.val)) ×
       (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))) × τcfg)
   let W := balancedIntervalChildren (minimalOperatorInterval U B hjm.le)
@@ -310,8 +314,10 @@ theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
       (p := fun i ↦ x i = 0)).symm
   let u := basisEncodingEquivOfRangeEq E' (zeroFlagEmbedding (d := d) s) hRange
   let gInv := (outerSpectatorJoiningRegrouping
-    ((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-      CutIntervalConfig d N (internalCutEmbedding N c).val k.val) ×
+    ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val (internalCutEmbedding
+        N c).val) ×
+      ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+          c).val k.val)) ×
       (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))) (Fin r ×
             Fin r) τcfg).trans

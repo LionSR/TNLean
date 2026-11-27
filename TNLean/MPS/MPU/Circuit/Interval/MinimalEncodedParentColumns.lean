@@ -104,8 +104,10 @@ theorem regroupedIntervalJointOutputEmbedding_reset_apply
     (ej : Fin l ↪ Cfg d (cutBondRegisterWidth d D N j))
     (ek : Fin n ↪ Cfg d (cutBondRegisterWidth d D N k))
     (q0 : Fin r) (hem : em q0 = 0)
-    (p : (((CutIntervalConfig d N j.val (internalCutEmbedding N c).val ×
-      CutIntervalConfig d N (internalCutEmbedding N c).val k.val) × (Fin n × Fin l)) ×
+    (p : (((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val
+        (internalCutEmbedding N c).val) ×
+      ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N (internalCutEmbedding N
+          c).val k.val)) × (Fin n × Fin l)) ×
       ({s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j
         (internalCutEmbedding N c) k hjm hmk} → Fin d))) :
     regroupedIntervalJointOutputEmbedding c j k hjm hmk em ej ek (p, (q0, q0)) =
@@ -141,9 +143,11 @@ local notation "ej" => minimalCutBondRegisterEncoding hd U hU hbound j
 local notation "ek" => minimalCutBondRegisterEncoding hd U hU hbound k
 local notation "RemainingCfg" => ({s // s ∉ intervalJointOutsideFlagSet (d := d) (D := D)
   j m k hjm hmk} → Fin d)
-local notation "ChildPhysical" => (CutIntervalConfig d N j.val
-  (Fin.val (internalCutEmbedding N c)) × CutIntervalConfig d N
-  (Fin.val (internalCutEmbedding N c)) k.val)
+local notation "ChildPhysical" =>
+  (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d)
+      (ManyBody.interval N j.val (Fin.val (internalCutEmbedding N c))) ×
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d)
+      (ManyBody.interval N (Fin.val (internalCutEmbedding N c)) k.val))
 local notation "OuterLabels" => (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
   Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
 local notation "ChildRows" => (((ChildPhysical × OuterLabels) × RemainingCfg) ×
@@ -188,7 +192,8 @@ theorem basisInclusion_regroupedOutput_mul_normalizedParent
   rw [joiningSpectatorColumns_basisResetOutput,
     basisInclusion_mul_basisResetOutput] at hcolumns
   let eout : ((ChildPhysical × OuterLabels) × RemainingCfg) ≃
-      ((CutIntervalConfig d N j.val k.val × OuterLabels) × parentOutside) := Equiv.prodCongr
+      ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) ×
+          OuterLabels) × parentOutside) := Equiv.prodCongr
     (Equiv.prodCongr (cutIntervalSplitEquiv d N j.val (Fin.val m) k.val hjm.le hmk.le).symm
       (Equiv.refl (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))))

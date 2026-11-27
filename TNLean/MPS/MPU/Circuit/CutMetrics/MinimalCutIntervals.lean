@@ -37,7 +37,7 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem pairPhysicalConfig_joinCutPrefix {d N j k : ℕ}
     (x y : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j))
-    (z w : MPSPreparation.CutIntervalConfig d N j k) :
+    (z w : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) :
     pairPhysicalConfig (MPSPreparation.joinCutPrefix j k x z)
         (MPSPreparation.joinCutPrefix j k y w) =
       MPSPreparation.joinCutPrefix j k (pairPhysicalConfig x y) (pairPhysicalConfig z w) := by
@@ -53,7 +53,8 @@ noncomputable def minimalOperatorInterval {d N : ℕ}
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     {j k : ℕ} (hjk : j ≤ k) :
-    MPSPreparation.CutIntervalConfig d N j k → MPSPreparation.CutIntervalConfig d N j k →
+    ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j
+        k) → ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k) →
       Matrix (Fin (cutRank (interval N 0 j) (operatorCoefficientTensor U)))
         (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U))) ℂ :=
   fun x y ↦ MPSPreparation.cutIntervalMatrix (operatorCoefficientTensor U) B hjk
@@ -70,9 +71,9 @@ theorem minimalOperatorPrefix_concat {d N : ℕ}
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     {j k : ℕ} (hjk : j ≤ k) :
     (fun (a : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) ×
-          MPSPreparation.CutIntervalConfig d N j k)
+          ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k))
         (b : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) ×
-          MPSPreparation.CutIntervalConfig d N j k) (_ : Unit) q ↦
+          ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) (_ : Unit) q ↦
       minimalOperatorPrefixFactor U B k (MPSPreparation.joinCutPrefix j k a.1 a.2)
         (MPSPreparation.joinCutPrefix j k b.1 b.2) q) =
       (fun a b ↦ (Matrix.of fun (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j a.1 b.1 q) *
@@ -102,9 +103,9 @@ theorem prefixGramAffineHull_minimalOperatorPrefix_concat {d N : ℕ}
     {j k : ℕ} (hjk : j ≤ k) :
     prefixGramAffineHull
       (fun (a : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) ×
-            MPSPreparation.CutIntervalConfig d N j k)
+            ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k))
           (b : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) ×
-            MPSPreparation.CutIntervalConfig d N j k) ↦
+            ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) ↦
         (Matrix.of fun (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j a.1 b.1 q) *
           minimalOperatorInterval U B hjk a.2 b.2) =
       prefixGramAffineHull
@@ -142,9 +143,9 @@ theorem minimalOperatorInterval_isometry_of_cut_metrics {d N : ℕ}
         1 := by
   have hnorm : ∀ X ∈ prefixGramAffineHull
       (fun (a : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) ×
-            MPSPreparation.CutIntervalConfig d N j k)
+            ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k))
           (b : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j) ×
-            MPSPreparation.CutIntervalConfig d N j k) ↦
+            ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) ↦
         (Matrix.of fun (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j a.1 b.1 q) *
           minimalOperatorInterval U B hjk a.2 b.2), trace (X * Q) = 1 := by
     intro X hX
@@ -163,8 +164,8 @@ theorem minimalOperatorInterval_isometry_of_cut_metrics {d N : ℕ}
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem pairPhysicalConfig_joinCutInterval {d N j k l : ℕ}
-    (x y : MPSPreparation.CutIntervalConfig d N j k)
-    (z w : MPSPreparation.CutIntervalConfig d N k l) :
+    (x y : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k))
+    (z w : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N k l)) :
     pairPhysicalConfig (MPSPreparation.joinCutInterval j k l x z)
         (MPSPreparation.joinCutInterval j k l y w) =
       MPSPreparation.joinCutInterval j k l
@@ -182,8 +183,8 @@ theorem minimalOperatorInterval_comp {d N : ℕ}
     (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     {j k l : ℕ} (hjk : j ≤ k) (hkl : k ≤ l)
-    (x y : MPSPreparation.CutIntervalConfig d N j k)
-    (z w : MPSPreparation.CutIntervalConfig d N k l) :
+    (x y : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k))
+    (z w : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N k l)) :
     minimalOperatorInterval U B (hjk.trans hkl)
         (MPSPreparation.joinCutInterval j k l x z)
         (MPSPreparation.joinCutInterval j k l y w) =

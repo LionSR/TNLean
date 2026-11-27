@@ -116,11 +116,12 @@ and its unrestricted outside configuration.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def intervalJointInputConfigEquiv {d D N : ℕ}
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val) :
-    ((CutIntervalConfig d N j.val m.val × CutIntervalConfig d N m.val k.val) ×
+    ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val)) ×
       ({s : {s : Fin (logicalSiteCount d D N) // s ∉ Set.range (Fin.Embedding.append
         (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk))} //
         s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j m k hjm hmk} → Fin d)) ≃
-    (CutIntervalConfig d N j.val k.val ×
+    (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val k.val) ×
       OutsidePlacedConfig d (intervalPacketSites d D N j.val k.val)) :=
   Equiv.prodCongr (cutIntervalSplitEquiv d N j.val m.val k.val
     (Nat.le_of_lt hjm) (Nat.le_of_lt hmk)).symm
@@ -130,7 +131,8 @@ noncomputable def intervalJointInputConfigEquiv {d D N : ℕ}
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPhysicalZeroConfig_join_left {d D N j m k : ℕ} [NeZero d]
-    (hmk : m ≤ k) (x : CutIntervalConfig d N j m) (y : CutIntervalConfig d N m k)
+    (hmk : m ≤ k) (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j m)) (y :
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m k))
     (s : LogicalSite d D N) (hs : s ∈ intervalLogicalSupport d D N j m) :
     intervalPhysicalZeroConfig (D := D) j k (joinCutInterval j m k x y) s =
       intervalPhysicalZeroConfig (D := D) j m x s := by
@@ -143,7 +145,8 @@ theorem intervalPhysicalZeroConfig_join_left {d D N j m k : ℕ} [NeZero d]
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPhysicalZeroConfig_join_right {d D N j m k : ℕ} [NeZero d]
-    (hjm : j ≤ m) (x : CutIntervalConfig d N j m) (y : CutIntervalConfig d N m k)
+    (hjm : j ≤ m) (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j m)) (y :
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m k))
     (s : LogicalSite d D N) (hs : s ∈ intervalLogicalSupport d D N m k) :
     intervalPhysicalZeroConfig (D := D) j k (joinCutInterval j m k x y) s =
       intervalPhysicalZeroConfig (D := D) m k y s := by
@@ -157,7 +160,8 @@ theorem intervalPhysicalZeroConfig_join_right {d D N j m k : ℕ} [NeZero d]
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPhysicalZeroConfig_joiningFlag_zero {d D N j k m : ℕ} [NeZero d]
-    (x : CutIntervalConfig d N j k) (s : LogicalSite d D N)
+    (x : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k)) (s : LogicalSite d
+        D N)
     (hs : s ∈ joiningFlagSupport d D N m) :
     intervalPhysicalZeroConfig (D := D) j k x s = 0 := by
   rcases s with s | (s | s)
@@ -171,7 +175,8 @@ remaining outside coordinate.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def intervalJointInputEmbedding {d D N : ℕ} [NeZero d]
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val) :
-    ((CutIntervalConfig d N j.val m.val × CutIntervalConfig d N m.val k.val) ×
+    ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val)) ×
       ({s : {s : Fin (logicalSiteCount d D N) // s ∉ Set.range (Fin.Embedding.append
         (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk))} //
         s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j m k hjm hmk} → Fin d)) ↪
@@ -226,7 +231,8 @@ physical and outside coordinates.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalJointInputEmbedding_eq_parent_input {d D N : ℕ} [NeZero d]
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
-    (p : ((CutIntervalConfig d N j.val m.val × CutIntervalConfig d N m.val k.val) ×
+    (p : ((ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
+        ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val)) ×
       ({s : {s : Fin (logicalSiteCount d D N) // s ∉ Set.range (Fin.Embedding.append
         (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk))} //
         s ∉ intervalJointOutsideFlagSet (d := d) (D := D) j m k hjm hmk} → Fin d))) :
@@ -312,7 +318,7 @@ theorem placedBasisEmbedding_restriction {d a n : ℕ} {α τ : Type*}
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalInputEmbedding_zero_auxiliary {d D N j k : ℕ} [NeZero d]
-    (p : CutIntervalConfig d N j k ×
+    (p : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k) ×
       OutsidePlacedConfig d (intervalPacketSites d D N j k))
     (s : LogicalSite d D N) (hs : s ∈ intervalAuxiliaryInitializationSupport d D N j k) :
     minimalIntervalInputEmbedding (D := D) j k p (logicalSiteEquivFin d D N s) = 0 := by
@@ -336,7 +342,7 @@ theorem mem_range_minimalIntervalInputEmbedding_iff {d D N : ℕ} [NeZero d]
   · rintro ⟨p, rfl⟩ s hs
     exact minimalIntervalInputEmbedding_zero_auxiliary p s hs
   · intro hx
-    let w : CutIntervalConfig d N j k := fun s ↦
+    let w : ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j k) := fun s ↦
       x (logicalSiteEquivFin d D N (Sum.inl s.val))
     let z : OutsidePlacedConfig d (intervalPacketSites d D N j k) := fun s ↦ x s.val
     refine ⟨(w, z), ?_⟩
@@ -444,12 +450,12 @@ theorem minimalIntervalJointInitializedChildColumns_of_supported_individual {d D
   unfold IsMinimalIntervalColumnImplementation minimalIntervalInputEmbedding
     minimalIntervalOutputEmbedding at hX hY
   convert jointPlacedColumns_of_supported_individual
-    (α := CutIntervalConfig d N j.val m.val)
-    (β := CutIntervalConfig d N m.val k.val)
-    (γ := CutIntervalConfig d N j.val m.val ×
+    (α := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val))
+    (β := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val))
+    (γ := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N j.val m.val) ×
       (Fin (cutRank (interval N 0 m.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))))
-    (δ := CutIntervalConfig d N m.val k.val ×
+    (δ := ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N m.val k.val) ×
       (Fin (cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ×
         Fin (cutRank (interval N 0 m.val) (operatorCoefficientTensor U))))
     (τ := {s : {s : Fin (logicalSiteCount d D N) // s ∉ Set.range (Fin.Embedding.append
