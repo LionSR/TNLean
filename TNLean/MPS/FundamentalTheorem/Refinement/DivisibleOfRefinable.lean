@@ -250,7 +250,7 @@ variable {d D m : ℕ} [NeZero m]
 private theorem blockScalarMatrix_mul_blockInclusion {r : ℕ} {dim : Fin r → ℕ}
     (c : Fin r → ℂ) (a : Fin r) :
     blockScalarMatrix dim c * blockInclusion dim a = c a • blockInclusion dim a := by
-  have h := toTensorFromBlocks_mul_blockInclusion (d := 1) (dim := dim) c
+  have h := toTensorFromBlocks_mul_blockInclusion (α := Fin 1) (dim := dim) c
     (fun _ _ ↦ 1) a 0
   change blockScalarMatrix dim c * blockInclusion dim a =
     blockInclusion dim a * (c a • 1) at h

@@ -29,26 +29,26 @@ noncomputable section
 
 namespace MPSTensor
 
-variable {d D r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} {D r : ℕ} {dim : Fin r → ℕ}
 
 /-- A boundary map to an unweighted direct sum determines a non-unital
 representation of its block matrix algebra. Source: GLM23, Appendix A,
 `decompopen` and the subsequent comparison at two chain lengths. -/
 theorem exists_boundaryRepresentation_of_boundaryMap
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       Matrix (Fin (∑ c : Fin r, dim c)) (Fin (∑ c : Fin r, dim c)) ℂ)
     (hb : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w =
           mpvWithBoundary (toTensorFromBlocks (fun _ ↦ 1) A) (b X) w)
     {L : ℕ} (hL : 0 < L) (hSpan : WordTupleSpanTop A L) :
     ∃ ρ : ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₙₐ[ℂ]
       Matrix (Fin D) (Fin D) ℂ,
-      ∀ i : Fin d, ρ (fun c ↦ A c i) = B i := by
+      ∀ i : α, ρ (fun c ↦ A c i) = B i := by
   let b' := Matrix.finSigmaDiagonalBlocks.comp b
   have hb' : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b' X c) w := by
     intro n hn X w
     rw [hb n hn X w, mpvWithBoundary_toTensorFromBlocks_one]

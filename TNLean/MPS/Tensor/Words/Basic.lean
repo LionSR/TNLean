@@ -40,9 +40,9 @@ open scoped Matrix
 namespace MPSTensor
 
 /-- Matrix product tensor word evaluation commutes with reindexing along an equivalence. -/
-lemma evalWord_reindex {d D : ℕ} {m : Type*} [Fintype m] [DecidableEq m]
-    (e : m ≃ Fin D) (A : Fin d → Matrix m m ℂ) :
-    ∀ w : List (Fin d),
+lemma evalWord_reindex {α : Type*} {D : ℕ} {m : Type*} [Fintype m] [DecidableEq m]
+    (e : m ≃ Fin D) (A : α → Matrix m m ℂ) :
+    ∀ w : List α,
       Kraus.evalWord (fun i => (Matrix.reindex e e) (A i)) w =
         (Matrix.reindex e e) (Kraus.evalWord A w) := by
   classical

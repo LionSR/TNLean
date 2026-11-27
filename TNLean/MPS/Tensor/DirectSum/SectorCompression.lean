@@ -86,7 +86,7 @@ theorem toTensor_mul_flatBlockInclusion
     (P : SectorDecomposition d) (s : Fin P.totalCopies) (i : Fin d) :
     P.toTensor i * P.flatBlockInclusion s =
       P.flatBlockInclusion s * (P.flatWeight s • P.flatBasis s i) :=
-  toTensorFromBlocks_mul_blockInclusion (d := d) P.flatWeight P.flatBasis s i
+  toTensorFromBlocks_mul_blockInclusion (α := Fin d) P.flatWeight P.flatBasis s i
 
 /-- The adjoint flattened block inclusion intertwines the ambient tensor with
 the weighted selected block on the left.

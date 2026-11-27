@@ -320,7 +320,7 @@ theorem toTensorFromBlocks_conj_of_matched_blocks_smul
       rw [hB', mul_smul, mul_smul, ← h]
       ext x y
       simp
-    have hreindex := toTensorFromBlocks_eq_reindex_of_equiv (d := d)
+    have hreindex := toTensorFromBlocks_eq_reindex_of_equiv (α := Fin d)
       (fun k => c k * μ k) A (fun t => c (e.symm t) * μ' t) B' e hd hblocks
     rw [hreindex i, hconj i, reindex_eq_permMatrixOfEquiv_conj]
     simp only [Matrix.mul_assoc]

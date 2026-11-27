@@ -299,7 +299,7 @@ lemma mpv_twoBlockTensor_eq {n m N : ℕ}
       mpv A₁ σ + mpv A₂ σ := by
   classical
   have h :=
-    mpv_toTensorFromBlocks_eq_sum (d := d) (r := 2) (dim := ![n, m])
+    mpv_toTensorFromBlocks_eq_sum (α := Fin d) (r := 2) (dim := ![n, m])
       (μ := fun _ => (1 : ℂ))
       (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂) (σ := σ)
   have h' :
@@ -505,7 +505,7 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
           (Kraus.evalWord A11raw w) (Kraus.evalWord A22raw w))
     -- Express `mpv A₁` and `mpv A₂` via the direct blocks.
     have hmpv₁ : mpv A₁ σ = Matrix.trace (Kraus.evalWord A11raw w) := by
-      have hEval₁ := MPSTensor.evalWord_reindex (d := d) (D := n) (e := eS) (A := A11raw) w
+      have hEval₁ := MPSTensor.evalWord_reindex (D := n) (e := eS) (A := A11raw) w
       have : Kraus.evalWord A₁ w = Matrix.reindex eS eS (Kraus.evalWord A11raw w) := by
         simpa [A₁] using hEval₁
       calc
@@ -514,7 +514,7 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
         _ = Matrix.trace (Kraus.evalWord A11raw w) := by
               simpa using (Matrix.trace_reindex eS (Kraus.evalWord A11raw w))
     have hmpv₂ : mpv A₂ σ = Matrix.trace (Kraus.evalWord A22raw w) := by
-      have hEval₂ := MPSTensor.evalWord_reindex (d := d) (D := m) (e := eT) (A := A22raw) w
+      have hEval₂ := MPSTensor.evalWord_reindex (D := m) (e := eT) (A := A22raw) w
       have : Kraus.evalWord A₂ w = Matrix.reindex eT eT (Kraus.evalWord A22raw w) := by
         simpa [A₂] using hEval₂
       calc

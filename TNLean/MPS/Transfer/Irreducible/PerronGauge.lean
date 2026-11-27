@@ -119,7 +119,7 @@ theorem exists_tp_data_of_irreducible
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
   let A' : MPSTensor d D := fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i
-  let B := Kraus.tpGauge (d := d) (D := D) A' σ
+  let B := Kraus.tpGauge (ι := Fin d) (D := D) A' σ
   refine ⟨B, r, σ, hσ_pd, hr_pos, fun i => rfl, ?_, gaugeEquiv_tpGauge A' σ hσ_pd⟩
   exact Kraus.tpGauge_isTP_of_map_conjTranspose_eigenvector A σ r hσ_pd hr_pos hσ_eig
 
@@ -163,11 +163,11 @@ theorem exists_unital_data_of_irreducible
     exists_posDef_adjoint_eigenvector (d := d) (D := D) Aadj hIrrAdj hAadj
   have hρ_eig : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = (r : ℂ) • ρ := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hρ_eig_adj
-  let B : MPSTensor d D := Kraus.spectralUnitalGauge (d := d) (D := D) A r ρ
+  let B : MPSTensor d D := Kraus.spectralUnitalGauge (ι := Fin d) (D := D) A r ρ
   have hB_unital : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
     simpa [B, Kraus.IsUnital] using
       Kraus.spectralUnitalGauge_isUnital_of_map_eigenvector
-        (d := d) (D := D) A ρ r hρ hr hρ_eig
+        (ι := Fin d) (D := D) A ρ r hρ hr hρ_eig
   have hGauge : GaugeEquiv (α := Fin d) (β := Fin D)
       (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
     convert

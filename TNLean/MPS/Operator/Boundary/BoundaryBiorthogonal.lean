@@ -40,16 +40,16 @@ noncomputable section
 
 namespace MPSTensor
 
-variable {d D r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} {D r : ℕ} {dim : Fin r → ℕ}
 
 /-- A representation of the target block algebra splits into an exact local
 biorthogonal decomposition. This gives a matrix-unit proof of the
 reconstruction in GLM23 Appendix A, `decompopen` and `eq:ortho`. -/
 theorem exists_biorthogonalDecomposition_of_nonUnitalAlgHom
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (ρ : ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₙₐ[ℂ]
       Matrix (Fin D) (Fin D) ℂ)
-    (hρ : ∀ i : Fin d, ρ (fun c ↦ A c i) = B i) :
+    (hρ : ∀ i : α, ρ (fun c ↦ A c i) = B i) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c)) (Fin D) ℂ)
       (W : ∀ c, Fin (m c) → Matrix (Fin D) (Fin (dim c)) ℂ),
@@ -86,11 +86,11 @@ the target blocks span simultaneously at one positive length. It is enough
 to compare that length and twice that length, while length one recovers the
 unblocked local letters. Source: GLM23, Appendix A. -/
 theorem exists_biorthogonalDecomposition_of_boundaryTransport
-    (B : MPSTensor d D) (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (hb : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b X c) w)
     {L : ℕ} (hL : 0 < L) (hSpan : WordTupleSpanTop A L) :
     ∃ (m : Fin r → ℕ)
@@ -160,16 +160,16 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D E r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} {D E r : ℕ} {dim : Fin r → ℕ}
 
 /-- An invariant bond-space inclusion transports arbitrary boundary
 coefficients by the same rectangular sandwich at every length. Source:
 GLM23, Appendix A, the block-projector argument preceding `decompopen`. -/
 theorem mpvWithBoundary_sandwich_of_intertwiner
-    (B : MPSTensor d D) (C : MPSTensor d E)
+    (B : MPTensor α (Fin D)) (C : MPTensor α (Fin E))
     (V : Matrix (Fin E) (Fin D) ℂ) (W : Matrix (Fin D) (Fin E) ℂ)
     (hVW : V * W = 1) (hW : ∀ i, B i * W = W * C i)
-    (X : Matrix (Fin E) (Fin E) ℂ) {L : ℕ} (w : Fin L → Fin d) :
+    (X : Matrix (Fin E) (Fin E) ℂ) {L : ℕ} (w : Fin L → α) :
     mpvWithBoundary B (W * X * V) w = mpvWithBoundary C X w := by
   have hw := Kraus.evalWord_intertwine B C W hW (List.ofFn w)
   change Matrix.trace ((W * X * V) * Kraus.evalWord B (List.ofFn w)) =
@@ -187,12 +187,12 @@ theorem mpvWithBoundary_sandwich_of_intertwiner
 a tensor with length-independent arbitrary-boundary transport. Source:
 GLM23, Appendix A, restriction to fixed incoming block labels. -/
 theorem exists_biorthogonalDecomposition_of_boundaryTransport_restrict
-    (B : MPSTensor d D) (C : MPSTensor d E)
-    (A : (c : Fin r) → MPSTensor d (dim c))
+    (B : MPTensor α (Fin D)) (C : MPTensor α (Fin E))
+    (A : (c : Fin r) → MPTensor α (Fin (dim c)))
     (b : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (hb : ∀ (n : ℕ), 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ w : Fin n → Fin d,
+      ∀ w : Fin n → α,
         mpvWithBoundary B X w = ∑ c : Fin r, mpvWithBoundary (A c) (b X c) w)
     (V₀ : Matrix (Fin E) (Fin D) ℂ) (W₀ : Matrix (Fin D) (Fin E) ℂ)
     (hVW : V₀ * W₀ = 1) (hW : ∀ i, B i * W₀ = W₀ * C i)
