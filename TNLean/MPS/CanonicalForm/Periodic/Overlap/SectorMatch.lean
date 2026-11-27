@@ -35,7 +35,7 @@ namespace MPSTensor
 
 section SectorMatch
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Common `Ω_u` right inverses for the sector blocks.
 
@@ -45,16 +45,16 @@ common positive word length, every sector block has a right inverse for the
 linear span of its length-`L` word products. -/
 lemma exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
     {m : ℕ} {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor d (dim k))
+    (blocks : (k : Fin m) → MPTensor α (Fin (dim k)))
     (hBlocks_lc :
-      ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+      ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
     (hNondeg : ∀ k, dim k ≠ 0)
     (hNormal : ∀ k, Kraus.IsNormal (blocks k)) :
     ∃ L : ℕ, 0 < L ∧
       ∃ Ω : (k : Fin m) →
-          Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] ((Fin L → Fin d) → ℂ),
+          Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] ((Fin L → α) → ℂ),
         ∀ (k : Fin m) (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-          ∑ σ : Fin L → Fin d,
+          ∑ σ : Fin L → α,
             (Ω k X σ) • Kraus.evalWord (blocks k) (List.ofFn σ) = X := by
   obtain ⟨L, hL_pos, hL⟩ :=
     exists_common_isNBlkInjective_of_isNormal_leftCanonical
@@ -207,10 +207,10 @@ This is the support identity used in the concatenation in arXiv:1708.00029,
 Appendix A, lines 1041--1056. -/
 lemma cornerProd_mul_finalCorner
     {m : ℕ} [NeZero m]
-    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D)
+    (Q : Fin m → MatrixAlg D) (B : MPTensor α (Fin D))
     (hQ : ∀ v, IsOrthogonalProjection (Q v))
-    (hQ_shift : ∀ (v : Fin m) (i : Fin d), Q v * B i = B i * Q (v + 1))
-    (v : Fin m) (w : List (Fin d)) :
+    (hQ_shift : ∀ (v : Fin m) (i : α), Q v * B i = B i * Q (v + 1))
+    (v : Fin m) (w : List α) :
     cornerProd Q B v w * Q (v + w.length • (1 : Fin m)) =
       cornerProd Q B v w := by
   rw [cornerProd_eq_conj_evalWord Q B hQ hQ_shift]
@@ -223,17 +223,17 @@ This is the cancellation of adjacent \(U_v^\dagger U_v=Q_v\) factors in
 arXiv:1708.00029, Appendix A, lines 1041--1056. -/
 lemma cornerProd_blockMatch_partial_isometry_pow
     {m : ℕ} [NeZero m]
-    (P Q : Fin m → MatrixAlg D) (A B : MPSTensor d D)
+    (P Q : Fin m → MatrixAlg D) (A B : MPTensor α (Fin D))
     (q : Fin m) (U : Fin m → MatrixAlg D) (c : Fin m → ℂ)
     (hP : ∀ u, IsOrthogonalProjection (P u))
     (hQ : ∀ v, IsOrthogonalProjection (Q v))
-    (hQ_shift : ∀ (v : Fin m) (i : Fin d), Q v * B i = B i * Q (v + 1))
+    (hQ_shift : ∀ (v : Fin m) (i : α), Q v * B i = B i * Q (v + 1))
     (hU_star_U : ∀ u, (U u)ᴴ * U u = Q (u + q))
-    (hBC : ∀ (u : Fin m) (w : List (Fin d)), w.length = m →
+    (hBC : ∀ (u : Fin m) (w : List α), w.length = m →
       cornerProd P A u w =
         c u • (U u * cornerProd Q B (u + q) w * (U u)ᴴ))
     (u : Fin m) (k : ℕ) :
-    ∀ W : List (Fin d), W.length = (k + 1) * m →
+    ∀ W : List α, W.length = (k + 1) * m →
       cornerProd P A u W =
         (c u) ^ (k + 1) •
           (U u * cornerProd Q B (u + q) W * (U u)ᴴ) := by
@@ -335,7 +335,7 @@ This module separates full-cycle corner products by matrix units and tensor
 trace pairings.
 -/
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Matrix units separate a cyclic product into its individual matrix
 coefficients.

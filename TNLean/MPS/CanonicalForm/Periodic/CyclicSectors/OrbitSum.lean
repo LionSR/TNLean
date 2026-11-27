@@ -35,7 +35,7 @@ open Matrix Finset Complex
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] {D m : ℕ}
 
 /-- The orbit sum `∑ₗ T^[l](Q)` is fixed by `T` as soon as `Q` is fixed by
 `T^[m]`. -/

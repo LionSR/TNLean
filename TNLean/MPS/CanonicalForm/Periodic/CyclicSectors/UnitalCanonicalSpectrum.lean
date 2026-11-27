@@ -33,10 +33,10 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder TNOperatorSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ} [NeZero D]
+variable {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
 
 open scoped Matrix.Norms.L2Operator in
-private theorem unital_spectralSup_eq_one (A : MPSTensor d D)
+private theorem unital_spectralSup_eq_one (A : MPTensor α (Fin D))
     (hOne : Kraus.transferMap A 1 = 1) :
     (⨆ μ ∈ spectrum ℂ (Kraus.transferMap A), (‖μ‖₊ : ENNReal)) = 1 := by
   simpa only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq] using
@@ -48,7 +48,7 @@ the actual transfer map; irreducibility is not an extra source hypothesis.
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 4 and the proof of
 Theorem 5, source lines 740–766 and 860–868. -/
 theorem isIrreducible_transferMap_of_unital_canonical
-    (A : MPSTensor d D) (hU : ∑ i, A i * (A i)ᴴ = 1)
+    (A : MPTensor α (Fin D)) (hU : ∑ i, A i * (A i)ᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (hUnique : ∀ X, Kraus.transferMap A X = X → ∃ c : ℂ, X = c • 1) :
@@ -82,7 +82,7 @@ period and a primitive generator of the actual unital transfer spectrum.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849–868. -/
 theorem exists_peripheral_generator_of_unital_canonical
-    (A : MPSTensor d D) (hU : ∑ i, A i * (A i)ᴴ = 1)
+    (A : MPTensor α (Fin D)) (hU : ∑ i, A i * (A i)ᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (hUnique : ∀ X, Kraus.transferMap A X = X → ∃ c : ℂ, X = c • 1)
@@ -115,7 +115,7 @@ algebraic multiplicity one: its maximal generalized eigenspace is a line.
 Source: the peripheral spectral structure invoked in PGVWC07,
 arXiv:quant-ph/0608197, proof of Theorem 5, lines 860–868. -/
 theorem peripheral_genEigenspace_finrank_eq_one_of_unital_canonical
-    (A : MPSTensor d D) (hU : ∑ i, A i * (A i)ᴴ = 1)
+    (A : MPTensor α (Fin D)) (hU : ∑ i, A i * (A i)ᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (hUnique : ∀ X, Kraus.transferMap A X = X → ∃ c : ℂ, X = c • 1)

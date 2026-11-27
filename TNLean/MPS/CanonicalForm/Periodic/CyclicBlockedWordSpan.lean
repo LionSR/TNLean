@@ -25,9 +25,8 @@ arXiv:cond-mat/9410110, equations (3.10)--(3.11) and Section 6.
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] {D r : ℕ} {dim : Fin r → ℕ}
 
 /-- Embed a tuple of sector matrices into the ambient virtual matrix algebra.
 Source: arXiv:1708.00029, Lemma bdcf. -/
@@ -44,11 +43,11 @@ noncomputable def sectorMatrixEmbedding
 /-- An isometric resolution and letter intertwiners map each simultaneous word
 to the corresponding ambient word. Source: arXiv:1708.00029, Lemma bdcf. -/
 theorem sectorMatrixEmbedding_wordTuple
-    (C : MPSTensor d D) (B : (j : Fin r) → MPSTensor d (dim j))
+    (C : MPTensor α (Fin D)) (B : (j : Fin r) → MPTensor α (Fin (dim j)))
     (V : (j : Fin r) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
     (hInt : ∀ j i, C i * V j = V j * B j i)
-    (q : ℕ) (σ : Fin q → Fin d) :
+    (q : ℕ) (σ : Fin q → α) :
     sectorMatrixEmbedding V (wordTuple B q σ) = Kraus.evalWord C (List.ofFn σ) := by
   change (∑ j, V j * Kraus.evalWord (B j) (List.ofFn σ) * (V j)ᴴ) = _
   have hW (j : Fin r) := Kraus.evalWord_intertwine C (B j) (V j) (hInt j) (List.ofFn σ)
@@ -56,7 +55,7 @@ theorem sectorMatrixEmbedding_wordTuple
 /-- Full simultaneous sector spanning contains the entire embedded matrix algebra
 in the ambient word span. Source: arXiv:1708.00029, Lemma bdcf. -/
 theorem sectorMatrixEmbedding_range_le_wordSpan
-    (C : MPSTensor d D) (B : (j : Fin r) → MPSTensor d (dim j))
+    (C : MPTensor α (Fin D)) (B : (j : Fin r) → MPTensor α (Fin (dim j)))
     (V : (j : Fin r) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
     (hInt : ∀ j i, C i * V j = V j * B j i)
@@ -92,7 +91,7 @@ ambient word span under simultaneous sector spanning.
 Source: arXiv:1708.00029, Lemma bdcf; Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.10)--(3.11). -/
 theorem mem_wordSpan_of_sector_wordTupleSpanTop
-    (C : MPSTensor d D) (B : (j : Fin r) → MPSTensor d (dim j))
+    (C : MPTensor α (Fin D)) (B : (j : Fin r) → MPTensor α (Fin (dim j)))
     (V : (j : Fin r) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
@@ -110,12 +109,12 @@ The supports may be assigned arbitrary cyclic labels.
 Source: arXiv:1708.00029, Lemma bdcf; Nachtergaele,
 arXiv:cond-mat/9410110, Section 6. -/
 theorem wordSpan_eq_cyclicMatrixSubspace_of_blocked_sector_span [NeZero r]
-    (A : MPSTensor d D) (P : ZMod r → Matrix (Fin D) (Fin D) ℂ)
-    (B : (j : Fin r) → MPSTensor (blockPhysDim d r) (dim j))
+    (A : MPTensor α (Fin D)) (P : ZMod r → Matrix (Fin D) (Fin D) ℂ)
+    (B : (j : Fin r) → MPTensor (Fin r → α) (Fin (dim j)))
     (V : (j : Fin r) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, blockTensor A r i * V j = V j * B j i)
+    (hInt : ∀ j i, Kraus.block A r i * V j = V j * B j i)
     (hVP : ∀ j, ∃ u : ZMod r, V j * (V j)ᴴ = P u)
     (hCycle : ∀ u i, P u * A i = A i * P (u + 1))
     {q : ℕ} (hSpan : WordTupleSpanTop B q) :
@@ -123,7 +122,7 @@ theorem wordSpan_eq_cyclicMatrixSubspace_of_blocked_sector_span [NeZero r]
   apply le_antisymm (wordSpan_le_cyclicMatrixSubspace A P hCycle (q * r))
   intro X hX
   rw [← Kraus.wordSpan_blockTensor A r q]
-  apply mem_wordSpan_of_sector_wordTupleSpanTop (blockTensor A r) B V hV hSum hInt hSpan
+  apply mem_wordSpan_of_sector_wordTupleSpanTop (Kraus.block A r) B V hV hSum hInt hSpan
   intro j
   obtain ⟨u, hu⟩ := hVP j
   simpa only [hu, Nat.cast_mul, ZMod.natCast_self, mul_zero, add_zero] using hX u

@@ -43,11 +43,10 @@ the equal-period sector-match case of arXiv:1708.00029, Appendix A.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
-open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ### One-site rotation covariance of the cross sector overlap
 
@@ -61,12 +60,12 @@ cross overlap is unchanged by the simultaneous shift. -/
 
 /-- One-site cyclic rotation of a configuration of length `L'+1`:
 move the last letter to the front. -/
-def rotateCfg {d L' : ℕ} : (Fin (L' + 1) → Fin d) ≃ (Fin (L' + 1) → Fin d) :=
-  Equiv.arrowCongr (finRotate (L' + 1)) (Equiv.refl (Fin d))
+def rotateCfg {L' : ℕ} : (Fin (L' + 1) → α) ≃ (Fin (L' + 1) → α) :=
+  Equiv.arrowCongr (finRotate (L' + 1)) (Equiv.refl α)
 
 /-- Word evaluation of the rotated configuration pulls the last letter to the front. -/
-private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPSTensor d D)
-    (σ : Fin (L' + 1) → Fin d) :
+private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPTensor α (Fin D))
+    (σ : Fin (L' + 1) → α) :
     Kraus.evalWord A (List.ofFn (rotateCfg σ)) =
       A (σ (Fin.last L')) * Kraus.evalWord A (List.ofFn (Fin.init σ)) := by
   have hrotate : rotateCfg σ = Fin.cons (σ (Fin.last L')) (Fin.init σ) := by
@@ -83,8 +82,8 @@ private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPSTensor d D)
   simp only [hrotate, List.ofFn_cons, Kraus.evalWord_cons]
 
 /-- Word evaluation of the original configuration pulls the last letter to the right. -/
-private lemma evalWord_ofFn_eq_init_mul_last {L' : ℕ} (A : MPSTensor d D)
-    (σ : Fin (L' + 1) → Fin d) :
+private lemma evalWord_ofFn_eq_init_mul_last {L' : ℕ} (A : MPTensor α (Fin D))
+    (σ : Fin (L' + 1) → α) :
     Kraus.evalWord A (List.ofFn σ) =
       Kraus.evalWord A (List.ofFn (Fin.init σ)) * A (σ (Fin.last L')) := by
   rw [List.ofFn_succ']
@@ -97,10 +96,10 @@ arXiv:1708.00029 lines 985--1002).  Given the single-site off-diagonal shift
 `P (k+1) * A i = A i * P k`, the projector-weighted trace at index `k+1` of the
 rotated word equals the projector-weighted trace at index `k` of the original
 word. -/
-private lemma trace_proj_evalWord_rotateCfg {L' m : ℕ} [NeZero m] (A : MPSTensor d D)
+private lemma trace_proj_evalWord_rotateCfg {L' m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (hShift : ∀ (k : Fin m) (i : Fin d), P (k + 1) * A i = A i * P k)
-    (k : Fin m) (σ : Fin (L' + 1) → Fin d) :
+    (hShift : ∀ (k : Fin m) (i : α), P (k + 1) * A i = A i * P k)
+    (k : Fin m) (σ : Fin (L' + 1) → α) :
     (P (k + 1) * Kraus.evalWord A (List.ofFn (rotateCfg σ))).trace =
       (P k * Kraus.evalWord A (List.ofFn σ)).trace := by
   rw [evalWord_ofFn_rotateCfg, evalWord_ofFn_eq_init_mul_last]
@@ -113,18 +112,18 @@ The cross overlap built from projector-weighted traces is invariant under the
 simultaneous one-step shift `(u, v) → (u+1, v+1)`, for any positive length
 (arXiv:1708.00029 lines 985--1002, translation operator `T`). -/
 private lemma sum_trace_proj_overlap_shift {L' m : ℕ} [NeZero m]
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     (P Q : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (hShiftA : ∀ (k : Fin m) (i : Fin d), P (k + 1) * A i = A i * P k)
-    (hShiftB : ∀ (k : Fin m) (i : Fin d), Q (k + 1) * B i = B i * Q k)
+    (hShiftA : ∀ (k : Fin m) (i : α), P (k + 1) * A i = A i * P k)
+    (hShiftB : ∀ (k : Fin m) (i : α), Q (k + 1) * B i = B i * Q k)
     (u v : Fin m) :
-    (∑ σ : Fin (L' + 1) → Fin d,
+    (∑ σ : Fin (L' + 1) → α,
         (P (u + 1) * Kraus.evalWord A (List.ofFn σ)).trace *
           star ((Q (v + 1) * Kraus.evalWord B (List.ofFn σ)).trace)) =
-      ∑ σ : Fin (L' + 1) → Fin d,
+      ∑ σ : Fin (L' + 1) → α,
         (P u * Kraus.evalWord A (List.ofFn σ)).trace *
           star ((Q v * Kraus.evalWord B (List.ofFn σ)).trace) := by
-  rw [← Equiv.sum_comp (rotateCfg (d := d) (L' := L'))
+  rw [← Equiv.sum_comp (rotateCfg (α := α) (L' := L'))
     (fun σ => (P (u + 1) * Kraus.evalWord A (List.ofFn σ)).trace *
       star ((Q (v + 1) * Kraus.evalWord B (List.ofFn σ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
@@ -135,55 +134,55 @@ private lemma sum_trace_proj_overlap_shift {L' m : ℕ} [NeZero m]
 `IsCyclicSectorDecomp` trace formula and reindexed to physical configurations
 of length `N * m`. -/
 private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero m]
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {dimA dimB : Fin m → ℕ}
-    (blocksA : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
-    (blocksB : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (blocksA : (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
+    (blocksB : (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (PA PB : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (hTraceA : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksA k) σ = (PA k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
-    (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksB k) σ = (PB k * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace)
+    (hTraceA : ∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+      mpv (blocksA k) σ = (PA k * Kraus.evalWord (Kraus.block A m) (List.ofFn σ)).trace)
+    (hTraceB : ∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+      mpv (blocksB k) σ = (PB k * Kraus.evalWord (Kraus.block B m) (List.ofFn σ)).trace)
     (u v : Fin m) (N : ℕ) :
-    mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N =
-      ∑ τ : Fin (N * m) → Fin d,
+    mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N =
+      ∑ τ : Fin (N * m) → α,
         (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
           star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace) := by
   classical
   rw [mpvOverlap]
-  rw [← Equiv.sum_comp (Kraus.blockedConfigEquiv d N m)
-    (fun τ : Fin (N * m) → Fin d =>
+  rw [← Equiv.sum_comp (Kraus.blockConfigEquiv α N m)
+    (fun τ : Fin (N * m) → α =>
       (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
         star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  rw [hTraceA u N σ, hTraceB v N σ, Kraus.ofFn_blockedConfigEquiv]
-  rw [← evalWord_blockTensor, ← evalWord_blockTensor]
+  rw [hTraceA u N σ, hTraceB v N σ, Kraus.ofFn_blockConfigEquiv]
+  rw [← Kraus.evalWord_block, ← Kraus.evalWord_block]
 
 /-- **One-step transport of the cross sector overlap** (positive lengths,
 arXiv:1708.00029 lines 985--1002).  For `N ≥ 1`, the cross overlap of compressed
 cyclic sectors is invariant under the simultaneous index shift
 `(u, v) → (u+1, v+1)`. -/
 private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero m]
-    (A B : MPSTensor d D)
-    (hA_lc : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_lc : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (A B : MPTensor α (Fin D))
+    (hA_lc : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hB_lc : ∑ i : α, (B i)ᴴ * B i = 1)
     {dimA dimB : Fin m → ℕ}
-    (blocksA : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
-    (blocksB : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (blocksA : (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
+    (blocksB : (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (PA PB : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hPAproj : ∀ k, IsOrthogonalProjection (PA k))
     (hPBproj : ∀ k, IsOrthogonalProjection (PB k))
-    (hShiftA : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (PA (k + 1)) =
+    (hShiftA : ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (PA (k + 1)) =
       PA k)
-    (hShiftB : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) (PB (k + 1)) =
+    (hShiftB : ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (B i)ᴴ) (PB (k + 1)) =
       PB k)
-    (hTraceA : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksA k) σ = (PA k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
-    (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksB k) σ = (PB k * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace)
+    (hTraceA : ∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+      mpv (blocksA k) σ = (PA k * Kraus.evalWord (Kraus.block A m) (List.ofFn σ)).trace)
+    (hTraceB : ∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+      mpv (blocksB k) σ = (PB k * Kraus.evalWord (Kraus.block B m) (List.ofFn σ)).trace)
     (u v : Fin m) (N : ℕ) (hN : 0 < N) :
-    mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA (u + 1)) (blocksB (v + 1)) N =
-      mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := (Fin m → α)) (blocksA (u + 1)) (blocksB (v + 1)) N =
+      mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N := by
   have hLetterA := offDiag_shift_of_adjoint_cyclic_shift A hA_lc hPAproj hShiftA
   have hLetterB := offDiag_shift_of_adjoint_cyclic_shift B hB_lc hPBproj hShiftB
   rw [sectorOverlap_eq_physical_sum A B blocksA blocksB PA PB hTraceA hTraceB,
@@ -200,16 +199,16 @@ invariant under the simultaneous index shift (u, v) ↦ (u + 1, v + 1).
 This is the formal overlap version of the translation-operator step in
 arXiv:1708.00029, lines 985--1002. -/
 lemma sectorOverlap_succ_eq_of_cyclicSectorDecomp {m : ℕ} [NeZero m]
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     {dimA dimB : Fin m → ℕ}
-    (blocksA : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
-    (blocksB : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (blocksA : (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
+    (blocksB : (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (u v : Fin m) (N : ℕ) (hN : 0 < N) :
-    mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA (u + 1)) (blocksB (v + 1)) N =
-      mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := (Fin m → α)) (blocksA (u + 1)) (blocksB (v + 1)) N =
+      mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N := by
   obtain ⟨PA, _φA, hPAproj, _hPAsum, hShiftA, _hCommA, hTraceA, _⟩ := hA_cyclic
   obtain ⟨PB, _φB, hPBproj, _hPBsum, hShiftB, _hCommB, hTraceB, _⟩ := hB_cyclic
   exact sectorOverlap_succ_eq A B hA_lc hB_lc blocksA blocksB PA PB
@@ -223,11 +222,10 @@ section SectorMatchPropagation
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct Kraus
 open Filter Matrix Module
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
 
@@ -237,31 +235,31 @@ tending to `1`.  The unit modulus of the gauge phase follows from the matching
 self-overlap limits (arXiv:1606.00608, Lemma equalMPS). -/
 private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
     {DA DB : ℕ} [NeZero DA] [NeZero DB]
-    (CA : MPSTensor d DA) (CB : MPSTensor d DB)
+    (CA : MPTensor α (Fin DA)) (CB : MPTensor α (Fin DB))
     (hdim : DA = DB)
     (hCA_irr : Kraus.IsIrreducibleFamily CA) (hCB_irr : Kraus.IsIrreducibleFamily CB)
-    (hCA_norm : ∑ i : Fin d, (CA i)ᴴ * CA i = 1)
-    (hCB_norm : ∑ i : Fin d, (CB i)ᴴ * CB i = 1)
-    (hCA_prim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DA) CA))
-    (hCB_prim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DB) CB))
-    (hMatch : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) CA) CB) :
-    Tendsto (fun N => ‖mpvOverlap (α := Fin d) CA CB N‖) atTop (nhds (1 : ℝ)) := by
+    (hCA_norm : ∑ i : α, (CA i)ᴴ * CA i = 1)
+    (hCB_norm : ∑ i : α, (CB i)ᴴ * CB i = 1)
+    (hCA_prim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DA) CA))
+    (hCB_prim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DB) CB))
+    (hMatch : GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) CA) CB) :
+    Tendsto (fun N => ‖mpvOverlap (α := α) CA CB N‖) atTop (nhds (1 : ℝ)) := by
   classical
   subst hdim
   simp only [cast_eq] at hMatch
-  have hCA_self : Tendsto (fun N => mpvOverlap (α := Fin d) CA CA N) atTop (nhds (1 : ℂ)) :=
+  have hCA_self : Tendsto (fun N => mpvOverlap (α := α) CA CA N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible CA hCA_irr hCA_norm hCA_prim
-  have hCB_self : Tendsto (fun N => mpvOverlap (α := Fin d) CB CB N) atTop (nhds (1 : ℂ)) :=
+  have hCB_self : Tendsto (fun N => mpvOverlap (α := α) CB CB N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible CB hCB_irr hCB_norm hCB_prim
   obtain ⟨X, ζ, _hζ, hX⟩ := hMatch
-  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv CB σ = ζ ^ N * mpv CA σ :=
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → α), mpv CB σ = ζ ^ N * mpv CA σ :=
     mpv_eq_pow_mul_of_gaugePhase CA CB X ζ hX
   have hζnorm : ‖ζ‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale (A := CA) (B := CB) (ζ := ζ)
       (by simpa using hCA_self.norm) (by simpa using hCB_self.norm)
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := CA) (B := CB) (ζ := ζ) hmpv)
   have hCrossNormEq : ∀ N,
-      ‖mpvOverlap (α := Fin d) CA CB N‖ = ‖mpvOverlap (α := Fin d) CA CA N‖ := by
+      ‖mpvOverlap (α := α) CA CB N‖ = ‖mpvOverlap (α := α) CA CA N‖ := by
     intro N
     rw [mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul (A := CA) (B := CB) (ζ := ζ) hmpv N]
     simp [norm_pow, hζnorm]
@@ -276,10 +274,10 @@ The corner equivalences identify a positive-dimensional matrix algebra with the 
 therefore `P (u + 1) = 0`; the cyclic relation `E†(P (u + 1)) = P u` then gives a
 contradiction. -/
 private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
-    (A : MPSTensor d D)
+    (A : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (hCyclic : IsCyclicSectorDecomp A blocks)
     {u : Fin m} (hNondeg : dim u ≠ 0) :
     dim (u + 1) ≠ 0 := by
@@ -342,25 +340,25 @@ so that the match transports along these transitions. This is a formalization of
 the same step via the `IsCyclicSectorDecomp` relation 𝓔_A^{*}(P_{k+1}) = P_k; see
 docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
@@ -369,13 +367,13 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     (hNondeg : dimA u ≠ 0)
     (hMatch : GaugePhaseEquiv
       (cast (congr_arg
-        (MPSTensor (blockPhysDim d m)) hdim)
+        (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
         (blocksA u))
       (blocksB v)) :
     ∃ (hdim' : dimA (u + 1) = dimB (v + 1)),
       GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim')
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim')
           (blocksA (u + 1)))
         (blocksB (v + 1)) := by
   -- The translation-operator step of arXiv:1708.00029, Appendix A (lines
@@ -416,13 +414,13 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
       hIrrA_u hIrrB_v (hA_blocks_lc u) (hB_blocks_lc v) hPrimA_u hPrimB_v hMatch
   -- Step B: the cross overlap is invariant under `(u, v) → (u+1, v+1)` at positive lengths.
   have hShiftEq : ∀ N : ℕ, 0 < N →
-      mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA (u + 1)) (blocksB (v + 1)) N =
-        mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := fun N hN =>
+      mpvOverlap (α := (Fin m → α)) (blocksA (u + 1)) (blocksB (v + 1)) N =
+        mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N := fun N hN =>
     sectorOverlap_succ_eq_of_cyclicSectorDecomp A B hA.leftCanonical hB.leftCanonical
       blocksA blocksB hA_cyclic hB_cyclic u v N hN
   -- Step C: transport the norm limit, then conclude gauge-phase equivalence at `(u+1, v+1)`.
   have hNorm_succ :
-      Tendsto (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m))
+      Tendsto (fun N => ‖mpvOverlap (α := (Fin m → α))
         (blocksA (u + 1)) (blocksB (v + 1)) N‖) atTop (nhds (1 : ℝ)) := by
     refine hNorm_uv.congr' ?_
     filter_upwards [eventually_gt_atTop 0] with N hN
@@ -430,32 +428,32 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
   -- The dimensions must agree, else the overlap would decay to zero.
   have hdim' : dimA (u + 1) = dimB (v + 1) := by
     by_contra hne
-    have hZero : Tendsto (fun N => mpvOverlap (α := Fin (blockPhysDim d m))
+    have hZero : Tendsto (fun N => mpvOverlap (α := (Fin m → α))
         (blocksA (u + 1)) (blocksB (v + 1)) N) atTop (nhds (0 : ℂ)) :=
       mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
         (blocksA (u + 1)) (blocksB (v + 1)) hIrrA_su hIrrB_sv
         (hA_blocks_lc (u + 1)) (hB_blocks_lc (v + 1)) hne
-    have hZeroNorm : Tendsto (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m))
+    have hZeroNorm : Tendsto (fun N => ‖mpvOverlap (α := (Fin m → α))
         (blocksA (u + 1)) (blocksB (v + 1)) N‖) atTop (nhds (0 : ℝ)) := by
       simpa using hZero.norm
     exact one_ne_zero (tendsto_nhds_unique hNorm_succ hZeroNorm)
   refine ⟨hdim', ?_⟩
   -- With matched dimensions, the unit-modulus overlap yields a gauge-phase equivalence.
-  have hAcast_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim')
+  have hAcast_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim')
       (blocksA (u + 1))) :=
     (isIrreducibleFamily_cast_dim hdim' (blocksA (u + 1))).mpr hIrrA_su
-  have hAcast_norm : ∑ i : Fin (blockPhysDim d m),
-      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)) i)ᴴ *
-        (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)) i) = 1 :=
+  have hAcast_norm : ∑ i : (Fin m → α),
+      (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim') (blocksA (u + 1)) i)ᴴ *
+        (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim') (blocksA (u + 1)) i) = 1 :=
     (leftCanonical_cast_dim hdim' (blocksA (u + 1))).mpr (hA_blocks_lc (u + 1))
   have hNorm_succ_cast :
-      Tendsto (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m))
-        (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)))
+      Tendsto (fun N => ‖mpvOverlap (α := (Fin m → α))
+        (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim') (blocksA (u + 1)))
         (blocksB (v + 1)) N‖) atTop (nhds (1 : ℝ)) := by
     refine hNorm_succ.congr fun N => ?_
     rw [mpvOverlap_cast_dim_left hdim' (blocksA (u + 1)) (blocksB (v + 1)) N]
   exact gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
-    (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1))) (blocksB (v + 1))
+    (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim') (blocksA (u + 1))) (blocksB (v + 1))
     hAcast_irr hIrrB_sv hAcast_norm (hB_blocks_lc (v + 1)) hNorm_succ_cast
 
 /-- One-step cyclic transport statement for sector matches.
@@ -467,25 +465,25 @@ equivalence between sector pair (u, v) to one between (u + 1, v + 1). The
 conclusion also propagates nondegeneracy so the step can be iterated around the
 cycle. -/
 private lemma sectorMatch_succ_of_cyclicSectorDecomp
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
@@ -494,14 +492,14 @@ private lemma sectorMatch_succ_of_cyclicSectorDecomp
     (hNondeg : dimA u ≠ 0)
     (hMatch : GaugePhaseEquiv
       (cast (congr_arg
-        (MPSTensor (blockPhysDim d m)) hdim)
+        (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
         (blocksA u))
       (blocksB v)) :
     ∃ (hdim' : dimA (u + 1) = dimB (v + 1)),
       dimA (u + 1) ≠ 0 ∧
       GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim')
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim')
           (blocksA (u + 1)))
         (blocksB (v + 1)) := by
   obtain ⟨hdim', hMatch'⟩ :=
@@ -515,15 +513,15 @@ private lemma sectorMatch_succ_of_cyclicSectorDecomp
 /-- Transport a sector `GaugePhaseEquiv` across equalities of both sector indices. -/
 private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
-    (A : (j : Fin gA) → MPSTensor d (dimA j))
-    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (A : (j : Fin gA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin gB) → MPTensor α (Fin (dimB k)))
     {i₁ i₂ : Fin gA} {j₁ j₂ : Fin gB}
     (hi : i₁ = i₂) (hj : j₁ = j₂)
     (hdim : dimA i₁ = dimB j₁)
     (hg : GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor d) hdim) (A i₁)) (B j₁)) :
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (A i₁)) (B j₁)) :
     GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor d) (show dimA i₂ = dimB j₂ from hi ▸ hj ▸ hdim))
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) (show dimA i₂ = dimB j₂ from hi ▸ hj ▸ hdim))
         (A i₂)) (B j₂) := by
   subst hi
   subst hj
@@ -555,25 +553,25 @@ unit-modulus cross overlap that certifies the match can reappear at the shifted
 sector pair.  They also supply the left-canonical normalization that keeps the
 propagated phases unit-modulus. -/
 lemma sectorMatch_propagation
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
@@ -582,14 +580,14 @@ lemma sectorMatch_propagation
     (hNondeg : dimA u₀ ≠ 0)
     (hMatch : GaugePhaseEquiv
       (cast (congr_arg
-        (MPSTensor (blockPhysDim d m)) hdim₀)
+        (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim₀)
         (blocksA u₀))
       (blocksB v₀)) :
     ∀ l : Fin m,
       ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
         GaugePhaseEquiv
           (cast (congr_arg
-            (MPSTensor (blockPhysDim d m)) hdim)
+            (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
             (blocksA (u₀ + l)))
           (blocksB (v₀ + l)) := by
   -- Iterate the one-step transport `sectorMatch_succ_of_cyclicSectorDecomp` (which
@@ -600,14 +598,14 @@ lemma sectorMatch_propagation
   have key : ∀ l : Fin m, ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
       dimA (u₀ + l) ≠ 0 ∧
       GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA (u₀ + l)))
+        (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim) (blocksA (u₀ + l)))
         (blocksB (v₀ + l)) := by
     intro l
     refine Fin.cyclic_induction
       (P := fun l => ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
         dimA (u₀ + l) ≠ 0 ∧
         GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA (u₀ + l)))
+          (cast (congr_arg (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim) (blocksA (u₀ + l)))
           (blocksB (v₀ + l))) ?_ ?_ l
     · exact ⟨(add_zero u₀).symm ▸ (add_zero v₀).symm ▸ hdim₀,
         (add_zero u₀).symm ▸ hNondeg,
@@ -641,11 +639,10 @@ sector-match branch of the periodic-overlap dichotomy.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
 open Filter Matrix Module
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they satisfy the repeated-block
@@ -670,25 +667,25 @@ used in Lemma bdcf before the Appendix A contraction step.
 This is the repeated-block consequence of the sector-match case in
 arXiv:1708.00029, Appendix A, lines 961--1117. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     {PA PB : Fin m → MatrixAlg D}
     {φA : (k : Fin m) →
@@ -697,15 +694,15 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
       Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PB k)}
     (hA_cyclic : IsCyclicSectorDecompWith A blocksA PA φA)
     (hB_cyclic : IsCyclicSectorDecompWith B blocksB PB φB)
-    (hA_letter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φA k (blocksA k i)).1 = PA k * (blockTensor A m) i * PA k)
-    (hB_letter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φB k (blocksB k i)).1 = PB k * (blockTensor B m) i * PB k)
+    (hA_letter : ∀ k (i : Fin m → α),
+      (φA k (blocksA k i)).1 = PA k * (Kraus.block A m) i * PA k)
+    (hB_letter : ∀ k (i : Fin m → α),
+      (φB k (blocksB k i)).1 = PB k * (Kraus.block B m) i * PB k)
     (hNondegA : ∀ u, dimA u ≠ 0)
     (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
       GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim)
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
           (blocksA u₀))
         (blocksB v₀)) :
     RepeatedBlocks A B := by
@@ -755,7 +752,7 @@ match), so the overlap must decay. This covers the `D₁ ≠ D₂` subcase of
 the main dichotomy regardless of period matching. -/
 theorem periodicOverlap_tendsto_zero_of_ne_dim
     {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hdim : D₁ ≠ D₂) :

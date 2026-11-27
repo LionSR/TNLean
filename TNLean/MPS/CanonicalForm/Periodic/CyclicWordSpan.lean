@@ -33,7 +33,7 @@ and Lemma existenceinteraction, for the intersection argument.
 
 open scoped Matrix BigOperators
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] {D m : ℕ}
 
 /-- Matrices of cyclic degree \(n\) satisfy \(P_uX=XP_{u+n}\).
 Source: arXiv:1708.00029, Lemma bdcf. The definition itself only requires
@@ -52,8 +52,8 @@ def cyclicMatrixSubspace (P : ZMod m → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
 /-- A word has its length as cyclic degree.
 Source: arXiv:1708.00029, Lemma bdcf. -/
 theorem evalWord_mem_cyclicMatrixSubspace
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
-    (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (w : List (Fin d)) :
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (w : List α) :
     Kraus.evalWord A w ∈ cyclicMatrixSubspace P w.length := by
   induction w with
   | nil => simp [cyclicMatrixSubspace]
@@ -67,7 +67,7 @@ theorem evalWord_mem_cyclicMatrixSubspace
 /-- Every word of fixed length belongs to the corresponding cyclic degree.
 Source: arXiv:1708.00029, Lemma bdcf. -/
 theorem wordSpan_le_cyclicMatrixSubspace
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (N : ℕ) :
     Kraus.wordSpan A N ≤ cyclicMatrixSubspace P N := by
   rw [Kraus.wordSpan, Submodule.span_le]
@@ -98,7 +98,7 @@ every later degree. This is the adjoint-word reconstruction used in the
 intersection argument of Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.10)--(3.11). The initial spanning equality is explicit. -/
 theorem wordSpan_eq_cyclicMatrixSubspace_add
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ u, (P u).IsHermitian)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     (hLeft : ∑ i, (A i)ᴴ * A i = 1) {q : ℕ}
@@ -107,7 +107,7 @@ theorem wordSpan_eq_cyclicMatrixSubspace_add
   apply le_antisymm (wordSpan_le_cyclicMatrixSubspace A P hshift (q + r))
   intro X hX
   rw [Kraus.wordSpan_add]
-  have hsum : (∑ σ : Fin r → Fin d,
+  have hsum : (∑ σ : Fin r → α,
       (X * (Kraus.evalWord A (List.ofFn σ))ᴴ) * Kraus.evalWord A (List.ofFn σ)) = X := by
     simp only [Matrix.mul_assoc, ← Finset.mul_sum,
       Kraus.sum_evalWord_conjTranspose_mul_evalWord A hLeft r, Matrix.mul_one]
@@ -122,7 +122,7 @@ theorem wordSpan_eq_cyclicMatrixSubspace_add
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11),
 using the cyclic-sector coordinates of arXiv:1708.00029, Lemma bdcf. -/
 theorem wordSpan_eq_cyclicMatrixSubspace_of_ge
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ u, (P u).IsHermitian)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     (hLeft : ∑ i, (A i)ᴴ * A i = 1) {q : ℕ}

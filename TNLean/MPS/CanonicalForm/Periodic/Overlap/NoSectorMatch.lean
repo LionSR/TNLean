@@ -57,7 +57,7 @@ overlap tends to $0$.
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
 
@@ -77,15 +77,15 @@ load-bearing step of the substitute proof route for different-period decay — t
 peripheral spectrum in place of the paper's lcm-blocking and one-site translation
 argument — documented in docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
-    {A B : MPSTensor d D}
+    {A B : MPTensor α (Fin D)}
     {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hGPE : GaugePhaseEquiv A B) : m_a = m_b := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨X, ζ, hζ_ne, hBi⟩ := hGPE
   -- Transfer map scaling: B = ζ • (X A X⁻¹) implies E_B = |ζ|² E_{XAX⁻¹}
-  have hEB_eq : ∀ Y, Kraus.transferMap (ι := Fin d) (n := Fin D) B Y =
+  have hEB_eq : ∀ Y, Kraus.transferMap (ι := α) (n := Fin D) B Y =
       (ζ * starRingEnd ℂ ζ) •
-        (X.val * Kraus.transferMap (ι := Fin d) (n := Fin D) A
+        (X.val * Kraus.transferMap (ι := α) (n := Fin D) A
           (X⁻¹.val * Y * X⁻¹.valᴴ) * X.valᴴ) := by
     intro Y
     simp only [Kraus.transferMap_apply]
@@ -105,15 +105,15 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
   have hRepeated : RepeatedBlocks A B :=
     repeatedBlocks_of_gaugePhaseData_norm_one X hζ_norm hBi
   -- Peripheral eigenvalue equality via conjugation
-  have hSpec : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := by
-    have hEB_is_conj : Kraus.transferMap (ι := Fin d) (n := Fin D) B =
-        (glConjEquiv X).conj (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+  have hSpec : peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) B) := by
+    have hEB_is_conj : Kraus.transferMap (ι := α) (n := Fin D) B =
+        (glConjEquiv X).conj (Kraus.transferMap (ι := α) (n := Fin D) A) := by
       apply LinearMap.ext; intro Y
       rw [hEB_eq, hζζ_real, show (↑(‖ζ‖ ^ 2) : ℂ) = (1 : ℂ) from by simp [h_eig_eq],
         one_smul,
-        show (glConjEquiv X).conj (Kraus.transferMap (ι := Fin d) (n := Fin D) A) Y =
-          X.val * (Kraus.transferMap (ι := Fin d) (n := Fin D) A
+        show (glConjEquiv X).conj (Kraus.transferMap (ι := α) (n := Fin D) A) Y =
+          X.val * (Kraus.transferMap (ι := α) (n := Fin D) A
             (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from by
           rw [LinearEquiv.conj_apply_apply]
           simp only [glConjEquiv, LinearEquiv.trans_apply, LinearEquiv.symm_trans_apply,
@@ -123,7 +123,7 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
       simp only [Matrix.mul_assoc]
     rw [hEB_is_conj]
     exact (peripheralEigenvalues_conj (glConjEquiv X)
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) A)).symm
+      (Kraus.transferMap (ι := α) (n := Fin D) A)).symm
   exact IsPeriodic.period_eq_of_repeatedBlocks hA hB hRepeated hSpec
 
 /-- If two periodic tensors have different periods `m_a ≠ m_b`, their overlap
@@ -150,7 +150,7 @@ mathematically equivalent substitute for the paper's step, documented in
 docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 theorem periodicOverlap_tendsto_zero_of_ne_period
     {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hne : m_a ≠ m_b) :
@@ -172,11 +172,10 @@ end DifferentPeriod
 
 section NoSectorMatch
 
-open Kraus (blockPhysDim wordOfBlock blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
@@ -200,16 +199,16 @@ spectrum (see `IsCyclicSectorDecomp`).
 The orbit-lift / corner-irreducibility input is supplied unconditionally by
 `SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocks k i)ᴴ * blocks k i = 1)
     (hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
@@ -223,55 +222,55 @@ lemma sectorBlocked_isNormal_of_isPeriodic
 /-- Gauge-phase equivalence is preserved by physical blocking.
 
 If `B i = ζ · X A i X⁻¹`, then every blocked letter is a word of length `L`,
-so `blockTensor B L` is related to `blockTensor A L` by the same gauge and
+so `Kraus.block B L` is related to `Kraus.block A L` by the same gauge and
 phase `ζ ^ L`. -/
 private theorem gaugePhaseEquiv_blockTensor
-    (A B : MPSTensor d D) (L : ℕ)
+    (A B : MPTensor α (Fin D)) (L : ℕ)
     (hGPE : GaugePhaseEquiv A B) :
-    GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A L)
-      (blockTensor (d := d) (n := Fin D) B L) := by
+    GaugePhaseEquiv (Kraus.block A L)
+      (Kraus.block B L) := by
   rcases hGPE with ⟨X, ζ, hζ, hX⟩
   refine ⟨X, ζ ^ L, pow_ne_zero L hζ, ?_⟩
   intro i
-  let C : MPSTensor d D := fun j =>
+  let C : MPTensor α (Fin D) := fun j =>
     (X : Matrix (Fin D) (Fin D) ℂ) * A j *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
   have hB : B = fun j => ζ • C j := by
     funext j
     simpa [C] using hX j
   have hGauge :
-      Kraus.evalWord C (wordOfBlock d L i) =
+      Kraus.evalWord C (List.ofFn i) =
         (X : Matrix (Fin D) (Fin D) ℂ) *
-          Kraus.evalWord A (wordOfBlock d L i) *
+          Kraus.evalWord A (List.ofFn i) *
           ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
     simpa [C] using
       (evalWord_gauge (A := A) (B := C) X (by intro j; rfl)
-        (wordOfBlock d L i))
+        (List.ofFn i))
   calc
-    blockTensor (d := d) (n := Fin D) B L i
-        = Kraus.evalWord B (wordOfBlock d L i) := rfl
-    _ = Kraus.evalWord (fun j => ζ • C j) (wordOfBlock d L i) := by simp [hB]
-    _ = (ζ ^ (wordOfBlock d L i).length) •
-          Kraus.evalWord C (wordOfBlock d L i) := by
+    Kraus.block B L i
+        = Kraus.evalWord B (List.ofFn i) := rfl
+    _ = Kraus.evalWord (fun j => ζ • C j) (List.ofFn i) := by simp [hB]
+    _ = (ζ ^ (List.ofFn i).length) •
+          Kraus.evalWord C (List.ofFn i) := by
           simpa using
-            (Kraus.evalWord_smul (ζ := ζ) (K := C) (wordOfBlock d L i))
+            (Kraus.evalWord_smul (ζ := ζ) (K := C) (List.ofFn i))
     _ = (ζ ^ L) •
           ((X : Matrix (Fin D) (Fin D) ℂ) *
-            blockTensor (d := d) (n := Fin D) A L i *
+            Kraus.block A L i *
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-          simp only [hGauge, Kraus.length_wordOfBlock, Matrix.coe_units_inv]
+          simp only [hGauge, List.length_ofFn, Matrix.coe_units_inv]
           rfl
 
 /-- A periodic tensor has nonzero blocked self-overlap limit after blocking by
 its period; the limit is the period itself. This restates
 `periodicSelfOverlap_tendsto` for the blocked tensor. -/
 private theorem blockTensor_selfOverlap_tendsto_of_isPeriodic
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
     Tendsto
-      (fun N => mpvOverlap (α := Fin (blockPhysDim d m))
-        (blockTensor (d := d) (n := Fin D) A m)
-        (blockTensor (d := d) (n := Fin D) A m) N)
+      (fun N => mpvOverlap (α := (Fin m → α))
+        (Kraus.block A m)
+        (Kraus.block A m) N)
       atTop (nhds (m : ℂ)) := by
   have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   have hSelf : Tendsto (fun N => mpvOverlap A A (m * N)) atTop (nhds (m : ℂ)) :=
@@ -288,28 +287,28 @@ The proof uses the nonzero blocked self-overlap limits from Appendix A,
 lines 908-914 of arXiv:1708.00029, to show that the gauge factor has unit
 modulus. -/
 private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
-    (A B : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A B : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     (hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A m)
-        (blockTensor (d := d) (n := Fin D) B m)) :
+      GaugePhaseEquiv (Kraus.block A m)
+        (Kraus.block B m)) :
     ¬ Tendsto
-      (fun N => mpvOverlap (α := Fin (blockPhysDim d m))
-        (blockTensor (d := d) (n := Fin D) A m)
-        (blockTensor (d := d) (n := Fin D) B m) N)
+      (fun N => mpvOverlap (α := (Fin m → α))
+        (Kraus.block A m)
+        (Kraus.block B m) N)
       atTop (nhds (0 : ℂ)) := by
   classical
   intro hZero
   obtain ⟨X, ζ, _hζ, hX⟩ := hGPE_block
-  let Ablk := blockTensor (d := d) (n := Fin D) A m
-  let Bblk := blockTensor (d := d) (n := Fin D) B m
-  have hA_self : Tendsto (fun N => mpvOverlap (α := Fin (blockPhysDim d m)) Ablk Ablk N)
+  let Ablk := Kraus.block A m
+  let Bblk := Kraus.block B m
+  have hA_self : Tendsto (fun N => mpvOverlap (α := (Fin m → α)) Ablk Ablk N)
       atTop (nhds (m : ℂ)) := by
     simpa [Ablk] using blockTensor_selfOverlap_tendsto_of_isPeriodic A hA
-  have hB_self : Tendsto (fun N => mpvOverlap (α := Fin (blockPhysDim d m)) Bblk Bblk N)
+  have hB_self : Tendsto (fun N => mpvOverlap (α := (Fin m → α)) Bblk Bblk N)
       atTop (nhds (m : ℂ)) := by
     simpa [Bblk] using blockTensor_selfOverlap_tendsto_of_isPeriodic B hB
-  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → (Fin m → α)),
       mpv Bblk σ = ζ ^ N * mpv Ablk σ :=
     mpv_eq_pow_mul_of_gaugePhase Ablk Bblk X ζ hX
   have hm_norm_ne : ‖(m : ℂ)‖ ≠ 0 := by
@@ -320,18 +319,18 @@ private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
       hA_self.norm hB_self.norm
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk) (ζ := ζ) hmpv)
   have hCrossNormEq : ∀ N,
-      ‖mpvOverlap (α := Fin (blockPhysDim d m)) Ablk Bblk N‖ =
-        ‖mpvOverlap (α := Fin (blockPhysDim d m)) Ablk Ablk N‖ := by
+      ‖mpvOverlap (α := (Fin m → α)) Ablk Bblk N‖ =
+        ‖mpvOverlap (α := (Fin m → α)) Ablk Ablk N‖ := by
     intro N
     rw [mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk)
       (ζ := ζ) hmpv N]
     simp [norm_pow, hζnorm]
   have hCrossNormZero : Tendsto
-      (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m)) Ablk Bblk N‖)
+      (fun N => ‖mpvOverlap (α := (Fin m → α)) Ablk Bblk N‖)
       atTop (nhds (0 : ℝ)) := by
     simpa using hZero.norm
   have hA_self_norm_zero : Tendsto
-      (fun N => ‖mpvOverlap (α := Fin (blockPhysDim d m)) Ablk Ablk N‖)
+      (fun N => ‖mpvOverlap (α := (Fin m → α)) Ablk Ablk N‖)
       atTop (nhds (0 : ℝ)) :=
     hCrossNormZero.congr hCrossNormEq
   have hLimit : (0 : ℝ) = ‖(m : ℂ)‖ :=
@@ -352,46 +351,46 @@ blocked overlap, using the two block decompositions, as a finite double sum of
 sector overlaps. Global gauge-phase equivalence keeps the total blocked overlap
 from tending to zero, so not every mixed sector overlap can tend to zero. -/
 private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A m)
-        (blockTensor (d := d) (n := Fin D) B m)) :
+      GaugePhaseEquiv (Kraus.block A m)
+        (Kraus.block B m)) :
     ∃ u v : Fin m,
       ¬ Tendsto
-        (fun N => mpvOverlap (α := Fin (blockPhysDim d m))
+        (fun N => mpvOverlap (α := (Fin m → α))
           (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
   classical
   by_contra hNone
   simp only [not_exists, not_not] at hNone
   have hOverlap_eq : ∀ N,
-      mpvOverlap (α := Fin (blockPhysDim d m))
-          (blockTensor (d := d) (n := Fin D) A m)
-          (blockTensor (d := d) (n := Fin D) B m) N =
+      mpvOverlap (α := (Fin m → α))
+          (Kraus.block A m)
+          (Kraus.block B m) N =
         ∑ u : Fin m, ∑ v : Fin m,
-          mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N := by
+          mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N := by
     intro N
     exact mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-      (blockTensor (d := d) (n := Fin D) A m)
-      (blockTensor (d := d) (n := Fin D) B m)
+      (Kraus.block A m)
+      (Kraus.block B m)
       blocksA blocksB hA_mpv hB_mpv N
   have hInnerZero : ∀ u : Fin m,
       Tendsto
         (fun N => ∑ v : Fin m,
-          mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N)
+          mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
     intro u
     have := tendsto_finsetSum (s := Finset.univ) fun v _ => hNone u v
@@ -399,15 +398,15 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
   have hSumZero :
       Tendsto
         (fun N => ∑ u : Fin m, ∑ v : Fin m,
-          mpvOverlap (α := Fin (blockPhysDim d m)) (blocksA u) (blocksB v) N)
+          mpvOverlap (α := (Fin m → α)) (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
     have := tendsto_finsetSum (s := Finset.univ) fun u _ => hInnerZero u
     simpa using this
   have hGlobalZero :
       Tendsto
-        (fun N => mpvOverlap (α := Fin (blockPhysDim d m))
-          (blockTensor (d := d) (n := Fin D) A m)
-          (blockTensor (d := d) (n := Fin D) B m) N)
+        (fun N => mpvOverlap (α := (Fin m → α))
+          (Kraus.block A m)
+          (Kraus.block B m) N)
         atTop (nhds (0 : ℂ)) :=
     hSumZero.congr fun N => (hOverlap_eq N).symm
   exact
@@ -420,38 +419,38 @@ After transporting global gauge-phase equivalence to the blocked tensors, the
 block-sum overlap gives a non-decaying pair of sectors. Irreducibility then
 forces equal dimensions and gauge-phase equivalence for that pair. -/
 private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (hNondegA : ∀ u, dimA u ≠ 0)
     (hNondegB : ∀ v, dimB v ≠ 0)
     (hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A m)
-        (blockTensor (d := d) (n := Fin D) B m)) :
+      GaugePhaseEquiv (Kraus.block A m)
+        (Kraus.block B m)) :
     ∃ (u v : Fin m) (hdim : dimA u = dimB v),
       dimA u ≠ 0 ∧
       GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim)
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
           (blocksA u))
         (blocksB v) := by
   obtain ⟨u, v, hNondecay⟩ :=
@@ -489,25 +488,25 @@ nondegeneracy assumptions ensure that the returned `A` sector has nonzero
 virtual dimension and that the corresponding `B` sector has positive bond
 dimension. Both assumptions come from the periodic sector decomposition. -/
 lemma exists_sector_match_of_gaugePhaseEquiv
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
@@ -518,7 +517,7 @@ lemma exists_sector_match_of_gaugePhaseEquiv
       dimA u ≠ 0 ∧
       GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim)
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
           (blocksA u))
         (blocksB v) := by
   exact exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
@@ -529,25 +528,25 @@ lemma exists_sector_match_of_gaugePhaseEquiv
 /-- If no nonzero compressed sector pair matches, then the original periodic
 tensors cannot be globally gauge-phase equivalent. -/
 lemma not_gaugePhaseEquiv_of_no_sector_match
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
@@ -557,7 +556,7 @@ lemma not_gaugePhaseEquiv_of_no_sector_match
       dimA u ≠ 0 →
       ¬ GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim)
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
           (blocksA u))
         (blocksB v)) :
     ¬ GaugePhaseEquiv A B := by
@@ -591,25 +590,25 @@ This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
 cross-sector overlaps decay by the normal-tensor overlap dichotomy. -/
 theorem periodicOverlap_tendsto_zero_of_no_sector_match
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
@@ -619,7 +618,7 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
       dimA u ≠ 0 →
       ¬ GaugePhaseEquiv
         (cast (congr_arg
-          (MPSTensor (blockPhysDim d m)) hdim)
+          (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
           (blocksA u))
         (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by

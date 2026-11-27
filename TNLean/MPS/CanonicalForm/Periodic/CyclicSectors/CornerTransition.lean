@@ -48,7 +48,7 @@ open Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 section CornerTransition
 
@@ -57,33 +57,33 @@ variable {m : ℕ} [NeZero m]
 /-- The **corner-transition tensor** `A_u^i = P_u A^i P_{u+1}` of
 arXiv:1708.00029, Appendix A, eq:Auprop: the one-site compression of the letter
 `A^i` between the sector projectors `P_u` and `P_{u+1}`. -/
-def cornerLetter (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
-    (u : Fin m) (i : Fin d) : MatrixAlg D :=
+def cornerLetter (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
+    (u : Fin m) (i : α) : MatrixAlg D :=
   P u * A i * P (u + 1)
 
 /-- The **repeated corner-transition product** `F_u^{\mathbf i}` of
 arXiv:1708.00029, Appendix A, eq:Fu: the product of corner letters
 `A_u^{i_1} A_{u+1}^{i_2} ⋯` along the word, with each successive letter carried
 one sector forward.  The empty word evaluates to the projector `P u`. -/
-def cornerProd (P : Fin m → MatrixAlg D) (A : MPSTensor d D) :
-    Fin m → List (Fin d) → MatrixAlg D
+def cornerProd (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D)) :
+    Fin m → List α → MatrixAlg D
   | u, [] => P u
   | u, i :: w => P u * A i * cornerProd P A (u + 1) w
 
 @[simp]
-lemma cornerProd_nil (P : Fin m → MatrixAlg D) (A : MPSTensor d D) (u : Fin m) :
+lemma cornerProd_nil (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D)) (u : Fin m) :
     cornerProd P A u [] = P u := rfl
 
 @[simp]
-lemma cornerProd_cons (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
-    (u : Fin m) (i : Fin d) (w : List (Fin d)) :
+lemma cornerProd_cons (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
+    (u : Fin m) (i : α) (w : List α) :
     cornerProd P A u (i :: w) = P u * A i * cornerProd P A (u + 1) w := rfl
 
 /-- The corner product is fixed on the left by its starting projector:
 `P u * F_u = F_u` (projector idempotency, applied to either the head letter or
 the empty-word projector). -/
-lemma corner_mul_cornerProd (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
-    (u : Fin m) (w : List (Fin d)) (hP : IsOrthogonalProjection (P u)) :
+lemma corner_mul_cornerProd (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
+    (u : Fin m) (w : List α) (hP : IsOrthogonalProjection (P u)) :
     P u * cornerProd P A u w = cornerProd P A u w := by
   cases w with
   | nil => simpa [cornerProd] using hP.2
@@ -98,9 +98,9 @@ junction sector `u + w₁.length • 1`:
 The junction projector is removed by idempotency.  This is the algebraic step by
 which the appendix repeats a single sector block around the cycle to reach an
 injective length. -/
-lemma cornerProd_append (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+lemma cornerProd_append (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hP : ∀ k, IsOrthogonalProjection (P k))
-    (u : Fin m) (w₁ w₂ : List (Fin d)) :
+    (u : Fin m) (w₁ w₂ : List α) :
     cornerProd P A u (w₁ ++ w₂) =
       cornerProd P A u w₁ * cornerProd P A (u + w₁.length • (1 : Fin m)) w₂ := by
   induction w₁ generalizing u with

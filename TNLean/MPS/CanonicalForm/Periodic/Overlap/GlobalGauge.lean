@@ -45,7 +45,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] {D m : ℕ}
 
 /-- The **global gauge** of arXiv:1708.00029, eq:result.
 
@@ -92,7 +92,7 @@ Then the global gauge `∑ u, P u U_{u+q} Q_{u+q}` is unitary, and the per-site
 proportionality reassembles into the global conjugation
 `A^i = ζ • (U_glob B^i U_glob^†)`. -/
 theorem exists_unitary_globalGauge [NeZero m]
-    {A B : MPSTensor d D}
+    {A B : MPTensor α (Fin D)}
     {P Q U : Fin m → Matrix (Fin D) (Fin D) ℂ}
     {q : Fin m} {ζ : ℂ}
     (hP_proj : ∀ u, IsOrthogonalProjection (P u))
@@ -104,7 +104,7 @@ theorem exists_unitary_globalGauge [NeZero m]
     (hU_isoP : ∀ v, U v * (U v)ᴴ = P (v - q))
     (hA_cyclic : ∀ i, A i = ∑ u : Fin m, P u * A i * P (u + 1))
     (hB_cyclic : ∀ i, B i = ∑ v : Fin m, Q v * B i * Q (v + 1))
-    (hprop : ∀ (u : Fin m) (i : Fin d),
+    (hprop : ∀ (u : Fin m) (i : α),
       P u * A i * P (u + 1)
         = ζ • (U (u + q) * (Q (u + q) * B i * Q (u + q + 1)) * (U (u + q + 1))ᴴ))
     (hζ : ‖ζ‖ = 1) :
@@ -181,7 +181,7 @@ theorem exists_unitary_globalGauge [NeZero m]
       _ = ∑ v : Fin m, Q v := Finset.sum_congr rfl (fun v _ => step' v)
       _ = 1 := hQ_sum
   -- Block-structure vanishing for `Q v B^i Q w` away from `w = v + 1`.
-  have hQBQ_zero : ∀ (v : Fin m) (i : Fin d) (w : Fin m),
+  have hQBQ_zero : ∀ (v : Fin m) (i : α) (w : Fin m),
       w ≠ v + 1 → Q v * B i * Q w = 0 := by
     intro v i w hw
     rw [hB_cyclic i, Finset.mul_sum, Finset.sum_mul]
@@ -222,7 +222,7 @@ theorem exists_unitary_globalGauge [NeZero m]
 /-- A unitary global gauge in particular gives the invertible gauge recorded by
 `RepeatedBlocks`. -/
 theorem repeatedBlocks_of_globalGauge [NeZero m]
-    {A B : MPSTensor d D}
+    {A B : MPTensor α (Fin D)}
     {P Q U : Fin m → Matrix (Fin D) (Fin D) ℂ}
     {q : Fin m} {ζ : ℂ}
     (hP_proj : ∀ u, IsOrthogonalProjection (P u))
@@ -234,7 +234,7 @@ theorem repeatedBlocks_of_globalGauge [NeZero m]
     (hU_isoP : ∀ v, U v * (U v)ᴴ = P (v - q))
     (hA_cyclic : ∀ i, A i = ∑ u : Fin m, P u * A i * P (u + 1))
     (hB_cyclic : ∀ i, B i = ∑ v : Fin m, Q v * B i * Q (v + 1))
-    (hprop : ∀ (u : Fin m) (i : Fin d),
+    (hprop : ∀ (u : Fin m) (i : α),
       P u * A i * P (u + 1)
         = ζ • (U (u + q) * (Q (u + q) * B i * Q (u + q + 1)) * (U (u + q + 1))ᴴ))
     (hζ : ‖ζ‖ = 1) :

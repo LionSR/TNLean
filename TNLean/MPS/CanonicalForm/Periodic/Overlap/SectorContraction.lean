@@ -21,16 +21,15 @@ ambient bond space `Fin D` for corner-supported matrices.
 
 ## From sector words to single-site words
 
-The sector right inverse works with *blocked* words `σ : Fin L → Fin (d^m)` over
+The sector right inverse works with *blocked* words `σ : Fin L → (Fin m → α)` over
 the blocked alphabet, while the contraction works with *single-site* words
-`j : Fin (m·L) → Fin d`.  The two are matched by `flattenBlockedWord`: a blocked
-word of length `L` flattens to a single-site word of length `m·L`, and the
-`directIteratedBlockEquiv` of `MPS/Core/BlockingInfrastructure` packages this as a
+`j : Fin (m·L) → α`.  A blocked word of length `L` flattens to a single-site word of
+length `m·L` by concatenating its blocks, and `Kraus.blockConfigEquiv` packages this as a
 bijection `blockFlattenEquiv`.
 
 Under the paper off-diagonal convention `P k · A i = A i · P (k+1)` the repeated
 corner-transition product telescopes:
-`cornerProd P A k (flattenBlockedWord d m W) = (φ k (Kraus.evalWord (blocks k) W)).1`
+`cornerProd P A k (W.flatMap List.ofFn) = (φ k (Kraus.evalWord (blocks k) W)).1`
 (`cornerProd_flatten_eq_phi_evalWord`), the algebraic content of eq:Fu read
 through the corner isomorphism `φ`.  Transporting the sector recovery identity
 `eq:Omegauprop` through `φ` along this telescoping produces the ambient corner
@@ -39,8 +38,7 @@ right inverse.
 ## Main results
 
 * `MPSTensor.blockFlattenEquiv` — the bijection
-  `(Fin L → Fin (blockPhysDim d m)) ≃ (Fin (m·L) → Fin d)` realizing
-  `flattenBlockedWord` at the level of word-indexing functions.
+  `(Fin L → (Fin m → α)) ≃ (Fin (m·L) → α)` concatenating the blocks of a word.
 * `MPSTensor.cornerProd_flatten_eq_phi_evalWord` — the telescoping identity
   identifying `cornerProd P A k` over a flattened blocked word with the corner
   image of the sector word product.
@@ -60,45 +58,29 @@ right inverse.
 
 open scoped Matrix BigOperators
 open Matrix
-open Kraus (blockPhysDim wordOfBlock length_wordOfBlock decodeBlockEquiv decodeBlockEquiv_apply
-  blockTensor flattenBlockedWord flattenBlockedWord_nil flattenBlockedWord_cons)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## The flattening bijection on word-indexing functions -/
 
 /-- The bijection between *blocked* words of length `L` over the alphabet
-`Fin (blockPhysDim d m)` and *single-site* words of length `m·L` over `Fin d`,
-realizing the list-level `flattenBlockedWord` at the level of indexing functions.
-It is assembled from the decode bijections `decodeBlockEquiv` and the grouping
-bijection `directIteratedBlockEquiv` of iterated blocking. -/
-noncomputable def blockFlattenEquiv (d m L : ℕ) :
-    (Fin L → Fin (blockPhysDim d m)) ≃ (Fin (m * L) → Fin d) :=
-  (decodeBlockEquiv (blockPhysDim d m) L).symm.trans
-    ((directIteratedBlockEquiv d m L).symm.trans (decodeBlockEquiv d (m * L)))
+`(Fin m → α)` and *single-site* words of length `m·L` over `α`, realizing the concatenation
+of the blocks at the level of indexing functions (`Kraus.blockConfigEquiv`). -/
+noncomputable def blockFlattenEquiv (m L : ℕ) :
+    (Fin L → (Fin m → α)) ≃ (Fin (m * L) → α) :=
+  (Kraus.blockConfigEquiv α L m).trans
+    (Equiv.arrowCongr (finCongr (Nat.mul_comm L m)) (Equiv.refl α))
 
-/-- `blockFlattenEquiv` realizes `flattenBlockedWord`: the single-site word of a
-blocked word `σ` is the flattening of `List.ofFn σ`. -/
-theorem ofFn_blockFlattenEquiv (d m L : ℕ) (σ : Fin L → Fin (blockPhysDim d m)) :
-    List.ofFn (blockFlattenEquiv d m L σ) = flattenBlockedWord d m (List.ofFn σ) := by
-  have hword :
-      wordOfBlock (blockPhysDim d m) L
-          ((decodeBlockEquiv (blockPhysDim d m) L).symm σ) = List.ofFn σ := by
-    change List.ofFn
-        (Kraus.decodeBlock (Kraus.blockPhysDim d m) L
-          ((Kraus.decodeBlockEquiv (Kraus.blockPhysDim d m) L).symm σ)) = List.ofFn σ
-    rw [Kraus.decodeBlock_decodeBlockEquiv_symm]
-  calc List.ofFn (blockFlattenEquiv d m L σ)
-      = wordOfBlock d (m * L)
-          (iteratedBlockIndex d m L ((decodeBlockEquiv (blockPhysDim d m) L).symm σ)) := by
-        simp only [blockFlattenEquiv, Equiv.trans_apply, decodeBlockEquiv_apply,
-          directIteratedBlockEquiv_symm_apply, Kraus.wordOfBlock]
-    _ = flattenBlockedWord d m
-          (wordOfBlock (blockPhysDim d m) L ((decodeBlockEquiv (blockPhysDim d m) L).symm σ)) :=
-        wordOfBlock_iteratedBlockIndex d m L _
-    _ = flattenBlockedWord d m (List.ofFn σ) := by rw [hword]
+/-- `blockFlattenEquiv` realizes the concatenation of blocks: the single-site word of a
+blocked word `σ` is `(List.ofFn σ).flatMap List.ofFn`. -/
+theorem ofFn_blockFlattenEquiv (m L : ℕ) (σ : Fin L → (Fin m → α)) :
+    List.ofFn (blockFlattenEquiv m L σ) = (List.ofFn σ).flatMap List.ofFn := by
+  rw [← Kraus.ofFn_blockConfigEquiv]
+  simp only [blockFlattenEquiv, Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.coe_refl,
+    Function.comp_id, finCongr_symm]
+  exact (List.ofFn_congr (Nat.mul_comm L m) _).symm
 
 /-! ## Telescoping identity for flattened words -/
 
@@ -112,7 +94,7 @@ read through the corner isomorphism).
 Under the paper off-diagonal convention `P k · A i = A i · P (k+1)`, the repeated
 corner-transition product over a *flattened* nonempty blocked word `W` telescopes
 into the corner image of the sector word product:
-`cornerProd P A k (flattenBlockedWord d m W) = (φ k (Kraus.evalWord (blocks k) W)).1`.
+`cornerProd P A k (W.flatMap List.ofFn) = (φ k (Kraus.evalWord (blocks k) W)).1`.
 
 Each length-`m` block of the flattening collapses, by `cornerProd_eq_blockDiagCorner`
 and the corner letter identity `hletter`, to the corner letter
@@ -120,41 +102,41 @@ and the corner letter identity `hletter`, to the corner letter
 into the sector word product.  The empty word is excluded so the induction stays
 inside the corner without needing the corner unit `(φ k 1).1 = P k`. -/
 theorem cornerProd_flatten_eq_phi_evalWord
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
+    (hshift : ∀ k (i : α), P k * A i = A i * P (k + 1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
-    (hletter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k)
+    (hletter : ∀ k (i : Fin m → α),
+      (φ k (blocks k i)).1 = P k * (Kraus.block A m) i * P k)
     (k : Fin m) :
-    ∀ W : List (Fin (blockPhysDim d m)), W ≠ [] →
-      cornerProd P A k (flattenBlockedWord d m W) = (φ k (Kraus.evalWord (blocks k) W)).1 := by
+    ∀ W : List ((Fin m → α)), W ≠ [] →
+      cornerProd P A k (W.flatMap List.ofFn) = (φ k (Kraus.evalWord (blocks k) W)).1 := by
   intro W
   -- Single-block collapse, reused below.
-  have hsingle : ∀ I : Fin (blockPhysDim d m),
-      cornerProd P A k (wordOfBlock d m I) = (φ k (blocks k I)).1 := by
+  have hsingle : ∀ I : (Fin m → α),
+      cornerProd P A k (List.ofFn I) = (φ k (blocks k I)).1 := by
     intro I
     rw [cornerProd_eq_blockDiagCorner P A hproj hshift k I, hletter k I]
   -- Junction shift of one length-`m` block is trivial.
-  have hjunc : ∀ I : Fin (blockPhysDim d m),
-      (k + (wordOfBlock d m I).length • (1 : Fin m)) = k := by
-    intro I; rw [length_wordOfBlock, nsmul_card_one_fin, add_zero]
+  have hjunc : ∀ I : (Fin m → α),
+      (k + (List.ofFn I).length • (1 : Fin m)) = k := by
+    intro I; rw [List.length_ofFn, nsmul_card_one_fin, add_zero]
   induction W with
   | nil => intro h; exact absurd rfl h
   | cons I W' ih =>
     intro _
     rcases W' with _ | ⟨J, W''⟩
     · -- single block `[I]`
-      rw [flattenBlockedWord_cons, flattenBlockedWord_nil, List.append_nil, hsingle I,
+      rw [List.flatMap_cons, List.flatMap_nil, List.append_nil, hsingle I,
         Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
     · -- `I :: J :: W''`
-      rw [flattenBlockedWord_cons,
-        cornerProd_append P A hproj k (wordOfBlock d m I) (flattenBlockedWord d m (J :: W'')),
+      rw [List.flatMap_cons,
+        cornerProd_append P A hproj k (List.ofFn I) ((J :: W'').flatMap List.ofFn),
         hjunc I, hsingle I, ih (by simp), ← hMul, ← Kraus.evalWord_cons]
 
 end Telescoping
@@ -186,27 +168,27 @@ there is an *ambient corner* right inverse `Ω̂` over single-site words of leng
 This is exactly the `hΩ` hypothesis consumed by `MPSTensor.cornerProd_contraction`
 (applied at sector `k+1` to the corner-supported inserted matrices `X k`). -/
 theorem exists_ambientCornerRightInverse_of_sectorRightInverse
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
+    (hshift : ∀ k (i : α), P k * A i = A i * P (k + 1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
-    (hletter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k)
+    (hletter : ∀ k (i : Fin m → α),
+      (φ k (blocks k i)).1 = P k * (Kraus.block A m) i * P k)
     (L : ℕ) (hL : 0 < L)
     (Ω : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ]
-        ((Fin L → Fin (blockPhysDim d m)) → ℂ))
+        ((Fin L → (Fin m → α)) → ℂ))
     (hΩ : ∀ (k : Fin m) (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      ∑ σ : Fin L → Fin (blockPhysDim d m),
+      ∑ σ : Fin L → (Fin m → α),
         Ω k X σ • Kraus.evalWord (blocks k) (List.ofFn σ) = X) :
-    ∃ Ωhat : (k : Fin m) → MatrixAlg D → ((Fin (m * L) → Fin d) → ℂ),
+    ∃ Ωhat : (k : Fin m) → MatrixAlg D → ((Fin (m * L) → α) → ℂ),
       ∀ (k : Fin m) (Y : MatrixAlg D), P k * Y * P k = Y →
-        ∑ j : Fin (m * L) → Fin d, Ωhat k Y j • cornerProd P A k (List.ofFn j) = Y := by
+        ∑ j : Fin (m * L) → α, Ωhat k Y j • cornerProd P A k (List.ofFn j) = Y := by
   classical
   -- The corner projection of any matrix lands in the corner submodule.
   have hcornerMem : ∀ (k : Fin m) (Y : MatrixAlg D),
@@ -219,7 +201,7 @@ theorem exists_ambientCornerRightInverse_of_sectorRightInverse
       _ = P k * Y * P k := by rw [hidem]
   refine ⟨fun k Y j =>
       Ω k ((φ k).symm ⟨P k * Y * P k, hcornerMem k Y⟩)
-        ((blockFlattenEquiv d m L).symm j), ?_⟩
+        ((blockFlattenEquiv m L).symm j), ?_⟩
   intro k Y hY
   set X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
     (φ k).symm ⟨P k * Y * P k, hcornerMem k Y⟩ with hX
@@ -232,8 +214,8 @@ theorem exists_ambientCornerRightInverse_of_sectorRightInverse
       (φ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] cornerSubmodule (P k))
   have hψ : ∀ Z, ψ Z = (φ k Z).1 := fun _ => rfl
   -- Telescoping identity per blocked word, after reindexing.
-  have hbridge : ∀ σ : Fin L → Fin (blockPhysDim d m),
-      cornerProd P A k (List.ofFn (blockFlattenEquiv d m L σ))
+  have hbridge : ∀ σ : Fin L → (Fin m → α),
+      cornerProd P A k (List.ofFn (blockFlattenEquiv m L σ))
         = (φ k (Kraus.evalWord (blocks k) (List.ofFn σ))).1 := by
     intro σ
     rw [ofFn_blockFlattenEquiv]
@@ -241,21 +223,21 @@ theorem exists_ambientCornerRightInverse_of_sectorRightInverse
       (List.ofFn σ) (List.ne_nil_of_length_pos (by rw [List.length_ofFn]; exact hL))
   -- Linearity of the corner embedding collapses the blocked recovery sum.
   have hlin :
-      ψ (∑ σ : Fin L → Fin (blockPhysDim d m),
+      ψ (∑ σ : Fin L → (Fin m → α),
           Ω k X σ • Kraus.evalWord (blocks k) (List.ofFn σ))
-        = ∑ σ : Fin L → Fin (blockPhysDim d m),
+        = ∑ σ : Fin L → (Fin m → α),
             Ω k X σ • (φ k (Kraus.evalWord (blocks k) (List.ofFn σ))).1 := by
     rw [map_sum]
     refine Finset.sum_congr rfl (fun σ _ => ?_)
     rw [map_smul, hψ]
-  calc ∑ j : Fin (m * L) → Fin d,
-        Ω k X ((blockFlattenEquiv d m L).symm j) • cornerProd P A k (List.ofFn j)
-      = ∑ σ : Fin L → Fin (blockPhysDim d m),
-          Ω k X ((blockFlattenEquiv d m L).symm (blockFlattenEquiv d m L σ))
-            • cornerProd P A k (List.ofFn (blockFlattenEquiv d m L σ)) := by
-        rw [← Equiv.sum_comp (blockFlattenEquiv d m L)
-          (fun j => Ω k X ((blockFlattenEquiv d m L).symm j) • cornerProd P A k (List.ofFn j))]
-    _ = ∑ σ : Fin L → Fin (blockPhysDim d m),
+  calc ∑ j : Fin (m * L) → α,
+        Ω k X ((blockFlattenEquiv m L).symm j) • cornerProd P A k (List.ofFn j)
+      = ∑ σ : Fin L → (Fin m → α),
+          Ω k X ((blockFlattenEquiv m L).symm (blockFlattenEquiv m L σ))
+            • cornerProd P A k (List.ofFn (blockFlattenEquiv m L σ)) := by
+        rw [← Equiv.sum_comp (blockFlattenEquiv m L)
+          (fun j => Ω k X ((blockFlattenEquiv m L).symm j) • cornerProd P A k (List.ofFn j))]
+    _ = ∑ σ : Fin L → (Fin m → α),
           Ω k X σ • (φ k (Kraus.evalWord (blocks k) (List.ofFn σ))).1 := by
         refine Finset.sum_congr rfl (fun σ _ => ?_)
         rw [Equiv.symm_apply_apply, hbridge σ]
@@ -276,28 +258,28 @@ the chain `∏_k (A_k^{σ_k} · X k)`.
 The right inverse `Ω` is the *sector* one (`eq:Omegauprop` on `Fin (dim k)`); the
 lift transports it to the ambient corner so the contraction's hypothesis is met. -/
 theorem exists_cornerProd_contraction_of_sectorRightInverse
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
+    (hshift : ∀ k (i : α), P k * A i = A i * P (k + 1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
-    (hletter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k)
+    (hletter : ∀ k (i : Fin m → α),
+      (φ k (blocks k i)).1 = P k * (Kraus.block A m) i * P k)
     (L : ℕ) (hL : 0 < L)
     (Ω : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ]
-        ((Fin L → Fin (blockPhysDim d m)) → ℂ))
+        ((Fin L → (Fin m → α)) → ℂ))
     (hΩ : ∀ (k : Fin m) (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      ∑ σ : Fin L → Fin (blockPhysDim d m),
+      ∑ σ : Fin L → (Fin m → α),
         Ω k X σ • Kraus.evalWord (blocks k) (List.ofFn σ) = X)
-    (σ : Fin m → Fin d) (X : Fin m → MatrixAlg D)
+    (σ : Fin m → α) (X : Fin m → MatrixAlg D)
     (hXcorner : ∀ k : Fin m, P (k + 1) * X k * P (k + 1) = X k) :
-    ∃ Ωhat : (k : Fin m) → MatrixAlg D → ((Fin (m * L) → Fin d) → ℂ),
-      ∑ ρ : Fin m → (Fin (m * L) → Fin d),
+    ∃ Ωhat : (k : Fin m) → MatrixAlg D → ((Fin (m * L) → α) → ℂ),
+      ∑ ρ : Fin m → (Fin (m * L) → α),
           (∏ k, Ωhat (k + 1) (X k) (ρ k)) •
             (List.ofFn (fun k => cornerLetter P A k (σ k) *
               cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod

@@ -80,7 +80,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator K
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] {D m : ℕ}
 
 /-- A spectrally periodic block has a gauge-equivalent left-canonical periodic
 representative obtained without scalar rescaling.
@@ -91,12 +91,12 @@ prescribed roots-of-unity peripheral spectrum are unchanged.
 
 Source: arXiv:1708.00029, lines 313--332. -/
 theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
-    {A : MPSTensor d D} (hA : IsSpectrallyPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsSpectrallyPeriodic m A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
-      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ) σ = σ ∧
-      GaugeEquiv A (Kraus.tpGauge (ι := Fin d) (D := D) A σ) ∧
-      IsPeriodic m (Kraus.tpGauge (ι := Fin d) (D := D) A σ) := by
+      Kraus.transferMap (ι := α) (n := Fin D) (fun i ↦ (A i)ᴴ) σ = σ ∧
+      GaugeEquiv A (Kraus.tpGauge (ι := α) (D := D) A σ) ∧
+      IsPeriodic m (Kraus.tpGauge (ι := α) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hLeft, hGauge, hIrr⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one
       hA.irreducible hA.spectral_radius_one
@@ -106,13 +106,13 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     simpa [Matrix.det_nonsing_inv] using inv_ne_zero hSdet
   have hPeripheral :
       peripheralEigenvalues
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (ι := Fin d) (D := D) A σ)) =
-        peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+          (Kraus.transferMap (ι := α) (n := Fin D) (Kraus.tpGauge (ι := α) (D := D) A σ)) =
+        peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) := by
     change peripheralEigenvalues (Kraus.mapLM (Kraus.tpGauge A σ)) =
       peripheralEigenvalues (Kraus.mapLM A)
     rw [Kraus.mapLM_tpGauge_eq_similarityMap A σ hσ]
     exact peripheralEigenvalues_similarityMap_eq
-      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
+      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (ι := α) (n := Fin D) A)
   refine ⟨σ, hσ, hσfix, hGauge, ?_⟩
   exact ⟨hIrr, hLeft, hA.period_pos, hPeripheral.trans hA.peripheral_eq⟩
 
@@ -126,7 +126,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 namespace SectorDecomposition
 
@@ -220,17 +220,17 @@ unchanged.
 
 Source: arXiv:1708.00029, lines 313--332, applied to the multiplicity-bearing
 form `eq:bdnr` at lines 286--305. -/
-theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition (Fin d))
+theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition α)
     (period : Fin P.basisCount → ℕ)
     (hP : ∀ j, IsSpectrallyPeriodic (period j) (P.basis j)) :
-    ∃ B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j),
+    ∃ B : (j : Fin P.basisCount) → MPTensor α (Fin (P.basisDim j)),
       (∀ j, GaugeEquiv (P.basis j) (B j)) ∧
       (∀ j, IsPeriodic (period j) (B j)) ∧
       GaugeEquiv P.toTensor (P.replaceBasis B).toTensor := by
   classical
   choose sigma _hsigma _hfixed hGauge hPeriodic using
     fun j ↦ (hP j).exists_isPeriodic_tpGauge
-  let B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j) :=
+  let B : (j : Fin P.basisCount) → MPTensor α (Fin (P.basisDim j)) :=
     fun j ↦ Kraus.tpGauge (P.basis j) (sigma j)
   have hGaugeB : ∀ j, GaugeEquiv (P.basis j) (B j) := by
     intro j
@@ -286,7 +286,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator K
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- **The period of an irreducible-form block.**
 
@@ -309,23 +309,23 @@ is that of the original tensor.
 Source: arXiv:1708.00029, lines 248--261, 257--258 and 313--332;
 Wolf, *Quantum Channels & Operations*, Theorem 6.6(1). -/
 theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
-    {A : MPSTensor d D}
-    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+    {A : MPTensor α (Fin D)}
+    (hIrr : Kraus.IsIrreducibleFamily (ι := α) (n := Fin D) A)
     (hRadius :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1) :
+          (Kraus.transferMap (ι := α) (n := Fin D) A)) = 1) :
     ∃ m : ℕ, IsSpectrallyPeriodic m A := by
   classical
   have hD : D ≠ 0 :=
     matrix_dim_ne_zero_of_spectralRadius_eq_one
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+        (Kraus.transferMap (ι := α) (n := Fin D) A))
       hRadius
   have : NeZero D := ⟨hD⟩
   obtain ⟨σ, hσ, -, hLeft, -, hIrrB⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one hIrr hRadius
-  set B : MPSTensor d D := Kraus.tpGauge (ι := Fin d) (D := D) A σ with hBdef
+  set B : MPTensor α (Fin D) := Kraus.tpGauge (ι := α) (D := D) A σ with hBdef
   have hSdet : (CFC.sqrt σ).det ≠ 0 :=
     (Matrix.PosDef.isUnit_det_cfc_sqrt hσ).ne_zero
   have hSinvDet : ((CFC.sqrt σ)⁻¹).det ≠ 0 := by
@@ -335,7 +335,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
   have hRadB :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) B)) = 1 := by
+          (Kraus.transferMap (ι := α) (n := Fin D) B)) = 1 := by
     change spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.mapLM B)) = 1
@@ -343,14 +343,14 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
       spectralRadius_similarityMap_eq (D := D) (CFC.sqrt σ)⁻¹ hSinvDet]
     exact hRadius
   have hPerB :
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B) =
-        peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) B) =
+        peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) := by
     change peripheralEigenvalues (Kraus.mapLM B) = peripheralEigenvalues (Kraus.mapLM A)
     rw [hBdef, Kraus.mapLM_tpGauge_eq_similarityMap A σ hσ]
     exact peripheralEigenvalues_similarityMap_eq
-      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
+      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (ι := α) (n := Fin D) A)
   -- The normalized block is nonzero, being trace preserving.
-  have hLeft' : ∑ i : Fin d, (B i)ᴴ * B i = 1 := hLeft
+  have hLeft' : ∑ i : α, (B i)ᴴ * B i = 1 := hLeft
   have hBne : ∃ i, B i ≠ 0 := by
     by_contra hzero
     push Not at hzero
@@ -358,7 +358,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
       rw [← hLeft']
       exact Finset.sum_eq_zero fun i _ => by rw [hzero i]; simp
     exact one_ne_zero hone
-  have hIrrMapB : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) :=
+  have hIrrMapB : IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) B) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hIrrB
   -- Its forward Perron eigenvector is a fixed point, since the spectral radius is one.
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
@@ -366,20 +366,20 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
   have hrRad :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) B))).toReal = r :=
+          (Kraus.transferMap (ι := α) (n := Fin D) B))).toReal = r :=
     spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) B) (Kraus.transferMap_isCPMap B) hIrrMapB
+      (Kraus.transferMap (ι := α) (n := Fin D) B) (Kraus.transferMap_isCPMap B) hIrrMapB
       ρ r hρ hr hρeig
   have hr_one : r = 1 := by
     rw [hRadB, ENNReal.toReal_one] at hrRad
     exact hrRad.symm
-  have hρfix : Kraus.transferMap (ι := Fin d) (n := Fin D) B ρ = ρ := by
+  have hρfix : Kraus.transferMap (ι := α) (n := Fin D) B ρ = ρ := by
     rw [hρeig, hr_one]
     simp
   -- The conjugate-transposed family of the normalized block is unital, and its
   -- map is the trace adjoint of the transfer map.
-  have hUnital : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) (fun i => (B i)ᴴ) := by
-    change ∑ i : Fin d, (B i)ᴴ * ((B i)ᴴ)ᴴ = 1
+  have hUnital : KadisonSchwarz.IsUnitalKraus (ι := α) (D := D) (fun i => (B i)ᴴ) := by
+    change ∑ i : α, (B i)ᴴ * ((B i)ᴴ)ᴴ = 1
     simpa using hLeft'
   have hIrrAdj : IsIrreducibleMap (Kraus.mapLM (fun i => (B i)ᴴ)) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose B hIrrMapB
@@ -447,12 +447,12 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator K
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Every irreducible left-canonical tensor of positive bond dimension has a period.
 Source: arXiv:1708.00029, lines 248–258 and `eq:unital`; Wolf Proposition 6.1. -/
 theorem exists_isPeriodic_of_irreducible_of_isLeftCanonical [NeZero D]
-    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A)
+    (A : MPTensor α (Fin D)) (hIrr : Kraus.IsIrreducibleFamily A)
     (hA : IsLeftCanonical A) : ∃ m, IsPeriodic m A := by
   have hRad := (Kraus.isPositiveMap_mapLM A).spectralRadius_eq_one_of_tracePreserving
     (Kraus.isTracePreservingMap_mapLM_of_isTP A hA)
@@ -464,9 +464,9 @@ theorem exists_isPeriodic_of_irreducible_of_isLeftCanonical [NeZero D]
 left-canonical tensors with strictly positive real weights and total bond dimension at most D.
 Source: arXiv:1708.00029, Proposition `thm:irr`, lines 238–271, and `eq:unital`, lines 313–320.
 No blocking of the physical sites is performed. -/
-theorem exists_periodic_blockDecomposition (A : MPSTensor d D) :
+theorem exists_periodic_blockDecomposition (A : MPTensor α (Fin D)) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)) (period : Fin r → ℕ),
+      (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) (period : Fin r → ℕ),
       (∀ k, IsPeriodic (period k) (blocks k)) ∧
       (∀ k, 0 < μ k) ∧ (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A (toTensorFromBlocks (μ := μ) blocks) ∧
@@ -514,7 +514,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator K
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- **Periodic normalization of a nonzero irreducible tensor.**
 
@@ -528,20 +528,20 @@ vectors.
 Source: `t1_unblocked.tex`, §"Trace reduction and explicit multiplicities",
 equations `moa-t1:factor-normalization`. -/
 theorem exists_leftCanonical_periodic_scale_of_irreducible
-    [NeZero D] {A : MPSTensor d D}
+    [NeZero D] {A : MPTensor α (Fin D)}
     (hIrr : Kraus.IsIrreducibleFamily A) (hA : ∃ i, A i ≠ 0) :
-    ∃ (B : MPSTensor d D) (ζ : ℂ) (m : ℕ), ζ ≠ 0 ∧
+    ∃ (B : MPTensor α (Fin D)) (ζ : ℂ) (m : ℕ), ζ ≠ 0 ∧
       GaugeEquiv (fun i => ζ • A i) B ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → α), mpv B σ = ζ ^ N * mpv A σ) ∧
       IsPeriodic m B := by
   classical
   obtain ⟨ρ, r, hρ, hr, hEig⟩ := exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   have hRad :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) =
+            (Kraus.transferMap (ι := α) (n := Fin D) A)) =
         ENNReal.ofReal r :=
     spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
       (Kraus.transferMap A) (Kraus.transferMap_isCPMap A) hIrrMap ρ r hρ hr hEig
@@ -557,7 +557,7 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
   have hRadScaled :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => ζ • A i))) = 1 := by
+            (Kraus.transferMap (ι := α) (n := Fin D) (fun i => ζ • A i))) = 1 := by
     rw [spectralRadius_transferMap_smul ζ hζ A, hRad]
     have hval : ‖ζ‖ ^ 2 * r = 1 := by
       rw [hnormζ, inv_pow, Real.sq_sqrt hr.le]
@@ -571,7 +571,7 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
   obtain ⟨m, hSpec⟩ :=
     exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one hIrrScaled hRadScaled
   obtain ⟨σ, hσ, hσfix, hGauge, hPer⟩ := hSpec.exists_isPeriodic_tpGauge
-  refine ⟨Kraus.tpGauge (ι := Fin d) (D := D) (fun i => ζ • A i) σ, ζ, m, hζ, hGauge, ?_, hPer⟩
+  refine ⟨Kraus.tpGauge (ι := α) (D := D) (fun i => ζ • A i) σ, ζ, m, hζ, hGauge, ?_, hPer⟩
   intro N τ
   rw [← hGauge.sameMPV N τ]
   simp only [mpv, coeff]

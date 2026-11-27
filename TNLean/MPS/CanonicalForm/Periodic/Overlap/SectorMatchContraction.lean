@@ -21,11 +21,10 @@ open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
 open Filter Matrix Module
-open Kraus (blockPhysDim wordOfBlock decodeBlockEquiv blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
@@ -71,25 +70,25 @@ normalization of the resulting sector phases; after that, the algebraic scalar
 extraction and the phase-coboundary lemma perform the κ/θ/φ telescoping. See
 docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 lemma sectorTensor_proportional_of_blockedMatch
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     {m : ℕ} [NeZero m]
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     {dimA dimB : Fin m → ℕ}
     (blocksA :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimA k)))
     (blocksB :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dimB k)))
     (hA_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksA k i)ᴴ * blocksA k i = 1)
     (hB_blocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (_hA_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
     (_hB_mpv :
-      SameMPV₂ (blockTensor B m)
+      SameMPV₂ (Kraus.block B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     {PA PB : Fin m → MatrixAlg D}
     {φA : (k : Fin m) →
@@ -98,16 +97,16 @@ lemma sectorTensor_proportional_of_blockedMatch
       Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PB k)}
     (hA_cyclic : IsCyclicSectorDecompWith A blocksA PA φA)
     (hB_cyclic : IsCyclicSectorDecompWith B blocksB PB φB)
-    (hA_letter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φA k (blocksA k i)).1 = PA k * (blockTensor A m) i * PA k)
-    (hB_letter : ∀ k (i : Fin (blockPhysDim d m)),
-      (φB k (blocksB k i)).1 = PB k * (blockTensor B m) i * PB k)
+    (hA_letter : ∀ k (i : Fin m → α),
+      (φA k (blocksA k i)).1 = PA k * (Kraus.block A m) i * PA k)
+    (hB_letter : ∀ k (i : Fin m → α),
+      (φB k (blocksB k i)).1 = PB k * (Kraus.block B m) i * PB k)
     (q : Fin m)
     (hBlockMatch : ∀ u : Fin m,
       ∃ (hdim : dimA u = dimB (u + q)),
         GaugePhaseEquiv
           (cast (congr_arg
-            (MPSTensor (blockPhysDim d m)) hdim)
+            (fun n ↦ MPTensor (Fin m → α) (Fin n)) hdim)
             (blocksA u))
           (blocksB (u + q)))
     (hNondeg : ∀ u, dimA u ≠ 0)
@@ -132,7 +131,7 @@ lemma sectorTensor_proportional_of_blockedMatch
         Uᴴ * U = PB (u + q) ∧
         U * Uᴴ = PA u ∧
         ‖c‖ = 1 ∧
-        ∀ i : Fin (blockPhysDim d m), (φA u (blocksA u i)).1 =
+        ∀ i : (Fin m → α), (φA u (blocksA u i)).1 =
           c • (U * (φB (u + q) (blocksB (u + q) i)).1 * Uᴴ) := by
     intro u
     obtain ⟨hdim, hMatch⟩ := hBlockMatch u
@@ -152,9 +151,9 @@ lemma sectorTensor_proportional_of_blockedMatch
     fun u => (hCornerData u).choose_spec.choose_spec.2.2.1
   have hc_norm : ∀ u, ‖c u‖ = 1 :=
     fun u => (hCornerData u).choose_spec.choose_spec.2.2.2.1
-  have hBlockAmbient : ∀ (u : Fin m) (i : Fin (blockPhysDim d m)),
-      PA u * (blockTensor A m) i * PA u =
-        c u • (U u * (PB (u + q) * (blockTensor B m) i * PB (u + q)) *
+  have hBlockAmbient : ∀ (u : Fin m) (i : Fin m → α),
+      PA u * (Kraus.block A m) i * PA u =
+        c u • (U u * (PB (u + q) * (Kraus.block B m) i * PB (u + q)) *
           (U u)ᴴ) := by
     intro u i
     rw [← hA_letter u i, ← hB_letter (u + q) i]
@@ -165,7 +164,7 @@ lemma sectorTensor_proportional_of_blockedMatch
   let U' : Fin m → MatrixAlg D := fun u => U (-u)
   let c' : Fin m → ℂ := fun u => c (-u)
   let dimA' : Fin m → ℕ := fun u => dimA (-u)
-  let blocksA' : (u : Fin m) → MPSTensor (blockPhysDim d m) (dimA' u) :=
+  let blocksA' : (u : Fin m) → MPTensor (Fin m → α) (Fin (dimA' u)) :=
     fun u => blocksA (-u)
   let φA' : (u : Fin m) →
       MatrixAlg (dimA' u) ≃ₗ[ℂ] cornerSubmodule (P u) :=
@@ -173,18 +172,18 @@ lemma sectorTensor_proportional_of_blockedMatch
   have hP_proj : ∀ u, IsOrthogonalProjection (P u) := fun u => hPA_proj (-u)
   have hQ_proj : ∀ v, IsOrthogonalProjection (Q v) := fun v => hPB_proj (-v)
   have hA_offDiag :
-      ∀ (k : Fin m) (i : Fin d), PA (k + 1) * A i = A i * PA k :=
+      ∀ (k : Fin m) (i : α), PA (k + 1) * A i = A i * PA k :=
     offDiag_shift_of_adjoint_cyclic_shift A hA_lc hPA_proj hPA_shift
   have hB_offDiag :
-      ∀ (k : Fin m) (i : Fin d), PB (k + 1) * B i = B i * PB k :=
+      ∀ (k : Fin m) (i : α), PB (k + 1) * B i = B i * PB k :=
     offDiag_shift_of_adjoint_cyclic_shift B hB_lc hPB_proj hPB_shift
-  have hP_shift : ∀ (u : Fin m) (i : Fin d), P u * A i = A i * P (u + 1) := by
+  have hP_shift : ∀ (u : Fin m) (i : α), P u * A i = A i * P (u + 1) := by
     intro u i
     have h := hA_offDiag (-(u + 1)) i
     have hindex : -(u + 1) + 1 = -u := by abel
     rw [hindex] at h
     exact h
-  have hQ_shift : ∀ (v : Fin m) (i : Fin d), Q v * B i = B i * Q (v + 1) := by
+  have hQ_shift : ∀ (v : Fin m) (i : α), Q v * B i = B i * Q (v + 1) := by
     intro v i
     have h := hB_offDiag (-(v + 1)) i
     have hindex : -(v + 1) + 1 = -v := by abel
@@ -208,20 +207,20 @@ lemma sectorTensor_proportional_of_blockedMatch
     intro u
     exact hU_U_star (-u)
   have hc'_norm : ∀ u, ‖c' u‖ = 1 := fun u => hc_norm (-u)
-  have hBlockAmbient' : ∀ (u : Fin m) (i : Fin (blockPhysDim d m)),
-      P u * (blockTensor A m) i * P u =
-        c' u • (U' u * (Q (u + q') * (blockTensor B m) i * Q (u + q')) *
+  have hBlockAmbient' : ∀ (u : Fin m) (i : Fin m → α),
+      P u * (Kraus.block A m) i * P u =
+        c' u • (U' u * (Q (u + q') * (Kraus.block B m) i * Q (u + q')) *
           (U' u)ᴴ) := by
     intro u i
     have h := hBlockAmbient (-u) i
     have hindex : -(u + q') = -u + q := by simp only [q']; abel
-    change PA (-u) * (blockTensor A m) i * PA (-u) =
+    change PA (-u) * (Kraus.block A m) i * PA (-u) =
       c (-u) • (U (-u) *
-        (PB (-(u + q')) * (blockTensor B m) i * PB (-(u + q'))) *
+        (PB (-(u + q')) * (Kraus.block B m) i * PB (-(u + q'))) *
           (U (-u))ᴴ)
     rw [hindex]
     exact h
-  have hBC : ∀ (u : Fin m) (w : List (Fin d)), w.length = m →
+  have hBC : ∀ (u : Fin m) (w : List α), w.length = m →
       cornerProd P A u w =
         c' u • (U' u * cornerProd Q B (u + q') w * (U' u)ᴴ) := by
     intro u w hw
@@ -229,8 +228,8 @@ lemma sectorTensor_proportional_of_blockedMatch
     | _ n σ =>
         simp only [List.length_ofFn] at hw
         subst n
-        let i : Fin (blockPhysDim d m) := (decodeBlockEquiv d m).symm σ
-        have hword : wordOfBlock d m i = List.ofFn σ := by
+        let i : (Fin m → α) := (decodeBlockEquiv d m).symm σ
+        have hword : List.ofFn i = List.ofFn σ := by
           change List.ofFn
               (Kraus.decodeBlock d m ((Kraus.decodeBlockEquiv d m).symm σ)) = List.ofFn σ
           rw [Kraus.decodeBlock_decodeBlockEquiv_symm]
@@ -239,22 +238,22 @@ lemma sectorTensor_proportional_of_blockedMatch
           cornerProd_eq_blockDiagCorner Q B hQ_proj hQ_shift]
         exact hBlockAmbient' u i
   let segments
-      (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d))
-      (k : Fin m) : List (Fin d) :=
+      (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α))
+      (k : Fin m) : List α :=
     σ k :: List.ofFn (ρ k)
   let combinedWord
-      (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)) :
-      List (Fin d) :=
+      (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α)) :
+      List α :=
     (cyclicList (segments σ ρ) 0 m).flatten
   have hsegments :
-      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d))
+      ∀ (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α))
         (k : Fin m),
         (segments σ ρ k).length • (1 : Fin m) = 1 := by
     intro σ ρ k
     simp only [segments, List.length_cons, List.length_ofFn, add_nsmul, one_nsmul,
       mul_nsmul, nsmul_card_one_fin, nsmul_zero, zero_add]
   have hcombinedWord_length :
-      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+      ∀ (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α)),
         (combinedWord σ ρ).length = (m * L + 1) * m := by
     intro σ ρ
     simp only [combinedWord, cyclicList_zero_card_eq_ofFn, List.length_flatten,
@@ -263,7 +262,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul]
     exact Nat.mul_comm m (m * L + 1)
   have hcombinedWord_corner :
-      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+      ∀ (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α)),
         cornerProd P A 0 (combinedWord σ ρ) =
           (List.ofFn (fun k => cornerLetter P A k (σ k) *
             cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod := by
@@ -282,7 +281,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     simp only [segments, cornerProd_cons, cornerLetter, Matrix.mul_assoc,
       corner_mul_cornerProd P A (k + 1) (List.ofFn (ρ k)) (hP_proj (k + 1))]
   have hcombinedMatch :
-      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+      ∀ (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α)),
         (List.ofFn (fun k => cornerLetter P A k (σ k) *
           cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod =
             (c' 0) ^ (m * L + 1) •
@@ -295,30 +294,30 @@ lemma sectorTensor_proportional_of_blockedMatch
         (combinedWord σ ρ) (hcombinedWord_length σ ρ)
   let Ω' : (u : Fin m) →
       MatrixAlg (dimA' u) →ₗ[ℂ]
-        ((Fin L → Fin (blockPhysDim d m)) → ℂ) :=
+        ((Fin L → (Fin m → α)) → ℂ) :=
     fun u => Ω (-u)
   have hΩ' : ∀ (u : Fin m) (X : MatrixAlg (dimA' u)),
-      ∑ σ : Fin L → Fin (blockPhysDim d m),
+      ∑ σ : Fin L → (Fin m → α),
         Ω' u X σ • Kraus.evalWord (blocksA' u) (List.ofFn σ) = X :=
     fun u X => hΩ (-u) X
   have hφA'_mul : ∀ (u : Fin m) (X Y : MatrixAlg (dimA' u)),
       (φA' u (X * Y)).1 = (φA' u X).1 * (φA' u Y).1 :=
     fun u X Y => hφA_mul (-u) X Y
-  have hA'_letter : ∀ (u : Fin m) (i : Fin (blockPhysDim d m)),
+  have hA'_letter : ∀ (u : Fin m) (i : Fin m → α),
       (φA' u (blocksA' u i)).1 =
-        P u * (blockTensor A m) i * P u :=
+        P u * (Kraus.block A m) i * P u :=
     fun u i => hA_letter (-u) i
   obtain ⟨Ωhat, hΩhat⟩ :=
     exists_ambientCornerRightInverse_of_sectorRightInverse
       P A blocksA' φA' hP_proj hP_shift hφA'_mul hA'_letter
       L hL_pos Ω' hΩ'
-  let T : Fin m → Fin d → MatrixAlg D :=
+  let T : Fin m → α → MatrixAlg D :=
     fun k i => U' k * cornerLetter Q B (k + q') i * (U' (k + 1))ᴴ
-  let G : Fin m → (Fin (m * L) → Fin d) → MatrixAlg D :=
+  let G : Fin m → (Fin (m * L) → α) → MatrixAlg D :=
     fun k ρ =>
       U' k * cornerProd Q B (k + q') (List.ofFn ρ) * (U' k)ᴴ
   have hBcombined :
-      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+      ∀ (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α)),
         U' 0 * cornerProd Q B q' (combinedWord σ ρ) * (U' 0)ᴴ =
           (List.ofFn (fun k => T k (σ k) * G (k + 1) (ρ k))).prod := by
     intro σ ρ
@@ -346,7 +345,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     exact transported_cornerProd_cons Q B q' U' hQ_proj hU'_star_U k
       (σ k) (List.ofFn (ρ k))
   have hGapMatch :
-      ∀ (k : Fin m) (ρ : Fin (m * L) → Fin d),
+      ∀ (k : Fin m) (ρ : Fin (m * L) → α),
         cornerProd P A k (List.ofFn ρ) = (c' k) ^ L • G k ρ := by
     intro k ρ
     have hL : L.pred + 1 = L := Nat.succ_pred_eq_of_pos hL_pos
@@ -390,12 +389,12 @@ lemma sectorTensor_proportional_of_blockedMatch
   let a : Fin m → ℂ := fun k => ((c' (k + 1)) ^ L)⁻¹
   let z : ℂ := (c' 0) ^ (m * L + 1) * ∏ k, a k
   have hInsertedProduct :
-      ∀ (σ : Fin m → Fin d) (X : Fin m → MatrixAlg D),
+      ∀ (σ : Fin m → α) (X : Fin m → MatrixAlg D),
         (∀ k, P (k + 1) * X k * P (k + 1) = X k) →
         (List.ofFn (fun k => cornerLetter P A k (σ k) * X k)).prod =
           z • (List.ofFn (fun k => T k (σ k) * X k)).prod := by
     intro σ X hX
-    let weight : (Fin m → (Fin (m * L) → Fin d)) → ℂ :=
+    let weight : (Fin m → (Fin (m * L) → α)) → ℂ :=
       fun ρ => ∏ k, Ωhat (k + 1) (X k) (ρ k)
     have hweighted :
         ∑ ρ, weight ρ •
@@ -480,7 +479,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     intro k i
     simp only [T, Matrix.mul_assoc, hUstar_P]
   have hresult :
-      ∀ σ : Fin m → Fin d,
+      ∀ σ : Fin m → α,
         (⨂ₜ[ℂ] k : Fin m, cornerLetter P A k (σ k)) =
           z • (⨂ₜ[ℂ] k : Fin m, T k (σ k)) := by
     intro σ
@@ -587,7 +586,7 @@ lemma sectorTensor_proportional_of_blockedMatch
       symm
       simpa [hzeroT] using hT_norm k
     exact hP_ne (k + 1) hzero
-  let ref : Fin m → Fin d := fun k => (hT_nonzero k).choose
+  let ref : Fin m → α := fun k => (hT_nonzero k).choose
   have href_ne : ∀ k, T k (ref k) ≠ 0 :=
     fun k => (hT_nonzero k).choose_spec
   have hentry : ∀ k, ∃ r c : Fin D, T k (ref k) r c ≠ 0 := by
@@ -737,7 +736,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     change κ (u + q' - q') =
       φ (u + q') * (φ (u + q' + 1))⁻¹ at hcob
     convert hcob.symm using 1; abel
-  have hVprod : ∀ (u : Fin m) (i : Fin d),
+  have hVprod : ∀ (u : Fin m) (i : α),
       V (u + q') * cornerLetter Q B (u + q') i * (V (u + q' + 1))ᴴ =
         κ u • T u i := by
     intro u i
@@ -746,7 +745,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     simp only [V, Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
       smul_smul, hindex₀, hindex₁, T]
     rw [mul_comm (star (φ (u + q' + 1))) (φ (u + q')), hphase]
-  have hprop : ∀ (u : Fin m) (i : Fin d),
+  have hprop : ∀ (u : Fin m) (i : α),
       P u * A i * P (u + 1) =
         ξ • (V (u + q') * (Q (u + q') * B i * Q (u + q' + 1)) *
           (V (u + q' + 1))ᴴ) := by

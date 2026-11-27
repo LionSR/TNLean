@@ -73,19 +73,19 @@ variable [NeZero p]
 
 Its local matrix is the PGVWC07 component
 \(Q_{u+k} A^i Q_{u+k+1}\) and retains the original bond dimension \(D\). -/
-def projectorComponentPattern (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+def projectorComponentPattern (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (u : Fin p) : MPSChainTensor d D p :=
   fun k i => cornerLetter Q A (u + k) i
 
 /-- Repeat one cyclic-projector component pattern around an \(N\)-site ring. -/
-def projectorComponentChain (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+def projectorComponentChain (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (u : Fin p) (N : ℕ) : MPSChainTensor d D N :=
   MPSChainTensor.repeatPeriodPattern (projectorComponentPattern Q A u) N
 
 @[simp]
 theorem projectorComponentChain_apply
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
-    (u : Fin p) (j : Fin N) (i : Fin d) :
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
+    (u : Fin p) (j : Fin N) (i : α) :
     projectorComponentChain Q A u N j i =
       cornerLetter Q A (u + j.val • (1 : Fin p)) i :=
   rfl
@@ -93,9 +93,9 @@ theorem projectorComponentChain_apply
 /-- A nonempty projector-component chain evaluates to the corresponding cyclic
 corner product. -/
 private theorem projectorComponentChain_eval
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
-    (u : Fin p) (σ : Fin (N + 1) → Fin d) :
+    (u : Fin p) (σ : Fin (N + 1) → α) :
     MPSChainTensor.eval (projectorComponentChain Q A u (N + 1)) σ =
       cornerProd Q A u (List.ofFn σ) := by
   induction N generalizing u with
@@ -125,10 +125,10 @@ private theorem projectorComponentChain_eval
 /-- Under the cyclic shift, the corner product is simply the word product with
 its starting projector inserted on the left. -/
 private theorem cornerProd_eq_projector_mul_evalWord
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
-    (u : Fin p) (w : List (Fin d)) :
+    (u : Fin p) (w : List α) :
     cornerProd Q A u w = Q u * Kraus.evalWord A w := by
   rw [cornerProd_eq_conj_evalWord Q A hQproj hshift]
   have htransport := projector_mul_evalWord_eq_evalWord_mul_projector Q A hshift u w
@@ -145,9 +145,9 @@ coefficient of the corresponding explicit projector-component chain.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 860--880. -/
 theorem projectorComponentChain_coeff_eq_trace_cornerProd
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
-    (u : Fin p) (σ : Fin (N + 1) → Fin d) :
+    (u : Fin p) (σ : Fin (N + 1) → α) :
     MPSChainTensor.coeff (projectorComponentChain Q A u (N + 1)) σ =
       Matrix.trace (cornerProd Q A u (List.ofFn σ)) := by
   rw [MPSChainTensor.coeff, projectorComponentChain_eval Q A hQproj]
@@ -170,11 +170,11 @@ Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 860--880. The
 empty-word convention is the formal extension of the source's inserted-projector
 calculation. -/
 theorem mpv_eq_sum_trace_cornerProd
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (hQsum : ∑ k, Q k = 1)
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
-    (σ : Fin N → Fin d) :
+    (σ : Fin N → α) :
     mpv A σ = ∑ u : Fin p, Matrix.trace (cornerProd Q A u (List.ofFn σ)) := by
   simp only [mpv, coeff, cornerProd_eq_projector_mul_evalWord Q A hQproj hshift]
   calc
@@ -187,11 +187,11 @@ theorem mpv_eq_sum_trace_cornerProd
 splits an MPS coefficient into the sum of the explicit projector-component
 chain coefficients. -/
 theorem mpv_eq_sum_projectorComponentChain_coeff
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (hQsum : ∑ k, Q k = 1)
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
-    (σ : Fin (N + 1) → Fin d) :
+    (σ : Fin (N + 1) → α) :
     mpv A σ =
       ∑ u : Fin p, MPSChainTensor.coeff
         (projectorComponentChain Q A u (N + 1)) σ := by
@@ -206,11 +206,11 @@ theorem mpv_eq_sum_projectorComponentChain_coeff
 /-- If the chain length does not close the cyclic sector, every component
 coefficient vanishes by projector orthogonality. -/
 theorem projectorComponentChain_coeff_eq_zero_of_not_dvd
-    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin p → MatrixAlg D) (A : MPTensor α (Fin D))
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (hQsum : ∑ k, Q k = 1)
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
-    {N : ℕ} (hN : ¬p ∣ N) (u : Fin p) (σ : Fin N → Fin d) :
+    {N : ℕ} (hN : ¬p ∣ N) (u : Fin p) (σ : Fin N → α) :
     MPSChainTensor.coeff (projectorComponentChain Q A u N) σ = 0 := by
   have hNpos : 0 < N := by
     by_contra h
@@ -249,7 +249,7 @@ orientation used by PGVWC07, Theorem 5:
 The projectors act on the original \(D\)-dimensional virtual space; no
 bond-dimension compression occurs. -/
 theorem exists_paper_cyclic_projectors_of_isPeriodic
-    (A : MPSTensor d D) (hA : IsPeriodic p A) :
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic p A) :
     let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ Q : Fin p → MatrixAlg D,
       (∀ k, IsOrthogonalProjection (Q k)) ∧
@@ -263,7 +263,7 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
     _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA
   have hCyclic' :
-      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
   let Q : Fin p → MatrixAlg D := fun k => P (-k)
@@ -311,19 +311,19 @@ convention is recorded in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
 theorem pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd
-    (A : MPSTensor d D) (hA : IsPeriodic p A)
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic p A)
     {N : ℕ} (hdiv : p ∣ N) :
     let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ Q : Fin p → MatrixAlg D,
       (∀ k, IsOrthogonalProjection (Q k)) ∧
       (∑ k, Q k = 1) ∧
       (∀ k i, Q k * A i = A i * Q (k + 1)) ∧
-      (∀ (u : Fin p) (j : Fin N) (i : Fin d),
+      (∀ (u : Fin p) (j : Fin N) (i : α),
         projectorComponentChain Q A u N j i =
           Q (u + j.val • (1 : Fin p)) * A i *
             Q (u + j.val • (1 : Fin p) + 1)) ∧
       (∀ u : Fin p, u + N • (1 : Fin p) = u) ∧
-      (∀ σ : Fin N → Fin d,
+      (∀ σ : Fin N → α,
         mpv A σ = ∑ u : Fin p, Matrix.trace (cornerProd Q A u (List.ofFn σ))) := by
   let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨Q, hQproj, hQsum, _, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
@@ -353,19 +353,19 @@ convention is recorded in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
 theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
-    (A : MPSTensor d D) (hA : IsPeriodic p A)
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic p A)
     {N : ℕ} (hN : 0 < N) (hdiv : p ∣ N) :
     let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ Q : Fin p → MatrixAlg D,
       (∀ k, IsOrthogonalProjection (Q k)) ∧
       (∑ k, Q k = 1) ∧
       (∀ k i, Q k * A i = A i * Q (k + 1)) ∧
-      (∀ (u : Fin p) (j : Fin N) (i : Fin d),
+      (∀ (u : Fin p) (j : Fin N) (i : α),
         projectorComponentChain Q A u N j i =
           Q (u + j.val • (1 : Fin p)) * A i *
             Q (u + j.val • (1 : Fin p) + 1)) ∧
       (∀ u : Fin p, u + N • (1 : Fin p) = u) ∧
-      (∀ σ : Fin N → Fin d,
+      (∀ σ : Fin N → α,
         mpv A σ = ∑ u : Fin p,
           MPSChainTensor.coeff (projectorComponentChain Q A u N) σ) := by
   let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
@@ -390,9 +390,9 @@ convention is recorded in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
 theorem pgvwc07_stateVector_eq_zero_of_not_dvd
-    (A : MPSTensor d D) (hA : IsPeriodic p A)
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic p A)
     {N : ℕ} (hN : ¬p ∣ N) :
-    ∀ σ : Fin N → Fin d, mpv A σ = 0 := by
+    ∀ σ : Fin N → α, mpv A σ = 0 := by
   let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨Q, hQproj, hQsum, _, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
   have hNpos : 0 < N := by
@@ -446,8 +446,8 @@ Non-divisible lengths give the zero vector, component by component.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5 and its proof,
 lines 849–880, with the canonical conditions of Theorem 4. -/
-theorem pgvwc07_unital_stateVector_decomposition {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D) (hU : ∑ i, A i * (A i)ᴴ = 1)
+theorem pgvwc07_unital_stateVector_decomposition {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
+    (A : MPTensor α (Fin D)) (hU : ∑ i, A i * (A i)ᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (hUnique : ∀ X, Kraus.transferMap A X = X → ∃ c : ℂ, X = c • 1)
@@ -459,16 +459,16 @@ theorem pgvwc07_unital_stateVector_decomposition {d D : ℕ} [NeZero D]
         (∑ k, Q k = 1) ∧
         (∀ k, Q k ≠ 0) ∧
         (∀ k i, Q k * A i = A i * Q (k + 1)) ∧
-        (∀ (N : ℕ) (u : Fin p) (j : Fin N) (i : Fin d),
+        (∀ (N : ℕ) (u : Fin p) (j : Fin N) (i : α),
           projectorComponentChain Q A u N j i =
             Q (u + j.val • (1 : Fin p)) * A i *
               Q (u + j.val • (1 : Fin p) + 1)) ∧
-        (∀ N, 0 < N → ∀ σ : Fin N → Fin d,
+        (∀ N, 0 < N → ∀ σ : Fin N → α,
           mpv A σ = ∑ u : Fin p,
             MPSChainTensor.coeff (projectorComponentChain Q A u N) σ) ∧
-        (∀ N, ¬p ∣ N → ∀ (u : Fin p) (σ : Fin N → Fin d),
+        (∀ N, ¬p ∣ N → ∀ (u : Fin p) (σ : Fin N → α),
           MPSChainTensor.coeff (projectorComponentChain Q A u N) σ = 0) ∧
-        (∀ N, ¬p ∣ N → ∀ σ : Fin N → Fin d, mpv A σ = 0) := by
+        (∀ N, ¬p ∣ N → ∀ σ : Fin N → α, mpv A σ = 0) := by
   obtain ⟨hpPos, γ, hγ, hper⟩ :=
     exists_peripheral_generator_of_unital_canonical A hU Λ hΛ hΛfix hUnique p hp
   let : NeZero p := ⟨hpPos.ne'⟩
@@ -481,13 +481,13 @@ theorem pgvwc07_unital_stateVector_decomposition {d D : ℕ} [NeZero D]
   have hshift : ∀ k i, Q k * A i = A i * Q (k + 1) := by
     intro k i
     exact (Kraus.kraus_mul_cyclicProj A Q hQproj hQsum hcyclic i k).symm
-  have hsum : ∀ N, 0 < N → ∀ σ : Fin N → Fin d,
+  have hsum : ∀ N, 0 < N → ∀ σ : Fin N → α,
       mpv A σ = ∑ u : Fin p,
         MPSChainTensor.coeff (projectorComponentChain Q A u N) σ := by
     intro N hN
     obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
     exact mpv_eq_sum_projectorComponentChain_coeff Q A hQproj hQsum hshift
-  have hzero : ∀ N, ¬p ∣ N → ∀ (u : Fin p) (σ : Fin N → Fin d),
+  have hzero : ∀ N, ¬p ∣ N → ∀ (u : Fin p) (σ : Fin N → α),
       MPSChainTensor.coeff (projectorComponentChain Q A u N) σ = 0 := by
     intro N hN
     exact projectorComponentChain_coeff_eq_zero_of_not_dvd Q A hQproj hQsum hshift hN

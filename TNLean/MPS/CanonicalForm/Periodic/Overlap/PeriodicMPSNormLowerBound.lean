@@ -55,7 +55,6 @@ of the characteristic polynomial. A simple eigenvalue one contributes exactly on
 to every positive trace power. The complementary quotient contributes at most its
 dimension times the corresponding power of a uniform spectral bound.
 -/
-open Kraus (blockTensor)
 
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
@@ -163,7 +162,7 @@ namespace MPSTensor
 dimension, without primitivity or a transfer gap. This controls the weighted
 subleading blocks in PGVWC07, arXiv:quant-ph/0608197, Theorem 6, lines 970–993. -/
 theorem norm_mpvState_le_bondDimension_of_unital
-    {d D : ℕ} [NeZero D] (A : MPSTensor d D) (hUnital : Kraus.IsUnital A) (N : ℕ) :
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D] (A : MPTensor α (Fin D)) (hUnital : Kraus.IsUnital A) (N : ℕ) :
     ‖mpvState A N‖ ≤ D := by
   have hOne : Kraus.transferMap A 1 = 1 := Kraus.map_one_of_isUnital A hUnital
   have hSpec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), ‖z‖ ≤ 1 := by
@@ -189,7 +188,7 @@ squared periodic MPS norm. Unital positivity makes the eigenvalue one
 semisimple (Wolf Proposition 6.2), so a one-dimensional fixed space supplies
 algebraic multiplicity one. No diagonalizability is assumed. -/
 theorem abs_norm_mpvState_sq_sub_one_le_of_transfer_spectrum
-    {d D : ℕ} [NeZero D] (A : MPSTensor d D) (hUnital : Kraus.IsUnital A)
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D] (A : MPTensor α (Fin D)) (hUnital : Kraus.IsUnital A)
     (hDim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap A) 1) = 1)
     (q : ℝ) (hspec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q)
     (N : ℕ) :
@@ -214,7 +213,7 @@ theorem abs_norm_mpvState_sq_sub_one_le_of_transfer_spectrum
 contribution of the remaining transfer eigenvalues, counted with algebraic
 multiplicity. -/
 theorem one_sub_le_norm_mpvState_sq_of_transfer_spectrum
-    {d D : ℕ} [NeZero D] (A : MPSTensor d D) (hUnital : Kraus.IsUnital A)
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D] (A : MPTensor α (Fin D)) (hUnital : Kraus.IsUnital A)
     (hDim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap A) 1) = 1)
     (q : ℝ) (hspec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q)
     (N : ℕ) :
@@ -227,7 +226,7 @@ theorem one_sub_le_norm_mpvState_sq_of_transfer_spectrum
 bound for all sufficiently long periodic MPS, throughout an arbitrary family.
 No continuity assumption on the family is required. -/
 theorem exists_uniform_norm_mpvState_sq_lowerBound_of_transfer_spectrum
-    {T : Type*} {d D : ℕ} [NeZero D] (A : T → MPSTensor d D)
+    {T : Type*} {α : Type*} [Fintype α] {D : ℕ} [NeZero D] (A : T → MPTensor α (Fin D))
     (hUnital : ∀ t, Kraus.IsUnital (A t))
     (hDim : ∀ t, Module.finrank ℂ
       (Module.End.eigenspace (Kraus.transferMap (A t)) 1) = 1)
@@ -250,30 +249,30 @@ theorem exists_uniform_norm_mpvState_sq_lowerBound_of_transfer_spectrum
     (A t) (hUnital t) (hDim t) q (hspec t) N
   linarith
 
-private theorem norm_mpvState_blockTensor_sq {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D) (L N : ℕ) :
-    ‖mpvState (blockTensor A L) N‖ ^ 2 = ‖mpvState A (L * N)‖ ^ 2 := by
+private theorem norm_mpvState_blockTensor_sq {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
+    (A : MPTensor α (Fin D)) (L N : ℕ) :
+    ‖mpvState (Kraus.block A L) N‖ ^ 2 = ‖mpvState A (L * N)‖ ^ 2 := by
   apply Complex.ofReal_injective
   rw [ofReal_norm_mpvState_sq, ofReal_norm_mpvState_sq,
     ← trace_mixedMapLM_pow_eq_mpvOverlap, ← trace_mixedMapLM_pow_eq_mpvOverlap,
     Kraus.mixedMapLM_self, Kraus.mixedMapLM_self]
   change LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
-      ((Kraus.transferMap (blockTensor A L)) ^ N) =
+      ((Kraus.transferMap (Kraus.block A L)) ^ N) =
     LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) ((Kraus.transferMap A) ^ (L * N))
-  rw [Kraus.transferMap_blockTensor, ← pow_mul]
+  rw [Kraus.transferMap_block, ← pow_mul]
 
 /-- A single physical blocking length makes every positive periodic ring
 nonzero, uniformly over any family with a common spectral bound below one. -/
 theorem exists_uniform_blocking_mpvState_ne_zero_of_transfer_spectrum
-    {T : Type*} {d D : ℕ} [NeZero D] (A : T → MPSTensor d D)
+    {T : Type*} {α : Type*} [Fintype α] {D : ℕ} [NeZero D] (A : T → MPTensor α (Fin D))
     (hUnital : ∀ t, Kraus.IsUnital (A t))
     (hDim : ∀ t, Module.finrank ℂ
       (Module.End.eigenspace (Kraus.transferMap (A t)) 1) = 1)
     (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
     (hspec : ∀ t z, z ∈ spectrum ℂ (Kraus.transferMap (A t)) → z ≠ 1 → ‖z‖ ≤ q) :
     ∃ L : ℕ, 0 < L ∧ ∀ t N, 0 < N →
-      (1 / 2 : ℝ) ≤ ‖mpvState (blockTensor (A t) L) N‖ ^ 2 ∧
-      mpvState (blockTensor (A t) L) N ≠ 0 := by
+      (1 / 2 : ℝ) ≤ ‖mpvState (Kraus.block (A t) L) N‖ ^ 2 ∧
+      mpvState (Kraus.block (A t) L) N ≠ 0 := by
   obtain ⟨L, hL, hBound⟩ :=
     exists_uniform_norm_mpvState_sq_lowerBound_of_transfer_spectrum
       A hUnital hDim q hq hqOne hspec
@@ -281,7 +280,7 @@ theorem exists_uniform_blocking_mpvState_ne_zero_of_transfer_spectrum
   intro t N hN
   have hLN : L ≤ L * N := by
     simpa using Nat.mul_le_mul_left L hN
-  have hNorm : (1 / 2 : ℝ) ≤ ‖mpvState (blockTensor (A t) L) N‖ ^ 2 := by
+  have hNorm : (1 / 2 : ℝ) ≤ ‖mpvState (Kraus.block (A t) L) N‖ ^ 2 := by
     rw [norm_mpvState_blockTensor_sq]
     exact hBound t (L * N) hLN
   refine ⟨hNorm, ?_⟩

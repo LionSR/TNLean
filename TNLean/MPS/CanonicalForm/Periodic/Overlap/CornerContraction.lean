@@ -64,7 +64,7 @@ open Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## Step (a): the repeated-block matrix identity -/
 
@@ -90,13 +90,13 @@ anchors every length-`m` block at the same base sector `u`, so each block
 contributes the same factor `c u`. -/
 lemma cornerProd_blockMatch_pow
     (P : Fin m → MatrixAlg D) (Q : Fin m → MatrixAlg D)
-    (A B : MPSTensor d D) (q : Fin m) (c : Fin m → ℂ)
+    (A B : MPTensor α (Fin D)) (q : Fin m) (c : Fin m → ℂ)
     (hP : ∀ k, IsOrthogonalProjection (P k))
     (hQ : ∀ k, IsOrthogonalProjection (Q k))
-    (hBC : ∀ (u : Fin m) (w : List (Fin d)), w.length = m →
+    (hBC : ∀ (u : Fin m) (w : List α), w.length = m →
       cornerProd P A u w = c u • cornerProd Q B (u + q) w)
     (u : Fin m) (k : ℕ) :
-    ∀ W : List (Fin d), W.length = (k + 1) * m →
+    ∀ W : List α, W.length = (k + 1) * m →
       cornerProd P A u W = (c u) ^ (k + 1) • cornerProd Q B (u + q) W := by
   induction k with
   | zero =>
@@ -190,13 +190,13 @@ The recovery is required only at the inserted matrices `X_k`, which in the
 Case-3 contraction are the corner-supported tensors `P_{k+1} X_k P_{k+1+L•1}`
 that `Ω_{k+1}` actually inverts. -/
 theorem cornerProd_contraction
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D) (L : ℕ)
-    (Ω : Fin m → MatrixAlg D → (Fin L → Fin d) → ℂ)
-    (σ : Fin m → Fin d) (X : Fin m → MatrixAlg D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D)) (L : ℕ)
+    (Ω : Fin m → MatrixAlg D → (Fin L → α) → ℂ)
+    (σ : Fin m → α) (X : Fin m → MatrixAlg D)
     (hΩ : ∀ k : Fin m,
-      ∑ j : Fin L → Fin d, Ω (k + 1) (X k) j •
+      ∑ j : Fin L → α, Ω (k + 1) (X k) j •
         cornerProd P A (k + 1) (List.ofFn j) = X k) :
-    ∑ ρ : Fin m → (Fin L → Fin d),
+    ∑ ρ : Fin m → (Fin L → α),
         (∏ k, Ω (k + 1) (X k) (ρ k)) •
           (List.ofFn (fun k => cornerLetter P A k (σ k) *
             cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod

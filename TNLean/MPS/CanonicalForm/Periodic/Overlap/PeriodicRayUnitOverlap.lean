@@ -34,12 +34,12 @@ namespace MPSTensor
 when both vectors vanish. Source context: arXiv:1010.3732, Appendix C,
 lines 2653–2717, comparison of the limiting periodic lines. -/
 theorem norm_mpvOverlap_eq_mul_norm_of_span_eq
-    {d D E N : ℕ} (A : MPSTensor d D) (B : MPSTensor d E)
-    (hspan : Submodule.span ℂ {(mpv A : (Fin N → Fin d) → ℂ)} =
-      Submodule.span ℂ {(mpv B : (Fin N → Fin d) → ℂ)}) :
+    {d D E N : ℕ} (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
+    (hspan : Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} =
+      Submodule.span ℂ {(mpv B : (Fin N → α) → ℂ)}) :
     ‖mpvOverlap A B N‖ = ‖mpvState A N‖ * ‖mpvState B N‖ := by
-  have hmem : (mpv B : (Fin N → Fin d) → ℂ) ∈
-      Submodule.span ℂ {(mpv A : (Fin N → Fin d) → ℂ)} := by
+  have hmem : (mpv B : (Fin N → α) → ℂ) ∈
+      Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} := by
     rw [hspan]
     exact Submodule.mem_span_singleton_self _
   obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp hmem
@@ -56,7 +56,7 @@ contracting remaining transfer spectrum has periodic state norm tending to
 one. Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. The transfer
 spectral bound is an explicit auxiliary hypothesis. -/
 theorem norm_mpvState_tendsto_one_of_transfer_spectrum
-    {d D : ℕ} [NeZero D] (A : MPSTensor d D) (hUnital : Kraus.IsUnital A)
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D] (A : MPTensor α (Fin D)) (hUnital : Kraus.IsUnital A)
     (hDim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap A) 1) = 1)
     (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
     (hspec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q) :
@@ -77,10 +77,10 @@ theorem norm_mpvState_tendsto_one_of_transfer_spectrum
 to one imply a unit limiting overlap modulus. No proportionality scalars
 are chosen. Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. -/
 theorem norm_mpvOverlap_tendsto_one_of_eventual_span_eq
-    {d D E : ℕ} (A : MPSTensor d D) (B : MPSTensor d E)
+    {d D E : ℕ} (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
     (hspan : ∀ᶠ N in atTop,
-      Submodule.span ℂ {(mpv A : (Fin N → Fin d) → ℂ)} =
-        Submodule.span ℂ {(mpv B : (Fin N → Fin d) → ℂ)})
+      Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} =
+        Submodule.span ℂ {(mpv B : (Fin N → α) → ℂ)})
     (hA : Tendsto (fun N => ‖mpvState A N‖) atTop (𝓝 (1 : ℝ)))
     (hB : Tendsto (fun N => ‖mpvState B N‖) atTop (𝓝 (1 : ℝ))) :
     Tendsto (fun N => ‖mpvOverlap A B N‖) atTop (𝓝 (1 : ℝ)) := by

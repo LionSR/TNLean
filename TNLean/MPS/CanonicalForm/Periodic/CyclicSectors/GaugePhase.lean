@@ -19,7 +19,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- A unit-modulus gauge-phase relation gives a repeated-block relation.
 
@@ -28,10 +28,10 @@ If \(B^i=\zeta X A^i X^{-1}\) and \(|\zeta|=1\), then
 relation. This is the final algebraic conversion used after the phase
 normalization step in arXiv:1708.00029, Appendix A, lines 1082--1117. -/
 theorem repeatedBlocks_of_gaugePhaseData_norm_one
-    {A B : MPSTensor d D} (X : GL (Fin D) ℂ) {ζ : ℂ}
+    {A B : MPTensor α (Fin D)} (X : GL (Fin D) ℂ) {ζ : ℂ}
     (hζ_norm : ‖ζ‖ = 1)
     (hB :
-      ∀ i : Fin d,
+      ∀ i : α,
         B i =
           ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :

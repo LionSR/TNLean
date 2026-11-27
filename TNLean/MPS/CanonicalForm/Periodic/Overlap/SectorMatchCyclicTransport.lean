@@ -17,7 +17,7 @@ open Filter Matrix Module
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Concatenating cyclic word segments multiplies their corner products in
 cyclic order.
@@ -26,9 +26,9 @@ This is the word-level concatenation in arXiv:1708.00029, Appendix A,
 lines 1041--1056. -/
 lemma cornerProd_cyclicList_flatten_succ
     {m : ℕ} [NeZero m]
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hP : ∀ u, IsOrthogonalProjection (P u))
-    (segments : Fin m → List (Fin d))
+    (segments : Fin m → List α)
     (hsegments : ∀ u, (segments u).length • (1 : Fin m) = 1)
     (u : Fin m) (n : ℕ) :
     cornerProd P A u (cyclicList segments u (n + 1)).flatten =
@@ -84,8 +84,8 @@ This is the fixed sector offset in arXiv:1708.00029, Appendix A,
 equation `eq:vprop` and lines 1041--1056. -/
 private lemma cornerProd_add_shift
     {m : ℕ} [NeZero m]
-    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D)
-    (q u : Fin m) (w : List (Fin d)) :
+    (Q : Fin m → MatrixAlg D) (B : MPTensor α (Fin D))
+    (q u : Fin m) (w : List α) :
     cornerProd (fun k => Q (k + q)) B u w =
       cornerProd Q B (u + q) w := by
   induction w generalizing u with
@@ -102,12 +102,12 @@ This is the cancellation of adjacent implementers in arXiv:1708.00029,
 Appendix A, lines 1041--1056. -/
 lemma cyclic_transport_cornerProd_segments
     {m : ℕ} [NeZero m]
-    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D) (q : Fin m)
+    (Q : Fin m → MatrixAlg D) (B : MPTensor α (Fin D)) (q : Fin m)
     (U : Fin m → MatrixAlg D)
     (hQ : ∀ k, IsOrthogonalProjection (Q k))
-    (hQ_shift : ∀ k (i : Fin d), Q k * B i = B i * Q (k + 1))
+    (hQ_shift : ∀ k (i : α), Q k * B i = B i * Q (k + 1))
     (hU_star_U : ∀ k, (U k)ᴴ * U k = Q (k + q))
-    (segments : Fin m → List (Fin d))
+    (segments : Fin m → List α)
     (hsegments : ∀ k, (segments k).length • (1 : Fin m) = 1)
     (u : Fin m) (n : ℕ) :
     (cyclicList
@@ -118,7 +118,7 @@ lemma cyclic_transport_cornerProd_segments
           (U (u + (n + 1) • (1 : Fin m)))ᴴ := by
   let S : Fin m → MatrixAlg D := fun k => Q (k + q)
   have hS : ∀ k, IsOrthogonalProjection (S k) := fun k => hQ (k + q)
-  have hS_shift : ∀ k (i : Fin d), S k * B i = B i * S (k + 1) := by
+  have hS_shift : ∀ k (i : α), S k * B i = B i * S (k + 1) := by
     intro k i
     change Q (k + q) * B i = B i * Q (k + 1 + q)
     rw [show k + 1 + q = k + q + 1 by abel]
@@ -166,11 +166,11 @@ This is one local cancellation in arXiv:1708.00029, Appendix A,
 lines 1041--1056. -/
 lemma transported_cornerProd_cons
     {m : ℕ} [NeZero m]
-    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D) (q : Fin m)
+    (Q : Fin m → MatrixAlg D) (B : MPTensor α (Fin D)) (q : Fin m)
     (U : Fin m → MatrixAlg D)
     (hQ : ∀ k, IsOrthogonalProjection (Q k))
     (hU_star_U : ∀ k, (U k)ᴴ * U k = Q (k + q))
-    (u : Fin m) (i : Fin d) (w : List (Fin d)) :
+    (u : Fin m) (i : α) (w : List α) :
     U u * cornerProd Q B (u + q) (i :: w) * (U (u + 1))ᴴ =
       (U u * cornerLetter Q B (u + q) i * (U (u + 1))ᴴ) *
         (U (u + 1) * cornerProd Q B (u + 1 + q) w * (U (u + 1))ᴴ) := by
@@ -199,7 +199,7 @@ This is the norm identity used in arXiv:1708.00029, Appendix A,
 lines 1082--1084. -/
 lemma sum_cornerLetter_star_mul
     {m : ℕ} [NeZero m]
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hP : ∀ k, IsOrthogonalProjection (P k))
     (htransfer : ∀ k, ∑ i, (A i)ᴴ * P k * A i = P (k + 1))
     (k : Fin m) :

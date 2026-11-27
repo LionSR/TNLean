@@ -18,14 +18,14 @@ No periodicity or normalization assumption is needed for this clause.
 open scoped BigOperators
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- The state of an assembled tensor belongs to the span of its nonzero
 basis-block states at every length.
 
 Source: arXiv:1708.00029, Proposition 3.3, lines 604--608. The coefficients are
 the sums of the length-th powers of the multiplicity entries. -/
-theorem SectorDecomposition.mpvState_mem_span_nonzero (P : SectorDecomposition (Fin d)) (N : ℕ) :
+theorem SectorDecomposition.mpvState_mem_span_nonzero (P : SectorDecomposition α) (N : ℕ) :
     mpvState P.toTensor N ∈ Submodule.span ℂ
       (Set.range (fun j : {j : Fin P.basisCount // mpvState (P.basis j) N ≠ 0} =>
         mpvState (P.basis j) N)) := by

@@ -45,30 +45,30 @@ open Fin.NatCast
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] {D m : ℕ}
 
 /-- Rephase each outgoing cyclic sector, as in arXiv:1708.00029, the definition
 of `A'_j` immediately before `eq:Aprime-is-cPA`. -/
-noncomputable def sectorPhaseTensor (A : MPSTensor d D)
-    (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ) : MPSTensor d D :=
+noncomputable def sectorPhaseTensor (A : MPTensor α (Fin D))
+    (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ) : MPTensor α (Fin D) :=
   fun i => ∑ u, c u • (P u * A i)
 
 /-- A projection extracts one letter's phase from the sector sum in
 arXiv:1708.00029, `eq:Aprime-is-cPA`. -/
-theorem mul_sectorPhaseTensor (A : MPSTensor d D)
+theorem mul_sectorPhaseTensor (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
-    (u : Fin m) (i : Fin d) :
+    (u : Fin m) (i : α) :
     P u * sectorPhaseTensor A P c i = c u • (P u * A i) := by
   simp [sectorPhaseTensor, Matrix.mul_sum, ← Matrix.mul_assoc, hP]
 
 /-- The phase accumulated along a word is the product of its successive sector
 phases (arXiv:1708.00029, first equality of `eq:Aprime-is-cPA`). -/
-theorem mul_evalWord_sectorPhaseTensor [NeZero m] (A : MPSTensor d D)
+theorem mul_evalWord_sectorPhaseTensor [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
     (hShift : ∀ u i, P u * A i = A i * P (u + 1))
-    (w : List (Fin d)) (u : Fin m) :
+    (w : List α) (u : Fin m) :
     P u * Kraus.evalWord (sectorPhaseTensor A P c) w =
       (∏ k ∈ Finset.range w.length, c (u + k • (1 : Fin m))) • (P u * Kraus.evalWord A w) := by
   induction w generalizing u with
@@ -83,12 +83,12 @@ theorem mul_evalWord_sectorPhaseTensor [NeZero m] (A : MPSTensor d D)
 
 /-- Summing the sector identities gives the first equality of
 arXiv:1708.00029, `eq:Aprime-is-cPA`, for an arbitrary word. -/
-theorem evalWord_sectorPhaseTensor [NeZero m] (A : MPSTensor d D)
+theorem evalWord_sectorPhaseTensor [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
     (hSum : ∑ u, P u = 1)
     (hShift : ∀ u i, P u * A i = A i * P (u + 1))
-    (w : List (Fin d)) :
+    (w : List α) :
     Kraus.evalWord (sectorPhaseTensor A P c) w =
       ∑ u, (∏ k ∈ Finset.range w.length, c (u + k • (1 : Fin m))) •
         (P u * Kraus.evalWord A w) := by
@@ -98,7 +98,7 @@ theorem evalWord_sectorPhaseTensor [NeZero m] (A : MPSTensor d D)
 /-- Unit-modulus sector phases preserve left-canonical normalization. This supplies
 trace preservation for the rephasing before `eq:Aprime-is-cPA` in arXiv:1708.00029,
 Theorem 4.1, when the original block is left canonical. -/
-theorem isLeftCanonical_sectorPhaseTensor (A : MPSTensor d D)
+theorem isLeftCanonical_sectorPhaseTensor (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
     (hHerm : ∀ u, (P u)ᴴ = P u) (hSum : ∑ u, P u = 1)
@@ -123,12 +123,12 @@ theorem isLeftCanonical_sectorPhaseTensor (A : MPSTensor d D)
 cyclic sectors, preserving left canonicality and realizing the required blocked tensor.
 Source: arXiv:1708.00029, `eq:Aprime-is-cPA` and its preceding construction. -/
 theorem exists_isLeftCanonical_evalWord_eq_sum_orbit_phases [NeZero m]
-    (A : MPSTensor d D) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
     (hHerm : ∀ u, (P u)ᴴ = P u) (hSum : ∑ u, P u = 1)
     (hShift : ∀ u i, P u * A i = A i * P (u + 1)) (hA : IsLeftCanonical A)
     (p : ℕ) (c : Fin (m.gcd p) → ℂ) (hc : ∀ a, c a ^ (m / m.gcd p) = 1) :
-    ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧ ∀ w : List (Fin d), w.length = p →
+    ∃ A' : MPTensor α (Fin D), IsLeftCanonical A' ∧ ∀ w : List α, w.length = p →
       Kraus.evalWord A' w = ∑ u,
         c ((Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 •
           (P u * Kraus.evalWord A w) := by
@@ -181,10 +181,9 @@ gauge; those are the preceding steps of the corrected forward theorem.
 largest coordinate. See `docs/paper-gaps/dccsp17_orbit_phase_wraparound.tex`.
 -/
 
-open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
 namespace MPSTensor
 
-variable {d D m : ℕ} [NeZero m]
+variable {α : Type*} [Fintype α] {D m : ℕ} [NeZero m]
 
 private theorem sum_orbit_weighted (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (p : ℕ)
     (c : Fin (m.gcd p) → ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -199,24 +198,24 @@ private theorem sum_orbit_weighted (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (p
 The resulting tensor remains left-canonical and blocks to `Z A^(p)`.
 Source: arXiv:1708.00029, `eq:ZPA-is-cPA`, `eq:Aprime-is-cPA`, lines 778–807. -/
 theorem exists_isLeftCanonical_blockTensor_eq_of_orbit_action
-    (A : MPSTensor d D) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
     (hHerm : ∀ u, (P u)ᴴ = P u) (hSum : ∑ u, P u = 1)
     (hShift : ∀ u i, P u * A i = A i * P (u + 1)) (hA : IsLeftCanonical A)
     (p : ℕ) (c : Fin (m.gcd p) → ℂ) (hc : ∀ a, c a ^ (m / m.gcd p) = 1)
     (Z : Matrix (Fin D) (Fin D) ℂ)
-    (hZ : ∀ a i, Z * (stepOrbitProjection P p a * blockTensor A p i) =
-      c a • (stepOrbitProjection P p a * blockTensor A p i)) :
-    ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
-      blockTensor A' p = fun i ↦ Z * blockTensor A p i := by
+    (hZ : ∀ a i, Z * (stepOrbitProjection P p a * Kraus.block A p i) =
+      c a • (stepOrbitProjection P p a * Kraus.block A p i)) :
+    ∃ A' : MPTensor α (Fin D), IsLeftCanonical A' ∧
+      Kraus.block A' p = fun i ↦ Z * Kraus.block A p i := by
   obtain ⟨A', hA', hword⟩ := exists_isLeftCanonical_evalWord_eq_sum_orbit_phases
     A P hP hHerm hSum hShift hA p c hc
   refine ⟨A', hA', ?_⟩
   funext i
-  change Kraus.evalWord A' (wordOfBlock d p i) = _
-  rw [hword _ (length_wordOfBlock d p i)]
+  change Kraus.evalWord A' (List.ofFn i) = _
+  rw [hword _ (List.length_ofFn)]
   change (∑ u, c ((Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 •
-    (P u * blockTensor A p i)) = _
+    (P u * Kraus.block A p i)) = _
   rw [sum_orbit_weighted]
   simp only [← hZ, ← Finset.mul_sum, ← Finset.sum_mul, sum_stepOrbitProjection,
     hSum, Matrix.one_mul]
@@ -225,12 +224,12 @@ theorem exists_isLeftCanonical_blockTensor_eq_of_orbit_action
 original physical dimension. Source: arXiv:1708.00029, lines 807–810,
 where the final root is `Uᴴ A′ U`. -/
 theorem exists_isLeftCanonical_blockTensor_eq_of_unitary_conj
-    (A : MPSTensor d D) (p : ℕ) (hA : IsLeftCanonical A)
-    (C : MPSTensor (blockPhysDim d p) D)
+    (A : MPTensor α (Fin D)) (p : ℕ) (hA : IsLeftCanonical A)
+    (C : MPTensor (Fin p → α) (Fin D))
     (U : Matrix (Fin D) (Fin D) ℂ) (hU : Uᴴ * U = 1) (hU' : U * Uᴴ = 1)
-    (he : ∀ i, blockTensor A p i = U * C i * Uᴴ) :
-    ∃ B : MPSTensor d D, IsLeftCanonical B ∧ blockTensor B p = C := by
-  let B : MPSTensor d D := fun i ↦ Uᴴ * A i * U
+    (he : ∀ i, Kraus.block A p i = U * C i * Uᴴ) :
+    ∃ B : MPTensor α (Fin D), IsLeftCanonical B ∧ Kraus.block B p = C := by
+  let B : MPTensor α (Fin D) := fun i ↦ Uᴴ * A i * U
   have hnorm : IsLeftCanonical B := by
     change (∑ i, (Uᴴ * A i * U)ᴴ * (Uᴴ * A i * U)) = 1
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
@@ -241,7 +240,7 @@ theorem exists_isLeftCanonical_blockTensor_eq_of_unitary_conj
         rw [Matrix.mul_sum, Matrix.sum_mul]
         simp only [Matrix.mul_assoc]
       _ = 1 := by rw [hA, Matrix.mul_one, hU]
-  have hw (w : List (Fin d)) : Kraus.evalWord B w = Uᴴ * Kraus.evalWord A w * U := by
+  have hw (w : List α) : Kraus.evalWord B w = Uᴴ * Kraus.evalWord A w * U := by
     induction w with
     | nil => simp [Kraus.evalWord_nil, hU]
     | cons i w ih =>
@@ -251,9 +250,9 @@ theorem exists_isLeftCanonical_blockTensor_eq_of_unitary_conj
       simp only [← Matrix.mul_assoc, hU', Matrix.one_mul]
   refine ⟨B, hnorm, ?_⟩
   funext i
-  change Kraus.evalWord B (wordOfBlock d p i) = _
+  change Kraus.evalWord B (List.ofFn i) = _
   rw [hw]
-  change Uᴴ * blockTensor A p i * U = _
+  change Uᴴ * Kraus.block A p i * U = _
   rw [he]
   simp only [← Matrix.mul_assoc, hU, Matrix.one_mul]
   rw [Matrix.mul_assoc, hU, Matrix.mul_one]

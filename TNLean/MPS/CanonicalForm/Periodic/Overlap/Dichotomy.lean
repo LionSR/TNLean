@@ -33,11 +33,10 @@ section Dichotomy
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
-open Kraus (blockPhysDim)
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-! ## Main dichotomy from `equal-or-orthogonal-generalized` -/
 
@@ -56,12 +55,12 @@ Source: arXiv:1708.00029, Proposition equal-or-orthogonal-generalized
 (statement, lines 589--609; appendix proof, lines 903--1118). -/
 theorem periodicOverlapDichotomy
     {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
       ∨ ∃ (hdim : D₁ = D₂),
-          RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) A) B := by
+          RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) B := by
   -- APPENDIX CASE SPLIT (arXiv:1708.00029 lines 915--1117):
   --   * m_a ≠ m_b            → `periodicOverlap_tendsto_zero_of_ne_period`
   --   * m_a = m_b, D₁ ≠ D₂ → `periodicOverlap_tendsto_zero_of_ne_dim`
@@ -88,12 +87,12 @@ theorem periodicOverlapDichotomy
         hB_letter⟩ :=
         exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic B hB
       have hAShift :
-          ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D₁) (fun i => (A i)ᴴ) (PA (k + 1)) =
+          ∀ k, Kraus.transferMap (ι := α) (n := Fin D₁) (fun i => (A i)ᴴ) (PA (k + 1)) =
             PA k := by
         intro k
         simpa [cyclicNextOfPos, Fin.add_def] using hAShift' k
       have hBShift :
-          ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D₁) (fun i => (B i)ᴴ) (PB (k + 1)) =
+          ∀ k, Kraus.transferMap (ι := α) (n := Fin D₁) (fun i => (B i)ᴴ) (PB (k + 1)) =
             PB k := by
         intro k
         simpa [cyclicNextOfPos, Fin.add_def] using hBShift' k
@@ -109,7 +108,7 @@ theorem periodicOverlapDichotomy
         ⟨PB, φB, hB_cyclic_with⟩
       by_cases hmatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
           GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim) (blocksA u₀))
+            (cast (congr_arg (fun n ↦ MPTensor (Fin m_a → α) (Fin n)) hdim) (blocksA u₀))
             (blocksB v₀)
       · refine Or.inr ⟨rfl, ?_⟩
         simpa using
@@ -133,7 +132,7 @@ periods, while the cross overlaps tend to zero. -/
 theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
     {ι : Type*} [Finite ι]
     {dim : ι → ℕ}
-    (A : (k : ι) → MPSTensor d (dim k))
+    (A : (k : ι) → MPTensor α (Fin (dim k)))
     (period : ι → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
     (p : ℕ) [NeZero p]
@@ -152,7 +151,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   let : Fintype ι := Fintype.ofFinite ι
   set V := lp (fun N : ℕ => MPVSpace d N) 2 with hV
   set v : ι → ℕ → V :=
-    fun k N => lp.single 2 (p * N) (mpvState (d := d) (A k) (p * N)) with hv
+    fun k N => lp.single 2 (p * N) (mpvState (α := α) (A k) (p * N)) with hv
   set L : Matrix ι ι ℂ := Matrix.diagonal (fun k => (period k : ℂ)) with hLdef
   have hLdet : L.det ≠ 0 := by
     rw [hLdef, Matrix.det_diagonal]
@@ -160,7 +159,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   have hGram : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j)) := by
     intro i j
     have hreduce : (fun N => ⟪v i N, v j N⟫_ℂ)
-        = fun N => star (mpvOverlap (α := Fin d) (A i) (A j) (p * N)) := by
+        = fun N => star (mpvOverlap (α := α) (A i) (A j) (p * N)) := by
       funext N
       simp only [hv]
       rw [lp.inner_single_left, lp.single_apply_self, mpvOverlap_eq_star_mpvInner, star_star]
@@ -177,7 +176,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
         · exact h
       have hmap : Tendsto (fun N : ℕ => c * N) atTop atTop :=
         tendsto_atTop_mono (fun n => le_mul_of_one_le_left (Nat.zero_le n) hcpos) tendsto_id
-      have hcomp : Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A i) (p * N)) atTop
+      have hcomp : Tendsto (fun N => mpvOverlap (α := α) (A i) (A i) (p * N)) atTop
           (nhds (period i : ℂ)) :=
         ((periodicSelfOverlap_tendsto (A i) (hPer i)).comp hmap).congr fun N => by
           simp only [Function.comp]; rw [hc, mul_assoc]
@@ -195,7 +194,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   refine ⟨N₀, fun N hN => ?_⟩
   let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
     lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 (p * N)
-  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (d := d) (A k) (p * N))) := by
+  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (α := α) (A k) (p * N))) := by
     convert hN₀ N hN using 1
     ext k L i
     rfl
@@ -225,14 +224,14 @@ source consequence is recorded in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem periodicBasis_eventuallyLinearlyIndependent
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (period : Fin r → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
     (p : ℕ) [NeZero p]
     (hDiv : ∀ k, period k ∣ p)
     (hNonrep : ∀ i j, i ≠ j →
       ∀ (hdim : dim i = dim j),
-        ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
+        ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
   refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
@@ -276,7 +275,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- **Independence of the non-zero members of a basis of periodic vectors.**
 
@@ -303,15 +302,15 @@ Source: arXiv:1708.00029, proposition `equal-or-orthogonal-generalized`,
 lines 604--608; used at lines 677--679. -/
 theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
     {g : ℕ} {dim : Fin g → ℕ}
-    (A : (j : Fin g) → MPSTensor d (dim j))
+    (A : (j : Fin g) → MPTensor α (Fin (dim j)))
     (period : Fin g → ℕ)
     (hPer : ∀ j, IsPeriodic (period j) (A j))
     (hNonrep : ∀ i j, i ≠ j →
       ∀ (hdim : dim i = dim j),
-        ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
+        ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ
-        (fun j : {j : Fin g // period j ∣ N} => mpvState (d := d) (A ↑j) N) := by
+        (fun j : {j : Fin g // period j ∣ N} => mpvState (α := α) (A ↑j) N) := by
   classical
   -- Positive bond dimensions, needed as instances by the overlap dichotomy.
   -- Every period is positive, so every least common multiple of periods is.
@@ -324,7 +323,7 @@ theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
   have key : ∀ S : Finset (Fin g), ∃ M : ℕ, ∀ n ≥ M,
       LinearIndependent ℂ
         (fun k : {j : Fin g // j ∈ S} =>
-          mpvState (d := d) (A ↑k) (S.lcm period * n)) := by
+          mpvState (α := α) (A ↑k) (S.lcm period * n)) := by
     intro S
     have : NeZero (S.lcm period) := ⟨(hlcmPos S).ne'⟩
     refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero

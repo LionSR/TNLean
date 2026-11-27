@@ -61,27 +61,26 @@ each compressed block is periodic of period m/gcd(m,p).
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
 /-- Prescribed blocking of a periodic tensor into periodic blocks.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`. -/
-theorem IsPeriodic.exists_stepOrbit_blockDecomposition {d D m : ℕ}
-    {A : MPSTensor d D} (hA : IsPeriodic m A) (p : ℕ) :
+theorem IsPeriodic.exists_stepOrbit_blockDecomposition {α : Type*} [Fintype α] {D m : ℕ}
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) (p : ℕ) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
       (dim : Fin (m.gcd p) → ℕ)
-      (blocks : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+      (blocks : (a : Fin (m.gcd p)) → MPTensor (Fin p → α) (Fin (dim a)))
       (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ),
       (∀ u, IsOrthogonalProjection (P u)) ∧ (∑ u, P u) = 1 ∧
       (∀ u, P u ≠ 0) ∧ (∀ u i, P u * A i = A i * P (u + 1)) ∧
       (∀ a, 0 < dim a) ∧ (∑ a, dim a) = D ∧
       (∀ a, IsLeftCanonical (blocks a)) ∧
-      SameMPV₂ (blockTensor A p) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      SameMPV₂ (Kraus.block A p) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ a, (V a)ᴴ * V a = 1) ∧
       (∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a) ∧
-      (∀ a i, blocks a i = (V a)ᴴ * blockTensor A p i * V a) ∧
+      (∀ a i, blocks a i = (V a)ᴴ * Kraus.block A p i * V a) ∧
       (0 < p → ∀ a, IsPeriodic (m / m.gcd p) (blocks a)) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, hproj, hsum, hne, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
@@ -103,20 +102,19 @@ end PrescribedBlocking
 section IrreducibleFormBlocking
 
 open scoped BigOperators Matrix
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Refining each summand by a unit-weight block presentation commutes with taking
 a weighted block sum. Each refined block inherits its original summand's weight.
 Source: arXiv:1708.00029, `eq:irreducible-form` and `lem:blocking-arbitrary`,
 lines 252–261 and 432–456. -/
 theorem sameMPV₂_toTensorFromBlocks_refinement
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (n : Fin r → ℕ) (sd : (k : Fin r) → Fin (n k) → ℕ)
-    (B : (k : Fin r) → (a : Fin (n k)) → MPSTensor d (sd k a))
+    (B : (k : Fin r) → (a : Fin (n k)) → MPTensor α (Fin (sd k a)))
     (hB : ∀ k, SameMPV₂ (A k) (toTensorFromBlocks (fun _ ↦ 1) (B k))) :
     let e := (finSigmaFinEquiv (n := n)).symm
     SameMPV₂ (toTensorFromBlocks μ A)
@@ -137,16 +135,16 @@ Source: arXiv:1708.00029, `lem:blocking-arbitrary`, lines 432–456, applied to
 each block as in the proof of Theorem 4.1, lines 750–756. This construction
 preserves the presentation's MPVs; it does not supply a global bond similarity
 between the original tensor and its presentation. -/
-noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPSTensor d D}
+noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPTensor α (Fin D)}
     (h : IsIrreducibleForm A) {p : ℕ} (hp : 0 < p) :
-    IsIrreducibleForm (blockTensor A p) := by
+    IsIrreducibleForm (Kraus.block A p) := by
   classical
   let n : Fin h.r → ℕ := fun k ↦ (h.period k).gcd p
   have hex (k : Fin h.r) :
       ∃ (sd : Fin (n k) → ℕ)
-        (B : (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd a)),
+        (B : (a : Fin (n k)) → MPTensor (Fin p → α) (Fin (sd a))),
         (∀ a, IsPeriodic (h.period k / n k) (B a)) ∧
-        SameMPV₂ (blockTensor (h.blocks k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
+        SameMPV₂ (Kraus.block (h.blocks k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
     obtain ⟨_, sd, B, _, _, _, _, _, _, _, _, hSame, _, _, _, hper⟩ :=
       (h.periodic k).exists_stepOrbit_blockDecomposition p
     exact ⟨sd, B, hper hp, hSame⟩
@@ -169,13 +167,13 @@ noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPSTensor d D}
   · have hbase := sameMPV₂_block_of_sameMPV₂_toTensorFromBlocks
       A h.μ h.blocks h.sameMPV p
     have hflat := sameMPV₂_toTensorFromBlocks_refinement (fun k ↦ h.μ k ^ p)
-      (fun k ↦ blockTensor (h.blocks k) p) n sd B hSame
+      (fun k ↦ Kraus.block (h.blocks k) p) n sd B hSame
     intro N σ
     exact (hbase N σ).trans (hflat N σ)
 
 /-- The all-length MPV equality in an irreducible-form presentation forces equality
 of total bond dimensions by evaluation on the empty word. -/
-theorem IsIrreducibleForm.sum_dim_eq {D : ℕ} {A : MPSTensor d D} (h : IsIrreducibleForm A) :
+theorem IsIrreducibleForm.sum_dim_eq {D : ℕ} {A : MPTensor α (Fin D)} (h : IsIrreducibleForm A) :
     (∑ k, h.dim k) = D := by
   have he := h.sameMPV 0 Fin.elim0
   simp only [mpv_zero_length, Fintype.card_fin] at he

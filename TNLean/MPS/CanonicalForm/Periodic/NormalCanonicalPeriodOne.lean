@@ -20,8 +20,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {blocks : (k : Fin r) → MPSTensor d (dim k)}
+variable {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {blocks : (k : Fin r) → MPTensor α (Fin (dim k))}
 
 /-- Replace each nonzero complex normal-canonical weight by its positive real
 modulus, as in the irreducible-form convention of arXiv:1708.00029, lines
@@ -33,8 +33,8 @@ noncomputable def positiveRealWeights (μ : Fin r → ℂ) : Fin r → ℂ :=
 With weights `positiveRealWeights μ`, these blocks generate the same MPV family
 as the original weighted block tensor. -/
 noncomputable def phaseNormalizedBlocks
-    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k)) :
-    (k : Fin r) → MPSTensor d (dim k) :=
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) :
+    (k : Fin r) → MPTensor α (Fin (dim k)) :=
   fun k i => (μ k / (‖μ k‖ : ℂ)) • blocks k i
 
 /-- Phase normalization does not change the MPV family represented by the
@@ -47,8 +47,8 @@ for each block contribution. -/
 theorem sameMPV₂_toTensorFromBlocks_phaseNormalized
     (hμ : ∀ k, μ k ≠ 0) :
     SameMPV₂
-      (toTensorFromBlocks (α := Fin d) (μ := μ) blocks)
-      (toTensorFromBlocks (α := Fin d) (μ := positiveRealWeights μ)
+      (toTensorFromBlocks (α := α) (μ := μ) blocks)
+      (toTensorFromBlocks (α := α) (μ := positiveRealWeights μ)
         (phaseNormalizedBlocks μ blocks)) := by
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
@@ -83,11 +83,11 @@ decomposition is first written with nonzero complex coefficients, replacing
 without changing the represented MPV family. -/
 noncomputable def toIsIrreducibleFormOfPhaseNormalized
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
-    (hLeft : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hLeft : ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
     (hPrim : ∀ k,
-      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
+      _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin (dim k)) (blocks k)))
     (hμ : ∀ k, μ k ≠ 0) :
-    IsIrreducibleForm (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) where
+    IsIrreducibleForm (toTensorFromBlocks (α := α) (μ := μ) blocks) where
   r := r
   dim := dim
   blocks := phaseNormalizedBlocks μ blocks
@@ -114,13 +114,13 @@ canonical block family, every block period is `1`.
 Source context: arXiv:1708.00029, lines 258--271. -/
 theorem toIsIrreducibleFormOfPhaseNormalized_period_eq_one
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
-    (hLeft : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hLeft : ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
     (hPrim : ∀ k,
-      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
+      _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin (dim k)) (blocks k)))
     (hμ : ∀ k, μ k ≠ 0) :
     ∀ k : Fin r,
       (toIsIrreducibleFormOfPhaseNormalized
-        (d := d) (μ := μ) (blocks := blocks) hIrr hLeft hPrim hμ).period k = 1 := by
+        (α := α) (μ := μ) (blocks := blocks) hIrr hLeft hPrim hμ).period k = 1 := by
   intro k
   rfl
 
