@@ -40,7 +40,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {d D : ℕ}
 
 /-- If the range projection `V * Vᴴ` of the isometry `V` commutes with every
 tensor matrix, then each `A i` intertwines `V` with the corner matrix
@@ -48,9 +48,9 @@ tensor matrix, then each `A i` intertwines `V` with the corner matrix
 
 This records that the corners of a reducing projection in
 arXiv:1606.00608, lines 253--254, are genuine compressions. -/
-private lemma mul_isometry_of_commutes {n : ℕ} (A : MPSTensor d D)
+private lemma mul_isometry_of_commutes {n : ℕ} (A : MPTensor α (Fin D))
     (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
-    (hComm : ∀ i : Fin d, A i * (V * Vᴴ) = (V * Vᴴ) * A i) (i : Fin d) :
+    (hComm : ∀ i : α, A i * (V * Vᴴ) = (V * Vᴴ) * A i) (i : α) :
     A i * V = V * (Vᴴ * A i * V) := by
   have hPV : (V * Vᴴ) * V = V := by rw [Matrix.mul_assoc, hV, Matrix.mul_one]
   calc A i * V
@@ -61,9 +61,9 @@ private lemma mul_isometry_of_commutes {n : ℕ} (A : MPSTensor d D)
 
 /-- Adjoint counterpart of `mul_isometry_of_commutes`: the corner matrix
 `Vᴴ * A i * V` intertwines `Vᴴ` with `A i`. -/
-private lemma conjTranspose_isometry_mul_of_commutes {n : ℕ} (A : MPSTensor d D)
+private lemma conjTranspose_isometry_mul_of_commutes {n : ℕ} (A : MPTensor α (Fin D))
     (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
-    (hComm : ∀ i : Fin d, A i * (V * Vᴴ) = (V * Vᴴ) * A i) (i : Fin d) :
+    (hComm : ∀ i : α, A i * (V * Vᴴ) = (V * Vᴴ) * A i) (i : α) :
     Vᴴ * A i = (Vᴴ * A i * V) * Vᴴ := by
   have hVP : Vᴴ * (V * Vᴴ) = Vᴴ := by rw [← Matrix.mul_assoc, hV, Matrix.one_mul]
   calc Vᴴ * A i
@@ -82,9 +82,9 @@ projector hypothesis.  A left-invariant projection of the corner lifts along
 algebra, and compressing back returns the closure identity for the corner.
 No normalization on `A` is assumed. -/
 theorem hasInvariantProjectorClosure_compress_of_commutes
-    (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
+    (A : MPTensor α (Fin D)) (hClosure : HasInvariantProjectorClosure A)
     {n : ℕ} (V : Matrix (Fin D) (Fin n) ℂ) (hV : Vᴴ * V = 1)
-    (hComm : ∀ i : Fin d, A i * (V * Vᴴ) = (V * Vᴴ) * A i) :
+    (hComm : ∀ i : α, A i * (V * Vᴴ) = (V * Vᴴ) * A i) :
     HasInvariantProjectorClosure (fun i => Vᴴ * A i * V) := by
   intro Q hQ hQleft
   -- The ambient lift `V * Q * Vᴴ` is an orthogonal projection.
@@ -101,7 +101,7 @@ theorem hasInvariantProjectorClosure_compress_of_commutes
         _ = V * (Q * Q) * Vᴴ := by simp only [Matrix.mul_assoc]
         _ = V * Q * Vᴴ := by rw [hQ.2]
   -- The lift is left-invariant for the ambient tensor.
-  have hlift : ∀ i : Fin d,
+  have hlift : ∀ i : α,
       (V * Q * Vᴴ) * A i = (V * Q * Vᴴ) * A i * (V * Q * Vᴴ) := by
     intro i
     have h1 : Vᴴ * A i = (Vᴴ * A i * V) * Vᴴ :=
