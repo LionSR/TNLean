@@ -136,7 +136,7 @@ and `8`.
 Source: arXiv:1606.00608, the distinct normal representatives in the BNT
 decomposition `eq:II_ABasicTensors`, lines 271--301. -/
 private theorem basis_not_gaugePhaseEquiv :
-    MPSTensor.BlocksNotGaugePhaseEquiv (d := 3 * 3) basis := by
+    MPSTensor.BlocksNotGaugePhaseEquiv (α := Fin (3 * 3)) basis := by
   intro j k hjk hdim
   fin_cases j <;> fin_cases k
   · exact absurd rfl hjk

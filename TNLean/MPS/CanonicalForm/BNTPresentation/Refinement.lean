@@ -82,7 +82,7 @@ theorem isCPSVBasisOfNormalTensors (h : IsBNTSectorPresentation A P) :
 
 Source: arXiv:1606.00608, Proposition 2.7, lines 1135--1148. -/
 theorem blocks_not_gaugePhaseEquiv (h : IsBNTSectorPresentation A P) :
-    BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+    BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
   h.isCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
 
 /-- Transport a presentation along equality of all positive-length matrix-product vectors.
@@ -332,7 +332,7 @@ structure _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement (data : CPSVCanoni
 
   Source: the BNT minimality argument in arXiv:1606.00608, lines 1135--1146. -/
   representativesNotEquiv :
-    BlocksNotGaugePhaseEquiv (d := d)
+    BlocksNotGaugePhaseEquiv (α := Fin d)
       (fun j => data.blocks (data.representativeIndex j))
   /-- The representative family is a basis of normal tensors for the original tensor.
 
@@ -552,7 +552,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.exists_bntRefinement
     intro j
     exact data.blocks_normal (repIndex j)
   have hRepresentativesNotEquiv :
-      BlocksNotGaugePhaseEquiv (d := d) (fun j => data.blocks (repIndex j)) :=
+      BlocksNotGaugePhaseEquiv (α := Fin d) (fun j => data.blocks (repIndex j)) :=
     classes.blocks_not_equiv
   have hRepresentativesBNT :
       IsCPSVBasisOfNormalTensors A

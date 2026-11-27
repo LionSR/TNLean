@@ -217,7 +217,7 @@ arXiv:1606.00608, lines 317--345. -/
 theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
     (T : ∀ c, MPOTensor p (D c)) (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor) :
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (α := Fin (p * p)) fun c => (T c).toMPSTensor) :
     ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L)) ∧
       ∃ K : Matrix (MPSTensor.BlockEntryIndex D) (Fin (Kraus.blockPhysDim p L) ×
           Fin (Kraus.blockPhysDim p L)) ℂ,
@@ -277,7 +277,7 @@ theorem PairCompression.remainder_blockTensor_eq_zero {a b : Fin g}
 inverse, chosen by `MPOTensor.exists_blockTensor_isMPOBlockLeftInverse`. -/
 noncomputable def jointBlockLength (T : ∀ c, MPOTensor p (D c))
     (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor) : ℕ :=
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (α := Fin (p * p)) fun c => (T c).toMPSTensor) : ℕ :=
   (exists_blockTensor_isMPOBlockLeftInverse T hT hD hne).choose
 
 theorem jointBlockLength_pos (T : ∀ c, MPOTensor p (D c))
@@ -301,7 +301,7 @@ to a nonzero scalar.  Documented in `docs/paper-gaps/bmwshv17_joint_block_left_i
 Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--200 and 269--277. -/
 noncomputable def ofCompressionBlocked (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor)
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (α := Fin (p * p)) fun c => (T c).toMPSTensor)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0) :
     CompleteZipperFusionFamily (Fin g)
       (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
@@ -350,7 +350,7 @@ Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--200 and 269--277; arXiv:2
 `REsubmission.tex`, lines 361--362 (the fusion rules). -/
 noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor)
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (α := Fin (p * p)) fun c => (T c).toMPSTensor)
     (htr : ∀ a b, ∀ w : List (Fin p × Fin p), w ≠ [] →
       Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)) w) =
         ∑ s : (c : Fin g) × Fin (N a b c),
@@ -392,7 +392,7 @@ theorem exists_positive_wordTupleSpanTop_of_isInjective
     {d g : ℕ} {dim : Fin g → ℕ}
     {B : (j : Fin g) → MPSTensor d (dim j)}
     (hInj : ∀ j, Kraus.IsInjective (B j)) (hdimPos : ∀ j, 0 < dim j)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) B) :
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) B) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
   have hScaled : ∀ j, ∃ ζ : ℂ, ζ ≠ 0 ∧ IsNormalTensor (ζ • B j) := by
     intro j

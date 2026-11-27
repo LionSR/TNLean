@@ -57,13 +57,13 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     {P : SectorDecomposition d} [∀ j, NeZero (P.basisDim j)]
     (B : (j : Fin g) → MPSTensor d (dimB j))
     (hPNormal : ∀ j, IsNormalTensor (P.basis j))
-    (hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P.basis)
+    (hPDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis)
     (hBNormal : ∀ j, IsNormalTensor (B j))
     (hBNT : IsCPSVBasisOfNormalTensors P.toTensor (fun j => ⟨dimB j, B j⟩))
     (j₀ : Fin P.basisCount) :
     ∃ k : Fin g, MPVBlockPhaseEquiv (P.basis j₀) (B k) := by
   classical
-  have hBDistinct : BlocksNotGaugePhaseEquiv (d := d) B :=
+  have hBDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) B :=
     hBNT.blocks_not_gaugePhaseEquiv
   have hPPhaseDistinct : ∀ i j : Fin P.basisCount, i ≠ j →
       ¬ MPVBlockPhaseEquiv (P.basis i) (P.basis j) := by
@@ -266,7 +266,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
         intro j
         rw [hPBasis j]
         exact hBlocksNormal (classes.repr j)
-      have hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P.basis := by
+      have hPDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis := by
         simpa [P, classes, collapsedBntSectorDecomp] using classes.blocks_not_equiv
       have hPA : SameMPV₂Pos P.toTensor A :=
         (collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne).trans hCF.symm
@@ -309,7 +309,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
       exact hBasisDistinct j k hjk hdim
         ⟨X, ζ, Complex.ne_zero_of_norm_eq_one hζnorm, hrel⟩
   · rintro ⟨hBasisNormal, hCover, hUnitDistinct⟩
-    have hDistinct : BlocksNotGaugePhaseEquiv (d := d) basis := by
+    have hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) basis := by
       intro j k hjk hdim hGPE
       obtain ⟨X, ζ, _hζ, hrel⟩ := hGPE
       apply hUnitDistinct j k hjk hdim

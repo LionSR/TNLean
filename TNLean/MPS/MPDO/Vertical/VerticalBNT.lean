@@ -255,7 +255,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
           (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
           (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) ∧
         MPSTensor.BlocksNotGaugePhaseEquiv
-          (d := D * D) (fun j => blocks (classes.repr j)) ∧
+          (α := Fin (D * D)) (fun j => blocks (classes.repr j)) ∧
         (∀ j q, μ (classes.enum j q) * ζ j q ≠ 0) ∧
         (∀ j q, SectorProjectorData M
           (V (classes.enum j q) * (V (classes.enum j q))ᴴ)

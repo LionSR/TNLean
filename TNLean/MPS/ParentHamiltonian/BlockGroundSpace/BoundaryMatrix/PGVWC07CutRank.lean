@@ -97,7 +97,7 @@ theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ
       Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun a => (A k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (A k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {n : ℕ} (hn : max L₀ (3 * (r - 1) * (L₀ + 1)) ≤ n) :
     WordTupleSpanTop A n := by
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hdim k).ne'⟩
@@ -121,7 +121,7 @@ specialization of `wordTupleSpanTop_of_ge_of_isNBlkInjective`, whose docstring r
 reading of the distinctness hypothesis. -/
 theorem wordTupleSpanTop_of_ge {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) h.blocks)
     {n : ℕ} (hn : max L₀ (3 * (h.r - 1) * (L₀ + 1)) ≤ n) :
     WordTupleSpanTop h.blocks n :=
   wordTupleSpanTop_of_ge_of_isNBlkInjective h.blocks h.dim_pos h.unital

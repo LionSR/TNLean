@@ -53,7 +53,7 @@ theorem exists_normal_blocks_of_no_small_divisor {d D N : ℕ}
         Kraus.transferMap (fun i => (B j i)ᴴ) ρ = ρ) ∧
       (∀ j, Kraus.IsIrreducibleFamily (B j)) ∧
       (∀ j, Kraus.IsNBlkInjective (B j) ((D ^ 2 + 1) ^ 2)) ∧
-      BlocksNotGaugePhaseEquiv (d := d) B ∧ (∀ j, c j ≠ 0) ∧
+      BlocksNotGaugePhaseEquiv (α := Fin d) B ∧ (∀ j, c j ≠ 0) ∧
       ∀ σ : Cfg d N, mpv A σ = ∑ j, c j * mpv (B j) σ := by
   classical
   have hNpos : 0 < N := lt_of_lt_of_le Nat.zero_lt_two hN

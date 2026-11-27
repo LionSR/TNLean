@@ -35,7 +35,7 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
@@ -77,7 +77,7 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
@@ -113,7 +113,7 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
@@ -160,7 +160,7 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
