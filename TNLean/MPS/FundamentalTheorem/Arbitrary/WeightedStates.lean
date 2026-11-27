@@ -562,7 +562,8 @@ private theorem hetRepeatedBlocks_of_isGaugeRelated_smul {D₁ D₂ : ℕ} {A : 
 
 /-- Under dependent states, every basis block of one decomposition is a repeated block of a basis
 block of the other, when all gauge scalars between basis blocks have modulus one. -/
-private theorem forall_exists_hetRepeatedBlocks_of_statesDependent (P Q : SectorDecomposition (Fin d))
+private theorem forall_exists_hetRepeatedBlocks_of_statesDependent
+    (P Q : SectorDecomposition (Fin d))
     (hirrP : ∀ j, Matrix.IsIrreducibleAction (P.basis j)) (hletP : ∀ j, ∃ i, P.basis j i ≠ 0)
     (hirrQ : ∀ k, Matrix.IsIrreducibleAction (Q.basis k)) (hletQ : ∀ k, ∃ i, Q.basis k i ≠ 0)
     (hP0 : 0 < P.basisCount) (hQ0 : 0 < Q.basisCount)
