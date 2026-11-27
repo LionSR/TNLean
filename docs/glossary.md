@@ -154,7 +154,9 @@ is deliberately source-faithful.
   `Kraus.IsInjective.isNormal` and
   `MPSTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
   rank" of arXiv:0909.5347, clause (b) of `MPSTensor.primitivity_tfae`.
-  `MPSTensor.normality_tfae` (for `[NeZero D]`, no normalization) gives the
+  `Kraus.isNormal_iff_eventually_isNBlkInjective` (no hypothesis) identifies
+  normality with fullness of every sufficiently long word span; QICLean keeps no
+  separate predicate for eventual fullness. `MPSTensor.normality_tfae` (for `[NeZero D]`, no normalization) gives the
   equivalent forms: every sufficiently long word span is full, the word span of
   length `D ^ 4` is full, and some positive blocking is injective.
 - **Caveat:** `Kraus.IsNormal` is invariant under rescaling of the tensor, so it

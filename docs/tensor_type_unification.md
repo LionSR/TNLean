@@ -189,7 +189,7 @@ state or an operator on a chain, are tensor-network notions and live in TNLean.
 | QICLean `Kraus` (generalized from `{d D : ℕ}` to `{ι n : Type*}`) | TNLean `MPTensor` |
 |---|---|
 | `evalWord (K : ι → Matrix n n ℂ) : List ι → Matrix n n ℂ` and its 8 basic lemmas | `mpv`, `mpo` (the periodic vector and operator) |
-| `reindexPhysical`, `wordSpan`, `cumulativeSpan`, `IsInjective`, `IsNBlkInjective`, `IsNormal`, `HasEventuallyFullWordSpan` | `act`, `mul` (stacking, bond `β × β'`) |
+| `reindexPhysical`, `wordSpan`, `cumulativeSpan`, `IsInjective`, `IsNBlkInjective`, `IsNormal` | `act`, `mul` (stacking, bond `β × β'`) |
 | `transferMap := mapLM` (already general) | `directSum` (bond `β ⊕ β'`) |
 | `block (K : ι → Matrix n n ℂ) (L : ℕ) : (Fin L → ι) → Matrix n n ℂ` | `blockOp` (blocking an operator tensor) |
 | `rectangularEval` with bond *types* (§2.7) | `reindexBond`, `gauge` |
