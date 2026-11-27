@@ -258,13 +258,13 @@ Source: arXiv:1606.00608, Appendix C.2, equations `CFK`, `biCFK`, `Pis`, and
 `PjKiPj`, lines 1626--1737. -/
 theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hCF : MPSTensor.IsBNTCanonicalForm S)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) :
     ∃ W : ThreeSiteClosureWitness M S,
@@ -278,7 +278,7 @@ theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_ind
         ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
           ∀ (β α : Fin (S.basisDim i)),
             completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s *
-                physicalSlice (S.basisMPOTensor i) β α *
+                physicalSlice (S.basis i) β α *
               completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ t = 0 := by
   obtain ⟨s₀, _q₀, _hs₀⟩ := hCF.weight_unit_exists
   obtain ⟨W, _hunique, _hproj, _horth, _hsum⟩ :=
@@ -317,12 +317,12 @@ Source: arXiv:1606.00608, Appendix C.2, Case II and Lemma `lemmus`, lines
 1626--1691; the projector argument continues through line 1737. -/
 theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
     (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -333,7 +333,7 @@ theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hZCL : IsSourceZCL M)
     (hSAL : IsSAL M) :
@@ -343,13 +343,13 @@ theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
       (∑ s, P s) = 1 ∧
       ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
         ∀ (β α : Fin (S.basisDim i)),
-          P s * physicalSlice (S.basisMPOTensor i) β α * P t = 0 := by
+          P s * physicalSlice (S.basis i) β α * P t = 0 := by
   subst D
-  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
     simpa using hEq i
-  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+  have hM : MPTensor.SameMPV₂Pos M S.toTensor :=
     fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
   have hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q' :=

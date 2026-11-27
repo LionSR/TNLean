@@ -60,16 +60,12 @@ variable {d : ℕ}
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1759. -/
 theorem physTraceTransfer_commonWeightAbsorbedBasisMPOTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (s : Fin S.basisCount) :
     physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
-      S.commonWeight hWeight s • doubledPhysTraceTransfer d (S.basis s) := by
-  rw [← doubledPhysTraceTransfer_toMPSTensor,
-    commonWeightAbsorbedBasisMPOTensor_toMPSTensor]
-  unfold doubledPhysTraceTransfer
-  rw [Finset.smul_sum]
-  simp only [MPSTensor.SectorDecomposition.commonWeightAbsorbedBasis]
+      S.commonWeight hWeight s • physTraceTransfer (S.basis s) := by
+  simp only [physTraceTransfer, commonWeightAbsorbedBasisMPOTensor, Finset.smul_sum]
 
 /-- Literal zero correlation length restricts to each common-weight-absorbed BNT
 representative:
@@ -87,10 +83,10 @@ yet be applied sectorwise. The remaining boundary is recorded in
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
 theorem commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -122,10 +118,10 @@ zero-correlation-length equation for the full canonical-form tensor.
 Source: arXiv:1606.00608, Appendix C.2, lines 1646--1657 and 1781. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isSourceZCL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -138,18 +134,18 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSourceZCL
     (hZCL : IsSourceZCL M)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (s : Fin S.basisCount)
-    (hnonNil : ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis s))) :
+    (hnonNil : ¬ IsNilpotent (physTraceTransfer (S.basis s))) :
     IsSourceZCL (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
   obtain ⟨lam, hlam, hSq⟩ :=
     exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL
       S hTotal X hEq hZCL
   have htransfer :=
     physTraceTransfer_commonWeightAbsorbedBasisMPOTensor S hWeight s
-  have hbasis : doubledPhysTraceTransfer d (S.basis s) ≠ 0 := by
+  have hbasis : physTraceTransfer (S.basis s) ≠ 0 := by
     intro hzero
     exact hnonNil (by rw [hzero]; exact IsNilpotent.zero)
   have hweighted :
-      S.commonWeight hWeight s • doubledPhysTraceTransfer d (S.basis s) ≠ 0 := by
+      S.commonWeight hWeight s • physTraceTransfer (S.basis s) ≠ 0 := by
     exact smul_ne_zero (S.commonWeight_ne_zero hWeight s) hbasis
   have hsquare := hSq s ⟨0, S.copies_pos s⟩
   rw [S.weight_eq_commonWeight hWeight] at hsquare
@@ -168,12 +164,12 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1628, 1646--1661, and 1781. -/
 theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL
     {D : ℕ} {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsSourceZCL M) :
-    ∃ S : MPSTensor.SectorDecomposition (d * d),
+    ∃ S : MPSTensor.SectorDecomposition (Fin d × Fin d),
       MPSTensor.IsBNTCanonicalForm S ∧
         (∃ hTotal : S.totalDim = D,
           ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
-          ∀ i : Fin (d * d),
-            M.toMPSTensor i =
+          ∀ i : Fin d × Fin d,
+            M i =
               cast (by rw [hTotal] :
                   Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
                     Matrix (Fin D) (Fin D) ℂ)
@@ -183,7 +179,7 @@ theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSource
                   (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                       GL (Fin S.totalDim) ℂ) :
                     Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))) ∧
-        (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j))) ∧
+        (∀ j, ¬ IsNilpotent (physTraceTransfer (S.basis j))) ∧
         ∃ hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q',
           ∀ s : Fin S.basisCount,
@@ -201,8 +197,8 @@ nonempty chain.
 Source: arXiv:1606.00608, Appendix C.2, lines 1753--1759. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -210,8 +206,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hMpdo : IsMPDO M) (s : Fin S.basisCount) :
     IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
@@ -250,12 +246,12 @@ strong subadditivity, `hayashi_ssa_equality_characterization_forward`.
 Source: arXiv:1606.00608, Appendix C.2, lines 1680--1759. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) (s : Fin S.basisCount) :
     IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
@@ -283,10 +279,10 @@ the source proof.  Its relation with finite physical blocking is recorded in
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780. -/
 theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -296,12 +292,12 @@ theorem trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hZCL : IsSourceZCL M)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) (s : Fin S.basisCount)
     {N : ℕ} (hN : 0 < N) :

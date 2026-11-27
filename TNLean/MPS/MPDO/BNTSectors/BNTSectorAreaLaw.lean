@@ -40,7 +40,7 @@ value nor a value obtained by dividing by a zero trace.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770. -/
 noncomputable def bntSectorProbability
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (N : ℕ) (_hN : 0 < N)
     (_hMtrace : 0 < Matrix.trace (mpo M N))
@@ -53,7 +53,7 @@ noncomputable def bntSectorProbability
 /-- Every BNT-sector probability is strictly positive when the full and
 sector chain operators have positive trace. -/
 theorem bntSectorProbability_pos
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N : ℕ}
     (hN : 0 < N)
@@ -71,8 +71,8 @@ normalized absorbed BNT sectors.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1770. -/
 theorem normalizedMPO_eq_sum_bntSectorProbability_smul
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N : ℕ} (hN : 0 < N)
     (hMtrace : 0 < Matrix.trace (mpo M N))
@@ -92,8 +92,8 @@ probabilities as the normalized full chain.
 Source: arXiv:1606.00608, Appendix C.2, equation `entropiesj`,
 lines 1760--1770. -/
 theorem reducedBlockState_eq_sum_bntSectorProbability_smul
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') {N L : ℕ} (hN : 0 < N)
     (_hLpos : 0 < L) (hL : L ≤ N)
@@ -116,8 +116,8 @@ same for every marginal length.
 Source: arXiv:1606.00608, Appendix C.2, equation `entropiesj`,
 lines 1760--1770. -/
 theorem blockEntropy_eq_sum_bntSectorProbability
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -125,8 +125,8 @@ theorem blockEntropy_eq_sum_bntSectorProbability
     {ρ₃ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ₃)
+      (fun j ↦ S.basis j) C)
+    (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ₃)
     (hη : EtaStructure ρ₃) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hMpdo : IsMPDO M)
     (hSectorMpdo : ∀ s, IsMPDO
@@ -163,8 +163,8 @@ absorbed BNT sector.  The four regions have lengths
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780. -/
 theorem blockEntropy_add_blockEntropy_eq_bntSector
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -172,8 +172,8 @@ theorem blockEntropy_add_blockEntropy_eq_bntSector
     {ρ₃ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ₃)
+      (fun j ↦ S.basis j) C)
+    (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ₃)
     (hη : EtaStructure ρ₃) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSAL : IsSAL M)
     (hSectorMpdo : ∀ s, IsMPDO
@@ -253,8 +253,8 @@ normalizations are available.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1753--1781. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -262,8 +262,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
     {ρ₃ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ₃)
+      (fun j ↦ S.basis j) C)
+    (hρ₃ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ₃)
     (hη : EtaStructure ρ₃) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSAL : IsSAL M)
     (hSectorMpdo : ∀ s, IsMPDO
@@ -302,10 +302,10 @@ the source proof.  The relation with finite physical blocking is recorded in
 Source: arXiv:1606.00608, Appendix C.2, lines 1748--1781. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -315,11 +315,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) (hZCL : IsSourceZCL M)
     (s : Fin S.basisCount) :
@@ -355,10 +355,10 @@ therefore remains unavailable sectorwise. This boundary is recorded in
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
 theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -371,7 +371,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M)
     (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M)
@@ -383,16 +383,15 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
           physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
         physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
   subst D
-  have hGauge : MPTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+  have hGauge : MPTensor.GaugeEquiv S.toTensor M := by
     refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
     intro i
     simpa using hEq i
-  have hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+  have hM : MPTensor.SameMPV₂Pos M S.toTensor :=
     fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
   have hSourceZCL : IsSourceZCL M :=
     hSAL.isSourceZCL_of_physTraceTransfer_sq hZCL_sq
-  exact ⟨(isInjective_toMPSTensor_iff _).1
-      (commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s),
+  exact ⟨commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s,
     commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL s,
     commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos

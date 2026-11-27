@@ -326,8 +326,8 @@ Proposition `prop4to2`.  This is documented in
 Source: CPSV16, Appendix C.2, lines 1660--1665 and Proposition `prop4to2`,
 lines 1801--1808. -/
 theorem isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     [Nonempty (Fin S.basisCount)]
@@ -366,11 +366,11 @@ no spectral normality of those sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem
     isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -380,11 +380,11 @@ theorem
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     [Nonempty (Fin S.basisCount)]
     (F : ProportionalOrthogonalCommutingSectorFamily
@@ -406,8 +406,7 @@ theorem
         mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
           M S hM hWeight hN⟩
   · exact hMPDO
-  · exact fun s ↦ (isInjective_toMPSTensor_iff _).1
-      (commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s)
+  · exact fun s ↦ commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s
   · exact fun s ↦
       commonWeightAbsorbedBasisMPOTensor_isSourceZCL
         M S hTotal X hEq hZCL hWeight s (hnonNil s)

@@ -92,12 +92,12 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817; the closing proof at lines 1821--1825; and the weight
 commonization at lines 1646--1665. -/
 theorem blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_physicalSectorFactorization_of_commonWeight
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (M : MPOTensor d S.totalDim)
     (G : GL (Fin S.totalDim) ℂ)
-    (hG : ∀ i, M.toMPSTensor i =
+    (hG : ∀ i, M i =
       (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
         (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
@@ -141,12 +141,12 @@ unrestricted source conclusion. See
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817, and lines 1389--1403. -/
 theorem blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_oneSectorFactorization_of_commonWeight
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (M : MPOTensor d S.totalDim)
     (G : GL (Fin S.totalDim) ℂ)
-    (hG : ∀ i, M.toMPSTensor i =
+    (hG : ∀ i, M i =
       (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
         (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)

@@ -66,7 +66,7 @@ required.  It constructs the sector supports but does not assert that their sum 
 Source: arXiv:1606.00608, Appendix C.2, equations `CFK`, `AppUkU=rl`, `Appetakhetc`,
 `AppKxKy=0`, and `PjKiPj`, lines 1383--1450 and 1634--1691. -/
 theorem exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
@@ -785,12 +785,12 @@ obligations and their elimination plans are recorded in
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>: prove projector completeness from
 the source hypotheses and construct the representative channel pairs. -/
 theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (M : MPOTensor d S.totalDim)
     (G : GL (Fin S.totalDim) ℂ)
-    (hG : ∀ i, M.toMPSTensor i =
+    (hG : ∀ i, M i =
       (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
         (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
     (P : Fin S.basisCount → Matrix (Fin d) (Fin d) ℂ)
@@ -837,12 +837,12 @@ on the two channel equations.
 This is a project-derived completion of the projection-first construction in
 arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1810--1825. -/
 theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupports
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (M : MPOTensor d S.totalDim)
     (G : GL (Fin S.totalDim) ℂ)
-    (hG : ∀ i, M.toMPSTensor i =
+    (hG : ∀ i, M i =
       (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
         (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
     (P : Fin S.basisCount → Matrix (Fin d) (Fin d) ℂ)

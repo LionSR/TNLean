@@ -94,14 +94,14 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
       (PhysicalSectorFactorization.changePhysicalBasis
         (Matrix.conjTranspose
           ((physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
-            (P s) (K s) (hP s) ((isInjective_toMPSTensor_iff _).2 (hInjective s))
+            (P s) (K s) (hP s) (hInjective s)
               (hSupport s)).inclusion))
         (K s)))
     (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
     Nonempty (OrthogonalCommutingSectorFamily K) := by
   let restriction : (s : Fin g) → PhysicalSupportRestrictionData (P s) (K s) :=
     fun s ↦ physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
-      (P s) (K s) (hP s) ((isInjective_toMPSTensor_iff _).2 (hInjective s)) (hSupport s)
+      (P s) (K s) (hP s) (hInjective s) (hSupport s)
   exact nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFactorization
     K P hP hPorth restriction G hη
 
@@ -121,7 +121,7 @@ theorem assumes more than the five blockwise identities printed in CPSV16
 Appendix C.2, Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -129,8 +129,8 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSectorSAL : ∀ s : Fin S.basisCount,
@@ -184,8 +184,8 @@ than the five blockwise identities printed in CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_bntSectorSAL
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -193,8 +193,8 @@ theorem hasGSNNCHForm_of_bntSectorSAL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSectorSAL : ∀ s : Fin S.basisCount,

@@ -164,7 +164,7 @@ GSNNCH form without copy independence.
 The orthogonality hypothesis is `AppKxKy=0`; the physical-sector
 factorizations are `AppUkU=rl`; and each neighboring trace factorization
 contains `Appetakhetc`, `Apptralktrrk`, and `AppPsiPhi`. All five hypotheses
-are imposed on the raw BNT representatives `S.basisMPOTensor`. The resulting
+are imposed on the raw BNT representatives `S.basis`. The resulting
 GSNNCH multiplicities are the natural copy numbers `S.copies`.
 
 Global MPDO positivity is the standing Case II assumption at CPSV16 lines
@@ -184,24 +184,20 @@ Source: arXiv:1606.00608, Appendix C.2, Case II and equation `biCFK`, lines
 1626--1639 and 1666--1676; Proposition `prop3to4`, lines 1786--1796. -/
 theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hMPDO : IsMPDO M)
     (hBasisDim : ∀ s, 0 < S.basisDim s)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
-    (hLayer : IsBNTLayerOrthogonal (fun s ↦ S.basisMPOTensor s))
+    (hLayer : IsBNTLayerOrthogonal (fun s ↦ S.basis s))
     (F : (s : Fin S.basisCount) →
-      PhysicalSectorFactorization (S.basisMPOTensor s))
+      PhysicalSectorFactorization (S.basis s))
     (hTrace : ∀ s,
       PhysicalSectorFactorization.NeighboringTraceFactorization (F s)) :
     HasGSNNCHForm M := by
   let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
-    fun s ↦ S.basisMPOTensor s
-  have hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor := by
-    intro s
-    dsimp only [K]
-    rw [S.basisMPOTensor_toMPSTensor]
-    exact hSpan.isInjective_one s
+    fun s ↦ S.basis s
+  have hInjective : ∀ s, Kraus.IsInjective (K s) := fun s ↦ hSpan.isInjective_one s
   have hSectorMPDO : ∀ s, IsMPDO (K s) := by
     intro s
     exact (F s).isMPDO_of_neighboringOperator_pos
@@ -211,7 +207,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
       K hInjective hSectorMPDO hLayer
   obtain ⟨family⟩ :=
     nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization
-      K P hP hPorth (fun s ↦ (isInjective_toMPSTensor_iff _).1 (hInjective s)) hSupport F
+      K P hP hPorth hInjective hSupport F
       (fun s k h ↦ (hTrace s).neighboringOperator_pos k h)
   intro N hN
   have hsum : mpo M N = ∑ s : Fin S.basisCount,
@@ -226,7 +222,8 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     have hmpv : (MPTensor.mpv (K s).toMPSTensor :
         MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective
-        (Kraus.isNBlkInjective_one_of_isInjective (hInjective s)) Nat.one_pos
+        (Kraus.isNBlkInjective_one_of_isInjective
+          ((isInjective_toMPSTensor_iff _).2 (hInjective s))) Nat.one_pos
       omega
     apply hmpv
     funext ρ
