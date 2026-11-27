@@ -228,15 +228,9 @@ lemma sectorTensor_proportional_of_blockedMatch
     | _ n σ =>
         simp only [List.length_ofFn] at hw
         subst n
-        let i : (Fin m → α) := (decodeBlockEquiv d m).symm σ
-        have hword : List.ofFn i = List.ofFn σ := by
-          change List.ofFn
-              (Kraus.decodeBlock d m ((Kraus.decodeBlockEquiv d m).symm σ)) = List.ofFn σ
-          rw [Kraus.decodeBlock_decodeBlockEquiv_symm]
-        rw [← hword,
-          cornerProd_eq_blockDiagCorner P A hP_proj hP_shift,
+        rw [cornerProd_eq_blockDiagCorner P A hP_proj hP_shift,
           cornerProd_eq_blockDiagCorner Q B hQ_proj hQ_shift]
-        exact hBlockAmbient' u i
+        exact hBlockAmbient' u σ
   let segments
       (σ : Fin m → α) (ρ : Fin m → (Fin (m * L) → α))
       (k : Fin m) : List α :=

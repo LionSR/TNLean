@@ -144,8 +144,7 @@ theorem adjoint_block_projection (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     Kraus.transferMap (fun i => (Kraus.block A p i)ᴴ) (P u) = P (u + (p : Fin m)) := by
   have hword (i : Fin p → α) :
       P u * Kraus.block A p i = Kraus.block A p i * P (u + (p : Fin m)) := by
-    simpa only [Kraus.block, Kraus.reindexPhysical, Kraus.block_apply,
-      Kraus.decodeBlockEquiv_apply, wordOfBlock, List.length_ofFn, nsmul_one] using
+    simpa only [Kraus.block_apply, List.length_ofFn, nsmul_one] using
       projector_mul_evalWord_eq_evalWord_mul_projector P A hshift u (List.ofFn i)
   simp only [Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose,
     Matrix.mul_assoc, hword]
