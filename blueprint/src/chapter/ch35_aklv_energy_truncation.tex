@@ -139,10 +139,10 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{lemma}[High-energy mass and the boundary cross term]
     \label{lem:aklv_clipped_high_mass}
-    \lean{TNLean.MPS.AreaLaw.AKLV.cutoff_smul_highProjection_le_twoSidedEnergyTruncation,
-        TNLean.MPS.AreaLaw.AKLV.cutoff_mul_sq_norm_highProjection_le_energy,
-        TNLean.MPS.AreaLaw.AKLV.norm_highProjection_le_sqrt_clipped_energy,
-        TNLean.MPS.AreaLaw.AKLV.norm_low_high_boundary_inner_le_sqrt_clipped_energy}
+    \lean{Matrix.cutoff_smul_highProjection_le_twoSidedEnergyTruncation,
+        Matrix.cutoff_mul_sq_norm_highProjection_le_energy,
+        Matrix.norm_highProjection_le_sqrt_clipped_energy,
+        Matrix.norm_low_high_boundary_inner_le_sqrt_clipped_energy}
     \leanok
     \uses{def:aklv_two_sided_truncation}
     Let $L,N,R$ be pairwise commuting positive operators, $A\ge0$,
@@ -181,12 +181,12 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 \begin{lemma}[Energy after projection onto the disconnected low spectrum]
     \label{lem:aklv_projected_energy}
     \lean{ContinuousLinearMap.re_inner_left_le_energy_add_cross,
-        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_posSemidef_le,
-        TNLean.MPS.AreaLaw.AKLV.commute_twoSidedEnergyTruncation_disconnected,
-        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting,
-        TNLean.MPS.AreaLaw.AKLV.lowProjection_mul_clipped_mul_highProjection_eq,
-        TNLean.MPS.AreaLaw.AKLV.projected_energy_le_clipped_energy_add_tail,
-        TNLean.MPS.AreaLaw.AKLV.projected_energy_le_clipped_energy_add_sqrt}
+        Matrix.twoSidedEnergyTruncation_posSemidef_le,
+        Matrix.commute_twoSidedEnergyTruncation_disconnected,
+        Matrix.twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting,
+        Matrix.lowProjection_mul_clipped_mul_highProjection_eq,
+        Matrix.projected_energy_le_clipped_energy_add_tail,
+        Matrix.projected_energy_le_clipped_energy_add_sqrt}
     \leanok
     \uses{def:aklv_two_sided_truncation}
     Let $L,N,R$ be pairwise commuting positive operators and $0\le A\le2I$.
@@ -250,8 +250,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{lemma}[The constant-fraction gap after exterior clipping]
     \label{lem:aklv_clipped_gap}
-    \lean{TNLean.MPS.AreaLaw.AKLV.orthogonal_clipped_energy_ge,
-        TNLean.MPS.AreaLaw.AKLV.exists_ground_gap_twoSidedEnergyTruncation}
+    \lean{Matrix.orthogonal_clipped_energy_ge,
+        Matrix.exists_ground_gap_twoSidedEnergyTruncation}
     \leanok
     Under the assumptions of Lemma~\ref{lem:aklv_projected_energy}, suppose
     $H\Omega=e\Omega$, $\|\Omega\|=1$, $0\le e\le6$, $0<g\le1$, and

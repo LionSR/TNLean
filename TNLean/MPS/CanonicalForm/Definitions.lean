@@ -65,12 +65,11 @@ duplicated.
 
 ## Connections to existing predicates
 
-The separate module `TNLean.MPS.BNT.Bridge` provides the source-faithful one-way
-implication `IsCPSVBasisOfNormalTensors.isBNT`, using the proved implication
-`IsNormalTensor.isNormal` on each positive-dimensional block.  The converse is
-intentionally absent: algebraic eventual block injectivity does not by itself
-supply the spectral-radius-one normalization and peripheral-spectrum data stored
-by `IsNormalTensor`.
+`IsCPSVBasisOfNormalTensors` is the only basis-of-normal-tensors predicate.  Its
+normality clause is `IsNormalTensor`; algebraic normality `Kraus.IsNormal` together
+with transfer spectral radius one is equivalent to it
+(`isNormalTensor_iff_isNormal_and_spectralRadius_eq_one` in
+`TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge`).
 
 ## Style
 
@@ -393,6 +392,17 @@ structure IsCPSVBasisOfNormalTensors {g : ℕ} (A : MPSTensor d D)
   /-- (iii) eventually, the MPV states of the basis are linearly independent. -/
   eventually_li : ∃ N₀ : ℕ, ∀ N > N₀,
     LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (blocks j).2 N)
+
+/-- Every tensor in a basis of normal tensors has positive bond dimension, since a normal tensor
+has transfer spectral radius one.
+
+Source: arXiv:1606.00608, lines 233--235 and 271--274. -/
+theorem IsCPSVBasisOfNormalTensors.blocks_dim_pos
+    {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
+    ∀ j, 0 < dim j :=
+  fun j => Nat.pos_of_ne_zero (hBNT.blocks_normal j).bondDim_ne_zero
 
 end MPSTensor
 
