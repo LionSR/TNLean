@@ -189,7 +189,7 @@ theorem exists_isReduction_fuseV (g h : G) (x : X) : ∃ W, MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (A (g • h • x))
       (ad.fuseV fd g h x) W :=
   ⟨_, isReduction_castIndex
-    (((isReduction_toMPSTensor_iff.2 (fd.isReduction g h)).actTensor_kronId (A x)).trans
+    ((((fd.isReduction g h)).actTensor_kronId (A x)).trans
       (ad.isReduction (g * h) x))
     (mul_smul g h x)⟩
 
@@ -371,14 +371,12 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
   have hS : MPTensor.IsReduction B3
       (actTensor (mulTensor (F.tensor (g * h)) (F.tensor k)) (A x))
       (kronId (kronId (fd.V g h) (F.bondDim k)) (D x)) _ :=
-    (isReduction_toMPSTensor_iff.2
-      ((fd.isReduction g h).mulTensor_kronId (F.tensor k))).actTensor_kronId (A x)
+    (((fd.isReduction g h).mulTensor_kronId (F.tensor k))).actTensor_kronId (A x)
   have hK : MPTensor.IsReduction B3
       (actTensor (mulTensor (F.tensor g) (F.tensor (h * k))) (A x))
       (kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x)) _ :=
-    (isReduction_toMPSTensor_iff.2
-      ((fd.isReduction h k).mulTensor_idKron (F.tensor g)).mulTensor_assoc_left).actTensor_kronId
+    (((fd.isReduction h k).mulTensor_idKron (F.tensor g)).mulTensor_assoc_left).actTensor_kronId
       (A x)
   have H3 := (isDressedProportional_lSymbol (fd := fd) (ad := ad) hA hperm (k • x) g h).pullback
     hR (hSame3C g h (k • x) rfl)
@@ -400,8 +398,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
       (by rw [kronId_mul, mulTensorAssocInvMatrix_mul_matrix, kronId_one])
       (actTensor_mul_kronId_of_intertwine (A x) fun i l ↦
         mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (F.tensor k) i l)
-  have H5 := (((isDressedProportional_toMPSTensor_iff.2
-    (fd.isAssociator_omega hF g h k)).actTensor_kronId (A x)).mul_left
+  have H5 := ((((fd.isAssociator_omega hF g h k)).actTensor_kronId (A x)).mul_left
     (ad.V (g * h * k) x)).mul_left
       (castIndex D ((mul_smul (g * h) k x).trans (mul_smul g h (k • x))))
   -- the canonical boundaries
