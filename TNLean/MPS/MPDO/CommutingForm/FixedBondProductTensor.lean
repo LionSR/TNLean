@@ -10,6 +10,7 @@ import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
 import TNLean.MPS.Operator.PhysicalSector.InverseMapActiveSectorRecurrence
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTransport
 import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Fixed matrix-product representations of commuting-bond products
@@ -156,17 +157,10 @@ private theorem fixedProduct_ne_zero_of_mpvOverlap_ne_zero
     intro ρ _hρ
     rw [h ρ, zero_mul]
   obtain ⟨ρ, hρ⟩ := hExists
-  let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
-  let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
-  have hρeq : (fun n ↦ finProdFinEquiv (σ n, τ n)) = ρ := by
-    funext n
-    simpa [σ, τ] using (finProdFinEquiv.apply_symm_apply (ρ n))
-  have hMpo : mpo M N σ τ ≠ 0 := by
-    rw [← MPSTensor.mpv_toMPSTensor_pairConfig, hρeq]
-    exact hρ
+  rw [mpv_toMPSTensor_eq, mpv_eq_mpo] at hρ
   obtain ⟨c, hc, hReal⟩ := data.realizes_mpo N hN
   intro hProduct
-  apply hMpo
+  apply hρ
   rw [hReal, hProduct, smul_zero, Matrix.zero_apply]
 
 /-- A fixed tensor representation of the commuting-bond product converts the
@@ -236,9 +230,10 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
   refine ⟨ζ, hζ, ?_⟩
   intro N hN
   ext σ τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    hPhase N (by omega), MPSTensor.mpv_smul,
-    MPSTensor.mpv_toMPSTensor_pairConfig, repr.mpo_eq_product N hN]
+  have h := hPhase N (by omega) (fun k ↦ finProdFinEquiv (σ k, τ k))
+  rw [MPSTensor.mpv_smul, mpv_toMPSTensor_eq, mpv_toMPSTensor_eq] at h
+  simp only [Equiv.symm_apply_apply, mpv_pair] at h
+  rw [h, repr.mpo_eq_product N hN]
   simp only [Matrix.smul_apply, smul_eq_mul, mul_assoc, mul_pow]
 
 /-- Under the hypotheses of

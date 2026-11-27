@@ -230,13 +230,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
       omega
     apply hmpv
     funext ρ
-    let u : Fin N → Fin d := fun n ↦ (ρ n).divNat
-    let v : Fin N → Fin d := fun n ↦ (ρ n).modNat
-    have hρ : ρ = fun n ↦ finProdFinEquiv (u n, v n) := by
-      funext n
-      exact (finProdFinEquiv.apply_symm_apply (ρ n)).symm
-    rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
-    rw [hzero]
+    rw [MPOTensor.mpv_toMPSTensor_eq, MPOTensor.mpv_eq_mpo, hzero]
     rfl
   obtain ⟨coefficient, hCoefficient, hCoefficientEq⟩ :=
     exists_nonnegative_real_eq_sectorCoefficient_of_orthogonalSupport
