@@ -179,7 +179,7 @@ theorem sameMPV₂Pos_of_forall_trace_evalWord_eq {D₁ D₂ : ℕ}
     {B : MPSTensor d D₁} {B' : MPSTensor d D₂}
     (h : ∀ w : List (Fin d), 1 ≤ w.length → w.length ≤ D₁ ^ 2 + D₂ ^ 2 →
       Matrix.trace (Kraus.evalWord B w) = Matrix.trace (Kraus.evalWord B' w)) :
-    SameMPV₂Pos B B' := by
+    MPTensor.SameMPV₂Pos B B' := by
   let A := Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ
   let φ : A →ₗ[ℂ] ℂ :=
     (Matrix.traceLinearMap (Fin D₁) ℂ ℂ).comp (LinearMap.fst ℂ _ _) -

@@ -114,7 +114,7 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k) (Nmin : ℕ) :
@@ -216,7 +216,7 @@ lemma isBNT_of_separated_bnt_data [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, Kraus.IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A where
