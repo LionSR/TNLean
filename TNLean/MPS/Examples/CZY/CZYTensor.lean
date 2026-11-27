@@ -32,7 +32,7 @@ cyclic convention `CZ_{1,1} = Z` at `N = 1`; the gate product itself is not form
 
 * `CZYCompression.czyIntTensor`, `CZYCompression.czyTensor`: the bond-two tensor `A_1`.
 * `CZYCompression.czySquareInt`, `CZYCompression.czySquare`: the stacked bond-four tensor
-  `Ã_0` in the pair-alphabet view.
+  `Ã_0` on the doubled index `Fin 4`.
 
 ## Main results
 
@@ -97,7 +97,7 @@ def czySquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 2 => 0
   | 3 => !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0]
 
-/-- The stacked tensor `Ã_0` in the pair-alphabet view (arXiv:2509.03600, main.tex
+/-- The stacked tensor `Ã_0` on the doubled index `Fin 4` (arXiv:2509.03600, main.tex
 lines 219–223). -/
 def czySquare : MPSTensor 4 4 := (MPOTensor.mulTensor czyTensor czyTensor).toMPSTensor
 

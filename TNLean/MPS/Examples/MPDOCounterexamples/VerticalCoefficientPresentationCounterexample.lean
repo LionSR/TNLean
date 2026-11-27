@@ -8,6 +8,7 @@ import TNLean.MPS.MPDO.Coefficients.LengthIndependentCoefficients
 import TNLean.MPS.Operator.Product.OperatorProduct
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
 import TNLean.MPS.Transfer.Scaling
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Horizontal equivalence does not determine vertical BNT coefficients
@@ -116,7 +117,7 @@ This project-derived identity uses the gauge relation of CPSV16, lines
 literal horizontal CPSV canonical form for `rightMPO`, as assumed in CPSV16,
 Proposition 4.13 and Theorem 4.14, lines 943--985. -/
 theorem leftMPO_gaugeEquiv_rightMPO :
-    MPTensor.GaugeEquiv leftMPO.toMPSTensor rightMPO.toMPSTensor := by
+    MPTensor.GaugeEquiv leftMPO rightMPO := by
   refine ⟨horizontalGauge, fun _ ↦ ?_⟩
   change rightMatrix =
     (horizontalGauge : Matrix I I ℂ) * leftMatrix *
@@ -146,8 +147,8 @@ cross-presentation assertion.  It uses the gauge mechanism of CPSV16, lines
 187--195, and does not by itself identify the vertical normalizations appearing
 in Proposition 4.13 and Theorem 4.14(ii), lines 943--985. -/
 theorem leftMPO_sameMPV₂Pos_rightMPO :
-    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor := by
-  intro L hL σ
+    MPTensor.SameMPV₂Pos leftMPO rightMPO := by
+  refine (sameMPV₂Pos_toMPSTensor_iff leftMPO rightMPO).1 fun L hL σ ↦ ?_
   have hσ : σ = fun _ ↦ (0 : Fin (1 * 1)) := by
     funext n
     exact Fin.eq_zero (σ n)
@@ -674,7 +675,7 @@ already give coefficients \(1\) and \(4/5\) at length one.  This project-derived
 counterexample refutes the extra assertion, not CPSV16,
 Proposition 4.13 or Theorem 4.14(ii), lines 943--985. -/
 theorem sameMPV₂Pos_and_no_relabelled_coefficient_equality :
-    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
+    MPTensor.SameMPV₂Pos leftMPO rightMPO ∧
       ¬ ∃ e : Fin rightClause.labelCount ≃ Fin leftClause.labelCount,
         ∀ L : ℕ, 0 < L → ∀ α β γ,
           rightClause.coeffs.coeff L α β γ =
@@ -696,7 +697,7 @@ left coefficients are constant and the right coefficients equal \((4/5)^L\).
 This project-derived counterexample refutes the extra assertion, not CPSV16,
 Proposition 4.13 or Theorem 4.14(ii), lines 943--985. -/
 theorem sameMPV₂Pos_and_lengthIndependent_mismatch :
-    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
+    MPTensor.SameMPV₂Pos leftMPO rightMPO ∧
       leftClause.coeffs.LengthIndependent ∧
         ¬ rightClause.coeffs.LengthIndependent :=
   ⟨leftMPO_sameMPV₂Pos_rightMPO, leftClause_lengthIndependent,

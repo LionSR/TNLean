@@ -82,13 +82,13 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   refinement and coarse-graining maps are trace-preserving completely positive,
   establishes both local renormalization equations, and packages them as
   `isRFPViaTS_R : IsRFPViaTS R`.
-* The literal CPSV canonical form of `R.toMPSTensor` (eq. `II_CF1`) is proved in
+* The literal CPSV canonical form of `R` (eq. `II_CF1`) is proved in
   `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`
-  (`R_toMPSTensor_isCPSVCanonicalForm`): a single retained normal block occupying the
+  (`R_isCPSVCanonicalForm`): a single retained normal block occupying the
   full ambient bond dimension `4`, with weight `weight = √(337/512)`, the unique
   positive scalar making the retained block's transfer map exactly idempotent (hence
   spectral-radius one). The letters of `R` form the full matrix-unit basis of M₄
-  (`R_toMPSTensor_isInjective`).
+  (`R_isInjective`).
 * The module `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` gives an explicit
   one-label clause with normalized component `(doubledTensor A).toMPSTensor`.
   Its tensor-attached component is the rotated vertical contraction, not the
@@ -554,14 +554,14 @@ units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`). Together `{1, lambd
 0, 0}` are the eigenvalues used in the completed canonical-form analysis.
 
 **Scope restriction (transfer-map eigenvalue groundwork):** this
-characterizes the per-site map `φ`, not `transferMap R.toMPSTensor` itself.
+characterizes the per-site map `φ`, not `transferMap R` itself.
 The primitivity, spectral-radius-one, and irreducibility lemmas needed for
 `IsNormalTensor` and the literal CPSV canonical form
 (`MPTensor.IsCPSVCanonicalForm`) are proved directly from
-`transferMap R.toMPSTensor`'s own rank-one closed form (not from a
+`transferMap R`'s own rank-one closed form (not from a
 Kronecker-product factorization in terms of `φ`) in
 `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`
-(`R_toMPSTensor_isCPSVCanonicalForm`). -/
+(`R_isCPSVCanonicalForm`). -/
 theorem transferMap_A_eigen :
     Kraus.transferMap A 1 = (1 : ℂ) • 1 ∧
       Kraus.transferMap A !![(1 : ℂ), 0; 0, -1] =

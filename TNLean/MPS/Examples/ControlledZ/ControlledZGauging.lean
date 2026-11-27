@@ -11,6 +11,7 @@ import TNLean.MPS.Examples.Cluster.ClusterReview
 import TNLean.MPS.FundamentalTheorem.Compression.RingEmbedding
 import TNLean.MPS.Operator.Periodic.BondOneOperator
 import TNLean.MPS.Operator.Defs
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AnomalyObstruction
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
@@ -170,21 +171,22 @@ theorem mpo_czMPUTensor_mul_self : mpo czMPUTensor N * mpo czMPUTensor N = 1 := 
 
 /-- The letter `(j, j)` of the controlled-`Z` tensor has the single nonzero column `j`, equal to
 the column `j` of `√2 H`. -/
-theorem toMPSTensor_czMPUTensor (j : Fin 2) :
-    czMPUTensor.toMPSTensor (finProdFinEquiv (j, j)) =
-      Matrix.of fun l r ↦ if r = j then czSign l j else 0 := by
+theorem czMPUTensor_apply_same (j : Fin 2) :
+    czMPUTensor (j, j) = Matrix.of fun l r ↦ if r = j then czSign l j else 0 := by
   ext l r
-  rw [toMPSTensor_finProdFinEquiv]
   simp [czMPUTensor]
 
 /-- **The controlled-`Z` tensor is normal**: its letters `(j, j)` carry the columns of the
 invertible matrix `√2 H`. -/
-theorem czMPUTensor_isNormal : Kraus.IsNormal czMPUTensor.toMPSTensor := by
-  refine isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j, j)) (fun j l ↦ czSign l j)
-    toMPSTensor_czMPUTensor (fun _ _ ↦ czSign_ne_zero _ _) ?_
-  rw [Matrix.det_fin_two]
-  simp [czSign]
-  norm_num
+theorem czMPUTensor_isNormal : Kraus.IsNormal czMPUTensor := by
+  refine (isNormal_toMPSTensor_iff _).1 (isNormal_of_forced_column
+    (fun j ↦ finProdFinEquiv (j, j)) (fun j l ↦ czSign l j) (fun j ↦ ?_)
+    (fun _ _ ↦ czSign_ne_zero _ _) ?_)
+  · rw [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical, Equiv.symm_apply_apply,
+      czMPUTensor_apply_same]
+  · rw [Matrix.det_fin_two]
+    simp [czSign]
+    norm_num
 
 /-! ### The representation of `ℤ₂` and its anomaly -/
 
@@ -219,7 +221,8 @@ private theorem mpo_czRepTensor_mul (hN : 0 < N) (a b : Fin 2) :
 /-- **`{1, U}` represents `ℤ₂` exactly with normal tensors** (arXiv:2502.20257, line 3873:
 "since it squares to identity, it yields a representation of `ℤ₂`"). -/
 theorem czFamily_isNormalRepresentation : czFamily.IsNormalRepresentation where
-  isNormal := Multiplicative.forall_zmod_two (idTensor_isNormal (d := 2)) czMPUTensor_isNormal
+  isNormal := Multiplicative.forall_zmod_two (idTensor_isNormal (d := 2))
+    ((isNormal_toMPSTensor_iff _).2 czMPUTensor_isNormal)
   operator_mul g h _ hN :=
     mpo_czRepTensor_mul hN (Multiplicative.toAdd g) (Multiplicative.toAdd h)
 

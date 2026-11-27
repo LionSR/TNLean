@@ -7,6 +7,7 @@ import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
 import TNLean.MPS.Examples.Z3.Z3ClockDefect
 import TNLean.MPS.Operator.Periodic.BondOneOperator
 import TNLean.MPS.Operator.Defs
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AnomalyObstruction
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
@@ -219,40 +220,44 @@ private theorem det_scaled_vandermonde_ne_zero {n : ℕ} {x c : Fin n → ℂ}
 
 /-- The letter `(j + 1, j)` of `α U` is the matrix whose only nonzero column is the column `j`,
 with entries `α ω^{l j}`. -/
-theorem toMPSTensor_normUTensor (j : Fin 3) :
-    (normUTensor α).toMPSTensor (finProdFinEquiv (j + 1, j)) =
+theorem normUTensor_apply (j : Fin 3) :
+    normUTensor α (j + 1, j) =
       Matrix.of fun l r ↦ if r = j then α * phaseChar (uWeight l j) else 0 := by
   ext l r
-  rw [toMPSTensor_finProdFinEquiv]
   simp [normUTensor, uTensor, clockTensor_apply]
 
 /-- The letter `(j + 2, j)` of `α² ω V` is the matrix whose only nonzero column is the column
 `j`, with entries `α² ω ω^{2 l j + 2 j}`. -/
-theorem toMPSTensor_normVTensor (j : Fin 3) :
-    (normVTensor α).toMPSTensor (finProdFinEquiv (j + 2, j)) =
+theorem normVTensor_apply (j : Fin 3) :
+    normVTensor α (j + 2, j) =
       Matrix.of fun l r ↦ if r = j then α ^ 2 * omega * phaseChar (vWeight l j) else 0 := by
   ext l r
-  rw [toMPSTensor_finProdFinEquiv]
   simp [normVTensor, vTensor, clockTensor_apply]
 
 /-- **`α U` is normal**: its letters `(j + 1, j)` carry the columns of the invertible matrix
 `(α ω^{l j})`. -/
-theorem normUTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normUTensor α).toMPSTensor := by
+theorem normUTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normUTensor α) := by
   have hα0 := ne_zero_of_pow_three_eq_omega hα
-  refine isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 1, j))
-    (fun j l ↦ α * phaseChar (uWeight l j)) toMPSTensor_normUTensor
-    (fun _ _ ↦ mul_ne_zero hα0 (phaseChar_ne_zero _)) ?_
+  refine (isNormal_toMPSTensor_iff _).1 <|
+    isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 1, j))
+      (fun j l ↦ α * phaseChar (uWeight l j))
+      (fun j ↦ (congrArg (normUTensor α) (finProdFinEquiv.symm_apply_apply _)).trans
+        (normUTensor_apply j))
+      (fun _ _ ↦ mul_ne_zero hα0 (phaseChar_ne_zero _)) ?_
   simpa only [uWeight, phaseChar_mul] using
     det_scaled_vandermonde_ne_zero phaseChar_injective fun _ ↦ hα0
 
 /-- **`α² ω V` is normal**: its letters `(j + 2, j)` carry the columns of the invertible matrix
 `(α² ω ω^{2 l j + 2 j})`. -/
-theorem normVTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normVTensor α).toMPSTensor := by
+theorem normVTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normVTensor α) := by
   have hα0 := ne_zero_of_pow_three_eq_omega hα
   have hc : α ^ 2 * omega ≠ 0 := mul_ne_zero (pow_ne_zero _ hα0) omega_ne_zero
-  refine isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 2, j))
-    (fun j l ↦ α ^ 2 * omega * phaseChar (vWeight l j)) toMPSTensor_normVTensor
-    (fun _ _ ↦ mul_ne_zero hc (phaseChar_ne_zero _)) ?_
+  refine (isNormal_toMPSTensor_iff _).1 <|
+    isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 2, j))
+      (fun j l ↦ α ^ 2 * omega * phaseChar (vWeight l j))
+      (fun j ↦ (congrArg (normVTensor α) (finProdFinEquiv.symm_apply_apply _)).trans
+        (normVTensor_apply j))
+      (fun _ _ ↦ mul_ne_zero hc (phaseChar_ne_zero _)) ?_
   have hv : ∀ l j : Fin 3, α ^ 2 * omega * phaseChar (vWeight l j) =
       (α ^ 2 * omega * phaseChar (2 * j)) * phaseChar (2 * j) ^ (l : ℕ) := by
     intro l j
@@ -273,7 +278,8 @@ the tensors are those of `Z3ClockTensor`, rescaled. -/
 theorem clockFamily_isNormalRepresentation (hα : α ^ 3 = omega) :
     (clockFamily α).IsNormalRepresentation where
   isNormal := Multiplicative.forall_zmod_three (idTensor_isNormal (d := 3))
-    (normUTensor_isNormal hα) (normVTensor_isNormal hα)
+    ((isNormal_toMPSTensor_iff _).2 (normUTensor_isNormal hα))
+    ((isNormal_toMPSTensor_iff _).2 (normVTensor_isNormal hα))
   operator_mul g h _ hN :=
     mpo_clockRepTensor_mul hα hN (Multiplicative.toAdd g) (Multiplicative.toAdd h)
 

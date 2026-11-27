@@ -68,32 +68,28 @@ theorem toMPSTensor_blockTensor_R_one :
 
 The positive blocking length is $L=1$. The BNT is the representative family
 supplied by the BNT refinement of `canonicalFormData`; its only retained
-normal block is `retainedBlock`, whose doubled physical-trace transfer is
+normal block is `retainedBlock`, whose physical-trace transfer is
 nonnilpotent.
 
 This theorem does not assert simplicity for every positive blocking.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSimple : MPOTensor.IsSimple R := by
-  let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
+  let data := canonicalFormData.reindexPhysical (oneSiteDoubledEquiv.trans finProdFinEquiv.symm)
   let ref := data.bntRefinement
   refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition, ?_, ?_⟩
   · rw [toMPSTensor_blockTensor_R_one]
     exact ref.isBNTSectorPresentation Nat.one_pos
   · intro j
     change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
-      (Kraus.reindexPhysical oneSiteDoubledEquiv retainedBlock))
+      (Kraus.reindexPhysical (oneSiteDoubledEquiv.trans finProdFinEquiv.symm) retainedBlock))
     have hTransfer : MPOTensor.doubledPhysTraceTransfer 4
-        (Kraus.reindexPhysical oneSiteDoubledEquiv retainedBlock) =
-        MPOTensor.doubledPhysTraceTransfer 4 retainedBlock := by
-      rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.doubledPhysTraceTransfer]
-      change (∑ i : Fin (Kraus.blockPhysDim 4 1),
-          retainedBlock (finProdFinEquiv
-            (Kraus.singleBlockEquiv 4 i, Kraus.singleBlockEquiv 4 i))) =
-        ∑ i : Fin 4, retainedBlock (finProdFinEquiv (i, i))
-      exact (Kraus.singleBlockEquiv 4).sum_comp
-        (fun i : Fin 4 => retainedBlock (finProdFinEquiv (i, i)))
+        (Kraus.reindexPhysical (oneSiteDoubledEquiv.trans finProdFinEquiv.symm) retainedBlock) =
+        MPOTensor.physTraceTransfer retainedBlock := by
+      rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.physTraceTransfer]
+      simp only [Kraus.reindexPhysical, oneSiteDoubledEquiv]
+      exact (Kraus.singleBlockEquiv 4).sum_comp (fun i : Fin 4 => retainedBlock (i, i))
     rw [hTransfer]
-    exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent
+    exact physTraceTransfer_retainedBlock_not_isNilpotent
 
 end MPOTensor.RescalingStableLengthDependentRFP

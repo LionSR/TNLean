@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveMarkovDecomposition
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # A non-Cartesian four-sector tensor
@@ -143,16 +144,12 @@ lemma sectorMatrix_span_eq_top :
     Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_range_self k))
 
 /-- The diagonal tensor is injective already at one site. -/
-lemma tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
+lemma tensor_isInjective : Kraus.IsInjective tensor := by
   apply top_unique
   rw [← sectorMatrix_span_eq_top]
   apply Submodule.span_le.2
   rintro _ ⟨k, rfl⟩
-  apply Submodule.subset_span
-  refine ⟨finProdFinEquiv (k, k), ?_⟩
-  change tensor ((finProdFinEquiv (k, k)).divNat, (finProdFinEquiv (k, k)).modNat) = sectorMatrix k
-  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-  simp [tensor]
+  exact Submodule.subset_span ⟨(k, k), by simp [tensor]⟩
 
 /-- The physical-trace transfer is the rectangular product \(LR\). -/
 lemma physTraceTransfer_tensor :
@@ -264,7 +261,8 @@ lemma neighboringOperator_pos (k h : Fin 4) :
 /-- The candidate tensor satisfies saturation of the area law. -/
 lemma tensor_isSAL : tensor.IsSAL := by
   let _ : NeZero 2 := ⟨by omega⟩
-  exact factorization.isSAL_of_isSourceZCL tensor_isInjective
+  exact factorization.isSAL_of_isSourceZCL
+    ((isInjective_toMPSTensor_iff tensor).2 tensor_isInjective)
     neighboringOperator_pos tensor_isSourceZCL
 
 end MPOTensor.NonCartesianActiveSectorCandidate

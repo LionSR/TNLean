@@ -36,8 +36,9 @@ operator by `(-1)^L`. The decorated, two-qubit-blocked convention of arXiv:2502.
 ## Main definitions
 
 * `CZXCompression.czxIntTensor`, `CZXCompression.czxTensor`, `CZXCompression.czxMPS`: the
-  bond-two tensor over the integers, over the complexes, and in the pair-alphabet view.
-* `CZXCompression.identityMPS`: the bond-one identity tensor `δ` in the pair-alphabet view.
+  bond-two tensor over the integers, over the complexes, and on the
+  doubled index `Fin 4` of the pair alphabet.
+* `CZXCompression.identityMPS`: the bond-one identity tensor `δ` on the doubled index `Fin 4`.
 * `CZXCompression.negIdentityIntMPS`: the integer matrices of `-δ`.
 * `CZXCompression.czxSquareInt`, `CZXCompression.czxSquare`: the stacked product tensor
   `B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four.
@@ -93,10 +94,10 @@ def identityIntTensor : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℤ :=
 def identityTensor : MPOTensor 2 1 :=
     Function.uncurry fun i j => complexOfInt (identityIntTensor i j)
 
-/-- The CZX tensor read as a tensor over the pair alphabet `Fin 4`. -/
+/-- The CZX tensor read on the doubled index `Fin 4` of the pair alphabet. -/
 def czxMPS : MPSTensor 4 2 := czxTensor.toMPSTensor
 
-/-- The bond-one identity tensor `δ` read as a tensor over the pair alphabet `Fin 4`. -/
+/-- The bond-one identity tensor `δ` read on the doubled index `Fin 4` of the pair alphabet. -/
 def identityMPS : MPSTensor 4 1 := identityTensor.toMPSTensor
 
 /-- The integer matrices of the pair-alphabet CZX tensor, in the letter order
@@ -150,7 +151,7 @@ def czxSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 2 => 0
   | 3 => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
 
-/-- The stacked product tensor of Example D, in the pair-alphabet view. -/
+/-- The stacked product tensor of Example D, on the doubled index `Fin 4`. -/
 def czxSquare : MPSTensor 4 4 := (MPOTensor.mulTensor czxTensor czxTensor).toMPSTensor
 
 theorem czxSquare_eq (a : Fin 4) : czxSquare a = complexOfInt (czxSquareInt a) := by
