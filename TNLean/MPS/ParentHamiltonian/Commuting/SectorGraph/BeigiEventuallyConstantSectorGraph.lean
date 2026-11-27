@@ -84,6 +84,7 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
       (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace d N)) :=
     LinearIndependent.of_comp
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap hImage
+  have : NeZero N := ⟨by omega⟩
   rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
   simpa using finrank_span_eq_card hCoefficients
 

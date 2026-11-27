@@ -53,7 +53,7 @@ documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 
 section
 
-open scoped Topology
+open scoped Topology ComplexOrder
 
 namespace MPSTensor
 

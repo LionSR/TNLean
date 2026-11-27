@@ -673,7 +673,9 @@ in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 @[simp] theorem groundSpace_hamiltonian_parentRingInteraction_two_one_eq_top
     (A : MPSTensor d D) :
     ManyBody.groundSpace (parentRingInteraction A 2 1).hamiltonian 0 = ⊤ := by
-  simp [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker]
+  rw [hamiltonian_parentRingInteraction_two_one]
+  ext v
+  simp [ManyBody.mem_groundSpace_iff]
 
 end MPSTensor
 
