@@ -48,7 +48,8 @@ lines 434--451. -/
 theorem residualCoverConfigEquiv_apply (K M r : ℕ)
     (u : Cfg (blockPhysDim d L) K) (v : Cfg (blockPhysDim d L) M) (τ : Cfg d r) :
     residualCoverConfigEquiv d L K M r (u, v, τ) =
-      Fin.append (Fin.append (Kraus.blockedConfigEquiv d K L u) (Kraus.blockedConfigEquiv d M L v)) τ := by
+      Fin.append (Fin.append (Kraus.blockedConfigEquiv d K L u)
+        (Kraus.blockedConfigEquiv d M L v)) τ := by
   apply List.ofFn_injective
   have hCast := List.ofFn_congr
     (show (K + M) * L + r = K * L + M * L + r by rw [Nat.add_mul])

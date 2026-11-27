@@ -167,7 +167,8 @@ theorem ker_regionalReplacement {h : ℕ → E →L[𝕜] E}
 /-- Every original zero-energy vector is annihilated by both regional layer terms and
 all retained exterior terms. ALVV, Theorem 5.14(1). -/
 theorem regionalReplacement_frustrationFree {h : ℕ → E →L[𝕜] E}
-    (hh : ∀ i, IsStarProjection (h i)) (even odd : Finset ℕ) (m : ℕ) {x : E} (hx : ∀ i < m, h i x = 0) :
+    (hh : ∀ i, IsStarProjection (h i)) (even odd : Finset ℕ) (m : ℕ) {x : E}
+    (hx : ∀ i < m, h i x = 0) :
     (1 - regionalProjection h even m) x = 0 ∧
     (1 - regionalProjection h odd m) x = 0 ∧
     ∀ i < m, i ∉ even ∪ odd → h i x = 0 :=

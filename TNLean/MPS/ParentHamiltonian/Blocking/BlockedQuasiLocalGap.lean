@@ -85,7 +85,8 @@ private theorem blocking_interval_commutator_eq
         (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) H *
           Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) X -
           Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) X *
-            Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L) H))) := by
+            Matrix.reindex (Kraus.blockedConfigEquiv d N L)
+              (Kraus.blockedConfigEquiv d N L) H))) := by
   change φ (quasiLocalBlocking d L
     (quasiLocalIntervalObservable (blockPhysDim d L) a N
       (Xᴴ * (H * X - X * H)))) = _
@@ -177,7 +178,8 @@ theorem blocking_localCommutator_energy_le
       φ (quasiLocalIntervalObservable d (a * L - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k * L) + (R - 1))
         (localCommutatorObservable h
-          (Matrix.reindex (Kraus.blockedConfigEquiv d k L) (Kraus.blockedConfigEquiv d k L) Y))) := by
+          (Matrix.reindex (Kraus.blockedConfigEquiv d k L)
+            (Kraus.blockedConfigEquiv d k L) Y))) := by
   let n := K + R
   let N := (n + k) + n
   let f := intervalStateFunctional φ hpos ((a - (n : ℤ)) * L) (N * L)

@@ -67,8 +67,8 @@ theorem sum_star_piKronecker_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : 
   set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
     Equiv.piCongrRight fun _ => virtualPairEquiv D
   set m : (Fin M → Fin D × Fin D) → ℂ := fun c => mpv (polarPosTensor Bq) (e.symm c)
-  have hT : ∀ τ, mpv A (Kraus.blockedConfigEquiv d M q τ) = ((Matrix.piKronecker fun _ : Fin M ↦ V) *ᵥ
-      m) τ := by
+  have hT : ∀ τ, mpv A (Kraus.blockedConfigEquiv d M q τ) =
+      ((Matrix.piKronecker fun _ : Fin M ↦ V) *ᵥ m) τ := by
     intro τ
     rw [mpv_blockedConfigEquiv_eq_sum_polar]
     simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply, m]

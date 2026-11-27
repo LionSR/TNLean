@@ -80,7 +80,8 @@ equations (3.12)--(3.14). -/
     (L K : ℕ) :
     Matrix.reindex (Kraus.blockedConfigEquiv d K L) (Kraus.blockedConfigEquiv d K L)
       (blockedInteractionMatrix h L K) = (chainTranslates R (K * L) h).hamiltonian :=
-  (Matrix.reindex (Kraus.blockedConfigEquiv d K L) (Kraus.blockedConfigEquiv d K L)).apply_symm_apply _
+  (Matrix.reindex (Kraus.blockedConfigEquiv d K L)
+    (Kraus.blockedConfigEquiv d K L)).apply_symm_apply _
 
 private theorem placeAlong_chainWindow_hamiltonian_chainTranslates {W n b : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hb : b + W ≤ n) :

@@ -139,6 +139,7 @@ open MPSTensor
 variable {d D : ℕ}
 variable [NeZero d]
 
+set_option linter.style.longLine false in
 /-- Every normalized positive state supported in all finite-interval primitive
 MPS spaces has the prescribed insertion expectations on every local interval.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3 and the boundary

@@ -250,7 +250,7 @@ private def extendLeftEquiv {k : ℕ} (hk : k < N) :
     · rfl
     · exact congrArg w (Subtype.ext (Fin.ext (by
         have := (mem_interval.mp v.2).2
-        show k = v.1.val
+        change k = v.1.val
         omega)))
 
 /-- Restriction of a vector on the left block after `k + 1` sites to the left block after `k`
@@ -431,7 +431,7 @@ private theorem cutChain_prefix {D n : ℕ} {ψ : (Fin (n + 1) → Fin d) → �
       · rfl
       · exact congrArg σ (Fin.ext (by
           have := (mem_interval.mp v.2).2
-          show v.1.val = k
+          change v.1.val = k
           omega))
     have ih' : ∀ γ : Fin D, (List.ofFn fun p : Fin k => OBCChainTensor.zeroPad (cutChain hψ hD)
         (Fin.castLE hk p.castSucc) (σ (Fin.castLE hk p.castSucc))).prod
