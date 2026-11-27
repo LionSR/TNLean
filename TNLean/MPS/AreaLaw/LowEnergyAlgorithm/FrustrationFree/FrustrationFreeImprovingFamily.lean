@@ -11,7 +11,7 @@ import QICLean.Analysis.Support.ProjectionOrder
 import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 import QICLean.Analysis.Projection.WeightedProjection
 import QICLean.ManyBody.Hamiltonian.Models
-import QICLean.ManyBody.Sites.OperatorSchmidtPartition
+import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Norm.MatrixToEuclidean

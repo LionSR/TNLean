@@ -9,7 +9,7 @@ import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
 import QICLean.Channel.Irreducible.CollatzWielandt
 import QICLean.Kraus.Injectivity
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 

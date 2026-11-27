@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
 import QICLean.Analysis.FunctionalCalculus.CfcConjugation
-import QICLean.Circuit.Gate.UnitaryExtension
+import QICLean.Circuit.Gate.PartialIsometryDilation
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Tensor.Physical.PhysicalMatrix
 import TNLean.MPS.Tensor.Physical.BlockedPolar

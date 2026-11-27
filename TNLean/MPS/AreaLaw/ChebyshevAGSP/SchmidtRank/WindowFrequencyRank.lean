@@ -3,18 +3,17 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.ManyBody.Sites.OperatorSchmidtPartition
+import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import QICLean.Algebra.Word.OneMarkerFullCounts
 import QICLean.Algebra.Word.LowFrequencyWordPartition
 import Mathlib.Algebra.BigOperators.Fin
 import QICLean.ManyBody.Entropy.RegionEntropy
 import Mathlib.Data.Nat.Sqrt
-import QICLean.Algebra.Combinatorics.BinomialFrequencySum
+import QICLean.Algebra.Combinatorics.TwoWindowCounts
 import Mathlib.Algebra.Polynomial.AlgebraMap
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 import QICLean.Algebra.OperatorSchmidt.WeightedFrequencySchmidtRank
-import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!

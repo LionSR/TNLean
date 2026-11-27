@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
-import QICLean.Algebra.PerronFrobenius.PrimitiveAperiodic
+import QICLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorDirectedCut
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorVirtualSpanning
 

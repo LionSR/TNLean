@@ -6,9 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingVector
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.Gluing
 import QICLean.Spectral.LowEnergy.HierarchyLevels
-import QICLean.Spectral.Eigenvalue.DensityMaxEigenvector
-import QICLean.Spectral.LowEnergy.DominantEigenvector
 import QICLean.Spectral.Eigenvalue.DominantEigenvectorUniqueness
+import QICLean.Spectral.LowEnergy.DominantEigenvector
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

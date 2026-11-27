@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowCoordinates
 import QICLean.Algebra.Matrix.MatrixAux
-import QICLean.Analysis.Norm.ThreeOperatorPerturbation
+import QICLean.Analysis.Norm.NormedRingTelescoping
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowOverlapFactors
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowRightSectorSum

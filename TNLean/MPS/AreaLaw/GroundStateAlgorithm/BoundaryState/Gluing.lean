@@ -8,7 +8,7 @@ import QICLean.Channel.Gluing.LeadingEigenvectorBounds
 import QICLean.ManyBody.Sites.ThreeRegion.Cut
 import QICLean.ManyBody.Entropy.Cut.RegionSplit
 import QICLean.Analysis.TraceNorm.RectangularTraceNormAlgebra
-import QICLean.Analysis.Isometry.EuclideanReindex
+import QICLean.Analysis.Isometry.UnitaryMulVecInner
 import QICLean.Analysis.Norm.KroneckerOperatorNorm
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Spectral.Eigenvalue.DominantEigenvectorUniqueness

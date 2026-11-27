@@ -8,7 +8,7 @@ import Mathlib.Data.Finset.SymmDiff
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Logic.Equiv.Basic
 import QICLean.ManyBody.Sites.RegionMatrix
-import QICLean.ManyBody.Sites.OperatorSchmidtPartition
+import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import QICLean.ManyBody.Sites.ThreeRegion.Cut
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Data.List.OfFn

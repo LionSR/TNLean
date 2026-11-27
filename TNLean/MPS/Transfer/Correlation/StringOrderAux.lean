@@ -9,7 +9,7 @@ import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import TNLean.MPS.Transfer.Correlation.StringOrderDefs
 import TNLean.MPS.Tensor.Gauge.TPGauge
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Scaling
 import QICLean.Channel.FixedPoint.Weighted.CanonicalGauge

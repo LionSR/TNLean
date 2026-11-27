@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 import QICLean.Channel.Irreducible.InvariantProjection
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 
 /-!
 # Injective transfer-gap corollaries

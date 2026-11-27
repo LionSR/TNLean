@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftClusterPrecision
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftGeneratedMiddleApproximation
-import QICLean.Analysis.Parameter.SoftClusterParameters
+import QICLean.Analysis.Parameter.SoftRegionalEnergyParameters
 
 /-!
 # A native soft middle approximation with its actual spectral cluster

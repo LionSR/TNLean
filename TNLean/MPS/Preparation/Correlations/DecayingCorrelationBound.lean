@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Peripheral.Irreducible.IrreducibleChannel
-import QICLean.Analysis.Real.ExponentialSumWindow
+import QICLean.Analysis.Real.UnitModulusPowerSum
 import TNLean.MPS.Transfer.Correlation.Correlations
 import TNLean.MPS.CanonicalForm.Correlation.CorrelatorFiniteSize
 import TNLean.MPS.Transfer.Primitivity.Equivalence

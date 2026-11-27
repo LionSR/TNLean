@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SequenceParameters
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
-import QICLean.Algebra.Combinatorics.DependentSequence
+import QICLean.Algebra.Combinatorics.IndexInduction
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedFilter
 
 /-!

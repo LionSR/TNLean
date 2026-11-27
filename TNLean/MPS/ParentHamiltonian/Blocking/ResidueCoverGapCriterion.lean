@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Gap.Filtration.OverlappingIntervalGap
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenFiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedFiniteGapTransport
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
-import QICLean.Analysis.Topology.UniformSelectionBounds
+import QICLean.Analysis.Topology.CompactUniformBounds
 import QICLean.Spectral.Gap.EigenvalueGap
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
 

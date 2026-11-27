@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncationResidual
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Order.QuadraticScalarShift
-import QICLean.ManyBody.Entropy.Cut.PositiveLocalLift
+import QICLean.ManyBody.Entropy.Cut.RightLocalLift
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMerge
 import QICLean.Analysis.Parameter.SoftRegionalEnergyParameters
 import QICLean.Analysis.Projection.RegionalEnergyCalibration
