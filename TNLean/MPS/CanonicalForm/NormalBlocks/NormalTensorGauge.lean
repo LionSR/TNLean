@@ -627,6 +627,43 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
   rw [← hFamily]
   exact hLI N hN
 
+/-- **Bases of normal tensors of a weighted direct sum.** A finite family of normal tensors is a
+basis of normal tensors of the weighted direct sum `⊕_k μ_k A_k` exactly when distinct members
+are not gauge-phase equivalent; the weights are arbitrary.
+
+The spanning clause is the block expansion `V^{(N)}(⊕_k μ_k A_k) = ∑_k μ_k^N V^{(N)}(A_k)`;
+eventual linear independence is equivalent to gauge-phase separation by the corollary to
+Lemma `equalMPS` and by condition (ii) of Proposition 2.7 of arXiv:1606.00608
+(`prop:char-BNT`, lines 271--280 and 1121--1142). -/
+theorem isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff
+    {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    {A : (k : Fin r) → MPSTensor d (dim k)} (hNormal : ∀ k, IsNormalTensor (A k)) :
+    IsCPSVBasisOfNormalTensors (toTensorFromBlocks μ A) (fun k => ⟨dim k, A k⟩) ↔
+      BlocksNotGaugePhaseEquiv (d := d) A := by
+  refine ⟨fun h => h.blocks_not_gaugePhaseEquiv, fun hDistinct => ?_⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hNormal k).bondDim_ne_zero⟩
+  refine ⟨hNormal, fun N _ => ⟨fun k => μ k ^ N, fun σ => ?_⟩,
+    exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv A hNormal
+      hDistinct⟩
+  simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
+
+/-- The blocks of a normal canonical form with gauge-phase separated blocks are a basis of
+normal tensors of their weighted direct sum: irreducible primitive left-canonical blocks are
+normal tensors.
+
+**Scope restriction (basis of representatives):** `IsNormalCanonicalFormBNT` keeps one
+representative per gauge-phase class and does not carry the repeated copies and their weights
+of the full decomposition of arXiv:1606.00608, eq. `decBSV`, lines 281--301. The restriction is
+documented in `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. -/
+theorem IsNormalCanonicalFormBNT.isCPSVBasisOfNormalTensors
+    {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hNCF : IsNormalCanonicalFormBNT μ A) :
+    IsCPSVBasisOfNormalTensors (toTensorFromBlocks μ A) (fun k => ⟨dim k, A k⟩) := by
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hNCF.dim_pos k).ne'⟩
+  exact (isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff μ fun k =>
+    isNormalTensor_of_isIrreducibleFamily_leftCanonical (A k) (hNCF.block_irreducible k)
+      (hNCF.block_primitive k) (hNCF.leftCanonical k)).2 hNCF.blocks_not_equiv
+
 end MPSTensor
 
 end

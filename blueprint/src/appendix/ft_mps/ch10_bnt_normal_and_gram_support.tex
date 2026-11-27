@@ -66,23 +66,6 @@ arguments.
     circle is unchanged.
 \end{proof}
 
-\begin{lemma}[Preservation of an algebraic BNT under positive-length MPV equality]
-    \label{lem:bnt_of_same_mpv2_pos}
-    \lean{MPSTensor.IsBNT.of_sameMPV₂Pos}
-    \leanok
-    \uses{def:bnt,def:same_mpv2_pos}
-    Let $A$ and $A'$ have the same matrix product vectors at every positive
-    length. If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$, then
-    the same family is a basis of normal tensors for $A'$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:bnt,def:same_mpv2_pos}
-    Substituting the positive-length MPV equality into the spanning identity
-    for $A$ transfers the span condition to $A'$, while normality and eventual
-    linear independence depend only on the family $(A_j)_{j=1}^{g}$.
-\end{proof}
-
 \begin{lemma}[Positive-length geometric proportionality phase]
     \label{cor:normal_positive_proportional_mpv_geometric_phase}
     \lean{MPTensor.NonzeroProportionalMPV₂.%

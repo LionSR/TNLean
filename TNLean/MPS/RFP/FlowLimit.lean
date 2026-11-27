@@ -26,9 +26,9 @@ oscillate under repeated squaring. That obstruction is formalized in
 
 ## Main result
 
-* `rg_flow_converges_of_cf`: for each primitive block in an auxiliary
-  canonical-form family, the dyadic transfer-map powers converge pointwise to
-  an idempotent. The proof uses the exponential transfer-map gap bound to
+* `rg_flow_converges_of_isInjective`: for an injective left-canonical tensor
+  (one block of a canonical form), the dyadic transfer-map powers converge
+  pointwise to an idempotent. The proof uses the exponential transfer-map gap bound to
   squeeze the difference `E^n X - P X` to zero, then composes with the
   subsequence `2^n → ∞`.
 
@@ -82,51 +82,45 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- For each primitive block in an auxiliary canonical-form family, the
-iterated transfer map `E^{2^n}` converges to an idempotent.
+/-- For an injective left-canonical tensor, the iterated transfer map `E^{2^n}` converges to an
+idempotent.
 
-The convergence is pointwise on the block's matrix space:
+The convergence is pointwise on the matrix space:
 `∀ ρ, (E^{2^n}) ρ → E_∞ ρ` where `E_∞ ∘ E_∞ = E_∞`.
 
-The proof uses the transfer-map gap: injectivity of block `k` implies
-primitivity of its transfer map. The exponential bound
-`‖E^n X - P X‖ ≤ C(1-δ)^n ‖X‖` from
+The proof uses the transfer-map gap: injectivity implies primitivity of the transfer map. The
+exponential bound `‖E^n X - P X‖ ≤ C(1-δ)^n ‖X‖` from
 `exponential_convergence_of_primitive` then gives pointwise convergence
 `E^n X → P X`, and composing with `2^n → ∞` yields the result.
 
 **Scope restriction (CPSV16 Appendix B):** This is the primitive single-block
-part of the argument at arXiv:1606.00608, lines 1211--1244, not the printed
-full weighted canonical-form convergence assertion. The latter is refuted by
-relative-phase oscillation; see
+part of the argument at arXiv:1606.00608, lines 1211--1244, applied to one block of a
+canonical form, not the printed full weighted canonical-form convergence assertion. The latter
+is refuted by relative-phase oscillation; see
 `docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex`. -/
-theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalForm μ A) (k : Fin r) :
-    ∃ (E_infty : Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ]
-                 Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+theorem rg_flow_converges_of_isInjective [NeZero D] (A : MPSTensor d D)
+    (hInj : Kraus.IsInjective A) (hNorm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
+    ∃ (E_infty : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ),
       E_infty ∘ₗ E_infty = E_infty ∧
-      ∀ ρ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
         Filter.Tendsto
-          (fun n : ℕ => ((Kraus.transferMap (A k) ^ (2 ^ n : ℕ) : _) ρ))
+          (fun n : ℕ => ((Kraus.transferMap A ^ (2 ^ n : ℕ) : _) ρ))
           Filter.atTop
           (nhds (E_infty ρ)) := by
-  have hInj := hCF.block_injective k
-  have hNorm := hCF.leftCanonical k
-  let : NeZero (dim k) := ⟨Nat.ne_of_gt (hCF.dim_pos k)⟩
   -- Obtain the unique positive-definite fixed point (quantum Perron-Frobenius).
-  obtain ⟨ρ₀, hufp⟩ := Kraus.injective_transfer_unique_fixed_point' (A k) hInj hNorm
+  obtain ⟨ρ₀, hufp⟩ := Kraus.injective_transfer_unique_fixed_point' A hInj hNorm
   have htr : Matrix.trace ρ₀ ≠ 0 := ne_of_gt hufp.pos_def.trace_pos
   -- The witness is the rank-one fixed-point projection P(X) = (tr X / tr ρ₀) • ρ₀.
   refine ⟨fixedPointProj ρ₀ htr,
     fixedPointProj_mul_self (ρ := ρ₀) (htr := htr), fun X => ?_⟩
   -- Exponential convergence bound from QuantitativeGap.
   obtain ⟨C, δ, hC, hδ, hδ1, hbound⟩ :=
-    exponential_convergence_of_primitive (A k) hNorm hInj ρ₀ hufp.pos_def hufp.fixed
+    exponential_convergence_of_primitive A hNorm hInj ρ₀ hufp.pos_def hufp.fixed
   -- Step 1: E^n X → P X for all n (not just 2^n).
-  have h_allN : Filter.Tendsto (fun n => (Kraus.transferMap (A k) ^ n) X)
+  have h_allN : Filter.Tendsto (fun n => (Kraus.transferMap A ^ n) X)
       Filter.atTop (nhds (fixedPointProj ρ₀ htr X)) := by
     -- Norm bound: ‖(E^n) X - P X‖ ≤ C · (1-δ)^n · ‖X‖.
-    have h_norm_bound : ∀ n, ‖(Kraus.transferMap (A k) ^ n) X - fixedPointProj ρ₀ htr X‖ ≤
+    have h_norm_bound : ∀ n, ‖(Kraus.transferMap A ^ n) X - fixedPointProj ρ₀ htr X‖ ≤
         C * (1 - δ) ^ n * ‖X‖ := fun n => by
       simpa [Module.End.pow_apply] using hbound n X
     -- The bounding sequence C · (1-δ)^n · ‖X‖ → 0.

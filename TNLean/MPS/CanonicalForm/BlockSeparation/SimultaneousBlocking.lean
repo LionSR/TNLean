@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.KrausGauge
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumSelectors
 import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge

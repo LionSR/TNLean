@@ -8,6 +8,7 @@ import TNLean.MPS.Tensor.Words.ScaledNormality
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
 import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Perron normalization inside quadratic reconstruction

@@ -154,9 +154,8 @@ noncomputable def blockTransferSum
 /-- The direct sum of a finite family of MPS tensors, as a single tensor on the
 total bond space `Fin (∑ k, dim k)`.
 
-This coincides with `CanonicalForm.toTensor` of the canonical form with block
-tensors `B`, all scalar weights $\mu_k = 1$, mirroring its `blockDiagonal'`/`Σ`-reindex
-construction (`TNLean/MPS/Core/MultiBlock.lean`). -/
+This is the weighted block-diagonal tensor `toTensorFromBlocks` with all scalar weights
+$\mu_k = 1$ (`toTensorFromBlocks_one_eq_directSumTensor`). -/
 noncomputable def directSumTensor (B : (k : Fin r) → MPSTensor d (dim k)) :
     MPSTensor d (∑ k : Fin r, dim k) := fun i =>
   Matrix.reindex (finSigmaFinEquiv (n := dim)) (finSigmaFinEquiv (n := dim))

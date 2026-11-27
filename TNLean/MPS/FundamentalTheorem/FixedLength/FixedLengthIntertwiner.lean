@@ -8,6 +8,7 @@ import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import QICLean.Algebra.Module.BipartiteSumUniqueness
 import TNLean.MPS.FundamentalTheorem.FixedLength.QuadraticReconstruction
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # The fixed-length intertwiner of the PGVWC07 uniqueness theorem

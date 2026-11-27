@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.MPDO.Coefficients.BNTTheoremData
 import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
 
@@ -99,14 +100,13 @@ theorem verticalBNTTraceScalarFamily_traceScalar {g : ℕ} {mult : Fin g → ℕ
     (verticalBNTTraceScalarFamily ω).traceScalar α = ∑ q, ω α q :=
   rfl
 
-/-- A vertical canonical decomposition which retains the CPSV16
-basis-of-normal-tensors predicate.
+/-- A chosen vertical canonical decomposition, as data.
 
-The ordinary predicate `IsVerticalCF` records the algebraic BNT predicate used
-elsewhere in the project.  The comparison of the one-site and two-site
-decompositions in CPSV16, Appendix C.4, additionally uses the literal CPSV16
-basis predicate.  This structure retains that assertion together with the
-positive diagonal weights and both coisometric decomposition identities.
+The predicate `IsVerticalCF` asserts that such a decomposition exists.  The
+comparison of the one-site and two-site decompositions in CPSV16, Appendix C.4,
+works with one chosen decomposition, so this structure names its basis of normal
+tensors, positive diagonal weights and both coisometric decomposition
+identities.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 943--951 and
 lines 1863--1921. -/

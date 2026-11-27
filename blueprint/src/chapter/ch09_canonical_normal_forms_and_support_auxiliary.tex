@@ -345,60 +345,49 @@ condition together with the overlap-decay theorems of the preceding chapter.
     Theorem~\ref{thm:overlap_decay} gives the decay.
 \end{proof}
 
-\begin{lemma}[BNT from explicit blockwise hypotheses]
+\begin{lemma}[Bases of normal tensors of a weighted direct sum]
     \label{lem:cf_bnt_is_bnt_split}
-    \lean{MPSTensor.isBNT_of_separated_bnt_data}
+    \lean{MPSTensor.isCPSVBasisOfNormalTensors_toTensorFromBlocks_iff}
     \leanok
-    \uses{def:bnt,def:mpv_overlap}
-    Let $(\mu_k, A_k)_{k=1}^r$ be a weighted block family. Assume each $A_k$ is
-    injective and left-canonical, $\sum_i (A_k^i)^\dagger A_k^i = \Id$, that
-    $O_{A_kA_k}(N) \to 1$ for each $k$, and that distinct equal-dimension blocks
-    are not gauge-phase equivalent. Then the blocks form a basis of normal
-    tensors for the block-diagonal tensor $\bigoplus_k \mu_k A_k$.
+    \uses{def:bnt_cpsv,def:blocks_not_gauge_phase_equiv}
+    Let $(A_k)_{k=1}^r$ be normal tensors in the sense of
+    Definition~\ref{def:nt_cpsv} and let $\mu_1,\ldots,\mu_r\in\C$ be arbitrary.
+    Then $(A_k)_{k=1}^r$ is a basis of normal tensors for the block-diagonal
+    tensor $\bigoplus_k \mu_k A_k$ if and only if distinct blocks of equal bond
+    dimension are not gauge-phase equivalent.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpv_decomposition,lem:bnt_finite_index_overlap_orthonormal_li,thm:cross_overlap_zero_split}
-    Injective blocks are normal. The block-diagonal decomposition theorem gives
-    the MPV expansion of $\bigoplus_k \mu_k A_k$ in terms of the block MPVs.
-    The self-overlap limits are part of the hypotheses, and
-    Lemma~\ref{thm:cross_overlap_zero_split} gives the off-diagonal
-    decay. By Definition~\ref{def:bnt}, Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}
-    therefore establishes the required eventual linear independence.
+    \uses{thm:mpv_decomposition,thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,thm:cpsv_normal_separated_eventually_li}
+    Distinct members of a basis of normal tensors are not gauge-phase
+    equivalent by Lemma~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}.
+    Conversely, the block-diagonal decomposition theorem gives
+    $\ket{V^{(N)}(\bigoplus_k\mu_kA_k)}=\sum_k\mu_k^N\ket{V^{(N)}(A_k)}$ at every
+    length, and Lemma~\ref{thm:cpsv_normal_separated_eventually_li} gives the
+    eventual linear independence of the block MPVs of a separated family of
+    normal tensors.
 \end{proof}
-
-The normal-canonical formulation encodes normality spectrally (primitive
-transfer map), the BNT definition algebraically (eventual block injectivity).
-
-\begin{remark}[Comparing the two normality conditions]%
-    \label{rem:normalcf_bnt_gap}
-    The spectral normality of Definition~\ref{def:is_normal_canonical_form} and
-    the algebraic normality of Definition~\ref{def:normal} agree: the Wielandt
-    theory of Chapter~\ref{ch:wielandt} gives the implication from
-    primitivity to eventual block injectivity used here.
-\end{remark}
 
 \begin{lemma}[Restricted normal-CF-BNT hypotheses give a BNT]
     \label{lem:normal_cf_bnt_is_bnt}
-    \lean{MPSTensor.IsNormalCanonicalFormBNT.isBNT}
+    \lean{MPSTensor.IsNormalCanonicalFormBNT.isCPSVBasisOfNormalTensors}
     \leanok
-    \uses{def:normal_cf_bnt,def:bnt}
+    \uses{def:normal_cf_bnt,def:bnt_cpsv}
     On this one-copy surface, if a family is in normal canonical form with BNT
-    separation and each block
-    is also normal in the algebraic sense, then the blocks form a basis of
-    normal tensors for the associated block-diagonal tensor. The blocks here are
-    distinct representatives.
+    separation, then the blocks form a basis of normal tensors for the
+    associated block-diagonal tensor. The blocks here are distinct
+    representatives.
     % Scope restriction (cpsv16_ft_one_copy_scope_restriction): this form carries no
     % repeated-copy multiplicities; the missing multiplicity argument is
     % recorded in docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex.
 \end{lemma}
 
-\begin{proof}\leanok\uses{rem:normalcf_bnt_gap}
-    The normal-canonical hypotheses already give the block-diagonal MPV
-    expansion, the self-overlap normalization, and the eventual linear
-    independence coming from irreducible trace-preserving overlap decay.
-    In Definition~\ref{def:bnt}, including algebraic normality for each block
-    completes the remaining condition.
+\begin{proof}\leanok
+    \uses{thm:prep_blocked_transfer_limit_normal,lem:cf_bnt_is_bnt_split}
+    Each block is irreducible and left-canonical, and $1$ is the only
+    eigenvalue of modulus one of its transfer map, so it is a normal tensor
+    (Lemma~\ref{thm:prep_blocked_transfer_limit_normal}).
+    Lemma~\ref{lem:cf_bnt_is_bnt_split} then applies to the separated blocks.
 \end{proof}
 
 % The weight moduli are non-increasing, not strictly decreasing; equal-modulus

@@ -32,11 +32,13 @@ separated finite block families.
    - Same-dimension case: `mpvOverlap_tendsto_zero` (using `blocks_not_equiv` to supply
      `¬GaugePhaseEquiv`)
 
-3. **`isBNT_of_separated_bnt_data`**: the separated block hypotheses give
-   a valid `IsBNT` structure with the required overlap and independence properties.
+3. **`exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal`**: asymptotically
+   orthonormal overlaps give eventual linear independence of the matrix product vectors.
 
 4. **`IsNormalCanonicalFormBNT`**: normal-canonical separated hypotheses retained for
-   the primitive-transfer-map route and used directly to construct an `IsBNT` witness.
+   the primitive-transfer-map route. That its blocks form a basis of normal tensors of their
+   weighted direct sum is `IsNormalCanonicalFormBNT.isCPSVBasisOfNormalTensors` in
+   `TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge`.
 
 ## Design note on coefficients
 
@@ -75,9 +77,8 @@ and the SectorBNT comparison theorems; see
 `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`.
 
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
-(`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
-`Kraus.IsNormal` (the equivalent algebraic eventual-block-injectivity notion). The
-primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
+(`IsNormalCanonicalForm`): irreducible, primitive, left-canonical blocks, hence normal
+tensors. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
@@ -142,18 +143,6 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
     hA_self_cast (hOverlap k)
     (hBlocks j k hjk hdim) Nmin
 
-/-- The block-diagonal tensor `toTensorFromBlocks μ A` carries the obvious coefficient
-expansion over its blocks. -/
-private theorem spans_mpv_toTensorFromBlocks
-    {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) :
-    ∀ N : ℕ, ∃ c : Fin r → ℂ, ∀ σ : Fin N → Fin d,
-      mpv (toTensorFromBlocks μ A) σ = ∑ k : Fin r, c k * mpv (A k) σ := by
-  intro N
-  refine ⟨fun k => μ k ^ N, ?_⟩
-  intro σ
-  simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
-
 /-- **Existential BNT linear independence from asymptotic orthonormal overlaps.**
 
 If the self-overlaps of a finite block family tend to `1` and the cross-overlaps
@@ -207,27 +196,6 @@ theorem cross_overlap_tendsto_zero_of_separated_bnt_data
       (hLeft k)
       hdim
 
-/-- Separated-hypotheses construction of an `IsBNT` witness.
-
-The only role of `μ` is to specify the block-diagonal tensor `toTensorFromBlocks μ A` and its
-obvious coefficient decomposition.  Strict weight ordering is not used here. -/
-lemma isBNT_of_separated_bnt_data [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hInj : ∀ k, Kraus.IsInjective (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
-      Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
-    IsBNT (toTensorFromBlocks μ A) r dim A where
-  normal := fun j => (hInj j).isNormal
-  spans_mpv := fun N _ => spans_mpv_toTensorFromBlocks μ A N
-  eventually_li :=
-    exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-      hOverlap
-      (fun i j hij =>
-        cross_overlap_tendsto_zero_of_separated_bnt_data A hInj hLeft hBlocks i j hij)
-
 end SeparatedBNT
 
 /-! ### Cross-overlap decay from separated normal BNT hypotheses -/
@@ -265,37 +233,5 @@ theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
       hdim
 
 end SeparatedNormalBNT
-
-namespace IsNormalCanonicalFormBNT
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- A normal-canonical-form decomposition with BNT separation yields a valid `IsBNT`
-structure once the equivalent blockwise `Kraus.IsNormal` witnesses (eventual block injectivity) are
-supplied explicitly.
-
-**Scope restriction (basis of representatives):** The hypothesis
-`IsNormalCanonicalFormBNT` is the separated representative-family surface. It
-allows equal weight moduli, but it does not carry repeated gauge-phase-equivalent
-copies and their individual weights from the full CPSV16 BNT multiplicity
-decomposition. The restriction is documented in
-`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. -/
-lemma isBNT [∀ k, NeZero (dim k)]
-    (hNCF : IsNormalCanonicalFormBNT μ A)
-    (hNormal : ∀ j, Kraus.IsNormal (A j)) :
-    IsBNT (toTensorFromBlocks μ A) r dim A where
-  normal := hNormal
-  spans_mpv := fun N _ => spans_mpv_toTensorFromBlocks μ A N
-  eventually_li :=
-    exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-      (fun j => hNCF.toIsNormalCanonicalForm.overlap_tendsto_one j)
-      (fun i j hij =>
-        cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
-          hNCF.toIsNormalCanonicalForm.block_irreducible
-          hNCF.toIsNormalCanonicalForm.leftCanonical
-          hNCF.blocks_not_equiv i j hij)
-
-end IsNormalCanonicalFormBNT
 
 end MPSTensor

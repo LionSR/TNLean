@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.BNTPresentation
 
-import TNLean.MPS.CanonicalForm.BNTPresentation.Bridge
 import TNLean.MPS.CanonicalForm.BNTPresentation.Characterization
 import TNLean.MPS.CanonicalForm.BNTPresentation.Examples
 import TNLean.MPS.CanonicalForm.BNTPresentation.PermutationRigidityPrimitive

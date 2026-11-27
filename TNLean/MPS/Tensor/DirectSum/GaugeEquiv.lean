@@ -147,27 +147,6 @@ lemma fundamentalTheorem_multiBlock_global
 
 end FundamentalTheoremMulti
 
-/-! ## Comparison with `CanonicalForm` -/
-
-section CanonicalFormComparison
-
-open CanonicalForm
-
-/-- `CanonicalForm.toTensor` agrees with `toTensorFromBlocks`. -/
-theorem CanonicalForm.toTensor_eq_toTensorFromBlocks (C : CanonicalForm d) :
-    C.toTensor = toTensorFromBlocks C.μ C.blockTensor := rfl
-
-theorem fundamentalTheorem_canonicalForm_sameStructure
-    (C : CanonicalForm d)
-    (B : (k : Fin C.numBlocks) → MPSTensor d (C.blockDim k))
-    (hB_inj : ∀ k, Kraus.IsInjective (C.blockTensor k))
-    (hSame : ∀ k, SameMPV (C.blockTensor k) (B k)) :
-    GaugeEquiv (C.toTensor) (toTensorFromBlocks C.μ B) := by
-  rw [C.toTensor_eq_toTensorFromBlocks]
-  exact fundamentalTheorem_multiBlock_global C.μ C.blockTensor B hB_inj hSame
-
-end CanonicalFormComparison
-
 /-! ## Converse and global `SameMPV` transfer -/
 
 section Converse

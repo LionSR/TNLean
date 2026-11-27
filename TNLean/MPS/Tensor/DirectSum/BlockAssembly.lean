@@ -5,7 +5,12 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.DependentBlockDiagonal
 import QICLean.Analysis.Isometry.CoisometricCompression
-import TNLean.MPS.Tensor.DirectSum.MultiBlock
+import QICLean.Algebra.Matrix.MatrixReindex
+import TNLean.MPS.Tensor.Defs
+import TNLean.MPS.Tensor.Words.Basic
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Data.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.Tensor.Tactic
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween

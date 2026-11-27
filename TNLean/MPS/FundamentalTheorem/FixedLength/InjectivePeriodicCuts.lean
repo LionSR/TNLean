@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.FixedLength.TranslationInvariantUniqueness
 import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Exact physical cut ranks of injective periodic tensors

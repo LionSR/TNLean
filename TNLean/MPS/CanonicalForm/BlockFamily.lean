@@ -30,7 +30,7 @@ the non-strict, ties-allowed order used in the reduction to canonical form.
 - Weight condition: `HasOrderedNonzeroWeights`. The blockwise conditions (injectivity,
   irreducibility, primitivity, left-canonical normalization, self-overlap normalization) are
   stated directly as `∀ k, P (A k)`.
-- Canonical-form conditions: `IsCanonicalForm` and `IsNormalCanonicalForm`.
+- Canonical-form conditions: `IsNormalCanonicalForm`.
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`: normal canonical form from
   primitive weighted block decompositions.
 -/
@@ -57,9 +57,9 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 The blockwise hypotheses of the canonical-form predicates (injectivity, irreducibility,
 peripheral primitivity, left-canonical normalization, and self-overlap normalization) are
 written directly as `∀ k, P (A k)`; only the weight condition, which couples the ordering and
-the nonvanishing of the weights, is recorded as a structure. `IsCanonicalForm` remains the
-compact mathematical statement, while the separated hypotheses let the canonical-form
-reduction and the RFP/BNT projections expose only the assumptions used at each step.
+the nonvanishing of the weights, is recorded as a structure. The separated hypotheses let the
+canonical-form reduction and the RFP/BNT projections expose only the assumptions used at each
+step.
 -/
 
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
@@ -77,69 +77,6 @@ structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
   mu_ne_zero : ∀ k, μ k ≠ 0
 
 /-! ### Canonical form conditions -/
-
-/-- Canonical-form conditions combining injectivity, positive bond dimensions,
-left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weights `μₖ`,
-and overlap normalization.
-
-Source context: arXiv:1606.00608, eq. `II_CF1` and lines 237--246, and
-arXiv:2011.12127, lines 1831--1836. The weight ordering is `Antitone`
-(non-increasing by modulus), matching the source convention that allows blocks with equal moduli.
-The full CPSV predicate `IsBNTCanonicalForm` carries sector multiplicities and likewise does not
-require strict ordering. -/
-structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
-  block_injective : ∀ k, Kraus.IsInjective (A k)
-  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
-  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
-  /-- Non-increasing ordering of the block weights by modulus. -/
-  mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
-  /-- No block weight vanishes. -/
-  mu_ne_zero : ∀ k, μ k ≠ 0
-  /-- Every normal block has positive bond-space dimension.
-
-  This positivity is implicit in the normal-block decomposition of CPSV16,
-  equation `II_CF1`, lines 238--243. -/
-  dim_pos : ∀ k, 0 < dim k
-  /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
-
-  In the normal-canonical-form formulation this conclusion is derived from irreducibility,
-  left-canonical normalization, and peripheral-spectrum primitivity via
-  `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
-  overlap_tendsto_one :
-    ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
-        Filter.atTop (nhds (1 : ℂ))
-
-namespace IsCanonicalForm
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- **Canonical form from primitive injective blocks.**
-
-Source context: arXiv:1606.00608, Section II.C and eq. II_CF1.
-The algebraic canonical-form clauses are supplied as hypotheses. The self-overlap
-clause follows from peripheral primitivity of each left-canonical injective block
-via the spectral gap of the complementary transfer map. -/
-theorem of_peripheral_primitive
-    (hInj : ∀ k, Kraus.IsInjective (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hμ_antitone : Antitone (fun k : Fin r => ‖μ k‖))
-    (hμ_ne_zero : ∀ k, μ k ≠ 0)
-    (hDim : ∀ k, 0 < dim k)
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))) :
-    IsCanonicalForm μ A := by
-  refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, hDim, ?_⟩
-  intro k
-  let : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
-  exact
-    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (A := A k) (MPSTensor.irreducibleTensor_of_injective (A k) (hInj k))
-      (hLeft k) (hPrim k)
-
-end IsCanonicalForm
 
 /-! ### Normal canonical form conditions -/
 

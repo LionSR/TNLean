@@ -8,6 +8,7 @@ import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumSelectors
 import TNLean.MPS.Tensor.Gauge.TPGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import QICLean.Channel.Irreducible.KrausGauge
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # BNT block-separation hypotheses for PGVWC block intersections

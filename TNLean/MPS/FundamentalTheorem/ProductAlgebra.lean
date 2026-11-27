@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BlockPermutation
 import TNLean.MPS.Tensor.Words.OneSidedInverse
-import TNLean.MPS.Tensor.DirectSum.MultiBlock
 import TNLean.MPS.Tensor.DirectSum.GaugeEquiv
 import Mathlib.LinearAlgebra.Pi
 import Mathlib.LinearAlgebra.Matrix.Trace

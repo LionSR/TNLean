@@ -252,7 +252,7 @@ Subsequent stages toward a complete canonical-form existence theorem are:
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
   sector bookkeeping and weight normalization needed for non-increasing nonzero weight moduli.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
-  the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
+  the normal-canonical-form lemmas.
 -/
 
 /-!

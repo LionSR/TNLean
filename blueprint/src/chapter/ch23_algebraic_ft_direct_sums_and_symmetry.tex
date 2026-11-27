@@ -243,42 +243,6 @@ already states that gauge-equivalent tensors generate the same MPV family.
 Applying it to the two weighted block-diagonal tensors gives the direct-sum
 specialization needed here; no additional formal declaration is required.
 
-\subsection{Canonical-form tensor as a weighted direct sum}%
-\label{subsec:canonical_form_block_sum}
-
-\begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
-    \lean{MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks}\leanok
-    \uses{def:block_diagonal_tensor}
-    For a canonical-form record $C$, the tensor $T_C$ is
-    definitionally equal to the weighted block-diagonal tensor
-    $\bigoplus_k \mu_k^C\, A_k^C$,
-    where $\mu_k^C$ are the block weights and $A_k^C$ are the block tensors
-    stored in $C$.
-\end{lemma}
-
-\begin{proof}\leanok
-    The equality holds by definition; $T_C$ is defined as the weighted
-    block-diagonal tensor formed from the weights and block tensors of $C$.
-\end{proof}
-
-\begin{theorem}[Fundamental theorem for canonical forms with the same block structure]\label{thm:ft_canonical_form_same_structure}
-    \lean{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}\leanok
-    \uses{lem:canonical_toTensor_eq,lem:multi_block_global}
-    Let $C$ be a canonical-form record with block weights $\mu_k^C$ and block
-    tensors $A_k^C$. Let $\{B_k\}$ be a family of MPS tensors on the same
-    block dimensions, and assume that each $A_k^C$ is injective and generates
-    the same MPV family as $B_k$.
-    Then $T_C$ and $\bigoplus_k \mu_k^C\, B_k$ are gauge equivalent.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:canonical_toTensor_eq,lem:multi_block_global}
-    Rewriting $T_C$ as a weighted block-diagonal tensor via
-    Lemma~\ref{lem:canonical_toTensor_eq} reduces the claim to the
-    multi-block global gauge-equivalence lemma
-    (Lemma~\ref{lem:multi_block_global}).
-\end{proof}
-
 \begin{lemma}[Per-block equality of MPV families and per-block gauge equivalence]%
     \label{lem:perBlock_sameMPV_iff_gaugeEquiv}
     \lean{MPSTensor.perBlock_sameMPV_iff_gaugeEquiv}

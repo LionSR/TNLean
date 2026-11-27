@@ -708,7 +708,7 @@
     \label{thm:vertical_cf_of_grouped_orthogonal_sectors}
     \lean{MPOTensor.isVerticalCF_of_grouped_orthogonal_sectors}
     \leanok
-    \uses{def:vertical_tensor_mpdo,def:vertical_cf_mpdo,def:bnt}
+    \uses{def:vertical_tensor_mpdo,def:vertical_cf_mpdo,def:bnt_cpsv}
     Let $\{A_\alpha\}_{\alpha=0}^{g-1}$ be a BNT for the vertically viewed
     tensor $\widetilde M$. For each $\alpha$, let $r_\alpha>0$, let
     $\omega_{\alpha,q}>0$ for $0\leq q<r_\alpha$, and let
@@ -804,11 +804,11 @@
     contradiction.
 \end{proof}
 
-\begin{lemma}[Algebraic BNT from a grouped vertical decomposition]
+\begin{lemma}[Basis of normal tensors from a grouped vertical decomposition]
     \label{thm:mpdo_vertical_grouped_is_bnt}
-    \lean{MPOTensor.isBNT_verticalTensor_of_grouping}
+    \lean{MPOTensor.isCPSVBasisOfNormalTensors_verticalTensor_of_grouping}
     \leanok
-    \uses{def:vertical_tensor_mpdo,def:bnt,def:bnt_cpsv,def:mpv_phase_class_data}
+    \uses{def:vertical_tensor_mpdo,def:bnt_cpsv,def:mpv_phase_class_data}
     Let $M$ be an MPO tensor and put $T=\widetilde M$. Let $B_k$ have bond
     dimension $d_k$, let $\mu_k\in\C$, and let
     $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$. Assume, for every
@@ -823,14 +823,14 @@
     choose one representative $A_\alpha$ from each class. For the grouped
     decomposition of \cite[Proposition~4.13, lines~1863--1921]{Cirac2016MPDO_arXiv}
     before the final coisometry is formed, if $\{A_\alpha\}_\alpha$ is a basis
-    of normal tensors in the spectral sense for the weighted direct sum
+    of normal tensors for the weighted direct sum
     $A_{\mathrm{ret}}=\bigoplus_{k=0}^{r-1}\mu_kB_k$, then
-    $\{A_\alpha\}_\alpha$ is an algebraic basis of normal tensors for $T$.
+    $\{A_\alpha\}_\alpha$ is a basis of normal tensors for $T$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_bnt_is_bnt,lem:bnt_of_same_mpv2_pos,thm:mpv_decomposition}
+    \uses{thm:mpdo_cpsv_bnt_of_same_mpv,thm:mpv_decomposition}
     With $C_k^v=\mu_kB_k^v$, induction on a word $w$ gives
     $V_k^\dagger T^w=C_k^wV_k^\dagger$.
     For a nonempty word $w=(v,w')$, reconstruction of its first letter,
@@ -845,11 +845,8 @@
         \notag
     \end{align}
     Thus $T$ and $A_{\mathrm{ret}}$ have the same matrix product vectors at
-    every positive length. By Lemma~\ref{thm:cpsv_bnt_is_bnt}, the spectral
-    BNT hypothesis gives an algebraic BNT for $A_{\mathrm{ret}}$, including
-    the required positive bond dimensions, and
-    Lemma~\ref{lem:bnt_of_same_mpv2_pos} then gives the same algebraic BNT for
-    $T$.
+    every positive length, and Lemma~\ref{thm:mpdo_cpsv_bnt_of_same_mpv}
+    carries the basis of normal tensors of $A_{\mathrm{ret}}$ over to $T$.
 \end{proof}
 
 \begin{lemma}[Pairwise Figure~8 identity under CPSV canonical form]
