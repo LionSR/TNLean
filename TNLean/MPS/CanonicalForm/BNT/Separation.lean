@@ -31,17 +31,17 @@ section Separation
 variable {d : ℕ}
 
 /-- Distinct equal-dimension blocks in a family are not gauge-phase equivalent. -/
-abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
+abbrev BlocksNotGaugePhaseEquiv {α : Type*} {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) : Prop :=
   ∀ j k : Fin r, j ≠ k →
     ∀ h : dim j = dim k,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) h) (A j)) (A k)
 
 /-- Separation of a block family passes to the subfamily along an injective reindexing. -/
-theorem BlocksNotGaugePhaseEquiv.comp {r s : ℕ} {dim : Fin r → ℕ}
-    {A : (k : Fin r) → MPSTensor d (dim k)} (hA : BlocksNotGaugePhaseEquiv (d := d) A)
+theorem BlocksNotGaugePhaseEquiv.comp {α : Type*} {r s : ℕ} {dim : Fin r → ℕ}
+    {A : (k : Fin r) → MPTensor α (Fin (dim k))} (hA : BlocksNotGaugePhaseEquiv A)
     {f : Fin s → Fin r} (hf : Function.Injective f) :
-    BlocksNotGaugePhaseEquiv (d := d) (fun j => A (f j)) :=
+    BlocksNotGaugePhaseEquiv (fun j => A (f j)) :=
   fun j k hjk h => hA (f j) (f k) (hf.ne hjk) h
 
 /-- Block-permutation gauge-phase matching between two block families.

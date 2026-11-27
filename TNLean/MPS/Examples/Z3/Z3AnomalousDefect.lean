@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Z3.Z3AnomalousInverseFusion
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Anomalous `ℤ/3` example: the condensation defect `1 ⊕ U ⊕ U†` and its stacked square
@@ -189,9 +190,13 @@ theorem mpo_defectTensor (L : ℕ) :
     MPOTensor.mpo defectTensor L =
       MPOTensor.mpo identityTensor L + MPOTensor.mpo uTensor L + MPOTensor.mpo uDagTensor L := by
   ext σ τ
-  rw [Matrix.add_apply, Matrix.add_apply, MPOTensor.mpo_apply_toMPSTensor,
-    MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
-    MPOTensor.mpo_apply_toMPSTensor]
+  have key : ∀ {D : ℕ} (M : MPOTensor 3 D),
+      Matrix.trace (Kraus.evalWord M (List.ofFn fun k ↦ (σ k, τ k))) =
+        Matrix.trace (Kraus.evalWord M.toMPSTensor
+          (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))) := fun M ↦ by
+    rw [MPOTensor.evalWord_toMPSTensor, List.map_ofFn]
+    simp only [Function.comp_def, Equiv.symm_apply_apply]
+  simp only [Matrix.add_apply, MPOTensor.mpo_apply_eq_trace_kraus_evalWord, key]
   exact defectMPS_trace_evalWord _
 
 /-! ### The stacked square and its pair blocks -/

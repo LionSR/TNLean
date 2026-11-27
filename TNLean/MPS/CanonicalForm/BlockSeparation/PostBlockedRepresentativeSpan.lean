@@ -95,7 +95,7 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
   have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
     hCF.basis_distinct
   have hPair : HasPairBlockSeparatingWords P.basis 6 := by
     simpa using
@@ -152,7 +152,7 @@ private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
   have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
     hCF.basis_distinct
   have hL₀ : 0 < L₀ := by
     dsimp [L₀]

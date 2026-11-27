@@ -62,7 +62,7 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
@@ -154,7 +154,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -199,7 +199,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
@@ -238,7 +238,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
         Filter.atTop (nhds (1 : ℂ)) :=
     fun j =>
       (hPreparedNormalTensor j).selfOverlap_tendsto_one
-  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) prepared := by
     intro j k hjk hdim hGPE
     apply hBlocks j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
@@ -270,7 +270,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -309,7 +309,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
@@ -337,7 +337,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -362,7 +362,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -392,7 +392,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
@@ -417,7 +417,7 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -448,7 +448,7 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_p
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -485,7 +485,7 @@ theorem
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
@@ -515,7 +515,7 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -559,7 +559,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
     (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
     (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
@@ -606,7 +606,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)

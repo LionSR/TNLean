@@ -63,7 +63,7 @@ noncomputable def hayashiInverseLeft {d D : ℕ}
     (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (α β : Fin D) (k : Fin hη.m) (l l' : Fin (hη.dL k)) : ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
-    inverseTensor K hK ((i, j)) α β *
+    inverseTensor K hK (i, j) α β *
       hη.ρ_left k (i, l) (j, l')
 
 /-- The right outer factor obtained by applying the inverse tensor to the right
@@ -75,7 +75,7 @@ noncomputable def hayashiInverseRight {d D : ℕ}
     (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (α β : Fin D) (k : Fin hη.m) (r r' : Fin (hη.dR k)) : ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
-    inverseTensor K hK ((i, j)) α β *
+    inverseTensor K hK (i, j) α β *
       hη.ρ_right k (r, i) (r', j)
 
 /-- Expanding a three-site closure identifies its contraction against the two
@@ -88,11 +88,11 @@ private lemma sum_inverseTensor_threeSiteClosure_eq {d D : ℕ}
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
     (∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-      inverseTensor K hK ((i₁, j₁)) α₁ β₁ *
-        inverseTensor K hK ((i₃, j₃)) α₃ β₃ *
+      inverseTensor K hK (i₁, j₁) α₁ β₁ *
+        inverseTensor K hK (i₃, j₃) α₃ β₃ *
           ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) =
       inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
-        ((i₂, j₂)) := by
+        (i₂, j₂) := by
   rw [inverseMapThreeSiteContraction]
   simp_rw [Fintype.sum_prod_type]
   congr 1 with i₁
@@ -100,7 +100,6 @@ private lemma sum_inverseTensor_threeSiteClosure_eq {d D : ℕ}
   congr 1 with i₃
   congr 1 with j₃
   rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
-  simp
 
 /-- The cyclic permutation of six indices given by
 \((a,b,c,d,e,f) \mapsto (c,d,e,f,a,b)\). -/
@@ -135,17 +134,17 @@ theorem inverseMap_threeSite_closure_collapse {d D : ℕ}
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
     ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-      inverseTensor K hK ((i₁, j₁)) α₁ β₁ *
-        inverseTensor K hK ((i₃, j₃)) α₃ β₃ *
+      inverseTensor K hK (i₁, j₁) α₁ β₁ *
+        inverseTensor K hK (i₃, j₃) α₃ β₃ *
         ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
       K (i₂, j₂) β₁ α₃ * R β₃ α₁ := by
   calc
     _ = inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
-        ((i₂, j₂)) :=
+        (i₂, j₂) :=
       sum_inverseTensor_threeSiteClosure_eq K hK R ρ hρ α₁ β₁ α₃ β₃ i₂ j₂
     _ = _ := by
       simpa using inverseMapThreeSiteContraction_eq
-        K hK R α₁ β₁ α₃ β₃ ((i₂, j₂))
+        K hK R α₁ β₁ α₃ β₃ (i₂, j₂)
 
 /-- **Expansion of the conjugated physical slice against a closure.** For any
 matrix $U$ on the middle site, one tail entry times an entry of the conjugated
@@ -168,16 +167,16 @@ theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (b b' : Fin d) :
     R β₃ α₁ * (U * physicalSlice K β₁ α₃ * Uᴴ) b b'
       = ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-          inverseTensor K hK ((i₁, j₁)) α₁ β₁ *
-            inverseTensor K hK ((i₃, j₃)) α₃ β₃ *
+          inverseTensor K hK (i₁, j₁) α₁ β₁ *
+            inverseTensor K hK (i₃, j₃) α₃ β₃ *
             (∑ i₂ : Fin d, ∑ j₂ : Fin d,
               U b i₂ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) *
                 (starRingEnd ℂ) (U b' j₂)) := by
   classical
   let A : Fin d → Fin d → ℂ := fun i j ↦
-    inverseTensor K hK ((i, j)) α₁ β₁
+    inverseTensor K hK (i, j) α₁ β₁
   let B : Fin d → Fin d → ℂ := fun i j ↦
-    inverseTensor K hK ((i, j)) α₃ β₃
+    inverseTensor K hK (i, j) α₃ β₃
   have hcollapse (i₂ j₂ : Fin d) :
       ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
         A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
@@ -309,14 +308,14 @@ theorem inverseMap_hayashi_sector_comparison {d D : ℕ}
   simp_rw [hsector]
   simp only [hayashiInverseLeft, hayashiInverseRight]
   rw [show (hη.p k : ℂ) *
-      (∑ i₁, ∑ j₁, inverseTensor K hK ((i₁, j₁)) α₁ β₁ *
+      (∑ i₁, ∑ j₁, inverseTensor K hK (i₁, j₁) α₁ β₁ *
         hη.ρ_left k (i₁, l) (j₁, l')) *
-      (∑ i₃, ∑ j₃, inverseTensor K hK ((i₃, j₃)) α₃ β₃ *
+      (∑ i₃, ∑ j₃, inverseTensor K hK (i₃, j₃) α₃ β₃ *
         hη.ρ_right k (r, i₃) (r', j₃)) =
     (hη.p k : ℂ) *
-      (∑ i₃, ∑ j₃, inverseTensor K hK ((i₃, j₃)) α₃ β₃ *
+      (∑ i₃, ∑ j₃, inverseTensor K hK (i₃, j₃) α₃ β₃ *
         hη.ρ_right k (r, i₃) (r', j₃)) *
-      (∑ i₁, ∑ j₁, inverseTensor K hK ((i₁, j₁)) α₁ β₁ *
+      (∑ i₁, ∑ j₁, inverseTensor K hK (i₁, j₁) α₁ β₁ *
         hη.ρ_left k (i₁, l) (j₁, l')) by ring]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun i₁ _ => ?_

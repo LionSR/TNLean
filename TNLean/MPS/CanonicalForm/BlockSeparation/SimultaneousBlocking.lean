@@ -199,7 +199,7 @@ scalar of the tensors. -/
 theorem exists_positive_wordTupleSpanTop_of_isNormal
     {g : ℕ} {dim : Fin g → ℕ} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hNormal : ∀ j, IsNormalTensor (B j)) (hdimPos : ∀ j, 0 < dim j)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) B) :
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) B) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
   classical
   let : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
@@ -207,7 +207,7 @@ theorem exists_positive_wordTupleSpanTop_of_isNormal
     fun j => (hNormal j).exists_tpGauge
   let prepared : (j : Fin g) → MPSTensor d (dim j) :=
     fun j => Kraus.tpGauge (B j) (σ j)
-  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) prepared := by
     intro j k hjk hdim hGPE
     apply hDistinct j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim

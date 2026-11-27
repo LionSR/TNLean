@@ -8,7 +8,7 @@ import QICLean.Algebra.Cohomology.LSymbol
 import QICLean.Algebra.Cohomology.ScalarThreeCocycleGroupCohomology
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.Z2Z2.KleinSymmetry
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorComap
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorOrderTwo
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorToolkit

@@ -67,7 +67,7 @@ def czxDecoratedSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 2 => 0
   | 3 => !![0, 0, -1, 0; 0, 0, -1, 0; 0, 0, 1, 0; 0, 0, 1, 0]
 
-/-- The double-layer tensor of the decorated CZX operator, in the pair-alphabet view.
+/-- The double-layer tensor of the decorated CZX operator, on the doubled index `Fin 4`.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–477 (the two stacked layers
 on the left of `eq:Ured`). -/
