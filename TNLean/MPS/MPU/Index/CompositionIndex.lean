@@ -8,7 +8,7 @@ import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
 import TNLean.MPS.MPU.Simple.RectangularSourceRanks
-import TNLean.MPS.CanonicalForm.SimpleMPU.PhysicalRelabelling
+import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 import TNLean.MPS.MPU.Index.RepresentativeIndex
 import TNLean.MPS.Operator.Unitary.StandardForm
 import TNLean.MPS.CanonicalForm.SimpleMPU.SimpleBlocking

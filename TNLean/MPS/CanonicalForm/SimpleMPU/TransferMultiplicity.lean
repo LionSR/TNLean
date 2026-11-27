@@ -42,7 +42,7 @@ open Polynomial
 
 namespace MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] {D : ℕ} {A : MPTensor α (Fin D)}
 
 section CPSVCanonicalFormData
 
@@ -75,7 +75,7 @@ private theorem
 /-- The CPSV reconstruction intertwines an ambient block inclusion with the
 corresponding weighted canonical block. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.mul_ambientBlockInclusion
-    (data : CPSVCanonicalFormData A) (k : Fin data.r) (i : Fin d) :
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) (i : α) :
     A i * data.ambientBlockInclusion k =
       data.ambientBlockInclusion k * (data.weights k • data.blocks k i) := by
   exact data.toRetainedBlockReconstructionData.mul_ambientBlockInclusion k i
@@ -140,7 +140,7 @@ private theorem _root_.MPTensor.CPSVCanonicalFormData.linearIndependent_ambientB
 /-- A normal MPS block has a nonzero fixed vector for its transfer map. -/
 private theorem
     _root_.MPTensor.CPSVCanonicalFormData.exists_nonzero_transferMap_fixedVector_of_normal
-    {n : ℕ} {B : MPSTensor d n} (hB : IsNormalTensor B) :
+    {n : ℕ} {B : MPTensor α (Fin n)} (hB : IsNormalTensor B) :
     ∃ X : Matrix (Fin n) (Fin n) ℂ, X ≠ 0 ∧ Kraus.transferMap B X = X := by
   have hone : (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap B) := by
     rw [hB.primitive_transfer]
@@ -322,7 +322,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.r_eq_one_of_shifted_transfer_trace
     have htwo := htrace 2 (by omega)
     rw [hAzero] at htwo
     have htransferZero :
-        transferMatrix (Kraus.transferMap (0 : MPSTensor d D)) = 0 := by
+        transferMatrix (Kraus.transferMap (0 : MPTensor α (Fin D))) = 0 := by
       ext ⟨a, b⟩ ⟨c, e⟩
       simp [transferMatrix]
     rw [htransferZero] at htwo
