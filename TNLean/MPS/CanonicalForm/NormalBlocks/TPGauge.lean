@@ -784,7 +784,6 @@ section
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -810,7 +809,7 @@ a decomposition:
 
 The MPV relationship holds at every positive blocked length:
 ```
-  mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ
+  mpv (Kraus.block A p) σ = mpv (toTensorFromBlocks μ blocks) σ
 ```
 
 The retained blocks have total bond dimension at most the original bond
@@ -829,21 +828,21 @@ general preserve tensor irreducibility. See the module documentation for the gap
 theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     ∃ (p : ℕ) (_ : 0 < p)
       (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k)),
+      (blocks : (k : Fin r) → MPTensor (Fin p → Fin d) (Fin (dim k))),
       -- (a) Blocks are left-canonical (TP)
-      (∀ k, ∑ i : Fin (blockPhysDim d p),
+      (∀ k, ∑ i : (Fin p → Fin d),
         (blocks k i)ᴴ * blocks k i = 1) ∧
       -- (b) Blocks have primitive transfer maps
       (∀ k, _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
+        (Kraus.transferMap (ι := (Fin p → Fin d)) (n := Fin (dim k)) (blocks k))) ∧
       -- (c) Positive bond dimensions
       (∀ k, 0 < dim k) ∧
       -- (d) Nonzero weights
       (∀ k, μ k ≠ 0) ∧
       -- (e) Positive-length MPV relationship
       SameMPV₂Pos
-        (blockTensor (d := d) (n := Fin D) A p)
-        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
+        (Kraus.block A p)
+        (toTensorFromBlocks (α := (Fin p → Fin d)) (μ := μ) blocks) ∧
       -- (f) Bond-dimension bound
       ∑ k : Fin r, dim k ≤ D := by
   classical
@@ -856,15 +855,14 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   obtain ⟨P, hP, hPrim⟩ :=
     exists_common_blocking_all_primitive_of_TP_irr blocks₀ hTP₀ hIrr₀ hDim₀
   -- Step C: Construct the blocked data.
-  set blocks₁ : (k : Fin r₀) → MPSTensor (blockPhysDim d P) (dim₀ k) :=
-    fun k => blockTensor (d := d) (n := Fin (dim₀ k)) (blocks₀ k) P with blocks₁_def
+  set blocks₁ : (k : Fin r₀) → MPTensor (Fin P → Fin d) (Fin (dim₀ k)) :=
+    fun k => Kraus.block (blocks₀ k) P with blocks₁_def
   set μ₁ : Fin r₀ → ℂ := fun k => (μ₀ k) ^ P with μ₁_def
   -- Step D: Verify all properties.
   refine ⟨P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (a) TP under blocking.
   · intro k
-    exact (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
-      (Kraus.IsTP.block (A := blocks₀ k) (hTP₀ k) P)
+    exact Kraus.IsTP.block (A := blocks₀ k) (hTP₀ k) P
   -- (b) Primitive transfer maps.
   · exact hPrim
   -- (c) Positive bond dimensions (unchanged by blocking).
@@ -873,8 +871,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   · exact blockWeights_ne_zero μ₀ hμNe₀ P
   -- (e) Positive-length MPV relationship.
   · simpa [μ₁_def, blocks₁_def] using
-      sameMPV₂Pos_blockTensor_toTensorFromBlocks
-        (D := D) (r := r₀) (dim := dim₀)
+      sameMPV₂Pos_block_toTensorFromBlocks
         A μ₀ blocks₀ hPos₀ P hP
   -- (f) Bond dimensions are unchanged by blocking.
   · exact hDimBound₀

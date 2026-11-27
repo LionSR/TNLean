@@ -116,7 +116,7 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
     simp [B, Kraus.gaugeTensor, hX_inv]
   have hB_inj : Kraus.IsInjective B := by
     rw [hB_eq_gauge]
-    exact Kraus.isInjective_conjugate (d := d) A hInjA X hX_det
+    exact Kraus.isInjective_conjugate (ι := Fin d) A hInjA X hX_det
   have hGauge : GaugeEquiv A B :=
     ⟨⟨Xᴴ, X, hXhX, hXXh⟩, fun _ => rfl⟩
   have hB_rfp : IsTransferIdempotent B := hGauge.isTransferIdempotent_iff.mp hRFP

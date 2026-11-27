@@ -380,7 +380,7 @@ Blocking preserves tensor normality and embeds exact word spans, allowing word
 eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{lemma}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
-    \lean{MPSTensor.isNormal_blockTensor_of_isNormal}
+    \lean{Kraus.IsNormal.block}
     \leanok
     \uses{def:normal,def:blocked_tensor}
     If $A$ is normal and $L>0$, then the blocked tensor

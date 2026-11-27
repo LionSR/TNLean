@@ -60,13 +60,11 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## Part 2: CFII-style diagonal positive-definite fixed point -/
 
 section CFII
-
-variable {α : Type*} [Fintype α]
 
 private theorem transferMap_unitaryConj_of_decidable [DecidableEq (Fin D)]
     (A : MPTensor α (Fin D)) (U : Matrix.unitaryGroup (Fin D) ℂ)
@@ -227,7 +225,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- **Dual fixed-point diagonalization in PGVWC07 unital orientation.**
 
@@ -241,46 +239,46 @@ and the finite-ring matrix product vectors. -/
 theorem for the conjugate-transposed Kraus family. This keeps the PGVWC07
 orientation explicit without repeating the spectral argument. -/
 theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
-    (A : MPSTensor d D)
-    (hUnital : ∑ i : Fin d, A i * (A i)ᴴ = 1)
-    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+    (A : MPTensor α (Fin D))
+    (hUnital : ∑ i : α, A i * (A i)ᴴ = 1)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := α) (n := Fin D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
-        let B : MPSTensor d D :=
+        let B : MPTensor α (Fin D) :=
           fun i =>
             (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
               (↑U : Matrix (Fin D) (Fin D) ℂ);
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
-        (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
-        Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
+        (∑ i : α, B i * (B i)ᴴ = 1) ∧
+        Kraus.transferMap (ι := α) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
   classical
-  let Aadj : MPSTensor d D := fun i => (A i)ᴴ
-  have hTPadj : ∑ i : Fin d, (Aadj i)ᴴ * Aadj i = 1 := by
+  let Aadj : MPTensor α (Fin D) := fun i => (A i)ᴴ
+  have hTPadj : ∑ i : α, (Aadj i)ᴴ * Aadj i = 1 := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hUnital
   have hIrrAdjMap :
-      IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) Aadj) := by
+      IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) Aadj) := by
     simpa [Aadj] using
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
-  have hIrrAdj : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) Aadj :=
+  have hIrrAdj : Kraus.IsIrreducibleFamily (ι := α) (n := Fin D) Aadj :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
       (D := D) Aadj hTPadj hIrrAdj hD
   refine ⟨U, Λ, ?_⟩
-  let B : MPSTensor d D :=
+  let B : MPTensor α (Fin D) :=
     fun i =>
       (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
         (↑U : Matrix (Fin D) (Fin D) ℂ)
   have hSame : SameMPV₂ A B := by
     intro N σ
     exact sameMPV_conj_unitary (D := D) A U N σ
-  have hUnitalB : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
+  have hUnitalB : ∑ i : α, B i * (B i)ᴴ = 1 := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hTP_conj
-  have hΛ_fixB : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
+  have hΛ_fixB : Kraus.transferMap (ι := α) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hΛ_fix
   exact ⟨hSame, hΛ_pd, hΛ_diag, hUnitalB, hΛ_fixB⟩
@@ -302,34 +300,34 @@ its unitality and irreducibility, and a `PosDef` fixed point `ρ` of `Kraus.adjo
 
 This bundles the common setup shared by cyclic-sector decomposition arguments. -/
 theorem conjTranspose_kraus_setup
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
     (hIrr : Kraus.IsIrreducibleFamily A) :
-    ∃ (K : MPSTensor d D)
-      (_ : IsUnitalKraus (ι := Fin d) (D := D) K)
-      (_ : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K))
+    ∃ (K : MPTensor α (Fin D))
+      (_ : IsUnitalKraus (ι := α) (D := D) K)
+      (_ : IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) K))
       (ρ : Matrix (Fin D) (Fin D) ℂ)
       (_ : ρ.PosDef)
       (_ : Kraus.adjointMap K ρ = ρ),
       K = fun i => (A i)ᴴ := by
   classical
   have hDpos : 0 < D := NeZero.pos D
-  let K : MPSTensor d D := fun i => (A i)ᴴ
+  let K : MPTensor α (Fin D) := fun i => (A i)ᴴ
   have hTP' : Kraus.IsTP A := hTP
-  have h_unitalK : IsUnitalKraus (ι := Fin d) (D := D) K :=
-    isUnitalKraus_conjTranspose (ι := Fin d) (D := D) (K := A) hTP'
-  have hIrrK : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K) :=
+  have h_unitalK : IsUnitalKraus (ι := α) (D := D) K :=
+    isUnitalKraus_conjTranspose (ι := α) (D := D) (K := A) hTP'
+  have hIrrK : IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) K) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
-  have hCh : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
+  have hCh : IsChannel (Kraus.transferMap (ι := α) (n := Fin D) A) :=
     Kraus.isChannel_mapLM (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hDpos
-  have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
-    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (ι := Fin d) (D := D) A hIrr
+    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := α) (n := Fin D) A) hDpos
+  have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) A) :=
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (ι := α) (D := D) A hIrr
   have hρ_pd : ρ.PosDef :=
-    Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
+    Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (ι := α) (D := D)
       hIrrAmap ρ hρ_psd hρ_ne hρ_fix
   have h_adjfix : Kraus.adjointMap K ρ = ρ := by
     simpa [K, Kraus.adjointMap, Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose,

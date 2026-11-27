@@ -286,8 +286,8 @@ theorem commutes_letters_of_adjoint_fixed_projection
     ∀ i : α, P * A i = A i * P := by
   let K : α → MatrixAlg D := fun i => (A i)ᴴ
   have hTPK : Kraus.IsTP A := hLeft
-  have hUnitalK : IsUnitalKraus (α := α) (D := D) K :=
-    KadisonSchwarz.isUnitalKraus_conjTranspose (α := α) (D := D) (K := A) hTPK
+  have hUnitalK : IsUnitalKraus (ι := α) (D := D) K :=
+    KadisonSchwarz.isUnitalKraus_conjTranspose (ι := α) (D := D) (K := A) hTPK
   have hKFix : krausMap K P = P := by
     simpa [K, KadisonSchwarz.krausMap, Kraus.transferMap_apply] using hFix
   have hEq : krausMap K (Pᴴ * P) = (krausMap K P)ᴴ * krausMap K P := by
@@ -385,8 +385,8 @@ theorem offDiag_shift_of_adjoint_cyclic_shift [NeZero m]
     P (k + 1) * A i = A i * P k := by
   let K : α → MatrixAlg D := fun i => (A i)ᴴ
   have hTPK : Kraus.IsTP A := hLeft
-  have hUnitalK : IsUnitalKraus (α := α) (D := D) K :=
-    KadisonSchwarz.isUnitalKraus_conjTranspose (α := α) (D := D) (K := A) hTPK
+  have hUnitalK : IsUnitalKraus (ι := α) (D := D) K :=
+    KadisonSchwarz.isUnitalKraus_conjTranspose (ι := α) (D := D) (K := A) hTPK
   -- The adjoint transfer map agrees with the Kraus map of `K = Aᴴ`.
   have hKshift : krausMap K (P (k + 1)) = P k := by
     simpa [K, KadisonSchwarz.krausMap, Kraus.transferMap_apply] using hShift k

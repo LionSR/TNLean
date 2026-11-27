@@ -28,7 +28,6 @@ shows that blocking keeps normality.
   tensor irreducibility imply normality.
 * `exists_pos_block_isInjective_of_tp_primitive_irreducible` — the same
   hypotheses give a positive blocking whose blocked tensor is one-site injective.
-* `isNormal_block_of_isNormal` — blocking preserves normality.
 * `exists_common_block_isInjective_of_isNormal` — a finite family of normal
   tensors admits one positive blocking length at which all of them are injective.
 * `exists_common_block_isInjective_two_of_isNormal` — the same
@@ -71,6 +70,24 @@ For a single block that is TP, has a primitive transfer map, and is irreducible
 We state this chain as a single theorem.
 -/
 
+private theorem isNormal_of_tp_primitive_irreducible_fin {d : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+    (hIrr : Kraus.IsIrreducibleFamily A) :
+    Kraus.IsNormal A := by
+  -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
+  -- primitive MPS data.
+  have hMPSPrim : Kraus.HasPrimitiveFixedPoint A :=
+    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
+  -- Step 2: Extract the Perron fixed point.
+  obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
+  -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.
+  have hPD : ρ.PosDef :=
+    hPrimMPS.posDef_of_isIrreducibleFamily hIrr
+  -- Step 4: Kraus.IsNormal from the primitive complementary gap and a faithful fixed point.
+  exact isNormal_of_hasComplementaryFixedPointGap_with_posDef hPrimMPS hPD
+
 /-- **TP + primitive + irreducible → Kraus.IsNormal** (per-block chain).
 
 For a single MPS tensor that is left-canonical (TP), has a primitive transfer map
@@ -92,27 +109,21 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A) :
     Kraus.IsNormal A := by
-  -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
-  -- primitive MPS data.
-  have hMPSPrim : Kraus.HasPrimitiveFixedPoint A :=
-    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
-  -- Step 2: Extract the Perron fixed point.
-  obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
-  -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.
-  have hPD : ρ.PosDef :=
-    hPrimMPS.posDef_of_isIrreducibleFamily hIrr
-  -- Step 4: Kraus.IsNormal from the primitive complementary gap and a faithful fixed point.
-  exact isNormal_of_hasComplementaryFixedPointGap_with_posDef hPrimMPS hPD
+  let f : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  refine (isNormal_reindexPhysical_equiv f A).1 (isNormal_of_tp_primitive_irreducible_fin _
+    ((Kraus.isTP_reindexPhysical_iff f A).2 hTP)
+    ((isPrimitive_transferMap_reindexPhysical_equiv f A).2 hPrim)
+    ((Kraus.isIrreducibleFamily_reindexPhysical_equiv f A).2 hIrr))
 
 /-- A trace-preserving scalar tensor has a nonzero Kraus matrix. -/
-private theorem exists_nonzero_kraus_of_tp [NeZero D]
-    (A : MPTensor α (Fin D))
-    (hTP : ∑ i : α, (A i)ᴴ * A i = 1) :
-    ∃ i : α, A i ≠ 0 := by
+private theorem exists_nonzero_kraus_of_tp_fin {d : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∃ i : Fin d, A i ≠ 0 := by
   by_contra hnone
   push Not at hnone
   have hsum_zero :
-      ∑ i : α, (A i)ᴴ * A i = (0 : Matrix (Fin D) (Fin D) ℂ) := by
+      ∑ i : Fin d, (A i)ᴴ * A i = (0 : Matrix (Fin D) (Fin D) ℂ) := by
     apply Finset.sum_eq_zero
     intro i _
     simp [hnone i]
@@ -145,16 +156,10 @@ normal once we know their transfer maps are primitive.
 -/
 
 
-/-- **Left-canonical normal tensor → bounded positive injective length**.
-
-This is the bounded form of the quantum Wielandt bound needed by the canonical-form comparison
-chain: some positive length `L ≤ D ^ 4` has `S_L(A) = M_D`.  The trace-preserving/left-canonical
-hypothesis rules out the scalar zero-physical-letter edge case and supplies a nonzero one-step
-Kraus matrix, which makes the general index bound `(D ^ 2 - krausRank A + 1) * D ^ 2` at most
-`D ^ 4`.  Source: arXiv:1606.00608, Section II, line 332; arXiv:0909.5347, Theorem 1. -/
-theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero D]
-    (A : MPTensor α (Fin D))
-    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
+private theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical_fin {d : ℕ}
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hN : Kraus.IsNormal A) :
     ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ Kraus.IsNBlkInjective A L := by
   have hDpos : 0 < D := NeZero.pos D
@@ -172,9 +177,9 @@ theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero
     intro hzero
     have hbot : Kraus.wordSpan A 1 = (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
       Submodule.finrank_eq_zero.mp hzero
-    obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp A hTP
+    obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp_fin A hTP
     have hmem : A i₀ ∈ Kraus.wordSpan A 1 := by
-      have := Kraus.evalWord_mem_wordSpan A ([i₀] : List α)
+      have := Kraus.evalWord_mem_wordSpan A ([i₀] : List (Fin d))
       simpa [Kraus.evalWord] using this
     rw [hbot] at hmem
     exact hi₀ hmem
@@ -196,6 +201,25 @@ theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).1
   exact ⟨L, hLpos, hBound, hTop⟩
 
+/-- **Left-canonical normal tensor → bounded positive injective length**.
+
+This is the bounded form of the quantum Wielandt bound needed by the canonical-form comparison
+chain: some positive length `L ≤ D ^ 4` has `S_L(A) = M_D`.  The trace-preserving/left-canonical
+hypothesis rules out the scalar zero-physical-letter edge case and supplies a nonzero one-step
+Kraus matrix, which makes the general index bound `(D ^ 2 - krausRank A + 1) * D ^ 2` at most
+`D ^ 4`.  Source: arXiv:1606.00608, Section II, line 332; arXiv:0909.5347, Theorem 1. -/
+theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero D]
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hN : Kraus.IsNormal A) :
+    ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ Kraus.IsNBlkInjective A L := by
+  let f : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨L, hL, hLle, hInj⟩ :=
+    exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical_fin
+      (Kraus.reindexPhysical f A) ((Kraus.isTP_reindexPhysical_iff f A).2 hTP)
+      ((isNormal_reindexPhysical_equiv f A).2 hN)
+  exact ⟨L, hL, hLle, (isNBlkInjective_reindexPhysical_equiv f A L).1 hInj⟩
+
 /-- **Left-canonical normal tensor is block injective at length $D^4$.**
 
 The bounded Wielandt theorem above produces an injective length at most
@@ -214,15 +238,10 @@ theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
   exact Kraus.isNBlkInjective_of_le hLpos hL hLle
 
 /-!
-## Kraus.IsNormal is preserved by blocking
+## Injectivity under further blocking
 
-The key observation: if `Kraus.wordSpan A N = ⊤`, then `Kraus.wordSpan A (m * N) = ⊤` for
-all `m ≥ 1` (because `⊤ * Kraus.wordSpan A k ⊇ Kraus.wordSpan A k` via the identity).
-Combined with the containment
-`Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (Kraus.block A P) n`, this gives:
-`Kraus.IsNormal A → Kraus.IsNormal (Kraus.block A P)`.
-
-This bypasses the blocked-irreducibility gap entirely for the Kraus.IsNormal conclusion.
+Normality is preserved by blocking (`Kraus.IsNormal.block`); one-site injectivity of a
+blocked tensor persists after further blocking.
 -/
 
 /-- One-site injectivity of a blocked tensor persists after a positive further
@@ -270,32 +289,6 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
     (blocks k) hmult_pos hL_blk
   simpa [hcommon] using hmul
 
-/-- **Kraus.IsNormal is preserved by blocking.**
-
-If `A` is normal (`∃ N, 0 < N ∧ Kraus.wordSpan A N = ⊤`), then `Kraus.block A P`
-is also normal for any `P ≥ 1`. The proof uses:
-1. `Kraus.wordSpan A N = ⊤ → Kraus.wordSpan A (P * N) = ⊤` (word span at multiples);
-2. `Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (Kraus.block A P) n` (blocking containment).
-
-Taking `n = N` in (2) and using (1) with `m = P`: `Kraus.wordSpan A (N * P) = ⊤` and
-`Kraus.wordSpan (Kraus.block A P) N ⊇ Kraus.wordSpan A (N * P) = ⊤`. -/
-theorem isNormal_block_of_isNormal
-    (A : MPTensor α (Fin D)) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
-    Kraus.IsNormal (Kraus.block A P) := by
-  obtain ⟨N, hNpos, hNblk⟩ := hN
-  have hwordN : Kraus.wordSpan A N = ⊤ := hNblk
-  have hwordNP : Kraus.wordSpan A (P * N) = ⊤ :=
-    Kraus.wordSpan_top_of_mul A hwordN P hP
-  -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (Kraus.block A P) N
-  have hle : Kraus.wordSpan A (N * P) ≤
-      Kraus.wordSpan (Kraus.block A P) N :=
-    wordSpan_le_wordSpan_blockTensor A P N
-  have hwordNP' : Kraus.wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
-  rw [hwordNP'] at hle
-  refine ⟨N, hNpos, ?_⟩
-  exact eq_top_iff.mpr hle
-
-
 /-- **Uniform finite-family injective blocking for normal blocks.**
 
 A finite family of normal tensors (eventually block injective in the sense of
@@ -330,7 +323,7 @@ single positive blocking length at which every block on both sides is one-site i
 This is the common blocking used for the two canonical forms compared in
 arXiv:1606.00608, Theorem 2.10, lines 318--344 and 1170--1192. -/
 theorem exists_common_block_isInjective_two_of_isNormal
-    {d rA rB : ℕ}
+    {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {blocksA : (j : Fin rA) → MPTensor α (Fin (dimA j))}
     {blocksB : (k : Fin rB) → MPTensor α (Fin (dimB k))}

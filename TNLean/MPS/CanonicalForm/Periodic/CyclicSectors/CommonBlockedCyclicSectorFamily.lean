@@ -49,9 +49,10 @@ theorem reindexPhysical_nestedBlockEquiv_block_block {D : ℕ} (A : MPTensor α 
   rw [← reindexPhysical_blockConfigEquiv_block]
   funext σ
   simp only [Kraus.reindexPhysical, nestedBlockEquiv, Equiv.trans_apply,
-    Equiv.apply_symm_apply, Kraus.block_apply, Equiv.arrowCongr_apply, Equiv.refl_symm,
-    Equiv.coe_refl, Function.comp_id]
-  exact congrArg (Kraus.evalWord A) (List.ofFn_congr (Nat.mul_comm m e).symm _).symm
+    Equiv.apply_symm_apply, Kraus.block_apply]
+  change Kraus.evalWord A (List.ofFn fun i : Fin (e * m) => σ (Fin.cast (Nat.mul_comm e m) i)) =
+    Kraus.evalWord A (List.ofFn σ)
+  exact congrArg (Kraus.evalWord A) (List.ofFn_congr (Nat.mul_comm e m).symm σ).symm
 
 /-- **Internal record**: common reblocking data for the cyclic sectors of a finite
 nonzero-weight block family.

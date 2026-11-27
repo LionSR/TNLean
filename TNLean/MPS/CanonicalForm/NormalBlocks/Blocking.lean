@@ -106,11 +106,11 @@ one-site canonical-form reconstruction, and Proposition 4.13 at lines
 its nonempty-word iteration, with intermediate coisometries cancelled by
 \(UU^*=1\). -/
 theorem evalWord_eq_coisometry_reconstruction_of_ne_nil
-    {s d n : ℕ} {A : MPSTensor s d} {B : MPSTensor s n}
-    (U : Matrix (Fin n) α ℂ)
+    {d n : ℕ} {A : MPTensor α (Fin d)} {B : MPTensor α (Fin n)}
+    (U : Matrix (Fin n) (Fin d) ℂ)
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ v, A v = Uᴴ * B v * U) :
-    ∀ w : List (Fin s), w ≠ [] →
+    ∀ w : List α, w ≠ [] →
       Kraus.evalWord A w = Uᴴ * Kraus.evalWord B w * U
   | [], hnil => False.elim (hnil rfl)
   | v :: w, _ => by

@@ -167,7 +167,7 @@ lemma unitalize_isUnitalKraus_of_fixedPoint
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (hDiag : Λ.IsDiag)
     (hfix : Kraus.transferMap B Λ = Λ) :
-    KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) := by
+    KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) (unitalize (d := d) (D := D) B Λ) := by
   classical
   let S : Matrix (Fin D) (Fin D) ℂ := diagSqrt (D := D) Λ
   let Sinv : Matrix (Fin D) (Fin D) ℂ := diagInvSqrt (D := D) Λ
@@ -680,7 +680,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
   let B : MPSTensor d D := fun i => Vᴴ * A i * V
   -- Unitalize using the diagonal fixed point.
   let C : MPSTensor d D := unitalize (d := d) (D := D) B Λ
-  have h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) C :=
+  have h_unital : KadisonSchwarz.IsUnitalKraus (ι := Fin d) (D := D) C :=
     unitalize_isUnitalKraus_of_fixedPoint (d := d) (D := D)
       (B := B) (Λ := Λ) hΛ_pd hΛ_diag hfixB
   have h_adjfix : Kraus.adjointMap C Λ = Λ :=

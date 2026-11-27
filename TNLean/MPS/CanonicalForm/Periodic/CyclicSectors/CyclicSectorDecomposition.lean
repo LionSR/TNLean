@@ -128,16 +128,16 @@ The proof uses `hMul` / `hStar` to lift orthogonal projections on
 conjugation `cornerRestriction P T = φ.conj (Kraus.transferMap Cᴴ)`.
 -/
 theorem compressedTensor_adjointTransferMap_cornerBridge
-    {r D n : ℕ} [NeZero n]
-    (B : MPSTensor r D) (C : MPSTensor r n) (P : MatrixAlg D)
+    {β : Type*} [Fintype β] {D n : ℕ} [NeZero n]
+    (B : MPTensor β (Fin D)) (C : MPTensor β (Fin n)) (P : MatrixAlg D)
     (T : MatrixEnd D)
     (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
     (hT :
-      Kraus.transferMap (ι := Fin r) (n := Fin D) (fun i => (B i)ᴴ) = T)
+      Kraus.transferMap (ι := β) (n := Fin D) (fun i => (B i)ᴴ) = T)
     (hPproj : IsOrthogonalProjection P)
     (hIntertwine : ∀ X : Matrix (Fin n) (Fin n) ℂ,
-      (φ (Kraus.transferMap (ι := Fin r) (n := Fin n) (fun i => (C i)ᴴ) X)).1 =
-        Kraus.transferMap (ι := Fin r) (n := Fin D) (fun i => (P * B i)ᴴ) ((φ X).1))
+      (φ (Kraus.transferMap (ι := β) (n := Fin n) (fun i => (C i)ᴴ) X)).1 =
+        Kraus.transferMap (ι := β) (n := Fin D) (fun i => (P * B i)ᴴ) ((φ X).1))
     (hMul : ∀ X Y : Matrix (Fin n) (Fin n) ℂ,
       (φ (X * Y)).1 = (φ X).1 * (φ Y).1)
     (hStar : ∀ X : Matrix (Fin n) (Fin n) ℂ,
@@ -147,21 +147,21 @@ theorem compressedTensor_adjointTransferMap_cornerBridge
       _root_.IsPrimitive (cornerRestriction P T hInv))
     (hCornerIrr : IsIrreducibleOnCorner P T) :
     _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin r) (n := Fin n) (fun i => (C i)ᴴ)) ∧
+      (Kraus.transferMap (ι := β) (n := Fin n) (fun i => (C i)ᴴ)) ∧
       IsIrreducibleMap
-        (Kraus.transferMap (ι := Fin r) (n := Fin n) (fun i => (C i)ᴴ)) := by
+        (Kraus.transferMap (ι := β) (n := Fin n) (fun i => (C i)ᴴ)) := by
   classical
   set F_C : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ :=
-    Kraus.transferMap (ι := Fin r) (n := Fin n) (fun i => (C i)ᴴ) with hF_C_def
+    Kraus.transferMap (ι := β) (n := Fin n) (fun i => (C i)ᴴ) with hF_C_def
   have hPherm : Pᴴ = P := hPproj.1.eq
   -- On the corner, the ambient `T` and the `P*B`-adjoint transfer map agree.
   have hTeq :
       ∀ Y : MatrixAlg D, P * Y * P = Y →
-        Kraus.transferMap (ι := Fin r) (n := Fin D) (fun i => (P * B i)ᴴ) Y = T Y := by
+        Kraus.transferMap (ι := β) (n := Fin D) (fun i => (P * B i)ᴴ) Y = T Y := by
     intro Y hY
     have hstep :
-        Kraus.transferMap (ι := Fin r) (n := Fin D) (fun i => (P * B i)ᴴ) Y =
-          Kraus.transferMap (ι := Fin r) (n := Fin D) (fun i => (B i)ᴴ) Y := by
+        Kraus.transferMap (ι := β) (n := Fin D) (fun i => (P * B i)ᴴ) Y =
+          Kraus.transferMap (ι := β) (n := Fin D) (fun i => (B i)ᴴ) Y := by
       simp only [Kraus.transferMap_apply]
       refine Finset.sum_congr rfl ?_
       intro i _
