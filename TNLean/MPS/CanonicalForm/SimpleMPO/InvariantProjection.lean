@@ -362,14 +362,8 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
   funext ⟨a, b⟩
   change (M.ketLeftMul Q) (a, b) = ((M.ketLeftMul Q).braRightMul Q) (a, b)
   apply sub_eq_zero.mp
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero
-    ((MPOTensor.isInjective_toMPSTensor_iff M).2 hInj)
-  intro p
-  change Matrix.trace
-    (((M.ketLeftMul Q) (a, b) - ((M.ketLeftMul Q).braRightMul Q) (a, b)) *
-        M (p.divNat, p.modNat)) = 0
-  set c := p.divNat
-  set c' := p.modNat
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hInj
+  rintro ⟨c, c'⟩
   have h2 := Matrix.ext_iff.mpr hOneSided
       (Fin.cons a (fun _ : Fin 1 => c)) (Fin.cons b (fun _ : Fin 1 => c'))
   rw [mul_firstSiteMatrix_apply] at h2
