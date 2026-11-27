@@ -140,7 +140,7 @@ theorem IsBiorthogonalDecomposition.mulTensor_polarSupportMPO
     {W : ∀ c, Matrix (Fin (D₁ * D₂)) (Fin (δ c)) ℂ}
     {V' : κ → Matrix (Fin D) (Fin (D₂ * D)) ℂ} {W' : κ → Matrix (Fin (D₂ * D)) (Fin D) ℂ}
     (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor M N)
-      O c V W)
+      O V W)
     (hN : IsBiorthogonalDecomposition (MPOTensor.actTensor N A) (fun _ : κ => A) V' W') :
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor (polarSupportMPO A M) (polarSupportMPO A N))

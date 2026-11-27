@@ -55,8 +55,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
-variable {ι : Type*} [Fintype ι] {d D : ℕ} {δ : ι → ℕ}
-  {B : MPSTensor d D} {A : ∀ c : ι, MPSTensor d (δ c)}
+variable {ι : Type*} [Fintype ι] {α : Type*} {D : ℕ} {δ : ι → ℕ}
+  {B : MPTensor α (Fin D)} {A : ∀ c : ι, MPTensor α (Fin (δ c))}
   {V : ∀ c : ι, Matrix (Fin (δ c)) (Fin D) ℂ}
   {W : ∀ c : ι, Matrix (Fin D) (Fin (δ c)) ℂ}
 
