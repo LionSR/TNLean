@@ -200,10 +200,6 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
 \begin{lemma}[Finite regions of the binary hierarchy]
     \label{thm:hastings05_hierarchy_block}
-    \lean{Finset.dyadicBlock_zero,
-        Finset.dyadicBlock_succ,
-        Finset.dyadicBlock_eq_univ}
-    \leanok
     \uses{def:hastings05_level_block,thm:hastings05_level_block_halves}
     Block $k$ of level $0$ consists of the physical sites of supersite $k$,
     and block $k$ of level $m+1$ is the union of the blocks $2k$ and $2k+1$
@@ -212,7 +208,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     chain. These are the regions of the retained-basis expansion in
     \cite[Section~III]{Hastings2006Solving}.
 \end{lemma}
-\begin{proof}\leanok
+\begin{proof}
     Use $\lfloor\sigma(i)/2^{m+1}\rfloor=\lfloor\lfloor\sigma(i)/2^m\rfloor/2\rfloor$,
     and $\lfloor\sigma(i)/2^h\rfloor=0$ when $\sigma(i)<2^h$.
 \end{proof}
