@@ -207,7 +207,7 @@ theorem normalizedBlock_isLeftCanonical (k : Fin 2) :
 arXiv:1606.00608, lines 224--235: its letters span the bond matrix algebra and
 its ket-against-bra letters resolve the identity. -/
 theorem normalizedBlock_isNormalTensor (k : Fin 2) :
-    MPSTensor.IsNormalTensor (normalizedBlock k).toMPSTensor :=
+    MPTensor.IsNormalTensor (normalizedBlock k).toMPSTensor :=
   MPSTensor.isNormalTensor_of_isNormal_leftCanonical _
     (normalizedBlock_toMPSTensor_isInjective k).isNormal (normalizedBlock_isLeftCanonical k)
 
@@ -276,14 +276,14 @@ otherwise, exactly as in `T_apply_blocks`. -/
 theorem toMPSTensor_T_reconstruct (i : Fin (8 * 8)) :
     T.toMPSTensor i =
       ambientCoisometryᴴ *
-        MPSTensor.toTensorFromBlocks (d := 8 * 8) (fun _ : Fin 2 => (5 / 8 : ℂ))
+        MPTensor.toTensorFromBlocks (α := Fin (8 * 8)) (fun _ : Fin 2 => (5 / 8 : ℂ))
           (fun k => (normalizedBlock k).toMPSTensor) i *
         ambientCoisometry := by
   rw [conjTranspose_mul_mul_ambientCoisometry]
   ext b b'
   obtain ⟨p, p', k, rfl⟩ := exists_eq_physIdx b
   obtain ⟨q, q', k', rfl⟩ := exists_eq_physIdx b'
-  simp only [MPSTensor.toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply,
+  simp only [MPTensor.toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply,
     finSigmaFinEquiv_symm_retainedBondEquiv_symm]
   change T (i.divNat, i.modNat) (physIdx p p' k) (physIdx q q' k') = _
   rw [T_apply_blocks]
@@ -300,7 +300,7 @@ blocks, both with weight $5/8$, and the bond permutation `ambientCoisometry`.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`
 (project example). -/
-def canonicalFormData : MPSTensor.CPSVCanonicalFormData T.toMPSTensor where
+def canonicalFormData : MPTensor.CPSVCanonicalFormData T.toMPSTensor where
   r := 2
   dim := fun _ => 4
   dim_pos := fun _ => by norm_num
@@ -317,7 +317,7 @@ def canonicalFormData : MPSTensor.CPSVCanonicalFormData T.toMPSTensor where
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`
 (project example). -/
-theorem T_toMPSTensor_isCPSVCanonicalForm : MPSTensor.IsCPSVCanonicalForm T.toMPSTensor :=
+theorem T_toMPSTensor_isCPSVCanonicalForm : MPTensor.IsCPSVCanonicalForm T.toMPSTensor :=
   ⟨canonicalFormData⟩
 
 end MPOTensor.TwistedDimer

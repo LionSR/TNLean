@@ -200,10 +200,10 @@ theorem gaugeEquiv_toTensor_replaceBasis (P : SectorDecomposition d)
     exact hX (P.flatIndexEquiv.symm s).1 i
   refine ⟨globalGaugeOfBlocks Xflat, ?_⟩
   change ∀ i : Fin d,
-    toTensorFromBlocks (d := d) (P.flatWeight)
+    toTensorFromBlocks (α := Fin d) (P.flatWeight)
         (P.replaceBasis B).flatBasis i =
       (globalGaugeOfBlocks Xflat : Matrix _ _ ℂ) *
-        toTensorFromBlocks (d := d) (P.flatWeight) P.flatBasis i *
+        toTensorFromBlocks (α := Fin d) (P.flatWeight) P.flatBasis i *
         (((globalGaugeOfBlocks Xflat)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
   exact toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     (P.flatWeight) P.flatBasis (P.replaceBasis B).flatBasis Xflat hXflat
@@ -310,7 +310,7 @@ Source: arXiv:1708.00029, lines 248--261, 257--258 and 313--332;
 Wolf, *Quantum Channels & Operations*, Theorem 6.6(1). -/
 theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
     {A : MPSTensor d D}
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hRadius :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))

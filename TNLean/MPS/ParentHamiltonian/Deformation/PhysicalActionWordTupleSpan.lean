@@ -19,6 +19,8 @@ of the blocks does not replace its hypothesis.
 Source: arXiv:1010.3732, the isometric deformation and Appendix A.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Topology ComplexOrder
 
 namespace MPSTensor
@@ -87,7 +89,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_physical
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ x)
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x)
             (fun j => rotatePhysical (M x) (A j))) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   exact exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths

@@ -23,8 +23,8 @@ without repeating the prepared family and its invariants.
 
 It also contains the following results.
 
-* `MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact`,
-  `MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm`: CPSV canonical forms as SectorBNT
+* `MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact`,
+  `MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm`: CPSV canonical forms as SectorBNT
   decompositions.
 -/
 
@@ -74,7 +74,7 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
       IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k ∧
       ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin r, dim k),
       ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
-        toTensorFromBlocks (d := d) μ blocks i =
+        toTensorFromBlocks (α := Fin d) μ blocks i =
           Matrix.reindex e e
             ((X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)) := by
   classical
@@ -113,7 +113,7 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
       (↑((Xflat s)⁻¹) : Matrix _ _ ℂ)
   have hX : ∀ i, (X : Matrix _ _ ℂ) * P.toTensor i *
       (↑(X⁻¹) : Matrix _ _ ℂ) =
-      toTensorFromBlocks (d := d) P.flatWeight gaugedFlat i := by
+      toTensorFromBlocks (α := Fin d) P.flatWeight gaugedFlat i := by
     intro i
     symm
     exact toTensorFromBlocks_eq_globalGaugeOfBlocks_conj P.flatWeight P.flatBasis
@@ -274,7 +274,7 @@ theorem PreparedBNTBlocks.exists_isBNTCanonicalForm_exact
       IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin data.r, data.dim k ∧
       ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin data.r, data.dim k),
       ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
-        toTensorFromBlocks (d := d) data.weight data.blocks i =
+        toTensorFromBlocks (α := Fin d) data.weight data.blocks i =
           Matrix.reindex e e
             ((X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)) :=
   exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
@@ -401,7 +401,9 @@ private theorem inv_mul_conjTranspose_equivalenceCoisometry_eq
       ext x y
       simp [Matrix.reindex_apply, Matrix.submatrix_apply]
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- A normalized nonzero CPSV canonical form has an exact BNT reconstruction through a
 coisometry.
@@ -415,7 +417,7 @@ Unused ambient coordinates do not contribute to the retained bond dimension.
 
 Source: arXiv:1606.00608, lines 214--301 and 1080--1148; arXiv:2011.12127,
 lines 1831--1885. -/
-theorem exists_isBNTCanonicalForm_exact
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
@@ -435,8 +437,8 @@ theorem exists_isBNTCanonicalForm_exact
   let prepared : (k : Fin data.r) → MPSTensor d (data.dim k) := fun k =>
     Kraus.tpGauge (data.blocks k) (σ k)
   have hDirectGauge : GaugeEquiv
-      (toTensorFromBlocks (d := d) data.weights data.blocks)
-      (toTensorFromBlocks (d := d) data.weights prepared) := by
+      (toTensorFromBlocks (α := Fin d) data.weights data.blocks)
+      (toTensorFromBlocks (α := Fin d) data.weights prepared) := by
     apply gaugeEquiv_toTensorFromBlocks_of_blockGauge
     intro k
     exact hGauge k
@@ -466,7 +468,7 @@ theorem exists_isBNTCanonicalForm_exact
     rw [← Matrix.mul_assoc data.ambient_coisometry data.ambient_coisometryᴴ,
       data.coisometric, Matrix.one_mul, hQ]
   have hOriginal : ∀ i,
-      toTensorFromBlocks (d := d) data.weights data.blocks i =
+      toTensorFromBlocks (α := Fin d) data.weights data.blocks i =
         Qᴴ * ((Z : Matrix _ _ ℂ) * P.toTensor i *
           (↑(Z⁻¹) : Matrix _ _ ℂ)) * Q := by
     intro i
@@ -479,16 +481,16 @@ theorem exists_isBNTCanonicalForm_exact
       Qh * (↑(W⁻¹) : Matrix _ _ ℂ) at hLeft
     change Q * (Y : Matrix _ _ ℂ) = (W : Matrix _ _ ℂ) * Q at hRight
     calc
-      toTensorFromBlocks (d := d) data.weights data.blocks i =
+      toTensorFromBlocks (α := Fin d) data.weights data.blocks i =
           (↑(Y⁻¹) : Matrix _ _ ℂ) *
             ((Y : Matrix _ _ ℂ) *
-              toTensorFromBlocks (d := d) data.weights data.blocks i *
+              toTensorFromBlocks (α := Fin d) data.weights data.blocks i *
               (↑(Y⁻¹) : Matrix _ _ ℂ)) * (Y : Matrix _ _ ℂ) := by
             simp only [← Matrix.mul_assoc]
             rw [Units.inv_mul, Matrix.one_mul]
             rw [Matrix.mul_assoc, Units.inv_mul, Matrix.mul_one]
       _ = (↑(Y⁻¹) : Matrix _ _ ℂ) *
-            toTensorFromBlocks (d := d) data.weights prepared i *
+            toTensorFromBlocks (α := Fin d) data.weights prepared i *
             (Y : Matrix _ _ ℂ) := by rw [hY]
       _ = (↑(Y⁻¹) : Matrix _ _ ℂ) *
             (Qh * ((X : Matrix _ _ ℂ) * P.toTensor i *
@@ -546,7 +548,7 @@ Unused ambient coordinates do not contribute to this dimension.
 
 Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
 1135--1146. -/
-theorem exists_isBNTCanonicalForm
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :

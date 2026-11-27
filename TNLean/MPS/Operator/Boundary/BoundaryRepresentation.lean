@@ -30,6 +30,8 @@ the biorthogonal fusion or action matrices.
   `decompopen` and `eq:ortho`, lines 2305--2455.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 noncomputable section

@@ -344,7 +344,7 @@ theorem exists_normalized_grouped_sector_maps_of_dressing
     {M : MPOTensor d D} (hDressing : HasGroupedCornerGramDressing M)
     (mu : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hDimPos : ∀ k, 0 < dim k)
-    (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
+    (hNormal : ∀ k, MPTensor.IsNormalTensor (blocks k))
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
       GL (Fin (dim ((C).enum j q))) ℂ)

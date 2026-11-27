@@ -226,8 +226,8 @@ Source: arXiv:1703.09188, Definition `def:strictly-equivalent-tensors`,
 lines 708--714. -/
 def StrictlyEquivalent (U : MPOTensor da Da) (V : MPOTensor db Db)
     (hphys : da = db) : Prop :=
-  MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
-    MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
+  MPTensor.IsMPUCanonicalForm U.toMPSTensor ∧
+    MPTensor.IsMPUCanonicalForm V.toMPSTensor ∧
       ∃ (D' : ℕ) (ha : Da ≤ D') (hb : Db ≤ D'),
         JoinedIn {W : MPOTensor db D' | IsMPU W}
           (reindexPhysical (finCongr hphys).symm (padBond U D' ha)) (padBond V D' hb)
@@ -237,8 +237,8 @@ MPU tensors of bond dimension `D`, are strictly equivalent: the case `D' = D` of
 the definition, which was the former fixed-bond definition. -/
 theorem StrictlyEquivalent.of_fixedBond {U : MPOTensor da D} {V : MPOTensor db D}
     (hphys : da = db)
-    (hU : MPSTensor.IsMPUCanonicalForm U.toMPSTensor)
-    (hV : MPSTensor.IsMPUCanonicalForm V.toMPSTensor)
+    (hU : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    (hV : MPTensor.IsMPUCanonicalForm V.toMPSTensor)
     (hpath : JoinedIn {W : MPOTensor db D | IsMPU W}
       (reindexPhysical (finCongr hphys).symm U) V) :
     StrictlyEquivalent U V hphys :=
@@ -261,8 +261,8 @@ Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
 lines 1345--1354. -/
 def StrictlyEquivalentUnderSymmetry (S : FiniteChainOperatorSymmetry db)
     (U : MPOTensor da Da) (V : MPOTensor db Db) (hphys : da = db) : Prop :=
-  MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
-    MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
+  MPTensor.IsMPUCanonicalForm U.toMPSTensor ∧
+    MPTensor.IsMPUCanonicalForm V.toMPSTensor ∧
       ∃ (D' : ℕ) (ha : Da ≤ D') (hb : Db ≤ D'),
         JoinedIn {W : MPOTensor db D' | IsMPU W ∧ IsInvariantUnderSymmetry S W}
           (reindexPhysical (finCongr hphys).symm (padBond U D' ha)) (padBond V D' hb)
@@ -283,8 +283,8 @@ theorem StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent
 fixed-bond definition. -/
 theorem StrictlyEquivalentUnderSymmetry.of_fixedBond {S : FiniteChainOperatorSymmetry db}
     {U : MPOTensor da D} {V : MPOTensor db D} (hphys : da = db)
-    (hU : MPSTensor.IsMPUCanonicalForm U.toMPSTensor)
-    (hV : MPSTensor.IsMPUCanonicalForm V.toMPSTensor)
+    (hU : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    (hV : MPTensor.IsMPUCanonicalForm V.toMPSTensor)
     (hpath : JoinedIn {W : MPOTensor db D | IsMPU W ∧ IsInvariantUnderSymmetry S W}
       (reindexPhysical (finCongr hphys).symm U) V) :
     StrictlyEquivalentUnderSymmetry S U V hphys :=
@@ -326,8 +326,8 @@ theorem Equivalent.of_fixedBond {U : MPOTensor da D} {V : MPOTensor db D}
     (hU : IsMPU U) (hV : IsMPU V) {k pa pb : ℕ}
     (hk : 0 < k) (hpa : 0 < pa) (hpb : 0 < pb) (hcoprime : Nat.Coprime pa pb)
     (hphys : pa * da = pb * db)
-    (hUcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
-    (hVcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
+    (hUcf : MPTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
+    (hVcf : MPTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
     (hpath : JoinedIn {W : MPOTensor (Kraus.blockPhysDim (db * pb) k) D | IsMPU W}
       (reindexPhysical (finCongr (blockedAncillaPhysicalDim_eq k hphys)).symm
         (blockTensor (tensorPhysicalId U pa) k))
@@ -371,8 +371,8 @@ theorem EquivalentUnderSymmetry.of_fixedBond {S : FiniteChainOperatorSymmetryFam
     (hU : IsMPU U) (hV : IsMPU V) {k pa pb : ℕ}
     (hk : 0 < k) (hpa : 0 < pa) (hpb : 0 < pb) (hcoprime : Nat.Coprime pa pb)
     (hphys : pa * da = pb * db)
-    (hUcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
-    (hVcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
+    (hUcf : MPTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
+    (hVcf : MPTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
     (hpath : JoinedIn {W : MPOTensor (Kraus.blockPhysDim (db * pb) k) D |
         IsMPU W ∧ IsInvariantUnderSymmetry ((S.at (db * pb)).block k) W}
       (reindexPhysical (finCongr (blockedAncillaPhysicalDim_eq k hphys)).symm

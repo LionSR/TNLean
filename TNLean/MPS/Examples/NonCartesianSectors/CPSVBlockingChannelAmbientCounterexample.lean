@@ -141,7 +141,7 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
-      MPSTensor.IsNormalTensor B ∧
+      MPTensor.IsNormalTensor B ∧
       MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
@@ -152,7 +152,7 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
         IsSimple K ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
-        (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
+        (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
         K.toMPSTensor = S.toTensor ∧
         (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q') ∧

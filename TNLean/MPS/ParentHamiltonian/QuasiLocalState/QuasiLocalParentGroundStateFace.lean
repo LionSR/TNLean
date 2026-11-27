@@ -34,6 +34,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1 and Lemma
 existenceinteraction, lines 2195--2230.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder BigOperators

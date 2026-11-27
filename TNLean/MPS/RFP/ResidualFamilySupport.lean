@@ -21,6 +21,8 @@ Source: arXiv:1606.00608, equations `III_CFI_RFP` and `eq:III_isometry`, lines
 543--555, and equations (3.16)--(3.18), lines 549--578.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -174,7 +176,7 @@ theorem twoSiteBondEmbedding_range_eq_directSum_groundSpace
       groundSpace (directSumTensor B) 2 := by
   rw [h.twoSiteBondEmbedding_range]
   have hTensor :
-      toTensorFromBlocks (d := d) (fun _ : Fin r ↦ 1) B = directSumTensor B := by
+      toTensorFromBlocks (α := Fin d) (fun _ : Fin r ↦ 1) B = directSumTensor B := by
     funext i
     simp [toTensorFromBlocks, directSumTensor]
   rw [← hTensor]

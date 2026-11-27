@@ -32,7 +32,7 @@ Proposition 4.13 (lines 1898–1921); the missing two-site attachment is documen
 * `MPOTensor.BNTAlgebraTensorClause.isRFPViaTS` (reverse implication of the algebra theorem):
   the tensor-attached clause and the canonical form make the model a renormalization fixed
   point, `MPOTensor.IsRFPViaTS`; arXiv:1606.00608, Theorem 4.14(ii) to (i) and Appendix C.4.
-* `MPSTensor.IsCPSVCanonicalForm` and `MPSTensor.IsCPSVBasisOfNormalTensors` (canonical forms):
+* `MPTensor.IsCPSVCanonicalForm` and `MPSTensor.IsCPSVBasisOfNormalTensors` (canonical forms):
   the doubled-index tensor is in literal canonical form with the singleton as basis;
   arXiv:1606.00608, eq. `II_CF1`.
 * `MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id` and

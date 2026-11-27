@@ -64,6 +64,8 @@ lines 2649--2675; DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
+open MPTensor
+
 section
 
 open SpinChain Filter

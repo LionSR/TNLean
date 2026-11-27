@@ -54,6 +54,8 @@ It also contains the following results.
   primitive presentations of periodically blocked local spaces.
 -/
 
+open MPTensor
+
 section PeriodicPrimitiveGroundSpace
 
 section

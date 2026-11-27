@@ -35,6 +35,8 @@ hypothesis is imposed on the ambient tensor.
   Section 2.3, lines 214--263
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 open Polynomial
 
@@ -42,21 +44,25 @@ namespace MPSTensor
 
 variable {d D : ℕ} {A : MPSTensor d D}
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- The inclusion of a retained canonical block into the ambient bond space. -/
-noncomputable def ambientBlockInclusion (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.ambientBlockInclusion
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Matrix (Fin D) (Fin (data.dim k)) ℂ :=
   data.toRetainedBlockReconstructionData.ambientBlockInclusion k
 
 /-- A retained block inclusion into the ambient bond space is an isometry. -/
-theorem ambientBlockInclusion_conjTranspose_mul_self
+theorem _root_.MPTensor.CPSVCanonicalFormData.ambientBlockInclusion_conjTranspose_mul_self
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     (data.ambientBlockInclusion k)ᴴ * data.ambientBlockInclusion k = 1 := by
   exact data.toRetainedBlockReconstructionData.ambientBlockInclusion_conjTranspose_mul_self k
 
 /-- Ambient inclusions of distinct retained blocks have orthogonal ranges. -/
-private theorem ambientBlockInclusion_conjTranspose_mul_eq_zero
+private theorem
+    _root_.MPTensor.CPSVCanonicalFormData.ambientBlockInclusion_conjTranspose_mul_eq_zero
     (data : CPSVCanonicalFormData A) {k l : Fin data.r} (hkl : k ≠ l) :
     (data.ambientBlockInclusion k)ᴴ * data.ambientBlockInclusion l = 0 := by
   simp only [ambientBlockInclusion,
@@ -68,14 +74,14 @@ private theorem ambientBlockInclusion_conjTranspose_mul_eq_zero
 
 /-- The CPSV reconstruction intertwines an ambient block inclusion with the
 corresponding weighted canonical block. -/
-theorem mul_ambientBlockInclusion
+theorem _root_.MPTensor.CPSVCanonicalFormData.mul_ambientBlockInclusion
     (data : CPSVCanonicalFormData A) (k : Fin data.r) (i : Fin d) :
     A i * data.ambientBlockInclusion k =
       data.ambientBlockInclusion k * (data.weights k • data.blocks k i) := by
   exact data.toRetainedBlockReconstructionData.mul_ambientBlockInclusion k i
 
 /-- Compressing a matrix supported in one ambient block corner recovers that matrix. -/
-private theorem ambientBlockCompression_self
+private theorem _root_.MPTensor.CPSVCanonicalFormData.ambientBlockCompression_self
     (data : CPSVCanonicalFormData A) (k : Fin data.r)
     (X : Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ) :
     (data.ambientBlockInclusion k)ᴴ *
@@ -87,7 +93,7 @@ private theorem ambientBlockCompression_self
   rw [Matrix.mul_one]
 
 /-- Compressing a matrix supported in a different ambient block corner gives zero. -/
-private theorem ambientBlockCompression_eq_zero_of_ne
+private theorem _root_.MPTensor.CPSVCanonicalFormData.ambientBlockCompression_eq_zero_of_ne
     (data : CPSVCanonicalFormData A) {k l : Fin data.r} (hkl : k ≠ l)
     (X : Matrix (Fin (data.dim l)) (Fin (data.dim l)) ℂ) :
     (data.ambientBlockInclusion k)ᴴ *
@@ -100,7 +106,7 @@ private theorem ambientBlockCompression_eq_zero_of_ne
 
 /-- Nonzero matrices placed in the distinct ambient canonical-block corners are
 linearly independent. -/
-private theorem linearIndependent_ambientBlockCorners
+private theorem _root_.MPTensor.CPSVCanonicalFormData.linearIndependent_ambientBlockCorners
     (data : CPSVCanonicalFormData A)
     (X : (k : Fin data.r) → Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ)
     (hX : ∀ k, X k ≠ 0) :
@@ -132,7 +138,8 @@ private theorem linearIndependent_ambientBlockCorners
   exact (smul_eq_zero.mp hck).resolve_right (hX k)
 
 /-- A normal MPS block has a nonzero fixed vector for its transfer map. -/
-private theorem exists_nonzero_transferMap_fixedVector_of_normal
+private theorem
+    _root_.MPTensor.CPSVCanonicalFormData.exists_nonzero_transferMap_fixedVector_of_normal
     {n : ℕ} {B : MPSTensor d n} (hB : IsNormalTensor B) :
     ∃ X : Matrix (Fin n) (Fin n) ℂ, X ≠ 0 ∧ Kraus.transferMap B X = X := by
   have hone : (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap B) := by
@@ -142,30 +149,33 @@ private theorem exists_nonzero_transferMap_fixedVector_of_normal
   exact ⟨X, hX.2, by simpa using hX.apply_eq_smul⟩
 
 /-- A chosen nonzero transfer fixed vector for one retained normal block. -/
-private noncomputable def blockFixedVector (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+private noncomputable def _root_.MPTensor.CPSVCanonicalFormData.blockFixedVector
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ :=
   Classical.choose (exists_nonzero_transferMap_fixedVector_of_normal (data.blocks_normal k))
 
 /-- The chosen normal-block fixed vector is nonzero. -/
-private theorem blockFixedVector_ne (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+private theorem _root_.MPTensor.CPSVCanonicalFormData.blockFixedVector_ne
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     data.blockFixedVector k ≠ 0 :=
   (Classical.choose_spec
     (exists_nonzero_transferMap_fixedVector_of_normal (data.blocks_normal k))).1
 
 /-- The chosen normal-block vector is fixed by the unweighted block transfer map. -/
-private theorem transferMap_blockFixedVector (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+private theorem _root_.MPTensor.CPSVCanonicalFormData.transferMap_blockFixedVector
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Kraus.transferMap (data.blocks k) (data.blockFixedVector k) = data.blockFixedVector k :=
   (Classical.choose_spec
     (exists_nonzero_transferMap_fixedVector_of_normal (data.blocks_normal k))).2
 
 /-- The transfer eigenvalue contributed by a weighted block. -/
-noncomputable def transferEigenvalue
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.transferEigenvalue
     (data : CPSVCanonicalFormData A) (k : Fin data.r) : ℂ :=
   data.weights k * starRingEnd ℂ (data.weights k)
 
 /-- The weighted block acts on its unweighted fixed vector with eigenvalue
 `weight * star weight`. -/
-private theorem transferMap_weightedBlock_blockFixedVector
+private theorem _root_.MPTensor.CPSVCanonicalFormData.transferMap_weightedBlock_blockFixedVector
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Kraus.transferMap (fun i => data.weights k • data.blocks k i)
         (data.blockFixedVector k) =
@@ -174,13 +184,13 @@ private theorem transferMap_weightedBlock_blockFixedVector
   simp [transferEigenvalue]
 
 /-- The ambient matrix obtained by transporting one block fixed vector. -/
-private noncomputable def ambientFixedVector
+private noncomputable def _root_.MPTensor.CPSVCanonicalFormData.ambientFixedVector
     (data : CPSVCanonicalFormData A) (k : Fin data.r) : Matrix (Fin D) (Fin D) ℂ :=
   data.ambientBlockInclusion k * data.blockFixedVector k *
     (data.ambientBlockInclusion k)ᴴ
 
 /-- A block's transported ambient vector is nonzero. -/
-private theorem ambientFixedVector_ne
+private theorem _root_.MPTensor.CPSVCanonicalFormData.ambientFixedVector_ne
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     data.ambientFixedVector k ≠ 0 := by
   intro hzero
@@ -194,7 +204,7 @@ private theorem ambientFixedVector_ne
 
 /-- Before spectral normalization, the transported ambient vector has the weighted
 block eigenvalue `weight * star weight`. -/
-private theorem transferMap_ambientFixedVector
+private theorem _root_.MPTensor.CPSVCanonicalFormData.transferMap_ambientFixedVector
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Kraus.transferMap A (data.ambientFixedVector k) =
       data.transferEigenvalue k • data.ambientFixedVector k := by
@@ -206,13 +216,13 @@ private theorem transferMap_ambientFixedVector
   simp [Matrix.mul_smul, Matrix.smul_mul]
 
 /-- A block's weighted transfer eigenvalue is nonzero. -/
-private theorem transferEigenvalue_ne
+private theorem _root_.MPTensor.CPSVCanonicalFormData.transferEigenvalue_ne
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     data.transferEigenvalue k ≠ 0 := by
   simp [transferEigenvalue, data.weights_ne_zero k]
 
 /-- Shifted ambient transfer traces normalize every weighted-block eigenvalue to one. -/
-theorem transferEigenvalue_eq_one
+theorem _root_.MPTensor.CPSVCanonicalFormData.transferEigenvalue_eq_one
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1)
@@ -235,7 +245,7 @@ theorem transferEigenvalue_eq_one
 
 /-- Under shifted ambient transfer traces, each transported block vector
 is fixed by the ambient transfer map. -/
-private theorem transferMap_ambientFixedVector_eq_self
+private theorem _root_.MPTensor.CPSVCanonicalFormData.transferMap_ambientFixedVector_eq_self
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1)
@@ -246,7 +256,8 @@ private theorem transferMap_ambientFixedVector_eq_self
 
 /-- The shifted trace hypothesis bounds the one-eigenspace of the squared
 transfer matrix by one dimension. -/
-private theorem finrank_eigenspace_one_transferMatrix_sq_le_one
+private theorem
+    _root_.MPTensor.CPSVCanonicalFormData.finrank_eigenspace_one_transferMatrix_sq_le_one
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1) :
     Module.finrank ℂ
@@ -274,7 +285,7 @@ private theorem finrank_eigenspace_one_transferMatrix_sq_le_one
           (Polynomial.X_sub_C_ne_zero 1)
 
 /-- The canonical blocks give linearly independent ambient transfer fixed vectors. -/
-private theorem linearIndependent_ambientFixedVector
+private theorem _root_.MPTensor.CPSVCanonicalFormData.linearIndependent_ambientFixedVector
     (data : CPSVCanonicalFormData A) :
     LinearIndependent ℂ data.ambientFixedVector := by
   change LinearIndependent ℂ (fun k : Fin data.r =>
@@ -290,7 +301,7 @@ This is the algebraic-multiplicity step in arXiv:1703.09188, Proposition
 `prop:normal-tensor`, lines 349--354. No full-support, positivity,
 normality, diagonalizability, or first-moment hypothesis is required for the
 ambient tensor. -/
-theorem r_eq_one_of_shifted_transfer_trace
+theorem _root_.MPTensor.CPSVCanonicalFormData.r_eq_one_of_shifted_transfer_trace
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1) :

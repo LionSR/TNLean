@@ -174,8 +174,8 @@ private lemma normalizedSingletonTensor_gaugeEquiv_gauged :
 This is the virtual-similarity invariance used in CPSV16, Appendix C.4,
 lines 2048--2057. -/
 theorem gaugedNormalizedSingletonTensor_isNormalTensor :
-    MPSTensor.IsNormalTensor gaugedNormalizedSingletonTensor :=
-  MPSTensor.IsNormalTensor.of_gaugeEquiv normalizedSingletonTensor_isNormalTensor
+    MPTensor.IsNormalTensor gaugedNormalizedSingletonTensor :=
+  MPTensor.IsNormalTensor.of_gaugeEquiv normalizedSingletonTensor_isNormalTensor
     normalizedSingletonTensor_gaugeEquiv_gauged.symm
 
 private lemma mpo_verticalBNTMPO_gaugedNormalizedSingletonTensor
@@ -207,7 +207,7 @@ private lemma gaugedNormalizedSingleton_verticalAssembledTensor :
   funext v
   ext i j
   simp only [verticalAssembledTensor, verticalCopyWeights, verticalCopyBlocks,
-    verticalCopyDim, MPSTensor.toTensorFromBlocks,
+    verticalCopyDim, MPTensor.toTensorFromBlocks,
     gaugedNormalizedSingletonFamily]
   change (Matrix.reindex e e
       (Matrix.blockDiagonal' (fun _k : Fin 1 ↦
@@ -406,7 +406,7 @@ private theorem gaugeDeformedSymbolTensor_transferMap (a : Fin 4) :
 /-- Every displayed horizontal block of the concrete deformation is a CPSV
 normal tensor. -/
 theorem gaugeDeformedSymbolTensor_isNormalTensor (a : Fin 4) :
-    MPSTensor.IsNormalTensor (gaugeDeformedSymbolTensor a) :=
+    MPTensor.IsNormalTensor (gaugeDeformedSymbolTensor a) :=
   MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     (gaugeDeformedSymbolTensor a) (gaugeDeformedSymbolTensor_transferMap a)
 
@@ -415,7 +415,7 @@ private def gaugeDeformedSymbolBlocks : (a : Fin 4) → MPSTensor 4 1 :=
 
 private theorem gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks :
     (gaugeDeformedBaseMPO gauge).toMPSTensor =
-      MPSTensor.toTensorFromBlocks (fun _ : Fin 4 ↦ (5 / 4 : ℂ))
+      MPTensor.toTensorFromBlocks (fun _ : Fin 4 ↦ (5 / 4 : ℂ))
         gaugeDeformedSymbolBlocks := by
   let e : (Σ _k : Fin 4, Fin 1) ≃ Fin 4 := finSigmaFinEquiv
   have hflat (k : Fin 4) : e ⟨k, 0⟩ = k := by
@@ -425,7 +425,7 @@ private theorem gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks :
     rw [e.apply_symm_apply, hflat]
   funext p
   ext x y
-  simp only [MPSTensor.toTensorFromBlocks, gaugeDeformedSymbolBlocks,
+  simp only [MPTensor.toTensorFromBlocks, gaugeDeformedSymbolBlocks,
     gaugeDeformedSymbolTensor]
   change (gaugeDeformedBaseMPO gauge).toMPSTensor p x y =
     Matrix.blockDiagonal' (fun k : Fin 4 ↦
@@ -446,10 +446,10 @@ is in the literal CPSV canonical form of `II_CF1`.
 Source: CPSV16, Section II.A, lines 214--245, and the use of horizontal
 canonical form in Theorem 4.14(ii). -/
 theorem gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm :
-    MPSTensor.IsCPSVCanonicalForm
+    MPTensor.IsCPSVCanonicalForm
       (gaugeDeformedBaseMPO gauge).toMPSTensor := by
   rw [gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks]
-  exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
+  exact (MPTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ : Fin 4 ↦ by simp) (fun _ : Fin 4 ↦ (5 / 4 : ℂ)) (fun _ ↦ by norm_num)
     gaugeDeformedSymbolBlocks
     (fun a ↦ gaugeDeformedSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm

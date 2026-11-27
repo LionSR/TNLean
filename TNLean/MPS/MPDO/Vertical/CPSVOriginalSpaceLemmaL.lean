@@ -34,9 +34,9 @@ vanish only through their zero raw weights.
 
 ### Main results
 
-* `MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners`: the pairwise Figure 8
+* `MPTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners`: the pairwise Figure 8
   identity under literal CPSV canonical form.
-* `MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners`: the positive
+* `MPTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners`: the positive
   relative Gram scalar for a normal representative.
 
 ### References
@@ -44,6 +44,8 @@ vanish only through their zero raw weights.
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, proof of Proposition 4.13,
   Figures 7--8 and lines 1909--1921.
 -/
+
+open MPTensor
 
 section
 
@@ -122,17 +124,21 @@ private theorem cast_linearMarkedTensor
   subst n
   rfl
 
-namespace CPSVCanonicalFormData.BNTRefinement
+section CPSVCanonicalFormData.BNTRefinement
+
+open MPTensor.CPSVCanonicalFormData.BNTRefinement
 
 variable {A : MPSTensor d D} {data : CPSVCanonicalFormData A}
 
+set_option linter.style.longLine false in
 /-- Linear marking of the full grouped tensor is exactly the full grouped marked tensor formed
 from the representative linear marks.
 
 Every copy carries its raw weight and phase.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1848--1858. -/
-theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
     (ref : data.BNTRefinement) (f : Fin e → Fin d → ℂ) :
     linearMarkedTensor f ref.groupedTensor =
       ref.groupedMarkedTensor
@@ -188,7 +194,7 @@ coisometry in the orientation `U * Uᴴ = 1`, the listed block gauge, and the fu
 grouped tensor.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
-theorem linearMarkedTensor_eq_of_trace_agree
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.linearMarkedTensor_eq_of_trace_agree
     (ref : data.BNTRefinement) (f g : Fin e → Fin d → ℂ)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A (List.ofFn w)) =
@@ -246,7 +252,8 @@ theorem linearMarkedTensor_eq_of_trace_agree
 
 /-- Physical first-site Lemma L in the original bond coordinates of a literal CPSV canonical
 form. -/
-theorem insertedTensor_eq_of_firstSiteActionAgree
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.insertedTensor_eq_of_firstSiteActionAgree
     (ref : data.BNTRefinement) {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
@@ -257,11 +264,13 @@ theorem insertedTensor_eq_of_firstSiteActionAgree
 
 end CPSVCanonicalFormData.BNTRefinement
 
-namespace IsCPSVCanonicalForm
+section IsCPSVCanonicalForm
+
+open MPTensor.IsCPSVCanonicalForm
 
 /-- Predicate-level form of Lemma L in the original bond coordinates of a literal CPSV canonical
 form. -/
-theorem linearMarkedTensor_eq_of_trace_agree
+theorem _root_.MPTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree
     (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
     (f g : Fin e → Fin d → ℂ)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
@@ -274,7 +283,7 @@ theorem linearMarkedTensor_eq_of_trace_agree
 
 /-- Predicate-level physical first-site Lemma L in the original bond coordinates of a literal
 CPSV canonical form. -/
-theorem insertedTensor_eq_of_firstSiteActionAgree
+theorem _root_.MPTensor.IsCPSVCanonicalForm.insertedTensor_eq_of_firstSiteActionAgree
     (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
     {Y Z : Matrix (Fin d) (Fin d) ℂ} (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
@@ -293,7 +302,9 @@ section
 open scoped Matrix ComplexOrder
 open MPOTensor
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 variable {d D n : ℕ}
 
@@ -395,6 +406,6 @@ theorem gram_eq_pos_smul_gram_of_two_grouped_corners
   intro v
   simpa only [gramDressing] using congrFun hDress v
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 end

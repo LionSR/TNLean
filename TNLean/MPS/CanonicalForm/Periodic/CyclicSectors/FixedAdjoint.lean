@@ -155,7 +155,7 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
       (V : (k : Fin m) → Matrix (Fin D) (Fin (dim k)) ℂ),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
         mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -240,7 +240,7 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter
       (φ : (k : Fin m) →
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
         mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -319,7 +319,7 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
       (V : (k : Fin m) → Matrix (Fin D) (Fin (dim k)) ℂ),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
         mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),

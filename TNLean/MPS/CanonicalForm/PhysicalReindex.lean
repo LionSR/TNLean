@@ -14,13 +14,13 @@ preserves normal tensors and the retained-block reconstruction of literal CPSV c
 
 ## Main definitions
 
-* `MPSTensor.CPSVCanonicalFormData.reindexPhysical`: relabel literal canonical-form data.
+* `MPTensor.CPSVCanonicalFormData.reindexPhysical`: relabel literal canonical-form data.
 * `MPSTensor.CPSVCanonicalFormIIData.reindexPhysical`: relabel canonical-form-II data.
 
 ## Main results
 
-* `MPSTensor.IsNormalTensor.reindexPhysical`: physical relabeling preserves normal tensors.
-* `MPSTensor.IsCPSVCanonicalForm.reindexPhysical`: physical relabeling preserves literal
+* `MPTensor.IsNormalTensor.reindexPhysical`: physical relabeling preserves normal tensors.
+* `MPTensor.IsCPSVCanonicalForm.reindexPhysical`: physical relabeling preserves literal
   canonical form.
 
 ## References
@@ -28,13 +28,17 @@ preserves normal tensors and the retained-block reconstruction of literal CPSV c
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Section 2.3.
 -/
 
+open MPTensor
+
 open scoped Matrix
 
 namespace MPSTensor
 
-variable {d₁ d₂ D : ℕ}
+variable {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂] {d₁ d₂ D : ℕ}
 
-namespace IsNormalTensor
+section IsNormalTensor
+
+open MPTensor.IsNormalTensor
 
 /-- A bijective relabeling of the physical alphabet preserves a normal tensor.
 
@@ -42,8 +46,8 @@ The transfer map is unchanged, so its spectral radius and peripheral spectrum ar
 invariant-projection condition is likewise invariant under the relabeling.
 
 Source: arXiv:1606.00608, normal-tensor definition at lines 233--235. -/
-theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsNormalTensor A)
-    (e : Fin d₁ ≃ Fin d₂) :
+theorem _root_.MPTensor.IsNormalTensor.reindexPhysical {β : Type*} [Fintype β] [DecidableEq β]
+    {A : MPTensor α₂ β} (hA : IsNormalTensor A) (e : α₁ ≃ α₂) :
     IsNormalTensor (Kraus.reindexPhysical e A) := by
   refine ⟨(isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
   · rw [Kraus.transferMap_reindexPhysical_equiv e A]
@@ -52,7 +56,9 @@ theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsNormalTensor A)
 
 end IsNormalTensor
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- Relabel the physical alphabet in literal CPSV canonical-form data.
 
@@ -60,8 +66,8 @@ The retained dimensions, weights, and ambient coisometry are unchanged; only eac
 block is relabeled.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--245. -/
-noncomputable def reindexPhysical {A : MPSTensor d₂ D}
-    (data : CPSVCanonicalFormData A) (e : Fin d₁ ≃ Fin d₂) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.reindexPhysical {A : MPTensor α₂ (Fin D)}
+    (data : CPSVCanonicalFormData A) (e : α₁ ≃ α₂) :
     CPSVCanonicalFormData (Kraus.reindexPhysical e A) where
   r := data.r
   dim := data.dim
@@ -104,13 +110,15 @@ noncomputable def reindexPhysical {A : MPSTensor d₂ D}
 
 end CPSVCanonicalFormIIData
 
-namespace IsCPSVCanonicalForm
+section IsCPSVCanonicalForm
+
+open MPTensor.IsCPSVCanonicalForm
 
 /-- A bijective relabeling of the physical alphabet preserves literal CPSV canonical form.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--245. -/
-theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsCPSVCanonicalForm A)
-    (e : Fin d₁ ≃ Fin d₂) :
+theorem _root_.MPTensor.IsCPSVCanonicalForm.reindexPhysical {A : MPTensor α₂ (Fin D)}
+    (hA : IsCPSVCanonicalForm A) (e : α₁ ≃ α₂) :
     IsCPSVCanonicalForm (Kraus.reindexPhysical e A) := by
   obtain ⟨data⟩ := hA
   exact ⟨data.reindexPhysical e⟩

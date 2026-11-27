@@ -221,8 +221,8 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
     (data : CommutingForm M)
     (repr : CommutingBond.FixedProductTensorData data.toCommutingBond)
     (s : ℝ) (hs : 0 < s)
-    (hM : MPSTensor.IsNormalTensor M.toMPSTensor)
-    (hRepr : MPSTensor.IsNormalTensor
+    (hM : MPTensor.IsNormalTensor M.toMPSTensor)
+    (hRepr : MPTensor.IsNormalTensor
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((ζ * (s : ℂ)) ^ N) • data.product hN := by
@@ -274,8 +274,8 @@ theorem mpo_eq_positive_power_product_of_normal_smul
     (data : CommutingForm M)
     (repr : CommutingBond.FixedProductTensorData data.toCommutingBond)
     (s : ℝ) (hs : 0 < s)
-    (hM : MPSTensor.IsNormalTensor M.toMPSTensor)
-    (hRepr : MPSTensor.IsNormalTensor
+    (hM : MPTensor.IsNormalTensor M.toMPSTensor)
+    (hRepr : MPTensor.IsNormalTensor
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((s : ℂ) ^ N) • data.product hN := by
@@ -396,11 +396,11 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 Lemma C.4 (`propSN`), lines 1406--1450. -/
 theorem exists_normal_fixedProductTensorData_of_isSAL
     {d D : ℕ} (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
-    (hNormal : MPSTensor.IsNormalTensor K.toMPSTensor) :
+    (hNormal : MPTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K)
       (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef),
       let repr := F.fixedProductTensorData hη (bondDim_pos_of_isSAL K hSAL)
-      MPSTensor.IsNormalTensor repr.tensor.toMPSTensor ∧
+      MPTensor.IsNormalTensor repr.tensor.toMPSTensor ∧
         ∀ (N : ℕ) (hN : 2 ≤ N),
           mpo K N =
             (F.commutingBond hη).product hN := by

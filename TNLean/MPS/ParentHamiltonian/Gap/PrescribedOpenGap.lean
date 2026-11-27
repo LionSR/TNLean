@@ -154,9 +154,9 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ p : ℕ in atTop, ∀ N : ℕ, 2 * p ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N).hamiltonian)
+        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian)
           z → z = 0 ∨ ((1 - η : ℝ) : ℂ) ≤ z := by
-  let B := toTensorFromBlocks (d := d) (μ := μ) A
+  let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
   let ε := η / (4 * Real.sqrt 2)
   have hsqrt : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hsqrtone : 1 ≤ Real.sqrt 2 := by
@@ -230,7 +230,7 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ p : ℕ in atTop, ∀ N : ℕ, 2 * p ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N).hamiltonian)
+        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian)
           z → z = 0 ∨ ((1 - η : ℝ) : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hGS, hDistinctB⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct

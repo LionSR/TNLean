@@ -136,8 +136,8 @@ Source: arXiv:1703.09188, Lemma `lem:equivalent-symmetry` (lines 1369--1376, "if
 with Proposition `prop1conj` (lines 1014--1027). -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path {d' : ℕ}
     (e : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
-    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical e W₁).toMPSTensor)
-    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical e W₂).toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm (reindexPhysical e W₁).toMPSTensor)
+    (hcf₂ : MPTensor.IsMPUCanonicalForm (reindexPhysical e W₂).toMPSTensor)
     (u : unitInterval → Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (v : unitInterval → Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hu : Continuous u) (hv : Continuous v)
@@ -171,7 +171,7 @@ theorem reindexPhysical_twoSiteBlockEquiv_symm_blockTwo {E : ℕ} (W : MPOTensor
 /-- The relabelled two-site block of a tensor in canonical form II is in canonical form. -/
 theorem IsMPUCanonicalFormII.isMPUCanonicalForm_reindexPhysical_blockTwo {E : ℕ}
     {W : MPOTensor d E} (h : IsMPUCanonicalFormII W) :
-    MPSTensor.IsMPUCanonicalForm
+    MPTensor.IsMPUCanonicalForm
       (MPOTensor.reindexPhysical (twoSiteBlockEquiv d).symm (MPOTensor.blockTwo W)).toMPSTensor :=
   have : NeZero d := h.neZero_phys
   (reindexPhysical_twoSiteBlockEquiv_symm_blockTwo W).symm ▸
@@ -199,8 +199,8 @@ Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, "if" direction, p
 1426--1446. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_eq {d' : ℕ}
     (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
-    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
-    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
+    (hcf₂ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
     (hc₁ : ∀ N : ℕ, 0 < N → mpo W₁ N = (mpo W₁ N).map (starRingEnd ℂ))
     (hc₂ : ∀ N : ℕ, 0 < N → mpo W₂ N = (mpo W₂ N).map (starRingEnd ℂ))
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
@@ -315,8 +315,8 @@ Source: arXiv:1703.09188, Theorem `prop:conjsym-strict-equiv`, lines 1480--1491,
 proof at lines 1540--1546. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of_even {d' : ℕ}
     (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
-    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
-    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
+    (hcf₂ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S₁ : TwoSiteStandardFormData W₁ u₁ v₁) (S₂ : TwoSiteStandardFormData W₂ u₂ v₂)

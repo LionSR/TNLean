@@ -113,7 +113,7 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
     {p g : ℕ} {D : Fin g → ℕ}
     {T : MPOTensor p (∑ c : Fin g, D c)} (h : IsBoundaryClosed T)
     (A : (c : Fin g) → MPOTensor p (D c))
-    (hBlocks : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1)
+    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun c ↦ (A c).toMPSTensor))
     (hInj : ∀ c, Kraus.IsInjective (A c).toMPSTensor) (hD : ∀ c, 0 < D c)
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (A c).toMPSTensor)) :

@@ -170,7 +170,7 @@ structure IsIrreducibleForm (A : MPSTensor d D) where
   weight_pos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0
   /-- The scalar-weight direct-sum tensor generates the same MPV family,
   including at the empty word. -/
-  sameMPV : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ) blocks)
+  sameMPV : SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks)
 
 /-- `ℤ_m`-gauge equivalence for periodic tensors. -/
 def ZGaugeEquiv (m : ℕ) (A B : MPSTensor d D) : Prop :=

@@ -81,7 +81,7 @@ theorem verticalAssembledTensor_apply_copy_same
         (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
         (verticalSectorFinEquiv dim mult ⟨α, (q, j)⟩) =
       weight α q * B α v i j := by
-  unfold verticalAssembledTensor MPSTensor.toTensorFromBlocks
+  unfold verticalAssembledTensor MPTensor.toTensorFromBlocks
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     verticalSectorFinEquiv_outer_symm]
   rw [Matrix.blockDiagonal'_apply_eq]
@@ -120,7 +120,7 @@ theorem verticalAssembledTensor_apply_copy_ne
         (verticalSectorFinEquiv dim mult ⟨β, (r, j)⟩) = 0 := by
   have hflat : finSigmaFinEquiv ⟨α, q⟩ ≠ finSigmaFinEquiv ⟨β, r⟩ :=
     fun hEq => h (finSigmaFinEquiv.injective hEq)
-  simp [verticalAssembledTensor, MPSTensor.toTensorFromBlocks,
+  simp [verticalAssembledTensor, MPTensor.toTensorFromBlocks,
     Matrix.reindex_apply, Matrix.submatrix_apply,
     verticalSectorFinEquiv_outer_symm, Matrix.blockDiagonal'_apply_ne,
     hflat]

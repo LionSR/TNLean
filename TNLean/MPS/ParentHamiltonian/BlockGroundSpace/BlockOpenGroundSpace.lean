@@ -128,10 +128,10 @@ theorem contiguous_mem_groundSpace_toTensorFromBlocks
     {ψ : NSiteSpace d N}
     (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s L hs τ ψ ∈
-        groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L) :
-    ψ ∈ groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+        groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L) :
+    ψ ∈ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N := by
   apply contiguous_mem_of_restriction_intersection_submodules
-    (fun M ↦ groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) M)
+    (fun M ↦ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) M)
     (by omega : 0 < L) hLN ?_ hwindow
   rintro (_ | n) hM
   · omega

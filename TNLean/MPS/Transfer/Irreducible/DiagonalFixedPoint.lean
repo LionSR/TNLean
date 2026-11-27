@@ -143,10 +143,9 @@ unitary `U` and a diagonal positive-definite matrix `Λ` such that:
 This is the key step in reducing to "Canonical Form II" from
 Cirac et al. arXiv:1606.00608 Appendix A. -/
 theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
-    [DecidableEq (Fin D)]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
@@ -243,7 +242,7 @@ orientation explicit without repeating the spectral argument. -/
 theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
     (A : MPSTensor d D)
     (hUnital : ∑ i : Fin d, A i * (A i)ᴴ = 1)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
@@ -264,7 +263,7 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleF
     simpa [Aadj] using
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
-  have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
+  have hIrrAdj : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) Aadj :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
@@ -327,7 +326,7 @@ theorem conjTranspose_kraus_setup
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hDpos
   have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
-    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) A hIrr
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (ι := Fin d) (D := D) A hIrr
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
       hIrrAmap ρ hρ_psd hρ_ne hρ_fix

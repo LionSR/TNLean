@@ -39,7 +39,7 @@ theorem hasFullSupport_blockTensorCFIIData
   unfold blockTensorCFIIData
   convert ((data.blockTensor p hp).reindexPhysical
       (blockedDoubledIndexEquiv d p)).hasFullSupport_cast
-    (MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical _
+    (MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical _
       (data.toCPSVCanonicalFormData.hasFullSupport_blockTensor hfull p hp)
       (blockedDoubledIndexEquiv d p)) (normalizedFlattening_blockTensor U p) using 1
   congr 1

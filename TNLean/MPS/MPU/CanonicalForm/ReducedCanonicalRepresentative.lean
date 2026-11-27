@@ -129,7 +129,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
       (ρ : Matrix (Fin Dred) (Fin Dred) ℂ),
       Dred ≤ D ∧
       MPTensor.SameMPV₂Pos U.normalizedFlattening Ared ∧
-      MPSTensor.IsNormalTensor Ared ∧
+      MPTensor.IsNormalTensor Ared ∧
       cfii.toCPSVCanonicalFormData.HasFullSupport ∧
       ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
       Kraus.transferMap Ared ρ = ρ := by
@@ -138,7 +138,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
     MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks U.normalizedFlattening
   let Dred : ℕ := ∑ k : Fin r, dim k
   let Ared : MPSTensor (d * d) Dred :=
-    MPSTensor.toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) blocks
+    MPTensor.toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) blocks
   have hOriginalOverlap :
       MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
     rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
@@ -160,7 +160,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   have hTrace : ∀ N : ℕ, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap Ared) ^ N) = 1 :=
     trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos hU hSame
-  have hBlocksNormal : ∀ k : Fin r, MPSTensor.IsNormalTensor (blocks k) := by
+  have hBlocksNormal : ∀ k : Fin r, MPTensor.IsNormalTensor (blocks k) := by
     intro k
     let _ : NeZero (dim k) := NeZero.of_pos (hDim k)
     obtain ⟨ρ, radius, hρ, hRadius, hEigenvector⟩ :=
@@ -202,8 +202,8 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
         rw [hRadiusOne]
         exact hEigenvalue_eq_one hμ hμ0)
     simpa [hRadiusOne] using hNormal
-  let data : MPSTensor.CPSVCanonicalFormData Ared :=
-    MPSTensor.CPSVCanonicalFormData.ofBlocks hDim
+  let data : MPTensor.CPSVCanonicalFormData Ared :=
+    MPTensor.CPSVCanonicalFormData.ofBlocks hDim
       (fun _ : Fin r => (1 : ℂ)) (fun _ => one_ne_zero) blocks hBlocksNormal
   have hFull : data.HasFullSupport := by
     rfl
@@ -241,7 +241,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   have hΛfix : Kraus.transferMap (dataB.blocks k) Λ = Λ := by
     simp only [Λ, map_smul, hΛ₀fix]
   have hweight : dataB.weights k * starRingEnd ℂ (dataB.weights k) = 1 := by
-    simpa [baseB, MPSTensor.CPSVCanonicalFormData.transferEigenvalue] using
+    simpa [baseB, MPTensor.CPSVCanonicalFormData.transferEigenvalue] using
       baseB.transferEigenvalue_eq_one hTraceB k
   have hweightedFix :
       Kraus.transferMap (fun i => dataB.weights k • dataB.blocks k i) Λ = Λ := by
@@ -306,7 +306,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
       _ = Wᴴ * (W * ρ * Wᴴ) * W := by rw [← hconj, hρconj, hVfix, ← hρconj]
       _ = ρ := hcompress ρ
   have hrecC : ∀ i, C i = (dataB.ambient_coisometry * W)ᴴ *
-      MPSTensor.toTensorFromBlocks dataB.weights dataB.blocks i *
+      MPTensor.toTensorFromBlocks dataB.weights dataB.blocks i *
         (dataB.ambient_coisometry * W) := by
     intro i
     rw [Matrix.conjTranspose_mul, hCdef i, dataB.reconstruct i]
@@ -336,7 +336,7 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   obtain ⟨hRadiusC, hPrimitiveC⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
       (Kraus.transferMap C) hTraceC
-  have hCNormal : MPSTensor.IsNormalTensor C :=
+  have hCNormal : MPTensor.IsNormalTensor C :=
     dataC.toCPSVCanonicalFormData.isNormalTensor_of_r_eq_one_of_fullSupport
       hBlockCountB hFullC hRadiusC hPrimitiveC
   exact ⟨Dred, hDred, C, dataC, ρ, by simpa [Dred] using hDimLe,

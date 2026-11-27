@@ -67,7 +67,7 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   /-- Each period-blocked nonzero-weight block is represented by its unit-weight cyclic sectors. -/
   sector_same : ∀ k,
     SameMPV₂ (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
-      (toTensorFromBlocks (d := blockPhysDim d (period k))
+      (toTensorFromBlocks (α := Fin (blockPhysDim d (period k)))
         (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k))
   /-- The sector transfer maps are primitive before later reblocking. -/
   sector_primitive : ∀ k s,
@@ -88,7 +88,7 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (blockPhysDim_nested_eq k))
         (blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
           (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k)))
-      (toTensorFromBlocks (d := blockPhysDim d p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
         (μ := fun _ : Fin (period k) => (1 : ℂ))
         (fun s => cast
           (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (blockPhysDim_nested_eq k))
@@ -132,7 +132,7 @@ noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
 /-- The common-alphabet sector tensor for one original nonzero-weight block. -/
 noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (∑ s : Fin (F.period k), F.sectorDim k s) :=
-  toTensorFromBlocks (d := blockPhysDim d F.p)
+  toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
     (μ := fun _ : Fin (F.period k) => (1 : ℂ)) (fun s => F.commonSectorBlock k s)
 
 /-- The common blocked tensor obtained by reindexing blocked physical words from
@@ -214,7 +214,7 @@ private theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
             (blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (dim k))
               (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k))
               (F.extra k))) σ =
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+          mpv (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
             (μ := fun _ : Fin (F.period k) => (1 : ℂ))
             (fun s =>
               cast (congr_arg (fun d' => MPSTensor d' (F.sectorDim k s))
@@ -227,15 +227,15 @@ private theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
 private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p) (F.commonReindexedBlock))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) := by
   intro N σ
   let gSigma : ((k : Fin r) × Fin (F.period k)) → ℂ := fun y =>
     ((μ y.1) ^ F.p) ^ N * mpv (F.commonSectorBlock y.1 y.2) σ
   calc
-    mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+    mpv (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p) (F.commonReindexedBlock)) σ
         = ∑ k : Fin r, ((μ k) ^ F.p) ^ N •
             mpv (F.commonReindexedBlock k) σ :=
@@ -248,7 +248,7 @@ private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
           ((μ k) ^ F.p) ^ N • mpv (F.commonSectorBlock k s) σ := by
           refine Finset.sum_congr rfl fun k _ => ?_
           change ((μ k) ^ F.p) ^ N •
-              mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+              mpv (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
                 (fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k)) σ =
             ∑ s : Fin (F.period k),
               ((μ k) ^ F.p) ^ N • mpv (F.commonSectorBlock k s) σ
@@ -268,7 +268,7 @@ private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
           simp only [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
             smul_eq_mul] at h ⊢
           exact h
-    _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ :=
           (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
@@ -471,14 +471,14 @@ private theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockw
         (blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p)
         (F.commonReindexedBlock k)) :
     SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p)
         (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) := by
   intro N σ
   calc
-    mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+    mpv (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p)
         (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p)) σ
         = ∑ k : Fin r, ((μ k) ^ F.p) ^ N •
@@ -488,7 +488,7 @@ private theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockw
     _ = ∑ k : Fin r, ((μ k) ^ F.p) ^ N • mpv (F.commonReindexedBlock k) σ := by
           refine Finset.sum_congr rfl fun k _ => ?_
           rw [hBlock k N σ]
-    _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) σ :=
           (mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
             F.commonReindexedBlock σ).symm
@@ -526,10 +526,10 @@ blocking by length $p$, the per-block scalar weights $\mu_k$ become $\mu_k^{p}$ 
 each $B_k^{[p]}$ is a $p$-fold matrix product. -/
 theorem reindexed_nonzero_part (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := fun k : Fin r => (μ k) ^ F.p)
         (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
+      (toTensorFromBlocks (α := Fin (blockPhysDim d F.p))
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) := by
   intro N σ
   exact (F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ

@@ -91,7 +91,7 @@ change this sum.
 This is derived from the literal direct-sum canonical form at
 arXiv:1606.00608, equation `II_CF1`, lines 237--244, and the phase-gauge BNT
 regrouping in equations `eq:II_ABasicTensors` and `decBSV`, lines 265--301. -/
-theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
+theorem _root_.MPTensor.CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
     {A : MPSTensor s d} (data : CPSVCanonicalFormData A)
     (ref : data.BNTRefinement) {p L : ℕ} (hp : 0 < p) (hL : 0 < L) :
     groundSpace (Kraus.blockTensor A p) L =
@@ -161,7 +161,7 @@ theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
   calc
     groundSpace (Kraus.blockTensor A p) L =
         groundSpace
-          (toTensorFromBlocks (d := blockPhysDim s p) blocked.weights blocked.blocks) L :=
+          (toTensorFromBlocks (α := Fin (blockPhysDim s p)) blocked.weights blocked.blocks) L :=
       groundSpace_eq_of_coisometry_reconstruction blocked.ambient_coisometry
         blocked.coisometric blocked.reconstruct hL
     _ = ⨆ k : Fin data.r, groundSpace (Kraus.blockTensor (data.blocks k) p) L := by

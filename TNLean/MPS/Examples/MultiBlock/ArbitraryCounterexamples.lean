@@ -77,11 +77,11 @@ noncomputable def propC : MPSTensor 2 2 := ![!![1, 1; 0, 2], !![0, 0; 1, 0]]
 
 /-- `A = C ⊕ 2C`. -/
 noncomputable def propA : MPSTensor 2 (∑ _k : Fin 2, 2) :=
-  toTensorFromBlocks (d := 2) (dim := fun _ => 2) ![1, 2] fun _ => propC
+  toTensorFromBlocks (α := Fin 2) (dim := fun _ => 2) ![1, 2] fun _ => propC
 
 /-- `B = C ⊕ 3C`. -/
 noncomputable def propB : MPSTensor 2 (∑ _k : Fin 2, 2) :=
-  toTensorFromBlocks (d := 2) (dim := fun _ => 2) ![1, 3] fun _ => propC
+  toTensorFromBlocks (α := Fin 2) (dim := fun _ => 2) ![1, 3] fun _ => propC
 
 theorem mpv_propA {N : ℕ} (σ : Fin N → Fin 2) : mpv propA σ = (1 + 2 ^ N) * mpv propC σ := by
   rw [propA, mpv_toTensorFromBlocks_eq_sum, Fin.sum_univ_two]

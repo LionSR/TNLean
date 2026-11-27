@@ -47,7 +47,7 @@ Source: arXiv:1606.00608, Theorem 4.14(i)--(ii), lines 972--985, and
 Appendix C.4, lines 1929--2085. -/
 theorem isRFPViaTS_iff_hasBNTAlgebraTensorClause
     (M : MPOTensor d D)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
     IsRFPViaTS M ↔ HasBNTAlgebraTensorClause M := by
   constructor
@@ -79,7 +79,7 @@ Source: arXiv:1606.00608, Theorem 4.14(i),(iii), lines 972--993, and
 Appendix C.4, lines 1929--2085. -/
 theorem isRFPViaTS_iff_hasBNTFusionTensorClause
     (M : MPOTensor d D)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
     IsRFPViaTS M ↔ HasBNTFusionTensorClause M := by
   constructor

@@ -128,7 +128,7 @@ lemma sigmaDimerBasis_isLeftCanonical : MPTensor.IsLeftCanonical sigmaDimerBasis
 /-- One-site injectivity and left-canonical normalization give source normality.
 
 Source notion: arXiv:1606.00608, lines 224–235. -/
-lemma sigmaDimerBasis_isNormalTensor : MPSTensor.IsNormalTensor sigmaDimerBasis := by
+lemma sigmaDimerBasis_isNormalTensor : MPTensor.IsNormalTensor sigmaDimerBasis := by
   apply MPSTensor.isNormalTensor_of_isNormal_leftCanonical
   · exact (MPSTensor.isNormal_smul_iff sigmaDimerNormalizingScalar_ne_zero _).2
       sigmaDimer_isInjective.isNormal
@@ -198,7 +198,7 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
       copies_pos := fun _ => Nat.one_pos
       weight := fun _ _ => sigmaDimerNormalizingScalar⁻¹
       weight_ne_zero := fun _ _ => inv_ne_zero sigmaDimerNormalizingScalar_ne_zero } }
-  have hB : MPSTensor.IsNormalTensor B := sigmaDimerBasis_isNormalTensor.reindexPhysical e
+  have hB : MPTensor.IsNormalTensor B := sigmaDimerBasis_isNormalTensor.reindexPhysical e
   have hBlock := blockTensor_one_toMPSTensor sigmaDimer
   refine ⟨sigmaDimer_isMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
   · refine ⟨Nat.one_pos, ?_, fun _ => hB, ?_⟩

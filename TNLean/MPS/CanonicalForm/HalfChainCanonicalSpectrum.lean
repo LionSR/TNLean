@@ -51,6 +51,8 @@ Condition C2 and its one-block context (lines 954–969), and Theorem 6
 (lines 987–993). The dual fixed point is normalized to trace one.
 -/
 
+open MPTensor
+
 section
 
 open Matrix Filter

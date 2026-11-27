@@ -33,6 +33,8 @@ forintersection, Lemma existenceinteraction, Theorems 1.1--1.2, and
 Section 6, lines 2649--2675.
 -/
 
+open MPTensor
+
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open ManyBody.Interaction (chainTranslates)

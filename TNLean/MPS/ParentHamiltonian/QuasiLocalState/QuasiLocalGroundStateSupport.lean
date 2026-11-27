@@ -41,6 +41,8 @@ It also contains the following results.
   energy and support in every finite MPS interval.
 -/
 
+open MPTensor
+
 section QuasiLocalGroundStateSupport
 
 open scoped ComplexOrder
@@ -85,15 +87,16 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_isParentInteraction_word
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (dim i)) (hμ : ∀ i, μ i ≠ 0)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0)
     (a : ℤ) {N : ℕ} (hN : R ≤ N) :
     φ (quasiLocalIntervalObservable d a N
-      (groundSpaceProjectionMatrix (toTensorFromBlocks (d := d) (μ := μ) A) N)) = 1 := by
+      (groundSpaceProjectionMatrix (toTensorFromBlocks (α := Fin d) (μ := μ) A) N)) = 1 := by
   refine quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
-    (toTensorFromBlocks (d := d) (μ := μ) A) φ hφ a ((chainTranslates R N h).hamiltonian) ?_ ?_ ?_
+    (toTensorFromBlocks (α := Fin d) (μ := μ) A) φ hφ a
+      ((chainTranslates R N h).hamiltonian) ?_ ?_ ?_
   · exact ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
       (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) N
   · rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
@@ -110,13 +113,13 @@ theorem eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (dim i)) (hμ : ∀ i, μ i ≠ 0)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0) :
     ∀ᶠ n : ℕ in Filter.atTop,
       φ (quasiLocalIntervalObservable d (-(n : ℤ)) (2 * n + 1)
-        (groundSpaceProjectionMatrix (toTensorFromBlocks (d := d) (μ := μ) A)
+        (groundSpaceProjectionMatrix (toTensorFromBlocks (α := Fin d) (μ := μ) A)
           (2 * n + 1))) = 1 := by
   filter_upwards [Filter.eventually_ge_atTop R] with n hn
   exact quasiLocalState_groundSpaceProjection_eq_one_of_isParentInteraction_wordTupleSpanTop

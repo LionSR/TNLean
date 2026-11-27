@@ -75,7 +75,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
   apply chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
@@ -117,7 +117,7 @@ theorem
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
   apply chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
@@ -162,7 +162,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, groundSpace (A j) N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   refine ⟨?_, ?_⟩
@@ -195,7 +195,7 @@ theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ φ : (j : Fin r) → NSiteSpace d N,
       (∀ j, φ j ∈ groundSpace (A j) N) ∧
         ψ = ∑ j, φ j ∧
@@ -240,9 +240,9 @@ theorem
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
@@ -277,9 +277,9 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
@@ -311,8 +311,8 @@ theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
     (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
-        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ∧
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ∧
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, groundSpace (A j) N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   refine ⟨?_, ?_⟩
@@ -341,11 +341,11 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L N : ℕ}
     (hBoundary : ∀ ψ : NSiteSpace d N,
-      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∃ φ : (j : Fin r) → NSiteSpace d N,
           (∀ j, φ j ∈ chainGroundSpace (A j) L N) ∧
             ψ = ∑ j, φ j) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   classical
   intro ψ hψ
@@ -371,7 +371,7 @@ theorem cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
     {L N : ℕ} (hN : 0 < N) (i : Fin N) (τ : Fin N → Fin d)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
     cyclicRestrictₗ hN L i τ
-        (groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        (groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X))) =
       ∑ j : Fin r,
         cyclicRestrictₗ hN L i τ
@@ -408,10 +408,10 @@ theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (i : Fin N) (τ : Fin N → Fin d) :
     (∑ j : Fin r,
@@ -421,10 +421,10 @@ theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
   classical
   have hLocal :
       cyclicRestrictₗ hN L i τ ψ ∈
-        groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+        groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
     rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
     let S : Submodule ℂ (NSiteSpace d L) :=
-      groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L
+      groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L
     change cyclicRestrictₗ hN L i τ ψ ∈ S
     change ψ ∈
       ⨅ (i : Fin N) (τ : Fin N → Fin d), S.comap (cyclicRestrictₗ hN L i τ) at hψ
@@ -438,7 +438,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
       (∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
             (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
-        groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+        groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
     rw [← cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum
       μ A hN i τ X]
     rw [← hψX]
@@ -546,7 +546,7 @@ theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal_mem_iSup_chainGroundSpac
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hX : ∀ j : Fin r,
       groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N) :
-    groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+    groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∈
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   classical
@@ -583,13 +583,13 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_gr
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L N : ℕ}
     (hBoundary : ∀ ψ : NSiteSpace d N,
-      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
           ∀ j : Fin r,
             groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   intro ψ hψ
   rcases hBoundary ψ hψ with ⟨X, hψX, hX⟩
@@ -651,17 +651,17 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_bloc
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hBoundary : ∀ ψ : NSiteSpace d N,
-      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
           ∀ j : Fin r,
             groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   have hClose :
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A hBoundary
@@ -720,15 +720,15 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boun
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hBoundary : ∀ ψ : NSiteSpace d N,
-      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∃ φ : (j : Fin r) → NSiteSpace d N,
           (∀ j, φ j ∈ chainGroundSpace (A j) L N) ∧
             ψ = ∑ j, φ j) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   have hClose :
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition μ A hBoundary
   refine ⟨?_, ?_⟩

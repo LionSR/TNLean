@@ -28,6 +28,8 @@ It also contains the following results.
   under physical left actions.
 -/
 
+open MPTensor
+
 section KetLeftMulCanonicalForm
 
 /-!
@@ -145,9 +147,9 @@ preserves irreducibility and the transfer map.
 Source: arXiv:1703.09188, canonical form at lines 259--267 and the symmetry
 transformation in Section `othersymmetries`, lines 1295--1332. -/
 theorem isMPUCanonicalForm_ketLeftMul (M : MPOTensor d D)
-    (hM : MPSTensor.IsMPUCanonicalForm M.toMPSTensor)
+    (hM : MPTensor.IsMPUCanonicalForm M.toMPSTensor)
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P ∈ Matrix.unitaryGroup (Fin d) ℂ) :
-    MPSTensor.IsMPUCanonicalForm (M.ketLeftMul P).toMPSTensor := by
+    MPTensor.IsMPUCanonicalForm (M.ketLeftMul P).toMPSTensor := by
   obtain ⟨data⟩ := hM
   rw [toMPSTensor_ketLeftMul]
   exact ⟨MPSTensor.rotateMPUCanonicalFormData data _

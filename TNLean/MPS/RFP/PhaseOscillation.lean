@@ -22,6 +22,8 @@ Appendix B, lines 1211--1244. It does not affect the primitive single-block conv
 See `docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex`.
 -/
 
+open MPTensor
+
 open Filter Topology
 open scoped Matrix BigOperators
 

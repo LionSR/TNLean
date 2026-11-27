@@ -19,6 +19,8 @@ may overlap within a summand, and all statements concern their joint support.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
+open MPTensor
+
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
 
 namespace MPSTensor.MPOSymmetry

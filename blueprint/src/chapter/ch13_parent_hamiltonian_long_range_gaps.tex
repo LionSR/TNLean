@@ -1776,13 +1776,13 @@ tensors.
 
 \begin{lemma}[Open parent gaps for canonical tensors]
     \label{thm:canonical_open_gap_all_lengths}
-    \lean{MPSTensor.CPSVCanonicalFormData.parentChainInteraction_eq_representatives,
-        MPSTensor.CPSVCanonicalFormData.%
+    \lean{MPTensor.CPSVCanonicalFormData.parentChainInteraction_eq_representatives,
+        MPTensor.CPSVCanonicalFormData.%
         exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop,
-        MPSTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop,
-        MPSTensor.IsCPSVCanonicalForm.%
+        MPTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop,
+        MPTensor.IsCPSVCanonicalForm.%
         exists_parentChainInteraction_gap_of_three_bondDim_pow_five_le,
-        MPSTensor.CPSVCanonicalFormData.%
+        MPTensor.CPSVCanonicalFormData.%
         ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a canonical tensor with physical dimension $d\geq1$, and
@@ -1837,7 +1837,7 @@ tensors.
     \label{thm:open_positive_parent_gap}
     \lean{MPSTensor.IsParentInteraction.exists_pos_hamiltonian_chainTranslates_comparison,
         MPSTensor.IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap,
-        MPSTensor.CPSVCanonicalFormData.%
+        MPTensor.CPSVCanonicalFormData.%
         exists_openInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $h\geq0$ be a matrix on $R$ sites with kernel $G_R(A)$.
@@ -1869,8 +1869,8 @@ tensors.
     \label{thm:compact_open_positive_parent_gap}
     \lean{MPSTensor.%
         exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap,
-        MPSTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact,
-        MPSTensor.IsCPSVCanonicalForm.%
+        MPTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact,
+        MPTensor.IsCPSVCanonicalForm.%
         exists_uniform_openInteraction_gap_of_compact_of_bounded_range}
     \leanok
     Let $K$ be a compact parameter set. Suppose the local ground projections
@@ -2235,7 +2235,7 @@ tensors.
 
 \begin{lemma}[Canonical parent Hamiltonians and normal representatives]
     \label{thm:canonical-parent-hamiltonian-representatives}
-    \lean{MPSTensor.CPSVCanonicalFormData.hamiltonian_parentRingInteraction_eq_representatives}
+    \lean{MPTensor.CPSVCanonicalFormData.hamiltonian_parentRingInteraction_eq_representatives}
     \leanok
     Let $A$ be a tensor in canonical form, with distinct normal
     representatives $B_0,\ldots,B_{g-1}$, and set $B=\bigoplus_j B_j$.
@@ -2259,7 +2259,7 @@ tensors.
 
 \begin{lemma}[Canonical gap for every canonical decomposition]
     \label{thm:canonical-decomposition-gap-simultaneous-injectivity}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
     Fix any canonical decomposition of
@@ -2280,7 +2280,7 @@ tensors.
 
 \begin{lemma}[Canonical gap at a given simultaneous injectivity length]
     \label{thm:canonical-gap-simultaneous-injectivity}
-    \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
     Including canonical forms with repeated blocks as in
@@ -2300,7 +2300,7 @@ tensors.
 
 \begin{lemma}[A dimension bound for canonical parent gaps]
     \label{thm:canonical_parent_gap_bounded_range}
-    \lean{MPSTensor.IsCPSVCanonicalForm.%
+    \lean{MPTensor.IsCPSVCanonicalForm.%
         exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension
@@ -2460,7 +2460,7 @@ tensors.
 
 \begin{lemma}[Positive parent interactions for every canonical decomposition]
     \label{thm:canonical-decomposition-positive-parent-gap-simultaneous-injectivity}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
     Fix any canonical decomposition of $A$, and let $B_0,\ldots,B_{g-1}$ be
@@ -2483,7 +2483,7 @@ tensors.
 
 \begin{lemma}[Positive parent interactions at the simultaneous injectivity range]
     \label{thm:canonical-positive-parent-gap-simultaneous-injectivity}
-    \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
     One may choose a basis of normal tensors $B_0,\ldots,B_{g-1}$ such that
@@ -2505,7 +2505,7 @@ tensors.
 
 \begin{lemma}[A dimension bound for fixed positive parent interactions]
     \label{thm:canonical_positive_parent_gap_bounded_range}
-    \lean{MPSTensor.IsCPSVCanonicalForm.%
+    \lean{MPTensor.IsCPSVCanonicalForm.%
         exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension

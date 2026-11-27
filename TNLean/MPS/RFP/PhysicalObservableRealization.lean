@@ -16,6 +16,8 @@ one physical observable to select one BNT basis sector and one virtual matrix
 unit on both sides of the inserted transfer map.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

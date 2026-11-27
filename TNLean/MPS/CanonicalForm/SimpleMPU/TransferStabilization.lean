@@ -167,7 +167,7 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
   have hweight : base.transferEigenvalue k = 1 :=
     base.transferEigenvalue_eq_one htrace k
   have hweight' : cfii.weights k * starRingEnd ℂ (cfii.weights k) = 1 := by
-    simpa [base, MPSTensor.CPSVCanonicalFormData.transferEigenvalue] using hweight
+    simpa [base, MPTensor.CPSVCanonicalFormData.transferEigenvalue] using hweight
   have hweightedFix :
       Kraus.transferMap (fun i => cfii.weights k • cfii.blocks k i) Λ = Λ := by
     rw [MPSTensor.transferMap_smul, hΛfix, hweight', one_smul]

@@ -244,10 +244,13 @@ theorem equiv_of_sameMPV₂Pos
 
 end IsBNTSectorPresentation
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- MPV phase classes of the canonical-form blocks. -/
-noncomputable def phaseClasses (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.phaseClasses
+    (data : CPSVCanonicalFormData A) :
     MPVPhaseClassData data.blocks :=
   mpvPhaseClassData data.blocks
 
@@ -255,27 +258,31 @@ noncomputable def phaseClasses (data : CPSVCanonicalFormData A) :
 
 This is the explicit retained-index identification used in the copy enumeration at
 arXiv:1606.00608, lines 265--301 and 1135--1146. -/
-noncomputable def classCopyEquiv (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.classCopyEquiv
+    (data : CPSVCanonicalFormData A) :
     (Σ j : Fin data.phaseClasses.g, Fin (data.phaseClasses.copies j)) ≃ Fin data.r :=
   data.phaseClasses.enumEquiv
 
 @[simp]
-theorem classCopyEquiv_apply (data : CPSVCanonicalFormData A)
+theorem _root_.MPTensor.CPSVCanonicalFormData.classCopyEquiv_apply (data : CPSVCanonicalFormData A)
     (j : Fin data.phaseClasses.g) (q : Fin (data.phaseClasses.copies j)) :
     data.classCopyEquiv ⟨j, q⟩ = data.phaseClasses.enum j q :=
   rfl
 
 /-- The original displayed index of the representative of a phase class. -/
-noncomputable def representativeIndex (data : CPSVCanonicalFormData A)
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.representativeIndex
+    (data : CPSVCanonicalFormData A)
     (j : Fin data.phaseClasses.g) : Fin data.r :=
   data.phaseClasses.repr j
 
 /-- The phase-class copy coordinate of an original displayed index. -/
-noncomputable def classCopy (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.classCopy (data : CPSVCanonicalFormData A)
+    (k : Fin data.r) :
     Σ j : Fin data.phaseClasses.g, Fin (data.phaseClasses.copies j) :=
   data.classCopyEquiv.symm k
 
-theorem classCopy_classCopyEquiv (data : CPSVCanonicalFormData A)
+theorem _root_.MPTensor.CPSVCanonicalFormData.classCopy_classCopyEquiv
+    (data : CPSVCanonicalFormData A)
     (j : Fin data.phaseClasses.g) (q : Fin (data.phaseClasses.copies j)) :
     data.classCopy (data.classCopyEquiv ⟨j, q⟩) = ⟨j, q⟩ :=
   data.classCopyEquiv.symm_apply_apply ⟨j, q⟩
@@ -293,7 +300,7 @@ coisometry orientation `U * Uᴴ = 1`.
 
 Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146.
 Proposition 4.13, lines 1863--1921, uses this refinement downstream. -/
-structure BNTRefinement (data : CPSVCanonicalFormData A) where
+structure _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement (data : CPSVCanonicalFormData A) where
   /-- Equality between the chosen representative's bond dimension and this copy's dimension.
 
   Source: arXiv:1606.00608, lines 265--301 and the normal-tensor gauge theorem at
@@ -362,9 +369,9 @@ structure BNTRefinement (data : CPSVCanonicalFormData A) where
   eq. `II_CF1`; this exact coordinate identity is formal preparation used downstream in
   Proposition 4.13, lines 1863--1921. -/
   regroupLetterwise : ∀ i,
-    toTensorFromBlocks (d := d) data.weights data.blocks i =
+    toTensorFromBlocks (α := Fin d) data.weights data.blocks i =
       (globalGaugeOfBlocks listedGauge : Matrix _ _ ℂ) *
-        toTensorFromBlocks (d := d) data.weights regroupedBlocks i *
+        toTensorFromBlocks (α := Fin d) data.weights regroupedBlocks i *
         (↑((globalGaugeOfBlocks listedGauge)⁻¹) : Matrix _ _ ℂ)
   /-- The original ambient coisometry from literal CPSV canonical form.
 
@@ -382,54 +389,59 @@ structure BNTRefinement (data : CPSVCanonicalFormData A) where
   reconstructRegrouped : ∀ i,
     A i = ambientCoisometryᴴ *
       ((globalGaugeOfBlocks listedGauge : Matrix _ _ ℂ) *
-        toTensorFromBlocks (d := d) data.weights regroupedBlocks i *
+        toTensorFromBlocks (α := Fin d) data.weights regroupedBlocks i *
         (↑((globalGaugeOfBlocks listedGauge)⁻¹) : Matrix _ _ ℂ)) *
       ambientCoisometry
 
 /-- The grouped block order: phase class and copy for every block. -/
-abbrev GroupedIndex (data : CPSVCanonicalFormData A) :=
+abbrev _root_.MPTensor.CPSVCanonicalFormData.GroupedIndex (data : CPSVCanonicalFormData A) :=
   Σ j : Fin data.phaseClasses.g, Fin (data.phaseClasses.copies j)
 
 /-- Number of blocks in the grouped order. -/
-noncomputable def groupedCount (data : CPSVCanonicalFormData A) : ℕ :=
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.groupedCount
+    (data : CPSVCanonicalFormData A) : ℕ :=
   Fintype.card data.GroupedIndex
 
 /-- Enumeration of the grouped class/copy order. -/
-noncomputable def groupedEnum (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.groupedEnum
+    (data : CPSVCanonicalFormData A) :
     Fin data.groupedCount ≃ data.GroupedIndex :=
   (Fintype.equivFin data.GroupedIndex).symm
 
 /-- Equivalence from the finite grouped enumeration to the original listed block indices. -/
-noncomputable def groupedListedEquiv (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.groupedListedEquiv
+    (data : CPSVCanonicalFormData A) :
     Fin data.groupedCount ≃ Fin data.r :=
   data.groupedEnum.trans data.classCopyEquiv
 
 /-- Bond dimension at a grouped block position. -/
-noncomputable def groupedDim (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.groupedDim
+    (data : CPSVCanonicalFormData A) :
     Fin data.groupedCount → ℕ :=
   fun l => data.dim (data.groupedListedEquiv l)
 
 /-- Original scalar weight at a grouped block position. -/
-noncomputable def BNTRefinement.groupedWeight
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight
     {data : CPSVCanonicalFormData A} (_ref : data.BNTRefinement) :
     Fin data.groupedCount → ℂ :=
   fun l => data.weights (data.groupedListedEquiv l)
 
 /-- Representative copy at a grouped block position. -/
-noncomputable def BNTRefinement.groupedBlocks
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks
     {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement) :
     (l : Fin data.groupedCount) → MPSTensor d (data.groupedDim l) :=
   fun l => ref.regroupedBlocks (data.groupedListedEquiv l)
 
 /-- The flattened coordinate permutation from grouped block coordinates to the original
 listed direct-sum coordinates. -/
-noncomputable def groupedCoordinateEquiv (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.groupedCoordinateEquiv
+    (data : CPSVCanonicalFormData A) :
     (Σ l : Fin data.groupedCount, Fin (data.groupedDim l)) ≃
       Fin (∑ k : Fin data.r, data.dim k) :=
   blockIndexCoordinateEquiv data.dim data.groupedListedEquiv
 
 /-- The grouped class/copy order has exactly the original retained dimension. -/
-theorem groupedTotalDim_eq (data : CPSVCanonicalFormData A) :
+theorem _root_.MPTensor.CPSVCanonicalFormData.groupedTotalDim_eq (data : CPSVCanonicalFormData A) :
     (∑ l : Fin data.groupedCount, data.groupedDim l) =
       ∑ k : Fin data.r, data.dim k := by
   simpa only [Fintype.card_fin, Fintype.card_sigma] using
@@ -442,7 +454,7 @@ explicit permutation into the original retained coordinates.
 
 Source: arXiv:1606.00608, lines 265--301 and 1135--1146; this coordinate form is used
 in Proposition 4.13, lines 1863--1921. -/
-noncomputable def BNTRefinement.groupedTensor
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor
     {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement) :
     MPSTensor d (∑ k : Fin data.r, data.dim k) := fun i =>
   Matrix.reindex data.groupedCoordinateEquiv data.groupedCoordinateEquiv
@@ -451,10 +463,10 @@ noncomputable def BNTRefinement.groupedTensor
 
 /-- Exact permutation identity between the in-place regrouped direct sum and the explicit
 class/copy grouped tensor. -/
-theorem BNTRefinement.regroupedTensor_eq_groupedTensor
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor
     {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement) (i : Fin d) :
-    toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks i = ref.groupedTensor i := by
-  change toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks i =
+    toTensorFromBlocks (α := Fin d) data.weights ref.regroupedBlocks i = ref.groupedTensor i := by
+  change toTensorFromBlocks (α := Fin d) data.weights ref.regroupedBlocks i =
     Matrix.reindex (blockIndexCoordinateEquiv data.dim data.groupedListedEquiv)
       (blockIndexCoordinateEquiv data.dim data.groupedListedEquiv)
       (Matrix.blockDiagonal' fun l : Fin data.groupedCount =>
@@ -468,9 +480,9 @@ coordinate permutation and the block-diagonal copy gauges.
 
 Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146. This is
 the structured input used downstream in Proposition 4.13, lines 1863--1921. -/
-theorem BNTRefinement.groupedRegroupLetterwise
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise
     {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement) (i : Fin d) :
-    toTensorFromBlocks (d := d) data.weights data.blocks i =
+    toTensorFromBlocks (α := Fin d) data.weights data.blocks i =
       (globalGaugeOfBlocks ref.listedGauge : Matrix _ _ ℂ) *
         Matrix.reindex data.groupedCoordinateEquiv data.groupedCoordinateEquiv
           (Matrix.blockDiagonal' fun l : Fin data.groupedCount =>
@@ -484,7 +496,7 @@ the original CPSV coisometry, with orientation `U * Uᴴ = 1`.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244; the grouped coordinates follow
 lines 265--301, 1080--1117, and 1135--1146 and are used in Proposition 4.13. -/
-theorem BNTRefinement.reconstructGrouped
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.reconstructGrouped
     {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement) (i : Fin d) :
     A i = ref.ambientCoisometryᴴ *
       ((globalGaugeOfBlocks ref.listedGauge : Matrix _ _ ℂ) * ref.groupedTensor i *
@@ -500,7 +512,8 @@ exact at each physical letter.
 
 Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146;
 Proposition 4.13, lines 1863--1921, is the downstream application. -/
-theorem exists_bntRefinement (data : CPSVCanonicalFormData A) :
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_bntRefinement
+    (data : CPSVCanonicalFormData A) :
     Nonempty data.BNTRefinement := by
   classical
   let classes := data.phaseClasses
@@ -592,18 +605,21 @@ theorem exists_bntRefinement (data : CPSVCanonicalFormData A) :
 
 Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146;
 Proposition 4.13, lines 1863--1921, is the downstream application. -/
-noncomputable def bntRefinement (data : CPSVCanonicalFormData A) :
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.bntRefinement
+    (data : CPSVCanonicalFormData A) :
     data.BNTRefinement :=
   Classical.choice data.exists_bntRefinement
 
-namespace BNTRefinement
+section BNTRefinement
+
+open MPTensor.CPSVCanonicalFormData.BNTRefinement
 
 variable {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement)
 
 /-- The original displayed block at a phase-class copy coordinate.
 
 Source: arXiv:1606.00608, lines 265--301 and 1135--1148. -/
-noncomputable def copy
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.copy
     (j : Fin data.phaseClasses.g)
     (q : Fin (data.phaseClasses.copies j)) : Fin data.r :=
   data.classCopyEquiv ⟨j, q⟩
@@ -614,7 +630,9 @@ The weight of a copy is its original canonical-form weight multiplied by the pha
 that copy to its representative.
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
-noncomputable def representativeSectorDecomposition : SectorDecomposition d where
+noncomputable def
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition
+    : SectorDecomposition d where
   basisCount := data.phaseClasses.g
   basisDim := fun j => data.dim (data.representativeIndex j)
   basis := fun j => data.blocks (data.representativeIndex j)
@@ -636,7 +654,9 @@ noncomputable def representativeSectorDecomposition : SectorDecomposition d wher
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
-theorem representativeSectorDecomposition_basisCount :
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition_basisCount
+    :
     ref.representativeSectorDecomposition.basisCount = data.phaseClasses.g :=
   rfl
 
@@ -644,7 +664,8 @@ theorem representativeSectorDecomposition_basisCount :
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
-theorem representativeSectorDecomposition_basisDim
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition_basisDim
     (j : Fin data.phaseClasses.g) :
     ref.representativeSectorDecomposition.basisDim j =
       data.dim (data.representativeIndex j) :=
@@ -654,7 +675,7 @@ theorem representativeSectorDecomposition_basisDim
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
-theorem representativeSectorDecomposition_basis
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition_basis
     (j : Fin data.phaseClasses.g) :
     ref.representativeSectorDecomposition.basis j =
       data.blocks (data.representativeIndex j) :=
@@ -664,7 +685,7 @@ theorem representativeSectorDecomposition_basis
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
-theorem representativeSectorDecomposition_copies
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition_copies
     (j : Fin data.phaseClasses.g) :
     ref.representativeSectorDecomposition.copies j =
       data.phaseClasses.copies j :=
@@ -674,7 +695,7 @@ theorem representativeSectorDecomposition_copies
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
-theorem representativeSectorDecomposition_weight
+theorem _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition_weight
     (j : Fin data.phaseClasses.g)
     (q : Fin (data.phaseClasses.copies j)) :
     ref.representativeSectorDecomposition.weight j q =
@@ -682,17 +703,19 @@ theorem representativeSectorDecomposition_weight
         ref.copyPhase (data.classCopyEquiv ⟨j, q⟩) :=
   rfl
 
+set_option linter.style.longLine false in
 /-- The full grouped tensor and the representative sector tensor have equal closed-chain
 coefficients at every positive length.
 
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
-theorem groupedTensor_sameMPV₂Pos_representativeSectorDecomposition :
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor_sameMPV₂Pos_representativeSectorDecomposition :
     SameMPV₂Pos ref.groupedTensor ref.representativeSectorDecomposition.toTensor := by
   classical
   intro N hN σ
   let P := ref.representativeSectorDecomposition
   have hGrouped : ref.groupedTensor =
-      toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks := by
+      toTensorFromBlocks (α := Fin d) data.weights ref.regroupedBlocks := by
     funext i
     exact (ref.regroupedTensor_eq_groupedTensor i).symm
   rw [hGrouped, mpv_toTensorFromBlocks_eq_sum]
@@ -731,7 +754,9 @@ theorem groupedTensor_sameMPV₂Pos_representativeSectorDecomposition :
 chosen normal representatives.
 
 Source: arXiv:1606.00608, lines 217--225, 265--301, and 1135--1148. -/
-theorem groupedTensor_isBNTSectorPresentation (hr : 0 < data.r) :
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor_isBNTSectorPresentation (hr
+    : 0 < data.r) :
     IsBNTSectorPresentation ref.groupedTensor
       ref.representativeSectorDecomposition := by
   refine ⟨?_, ref.groupedTensor_sameMPV₂Pos_representativeSectorDecomposition,
@@ -745,7 +770,9 @@ The original CPSV coisometry first reconstructs the simultaneous gauge conjugate
 grouped tensor; cyclicity of trace then removes that gauge.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244, and lines 1080--1117. -/
-theorem source_sameMPV₂Pos_groupedTensor : SameMPV₂Pos A ref.groupedTensor := by
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.source_sameMPV₂Pos_groupedTensor
+    : SameMPV₂Pos A ref.groupedTensor := by
   let X := globalGaugeOfBlocks ref.listedGauge
   let B : MPSTensor d (∑ k : Fin data.r, data.dim k) := fun i ↦
     (X : Matrix _ _ ℂ) * ref.groupedTensor i *
@@ -760,7 +787,8 @@ theorem source_sameMPV₂Pos_groupedTensor : SameMPV₂Pos A ref.groupedTensor :
 /-- A nonempty family of displayed blocks yields a BNT presentation of the original tensor.
 
 Source: arXiv:1606.00608, lines 217--246, 265--301, and 1135--1148. -/
-theorem isBNTSectorPresentation (hr : 0 < data.r) :
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.isBNTSectorPresentation (hr : 0 < data.r) :
     IsBNTSectorPresentation A ref.representativeSectorDecomposition :=
   (ref.groupedTensor_isBNTSectorPresentation hr).of_sameMPV₂Pos
     ref.source_sameMPV₂Pos_groupedTensor

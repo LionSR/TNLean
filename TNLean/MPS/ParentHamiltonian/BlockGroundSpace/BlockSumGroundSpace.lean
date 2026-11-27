@@ -21,6 +21,8 @@ the linear sum of the corresponding local spaces of its blocks.
   \(S=\bigoplus_j\mathcal G_L^{A^j}\).
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -35,7 +37,7 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ) :
-    groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L X =
+    groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L X =
       ∑ j : Fin r, groundSpaceMap (A j) L
         ((μ j) ^ L • Matrix.finSigmaDiagonalBlock X j) := by
   ext σ
@@ -60,7 +62,7 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
-    groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L
+    groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) =
       ∑ j : Fin r, groundSpaceMap (A j) L ((μ j) ^ L • X j) := by
   rw [groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock]
@@ -80,7 +82,7 @@ theorem exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
     (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} {ψ : NSiteSpace d L}
     (hψ : ψ ∈ ⨆ j : Fin r, groundSpace (A j) L) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) L ((μ j) ^ L • X j) ∈ groundSpace (A j) L := by
@@ -124,7 +126,7 @@ theorem groundSpace_block_le_toTensorFromBlocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {j : Fin r} (hμj : μ j ≠ 0) (L : ℕ) :
-    groundSpace (A j) L ≤ groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+    groundSpace (A j) L ≤ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
   classical
   intro ψ hψ
   rw [groundSpace, LinearMap.mem_range] at hψ
@@ -178,7 +180,7 @@ theorem groundSpace_toTensorFromBlocks_eq_iSup
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0) (L : ℕ) :
-    groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L =
+    groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
       ⨆ j : Fin r, groundSpace (A j) L := by
   classical
   apply le_antisymm

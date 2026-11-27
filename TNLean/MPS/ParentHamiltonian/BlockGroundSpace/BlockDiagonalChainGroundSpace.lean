@@ -19,6 +19,8 @@ It also contains the following results.
   constraints and propagated subspaces.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -84,14 +86,14 @@ theorem chainGroundSpace_block_le_toTensorFromBlocks
     {j : Fin r} (hμj : μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     chainGroundSpace (A j) L N ≤
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N := by
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N := by
   classical
   intro ψ hψ
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ ⊢
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
   intro i τ
   have hlocal : groundSpace (A j) L ≤
-      groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+      groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
     exact groundSpace_block_le_toTensorFromBlocks μ A hμj L
   exact hlocal (hψ i τ)
 
@@ -103,7 +105,7 @@ theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N := by
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N := by
   exact iSup_le fun j =>
     chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
 
@@ -122,7 +124,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     bntMPSVectorSpan A N ≤
-      LinearMap.ker (parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) A) L N) := by
+      LinearMap.ker (parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) := by
   rw [bntMPSVectorSpan]
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨j, rfl⟩
@@ -132,7 +134,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
   refine Finset.sum_eq_zero fun i _ => ?_
   exact ManyBody.Interaction.mem_zeroSpace_iff.mp
     (toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace
-      (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) hN hLN
       ((chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN)
         (mpv_mem_chainGroundSpace (A j) L N hN hLN))) i
 
@@ -156,9 +158,9 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (hClose :
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) L N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N :=
   le_antisymm hClose (iSup_chainGroundSpace_block_le_toTensorFromBlocks μ A hμ hN hLN)
 
@@ -193,13 +195,13 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
         (⨅ a : Fin d,
           (⨆ j : Fin r, groundSpace (A j) M).comap (restrictFirstₗ a))) =
         ⨆ j : Fin r, groundSpace (A j) (M + 1)) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
   let S : (M : ℕ) → Submodule ℂ (NSiteSpace d M) :=
     fun M => ⨆ j : Fin r, groundSpace (A j) M
   apply chainGroundSpace_le_of_local_le_restriction_intersection_submodules
-    (A := toTensorFromBlocks (d := d) (μ := μ) A) (S := S) hN hL hLN
+    (A := toTensorFromBlocks (α := Fin d) (μ := μ) A) (S := S) hN hL hLN
   · rw [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L]
   · intro M hM
     exact hstep M hM

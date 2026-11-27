@@ -41,6 +41,8 @@ hypothesis with \(S=1\) after its initial blocking, which is proved in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder
 
 namespace MPSTensor
@@ -59,7 +61,7 @@ theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_s
     (hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ)
     (hgap : ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ x₀) (A x₀)) R
+        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x₀) (A x₀)) R
           (m + R - 1)).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ x in 𝓝 x₀, ∀ (N : ℕ) (hN : 2 * m ≤ N),
@@ -67,13 +69,13 @@ theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_s
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   have hmpos : 0 < (m : ℝ) := by exact_mod_cast (by omega : 0 < m)
   have hthreshold : ((R : ℝ) - 1) ^ 2 / (m : ℝ) < γ :=
     (div_lt_iff₀ hmpos).2 (by simpa only [mul_comm] using hnum)
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
-  let B := fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x)
+  let B := fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)
   have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x => wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   have hProjW := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
@@ -116,13 +118,13 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   refine hK.exists_uniform_pos_nat_bounds (fun δ N₀ x ↦ ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z)
     (fun hle hgap N _ hN ↦ ManyBody.forall_hasEigenvalue_mono hle (hgap N hN))
     (fun hle hgap N _ hN ↦ hgap N (hle.trans hN)) fun x _ ↦ ?_
@@ -148,7 +150,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨δ₀, hδ₀, N₀, hlong⟩ :=
     exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_compact
@@ -158,7 +160,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z)
     (fun N γ δ hle h hN x hx => ManyBody.forall_hasEigenvalue_mono hle (h hN x hx))
     (fun N => by
@@ -191,7 +193,7 @@ theorem exists_uniform_block_hamiltonian_parentRingInteraction_gap_of_compact_is
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   classical
   rcases isEmpty_or_nonempty X with hX | hX

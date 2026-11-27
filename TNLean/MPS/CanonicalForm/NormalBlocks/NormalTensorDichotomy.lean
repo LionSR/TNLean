@@ -46,7 +46,7 @@ Lemma A.2 (equalMPS), lines 1080--1117).
 For two normal tensors of positive, possibly different, bond dimensions, both self-overlaps tend
 to one. Their rectangular overlap either tends to zero, or its modulus tends to one and the tensors
 are related by an invertible gauge and a unit phase. -/
-theorem IsNormalTensor.overlap_dichotomy
+theorem _root_.MPTensor.IsNormalTensor.overlap_dichotomy
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
     (Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds 1) ∧
@@ -117,7 +117,7 @@ Corollary A.3 (eqV), lines 1121--1128).
 For two normal tensors of positive, possibly different, bond dimensions, either the rectangular
 overlap tends to zero, or their matrix product vectors differ at every length by a fixed unit phase
 raised to that length. -/
-theorem IsNormalTensor.mpv_phase_alternative
+theorem _root_.MPTensor.IsNormalTensor.mpv_phase_alternative
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
     Tendsto (fun N ↦ mpvOverlap (α := Fin d) A B N) atTop (nhds 0) ∨

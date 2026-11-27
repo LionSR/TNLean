@@ -522,7 +522,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
     ∃ P : SectorDecomposition d,
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_⟩
@@ -546,7 +546,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
     ∃ P : SectorDecomposition d,
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_, ?_⟩
@@ -630,7 +630,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
       (∀ k, Kraus.IsInjective (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
       SameMPV₂Pos (blockTensor (d := d) (n := Fin D) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) := by
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) := by
   classical
   -- Step 1: arbitrary-input two-sided reduction at `B = A`.
   obtain ⟨p₀, hp₀,
@@ -706,18 +706,18 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
           (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
             (blockTensor (d := d) (n := Fin D) A p₀) L)
           (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
-            (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L) :=
+            (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L) :=
       sameMPV₂Pos_blockTensor
         (d := blockPhysDim d p₀)
         (blockTensor (d := d) (n := Fin D) A p₀)
-        (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA)
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA)
         hAPos L hL
     -- (ii) blocking distributes over toTensorFromBlocks (full-length SameMPV₂):
     have hDistr : SameMPV₂
         (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
-          (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L)
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L)
         (toTensorFromBlocks
-          (d := blockPhysDim (blockPhysDim d p₀) L)
+          (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
           (fun k => (μA k) ^ L)
           (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) :=
@@ -728,7 +728,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
         (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
           (blockTensor (d := d) (n := Fin D) A p₀) L)
         (toTensorFromBlocks
-          (d := blockPhysDim (blockPhysDim d p₀) L)
+          (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
           (fun k => (μA k) ^ L)
           (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) := by
@@ -743,7 +743,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
               (blockTensor (d := d) (n := Fin D) A p₀) L))
           (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
             (toTensorFromBlocks
-              (d := blockPhysDim (blockPhysDim d p₀) L)
+              (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
               (fun k => (μA k) ^ L)
               (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
                 (blocksA k) L))) :=
@@ -760,12 +760,12 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     have hRight :
         Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
           (toTensorFromBlocks
-            (d := blockPhysDim (blockPhysDim d p₀) L)
+            (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
             (fun k => (μA k) ^ L)
             (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
               (blocksA k) L)) =
           toTensorFromBlocks
-            (d := blockPhysDim d (p₀ * L))
+            (α := Fin (blockPhysDim d (p₀ * L)))
             (μ := fun k => (μA k) ^ L)
             (fun k => flattenedIteratedBlockTensor (d := d) (p := p₀)
               (D := dimA k) (blocksA k) L) :=

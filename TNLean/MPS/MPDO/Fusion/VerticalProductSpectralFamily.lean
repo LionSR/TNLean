@@ -60,7 +60,7 @@ structure RetainedProductSpectralFamily
   /-- Every retained spectral coefficient is positive. -/
   coefficient_pos : ∀ p k, (0 : ℂ) < coefficient p k
   /-- Every retained local corner is a normal tensor. -/
-  block_normal : ∀ p k, MPSTensor.IsNormalTensor (block p k)
+  block_normal : ∀ p k, MPTensor.IsNormalTensor (block p k)
   /-- Each local corner inclusion is an isometry. -/
   localInclusion_isometry : ∀ p k,
     (localInclusion p k)ᴴ * localInclusion p k = 1
@@ -353,7 +353,7 @@ theorem flatCoefficient_ne
 theorem flatBlock_normal
     (S : RetainedProductSpectralFamily dim mult weight B)
     (j : Fin (Fintype.card S.ActiveLabel)) :
-    MPSTensor.IsNormalTensor (S.flatBlock j) :=
+    MPTensor.IsNormalTensor (S.flatBlock j) :=
   S.block_normal (S.activeLabelEquiv j).1 (S.activeLabelEquiv j).2
 
 /-- Enumerated active-corner inclusions are isometries. -/
@@ -420,7 +420,7 @@ active normal corners have the same positive-length closed chains. -/
 theorem flat_sameMPV₂Pos
     (S : RetainedProductSpectralFamily dim mult weight B) :
     MPTensor.SameMPV₂Pos (retainedVerticalProductTensor dim mult weight B)
-      (MPSTensor.toTensorFromBlocks (d := D * D)
+      (MPTensor.toTensorFromBlocks (α := Fin (D * D))
         (μ := S.flatCoefficient) S.flatBlock) :=
   MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
     (retainedVerticalProductTensor dim mult weight B)

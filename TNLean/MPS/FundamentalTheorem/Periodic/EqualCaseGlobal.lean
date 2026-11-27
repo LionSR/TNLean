@@ -103,8 +103,8 @@ theorem blockScalarMatrix_pow (z : Fin r → ℂ) (n : ℕ) :
 rescales the block weights. -/
 theorem blockScalarMatrix_mul_toTensorFromBlocks
     (z μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (i : Fin d) :
-    blockScalarMatrix dim z * toTensorFromBlocks (d := d) (μ := μ) A i =
-      toTensorFromBlocks (d := d) (μ := fun k => z k * μ k) A i := by
+    blockScalarMatrix dim z * toTensorFromBlocks (α := Fin d) (μ := μ) A i =
+      toTensorFromBlocks (α := Fin d) (μ := fun k => z k * μ k) A i := by
   classical
   have hmul := map_mul (Matrix.reindexAlgEquiv ℂ ℂ
       (finSigmaFinEquiv (m := r) (n := dim)))
@@ -126,8 +126,8 @@ theorem blockScalarMatrix_mul_toTensorFromBlocks
 rescales the block weights in the same way. -/
 theorem toTensorFromBlocks_mul_blockScalarMatrix
     (z μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (i : Fin d) :
-    toTensorFromBlocks (d := d) (μ := μ) A i * blockScalarMatrix dim z =
-      toTensorFromBlocks (d := d) (μ := fun k => z k * μ k) A i := by
+    toTensorFromBlocks (α := Fin d) (μ := μ) A i * blockScalarMatrix dim z =
+      toTensorFromBlocks (α := Fin d) (μ := fun k => z k * μ k) A i := by
   classical
   have hmul := map_mul (Matrix.reindexAlgEquiv ℂ ℂ
       (finSigmaFinEquiv (m := r) (n := dim)))
@@ -255,8 +255,8 @@ theorem toTensorFromBlocks_conj_of_matched_blocks_smul
       ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
       ∀ (c : Fin r → ℂ) (i : Fin d),
-        toTensorFromBlocks (d := d) (μ := fun k => c k * μ k) A i =
-          Y * toTensorFromBlocks (d := d) (μ := fun t => c (e.symm t) * μ' t) B i * Y' := by
+        toTensorFromBlocks (α := Fin d) (μ := fun k => c k * μ k) A i =
+          Y * toTensorFromBlocks (α := Fin d) (μ := fun t => c (e.symm t) * μ' t) B i * Y' := by
   classical
   -- The conjugated `B`-family, still indexed by the `B`-side blocks.
   set B' : (t : Fin r') → MPSTensor d (dim' t) := fun t i =>
@@ -349,8 +349,8 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
       ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
       ∀ i : Fin d,
-        toTensorFromBlocks (d := d) (μ := μ) A i =
-          Y * toTensorFromBlocks (d := d) (μ := μ') B i * Y' := by
+        toTensorFromBlocks (α := Fin d) (μ := μ) A i =
+          Y * toTensorFromBlocks (α := Fin d) (μ := μ') B i * Y' := by
   obtain ⟨Y, Y', hYY', hY'Y, hunit, hconj⟩ :=
     toTensorFromBlocks_conj_of_matched_blocks_smul μ A μ' B e hd X hrel
   refine ⟨Y, Y', hYY', hY'Y, hunit, fun i => ?_⟩
@@ -482,12 +482,12 @@ theorem sameMPV₂Pos_blockScalarMatrix_mul_toTensor
   intro N _hN σ
   have hfun :
       (fun i => blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) =
-        toTensorFromBlocks (d := d)
+        toTensorFromBlocks (α := Fin d)
           (μ := fun s => P.flatCopyScalar z s * P.flatWeight s) P.flatBasis :=
     funext fun i =>
       blockScalarMatrix_mul_toTensorFromBlocks _ P.flatWeight P.flatBasis i
   rw [hfun]
-  change mpv (toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis) σ = _
+  change mpv (toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis) σ = _
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   refine Finset.sum_congr rfl fun s _ => ?_
   by_cases hdvd : period (P.flatIndexEquiv.symm s).1 ∣ N
@@ -562,11 +562,11 @@ theorem equalCase_global_zgauge_of_blockwise
     blockScalarMatrix P.flatDim zflat with hZ
   -- The gauged first tensor is the first tensor with rescaled multiplicities.
   have hZmul : ∀ i : Fin d, Z * P.toTensor i =
-      toTensorFromBlocks (d := d)
+      toTensorFromBlocks (α := Fin d)
         (μ := fun s => zflat s * P.flatWeight s) P.flatBasis i := fun i =>
     blockScalarMatrix_mul_toTensorFromBlocks zflat P.flatWeight P.flatBasis i
   have hZmulr : ∀ i : Fin d, P.toTensor i * Z =
-      toTensorFromBlocks (d := d)
+      toTensorFromBlocks (α := Fin d)
         (μ := fun s => zflat s * P.flatWeight s) P.flatBasis i := fun i =>
     toTensorFromBlocks_mul_blockScalarMatrix zflat P.flatWeight P.flatBasis i
   -- The matched flattened copy indices.

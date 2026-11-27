@@ -203,10 +203,10 @@ theorem sector_bnt_global_gauge_of_matched_weights
     ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
       X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
       ∀ i : Fin d,
-        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+        toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
           (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-            toTensorFromBlocks (d := d)
+            toTensorFromBlocks (α := Fin d)
               (μ := matched_p_weight (P := P) (Q := Q) β τ)
               (matched_p_basis (P := P) (Q := Q) β hDim) i *
             (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -249,28 +249,28 @@ theorem sector_bnt_global_gauge_of_matched_weights
       (B := fun s i => Q.flatWeight s • Q.flatBasis s i)
       Xcoord hWeighted
   have hLeft :
-      toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+      toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
         (fun s i => μP s • AP s i) =
-        toTensorFromBlocks (d := d) (μ := μP) AP := by
+        toTensorFromBlocks (α := Fin d) (μ := μP) AP := by
     funext i
     simp [toTensorFromBlocks]
   have hRight :
-      toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+      toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
         (fun s i => Q.flatWeight s • Q.flatBasis s i) =
-        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis := by
+        toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis := by
     funext i
     simp [toTensorFromBlocks]
   refine ⟨globalGaugeOfBlocks Xcoord, rfl, ?_⟩
   intro i
   calc
-    toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
-        toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+    toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
+        toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
           (fun s i => Q.flatWeight s • Q.flatBasis s i) i := by
             rw [hRight]
     _ = (globalGaugeOfBlocks Xcoord : Matrix
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-          toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+          toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
             (fun s i => μP s • AP s i) i *
           (((globalGaugeOfBlocks Xcoord)⁻¹ :
               GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -279,7 +279,7 @@ theorem sector_bnt_global_gauge_of_matched_weights
     _ = (globalGaugeOfBlocks Xcoord : Matrix
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-          toTensorFromBlocks (d := d) (μ := μP) AP i *
+          toTensorFromBlocks (α := Fin d) (μ := μP) AP i *
           (((globalGaugeOfBlocks Xcoord)⁻¹ :
               GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
             Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
@@ -311,10 +311,10 @@ theorem sector_bnt_global_gauge_of_copy_weight_matching
     ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
       X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
       ∀ i : Fin d,
-        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+        toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
           (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-            toTensorFromBlocks (d := d)
+            toTensorFromBlocks (α := Fin d)
               (μ := matched_p_weight (P := P) (Q := Q) β W.copy_equiv)
               (matched_p_basis (P := P) (Q := Q) β hDim) i *
             (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -359,10 +359,10 @@ theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
         ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
           X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
           ∀ i : Fin d,
-            toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+            toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
               (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                 (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-                toTensorFromBlocks (d := d)
+                toTensorFromBlocks (α := Fin d)
                   (μ := matched_p_weight (P := P) (Q := Q) β W.copy_equiv)
                   (matched_p_basis (P := P) (Q := Q) β hDim) i *
                 (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -416,10 +416,10 @@ theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
           ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
             X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
             ∀ i : Fin d,
-              toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+              toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
                 (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                   (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-                  toTensorFromBlocks (d := d)
+                  toTensorFromBlocks (α := Fin d)
                     (μ := matched_p_weight (P := P) (Q := Q) β W.copy_equiv)
                     (matched_p_basis (P := P) (Q := Q) β hDim) i *
                   (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -596,10 +596,10 @@ theorem ft_sector_bnt_equal_global_gauge
       ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
         X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
         ∀ i : Fin d,
-          toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+          toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
             (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
               (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-              toTensorFromBlocks (d := d)
+              toTensorFromBlocks (α := Fin d)
                 (μ := matched_p_weight (P := P) (Q := Q) β τ)
                 (matched_p_basis (P := P) (Q := Q) β hDim) i *
               (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -738,10 +738,10 @@ theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
         (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) ∈
         Matrix.unitaryGroup (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ ∧
       ∀ i : Fin d,
-        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+        toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i =
           (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
             (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-            toTensorFromBlocks (d := d)
+            toTensorFromBlocks (α := Fin d)
               (μ := matched_p_weight (P := P) (Q := Q) β τ)
               (matched_p_basis (P := P) (Q := Q) β hDim) i *
             (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :

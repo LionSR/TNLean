@@ -65,6 +65,8 @@ normalized vectors `φ_N/‖φ_N‖` and the correlation length unchanged.
   `λ₁`; the correlation length is `ξ = -1/ln|λ₂/λ₁|`.
 -/
 
+open MPTensor
+
 section
 
 open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator ComplexOrder

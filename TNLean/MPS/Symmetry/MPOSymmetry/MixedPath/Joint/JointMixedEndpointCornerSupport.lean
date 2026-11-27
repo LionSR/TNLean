@@ -17,6 +17,8 @@ all overlaps retained.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor.MPOSymmetry

@@ -248,7 +248,7 @@ lemma transferMap_toMPSTensor :
   simp [tensor, sectorWeight, Fin.sum_univ_two, Matrix.mul_apply]
 
 /-- The source tensor is normal. -/
-lemma tensor_isNormalTensor : MPSTensor.IsNormalTensor tensor.toMPSTensor :=
+lemma tensor_isNormalTensor : MPTensor.IsNormalTensor tensor.toMPSTensor :=
   MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     tensor.toMPSTensor transferMap_toMPSTensor
 
@@ -335,7 +335,7 @@ $(1)$. -/
 theorem normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive :
     tensor.IsMPDO ∧
       Kraus.IsInjective tensor.toMPSTensor ∧
-      MPSTensor.IsNormalTensor tensor.toMPSTensor ∧
+      MPTensor.IsNormalTensor tensor.toMPSTensor ∧
       tensor.IsSourceZCL ∧
       (∀ k h, (factorization.neighboringOperator k h).PosSemidef) ∧
       (∀ (N : ℕ) (hN : 2 ≤ N),

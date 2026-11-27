@@ -66,7 +66,7 @@ BNT elements.\footnote{Local source:
 The single-normal-tensor characterization is formalized under the source
 hypotheses. When $A$ is normal in the sense of Ref.~\cite{Cirac2016MPDO_arXiv},
 its bond dimension is positive,\footnote{Formal declaration:
-\leanid{MPSTensor.IsNormalTensor.bondDim_ne_zero}.} and
+\leanid{MPTensor.IsNormalTensor.bondDim_ne_zero}.} and
 \begin{align}
     A\text{ is a renormalization fixed point}
         \quad\Longleftrightarrow\quad
@@ -80,7 +80,7 @@ converse follows directly from the rank-one transfer formula.\footnote{Formal
 declarations:
 \leanid{MPTensor.GaugeEquiv.isIsometryCanonicalForm_iff} in
 \doclink{TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull} and
-\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
+\leanid{MPTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
 in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.}
 
 Applied to each block of an indexed family, the same theorem gives the
@@ -397,7 +397,7 @@ and only if it admits the square-root form in
 Eq.~\ref{eq:cpsv16_trace_normalized_sqrt_decomposition}, without requiring
 left-canonical normalization or bond-dimension restrictions on the original
 tensor.\footnote{Formal equivalence:
-\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.}
+\leanid{MPTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.}
 
 This discharges the single-normal-tensor characterization and its trace
 normalization. The cross-block orthogonality ($\delta_{j,j'}$) between
@@ -528,15 +528,15 @@ with $\sum_\alpha\lambda_{j,\alpha}=1$, and tensors $V_j$ such that
 \end{align}
 This holds also when the index set of phase classes is empty. The result is
 formalized for phase-class representatives.\footnote{Formal declarations:
-\leanid{MPSTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent}
+\leanid{MPTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent}
 and predicate wrapper
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}
+\leanid{MPTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}
 in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.}
 
 The proof recovers the weighted direct sum through the ambient coisometry.
 For each block, the weight has modulus one and the block is an RFP:\footnote{Formal
 declaration:
-\leanid{MPSTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp}.}
+\leanid{MPTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp}.}
 \begin{align}
     \lvert\mu_j\rvert
         &=
@@ -756,7 +756,7 @@ The relation between these two scalings is therefore fully accounted for.
 For every normal tensor, whose bond dimension is positive, transfer-map
 idempotence is equivalent to the trace-normalized square-root form.\footnote{Formal
 equivalence:
-\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.}
+\leanid{MPTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.}
 The diagonal weight is
 \begin{align}
     \Lambda_\alpha
@@ -776,9 +776,9 @@ In CPSV canonical-form data, every block carries a unit-modulus weight and is
 itself a renormalization fixed point. Selecting one representative per phase
 class yields simultaneous trace-normalized square-root forms satisfying all
 diagonal and off-diagonal residual isometry equations.\footnote{Formal theorem:
-\leanid{MPSTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent},
+\leanid{MPTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent},
 wrapped by
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}.}
+\leanid{MPTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}.}
 
 The repeated-copy clause of Theorem~\cpsvref{thm:charact-MPS} in
 Ref.~\cite{Cirac2016MPDO_arXiv} remains underspecified: the displayed isometry

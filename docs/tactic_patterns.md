@@ -4755,7 +4755,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Result:** the Figure Eight and Gram-normalization steps are stated once, over the
   Gram-dressing property, and each canonical form supplies that property through
   `MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing` or
-  `MPSTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing` in
+  `MPTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing` in
   `TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean`. No implication between the two canonical-form
   predicates is used.
 

@@ -103,7 +103,8 @@ rescaling, to a tensor `B` with `∑ᵢ (Bⁱ)† Bⁱ = 1` and a fixed point `E
 
 This is the gauge transformation of arXiv:2307.01696 stated before its eq. (5): the gauge is
 `B^i = σ^{1/2} A^i σ^{-1/2}` with `σ > 0` the fixed point of the dual transfer map. -/
-theorem IsNormalTensor.exists_normalGauge {A : MPSTensor d D} (hA : IsNormalTensor A) :
+theorem _root_.MPTensor.IsNormalTensor.exists_normalGauge {A : MPSTensor d D}
+    (hA : IsNormalTensor A) :
     ∃ (B : MPSTensor d D) (L : ℕ) (ρ : Matrix (Fin D) (Fin D) ℂ),
       GaugeEquiv A B ∧ 1 ≤ L ∧ Kraus.IsNBlkInjective B L ∧ ∑ i, (B i)ᴴ * B i = 1 ∧
         ρ.PosDef ∧ Kraus.transferMap B ρ = ρ ∧ ρ.trace = 1 := by

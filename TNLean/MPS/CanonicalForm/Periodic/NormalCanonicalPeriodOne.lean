@@ -45,8 +45,8 @@ for each block contribution. -/
 theorem sameMPV₂_toTensorFromBlocks_phaseNormalized
     (hμ : ∀ k, μ k ≠ 0) :
     SameMPV₂
-      (toTensorFromBlocks (d := d) (μ := μ) blocks)
-      (toTensorFromBlocks (d := d) (μ := positiveRealWeights μ)
+      (toTensorFromBlocks (α := Fin d) (μ := μ) blocks)
+      (toTensorFromBlocks (α := Fin d) (μ := positiveRealWeights μ)
         (phaseNormalizedBlocks μ blocks)) := by
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
@@ -80,7 +80,7 @@ decomposition is first written with nonzero complex coefficients, replacing
 without changing the represented MPV family. -/
 noncomputable def toIsIrreducibleFormOfPhaseNormalized
     (hNCF : IsNormalCanonicalForm (d := d) μ blocks) :
-    IsIrreducibleForm (toTensorFromBlocks (d := d) (μ := μ) blocks) where
+    IsIrreducibleForm (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) where
   r := r
   dim := dim
   blocks := phaseNormalizedBlocks μ blocks

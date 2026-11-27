@@ -205,13 +205,13 @@ Source: arXiv:1606.00608, canonical-form blocking at lines 317--345. -/
 theorem blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
     Kraus.blockTensor P.toTensor p = (P.blockTensor p).toTensor := by
   change Kraus.blockTensor
-      (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis) p =
-    toTensorFromBlocks (d := blockPhysDim d p)
+      (toTensorFromBlocks (α := Fin d) P.flatWeight P.flatBasis) p =
+    toTensorFromBlocks (α := Fin (blockPhysDim d p))
       (fun s ↦ (P.flatWeight s) ^ p)
       (fun s ↦ Kraus.blockTensor (P.flatBasis s) p)
   funext i
   change Kraus.evalWord
-      (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis)
+      (toTensorFromBlocks (α := Fin d) P.flatWeight P.flatBasis)
       (Kraus.wordOfBlock d p i) = _
   have h := evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
     P.flatWeight P.flatBasis (Kraus.wordOfBlock d p i)
@@ -248,8 +248,8 @@ theorem sameMPV₂_blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
       (P.blockTensor p).toTensor := by
   change SameMPV₂
     (Kraus.blockTensor
-      (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis) p)
-    (toTensorFromBlocks (d := blockPhysDim d p)
+      (toTensorFromBlocks (α := Fin d) P.flatWeight P.flatBasis) p)
+    (toTensorFromBlocks (α := Fin (blockPhysDim d p))
       (fun s ↦ (P.flatWeight s) ^ p)
       (fun s ↦ Kraus.blockTensor (P.flatBasis s) p))
   exact sameMPV₂_blockTensor_toTensorFromBlocks P.flatWeight P.flatBasis p

@@ -41,7 +41,7 @@ private structure CFIIBlockGaugeData {m : ℕ} (A : MPSTensor d m) where
   fixedPoint : ∃ Λ : Matrix (Fin m) (Fin m) ℂ,
     Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap block Λ = Λ
 
-private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ}
+private theorem _root_.MPTensor.IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ}
     {A : MPSTensor d m} (hA : IsNormalTensor A) :
     Nonempty (CFIIBlockGaugeData A) := by
   have : NeZero m := ⟨hA.bondDim_ne_zero⟩
@@ -68,7 +68,7 @@ nonsingular gauge. The returned witness records that the total retained block
 dimension is unchanged by the blockwise gauges.
 
 Source: arXiv:1606.00608, Appendix A, lines 1058--1077 and eq. `II_XAX`. -/
-theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormIIData
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormIIData
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
     ∃ (B : MPSTensor d D) (dataB : CPSVCanonicalFormIIData B),
       GaugeEquiv A B ∧
@@ -157,7 +157,7 @@ representative in the same ambient bond dimension, related to the original
 tensor by a nonsingular gauge.
 
 Source: arXiv:1606.00608, Appendix A, lines 1058--1077 and eq. `II_XAX`. -/
-theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
     ∃ B : MPSTensor d D, GaugeEquiv A B ∧ IsCPSVCanonicalFormII B := by
   obtain ⟨B, dataB, hGauge, _⟩ := data.exists_gaugeEquiv_canonicalFormIIData
@@ -167,7 +167,7 @@ theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
 same ambient bond dimension, to a tensor in literal canonical form II.
 
 Source: arXiv:1606.00608, Appendix A, lines 1058--1077 and eq. `II_XAX`. -/
-theorem IsCPSVCanonicalForm.exists_gaugeEquiv_canonicalFormII
+theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_gaugeEquiv_canonicalFormII
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
     ∃ B : MPSTensor d D, GaugeEquiv A B ∧ IsCPSVCanonicalFormII B := by
   obtain ⟨B, hGauge, dataB⟩ := hA.data.exists_gaugeEquiv_canonicalFormII

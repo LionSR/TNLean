@@ -438,7 +438,7 @@ private lemma katoCFBlock1_transferMap_eq_id :
       rw [blockLetterAmplitude_sq]
       norm_num)
 
-private lemma katoCFBlocks_normal (k : Fin 2) : MPSTensor.IsNormalTensor (katoCFBlocks k) := by
+private lemma katoCFBlocks_normal (k : Fin 2) : MPTensor.IsNormalTensor (katoCFBlocks k) := by
   fin_cases k
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       katoCFBlock0 katoCFBlock0_transferMap_eq_id
@@ -458,13 +458,13 @@ private lemma eq_zero_or_eq_three_of_divNat_eq_modNat {p : Fin (2 * 2)}
   · right; rfl
 
 private theorem toMPSTensor_eq_toTensorFromBlocks :
-    MPOTensor.toMPSTensor tensor = MPSTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
+    MPOTensor.toMPSTensor tensor = MPTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
   let e : (Σ _k : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
   have hflat (k : Fin 2) : e ⟨k, (0 : Fin 1)⟩ = k := by fin_cases k <;> rfl
   have hflat_symm (k : Fin 2) : e.symm k = ⟨k, (0 : Fin 1)⟩ := by
     apply e.injective; rw [e.apply_symm_apply, hflat]
   funext p; ext x y
-  simp only [MPOTensor.toMPSTensor, MPSTensor.toTensorFromBlocks,
+  simp only [MPOTensor.toMPSTensor, MPTensor.toTensorFromBlocks,
     Matrix.reindex_apply, katoCFWeights, katoCFBlocks]
   change tensor (p.divNat, p.modNat) x y =
     (Matrix.blockDiagonal' (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p)))
@@ -521,9 +521,9 @@ a weighted direct sum of two normal bond-one tensors.
 Source: the tensor is arXiv:2410.22696 lines 712–721; the canonical form
 verification follows the construction in arXiv:1606.00608 Section 2.3. -/
 theorem tensor_toMPSTensor_isCPSVCanonicalForm :
-    MPSTensor.IsCPSVCanonicalForm (MPOTensor.toMPSTensor tensor) := by
+    MPTensor.IsCPSVCanonicalForm (MPOTensor.toMPSTensor tensor) := by
   rw [toMPSTensor_eq_toTensorFromBlocks]
-  exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
+  exact (MPTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ => by norm_num) katoCFWeights katoCFWeights_ne_zero katoCFBlocks
     katoCFBlocks_normal).isCPSVCanonicalForm
 
@@ -718,7 +718,7 @@ admits no fixed-scale renormalization a la arXiv:1606.00608
 Definition 4.1. -/
 theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
     ∃ K : MPOTensor 2 2,
-      MPSTensor.IsCPSVCanonicalForm K.toMPSTensor ∧
+      MPTensor.IsCPSVCanonicalForm K.toMPSTensor ∧
       IsMPDO K ∧
       (physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) ∧
       IsSAL K ∧

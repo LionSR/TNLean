@@ -172,7 +172,7 @@ private theorem baseSymbolTensor_transferMap (a : Fin 4) :
 
 /-- Every symbol block in the four-block decomposition is a normal tensor. -/
 theorem baseSymbolTensor_isNormalTensor (a : Fin 4) :
-    MPSTensor.IsNormalTensor (baseSymbolTensor a) :=
+    MPTensor.IsNormalTensor (baseSymbolTensor a) :=
   MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     (baseSymbolTensor a) (baseSymbolTensor_transferMap a)
 
@@ -184,7 +184,7 @@ def baseSymbolBlocks : (a : Fin 4) → MPSTensor 4 1 :=
 its four bond-one symbol blocks, each with weight one. -/
 theorem baseMPO_toMPSTensor_eq_symbolBlocks :
     baseMPO.toMPSTensor =
-      MPSTensor.toTensorFromBlocks (fun _ : Fin 4 ↦ (1 : ℂ)) baseSymbolBlocks := by
+      MPTensor.toTensorFromBlocks (fun _ : Fin 4 ↦ (1 : ℂ)) baseSymbolBlocks := by
   let e : (Σ _k : Fin 4, Fin 1) ≃ Fin 4 := finSigmaFinEquiv
   have hflat (k : Fin 4) : e ⟨k, 0⟩ = k := by
     fin_cases k <;> rfl
@@ -195,7 +195,7 @@ theorem baseMPO_toMPSTensor_eq_symbolBlocks :
   obtain ⟨⟨i, j⟩, rfl⟩ :=
     (finProdFinEquiv : I × I ≃ Fin 4).surjective p
   ext x y
-  simp only [baseMPO, toMPSTensor, MPSTensor.toTensorFromBlocks,
+  simp only [baseMPO, toMPSTensor, MPTensor.toTensorFromBlocks,
     baseSymbolBlocks, baseSymbolTensor, Matrix.reindex_apply, one_smul,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
   change Matrix.single (finProdFinEquiv (i, j)) (finProdFinEquiv (i, j)) 1 x y =
@@ -213,9 +213,9 @@ theorem baseMPO_toMPSTensor_eq_symbolBlocks :
 /-- The ambient doubled-index MPS is in literal CPSV canonical form via the
 four displayed bond-one symbol blocks. -/
 theorem baseMPO_toMPSTensor_isCPSVCanonicalForm :
-    MPSTensor.IsCPSVCanonicalForm baseMPO.toMPSTensor := by
+    MPTensor.IsCPSVCanonicalForm baseMPO.toMPSTensor := by
   rw [baseMPO_toMPSTensor_eq_symbolBlocks]
-  exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
+  exact (MPTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ : Fin 4 ↦ by simp)
     (fun _ : Fin 4 ↦ (1 : ℂ)) (fun _ ↦ one_ne_zero) baseSymbolBlocks
     (fun a ↦ baseSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
@@ -428,7 +428,7 @@ theorem normalizedSingletonTensor_isLeftCanonical :
 
 /-- The normalized singleton is a CPSV normal tensor. -/
 theorem normalizedSingletonTensor_isNormalTensor :
-    MPSTensor.IsNormalTensor normalizedSingletonTensor := by
+    MPTensor.IsNormalTensor normalizedSingletonTensor := by
   have hs : ((singletonScale : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt singletonScale_pos
   have hNormal : Kraus.IsNormal normalizedSingletonTensor :=
@@ -577,7 +577,7 @@ theorem normalizedSingleton_verticalAssembledTensor :
   funext v
   ext i j
   simp only [verticalAssembledTensor, verticalCopyWeights, verticalCopyBlocks,
-    verticalCopyDim, MPSTensor.toTensorFromBlocks, normalizedSingletonWeight,
+    verticalCopyDim, MPTensor.toTensorFromBlocks, normalizedSingletonWeight,
     normalizedSingletonFamily, normalizedSingletonTensor]
   change (Matrix.reindex e e
       (Matrix.blockDiagonal' (fun _k : Fin 1 ↦

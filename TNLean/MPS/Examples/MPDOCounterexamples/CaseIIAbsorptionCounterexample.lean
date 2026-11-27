@@ -122,7 +122,7 @@ private lemma secondBasis_transferMap :
 
 Source: arXiv:1606.00608, the normal representatives in the BNT decomposition
 `eq:II_ABasicTensors`, lines 271--301. -/
-lemma basis_isNormalTensor (s : Fin 2) : MPSTensor.IsNormalTensor (basis s) := by
+lemma basis_isNormalTensor (s : Fin 2) : MPTensor.IsNormalTensor (basis s) := by
   fin_cases s
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       _ firstBasis_transferMap
@@ -285,7 +285,7 @@ theorem spectralRadius_transferMap_firstAbsorbed :
 /-- Consequently the first absorbed representative is not a CPSV normal tensor.
 Source: arXiv:1606.00608, the claimed absorbed normal form at lines 1646--1665. -/
 theorem firstAbsorbed_not_isNormalTensor :
-    ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
+    ¬ MPTensor.IsNormalTensor firstAbsorbed := by
   intro h
   have hr := h.spectral_radius_one
   rw [spectralRadius_transferMap_firstAbsorbed] at hr
@@ -400,7 +400,7 @@ private theorem sectors_toTensor_apply
     change (finSigmaFinEquiv : (Σ _s : Fin 2, Fin 1) ≃ Fin 2).symm k = ⟨k, 0⟩
     fin_cases k <;> rfl
   simp only [MPSTensor.SectorDecomposition.toTensor,
-    MPSTensor.toTensorFromBlocks]
+    MPTensor.toTensorFromBlocks]
   have hBlocks :
       (fun k => sectors.flatWeight k • sectors.flatBasis k p) =
         fun k : Fin 2 => weight k • basis k p := by
@@ -857,7 +857,7 @@ Source: arXiv:1606.00608, lines 1646--1665. -/
 theorem printed_absorbed_normality_step_is_false :
     weight 0 = invSqrtTwo ∧ weight 1 = 1 ∧
       (∀ s, ‖weight s‖ ≤ 1) ∧ (∃ s, ‖weight s‖ = 1) ∧
-      (∀ s, MPSTensor.IsNormalTensor (basis s)) ∧
+      (∀ s, MPTensor.IsNormalTensor (basis s)) ∧
       (∀ i, basis 0 i ≠ 0 → basis 1 i = 0) ∧
       (∀ i j, ambient (i, j) = Matrix.diagonal fun s : Fin 2 ↦
         if s = 0 then
@@ -868,7 +868,7 @@ theorem printed_absorbed_normality_step_is_false :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
             (Kraus.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
-      ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
+      ¬ MPTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨rfl, rfl, weight_globally_normalized.1, weight_globally_normalized.2,
     basis_isNormalTensor, basis_disjoint_support,
     ambient_eq_weighted_basis_blocks,
@@ -906,14 +906,14 @@ theorem
         sectors.weight s q = sectors.weight s q') ∧
       weight 0 = invSqrtTwo ∧ weight 1 = 1 ∧
       (∀ s, ‖weight s‖ ≤ 1) ∧ (∃ s, ‖weight s‖ = 1) ∧
-      (∀ s, MPSTensor.IsNormalTensor (basis s)) ∧
+      (∀ s, MPTensor.IsNormalTensor (basis s)) ∧
       (∀ i, basis 0 i ≠ 0 → basis 1 i = 0) ∧
       physTraceTransfer ambient * physTraceTransfer ambient =
         physTraceTransfer ambient ∧
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
             (Kraus.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
-      ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
+      ¬ MPTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨ambient_isMPDO, fun N _hN => trace_mpo_ambient_pos N,
     ambient_isSAL, ambient_isSimpleCanonicalForm,
     sectors_isBNTCanonicalForm, sectors_wordTupleSpanTop_one,

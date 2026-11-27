@@ -12,7 +12,7 @@ import QICLean.Algebra.Combinatorics.FinSumPermutation
 /-!
 # The literal CPSV canonical form of `R.toMPSTensor`
 
-This file proves `MPSTensor.IsCPSVCanonicalForm R.toMPSTensor` for the rescaling-stable
+This file proves `MPTensor.IsCPSVCanonicalForm R.toMPSTensor` for the rescaling-stable
 length-dependent example `R` of `TNLean.MPS.MPDO.RescalingStableLengthDependentRFP`
 (arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`).
 
@@ -366,7 +366,7 @@ lemma retainedBlock_isInjective : Kraus.IsInjective retainedBlock := by
   exact_mod_cast weight_ne
 
 /-- **`retainedBlock` is a CPSV normal tensor.** -/
-lemma retainedBlock_isNormalTensor : MPSTensor.IsNormalTensor retainedBlock :=
+lemma retainedBlock_isNormalTensor : MPTensor.IsNormalTensor retainedBlock :=
   MPSTensor.isNormalTensor_of_isNormal_isTransferIdempotent retainedBlock
     retainedBlock_isInjective.isNormal retainedBlock_isTransferIdempotent
 
@@ -385,7 +385,7 @@ lemma R_toMPSTensor_eq_weight_smul_retainedBlock (i : Fin 16) :
 /-- The `r = 1` weighted direct sum used for the literal reconstruction below reduces,
 letter by letter, to the plain scalar multiple `weight • retainedBlock i`. -/
 lemma toTensorFromBlocks_single_eq (i : Fin 16) :
-    MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (weight : ℂ)) (fun _ : Fin 1 => retainedBlock)
+    MPTensor.toTensorFromBlocks (fun _ : Fin 1 => (weight : ℂ)) (fun _ : Fin 1 => retainedBlock)
         i =
       (weight : ℂ) • retainedBlock i := by
   let e : (Σ _k : Fin 1, Fin 4) ≃ Fin 4 := finSigmaFinEquiv
@@ -393,7 +393,7 @@ lemma toTensorFromBlocks_single_eq (i : Fin 16) :
   have hflat_symm (x : Fin 4) : e.symm x = ⟨0, x⟩ := by
     apply e.injective
     rw [e.apply_symm_apply, hflat]
-  unfold MPSTensor.toTensorFromBlocks
+  unfold MPTensor.toTensorFromBlocks
   ext a b
   let a' : Fin 4 := a
   let b' : Fin 4 := b
@@ -415,7 +415,7 @@ normal block (`retainedBlock`) occupying the full ambient bond dimension `4`, we
 `weight`, and the trivial (identity) coisometry.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
-noncomputable def canonicalFormData : MPSTensor.CPSVCanonicalFormData R.toMPSTensor where
+noncomputable def canonicalFormData : MPTensor.CPSVCanonicalFormData R.toMPSTensor where
   r := 1
   dim := fun _ => 4
   dim_pos := fun _ => by norm_num
@@ -444,7 +444,7 @@ transfer map idempotent, hence spectral-radius one).
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
 theorem R_toMPSTensor_isCPSVCanonicalForm :
-    MPSTensor.IsCPSVCanonicalForm R.toMPSTensor :=
+    MPTensor.IsCPSVCanonicalForm R.toMPSTensor :=
   ⟨canonicalFormData⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP

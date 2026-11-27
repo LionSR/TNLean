@@ -24,6 +24,8 @@ Source: arXiv:1010.3732, eq. (1d-iso:polardec), lines 575--594 and 610--625,
 and Appendix A.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators Topology ComplexOrder
 
 namespace MPSTensor
@@ -87,7 +89,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDef
       haveI : NeZero N := ⟨by omega⟩;
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (d := d) μ
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d) μ
             (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2 N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨δ, hδ, hgap⟩ :=

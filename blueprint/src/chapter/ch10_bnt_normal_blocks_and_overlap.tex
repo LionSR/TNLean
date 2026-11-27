@@ -6,7 +6,7 @@ blocks.
 
 \begin{lemma}[Normality forces positive bond dimension]
     \label{thm:cpsv_normal_bond_dim_pos}
-    \lean{MPSTensor.IsNormalTensor.bondDim_ne_zero}
+    \lean{MPTensor.IsNormalTensor.bondDim_ne_zero}
     \leanok
     \uses{def:nt_cpsv}
     Every normal tensor has positive bond dimension.
@@ -48,7 +48,7 @@ blocks.
 
 \begin{lemma}[Spectral normality gives a pure trace-preserving gauge]
     \label{thm:cpsv_normal_tp_gauge}
-    \lean{MPSTensor.IsNormalTensor.exists_tpGauge}
+    \lean{MPTensor.IsNormalTensor.exists_tpGauge}
     \leanok
     \uses{def:nt_cpsv,thm:cpsv_normal_bond_dim_pos}
     Let $A$ be a normal tensor in the sense of
@@ -67,7 +67,7 @@ blocks.
 
 \begin{lemma}[Spectral normality gives eventual block injectivity]
     \label{thm:cpsv_normal_eventually_injective}
-    \lean{MPSTensor.IsNormalTensor.isNormal}
+    \lean{MPTensor.IsNormalTensor.isNormal}
     \leanok
     \uses{def:nt_cpsv,def:normal,thm:cpsv_normal_bond_dim_pos}
     Every normal tensor in the sense of
@@ -118,7 +118,7 @@ blocks.
 
 \begin{lemma}[A normal tensor has a nonzero letter]
     \label{thm:cpsv_normal_nonzero_letter}
-    \lean{MPSTensor.IsNormalTensor.exists_apply_ne_zero}
+    \lean{MPTensor.IsNormalTensor.exists_apply_ne_zero}
     \leanok
     \uses{def:nt_cpsv}
     Let $A$ be a CPSV normal tensor of positive bond dimension. Then
@@ -134,7 +134,7 @@ blocks.
 
 \begin{lemma}[Phase-equivalent normal tensors are gauge-phase equivalent]
     \label{thm:cpsv_normal_mpv_phase_gauge}
-    \lean{MPSTensor.IsNormalTensor.selfOverlap_tendsto_one}
+    \lean{MPTensor.IsNormalTensor.selfOverlap_tendsto_one}
     \lean{MPSTensor.isNormalTensor_cast_iff}
     \lean{MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor}
     \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
@@ -164,7 +164,7 @@ blocks.
 
 \begin{lemma}[Normal-tensor overlap dichotomy]
     \label{thm:cpsv_normal_overlap_dichotomy}
-    \lean{MPSTensor.IsNormalTensor.overlap_dichotomy}
+    \lean{MPTensor.IsNormalTensor.overlap_dichotomy}
     \leanok
     \uses{def:nt_cpsv,def:mpv_overlap,def:gauge_phase_equiv}
     As in \cite[Lemma~A.2]{Cirac2016MPDO_arXiv}, let $A$ and $B$ be normal
@@ -203,7 +203,7 @@ blocks.
 
 \begin{lemma}[Exact phase alternative for normal tensors]
     \label{thm:cpsv_normal_mpv_phase_alternative}
-    \lean{MPSTensor.IsNormalTensor.mpv_phase_alternative}
+    \lean{MPTensor.IsNormalTensor.mpv_phase_alternative}
     \lean{MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv}
     \leanok
     \uses{def:nt_cpsv,def:mpv_overlap,def:mpv_state}

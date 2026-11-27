@@ -53,7 +53,7 @@ symmetries are those of Sun 2025 (arXiv:2504.16985, line 182).
 * `MPOTensor.IsRFPViaTS` (density-operator renormalization fixed points): both `R` and `T`, and
   the mixed-Bell bond factor of `T`, satisfy it through explicit Kraus channels;
   arXiv:1606.00608, Definition 4.1.
-* `MPSTensor.IsCPSVCanonicalForm` and `MPSTensor.IsCPSVBasisOfNormalTensors` (canonical forms):
+* `MPTensor.IsCPSVCanonicalForm` and `MPSTensor.IsCPSVBasisOfNormalTensors` (canonical forms):
   the doubled-index tensors are in literal canonical form, and the flag sectors of `T` are a
   vertical basis of normal tensors; arXiv:1606.00608, eq. `II_CF1` and Proposition 4.13.
 * `MPSTensor.isNormalTensor_of_isNormal_leftCanonical` (normal blocks): the rescaled blocks and
