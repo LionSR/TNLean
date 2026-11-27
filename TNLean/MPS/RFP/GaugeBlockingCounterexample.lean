@@ -233,7 +233,7 @@ private noncomputable def cubePhaseDoubledCanonicalData :
   CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
     (fun q => norm_ne_zero_iff.mp (by rw [norm_cubePhaseDoubledWeight]; exact one_ne_zero))
     (fun _ : Fin 4 => scalarUnitTensor (α := Fin 1 × Fin 1))
-    (fun _ => scalarUnitTensor_isNormalTensor)
+    (fun _ => @scalarUnitTensor_isNormalTensor (Fin 1 × Fin 1) _ (Unique.mk' _))
 
 /-- The doubled cube-phase tensor generates positive semidefinite operators on every
 nonempty chain and hence satisfies the MPDO standing hypothesis.
