@@ -333,7 +333,8 @@ This is arXiv:1606.00608, Appendix A, lines 1054--1077.  It extends the exact
 ambient reconstruction in `CPSVCanonicalFormData` by the two blockwise
 normalization conditions: left-canonical form and a diagonal positive-definite
 fixed point of the transfer map. -/
-structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormData A where
+structure CPSVCanonicalFormIIData {α : Type*} [Fintype α] (A : MPTensor α (Fin D))
+    extends CPSVCanonicalFormData A where
   /-- Every retained block is left-canonical (CPSV16, Appendix A, eq. `TP`). -/
   blocks_left_canonical : ∀ k, IsLeftCanonical (blocks k)
   /-- Every block has diagonal positive-definite fixed-point data (CPSV16,
@@ -346,14 +347,14 @@ structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormD
 reconstructed, blockwise normalized retained-block data.
 
 Source: arXiv:1606.00608, Appendix A, lines 1054--1077. -/
-def IsCPSVCanonicalFormII (A : MPSTensor d D) : Prop :=
+def IsCPSVCanonicalFormII {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) : Prop :=
   Nonempty (CPSVCanonicalFormIIData A)
 
 namespace CPSVCanonicalFormIIData
 
 /-- Canonical-form-II witness data determine the corresponding predicate. -/
-theorem isCPSVCanonicalFormII (data : CPSVCanonicalFormIIData A) :
-    IsCPSVCanonicalFormII A :=
+theorem isCPSVCanonicalFormII {α : Type*} [Fintype α] {A : MPTensor α (Fin D)}
+    (data : CPSVCanonicalFormIIData A) : IsCPSVCanonicalFormII A :=
   ⟨data⟩
 
 end CPSVCanonicalFormIIData
@@ -361,7 +362,8 @@ end CPSVCanonicalFormIIData
 namespace IsCPSVCanonicalFormII
 
 /-- Choose normalized retained-block data from a canonical-form-II predicate. -/
-noncomputable def data (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
+noncomputable def data {α : Type*} [Fintype α] {A : MPTensor α (Fin D)}
+    (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
   Classical.choice h
 
 end IsCPSVCanonicalFormII
