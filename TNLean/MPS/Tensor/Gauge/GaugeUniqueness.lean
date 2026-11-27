@@ -22,15 +22,14 @@ for injective tensors (`gauge_phase_unique`) and for normal tensors
 -/
 
 open scoped Matrix
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- If two gauges send the same injective tensor `A` to the same tensor `B`,
 then they differ by a nonzero scalar. -/
-theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : Kraus.IsInjective A)
+theorem gauge_unique_up_to_scalar {A B : MPTensor α (Fin D)} (hA : Kraus.IsInjective A)
     {X Y : GL (Fin D) ℂ}
     (hX : ∀ i, B i = X * A i * X⁻¹)
     (hY : ∀ i, B i = Y * A i * Y⁻¹) :
@@ -43,7 +42,7 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : Kraus.IsInjective 
       exact Subsingleton.elim _ _
   | succ D' =>
       let Z : GL (Fin (Nat.succ D')) ℂ := X⁻¹ * Y
-      have hcommA : ∀ i : Fin d,
+      have hcommA : ∀ i : α,
           (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A i
             = A i * (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
         intro i
@@ -112,7 +111,7 @@ by linearity to every matrix; the identity matrix gives `c = 1`, and then `Z`
 commutes with the whole matrix algebra, so it is a scalar.  The statement for
 tensors that are normal, with injectivity only after blocking, is
 `gauge_phase_unique_of_isNormal` below. -/
-theorem gauge_phase_unique [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjective A)
+theorem gauge_phase_unique [NeZero D] {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A)
     {X Y : GL (Fin D) ℂ} {c : ℂ}
     (h : ∀ i, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X =
       c • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Y)) :
@@ -170,10 +169,10 @@ theorem gauge_phase_unique [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjectiv
 
 /-- A letterwise gauge-phase relation propagates to words, with the phase raised
 to the word length. -/
-theorem evalWord_gauge_phase {A : MPSTensor d D} {X Y : GL (Fin D) ℂ} {c : ℂ}
+theorem evalWord_gauge_phase {A : MPTensor α (Fin D)} {X Y : GL (Fin D) ℂ} {c : ℂ}
     (h : ∀ i, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X =
       c • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Y)) :
-    ∀ w : List (Fin d),
+    ∀ w : List α,
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * X =
         c ^ w.length •
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * Y)
@@ -192,23 +191,20 @@ theorem evalWord_gauge_phase {A : MPSTensor d D} {X Y : GL (Fin D) ℂ} {c : ℂ
 
 /-- A normal tensor of positive bond dimension has a nonzero letter: otherwise every
 word of positive length vanishes and no word space is the full matrix algebra. -/
-theorem exists_apply_ne_zero_of_isNormal [NeZero D] {A : MPSTensor d D}
+theorem exists_apply_ne_zero_of_isNormal [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) : ∃ i, A i ≠ 0 := by
   classical
   by_contra hcon
   push Not at hcon
   obtain ⟨N, hNpos, hN⟩ := hA
-  have hB : Kraus.IsInjective (blockTensor A N) :=
-    (isNBlkInjective_iff_blockTensor_isInjective A N).1 hN
-  have hBzero : ∀ I, blockTensor A N I = 0 := by
+  have hB : Kraus.IsInjective (Kraus.block A N) :=
+    (Kraus.isNBlkInjective_iff_isInjective_block A N).1 hN
+  have hBzero : ∀ I, Kraus.block A N I = 0 := by
     intro I
-    have hlen := Kraus.length_wordOfBlock d N I
-    change Kraus.evalWord A (Kraus.wordOfBlock d N I) = 0
-    cases hw : Kraus.wordOfBlock d N I with
-    | nil => rw [hw] at hlen; simp at hlen; omega
-    | cons i w => simp [Kraus.evalWord, hcon i]
+    obtain ⟨k, rfl⟩ : ∃ k, N = k + 1 := ⟨N - 1, by omega⟩
+    simp [Kraus.block_apply, List.ofFn_succ, hcon]
   have htop := hB.span_eq_top
-  have hbot : Submodule.span ℂ (Set.range (blockTensor A N)) = ⊥ :=
+  have hbot : Submodule.span ℂ (Set.range (Kraus.block A N)) = ⊥ :=
     (Submodule.span_eq_bot).2 (fun x ⟨I, hI⟩ => hI ▸ hBzero I)
   rw [hbot] at htop
   have : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
@@ -223,7 +219,7 @@ Source: arXiv:2011.12127, §III.A, eq. `eq:XAX=B`
 Blocking to an injective length gives `X ∝ Y` from `gauge_phase_unique`; the
 single-letter relation then reads `Y⁻¹ Aⁱ Y = c Y⁻¹ Aⁱ Y`, and some letter is
 nonzero, so `c = 1`. -/
-theorem gauge_phase_unique_of_isNormal [NeZero D] {A : MPSTensor d D}
+theorem gauge_phase_unique_of_isNormal [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) {X Y : GL (Fin D) ℂ} {c : ℂ}
     (h : ∀ i, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X =
       c • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Y)) :
@@ -231,13 +227,13 @@ theorem gauge_phase_unique_of_isNormal [NeZero D] {A : MPSTensor d D}
       (X : Matrix (Fin D) (Fin D) ℂ) = (u : ℂ) • (Y : Matrix (Fin D) (Fin D) ℂ) := by
   classical
   obtain ⟨N, hNpos, hN⟩ := hA
-  have hB : Kraus.IsInjective (blockTensor A N) :=
-    (isNBlkInjective_iff_blockTensor_isInjective A N).1 hN
-  have hBrel : ∀ I, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * blockTensor A N I * X =
-      c ^ N • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * blockTensor A N I * Y) := by
+  have hB : Kraus.IsInjective (Kraus.block A N) :=
+    (Kraus.isNBlkInjective_iff_isInjective_block A N).1 hN
+  have hBrel : ∀ I, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.block A N I * X =
+      c ^ N • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.block A N I * Y) := by
     intro I
-    have := evalWord_gauge_phase h (Kraus.wordOfBlock d N I)
-    rwa [Kraus.length_wordOfBlock] at this
+    have := evalWord_gauge_phase h (List.ofFn I)
+    rwa [List.length_ofFn] at this
   obtain ⟨-, u, hu⟩ := gauge_phase_unique hB hBrel
   refine ⟨?_, u, hu⟩
   -- With `X = u Y`, the letter relation reads `Y⁻¹ Aⁱ Y = c Y⁻¹ Aⁱ Y`.
