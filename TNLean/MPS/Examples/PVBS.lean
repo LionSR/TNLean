@@ -46,7 +46,7 @@ the canonical form and condition C1 as hypotheses or at lengths without small di
 * `MPSTensor.groundSpaceES_le_ker_hamiltonian_parentChainInteraction` (open-chain parent
   Hamiltonian): the open matrix product space lies in the kernel; Nachtergaele,
   arXiv:cond-mat/9410110, equation (3.12).
-* `MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace` (periodic parent kernel): the periodic
+* `MPSTensor.ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace` (periodic parent kernel): the periodic
   kernel is the chain ground space, for vacuum uniqueness and the gap.
 * `ManyBody.isGapped_zero_iff_inner` (gap above the kernel, companion library): the uniform
   periodic gap.

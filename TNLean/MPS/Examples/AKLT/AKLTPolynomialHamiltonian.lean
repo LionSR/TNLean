@@ -277,14 +277,16 @@ def akltHamiltonian (N : ℕ) : NSiteSpace 3 N →ₗ[ℂ] NSiteSpace 3 N :=
 /-- On a periodic chain of \(N\ge2\) sites, the two-site local term of the parent
 Hamiltonian of `akltTensor` at the window \(i,i+1\) is
 \(\tfrac12(h_i+\tfrac23)\), with \(h_i\) the AKLT term of that bond. -/
-lemma aklt_localTerm_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N) (ψ : NSiteSpace 3 N)
+lemma aklt_parentRingInteraction_term_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N) (ψ : NSiteSpace 3 N)
     (σ : Cfg 3 N) :
-    localTerm akltTensor 2 N i ψ σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toLin' ((parentRingInteraction akltTensor 2 N).term i) ψ σ =
       (1 / 2) * (spinExchange spinOneOperator i (cyclicForwardSite i 1) ψ σ +
         (1 / 3) * spinExchange spinOneOperator i (cyclicForwardSite i 1)
           (spinExchange spinOneOperator i (cyclicForwardSite i 1) ψ) σ + (2 / 3) * ψ σ) := by
   have hN : 0 < N := by omega
-  rw [localTerm_apply_of_le _ 2 N hN2 i]
+  have : NeZero N := ⟨by omega⟩
+  rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le _ 2 N hN2 i]
   rw [← akltBondTerm_shift_eq_parentInteraction]
   change 𝐐 (cyclicRestrictₗ hN 2 i σ ψ) (extractWindow 2 i σ) = _
   simp only [akltBondTerm, LinearMap.smul_apply, LinearMap.add_apply, LinearMap.comp_apply,
@@ -296,13 +298,15 @@ lemma aklt_localTerm_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N) (ψ : NSite
 arXiv:quant-ph/0608197, `Papers/quant-ph_0608197/MPSarchive.tex` lines 340–349, and
 \(H^{(2)}_{\mathrm{parent}}\) is the two-site parent Hamiltonian of `akltTensor`. -/
 theorem akltHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN2 : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     akltHamiltonian N + (2 * N / 3 : ℂ) • LinearMap.id =
-      (2 : ℂ) • parentHamiltonian akltTensor 2 N := by
+      (2 : ℂ) • Matrix.toLin' (parentRingInteraction akltTensor 2 N).hamiltonian := by
+  have : NeZero N := ⟨by omega⟩
   refine LinearMap.ext fun ψ => funext fun σ => ?_
-  simp only [akltHamiltonian, parentHamiltonian_eq_sum_localTerm, LinearMap.add_apply,
+  simp only [akltHamiltonian, ManyBody.Interaction.hamiltonian, map_sum, LinearMap.add_apply,
     LinearMap.smul_apply,
     LinearMap.id_apply, LinearMap.sum_apply, LinearMap.comp_apply, Finset.sum_apply,
-    Pi.add_apply, Pi.smul_apply, smul_eq_mul, aklt_localTerm_two_apply hN2, Finset.mul_sum,
+    Pi.add_apply, Pi.smul_apply, smul_eq_mul, aklt_parentRingInteraction_term_two_apply hN2, Finset.mul_sum,
     Finset.sum_add_distrib]
   simp only [show ∀ x y z : ℂ, 2 * (1 / 2 * (x + y + z)) = x + y + z from
       fun x y z => by ring, Finset.sum_add_distrib, Finset.sum_const, Finset.card_univ,
@@ -316,6 +320,7 @@ theorem akltHamiltonian_add_isPositive {N : ℕ} (hN2 : 2 ≤ N) :
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
       (akltHamiltonian N + (2 * N / 3 : ℂ) • LinearMap.id) ∘ₗ
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap).IsPositive :=
+  haveI : NeZero N := ⟨by omega⟩
   isPositive_conj_of_add_eq_smul_parentHamiltonian
     (akltHamiltonian_add_eq_parentHamiltonian hN2) (by norm_num [Complex.le_def])
 
@@ -324,6 +329,7 @@ of the AKLT Hamiltonian is real with \(\mu\ge-\tfrac{2N}3\). -/
 theorem akltHamiltonian_eigenvalue_ge {N : ℕ} (hN2 : 2 ≤ N) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (akltHamiltonian N) μ) :
     μ.im = 0 ∧ -(2 * N / 3 : ℝ) ≤ μ.re := by
+  have : NeZero N := ⟨by omega⟩
   have h := Complex.le_def.1 (neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian
     (akltHamiltonian_add_eq_parentHamiltonian hN2) (by norm_num [Complex.le_def]) hμ)
   simp only [Complex.neg_re, Complex.neg_im] at h
@@ -334,8 +340,10 @@ theorem akltHamiltonian_eigenvalue_ge {N : ℕ} (hN2 : 2 ≤ N) {μ : ℂ}
 Hamiltonian for \(-\tfrac{2N}3\) is the kernel of the two-site parent Hamiltonian
 of `akltTensor`. -/
 theorem akltHamiltonian_eigenspace_eq_ker {N : ℕ} (hN2 : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Module.End.eigenspace (akltHamiltonian N) (-(2 * N / 3) : ℂ) =
-      LinearMap.ker (parentHamiltonian akltTensor 2 N) :=
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction akltTensor 2 N).hamiltonian) :=
+  haveI : NeZero N := ⟨by omega⟩
   eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian
     (akltHamiltonian_add_eq_parentHamiltonian hN2) (by norm_num)
 
@@ -351,7 +359,7 @@ theorem akltHamiltonian_eigenspace_eq_mpvSubmodule {N : ℕ} (hN3 : 3 ≤ N) :
     Module.End.eigenspace (akltHamiltonian N) (-(2 * N / 3) : ℂ) =
       mpvSubmodule akltTensor N := by
   rw [akltHamiltonian_eigenspace_eq_ker (by omega),
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) (by omega),
     aklt_chainGroundSpace_two_eq_mpvSubmodule hN3]
 
 /-- Project result: on a periodic chain of \(N\ge3\) sites, \(-\tfrac{2N}3\) is an

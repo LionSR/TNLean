@@ -202,7 +202,7 @@
 
 \begin{lemma}[Three-site intersection of adjacent parent kernels]
     \label{thm:three_site_ground_space_adjacent_parent_kernels}
-    \lean{MPSTensor.adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ}
+    \lean{MPSTensor.adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ}
     \lean{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}
     \leanok
     \uses{thm:local_term_two_three_ax_xb_lifts,thm:ground_space_intersection,def:parent_interaction,def:injective}
@@ -275,9 +275,9 @@
 
 \begin{lemma}[Chain embedding of the three-site commutator]
     \label{thm:three_site_commutator_chain_transport}
-    \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_left}
-    \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_right}
-    \lean{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+    \lean{MPSTensor.cyclicRestrictₗ_three_parentRingInteraction_term_left}
+    \lean{MPSTensor.cyclicRestrictₗ_three_parentRingInteraction_term_right}
+    \lean{MPSTensor.parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
     \leanok
     \uses{def:local_term_parent}
     Suppose the first two length-two parent interactions commute on the
@@ -331,7 +331,7 @@
 
 \begin{lemma}[Appendix B adjacent commutation on periodic chains]
     \label{thm:appendixB_adjacent_chain_commutation}
-    \lean{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}
+    \lean{MPSTensor.AppendixBStructuralData.adjacent_twoSite_parentRingInteraction_terms_commute}
     \leanok
     \uses{thm:appendixB_overlapping_two_site_commutation,thm:three_site_commutator_chain_transport}
     For every Appendix~B structural datum and every periodic chain of length
@@ -397,7 +397,7 @@
 \begin{lemma}[Definition D.2 projectors identified with Appendix B representatives]
     \label{lem:appendixB_d2_projectors_identified_with_representatives}
     \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2_identified_projectors}
+    \lean{MPSTensor.AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2_identified_projectors}
     \leanok
     \uses{def:overlapping_two_site_supports,def:appendixB_qax,lem:appendixB_overlapping_condition_parent_terms}
     Let $Q_{AX}$ and $Q_{XB}$ be the two-site coefficient-space images of
@@ -430,8 +430,8 @@
 
 \begin{lemma}[Three-site lifts of the Appendix B coefficient representatives]
     \label{lem:appendixB_three_site_parent_lifts}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift}
+    \lean{MPSTensor.AppendixBStructuralData.parentRingInteraction_term_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift}
+    \lean{MPSTensor.AppendixBStructuralData.parentRingInteraction_term_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift}
     \leanok
     \uses{thm:local_term_two_three_ax_xb_lifts,lem:appendixB_qax_qxb_parent_interaction}
     On the three-site $A,X,B$ window, the two adjacent length-two local terms
@@ -455,7 +455,7 @@
 
 \begin{lemma}[Appendix B overlapping condition gives three-site local-term commutation]
     \label{lem:appendixB_overlapping_condition_parent_terms}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
+    \lean{MPSTensor.AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping}
     \leanok
     \uses{lem:appendixB_three_site_parent_lifts}
     If the Appendix~B $AX$ and $XB$ coefficient representatives satisfy the
@@ -487,8 +487,8 @@
 
 \begin{lemma}[Appendix B lifted commutator gives three-site local-term commutation]
     \label{lem:appendixB_lift_commutator_parent_terms}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2}
+    \lean{MPSTensor.AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_commute_lifts}
+    \lean{MPSTensor.AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2}
     \leanok
     \uses{lem:appendixB_overlapping_condition_from_lift_commutator,lem:appendixB_overlapping_condition_parent_terms}
     If the Appendix~B $AX$ and $XB$ coefficient representatives satisfy the

@@ -139,7 +139,7 @@ theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span {ζ : �
     exact (mpvState_apply (threeLetterTensor ζ) N σ).symm
   rw [← ManyBody.groundSpace_zero,
     groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule hζ (by omega),
     mpvSubmodule, Submodule.map_span, Set.image_singleton, LinearEquiv.coe_coe, hstate]
 
@@ -150,7 +150,7 @@ theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot {ζ
       (parentRingInteraction (threeLetterTensor ζ) 7 7).hamiltonian) = ⊥ := by
   rw [← ManyBody.groundSpace_zero,
     groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_threeLetterTensor_seven_eq_bot hζ, Submodule.map_bot]
 
 end RingInteraction

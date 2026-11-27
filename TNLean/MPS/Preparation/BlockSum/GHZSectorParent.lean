@@ -172,10 +172,10 @@ theorem chainGroundSpace_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
 
 /-- The finite-chain canonical parent Hamiltonians coincide although their
 periodic MPS vectors carry different sector probabilities. -/
-theorem parentHamiltonian_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
-    parentHamiltonian repeatedBlockTensor L N = parentHamiltonian ghzTensor L N := by
-  simp [parentHamiltonian, localTerm, parentRingInteraction,
-    parentInteraction_repeatedBlockTensor_eq_ghzTensor]
+theorem parentRingInteraction_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) [NeZero N] :
+    parentRingInteraction repeatedBlockTensor L N = parentRingInteraction ghzTensor L N :=
+  parentRingInteraction_eq_of_parentInteraction_eq
+    (parentInteraction_repeatedBlockTensor_eq_ghzTensor L) N
 
 /-- The actual normalized periodic vectors of two tensors with identical parent
 Hamiltonians require a linear circuit depth for sufficiently accurate conversion. -/

@@ -99,7 +99,7 @@ theorem ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap
   have : NeZero N := ⟨by omega⟩
   rw [← ManyBody.groundSpace_zero,
     groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
-    ker_parentHamiltonian_eq_chainGroundSpace A (by omega : 0 < N) hN,
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace A (by omega : 0 < N) hN,
     chainGroundSpace_eq_mpvSubmodule hA hN (by norm_num : 1 < 2) hN]
   simp only [mpvSubmodule, periodicMpvLineMap]
   rw [Submodule.map_span]

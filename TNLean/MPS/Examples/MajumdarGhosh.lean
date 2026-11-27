@@ -40,7 +40,7 @@ eigenvalue on odd rings of `N ≥ 5` sites.
   arXiv:2011.12127, Section IV.C, lines 2078–2079.
 * `MPSTensor.twistedMPV_mem_chainGroundSpace` (twisted periodic vectors): with the grading
   `G = diag(1, -1, -1)`, both singlet coverings lie in the chain ground space.
-* `MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace` (periodic parent kernel): the kernel of
+* `MPSTensor.ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace` (periodic parent kernel): the kernel of
   the range-three parent Hamiltonian is the chain ground space.
 * `MPSTensor.isPositive_conj_of_add_eq_smul_parentHamiltonian`,
   `MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian` and

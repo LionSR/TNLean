@@ -184,9 +184,10 @@ variable {D : ℕ}
 /-- On a three-site window, the translated length-two parent interaction at
 the first site is the \(AX\) lift of the two-site parent interaction. -/
 @[simp]
-theorem localTerm_two_three_zero_eq_leftPairLift_parentInteraction
+theorem parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction
     (A : MPSTensor d D) :
-    localTerm A 2 3 (0 : Fin 3) = leftPairLift (parentInteraction A 2) := by
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) =
+      leftPairLift (parentInteraction A 2) := by
   ext ω σ
   have hExtract : extractWindow 2 (0 : Fin 3) σ = axPairCfg σ := by
     funext j
@@ -204,15 +205,16 @@ theorem localTerm_two_three_zero_eq_leftPairLift_parentInteraction
       funext k
       fin_cases k <;> rfl
     simp [hWindow]
-  rw [LinearMap.comp_apply, localTerm_apply_of_le A 2 3 (by decide) (0 : Fin 3)]
+  rw [LinearMap.comp_apply, Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by decide) (0 : Fin 3)]
   simp [leftPairLift, hExtract, hPi]
 
 /-- On a three-site window, the translated length-two parent interaction at
 the second site is the \(XB\) lift of the two-site parent interaction. -/
 @[simp]
-theorem localTerm_two_three_one_eq_rightPairLift_parentInteraction
+theorem parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction
     (A : MPSTensor d D) :
-    localTerm A 2 3 (1 : Fin 3) = rightPairLift (parentInteraction A 2) := by
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      rightPairLift (parentInteraction A 2) := by
   ext ω σ
   have hExtract : extractWindow 2 (1 : Fin 3) σ = xbPairCfg σ := by
     funext j
@@ -230,7 +232,7 @@ theorem localTerm_two_three_one_eq_rightPairLift_parentInteraction
       funext k
       fin_cases k <;> rfl
     simp [hWindow]
-  rw [LinearMap.comp_apply, localTerm_apply_of_le A 2 3 (by decide) (1 : Fin 3)]
+  rw [LinearMap.comp_apply, Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by decide) (1 : Fin 3)]
   simp [rightPairLift, hExtract, hPi]
 
 /-- The algebraic part of the source nearest-neighbor parent-commuting condition
@@ -313,28 +315,32 @@ This identifies the first two translated terms with the lifted \(AX\) and
 \(XB\) actions of the canonical two-site parent interaction. It does not
 construct the source projectors associated with the Appendix B basic-vector
 form. -/
-theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
+theorem parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_commutation
     (A : MPSTensor d D)
     (h : HasOverlappingTwoSiteCommutation (d := d)
       (parentInteraction A 2) (parentInteraction A 2)) :
-    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
-  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
-    localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) := by
+  rw [parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction,
+    parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction]
   exact h.commute_lifts
 
 /-- If the two-site parent interaction is identified with the Appendix D.2
 projectors \(Q_{AX}\) and \(Q_{XB}\) before lifting, then the first two
 translated parent terms on the three-site chain commute. -/
-theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors
+theorem parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_projectors
     (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
     (hAX : parentInteraction A 2 = QAX)
     (hXB : parentInteraction A 2 = QXB) :
-    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
-  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
-    localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) := by
+  rw [parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction,
+    parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction]
   have hLeft : leftPairLift (parentInteraction A 2) = leftPairLift QAX := by
     rw [hAX]
   have hRight : rightPairLift (parentInteraction A 2) = rightPairLift QXB := by
@@ -345,29 +351,33 @@ theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors
 /-- The Definition D.2 local projector condition gives commutation of the first
 two translated parent terms, once the canonical two-site parent interaction is
 identified with the projectors \(Q_{AX}\) and \(Q_{XB}\) themselves. -/
-theorem localTerm_two_three_zero_one_commute_of_appendixD2
+theorem parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2
     (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace d 3)}
     {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
     (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
     (hAX : parentInteraction A 2 = QAX)
     (hXB : parentInteraction A 2 = QXB) :
-    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
-  localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors A
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) :=
+  parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_projectors A
     h.toHasOverlappingTwoSiteCommutation hAX hXB
 
 /-- If the two-site parent interaction is identified with the complementary
 Appendix D.2 projectors \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), then the
 first two translated parent terms on the three-site chain commute. -/
-theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement
+theorem parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_complement
     (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
     (hAX : parentInteraction A 2 = 1 - QAX)
     (hXB : parentInteraction A 2 = 1 - QXB) :
-    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
-  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
-    localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) := by
+  rw [parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction,
+    parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction]
   have hLeft : leftPairLift (parentInteraction A 2) = leftPairLift (1 - QAX) := by
     rw [hAX]
   have hRight : rightPairLift (parentInteraction A 2) = rightPairLift (1 - QXB) := by
@@ -378,15 +388,17 @@ theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement
 /-- The Definition D.2 local projector condition gives commutation of the first
 two translated parent terms, once the canonical two-site parent interaction is
 identified with the complementary projectors \(1-Q_{AX}\) and \(1-Q_{XB}\). -/
-theorem localTerm_two_three_zero_one_commute_of_appendixD2_complement
+theorem parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2_complement
     (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace d 3)}
     {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
     (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
     (hAX : parentInteraction A 2 = 1 - QAX)
     (hXB : parentInteraction A 2 = 1 - QXB) :
-    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
-      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
-  localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement A
+    Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
+        Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
+      Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
+          Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) :=
+  parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_complement A
     h.toHasOverlappingTwoSiteCommutation hAX hXB
 
 /-! ### Adjacent cyclic two-site supports -/

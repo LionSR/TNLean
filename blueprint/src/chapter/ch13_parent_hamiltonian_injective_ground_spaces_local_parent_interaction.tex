@@ -3265,15 +3265,17 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     Away from that interval neither second prescription changes the value.
 \end{proof}
 
-For a periodic chain of length $N$, the parent Hamiltonian is the sum of
-translated copies of the local interaction.
+For a periodic chain of length $N$, the parent interaction on the ring has
+the translated copies of the local interaction as its terms, and the parent
+Hamiltonian is its Hamiltonian, the sum of these terms.
 
 \begin{definition}[Translated local term]\label{def:local_term_parent}
-    \lean{MPSTensor.localTerm}
+    \lean{MPSTensor.parentRingInteraction}
     \leanok
     \uses{def:parent_interaction,def:replace_window,def:extract_window}
-    For each site index $i\in\Fin{N}$, the translated local term is determined
-    by
+    The parent interaction on the ring of $N\ge1$ sites has, for each site
+    index $i\in\Fin{N}$, the translated local term $h_i$ as its term at $i$;
+    it is determined by
     \begin{align}
         (h_i\psi)(\sigma)
          & =
@@ -3291,7 +3293,7 @@ translated copies of the local interaction.
 \end{definition}
 
 \begin{lemma}[Pointwise form of a translated local term]\label{lem:local_term_apply_of_le}
-    \lean{MPSTensor.localTerm_apply_of_le}
+    \lean{MPSTensor.parentRingInteraction_term_mulVec_apply_of_le}
     \leanok
     \uses{def:local_term_parent}
     If $L\le N$, then the translated term is obtained by applying the local
@@ -3313,7 +3315,7 @@ translated copies of the local interaction.
 \end{proof}
 
 \begin{lemma}[Translated local terms are idempotent]\label{lem:local_term_idempotent}
-    \lean{MPSTensor.localTerm_idempotent}
+    \lean{MPSTensor.parentRingInteraction_term_mul_self}
     \leanok
     \uses{def:local_term_parent,lem:parent_interaction_idempotent,lem:local_term_apply_of_le,lem:extract_window_replace_window,lem:replace_window_replace_window_same}
     For every site $i$, one has $h_i(A,L)^2=h_i(A,L)$.
@@ -3343,10 +3345,10 @@ translated copies of the local interaction.
 \end{proof}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
-    \lean{MPSTensor.parentHamiltonian}
     \leanok
     \uses{def:local_term_parent}
-    The chain Hamiltonian is
+    The chain Hamiltonian is the Hamiltonian of the parent interaction on the
+    ring,
     \begin{align}
         H_N(A,L)
          & :=\sum_{i=0}^{N-1}h_i.
@@ -3381,7 +3383,7 @@ translated copies of the local interaction.
 \end{proof}
 
 \begin{lemma}[Local term annihilates the periodic MPS vector]\label{lem:local_term_annihilates_mpv}
-    \lean{MPSTensor.localTerm_annihilates_mpv}
+    \lean{MPSTensor.parentRingInteraction_term_mulVec_mpv}
     \leanok
     \uses{def:local_term_parent,def:mpv,lem:mpv_window_mem_ground_space,lem:parent_interaction_apply_mem_ground_space}
     For each site $i$, one has $h_iV^{(N)}(A)=0$.
@@ -3394,10 +3396,10 @@ translated copies of the local interaction.
 \end{proof}
 
 \begin{lemma}[Parent Hamiltonian annihilates the periodic MPS vector]\label{lem:parent_hamiltonian_annihilates}
-    \lean{MPSTensor.parentHamiltonian_annihilates}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_mulVec_mpv}
     \leanok
     \uses{def:parent_hamiltonian,def:mpv,lem:local_term_annihilates_mpv}
-    For every $N$ with $L\le N$, the periodic MPS vector satisfies
+    For every $N\ge1$, the periodic MPS vector satisfies
     $H_N(A,L)V^{(N)}(A)=0$.
 \end{lemma}
 

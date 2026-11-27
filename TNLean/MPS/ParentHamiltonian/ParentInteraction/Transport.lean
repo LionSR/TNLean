@@ -30,8 +30,8 @@ The Hilbert-space ingredients of the parent-Hamiltonian martingale method:
   the terms, their kernels through cyclic restrictions, commutation and non-overlap
   positivity for disjoint cyclic windows;
 * kernel identification: the ground space at energy \(0\) of the Hamiltonian of the parent
-  interaction on the ring is the kernel of the finite parent Hamiltonian, read in the Euclidean
-  space.
+  interaction on the ring is the kernel of its Hamiltonian on the function space, read in the
+  Euclidean space.
 
 ## Nonzero canonical parent interactions
 
@@ -41,9 +41,8 @@ both as a matrix and in function-space coordinates.
 
 It also contains the following results.
 
-* `MPSTensor.localTerm_eq_toLin'_placeAlong_ringWindow`,
-  `MPSTensor.parentInteraction_toMatrix'_norm_le_one`: matrix coordinates for canonical parent
-  Hamiltonians.
+* `MPSTensor.parentInteraction_toMatrix'_norm_le_one`: the matrix of the canonical parent
+  interaction has operator norm at most one.
 -/
 
 open MPTensor
@@ -52,7 +51,7 @@ section Transport
 
 section
 
-open scoped BigOperators ComplexOrder InnerProductSpace
+open scoped BigOperators ComplexOrder InnerProductSpace Matrix
 
 namespace MPSTensor
 
@@ -447,10 +446,9 @@ theorem toEuclideanLin_parentRingInteraction_term_apply (A : MPSTensor d D) {L N
         (cyclicRestrictES (Fin.pos i) L i σ v) (extractWindow L i σ) := by
   have : NeZero N := NeZero.of_pos i.pos
   have h1 : Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v σ =
-      localTerm A L N i v.ofLp σ := by
-    rw [localTerm_eq_toLin'_term A L i]
+      ((parentRingInteraction A L N).term i *ᵥ v.ofLp) σ :=
     rfl
-  rw [h1, localTerm_apply_of_le A L N hLN]
+  rw [h1, parentRingInteraction_term_mulVec_apply_of_le A L N hLN]
   change _ = (Matrix.toLin' (LinearMap.toMatrix' (parentInteraction A L))) _ _
   rw [Matrix.toLin'_toMatrix']
   rfl
@@ -610,16 +608,6 @@ theorem commute_parentRingInteraction_term_of_cyclic_windows_disjoint (A : MPSTe
     (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
   exact hij k ((mem_map_ringWindow_iff hLN i k).mp hki) ((mem_map_ringWindow_iff hLN j k).mp hkj)
 
-/-- Local parent-Hamiltonian terms with disjoint cyclic supports commute. -/
-theorem localTerm_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor d D)
-    {L : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j) :
-    localTerm A L N i * localTerm A L N j =
-      localTerm A L N j * localTerm A L N i := by
-  have : NeZero N := NeZero.of_pos i.pos
-  rw [localTerm_eq_toLin'_term A L, localTerm_eq_toLin'_term A L, Module.End.mul_eq_comp,
-    Module.End.mul_eq_comp, ← Matrix.toLin'_mul, ← Matrix.toLin'_mul,
-    (commute_parentRingInteraction_term_of_cyclic_windows_disjoint A hLN hij).eq]
-
 /-- **Non-overlap positivity.** For terms of the parent interaction on the ring whose cyclic
 windows have no common site, the ordered cross term is nonnegative:
 \(0 ≤ \operatorname{Re}\langle h_i v, h_j v\rangle\). -/
@@ -666,19 +654,18 @@ is the kernel of the parent Hamiltonian, read in the Euclidean space. -/
 theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_ker
     (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
     ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
-      (LinearMap.ker (parentHamiltonian A L N)).map
+      (LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian)).map
         (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
   ext v
-  rw [ManyBody.mem_groundSpace_iff_mulVec, parentHamiltonian_eq_toLin'_hamiltonian A L,
-    Submodule.mem_map_equiv, LinearEquiv.symm_symm, LinearMap.mem_ker, Complex.ofReal_zero,
-    zero_smul]
+  rw [ManyBody.mem_groundSpace_iff_mulVec, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
+    LinearMap.mem_ker, Complex.ofReal_zero, zero_smul]
   rfl
 
 /-- The one-site ground space for the two-site parent interaction is the full
 one-site Hilbert space under the project's zero convention.
 
 **Scope restriction (one-site chain):** This is a consequence of
-`parentHamiltonian_two_one_eq_zero`. Beigi, J. Phys. A 45 (2012) 025306,
+`hamiltonian_parentRingInteraction_two_one`. Beigi, J. Phys. A 45 (2012) 025306,
 Section III, does not specify a one-site action for its two-site
 interaction, while CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines
 534--540, only uses chain lengths greater than two. This restriction is documented
@@ -739,18 +726,6 @@ open scoped Matrix.Norms.L2Operator
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- A cyclic parent term is the matrix of its local interaction placed on the window of `L`
-consecutive sites starting at `i`. Source: arXiv:1010.3732, Section II.B, the local Hamiltonian
-sum. -/
-theorem localTerm_eq_toLin'_placeAlong_ringWindow (A : MPSTensor d D)
-    {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
-    localTerm A L N i = Matrix.toLin'
-      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
-        (LinearMap.toMatrix' (parentInteraction A L))) := by
-  have : NeZero N := NeZero.of_pos i.pos
-  rw [localTerm_eq_toLin'_term A L i,
-    ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
 
 /-- Canonical parent interactions have Hilbert-space operator norm at most
 one, as do the projector local terms of arXiv:1010.3732, Section II.B. -/

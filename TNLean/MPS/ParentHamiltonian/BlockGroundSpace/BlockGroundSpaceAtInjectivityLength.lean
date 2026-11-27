@@ -126,8 +126,10 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_trace
     (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
     {S L N : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
-        (parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
+        (Matrix.toLin'
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   have hSpans : ∀ n ≥ S, WordTupleSpanTop A n := fun n hn ↦
     wordTupleSpanTop_of_ge_of_tracePreserving A hSpan hTP hn
@@ -149,7 +151,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_trace
   intro i
   have hcyclic := cyclicTranslateState_mem_chainGroundSpace
     (toTensorFromBlocks (α := Fin d) (μ := μ) A) (by omega) hLN i
-    (ker_parentHamiltonian_le_chainGroundSpace _ (by omega) hLN hψ)
+    (ker_hamiltonian_parentRingInteraction_le_chainGroundSpace _ (by omega) hLN hψ)
   obtain ⟨X, hX⟩ := hOpen hcyclic
   refine ⟨fun j ↦ (μ j) ^ N • Matrix.finSigmaDiagonalBlock X j, ?_⟩
   rw [← hX]
@@ -183,7 +185,9 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hHam, hBNT⟩ :=
     exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_wordTupleSpanTop
       μ A hμ hS hSpan
-  rw [← ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hLN, hHam, hBNT]
+  have : NeZero N := ⟨by omega⟩
+  rw [← ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hLN,
+    parentRingInteraction_eq_of_parentInteraction_eq (hHam L) N, hBNT]
   exact ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_tracePreserving
     μ B hμ (fun j ↦ (hP j).norm) hS hSpanB hSL hLN
 
@@ -195,9 +199,12 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
-  rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hLN]
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hLN]
   exact chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hSL hLN
 
 /-- Any positive local terms with the prescribed parent kernels have the

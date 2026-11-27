@@ -467,8 +467,10 @@ theorem
     (hNlarge : L + L₀ ≤ N)
     (hBlock : ∀ j : Fin r,
       chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
@@ -504,8 +506,10 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   have hL : L₀ < L := by
     calc
@@ -624,8 +628,10 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
     (hNlarge : L + L₀ ≤ N)
     (hBlock : ∀ j : Fin r,
       chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
@@ -665,8 +671,10 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   apply
     ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint

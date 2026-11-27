@@ -676,8 +676,10 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_co
                         Kraus.evalWord (A j) (List.ofFn ρ))
     (hBlock :
       ∀ j : Fin r, chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   refine ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
     μ A hN hLN ?_ hBlock
@@ -736,8 +738,10 @@ theorem
       ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val))
     (hBlock :
       ∀ j : Fin r, chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   refine ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
     μ A hN hLN ?_ hBlock
