@@ -10,7 +10,6 @@ import TNLean.MPS.Examples.CZX.Gauging.CZXTensor
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorOrderTwo
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.PermutedBlocks
-import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The anomaly and the L-symbols of the blocked CZX matrix product unitary
@@ -140,7 +139,7 @@ Source: arXiv:2502.20257, `eq:MPU_CZX`, `main.tex` lines 4503--4547, with the re
 law of lines 1403--1407. -/
 theorem family_isNormalRepresentation : family.IsNormalRepresentation where
   isNormal := Multiplicative.forall_zmod_two idTensor_isNormal
-    ((isNormal_toMPSTensor_iff _).2 tensor_isInjective.isNormal)
+    tensor_isInjective.isNormal
   operator_mul := by
     refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
       (Multiplicative.forall_zmod_two ?_ ?_) <;> intro N hN
@@ -155,10 +154,8 @@ theorem family_isNormalRepresentation : family.IsNormalRepresentation where
       rw [mpo_idTensor, mpo_tensor_mul_self]
 
 private theorem fusion_isReduction_idTensor :
-    IsReduction (mulTensor tensor tensor).toMPSTensor (idTensor 4).toMPSTensor fusionV fusionW :=
-  ⟨fusion_isReduction.1, fun w ↦ by
-    rw [evalWord_toMPSTensor, evalWord_toMPSTensor]
-    exact fusion_isReduction.2 _⟩
+    IsReduction (mulTensor tensor tensor) (idTensor 4) fusionV fusionW :=
+  ⟨fusion_isReduction.1, fusion_isReduction.2⟩
 
 /-- **Fusion tensors of the CZX representation**: the identity whenever a factor is the
 identity, and the printed caps `F^<_{g,g} = Y`, `F^>_{g,g} = Y / 2` for two generators.
@@ -177,15 +174,14 @@ local notation "o₁" => Multiplicative.ofAdd (1 : ZMod 2)
 
 /-- The integer matrices of the once-blocked CZX tensor, in the coordinates of
 `MPOTensor.CZX.tensor_apply`. -/
-def tensorInt (i j : Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := fun l r ↦
-  if i = complementSite j ∧ l = (show Fin 2 from (siteBits i).1) then
-    (-1) ^ edgeExponent i r else 0
+def tensorInt (a : Fin 4 × Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := fun l r ↦
+  if a.1 = complementSite a.2 ∧ l = (show Fin 2 from (siteBits a.1).1) then
+    (-1) ^ edgeExponent a.1 r else 0
 
-theorem tensor_eq_complexOfInt :
-    tensor = Function.uncurry fun i j ↦ complexOfInt (tensorInt i j) := by
+theorem tensor_eq_complexOfInt : tensor = fun a ↦ complexOfInt (tensorInt a) := by
   funext ⟨i, j⟩
   ext l r
-  rw [tensor_apply, Function.uncurry_apply_pair, complexOfInt_apply, tensorInt]
+  rw [tensor_apply, complexOfInt_apply, tensorInt]
   split_ifs <;> simp
 
 /-- The integer row `(0, 1, -1, 0)`; the printed cap `F^<_{g,g}` is `-i` times it. -/
@@ -199,17 +195,13 @@ theorem fusionV_eq_smul : fusionV = (-Complex.I) • complexOfInt fusionVInt := 
 /-- The stacked square of the CZX tensor is the image of the integer stacked square. -/
 theorem mulTensor_tensor_eq_complexOfInt :
     mulTensor tensor tensor =
-        Function.uncurry fun i j ↦ complexOfInt (mulTensorR tensorInt tensorInt i j) := by
+        fun a ↦ complexOfInt (mulTensorR tensorInt tensorInt a) := by
   rw [tensor_eq_complexOfInt]
-  exact funext fun p ↦ mulTensor_complexOfRing _ tensorInt tensorInt p.1 p.2
+  exact funext fun p ↦ mulTensor_complexOfRing _ tensorInt tensorInt p
 
 /-- The integer letters of the triple product of the CZX tensor. -/
-def cubeInt (a : Fin (4 * 4)) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
-  mulTensorR (mulTensorR tensorInt tensorInt) tensorInt a.divNat a.modNat
-
-/-- The integer letters of the CZX tensor over the pair alphabet. -/
-def tensorIntMPS (a : Fin (4 * 4)) : Matrix (Fin 2) (Fin 2) ℤ :=
-  tensorInt a.divNat a.modNat
+def cubeInt (a : Fin 4 × Fin 4) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
+  mulTensorR (mulTensorR tensorInt tensorInt) tensorInt a
 
 private theorem kronId_smul {m n : ℕ} (c : ℂ) (X : Matrix (Fin m) (Fin n) ℂ) (D : ℕ) :
     kronId (c • X) D = c • kronId X D := by
@@ -221,7 +213,7 @@ private theorem idKron_smul {m n : ℕ} (c : ℂ) (D : ℕ) (X : Matrix (Fin m) 
   ext r s
   simp [idKron, Matrix.kroneckerMap_apply, mul_left_comm]
 
-private theorem isDressedProportional_smul {d D m : ℕ} {T : MPSTensor d D}
+private theorem isDressedProportional_smul {α : Type*} {D m : ℕ} {T : MPTensor α (Fin D)}
     {L R : Matrix (Fin m) (Fin D) ℂ} {z : ℂ} (c : ℂ) (h : IsDressedProportional T L R z) :
     IsDressedProportional T (c • L) (c • R) z := by
   obtain ⟨N, h⟩ := h
@@ -243,16 +235,16 @@ theorem fusionData_isAssociator :
   rw [hL, hR, fusionV_eq_smul, kronId_smul,
     idKron_smul, kronId_complexOfRing, idKron_complexOfRing]
   refine isDressedProportional_smul _ ?_
-  have hT : (GroupFamily.tripleTensor family orderTwoGen orderTwoGen
-      orderTwoGen).toMPSTensor = fun a ↦ complexOfInt (cubeInt a) := by
+  have hT : GroupFamily.tripleTensor family orderTwoGen orderTwoGen orderTwoGen =
+      fun a ↦ complexOfInt (cubeInt a) := by
     funext a
-    change mulTensor (mulTensor tensor tensor) tensor (a.divNat, a.modNat) = _
+    change mulTensor (mulTensor tensor tensor) tensor a = _
     rw [mulTensor_tensor_eq_complexOfInt, tensor_eq_complexOfInt]
-    exact mulTensor_complexOfRing _ _ tensorInt _ _
+    exact mulTensor_complexOfRing _ _ tensorInt a
   rw [hT]
-  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := tensorIntMPS)
-    [(cubeInt 3, tensorIntMPS 3), (cubeInt 6, tensorIntMPS 6), (cubeInt 9, tensorIntMPS 9),
-      (cubeInt 12, tensorIntMPS 12), (0, 0)]
+  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := tensorInt)
+    [(cubeInt (0, 3), tensorInt (0, 3)), (cubeInt (1, 2), tensorInt (1, 2)),
+      (cubeInt (2, 1), tensorInt (2, 1)), (cubeInt (3, 0), tensorInt (3, 0)), (0, 0)]
     (by decide +kernel) ?_ ?_ ?_ <;>
     decide +kernel
 
