@@ -18,6 +18,8 @@ import TNLean.MPS.Operator.Defs
 import TNLean.MPS.Operator.DensityOperator
 import TNLean.MPS.Operator.Fusion
 import TNLean.MPS.Operator.Interaction
+import TNLean.MPS.Operator.PairAlphabet
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Periodic
 import TNLean.MPS.Operator.PhysicalSector
 import TNLean.MPS.Operator.Product
