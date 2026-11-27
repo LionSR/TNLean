@@ -204,7 +204,7 @@ noncomputable def block (F : GroupFamily G d) (L : ℕ) :
 private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
     {L : ℕ} (hL : 0 < L) (h : Kraus.IsInjective (F.tensor g)) :
     Kraus.IsInjective ((F.block L).tensor g) := by
-  rw [block, isInjective_blockTensor_iff]
+  rw [block, isInjective_blockTensor_iff, ← Kraus.isNBlkInjective_iff_isInjective_block]
   have hOne : Kraus.IsNBlkInjective (F.tensor g) 1 :=
     Kraus.isNBlkInjective_one_of_isInjective h
   simpa using MPTensor.isNBlkInjective_mul_of_isNBlkInjective (F.tensor g) hL hOne
@@ -260,7 +260,8 @@ theorem IsRawRepresentation.of_isNBlkInjective [Group G] (F : GroupFamily G d)
     {L : ℕ} (hL : 0 < L) (hInj : ∀ g, Kraus.IsNBlkInjective (F.tensor g) L) :
     (F.block L).IsRawRepresentation where
   isMPUPos g := (hMPU g).blockTensor L hL
-  isInjective g := (isInjective_blockTensor_iff _ L).2 (hInj g)
+  isInjective g := (isInjective_blockTensor_iff _).2
+    ((Kraus.isNBlkInjective_iff_isInjective_block _ L).1 (hInj g))
   operator_one N hN := operator_one_block F hOne hL N hN
   operator_mul g h N hN := operator_mul_block F hMul hL g h N hN
 
