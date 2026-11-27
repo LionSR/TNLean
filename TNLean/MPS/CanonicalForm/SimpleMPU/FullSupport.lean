@@ -87,6 +87,7 @@ section CPSVCanonicalFormData
 
 open MPTensor.CPSVCanonicalFormData
 
+omit [Fintype α] in
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_reindexBond
     {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPTensor α (Fin n))

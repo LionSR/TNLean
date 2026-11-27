@@ -423,11 +423,12 @@ private theorem exists_positive_wordTupleSpanTop_of_isInjective_fin
 alphabet have a common positive simultaneous spanning length, without a spectral-radius-one
 assumption on any original block. -/
 theorem exists_positive_wordTupleSpanTop_of_isInjective
-    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {α : Type*} [Finite α] {g : ℕ} {dim : Fin g → ℕ}
     {B : (j : Fin g) → MPTensor α (Fin (dim j))}
     (hInj : ∀ j, Kraus.IsInjective (B j)) (hdimPos : ∀ j, 0 < dim j)
     (hDistinct : BlocksNotGaugePhaseEquiv B) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
+  have := Fintype.ofFinite α
   let e := (Fintype.equivFin α).symm
   obtain ⟨L, hL, hSpan⟩ := exists_positive_wordTupleSpanTop_of_isInjective_fin
     (B := fun j ↦ Kraus.reindexPhysical e (B j))

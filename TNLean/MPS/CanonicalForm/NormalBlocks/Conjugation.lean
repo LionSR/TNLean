@@ -41,10 +41,12 @@ namespace MPSTensor
 def mapStar (A : MPTensor α (Fin D)) : MPTensor α (Fin D) :=
   fun i ↦ (A i).map (starRingEnd ℂ)
 
+omit [Fintype α] in
 /-- Entrywise conjugation evaluated at one physical letter. -/
 @[simp] theorem mapStar_apply (A : MPTensor α (Fin D)) (i : α) :
     mapStar A i = (A i).map (starRingEnd ℂ) := rfl
 
+omit [Fintype α] in
 /-- Entrywise conjugation is an involution on MPS tensors. -/
 @[simp] theorem mapStar_mapStar (A : MPTensor α (Fin D)) :
     mapStar (mapStar A) = A := by
@@ -55,6 +57,7 @@ end MPSTensor
 
 namespace Kraus
 
+omit [Fintype α] in
 /-- Entrywise conjugation preserves algebraic injectivity. -/
 theorem IsInjective.mapStar {A : MPTensor α (Fin D)} (hA : IsInjective A) :
     IsInjective (MPSTensor.mapStar A) := by
@@ -90,6 +93,7 @@ end Kraus
 
 namespace MPSTensor
 
+omit [Fintype α] in
 /-- Word evaluation commutes with entrywise complex conjugation. -/
 theorem evalWord_mapStar (A : MPTensor α (Fin D)) (w : List α) :
     Kraus.evalWord (mapStar A) w = (Kraus.evalWord A w).map (starRingEnd ℂ) := by
@@ -103,9 +107,11 @@ end MPSTensor
 
 namespace Kraus
 
+omit [Fintype α] in
 /-- Entrywise conjugation preserves positive-length block injectivity, hence normality. -/
-theorem IsNormal.mapStar {A : MPTensor α (Fin D)} (hA : IsNormal A) :
+theorem IsNormal.mapStar [Finite α] {A : MPTensor α (Fin D)} (hA : IsNormal A) :
     IsNormal (MPSTensor.mapStar A) := by
+  have := Fintype.ofFinite α
   obtain ⟨N, hN, hInj⟩ := hA
   refine ⟨N, hN, ?_⟩
   rw [isNBlkInjective_iff_isInjective_block] at hInj ⊢
@@ -135,6 +141,7 @@ theorem _root_.MPTensor.IsLeftCanonical.mapStar {A : MPTensor α (Fin D)} (hA : 
       rfl
     _ = 1 := by rw [hA]; simp
 
+omit [Fintype α] in
 /-- Gauge equivalence is preserved by entrywise complex conjugation.
 
 This conjugates the invertible gauge in the relation of arXiv:1606.00608,
@@ -194,6 +201,7 @@ end MPSTensor
 
 namespace Kraus
 
+omit [Fintype α] in
 /-- Entrywise conjugation preserves irreducibility: an invariant orthogonal projection of
 the conjugated tensor conjugates entrywise to an invariant orthogonal projection of the
 original tensor. Transports the no-nontrivial-invariant-projection clause of the

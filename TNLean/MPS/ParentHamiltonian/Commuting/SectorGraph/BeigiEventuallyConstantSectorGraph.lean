@@ -79,7 +79,7 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
     convert hLI N hN₁ using 1
     funext j
     ext σ
-    simp [Function.comp_apply, mpvState_apply]
+    simp [Function.comp_apply]
   have hCoefficients : LinearIndependent ℂ
       (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace d N)) :=
     LinearIndependent.of_comp

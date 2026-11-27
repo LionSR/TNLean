@@ -151,10 +151,11 @@ theorem of_target_intertwine {α : Type*} {B : MPTensor α (Fin D₂)} {A : MPTe
 
 /-- Entrywise complex conjugation of both tensors and both matrices preserves a
 reduction. -/
-theorem mapStar {α : Type*} [Fintype α] {B : MPTensor α (Fin D₂)} {A : MPTensor α (Fin D₁)}
+theorem mapStar {α : Type*} [Finite α] {B : MPTensor α (Fin D₂)} {A : MPTensor α (Fin D₁)}
     (h : IsReduction B A V W) :
     IsReduction (MPSTensor.mapStar B) (MPSTensor.mapStar A)
       (V.map (starRingEnd ℂ)) (W.map (starRingEnd ℂ)) := by
+  have := Fintype.ofFinite α
   refine ⟨?_, fun w ↦ ?_⟩
   · rw [← Matrix.map_mul, h.mul_eq_one, Matrix.map_one _ (map_zero _) (map_one _)]
   · rw [MPSTensor.evalWord_mapStar, MPSTensor.evalWord_mapStar, ← Matrix.map_mul,

@@ -159,12 +159,13 @@ theorem phase_norm_one {μ : ℂ} (hμ : μ ≠ 0) :
 
 /-- Multiplying every block weight by the same scalar multiplies length-`N`
 MPV coefficients by `c ^ N`. -/
-theorem mpv_toTensorFromBlocks_weight_mul_left {α : Type*} [Fintype α] {r : ℕ}
+theorem mpv_toTensorFromBlocks_weight_mul_left {α : Type*} [Finite α] {r : ℕ}
     {dim : Fin r → ℕ} (c : ℂ) (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {N : ℕ} (σ : Fin N → α) :
     mpv (toTensorFromBlocks (μ := fun k => c * μ k) A) σ =
       c ^ N * mpv (toTensorFromBlocks (μ := μ) A) σ := by
+  have := Fintype.ofFinite α
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_

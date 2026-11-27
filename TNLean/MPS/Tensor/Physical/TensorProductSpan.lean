@@ -136,10 +136,12 @@ If `S_{N_A}(A)` and `S_{N_B}(B)` are full at positive lengths `N_A` and
 The paired-span theorem at this common length gives a full product matrix
 algebra.  This is project infrastructure for arXiv:1703.09188, proof of
 Theorem `IndexTh` (ii), lines 824--845, not a separate paper theorem. -/
-theorem isNormal_tensorProduct [Fintype α] [Fintype β]
+theorem isNormal_tensorProduct [Finite α] [Finite β]
     (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B) :
     Kraus.IsNormal (tensorProduct A B) := by
+  have := Fintype.ofFinite α
+  have := Fintype.ofFinite β
   rcases hA with ⟨NA, hNA, hA⟩
   rcases hB with ⟨NB, hNB, hB⟩
   refine ⟨NA * NB, Nat.mul_pos hNA hNB, ?_⟩

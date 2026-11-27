@@ -268,8 +268,6 @@ theorem IsLeftCanonicalBNTPresentation.blockTensor
     apply linearIndependent_mpvState_of_configEquiv e
       (fun j ↦ Kraus.blockTensor (P.basis j) p) P.basis
     · intro j σ
-      change mpv (Kraus.blockTensor (P.basis j) p) (e.symm σ) =
-        mpv (P.basis j) σ
       simp only [mpv, MPTensor.coeff, evalWord_blockTensor]
       rw [← Kraus.ofFn_blockedConfigEquiv d N p (e.symm σ)]
       simp [e]

@@ -151,14 +151,16 @@ namespace MPSTensor
 
 variable {α : Type*} [Fintype α] {D : ℕ}
 
+omit [Fintype α] in
 /-- If `A` is injective and `A`, `B` generate the same MPV family,
 then there exists a unique linear map $T : \MN{D} \to \MN{D}$
 satisfying $T(A^i) = B^i$ for all $i$. -/
-theorem linearExtension_exists_unique {A B : MPTensor α (Fin D)}
+theorem linearExtension_exists_unique [Finite α] {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) :
     ∃! T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       (∀ i : α, T (A i) = B i) := by
   classical
+  have := Fintype.ofFinite α
   -- Shorthand for the key linear maps.
   let ΦA := traceMulRightPi (D := D) A
   let ΦB := traceMulRightPi (D := D) B
@@ -307,7 +309,7 @@ variable {α : Type*} {D : ℕ}
 
 /-- Lemma 2 of arXiv:1804.04964 (2-site case): two injective tensor pairs that
 agree under all virtual insertions on both bonds are proportional. -/
-theorem tensor_proportional [Fintype α]
+theorem tensor_proportional [Finite α]
     (A₁ A₂ B₁ B₂ : MPTensor α (Fin D))
     (hD : 0 < D)
     (hA₁ : Kraus.IsInjective A₁) (hA₂ : Kraus.IsInjective A₂)
@@ -318,6 +320,7 @@ theorem tensor_proportional [Fintype α]
       Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (B₂ j * Y * B₁ i)) :
     ∃ (lambda_ : ℂ), lambda_ ≠ 0 ∧
       (∀ i, A₁ i = lambda_ • B₁ i) ∧ (∀ j, A₂ j = lambda_⁻¹ • B₂ j) := by
+  have := Fintype.ofFinite α
   -- Step 1: From trace conditions, derive matrix product equalities.
   have hProdL : ∀ i j, A₂ j * A₁ i = B₂ j * B₁ i :=
     internal_products_eq A₁ A₂ B₁ B₂ hInt

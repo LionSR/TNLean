@@ -271,7 +271,7 @@ each multiplicity space: `V' = Y V` and `W' = W Y⁻¹`. The letter-support
 relation of the zipper uniqueness theorem holds before multiplication by a
 letter because each target block is injective. Source: GLM23, fusion and
 action gauge freedoms at lines 415--424 and 595--602. -/
-theorem exists_multiplicityGauge_eq_of_isInjective {α : Type*} [Fintype α]
+theorem exists_multiplicityGauge_eq_of_isInjective {α : Type*} [Finite α]
     {DB g : ℕ} {dim N : Fin g → ℕ} {B : MPTensor α (Fin DB)}
     {A : ∀ c, MPTensor α (Fin (dim c))}
     {V V' : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
@@ -289,6 +289,7 @@ theorem exists_multiplicityGauge_eq_of_isInjective {α : Type*} [Fintype α]
         ∑ ν, (↑(Y c) : Matrix (Fin (N c)) (Fin (N c)) ℂ) μ ν • V c ν) ∧
       (∀ c κ, W' c κ =
         ∑ ν, (↑(Y c)⁻¹ : Matrix (Fin (N c)) (Fin (N c)) ℂ) ν κ • W c ν) := by
+  have := Fintype.ofFinite α
   obtain ⟨Y, ⟨hV, hW⟩, -⟩ := h.exists_unique_multiplicityGauge_of_isInjective h' hInj hD hne
   refine ⟨Y, fun c μ ↦ ?_, fun c κ ↦ ?_⟩
   · refine eq_of_mul_letter_eq (hInj c) (fun i ↦ ?_) (fun i ↦ h'.toZipperDecomposition.V_mul c μ i)

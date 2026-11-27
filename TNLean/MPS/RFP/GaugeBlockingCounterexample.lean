@@ -114,7 +114,8 @@ private noncomputable def cubePhaseDoubledWeight (q : Fin 4) : ℂ :=
 Source: arXiv:1606.00608, equation `II_CF1` and canonical-form data at lines 219--246. -/
 private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
     (doubledTensor cubePhaseTensor).toMPSTensor =
-      toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) := by
+      toTensorFromBlocks cubePhaseDoubledWeight
+        (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) := by
   have hflat_symm (q : Fin 4) :
       (finSigmaFinEquiv : (Σ _q : Fin 4, Fin 1) ≃ Fin 4).symm q = ⟨q, 0⟩ := by
     fin_cases q <;> rfl
@@ -141,7 +142,8 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
         cubePhaseWeight k₁ * star (cubePhaseWeight k₂) := by
     simp [cubePhaseDoubledWeight]
   have hblocks (p : Fin 1) (q r : Fin 4) :
-      toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) p q r =
+      toTensorFromBlocks cubePhaseDoubledWeight
+          (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) p q r =
         if q = r then cubePhaseDoubledWeight q else 0 := by
     change Matrix.blockDiagonal' (fun k : Fin 4 =>
       cubePhaseDoubledWeight k • scalarUnitTensor p)
@@ -220,7 +222,8 @@ private theorem norm_cubePhaseDoubledWeight (q : Fin 4) :
 /-- Canonical-form data for the four scalar normal blocks of the doubled cube-phase tensor. -/
 private noncomputable def cubePhaseDoubledCanonicalData :
     CPSVCanonicalFormData
-      (toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1)))) :=
+      (toTensorFromBlocks cubePhaseDoubledWeight
+        (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1)))) :=
   CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
     (fun q => norm_ne_zero_iff.mp (by rw [norm_cubePhaseDoubledWeight]; exact one_ne_zero))
     (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1)))

@@ -190,6 +190,7 @@ def withBasis (P : SectorDecomposition α)
   basis := B
   sectors := P.sectors
 
+omit [Fintype α] in
 /-- Gauging every basis tensor does not change the assembled matrix product
 vectors (arXiv:1606.00608, lines 281--301). -/
 theorem sameMPV₂Pos_toTensor_withBasis (P : SectorDecomposition α)
