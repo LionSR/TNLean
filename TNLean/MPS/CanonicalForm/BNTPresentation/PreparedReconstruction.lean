@@ -77,7 +77,7 @@ theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
             ((X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)) := by
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  let P := collapsedBntSectorDecomp (α := Fin d) μ blocks hμne
   have hBNT := isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne hr
   have hTotal := collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr

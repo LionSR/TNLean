@@ -250,7 +250,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     have hBasisDistinct := hBNT.blocks_not_gaugePhaseEquiv
     refine ⟨hBasisNormal, ?_, ?_⟩
     · let classes := mpvPhaseClassData blocks
-      let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+      let P := collapsedBntSectorDecomp (α := Fin d) μ blocks hμne
       have hPBasis : ∀ j : Fin P.basisCount,
           P.basis j = blocks (classes.repr j) := by
         intro j
@@ -269,7 +269,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
       have hPDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis := by
         simpa [P, classes, collapsedBntSectorDecomp] using classes.blocks_not_equiv
       have hPA : SameMPV₂Pos P.toTensor A :=
-        (collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne).trans hCF.symm
+        (collapsedBntSectorDecomp_sameMPV₂Pos (α := Fin d) μ blocks hμne).trans hCF.symm
       have hPBNT :
           IsCPSVBasisOfNormalTensors P.toTensor
             (fun j => ⟨dimB j, basis j⟩) := by

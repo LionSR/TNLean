@@ -36,12 +36,12 @@ open Filter Topology
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {β : Type*} [Fintype β]
 
 /-! ### Small bridges between `GaugePhaseEquiv` and `RepeatedBlocks` -/
 
 /-- Transitivity of gauge-phase equivalence. -/
-theorem gaugePhaseEquiv_trans {D : ℕ} {A B C : MPSTensor d D}
+theorem gaugePhaseEquiv_trans {D : ℕ} {A B C : MPTensor β (Fin D)}
     (hAB : GaugePhaseEquiv A B) (hBC : GaugePhaseEquiv B C) : GaugePhaseEquiv A C := by
   obtain ⟨X, ζ, hζ, hX⟩ := hAB
   obtain ⟨Y, η, hη, hY⟩ := hBC
@@ -50,7 +50,7 @@ theorem gaugePhaseEquiv_trans {D : ℕ} {A B C : MPSTensor d D}
   simp [mul_smul, Matrix.mul_assoc, mul_inv_rev]
 
 /-- A one-sided nonzero rescaling can be absorbed into the gauge-phase scalar. -/
-theorem gaugePhaseEquiv_of_gaugePhaseEquiv_smul_right {D : ℕ} {A B : MPSTensor d D} {c : ℂ}
+theorem gaugePhaseEquiv_of_gaugePhaseEquiv_smul_right {D : ℕ} {A B : MPTensor β (Fin D)} {c : ℂ}
     (hc : c ≠ 0) (h : GaugePhaseEquiv A (fun i => c • B i)) : GaugePhaseEquiv A B := by
   obtain ⟨X, ζ, hζ, hX⟩ := h
   refine ⟨X, ζ / c, div_ne_zero hζ hc, fun i => ?_⟩
@@ -60,13 +60,13 @@ theorem gaugePhaseEquiv_of_gaugePhaseEquiv_smul_right {D : ℕ} {A B : MPSTensor
   rw [hBi, hXi, smul_smul, div_eq_inv_mul]
 
 /-- A `RepeatedBlocks` relation gives a (reversed) gauge-phase equivalence. -/
-theorem gaugePhaseEquiv_of_repeatedBlocks {D : ℕ} {A B : MPSTensor d D}
+theorem gaugePhaseEquiv_of_repeatedBlocks {D : ℕ} {A B : MPTensor β (Fin D)}
     (h : RepeatedBlocks A B) : GaugePhaseEquiv B A := by
   obtain ⟨ξ, Y, hξ, hrel⟩ := h
   exact ⟨Y, ξ, Complex.ne_zero_of_norm_eq_one hξ, hrel⟩
 
 /-- Non-gauge-phase-equivalence (in either order) rules out `RepeatedBlocks`. -/
-theorem not_repeatedBlocks_of_not_gaugePhaseEquiv {D : ℕ} {A B : MPSTensor d D}
+theorem not_repeatedBlocks_of_not_gaugePhaseEquiv {D : ℕ} {A B : MPTensor β (Fin D)}
     (h : ¬ GaugePhaseEquiv A B) : ¬ RepeatedBlocks A B := by
   intro hRep
   exact h (gaugePhaseEquiv_symm_same_dim (gaugePhaseEquiv_of_repeatedBlocks hRep))
@@ -74,9 +74,9 @@ theorem not_repeatedBlocks_of_not_gaugePhaseEquiv {D : ℕ} {A B : MPSTensor d D
 /-- A `RepeatedBlocks` relation across a dimension cast gives a gauge-phase
 equivalence with the cast transported to the other side. -/
 theorem gaugePhaseEquiv_cast_symm_of_repeatedBlocks {D₁ D₂ : ℕ}
-    {X : MPSTensor d D₁} {Y : MPSTensor d D₂} (h : D₁ = D₂)
-    (hRep : RepeatedBlocks (cast (congr_arg (MPSTensor d) h) X) Y) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h.symm) Y) X := by
+    {X : MPTensor β (Fin D₁)} {Y : MPTensor β (Fin D₂)} (h : D₁ = D₂)
+    (hRep : RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) X) Y) :
+    GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h.symm) Y) X := by
   subst h
   simp only [cast_eq] at hRep ⊢
   exact gaugePhaseEquiv_of_repeatedBlocks hRep
@@ -91,8 +91,8 @@ By the periodic overlap dichotomy (arXiv:1708.00029, Proposition
 dimension tends to zero, whereas proportionality forces
 `⟨A,B⟩ * conj ⟨A,B⟩ = ⟨A,A⟩ * ⟨B,B⟩`, whose limit along common multiples of the
 periods is the product of the periods. -/
-private theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic_fin {D₁ D₂ m_a m_b : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic {D₁ D₂ m_a m_b : ℕ}
+    {A : MPTensor β (Fin D₁)} {B : MPTensor β (Fin D₂)}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B) (h : MPVBlockPhaseEquiv A B) :
     D₁ = D₂ := by
   classical
@@ -156,23 +156,6 @@ private theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic_fin {D₁ D₂ m_a m_
   simp at this
   omega
 
-/-- Two periodic blocks whose periodic vectors are proportional by a power of a
-nonzero scalar at every positive length have the same bond dimension.
-
-By the periodic overlap dichotomy (arXiv:1708.00029, Proposition
-`equal-or-orthogonal-generalized`) the overlap of blocks of different bond
-dimension tends to zero, whereas proportionality forces
-`⟨A,B⟩ * conj ⟨A,B⟩ = ⟨A,A⟩ * ⟨B,B⟩`, whose limit along common multiples of the
-periods is the product of the periods.  The physical alphabet is relabelled by
-`Fin (Fintype.card β)`. -/
-theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic {β : Type*} [Fintype β]
-    {D₁ D₂ m_a m_b : ℕ} {A : MPTensor β (Fin D₁)} {B : MPTensor β (Fin D₂)}
-    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B) (h : MPVBlockPhaseEquiv A B) :
-    D₁ = D₂ :=
-  let f : Fin (Fintype.card β) ≃ β := (Fintype.equivFin β).symm
-  dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic_fin (hA.reindexPhysical f) (hB.reindexPhysical f)
-    (h.reindexPhysical f)
-
 /-! ### Trace reduction into periodic representatives -/
 
 /-- **Trace reduction into periodic representative classes.**
@@ -190,16 +173,16 @@ irreducible block decomposition of `B`, the periodic normalization of each
 nonzero irreducible factor
 (`exists_leftCanonical_periodic_scale_of_irreducible`), and the finite
 gauge-phase class regrouping (`MPSTensor.mpvPhaseClassData`). -/
-private theorem exists_irreducible_expansion_fin {DB : ℕ} (B : MPSTensor d DB) :
-    ∃ (g : ℕ) (dimRep : Fin g → ℕ) (A : (j : Fin g) → MPSTensor d (dimRep j))
+theorem exists_irreducible_expansion {DB : ℕ} (B : MPTensor β (Fin DB)) :
+    ∃ (g : ℕ) (dimRep : Fin g → ℕ) (A : (j : Fin g) → MPTensor β (Fin (dimRep j)))
       (per : Fin g → ℕ) (copies : Fin g → ℕ) (α : (j : Fin g) → Fin (copies j) → ℂ),
       (∀ j, 0 < dimRep j) ∧
       (∀ j, IsPeriodic (per j) (A j)) ∧
       (∀ j, 0 < copies j) ∧
       (∀ j q, α j q ≠ 0) ∧
       (∀ j k : Fin g, j ≠ k → ∀ h : dimRep j = dimRep k,
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) ∧
-      (∀ L : ℕ, 0 < L → ∀ σ : Fin L → Fin d,
+        ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (A k)) ∧
+      (∀ L : ℕ, 0 < L → ∀ σ : Fin L → β,
         mpv B σ = ∑ j : Fin g, (∑ q : Fin (copies j), (α j q) ^ L) * mpv (A j) σ) ∧
       ∑ j : Fin g, copies j * dimRep j ≤ DB := by
   classical
@@ -210,7 +193,7 @@ private theorem exists_irreducible_expansion_fin {DB : ℕ} (B : MPSTensor d DB)
     fun k => exists_leftCanonical_periodic_scale_of_irreducible (hIrr k) (hNZ k)
   set classes := mpvPhaseClassData Ã with hclasses_def
   choose ζEnum hζEnum hmpvEnum using fun j q => classes.enum_phase j q
-  set A : (j : Fin classes.g) → MPSTensor d (dim (classes.repr j)) :=
+  set A : (j : Fin classes.g) → MPTensor β (Fin (dim (classes.repr j))) :=
     fun j => Ã (classes.repr j) with hA_def
   set α : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
     fun j q => (ζEnum j q) * (ζ0 (classes.enum j q))⁻¹ with hα_def
@@ -258,68 +241,21 @@ private theorem exists_irreducible_expansion_fin {DB : ℕ} (B : MPSTensor d DB)
     rw [hα_def, mul_pow, inv_pow, hmulboth]
     ring
 
-/-- **Trace reduction into periodic representative classes.**
-
-Every tensor `B` decomposes, at every positive length, into finitely many
-gauge-and-scalar equivalence classes of periodic representatives: there are a
-finite index set `Fin g`, periodic representatives `A j` with periods
-`per j`, and finite nonzero weight multiplicities `α j` (indexed by `Fin
-(copies j)`) such that `v_L(B) = ∑_j (∑_q (α j q)^L) v_L(A j)` for every
-`L ≥ 1`.
-
-This packages the trace-reduction and explicit-multiplicity construction of
-`t1_unblocked.tex`, §"Trace reduction and explicit multiplicities": the
-irreducible block decomposition of `B`, the periodic normalization of each
-nonzero irreducible factor
-(`exists_leftCanonical_periodic_scale_of_irreducible`), and the finite
-gauge-phase class regrouping (`MPSTensor.mpvPhaseClassData`).  The physical alphabet is
-relabelled by `Fin (Fintype.card β)`. -/
-theorem exists_irreducible_expansion {β : Type*} [Fintype β] {DB : ℕ}
-    (B : MPTensor β (Fin DB)) :
-    ∃ (g : ℕ) (dimRep : Fin g → ℕ) (A : (j : Fin g) → MPTensor β (Fin (dimRep j)))
-      (per : Fin g → ℕ) (copies : Fin g → ℕ) (α : (j : Fin g) → Fin (copies j) → ℂ),
-      (∀ j, 0 < dimRep j) ∧
-      (∀ j, IsPeriodic (per j) (A j)) ∧
-      (∀ j, 0 < copies j) ∧
-      (∀ j q, α j q ≠ 0) ∧
-      (∀ j k : Fin g, j ≠ k → ∀ h : dimRep j = dimRep k,
-        ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (A k)) ∧
-      (∀ L : ℕ, 0 < L → ∀ σ : Fin L → β,
-        mpv B σ = ∑ j : Fin g, (∑ q : Fin (copies j), (α j q) ^ L) * mpv (A j) σ) ∧
-      ∑ j : Fin g, copies j * dimRep j ≤ DB := by
-  classical
-  let f : Fin (Fintype.card β) ≃ β := (Fintype.equivFin β).symm
-  obtain ⟨g, dimRep, A, per, copies, α, hpos, hper, hcop, hne, hdist, hexp, hsum⟩ :=
-    exists_irreducible_expansion_fin (Kraus.reindexPhysical f B)
-  have hback : ∀ {D : ℕ} (T : MPSTensor (Fintype.card β) D),
-      Kraus.reindexPhysical f (Kraus.reindexPhysical f.symm T) = T := by
-    intro D T
-    funext i
-    simp [Kraus.reindexPhysical]
-  refine ⟨g, dimRep, fun j ↦ Kraus.reindexPhysical f.symm (A j), per, copies, α, hpos,
-    fun j ↦ (hper j).reindexPhysical f.symm, hcop, hne, ?_, ?_, hsum⟩
-  · intro j k hjk h hG
-    apply hdist j k hjk h
-    have hG' := (gaugePhaseEquiv_reindexPhysical_equiv f _ _).2 hG
-    rwa [reindexPhysical_cast_dim, hback, hback] at hG'
-  · intro L hL σ
-    have h := hexp L hL fun n ↦ f.symm (σ n)
-    simp only [MPTensor.mpv_reindexPhysical, Equiv.apply_symm_apply] at h
-    simpa only [MPTensor.mpv_reindexPhysical] using h
-
 /-! ### Matching before blocking -/
 
-/-- General finite-index wrapper of `periodicBasis_eventuallyLinearlyIndependent`,
-matching the `Fin r`-indexed statement to an arbitrary finite index type. -/
-private theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repeated_fin
+/-- Periodic blocks that are pairwise not repeated, with periods dividing `p`, have eventually
+linearly independent periodic vectors at the lengths `p * N`. This is the finite-index form of
+`periodicBasis_eventuallyLinearlyIndependent`. -/
+theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repeated
     {ι : Type*} [Finite ι] {dim : ι → ℕ}
-    (A : (k : ι) → MPSTensor d (dim k)) (period : ι → ℕ)
+    (A : (k : ι) → MPTensor β (Fin (dim k))) (period : ι → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
     (p : ℕ) [NeZero p] (hDiv : ∀ k, period k ∣ p)
     (hNonrep : ∀ j k : ι, j ≠ k → ∀ h : dim j = dim k,
-      ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+      ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (A k)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
-      LinearIndependent ℂ (fun k : ι => mpvState (α := Fin d) (A k) (p * N)) := by
+      LinearIndependent ℂ (fun k : ι ↦
+        (EuclideanSpace.equiv (ι := Fin (p * N) → β) (𝕜 := ℂ)).symm fun σ ↦ mpv (A k) σ) := by
   classical
   let : Fintype ι := Fintype.ofFinite ι
   set e := Fintype.equivFin ι with he
@@ -331,38 +267,8 @@ private theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repea
       (fun j k hjk h => hNonrep (e.symm j) (e.symm k)
         (fun hEq => hjk (by simpa using congrArg e hEq)) h)
   refine ⟨N₀, fun N hN => ?_⟩
-  have hfun :
-      ((fun k : Fin (Fintype.card ι) => mpvState (α := Fin d) (A (e.symm k)) (p * N)) ∘ e) =
-        fun k : ι => mpvState (α := Fin d) (A k) (p * N) := by
-    funext k
-    exact congrArg (fun y : ι => mpvState (α := Fin d) (A y) (p * N)) (e.symm_apply_apply k)
-  rw [← hfun]
-  exact (hLI N hN).comp e e.injective
-
-/-- Periodic blocks that are pairwise not repeated, with periods dividing `p`, have eventually
-linearly independent periodic vectors at the lengths `p * N`.  The physical alphabet is relabelled
-by `Fin (Fintype.card β)`, where `periodicBasis_eventuallyLinearlyIndependent` applies. -/
-theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repeated
-    {ι : Type*} [Finite ι] {β : Type*} [Fintype β] {dim : ι → ℕ}
-    (A : (k : ι) → MPTensor β (Fin (dim k))) (period : ι → ℕ)
-    (hPer : ∀ k, IsPeriodic (period k) (A k))
-    (p : ℕ) [NeZero p] (hDiv : ∀ k, period k ∣ p)
-    (hNonrep : ∀ j k : ι, j ≠ k → ∀ h : dim j = dim k,
-      ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (A k)) :
-    ∃ N₀ : ℕ, ∀ N ≥ N₀,
-      LinearIndependent ℂ (fun k : ι ↦
-        (EuclideanSpace.equiv (ι := Fin (p * N) → β) (𝕜 := ℂ)).symm fun σ ↦ mpv (A k) σ) := by
-  classical
-  let f : Fin (Fintype.card β) ≃ β := (Fintype.equivFin β).symm
-  obtain ⟨N₀, hLI⟩ := exists_eventually_linearIndependent_of_periodic_blocks_not_repeated_fin
-    (fun k ↦ Kraus.reindexPhysical f (A k)) period (fun k ↦ (hPer k).reindexPhysical f) p hDiv
-    (fun j k hjk h hRep ↦ hNonrep j k hjk h (by
-      rw [← reindexPhysical_cast_dim f h (A j)] at hRep
-      exact (repeatedBlocks_reindexPhysical_iff f _ _).1 hRep))
-  refine ⟨N₀, fun N hN ↦ ?_⟩
-  let E : (Fin (p * N) → β) ≃ (Fin (p * N) → Fin (Fintype.card β)) :=
-    Equiv.arrowCongr (Equiv.refl _) f.symm
-  exact linearIndependent_mpvState_of_configEquiv E A (fun k ↦ Kraus.reindexPhysical f (A k))
-    (fun k σ ↦ by rw [MPTensor.mpv_reindexPhysical]; rfl) (hLI N hN)
+  convert (hLI N hN).comp e e.injective using 1
+  funext k
+  simp only [Function.comp_apply, Equiv.symm_apply_apply, mpvState]
 
 end MPSTensor
