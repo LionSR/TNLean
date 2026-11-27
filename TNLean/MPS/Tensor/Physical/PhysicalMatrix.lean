@@ -36,42 +36,42 @@ open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor
 
-variable {n m D : ℕ}
+variable {α β : Type*} [Fintype α] {D : ℕ}
 
-/-- The tensor `B` read as the matrix of the linear map `ℂ^{D²} → ℂ^n`, `(i, (α, β)) ↦ B^i_{αβ}`.
+/-- The tensor `B` read as the matrix of the linear map `ℂ^{D²} → ℂ^α`, `(i, (α, β)) ↦ B^i_{αβ}`.
 
 arXiv:2307.01696, paragraph "Approximation through the fixed-point state": the blocked tensor
 is interpreted "as a map from the `D²`-dimensional virtual space to the `d^q`-dimensional
 physical space". -/
-def physicalMatrix (A : MPSTensor n D) : Matrix (Fin n) (Fin D × Fin D) ℂ :=
+def physicalMatrix (A : MPTensor α (Fin D)) : Matrix α (Fin D × Fin D) ℂ :=
   fun i p => A i p.1 p.2
 
 /-- The tensor whose physical matrix is `R`. -/
-def ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) : MPSTensor n D :=
+def ofPhysicalMatrix (R : Matrix α (Fin D × Fin D) ℂ) : MPTensor α (Fin D) :=
   fun i α β => R i (α, β)
 
 /-- Reading the physical matrix of a tensor back as a tensor returns the tensor. -/
-@[simp] lemma ofPhysicalMatrix_physicalMatrix (A : MPSTensor n D) :
+@[simp] lemma ofPhysicalMatrix_physicalMatrix (A : MPTensor α (Fin D)) :
     ofPhysicalMatrix (physicalMatrix A) = A := rfl
 
 /-- The physical matrix of the tensor built from a matrix `R` is `R`. -/
-@[simp] lemma physicalMatrix_ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) :
+@[simp] lemma physicalMatrix_ofPhysicalMatrix (R : Matrix α (Fin D × Fin D) ℂ) :
     physicalMatrix (ofPhysicalMatrix R) = R := rfl
 
 /-- A tensor is determined by its physical matrix. -/
-lemma physicalMatrix_injective : Function.Injective (physicalMatrix (n := n) (D := D)) :=
+lemma physicalMatrix_injective : Function.Injective (physicalMatrix (α := α) (D := D)) :=
   fun A B h => by rw [← ofPhysicalMatrix_physicalMatrix A, h, ofPhysicalMatrix_physicalMatrix]
 
 /-- The physical matrix of `W · A` is `W` times the physical matrix of `A`. -/
-lemma physicalMatrix_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
+lemma physicalMatrix_rotatePhysical (W : Matrix β α ℂ) (A : MPTensor α (Fin D)) :
     physicalMatrix (rotatePhysical W A) = W * physicalMatrix A := by
   ext i p
   simp [physicalMatrix, rotatePhysical, Matrix.mul_apply, Matrix.sum_apply]
 
 /-- The mixed Gram matrix `Xᴴ Y` of the physical matrices of two tensors is a rearrangement of
 their mixed transfer map: `(Xᴴ Y)_{(α,β),(α',β')} = E_{YX}(|β'⟩⟨β|)_{α' α}`. -/
-theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {n D₁ D₂ : ℕ}
-    (X : MPSTensor n D₁) (Y : MPSTensor n D₂) (a : Fin D₁ × Fin D₁) (b : Fin D₂ × Fin D₂) :
+theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {D₁ D₂ : ℕ}
+    (X : MPTensor α (Fin D₁)) (Y : MPTensor α (Fin D₂)) (a : Fin D₁ × Fin D₁) (b : Fin D₂ × Fin D₂) :
     ((physicalMatrix X)ᴴ * physicalMatrix Y) a b =
       Kraus.mixedMapLM Y X (Matrix.single b.2 a.2 1) b.1 a.1 := by
   rw [Kraus.mixedMapLM_apply, Matrix.sum_apply, Matrix.mul_apply]
@@ -86,14 +86,14 @@ theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {n D₁ D₂ : ℕ
 map: `(Bᴴ B)_{(α,β),(α',β')} = E_B(|β'⟩⟨β|)_{α' α}`.
 
 arXiv:2307.01696, eq. (8): `E_B` is `P† P = B† B` with legs regrouped. -/
-theorem conjTranspose_physicalMatrix_mul_apply (B : MPSTensor n D) (a b : Fin D × Fin D) :
+theorem conjTranspose_physicalMatrix_mul_apply (B : MPTensor α (Fin D)) (a b : Fin D × Fin D) :
     ((physicalMatrix B)ᴴ * physicalMatrix B) a b =
       Kraus.transferMap B (Matrix.single b.2 a.2 1) b.1 a.1 := by
   rw [conjTranspose_physicalMatrix_mul_physicalMatrix_apply, Kraus.mixedMapLM_self]
 
 /-- Conjugation of the bond matrices acts on the virtual pair index by
 `Xᵀ ⊗ Y`. Source: arXiv:1010.3732, Section II.C, virtual gauge action. -/
-theorem physicalMatrix_mul_left_right {d D : ℕ} (A : MPSTensor d D)
+theorem physicalMatrix_mul_left_right (A : MPTensor α (Fin D))
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
     physicalMatrix (fun i => X * A i * Y) = physicalMatrix A * (Xᵀ ⊗ₖ Y) := by
   ext i ⟨a, b⟩
@@ -105,7 +105,7 @@ theorem physicalMatrix_mul_left_right {d D : ℕ} (A : MPSTensor d D)
 /-- The physical contraction of two tensor reshapes is the trace pairing of
 individual bond matrices. -/
 theorem physicalMatrix_mul_conjTranspose_apply
-    (A B : MPSTensor n D) (i j : Fin n) :
+    (A B : MPTensor α (Fin D)) (i j : α) :
     (physicalMatrix A * (physicalMatrix B)ᴴ) i j =
       Matrix.trace (A i * (B j)ᴴ) := by
   simp only [Matrix.mul_apply, physicalMatrix, Matrix.conjTranspose_apply,
