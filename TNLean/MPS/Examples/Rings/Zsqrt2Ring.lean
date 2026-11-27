@@ -80,15 +80,15 @@ theorem complexOfZsqrt2_submatrix {m n m' n' : Type*} (X : Matrix m n (ℤ√2))
 variable {d D D₁ D₂ : ℕ}
 
 /-- The bond-space product of two tensors over `ℤ√2`,
-`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
-abbrev mulZsqrt2Tensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ√2))
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) (ℤ√2)) (i k : Fin d) :
+`(M · N)^{(i,k)} = ∑_j M^{(i,j)} ⊗ N^{(j,k)}`, in the bond order of `finProdFinEquiv`. -/
+abbrev mulZsqrt2Tensor (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ√2))
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) (ℤ√2)) (ik : Fin d × Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) (ℤ√2) :=
-  mulTensorR M N i k
+  mulTensorR M N ik
 
 /-- The bond-space action of a matrix product operator tensor over `ℤ√2` on a state tensor over
-`ℤ√2`, `(M · A)^i = ∑_j M^{ij} ⊗ A^j`, in the bond order of `finProdFinEquiv`. -/
-abbrev actZsqrt2Tensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ√2))
+`ℤ√2`, `(M · A)^i = ∑_j M^{(i,j)} ⊗ A^j`, in the bond order of `finProdFinEquiv`. -/
+abbrev actZsqrt2Tensor (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ√2))
     (A : Fin d → Matrix (Fin D₂) (Fin D₂) (ℤ√2)) (i : Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) (ℤ√2) :=
   actTensorR M A i

@@ -145,19 +145,19 @@ theorem evalWord_complexOfGolden (A : Fin d → Matrix (Fin D) (Fin D) GoldenInt
   evalWord_complexOfRing goldenToComplex A w
 
 /-- The bond-space product of two tensors over the golden integers,
-`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
-abbrev mulGoldenTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (i k : Fin d) :
+`(M · N)^{(i,k)} = ∑_j M^{(i,j)} ⊗ N^{(j,k)}`, in the bond order of `finProdFinEquiv`. -/
+abbrev mulGoldenTensor (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (ik : Fin d × Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) GoldenInt :=
-  mulTensorR M N i k
+  mulTensorR M N ik
 
 /-- The bond-space product commutes with the entrywise embedding of the golden integers. -/
-theorem mulTensor_complexOfGolden (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (i k : Fin d) :
-    MPOTensor.mulTensor (Function.uncurry fun i j => complexOfGolden (M i j))
-        (Function.uncurry fun i j => complexOfGolden (N i j)) (i, k) =
-      complexOfGolden (mulGoldenTensor M N i k) :=
-  mulTensor_complexOfRing goldenToComplex M N i k
+theorem mulTensor_complexOfGolden (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (ik : Fin d × Fin d) :
+    MPOTensor.mulTensor (fun ij => complexOfGolden (M ij))
+        (fun ij => complexOfGolden (N ij)) ik =
+      complexOfGolden (mulGoldenTensor M N ik) :=
+  mulTensor_complexOfRing goldenToComplex M N ik
 
 end MPSTensor
 

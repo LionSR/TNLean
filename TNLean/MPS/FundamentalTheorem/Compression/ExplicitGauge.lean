@@ -69,10 +69,10 @@ variable {d D₁ D₂ : ℕ}
 
 /-- The bond-space product of two integer tensors,
 `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
-abbrev mulIntTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (i k : Fin d) :
+abbrev mulIntTensor (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (ik : Fin d × Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
-  mulTensorR M N i k
+  mulTensorR M N ik
 
 /-! ### The gauge attached to an invertible matrix -/
 
