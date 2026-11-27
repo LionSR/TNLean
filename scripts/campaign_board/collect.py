@@ -32,7 +32,7 @@ import sys
 import time
 
 # The sorry badge's Lean-aware stripper (nested block comments and string literals).
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "reports"))
 from generate_badges import strip_lean_comments_and_strings  # noqa: E402
 
 THEOREM_KINDS = r"Theorem|Lemma|Proposition|Corollary|Definition|Remark"

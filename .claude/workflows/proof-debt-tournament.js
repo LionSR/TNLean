@@ -42,7 +42,7 @@ Known signals from an initial scout (verify and go deeper, do not just repeat th
   AppendixBStructuralData x55, NeighboringTraceFactorization x46, ThreeBlockGeometry x34,
   PosSemidef x33, IsPositiveMap x31, sameMPV x18, GaugeEquiv x18, IsHorizontalCF x14.
 - Many files bunch just under 1000 lines (looks like a hard cap causing artificial splits).
-- scripts/tactic_pattern_scan.py reports repeated tactic patterns >= rule-of-three not yet
+- scripts/audit/tactic_pattern_scan.py reports repeated tactic patterns >= rule-of-three not yet
   promoted, e.g. 'apply Finset.sum_congr rfl; intro i _; ...' x9-12 across files,
   a 7-line intro/simp block x5 in Channel/Schwarz/TwoPositive.lean, a 6-line filter/sum block
   x5 across PEPS/RegionBlock files.
@@ -191,7 +191,7 @@ proofs and diagnose WHY they are long: missing helper lemmas, manual index bookk
 Finset.sum manipulation done by hand, repeated conv/calc blocks, missing simp lemmas for the
 project's own definitions. Report which proof-shortening infrastructure is missing, with
 quantified examples (proof X is N lines, of which ~M lines are pattern Y).` },
-  { key: 'tactic-infra', prompt: `Lens: TACTIC INFRASTRUCTURE DEBT. Run 'python3 scripts/tactic_pattern_scan.py' in the repo
+  { key: 'tactic-infra', prompt: `Lens: TACTIC INFRASTRUCTURE DEBT. Run 'python3 scripts/audit/tactic_pattern_scan.py' in the repo
 root and analyze the full output. Cross-check against docs/tactic_patterns.md (the ledger) and
 TNLean/MPS/Tactic/Basic.lean (promoted tactics: mpv_ext, block_words, transfer_simp). Per the
 project's own rule of three, patterns with >=3 occurrences across >=2 files must be promoted

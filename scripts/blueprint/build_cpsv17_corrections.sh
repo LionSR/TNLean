@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Build the author-facing CPSV17 corrections note and its source references.
 set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
-bash scripts/generate_paper_aux.sh 1606.00608
+bash scripts/blueprint/generate_paper_aux.sh 1606.00608
 # The paper repeats several main-text labels in unnumbered appendix restatements.
 # Keep their first occurrence, which is the numbered main-text statement.
 python3 - <<'PY'

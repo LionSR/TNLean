@@ -63,7 +63,7 @@
 - **Seen:** `MPS/Symmetry/MPOSymmetry/MixedPath/Joint/JointMixedEndpointEdgeFactors.lean`,
   `MixedEndpointEmbedding.lean`, `MixedEndpointSwap.lean`,
   `MPS/MPU/Circuit/Merging/SingleSiteCircuit.lean` and the former `Circuit/ZeroRegisterConjunction.lean`,
-  now QICLean's `Circuit/Protocol/ZeroRegister/Conjunction.lean` (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
+  now QICLean's `Circuit/Protocol/ZeroRegister/Conjunction.lean` (five copies, found by `scripts/audit/tactic_pattern_scan.py` over the MPO-symmetry modules).
 - **Pattern:**
   ```lean
   intro h
@@ -6655,7 +6655,7 @@ currently one occurrence, so no general declaration is warranted.
   `∑ m, X m ⊗ (∑ j, Y m j ⊗ Z j).submatrix e e`, for arbitrary families of matrices.
 - **Notes:** below the rule of three; promote on the next occurrence.
 
-Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
+Seeded from `scripts/audit/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
 ### ambient left-canonical normalization from a unique full-support MPU block — candidate
@@ -7542,7 +7542,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `leftAct_leftEndpoint_eq_zero`, `rightAct_rightEndpoint` and
   `rightAct_rightEndpoint_eq_zero`
   (`TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallString.lean`, lines 163, 186, 207 and 227;
-  reported by `scripts/tactic_pattern_scan.py`, recorded 2026-09-27).
+  reported by `scripts/audit/tactic_pattern_scan.py`, recorded 2026-09-27).
 - **Abstraction (proposed):** a lemma rewriting
   `∑ c, (∑ α, ∑ β, x α β * Â c α β) * y c` as `∑ α, ∑ β, x α β * ∑ c, Â c α β * y c`, or
   one endpoint lemma parametrized by the value of the pairing, from which the four

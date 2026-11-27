@@ -151,13 +151,13 @@ The blueprint builds with `leanblueprint` on top of a compiled `TNLean` library:
 
 ```bash
 lake build TNLean
-python3 scripts/fetch_tenkz.py
+python3 scripts/tenkz/fetch_tenkz.py
 cd blueprint
 leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
 ```
 
-The standalone FT-MPS volume is built by `scripts/build_blueprint_ch01_12.sh` and published automatically alongside the full blueprint.
+The standalone FT-MPS volume is built by `scripts/blueprint/build_blueprint_ch01_12.sh` and published automatically alongside the full blueprint.
 
 ### Guides and conventions
 

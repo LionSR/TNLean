@@ -21,10 +21,10 @@ Instructions:
      `scripts/generate_import_aggregators.py --check` commands of the step.
    - blueprint jobs: `python3 scripts/run_diagram_tests.py`,
      `(cd blueprint && texra-blueprint web)`, `(cd blueprint && leanblueprint pdf)`,
-     `./scripts/build_blueprint_ch01_12.sh`, and the `python3 scripts/test_*.py`
+     `./scripts/blueprint/build_blueprint_ch01_12.sh`, and the `python3 scripts/test_*.py`
      command of the failed step. The TeX stack is installed only when a
      blueprint job failed.
-     Run `python3 scripts/fetch_tenkz.py` first; the builds need the pinned
+     Run `python3 scripts/tenkz/fetch_tenkz.py` first; the builds need the pinned
      picture package.
 
    A failure that does not reproduce (an expired download, a runner outage, a

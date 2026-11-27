@@ -7,7 +7,7 @@ cap-riding files, degenerate-case sites, and sorries. Prints a human summary
 and a Markdown table row to append to the Metrics section of
 ``docs/proof_debt_ledger.md``.
 
-Usage: python3 scripts/loc_report.py [--row-only]
+Usage: python3 scripts/reports/loc_report.py [--row-only]
 """
 
 import argparse
@@ -18,7 +18,7 @@ import re
 import sys
 from collections import Counter, defaultdict
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, "TNLean")
 WINDOW = 10
 SEQUEL_RE = re.compile(r"[A-Za-z][0-9]+[a-z]?\.lean$")

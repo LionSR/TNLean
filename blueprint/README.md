@@ -25,7 +25,7 @@ Run these commands from the repository root:
 
 ```bash
 lake build
-python3 scripts/fetch_tenkz.py
+python3 scripts/tenkz/fetch_tenkz.py
 cd blueprint
 leanblueprint checkdecls
 leanblueprint pdf
@@ -39,7 +39,7 @@ tags.  The PDF and web builds regenerate `blueprint/print/` and
 Build the separate FT--MPS volume from the repository root:
 
 ```bash
-./scripts/build_blueprint_ch01_12.sh
+./scripts/blueprint/build_blueprint_ch01_12.sh
 ```
 
 This writes `blueprint/print/print12.pdf`, containing the focused FT--MPS

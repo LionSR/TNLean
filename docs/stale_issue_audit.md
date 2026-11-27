@@ -1,6 +1,6 @@
 # Stale Issue Audit
 
-The stale-issue audit (`scripts/audit_stale_issues.py`) scans open GitHub issues
+The stale-issue audit (`scripts/audit/audit_stale_issues.py`) scans open GitHub issues
 for citations that may have drifted out of sync with the current state of the
 repository. It is **report-only** — it never edits, closes, or comments on
 issues. Flagged items are triage signals for a human maintainer, who decides
@@ -61,7 +61,7 @@ gh issue list \
 Then run the audit:
 
 ```bash
-python3 scripts/audit_stale_issues.py --issues open-issues.json
+python3 scripts/audit/audit_stale_issues.py --issues open-issues.json
 ```
 
 ### CLI options
@@ -80,7 +80,7 @@ python3 scripts/audit_stale_issues.py --issues open-issues.json
 The `--self-test` flag runs a smoke test without talking to GitHub:
 
 ```bash
-python3 scripts/audit_stale_issues.py --self-test
+python3 scripts/audit/audit_stale_issues.py --self-test
 ```
 
 It constructs a synthetic issue referencing a bogus file

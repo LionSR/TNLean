@@ -19,7 +19,7 @@ from pathlib import Path
 from badge_utils import axioms_color, count_color, sorries_color
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 LEAN_ROOT = ROOT / "TNLean"
 BLUEPRINT_SRC = ROOT / "blueprint" / "src"
 

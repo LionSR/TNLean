@@ -42,10 +42,10 @@ by identifier, and a build.
 
 Usage
 -----
-    python3 scripts/zero_reference_scan.py                  # default scan
-    python3 scripts/zero_reference_scan.py --include-attributed
-    python3 scripts/zero_reference_scan.py --json > residue.json
-    python3 scripts/zero_reference_scan.py --corpus ../QICLean
+    python3 scripts/audit/zero_reference_scan.py                  # default scan
+    python3 scripts/audit/zero_reference_scan.py --include-attributed
+    python3 scripts/audit/zero_reference_scan.py --json > residue.json
+    python3 scripts/audit/zero_reference_scan.py --corpus ../QICLean
 
 Exit code is always 0; this is a reporting tool, not a lint gate.
 """
@@ -318,7 +318,7 @@ def find_zero_reference(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent.parent)
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument(
         "--include-archive", action="store_true", help="also scan TNLean/Archive declarations"
     )
