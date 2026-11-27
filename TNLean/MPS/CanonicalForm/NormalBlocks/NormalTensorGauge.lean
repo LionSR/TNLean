@@ -102,14 +102,25 @@ arXiv:0909.5347, Proposition 3. Thus the transfer map has a positive-definite fi
 has no unit-modulus eigenvalue other than one. The spectral normalization of
 arXiv:1606.00608, lines 224--235, then has Perron value one and does not rescale the tensor.
 This conversion is an input to the BNT identification invoked at arXiv:1606.00608, line 1307.
+The physical alphabet is relabelled along `Fintype.equivFin`, where the strong-irreducibility
+consequences of normality are stated.
 -/
-theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D]
-    (A : MPSTensor d D) (hNormal : Kraus.IsNormal A) (hLeft : IsLeftCanonical A) :
+theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D] {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D)) (hNormal : Kraus.IsNormal A) (hLeft : IsLeftCanonical A) :
     IsNormalTensor A := by
-  obtain ⟨ρ, hρ, hρfix⟩ := exists_posDef_fixedPoint_of_isNormal A hLeft hNormal
+  classical
+  let e := (Fintype.equivFin α).symm
+  suffices h : IsNormalTensor (Kraus.reindexPhysical e A) by
+    simpa [Kraus.reindexPhysical] using h.reindexPhysical e.symm
+  have hNormal' := (isNormal_reindexPhysical_equiv e A).2 hNormal
+  have hLeft' : IsLeftCanonical (Kraus.reindexPhysical e A) :=
+    (Kraus.isTP_reindexPhysical_iff e A).2 hLeft
+  clear hNormal hLeft
+  generalize Kraus.reindexPhysical e A = A at hNormal' hLeft' ⊢
+  obtain ⟨ρ, hρ, hρfix⟩ := exists_posDef_fixedPoint_of_isNormal A hLeft' hNormal'
   have hPrim : IsPrimitive (Kraus.transferMap A) :=
-    isPrimitive_transferMap_of_isNormal A hLeft hNormal
-  have hIrr : Kraus.IsIrreducibleFamily A := isIrreducibleFamily_of_isNormal A hNormal
+    isPrimitive_transferMap_of_isNormal A hLeft' hNormal'
+  have hIrr : Kraus.IsIrreducibleFamily A := isIrreducibleFamily_of_isNormal A hNormal'
   have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap A) μ →
       ‖μ‖ = (1 : ℝ) → μ = (1 : ℂ) := by
     intro μ hμ hμnorm
