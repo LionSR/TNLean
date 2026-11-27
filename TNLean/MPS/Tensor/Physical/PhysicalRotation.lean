@@ -69,6 +69,15 @@ lemma rotatePhysical_rotatePhysical [Fintype β] (M : Matrix γ β ℂ)
     _ = rotatePhysical (M * M') A i := by
           simp [rotatePhysical, Matrix.mul_apply, Finset.sum_smul]
 
+/-- Relabelling both physical alphabets of a rotation relabels the rotation matrix. -/
+lemma reindexPhysical_rotatePhysical {α' β' : Type*} [Fintype α'] (M : Matrix β α ℂ)
+    (A : MPTensor α (Fin D)) (e : β' ≃ β) (f : α' ≃ α) :
+    Kraus.reindexPhysical e (rotatePhysical M A) =
+      rotatePhysical (M.submatrix e f) (Kraus.reindexPhysical f A) := by
+  funext i
+  simp only [Kraus.reindexPhysical, rotatePhysical_apply, Matrix.submatrix_apply]
+  exact (f.sum_comp fun j ↦ M (e i) j • A j).symm
+
 /-- Expanding a word of a physically rotated tensor gives the sitewise matrix
 coefficients multiplying the corresponding unrotated words. -/
 theorem evalWord_rotatePhysical_ofFn

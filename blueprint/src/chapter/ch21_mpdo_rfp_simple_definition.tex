@@ -1,45 +1,10 @@
 \section{Simple tensors}
 
-\begin{definition}[Physical-trace transfer of a doubled-index tensor]
-    \label{def:mpdo_doubled_phys_trace_transfer}
-    \lean{MPOTensor.doubledPhysTraceTransfer}
-    \leanok
-    \uses{def:mpo_tensor}
-    As the transfer object of the zero-correlation-length condition of
-    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv} applied to
-    one element of a basis of normal tensors, for a doubled-index tensor $B$
-    with physical dimension $d^{2}$, the physical-trace transfer is the bond
-    matrix obtained by closing the ket leg against the bra leg of one tensor:
-    \begin{align}
-        \mathcal T_{B}
-         & =\sum_{i} B^{\,ii}.
-        \label{eq:rfp_phys_trace}
-    \end{align}
-\end{definition}
-
-\begin{lemma}[Identification with the tensor-level transfer]
-    \label{lem:mpdo_doubled_phys_trace_transfer_to_mps}
-    \lean{MPOTensor.doubledPhysTraceTransfer_toMPSTensor}
-    \leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer}
-    The physical-trace transfer of the doubled-index view of an MPO tensor
-    is the physical-trace transfer of the tensor itself.
-\end{lemma}
-
-\begin{proof}\leanok
-    If $M^{\mathrm{dbl}}$ is the doubled-index view of $M$, then
-    $(M^{\mathrm{dbl}})^{(i,j)}=M^{ij}$, and hence
-    $\mathcal T_{M^{\mathrm{dbl}}}
-        =\sum_i(M^{\mathrm{dbl}})^{ii}
-        =\sum_i M^{ii}
-        =\mathcal T_M$.
-\end{proof}
-
 \begin{lemma}[Blockwise form of the physical-trace transfer]
-    \label{lem:mpdo_doubled_phys_trace_transfer_blockwise}
-    \lean{MPOTensor.doubledPhysTraceTransfer_toTensor}
+    \label{lem:mpdo_phys_trace_transfer_blockwise}
+    \lean{MPOTensor.physTraceTransfer_toTensor}
     \leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:mpo_physical_trace_transfer}
     For a sector decomposition with basis elements $A_{j}$ and weights
     $\mu_{j,q}$, the physical-trace transfer of the direct-sum tensor is the
     block direct sum of the weighted transfers of the copies:
@@ -64,15 +29,15 @@
 \end{proof}
 
 \begin{lemma}[Gauge-phase invariance of nilpotent physical trace]
-    \label{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
+    \label{thm:mpdo_phys_trace_nilpotent_gauge_phase}
     \lean{MPOTensor.%
-        isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv}
+        isNilpotent_physTraceTransfer_of_gaugePhaseEquiv}
     \lean{MPOTensor.%
-        isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv}
-    \lean{MPOTensor.isNilpotent_doubledPhysTraceTransfer_cast_iff}
+        isNilpotent_physTraceTransfer_iff_of_gaugePhaseEquiv}
+    \lean{MPOTensor.isNilpotent_physTraceTransfer_cast_iff}
     \leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer,def:gauge_phase_equiv}
-    If two doubled-index tensors are related by an invertible gauge and a
+    \uses{def:mpo_physical_trace_transfer,def:gauge_phase_equiv}
+    If two MPO tensors are related by an invertible gauge and a
     nonzero phase, then the physical-trace transfer of one is nilpotent if and
     only if that of the other is nilpotent. Identifying equal bond dimensions
     does not alter this condition.
@@ -89,17 +54,17 @@
     \label{thm:mpdo_bnt_nonnilpotency_independent}
     \lean{MPOTensor.bnt_basis_not_isNilpotent_iff}
     \leanok
-    \uses{def:cpsv_bnt_sector_presentation,def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:cpsv_bnt_sector_presentation,def:mpo_physical_trace_transfer}
     Let $P$ and $Q$ be BNT sector presentations of the same
-    doubled-index tensor. Every representative of $P$ has non-nilpotent
+    MPO tensor. Every representative of $P$ has non-nilpotent
     physical-trace transfer if and only if every representative of $Q$ does.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_bnt_presentation_uniqueness,thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
+    \uses{thm:cpsv_bnt_presentation_uniqueness,thm:mpdo_phys_trace_nilpotent_gauge_phase}
     Matching the representatives by
     Lemma~\ref{thm:cpsv_bnt_presentation_uniqueness} and applying
-    Lemma~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} to each
+    Lemma~\ref{thm:mpdo_phys_trace_nilpotent_gauge_phase} to each
     matched pair proves the equivalence.
 \end{proof}
 
@@ -107,10 +72,9 @@
     \label{def:mpdo_simple_tensor}
     \lean{MPOTensor.IsSimple}
     \leanok
-    \uses{def:mpdo,def:mpdo_physical_blocking,def:cpsv_bnt_sector_presentation,def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:mpdo,def:mpdo_physical_blocking,def:cpsv_bnt_sector_presentation,def:mpo_physical_trace_transfer}
     A tensor generating MPDOs is \emph{simple} if there is a positive
-    physical blocking length $L$ such that the doubled-index tensor of the
-    $L$-site blocking has a BNT sector presentation $P$ for which every
+    physical blocking length $L$ such that the $L$-site blocking has a BNT sector presentation $P$ for which every
     representative $B_j$ has non-nilpotent physical-trace transfer
     $\mathcal T_{B_j}$. This records the standing canonical-block
     convention of
@@ -366,7 +330,7 @@
     \label{def:mpdo_simple_cf_tensor}
     \lean{MPOTensor.IsSimpleCanonicalForm}
     \leanok
-    \uses{def:mpdo,def:horizontal_cf_mpdo,def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:mpdo,def:horizontal_cf_mpdo,def:mpo_physical_trace_transfer}
     A tensor generating MPDOs satisfies this predicate if it has a normalized
     horizontal basis-of-normal-tensors decomposition whose basis elements all
     have non-nilpotent physical-trace transfer. This records the
@@ -408,7 +372,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer,def:global_gauge_of_blocks,thm:gauge_invariance,thm:is_normal_tensor_of_is_normal_left_canonical,thm:sector_bnt_cf_reindex_physical}
+    \uses{def:mpo_physical_trace_transfer,def:global_gauge_of_blocks,thm:gauge_invariance,thm:is_normal_tensor_of_is_normal_left_canonical,thm:sector_bnt_cf_reindex_physical}
     At blocking length one, the canonical bijection between the
     one-site blocked ket--bra alphabet and the original doubled alphabet
     relabels the displayed sector decomposition into a BNT presentation of the

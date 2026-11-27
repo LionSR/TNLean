@@ -131,9 +131,10 @@ variable {ι : Type*} [Fintype ι] {d e D : ℕ} {δ : ι → ℕ}
 /-- Physical mixing preserves an exact biorthogonal decomposition, with the
 same analysis and synthesis maps. Source context: GLM23, `fusiontensors2`
 and `eq:orthoV`, lines 458–490. -/
-protected theorem rotatePhysical {B : MPSTensor d D} {A : ∀ c : ι, MPSTensor d (δ c)}
+protected theorem rotatePhysical {α β : Type} [Fintype α] [Fintype β]
+    {B : MPTensor α (Fin D)} {A : ∀ c : ι, MPTensor α (Fin (δ c))}
     {V : ∀ c, Matrix (Fin (δ c)) (Fin D) ℂ} {W : ∀ c, Matrix (Fin D) (Fin (δ c)) ℂ}
-    (h : IsBiorthogonalDecomposition B A V W) (M : Matrix (Fin e) (Fin d) ℂ) :
+    (h : IsBiorthogonalDecomposition B A V W) (M : Matrix β α ℂ) :
     IsBiorthogonalDecomposition (rotatePhysical M B)
       (fun c => rotatePhysical M (A c)) V W where
   retract := h.retract
@@ -165,8 +166,12 @@ theorem toMPSTensor_changePhysicalBasis {χ : ℕ} {O : ∀ c : ι, MPOTensor d 
     (h : IsBiorthogonalDecomposition T.toMPSTensor (fun c => (O c).toMPSTensor) V W) :
     IsBiorthogonalDecomposition (changePhysicalBasis U T).toMPSTensor
       (fun c => (changePhysicalBasis U (O c)).toMPSTensor) V W := by
-  simp only [MPOTensor.toMPSTensor_changePhysicalBasis]
-  exact h.rotatePhysical (MPOTensor.doubledPhysicalMatrix U)
+  change IsBiorthogonalDecomposition
+    (Kraus.reindexPhysical finProdFinEquiv.symm (changePhysicalBasis U T))
+    (fun c => Kraus.reindexPhysical finProdFinEquiv.symm (changePhysicalBasis U (O c))) V W
+  simp only [MPOTensor.changePhysicalBasis_eq_rotatePhysical,
+    reindexPhysical_rotatePhysical (f := finProdFinEquiv.symm)]
+  exact h.rotatePhysical _
 
 /-- A fusion decomposition of a stacked product transports along a physical
 coordinate change, provided the second factor is unchanged by `Vᴴ V`.

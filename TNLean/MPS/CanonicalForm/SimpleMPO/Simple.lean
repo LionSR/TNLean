@@ -49,8 +49,8 @@ theorem IsBNTSectorPresentation.reindexPhysical {α α' : Type*} [Fintype α] [F
     IsBNTSectorPresentation (Kraus.reindexPhysical e A) (P.reindexPhysical e) where
   basisCount_pos := h.basisCount_pos
   sameMPV₂Pos N hN σ := by
-    rw [SectorDecomposition.reindexPhysical_toTensor, MPTensor.mpv_reindexPhysical,
-      MPTensor.mpv_reindexPhysical]
+    change mpv (Kraus.reindexPhysical e A) σ = mpv (Kraus.reindexPhysical e P.toTensor) σ
+    rw [MPTensor.mpv_reindexPhysical, MPTensor.mpv_reindexPhysical]
     exact h.sameMPV₂Pos N hN _
   basis_normal j := (h.basis_normal j).reindexPhysical e
   eventually_li := by
@@ -78,6 +78,7 @@ theorem basis_isNormalTensor {α : Type*} [Fintype α] {S : SectorDecomposition 
   have h := (isNormalTensor_of_isNormal_leftCanonical ((S.reindexPhysical f).basis j)
     (hCF'.basis_isNormal j) (hCF'.basis_left_canonical j)).reindexPhysical f.symm
   have hback : Kraus.reindexPhysical f.symm ((S.reindexPhysical f).basis j) = S.basis j := by
+    change Kraus.reindexPhysical f.symm (Kraus.reindexPhysical f (S.basis j)) = S.basis j
     funext i
     simp [Kraus.reindexPhysical]
   rwa [hback] at h

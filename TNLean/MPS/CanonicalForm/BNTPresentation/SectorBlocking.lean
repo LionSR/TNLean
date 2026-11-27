@@ -309,9 +309,9 @@ theorem IsBNTCanonicalForm.blockTensor
       weight_unit_exists := ?_ }
   · intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-    exact Kraus.isIrreducibleFamily_blockTensor_of_tp_primitive_irr
-      (P.basis j) (hCF.basis_left_canonical j) (hPrimitive j)
-        (hCF.basis_irreducible j) hp
+    exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv (Kraus.decodeBlockEquiv _ _) _).2
+      (Kraus.isIrreducibleFamily_block_of_tp_primitive_irr (P.basis j)
+        (hCF.basis_left_canonical j) (hPrimitive j) (hCF.basis_irreducible j) hp)
   · intro j
     exact (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
       (Kraus.IsTP.block (A := P.basis j) (hCF.basis_left_canonical j) p)
