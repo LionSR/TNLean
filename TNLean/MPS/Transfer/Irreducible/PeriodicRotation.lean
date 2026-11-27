@@ -175,7 +175,8 @@ theorem isIrreducibleFamily_rotatePhysical [DecidableEq α]
 /-- `IsPeriodic m A` is preserved by unitary rotation: the transfer map (hence
 its peripheral spectrum) is unchanged, left-canonical is preserved, and
 irreducibility is preserved. -/
-theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+theorem isPeriodic_rotatePhysical [DecidableEq α] (m : ℕ) (A : MPTensor α (Fin D))
+    (u : Matrix α α ℂ)
     (hu : u * uᴴ = 1) (hA : IsPeriodic m A) :
     IsPeriodic m (rotatePhysical u A) where
   irreducible := isIrreducibleFamily_rotatePhysical A u hu hA.irreducible
