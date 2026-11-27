@@ -28,7 +28,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D₁ D₂ g g₁ g₂ : ℕ}
+variable {α : Type*} [Fintype α] {D₁ D₂ g g₁ g₂ : ℕ}
 
 /-- A basis of normal tensors remains such after replacing the represented tensor by one with
 the same matrix product vectors at every positive length.
@@ -36,8 +36,8 @@ the same matrix product vectors at every positive length.
 This transports the spanning clause in arXiv:1606.00608, lines 271--274; normality and eventual
 linear independence concern only the basis family and are unchanged. -/
 theorem IsCPSVBasisOfNormalTensors.of_sameMPV₂Pos
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    {basis : (j : Fin g) → Σ Dj : ℕ, MPSTensor d Dj}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
+    {basis : (j : Fin g) → Σ Dj : ℕ, MPTensor α (Fin Dj)}
     (hBNT : IsCPSVBasisOfNormalTensors A basis) (hAB : SameMPV₂Pos A B) :
     IsCPSVBasisOfNormalTensors B basis := by
   refine ⟨hBNT.blocks_normal, ?_, hBNT.eventually_li⟩
@@ -50,7 +50,7 @@ linear-independence properties.
 
 This is the label-invariance of the definition in arXiv:1606.00608, lines 271--274. -/
 theorem IsCPSVBasisOfNormalTensors.reindex
-    {A : MPSTensor d D₁} {basis : (j : Fin g₂) → Σ Dj : ℕ, MPSTensor d Dj}
+    {A : MPTensor α (Fin D₁)} {basis : (j : Fin g₂) → Σ Dj : ℕ, MPTensor α (Fin Dj)}
     (hBNT : IsCPSVBasisOfNormalTensors A basis) (e : Fin g₁ ≃ Fin g₂) :
     IsCPSVBasisOfNormalTensors A (fun j ↦ basis (e j)) := by
   refine ⟨fun j ↦ hBNT.blocks_normal (e j), ?_, ?_⟩
@@ -62,7 +62,7 @@ theorem IsCPSVBasisOfNormalTensors.reindex
   · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
     change LinearIndependent ℂ
-      ((fun j : Fin g₂ ↦ mpvState (α := Fin d) (basis j).2 N) ∘ e)
+      ((fun j : Fin g₂ ↦ mpvState (α := α) (basis j).2 N) ∘ e)
     exact (linearIndependent_equiv e).mpr (hLI N hN)
 
 end MPSTensor

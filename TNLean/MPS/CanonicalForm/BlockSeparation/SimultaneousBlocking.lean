@@ -196,7 +196,7 @@ equal or opposite, so the tuples never span the direct sum.
 Source: arXiv:1606.00608, block injectivity of a basis of normal tensors at lines
 317--345; the argument uses only normality and pairwise non-equivalence up to a
 scalar of the tensors. -/
-theorem exists_positive_wordTupleSpanTop_of_isNormal
+private theorem exists_positive_wordTupleSpanTop_of_isNormal_fin
     {g : ℕ} {dim : Fin g → ℕ} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hNormal : ∀ j, IsNormalTensor (B j)) (hdimPos : ∀ j, 0 < dim j)
     (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) B) :
@@ -252,6 +252,23 @@ theorem exists_positive_wordTupleSpanTop_of_isNormal
       B hOriginalAtP hSelectors
   exact ⟨p + selectorLength, Nat.add_pos_left hp selectorLength, hSpan⟩
 
+/-- Normal, positive-dimensional, pairwise gauge-phase-inequivalent blocks over any finite physical
+alphabet have a common positive simultaneous spanning length: the statement above, transported
+along `Fintype.equivFin`.
+
+Source: arXiv:1606.00608, block injectivity of a basis of normal tensors at lines 317--345. -/
+theorem exists_positive_wordTupleSpanTop_of_isNormal
+    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ} {B : (j : Fin g) → MPTensor α (Fin (dim j))}
+    (hNormal : ∀ j, IsNormalTensor (B j)) (hdimPos : ∀ j, 0 < dim j)
+    (hDistinct : BlocksNotGaugePhaseEquiv B) :
+    ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
+  classical
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨L, hL, hSpan⟩ := exists_positive_wordTupleSpanTop_of_isNormal_fin
+    (B := fun j ↦ Kraus.reindexPhysical e (B j)) (fun j ↦ (hNormal j).reindexPhysical e)
+    hdimPos (hDistinct.reindexPhysical e)
+  exact ⟨L, hL, (wordTupleSpanTop_reindexPhysical_equiv e B L).1 hSpan⟩
+
 /-- A basis of normal tensors has one common positive word length at which the
 labelled word evaluations span the full product matrix algebra.
 
@@ -262,8 +279,8 @@ gauge-phase-equivalent duplicate representatives, the hypotheses of
 Source: arXiv:1606.00608, BNT definition at lines 271--274 and block
 injectivity at lines 317--345. -/
 theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
-    {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPTensor α (Fin D)} {B : (j : Fin g) → MPTensor α (Fin (dim j))}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L :=
   exists_positive_wordTupleSpanTop_of_isNormal hBNT.blocks_normal hBNT.blocks_dim_pos
