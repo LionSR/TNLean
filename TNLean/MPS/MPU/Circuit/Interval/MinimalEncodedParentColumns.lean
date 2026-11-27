@@ -134,7 +134,7 @@ variable (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
   (hmk : (internalCutEmbedding N c).val < k.val)
 
 local notation "m" => internalCutEmbedding N c
-local notation "hr" => ManyBody.cutRank_pos (D := interval N 0 (internalCutEmbedding N c).val)
+local notation "hr" => ManyBody.cutRank_pos (D := interval N 0 (Fin.val (internalCutEmbedding N c)))
   (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU)
 local notation "em" => minimalCutBondRegisterEncoding hd U hU hbound m
 local notation "ej" => minimalCutBondRegisterEncoding hd U hU hbound j
