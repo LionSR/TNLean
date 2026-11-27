@@ -234,29 +234,33 @@ namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- An analysis map that intertwines an injective target block with the
 source tensor is determined by its products with the letters. -/
-private theorem eq_of_mul_letter_eq {d DB D : ℕ} {B : MPSTensor d DB} {A : MPSTensor d D}
+private theorem eq_of_mul_letter_eq {α : Type*} [Finite α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
+    {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) {V V' : Matrix (Fin D) (Fin DB) ℂ}
     (hV : ∀ i, V * B i = A i * V) (hV' : ∀ i, V' * B i = A i * V')
     (h : ∀ i, V' * B i = V * B i) : V' = V := by
-  obtain ⟨α, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
+  have := Fintype.ofFinite α
+  obtain ⟨coef, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
     (hA.span_eq_top ▸ Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range A))
-  calc V' = (∑ i, α i • A i) * V' := by rw [hα, Matrix.one_mul]
-    _ = (∑ i, α i • A i) * V := by
+  calc V' = (∑ i, coef i • A i) * V' := by rw [hα, Matrix.one_mul]
+    _ = (∑ i, coef i • A i) * V := by
       simp only [Matrix.sum_mul, Matrix.smul_mul, ← hV', h, hV]
     _ = V := by rw [hα, Matrix.one_mul]
 
 /-- A synthesis map that intertwines an injective target block with the
 source tensor is determined by its products with the letters. -/
-private theorem eq_of_letter_mul_eq {d DB D : ℕ} {B : MPSTensor d DB} {A : MPSTensor d D}
+private theorem eq_of_letter_mul_eq {α : Type*} [Finite α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
+    {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) {W W' : Matrix (Fin DB) (Fin D) ℂ}
     (hW : ∀ i, B i * W = W * A i) (hW' : ∀ i, B i * W' = W' * A i)
     (h : ∀ i, B i * W' = B i * W) : W' = W := by
-  obtain ⟨α, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
+  have := Fintype.ofFinite α
+  obtain ⟨coef, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
     (hA.span_eq_top ▸ Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range A))
-  calc W' = W' * (∑ i, α i • A i) := by rw [hα, Matrix.mul_one]
-    _ = W * (∑ i, α i • A i) := by
+  calc W' = W' * (∑ i, coef i • A i) := by rw [hα, Matrix.mul_one]
+    _ = W * (∑ i, coef i • A i) := by
       simp only [Matrix.mul_sum, Matrix.mul_smul, ← hW', h, hW]
     _ = W := by rw [hα, Matrix.mul_one]
 
@@ -267,9 +271,9 @@ each multiplicity space: `V' = Y V` and `W' = W Y⁻¹`. The letter-support
 relation of the zipper uniqueness theorem holds before multiplication by a
 letter because each target block is injective. Source: GLM23, fusion and
 action gauge freedoms at lines 415--424 and 595--602. -/
-theorem exists_multiplicityGauge_eq_of_isInjective
-    {d DB g : ℕ} {dim N : Fin g → ℕ} {B : MPSTensor d DB}
-    {A : ∀ c, MPSTensor d (dim c)}
+theorem exists_multiplicityGauge_eq_of_isInjective {α : Type*} [Fintype α]
+    {DB g : ℕ} {dim N : Fin g → ℕ} {B : MPTensor α (Fin DB)}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {V V' : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {W W' : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     (h : IsBiorthogonalDecomposition B

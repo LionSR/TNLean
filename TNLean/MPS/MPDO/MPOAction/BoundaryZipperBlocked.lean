@@ -38,9 +38,9 @@ namespace MPSTensor.IsBiorthogonalDecomposition
 /-- Blocking both incoming MPOs and all targets preserves their exact
 biorthogonal decomposition with the same analysis and synthesis maps.
 Source: GLM23 Appendix A, `decompopen`, and physical blocking. 
-**Bridge (T.2b):** the blocked tensors are compared through their doubled-index views, since the
-pair-alphabet blocking of an operator tensor along `Kraus.block` is a T.2b item; removed with
-`toMPSTensor`. -/
+**Bridge (T.2b):** the blocked letters are read as words through the doubled-index blocking
+`toMPSTensor_blockTensor_apply`, since the pair-alphabet blocking of an operator tensor along
+`Kraus.block` is a T.2b item; removed with `toMPSTensor`. -/
 theorem blockMPO {p g : ℕ} {D : Fin g → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Fin g → ℕ} {a b : Fin g}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
@@ -51,16 +51,23 @@ theorem blockMPO {p g : ℕ} {D : Fin g → ℕ}
     {L : ℕ} (hL : 0 < L) :
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor (MPOTensor.blockTensor (T a) L)
-        (MPOTensor.blockTensor (T b) L)).toMPSTensor
-      (fun q : (c : Fin g) × Fin (N c) ↦ (MPOTensor.blockTensor (T q.1) L).toMPSTensor)
+        (MPOTensor.blockTensor (T b) L))
+      (fun q : (c : Fin g) × Fin (N c) ↦ MPOTensor.blockTensor (T q.1) L)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
-  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L I).map finProdFinEquiv.symm)
-    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL I)
+  have key : ∀ {D' : ℕ} (M : MPOTensor p D') (I : Fin (Kraus.blockPhysDim p L) ×
+      Fin (Kraus.blockPhysDim p L)), MPOTensor.blockTensor M L I = Kraus.evalWord M
+        ((MPOTensor.blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm) := by
+    intro D' M I
+    have hI := MPOTensor.toMPSTensor_blockTensor_apply M L (finProdFinEquiv I)
+    rw [MPOTensor.evalWord_toMPSTensor] at hI
+    have hI' : MPOTensor.blockTensor M L (finProdFinEquiv.symm (finProdFinEquiv I)) = _ := hI
+    rwa [Equiv.symm_apply_apply] at hI'
+  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm)
+    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL (finProdFinEquiv I))
     (fun I ↦ by
-      rw [← MPOTensor.blockTensor_mulTensor, MPOTensor.toMPSTensor_blockTensor_apply,
-        MPOTensor.evalWord_toMPSTensor])
-    (fun q I ↦ by
-      rw [MPOTensor.toMPSTensor_blockTensor_apply, MPOTensor.evalWord_toMPSTensor])
+      rw [← MPOTensor.blockTensor_mulTensor]
+      exact key _ I)
+    (fun q I ↦ key (T q.1) I)
 
 end MPSTensor.IsBiorthogonalDecomposition
 
