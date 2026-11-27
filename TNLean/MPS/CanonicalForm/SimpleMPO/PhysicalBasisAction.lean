@@ -28,8 +28,6 @@ Garre-Rubio–Lootens–Molnár, derived here rather than assumed.
 * `MPSTensor.IsBiorthogonalDecomposition.actTensor_changePhysicalBasis` and
   `MPSTensor.IsBiorthogonalDecomposition.changePhysicalBasis`:
   transport of action and fusion decompositions, on the pair alphabet.
-* `MPOTensor.changePhysicalBasis_eq_rotatePhysical`: a physical coordinate change mixes the
-  letters `(p, q)` by `V ⊗ \bar V`.
 * `MPOTensor.mulTensor_changePhysicalBasis_of_slice`: products of changed
   operators.
 * `MPOTensor.physicalSlice_mul_eq_of_isBiorthogonalDecomposition`: an exact
@@ -123,16 +121,6 @@ theorem mulTensor_changePhysicalBasis (V : Matrix (Fin e) (Fin d) ℂ) (hV : V�
     mulTensor (changePhysicalBasis V M) (changePhysicalBasis V N) =
       changePhysicalBasis V (mulTensor M N) :=
   mulTensor_changePhysicalBasis_of_slice V M N fun _ _ => by rw [hV, Matrix.one_mul]
-
-/-- A physical coordinate change of an operator tensor is the physical mixing of its letters
-`(p, q)` by `V ⊗ \bar V`: the ket index is mixed by `V`, the bra index by its conjugate.
-Source context: GLM23, `fusiontensors`, lines 364–391. -/
-theorem changePhysicalBasis_eq_rotatePhysical (V : Matrix (Fin e) (Fin d) ℂ)
-    (K : MPOTensor d D) :
-    changePhysicalBasis V K = MPSTensor.rotatePhysical (V ⊗ₖ V.map (starRingEnd ℂ)) K := by
-  funext ⟨i, j⟩
-  rw [changePhysicalBasis_apply_eq_sum, MPSTensor.rotatePhysical_apply]
-  simp [Matrix.kroneckerMap_apply]
 
 end MPOTensor
 

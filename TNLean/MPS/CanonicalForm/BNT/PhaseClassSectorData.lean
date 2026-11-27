@@ -190,7 +190,7 @@ theorem collapsedBntSectorDecomp_hasBNT
         (fun j => hIrr (classes.repr j))
         (fun j => hTP (classes.repr j))
         classes.blocks_not_equiv i j hij
-  simpa [HasBNTSectorData, P, collapsedBntSectorDecomp, classes] using hLI
+  exact hLI
 
 
 

@@ -332,14 +332,14 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.mpo_pairTwist,
         MPOTensor.mpoWithBoundary_ketTwist, MPOTensor.mpoWithBoundary_braTwist,
         MPOTensor.mpoWithBoundary_pairTwist, Matrix.trace_mul_prod_ofFn_sum_smul,
-        MPOTensor.mpvWithBoundary_toMPSTensor,
-        MPOTensor.mpvWithBoundary_toMPSTensor_eq_mul_iff,
-        MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor,
-        MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor,
-        MPOTensor.twistedTensor_toMPSTensor_pairRep,
-        MPOTensor.mpv_toMPSTensor_eq_mul_iff, MPOTensor.sameMPV_toMPSTensor_iff,
-        MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor,
-        MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor}
+        MPOTensor.mpvWithBoundary_eq_mpoWithBoundary,
+        MPOTensor.forall_mpvWithBoundary_eq_mul_iff,
+        MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary,
+        MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary,
+        MPOTensor.twistedTensor_pairRep,
+        MPOTensor.forall_mpv_eq_mul_iff, MPOTensor.sameMPV_iff_mpo_eq,
+        MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric,
+        MPOTensor.isStrongOnSiteSymmetry_iff_mpv}
     \leanok
     \uses{def:mpdo_onsite_symmetry,def:on_site_symmetric}
     Regard $\rho^{(L)}(\mathcal X,M)$ as the boundary-weighted
