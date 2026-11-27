@@ -27,14 +27,14 @@ one copy per block and complex phases. The corrected multiplicity-one coefficien
 open scoped BigOperators Matrix ComplexOrder
 open Matrix QuantumCircuit
 
-namespace MPSTensor.IsBNTCanonicalForm
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- The normalized one-copy fixed-point state at `N = qM`, with the actual canonical block
 fixed points and corrected weights. This is the corrected instance of arXiv:2307.01696,
 eqs. (19) and (S7), described in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
-noncomputable def oneCopyFixedPointState (h : IsBNTCanonicalForm P)
+noncomputable def oneCopyFixedPointState (h : IsLeftCanonicalBNTPresentation P)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (q M : ℕ) :
     (Fin M → Fin P.totalDim × Fin P.totalDim) → ℂ :=
   nonNormalFixedPointState (ghzAmplitude (oneCopyWeight P.copyWeights κ q M))
@@ -43,7 +43,7 @@ noncomputable def oneCopyFixedPointState (h : IsBNTCanonicalForm P)
 /-- In bond coordinates the actual canonical one-copy state is obtained by applying the
 pair isometry to a GHZ state, as in arXiv:2307.01696, the paragraph after eq. (19), with
 the corrected coefficients of `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
-theorem oneCopyFixedPointState_eq_piKronecker_mulVec_ghzState (h : IsBNTCanonicalForm P)
+theorem oneCopyFixedPointState_eq_piKronecker_mulVec_ghzState (h : IsLeftCanonicalBNTPresentation P)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (q M : ℕ)
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
     h.oneCopyFixedPointState κ q M ((bondRegrouping M P.totalDim).symm p) =
@@ -54,7 +54,7 @@ theorem oneCopyFixedPointState_eq_piKronecker_mulVec_ghzState (h : IsBNTCanonica
 /-- The corrected canonical one-copy state is normalized at every positive blocked length
 with a nonzero coefficient vector. The pairs and their unit norms are derived from the
 canonical tensor, not supplied as hypotheses (arXiv:2307.01696, eqs. (19) and (S8)). -/
-theorem oneCopyFixedPointState_norm_sq (h : IsBNTCanonicalForm P)
+theorem oneCopyFixedPointState_norm_sq (h : IsLeftCanonicalBNTPresentation P)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) {q M : ℕ} (hM : M ≠ 0)
     (hβ : P.coeff (q * M) ≠ 0) :
     ∑ c : Fin M → Fin P.totalDim × Fin P.totalDim,
@@ -70,7 +70,7 @@ theorem oneCopyFixedPointState_norm_sq (h : IsBNTCanonicalForm P)
 have exactly the same physical vector for the actual canonical tensor and its faithful
 block fixed points. This is the corrected identity replacing arXiv:2307.01696, eq. (S7);
 see `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
-theorem nonNormalApproxVector_oneCopyFixedPoint (h : IsBNTCanonicalForm P)
+theorem nonNormalApproxVector_oneCopyFixedPoint (h : IsLeftCanonicalBNTPresentation P)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) {q : ℕ} (hq : q ≠ 0) (M : ℕ) :
     nonNormalApproxVector P.toTensor q M (oneCopyWeight P.copyWeights κ q M)
         (h.basisFixedPointPair κ) =
@@ -99,7 +99,7 @@ and the coefficient length is exactly `qM`.
 
 This instantiates the correction to arXiv:2307.01696, eq. (S7), proved in
 `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
-theorem nonNormalApproxOverlap_oneCopyFixedPoint (h : IsBNTCanonicalForm P)
+theorem nonNormalApproxOverlap_oneCopyFixedPoint (h : IsLeftCanonicalBNTPresentation P)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) {q : ℕ} (hq : q ≠ 0) (M : ℕ) :
     nonNormalApproxOverlap P.toTensor q M
         (ghzAmplitude (oneCopyWeight P.copyWeights κ q M)) (h.basisFixedPointPair κ) =
@@ -112,4 +112,4 @@ theorem nonNormalApproxOverlap_oneCopyFixedPoint (h : IsBNTCanonicalForm P)
     nonNormalApproxOverlap_repeatedBlockSum_oneCopy P.copyCoord_injective
       P.copyCoord_disjoint P.copyWeights hq κ h.basisFixedPoint M
 
-end MPSTensor.IsBNTCanonicalForm
+end MPSTensor.IsLeftCanonicalBNTPresentation

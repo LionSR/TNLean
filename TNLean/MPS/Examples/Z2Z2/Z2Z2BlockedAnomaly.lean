@@ -91,8 +91,7 @@ theorem blockedTensor_isNormal (g : Multiplicative (ZMod 2 × ZMod 2)) :
   rw [blockedTensor, toMPSTensor_blockTensor]
   refine (isNormal_reindexPhysical_equiv _ _).2 ?_
   apply MPSTensor.isNormal_blockTensor _ 2 (by omega)
-  rw [← symMPS_eq_toMPSTensor]
-  exact symMPS_isNormal _
+  exact (isNormal_toMPSTensor_iff _).2 (symMPS_isNormal _)
 
 /-- The original family becomes an exact normal representation after blocking
 two physical sites; the raw odd-ring family is not asserted to be exact. -/
@@ -183,7 +182,7 @@ def blockedXyFusionData :
     (block_pair_eq _ _ _ (funext xyEStacked_eq))
     (by
       rw [toMPSTensor_blockTensor eTensor]
-      change IsReduction _ (blockedMPS eMPS) _ _
+      change IsReduction _ (blockedMPS eTensor.toMPSTensor) _ _
       simpa only [block_neg] using block_reduction _ _ _ xyXy_isReduction)
 
 -- Only the sixteen raw letters are checked, never the 256 blocked letters.

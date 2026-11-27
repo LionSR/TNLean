@@ -16,7 +16,7 @@ MPS/Operator            1
 MPS/ParentHamiltonian   12
 MPS/Preparation         11
 MPS/Symmetry            16
-MPS/Tensor              9
+MPS/Tensor              8
 MPS/Transfer            4
 Network                 3
 PEPS/Approximation      16

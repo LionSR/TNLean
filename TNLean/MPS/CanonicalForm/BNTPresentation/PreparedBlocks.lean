@@ -7,7 +7,7 @@ import TNLean.MPS.CanonicalForm.BNT.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonBlockedCyclicSectorConstruction
 import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 import TNLean.MPS.Transfer.Spectrum.GaugePhase
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 import TNLean.MPS.Tensor.DirectSum.BlockGauge
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 
@@ -15,24 +15,21 @@ import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 # Prepared-block SectorBNT constructor
 
 The suppliers in this file take a finite family of **already prepared**
-TP / primitive / irreducible blocks, their nonzero weights, and the CPSV16 §II.C
-line-246 normalization (`|μ_k| ≤ 1` and at least one `|μ_k| = 1`) as separate
-arguments, and produce a `SectorDecomposition` `P` together with a proof that
+TP / primitive / irreducible blocks, at least one of them, with nonzero weights,
+and produce a `SectorDecomposition` `P` together with a proof that
 
 * `P.toTensor` has the same MPV at every positive length as the original
   `toTensorFromBlocks μ blocks`, and
-* `P` satisfies `IsBNTCanonicalForm`.
+* `P` satisfies `IsLeftCanonicalBNTPresentation`.
 
 The letterwise exact reconstruction is
-`exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks` in
+`exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks` in
 `TNLean.MPS.CanonicalForm.BNTPresentation.PreparedReconstruction`.
 
 The route is to quotient the block indices by MPV phase equivalence (the
 existing one-sided BNT construction of
-`TNLean.MPS.CanonicalForm.PhaseClassSectorData`), and then to discharge the
-two paper-line-246 normalization fields (`weight_norm_le_one`,
-`weight_unit_exists`) via the unit modulus of the phase-class scalar between
-phase-equivalent TP/primitive/irreducible blocks.
+`TNLean.MPS.CanonicalForm.PhaseClassSectorData`).  No normalization of the
+weights (arXiv:1606.00608, line 246) is needed.
 
 ## Paper anchor
 
@@ -53,12 +50,9 @@ phase-equivalent TP/primitive/irreducible blocks.
 
 ## Layering
 
-This module lives in the `FundamentalTheorem.SectorBNT.*` layer because it
-consumes both canonical-form data (`CanonicalForm.PhaseClassSectorData`) and
-the FT-side `IsBNTCanonicalForm` contract (`FundamentalTheorem.SectorBNT.Basic`).
-Placing it in `FundamentalTheorem.SectorBNT.Supplier` re-establishes the natural
-layering: `FundamentalTheorem.SectorBNT` is above `CanonicalForm`, so importing
-from both directions here is consistent with the overall layer order.
+This module consumes both canonical-form data
+(`CanonicalForm.BNT.PhaseClassSectorData`) and the presentation in left-canonical
+gauge (`CanonicalForm.BNTPresentation.LeftCanonical`).
 -/
 
 open MPTensor
@@ -363,15 +357,16 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
 /--
 **Prepared-block SectorBNT constructor.**
 
-Given a finite family of TP, primitive, irreducible blocks with nonzero weights
-satisfying the SectorBNT normalization conditions, the phase-class-collapsed
-sector decomposition is in BNT canonical form.
+Given a nonempty finite family of TP, primitive, irreducible blocks with nonzero
+weights, the phase-class-collapsed sector decomposition is a presentation of its
+assembled tensor in left-canonical gauge.  No normalization of the weights is
+needed.
 
 Paper anchor: `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271-279 and
 1135-1148 for prop:char-BNT, and lines 283-301 for the two-layer BNT/copy
 expansion.
 -/
-theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+theorem isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -380,102 +375,31 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (hμLe : ∀ k, ‖μ k‖ ≤ 1)
-    (hμUnit : ∃ k, ‖μ k‖ = 1) :
-    IsBNTCanonicalForm (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
+    (hr : 0 < r) :
+    IsLeftCanonicalBNTPresentation (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
   classical
-  -- Promote `0 < dim k` to a `NeZero (dim k)` typeclass instance.
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   set classes := mpvPhaseClassData (d := d) blocks with hclasses
-  -- Concrete sector decomposition from phase-class representatives.
   set P := collapsedBntSectorDecomp (d := d) μ blocks hμne with hP
-  -- The phase scalar attached to each phase-class member.
-  set ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
-    fun j q => (classes.enum_phase j q).choose with hζFn
-  -- Phase-scalar nonvanishing.
-  have hζ_ne : ∀ j q, ζFn j q ≠ 0 :=
-    fun j q => (classes.enum_phase j q).choose_spec.1
-  -- Phase-scalar unit modulus (TP + primitive + irreducible on both blocks).
-  have hζ_unit : ∀ j q, ‖ζFn j q‖ = 1 := by
-    intro j q
-    have hPE :
-        MPVBlockPhaseEquiv (blocks (classes.repr j)) (blocks (classes.enum j q)) :=
-      classes.enum_phase j q
-    exact
-      norm_choose_MPVBlockPhaseEquiv_eq_one
-        (X := blocks (classes.repr j)) (Y := blocks (classes.enum j q))
-        (hTP (classes.repr j)) (hTP (classes.enum j q))
-        (hPrim (classes.repr j)) (hPrim (classes.enum j q))
-        (hIrr (classes.repr j)) (hIrr (classes.enum j q))
-        hPE
-  -- HasBNTSectorData.
   have hBNT : HasBNTSectorData P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
-  -- Per-block fields.
-  have h_dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j := by
-    intro j
-    -- `P.basisDim j` is definitionally `dim (classes.repr j)`.
-    change 0 < dim (classes.repr j)
-    exact hDim (classes.repr j)
-  have h_irr : ∀ j : Fin P.basisCount, Kraus.IsIrreducibleFamily (P.basis j) := by
-    intro j; change Kraus.IsIrreducibleFamily (blocks (classes.repr j)); exact hIrr (classes.repr j)
-  have h_lc : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j) := by
-    intro j; change IsLeftCanonical (blocks (classes.repr j)); exact hTP (classes.repr j)
-  have h_self_overlap : ∀ j : Fin P.basisCount,
-      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis j) N)
-        atTop (𝓝 (1 : ℂ)) := by
-    intro j
-    change
-      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (blocks (classes.repr j))
-        (blocks (classes.repr j)) N) atTop (𝓝 (1 : ℂ))
-    exact
-      overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-        (d := d) (D := dim (classes.repr j))
-        (blocks (classes.repr j))
-        (hIrr (classes.repr j)) (hTP (classes.repr j)) (hPrim (classes.repr j))
-  have h_distinct : ∀ j k : Fin P.basisCount, j ≠ k →
-      ∀ h : P.basisDim j = P.basisDim k,
-        ¬ GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) h) (P.basis j)) (P.basis k) := by
-    intro j k hjk hdim
-    -- `P.basisDim j = dim (classes.repr j)` definitionally; ditto for basis.
-    exact classes.blocks_not_equiv j k hjk hdim
-  -- Weight-norm fields (line 246 normalization).
-  have h_weight_le : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
-      ‖P.weight j q‖ ≤ 1 := by
-    intro j q
-    -- `P.weight j q` is definitionally `ζFn j q * μ (classes.enum j q)`.
-    change ‖ζFn j q * μ (classes.enum j q)‖ ≤ 1
-    have := hμLe (classes.enum j q)
-    calc ‖ζFn j q * μ (classes.enum j q)‖
-        = ‖ζFn j q‖ * ‖μ (classes.enum j q)‖ := norm_mul _ _
-      _ = 1 * ‖μ (classes.enum j q)‖ := by rw [hζ_unit j q]
-      _ = ‖μ (classes.enum j q)‖ := one_mul _
-      _ ≤ 1 := this
-  have h_weight_unit : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
-      ‖P.weight j q‖ = 1 := by
-    obtain ⟨k0, hk0⟩ := hμUnit
-    obtain ⟨j, q, hjq⟩ := classes.exists_enum_eq k0
-    refine ⟨j, q, ?_⟩
-    change ‖ζFn j q * μ (classes.enum j q)‖ = 1
-    rw [hjq]
-    rw [norm_mul, hζ_unit j q, one_mul, hk0]
+  -- `P.basis j` is definitionally `blocks (classes.repr j)`.
+  have h_normal : ∀ j : Fin P.basisCount, IsNormalTensor (P.basis j) := fun j =>
+    isNormalTensor_of_isIrreducibleFamily_leftCanonical (blocks (classes.repr j))
+      (hIrr (classes.repr j)) (hPrim (classes.repr j)) (hTP (classes.repr j))
   exact
-    { basis_dim_pos := h_dim_pos
-      basis_irreducible := h_irr
-      basis_left_canonical := h_lc
-      basis_normalized_self_overlap := h_self_overlap
-      bnt_data := hBNT
-      basis_distinct := h_distinct
-      weight_norm_le_one := h_weight_le
-      weight_unit_exists := h_weight_unit }
+    { basisCount_pos := classes.g_pos_of_r_pos hr
+      sameMPV₂Pos := fun _ _ _ => rfl
+      basis_normal := h_normal
+      eventually_li := hBNT
+      basis_left_canonical := fun j => hTP (classes.repr j) }
 
 /-- Prepared TP, primitive, irreducible blocks determine a BNT canonical-form sector
 decomposition with the same positive-length matrix product vectors.
 
 Source: arXiv:1606.00608, lines 237--301 and 1135--1148; arXiv:2011.12127,
 lines 1831--1885. -/
-theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
+theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -484,22 +408,21 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (hμLe : ∀ k, ‖μ k‖ ≤ 1)
-    (hμUnit : ∃ k, ‖μ k‖ = 1) :
+    (hr : 0 < r) :
     ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
-      IsBNTCanonicalForm P := by
+      IsLeftCanonicalBNTPresentation P := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_⟩
-  exact isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
-    μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
+  exact isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+    μ blocks hDim hTP hPrim hIrr hμne hr
 
 /-- Prepared TP, primitive, irreducible blocks determine a dimension-preserving BNT
 canonical-form sector decomposition.
 
 Source: arXiv:1606.00608, lines 237--301 and 1135--1148; arXiv:2011.12127,
 lines 1831--1885. -/
-theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
+theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks_and_totalDim
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -508,15 +431,14 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (hμLe : ∀ k, ‖μ k‖ ≤ 1)
-    (hμUnit : ∃ k, ‖μ k‖ = 1) :
+    (hr : 0 < r) :
     ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
-      IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k := by
+      IsLeftCanonicalBNTPresentation P ∧ P.totalDim = ∑ k : Fin r, dim k := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_, ?_⟩
-  · exact isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
-      μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
+  · exact isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+      μ blocks hDim hTP hPrim hIrr hμne hr
   · exact collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
       μ blocks hDim hTP hPrim hIrr hμne
 
@@ -528,14 +450,9 @@ produce a finite family of prepared blocks that are simultaneously
 left-canonical, primitive, irreducible, and one-site injective, with nonzero
 weights, and matching the blocked input in positive-length MPVs.
 
-This is the "everything except the weight normalization" layer.  The
-remaining ingredient is the CPSV16 §II.C line 246 normalization
-(absolute value of every weight at most one and at least one of unit modulus),
-which the source paper makes an explicit user choice ("we can always choose
-this normalization, which we will assume").  A separate normalization layer
-or hypothesis passes those facts to the prepared-block supplier
-`exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` to obtain
-the full `IsBNTCanonicalForm` conclusion.
+The prepared-block supplier
+`exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks` turns a nonempty such
+family into an `IsLeftCanonicalBNTPresentation` presentation.
 
 Paper anchor: Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608,
 lines 237-246 for eq:II_CF1 and the weight normalization, lines 249-251 for
@@ -560,11 +477,8 @@ positive blocking length `p` and a finite family of prepared blocks
 weights and positive bond dimensions) whose direct-sum tensor matches the
 `p`-blocked input `blockTensor A p` at every positive length.
 
-The CPSV16 §II.C line 246 weight normalization is **not** delivered
-here, since the source paper makes this an explicit user assumption.  A
-separate normalization hypothesis is composed with the prepared
-blocks here to feed the `IsBNTCanonicalForm` constructor
-`exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks`.
+A nonempty family of these blocks feeds the `IsLeftCanonicalBNTPresentation` constructor
+`exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks`.
 
 Construction steps:
 

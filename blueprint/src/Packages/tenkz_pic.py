@@ -6,7 +6,7 @@ carries the blueprint's commutative diagrams, and the ``quantikz`` circuit
 environment are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
 captured unit is compiled **standalone** against the pinned tenkz package
-   (``scripts/fetch_tenkz.py``, then ``TEXINPUTS=<tenkz>/tex/tenkz//``)
+   (``scripts/tenkz/fetch_tenkz.py``, then ``TEXINPUTS=<tenkz>/tex/tenkz//``)
 and converted to one SVG, cached by a per-body content hash, so editing one
 figure invalidates exactly one SVG (spec §1.5: "one edited figure
 invalidates one SVG, not 114").

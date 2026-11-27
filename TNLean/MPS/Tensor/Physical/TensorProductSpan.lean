@@ -120,9 +120,8 @@ theorem isNBlkInjective_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β
 /-- One-site injectivity is preserved by independent tensor products. -/
 theorem isInjective_tensorProduct (A : MPTensor α (Fin D)) (B : MPTensor β (Fin E))
     (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B) :
-    Kraus.IsInjective (tensorProduct A B) := by
-  rw [Kraus.IsInjective, ← Kraus.wordSpan_one]
-  exact isNBlkInjective_tensorProduct A B
+    Kraus.IsInjective (tensorProduct A B) :=
+  (Kraus.isInjective_iff_isNBlkInjective_one _).mpr <| isNBlkInjective_tensorProduct A B
     (Kraus.isNBlkInjective_one_of_isInjective hA)
     (Kraus.isNBlkInjective_one_of_isInjective hB)
 

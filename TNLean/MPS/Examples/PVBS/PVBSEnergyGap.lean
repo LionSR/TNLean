@@ -108,8 +108,8 @@ theorem pvbs_zero_of_mem_orthogonal_parent_kernel (q : ℂ) {N : ℕ} (hN : 2 �
     v 0 = 0 := by
   have : NeZero N := ⟨by omega⟩
   have hraw := pvbsVacuum_mem_chainGroundSpace q hN
-  rw [← ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN,
-    parentHamiltonian_eq_toLin'_hamiltonian _ 2, LinearMap.mem_ker, Matrix.toLin'_apply] at hraw
+  rw [← ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hN,
+    LinearMap.mem_ker, Matrix.toLin'_apply] at hraw
   have hΩ : WithLp.toLp 2 (pvbsVacuum N) ∈ LinearMap.ker
       (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor q) 2 N).hamiltonian) := by
     rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.ofLp_toLp, hraw, WithLp.toLp_zero]

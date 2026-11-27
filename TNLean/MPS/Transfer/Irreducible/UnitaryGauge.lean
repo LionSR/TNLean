@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Unitary.MatrixGramUnitary
 import QICLean.Channel.Irreducible.PerronFrobenius
 import TNLean.MPS.Tensor.Defs
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 

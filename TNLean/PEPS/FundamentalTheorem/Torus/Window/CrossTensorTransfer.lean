@@ -326,8 +326,7 @@ theorem exists_staircaseWindowEdgeCoeffIdentityWitness :
         e.1.1 ∈ T.region := by
   obtain ⟨hE, Z, hZ⟩ := exists_staircaseWindowConjCoeffIdentity
     A B hA hB hATI hBTI hAB hposA hposB hL hK ha0 haw hbh hxw hyh
-  let T := windowEdgeCoeffIdentityWitness_of_hypotheses hB
-    (regionInjectivityUnionClosure_of_overlap B hposB) hL hK ha0 haw hbh hxw hyh
+  let T := windowEdgeCoeffIdentityWitness_of_hypotheses hB hL hK ha0 haw hbh hxw hyh
     Z hE hposB hZ
   refine ⟨hE, Z, T, rfl, ?_⟩
   change (horizontalStaircaseReferenceEdge

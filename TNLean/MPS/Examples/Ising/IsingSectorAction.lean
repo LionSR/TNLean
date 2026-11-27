@@ -91,10 +91,10 @@ open MPSTensor Zsqrtd
 /-- The weighted bond object `Θ_3 = 5 A_1 ⊕ 3 A_ψ ⊕ 2 A_σ` over `ℤ√2`, on
 `ℂ^10 = P_1 ⊕ P_ψ ⊕ P_σ` (data file §1.4); the `σ` summand is `√2` times the rescaled tensor
 `√2 A_σ`. -/
-def thetaThreeZ (h h' : Fin 10) : Matrix (Fin 10) (Fin 10) (ℤ√2) :=
-  (Matrix.fromBlocks ((5 : ℤ√2) • isingOneZ h h') 0 0
-    (Matrix.fromBlocks ((3 : ℤ√2) • isingPsiZ h h') 0 0
-      ((sqrtd : ℤ√2) • isingSigmaZ h h'))).submatrix
+def thetaThreeZ (hh : Fin 10 × Fin 10) : Matrix (Fin 10) (Fin 10) (ℤ√2) :=
+  (Matrix.fromBlocks ((5 : ℤ√2) • isingOneZ hh) 0 0
+    (Matrix.fromBlocks ((3 : ℤ√2) • isingPsiZ hh) 0 0
+      ((sqrtd : ℤ√2) • isingSigmaZ hh))).submatrix
     ((finSumFinEquiv (m := 3) (n := 7)).symm.trans
       (Equiv.sumCongr (Equiv.refl _) (finSumFinEquiv (m := 3) (n := 4)).symm))
     ((finSumFinEquiv (m := 3) (n := 7)).symm.trans
@@ -104,7 +104,7 @@ def thetaThreeZ (h h' : Fin 10) : Matrix (Fin 10) (Fin 10) (ℤ√2) :=
 with the weights ten times the generic P6 point `(λ_1, λ_ψ, λ_σ) = (1/2, 3/10, 1/5)`
 (data file §1.4). -/
 noncomputable def thetaThree : MPOTensor 10 10 :=
-  Function.uncurry fun h h' => complexOfZsqrt2 (thetaThreeZ h h')
+  fun hh => complexOfZsqrt2 (thetaThreeZ hh)
 
 /-! ### The fusion-tree product states -/
 

@@ -107,15 +107,16 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{lemma}[Bounded injective blocking for left-canonical normal tensors]%
     \label{thm:bounded_injective_blocking_normal_left_canonical}
-    \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
+    \lean{MPSTensor.exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal,def:blocked_tensor,thm:wielandt_general,thm:wielandt_proposition_three}
-    As the blocked-injectivity form of the quantum Wielandt input in
+    \uses{def:normal,def:l_blk_injective,def:blocked_tensor,lem:blocking_transfer,thm:wielandt_general,thm:wielandt_proposition_three}
+    As the bounded form of the quantum Wielandt input in
     \cite[Section~II]{Cirac2016MPDO_arXiv} (with the index estimate
     of~\cite[Theorem~1]{Sanz2010Quantum} and the left-canonical hypothesis of
     the canonical-form reduction), let $A$ be a left-canonical normal MPS
-    tensor with bond dimension $D>0$. Then there is a positive blocking length
-    $L\le D^4$ such that the blocked tensor $A^{[L]}$ is one-site injective.
+    tensor with bond dimension $D>0$. Then there is a positive length
+    $L\le D^4$ such that $S_L(A)=\MN{D}$; equivalently, the blocked tensor
+    $A^{[L]}$ is one-site injective.
 \end{lemma}
 
 \begin{proof}
@@ -130,7 +131,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \end{align}
     Trace preservation gives a nonzero Kraus operator, hence
     $\krausrk(A)\ge1$ and the right-hand side is at most $D^4$.
-    Setting $L=\iota(A)$ gives $L>0$ and $S_L(A)=\MN{D}$ by definition, and
+    Setting $L=\iota(A)$ gives $L>0$ and $S_L(A)=\MN{D}$ by definition.
     Lemma~\ref{lem:blocking_transfer} identifies the latter equality with
     one-site injectivity of $A^{[L]}$.
 \end{proof}
@@ -139,7 +140,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:exact_pow_four_block_injectivity_normal_left_canonical}
     \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical,lem:blocking_transfer,thm:wordspan_blk_inj_succ}
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,thm:wordspan_blk_inj_succ}
     Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
     Then $S_{D^4}(A)=\MN{D}$; equivalently, $A$ is
     $D^4$-block injective.
@@ -147,8 +148,8 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical,lem:blocking_transfer,thm:wordspan_blk_inj_succ}
-    Bounded injective blocking and blocking transfer provide $L$ with
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,thm:wordspan_blk_inj_succ}
+    Bounded injective blocking provides $L$ with
     $0<L\le D^4$ and $S_L(A)=\MN{D}$. Writing $D^4=L+k$, induction on $k$ via
     positive-length propagation at each step gives $S_{L+k}(A)=\MN{D}$.
 \end{proof}

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNT.Basic
 import TNLean.MPS.CanonicalForm.BNT.PhaseCover
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # Coefficient identity for full BNT basis matching
@@ -13,10 +13,10 @@ import TNLean.MPS.Tensor.DirectSum.SectorBNT
 This module contains the CPSV16 Appendix MPV proof, lines 1187–1188, coefficient
 comparison in the full-basis bijection form.  The full basis bijection
 `β : Fin Q.basisCount ≃ Fin P.basisCount` (from `StrongMatch`) together with
-`IsBNTCanonicalForm`'s CPSV21 Section IV.A / Definition 4.2 BNT input and
+`IsLeftCanonicalBNTPresentation`'s CPSV21 Section IV.A / Definition 4.2 BNT input and
 per-block spectral-radius-one normalization ensure the substitution has no
 residual unmatched terms.  BNT linear independence of the `P`-basis
-(`hP.bnt_data`) then yields eventual **exact** coefficient identities.
+(`hP.eventually_li`) then yields eventual **exact** coefficient identities.
 
 Paper anchors:
 
@@ -47,9 +47,9 @@ If two normalized BNT basis tensors have MPV families related by a scalar
 power `ζ^N`, then `ζ` has norm one. This is the self-overlap normalization
 closure used after the equal-MPS lemma of CPSV16 (lines 1080–1097) in the
 non-periodic BNT setting. -/
-theorem IsBNTCanonicalForm.norm_phase_of_matched_mpv
+theorem IsLeftCanonicalBNTPresentation.norm_phase_of_matched_mpv
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount} {ζ : ℂ}
     (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv (Q.basis k) σ = ζ ^ N * mpv (P.basis j) σ) :
@@ -77,7 +77,7 @@ This is CPSV16's Lemma `equalMPS` (lines 1080–1097) plus the normalized
 self-overlap/unit-phase closure used in the non-periodic setting. -/
 private lemma extract_unit_gauge_phase_mpv
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (h : P.basisDim j = Q.basisDim k)
     (hGPE : GaugePhaseEquiv
@@ -94,10 +94,10 @@ private lemma extract_unit_gauge_phase_mpv
 /-- The eventual coefficient-comparison argument with an arbitrary length-dependent scalar.
 
 This is the common kernel for equal and proportional MPV families. It substitutes the full
-matched `Q`-basis into the full `P`-basis and compares coefficients using `hP.bnt_data`. -/
+matched `Q`-basis into the full `P`-basis and compares coefficients using `hP.eventually_li`. -/
 private lemma coeff_identity_via_matched_mpv_phase_scalar
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P)
+    (hP : IsLeftCanonicalBNTPresentation P)
     (c : ℕ → ℂ)
     (hc_mpv : ∀ᶠ N in atTop, ∀ σ : Fin N → Fin d,
       mpv P.toTensor σ = c N * mpv Q.toTensor σ)
@@ -113,7 +113,7 @@ private lemma coeff_identity_via_matched_mpv_phase_scalar
     c N * (ζ (β.symm j)) ^ N * Q.coeff N (β.symm j)
   have hLI : ∀ᶠ N in atTop,
       LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (d := d) (P.basis j) N) := by
-    obtain ⟨N₀, hN₀⟩ := hP.bnt_data
+    obtain ⟨N₀, hN₀⟩ := hP.eventually_li
     rw [Filter.eventually_atTop]
     refine ⟨N₀ + 1, ?_⟩
     intro N hN
@@ -203,7 +203,7 @@ gauge matrices are combined afterwards into `X = ⊕_k (𝟙_{r_k} ⊗ X_k)` in
 lines 1189--1192. -/
 theorem coeff_identity_via_matched_mpv_phase
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P)
+    (hP : IsLeftCanonicalBNTPresentation P)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (ζ : Fin Q.basisCount → ℂ)
@@ -240,7 +240,7 @@ Assume a full matched-basis bijection `β` equipped with phases `ζ k` satisfyin
 
 as produced by `ft_sector_bnt_proportional_sector_match_witnesses`.  Substituting
 these per-sector phase relations into `EventuallyNonzeroProportionalMPV₂` and
-applying the BNT linear independence of the `P`-basis (`hP.bnt_data`) forces, for
+applying the BNT linear independence of the `P`-basis (`hP.eventually_li`) forces, for
 a single eventually-nonzero length-dependent scalar `c N`, the eventual
 coefficient identities
 
@@ -276,7 +276,7 @@ conditional implication rather than a residual step of the proportional
 fundamental theorem. -/
 theorem coeff_identity_via_matched_mpv_phase_proportional
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P)
+    (hP : IsLeftCanonicalBNTPresentation P)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (ζ : Fin Q.basisCount → ℂ)
@@ -319,7 +319,7 @@ Assume a full matched-basis equivalence `β : Fin Q.basisCount ≃
 Fin P.basisCount`, with every `Q`-block gauge-phase equivalent to the
 corresponding `P`-block.  Substituting the MPV phase relation for each
 matched pair into `SameMPV₂Pos P.toTensor Q.toTensor`, reindexing the `Q`-sum
-by `β`, and applying A-only BNT linear independence (`hP.bnt_data`) gives
+by `β`, and applying A-only BNT linear independence (`hP.eventually_li`) gives
 an eventual exact coefficient identity.  Equality of the total MPV families
 is required at every positive length.
 
@@ -331,7 +331,7 @@ separate algebraic step, applied after these eventual coefficient identities
 have been obtained. -/
 theorem coeff_identity_via_global_gauge
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,

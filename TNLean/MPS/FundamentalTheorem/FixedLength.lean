@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.FundamentalTheorem.FixedLength.FixedLengthIntertwiner
 import TNLean.MPS.FundamentalTheorem.FixedLength.InjectivePeriodicCuts
-import TNLean.MPS.FundamentalTheorem.FixedLength.PeriodicCutBasisCoordinates
 import TNLean.MPS.FundamentalTheorem.FixedLength.QuadraticCanonicalOBCWindow
 import TNLean.MPS.FundamentalTheorem.FixedLength.QuadraticPerronNormalization
 import TNLean.MPS.FundamentalTheorem.FixedLength.QuadraticPhysicalCutWindow

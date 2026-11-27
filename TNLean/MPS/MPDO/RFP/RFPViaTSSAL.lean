@@ -13,7 +13,7 @@ import TNLean.MPS.MPDO.Entropy.SALTraceTransfer
 
 This file proves Proposition `propsimple` under the explicit normalization
 condition that every positive-length MPO has nonzero trace.  This condition is
-implicit in the source's density-operator language.  A normalized BNT-refined
+implicit in the source's density-operator language.  A BNT-refined
 horizontal form supplies it as a corollary, yielding the previously exposed
 horizontal-form specialization.
 
@@ -334,7 +334,7 @@ This is the conditional entropic conclusion of Appendix C.  It still does not
 assert Proposition `propsimple`: matching the two cuts with the chain lengths of
 `mutualInfoChain` and assembling the positive-chain SAL statement remain
 separate steps.  The required nonzero trace follows separately from
-normalized BNT-refined horizontal form, the MPDO condition, and the
+BNT-refined horizontal form, the MPDO condition, and the
 renormalization maps; source simplicity is not used in this implication.
 
 Source: arXiv:1606.00608, Definition 4.1 and Appendix C,
@@ -415,11 +415,11 @@ theorem isSAL_of_isRFPViaTS_of_trace_ne_zero (M : MPOTensor d D)
     M hRFP N₀ a b (N₀ - (a + 1)) (N₀ - (a + 2))
     hKIn hKOut hIn hOut (hM N₀ hNpos) htr
 
-/-- A matrix product density operator in normalized BNT-refined horizontal
+/-- A matrix product density operator in BNT-refined horizontal
 form satisfying the local renormalization fixed-point equations saturates the
 area law.
 
-Normalized BNT-refined horizontal form supplies the nonzero positive-length
+BNT-refined horizontal form supplies the nonzero positive-length
 traces that are implicit in the source's density-operator language.  The SAL
 argument itself is `isSAL_of_isRFPViaTS_of_trace_ne_zero`.
 

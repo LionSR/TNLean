@@ -80,7 +80,7 @@ each sector $(\alpha,k)$, the orthogonal projector $P_{\alpha,k}$ and its
 $(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$.  It is independent of
 $k$ because cyclicity of trace removes the internal similarity
 $X_{\alpha,k}M_\alpha^{(a,b)}X_{\alpha,k}^{-1}$.  The decomposition assumes
-normalized BNT-refined horizontal form to find a nonzero sector compression,
+BNT-refined horizontal form to find a nonzero sector compression,
 and hence deduces the positivity of every grouped coefficient.  Proposition
 4.13 then applies the reflected marked-chain comparison at line 1909.
 

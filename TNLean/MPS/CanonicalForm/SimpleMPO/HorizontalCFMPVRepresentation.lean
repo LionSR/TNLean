@@ -37,7 +37,7 @@ trace-separation argument; no per-copy separation hypothesis is imposed.
 
 ## Main results
 
-* `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_two_firstSiteActionAgree`:
+* `MPSTensor.IsLeftCanonicalBNTPresentation.insertedTensor_basis_eq_of_two_firstSiteActionAgree`:
   two first-site identities with a common left action give equality of the
   other two insertions on every BNT representative.
 * `MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries`: the preceding
@@ -62,11 +62,11 @@ include the literal bond-space gauge of equation `eq:II_ABasicTensors`,
 lines 283--297. -/
 def HasHorizontalCFMPVRepresentation (M : MPOTensor d D) : Prop :=
   ∃ P : MPSTensor.SectorDecomposition (Fin d × Fin d),
-    MPSTensor.IsBNTCanonicalForm P ∧ MPTensor.SameMPV₂Pos M P.toTensor
+    MPSTensor.IsLeftCanonicalBNTPresentation P ∧ MPTensor.SameMPV₂Pos M P.toTensor
 
 end MPOTensor
 
-namespace MPSTensor.IsBNTCanonicalForm
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 variable {α : Type*} [Fintype α] {P : SectorDecomposition α}
 
@@ -78,7 +78,7 @@ The copies over a representative contribute the grouped coefficient
 to both identities and gives the conclusion without separating repeated
 copies.  Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_two_firstSiteActionAgree
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     {Yleft Ycorner Yright : Matrix α α ℂ}
     (hInv : FirstSiteActionAgree P.toTensor Yleft Ycorner)
     (hPos : FirstSiteActionAgree P.toTensor Yleft Yright) :
@@ -86,7 +86,7 @@ theorem insertedTensor_basis_eq_of_two_firstSiteActionAgree
   exact fun j ↦ (hCF.insertedTensor_basis_eq_of_firstSiteActionAgree hPos j).symm.trans
     (hCF.insertedTensor_basis_eq_of_firstSiteActionAgree hInv j)
 
-end MPSTensor.IsBNTCanonicalForm
+end MPSTensor.IsLeftCanonicalBNTPresentation
 
 namespace MPOTensor
 
@@ -105,7 +105,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887, using the
 representative-grouped Lemma L at Appendix C.3, lines 1835--1858. -/
 theorem basis_opposite_insert_eq_of_rotated_mpo_entries
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hCF : MPSTensor.IsLeftCanonicalBNTPresentation S)
     (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),

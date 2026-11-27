@@ -13,8 +13,6 @@ import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Schwarz.KadisonSchwarz
-import QICLean.Kraus.CPPrimitive
-import QICLean.Kraus.PrimitiveFixedPoint.PosDef
 import QICLean.Channel.Schwarz.Basic
 
 /-!

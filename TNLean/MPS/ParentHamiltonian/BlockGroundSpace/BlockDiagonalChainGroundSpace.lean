@@ -123,14 +123,18 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     bntMPSVectorSpan A N ≤
-      LinearMap.ker (parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) := by
+      LinearMap.ker
+        (Matrix.toLin'
+          (parentRingInteraction
+            (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) := by
   rw [bntMPSVectorSpan]
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨j, rfl⟩
   have : NeZero N := ⟨by omega⟩
   refine LinearMap.mem_ker.mpr ?_
-  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
+  rw [Matrix.toLin'_apply, ManyBody.Interaction.hamiltonian, Matrix.sum_mulVec]
   refine Finset.sum_eq_zero fun i _ => ?_
   exact ManyBody.Interaction.mem_zeroSpace_iff.mp
     (toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace

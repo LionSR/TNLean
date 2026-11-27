@@ -406,7 +406,7 @@ right-hand side is the corresponding block of $Q_3$.
     \lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_density_operator,def:mpdo_sitewise_physical_matrix,thm:mpdo_fusion_clause_topological_density_decomposition}
-    Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
+    Let $M$ generate MPDOs and be in BNT-refined horizontal
     form. Suppose that $M$ is an RFP.
     There is one vertical canonical decomposition and one compatible family of
     fusion coisometries such that, for every $N>0$, the rectangular vertical
@@ -419,7 +419,7 @@ right-hand side is the corresponding block of $Q_3$.
          & =\rho^{(N)}(M).
         \label{eq:rfp_density_reverse}
     \end{align}
-    The statement applies to positive lengths under the normalized BNT-refined
+    The statement applies to positive lengths under the BNT-refined
     horizontal hypothesis.
     % See docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 
@@ -430,7 +430,7 @@ right-hand side is the corresponding block of $Q_3$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_topological_projector_recursion,lem:mpdo_sitewise_physical_coordinate_congruence}
-    Under the normalized BNT-refined horizontal hypothesis, the vertical
+    Under the BNT-refined horizontal hypothesis, the vertical
     canonical-form theorem gives a rectangular coisometry onto the retained
     nonzero vertical sectors, together with exact reconstruction from those
     sectors.
@@ -481,7 +481,7 @@ right-hand side is the corresponding block of $Q_3$.
     \lean{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_topological_density_operator,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,cor:mpdo_fusion_clause_topological_density_factor_commutator}
-    Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
+    Let $M$ generate MPDOs and be in BNT-refined horizontal
     form. Suppose that $M$ is an RFP.
     One choice of the vertical canonical decomposition and fusion
     coisometries gives the density decomposition and, for every $N>0$,

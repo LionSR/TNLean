@@ -7,6 +7,7 @@ import TNLean.MPS.Examples.CZX.CZXTensor
 import TNLean.MPS.FundamentalTheorem.Compression.AssemblyLemmas
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
 import TNLean.MPS.FundamentalTheorem.Compression.Splitting
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # CZX: compression of the stacked square onto `-δ`
@@ -83,9 +84,9 @@ abbrev squareDim : Unit → ℕ := fun _ => 1
 
 /-- The single target of Example D: the bond-one identity tensor carried with the weight `-1`
 (P5 note, `ex:p5ft-czx`). -/
-def czxSquareTarget : (s : Unit) → MPSTensor 4 (squareDim s) := fun _ => (-1 : ℂ) • identityMPS
+def czxSquareTarget : (s : Unit) → MPOTensor 2 (squareDim s) := fun _ => (-1 : ℂ) • identityTensor
 
-theorem czxSquareTarget_eq (s : Unit) (a : Fin 4) :
+theorem czxSquareTarget_eq (s : Unit) (a : Fin 2 × Fin 2) :
     czxSquareTarget s a = complexOfInt (negIdentityIntMPS a) :=
   negIdentityMPS_eq a
 
@@ -144,18 +145,18 @@ def czxSquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace squareDim oneSlot 3
 
 /-- The letters of Example D in the block coordinates: block upper triangular, with the weight
 `-1` on the diagonal of the second block and zero on the other three. -/
-def czxSquareConjInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, 0, 0; 0, -1, 0, 0; 0, 0, 0, 0; 0, 0, 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 2, 0, 2; 0, -1, 0, -1; 0, 0, 0, 0; 0, 0, 0, 0]
+def czxSquareConjInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, 0, 0; 0, -1, 0, 0; 0, 0, 0, 0; 0, 0, 0, 0]
+  | (0, 1) => 0
+  | (1, 0) => 0
+  | (1, 1) => !![0, 2, 0, 2; 0, -1, 0, -1; 0, 0, 0, 0; 0, 0, 0, 0]
 
-theorem czxSquare_conj_int (i : Fin 4) :
+theorem czxSquare_conj_int (i : Fin 2 × Fin 2) :
     czxSquareGaugeInt * czxSquareInt i * czxSquareGaugeInvInt = czxSquareConjInt i := by
   revert i
   decide
 
-theorem czxSquare_conjMatrix (i : Fin 4) :
+theorem czxSquare_conjMatrix (i : Fin 2 × Fin 2) :
     conjMatrix czxSquareGauge (czxSquare i) =
       (complexOfInt (czxSquareConjInt i)).submatrix czxSquareTau czxSquareTau := by
   rw [czxSquareGauge, conjMatrix_gaugeOfMatrix, czxSquare_eq, ← complexOfInt_mul,
@@ -163,13 +164,13 @@ theorem czxSquare_conjMatrix (i : Fin 4) :
 
 /-! ### The compression datum -/
 
-private theorem czxSquare_triangular_int (i : Fin 4)
+private theorem czxSquare_triangular_int (i : Fin 2 × Fin 2)
     (x y : BlockSpace squareDim oneSlot 3) (h : czxSquareOrd y.1 < czxSquareOrd x.1) :
     czxSquareConjInt i (czxSquareTau x) (czxSquareTau y) = 0 := by
   revert i x y
   decide
 
-private theorem czxSquare_matched_int (i : Fin 4) (p q : Fin 1) :
+private theorem czxSquare_matched_int (i : Fin 2 × Fin 2) (p q : Fin 1) :
     czxSquareConjInt i (czxSquareTau ⟨Sum.inl oneSlotMem, p⟩)
         (czxSquareTau ⟨Sum.inl oneSlotMem, q⟩) = negIdentityIntMPS i p q := by
   obtain rfl : p = 0 := Subsingleton.elim p 0
@@ -177,7 +178,7 @@ private theorem czxSquare_matched_int (i : Fin 4) (p q : Fin 1) :
   revert i
   decide
 
-private theorem czxSquare_unmatched_int (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
+private theorem czxSquare_unmatched_int (i : Fin 2 × Fin 2) (t : Fin 3) (p q : Fin 1) :
     czxSquareConjInt i (czxSquareTau ⟨Sum.inr t, p⟩) (czxSquareTau ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide
@@ -198,12 +199,12 @@ def czxSquare_compression : MultiBlockCompression czxSquare oneSlot czxSquareTar
 /-- **The word-trace identity of Example D**: at every positive length the stacked tensor has
 `(-1)^L` times the word traces of the bond-one identity tensor. This is `U_L² = (-1)^L id` at
 the level of traces (P5 note, `ex:p5ft-czx`). -/
-theorem czxSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
+theorem czxSquare_trace_evalWord (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord czxSquare w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityMPS w) := by
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityTensor w) := by
   have h := czxSquare_compression.trace_evalWord_eq_sum w hw
   rw [Finset.sum_singleton, czxSquareTarget,
-    show ((-1 : ℂ) • identityMPS) = fun i => (-1 : ℂ) • identityMPS i from rfl,
+    show ((-1 : ℂ) • identityTensor) = fun i => (-1 : ℂ) • identityTensor i from rfl,
     Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul] at h
   exact h
 
@@ -244,7 +245,7 @@ theorem czxSquareLeft_mul_right : czxSquareLeft * czxSquareRight = 1 :=
 
 /-- **Nilpotency of the remainder of Example D** (P5 note, `ex:p5ft-czx`, with the nilpotency
 length `z + 1 = 4` of Theorem 7.7(vi)). -/
-theorem czxSquare_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 4 ≤ w.length) :
+theorem czxSquare_evalWord_remainder_eq_zero (w : List (Fin 2 × Fin 2)) (hw : 4 ≤ w.length) :
     Kraus.evalWord
       (fun i => czxSquare i - czxSquareRight * czxSquareTarget () i * czxSquareLeft) w = 0 := by
   have hsum : (fun i => czxSquare i - czxSquareRight * czxSquareTarget () i * czxSquareLeft) =
@@ -267,7 +268,8 @@ theorem czxSquare_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, squareDim s + 3 :=
 theorem czxSquare_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
     (h : ∀ i, czxSquare i *ᵥ v = czxSquareTarget () i 0 0 • v) : v = 0 :=
   mulVec_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
-    negIdentityIntMPS (czxSquareTarget_eq ()) ![(0, 0, 0), (0, 3, 0), (3, 2, 0), (3, 3, 0)]
+    negIdentityIntMPS (czxSquareTarget_eq ())
+    ![((0, 0), 0, 0), ((0, 0), 3, 0), ((1, 1), 2, 0), ((1, 1), 3, 0)]
     (Matrix.of fun x => ![![2, 1, -1, -1], ![0, 1, 1, -1], ![0, -1, 1, 1], ![0, 1, 1, 1]] x.1)
     (c := 2) (by norm_num) (by decide) v h
 
@@ -275,7 +277,8 @@ theorem czxSquare_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
 theorem czxSquare_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
     (h : ∀ i, u ᵥ* czxSquare i = czxSquareTarget () i 0 0 • u) : u = 0 :=
   vecMul_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
-    negIdentityIntMPS (czxSquareTarget_eq ()) ![(0, 1, 0), (0, 2, 0), (0, 3, 0), (3, 2, 0)]
+    negIdentityIntMPS (czxSquareTarget_eq ())
+    ![((0, 0), 1, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 2, 0)]
     (Matrix.of fun x => ![![-1, 1, 1, 0], ![1, 0, 0, 0], ![0, 0, 0, 1], ![0, 0, 1, 0]] x.1)
     (c := 1) (by norm_num) (by decide) u h
 
@@ -335,7 +338,7 @@ namespace CZXCompression
 open MPSTensor
 
 private theorem negIdentityIntMPS_unit (x y : Fin 1) :
-    negIdentityIntMPS ((fun _ _ => 0) x y) =
+    negIdentityIntMPS ((fun _ _ => ((0, 0) : Fin 2 × Fin 2)) x y) =
       ((fun _ _ => -1 : Fin 1 → Fin 1 → ℤ) x y) • Matrix.single x y 1 := by
   revert x y
   decide
@@ -345,7 +348,7 @@ acts by the nonzero scalar `-1`, so the one-site matrices already span the whole
 algebra. -/
 theorem czxSquareTarget_isNormal (s : Unit) : Kraus.IsNormal (czxSquareTarget s) :=
   P6Compression.isNormal_of_single_eq_smul negIdentityIntMPS (c := 1) one_ne_zero
-    (fun a => by rw [czxSquareTarget_eq, one_smul]) (fun _ _ => 0) (fun _ _ => -1)
+    (fun a => by rw [czxSquareTarget_eq, one_smul]) (fun _ _ => (0, 0)) (fun _ _ => -1)
     (fun _ _ => by norm_num) negIdentityIntMPS_unit
 
 /-- The virtual algebra of the stacked square is not star closed in these coordinates.
@@ -353,16 +356,27 @@ A star-closed algebra would give a nonzero sitewise right intertwiner with the n
 target `-δ`, contradicting `czxSquare_right_intertwiner_eq_zero`. -/
 theorem czxSquare_not_starClosed :
     ¬ ∀ i, (czxSquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czxSquare) := by
+  -- The splitting criterion is stated on the letters `Fin (2 * 2)` (it runs through the word
+  -- algebra of `Fin d`); it is applied to the doubled-index views.
+  have hrange : Set.range czxSquare.toMPSTensor = Set.range czxSquare :=
+    finProdFinEquiv.symm.surjective.range_comp czxSquare
+  intro hstar
   refine MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    oneSlot czxSquareTarget (fun s _ => czxSquareTarget_isNormal s)
-    (fun _ _ => Nat.one_pos) czxSquare
-    (fun w hw => czxSquare_compression.trace_evalWord_eq_sum w hw) oneSlotMem ?_
+    oneSlot (fun s => (czxSquareTarget s).toMPSTensor)
+    (fun s _ => (MPOTensor.isNormal_toMPSTensor_iff _).2 (czxSquareTarget_isNormal s))
+    (fun _ _ => Nat.one_pos) czxSquare.toMPSTensor
+    (fun w hw => by
+      simp only [MPOTensor.evalWord_toMPSTensor]
+      exact czxSquare_compression.trace_evalWord_eq_sum _ (by simpa using hw)) oneSlotMem ?_
+    (fun i => by rw [hrange]; exact hstar _)
   intro X hX
   have hv : ∀ i, czxSquare i *ᵥ (fun x => X x 0) =
       czxSquareTarget () i 0 0 • (fun x => X x 0) := by
     intro i
     funext x
-    have h := congrFun (congrFun (hX i) x) 0
+    have h := congrFun (congrFun (hX (finProdFinEquiv i)) x) 0
+    simp only [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
+      Equiv.symm_apply_apply] at h
     simp only [Matrix.mul_apply, Fin.sum_univ_one] at h
     simp only [Matrix.mulVec, dotProduct, Pi.smul_apply, smul_eq_mul]
     exact h.trans (mul_comm _ _)

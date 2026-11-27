@@ -8,7 +8,7 @@ import QICLean.Representation.Character.TensorProduct
 import QICLean.Representation.Character.TranslatedOrthogonality
 import QICLean.Algebra.Hermitian.BinaryProjectionFamily
 import QICLean.Algebra.Unitary.UnitaryVectorSwap
-import QICLean.Algebra.Matrix.PermutationMatrixCommute
+import QICLean.Algebra.Matrix.MonomialMatrix
 
 /-!
 # Charge-pair coefficients and the interferometric return measurement

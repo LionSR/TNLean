@@ -31,7 +31,7 @@ basis sectors of a BNT canonical form.
 
 section
 
-namespace MPSTensor.IsBNTCanonicalForm
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
@@ -47,7 +47,7 @@ the direct sum of the BNT basis tensors, with one copy of each distinct sector.
 Repeated copies and arbitrary raw sector weights remain outside this statement;
 see docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex. -/
 theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     HasParentHamiltonianGroundSpaceSpanning
       (directSumTensor P.basis) 2 P.basis := by
@@ -95,7 +95,7 @@ quantifies over all disjoint regions, including adjacent ones, and the source
 theorem permits raw sector weights and repeated copies. Both restrictions are
 recorded in docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
 theorem isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis := by
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
@@ -104,7 +104,7 @@ theorem isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL
     hCF.isCPSVBasisOfNormalTensors_basisDirectSum
     hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
 
-end MPSTensor.IsBNTCanonicalForm
+end MPSTensor.IsLeftCanonicalBNTPresentation
 
 end
 
@@ -112,7 +112,7 @@ section
 
 namespace MPSTensor
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
@@ -129,7 +129,7 @@ the direct sum of the BNT basis tensors, with one copy of each distinct sector.
 Repeated copies and arbitrary raw sector weights remain outside this statement;
 see `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_hasNNCPHGroundSpaces_basisDirectSum
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis := by
   rw [hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning]
@@ -137,7 +137,7 @@ theorem rfp_implies_hasNNCPHGroundSpaces_basisDirectSum
     ⟨fun N hN ↦ hCF.rfp_implies_nncph_basisDirectSum hRFP N hN,
       hCF.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum hRFP⟩
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor
 

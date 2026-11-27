@@ -118,8 +118,8 @@ private theorem eq_inv_dim_trace_smul_one_of_commute
 
 variable {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hA : ∀ a x,
     MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))

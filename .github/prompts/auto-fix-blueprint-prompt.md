@@ -32,7 +32,7 @@ Instructions:
    Require the command to succeed; it rejects unresolved `ERROR` lines and
    renderer warnings that the Blueprint CI gate treats as failures.
    When the PDF job failed, also run `cd blueprint && leanblueprint pdf`, and
-   `./scripts/build_blueprint_ch01_12.sh` if the FT-MPS step failed. Require
+   `./scripts/blueprint/build_blueprint_ch01_12.sh` if the FT-MPS step failed. Require
    both to succeed.
 5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
 6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.

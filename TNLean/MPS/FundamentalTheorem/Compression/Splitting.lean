@@ -277,7 +277,7 @@ bond dimension admits no nonzero sitewise right intertwiner `B^i X = X C_s^i`, t
 remainder of every multi-block compression of the source is nonzero: a vanishing remainder
 would make the compression pair of `s` such an intertwiner with `W_s V_s = 1`. -/
 theorem MultiBlockCompression.remainder_ne_zero_of_forall_right_intertwiner_eq_zero
-    {B : MPSTensor d DB} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+    {α : Type*} {B : MPTensor α (Fin DB)} {S : Finset ι} {C : ∀ s, MPTensor α (Fin (D s))}
     (P : MultiBlockCompression B S C) (s : {s // s ∈ S}) (hD : 0 < D s.1)
     (hno : ∀ X : Matrix (Fin DB) (Fin (D s.1)) ℂ, (∀ i, B i * X = X * C s.1 i) → X = 0) :
     P.remainder ≠ 0 := by

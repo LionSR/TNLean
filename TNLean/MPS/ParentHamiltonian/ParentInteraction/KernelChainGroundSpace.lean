@@ -32,16 +32,18 @@ periodic chain ground space.
 
 Equivalently, a zero-energy vector for \(H_N(A,L)\) satisfies every cyclic
 \(L\)-site local MPS constraint. -/
-theorem ker_parentHamiltonian_le_chainGroundSpace
+theorem ker_hamiltonian_parentRingInteraction_le_chainGroundSpace
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian A L N) ≤ chainGroundSpace A L N := by
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) ≤
+      chainGroundSpace A L N := by
   have : NeZero N := ⟨by omega⟩
   intro ψ hψ
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
   have hH : (parentRingInteraction A L N).hamiltonian.mulVec ψ = 0 := by
-    rwa [LinearMap.mem_ker, parentHamiltonian_eq_toLin'_hamiltonian A L, Matrix.toLin'_apply] at hψ
+    rwa [LinearMap.mem_ker, Matrix.toLin'_apply] at hψ
   have hlocal :
       Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) (WithLp.toLp 2 ψ) = 0 := by
     rw [Matrix.toLpLin_apply, WithLp.ofLp_toLp,
@@ -56,23 +58,27 @@ periodic parent Hamiltonian.
 
 Equivalently, imposing every cyclic \(L\)-site local MPS constraint makes every
 translated parent interaction vanish, and hence gives zero total energy. -/
-theorem chainGroundSpace_le_ker_parentHamiltonian
+theorem chainGroundSpace_le_ker_hamiltonian_parentRingInteraction
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
-    chainGroundSpace A L N ≤ LinearMap.ker (parentHamiltonian A L N) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    chainGroundSpace A L N ≤
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) := by
   have : NeZero N := ⟨by omega⟩
   intro ψ hψ
-  rw [LinearMap.mem_ker, parentHamiltonian_eq_toLin'_hamiltonian A L, Matrix.toLin'_apply]
+  rw [LinearMap.mem_ker, Matrix.toLin'_apply]
   exact (ManyBody.Interaction.mem_zeroSpace_iff_hamiltonian_mulVec_eq_zero
     fun i ↦ posSemidef_parentRingInteraction_term A L i).mp
     (toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace A hN hLN hψ)
 
 /-- In the nondegenerate range, the finite periodic parent-Hamiltonian kernel is
 exactly the cyclic chain ground space. -/
-theorem ker_parentHamiltonian_eq_chainGroundSpace
+theorem ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian A L N) = chainGroundSpace A L N :=
-  le_antisymm (ker_parentHamiltonian_le_chainGroundSpace A hN hLN)
-    (chainGroundSpace_le_ker_parentHamiltonian A hN hLN)
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) =
+      chainGroundSpace A L N :=
+  le_antisymm (ker_hamiltonian_parentRingInteraction_le_chainGroundSpace A hN hLN)
+    (chainGroundSpace_le_ker_hamiltonian_parentRingInteraction A hN hLN)
 
 /-- **The ground space of the parent Hamiltonian on the ring.** In the nondegenerate range
 \(0 < N\), \(L \le N\), the ground space at energy \(0\) of the Hamiltonian of the parent
@@ -85,7 +91,7 @@ theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace
         (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
-    ker_parentHamiltonian_eq_chainGroundSpace A hN hLN]
+    ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace A hN hLN]
 
 /-- **The zero space of the parent interaction on the ring.** In the nondegenerate range
 \(0 < N\), \(L \le N\), the vectors annihilated by every translated parent interaction are

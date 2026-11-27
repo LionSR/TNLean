@@ -153,11 +153,13 @@ jobs:
         timeout-minutes: 10
         run: lake exe checkdecls blueprint/lean_decls
 
-      - name: Generate paper-gap Lean declaration list
+      # The list holds the `\leanid` heads of the paper-gap notes and the qualified
+      # declaration names that `docs/glossary.md` cites in backticks.
+      - name: Generate paper-gap and glossary Lean declaration list
         if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
         run: python3 scripts/paper_gap_leanid_sync.py --root . --output "$RUNNER_TEMP/paper_gap_leanid_decls"
 
-      - name: Check paper-gap Lean declarations
+      - name: Check paper-gap and glossary Lean declarations
         if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
         timeout-minutes: 10
         run: lake exe checkdecls "$RUNNER_TEMP/paper_gap_leanid_decls"

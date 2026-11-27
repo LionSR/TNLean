@@ -79,8 +79,8 @@ theorem isMPOFusionAlgebra_of_biorthogonalDecompositions
     (V : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
     (W : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
     (h : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2)) :
     IsMPOFusionAlgebra O N := by
   intro a b L hL
@@ -88,13 +88,10 @@ theorem isMPOFusionAlgebra_of_biorthogonalDecompositions
   ext σ τ
   have hh := MPSTensor.IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity
     (ι := Fin r) (D := χ) (N := N a b)
-    (B := (mulTensor (O a) (O b)).toMPSTensor)
-    (A := fun c ↦ (O c).toMPSTensor) (V := V a b) (W := W a b) (h a b) hL
-    (fun n ↦ finProdFinEquiv (σ n, τ n))
-  simpa [mpv_toMPSTensor_eq, kraus_evalWord_ofFn, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
-    MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, Matrix.sum_apply, Matrix.smul_apply,
-    smul_eq_mul] using hh
+    (B := mulTensor (O a) (O b))
+    (A := fun c ↦ O c) (V := V a b) (W := W a b) (h a b) hL
+    (fun n ↦ (σ n, τ n))
+  simpa [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hh
 
 /-- Tracing exact action decompositions gives the existing periodic symmetry
 predicate with the same natural-number multiplicities. Source: GLM23
@@ -127,19 +124,19 @@ theorem isNIMRep_of_periodic_expansions_of_isInjective
     (hSpan.linearIndependent_mpv hD) a b x y
   exact_mod_cast he
 
-/-- A simultaneous span on the doubled physical alphabet gives linear
+/-- A simultaneous span on the pair alphabet gives linear
 independence of the periodic block operators. -/
 theorem linearIndependent_mpo_of_wordTupleSpanTop
-    {L : ℕ} (hSpan : MPSTensor.WordTupleSpanTop (fun a ↦ (O a).toMPSTensor) L)
+    {L : ℕ} (hSpan : MPSTensor.WordTupleSpanTop O L)
     (hχ : ∀ a, 0 < χ a) : LinearIndependent ℂ (fun a ↦ mpo (O a) L) := by
   apply Fintype.linearIndependent_iff.2
   intro z hz
   apply Fintype.linearIndependent_iff.1 (hSpan.linearIndependent_mpv hχ) z
   funext w
   have hw := congrArg
-    (fun X ↦ X (fun n ↦ (w n).divNat) (fun n ↦ (w n).modNat)) hz
-  simpa [mpv_toMPSTensor_eq, kraus_evalWord_ofFn, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
-    Finset.sum_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hw
+    (fun X ↦ X (fun n ↦ (w n).1) (fun n ↦ (w n).2)) hz
+  simpa [← mpv_pair, Finset.sum_apply, Matrix.sum_apply, Matrix.smul_apply,
+    smul_eq_mul] using hw
 
 /-- Associativity of physical operators implies associativity of their
 fusion coefficients at any positive length where the operators are linearly
@@ -169,11 +166,11 @@ to read fusion associativity from physical matrix associativity. -/
 theorem IsMPOFusionAlgebra.associative_of_isInjective
     (hfus : IsMPOFusionAlgebra O N)
     (hInj : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (a b c q : Fin r) :
     ∑ e, N a b e * N e c q = ∑ f, N b c f * N a f q := by
   obtain ⟨L, hL, hSpan⟩ := MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective
-    (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInj a)) hχ hne
+    hInj hχ hne
   exact hfus.associative_of_linearIndependent hL
     (linearIndependent_mpo_of_wordTupleSpanTop hSpan hχ) a b c q
 
@@ -187,11 +184,10 @@ theorem IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible
     {B : MPSTensor d (∑ x : Fin s, D x)} (hT : IsBoundaryClosed T)
     (hB : IsBoundaryCompatible T B)
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hOp : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (O a).toMPSTensor))
+    (hOp : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) O)
     (hState : B = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     (hInjOp : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
-    (hneOp : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneOp : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hInjState : ∀ x, Kraus.IsInjective (A x)) (hD : ∀ x, 0 < D x)
     (hneState : MPSTensor.BlocksNotGaugePhaseEquiv A) :
     ∃ (N : Fin r → Fin r → Fin r → ℕ) (M : Fin r → Fin s → Fin s → ℕ),

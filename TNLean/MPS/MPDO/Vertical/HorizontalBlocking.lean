@@ -9,9 +9,9 @@ import TNLean.MPS.Operator.Product.PhysicalBlocking
 import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
-# Normalized BNT-refined horizontal form under two-site blocking
+# BNT-refined horizontal form under two-site blocking
 
-Two-site physical blocking preserves normalized BNT-refined horizontal form.
+Two-site physical blocking preserves BNT-refined horizontal form.
 The sector representatives and copy weights are blocked, the physical alphabet is
 relabeled by the canonical ket--bra equivalence, and every copy retains its
 original virtual gauge.
@@ -27,7 +27,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Two-site physical blocking preserves normalized BNT-refined horizontal
+/-- Two-site physical blocking preserves BNT-refined horizontal
 form.
 
 The proof blocks the BNT sector decomposition, transports it through the
@@ -48,9 +48,9 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
     finProdFinEquiv.trans (twoSiteDoubledIndexEquiv d)
   let S₀ := S.reindexPhysical e₀
   let S' := (S₀.blockTensor 2).reindexPhysical e
-  have hCF' : MPSTensor.IsBNTCanonicalForm S' :=
-    MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical
-      (MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor
+  have hCF' : MPSTensor.IsLeftCanonicalBNTPresentation S' :=
+    MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical
+      (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor
         (hCF.reindexPhysical e₀) (by omega)) e
   refine ⟨S', hCF', ?_⟩
   refine ⟨by rfl, ?_⟩

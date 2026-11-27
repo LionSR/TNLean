@@ -35,7 +35,7 @@ variable {d : ℕ}
 
 Made non-`private` so the prepared-block SectorBNT constructor
 (`TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier`) can construct an
-`IsBNTCanonicalForm P` directly on top of this concrete `P`, with full access
+`IsLeftCanonicalBNTPresentation P` directly on top of this concrete `P`, with full access
 to the underlying phase-class representatives. -/
 noncomputable def collapsedBntSectorDecomp
     {r : ℕ} {dim : Fin r → ℕ}
@@ -190,7 +190,7 @@ theorem collapsedBntSectorDecomp_hasBNT
         (fun j => hIrr (classes.repr j))
         (fun j => hTP (classes.repr j))
         classes.blocks_not_equiv i j hij
-  simpa [HasBNTSectorData, P, collapsedBntSectorDecomp, classes] using hLI
+  exact hLI
 
 
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Blocking
-import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.Transfer
 import QICLean.Kraus.IrreducibleAction
 import TNLean.MPS.FundamentalTheorem.FixedLength.FixedLengthIntertwiner
 import TNLean.MPS.CanonicalForm.TranslationInvariant

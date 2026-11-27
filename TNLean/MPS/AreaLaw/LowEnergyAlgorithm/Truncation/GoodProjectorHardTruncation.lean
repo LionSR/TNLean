@@ -7,7 +7,7 @@ import QICLean.Spectral.LowEnergy.RelativeLowEnergyCloseness
 import QICLean.ManyBody.Replica.Symbol.CoherentSymbolFunction
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
-import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
+import QICLean.Spectral.Eigenvalue.MatrixSpectralDecomp
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.SpectralProjector
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
 

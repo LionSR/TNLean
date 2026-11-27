@@ -27,41 +27,38 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D} {L N : ℕ} {H : NSiteSpace d N →ₗ[ℂ] NSiteSpace d N}
-  {c s : ℂ}
+variable {d D : ℕ} {A : MPSTensor d D} {L N : ℕ} [NeZero N]
+  {H : NSiteSpace d N →ₗ[ℂ] NSiteSpace d N} {c s : ℂ}
 
 /-- If \(H+c=s\,H_{\mathrm{parent}}\) with \(s\ge0\), then \(H+c\), transported to the
 \(\ell^2\) space of coefficient vectors, is positive. -/
 theorem isPositive_conj_of_add_eq_smul_parentHamiltonian
-    (h : H + c • LinearMap.id = s • parentHamiltonian A L N) (hs : 0 ≤ s) :
+    (h : H + c • LinearMap.id =
+      s • Matrix.toLin' (parentRingInteraction A L N).hamiltonian) (hs : 0 ≤ s) :
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ (H + c • LinearMap.id) ∘ₗ
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap).IsPositive := by
   have h' : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
       (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
       s • ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
-        parentHamiltonian A L N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap) := by
+        Matrix.toLin' (parentRingInteraction A L N).hamiltonian ∘ₗ
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap) := by
     rw [h]
     ext v
     simp
-  rw [h']
-  rcases Nat.eq_zero_or_pos N with rfl | hN
-  · rw [parentHamiltonian_eq_sum_localTerm, Finset.univ_eq_empty, Finset.sum_empty,
-      LinearMap.zero_comp, LinearMap.comp_zero, smul_zero]
-    exact LinearMap.isPositive_zero
-  · have : NeZero N := ⟨hN.ne'⟩
-    have hH : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
-        parentHamiltonian A L N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
-        Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian := by
-      rw [parentHamiltonian_eq_toLin'_hamiltonian]
-      rfl
-    rw [hH]
-    exact (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_hamiltonian_parentRingInteraction A L N)).smul_of_nonneg hs
+  have hH : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
+      Matrix.toLin' (parentRingInteraction A L N).hamiltonian ∘ₗ
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
+      Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian :=
+    rfl
+  rw [h', hH]
+  exact (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentRingInteraction A L N)).smul_of_nonneg hs
 
 /-- If \(H+c=s\,H_{\mathrm{parent}}\) with \(s\ge0\), then every eigenvalue \(\mu\) of
 \(H\) satisfies \(-c\le\mu\) in the complex order. -/
 theorem neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian
-    (h : H + c • LinearMap.id = s • parentHamiltonian A L N) (hs : 0 ≤ s) {μ : ℂ}
+    (h : H + c • LinearMap.id =
+      s • Matrix.toLin' (parentRingInteraction A L N).hamiltonian) (hs : 0 ≤ s) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue H μ) : -c ≤ μ := by
   obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
   have hshift : Module.End.HasEigenvalue (H + c • LinearMap.id) (μ + c) :=
@@ -75,8 +72,10 @@ theorem neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian
 /-- If \(H+c=s\,H_{\mathrm{parent}}\) with \(s\ne0\), then the eigenspace of \(H\) for
 \(-c\) is the kernel of the parent Hamiltonian. -/
 theorem eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian
-    (h : H + c • LinearMap.id = s • parentHamiltonian A L N) (hs : s ≠ 0) :
-    Module.End.eigenspace H (-c) = LinearMap.ker (parentHamiltonian A L N) := by
+    (h : H + c • LinearMap.id =
+      s • Matrix.toLin' (parentRingInteraction A L N).hamiltonian) (hs : s ≠ 0) :
+    Module.End.eigenspace H (-c) =
+      LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) := by
   ext v
   have hv := LinearMap.congr_fun h v
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply] at hv

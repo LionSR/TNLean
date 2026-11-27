@@ -240,10 +240,10 @@
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo_vertical_loops,def:vertical_tensor_mpdo,thm:representative_one_sub_mp_zero,thm:cpsv_normal_mpv_phase_gauge}
     In the separation step of
-    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv} under normalized
+    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv} under
     BNT-refined horizontal form (with the CPSV canonical-form counterpart given
     in Lemma~\ref{thm:cpsv_literal_sector_compression_nonzero}), let $M$ be in
-    normalized BNT-refined horizontal form and let $P$ be a matrix for which
+    BNT-refined horizontal form and let $P$ be a matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$. Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
 \end{lemma}
@@ -251,7 +251,7 @@
 \begin{proof}\leanok
     If every compression vanished, its matrix entries would say that the
     first-site insertion by $P$ has the same matrix product vectors as zero.
-    Lemma~L on the normalized BNT-refined horizontal form would then force the
+    Lemma~L on the BNT-refined horizontal form would then force the
     inserted tensor itself to vanish, contrary to the assumed nonzero corner.
 \end{proof}
 
@@ -446,7 +446,7 @@
     \lean{MPOTensor.IsHorizontalCF.gramDressing_eq_of_two_grouped_corners}
     \leanok
     \uses{def:mpdo,def:horizontal_cf_mpdo}
-    Let $M$ be in normalized BNT-refined horizontal form and generate positive
+    Let $M$ be in BNT-refined horizontal form and generate positive
     semidefinite operators on every nonempty chain. Suppose two vertical
     corners are positive scalar multiples of similarities of the same tensor
     $A$:
@@ -475,7 +475,7 @@
     \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
 
     \textbf{Scope restriction (BNT-refined horizontal form):}
-    The normalized BNT-refined horizontal hypothesis is stronger than the
+    The BNT-refined horizontal hypothesis is stronger than the
     CPSV canonical-form hypothesis; documented in
     \cite{gap:cpgsv17_vertical_cf_grouping}.
 \end{lemma}
@@ -749,7 +749,7 @@
     Consequently $U_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ is
     unitary. This is the gauge normalization of
     \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}. Both
-    CPSV canonical form and normalized BNT-refined horizontal form give
+    CPSV canonical form and BNT-refined horizontal form give
     the Gram-dressing hypothesis on their own.
 \end{lemma}
 
@@ -908,7 +908,7 @@
     \end{align}
     These are the normalized sector identities in
     \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}. Both
-    CPSV canonical form and normalized BNT-refined horizontal form give
+    CPSV canonical form and BNT-refined horizontal form give
     the Gram-dressing hypothesis on their own.
 \end{lemma}
 

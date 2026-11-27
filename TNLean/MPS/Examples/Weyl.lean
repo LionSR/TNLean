@@ -44,7 +44,7 @@ this is not a counterexample to an eventual fixed-tensor conclusion of that theo
   lines 2013–2078.
 * `MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top` (boundary map of a spanning length):
   injectivity of the boundary map from degree eight on.
-* `MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace`,
+* `MPSTensor.ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace`,
   `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker` and
   `MPSTensor.cyclicTranslateState_mem_chainGroundSpace` (periodic parent kernel): the periodic
   kernel as the trace line.

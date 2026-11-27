@@ -224,8 +224,8 @@ end Gauge
 
 section ProjectorSum
 
-variable {d m DC DB zz : ℕ} {ι : Type*} [DecidableEq ι] {S : Finset ι} {μ : ι → ℂ}
-  {C : ι → MPSTensor d DC} {B : MPSTensor d DB} {j : ι → Fin m}
+variable {α : Type*} {m DC DB zz : ℕ} {ι : Type*} [DecidableEq ι] {S : Finset ι} {μ : ι → ℂ}
+  {C : ι → MPTensor α (Fin DC)} {B : MPTensor α (Fin DB)} {j : ι → Fin m}
   {U Uinv : Matrix (Fin m) (Fin m) ℂ}
 
 /-- The one-site matrices of a projector-weighted direct sum, in the block coordinates: the
@@ -234,7 +234,7 @@ theorem conjMatrix_projGauge (hU : U * Uinv = 1) (hU' : Uinv * U = 1)
     (ρ : {s // s ∈ S} ⊕ Fin zz ≃ Fin m) (σ : Fin m × Fin DC ≃ Fin DB)
     (hB : ∀ i, B i =
       (∑ s ∈ S, μ s • (basisProj U Uinv (j s) ⊗ₖ C s i)).submatrix σ.symm σ.symm)
-    (i : Fin d) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) :
+    (i : α) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) :
     conjMatrix (projGauge S ρ σ hU hU') (B i) x y =
       ∑ s ∈ S, μ s * (if j s = ρ (projBlockEquiv S DC zz x).1 ∧
           j s = ρ (projBlockEquiv S DC zz y).1 then (1 : ℂ) else 0) *
@@ -263,7 +263,7 @@ include hU hU' hj in
 private theorem conjMatrix_projGauge_eq_zero
     (hB : ∀ i, B i =
       (∑ s ∈ S, μ s • (basisProj U Uinv (j s) ⊗ₖ C s i)).submatrix σ.symm σ.symm)
-    (i : Fin d) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) (hxy : x.1 ≠ y.1) :
+    (i : α) (x y : BlockSpace (fun _ : ι => DC) S (zz * DC)) (hxy : x.1 ≠ y.1) :
     conjMatrix (projGauge S ρ σ hU hU') (B i) x y = 0 := by
   rw [conjMatrix_projGauge hU hU' ρ σ hB i x y]
   refine Finset.sum_eq_zero fun s hs => ?_
@@ -339,20 +339,20 @@ end ProjectorSum
 
 namespace MultiBlockCompression
 
-variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPSTensor d DB}
-  {S : Finset ι} {C : ∀ s, MPSTensor d (D s)} (P : MultiBlockCompression B S C)
+variable {α : Type*} {DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPTensor α (Fin DB)}
+  {S : Finset ι} {C : ∀ s, MPTensor α (Fin (D s))} (P : MultiBlockCompression B S C)
 
 include P in
 /-- A compression with vanishing remainder reconstructs `B` from its blocks (P5 note,
 `eq:p5-main-reconstruction` with `R = 0`). -/
-theorem eq_sum_right_mul_mul_left (hP : P.remainder = 0) (i : Fin d) :
+theorem eq_sum_right_mul_mul_left (hP : P.remainder = 0) (i : α) :
     B i = ∑ s : {s // s ∈ S}, P.right s * C s.1 i * P.left s := by
   have h : B i - ∑ s : {s // s ∈ S}, P.right s * C s.1 i * P.left s = 0 := congrFun hP i
   exact sub_eq_zero.mp h
 
 include P in
 /-- **The sitewise right intertwiner of a split compression**: `B^i V_s = V_s C_s^i`. -/
-theorem mul_right_eq_right_mul (hP : P.remainder = 0) (i : Fin d) (t : {s // s ∈ S}) :
+theorem mul_right_eq_right_mul (hP : P.remainder = 0) (i : α) (t : {s // s ∈ S}) :
     B i * P.right t = P.right t * C t.1 i := by
   rw [P.eq_sum_right_mul_mul_left hP i, Matrix.sum_mul, Finset.sum_eq_single t]
   · rw [Matrix.mul_assoc, P.left_mul_right_self, Matrix.mul_one]
@@ -363,7 +363,7 @@ theorem mul_right_eq_right_mul (hP : P.remainder = 0) (i : Fin d) (t : {s // s �
 
 include P in
 /-- **The sitewise left intertwiner of a split compression**: `W_s B^i = C_s^i W_s`. -/
-theorem left_mul_eq_mul_left (hP : P.remainder = 0) (i : Fin d) (t : {s // s ∈ S}) :
+theorem left_mul_eq_mul_left (hP : P.remainder = 0) (i : α) (t : {s // s ∈ S}) :
     P.left t * B i = C t.1 i * P.left t := by
   rw [P.eq_sum_right_mul_mul_left hP i, Matrix.mul_sum, Finset.sum_eq_single t]
   · rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, P.left_mul_right_self, Matrix.one_mul]

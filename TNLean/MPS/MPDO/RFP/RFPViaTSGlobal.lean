@@ -42,7 +42,7 @@ source argument are recorded in
 * `MPOTensor.exists_global_renormalization_maps`: a renormalization fixed point
   supplies localized channels with the global physical-closure identities.
 * `MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS`: an MPDO
-  in normalized BNT-refined horizontal form satisfying Definition 4.1 has
+  in BNT-refined horizontal form satisfying Definition 4.1 has
   nonzero trace at every positive chain length.
 * `MPOTensor.blockTwo_isRFPViaTS_of_two_four_maps`, `MPOTensor.IsRFPViaTS.blockTwo`: renormalization
   fixed points under two-site physical blocking.
@@ -259,7 +259,7 @@ theorem exists_global_renormalization_maps (M : MPOTensor d D)
   exact ⟨S, T, hS, hT, coarsenFirstTwoSites_physCloseN M S hSclose,
     refineFirstSite_physCloseN M T hTclose⟩
 
-/-- An MPDO in normalized BNT-refined horizontal form satisfying Definition
+/-- An MPDO in BNT-refined horizontal form satisfying Definition
 4.1 has nonzero trace at every positive chain length.
 
 The BNT representation supplies one sufficiently long nonzero density

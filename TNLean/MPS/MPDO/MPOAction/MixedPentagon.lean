@@ -86,9 +86,9 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (hD : ∀ q, 0 < triangularBondDim χ D q)
   (hT : ∀ q, Kraus.IsInjective (T q))
   (hVW : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
-        (T q.1).toMPSTensor)
+        T q.1)
       (fun q ↦ triangularFusionAnalysis VF VA a b q.1 q.2)
       (fun q ↦ triangularFusionSynthesis WF WA a b q.1 q.2))
   (K : Matrix ((c : Fin r ⊕ Fin s) ×
@@ -164,9 +164,9 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (hD : ∀ q, 0 < triangularBondDim χ D q)
   (hT : ∀ q, Kraus.IsInjective (T q))
   (hVW : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
-        (T q.1).toMPSTensor)
+        T q.1)
       (fun q ↦ triangularFusionAnalysis VF VA a b q.1 q.2)
       (fun q ↦ triangularFusionSynthesis WF WA a b q.1 q.2))
   (K : Matrix ((c : Fin r ⊕ Fin s) ×
@@ -289,15 +289,15 @@ theorem actionLMatrix_mixed_pentagon
     (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
     (VF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
     (WF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
     (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
     (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
     (hF : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (hA : ∀ a x,
       MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -339,15 +339,15 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
     (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A) :
     ∃ (N : Fin r → Fin r → Fin r → ℕ) (M : Fin r → Fin s → Fin s → ℕ)
       (VF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
       (WF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
       (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
       (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ),
-      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2)) ∧
       (∀ a x, MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
         (fun q : (y : Fin s) × Fin (M a x y) ↦ A q.1)
@@ -364,14 +364,11 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
             actionLMatrix WF VA WA b c x z ⟨t, j, k⟩ ⟨f, l, mu⟩ *
               actionLMatrix WF VA WA a f x y ⟨z, i, l⟩ ⟨e, m, nu⟩ := by
   classical
-  have hT' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (O a).toMPSTensor) := congrArg toMPSTensor hT
   choose N VF WF hF using fun a b ↦
-    hClosed.exists_blockFusionDecomposition_of_isInjective O hT'
-      (fun a ↦ (hInjO a)) hχ hneO a b
+    hClosed.exists_blockFusionDecomposition_of_isInjective O hT hInjO hχ hneO a b
   choose M VA WA hA using fun a x ↦
     hCompatible.exists_blockActionDecomposition_of_isInjective
-      O A hT' hB hInjA hD hneA a x
+      O A hT hB hInjA hD hneA a x
   exact ⟨N, M, VF, WF, VA, WA, hF, hA,
     actionLMatrix_mixed_pentagon O A hInjO hInjA hχ hD hneO hneA
       VF WF VA WA hF hA⟩

@@ -61,9 +61,9 @@ T2-G3): every letter of the spin sector whose left label is `(1,σ,σ)` or `(ψ,
 diagonal with the prescribed blocks. -/
 theorem conjSector_eq_blockDiagonal_of_rho_two_of_lt :
     ∀ h h' : Fin 10, isingRho h = 2 → isingRho h' = 2 → h.val < 8 →
-      conjSector 2 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      conjSector 2 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
   have key : ∀ h h' : Fin 10, isingRho h = 2 → isingRho h' = 2 → h.val < 8 →
-      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
     decide +kernel
   exact fun h h' hh hh' hlt => (conjSector_eq_conjBlockwise hh h').trans (key h h' hh hh' hlt)
 

@@ -11,7 +11,7 @@ import Mathlib.Tactic.Ring
 import QICLean.Spectral.Filter.EnergyTruncation
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
-import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
+import QICLean.Spectral.Eigenvalue.MatrixSpectralDecomp
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import QICLean.Spectral.LowEnergy.Cluster
 import QICLean.Analysis.Order.LowEnergyPerturbation

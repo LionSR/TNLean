@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.OpenMPS.CutReducedState
-import QICLean.ManyBody.Entropy.Cut.RegionPureApproximationTail
+import QICLean.ManyBody.Entropy.Cut.RegionTraceNorm
 
 /-!
 # Spectral-tail lower bound for MPS approximation

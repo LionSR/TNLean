@@ -136,11 +136,11 @@ theorem basisProj_pairJ (s : Fin 2) :
 
 /-! ### From an integer letter identity to a projector-weighted decomposition -/
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-- A weighted block of a stacked pair fixed point, placed in the stacked bond coordinates, over
 the integers. -/
-def pairBlockInt (CInt : Fin 2 → Fin d → Matrix (Fin 4) (Fin 4) ℤ) (s : Fin 2) (a : Fin d) :
+def pairBlockInt (CInt : Fin 2 → α → Matrix (Fin 4) (Fin 4) ℤ) (s : Fin 2) (a : α) :
     Matrix (Fin 16) (Fin 16) ℤ :=
   (pairProjInt s ⊗ₖ CInt s a).submatrix pairReorder.symm pairReorder.symm
 
@@ -149,13 +149,13 @@ tensor and the two target blocks are rescaled integer tensors, if the weights sa
 identity `n μ_s / (2 c_C) = k_s c_B`, and if the rescaled letters satisfy the integer identity
 `n B^a = ∑_s k_s (Π_s ⊗ C_s^a)`, then the stacked tensor is the projector-weighted sum required
 by `MPSTensor.MultiBlockCompression.ofProjectorSum`. -/
-theorem stackedPair_letter_identity {B : MPSTensor d 16} {C : Fin 2 → MPSTensor d 4}
-    {μ : Fin 2 → ℂ} {cB cC : ℂ} {BInt : Fin d → Matrix (Fin 16) (Fin 16) ℤ}
-    {CInt : Fin 2 → Fin d → Matrix (Fin 4) (Fin 4) ℤ} {n : ℤ} {k : Fin 2 → ℤ}
+theorem stackedPair_letter_identity {B : MPTensor α (Fin 16)} {C : Fin 2 → MPTensor α (Fin 4)}
+    {μ : Fin 2 → ℂ} {cB cC : ℂ} {BInt : α → Matrix (Fin 16) (Fin 16) ℤ}
+    {CInt : Fin 2 → α → Matrix (Fin 4) (Fin 4) ℤ} {n : ℤ} {k : Fin 2 → ℤ}
     (hn : (n : ℂ) ≠ 0) (hB : ∀ a, B a = cB • complexOfInt (BInt a))
     (hC : ∀ s a, C s a = cC • complexOfInt (CInt s a))
     (hscal : ∀ s, (n : ℂ) * (μ s * ((2 : ℂ)⁻¹ * cC)) = (k s : ℂ) * cB)
-    (hint : ∀ a, n • BInt a = ∑ s, k s • pairBlockInt CInt s a) (a : Fin d) :
+    (hint : ∀ a, n • BInt a = ∑ s, k s • pairBlockInt CInt s a) (a : α) :
     B a = (∑ s ∈ pairSlots, μ s •
       (basisProj pairU pairUinv (pairJ s) ⊗ₖ C s a)).submatrix
         pairReorder.symm pairReorder.symm := by
@@ -192,9 +192,9 @@ theorem stackedPair_letter_identity {B : MPSTensor d 16} {C : Fin 2 → MPSTenso
 /-- **Normality from a table of scaled matrix units.** A tensor whose letters are rescaled
 integer matrices and which realises every matrix unit as a nonzero integer multiple of one of
 its letters spans the full matrix algebra, hence is normal at blocking length one. -/
-theorem isNormal_of_single_eq_smul {D : ℕ} {A : MPSTensor d D}
-    (AInt : Fin d → Matrix (Fin D) (Fin D) ℤ) {c : ℂ} (hc : c ≠ 0)
-    (hA : ∀ a, A a = c • complexOfInt (AInt a)) (ℓ : Fin D → Fin D → Fin d)
+theorem isNormal_of_single_eq_smul {α : Type*} {D : ℕ} {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AInt : α → Matrix (Fin D) (Fin D) ℤ) {c : ℂ} (hc : c ≠ 0)
+    (hA : ∀ a, A a = c • complexOfInt (AInt a)) (ℓ : Fin D → Fin D → α)
     (w : Fin D → Fin D → ℤ) (hw : ∀ x y, w x y ≠ 0)
     (h : ∀ x y, AInt (ℓ x y) = w x y • Matrix.single x y 1) :
     Kraus.IsNormal A :=

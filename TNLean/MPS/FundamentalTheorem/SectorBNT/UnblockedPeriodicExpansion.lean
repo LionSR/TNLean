@@ -357,7 +357,7 @@ theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repeated
   obtain ⟨N₀, hLI⟩ := exists_eventually_linearIndependent_of_periodic_blocks_not_repeated_fin
     (fun k ↦ Kraus.reindexPhysical f (A k)) period (fun k ↦ (hPer k).reindexPhysical f) p hDiv
     (fun j k hjk h hRep ↦ hNonrep j k hjk h (by
-      rw [← reindexPhysical_cast_dim] at hRep
+      rw [← reindexPhysical_cast_dim f h (A j)] at hRep
       exact (repeatedBlocks_reindexPhysical_iff f _ _).1 hRep))
   refine ⟨N₀, fun N hN ↦ ?_⟩
   let E : (Fin (p * N) → β) ≃ (Fin (p * N) → Fin (Fintype.card β)) :=

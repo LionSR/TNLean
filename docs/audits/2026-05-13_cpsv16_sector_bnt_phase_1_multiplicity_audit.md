@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-The proposed `IsBNTCanonicalForm` is a real improvement over the one-copy surface, and it correctly admits the motivating `C ⊕ (-C)` and `C ⊕ e^{iθ}C` examples.  However, it is still too restrictive to be the full CPSV16/CPSV21 BNT surface.  Two independent restrictions are not in the papers: strict modulus decrease between distinct BNT basis elements, and equal modulus for all copies over a fixed BNT basis element.  CPSV16 allows distinct normal basis tensors with equal coefficient modulus, and it also allows gauge-phase-equivalent copies over one basis tensor whose coefficients have different moduli.  The safe correction is to make the primary BNT predicate store the BNT basis and the raw `SectorWeightData` weights, with normality, eventual LI, and cast-compatible basis distinctness; any equal-modulus `spectralLevel`/`phaseWeight` layer should be optional, not part of the core predicate.
+The proposed `IsLeftCanonicalBNTPresentation` is a real improvement over the one-copy surface, and it correctly admits the motivating `C ⊕ (-C)` and `C ⊕ e^{iθ}C` examples.  However, it is still too restrictive to be the full CPSV16/CPSV21 BNT surface.  Two independent restrictions are not in the papers: strict modulus decrease between distinct BNT basis elements, and equal modulus for all copies over a fixed BNT basis element.  CPSV16 allows distinct normal basis tensors with equal coefficient modulus, and it also allows gauge-phase-equivalent copies over one basis tensor whose coefficients have different moduli.  The safe correction is to make the primary BNT predicate store the BNT basis and the raw `SectorWeightData` weights, with normality, eventual LI, and cast-compatible basis distinctness; any equal-modulus `spectralLevel`/`phaseWeight` layer should be optional, not part of the core predicate.
 
 ## Source anchors
 
@@ -159,7 +159,7 @@ or reuse a `BlocksNotGaugePhaseEquiv` abbreviation specialized to `P.basis`.  Al
 Use `SectorWeightData` as the coefficient layer and make BNT minimality about basis tensors, not weight moduli.
 
 ```lean
-structure IsBNTCanonicalForm (P : SectorDecomposition d) where
+structure IsLeftCanonicalBNTPresentation (P : SectorDecomposition d) where
   basis_dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
   basis_injective : ∀ j, IsInjective (P.basis j)
   basis_irreducible : ∀ j, IsIrreducibleTensor (P.basis j)
@@ -178,7 +178,7 @@ Then add API lemmas, not fields:
 
 ```lean
 lemma coeff_not_eventually_zero
-    (h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
+    (h : IsLeftCanonicalBNTPresentation P) (j : Fin P.basisCount) :
     ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0)
 ```
 

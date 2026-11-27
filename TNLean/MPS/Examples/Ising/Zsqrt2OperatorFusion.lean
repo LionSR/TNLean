@@ -52,12 +52,12 @@ variable {R : Type*} [CommRing R] {d D₁ D₂ : ℕ}
 /-- The bond-space product of two tensors of scaled matrix units is a sum of scaled matrix
 units. -/
 theorem mulTensorR_of_eq_smul_single
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (a b : Fin d → Fin d → R)
+    (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (a b : Fin d → Fin d → R)
     (l r : Fin d → Fin d → Fin D₁) (l' r' : Fin d → Fin d → Fin D₂)
-    (hM : ∀ i j, M i j = a i j • Matrix.single (l i j) (r i j) 1)
-    (hN : ∀ i j, N i j = b i j • Matrix.single (l' i j) (r' i j) 1) (i k : Fin d) :
-    mulTensorR M N i k = ∑ j : Fin d, (a i j * b j k) •
+    (hM : ∀ i j, M (i, j) = a i j • Matrix.single (l i j) (r i j) 1)
+    (hN : ∀ i j, N (i, j) = b i j • Matrix.single (l' i j) (r' i j) 1) (i k : Fin d) :
+    mulTensorR M N (i, k) = ∑ j : Fin d, (a i j * b j k) •
       Matrix.single (finProdFinEquiv (l i j, l' j k)) (finProdFinEquiv (r i j, r' j k)) 1 := by
   unfold mulTensorR
   ext x y
@@ -87,15 +87,15 @@ duplicate-free list `next i`, then conjugating a letter of the stacked tensor by
 gives the explicit sum over `next i`. The right side is cheap to evaluate, so an identity for it
 between explicit matrices is decided quickly. -/
 theorem mul_mulTensorR_mul_transpose_eq_list
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (a b : Fin d → Fin d → R)
+    (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (a b : Fin d → Fin d → R)
     (l r : Fin d → Fin d → Fin D₁) (l' r' : Fin d → Fin d → Fin D₂)
-    (hM : ∀ i j, M i j = a i j • Matrix.single (l i j) (r i j) 1)
-    (hN : ∀ i j, N i j = b i j • Matrix.single (l' i j) (r' i j) 1)
+    (hM : ∀ i j, M (i, j) = a i j • Matrix.single (l i j) (r i j) 1)
+    (hN : ∀ i j, N (i, j) = b i j • Matrix.single (l' i j) (r' i j) 1)
     (next : Fin d → List (Fin d)) (hnext : ∀ i, (next i).Nodup)
     (hzero : ∀ i j, j ∉ next i → a i j = 0)
     {m : Type*} (G : Matrix m (Fin (D₁ * D₂)) R) (i k : Fin d) :
-    G * mulTensorR M N i k * Gᵀ = Matrix.of fun x y => ((next i).map fun j =>
+    G * mulTensorR M N (i, k) * Gᵀ = Matrix.of fun x y => ((next i).map fun j =>
       a i j * b j k * G x (finProdFinEquiv (l i j, l' j k)) *
         G y (finProdFinEquiv (r i j, r' j k))).sum := by
   rw [mulTensorR_of_eq_smul_single M N a b l r l' r' hM hN,
@@ -108,10 +108,10 @@ theorem mul_mulTensorR_mul_transpose_eq_list
 /-- The stacked letter of two tensors that are block diagonal for a labelling `ρ` of the physical
 index vanishes across blocks. -/
 theorem mulTensorR_eq_zero_of_ne {α : Type*} (ρ : Fin d → α)
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R)
-    (hM : ∀ i j, ρ i ≠ ρ j → M i j = 0) (hN : ∀ i j, ρ i ≠ ρ j → N i j = 0) {i k : Fin d}
-    (hik : ρ i ≠ ρ k) : mulTensorR M N i k = 0 := by
+    (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R)
+    (hM : ∀ i j, ρ i ≠ ρ j → M (i, j) = 0) (hN : ∀ i j, ρ i ≠ ρ j → N (i, j) = 0) {i k : Fin d}
+    (hik : ρ i ≠ ρ k) : mulTensorR M N (i, k) = 0 := by
   unfold mulTensorR
   rw [Finset.sum_eq_zero fun j _ => ?_]
   · simp
@@ -151,25 +151,25 @@ theorem padZsqrt2_smul_single (z : ℕ) {k : ℕ} (c : ℤ√2) (a b : Fin k) :
 matrix `G` with inverse `c⁻¹ H` conjugates every letter of the stacked tensor `X ⋆ Y` into the
 letter of `T` padded by a zero block, then `O_L(X) O_L(Y) = O_L(T)` at every positive length. -/
 theorem mpo_mul_eq_of_zsqrt2_conj {d D₁ D₂ k z : ℕ}
-    (XZ : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ√2))
-    (YZ : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) (ℤ√2))
-    (TZ : Fin d → Fin d → Matrix (Fin k) (Fin k) (ℤ√2))
+    (XZ : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) (ℤ√2))
+    (YZ : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) (ℤ√2))
+    (TZ : Fin d × Fin d → Matrix (Fin k) (Fin k) (ℤ√2))
     (G : Matrix (Fin (k + z)) (Fin (D₁ * D₂)) (ℤ√2))
     (H : Matrix (Fin (D₁ * D₂)) (Fin (k + z)) (ℤ√2)) (c : ℤ√2) (hc : c ≠ 0)
     (hGH : G * H = c • 1) (hHG : H * G = c • 1)
-    (hconj : ∀ i j, G * mulZsqrt2Tensor XZ YZ i j * H = c • padZsqrt2 z (TZ i j))
+    (hconj : ∀ i j, G * mulZsqrt2Tensor XZ YZ (i, j) * H = c • padZsqrt2 z (TZ (i, j)))
     {L : ℕ} (hL : 0 < L) :
-    MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (XZ i j)) L *
-        MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (YZ i j)) L =
-      MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (TZ i j)) L := by
+    MPOTensor.mpo (fun ij => complexOfZsqrt2 (XZ ij)) L *
+        MPOTensor.mpo (fun ij => complexOfZsqrt2 (YZ ij)) L =
+      MPOTensor.mpo (fun ij => complexOfZsqrt2 (TZ ij)) L := by
   rw [← MPOTensor.mpo_mulTensor]
-  have hM : MPOTensor.mulTensor (Function.uncurry fun i j => complexOfZsqrt2 (XZ i j))
-      (Function.uncurry fun i j => complexOfZsqrt2 (YZ i j)) =
-      Function.uncurry fun i j => complexOfZsqrt2 (mulZsqrt2Tensor XZ YZ i j) :=
-    funext fun p => mulTensor_complexOfRing _ XZ YZ p.1 p.2
+  have hM : MPOTensor.mulTensor (fun ij => complexOfZsqrt2 (XZ ij))
+      (fun ij => complexOfZsqrt2 (YZ ij)) =
+      fun ij => complexOfZsqrt2 (mulZsqrt2Tensor XZ YZ ij) :=
+    funext fun p => mulTensor_complexOfRing _ XZ YZ p
   have hγ : zsqrt2ToComplex c ≠ 0 := zsqrt2ToComplex_ne_zero hc
   rw [hM, MPOTensor.mpo_eq_of_conj (N := MPOTensor.directSum
-      (Function.uncurry fun i j => complexOfZsqrt2 (TZ i j)) (0 : MPOTensor d z))
+      (fun ij => complexOfZsqrt2 (TZ ij)) (0 : MPOTensor d z))
       (G := complexOfZsqrt2 G) (H := (zsqrt2ToComplex c)⁻¹ • complexOfZsqrt2 H) ?_ ?_ ?_,
     MPOTensor.mpo_directSum, MPOTensor.mpo_zero_of_pos hL, add_zero]
   · rw [Matrix.mul_smul, ← complexOfZsqrt2_mul, hGH, complexOfZsqrt2_smul, complexOfZsqrt2_one,
@@ -177,7 +177,6 @@ theorem mpo_mul_eq_of_zsqrt2_conj {d D₁ D₂ k z : ℕ}
   · rw [Matrix.smul_mul, ← complexOfZsqrt2_mul, hHG, complexOfZsqrt2_smul, complexOfZsqrt2_one,
       smul_smul, inv_mul_cancel₀ hγ, one_smul]
   · intro i j
-    simp only [Function.uncurry_apply_pair]
     rw [Matrix.mul_smul, ← complexOfZsqrt2_mul, ← complexOfZsqrt2_mul, hconj,
       complexOfZsqrt2_smul, smul_smul, inv_mul_cancel₀ hγ, one_smul, complexOfZsqrt2_padZsqrt2]
     rfl

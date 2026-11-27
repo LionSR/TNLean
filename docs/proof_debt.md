@@ -21,9 +21,9 @@ The process has these artifacts:
 - `.claude/workflows/proof-shrink-tournament.js` — the demolition audit:
   nine lenses hunting mathematically excessive code rankable by *net
   deletable lines* (`name: 'proof-shrink-tournament'`).
-- `scripts/loc_report.py` — the deterministic size snapshot feeding the
+- `scripts/reports/loc_report.py` — the deterministic size snapshot feeding the
   Metrics table.
-- `scripts/zero_reference_scan.py` — the exact-head residue of ledger entry
+- `scripts/audit/zero_reference_scan.py` — the exact-head residue of ledger entry
   S2: every public, unattributed declaration whose final name component
   occurs nowhere but at its own definition across the Lean tree, the
   blueprint, `docs/`, `Notes/`, `Papers/` and `scripts/`, iterated so that
@@ -89,7 +89,7 @@ that removes code the mathematics and physics never needed — code generated
 by the process of formalization (staged exploration, hand-mirroring,
 forked variants, degenerate-case admission) rather than by the theorems.
 
-1. **Measure (weekly, with the audit).** Run `python3 scripts/loc_report.py`
+1. **Measure (weekly, with the audit).** Run `python3 scripts/reports/loc_report.py`
    and append the row to the ledger's Metrics table. The tracked quantities
    — total lines, cross-file duplicated windows, numbered-sequel files,
    cap-riding files, degenerate-case sites, sorries — must trend down or
@@ -105,7 +105,7 @@ forked variants, degenerate-case admission) rather than by the theorems.
    proofs, parallel theories — verifies each candidate adversarially
    (safety: nothing blueprint-cited is lost; arithmetic: the net count
    survives recounting), and ranks by verified net deletable lines. Results
-   land in the ledger's Demolition section.
+   land in the ledger as open entries.
 4. **Deletion outranks abstraction.** When a ledger entry can be resolved
    either by abstracting the duplication or by deleting one side, prefer
    deletion: the general route stays, the superseded route goes, and the
@@ -125,8 +125,9 @@ forked variants, degenerate-case admission) rather than by the theorems.
 ```
 
 Entries stay ranked: the ledger lists open debts in current tournament
-order. Burned-down and retired entries move to the bottom section with
-their outcome recorded, so the same debt is not re-proposed later.
+order. A burned-down, retired or rejected entry is removed from the ledger;
+its outcome is recorded in the closing pull request and issue, which git
+history and the tracker keep.
 
 ## Rules
 

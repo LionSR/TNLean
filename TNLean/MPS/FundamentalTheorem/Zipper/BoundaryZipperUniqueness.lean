@@ -29,8 +29,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
-variable {ι : Type*} [Fintype ι] {d DB : ℕ} {D N : ι → ℕ}
-  {B : MPSTensor d DB} {A : ∀ c, MPSTensor d (D c)}
+variable {ι : Type*} [Fintype ι] {α : Type*} [Fintype α] {DB : ℕ} {D N : ι → ℕ}
+  {B : MPTensor α (Fin DB)} {A : ∀ c, MPTensor α (Fin (D c))}
   {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin DB) ℂ}
   {W : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (D c)) ℂ}
 
@@ -54,7 +54,7 @@ theorem trace_evalWord_eq_sum_multiplicity
     (h : IsBiorthogonalDecomposition B
       (fun q : (c : ι) × Fin (N c) ↦ A q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
-    (w : List (Fin d)) (hw : w ≠ []) :
+    (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) =
       ∑ c, (N c : ℂ) * Matrix.trace (Kraus.evalWord (A c) w) := by
   have ht := h.trace_mul_evalWord 1 w hw
@@ -68,7 +68,7 @@ have uniquely determined multiplicities in any exact biorthogonal
 decomposition of the same tensor. Source: the multiplicity interpretation
 of GLM23 Appendix A, with the derived simultaneous block inverse. -/
 theorem multiplicity_eq_of_wordTupleSpanTop
-    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPTensor α (Fin (dim c))}
     {VN : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {WN : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     {VM : ∀ c, Fin (M c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
@@ -100,7 +100,7 @@ theorem multiplicity_eq_of_wordTupleSpanTop
 the multiplicities; a simultaneous word span is derived internally.
 Source: GLM23 block assumptions, lines 314--323, and Appendix A. -/
 theorem multiplicity_eq_of_isInjective
-    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPTensor α (Fin (dim c))}
     {VN : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {WN : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     {VM : ∀ c, Fin (M c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
@@ -124,7 +124,8 @@ namespace MPSTensor
 distinct target blocks. Source: GLM23 Appendix A, the block-separating inverse
 in the proof of orthogonality. -/
 theorem rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
-    {d g : ℕ} {dim : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {L : ℕ} (hSpan : WordTupleSpanTop A L)
     (c e : Fin g) (hce : c ≠ e)
     (X : Matrix (Fin (dim c)) (Fin (dim e)) ℂ)
@@ -150,7 +151,8 @@ theorem rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
 /-- Distinct positive-dimensional target blocks in a simultaneous word span
 cannot be related by an invertible rectangular gauge. -/
 theorem not_isGaugeRelated_of_wordTupleSpanTop
-    {d g : ℕ} {dim : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {L : ℕ} (hSpan : WordTupleSpanTop A L) (hD : ∀ c, 0 < dim c)
     (c e : Fin g) (hce : c ≠ e) : ¬ IsGaugeRelated (A c) (A e) := by
   rintro ⟨X, Y, hXY, _, hX⟩
@@ -167,8 +169,8 @@ unique existing zipper gauge on the letter support. All block-separation
 premises are derived from the source's injectivity and scalar-gauge exclusion.
 Source: GLM23, fusion and action gauge freedoms at lines 415--424 and 595--602. -/
 theorem exists_unique_multiplicityGauge_of_isInjective
-    {d DB g : ℕ} {dim N : Fin g → ℕ} {B : MPSTensor d DB}
-    {A : ∀ c, MPSTensor d (dim c)}
+    {α : Type*} [Fintype α] {DB g : ℕ} {dim N : Fin g → ℕ} {B : MPTensor α (Fin DB)}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {V V' : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {W W' : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     (h : IsBiorthogonalDecomposition B

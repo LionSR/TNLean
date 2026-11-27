@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Unitary.MatrixIsometryEntries
 import TNLean.MPS.Tensor.Physical.PhysicalIndexMixing
+import TNLean.MPS.Tensor.Physical.PhysicalRotation
 import TNLean.MPS.CanonicalForm.SimpleMPO.BNTLayerOrthogonality
 import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportSALTransport
@@ -29,9 +30,8 @@ decomposition in lines 217--246 and the per-sector reduction in lines
   physical index.
 * `MPOTensor.doubledPhysicalMatrix_isometry`: a physical isometry induces an
   isometry on the doubled index.
-* `MPOTensor.toMPSTensor_changePhysicalBasis`: exact identification with
-  isometric Kraus mixing on the doubled index, the bridge to the doubled-index
-  isometric-mixing lemmas.
+* `MPOTensor.changePhysicalBasis_eq_rotatePhysical`: a change of physical coordinates is
+  the physical mixing of the pair alphabet by `doubledPhysicalMatrix`.
 * `MPOTensor.transferMap_changePhysicalBasis`,
   `MPOTensor.isInjective_changePhysicalBasis_iff`,
   `MPOTensor.isLeftCanonical_changePhysicalBasis`,
@@ -57,20 +57,18 @@ open PhysicalSectorFactorization
 
 /-! ### The doubled physical isometry -/
 
-/-- The matrix induced on the doubled physical index by a physical coordinate
-matrix.  Its ket coefficient is `V i p`, while its bra coefficient is
-`star (V j q)`, in the `finProdFinEquiv` convention of `MPOTensor.toMPSTensor`.
+/-- The matrix induced on the pair alphabet by a physical coordinate matrix. Its ket
+coefficient is `V i p`, while its bra coefficient is `star (V j q)`.
 
 This is a project-derived coordinate definition used in the setting of
 arXiv:1606.00608, lines 217--246 and 1628--1665; the paper does not state this
 definition. -/
 def doubledPhysicalMatrix (V : Matrix (Fin e) (Fin d) ℂ) :
-    Matrix (Fin (e * e)) (Fin (d * d)) ℂ :=
-  fun ij pq ↦
-    V ij.divNat pq.divNat * star (V ij.modNat pq.modNat)
+    Matrix (Fin e × Fin e) (Fin d × Fin d) ℂ :=
+  fun ij pq ↦ V ij.1 pq.1 * star (V ij.2 pq.2)
 
 /-- An isometry of the one-site physical space induces an isometry on the
-doubled ket--bra index.
+pair alphabet.
 
 This is project-derived coordinate algebra in the setting of arXiv:1606.00608,
 lines 217--246 and 1628--1665, not a result asserted in the paper. -/
@@ -78,15 +76,9 @@ theorem doubledPhysicalMatrix_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) :
     (doubledPhysicalMatrix V)ᴴ * doubledPhysicalMatrix V = 1 := by
   classical
-  ext pq rs
-  obtain ⟨⟨p, q⟩, rfl⟩ :=
-    (finProdFinEquiv : Fin d × Fin d ≃ Fin (d * d)).surjective pq
-  obtain ⟨⟨r, s⟩, rfl⟩ :=
-    (finProdFinEquiv : Fin d × Fin d ≃ Fin (d * d)).surjective rs
-  rw [Matrix.mul_apply, ← Equiv.sum_comp
-    (finProdFinEquiv : Fin e × Fin e ≃ Fin (e * e)), Fintype.sum_prod_type]
-  simp only [Matrix.conjTranspose_apply, doubledPhysicalMatrix,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  ext ⟨p, q⟩ ⟨r, s⟩
+  rw [Matrix.mul_apply, Fintype.sum_prod_type]
+  simp only [Matrix.conjTranspose_apply, doubledPhysicalMatrix]
   simp_rw [star_mul, star_star]
   have hterm (i j : Fin e) :
       (V j q * star (V i p)) * (V i r * star (V j s)) =
@@ -96,29 +88,21 @@ theorem doubledPhysicalMatrix_isometry
   rw [← Fintype.sum_mul_sum]
   rw [Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one V hV p r,
     Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one V hV q s]
-  simp only [Matrix.one_apply, Equiv.apply_eq_iff_eq, Prod.mk.injEq]
+  simp only [Matrix.one_apply, Prod.mk.injEq]
   by_cases h₁ : p = r <;> by_cases h₂ : q = s <;>
     simp [h₁, h₂]
 
-/-- Changing the physical basis of an MPO tensor is exactly isometric mixing
-of its doubled-index MPS matrices by `doubledPhysicalMatrix`.
+/-- Changing the physical basis of an MPO tensor is exactly the physical mixing of the
+pair alphabet by `doubledPhysicalMatrix`.
 
 This is a project-derived coordinate identity used in the setting of
 arXiv:1606.00608, lines 217--246 and 1628--1665; the paper does not state it. -/
-theorem toMPSTensor_changePhysicalBasis
+theorem changePhysicalBasis_eq_rotatePhysical
     (V : Matrix (Fin e) (Fin d) ℂ) (K : MPOTensor d D) :
-    (changePhysicalBasis V K).toMPSTensor =
-      fun ij ↦ ∑ pq : Fin (d * d), doubledPhysicalMatrix V ij pq • K.toMPSTensor pq := by
-  funext ij
-  obtain ⟨⟨i, j⟩, rfl⟩ :=
-    (finProdFinEquiv : Fin e × Fin e ≃ Fin (e * e)).surjective ij
-  simp only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat]
-  rw [changePhysicalBasis_apply_eq_sum]
-  rw [← Equiv.sum_comp (finProdFinEquiv : Fin d × Fin d ≃ Fin (d * d))]
-  apply Finset.sum_congr rfl
-  rintro ⟨p, q⟩ _
-  simp [doubledPhysicalMatrix]
+    changePhysicalBasis V K = MPSTensor.rotatePhysical (doubledPhysicalMatrix V) K := by
+  funext ⟨i, j⟩
+  rw [changePhysicalBasis_apply_eq_sum, MPSTensor.rotatePhysical_apply]
+  rfl
 
 /-! ### Tensor consequences on the pair alphabet -/
 
@@ -131,10 +115,9 @@ theorem transferMap_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) :
     Kraus.transferMap (changePhysicalBasis V K) = Kraus.transferMap K := by
-  rw [← kraus_transferMap_toMPSTensor, ← kraus_transferMap_toMPSTensor,
-    toMPSTensor_changePhysicalBasis]
-  exact MPSTensor.transferMap_kraus_isometry K.toMPSTensor
-    (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV)
+  rw [changePhysicalBasis_eq_rotatePhysical]
+  exact MPSTensor.transferMap_kraus_isometry K (doubledPhysicalMatrix V)
+    (doubledPhysicalMatrix_isometry V hV)
 
 /-- Isometric physical embedding preserves and reflects one-site
 injectivity of the tensor on the pair alphabet.
@@ -146,10 +129,9 @@ theorem isInjective_changePhysicalBasis_iff
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) :
     Kraus.IsInjective (changePhysicalBasis V K) ↔ Kraus.IsInjective K := by
-  rw [← isInjective_toMPSTensor_iff, ← isInjective_toMPSTensor_iff,
-    toMPSTensor_changePhysicalBasis]
-  exact MPSTensor.isInjective_kraus_isometry_iff K.toMPSTensor
-    (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV)
+  rw [changePhysicalBasis_eq_rotatePhysical]
+  exact MPSTensor.isInjective_kraus_isometry_iff K (doubledPhysicalMatrix V)
+    (doubledPhysicalMatrix_isometry V hV)
 
 /-- An isometric physical embedding preserves left-canonical normalization
 of the tensor on the pair alphabet.
@@ -161,12 +143,9 @@ theorem isLeftCanonical_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) (hK : MPTensor.IsLeftCanonical K) :
     MPTensor.IsLeftCanonical (changePhysicalBasis V K) := by
-  have hK' : MPTensor.IsLeftCanonical K.toMPSTensor := (isTP_toMPSTensor_iff K).2 hK
-  refine (isTP_toMPSTensor_iff _).1 ?_
-  change MPTensor.IsLeftCanonical (changePhysicalBasis V K).toMPSTensor
-  rw [toMPSTensor_changePhysicalBasis]
-  exact MPSTensor.isLeftCanonical_kraus_isometry K.toMPSTensor
-    (doubledPhysicalMatrix V) (doubledPhysicalMatrix_isometry V hV) hK'
+  rw [changePhysicalBasis_eq_rotatePhysical]
+  exact MPSTensor.isLeftCanonical_kraus_isometry K (doubledPhysicalMatrix V)
+    (doubledPhysicalMatrix_isometry V hV) hK
 
 /-- Isometric physical embedding preserves and reflects normality of the
 tensor on the pair alphabet.
@@ -220,8 +199,7 @@ theorem gaugeEquiv_changePhysicalBasis
     (V : Matrix (Fin e) (Fin d) ℂ) {K L : MPOTensor d D}
     (hKL : MPTensor.GaugeEquiv K L) :
     MPTensor.GaugeEquiv (changePhysicalBasis V K) (changePhysicalBasis V L) := by
-  rw [← gaugeEquiv_toMPSTensor_iff] at hKL ⊢
-  simp only [toMPSTensor_changePhysicalBasis]
+  rw [changePhysicalBasis_eq_rotatePhysical, changePhysicalBasis_eq_rotatePhysical]
   exact hKL.sum_smul (doubledPhysicalMatrix V)
 
 /-! ### MPO positivity and saturation consequences -/

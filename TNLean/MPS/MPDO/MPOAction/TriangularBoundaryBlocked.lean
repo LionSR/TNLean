@@ -32,13 +32,16 @@ open Kraus (blockTensor)
 namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- Positive physical blocking preserves an exact pairwise decomposition
-over any finite label type, with its rectangular matrices unchanged. -/
+over any finite label type, with its rectangular matrices unchanged. 
+**Bridge (T.2b):** the blocked tensors are compared through their doubled-index views, since the
+pair-alphabet blocking of an operator tensor along `Kraus.block` is a T.2b item; removed with
+`toMPSTensor`. -/
 theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Λ → ℕ} {a b : Λ}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
     {W : ∀ c, Fin (N c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ}
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b)).toMPSTensor
-      (fun q : (c : Λ) × Fin (N c) ↦ (T q.1).toMPSTensor)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b))
+      (fun q : (c : Λ) × Fin (N c) ↦ T q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
     {L : ℕ} (hL : 0 < L) :
     IsBiorthogonalDecomposition
@@ -46,29 +49,17 @@ theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
         (MPOTensor.blockTensor (T b) L)).toMPSTensor
       (fun q : (c : Λ) × Fin (N c) ↦ (MPOTensor.blockTensor (T q.1) L).toMPSTensor)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
-  h.ofWords (MPOTensor.blockedPairWord p L) (MPOTensor.blockedPairWord_ne_nil hL)
+  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L I).map finProdFinEquiv.symm)
+    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL I)
     (fun I ↦ by
-      rw [← MPOTensor.blockTensor_mulTensor]
-      exact MPOTensor.toMPSTensor_blockTensor_apply _ L I)
-    (fun q I ↦ MPOTensor.toMPSTensor_blockTensor_apply (T q.1) L I)
+      rw [← MPOTensor.blockTensor_mulTensor, MPOTensor.toMPSTensor_blockTensor_apply,
+        MPOTensor.evalWord_toMPSTensor])
+    (fun q I ↦ by
+      rw [MPOTensor.toMPSTensor_blockTensor_apply, MPOTensor.evalWord_toMPSTensor])
 
 end MPSTensor.IsBiorthogonalDecomposition
 
 namespace MPOTensor
-
-/-- Gauge-phase equivalence of the doubled-index views, after a cast of the bond dimension, is
-gauge-phase equivalence on the pair alphabet. -/
-private theorem gaugePhaseEquiv_cast_toMPSTensor_iff {p D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (M : MPOTensor p D₁) (N : MPOTensor p D₂) :
-    MPTensor.GaugePhaseEquiv (cast (congrArg (MPSTensor (p * p)) h) M.toMPSTensor)
-        N.toMPSTensor ↔
-      MPTensor.GaugePhaseEquiv (cast (congrArg (MPOTensor p) h) M) N := by
-  subst h
-  simp only [cast_eq, MPTensor.GaugePhaseEquiv, toMPSTensor_eq_reindexPhysical,
-    Kraus.reindexPhysical]
-  exact exists_congr fun X ↦ exists_congr fun ζ ↦ and_congr_right fun _ ↦
-    (finProdFinEquiv.forall_congr_left
-      (p := fun i ↦ N i = ζ • ((X : Matrix _ _ ℂ) * M i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)))).symm
 
 /-- The derived common-block inverse is independent of the finite label
 coordinates. Only its row label is transported by the given equivalence. -/
@@ -90,8 +81,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
   obtain ⟨L, hL, hInj, K, hK⟩ := exists_blockTensor_isMPOBlockLeftInverse
     (fun c ↦ T (e.symm c)) (fun c ↦ (hT (e.symm c)))
     (fun c ↦ hD (e.symm c))
-    (fun a b hab hdim ↦ (gaugePhaseEquiv_cast_toMPSTensor_iff hdim _ _).not.2
-      (hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim))
+    (fun a b hab hdim ↦ hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim)
   let Krow : ∀ c : Λ, Matrix (Fin (D c) × Fin (D c))
       (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ :=
     Equiv.piCongrLeft (fun c ↦ Matrix (Fin (D c) × Fin (D c))
@@ -158,7 +148,7 @@ variable {d r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (hInjO : ∀ a, Kraus.IsInjective (O a))
   (hInjA : ∀ x, Kraus.IsInjective (A x))
   (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-  (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+  (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
   (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
 
 include hInjO hInjA hχ hD hneO hneA in
@@ -174,8 +164,7 @@ private theorem triangularTensor_separated
     | inl b =>
       intro h
       exact hneO a b (fun he ↦ hab (congrArg Sum.inl he)) hDim
-        ((gaugePhaseEquiv_cast_toMPSTensor_iff hDim _ _).2
-          (gaugePhaseEquiv_of_operatorPhysicalPadding_cast hDim h))
+        (gaugePhaseEquiv_of_operatorPhysicalPadding_cast hDim h)
     | inr y =>
       exact not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding_cast
         hDim (O a) (hD y) (hInjA y)
@@ -234,8 +223,8 @@ variable {N : Fin r → Fin r → Fin r → ℕ} {M : Fin r → Fin s → Fin s 
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hAct : ∀ a x,
     MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))

@@ -26,8 +26,8 @@ Garre-Rubio–Lootens–Molnár, derived here rather than assumed.
 
 * `MPOTensor.actTensor_changePhysicalBasis`: the action of a changed operator.
 * `MPSTensor.IsBiorthogonalDecomposition.actTensor_changePhysicalBasis` and
-  `MPSTensor.IsBiorthogonalDecomposition.toMPSTensor_changePhysicalBasis`:
-  transport of action and fusion decompositions.
+  `MPSTensor.IsBiorthogonalDecomposition.changePhysicalBasis`:
+  transport of action and fusion decompositions, on the pair alphabet.
 * `MPOTensor.mulTensor_changePhysicalBasis_of_slice`: products of changed
   operators.
 * `MPOTensor.physicalSlice_mul_eq_of_isBiorthogonalDecomposition`: an exact
@@ -131,9 +131,10 @@ variable {ι : Type*} [Fintype ι] {d e D : ℕ} {δ : ι → ℕ}
 /-- Physical mixing preserves an exact biorthogonal decomposition, with the
 same analysis and synthesis maps. Source context: GLM23, `fusiontensors2`
 and `eq:orthoV`, lines 458–490. -/
-protected theorem rotatePhysical {B : MPSTensor d D} {A : ∀ c : ι, MPSTensor d (δ c)}
+protected theorem rotatePhysical {α β : Type*} [Fintype α] {B : MPTensor α (Fin D)}
+    {A : ∀ c : ι, MPTensor α (Fin (δ c))}
     {V : ∀ c, Matrix (Fin (δ c)) (Fin D) ℂ} {W : ∀ c, Matrix (Fin D) (Fin (δ c)) ℂ}
-    (h : IsBiorthogonalDecomposition B A V W) (M : Matrix (Fin e) (Fin d) ℂ) :
+    (h : IsBiorthogonalDecomposition B A V W) (M : Matrix β α ℂ) :
     IsBiorthogonalDecomposition (rotatePhysical M B)
       (fun c => rotatePhysical M (A c)) V W where
   retract := h.retract
@@ -159,14 +160,14 @@ theorem actTensor_changePhysicalBasis {χ D' : ℕ} {A : ∀ c : ι, MPSTensor d
 /-- A fusion decomposition transports along a physical coordinate change of
 every operator involved. Source context: GLM23, `fusiontensors` and
 `eq:orthoW`, lines 364–391. -/
-theorem toMPSTensor_changePhysicalBasis {χ : ℕ} {O : ∀ c : ι, MPOTensor d (δ c)}
+protected theorem changePhysicalBasis {χ : ℕ} {O : ∀ c : ι, MPOTensor d (δ c)}
     {V : ∀ c, Matrix (Fin (δ c)) (Fin χ) ℂ} {W : ∀ c, Matrix (Fin χ) (Fin (δ c)) ℂ}
     (U : Matrix (Fin e) (Fin d) ℂ) (T : MPOTensor d χ)
-    (h : IsBiorthogonalDecomposition T.toMPSTensor (fun c => (O c).toMPSTensor) V W) :
-    IsBiorthogonalDecomposition (changePhysicalBasis U T).toMPSTensor
-      (fun c => (changePhysicalBasis U (O c)).toMPSTensor) V W := by
-  simp only [MPOTensor.toMPSTensor_changePhysicalBasis]
-  exact h.rotatePhysical (MPOTensor.doubledPhysicalMatrix U)
+    (h : IsBiorthogonalDecomposition T O V W) :
+    IsBiorthogonalDecomposition (changePhysicalBasis U T)
+      (fun c => changePhysicalBasis U (O c)) V W := by
+  simp only [MPOTensor.changePhysicalBasis_eq_rotatePhysical]
+  exact h.rotatePhysical _
 
 /-- A fusion decomposition of a stacked product transports along a physical
 coordinate change, provided the second factor is unchanged by `Vᴴ V`.
@@ -177,14 +178,12 @@ theorem mulTensor_changePhysicalBasis {D₁ D₂ : ℕ} {O : ∀ c : ι, MPOTens
     (U : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (hN : ∀ β α, Uᴴ * U * MPOTensor.physicalSlice N β α * Uᴴ =
       MPOTensor.physicalSlice N β α * Uᴴ)
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor M N).toMPSTensor
-      (fun c => (O c).toMPSTensor) V W) :
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor M N) O V W) :
     IsBiorthogonalDecomposition
-      (MPOTensor.mulTensor (changePhysicalBasis U M)
-        (changePhysicalBasis U N)).toMPSTensor
-      (fun c => (changePhysicalBasis U (O c)).toMPSTensor) V W := by
+      (MPOTensor.mulTensor (changePhysicalBasis U M) (changePhysicalBasis U N))
+      (fun c => changePhysicalBasis U (O c)) V W := by
   rw [MPOTensor.mulTensor_changePhysicalBasis_of_slice U M N hN]
-  exact h.toMPSTensor_changePhysicalBasis U _
+  exact h.changePhysicalBasis U _
 
 end MPSTensor.IsBiorthogonalDecomposition
 

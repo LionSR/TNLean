@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.Eigenvalue.AnticommutingEvenDimension
-import QICLean.Spectral.Eigenvalue.ProjectiveCommutantEigenspace
+import QICLean.Spectral.Eigenvalue.KramersDegeneracy
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
 import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.Transfer.Correlation.StringOrderAux

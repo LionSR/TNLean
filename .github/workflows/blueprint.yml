@@ -98,7 +98,7 @@ jobs:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
       - name: Fetch pinned tenkz package
-        run: python3 scripts/fetch_tenkz.py
+        run: python3 scripts/tenkz/fetch_tenkz.py
 
       - name: Lint tenkz picture sources
         run: |
@@ -118,8 +118,8 @@ jobs:
       # instead of reusing the last Full documentation artifact.
       - name: Generate paper source aux for paper-gap references
         run: |
-          ./scripts/generate_paper_aux.sh 1606.00608
-          ./scripts/generate_paper_aux.sh 2502.20257
+          ./scripts/blueprint/generate_paper_aux.sh 1606.00608
+          ./scripts/blueprint/generate_paper_aux.sh 2502.20257
 
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
@@ -154,7 +154,7 @@ jobs:
           key: blueprint-print-aux-${{ github.run_id }}
 
       - name: Build FT-MPS blueprint volume
-        run: ./scripts/build_blueprint_ch01_12.sh
+        run: ./scripts/blueprint/build_blueprint_ch01_12.sh
 
       - name: Package PDFs
         run: |
@@ -234,15 +234,15 @@ jobs:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
       - name: Fetch pinned tenkz package
-        run: python3 scripts/fetch_tenkz.py
+        run: python3 scripts/tenkz/fetch_tenkz.py
 
       - name: Build blueprint bibliography
         run: texra-blueprint bbl
 
       - name: Generate paper source aux for paper-gap references
         run: |
-          ./scripts/generate_paper_aux.sh 1606.00608
-          ./scripts/generate_paper_aux.sh 2502.20257
+          ./scripts/blueprint/generate_paper_aux.sh 1606.00608
+          ./scripts/blueprint/generate_paper_aux.sh 2502.20257
 
       # Every picture is compiled standalone and stored under its content
       # hash (blueprint/src/Packages/tenkz_pic.py), so an SVG from an earlier
@@ -325,7 +325,7 @@ jobs:
       # Drop pictures no page references any more, so neither the published
       # site nor the saved cache carries figures that were edited away.
       - name: Prune unused tenkz pictures
-        run: python3 scripts/prune_tenkz_render_cache.py
+        run: python3 scripts/tenkz/prune_tenkz_render_cache.py
 
       # Every blueprint picture compiled standalone during the web build and
       # left its event stream in the render cache; the sweep audits all of them.
@@ -372,7 +372,7 @@ jobs:
       - name: Write badges
         run: |
           mkdir -p site-badges
-          python3 scripts/write_badges.py site-badges
+          python3 scripts/reports/write_badges.py site-badges
 
       # Runs in Docker and produces root-owned output; keep it after the
       # other steps so it only writes into the pre-created directory.

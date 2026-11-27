@@ -26,7 +26,7 @@ variable {d : ℕ}
 the two irreducible-TP overlap dichotomies, applied by contradiction. -/
 lemma dim_and_gaugePhase_of_nondecaying_overlap
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (hnd : ¬ Tendsto (fun N : ℕ =>
       mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
@@ -61,7 +61,7 @@ then the left MPV state is an exact scalar multiple of the right MPV state at
 every length. -/
 lemma exists_state_scalar_of_nondecaying_overlap
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (hnd : ¬ Tendsto (fun N : ℕ =>
       mpvOverlap (α := Fin d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
@@ -94,7 +94,7 @@ whose indices lie in a finset `T`, together with all `Q`-blocks, assuming all
 `T`-to-`Q` overlaps decay. -/
 lemma restricted_combined_family_eventually_li
     {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (T : Finset (Fin P.basisCount))
     (hTQ : ∀ (j : Fin P.basisCount), j ∈ T → ∀ k : Fin Q.basisCount,
       Tendsto (fun N : ℕ =>
@@ -172,7 +172,7 @@ Given two injective maps built from per-sector existential matches, finite
 cardinality comparison turns the forward injection into a bijection
 `β : Fin Q.basisCount ≃ Fin P.basisCount`. -/
 lemma bijection_from_matches {P Q : SectorDecomposition (Fin d)}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hFwd : ∀ k : Fin Q.basisCount,
       ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
         GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j)) (Q.basis k) ∧

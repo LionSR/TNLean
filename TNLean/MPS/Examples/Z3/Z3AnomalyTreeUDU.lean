@@ -20,22 +20,22 @@ namespace Z3Anomalous
 set_option maxRecDepth 8000 in
 /-- The tree of `(g,g²,g)` fusing the first two factors first intertwines two letters of the triple
 product with `U`. -/
-theorem leftUDU_pair : ∀ a b : Fin 9,
+theorem leftUDU_pair : ∀ a b : Fin 3 × Fin 3,
     leftUDUEis * tripleUDUTable a * tripleUDUTable b =
-      uEisMPS a * leftUDUEis * tripleUDUTable b := by
+      uEis a * leftUDUEis * tripleUDUTable b := by
   decide +kernel
 
 set_option maxRecDepth 8000 in
 /-- The tree of `(g,g²,g)` fusing the last two factors first intertwines two letters of the triple
 product with `U`. -/
-theorem rightUDU_pair : ∀ a b : Fin 9,
+theorem rightUDU_pair : ∀ a b : Fin 3 × Fin 3,
     rightUDUEis * tripleUDUTable a * tripleUDUTable b =
-      uEisMPS a * rightUDUEis * tripleUDUTable b := by
+      uEis a * rightUDUEis * tripleUDUTable b := by
   decide +kernel
 
 set_option maxRecDepth 8000 in
 /-- On one letter of the triple product, the two trees of `(g,g²,g)` agree. -/
-theorem UDU_letter : ∀ a : Fin 9,
+theorem UDU_letter : ∀ a : Fin 3 × Fin 3,
     leftUDUEis * tripleUDUTable a = rightUDUEis * tripleUDUTable a := by
   decide +kernel
 

@@ -20,22 +20,22 @@ namespace Z3Anomalous
 set_option maxRecDepth 8000 in
 /-- The tree of `(g,g,g)` fusing the first two factors first intertwines two letters of the triple
 product with the identity tensor. -/
-theorem leftUUU_pair : ∀ a b : Fin 9,
+theorem leftUUU_pair : ∀ a b : Fin 3 × Fin 3,
     leftUUUEis * tripleUUUTable a * tripleUUUTable b =
-      identityEisMPS a * leftUUUEis * tripleUUUTable b := by
+      identityEis a * leftUUUEis * tripleUUUTable b := by
   decide +kernel
 
 set_option maxRecDepth 8000 in
 /-- The tree of `(g,g,g)` fusing the last two factors first intertwines two letters of the triple
 product with the identity tensor. -/
-theorem rightUUU_pair : ∀ a b : Fin 9,
+theorem rightUUU_pair : ∀ a b : Fin 3 × Fin 3,
     rightUUUEis * tripleUUUTable a * tripleUUUTable b =
-      identityEisMPS a * rightUUUEis * tripleUUUTable b := by
+      identityEis a * rightUUUEis * tripleUUUTable b := by
   decide +kernel
 
 set_option maxRecDepth 8000 in
 /-- On one letter of the triple product, the two trees of `(g,g,g)` differ by `-1 - ω`. -/
-theorem UUU_letter : ∀ a : Fin 9,
+theorem UUU_letter : ∀ a : Fin 3 × Fin 3,
     leftUUUEis * tripleUUUTable a =
       (⟨-1, -1⟩ : EisensteinInt) • (rightUUUEis * tripleUUUTable a) := by
   decide +kernel

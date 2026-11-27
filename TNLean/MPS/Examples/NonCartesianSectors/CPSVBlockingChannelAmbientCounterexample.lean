@@ -150,7 +150,7 @@ theorem printed_propositionC15_and_theorem49_ii_to_v_are_false :
         IsSAL K ∧
         IsSimpleCanonicalForm K ∧
         IsSimple K ∧
-        MPSTensor.IsBNTCanonicalForm S ∧
+        MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
         K.toMPSTensor = S.toTensor ∧

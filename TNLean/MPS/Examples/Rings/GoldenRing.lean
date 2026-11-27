@@ -134,30 +134,30 @@ theorem complexOfGolden_zero {m n : Type*} :
 variable {d D D₁ D₂ : ℕ}
 
 /-- Word evaluation of a tensor over the golden integers. -/
-abbrev evalWordGolden (A : Fin d → Matrix (Fin D) (Fin D) GoldenInt) :
-    List (Fin d) → Matrix (Fin D) (Fin D) GoldenInt :=
+abbrev evalWordGolden {α : Type*} (A : α → Matrix (Fin D) (Fin D) GoldenInt) :
+    List α → Matrix (Fin D) (Fin D) GoldenInt :=
   evalWordR A
 
 /-- Word evaluation commutes with the entrywise embedding of the golden integers. -/
-theorem evalWord_complexOfGolden (A : Fin d → Matrix (Fin D) (Fin D) GoldenInt)
-    (w : List (Fin d)) :
+theorem evalWord_complexOfGolden {α : Type*} (A : α → Matrix (Fin D) (Fin D) GoldenInt)
+    (w : List α) :
     Kraus.evalWord (fun i => complexOfGolden (A i)) w = complexOfGolden (evalWordGolden A w) :=
   evalWord_complexOfRing goldenToComplex A w
 
 /-- The bond-space product of two tensors over the golden integers,
-`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`. -/
-abbrev mulGoldenTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (i k : Fin d) :
+`(M · N)^{(i,k)} = ∑_j M^{(i,j)} ⊗ N^{(j,k)}`, in the bond order of `finProdFinEquiv`. -/
+abbrev mulGoldenTensor (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (ik : Fin d × Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) GoldenInt :=
-  mulTensorR M N i k
+  mulTensorR M N ik
 
 /-- The bond-space product commutes with the entrywise embedding of the golden integers. -/
-theorem mulTensor_complexOfGolden (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (i k : Fin d) :
-    MPOTensor.mulTensor (Function.uncurry fun i j => complexOfGolden (M i j))
-        (Function.uncurry fun i j => complexOfGolden (N i j)) (i, k) =
-      complexOfGolden (mulGoldenTensor M N i k) :=
-  mulTensor_complexOfRing goldenToComplex M N i k
+theorem mulTensor_complexOfGolden (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (ik : Fin d × Fin d) :
+    MPOTensor.mulTensor (fun ij => complexOfGolden (M ij))
+        (fun ij => complexOfGolden (N ij)) ik =
+      complexOfGolden (mulGoldenTensor M N ik) :=
+  mulTensor_complexOfRing goldenToComplex M N ik
 
 end MPSTensor
 
@@ -169,7 +169,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {Dι : ι → ℕ} {S : Finset ι}
+variable {α : Type*} {DB : ℕ} {ι : Type*} [DecidableEq ι] {Dι : ι → ℕ} {S : Finset ι}
 
 /-- **A multi-block compression datum from a gauge over `ℤ[σ]`.** The letters of the source
 `B` and of the targets `C s` are the entrywise embeddings of the matrices `Bg` and `Cg` over
@@ -178,18 +178,18 @@ variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {Dι : ι → ℕ} {S : Fins
 read along the bond coordinates `τ`, each `K i` is block upper triangular for the ordering `ord`
 with the target `Cg s` on the diagonal block of the slot `s` and zero on every zero slot. This
 is `MultiBlockCompression.ofRing` for the gauge `gaugeOfRingMatrix` over `ℤ[σ]`. -/
-noncomputable def MultiBlockCompression.ofGolden {B : MPSTensor d DB}
-    {C : ∀ s, MPSTensor d (Dι s)} (z : ℕ) (ord : BlockIndex S z ≃ Fin (S.card + z))
-    (τ : BlockSpace Dι S z ≃ Fin DB) (Bg : Fin d → Matrix (Fin DB) (Fin DB) GoldenInt)
+noncomputable def MultiBlockCompression.ofGolden {B : MPTensor α (Fin DB)}
+    {C : ∀ s, MPTensor α (Fin (Dι s))} (z : ℕ) (ord : BlockIndex S z ≃ Fin (S.card + z))
+    (τ : BlockSpace Dι S z ≃ Fin DB) (Bg : α → Matrix (Fin DB) (Fin DB) GoldenInt)
     (hB : ∀ i, B i = complexOfGolden (Bg i))
-    (Cg : ∀ s, Fin d → Matrix (Fin (Dι s)) (Fin (Dι s)) GoldenInt)
+    (Cg : ∀ s, α → Matrix (Fin (Dι s)) (Fin (Dι s)) GoldenInt)
     (hC : ∀ s i, C s i = complexOfGolden (Cg s i))
     (G Ginv : Matrix (Fin DB) (Fin DB) GoldenInt) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
-    (K : Fin d → Matrix (Fin DB) (Fin DB) GoldenInt) (hK : ∀ i, Bg i * Ginv = Ginv * K i)
-    (htri : ∀ (i : Fin d) (x y : BlockSpace Dι S z), ord y.1 < ord x.1 → K i (τ x) (τ y) = 0)
-    (hmatched : ∀ (i : Fin d) (s : ι) (hs : s ∈ S) (p q : Fin (Dι s)),
+    (K : α → Matrix (Fin DB) (Fin DB) GoldenInt) (hK : ∀ i, Bg i * Ginv = Ginv * K i)
+    (htri : ∀ (i : α) (x y : BlockSpace Dι S z), ord y.1 < ord x.1 → K i (τ x) (τ y) = 0)
+    (hmatched : ∀ (i : α) (s : ι) (hs : s ∈ S) (p q : Fin (Dι s)),
       K i (τ ⟨Sum.inl ⟨s, hs⟩, p⟩) (τ ⟨Sum.inl ⟨s, hs⟩, q⟩) = Cg s i p q)
-    (hunmatched : ∀ (i : Fin d) (t : Fin z) (p q : Fin 1),
+    (hunmatched : ∀ (i : α) (t : Fin z) (p q : Fin 1),
       K i (τ ⟨Sum.inr t, p⟩) (τ ⟨Sum.inr t, q⟩) = 0) :
     MultiBlockCompression B S C :=
   MultiBlockCompression.ofRing goldenToComplex ord τ

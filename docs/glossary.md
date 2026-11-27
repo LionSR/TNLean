@@ -14,6 +14,10 @@ For new declarations, prefer namespace overloading (`Kraus.IsInjective`,
 the predicate name. Preserve a paper's established terminology when a declaration
 is deliberately source-faithful.
 
+Cite declarations by their full names. The nightly workflow passes every backticked
+qualified name of this file to `checkdecls` (`scripts/paper_gap_leanid_sync.py`),
+so a renamed or deleted declaration must be updated here in the same change.
+
 ## Two-site matrix product unitaries
 
 ### `MPOTensor.TwoSiteStandardFormData`
@@ -235,10 +239,15 @@ is deliberately source-faithful.
 - **Sanctioned bridges:**
   `MPSTensor.IsBNTSectorPresentation.isCPSVBasisOfNormalTensors` forgets the
   grouping to the literal Definition 2.4 interface; every canonical-form datum
-  with at least one block yields a presentation through
-  `MPTensor.CPSVCanonicalFormData.isBNTSectorPresentation`, and presentations
-  of the same tensor agree up to permutation, dimension identification, gauge,
-  and phase through `MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`.
+  with at least one block yields a presentation through each of its BNT
+  refinements,
+  `MPTensor.CPSVCanonicalFormData.BNTRefinement.isBNTSectorPresentation`, and
+  presentations of the same tensor agree up to permutation, dimension
+  identification, gauge, and phase through `MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`.
+  `MPSTensor.IsLeftCanonicalBNTPresentation` extends this predicate (a
+  presentation of `P.toTensor` with left-canonical basis tensors), and
+  `MPSTensor.IsBNTSectorPresentation.exists_leftCanonical_withBasis` puts every
+  presentation into that gauge.
 - **Caveat:** this is the grouped presentation used by the sector fundamental
   theorem and the MPDO simplicity predicate, not a second BNT definition; the
   literal interface remains `MPSTensor.IsCPSVBasisOfNormalTensors`.
@@ -359,10 +368,10 @@ out.
   (`MPSTensor.isIrreducibleMap_transferMap_of_isNormal`), not an assumption.
 - **Caveat:** the implication from (b) to (a),
   `MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`, needs no
-  normalization; the other implications do. The predicates
-  `MPSTensor.IsPrimitivePaper`, `MPSTensor.HasEventuallyFullKrausRank`,
-  `MPSTensor.IsStronglyIrreduciblePaper`, `MPSTensor.IsPeripherallyPrimitive`
-  and `MPSTensor.HasPrimitiveFixedPoint` were removed; see
+  normalization; the other implications do. The separate tensor predicates for
+  the paper's primitivity, eventually full Kraus rank, strong irreducibility,
+  peripheral primitivity and the primitive fixed point were removed in favour of
+  the kept notions above; see
   `docs/audits/2026-11-16_primitivity_one_definition.md`.
 
 ## Injectivity
@@ -436,8 +445,8 @@ out.
   source occurrences separately, including repeated pairs of parties.
 - **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
   `04-compression.tex`, lines 53–70 and 125–127.
-- **Sanctioned bridges:** `SourceInventory.isAllowed_prepare_iff` and
-  `Word.isNormalized_sources` identify normalization with allowed preparation
+- **Sanctioned bridges:** `QuantumCircuit.Party.SourceInventory.isAllowed_prepare_iff` and
+  `QuantumCircuit.Party.Word.isNormalized_sources` identify normalization with allowed preparation
   and derive it from an allowed composition.
 
 #### `QuantumCircuit.Party.SourceInventory.Expands`
@@ -448,18 +457,18 @@ out.
   preparations take the preparation of `G` exactly to the preparation of `S`.
 - **Source:** the same Lemma 5.1, lines 125–127; the fresh-register argument
   in Theorem 5.2, `eq:compression-source-gate`, lines 233–251.
-- **Sanctioned bridges:** `SourceInventory.exists_grouped` constructs a
+- **Sanctioned bridges:** `QuantumCircuit.Party.SourceInventory.exists_grouped` constructs a
   normalized `G` with one source for each unordered pair occurring in `S`.
-  `Word.exists_grouped_source_preparation` gives the resulting exact
+  `QuantumCircuit.Party.Word.exists_grouped_source_preparation` gives the resulting exact
   factorization of an arbitrary allowed composition.
-- **Further consequence:** `Word.exists_piKronecker_of_sources_eq_nil` collects the
-  remaining operations into one contraction per party. `Word.exists_prepared_localOps`
+- **Further consequence:** `QuantumCircuit.Party.Word.exists_piKronecker_of_sources_eq_nil` collects the
+  remaining operations into one contraction per party. `QuantumCircuit.Party.Word.exists_prepared_localOps`
   combines this with
   grouped preparation for a prescribed finite gate party type.
-- **All pair slots:** `Word.exists_complete_prepared_localOps` also
+- **All pair slots:** `QuantumCircuit.Party.Word.exists_complete_prepared_localOps` also
   supplies a source on every unordered pair of distinct gate parties. Sources
   on pairs absent from the original monomial have one-dimensional halves.
-  `SourceInventory.exists_complete_extension` retains the original inventory
+  `QuantumCircuit.Party.SourceInventory.exists_complete_extension` retains the original inventory
   verbatim and supplies an allowed recovery of its preparation.
 - **Caveat:** the finite type is the party set of the gate, not necessarily all
   parties in a larger construction. A bound on its cardinality and common
@@ -468,8 +477,8 @@ out.
 #### `TNLean.PEPS.Approximation.RepaintingUses` and `JunctionUses`
 
 - **Defined in:** `TNLean/PEPS/Approximation/Guides/DyadicActiveLabelParties.lean`,
-  together with `OwnsLevelBlock` and the hierarchy forms `DyadicSquare.Uses` and
-  `DyadicJunction.Uses`.
+  together with `OwnsLevelBlock` and the hierarchy forms `TNLean.PEPS.Approximation.DyadicSquare.Uses` and
+  `TNLean.PEPS.Approximation.DyadicJunction.Uses`.
 - **Meaning:** the block parties an event of the dyadic protocol uses.
   `OwnsLevelBlock j' Q x` says that `x` is the new party of the `2 ^ j'`-block `Q`
   or the old party of its parent block. A repainting uses the owners of the blocks
@@ -479,8 +488,8 @@ out.
   `06-geometry.tex`, lines 82–90, 127–131 and 585–594.
 - **Sanctioned bridges:** `repaintingUses_of_levelLabels` and
   `junctionUses_of_incidentLabels` derive use from the block labelling at the
-  transition times between repaintings. `RepaintingUses.near` and
-  `JunctionUses.near` turn use into the nearness predicates `BlockNear` and
+  transition times between repaintings. `TNLean.PEPS.Approximation.RepaintingUses.near` and
+  `TNLean.PEPS.Approximation.JunctionUses.near` turn use into the nearness predicates `BlockNear` and
   `CornerNear` of the lifetime-incidence count.
 - **Caveat:** use is a property of the events, not of gates. That every gate of
   an event involves only parties the event uses is a separate hypothesis of
@@ -577,9 +586,9 @@ out.
   the window corollary at lines 2297-2318; the nonzero bond spaces are recorded
   as a Local fix in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 - **Sanctioned bridges:** the structure projections and the anonymous
-  constructor; `IsNormalCycleArcMPS.pairHypotheses` builds
+  constructor; `TNLean.PEPS.IsNormalCycleArcMPS.pairHypotheses` builds
   `NormalPEPSPairHypotheses` on the cycle, and
-  `IsNormalTorusRectanglePEPS.unionClosure` gives union closure.
+  `TNLean.PEPS.IsNormalTorusRectanglePEPS.unionClosure` gives union closure.
 - **Caveat:** the region-family structures they extend are indexed by an
   injectivity assignment, not by a tensor, so they cannot carry the
   convention themselves. The source-facing existence, bond-dimension and
@@ -686,9 +695,9 @@ out.
   `σ` is the twirl onto the commutant.
 - **Source:** arXiv:1001.3807, Definition `def:iso:isopeps` in the form
   `𝒫(A)⁻¹ = 𝒫(A†)`, `Papers/1001.3807/paper_v3.tex:1668-1700`.
-- **Sanctioned bridges:** `IsGIsometricMPS.isGInjective` (G-injectivity for
+- **Sanctioned bridges:** `TNLean.PEPS.IsGIsometricMPS.isGInjective` (G-injectivity for
   the conjugation action of the left-regular representation);
-  `IsGIsometricMPS.concatTensor` (Lemma 6.2 in one dimension).
+  `TNLean.PEPS.IsGIsometricMPS.concatTensor` (Lemma 6.2 in one dimension).
 - **Caveat / paper gap:** the constant `c` is the normalization Local fix of
   `IsGIsometric`. No bridge to the coordinate-space `IsGIsometric` is stated:
   the virtual system here is `End ℂ[G]` rather than a coordinate space.
@@ -1062,39 +1071,56 @@ model different levels of data and different sources.
   their optional ambient complement. The PGVWC07 form has a distinct
   reconstruction using a bond-index equivalence and real weights.
 
-### `MPSTensor.IsBNTCanonicalForm`
+### `MPSTensor.IsLeftCanonicalBNTPresentation`
 
 - **Declaration:**
-  `MPSTensor.IsBNTCanonicalForm (P : MPSTensor.SectorDecomposition d)`.
-- **Defined in:** `TNLean/MPS/Tensor/DirectSum/SectorBNT.lean`.
-- **Meaning:** the core paper-faithful two-layer sector canonical form: positive
-  basis dimensions, irreducible and left-canonical basis tensors, normalized
-  self-overlap, eventual BNT independence, separation of basis representatives,
-  and normalized raw copy weights while retaining each copy and coefficient
-  `∑q (μ[j,q])^N`.
+  `MPSTensor.IsLeftCanonicalBNTPresentation (P : MPSTensor.SectorDecomposition d)`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/BNTPresentation/LeftCanonical.lean`.
+- **Meaning:** `P` is a presentation of its own assembled tensor `P.toTensor`
+  by a basis of normal tensors (`extends MPSTensor.IsBNTSectorPresentation
+  P.toTensor P`: nonempty basis, normal basis tensors, eventual linear
+  independence) whose basis tensors are left-canonical. It retains each copy
+  and the raw coefficient `∑q (μ[j,q])^N`; no normalization of the copy
+  weights (arXiv:1606.00608, line 246) is imposed. Positive basis dimensions,
+  irreducibility, normalized self-overlap and the separation of distinct basis
+  tensors are theorems of the same names (`basis_dim_pos`, `basis_irreducible`,
+  `basis_normalized_self_overlap`, `basis_distinct`).
 - **Source:** arXiv:1606.00608 §II, lines 271--301, and arXiv:2011.12127
-  Definition 4.2 and two-layer display, lines 1846--1884.
+  Definition 4.2 and two-layer display, lines 1846--1884; left-canonicality is
+  a gauge choice (arXiv:2011.12127, lines 1815--1837) that no source statement
+  contains.
 - **Sanctioned bridges:**
-  `MPSTensor.IsBNTCanonicalForm.basis_isNormal` projects algebraic normality of
-  each basis block. Further bridges are
-  `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor`,
-  `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical`, and the
+  `MPSTensor.IsBNTSectorPresentation.exists_leftCanonical_withBasis` brings
+  every presentation into this gauge with the same sectors and weights.
+  `MPSTensor.IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap` is the
+  constructor from irreducible left-canonical basis tensors with normalized
+  self-overlap. Further bridges are
+  `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor`,
+  `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical`, and the
   supplier declarations
-  `MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` and
-  `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized`.
-- **Caveat:** `IsBNTCanonicalForm.blockTensor` requires a strictly positive
-  blocking length `0 < p`; it does not assert preservation at length zero.
-  `exists_isBNTCanonicalForm_afterBlocking_pos_normalized` assumes a nonzero
-  positive-length MPV family (the standing convention of arXiv:1606.00608,
-  line 246) and realizes the weight normalization itself, at the cost of a
-  per-site scalar. This is the canonical predicate when
-  multiplicities and raw sector weights matter; multiplicity recovery is genuine
-  mathematical content, not a change of packaging.
+  `MPSTensor.exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks` and
+  `MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized`.
+- **Caveat:** the Fundamental Theorem comparisons stated on this predicate
+  (`fundamentalTheorem_proportional_canonicalForm`,
+  `fundamentalTheorem_equal_canonicalForm`) are scope-restricted variants of
+  arXiv:1606.00608, Theorem 2.10 and Corollary 2.11; the source-faithful
+  statements on presentations with no gauge condition are
+  `MPSTensor.fundamentalTheorem_proportional_of_isBNTSectorPresentation` and
+  `MPSTensor.fundamentalTheorem_equal_of_isBNTSectorPresentation`; see
+  `docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`.
+  `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor` requires a strictly positive
+  blocking length `0 < p`.
+  `exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` assumes a
+  nonzero positive-length MPV family and states the line-246 weight
+  normalization of its presentation explicitly in its conclusion, at the cost
+  of a per-site scalar. This is the canonical predicate when multiplicities and
+  raw sector weights matter; multiplicity recovery is genuine mathematical
+  content, not a change of packaging.
 
 ### MPDO canonical-form predicates
 
 - `MPOTensor.IsHorizontalCF` in `TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT.lean` is the
-  normalized representative-indexed BNT-refined horizontal decomposition. It
+  representative-indexed BNT-refined horizontal decomposition. It
   is stronger than the literal CPSV canonical form from arXiv:1606.00608,
   lines 237--244; see
   `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
@@ -1124,7 +1150,7 @@ model different levels of data and different sources.
 - The bundle has two independent suppliers, each assuming the matrix product
   density operator condition `MPOTensor.IsMPDO` alongside its own canonical
   form: `MPOTensor.IsHorizontalCF.hasVerticalBNTGroupingInputs` from
-  normalized BNT-refined horizontal form, and
+  BNT-refined horizontal form, and
   `MPTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs` from literal
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
@@ -1427,7 +1453,7 @@ The following notions use different transfer objects and are not interchangeable
   $\mathcal K_{a,b}$.
 - **Source:** arXiv:2502.20257, modified-fusion Lemma `lemma:modif` and the
   nonuniqueness observation at lines 4215--4326.
-- **Sanctioned bridges:** `DefectMaps.mem_completionClass_iff` identifies the
+- **Sanctioned bridges:** `GaussLaw.DefectMaps.mem_completionClass_iff` identifies the
   predicate with membership in the full completion class. The transport
   theorems in the same module use exact prescribed-map covariance before
   applying the target completion's adjoint.
@@ -1444,7 +1470,7 @@ The following notions use different transfer objects and are not interchangeable
   subspace selected by the adjacent labels, and the prescribed defect maps
   carry these slices covariantly under $(a,b)\mapsto(ag^{-1},gb)$.
 - **Source:** arXiv:2502.20257, lines 4325--4335.
-- **Sanctioned bridge:** together with `DefectMaps.IsCompletion`, these
+- **Sanctioned bridge:** together with `GaussLaw.DefectMaps.IsCompletion`, these
   predicates imply invariance of the gauged vector under every placed Gauss
   operator and averaged projector through
   `MPOTensor.placedGaussOperator_mulVec_gaugedVector` and
@@ -1509,10 +1535,9 @@ The following notions use different transfer objects and are not interchangeable
   chain ground space for `0 < N`, `L ≤ N`
   (`ManyBody.Interaction.zeroSpace_eq_groundSpace` for the positive terms
   `MPSTensor.posSemidef_parentRingInteraction_term`);
-  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker`,
-  `MPSTensor.localTerm_eq_toLin'_term`, `MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian`
-  and `MPSTensor.parentHamiltonian_eq_sum_localTerm` relate the linear-map forms
-  `MPSTensor.localTerm` and `MPSTensor.parentHamiltonian`.
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker` reads the ground
+  space in the function space `NSiteSpace d N`, where the terms and the Hamiltonian act as
+  `Matrix.toLin'` of the matrices; there is no separate linear-map definition.
 - **Caveat:** for `L > N` the terms are `0` by convention and the zero space is
   the whole space.
 
@@ -1764,10 +1789,10 @@ placed operators, permutations of configurations and of sites, onsite
 channels) are stated for any finite type of sites `ι`. Layers, unitary circuits,
 products of gates and light cones are QICLean's (`QICLean/Circuit/Core`,
 `QICLean/Circuit/Model/Unitary*`, `QICLean/Circuit/Compile`), stated for a geometry
-`Γ : QuantumCircuit.Geometry S` of cells with costs; the ring is `Geometry.ring N`
+`Γ : QuantumCircuit.Geometry S` of cells with costs; the ring is `QuantumCircuit.Geometry.ring N`
 (cells `{k, k + 1}`, addition modulo `N`), the open chain is
-`Geometry.graph (SimpleGraph.pathGraph n)`, and the edges of a simple graph are
-`Geometry.graph G`. TNLean keeps no copy of them.
+`QuantumCircuit.Geometry.graph (SimpleGraph.pathGraph n)`, and the edges of a simple graph are
+`QuantumCircuit.Geometry.graph G`. TNLean keeps no copy of them.
 Measurement circuits, teleportation, GHZ-type states and the zero-register reflections are also
 QICLean's (`QICLean/Circuit/Model/Measurement.lean`, `QICLean/Circuit/Protocol/`); TNLean uses
 them on the ring. The blueprint chapter is
@@ -1808,9 +1833,9 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
   LOCC" and the graph distance before Proposition `propQCA2`.
-- **Sanctioned bridges:** `Geometry.iterate_neighbourhood_ring` (on the ring, the
-  ring neighbourhood of radius `r`), `Geometry.iterate_neighbourhood_pathGraph_subset`,
-  `Geometry.iterate_neighbourhood_graph` and their disjointness forms.
+- **Sanctioned bridges:** `QuantumCircuit.Geometry.iterate_neighbourhood_ring` (on the ring, the
+  ring neighbourhood of radius `r`), `QuantumCircuit.Geometry.iterate_neighbourhood_pathGraph_subset`,
+  `QuantumCircuit.Geometry.iterate_neighbourhood_graph` and their disjointness forms.
 - **Caveat:** for the open chain only the inclusion in the metric ball is
   proved; on the ring and on a graph the equality holds.
 
@@ -1819,14 +1844,14 @@ in `MPS/Preparation/` uses it.
 - **Declaration:** `ManyBody.IsGraphSeparated (G : SimpleGraph V) (S T : Finset V) (s : ℕ) : Prop`,
   used with `G = SimpleGraph.cycleGraph N` for the ring.
 - **Defined in:** QICLean, `QICLean/ManyBody/Sites/GraphBall.lean`; it replaces
-  TNLean's `QuantumCircuit.IsSeparatedBy`.
+  TNLean's former ring separation predicate of the circuit layer.
 - **Meaning:** every point of `S` is at graph distance larger than `s` from every
   point of `T`; on the cycle, ring distance larger than `s`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1
   (operators at a distance larger than `2T` have uncorrelated expectations in a
   state prepared by a local circuit of depth `T`).
-- **Sanctioned bridges:** `IsGraphSeparated.symm`,
-  `IsGraphSeparated.disjoint_graphNeighborhood`,
+- **Sanctioned bridges:** `ManyBody.IsGraphSeparated.symm`,
+  `ManyBody.IsGraphSeparated.disjoint_graphNeighborhood`,
   `isGraphSeparated_cycleGraph_of_val_bounds` (two windows of consecutive sites
   with gaps of at least `s` on both sides of the ring), and, for nonempty sets,
   `ManyBody.isGraphSeparated_iff_lt_ringSupportDistance`.
@@ -1850,8 +1875,8 @@ in `MPS/Preparation/` uses it.
   "Depth-`ℓ` quantum circuits".
 - **Sanctioned bridges:** `.mul` (series composition; the factor applied first
   is the right argument), `.conjTranspose`, `.mono`, `.pow`,
-  `IsGateProduct.isUnitaryCircuit`, the light cone
-  `IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators`, and the
+  `QuantumCircuit.IsGateProduct.isUnitaryCircuit`, the light cone
+  `QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators`, and the
   universality results `isGateProduct_pathGraph_unitaryGateCount` and
   `isGateProduct_pathGraph_le_card_pow`.
 - **Caveat:** both bounds are upper bounds; the matrix is the last argument.
@@ -1866,10 +1891,10 @@ in `MPS/Preparation/` uses it.
   depth at most `T` on `Γ`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
   obtained from depth-`T` local quantum circuits applied to product states").
-- **Sanctioned bridges:** `IsPreparedInDepth.dotProduct_mul_eq` (vanishing
+- **Sanctioned bridges:** `QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq` (vanishing
   connected correlations for disjoint light cones), its ring forms in
   `QICLean/Circuit/Model/UnitaryRing.lean`, and
-  `IsPreparedInDepth.exists_eq_smul_mulVec_prod_single` (a nonzero prepared
+  `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_prod_single` (a nonzero prepared
   vector is a multiple of a circuit of depth `T` applied to a product basis vector).
 - **Caveat:** no normalization is imposed and `ψ` may be zero.
 
@@ -1883,9 +1908,9 @@ in `MPS/Preparation/` uses it.
   all of whose layers act inside `R`.
 - **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit" (block
   unitaries applied in parallel on disjoint blocks).
-- **Sanctioned bridges:** `IsUnitaryCircuitOn.mul`, `IsUnitaryCircuitOn.par`
-  (depth `max T₁ T₂`, for nonempty cells), `IsUnitaryCircuitOn.finset_noncommProd`,
-  `IsUnitaryCircuitOn.list_prod`, and `IsGateProduct.isUnitaryCircuitOn_ring`
+- **Sanctioned bridges:** `QuantumCircuit.IsUnitaryCircuitOn.mul`, `QuantumCircuit.IsUnitaryCircuitOn.par`
+  (depth `max T₁ T₂`, for nonempty cells), `QuantumCircuit.IsUnitaryCircuitOn.finset_noncommProd`,
+  `QuantumCircuit.IsUnitaryCircuitOn.list_prod`, and `QuantumCircuit.IsGateProduct.isUnitaryCircuitOn_ring`
   (a product of `K` neighbouring gates on consecutive ring sites).
 - **Caveat:** the cells must be nonempty for the parallel composition.
 
@@ -1932,7 +1957,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsOneRoundConversion (Γ : Geometry S) (T₁ T₂ : ℕ) (φ ψ : Config X → ℂ) : Prop`,
-  used here at the ring `Geometry.ring N` with `X = Qudits (Fin N) d`.
+  used here at the ring `QuantumCircuit.Geometry.ring N` with `X = Qudits (Fin N) d`.
 - **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
 - **Meaning:** `φ ≠ 0`, and a unitary circuit `U` of depth at most `T₁`, the
   measurement of a region `D` in the computational basis, single-site
@@ -1949,10 +1974,10 @@ in `MPS/Preparation/` uses it.
   MPS using measurements" ("First create `|χ_{N/q}⟩`, which can be done in
   constant depth with measurements ... Subsequently, apply in parallel the
   isometries `W`").
-- **Sanctioned bridges:** `IsUnitaryCircuit.isOneRoundConversion` (a unitary
+- **Sanctioned bridges:** `QuantumCircuit.IsUnitaryCircuit.isOneRoundConversion` (a unitary
   circuit is one round without measurements),
-  `IsOneRoundConversion.isMeasurementConversion`,
-  `IsOneRoundConversion.mulVec` (a unitary circuit after one round),
+  `QuantumCircuit.IsOneRoundConversion.isMeasurementConversion`,
+  `QuantumCircuit.IsOneRoundConversion.mulVec` (a unitary circuit after one round),
   `QuantumCircuit.isOneRoundConversion_withZeroAncillas_ghzState` (GHZ-type
   states in depth `2`), and in TNLean
   `MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState`,
@@ -2006,7 +2031,7 @@ in `MPS/Preparation/` uses it.
   `S`.
 - **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
   corrections of the GHZ preparation, generalized to shifts of qudits).
-- **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
+- **Sanctioned bridges:** `QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators` (the
   permutation matrix is a unitary acting on `S`).
 - **Caveat:** only permutations of the computational basis are covered; a
   permutation of the sites is QICLean's `ManyBody.sitePermOp`.
@@ -2015,7 +2040,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsMeasurementConversion (Γ : Geometry S) (T : ℕ) (φ : Config X → ℂ) (ψ : Config Z → ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
 - **Meaning:** `φ ≠ 0`, and some measurement circuit `c` (its gates and onsite
   families satisfy `KrausFamily.IsUnitaryOrMeasurement`; later layers may
@@ -2023,19 +2048,19 @@ in `MPS/Preparation/` uses it.
   to a scalar multiple of `ψ`. A preparation with measurement rounds in depth
   `T` is
   `∃ v, IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ s, v s (σ s)) ψ`;
-  a list of rounds is one circuit composed by `Circuit.comp`.
+  a list of rounds is one circuit composed by `QuantumCircuit.Circuit.comp`.
 - **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
   LOCC" (one round, and "a more general scheme with multiple rounds of
   LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
-- **Sanctioned bridges:** `IsMeasurementConversion.trans` (depths add),
-  `IsMeasurementConversion.mono`, `IsMeasurementConversion.ne_zero`,
-  `Circuit.IsImplementationOn.isMeasurementConversion`,
-  `IsMeasurementConversion.isAdaptiveConversion`, and
+- **Sanctioned bridges:** `QuantumCircuit.IsMeasurementConversion.trans` (depths add),
+  `QuantumCircuit.IsMeasurementConversion.mono`, `QuantumCircuit.IsMeasurementConversion.ne_zero`,
+  `QuantumCircuit.Circuit.IsImplementationOn.isMeasurementConversion`,
+  `QuantumCircuit.IsMeasurementConversion.isAdaptiveConversion`, and
   `MPSPreparation.exists_isMeasurementConversion_treeOp` (binary trees
   of two-site gates with `k` levels in depth `5k`).
 - **Caveat:** the depth counts the layers with a cell of positive cost;
   measurements, classical processing and single-site corrections are free.
-  The number of rounds of measurements (`Circuit.rounds`) is not bounded (the
+  The number of rounds of measurements (`QuantumCircuit.Circuit.rounds`) is not bounded (the
   tree of `k` levels uses `2k` rounds), whereas in the class `QCcc^{(k)}_ℓ` of
   the paragraph "Phases of matter" of arXiv:2103.13367 the number `k` of
   composed transformations does not depend on the system size.
@@ -2050,8 +2075,8 @@ in `MPS/Preparation/` uses it.
   `p` maps `v` to a scalar multiple of `W v`.
 - **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
   ("correcting (without postselection) based on the measurement outcomes").
-- **Sanctioned bridges:** `Circuit.IsImplementationOn.comp` (implementations
-  compose), `Circuit.IsImplementationOn.exists_smul_of_isometry` (one scalar
+- **Sanctioned bridges:** `QuantumCircuit.Circuit.IsImplementationOn.comp` (implementations
+  compose), `QuantumCircuit.Circuit.IsImplementationOn.exists_smul_of_isometry` (one scalar
   per branch on a subspace), `QuantumCircuit.TeleportHop.isImplementationOn_round`
   (teleportation along chains of hops in one round of depth at most `2`),
   `QuantumCircuit.LongRangeGate.isImplementationOn_rounds` (a layer of two-site
@@ -2066,7 +2091,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsProtocol (Γ : Geometry S) (T : ℕ) (Φ : Matrix (Config X) (Config X) ℂ →ₗ[ℂ] Matrix (Config Z) (Config Z) ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
 - **Meaning:** `Φ` is the map of an unbranched circuit on `Γ` of depth at most
   `T` whose gates and onsite families are trace preserving. On the ring this is
@@ -2082,10 +2107,10 @@ in `MPS/Preparation/` uses it.
   $V'=U_\ell V_\ell\cdots U_1V_1U_0$ with local operations $U_n$ on each site
   and its ancillas between the layers $V_n$), with channels in place of
   unitaries.
-- **Sanctioned bridges:** `IsProtocol.isKrausCPTP` (the map is a channel),
-  `IsProtocol.comp` (protocols compose and depths add), `IsProtocol.seq`
+- **Sanctioned bridges:** `QuantumCircuit.IsProtocol.isKrausCPTP` (the map is a channel),
+  `QuantumCircuit.IsProtocol.comp` (protocols compose and depths add), `QuantumCircuit.IsProtocol.seq`
   (a sequence of layers is a protocol of at most its length), and
-  `IsProtocol.traceAdjointMap_mem_supportedOperators_graphNeighborhood` (light
+  `QuantumCircuit.IsProtocol.traceAdjointMap_mem_supportedOperators_graphNeighborhood` (light
   cone of radius `T` of the Heisenberg picture on the ring). Grouping `k` consecutive
   sites is QICLean's
   `QuantumCircuit.IsProtocol.block` with `QuantumCircuit.Geometry.ringBlocking`:
@@ -2107,7 +2132,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsAdaptiveProtocol (Γ : Geometry S) (T : ℕ) (Φ : Matrix (Config X) (Config X) ℂ →ₗ[ℂ] Matrix (Config Z) (Config Z) ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
 - **Meaning:** `Φ` is the map of a circuit of trace-preserving plain gates and
   onsite families, of depth at most `T`, whose later layers may depend on the
@@ -2117,10 +2142,10 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
   LOCC", motivates finite adaptive operations. The formal predicate uses
   enlarged-site gate costs rather than the source's fixed physical-qudit costs.
-- **Sanctioned bridges:** `IsAdaptiveProtocol.isKrausCPTP`,
-  `IsAdaptiveProtocol.comp` (additive depth bounds), `IsAdaptiveProtocol.step`
-  (classical feedforward), `IsProtocol.adaptive` (deterministic protocols are
-  included), and `Circuit.isAdaptiveProtocol_map` (the average map of a
+- **Sanctioned bridges:** `QuantumCircuit.IsAdaptiveProtocol.isKrausCPTP`,
+  `QuantumCircuit.IsAdaptiveProtocol.comp` (additive depth bounds), `QuantumCircuit.IsAdaptiveProtocol.step`
+  (classical feedforward), `QuantumCircuit.IsProtocol.adaptive` (deterministic protocols are
+  included), and `QuantumCircuit.Circuit.isAdaptiveProtocol_map` (the average map of a
   measurement circuit has the same depth bound).
 - **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
   gate on the enlarged spaces still costs one layer. No uniform-depth
@@ -2142,9 +2167,9 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
   LOCC", with the enlarged-site and finite-round scope of
   `IsAdaptiveProtocol`.
-- **Sanctioned bridges:** `IsAdaptiveConversion.refl`,
-  `IsAdaptiveConversion.mono`, `IsAdaptiveConversion.trans`,
-  `IsAdaptiveConversion.density`, and `IsConversion.adaptive`.
+- **Sanctioned bridges:** `QuantumCircuit.IsAdaptiveConversion.refl`,
+  `QuantumCircuit.IsAdaptiveConversion.mono`, `QuantumCircuit.IsAdaptiveConversion.trans`,
+  `QuantumCircuit.IsAdaptiveConversion.density`, and `QuantumCircuit.IsConversion.adaptive`.
 - **Caveat:** exact, directed conversion on arbitrary input operators;
   positivity and unit trace of the output follow from those of the input.
   No symmetry or asymptotic phase classification is asserted.
@@ -2153,16 +2178,16 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsConversion (Γ : Geometry S) (T : ℕ) (ρ : Matrix (Config X) (Config X) ℂ) (σ : Matrix (Config Z) (Config Z) ℂ) : Prop`,
-  used here at the ring `Geometry.ring N`.
+  used here at the ring `QuantumCircuit.Geometry.ring N`.
 - **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
 - **Meaning:** `σ = Φ ρ` for a map `Φ` with `IsProtocol Γ T Φ`.
 - **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
   LOCC" (circuits with ancillas attached to each site) and paragraph "Phases
   of matter" (a protocol "where ancillas are traced out at the end, defines a
   quantum channel"), without measurements or classical communication.
-- **Sanctioned bridges:** `IsConversion.refl` (depth `0`),
-  `IsConversion.mono`, `IsConversion.trans` (depths add),
-  `IsConversion.density` (a conversion of a density matrix is a density
+- **Sanctioned bridges:** `QuantumCircuit.IsConversion.refl` (depth `0`),
+  `QuantumCircuit.IsConversion.mono`, `QuantumCircuit.IsConversion.trans` (depths add),
+  `QuantumCircuit.IsConversion.density` (a conversion of a density matrix is a density
   matrix), `QuantumCircuit.IsConversion.ofOnsite_seq` (attach, run a sequence
   of channel layers, discard), and
   `QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isGraphSeparated` (vanishing
@@ -2170,7 +2195,7 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
   matrix; positivity and unit trace of `σ` follow from those of `ρ` by
-  `IsConversion.density`. Conversions are exact; the approximate
+  `QuantumCircuit.IsConversion.density`. Conversions are exact; the approximate
   and asymptotic local-channel relations below extend this relation without
   classical feedforward. The full phase equivalence in arXiv:2103.13367 and
   blocking of sites are not formalized here.
@@ -2181,7 +2206,7 @@ Approximate conversion in trace norm, asymptotic conversion in polylogarithmic d
 equivalence of local channel protocols are QICLean's `QuantumCircuit.IsApproxConversion`,
 `QuantumCircuit.IsAsymptoticConversion` and `QuantumCircuit.IsPhaseEquivalent`, defined in
 `QICLean/Circuit/Model/Approximate.lean` (QICLean dependency) for a circuit geometry and used
-here at the ring `Geometry.ring N`, with the trace norm `Matrix.rectangularTraceNorm` of
+here at the ring `QuantumCircuit.Geometry.ring N`, with the trace norm `Matrix.rectangularTraceNorm` of
 operators on the configurations. The scope of the local channel model relative to the source
 `QCcc` relation is recorded in `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
@@ -2224,7 +2249,7 @@ operators on the configurations. The scope of the local channel model relative t
   `ManyBody.regionExpectation (D : Finset V) (A : Matrix (Config X) (Config X) ℂ)`,
   with the linear map `ManyBody.regionExpectationLM`; QICLean,
   `QICLean/ManyBody/Sites/RegionExpectation.lean`. TNLean uses it at
-  `X := fun _ ↦ Fin q`; the former `QuantumCircuit.siteExpectation` was deleted in
+  `X := fun _ ↦ Fin q`; TNLean's former site expectation was deleted in
   follow-up F12 of `docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md`.
 - **Meaning:** the normalized partial trace
   `E_K(B) = |X_{V∖K}|⁻¹ Tr_{V∖K}(B) ⊗ 1`, with the factors at their
@@ -2379,7 +2404,7 @@ operators on the configurations. The scope of the local channel model relative t
   `lem:trimming`), used in the degenerate-ground-space construction,
   lines 1777–1817.
 - **Sanctioned bridges:**
-  `IsIntervalSpanWithRankBound.finrank_le` (the recorded count bounds
+  `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound.finrank_le` (the recorded count bounds
   `finrank S`); `isIntervalSpanWithRankBound_intervalTrimSubspace` (the
   collective trim of an orthonormal basis of size `n ≤ count` satisfies the
   predicate).
@@ -2419,7 +2444,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 - **Source:** LVV13, `algo53.tex`, lines 219 and 484–487 (any solver of the convex
   programs).
 - **Sanctioned bridges:** `isAdmissibleLeadingVector_boundaryLeadingVector`; it is
-  the `leadingVector` field of `LinearAlgebraQuery.IsValidOracle`.
+  the `leadingVector` field of `TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle`.
 - **Caveat:** nothing is asserted at infeasible boundary points.
 
 ### `ManyBody.ChainInteraction.IsAdmissibleNet` and `IsAdmissibleSolver`
@@ -2466,7 +2491,7 @@ lift, for correctness, the honest-oracle restriction recorded in
   of least energy for the final program.
 - **Source:** LVV13, `algo53.tex`, lines 219 and 484–487, and the proof of
   Theorem 1, lines 652–678.
-- **Sanctioned bridges:** `LinearAlgebraQuery.isValidOracle_honestOracle`;
+- **Sanctioned bridges:** `TNLean.MPS.AreaLaw.LinearAlgebraQuery.isValidOracle_honestOracle`;
   correctness `groundStateProgram_spec_of_valid`, `sweepProgram_spec_of_valid` and
   the sampled variants `sampledGroundStateProgram_spec_of_valid`,
   `measureReal_sampledGroundStateProgram_success_of_valid`; cost
@@ -2514,7 +2539,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 - **Source:** arXiv:2203.12563, `gdgroup` with the fusion gauge fixed as at
   line 761, `Papers/2203.12563/REsubmission.tex:716-721,761`.
 - **Sanctioned bridges:**
-  `StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq`
+  `StabilizerRepresentatives.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq`
   and `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`
   identify the relation on induced L-symbols with cohomology of stabilizer
   cocycles; on the classes of `StabilizerRepresentatives.solutionSetoid`,
@@ -2553,7 +2578,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 The periodic-boundary layer of non-invertible matrix product operator symmetry.
 The operator-level predicates `IsMPOFusionAlgebra`, `IsMPOSymmetricFamily`,
-`IsMPOSymmetric` and `GroupFamily.IsNormalRepresentation` impose their
+`IsMPOSymmetric` and `MPOTensor.GroupFamily.IsNormalRepresentation` impose their
 identities only with identity boundaries; for the symmetric-state predicates that
 restriction is recorded in `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 The remaining entries are conditions on structure constants or on words and
@@ -2699,7 +2724,7 @@ involve no boundary.
   lines 1403–1497; arXiv:2203.12563, equation `fusiontensorG2`.
 - **Sanctioned bridges:** `MPOTensor.GroupFamily.IsNormalRepresentation.nonempty_fusionData`
   (existence); `MPOTensor.GroupFamily.FusionData.omega` is the anomaly
-  three-cochain, and `FusionData.omega_cohomologousTo` shows its class does not
+  three-cochain, and `MPOTensor.GroupFamily.FusionData.omega_cohomologousTo` shows its class does not
   depend on the choice.
 - **Caveat:** data, not a proposition; the nilpotent-remainder clause of the
   existence theorem is not stored.
@@ -2713,9 +2738,9 @@ involve no boundary.
 - **Source:** Molnár–Ge–Schuch–Cirac, arXiv:1706.07329v2, Theorem 22,
   `cornerproblem.tex` lines 3156–3162; the definition of the anomaly
   three-cocycle, arXiv:2502.20257, `main.tex` lines 1506–1535.
-- **Sanctioned bridges:** `MPSTensor.exists_isDressedProportional` (two
-  reductions onto a normal tensor are dressed proportional with a nonzero
-  scalar), `IsDressedProportional.refl` and `.trans`, and
+- **Sanctioned bridges:** `MPTensor.IsReduction.exists_isDressedProportional`
+  (two reductions onto a normal tensor are dressed proportional with a nonzero
+  scalar), `MPTensor.IsDressedProportional.refl` and `.trans`, and
   `MPTensor.IsDressedProportional.of_forall_mul_mul`.
 - **Caveat:** the scalar is not required to be nonzero in the definition, and
   the threshold length is existential.
@@ -2732,8 +2757,8 @@ involve no boundary.
 - **Source:** arXiv:2203.12563, line 1064, the relation
   $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ with $y=x$.
 - **Sanctioned bridges:** it is the single-operator, unit-eigenvalue case of
-  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `FixesMPV.mulTensor` closes
-  it under operator products, and `FixesMPV.sameMPV₂Pos_actTensor` turns it into
+  `MPOTensor.IsMPOSymmetric` (eigenvalue $c_a=1$). `MPOTensor.GroupFamily.FixesMPV.mulTensor` closes
+  it under operator products, and `MPOTensor.GroupFamily.FixesMPV.sameMPV₂Pos_actTensor` turns it into
   positive-length vector equality of the action tensor with `A`, which is the
   input of `MPOTensor.GroupFamily.nonempty_actionData`.
 - **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
@@ -2750,7 +2775,7 @@ involve no boundary.
 - **Source:** arXiv:2203.12563, line 1064, the relation
   $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ for blocks permuted by the group.
 - **Sanctioned bridges:** `FixesMPV T A` is the case $B=B'=A$, by unfolding.
-  `CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
+  `MPOTensor.GroupFamily.CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
   equality of the action tensor with $B'$, the input of
   `MPOTensor.GroupFamily.nonempty_blockActionData`.
 - **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
@@ -2784,7 +2809,7 @@ involve no boundary.
   case of the reduction.
 - **Source:** arXiv:2203.12563, equation `fusiontensorG`, lines 641--656, with
   the fusion tensors of `fusiontensorG2`, lines 1002--1026.
-- **Sanctioned bridge:** `FusionData.IsClosed.mulTensor_apply` restates it in
+- **Sanctioned bridge:** `MPOTensor.GroupFamily.FusionData.IsClosed.mulTensor_apply` restates it in
   the two physical indices of the operator tensors.
 - **Caveat:** for an injective representation with $U_e=\Id$ it forces bond
   dimension one (`MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`), so
@@ -2830,10 +2855,10 @@ involve no boundary.
   the relation with one site on each side of the wall at the renormalization fixed point and
   does not state the nonzero conditions. Both conventions are recorded in
   `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
-- **Sanctioned bridges:** `IsDomainWallAction.physAct_eq` (configuration-indexed form),
-  `IsDomainWallAction.mul` (composition, with L-symbols), `IsDomainWallAction.phase_eq`
-  (uniqueness of the phase), `IsDomainWallAction.pair` (a string over a pair of walls),
-  `IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.physAct_eq` (configuration-indexed form),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul` (composition, with L-symbols), `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.phase_eq`
+  (uniqueness of the phase), `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair` (a string over a pair of walls),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
 
 ### `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily`
 
@@ -2844,9 +2869,9 @@ involve no boundary.
   `IsDomainWallAction`; in particular all walls and phases are nonzero.
 - **Source boundary:** arXiv:2405.00439, line 1894 and `eq:localcdefG`, with the conventions of
   `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
-- **Sanctioned bridges:** `IsDomainWallFamily.mul_eq` (`PentLB`),
-  `IsDomainWallFamily.prod_eq_inv_cyclicInvariant` (`Intequiv`),
-  `IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq` (`PentLB`),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant` (`Intequiv`),
+  `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
   blocks).
 
 ### `MPOTensor.GroupFamily.IsSeparatingLeftInverse`
@@ -2860,11 +2885,11 @@ involve no boundary.
   the other tensor.
 - **Source boundary:** arXiv:2405.00439, lines 1422--1425 (the left inverses `Â`, `B̂` in the
   endpoint tensors of `eq:defEndT`, with orthogonal supports at the renormalization fixed point).
-- **Sanctioned bridges:** `BlockActionData.wallString_mulVec_mpv_left` and
-  `BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_left` and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
+  `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
   half-chains), the last three in `TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallStringExchange.lean`.
 
 ## Symmetries of matrix product density operators
@@ -2947,7 +2972,7 @@ involve no boundary.
 - **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the
   definition; they are phases, multiplicative in `g`, and equal to $1$ at the
   identity only under unitarity and $\rho^{(L)}\neq 0$
-  (`IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).
+  (`MPOTensor.IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).
 
 ### `MPSTensor.SymmetricGappedInteractionPath`
 
@@ -2959,8 +2984,8 @@ involve no boundary.
   common positive spectral gap for every parameter and every length at
   least two. The ground energy may vary, and ground-state degeneracy is allowed.
 - **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
-- **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
-  `SymmetricGappedInteractionPath.trans`,
+- **Sanctioned constructions:** `MPSTensor.SymmetricGappedInteractionPath.reverse`,
+  `MPSTensor.SymmetricGappedInteractionPath.trans`,
   `normalizedBondFixedPointGappedPath` (the path between the direct-sum
   fixed points built from the normalized interpolating bond),
   `MPSTensor.canonicalInjectiveGappedPath`, and
@@ -3058,7 +3083,7 @@ involve no boundary.
   only at the base parameter. The more general
   `MPSTensor.eventually_cohomologousTo_of_continuousOn_unique_stationary_density`
   uses supplied continuous locally unique stationary data without unitality.
-  `MPSTensor.cohomologousTo_of_continuous_unital_supported_family` gives endpoint
+  `MPSTensor.H2π_eq_of_continuous_unital_supported_family` gives endpoint
   cohomology equivalence when the fixed-space and injectivity assumptions hold
   at every parameter; preconnectedness extends the local conclusion.
 - **Caveat:** the relation contains no virtual representation, factor system,
@@ -3092,11 +3117,11 @@ involve no boundary.
   33.
 - **Source:** the physical-qudit/onsite-ancilla distinction in arXiv:2103.13367, Supplement
   pp. 7–8 (proof of Proposition 2).
-- **Sanctioned bridges:** `isUnitaryDilation_id`, `IsUnitaryDilation.mono`,
-  `IsUnitaryDilation.comp`, `Layer.isUnitaryDilation`, `Circuit.isUnitaryDilation`,
-  `IsProtocol.isUnitaryDilation`, `Layer.exists_portRing_sites` (operations on whole sites are
-  free), `Layer.exists_portRing` (one matching layer costs `2k`), and the pure-output estimate
-  `IsUnitaryDilation.exists_unit_product_approx`.
+- **Sanctioned bridges:** `isUnitaryDilation_id`, `QuantumCircuit.IsUnitaryDilation.mono`,
+  `QuantumCircuit.IsUnitaryDilation.comp`, `QuantumCircuit.Layer.isUnitaryDilation`, `QuantumCircuit.Circuit.isUnitaryDilation`,
+  `QuantumCircuit.IsProtocol.isUnitaryDilation`, `QuantumCircuit.Layer.exists_portRing_sites` (operations on whole sites are
+  free), `QuantumCircuit.Layer.exists_portRing` (one matching layer costs `2k`), and the pure-output estimate
+  `QuantumCircuit.IsUnitaryDilation.exists_unit_product_approx`.
 - **Caveat:** the environments are finite bases at the wires of `D`, not appended qudits;
   they need not reset. Source pure-state conditions and the fixed number of composed `QCcc`
   blocks with their internal measurement/control rules remain separate.
@@ -3116,7 +3141,7 @@ involve no boundary.
   `.exists_portRing_of_code` (between any codes on the wires, in particular the port codes,
   which give output on the original ports and zero designated memory) and
   `.exists_portRing_unit_product_approx` (pure and approximately pure outputs). A protocol on
-  nonempty input bases admits some bound via `IsProtocol.exists_dimension_bound`.
+  nonempty input bases admits some bound via `QuantumCircuit.IsProtocol.exists_dimension_bound`.
 - **Caveat:** an existential bound separately for each chain length is not a uniform family
   bound; a uniform constant requires `B` and `d` chosen independently of `N`. The compiled
   channel identity holds on the codes, which fix every wire of a site; no identity with an
@@ -3131,9 +3156,9 @@ involve no boundary.
   register with its workspace initialized, this identity says that the
   workspace returns to its initialized state on every logical input.
 - **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
-- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+- **Sanctioned constructions:** `QuantumCircuit.IsCleanImplementation.mul` composes
   implementations using the same workspace; TNLean's
-  `IsCleanImplementation.placeAlong` places one in a larger register; `exists_isGateProduct_isCleanImplementation`
+  `QuantumCircuit.IsCleanImplementation.placeAlong` places one in a larger register; `exists_isGateProduct_isCleanImplementation`
   constructs a product of gates for an included logical unitary, given that
   every unitary on the register is such a product.
 - **Caveat:** the identity alone does not assert unitarity. It specifies the
@@ -3205,12 +3230,12 @@ involve no boundary.
 - **Sanctioned bridges:** `isBoundaryClosed_iff_exists_linearMap` derives
   one linear boundary map on the full stacked matrix space, valid at all
   positive lengths; `mpoWithBoundary_eq_physCloseN` identifies the existing
-  physical closure; `IsBoundaryClosed.mul_mem_range` gives closure of its
+  physical closure; `MPOTensor.IsBoundaryClosed.mul_mem_range` gives closure of its
   range at each positive length. Exact biorthogonal data imply the predicate
   through `isBoundaryClosed_of_biorthogonalDecomposition`.
 - **Caveat:** closure at each length alone does not supply a common boundary
   choice. No converse from independent lengthwise range closure is asserted.
-  `IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective` now
+  `MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective` now
   constructs exact fusion decompositions from an unweighted block presentation
   with positive-dimensional, individually injective, gauge-scalar-separated
   blocks. The common positive spanning length is derived, not assumed.
@@ -3227,12 +3252,12 @@ involve no boundary.
 - **Sanctioned bridges:** `isBoundaryCompatible_iff_exists_linearMap`
   supplies a length-independent linear map on the complete product boundary
   matrix space. `MPSTensor.mpvWithBoundary_eq_groundSpaceMap` and
-  `IsBoundaryCompatible.mulVec_mem_groundSpace` identify the boundary state
+  `MPOTensor.IsBoundaryCompatible.mulVec_mem_groundSpace` identify the boundary state
   map and prove ground-space invariance. Exact action data give compatibility
   through `isBoundaryCompatible_of_biorthogonalDecomposition`.
 - **Caveat:** separate ground-space invariance at each length does not assert
   a common boundary transport.
-  `IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective`
+  `MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective`
   constructs exact action tensors from unweighted operator/state block
   presentations and positive-dimensional, individually injective,
   gauge-scalar-separated target state blocks. Operator-block injectivity is
@@ -3263,7 +3288,7 @@ involve no boundary.
   The source-block construction is in `BoundarySourceDecomposition.lean`;
   `BoundaryZipperBlocked.lean` retains its exact unblocked maps and packages
   the same maps into a complete zipper family after a derived common blocking.
-  `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
+  `MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
   of multiplicities under positive dimensions and injective block separation.
 
 ## Finite-domain area law and open-grid PEPS approximation
@@ -3290,7 +3315,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `ManyBody.relabelVector` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
 | `ManyBody.IsFrustrationFreeGapped` | The frustration-free model on a planar domain: every term of a `ManyBody.PlaneInteraction` satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, `H` is gapped at energy zero (`IsGapped H 0 Δ`), and the zero space `ManyBody.Interaction.zeroSpace` (the common kernel of the terms) is `span {Ω}`. The ground space at energy zero is `span {Ω}` (`groundSpace_eq`) and each `h_X Ω = 0` follows (`mulVec_eq_zero`), so the interaction is `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`); for `0 < Δ` the model is equivalent to `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `Δ (1 − \|Ω⟩⟨Ω\|) ≤ H` (`iff_model`). The terms are Hermitian and `H Ω = 0` (`isHermitian`, `hamiltonian_mulVec_eq_zero`); with `0 ≤ J`, `‖h_X‖ ≤ J` (`norm_term_le`); so with `0 < J, Δ` it is a special case of the hypotheses of `UniformAreaLaw`; the converse fails, since a gapped instance need not have positive terms annihilating `Ω` | Frustration-free area-law note (`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`), `eq:model`; the positivity `0 ≤ h_X` and the annihilation are what the gap and the sweep consequences use. |
-| `TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw` | The uniform boundary entropy bound of `UniformAreaLaw` restricted to instances of `IsFrustrationFreeGapped`, with the constant chosen before the domain, the Hamiltonian and the cut | Frustration-free note, `eq:goal`. `UniformAreaLaw.frustrationFreeAreaLaw` derives it from `UniformAreaLaw`; it is proved by that route (`frustrationFreeAreaLaw_of_uniformAreaLaw`). It is also proved by the note's sweep route, which does not use the general amplification (`frustrationFreeAreaLaw`). |
+| `TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw` | The uniform boundary entropy bound of `UniformAreaLaw` restricted to instances of `IsFrustrationFreeGapped`, with the constant chosen before the domain, the Hamiltonian and the cut | Frustration-free note, `eq:goal`. `TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw` derives it from `UniformAreaLaw`; it is proved by that route (`frustrationFreeAreaLaw_of_uniformAreaLaw`). It is also proved by the note's sweep route, which does not use the general amplification (`frustrationFreeAreaLaw`). |
 | `ManyBody.innerBoundary` | Sites of a region adjacent to its complement, for any graph; the induced domain uses `innerBoundary (planeDomainGraph Λ) A` | Area-law Corollary 1.2; defined in `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency); in a graph of degree at most four every cut has at most four crossing edges per inner-boundary site. |
 | `ManyBody.endpointBoundary` | Both endpoints of every edge of the edge boundary, with repetitions removed | Area-law Corollary 1.2; defined in `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency); `two_mul_card_edgeBoundary_le_mul_card_endpointBoundary` gives `2 |∂A| ≤ 4 |Z_A|` on the induced domain. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. The unconditional form is `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds`. |
@@ -3324,7 +3349,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `ManyBody.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
 | `ManyBody.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
 | `ManyBody.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
-| `TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar` | An assignment of the eight elementary triangles of the closed square of half-side ρ about v to region identifiers. Each open triangle lies in its region, and each region closure meets the square in exactly its triangles. The frontiers in the square are exactly the directed axis and diagonal rays at changes of identifier. Successive triangles have equal labels exactly when their identifiers agree, and without a change the square lies in one region | Area-law `geometry:initial-stars`, lines 340–349; definition only. Shrinking the half-side preserves it (`IsIsolatedStar.mono`). |
+| `TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar` | An assignment of the eight elementary triangles of the closed square of half-side ρ about v to region identifiers. Each open triangle lies in its region, and each region closure meets the square in exactly its triangles. The frontiers in the square are exactly the directed axis and diagonal rays at changes of identifier. Successive triangles have equal labels exactly when their identifiers agree, and without a change the square lies in one region | Area-law `geometry:initial-stars`, lines 340–349; definition only. Shrinking the half-side preserves it (`TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.mono`). |
 | `TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars` | Mark occurrences of a repair stage separated by `a₀` times the larger scale, each with an isolated star of half-side `a₀ S` in the current regions | Area-law `geometry:initial-stars` and `geometry:repair-induction`, lines 332–349 and 471–485; definition only, with shrinking of `a₀` for positive scales. Holding it at every generation is Lemma 11.4. |
 | `TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement` | One positive `a₀` such that the jointly chosen initial repair stage has isolated stars with constant `a₀` for all large `k₀` | The specialization of Lemma 11.3 (`geometry:initial-stars`) to the residues chosen in `initialRepairStage`, which Lemma 11.4 consumes. Proved with `a₀ = 1/128` by `initialIsolatedStarsStatement_holds`, as a corollary of the shift-uniform theorem below. |
 | `TNLean.PEPS.AreaLaw.Geometry.initialMarks_isolatedStars` | For arbitrary belt residues, the deduplicated marks of selected belt cells, each with a positive scale realized by an incident selected cell, are separated by `a₀` times the larger scale, with `a₀ = 1/128`. Each mark of scale `S` has an isolated star of half-side `a₀ S` in the actual initial regions | Area-law Lemma 11.3 (`geometry:initial-stars`, lines 325–370); proved with the source's hypotheses, for every endpoint set and every `k₀ ≥ 50000000`. |
@@ -3334,7 +3359,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated`, `exists_isInitialBirthSeparated` | The closed birth of every initial belt tile of side `u = t_k` is at distance at least `c₁ u^ρ₀` from the final actual region of every primary and every other initial belt tile of its label, with one `c₁ > 0` chosen before all data | Area-law Lemma 11.5 (`geometry:birth-separation`), lines 573–659, initial-belt half; proved without premises. The replacement half is `IsRepairBirthSeparated`, from the conclusion of Lemma 11.4. |
 | `TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement` | One `c₁ > 0` for both halves of the birth-separation lemma, given the uniform repair induction | Area-law Lemma 11.5 from Lemma 11.4; conditional on `UniformRepairInductionStatement`, so not the source lemma itself. `exists_birthSeparation_of_initialIsolatedStars` derives it from `InitialIsolatedStarsStatement`. |
 | `TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation` | One `c₁ > 0` and a threshold `T` such that, for every stopping scale `S_* ≥ T`, every width `C₀ ≥ 2` and every large lower layer index, the births of the initial belt tiles and of the replacements are at distance at least `c₁ u^ρ₀` from the final actual regions of earlier and peer identifiers of the same label | Area-law Lemma 11.5 (`geometry:birth-separation`, lines 573–582), without premise: Lemma 11.3 is supplied by `initialIsolatedStarsStatement_holds`. The thresholds are the source's standing choices of large `S_*` and `k₀` (lines 380–393). |
-| `TNLean.PEPS.AreaLaw.Geometry.repairSectorSet`, `repairActiveRaySet`, `isIsolatedStar_of_model` | The closed sector of an identifier under a wedge assignment about a point and the active rays between wedges of different identifiers; a local radial model in a larger open square gives an isolated star | Area-law Lemma 11.3, lines 340–349; conversely `IsIsolatedStar.exists_model` reads the model off a star. |
+| `TNLean.PEPS.AreaLaw.Geometry.repairSectorSet`, `repairActiveRaySet`, `isIsolatedStar_of_model` | The closed sector of an identifier under a wedge assignment about a point and the active rays between wedges of different identifiers; a local radial model in a larger open square gives an isolated star | Area-law Lemma 11.3, lines 340–349; conversely `TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_model` reads the model off a star. |
 | `TNLean.PEPS.AreaLaw.Geometry.IsRepairChildConeCompatible` | For a child `v + d e` of a removal square, each child wedge in the open square of half-side `d/2` lies in its tabulated parent wedge and inside or outside the removal square according to its kind | Area-law Lemma 11.4 proof, lines 497–514; proved for all nine children by `isRepairChildConeCompatible_holds`. |
 | `TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars` | The statement of the initial isolated-star lemma implies the statement of the uniform repair induction | Area-law Lemmas 11.3 and 11.4, lines 332–349 and 471–543; with `initialIsolatedStarsStatement_holds` it gives `uniformRepairInductionStatement_holds`. |
 | `TNLean.PEPS.AreaLaw.Geometry.descendant_birthTemplate_cutClearance` | One stopping-scale threshold such that, for every `S_*` beyond it, every width `C₀ ≥ 2` and all real `D₀`, `C_B`, every large lower layer index gives each replacement, with removal half-side `u`, an initial ancestor in a layer `k ≥ k₀` with `u ≤ t_k`, birth region at endpoint distance at least `(C₀ - 1) 2^k` (also inside the dummy region), and, for every template in that birth region with `s₀ ≤ 2u` and `n ≤ ⌈C_B u⌉`, the clearances `dist_∞(T, Z) > 4 D₀ s₀` and `dist_∞(T, Z) > 2 n^β` | Area-law Section 11, `10-geometry.tex` lines 742–750, with the replacement scales of lines 735–737; proved from `uniformRepairInductionStatement_holds`. The threshold on `k₀` is chosen after `C₀`, `D₀` and `C_B`, so every `D₀` is allowed. |
@@ -3464,7 +3489,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   at each occurrence of the same chronology.
 - **Source:** Polynomial-PEPS Theorem 5.2, `04-compression.tex:32–43,137–149,590–600`,
   revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-- **Sanctioned bridges:** `IsMessageGateApproximation.mono` enlarges the local
+- **Sanctioned bridges:** `QuantumCircuit.Party.EffectCircuit.IsMessageGateApproximation.mono` enlarges the local
   error budget. `isGateApproximation_expandMessageGateLists` exactly expands
   the messages and retains the comparison with the prescribed original
   operators, under the occurrence-preserving gate assignment.
@@ -3490,9 +3515,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   With D ≥ 1, C ≥ 0, and `IsMessageGateApproximation` supplying allowedness,
   `isTermwiseBounded_expandMessageGateLists` bounds each expanded coefficient
   by K C D^m and retains the original pair-effect bound.
-  `IsMessageResourceBounded.mono_dimension` enlarges the dimension bound on
+  `QuantumCircuit.Party.EffectCircuit.IsMessageResourceBounded.mono_dimension` enlarges the dimension bound on
   the same original message lists.
-  `IsTermwiseBounded.mono_coefficient` enlarges the coefficient majorant of
+  `QuantumCircuit.Party.EffectCircuit.IsTermwiseBounded.mono_coefficient` enlarges the coefficient majorant of
   a termwise bound on the same circuit, preserving its pair-effect bound.
 - **Caveat:** This predicate does not impose allowedness or contraction; these
   belong to `IsMessageGateApproximation`. It bounds individual coefficients,
@@ -3592,9 +3617,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `biUnion_rectRegion_cappedDyadicPartition` and
   `pairwiseDisjoint_rectRegion_cappedDyadicPartition` identify the actual
   disjoint physical rectangle cover, including missing sites and disconnected domains.
-- `Template.regionEntropy_core_le_of_safe_box`,
-  `Template.regionEntropy_shell_le_of_safe_box`, and
-  `Template.regionEntropy_prefix_le_of_safe_box` compose actual regional
+- `ManyBody.Template.regionEntropy_core_le_of_safe_box`,
+  `ManyBody.Template.regionEntropy_shell_le_of_safe_box`, and
+  `ManyBody.Template.regionEntropy_prefix_le_of_safe_box` compose actual regional
   subadditivity, derived safety, and the weighted covering estimates. A partial
   final row costs at most `n * log q`.
 - `exists_template_entropy_bounds_of_arbitrary_safe_box` assumes the safe-box
@@ -3602,7 +3627,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   chooses the corresponding constant before the template and scales. This is
   the conditional entropy component of Lemma 9.4, not a derivation of the
   arbitrary-exponent input or a completion marker for the full source lemma.
-- `Geometry.template_entropy_bounds_of_real_safe_box`
+- `ManyBody.template_entropy_bounds_of_real_safe_box`
   (`TemplateBoxEntropyReal.lean`) assumes the box estimate at one exponent
   `e > 0` and for one real clearance `D₀ ≥ 1`, for every integer rectangle
   `Q` with `dist_∞(Q, Z) > D₀ size(Q)`. It proves the core, shell and prefix
@@ -3672,10 +3697,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 The [nested-square patch geometry](formalization/peps-nested-patch-geometry.md)
 records the geometric part of the polynomial-PEPS patch construction. For the
-existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
+existing finite induced lattice domain, `ManyBody.closedSquareSample Λ c r`
 samples the closed coordinate square at any real centre and clips it to `Λ`.
-`Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
-`Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
+`ManyBody.nestedPatch Λ c u j` uses radius `u + 2j`, with
+`ManyBody.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
 These patches use `ManyBody.planeDomainGraph` and the unordered `ManyBody.edgeBoundary`;
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
@@ -3779,7 +3804,7 @@ source's Proposition 4.1.
 
 ## Uniform conditional entropy of rounded shells
 
-- **Declarations:** `Scan.rounded_shell_coefficient_uniform_le` and
+- **Declarations:** `TNLean.PEPS.AreaLaw.Scan.rounded_shell_coefficient_uniform_le` and
   `exists_regionEntropy_rounded_shell_le_uniform_rpow`, in the
   `TNLean.PEPS.AreaLaw` namespace.
 - **Defined in:** `Scan/RoundedScalePower.lean` and `RoundedShellEntropy.lean`.
@@ -3830,7 +3855,7 @@ predicate used in the analytic estimates. No planar embedding is assumed.
 
 | Declaration | Mathematical meaning | Source and status |
 |---|---|---|
-| `ManyBody.IsLocalCoefficient near i f` | `f` depends only on the indices at sites `j` satisfying `near i j` | Lines 1037–1039. For a metric lattice of range `l`, use `dist i j ≤ l`; walk locality on a finite graph is another instance. Enlargement of the coefficient neighborhoods is `IsLocalCoefficient.mono`. |
+| `ManyBody.IsLocalCoefficient near i f` | `f` depends only on the indices at sites `j` satisfying `near i j` | Lines 1037–1039. For a metric lattice of range `l`, use `dist i j ≤ l`; walk locality on a finite graph is another instance. Enlargement of the coefficient neighborhoods is `ManyBody.IsLocalCoefficient.mono`. |
 | `ManyBody.HasProductForm d near ρ` | `ρ = ∑_α (∏_i F_i(α)) ⊗_j ρ_j(α_j)` with each `F_i` local for `near i` | Eq. `mpf`, lines 1024–1039, on arbitrary finite sites. The finite index type and the physical dimension `d j` may vary with the site; a common dimension `q` is `fun _ ↦ q`. Products and powers preserve the neighborhoods. `exists_productForm_lie_card_index_eq` gives, for sweeps with one factor per centre, an index set at `j` with exactly `(d_j²)^(n c_j)` values, where `n c_j` factors act at `j`; on a planar domain `card_filter_mem_support_le` bounds `c_j` by the radius ball about `j`. The Trotter product is QICLean's `ProductFormula.lie` at `z = -β`. `exists_productForm_lie_card_index_of_dist_le` proves the source's metric-lattice Trotter form with at most `(d_j²)^(nS)` index values at each site. `exists_productForm_truncatedExp_card_index` gives at most `q²(1+2^M_i)` values, where `M_i` counts interaction centres within `l+R` of site `i`; powers raise this bound to the number of factors. Polynomial ball growth yields the source's exponential dimensional bounds, and `IntegerLatticeBallCount` derives this growth for distinct centres in the coordinate maximum metric on the integer lattice. |
 | `ClusterExpansion.IsCluster G A C` | `C ⊆ A` is connected in `G` and no other term of `A` is adjacent to it: a connected component of `A`, a cluster of the words with letter set `A` | Lines 1096–1102 (active bonds and clusters). The boundary is the set of overlap neighbours, not the source's `B(C)` (lines 1131–1134); see <https://sirui-lu.com/QICLean/paper-gaps/hastings05_cluster_boundary.pdf>. `exists_isCluster_mem`, `biUnion_clusters` and `pairwise_clusters` show the clusters of `A` partition it and are pairwise non-adjacent. |
 | `ClusterExpansion.IsAdmissible G U` | The union of a family `U` of sets of terms avoids the union of their boundaries, so all members can be clusters of one set | Lines 1197–1225 (inclusion and exclusion). For connected members, `pairwiseDisjoint_of_admissible` gives disjointness; the admissible families index `truncatedExp_eq_sum`. |
@@ -3930,9 +3955,9 @@ cut lie in `Span(S)`, that is, whose reduced density on the first `i` sites is s
 
 | Declaration | Mathematical meaning | Source and status |
 |---|---|---|
-| `TNLean.MPS.AreaLaw.IsViable Γ δ S` | Some unit vector `φ ∈ Span(S) ⊗ H_R` has `‖⟨φ, Γ⟩‖ ≥ 1 - δ` | Definition `def:viable`, lines 240–242, with the overlap itself (not its square) bounded below. For `δ < 1`, `isViable_iff_le_norm_starProjection` makes it `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`; at `δ = 1` with `Span(S) = 0` this fails. For a unit `Γ`, `IsViable.forall_mem_span_singleton` (all `δ ≤ 1`) and `isViable_iff_forall_mem_span_singleton` (`δ < 1`) identify it with the vector form of QICLean's `Submodule.IsCloseTo (1 - (1 - δ)²)` for `span {Γ}`, the squared-overlap closeness of arXiv:1602.08828v2 (Definitions `d:vs`, `d:close`); the parameter changes from `δ` to `1 - (1 - δ)²`. |
-| `TNLean.MPS.AreaLaw.IsLeftOpenMPS b v` | The vector `v` on the first `k` sites, read on `Fin k → Fin q`, is an open-boundary matrix product state of bond dimension at most `max 1 b` | Line 243. Bond dimension `0` is read as `1`, a local fix recorded in `docs/paper-gaps/lvv13_bond_dimension_zero.tex`; it makes `IsLeftOpenMPS.extendSite` hold with no hypothesis `0 < b`. |
-| `TNLean.MPS.AreaLaw.IsViableMPS Γ s b δ S` | `S` has at most `s` members, each `IsLeftOpenMPS b`, and is `IsViable Γ δ` | Definition `def:viable`, lines 240–244. Claim `c:ext` (lines 379–400) is `IsViableMPS.extend`: appending one site in every basis state gives an `(i, q s, b, δ)`-viable set with the same witness. |
+| `TNLean.MPS.AreaLaw.IsViable Γ δ S` | Some unit vector `φ ∈ Span(S) ⊗ H_R` has `‖⟨φ, Γ⟩‖ ≥ 1 - δ` | Definition `def:viable`, lines 240–242, with the overlap itself (not its square) bounded below. For `δ < 1`, `isViable_iff_le_norm_starProjection` makes it `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`; at `δ = 1` with `Span(S) = 0` this fails. For a unit `Γ`, `TNLean.MPS.AreaLaw.IsViable.forall_mem_span_singleton` (all `δ ≤ 1`) and `isViable_iff_forall_mem_span_singleton` (`δ < 1`) identify it with the vector form of QICLean's `Submodule.IsCloseTo (1 - (1 - δ)²)` for `span {Γ}`, the squared-overlap closeness of arXiv:1602.08828v2 (Definitions `d:vs`, `d:close`); the parameter changes from `δ` to `1 - (1 - δ)²`. |
+| `TNLean.MPS.AreaLaw.IsLeftOpenMPS b v` | The vector `v` on the first `k` sites, read on `Fin k → Fin q`, is an open-boundary matrix product state of bond dimension at most `max 1 b` | Line 243. Bond dimension `0` is read as `1`, a local fix recorded in `docs/paper-gaps/lvv13_bond_dimension_zero.tex`; it makes `TNLean.MPS.AreaLaw.IsLeftOpenMPS.extendSite` hold with no hypothesis `0 < b`. |
+| `TNLean.MPS.AreaLaw.IsViableMPS Γ s b δ S` | `S` has at most `s` members, each `IsLeftOpenMPS b`, and is `IsViable Γ δ` | Definition `def:viable`, lines 240–244. Claim `c:ext` (lines 379–400) is `TNLean.MPS.AreaLaw.IsViableMPS.extend`: appending one site in every basis state gives an `(i, q s, b, δ)`-viable set with the same witness. |
 
 ## The physical AKLV filter sequence
 

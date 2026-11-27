@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Eigenspace.Charpoly
 import Mathlib.LinearAlgebra.Eigenspace.Zero
-import QICLean.Algebra.Module.TraceInvariantSubmodule
+import QICLean.Algebra.Module.Subquotient
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.FieldTheory.IsAlgClosed.Spectrum

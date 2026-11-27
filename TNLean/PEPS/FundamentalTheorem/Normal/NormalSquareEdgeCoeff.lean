@@ -72,11 +72,7 @@ theorem exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge_coeff
     (A B : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
@@ -108,6 +104,8 @@ theorem exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge_coeff
                   ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
                     Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))
               σ τ := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   intro e hsingle
   let DA := normalSquareHorizontalTranslatedEdge_blockingDatum_interior
       (κ := regionInjectivityDataOf A) hA hUA hx0 hy0 hxw hyh
@@ -145,11 +143,7 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge_coeff
     (A B : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
@@ -181,6 +175,8 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge_coeff
                   ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
                     Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))
               σ τ := by
+  have hUA := regionInjectivityUnionClosure_of_overlap A hposA
+  have hUB := regionInjectivityUnionClosure_of_overlap B hposB
   intro e hsingle
   let DA := normalSquareVerticalTranslatedEdge_blockingDatum_interior
       (κ := regionInjectivityDataOf A) hA hUA hx0 hy0 hxw hyh
@@ -230,11 +226,7 @@ theorem exists_absorbingGauge_normalSquareHorizontalTranslatedEdge
     (A B : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
@@ -252,7 +244,7 @@ theorem exists_absorbingGauge_normalSquareHorizontalTranslatedEdge
               (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N) := by
   intro e
   obtain ⟨hEdge, Z, hid⟩ :=
-    exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge_coeff A B hA hUA hB hUB
+    exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge_coeff A B hA hB
       hx0 hy0 hxw hyh hbond hAB hd hposA hposB
   have hEeq : hEdge = congr_fun hbond e := Subsingleton.elim _ _
   subst hEeq
@@ -282,11 +274,7 @@ theorem exists_absorbingGauge_normalSquareVerticalTranslatedEdge
     (A B : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
     (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
@@ -304,7 +292,7 @@ theorem exists_absorbingGauge_normalSquareVerticalTranslatedEdge
               (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N) := by
   intro e
   obtain ⟨hEdge, Z, hid⟩ :=
-    exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge_coeff A B hA hUA hB hUB
+    exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge_coeff A B hA hB
       hx0 hy0 hxw hyh hbond hAB hd hposA hposB
   have hEeq : hEdge = congr_fun hbond e := Subsingleton.elim _ _
   subst hEeq
@@ -387,11 +375,7 @@ theorem exists_absorbingGauge_of_normalSquareInteriorEdgeDatum
     (A B : Tensor (squareLatticeGraph width height) d)
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (squareLatticeGraph width height), 0 < A.bondDim g)
@@ -415,7 +399,7 @@ theorem exists_absorbingGauge_of_normalSquareInteriorEdgeDatum
         (by omega) (by omega) (by omega) (by omega)]
       exact horizontalSquareLatticeEdge_eq_rightEdge e hEdge
     rw [heq]
-    exact exists_absorbingGauge_normalSquareHorizontalTranslatedEdge A B hA hUA hB hUB
+    exact exists_absorbingGauge_normalSquareHorizontalTranslatedEdge A B hA hB
       (by omega) (by omega) (by omega) (by omega) hbond hAB hd hposA hposB
   · -- Vertical interior edge: the translated frame at `(x-2, y-1)`.
     obtain ⟨hx4, hx6, hy3, hy7⟩ := hMargins
@@ -425,13 +409,13 @@ theorem exists_absorbingGauge_of_normalSquareInteriorEdgeDatum
         (by omega) (by omega) (by omega) (by omega)]
       exact verticalSquareLatticeEdge_eq_upEdge e hEdge
     rw [heq]
-    exact exists_absorbingGauge_normalSquareVerticalTranslatedEdge A B hA hUA hB hUB
+    exact exists_absorbingGauge_normalSquareVerticalTranslatedEdge A B hA hB
       (by omega) (by omega) (by omega) (by omega) hbond hAB hd hposA hposB
 
 /-- **The interior absorbed gauge family on the open square lattice.**
 
-For two tensors on the open square lattice with the rectangular-injectivity hypotheses, union
-closure, matched bond dimensions, the same state, and positive bonds, there is a per-edge gauge
+For two tensors on the open square lattice with the rectangular-injectivity hypotheses,
+matched bond dimensions, the same state, and positive bonds, there is a per-edge gauge
 family `X` over the second tensor's bonds satisfying the bare-edge absorbed equality against
 `applyGauge B X` at every edge with interior margins: inserting `N` on `A`'s edge `e` matches
 inserting the reindexed `N` on `applyGauge B X`'s edge `e`, for every global physical
@@ -450,11 +434,7 @@ theorem exists_normalSquareInteriorAbsorbedGaugeFamily
     (A B : Tensor (squareLatticeGraph width height) d)
     (hA : NormalSquareLatticeRectangleInjectivityHypotheses
             (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hUA : RegionInjectivityUnionClosure
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
     (hB : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
             (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (squareLatticeGraph width height), 0 < A.bondDim g)
@@ -482,7 +462,7 @@ theorem exists_normalSquareInteriorAbsorbedGaugeFamily
     intro e
     by_cases he : NormalSquareInteriorEdgeDatum e
     · obtain ⟨Ze, hZe⟩ := exists_absorbingGauge_of_normalSquareInteriorEdgeDatum A B
-        hA hUA hB hUB hbond hAB hd hposA hposB e he
+        hA hB hbond hAB hd hposA hposB e he
       exact ⟨Ze, fun _ => hZe⟩
     · exact ⟨1, fun hcon => absurd hcon he⟩
   choose X hX using hsel

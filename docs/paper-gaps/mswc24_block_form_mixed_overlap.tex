@@ -358,8 +358,8 @@ positive-definite fixed point $1$ of each block, the same fixed point from which
 the approximating state in its conclusion is built; it also collects the identification of the pairs and of the
 weights $\beta_j$ with those of the canonical form, and the failure of the printed
 bound.\footnote{Formal declarations:
-    \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock},
-    \leanid{MPSTensor.isBNTCanonicalForm_overlappingBlockSector},
+    \leanid{MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlappingBlock},
+    \leanid{MPSTensor.isLeftCanonicalBNTPresentation_overlappingBlockSector},
     \leanid{MPSTensor.reindex_toTensor_overlappingBlockSector} and
     \leanid{MPSTensor.embeddedFixedPointPair_overlappingBlockSector} in
     \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample}.}
@@ -408,8 +408,8 @@ the failure of the printed bound for $\mu=-1$, is formalized.\footnote{Formal de
     \leanid{MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_norm},
     \leanid{MPSTensor.one_sub_norm_nonNormalApproxOverlap_phaseBlockTensor_neg_one},
     \leanid{MPSTensor.not_approximationError_le_phaseBlockTensor},
-    \leanid{MPSTensor.isBNTCanonicalForm_phaseBlockSector} and
-    \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_phaseBlock} in
+    \leanid{MPSTensor.isLeftCanonicalBNTPresentation_phaseBlockSector} and
+    \leanid{MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_phaseBlock} in
     \doclink{TNLean/MPS/Preparation/BlockSum/PhaseWeightCounterexample}.}
 The bound (\ref{eq:mswc24_mixed_corrected}) for complex weights $\mu_j$, not all zero,
 multiplicity one, $\beta_j=\lvert\mu_j\rvert^N$ and every $0<\gamma<1$, with a constant

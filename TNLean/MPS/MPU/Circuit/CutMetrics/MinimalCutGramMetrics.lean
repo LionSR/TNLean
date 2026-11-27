@@ -28,6 +28,8 @@ Source: the finite nonuniform operator definition in arXiv:2508.08160v2,
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 open Matrix
 open scoped Matrix ComplexOrder
 
@@ -39,11 +41,11 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def minimalOperatorPrefixFactor {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) (k : ℕ) :
-    MPSPreparation.CutPrefixConfig d N k →
-      Matrix (MPSPreparation.CutPrefixConfig d N k)
-        (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k)) ℂ :=
+    RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) →
+      Matrix (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k))
+        (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U))) ℂ :=
   fun x y q ↦ MPSPreparation.cutPrefixMatrix (operatorCoefficientTensor U) B k
     (pairPhysicalConfig x y) q
 
@@ -53,11 +55,11 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def minimalOperatorSuffixFactor {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) (k : ℕ) :
-    MPSPreparation.CutSuffixConfig d N k →
-      Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
-        (MPSPreparation.CutSuffixConfig d N k) ℂ :=
+    ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) →
+      Matrix (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
+        (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k)) ℂ :=
   fun x q y ↦ MPSPreparation.cutSuffixMatrix (operatorCoefficientTensor U) B k q
     (pairPhysicalConfig x y)
 
@@ -67,22 +69,24 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem factorizedOperator_minimalOperatorFactors {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) (k : ℕ) :
     MPUPrefixGram.factorizedOperator
       (minimalOperatorPrefixFactor U B k) (minimalOperatorSuffixFactor U B k) =
-      Matrix.reindex (physicalCutConfigEquiv d N k) (physicalCutConfigEquiv d N k) U := by
+      Matrix.reindex (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k))
+          (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) U := by
   classical
   ext ⟨x₁, x₂⟩ ⟨y₁, y₂⟩
   change (MPSPreparation.cutPrefixMatrix (operatorCoefficientTensor U) B k *
       MPSPreparation.cutSuffixMatrix (operatorCoefficientTensor U) B k)
       (pairPhysicalConfig x₁ y₁) (pairPhysicalConfig x₂ y₂) =
-    U ((physicalCutConfigEquiv d N k).symm (x₁, x₂))
-      ((physicalCutConfigEquiv d N k).symm (y₁, y₂))
-  rw [← MPSPreparation.cutCoefficientMatrix_eq_prefix_mul_suffix]
-  change operatorCoefficientTensor U ((physicalCutConfigEquiv (d * d) N k).symm
+    U ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)).symm (x₁, x₂))
+      ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)).symm (y₁, y₂))
+  rw [← MPSPreparation.cutMatrix_eq_prefix_mul_suffix]
+  change operatorCoefficientTensor U ((ManyBody.cutEquiv (fun _ : Fin N ↦ Fin (d * d))
+      (interval N 0 k)).symm
     (pairPhysicalConfig x₁ y₁, pairPhysicalConfig x₂ y₂)) = _
-  rw [physicalCutConfigEquiv_pair]
+  rw [cutEquiv_symm_pairPhysicalConfig]
   exact operatorCoefficientTensor_apply U _ _
 
 /-- The constructed factors of a finite unitary are globally isometric.
@@ -92,14 +96,15 @@ Source: Section 5 of
 theorem minimalOperatorFactors_isIsometry {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) (k : ℕ) :
     (MPUPrefixGram.factorizedOperator
       (minimalOperatorPrefixFactor U B k) (minimalOperatorSuffixFactor U B k)).IsIsometry := by
   classical
   rw [factorizedOperator_minimalOperatorFactors]
   exact ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup U).mpr hU).1.reindex U
-    (physicalCutConfigEquiv d N k) (physicalCutConfigEquiv d N k)
+    (ManyBody.cutEquiv (fun _ : Fin N ↦ Fin d) (interval N 0 k)) (ManyBody.cutEquiv
+        (fun _ : Fin N ↦ Fin d) (interval N 0 k))
 
 /-- Both constructed bond-space spans follow from the physical cut rank
 and the equivalence between paired configurations and separate output-input
@@ -108,30 +113,30 @@ Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem minimalOperatorFactors_spans {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) (k : ℕ) :
     Submodule.span ℂ (Set.range
-      (fun xy : MPSPreparation.CutPrefixConfig d N k ×
-          MPSPreparation.CutPrefixConfig d N k ↦
+      (fun xy : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ×
+          RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ↦
         fun q ↦ minimalOperatorPrefixFactor U B k xy.1 xy.2 q)) = ⊤ ∧
       Submodule.span ℂ (Set.range
-        (fun xy : MPSPreparation.CutSuffixConfig d N k ×
-            MPSPreparation.CutSuffixConfig d N k ↦
+        (fun xy : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ×
+            ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ↦
           fun q ↦ minimalOperatorSuffixFactor U B k xy.1 q xy.2)) = ⊤ := by
   have hF : Set.range
-      (fun xy : MPSPreparation.CutPrefixConfig d N k ×
-          MPSPreparation.CutPrefixConfig d N k ↦
+      (fun xy : RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ×
+          RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ↦
         fun q ↦ minimalOperatorPrefixFactor U B k xy.1 xy.2 q) =
       Set.range (MPSPreparation.cutPrefixMatrix (operatorCoefficientTensor U) B k).row := by
-    exact (physicalPairConfigEquiv {s : Fin N // s.val < k} d).symm.surjective.range_comp _
+    exact (physicalPairConfigEquiv {s : Fin N // s ∈ interval N 0 k} d).symm.surjective.range_comp _
   have hG : Set.range
-      (fun xy : MPSPreparation.CutSuffixConfig d N k ×
-          MPSPreparation.CutSuffixConfig d N k ↦
+      (fun xy : ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ×
+          ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 k) ↦
         fun q ↦ minimalOperatorSuffixFactor U B k xy.1 q xy.2) =
       Set.range (MPSPreparation.cutSuffixMatrix (operatorCoefficientTensor U) B k).col := by
     change Set.range ((MPSPreparation.cutSuffixMatrix (operatorCoefficientTensor U) B k).col ∘
-        (physicalPairConfigEquiv {s : Fin N // k ≤ s.val} d).symm) = _
-    exact (physicalPairConfigEquiv {s : Fin N // k ≤ s.val} d).symm.surjective.range_comp _
+        (physicalPairConfigEquiv {s : Fin N // s ∉ interval N 0 k} d).symm) = _
+    exact (physicalPairConfigEquiv {s : Fin N // s ∉ interval N 0 k} d).symm.surjective.range_comp _
   rw [hF, hG]
   exact MPSPreparation.cutPrefixMatrix_rows_and_cutSuffixMatrix_cols_span
     (operatorCoefficientTensor U) B k
@@ -144,11 +149,11 @@ Source: Section 5 of
 theorem exists_simultaneous_balanced_minimalOperator_metrics {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k)) :
     ∃ P : ∀ j : Fin (N + 1),
-        Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
-          (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ,
+        Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+          (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ,
       ∀ j, P j ∈ prefixGramAffineHull
           (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q) ∧
         (P j).PosDef ∧ (dualGramMetric (P j)).PosDef ∧
@@ -156,27 +161,29 @@ theorem exists_simultaneous_balanced_minimalOperator_metrics {d N : ℕ}
             (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q),
           trace (X * dualGramMetric (P j)) = 1) ∧
         trace ((dualGramMetric (P j))⁻¹ * (P j)⁻¹) =
-          (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val : ℂ) ^ 2 := by
+          (cutRank (interval N 0 j.val) (operatorCoefficientTensor U) : ℂ) ^ 2 := by
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
   let : ∀ j : Fin (N + 1),
-      Fintype (MPSPreparation.CutPrefixConfig d N j.val) := fun _ ↦ inferInstance
+      Fintype (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦ inferInstance
   let : ∀ j : Fin (N + 1),
-      Fintype (MPSPreparation.CutSuffixConfig d N j.val) := fun _ ↦ inferInstance
+      Fintype (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦ inferInstance
   let : ∀ j : Fin (N + 1),
-      Nonempty (MPSPreparation.CutPrefixConfig d N j.val) := fun _ ↦
+      Nonempty (RegionConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦
     ⟨fun _ ↦ ⟨0, hd⟩⟩
   let : ∀ j : Fin (N + 1),
-      Nonempty (MPSPreparation.CutSuffixConfig d N j.val) := fun _ ↦
+      Nonempty (ComplConfig (fun _ : Fin N ↦ Fin d) (interval N 0 j.val)) := fun _ ↦
     ⟨fun _ ↦ ⟨0, hd⟩⟩
   let : ∀ j : Fin (N + 1),
-      DecidableEq (MPSPreparation.CutPrefixConfig d N j.val) := fun _ ↦ inferInstance
+      DecidableEq (RegionConfig (fun _ : Fin N ↦ Fin d)
+          (interval N 0 j.val)) := fun _ ↦ inferInstance
   let : ∀ j : Fin (N + 1),
-      DecidableEq (MPSPreparation.CutSuffixConfig d N j.val) := fun _ ↦ inferInstance
+      DecidableEq (ComplConfig (fun _ : Fin N ↦ Fin d)
+          (interval N 0 j.val)) := fun _ ↦ inferInstance
   let : ∀ j : Fin (N + 1),
-      Nonempty (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
+      Nonempty (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
           := fun j ↦
-    ⟨⟨0, MPSPreparation.cutCoefficientRank_pos (operatorCoefficientTensor U) hψ j.val⟩⟩
+    ⟨⟨0, (ManyBody.cutRank_pos (D := interval N 0 j.val) hψ)⟩⟩
   exact exists_simultaneous_balanced_prefix_metrics_of_factorizedOperator_isometries
     (fun j : Fin (N + 1) ↦ minimalOperatorPrefixFactor U B j.val)
     (fun j : Fin (N + 1) ↦ minimalOperatorSuffixFactor U B j.val)
@@ -195,14 +202,13 @@ theorem exists_cutBases_simultaneous_balanced_metrics_of_unitary {d N : ℕ}
     (hd : 0 < d) (hN : 0 < N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) k))
+    ∃ B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧
       ∃ P : ∀ j : Fin (N + 1),
-          Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
-            (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ,
+          Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+            (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ,
         ∀ j, P j ∈ prefixGramAffineHull
             (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q) ∧
           (P j).PosDef ∧ (dualGramMetric (P j)).PosDef ∧
@@ -210,7 +216,7 @@ theorem exists_cutBases_simultaneous_balanced_metrics_of_unitary {d N : ℕ}
               (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q),
             trace (X * dualGramMetric (P j)) = 1) ∧
           trace ((dualGramMetric (P j))⁻¹ * (P j)⁻¹) =
-            (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val : ℂ) ^ 2 := by
+            (cutRank (interval N 0 j.val) (operatorCoefficientTensor U) : ℂ) ^ 2 := by
   obtain ⟨B, hB0, hBN⟩ := MPSPreparation.exists_cutBasisFamily_with_endpoints
     (operatorCoefficientTensor U) (operatorCoefficientTensor_ne_zero hd U hU) hN
   obtain ⟨P, hP⟩ := exists_simultaneous_balanced_minimalOperator_metrics hd U hU B

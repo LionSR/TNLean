@@ -159,8 +159,8 @@ noncomputable def exactMPSGroundPath_of_canonicalInjective
         (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian ↔
         Module.End.HasEigenvalue (Matrix.toEuclideanLin
           (ManyBody.Interaction.translationInvariant N
-            (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian) μ := by
-      rw [← Matrix.spectrum_toLpLin (p := 2), Module.End.hasEigenvalue_iff_mem_spectrum]
+            (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian) μ :=
+      Matrix.hasEigenvalue_toEuclideanLin_iff_mem_spectrum.symm
     refine ⟨0, (hmem 0).mpr (Module.End.hasEigenvalue_iff.mpr (by
       simpa only [ManyBody.groundSpace, Complex.ofReal_zero] using hGap.1)), fun z hz => ?_, ?_⟩
     · rcases hGap.2 z ((hmem z).mp hz) with h | h

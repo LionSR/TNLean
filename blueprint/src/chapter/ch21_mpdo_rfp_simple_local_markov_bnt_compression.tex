@@ -820,7 +820,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_doubled_phys_trace_transfer_to_mps}
+    \uses{def:mpo_physical_trace_transfer}
     Substituting $\mathcal K_s=\mu_sA_s$ into the defining diagonal sum for the
     physical-trace transfer and factoring out the scalar $\mu_s$ gives the
     claim.
@@ -852,7 +852,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:global_gauge_of_blocks,lem:mpdo_doubled_phys_trace_transfer_to_mps,lem:mpdo_doubled_phys_trace_transfer_blockwise,lem:mpdo_copy_weight_eq_common_weight,thm:mpdo_absorbed_bnt_sector_phys_trace_transfer,lem:mpdo_simple_blockwise_zcl_equation}
+    \uses{def:global_gauge_of_blocks,lem:mpdo_phys_trace_transfer_blockwise,lem:mpdo_copy_weight_eq_common_weight,thm:mpdo_absorbed_bnt_sector_phys_trace_transfer,lem:mpdo_simple_blockwise_zcl_equation}
     Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
     gives the same identity for the weighted direct sum. Its diagonal block
     indexed by $(s,q)$ is

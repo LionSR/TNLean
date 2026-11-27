@@ -7,7 +7,6 @@ import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
 import TNLean.MPS.Examples.Z3.Z3ClockDefect
 import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.Operator.Defs
-import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AnomalyObstruction
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
@@ -238,12 +237,9 @@ theorem normVTensor_apply (j : Fin 3) :
 `(α ω^{l j})`. -/
 theorem normUTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normUTensor α) := by
   have hα0 := ne_zero_of_pow_three_eq_omega hα
-  refine (isNormal_toMPSTensor_iff _).1 <|
-    isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 1, j))
-      (fun j l ↦ α * phaseChar (uWeight l j))
-      (fun j ↦ (congrArg (normUTensor α) (finProdFinEquiv.symm_apply_apply _)).trans
-        (normUTensor_apply j))
-      (fun _ _ ↦ mul_ne_zero hα0 (phaseChar_ne_zero _)) ?_
+  refine isNormal_of_forced_column (fun j ↦ (j + 1, j))
+    (fun j l ↦ α * phaseChar (uWeight l j)) normUTensor_apply
+    (fun _ _ ↦ mul_ne_zero hα0 (phaseChar_ne_zero _)) ?_
   simpa only [uWeight, phaseChar_mul] using
     det_scaled_vandermonde_ne_zero phaseChar_injective fun _ ↦ hα0
 
@@ -252,12 +248,9 @@ theorem normUTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normUTenso
 theorem normVTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normVTensor α) := by
   have hα0 := ne_zero_of_pow_three_eq_omega hα
   have hc : α ^ 2 * omega ≠ 0 := mul_ne_zero (pow_ne_zero _ hα0) omega_ne_zero
-  refine (isNormal_toMPSTensor_iff _).1 <|
-    isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 2, j))
-      (fun j l ↦ α ^ 2 * omega * phaseChar (vWeight l j))
-      (fun j ↦ (congrArg (normVTensor α) (finProdFinEquiv.symm_apply_apply _)).trans
-        (normVTensor_apply j))
-      (fun _ _ ↦ mul_ne_zero hc (phaseChar_ne_zero _)) ?_
+  refine isNormal_of_forced_column (fun j ↦ (j + 2, j))
+    (fun j l ↦ α ^ 2 * omega * phaseChar (vWeight l j)) normVTensor_apply
+    (fun _ _ ↦ mul_ne_zero hc (phaseChar_ne_zero _)) ?_
   have hv : ∀ l j : Fin 3, α ^ 2 * omega * phaseChar (vWeight l j) =
       (α ^ 2 * omega * phaseChar (2 * j)) * phaseChar (2 * j) ^ (l : ℕ) := by
     intro l j
@@ -278,8 +271,7 @@ the tensors are those of `Z3ClockTensor`, rescaled. -/
 theorem clockFamily_isNormalRepresentation (hα : α ^ 3 = omega) :
     (clockFamily α).IsNormalRepresentation where
   isNormal := Multiplicative.forall_zmod_three (idTensor_isNormal (d := 3))
-    ((isNormal_toMPSTensor_iff _).2 (normUTensor_isNormal hα))
-    ((isNormal_toMPSTensor_iff _).2 (normVTensor_isNormal hα))
+    (normUTensor_isNormal hα) (normVTensor_isNormal hα)
   operator_mul g h _ hN :=
     mpo_clockRepTensor_mul hα hN (Multiplicative.toAdd g) (Multiplicative.toAdd h)
 

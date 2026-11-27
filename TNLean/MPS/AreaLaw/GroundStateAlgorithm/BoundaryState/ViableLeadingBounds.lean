@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingVector
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.Gluing
 import QICLean.Spectral.LowEnergy.HierarchyLevels
-import QICLean.Spectral.Eigenvalue.DensityMaxEigenvector
 import QICLean.Spectral.Eigenvalue.DominantEigenvectorUniqueness
+import QICLean.Spectral.LowEnergy.DominantEigenvector
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -37,107 +37,6 @@ open ManyBody (IsGapped groundSpace ChainInteraction interval interval_mono)
 namespace TNLean.MPS.AreaLaw
 
 variable {L q k : ℕ}
-
-/-- The largest eigenvalue of a low-energy density matrix is at least its ground-state
-population.  Under a gap `Δ`, an energy excess `e` therefore gives the quantitative
-bound `1 - e / Δ ≤ μ`.  This is the spectral separation estimate implicit in the
-leading-vector step of LVV13, `algo53.tex`, lines 497--502. -/
-theorem Matrix.PosSemidef.one_sub_energyExcess_div_gap_le_maxEigenvalue
-    {n : Type*} [Fintype n] [DecidableEq n]
-    {σ H : Matrix n n ℂ} {E₀ Δ e μ : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hσ : σ.PosSemidef) (htr : σ.trace = 1)
-    (hgap : (H - (E₀ : ℂ) • 1 -
-      (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hΩ : ‖Ω‖ = 1) (hΔ : 0 < Δ) (henergy : (σ * H).trace.re ≤ E₀ + e)
-    (hmax : ∀ (ν : ℝ) (z : EuclideanSpace ℂ n), z ≠ 0 →
-      σ *ᵥ WithLp.ofLp z = (ν : ℂ) • WithLp.ofLp z → ν ≤ μ) :
-    1 - e / Δ ≤ μ := by
-  classical
-  let hS := hσ.isHermitian
-  let b := hS.eigenvectorBasis
-  let lam := hS.eigenvalues
-  let E : n → ℝ := fun i ↦ (⟪b i, toEuclideanLin H (b i)⟫_ℂ).re
-  have hb1 (i : n) : ‖b i‖ = 1 := b.orthonormal.1 i
-  have hlam0 (i : n) : 0 ≤ lam i := hσ.eigenvalues_nonneg i
-  have hlam1 : ∑ i, lam i = 1 := by
-    have hh := congrArg Complex.re hS.trace_eq_sum_eigenvalues
-    rw [htr, Complex.re_sum] at hh
-    simpa [lam] using hh.symm
-  have hgap_i (i : n) :
-      Δ * (1 - ‖⟪Ω, b i⟫_ℂ‖ ^ 2) ≤ E i - E₀ := by
-    have hh := hgap.gap_le (b i)
-    rw [hb1, one_pow, mul_one] at hh
-    exact hh
-  have hsum : ∑ i, lam i * (E i - E₀) ≤ e := by
-    have hh : (σ * H).trace.re = ∑ i, lam i * E i :=
-      hS.re_trace_mul_eq_sum_eigenvalues_mul H
-    simp only [mul_sub, Finset.sum_sub_distrib, ← Finset.sum_mul, hlam1, one_mul]
-    linarith
-  have hweighted :
-      Δ * ∑ i, lam i * (1 - ‖⟪Ω, b i⟫_ℂ‖ ^ 2) ≤ e := by
-    calc
-      _ = ∑ i, lam i * (Δ * (1 - ‖⟪Ω, b i⟫_ℂ‖ ^ 2)) := by
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro i _
-        ring
-      _ ≤ ∑ i, lam i * (E i - E₀) := Finset.sum_le_sum fun i _ ↦
-        mul_le_mul_of_nonneg_left (hgap_i i) (hlam0 i)
-      _ ≤ e := hsum
-  have hpopulation : 1 - e / Δ ≤ ∑ i, lam i * ‖⟪Ω, b i⟫_ℂ‖ ^ 2 := by
-    have hid : ∑ i, lam i * (1 - ‖⟪Ω, b i⟫_ℂ‖ ^ 2) =
-        1 - ∑ i, lam i * ‖⟪Ω, b i⟫_ℂ‖ ^ 2 := by
-      simp only [mul_sub, mul_one, Finset.sum_sub_distrib, hlam1]
-    rw [hid] at hweighted
-    field_simp [ne_of_gt hΔ]
-    nlinarith only [hweighted]
-  have hlamμ (i : n) : lam i ≤ μ := by
-    apply hmax (lam i) (b i) (by
-      intro hz
-      have hi := hb1 i
-      rw [hz, norm_zero] at hi
-      norm_num at hi)
-    exact hS.mulVec_eigenvectorBasis i
-  have hparseval : ∑ i, ‖⟪Ω, b i⟫_ℂ‖ ^ 2 = 1 := by
-    have hh := b.sum_sq_norm_inner_right Ω
-    rw [hΩ, one_pow] at hh
-    simpa only [norm_inner_symm] using hh
-  calc
-    1 - e / Δ ≤ ∑ i, lam i * ‖⟪Ω, b i⟫_ℂ‖ ^ 2 := hpopulation
-    _ ≤ ∑ i, μ * ‖⟪Ω, b i⟫_ℂ‖ ^ 2 :=
-      Finset.sum_le_sum fun i _ ↦ mul_le_mul_of_nonneg_right (hlamμ i) (sq_nonneg _)
-    _ = μ := by rw [← Finset.mul_sum, hparseval, mul_one]
-
-/-- At the LVV leading-vector energy scale, the maximal density eigenvalue is uniformly
-bounded away from one half: energy excess at most `Δ / 24` gives `23 / 24 ≤ μ`.
-This is the quantitative conditioning needed for a numerical leading-eigenvector solve. -/
-theorem Matrix.PosSemidef.twentyThree_div_twentyFour_le_maxEigenvalue
-    {n : Type*} [Fintype n] [DecidableEq n]
-    {σ H : Matrix n n ℂ} {E₀ Δ μ : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hσ : σ.PosSemidef) (htr : σ.trace = 1)
-    (hgap : (H - (E₀ : ℂ) • 1 -
-      (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hΩ : ‖Ω‖ = 1) (hΔ : 0 < Δ) (henergy : (σ * H).trace.re ≤ E₀ + Δ / 24)
-    (hmax : ∀ (ν : ℝ) (z : EuclideanSpace ℂ n), z ≠ 0 →
-      σ *ᵥ WithLp.ofLp z = (ν : ℂ) • WithLp.ofLp z → ν ≤ μ) :
-    23 / 24 ≤ μ := by
-  have hh := Matrix.PosSemidef.one_sub_energyExcess_div_gap_le_maxEigenvalue
-    hσ htr hgap hΩ hΔ henergy hmax
-  have heq : 1 - (Δ / 24) / Δ = (23 : ℝ) / 24 := by
-    field_simp [ne_of_gt hΔ]
-    ring
-  rwa [heq] at hh
-
-/-- The uniform bound `23 / 24 ≤ μ` leaves a spectral separation of at least
-`11 / 12` between `μ` and the interval `[0, 1 - μ]`.  Consequently division by
-this separation costs at most the factor `12 / 11`. -/
-theorem leading_residual_div_separation_le
-    {r μ : ℝ} (hr : 0 ≤ r) (hμ : 23 / 24 ≤ μ) :
-    r / (2 * μ - 1) ≤ (12 / 11) * r := by
-  have hsep : (11 : ℝ) / 12 ≤ 2 * μ - 1 := by linarith only [hμ]
-  have hpos : 0 < 2 * μ - 1 := lt_of_lt_of_le (by norm_num) hsep
-  apply (div_le_iff₀ hpos).2
-  nlinarith only [hr, hsep]
 
 /-- The maximal eigenvalue in the numerical gluing problem retains the full quantitative
 ground-population bound.  Objective error `ξ` and boundary error `τ` enter through the

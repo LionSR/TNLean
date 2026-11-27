@@ -6,7 +6,6 @@ Authors: Sirui Lu
 import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.Kraus.Word
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
-import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 
@@ -100,7 +99,7 @@ theorem reviewP_isOrthogonalProjection : IsOrthogonalProjection reviewP := by
     decide
 
 /-- The range of `P` contains the range of every letter of the square. -/
-theorem reviewP_mul_reviewCZXSquare (a : Fin 4) :
+theorem reviewP_mul_reviewCZXSquare (a : Fin 2 × Fin 2) :
     reviewP * reviewCZXSquare a = reviewCZXSquare a := by
   rw [reviewP_eq, reviewCZXSquare_eq, ← complexOfInt_mul]
   congr 1
@@ -111,12 +110,12 @@ theorem reviewP_mul_reviewCZXSquare (a : Fin 4) :
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2596–2597, in the form
 of the invariance condition at lines 1784–1787. -/
-theorem reviewCZXSquare_mul_reviewP (a : Fin 4) :
+theorem reviewCZXSquare_mul_reviewP (a : Fin 2 × Fin 2) :
     reviewCZXSquare a * reviewP = reviewP * reviewCZXSquare a * reviewP := by
   rw [reviewP_mul_reviewCZXSquare]
 
 /-- The diagonal block of the square on the complement of the range of `P` vanishes. -/
-theorem reviewCZXSquare_complement_block (a : Fin 4) :
+theorem reviewCZXSquare_complement_block (a : Fin 2 × Fin 2) :
     (1 - reviewP) * reviewCZXSquare a * (1 - reviewP) = 0 := by
   rw [Matrix.sub_mul, Matrix.one_mul, reviewP_mul_reviewCZXSquare, sub_self, Matrix.zero_mul]
 
@@ -124,22 +123,22 @@ theorem reviewCZXSquare_complement_block (a : Fin 4) :
 
 /-- The integer matrices of the block `B^{00} = [[-1,1],[0,0]]`, `B^{11} = [[0,0],[1,-1]]`,
 in the pair alphabet. -/
-def reviewBlockInt : Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
-  | 0 => !![-1, 1; 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 0; 1, -1]
+def reviewBlockInt : Fin 2 × Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
+  | (0, 0) => !![-1, 1; 0, 0]
+  | (0, 1) => 0
+  | (1, 0) => 0
+  | (1, 1) => !![0, 0; 1, -1]
 
 /-- The block of the square on the range of `P`, in the pair alphabet.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2598–2599. -/
-def reviewBlock : MPSTensor 4 2 := fun a => complexOfInt (reviewBlockInt a)
+def reviewBlock : MPOTensor 2 2 := fun a => complexOfInt (reviewBlockInt a)
 
 /-- The printed block is the restriction of the square to the coordinates `1, 2` spanning the
 range of `P`.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2596–2599. -/
-theorem reviewCZXSquare_submatrix (a : Fin 4) :
+theorem reviewCZXSquare_submatrix (a : Fin 2 × Fin 2) :
     (reviewCZXSquare a).submatrix ![1, 2] ![1, 2] = reviewBlock a := by
   rw [reviewCZXSquare_eq]
   change complexOfInt ((reviewCZXSquareInt a).submatrix ![1, 2] ![1, 2]) =
@@ -162,7 +161,7 @@ theorem reviewV₁_mul_reviewW₁ : reviewV₁ * reviewW₁ = reviewP := by
   congr 1
   decide
 
-theorem reviewBlock_eq_compress (a : Fin 4) :
+theorem reviewBlock_eq_compress (a : Fin 2 × Fin 2) :
     reviewBlock a = reviewW₁ * reviewCZXSquare a * reviewV₁ := by
   rw [reviewBlock, reviewW₁, reviewV₁, reviewCZXSquare_eq, ← complexOfInt_mul,
     ← complexOfInt_mul]
@@ -175,7 +174,7 @@ canonical-form reduction.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2598–2599, by the block
 replacement of lines 1793–1797. -/
-theorem trace_evalWord_reviewCZXSquare_eq_reviewBlock (w : List (Fin 4)) (hw : w ≠ []) :
+theorem trace_evalWord_reviewCZXSquare_eq_reviewBlock (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord reviewCZXSquare w) =
       Matrix.trace (Kraus.evalWord reviewBlock w) := by
   have h : reviewBlock = fun a => reviewW₁ * reviewCZXSquare a * reviewV₁ :=
@@ -200,7 +199,7 @@ theorem reviewQ_isOrthogonalProjection : IsOrthogonalProjection reviewQ := by
       norm_num [reviewQ, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- Every letter of the block annihilates the range of `1 - Q`: `B^{ij} Q = B^{ij}`. -/
-theorem reviewBlock_mul_reviewQ (a : Fin 4) : reviewBlock a * reviewQ = reviewBlock a := by
+theorem reviewBlock_mul_reviewQ (a : Fin 2 × Fin 2) : reviewBlock a * reviewQ = reviewBlock a := by
   ext p q
   fin_cases a <;> fin_cases p <;> fin_cases q <;>
     norm_num [reviewBlock, reviewBlockInt, reviewQ, complexOfInt, Matrix.mul_apply,
@@ -214,7 +213,7 @@ docstring on the side of the second projector).
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2600, read with the
 relations at lines 1784–1788. -/
-theorem reviewQ_mul_reviewBlock (a : Fin 4) :
+theorem reviewQ_mul_reviewBlock (a : Fin 2 × Fin 2) :
     reviewQ * reviewBlock a = reviewQ * reviewBlock a * reviewQ := by
   rw [Matrix.mul_assoc, reviewBlock_mul_reviewQ]
 
@@ -222,12 +221,13 @@ theorem reviewQ_mul_reviewBlock (a : Fin 4) :
 `B^{11}` act as `-1` and the others as zero.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2601. -/
-theorem reviewQ_conj_reviewBlock (a : Fin 4) :
-    reviewQ * reviewBlock a * reviewQ = (if a = 0 ∨ a = 3 then (-1 : ℂ) else 0) • reviewQ := by
+theorem reviewQ_conj_reviewBlock (a : Fin 2 × Fin 2) :
+    reviewQ * reviewBlock a * reviewQ =
+      (if a = (0, 0) ∨ a = (1, 1) then (-1 : ℂ) else 0) • reviewQ := by
   ext p q
   fin_cases a <;> fin_cases p <;> fin_cases q <;>
     norm_num [reviewBlock, reviewBlockInt, reviewQ, complexOfInt, Matrix.mul_apply,
-      Fin.sum_univ_two, Matrix.vecMul, dotProduct, Matrix.complexOfRing, Fin.ext_iff]
+      Fin.sum_univ_two, Matrix.vecMul, dotProduct, Matrix.complexOfRing, Fin.ext_iff, Prod.ext_iff]
 
 /-- The row vector `W₂ = ½ (1, -1)`. -/
 def reviewW₂ : Matrix (Fin 1) (Fin 2) ℂ := (1 / 2 : ℂ) • !![1, -1]
@@ -243,25 +243,26 @@ theorem reviewV₂_mul_reviewW₂ : reviewV₂ * reviewW₂ = reviewQ := by
 `czxSquareTarget` of `CZXSquare`.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2601. -/
-theorem reviewBlock_compress (a : Fin 4) :
+theorem reviewBlock_compress (a : Fin 2 × Fin 2) :
     reviewW₂ * reviewBlock a * reviewV₂ = czxSquareTarget () a := by
   rw [czxSquareTarget_eq]
   ext p q
   fin_cases a <;> fin_cases p <;> fin_cases q <;>
     norm_num [reviewBlock, reviewBlockInt, reviewW₂, reviewV₂, negIdentityIntMPS,
-      identityIntMPS, complexOfInt, Matrix.mul_apply, Fin.sum_univ_two, Matrix.vecMul,
+      identityIntTensor, complexOfInt, Matrix.mul_apply, Fin.sum_univ_two, Matrix.vecMul,
       dotProduct, Matrix.complexOfRing]
 
 /-- **The block has the word traces of the canonical form** `(-1) δ_{ij}`: the second step of
 the review's canonical-form reduction.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2600–2601. -/
-theorem trace_evalWord_reviewBlock (w : List (Fin 4)) (hw : w ≠ []) :
+theorem trace_evalWord_reviewBlock (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord reviewBlock w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityMPS w) := by
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityTensor w) := by
   rw [← Kraus.trace_evalWord_compress_of_right_absorb reviewBlock reviewW₂ reviewV₂
     (fun a => by rw [reviewV₂_mul_reviewW₂, reviewBlock_mul_reviewQ]) w hw]
-  have h : (fun a => reviewW₂ * reviewBlock a * reviewV₂) = fun a => (-1 : ℂ) • identityMPS a :=
+  have h : (fun a => reviewW₂ * reviewBlock a * reviewV₂) =
+      fun a => (-1 : ℂ) • identityTensor a :=
     funext reviewBlock_compress
   rw [h, Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
 
@@ -269,9 +270,9 @@ theorem trace_evalWord_reviewBlock (w : List (Fin 4)) (hw : w ≠ []) :
 two reduction steps.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2596–2601. -/
-theorem reviewCZXSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
+theorem reviewCZXSquare_trace_evalWord (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord reviewCZXSquare w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityMPS w) := by
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityTensor w) := by
   rw [trace_evalWord_reviewCZXSquare_eq_reviewBlock w hw, trace_evalWord_reviewBlock w hw]
 
 /-- **`O(A)^2 = (-1)^N I`** as the operator of the bond-four square, at every positive length,
@@ -289,11 +290,9 @@ theorem mpo_mulTensor_reviewCZXTensor {N : ℕ} [NeZero N] :
       simp [identityTensor, identityIntTensor, MPOTensor.idTensor, Matrix.one_apply]
   rw [MPOTensor.mpo_eq_of_forall_trace_evalWord (N := (-1 : ℂ) • identityTensor)
     (fun w hw => ?_) (NeZero.pos N), MPOTensor.mpo_smul, hid, MPOTensor.mpo_idTensor]
-  have h := reviewCZXSquare_trace_evalWord (w.map finProdFinEquiv) (by simpa using hw)
-  rw [reviewCZXSquare, identityMPS, MPOTensor.evalWord_toMPSTensor,
-    MPOTensor.evalWord_toMPSTensor, List.map_map, Equiv.symm_comp_self, List.map_id,
-    List.length_map] at h
-  rw [h, show (-1 : ℂ) • identityTensor = fun a ↦ (-1 : ℂ) • identityTensor a from rfl,
+  rw [show MPOTensor.mulTensor reviewCZXTensor reviewCZXTensor = reviewCZXSquare from rfl,
+    reviewCZXSquare_trace_evalWord w hw,
+    show (-1 : ℂ) • identityTensor = fun a ↦ (-1 : ℂ) • identityTensor a from rfl,
     Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
 
 end CZXCompression

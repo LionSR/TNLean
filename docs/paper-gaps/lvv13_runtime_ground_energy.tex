@@ -1990,32 +1990,32 @@ valid provided
 The denominator $2028=12\cdot169$ records the exact unused margin between
 the intermediate estimate $14\Delta/169$ and $\Delta/12$.
 For the numerical spectral problem, the general estimate
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.one\_sub\_energyExcess\_div\_gap\_le\_maxEigenvalue}
+\leanid{Matrix.PosSemidef.one\_sub\_energyExcess\_div\_gap\_le\_maxEigenvalue}
 shows that a density of energy at most $E_0+e$ has maximal eigenvalue at
 least $1-e/\Delta$.  This retains the quantitative dominant-eigenvalue
 information which is hidden by the coarser conclusion that the eigenvalue
 is merely larger than one half.  Its explicit LVV-scale corollary
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.twentyThree\_div\_twentyFour\_le\_maxEigenvalue}
+\leanid{Matrix.PosSemidef.twentyThree\_div\_twentyFour\_le\_maxEigenvalue}
 gives $\mu_{\max}\ge23/24$ whenever the energy excess is at most
 $\Delta/24$.  The trace-one spectral estimate
 \leanid{Matrix.PosSemidef.re\_inner\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
 shows that the density is bounded by $1-\mu_{\max}$ on the orthogonal
 complement of its leading vector.  Hence the resulting separation is at
 least $11/12$, and
-\leanid{TNLean.MPS.AreaLaw.leading\_residual\_div\_separation\_le}
+\leanid{Matrix.PosSemidef.exists\_phase\_sq\_distance\_le\_twelve\_div\_eleven\_residual}
 shows that converting an eigenvalue residual into an orthogonal-component
 bound costs at most the uniform factor $12/11$.
 The residual certification is made explicit by
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm\_orthogonal\_component\_le\_leading\_residual}
+\leanid{Matrix.PosSemidef.norm\_orthogonal\_component\_le\_leading\_residual}
 and its phase-aligned form
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_phase\_sq\_distance\_le\_twelve\_div\_eleven\_residual}.
+\leanid{Matrix.PosSemidef.exists\_phase\_sq\_distance\_le\_twelve\_div\_eleven\_residual}.
 In particular,
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_phase\_distance\_le\_of\_residual\_le}
+\leanid{Matrix.PosSemidef.exists\_phase\_distance\_le\_of\_residual\_le}
 shows that a residual at most $11\zeta/24$ suffices to obtain a unit leading
 vector within distance $\zeta$, after choosing its physically irrelevant
 phase.
 The packaged conclusion
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_nearby\_unit\_eigenvector\_of\_residual\_le}
+\leanid{Matrix.PosSemidef.exists\_nearby\_unit\_eigenvector\_of\_residual\_le}
 returns that nearby vector together with its exact unit norm, eigenvalue
 equation, and phase relation to the chosen leading vector.  At the allocated
 LVV tolerance $\zeta=\Delta/(16224L)$, the arithmetic theorem

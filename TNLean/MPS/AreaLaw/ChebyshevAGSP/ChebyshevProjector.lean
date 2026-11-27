@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.SingleWindowPolynomialRank
+import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialCutRank
 import Mathlib.Data.Finset.NoncommProd
 import QICLean.Algebra.Combinatorics.DyadicBlock
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct

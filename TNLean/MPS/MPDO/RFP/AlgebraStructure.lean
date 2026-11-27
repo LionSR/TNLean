@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.FixedPoint.Algebra.Algebra
 import TNLean.MPS.Transfer.Irreducible.BlockingViaAdjoint
 import TNLean.MPS.MPDO.RFP.FusionIsometries
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Algebra-structure witnesses for MPDO renormalization fixed points
@@ -213,12 +213,8 @@ theorem mem_faithfulFixedPointSupportAlgebra_iff
   unfold faithfulFixedPointSupportAlgebra
   rw [Kraus.mem_fixedPoints_starSubalgebra, Kraus.mem_adjointFixedPoints]
   have hAdj : Kraus.adjointMap M X = (transferMap M).adjoint X := by
-    rw [transferMap_eq_kraus_transferMap, ← kraus_transferMap_toMPSTensor,
-      ← Kraus.mapLM_conjTranspose_eq_adjoint]
-    simp only [Kraus.mapLM_apply, Kraus.map_apply, Kraus.adjointMap,
-      Matrix.conjTranspose_conjTranspose]
-    exact Fintype.sum_equiv finProdFinEquiv _ _ fun p ↦ by
-      simp [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical]
+    rw [transferMap_eq_kraus_transferMap, ← Kraus.mapLM_conjTranspose_eq_adjoint]
+    simp [Kraus.mapLM_apply, Kraus.adjointMap]
   rw [hAdj]
 
 namespace AlgebraStructureData

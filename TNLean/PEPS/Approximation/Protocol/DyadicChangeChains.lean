@@ -119,9 +119,6 @@ theorem treat_operate {ι : Type*} [DecidableEq ι] (T T' : Finset ι → α) (m
     IsStepChain Rel (2 * marks.length + 1) (T ∅) (T' ∅) :=
   ((treat T marks h).trans (single hb) |>.trans (untreat T' marks h')).cast_length (by ring)
 
-/-- Compatibility name for the chain of treatments, one operation, and reverse treatments. -/
-alias treatOperate := treat_operate
-
 end IsStepChain
 
 /-! ### Lifting chains of changes to the memory -/

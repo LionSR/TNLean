@@ -325,7 +325,7 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
   -- The translation-covariant absorbed gauge family, at the seam-touching reference anchors.
   obtain ⟨X, hXcov, hedge⟩ := exists_torusCovariantAbsorbedGaugeFamily
     (xhStart := width - 5) (yhStart := height - 5) (xvStart := width - 5) (yvStart := height - 5)
-    hA hB hAr hBr hUA hUB (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega))
+    hA hB hAr hBr (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega))
     (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB
   -- The base injectivity facts at the corner region and its insert-completed square, for `A`.
   have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A cornerRegion :=

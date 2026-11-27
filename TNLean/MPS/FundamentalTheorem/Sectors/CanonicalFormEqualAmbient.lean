@@ -10,7 +10,7 @@ import TNLean.MPS.Tensor.Gauge.CoisometryGauge
 /-!
 # Equal-ambient fundamental theorem for CPSV canonical forms
 
-This module proves the equal fundamental theorem for two normalized CPSV canonical forms whose
+This module proves the equal fundamental theorem for two CPSV canonical forms whose
 ambient bond spaces have the same dimension, by lifting the exact BNT reconstructions through
 their coisometric inclusions.
 -/
@@ -53,7 +53,7 @@ private lemma _root_.MPTensor.CPSVCanonicalFormData.gaugeEquiv_cast_dim {n m : �
 
 /-- **Equal-ambient CPSV fundamental theorem.**
 
-Two normalized nonzero CPSV canonical-form tensors in the same ambient bond
+Two nonzero CPSV canonical-form tensors in the same ambient bond
 dimension that generate the same matrix product vectors at every positive length
 are gauge equivalent. Unused ambient coordinates are allowed: the ambient lifting
 aligns the possibly different coisometric inclusions of the two exact reconstructions.
@@ -72,15 +72,13 @@ lines 237--301 and 1135--1199. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.fundamentalTheorem_equal_ambient_canonicalForm
     (dataA : CPSVCanonicalFormData A)
     (dataB : CPSVCanonicalFormData B)
-    (hNormA : dataA.IsWeightNormalized)
-    (hNormB : dataB.IsWeightNormalized)
     (hA : A ≠ 0) (hB : B ≠ 0)
     (hEqual : SameMPV₂Pos A B) :
     GaugeEquiv A B := by
   obtain ⟨P, hPBNT, _hPDim, UA, hUA, XA, hRecA⟩ :=
-    dataA.exists_isBNTCanonicalForm_exact hNormA hA
+    dataA.exists_isLeftCanonicalBNTPresentation_exact hA
   obtain ⟨Q, hQBNT, _hQDim, UB, hUB, XB, hRecB⟩ :=
-    dataB.exists_isBNTCanonicalForm_exact hNormB hB
+    dataB.exists_isLeftCanonicalBNTPresentation_exact hB
   let C : MPSTensor d P.totalDim := fun i =>
     (XA : Matrix _ _ ℂ) * P.toTensor i * (↑(XA⁻¹) : Matrix _ _ ℂ)
   let E : MPSTensor d Q.totalDim := fun i =>

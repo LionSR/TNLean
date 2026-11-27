@@ -35,8 +35,8 @@ private theorem endpoint_fusion_entry {d r : ℕ} {χ : Fin r → ℕ}
     (VF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
     (WF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
     (a b : Fin r)
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (i j : Fin d) (α γ : Fin (χ a)) (β δ : Fin (χ b)) :
     (∑ k, O a (i, k) α γ * O b (k, j) β δ) =
@@ -45,9 +45,8 @@ private theorem endpoint_fusion_entry {d r : ℕ} {χ : Fin r → ℕ}
           (finProdFinEquiv (α, β)) (finProdFinEquiv (γ, δ)) := by
   have he := congrArg
     (fun Z ↦ Z (finProdFinEquiv (α, β)) (finProdFinEquiv (γ, δ)))
-    (h.letter (finProdFinEquiv (i, j)))
-  simpa only [MPOTensor.toMPSTensor, finProdFinEquiv_divNat,
-    finProdFinEquiv_modNat, MPOTensor.mulTensor, Matrix.submatrix_apply,
+    (h.letter (i, j))
+  simpa only [MPOTensor.mulTensor, Matrix.submatrix_apply,
     Equiv.symm_apply_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
     Fintype.sum_sigma, Matrix.mul_assoc] using he
 
@@ -67,14 +66,14 @@ variable {r D₀ D₁ : ℕ} {χ₀ χ₁ : Fin r → ℕ}
   (VA₁ : ∀ a, Fin (m a) → Matrix (Fin D₁) (Fin (χ₁ a * D₁)) ℂ)
   (WA₁ : ∀ a, Fin (m a) → Matrix (Fin (χ₁ a * D₁)) (Fin D₁) ℂ)
   (hF₀ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₀ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₀ q.1)
       (fun q ↦ VF₀ a b q.1 q.2) (fun q ↦ WF₀ a b q.1 q.2))
   (hA₀ : ∀ a, IsBiorthogonalDecomposition (MPOTensor.actTensor (O₀ a) A₀)
     (fun _ : Fin (m a) ↦ A₀) (VA₀ a) (WA₀ a))
   (hF₁ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₁ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₁ q.1)
       (fun q ↦ VF₁ a b q.1 q.2) (fun q ↦ WF₁ a b q.1 q.2))
   (hA₁ : ∀ a, IsBiorthogonalDecomposition (MPOTensor.actTensor (O₁ a) A₁)
     (fun _ : Fin (m a) ↦ A₁) (VA₁ a) (WA₁ a))
@@ -141,10 +140,10 @@ theorem isBiorthogonalDecomposition_mixedEndpointMPO (a b : Fin r)
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor
         (mixedEndpointMPO (O₀ a) (O₁ a) (VA₀ a) (VA₁ a) (WA₀ a) (WA₁ a))
-        (mixedEndpointMPO (O₀ b) (O₁ b) (VA₀ b) (VA₁ b) (WA₀ b) (WA₁ b))).toMPSTensor
+        (mixedEndpointMPO (O₀ b) (O₁ b) (VA₀ b) (VA₁ b) (WA₀ b) (WA₁ b)))
       (fun q : (c : Fin r) × Fin (N a b c) ↦
         (mixedEndpointMPO (O₀ q.1) (O₁ q.1) (VA₀ q.1) (VA₁ q.1)
-          (WA₀ q.1) (WA₁ q.1)).toMPSTensor)
+          (WA₀ q.1) (WA₁ q.1)))
       (fun q ↦ mixedEndpointMPOFusionAnalysis (VF₀ a b q.1 q.2) (VF₁ a b q.1 q.2))
       (fun q ↦ mixedEndpointMPOFusionSynthesis (WF₀ a b q.1 q.2) (WF₁ a b q.1 q.2)) where
   retract q := by
@@ -157,8 +156,7 @@ theorem isBiorthogonalDecomposition_mixedEndpointMPO (a b : Fin r)
     rfl
   letter p := by
     classical
-    obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective p
-    simp only [MPOTensor.toMPSTensor, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
+    obtain ⟨i, j⟩ := p
     obtain ⟨⟨r, s⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective i
     obtain ⟨⟨k, l⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective j
     ext x y

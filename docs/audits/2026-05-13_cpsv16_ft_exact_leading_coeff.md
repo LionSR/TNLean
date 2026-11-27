@@ -7,7 +7,7 @@ relative to the workplan in `audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md
 in general at finite chain length; the asymptotic input cannot upgrade
 to eventual equality from `IsCanonicalFormBNT` hypotheses alone.
 **Recommendation:** Path β (two-layer canonical form via
-`IsBNTCanonicalFormSD` on the `SectorDecomposition` surface).
+`IsLeftCanonicalBNTPresentationSD` on the `SectorDecomposition` surface).
 
 ---
 
@@ -303,11 +303,11 @@ unit-modulus weights:
 * `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`
   and its left counterpart in
   `SectorDecomposition/HNoCancelDischarge.lean`;
-* `IsBNTCanonicalFormSD` wrapper in
-  `SectorDecomposition/IsBNTCanonicalFormSD.lean`.
+* `IsLeftCanonicalBNTPresentationSD` wrapper in
+  `SectorDecomposition/IsLeftCanonicalBNTPresentationSD.lean`.
 
 The path-β follow-up workstream is to (i) bridge
-`IsCanonicalFormBNT` to `IsBNTCanonicalFormSD` (existing
+`IsCanonicalFormBNT` to `IsLeftCanonicalBNTPresentationSD` (existing
 `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` is the natural
 foundation), and (ii) use the `_sectorDecomp` discharge lemmas to
 retire the two `_CFBNT` sorries in
@@ -322,7 +322,7 @@ cancellation.
 
 Concretely, the next PR should:
 
-1. Provide an unconditional construction of `IsBNTCanonicalFormSD`
+1. Provide an unconditional construction of `IsLeftCanonicalBNTPresentationSD`
    from `IsCanonicalFormBNT` (the trivial multiplicity-1 instance — every
    sector has a single weight `μ_j`, automatically unit modulus only if
    `‖μ_j‖ = 1`, which holds for `j = 0` after normalization but not for
@@ -331,7 +331,7 @@ Concretely, the next PR should:
    `mu_strict_anti` as the *only* sector-level ordering, replacing it
    with a two-layer `λ`-strict-anti + per-sector unit-modulus pair.
 
-2. Alternatively, construct an `IsBNTCanonicalFormSD` from the
+2. Alternatively, construct an `IsLeftCanonicalBNTPresentationSD` from the
    *upstream* irreducible-TP-primitive block data via
    `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`
    (`CanonicalForm/PhaseClassSectorData.lean`); this is unconditional

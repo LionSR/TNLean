@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Combinatorics.FinSum
 import QICLean.Algebra.Word.OrderedProduct
 import QICLean.Algebra.Combinatorics.FinSumPermutation
-import QICLean.Circuit.Gate.UnitaryExtension
+import QICLean.Circuit.Gate.PartialIsometryDilation
 import TNLean.MPS.Tensor.VaryingBond.VaryingBondOBC
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.LinearAlgebra.UnitaryGroup

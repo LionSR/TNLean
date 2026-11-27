@@ -25,6 +25,8 @@ operators are unchanged.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
+open ManyBody (interval cutMatrix cutRank RegionConfig ComplConfig)
+
 
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped Matrix Kronecker ComplexOrder MatrixOrder
@@ -205,7 +207,8 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
       basisInclusion (leafOutputEmbedding eρ eσ) * V) :
     Matrix.reindex (leafIntervalConfigEquiv d D N i) (leafIntervalConfigEquiv d D N i) Z *
         basisInclusion (intervalInputEmbedding (D := D) i.val (i.val + 1)) =
-      basisInclusion (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+      basisInclusion (show (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val
+          (i.val + 1)) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ) *
         Matrix.reindex (Equiv.prodCongr (singleSiteIntervalConfigEquiv d N i) (Equiv.refl _))
@@ -226,11 +229,13 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     simpa only [E, F, Equiv.apply_symm_apply] using
       leafIntervalConfigEquiv_leafInput (D := D) i (F.symm b)
   have hout : Matrix.reindex E G (basisInclusion (leafOutputEmbedding eρ eσ)) =
-      basisInclusion (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+      basisInclusion (show (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val
+          (i.val + 1)) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ) := by
     apply basisInclusion_reindex_of_mapping E G (leafOutputEmbedding eρ eσ)
-      (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+      (show (ManyBody.RegionConfig (fun _ : Fin N ↦ Fin d) (ManyBody.interval N i.val (i.val + 1)) ×
+          (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ)
     rintro ⟨b, labels⟩
@@ -254,10 +259,11 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalLeafInterval_reindex {d N : ℕ}
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ) (i : Fin N) :
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ) (i : Fin N) :
     Matrix.reindex
       (Equiv.prodCongr (singleSiteIntervalConfigEquiv d N i) (Equiv.refl _))
       (singleSiteIntervalConfigEquiv d N i) (minimalLeafInterval U B P i) =
@@ -274,11 +280,12 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem isMinimalIntervalColumnImplementation_leaf_of_columns {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (interval N 0 j.val)
+        (operatorCoefficientTensor U)))
+      (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ)
     (i : Fin N)
     (Z : Matrix
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)))
@@ -287,8 +294,8 @@ theorem isMinimalIntervalColumnImplementation_leaf_of_columns {d D N : ℕ} [NeZ
       (qρ := cutBondRegisterWidth d D N i.succ)
       (qσ := cutBondRegisterWidth d D N i.castSucc)) =
       basisInclusion (leafOutputEmbedding
-        (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
-        (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
+        (ρ := Fin (cutRank (interval N 0 (i.val + 1)) (operatorCoefficientTensor U)))
+        (σ := Fin (cutRank (interval N 0 i.val) (operatorCoefficientTensor U)))
         (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
         (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
           minimalLeafInterval U B P i) :
@@ -296,8 +303,8 @@ theorem isMinimalIntervalColumnImplementation_leaf_of_columns {d D N : ℕ} [NeZ
       (Nat.le_succ i.val)
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z) := by
   have hlocal := leafColumns_reindex_interval
-    (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
-    (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val)) i
+    (ρ := Fin (cutRank (interval N 0 (i.val + 1)) (operatorCoefficientTensor U)))
+    (σ := Fin (cutRank (interval N 0 i.val) (operatorCoefficientTensor U))) i
     (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
     (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc) Z
     (minimalLeafInterval U B P i) hcolumns
@@ -332,15 +339,14 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_uni
     (hd : 2 ≤ d) (hN : 2 ≤ N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank
-        (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutRank (interval N 0 j.val) (operatorCoefficientTensor U) ≤ D) :
+    ∃ B : ∀ k, Module.Basis (Fin (cutRank (interval N 0 k) (operatorCoefficientTensor U)))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧
       ∃ P : ∀ j : Fin (N + 1),
-          Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
-            (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ,
+          Matrix (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U)))
+            (Fin (cutRank (interval N 0 j.val) (operatorCoefficientTensor U))) ℂ,
         (∀ j, P j ∈ prefixGramAffineHull
             (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q) ∧
           (P j).PosDef ∧ (dualGramMetric (P j)).PosDef ∧
@@ -348,19 +354,19 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_uni
               (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q),
             trace (X * dualGramMetric (P j)) = 1) ∧
           trace ((dualGramMetric (P j))⁻¹ * (P j)⁻¹) =
-            (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val : ℂ) ^ 2) ∧
+            (cutRank (interval N 0 j.val) (operatorCoefficientTensor U) : ℂ) ^ 2) ∧
         (∀ (j k : Fin (N + 1)) (hjk : j.val ≤ k.val),
           (vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
               (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))))ᴴ *
             vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
               (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))) = 1) ∧
         P 0 = 1 ∧ P (Fin.last N) = 1 ∧
-        (∀ (α : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
-          (β : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)),
+        (∀ (α : Fin (cutRank (interval N 0 0) (operatorCoefficientTensor U)))
+          (β : Fin (cutRank (interval N 0 N) (operatorCoefficientTensor U))),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
-            (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
-            (fullCutIntervalConfigEquiv d N) = U) ∧
+            (fun x ↦ ((MPSPreparation.finalCutPrefixEquiv d N).symm x, (β, α)))
+            ((MPSPreparation.finalCutPrefixEquiv d N).symm) = U) ∧
         ∀ i : Fin N,
           ∃ Z : Matrix
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +
@@ -377,8 +383,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_uni
                 (qρ := cutBondRegisterWidth d D N i.succ)
                 (qσ := cutBondRegisterWidth d D N i.castSucc)) =
               basisInclusion (leafOutputEmbedding
-                  (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
-                  (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
+                  (ρ := Fin (cutRank (interval N 0 (i.val + 1)) (operatorCoefficientTensor U)))
+                  (σ := Fin (cutRank (interval N 0 i.val) (operatorCoefficientTensor U)))
                   (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
                   (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
                 minimalLeafInterval U B P i ∧

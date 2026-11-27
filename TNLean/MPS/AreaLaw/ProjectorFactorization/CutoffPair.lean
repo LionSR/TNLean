@@ -120,16 +120,17 @@ noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
 
 /-- **The localized left part acts left of the cut.** If `R + k ≤ m`, then `M_L` is supported on
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
-theorem _root_.TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
+theorem isSupportedOn_localizedPart_partialHamiltonian_cutLeftSupports {c m k : ℕ}
     (hmk : R + k ≤ m) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h.localizedPart Ω s ΔE (h.partialHamiltonian (cutLeftSupports L R c m))
         (leftWindow L R c m k)) (interval L 0 c) := by
   by_cases hcm : c ≤ m
-  · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
+  · rw [h.partialHamiltonian_cutLeftSupports_eq_zero_of_le hcm, h.localizedPart_zero]
     change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _)
-  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
+  refine (h.isSupportedOn_localizedPart Ω s ΔE
+    (h.isSupportedOn_partialHamiltonian_cutLeftSupports c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_)
     ((graphNeighborhood_pathGraph_interval_subset _ _ _).trans fun x hx ↦ ?_)
   · rw [mem_interval] at hx ⊢; omega
@@ -137,12 +138,13 @@ theorem _root_.TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_leftPart {c m k : 
 
 /-- **The localized right part acts right of the cut.** If `R + k ≤ m`, then `M_R` is supported
 on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
-theorem _root_.TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_rightPart {c m k : ℕ}
+theorem isSupportedOn_localizedPart_partialHamiltonian_cutRightSupports {c m k : ℕ}
     (hmk : R + k ≤ m) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h.localizedPart Ω s ΔE (h.partialHamiltonian (cutRightSupports L R c m))
         (rightWindow L R c m k)) (interval L 0 c)ᶜ := by
-  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart c m) _).mono ?_
+  refine (h.isSupportedOn_localizedPart Ω s ΔE
+    (h.isSupportedOn_partialHamiltonian_cutRightSupports c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_)
     ((graphNeighborhood_pathGraph_interval_subset _ _ _).trans fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_interval]; omega
@@ -195,9 +197,9 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_cutoffPair [NeZero q] (h : ChainInterac
   have hML : ML.IsHermitian := TNLean.MPS.AreaLaw.localizedPart_isHermitian h hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := TNLean.MPS.AreaLaw.localizedPart_isHermitian h hh Ω s ΔE hPR KR
   have hsL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) ML (interval L 0 c) :=
-    TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_leftPart h Ω s ΔE hmk
+    TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_partialHamiltonian_cutLeftSupports h Ω s ΔE hmk
   have hsR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) MR (interval L 0 c)ᶜ :=
-    TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_rightPart h Ω s ΔE hmk
+    TNLean.MPS.AreaLaw.isSupportedOn_localizedPart_partialHamiltonian_cutRightSupports h Ω s ΔE hmk
   have hcomm : Commute (Matrix.spectralCutoff ML θ) (Matrix.spectralCutoff MR θ) :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint
       (ManyBody.cfc_mem_supportedOperators _ hsL)
@@ -206,19 +208,19 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_cutoffPair [NeZero q] (h : ChainInterac
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KL
-      (h.norm_commutator_leftPart_le hhJ c m)
+      (h.norm_commutator_partialHamiltonian_cutLeftSupports_le hhJ c m)
       (by
-        have hloc := norm_gaussianFilteredTerm_leftPart_sub_localized_le h hh hhJ hq1 c m s ΔE
-          (ℓ := (k : ℝ)) hT
+        have hloc := norm_gaussianFilteredTerm_partialHamiltonian_cutLeftSupports_sub_localized_le
+          h hh hhJ hq1 c m s ΔE (ℓ := (k : ℝ)) hT
         rw [Nat.floor_natCast] at hloc
         exact hloc)
   have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KR
-      (h.norm_commutator_rightPart_le hhJ c m)
+      (h.norm_commutator_partialHamiltonian_cutRightSupports_le hhJ c m)
       (by
-        have hloc := norm_gaussianFilteredTerm_rightPart_sub_localized_le h hh hhJ hq1 c m s ΔE
-          (ℓ := (k : ℝ)) hT
+        have hloc := norm_gaussianFilteredTerm_partialHamiltonian_cutRightSupports_sub_localized_le
+          h hh hhJ hq1 c m s ΔE (ℓ := (k : ℝ)) hT
         rw [Nat.floor_natCast] at hloc
         exact hloc)
   -- the remainder
@@ -256,7 +258,7 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_cutoffPair [NeZero q] (h : ChainInterac
             (ManyBody.supportedOperators (fun _ ↦ Fin q)
               (interval L (c - m - R) (c + m + R))).toSubalgebra)
           (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _))
-          (h.isSupportedOn_bufferPart c m)
+          (h.isSupportedOn_partialHamiltonian_cutBufferSupports c m)
       refine ManyBody.supportedOperators_mono ?_ hB
       intro x hx
       simp only [mem_interval] at hx ⊢
@@ -288,9 +290,9 @@ theorem _root_.TNLean.MPS.AreaLaw.exists_cutoffPair [NeZero q] (h : ChainInterac
     rw [hrem]
     refine (norm_sub_le _ _).trans ?_
     refine (add_le_add (norm_sub_le _ _) le_rfl).trans ?_
-    have hB := h.norm_centeredObservable_bufferPart_le hhJ hJ hΩ c m
-    have hL := hD PL hPL (h.norm_commutator_leftPart_le hhJ c m) KL
-    have hR := hD PR hPR (h.norm_commutator_rightPart_le hhJ c m) KR
+    have hB := h.norm_centeredObservable_partialHamiltonian_cutBufferSupports_le hhJ hJ hΩ c m
+    have hL := hD PL hPL (h.norm_commutator_partialHamiltonian_cutLeftSupports_le hhJ c m) KL
+    have hR := hD PR hPR (h.norm_commutator_partialHamiltonian_cutRightSupports_le hhJ c m) KR
     linarith
 
 end TNLean.MPS.AreaLaw

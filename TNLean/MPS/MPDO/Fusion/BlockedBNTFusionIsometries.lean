@@ -250,7 +250,7 @@ theorem exists_positive_block_with_injective_fusion
     rw [hFamily]
     exact hReindexed
   refine ⟨L, hL, hSpanBlocked,
-    fun γ ↦ (hSpanBlocked.isInjective_one γ), ?_⟩
+    fun γ ↦ (isInjective_toMPSTensor_iff _).1 (hSpanBlocked.isInjective_one γ), ?_⟩
   intro α β I J
   exact ⟨Fam.blocked_fusion_of_lengthIndependent c hχ hLI hL α β I J,
     Fam.fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent c hχ hLI hL α β I J,

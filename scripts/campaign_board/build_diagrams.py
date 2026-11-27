@@ -9,7 +9,7 @@ display. Each CAMPAIGN_DIR/diagrams/inline/NAME.tex holds a short equation
 set in running mathematics, so tenkz chooses its denser inline size class;
 the board places these inside sentences. Every source is compiled in a
 standalone document with the pinned tenkz package and quantikz (fetch it
-with `python3 scripts/fetch_tenkz.py`) along the blueprint's route, xelatex
+with `python3 scripts/tenkz/fetch_tenkz.py`) along the blueprint's route, xelatex
 to PDF and pdftocairo to SVG, and written to CAMPAIGN_DIR/diagrams/NAME.svg.
 The SVGs are committed, so the hourly board job needs no TeX installation;
 rerun this script after editing a source.
@@ -56,7 +56,7 @@ def main() -> None:
     if len(sys.argv) != 2:
         sys.exit(__doc__)
     if not TENKZ.is_dir():
-        sys.exit(f"{TENKZ} is missing; run python3 scripts/fetch_tenkz.py")
+        sys.exit(f"{TENKZ} is missing; run python3 scripts/tenkz/fetch_tenkz.py")
     for tool in ("xelatex", "pdftocairo"):
         if shutil.which(tool) is None:
             sys.exit(f"{tool} is not on PATH")

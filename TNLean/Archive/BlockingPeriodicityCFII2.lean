@@ -378,8 +378,8 @@ section Irreducibility
 /-- Unitary conjugation preserves tensor irreducibility. -/
 lemma isIrreducibleTensor_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
-    Kraus.IsIrreducibleFamily (d := d) (D := D)
+    (hIrr : Kraus.IsIrreducibleFamily A) :
+    Kraus.IsIrreducibleFamily
       (fun i =>
         (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
   classical
@@ -470,8 +470,8 @@ This is the key irreducibility-preservation step for the CFII unitalization. -/
 lemma hasInvariantProj_of_hasInvariantProj_unitalize
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (_hDiag : Λ.IsDiag) :
-    Kraus.HasInvariantProj (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) →
-      Kraus.HasInvariantProj (d := d) (D := D) B := by
+    Kraus.HasInvariantProj (unitalize (d := d) (D := D) B Λ) →
+      Kraus.HasInvariantProj B := by
   classical
   rintro ⟨P, hPproj, hP0, hP1, hLower⟩
   -- Similarity matrices.
@@ -645,8 +645,8 @@ lemma hasInvariantProj_of_hasInvariantProj_unitalize
 lemma isIrreducibleTensor_unitalize
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (hDiag : Λ.IsDiag)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) B) :
-    Kraus.IsIrreducibleFamily (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) := by
+    (hIrr : Kraus.IsIrreducibleFamily B) :
+    Kraus.IsIrreducibleFamily (unitalize (d := d) (D := D) B Λ) := by
   intro hHas
   exact hIrr (hasInvariantProj_of_hasInvariantProj_unitalize (d := d) (D := D)
     (B := B) (Λ := Λ) hΛ hDiag hHas)
@@ -665,7 +665,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrrT : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
+    (hIrrT : Kraus.IsIrreducibleFamily A) :
     ∃ p : ℕ, 0 < p ∧
       _root_.IsPrimitive
         (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin D)
@@ -687,12 +687,12 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     unitalize_adjoint_fixedPoint_of_TP (d := d) (D := D)
       (B := B) (Λ := Λ) hΛ_pd hΛ_diag (by simpa [B] using hTPB)
   -- Irreducibility: preserved by unitary conjugation and by similarity unitalization.
-  have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
+  have hIrrB : Kraus.IsIrreducibleFamily B :=
     isIrreducibleTensor_unitaryConj (d := d) (D := D) (A := A) U hIrrT
-  have hIrrC_tensor : Kraus.IsIrreducibleFamily (d := d) (D := D) C :=
+  have hIrrC_tensor : Kraus.IsIrreducibleFamily C :=
     isIrreducibleTensor_unitalize (d := d) (D := D) (B := B) (Λ := Λ) hΛ_pd hΛ_diag hIrrB
   have hIrrC : IsIrreducibleMap (Kraus.transferMap C) :=
-    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) C hIrrC_tensor
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily C hIrrC_tensor
   -- Root-of-unity peripheral eigenvalues for the unitalized map.
   let E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     Kraus.transferMap C

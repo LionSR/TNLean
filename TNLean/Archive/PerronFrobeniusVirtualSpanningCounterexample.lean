@@ -226,7 +226,7 @@ lemma complexVirtualMatrix_apply (k : Fin 4) (i j : Fin 2) :
 /-- A physical-diagonal MPO tensor whose four diagonal matrices are the sector
 virtual matrices above. -/
 noncomputable def mpoTensor : MPOTensor 4 2 :=
-  fun i j => if i = j then complexVirtualMatrix i else 0
+  fun ij => if ij.1 = ij.2 then complexVirtualMatrix ij.1 else 0
 
 theorem complexVirtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ∑ k, reconstructionCoefficients X k • complexVirtualMatrix k = X := by
@@ -284,7 +284,7 @@ theorem mpoTensor_isSourceZCL : MPOTensor.IsSourceZCL mpoTensor := by
 /-- The four sector virtual matrices occur as the diagonal physical slices of
 the tensor. -/
 theorem mpoTensor_diagonal_slice (k : Fin 4) :
-    mpoTensor k k = complexVirtualMatrix k := by
+    mpoTensor (k, k) = complexVirtualMatrix k := by
   simp [mpoTensor]
 
 /-- The primitive trace matrix has no rank-one factorization. -/
@@ -339,7 +339,7 @@ theorem injective_sourceZCL_tensor_with_nilpotent_sector_pairing :
       MPOTensor.IsSourceZCL mpoTensor ∧
       MPOTensor.physTraceTransfer mpoTensor =
         Matrix.map pairingProjection Complex.ofReal ∧
-      (∀ k : Fin 4, mpoTensor k k = complexVirtualMatrix k) ∧
+      (∀ k : Fin 4, mpoTensor (k, k) = complexVirtualMatrix k) ∧
       Submodule.span ℝ (Set.range virtualMatrix) =
         (⊤ : Submodule ℝ (Matrix (Fin 2) (Fin 2) ℝ)) ∧
       IsIdempotentElem (pairingL * pairingQ) ∧

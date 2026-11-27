@@ -120,15 +120,19 @@ theorem chainGroundSpace_pvbs_eq_vacuum (q : ℂ) {N : ℕ} (hN : 2 ≤ N)
 /-- The zero-energy space of the periodic nearest-neighbour parent Hamiltonian
 is the vacuum span whenever `qᴺ ≠ 1`. -/
 theorem ker_parentHamiltonian_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N) (hq : q ^ N ≠ 1) :
-    LinearMap.ker (parentHamiltonian (pvbsTensor q) 2 N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction (pvbsTensor q) 2 N).hamiltonian) =
       Submodule.span ℂ {pvbsVacuum N} := by
-  rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN]
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hN]
   exact chainGroundSpace_pvbs_eq_vacuum q hN hq
 
 /-- The periodic zero-energy space is one-dimensional away from a finite-ring resonance. -/
 theorem finrank_ker_parentHamiltonian_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N)
     (hq : q ^ N ≠ 1) :
-    Module.finrank ℂ (LinearMap.ker (parentHamiltonian (pvbsTensor q) 2 N)) = 1 := by
+    haveI : NeZero N := ⟨by omega⟩;
+    Module.finrank ℂ
+      (LinearMap.ker (Matrix.toLin' (parentRingInteraction (pvbsTensor q) 2 N).hamiltonian)) =
+        1 := by
   rw [ker_parentHamiltonian_pvbs q hN hq]
   apply finrank_span_singleton
   intro h
@@ -151,7 +155,8 @@ claim excludes the critical hopping value; see
 `docs/paper-gaps/cpgsv21_pvbs_threshold.tex`. -/
 theorem ker_parentHamiltonian_pvbs_of_norm_ne_one (q : ℂ) (hq : ‖q‖ ≠ 1)
     {N : ℕ} (hN : 2 ≤ N) :
-    LinearMap.ker (parentHamiltonian (pvbsTensor q) 2 N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction (pvbsTensor q) 2 N).hamiltonian) =
       Submodule.span ℂ {pvbsVacuum N} :=
   ker_parentHamiltonian_pvbs q hN (pvbs_pow_ne_one_of_norm_ne_one q hq (by omega))
 
@@ -169,10 +174,10 @@ theorem pvbsEdge_one_two_mem_chainGroundSpace :
 /-- At the critical parameter, a nonvacuum periodic zero-energy state exists
 already on two sites, refuting unrestricted periodic vacuum uniqueness. -/
 theorem pvbs_critical_periodic_counterexample :
-    ∃ v ∈ LinearMap.ker (parentHamiltonian (pvbsTensor 1) 2 2),
+    ∃ v ∈ LinearMap.ker (Matrix.toLin' (parentRingInteraction (pvbsTensor 1) 2 2).hamiltonian),
       v ∉ Submodule.span ℂ {pvbsVacuum 2} := by
   refine ⟨pvbsEdge 1 2, ?_, ?_⟩
-  · rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) le_rfl]
+  · rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) le_rfl]
     exact pvbsEdge_one_two_mem_chainGroundSpace
   · intro h
     obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.mp h

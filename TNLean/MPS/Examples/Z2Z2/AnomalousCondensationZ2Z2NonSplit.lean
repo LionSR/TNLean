@@ -103,22 +103,22 @@ open MPSTensor
 /-! ### The block `(x, x)` -/
 
 /-- The stacked tensor of `U_x U_x`. -/
-def xXStacked : MPSTensor 16 4 := (MPOTensor.mulTensor xTensor xTensor).toMPSTensor
+def xXStacked : MPOTensor 4 4 := MPOTensor.mulTensor xTensor xTensor
 
 /-- The integer matrices of the stacked tensor of `U_x U_x` (data file, appendix). -/
-def xXInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
-  | 5 => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
-  | 10 => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
-  | 15 => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
+def xXInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
+  | (1, 1) => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
+  | (2, 2) => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
+  | (3, 3) => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
   | _ => 0
 
-private theorem xX_int (b : Fin 16) : stackedInt xIntTensor xIntTensor b = xXInt b := by
+private theorem xX_int (b : Fin 4 × Fin 4) : mulIntTensor xIntTensor xIntTensor b = xXInt b := by
   revert_decide_kernel b
 
-theorem xXStacked_eq (a : Fin 16) : xXStacked a = complexOfInt (xXInt a) := by
+theorem xXStacked_eq (a : Fin 4 × Fin 4) : xXStacked a = complexOfInt (xXInt a) := by
   rw [← xX_int]
-  exact toMPSTensor_mulTensor_complexOfInt xIntTensor xIntTensor a
+  exact mulTensor_complexOfRing _ xIntTensor xIntTensor a
 
 /-- The change of bond coordinates of the block `(x, x)` (data file, appendix). -/
 def xXGaugeInt : Matrix (Fin 4) (Fin 4) ℤ :=
@@ -130,24 +130,24 @@ def xXGaugeInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![0, 0, 1, 1; 1, 0, -1, 0; 0, 1, -1, 0; 0, 0, 1, 0]
 
 /-- The letters of the block `(x, x)` in the flag coordinates. -/
-def xXConjInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
-  | 5 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
-  | 10 => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
-  | 15 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
+def xXConjInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
+  | (1, 1) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
+  | (2, 2) => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
+  | (3, 3) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
   | _ => 0
 
 /-- **The compression datum of the block `(x, x)`**: the stacked tensor of `U_x U_x` compresses
 onto the tensor of `U_e` with three zero slots (data file, Section 5; P5 note,
 Theorem 7.7(i)–(iii)). -/
-def xXCompression : MultiBlockCompression xXStacked oneSlot (fun _ => eMPS) :=
-  MultiBlockCompression.ofScalarFlagFour xXInt eIntMPS xXStacked_eq eMPS_eq xXGaugeInt
+def xXCompression : MultiBlockCompression xXStacked oneSlot (fun _ => eTensor) :=
+  MultiBlockCompression.ofScalarFlagFour xXInt eIntTensor xXStacked_eq eTensor_eq xXGaugeInt
     xXGaugeInvInt (by decide) (by decide) xXConjInt (by decide +kernel) (by decide +kernel)
     (by decide +kernel) (by decide +kernel)
 
 /-- **`U_x U_x = U_e` at the level of word traces.** -/
-theorem xX_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord xXStacked w) = Matrix.trace (Kraus.evalWord eMPS w) :=
+theorem xX_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord xXStacked w) = Matrix.trace (Kraus.evalWord eTensor w) :=
   xXCompression.trace_evalWord_oneSlot w hw
 
 /-- The left compression witness of the block `(x, x)`: the third row of the gauge. -/
@@ -172,48 +172,50 @@ theorem xX_right_eq : xXCompression.right oneSlotMem = xXRight := by
   decide
 
 /-- **The explicit compression pair of the block `(x, x)`** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem xX_isReduction : IsReduction xXStacked eMPS xXLeft xXRight := by
+theorem xX_isReduction : IsReduction xXStacked eTensor xXLeft xXRight := by
   have h := xXCompression.isReduction oneSlotMem
   rwa [xX_left_eq, xX_right_eq] at h
 
 /-- **Nilpotency of the remainder of the block `(x, x)`** (P5 note, Theorem 7.7(vi)). -/
-theorem xX_evalWord_remainder_eq_zero (w : List (Fin 16)) (hw : 4 ≤ w.length) :
+theorem xX_evalWord_remainder_eq_zero (w : List (Fin 4 × Fin 4)) (hw : 4 ≤ w.length) :
     Kraus.evalWord xXCompression.remainder w = 0 :=
   xXCompression.evalWord_remainder_eq_zero w (by change (1 : ℕ) + 3 ≤ w.length; omega)
 
 /-- **No nonzero right sitewise intertwiner in the block `(x, x)`** (data file, Section 5). -/
 theorem xX_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
-    (h : ∀ i, xXStacked i *ᵥ v = eMPS i 0 0 • v) : v = 0 :=
-  right_intertwiner_eq_zero_of_int xXInt eIntMPS xXStacked_eq eMPS_eq ![0, 0, 0, 5]
+    (h : ∀ i, xXStacked i *ᵥ v = eTensor i 0 0 • v) : v = 0 :=
+  right_intertwiner_eq_zero_of_int xXInt eIntTensor xXStacked_eq eTensor_eq
+    ![(0, 0), (0, 0), (0, 0), (1, 1)]
     ![1, 2, 3, 1] !![-1, 0, -1, 1; 1, 0, -1, 1; -1, 2, -1, 1; -1, 0, 1, 1] (-2) (by decide)
     (by decide +kernel) v h
 
 /-- **No nonzero left sitewise intertwiner in the block `(x, x)`** (data file, Section 5). -/
 theorem xX_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
-    (h : ∀ i, u ᵥ* xXStacked i = eMPS i 0 0 • u) : u = 0 :=
-  left_intertwiner_eq_zero_of_int xXInt eIntMPS xXStacked_eq eMPS_eq ![0, 0, 0, 5]
+    (h : ∀ i, u ᵥ* xXStacked i = eTensor i 0 0 • u) : u = 0 :=
+  left_intertwiner_eq_zero_of_int xXInt eIntTensor xXStacked_eq eTensor_eq
+    ![(0, 0), (0, 0), (0, 0), (1, 1)]
     ![0, 1, 2, 0] !![0, 0, 0, -1; 0, -1, 0, 0; 0, 0, -1, 0; 1, 1, 1, 0] 1 (by decide)
     (by decide +kernel) u h
 
 /-! ### The block `(x, xy)` -/
 
 /-- The stacked tensor of `U_x U_xy`. -/
-def xXyStacked : MPSTensor 16 4 := (MPOTensor.mulTensor xTensor xyTensor).toMPSTensor
+def xXyStacked : MPOTensor 4 4 := MPOTensor.mulTensor xTensor xyTensor
 
 /-- The integer matrices of the stacked tensor of `U_x U_xy` (data file, appendix). -/
-def xXyInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 1 => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
-  | 4 => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
-  | 11 => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
-  | 14 => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
+def xXyInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 1) => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
+  | (1, 0) => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
+  | (2, 3) => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
+  | (3, 2) => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
   | _ => 0
 
-private theorem xXy_int (b : Fin 16) : stackedInt xIntTensor xyIntTensor b = xXyInt b := by
+private theorem xXy_int (b : Fin 4 × Fin 4) : mulIntTensor xIntTensor xyIntTensor b = xXyInt b := by
   revert_decide_kernel b
 
-theorem xXyStacked_eq (a : Fin 16) : xXyStacked a = complexOfInt (xXyInt a) := by
+theorem xXyStacked_eq (a : Fin 4 × Fin 4) : xXyStacked a = complexOfInt (xXyInt a) := by
   rw [← xXy_int]
-  exact toMPSTensor_mulTensor_complexOfInt xIntTensor xyIntTensor a
+  exact mulTensor_complexOfRing _ xIntTensor xyIntTensor a
 
 /-- The change of bond coordinates of the block `(x, xy)` (data file, appendix). -/
 def xXyGaugeInt : Matrix (Fin 4) (Fin 4) ℤ :=
@@ -224,25 +226,25 @@ def xXyGaugeInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 0, -1, 0; 0, 0, -1, 1; 0, 0, 1, 0; 0, 1, 1, 0]
 
 /-- The letters of the block `(x, xy)` in the flag coordinates. -/
-def xXyConjInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 1 => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
-  | 4 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
-  | 11 => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
-  | 14 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
+def xXyConjInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 1) => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
+  | (1, 0) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
+  | (2, 3) => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
+  | (3, 2) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
   | _ => 0
 
 /-- **The compression datum of the block `(x, xy)`**: the stacked tensor of `U_x U_xy`
 compresses onto the tensor of `U_y` carried with the weight `-1`, with three zero slots (data
 file, Section 5; P5 note, Theorem 7.7(i)–(iii)). -/
-def xXyCompression : MultiBlockCompression xXyStacked oneSlot (fun _ => (-1 : ℂ) • yMPS) :=
+def xXyCompression : MultiBlockCompression xXyStacked oneSlot (fun _ => (-1 : ℂ) • yTensor) :=
   MultiBlockCompression.ofScalarFlagFour xXyInt negYIntMPS xXyStacked_eq negYMPS_eq xXyGaugeInt
     xXyGaugeInvInt (by decide) (by decide) xXyConjInt (by decide +kernel) (by decide +kernel)
     (by decide +kernel) (by decide +kernel)
 
 /-- **`U_x U_xy = (-1)^L U_y` at the level of word traces** (data file, Section 2). -/
-theorem xXy_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
+theorem xXy_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord xXyStacked w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord yMPS w) :=
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord yTensor w) :=
   xXyCompression.trace_evalWord_oneSlot_smul w hw
 
 /-- The left compression witness of the block `(x, xy)`. -/
@@ -267,49 +269,51 @@ theorem xXy_right_eq : xXyCompression.right oneSlotMem = xXyRight := by
 
 /-- **The explicit compression pair of the block `(x, xy)`** (P5 note,
 Theorem 7.7(iv)–(v)). -/
-theorem xXy_isReduction : IsReduction xXyStacked ((-1 : ℂ) • yMPS) xXyLeft xXyRight := by
+theorem xXy_isReduction : IsReduction xXyStacked ((-1 : ℂ) • yTensor) xXyLeft xXyRight := by
   have h := xXyCompression.isReduction oneSlotMem
   rwa [xXy_left_eq, xXy_right_eq] at h
 
 /-- **Nilpotency of the remainder of the block `(x, xy)`** (P5 note, Theorem 7.7(vi)). -/
-theorem xXy_evalWord_remainder_eq_zero (w : List (Fin 16)) (hw : 4 ≤ w.length) :
+theorem xXy_evalWord_remainder_eq_zero (w : List (Fin 4 × Fin 4)) (hw : 4 ≤ w.length) :
     Kraus.evalWord xXyCompression.remainder w = 0 :=
   xXyCompression.evalWord_remainder_eq_zero w (by change (1 : ℕ) + 3 ≤ w.length; omega)
 
 /-- **No nonzero right sitewise intertwiner in the block `(x, xy)`** (data file,
 Section 5). -/
 theorem xXy_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
-    (h : ∀ i, xXyStacked i *ᵥ v = ((-1 : ℂ) • yMPS) i 0 0 • v) : v = 0 :=
-  right_intertwiner_eq_zero_of_int xXyInt negYIntMPS xXyStacked_eq negYMPS_eq ![1, 1, 1, 4]
+    (h : ∀ i, xXyStacked i *ᵥ v = ((-1 : ℂ) • yTensor) i 0 0 • v) : v = 0 :=
+  right_intertwiner_eq_zero_of_int xXyInt negYIntMPS xXyStacked_eq negYMPS_eq
+    ![(0, 1), (0, 1), (0, 1), (1, 0)]
     ![0, 2, 3, 0] !![-1, 1, 0, -1; -1, -1, 0, 1; 1, -1, 0, -1; -1, -1, -2, 1] (-2) (by decide)
     (by decide +kernel) v h
 
 /-- **No nonzero left sitewise intertwiner in the block `(x, xy)`** (data file, Section 5). -/
 theorem xXy_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
-    (h : ∀ i, u ᵥ* xXyStacked i = ((-1 : ℂ) • yMPS) i 0 0 • u) : u = 0 :=
-  left_intertwiner_eq_zero_of_int xXyInt negYIntMPS xXyStacked_eq negYMPS_eq ![1, 1, 1, 4]
+    (h : ∀ i, u ᵥ* xXyStacked i = ((-1 : ℂ) • yTensor) i 0 0 • u) : u = 0 :=
+  left_intertwiner_eq_zero_of_int xXyInt negYIntMPS xXyStacked_eq negYMPS_eq
+    ![(0, 1), (0, 1), (0, 1), (1, 0)]
     ![0, 1, 2, 1] !![1, 0, 0, 0; 0, 0, 0, 1; 0, 0, 1, 0; 1, -1, 1, 0] 1 (by decide)
     (by decide +kernel) u h
 
 /-! ### The block `(xy, x)` -/
 
 /-- The stacked tensor of `U_xy U_x`. -/
-def xyXStacked : MPSTensor 16 4 := (MPOTensor.mulTensor xyTensor xTensor).toMPSTensor
+def xyXStacked : MPOTensor 4 4 := MPOTensor.mulTensor xyTensor xTensor
 
 /-- The integer matrices of the stacked tensor of `U_xy U_x` (data file, appendix). -/
-def xyXInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 1 => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
-  | 4 => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
-  | 11 => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
-  | 14 => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
+def xyXInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 1) => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
+  | (1, 0) => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
+  | (2, 3) => !![0, 0, 0, 1; 0, 0, 0, -1; 0, 0, 0, -1; 0, 0, 0, 1]
+  | (3, 2) => !![1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0; 1, 0, 0, 0]
   | _ => 0
 
-private theorem xyX_int (b : Fin 16) : stackedInt xyIntTensor xIntTensor b = xyXInt b := by
+private theorem xyX_int (b : Fin 4 × Fin 4) : mulIntTensor xyIntTensor xIntTensor b = xyXInt b := by
   revert_decide_kernel b
 
-theorem xyXStacked_eq (a : Fin 16) : xyXStacked a = complexOfInt (xyXInt a) := by
+theorem xyXStacked_eq (a : Fin 4 × Fin 4) : xyXStacked a = complexOfInt (xyXInt a) := by
   rw [← xyX_int]
-  exact toMPSTensor_mulTensor_complexOfInt xyIntTensor xIntTensor a
+  exact mulTensor_complexOfRing _ xyIntTensor xIntTensor a
 
 /-- The change of bond coordinates of the block `(xy, x)` (data file, appendix). -/
 def xyXGaugeInt : Matrix (Fin 4) (Fin 4) ℤ :=
@@ -320,24 +324,24 @@ def xyXGaugeInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![0, 0, -1, 0; 1, 0, -1, 0; 0, 1, -1, 0; 0, 0, -1, -1]
 
 /-- The letters of the block `(xy, x)` in the flag coordinates. -/
-def xyXConjInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 1 => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
-  | 4 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
-  | 11 => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
-  | 14 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
+def xyXConjInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 1) => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
+  | (1, 0) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
+  | (2, 3) => !![0, 0, 2, 2; 0, 0, 2, 2; 0, 0, 1, 1; 0, 0, 0, 0]
+  | (3, 2) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]
   | _ => 0
 
 /-- **The compression datum of the block `(xy, x)`**: the stacked tensor of `U_xy U_x`
 compresses onto the tensor of `U_y` with three zero slots (data file, Section 5; P5 note,
 Theorem 7.7(i)–(iii)). -/
-def xyXCompression : MultiBlockCompression xyXStacked oneSlot (fun _ => yMPS) :=
-  MultiBlockCompression.ofScalarFlagFour xyXInt yIntMPS xyXStacked_eq yMPS_eq xyXGaugeInt
+def xyXCompression : MultiBlockCompression xyXStacked oneSlot (fun _ => yTensor) :=
+  MultiBlockCompression.ofScalarFlagFour xyXInt yIntTensor xyXStacked_eq yTensor_eq xyXGaugeInt
     xyXGaugeInvInt (by decide) (by decide) xyXConjInt (by decide +kernel) (by decide +kernel)
     (by decide +kernel) (by decide +kernel)
 
 /-- **`U_xy U_x = U_y` at the level of word traces.** -/
-theorem xyX_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord xyXStacked w) = Matrix.trace (Kraus.evalWord yMPS w) :=
+theorem xyX_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord xyXStacked w) = Matrix.trace (Kraus.evalWord yTensor w) :=
   xyXCompression.trace_evalWord_oneSlot w hw
 
 /-- The left compression witness of the block `(xy, x)`. -/
@@ -362,49 +366,52 @@ theorem xyX_right_eq : xyXCompression.right oneSlotMem = xyXRight := by
 
 /-- **The explicit compression pair of the block `(xy, x)`** (P5 note,
 Theorem 7.7(iv)–(v)). -/
-theorem xyX_isReduction : IsReduction xyXStacked yMPS xyXLeft xyXRight := by
+theorem xyX_isReduction : IsReduction xyXStacked yTensor xyXLeft xyXRight := by
   have h := xyXCompression.isReduction oneSlotMem
   rwa [xyX_left_eq, xyX_right_eq] at h
 
 /-- **Nilpotency of the remainder of the block `(xy, x)`** (P5 note, Theorem 7.7(vi)). -/
-theorem xyX_evalWord_remainder_eq_zero (w : List (Fin 16)) (hw : 4 ≤ w.length) :
+theorem xyX_evalWord_remainder_eq_zero (w : List (Fin 4 × Fin 4)) (hw : 4 ≤ w.length) :
     Kraus.evalWord xyXCompression.remainder w = 0 :=
   xyXCompression.evalWord_remainder_eq_zero w (by change (1 : ℕ) + 3 ≤ w.length; omega)
 
 /-- **No nonzero right sitewise intertwiner in the block `(xy, x)`** (data file,
 Section 5). -/
 theorem xyX_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
-    (h : ∀ i, xyXStacked i *ᵥ v = yMPS i 0 0 • v) : v = 0 :=
-  right_intertwiner_eq_zero_of_int xyXInt yIntMPS xyXStacked_eq yMPS_eq ![1, 1, 1, 4]
+    (h : ∀ i, xyXStacked i *ᵥ v = yTensor i 0 0 • v) : v = 0 :=
+  right_intertwiner_eq_zero_of_int xyXInt yIntTensor xyXStacked_eq yTensor_eq
+    ![(0, 1), (0, 1), (0, 1), (1, 0)]
     ![0, 1, 2, 1] !![1, 1, 0, -1; 1, 1, 0, 1; 1, -1, 2, 1; -1, 1, 0, -1] (-2) (by decide)
     (by decide +kernel) v h
 
 /-- **No nonzero left sitewise intertwiner in the block `(xy, x)`** (data file, Section 5). -/
 theorem xyX_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
-    (h : ∀ i, u ᵥ* xyXStacked i = yMPS i 0 0 • u) : u = 0 :=
-  left_intertwiner_eq_zero_of_int xyXInt yIntMPS xyXStacked_eq yMPS_eq ![1, 1, 1, 4]
+    (h : ∀ i, u ᵥ* xyXStacked i = yTensor i 0 0 • u) : u = 0 :=
+  left_intertwiner_eq_zero_of_int xyXInt yIntTensor xyXStacked_eq yTensor_eq
+    ![(0, 1), (0, 1), (0, 1), (1, 0)]
     ![0, 1, 2, 0] !![1, 0, 0, 0; 0, 1, 0, 0; 0, 0, 1, 0; 0, -1, -1, -1] (-1) (by decide)
     (by decide +kernel) u h
 
 /-! ### The block `(xy, xy)` -/
 
 /-- The stacked tensor of `U_xy U_xy`. -/
-def xyXyStacked : MPSTensor 16 4 := (MPOTensor.mulTensor xyTensor xyTensor).toMPSTensor
+def xyXyStacked : MPOTensor 4 4 := MPOTensor.mulTensor xyTensor xyTensor
 
 /-- The integer matrices of the stacked tensor of `U_xy U_xy` (data file, appendix). -/
-def xyXyInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
-  | 5 => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
-  | 10 => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
-  | 15 => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
+def xyXyInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
+  | (1, 1) => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
+  | (2, 2) => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
+  | (3, 3) => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
   | _ => 0
 
-private theorem xyXy_int (b : Fin 16) : stackedInt xyIntTensor xyIntTensor b = xyXyInt b := by
+private theorem xyXy_int (b : Fin 4 × Fin 4) :
+    mulIntTensor xyIntTensor xyIntTensor b = xyXyInt b := by
   revert_decide_kernel b
 
-theorem xyXyStacked_eq (a : Fin 16) : xyXyStacked a = complexOfInt (xyXyInt a) := by
+theorem xyXyStacked_eq (a : Fin 4 × Fin 4) : xyXyStacked a = complexOfInt (xyXyInt a) := by
   rw [← xyXy_int]
-  exact toMPSTensor_mulTensor_complexOfInt xyIntTensor xyIntTensor a
+  exact mulTensor_complexOfRing _ xyIntTensor xyIntTensor a
 
 /-- The change of bond coordinates of the block `(xy, xy)` (data file, appendix). -/
 def xyXyGaugeInt : Matrix (Fin 4) (Fin 4) ℤ :=
@@ -415,26 +422,26 @@ def xyXyGaugeInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 0, -1, 0; 0, 0, 1, 0; 0, 0, -1, 1; 0, 1, 1, 0]
 
 /-- The letters of the block `(xy, xy)` in the flag coordinates. -/
-def xyXyConjInt : Fin 16 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
-  | 5 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
-  | 10 => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
-  | 15 => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
+def xyXyConjInt : Fin 4 × Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
+  | (1, 1) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
+  | (2, 2) => !![0, 0, -2, 2; 0, 0, 2, -2; 0, 0, -1, 1; 0, 0, 0, 0]
+  | (3, 3) => !![0, 0, 0, 0; 0, 0, 0, 0; 0, 0, -1, 0; 0, 0, 0, 0]
   | _ => 0
 
 /-- **The compression datum of the block `(xy, xy)`**: the stacked tensor of `U_xy U_xy`
 compresses onto the tensor of `U_e` carried with the weight `-1`, with three zero slots (data
 file, Section 5; P5 note, Theorem 7.7(i)–(iii)). -/
-def xyXyCompression : MultiBlockCompression xyXyStacked oneSlot (fun _ => (-1 : ℂ) • eMPS) :=
+def xyXyCompression : MultiBlockCompression xyXyStacked oneSlot (fun _ => (-1 : ℂ) • eTensor) :=
   MultiBlockCompression.ofScalarFlagFour xyXyInt negEIntMPS xyXyStacked_eq negEMPS_eq
     xyXyGaugeInt xyXyGaugeInvInt (by decide) (by decide) xyXyConjInt (by decide +kernel)
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- **`U_xy U_xy = (-1)^L U_e` at the level of word traces** (data file, Section 2): the
 restriction of the symmetry to the diagonal element `xy` is the CZX symmetry of Example D. -/
-theorem xyXy_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
+theorem xyXy_trace_evalWord (w : List (Fin 4 × Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord xyXyStacked w) =
-      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord eMPS w) :=
+      (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord eTensor w) :=
   xyXyCompression.trace_evalWord_oneSlot_smul w hw
 
 /-- The left compression witness of the block `(xy, xy)`. -/
@@ -459,28 +466,30 @@ theorem xyXy_right_eq : xyXyCompression.right oneSlotMem = xyXyRight := by
 
 /-- **The explicit compression pair of the block `(xy, xy)`** (P5 note,
 Theorem 7.7(iv)–(v)). -/
-theorem xyXy_isReduction : IsReduction xyXyStacked ((-1 : ℂ) • eMPS) xyXyLeft xyXyRight := by
+theorem xyXy_isReduction : IsReduction xyXyStacked ((-1 : ℂ) • eTensor) xyXyLeft xyXyRight := by
   have h := xyXyCompression.isReduction oneSlotMem
   rwa [xyXy_left_eq, xyXy_right_eq] at h
 
 /-- **Nilpotency of the remainder of the block `(xy, xy)`** (P5 note, Theorem 7.7(vi)). -/
-theorem xyXy_evalWord_remainder_eq_zero (w : List (Fin 16)) (hw : 4 ≤ w.length) :
+theorem xyXy_evalWord_remainder_eq_zero (w : List (Fin 4 × Fin 4)) (hw : 4 ≤ w.length) :
     Kraus.evalWord xyXyCompression.remainder w = 0 :=
   xyXyCompression.evalWord_remainder_eq_zero w (by change (1 : ℕ) + 3 ≤ w.length; omega)
 
 /-- **No nonzero right sitewise intertwiner in the block `(xy, xy)`** (data file,
 Section 5). -/
 theorem xyXy_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
-    (h : ∀ i, xyXyStacked i *ᵥ v = ((-1 : ℂ) • eMPS) i 0 0 • v) : v = 0 :=
-  right_intertwiner_eq_zero_of_int xyXyInt negEIntMPS xyXyStacked_eq negEMPS_eq ![0, 0, 0, 5]
+    (h : ∀ i, xyXyStacked i *ᵥ v = ((-1 : ℂ) • eTensor) i 0 0 • v) : v = 0 :=
+  right_intertwiner_eq_zero_of_int xyXyInt negEIntMPS xyXyStacked_eq negEMPS_eq
+    ![(0, 0), (0, 0), (0, 0), (1, 1)]
     ![0, 1, 3, 0] !![1, -1, 0, 1; -1, 1, 0, 1; 1, 1, 0, -1; 1, 1, 2, -1] 2 (by decide)
     (by decide +kernel) v h
 
 /-- **No nonzero left sitewise intertwiner in the block `(xy, xy)`** (data file,
 Section 5). -/
 theorem xyXy_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
-    (h : ∀ i, u ᵥ* xyXyStacked i = ((-1 : ℂ) • eMPS) i 0 0 • u) : u = 0 :=
-  left_intertwiner_eq_zero_of_int xyXyInt negEIntMPS xyXyStacked_eq negEMPS_eq ![0, 0, 0, 5]
+    (h : ∀ i, u ᵥ* xyXyStacked i = ((-1 : ℂ) • eTensor) i 0 0 • u) : u = 0 :=
+  left_intertwiner_eq_zero_of_int xyXyInt negEIntMPS xyXyStacked_eq negEMPS_eq
+    ![(0, 0), (0, 0), (0, 0), (1, 1)]
     ![0, 1, 2, 1] !![1, 0, 0, 0; 0, 1, 0, 0; 0, 1, -1, 1; 1, 1, -1, 0] 1 (by decide)
     (by decide +kernel) u h
 

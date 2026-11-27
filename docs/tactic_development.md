@@ -31,8 +31,8 @@ a proof) follows this loop:
    many proofs) run the scanner:
 
    ```bash
-   python3 scripts/tactic_pattern_scan.py                 # default report
-   python3 scripts/tactic_pattern_scan.py --min-count 5   # stricter
+   python3 scripts/audit/tactic_pattern_scan.py                 # default report
+   python3 scripts/audit/tactic_pattern_scan.py --min-count 5   # stricter
    ```
 
 3. **Record** — add newly noticed repetition to the ledger as a *candidate*
@@ -150,7 +150,7 @@ These extend the design notes in `TNLean/MPS/Tensor/Tactic.lean`:
 
 ## Scanner notes
 
-`scripts/tactic_pattern_scan.py` is a heuristic line-based n-gram scanner,
+`scripts/audit/tactic_pattern_scan.py` is a heuristic line-based n-gram scanner,
 not a Lean parser:
 
 - It only sees lines starting with a known tactic keyword; extend its

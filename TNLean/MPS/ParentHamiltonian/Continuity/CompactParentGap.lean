@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Spectral.Perturbation.KernelGapPerturbation
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap
 import TNLean.MPS.Tensor.Words.WordSpan
@@ -53,35 +53,39 @@ documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 
 section
 
-open scoped Topology
+open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
 /-- Every strictly smaller finite-window gap of the Hamiltonian of the parent interaction on the
 open chain persists locally along a continuous tensor family injective at the interaction and
-window lengths. The complement here is the canonical MPS ground space. Source:
-arXiv:1010.3732, Appendix A, finite-window gap continuity. -/
+window lengths, together with the identification of the kernel with the canonical MPS ground
+space. Source: arXiv:1010.3732, Appendix A, finite-window gap continuity. -/
 theorem eventually_hamiltonian_parentChainInteraction_gap
     {X : Type*} [TopologicalSpace X] {d D R N : ℕ}
     (A : X → MPSTensor d D) (hA : Continuous A)
     (hR : ∀ x, Kraus.IsNBlkInjective (A x) R)
     (hN : ∀ x, Kraus.IsNBlkInjective (A x) N) {x₀ : X}
-    {δ δ' : ℝ} (hδ : 0 < δ) (hδ' : δ' < δ)
-    (hgap : ∀ v ∈ (groundSpaceES (A x₀) N)ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction (A x₀) R N).hamiltonian v‖) :
-    ∀ᶠ x in 𝓝 x₀, ∀ v ∈ (groundSpaceES (A x) N)ᗮ,
-      δ' * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian v‖ := by
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
-  have hH : Continuous fun x ↦ e (parentChainInteraction (A x) R N).hamiltonian :=
-    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
-      (continuous_hamiltonian_parentChainInteraction_family A hA hR)
-  apply ContinuousLinearMap.eventually_norm_gap_on_orthogonal
-    (fun x ↦ e (parentChainInteraction (A x) R N).hamiltonian)
-    (fun x => groundSpaceES (A x) N) hH.continuousAt
+    {δ δ' : ℝ} (hδ' : δ' < δ)
+    (hgap : ManyBody.groundSpace (parentChainInteraction (A x₀) R N).hamiltonian 0 =
+        groundSpaceES (A x₀) N ∧
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction (A x₀) R N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ᶠ x in 𝓝 x₀,
+      ManyBody.groundSpace (parentChainInteraction (A x) R N).hamiltonian 0 =
+          groundSpaceES (A x) N ∧
+        ∀ μ : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian) μ →
+            μ = 0 ∨ (δ' : ℂ) ≤ μ :=
+  ManyBody.eventually_groundSpace_zero_eq_and_forall_hasEigenvalue
+    (continuous_hamiltonian_parentChainInteraction_family A hA hR).continuousAt
+    (Filter.Eventually.of_forall fun x ↦ posSemidef_hamiltonian_parentChainInteraction (A x) R N)
     (continuous_groundSpaceES_starProjection_family A hA N hN).continuousAt
-    (by rw [Matrix.coe_toEuclideanCLM_eq_toEuclideanLin]
-        exact groundSpaceES_le_ker_hamiltonian_parentChainInteraction (A x₀) R N)
-    hδ hδ' hgap
+    (Filter.Eventually.of_forall fun x ↦ by
+      rw [ManyBody.groundSpace_zero]
+      exact groundSpaceES_le_ker_hamiltonian_parentChainInteraction (A x) R N)
+    hgap hδ'
 
 end MPSTensor
 

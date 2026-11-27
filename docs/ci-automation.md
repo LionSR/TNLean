@@ -211,6 +211,27 @@ gh workflow run nightly.yml --repo LionSR/TNLean --ref <branch>
 A run on a branch other than `main` checks everything but publishes nothing
 and saves no cache.
 
+### Layout of `scripts/`
+
+The checks that workflows and other scripts call by path stay at the top of
+`scripts/`: `lake_build_locked.sh`, `seed_lake_build.sh`, `ci_lean_checks.py`,
+the `check_*.py` ratchets with their shared `lean_import_syntax.py`,
+`generate_import_aggregators.py`, `blueprint_lean_sync.py`,
+`paper_gap_leanid_sync.py`, the linter `LintStyle.lean` and the record files
+they read. The rest is grouped by purpose:
+
+| Directory | Contents |
+|-----------|----------|
+| `scripts/blueprint/` | focused blueprint PDF builds and paper auxiliary files |
+| `scripts/tenkz/` | fetching the pinned tenkz package and pruning its render cache |
+| `scripts/deploy/` | assembling the Pages site from workflow artifacts |
+| `scripts/reports/` | badges and the line-count report |
+| `scripts/audit/` | the stale-issue, zero-reference and tactic-pattern scans |
+| `scripts/campaign_board/` | the campaign board |
+
+The scripts that the `scripts/test_*` files import still sit at the top level
+and join their groups once those tests are removed.
+
 ---
 
 ## Workflow Reference
@@ -244,7 +265,7 @@ the merged tree.
 | Job | Checks |
 |-----|--------|
 | `plan` | Finds the last commit of `main` that passed this workflow. A scheduled run on that same commit is skipped; otherwise the commit is the base of the changed-file checks and the ratchets. |
-| `build` | Root `lake build` and the linter executable; saves the Lean build cache (main only); strict elaboration of every production file changed since the base; the text linter; `checkdecls` on the blueprint and paper-gap declaration lists; a table of the slowest modules in the job summary. |
+| `build` | Root `lake build` and the linter executable; saves the Lean build cache (main only); strict elaboration of every production file changed since the base; the text linter; `checkdecls` on the blueprint declaration list and on one list of the paper-gap `\leanid` heads and the qualified declaration names of `docs/glossary.md`; a table of the slowest modules in the job summary. |
 | `policies` | Generated import aggregators, the docbuild manifest, the oversized-file guard, and the import-layer, pass-through and small-module ratchets against the base. |
 | `site` | Calls `blueprint.yml`, the one blueprint build: the paper-gap reference check, both print volumes, the web pages, the diagram tests, the event-stream sweep and the browser tests, then, on `main`, the Pages deployment. |
 
@@ -465,7 +486,7 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 The "PR CI" blueprint job, Nightly CI and the "Blueprint" workflow fetch the pinned
 [tenkz](https://github.com/LionSR/tenkz) package (`tenkz.toml`,
-`scripts/fetch_tenkz.py`) and then lint blueprint and slide pictures. The
+`scripts/tenkz/fetch_tenkz.py`) and then lint blueprint and slide pictures. The
 package corpus, shrink ratchet, and RMP book run in the tenkz repository.
 Changes to visible figures also require rendered PDF and web inspection
 during review.

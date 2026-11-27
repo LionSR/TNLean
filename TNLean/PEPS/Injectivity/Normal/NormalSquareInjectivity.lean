@@ -116,29 +116,6 @@ theorem regionBlockedTensorInjective_biUnion_overlap {ι : Type*}
       exact regionBlockedTensorInjective_union_overlap
         (hR i (by simp)) (ih fun j hj => hR j (by simp [hj])) hpos
 
-/-! ### The faithful union-closure provider -/
-
-/-- **The faithful union-closure provider.** The concrete region-injectivity
-predicate of a PEPS tensor with positive bond dimensions satisfies the
-union-closure assertion of the source injective-union lemma: the union of two
-injective regions is injective.
-
-The union-closure field is discharged by the overlapping union lemma
-`regionBlockedTensorInjective_union_overlap`, which uses the injectivity of both
-argument regions.  This is the source-faithful provider of
-`RegionInjectivityUnionClosure`: it derives injectivity of the union from
-injectivity of the two regions, in contrast with the vertex-injective
-`regionInjectivityUnionClosure_of_isVertexInjective`, which discharges the same
-field from the stronger hypothesis that every region is injective.
-
-Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines
-1322--1404 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem regionInjectivityUnionClosure_of_overlap (A : Tensor G d)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
-    RegionInjectivityUnionClosure (regionInjectivityDataOf (G := G) A) where
-  union_injective hR hS :=
-    regionBlockedTensorInjective_union_overlap hR hS hpos
-
 end PEPS
 end TNLean
 

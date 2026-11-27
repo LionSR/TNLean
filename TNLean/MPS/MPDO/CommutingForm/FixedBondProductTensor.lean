@@ -9,8 +9,7 @@ import TNLean.MPS.CanonicalForm.VerticalForm.VerticalCF
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
 import TNLean.MPS.Operator.PhysicalSector.InverseMapActiveSectorRecurrence
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTransport
-import TNLean.MPS.Operator.PairAlphabetBridge
-import TNLean.MPS.CanonicalForm.PhysicalReindex
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Fixed matrix-product representations of commuting-bond products
@@ -214,24 +213,22 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
   let : NeZero repr.bondDim := ⟨Nat.ne_of_gt repr.bondDim_pos⟩
   have hsℂ : (s : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt hs
-  have hProp : MPTensor.EventuallyNonzeroProportionalMPV₂ M.toMPSTensor
-      (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i) := by
+  have hProp : MPTensor.EventuallyNonzeroProportionalMPV₂ M
+      (fun i ↦ (s : ℂ) • repr.tensor i) := by
     filter_upwards [data.eventuallyNonzeroProportionalMPV₂_fixedProductTensor repr]
       with N hN
     rcases hN with ⟨c, hc, hEq⟩
     refine ⟨c / (s : ℂ) ^ N, div_ne_zero hc (pow_ne_zero N hsℂ), ?_⟩
     intro σ
-    rw [MPSTensor.mpv_smul, mpv_toMPSTensor_eq, mpv_toMPSTensor_eq, hEq]
+    rw [MPSTensor.mpv_smul, hEq]
     field_simp
-  rcases hProp.exists_unit_phase_power_of_isNormalTensor
-      (hM.reindexPhysical finProdFinEquiv.symm) (hRepr.reindexPhysical finProdFinEquiv.symm) with
-    ⟨ζ, hζ, hPhase⟩
+  rcases hProp.exists_unit_phase_power_of_isNormalTensor hM hRepr with ⟨ζ, hζ, hPhase⟩
   refine ⟨ζ, hζ, ?_⟩
   intro N hN
   ext σ τ
-  have h := hPhase N (by omega) (fun k ↦ finProdFinEquiv (σ k, τ k))
-  rw [MPSTensor.mpv_smul, mpv_toMPSTensor_eq, mpv_toMPSTensor_eq] at h
-  simp only [Equiv.symm_apply_apply, mpv_pair] at h
+  have h := hPhase N (by omega) (fun k ↦ (σ k, τ k))
+  rw [MPSTensor.mpv_smul] at h
+  simp only [mpv_pair] at h
   rw [h, repr.mpo_eq_product N hN]
   simp only [Matrix.smul_apply, smul_eq_mul, mul_assoc, mul_pow]
 

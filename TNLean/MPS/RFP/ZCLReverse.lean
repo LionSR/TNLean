@@ -237,7 +237,7 @@ private theorem trace_mul_pow_apply_of_traceAdjointMap_hasEigenvector
 
 end Eigenvectors
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition (Fin d)}
 
@@ -255,7 +255,7 @@ the source's unrestricted physical CID, and the spectral package is an explicit
 premise. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
-    (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)
+    (hCF : IsLeftCanonicalBNTPresentation P) (j : Fin P.basisCount)
     {ν : ℂ} {r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hν_ne : ν ≠ 0) (hν_norm : ‖ν‖ < 1)
     (_hr : Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r)
@@ -364,7 +364,7 @@ direct sum. The source's printed spectral argument remains formalized by
 `not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair`. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow
-    (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)
+    (hCF : IsLeftCanonicalBNTPresentation P) (j : Fin P.basisCount)
     (u v : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ) :
     ∃ (L : ℕ)
       (O₁ O₂ : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ),
@@ -460,7 +460,7 @@ and $(2,1)$ makes these pairings equal. This does not cover raw weighted
 repeated copies. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) := by
   classical
@@ -497,7 +497,7 @@ existing positive-gap consequence of transfer idempotence. Raw weighted
 repeated copies and adjacent complementary gaps remain outside the statement.
 See `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent
-    (hCF : IsBNTCanonicalForm P) :
+    (hCF : IsLeftCanonicalBNTPresentation P) :
     IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis ↔
       IsTransferIdempotent (directSumTensor P.basis) := by
   constructor
@@ -518,12 +518,12 @@ trace-pairing repair proves idempotence. This does not restore the false
 raw-weight statement of Theorem 3.8. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hZCL : IsPhysicalBNTZCL (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) :=
   hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
     (isPositiveGapBNTZCL_of_isPhysicalBNTZCL _ _ hZCL)
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

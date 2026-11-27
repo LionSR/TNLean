@@ -51,13 +51,15 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
         ⨆ j : Fin r, chainGroundSpace (A j) L N)
     (hBlock :
       ∀ j : Fin r, chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
-    LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker
+      (Matrix.toLin'
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   intro ψ hψ
   have hChain :
       ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N :=
-    ker_parentHamiltonian_le_chainGroundSpace
+    ker_hamiltonian_parentRingInteraction_le_chainGroundSpace
       (toTensorFromBlocks (α := Fin d) (μ := μ) A) hN hLN hψ
   have hSum : ψ ∈ ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     hClose hChain
@@ -91,9 +93,10 @@ theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bn
     (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} :
     HasParentHamiltonianGroundSpaceSpanning
         (toTensorFromBlocks (α := Fin d) (μ := μ) A) L A ↔
-      ∀ N : ℕ, L < N →
-        LinearMap.ker (parentHamiltonian
-          (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
+      ∀ N : ℕ, (hLN : L < N) → haveI : NeZero N := ⟨by omega⟩;
+        LinearMap.ker
+          (Matrix.toLin'
+            (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
           bntMPSVectorSpan A N := by
   constructor
   · intro hSpan N hN
@@ -130,7 +133,7 @@ theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_i
   intro N hN
   have hNpos : 0 < N := lt_of_le_of_lt (Nat.zero_le L) hN
   have hLN : L ≤ N := le_of_lt hN
-  rw [ker_parentHamiltonian_eq_chainGroundSpace
+  rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
     (toTensorFromBlocks (α := Fin d) (μ := μ) A) hNpos hLN]
   rw [hChain N hN, iSup_mpvSubmodule_eq_bntMPSVectorSpan]
 
@@ -188,12 +191,14 @@ theorem HasParentHamiltonianGroundSpaceSpanning.of_groundSpace_eq
   intro N hN
   have hNpos : 0 < N := lt_of_le_of_lt (Nat.zero_le L) hN
   have hLN : L ≤ N := le_of_lt hN
+  have : NeZero N := ⟨by omega⟩
   calc
-    LinearMap.ker (parentHamiltonian B L N) = chainGroundSpace B L N :=
-      ker_parentHamiltonian_eq_chainGroundSpace B hNpos hLN
+    LinearMap.ker (Matrix.toLin' (parentRingInteraction B L N).hamiltonian) =
+        chainGroundSpace B L N :=
+      ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace B hNpos hLN
     _ = chainGroundSpace C L N := chainGroundSpace_eq_of_groundSpace_eq hGround
-    _ = LinearMap.ker (parentHamiltonian C L N) :=
-      (ker_parentHamiltonian_eq_chainGroundSpace C hNpos hLN).symm
+    _ = LinearMap.ker (Matrix.toLin' (parentRingInteraction C L N).hamiltonian) :=
+      (ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace C hNpos hLN).symm
     _ = bntMPSVectorSpan A N := hSpan N hN
 
 /-- For block-diagonal nearest-neighbor parent Hamiltonians, the all-chain
@@ -211,9 +216,10 @@ theorem hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bn
     HasNNCPHGroundSpaces (toTensorFromBlocks (α := Fin d) (μ := μ) A) A ↔
       (∀ N : ℕ, 2 < N →
         IsNNCPH (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) ∧
-      ∀ N : ℕ, 2 < N →
-        LinearMap.ker (parentHamiltonian
-          (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) ≤
+      ∀ N : ℕ, (hN : 2 < N) → haveI : NeZero N := ⟨by omega⟩;
+        LinearMap.ker
+          (Matrix.toLin'
+            (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N).hamiltonian) ≤
           bntMPSVectorSpan A N := by
   rw [hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning,
     hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan

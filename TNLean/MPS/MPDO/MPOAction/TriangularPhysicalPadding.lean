@@ -154,36 +154,32 @@ variable {ι : Type*} [Fintype ι] {d D : ℕ} {δ : ι → ℕ}
 with precisely the same rectangular analysis and synthesis matrices. -/
 theorem operatorPhysicalPadding {O : MPOTensor d D}
     {T : ∀ c : ι, MPOTensor d (δ c)}
-    (h : IsBiorthogonalDecomposition O.toMPSTensor (fun c ↦ (T c).toMPSTensor) V W) :
-    IsBiorthogonalDecomposition (MPOTensor.operatorPhysicalPadding O).toMPSTensor
-      (fun c ↦ (MPOTensor.operatorPhysicalPadding (T c)).toMPSTensor) V W where
+    (h : IsBiorthogonalDecomposition O T V W) :
+    IsBiorthogonalDecomposition (MPOTensor.operatorPhysicalPadding O)
+      (fun c ↦ MPOTensor.operatorPhysicalPadding (T c)) V W where
   retract := h.retract
   orthogonal := h.orthogonal
   letter q := by
-    change MPOTensor.operatorPhysicalPadding O (q.divNat, q.modNat) =
-      ∑ c : ι, W c * MPOTensor.operatorPhysicalPadding (T c) (q.divNat, q.modNat) * V c
-    generalize q.divNat = i, q.modNat = j
+    obtain ⟨i, j⟩ := q
     cases i using Fin.lastCases with
     | last => simp
     | cast i =>
       cases j using Fin.lastCases with
       | last => simp
       | cast j =>
-        simpa [MPOTensor.toMPSTensor] using h.letter (finProdFinEquiv (i, j))
+        simpa using h.letter (i, j)
 
 /-- Upper-right physical padding transports an exact state decomposition
 with precisely the same rectangular analysis and synthesis matrices. -/
 theorem statePhysicalPadding {B : MPSTensor d D}
     {A : ∀ c : ι, MPSTensor d (δ c)}
     (h : IsBiorthogonalDecomposition B A V W) :
-    IsBiorthogonalDecomposition (MPOTensor.statePhysicalPadding B).toMPSTensor
-      (fun c ↦ (MPOTensor.statePhysicalPadding (A c)).toMPSTensor) V W where
+    IsBiorthogonalDecomposition (MPOTensor.statePhysicalPadding B)
+      (fun c ↦ MPOTensor.statePhysicalPadding (A c)) V W where
   retract := h.retract
   orthogonal := h.orthogonal
   letter q := by
-    change MPOTensor.statePhysicalPadding B (q.divNat, q.modNat) =
-      ∑ c : ι, W c * MPOTensor.statePhysicalPadding (A c) (q.divNat, q.modNat) * V c
-    generalize q.divNat = i, q.modNat = j
+    obtain ⟨i, j⟩ := q
     cases i using Fin.lastCases with
     | last => simp
     | cast i =>
