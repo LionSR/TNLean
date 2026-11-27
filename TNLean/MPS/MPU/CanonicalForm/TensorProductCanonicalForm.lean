@@ -101,7 +101,7 @@ theorem normalizedFlattening_tensorProduct (U : MPOTensor d D) (V : MPOTensor e 
   rcases finProdFinEquiv.surjective βδ with ⟨⟨β, δ⟩, rfl⟩
   simp only [normalizedFlattening, Kraus.reindexPhysical,
     finDoubledProdEquiv_apply, MPSTensor.tensorProduct_apply,
-    MPOTensor.tensorProduct_apply, toMPSTensor,
+    MPOTensor.tensorProduct_apply,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat,
     Matrix.smul_apply, smul_eq_mul]
   rw [hsqrt, mul_inv]

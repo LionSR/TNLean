@@ -427,10 +427,12 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
       Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
         (Kraus.blockTensor U.normalizedFlattening p) := by
   funext ij
-  rw [normalizedFlattening, toMPSTensor_blockTensor]
+  change ((Real.sqrt (Kraus.blockPhysDim d p) : ℂ)⁻¹) •
+    (MPOTensor.blockTensor U p).toMPSTensor ij = _
+  rw [toMPSTensor_blockTensor]
   simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
   change _ = Kraus.evalWord
-    (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) _
+    (fun i => ((Real.sqrt d : ℂ)⁻¹) • U (i.divNat, i.modNat)) _
   rw [Kraus.evalWord_smul, List.length_ofFn]
   have hsqrtC : (Real.sqrt (Kraus.blockPhysDim d p) : ℂ) =
       (Real.sqrt d : ℂ) ^ p := by

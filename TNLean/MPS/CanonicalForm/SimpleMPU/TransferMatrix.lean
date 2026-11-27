@@ -7,6 +7,7 @@ import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import TNLean.MPS.Operator.Unitary.Basic
 import TNLean.MPS.CanonicalForm.VerticalForm.Purity
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Normalized transfer matrix of a Matrix Product Unitary
@@ -21,6 +22,8 @@ Cirac--Perez-Garcia--Schuch--Verstraete.
 
 ## Main results
 
+* `MPOTensor.sqrt_smul_normalizedFlattening` — multiplying back by `sqrt d` recovers `U` on the
+  relabelled pair alphabet.
 * `MPOTensor.mpvOverlap_normalizedFlattening_self` — its self-overlap scaling law.
 * `MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one` — for every `N > 1`,
   the trace of the `N`-th power of its transfer matrix is one.
@@ -42,13 +45,42 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The paper-normalized doubled-index MPS tensor associated to an MPO tensor:
-`normalizedFlattening U = U.toMPSTensor / sqrt d`.
+/-- The paper-normalized doubled-index MPS tensor associated to an MPO tensor: the tensor
+`U / sqrt d` on the pair alphabet, relabelled along `finProdFinEquiv.symm`, so that the letter
+`ij` is `U (ij.divNat, ij.modNat) / sqrt d`.
 
 Source: Cirac--Perez-Garcia--Schuch--Verstraete, equation `eq:transfer-op`,
 lines 336--340. -/
 noncomputable def normalizedFlattening (U : MPOTensor d D) : MPSTensor (d * d) D :=
-  fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij
+  fun ij => ((Real.sqrt d : ℂ)⁻¹) • U (ij.divNat, ij.modNat)
+
+/-- The normalized flattening is the relabelling along `finProdFinEquiv.symm` of the tensor
+`U / sqrt d` on the pair alphabet. -/
+theorem normalizedFlattening_eq_reindexPhysical (U : MPOTensor d D) :
+    U.normalizedFlattening =
+      Kraus.reindexPhysical finProdFinEquiv.symm fun ij ↦ ((Real.sqrt d : ℂ)⁻¹) • U ij :=
+  rfl
+
+/-- Multiplying the normalized flattening back by `sqrt d` gives the relabelling of `U` along
+`finProdFinEquiv.symm`. -/
+theorem sqrt_smul_normalizedFlattening [NeZero d] (U : MPOTensor d D) :
+    (fun ij ↦ (Real.sqrt d : ℂ) • U.normalizedFlattening ij) =
+      Kraus.reindexPhysical finProdFinEquiv.symm U := by
+  have hc : (Real.sqrt d : ℂ) ≠ 0 := by
+    have hd : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
+    exact_mod_cast (Real.sqrt_pos.mpr hd).ne'
+  funext ij
+  simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
+  rfl
+
+/-- Relabelling the physical basis along an equivalence leaves the overlap unchanged. -/
+private theorem mpvOverlap_reindexPhysical_equiv {α α' : Type*} [Fintype α] [Fintype α']
+    {D₁ D₂ : ℕ} (e : α' ≃ α) (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (N : ℕ) :
+    MPTensor.mpvOverlap (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) N =
+      MPTensor.mpvOverlap A B N := by
+  simp only [MPTensor.mpvOverlap, MPTensor.mpv_reindexPhysical]
+  exact (Equiv.arrowCongr (Equiv.refl (Fin N)) e).sum_comp
+    (fun σ ↦ MPTensor.mpv A σ * star (MPTensor.mpv B σ))
 
 /-- The length-`N` self-overlap of the normalized flattening is `d⁻ᴺ` times the raw
 self-overlap. The physical dimension is explicitly nonzero so that division by `sqrt d`
@@ -59,12 +91,9 @@ lines 344--354. -/
 theorem mpvOverlap_normalizedFlattening_self [NeZero d]
     (U : MPOTensor d D) (N : ℕ) :
     MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N =
-      ((d : ℂ)⁻¹) ^ N *
-        MPTensor.mpvOverlap U.toMPSTensor U.toMPSTensor N := by
-  change MPTensor.mpvOverlap
-      (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i)
-      (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) N = _
-  rw [MPTensor.mpvOverlap_smul_self]
+      ((d : ℂ)⁻¹) ^ N * MPTensor.mpvOverlap U U N := by
+  rw [normalizedFlattening_eq_reindexPhysical, mpvOverlap_reindexPhysical_equiv,
+    MPTensor.mpvOverlap_smul_self]
   congr 2
   have hd : (0 : ℝ) < d := by
     exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
@@ -85,7 +114,9 @@ theorem IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one
     {N : ℕ} (hN : 1 < N) :
     Matrix.trace (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 := by
   rw [MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
-  rw [mpvOverlap_normalizedFlattening_self, mpvOverlap_toMPSTensor_self,
+  rw [mpvOverlap_normalizedFlattening_self,
+    ← mpvOverlap_reindexPhysical_equiv finProdFinEquiv.symm U U,
+    ← toMPSTensor_eq_reindexPhysical, mpvOverlap_toMPSTensor_self,
     hU.mpo_mul_conjTranspose_mpo hN, Matrix.trace_one]
   rw [Fintype.card_pi_const]
   push_cast

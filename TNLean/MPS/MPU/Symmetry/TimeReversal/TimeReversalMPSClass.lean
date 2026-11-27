@@ -264,7 +264,7 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
     hW.blockTwo.isNormalTensor_normalizedFlattening.isNormal
   have hsign := MPSTensor.mul_map_star_eq_one_or_neg_one_of_twice hN G
     (c := starRingEnd ℂ ζ * ζ) (fun i => by
-      simp only [normalizedFlattening, toMPSTensor, Matrix.mul_smul, Matrix.smul_mul]
+      simp only [normalizedFlattening, Matrix.mul_smul, Matrix.smul_mul]
       conv_lhs => rw [htwice]
       rw [smul_comm])
   -- The phase is one, from the length-two invariance.

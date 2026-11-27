@@ -379,7 +379,7 @@ theorem IsMPUCanonicalFormII.mps_conjugation_sign_iff
     (P := 1) (by simp) G (ζ := ζ) (fun i => by
       simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
         Finset.mem_univ, ite_true]
-      simp only [normalizedFlattening, toMPSTensor, map_star_smul, hgauge, Matrix.mul_smul,
+      simp only [normalizedFlattening, map_star_smul, hgauge, Matrix.mul_smul,
         Matrix.smul_mul, smul_comm ζ]
       congr 1
       simp)

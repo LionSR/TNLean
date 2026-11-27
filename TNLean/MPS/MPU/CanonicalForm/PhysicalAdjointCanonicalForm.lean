@@ -61,7 +61,7 @@ theorem normalizedFlattening_physicalAdjointTensor (U : MPOTensor d D) :
   rw [show ij = finProdFinEquiv (ij.divNat, ij.modNat) by
     exact (finProdFinEquiv.apply_symm_apply ij).symm]
   simp [normalizedFlattening, Kraus.reindexPhysical, MPSTensor.mapStar,
-    MPOTensor.toMPSTensor, Matrix.smul_apply, Matrix.map_apply, RCLike.star_def]
+    Matrix.smul_apply, Matrix.map_apply, RCLike.star_def]
 
 end MPOTensor
 

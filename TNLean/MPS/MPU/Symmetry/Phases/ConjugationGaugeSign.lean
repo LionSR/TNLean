@@ -118,7 +118,7 @@ theorem IsMPUCanonicalFormII.mul_map_star_eq_one_or_neg_one_of_conjugation_gauge
     (P := 1) (by simp) X (ζ := ζ) (fun i => by
       simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
         Finset.mem_univ, ite_true]
-      simp only [normalizedFlattening, toMPSTensor, map_star_smul, hg, Matrix.mul_smul,
+      simp only [normalizedFlattening, map_star_smul, hg, Matrix.mul_smul,
         Matrix.smul_mul, smul_comm ζ]
       congr 1
       simp)
