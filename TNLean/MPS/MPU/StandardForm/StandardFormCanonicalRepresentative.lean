@@ -9,7 +9,6 @@ import TNLean.MPS.MPU.CanonicalForm.CanonicalFormAncillaBlocking
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import QICLean.Channel.Schmidt.Rank
-import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # A tensor in canonical form for given standard-form gates
@@ -53,7 +52,8 @@ irreducible block with transfer spectral radius one; `A` is that block with weig
 
 Source: arXiv:1703.09188, canonical form, lines 258--267, with the normalization of the blocks;
 the Perron eigenvalue is Wolf, Theorem 6.3. -/
-theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
+theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D))
     (hIrr : Kraus.IsIrreducibleFamily A) (hA : ∃ i, A i ≠ 0) : IsMPUCanonicalForm A := by
   obtain ⟨ρ, r, hρ, hr, hEig⟩ := exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
   set c : ℂ := ((Real.sqrt r : ℝ) : ℂ)
@@ -62,7 +62,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
   have hcc : c⁻¹ * starRingEnd ℂ c⁻¹ = (r : ℂ)⁻¹ := by
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
-  have hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i) ρ = ρ := by
+  have hfix : Kraus.transferMap (ι := α) (n := Fin D) (fun i => c⁻¹ • A i) ρ = ρ := by
     rw [transferMap_smul, hcc, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
   have hIrrScaled : Kraus.IsIrreducibleFamily (fun i => c⁻¹ • A i) :=
     isIrreducibleFamily_smul (inv_ne_zero hc) A hIrr
@@ -70,7 +70,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
     refine ⟨hIrrScaled, ?_⟩
     simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-        (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i))
+        (Kraus.transferMap (ι := α) (n := Fin D) (fun i => c⁻¹ • A i))
         (Kraus.transferMap_isCPMap _)
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrScaled)
         ρ 1 hρ (by norm_num) (by simpa using hfix))
@@ -268,12 +268,8 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
       exact Submodule.mem_top
     rw [hspan, Submodule.mem_bot] at h1
     exact one_ne_zero h1
-  obtain ⟨⟨i, j⟩, hij⟩ := hne
-  refine (MPTensor.isMPUCanonicalForm_reindexPhysical_iff finProdFinEquiv.symm).1 ?_
-  rw [← toMPSTensor_eq_reindexPhysical]
   exact MPSTensor.isMPUCanonicalForm_of_isIrreducibleFamily _
     (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-      (Kraus.injective_implies_irreducibleCP _ ((isInjective_toMPSTensor_iff W).2 hinj)))
-    ⟨finProdFinEquiv (i, j), by simpa [toMPSTensor] using hij⟩
+      (Kraus.injective_implies_irreducibleCP _ hinj)) hne
 
 end MPOTensor

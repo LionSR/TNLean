@@ -565,10 +565,7 @@ theorem exists_isReduction_of_mpo_eq_cfii
   have hζ : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 := inv_ne_zero hsqrt
   have hNormalNorm : Kraus.IsNormal V.normalizedFlattening :=
     hV.isNormalTensor_normalizedFlattening.isNormal
-  have hNormalRaw : Kraus.IsNormal V := by
-    apply (isNormal_toMPSTensor_iff V).1
-    apply (MPSTensor.isNormal_smul_iff hζ V.toMPSTensor).mp
-    exact (isNormal_toMPSTensor_iff V.normalizedFlattening).2 hNormalNorm
+  have hNormalRaw : Kraus.IsNormal V := (MPSTensor.isNormal_smul_iff hζ V).mp hNormalNorm
   exact MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos V U hNormalRaw
     (sameMPV₂Pos_iff_mpo_eq.2 hEq)
 

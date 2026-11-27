@@ -71,7 +71,8 @@ predicates in `Kraus`. -/
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 theorem isIrreducibleFamily_smul
-    {c : ℂ} (hc : c ≠ 0) (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A) :
+    {c : ℂ} (hc : c ≠ 0) {α : Type*} (A : MPTensor α (Fin D))
+    (hIrr : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (fun i => c • A i) := by
   intro hHas
   apply hIrr
