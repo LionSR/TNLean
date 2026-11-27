@@ -36,7 +36,7 @@ namespace MPSTensor
 /-- Exact biorthogonal synthesis gives the periodic vector expansion with
 its actual integer multiplicities. Source: GLM23 Appendix A and lines 567--568. -/
 theorem IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity
-    {ι : Type*} [Fintype ι] {α : Type*} [Fintype α] {DB : ℕ} {D N : ι → ℕ}
+    {ι : Type*} [Fintype ι] {α : Type*} [Finite α] {DB : ℕ} {D N : ι → ℕ}
     {B : MPTensor α (Fin DB)} {A : ∀ c, MPTensor α (Fin (D c))}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin DB) ℂ}
     {W : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (D c)) ℂ}
@@ -44,16 +44,18 @@ theorem IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity
       (fun q : (c : ι) × Fin (N c) ↦ A q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
     {L : ℕ} (hL : 0 < L) (w : Fin L → α) :
-    mpv B w = ∑ c, (N c : ℂ) * mpv (A c) w :=
-  h.trace_evalWord_eq_sum_multiplicity (List.ofFn w)
+    mpv B w = ∑ c, (N c : ℂ) * mpv (A c) w := by
+  have := Fintype.ofFinite α
+  exact h.trace_evalWord_eq_sum_multiplicity (List.ofFn w)
     (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
 
 /-- Positive-dimensional blocks with simultaneous word spanning have
 linearly independent periodic vectors at that same length. -/
 theorem WordTupleSpanTop.linearIndependent_mpv
-    {α : Type*} [Fintype α] {g : ℕ} {D : Fin g → ℕ} {A : ∀ c, MPTensor α (Fin (D c))}
+    {α : Type*} [Finite α] {g : ℕ} {D : Fin g → ℕ} {A : ∀ c, MPTensor α (Fin (D c))}
     {L : ℕ} (hSpan : WordTupleSpanTop A L) (hD : ∀ c, 0 < D c) :
     LinearIndependent ℂ (fun c ↦ fun w : Fin L → α ↦ mpv (A c) w) := by
+  have := Fintype.ofFinite α
   apply Fintype.linearIndependent_iff.2
   intro z hz c
   have hzero := block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan
@@ -91,6 +93,7 @@ theorem isMPOFusionAlgebra_of_biorthogonalDecompositions
     (B := mulTensor (O a) (O b))
     (A := fun c ↦ O c) (V := V a b) (W := W a b) (h a b) hL
     (fun n ↦ (σ n, τ n))
+  simp only [mpv_pair] at hh
   simpa [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hh
 
 /-- Tracing exact action decompositions gives the existing periodic symmetry
@@ -135,8 +138,9 @@ theorem linearIndependent_mpo_of_wordTupleSpanTop
   funext w
   have hw := congrArg
     (fun X ↦ X (fun n ↦ (w n).1) (fun n ↦ (w n).2)) hz
-  simpa [← mpv_pair, Finset.sum_apply, Matrix.sum_apply, Matrix.smul_apply,
-    smul_eq_mul] using hw
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.zero_apply] at hw
+  simp only [← mpv_pair] at hw
+  simpa [Finset.sum_apply] using hw
 
 /-- Associativity of physical operators implies associativity of their
 fusion coefficients at any positive length where the operators are linearly

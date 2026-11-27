@@ -60,7 +60,8 @@ theorem blockMPO {p g : ℕ} {D : Fin g → ℕ}
     intro D' M I
     have hI := MPOTensor.toMPSTensor_blockTensor_apply M L (finProdFinEquiv I)
     rw [MPOTensor.evalWord_toMPSTensor] at hI
-    simpa [MPOTensor.toMPSTensor] using hI
+    have hI' : MPOTensor.blockTensor M L (finProdFinEquiv.symm (finProdFinEquiv I)) = _ := hI
+    rwa [Equiv.symm_apply_apply] at hI'
   h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm)
     (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL (finProdFinEquiv I))
     (fun I ↦ by

@@ -234,11 +234,12 @@ namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- An analysis map that intertwines an injective target block with the
 source tensor is determined by its products with the letters. -/
-private theorem eq_of_mul_letter_eq {α : Type*} [Fintype α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
+private theorem eq_of_mul_letter_eq {α : Type*} [Finite α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
     {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) {V V' : Matrix (Fin D) (Fin DB) ℂ}
     (hV : ∀ i, V * B i = A i * V) (hV' : ∀ i, V' * B i = A i * V')
     (h : ∀ i, V' * B i = V * B i) : V' = V := by
+  have := Fintype.ofFinite α
   obtain ⟨coef, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
     (hA.span_eq_top ▸ Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range A))
@@ -249,11 +250,12 @@ private theorem eq_of_mul_letter_eq {α : Type*} [Fintype α] {DB D : ℕ} {B : 
 
 /-- A synthesis map that intertwines an injective target block with the
 source tensor is determined by its products with the letters. -/
-private theorem eq_of_letter_mul_eq {α : Type*} [Fintype α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
+private theorem eq_of_letter_mul_eq {α : Type*} [Finite α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
     {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) {W W' : Matrix (Fin DB) (Fin D) ℂ}
     (hW : ∀ i, B i * W = W * A i) (hW' : ∀ i, B i * W' = W' * A i)
     (h : ∀ i, B i * W' = B i * W) : W' = W := by
+  have := Fintype.ofFinite α
   obtain ⟨coef, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
     (hA.span_eq_top ▸ Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range A))
