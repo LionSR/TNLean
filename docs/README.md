@@ -36,11 +36,8 @@ requirements.
 - `paper-gaps/`
 - `pr_review_management.md`
 - `project_conventions.md`
-- `stale_issue_audit.md`
 - `tactic_development.md`
 - `tactic_patterns.md`
-- `tenkz/`
-- `upgrade_4_29.md`
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
 the prose section of [`project_conventions.md`](project_conventions.md) or
@@ -48,9 +45,12 @@ in `blueprint_style_guide.md`; shared rules belong upstream in the skill.
 
 ## Audit memos
 
-- `audits/`
+`audits/` keeps only the dated memos that something still cites: a Lean
+docstring, a blueprint entry, a paper-gap note, a live document of this
+directory, or an open issue. Memos whose findings have landed are removed;
+git history keeps them. Name a new memo `<YYYY-MM-DD>_<topic>.md` and cite it
+by its `docs/audits/...` path.
 
-`audits/` collects dated scouting, blocker, and source-faithfulness memos, named
-`<YYYY-MM-DD>_<topic>.md`. These are historical working notes rather than
-maintained policy; live documents that cite a specific memo link to it by its
-`docs/audits/...` path.
+`formalization/` holds the scope notes that the glossary, a paper-gap note or
+a module docstring cites. `campaign/` holds the data of the hourly campaign
+boards (see `campaign/README.md`). `slides/` holds talk sources.
