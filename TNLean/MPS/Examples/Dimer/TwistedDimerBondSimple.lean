@@ -198,10 +198,17 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
         Kraus.evalWord_smul, Matrix.trace_smul, List.length_ofFn, smul_eq_mul,
         ← mul_assoc, ← mul_pow, inv_mul_cancel₀ sigmaDimerNormalizingScalar_ne_zero,
         one_pow, one_mul]
-    · exact MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
-        (fun _ : Fin 1 => B) (fun _ => hB) (by
-          intro j k hjk
-          exact (hjk (Subsingleton.elim j k)).elim)
+    · -- T.2c: the eventual independence of normal blocks is stated on a `Fin` alphabet.
+      obtain ⟨N0, hN0⟩ :=
+        MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+          (fun _ : Fin 1 => Kraus.reindexPhysical finProdFinEquiv.symm B)
+          (fun _ => hB.reindexPhysical _) (by
+            intro j k hjk
+            exact (hjk (Subsingleton.elim j k)).elim)
+      exact ⟨N0, fun N hN => MPSTensor.linearIndependent_mpvState_of_configEquiv
+        (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv) P.basis
+        (fun _ => Kraus.reindexPhysical finProdFinEquiv.symm B)
+        (fun _ _ => by simp only [P, B, MPTensor.mpv_reindexPhysical]; rfl) (hN0 N hN)⟩
   · intro j hNil
     have hTransfer := physTraceTransfer_reindex_singleBlock (d := 4) sigmaDimerBasis
     change IsNilpotent (physTraceTransfer B) at hNil
