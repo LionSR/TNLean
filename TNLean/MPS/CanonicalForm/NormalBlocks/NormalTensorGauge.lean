@@ -111,7 +111,10 @@ theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D] {α : Type*} [Fintyp
   classical
   let e := (Fintype.equivFin α).symm
   suffices h : IsNormalTensor (Kraus.reindexPhysical e A) by
-    simpa [Kraus.reindexPhysical] using h.reindexPhysical e.symm
+    have hA : Kraus.reindexPhysical e.symm (Kraus.reindexPhysical e A) = A := by
+      funext i
+      simp [Kraus.reindexPhysical]
+    simpa only [hA] using h.reindexPhysical e.symm
   have hNormal' := (isNormal_reindexPhysical_equiv e A).2 hNormal
   have hLeft' : IsLeftCanonical (Kraus.reindexPhysical e A) :=
     (Kraus.isTP_reindexPhysical_iff e A).2 hLeft
