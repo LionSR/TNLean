@@ -526,7 +526,7 @@ theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
     (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (s : Fin S.basisCount) :
-    (S.commonWeightAbsorbedBasis hWeight s).ketLeftMul
+    MPOTensor.ketLeftMul (S.commonWeightAbsorbedBasis hWeight s)
         (bntSectorProjection hC hρ hη hR s) =
       S.commonWeightAbsorbedBasis hWeight s := by
   ext ⟨a, b⟩ β α

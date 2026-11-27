@@ -345,9 +345,9 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree
     (SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e)
     (hAct.reindexPhysical e)
   intro j
-  have hj := h j
-  rw [SectorDecomposition.reindexPhysical_basis, insertedTensor_reindexPhysical,
-    insertedTensor_reindexPhysical] at hj
+  have hj : insertedTensor (Y.submatrix e e) (Kraus.reindexPhysical e (Q.basis j)) =
+      insertedTensor (Z.submatrix e e) (Kraus.reindexPhysical e (Q.basis j)) := h j
+  rw [insertedTensor_reindexPhysical, insertedTensor_reindexPhysical] at hj
   funext i
   simpa only [Kraus.reindexPhysical, Equiv.apply_symm_apply] using congrFun hj (e.symm i)
 

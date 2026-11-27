@@ -216,8 +216,8 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
           (fun _ => 1)
     _ = ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j) *
           Matrix.trace
-            ((S.basis j).evalWord (List.ofFn u) (List.ofFn v) *
-              (S.basis j).verticalLoop ^ L) := by
+            (MPOTensor.evalWord (S.basis j) (List.ofFn u) (List.ofFn v) *
+              MPOTensor.verticalLoop (S.basis j) ^ L) := by
       rw [sum_mpo_threeSite_prefix_diagonal_tail]
     _ = Matrix.trace
           (S.basis j (i₁, j₁) * S.basis j (i₂, j₂) *

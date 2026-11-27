@@ -96,8 +96,11 @@ theorem isNilpotent_physTraceTransfer_iff_of_gaugePhaseEquiv
     {A B : MPOTensor d D} (h : MPTensor.GaugePhaseEquiv A B) :
     IsNilpotent (physTraceTransfer A) ↔ IsNilpotent (physTraceTransfer B) :=
   ⟨isNilpotent_physTraceTransfer_of_gaugePhaseEquiv h,
-    isNilpotent_physTraceTransfer_of_gaugePhaseEquiv
-      (MPSTensor.gaugePhaseEquiv_symm_same_dim h)⟩
+    isNilpotent_physTraceTransfer_of_gaugePhaseEquiv (by
+      let e := (Fintype.equivFin (Fin d × Fin d)).symm
+      exact (MPSTensor.gaugePhaseEquiv_reindexPhysical_equiv e B A).1
+        (MPSTensor.gaugePhaseEquiv_symm_same_dim
+          ((MPSTensor.gaugePhaseEquiv_reindexPhysical_equiv e A B).2 h)))⟩
 
 /-- Identifying equal bond dimensions does not change nilpotency of the
 physical-trace transfer.

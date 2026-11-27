@@ -123,7 +123,8 @@ theorem mpv_commonWeightAbsorbedBasis (S : SectorDecomposition α)
       S.weight j q = S.weight j q') (j : Fin S.basisCount) {N : ℕ} (σ : Fin N → α) :
     mpv (S.commonWeightAbsorbedBasis hWeight j) σ =
       (S.commonWeight hWeight j) ^ N * mpv (S.basis j) σ := by
-  simp only [commonWeightAbsorbedBasis, mpv, coeff]
+  change mpv (fun i ↦ S.commonWeight hWeight j • S.basis j i) σ = _
+  simp only [MPTensor.mpv, MPTensor.coeff]
   rw [Kraus.evalWord_smul]
   simp [List.length_ofFn, Matrix.trace_smul]
 

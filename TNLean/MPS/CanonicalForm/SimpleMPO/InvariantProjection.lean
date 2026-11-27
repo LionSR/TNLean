@@ -281,7 +281,7 @@ theorem exists_not_commute_of_displaced_of_insertedTensor_eq
     rw [h2]
     simp only [Finset.sum_mul]
     exact Finset.sum_comm
-  rw [← insertedTensor_ketLeftAction, ← insertedTensor_ketLeftBraRightAction]
+  rw [← insertedTensor_ketLeftBraRightAction, ← insertedTensor_ketLeftAction]
   exact hInsert hAct
 
 /-- Let the tensor of an MPDO on the pair alphabet have the same positive-length MPV

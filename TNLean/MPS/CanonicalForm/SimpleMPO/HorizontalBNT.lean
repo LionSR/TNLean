@@ -332,7 +332,7 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
       MPSTensor.insertedTensor (MPSTensor.braRightAction Q) M =
         MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) M :=
     MPSTensor.insertedTensor_eq_of_gauge X hX' _ _ hSector
-  rw [← insertedTensor_braRightAction, ← insertedTensor_ketLeftBraRightAction]
+  rw [← insertedTensor_ketLeftBraRightAction, ← insertedTensor_braRightAction]
   exact hOriginal
 
 end MPOTensor
