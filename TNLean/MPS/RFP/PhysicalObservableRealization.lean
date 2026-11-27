@@ -204,7 +204,7 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_rankOne
 
 namespace IsBNTCanonicalForm
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- The multiplicity-one, unit-weight direct sum of a BNT basis admits
 sector-supported rank-one physical observables on a common region of size at

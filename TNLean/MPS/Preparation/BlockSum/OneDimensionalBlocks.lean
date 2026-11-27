@@ -139,10 +139,12 @@ theorem not_gaugePhaseEquiv_of_dim_one {A B : MPSTensor d 1} (i : Fin d)
 
 namespace SectorDecomposition
 
+variable {α : Type*}
+
 /-- Coordinates of the assembled tensor coming from two copies coincide only when the copies
 coincide: the copies `μ_{j,k} A_j` of arXiv:2307.01696, eq. (S2), occupy disjoint bond
 coordinates. -/
-theorem sigma_eq_of_copyCoord_eq (P : SectorDecomposition d) {j j' : Fin P.basisCount}
+theorem sigma_eq_of_copyCoord_eq (P : SectorDecomposition α) {j j' : Fin P.basisCount}
     {k : Fin (P.copies j)} {k' : Fin (P.copies j')} {a : Fin (P.basisDim j)}
     {a' : Fin (P.basisDim j')} (h : P.copyCoord j k a = P.copyCoord j' k' a') :
     (⟨j, k⟩ : (j : Fin P.basisCount) × Fin (P.copies j)) = ⟨j', k'⟩ :=
@@ -150,7 +152,7 @@ theorem sigma_eq_of_copyCoord_eq (P : SectorDecomposition d) {j j' : Fin P.basis
 
 /-- The assembled tensor vanishes between the coordinates of two distinct copies: it is the
 direct sum `⊕_{(j,k)} μ_{j,k} A_j` of arXiv:2307.01696, eq. (S2). -/
-theorem toTensor_copyCoord_of_ne (P : SectorDecomposition d) (i : Fin d)
+theorem toTensor_copyCoord_of_ne (P : SectorDecomposition α) (i : α)
     {j j' : Fin P.basisCount} {k : Fin (P.copies j)} {k' : Fin (P.copies j')}
     (h : (⟨j, k⟩ : (j : Fin P.basisCount) × Fin (P.copies j)) ≠ ⟨j', k'⟩)
     (a : Fin (P.basisDim j)) (a' : Fin (P.basisDim j')) :

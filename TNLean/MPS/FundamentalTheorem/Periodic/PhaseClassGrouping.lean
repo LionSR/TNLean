@@ -39,7 +39,7 @@ into each copy. This is the multiplicity formula of arXiv:1708.00029,
 `MPVPhaseClassData.exists_unitary_sectorDecomposition`. -/
 def MPVPhaseClassData.toSectorDecomposition (classes : MPVPhaseClassData blocks)
     (μ : Fin r → ℂ) (ξ : (j : Fin classes.g) → Fin (classes.copies j) → ℂ)
-    (hμ : ∀ k, μ k ≠ 0) (hξ : ∀ j q, ‖ξ j q‖ = 1) : SectorDecomposition d where
+    (hμ : ∀ k, μ k ≠ 0) (hξ : ∀ j q, ‖ξ j q‖ = 1) : SectorDecomposition (Fin d) where
   basisCount := classes.g
   basisDim := fun j ↦ dim (classes.repr j)
   basis := fun j ↦ blocks (classes.repr j)
@@ -169,7 +169,7 @@ false as printed without it; see
 `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
 theorem weight_norm_eq_one_of_block_sum_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (blocks k))
-    (Q : SectorDecomposition d) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition (Fin d)) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos (toTensorFromBlocks μ blocks) Q.toTensor)

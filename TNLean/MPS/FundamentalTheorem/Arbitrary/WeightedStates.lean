@@ -517,7 +517,7 @@ private theorem exists_ne_zero_of_spectralRadius_eq_one {n : ℕ} {C : MPSTensor
 
 /-- A sector decomposition with nonzero irreducible basis blocks reduces onto its weighted
 blocks. -/
-private theorem nonempty_multiBlockCompression_toTensor (P : SectorDecomposition d)
+private theorem nonempty_multiBlockCompression_toTensor (P : SectorDecomposition (Fin d))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (P.basis j)) (hlet : ∀ j, ∃ i, P.basis j i ≠ 0) :
     Nonempty (MultiBlockCompression (D := fun x : (Σ j, Fin (P.copies j)) => P.basisDim x.1)
       P.toTensor Finset.univ (fun x => P.weight x.1 x.2 • P.basis x.1)) := by
@@ -562,7 +562,8 @@ private theorem hetRepeatedBlocks_of_isGaugeRelated_smul {D₁ D₂ : ℕ} {A : 
 
 /-- Under dependent states, every basis block of one decomposition is a repeated block of a basis
 block of the other, when all gauge scalars between basis blocks have modulus one. -/
-private theorem forall_exists_hetRepeatedBlocks_of_statesDependent (P Q : SectorDecomposition d)
+private theorem forall_exists_hetRepeatedBlocks_of_statesDependent
+    (P Q : SectorDecomposition (Fin d))
     (hirrP : ∀ j, Matrix.IsIrreducibleAction (P.basis j)) (hletP : ∀ j, ∃ i, P.basis j i ≠ 0)
     (hirrQ : ∀ k, Matrix.IsIrreducibleAction (Q.basis k)) (hletQ : ∀ k, ∃ i, Q.basis k i ≠ 0)
     (hP0 : 0 < P.basisCount) (hQ0 : 0 < Q.basisCount)
@@ -611,7 +612,7 @@ Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623; the source assumes p
 for all `N`. The hypotheses `0 < P.basisCount`, `0 < Q.basisCount` exclude the empty form, whose
 state vanishes and is dependent on every state. -/
 theorem fundamentalTheorem_irreducibleForm_of_statesDependent
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (hIrrP : ∀ j, Kraus.IsIrreducibleFamily (P.basis j))
     (hRadP : ∀ j,
       spectralRadius ℂ

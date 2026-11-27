@@ -174,7 +174,7 @@ application at lines 747--756. The source statement itself, with the periods der
 isolated because the periodic overlap dichotomy and the vanishing of an
 off-period block are available in the normalized orientation. -/
 theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
     (hPerQ : ∀ k, IsPeriodic (periodQ k) (Q.basis k))
@@ -304,7 +304,7 @@ This is the normalization step in the corrected forward implication of
 arXiv:1708.00029, Theorem 4.1, lines 743–756, allowing the phases introduced when
 grouping repeated blocks. -/
 theorem weight_norm_eq_one_of_sameMPV₂Pos
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
     (hPerQ : ∀ k, IsPeriodic (periodQ k) (Q.basis k))
@@ -380,7 +380,7 @@ periods produced from the source's two conditions on the blocks, is
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`, section "The
 periods of an irreducible-form block: restriction eliminated". -/
 theorem fundamentalTheorem_periodic_equalCase_irreducibleForm
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))
     (hPerQ : ∀ k, IsSpectrallyPeriodic (periodQ k) (Q.basis k))
@@ -444,13 +444,13 @@ theorem fundamentalTheorem_periodic_equalCase_irreducibleForm
   have hXQmul' : XQ' * XQ = 1 := by rw [hXQdef, hXQ'def]; simp
   have hPconj : ∀ i : Fin d,
       (P.replaceBasis basisP).toTensor i = XP * P.toTensor i * XP' :=
-    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (d := d) P.flatWeight
+    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (α := Fin d) P.flatWeight
       P.flatBasis (P.replaceBasis basisP).flatBasis
       (matched_block_gauge (Q := P) XPb)
       (fun s i => hXPb (P.flatIndexEquiv.symm s).1 i)
   have hQconj : ∀ i : Fin d,
       (Q.replaceBasis basisQ).toTensor i = XQ * Q.toTensor i * XQ' :=
-    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (d := d) Q.flatWeight
+    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (α := Fin d) Q.flatWeight
       Q.flatBasis (Q.replaceBasis basisQ).flatBasis
       (matched_block_gauge (Q := Q) XQb)
       (fun s i => hXQb (Q.flatIndexEquiv.symm s).1 i)
@@ -598,7 +598,7 @@ periods of matched blocks.
 Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623, over the
 irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582. -/
 theorem fundamentalTheorem_periodic_proportional_irreducibleForm
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (hIrrP : ∀ j, Kraus.IsIrreducibleFamily (P.basis j))
     (hRadP : ∀ j,
       spectralRadius ℂ
@@ -641,7 +641,7 @@ periods.
 Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 643--693, over the
 irreducible forms `eq:bdnr`, line 294, and `eq:Bbdnr`, line 582. -/
 theorem fundamentalTheorem_periodic_equalCase_derivedPeriods
-    (P Q : SectorDecomposition d)
+    (P Q : SectorDecomposition (Fin d))
     (hIrrP : ∀ j, Kraus.IsIrreducibleFamily (P.basis j))
     (hRadP : ∀ j,
       spectralRadius ℂ

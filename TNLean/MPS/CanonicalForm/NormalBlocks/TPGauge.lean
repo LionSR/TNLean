@@ -161,15 +161,15 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
 private theorem isIrreducibleAction_gaugeEquiv
     {D : ℕ} {A B : MPSTensor d D}
     (hGauge : GaugeEquiv (α := Fin d) (β := Fin D) A B)
-    (hIrr : Matrix.IsIrreducibleAction (d := d) (D := D) A) :
-    Matrix.IsIrreducibleAction (d := d) (D := D) B := by
+    (hIrr : Matrix.IsIrreducibleAction (ι := Fin d) (D := D) A) :
+    Matrix.IsIrreducibleAction (ι := Fin d) (D := D) B := by
   classical
   rcases hGauge with ⟨X, hX⟩
   let T : (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) :=
     (Matrix.GeneralLinearGroup.toLin X).toLinearEquiv
   intro W hW
   let W' : Submodule ℂ (Fin D → ℂ) := W.map T.symm.toLinearMap
-  have hW' : Matrix.IsInvariantSubmodule (d := d) (D := D) A W' := by
+  have hW' : Matrix.IsInvariantSubmodule (ι := Fin d) (D := D) A W' := by
     intro i v hv
     rcases (Submodule.mem_map).1 hv with ⟨u, huW, rfl⟩
     refine (Submodule.mem_map).2 ?_
@@ -247,13 +247,13 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
       Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) (fun i => c • A i) :=
     isIrreducibleFamily_smul (D := D) hc_ne A hIrr
   have hActionScaled :
-      Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
+      Matrix.IsIrreducibleAction (ι := Fin d) (D := D) (fun i => c • A i) :=
     Kraus.isIrreducibleAction_of_isIrreducibleFamily
       (d := d) (D := D) (fun i => c • A i) hIrr_scaled
-  have hActionB : Matrix.IsIrreducibleAction (d := d) (D := D) B :=
+  have hActionB : Matrix.IsIrreducibleAction (ι := Fin d) (D := D) B :=
     isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
   have hIrrB : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleAction (d := d) (D := D) B hActionB
+    Kraus.isIrreducibleFamily_of_isIrreducibleAction (ι := Fin d) (D := D) B hActionB
   have hB_unital_map : Kraus.transferMap (ι := Fin d) (n := Fin D) B 1 = 1 := by
     simpa [Kraus.transferMap_apply, Matrix.mul_one] using hB_unital
   have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩

@@ -26,7 +26,7 @@ open Matrix
 
 namespace MPSTensor.IsBNTCanonicalForm
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 private theorem exists_basisFixedPoint (h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
     ∃ σ : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ,

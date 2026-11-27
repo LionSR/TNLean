@@ -47,7 +47,7 @@ theorem reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow
     M.reducedBlockState N L hL u v =
       (mpo M N).trace⁻¹ *
         Matrix.trace
-          (M.evalWord (List.ofFn u) (List.ofFn v) * M.physTraceTransfer ^ (N - L)) := by
+          (M.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer M ^ (N - L)) := by
   rw [MPOTensor.reducedBlockState_eq_sum]
   simp only [normalizedMPO, Matrix.smul_apply, smul_eq_mul, mpo_apply, mpoMatrixEntry]
   rw [← Finset.mul_sum]
@@ -86,19 +86,19 @@ theorem reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
     reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow]
   rw [show N + 2 - N = 2 by omega, show N + 1 - N = 1 by omega, pow_one]
   obtain ⟨hE0, lam, hlam, hsq⟩ := hZCL
-  have hsq' : M.physTraceTransfer ^ 2 = (lam : ℂ) • M.physTraceTransfer := by
+  have hsq' : physTraceTransfer M ^ 2 = (lam : ℂ) • physTraceTransfer M := by
     rw [pow_two, hsq]
   have hnum :
       Matrix.trace
-          (M.evalWord (List.ofFn u) (List.ofFn v) * M.physTraceTransfer ^ 2) =
+          (M.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer M ^ 2) =
         (lam : ℂ) *
-          Matrix.trace (M.evalWord (List.ofFn u) (List.ofFn v) * M.physTraceTransfer) := by
+          Matrix.trace (M.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer M) := by
     rw [hsq', Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
-  have hsplit : M.physTraceTransfer ^ (N + 2) =
-      M.physTraceTransfer ^ N * M.physTraceTransfer ^ 2 := by
+  have hsplit : physTraceTransfer M ^ (N + 2) =
+      physTraceTransfer M ^ N * physTraceTransfer M ^ 2 := by
     rw [pow_add]
-  have hpow : M.physTraceTransfer ^ (N + 2) =
-      (lam : ℂ) • M.physTraceTransfer ^ (N + 1) := by
+  have hpow : physTraceTransfer M ^ (N + 2) =
+      (lam : ℂ) • physTraceTransfer M ^ (N + 1) := by
     rw [hsplit, hsq', Matrix.mul_smul, ← pow_succ]
   have htrace : (mpo M (N + 2)).trace =
       (lam : ℂ) * (mpo M (N + 1)).trace := by

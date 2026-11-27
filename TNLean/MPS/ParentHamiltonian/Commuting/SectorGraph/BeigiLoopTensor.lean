@@ -572,7 +572,7 @@ whole parent ground space at every length greater than two.
 Source: CPSV16, Definition 3.9 and Theorem 3.10, source lines 517--540;
 Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_hasBNTSectorData
-    {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
+    {P : SectorDecomposition (Fin d)} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis)
     {N : ℕ} (hN : 2 < N) :

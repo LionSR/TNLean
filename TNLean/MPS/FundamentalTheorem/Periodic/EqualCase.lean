@@ -63,7 +63,7 @@ In the intended application they are the unit-modulus scalars of the
 repeated-block relation, supplied by
 `HetRepeatedBlocks.exists_unit_phase_power_mpv`. -/
 theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (periodP : Fin P.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
@@ -162,7 +162,7 @@ matrix holds against the *rescaled* multiplicities, and the rescaling factor is
 in general different from one even when the period is one, as the block pair
 `B = e^{iθ} A` with period one shows. -/
 theorem equalCase_blockwise_zgauge
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (periodP : Fin P.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
