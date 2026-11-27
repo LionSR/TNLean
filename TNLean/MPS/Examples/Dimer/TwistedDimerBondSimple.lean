@@ -145,7 +145,7 @@ lemma sigmaDimerBasis_trace_physTransfer :
     Matrix.trace (physTraceTransfer sigmaDimerBasis) = sigmaDimerNormalizingScalar := by
   have ht : Matrix.trace (physTraceTransfer sigmaDimer) = 1 := by
     have h := trace_mpo_sigmaDimer (N := 1) (by decide)
-    rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer,
+    rw [trace_mpo_eq_trace_physTraceTransfer_pow,
       pow_one] at h
     exact h
   have he : physTraceTransfer sigmaDimerBasis =

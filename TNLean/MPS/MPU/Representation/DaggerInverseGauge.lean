@@ -232,8 +232,8 @@ private theorem exists_unitaryConj_of_gaugeEquiv_of_smul_leftCanonical
       X 1 one_ne_zero (fun i ↦ hcGauge (e i))
       ((Kraus.isTP_reindexPhysical_iff e _).2 hAleft)
       ((Kraus.isTP_reindexPhysical_iff e _).2 hBleft)
-      ((MPSTensor.isIrreducibleFamily_reindexPhysical_equiv e _).2 hAc_irr)
-      ((MPSTensor.isIrreducibleFamily_reindexPhysical_equiv e _).2 hBc_irr)
+      ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).2 hAc_irr)
+      ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).2 hBc_irr)
   refine ⟨U, fun i ↦ ?_⟩
   have hi : c • B i = c • ((U : Matrix (Fin D) (Fin D) ℂ) * A i *
       (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by

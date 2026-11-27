@@ -234,7 +234,7 @@ per-representative assertion of Theorem 4.9, condition (iv), lines
 theorem trace_mpo_eq_one (H : NeighboringTraceFactorization F)
     {N : ℕ} (hN : 0 < N) :
     Matrix.trace (mpo K N) = 1 := by
-  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer]
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow]
   exact H.trace_physTraceTransfer_pow_eq_one hN
 
 end NeighboringTraceFactorization
