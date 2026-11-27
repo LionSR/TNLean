@@ -64,11 +64,11 @@ theorem isInjective_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : �
       exact ⟨e.symm i, by simp [Kraus.reindexPhysical]⟩
   simp [Kraus.IsInjective, hRange]
 
-/-- Reindexing by a physical-index equivalence preserves normality: the words of each length
-range over the same matrices. -/
-theorem isNormal_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
-    (A : MPTensor α₂ (Fin D)) :
-    Kraus.IsNormal (Kraus.reindexPhysical e A) ↔ Kraus.IsNormal A := by
+/-- Reindexing by a physical-index equivalence preserves block injectivity at every length: the
+words of each length range over the same matrices. -/
+theorem isNBlkInjective_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
+    (A : MPTensor α₂ (Fin D)) (L : ℕ) :
+    Kraus.IsNBlkInjective (Kraus.reindexPhysical e A) L ↔ Kraus.IsNBlkInjective A L := by
   have hr : ∀ N : ℕ, Set.range (fun σ : Fin N → α₁ ↦
       Kraus.evalWord (Kraus.reindexPhysical e A) (List.ofFn σ)) =
       Set.range (fun σ : Fin N → α₂ ↦ Kraus.evalWord A (List.ofFn σ)) := by
@@ -81,7 +81,13 @@ theorem isNormal_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α�
     · rintro ⟨σ, rfl⟩
       exact ⟨fun i ↦ e.symm (σ i), by
         simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
-  simp only [Kraus.IsNormal, Kraus.IsNBlkInjective, Kraus.wordSpan, hr]
+  simp only [Kraus.IsNBlkInjective, Kraus.wordSpan, hr]
+
+/-- Reindexing by a physical-index equivalence preserves normality. -/
+theorem isNormal_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
+    (A : MPTensor α₂ (Fin D)) :
+    Kraus.IsNormal (Kraus.reindexPhysical e A) ↔ Kraus.IsNormal A := by
+  simp only [Kraus.IsNormal, isNBlkInjective_reindexPhysical_equiv]
 
 /-- Reindexing both tensors by a physical-index equivalence preserves gauge-phase equivalence. -/
 theorem gaugePhaseEquiv_reindexPhysical_equiv {α₁ α₂ : Type*} {D : ℕ}

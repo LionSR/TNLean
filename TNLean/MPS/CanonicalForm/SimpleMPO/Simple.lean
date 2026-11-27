@@ -59,32 +59,6 @@ theorem IsBNTSectorPresentation.reindexPhysical {α α' : Type*} [Fintype α] [F
 
 end MPSTensor
 
-namespace MPSTensor.IsLeftCanonicalBNTPresentation
-
-/-- Every representative of a BNT canonical form is a normal tensor.
-
-The physical alphabet is relabelled by `Fin (Fintype.card α)`, on which irreducibility,
-left-canonicality and normalized self-overlap give normality.
-
-Source: arXiv:1606.00608, lines 224--235 and 271--274; the period-one characterization is the
-non-periodic canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
-theorem basis_isNormalTensor {α : Type*} [Fintype α] {S : SectorDecomposition α}
-    (hCF : IsLeftCanonicalBNTPresentation S) (j : Fin S.basisCount) :
-    MPTensor.IsNormalTensor (S.basis j) := by
-  classical
-  let f : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
-  have hCF' := SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF f
-  let _ : NeZero ((S.reindexPhysical f).basisDim j) := ⟨(hCF'.basis_dim_pos j).ne'⟩
-  have h := (isNormalTensor_of_isNormal_leftCanonical ((S.reindexPhysical f).basis j)
-    (hCF'.basis_isNormal j) (hCF'.basis_left_canonical j)).reindexPhysical f.symm
-  have hback : Kraus.reindexPhysical f.symm ((S.reindexPhysical f).basis j) = S.basis j := by
-    change Kraus.reindexPhysical f.symm (Kraus.reindexPhysical f (S.basis j)) = S.basis j
-    funext i
-    simp [Kraus.reindexPhysical]
-  rwa [hback] at h
-
-end MPSTensor.IsLeftCanonicalBNTPresentation
-
 namespace MPOTensor
 
 variable {d D : ℕ}
@@ -219,7 +193,7 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       simp only [MPTensor.mpv_reindexPhysical]
       exact hSame N hN (fun n => e (σ n))
     · intro j
-      exact hCF'.basis_isNormalTensor j
+      exact hCF'.basis_normal j
   · intro j
     change ¬ IsNilpotent (physTraceTransfer (Kraus.reindexPhysical e (S.basis j)))
     have hTransfer :
