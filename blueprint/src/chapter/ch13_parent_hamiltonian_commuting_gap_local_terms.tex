@@ -131,8 +131,8 @@
 
 \begin{lemma}[Three-site translated local terms]
     \label{thm:local_term_two_three_ax_xb_lifts}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction}
+    \lean{MPSTensor.term_two_three_zero_eq_leftPairLift_parentInteraction}
+    \lean{MPSTensor.term_two_three_one_eq_rightPairLift_parentInteraction}
     \leanok
     \uses{def:overlapping_two_site_supports,def:local_term_parent}
     With $q(A)=1-P_{G_2(A)}$ denoting the canonical two-site parent
@@ -176,7 +176,7 @@
 
 \begin{lemma}[Three-site commutation from overlapping supports]
     \label{thm:local_term_two_three_commute_from_ax_xb}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_commutation}
+    \lean{MPSTensor.term_two_three_zero_one_commute_of_overlapping_two_site_commutation}
     \leanok
     \uses{def:overlapping_two_site_supports,thm:local_term_two_three_ax_xb_lifts}
     Suppose the canonical two-site parent interaction $q(A)=1-P_{G_2(A)}$
@@ -198,7 +198,7 @@
 
 \begin{lemma}[Three-site commutation from two-site representatives]
     \label{thm:local_term_two_three_commute_from_two_site_q}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_projectors}
+    \lean{MPSTensor.term_two_three_zero_one_commute_of_overlapping_two_site_projectors}
     \leanok
     \uses{def:overlapping_two_site_supports,thm:local_term_two_three_ax_xb_lifts}
     Let $Q_{AX}$ and $Q_{XB}$ be two-site projectors whose lifted $AX$ and
@@ -224,7 +224,7 @@
 
 \begin{lemma}[Three-site commutation from source projectors]
     \label{thm:local_term_two_three_commute_from_source_q}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2}
+    \lean{MPSTensor.term_two_three_zero_one_commute_of_appendixD2}
     \leanok
     \uses{def:overlapping_two_site_supports,thm:local_term_two_three_ax_xb_lifts}
     Suppose the projectors $Q_{AX}$ and $Q_{XB}$ satisfy the
@@ -247,8 +247,8 @@
 
 \begin{lemma}[Three-site commutation from complementary Appendix projectors]
     \label{thm:local_term_two_three_commute_from_complement_ax_xb}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_complement}
-    \lean{MPSTensor.parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2_complement}
+    \lean{MPSTensor.term_two_three_zero_one_commute_of_overlapping_two_site_complement}
+    \lean{MPSTensor.term_two_three_zero_one_commute_of_appendixD2_complement}
     \leanok
     \uses{def:overlapping_two_site_supports,thm:local_term_two_three_ax_xb_lifts}
     Suppose the Appendix~D.2 projectors $Q_{AX}$ and $Q_{XB}$ satisfy the

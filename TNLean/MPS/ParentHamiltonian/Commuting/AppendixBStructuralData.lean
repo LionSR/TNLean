@@ -410,11 +410,11 @@ theorem
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift
+theorem AppendixBStructuralData.term_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) =
       leftPairLift hStruct.appendixBQAXOnCoeffSpace := by
-  rw [parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction,
+  rw [term_two_three_zero_eq_leftPairLift_parentInteraction,
     hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
 
 /-- On a three-site window, the second translated length-two parent term is the
@@ -423,11 +423,11 @@ theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_eq_app
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.parentRingInteraction_term_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift
+theorem AppendixBStructuralData.term_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       rightPairLift hStruct.appendixBQAXOnCoeffSpace := by
-  rw [parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction,
+  rw [term_two_three_one_eq_rightPairLift_parentInteraction,
     hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
 
 /-- The algebraic overlapping condition for the Appendix B two-site coefficient
@@ -441,7 +441,7 @@ Appendix B basic-vector form.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping
+theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_overlapping
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (h : HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
       hStruct.appendixBQAXOnCoeffSpace) :
@@ -449,8 +449,8 @@ theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_co
         Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
           Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) := by
-  rw [hStruct.parentRingInteraction_term_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift,
-    hStruct.parentRingInteraction_term_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift]
+  rw [hStruct.term_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift,
+    hStruct.term_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift]
   exact h.commute_lifts
 
 /-- If the lifted Appendix B \(AX\) and \(XB\) coefficient representatives
@@ -462,7 +462,7 @@ statements and the supplied Definition D.2 lifted commutator.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_commute_lifts
+theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_commute_lifts
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (hcomm :
       leftPairLift hStruct.appendixBQAXOnCoeffSpace *
@@ -473,7 +473,7 @@ theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_co
         Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
           Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) :=
-  hStruct.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping
+  hStruct.term_two_three_zero_one_commute_of_overlapping
     (hStruct.hasOverlappingTwoSiteCommutation_of_commute_lifts hcomm)
 
 /-- A supplied Definition D.2-shaped condition on the Appendix B \(AX\) and
@@ -489,7 +489,7 @@ projectors remains a separate hypothesis.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2
+theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_appendixD2
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     {KAXB : Submodule ℂ (NSiteSpace d 3)}
     (hD2 : HasAppendixD2ParentCommutingHamiltonian
@@ -498,7 +498,7 @@ theorem AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_co
         Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
           Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) :=
-  hStruct.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping hD2.toHasOverlappingTwoSiteCommutation
+  hStruct.term_two_three_zero_one_commute_of_overlapping hD2.toHasOverlappingTwoSiteCommutation
 
 /-- A Definition D.2 projector pair gives commutation of the first two
 translated length-two parent terms, once the source projectors are transported
@@ -510,7 +510,7 @@ construct \(Q_{AX}\) and \(Q_{XB}\) from the Appendix B basic-vector form.
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem
-    AppendixBStructuralData.parentRingInteraction_term_two_three_zero_one_commute_of_appendixD2_identified_projectors
+    AppendixBStructuralData.term_two_three_zero_one_commute_of_appendixD2_identified_projectors
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     {KAXB : Submodule ℂ (NSiteSpace d 3)}
     {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
@@ -521,7 +521,7 @@ theorem
         Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
           Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) :=
-  hStruct.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping
+  hStruct.term_two_three_zero_one_commute_of_overlapping
     (hStruct.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors
       hD2 hAX hXB)
 

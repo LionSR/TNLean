@@ -302,8 +302,8 @@ theorem isNNCPH_of_pairLift_groundSpaceFrame {A : MPSTensor d D} {c : ℝ} (hc :
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
           Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) := by
-    rw [parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction,
-      parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction,
+    rw [term_two_three_zero_eq_leftPairLift_parentInteraction,
+      term_two_three_one_eq_rightPairLift_parentInteraction,
       parentInteraction_eq_one_sub_smul_groundSpaceFrame hc h, leftPairLift_one_sub,
       rightPairLift_one_sub, leftPairLift_smul, rightPairLift_smul]
     set k := ((c : ℂ)⁻¹)

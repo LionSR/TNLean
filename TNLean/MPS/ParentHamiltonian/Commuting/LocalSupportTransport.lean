@@ -88,8 +88,8 @@ theorem groundSpace_three_eq_adjacent_twoSite_parent_kernels
         LinearMap.ker (rightPairLift (parentInteraction A 2)) := by
   ext v
   rw [Submodule.mem_inf, LinearMap.mem_ker, LinearMap.mem_ker]
-  rw [← parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction]
-  rw [← parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction]
+  rw [← term_two_three_zero_eq_leftPairLift_parentInteraction]
+  rw [← term_two_three_one_eq_rightPairLift_parentInteraction]
   exact (adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
     hA (by omega : 1 < 2)).symm
 
@@ -233,7 +233,8 @@ theorem cyclicRestrictₗ_three_parentRingInteraction_term_left
   ext σ
   simp only [cyclicRestrictₗ_apply]
   rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 N (by omega) i]
-  rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by omega) (0 : Fin 3)]
+  rw [Matrix.toLin'_apply,
+    parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by omega) (0 : Fin 3)]
   change parentInteraction A 2
       (fun α => ψ (replaceWindow 2 (by omega) i
         (replaceWindow 3 hN i τ σ) α))
@@ -269,8 +270,10 @@ theorem cyclicRestrictₗ_three_parentRingInteraction_term_right
   have : NeZero N := ⟨by omega⟩
   ext σ
   simp only [cyclicRestrictₗ_apply]
-  rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 N (by omega) (cyclicForwardSite i 1)]
-  rw [Matrix.toLin'_apply, parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by omega) (1 : Fin 3)]
+  rw [Matrix.toLin'_apply,
+    parentRingInteraction_term_mulVec_apply_of_le A 2 N (by omega) (cyclicForwardSite i 1)]
+  rw [Matrix.toLin'_apply,
+    parentRingInteraction_term_mulVec_apply_of_le A 2 3 (by omega) (1 : Fin 3)]
   change parentInteraction A 2
       (fun β => ψ (replaceWindow 2 (by omega) (cyclicForwardSite i 1)
         (replaceWindow 3 hN i τ σ) β))
@@ -396,7 +399,8 @@ private theorem cyclicRestrictES_three_parentRingInteraction_term_left
       Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0)
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
   have : NeZero N := ⟨by omega⟩
-  have h := cyclicRestrictₗ_three_parentRingInteraction_term_left (A := A) hN i τ (WithLp.ofLp v)
+  have h :=
+    cyclicRestrictₗ_three_parentRingInteraction_term_left (A := A) hN i τ (WithLp.ofLp v)
   rw [Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
@@ -410,7 +414,8 @@ private theorem cyclicRestrictES_three_parentRingInteraction_term_right
       Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1)
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
   have : NeZero N := ⟨by omega⟩
-  have h := cyclicRestrictₗ_three_parentRingInteraction_term_right (A := A) hN i τ (WithLp.ofLp v)
+  have h :=
+    cyclicRestrictₗ_three_parentRingInteraction_term_right (A := A) hN i τ (WithLp.ofLp v)
   rw [Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 

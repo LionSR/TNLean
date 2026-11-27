@@ -551,13 +551,13 @@ on the three-site chain.
 
 Source: arXiv:1606.00608, Definition 3.9, lines 517--524, Theorem 3.10, lines
 534--541, and Appendix B, lines 1305--1307. -/
-theorem parentRingInteraction_term_two_three_zero_one_commute
+theorem term_two_three_zero_one_commute
     (h : ResidualFamilyAppendixBData B) :
     Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (0 : Fin 3)) *
         Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (1 : Fin 3)) *
         Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 3).term (0 : Fin 3)) :=
-  parentRingInteraction_term_two_three_zero_one_commute_of_overlapping_two_site_commutation
+  term_two_three_zero_one_commute_of_overlapping_two_site_commutation
     (directSumTensor B) h.hasOverlappingTwoSiteCommutation
 
 /-- The residual-family form gives adjacent two-site commutation on every
@@ -575,7 +575,7 @@ theorem adjacent_twoSite_parentRingInteraction_terms_commute
           ((parentRingInteraction (directSumTensor B) 2 N).term (cyclicForwardSite i 1)) *
         Matrix.toLin' ((parentRingInteraction (directSumTensor B) 2 N).term i) :=
   parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute
-    h.parentRingInteraction_term_two_three_zero_one_commute (by omega) i
+    h.term_two_three_zero_one_commute (by omega) i
 
 /-- Simultaneous Appendix B data supplies the nearest-neighbor commuting
 parent Hamiltonian on every periodic chain of length greater than two.

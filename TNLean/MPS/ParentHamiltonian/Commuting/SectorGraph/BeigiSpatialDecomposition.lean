@@ -127,8 +127,8 @@ theorem IsNNCPH.twoSiteParentInteractionMatrix_overlappingLifts_commute
       Matrix.rightOverlappingLift (twoSiteParentInteractionMatrix A) *
         Matrix.leftOverlappingLift (twoSiteParentInteractionMatrix A) := by
   have hComm := hNNCPH (0 : Fin 3) (1 : Fin 3)
-  rw [parentRingInteraction_term_two_three_zero_eq_leftPairLift_parentInteraction,
-    parentRingInteraction_term_two_three_one_eq_rightPairLift_parentInteraction] at hComm
+  rw [term_two_three_zero_eq_leftPairLift_parentInteraction,
+    term_two_three_one_eq_rightPairLift_parentInteraction] at hComm
   have hMatrix := congrArg LinearMap.toMatrix' hComm
   simp only [LinearMap.toMatrix'_mul] at hMatrix
   let e := threeSiteParentInteractionEquiv (Fin d)

@@ -1509,10 +1509,9 @@ The following notions use different transfer objects and are not interchangeable
   chain ground space for `0 < N`, `L ≤ N`
   (`ManyBody.Interaction.zeroSpace_eq_groundSpace` for the positive terms
   `MPSTensor.posSemidef_parentRingInteraction_term`);
-  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker`,
-  `MPSTensor.localTerm_eq_toLin'_term`, `MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian`
-  and `MPSTensor.parentHamiltonian_eq_sum_localTerm` relate the linear-map forms
-  `MPSTensor.localTerm` and `MPSTensor.parentHamiltonian`.
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker` reads the ground
+  space in the function space `NSiteSpace d N`, where the terms and the Hamiltonian act as
+  `Matrix.toLin'` of the matrices; there is no separate linear-map definition.
 - **Caveat:** for `L > N` the terms are `0` by convention and the zero space is
   the whole space.
 

@@ -89,7 +89,7 @@ theorem AppendixBStructuralData.adjacent_twoSite_parentRingInteraction_terms_com
       Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) *
           Matrix.toLin' ((parentRingInteraction A 2 N).term i) :=
   parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute
-    (hStruct.parentRingInteraction_term_two_three_zero_one_commute_of_overlapping
+    (hStruct.term_two_three_zero_one_commute_of_overlapping
       hStruct.hasOverlappingTwoSiteCommutation)
     (by omega) i
 
