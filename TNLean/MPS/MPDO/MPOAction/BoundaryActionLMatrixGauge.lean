@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryActionLMatrix
 import TNLean.MPS.Operator.Fusion.BoundaryFusionFMatrix
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Gauge transformations of the multiplicity L and F matrices
@@ -313,7 +314,7 @@ transposed inverses. Source: GLM23, `REsubmission.tex`, lines 415--422 and
 593--605. -/
 theorem exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective
     {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+    (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
@@ -358,7 +359,8 @@ theorem exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective
               (↑(Y a f d)⁻¹ : Matrix (Fin (N a f d)) (Fin (N a f d)) ℂ) sig' sig *
               fusionFMatrix VF WF a b c d ⟨e, mu', nu'⟩ ⟨f, lam', sig'⟩) := by
   choose Y hYV hYW using fun a b ↦
-    (hF a b).exists_multiplicityGauge_eq_of_isInjective (hF' a b) hInjO hχ hneO
+    (hF a b).exists_multiplicityGauge_eq_of_isInjective (hF' a b)
+      (fun a ↦ (isInjective_toMPSTensor_iff _).2 (hInjO a)) hχ hneO
   choose X hXV hXW using fun a x ↦
     (hA a x).exists_multiplicityGauge_eq_of_isInjective (hA' a x) hInjA hD hneA
   refine ⟨X, Y, fun a b c x y z i j k μ ↦ ?_, fun a b c d e f mu nu lam sig ↦ ?_⟩

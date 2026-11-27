@@ -116,27 +116,25 @@ theorem mulTensor_statePhysicalPadding_statePhysicalPadding
 
 /-- Retaining every original operator letter preserves injectivity. -/
 theorem isInjective_operatorPhysicalPadding {O : MPOTensor d D}
-    (hO : Kraus.IsInjective O.toMPSTensor) :
-    Kraus.IsInjective (operatorPhysicalPadding O).toMPSTensor := by
+    (hO : Kraus.IsInjective O) :
+    Kraus.IsInjective (operatorPhysicalPadding O) := by
   unfold Kraus.IsInjective
   apply top_unique
   rw [← hO.span_eq_top]
   apply Submodule.span_mono
   rintro X ⟨q, rfl⟩
-  refine ⟨finProdFinEquiv (q.divNat.castSucc, q.modNat.castSucc), ?_⟩
-  simp [toMPSTensor]
+  exact ⟨(q.1.castSucc, q.2.castSucc), by simp⟩
 
 /-- Retaining every original state letter preserves injectivity. -/
 theorem isInjective_statePhysicalPadding {A : MPSTensor d D}
     (hA : Kraus.IsInjective A) :
-    Kraus.IsInjective (statePhysicalPadding A).toMPSTensor := by
+    Kraus.IsInjective (statePhysicalPadding A) := by
   unfold Kraus.IsInjective
   apply top_unique
   rw [← hA.span_eq_top]
   apply Submodule.span_mono
   rintro X ⟨i, rfl⟩
-  refine ⟨finProdFinEquiv (i.castSucc, Fin.last d), ?_⟩
-  simp [toMPSTensor]
+  exact ⟨(i.castSucc, Fin.last d), by simp⟩
 
 end MPOTensor
 
