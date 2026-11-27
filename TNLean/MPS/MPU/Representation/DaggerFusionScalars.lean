@@ -103,7 +103,8 @@ end MPSTensor
 
 namespace MPTensor.IsDressedProportional
 
-variable {d D m : ℕ} {B : MPSTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
+variable {α : Type*} [Fintype α] {D m : ℕ} {B : MPTensor α (Fin D)}
+  {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
 /-- Entrywise complex conjugation of the tensor and both boundaries conjugates
 the scalar of a dressed proportionality. -/
@@ -118,7 +119,7 @@ theorem mapStar (h : IsDressedProportional B X Y z) :
   simp only [Matrix.map_apply, Matrix.smul_apply, smul_eq_mul, map_mul]
 
 /-- Relabelling the physical alphabet preserves a dressed proportionality. -/
-theorem reindexPhysical {d' : ℕ} (h : IsDressedProportional B X Y z) (f : Fin d' → Fin d) :
+theorem reindexPhysical {α' : Type*} (h : IsDressedProportional B X Y z) (f : α' → α) :
     IsDressedProportional (Kraus.reindexPhysical f B) X Y z := by
   obtain ⟨N, h⟩ := h
   exact ⟨N, fun w hw ↦ by
@@ -126,16 +127,16 @@ theorem reindexPhysical {d' : ℕ} (h : IsDressedProportional B X Y z) (f : Fin 
     exact h _ (by simpa using hw)⟩
 
 /-- **The dagger of a dressed proportionality.** If $X K^w=zYK^w$ for long words
-of the doubled-index tensor of $K$, then
+of $K$ on the pair alphabet, then
 $\overline X(K^\dagger)^w=\overline z\,\overline Y(K^\dagger)^w$ for long words of
 the physical adjoint.  This is the dagger step of the proof of `prop:zetas`,
 arXiv:2502.20257, lines 1662--1677, applied to a boundary-dressed comparison. -/
 theorem physicalAdjointTensor {d D₁ m : ℕ} {K : MPOTensor d D₁}
     {X Y : Matrix (Fin m) (Fin D₁) ℂ} {z : ℂ}
-    (h : IsDressedProportional K.toMPSTensor X Y z) :
-    IsDressedProportional (MPOTensor.physicalAdjointTensor K).toMPSTensor
+    (h : IsDressedProportional K X Y z) :
+    IsDressedProportional (MPOTensor.physicalAdjointTensor K)
       (X.map (starRingEnd ℂ)) (Y.map (starRingEnd ℂ)) (starRingEnd ℂ z) := by
-  rw [MPOTensor.toMPSTensor_physicalAdjointTensor]
+  rw [MPOTensor.physicalAdjointTensor_eq_reindexPhysical_mapStar]
   exact h.mapStar.reindexPhysical _
 
 /-- A dressed proportionality for a tensor with relabelled bond coordinates is
@@ -143,8 +144,8 @@ one for the original tensor, with the permutation matrix absorbed into the
 boundaries. -/
 theorem of_reindexBond_source {d D₂ D₂' m : ℕ} {K : MPOTensor d D₂}
     {X Y : Matrix (Fin m) (Fin D₂') ℂ} {z : ℂ} (e : Fin D₂' ≃ Fin D₂)
-    (h : IsDressedProportional (MPOTensor.reindexBond e K).toMPSTensor X Y z) :
-    IsDressedProportional K.toMPSTensor (X * (e.toPEquiv.toMatrix : Matrix (Fin D₂') (Fin D₂) ℂ))
+    (h : IsDressedProportional (MPOTensor.reindexBond e K) X Y z) :
+    IsDressedProportional K (X * (e.toPEquiv.toMatrix : Matrix (Fin D₂') (Fin D₂) ℂ))
       (Y * (e.toPEquiv.toMatrix : Matrix (Fin D₂') (Fin D₂) ℂ)) z := by
   refine h.of_intertwine (P := e.symm.toPEquiv.toMatrix) ?_ ?_ (fun i ↦ ?_)
   · rw [← PEquiv.toMatrix_trans, ← Equiv.toPEquiv_trans, Equiv.symm_trans_self,
@@ -153,7 +154,7 @@ theorem of_reindexBond_source {d D₂ D₂' m : ℕ} {K : MPOTensor d D₂}
       Equiv.toPEquiv_refl, PEquiv.toMatrix_refl]
   · rw [PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv]
     ext x y
-    simp [MPOTensor.toMPSTensor, MPOTensor.reindexBond]
+    simp [MPOTensor.reindexBond]
 
 end MPTensor.IsDressedProportional
 
@@ -391,25 +392,25 @@ arXiv:2502.20257, lines 1675--1677. -/
 theorem isDressedProportional_daggerBoundary (g h : G)
     {X Y : Matrix (Fin (F.bondDim (h⁻¹ * g⁻¹))) (Fin (F.bondDim h⁻¹ * F.bondDim g⁻¹)) ℂ}
     {z : ℂ} (hXY : MPTensor.IsDressedProportional
-      (mulTensor (F.tensor h⁻¹) (F.tensor g⁻¹)).toMPSTensor X Y z) :
-    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+      (mulTensor (F.tensor h⁻¹) (F.tensor g⁻¹)) X Y z) :
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h))
       (hF.daggerBoundary hc g h X) (hF.daggerBoundary hc g h Y) (starRingEnd ℂ z) := by
   have h₀ := hXY.physicalAdjointTensor
   rw [physicalAdjointTensor_mulTensor] at h₀
   have h₁ := h₀.of_reindexBond_source _
   have h₂ := h₁.of_intertwine
-    (B' := (mulTensor (physicalAdjointTensor (F.tensor g⁻¹)) (F.tensor h)).toMPSTensor)
+    (B' := (mulTensor (physicalAdjointTensor (F.tensor g⁻¹)) (F.tensor h)))
     (P := idKron (F.bondDim g⁻¹) (hF.daggerLegGaugeInv hc h))
     (by rw [idKron_mul, hF.daggerLegGaugeInv_mul, idKron_one])
     (by rw [idKron_mul, hF.daggerLegGauge_mul_inv, idKron_one])
     (fun i ↦ mulTensor_mul_idKron_of_intertwine _
-      (hF.tensor_mul_daggerLegGaugeInv hc h) i.divNat i.modNat)
-  have h₃ := h₂.of_intertwine (B' := (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor)
+      (hF.tensor_mul_daggerLegGaugeInv hc h) i.1 i.2)
+  have h₃ := h₂.of_intertwine (B' := (mulTensor (F.tensor g) (F.tensor h)))
     (P := kronId (hF.daggerLegGaugeInv hc g) (F.bondDim h))
     (by rw [kronId_mul, hF.daggerLegGaugeInv_mul, kronId_one])
     (by rw [kronId_mul, hF.daggerLegGauge_mul_inv, kronId_one])
     (fun i ↦ mulTensor_mul_kronId_of_intertwine _
-      (hF.tensor_mul_daggerLegGaugeInv hc g) i.divNat i.modNat)
+      (hF.tensor_mul_daggerLegGaugeInv hc g) i.1 i.2)
   have h₄ := h₃.mul_left (hF.daggerTargetGauge hc g h)
   simpa only [daggerBoundary, Matrix.mul_assoc] using h₄
 
@@ -433,8 +434,7 @@ theorem daggerFusionV_eq_daggerBoundary (g h : G) :
 noncomputable def dagger : FusionData F where
   V := fd.daggerFusionV hF hc
   W := fd.daggerFusionW hF hc
-  isReduction g h := (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).2
-    (fd.isReduction_daggerFusion hF hc g h)
+  isReduction := fd.isReduction_daggerFusion hF hc
 
 /-- The scalars $\zeta_{g,h}$ of `eq:defzeta` compare the daggered choice of fusion
 tensors with the original one. -/
@@ -541,7 +541,7 @@ theorem daggerZeta_mul_star_daggerZeta_inv (g h : G) :
     (fd.daggerZeta_defzeta hF hc h⁻¹ g⁻¹).1
   rw [fd.daggerBoundary_daggerFusionV hF hc g h, ← fd.daggerFusionV_eq_daggerBoundary] at ht
   have hcomp := ht.trans (fd.daggerZeta_defzeta hF hc g h).1
-  have hscalar : MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+  have hscalar : MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h))
       (c • fd.V g h) (fd.V g h) c :=
     ⟨0, fun w _ ↦ by rw [Matrix.smul_mul]⟩
   have key := hcomp.eq_of_forall_exists_ne_zero hscalar fun N ↦ by

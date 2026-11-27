@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.SpanningSectors.ActiveSectorSpanningCounterexample
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorPruning
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Inverse-map provenance of the four-sector example
@@ -23,17 +24,22 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor.ActiveSectorSpanningCounterexample
 
+/-- Injectivity of the doubled-index view, the form taken by the inverse-tensor
+construction `inverseTensor` and the inverse-map sector tensors. -/
+private lemma tensor_isInjective_toMPSTensor : Kraus.IsInjective tensor.toMPSTensor :=
+  (isInjective_toMPSTensor_iff tensor).2 tensor_isInjective
+
 /-- The diagonal inverse-tensor coefficients reconstruct each virtual matrix
 unit from the four nonzero physical slices.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1413--1428. -/
 private lemma sum_inverseTensor_diagonal (alpha beta : Fin 2) :
     (∑ i : Fin 4,
-        inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, i)) alpha beta •
+        inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv (i, i)) alpha beta •
           sectorMatrix i) = Matrix.single alpha beta (1 : ℂ) := by
   calc
     _ = ∑ q : Fin 4 × Fin 4,
-        inverseTensor tensor tensor_isInjective (finProdFinEquiv q) alpha beta •
+        inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv q) alpha beta •
           tensor.toMPSTensor (finProdFinEquiv q) := by
       rw [Fintype.sum_prod_type]
       apply Finset.sum_congr rfl
@@ -53,11 +59,13 @@ private lemma sum_inverseTensor_diagonal (alpha beta : Fin 2) :
         simp [MPOTensor.toMPSTensor, tensor, hij, hdiv, hmod]
       · simp
     _ = ∑ q : Fin (4 * 4),
-        inverseTensor tensor tensor_isInjective q alpha beta • tensor.toMPSTensor q := by
+        inverseTensor tensor tensor_isInjective_toMPSTensor q alpha beta •
+          tensor.toMPSTensor q := by
       exact (Equiv.sum_comp finProdFinEquiv (fun q =>
-        inverseTensor tensor tensor_isInjective q alpha beta • tensor.toMPSTensor q)).symm
+        inverseTensor tensor tensor_isInjective_toMPSTensor q alpha beta •
+          tensor.toMPSTensor q)).symm
     _ = Matrix.single alpha beta (1 : ℂ) :=
-      inverseTensor_spec tensor tensor_isInjective alpha beta
+      inverseTensor_spec tensor tensor_isInjective_toMPSTensor alpha beta
 
 /-- The four nonzero physical slices form a basis of the virtual matrix
 space, not merely a spanning family.  This is a property of the explicit
@@ -97,13 +105,13 @@ four sector matrices.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 private lemma inverseTensor_diagonal_eq_dualCoefficient (i : Fin 4) :
-    inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, i)) =
+    inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv (i, i)) =
       dualCoefficient i := by
   ext alpha beta
   apply sub_eq_zero.mp
   apply Fintype.linearIndependent_iff.mp sectorMatrix_linearIndependent
     (fun j =>
-      inverseTensor tensor tensor_isInjective (finProdFinEquiv (j, j)) alpha beta -
+      inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv (j, j)) alpha beta -
         dualCoefficient j alpha beta)
   have hinv := sum_inverseTensor_diagonal alpha beta
   have hdual :
@@ -118,7 +126,7 @@ private lemma inverseTensor_diagonal_eq_dualCoefficient (i : Fin 4) :
   rw [Finset.sum_sub_distrib, hinv, hdual, sub_self]
 
 private lemma inverseTensor_diagonal_apply (i : Fin 4) (alpha beta : Fin 2) :
-    inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, i)) alpha beta =
+    inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv (i, i)) alpha beta =
       dualCoefficient i alpha beta :=
   congrFun (congrFun (inverseTensor_diagonal_eq_dualCoefficient i) alpha) beta
 
@@ -375,7 +383,7 @@ factor four in the left inverse contraction.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 lemma sectorTensorL_hayashiData (k : Fin 4) (beta : Fin 2) :
-    sectorTensorL tensor tensor_isInjective hayashiData
+    sectorTensorL tensor tensor_isInjective_toMPSTensor hayashiData
         (normalizedFourSiteTail tensor) 0 0 k beta =
       factorization.leftTensor k beta := by
   ext x y
@@ -383,7 +391,7 @@ lemma sectorTensorL_hayashiData (k : Fin 4) (beta : Fin 2) :
   fin_cases y
   change ((normalizedFourSiteTail tensor 0 0)⁻¹ * (p k : ℂ) *
       (∑ i : Fin 4, ∑ j : Fin 4,
-        inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, j)) 0 beta *
+        inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv (i, j)) 0 beta *
           hayashiLeftDensity k (i, 0) (j, 0))) = leftPairing beta k
   rw [normalizedFourSiteTail_tensor, leftPairing_mul_rightPairing]
   norm_num [p]
@@ -399,13 +407,13 @@ the chosen right sector tensor exactly.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1415--1439. -/
 lemma sectorTensorR_hayashiData (k : Fin 4) (alpha : Fin 2) :
-    sectorTensorR tensor tensor_isInjective hayashiData 0 k alpha =
+    sectorTensorR tensor tensor_isInjective_toMPSTensor hayashiData 0 k alpha =
       factorization.rightTensor k alpha := by
   ext x y
   fin_cases x
   fin_cases y
   change (∑ i : Fin 4, ∑ j : Fin 4,
-      inverseTensor tensor tensor_isInjective (finProdFinEquiv (i, j)) alpha 0 *
+      inverseTensor tensor tensor_isInjective_toMPSTensor (finProdFinEquiv (i, j)) alpha 0 *
         hayashiRightDensity k (0, i) (0, j)) = rightPairing k alpha
   rw [sum_mul_hayashiRightDensity]
   simp_rw [inverseTensor_diagonal_apply]
@@ -426,7 +434,7 @@ sector is removed.
 Source: arXiv:1606.00608, Appendix C.2, lines 1413--1455. -/
 noncomputable def inverseMapFactorization : PhysicalSectorFactorization tensor :=
   zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    tensor tensor_isInjective (normalizedFourSiteTail tensor)
+    tensor tensor_isInjective_toMPSTensor (normalizedFourSiteTail tensor)
       isThreeSiteClosure_threeSiteState hayashiData 0 0
       normalizedFourSiteTail_tensor_zero_zero_ne
 
@@ -440,7 +448,7 @@ lemma inverseMapFactorization_neighboringOperator (k h : Fin 4) :
   unfold inverseMapFactorization
   apply Eq.trans
     (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator
-      tensor tensor_isInjective (normalizedFourSiteTail tensor)
+      tensor tensor_isInjective_toMPSTensor (normalizedFourSiteTail tensor)
       isThreeSiteClosure_threeSiteState hayashiData 0 0
       normalizedFourSiteTail_tensor_zero_zero_ne k h)
   have hk : hayashiData.p k ≠ 0 := by

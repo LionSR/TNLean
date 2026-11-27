@@ -7,7 +7,7 @@ import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.Operator.Periodic.BondSimilarity
 import TNLean.MPS.Operator.Boundary.Boundary
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Arbitrary-boundary adjoints from normal periodic dual blocks
@@ -105,15 +105,11 @@ theorem bondDim_dual (h : IsPeriodicAdjointFamily A dual)
   let : ∀ a, NeZero (dim a) := fun a ↦ ⟨Nat.ne_of_gt (hDim a)⟩
   obtain ⟨V₁, W₁, h₁⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
-      (A (dual a)).toMPSTensor (physicalAdjointTensor (A a)).toMPSTensor
-      ((isNormal_toMPSTensor_iff _).2 (hNormal (dual a)))
-      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (h.sameMPV₂Pos a))
+      (A (dual a)) (physicalAdjointTensor (A a)) (hNormal (dual a)) (h.sameMPV₂Pos a)
   obtain ⟨V₂, W₂, h₂⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
-      (A (dual (dual a))).toMPSTensor
-      (physicalAdjointTensor (A (dual a))).toMPSTensor
-      ((isNormal_toMPSTensor_iff _).2 (hNormal (dual (dual a))))
-      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (h.sameMPV₂Pos (dual a)))
+      (A (dual (dual a))) (physicalAdjointTensor (A (dual a)))
+      (hNormal (dual (dual a))) (h.sameMPV₂Pos (dual a))
   exact Nat.le_antisymm (by simpa only [hdual a] using h₂.bondDim_le) h₁.bondDim_le
 
 /-- The normal-target reduction becomes a two-sided similarity. It gives
@@ -136,15 +132,13 @@ theorem exists_boundaryGauge (h : IsPeriodicAdjointFamily A dual)
   let : NeZero (dim (dual a)) := ⟨Nat.ne_of_gt (hDim (dual a))⟩
   obtain ⟨V, W, hred⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
-      (A (dual a)).toMPSTensor (physicalAdjointTensor (A a)).toMPSTensor
-      ((isNormal_toMPSTensor_iff _).2 (hNormal (dual a)))
-      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (h.sameMPV₂Pos a))
+      (A (dual a)) (physicalAdjointTensor (A a)) (hNormal (dual a)) (h.sameMPV₂Pos a)
   have hWV : W * V = 1 :=
     (Matrix.mul_eq_one_comm_of_equiv
       (finCongr (h.bondDim_dual hdual hNormal hDim a).symm)).mp hred.mul_eq_one
   have hletter (i j : Fin d) :
       V * physicalAdjointTensor (A a) (i, j) * W = A (dual a) (i, j) := by
-    simpa [toMPSTensor] using hred.evalWord [finProdFinEquiv (i, j)]
+    simpa using hred.evalWord [(i, j)]
   refine ⟨V, W, hred.mul_eq_one, hWV, ?_, ?_⟩
   · intro i j
     rw [← hletter i j]

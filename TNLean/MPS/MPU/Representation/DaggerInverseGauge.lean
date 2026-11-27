@@ -286,17 +286,18 @@ theorem IsRepresentation.exists_daggerInverseGauge [Group G]
           (F.tensor g⁻¹).toMPSTensor i)
     rw [← reindex_smul]
     exact leftCanonical_reindex (hF.bondDim_inv F g).symm
-      (F.tensor g⁻¹).normalizedFlattening (hcanonical g⁻¹)
+      (Kraus.reindexPhysical finProdFinEquiv.symm (F.tensor g⁻¹).normalizedFlattening)
+      ((Kraus.isTP_reindexPhysical_iff _ _).2 (hcanonical g⁻¹))
   have hBcanonical : MPTensor.IsLeftCanonical
       (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening := by
     rw [MPOTensor.normalizedFlattening_physicalAdjointTensor]
     exact (Kraus.isTP_reindexPhysical_iff
-      (MPOTensor.physicalPairSwapEquiv d) _).2 ((hcanonical g).mapStar)
+      (Equiv.prodComm (Fin d) (Fin d)) _).2 ((hcanonical g).mapStar)
   have hBleft : MPTensor.IsLeftCanonical
       (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • B i) := by
-    change MPTensor.IsLeftCanonical
-      (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening
-    exact hBcanonical
+    change MPTensor.IsLeftCanonical (Kraus.reindexPhysical finProdFinEquiv.symm
+      (MPOTensor.physicalAdjointTensor (F.tensor g)).normalizedFlattening)
+    exact (Kraus.isTP_reindexPhysical_iff _ _).2 hBcanonical
   obtain ⟨U, hU⟩ :=
     exists_unitaryConj_of_gaugeEquiv_of_smul_leftCanonical
       hc hA hGauge hAleft hBleft

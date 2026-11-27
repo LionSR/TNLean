@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.FusionTensors
 import QICLean.Kraus.Word
-import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The virtual support projector of the periodic group construction
@@ -244,18 +244,13 @@ theorem evalWord_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G)
     (w : List (Fin n × Fin n)) (hw : w ≠ []) :
     Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w * fusionProjector e h =
       Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w := by
-  have hfin : Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
-      (w.map finProdFinEquiv) * fusionProjector e h =
-      Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
-        (w.map finProdFinEquiv) := by
-    rw [← fusionW_mul_fusionV e ω g h]
-    apply Kraus.evalWord_mul_of_right_absorb
-      (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
-      (fusionV e ω g h) (fusionW e ω g h) _ _ (by simpa using hw)
-    intro ij
-    rw [fusionW_mul_fusionV]
-    exact mulTensor_mul_fusionProjector e ω g h ij.divNat ij.modNat
-  rwa [evalWord_toMPSTensor, List.map_map, Equiv.symm_comp_self, List.map_id] at hfin
+  rw [← fusionW_mul_fusionV e ω g h]
+  apply Kraus.evalWord_mul_of_right_absorb
+    (mulTensor (tensor e ω g) (tensor e ω h))
+    (fusionV e ω g h) (fusionW e ω g h) _ w hw
+  intro ij
+  rw [fusionW_mul_fusionV]
+  exact mulTensor_mul_fusionProjector e ω g h ij.1 ij.2
 
 /-- Closing a nonempty chain makes the projector act as the identity: inserting it at the
 cut leaves every periodic coefficient unchanged.

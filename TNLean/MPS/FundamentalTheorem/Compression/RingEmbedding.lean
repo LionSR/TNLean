@@ -54,19 +54,19 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d D D₁ D₂ : ℕ}
+variable {R : Type*} [CommRing R] (f : R →+* ℂ) {α : Type*} {d D D₁ D₂ : ℕ}
 
 /-! ### Word evaluation -/
 
 /-- Word evaluation of a tensor over a commutative ring, `A^{i₁} ⋯ A^{iₙ}`, matching
 `Kraus.evalWord`. -/
-def evalWordR (A : Fin d → Matrix (Fin D) (Fin D) R) :
-    List (Fin d) → Matrix (Fin D) (Fin D) R
+def evalWordR (A : α → Matrix (Fin D) (Fin D) R) :
+    List α → Matrix (Fin D) (Fin D) R
   | [] => 1
   | i :: w => A i * evalWordR A w
 
 /-- Word evaluation commutes with the entrywise image. -/
-theorem evalWord_complexOfRing (A : Fin d → Matrix (Fin D) (Fin D) R) (w : List (Fin d)) :
+theorem evalWord_complexOfRing (A : α → Matrix (Fin D) (Fin D) R) (w : List α) :
     Kraus.evalWord (fun i => Matrix.complexOfRing f (A i)) w = Matrix.complexOfRing f (evalWordR A
         w) := by
   induction w with
@@ -77,16 +77,16 @@ theorem evalWord_complexOfRing (A : Fin d → Matrix (Fin D) (Fin D) R) (w : Lis
 `E_{ij}` finitely many words of one length `N` of a tensor over `R` combine, with coefficients in
 `R`, to `c • E_{ij}` for one `c` whose image is nonzero, then the words of length `N` of the
 complex tensor span the full matrix algebra. -/
-theorem isNBlkInjective_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
-    {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+theorem isNBlkInjective_of_complexOfRing_smul_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
+    {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → α)
     (coeff : Fin D → Fin D → κ → R) {c : R} (hc : f c ≠ 0)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
     Kraus.IsNBlkInjective A N := by
   rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
   set T := Submodule.span ℂ
-    (Set.range fun w : Fin N → Fin d => Kraus.evalWord A (List.ofFn w)) with hT
+    (Set.range fun w : Fin N → α => Kraus.evalWord A (List.ofFn w)) with hT
   have hA' : A = fun a => Matrix.complexOfRing f (AR a) := funext hA
   refine T.eq_top_of_forall_single_mem fun i j => ?_
   have h1 := congrArg (Matrix.complexOfRing f) (h i j)
@@ -102,9 +102,9 @@ theorem isNBlkInjective_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin 
 /-- **Normality from a decided table of scaled matrix units**: the certificate of
 `isNBlkInjective_of_complexOfRing_smul_single` at a positive length `N` shows that the complex
 tensor is normal at blocking length `N`. -/
-theorem isNormal_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
-    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+theorem isNormal_of_complexOfRing_smul_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
+    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → α)
     (coeff : Fin D → Fin D → κ → R) {c : R} (hc : f c ≠ 0)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
@@ -113,9 +113,9 @@ theorem isNormal_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin
 
 /-- **Normality from a decided table of matrix units**: the unscaled case `c = 1` of
 `isNormal_of_complexOfRing_smul_single`. -/
-theorem isNormal_of_complexOfRing_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
-    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+theorem isNormal_of_complexOfRing_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
+    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → α)
     (coeff : Fin D → Fin D → κ → R)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
       Matrix.single i j 1) :
@@ -127,9 +127,9 @@ theorem isNormal_of_complexOfRing_single {A : Fin d → Matrix (Fin D) (Fin D) �
 images of matrices over `R` rescaled by one nonzero complex number, and every matrix unit
 `E_{xy}` is a multiple, with a coefficient of nonzero image, of one letter, then the letters
 span the full matrix algebra and the tensor is normal at blocking length one. -/
-theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) {c : ℂ} (hc : c ≠ 0)
-    (hA : ∀ a, A a = c • Matrix.complexOfRing f (AR a)) (ℓ : Fin D → Fin D → Fin d)
+theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) {c : ℂ} (hc : c ≠ 0)
+    (hA : ∀ a, A a = c • Matrix.complexOfRing f (AR a)) (ℓ : Fin D → Fin D → α)
     (w : Fin D → Fin D → R) (hw : ∀ x y, f (w x y) ≠ 0)
     (h : ∀ x y, AR (ℓ x y) = w x y • Matrix.single x y 1) :
     Kraus.IsNormal A := by

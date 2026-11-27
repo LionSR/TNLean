@@ -40,7 +40,7 @@ their full product matrix algebra.
 This is the representative-level separation condition in the proof of Lemma L
 of arXiv:1606.00608, Appendix C.3, lines 1848--1857.  It is imposed only on
 the basis tensors `P.basis j`, not on their repeated copies. -/
-def RepresentativeWordTupleSpanAt (P : SectorDecomposition (Fin d)) (L : ℕ) : Prop :=
+def RepresentativeWordTupleSpanAt {α : Type*} (P : SectorDecomposition α) (L : ℕ) : Prop :=
   WordTupleSpanTop P.basis L
 
 /-- Representative word tuples span the full product algebra at every
@@ -51,7 +51,7 @@ property from block injectivity of a minimal basis of normal tensors.  That
 implication is not yet available from the abstract `SectorDecomposition`
 structure and is therefore stated explicitly.  See
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
-def EventuallyRepresentativeWordTupleSpan (P : SectorDecomposition (Fin d)) : Prop :=
+def EventuallyRepresentativeWordTupleSpan {α : Type*} (P : SectorDecomposition α) : Prop :=
   ∃ L₀ : ℕ, ∀ L ≥ L₀, P.RepresentativeWordTupleSpanAt L
 
 /-- At one separating length, a nonzero grouped coefficient lets Lemma L

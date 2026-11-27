@@ -34,7 +34,7 @@ open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder Kraus
 
 namespace MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] {d D : ℕ} {A : MPTensor α (Fin D)}
 
 section CPSVCanonicalFormData
 
@@ -47,14 +47,14 @@ describes the intended reduced representative used in arXiv:1703.09188, Proposit
 `prop:normal-tensor`, lines 319--326 and 344--354, rather than every tensor satisfying
 the paper's literal canonical-form definition. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport {α : Type*} [Fintype α]
-    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) : Prop :=
+def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport (data : CPSVCanonicalFormData A) :
+    Prop :=
   ∑ k, data.dim k = D
 
 /-- Full support is preserved by blocking a positive number of sites.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullSupport) (p : ℕ) (hp : 0 < p) :
     (data.blockTensor p hp).HasFullSupport := by
@@ -63,8 +63,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor
 
 /-- Full support is unchanged by a bijective relabeling of the physical alphabet. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
-    {α α' : Type*} [Fintype α] [Fintype α'] {A : MPTensor α (Fin D)}
-    (data : CPSVCanonicalFormData A)
+    {α' : Type*} [Fintype α'] (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullSupport) (e : α' ≃ α) :
     (data.reindexPhysical e).HasFullSupport := by
   change ∑ k, data.dim k = D
@@ -76,8 +75,7 @@ namespace CPSVCanonicalFormIIData
 
 /-- Full support is preserved when canonical-form-II data are cast along an equality of
 ambient tensors. -/
-theorem hasFullSupport_cast {α : Type*} [Fintype α] {A B : MPTensor α (Fin D)}
-    (data : CPSVCanonicalFormIIData B)
+theorem hasFullSupport_cast {A B : MPTensor α (Fin D)} (data : CPSVCanonicalFormIIData B)
     (hfull : data.toCPSVCanonicalFormData.HasFullSupport) (h : A = B) :
     (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
   subst h
@@ -91,7 +89,7 @@ open MPTensor.CPSVCanonicalFormData
 
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_reindexBond
-    {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPSTensor d n)
+    {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPTensor α (Fin n))
     (hB : Kraus.IsIrreducibleFamily B) :
     Kraus.IsIrreducibleFamily (fun i => Matrix.reindex e e (B i)) := by
   classical
@@ -166,7 +164,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq
   let eBlock : Fin (data.dim k) ≃ Fin D := finCongr hDim
   let U : Matrix (Fin D) (Fin D) ℂ :=
     data.ambient_coisometry.submatrix eTotal.symm (Equiv.refl _)
-  let B : MPSTensor d D := fun i => Matrix.reindex eBlock eBlock (data.blocks k i)
+  let B : MPTensor α (Fin D) := fun i => Matrix.reindex eBlock eBlock (data.blocks k i)
   have hUcois : U * Uᴴ = 1 := by
     unfold U
     rw [Matrix.conjTranspose_submatrix]
@@ -183,7 +181,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq
       (data.blocks_normal k).no_invariant_proj
   have hassembled : ∀ i,
       Matrix.reindex eTotal eTotal
-          (toTensorFromBlocks (α := Fin d) data.weights data.blocks i) =
+          (toTensorFromBlocks (α := α) data.weights data.blocks i) =
         data.weights k • B i := by
     intro i
     ext x y
@@ -438,8 +436,9 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
   rw [Kraus.evalWord_smul, List.length_ofFn, hsqrtC, inv_pow]
 
 /-- A blocked operator tensor is the doubled-index blocking of its relabelling, relabelled
-back to the pair alphabet. -/
-private theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
+back to the pair alphabet. This bridges to the canonical-form blocking statements that are still
+stated on a `Fin` alphabet. -/
+theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
     MPOTensor.blockTensor X p = Kraus.reindexPhysical finProdFinEquiv
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
         (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
@@ -456,10 +455,22 @@ Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356.
 noncomputable def blockTensorCFIIData (U : MPOTensor d D)
     (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
     (p : ℕ) (hp : 0 < p) :
-    MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening := by
-  rw [normalizedFlattening_blockTensor, blockTensor_eq_reindexPhysical]
-  exact (((data.reindexPhysical finProdFinEquiv.symm).blockTensor p hp).reindexPhysical
-    (blockedDoubledIndexEquiv d p)).reindexPhysical finProdFinEquiv
+    MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening :=
+  ((normalizedFlattening_blockTensor U p).trans
+    (blockTensor_eq_reindexPhysical U.normalizedFlattening p)).symm ▸
+    (((data.reindexPhysical finProdFinEquiv.symm).blockTensor p hp).reindexPhysical
+      (blockedDoubledIndexEquiv d p)).reindexPhysical finProdFinEquiv
+
+/-- Full support of canonical-form-II data is preserved by any positive physical blocking.
+
+Source: arXiv:1703.09188, lines 269--281 and 297--305. -/
+theorem hasFullSupport_blockTensorCFIIData {U : MPOTensor d D}
+    (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport)
+    (p : ℕ) (hp : 0 < p) :
+    (blockTensorCFIIData U data p hp).toCPSVCanonicalFormData.HasFullSupport := by
+  unfold blockTensorCFIIData
+  exact MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_cast _ hfull _
 
 /-- The normalized tensor of an MPU is normal when the chosen CPSV canonical-form
 representative has full support.
@@ -476,24 +487,17 @@ theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
     (data : MPTensor.CPSVCanonicalFormData U.normalizedFlattening)
     (hfull : data.HasFullSupport) :
     MPTensor.IsNormalTensor U.normalizedFlattening := by
-  let A : MPSTensor (d * d) D :=
-    Kraus.reindexPhysical finProdFinEquiv.symm U.normalizedFlattening
-  let data' : MPTensor.CPSVCanonicalFormData A := data.reindexPhysical finProdFinEquiv.symm
-  have hfull' : data'.HasFullSupport := hfull
   have htrace : ∀ N : ℕ, 1 < N →
-      Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1 := fun _ hN ↦ by
-    rw [Kraus.transferMap_reindexPhysical_equiv]
-    exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
-  have hr : data'.r = 1 := data'.r_eq_one_of_shifted_transfer_trace htrace
+      Matrix.trace
+        (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 :=
+    fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
+  have hr : data.r = 1 :=
+    data.r_eq_one_of_shifted_transfer_trace htrace
   obtain ⟨hrad, hprim⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
-      (Kraus.transferMap A) htrace
-  have hA := (data'.isNormalTensor_of_r_eq_one_of_fullSupport hr hfull' hrad hprim).reindexPhysical
-    finProdFinEquiv
-  have hAe : Kraus.reindexPhysical finProdFinEquiv A = U.normalizedFlattening := by
-    funext i
-    simp [A, Kraus.reindexPhysical]
-  rwa [hAe] at hA
+      (Kraus.transferMap U.normalizedFlattening) htrace
+  exact data.isNormalTensor_of_r_eq_one_of_fullSupport
+    hr hfull hrad hprim
 
 namespace IsMPUCanonicalFormII
 

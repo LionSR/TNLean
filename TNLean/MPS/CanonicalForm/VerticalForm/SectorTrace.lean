@@ -30,8 +30,7 @@ the sector projector acting on one site, as in the diagrams of that proof.
 
 ## Main definitions
 
-* `verticalLoop` / `verticalLoopWith`:
-  the closed single-site vertical loop $E = \sum_i M^{ii}$, and the loop with a
+* `verticalLoopWith`: the closed single-site vertical loop with a
   matrix $P$ inserted, $E_P = \sum_{i,j} P_{ji}\,M^{ij}$.
 * `representativeLoop`:
   the closed loop of a vertical representative, defined entrywise by
@@ -52,8 +51,8 @@ the sector projector acting on one site, as in the diagrams of that proof.
 
 ## Main results
 
-* `trace_mpo_eq_trace_verticalLoop_pow`:
-  $\tr H^{(N)} = \tr(E^N)$ with `E = verticalLoop M`.
+* `trace_mpo_eq_trace_physTraceTransfer_pow`:
+  $\tr H^{(N)} = \tr(E^N)$ with `E = physTraceTransfer M`.
 * `trace_mpo_ne_zero_of_isSourceZCL`:
   source zero correlation length forces the trace of every positive-length
   density operator to be nonzero.
@@ -99,22 +98,6 @@ variable {d D n : ℕ}
 
 /-! ### Single-site vertical loops -/
 
-/-- The closed vertical loop of a single site: contracting the ket index of
-an MPO tensor with its bra index gives the matrix $\sum_i M^{ii}$ on the
-horizontal bond space.  Each unmarked site of the diagram defining
-$d_\alpha$ in the proof of Proposition 4.13 of arXiv:1606.00608, lines
-1899--1901, contributes one such loop.  As a matrix this is the physical-trace
-transfer object `physTraceTransfer` of the zero-correlation-length layer; the
-definition delegates to it, and this name records the loop role the matrix
-plays in the sector-trace diagrams. -/
-noncomputable def verticalLoop (M : MPOTensor d D) : Matrix (Fin D) (Fin D) ℂ :=
-  physTraceTransfer M
-
-/-- The vertical loop is the physical-trace transfer matrix. -/
-theorem verticalLoop_eq_physTraceTransfer (M : MPOTensor d D) :
-    verticalLoop M = physTraceTransfer M :=
-  rfl
-
 /-- The single-site vertical loop with a matrix $P$ inserted,
 $E_P = \sum_{i,j}P_{ji}\,M^{ij}$.  This is the closed vertical loop of the
 vertically viewed product $PM$, the contraction produced at the marked site
@@ -158,7 +141,7 @@ theorem verticalLoopWith_apply_eq_trace_mul_verticalTensor
 
 /-- Inserting the identity recovers the plain vertical loop. -/
 @[simp] theorem verticalLoopWith_one (M : MPOTensor d D) :
-    verticalLoopWith M 1 = verticalLoop M := by
+    verticalLoopWith M 1 = physTraceTransfer M := by
   refine Finset.sum_congr rfl fun a _ => ?_
   rw [Finset.sum_eq_single a]
   · rw [Matrix.one_apply_eq, one_smul]
@@ -169,17 +152,17 @@ theorem verticalLoopWith_apply_eq_trace_mul_verticalTensor
 
 /-- The inserted loop is the closed vertical loop of the vertically viewed
 product $PM$. -/
-theorem verticalLoop_ketLeftMul (M : MPOTensor d D)
+theorem physTraceTransfer_ketLeftMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) :
-    verticalLoop (M.ketLeftMul P) = verticalLoopWith M P := by
-  simp only [verticalLoop, physTraceTransfer, ketLeftMul, verticalLoopWith]
+    physTraceTransfer (M.ketLeftMul P) = verticalLoopWith M P := by
+  simp only [physTraceTransfer, ketLeftMul, verticalLoopWith]
 
 /-- The inserted loop is also the closed vertical loop of $MP$: the insertion
 point inside the loop is immaterial, by cyclicity of the single-site trace. -/
-theorem verticalLoop_braRightMul (M : MPOTensor d D)
+theorem physTraceTransfer_braRightMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) :
-    verticalLoop (M.braRightMul P) = verticalLoopWith M P := by
-  simp only [verticalLoop, physTraceTransfer, braRightMul, verticalLoopWith]
+    physTraceTransfer (M.braRightMul P) = verticalLoopWith M P := by
+  simp only [physTraceTransfer, braRightMul, verticalLoopWith]
   exact Finset.sum_comm
 
 /-- **Summing the diagonal word evaluations closes the vertical loops.** The
@@ -189,10 +172,10 @@ power of the single-site vertical loop.  This is the contraction pattern of
 the closed diagrams in the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1895--1902: each site contributes one loop, and the loops multiply
 along the horizontal bond. -/
-theorem sum_evalWord_diag_eq_verticalLoop_pow (M : MPOTensor d D) (N : ℕ) :
+theorem sum_evalWord_diag_eq_physTraceTransfer_pow (M : MPOTensor d D) (N : ℕ) :
     ∑ σ : Fin N → Fin d, evalWord M (List.ofFn σ) (List.ofFn σ) =
-      verticalLoop M ^ N := by
-  rw [verticalLoop, physTraceTransfer, ← List.prod_replicate,
+      physTraceTransfer M ^ N := by
+  rw [physTraceTransfer, ← List.prod_replicate,
     ← List.ofFn_const, List.prod_ofFn_sum]
   exact Finset.sum_congr rfl fun σ _ => evalWord_ofFn M σ σ
 
@@ -200,9 +183,9 @@ theorem sum_evalWord_diag_eq_verticalLoop_pow (M : MPOTensor d D) (N : ℕ) :
 $\tr H^{(N)} = \tr(E^N)$ with `E` the single-site vertical loop.  This is the
 fully closed diagram of the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1895--1902, with no site marked. -/
-theorem trace_mpo_eq_trace_verticalLoop_pow (M : MPOTensor d D) (N : ℕ) :
-    Matrix.trace (mpo M N) = Matrix.trace (verticalLoop M ^ N) := by
-  rw [← sum_evalWord_diag_eq_verticalLoop_pow M N, Matrix.trace_sum]
+theorem trace_mpo_eq_trace_physTraceTransfer_pow (M : MPOTensor d D) (N : ℕ) :
+    Matrix.trace (mpo M N) = Matrix.trace (physTraceTransfer M ^ N) := by
+  rw [← sum_evalWord_diag_eq_physTraceTransfer_pow M N, Matrix.trace_sum]
   simp only [Matrix.trace, Matrix.diag, mpo_apply, mpoMatrixEntry]
 
 /-- Source zero correlation length forces the trace of every nonempty-chain
@@ -237,7 +220,7 @@ theorem trace_mpo_ne_zero_of_isSourceZCL (M : MPOTensor d D)
   have hscale : physTraceTransfer M = (lam : ℂ) • E := by
     dsimp only [E]
     rw [smul_smul, mul_inv_cancel₀ hlamC, one_smul]
-  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer,
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow,
     hscale, smul_pow, hidem.pow_eq hN.ne', Matrix.trace_smul, smul_eq_mul]
   exact mul_ne_zero (pow_ne_zero N hlamC) hEtrace
 
@@ -316,7 +299,7 @@ arXiv:1606.00608, lines 1899--1901. -/
 theorem trace_firstSiteMatrix_mul_mpo (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     Matrix.trace (firstSiteMatrix P N * mpo M (N + 1)) =
-      Matrix.trace (verticalLoopWith M P * verticalLoop M ^ N) := by
+      Matrix.trace (verticalLoopWith M P * physTraceTransfer M ^ N) := by
   have hdiag : ∀ (a : Fin d) (ρ : Fin N → Fin d),
       (firstSiteMatrix P N * mpo M (N + 1)) (Fin.cons a ρ) (Fin.cons a ρ) =
         ∑ i : Fin d,
@@ -349,8 +332,8 @@ theorem trace_firstSiteMatrix_mul_mpo (M : MPOTensor d D)
     _ = Matrix.trace (verticalLoopWith M P *
           ∑ ρ : Fin N → Fin d, evalWord M (List.ofFn ρ) (List.ofFn ρ)) := by
         rw [Matrix.mul_sum, Matrix.trace_sum]
-    _ = Matrix.trace (verticalLoopWith M P * verticalLoop M ^ N) := by
-        rw [sum_evalWord_diag_eq_verticalLoop_pow]
+    _ = Matrix.trace (verticalLoopWith M P * physTraceTransfer M ^ N) := by
+        rw [sum_evalWord_diag_eq_physTraceTransfer_pow]
 
 /-- For an idempotent `P`, the trace of the first-site compression equals the
 trace of the inserted-loop chain:
@@ -358,7 +341,7 @@ $\tr(P_1H^{(N+1)}P_1) = \tr(E_P\,E^N)$. -/
 theorem trace_sectorCompression_of_idempotent (M : MPOTensor d D)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P * P = P) (N : ℕ) :
     Matrix.trace (sectorCompression M P N) =
-      Matrix.trace (verticalLoopWith M P * verticalLoop M ^ N) := by
+      Matrix.trace (verticalLoopWith M P * physTraceTransfer M ^ N) := by
   rw [sectorCompression_def, Matrix.trace_mul_cycle,
     firstSiteMatrix_mul_firstSiteMatrix, hP, trace_firstSiteMatrix_mul_mpo]
 
@@ -371,7 +354,7 @@ trace, $d_\alpha^{(N+1)} = \tr(E_\alpha\,E^N)$.  The displayed diagram in the
 source suppresses the length dependence. -/
 noncomputable def blockChainTrace (M : MPOTensor d D)
     (Eα : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) : ℂ :=
-  Matrix.trace (Eα * verticalLoop M ^ N)
+  Matrix.trace (Eα * physTraceTransfer M ^ N)
 
 /-- **Sector projector hypotheses.** The hypotheses carried by the projector
 $P_{\alpha,k}$ selecting the sector $(\alpha,k)$ in the vertical

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
-import TNLean.MPS.CanonicalForm.SimpleMPU.PhysicalRelabelling
+import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 
 /-!
 # Group matrix product operators from a three-cocycle: fusion tensors and the inverse cocycle
@@ -189,8 +189,7 @@ def fusionData {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle �
     (family e ω).FusionData where
   V := fusionV e ω
   W := fusionW e ω
-  isReduction g h := (MPTensor.isReduction_reindexPhysical_iff finProdFinEquiv.symm).2
-    (isReduction_fusion e hω g h)
+  isReduction := isReduction_fusion e hω
 
 theorem fusionV_mul_kronId {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
     (g h k : G) :
@@ -287,10 +286,9 @@ theorem fusionData_omega {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.I
   simp only [Pi.inv_apply]
   refine hdp.eq_of_forall_exists_ne_zero hz fun N ↦ ?_
   obtain ⟨w, hw, hne⟩ := exists_evalWord_tensor_ne_zero e ω (g * h * k) N
-  refine ⟨w.map finProdFinEquiv, by simpa using hw, fun h0 ↦ hne ?_⟩
-  have hred := ((fusionData e hω).isReduction_left g h k).evalWord (w.map finProdFinEquiv)
-  rw [h0, Matrix.zero_mul, evalWord_toMPSTensor, List.map_map, Equiv.symm_comp_self,
-    List.map_id] at hred
+  refine ⟨w, hw, fun h0 ↦ hne ?_⟩
+  have hred := ((fusionData e hω).isReduction_left g h k).evalWord w
+  rw [h0, Matrix.zero_mul] at hred
   exact hred.symm
 
 /-! ### The identity member is not normal -/
@@ -343,6 +341,6 @@ normal tensors, so the class-independence results for such representations do no
 it; its three-cochain is taken with the fusion tensors of the source (`fusionData_omega`). -/
 theorem not_isNormalRepresentation [Nontrivial G] {ω : ScalarThreeCochain G}
     (hn : ScalarThreeCochain.IsNormalized ω) : ¬ (family e ω).IsNormalRepresentation :=
-  fun h ↦ not_isNormal_tensor_one e hn ((isNormal_toMPSTensor_iff _).1 (h.isNormal 1))
+  fun h ↦ not_isNormal_tensor_one e hn (h.isNormal 1)
 
 end MPOTensor.GroupCocycle

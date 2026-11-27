@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.MinimalPhysicalCuts
-import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Consecutive operator cut ranks of periodic MPOs
@@ -107,13 +107,12 @@ exactly the periodic coefficient tensor of its doubled-letter MPS view.
 The identity retains the original scalar and global phase.
 Source: the periodic representation in arXiv:2508.08160v2, `eq:U_N_hom`. -/
 theorem operatorCoefficientTensor_mpo_eq_mpv {d D N : ℕ} (M : MPOTensor d D) :
-    operatorCoefficientTensor (M.mpo N) = M.toMPSTensor.mpv (N := N) := by
+    operatorCoefficientTensor (M.mpo N) =
+      MPTensor.mpv (N := N)
+        (Kraus.reindexPhysical finProdFinEquiv.symm M : MPSTensor (d * d) D) := by
   funext σ
-  simp only [operatorCoefficientTensor, MPOTensor.mpo_apply_toMPSTensor,
-    MPTensor.mpv, MPTensor.coeff]
-  congr 3
-  funext s
-  exact Equiv.apply_symm_apply finProdFinEquiv (σ s)
+  rw [operatorCoefficientTensor, MPOTensor.mpo_apply_eq_trace_kraus_evalWord,
+    MPTensor.mpv_reindexPhysical, MPTensor.mpv_eq, MPTensor.coeff_eq]
 
 /-- Every consecutive operator cut of an ordinary periodic MPO with virtual
 dimension `D` has rank at most `D * D`. This is stated for the unnormalized
@@ -125,7 +124,8 @@ theorem cutCoefficientRank_operatorCoefficientTensor_mpo_le {d D N k : ℕ}
     (M : MPOTensor d D) (hk : k ≤ N) :
     cutCoefficientRank (operatorCoefficientTensor (M.mpo N)) k ≤ D * D := by
   rw [operatorCoefficientTensor_mpo_eq_mpv]
-  exact cutCoefficientRank_mpv_le M.toMPSTensor hk
+  exact cutCoefficientRank_mpv_le
+    (Kraus.reindexPhysical finProdFinEquiv.symm M : MPSTensor (d * d) D) hk
 
 /-- A uniform square tensor contracted between fixed scalar left and right
 boundary matrices has consecutive coefficient cut rank at most `D`.
@@ -167,12 +167,13 @@ theorem cutCoefficientRank_operatorCoefficientTensor_traceBoundary_le {d D N k :
   have hcoeff : operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       Matrix.trace (b * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y))) =
       fun σ : Fin N → Fin (d * d) ↦
-        Matrix.trace (b * Kraus.evalWord M.toMPSTensor (List.ofFn σ)) := by
+        Matrix.trace (b * Kraus.evalWord (Kraus.reindexPhysical finProdFinEquiv.symm M)
+          (List.ofFn σ)) := by
     funext σ
-    exact congrArg (fun X ↦ Matrix.trace (b * X))
-      (MPOTensor.evalWord_toMPSTensor_ofFn M N σ).symm
+    rw [Kraus.evalWord_reindexPhysical, List.map_ofFn, MPOTensor.kraus_evalWord_ofFn]
+    rfl
   rw [hcoeff]
-  exact cutCoefficientRank_traceBoundary_le M.toMPSTensor b hk
+  exact cutCoefficientRank_traceBoundary_le _ b hk
 
 /-- A uniform MPO contracted with fixed scalar left and right boundary
 matrices has consecutive operator cut rank at most its virtual dimension.
@@ -187,12 +188,13 @@ theorem cutCoefficientRank_operatorCoefficientTensor_openBoundary_le {d D N k : 
   have hcoeff : operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       (l * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y) * r) () ()) =
       fun σ : Fin N → Fin (d * d) ↦
-        (l * Kraus.evalWord M.toMPSTensor (List.ofFn σ) * r) () () := by
+        (l * Kraus.evalWord (Kraus.reindexPhysical finProdFinEquiv.symm M)
+          (List.ofFn σ) * r) () () := by
     funext σ
-    exact congrArg (fun X ↦ (l * X * r) () ())
-      (MPOTensor.evalWord_toMPSTensor_ofFn M N σ).symm
+    rw [Kraus.evalWord_reindexPhysical, List.map_ofFn, MPOTensor.kraus_evalWord_ofFn]
+    rfl
   rw [hcoeff]
-  exact cutCoefficientRank_openBoundary_le M.toMPSTensor l r hk
+  exact cutCoefficientRank_openBoundary_le _ l r hk
 
 /-- The bound on all consecutive operator cuts of an ordinary periodic MPO,
 in the exact form consumed by the finite-unitary circuit theorem.
