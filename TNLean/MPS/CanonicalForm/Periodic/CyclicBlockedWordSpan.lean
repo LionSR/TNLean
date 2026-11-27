@@ -121,7 +121,7 @@ theorem wordSpan_eq_cyclicMatrixSubspace_of_blocked_sector_span [NeZero r]
     Kraus.wordSpan A (q * r) = cyclicMatrixSubspace P (q * r) := by
   apply le_antisymm (wordSpan_le_cyclicMatrixSubspace A P hCycle (q * r))
   intro X hX
-  rw [← Kraus.wordSpan_blockTensor A r q]
+  rw [← Kraus.wordSpan_block A r q]
   apply mem_wordSpan_of_sector_wordTupleSpanTop (Kraus.block A r) B V hV hSum hInt hSpan
   intro j
   obtain ⟨u, hu⟩ := hVP j

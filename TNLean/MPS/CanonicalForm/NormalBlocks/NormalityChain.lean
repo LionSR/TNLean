@@ -26,12 +26,12 @@ shows that blocking keeps normality.
 
 * `isNormal_of_tp_primitive_irreducible` — TP, primitive transfer map, and
   tensor irreducibility imply normality.
-* `exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible` — the same
+* `exists_pos_block_isInjective_of_tp_primitive_irreducible` — the same
   hypotheses give a positive blocking whose blocked tensor is one-site injective.
-* `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
-* `exists_common_blockTensor_isInjective_of_isNormal` — a finite family of normal
+* `isNormal_block_of_isNormal` — blocking preserves normality.
+* `exists_common_block_isInjective_of_isNormal` — a finite family of normal
   tensors admits one positive blocking length at which all of them are injective.
-* `exists_common_blockTensor_isInjective_two_of_isNormal` — the same
+* `exists_common_block_isInjective_two_of_isNormal` — the same
   common-blocking conclusion simultaneously for two finite families.
 
 ## References
@@ -49,11 +49,10 @@ open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
-open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-!
 ## Per-block chain from TP + primitive + irreducible to Kraus.IsNormal
@@ -88,9 +87,9 @@ is `1`.  The conclusion is obtained by the following implications:
 * The primitive complementary transfer-map gap together with the faithful fixed point gives
   eventual full Kraus rank, equivalently `Kraus.IsNormal A`. -/
 theorem isNormal_of_tp_primitive_irreducible [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A) :
     Kraus.IsNormal A := by
   -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
@@ -107,13 +106,13 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
 
 /-- A trace-preserving scalar tensor has a nonzero Kraus matrix. -/
 private theorem exists_nonzero_kraus_of_tp [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∃ i : Fin d, A i ≠ 0 := by
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1) :
+    ∃ i : α, A i ≠ 0 := by
   by_contra hnone
   push Not at hnone
   have hsum_zero :
-      ∑ i : Fin d, (A i)ᴴ * A i = (0 : Matrix (Fin D) (Fin D) ℂ) := by
+      ∑ i : α, (A i)ᴴ * A i = (0 : Matrix (Fin D) (Fin D) ℂ) := by
     apply Finset.sum_eq_zero
     intro i _
     simp [hnone i]
@@ -128,14 +127,14 @@ private theorem exists_nonzero_kraus_of_tp [NeZero D]
 /-- **TP + primitive + irreducible → injective after positive blocking**.
 
 The blocking length is positive by the definition of normality. -/
-theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+theorem exists_pos_block_isInjective_of_tp_primitive_irreducible [NeZero D]
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A) :
-    ∃ L : ℕ, 0 < L ∧ Kraus.IsInjective (blockTensor A L) := by
+    ∃ L : ℕ, 0 < L ∧ Kraus.IsInjective (Kraus.block A L) := by
   obtain ⟨L, hLpos, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
-  exact ⟨L, hLpos, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
+  exact ⟨L, hLpos, (Kraus.isNBlkInjective_iff_isInjective_block A L).1 hL⟩
 
 /-!
 ## Combined reduction: arbitrary → Kraus.IsNormal (per block, for primitive blocks)
@@ -154,8 +153,8 @@ hypothesis rules out the scalar zero-physical-letter edge case and supplies a no
 Kraus matrix, which makes the general index bound `(D ^ 2 - krausRank A + 1) * D ^ 2` at most
 `D ^ 4`.  Source: arXiv:1606.00608, Section II, line 332; arXiv:0909.5347, Theorem 1. -/
 theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
     (hN : Kraus.IsNormal A) :
     ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ Kraus.IsNBlkInjective A L := by
   have hDpos : 0 < D := NeZero.pos D
@@ -175,7 +174,7 @@ theorem exists_pos_isNBlkInjective_le_pow_four_of_isNormal_leftCanonical [NeZero
       Submodule.finrank_eq_zero.mp hzero
     obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp A hTP
     have hmem : A i₀ ∈ Kraus.wordSpan A 1 := by
-      have := Kraus.evalWord_mem_wordSpan A ([i₀] : List (Fin d))
+      have := Kraus.evalWord_mem_wordSpan A ([i₀] : List α)
       simpa [Kraus.evalWord] using this
     rw [hbot] at hmem
     exact hi₀ hmem
@@ -206,8 +205,8 @@ $D$.
 
 Source: arXiv:1606.00608, line 332. -/
 theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
     (hN : Kraus.IsNormal A) :
     Kraus.IsNBlkInjective A (D ^ 4) := by
   obtain ⟨L, hLpos, hLle, hL⟩ :=
@@ -220,21 +219,21 @@ theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
 The key observation: if `Kraus.wordSpan A N = ⊤`, then `Kraus.wordSpan A (m * N) = ⊤` for
 all `m ≥ 1` (because `⊤ * Kraus.wordSpan A k ⊇ Kraus.wordSpan A k` via the identity).
 Combined with the containment
-`Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (blockTensor A P) n`, this gives:
-`Kraus.IsNormal A → Kraus.IsNormal (blockTensor A P)`.
+`Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (Kraus.block A P) n`, this gives:
+`Kraus.IsNormal A → Kraus.IsNormal (Kraus.block A P)`.
 
 This bypasses the blocked-irreducibility gap entirely for the Kraus.IsNormal conclusion.
 -/
 
 /-- One-site injectivity of a blocked tensor persists after a positive further
 blocking, read back as direct blocking of the original tensor. -/
-theorem blockTensor_isInjective_mul_of_blockTensor_isInjective
-    (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m)
-    (hN : Kraus.IsInjective (blockTensor A N)) :
-    Kraus.IsInjective (blockTensor A (m * N)) :=
-  (isNBlkInjective_iff_blockTensor_isInjective A (m * N)).1
+theorem block_isInjective_mul_of_block_isInjective
+    (A : MPTensor α (Fin D)) {N m : ℕ} (hm : 0 < m)
+    (hN : Kraus.IsInjective (Kraus.block A N)) :
+    Kraus.IsInjective (Kraus.block A (m * N)) :=
+  (Kraus.isNBlkInjective_iff_isInjective_block A (m * N)).1
     (isNBlkInjective_mul_of_isNBlkInjective A hm
-      ((isNBlkInjective_iff_blockTensor_isInjective A N).2 hN))
+      ((Kraus.isNBlkInjective_iff_isInjective_block A N).2 hN))
 
 /-- **Common exact block-injectivity length for a finite normal left-canonical family.**
 
@@ -246,8 +245,8 @@ the product of the finitely many individual lengths. Exact block-injectivity per
 positive multiples, so this product is a common length for all sectors. -/
 theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
     {r d : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hLeft : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hLeft : ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
     (hNonzero : ∀ k, dim k ≠ 0)
     (hNormal : ∀ k, Kraus.IsNormal (blocks k)) :
     ∃ L : ℕ, 0 < L ∧ ∀ k : Fin r, Kraus.IsNBlkInjective (blocks k) L := by
@@ -273,23 +272,23 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
 
 /-- **Kraus.IsNormal is preserved by blocking.**
 
-If `A` is normal (`∃ N, 0 < N ∧ Kraus.wordSpan A N = ⊤`), then `blockTensor A P`
+If `A` is normal (`∃ N, 0 < N ∧ Kraus.wordSpan A N = ⊤`), then `Kraus.block A P`
 is also normal for any `P ≥ 1`. The proof uses:
 1. `Kraus.wordSpan A N = ⊤ → Kraus.wordSpan A (P * N) = ⊤` (word span at multiples);
-2. `Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (blockTensor A P) n` (blocking containment).
+2. `Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (Kraus.block A P) n` (blocking containment).
 
 Taking `n = N` in (2) and using (1) with `m = P`: `Kraus.wordSpan A (N * P) = ⊤` and
-`Kraus.wordSpan (blockTensor A P) N ⊇ Kraus.wordSpan A (N * P) = ⊤`. -/
-theorem isNormal_blockTensor_of_isNormal
-    (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
-    Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A P) := by
+`Kraus.wordSpan (Kraus.block A P) N ⊇ Kraus.wordSpan A (N * P) = ⊤`. -/
+theorem isNormal_block_of_isNormal
+    (A : MPTensor α (Fin D)) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
+    Kraus.IsNormal (Kraus.block A P) := by
   obtain ⟨N, hNpos, hNblk⟩ := hN
   have hwordN : Kraus.wordSpan A N = ⊤ := hNblk
   have hwordNP : Kraus.wordSpan A (P * N) = ⊤ :=
     Kraus.wordSpan_top_of_mul A hwordN P hP
-  -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (blockTensor A P) N
+  -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (Kraus.block A P) N
   have hle : Kraus.wordSpan A (N * P) ≤
-      Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A P) N :=
+      Kraus.wordSpan (Kraus.block A P) N :=
     wordSpan_le_wordSpan_blockTensor A P N
   have hwordNP' : Kraus.wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
   rw [hwordNP'] at hle
@@ -307,12 +306,12 @@ length, since fixed-length injectivity persists at positive multiples.
 
 This is the common blocking of the normal blocks of a canonical form used in
 arXiv:1606.00608, lines 318--344. -/
-theorem exists_common_blockTensor_isInjective_of_isNormal
-    {d r : ℕ} {dim : Fin r → ℕ} {blocks : (k : Fin r) → MPSTensor d (dim k)}
+theorem exists_common_block_isInjective_of_isNormal
+    {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ} {blocks : (k : Fin r) → MPTensor α (Fin (dim k))}
     (hNormal : ∀ k, Kraus.IsNormal (blocks k)) :
     ∃ L : ℕ, 0 < L ∧
       ∀ k : Fin r,
-        Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
+        Kraus.IsInjective (Kraus.block (blocks k) L) := by
   classical
   choose L hL_pos hL using hNormal
   refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, fun k => ?_⟩
@@ -320,7 +319,7 @@ theorem exists_common_blockTensor_isInjective_of_isNormal
     simpa using (Finset.prod_erase_mul (s := Finset.univ) (a := k) (f := L)
       (Finset.mem_univ k)).symm
   rw [hcommon]
-  exact (isNBlkInjective_iff_blockTensor_isInjective (blocks k) _).1
+  exact (Kraus.isNBlkInjective_iff_isInjective_block (blocks k) _).1
     (isNBlkInjective_mul_of_isNBlkInjective (blocks k)
       (Finset.prod_pos fun j _ => hL_pos j) (hL k))
 
@@ -330,23 +329,23 @@ Given two finite families of normal tensors with the same physical dimension, th
 single positive blocking length at which every block on both sides is one-site injective.
 This is the common blocking used for the two canonical forms compared in
 arXiv:1606.00608, Theorem 2.10, lines 318--344 and 1170--1192. -/
-theorem exists_common_blockTensor_isInjective_two_of_isNormal
+theorem exists_common_block_isInjective_two_of_isNormal
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
-    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    {blocksA : (j : Fin rA) → MPTensor α (Fin (dimA j))}
+    {blocksB : (k : Fin rB) → MPTensor α (Fin (dimB k))}
     (hA : ∀ j, Kraus.IsNormal (blocksA j))
     (hB : ∀ k, Kraus.IsNormal (blocksB k)) :
     ∃ L : ℕ, 0 < L ∧
       (∀ j : Fin rA,
-        Kraus.IsInjective (blockTensor (d := d) (n := Fin (dimA j)) (blocksA j) L)) ∧
+        Kraus.IsInjective (Kraus.block (blocksA j) L)) ∧
       (∀ k : Fin rB,
-        Kraus.IsInjective (blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) L)) := by
-  obtain ⟨LA, hLA_pos, hLA⟩ := exists_common_blockTensor_isInjective_of_isNormal hA
-  obtain ⟨LB, hLB_pos, hLB⟩ := exists_common_blockTensor_isInjective_of_isNormal hB
+        Kraus.IsInjective (Kraus.block (blocksB k) L)) := by
+  obtain ⟨LA, hLA_pos, hLA⟩ := exists_common_block_isInjective_of_isNormal hA
+  obtain ⟨LB, hLB_pos, hLB⟩ := exists_common_block_isInjective_of_isNormal hB
   refine ⟨LB * LA, Nat.mul_pos hLB_pos hLA_pos, fun j => ?_, fun k => ?_⟩
-  · exact blockTensor_isInjective_mul_of_blockTensor_isInjective (blocksA j) hLB_pos (hLA j)
+  · exact block_isInjective_mul_of_block_isInjective (blocksA j) hLB_pos (hLA j)
   · rw [Nat.mul_comm]
-    exact blockTensor_isInjective_mul_of_blockTensor_isInjective (blocksB k) hLA_pos (hLB k)
+    exact block_isInjective_mul_of_block_isInjective (blocksB k) hLA_pos (hLB k)
 
 end MPSTensor

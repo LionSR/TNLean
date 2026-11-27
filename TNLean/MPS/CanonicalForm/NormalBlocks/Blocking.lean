@@ -45,24 +45,22 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
 open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Gauge equivalence is preserved by blocking the physical alphabet.
 
 Source: arXiv:1606.00608, line 227 defines blocking by matrix products and
 lines 264--268 give the invertible gauge relation. -/
-theorem _root_.MPTensor.GaugeEquiv.blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
-    GaugeEquiv (blockTensor (d := d) (n := Fin D) A p)
-      (blockTensor (d := d) (n := Fin D) B p) := by
+theorem _root_.MPTensor.GaugeEquiv.block {A B : MPTensor α (Fin D)} (h : GaugeEquiv A B) (p : ℕ) :
+    GaugeEquiv (Kraus.block A p)
+      (Kraus.block B p) := by
   obtain ⟨X, hX⟩ := h
   refine ⟨X, fun i ↦ ?_⟩
-  simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock,
-    Matrix.GeneralLinearGroup.coe_inv] using
-    evalWord_gauge (A := A) (B := B) X hX (Kraus.wordOfBlock d p i)
+  simpa [Kraus.block_apply, Matrix.GeneralLinearGroup.coe_inv] using
+    evalWord_gauge (A := A) (B := B) X hX (List.ofFn i)
 
 section IsNormalTensor
 
@@ -79,24 +77,23 @@ blocked tensor.
 Source: arXiv:1606.00608, lines 227--235 define physical blocking and normal
 tensors; the closure under reblocking is used in the normal-block arguments at
 lines 332--345. -/
-theorem _root_.MPTensor.IsNormalTensor.blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A)
+theorem _root_.MPTensor.IsNormalTensor.block {A : MPTensor α (Fin D)} (hA : IsNormalTensor A)
     (p : ℕ) (hp : 0 < p) :
-    IsNormalTensor (Kraus.blockTensor (d := d) (n := Fin D) A p) := by
+    IsNormalTensor (Kraus.block A p) := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσpos, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B : MPSTensor d D := Kraus.tpGauge (ι := Fin d) (D := D) A σ
-  have hExtra := Kraus.tp_primitive_irreducible_extra_blocking
-    (d := d) (D := D) B hTP hPrim hIrr hp
-  have hNormalAlg : Kraus.IsNormal (Kraus.blockTensor (d := d) (n := Fin D) B p) :=
+  let B : MPTensor α (Fin D) := Kraus.tpGauge (ι := α) (D := D) A σ
+  have hExtra := Kraus.tp_primitive_irreducible_extra_blocking B hTP hPrim hIrr hp
+  have hNormalAlg : Kraus.IsNormal (Kraus.block B p) :=
     isNormal_of_tp_primitive_irreducible
-      (d := blockPhysDim d p) (D := D)
-      (Kraus.blockTensor (d := d) (n := Fin D) B p) hExtra.1 hExtra.2.1 hExtra.2.2
+      (α := Fin p → α) (D := D)
+      (Kraus.block B p) hExtra.1 hExtra.2.1 hExtra.2.2
   have hBlockedGaugeNormal :
-      IsNormalTensor (Kraus.blockTensor (d := d) (n := Fin D) B p) :=
+      IsNormalTensor (Kraus.block B p) :=
     isNormalTensor_of_isNormal_leftCanonical
-      (α := Fin (blockPhysDim d p)) (D := D)
-      (Kraus.blockTensor (d := d) (n := Fin D) B p) hNormalAlg hExtra.1
-  exact hBlockedGaugeNormal.of_gaugeEquiv (hGauge.blockTensor p)
+      (α := (Fin p → α)) (D := D)
+      (Kraus.block B p) hNormalAlg hExtra.1
+  exact hBlockedGaugeNormal.of_gaugeEquiv (hGauge.block p)
 
 end IsNormalTensor
 
@@ -110,7 +107,7 @@ its nonempty-word iteration, with intermediate coisometries cancelled by
 \(UU^*=1\). -/
 theorem evalWord_eq_coisometry_reconstruction_of_ne_nil
     {s d n : ℕ} {A : MPSTensor s d} {B : MPSTensor s n}
-    (U : Matrix (Fin n) (Fin d) ℂ)
+    (U : Matrix (Fin n) α ℂ)
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ v, A v = Uᴴ * B v * U) :
     ∀ w : List (Fin s), w ≠ [] →
@@ -132,15 +129,15 @@ blocked summands, with every weight raised to the blocking length.
 
 Source: arXiv:1606.00608, lines 259--301, especially equations `II_Psi_k`,
 `II_ABasicTensors`, and `decBSV`. -/
-theorem blockTensor_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (p : ℕ) (i : Fin (blockPhysDim d p)) :
-    blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
-        (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) p i =
-      toTensorFromBlocks (α := Fin (blockPhysDim d p))
+theorem block_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (p : ℕ) (i : Fin p → α) :
+    Kraus.block
+        (toTensorFromBlocks (α := α) (μ := μ) blocks) p i =
+      toTensorFromBlocks (α := (Fin p → α))
         (fun k ↦ μ k ^ p)
-        (fun k ↦ blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) i := by
-  simp [Kraus.blockTensor, Kraus.reindexPhysical, toTensorFromBlocks,
+        (fun k ↦ Kraus.block (blocks k) p) i := by
+  simp [Kraus.block_apply, toTensorFromBlocks,
     evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
 
 section CPSVCanonicalFormData
@@ -155,43 +152,43 @@ weights are raised to the blocking length and each retained normal tensor is
 blocked by that length.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
-noncomputable def _root_.MPTensor.CPSVCanonicalFormData.blockTensor {A : MPSTensor d D}
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.block {A : MPTensor α (Fin D)}
     (data : CPSVCanonicalFormData A) (p : ℕ) (hp : 0 < p) :
-    CPSVCanonicalFormData (Kraus.blockTensor (d := d) (n := Fin D) A p) where
+    CPSVCanonicalFormData (Kraus.block A p) where
   r := data.r
   dim := data.dim
   dim_pos := data.dim_pos
   weights := fun k ↦ data.weights k ^ p
   weights_ne_zero := fun k ↦ pow_ne_zero p (data.weights_ne_zero k)
-  blocks := fun k ↦ Kraus.blockTensor (d := d) (n := Fin (data.dim k)) (data.blocks k) p
-  blocks_normal := fun k ↦ (data.blocks_normal k).blockTensor p hp
+  blocks := fun k ↦ Kraus.block (data.blocks k) p
+  blocks_normal := fun k ↦ (data.blocks_normal k).block p hp
   total_dim_le := data.total_dim_le
   ambient_coisometry := data.ambient_coisometry
   coisometric := data.coisometric
   reconstruct := by
     intro i
-    have hword_ne : Kraus.wordOfBlock d p i ≠ [] := by
+    have hword_ne : List.ofFn i ≠ [] := by
       intro hnil
       have hlen := congrArg List.length hnil
-      simp [Kraus.length_wordOfBlock, hp.ne'] at hlen
+      simp [List.length_ofFn, hp.ne'] at hlen
     calc
-      Kraus.blockTensor (d := d) (n := Fin D) A p i =
+      Kraus.block A p i =
           data.ambient_coisometryᴴ *
-            Kraus.evalWord (toTensorFromBlocks (α := Fin d) data.weights data.blocks)
-              (Kraus.wordOfBlock d p i) *
+            Kraus.evalWord (toTensorFromBlocks (α := α) data.weights data.blocks)
+              (List.ofFn i) *
             data.ambient_coisometry := by
-            simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock] using
+            simpa [Kraus.block_apply] using
               evalWord_eq_coisometry_reconstruction_of_ne_nil
                 data.ambient_coisometry data.coisometric data.reconstruct
-                (Kraus.wordOfBlock d p i) hword_ne
+                (List.ofFn i) hword_ne
       _ = data.ambient_coisometryᴴ *
-            toTensorFromBlocks (α := Fin (blockPhysDim d p))
+            toTensorFromBlocks (α := (Fin p → α))
               (fun k ↦ data.weights k ^ p)
-              (fun k ↦ Kraus.blockTensor (d := d) (n := Fin (data.dim k))
+              (fun k ↦ Kraus.block
                 (data.blocks k) p) i *
             data.ambient_coisometry := by
-            have hblock := blockTensor_toTensorFromBlocks_apply
-              (d := d) (dim := data.dim) data.weights data.blocks p i
+            have hblock := block_toTensorFromBlocks_apply
+              (α := α) (dim := data.dim) data.weights data.blocks p i
             rw [← hblock]
             rfl
 
@@ -206,19 +203,18 @@ map because that map is the corresponding positive power of the original transfe
 matrix is retained, so any separately supplied trace normalization is also unchanged.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
-noncomputable def blockTensor {A : MPSTensor d D}
+noncomputable def block {A : MPTensor α (Fin D)}
     (data : CPSVCanonicalFormIIData A) (p : ℕ) (hp : 0 < p) :
-    CPSVCanonicalFormIIData (Kraus.blockTensor (d := d) (n := Fin D) A p) where
-  toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.blockTensor p hp
+    CPSVCanonicalFormIIData (Kraus.block A p) where
+  toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.block p hp
   blocks_left_canonical := fun k ↦
-    (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
-      (Kraus.IsTP.block (A := data.blocks k) (data.blocks_left_canonical k) p)
+    (Kraus.IsTP.block (A := data.blocks k) (data.blocks_left_canonical k) p)
   blocks_fixed_point := by
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
     exact ⟨Λ, hΛpos, hΛdiag, by
-      change Kraus.transferMap (Kraus.blockTensor (data.blocks k) p) Λ = Λ
-      exact Kraus.transferMap_blockTensor_fixedPoint (data.blocks k) p Λ hΛfix⟩
+      change Kraus.transferMap (Kraus.block (data.blocks k) p) Λ = Λ
+      rw [Kraus.transferMap_block, Module.End.pow_apply, Function.iterate_fixed hΛfix]⟩
 
 end CPSVCanonicalFormIIData
 
@@ -230,12 +226,12 @@ open MPTensor.IsCPSVCanonicalForm
 
 Source: arXiv:1606.00608, lines 227--244 define blocking, normal tensors, and
 canonical form; lines 259--301 give the weight-power expansion under products. -/
-theorem _root_.MPTensor.IsCPSVCanonicalForm.blockTensor {A : MPSTensor d D}
+theorem _root_.MPTensor.IsCPSVCanonicalForm.block {A : MPTensor α (Fin D)}
     (hA : IsCPSVCanonicalForm A)
     (p : ℕ) (hp : 0 < p) :
-    IsCPSVCanonicalForm (Kraus.blockTensor (d := d) (n := Fin D) A p) := by
+    IsCPSVCanonicalForm (Kraus.block A p) := by
   obtain ⟨data⟩ := hA
-  exact ⟨data.blockTensor p hp⟩
+  exact ⟨data.block p hp⟩
 
 end IsCPSVCanonicalForm
 
@@ -248,7 +244,7 @@ normalization, transfer-map primitivity, and tensor irreducibility are all
 preserved.
 
 This is the finite-family analogue of
-`exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible`, stated so
+`exists_pos_block_isInjective_of_tp_primitive_irreducible`, stated so
 that the consumer can feed the resulting prepared blocks into the
 `SectorBNT` prepared-block supplier.
 
@@ -267,43 +263,43 @@ one-site injective, left-canonical, primitive, and irreducible.
 Strategy:
 
 1. For each `k`, the per-block lemma
-   `exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible` gives a
+   `exists_pos_block_isInjective_of_tp_primitive_irreducible` gives a
    positive length `L k` at which the block becomes one-site injective.
 2. Setting `L := ∏ k, L k`, fixed-length injectivity persists at positive
-   multiples via `blockTensor_isInjective_mul_of_blockTensor_isInjective`.
+   multiples via `block_isInjective_mul_of_block_isInjective`.
 3. Trace-preservation, transfer-map primitivity, and tensor irreducibility
    are preserved at any positive blocking length via
    `Kraus.tp_primitive_irreducible_extra_blocking`.
 -/
 theorem exists_common_injective_blocking_of_tp_primitive_irr_family
-    {d r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
+    (hTP : ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin (dim k)) (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k)) :
     ∃ L : ℕ, 0 < L ∧ ∀ k : Fin r,
-      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) ∧
-      (∑ i : Fin (blockPhysDim d L),
-        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L i)ᴴ *
-          blockTensor (d := d) (n := Fin (dim k)) (blocks k) L i = 1) ∧
+      Kraus.IsInjective (Kraus.block (blocks k) L) ∧
+      (∑ i : (Fin L → α),
+        (Kraus.block (blocks k) L i)ᴴ *
+          Kraus.block (blocks k) L i = 1) ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin (dim k))
-          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L)) ∧
-      Kraus.IsIrreducibleFamily (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
+        (Kraus.transferMap (ι := (Fin L → α)) (n := Fin (dim k))
+          (Kraus.block (blocks k) L)) ∧
+      Kraus.IsIrreducibleFamily (Kraus.block (blocks k) L) := by
   classical
   -- `NeZero (dim k)` for each `k` from positivity.
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   -- Per-block injective blocking lengths.
   have hBlock : ∀ k : Fin r, ∃ Lk : ℕ, 0 < Lk ∧
-      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) Lk) := by
+      Kraus.IsInjective (Kraus.block (blocks k) Lk) := by
     intro k
-    exact MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible
+    exact MPSTensor.exists_pos_block_isInjective_of_tp_primitive_irreducible
       (blocks k) (hTP k) (hPrim k) (hIrr k)
   let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
   have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
   have hL_inj : ∀ k,
-      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (L k)) :=
+      Kraus.IsInjective (Kraus.block (blocks k) (L k)) :=
     fun k => (Classical.choose_spec (hBlock k)).2
   refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
   intro k
@@ -317,8 +313,8 @@ theorem exists_common_injective_blocking_of_tp_primitive_irr_family
   -- Step 2: injectivity at the common length via blockwise multiplication.
   have hInj :
       Kraus.IsInjective
-        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (∏ j : Fin r, L j)) := by
-    have hmul := MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective
+        (Kraus.block (blocks k) (∏ j : Fin r, L j)) := by
+    have hmul := MPSTensor.block_isInjective_mul_of_block_isInjective
       (blocks k) hmult_pos (hL_inj k)
     rw [hcommon]
     exact hmul
@@ -327,7 +323,6 @@ theorem exists_common_injective_blocking_of_tp_primitive_irr_family
     Finset.prod_pos fun j _ => hL_pos j
   obtain ⟨hTPk, hPrimk, hIrrk⟩ :=
     Kraus.tp_primitive_irreducible_extra_blocking
-      (d := d) (D := dim k)
       (blocks k) (hTP k) (hPrim k) (hIrr k) hL_total_pos
   exact ⟨hInj, hTPk, hPrimk, hIrrk⟩
 
