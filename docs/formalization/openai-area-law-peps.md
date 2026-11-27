@@ -201,7 +201,7 @@ hypothesis to the printed one.
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
 | Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `ManyBody.Interaction.hamiltonian_hermitianPart` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
-| Template (Definition 9.3) | `ManyBody.Template`, `Template.IsSeparated` (QICLean) | Definition. Polygons are read as nondegenerate ([paper-gap note](https://sirui-lu.com/QICLean/paper-gaps/arealaw2d_nondegenerate_templates.pdf)). |
+| Template (Definition 9.3) | `ManyBody.Template`, `Template.IsSeparated` (QICLean) | Definition. Polygons are read as nondegenerate ([paper-gap note](https://sirui-lu.com/QICLean/paper-gaps/oai26_nondegenerate_templates.pdf)). |
 | Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound`, `sublinearCollarBound_real` | Proved for every real `D₀ > 2R + 10` and `C_tpl ≥ 24`. |
 | Amplification (Proposition 10.2) | `AmplificationBound`, `amplificationBound` | Proved. `L + 2r = o(n^β)` follows from the radius bound (`Exponents.collar_add_radius_isLittleO`). The PEPS use with `A = Λ`, `M = 1` is `coarse_mutualInformation_le_of_sublinearCollarBound`, applied with the proved collar bound. |
 | Two-family entropy cancellation (Lemma 11.1) | `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`, `regionEntropy_le_residual_add_half_sum` | Proved. |
