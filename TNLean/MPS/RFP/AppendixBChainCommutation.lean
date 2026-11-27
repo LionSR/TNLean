@@ -154,12 +154,12 @@ theorem rfp_implies_nncph (A : MPSTensor d D)
     IsNNCPH A N := by
   have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
-  have hRFP' : IsTransferIdempotent (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hRFP' : IsTransferIdempotent (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     hGauge.isTransferIdempotent_iff.mp hRFP
-  have hNormal' : Kraus.IsNormal (Kraus.tpGauge (d := d) (D := D) A σ) :=
+  have hNormal' : Kraus.IsNormal (Kraus.tpGauge (ι := Fin d) (D := D) A σ) :=
     isNormal_of_gaugeEquiv hNT.isNormal hGauge
   have hNN := rfp_implies_nncph_of_leftCanonical
-    (Kraus.tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN
+    (Kraus.tpGauge (ι := Fin d) (D := D) A σ) hRFP' hNormal' hLeft N hN
   exact hGauge.symm.isNNCPH hNN
 
 end MPSTensor

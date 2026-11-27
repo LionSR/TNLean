@@ -9,6 +9,7 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.Operator.Boundary.BlockBoundarySelector
 import TNLean.MPS.Operator.Boundary.DualRepresentationAdjointBoundary
 import TNLean.MPS.Operator.Boundary.BlockSumAdjointBoundary
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Periodic canonical parents for arbitrary-boundary MPO symmetries
@@ -279,14 +280,15 @@ injectivity hypothesis on the compatible state tensor is needed. -/
 theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block_of_periodicAdjoint
     (h : IsBoundaryCompatible (blockSum O) A)
     (hAdjoint : IsPeriodicAdjointFamily O dual) (hdual : Function.Involutive dual)
-    (hNormal : ∀ a, Kraus.IsNormal (O a).toMPSTensor)
+    (hNormal : ∀ a, Kraus.IsNormal (O a))
     (hDim : ∀ a, 0 < dim a) (hL : 0 < L) (hLN : L ≤ N) (a : Fin r) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (MPSTensor.parentRingInteraction A L N).hamiltonian (mpo (O a) N) := by
   have : NeZero N := ⟨by omega⟩
   apply h.commute_hamiltonian_parentRingInteraction_mpo_block hL hLN ?_ a
   intro X
-  obtain ⟨Y, hY⟩ := hAdjoint.isBoundaryAdjointClosed_blockSum hdual hNormal hDim X
+  obtain ⟨Y, hY⟩ := hAdjoint.isBoundaryAdjointClosed_blockSum hdual
+    (fun a ↦ (isNormal_toMPSTensor_iff (O a)).2 (hNormal a)) hDim X
   exact ⟨Y, hY L hL⟩
 
 end MPOTensor

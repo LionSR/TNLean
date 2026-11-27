@@ -7,6 +7,7 @@ import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.Operator.Periodic.BondSimilarity
 import TNLean.MPS.Operator.Boundary.Boundary
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Arbitrary-boundary adjoints from normal periodic dual blocks
@@ -86,23 +87,11 @@ namespace IsPeriodicAdjointFamily
 variable {A : (a : ι) → MPOTensor d (dim a)} {dual : ι → ι}
 
 /-- Periodic physical adjoint equality is positive-length MPV equality for
-the flattened physical-adjoint and dual tensors. -/
+the physical-adjoint and dual tensors on the pair alphabet. -/
 theorem sameMPV₂Pos (h : IsPeriodicAdjointFamily A dual) (a : ι) :
-    MPTensor.SameMPV₂Pos (physicalAdjointTensor (A a)).toMPSTensor
-      (A (dual a)).toMPSTensor := by
-  intro N hN ρ
-  let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
-  let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
-  have hρ : (fun n ↦ finProdFinEquiv (σ n, τ n)) = ρ := by
-    funext n
-    exact finProdFinEquiv.apply_symm_apply (ρ n)
-  rw [← hρ]
-  change Matrix.trace (Kraus.evalWord (physicalAdjointTensor (A a)).toMPSTensor
-      (List.ofFn (fun n ↦ finProdFinEquiv (σ n, τ n)))) =
-    Matrix.trace (Kraus.evalWord (A (dual a)).toMPSTensor
-      (List.ofFn (fun n ↦ finProdFinEquiv (σ n, τ n))))
-  rw [evalWord_toMPSTensor_pairConfig, evalWord_toMPSTensor_pairConfig]
-  change mpo (physicalAdjointTensor (A a)) N σ τ = mpo (A (dual a)) N σ τ
+    MPTensor.SameMPV₂Pos (physicalAdjointTensor (A a)) (A (dual a)) := by
+  refine sameMPV₂Pos_iff_mpo_eq.2 fun N hN ↦ ?_
+  ext σ τ
   rw [mpo_physicalAdjointTensor, h a N hN]
   rfl
 
@@ -111,18 +100,20 @@ The two inequalities come from normal-target reductions in opposite dual
 directions; no one-site injectivity or canonical normalization is assumed. -/
 theorem bondDim_dual (h : IsPeriodicAdjointFamily A dual)
     (hdual : Function.Involutive dual)
-    (hNormal : ∀ a, Kraus.IsNormal (A a).toMPSTensor)
+    (hNormal : ∀ a, Kraus.IsNormal (A a))
     (hDim : ∀ a, 0 < dim a) (a : ι) : dim a = dim (dual a) := by
   let : ∀ a, NeZero (dim a) := fun a ↦ ⟨Nat.ne_of_gt (hDim a)⟩
   obtain ⟨V₁, W₁, h₁⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
       (A (dual a)).toMPSTensor (physicalAdjointTensor (A a)).toMPSTensor
-      (hNormal (dual a)) (h.sameMPV₂Pos a)
+      ((isNormal_toMPSTensor_iff _).2 (hNormal (dual a)))
+      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (h.sameMPV₂Pos a))
   obtain ⟨V₂, W₂, h₂⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
       (A (dual (dual a))).toMPSTensor
       (physicalAdjointTensor (A (dual a))).toMPSTensor
-      (hNormal (dual (dual a))) (h.sameMPV₂Pos (dual a))
+      ((isNormal_toMPSTensor_iff _).2 (hNormal (dual (dual a))))
+      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (h.sameMPV₂Pos (dual a)))
   exact Nat.le_antisymm (by simpa only [hdual a] using h₂.bondDim_le) h₁.bondDim_le
 
 /-- The normal-target reduction becomes a two-sided similarity. It gives
@@ -133,7 +124,7 @@ The boundary is \(V_a\overline XW_a\); its conjugation is entrywise rather
 than the virtual conjugate transpose. -/
 theorem exists_boundaryGauge (h : IsPeriodicAdjointFamily A dual)
     (hdual : Function.Involutive dual)
-    (hNormal : ∀ a, Kraus.IsNormal (A a).toMPSTensor)
+    (hNormal : ∀ a, Kraus.IsNormal (A a))
     (hDim : ∀ a, 0 < dim a) (a : ι) :
     ∃ (V : Matrix (Fin (dim (dual a))) (Fin (dim a)) ℂ)
       (W : Matrix (Fin (dim a)) (Fin (dim (dual a))) ℂ),
@@ -146,7 +137,8 @@ theorem exists_boundaryGauge (h : IsPeriodicAdjointFamily A dual)
   obtain ⟨V, W, hred⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
       (A (dual a)).toMPSTensor (physicalAdjointTensor (A a)).toMPSTensor
-      (hNormal (dual a)) (h.sameMPV₂Pos a)
+      ((isNormal_toMPSTensor_iff _).2 (hNormal (dual a)))
+      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (h.sameMPV₂Pos a))
   have hWV : W * V = 1 :=
     (Matrix.mul_eq_one_comm_of_equiv
       (finCongr (h.bondDim_dual hdual hNormal hDim a).symm)).mp hred.mul_eq_one

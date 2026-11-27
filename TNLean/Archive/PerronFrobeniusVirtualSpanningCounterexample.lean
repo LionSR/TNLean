@@ -237,17 +237,13 @@ theorem complexVirtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℂ) :
 
 lemma complexVirtualMatrix_mem_tensor_span (k : Fin 4) :
     complexVirtualMatrix k ∈
-      Submodule.span ℂ (Set.range (MPOTensor.toMPSTensor mpoTensor)) := by
+      Submodule.span ℂ (Set.range mpoTensor) := by
   apply Submodule.subset_span
-  refine ⟨finProdFinEquiv (k, k), ?_⟩
-  change mpoTensor (finProdFinEquiv (k, k)).divNat
-      (finProdFinEquiv (k, k)).modNat = complexVirtualMatrix k
-  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-  simp [mpoTensor]
+  exact ⟨(k, k), by simp [mpoTensor]⟩
 
 /-- The diagonal MPO tensor is injective: its four physical matrices span the
 full two-by-two virtual matrix algebra. -/
-theorem mpoTensor_isInjective : Kraus.IsInjective mpoTensor.toMPSTensor := by
+theorem mpoTensor_isInjective : Kraus.IsInjective mpoTensor := by
   unfold Kraus.IsInjective
   rw [Submodule.eq_top_iff']
   intro X
@@ -339,7 +335,7 @@ the present formal proof of Lemma C.5.  It does not identify `pairingL` and
 `pairingQ` with the particular tensors chosen by the SAL inverse-map
 construction. -/
 theorem injective_sourceZCL_tensor_with_nilpotent_sector_pairing :
-    Kraus.IsInjective mpoTensor.toMPSTensor ∧
+    Kraus.IsInjective mpoTensor ∧
       MPOTensor.IsSourceZCL mpoTensor ∧
       MPOTensor.physTraceTransfer mpoTensor =
         Matrix.map pairingProjection Complex.ofReal ∧

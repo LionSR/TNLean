@@ -674,7 +674,7 @@
 \begin{lemma}[Doubled-index self-overlap is the Hilbert--Schmidt trace]
     \label{thm:mpdo_doubled_overlap_hilbert_schmidt}
     \lean{MPOTensor.pairCfgEquiv,
-        MPOTensor.mpvOverlap_toMPSTensor_self}
+        MPOTensor.mpvOverlap_self}
     \leanok
     \uses{def:mpv_overlap,def:mpo_to_mps,def:mpo_family}
     Let $K$ be an MPO tensor. For every chain length $N$, the
@@ -720,7 +720,7 @@
 
 \begin{corollary}[Self-overlap as the trace of the square for an MPDO]
     \label{cor:mpdo_doubled_overlap_trace_sq}
-    \lean{MPOTensor.mpvOverlap_toMPSTensor_self_eq_trace_sq}
+    \lean{MPOTensor.mpvOverlap_self_eq_trace_sq}
     \leanok
     \uses{thm:mpdo_doubled_overlap_hilbert_schmidt,def:mpdo}
     If $K$ generates MPDOs and $N\geq1$, then
@@ -744,7 +744,7 @@
 \begin{corollary}[Real part of the self-overlap is the squared Frobenius
         norm]
     \label{cor:mpdo_doubled_overlap_frobenius}
-    \lean{MPOTensor.mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq}
+    \lean{MPOTensor.mpvOverlap_self_re_eq_frobenius_norm_sq}
     \leanok
     \uses{thm:mpdo_doubled_overlap_hilbert_schmidt}
     For every MPO tensor $K$ and every chain length $N$,
@@ -1056,7 +1056,7 @@
 
 \begin{lemma}[The overlap formula]
     \label{thm:mpdo_overlap_formula}
-    \lean{MPOTensor.mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow}
+    \lean{MPOTensor.mpvOverlap_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow}
     \leanok
     \uses{lem:mpdo_active_sector_trace_sq_matrix,thm:mpdo_doubled_overlap_hilbert_schmidt,thm:mpdo_trace_pow_cyclic_product,lem:mpdo_trace_conjugate_physical_invariant,lem:mpdo_sum_prod_traceSq_active}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization

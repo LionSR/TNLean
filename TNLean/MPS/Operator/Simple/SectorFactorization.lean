@@ -97,7 +97,7 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1448. -/
 theorem inverseMap_hayashi_sector_offdiagonal
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
@@ -139,7 +139,7 @@ the entry printed in the source display.  The correction is recorded in
 Source: arXiv:1606.00608, Appendix C.2, lines 1435--1448. -/
 noncomputable def sectorTensorL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k : Fin hη.m)
     (β₁ : Fin D) : Matrix (Fin (hη.dL k)) (Fin (hη.dL k)) ℂ :=
   Matrix.of fun l l' =>
@@ -152,7 +152,7 @@ indices.
 Source: arXiv:1606.00608, Appendix C.2, lines 1435--1448. -/
 noncomputable def sectorTensorR
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (β₃ : Fin D) (k : Fin hη.m) (α₃ : Fin D) :
     Matrix (Fin (hη.dR k)) (Fin (hη.dR k)) ℂ :=
   Matrix.of fun r r' => hayashiInverseRight K hK hη α₃ β₃ k r r'
@@ -180,7 +180,7 @@ at the pair printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1429--1448. -/
 theorem physicalSlice_sector_factorization
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
@@ -240,7 +240,7 @@ display. The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1407--1448. -/
 theorem exists_physicalSlice_sector_factorization
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (htrace : (mpo K 4).trace ≠ 0)
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     (hρ : IsThreeSiteClosure K (normalizedFourSiteTail K) ρ)
@@ -286,7 +286,7 @@ source display.  The correction is recorded in
 Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
 noncomputable def sectorEta
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m) :
     Matrix (Fin (hη.dR k) × Fin (hη.dL h)) (Fin (hη.dR k) × Fin (hη.dL h)) ℂ :=
   ∑ γ : Fin D,
@@ -312,7 +312,7 @@ chain.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1449. -/
 theorem physicalSlice_neighboring_contraction
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
@@ -355,7 +355,7 @@ $(r_k|_{\gamma} = \operatorname{tr}[(r_k)_{\gamma}]$.
 Source: arXiv:1606.00608, Appendix C.2, equation `lkrk`, lines 1473--1477. -/
 noncomputable def closedSectorR
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (β₃ : Fin D) (k : Fin hη.m) : Fin D → ℂ :=
   fun γ => (sectorTensorR K hK hη β₃ k γ).trace
 
@@ -366,7 +366,7 @@ $|l_k)_{\gamma} = \operatorname{tr}[(l_k)_{\gamma}]$.
 Source: arXiv:1606.00608, Appendix C.2, equation `lkrk`, lines 1473--1477. -/
 noncomputable def closedSectorL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k : Fin hη.m) :
     Fin D → ℂ :=
   fun γ => (sectorTensorL K hK hη R α₁ β₃ k γ).trace
@@ -382,7 +382,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `StochT`, lines 1452--1455,
 and equation `Tkn`, lines 1478--1481. -/
 theorem trace_sectorEta
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m) :
     (sectorEta K hK hη R α₁ β₃ k h).trace =
       closedSectorR K hK hη β₃ k ⬝ᵥ closedSectorL K hK hη R α₁ β₃ h := by
@@ -421,7 +421,7 @@ in symmetric pairs (`MPOTensor.exists_explicitEtaOperators_sectorEta`).
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
 noncomputable def ExplicitEtaOperators.ofSectorTensors
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D)
     (hpos : ∀ k h, (sectorEta K hK hη R α₁ β₃ k h).PosSemidef) :
     ExplicitEtaOperators hη where
@@ -435,7 +435,7 @@ matrix consumed by the rank-one step.
 Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1478--1481. -/
 @[simp] theorem ExplicitEtaOperators.traceMatrix_ofSectorTensors
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D)
     (hpos : ∀ k h, (sectorEta K hK hη R α₁ β₃ k h).PosSemidef)
     (k h : Fin hη.m) :

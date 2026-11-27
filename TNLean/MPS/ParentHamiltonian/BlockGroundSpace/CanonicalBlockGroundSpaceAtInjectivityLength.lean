@@ -321,7 +321,7 @@ private theorem _root_.MPTensor.IsNormalTensor.isNBlkInjective_cap_pow_four
     (hnK : n ≤ K) : Kraus.IsNBlkInjective A (K ^ 4) := by
   let : NeZero n := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B := Kraus.tpGauge (d := s) (D := n) A σ
+  let B := Kraus.tpGauge (ι := Fin s) (D := n) A σ
   have hBNormal : Kraus.IsNormal B :=
     isNormal_of_tp_primitive_irreducible B hTP hPrim hIrr
   have hOwn : Kraus.IsNBlkInjective B (n ^ 4) :=

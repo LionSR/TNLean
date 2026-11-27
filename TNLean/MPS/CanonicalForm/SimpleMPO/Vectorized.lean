@@ -226,12 +226,6 @@ theorem twistedTensor_toMPSTensor_pairRep (U V : G →* Matrix (Fin d) (Fin d) �
 
 end Rep
 
-/-- The matrix product vector of the doubled tensor at a word `w` is the entry of the
-periodic operator at the ket and bra configurations of `w`. -/
-theorem mpv_toMPSTensor (M : MPOTensor d D) {N : ℕ} (w : Fin N → Fin (d * d)) :
-    MPTensor.mpv (toMPSTensor M) w = mpo M N (fun n => (w n).divNat) fun n => (w n).modNat := by
-  rw [MPTensor.mpv_eq, MPTensor.coeff_eq, evalWord_toMPSTensor_ofFn, mpo_apply, mpoMatrixEntry]
-
 /-- **Proportional vectorized states are proportional density operators.**
 
 Bridge: at a fixed length, the matrix product vectors of the doubled tensors of `X` and `Y`
@@ -244,10 +238,11 @@ theorem mpv_toMPSTensor_eq_mul_iff (X Y : MPOTensor d D) (N : ℕ) (c : ℂ) :
   · intro h
     ext σ τ
     have h1 := h fun n => finProdFinEquiv (σ n, τ n)
-    simpa only [mpv_toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat, Matrix.smul_apply, smul_eq_mul] using h1
+    simpa only [mpv_toMPSTensor_eq, Equiv.symm_apply_apply, mpv_pair, Matrix.smul_apply,
+      smul_eq_mul] using h1
   · intro h w
-    rw [mpv_toMPSTensor, mpv_toMPSTensor, h, Matrix.smul_apply, smul_eq_mul]
+    rw [mpv_toMPSTensor_eq, mpv_toMPSTensor_eq, mpv_eq_mpo, mpv_eq_mpo, h, Matrix.smul_apply,
+      smul_eq_mul]
 
 /-- **Equal vectorized states are equal density operators.**
 

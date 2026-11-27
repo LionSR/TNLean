@@ -182,7 +182,7 @@ action multiplicities, the multiplicity coupled pentagon reads
 Source: GLM23, `coupledpent` (lines 554--562), specialized to the group
 case of lines 640--720. -/
 theorem groupFScalar_mul_groupLScalar
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
     (x : X) (g h k : G) :
     groupLScalar eG eX hN hM WF VA WA (k • x) g h *
@@ -234,7 +234,7 @@ multiplicity coupled pentagon is the scalar compatibility
 its nonvanishing L entries make the F entries nonzero. Source: GLM23,
 `coupledpent`, lines 554--562, and the group case, lines 640--720. -/
 theorem exists_lSymbol_isCompatible_of_group [Nonempty X]
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor)) :
     ∃ (L : LSymbol G X) (ω : ScalarThreeCochain G),
       (∀ x g h, (L x g h : ℂ) = groupLScalar eG eX hN hM WF VA WA x g h) ∧
@@ -264,7 +264,7 @@ injective block acted on without multiplicity, then the scalar F-symbol of
 the exact fusion maps is a three-coboundary: the MPO symmetry is
 non-anomalous. Source: GLM23, lines 607--636; arXiv:2502.20257, line 1925. -/
 theorem isTrivialGaugeClass_of_group_of_forall_smul_eq
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
     (x : X) (hfix : ∀ g : G, g • x = x) :
     ∃ ω : ScalarThreeCochain G,

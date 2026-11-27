@@ -38,11 +38,9 @@ of the products of the tensor entries around the chain. -/
 theorem mpo_apply_eq_sum_cyclic (M : MPOTensor d D) (s t : Fin N → Fin d) :
     mpo M N s t = ∑ g : Fin N → Fin D, ∏ n : Fin N, M (s n, t n) (g n) (g (n + 1)) := by
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic M.toMPSTensor
-    (fun n ↦ finProdFinEquiv (s n, t n))
+  have h := MPSTensor.trace_evalWord_eq_sum_cyclic M (fun n ↦ (s n, t n))
   rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] using h
+  exact h
 
 /-- **A periodic entry along a forced bond configuration.** If every closed bond configuration
 other than `g₀` meets a vanishing tensor entry, then the entry of the periodic operator at

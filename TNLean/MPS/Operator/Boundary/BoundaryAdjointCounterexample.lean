@@ -36,8 +36,8 @@ def tensor : MPOTensor 2 1 := fun (i, _) ↦ if i = 0 then 1 else 0
 /-- The bond-one product state \(|0\rangle\). -/
 def state : MPSTensor 2 1 := fun i ↦ if i = 0 then 1 else 0
 
-private theorem isInjective_of_letter_eq_one {d : ℕ} (A : MPSTensor d 1)
-    (i : Fin d) (hi : A i = 1) : Kraus.IsInjective A := by
+private theorem isInjective_of_letter_eq_one {α : Type*} (A : MPTensor α (Fin 1))
+    (i : α) (hi : A i = 1) : Kraus.IsInjective A := by
   rw [Kraus.IsInjective]
   apply top_unique
   intro X _
@@ -51,16 +51,16 @@ private theorem isInjective_of_letter_eq_one {d : ℕ} (A : MPSTensor d 1)
   rw [hX]
   exact Submodule.smul_mem _ _ hOne
 
-/-- The flattened operator tensor is already injective without blocking. -/
-theorem tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor :=
-  isInjective_of_letter_eq_one _ (0 : Fin (2 * 2)) (by rfl)
+/-- The operator tensor, on the pair alphabet, is already injective without blocking. -/
+theorem tensor_isInjective : Kraus.IsInjective tensor :=
+  isInjective_of_letter_eq_one _ ((0 : Fin 2), (0 : Fin 2)) (by rfl)
 
 /-- The state tensor is already injective without blocking. -/
 theorem state_isInjective : Kraus.IsInjective state :=
   isInjective_of_letter_eq_one _ 0 (by simp [state])
 
 /-- In particular, the operator tensor is normal. -/
-theorem tensor_isNormal : Kraus.IsNormal tensor.toMPSTensor :=
+theorem tensor_isNormal : Kraus.IsNormal tensor :=
   tensor_isInjective.isNormal
 
 /-- In particular, the state tensor is normal. -/

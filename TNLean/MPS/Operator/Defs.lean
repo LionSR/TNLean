@@ -399,6 +399,14 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
   simp only [transferMap, LinearMap.sum_apply, LinearMap.comp_apply,
     LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
 
+/-- The transfer map of an operator tensor is the transfer map of the tensor on the pair
+alphabet. -/
+theorem transferMap_eq_kraus_transferMap (M : MPOTensor d D) :
+    transferMap M = Kraus.transferMap M := by
+  refine LinearMap.ext fun X => ?_
+  rw [transferMap_apply, Kraus.transferMap_apply]
+  exact (Fintype.sum_prod_type' fun i j ↦ M (i, j) * X * (M (i, j))ᴴ).symm
+
 /-- The MPO transfer map equals the MPS transfer map of the doubled-index tensor. -/
 @[simp] lemma transferMap_eq_toMPSTensor (M : MPOTensor d D) :
     transferMap M = Kraus.transferMap (toMPSTensor M) := by
@@ -411,8 +419,8 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
 theorem transferMap_pos (M : MPOTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
     (transferMap M X).PosSemidef := by
-  simpa [transferMap_eq_toMPSTensor] using
-    Kraus.transferMap_pos (toMPSTensor M) hX
+  rw [transferMap_eq_kraus_transferMap]
+  exact Kraus.transferMap_pos M hX
 
 /-! ### MPDO: global positivity -/
 

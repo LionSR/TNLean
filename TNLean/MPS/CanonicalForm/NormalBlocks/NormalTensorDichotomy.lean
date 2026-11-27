@@ -63,8 +63,8 @@ theorem _root_.MPTensor.IsNormalTensor.overlap_dichotomy
   refine ⟨⟨hA.selfOverlap_tendsto_one, hB.selfOverlap_tendsto_one⟩, ?_⟩
   obtain ⟨σA, _hσA, _hσAfix, hTPA, hGaugeA, _hPrimA, hIrrA⟩ := hA.exists_tpGauge
   obtain ⟨σB, _hσB, _hσBfix, hTPB, hGaugeB, _hPrimB, hIrrB⟩ := hB.exists_tpGauge
-  let A' := Kraus.tpGauge (d := d) (D := D₁) A σA
-  let B' := Kraus.tpGauge (d := d) (D := D₂) B σB
+  let A' := Kraus.tpGauge (ι := Fin d) (D := D₁) A σA
+  let B' := Kraus.tpGauge (ι := Fin d) (D := D₂) B σB
   have hOverlapGauge : ∀ N,
       mpvOverlap (α := Fin d) A B N = mpvOverlap (α := Fin d) A' B' N := by
     intro N

@@ -237,8 +237,8 @@ as for the alphabet of length-two words of a one-site tensor.
 Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, proof at lines 1419--1446. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_iff_det_mul_eq {d' : ℕ}
     (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
-    (hcf₁ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
-    (hcf₂ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₁))
+    (hcf₂ : MPTensor.IsMPUCanonicalForm (reindexPhysical eP W₂))
     (hc₁ : ∀ N : ℕ, 0 < N → mpo W₁ N = (mpo W₁ N).map (starRingEnd ℂ))
     (hc₂ : ∀ N : ℕ, 0 < N → mpo W₂ N = (mpo W₂ N).map (starRingEnd ℂ))
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
@@ -263,8 +263,8 @@ Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, proof at lines 14
 "only if" direction follows the route of the module docstring. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq
     {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
-    (hcf₁ : MPTensor.IsMPUCanonicalForm W₁.toMPSTensor)
-    (hcf₂ : MPTensor.IsMPUCanonicalForm W₂.toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm W₁)
+    (hcf₂ : MPTensor.IsMPUCanonicalForm W₂)
     (hc₁ : ∀ N : ℕ, 0 < N → mpo W₁ N = (mpo W₁ N).map (starRingEnd ℂ))
     (hc₂ : ∀ N : ℕ, 0 < N → mpo W₂ N = (mpo W₂ N).map (starRingEnd ℂ))
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}

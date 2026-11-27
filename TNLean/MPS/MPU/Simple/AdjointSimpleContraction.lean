@@ -320,15 +320,15 @@ theorem IsMPUCanonicalFormII.adjointSimpleContraction_eq_smul
   have hnormal : Kraus.IsNormal U.normalizedFlattening :=
     hU.isNormalTensor_normalizedFlattening.isNormal
   have hcross : ∀ i j : Fin (d * d),
-      (adjointSimpleContraction U hU.ρ).toMPSTensor i * U.normalizedFlattening j =
-        U.normalizedFlattening i * (adjointSimpleContraction U hU.ρ).toMPSTensor j := by
+      adjointSimpleContraction U hU.ρ (i.divNat, i.modNat) * U.normalizedFlattening j =
+        U.normalizedFlattening i * adjointSimpleContraction U hU.ρ (j.divNat, j.modNat) := by
     intro i j
-    simp only [normalizedFlattening, toMPSTensor, Matrix.mul_smul, Matrix.smul_mul]
+    simp only [normalizedFlattening, Matrix.mul_smul, Matrix.smul_mul]
     rw [hU.adjointSimpleContraction_cross_mul hsimple hadjoint]
   obtain ⟨δ, hδ⟩ := hnormal.eq_smul_of_cross_mul_eq hcross
   refine ⟨δ * ((Real.sqrt d : ℂ)⁻¹), ?_⟩
   intro i j
-  simpa only [normalizedFlattening, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+  simpa only [normalizedFlattening, MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat, smul_smul] using hδ (finProdFinEquiv (i, j))
 
 end MPOTensor

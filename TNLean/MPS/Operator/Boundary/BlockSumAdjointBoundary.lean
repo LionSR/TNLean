@@ -46,11 +46,11 @@ theorem mpoWithBoundary_blockSum
       ∑ a, mpoWithBoundary (A a) (Matrix.finSigmaDiagonalBlock X a) N := by
   ext σ τ
   simp only [Matrix.sum_apply, mpoWithBoundary]
-  rw [Matrix.trace_mul_comm, ← evalWord_toMPSTensor_pairConfig,
-    blockSum_toMPSTensor, MPSTensor.trace_evalWord_toTensorFromBlocks_mul]
+  rw [Matrix.trace_mul_comm, ← kraus_evalWord_ofFn_pair,
+    blockSum_eq_toTensorFromBlocks, MPSTensor.trace_evalWord_toTensorFromBlocks_mul]
   apply Finset.sum_congr rfl
   intro a _
-  simp only [one_pow, one_smul, evalWord_toMPSTensor_pairConfig]
+  simp only [one_pow, one_smul, kraus_evalWord_ofFn_pair]
   exact Matrix.trace_mul_comm _ _
 
 /-- Insert one arbitrary boundary into a chosen summand of the flattened
@@ -115,7 +115,7 @@ is required. -/
 theorem IsPeriodicAdjointFamily.exists_blockSumAdjointBoundary
     {A : (a : Fin r) → MPOTensor d (dim a)} {dual : Fin r → Fin r}
     (h : IsPeriodicAdjointFamily A dual) (hdual : Function.Involutive dual)
-    (hNormal : ∀ a, Kraus.IsNormal (A a).toMPSTensor)
+    (hNormal : ∀ a, Kraus.IsNormal (A a))
     (hDim : ∀ a, 0 < dim a) :
     ∃ (V : ∀ a, Matrix (Fin (dim (dual a))) (Fin (dim a)) ℂ)
       (W : ∀ a, Matrix (Fin (dim a)) (Fin (dim (dual a))) ℂ),
@@ -144,7 +144,7 @@ positive lengths, derived from normal blocks and explicit periodic duality. -/
 theorem IsPeriodicAdjointFamily.isBoundaryAdjointClosed_blockSum
     {A : (a : Fin r) → MPOTensor d (dim a)} {dual : Fin r → Fin r}
     (h : IsPeriodicAdjointFamily A dual) (hdual : Function.Involutive dual)
-    (hNormal : ∀ a, Kraus.IsNormal (A a).toMPSTensor)
+    (hNormal : ∀ a, Kraus.IsNormal (A a))
     (hDim : ∀ a, 0 < dim a) : IsBoundaryAdjointClosed (blockSum A) := by
   obtain ⟨V, W, _, _, _, hboundary⟩ := h.exists_blockSumAdjointBoundary hdual hNormal hDim
   intro X

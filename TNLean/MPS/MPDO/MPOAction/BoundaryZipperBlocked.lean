@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Fusion.BoundaryZipper
 import TNLean.MPS.FundamentalTheorem.Zipper.CompleteZipperFusionBlocked
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Complete zipper families from arbitrary-boundary closedness
@@ -63,7 +64,7 @@ namespace MPOTensor.CompleteZipperFusionFamily
 variable {p g : ℕ} {D : Fin g → ℕ} {T : ∀ c, MPOTensor p (D c)}
   {N : Fin g → Fin g → Fin g → ℕ}
 
-variable (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c)
+variable (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c)
   (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (T c).toMPSTensor))
   (V : ∀ a b c, Fin (N a b c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ)
   (W : ∀ a b c, Fin (N a b c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ)
@@ -77,15 +78,18 @@ biorthogonal family. The multiplicities and both rectangular maps are
 unchanged. Source: GLM23 Appendix A and arXiv:1511.08090, lines 427--431. -/
 @[reducible] noncomputable def ofBiorthogonalBlocked :
     CompleteZipperFusionFamily (Fin g)
-      (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
-  let hspec := (exists_blockTensor_isMPOBlockLeftInverse T hT hD hne).choose_spec
+      (Kraus.blockPhysDim p
+        (jointBlockLength T (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT c)) hD hne)) :=
+  let hspec := (exists_blockTensor_isMPOBlockLeftInverse T
+    (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT c)) hD hne).choose_spec
   ofBiorthogonal hD hspec.2.1 V W (fun a b ↦ (hVW a b).blockMPO hspec.1)
     hspec.2.2.choose hspec.2.2.choose_spec
 
 /-- The complete family has precisely the commonly blocked source tensors. -/
 theorem ofBiorthogonalBlocked_tensor (c : Fin g) :
     (ofBiorthogonalBlocked hT hD hne V W hVW).tensor c =
-      blockTensor (T c) (jointBlockLength T hT hD hne) := rfl
+      blockTensor (T c)
+        (jointBlockLength T (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hT c)) hD hne) := rfl
 
 /-- Physical blocking preserves every synthesis entry, including its
 unblocked incoming bond coordinates. -/
@@ -113,9 +117,8 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
     {p g : ℕ} {D : Fin g → ℕ}
     {T : MPOTensor p (∑ c : Fin g, D c)} (h : IsBoundaryClosed T)
     (A : (c : Fin g) → MPOTensor p (D c))
-    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun c ↦ (A c).toMPSTensor))
-    (hInj : ∀ c, Kraus.IsInjective (A c).toMPSTensor) (hD : ∀ c, 0 < D c)
+    (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (hInj : ∀ c, Kraus.IsInjective (A c)) (hD : ∀ c, 0 < D c)
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (A c).toMPSTensor)) :
     ∃ (N : Fin g → Fin g → Fin g → ℕ)
       (V : ∀ a b c, Fin (N a b c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ)
@@ -131,14 +134,18 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
         HEq F.fusionAnalysis
           (fun a b ↦ CompleteZipperFusionFamily.biorthogonalAnalysis (V a b)) := by
   classical
+  have hBlocks' : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
+      (fun c ↦ (A c).toMPSTensor) := congrArg toMPSTensor hBlocks
+  have hInj' : ∀ c, Kraus.IsInjective (A c).toMPSTensor :=
+    fun c ↦ (isInjective_toMPSTensor_iff (A c)).2 (hInj c)
   choose N V W hVW using
     fun a b ↦ h.exists_blockFusionDecomposition_of_isInjective
-      A hBlocks hInj hD hne a b
+      A hBlocks' hInj' hD hne a b
   let hNormal := fun c ↦ (hInj c).isNormal
-  let L := CompleteZipperFusionFamily.jointBlockLength A hNormal hD hne
   let F := CompleteZipperFusionFamily.ofBiorthogonalBlocked hNormal hD hne V W hVW
-  exact ⟨N, V, W, hVW, L,
-    CompleteZipperFusionFamily.jointBlockLength_pos A hNormal hD hne,
+  exact ⟨N, V, W, hVW, _,
+    CompleteZipperFusionFamily.jointBlockLength_pos A
+      (fun c ↦ (isNormal_toMPSTensor_iff _).2 (hNormal c)) hD hne,
     F, rfl, rfl, HEq.rfl, HEq.rfl, HEq.rfl⟩
 
 end MPOTensor

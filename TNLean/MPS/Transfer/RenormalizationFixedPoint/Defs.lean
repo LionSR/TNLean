@@ -50,7 +50,7 @@ the completely positive map associated to `A` is idempotent,
 The source defines the fixed-point property by a physical blocking isometry.
 Theorem `isTransferIdempotent_iff_hasPhysicalBlockingIsometry` proves that the two conditions
 are equivalent. -/
-def IsTransferIdempotent (A : MPSTensor d D) : Prop :=
+def IsTransferIdempotent {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) : Prop :=
   Kraus.transferMap A ∘ₗ Kraus.transferMap A = Kraus.transferMap A
 
 /-- If the product letters of an MPS tensor are obtained from its letters by a

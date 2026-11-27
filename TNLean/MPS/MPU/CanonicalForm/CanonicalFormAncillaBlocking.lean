@@ -114,14 +114,12 @@ canonical form: its letters are the normalized letters with weight \(d^{1/2}\).
 Source: arXiv:1703.09188, canonical form, lines 259--267. -/
 theorem isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening [NeZero d]
     {U : MPOTensor d D} (hU : MPTensor.IsNormalTensor U.normalizedFlattening) :
-    MPTensor.IsMPUCanonicalForm U.toMPSTensor := by
+    MPTensor.IsMPUCanonicalForm U := by
   have hc : (Real.sqrt d : ℂ) ≠ 0 := by
     have hd : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
     exact_mod_cast (Real.sqrt_pos.mpr hd).ne'
-  have hU' : (fun i => (Real.sqrt d : ℂ) • U.normalizedFlattening i) = U.toMPSTensor := by
-    funext i
-    simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
-  rw [← hU']
+  refine (MPTensor.isMPUCanonicalForm_reindexPhysical_iff finProdFinEquiv.symm).1 ?_
+  rw [← sqrt_smul_normalizedFlattening]
   obtain ⟨data⟩ := hU.isMPUCanonicalForm
   exact ⟨data.smul _ hc⟩
 
@@ -133,8 +131,8 @@ Source: arXiv:1703.09188, Definition `def:equivalent-tensors`, lines 706--724,
 with Proposition `prop:normal-tensor`, lines 344--354. -/
 theorem IsMPU.isMPUCanonicalForm_tensorPhysicalId [NeZero d] [NeZero D]
     {U : MPOTensor d D} (hU : IsMPU U)
-    (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor) {p : ℕ} (hp : 0 < p) :
-    MPTensor.IsMPUCanonicalForm (MPOTensor.tensorPhysicalId U p).toMPSTensor := by
+    (hcf : MPTensor.IsMPUCanonicalForm U) {p : ℕ} (hp : 0 < p) :
+    MPTensor.IsMPUCanonicalForm (MPOTensor.tensorPhysicalId U p) := by
   have : NeZero p := ⟨hp.ne'⟩
   apply isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening
   rw [normalizedFlattening_tensorPhysicalId U p hp]
@@ -148,8 +146,8 @@ Source: arXiv:1703.09188, blocking, lines 297--305, with Proposition
 `prop:normal-tensor`, lines 344--354. -/
 theorem IsMPU.isMPUCanonicalForm_blockTensor [NeZero d] [NeZero D]
     {U : MPOTensor d D} (hU : IsMPU U)
-    (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor) {k : ℕ} (hk : 0 < k) :
-    MPTensor.IsMPUCanonicalForm (MPOTensor.blockTensor U k).toMPSTensor := by
+    (hcf : MPTensor.IsMPUCanonicalForm U) {k : ℕ} (hk : 0 < k) :
+    MPTensor.IsMPUCanonicalForm (MPOTensor.blockTensor U k) := by
   have : NeZero (Kraus.blockPhysDim d k) := ⟨by
     rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero k (NeZero.ne d)⟩
@@ -167,10 +165,10 @@ Source: arXiv:1703.09188, Definitions `def:strictly-equivalent-tensors` and
 `prop:normal-tensor`, lines 344--354. -/
 theorem IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId [NeZero d] [NeZero D]
     {U : MPOTensor d D} (hU : IsMPU U)
-    (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
+    (hcf : MPTensor.IsMPUCanonicalForm U)
     {p k : ℕ} (hp : 0 < p) (hk : 0 < k) :
     MPTensor.IsMPUCanonicalForm
-      (MPOTensor.blockTensor (MPOTensor.tensorPhysicalId U p) k).toMPSTensor := by
+      (MPOTensor.blockTensor (MPOTensor.tensorPhysicalId U p) k) := by
   have : NeZero p := ⟨hp.ne'⟩
   exact (hU.tensorPhysicalId p hp).isMPUCanonicalForm_blockTensor
     (hU.isMPUCanonicalForm_tensorPhysicalId hcf hp) hk

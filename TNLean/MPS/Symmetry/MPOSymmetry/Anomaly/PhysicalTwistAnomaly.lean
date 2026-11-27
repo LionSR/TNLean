@@ -17,8 +17,8 @@ tensors, with anomaly three-cocycle `ω` (arXiv:2502.20257, display preceding `e
 
 * **An on-site unitary change of physical basis.** Replacing every letter by `u T^{kl} u^†`,
   that is the tensor `pairTwist u \bar u T`, conjugates every periodic operator by `u^{⊗N}`.
-  Stacking commutes with the change of basis, and the doubled-index letters of the new tensors
-  are fixed linear combinations of the old ones, so the same fusion tensors reduce the new
+  Stacking commutes with the change of basis, and the letters of the new tensors on the pair
+  alphabet are fixed linear combinations of the old ones, so the same fusion tensors reduce the new
   stacked products and compare the two fusion trees by the same scalar.
 * **A character.** Replacing `T_g` by `χ(g) T_g`, for nonzero scalars with
   `χ(g) χ(h) = χ(gh)`, multiplies `O_g` by `χ(g)^N`. Stacking multiplies the scalars, so again
@@ -49,11 +49,11 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d d' D : ℕ}
+variable {α α' : Type*} {D : ℕ}
 
 /-- If every letter of `A` is a linear combination of the letters of `B`, then the words of `A`
 of each length lie in the span of the words of `B` of the same length. -/
-theorem wordSpan_le_of_forall_mem_span {A : MPSTensor d D} {B : MPSTensor d' D}
+theorem wordSpan_le_of_forall_mem_span {A : MPTensor α (Fin D)} {B : MPTensor α' (Fin D)}
     (h : ∀ a, A a ∈ Submodule.span ℂ (Set.range B)) (N : ℕ) :
     Kraus.wordSpan A N ≤ Kraus.wordSpan B N := by
   induction N with
@@ -65,7 +65,7 @@ theorem wordSpan_le_of_forall_mem_span {A : MPSTensor d D} {B : MPSTensor d' D}
       exact Submodule.span_le.2 (Set.range_subset_iff.2 h)
 
 /-- A tensor whose letters span the letters of a normal tensor is normal. -/
-theorem isNormal_of_forall_mem_span {A : MPSTensor d D} {B : MPSTensor d' D}
+theorem isNormal_of_forall_mem_span {A : MPTensor α (Fin D)} {B : MPTensor α' (Fin D)}
     (h : ∀ a, A a ∈ Submodule.span ℂ (Set.range B)) (hA : Kraus.IsNormal A) :
     Kraus.IsNormal B := by
   obtain ⟨N, hN, hA⟩ := hA
@@ -77,11 +77,14 @@ section IsDressedProportional
 
 open MPTensor.IsDressedProportional
 
-variable {m : ℕ} {B : MPSTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
+variable {m : ℕ} {B : MPTensor α (Fin D)} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
 /-- Dressed proportionality persists when every letter is multiplied by the same scalar. -/
-theorem _root_.MPTensor.IsDressedProportional.smul (h : IsDressedProportional B X Y z) (c : ℂ) :
+theorem _root_.MPTensor.IsDressedProportional.smul [Finite α]
+    (h : IsDressedProportional B X Y z) (c : ℂ) :
     IsDressedProportional (fun i ↦ c • B i) X Y z := by
+  classical
+  have := Fintype.ofFinite α
   simpa [ite_smul] using h.recombine fun i a ↦ if i = a then c else 0
 
 end IsDressedProportional
@@ -124,16 +127,13 @@ theorem pairTwist_star_pairTwist {u : Matrix (Fin d) (Fin d) ℂ} (hu : star u *
   rw [pairTwist_pairTwist, hu, ← Matrix.map_mul, hu, Matrix.map_one _ (map_zero _) (map_one _),
     pairTwist_one_one]
 
-/-- The doubled-index letters of a physical twist are linear combinations of the doubled-index
-letters of the original tensor, with the coefficients `u_{ik} v_{jl}` of `u ⊗ v`. -/
-theorem toMPSTensor_pairTwist (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) :
-    (pairTwist u v M).toMPSTensor = fun p ↦ ∑ q : Fin (d * d),
-      (u p.divNat q.divNat * v p.modNat q.modNat) • M.toMPSTensor q := by
-  funext p
-  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
-  simp only [toMPSTensor, pairTwist, Finset.smul_sum, smul_smul]
-  refine Finset.sum_congr rfl fun k _ ↦ Finset.sum_congr rfl fun l _ ↦ ?_
-  simp
+/-- The letters of a physical twist are linear combinations of the letters of the original
+tensor, with the coefficients `u_{ik} v_{jl}` of `u ⊗ v` on the pair alphabet. -/
+theorem pairTwist_eq_sum_smul (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) :
+    pairTwist u v M = fun p ↦ ∑ q : Fin d × Fin d, (u p.1 q.1 * v p.2 q.2) • M q := by
+  funext ⟨i, j⟩
+  rw [Fintype.sum_prod_type]
+  simp only [pairTwist, Finset.smul_sum, smul_smul]
 
 /-- **A unitary change of physical basis commutes with stacking**: for a unitary `u`, the
 stacked product of `u M u^†` and `u N u^†` is `u (M N) u^†`, at the level of tensors. -/
@@ -198,9 +198,9 @@ theorem IsNormalRepresentation.withTensor_pairTwist (hF : F.IsNormalRepresentati
     (hu : star u * u = 1) (hT : ∀ g, T g = pairTwist u (u.map (starRingEnd ℂ)) (F.tensor g)) :
     (F.withTensor T).IsNormalRepresentation where
   isNormal g := by
-    change Kraus.IsNormal (T g).toMPSTensor
+    change Kraus.IsNormal (T g)
     refine MPSTensor.isNormal_of_forall_mem_span (fun a ↦ ?_) (hF.isNormal g)
-    rw [← pairTwist_star_pairTwist hu (F.tensor g), ← hT, toMPSTensor_pairTwist]
+    rw [← pairTwist_star_pairTwist hu (F.tensor g), ← hT, pairTwist_eq_sum_smul]
     exact Submodule.sum_mem _ fun q _ ↦
       Submodule.smul_mem _ _ (Submodule.subset_span ⟨q, rfl⟩)
   operator_mul g h N hN := by
@@ -219,20 +219,19 @@ noncomputable def physicalTwist (fd : FusionData F) (hu : star u * u = 1)
   V := fd.V
   W := fd.W
   isReduction g h := by
-    change MPTensor.IsReduction (mulTensor (T g) (T h)).toMPSTensor (T (g * h)).toMPSTensor
-      (fd.V g h) (fd.W g h)
+    change MPTensor.IsReduction (mulTensor (T g) (T h)) (T (g * h)) (fd.V g h) (fd.W g h)
     simp only [hT]
-    rw [mulTensor_pairTwist_map_star hu, toMPSTensor_pairTwist, toMPSTensor_pairTwist]
+    rw [mulTensor_pairTwist_map_star hu, pairTwist_eq_sum_smul, pairTwist_eq_sum_smul]
     exact (fd.isReduction g h).recombine _
 
 /-- The two fusion trees of the transported fusion tensors compare by the same scalar. -/
 theorem isAssociator_physicalTwist {fd : FusionData F} (hu : star u * u = 1)
     (hT : ∀ g, T g = pairTwist u (u.map (starRingEnd ℂ)) (F.tensor g)) {g h k : G} {z : ℂ}
     (hz : fd.IsAssociator g h k z) : (fd.physicalTwist hu hT).IsAssociator g h k z := by
-  change MPTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k)).toMPSTensor
+  change MPTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k))
     (fd.leftV g h k) (fd.rightV g h k) z
   simp only [hT]
-  rw [mulTensor_pairTwist_map_star hu, mulTensor_pairTwist_map_star hu, toMPSTensor_pairTwist]
+  rw [mulTensor_pairTwist_map_star hu, mulTensor_pairTwist_map_star hu, pairTwist_eq_sum_smul]
   exact hz.recombine _
 
 /-- **The anomaly is unchanged by an on-site unitary change of physical basis**: the transported
@@ -263,9 +262,12 @@ theorem IsNormalRepresentation.withTensor_smul (hF : F.IsNormalRepresentation)
     (hT : ∀ g, T g = χ g • F.tensor g) :
     (F.withTensor T).IsNormalRepresentation where
   isNormal g := by
-    change Kraus.IsNormal (T g).toMPSTensor
-    rw [hT]
-    exact (MPSTensor.isNormal_smul_iff (hχ0 g) _).2 (hF.isNormal g)
+    change Kraus.IsNormal (T g)
+    refine MPSTensor.isNormal_of_forall_mem_span (fun a ↦ ?_) (hF.isNormal g)
+    have ha : F.tensor g a = (χ g)⁻¹ • T g a := by
+      rw [hT, Pi.smul_apply, smul_smul, inv_mul_cancel₀ (hχ0 g), one_smul]
+    rw [ha]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨a, rfl⟩)
   operator_mul g h N hN := by
     change mpo (T g) N * mpo (T h) N = mpo (T (g * h)) N
     simp only [hT, mpo_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
@@ -280,8 +282,7 @@ noncomputable def smulTensor (fd : FusionData F) (hχ : ∀ g h, χ g * χ h = �
   V := fd.V
   W := fd.W
   isReduction g h := by
-    change MPTensor.IsReduction (mulTensor (T g) (T h)).toMPSTensor (T (g * h)).toMPSTensor
-      (fd.V g h) (fd.W g h)
+    change MPTensor.IsReduction (mulTensor (T g) (T h)) (T (g * h)) (fd.V g h) (fd.W g h)
     simp only [hT]
     rw [mulTensor_smul_smul, hχ]
     exact (fd.isReduction g h).smul _
@@ -290,7 +291,7 @@ noncomputable def smulTensor (fd : FusionData F) (hχ : ∀ g h, χ g * χ h = �
 theorem isAssociator_smulTensor {fd : FusionData F} (hχ : ∀ g h, χ g * χ h = χ (g * h))
     (hT : ∀ g, T g = χ g • F.tensor g) {g h k : G} {z : ℂ} (hz : fd.IsAssociator g h k z) :
     (fd.smulTensor hχ hT).IsAssociator g h k z := by
-  change MPTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k)).toMPSTensor
+  change MPTensor.IsDressedProportional (mulTensor (mulTensor (T g) (T h)) (T k))
     (fd.leftV g h k) (fd.rightV g h k) z
   simp only [hT]
   rw [mulTensor_smul_smul, mulTensor_smul_smul]

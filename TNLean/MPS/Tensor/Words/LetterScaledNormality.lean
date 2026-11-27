@@ -25,11 +25,11 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- Rescaling each letter `i` by a scalar `c i` multiplies a word by the product of the scalars
 of its letters. -/
-theorem evalWord_letterSmul (c : Fin d → ℂ) (A : MPSTensor d D) (w : List (Fin d)) :
+theorem evalWord_letterSmul (c : α → ℂ) (A : MPTensor α (Fin D)) (w : List α) :
     Kraus.evalWord (fun i ↦ c i • A i) w = (w.map c).prod • Kraus.evalWord A w := by
   induction w with
   | nil => simp
@@ -38,7 +38,7 @@ theorem evalWord_letterSmul (c : Fin d → ℂ) (A : MPSTensor d D) (w : List (F
         smul_mul_smul_comm]
 
 /-- Rescaling each letter by a scalar does not enlarge the span of the length-`N` words. -/
-theorem wordSpan_letterSmul_le (c : Fin d → ℂ) (A : MPSTensor d D) (N : ℕ) :
+theorem wordSpan_letterSmul_le (c : α → ℂ) (A : MPTensor α (Fin D)) (N : ℕ) :
     Kraus.wordSpan (fun i ↦ c i • A i) N ≤ Kraus.wordSpan A N := by
   refine Submodule.span_le.2 (Set.range_subset_iff.2 fun σ ↦ ?_)
   rw [evalWord_letterSmul]
@@ -46,7 +46,7 @@ theorem wordSpan_letterSmul_le (c : Fin d → ℂ) (A : MPSTensor d D) (N : ℕ)
 
 /-- Rescaling each letter by its own nonzero scalar preserves the span of the length-`N`
 words. -/
-theorem wordSpan_letterSmul_eq {c : Fin d → ℂ} (hc : ∀ i, c i ≠ 0) (A : MPSTensor d D)
+theorem wordSpan_letterSmul_eq {c : α → ℂ} (hc : ∀ i, c i ≠ 0) (A : MPTensor α (Fin D))
     (N : ℕ) : Kraus.wordSpan (fun i ↦ c i • A i) N = Kraus.wordSpan A N := by
   refine le_antisymm (wordSpan_letterSmul_le c A N) ?_
   have h := wordSpan_letterSmul_le (fun i ↦ (c i)⁻¹) (fun i ↦ c i • A i) N
@@ -55,13 +55,13 @@ theorem wordSpan_letterSmul_eq {c : Fin d → ℂ} (hc : ∀ i, c i ≠ 0) (A : 
 
 /-- Rescaling each letter by its own nonzero scalar preserves block injectivity at every
 blocking length. -/
-theorem isNBlkInjective_letterSmul_iff {c : Fin d → ℂ} (hc : ∀ i, c i ≠ 0)
-    (A : MPSTensor d D) (N : ℕ) :
+theorem isNBlkInjective_letterSmul_iff {c : α → ℂ} (hc : ∀ i, c i ≠ 0)
+    (A : MPTensor α (Fin D)) (N : ℕ) :
     Kraus.IsNBlkInjective (fun i ↦ c i • A i) N ↔ Kraus.IsNBlkInjective A N := by
   simp only [Kraus.IsNBlkInjective, wordSpan_letterSmul_eq hc A N]
 
 /-- Rescaling each letter by its own nonzero scalar preserves normality. -/
-theorem isNormal_letterSmul_iff {c : Fin d → ℂ} (hc : ∀ i, c i ≠ 0) (A : MPSTensor d D) :
+theorem isNormal_letterSmul_iff {c : α → ℂ} (hc : ∀ i, c i ≠ 0) (A : MPTensor α (Fin D)) :
     Kraus.IsNormal (fun i ↦ c i • A i) ↔ Kraus.IsNormal A := by
   simp only [Kraus.isNormal_iff, isNBlkInjective_letterSmul_iff hc A]
 

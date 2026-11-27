@@ -95,8 +95,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
 195--219, and Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def ofVirtualMatrices (F : PhysicalSectorFactorization K)
     (X : Matrix (Fin E) (Fin D) ℂ) (Y : Matrix (Fin D) (Fin E) ℂ)
-    (hTransport : ∀ i : Fin (d * d),
-      L.toMPSTensor i = X * K.toMPSTensor i * Y) :
+    (hTransport : ∀ i : Fin d × Fin d, L i = X * K i * Y) :
     PhysicalSectorFactorization L := by
   classical
   refine
@@ -116,11 +115,7 @@ noncomputable def ofVirtualMatrices (F : PhysicalSectorFactorization K)
   intro beta alpha
   ext ⟨k, a⟩ ⟨h, b⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-  have hLetter (i j : Fin d) :
-      L (i, j) = X * K (i, j) * Y := by
-    simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using
-      hTransport (finProdFinEquiv (i, j))
+  have hLetter (i j : Fin d) : L (i, j) = X * K (i, j) * Y := hTransport (i, j)
   have hSlice :
       physicalSlice L beta alpha =
         ∑ gamma, ∑ delta,
@@ -174,8 +169,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
 @[simp] theorem ofVirtualMatrices_neighboringOperator
     (F : PhysicalSectorFactorization K)
     (X : Matrix (Fin E) (Fin D) ℂ) (Y : Matrix (Fin D) (Fin E) ℂ)
-    (hTransport : ∀ i : Fin (d * d),
-      L.toMPSTensor i = X * K.toMPSTensor i * Y)
+    (hTransport : ∀ i : Fin d × Fin d, L i = X * K i * Y)
     (k h : Fin F.sectorCount) :
     (F.ofVirtualMatrices X Y hTransport).neighboringOperator k h =
       F.neighboringOperatorWithMatrix k h (Y * X) := by
@@ -222,8 +216,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
 195--219, and Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def ofVirtualCompression (F : PhysicalSectorFactorization K)
     (V : Matrix (Fin D) (Fin E) ℂ)
-    (hCompression : ∀ i : Fin (d * d),
-      L.toMPSTensor i = Vᴴ * K.toMPSTensor i * V) :
+    (hCompression : ∀ i : Fin d × Fin d, L i = Vᴴ * K i * V) :
     PhysicalSectorFactorization L :=
   F.ofVirtualMatrices Vᴴ V hCompression
 
@@ -237,8 +230,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
 195--219, and Appendix C.2, equation `etarl`, lines 1441--1445. -/
 @[simp] theorem ofVirtualCompression_neighboringOperator
     (F : PhysicalSectorFactorization K) (V : Matrix (Fin D) (Fin E) ℂ)
-    (hCompression : ∀ i : Fin (d * d),
-      L.toMPSTensor i = Vᴴ * K.toMPSTensor i * V)
+    (hCompression : ∀ i : Fin d × Fin d, L i = Vᴴ * K i * V)
     (k h : Fin F.sectorCount) :
     (F.ofVirtualCompression V hCompression).neighboringOperator k h =
       F.neighboringOperatorWithMatrix k h (V * Vᴴ) :=

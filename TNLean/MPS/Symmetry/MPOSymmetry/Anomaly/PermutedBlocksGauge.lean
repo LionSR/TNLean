@@ -88,7 +88,7 @@ noncomputable def rescale (fd : FusionData F) (β : ScalarCocycle G) : FusionDat
 
 /-- The left fusion tensors before and after rescaling by `β` differ by `β`. -/
 theorem isDressedProportional_rescale (fd : FusionData F) (β : ScalarCocycle G) (g h : G) :
-    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h))
       (fd.V g h) ((fd.rescale β).V g h) (β (g, h)) :=
   ⟨0, fun w _ ↦ by simp [rescale, Matrix.smul_mul, smul_smul, (β (g, h)).ne_zero]⟩
 
@@ -205,9 +205,10 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
       rw [(((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
           (MPTensor.SameMPV₂Pos.refl (A x))) N hN σ,
         (hSame (g * h) _ x (MPTensor.SameMPV₂Pos.refl (A x))) N hN σ, mul_smul]
-    have h₁ := ((FusionData.isDressedProportional_relativeScalar hF fd fd' g h).actTensor_kronId
-      (A x)).mul_left (ad.V (g * h) x)
-    have h₂ := (hγ (g * h) x).pullback ((fd'.isReduction g h).actTensor_kronId (A x)) hSameB
+    have h₁ := (((FusionData.isDressedProportional_relativeScalar hF fd fd' g h)).actTensor_kronId
+        (A x)).mul_left (ad.V (g * h) x)
+    have h₂ := (hγ (g * h) x).pullback
+      (((fd'.isReduction g h)).actTensor_kronId (A x)) hSameB
     exact (h₁.trans h₂).mul_left (castIndex D (mul_smul g h x))
   have key := (hact.trans (isDressedProportional_lSymbol (fd := fd') (ad := ad') hA hperm x g h))
     |>.eq_of_forall_exists_ne_zero

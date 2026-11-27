@@ -86,8 +86,8 @@ of fixed incoming blocks give their individual fusion multiplicities.
 Source: GLM23, Appendix A, `decompopen` and `eq:ortho`. -/
 theorem IsBoundaryClosed.exists_fusionDecomposition_of_retracts
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
-    (A : (c : Fin r) → MPSTensor (d * d) (dim c))
-    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (A : (c : Fin r) → MPOTensor d (dim c))
+    (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L)
     (S₁ : MPOTensor d E₁) (S₂ : MPOTensor d E₂)
     (V₁ : Matrix (Fin E₁) (Fin (∑ c : Fin r, dim c)) ℂ)
@@ -100,25 +100,23 @@ theorem IsBoundaryClosed.exists_fusionDecomposition_of_retracts
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c)) (Fin (E₁ * E₂)) ℂ)
       (W : ∀ c, Fin (m c) → Matrix (Fin (E₁ * E₂)) (Fin (dim c)) ℂ),
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor S₁ S₂).toMPSTensor
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor S₁ S₂)
         (fun q : (c : Fin r) × Fin (m c) ↦ A q.1)
         (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) := by
   obtain ⟨b, hb⟩ := (isBoundaryClosed_iff_exists_linearMap T).mp hT
   apply MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport_restrict
-    (mulTensor T T).toMPSTensor (mulTensor S₁ S₂).toMPSTensor A
+    (mulTensor T T) (mulTensor S₁ S₂) A
     (Matrix.finSigmaDiagonalBlocks.comp b) ?_
     (stackedBondMap V₁ V₂) (stackedBondMap W₁ W₂) ?_ ?_ hL hSpan
   · intro n hn X w
-    rw [mpvWithBoundary_toMPSTensor]
-    have hh := congrArg (fun M ↦ M (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat))
-      (hb n hn X)
-    rw [hh, ← mpvWithBoundary_toMPSTensor, hBlocks,
+    rw [mpvWithBoundary_eq_mpoWithBoundary]
+    have hh := congrArg (fun M ↦ M (fun k ↦ (w k).1) (fun k ↦ (w k).2)) (hb n hn X)
+    rw [hh, ← mpvWithBoundary_eq_mpoWithBoundary, hBlocks,
       MPSTensor.mpvWithBoundary_toTensorFromBlocks_one]
     rfl
   · rw [stackedBondMap_mul, hVW₁, hVW₂, stackedBondMap_one]
   · intro i
-    exact mulTensor_intertwine_stackedBondMap T T S₁ S₂ W₁ W₂ hW₁ hW₂
-      i.divNat i.modNat
+    exact mulTensor_intertwine_stackedBondMap T T S₁ S₂ W₁ W₂ hW₁ hW₂ i.1 i.2
 
 /-- The individual incoming blocks of a closed block-diagonal tensor have
 exact biorthogonal fusion tensors. Source: GLM23, `fusiontensors`,
@@ -126,25 +124,21 @@ exact biorthogonal fusion tensors. Source: GLM23, `fusiontensors`,
 theorem IsBoundaryClosed.exists_blockFusionDecomposition
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPOTensor d (dim c))
-    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun c ↦ (A c).toMPSTensor))
-    {L : ℕ} (hL : 0 < L)
-    (hSpan : MPSTensor.WordTupleSpanTop (fun c ↦ (A c).toMPSTensor) L)
+    (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L)
     (a b : Fin r) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c)) (Fin (dim a * dim b)) ℂ)
       (W : ∀ c, Fin (m c) → Matrix (Fin (dim a * dim b)) (Fin (dim c)) ℂ),
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (m c) ↦ (A q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b))
+        (fun q : (c : Fin r) × Fin (m c) ↦ A q.1)
         (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) := by
   have hinter c i j : T (i, j) * MPSTensor.blockInclusion dim c =
       MPSTensor.blockInclusion dim c * A c (i, j) := by
-    have h := MPSTensor.toTensorFromBlocks_mul_blockInclusion
-      (fun _ ↦ 1) (fun c ↦ (A c).toMPSTensor) c (finProdFinEquiv (i, j))
+    have h := MPSTensor.toTensorFromBlocks_mul_blockInclusion (fun _ ↦ 1) A c (i, j)
     rw [← hBlocks] at h
-    simpa [toMPSTensor] using h
-  exact hT.exists_fusionDecomposition_of_retracts
-    (fun c ↦ (A c).toMPSTensor) hBlocks hL hSpan (A a) (A b)
+    simpa using h
+  exact hT.exists_fusionDecomposition_of_retracts A hBlocks hL hSpan (A a) (A b)
     (MPSTensor.blockInclusion dim a)ᴴ (MPSTensor.blockInclusion dim a)
     (MPSTensor.blockInclusion dim b)ᴴ (MPSTensor.blockInclusion dim b)
     (MPSTensor.blockInclusion_conjTranspose_mul_self dim a)
@@ -191,8 +185,7 @@ theorem IsBoundaryCompatible.exists_blockActionDecomposition
     {A : MPSTensor d (∑ c : Fin s, dim c)} (h : IsBoundaryCompatible T A)
     (S : (a : Fin r) → MPOTensor d (opDim a))
     (B : (c : Fin s) → MPSTensor d (dim c))
-    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (S a).toMPSTensor))
+    (hT : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) S)
     (hA : A = MPTensor.toTensorFromBlocks (fun _ ↦ 1) B)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop B L)
     (a : Fin r) (x : Fin s) :
@@ -206,10 +199,9 @@ theorem IsBoundaryCompatible.exists_blockActionDecomposition
   let U := MPSTensor.blockInclusion opDim a
   let J := MPSTensor.blockInclusion dim x
   have hU i j : T (i, j) * U = U * S a (i, j) := by
-    have hh := MPSTensor.toTensorFromBlocks_mul_blockInclusion
-      (fun _ ↦ 1) (fun a ↦ (S a).toMPSTensor) a (finProdFinEquiv (i, j))
+    have hh := MPSTensor.toTensorFromBlocks_mul_blockInclusion (fun _ ↦ 1) S a (i, j)
     rw [← hT] at hh
-    simpa [toMPSTensor, U] using hh
+    simpa [U] using hh
   have hJ i : A i * J = J * B x i := by
     rw [hA]
     simpa only [one_smul] using

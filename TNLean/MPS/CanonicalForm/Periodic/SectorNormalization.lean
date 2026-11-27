@@ -95,8 +95,8 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ) σ = σ ∧
-      GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
-      IsPeriodic m (Kraus.tpGauge (d := d) (D := D) A σ) := by
+      GaugeEquiv A (Kraus.tpGauge (ι := Fin d) (D := D) A σ) ∧
+      IsPeriodic m (Kraus.tpGauge (ι := Fin d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hLeft, hGauge, hIrr⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one
       hA.irreducible hA.spectral_radius_one
@@ -106,7 +106,7 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     simpa [Matrix.det_nonsing_inv] using inv_ne_zero hSdet
   have hPeripheral :
       peripheralEigenvalues
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (d := d) (D := D) A σ)) =
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (ι := Fin d) (D := D) A σ)) =
         peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
     change peripheralEigenvalues (Kraus.mapLM (Kraus.tpGauge A σ)) =
       peripheralEigenvalues (Kraus.mapLM A)
@@ -325,7 +325,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
   have : NeZero D := ⟨hD⟩
   obtain ⟨σ, hσ, -, hLeft, -, hIrrB⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one hIrr hRadius
-  set B : MPSTensor d D := Kraus.tpGauge (d := d) (D := D) A σ with hBdef
+  set B : MPSTensor d D := Kraus.tpGauge (ι := Fin d) (D := D) A σ with hBdef
   have hSdet : (CFC.sqrt σ).det ≠ 0 :=
     (Matrix.PosDef.isUnit_det_cfc_sqrt hσ).ne_zero
   have hSinvDet : ((CFC.sqrt σ)⁻¹).det ≠ 0 := by
@@ -571,7 +571,7 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
   obtain ⟨m, hSpec⟩ :=
     exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one hIrrScaled hRadScaled
   obtain ⟨σ, hσ, hσfix, hGauge, hPer⟩ := hSpec.exists_isPeriodic_tpGauge
-  refine ⟨Kraus.tpGauge (d := d) (D := D) (fun i => ζ • A i) σ, ζ, m, hζ, hGauge, ?_, hPer⟩
+  refine ⟨Kraus.tpGauge (ι := Fin d) (D := D) (fun i => ζ • A i) σ, ζ, m, hζ, hGauge, ?_, hPer⟩
   intro N τ
   rw [← hGauge.sameMPV N τ]
   simp only [mpv, coeff]

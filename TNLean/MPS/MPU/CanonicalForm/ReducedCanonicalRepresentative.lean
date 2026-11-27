@@ -8,6 +8,7 @@ import TNLean.MPS.CanonicalForm.SimpleMPU.FullSupport
 import TNLean.MPS.Tensor.Tactic
 import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.MPU.CanonicalForm.TransferStabilizationConverse
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Reduced canonical representatives of matrix product unitaries
@@ -346,15 +347,6 @@ private noncomputable def ofNormalizedFlattening
     (A : MPSTensor (d * d) D) : MPOTensor d D :=
   fun ij => (Real.sqrt d : ℂ) • A (finProdFinEquiv ij)
 
-private theorem toMPSTensor_ofNormalizedFlattening
-    (A : MPSTensor (d * d) D) :
-    (ofNormalizedFlattening A).toMPSTensor =
-      fun ij => (Real.sqrt d : ℂ) • A ij := by
-  funext ij
-  rw [show ij = finProdFinEquiv (ij.divNat, ij.modNat) by
-    exact (finProdFinEquiv.apply_symm_apply ij).symm]
-  simp [ofNormalizedFlattening, MPOTensor.toMPSTensor]
-
 private theorem normalizedFlattening_ofNormalizedFlattening [NeZero d]
     (A : MPSTensor (d * d) D) :
     (ofNormalizedFlattening A).normalizedFlattening = A := by
@@ -362,21 +354,10 @@ private theorem normalizedFlattening_ofNormalizedFlattening [NeZero d]
     exact_mod_cast NeZero.pos d
   have hsqrt : (Real.sqrt d : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hd).ne'
-  change (fun ij => ((Real.sqrt d : ℂ)⁻¹) •
-    (ofNormalizedFlattening A).toMPSTensor ij) = A
-  rw [toMPSTensor_ofNormalizedFlattening]
   funext ij
-  rw [smul_smul, inv_mul_cancel₀ hsqrt, one_smul]
-
-private theorem sqrt_smul_normalizedFlattening [NeZero d]
-    (U : MPOTensor d D) :
-    (fun ij => (Real.sqrt d : ℂ) • U.normalizedFlattening ij) = U.toMPSTensor := by
-  have hd : (0 : ℝ) < d := by
-    exact_mod_cast NeZero.pos d
-  have hsqrt : (Real.sqrt d : ℂ) ≠ 0 :=
-    Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hd).ne'
-  funext ij
-  simp [MPOTensor.normalizedFlattening, smul_smul, hsqrt]
+  change ((Real.sqrt d : ℂ)⁻¹) •
+    ((Real.sqrt d : ℂ) • A (finProdFinEquiv (finProdFinEquiv.symm ij))) = A ij
+  rw [Equiv.apply_symm_apply, smul_smul, inv_mul_cancel₀ hsqrt, one_smul]
 
 /-- Every matrix product unitary has a positive-dimensional
 canonical-form-II matrix product unitary representative of no larger bond
@@ -403,17 +384,19 @@ theorem IsMPU.exists_reduced_cfii_representative
   let Ured : MPOTensor d Dred := ofNormalizedFlattening Ared
   have hFlat : Ured.normalizedFlattening = Ared :=
     normalizedFlattening_ofNormalizedFlattening Ared
-  have hRaw : MPTensor.SameMPV₂Pos U.toMPSTensor Ured.toMPSTensor := by
-    mpv_ext
-    rw [← sqrt_smul_normalizedFlattening U,
-      toMPSTensor_ofNormalizedFlattening, MPSTensor.mpv_smul,
-      MPSTensor.mpv_smul, hSame N hN σ]
-  have hMpo : ∀ N : ℕ, 0 < N → mpo Ured N = mpo U N := by
-    intro N hN
-    ext σ τ
-    rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-      ← MPSTensor.mpv_toMPSTensor_pairConfig]
-    exact (hRaw N hN (fun n => finProdFinEquiv (σ n, τ n))).symm
+  have hRaw : MPTensor.SameMPV₂Pos U Ured := by
+    intro N hN σ
+    have h1 : MPTensor.mpv U σ = MPTensor.mpv (Kraus.reindexPhysical finProdFinEquiv.symm U)
+        (fun n ↦ finProdFinEquiv (σ n)) := by
+      rw [MPTensor.mpv_reindexPhysical]
+      simp
+    have h2 : MPTensor.mpv Ured σ = MPTensor.mpv (fun ij ↦ (Real.sqrt d : ℂ) • Ared ij)
+        (fun n ↦ finProdFinEquiv (σ n)) :=
+      MPTensor.mpv_reindexPhysical (⇑finProdFinEquiv) (fun ij ↦ (Real.sqrt d : ℂ) • Ared ij) σ
+    rw [h1, h2, ← sqrt_smul_normalizedFlattening U, MPSTensor.mpv_smul, MPSTensor.mpv_smul,
+      hSame N hN]
+  have hMpo : ∀ N : ℕ, 0 < N → mpo Ured N = mpo U N := fun N hN ↦
+    (sameMPV₂Pos_iff_mpo_eq.1 hRaw N hN).symm
   have hUred : Ured.IsMPU := by
     intro N hN
     rw [hMpo N (Nat.zero_lt_of_lt hN)]
@@ -441,7 +424,7 @@ original tensor.
 Sources: CPSV17, arXiv:1703.09188, lines 319–356; MGSC18, arXiv:1706.07329v2,
 Proposition 20, lines 3815–3938 of `cornerproblem.tex`. -/
 theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
-    {U : MPOTensor d D} (hU : IsMPU U) (hInj : Kraus.IsInjective U.toMPSTensor) :
+    {U : MPOTensor d D} (hU : IsMPU U) (hInj : Kraus.IsInjective U) :
     ∃ (V : MPOTensor d D) (_hV : IsMPUCanonicalFormII V)
       (X : GL (Fin D) ℂ),
       (∀ i j, V (i, j) = (X : Matrix (Fin D) (Fin D) ℂ) * U (i, j) *
@@ -449,16 +432,11 @@ theorem IsMPU.exists_cfii_representative_of_isInjective [NeZero d]
       (∀ N : ℕ, 0 < N → mpo V N = mpo U N) := by
   let : NeZero D := hU.neZero_bond
   obtain ⟨E, _hE, V, hV, hED, hMpo⟩ := hU.exists_reduced_cfii_representative
-  have hSame : MPTensor.SameMPV₂Pos V.toMPSTensor U.toMPSTensor := by
-    intro N hN σ
-    have hσ : σ = (fun n => finProdFinEquiv ((σ n).divNat, (σ n).modNat)) := by
-      funext n
-      exact (finProdFinEquiv.apply_symm_apply (σ n)).symm
-    rw [hσ, MPSTensor.mpv_toMPSTensor_pairConfig,
-      MPSTensor.mpv_toMPSTensor_pairConfig, hMpo N hN]
+  have hSame : MPTensor.SameMPV₂Pos V U := sameMPV₂Pos_iff_mpo_eq.2 hMpo
   obtain ⟨P, Q, hRed⟩ :=
     MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos
-      U.toMPSTensor V.toMPSTensor hInj hSame
+      U.toMPSTensor V.toMPSTensor ((isInjective_toMPSTensor_iff U).2 hInj)
+      ((sameMPV₂Pos_toMPSTensor_iff V U).2 hSame)
   have hE : E = D := Nat.le_antisymm hED hRed.bondDim_le
   subst E
   have hQP : Q * P = 1 := mul_eq_one_comm.mp hRed.mul_eq_one

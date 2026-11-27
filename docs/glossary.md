@@ -1309,11 +1309,11 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:** `MPOTensor.IsZCL (M : MPOTensor d D) : Prop`.
 - **Defined in:** `TNLean/MPS/Operator/DensityOperator/ZCL.lean`.
-- **Meaning:** the doubled-index transfer map is idempotent,
+- **Meaning:** the transfer map of the tensor on the pair alphabet is idempotent,
   $E_M\circ E_M=E_M$.
 - **Sanctioned bridge:**
-  `MPOTensor.isZCL_iff_toMPSTensor_isTransferIdempotent` identifies this with
-  transfer idempotence of the doubled-index MPS tensor `M.toMPSTensor`.
+  `MPOTensor.isZCL_iff_isTransferIdempotent` identifies this with
+  transfer idempotence of `M` read as a tensor on the pair alphabet.
 - **Caveat:** this is not the physical-trace ZCL diagram of CPSV16 Definition
   4.2 and not the physical-map RFP predicate `MPOTensor.IsRFPViaTS`.
 

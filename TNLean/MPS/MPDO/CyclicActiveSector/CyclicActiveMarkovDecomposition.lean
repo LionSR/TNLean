@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveCutRegrouping
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveAdjacentCoefficientExtraction
 import TNLean.MPS.MPDO.Entropy.SALArbitraryCut
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Hayashi decomposition in cyclic-active coordinates
@@ -493,7 +494,7 @@ sectors, and it is obtained after one additional marginal replacement.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) (A C : ℕ) :
     let ρ_ABC :=
@@ -539,7 +540,7 @@ additional marginal replacement. It assumes no injectivity, normality, or
 zero-correlation-length property of the selected fixed-product tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
-    (hK : Kraus.IsInjective K.toMPSTensor) (data : CommutingForm K)
+    (hK : Kraus.IsInjective K) (data : CommutingForm K)
     (hZCL : K.IsSourceZCL)
     (A C : ℕ) :
     let F :=
@@ -701,7 +702,7 @@ translation-invariant commuting bond is
 `CommutingForm.isSAL_of_isSourceZCL`; see
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) : IsSAL K := by
   have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
@@ -752,7 +753,7 @@ resulting normalized marginals from the selected fixed-product tensor to the
 source tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_isSourceZCL
-    (hMPDO : IsMPDO K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (hMPDO : IsMPDO K) (hK : Kraus.IsInjective K)
     (data : CommutingForm K) (hZCL : K.IsSourceZCL) :
     IsSAL K := by
   let F :=
@@ -802,9 +803,9 @@ Proposition C.8 (`3to4`), lines 1569--1594, and Proposition `4to2`, lines
 1597--1619. The local fixes of the two directions are recorded in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_iff_nonempty_commutingForm (K : MPOTensor d D) (hMPDO : IsMPDO K)
-    (hK : Kraus.IsInjective K.toMPSTensor) (hZCL : K.IsSourceZCL) :
+    (hK : Kraus.IsInjective K) (hZCL : K.IsSourceZCL) :
     IsSAL K ↔ Nonempty (CommutingForm K) :=
-  ⟨nonempty_commutingForm_of_isSAL K hK, fun ⟨data⟩ ↦
+  ⟨nonempty_commutingForm_of_isSAL K ((isInjective_toMPSTensor_iff K).2 hK), fun ⟨data⟩ ↦
     data.isSAL_of_isSourceZCL hMPDO hK hZCL⟩
 
 end MPOTensor

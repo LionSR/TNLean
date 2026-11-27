@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalBNT
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The cyclic projector of a nontrivial periodic vector
@@ -533,7 +534,7 @@ injective.  The theorem `hasNoPeriodicVectors_verticalTensor_of_horizontalCF`
 below treats normalized BNT-refined horizontal form. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
     {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
-    (hInj : Kraus.IsInjective M.toMPSTensor) :
+    (hInj : Kraus.IsInjective M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
   intro n V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm
   by_contra hne
@@ -545,7 +546,8 @@ theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
     have h := firstSiteMatrix_mul_mpo_comm (stackedTensor M p) (hM.stackedTensor p) hQherm
       (stackedTensor_ketLeftMul_invariant M hword) 1
     rwa [mpo_stackedTensor] at h
-  exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M hInj hQidem
+  exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M
+    ((isInjective_toMPSTensor_iff M).2 hInj) hQidem
     (mpo_commute_of_commute_pow M hM 2 (by omega) hp hCommPow)
 
 /-- The vertically viewed tensor of an MPDO has no nontrivial periodic vectors whenever

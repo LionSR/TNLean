@@ -48,16 +48,16 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {d D₁ D₂ D₃ : ℕ}
+variable {α : Type*} {D₁ D₂ D₃ : ℕ}
 
 /-- The residual letters of a composite reduction: `R^i = N^i + W₁ M^i V₁`, where `N` and `M`
 are the residual letters of the two factors.
 
 Source: arXiv:1706.07329v2, Proposition 21, `cornerproblem.tex` lines 3142--3144 (the residual
 letters), applied to the composite of arXiv:2502.20257, `main.tex` lines 1506--1535. -/
-theorem reductionResidual_trans_apply (C : MPSTensor d D₃) (B : MPSTensor d D₂)
-    (A : MPSTensor d D₁) (V₁ : Matrix (Fin D₂) (Fin D₃) ℂ) (W₁ : Matrix (Fin D₃) (Fin D₂) ℂ)
-    (V₂ : Matrix (Fin D₁) (Fin D₂) ℂ) (W₂ : Matrix (Fin D₂) (Fin D₁) ℂ) (i : Fin d) :
+theorem reductionResidual_trans_apply (C : MPTensor α (Fin D₃)) (B : MPTensor α (Fin D₂))
+    (A : MPTensor α (Fin D₁)) (V₁ : Matrix (Fin D₂) (Fin D₃) ℂ) (W₁ : Matrix (Fin D₃) (Fin D₂) ℂ)
+    (V₂ : Matrix (Fin D₁) (Fin D₂) ℂ) (W₂ : Matrix (Fin D₂) (Fin D₁) ℂ) (i : α) :
     reductionResidual C A (V₂ * V₁) (W₁ * W₂) i =
       reductionResidual C B V₁ W₁ i + W₁ * reductionResidual B A V₂ W₂ i * V₁ := by
   simp only [reductionResidual, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_assoc]
@@ -67,13 +67,13 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {C : MPSTensor d D₃} {B : MPSTensor d D₂} {A : MPSTensor d D₁}
+variable {C : MPTensor α (Fin D₃)} {B : MPTensor α (Fin D₂)} {A : MPTensor α (Fin D₁)}
   {V₁ : Matrix (Fin D₂) (Fin D₃) ℂ} {W₁ : Matrix (Fin D₃) (Fin D₂) ℂ}
   {V₂ : Matrix (Fin D₁) (Fin D₂) ℂ} {W₂ : Matrix (Fin D₂) (Fin D₁) ℂ}
 
 private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_trans_append_singleton
-    (w : List (Fin d))
-    (x : Fin d) :
+    (w : List α)
+    (x : α) :
     Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) (w ++ [x]) =
       Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w *
           reductionResidual C B V₁ W₁ x +
@@ -92,10 +92,10 @@ Source: arXiv:1706.07329v2, Lemma `lem:VNW=0`, `cornerproblem.tex` lines 3946--3
 to the composite reductions of arXiv:2502.20257, `main.tex` lines 1506--1535. -/
 theorem _root_.MPTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul
     (h₁ : IsReduction C B V₁ W₁)
-    (w : List (Fin d)) :
+    (w : List α) :
     V₁ * Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w * W₁ =
         Kraus.evalWord (reductionResidual B A V₂ W₂) w ∧
-      ∀ q : List (Fin d), q ≠ [] →
+      ∀ q : List α, q ≠ [] →
         V₁ * Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w *
           Kraus.evalWord (reductionResidual C B V₁ W₁) q * W₁ = 0 := by
   induction w using List.reverseRecOn with
@@ -129,8 +129,8 @@ theorem _root_.MPTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul
 private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_mul_trans_mul_eq_zero
     (h₁ : IsReduction C B V₁ W₁)
     {N₁ N₂ : ℕ} (hN₁ : IsReductionResidualNilpotencyBound C B V₁ W₁ N₁)
-    (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) (w : List (Fin d)) :
-    ∀ p : List (Fin d), N₁ + N₂ ≤ p.length + w.length →
+    (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) (w : List α) :
+    ∀ p : List α, N₁ + N₂ ≤ p.length + w.length →
       Kraus.evalWord (reductionResidual C B V₁ W₁) p *
           Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w * W₁ = 0 := by
   induction w with
@@ -165,8 +165,8 @@ private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_mul_trans
 private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_trans_mul_eq_zero
     (h₁ : IsReduction C B V₁ W₁)
     {N₁ N₂ : ℕ} (hN₁ : IsReductionResidualNilpotencyBound C B V₁ W₁ N₁)
-    (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) (w : List (Fin d)) :
-    ∀ q : List (Fin d), 2 * N₁ + N₂ ≤ w.length + q.length →
+    (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) (w : List α) :
+    ∀ q : List α, 2 * N₁ + N₂ ≤ w.length + q.length →
       Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w *
           Kraus.evalWord (reductionResidual C B V₁ W₁) q = 0 := by
   induction w using List.reverseRecOn with
@@ -224,8 +224,8 @@ residual nilpotency bound is preserved.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 3147--3152; the
 intertwiner is the bond associator of arXiv:1606.00608, lines 995--999. -/
-theorem isReductionResidualNilpotencyBound_of_intertwine {B' : MPSTensor d D₂}
-    {B : MPSTensor d D₃} {A : MPSTensor d D₁} {V : Matrix (Fin D₁) (Fin D₃) ℂ}
+theorem isReductionResidualNilpotencyBound_of_intertwine {B' : MPTensor α (Fin D₂)}
+    {B : MPTensor α (Fin D₃)} {A : MPTensor α (Fin D₁)} {V : Matrix (Fin D₁) (Fin D₃) ℂ}
     {W : Matrix (Fin D₃) (Fin D₁) ℂ} {P : Matrix (Fin D₂) (Fin D₃) ℂ}
     {Q : Matrix (Fin D₃) (Fin D₂) ℂ} (hQP : Q * P = 1) (hPQ : P * Q = 1)
     (hB : ∀ i, B' i * P = P * B i) {N : ℕ}
@@ -237,7 +237,7 @@ theorem isReductionResidualNilpotencyBound_of_intertwine {B' : MPSTensor d D₂}
     have hB' : B' i = P * B i * Q := by
       rw [← hB i, Matrix.mul_assoc, hPQ, Matrix.mul_one]
     simp only [reductionResidual, hB', Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_assoc]
-  have hword : ∀ w : List (Fin d), Kraus.evalWord (reductionResidual B' A (V * Q) (P * W)) w =
+  have hword : ∀ w : List α, Kraus.evalWord (reductionResidual B' A (V * Q) (P * W)) w =
       P * Kraus.evalWord (reductionResidual B A V W) w * Q := by
     intro w
     induction w with
@@ -271,17 +271,6 @@ private theorem kronecker_sub' {l m n p : Type*} (Z : Matrix n p ℂ) (X Y : Mat
   ext
   simp [mul_sub]
 
-/-- The residual letters of a reduction of matrix product operator tensors, as an operator
-tensor: `(X - W A V)^{ij} = X^{ij} - W A^{ij} V`. -/
-private def residualTensor (X : MPOTensor d D₂) (A : MPOTensor d D₁)
-    (V : Matrix (Fin D₁) (Fin D₂) ℂ) (W : Matrix (Fin D₂) (Fin D₁) ℂ) : MPOTensor d D₂ :=
-  fun ij ↦ X ij - W * A ij * V
-
-private theorem toMPSTensor_residualTensor (X : MPOTensor d D₂) (A : MPOTensor d D₁)
-    (V : Matrix (Fin D₁) (Fin D₂) ℂ) (W : Matrix (Fin D₂) (Fin D₁) ℂ) :
-    (residualTensor X A V W).toMPSTensor =
-      MPTensor.reductionResidual X.toMPSTensor A.toMPSTensor V W := rfl
-
 /-- **An identity strand on the right preserves the residual bound.** If the residual words of
 `(V, W)` from `X` to `A` vanish at length `N`, so do those of `(V ⊗ 1, W ⊗ 1)` from `X · P`
 to `A · P`: the latter are sums of Kronecker products of the former with words of `P`.
@@ -291,23 +280,20 @@ strand beside a fusion tensor is that of arXiv:2502.20257, `main.tex` lines 1506
 theorem isReductionResidualNilpotencyBound_mulTensor_kronId {X : MPOTensor d D₂}
     {A : MPOTensor d D₁} (P : MPOTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ} {N : ℕ}
-    (hN : MPTensor.IsReductionResidualNilpotencyBound X.toMPSTensor A.toMPSTensor V W N) :
-    MPTensor.IsReductionResidualNilpotencyBound (mulTensor X P).toMPSTensor
-      (mulTensor A P).toMPSTensor (kronId V D₃) (kronId W D₃) N := by
-  have hres : MPTensor.reductionResidual (mulTensor X P).toMPSTensor
-      (mulTensor A P).toMPSTensor (kronId V D₃) (kronId W D₃) =
-        (mulTensor (residualTensor X A V W) P).toMPSTensor := by
-    funext ij
-    simp only [MPTensor.reductionResidual, toMPSTensor, mulTensor_apply, kronId_mul_submatrix_sum,
-      submatrix_sum_mul_kronId, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
+    (hN : MPTensor.IsReductionResidualNilpotencyBound X A V W N) :
+    MPTensor.IsReductionResidualNilpotencyBound (mulTensor X P) (mulTensor A P)
+      (kronId V D₃) (kronId W D₃) N := by
+  have hres : MPTensor.reductionResidual (mulTensor X P) (mulTensor A P)
+      (kronId V D₃) (kronId W D₃) = mulTensor (MPTensor.reductionResidual X A V W) P := by
+    funext ⟨i, k⟩
+    simp only [MPTensor.reductionResidual, mulTensor_apply, kronId_mul_submatrix_sum,
+      submatrix_sum_mul_kronId, sub_kronecker', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
-  rw [hres, evalWord_toMPSTensor_mulTensor_ofFn]
-  have hzero : ∀ ρ : Fin L → Fin d, Kraus.evalWord (residualTensor X A V W).toMPSTensor
-      (List.ofFn fun k ↦ finProdFinEquiv ((u k).divNat, ρ k)) = 0 := fun ρ ↦ by
-    rw [toMPSTensor_residualTensor]
-    exact hN _ (by simpa using hw)
+  rw [hres, kraus_evalWord_mulTensor_ofFn]
+  have hzero : ∀ ρ : Fin L → Fin d, Kraus.evalWord (MPTensor.reductionResidual X A V W)
+      (List.ofFn fun k ↦ ((u k).1, ρ k)) = 0 := fun ρ ↦ hN _ (by simpa using hw)
   simp [hzero]
 
 /-- **An identity strand on the left preserves the residual bound.** If the residual words of
@@ -319,23 +305,20 @@ strand beside a fusion tensor is that of arXiv:2502.20257, `main.tex` lines 1506
 theorem isReductionResidualNilpotencyBound_mulTensor_idKron {X : MPOTensor d D₂}
     {A : MPOTensor d D₁} (P : MPOTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ} {N : ℕ}
-    (hN : MPTensor.IsReductionResidualNilpotencyBound X.toMPSTensor A.toMPSTensor V W N) :
-    MPTensor.IsReductionResidualNilpotencyBound (mulTensor P X).toMPSTensor
-      (mulTensor P A).toMPSTensor (idKron D₃ V) (idKron D₃ W) N := by
-  have hres : MPTensor.reductionResidual (mulTensor P X).toMPSTensor
-      (mulTensor P A).toMPSTensor (idKron D₃ V) (idKron D₃ W) =
-        (mulTensor P (residualTensor X A V W)).toMPSTensor := by
-    funext ij
-    simp only [MPTensor.reductionResidual, toMPSTensor, mulTensor_apply, idKron_mul_submatrix_sum,
-      submatrix_sum_mul_idKron, residualTensor, kronecker_sub', Finset.sum_sub_distrib]
+    (hN : MPTensor.IsReductionResidualNilpotencyBound X A V W N) :
+    MPTensor.IsReductionResidualNilpotencyBound (mulTensor P X) (mulTensor P A)
+      (idKron D₃ V) (idKron D₃ W) N := by
+  have hres : MPTensor.reductionResidual (mulTensor P X) (mulTensor P A)
+      (idKron D₃ V) (idKron D₃ W) = mulTensor P (MPTensor.reductionResidual X A V W) := by
+    funext ⟨i, k⟩
+    simp only [MPTensor.reductionResidual, mulTensor_apply, idKron_mul_submatrix_sum,
+      submatrix_sum_mul_idKron, kronecker_sub', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
-  rw [hres, evalWord_toMPSTensor_mulTensor_ofFn]
-  have hzero : ∀ ρ : Fin L → Fin d, Kraus.evalWord (residualTensor X A V W).toMPSTensor
-      (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat)) = 0 := fun ρ ↦ by
-    rw [toMPSTensor_residualTensor]
-    exact hN _ (by simpa using hw)
+  rw [hres, kraus_evalWord_mulTensor_ofFn]
+  have hzero : ∀ ρ : Fin L → Fin d, Kraus.evalWord (MPTensor.reductionResidual X A V W)
+      (List.ofFn fun k ↦ (ρ k, (u k).2)) = 0 := fun ρ ↦ hN _ (by simpa using hw)
   simp [hzero]
 
 /-- **Reassociation preserves the residual bound, right to left.** The residual bound of a
@@ -345,16 +328,17 @@ reduction of `M · (N · P)` carries over to the reduction of `(M · N) · P` ob
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 3147--3152; the associator
 is that of arXiv:1606.00608, lines 995--999. -/
 theorem isReductionResidualNilpotencyBound_mulTensor_assoc_left {M : MPOTensor d D₁}
-    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPSTensor (d * d) D}
+    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPOTensor d D}
     {V : Matrix (Fin D) (Fin (D₁ * (D₂ * D₃))) ℂ}
     {W : Matrix (Fin (D₁ * (D₂ * D₃))) (Fin D) ℂ} {K : ℕ}
     (hK : MPTensor.IsReductionResidualNilpotencyBound
-      (mulTensor M (mulTensor N P)).toMPSTensor A V W K) :
-    MPTensor.IsReductionResidualNilpotencyBound (mulTensor (mulTensor M N) P).toMPSTensor A
+      (mulTensor M (mulTensor N P)) A V W K) :
+    MPTensor.IsReductionResidualNilpotencyBound (mulTensor (mulTensor M N) P) A
       (V * mulTensorAssocInvMatrix D₁ D₂ D₃) (mulTensorAssocMatrix D₁ D₂ D₃ * W) K :=
   MPSTensor.isReductionResidualNilpotencyBound_of_intertwine
+    (B' := mulTensor (mulTensor M N) P) (B := mulTensor M (mulTensor N P))
     (mulTensorAssocInvMatrix_mul_matrix D₁ D₂ D₃) (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃)
-    (fun i ↦ mulTensor_mul_assocMatrix M N P i.divNat i.modNat) hK
+    (fun ⟨i, l⟩ ↦ mulTensor_mul_assocMatrix M N P i l) hK
 
 /-- **Reassociation preserves the residual bound, left to right.** The residual bound of a
 reduction of `(M · N) · P` carries over to the reduction of `M · (N · P)` obtained by
@@ -363,16 +347,17 @@ reduction of `(M · N) · P` carries over to the reduction of `M · (N · P)` ob
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 3147--3152; the associator
 is that of arXiv:1606.00608, lines 995--999. -/
 theorem isReductionResidualNilpotencyBound_mulTensor_assoc_right {M : MPOTensor d D₁}
-    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPSTensor (d * d) D}
+    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPOTensor d D}
     {V : Matrix (Fin D) (Fin (D₁ * D₂ * D₃)) ℂ}
     {W : Matrix (Fin (D₁ * D₂ * D₃)) (Fin D) ℂ} {K : ℕ}
     (hK : MPTensor.IsReductionResidualNilpotencyBound
-      (mulTensor (mulTensor M N) P).toMPSTensor A V W K) :
-    MPTensor.IsReductionResidualNilpotencyBound (mulTensor M (mulTensor N P)).toMPSTensor A
+      (mulTensor (mulTensor M N) P) A V W K) :
+    MPTensor.IsReductionResidualNilpotencyBound (mulTensor M (mulTensor N P)) A
       (V * mulTensorAssocMatrix D₁ D₂ D₃) (mulTensorAssocInvMatrix D₁ D₂ D₃ * W) K :=
   MPSTensor.isReductionResidualNilpotencyBound_of_intertwine
+    (B' := mulTensor M (mulTensor N P)) (B := mulTensor (mulTensor M N) P)
     (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃) (mulTensorAssocInvMatrix_mul_matrix D₁ D₂ D₃)
-    (fun i ↦ (assocInvMatrix_mul_mulTensor M N P i.divNat i.modNat).symm) hK
+    (fun ⟨i, l⟩ ↦ (assocInvMatrix_mul_mulTensor M N P i l).symm) hK
 
 /-- **Reducing the state inside an action tensor preserves the residual bound.** If the
 residual words of `(V, W)` from `B` to `A` vanish at length `N`, so do those of
@@ -409,23 +394,23 @@ tensors are those of arXiv:2203.12563, `sec:PBC`, lines 1062--1129. -/
 theorem isReductionResidualNilpotencyBound_actTensor_kronId {X : MPOTensor d D₂}
     {Y : MPOTensor d D₁} (B : MPSTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ} {N : ℕ}
-    (hN : MPTensor.IsReductionResidualNilpotencyBound X.toMPSTensor Y.toMPSTensor V W N) :
+    (hN : MPTensor.IsReductionResidualNilpotencyBound X Y V W N) :
     MPTensor.IsReductionResidualNilpotencyBound (actTensor X B) (actTensor Y B)
       (kronId V D₃) (kronId W D₃) N := by
   have hres : MPTensor.reductionResidual (actTensor X B) (actTensor Y B) (kronId V D₃)
-      (kronId W D₃) = actTensor (residualTensor X Y V W) B := by
+      (kronId W D₃) = actTensor (MPTensor.reductionResidual X Y V W) B := by
     funext i
     simp only [MPTensor.reductionResidual, actTensor_apply, kronId_mul_submatrix_sum,
-      submatrix_sum_mul_kronId, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
+      submatrix_sum_mul_kronId, sub_kronecker', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [hres, evalWord_actTensor]
   have hzero : ∀ τ : Fin L → Fin d,
-      evalWord (residualTensor X Y V W) (List.ofFn σ) (List.ofFn τ) = 0 := fun τ ↦ by
-    have h := hN (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k)) (by simpa using hw)
-    rw [← toMPSTensor_residualTensor] at h
-    simpa only [evalWord_toMPSTensor_pairConfig] using h
+      evalWord (MPTensor.reductionResidual X Y V W) (List.ofFn σ) (List.ofFn τ) = 0 :=
+    fun τ ↦ by
+      have h := hN (List.ofFn fun k ↦ (σ k, τ k)) (by simpa using hw)
+      rwa [kraus_evalWord_ofFn_pair] at h
   simp [hzero]
 
 end MPOTensor

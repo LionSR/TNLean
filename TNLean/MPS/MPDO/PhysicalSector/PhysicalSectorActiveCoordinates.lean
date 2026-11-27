@@ -136,7 +136,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450. -/
 theorem transformedPhysicalSlice_mul_dependentPhysicalSupportProj
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (β α : Fin D) :
     F.transformedPhysicalSlice β α * F.dependentPhysicalSupportProj =

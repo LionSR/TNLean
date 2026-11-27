@@ -73,15 +73,15 @@ Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913 (the fusion ten
 theorem _root_.MPTensor.IsReduction.actTensor_kronId {X : MPOTensor d D₂}
     {Y : MPOTensor d D₁} (B : MPSTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (h : MPTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W) :
+    (h : MPTensor.IsReduction X Y V W) :
     MPTensor.IsReduction (actTensor X B) (actTensor Y B) (kronId V D₃) (kronId W D₃) := by
   rw [MPTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_actTensor, evalWord_actTensor, kronId_mul_submatrix_sum,
     submatrix_sum_mul_kronId]
-  have hw (τ : Fin L → Fin d) := h.evalWord (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
-  simp only [evalWord_toMPSTensor_pairConfig] at hw
+  have hw (τ : Fin L → Fin d) := h.evalWord (List.ofFn fun k ↦ (σ k, τ k))
+  simp only [kraus_evalWord_ofFn_pair] at hw
   simp only [hw]
 
 /-! ### Reassociation -/
@@ -211,16 +211,16 @@ by fusion tensors on long words, is compared with the L-symbols inside the actio
 state. -/
 theorem _root_.MPTensor.IsDressedProportional.actTensor_kronId {X : MPOTensor d D₂}
     (B : MPSTensor d D₃) {m : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
-    (h : MPTensor.IsDressedProportional X.toMPSTensor V V' z) :
+    (h : MPTensor.IsDressedProportional X V V' z) :
     MPTensor.IsDressedProportional (actTensor X B) (kronId V D₃) (kronId V' D₃) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [evalWord_actTensor, kronId_mul_submatrix_sum, kronId_mul_submatrix_sum]
-  have hu (τ : Fin L → Fin d) := h (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
+  have hu (τ : Fin L → Fin d) := h (List.ofFn fun k ↦ (σ k, τ k))
     (by rw [List.length_ofFn]; exact hw)
-  simp only [evalWord_toMPSTensor_pairConfig] at hu
+  simp only [kraus_evalWord_ofFn_pair] at hu
   simp only [hu, Matrix.smul_kronecker, ← Finset.smul_sum]
   rfl
 

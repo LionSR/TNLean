@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
 import TNLean.MPS.FundamentalTheorem.Compression.Splitting
 import TNLean.MPS.Operator.Fusion.CompleteZipperFusionDefs
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Complete zipper fusion families from split compressions
@@ -186,7 +187,7 @@ one site.  After a common positive blocking it is derived for normal blocks that
 inequivalent up to a nonzero scalar (`ofCompressionBlocked`).  Documented in
 `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`. -/
 noncomputable def ofCompression (hD : ∀ a, 0 < D a)
-    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
+    (hT : ∀ a, Kraus.IsInjective (T a))
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
     (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
@@ -198,7 +199,7 @@ noncomputable def ofCompression (hD : ∀ a, 0 < D a)
   bondDim := D
   bondDim_pos := hD
   tensor := T
-  tensor_injective := hT
+  tensor_injective a := (isInjective_toMPSTensor_iff _).2 (hT a)
   fusionMultiplicity := N
   fusionSynthesis a b := compressionSynthesis (P a b)
   fusionAnalysis a b := compressionAnalysis (P a b)
@@ -218,7 +219,7 @@ noncomputable def ofCompression (hD : ∀ a, 0 < D a)
 /-- The fusion tensor `X^c_{ab,μ}` of `ofCompression` is the compression map `V_{(c,μ)}` of the
 compression of `O_a O_b`. -/
 theorem ofCompression_fusionTensor (hD : ∀ a, 0 < D a)
-    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
+    (hT : ∀ a, Kraus.IsInjective (T a))
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ) (hK)
     (a b c : Λ) (μ : Fin (N a b c)) (x : Fin (D a) × Fin (D b)) (z : Fin (D c)) :
@@ -228,7 +229,7 @@ theorem ofCompression_fusionTensor (hD : ∀ a, 0 < D a)
 /-- The left inverse `X^{c+}_{ab,μ}` of `ofCompression` is the compression map `W_{(c,μ)}` of
 the compression of `O_a O_b`. -/
 theorem ofCompression_fusionTensorLeftInverse (hD : ∀ a, 0 < D a)
-    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
+    (hT : ∀ a, Kraus.IsInjective (T a))
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ) (hK)
     (a b c : Λ) (μ : Fin (N a b c)) (z : Fin (D c)) (x : Fin (D a) × Fin (D b)) :
@@ -241,17 +242,25 @@ the letters of the product tensor lie, with their conjugate transposes, in the a
 generate, then the product has a multi-block compression with vanishing remainder
 (`MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star`). -/
 theorem exists_pairCompression_remainder_eq_zero_of_star (hD : ∀ a, 0 < D a)
-    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor) (a b : Λ)
-    (htr : ∀ w : List (Fin (p * p)), w ≠ [] →
-      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)).toMPSTensor w) =
-        ∑ s : (c : Λ) × Fin (N a b c), Matrix.trace (Kraus.evalWord (T s.1).toMPSTensor w))
-    (hstar : ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
-      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor)) :
+    (hT : ∀ a, Kraus.IsInjective (T a)) (a b : Λ)
+    (htr : ∀ w : List (Fin p × Fin p), w ≠ [] →
+      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)) w) =
+        ∑ s : (c : Λ) × Fin (N a b c), Matrix.trace (Kraus.evalWord (T s.1) w))
+    (hstar : ∀ i, (mulTensor (T a) (T b) i)ᴴ ∈
+      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)))) :
     ∃ P : PairCompression T N a b, P.remainder = 0 :=
   MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
     (D := fun s : (c : Λ) × Fin (N a b c) => D s.1) Finset.univ
     (fun s : (c : Λ) × Fin (N a b c) => (T s.1).toMPSTensor)
-    (fun s _ => (hT s.1).isNormal) (fun s _ => hD s.1) _ htr hstar
+    (fun s _ => ((isInjective_toMPSTensor_iff _).2 (hT s.1)).isNormal) (fun s _ => hD s.1) _
+    (fun w hw => by
+      simpa only [evalWord_toMPSTensor] using
+        htr (w.map finProdFinEquiv.symm) (by simpa using hw))
+    (fun i => by
+      rw [show Set.range (mulTensor (T a) (T b)).toMPSTensor =
+          Set.range (mulTensor (T a) (T b)) from
+        finProdFinEquiv.symm.surjective.range_comp _]
+      exact hstar (finProdFinEquiv.symm i))
 
 /-- **Complete zipper fusion family in the star-closed case.** Under the fusion rules on word
 traces and the star closure of every product tensor, the split compressions of
@@ -264,12 +273,12 @@ sufficient condition for a vanishing remainder in
 `thm:p5-local-adjoint-closure`; the simultaneous left inverse `K` remains an input, as in
 `ofCompression`. -/
 noncomputable def ofStar (hD : ∀ a, 0 < D a)
-    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
-    (htr : ∀ a b, ∀ w : List (Fin (p * p)), w ≠ [] →
-      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)).toMPSTensor w) =
-        ∑ s : (c : Λ) × Fin (N a b c), Matrix.trace (Kraus.evalWord (T s.1).toMPSTensor w))
-    (hstar : ∀ a b, ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
-      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor))
+    (hT : ∀ a, Kraus.IsInjective (T a))
+    (htr : ∀ a b, ∀ w : List (Fin p × Fin p), w ≠ [] →
+      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)) w) =
+        ∑ s : (c : Λ) × Fin (N a b c), Matrix.trace (Kraus.evalWord (T s.1) w))
+    (hstar : ∀ a b, ∀ i, (mulTensor (T a) (T b) i)ᴴ ∈
+      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b))))
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
     (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
       (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
@@ -286,7 +295,7 @@ noncomputable def ofStar (hD : ∀ a, 0 < D a)
 /-- The fusion tensors of `ofStar` are the compression maps of split compressions of the
 pairwise products. -/
 theorem exists_ofStar_fusionTensor_eq (hD : ∀ a, 0 < D a)
-    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor) (htr) (hstar)
+    (hT : ∀ a, Kraus.IsInjective (T a)) (htr) (hstar)
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ) (hK) (a b : Λ) :
     ∃ P : PairCompression T N a b, P.remainder = 0 ∧
       ∀ (c : Λ) (μ : Fin (N a b c)) (x : Fin (D a) × Fin (D b)) (z : Fin (D c)),

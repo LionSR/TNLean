@@ -107,31 +107,29 @@ theorem isNBlkInjective_mixedEndpointMPO_three
     (W₀ : Fin m → Matrix (Fin (χ₀ * D₀)) (Fin D₀) ℂ)
     (W₁ : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (hm : 0 < m)
-    (hT₀ : Kraus.IsInjective T₀.toMPSTensor)
-    (hT₁ : Kraus.IsInjective T₁.toMPSTensor)
+    (hT₀ : Kraus.IsInjective T₀)
+    (hT₁ : Kraus.IsInjective T₁)
     (hret₀ : ∀ μ, V₀ μ * W₀ μ = 1)
     (hret₁ : ∀ μ, V₁ μ * W₁ μ = 1)
     (horth₀ : ∀ μ ν, μ ≠ ν → V₀ μ * W₀ ν = 0)
     (horth₁ : ∀ μ ν, μ ≠ ν → V₁ μ * W₁ ν = 0) :
-    Kraus.IsNBlkInjective (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁).toMPSTensor 3 := by
+    Kraus.IsNBlkInjective (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) 3 := by
   classical
   let T := mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁
-  let S := Kraus.wordSpan T.toMPSTensor 1
+  let S := Kraus.wordSpan T 1
   let e : (Fin χ₀ ⊕ Fin χ₁) ≃ Fin (χ₀ + χ₁) := finSumFinEquiv
   have hletter (i j) : T (i, j) ∈ S := by
-    change T (i, j) ∈ Kraus.wordSpan T.toMPSTensor 1
+    change T (i, j) ∈ Kraus.wordSpan T 1
     rw [Kraus.wordSpan_one]
-    exact Submodule.subset_span ⟨finProdFinEquiv (i, j), by
-      simp [MPOTensor.toMPSTensor]⟩
+    exact Submodule.subset_span ⟨(i, j), rfl⟩
   have hleft (M : Matrix (Fin χ₀) (Fin χ₀) ℂ) :
       (Matrix.fromBlocks M (0 : Matrix (Fin χ₀) (Fin χ₁) ℂ) 0 0).submatrix
         e.symm e.symm ∈ S := by
-    have hM : M ∈ Submodule.span ℂ (Set.range T₀.toMPSTensor) :=
+    have hM : M ∈ Submodule.span ℂ (Set.range T₀) :=
       hT₀ ▸ Submodule.mem_top
     induction hM using Submodule.span_induction with
     | mem M hM =>
-        obtain ⟨p, rfl⟩ := hM
-        obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective p
+        obtain ⟨⟨i, j⟩, rfl⟩ := hM
         obtain ⟨⟨r, s⟩, rfl⟩ := finProdFinEquiv.surjective i
         obtain ⟨⟨k, l⟩, rfl⟩ := finProdFinEquiv.surjective j
         convert hletter (mixedEndpointPhysicalEquiv D₀ D₁ (.inl r, .inl s))
@@ -140,7 +138,7 @@ theorem isNBlkInjective_mixedEndpointMPO_three
         obtain ⟨a, rfl⟩ := e.surjective a
         obtain ⟨b, rfl⟩ := e.surjective b
         cases a <;> cases b <;>
-          simp [T, e, mixedEndpointMPOLetter, MPOTensor.toMPSTensor]
+          simp [T, e, mixedEndpointMPOLetter]
     | zero => simp
     | add M N _ _ hM hN =>
         have h := S.add_mem hM hN
@@ -155,12 +153,11 @@ theorem isNBlkInjective_mixedEndpointMPO_three
   have hright (M : Matrix (Fin χ₁) (Fin χ₁) ℂ) :
       (Matrix.fromBlocks (0 : Matrix (Fin χ₀) (Fin χ₀) ℂ) 0 0 M).submatrix
         e.symm e.symm ∈ S := by
-    have hM : M ∈ Submodule.span ℂ (Set.range T₁.toMPSTensor) :=
+    have hM : M ∈ Submodule.span ℂ (Set.range T₁) :=
       hT₁ ▸ Submodule.mem_top
     induction hM using Submodule.span_induction with
     | mem M hM =>
-        obtain ⟨p, rfl⟩ := hM
-        obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective p
+        obtain ⟨⟨i, j⟩, rfl⟩ := hM
         obtain ⟨⟨r, s⟩, rfl⟩ := finProdFinEquiv.surjective i
         obtain ⟨⟨k, l⟩, rfl⟩ := finProdFinEquiv.surjective j
         convert hletter (mixedEndpointPhysicalEquiv D₀ D₁ (.inr r, .inr s))
@@ -169,7 +166,7 @@ theorem isNBlkInjective_mixedEndpointMPO_three
         obtain ⟨a, rfl⟩ := e.surjective a
         obtain ⟨b, rfl⟩ := e.surjective b
         cases a <;> cases b <;>
-          simp [T, e, mixedEndpointMPOLetter, MPOTensor.toMPSTensor]
+          simp [T, e, mixedEndpointMPOLetter]
     | zero => simp
     | add M N _ _ hM hN =>
         have h := S.add_mem hM hN
@@ -195,15 +192,15 @@ theorem isNBlkInjective_mixedEndpointMPO_three
     cases i <;> cases j <;> simp [Matrix.single_apply, Matrix.fromBlocks]
   have hthree {X Y Z : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ}
       (hX : X ∈ S) (hY : Y ∈ S) (hZ : Z ∈ S) :
-      X * Y * Z ∈ Kraus.wordSpan T.toMPSTensor 3 := by
-    change X * Y * Z ∈ Kraus.wordSpan T.toMPSTensor ((1 + 1) + 1)
+      X * Y * Z ∈ Kraus.wordSpan T 3 := by
+    change X * Y * Z ∈ Kraus.wordSpan T ((1 + 1) + 1)
     rw [Kraus.wordSpan_add, Kraus.wordSpan_add]
     exact Submodule.mul_mem_mul (Submodule.mul_mem_mul hX hY) hZ
   have hsandwich {C : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ}
       {a u v b : Fin (χ₀ + χ₁)} (hC : C ∈ S) (hne : C u v ≠ 0)
       (ha : Matrix.single a u 1 ∈ S) (hb : Matrix.single v b 1 ∈ S) :
-      Matrix.single a b 1 ∈ Kraus.wordSpan T.toMPSTensor 3 := by
-    have h := (Kraus.wordSpan T.toMPSTensor 3).smul_mem (C u v)⁻¹
+      Matrix.single a b 1 ∈ Kraus.wordSpan T 3 := by
+    have h := (Kraus.wordSpan T 3).smul_mem (C u v)⁻¹
       (hthree ha hC hb)
     simpa [Matrix.single_mul_mul_single, Matrix.smul_single, hne] using h
   obtain ⟨r₀, s₁, α₀, k₀, β₁, l₁, h₀₁⟩ :=
@@ -242,13 +239,13 @@ theorem isNormal_mixedEndpointMPO
     (W₀ : Fin m → Matrix (Fin (χ₀ * D₀)) (Fin D₀) ℂ)
     (W₁ : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (hm : 0 < m)
-    (hT₀ : Kraus.IsInjective T₀.toMPSTensor)
-    (hT₁ : Kraus.IsInjective T₁.toMPSTensor)
+    (hT₀ : Kraus.IsInjective T₀)
+    (hT₁ : Kraus.IsInjective T₁)
     (hret₀ : ∀ μ, V₀ μ * W₀ μ = 1)
     (hret₁ : ∀ μ, V₁ μ * W₁ μ = 1)
     (horth₀ : ∀ μ ν, μ ≠ ν → V₀ μ * W₀ ν = 0)
     (horth₁ : ∀ μ ν, μ ≠ ν → V₁ μ * W₁ ν = 0) :
-    Kraus.IsNormal (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁).toMPSTensor :=
+    Kraus.IsNormal (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) :=
   ⟨3, by omega, isNBlkInjective_mixedEndpointMPO_three T₀ T₁ V₀ V₁ W₀ W₁
     hD₀ hD₁ hm hT₀ hT₁ hret₀ hret₁ horth₀ horth₁⟩
 
@@ -263,7 +260,7 @@ theorem multiplicity_pos_of_injective_endpoint_action {D χ : ℕ}
     (T : MPOTensor (D * D) χ) (A : MPSTensor (D * D) D)
     (V : Fin m → Matrix (Fin D) (Fin (χ * D)) ℂ)
     (W : Fin m → Matrix (Fin (χ * D)) (Fin D) ℂ)
-    (hχ : 0 < χ) (hT : Kraus.IsInjective T.toMPSTensor)
+    (hχ : 0 < χ) (hT : Kraus.IsInjective T)
     (hA : Kraus.IsInjective A)
     (h : IsBiorthogonalDecomposition (MPOTensor.actTensor T A)
       (fun _ : Fin m => A) V W) : 0 < m := by
@@ -281,12 +278,12 @@ theorem multiplicity_pos_of_injective_endpoint_action {D χ : ℕ}
       (finProdFinEquiv (β, s))) (h.letter i)
     simpa [MPOTensor.actTensor, Matrix.sum_apply, Matrix.submatrix_apply,
       Matrix.kroneckerMap_apply] using he
-  have hle : Submodule.span ℂ (Set.range T.toMPSTensor) ≤ ⊥ := by
+  have hle : Submodule.span ℂ (Set.range T) ≤ ⊥ := by
     apply Submodule.span_le.mpr
-    rintro M ⟨i, rfl⟩
+    rintro M ⟨⟨i, j⟩, rfl⟩
     apply (Submodule.mem_bot ℂ).mpr
     ext α β
-    exact hzero _ _ α β
+    exact hzero i j α β
   rw [hT] at hle
   have hI : (1 : Matrix (Fin χ) (Fin χ) ℂ) = 0 :=
     (Submodule.mem_bot ℂ).mp (hle Submodule.mem_top)
@@ -309,13 +306,13 @@ theorem isNBlkInjective_mixedEndpointMPO_three_of_exact_action
     (W₀ : Fin m → Matrix (Fin (χ₀ * D₀)) (Fin D₀) ℂ)
     (W₁ : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (hχ₀ : 0 < χ₀)
-    (hT₀ : Kraus.IsInjective T₀.toMPSTensor)
-    (hT₁ : Kraus.IsInjective T₁.toMPSTensor) (hA₀ : Kraus.IsInjective A₀)
+    (hT₀ : Kraus.IsInjective T₀)
+    (hT₁ : Kraus.IsInjective T₁) (hA₀ : Kraus.IsInjective A₀)
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
       (fun _ : Fin m => A₀) V₀ W₀)
     (h₁ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₁ A₁)
       (fun _ : Fin m => A₁) V₁ W₁) :
-    Kraus.IsNBlkInjective (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁).toMPSTensor 3 :=
+    Kraus.IsNBlkInjective (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) 3 :=
   isNBlkInjective_mixedEndpointMPO_three T₀ T₁ V₀ V₁ W₀ W₁ hD₀ hD₁
     (multiplicity_pos_of_injective_endpoint_action T₀ A₀ V₀ W₀ hχ₀ hT₀ hA₀ h₀)
     hT₀ hT₁ h₀.retract h₁.retract h₀.orthogonal h₁.orthogonal
