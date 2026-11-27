@@ -75,7 +75,7 @@ suffices.
 
 This change is a local correction to the intermediate statement. The corrected
 periodic-sector implication is proved both from literal CPSV canonical form and
-from the stronger normalized BNT-refined horizontal form. It completes the
+from the stronger BNT-refined horizontal form. It completes the
 periodic-exclusion step in Proposition~4.13 of
 Ref.~\cite{Cirac2016MPDO_arXiv}. The subsequent vertical phase-class grouping,
 gauge normalization, and coisometry construction are recorded in
@@ -105,7 +105,7 @@ of Lemma~L then yields
 \end{align}
 contradicting
 Eq.~\ref{eq:cpgsv17_periodic_sector_projector_vertical_displacement}. The
-corresponding theorem under the stronger normalized BNT-refined horizontal
+corresponding theorem under the stronger BNT-refined horizontal
 hypothesis is
 \leanid{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced} in
 \doclink{TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT}.
@@ -141,7 +141,7 @@ beyond its stated canonical-form and MPDO hypotheses.
 \section{Status}
 
 The periodic-sector step is complete under literal CPSV canonical form and
-under the stronger normalized BNT-refined predicate
+under the stronger BNT-refined predicate
 \path{MPOTensor.IsHorizontalCF}. The source's all-length condition for its
 distinguished periodic-sector projector is formalized as
 \leanid{MPOTensor.PeriodicSectorProjector.not_commute}. The stronger uniform predicate requiring this noncommutation at every length
@@ -158,7 +158,7 @@ representatives, and construction of the final coisometry are also complete.
 Together, these results establish the literal theorem
 \leanid{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
 \doclink{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm}. The stronger theorem from
-normalized BNT-refined horizontal form remains separate.
+BNT-refined horizontal form remains separate.
 
 This completion concerns only Proposition~4.13 of
 Ref.~\cite{Cirac2016MPDO_arXiv}. It proves neither the positive-fusion

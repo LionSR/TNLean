@@ -330,10 +330,13 @@ private theorem exists_long_frustrationFree_family
     (hcollar : (interval L p r \ interval L (a + ℓ) (b + ℓ + 1)).card ≤ 2 * ℓ)
     (Φ : ManyBody.BondInteraction L q)
     (hh : ∀ i, IsStarProjection (Φ.term i)) (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator Φ.term).toLinearMap)ᗮ,
-      g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ.term y⟫_ℂ)
+    (hgap : ∀ y ∈ (LinearMap.ker
+        (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian).toLinearMap)ᗮ,
+      g * ‖y‖ ^ 2 ≤ Complex.re ⟪y,
+        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ)
     (G₀ : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
-    (hG₀ : LinearMap.ker (chainOperator Φ.term).toLinearMap = G₀)
+    (hG₀ : LinearMap.ker
+      (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian).toLinearMap = G₀)
     (htrade : ∀ R : ℝ, 0 < R → R ≤ 2 * 80 * (ℓ : ℝ) →
       (((d * ℓ ^ 2) ^ (22 * ℓ) : ℕ) : ℝ) ^ 12 *
         (4 * Real.exp (-(4 * (ℓ : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)))) ≤ 1 / 100000) :
@@ -376,7 +379,8 @@ private theorem exists_long_frustrationFree_family
   have hv : ∀ i, Ht.toEuclideanLin (v i) = (lam i : ℂ) • v i :=
     hHerm.toEuclideanCLM_eigenvectorBasis
   have hvC : ∀ i, C Ht (v i) = (lam i : ℂ) • v i := hv
-  have hker := ker_threeRegion hh Φ.mem a b ℓ
+  have hker : LinearMap.ker (C Ht).toLinearMap = LinearMap.ker (C Φ.hamiltonian).toLinearMap :=
+    ker_threeRegion hh Φ.mem a b ℓ
   have hlam_eq : ∀ i, lam i = Complex.re ⟪v i, C Ht (v i)⟫_ℂ := by
     intro i
     rw [hvC, inner_smul_right, inner_self_eq_norm_sq_to_K, v.orthonormal.norm_eq_one i]
@@ -392,7 +396,7 @@ private theorem exists_long_frustrationFree_family
       have hne : (lam i : ℂ) ≠ 0 := by exact_mod_cast hi.ne'
       change C Ht ((lam i : ℂ)⁻¹ • v i) = v i
       rw [map_smul, hvC, smul_smul, inv_mul_cancel₀ hne, one_smul]
-    have hmem' : v i ∈ (LinearMap.ker (chainOperator Φ.term).toLinearMap)ᗮ := by
+    have hmem' : v i ∈ (LinearMap.ker (C Φ.hamiltonian).toLinearMap)ᗮ := by
       rw [← hker]
       exact hmem
     have h3 := threeRegion_gap hh Φ.mem hg hgap hab hb (v.orthonormal.norm_eq_one i) hmem'
@@ -409,7 +413,7 @@ private theorem exists_long_frustrationFree_family
     · intro hx j hj
       exact hx j (by linarith [hlam_gap j hj])
   have hspan0 : Submodule.spectralSpanLE v lam 0 =
-      LinearMap.ker (chainOperator Φ.term).toLinearMap := by
+      LinearMap.ker (C Φ.hamiltonian).toLinearMap := by
     rw [← hker]
     ext x
     rw [Submodule.mem_spectralSpanLE_iff, LinearMap.mem_ker]
@@ -671,20 +675,18 @@ private theorem exists_improving_family_core :
   · have hlong : 4 * ℓ < r - p := by omega
     obtain ⟨-, -, hab, hb, -, -, -, -, -, -, -, hsub, hcollar⟩ :=
       inward_effective_cuts L ℓ p r (by omega) hpr hrL hlong
-    have hker : LinearMap.ker (chainOperator Φ.term).toLinearMap = G₀ := by
-      rw [chainOperator_eq_toEuclideanCLM_sum]
-      exact hG₀
-    have hgapC : ∀ y ∈ (LinearMap.ker (chainOperator Φ.term).toLinearMap)ᗮ,
-        g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ.term y⟫_ℂ := by
+    have hgapC : ∀ y ∈ (LinearMap.ker
+        (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian).toLinearMap)ᗮ,
+        g * ‖y‖ ^ 2 ≤ Complex.re ⟪y,
+          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ := by
       intro y hy
-      rw [hker] at hy
-      rw [chainOperator_eq_toEuclideanCLM_sum]
+      rw [hG₀] at hy
       have h1 := hgap y hy
       have h2 : g * ‖y‖ ^ 2 ≤ γ * ‖y‖ ^ 2 :=
         mul_le_mul_of_nonneg_right (min_le_left γ 1) (sq_nonneg _)
       exact h2.trans h1
     exact exists_long_frustrationFree_family L q p r ℓ
-      _ _ d hdq.symm hq (by omega) hab hb hsub hcollar Φ hh g hg hg1 hgapC G₀ hker htrade
+      _ _ d hdq.symm hq (by omega) hab hb hsub hcollar Φ hh g hg hg1 hgapC G₀ hG₀ htrade
 
 /-- **Words in the frustration-free improving family.** Arad, Landau, Vazirani and Vidick,
 arXiv:1602.08828v2, Theorem `t:aisff`, lines 1580–1609, in the form used by the merge,

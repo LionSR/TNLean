@@ -685,8 +685,9 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays
   have hDPos : ∀ t, 0 < D t := fun t => Nat.pos_of_ne_zero (hA t).bondDim_ne_zero
   have hMPos : 0 < M := (hDPos t₀).trans_le (hDBound t₀)
   have hL : 0 < L := Nat.pow_pos hMPos
-  have hBlock : ∀ t, Kraus.IsInjective (blockTensor (A t) L) :=
-    fun t => (hA t).blockTensor_isInjective_of_bondDim_le (hDBound t)
+  have hBlock : ∀ t, Kraus.IsInjective (blockTensor (A t) L) := fun t =>
+    (Kraus.isNBlkInjective_iff_blockTensor_isInjective _ L).1
+      ((hA t).isNBlkInjective_of_bondDim_le (hDBound t))
   have hIrred : ∀ t, Kraus.IsIrreducibleFamily (blockTensor (A t) L) := fun t =>
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
       (Kraus.injective_implies_irreducibleCP _ (hBlock t))

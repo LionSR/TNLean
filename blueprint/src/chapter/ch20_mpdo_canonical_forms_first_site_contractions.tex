@@ -13,7 +13,7 @@
     \lean{MPOTensor.IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant}
     \leanok
     \uses{def:mpdo,def:horizontal_cf_mpdo,def:mpdo_three_first_site_contractions,thm:representative_grouped_insert_eq,thm:postblocked_representative_grouped_insert_eq,thm:cpsv_original_coordinate_marked_lemma_l,thm:mpdo_first_site_invariant_comm}
-    Let $M$ be in normalized BNT-refined horizontal form. For doubled-index
+    Let $M$ be in BNT-refined horizontal form. For doubled-index
     matrices
     $Y,Z$, suppose that
     $Y_1V^{(N)}(M)=Z_1V^{(N)}(M)$ for every $N\geq1$.
@@ -57,7 +57,7 @@
 \begin{proof}
     \leanok
     \uses{thm:representative_grouped_insert_eq,thm:postblocked_representative_grouped_insert_eq,thm:cpsv_original_coordinate_marked_lemma_l,thm:mpdo_first_site_invariant_comm,thm:blockwise_opposite_insert_rotated_mpo}
-    For the normalized BNT-refined assertion, positive-length MPV equality
+    For the BNT-refined assertion, positive-length MPV equality
     gives the first-site identity for the BNT sector decomposition. The representative-grouped
     Lemma~L gives $YA_j=ZA_j$ for every representative. First-site insertion
     commutes with the weighted direct sum, and conjugating each copy by its
@@ -264,7 +264,7 @@ the physical index.
 
 \begin{lemma}[First-site contraction reduction]
     \label{thm:blockwise_opposite_insert_eq}
-    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_two_firstSiteActionAgree}
+    \lean{MPSTensor.IsLeftCanonicalBNTPresentation.insertedTensor_basis_eq_of_two_firstSiteActionAgree}
     \leanok
     \uses{def:sector_bnt_cf,thm:postblocked_representative_grouped_insert_eq}
     Let $\bigoplus_{j,q}\mu_{j,q}A_j$ be a BNT canonical form and let

@@ -14,7 +14,7 @@ letter by taking the corresponding linear combination of the local tensor
 matrices.  Such marked letters commute with weighted direct sums and are
 covariant under a common virtual similarity.
 
-For a tensor in normalized BNT-refined horizontal form, equality of every
+For a tensor in BNT-refined horizontal form, equality of every
 closed chain with one such marked letter and a positive-length tail implies
 equality of the marked tensors.  The proof passes to the representative-indexed
 sector decomposition,
@@ -33,7 +33,7 @@ not detect arbitrary off-diagonal matrices between repeated sectors.
 * `linearMarkedTensor_gauge`: linear marking is covariant under a common
   virtual similarity.
 * `MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree`: positive-tail
-  marked-chain equality separates physical-letter marks in normalized
+  marked-chain equality separates physical-letter marks in
   BNT-refined horizontal form.
 
 ## References
@@ -175,7 +175,7 @@ namespace MPOTensor.IsHorizontalCF
 variable {d e D : ℕ}
 
 /-- Closed chains with one marked letter separate two physical-letter marks
-for a tensor in normalized BNT-refined horizontal form.
+for a tensor in BNT-refined horizontal form.
 
 For coefficient families `f` and `g`, suppose that replacing the first
 physical letter by `sum_z f u z M^z` or by `sum_z g u z M^z` gives equal

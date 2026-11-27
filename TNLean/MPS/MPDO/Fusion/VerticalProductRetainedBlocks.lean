@@ -163,7 +163,7 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockT
     (verticalCoisometrySquare U) hsquare.1 hsquare.2
     hClosure hPer
 
-/-- The squared retained product of a tensor in normalized BNT-refined
+/-- The squared retained product of a tensor in BNT-refined
 horizontal form has projector closure and no periodic vectors.
 
 Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
@@ -486,7 +486,7 @@ theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_b
     hCanonical.1 hCanonical.2 p
 
 /-- Every ordered pair of retained vertical BNT copies of a tensor in
-normalized BNT-refined horizontal form has projector closure and no periodic
+BNT-refined horizontal form has projector closure and no periodic
 vectors.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
@@ -572,7 +572,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
     (weightedVerticalProductBlock dim mult weight B p)
     hCanonical.1 hCanonical.2
 
-/-- Every retained copy-pair tensor of a tensor in normalized BNT-refined
+/-- Every retained copy-pair tensor of a tensor in BNT-refined
 horizontal form has an exact decomposition into its nonzero normal corners,
 with the corner isometries retained.
 

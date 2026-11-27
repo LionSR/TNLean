@@ -459,7 +459,7 @@ theorem isTransferIdempotent_directSumTensor_iff [∀ k, NeZero (dim k)]
 
 end Blocks
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition d}
 
@@ -477,7 +477,7 @@ This is the multiplicity-one, phase-one specialization of CPSV16,
 Theorem `charact-MPS` and Corollary `III.cor3` (arXiv:1606.00608, lines
 543--584).  The repeated-copy physical-space construction remains separate;
 see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem isTransferIdempotent_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
+theorem isTransferIdempotent_basisDirectSum_iff (hCF : IsLeftCanonicalBNTPresentation P) :
     IsTransferIdempotent (directSumTensor P.basis) ↔
       ((∀ k, IsIsometryCanonicalForm (P.basis k)) ∧
         ∀ j j' : Fin P.basisCount, j ≠ j' →
@@ -499,7 +499,8 @@ This is the multiplicity-one, phase-one form of CPSV16, Corollary `III.cor3`
 construction remains outside this statement; see
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum
-    (hCF : IsBNTCanonicalForm P) (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
+    (hCF : IsLeftCanonicalBNTPresentation P)
+    (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     ∃ (X : (j : Fin P.basisCount) →
         Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
       (Λ : (j : Fin P.basisCount) → Fin (P.basisDim j) → ℝ)
@@ -516,6 +517,6 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum
   exact exists_residualIsometryFamily_of_isTransferIdempotent_directSum P.basis
     hCF.basis_isNormal hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

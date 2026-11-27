@@ -13,7 +13,7 @@ import TNLean.MPS.MPDO.Fusion.VerticalProductFusionDecomposition
 
 This file derives the positive fusion decomposition of the one-site vertical
 basis of normal tensors directly from the renormalization fixed-point maps,
-normalized BNT-refined horizontal form, and matrix-product-density-operator
+BNT-refined horizontal form, and matrix-product-density-operator
 positivity.
 
 ## Main results
@@ -217,7 +217,7 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
 /-- Phase-class grouping and the grouped-corner Gram comparison give a vertical
 decomposition retaining the CPSV16 basis of normal tensors.
 
-Literal CPSV canonical form and normalized BNT-refined horizontal form supply
+Literal CPSV canonical form and BNT-refined horizontal form supply
 these assumptions independently.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
@@ -267,7 +267,7 @@ theorem HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition
     (fun j ↦ blocks (C.repr j)) hBNT W hWIso hWOrth hWInter
     hWReconstructFlat
 
-/-- A matrix product density operator in normalized BNT-refined horizontal form
+/-- A matrix product density operator in BNT-refined horizontal form
 that satisfies the renormalization fixed-point condition has a positive fusion
 decomposition of its vertical basis of normal tensors.
 

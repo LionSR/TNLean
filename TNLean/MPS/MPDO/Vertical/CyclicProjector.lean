@@ -35,12 +35,12 @@ unconditionally:
 
 The source also states that $Q$ fails to commute with the density operator
 $H^{(N)}$ at every length (arXiv:1606.00608, line 1889).  The proof needs only
-one noncommuting length.  Normalized BNT-refined horizontal form supplies such
+one noncommuting length.  BNT-refined horizontal form supplies such
 a length: otherwise the representative-grouped Lemma L would turn simultaneous
 commutation into the forbidden letter-level invariance.  At that same length,
 full-period word invariance gives commutation with $[H^{(N)}]^p$, and
 positivity removes the power.  This proves the periodic-sector step under
-normalized BNT-refined horizontal form, which is stronger than the literal
+BNT-refined horizontal form, which is stronger than the literal
 CPSV canonical-form hypothesis; see
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
 
@@ -55,7 +55,7 @@ CPSV canonical-form hypothesis; see
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced`:
   one noncommuting length for every displaced idempotent excludes periodic vectors.
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF`: an MPDO in
-  normalized BNT-refined horizontal form has no nontrivial periodic vectors in
+  BNT-refined horizontal form has no nontrivial periodic vectors in
   the vertical direction.
 
 ## References
@@ -530,7 +530,7 @@ Proposition 4.13 allows `M` to be reducible, decomposed horizontally into
 several gauge-inequivalent canonical-form blocks with weights; this theorem
 covers the sub-case where `M`'s own tensor is already (single-letter)
 injective.  The theorem `hasNoPeriodicVectors_verticalTensor_of_horizontalCF`
-below treats normalized BNT-refined horizontal form. -/
+below treats BNT-refined horizontal form. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
     {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
     (hInj : Kraus.IsInjective M.toMPSTensor) :
@@ -579,10 +579,10 @@ theorem hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced
     rwa [mpo_stackedTensor] at h
   exact mpo_commute_of_commute_pow M hM (N + 1) (by omega) hp hCommPow
 
-/-- **The periodic-sector step for an MPDO in normalized BNT-refined
+/-- **The periodic-sector step for an MPDO in BNT-refined
 horizontal form.**
 
-The vertically viewed tensor of an MPDO in normalized BNT-refined horizontal
+The vertically viewed tensor of an MPDO in BNT-refined horizontal
 form has no nontrivial periodic vector.  A periodic vector supplies an
 orthogonal projector displaced by one vertical layer and invariant under every
 word of one full period.  The BNT-refined horizontal form shows that this

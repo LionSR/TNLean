@@ -19,7 +19,7 @@ $$
 $$
 where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
 Lemma L transfers these identities to every minimal representative, where they
-say $(\Id-P)MP=0$. For tensors in the normalized BNT-refined horizontal form
+say $(\Id-P)MP=0$. For tensors in the BNT-refined horizontal form
 of `TNLean.MPS.MPDO.HorizontalBNT`, these identities also hold for the original
 MPO letters.
 
@@ -27,7 +27,7 @@ The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
 implication in source lines 1888--1893.  The cyclic projector and its word
 invariance are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`; for a
-tensor in normalized BNT-refined horizontal form, one noncommuting length
+tensor in BNT-refined horizontal form, one noncommuting length
 suffices for the periodic-sector contradiction.  No corresponding literal
 canonical-form transport is asserted.
 
@@ -319,7 +319,7 @@ C.3, Lemma L, lines 1835--1858. -/
 theorem basis_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (S : MPSTensor.SectorDecomposition (d * d))
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hCF : MPSTensor.IsLeftCanonicalBNTPresentation S)
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
@@ -379,7 +379,7 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
   funext ⟨a, b⟩
   change (M.ketLeftMul Q) (a, b) = ((M.ketLeftMul Q).braRightMul Q) (a, b)
   apply sub_eq_zero.mp
-  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hInj
+  apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hInj
   intro p
   change Matrix.trace
     (((M.ketLeftMul Q) (a, b) - ((M.ketLeftMul Q).braRightMul Q) (a, b)) *
@@ -415,7 +415,7 @@ This is the final operator implication in the contradiction at
 arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
 period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
-combined in `TNLean/MPS/MPDO/CyclicProjector.lean` under normalized BNT-refined
+combined in `TNLean/MPS/MPDO/CyclicProjector.lean` under BNT-refined
 horizontal form and in `TNLean/MPS/MPDO/CPSVPeriodicExclusion.lean` under
 literal CPSV canonical form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)

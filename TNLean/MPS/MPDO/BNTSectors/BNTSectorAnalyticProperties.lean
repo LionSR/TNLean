@@ -169,7 +169,7 @@ theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSource
     {D : ℕ} {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsSourceZCL M) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
-      MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.IsLeftCanonicalBNTPresentation S ∧
         (∃ hTotal : S.totalDim = D,
           ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
           ∀ i : Fin (d * d),

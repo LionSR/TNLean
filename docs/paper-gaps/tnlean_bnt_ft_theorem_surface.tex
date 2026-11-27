@@ -229,7 +229,34 @@ The formal route has three distinct layers:
           equal-MPV corollary.
 \end{enumerate}
 
-The current proportional theorem is
+\paragraph{Gauge condition on the basis tensors.}
+The comparison theorems
+\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} and
+\leanid{MPSTensor.fundamentalTheorem_equal_canonicalForm} assume that the two
+sector decompositions are presentations by bases of normal tensors whose basis
+tensors are left-canonical, $\sum_i (A_j^i)^\dagger A_j^i=\Id$. Theorem~2.10
+and Corollary~2.11 of Ref.~\cite{Cirac2016MPDO_arXiv} (lines 349--361) state
+the result for tensors in canonical form with no gauge condition on the
+normal blocks. Under the faithfulness rule these two declarations are
+therefore scope-restricted variants and are not the formalization of the
+source statements. The restriction is removed by a gauge argument: every
+presentation by a basis of normal tensors is brought into left-canonical gauge
+by a blockwise similarity, the trace-preserving Perron gauge of each basis
+tensor (Appendix~A, lines 1093--1117), which changes neither the copies, nor
+the weights, nor any matrix product vector
+(\leanid{MPSTensor.IsBNTSectorPresentation.exists_leftCanonical_withBasis}).
+The source-faithful statements, on presentations with no gauge condition and
+no normalization of the weights, are
+\leanid{MPSTensor.fundamentalTheorem_proportional_of_isBNTSectorPresentation}
+(Theorem~2.10),
+\leanid{MPSTensor.fundamentalTheorem_equal_of_isBNTSectorPresentation}
+(Corollary~2.11), and
+\leanid{MPSTensor.ft_sector_data_of_isBNTSectorPresentation} (the equal case
+with matched copies and weights, Appendix~A, lines 1182--1192). The blueprint
+entries of the two source statements cite these; the left-canonical theorems
+are kept as separate entries that state the restriction.
+
+The left-canonical proportional theorem is
 \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.%
 \footnote{Formal declaration:
     \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.}
@@ -245,7 +272,7 @@ identified with the source theorem.
 The declaration
 \leanid{MPTensor.CPSVCanonicalFormData.fundamentalTheorem_equal_ambient_canonicalForm}
 covers the equal-ambient case. It assumes equal ambient bond dimensions and
-separate weight normalization for both canonical-form data sets. Exact
+nonzero tensors; no normalization of the weights is assumed. Exact
 reconstruction and a coisometry-alignment argument then yield ambient gauge
 equivalence. This theorem does not remove the heterogeneous
 ambient-dimension obstruction in the printed corollary of

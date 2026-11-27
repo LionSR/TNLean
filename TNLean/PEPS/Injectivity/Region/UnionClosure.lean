@@ -5,24 +5,25 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Region.InjectiveRegion
 import TNLean.PEPS.Injectivity.Region.RegionKernelDescent
+import TNLean.PEPS.Injectivity.Region.OverlapUnion
 
 /-!
-# Concrete region-injectivity union closure for vertex-injective PEPS
+# Concrete region-injectivity union closure
 
 The abstract region-injectivity framework of `TNLean.PEPS.InjectiveRegion`
 records a predicate `RegionInjectivityData` assigning injectivity to finite
 vertex regions, together with the union-closure hypothesis
 `RegionInjectivityUnionClosure` that the union of two injective regions is
-injective. This file instantiates that framework concretely for a
-vertex-injective PEPS tensor.
+injective. This file instantiates that framework concretely for a PEPS tensor
+with positive bond dimensions.
 
 The concrete predicate sends a region `R` to injectivity of the blocked-region
-tensor family, `RegionBlockedTensorInjective A R`. The kernel-descent result
-`regionBlockedTensorInjective_of_isVertexInjective` of
-`TNLean.PEPS.RegionBlock.KernelDescent` shows that *every* finite region is
-injective once `A` is vertex-injective and every bond dimension is positive.
-The union-closure hypothesis is therefore discharged directly: for the concrete
-predicate, `R ∪ S` is injective regardless of the injectivity of `R` and `S`.
+tensor family, `RegionBlockedTensorInjective A R`. It is union closed whenever
+every bond dimension is positive (`regionInjectivityUnionClosure_of_overlap`),
+by the overlapping union lemma `regionBlockedTensorInjective_union_overlap`.
+(For a vertex-injective tensor, the kernel-descent result
+`regionBlockedTensorInjective_of_isVertexInjective` gives the stronger fact that
+every finite region is injective.)
 
 ## References
 
@@ -51,21 +52,24 @@ def regionInjectivityDataOf (A : Tensor G d) : RegionInjectivityData V where
     (regionInjectivityDataOf (G := G) A).IsInjective R =
       RegionBlockedTensorInjective (G := G) A R := rfl
 
-/-- The concrete region-injectivity predicate of a vertex-injective PEPS tensor
-satisfies union closure: the union of two injective regions is injective.
+/-- **The faithful union-closure provider.** The concrete region-injectivity
+predicate of a PEPS tensor with positive bond dimensions satisfies the
+union-closure assertion of the source injective-union lemma: the union of two
+injective regions is injective.
 
-The proof discharges the union-closure hypothesis directly from the
-kernel-descent result that every finite region is injective; the injectivity of
-the two argument regions is not needed.
+The union-closure field is discharged by the overlapping union lemma
+`regionBlockedTensorInjective_union_overlap`, which uses the injectivity of both
+argument regions.  This is the source-faithful provider of
+`RegionInjectivityUnionClosure`: it derives injectivity of the union from
+injectivity of the two regions and needs no vertex injectivity.
 
-Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
-1322--1404 of `Papers/1804.04964/paper_normal.tex`, with the positive-bond
-hypothesis recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
-theorem regionInjectivityUnionClosure_of_isVertexInjective (A : Tensor G d)
-    (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines
+1322--1404 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInjectivityUnionClosure_of_overlap (A : Tensor G d)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     RegionInjectivityUnionClosure (regionInjectivityDataOf (G := G) A) where
-  union_injective {R S} _ _ :=
-    regionBlockedTensorInjective_of_isVertexInjective (G := G) A (R ∪ S) hA hpos
+  union_injective hR hS :=
+    regionBlockedTensorInjective_union_overlap hR hS hpos
 
 end PEPS
 end TNLean

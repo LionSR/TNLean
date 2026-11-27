@@ -5190,7 +5190,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseSpectrum.lean` (2026-07-22).
 - **Abstraction (proposed):** generalize `coeff_identity_via_matched_mpv_phase` to accept
   eventual linear independence of the chosen basis directly, while retaining its current
-  `IsBNTCanonicalForm` wrapper for existing consumers.
+  `IsLeftCanonicalBNTPresentation` wrapper for existing consumers.
 
 ### square_interior_edge_translate — candidate
 - **Pattern:** given `NormalSquareInteriorEdgeDatum e`, case-split horizontal/vertical,
@@ -5400,7 +5400,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   arbitrary pair configuration and needs no auxiliary equality of configurations.
 
 ### canonical form of normalized one-dimensional blocks — candidate
-- **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
+- **Pattern:** certify `IsLeftCanonicalBNTPresentation` for a `SectorDecomposition` whose blocks are
   normalized tensors of bond dimension one with unit weights: linear independence of the block
   states from `mpv_of_dim_one` evaluated on constant words, `basis_distinct` by
   `not_gaugePhaseEquiv_of_dim_one` after a `cast_eq`, then `totalDim_*`, bijectivity of the
@@ -5408,7 +5408,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   and `reindex_toTensor_*` by `toTensor_copyCoord` / `toTensor_copyCoord_of_ne`.
 - **Seen:** 2 occurrences, `TNLean/MPS/Preparation/BlockSum/RepeatedBlockCounterexample.lean` and
   `TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample.lean` (recorded 2026-09-27).
-- **Abstraction:** proposed lemma giving `IsBNTCanonicalForm` for a sector decomposition of
+- **Abstraction:** proposed lemma giving `IsLeftCanonicalBNTPresentation` for a sector decomposition of
   normalized one-dimensional blocks with unit weights whose letters are pairwise distinguished
   by their zero patterns.
 

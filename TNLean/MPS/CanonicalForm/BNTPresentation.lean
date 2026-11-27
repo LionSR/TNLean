@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.CanonicalForm.BNTPresentation.Characterization
 import TNLean.MPS.CanonicalForm.BNTPresentation.Examples
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 import TNLean.MPS.CanonicalForm.BNTPresentation.PermutationRigidityPrimitive
 import TNLean.MPS.CanonicalForm.BNTPresentation.PreparedBlocks
 import TNLean.MPS.CanonicalForm.BNTPresentation.PreparedBlocksNormalized

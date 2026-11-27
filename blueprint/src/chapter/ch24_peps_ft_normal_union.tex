@@ -487,20 +487,6 @@ every finite union of injective regions.
     the empty region and forces $c_\rho=0$ for all $\rho$.
 \end{proof}
 
-\begin{lemma}[Union closure for a vertex-injective tensor]%
-    \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
-    \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
-    \leanok
-    \uses{def:IsVertexInjective,def:peps_regionInjectivityDataOf,thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
-    If $A$ is vertex-injective and $D_f>0$ for all $f$, then $\inj_A$ satisfies
-    $\inj_A(R)\wedge\inj_A(S)\Longrightarrow\inj_A(R\cup S)$ for all $R,S\subseteq V$.
-    % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
-\end{lemma}
-\begin{proof}\leanok
-    Apply Lemma~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
-    directly to $R\cup S$.
-\end{proof}
-
 \begin{lemma}[Union closure from the overlapping union lemma]%
     \label{thm:peps_regionInjectivityUnionClosure_of_overlap}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_overlap}

@@ -135,6 +135,28 @@ a paper-gap note (decision 1.D4).
    density matrices in QICLean); family 1 T9 and T10 (the source-faithful Fundamental Theorem on
    presentations).
 
+## Status after round 3 (2026-11-27)
+
+- **Family 1.** S0–S3 landed in rounds 1–2. S4 and S7: `IsBNTCanonicalForm` is now
+  `IsLeftCanonicalBNTPresentation`, a presentation of `P.toTensor` with left-canonical basis
+  tensors (`extends IsBNTSectorPresentation`), without the two line-246 weight fields; the
+  module `MPS/Tensor/DirectSum/SectorBNT.lean` became
+  `MPS/CanonicalForm/BNTPresentation/LeftCanonical.lean`. S5: T9, T10 and the equal case are
+  proved on presentations (`MPS/FundamentalTheorem/Sectors/Presentation.lean`), and the ch11
+  source entries point to them (decision 1.D4(b)). S6 (the D1 renames) is deferred: the
+  tensor-types lane restates `IsCPSVCanonicalForm` in the same round.
+- **Family 5.** FF9: `regionalTruncationInteraction` with
+  `zeroSpace_regionalTruncationInteraction`. D3: the chain layer (`chainOperator`,
+  `chainReplacement` and their lemmas) is deleted in favour of the truncation on a
+  `BondInteraction`; the three-region lemmas keep the bare family and `chainTerm`.
+- **Family 6.** The `pow_four` copies are deleted and two blocked-spelling theorems restated
+  with `Kraus.IsNBlkInjective`. D6: `isNBlkInjective_of_le_of_canonical` stays, since every
+  caller starts from a length that may be zero. D3: the union-closure hypothesis is stripped
+  from the source-facing PEPS statements whose tensors carry positive bonds; only
+  `regionInjectivityUnionClosure_of_overlap` remains as the concrete provider. D5 stays with
+  the tensor-types plan T.1. In QICLean, `Kraus.isInjective_iff_isNBlkInjective_one` and
+  `Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero` replace the TNLean copies.
+
 ## Open decisions
 
 Each section ends with its decisions; the ones that change a public name or a blueprint status are

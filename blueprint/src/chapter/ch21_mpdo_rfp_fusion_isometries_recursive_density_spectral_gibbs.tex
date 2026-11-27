@@ -84,7 +84,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.rfpBNTFusionTensorClause}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_fusion_clause_terminal_spectral_refinement,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
-    For an MPDO in normalized BNT-refined horizontal form satisfying the
+    For an MPDO in BNT-refined horizontal form satisfying the
     RFP condition, fix the fusion decomposition given by that
     construction. For every terminal label $\gamma$, close the horizontal
     operator leg of $M_\gamma$ to obtain a matrix $K_\gamma$ on its bond
@@ -98,7 +98,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     sitewise label and multiplicity configurations. Denote the resulting
     operator at positive chain length $N$ by $P_s^{(N)}$.
 
-    The normalized BNT-refined horizontal hypothesis is stronger than CF
+    The BNT-refined horizontal hypothesis is stronger than CF
     as defined by CPSV.
     % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{definition}
@@ -168,7 +168,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_terminal_spectral_refinement,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
-    Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
+    Let $M$ generate MPDOs, be in BNT-refined horizontal form,
     and satisfy the RFP condition. Fix the fusion decomposition given by
     that construction, and suppose that its structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
@@ -206,7 +206,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     decomposition given by the RFP construction, not for an arbitrary
     fusion decomposition.
 
-    The normalized BNT-refined horizontal hypothesis is stronger than CF
+    The BNT-refined horizontal hypothesis is stronger than CF
     as defined by CPSV.
     % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 
@@ -380,7 +380,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.topologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
-    Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
+    Let $M$ generate MPDOs, be in BNT-refined horizontal form,
     and satisfy the RFP condition. Select the fusion decomposition on the
     nonzero product sectors given by that condition, and suppose that the
     structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}
@@ -494,7 +494,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
-    Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
+    Let $M$ generate MPDOs, be in BNT-refined horizontal form,
     and satisfy the RFP condition. Select the fusion decomposition on the
     nonzero product sectors given by that condition, and suppose that the
     structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}

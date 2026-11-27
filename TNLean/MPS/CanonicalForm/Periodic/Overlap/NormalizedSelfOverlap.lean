@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.Transfer.Irreducible.TransferPeripheral
 import TNLean.MPS.Transfer.Irreducible.BlockingViaAdjoint
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalityChain
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 
@@ -25,10 +24,8 @@ basis of normal tensors from the normalized representatives.
 
 * `isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one`:
   normalized self-overlap implies primitivity and normality;
-* `IsBNTCanonicalForm.basis_isNormal`: every canonical-form basis block is
-  algebraically normal;
-* `IsBNTCanonicalForm.exists_common_basis_isNBlkInjective`: all basis blocks
-  are block injective at one common length.
+* `isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one`: the
+  normality part alone.
 
 ## References
 
@@ -173,64 +170,3 @@ theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     A hIrr hLeft hSelf).2
 
 end MPSTensor
-
-namespace MPSTensor.IsBNTCanonicalForm
-
-variable {d : ℕ} {P : SectorDecomposition d}
-
-/-- Every basis tensor in BNT canonical form is algebraically normal.
-
-The canonical-form irreducibility, left-canonicality, normalized self-overlap,
-and positive bond dimension imply eventual block injectivity.
-
-Source: CPSV21, arXiv:2011.12127, lines 1815--1830. -/
-theorem basis_isNormal (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
-    Kraus.IsNormal (P.basis j) := by
-  let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-    (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
-      (hCF.basis_normalized_self_overlap j)
-
-/-- Every representative of a BNT canonical form is block injective at the
-common length $D^4$, where $D$ is the total bond dimension.
-
-For the $j$th representative $A_j$ with bond dimension $D_j$, quantum
-Wielandt gives exact block injectivity at $D_j^4$.  Since $D_j \leq D$,
-positive-length block injectivity propagates to the common length $D^4$.
-
-Source: arXiv:1606.00608, line 332. -/
-theorem basis_isNBlkInjective_totalDim_pow_four
-    (hCF : IsBNTCanonicalForm P) :
-    ∀ j : Fin P.basisCount,
-      Kraus.IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
-  intro j
-  let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  have hNormal : Kraus.IsNormal (P.basis j) := hCF.basis_isNormal j
-  have hOwn : Kraus.IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
-    isNBlkInjective_pow_four_of_isNormal_leftCanonical
-      (P.basis j) (hCF.basis_left_canonical j) hNormal
-  have hOwnPos : 0 < (P.basisDim j) ^ 4 :=
-    Nat.pow_pos (hCF.basis_dim_pos j)
-  have hPow : (P.basisDim j) ^ 4 ≤ P.totalDim ^ 4 :=
-    Nat.pow_le_pow_left (P.basisDim_le_totalDim j) 4
-  exact Kraus.isNBlkInjective_of_le hOwnPos hOwn hPow
-
-/-- The finitely many representatives of a BNT canonical form have one common
-positive block-injectivity length.
-
-Each representative is irreducible and left-canonical, and its normalized
-self-overlap tends to one.  The preceding period-one theorem therefore makes
-each representative normal.  Taking a common positive multiple of their
-individual normality lengths gives the conclusion.
-
-Source context: arXiv:1606.00608, lines 318--344; arXiv:2011.12127,
-lines 1815--1837. -/
-theorem exists_common_basis_isNBlkInjective
-    (hCF : IsBNTCanonicalForm P) :
-    ∃ L : ℕ, 0 < L ∧ ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) L := by
-  have hNormal : ∀ j : Fin P.basisCount, Kraus.IsNormal (P.basis j) :=
-    hCF.basis_isNormal
-  exact exists_common_isNBlkInjective_of_isNormal_leftCanonical
-    P.basis hCF.basis_left_canonical (fun j ↦ (hCF.basis_dim_pos j).ne') hNormal
-
-end MPSTensor.IsBNTCanonicalForm

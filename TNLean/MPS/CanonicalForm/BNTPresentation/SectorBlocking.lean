@@ -5,8 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
 import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
-import TNLean.MPS.Tensor.DirectSum.SectorBNT
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
+import TNLean.MPS.CanonicalForm.BNTPresentation.LeftCanonical
 
 /-!
 # Physical blocking of sector decompositions
@@ -20,7 +19,8 @@ The two-layer representative and copy-weight structure comes from
 arXiv:1606.00608, `eq:II_ABasicTensors` and `decBSV`, lines 283--301.  Physical
 blocking of this structure is an auxiliary construction used in Appendix C.3,
 Lemma L, lines 1835--1858; it is not a separate construction stated there.
-Positive blocking preserves the full predicate `IsBNTCanonicalForm`.
+Positive blocking preserves the presentation in left-canonical gauge
+`IsLeftCanonicalBNTPresentation`.
 
 ## Main results
 
@@ -95,19 +95,17 @@ form.
 
 Source: arXiv:1606.00608, the physical-basis identifications implicit in the
 blocking passage at lines 317--345. -/
-theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
-    {P : SectorDecomposition d} (hCF : IsBNTCanonicalForm P)
+theorem IsLeftCanonicalBNTPresentation.reindexPhysical {d' : ℕ}
+    {P : SectorDecomposition d} (hCF : IsLeftCanonicalBNTPresentation P)
     (e : Fin d' ≃ Fin d) :
-    IsBNTCanonicalForm (P.reindexPhysical e) where
-  basis_dim_pos := hCF.basis_dim_pos
-  basis_irreducible := fun j ↦
-    (isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
-      (hCF.basis_irreducible j)
-  basis_left_canonical := fun j ↦
-    (Kraus.isTP_reindexPhysical_iff e (P.basis j)).2
-      (hCF.basis_left_canonical j)
-  basis_normalized_self_overlap := by
-    change ∀ j : Fin P.basisCount,
+    IsLeftCanonicalBNTPresentation (P.reindexPhysical e) := by
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
+    hCF.basisCount_pos hCF.basis_dim_pos
+    (fun j ↦ (isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
+      (hCF.basis_irreducible j))
+    (fun j ↦ (Kraus.isTP_reindexPhysical_iff e (P.basis j)).2 (hCF.basis_left_canonical j))
+    ?_ ?_
+  · change ∀ j : Fin P.basisCount,
       Tendsto (fun N : ℕ ↦ mpvOverlap
         (Kraus.reindexPhysical e (P.basis j))
         (Kraus.reindexPhysical e (P.basis j)) N) atTop (nhds 1)
@@ -115,26 +113,12 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
     refine (hCF.basis_normalized_self_overlap j).congr' ?_
     filter_upwards with N
     exact (mpvOverlap_reindexPhysical_equiv e (P.basis j) (P.basis j)).symm
-  bnt_data := by
-    change ∃ N₀ : ℕ, ∀ N > N₀,
+  · change ∃ N₀ : ℕ, ∀ N > N₀,
       LinearIndependent ℂ (fun j : Fin P.basisCount ↦
         mpvState (Kraus.reindexPhysical e (P.basis j)) N)
-    obtain ⟨N₀, hLI⟩ := hCF.bnt_data
+    obtain ⟨N₀, hLI⟩ := hCF.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
     exact linearIndependent_mpvState_reindexPhysical_equiv e P.basis (hLI N hN)
-  basis_distinct := by
-    change ∀ j k : Fin P.basisCount, j ≠ k →
-      ∀ hdim : P.basisDim j = P.basisDim k,
-        ¬ GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor d') hdim)
-            (Kraus.reindexPhysical e (P.basis j)))
-          (Kraus.reindexPhysical e (P.basis k))
-    intro j k hjk hdim hGauge
-    apply hCF.basis_distinct j k hjk hdim
-    rw [← MPSTensor.reindexPhysical_cast_dim e hdim (P.basis j)] at hGauge
-    exact (gaugePhaseEquiv_reindexPhysical_equiv e _ _).1 hGauge
-  weight_norm_le_one := hCF.weight_norm_le_one
-  weight_unit_exists := hCF.weight_unit_exists
 
 /-- The sector decomposition obtained by blocking `p` physical sites.
 
@@ -256,30 +240,23 @@ theorem sameMPV₂_blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
 
 /-- Positive physical blocking preserves BNT canonical form.
 
-The primitive transfer map obtained from irreducibility, left-canonicality,
-and normalized self-overlap makes every positive blocked representative
-irreducible. The canonical equivalence between blocked configurations of
-length `N` and original configurations of length `N * p` transports eventual
-linear independence. That independence also prevents two distinct blocked
-representatives from becoming gauge-phase equivalent.
+The primitive transfer map of each normal representative makes every positive
+blocked representative irreducible. The canonical equivalence between blocked
+configurations of length `N` and original configurations of length `N * p`
+transports eventual linear independence.
 
 Source: arXiv:1606.00608, canonical-form blocking at lines 317--345, and
 arXiv:2011.12127, lines 1815--1850. -/
-theorem IsBNTCanonicalForm.blockTensor
-    {P : SectorDecomposition d} (hCF : IsBNTCanonicalForm P)
+theorem IsLeftCanonicalBNTPresentation.blockTensor
+    {P : SectorDecomposition d} (hCF : IsLeftCanonicalBNTPresentation P)
     {p : ℕ} (hp : 0 < p) :
-    IsBNTCanonicalForm (P.blockTensor p) := by
+    IsLeftCanonicalBNTPresentation (P.blockTensor p) := by
   classical
   have hPrimitive : ∀ j : Fin P.basisCount,
-      _root_.IsPrimitive (Kraus.transferMap (P.basis j)) := by
-    intro j
-    let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-    exact
-      (isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-        (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
-          (hCF.basis_normalized_self_overlap j)).1
+      _root_.IsPrimitive (Kraus.transferMap (P.basis j)) :=
+    fun j ↦ (hCF.basis_normal j).primitive_transfer
   have hData : HasBNTSectorData (P.blockTensor p) := by
-    obtain ⟨N₀, hLI⟩ := hCF.bnt_data
+    obtain ⟨N₀, hLI⟩ := hCF.eventually_li
     refine ⟨N₀, ?_⟩
     intro N hN
     change LinearIndependent ℂ (fun j : Fin P.basisCount ↦
@@ -296,15 +273,9 @@ theorem IsBNTCanonicalForm.blockTensor
     · have hNp : N₀ < N * p := by
         exact lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)
       exact hLI (N * p) hNp
-  refine
-    { basis_dim_pos := hCF.basis_dim_pos
-      basis_irreducible := ?_
-      basis_left_canonical := ?_
-      basis_normalized_self_overlap := ?_
-      bnt_data := hData
-      basis_distinct := ?_
-      weight_norm_le_one := ?_
-      weight_unit_exists := ?_ }
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
+    hCF.basisCount_pos hCF.basis_dim_pos
+    ?_ ?_ ?_ hData
   · intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     exact Kraus.isIrreducibleFamily_blockTensor_of_tp_primitive_irr
@@ -317,7 +288,6 @@ theorem IsBNTCanonicalForm.blockTensor
         (Kraus.blockTensor (P.basis j) p)
         (Kraus.blockTensor (P.basis j) p) N) atTop (nhds 1)
     intro j
-    let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     have hMul : Tendsto (fun a : ℕ ↦ a * p) atTop atTop := by
       refine tendsto_atTop.2 fun b ↦ ?_
       filter_upwards [eventually_ge_atTop b] with a ha
@@ -325,30 +295,5 @@ theorem IsBNTCanonicalForm.blockTensor
     refine ((hCF.basis_normalized_self_overlap j).comp hMul).congr' ?_
     filter_upwards with N
     exact (mpvOverlap_blockTensor_self_eq (P.basis j) p N).symm
-  · intro j k hjk hdim hGauge
-    obtain ⟨X, ζ, _, hX⟩ := hGauge
-    obtain ⟨N₀, hLI⟩ := hData
-    let N := N₀ + 1
-    have hState : mpvState ((P.blockTensor p).basis k) N =
-        (ζ ^ N) • mpvState ((P.blockTensor p).basis j) N := by
-      ext σ
-      change mpv ((P.blockTensor p).basis k) σ =
-        ζ ^ N * mpv ((P.blockTensor p).basis j) σ
-      rw [mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX N σ,
-        mpv_cast_dim hdim ((P.blockTensor p).basis j) N σ]
-    have hEq : (1 : ℂ) • mpvState ((P.blockTensor p).basis k) N =
-        (ζ ^ N) • mpvState ((P.blockTensor p).basis j) N := by
-      simpa using hState
-    have hkj : k = j :=
-      (hLI N (by omega)).eq_of_smul_apply_eq_smul_apply 1 (ζ ^ N) k j one_ne_zero hEq
-    exact hjk hkj.symm
-  · intro j q
-    change ‖P.weight j q ^ p‖ ≤ 1
-    rw [norm_pow]
-    exact pow_le_one₀ (norm_nonneg _) (hCF.weight_norm_le_one j q)
-  · obtain ⟨j, q, hq⟩ := hCF.weight_unit_exists
-    refine ⟨j, q, ?_⟩
-    change ‖P.weight j q ^ p‖ = 1
-    rw [norm_pow, hq, one_pow]
 
 end MPSTensor.SectorDecomposition

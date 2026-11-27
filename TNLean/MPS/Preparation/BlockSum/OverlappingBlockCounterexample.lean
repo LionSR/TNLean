@@ -40,7 +40,7 @@ definite at every positive block length.
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with both weights
-equal to one (`isBNTCanonicalForm_overlappingBlockSector`,
+equal to one (`isLeftCanonicalBNTPresentation_overlappingBlockSector`,
 `reindex_toTensor_overlappingBlockSector`), and the pairs and weights of the approximating
 state are those of this canonical form (`embeddedFixedPointPair_overlappingBlockSector`).
 
@@ -67,11 +67,12 @@ the approximating state of eq. (S7) even when every multiplicity is one. Documen
   between `(9/25)^q / 16` and `M (9/25)^q`.
 * `MPSTensor.not_approximationError_le_overlappingBlockTensor` — the bound of Lemma 1'(ii)
   fails.
-* `MPSTensor.overlappingBlockSector`, `MPSTensor.isBNTCanonicalForm_overlappingBlockSector`,
+* `MPSTensor.overlappingBlockSector`,
+  `MPSTensor.isLeftCanonicalBNTPresentation_overlappingBlockSector`,
   `MPSTensor.reindex_toTensor_overlappingBlockSector` — the tensor is, after ordering its bond
   coordinates, the canonical form of eq. (S2) of a basis of normal tensors.
-* `MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock` — the tensor
-  satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
+* `MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlappingBlock` — the
+  tensor satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
 
 ## References
 
@@ -480,26 +481,14 @@ theorem hasBNTSectorData_overlappingBlockSector : HasBNTSectorData overlappingBl
 
 /-- **The canonical form of `overlappingBlockTensor` is a basis of normal tensors**
 (arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
-self-overlap, their states are linearly independent, they are not related by a gauge
-transformation and a phase, and every weight is `μ_{j,1} = 1`. -/
-theorem isBNTCanonicalForm_overlappingBlockSector : IsBNTCanonicalForm overlappingBlockSector where
-  basis_dim_pos := fun _ => Nat.one_pos
-  basis_irreducible := fun j => isIrreducibleFamily_of_bondDim_one (overlappingBlockBasis j)
-  basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (overlappingBlockBasis_norm j)
-  basis_normalized_self_overlap := fun j =>
-    tendsto_mpvOverlap_self_of_dim_one _ (overlappingBlockBasis_norm j)
-  bnt_data := hasBNTSectorData_overlappingBlockSector
-  basis_distinct := fun j k hjk h => by
-    have hc : cast (congr_arg (MPSTensor 2) h) (overlappingBlockSector.basis j) =
-        overlappingBlockBasis j :=
-      cast_eq _ _
-    rw [hc]
-    refine not_gaugePhaseEquiv_of_dim_one 1 ?_
-    fin_cases j <;> fin_cases k <;> simp_all [overlappingBlockBasis, overlappingBlockDiag]
-  weight_norm_le_one := fun _ _ => by
-    change ‖(1 : ℂ)‖ ≤ 1
-    simp
-  weight_unit_exists := ⟨(0 : Fin 2), ⟨0, by decide⟩, by change ‖(1 : ℂ)‖ = 1; simp⟩
+self-overlap, and their states are linearly independent. -/
+theorem isLeftCanonicalBNTPresentation_overlappingBlockSector :
+    IsLeftCanonicalBNTPresentation overlappingBlockSector :=
+  IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.two_pos (fun _ => Nat.one_pos)
+    (fun j => isIrreducibleFamily_of_bondDim_one (overlappingBlockBasis j))
+    (fun j => isLeftCanonical_of_dim_one _ (overlappingBlockBasis_norm j))
+    (fun j => tendsto_mpvOverlap_self_of_dim_one _ (overlappingBlockBasis_norm j))
+    hasBNTSectorData_overlappingBlockSector
 
 /-- The bond coordinates of the two blocks in the canonical form. -/
 noncomputable def overlappingBlockCopyCoord : Fin 2 → Fin overlappingBlockSector.totalDim :=
@@ -577,7 +566,7 @@ theorem embeddedFixedPointPair_overlappingBlockSector (j : Fin 2) (p : Fin 2 × 
 /-- **Lemma 1'(ii) of arXiv:2307.01696 fails for a tensor satisfying all its hypotheses, with
 every multiplicity one.** The tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` is, after
 ordering its bond coordinates, the canonical form `⊕ⱼ μ_{j,1} A_j` of eq. (S2) of a basis of two
-normal blocks in canonical form II, with weights `μ_{j,1} = 1` (`IsBNTCanonicalForm`,
+normal blocks in canonical form II, with weights `μ_{j,1} = 1` (`IsLeftCanonicalBNTPresentation`,
 normality, and the diagonal positive-definite fixed point `1` of each block), whose states
 "produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696, line 973). The
 transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` bounds their
@@ -585,8 +574,8 @@ subleading eigenvalues. When `e^{-γ/ξ_diag} < 9/25`, for the approximating sta
 built from the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` and the pairs of that same fixed point `1`, and
 for every constant `C`, there is `q ≥ 3` such that, with `M = q` and `N = q²` (so `q = o(N)`
 along this sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
-theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
-    IsBNTCanonicalForm overlappingBlockSector ∧
+theorem isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlappingBlock :
+    IsLeftCanonicalBNTPresentation overlappingBlockSector ∧
       (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
         mpvOverlap (overlappingBlockSector.basis j) (overlappingBlockSector.basis k) N)
           atTop (𝓝 0)) ∧
@@ -608,8 +597,9 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
                 (fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ))
                 (fun j => ⟨0, overlappingBlockSector.copies_pos j⟩) j
                 (overlappingBlockEquiv.symm p.1, overlappingBlockEquiv.symm p.2))‖ := by
-  refine ⟨isBNTCanonicalForm_overlappingBlockSector,
-    fun _ _ hjk => isBNTCanonicalForm_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
+  refine ⟨isLeftCanonicalBNTPresentation_overlappingBlockSector,
+    fun _ _ hjk =>
+      isLeftCanonicalBNTPresentation_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (overlappingBlockBasis_norm j),
     fun j => posDef_isDiag_transferMap_one_of_dim_one _ (overlappingBlockBasis_norm j),
     reindex_toTensor_overlappingBlockSector,

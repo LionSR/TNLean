@@ -587,7 +587,7 @@ theorem isNNCPH
 
 end ResidualFamilyAppendixBData
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition d}
 
@@ -604,13 +604,13 @@ the direct sum of the BNT basis tensors, with one copy of each distinct
 sector. Repeated copies and arbitrary raw sector weights remain outside this
 statement; see `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_basisDirectSum
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis))
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH (directSumTensor P.basis) N := by
   obtain ⟨h⟩ := hCF.exists_residualFamilyAppendixBData hRFP
   exact h.isNNCPH hN
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

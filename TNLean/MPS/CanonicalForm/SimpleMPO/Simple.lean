@@ -112,9 +112,6 @@ matrix-product coefficient, while this relabeling preserves normality and the
 physical-trace transfer of each representative. Hence the displayed
 nonnilpotency certificates give the required BNT presentation after blocking.
 
-The implication forgets the line-246 unit-weight normalization built into
-`IsSimpleCanonicalForm`; that normalization is not part of `IsSimple`.
-
 Source: arXiv:1606.00608, canonical form at lines 217--246 and Definition 4.7
 at lines 815--822. -/
 theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
@@ -141,10 +138,8 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
     simp [e]
   refine ⟨hMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
   · have hCF' :=
-      MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical hCF e
-    refine ⟨?_, ?_, ?_, hCF'.bnt_data⟩
-    · obtain ⟨j, _q, _hj⟩ := hCF.weight_unit_exists
-      exact Fin.pos_iff_nonempty.mpr ⟨j⟩
+      MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF e
+    refine ⟨hCF.basisCount_pos, ?_, ?_, hCF'.eventually_li⟩
     · intro N hN σ
       rw [hBlock]
       change MPTensor.mpv (Kraus.reindexPhysical e M.toMPSTensor) σ =

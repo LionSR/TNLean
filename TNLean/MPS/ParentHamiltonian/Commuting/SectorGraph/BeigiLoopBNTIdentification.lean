@@ -498,7 +498,7 @@ theorem nncph_implies_rfp
   exact isTransferIdempotent_of_mpvBlockPhaseEquiv hBNormal (hLoopNormal l)
     (F.normalizedMinimalLoopTensor_isTransferIdempotent l) hPhase
 
-namespace IsBNTCanonicalForm
+namespace IsLeftCanonicalBNTPresentation
 
 variable {P : SectorDecomposition d}
 
@@ -520,7 +520,7 @@ unit-weight copy of each distinct BNT basis sector. It does not prove the
 printed theorem for arbitrary raw weights or repeated copies. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
-    (hCF : IsBNTCanonicalForm P)
+    (hCF : IsLeftCanonicalBNTPresentation P)
     (hNNCPH : HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) := by
   classical
@@ -541,7 +541,7 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
     F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
     eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_eventually_li
-      hCF.bnt_data hNNCPH
+      hCF.eventually_li hNNCPH
   have hPhaseExists : ∀ j : Fin P.basisCount,
       ∃ l : Loop F.edgeWeight,
         MPVBlockPhaseEquiv (P.basis j) (F.normalizedMinimalLoopTensor l) := by
@@ -605,6 +605,6 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
     rw [hZero]
     exact IsIdempotentElem.zero
 
-end IsBNTCanonicalForm
+end IsLeftCanonicalBNTPresentation
 
 end MPSTensor

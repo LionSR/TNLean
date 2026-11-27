@@ -474,14 +474,15 @@ theorem obstructionTerminalDecomposition_basis
   · rfl
   · rfl
 
-/-- The literal two-block decomposition is in BNT canonical form. The
-basis-family separation is forced by the impossible bond-dimension equality
-`2 = 1`; the terminal coefficient supplies the single global unit witness. -/
-theorem obstructionTerminalDecomposition_isBNTCanonicalForm
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) (hmuNorm : ‖mu‖ < 1)
+/-- The literal two-block decomposition is a presentation by a basis of normal
+tensors in left-canonical gauge: both blocks are normal and left-canonical, and
+their matrix product vectors are eventually linearly independent
+(arXiv:1606.00608, lines 271--301). -/
+theorem obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
     (hBInj : Kraus.IsInjective B) (hBLeft : MPTensor.IsLeftCanonical B)
     (hBNormal : MPTensor.IsNormalTensor B) :
-    MPSTensor.IsBNTCanonicalForm (obstructionTerminalDecomposition mu B hmu) := by
+    MPSTensor.IsLeftCanonicalBNTPresentation (obstructionTerminalDecomposition mu B hmu) := by
   have hTerminalNormal := terminalBlock_isNormalTensor
   have hBSelf : Filter.Tendsto
       (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5)) B B N)
@@ -505,35 +506,12 @@ theorem obstructionTerminalDecomposition_isBNTCanonicalForm
         terminalBlock.toMPSTensor B N) Filter.atTop (nhds 0) :=
     MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne terminalBlock.toMPSTensor B
       terminalBlock_isInjective hBInj terminalBlock_isLeftCanonical hBLeft (by omega)
-  refine {
-    basis_dim_pos := ?_
-    basis_irreducible := ?_
-    basis_left_canonical := ?_
-    basis_normalized_self_overlap := ?_
-    bnt_data := ?_
-    basis_distinct := ?_
-    weight_norm_le_one := ?_
-    weight_unit_exists := ?_ }
+  refine ⟨⟨Nat.two_pos, fun _ _ _ ↦ rfl, ?_, ?_⟩, ?_⟩
   · intro j
     change Fin 2 at j
     fin_cases j
-    · norm_num
-    · exact Nat.one_pos
-  · intro j
-    change Fin 2 at j
-    fin_cases j
-    · exact hBNormal.no_invariant_proj
-    · exact hTerminalNormal.no_invariant_proj
-  · intro j
-    change Fin 2 at j
-    fin_cases j
-    · exact hBLeft
-    · exact terminalBlock_isLeftCanonical
-  · intro j
-    change Fin 2 at j
-    fin_cases j
-    · exact hBSelf
-    · exact hTerminalSelf
+    · exact hBNormal
+    · exact hTerminalNormal
   · have hLI := MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
         (obstructionTerminalDecomposition mu B hmu).basis
         (fun j ↦ by
@@ -551,28 +529,14 @@ theorem obstructionTerminalDecomposition_isBNTCanonicalForm
     rw [Filter.Eventually] at hLI
     obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hLI
     exact ⟨N0, fun N hN ↦ hN0 N (Nat.le_of_lt hN)⟩
-  · intro j k hjk hdim
-    change Fin 2 at j k
-    fin_cases j <;> fin_cases k
-    · exact absurd rfl hjk
-    · norm_num [obstructionTerminalDecomposition, Fin.cons_succ] at hdim
-    · norm_num [obstructionTerminalDecomposition, Fin.cons_succ] at hdim
-    · exact absurd rfl hjk
-  · intro j q
+  · intro j
     change Fin 2 at j
     fin_cases j
-    · fin_cases q
-      change ‖mu‖ ≤ 1
-      exact le_of_lt hmuNorm
-    · fin_cases q
-      change ‖(1 : ℂ)‖ ≤ 1
-      norm_num
-  · refine ⟨(Fin.succ 0 : Fin 2), 0, ?_⟩
-    change ‖(1 : ℂ)‖ = 1
-    norm_num
+    · exact hBLeft
+    · exact terminalBlock_isLeftCanonical
 
 /-- The prepared neighboring-trace obstruction and terminal block give an
-explicit normalized two-sector BNT witness. The obstruction basis tensor
+explicit two-sector BNT witness, with weights `mu` and `1`. The obstruction basis tensor
 remains unabsorbed and normal; only the gauge target carries the coefficient
 `mu`. Its MPO presentation has the first-four-coordinate support, orthogonal
 to the terminal support in both multiplication orders. -/
@@ -597,7 +561,7 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
       physicalSupportProj (verticalBNTMPO B) * physicalSupportProj terminalBlock = 0 ∧
       physicalSupportProj terminalBlock * physicalSupportProj (verticalBNTMPO B) = 0 ∧
       physicalSupportProj (verticalBNTMPO B) + physicalSupportProj terminalBlock = 1 ∧
-      MPSTensor.IsBNTCanonicalForm (obstructionTerminalDecomposition mu B hmu) := by
+      MPSTensor.IsLeftCanonicalBNTPresentation (obstructionTerminalDecomposition mu B hmu) := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge, hObstructionSupport⟩ :=
     exists_embedded_leftCanonical_normal_obstruction_block
   have hObstructionTerminal :
@@ -619,7 +583,7 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
     hBasisZero, hBasisOne, rfl, rfl, hObstructionSupport,
     terminalBlock_physicalSupportProj, hObstructionTerminal,
     hTerminalObstruction, hSupportSum, ?_⟩
-  exact obstructionTerminalDecomposition_isBNTCanonicalForm
-    mu B hmu hmuNorm hBInj hBLeft hBNormal
+  exact obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
+    mu B hmu hBInj hBLeft hBNormal
 
 end MPOTensor.NeighboringTraceObstructionAmbientBlocks

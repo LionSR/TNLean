@@ -26,7 +26,7 @@ by the one-site positivity theorem for the original MPDO.
 * `MPOTensor.BNTFusionTensorClause.hasTerminalSpectralProjectorRefinement`:
   a length-independent fusion clause has the all-label spectral refinement.
 * `MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS`: under
-  normalized BNT-refined horizontal form, the theorem makes all spectral
+  BNT-refined horizontal form, the theorem makes all spectral
   choices internally.  This hypothesis is stronger than literal CPSV
   canonical form.
 
@@ -628,7 +628,7 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- The BNT fusion clause selected from the renormalization fixed-point
-construction under normalized BNT-refined horizontal form.
+construction under BNT-refined horizontal form.
 
 Source: arXiv:1606.00608, Theorem 4.14(i),(iii), lines 972--993. -/
 noncomputable def rfpBNTFusionTensorClause (M : MPOTensor d D)
@@ -641,7 +641,7 @@ noncomputable def rfpBNTFusionTensorClause (M : MPOTensor d D)
 /-- **Terminal spectral projector refinement for a length-independent RFP
 MPDO.**
 
-The fusion clause is fixed under normalized BNT-refined horizontal form by
+The fusion clause is fixed under BNT-refined horizontal form by
 `rfpBNTFusionTensorClause M hHorizontal hM hRFP`; no additional fusion clause,
 spectral family, or projector hypothesis is assumed.  Length independence is
 stated on the coefficient family of exactly that RFP-derived clause.  This is
