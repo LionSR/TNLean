@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Reduction.Reduction
 import TNLean.MPS.Tensor.Reduction.ReductionUniqueness
-import TNLean.MPS.Operator.Product.OperatorProduct
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Composition of rectangular reductions
@@ -65,7 +65,7 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {d D₁ D₂ D₃ : ℕ}
+variable {α : Type*} {D₁ D₂ D₃ : ℕ}
 
 /-- Reductions compose: a reduction from `C` to `B` followed by a reduction
 from `B` to `A` is a reduction from `C` to `A`.
@@ -73,8 +73,8 @@ from `B` to `A` is a reduction from `C` to `A`.
 Source: the composition of reductions is implicit in the fusion trees of
 arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
-theorem _root_.MPTensor.IsReduction.trans {C : MPSTensor d D₃} {B : MPSTensor d D₂}
-    {A : MPSTensor d D₁}
+theorem _root_.MPTensor.IsReduction.trans {C : MPTensor α (Fin D₃)} {B : MPTensor α (Fin D₂)}
+    {A : MPTensor α (Fin D₁)}
     {V₁ : Matrix (Fin D₂) (Fin D₃) ℂ} {W₁ : Matrix (Fin D₃) (Fin D₂) ℂ}
     {V₂ : Matrix (Fin D₁) (Fin D₂) ℂ} {W₂ : Matrix (Fin D₂) (Fin D₁) ℂ}
     (h₁ : IsReduction C B V₁ W₁) (h₂ : IsReduction B A V₂ W₂) :
@@ -92,8 +92,8 @@ Source: this is the change of bond basis used when the associator of three
 stacked matrix product operators is inserted in a fusion tree,
 arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
-theorem _root_.MPTensor.IsReduction.of_intertwine {B' : MPSTensor d D₂} {B : MPSTensor d D₃}
-    {A : MPSTensor d D₁} {V : Matrix (Fin D₁) (Fin D₃) ℂ}
+theorem _root_.MPTensor.IsReduction.of_intertwine {B' : MPTensor α (Fin D₂)}
+    {B : MPTensor α (Fin D₃)} {A : MPTensor α (Fin D₁)} {V : Matrix (Fin D₁) (Fin D₃) ℂ}
     {W : Matrix (Fin D₃) (Fin D₁) ℂ} {P : Matrix (Fin D₂) (Fin D₃) ℂ}
     {Q : Matrix (Fin D₃) (Fin D₂) ℂ} (hQP : Q * P = 1)
     (hB : ∀ i, B' i * P = P * B i) (h : IsReduction B A V W) :
@@ -218,23 +218,21 @@ theorem kronId_mul_idKron {m n m' n' : ℕ} (V : Matrix (Fin m) (Fin n) ℂ)
 
 /-! ### Word evaluation of a product tensor on arbitrary pair words -/
 
-/-- Word evaluation of the doubled-index view of a product tensor on an
-arbitrary pair word: the sum over the contracted middle configurations of
-Kronecker products of the doubled-index word evaluations of the two factors.
+/-- Word evaluation of a product tensor on an arbitrary word of the pair alphabet: the sum over
+the contracted middle configurations of Kronecker products of the word evaluations of the two
+factors.
 
 Source: arXiv:1606.00608, lines 986--993 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem evalWord_toMPSTensor_mulTensor_ofFn (M : MPOTensor d D₁) (N : MPOTensor d D₂)
-    {L : ℕ} (u : Fin L → Fin (d * d)) :
-    Kraus.evalWord (mulTensor M N).toMPSTensor (List.ofFn u) =
+theorem kraus_evalWord_mulTensor_ofFn (M : MPOTensor d D₁) (N : MPOTensor d D₂)
+    {L : ℕ} (u : Fin L → Fin d × Fin d) :
+    Kraus.evalWord (mulTensor M N) (List.ofFn u) =
       (∑ ρ : Fin L → Fin d,
-        Kraus.evalWord M.toMPSTensor
-            (List.ofFn fun k ↦ finProdFinEquiv ((u k).divNat, ρ k)) ⊗ₖ
-          Kraus.evalWord N.toMPSTensor
-            (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat))).submatrix
+        Kraus.evalWord M (List.ofFn fun k ↦ ((u k).1, ρ k)) ⊗ₖ
+          Kraus.evalWord N (List.ofFn fun k ↦ (ρ k, (u k).2))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  rw [evalWord_toMPSTensor_ofFn, evalWord_mulTensor]
-  simp only [evalWord_toMPSTensor_pairConfig]
+  rw [kraus_evalWord_ofFn, evalWord_mulTensor]
+  simp only [kraus_evalWord_ofFn_pair]
 
 /-! ### Reductions and products of matrix product operators -/
 
@@ -257,13 +255,13 @@ display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
 theorem mulTensor_kronId {X : MPOTensor d D₂}
     {A : MPOTensor d D₁} (P : MPOTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (h : MPTensor.IsReduction X.toMPSTensor A.toMPSTensor V W) :
-    MPTensor.IsReduction (mulTensor X P).toMPSTensor (mulTensor A P).toMPSTensor
+    (h : MPTensor.IsReduction X A V W) :
+    MPTensor.IsReduction (mulTensor X P) (mulTensor A P)
       (kronId V D₃) (kronId W D₃) := by
   rw [MPTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
-  rw [evalWord_toMPSTensor_mulTensor_ofFn, evalWord_toMPSTensor_mulTensor_ofFn,
+  rw [kraus_evalWord_mulTensor_ofFn, kraus_evalWord_mulTensor_ofFn,
     kronId_mul_submatrix_sum, submatrix_sum_mul_kronId]
   simp only [h.evalWord]
 
@@ -276,13 +274,13 @@ display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
 theorem mulTensor_idKron {X : MPOTensor d D₂}
     {A : MPOTensor d D₁} (P : MPOTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (h : MPTensor.IsReduction X.toMPSTensor A.toMPSTensor V W) :
-    MPTensor.IsReduction (mulTensor P X).toMPSTensor (mulTensor P A).toMPSTensor
+    (h : MPTensor.IsReduction X A V W) :
+    MPTensor.IsReduction (mulTensor P X) (mulTensor P A)
       (idKron D₃ V) (idKron D₃ W) := by
   rw [MPTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
-  rw [evalWord_toMPSTensor_mulTensor_ofFn, evalWord_toMPSTensor_mulTensor_ofFn,
+  rw [kraus_evalWord_mulTensor_ofFn, kraus_evalWord_mulTensor_ofFn,
     idKron_mul_submatrix_sum, submatrix_sum_mul_idKron]
   simp only [h.evalWord]
 
@@ -346,14 +344,14 @@ bond associator.
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535; the associator is that of arXiv:1606.00608, lines 995--999. -/
 theorem mulTensor_assoc_left {M : MPOTensor d D₁}
-    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPSTensor (d * d) D}
+    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPOTensor d D}
     {V : Matrix (Fin D) (Fin (D₁ * (D₂ * D₃))) ℂ}
     {W : Matrix (Fin (D₁ * (D₂ * D₃))) (Fin D) ℂ}
-    (h : MPTensor.IsReduction (mulTensor M (mulTensor N P)).toMPSTensor A V W) :
-    MPTensor.IsReduction (mulTensor (mulTensor M N) P).toMPSTensor A
+    (h : MPTensor.IsReduction (mulTensor M (mulTensor N P)) A V W) :
+    MPTensor.IsReduction (mulTensor (mulTensor M N) P) A
       (V * mulTensorAssocInvMatrix D₁ D₂ D₃) (mulTensorAssocMatrix D₁ D₂ D₃ * W) :=
   h.of_intertwine (mulTensorAssocInvMatrix_mul_matrix D₁ D₂ D₃)
-    (fun i ↦ mulTensor_mul_assocMatrix M N P i.divNat i.modNat)
+    (fun i ↦ mulTensor_mul_assocMatrix M N P i.1 i.2)
 
 /-- **Associativity transport, left to right.** A reduction `(V, W)` of the
 left-associated product `(M · N) · P` gives the reduction `(V a, a⁻¹ W)` of the
@@ -362,14 +360,14 @@ right-associated product `M · (N · P)`, where `a` is the bond associator.
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535; the associator is that of arXiv:1606.00608, lines 995--999. -/
 theorem mulTensor_assoc_right {M : MPOTensor d D₁}
-    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPSTensor (d * d) D}
+    {N : MPOTensor d D₂} {P : MPOTensor d D₃} {D : ℕ} {A : MPOTensor d D}
     {V : Matrix (Fin D) (Fin (D₁ * D₂ * D₃)) ℂ}
     {W : Matrix (Fin (D₁ * D₂ * D₃)) (Fin D) ℂ}
-    (h : MPTensor.IsReduction (mulTensor (mulTensor M N) P).toMPSTensor A V W) :
-    MPTensor.IsReduction (mulTensor M (mulTensor N P)).toMPSTensor A
+    (h : MPTensor.IsReduction (mulTensor (mulTensor M N) P) A V W) :
+    MPTensor.IsReduction (mulTensor M (mulTensor N P)) A
       (V * mulTensorAssocMatrix D₁ D₂ D₃) (mulTensorAssocInvMatrix D₁ D₂ D₃ * W) :=
   h.of_intertwine (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃)
-    (fun i ↦ (assocInvMatrix_mul_mulTensor M N P i.divNat i.modNat).symm)
+    (fun i ↦ (assocInvMatrix_mul_mulTensor M N P i.1 i.2).symm)
 
 end MPTensor.IsReduction
 
@@ -397,12 +395,12 @@ namespace MPTensor.IsDressedProportional
 
 open MPSTensor
 
-variable {d D D' m k : ℕ}
+variable {α : Type*} {D D' m k : ℕ}
 
-variable {B : MPSTensor d D} {X Y Z : Matrix (Fin m) (Fin D) ℂ} {z z' : ℂ}
+variable {B : MPTensor α (Fin D)} {X Y Z : Matrix (Fin m) (Fin D) ℂ} {z z' : ℂ}
 
 /-- Every left boundary is dressed proportional to itself with scalar one. -/
-theorem refl (B : MPSTensor d D) (X : Matrix (Fin m) (Fin D) ℂ) :
+theorem refl (B : MPTensor α (Fin D)) (X : Matrix (Fin m) (Fin D) ℂ) :
     IsDressedProportional B X X 1 :=
   ⟨0, fun w _ ↦ by rw [one_smul]⟩
 
@@ -430,7 +428,7 @@ theorem mul_left (h : IsDressedProportional B X Y z) (C : Matrix (Fin k) (Fin m)
 
 /-- Dressed proportionality transports along an invertible intertwiner of
 letters, in the same way as `MPTensor.IsReduction.of_intertwine`. -/
-theorem of_intertwine {B' : MPSTensor d D'} {P : Matrix (Fin D') (Fin D) ℂ}
+theorem of_intertwine {B' : MPTensor α (Fin D')} {P : Matrix (Fin D') (Fin D) ℂ}
     {Q : Matrix (Fin D) (Fin D') ℂ} (hPQ : P * Q = 1) (hQP : Q * P = 1)
     (hB : ∀ i, B' i * P = P * B i) (h : IsDressedProportional B X Y z) :
     IsDressedProportional B' (X * Q) (Y * Q) z := by
@@ -455,7 +453,7 @@ which is allowed once both exterior buffers exceed the residual nilpotency
 bound (Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Lemma `B_expand`,
 `cornerproblem.tex` lines 3993--4005, in the corrected form of
 `MPTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append`). -/
-theorem pullback {D_A : ℕ} {A : MPSTensor d D_A} {V : Matrix (Fin D_A) (Fin D) ℂ}
+theorem pullback {D_A : ℕ} {A : MPTensor α (Fin D_A)} {V : Matrix (Fin D_A) (Fin D) ℂ}
     {W : Matrix (Fin D) (Fin D_A) ℂ} {X Y : Matrix (Fin m) (Fin D_A) ℂ}
     (hR : IsReduction B A V W) (hSame : SameMPV₂Pos B A)
     (h : IsDressedProportional A X Y z) :
@@ -493,7 +491,7 @@ with two scalars, and `X B^w` is nonzero for arbitrarily long words, then the
 two scalars agree. -/
 theorem eq_of_forall_exists_ne_zero (h : IsDressedProportional B X Y z)
     (h' : IsDressedProportional B X Y z')
-    (hX : ∀ N : ℕ, ∃ w : List (Fin d), N ≤ w.length ∧ X * Kraus.evalWord B w ≠ 0) :
+    (hX : ∀ N : ℕ, ∃ w : List α, N ≤ w.length ∧ X * Kraus.evalWord B w ≠ 0) :
     z = z' := by
   obtain ⟨N, h⟩ := h
   obtain ⟨N', h'⟩ := h'
@@ -512,7 +510,7 @@ end MPTensor.IsDressedProportional
 
 namespace MPSTensor
 
-variable {d D D' m k : ℕ}
+variable {α : Type*} {D D' m k : ℕ}
 
 open Classical in
 /-- **A chosen dressed scalar.** A nonzero scalar `z` with `X B^w = z Y B^w` for long words,
@@ -520,13 +518,14 @@ chosen when one exists, and one otherwise. Every scalar invariant defined by com
 reductions onto the same normal tensor is of this form: the anomaly three-cochain of
 arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535, the scalar
 gauge freedom of the fusion tensors, `eq:scalar_fus_ten`, and the L-symbols of `eq:defL`. -/
-noncomputable def dressedScalar (B : MPSTensor d D) (X Y : Matrix (Fin m) (Fin D) ℂ) : Units ℂ :=
+noncomputable def dressedScalar (B : MPTensor α (Fin D)) (X Y : Matrix (Fin m) (Fin D) ℂ) :
+    Units ℂ :=
   if hz : ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B X Y z then Units.mk0 hz.choose hz.choose_spec.1
   else 1
 
 /-- The chosen dressed scalar satisfies the dressed proportionality whenever some nonzero
 scalar does. -/
-theorem isDressedProportional_dressedScalar {B : MPSTensor d D}
+theorem isDressedProportional_dressedScalar {B : MPTensor α (Fin D)}
     {X Y : Matrix (Fin m) (Fin D) ℂ} (h : ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B X Y z) :
     IsDressedProportional B X Y (dressedScalar B X Y) := by
   simp only [dressedScalar, h, ↓reduceDIte, Units.val_mk0]
@@ -536,7 +535,7 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {D_A : ℕ} {B : MPSTensor d D} {A : MPSTensor d D_A}
+variable {D_A : ℕ} {B : MPTensor α (Fin D)} {A : MPTensor α (Fin D_A)}
   {V V' : Matrix (Fin D_A) (Fin D) ℂ} {W W' : Matrix (Fin D) (Fin D_A) ℂ}
 
 /-- The left boundary of a reduction onto a normal tensor of positive bond
@@ -545,7 +544,7 @@ normal tensor has nonzero words of every multiple of its injectivity length. -/
 theorem _root_.MPTensor.IsReduction.exists_mul_evalWord_ne_zero (h : IsReduction B A V W)
     (hA : Kraus.IsNormal A)
     (hD : 0 < D_A) (N : ℕ) :
-    ∃ w : List (Fin d), N ≤ w.length ∧ V * Kraus.evalWord B w ≠ 0 := by
+    ∃ w : List α, N ≤ w.length ∧ V * Kraus.evalWord B w ≠ 0 := by
   obtain ⟨L, hL, hinj⟩ := hA
   obtain ⟨σ, hσ⟩ := exists_evalWord_ne_zero_of_isNBlkInjective hD.ne'
     (isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj)
@@ -575,46 +574,42 @@ namespace MPOTensor
 variable {d D₁ D₂ D₃ m : ℕ}
 
 /-- The left boundary `X ⊗ 1` against a word of a product tensor. -/
-theorem kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn (M : MPOTensor d D₁)
+theorem kronId_mul_kraus_evalWord_mulTensor_ofFn (M : MPOTensor d D₁)
     (P : MPOTensor d D₂) (X : Matrix (Fin m) (Fin D₁) ℂ) {L : ℕ}
-    (u : Fin L → Fin (d * d)) :
-    kronId X D₂ * Kraus.evalWord (mulTensor M P).toMPSTensor (List.ofFn u) =
+    (u : Fin L → Fin d × Fin d) :
+    kronId X D₂ * Kraus.evalWord (mulTensor M P) (List.ofFn u) =
       (∑ ρ : Fin L → Fin d,
-        (X * Kraus.evalWord M.toMPSTensor
-            (List.ofFn fun k ↦ finProdFinEquiv ((u k).divNat, ρ k))) ⊗ₖ
-          Kraus.evalWord P.toMPSTensor
-            (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat))).submatrix
+        (X * Kraus.evalWord M (List.ofFn fun k ↦ ((u k).1, ρ k))) ⊗ₖ
+          Kraus.evalWord P (List.ofFn fun k ↦ (ρ k, (u k).2))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  rw [evalWord_toMPSTensor_mulTensor_ofFn, kronId_mul_submatrix_sum]
+  rw [kraus_evalWord_mulTensor_ofFn, kronId_mul_submatrix_sum]
 
 /-- The left boundary `1 ⊗ X` against a word of a product tensor. -/
-theorem idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn (P : MPOTensor d D₂)
+theorem idKron_mul_kraus_evalWord_mulTensor_ofFn (P : MPOTensor d D₂)
     (M : MPOTensor d D₁) (X : Matrix (Fin m) (Fin D₁) ℂ) {L : ℕ}
-    (u : Fin L → Fin (d * d)) :
-    idKron D₂ X * Kraus.evalWord (mulTensor P M).toMPSTensor (List.ofFn u) =
+    (u : Fin L → Fin d × Fin d) :
+    idKron D₂ X * Kraus.evalWord (mulTensor P M) (List.ofFn u) =
       (∑ ρ : Fin L → Fin d,
-        Kraus.evalWord P.toMPSTensor
-            (List.ofFn fun k ↦ finProdFinEquiv ((u k).divNat, ρ k)) ⊗ₖ
-          (X * Kraus.evalWord M.toMPSTensor
-            (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat)))).submatrix
+        Kraus.evalWord P (List.ofFn fun k ↦ ((u k).1, ρ k)) ⊗ₖ
+          (X * Kraus.evalWord M (List.ofFn fun k ↦ (ρ k, (u k).2)))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  rw [evalWord_toMPSTensor_mulTensor_ofFn, idKron_mul_submatrix_sum]
+  rw [kraus_evalWord_mulTensor_ofFn, idKron_mul_submatrix_sum]
 
 /-- Dressed proportionality on a factor extends to the product with a factor
 on the right, through `X ⊗ 1`. -/
 theorem _root_.MPTensor.IsDressedProportional.mulTensor_kronId {M : MPOTensor d D₁}
     (P : MPOTensor d D₂) {X Y : Matrix (Fin m) (Fin D₁) ℂ} {z : ℂ}
-    (h : MPTensor.IsDressedProportional M.toMPSTensor X Y z) :
-    MPTensor.IsDressedProportional (mulTensor M P).toMPSTensor (kronId X D₂)
+    (h : MPTensor.IsDressedProportional M X Y z) :
+    MPTensor.IsDressedProportional (mulTensor M P) (kronId X D₂)
       (kronId Y D₂) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
-  rw [kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn,
-    kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn]
-  have h' : ∀ σ : Fin L → Fin (d * d), X * Kraus.evalWord M.toMPSTensor (List.ofFn σ) =
-      z • (Y * Kraus.evalWord M.toMPSTensor (List.ofFn σ)) := fun σ ↦
+  rw [kronId_mul_kraus_evalWord_mulTensor_ofFn,
+    kronId_mul_kraus_evalWord_mulTensor_ofFn]
+  have h' : ∀ σ : Fin L → Fin d × Fin d, X * Kraus.evalWord M (List.ofFn σ) =
+      z • (Y * Kraus.evalWord M (List.ofFn σ)) := fun σ ↦
     h _ (by rw [List.length_ofFn]; exact hw)
   simp only [h', Matrix.smul_kronecker, ← Finset.smul_sum]
   rfl
@@ -623,17 +618,17 @@ theorem _root_.MPTensor.IsDressedProportional.mulTensor_kronId {M : MPOTensor d 
 on the left, through `1 ⊗ X`. -/
 theorem _root_.MPTensor.IsDressedProportional.mulTensor_idKron {M : MPOTensor d D₁}
     (P : MPOTensor d D₂) {X Y : Matrix (Fin m) (Fin D₁) ℂ} {z : ℂ}
-    (h : MPTensor.IsDressedProportional M.toMPSTensor X Y z) :
-    MPTensor.IsDressedProportional (mulTensor P M).toMPSTensor (idKron D₂ X)
+    (h : MPTensor.IsDressedProportional M X Y z) :
+    MPTensor.IsDressedProportional (mulTensor P M) (idKron D₂ X)
       (idKron D₂ Y) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
-  rw [idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn,
-    idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn]
-  have h' : ∀ σ : Fin L → Fin (d * d), X * Kraus.evalWord M.toMPSTensor (List.ofFn σ) =
-      z • (Y * Kraus.evalWord M.toMPSTensor (List.ofFn σ)) := fun σ ↦
+  rw [idKron_mul_kraus_evalWord_mulTensor_ofFn,
+    idKron_mul_kraus_evalWord_mulTensor_ofFn]
+  have h' : ∀ σ : Fin L → Fin d × Fin d, X * Kraus.evalWord M (List.ofFn σ) =
+      z • (Y * Kraus.evalWord M (List.ofFn σ)) := fun σ ↦
     h _ (by rw [List.length_ofFn]; exact hw)
   simp only [h', Matrix.kronecker_smul, ← Finset.smul_sum]
   rfl
