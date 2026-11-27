@@ -97,31 +97,27 @@ has a common blocking at length `p = 1` and that the block family can be
 reordered by decreasing weight norm before the final normal-form statement.
 -/
 
-open Kraus (blockPhysDim singleBlockEquiv blockTensor)
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-private theorem isIrreducibleFamily_blockTensor_one
+private theorem isIrreducibleFamily_block_one
     (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A) :
-    Kraus.IsIrreducibleFamily (ι := Fin (blockPhysDim d 1)) (n := Fin D)
-      (blockTensor (d := d) (n := Fin D) A 1) := by
+    Kraus.IsIrreducibleFamily (ι := Fin 1 → Fin d) (n := Fin D)
+      (Kraus.block A 1) := by
   intro hHas
   apply hIrr
   rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
   refine ⟨P, hPproj, hP0, hP1, ?_⟩
   intro j
-  simpa using hLower ((singleBlockEquiv d).symm j)
+  simpa using hLower (fun _ => j)
 
-private theorem leftCanonical_blockTensor_one
+private theorem leftCanonical_block_one
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∑ i : Fin (blockPhysDim d 1),
-      (blockTensor (d := d) (n := Fin D) A 1 i)ᴴ *
-        blockTensor (d := d) (n := Fin D) A 1 i = 1 := by
-  exact (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
-      (Kraus.IsTP.block (A := A) hLeft 1)
+    ∑ i : Fin 1 → Fin d, (Kraus.block A 1 i)ᴴ * Kraus.block A 1 i = 1 :=
+  Kraus.IsTP.block (A := A) hLeft 1
 
 /-- A primitive weighted block family is already in common blocking length `p = 1`. -/
 private theorem common_blocking_primitive
@@ -143,82 +139,82 @@ private theorem common_blocking_primitive
       ∃ r2 : ℕ,
       ∃ dim2 : Fin r2 → ℕ,
       ∃ μ2 : Fin r2 → ℂ,
-      ∃ blocks2 : (k : Fin r2) → MPSTensor (blockPhysDim d p) (dim2 k),
+      ∃ blocks2 : (k : Fin r2) → MPTensor (Fin p → Fin d) (Fin (dim2 k)),
         SameMPV₂
-          (blockTensor (d := d) (n := Fin D) A p)
-          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ2) blocks2) ∧
+          (Kraus.block A p)
+          (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ2) blocks2) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks2 k)) ∧
-        (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks2 k i)ᴴ * blocks2 k i = 1) ∧
+        (∀ k, ∑ i : (Fin p → Fin d), (blocks2 k i)ᴴ * blocks2 k i = 1) ∧
         (∀ k,
           _root_.IsPrimitive
-            (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim2 k)) (blocks2 k))) ∧
+            (Kraus.transferMap (ι := Fin p → Fin d) (n := Fin (dim2 k)) (blocks2 k))) ∧
         (∀ k, μ2 k ≠ 0) ∧
         (∀ k, 0 < dim2 k) := by
   refine ⟨1, Nat.one_pos, r1, dim1, μ1,
-    (fun k => blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1), ?_⟩
+    (fun k => Kraus.block (blocks1 k) 1), ?_⟩
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro N σ
-    let σ' : Fin N → Fin d := fun n => singleBlockEquiv d (σ n)
+    let σ' : Fin N → Fin d := fun n => σ n 0
     calc
-      mpv (blockTensor (d := d) (n := Fin D) A 1) σ = mpv A σ' :=
-        mpv_blockTensor_one (d := d) (D := D) (A := A) σ
+      mpv (Kraus.block A 1) σ = mpv A σ' :=
+        mpv_block_one (D := D) (A := A) σ
       _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) σ' := hSame1 N σ'
       _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blocks1 k) σ' := by
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum (α := Fin d) (μ := μ1) (A := blocks1) (σ := σ'))
       _ = ∑ k : Fin r1, (μ1 k) ^ N *
-            mpv (blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1) σ := by
+            mpv (Kraus.block (blocks1 k) 1) σ := by
             refine Finset.sum_congr rfl ?_
             intro k _
-            rw [mpv_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (σ := σ)]
+            rw [mpv_block_one (D := dim1 k) (A := blocks1 k) (σ := σ)]
       _ = mpv (toTensorFromBlocks
-            (α := Fin (blockPhysDim d 1))
+            (α := Fin 1 → Fin d)
             (μ := μ1)
-            (fun k => blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1)) σ := by
+            (fun k => Kraus.block (blocks1 k) 1)) σ := by
             symm
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
-                (α := Fin (blockPhysDim d 1))
+                (α := Fin 1 → Fin d)
                 (μ := μ1)
-                (A := fun k => blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1)
+                (A := fun k => Kraus.block (blocks1 k) 1)
                 (σ := σ))
   · intro k
-    exact isIrreducibleFamily_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hIrr1 k)
+    exact isIrreducibleFamily_block_one (D := dim1 k) (A := blocks1 k) (hIrr1 k)
   · intro k
-    exact leftCanonical_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hLeft1 k)
+    exact leftCanonical_block_one (D := dim1 k) (A := blocks1 k) (hLeft1 k)
   · intro k
-    simpa [Kraus.transferMap_blockTensor (A := blocks1 k) (L := 1)] using hPrim1 k
+    simpa [Kraus.transferMap_block (A := blocks1 k) (L := 1)] using hPrim1 k
   · exact hμne1
   · exact hDim1
 
 /-- Sort a primitive weighted block family by decreasing weight norm. -/
 private theorem sort_blocks_by_weight_norm
     {p Dblk : ℕ}
-    (Ablk : MPSTensor (blockPhysDim d p) Dblk)
+    (Ablk : MPTensor (Fin p → Fin d) (Fin Dblk))
     {r2 : ℕ} {dim2 : Fin r2 → ℕ}
     (μ2 : Fin r2 → ℂ)
-    (blocks2 : (k : Fin r2) → MPSTensor (blockPhysDim d p) (dim2 k))
+    (blocks2 : (k : Fin r2) → MPTensor (Fin p → Fin d) (Fin (dim2 k)))
     (hSame2 :
       SameMPV₂ Ablk
-        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ2) blocks2))
+        (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ2) blocks2))
     (hIrr2 : ∀ k, Kraus.IsIrreducibleFamily (blocks2 k))
-    (hLeft2 : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocks2 k i)ᴴ * blocks2 k i = 1)
+    (hLeft2 : ∀ k, ∑ i : (Fin p → Fin d), (blocks2 k i)ᴴ * blocks2 k i = 1)
     (hPrim2 : ∀ k,
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim2 k)) (blocks2 k)))
+        (Kraus.transferMap (ι := Fin p → Fin d) (n := Fin (dim2 k)) (blocks2 k)))
     (hμne2 : ∀ k, μ2 k ≠ 0)
     (hDim2 : ∀ k, 0 < dim2 k) :
     ∃ r : ℕ,
       ∃ dim : Fin r → ℕ,
       ∃ μ : Fin r → ℂ,
-      ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+      ∃ blocks : (k : Fin r) → MPTensor (Fin p → Fin d) (Fin (dim k)),
         SameMPV₂ Ablk
-          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
+          (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ) blocks) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-        (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks k i)ᴴ * blocks k i = 1) ∧
+        (∀ k, ∑ i : (Fin p → Fin d), (blocks k i)ᴴ * blocks k i = 1) ∧
         (∀ k,
           _root_.IsPrimitive
-            (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
+            (Kraus.transferMap (ι := Fin p → Fin d) (n := Fin (dim k)) (blocks k))) ∧
         Antitone (fun k : Fin r => ‖μ k‖) ∧
         (∀ k, μ k ≠ 0) ∧
         (∀ k, 0 < dim k) := by
@@ -232,25 +228,25 @@ private theorem sort_blocks_by_weight_norm
     intro i; simp [e, Equiv.trans_apply, Fin.revPerm_apply]
   let dim : Fin r2 → ℕ := fun i => dim2 (e i)
   let μ : Fin r2 → ℂ := fun i => μ2 (e i)
-  let blocks : (k : Fin r2) → MPSTensor (blockPhysDim d p) (dim k) :=
+  let blocks : (k : Fin r2) → MPTensor (Fin p → Fin d) (Fin (dim k)) :=
     fun i => blocks2 (e i)
   refine ⟨r2, dim, μ, blocks, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro N σ
     calc
       mpv Ablk σ
-          = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ2) blocks2) σ := hSame2 N σ
+          = mpv (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ2) blocks2) σ := hSame2 N σ
       _ = ∑ k : Fin r2, (μ2 k) ^ N * mpv (blocks2 k) σ := by
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
-                (α := Fin (blockPhysDim d p)) (μ := μ2) (A := blocks2) (σ := σ))
+                (α := Fin p → Fin d) (μ := μ2) (A := blocks2) (σ := σ))
       _ = ∑ i : Fin r2, (μ2 (e i)) ^ N * mpv (blocks2 (e i)) σ := by
             symm
             simpa using (e.sum_comp (fun k : Fin r2 => (μ2 k) ^ N * mpv (blocks2 k) σ))
-      _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) σ := by
+      _ = mpv (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ) blocks) σ := by
             symm
             simpa [μ, blocks, smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
-                (α := Fin (blockPhysDim d p)) (μ := μ) (A := blocks) (σ := σ))
+                (α := Fin p → Fin d) (μ := μ) (A := blocks) (σ := σ))
   · intro i
     exact hIrr2 (e i)
   · intro i
@@ -292,15 +288,15 @@ private theorem exists_blocked_normal_data_of_primitive_blockDecomp
       ∃ r : ℕ,
       ∃ dim : Fin r → ℕ,
       ∃ μ : Fin r → ℂ,
-      ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+      ∃ blocks : (k : Fin r) → MPTensor (Fin p → Fin d) (Fin (dim k)),
         SameMPV₂
-          (blockTensor (d := d) (n := Fin D) A p)
-          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
+          (Kraus.block A p)
+          (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ) blocks) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-        (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks k i)ᴴ * blocks k i = 1) ∧
+        (∀ k, ∑ i : (Fin p → Fin d), (blocks k i)ᴴ * blocks k i = 1) ∧
         (∀ k,
           _root_.IsPrimitive
-            (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
+            (Kraus.transferMap (ι := Fin p → Fin d) (n := Fin (dim k)) (blocks k))) ∧
         Antitone (fun k : Fin r => ‖μ k‖) ∧
         (∀ k, μ k ≠ 0) ∧
         (∀ k, 0 < dim k) := by
@@ -313,7 +309,7 @@ private theorem exists_blocked_normal_data_of_primitive_blockDecomp
     sort_blocks_by_weight_norm
       (d := d)
       (p := p)
-      (Ablk := blockTensor (d := d) (n := Fin D) A p)
+      (Ablk := Kraus.block A p)
       (r2 := r2) (dim2 := dim2) (μ2 := μ2) blocks2
       hSame2 hIrr2 hLeft2 hPrim2 hμne2 hDim2
   exact ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩
@@ -331,7 +327,7 @@ Hypotheses:
 
 Conclusion: after a common blocking (currently `p = 1`) and reordering by
 non-increasing weight modulus (ties allowed),
-`blockTensor A p` is `SameMPV₂`-equivalent to a weighted block family whose blocks
+`Kraus.block A p` is `SameMPV₂`-equivalent to a weighted block family whose blocks
 are irreducible, left-canonical and primitive (hence normal tensors), with nonzero
 weights ordered by non-increasing modulus and positive bond dimensions.
 
@@ -366,15 +362,15 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
       ∃ r : ℕ,
       ∃ dim : Fin r → ℕ,
       ∃ μ : Fin r → ℂ,
-      ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+      ∃ blocks : (k : Fin r) → MPTensor (Fin p → Fin d) (Fin (dim k)),
         SameMPV₂
-          (blockTensor (d := d) (n := Fin D) A p)
-          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
+          (Kraus.block A p)
+          (toTensorFromBlocks (α := Fin p → Fin d) (μ := μ) blocks) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
-        (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks k i)ᴴ * blocks k i = 1) ∧
+        (∀ k, ∑ i : (Fin p → Fin d), (blocks k i)ᴴ * blocks k i = 1) ∧
         (∀ k,
           _root_.IsPrimitive
-            (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
+            (Kraus.transferMap (ι := Fin p → Fin d) (n := Fin (dim k)) (blocks k))) ∧
         HasOrderedNonzeroWeights μ ∧
         (∀ k, 0 < dim k) := by
   obtain ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=

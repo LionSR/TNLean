@@ -266,15 +266,17 @@ theorem polarIsoMatrix_comp_equiv (X : MPTensor α (Fin D)) (e : β ≃ α) :
 
 /-- Relabelling the physical index of a tensor by a bijection does not change its positive-part
 tensor. -/
-theorem polarPosTensor_comp_equiv [DecidableEq α] (X : MPTensor α (Fin D)) (e : β ≃ α) :
+theorem polarPosTensor_comp_equiv (X : MPTensor α (Fin D)) (e : β ≃ α) :
     polarPosTensor (fun i => X (e i)) = polarPosTensor X := by
+  classical
   rw [← rotatePhysical_one_submatrix,
     polarPosTensor_rotatePhysical (rotatePhysical_conjTranspose_one_submatrix_mul X e)]
 
 /-- Relabelling the physical index of a tensor by a bijection does not change its support
 projector. -/
-theorem polarSupportMatrix_comp_equiv [DecidableEq α] (X : MPTensor α (Fin D)) (e : β ≃ α) :
+theorem polarSupportMatrix_comp_equiv (X : MPTensor α (Fin D)) (e : β ≃ α) :
     polarSupportMatrix (fun i => X (e i)) = polarSupportMatrix X := by
+  classical
   rw [← rotatePhysical_one_submatrix,
     polarSupportMatrix_rotatePhysical (rotatePhysical_conjTranspose_one_submatrix_mul X e)]
 

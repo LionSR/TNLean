@@ -80,7 +80,7 @@ def blockKron (L : ℕ) (P : Matrix α β ℂ) : Matrix (Fin L → α) (Fin L �
 /-- The Kronecker lift is multiplicative: `blockKron L (P * Q) = blockKron L P *
 blockKron L Q`.  Summing over the intermediate blocked index is summing over
 length-`L` words, and the product distributes site by site. -/
-lemma blockKron_mul [Fintype β] [DecidableEq β] (L : ℕ) (P : Matrix α β ℂ)
+lemma blockKron_mul [Fintype β] (L : ℕ) (P : Matrix α β ℂ)
     (Q : Matrix β γ ℂ) :
     blockKron L (P * Q) = blockKron L P * blockKron L Q := by
   ext I J

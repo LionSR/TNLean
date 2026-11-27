@@ -38,7 +38,7 @@ This file proves these three steps.
 
 ## Main declarations
 
-* `MPSTensor.tendsto_polarPosTensor_blockTensor_of_isNormal` — for a normal tensor in the gauge
+* `MPSTensor.tendsto_polarPosTensor_block_of_isNormal` — for a normal tensor in the gauge
   `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1`, the positive factor of the `q`-site
   blocked tensor converges to `P_∞` (arXiv:2307.01696, eq. (8)).
   The general form `MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap` only assumes the
@@ -49,8 +49,8 @@ This file proves these three steps.
 * `MPSTensor.mpv_approximatingTensor_norm_sq` — for injective `B` that state is normalized.
 * `MPSTensor.exists_unitary_mpv_approximatingTensor` — the periodic state of `B'` is
   `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})` (eqs. (10) and (11)).
-* `MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one`,
-  `MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive`: convergence to the fixed-point
+* `MPSTensor.tendsto_transferMap_block_of_spectralRadius_lt_one`,
+  `MPSTensor.tendsto_transferMap_block_of_isPrimitive`: convergence to the fixed-point
   transfer map.
 
 ## References
@@ -83,7 +83,6 @@ results.
 
 open scoped Kronecker Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Operator
 open Matrix Finset Filter
-open Kraus (blockTensor)
 
 attribute [local instance 1001]
   ContinuousLinearMap.toNormedAddCommGroup
@@ -102,14 +101,14 @@ decomposition `E_A = |ρ⟩⟨1| + R` of arXiv:2307.01696, eq. `eq:Ek_decomp`: h
 is left canonical, `σ` is a unit-trace fixed point, and `R = E_A - E_{P_∞}` has
 spectral radius less than one. This is the limit `E_B = E_A^q → E_{P_∞}` of
 eq. `eq:B_TM`, for the blocked tensor `B` of eq. `eq:B`. -/
-theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
+theorem tendsto_transferMap_block_of_spectralRadius_lt_one
     (A : MPSTensor d D) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ)
     (hR : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.transferMap A - Kraus.transferMap (fixedPointTensor σ))) < 1)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Tendsto (fun q : ℕ => Kraus.transferMap (blockTensor A q) X) atTop
+    Tendsto (fun q : ℕ => Kraus.transferMap (Kraus.block A q) X) atTop
       (nhds (Kraus.transferMap (fixedPointTensor σ) X)) := by
   have htr' : σ.trace ≠ 0 := by simp [htr]
   set E := Kraus.transferMap A
@@ -135,7 +134,7 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
     simpa using (tendsto_const_nhds (x := P X)).add happ
   refine hlim.congr' ?_
   filter_upwards [eventually_ge_atTop 1] with q hq
-  rw [Kraus.transferMap_blockTensor_apply,
+  rw [Kraus.transferMap_block,
     pow_eq_fixedPointProj_add_compl_pow E htr' hTP hfix hq]
   rfl
 
@@ -150,11 +149,11 @@ Normality is taken as `MPTensor.IsNormalTensor`; the proof uses its fields
 nothing to the source's hypotheses here: in the left-canonical gauge `hA` the transfer map is a
 channel, so a caller holding only the source's two conditions obtains `IsNormalTensor A` from
 `MPSTensor.isNormalTensor_of_isIrreducibleFamily_leftCanonical`. -/
-theorem tendsto_transferMap_blockTensor_of_isPrimitive
+theorem tendsto_transferMap_block_of_isPrimitive
     (A : MPSTensor d D) (hN : IsNormalTensor A) (hA : IsLeftCanonical A)
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Tendsto (fun q : ℕ => Kraus.transferMap (blockTensor A q) X) atTop
+    Tendsto (fun q : ℕ => Kraus.transferMap (Kraus.block A q) X) atTop
       (nhds (Kraus.transferMap (fixedPointTensor σ) X)) := by
   have : NeZero D := ⟨by rintro rfl; simp at htr⟩
   obtain ⟨htr', hgap⟩ :=
@@ -163,7 +162,7 @@ theorem tendsto_transferMap_blockTensor_of_isPrimitive
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hN.no_invariant_proj)
       hN.primitive_transfer σ hσ.posSemidef
       (by rintro rfl; simp at htr) hfix
-  refine tendsto_transferMap_blockTensor_of_spectralRadius_lt_one A hA hσ.posSemidef htr hfix
+  refine tendsto_transferMap_block_of_spectralRadius_lt_one A hA hσ.posSemidef htr hfix
     ?_ X
   rwa [transferMap_fixedPointTensor hσ.posSemidef htr]
 
@@ -175,21 +174,20 @@ section ApproximatingState
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Filter Topology
-open Kraus (blockTensor)
 
 
 namespace MPSTensor
 
 /-! ### The Gram matrix of a tensor as a rearranged transfer map -/
 
-variable {d n D : ℕ}
+variable {d D : ℕ} {α : Type*} [Fintype α]
 
 /-- If the transfer maps of a family of tensors converge to `X ↦ Tr(X) σ`, their Gram matrices
 converge to `σᵀ ⊗ 1`.
 
 arXiv:2307.01696, eq. (8): `E_B = P† P → E_{P_∞}` with `E_{P_∞} = |ρ⟩⟨1|`. -/
-theorem tendsto_gram_physicalMatrix_of_tendsto_transferMap {nq : ℕ → ℕ}
-    (B : ∀ q, MPSTensor (nq q) D) {σ : Matrix (Fin D) (Fin D) ℂ}
+theorem tendsto_gram_physicalMatrix_of_tendsto_transferMap {nq : ℕ → Type*} [∀ q, Fintype (nq q)]
+    (B : ∀ q, MPTensor (nq q) (Fin D)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hlim : ∀ X, Tendsto (fun q => Kraus.transferMap (B q) X) atTop (𝓝 (X.trace • σ))) :
     Tendsto (fun q => (physicalMatrix (B q))ᴴ * physicalMatrix (B q)) atTop
       (𝓝 (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) := by
@@ -210,8 +208,8 @@ theorem tendsto_gram_physicalMatrix_of_tendsto_transferMap {nq : ℕ → ℕ}
 `|α, β⟩ ↦ ∑_γ (√σ)_{αγ} |γ, β⟩`.
 
 arXiv:2307.01696, eq. (8): `P → P_∞` as `q → ∞`. -/
-theorem tendsto_polarPos_physicalMatrix_of_tendsto_transferMap {nq : ℕ → ℕ}
-    (B : ∀ q, MPSTensor (nq q) D) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
+theorem tendsto_polarPos_physicalMatrix_of_tendsto_transferMap {nq : ℕ → Type*} [∀ q, Fintype (nq q)]
+    (B : ∀ q, MPTensor (nq q) (Fin D)) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
     (hlim : ∀ X, Tendsto (fun q => Kraus.transferMap (B q) X) atTop (𝓝 (X.trace • σ))) :
     Tendsto (fun q => Matrix.polarPos (physicalMatrix (B q))) atTop
       (𝓝 ((CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) := by
@@ -242,8 +240,8 @@ tensors `B_q` converge to `X ↦ Tr(X) σ` with `σ ≥ 0`, the positive-part te
 polar decompositions `B_q = V_q P_q` converge to the fixed-point tensor `P_∞`.
 
 arXiv:2307.01696, eq. (8): `E_B = E_P → E_{P_∞}` and `P → P_∞` as `q → ∞`. -/
-theorem tendsto_polarPosTensor_of_tendsto_transferMap {nq : ℕ → ℕ}
-    (B : ∀ q, MPSTensor (nq q) D) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
+theorem tendsto_polarPosTensor_of_tendsto_transferMap {nq : ℕ → Type*} [∀ q, Fintype (nq q)]
+    (B : ∀ q, MPTensor (nq q) (Fin D)) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
     (hlim : ∀ X, Tendsto (fun q => Kraus.transferMap (B q) X) atTop (𝓝 (X.trace • σ))) :
     Tendsto (fun q => polarPosTensor (B q)) atTop (𝓝 (fixedPointTensor σ)) := by
   have hcont : Continuous fun G : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ =>
@@ -257,15 +255,15 @@ theorem tendsto_polarPosTensor_of_tendsto_transferMap {nq : ℕ → ℕ}
 the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (eq. (5)). Then the positive-part
 tensor `P_q` of the polar decomposition `B_q = V_q P_q` of the `q`-site blocked tensor converges
 to the fixed-point tensor `P_∞` as `q → ∞`. -/
-theorem tendsto_polarPosTensor_blockTensor_of_isNormal (A : MPSTensor d D)
+theorem tendsto_polarPosTensor_block_of_isNormal (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) :
-    Tendsto (fun q => polarPosTensor (blockTensor A q)) atTop (𝓝 (fixedPointTensor σ)) := by
+    Tendsto (fun q => polarPosTensor (Kraus.block A q)) atTop (𝓝 (fixedPointTensor σ)) := by
   have : NeZero D := ⟨by rintro rfl; simp at htr⟩
   have hNT := isNormalTensor_of_isNormal_leftCanonical A hN hA
-  refine tendsto_polarPosTensor_of_tendsto_transferMap (fun q => blockTensor A q)
+  refine tendsto_polarPosTensor_of_tendsto_transferMap (fun q => Kraus.block A q)
     hσ.posSemidef fun X => ?_
-  have h := tendsto_transferMap_blockTensor_of_isPrimitive A hNT hA hσ htr hfix X
+  have h := tendsto_transferMap_block_of_isPrimitive A hNT hA hσ htr hfix X
   rwa [transferMap_fixedPointTensor_apply hσ.posSemidef] at h
 
 /-! ### The approximating tensor and its periodic state -/
@@ -275,16 +273,16 @@ decomposition `B = V P` of a tensor `B`, applied to the physical leg of the fixe
 `P_∞` built from `σ`.
 
 arXiv:2307.01696, eq. (9): `B = V P ≈ V P_∞ = B'`. -/
-noncomputable def approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (Fin D) ℂ) :
-    MPSTensor n D :=
+noncomputable def approximatingTensor (B : MPTensor α (Fin D)) (σ : Matrix (Fin D) (Fin D) ℂ) :
+    MPTensor α (Fin D) :=
   rotatePhysical (polarIsoMatrix B) (fixedPointTensor σ)
 
 /-- **The approximating state.** The periodic state of `B' = V P_∞` on `M ≥ 1` blocks is
 `V^{⊗M}` applied to the product `⊗ₖ |ω⟩_{R_k L_{k+1}}` of the pairs of eq. (12).
 
 arXiv:2307.01696, eqs. (9) and (10). -/
-theorem mpv_approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (Fin D) ℂ) {M : ℕ}
-    [NeZero M] (s : Fin M → Fin n) :
+theorem mpv_approximatingTensor (B : MPTensor α (Fin D)) (σ : Matrix (Fin D) (Fin D) ℂ) {M : ℕ}
+    [NeZero M] (s : Fin M → α) :
     mpv (approximatingTensor B σ) s =
       ∑ τ : Fin M → Fin (D * D), (∏ j, polarIsoMatrix B (s j) (τ j)) *
         pairProductState (fixedPointPair σ) (fun k => finProdFinEquiv.symm (τ k)) := by
@@ -295,10 +293,10 @@ theorem mpv_approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (Fin D)
 normalized, so it is the approximating state `|φ'_N⟩` itself.
 
 arXiv:2307.01696, eq. (10): `|φ'_N⟩` is `V^{⊗M}` applied to the normalized state `|Ω⟩`. -/
-theorem mpv_approximatingTensor_norm_sq {B : MPSTensor n D}
+theorem mpv_approximatingTensor_norm_sq {B : MPTensor α (Fin D)}
     (hB : Kraus.IsInjective B) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) {M : ℕ} [NeZero M] :
-    ∑ s : Fin M → Fin n,
+    ∑ s : Fin M → α,
       star (mpv (approximatingTensor B σ) s) * mpv (approximatingTensor B σ) s = 1 := by
   simp_rw [mpv_approximatingTensor]
   rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_prod_const]
@@ -309,27 +307,27 @@ theorem mpv_approximatingTensor_norm_sq {B : MPSTensor n D}
 /-! ### A unitary implementing the isometry -/
 
 /-- The input state `⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})` of the preparation, on `M` blocks each
-with physical space `ℂ^n`. The placement `ι` sends the pair `(l, r)` of left and right
-indices of a block to a basis vector of `ℂ^n`; in the source, where `D = d` so that `L` and `R`
+with physical space `ℂ^α`. The placement `ι` sends the pair `(l, r)` of left and right
+indices of a block to a basis vector of `ℂ^α`; in the source, where `D = d` so that `L` and `R`
 are single sites, it is `(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`.
 
 arXiv:2307.01696, eq. (10). -/
-noncomputable def embeddedPairState (ι : Fin D × Fin D → Fin n) (σ : Matrix (Fin D) (Fin D) ℂ)
-    {M : ℕ} (t : Fin M → Fin n) : ℂ :=
+noncomputable def embeddedPairState [DecidableEq α] (ι : Fin D × Fin D → α) (σ : Matrix (Fin D) (Fin D) ℂ)
+    {M : ℕ} (t : Fin M → α) : ℂ :=
   ∑ c : Fin M → Fin D × Fin D,
     if (fun j => ι (c j)) = t then pairProductState (fixedPointPair σ) c else 0
 
-/-- **Product formula.** If a matrix `U` on `ℂ^n` sends the placed basis vector `|ι(l, r)⟩` to
+/-- **Product formula.** If a matrix `U` on `ℂ^α` sends the placed basis vector `|ι(l, r)⟩` to
 `V |l, r⟩`, then the periodic state of `B' = V P_∞` on `M ≥ 1` blocks is
 `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})`.
 
 arXiv:2307.01696, eqs. (10) and (11). -/
-theorem mpv_approximatingTensor_eq_sum_embeddedPairState (B : MPSTensor n D)
-    (σ : Matrix (Fin D) (Fin D) ℂ) (ι : Fin D × Fin D → Fin n) (U : Matrix (Fin n) (Fin n) ℂ)
+theorem mpv_approximatingTensor_eq_sum_embeddedPairState [DecidableEq α] (B : MPTensor α (Fin D))
+    (σ : Matrix (Fin D) (Fin D) ℂ) (ι : Fin D × Fin D → α) (U : Matrix (α) (α) ℂ)
     (hU : ∀ i p, U i (ι p) = polarIsoMatrix B i (finProdFinEquiv p)) {M : ℕ} [NeZero M]
-    (s : Fin M → Fin n) :
+    (s : Fin M → α) :
     mpv (approximatingTensor B σ) s =
-      ∑ t : Fin M → Fin n, (∏ j, U (s j) (t j)) * embeddedPairState ι σ t := by
+      ∑ t : Fin M → α, (∏ j, U (s j) (t j)) * embeddedPairState ι σ t := by
   rw [mpv_approximatingTensor]
   simp_rw [embeddedPairState, Finset.mul_sum, mul_ite, mul_zero]
   rw [Finset.sum_comm]
@@ -341,17 +339,17 @@ theorem mpv_approximatingTensor_eq_sum_embeddedPairState (B : MPSTensor n D)
 
 /-- **A unitary implementing the isometry** (arXiv:2307.01696, eqs. (10) and (11)). Let the
 tensor `B` be injective and let `ι` be an injective placement of the pairs `(l, r)` among the
-basis vectors of `ℂ^n`, for instance `(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`. Then there is a
-unitary `U` on `ℂ^n` with `U |ι(l, r)⟩ = V |l, r⟩`, and for every `M ≥ 1` the periodic state of
+basis vectors of `ℂ^α`, for instance `(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`. Then there is a
+unitary `U` on `ℂ^α` with `U |ι(l, r)⟩ = V |l, r⟩`, and for every `M ≥ 1` the periodic state of
 `B' = V P_∞` on `M` blocks is `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})`. -/
-theorem exists_unitary_mpv_approximatingTensor {B : MPSTensor n D}
-    (hB : Kraus.IsInjective B) (ι : Fin D × Fin D ↪ Fin n)
+theorem exists_unitary_mpv_approximatingTensor [DecidableEq α] {B : MPTensor α (Fin D)}
+    (hB : Kraus.IsInjective B) (ι : Fin D × Fin D ↪ α)
     (σ : Matrix (Fin D) (Fin D) ℂ) :
-    ∃ U ∈ Matrix.unitaryGroup (Fin n) ℂ,
+    ∃ U ∈ Matrix.unitaryGroup (α) ℂ,
       (∀ i p, U i (ι p) = polarIsoMatrix B i (finProdFinEquiv p)) ∧
-      ∀ (M : ℕ) [NeZero M] (s : Fin M → Fin n),
+      ∀ (M : ℕ) [NeZero M] (s : Fin M → α),
         mpv (approximatingTensor B σ) s =
-          ∑ t : Fin M → Fin n, (∏ j, U (s j) (t j)) * embeddedPairState ι σ t := by
+          ∑ t : Fin M → α, (∏ j, U (s j) (t j)) * embeddedPairState ι σ t := by
   obtain ⟨U, hU, hUV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq
     (isIsometry_polarIsoMatrix_of_isInjective hB) (finProdFinEquiv.symm.toEmbedding.trans ι)
   have hUV' : ∀ i p, U i (ι p) = polarIsoMatrix B i (finProdFinEquiv p) := fun i p => by
