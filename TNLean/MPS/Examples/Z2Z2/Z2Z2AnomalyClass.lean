@@ -180,27 +180,27 @@ private theorem comap_eq_orderTwoFamily
 /-! ### The integer data of the two nontrivial blocks -/
 
 private theorem eKx_int (b : Fin 4 × Fin 4) :
-    mulIntTensor eIntTensor kxIntTensor b = kxIntTensor b := by
+    mulTensorR eIntTensor kxIntTensor b = kxIntTensor b := by
   revert_decide_kernel b
 
 private theorem kxE_int (b : Fin 4 × Fin 4) :
-    mulIntTensor kxIntTensor eIntTensor b = kxIntTensor b := by
+    mulTensorR kxIntTensor eIntTensor b = kxIntTensor b := by
   revert_decide_kernel b
 
 private theorem kxKx_int (b : Fin 4 × Fin 4) :
-    mulIntTensor kxIntTensor kxIntTensor b = xXInt b := by
+    mulTensorR kxIntTensor kxIntTensor b = xXInt b := by
   revert_decide_kernel b
 
 private theorem eKxy_int (b : Fin 4 × Fin 4) :
-    mulIntTensor eIntTensor kxyIntTensor b = kxyIntTensor b := by
+    mulTensorR eIntTensor kxyIntTensor b = kxyIntTensor b := by
   revert_decide_kernel b
 
 private theorem kxyE_int (b : Fin 4 × Fin 4) :
-    mulIntTensor kxyIntTensor eIntTensor b = kxyIntTensor b := by
+    mulTensorR kxyIntTensor eIntTensor b = kxyIntTensor b := by
   revert_decide_kernel b
 
 private theorem kxyKxy_int (b : Fin 4 × Fin 4) :
-    mulIntTensor kxyIntTensor kxyIntTensor b = -xyXyInt b := by
+    mulTensorR kxyIntTensor kxyIntTensor b = -xyXyInt b := by
   revert_decide_kernel b
 
 /-- Stacking `M_e` with the dressed tensor of `x` gives that tensor. -/
@@ -243,8 +243,7 @@ theorem mulTensor_eTensor_eTensor :
 /-- **The square of the dressed tensor of `x` is the square of `M_x`**, so the compression
 witnesses of the block `(x, x)` are fusion tensors onto `M_e`. -/
 theorem kx_isReduction :
-    MPTensor.IsReduction mulTensor kxTensor kxTensor eTensor xXLeft
-      xXRight := by
+    MPTensor.IsReduction (mulTensor kxTensor kxTensor) eTensor xXLeft xXRight := by
   have h : mulTensor kxTensor kxTensor = xXStacked := by
     funext a
     rw [xXStacked_eq, ← kxKx_int]
@@ -256,13 +255,12 @@ theorem kx_isReduction :
 compression witnesses of the block `(xy, xy)` are fusion tensors onto `M_e`: the sign cancels
 the weight `−1` of the target of that block. -/
 theorem kxy_isReduction :
-    MPTensor.IsReduction mulTensor kxyTensor kxyTensor eTensor
-      xyXyLeft xyXyRight := by
+    MPTensor.IsReduction (mulTensor kxyTensor kxyTensor) eTensor xyXyLeft xyXyRight := by
   have h : mulTensor kxyTensor kxyTensor = fun i ↦ (-1 : ℂ) • xyXyStacked i := by
     funext a
     rw [xyXyStacked_eq, show mulTensor kxyTensor kxyTensor a = _
       from mulTensor_complexOfRing _ kxyIntTensor kxyIntTensor a, kxyKxy_int,
-      complexOfInt_neg, neg_one_smul]
+      ← complexOfInt, complexOfInt_neg, neg_one_smul]
   rw [h]
   convert xyXy_isReduction.smul (-1) using 1
   funext i
