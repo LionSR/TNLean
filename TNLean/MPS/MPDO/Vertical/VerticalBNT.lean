@@ -85,23 +85,22 @@ Proposition 4.13 of arXiv:1606.00608, line 1898, using Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq
     (M : MPOTensor d D)
-    (hLemmaL : ∀ {Y Z : Matrix (Fin (d * d)) (Fin (d * d)) ℂ},
-      MPSTensor.FirstSiteActionAgree M.toMPSTensor Y Z →
-        MPSTensor.insertedTensor Y M.toMPSTensor =
-          MPSTensor.insertedTensor Z M.toMPSTensor)
+    (hLemmaL : ∀ {Y Z : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ},
+      MPSTensor.FirstSiteActionAgree M Y Z →
+        MPSTensor.insertedTensor Y M = MPSTensor.insertedTensor Z M)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hcorner : ∃ v, P * verticalTensor M v * P ≠ 0) :
     ∃ N, sectorCompression M P N ≠ 0 := by
   by_contra hnone
   simp only [not_exists, not_not] at hnone
-  have hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor
+  have hAct : MPSTensor.FirstSiteActionAgree M
       (MPSTensor.ketLeftBraRightAction P) 0 := by
     intro N ρ
     rw [MPSTensor.ketLeftBraRightAction_mpv]
     simp only [Matrix.zero_apply, zero_mul, Finset.sum_const_zero]
     have hentry := Matrix.ext_iff.mpr (hnone N)
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+      (Fin.cons (ρ 0).1 fun n => (ρ (Fin.succ n)).1)
+      (Fin.cons (ρ 0).2 fun n => (ρ (Fin.succ n)).2)
     rw [sectorCompression_def, mul_firstSiteMatrix_apply] at hentry
     simp only [firstSiteMatrix_mul_apply] at hentry
     simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ,
@@ -110,15 +109,10 @@ theorem exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq
     simp only [Finset.sum_mul]
     exact Finset.sum_comm
   have hInserted := hLemmaL hAct
-  have hTensor : ((M.ketLeftMul P).braRightMul P).toMPSTensor = 0 := by
-    rw [← insertedTensor_ketLeftBraRightAction_toMPSTensor]
-    rw [hInserted]
+  have hMzero : (M.ketLeftMul P).braRightMul P = 0 := by
+    rw [← insertedTensor_ketLeftBraRightAction, hInserted]
     ext v a b
     simp [MPSTensor.insertedTensor]
-  have hMzero : (M.ketLeftMul P).braRightMul P = 0 := by
-    funext ⟨i, j⟩
-    have hij := congrFun hTensor (finProdFinEquiv (i, j))
-    simpa [toMPSTensor] using hij
   obtain ⟨v, hv⟩ := hcorner
   apply hv
   have hv0 : verticalTensor ((M.ketLeftMul P).braRightMul P) v = 0 := by
@@ -590,8 +584,8 @@ variable {d D : ℕ}
 The global unit-modulus witness selects a basis block and one of its copies.
 Left canonicity makes that basis tensor nonzero, while the selected copy has a
 nonzero weight. -/
-private theorem bntCanonicalForm_toTensor_ne_zero
-    (P : MPSTensor.SectorDecomposition (Fin d))
+private theorem bntCanonicalForm_toTensor_ne_zero {α : Type*} [Fintype α]
+    (P : MPSTensor.SectorDecomposition α)
     (hP : MPSTensor.IsBNTCanonicalForm P) : P.toTensor ≠ 0 := by
   classical
   obtain ⟨j, q, _hq⟩ := hP.weight_unit_exists
@@ -599,7 +593,7 @@ private theorem bntCanonicalForm_toTensor_ne_zero
   have hBasis : ∃ i, P.basis j i ≠ 0 := by
     by_contra hzero
     push Not at hzero
-    have hsum : ∑ i : Fin d, (P.basis j i)ᴴ * P.basis j i = 0 := by
+    have hsum : ∑ i : α, (P.basis j i)ᴴ * P.basis j i = 0 := by
       simp [hzero]
     rw [hP.basis_left_canonical j] at hsum
     exact one_ne_zero hsum
@@ -642,14 +636,14 @@ theorem IsHorizontalCF.verticalTensor_ne_zero
   have hSTensor : S.toTensor ≠ 0 := bntCanonicalForm_toTensor_ne_zero S hCF
   intro hVertical
   apply hSTensor
-  have hMzero : M.toMPSTensor = 0 := by
+  have hMzero : M = 0 := by
     funext ij
     apply Matrix.ext
     intro a b
     have hz := congrFun (congrFun (congrFun hVertical
-      (finProdFinEquiv (a, b))) ij.divNat) ij.modNat
-    simpa [verticalTensor, toMPSTensor,
-      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using hz
+      (finProdFinEquiv (a, b))) ij.1) ij.2
+    simpa [verticalTensor, MPSTensor.finProdFinEquiv_divNat,
+      MPSTensor.finProdFinEquiv_modNat] using hz
   let G := MPSTensor.globalGaugeOfBlocks X
   have hConj : ∀ i, (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
       S.toTensor i * (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) = 0 := by

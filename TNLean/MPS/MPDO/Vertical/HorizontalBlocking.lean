@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BNTPresentation.SectorBlocking
 import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalBNT
 import TNLean.MPS.Operator.Product.PhysicalBlocking
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Normalized BNT-refined horizontal form under two-site blocking
@@ -40,14 +41,20 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   classical
   obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
-  let e := twoSiteDoubledIndexEquiv d
-  let S' := (S.blockTensor 2).reindexPhysical e
+  -- Temporary: `SectorDecomposition.blockTensor` is still stated on `Fin d`, so the pair
+  -- alphabet is relabelled along `finProdFinEquiv` before blocking.
+  let e₀ : Fin (d * d) ≃ Fin d × Fin d := finProdFinEquiv.symm
+  let e : Fin (d * d) × Fin (d * d) ≃ Fin (Kraus.blockPhysDim (d * d) 2) :=
+    finProdFinEquiv.trans (twoSiteDoubledIndexEquiv d)
+  let S₀ := S.reindexPhysical e₀
+  let S' := (S₀.blockTensor 2).reindexPhysical e
   have hCF' : MPSTensor.IsBNTCanonicalForm S' :=
     MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical
-      (MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor hCF (by omega)) e
+      (MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor
+        (hCF.reindexPhysical e₀) (by omega)) e
   refine ⟨S', hCF', ?_⟩
   refine ⟨by rfl, ?_⟩
-  simp only [S', MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,
+  simp only [S', S₀, MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,
     MPSTensor.SectorDecomposition.blockTensor_totalCopies,
     MPSTensor.SectorDecomposition.reindexPhysical_toTensor,
     Kraus.reindexPhysical]
@@ -56,16 +63,17 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   let X := MPSTensor.globalGaugeOfBlocks Xcopy
   have hGauge : ∀ i : Fin (d * d),
       M.toMPSTensor i =
-        (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
+        (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S₀.toTensor i *
           (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
     intro i
-    simpa [X] using hX i
+    simpa [X] using hX (e₀ i)
   intro i
+  change (MPOTensor.blockTwo M).toMPSTensor (finProdFinEquiv i) = _
   rw [toMPSTensor_blockTwo]
   change Kraus.blockTensor M.toMPSTensor 2 (e i) =
     (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
-      Kraus.blockTensor S.toTensor 2 (e i) *
+      Kraus.blockTensor S₀.toTensor 2 (e i) *
         (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)
   exact MPTensor.evalWord_gauge X hGauge

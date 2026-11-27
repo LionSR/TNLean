@@ -293,14 +293,19 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree
   exact hTrace L hL u _
 
 /-- Predicate-level physical first-site Lemma L in the original bond coordinates of a literal
-CPSV canonical form. -/
+CPSV canonical form, on any finite physical alphabet. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.insertedTensor_eq_of_firstSiteActionAgree
-    (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ} (hAct : FirstSiteActionAgree A Y Z) :
+    {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) (hCanonical : IsCPSVCanonicalForm A)
+    {Y Z : Matrix α α ℂ} (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
-  let data := Classical.choice hCanonical
-  let ref := data.bntRefinement
-  exact ref.insertedTensor_eq_of_firstSiteActionAgree hAct
+  classical
+  let eα := Fintype.equivFin α
+  let data := Classical.choice (hCanonical.reindexPhysical eα.symm)
+  have h := data.bntRefinement.insertedTensor_eq_of_firstSiteActionAgree
+    (hAct.reindexPhysical eα.symm)
+  rw [insertedTensor_reindexPhysical, insertedTensor_reindexPhysical] at h
+  funext i
+  simpa [Kraus.reindexPhysical] using congrFun h (eα i)
 
 end IsCPSVCanonicalForm
 

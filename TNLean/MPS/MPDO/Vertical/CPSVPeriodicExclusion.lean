@@ -81,8 +81,7 @@ theorem exists_not_commute_of_displaced
       ¬ Commute (MPOTensor.firstSiteMatrix Q N)
         (MPOTensor.mpo M (N + 1)) := by
   exact exists_not_commute_of_displaced_of_insertedTensor_eq M
-    ((hCanonical.reindexPhysical finProdFinEquiv.symm).insertedTensor_eq_of_firstSiteActionAgree
-      M.toMPSTensor) hQidem hdisp
+    (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M) hQidem hdisp
 
 end MPTensor.IsCPSVCanonicalForm
 
@@ -192,8 +191,7 @@ theorem exists_sectorCompression_ne_zero_of_corner
     (hcorner : ∃ v, P * MPOTensor.verticalTensor M v * P ≠ 0) :
     ∃ N, MPOTensor.sectorCompression M P N ≠ 0 := by
   exact MPOTensor.exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq M
-    ((hCanonical.reindexPhysical finProdFinEquiv.symm).insertedTensor_eq_of_firstSiteActionAgree
-      M.toMPSTensor) P hcorner
+    (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M) P hcorner
 
 /-- Group the normal vertical corners of an MPDO in literal CPSV canonical
 form by their gauge-phase classes while retaining their physical isometries.
