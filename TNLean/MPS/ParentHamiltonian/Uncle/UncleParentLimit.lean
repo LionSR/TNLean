@@ -25,6 +25,7 @@ open Kraus (blockTensor)
 
 namespace MPSTensor
 
+open scoped Matrix.Norms.Frobenius in
 /-- Injectivity after blocking \(L\) sites at the base point suffices for
 continuity of the actual local MPS ground-space projector. No injectivity
 away from that point is assumed. -/
@@ -39,9 +40,10 @@ theorem continuousAt_map_groundSpace_starProjection_of_isNBlkInjective
       (fun B : MPSTensor d D => B) continuous_id L).continuousAt.comp hA
   have hproj := ContinuousLinearMap.continuousAt_range_starProjection_of_injective
     (fun x => groundSpaceMapES (A x) L) hT
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
-      ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
-        (Matrix.frobeniusEquivEuclidean _ _).symm.injective))
+    (show Function.Injective (groundSpaceMapES (A x₀) L) from
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
+        ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective))
   simpa only [range_groundSpaceMapES] using hproj
 
 /-- The matrix of the actual canonical interaction on \(L\) sites is continuous when the tensor
@@ -116,15 +118,10 @@ private theorem toMatrix'_parentInteraction_eq_uncleInterpolant_submatrix {d a b
       groundSpace (blockTensor (twoBlockPerturbation A P B Q R L ε) 2) 1 := by
     rw [← twoBlockVirtualScale_blockTensor A P B Q R L hε]
     exact groundSpace_twoBlockVirtualScale_one (inv_ne_zero hε) _
-  have hGES : ((groundSpace (uncleTensorInterpolant A P B Q R L ε) 1).map (WithLp.linearEquiv 2 ℂ
-      _).symm.toLinearMap) =
-      ((groundSpace (blockTensor (twoBlockPerturbation A P B Q R L ε) 2) 1).map (WithLp.linearEquiv
-          2 ℂ _).symm.toLinearMap) := by
-    simp only [hG]
   apply Matrix.toEuclideanLin.injective
   ext v : 1
   rw [toEuclideanLin_submatrix_blockedConfigEquiv_apply, toEuclideanLin_toMatrix'_parentInteraction,
-    hGES]
+    hG]
   change ((groundSpace (twoBlockPerturbation A P B Q R L ε) 2).map (WithLp.linearEquiv 2 ℂ
       _).symm.toLinearMap)ᗮ.starProjection v = _
   simp only [Submodule.starProjection_orthogonal, sub_apply,

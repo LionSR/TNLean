@@ -67,6 +67,7 @@ theorem continuous_groundSpaceMapES_family
   change (groundSpaceMap (A x) L (Matrix.single a b 1)) σ = _
   rw [groundSpaceMap_apply]
 
+open scoped Matrix.Norms.Frobenius in
 /-- Along a continuously varying family of tensors that is block-injective
 at one fixed length, the orthogonal projector onto that local ground space
 varies continuously. This is a finite-window statement. -/
@@ -80,7 +81,7 @@ theorem continuous_map_groundSpace_starProjection_family
   have hTinj (x : X) : Function.Injective (groundSpaceMapES (A x) L) :=
     (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
       ((groundSpaceMap_injective_of_isNBlkInjective (hInj x)).comp
-        (Matrix.frobeniusEquivEuclidean _ _).symm.injective)
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective)
   have hproj := ContinuousLinearMap.continuous_injectiveRangeProjector
     (fun x => groundSpaceMapES (A x) L) hT hTinj
   have heq :

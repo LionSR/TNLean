@@ -86,7 +86,7 @@ the local MPS ground space. Source: GLM23, arXiv:2203.12563v3,
 theorem IsBoundaryCompatible.map_groundSpace_mem_invtSubmodule
     (h : IsBoundaryCompatible T A) (X : Matrix (Fin D₁) (Fin D₁) ℂ)
     (hL : 0 < L) :
-    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
+    ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
       Module.End.invtSubmodule (Matrix.toEuclideanLin (mpoWithBoundary T X L)) := by
   intro x hx
   apply (MPSTensor.mem_map_groundSpace_iff A L _).mpr
@@ -107,7 +107,7 @@ theorem IsBoundaryCompatible.map_groundSpace_invariant_boundaryStarAlgebra
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L) :
     (StarAlgebra.adjoin ℂ (Set.range (fun X ↦ mpoWithBoundary T X L))).IsInvariantSubspace
-      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   apply invariant_adjoin_of_conjTranspose_mem
   · rintro B ⟨X, rfl⟩
     obtain ⟨Y, hY⟩ := hstar X
@@ -128,7 +128,8 @@ formula. -/
 theorem commute_toMatrix'_parentInteraction_of_starAlgebra_invariant
     {d D L : ℕ} (A : MPSTensor d D)
     (S : StarSubalgebra ℂ (Matrix (Cfg d L) (Cfg d L) ℂ))
-    (hS : S.IsInvariantSubspace ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hS : S.IsInvariantSubspace ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ S) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) B := by
   refine (commute_iff_eq _ _).2 (Matrix.toEuclideanLin.injective (LinearMap.ext fun x ↦ ?_))
@@ -146,7 +147,7 @@ arXiv:2203.12563v3, lines 1276--1320. -/
 theorem commute_toMatrix'_parentInteraction_of_conjTranspose_mem
     {d D L : ℕ} (A : MPSTensor d D) (s : Set (Matrix (Cfg d L) (Cfg d L) ℂ))
     (hs : ∀ B ∈ s, Bᴴ ∈ s)
-    (hq : ∀ B ∈ s, ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
+    (hq : ∀ B ∈ s, ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
         Module.End.invtSubmodule (Matrix.toEuclideanLin B))
     {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ s) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) B :=

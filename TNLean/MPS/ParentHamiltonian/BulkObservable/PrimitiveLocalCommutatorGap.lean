@@ -171,7 +171,8 @@ private theorem reindexChainVector_norm {N M : ℕ} (h : N = M)
 private theorem reindexChainVector_mem {N M : ℕ} (h : N = M)
     (A : MPSTensor d D) (v : EuclideanSpace ℂ (Cfg d N)) :
     reindexChainVector h v ∈ ((groundSpace A M).map (WithLp.linearEquiv 2 ℂ
-        _).symm.toLinearMap) ↔ v ∈ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        _).symm.toLinearMap) ↔ v ∈ ((groundSpace A N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   subst M
   rfl
 

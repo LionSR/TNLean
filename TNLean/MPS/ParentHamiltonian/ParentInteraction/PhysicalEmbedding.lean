@@ -22,7 +22,6 @@ open scoped Matrix
 
 namespace MPSTensor
 
-attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 /-- A rectangular physical map transports the local boundary map by its
 tensor power. Source context: arXiv:1010.3732, Section II.F.2,

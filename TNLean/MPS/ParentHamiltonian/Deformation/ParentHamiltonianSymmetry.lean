@@ -168,7 +168,7 @@ theorem parentInteraction_matrix_commute_onSiteTensorPow {d D : ℕ}
   have hG : G.map I.toLinearMap = G := by
     simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
       map_groundSpace_invariant_of_gauge_covariance A U hCov L
-  let : G.HasOrthogonalProjection := map_groundSpace_hasOrthogonalProjection A L
+  let : G.HasOrthogonalProjection := inferInstance
   let : (G.map I.toLinearMap).HasOrthogonalProjection := by rw [hG]; infer_instance
   have hproj (v : EuclideanSpace ℂ (Cfg d L)) :
       T (G.starProjection v) = G.starProjection (T v) := by

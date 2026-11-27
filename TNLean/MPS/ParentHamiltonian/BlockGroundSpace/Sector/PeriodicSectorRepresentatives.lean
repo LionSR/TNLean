@@ -97,7 +97,8 @@ theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isPeriodic
     {A : MPSTensor d DA} {B : MPSTensor d DB}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
-        _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        _).symm.toLinearMap) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨e, he⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isPeriodic hA hB
   cases e
   exact he.map_groundSpace_eq N

@@ -61,7 +61,6 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 /-- Display (6.1) of Nachtergaele, arXiv:cond-mat/9410110, lines 2401--2412, at a fixed
 interaction length. Given the geometric bound \(a(m)\le c\lambda^m<1\) on the source
@@ -114,7 +113,6 @@ open MPSTensor
 variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- A primitive matrix-product state satisfies display (6.1) of Nachtergaele,
 arXiv:cond-mat/9410110, lines 2401--2412, with a rate strictly below one and a positive
@@ -165,7 +163,6 @@ noncomputable section
 
 variable {d D : ℕ}
 
-attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 /-- The open-chain projector defect at overlap length \(l\) is the whole-increment defect
 with a one-site suffix. -/
@@ -193,7 +190,6 @@ open MPSTensor
 variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- The open-chain form of display (6.1) of Nachtergaele, arXiv:cond-mat/9410110,
 lines 1180--1194: any prefix length and an overlap length beyond the interaction

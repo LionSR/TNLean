@@ -60,6 +60,16 @@ function space equipped with the canonical ℓ² inner product via `WithLp 2`
 `WithLp.linearEquiv` to view the local ground space in this ℓ² realization, where
 Mathlib provides `InnerProductSpace` and orthogonal projection. -/
 
+/-- Every subspace of a finite-dimensional inner product space has an orthogonal projection.
+The instance is stated for every subspace at once, so that rewriting a subspace under
+`Submodule.starProjection`, such as the image of a local ground space, keeps the instance argument
+well typed. -/
+instance (priority := high) _root_.Submodule.hasOrthogonalProjection_of_finiteDimensional
+    {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E) : K.HasOrthogonalProjection :=
+  haveI : CompleteSpace K := FiniteDimensional.complete 𝕜 K
+  Submodule.HasOrthogonalProjection.ofCompleteSpace K
+
 /-- Membership in the canonical ℓ² realization of \(G_L(A)\) is the same as
 membership of the corresponding function in the original local ground space. -/
 theorem mem_map_groundSpace_iff (A : MPSTensor d D) (L : ℕ)
@@ -68,14 +78,6 @@ theorem mem_map_groundSpace_iff (A : MPSTensor d D) (L : ℕ)
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)) v ∈ groundSpace A L := by
   exact Submodule.mem_map_equiv (p := groundSpace A L)
     (e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm) (x := v)
-
-/-- The finite-dimensional local ground space \(G_L(A)\) admits an orthogonal projection. -/
-theorem map_groundSpace_hasOrthogonalProjection
-    (A : MPSTensor d D) (L : ℕ) : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
-        _).symm.toLinearMap).HasOrthogonalProjection := by
-  let : CompleteSpace ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
-      _).symm.toLinearMap) := FiniteDimensional.complete ℂ _
-  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
 /-! ### Parent interaction -/
 

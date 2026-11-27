@@ -42,7 +42,8 @@ at every length. Source: arXiv:1606.00608, Theorem thm1, gauge relation;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem _root_.MPTensor.GaugePhaseEquiv.map_groundSpace_eq {A B : MPSTensor d DA}
     (h : GaugePhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
-        _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        _).symm.toLinearMap) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨X, ζ, hζ, hX⟩ := h
   let C : MPSTensor d DA := fun i =>
     (X : Matrix (Fin DA) (Fin DA) ℂ) * A i *
@@ -58,7 +59,8 @@ theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor
     {A : MPSTensor d DA} {B : MPSTensor d DB}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
-        _).symm.toLinearMap) = ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+        _).symm.toLinearMap) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have : NeZero DA := ⟨hA.bondDim_ne_zero⟩
   have : NeZero DB := ⟨hB.bondDim_ne_zero⟩
   obtain ⟨e, he⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor hA hB

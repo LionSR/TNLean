@@ -786,20 +786,19 @@ theorem unitWordEntry_mem_groundSpace (n : ℕ) (p : Fin r × Fin r) :
     Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
   rfl
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- For the Bell-pair state tensor the support projection is the represented
 unit, \(P_n=Q_n\), at every positive length; at two sites
 \(P=Q=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K\), as in
 `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
 theorem starProjection_map_groundSpace_stateTensor {n : ℕ} (hn : 0 < n) :
-    (((groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
+    (((MPSTensor.groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap)).starProjection.toLinearMap =
       Matrix.toEuclideanLin ((weakHopfRepresentation r).rep n 1) := by
   obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
   have hQP := (weakHopfRepresentation r).toEuclideanLin_rep_one_comp_starProjection
     (isBoundaryCompatible r) (isNBlkInjective_stateTensor r) hn
-  have hPQ : (((groundSpace (stateTensor r) (m + 1)).map (WithLp.linearEquiv 2 ℂ
+  have hPQ : (((MPSTensor.groundSpace (stateTensor r) (m + 1)).map (WithLp.linearEquiv 2 ℂ
       _).symm.toLinearMap)).starProjection.toLinearMap ∘ₗ
       Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) =
         Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) := by
@@ -816,7 +815,7 @@ theorem starProjection_map_groundSpace_stateTensor {n : ℕ} (hn : 0 < n) :
     rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       ← (weakHopfRepresentation r).rep_star, star_one]
   have hP := (Submodule.starProjection_isSymmetric
-    (((groundSpace (stateTensor r) (m + 1)).map (WithLp.linearEquiv 2 ℂ
+    (((MPSTensor.groundSpace (stateTensor r) (m + 1)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap))).adjoint_eq
   rw [← hP, ← hQP, LinearMap.adjoint_comp, hP, hQ, hPQ]
 
@@ -825,9 +824,9 @@ theorem starProjection_map_groundSpace_stateTensor {n : ℕ} (hn : 0 < n) :
 lines 2463--2466. -/
 theorem weakHopfAverage_starProjection_stateTensor {n : ℕ} (hn : 0 < n) :
     (weakHopfRepresentation r).weakHopfAverage n
-        (((groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
+        (((MPSTensor.groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)).starProjection.toLinearMap =
-      (((groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
+      (((MPSTensor.groundSpace (stateTensor r) n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)).starProjection.toLinearMap :=
   (weakHopfRepresentation r).weakHopfAverage_starProjection (isBoundaryCompatible r)
     (isNBlkInjective_stateTensor r) hn

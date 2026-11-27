@@ -45,7 +45,8 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.parentChainInteraction_eq_represen
     parentChainInteraction A R N = parentChainInteraction
       (toTensorFromBlocks (fun _ ↦ 1)
         (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
-  simp only [parentChainInteraction, parentInteraction, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
+  simp only [parentChainInteraction, parentInteraction,
+      data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]
 

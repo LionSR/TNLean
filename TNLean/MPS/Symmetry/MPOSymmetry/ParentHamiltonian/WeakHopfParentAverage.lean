@@ -340,27 +340,28 @@ theorem rep_one_mulVec_mpvWithBoundary {A : MPSTensor d Dₐ}
     obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hm.ne'
     rw [hall, Matrix.mulVec_zero]
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- The represented unit fixes the MPS support, \(Q_nP_n=P_n\), for a
 compatible state tensor injective after blocking. -/
 theorem toEuclideanLin_rep_one_comp_starProjection {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
     Matrix.toEuclideanLin (W.rep n 1) ∘ₗ
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.toLinearMap =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.toLinearMap := by
   apply LinearMap.ext
   intro ψ
   apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n)).injective
   change W.rep n 1 *ᵥ
       ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
-        (((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection ψ)) =
+        (((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection ψ)) =
       (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
-        (((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection ψ)
+        (((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection ψ)
   obtain ⟨X, hX⟩ := (MPSTensor.mem_map_groundSpace_iff A n _).mp
-    (Submodule.starProjection_apply_mem ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+    (Submodule.starProjection_apply_mem ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) ψ)
   rw [← hX]
   simpa only [MPSTensor.mpvWithBoundary_eq_groundSpaceMap] using
@@ -377,9 +378,9 @@ Hermiticity and \(\operatorname{tr}E_n(P_n)=\operatorname{tr}(Q_nP_n)\)
 follow below. -/
 theorem weakHopfAverage_starProjection {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
-    W.weakHopfAverage n ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+    W.weakHopfAverage n ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection.toLinearMap =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.toLinearMap := by
   let 𝓡 := Coalgebra.Repr.arbitrary ℂ W.integral
   have hstar : ∀ Z : Matrix (Fin D) (Fin D) ℂ, ∃ Z' : Matrix (Fin D) (Fin D) ℂ,
@@ -387,11 +388,11 @@ theorem weakHopfAverage_starProjection {A : MPSTensor d Dₐ}
     intro Z
     obtain ⟨Z', hZ'⟩ := W.exists_conjTranspose_mpoWithBoundary_eq Z
     exact ⟨Z', hZ' n⟩
-  calc W.weakHopfAverage n ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+  calc W.weakHopfAverage n ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
       _).symm.toLinearMap).starProjection.toLinearMap
       = (∑ i ∈ 𝓡.index, Matrix.toEuclideanLin (W.rep n (𝓡.left i)) *
           Matrix.toEuclideanLin (W.rep n (W.pullThrough (𝓡.right i)))) *
-          ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap).starProjection.toLinearMap := by
         rw [W.weakHopfAverage_eq_sum 𝓡, Finset.sum_mul]
         refine Finset.sum_congr rfl fun i _ ↦ ?_
@@ -400,11 +401,11 @@ theorem weakHopfAverage_starProjection {A : MPSTensor d Dₐ}
         rw [mpoWithBoundary_boundary] at hc
         rw [mul_assoc, hc.eq, ← mul_assoc]
     _ = W.weakHopfAverage n 1 *
-          ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap).starProjection.toLinearMap := by
         rw [W.weakHopfAverage_eq_sum 𝓡]
         simp only [mul_one]
-    _ = ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+    _ = ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection.toLinearMap := by
         rw [W.weakHopfAverage_one hn]
         exact W.toEuclideanLin_rep_one_comp_starProjection h hInj hn
@@ -415,13 +416,13 @@ lines 2463--2466. -/
 theorem isSymmetricProjection_weakHopfAverage_starProjection {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
     (W.weakHopfAverage n
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.toLinearMap).IsSymmetricProjection ∧
       LinearMap.trace ℂ _ (W.weakHopfAverage n
-          ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap).starProjection.toLinearMap) =
         LinearMap.trace ℂ _ (Matrix.toEuclideanLin (W.rep n 1) ∘ₗ
-          ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap).starProjection.toLinearMap) := by
   rw [W.weakHopfAverage_starProjection h hInj hn,
     W.toEuclideanLin_rep_one_comp_starProjection h hInj hn]
@@ -438,11 +439,11 @@ theorem weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction {A : MPSTenso
     W.weakHopfAverage n
         (Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n))) =
       Matrix.toEuclideanLin (W.rep n 1) -
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.toLinearMap := by
   rw [MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   change W.weakHopfAverage n
-      (1 - ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      (1 - ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.toLinearMap) = _
   rw [W.weakHopfAverage_sub, W.weakHopfAverage_one hn,
     W.weakHopfAverage_starProjection h hInj hn]
@@ -453,7 +454,7 @@ Appendix B, lines 2463--2466. -/
 theorem one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction
     {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
-    1 - W.weakHopfAverage n ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+    1 - W.weakHopfAverage n ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection.toLinearMap =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) := by
   rw [W.weakHopfAverage_starProjection h hInj hn,
@@ -466,7 +467,7 @@ for the ambient complement. -/
 theorem one_sub_weakHopfAverage_starProjection_ne_zero {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n)
     (hDim : d ^ n > Dₐ ^ 2) :
-    1 - W.weakHopfAverage n ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+    1 - W.weakHopfAverage n ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection.toLinearMap ≠ 0 := by
   rw [W.one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction
     h hInj hn]
@@ -478,7 +479,7 @@ representation, at every positive length. -/
 theorem commute_one_sub_weakHopfAverage_mpoWithBoundary {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Commute (1 - W.weakHopfAverage n ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+    Commute (1 - W.weakHopfAverage n ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection.toLinearMap)
       (Matrix.toEuclideanLin (mpoWithBoundary W.tensor X n)) := by
   rw [W.one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction

@@ -316,7 +316,8 @@ theorem IsPeriodic.eventually_norm_inner_map_groundSpace_le_of_inequivalent
     (hDistinct : ∀ e : D₂ = D, ¬ GaugePhaseEquiv (e ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ n in atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
-        _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+        _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   let _ : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let _ : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩

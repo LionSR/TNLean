@@ -49,7 +49,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 /-- The open-chain left-window ground subspace on \(L + 1\) sites.
 

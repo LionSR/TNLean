@@ -431,7 +431,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff (A : MPSTen
       v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [toEuclideanLin_toMatrix'_parentInteraction]
   change ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
-      _).symm.toLinearMap)ᗮ.starProjection v = 0 ↔ v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+      _).symm.toLinearMap)ᗮ.starProjection v = 0 ↔ v ∈ ((groundSpace A L).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   rw [Submodule.starProjection_orthogonal']
   simp only [sub_apply, one_apply_eq_self]
   rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
@@ -489,7 +490,8 @@ theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D
   constructor
   · intro hv τ
     rw [← toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff,
-      ← withLpMap_cyclicRestrictₗ_toEuclideanLin_parentRingInteraction_term A hLN i τ v, hv, map_zero]
+      ← withLpMap_cyclicRestrictₗ_toEuclideanLin_parentRingInteraction_term A hLN i τ v, hv,
+          map_zero]
   · intro hv
     ext σ
     rw [toEuclideanLin_parentRingInteraction_term_apply A hLN i v σ,

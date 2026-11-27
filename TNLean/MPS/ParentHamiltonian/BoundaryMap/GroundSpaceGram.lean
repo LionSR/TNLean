@@ -89,9 +89,10 @@ overlapping-window estimate. -/
 theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
     (A : MPSTensor d D) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L) :
     ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
-        ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
-          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective)) =
+      (show Function.Injective (groundSpaceMapES A L) from
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
+          ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
+            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective)) =
         ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
   exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) => K.starProjection)
@@ -112,10 +113,11 @@ theorem map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp
     ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (groundSpaceMapES A L).comp
         ((ContinuousLinearMap.inverseGram (groundSpaceMapES A L)
-          ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
-            ((groundSpaceMap_injective_of_isNBlkInjective
-              (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).comp
-                (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective))).comp
+          (show Function.Injective (groundSpaceMapES A L) from
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
+              ((groundSpaceMap_injective_of_isNBlkInjective
+                (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).comp
+                  (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective))).comp
             (groundSpaceMapES A L).adjoint) := by
   exact (injectiveRangeProjector_groundSpaceMapES_eq_starProjection A L
     (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).symm

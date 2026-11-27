@@ -90,7 +90,6 @@ theorem IsBoundaryCompatible.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one
   simpa only [MPSTensor.mpvWithBoundary_eq_groundSpaceMap] using
     h.mpoWithBoundary_mulVec_eq_of_one_length_eq_one hInj hL hU X hn
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- The actual canonical ground-space projection satisfies \(Q_nP_n=P_n\).
 This is the unit-support normalization needed in GLM23 Appendix B,
@@ -101,16 +100,17 @@ theorem IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n) :
     Matrix.toEuclideanLin (mpoWithBoundary T U n) ∘ₗ
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.toLinearMap =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.toLinearMap := by
   apply LinearMap.ext
   intro ψ
   apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n)).injective
   change mpoWithBoundary T U n *ᵥ
       ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
-        (((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection ψ)) = _
+        (((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection ψ)) = _
   exact h.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one hInj hL hU hn
     ((MPSTensor.mem_map_groundSpace_iff A n _).mp
       (Submodule.starProjection_apply_mem _ _))
@@ -123,9 +123,9 @@ theorem IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection_
     {U : Matrix (Fin D₁) (Fin D₁) ℂ} (hU : mpoWithBoundary T U 1 = 1)
     (hn : 0 < n) :
     Matrix.toEuclideanLin (mpoWithBoundary T U n) ∘ₗ
-        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.toLinearMap =
-      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.toLinearMap :=
   h.toEuclideanLin_comp_map_groundSpace_starProjection
     (Kraus.isNBlkInjective_one_of_isInjective hInj) Nat.one_pos hU hn

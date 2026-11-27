@@ -72,7 +72,6 @@ theorem rep_one_commute_mpoWithBoundary [FiniteDimensional ℂ H]
 
 end MPOTensor.WeakHopfRepresentation
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 namespace MPSTensor.MPOSymmetry
 

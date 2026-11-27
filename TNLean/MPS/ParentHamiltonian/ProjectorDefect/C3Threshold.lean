@@ -55,7 +55,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 private theorem tendsto_sqrt_succ_mul_pow_of_lt_one {r : ℝ}
     (hr : 0 ≤ r) (hr_lt_one : r < 1) :
@@ -112,7 +111,6 @@ open MPSTensor
 
 variable {d D : ℕ}
 
-attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
