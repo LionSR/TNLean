@@ -64,11 +64,10 @@ section
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- The blocks form a **cyclic sector decomposition** of the blocked tensor
 $A^{[m]}$, witnessed by orthogonal projections $P_k$ that are fixed by the
@@ -103,24 +102,24 @@ algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the
 canonical inner products; the support isometries record this property where
 needed. -/
-def IsCyclicSectorDecompWith {m : ℕ} [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecompWith {m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)) : Prop :=
   (∀ k, IsOrthogonalProjection (P k)) ∧
     (∑ k : Fin m, P k = 1) ∧
-    (∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
-    (∀ k (i : Fin (blockPhysDim d m)),
-      P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
-    (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+    (∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+    (∀ k (i : Fin m → α),
+      P k * (Kraus.block A m) i = (Kraus.block A m) i * P k) ∧
+    (∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+      mpv (blocks k) σ = (P k * Kraus.evalWord (Kraus.block A m) (List.ofFn σ)).trace) ∧
     (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
+      (φ k (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim k))
           (fun i => (blocks k i)ᴴ) X)).1 =
-        Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
-          (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+        Kraus.transferMap (ι := (Fin m → α)) (n := Fin D)
+          (fun i => (P k * Kraus.block A m i)ᴴ) ((φ k X).1)) ∧
     (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
     (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -129,9 +128,9 @@ def IsCyclicSectorDecompWith {m : ℕ} [NeZero m] (A : MPSTensor d D)
 /-- A cyclic-sector decomposition with existentially quantified projectors and
 corner identifications. Use `IsCyclicSectorDecompWith` when the particular
 projectors and corner maps are part of the surrounding statement. -/
-def IsCyclicSectorDecomp {m : ℕ} [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecomp {m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
+    (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k))) : Prop :=
   ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
@@ -144,10 +143,10 @@ arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form; the later eq:Auprop only
 sector letters \(A_u^i = P_u A^i P_{u+1}\).  The relation used here is obtained
 from the cyclic relation 𝓔^*(P_{k+1}) = P_k stored in `IsCyclicSectorDecomp`. -/
 theorem IsCyclicSectorDecomp.offDiag_shift {m : ℕ} [NeZero m]
-    {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
-    {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
+    {A : MPTensor α (Fin D)} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
+    {blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k))}
     (hCyclic : IsCyclicSectorDecomp A blocks)
-    (k : Fin m) (i : Fin d) :
+    (k : Fin m) (i : α) :
     ∃ P : Fin m → Matrix (Fin D) (Fin D) ℂ,
       (∀ l, IsOrthogonalProjection (P l)) ∧ (∑ l : Fin m, P l = 1) ∧
         P (k + 1) * A i = A i * P k := by
@@ -159,10 +158,10 @@ theorem IsCyclicSectorDecomp.offDiag_shift {m : ℕ} [NeZero m]
 cyclic sector decomposition (arXiv:1708.00029, eq:Aoffdiag), graded by the cyclic
 projections stored in `IsCyclicSectorDecomp`. -/
 theorem IsCyclicSectorDecomp.eq_sum_offDiag {m : ℕ} [NeZero m]
-    {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
-    {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
+    {A : MPTensor α (Fin D)} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
+    {blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k))}
     (hCyclic : IsCyclicSectorDecomp A blocks)
-    (i : Fin d) :
+    (i : α) :
     ∃ P : Fin m → Matrix (Fin D) (Fin D) ℂ,
       (∀ l, IsOrthogonalProjection (P l)) ∧ (∑ l : Fin m, P l = 1) ∧
         A i = ∑ u : Fin m, P (u + 1) * A i * P u := by
@@ -187,36 +186,36 @@ conclusions of Lemma bdcf are stated separately below, for example in
 `sectorBlocked_isNormal_of_isPeriodic` and
 `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`. -/
 theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic
-    (A : MPSTensor d D) {m : ℕ}
+    (A : MPTensor α (Fin D)) {m : ℕ}
     (hP : IsPeriodic m A) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
       (P : Fin m → MatrixAlg D)
       (φ : (k : Fin m) →
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
       (V : (k : Fin m) → Matrix (Fin D) (Fin (dim k)) ℂ),
-      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      (∀ k, ∑ i : (Fin m → α), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (Kraus.block A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
       (∑ k : Fin m, P k = 1) ∧
       (∀ k,
-        Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)
+        Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)
           (P (cyclicNextOfPos hP.period_pos k)) = P k) ∧
-      (∀ k (i : Fin (blockPhysDim d m)),
-        P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
-      (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+      (∀ k (i : Fin m → α),
+        P k * (Kraus.block A m) i = (Kraus.block A m) i * P k) ∧
+      (∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+        mpv (blocks k) σ = (P k * Kraus.evalWord (Kraus.block A m) (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
+        (φ k (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
-            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+          Kraus.transferMap (ι := (Fin m → α)) (n := Fin D)
+            (fun i => (P k * Kraus.block A m i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
       (∀ k, dim k ≠ 0) ∧
-      (∀ k (i : Fin (blockPhysDim d m)),
-        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k) ∧
+      (∀ k (i : Fin m → α),
+        (φ k (blocks k i)).1 = P k * (Kraus.block A m) i * P k) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k, V k * (V k)ᴴ = P k) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -234,27 +233,27 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
-      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) =
-        (Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint := by
+      Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) =
+        (Kraus.transferMap (ι := α) (n := Fin D) A).adjoint := by
     simpa using Kraus.mapLM_conjTranspose_eq_adjoint (K := A)
   have hperiph_roots :
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) =
         {μ : ℂ | μ ^ m = 1} := by
     ext μ
     constructor
     · intro hμ
       have hEigAdj :
-          Module.End.HasEigenvalue ((Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint) μ := by
+          Module.End.HasEigenvalue ((Kraus.transferMap (ι := α) (n := Fin D) A).adjoint) μ := by
         simpa [hAdj] using hμ.1
       have hEig :
-          Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) A) (star μ) :=
+          Module.End.HasEigenvalue (Kraus.transferMap (ι := α) (n := Fin D) A) (star μ) :=
         (Module.End.hasEigenvalue_adjoint_iff
-          (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (μ := star μ)).2 <| by
+          (E := Kraus.transferMap (ι := α) (n := Fin D) A) (μ := star μ)).2 <| by
             simpa [star_star] using hEigAdj
       have hNorm : ‖star μ‖ = 1 := by
         simpa [norm_star] using hμ.2
       have hStarMem :
-          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
+          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) :=
         ⟨hEig, hNorm⟩
       have hpowStar : (star μ) ^ m = 1 := by
         simpa [hP.peripheral_eq] using hStarMem
@@ -267,18 +266,18 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
         have := congrArg star hμ
         simpa using this
       have hStarMem :
-          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) := by
         simpa [hP.peripheral_eq] using hpowStar
       have hEigAdj :
-          Module.End.HasEigenvalue ((Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint) μ := by
+          Module.End.HasEigenvalue ((Kraus.transferMap (ι := α) (n := Fin D) A).adjoint) μ := by
           simpa [star_star] using
             (Module.End.hasEigenvalue_adjoint_iff
-              (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (μ := star μ)).1 hStarMem.1
+              (E := Kraus.transferMap (ι := α) (n := Fin D) A) (μ := star μ)).1 hStarMem.1
       have hNorm : ‖μ‖ = 1 := by
         simpa [norm_star] using hStarMem.2
       exact ⟨by simpa [hAdj] using hEigAdj, hNorm⟩
   have hperiph_range :
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => ω ^ (j : ℕ)) := by
     ext μ
     constructor
@@ -301,7 +300,7 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
   have hCyclic' :
       ∀ k,
-        Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)
+        Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)
           (P (cyclicNextOfPos hP.period_pos k)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
@@ -316,35 +315,35 @@ This is the projection of
 `exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic`
 that forgets the support isometries. -/
 theorem exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic
-    (A : MPSTensor d D) {m : ℕ}
+    (A : MPTensor α (Fin D)) {m : ℕ}
     (hP : IsPeriodic m A) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
       (P : Fin m → MatrixAlg D)
       (φ : (k : Fin m) →
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
-      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      (∀ k, ∑ i : (Fin m → α), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (Kraus.block A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
       (∑ k : Fin m, P k = 1) ∧
       (∀ k,
-        Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)
+        Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)
           (P (cyclicNextOfPos hP.period_pos k)) = P k) ∧
-      (∀ k (i : Fin (blockPhysDim d m)),
-        P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
-      (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+      (∀ k (i : Fin m → α),
+        P k * (Kraus.block A m) i = (Kraus.block A m) i * P k) ∧
+      (∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+        mpv (blocks k) σ = (P k * Kraus.evalWord (Kraus.block A m) (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
+        (φ k (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
-            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+          Kraus.transferMap (ι := (Fin m → α)) (n := Fin D)
+            (fun i => (P k * Kraus.block A m i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
       (∀ k, dim k ≠ 0) ∧
-      ∀ k (i : Fin (blockPhysDim d m)),
-        (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
+      ∀ k (i : Fin m → α),
+        (φ k (blocks k i)).1 = P k * (Kraus.block A m) i * P k := by
   obtain ⟨dim, blocks, P, φ, _V, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
     hIntertwine, hMul, hStar, hNondeg, hLetter, _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP
@@ -359,18 +358,18 @@ projection of
 `exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic` that
 forgets the explicit corner-letter identity. -/
 theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
-      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k))),
+      (∀ k, ∑ i : (Fin m → α), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (Kraus.block A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       IsCyclicSectorDecomp A blocks ∧
       (∀ k, dim k ≠ 0) := by
   obtain ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
     hIntertwine, hMul, hStar, hNondeg, _hLetter⟩ :=
     exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic A hP
   have hCyclic' :
-      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
   exact ⟨dim, blocks, hLC, hMPV,
@@ -385,40 +384,40 @@ the `m`-step adjoint transfer map is primitive and irreducible. The later
 compression identification converts these corner statements into the
 corresponding statements for the compressed sector tensor. -/
 private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (_hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocks k i)ᴴ * blocks k i = 1)
     (_hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
     {P : Fin m → MatrixAlg D}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclic :
-      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (_hComm :
-      ∀ k (i : Fin (blockPhysDim d m)),
-        P k * (blockTensor A m) i = (blockTensor A m) i * P k)
+      ∀ k (i : Fin m → α),
+        P k * (Kraus.block A m) i = (Kraus.block A m) i * P k)
     (_hTrace :
-      ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
+      ∀ k (N : ℕ) (σ : Fin N → (Fin m → α)),
+        mpv (blocks k) σ = (P k * Kraus.evalWord (Kraus.block A m) (List.ofFn σ)).trace)
     (u : Fin m) (_hNonzero : dim u ≠ 0) :
     ∃ hInv :
         PreservesCorner (P u)
-          ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m),
+          ((Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m),
       _root_.IsPrimitive
         (cornerRestriction (P u)
-          ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) hInv) ∧
+          ((Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) hInv) ∧
       IsIrreducibleOnCorner (P u)
-        ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) := by
+        ((Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) := by
   have : NeZero D := ⟨hP.bondDim_ne_zero⟩
-  let T : MatrixEnd D := Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)
-  have hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1 := hP.leftCanonical
+  let T : MatrixEnd D := Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)
+  have hTP : ∑ i : α, (A i)ᴴ * A i = 1 := hP.leftCanonical
   have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hCyclic
   have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hCyclic
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
@@ -430,24 +429,24 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
   let : InnerProductSpace ℂ (MatrixAlg D) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
-      T = (Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint := by
+      T = (Kraus.transferMap (ι := α) (n := Fin D) A).adjoint := by
     simpa [T] using Kraus.mapLM_conjTranspose_eq_adjoint (K := A)
   have hperiph_roots : peripheralEigenvalues T = {μ : ℂ | μ ^ m = 1} := by
     ext μ
     constructor
     · intro hμ
       have hEigAdj :
-          Module.End.HasEigenvalue ((Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint) μ := by
+          Module.End.HasEigenvalue ((Kraus.transferMap (ι := α) (n := Fin D) A).adjoint) μ := by
         simpa [hAdj] using hμ.1
       have hEig :
-          Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) A) (star μ) :=
+          Module.End.HasEigenvalue (Kraus.transferMap (ι := α) (n := Fin D) A) (star μ) :=
         (Module.End.hasEigenvalue_adjoint_iff
-          (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (μ := star μ)).2 <| by
+          (E := Kraus.transferMap (ι := α) (n := Fin D) A) (μ := star μ)).2 <| by
             simpa [star_star] using hEigAdj
       have hNorm : ‖star μ‖ = 1 := by
         simpa [norm_star] using hμ.2
       have hStarMem :
-          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
+          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) :=
         ⟨hEig, hNorm⟩
       have hpowStar : (star μ) ^ m = 1 := by
         simpa [hP.peripheral_eq] using hStarMem
@@ -460,13 +459,13 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
         have := congrArg star hμ
         simpa using this
       have hStarMem :
-          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+          star μ ∈ peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) := by
         simpa [hP.peripheral_eq] using hpowStar
       have hEigAdj :
-          Module.End.HasEigenvalue ((Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint) μ := by
+          Module.End.HasEigenvalue ((Kraus.transferMap (ι := α) (n := Fin D) A).adjoint) μ := by
         simpa [star_star] using
           (Module.End.hasEigenvalue_adjoint_iff
-            (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (μ := star μ)).1 hStarMem.1
+            (E := Kraus.transferMap (ι := α) (n := Fin D) A) (μ := star μ)).1 hStarMem.1
       have hNorm : ‖μ‖ = 1 := by
         simpa [norm_star] using hStarMem.2
       exact ⟨by simpa [hAdj] using hEigAdj, hNorm⟩
@@ -518,20 +517,20 @@ to that corner: primitivity and irreducibility on the corner of P u for the
 ambient m-step adjoint transfer map transport along φ u to primitivity and
 irreducibility of the compressed block `blocks u`. -/
 private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
     (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     {P : Fin m → MatrixAlg D}
     {φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hIntertwine :
       ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
+        (φ k (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
-            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
+          Kraus.transferMap (ι := (Fin m → α)) (n := Fin D)
+            (fun i => (P k * Kraus.block A m i)ᴴ) ((φ k X).1))
     (hMul :
       ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -541,54 +540,54 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     (u : Fin m) (hNonzero : dim u ≠ 0)
     (hInv :
       PreservesCorner (P u)
-        ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m))
+        ((Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m))
     (hCornerPrim :
       _root_.IsPrimitive
         (cornerRestriction (P u)
-          ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) hInv))
+          ((Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) hInv))
     (hCornerIrr :
       IsIrreducibleOnCorner (P u)
-        ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m)) :
+        ((Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m)) :
     _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u))
+      (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim u))
         (fun i => (blocks u i)ᴴ)) ∧
       IsIrreducibleMap
-        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u))
+        (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim u))
           (fun i => (blocks u i)ᴴ)) := by
   have : NeZero (dim u) := ⟨hNonzero⟩
   let T : MatrixEnd D :=
-    (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m
+    (Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ)) ^ m
   have hT :
-      Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
-          (fun i => (blockTensor A m i)ᴴ) =
+      Kraus.transferMap (ι := (Fin m → α)) (n := Fin D)
+          (fun i => (Kraus.block A m i)ᴴ) =
         T := by
     ext X : 1
     exact transferMap_adjoint_blocked_eq_pow A m X
   exact
     compressedTensor_adjointTransferMap_cornerBridge
-      (B := blockTensor A m) (C := blocks u) (P := P u) (T := T) (φ := φ u)
+      (B := Kraus.block A m) (C := blocks u) (P := P u) (T := T) (φ := φ u)
       hT (hPproj u) (hIntertwine u) (hMul u) (hStar u)
       hInv hCornerPrim hCornerIrr
 
 private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocks k i)ᴴ * blocks k i = 1)
     (hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u))
+        (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim u))
           (fun i => (blocks u i)ᴴ))
       ∧ IsIrreducibleMap
-        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u))
+        (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim u))
           (fun i => (blocks u i)ᴴ)) := by
   obtain ⟨P, φ, hPproj, hPsum, hCyclicP, hComm, hTrace, hIntertwine, hMul, hStar⟩ := hCyclic
   obtain ⟨hInv, hCornerPrim, hCornerIrr⟩ :=
@@ -615,21 +614,21 @@ irreducibility of the ordinary transfer map.
 This lemma is invoked by the Case 2 and Case 3 arguments of the periodic
 overlap dichotomy. -/
 lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
-    (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPTensor α (Fin D)) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (k : Fin m) → MPTensor (Fin m → α) (Fin (dim k)))
     (hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
+      ∀ k, ∑ i : (Fin m → α),
         (blocks k i)ᴴ * blocks k i = 1)
     (hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
+      SameMPV₂ (Kraus.block A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u)) (blocks u))
+        (Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim u)) (blocks u))
       ∧ Kraus.IsIrreducibleFamily (blocks u) := by
   obtain ⟨hPrimAdj, hIrrAdj⟩ :=
     adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
@@ -645,7 +644,7 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
   let : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
-      Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u)) (fun i => (blocks u i)ᴴ) =
+      Kraus.transferMap (ι := (Fin m → α)) (n := Fin (dim u)) (fun i => (blocks u i)ᴴ) =
         (Kraus.transferMap (blocks u)).adjoint := by
     simpa only using
       (Kraus.mapLM_conjTranspose_eq_adjoint (K := blocks u))
@@ -662,16 +661,16 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
 
 /-- The self-overlap of a blocked tensor at length `N` is the self-overlap of
 the original tensor at length `N * L`. -/
-theorem mpvOverlap_blockTensor_self_eq
-    [NeZero D] (A : MPSTensor d D) (L N : ℕ) :
-    mpvOverlap (α := Fin (blockPhysDim d L)) (blockTensor (d := d) (n := Fin D) A L)
-        (blockTensor (d := d) (n := Fin D) A L) N =
-      mpvOverlap (α := Fin d) A A (N * L) := by
+theorem mpvOverlap_block_self_eq
+    [NeZero D] (A : MPTensor α (Fin D)) (L N : ℕ) :
+    mpvOverlap (α := (Fin L → α)) (Kraus.block A L)
+        (Kraus.block A L) N =
+      mpvOverlap (α := α) A A (N * L) := by
   rw [← trace_mixedMapLM_pow_eq_mpvOverlap
-      (A := blockTensor (d := d) (n := Fin D) A L)
-      (B := blockTensor (d := d) (n := Fin D) A L) N]
+      (A := Kraus.block A L)
+      (B := Kraus.block A L) N]
   rw [← trace_mixedMapLM_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
-  simp [Kraus.mixedMapLM_self, Kraus.transferMap_blockTensor, pow_mul, Nat.mul_comm]
+  simp [Kraus.mixedMapLM_self, Kraus.transferMap_block, pow_mul, Nat.mul_comm]
 
 /-- A same-dimension gauge-phase equivalence between two compressed sector blocks
 produces a nonzero off-diagonal eigenvector of the ambient blocked transfer map.
@@ -684,21 +683,21 @@ a positive fixed point of the first compressed transfer map and X is the gauge
 matrix.  The rectangular support isometries then embed this coordinate
 eigenvector into the two ambient corners. -/
 private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
-    {d₀ D₀ : ℕ} [NeZero D₀]
-    (C : MPSTensor d₀ D) (Au Av : MPSTensor d₀ D₀)
+    {β : Type*} [Fintype β] {D₀ : ℕ} [NeZero D₀]
+    (C : MPTensor β (Fin D)) (Au Av : MPTensor β (Fin D₀))
     (hAu_left : IsLeftCanonical Au) (hAv_left : IsLeftCanonical Av)
     (hAv_irr : Kraus.IsIrreducibleFamily Av)
     {Pu Pv : MatrixAlg D}
-    (hComm_u : ∀ i : Fin d₀, Pu * C i = C i * Pu)
-    (hComm_v : ∀ i : Fin d₀, Pv * C i = C i * Pv)
+    (hComm_u : ∀ i : β, Pu * C i = C i * Pu)
+    (hComm_v : ∀ i : β, Pv * C i = C i * Pv)
     {Vu Vv : Matrix (Fin D) (Fin D₀) ℂ}
     (hVu_iso : Vuᴴ * Vu = 1) (hVv_iso : Vvᴴ * Vv = 1)
     (hVu_range : Vu * Vuᴴ = Pu) (hVv_range : Vv * Vvᴴ = Pv)
-    (hLetter_u : ∀ i : Fin d₀, Vu * Au i * Vuᴴ = Pu * C i * Pu)
-    (hLetter_v : ∀ i : Fin d₀, Vv * Av i * Vvᴴ = Pv * C i * Pv)
+    (hLetter_u : ∀ i : β, Vu * Au i * Vuᴴ = Pu * C i * Pu)
+    (hLetter_v : ∀ i : β, Vv * Av i * Vvᴴ = Pv * C i * Pv)
     (hGPE : GaugePhaseEquiv Au Av) :
     ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧
-      U = Pu * U * Pv ∧ Kraus.transferMap (ι := Fin d₀) (n := Fin D) C U = ζ • U := by
+      U = Pu * U * Pv ∧ Kraus.transferMap (ι := β) (n := Fin D) C U = ζ • U := by
   classical
   obtain ⟨X, η, hη_ne, hAv_eq⟩ := hGPE
   have hη_norm : ‖η‖ = 1 :=
@@ -718,14 +717,14 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
     have hcancel :=
       congr_arg (fun Z : Matrix (Fin D₀) (Fin D₀) ℂ => Z * X⁻¹.valᴴ) hY_zero
     simpa [Y, Matrix.mul_assoc, hright] using hcancel
-  have hρ_sum : (∑ i : Fin d₀, Au i * ρ * (Au i)ᴴ) = ρ := by
+  have hρ_sum : (∑ i : β, Au i * ρ * (Au i)ᴴ) = ρ := by
     simpa [Kraus.transferMap_apply] using hρ_fix
   have hMixed : Kraus.mixedMapLM Au Av Y = (star η) • Y := by
     calc
       Kraus.mixedMapLM Au Av Y =
-          ∑ i : Fin d₀, Au i * (ρ * X.valᴴ) * (Av i)ᴴ := by
+          ∑ i : β, Au i * (ρ * X.valᴴ) * (Av i)ᴴ := by
         simp [Kraus.mixedMapLM_apply, Y]
-      _ = ∑ i : Fin d₀, (star η) • (Au i * ρ * (Au i)ᴴ * X.valᴴ) := by
+      _ = ∑ i : β, (star η) • (Au i * ρ * (Au i)ᴴ * X.valᴴ) := by
         refine Finset.sum_congr rfl ?_
         intro i _
         rw [hAv_eq i]
@@ -735,7 +734,7 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
         simp only [Matrix.mul_assoc]
         rw [← Matrix.mul_assoc X.valᴴ X⁻¹.valᴴ ((Au i)ᴴ * X.valᴴ), hright_unit]
         simp
-      _ = (star η) • ((∑ i : Fin d₀, Au i * ρ * (Au i)ᴴ) * X.valᴴ) := by
+      _ = (star η) • ((∑ i : β, Au i * ρ * (Au i)ᴴ) * X.valᴴ) := by
         rw [← Finset.smul_sum]
         congr 1
         simp [Finset.sum_mul, Matrix.mul_assoc]
@@ -751,7 +750,7 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
       Pv * Vv = (Vv * Vvᴴ) * Vv := by rw [hVv_range]
       _ = Vv * (Vvᴴ * Vv) := by simp [Matrix.mul_assoc]
       _ = Vv := by rw [hVv_iso, Matrix.mul_one]
-  have hC_Vu : ∀ i : Fin d₀, C i * Vu = Vu * Au i := by
+  have hC_Vu : ∀ i : β, C i * Vu = Vu * Au i := by
     intro i
     calc
       C i * Vu = C i * (Pu * Vu) := by rw [hPuVu]
@@ -761,7 +760,7 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
       _ = (Pu * C i * Pu) * Vu := by simp [Matrix.mul_assoc]
       _ = (Vu * Au i * Vuᴴ) * Vu := by rw [← hLetter_u i]
       _ = Vu * Au i := by simp [Matrix.mul_assoc, hVu_iso]
-  have hC_Vv : ∀ i : Fin d₀, C i * Vv = Vv * Av i := by
+  have hC_Vv : ∀ i : β, C i * Vv = Vv * Av i := by
     intro i
     calc
       C i * Vv = C i * (Pv * Vv) := by rw [hPvVv]
@@ -794,12 +793,12 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
           rw [hVu_iso, hVv_iso]
           simp [U, Matrix.mul_assoc]
     exact hPuUPv.symm
-  have hEig : Kraus.transferMap (ι := Fin d₀) (n := Fin D) C U = (star η) • U := by
+  have hEig : Kraus.transferMap (ι := β) (n := Fin D) C U = (star η) • U := by
     calc
-      Kraus.transferMap (ι := Fin d₀) (n := Fin D) C U =
-          ∑ i : Fin d₀, C i * (Vu * Y * Vvᴴ) * (C i)ᴴ := by
+      Kraus.transferMap (ι := β) (n := Fin D) C U =
+          ∑ i : β, C i * (Vu * Y * Vvᴴ) * (C i)ᴴ := by
         simp [U]
-      _ = ∑ i : Fin d₀, Vu * (Au i * Y * (Av i)ᴴ) * Vvᴴ := by
+      _ = ∑ i : β, Vu * (Au i * Y * (Av i)ᴴ) * Vvᴴ := by
         refine Finset.sum_congr rfl ?_
         intro i _
         have hright_i : Vvᴴ * (C i)ᴴ = (Av i)ᴴ * Vvᴴ := by
@@ -813,7 +812,7 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
             rw [hC_Vu i, hright_i]
           _ = Vu * (Au i * Y * (Av i)ᴴ) * Vvᴴ := by
             simp [Matrix.mul_assoc]
-      _ = Vu * (∑ i : Fin d₀, Au i * Y * (Av i)ᴴ) * Vvᴴ := by
+      _ = Vu * (∑ i : β, Au i * Y * (Av i)ᴴ) * Vvᴴ := by
         rw [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = Vu * Kraus.mixedMapLM Au Av Y * Vvᴴ := by
         simp [Kraus.mixedMapLM_apply]
@@ -828,22 +827,22 @@ bond dimension need not equal the left a priori.
 Source: arXiv:1708.00029, Lemma bdcf, lines 409--421.  The equality of compressed
 bond dimensions is eliminated here, where the right dimension is a variable. -/
 lemma exists_offDiag_eigenvector_of_gaugePhase_cast_left
-    {d₀ Du Dv : ℕ} [NeZero Du]
+    {β : Type*} [Fintype β] {Du Dv : ℕ} [NeZero Du]
     (hdim : Dv = Du)
-    (C : MPSTensor d₀ D) (Au : MPSTensor d₀ Du) (Av : MPSTensor d₀ Dv)
+    (C : MPTensor β (Fin D)) (Au : MPTensor β (Fin Du)) (Av : MPTensor β (Fin Dv))
     (hAu_left : IsLeftCanonical Au) (hAv_left : IsLeftCanonical Av)
     (hAv_irr : Kraus.IsIrreducibleFamily Av)
     {Pu Pv : MatrixAlg D}
-    (hComm_u : ∀ i : Fin d₀, Pu * C i = C i * Pu)
-    (hComm_v : ∀ i : Fin d₀, Pv * C i = C i * Pv)
+    (hComm_u : ∀ i : β, Pu * C i = C i * Pu)
+    (hComm_v : ∀ i : β, Pv * C i = C i * Pv)
     {Vu : Matrix (Fin D) (Fin Du) ℂ} {Vv : Matrix (Fin D) (Fin Dv) ℂ}
     (hVu_iso : Vuᴴ * Vu = 1) (hVv_iso : Vvᴴ * Vv = 1)
     (hVu_range : Vu * Vuᴴ = Pu) (hVv_range : Vv * Vvᴴ = Pv)
-    (hLetter_u : ∀ i : Fin d₀, Vu * Au i * Vuᴴ = Pu * C i * Pu)
-    (hLetter_v : ∀ i : Fin d₀, Vv * Av i * Vvᴴ = Pv * C i * Pv)
-    (hGPE : GaugePhaseEquiv (cast (congr_arg (MPSTensor d₀) hdim.symm) Au) Av) :
+    (hLetter_u : ∀ i : β, Vu * Au i * Vuᴴ = Pu * C i * Pu)
+    (hLetter_v : ∀ i : β, Vv * Av i * Vvᴴ = Pv * C i * Pv)
+    (hGPE : GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) hdim.symm) Au) Av) :
     ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧
-      U = Pu * U * Pv ∧ Kraus.transferMap (ι := Fin d₀) (n := Fin D) C U = ζ • U := by
+      U = Pu * U * Pv ∧ Kraus.transferMap (ι := β) (n := Fin D) C U = ζ • U := by
   cases hdim
   exact
     exists_offDiag_eigenvector_of_gaugePhase_same_dim
@@ -861,14 +860,14 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- The period is bounded by the bond dimension. The nonzero cyclic sectors resolve the
 identity, so their positive dimensions sum to the bond dimension.
 
 Source: arXiv:1708.00029, Lemma `lem:bdcf`, and the cyclic projections in
 arXiv:quant-ph/0608197, Theorem 5. -/
-theorem IsPeriodic.period_le_bondDim {m : ℕ} {A : MPSTensor d D}
+theorem IsPeriodic.period_le_bondDim {m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) : m ≤ D := by
   obtain ⟨dim, _, P, _, V, _, _, _, hsum, _, _, _, _, _, _, hdim, _, hV, hP, _⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA

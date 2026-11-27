@@ -99,7 +99,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       _ = (V * Vᴴ) * A i * V := by rw [hVVt]
       _ = V * (Vᴴ * A i * V) := by simp only [Matrix.mul_assoc]
       _ = V * C i := by rw [hCompression i]
-  have hEvalCompression (w : List (α)) :
+  have hEvalCompression (w : List α) :
       Kraus.evalWord C w = Vᴴ * Kraus.evalWord A w * V := by
     calc
       Kraus.evalWord C w = 1 * Kraus.evalWord C w := (Matrix.one_mul _).symm
@@ -167,7 +167,7 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
       _ = P * A i * P := by rw [hP.2]
       _ = A i := by simpa [Matrix.mul_assoc] using hSupp i
   have hword :
-      ∀ {w : List (α)}, w ≠ [] → P * Kraus.evalWord A w = Kraus.evalWord A w := by
+      ∀ {w : List α}, w ≠ [] → P * Kraus.evalWord A w = Kraus.evalWord A w := by
     intro w hw
     cases w with
     | nil =>

@@ -16,11 +16,10 @@ dimensions. Per-block primitivity witnesses are transported along the
 divisibility `periods i ∣ lcmPeriod periods`.
 -/
 
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d k : ℕ}
+variable {α : Type*} [Fintype α] {k : ℕ}
 
 /-- Block each family member to the common `lcmPeriod`.
 
@@ -30,30 +29,30 @@ basic input for common-period cyclic-sector comparison.
 -/
 noncomputable def commonPeriodBlocking
     {dim : Fin k → ℕ}
-    (blocks : (i : Fin k) → MPSTensor d (dim i)) (periods : Fin k → ℕ) :
-    (i : Fin k) → MPSTensor (blockPhysDim d (lcmPeriod periods)) (dim i) :=
-  fun i => blockTensor (d := d) (n := Fin (dim i)) (blocks i) (lcmPeriod periods)
+    (blocks : (i : Fin k) → MPTensor α (Fin (dim i))) (periods : Fin k → ℕ) :
+    (i : Fin k) → MPTensor (Fin (lcmPeriod periods) → α) (Fin (dim i)) :=
+  fun i => Kraus.block (blocks i) (lcmPeriod periods)
 
 /-- If each block has a primitive transfer map at its own period, then blocking the whole family
 to the common LCM period preserves that primitivity witness for every member. -/
 theorem isPrimitive_transferMap_commonPeriodBlocking
     {dim : Fin k → ℕ}
     (hDim : ∀ i, 0 < dim i)
-    (blocks : (i : Fin k) → MPSTensor d (dim i)) (periods : Fin k → ℕ)
+    (blocks : (i : Fin k) → MPTensor α (Fin (dim i))) (periods : Fin k → ℕ)
     (hPeriodsPos : ∀ i, 0 < periods i)
     (hPrim : ∀ i,
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d (periods i))) (n := Fin (dim i))
-          (blockTensor (d := d) (n := Fin (dim i)) (blocks i) (periods i)))) :
+        (Kraus.transferMap (ι := (Fin (periods i) → α)) (n := Fin (dim i))
+          (Kraus.block (blocks i) (periods i)))) :
     ∀ i,
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d (lcmPeriod periods))) (n := Fin (dim i))
-          (commonPeriodBlocking (d := d) blocks periods i)) := by
+        (Kraus.transferMap (ι := (Fin (lcmPeriod periods) → α)) (n := Fin (dim i))
+          (commonPeriodBlocking (α := α) blocks periods i)) := by
   intro i
   let : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
   simpa [commonPeriodBlocking] using
     isPrimitive_transferMap_blockTensor_of_dvd
-      (d := d) (D := dim i)
+      (α := α) (D := dim i)
       (A := blocks i)
       (p := periods i) (q := lcmPeriod periods)
       (dvd_lcmPeriod periods i) (lcmPeriod_pos hPeriodsPos) (hPrim i)

@@ -13,21 +13,26 @@ import Mathlib.Algebra.GCDMonoid.Finset
 /-!
 # Blocking infrastructure: SameMPV₂ compatibility, primitivity under multiples, common period
 
-This file contains the **Tier 3** blocking infrastructure needed to go from
-per-block periodicity removal to a common blocking period making all blocks
-primitive simultaneously.
+This file contains the blocking infrastructure needed to go from per-block periodicity
+removal to a common blocking period making all blocks primitive simultaneously.  Blocking
+`p` sites is `Kraus.block A p`, the family indexed by the words `Fin p → α`; configurations
+of blocks are configurations of sites through `Kraus.blockConfigEquiv`.
 
 ## Main results
 
 ### Part A: SameMPV₂ blocking
-* `sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks` — Blocking distributes over
+* `mpv_block_eq_mpv_blockConfig` — the matrix product vector of a blocked tensor is the
+  matrix product vector of the original tensor on the flattened configuration.
+* `sameMPV₂_block_of_sameMPV₂_toTensorFromBlocks` — Blocking distributes over
   `toTensorFromBlocks`: if `SameMPV₂ A (toTensorFromBlocks μ blocks)`, then
-  `SameMPV₂ (blockTensor A p) (toTensorFromBlocks (μ^p) (blockTensor blocks p))`.
-* `EventuallyNonzeroProportionalMPV₂.blockTensor` — Eventual nonzero proportionality
+  `SameMPV₂ (block A p) (toTensorFromBlocks (μ^p) (block blocks p))`.
+* `EventuallyNonzeroProportionalMPV₂.block` — Eventual nonzero proportionality
   is preserved by positive physical blocking.
+* `reindexPhysical_blockConfigEquiv_block` — blocking `n` blocks of length `m` is blocking
+  `n * m` sites.
 
 ### Part B: Primitivity under multiples
-* `isPrimitive_transferMap_blockTensor_of_dvd` — transfer-map primitivity is monotone
+* `isPrimitive_transferMap_block_of_dvd` — transfer-map primitivity is monotone
   in the blocking period (for multiples).
 
 ### Part C: Common period via LCM
@@ -47,147 +52,63 @@ primitive simultaneously.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock wordOfBlock length_wordOfBlock
-  blockTensor flattenBlockedWord evalWord_blockTensor length_flattenBlockedWord)
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-!
 ## Part A: SameMPV₂ compatibility under blocking
-
-The key observation: `blockTensor T p` computes `mpv` via flattened words,
-and the flattening depends only on the blocked configuration `σ` and the
-period `p`, not on the tensor `T`. This lets us "push blocking through"
-`toTensorFromBlocks`.
 -/
 
 section SameMPV₂Blocking
 
 variable {D : ℕ} {r : ℕ} {dim : Fin r → ℕ}
 
-/-- Flatten a blocked configuration to the underlying word of original physical indices. -/
-private noncomputable def blockedFlatWord (p : ℕ) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d p)) : List (Fin d) :=
-  flattenBlockedWord d p (List.ofFn σ)
-
-/-- The flattened word of an `N`-site blocked configuration has length `N * p`. -/
-private theorem length_blockedFlatWord (p : ℕ) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d p)) :
-    (blockedFlatWord (d := d) p σ).length = N * p := by
-  simpa [blockedFlatWord] using
-    (length_flattenBlockedWord (d := d) (L := p) (List.ofFn σ))
-
-/-- The flattened configuration associated to a blocked physical configuration. -/
-noncomputable def blockedFlatConfig (p : ℕ) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d p)) : Fin (N * p) → Fin d :=
-  fun i =>
-    (blockedFlatWord (d := d) p σ).get
-      (Fin.cast (length_blockedFlatWord (d := d) p σ).symm i)
-
-/-- Reconstruct the flattened blocked word from `blockedFlatConfig`. -/
-private theorem ofFn_blockedFlatConfig (p : ℕ) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d p)) :
-    List.ofFn (blockedFlatConfig (d := d) p σ) = blockedFlatWord (d := d) p σ := by
-  unfold blockedFlatConfig
-  conv_rhs => rw [← List.ofFn_get (blockedFlatWord (d := d) p σ)]
-  have hcongr :=
-    (List.ofFn_congr (m := N * p) (n := (blockedFlatWord (d := d) p σ).length)
-      (length_blockedFlatWord (d := d) p σ).symm
-      (fun i : Fin (N * p) =>
-        (blockedFlatWord (d := d) p σ).get
-          (Fin.cast (length_blockedFlatWord (d := d) p σ).symm i)))
-  simpa [Function.comp, Fin.cast_cast] using hcongr
-
-/-- Evaluating the blocked tensor on a blocked configuration agrees with evaluating
-    the original tensor on the flattened configuration. -/
-theorem mpv_blockTensor_eq_mpv_blockedFlatConfig
-    {D' : ℕ} (T : MPSTensor d D') (p : ℕ) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d p)) :
-    mpv (blockTensor (d := d) (n := Fin D') T p) σ =
-      mpv T (blockedFlatConfig (d := d) p σ) := by
-  simp [mpv, coeff, ofFn_blockedFlatConfig (d := d) p σ,
-    blockedFlatWord, evalWord_blockTensor]
+/-- Evaluating the blocked tensor on a configuration of blocks agrees with evaluating
+the original tensor on the flattened configuration. -/
+theorem mpv_block_eq_mpv_blockConfig {D' : ℕ} (T : MPTensor α (Fin D')) (p : ℕ) {N : ℕ}
+    (σ : Fin N → Fin p → α) :
+    mpv (Kraus.block T p) σ = mpv T (Kraus.blockConfigEquiv α N p σ) := by
+  simp only [mpv, coeff, Kraus.evalWord_block, Kraus.ofFn_blockConfigEquiv]
 
 /-- Blocking distributes over `toTensorFromBlocks`: if
 `SameMPV₂ A (toTensorFromBlocks μ blocks)`, then blocking by `p` on both sides gives
-`SameMPV₂ (blockTensor A p) (toTensorFromBlocks (μ^p) (blockTensor blocks p))`.
-
-The mathematical content is: `V_N(blockTensor A p) = V_{Np}(A)` after identifying
-physical indices, and the block-diagonal expansion of `toTensorFromBlocks` respects
-this identification with exponents scaling from `N * p` to `N` by `(μ^p)^N = μ^(Np)`. -/
-theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
-    (A : MPSTensor d D)
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hSame : SameMPV₂ A (toTensorFromBlocks μ blocks))
-    (p : ℕ) :
-    SameMPV₂
-      (blockTensor (d := d) (n := Fin D) A p)
-      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
-  mpv_ext
-  let σflat := blockedFlatConfig (d := d) p σ
-  calc
-    mpv (blockTensor (d := d) (n := Fin D) A p) σ
-        = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
-    _ = mpv (toTensorFromBlocks μ blocks) σflat := hSame (N * p) σflat
-    _ = ∑ k : Fin r, (μ k) ^ (N * p) • mpv (blocks k) σflat :=
-          mpv_toTensorFromBlocks_eq_sum μ blocks σflat
-    _ = ∑ k : Fin r,
-          ((μ k) ^ p) ^ N • mpv (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) σ := by
-          refine Finset.sum_congr rfl fun k _ => ?_
-          have hpow : (μ k) ^ (N * p) = ((μ k) ^ p) ^ N := by
-            rw [Nat.mul_comm, pow_mul]
-          rw [hpow, (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) (blocks k) p σ).symm]
-    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-          (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) σ :=
-          (mpv_toTensorFromBlocks_eq_sum
-            (fun k => (μ k) ^ p)
-            (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) σ).symm
+`SameMPV₂ (block A p) (toTensorFromBlocks (μ^p) (block blocks p))`, since
+`V_N(A^{[p]}) = V_{Np}(A)` and `(μ^p)^N = μ^(Np)`. -/
+theorem sameMPV₂_block_of_sameMPV₂_toTensorFromBlocks
+    (A : MPTensor α (Fin D)) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hSame : SameMPV₂ A (toTensorFromBlocks μ blocks)) (p : ℕ) :
+    SameMPV₂ (Kraus.block A p)
+      (toTensorFromBlocks (fun k => (μ k) ^ p) (fun k => Kraus.block (blocks k) p)) := by
+  intro N σ
+  rw [mpv_block_eq_mpv_blockConfig, hSame, mpv_toTensorFromBlocks_eq_sum,
+    mpv_toTensorFromBlocks_eq_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [mpv_block_eq_mpv_blockConfig, ← pow_mul, Nat.mul_comm p N]
 
 /-- Blocking the assembled weighted block tensor is MPV-equivalent to assembling the
 blocked blocks with powered weights. -/
-theorem sameMPV₂_blockTensor_toTensorFromBlocks
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (p : ℕ) :
-    SameMPV₂
-      (blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
-        (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) p)
-      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) :=
-  sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
-    (d := d) (D := ∑ k : Fin r, dim k) (dim := dim)
-    (A := toTensorFromBlocks (α := Fin d) (μ := μ) blocks)
-    μ blocks (by mpv_ext; rfl) p
+theorem sameMPV₂_block_toTensorFromBlocks (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k))) (p : ℕ) :
+    SameMPV₂ (Kraus.block (toTensorFromBlocks (α := α) (μ := μ) blocks) p)
+      (toTensorFromBlocks (fun k => (μ k) ^ p) (fun k => Kraus.block (blocks k) p)) :=
+  sameMPV₂_block_of_sameMPV₂_toTensorFromBlocks _ μ blocks (fun _ _ => rfl) p
 
 /-- Positive-length MPV equality is preserved by positive physical blocking. -/
-theorem sameMPV₂Pos_blockTensor
-    {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+theorem sameMPV₂Pos_block {D₁ D₂ : ℕ} (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hSame : SameMPV₂Pos A B) (p : ℕ) (hp : 0 < p) :
-    SameMPV₂Pos
-      (blockTensor (d := d) (n := Fin D₁) A p)
-      (blockTensor (d := d) (n := Fin D₂) B p) := by
-  mpv_ext
-  let σflat := blockedFlatConfig (d := d) p σ
-  calc
-    mpv (blockTensor (d := d) (n := Fin D₁) A p) σ
-        = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
-    _ = mpv B σflat := hSame (N * p) (Nat.mul_pos hN hp) σflat
-    _ = mpv (blockTensor (d := d) (n := Fin D₂) B p) σ :=
-          (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
+    SameMPV₂Pos (Kraus.block A p) (Kraus.block B p) := by
+  intro N hN σ
+  rw [mpv_block_eq_mpv_blockConfig, mpv_block_eq_mpv_blockConfig]
+  exact hSame (N * p) (Nat.mul_pos hN hp) _
 
 /-- Eventual nonzero MPV proportionality is preserved by positive physical blocking. -/
-theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.blockTensor
-    {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.block
+    {D₁ D₂ : ℕ} {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (h : EventuallyNonzeroProportionalMPV₂ A B) (p : ℕ) (hp : 0 < p) :
-    EventuallyNonzeroProportionalMPV₂
-      (blockTensor (d := d) (n := Fin D₁) A p)
-      (blockTensor (d := d) (n := Fin D₂) B p) := by
+    EventuallyNonzeroProportionalMPV₂ (Kraus.block A p) (Kraus.block B p) := by
   unfold EventuallyNonzeroProportionalMPV₂ at h ⊢
   rw [Filter.eventually_atTop] at h ⊢
   rcases h with ⟨N₀, hN₀⟩
@@ -195,95 +116,49 @@ theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.blockTensor
   have hNle : N ≤ N * p := le_mul_of_one_le_right (Nat.zero_le N) hp
   rcases hN₀ (N * p) (hN.trans hNle) with ⟨c, hc, hEq⟩
   refine ⟨c, hc, fun σ => ?_⟩
-  calc
-    mpv (Kraus.blockTensor (d := d) (n := Fin D₁) A p) σ =
-        mpv A (blockedFlatConfig (d := d) p σ) :=
-      mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
-    _ = c * mpv B (blockedFlatConfig (d := d) p σ) := hEq _
-    _ = c * mpv (Kraus.blockTensor (d := d) (n := Fin D₂) B p) σ := by
-      rw [mpv_blockTensor_eq_mpv_blockedFlatConfig]
+  rw [mpv_block_eq_mpv_blockConfig, mpv_block_eq_mpv_blockConfig]
+  exact hEq _
 
 /-- Positive-length equality with a weighted nonzero-block tensor is preserved by
 positive physical blocking, with each weight transported to the corresponding power. -/
-theorem sameMPV₂Pos_blockTensor_toTensorFromBlocks
-    {D r : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hSame : SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks))
+theorem sameMPV₂Pos_block_toTensorFromBlocks
+    (A : MPTensor α (Fin D)) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hSame : SameMPV₂Pos A (toTensorFromBlocks (α := α) (μ := μ) blocks))
     (p : ℕ) (hp : 0 < p) :
-    SameMPV₂Pos
-      (blockTensor (d := d) (n := Fin D) A p)
-      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
-  have hBlock : SameMPV₂Pos
-      (blockTensor (d := d) (n := Fin D) A p)
-      (blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
-        (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) p) :=
-    sameMPV₂Pos_blockTensor
-      (d := d) A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) hSame p hp
-  have hCanon := sameMPV₂_blockTensor_toTensorFromBlocks
-    (d := d) (dim := dim) μ blocks p
-  mpv_ext
-  calc
-    mpv (blockTensor (d := d) (n := Fin D) A p) σ =
-        mpv (blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
-          (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) p) σ := hBlock N hN σ
-    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) σ := hCanon N σ
+    SameMPV₂Pos (Kraus.block A p)
+      (toTensorFromBlocks (fun k => (μ k) ^ p) (fun k => Kraus.block (blocks k) p)) := by
+  intro N hN σ
+  exact (sameMPV₂Pos_block A _ hSame p hp N hN σ).trans
+    (sameMPV₂_block_toTensorFromBlocks μ blocks p N σ)
 
 /-- Positive-length equality of weighted nonzero-block tensors is preserved after
 positive common blocking, with each weight transported to the corresponding power. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPTensor α (Fin (dimA k)))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPTensor α (Fin (dimB k)))
     (hSame : SameMPV₂Pos
-      (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA)
-      (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB))
+      (toTensorFromBlocks (α := α) (μ := μA) blocksA)
+      (toTensorFromBlocks (α := α) (μ := μB) blocksB))
     (p : ℕ) (hp : 0 < p) :
     SameMPV₂Pos
-      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p))
-      (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) := by
-  have hA := sameMPV₂_blockTensor_toTensorFromBlocks
-    (d := d) (dim := dimA) μA blocksA p
-  have hB := sameMPV₂_blockTensor_toTensorFromBlocks
-    (d := d) (dim := dimB) μB blocksB p
-  have hBlock : SameMPV₂Pos
-      (blockTensor (d := d) (n := Fin (∑ k : Fin rA, dimA k))
-        (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA) p)
-      (blockTensor (d := d) (n := Fin (∑ k : Fin rB, dimB k))
-        (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB) p) :=
-    sameMPV₂Pos_blockTensor
-      (d := d)
-      (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA)
-      (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB) hSame p hp
-  mpv_ext
-  calc
-    mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p)) σ
-        = mpv (blockTensor (d := d) (n := Fin (∑ k : Fin rA, dimA k))
-            (toTensorFromBlocks (α := Fin d) (μ := μA) blocksA) p) σ := (hA N σ).symm
-    _ = mpv (blockTensor (d := d) (n := Fin (∑ k : Fin rB, dimB k))
-            (toTensorFromBlocks (α := Fin d) (μ := μB) blocksB) p) σ := hBlock N hN σ
-    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
-        (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) σ := hB N σ
+      (toTensorFromBlocks (fun k => (μA k) ^ p) (fun k => Kraus.block (blocksA k) p))
+      (toTensorFromBlocks (fun k => (μB k) ^ p) (fun k => Kraus.block (blocksB k) p)) := by
+  intro N hN σ
+  exact ((sameMPV₂_block_toTensorFromBlocks μA blocksA p N σ).symm.trans
+    (sameMPV₂Pos_block _ _ hSame p hp N hN σ)).trans
+    (sameMPV₂_block_toTensorFromBlocks μB blocksB p N σ)
 
 end SameMPV₂Blocking
 
-/-! ## Weight transport under blocking and sector replication -/
+/-! ## Weight transport under blocking -/
 
 section WeightTransport
 
 variable {r : ℕ}
 
+omit [Fintype α] in
 /-- Nonzero block weights remain nonzero after taking a blocking power. -/
 theorem blockWeights_ne_zero
     (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (p : ℕ) :
@@ -293,365 +168,27 @@ theorem blockWeights_ne_zero
 
 end WeightTransport
 
-/-!
-## Physical-dimension casts and iterated blocking dimensions
+/-! ## Iterated blocking -/
 
-These auxiliary lemmas keep the later common-blocking statements at a single physical
-alphabet size.  Mathematically, they state that substituting equal physical
-dimensions leaves the tensors and their MPV/transfer-map properties unchanged.
--/
+section IteratedBlocking
 
-/-- The physical dimension of an iterated blocking is the physical dimension of
-direct blocking by the product length. -/
-theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
-    blockPhysDim (blockPhysDim d m) n = blockPhysDim d (m * n) := by
-  simp [blockPhysDim_eq_pow, pow_mul]
+omit [Fintype α] in
+/-- Blocking `n` blocks of length `m` is blocking `n * m` sites, after reading a
+configuration of `n` blocks as a configuration of `n * m` sites. -/
+theorem reindexPhysical_blockConfigEquiv_block {D : ℕ} (A : MPTensor α (Fin D)) (m n : ℕ) :
+    Kraus.reindexPhysical (Kraus.blockConfigEquiv α n m) (Kraus.block A (n * m)) =
+      Kraus.block (Kraus.block A m) n := by
+  funext σ
+  simp only [Kraus.reindexPhysical, Kraus.block_apply, Kraus.evalWord_block,
+    Kraus.ofFn_blockConfigEquiv]
 
-/-- Encode a word of length `L` as a single blocked physical index. -/
-noncomputable def blockIndexOfList (d L : ℕ) (w : List (Fin d)) (h : w.length = L) :
-    Fin (blockPhysDim d L) :=
-  Fin.cast (blockPhysDim_eq_pow d L).symm
-    (finFunctionFinEquiv (fun i => w.get (Fin.cast h.symm i)))
-
-/-- Decoding the blocked index associated to a list returns the original list. -/
-theorem wordOfBlock_blockIndexOfList (d L : ℕ) (w : List (Fin d))
-    (h : w.length = L) :
-    wordOfBlock d L (blockIndexOfList d L w h) = w := by
-  classical
-  unfold blockIndexOfList
-  change List.ofFn (finFunctionFinEquiv.symm
-    (finFunctionFinEquiv (fun i : Fin L => w.get (Fin.cast h.symm i)))) = w
-  rw [finFunctionFinEquiv.symm_apply_apply]
-  have hcongr := List.ofFn_congr h.symm
-    (fun i : Fin L => w.get (Fin.cast h.symm i))
-  calc
-    List.ofFn (fun i : Fin L => w.get (Fin.cast h.symm i)) = List.ofFn w.get := by
-      simpa only [Fin.cast_cast, Fin.cast_refl, id_eq] using hcongr
-    _ = w := List.ofFn_get w
-
-/-- The physical index of the direct block obtained from an iterated blocked index. -/
-noncomputable def iteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    Fin (blockPhysDim d (m * n)) :=
-  let w := flattenBlockedWord d m (wordOfBlock (blockPhysDim d m) n i)
-  have hw : w.length = m * n := by
-    rw [length_flattenBlockedWord, length_wordOfBlock, Nat.mul_comm]
-  blockIndexOfList d (m * n) w hw
-
-/-- The directly blocked word associated to an iterated blocked index is the flattened word. -/
-theorem wordOfBlock_iteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    wordOfBlock d (m * n) (iteratedBlockIndex d m n i) =
-      flattenBlockedWord d m (wordOfBlock (blockPhysDim d m) n i) := by
-  classical
-  unfold iteratedBlockIndex
-  exact wordOfBlock_blockIndexOfList d (m * n)
-    (flattenBlockedWord d m (wordOfBlock (blockPhysDim d m) n i)) _
-
-/-- The position of the `t`-th letter in the `j`-th block of a word split into
-`n` consecutive blocks of length `m`. -/
-private theorem blockWordChunkIndex_lt (m n : ℕ) (j : Fin n) (t : Fin m) :
-    m * (j : ℕ) + (t : ℕ) < m * n := by
-  calc
-    m * (j : ℕ) + (t : ℕ) < m * (j : ℕ) + m :=
-      Nat.add_lt_add_left t.isLt _
-    _ = m * ((j : ℕ) + 1) := by rw [Nat.mul_add, Nat.mul_one]
-    _ ≤ m * n := Nat.mul_le_mul_left m (Nat.succ_le_of_lt j.isLt)
-
-/-- The `j`-th length-`m` subword of a direct length-`m * n` blocked word. -/
-noncomputable def blockWordChunk (d m n : ℕ) (i : Fin (blockPhysDim d (m * n)))
-    (j : Fin n) : List (Fin d) :=
-  List.ofFn fun t : Fin m =>
-    decodeBlock d (m * n) i ⟨m * (j : ℕ) + (t : ℕ), blockWordChunkIndex_lt m n j t⟩
-
-@[simp] theorem length_blockWordChunk (d m n : ℕ) (i : Fin (blockPhysDim d (m * n)))
-    (j : Fin n) : (blockWordChunk d m n i j).length = m := by
-  simp [blockWordChunk]
-
-/-- Encode a direct length-`m * n` blocked index as an iterated blocked index by grouping
-its decoded word into `n` consecutive blocks of length `m`. -/
-noncomputable def directToIteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim d (m * n))) :
-    Fin (blockPhysDim (blockPhysDim d m) n) :=
-  blockIndexOfList (blockPhysDim d m) n
-    (List.ofFn fun j : Fin n =>
-      blockIndexOfList d m (blockWordChunk d m n i j) (length_blockWordChunk d m n i j))
-    (by simp)
-
-/-- Decoding blocked physical indices as words is injective. -/
-theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L) := by
-  intro i j hij
-  have hdecode : decodeBlock d L i = decodeBlock d L j :=
-    List.ofFn_injective hij
-  exact ((finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm).injective hdecode
-
-/-- Flattening the grouped iterated index recovers the direct blocked word. -/
-theorem flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim d (m * n))) :
-    flattenBlockedWord d m
-        (wordOfBlock (blockPhysDim d m) n (directToIteratedBlockIndex d m n i)) =
-      wordOfBlock d (m * n) i := by
-  classical
-  unfold directToIteratedBlockIndex
-  rw [wordOfBlock_blockIndexOfList]
-  simp only [Kraus.flattenBlockedWord, List.map_ofFn]
-  change (List.ofFn (fun j : Fin n =>
-    wordOfBlock d m (blockIndexOfList d m (blockWordChunk d m n i j) _))).flatten =
-      wordOfBlock d (m * n) i
-  simp_rw [wordOfBlock_blockIndexOfList]
-  simpa [blockWordChunk, Kraus.wordOfBlock] using
-    (List.ofFn_mul' (m := m) (n := n) (f := decodeBlock d (m * n) i)).symm
-
-/-- Direct blocking is recovered after grouping a direct blocked index and then flattening
-it through the iterated-blocking map. -/
-theorem wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim d (m * n))) :
-    wordOfBlock d (m * n) (iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i)) =
-      wordOfBlock d (m * n) i := by
-  rw [wordOfBlock_iteratedBlockIndex,
-    flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex]
-
-/-- Grouping a direct blocked index and then flattening the iterated index recovers the
-original direct blocked index. -/
-theorem iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim d (m * n))) :
-    iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i) = i :=
-  wordOfBlock_injective d (m * n)
-    (wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex d m n i)
-
-/-- The map grouping a direct blocked word into iterated blocked words is surjective. -/
-theorem directToIteratedBlockIndex_surjective (d m n : ℕ) :
-    Function.Surjective (directToIteratedBlockIndex d m n) := by
-  have hLeft : Function.LeftInverse (iteratedBlockIndex d m n) (directToIteratedBlockIndex d m n) :=
-    iteratedBlockIndex_directToIteratedBlockIndex d m n
-  have hInjective : Function.Injective (directToIteratedBlockIndex d m n) := hLeft.injective
-  have hEquiv : Fin (blockPhysDim d (m * n)) ≃
-      Fin (blockPhysDim (blockPhysDim d m) n) :=
-    finCongr (blockPhysDim_blockPhysDim d m n).symm
-  exact (Finite.injective_iff_surjective_of_equiv hEquiv).mp hInjective
-
-/-- Flattening an iterated blocked index and then grouping it back recovers the iterated
-blocked index. -/
-theorem directToIteratedBlockIndex_iteratedBlockIndex (d m n : ℕ)
-    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    directToIteratedBlockIndex d m n (iteratedBlockIndex d m n i) = i := by
-  have hLeft : Function.LeftInverse (iteratedBlockIndex d m n) (directToIteratedBlockIndex d m n) :=
-    iteratedBlockIndex_directToIteratedBlockIndex d m n
-  exact hLeft.rightInverse_of_surjective (directToIteratedBlockIndex_surjective d m n) i
-
-/-- The canonical bijection between direct length-`m * n` blocked indices and iterated
-length-`n` blocked indices obtained by grouping consecutive length-`m` words. -/
-noncomputable def directIteratedBlockEquiv (d m n : ℕ) :
-    Fin (blockPhysDim d (m * n)) ≃ Fin (blockPhysDim (blockPhysDim d m) n) where
-  toFun := directToIteratedBlockIndex d m n
-  invFun := iteratedBlockIndex d m n
-  left_inv := iteratedBlockIndex_directToIteratedBlockIndex d m n
-  right_inv := directToIteratedBlockIndex_iteratedBlockIndex d m n
-
-@[simp] theorem directIteratedBlockEquiv_apply (d m n : ℕ)
-    (i : Fin (blockPhysDim d (m * n))) :
-    directIteratedBlockEquiv d m n i = directToIteratedBlockIndex d m n i := rfl
-
-@[simp] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
-    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    (directIteratedBlockEquiv d m n).symm i = iteratedBlockIndex d m n i := rfl
-
-/-- Rewriting the blocking length does not change the decoded blocked word. -/
-theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)
-    (i : Fin (blockPhysDim d L₁)) :
-    wordOfBlock d L₂ (Fin.cast (congr_arg (blockPhysDim d) h) i) = wordOfBlock d L₁ i := by
-  subst h
-  rfl
-
-/-- Iterated physical blocking agrees with direct blocking after the canonical
-index relabeling from iterated blocks to flattened blocks. -/
-theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
-    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    blockTensor (d := blockPhysDim d m) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A m) n i =
-      blockTensor (d := d) (n := Fin D) A (m * n) (iteratedBlockIndex d m n i) := by
-  change Kraus.evalWord (Kraus.blockTensor (d := d) (n := Fin D) A m)
-      (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n i) =
-    Kraus.evalWord A
-      (Kraus.wordOfBlock d (m * n) (iteratedBlockIndex d m n i))
-  rw [Kraus.evalWord_blockTensor]
-  exact congrArg (Kraus.evalWord A)
-    (wordOfBlock_iteratedBlockIndex d m n i).symm
-
-/-- Tensor form of iterated blocking versus direct blocking with physical relabeling. -/
-theorem blockTensor_blockTensor_eq_reindex {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
-    blockTensor (d := blockPhysDim d m) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A m) n =
-      Kraus.reindexPhysical (iteratedBlockIndex d m n)
-        (blockTensor (d := d) (n := Fin D) A (m * n)) := by
-  funext i
-  exact blockTensor_blockTensor_apply (d := d) A m n i
-
-/-- Iterated physical blocking and direct blocking have the same MPV family after
-the natural relabeling of physical indices. -/
-theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
-    (A : MPSTensor d D) (m n : ℕ) :
-    SameMPV₂
-      (blockTensor (d := blockPhysDim d m) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A m) n)
-      (Kraus.reindexPhysical (iteratedBlockIndex d m n)
-        (blockTensor (d := d) (n := Fin D) A (m * n))) := by
-  rw [blockTensor_blockTensor_eq_reindex]
-  mpv_ext
-  rfl
-
-/-- Reindexing the physical alphabet of the iterated block tensor by the consecutive-grouping
-map returns the direct block tensor at length `m*n`.
-
-This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
-explicit bijection `directToIteratedBlockIndex`. It gives a direct connection between iterated
-and direct blocking without an additional coordinate-grouping hypothesis. -/
-theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
-    (A : MPSTensor d D) (m n : ℕ) :
-    Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
-      (blockTensor (d := blockPhysDim d m) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A m) n) =
-    blockTensor (d := d) (n := Fin D) A (m * n) := by
-  calc
-    Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
-        (blockTensor (d := blockPhysDim d m) (n := Fin D)
-          (blockTensor (d := d) (n := Fin D) A m) n) =
-      Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
-        (Kraus.reindexPhysical (iteratedBlockIndex d m n)
-          (blockTensor (d := d) (n := Fin D) A (m * n))) := by
-      rw [blockTensor_blockTensor_eq_reindex A m n]
-    _ = blockTensor (d := d) (n := Fin D) A (m * n) := by
-      ext i
-      simp [Kraus.reindexPhysical, iteratedBlockIndex_directToIteratedBlockIndex d m n]
-
-/-- Refine a tensor already blocked by `p` through a further length-`L` blocking, but expose
-the resulting physical alphabet as the direct length-`p * L` alphabet.
-
-It is ordinary length-`L` blocking over the already blocked alphabet, followed by
-physical reindexing along the canonical grouping map from direct length-`p * L`
-indices to iterated length-`L` indices. -/
-noncomputable def flattenedIteratedBlockTensor
-    {d p D : ℕ}
-    (A : MPSTensor (blockPhysDim d p) D) (L : ℕ) :
-    MPSTensor (blockPhysDim d (p * L)) D :=
-  Kraus.reindexPhysical (directToIteratedBlockIndex d p L)
-    (blockTensor (d := blockPhysDim d p) (n := Fin D) A L)
-
-/-- Flattened iterated blocking of an already `p`-blocked tensor agrees with direct blocking by
-`p * L` of the original tensor. -/
-theorem flattenedIteratedBlockTensor_blockTensor
-    {d D : ℕ} (A : MPSTensor d D) (p L : ℕ) :
-    flattenedIteratedBlockTensor
-        (d := d) (p := p) (D := D)
-        (blockTensor (d := d) (n := Fin D) A p) L =
-      blockTensor (d := d) (n := Fin D) A (p * L) :=
-  reindexPhysical_directToIteratedBlockIndex_blockTensor (d := d) A p L
-
-/-- Assembling flattened iterated blocks is the physical reindexing of assembling the
-iterated blocked tensors. -/
-theorem toTensorFromBlocks_flattenedIteratedBlockTensor
-    {d p r L : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k)) :
-    toTensorFromBlocks (α := Fin (blockPhysDim d (p * L))) (μ := μ)
-        (fun k => flattenedIteratedBlockTensor
-          (d := d) (p := p) (D := dim k) (blocks k) L) =
-      Kraus.reindexPhysical (directToIteratedBlockIndex d p L)
-        (toTensorFromBlocks (α := Fin (blockPhysDim (blockPhysDim d p) L)) (μ := μ)
-          (fun k => blockTensor (d := blockPhysDim d p) (n := Fin (dim k)) (blocks k) L)) := by
-  funext i
-  rfl
-
-/-!
-### Blocked-word identification
-
-The lemma `reindexPhysical_directToIteratedBlockIndex_blockTensor` shows that applying the
-explicit block-grouping bijection to the iterated block tensor recovers the direct block
-tensor.  For common-block cyclic sectors, the corresponding coordinate assertion is that this
-bijection coincides with the `Fin.cast` identification used in
-`CommonBlockedCyclicSectorFamily`.  Concretely, one compares
-
-```lean
-Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
-  directToIteratedBlockIndex d (F.period k) (F.extra k)
-    (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i)
-```
-
-for each block `k` and each physical index `i : Fin (blockPhysDim d F.p)`.
-
-The proof is purely combinatorial.  With the explicit `finFunctionFinEquiv` encoding, the
-coordinate comparison reduces to the base-`d` digit identity relating a length-`m*n`
-word to a length-`n` word over length-`m` blocks.
-
-### Relationship with the common-sector word identity
-
-The common-sector comparison uses the same combinatorial fact as a list equality: flattening
-a word of length `n` over length-`m` blocks gives the direct word of length `m*n`.  That
-list-level assertion supplies the coordinate comparison needed for the common-alphabet
-blocked tensor theorem.
--/
-
-/-- Casting the physical dimension of both tensors preserves rectangular MPV equality. -/
-theorem sameMPV₂_cast_physDim {d₁ d₂ D₁ D₂ : ℕ} (h : d₁ = d₂)
-    (A : MPSTensor d₁ D₁) (B : MPSTensor d₁ D₂) :
-    SameMPV₂
-        (cast (congr_arg (fun d' => MPSTensor d' D₁) h) A)
-        (cast (congr_arg (fun d' => MPSTensor d' D₂) h) B) ↔
-      SameMPV₂ A B := by
-  subst h
-  rfl
-
-/-- Casting the physical dimension commutes with the block-diagonal tensor constructor. -/
-theorem toTensorFromBlocks_cast_physDim {d₁ d₂ r : ℕ} {dim : Fin r → ℕ}
-    (h : d₁ = d₂) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d₁ (dim k)) :
-    cast (congr_arg (fun d' => MPSTensor d' (∑ k : Fin r, dim k)) h)
-        (toTensorFromBlocks (α := Fin d₁) (μ := μ) blocks) =
-      toTensorFromBlocks (α := Fin d₂) (μ := μ)
-        (fun k => cast (congr_arg (fun d' => MPSTensor d' (dim k)) h) (blocks k)) := by
-  subst h
-  rfl
-
-/-- Evaluating a physical-dimension cast amounts to casting the physical index. -/
-theorem cast_physDim_apply {d₁ d₂ D : ℕ} (h : d₁ = d₂)
-    (A : MPSTensor d₁ D) (i : Fin d₂) :
-    cast (congr_arg (fun d' => MPSTensor d' D) h) A i = A (Fin.cast h.symm i) := by
-  subst h
-  rfl
-
-/-- Casting the physical dimension preserves trace-preserving normalization. -/
-theorem leftCanonical_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
-    (A : MPSTensor d₁ D) :
-    (∑ i : Fin d₂,
-        (cast (congr_arg (fun d' => MPSTensor d' D) h) A i)ᴴ *
-          cast (congr_arg (fun d' => MPSTensor d' D) h) A i = 1) ↔
-      (∑ i : Fin d₁, (A i)ᴴ * A i = 1) := by
-  subst h
-  simp
-
-/-- Casting the physical dimension preserves transfer-map primitivity. -/
-theorem isPrimitive_transferMap_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
-    (A : MPSTensor d₁ D) :
-    _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin d₂) (n := Fin D)
-          (cast (congr_arg (fun d' => MPSTensor d' D) h) A)) ↔
-      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d₁) (n := Fin D) A) := by
-  subst h
-  rfl
-
-/-- Casting the physical dimension preserves tensor irreducibility. -/
-theorem isIrreducibleFamily_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
-    (A : MPSTensor d₁ D) :
-    Kraus.IsIrreducibleFamily (cast (congr_arg (fun d' => MPSTensor d' D) h) A) ↔
-      Kraus.IsIrreducibleFamily A := by
-  subst h
-  rfl
+end IteratedBlocking
 
 /-!
 ## Part B: Primitivity under multiples
 
-If the transfer map of `blockTensor A p` is primitive and `p ∣ q`, then the
-transfer map of `blockTensor A q` is also primitive, by `isPrimitive_pow_of_isPrimitive`:
+If the transfer map of `block A p` is primitive and `p ∣ q`, then the
+transfer map of `block A q` is also primitive, by `isPrimitive_pow_of_isPrimitive`:
 if `periph(E) = {1}` then `periph(E^m) = {1}`.
 -/
 
@@ -661,16 +198,14 @@ variable {D : ℕ}
 
 /-- Transfer-map primitivity is monotone in the blocking period (for multiples).
 
-If `blockTensor A p` has a primitive transfer map and `p ∣ q` with `q > 0`, then
-`blockTensor A q` also has a primitive transfer map. The proof uses `Kraus.transferMap_blockTensor`
+If `block A p` has a primitive transfer map and `p ∣ q` with `q > 0`, then
+`block A q` also has a primitive transfer map. The proof uses `Kraus.transferMap_block`
 to convert between blocking levels. -/
-theorem isPrimitive_transferMap_blockTensor_of_dvd
+theorem isPrimitive_transferMap_block_of_dvd
     [NeZero D]
-    (A : MPSTensor d D) (p q : ℕ) (hpq : p ∣ q) (hq : 0 < q)
-    (hPrim : _root_.IsPrimitive
-      (Kraus.transferMap (blockTensor (d := d) (n := Fin D) A p))) :
-    _root_.IsPrimitive
-      (Kraus.transferMap (blockTensor (d := d) (n := Fin D) A q)) := by
+    (A : MPTensor α (Fin D)) (p q : ℕ) (hpq : p ∣ q) (hq : 0 < q)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (Kraus.block A p))) :
+    _root_.IsPrimitive (Kraus.transferMap (Kraus.block A q)) := by
   obtain ⟨m, rfl⟩ := hpq
   -- p > 0 since p * m > 0
   have hp : 0 < p := by
@@ -678,10 +213,10 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
   -- m > 0 since p * m > 0 and p > 0
   have hm : 0 < m := Nat.pos_of_mul_pos_left hq
   -- Rewrite transfer maps as iterates of the original transfer map.
-  rw [Kraus.transferMap_blockTensor]    -- goal: IsPrimitive ((Kraus.transferMap A) ^ (p * m))
+  rw [Kraus.transferMap_block]    -- goal: IsPrimitive ((Kraus.transferMap A) ^ (p * m))
   rw [pow_mul]                          -- goal: IsPrimitive (((Kraus.transferMap A) ^ p) ^ m)
-  -- goal: IsPrimitive ((Kraus.transferMap (blockTensor A p)) ^ m)
-  rw [← Kraus.transferMap_blockTensor]
+  -- goal: IsPrimitive ((Kraus.transferMap (block A p)) ^ m)
+  rw [← Kraus.transferMap_block]
   exact isPrimitive_pow_of_isPrimitive _ m hm hPrim
 
 end PrimitivityMultiples
@@ -717,27 +252,24 @@ theorem dvd_lcmPeriod {k : ℕ} (periods : Fin k → ℕ) (i : Fin k) :
 /-- There exists a common blocking period making all block transfer maps primitive.
 
 Given a family of blocks indexed by `Fin r`, where each block `k` has some period `p_k`
-making `Kraus.transferMap (blockTensor (blocks k) p_k)` primitive, the LCM of all `p_k`
+making `Kraus.transferMap (block (blocks k) p_k)` primitive, the LCM of all `p_k`
 serves as a universal period. -/
 theorem exists_common_blocking_all_primitive
     {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hPer : ∀ k, ∃ p, 0 < p ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
-          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p))) :
+        (Kraus.transferMap (Kraus.block (blocks k) p))) :
     ∃ p, 0 < p ∧ ∀ k,
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
-          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
+        (Kraus.transferMap (Kraus.block (blocks k) p)) := by
   classical
   -- Choose a period for each block.
   let pk : Fin r → ℕ := fun k => (hPer k).choose
   have pk_pos : ∀ k, 0 < pk k := fun k => (hPer k).choose_spec.1
   have pk_prim : ∀ k, _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin (blockPhysDim d (pk k))) (n := Fin (dim k))
-        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (pk k))) :=
+      (Kraus.transferMap (Kraus.block (blocks k) (pk k))) :=
     fun k => (hPer k).choose_spec.2
   -- Take the LCM of all periods.
   let P := lcmPeriod pk
@@ -745,29 +277,27 @@ theorem exists_common_blocking_all_primitive
   refine ⟨P, hP_pos, fun k => ?_⟩
   have hk_dvd : pk k ∣ P := dvd_lcmPeriod pk k
   have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
-  exact isPrimitive_transferMap_blockTensor_of_dvd (blocks k) (pk k) P hk_dvd hP_pos (pk_prim k)
+  exact isPrimitive_transferMap_block_of_dvd (blocks k) (pk k) P hk_dvd hP_pos (pk_prim k)
 
 /-- Common blocking from TP + irreducible hypotheses (the standard reduction entry point).
 
-This combines `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily` (per-block
+This combines `exists_block_isPrimitive_of_TP_of_isIrreducibleFamily` (per-block
 periodicity removal) with `exists_common_blocking_all_primitive` (LCM common period). -/
 theorem exists_common_blocking_all_primitive_of_TP_irr
     {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hTP : ∀ k, ∑ i : α, (blocks k i)ᴴ * blocks k i = 1)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hDim : ∀ k, 0 < dim k) :
     ∃ p, 0 < p ∧ ∀ k,
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
-          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
+        (Kraus.transferMap (Kraus.block (blocks k) p)) := by
   have hPer : ∀ k, ∃ p, 0 < p ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
-          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
+        (Kraus.transferMap (Kraus.block (blocks k) p)) := by
     intro k
     have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
-    exact exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily
+    exact exists_block_isPrimitive_of_TP_of_isIrreducibleFamily
       (blocks k) (hTP k) (hIrr k) (hDim k)
   exact exists_common_blocking_all_primitive blocks hDim hPer
 

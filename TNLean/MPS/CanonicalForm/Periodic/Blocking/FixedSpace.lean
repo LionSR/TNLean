@@ -35,7 +35,6 @@ open MPTensor
 
 open scoped Matrix BigOperators
 open Fin.NatCast
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -93,7 +92,7 @@ private theorem pow_fixed_of_peripheral_roots {M : Type*} [AddCommGroup M] [Modu
 /-- Any vector fixed by a positive power of the adjoint transfer map is fixed
 by its m-th power. This is a spectral reduction in the prescribed-blocking argument
 of arXiv:1708.00029, Lemma 6. -/
-theorem IsPeriodic.adjoint_pow_fixed_of_pow_fixed {d D m : ℕ} {A : MPSTensor d D}
+theorem IsPeriodic.adjoint_pow_fixed_of_pow_fixed {α : Type*} [Fintype α] {D m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : (Kraus.transferMap (fun i => (A i)ᴴ) ^ p) X = X) :
@@ -110,7 +109,7 @@ theorem IsPeriodic.adjoint_pow_fixed_of_pow_fixed {d D m : ℕ} {A : MPSTensor d
 /-- Positive powers have the same adjoint fixed space as the gcd of the power
 and the original period. Source: the periodic spectral structure used in
 arXiv:1708.00029, Lemma 6. -/
-theorem IsPeriodic.adjoint_pow_fixed_iff_gcd {d D m : ℕ} {A : MPSTensor d D}
+theorem IsPeriodic.adjoint_pow_fixed_iff_gcd {α : Type*} [Fintype α] {D m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (Kraus.transferMap (fun i => (A i)ᴴ) ^ p) X = X ↔
@@ -133,9 +132,9 @@ theorem IsPeriodic.adjoint_pow_fixed_iff_gcd {d D m : ℕ} {A : MPSTensor d D}
 
 /-- Averaging one grouped projection over gcd(m,p) consecutive adjoint iterates
 recovers the identity. Source: the cyclic projections in arXiv:1708.00029, Lemma 6. -/
-theorem sum_adjoint_pow_stepOrbitProjection {d D m : ℕ} [NeZero m]
+theorem sum_adjoint_pow_stepOrbitProjection {α : Type*} [Fintype α] {D m : ℕ} [NeZero m]
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (hsum : ∑ u, P u = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     (p : ℕ) (a : Fin (m.gcd p)) :
     ∑ j : Fin (m.gcd p), (Kraus.transferMap (fun i => (A i)ᴴ) ^ j.val)
@@ -175,7 +174,7 @@ theorem sum_adjoint_pow_stepOrbitProjection {d D m : ℕ} [NeZero m]
 /-- An adjoint fixed point of the blocked map supported on one step orbit is scalar
 on that orbit. This is the fixed-space rigidity needed for arXiv:1708.00029, Lemma 6. -/
 theorem IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection
-    {d D m : ℕ} [NeZero m] {A : MPSTensor d D} (hA : IsPeriodic m A)
+    {α : Type*} [Fintype α] {D m : ℕ} [NeZero m] {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
@@ -192,7 +191,7 @@ theorem IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection
     ∑ k : Fin (m / m.gcd p), P (e (a, k) + (j.val : Fin m))
   have hmulstep (u : Fin m) (Y : Matrix (Fin D) (Fin D) ℂ) :
       f (P u * Y) = P (u + 1) * f Y := by
-    have hs (i : Fin d) : (A i)ᴴ * P u = P (u + 1) * (A i)ᴴ := by
+    have hs (i : α) : (A i)ᴴ * P u = P (u + 1) * (A i)ᴴ := by
       simpa only [Matrix.conjTranspose_mul, (hproj u).1.eq, (hproj (u + 1)).1.eq]
         using congrArg Matrix.conjTranspose (hshift u i)
     simp only [f, Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose,
@@ -261,32 +260,32 @@ theorem IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection
 /-- Each compressed step-orbit block is irreducible. This completes the
 irreducibility assertion of arXiv:1708.00029, Lemma 6. -/
 theorem IsPeriodic.isIrreducibleFamily_compressed_stepOrbit
-    {d D m n : ℕ} [NeZero m] {A : MPSTensor d D} (hA : IsPeriodic m A)
+    {α : Type*} [Fintype α] {D m n : ℕ} [NeZero m] {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     {p : ℕ} (hp : 0 < p) (a : Fin (m.gcd p))
-    (C : MPSTensor (blockPhysDim d p) n) (V : Matrix (Fin D) (Fin n) ℂ)
+    (C : MPTensor (Fin p → α) (Fin n)) (V : Matrix (Fin D) (Fin n) ℂ)
     (hiso : Vᴴ * V = 1) (hV : V * Vᴴ = stepOrbitProjection P p a)
-    (hC : ∀ i, C i = Vᴴ * blockTensor A p i * V) :
+    (hC : ∀ i, C i = Vᴴ * Kraus.block A p i * V) :
     Kraus.IsIrreducibleFamily C := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let f := Kraus.transferMap (fun i => (A i)ᴴ)
   let g := Kraus.transferMap (fun i => (C i)ᴴ)
-  have hpow : Kraus.transferMap (fun i => (blockTensor A p i)ᴴ) = f ^ p := by
-    have h := congrArg Matrix.traceAdjointMap (Kraus.transferMap_blockTensor A p)
+  have hpow : Kraus.transferMap (fun i => (Kraus.block A p i)ᴴ) = f ^ p := by
+    have h := congrArg Matrix.traceAdjointMap (Kraus.transferMap_block A p)
     simpa only [Kraus.transferMap, Matrix.traceAdjointMap_pow,
       Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose] using h
-  have hint (i) : (blockTensor A p i)ᴴ * V = V * (C i)ᴴ := by
-    have hcomm : (V * Vᴴ) * blockTensor A p i = blockTensor A p i * (V * Vᴴ) := by
+  have hint (i) : (Kraus.block A p i)ᴴ * V = V * (C i)ᴴ := by
+    have hcomm : (V * Vᴴ) * Kraus.block A p i = Kraus.block A p i * (V * Vᴴ) := by
       rw [hV]
-      exact stepOrbitProjection_mul_blockTensor P A hshift p a i
+      exact stepOrbitProjection_mul_block P A hshift p a i
     have hs := congrArg Matrix.conjTranspose hcomm
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose] at hs
     calc
-      (blockTensor A p i)ᴴ * V = ((blockTensor A p i)ᴴ * (V * Vᴴ)) * V := by
+      (Kraus.block A p i)ᴴ * V = ((Kraus.block A p i)ᴴ * (V * Vᴴ)) * V := by
         simp only [Matrix.mul_assoc, hiso, Matrix.mul_one]
-      _ = ((V * Vᴴ) * (blockTensor A p i)ᴴ) * V := by rw [hs]
+      _ = ((V * Vᴴ) * (Kraus.block A p i)ᴴ) * V := by rw [hs]
       _ = V * (C i)ᴴ := by
         rw [hC i]
         simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]

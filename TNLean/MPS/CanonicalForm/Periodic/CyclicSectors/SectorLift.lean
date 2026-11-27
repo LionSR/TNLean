@@ -42,7 +42,7 @@ from the adjoint shift, repairing the index mismatch so the telescoping applies.
   length is a multiple of the period (`w.length • 1 = 0`), the product is the
   diagonal corner `P u * Kraus.evalWord A w * P u`.
 * `MPSTensor.cornerProd_eq_blockDiagCorner` — for a single blocked letter
-  `wordOfBlock d m I`, the product is `P u * (blockTensor A m) I * P u`
+  `List.ofFn I`, the product is `P u * Kraus.block A m I * P u`
   (eq:Cu).
 * `MPSTensor.negReindex_paper_shift` — converts the adjoint cyclic shift
   into the paper-convention shift for the inverse-reindexed projectors.
@@ -56,11 +56,10 @@ from the adjoint shift, repairing the index mismatch so the telescoping applies.
 
 open scoped Matrix BigOperators
 open Matrix
-open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 section Telescope
 
@@ -70,9 +69,9 @@ variable {m : ℕ} [NeZero m]
 projector to its ending projector.
 Source: arXiv:1708.00029, `eq:Aoffdiag` iterated over a word. -/
 theorem projector_mul_evalWord_eq_evalWord_mul_projector
-    (Q : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (Q : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
-    (u : Fin m) (w : List (Fin d)) :
+    (u : Fin m) (w : List α) :
     Q u * Kraus.evalWord A w = Kraus.evalWord A w * Q (u + w.length • (1 : Fin m)) := by
   induction w generalizing u with
   | nil => simp
@@ -105,10 +104,10 @@ projector `P (u + w.length • 1)` records the accumulated sector offset on the
 right.  This is the algebraic mechanism by which Appendix A repeats a single
 sector block around the cycle (eq:Fu). -/
 theorem cornerProd_eq_conj_evalWord
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
-    (u : Fin m) (w : List (Fin d)) :
+    (hshift : ∀ k (i : α), P k * A i = A i * P (k + 1))
+    (u : Fin m) (w : List α) :
     cornerProd P A u w = P u * Kraus.evalWord A w * P (u + w.length • (1 : Fin m)) := by
   induction w generalizing u with
   | nil =>
@@ -138,29 +137,29 @@ If the word length is a multiple of the period (`w.length • 1 = 0` in `Fin m`)
 then the accumulated sector offset vanishes and the corner-transition product is
 the diagonal corner `P u * Kraus.evalWord A w * P u`. -/
 theorem cornerProd_eq_diagCorner_of_length_smul_eq_zero
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
-    (u : Fin m) (w : List (Fin d)) (hlen : w.length • (1 : Fin m) = 0) :
+    (hshift : ∀ k (i : α), P k * A i = A i * P (k + 1))
+    (u : Fin m) (w : List α) (hlen : w.length • (1 : Fin m) = 0) :
     cornerProd P A u w = P u * Kraus.evalWord A w * P u := by
   rw [cornerProd_eq_conj_evalWord P A hproj hshift u w, hlen, add_zero]
 
 /-- **Single blocked letter as a diagonal corner** (arXiv:1708.00029, eq:Cu).
 
-For one blocked letter `wordOfBlock d m I` (a word of length exactly the period
+For one blocked letter `I : Fin m → α` (a word of length exactly the period
 `m`), the corner-transition product is the diagonal blocked corner
-`P u * (blockTensor A m) I * P u = C_u^{I}` of Lemma bdcf.  Combined with the
+`P u * Kraus.block A m I * P u = C_u^{I}` of Lemma bdcf.  Combined with the
 corner-isomorphism letter identity of `IsCyclicSectorDecompWith`
-(`(φ k (blocks k I)).1 = P k * blockTensor A m I * P k`), this exhibits the
+(`(φ k (blocks k I)).1 = P k * Kraus.block A m I * P k`), this exhibits the
 compressed sector letter as the corner-transition product. -/
 theorem cornerProd_eq_blockDiagCorner
-    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D) (A : MPTensor α (Fin D))
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
-    (u : Fin m) (I : Fin (blockPhysDim d m)) :
-    cornerProd P A u (wordOfBlock d m I) = P u * (blockTensor A m) I * P u := by
-  have hlen : (wordOfBlock d m I).length • (1 : Fin m) = 0 := by
-    rw [length_wordOfBlock]
+    (hshift : ∀ k (i : α), P k * A i = A i * P (k + 1))
+    (u : Fin m) (I : Fin m → α) :
+    cornerProd P A u (List.ofFn I) = P u * Kraus.block A m I * P u := by
+  have hlen : (List.ofFn I).length • (1 : Fin m) = 0 := by
+    rw [List.length_ofFn]
     have h := card_nsmul_eq_zero (x := (1 : Fin m))
     rwa [Fintype.card_fin] at h
   rw [cornerProd_eq_diagCorner_of_length_smul_eq_zero P A hproj hshift u _ hlen]
@@ -183,12 +182,12 @@ inverse cyclic reindexing `P_k ↦ P_{-k}` documented at
 convention `P_{-k} A^i = A^i P_{-(k+1)}` (arXiv:1708.00029, eq:Auprop grading),
 which is the shift hypothesis of `cornerProd_eq_conj_evalWord`. -/
 theorem negReindex_paper_shift
-    (A : MPSTensor d D)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (A : MPTensor α (Fin D))
+    (hLeft : ∑ i : α, (A i)ᴴ * A i = 1)
     {P : Fin m → MatrixAlg D}
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hShift : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (k : Fin m) (i : Fin d) :
+    (hShift : ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (k : Fin m) (i : α) :
     P (-k) * A i = A i * P (-(k + 1)) := by
   have h := offDiag_shift_of_adjoint_cyclic_shift A hLeft hproj hShift (-(k + 1)) i
   have he : (-(k + 1) + 1 : Fin m) = -k := by abel

@@ -24,10 +24,10 @@ The correct peripheral roots satisfy z^(m/gcd(m,p)) = 1; see
 
 ## Main results
 
-* `IsPeriodic.peripheral_blockTensor`: the exact ambient peripheral spectrum.
-* `IsPeriodic.peripheral_compressed_blockTensor`: the peripheral-root bound for
+* `IsPeriodic.peripheral_block`: the exact ambient peripheral spectrum.
+* `IsPeriodic.peripheral_compressed_block`: the peripheral-root bound for
   any invariant compressed block.
-* `adjoint_compressed_blockTensor_projection`: the cyclic action survives compression.
+* `adjoint_compressed_block_projection`: the cyclic action survives compression.
 * `MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq`: peripheral eigenvalues of the
   prescribed blocks.
 
@@ -41,7 +41,6 @@ open MPTensor
 
 open scoped Matrix BigOperators
 open Fin.NatCast
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -50,11 +49,11 @@ section Spectrum
 /-- Spectral mapping for positive blocking preserves exactly the powers of the
 original peripheral eigenvalues. Source: arXiv:1708.00029, proof of
 Lemma `lem:blocking-arbitrary`. -/
-theorem peripheralEigenvalues_blockTensor {d D : ℕ} (A : MPSTensor d D)
+theorem peripheralEigenvalues_block {α : Type*} [Fintype α] {D : ℕ} (A : MPTensor α (Fin D))
     {p : ℕ} (hp : 0 < p) :
-    peripheralEigenvalues (Kraus.transferMap (blockTensor A p)) =
+    peripheralEigenvalues (Kraus.transferMap (Kraus.block A p)) =
       (fun z : ℂ => z ^ p) '' peripheralEigenvalues (Kraus.transferMap A) := by
-  rw [Kraus.transferMap_blockTensor]
+  rw [Kraus.transferMap_block]
   ext z
   simp only [peripheralEigenvalues, Set.mem_ofPred_eq, Set.mem_image]
   constructor
@@ -70,11 +69,11 @@ theorem peripheralEigenvalues_blockTensor {d D : ℕ} (A : MPSTensor d D)
 
 /-- Positive blocking changes the ambient peripheral root order from m to m/gcd(m,p).
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, peripheral-spectrum argument. -/
-theorem IsPeriodic.peripheral_blockTensor {d D m : ℕ} {A : MPSTensor d D}
+theorem IsPeriodic.peripheral_block {α : Type*} [Fintype α] {D m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p) :
-    peripheralEigenvalues (Kraus.transferMap (blockTensor A p)) =
+    peripheralEigenvalues (Kraus.transferMap (Kraus.block A p)) =
       {z : ℂ | z ^ (m / m.gcd p) = 1} := by
-  rw [peripheralEigenvalues_blockTensor A hp, hA.peripheral_eq]
+  rw [peripheralEigenvalues_block A hp, hA.peripheral_eq]
   ext z
   simp only [Set.mem_image, Set.mem_ofPred_eq]
   constructor
@@ -92,34 +91,34 @@ theorem IsPeriodic.peripheral_blockTensor {d D m : ℕ} {A : MPSTensor d D}
 
 /-- A compressed invariant block cannot introduce additional peripheral roots.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, peripheral-spectrum argument. -/
-theorem IsPeriodic.peripheral_compressed_blockTensor {d D m n : ℕ}
-    {A : MPSTensor d D} (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p)
-    (C : MPSTensor (blockPhysDim d p) n) (V : Matrix (Fin D) (Fin n) ℂ)
-    (hV : Vᴴ * V = 1) (hC : ∀ i, C i = Vᴴ * blockTensor A p i * V)
-    (hcomm : ∀ i, (V * Vᴴ) * blockTensor A p i = blockTensor A p i * (V * Vᴴ))
+theorem IsPeriodic.peripheral_compressed_block {α : Type*} [Fintype α] {D m n : ℕ}
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p)
+    (C : MPTensor (Fin p → α) (Fin n)) (V : Matrix (Fin D) (Fin n) ℂ)
+    (hV : Vᴴ * V = 1) (hC : ∀ i, C i = Vᴴ * Kraus.block A p i * V)
+    (hcomm : ∀ i, (V * Vᴴ) * Kraus.block A p i = Kraus.block A p i * (V * Vᴴ))
     {z : ℂ} (hz : z ∈ peripheralEigenvalues (Kraus.transferMap C)) :
     z ^ (m / m.gcd p) = 1 := by
-  have hint : ∀ i, blockTensor A p i * V = V * C i := by
+  have hint : ∀ i, Kraus.block A p i * V = V * C i := by
     intro i
     calc
-      blockTensor A p i * V = (blockTensor A p i * (V * Vᴴ)) * V := by
+      Kraus.block A p i * V = (Kraus.block A p i * (V * Vᴴ)) * V := by
         simp [Matrix.mul_assoc, hV]
-      _ = ((V * Vᴴ) * blockTensor A p i) * V := by rw [hcomm i]
+      _ = ((V * Vᴴ) * Kraus.block A p i) * V := by rw [hcomm i]
       _ = V * C i := by rw [hC i]; simp only [Matrix.mul_assoc]
-  have hzA : z ∈ peripheralEigenvalues (Kraus.transferMap (blockTensor A p)) :=
-    ⟨hasEigenvalue_transferMap_of_intertwine (blockTensor A p) C V hV hint hz.1, hz.2⟩
-  rwa [hA.peripheral_blockTensor hp] at hzA
+  have hzA : z ∈ peripheralEigenvalues (Kraus.transferMap (Kraus.block A p)) :=
+    ⟨hasEigenvalue_transferMap_of_intertwine (Kraus.block A p) C V hV hint hz.1, hz.2⟩
+  rwa [hA.peripheral_block hp] at hzA
 
 /-- Compression to a step orbit preserves the cyclic action of the blocked adjoint map.
 Source: arXiv:1708.00029, final display in the proof of Lemma `lem:blocking-arbitrary`. -/
-theorem adjoint_compressed_blockTensor_projection {d D m n : ℕ} [NeZero m]
+theorem adjoint_compressed_block_projection {α : Type*} [Fintype α] {D m n : ℕ} [NeZero m]
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     (p : ℕ) (a : Fin (m.gcd p))
-    (C : MPSTensor (blockPhysDim d p) n) (V : Matrix (Fin D) (Fin n) ℂ)
-    (hC : ∀ i, C i = Vᴴ * blockTensor A p i * V)
+    (C : MPTensor (Fin p → α) (Fin n)) (V : Matrix (Fin D) (Fin n) ℂ)
+    (hC : ∀ i, C i = Vᴴ * Kraus.block A p i * V)
     (hV : V * Vᴴ = stepOrbitProjection P p a)
     (k : Fin (m / m.gcd p)) :
     Kraus.transferMap (fun i => (C i)ᴴ)
@@ -138,14 +137,14 @@ theorem adjoint_compressed_blockTensor_projection {d D m n : ℕ} [NeZero m]
       V * (Vᴴ * P u * V) * Vᴴ = (V * Vᴴ) * P u * (V * Vᴴ) := by
         simp only [Matrix.mul_assoc]
       _ = P u := by rw [hV, hleft, hright]
-  have hCstar : ∀ i, (C i)ᴴ = Vᴴ * (blockTensor A p i)ᴴ * V := by
+  have hCstar : ∀ i, (C i)ᴴ = Vᴴ * (Kraus.block A p i)ᴴ * V := by
     intro i
     rw [hC i]
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
   change Kraus.map (fun i => (C i)ᴴ) (Vᴴ * P u * V) = _
   rw [Kraus.map_compressed_eq_conj _ _ V hCstar, hexpand]
-  change Vᴴ * Kraus.transferMap (fun i => (blockTensor A p i)ᴴ) (P u) * V = _
-  rw [adjoint_blockTensor_projection P A hA hshift]
+  change Vᴴ * Kraus.transferMap (fun i => (Kraus.block A p i)ᴴ) (P u) * V = _
+  rw [adjoint_block_projection P A hA hshift]
 
 end Spectrum
 
@@ -197,14 +196,14 @@ private theorem map_cyclic_sum {M : Type*} [AddCommGroup M] [Module ℂ M]
 transfer map, namely the Fourier sum of the compressed orbit projections.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, final step. -/
 private theorem hasEigenvalue_adjoint_compressed_stepOrbit
-    {d D m n : ℕ} [NeZero m]
+    {α : Type*} [Fintype α] {D m n : ℕ} [NeZero m]
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
-    (hne : ∀ u, P u ≠ 0) (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (hne : ∀ u, P u ≠ 0) (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     (p : ℕ) (a : Fin (m.gcd p))
-    (C : MPSTensor (blockPhysDim d p) n) (V : Matrix (Fin D) (Fin n) ℂ)
-    (hC : ∀ i, C i = Vᴴ * blockTensor A p i * V)
+    (C : MPTensor (Fin p → α) (Fin n)) (V : Matrix (Fin D) (Fin n) ℂ)
+    (hC : ∀ i, C i = Vᴴ * Kraus.block A p i * V)
     (hV : V * Vᴴ = stepOrbitProjection P p a)
     (z : ℂ) (hz : z ^ (m / m.gcd p) = 1) :
     Module.End.HasEigenvalue (Kraus.transferMap (fun i => (C i)ᴴ)) z⁻¹ := by
@@ -215,7 +214,7 @@ private theorem hasEigenvalue_adjoint_compressed_stepOrbit
   have hcycle (k : Fin (m / m.gcd p)) :
       Kraus.transferMap (fun i => (C i)ᴴ) (v k) = v (k + 1) := by
     rw [show v k = Vᴴ * P (e (a, k)) * V from rfl,
-      adjoint_compressed_blockTensor_projection P hproj hsum A hA hshift p a C V hC hV k]
+      adjoint_compressed_block_projection P hproj hsum A hA hshift p a C V hC hV k]
     rw [← Fin.stepOrbitEquiv_add_one m p (Nat.pos_of_ne_zero (NeZero.ne m)) a k]
   have hlift (k : Fin (m / m.gcd p)) : V * v k * Vᴴ = P (e (a, k)) := by
     have hleft : (V * Vᴴ) * P (e (a, k)) = P (e (a, k)) := by
@@ -251,21 +250,21 @@ private theorem hasEigenvalue_adjoint_compressed_stepOrbit
 /-- Every prescribed orbit block has the full peripheral root set of order m/gcd(m,p).
 Source: arXiv:1708.00029, Lemma 6, the final spectral argument. This statement does not
 assert irreducibility or the multiplicities of these eigenvalues. -/
-theorem IsPeriodic.peripheral_compressed_stepOrbit_eq {d D m n : ℕ} [NeZero m]
-    {A : MPSTensor d D} (hA : IsPeriodic m A)
+theorem IsPeriodic.peripheral_compressed_stepOrbit_eq {α : Type*} [Fintype α] {D m n : ℕ} [NeZero m]
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
     (hne : ∀ u, P u ≠ 0) (hshift : ∀ u i, P u * A i = A i * P (u + 1))
     {p : ℕ} (hp : 0 < p) (a : Fin (m.gcd p))
-    (C : MPSTensor (blockPhysDim d p) n) (V : Matrix (Fin D) (Fin n) ℂ)
+    (C : MPTensor (Fin p → α) (Fin n)) (V : Matrix (Fin D) (Fin n) ℂ)
     (hiso : Vᴴ * V = 1) (hV : V * Vᴴ = stepOrbitProjection P p a)
-    (hC : ∀ i, C i = Vᴴ * blockTensor A p i * V) :
+    (hC : ∀ i, C i = Vᴴ * Kraus.block A p i * V) :
     peripheralEigenvalues (Kraus.transferMap C) = {z : ℂ | z ^ (m / m.gcd p) = 1} := by
   ext z
   constructor
   · intro hz
-    exact hA.peripheral_compressed_blockTensor hp C V hiso hC
-      (fun i => by rw [hV]; exact stepOrbitProjection_mul_blockTensor P A hshift p a i) hz
+    exact hA.peripheral_compressed_block hp C V hiso hC
+      (fun i => by rw [hV]; exact stepOrbitProjection_mul_block P A hshift p a i) hz
   · intro hz
     have hw : ((star z)⁻¹) ^ (m / m.gcd p) = 1 := by
       rw [inv_pow, ← star_pow, hz, star_one, inv_one]

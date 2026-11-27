@@ -20,7 +20,7 @@ compressed blocks are separate from these algebraic identities.
 
 ## Main results
 
-* `stepOrbitProjection_mul_blockTensor`: orbit sums commute with blocked letters.
+* `stepOrbitProjection_mul_block`: orbit sums commute with blocked letters.
 * `exists_stepOrbit_blockDecomposition`: compression gives nonzero left-canonical
   blocks of total dimension D and preserves the MPVs, including the empty word.
 
@@ -34,11 +34,10 @@ open MPTensor
 
 open scoped Matrix BigOperators
 open Fin.NatCast
-open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
 
 namespace MPSTensor
 
-variable {d D m : ℕ} [NeZero m]
+variable {α : Type*} [Fintype α] {D m : ℕ} [NeZero m]
 
 /-- Sum the cyclic projections along one step-p orbit.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, definition of tilde P. -/
@@ -114,8 +113,8 @@ theorem stepOrbitProjection_ne_zero
 /-- Step-p orbit projections commute with words of length p.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, paragraph after `lem:unique-dec`. -/
 theorem stepOrbitProjection_mul_evalWord (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (A : MPSTensor d D) (hshift : ∀ u i, P u * A i = A i * P (u + 1))
-    (p : ℕ) (a : Fin (m.gcd p)) (w : List (Fin d)) (hw : w.length = p) :
+    (A : MPTensor α (Fin D)) (hshift : ∀ u i, P u * A i = A i * P (u + 1))
+    (p : ℕ) (a : Fin (m.gcd p)) (w : List α) (hw : w.length = p) :
     stepOrbitProjection P p a * Kraus.evalWord A w =
       Kraus.evalWord A w * stepOrbitProjection P p a := by
   let : NeZero (m / m.gcd p) :=
@@ -130,29 +129,28 @@ theorem stepOrbitProjection_mul_evalWord (P : Fin m → Matrix (Fin D) (Fin D) �
 
 /-- The grouped cyclic projections commute with every p-blocked letter.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`. -/
-theorem stepOrbitProjection_mul_blockTensor (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (A : MPSTensor d D) (hshift : ∀ u i, P u * A i = A i * P (u + 1))
-    (p : ℕ) (a : Fin (m.gcd p)) (i : Fin (blockPhysDim d p)) :
-    stepOrbitProjection P p a * blockTensor A p i =
-      blockTensor A p i * stepOrbitProjection P p a :=
-  stepOrbitProjection_mul_evalWord P A hshift p a (wordOfBlock d p i) (length_wordOfBlock d p i)
+theorem stepOrbitProjection_mul_block (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (hshift : ∀ u i, P u * A i = A i * P (u + 1))
+    (p : ℕ) (a : Fin (m.gcd p)) (i : Fin p → α) :
+    stepOrbitProjection P p a * Kraus.block A p i =
+      Kraus.block A p i * stepOrbitProjection P p a :=
+  stepOrbitProjection_mul_evalWord P A hshift p a (List.ofFn i) (List.length_ofFn)
 
 /-- The blocked adjoint transfer map advances the original projectors by p steps.
 Source: arXiv:1708.00029, final display in the proof of `lem:blocking-arbitrary`. -/
-theorem adjoint_blockTensor_projection (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+theorem adjoint_block_projection (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (p : ℕ) (u : Fin m) :
-    Kraus.transferMap (fun i => (blockTensor A p i)ᴴ) (P u) = P (u + (p : Fin m)) := by
-  have hword (i : Fin (blockPhysDim d p)) :
-      P u * blockTensor A p i = blockTensor A p i * P (u + (p : Fin m)) := by
-    simpa only [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
+    Kraus.transferMap (fun i => (Kraus.block A p i)ᴴ) (P u) = P (u + (p : Fin m)) := by
+  have hword (i : Fin p → α) :
+      P u * Kraus.block A p i = Kraus.block A p i * P (u + (p : Fin m)) := by
+    simpa only [Kraus.block, Kraus.reindexPhysical, Kraus.block_apply,
       Kraus.decodeBlockEquiv_apply, wordOfBlock, List.length_ofFn, nsmul_one] using
-      projector_mul_evalWord_eq_evalWord_mul_projector P A hshift u (wordOfBlock d p i)
+      projector_mul_evalWord_eq_evalWord_mul_projector P A hshift u (List.ofFn i)
   simp only [Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose,
     Matrix.mul_assoc, hword]
-  have hTP : ∑ i, (blockTensor A p i)ᴴ * blockTensor A p i = 1 :=
-    (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
-      (Kraus.IsTP.block (A := A) hA p)
+  have hTP : ∑ i, (Kraus.block A p i)ᴴ * Kraus.block A p i = 1 :=
+    (Kraus.IsTP.block (A := A) hA p)
   simp only [← Matrix.mul_assoc, ← Finset.sum_mul, hTP, Matrix.one_mul]
 
 /-- Compress the step-orbit corners to nonzero left-canonical blocks without changing any MPV.
@@ -161,28 +159,27 @@ its final peripheral-spectrum argument. No irreducibility or period conclusion i
 theorem exists_stepOrbit_blockDecomposition
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
-    (hne : ∀ u, P u ≠ 0) (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (hne : ∀ u, P u ≠ 0) (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (p : ℕ) :
     ∃ (dim : Fin (m.gcd p) → ℕ)
-      (blocks : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+      (blocks : (a : Fin (m.gcd p)) → MPTensor (Fin p → α) (Fin (dim a)))
       (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ),
       (∀ a, 0 < dim a) ∧ (∑ a, dim a) = D ∧
       (∀ a, IsLeftCanonical (blocks a)) ∧
-      SameMPV₂ (blockTensor A p) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      SameMPV₂ (Kraus.block A p) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ a, (V a)ᴴ * V a = 1) ∧
       (∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a) ∧
-      (∀ a i, blocks a i = (V a)ᴴ * blockTensor A p i * V a) := by
+      (∀ a i, blocks a i = (V a)ᴴ * Kraus.block A p i * V a) := by
   obtain ⟨dim, blocks, φ, V, hTP, hSame, hTrace, hIntertwine, hMul, hStar,
     hLetter, hViso, hVrange, hEmbed⟩ :=
     exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
-      (blockTensor A p) (stepOrbitProjection P p)
+      (Kraus.block A p) (stepOrbitProjection P p)
       (stepOrbitProjection_isOrthogonalProjection P hproj hsum p)
       ((sum_stepOrbitProjection P p).trans hsum)
-      ((Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
-        (Kraus.IsTP.block (A := A) hA p))
-      (stepOrbitProjection_mul_blockTensor P A hshift p)
-  have hentries (a : Fin (m.gcd p)) (i : Fin (blockPhysDim d p)) :
-      blocks a i = (V a)ᴴ * blockTensor A p i * V a := by
+      ((Kraus.IsTP.block (A := A) hA p))
+      (stepOrbitProjection_mul_block P A hshift p)
+  have hentries (a : Fin (m.gcd p)) (i : Fin p → α) :
+      blocks a i = (V a)ᴴ * Kraus.block A p i * V a := by
     have h := congrArg (fun X => (V a)ᴴ * X * V a)
       ((hEmbed a (blocks a i)).symm.trans (hLetter a i))
     simp only [← hVrange, Matrix.mul_assoc, hViso, Matrix.mul_one] at h

@@ -80,7 +80,7 @@ lemma left_mul_evalWord_leftSectorTensor_of_commutes
     (P : MatrixAlg D) (A : MPTensor α (Fin D))
     (hPidem : P * P = P)
     (hComm : ∀ i : α, P * A i = A i * P) :
-    ∀ w : List (α),
+    ∀ w : List α,
       P * Kraus.evalWord (leftSectorTensor P A) w = P * Kraus.evalWord A w := by
   intro w
   induction w with
@@ -438,14 +438,14 @@ step per letter: evaluating a word of length `ℓ` carries index `k` to
 `k + ℓ·1` in `Fin m`.  This is the form contracted by the cyclic-transport step
 of arXiv:1708.00029 (eq:Aoffdiag iterated across a block): for a length-`m`
 word `ℓ·1 = 0`, recovering the same-index blocked commutation
-`commutes_letters_of_adjoint_fixed_projection` for `blockTensor A m`. -/
+`commutes_letters_of_adjoint_fixed_projection` for `Kraus.block A m`. -/
 theorem offDiag_shift_evalWord_of_adjoint_cyclic_shift [NeZero m]
     (A : MPTensor α (Fin D))
     (hLeft : ∑ i : α, (A i)ᴴ * A i = 1)
     {P : Fin m → MatrixAlg D}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hShift : ∀ k, Kraus.transferMap (ι := α) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (k : Fin m) (w : List (α)) :
+    (k : Fin m) (w : List α) :
     P (k + w.length • (1 : Fin m)) * Kraus.evalWord A w = Kraus.evalWord A w * P k := by
   induction w generalizing k with
   | nil => simp
