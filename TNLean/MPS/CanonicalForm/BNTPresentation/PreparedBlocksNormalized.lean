@@ -173,9 +173,9 @@ theorem norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (j : Fin (collapsedBntSectorDecomp (d := d) μ blocks hμne).basisCount)
-    (q : Fin ((collapsedBntSectorDecomp (d := d) μ blocks hμne).copies j)) :
-    ‖(collapsedBntSectorDecomp (d := d) μ blocks hμne).weight j q‖ =
+    (j : Fin (collapsedBntSectorDecomp (α := Fin d) μ blocks hμne).basisCount)
+    (q : Fin ((collapsedBntSectorDecomp (α := Fin d) μ blocks hμne).copies j)) :
+    ‖(collapsedBntSectorDecomp (α := Fin d) μ blocks hμne).weight j q‖ =
       ‖μ ((mpvPhaseClassData (α := Fin d) blocks).enum j q)‖ := by
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   set classes := mpvPhaseClassData (α := Fin d) blocks
@@ -240,10 +240,10 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
   -- The block properties do not involve the weights, so the normalized weights feed the
   -- prepared-block constructor directly.
   let ν : Fin r → ℂ := fun k => μ k / (m : ℂ)
-  let P := collapsedBntSectorDecomp (d := blockPhysDim d p) ν blocks hne
+  let P := collapsedBntSectorDecomp (α := Fin (blockPhysDim d p)) ν blocks hne
   have hSame : SameMPV₂Pos P.toTensor
       (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := ν) blocks) :=
-    collapsedBntSectorDecomp_sameMPV₂Pos (d := blockPhysDim d p) ν blocks hne
+    collapsedBntSectorDecomp_sameMPV₂Pos (α := Fin (blockPhysDim d p)) ν blocks hne
   have hNormP := norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
     ν blocks hDim hTP hPrim hIrr hne
   refine ⟨p, hp, m, hm, P,

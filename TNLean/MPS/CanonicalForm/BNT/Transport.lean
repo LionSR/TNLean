@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Transport of bases of normal tensors
@@ -64,5 +65,22 @@ theorem IsCPSVBasisOfNormalTensors.reindex
     change LinearIndependent ℂ
       ((fun j : Fin g₂ ↦ mpvState (α := α) (basis j).2 N) ∘ e)
     exact (linearIndependent_equiv e).mpr (hLI N hN)
+
+/-- A bijective relabelling of the physical alphabet preserves a basis of normal tensors.
+
+The three clauses of arXiv:1606.00608, lines 271--274, are invariant: normality, the spanning
+identities read at relabelled configurations, and linear independence of the relabelled states. -/
+theorem IsCPSVBasisOfNormalTensors.reindexPhysical {α' : Type*} [Fintype α']
+    {A : MPTensor α (Fin D₁)} {basis : (j : Fin g) → Σ Dj : ℕ, MPTensor α (Fin Dj)}
+    (hBNT : IsCPSVBasisOfNormalTensors A basis) (e : α' ≃ α) :
+    IsCPSVBasisOfNormalTensors (Kraus.reindexPhysical e A)
+      (fun j ↦ ⟨(basis j).1, Kraus.reindexPhysical e (basis j).2⟩) := by
+  refine ⟨fun j ↦ (hBNT.blocks_normal j).reindexPhysical e, ?_, ?_⟩
+  · intro N hN
+    obtain ⟨c, hc⟩ := hBNT.spans_mpv N hN
+    exact ⟨c, fun σ ↦ by simpa only [mpv_reindexPhysical] using hc fun n ↦ e (σ n)⟩
+  · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
+    exact ⟨N₀, fun N hN ↦
+      linearIndependent_mpvState_reindexPhysical_equiv e (fun j ↦ (basis j).2) (hLI N hN)⟩
 
 end MPSTensor

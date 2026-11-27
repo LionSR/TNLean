@@ -347,9 +347,9 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0) :
-    (collapsedBntSectorDecomp (d := d) μ blocks hμne).totalDim =
+    (collapsedBntSectorDecomp (α := Fin d) μ blocks hμne).totalDim =
       ∑ k : Fin r, dim k :=
-  collapsedBntSectorDecomp_totalDim_eq_sum_dim (d := d) μ blocks hμne
+  collapsedBntSectorDecomp_totalDim_eq_sum_dim (α := Fin d) μ blocks hμne
     (mpvPhaseClassData_dim_eq_of_tp_primitive_irr blocks hDim hTP hPrim hIrr)
 
 /-! ### Prepared-block SectorBNT constructor -/
@@ -376,11 +376,11 @@ theorem isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    IsLeftCanonicalBNTPresentation (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
+    IsLeftCanonicalBNTPresentation (collapsedBntSectorDecomp (α := Fin d) μ blocks hμne) := by
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   set classes := mpvPhaseClassData (α := Fin d) blocks with hclasses
-  set P := collapsedBntSectorDecomp (d := d) μ blocks hμne with hP
+  set P := collapsedBntSectorDecomp (α := Fin d) μ blocks hμne with hP
   have hBNT : HasBNTSectorData P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
   -- `P.basis j` is definitionally `blocks (classes.repr j)`.
@@ -412,8 +412,8 @@ theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks
     ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsLeftCanonicalBNTPresentation P := by
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_⟩
+  let P := collapsedBntSectorDecomp (α := Fin d) μ blocks hμne
+  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (α := Fin d) μ blocks hμne, ?_⟩
   exact isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne hr
 
@@ -435,8 +435,8 @@ theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks_and_tot
     ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsLeftCanonicalBNTPresentation P ∧ P.totalDim = ∑ k : Fin r, dim k := by
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_, ?_⟩
+  let P := collapsedBntSectorDecomp (α := Fin d) μ blocks hμne
+  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (α := Fin d) μ blocks hμne, ?_, ?_⟩
   · exact isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
       μ blocks hDim hTP hPrim hIrr hμne hr
   · exact collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr

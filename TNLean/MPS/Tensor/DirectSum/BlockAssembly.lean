@@ -269,13 +269,13 @@ closed-chain coefficients as the tensor on the retained space.
 The positive-length restriction is necessary because the tensors may have
 different bond dimensions, hence different length-zero traces. -/
 theorem sameMPV₂Pos_of_coisometry_reconstruction
-    {s d n : ℕ} (T : MPSTensor s d) (B : MPSTensor s n)
+    {κ : Type*} {d n : ℕ} (T : MPTensor κ (Fin d)) (B : MPTensor κ (Fin n))
     (U : Matrix (Fin n) (Fin d) ℂ)
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ v, T v = Uᴴ * B v * U) :
     SameMPV₂Pos T B := by
   mpv_ext
-  have hEval : ∀ (v : Fin s) (w : List (Fin s)),
+  have hEval : ∀ (v : κ) (w : List κ),
       Kraus.evalWord T (v :: w) = Uᴴ * Kraus.evalWord B (v :: w) * U := by
     intro v w
     induction w generalizing v with
