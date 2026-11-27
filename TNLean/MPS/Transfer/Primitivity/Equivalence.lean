@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.Irreducible.FromSpectral
 import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 import TNLean.MPS.Tensor
 
 /-!

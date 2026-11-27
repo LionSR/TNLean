@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableCommutator
 import TNLean.MPS.ParentHamiltonian.Continuity.NormalOpenGapAtWielandtRange
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableAlgebra

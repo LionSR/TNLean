@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BlockSeparation.PostBlockedRepresentativeSpan
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # Simultaneous word spans of primitive blocks

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.Transfer.Scaling
-import TNLean.MPS.CanonicalForm.BlockFamily
+import TNLean.MPS.CanonicalForm.BNT.Construction
 
 /-!
 # Normal canonical forms as period-one irreducible forms

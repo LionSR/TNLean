@@ -17,7 +17,7 @@ This file states the low-level consequences of a complementary fixed-point gap
 It does **not** prove that such a gap implies `Kraus.IsNormal`. The currently
 formalized route from complementary transfer-map gap primitivity to normality
 with an additional positive-definite fixed point hypothesis is assembled in
-`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`.
+`TNLean.MPS.Transfer.Primitivity.Definitions`.
 
 ## Main results
 

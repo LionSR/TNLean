@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWGeometricDefect
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.OpenChain
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # The open-chain C3 threshold

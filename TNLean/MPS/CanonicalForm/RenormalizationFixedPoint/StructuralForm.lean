@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
-import TNLean.MPS.CanonicalForm.BlockFamily
+import TNLean.MPS.CanonicalForm.BNT.Construction
 
 /-!
 # Structural form of RFP tensors

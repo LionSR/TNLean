@@ -7,7 +7,7 @@ import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # Canonical form existence reductions from the source proofs
@@ -63,7 +63,7 @@ fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 
-This file imports `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`,
+This file imports `TNLean.MPS.Transfer.Primitivity.Definitions`,
 which supplies the hardest direction of the Quantum Wielandt primitivity equivalence:
 
 > **Proposition 3(c)→(b) of arXiv:0909.5347 / Wolf Theorem 6.7 case (iii).**
@@ -81,7 +81,7 @@ positive length.
 
 The formal statement:
 
-> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves
+> `TNLean.MPS.Transfer.Primitivity.Definitions` proves
 > `Kraus.isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
 > transfer map is irreducible with peripheral spectrum `{1}` is normal.  This
 > is the hardest direction in the Sanz–Pérez-García–Wolf–Cirac primitivity

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.Projection.TwoProjectionCompression
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWAggregateOrthogonality
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.SpectatorBoundaryGram
-import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # FNW projector defect

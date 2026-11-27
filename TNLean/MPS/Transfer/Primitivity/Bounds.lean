@@ -69,7 +69,7 @@ them directly.
 
 This file is the preferred entry point for the currently formalized Theorem 1
 bounds. The positive-definite primitive-to-normal theorem lives in
-`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
+`TNLean.MPS.Transfer.Primitivity.Definitions`; it is not the
 Theorem 1 bound itself.
 
 The comparison `q(E_A) ≤ i(A)` of Proposition 1 is
