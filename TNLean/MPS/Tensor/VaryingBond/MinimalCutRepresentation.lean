@@ -15,9 +15,6 @@ spaces form an open-boundary chain. Composition of prefix evaluation maps
 proves exact coefficient reconstruction. The bond dimension at every cut
 is the rank of that physical coefficient flattening.
 
-The final existence theorem concerns nonzero tensors of positive length.
-It uses the existing open-boundary chain and its coefficient convention.
-
 Choosing orthonormal bases of the same column spaces gives the successive Schmidt decompositions
 of arXiv:quant-ph/0608197, lines 444--447: `OBCChainTensor.exists_coeff_eq_of_cutRank_le` is a
 representation whose bond `k` is exactly the cut rank at `k` and in which every site except the
@@ -213,21 +210,6 @@ theorem minimalCutChain_coeff {d N D : ℕ}
   apply cutPrefixChain_eval_entry ψ hψ B hB0 hBN
   intro k hk
   exact hbound ⟨k, by omega⟩
-
-/-- Every nonzero physical coefficient tensor of positive length whose cut
-ranks are bounded by D has an exact open-boundary representation with each
-bond dimension equal to its cut rank. No normalization or phase restriction
-is imposed on the coefficient tensor.
-Source: the minimal representation step in Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem exists_obcChainTensor_coeff_eq_bondDim_eq_cutRank {d N D : ℕ} (hN : 0 < N)
-    (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (hbound : ∀ k : Fin (N + 1), cutRank (interval N 0 k.val) ψ ≤ D) :
-    ∃ A : OBCChainTensor d D N,
-      (∀ k, A.bondDim k = cutRank (interval N 0 k.val) ψ) ∧ ∀ σ, A.coeff σ = ψ σ := by
-  obtain ⟨B, hB0, hBN⟩ := exists_cutBasisFamily_with_endpoints ψ hψ hN
-  exact ⟨minimalCutChain ψ hψ B hbound, (fun _ ↦ rfl),
-    minimalCutChain_coeff ψ hψ B hB0 hBN hbound⟩
 
 end MPSPreparation
 

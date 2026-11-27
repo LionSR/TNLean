@@ -76,9 +76,9 @@ theorem exists_minimal_obcChainTensor_of_unitary {d N D : ℕ}
       (∀ k, A.bondDim k = cutRank (interval N 0 k.val) (operatorCoefficientTensor U)) ∧
       ∀ x y : Fin N → Fin d,
         A.coeff (fun s ↦ finProdFinEquiv (x s, y s)) = U x y := by
-  obtain ⟨A, hA, hcoeff⟩ :=
-    MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutRank hN
-      (operatorCoefficientTensor U) (operatorCoefficientTensor_ne_zero hd U hU) hbound
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
+  obtain ⟨A, hcoeff, hA, -, -⟩ := OBCChainTensor.exists_coeff_eq_of_cutRank_le
+    (operatorCoefficientTensor_ne_zero hd U hU) hbound
   refine ⟨A, hA, fun x y ↦ ?_⟩
   rw [hcoeff, operatorCoefficientTensor_apply]
 

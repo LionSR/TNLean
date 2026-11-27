@@ -1422,22 +1422,6 @@ left multiplication, right vector $b$ and left functional the trace.
     column evaluates $\psi$.
 \end{proof}
 
-\begin{lemma}[Existence of a minimal finite-chain representation]
-    \label{thm:mpu_minimal_finite_chain_representation}
-    \lean{MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutRank}
-    \leanok
-    \uses{thm:mpu_minimal_cut_coordinate_reconstruction}
-    Every nonzero coefficient tensor on $N\geq1$ sites whose
-    consecutive physical cut ranks satisfy $r_k\leq D$ has an
-    exact open-boundary matrix-product representation with bond
-    dimension $r_k$ at each cut.
-\end{lemma}
-\begin{proof}\leanok
-    In the chain of coordinate slices with the endpoint bases fixed
-    above, the bond dimensions are the physical cut ranks by construction,
-    and reconstruction gives every coefficient.
-\end{proof}
-
 \begin{definition}[Prefix and suffix factors at a physical cut]
     \label{def:mpu_minimal_cut_factors}
     \lean{MPSPreparation.cutPrefixMatrix, MPSPreparation.cutSuffixMatrix}
@@ -1452,7 +1436,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_minimal_cut_factors}
     \lean{MPSPreparation.cutMatrix_eq_prefix_mul_suffix, MPSPreparation.cutPrefixMatrix_rank, MPSPreparation.cutSuffixMatrix_rank, MPSPreparation.cutPrefixMatrix_rows_and_cutSuffixMatrix_cols_span, MPSPreparation.cutPrefixMatrix_step, MPSPreparation.cutSlice_column, MPSPreparation.cutSuffixMatrix_step, MPSPreparation.minimalCutChain_cutMatrix_factorization, MPSPreparation.cutPrefixMatrix_zero, MPSPreparation.cutSuffixMatrix_last, MPSPreparation.exists_obcChainTensor_minimal_factorizations}
     \leanok
-    \uses{def:mpu_minimal_cut_factors,thm:mpu_minimal_finite_chain_representation}
+    \uses{def:mpu_minimal_cut_factors,thm:seqanc_cut_rank_attained}
     At every cut, $C_k=F_kG_k$ and
     $\operatorname{rank}F_k=\operatorname{rank}G_k=r_k$.
     The prefix rows and suffix columns both span the bond space.
@@ -1773,7 +1757,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_minimal_physical_unitary_cuts}
     \lean{MPUCircuit.exists_minimal_obcChainTensor_of_unitary, MPUCircuit.operatorCoefficientTensor_apply, MPUCircuit.operatorCoefficientTensor_ne_zero, MPUCircuit.cutEquiv_symm_pairPhysicalConfig}
     \leanok
-    \uses{def:mpu_paired_operator_coefficients,thm:mpu_minimal_finite_chain_representation}
+    \uses{def:mpu_paired_operator_coefficients,thm:seqanc_cut_rank_attained}
     Pairing and splitting commute, and the paired tensor recovers
     every original operator entry. A finite unitary on a positive
     physical alphabet has a nonzero coefficient tensor. If its
