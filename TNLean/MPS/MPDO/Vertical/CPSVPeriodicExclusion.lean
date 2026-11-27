@@ -35,9 +35,9 @@ by matrix-product-vector phase class.
 
 ### Main statement
 
-* `MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner`:
+* `MPTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner`:
   every nonzero vertical corner has a nonzero finite-chain compression.
-* `MPSTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`:
+* `MPTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`:
   the literal vertical sectors grouped into BNT representatives with positive
   coefficients.
 
@@ -51,7 +51,9 @@ section
 
 open scoped Matrix BigOperators ComplexOrder
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 open MPOTensor
 
@@ -81,7 +83,7 @@ theorem exists_not_commute_of_displaced
   exact exists_not_commute_of_displaced_of_insertedTensor_eq M
     (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M.toMPSTensor) hQidem hdisp
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 namespace MPOTensor
 
@@ -104,14 +106,16 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm
     (M : MPOTensor d D)
     (hM : M.IsMPDO)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) :
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
   exact hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced M hM
     fun hQidem hdisp => hCanonical.exists_not_commute_of_displaced M hQidem hdisp
 
 end MPOTensor
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 open MPOTensor
 
@@ -157,7 +161,7 @@ theorem exists_normal_verticalBlockDecomp_with_isometry
   exact ⟨r, dim, μ, blocks, V, hdim, hμ, hnormal, hiso, horth,
     hintertwine, hintertwineStar, hcorner, hreconstruct⟩
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 end
 
@@ -165,7 +169,9 @@ section
 
 open scoped Matrix
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 variable {d D : ℕ}
 
@@ -180,7 +186,7 @@ of Proposition 4.13 of arXiv:1606.00608, lines 1898--1902, using Appendix C.3,
 Lemma L, lines 1835--1858. -/
 theorem exists_sectorCompression_ne_zero_of_corner
     (M : MPOTensor d D)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hcorner : ∃ v, P * MPOTensor.verticalTensor M v * P ≠ 0) :
     ∃ N, MPOTensor.sectorCompression M P N ≠ 0 := by
@@ -202,13 +208,13 @@ without a canonical-form hypothesis in
 `MPOTensor.verticalCF_of_cpsvCanonicalForm`. -/
 theorem exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : MPOTensor.IsMPDO M) :
     MPOTensor.HasVerticalBNTGroupingWithIsometry M := by
   exact MPOTensor.exists_verticalBNTGrouping_with_isometry_of_decomposition M hM
     (hCanonical.exists_normal_verticalBlockDecomp_with_isometry M hM)
     (hCanonical.exists_sectorCompression_ne_zero_of_corner M)
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 end

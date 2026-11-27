@@ -45,6 +45,8 @@ It also contains the following results.
   open-chain gaps for positive parent interactions.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder
 
 namespace MPSTensor
@@ -68,12 +70,12 @@ theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_
     (hR : S + 1 ≤ R) {x₀ : X} {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-          (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ x₀) (A x₀)) R
+          (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x₀) (A x₀)) R
               N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ x in 𝓝 x₀, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-          (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R
+          (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R
               N).hamiltonian) z →
         z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨n, hn⟩ := exists_lt_nsmul (half_pos hγ) (((R : ℝ) - 1) ^ 2)
@@ -92,7 +94,7 @@ theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_
     ((m : ℝ) - R + 1), div_pos (sub_pos.mpr hnum) hden, ?_⟩
   filter_upwards [hnear] with x hx N hN
   exact (hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
-    (toTensorFromBlocks (d := d) (μ := μ x) (A x)) (by omega) hmR hnum hx).2 N hN
+    (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) (by omega) hmR hnum hx).2 N hN
 
 /-- A compact continuous family of simultaneously injective blocks has one
 positive canonical open-chain gap uniform in the parameter and every chain
@@ -110,13 +112,13 @@ theorem
     (hR : S + 1 ≤ R) {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-          (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R
+          (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R
               N).hamiltonian) z →
         z = 0 ∨ (δ : ℂ) ≤ z := by
   have hlocal : ∀ x ∈ K, ∃ δ : ℝ, 0 < δ ∧ ∃ n : ℕ,
       ∀ᶠ y in 𝓝 x, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-            (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ y) (A y)) R
+            (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ y) (A y)) R
                 N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
     intro x _
@@ -128,7 +130,7 @@ theorem
   obtain ⟨δ, hδ, _, hgap⟩ := hK.exists_uniform_pos_nat_bounds
     (fun δ _ x ↦ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-          (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R
+          (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R
               N).hamiltonian) z →
         z = 0 ∨ (δ : ℂ) ≤ z)
     (fun {_δ _δ' _n _x} hle hgap N hN ↦ ManyBody.forall_hasEigenvalue_mono hle (hgap N hN))
@@ -151,7 +153,7 @@ theorem exists_uniform_block_hamiltonian_parentChainInteraction_gap_of_compact_i
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-            (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R
+            (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R
                 N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   classical
@@ -220,7 +222,7 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact
     (hR : S + 1 ≤ R)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
+      (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
@@ -232,7 +234,7 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact
     exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_compact_all_lengths
       μ A hμ hA hS hSpan hR hK
   exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
-    (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
+    (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
     H hH hParent hK hγ hGap
 
@@ -253,7 +255,7 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor
     (hR : 3 * (max (∑ j, dim j) 1) ^ 5 ≤ R)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
+      (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
@@ -276,7 +278,7 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor
     exists_uniform_block_hamiltonian_parentChainInteraction_gap_of_compact_isNormalTensor
       μ A hμ hA hNormal hDistinct hR hK
   exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
-    (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
+    (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
     H hH hParent hK hγ hGap
 

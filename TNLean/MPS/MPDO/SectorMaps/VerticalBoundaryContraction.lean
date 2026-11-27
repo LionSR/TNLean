@@ -30,6 +30,8 @@ form.
   Appendix C.4, lines 1955--1979.
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix
 
 noncomputable section

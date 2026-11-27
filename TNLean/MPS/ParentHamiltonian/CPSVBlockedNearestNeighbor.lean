@@ -23,7 +23,7 @@ ring. The distinction is documented in
 
 ## Main result
 
-* `MPSTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian`
+* `MPTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian`
 
 ## References
 
@@ -32,6 +32,8 @@ ring. The distinction is documented in
 * Perez-Garcia--Verstraete--Wolf--Cirac, arXiv:quant-ph/0608197, Theorem 12,
   proof lines 1424--1456.
 -/
+
+open MPTensor
 
 open Kraus (blockPhysDim blockPhysDim_eq_pow)
 
@@ -50,7 +52,7 @@ of the blocked ambient tensor, as required by Definition 3.9.
 This is the blocked-lattice statement in arXiv:1606.00608, line 527, using
 Proposition `propblockinj` (lines 342--345) and Definition 3.9
 (lines 511--525). -/
-theorem IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian
+theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian
     {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
       ∃ B : (j : Fin g) → MPSTensor d (dim j),
@@ -101,19 +103,19 @@ theorem IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltoni
       ⟨(hBNT.blocks_normal j).bondDim_ne_zero⟩
     have hDirect :
         HasParentHamiltonianGroundSpaceSpanning
-          (toTensorFromBlocks (d := blockPhysDim d p) (fun _ ↦ 1) blocks) 2 blocks := by
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (fun _ ↦ 1) blocks) 2 blocks := by
       exact
         hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one
           (fun _ ↦ 1) blocks (by simp) hOne
     have hDirectLocal :
         groundSpace
-            (toTensorFromBlocks (d := blockPhysDim d p) (fun _ ↦ 1) blocks) 2 =
+            (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (fun _ ↦ 1) blocks) 2 =
           ⨆ j : Fin data.phaseClasses.g, groundSpace (blocks j) 2 :=
       groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) blocks (by simp) 2
     have hActualDirect :
         groundSpace (Kraus.blockTensor A p) 2 =
           groundSpace
-            (toTensorFromBlocks (d := blockPhysDim d p) (fun _ ↦ 1) blocks) 2 := by
+            (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (fun _ ↦ 1) blocks) 2 := by
       exact hLocal.trans hDirectLocal.symm
     exact hDirect.of_groundSpace_eq hActualDirect
 

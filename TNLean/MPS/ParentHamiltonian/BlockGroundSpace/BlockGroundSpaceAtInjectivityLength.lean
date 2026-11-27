@@ -45,6 +45,8 @@ specified by the preceding intersection argument, lines 2044--2094; the
 simultaneous injectivity length need not equal an individual block's C1 length.
 -/
 
+open MPTensor
+
 section
 
 namespace MPSTensor
@@ -125,12 +127,12 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_trace
     {S L N : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
     LinearMap.ker
-        (parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
+        (parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
   have hSpans : ∀ n ≥ S, WordTupleSpanTop A n := fun n hn ↦
     wordTupleSpanTop_of_ge_of_tracePreserving A hSpan hTP hn
-  have hOpen : chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
-      groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+  have hOpen : chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
+      groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N := by
     intro φ hφ
     apply contiguous_mem_groundSpace_toTensorFromBlocks μ A hμ hTP hSpans hSL hLN
     intro k hk τ
@@ -146,7 +148,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_trace
     (hSpans (N - 1) (by omega)) ψ
   intro i
   have hcyclic := cyclicTranslateState_mem_chainGroundSpace
-    (toTensorFromBlocks (d := d) (μ := μ) A) (by omega) hLN i
+    (toTensorFromBlocks (α := Fin d) (μ := μ) A) (by omega) hLN i
     (ker_parentHamiltonian_le_chainGroundSpace _ (by omega) hLN hψ)
   obtain ⟨X, hX⟩ := hOpen hcyclic
   refine ⟨fun j ↦ (μ j) ^ N • Matrix.finSigmaDiagonalBlock X j, ?_⟩
@@ -176,7 +178,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
       bntMPSVectorSpan A N := by
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hHam, hBNT⟩ :=
     exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_wordTupleSpanTop
@@ -193,7 +195,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
-    LinearMap.ker (parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
+    LinearMap.ker (parentHamiltonian (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
   rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hLN]
   exact chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hSL hLN

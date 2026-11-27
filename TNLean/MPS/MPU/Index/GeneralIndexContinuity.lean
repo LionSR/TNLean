@@ -383,8 +383,8 @@ theorem IsMPU.sourceRanks_canonicalForm_blockTensor_const [NeZero d]
     {W : unitInterval → MPOTensor d D} (hW : Continuous W) (hMPU : ∀ x, IsMPU (W x))
     {k : ℕ} (hk : D * D ≤ k) {x y : unitInterval} {Dx Dy : ℕ}
     {Ux : MPOTensor d Dx} {Uy : MPOTensor d Dy}
-    (hUx : IsMPU Ux) (hcfx : MPSTensor.IsMPUCanonicalForm Ux.toMPSTensor)
-    (hUy : IsMPU Uy) (hcfy : MPSTensor.IsMPUCanonicalForm Uy.toMPSTensor)
+    (hUx : IsMPU Ux) (hcfx : MPTensor.IsMPUCanonicalForm Ux.toMPSTensor)
+    (hUy : IsMPU Uy) (hcfy : MPTensor.IsMPUCanonicalForm Uy.toMPSTensor)
     (hx : ∀ N, 0 < N → mpo Ux N = mpo (W x) N)
     (hy : ∀ N, 0 < N → mpo Uy N = mpo (W y) N) :
     r[MPOTensor.blockTensor Ux k] = r[MPOTensor.blockTensor Uy k] ∧

@@ -184,9 +184,9 @@ theorem isIrreducibleFamily_normalizedDiagonalLift
 
 /-- A nonempty normalized diagonal lift preserves normal tensors. -/
 theorem isNormalTensor_normalizedDiagonalLift
-    {A : MPSTensor (d * d) D} (hA : MPSTensor.IsNormalTensor A)
+    {A : MPSTensor (d * d) D} (hA : MPTensor.IsNormalTensor A)
     (x : ℕ) (hx : 0 < x) :
-    MPSTensor.IsNormalTensor (normalizedDiagonalLift A x) := by
+    MPTensor.IsNormalTensor (normalizedDiagonalLift A x) := by
   refine ⟨isIrreducibleFamily_normalizedDiagonalLift A x hx hA.no_invariant_proj, ?_, ?_⟩
   · rw [transferMap_normalizedDiagonalLift A x hx]
     exact hA.spectral_radius_one
@@ -284,7 +284,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
     · subst b
       simp only [normalizedDiagonalLift_apply]
       rw [data.reconstruct ij]
-      simp only [MPSTensor.toTensorFromBlocks]
+      simp only [MPTensor.toTensorFromBlocks]
       simp only [normalizedDiagonalLift_apply, ite_eq_left]
       rw [show (fun k ↦ data.weights k • ((Real.sqrt x : ℂ)⁻¹ • data.blocks k ij)) =
           ((Real.sqrt x : ℂ)⁻¹) •
@@ -293,7 +293,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
         simp [smul_smul, mul_comm]]
       rw [Matrix.blockDiagonal'_smul]
       simp [Matrix.submatrix_smul, Matrix.mul_smul, Matrix.smul_mul]
-    · simp only [normalizedDiagonalLift_apply, ite_eq_right hab, MPSTensor.toTensorFromBlocks,
+    · simp only [normalizedDiagonalLift_apply, ite_eq_right hab, MPTensor.toTensorFromBlocks,
         smul_zero]
       rw [show (fun _ : Fin data.r ↦
           (0 : Matrix (Fin (data.dim _)) (Fin (data.dim _)) ℂ)) = 0 by rfl,
@@ -348,7 +348,7 @@ theorem hasFullSupport_tensorPhysicalIdCFIIData (U : MPOTensor d D)
     hasFullSupport_normalizedDiagonalLiftCFIIData data hfull x hx
   let shuffled := lifted.reindexPhysical (finDoubledProdEquiv d x)
   have hshuffle : shuffled.toCPSVCanonicalFormData.HasFullSupport :=
-    MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
+    MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
       lifted.toCPSVCanonicalFormData hlift (finDoubledProdEquiv d x)
   exact shuffled.hasFullSupport_cast hshuffle
     (normalizedFlattening_tensorPhysicalId U x hx)

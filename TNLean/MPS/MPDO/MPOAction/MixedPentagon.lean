@@ -332,9 +332,9 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
     {B : MPSTensor d (∑ x : Fin s, D x)}
     (hClosed : IsBoundaryClosed T) (hCompatible : IsBoundaryCompatible T B)
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hT : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1)
+    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun a ↦ (O a).toMPSTensor))
-    (hB : B = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (hB : B = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)

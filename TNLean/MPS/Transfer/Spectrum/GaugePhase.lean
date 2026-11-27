@@ -370,8 +370,8 @@ which is applied directly where blocks of differing dimension arise. Documented
 in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
-    (hA_irr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
-    (hB_irr : Kraus.IsIrreducibleFamily (d := d) (D := D) B)
+    (hA_irr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+    (hB_irr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hOverlap :

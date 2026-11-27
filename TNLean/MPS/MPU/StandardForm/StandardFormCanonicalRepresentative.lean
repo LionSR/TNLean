@@ -37,6 +37,8 @@ transfer map gives a canonical block.
   `standardFormTensorOfGates u v`.
 -/
 
+open MPTensor
+
 open scoped Matrix
 open Matrix
 
@@ -155,7 +157,7 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ) (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween) :
     ∃ (K : ℕ) (W : MPOTensor (d * d) K),
-      MPSTensor.IsMPUCanonicalForm W.toMPSTensor ∧ Nonempty (TwoSiteStandardFormData W u v) ∧
+      MPTensor.IsMPUCanonicalForm W.toMPSTensor ∧ Nonempty (TwoSiteStandardFormData W u v) ∧
         ∀ N : ℕ, 0 < N → mpo W N = mpo (standardFormTensorOfGates u v) N := by
   classical
   set V := shiftedGateCut v

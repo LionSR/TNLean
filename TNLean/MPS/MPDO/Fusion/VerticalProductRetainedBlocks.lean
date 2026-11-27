@@ -545,7 +545,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
         Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim k)) ℂ),
       (∀ k, 0 < localDim k) ∧
       (∀ k, (0 : ℂ) < coefficient k) ∧
-      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
       (∀ (k : Fin r) (ab : Fin (D * D)),
@@ -562,7 +562,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
           ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
       MPTensor.SameMPV₂Pos
         (weightedVerticalProductBlock dim mult weight B p)
-        (MPSTensor.toTensorFromBlocks (d := D * D)
+        (MPTensor.toTensorFromBlocks (α := Fin (D * D))
           (μ := coefficient) blocks) ∧
       (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
   have hCanonical :=
@@ -597,7 +597,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
         Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim k)) ℂ),
       (∀ k, 0 < localDim k) ∧
       (∀ k, (0 : ℂ) < coefficient k) ∧
-      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
       (∀ (k : Fin r) (ab : Fin (D * D)),
@@ -614,7 +614,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
           ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
       MPTensor.SameMPV₂Pos
         (weightedVerticalProductBlock dim mult weight B p)
-        (MPSTensor.toTensorFromBlocks (d := D * D)
+        (MPTensor.toTensorFromBlocks (α := Fin (D * D))
           (μ := coefficient) blocks) ∧
       (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
   have hHorizontalTwo := hHorizontal.blockTwo

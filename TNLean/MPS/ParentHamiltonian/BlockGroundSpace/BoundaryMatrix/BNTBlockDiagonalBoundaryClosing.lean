@@ -185,15 +185,15 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
     (hL₀ : 0 < L₀) [NeZero d]
     (hN : 0 < N) (hLN : L ≤ N) (hL₀N : L₀ ≤ N)
     (hOpenBoundary : ∀ {φ : NSiteSpace d N},
-      φ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+      φ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
         ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          φ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          φ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hSpan : WordTupleSpanTop A (N - L₀))
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -202,14 +202,14 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
   let s : Fin N := ⟨N - L₀, by omega⟩
   have hTranslate :
       cyclicTranslateState s ψ ∈
-        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N :=
+        chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N :=
     cyclicTranslateState_mem_chainGroundSpace
-      (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN s hψ
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) hN hLN s hψ
   obtain ⟨Y, hψY⟩ := hOpenBoundary hTranslate
   have hXsum :
       ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
     calc
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
             (Matrix.blockDiagonal' X)) := hψX
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
@@ -219,7 +219,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
         ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
     calc
       cyclicTranslateState s ψ =
-          groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
               (Matrix.blockDiagonal' Y)) := hψY
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
@@ -289,9 +289,9 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -339,9 +339,9 @@ theorem
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -388,13 +388,13 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
   have hClose :
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
@@ -433,7 +433,7 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N :=
   (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
     μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
@@ -468,7 +468,7 @@ theorem
     (hBlock : ∀ j : Fin r,
       chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
     LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (d := d) (μ := μ) A) L N) ≤
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
       bntMPSVectorSpan A N := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
@@ -505,7 +505,7 @@ theorem
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
     LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
   have hL : L₀ < L := by
     calc
@@ -560,7 +560,7 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
   apply
@@ -592,7 +592,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   exact
     (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
@@ -625,7 +625,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
     (hBlock : ∀ j : Fin r,
       chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
     LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (d := d) (μ := μ) A) L N) ≤
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) ≤
       bntMPSVectorSpan A N := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
@@ -666,7 +666,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
     LinearMap.ker (parentHamiltonian
-      (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
   apply
     ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint

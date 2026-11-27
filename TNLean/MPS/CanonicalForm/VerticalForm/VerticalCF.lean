@@ -349,8 +349,8 @@ original configuration. -/
 theorem mpv_toTensorFromBlocks_diag {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
     {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (d := d * d) (μ := μ) A) (fun k => finProdFinEquiv (σ k, σ k))
-      = mpv (toTensorFromBlocks (d := d) (μ := μ) (fun k => diagBlock (A k))) σ := by
+    mpv (toTensorFromBlocks (α := Fin (d * d)) (μ := μ) A) (fun k => finProdFinEquiv (σ k, σ k))
+      = mpv (toTensorFromBlocks (α := Fin d) (μ := μ) (fun k => diagBlock (A k))) σ := by
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
   congr 1
@@ -441,10 +441,10 @@ theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
     (hM : MPTensor.SameMPV₂Pos M.toMPSTensor
-      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
+      (MPTensor.toTensorFromBlocks (α := Fin (d * d)) (μ := μ) A))
     {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
     MPTensor.mpv (diagonalTensor M) σ
-      = MPTensor.mpv (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
+      = MPTensor.mpv (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ)
           (fun k => MPSTensor.diagBlock (A k))) σ := by
   rw [mpv_diagonalTensor, hM N hN, MPSTensor.mpv_toTensorFromBlocks_diag]
 
@@ -551,7 +551,7 @@ noncomputable def verticalAssembledTensor {g : ℕ}
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (A : (α : Fin g) → MPSTensor d (dim α)) :
     MPSTensor d (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) :=
-  MPSTensor.toTensorFromBlocks
+  MPTensor.toTensorFromBlocks
     (μ := verticalCopyWeights mult ω)
     (A := verticalCopyBlocks dim mult A)
 
@@ -637,7 +637,7 @@ theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv
     (hWeight : ∀ k, μ k = ω (e k).1 (e k).2)
     (hBlock : ∀ k, MPTensor.SameMPV₂Pos (B k) (A (e k).1)) :
     MPTensor.SameMPV₂Pos
-      (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) B)
+      (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ) B)
       (verticalAssembledTensor dim mult ω A) := by
   intro N hN σ
   rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]

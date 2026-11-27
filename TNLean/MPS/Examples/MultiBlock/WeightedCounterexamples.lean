@@ -34,11 +34,11 @@ namespace ArbitraryExamples
 
 /-- `A = C ⊕ C`. -/
 noncomputable def depA : MPSTensor 2 (∑ _k : Fin 2, 2) :=
-  toTensorFromBlocks (d := 2) (dim := fun _ => 2) ![1, 1] fun _ => propC
+  toTensorFromBlocks (α := Fin 2) (dim := fun _ => 2) ![1, 1] fun _ => propC
 
 /-- `B = C ⊕ (-C)`. -/
 noncomputable def depB : MPSTensor 2 (∑ _k : Fin 2, 2) :=
-  toTensorFromBlocks (d := 2) (dim := fun _ => 2) ![1, -1] fun _ => propC
+  toTensorFromBlocks (α := Fin 2) (dim := fun _ => 2) ![1, -1] fun _ => propC
 
 private theorem mpv_depA {N : ℕ} (σ : Fin N → Fin 2) : mpv depA σ = 2 * mpv propC σ := by
   rw [depA, mpv_toTensorFromBlocks_eq_sum, Fin.sum_univ_two]
@@ -99,11 +99,11 @@ noncomputable def propD : MPSTensor 2 2 := ![!![1, 0; 1, 1], !![0, 1; 3, 0]]
 
 /-- `A = C ⊕ 2C ⊕ D ⊕ 8D`. -/
 noncomputable def commonA : MPSTensor 2 (∑ _k : Fin 4, 2) :=
-  toTensorFromBlocks (d := 2) (dim := fun _ => 2) ![1, 2, 1, 8] ![propC, propC, propD, propD]
+  toTensorFromBlocks (α := Fin 2) (dim := fun _ => 2) ![1, 2, 1, 8] ![propC, propC, propD, propD]
 
 /-- `B = C ⊕ 2C ⊕ 4C ⊕ D ⊕ 4D ⊕ 16D`. -/
 noncomputable def commonB : MPSTensor 2 (∑ _k : Fin 6, 2) :=
-  toTensorFromBlocks (d := 2) (dim := fun _ => 2) ![1, 2, 4, 1, 4, 16]
+  toTensorFromBlocks (α := Fin 2) (dim := fun _ => 2) ![1, 2, 4, 1, 4, 16]
     ![propC, propC, propC, propD, propD, propD]
 
 /-- A tensor on `ℂ²` is irreducible if the letters give a map `(x, y) ↦ (0, x)` and a map sending

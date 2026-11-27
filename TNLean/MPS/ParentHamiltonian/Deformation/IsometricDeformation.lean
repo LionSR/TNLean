@@ -30,6 +30,8 @@ and Appendix A. The one-site simultaneous span is the source's initial
 blocking assumption.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder
 open Kraus (blockTensor)
 

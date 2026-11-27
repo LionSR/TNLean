@@ -70,7 +70,7 @@ theorem collapsedBntSectorDecomp_sameMPV₂Pos
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hμne : ∀ k, μ k ≠ 0) :
     SameMPV₂Pos (collapsedBntSectorDecomp (d := d) μ blocks hμne).toTensor
-      (toTensorFromBlocks (d := d) (μ := μ) blocks) := by
+      (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) := by
   classical
   let classes := mpvPhaseClassData blocks
   let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
@@ -98,7 +98,7 @@ theorem collapsedBntSectorDecomp_sameMPV₂Pos
             ring
     _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
           classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
-    _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+    _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) σ := by
             symm
             simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 

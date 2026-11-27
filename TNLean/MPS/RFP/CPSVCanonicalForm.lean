@@ -55,7 +55,7 @@ structure back. The reverse implication is
 positive and trace-normalized, rather than the bare `Λ` in the source display.
 This correction is documented in
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm
+theorem _root_.MPTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm
     {A : MPSTensor d D} (hNT : IsNormalTensor A) :
     IsTransferIdempotent A ↔ IsIsometryCanonicalForm A := by
   let : NeZero D := ⟨hNT.bondDim_ne_zero⟩
@@ -212,14 +212,16 @@ private theorem gaugePhaseEquiv_of_smul
         Algebra.smul_mul_assoc]
       rw [← mul_assoc]
 
-namespace CPSVCanonicalFormData
+section CPSVCanonicalFormData
+
+open MPTensor.CPSVCanonicalFormData
 
 /-- Every listed block of a literal CPSV canonical-form renormalization fixed point has
 unit-modulus weight and is itself a renormalization fixed point.
 
 This is the block consequence of arXiv:1606.00608, Corollary 3.12, lines 583--590,
 with the proof observation at line 1303. -/
-theorem weight_norm_one_and_block_rfp
+theorem _root_.MPTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp
     (data : CPSVCanonicalFormData A) (hRFP : IsTransferIdempotent A)
     (k : Fin data.r) :
     ‖data.weights k‖ = 1 ∧ IsTransferIdempotent (data.blocks k) := by
@@ -240,8 +242,11 @@ theorem weight_norm_one_and_block_rfp
     (data.blocks k) (data.blocks_normal k) (data.weights k) (data.weights_ne_zero k)
     hScaledBlock
 
-namespace BNTRefinement
+section BNTRefinement
 
+open MPTensor.CPSVCanonicalFormData.BNTRefinement
+
+set_option linter.style.longLine false in
 /-- The chosen phase-class representatives of a literal CPSV canonical-form
 renormalization fixed point have simultaneous square-root isometry canonical forms, and their
 residual tensors satisfy the full joint residual-isometry equation.
@@ -253,7 +258,8 @@ the empty family.
 
 The square-root diagonal follows TNLean's corrected convention for arXiv:1606.00608,
 Corollary `III.cor3`, lines 583--590; see `IsIsometryCanonicalForm`. -/
-theorem exists_residualIsometryFamily_of_isTransferIdempotent
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent
     {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement)
     (hRFP : IsTransferIdempotent A) :
     ∃ (X : (j : Fin data.phaseClasses.g) →
@@ -346,14 +352,18 @@ end BNTRefinement
 
 end CPSVCanonicalFormData
 
-namespace IsCPSVCanonicalForm
+section IsCPSVCanonicalForm
 
+open MPTensor.IsCPSVCanonicalForm
+
+set_option linter.style.longLine false in
 /-- Predicate-level form of Corollary 3.12: for the canonical witness data and its chosen BNT
 refinement, the representative blocks possess simultaneous square-root isometry forms with a
 joint residual-isometry family.
 
 Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590. -/
-theorem exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent
+theorem
+    _root_.MPTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent
     (hCF : IsCPSVCanonicalForm A) (hRFP : IsTransferIdempotent A) :
     ∃ (X : (j : Fin hCF.data.phaseClasses.g) →
         Matrix (Fin (hCF.data.dim (hCF.data.representativeIndex j)))

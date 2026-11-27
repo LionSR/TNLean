@@ -195,8 +195,8 @@ theorem sectors_wordTupleSpanTop_one
 /-- Both representatives displayed by the ambient decomposition are normal. -/
 theorem sectors_basis_isNormalTensor
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hBNormal : MPSTensor.IsNormalTensor B) :
-    ∀ j, MPSTensor.IsNormalTensor ((sectors mu B hmu).basis j) := by
+    (hBNormal : MPTensor.IsNormalTensor B) :
+    ∀ j, MPTensor.IsNormalTensor ((sectors mu B hmu).basis j) := by
   intro j
   change Fin 2 at j
   fin_cases j
@@ -816,7 +816,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
-      MPSTensor.IsNormalTensor B ∧
+      MPTensor.IsNormalTensor B ∧
       MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
@@ -827,7 +827,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       IsSimple K ∧
       MPSTensor.IsBNTCanonicalForm S ∧
       MPSTensor.WordTupleSpanTop S.basis 1 ∧
-      (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
+      (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
       K.toMPSTensor = S.toTensor ∧
       (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
         S.weight j q = S.weight j q') ∧
@@ -895,7 +895,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
-      MPSTensor.IsNormalTensor B ∧
+      MPTensor.IsNormalTensor B ∧
       MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
       let K := ambient mu B hmu
@@ -906,7 +906,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
         IsSimple K ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
-        (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
+        (∀ j, MPTensor.IsNormalTensor (S.basis j)) ∧
         K.toMPSTensor = S.toTensor ∧
         (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q') ∧

@@ -25,7 +25,7 @@ and the transfer-map fixed-point equations used in canonical forms.
 * `MPSTensor.transferMap_mapStar_eq_entrywiseConjTransport`: conjugating the tensor
   conjugates its transfer map anti-linearly, as an operator identity.
 * `Kraus.IsIrreducibleFamily.mapStar`: conjugation preserves irreducibility.
-* `MPSTensor.IsNormalTensor.mapStar`: conjugation preserves normalized normal tensors.
+* `MPTensor.IsNormalTensor.mapStar`: conjugation preserves normalized normal tensors.
 -/
 
 open MPTensor
@@ -229,7 +229,7 @@ transfer map anti-linearly, which conjugates its spectrum, preserves its spectra
 preserves primitivity, and preserves irreducibility. This transports both clauses of the
 normal-tensor definition of arXiv:1606.00608, lines 224--235, across entrywise
 conjugation. -/
-theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
+theorem _root_.MPTensor.IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
     IsNormalTensor (mapStar A) where
   no_invariant_proj := hA.no_invariant_proj.mapStar
   spectral_radius_one := by

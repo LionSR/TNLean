@@ -152,21 +152,21 @@ is deliberately source-faithful.
   `Papers/2011.12127/TN-Review-main.tex:1815-1830`.
 - **Sanctioned bridges:**
   `Kraus.IsInjective.isNormal` and
-  `MPSTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
+  `MPTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
   rank" of arXiv:0909.5347, clause (b) of `MPSTensor.primitivity_tfae`.
   `MPSTensor.normality_tfae` (for `[NeZero D]`, no normalization) gives the
   equivalent forms: every sufficiently long word span is full, the word span of
   length `D ^ 4` is full, and some positive blocking is injective.
 - **Caveat:** `Kraus.IsNormal` is invariant under rescaling of the tensor, so it
-  is not equivalent to `MPSTensor.IsNormalTensor`, which fixes the spectral
+  is not equivalent to `MPTensor.IsNormalTensor`, which fixes the spectral
   radius of the transfer map at one. The exact relation is
   `MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`, with no
   hypothesis.
 
-### `MPSTensor.IsNormalTensor`
+### `MPTensor.IsNormalTensor`
 
 - **Declaration:**
-  `MPSTensor.IsNormalTensor (A : MPSTensor d D) : Prop`.
+  `MPTensor.IsNormalTensor (A : MPSTensor d D) : Prop`.
 - **Defined in:** `TNLean/MPS/CanonicalForm/Definitions.lean`.
 - **Meaning:** the CPSV normal-tensor condition: no nontrivial invariant
   orthogonal projection, transfer-map spectral radius exactly one, and no
@@ -178,9 +178,9 @@ is deliberately source-faithful.
 - **Sanctioned characterization:**
   `MPSTensor.isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`, in
   `TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorGauge.lean`.
-- **Sanctioned bridges:** `MPSTensor.IsNormalTensor.exists_tpGauge`,
-  `MPSTensor.IsNormalTensor.isNormal`, and
-  `MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, all in
+- **Sanctioned bridges:** `MPTensor.IsNormalTensor.exists_tpGauge`,
+  `MPTensor.IsNormalTensor.isNormal`, and
+  `MPTensor.IsNormalTensor.selfOverlap_tendsto_one`, all in
   `TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorGauge.lean`.
 - **Caveat:** `exists_tpGauge` and `isNormal` derive nonzero bond dimension
   internally from spectral normality. Other asymptotic consequences may still
@@ -204,7 +204,7 @@ is deliberately source-faithful.
   Definition 4.2, `Papers/2011.12127/TN-Review-main.tex:1846-1850`.
 - **Sanctioned bridges:**
   `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos` records block positivity
-  explicitly, while `MPSTensor.IsNormalTensor.isNormal` now derives it directly
+  explicitly, while `MPTensor.IsNormalTensor.isNormal` now derives it directly
   from each block's spectral normality.
   `MPSTensor.IsCPSVBasisOfNormalTensors.isBNT` then forgets the spectral
   normality data to produce `MPSTensor.IsBNT`.
@@ -233,7 +233,7 @@ is deliberately source-faithful.
   `MPSTensor.IsBNTSectorPresentation.isCPSVBasisOfNormalTensors` forgets the
   grouping to the literal Definition 2.4 interface; every canonical-form datum
   with at least one block yields a presentation through
-  `MPSTensor.CPSVCanonicalFormData.isBNTSectorPresentation`, and presentations
+  `MPTensor.CPSVCanonicalFormData.isBNTSectorPresentation`, and presentations
   of the same tensor agree up to permutation, dimension identification, gauge,
   and phase through `MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`.
 - **Caveat:** this is the grouped presentation used by the sector fundamental
@@ -1041,8 +1041,8 @@ model different levels of data and different sources.
 
 ### Retained-block reconstruction and literal CPSV canonical form
 
-- **Declarations:** `MPSTensor.RetainedBlockReconstructionData A` and
-  `MPSTensor.CPSVCanonicalFormData A`.
+- **Declarations:** `MPTensor.RetainedBlockReconstructionData A` and
+  `MPTensor.CPSVCanonicalFormData A`.
 - **Defined in:** `TNLean/MPS/CanonicalForm/Definitions.lean`; block inclusions
   in `TNLean/MPS/CanonicalForm/RetainedBlockReconstruction.lean`.
 - **Meaning:** the common reconstruction is
@@ -1054,10 +1054,10 @@ model different levels of data and different sources.
   condition. The nonzero-weight convention is recorded in
   `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
-### `MPSTensor.IsMPUCanonicalForm`
+### `MPTensor.IsMPUCanonicalForm`
 
-- **Declarations:** `MPSTensor.MPUCanonicalFormData A` and
-  `MPSTensor.IsMPUCanonicalForm A`.
+- **Declarations:** `MPTensor.MPUCanonicalFormData A` and
+  `MPTensor.IsMPUCanonicalForm A`.
 - **Defined in:** `TNLean/MPS/MPU/CanonicalForm/MPUCanonicalForm.lean`.
 - **Meaning:** the same weighted reconstruction with irreducible blocks of
   transfer spectral radius one, nonzero weights, and full ambient support
@@ -1200,10 +1200,10 @@ model different levels of data and different sources.
   density operator condition `MPOTensor.IsMPDO` alongside its own canonical
   form: `MPOTensor.IsHorizontalCF.hasVerticalBNTGroupingInputs` from
   normalized BNT-refined horizontal form, and
-  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs` from literal
+  `MPTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs` from literal
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
-  `MPSTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
+  `MPTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
   none may be assumed: supplying the common grouping properties from one
   canonical form says nothing about the other.
 - `MPOTensor.HasVerticalBNTProductInputs` in
@@ -1217,7 +1217,7 @@ model different levels of data and different sources.
   the properties used in CPSV16, Proposition 4.13, lines 1873--1921, and
   Appendix C.4, lines 2020--2029. The constructors
   `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
-  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs` prove them
+  `MPTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs` prove them
   independently under MPDO positivity. They imply the common retained-product
   spectral and positive fusion constructions; together with positivity and
   `IsRFPViaTS`, they give `HasBNTFusionTensorClause`. These are intermediate

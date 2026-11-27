@@ -33,6 +33,8 @@ docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex. Divisibility makes
 this corrected period one.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators
 open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor

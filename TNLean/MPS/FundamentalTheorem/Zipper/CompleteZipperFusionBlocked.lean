@@ -63,6 +63,8 @@ arXiv:2203.12563v3, Appendix A, using the block-injectivity theorem of
 arXiv:1606.00608, lines 317--345.
 -/
 
+open MPTensor
+
 section CompleteZipperFusionBlocked
 
 section
@@ -221,12 +223,12 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
           Fin (Kraus.blockPhysDim p L)) ℂ,
         MPSTensor.IsMPOBlockLeftInverse (fun c => blockTensor (T c) L) K := by
   have hScaled : ∀ c, ∃ ζ : ℂ, ζ ≠ 0 ∧
-      MPSTensor.IsNormalTensor (ζ • (T c).toMPSTensor) := by
+      MPTensor.IsNormalTensor (ζ • (T c).toMPSTensor) := by
     intro c
     have : NeZero (D c) := ⟨(hD c).ne'⟩
     obtain ⟨B, ζ, hζ, hGauge, -, -, hB⟩ :=
       MPSTensor.exists_leftCanonical_normalTensor_scale_of_isNormal (hT c)
-    exact ⟨ζ, hζ, MPSTensor.IsNormalTensor.of_gaugeEquiv hB hGauge⟩
+    exact ⟨ζ, hζ, MPTensor.IsNormalTensor.of_gaugeEquiv hB hGauge⟩
   choose scale hscale hNormal using hScaled
   obtain ⟨L, hL, hSpan⟩ := MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal hNormal hD
     (fun j k hjk hdim hGPE => hne j k hjk hdim
@@ -432,7 +434,7 @@ theorem IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective
     {d r : ℕ} {dim : Fin r → ℕ}
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPOTensor d (dim c))
-    (hBlocks : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1)
+    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun c ↦ (A c).toMPSTensor))
     (hInj : ∀ c, Kraus.IsInjective (A c).toMPSTensor)
     (hDim : ∀ c, 0 < dim c)
@@ -458,9 +460,9 @@ theorem IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective
     {A : MPSTensor d (∑ c : Fin s, dim c)} (h : IsBoundaryCompatible T A)
     (S : (a : Fin r) → MPOTensor d (opDim a))
     (B : (c : Fin s) → MPSTensor d (dim c))
-    (hT : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1)
+    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun a ↦ (S a).toMPSTensor))
-    (hA : A = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) B)
+    (hA : A = MPTensor.toTensorFromBlocks (fun _ ↦ 1) B)
     (hInj : ∀ c, Kraus.IsInjective (B c)) (hDim : ∀ c, 0 < dim c)
     (hDistinct : MPSTensor.BlocksNotGaugePhaseEquiv B)
     (a : Fin r) (x : Fin s) :

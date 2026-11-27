@@ -153,7 +153,7 @@ This is the explicit 2-block direct sum tensor used throughout canonical-form ar
 -/
 noncomputable def twoBlockTensor (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) :
     MPSTensor d (n + m) :=
-  toTensorFromBlocks (d := d) (r := 2) (dim := ![n, m])
+  toTensorFromBlocks (α := Fin d) (r := 2) (dim := ![n, m])
     (μ := fun _ => (1 : ℂ)) (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂)
 
 end TwoBlock

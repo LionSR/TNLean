@@ -242,12 +242,12 @@ theorem exists_positive_parent_interaction_of_hasComplementaryFixedPointGap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+          groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   exact ⟨R, hR,
-    LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R),
+    LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R),
     posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 /-- One positive interaction realizes both the exact joint open kernels
@@ -266,10 +266,10 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) ∧
+          groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) ∧
       (∀ᶠ N : ℕ in atTop,
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) ∧
+          groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) ∧
       let ω := fun j => quasiLocalExpectation (A j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero
       (∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -281,7 +281,7 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
     exists_positive_parent_interaction_of_hasComplementaryFixedPointGap μ A hμ ρ hP hρ hDistinct
   have hEventual : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N :=
+        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   refine ⟨R, hR, h, hh, hKernel, hEventual, ?_, ?_⟩
   · exact fun φ => mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel

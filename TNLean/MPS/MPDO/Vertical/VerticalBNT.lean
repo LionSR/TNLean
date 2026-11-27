@@ -55,7 +55,7 @@ and normalized BNT-refined horizontal form supply these interfaces.
 * `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`: the normalized
   vertical corners grouped into BNT representatives, with the physical
   isometries and literal reconstruction retained.
-* `MPSTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`:
+* `MPTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`:
   the same conclusion from literal CPSV canonical form.
 
 ### References
@@ -225,7 +225,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧
-      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
       (∀ k v, verticalTensor M v * V k = V k * (μ k • blocks k v)) ∧
@@ -252,7 +252,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
                 (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                   (Fin (dim (classes.enum j q))) ℂ))) ∧
         MPSTensor.IsCPSVBasisOfNormalTensors
-          (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks)
+          (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
           (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) ∧
         MPSTensor.BlocksNotGaugePhaseEquiv
           (d := D * D) (fun j => blocks (classes.repr j)) ∧
@@ -324,7 +324,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
         (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
         (∀ k, 0 < dim k) ∧
         (∀ k, (0 : ℂ) < μ k) ∧
-        (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+        (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
         (∀ k, (V k)ᴴ * V k = 1) ∧
         (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
         (∀ k v, verticalTensor M v * V k = V k * (μ k • blocks k v)) ∧
@@ -434,7 +434,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
   have hCompression : ∀ j q, ∃ N, sectorCompression M
       (V (classes.enum j q) * (V (classes.enum j q))ᴴ) N ≠ 0 := by
     intro j q
-    have hNormalCast : MPSTensor.IsNormalTensor
+    have hNormalCast : MPTensor.IsNormalTensor
         (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
           (blocks (classes.repr j))) :=
       (MPSTensor.isNormalTensor_cast_iff (hdim j q)
@@ -457,7 +457,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
     obtain ⟨N, hne⟩ := hCompression j q
     exact sector_weight_pos hM (hSector j q₀) hRefPos (hSector j q) N hne
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors
-      (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks)
+      (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
       (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) := by
     refine ⟨fun j => hNormal (classes.repr j), ?_, ?_⟩
     · intro N _hN
@@ -468,7 +468,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       intro w
       calc
         MPTensor.mpv
-            (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks) w =
+            (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks) w =
             ∑ k : Fin r, (μ k) ^ N * MPTensor.mpv (blocks k) w := by
               simpa [smul_eq_mul] using
                 (MPSTensor.mpv_toTensorFromBlocks_eq_sum
@@ -626,7 +626,7 @@ private theorem bntCanonicalForm_toTensor_ne_zero
     exact P.weight_ne_zero j q
   apply hab
   have : P.flatWeight s * P.flatBasis s i a b = 0 := by
-    simpa [MPSTensor.SectorDecomposition.toTensor, MPSTensor.toTensorFromBlocks,
+    simpa [MPSTensor.SectorDecomposition.toTensor, MPTensor.toTensorFromBlocks,
       Matrix.reindex_apply, Matrix.blockDiagonal'_apply_eq] using hentry.symm
   exact (mul_eq_zero.mp this).resolve_left hweight
 
@@ -680,7 +680,7 @@ theorem IsHorizontalCF.exists_nonempty_verticalBNTGrouping
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧
-      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
       (∀ v, verticalTensor M v = ∑ k, V k * (μ k • blocks k v) * (V k)ᴴ) ∧

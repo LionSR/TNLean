@@ -14,6 +14,8 @@ of a BNT canonical form is in literal CPSV canonical form and that its distinct
 blocks form both a CPSV basis of normal tensors and an algebraic BNT.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -23,7 +25,7 @@ variable {d r : ℕ} {dim : Fin r → ℕ}
 /-- The unit-weight block tensor is the direct-sum tensor. -/
 theorem toTensorFromBlocks_one_eq_directSumTensor
     (A : (j : Fin r) → MPSTensor d (dim j)) :
-    toTensorFromBlocks (d := d) (fun _ ↦ 1) A = directSumTensor A := by
+    toTensorFromBlocks (α := Fin d) (fun _ ↦ 1) A = directSumTensor A := by
   funext i
   simp [toTensorFromBlocks, directSumTensor]
 

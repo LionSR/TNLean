@@ -16,6 +16,8 @@ Source: arXiv:1606.00608, lines 317--345. This is the initial simultaneous
 blocking used in arXiv:1010.3732, lines 575--597 and Appendix A.
 -/
 
+open MPTensor
+
 open scoped BigOperators
 open Kraus (blockTensor)
 

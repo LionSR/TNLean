@@ -240,7 +240,7 @@ variable {d D : ℕ}
 
 private theorem isIrreducibleFamily_blockTensor_one
     (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A) :
-    Kraus.IsIrreducibleFamily (d := blockPhysDim d 1) (D := D)
+    Kraus.IsIrreducibleFamily (ι := Fin (blockPhysDim d 1)) (n := Fin D)
       (blockTensor (d := d) (n := Fin D) A 1) := by
   intro hHas
   apply hIrr
@@ -265,7 +265,7 @@ private theorem common_blocking_primitive
     (blocks1 : (k : Fin r1) → MPSTensor d (dim1 k))
     (hSame1 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := μ1) blocks1))
+        (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1))
     (hIrr1 : ∀ k, Kraus.IsIrreducibleFamily (blocks1 k))
     (hLeft1 : ∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1)
     (hPrim1 : ∀ k,
@@ -280,7 +280,7 @@ private theorem common_blocking_primitive
       ∃ blocks2 : (k : Fin r2) → MPSTensor (blockPhysDim d p) (dim2 k),
         SameMPV₂
           (blockTensor (d := d) (n := Fin D) A p)
-          (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ2) blocks2) ∧
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ2) blocks2) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks2 k)) ∧
         (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks2 k i)ᴴ * blocks2 k i = 1) ∧
         (∀ k,
@@ -296,7 +296,7 @@ private theorem common_blocking_primitive
     calc
       mpv (blockTensor (d := d) (n := Fin D) A 1) σ = mpv A σ' :=
         mpv_blockTensor_one (d := d) (D := D) (A := A) σ
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ' := hSame1 N σ'
+      _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) σ' := hSame1 N σ'
       _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blocks1 k) σ' := by
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ'))
@@ -306,7 +306,7 @@ private theorem common_blocking_primitive
             intro k _
             rw [mpv_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (σ := σ)]
       _ = mpv (toTensorFromBlocks
-            (d := blockPhysDim d 1)
+            (α := Fin (blockPhysDim d 1))
             (μ := μ1)
             (fun k => blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1)) σ := by
             symm
@@ -334,7 +334,7 @@ private theorem sort_blocks_by_weight_norm
     (blocks2 : (k : Fin r2) → MPSTensor (blockPhysDim d p) (dim2 k))
     (hSame2 :
       SameMPV₂ Ablk
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ2) blocks2))
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ2) blocks2))
     (hIrr2 : ∀ k, Kraus.IsIrreducibleFamily (blocks2 k))
     (hLeft2 : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocks2 k i)ᴴ * blocks2 k i = 1)
     (hPrim2 : ∀ k,
@@ -347,7 +347,7 @@ private theorem sort_blocks_by_weight_norm
       ∃ μ : Fin r → ℂ,
       ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
         SameMPV₂ Ablk
-          (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
         (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks k i)ᴴ * blocks k i = 1) ∧
         (∀ k,
@@ -372,7 +372,7 @@ private theorem sort_blocks_by_weight_norm
   · intro N σ
     calc
       mpv Ablk σ
-          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ2) blocks2) σ := hSame2 N σ
+          = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ2) blocks2) σ := hSame2 N σ
       _ = ∑ k : Fin r2, (μ2 k) ^ N * mpv (blocks2 k) σ := by
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
@@ -380,7 +380,7 @@ private theorem sort_blocks_by_weight_norm
       _ = ∑ i : Fin r2, (μ2 (e i)) ^ N * mpv (blocks2 (e i)) σ := by
             symm
             simpa using (e.sum_comp (fun k : Fin r2 => (μ2 k) ^ N * mpv (blocks2 k) σ))
-      _ = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ := by
+      _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) σ := by
             symm
             simpa [μ, blocks, smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum
@@ -415,7 +415,7 @@ private theorem exists_blocked_normal_data_of_primitive_blockDecomp
     (blocks1 : (k : Fin r1) → MPSTensor d (dim1 k))
     (hSame1 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := μ1) blocks1))
+        (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1))
     (hIrr1 : ∀ k, Kraus.IsIrreducibleFamily (blocks1 k))
     (hLeft1 : ∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1)
     (hPrim1 : ∀ k,
@@ -430,7 +430,7 @@ private theorem exists_blocked_normal_data_of_primitive_blockDecomp
       ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
         SameMPV₂
           (blockTensor (d := d) (n := Fin D) A p)
-          (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
         (∀ k, ∑ i : Fin (blockPhysDim d p), (blocks k i)ᴴ * blocks k i = 1) ∧
         (∀ k,
@@ -488,7 +488,7 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     (blocks1 : (k : Fin r1) → MPSTensor d (dim1 k))
     (hSame1 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := μ1) blocks1))
+        (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1))
     (hIrr1 : ∀ k, Kraus.IsIrreducibleFamily (blocks1 k))
     (hLeft1 : ∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1)
     (hPrim1 : ∀ k,
@@ -503,7 +503,7 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
       ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
         SameMPV₂
           (blockTensor (d := d) (n := Fin D) A p)
-          (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
         IsNormalCanonicalForm (d := blockPhysDim d p) μ blocks := by
   obtain ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=
     exists_blocked_normal_data_of_primitive_blockDecomp

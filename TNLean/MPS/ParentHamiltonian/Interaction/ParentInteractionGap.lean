@@ -66,6 +66,8 @@ It also contains the following results.
   transfer of canonical gaps to a positive interaction.
 -/
 
+open MPTensor
+
 section ParentInteractionGap
 
 section
@@ -119,7 +121,8 @@ theorem IsParentInteraction.exists_uniform_gap_of_canonical_gap
 /-- Every fixed positive parent interaction of a canonical tensor has a uniform
 gap on the rings at the supplied simultaneous injectivity range plus one.
 Source: CPGSV21, Section IV.C, lines 2114--2129 and 2170--2187. -/
-theorem CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop
     {d D : ℕ} [NeZero d] {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop
@@ -137,7 +140,8 @@ theorem CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleS
 /-- One choice of normal representatives gives the uniform gap for every fixed
 positive parent interaction at every admissible simultaneous injectivity range.
 Source: CPGSV21, Section IV.C, lines 2114--2129 and 2170--2187. -/
-theorem IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop
+theorem
+    _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop
     {d D : ℕ} [NeZero d] {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
@@ -165,11 +169,13 @@ namespace MPSTensor
 
 variable {d D : ℕ} [NeZero d] [NeZero D]
 
+set_option linter.style.longLine false in
 /-- Every canonical parent Hamiltonian at interaction range
 \(R\geq 3D^5\) has a positive gap uniform over the periodic chain length.
 Source: arXiv:1606.00608, lines 317--345, and arXiv:2011.12127,
 Section IV.C, lines 2114--2129 and 2183--2187. -/
-theorem IsCPSVCanonicalForm.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le
+theorem
+    _root_.MPTensor.IsCPSVCanonicalForm.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -181,11 +187,13 @@ theorem IsCPSVCanonicalForm.exists_parentRingInteraction_uniform_gap_of_three_bo
   exact data.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop
     hS hSpan (hBound.trans hR)
 
+set_option linter.style.longLine false in
 /-- Every fixed positive parent interaction of a canonical tensor at range
 \(R\geq 3D^5\) has a positive periodic gap independent of the chain length.
 The constant may depend on the interaction. Source: arXiv:1606.00608,
 lines 317--345, and arXiv:2011.12127, Section IV.C, lines 2170--2187. -/
-theorem IsCPSVCanonicalForm.exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le
+theorem
+    _root_.MPTensor.IsCPSVCanonicalForm.exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R)
     {h : Matrix (Cfg d R) (Cfg d R) ℂ}

@@ -15,6 +15,8 @@ free sites on either side. These are the interval spaces in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2444--2463.
 -/
 
+open MPTensor
+
 private theorem pi_univ_iSup_const {ι α M : Type*} [Finite α]
     [AddCommMonoid M] [Module ℂ M] (S : ι → Submodule ℂ M) :
     Submodule.pi (Set.univ : Set α) (fun _ ↦ ⨆ i, S i) =
@@ -33,7 +35,7 @@ Theorem 12, with nonzero block coefficients. -/
 theorem groundSpaceES_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (L : ℕ) :
-    groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) L =
+    groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
       ⨆ j, groundSpaceES (A j) L := by
   simp only [groundSpaceES, groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     Submodule.map_iSup]
@@ -44,14 +46,14 @@ arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2444--2463. -/
 theorem groundSpaceES_block_le_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (α : Fin r) (L : ℕ) :
-    groundSpaceES (A α) L ≤ groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+    groundSpaceES (A α) L ≤ groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
   simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ] using
     (le_iSup (fun β ↦ groundSpaceES (A β) L) α)
 
 private theorem leftBoundaryMap_range_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (leftBoundaryMap (toTensorFromBlocks (d := d) (μ := μ) A) K L).range =
+    (leftBoundaryMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
       ⨆ j, (leftBoundaryMap (A j) K L).range := by
   let T : (Cfg d L → NSiteSpace d K) →ₗ[ℂ] NSiteSpace d (K + L) :=
     LinearMap.pi fun σ ↦
@@ -60,7 +62,7 @@ private theorem leftBoundaryMap_range_toTensorFromBlocks
   have hfac {D : ℕ} (B : MPSTensor d D) :
       leftBoundaryMap B K L = T.comp ((groundSpaceMap B K).compLeft (Cfg d L)) := rfl
   simp only [hfac, LinearMap.range_comp, LinearMap.range_compLeft,
-    show (groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) K).range =
+    show (groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K).range =
       ⨆ j, (groundSpaceMap (A j) K).range from
         groundSpace_toTensorFromBlocks_eq_iSup μ A hμ K,
     pi_univ_iSup_const, Submodule.map_iSup]
@@ -71,7 +73,7 @@ arXiv:cond-mat/9410110, Lemma `commutation` (ii), for a weighted direct sum. -/
 theorem range_leftBoundaryMapES_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (leftBoundaryMapES (toTensorFromBlocks (d := d) (μ := μ) A) K L).range =
+    (leftBoundaryMapES (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
       ⨆ j, (leftBoundaryMapES (A j) K L).range := by
   simp only [leftBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
@@ -80,7 +82,7 @@ theorem range_leftBoundaryMapES_toTensorFromBlocks_eq_iSup
 private theorem tailBoundaryMap_range_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (tailBoundaryMap (toTensorFromBlocks (d := d) (μ := μ) A) K L).range =
+    (tailBoundaryMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
       ⨆ j, (tailBoundaryMap (A j) K L).range := by
   let T : (Cfg d K → NSiteSpace d L) →ₗ[ℂ] NSiteSpace d (K + L) :=
     LinearMap.pi fun σ ↦
@@ -89,7 +91,7 @@ private theorem tailBoundaryMap_range_toTensorFromBlocks
   have hfac {D : ℕ} (B : MPSTensor d D) :
       tailBoundaryMap B K L = T.comp ((groundSpaceMap B L).compLeft (Cfg d K)) := rfl
   simp only [hfac, LinearMap.range_comp, LinearMap.range_compLeft,
-    show (groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L).range =
+    show (groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).range =
       ⨆ j, (groundSpaceMap (A j) L).range from
         groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L,
     pi_univ_iSup_const, Submodule.map_iSup]
@@ -100,7 +102,7 @@ arXiv:cond-mat/9410110, Lemma `commutation` (ii), for a weighted direct sum. -/
 theorem range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (tailBoundaryMapES (toTensorFromBlocks (d := d) (μ := μ) A) K L).range =
+    (tailBoundaryMapES (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
       ⨆ j, (tailBoundaryMapES (A j) K L).range := by
   simp only [tailBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
@@ -112,7 +114,7 @@ space in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem range_reassocTailBoundaryMapES_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (K L Q : ℕ) :
-    (reassocTailBoundaryMapES (toTensorFromBlocks (d := d) (μ := μ) A) K L Q).range =
+    (reassocTailBoundaryMapES (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L Q).range =
       ⨆ j, (reassocTailBoundaryMapES (A j) K L Q).range := by
   simp only [reassocTailBoundaryMapES, ContinuousLinearMap.toLinearMap_comp,
     LinearMap.range_comp, range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup μ A hμ,

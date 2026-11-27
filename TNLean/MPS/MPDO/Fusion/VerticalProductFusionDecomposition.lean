@@ -390,7 +390,7 @@ theorem HasVerticalBNTProductInputs.exists_positiveFusionDecomposition_of_unitar
     ⟨(hBNT₂.blocks_dim_pos γ).ne'⟩
   obtain ⟨C⟩ := R.exists_flatBlockedBNTComparison
     M U₁ hU₁ hReconstruct₁ dim₂ A₂ hBNT₂
-  have hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ) := fun γ ↦
+  have hNormal₂ : ∀ γ, MPTensor.IsNormalTensor (A₂ γ) := fun γ ↦
     hBNT₂.blocks_normal γ
   have hActivePos : ∀ j, (0 : ℂ) < R.flatCoefficient j * C.phase j := fun j ↦
     C.activeCoefficient_mul_phase_pos M hInputs hM

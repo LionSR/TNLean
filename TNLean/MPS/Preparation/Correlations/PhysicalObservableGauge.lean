@@ -20,8 +20,8 @@ is its specialization to the identity left matrix.
 
 It also contains the following results.
 
-* `MPSTensor.IsNormalTensor.exists_physicalCorrelation_normalGauge`,
-  `MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay`: decay of physical
+* `MPTensor.IsNormalTensor.exists_physicalCorrelation_normalGauge`,
+  `MPTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay`: decay of physical
   correlations in an arbitrary normal representation.
 -/
 
@@ -234,7 +234,7 @@ This packages the existing gauge transport independently of any decay estimate.
 Source: arXiv:2011.12127, Section II.B.3, source lines 433–441.
 The Jordan correction is documented in
 `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`. -/
-theorem IsNormalTensor.exists_physicalCorrelation_normalGauge
+theorem _root_.MPTensor.IsNormalTensor.exists_physicalCorrelation_normalGauge
     {A : MPSTensor d D} (hNormal : IsNormalTensor A) :
     ∃ B : MPSTensor d D, ∃ ρB ℓ ρ : Matrix (Fin D) (Fin D) ℂ,
       GaugeEquiv A B ∧ IsNormalTensor B ∧ (∑ i, (B i)ᴴ * B i = 1) ∧
@@ -275,7 +275,7 @@ physical correlation on independently chosen finite supports.
 Reference: arXiv:2011.12127, Section II.B.3, lines 433–441. Normality includes
 the source's leading-eigenvalue normalization. No trace-preserving gauge is
 assumed for the given tensor. -/
-theorem IsNormalTensor.exists_physicalLeftRightCorrelation_decay
+theorem _root_.MPTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay
     {A : MPSTensor d D} (hNormal : IsNormalTensor A) :
     ∃ ℓ ρ : Matrix (Fin D) (Fin D) ℂ,
       ℓ.PosDef ∧ ρ.PosDef ∧ Kraus.transferMap (fun i => (A i)ᴴ) ℓ = ℓ ∧

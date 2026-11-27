@@ -21,6 +21,8 @@ The argument uses finite local support and positivity, not primitivity,
 simultaneous injectivity, or a spectral gap.
 -/
 
+open MPTensor
+
 open scoped Matrix ComplexOrder BigOperators
 
 open ManyBody.Interaction (chainTranslates)
@@ -57,7 +59,7 @@ theorem IsParentInteraction.localCommutatorObservable_nonneg
     (μ : Fin b → ℂ) (A : ∀ α, MPSTensor d (dim α)) (hμ : ∀ α, μ α ≠ 0)
     (α : Fin b) {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h))
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k) :
     0 ≤ observableInsertionExpectation (A α) ρ (localCommutatorObservable h X) := by
@@ -70,7 +72,7 @@ theorem IsParentInteraction.localCommutatorObservable_nonneg
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R w h).hamiltonian)) := by
     rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
     apply le_trans ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction
-      (toTensorFromBlocks (d := d) (μ := μ) A) R w)
+      (toTensorFromBlocks (α := Fin d) (μ := μ) A) R w)
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α w
   exact observableInsertionExpectation_adjoint_commutator_nonneg
     (A α) hρ ((chainTranslates R w h).hamiltonian) (bulkObservable X (R - 1) (R - 1)) hH hker
@@ -82,7 +84,7 @@ theorem IsParentInteraction.localCommutatorObservable_im_eq_zero
     (μ : Fin b → ℂ) (A : ∀ α, MPSTensor d (dim α)) (hμ : ∀ α, μ α ≠ 0)
     (α : Fin b) {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h))
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k) :
     (observableInsertionExpectation (A α) ρ (localCommutatorObservable h X)).im = 0 := by
@@ -99,7 +101,7 @@ theorem IsParentInteraction.quasiLocalExpectation_localCommutatorObservable_nonn
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
+    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
       (Matrix.toEuclideanLin h))
     (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k) :
     0 ≤ quasiLocalExpectation (A α) hTP hρ hfix htr

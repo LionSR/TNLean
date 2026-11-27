@@ -421,7 +421,7 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
     intro X
     simpa [T, Kraus.transferMap_apply, Kraus.map] using
       (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) X).symm
-  have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
+  have hIrrTensor : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
       ((Kraus.isIrreducibleMap_mapLM_conjTranspose_iff A).mp hIrrAdj)
   have hIrr : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=

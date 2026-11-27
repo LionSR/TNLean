@@ -168,8 +168,8 @@ used for the normal-block construction surrounding arXiv:1606.00608, lines
 theorem isNormalTensor_toMPSTensor_changePhysicalBasis_iff
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (K : MPOTensor d D) :
-    MPSTensor.IsNormalTensor (changePhysicalBasis V K).toMPSTensor ↔
-      MPSTensor.IsNormalTensor K.toMPSTensor := by
+    MPTensor.IsNormalTensor (changePhysicalBasis V K).toMPSTensor ↔
+      MPTensor.IsNormalTensor K.toMPSTensor := by
   have hTransfer := transferMap_toMPSTensor_changePhysicalBasis V hV K
   constructor
   · intro hC

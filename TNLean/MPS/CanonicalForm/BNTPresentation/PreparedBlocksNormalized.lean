@@ -225,12 +225,12 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
     exact div_mul_cancel₀ (μ k) hm0
   calc
     mpv (blockTensor (d := d) (n := Fin D) A p) σ
-        = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ :=
+        = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) σ :=
       hSamePos N hN σ
-    _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
+    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (μ := fun k => (m : ℂ) * (μ k / (m : ℂ))) blocks) σ := by
       rw [hμeq]
-    _ = (m : ℂ) ^ N * mpv (toTensorFromBlocks (d := blockPhysDim d p)
+    _ = (m : ℂ) ^ N * mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
           (μ := fun k => μ k / (m : ℂ)) blocks) σ :=
       mpv_toTensorFromBlocks_weight_mul_left (m : ℂ) _ blocks σ
     _ = (m : ℂ) ^ N * mpv P.toTensor σ := by

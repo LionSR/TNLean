@@ -12,6 +12,8 @@ This file collects the source-shaped PGVWC07 chain consequences obtained from
 positive dual fixed points together with the source unital normalization.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
@@ -44,7 +46,7 @@ theorem
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
   apply chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
@@ -86,7 +88,7 @@ theorem
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, groundSpace (A j) N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   refine ⟨?_, ?_⟩
@@ -123,7 +125,7 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ φ : (j : Fin r) → NSiteSpace d N,
       (∀ j, φ j ∈ groundSpace (A j) N) ∧
         ψ = ∑ j, φ j ∧
@@ -170,9 +172,9 @@ theorem
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     {ψ : NSiteSpace d N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by

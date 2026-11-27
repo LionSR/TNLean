@@ -182,13 +182,13 @@ PGVWC07 Theorem 4 and CPSV17.
 
 | Notion | Surviving definition (HEAD name) |
 |---|---|
-| normal tensor | `MPSTensor.IsNormalTensor` (normality family; unchanged) |
+| normal tensor | `MPTensor.IsNormalTensor` (normality family; unchanged) |
 | basis of normal tensors of `A` | `MPSTensor.IsCPSVBasisOfNormalTensors` (rename: D1; argument shape: D2) |
 | two-layer presentation of `A` by a basis of normal tensors | `MPSTensor.IsBNTSectorPresentation A P` on the data `MPSTensor.SectorDecomposition` |
-| canonical form | `MPSTensor.CPSVCanonicalFormData A` / `IsCPSVCanonicalForm A`, on the shared shape `RetainedBlockReconstructionData A` (rename: D1) |
+| canonical form | `MPTensor.CPSVCanonicalFormData A` / `IsCPSVCanonicalForm A`, on the shared shape `RetainedBlockReconstructionData A` (rename: D1) |
 | canonical form II | `MPSTensor.CPSVCanonicalFormIIData A` / `IsCPSVCanonicalFormII A` |
-| canonical form with irreducible blocks | `MPSTensor.MPUCanonicalFormData A` (CPSV17) and its gauge-fixed form `MPSTensor.PGVWC07CanonicalFormData A` (names: D6) |
-| line-246 weight convention for a canonical form | `MPSTensor.CPSVCanonicalFormData.IsWeightNormalized` |
+| canonical form with irreducible blocks | `MPTensor.MPUCanonicalFormData A` (CPSV17) and its gauge-fixed form `MPSTensor.PGVWC07CanonicalFormData A` (names: D6) |
+| line-246 weight convention for a canonical form | `MPTensor.CPSVCanonicalFormData.IsWeightNormalized` |
 | left-canonical gauge of a presentation (a proof device) | `MPSTensor.IsBNTCanonicalForm P`, restated as a presentation of `P.toTensor` with left-canonical basis (S4; name: D3) |
 
 ### Inventory
@@ -397,7 +397,7 @@ The dry-run of `rewrite.py` (dryrun.txt) gives the per-rule numbers by directory
 
 #### Glossary (`docs/glossary.md`)
 
-"Normality": `Kraus.IsNormal` and `MPSTensor.IsNormalTensor` caveats (replace the
+"Normality": `Kraus.IsNormal` and `MPTensor.IsNormalTensor` caveats (replace the
 "no equivalence" sentences by T1, T2); "Basis-level normality" (one predicate; T3);
 "`MPSTensor.IsBNTSectorPresentation`" (the sector form extends it). "Canonical
 form": opening sentence replaced by the table of §1; subsections
@@ -405,7 +405,7 @@ form": opening sentence replaced by the table of §1; subsections
 "`MPSTensor.IsNormalCanonicalForm`", "`MPSTensor.IsNormalCanonicalFormBNT`" removed;
 "`MPSTensor.IsBNTCanonicalForm`" rewritten (left-canonical presentation, no weight
 fields); "Retained-block reconstruction and literal CPSV canonical form" and
-"`MPSTensor.IsMPUCanonicalForm`" renamed under D1/D6; "MPDO canonical-form
+"`MPTensor.IsMPUCanonicalForm`" renamed under D1/D6; "MPDO canonical-form
 predicates" (`IsVerticalCF` basis clause; `IsSimpleCanonicalForm` unit-weight
 paragraph; `HasHorizontalCFMPVRepresentation`).
 
@@ -1621,7 +1621,7 @@ Reference: TNLean HEAD `e8f8dd3202`, QICLean pin `d65bece64d`. Elaboration again
 | `Kraus.IsNBlkInjective A N` (QICLean `:97`) | `wordSpan A N = ⊤` | arXiv:0909.5347 `main.tex:387-391` (`S_n(A)`); PVWC07 `:888-908` (`Γ_L` injective, condition C1) | 144 / 630: MPS/ParentHamiltonian 59, MPS/Examples 15, MPS/CanonicalForm 13, MPS/Preparation 11, MPS/Core 10, MPS/MPDO 9, MPS/Symmetry 7, PEPS 6, MPS/Chain 3, Wielandt 3, MPS/Periodic 2, MPS 1, MPS/BNT 1, MPS/FundamentalTheorem 1, MPS/MPU 1, MPS/Overlap 1, MPS/RFP 1 |
 | `Kraus.IsNormal A` (QICLean `:168`) | `∃ N, 0 < N ∧ IsNBlkInjective A N` | arXiv:0909.5347 `main.tex:416-421` (property (b)); arXiv:2011.12127 `TN-Review-main.tex:1815-1830` | 233 / 554: MPS/Preparation 45, MPS/Examples 43, MPS/MPDO 24, MPS/Symmetry 24, Wielandt 18, MPS/FundamentalTheorem 17, MPS/ParentHamiltonian 16, MPS/RFP 12, MPS/Core 9, MPS/MPU 8, MPS/CanonicalForm 7, MPS/Periodic 5, MPS/BNT 2, MPS 1, MPS/Chain 1, Spectral 1 |
 | `Kraus.HasEventuallyFullWordSpan A` (QICLean `:232`) | `∀ᶠ N in atTop, wordSpan A N = ⊤` | none (QICLean helper) | 3 / 5: Wielandt 2, MPS/Examples 1; QICLean 24 occ |
-| `MPSTensor.IsNormalTensor A` (`MPS/CanonicalForm/Definitions.lean:105`) | structure: `Kraus.IsIrreducibleFamily A`, spectral radius of `transferMap A` is `1`, `IsPrimitive (transferMap A)` | arXiv:1606.00608 `MPDO-22-12-17-2.tex:233-235` (Definition NT) | 100 / 301: MPS/MPDO 36, MPS/ParentHamiltonian 15, MPS/CanonicalForm 13, MPS/MPU 9, MPS/Preparation 8, MPS/RFP 6, MPS/Symmetry 4, MPS/FundamentalTheorem 3, Spectral 3, MPS/BNT 1, MPS/Core 1, MPS/Overlap 1 |
+| `MPTensor.IsNormalTensor A` (`MPS/CanonicalForm/Definitions.lean:105`) | structure: `Kraus.IsIrreducibleFamily A`, spectral radius of `transferMap A` is `1`, `IsPrimitive (transferMap A)` | arXiv:1606.00608 `MPDO-22-12-17-2.tex:233-235` (Definition NT) | 100 / 301: MPS/MPDO 36, MPS/ParentHamiltonian 15, MPS/CanonicalForm 13, MPS/MPU 9, MPS/Preparation 8, MPS/RFP 6, MPS/Symmetry 4, MPS/FundamentalTheorem 3, Spectral 3, MPS/BNT 1, MPS/Core 1, MPS/Overlap 1 |
 | `MPOTensor.IsInjective K` (`MPS/MPDO/SimpleLocalInverseMaps.lean:30`; the glossary names `SimpleLocalStructure.lean`, stale) | `abbrev … := Kraus.IsInjective K.toMPSTensor` | arXiv:1606.00608 `:1628-1658` | 34 files / 130 occurrences, all MPS/MPDO (R1) |
 | `MPSChainTensor.IsInjective A` (`MPS/Chain/Defs.lean:45`) | `∀ k, Kraus.IsInjective (A k)` | arXiv:1804.04964 `:145, 196-205` | 6 modules (unqualified in `MPS/Chain` 3, `PEPS` 3) |
 | `MPSChainTensor.IsWindowInjective A L` (`PEPS/CycleMPSChainArc.lean:184`) | every cyclic window of `L` sites has full arc-product span | arXiv:1804.04964 `:1928-1940` | 5 / 23: PEPS 5 |
@@ -1706,7 +1706,7 @@ MPS/FundamentalTheorem 1). Translations between them: `isNBlkInjective_iff_block
   (`isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`, elaborated). Left-canonical
   normalization or irreducibility is not needed; irreducibility follows from normality. The
   glossary sentence "There is no equivalence theorem between `Kraus.IsNormal` and
-  `MPSTensor.IsNormalTensor`" stays true, but the exact relation is now this theorem.
+  `MPTensor.IsNormalTensor`" stays true, but the exact relation is now this theorem.
 * **`IsNBlkInjective A n` against `IsInjective (blockTensor A n)`.** Not a pass-through: the
   body of `IsNBlkInjective` is `wordSpan A n = ⊤`, and the equivalence with the blocked
   tensor is a proof through the reindexing `Fin (d^n) ≃ (Fin n → Fin d)` (QICLean
@@ -1746,7 +1746,7 @@ MPS/FundamentalTheorem 1). Translations between them: `isNBlkInjective_iff_block
 | `Kraus.IsNormal` | survivor |
 | `Kraus.IsNBlkInjective` | survivor as the name of the source's `S_N(A) = M_D` / "`Γ_N` injective" (see D1). The spelling `Kraus.IsInjective (Kraus.blockTensor A N)` stays only as the right side of the characterization theorem and where a one-site theorem is applied to the blocked tensor. Theorems stated that way only to be converted back are restated. |
 | `Kraus.HasEventuallyFullWordSpan` | equivalent to `Kraus.IsNormal` with no hypothesis: deleted (QICLean). Characterization: `hasEventuallyFullWordSpan_iff_isNormal`, clause 2 of `normality_tfae`. Not caught by the primitivity change (that change removed `HasEventuallyFullKrausRank`; this QICLean name dates from 2026-08-21). |
-| `MPSTensor.IsNormalTensor` | different notion (normal and spectral radius one): survivor. Add the characterization theorem. The name does not say it includes the normalization (D2). |
+| `MPTensor.IsNormalTensor` | different notion (normal and spectral radius one): survivor. Add the characterization theorem. The name does not say it includes the normalization (D2). |
 | `MPOTensor.IsInjective` | abbreviation: deleted. Callers write `Kraus.IsInjective K.toMPSTensor` (R1). |
 | `MPSChainTensor.IsInjective` | survivor: injectivity of a site-dependent chain, sitewise `Kraus.IsInjective`, the source's "injective MPS". |
 | `MPSChainTensor.IsWindowInjective` | survivor (different notion: windows). Carrier duplication with `IsNormalCycleArcMPS` is deferred to T.1 (D4). |
@@ -1797,7 +1797,7 @@ deletion, not kept), `VaryingBondChain.isBlockInjective_iff_forall_isInjectiveOn
 
 * `### Kraus.IsNormal`: bridges `Kraus.IsInjective.isNormal`, `normality_tfae`. Replace the
   caveat with the characterization of `IsNormalTensor`.
-* `### MPSTensor.IsNormalTensor`: meaning "normal (`Kraus.IsNormal`) with spectral radius
+* `### MPTensor.IsNormalTensor`: meaning "normal (`Kraus.IsNormal`) with spectral radius
   one", sanctioned characterization `isNormalTensor_iff_isNormal_and_spectralRadius_eq_one`.
 * `#### Kraus.IsNBlkInjective`: drop `wordSpan_eq_top_iff_isNBlkInjective`; record the three
   spellings rule.

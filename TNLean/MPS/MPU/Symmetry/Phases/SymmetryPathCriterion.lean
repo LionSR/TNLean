@@ -118,8 +118,8 @@ theorem strictlyEquivalentUnderSymmetry_reindexPhysical_of_gate_path {b d' : ℕ
     (e : Fin d' ≃ Fin (b * b))
     {S : FiniteChainOperatorSymmetry d'} (hpos : ∀ N ∈ S.applicable, 0 < N)
     {W₁ : MPOTensor (b * b) D₁} {W₂ : MPOTensor (b * b) D₂}
-    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical e W₁).toMPSTensor)
-    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical e W₂).toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm (reindexPhysical e W₁).toMPSTensor)
+    (hcf₂ : MPTensor.IsMPUCanonicalForm (reindexPhysical e W₂).toMPSTensor)
     (u : unitInterval → Matrix (Fin ℓ × Fin r) (Fin b × Fin b) ℂ)
     (v : unitInterval → Matrix (Fin b × Fin b) (Fin r × Fin ℓ) ℂ)
     (hu : Continuous u) (hv : Continuous v)

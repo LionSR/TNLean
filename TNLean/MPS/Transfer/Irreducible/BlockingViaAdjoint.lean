@@ -70,7 +70,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrrT : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrrT : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hDpos : 0 < D) :
     ∃ p : ℕ, 0 < p ∧
       _root_.IsPrimitive
@@ -95,7 +95,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hDpos
   have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
-    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) A hIrrT
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (ι := Fin d) (D := D) A hIrrT
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
       hIrrAmap ρ hρ_psd hρ_ne hρ_fix

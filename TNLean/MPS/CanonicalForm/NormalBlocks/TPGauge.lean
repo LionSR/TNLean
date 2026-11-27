@@ -153,7 +153,7 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   dim_pos : ∀ k, 0 < dim k
   /-- On nonempty rings, the original tensor and the weighted block tensor have
   the same MPV coefficients. -/
-  sameMPV_pos : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := weights) blocks)
+  sameMPV_pos : SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := weights) blocks)
   /-- The total bond dimension of the nonzero canonical blocks is at most the
   original bond dimension. -/
   bondDim_le : ∑ k : Fin r, dim k ≤ D
@@ -206,7 +206,7 @@ theorem. -/
 theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B C : MPSTensor d D)
       (r : ℝ)
@@ -244,7 +244,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     dsimp [c]
     simp [hroot_ne]
   have hIrr_scaled :
-      Kraus.IsIrreducibleFamily (d := d) (D := D) (fun i => c • A i) :=
+      Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) (fun i => c • A i) :=
     isIrreducibleFamily_smul (d := d) (D := D) hc_ne A hIrr
   have hActionScaled :
       Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
@@ -252,7 +252,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
       (d := d) (D := D) (fun i => c • A i) hIrr_scaled
   have hActionB : Matrix.IsIrreducibleAction (d := d) (D := D) B :=
     isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
-  have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
+  have hIrrB : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B :=
     Kraus.isIrreducibleFamily_of_isIrreducibleAction (d := d) (D := D) B hActionB
   have hB_unital_map : Kraus.transferMap (ι := Fin d) (n := Fin D) B 1 = 1 := by
     simpa [Kraus.transferMap_apply, Matrix.mul_one] using hB_unital
@@ -352,7 +352,7 @@ private theorem gauge_blockwise_shared
     (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
     (hSame0 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
     (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0)
     (blocks1 : (k : Fin r0) → MPSTensor d (dim0 k))
     (r1 : Fin r0 → ℝ)
@@ -364,7 +364,7 @@ private theorem gauge_blockwise_shared
           (blocks1 k)) :
     SameMPV₂ A
         (toTensorFromBlocks
-          (d := d) (μ := fun k : Fin r0 => (↑(Real.sqrt (r1 k)) : ℂ)) blocks1) ∧
+          (α := Fin d) (μ := fun k : Fin r0 => (↑(Real.sqrt (r1 k)) : ℂ)) blocks1) ∧
       (∀ k : Fin r0, (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0) ∧
       (∀ k, 0 < dim0 k) := by
   classical
@@ -375,11 +375,11 @@ private theorem gauge_blockwise_shared
       (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)
   have hSameBlocks :
       SameMPV₂
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
-        (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
+        (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) := by
     intro N σ
     calc
-      mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
+      mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
           = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
               simpa [smul_eq_mul] using
                 (mpv_toTensorFromBlocks_eq_sum
@@ -412,18 +412,18 @@ private theorem gauge_blockwise_shared
               (1 : ℂ) ^ N * mpv (blocks0 k) σ = mpv (blocks0 k) σ := by simp
               _ = (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) := hmulpow_apply.symm
               _ = (μ1 k) ^ N * mpv (blocks1 k) σ := by rw [hscale]
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := by
+      _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) σ := by
             symm
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
   have hSame1 :
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+      SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) := by
     intro N σ
     calc
       mpv A σ
-          = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
+          = mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
               hSame0 N σ
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := hSameBlocks N σ
+      _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) σ := hSameBlocks N σ
   have hμne1 : ∀ k : Fin r0, μ1 k ≠ 0 := by
     intro k
     dsimp [μ1]
@@ -454,12 +454,12 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
     (hIrr0 : ∀ k, Kraus.IsIrreducibleFamily (blocks0 k))
     (hSame0 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
     (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
     ∃ μ1 : Fin r0 → ℂ,
       ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
         SameMPV₂ A
-          (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
+          (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) ∧
         (∀ k,
           ∃ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
             Λ.PosDef ∧
@@ -577,12 +577,12 @@ theorem exists_tp_gauge_blockwise
     (hIrr0 : ∀ k, Kraus.IsIrreducibleFamily (blocks0 k))
     (hSame0 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
     (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
     ∃ μ1 : Fin r0 → ℂ,
       ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
         SameMPV₂ A
-          (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
+          (toTensorFromBlocks (α := Fin d) (μ := μ1) blocks1) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks1 k)) ∧
         (∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1) ∧
         (∀ k, 0 < μ1 k) ∧
@@ -628,10 +628,10 @@ theorem exists_tp_gauge_blockwise
       dsimp [c]
       simp [hroot_ne]
     have hIrr_scaled :
-        Kraus.IsIrreducibleFamily (d := d) (D := dim0 k) (fun i => c • blocks0 k i) :=
+        Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin (dim0 k)) (fun i => c • blocks0 k i) :=
       isIrreducibleFamily_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
     have hIrr_gauge :
-        Kraus.IsIrreducibleFamily (d := d) (D := dim0 k)
+        Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin (dim0 k))
           (Kraus.tpGauge (fun i => c • blocks0 k i) (σ1 k)) :=
       (Kraus.isIrreducibleFamily_tpGauge_iff
         (fun i => c • blocks0 k i) (σ1 k) (hσpd1 k)).2 hIrr_scaled
@@ -679,14 +679,14 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
       (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
       (∀ k, 0 < dim k) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
     exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
-  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
+  let A_nonzero := toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_nonzero
-      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
+      (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
     fun _ _ => rfl
   obtain ⟨μ, blocks, hSame, hΛ, hScalar, hμPos, _hμNe, hDim⟩ :=
     exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
@@ -761,14 +761,14 @@ theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       (∀ k, 0 < μ k) ∧
       (∀ k, 0 < dim k) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
     exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
-  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
+  let A_nonzero := toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_nonzero
-      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
+      (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
     fun _ _ => rfl
   obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμPos, hDim⟩ :=
     exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
@@ -843,7 +843,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
       -- (e) Positive-length MPV relationship
       SameMPV₂Pos
         (blockTensor (d := d) (n := Fin D) A p)
-        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) ∧
       -- (f) Bond-dimension bound
       ∑ k : Fin r, dim k ≤ D := by
   classical

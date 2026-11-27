@@ -66,7 +66,7 @@ lemma sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
     (hinter : ∀ k v, (V k)ᴴ * T v = (μ k • blocks k v) * (V k)ᴴ)
     (hreconstruct : ∀ v, T v = ∑ k, V k * (μ k • blocks k v) * (V k)ᴴ) :
     MPTensor.SameMPV₂Pos T
-      (MPSTensor.toTensorFromBlocks (d := s) (μ := μ) blocks) := by
+      (MPTensor.toTensorFromBlocks (α := Fin s) (μ := μ) blocks) := by
   intro N hN σ
   rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum]
   simp only [MPTensor.mpv, MPTensor.coeff]
@@ -136,7 +136,7 @@ theorem isBNT_verticalTensor_of_grouping
       verticalTensor M v = ∑ k, V k * (μ k • blocks k v) * (V k)ᴴ)
     (hBNT : let C := MPSTensor.mpvPhaseClassData blocks
       MPSTensor.IsCPSVBasisOfNormalTensors
-        (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks)
+        (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
         (fun j => ⟨dim (C.repr j), blocks (C.repr j)⟩)) :
     let C := MPSTensor.mpvPhaseClassData blocks
     MPSTensor.IsBNT (verticalTensor M) C.g
@@ -144,7 +144,7 @@ theorem isBNT_verticalTensor_of_grouping
   classical
   let C := MPSTensor.mpvPhaseClassData blocks
   have hPositive : MPTensor.SameMPV₂Pos (verticalTensor M)
-      (MPSTensor.toTensorFromBlocks (d := D * D) (μ := μ) blocks) :=
+      (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks) :=
     MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) μ blocks V hiso hinter hreconstruct
   exact hBNT.isBNT.of_sameMPV₂Pos hPositive.symm

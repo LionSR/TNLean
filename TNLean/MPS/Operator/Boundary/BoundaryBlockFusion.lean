@@ -87,7 +87,7 @@ Source: GLM23, Appendix A, `decompopen` and `eq:ortho`. -/
 theorem IsBoundaryClosed.exists_fusionDecomposition_of_retracts
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPSTensor (d * d) (dim c))
-    (hBlocks : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L)
     (S₁ : MPOTensor d E₁) (S₂ : MPOTensor d E₂)
     (V₁ : Matrix (Fin E₁) (Fin (∑ c : Fin r, dim c)) ℂ)
@@ -126,7 +126,7 @@ exact biorthogonal fusion tensors. Source: GLM23, `fusiontensors`,
 theorem IsBoundaryClosed.exists_blockFusionDecomposition
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPOTensor d (dim c))
-    (hBlocks : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1)
+    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun c ↦ (A c).toMPSTensor))
     {L : ℕ} (hL : 0 < L)
     (hSpan : MPSTensor.WordTupleSpanTop (fun c ↦ (A c).toMPSTensor) L)
@@ -191,9 +191,9 @@ theorem IsBoundaryCompatible.exists_blockActionDecomposition
     {A : MPSTensor d (∑ c : Fin s, dim c)} (h : IsBoundaryCompatible T A)
     (S : (a : Fin r) → MPOTensor d (opDim a))
     (B : (c : Fin s) → MPSTensor d (dim c))
-    (hT : T.toMPSTensor = MPSTensor.toTensorFromBlocks (fun _ ↦ 1)
+    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
       (fun a ↦ (S a).toMPSTensor))
-    (hA : A = MPSTensor.toTensorFromBlocks (fun _ ↦ 1) B)
+    (hA : A = MPTensor.toTensorFromBlocks (fun _ ↦ 1) B)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop B L)
     (a : Fin r) (x : Fin s) :
     ∃ (m : Fin s → ℕ)

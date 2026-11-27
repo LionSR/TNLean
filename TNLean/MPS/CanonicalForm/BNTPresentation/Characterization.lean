@@ -228,7 +228,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     (basis : (j : Fin g) → MPSTensor d (dimB j))
     (hBlocksNormal : ∀ k, IsNormalTensor (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (hCF : SameMPV₂Pos A (toTensorFromBlocks (d := d) μ blocks)) :
+    (hCF : SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) μ blocks)) :
     IsCPSVBasisOfNormalTensors A (fun j => ⟨dimB j, basis j⟩) ↔
       (∀ j, IsNormalTensor (basis j)) ∧
       (∀ k : Fin r, ∃ j : Fin g, ∃ hdim : dimB j = dimCF k,
@@ -342,7 +342,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     refine ⟨c, ?_⟩
     intro σ
     calc
-      mpv A σ = mpv (toTensorFromBlocks (d := d) μ blocks) σ := hCF N hN σ
+      mpv A σ = mpv (toTensorFromBlocks (α := Fin d) μ blocks) σ := hCF N hN σ
       _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ := by
         simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
       _ = ∑ k : Fin r, (μ k * ζ k) ^ N * mpv (basis (jOf k)) σ := by
@@ -362,7 +362,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
 
 This specializes arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines
 271--301 and 1137--1148), to the data of eq. `II_CF1`. -/
-theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
+theorem _root_.MPTensor.CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
     {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
     (data : CPSVCanonicalFormData A)
     (basis : (j : Fin g) → MPSTensor d (dimB j)) :
@@ -403,7 +403,7 @@ choosing one representative from each MPV phase-equivalence class.
 
 The conclusion is the existence part of the construction underlying
 arXiv:1606.00608, Proposition `prop:char-BNT`, lines 271--280 and 1137--1146. -/
-theorem CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
     (data : CPSVCanonicalFormData A) :
     ∃ g : ℕ, ∃ dimB : Fin g → ℕ,
       ∃ basis : (j : Fin g) → MPSTensor d (dimB j),

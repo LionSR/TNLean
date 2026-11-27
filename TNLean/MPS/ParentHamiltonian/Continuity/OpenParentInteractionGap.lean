@@ -34,6 +34,8 @@ The statements are for the open-chain translates of the matrix of a parent inter
 of the Hamiltonian is `0` or at least the gap.
 -/
 
+open MPTensor
+
 open scoped Topology ComplexOrder
 
 namespace MPSTensor
@@ -133,7 +135,7 @@ open-chain gap at an admissible simultaneous injectivity range: every eigenvalue
 Hamiltonian of its open-chain translates is `0` or at least the gap.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, lines 2114--2129 and 2170--2172. -/
-theorem CPSVCanonicalFormData.exists_openInteraction_uniform_gap_of_wordTupleSpanTop
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_openInteraction_uniform_gap_of_wordTupleSpanTop
     [NeZero d] {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S) (hR : S + 1 ≤ R)
@@ -152,7 +154,7 @@ all admissible lengths: every eigenvalue of each Hamiltonian is `0` or at least 
 The tensor and its simultaneous injectivity length are fixed. This is a consequence of the
 local projector comparison in CPGSV21, arXiv:2011.12127, lines 2170--2172, and Nachtergaele's
 finite-interval gap, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact
+theorem _root_.MPTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact
     [NeZero d] {X : Type*} [TopologicalSpace X]
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop
@@ -168,13 +170,15 @@ theorem CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact
   exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     (fun _ ↦ A) continuous_const H hH hParent hK hγ (fun _ _ N hN ↦ hGap N hN)
 
+set_option linter.style.longLine false in
 /-- At range \(R\geq3D^5\), a compact continuous family of positive parent
 interactions for a fixed canonical tensor of positive bond dimension \(D\)
 has one uniform open-chain gap for all chain lengths \(N\geq R\): every eigenvalue of each
 Hamiltonian is `0` or at least the gap.
 Source: arXiv:1606.00608, lines 317--345; the positive comparison is
 CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
-theorem IsCPSVCanonicalForm.exists_uniform_openInteraction_gap_of_compact_of_bounded_range
+theorem
+    _root_.MPTensor.IsCPSVCanonicalForm.exists_uniform_openInteraction_gap_of_compact_of_bounded_range
     [NeZero d] [NeZero D] {X : Type*} [TopologicalSpace X]
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ} (hR : 3 * D ^ 5 ≤ R)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)

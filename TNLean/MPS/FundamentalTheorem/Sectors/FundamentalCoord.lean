@@ -129,7 +129,7 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnesses
         Q.toTensor i =
           (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                       (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
-            toTensorFromBlocks (d := d)
+            toTensorFromBlocks (α := Fin d)
               (μ := matched_p_weight (P := P) (Q := Q) β τ)
               (matched_p_basis (P := P) (Q := Q) β hDim) i *
             (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
@@ -258,7 +258,7 @@ private lemma matched_toTensor_eq_submatrix
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
     (i : Fin d) :
-    toTensorFromBlocks (d := d)
+    toTensorFromBlocks (α := Fin d)
         (μ := matched_p_weight (P := P) (Q := Q) β τ)
         (matched_p_basis (P := P) (Q := Q) β hDim) i =
       (P.toTensor i).submatrix
@@ -278,7 +278,7 @@ private lemma matched_toTensor_eq_submatrix
   -- the sigma-level equiv induced by sectorFlatDimEquiv.
   -- Compute both:
   have hLHS :
-      toTensorFromBlocks (d := d)
+      toTensorFromBlocks (α := Fin d)
           (μ := matched_p_weight (P := P) (Q := Q) β τ)
           (matched_p_basis (P := P) (Q := Q) β hDim) i j₁ j₂ =
         Matrix.blockDiagonal' (fun s : Fin Q.totalCopies =>
@@ -451,7 +451,7 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
             (P.toTensor i) *
           (((permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
             Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) =
-        toTensorFromBlocks (d := d)
+        toTensorFromBlocks (α := Fin d)
             (μ := matched_p_weight (P := P) (Q := Q) β τ)
             (matched_p_basis (P := P) (Q := Q) β hDim) i := by
     rw [permGL_val, permGL_inv_val, hCast,
@@ -565,7 +565,7 @@ theorem fundamentalTheorem_equal_canonicalForm_unitary
             (P.toTensor i) *
           (((permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
             Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) =
-        toTensorFromBlocks (d := d)
+        toTensorFromBlocks (α := Fin d)
             (μ := matched_p_weight (P := P) (Q := Q) β τ)
             (matched_p_basis (P := P) (Q := Q) β hDim) i := by
     rw [permGL_val, permGL_inv_val, hCast,
@@ -573,7 +573,7 @@ theorem fundamentalTheorem_equal_canonicalForm_unitary
         ((P.toTensor i).submatrix (finCongr hTotal.symm) (finCongr hTotal.symm)),
       Matrix.submatrix_submatrix, hsubm]
     rfl
-  change toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i = _
+  change toTensorFromBlocks (α := Fin d) (μ := Q.flatWeight) Q.flatBasis i = _
   rw [hGauge i, ← hPerm]
   have hY_inv :
       (((X' * permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :

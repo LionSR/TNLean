@@ -70,7 +70,7 @@ theorem blockwise_insert_eq_of_mpv_agree
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct :
       MPSTensor.FirstSiteActionAgree
-        (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Y Z) :
+        (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ) A) Y Z) :
     ∀ k, MPSTensor.insertedTensor Y (A k) = MPSTensor.insertedTensor Z (A k) := by
   -- Obtain the finite-word separation length `L`.
   obtain ⟨L, hL⟩ := hCF.finiteWordTraceSeparation
@@ -96,7 +96,7 @@ theorem blockwise_insert_eq_of_mpv_agree
     have htrans : ∀ W : Matrix (Fin d) (Fin d) ℂ,
         ∑ i : Fin d, W s i *
             MPTensor.mpv
-              (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
+              (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ) A)
               (Fin.cons i w : Fin (L + 1) → Fin d) =
           ∑ k : Fin r, Matrix.trace
             ((μ k) ^ (L + 1) • MPSTensor.insertedTensor W (A k) s *
@@ -106,7 +106,7 @@ theorem blockwise_insert_eq_of_mpv_agree
       -- `mpv (A k) (Fin.cons i w)` into `trace (A k i * Kraus.evalWord (A k) (List.ofFn w))`.
       have hExp : ∀ i : Fin d,
           MPTensor.mpv
-              (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
+              (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ) A)
               (Fin.cons i w : Fin (L + 1) → Fin d) =
             ∑ k : Fin r, (μ k) ^ (L + 1) *
               Matrix.trace (A k i * Kraus.evalWord (A k) (List.ofFn w)) := by

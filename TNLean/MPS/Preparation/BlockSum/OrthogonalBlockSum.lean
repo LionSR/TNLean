@@ -35,7 +35,7 @@ are orthogonal, `B_jᴴ B_{j'} = 0` for the blocked tensors `B_j` of the blocks.
 
 The blocks are placed along arbitrary injective coordinate maps `ι_j` with disjoint ranges,
 rather than through the fixed flattening `finSigmaFinEquiv` of
-`MPSTensor.toTensorFromBlocks` and `MPSTensor.blockInclusion`, because the pairs of the
+`MPTensor.toTensorFromBlocks` and `MPSTensor.blockInclusion`, because the pairs of the
 approximating state are placed the same way (`MPSTensor.embedPair`, along
 `MPSTensor.SectorDecomposition.copyCoord` for a canonical form); the flattened direct sum is the
 case `ι_j a = finSigmaFinEquiv ⟨j, a⟩`.

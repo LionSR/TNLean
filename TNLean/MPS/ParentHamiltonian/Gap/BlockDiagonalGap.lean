@@ -46,7 +46,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_isNor
     ∃ R : ℕ, 0 < R ∧ ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N],
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
@@ -66,7 +66,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshol
     ∃ R₀ : ℕ, 0 < R₀ ∧ ∀ R : ℕ, R₀ ≤ R →
       ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
@@ -89,7 +89,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hBlkB, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isNBlkInjective

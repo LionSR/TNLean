@@ -40,6 +40,8 @@ statements of the fundamental theorem itself.
   normalization similarities at lines 313--332.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -135,10 +137,10 @@ theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
         (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
           (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
     ∀ i : Fin d,
-      toTensorFromBlocks (d := d) (μ := μ) B i =
+      toTensorFromBlocks (α := Fin d) (μ := μ) B i =
         (globalGaugeOfBlocks X : Matrix (Fin (∑ k : Fin r, dim k))
           (Fin (∑ k : Fin r, dim k)) ℂ) *
-          toTensorFromBlocks (d := d) (μ := μ) A i *
+          toTensorFromBlocks (α := Fin d) (μ := μ) A i *
           (((globalGaugeOfBlocks X)⁻¹ : GL (Fin (∑ k : Fin r, dim k)) ℂ) :
             Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) := by
   classical
@@ -153,9 +155,9 @@ theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     Matrix.blockDiagonal' fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
   let XBDinv : Matrix α α ℂ :=
     Matrix.blockDiagonal' fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-  have htoA : toTensorFromBlocks (d := d) (μ := μ) A i = f (BD A) := by
+  have htoA : toTensorFromBlocks (α := Fin d) (μ := μ) A i = f (BD A) := by
     simp [toTensorFromBlocks, BD, f, e]
-  have htoB : toTensorFromBlocks (d := d) (μ := μ) B i = f (BD B) := by
+  have htoB : toTensorFromBlocks (α := Fin d) (μ := μ) B i = f (BD B) := by
     simp [toTensorFromBlocks, BD, f, e]
   have hBD : BD B = XBD * BD A * XBDinv := by
     simp only [BD, XBD, XBDinv]

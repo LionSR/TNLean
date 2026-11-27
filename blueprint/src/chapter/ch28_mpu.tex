@@ -2281,7 +2281,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{lemma}[Left-canonical normal blocks under independent tensor products]
     \label{thm:mps_normal_block_tensor_product}
     \lean{MPSTensor.leftCanonical_tensorProduct,
-        MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical}
+        MPTensor.IsNormalTensor.tensorProduct_of_leftCanonical}
     \leanok
     \uses{def:mps_independent_tensor_product,def:left_canonical_tensor,def:nt_cpsv}
     Let $A$ and $B$ be CPSV normal tensors, and suppose that
@@ -3598,7 +3598,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Full support]
     \label{def:mpu_full_support}
-    \lean{MPSTensor.CPSVCanonicalFormData.HasFullSupport}
+    \lean{MPTensor.CPSVCanonicalFormData.HasFullSupport}
     \leanok
     \uses{def:cpsv_canonical_form}
     Let
@@ -3803,7 +3803,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{lemma}[Full support under physical blocking]
     \label{thm:mpu_full_support_blocking}
-    \lean{MPSTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor}
+    \lean{MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor}
     \leanok
     \uses{def:mpu_full_support,thm:cpsv_literal_canonical_form_positive_blocking}
     Suppose that canonical-form data have full support:
@@ -3822,7 +3822,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{lemma}[Full support under physical relabeling]
     \label{thm:mpu_full_support_reindexing}
-    \lean{MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical}
+    \lean{MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical}
     \leanok
     \uses{def:mpu_full_support,thm:cpsv_physical_reindexing}
     A bijective relabeling of the physical alphabet preserves full
@@ -3837,7 +3837,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{lemma}[An ambient-dimensional block is irreducible]
     \label{thm:mpu_block_ambient_irreducible}
-    \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq}
+    \lean{MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq}
     \leanok
     \uses{def:cpsv_canonical_form}
     If a block has bond dimension $D$, then the ambient tensor $A$ is
@@ -3863,7 +3863,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{lemma}[Unique block with full support]
     \label{thm:mpu_unique_full_support_irreducible}
-    \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_r_eq_one_of_fullSupport}
+    \lean{MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_r_eq_one_of_fullSupport}
     \leanok
     \uses{def:mpu_full_support}
     Canonical-form data with one block and full support reconstruct
@@ -3883,7 +3883,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{lemma}[Normality of a unique full-support block]
     \label{thm:mpu_unique_full_support_normal}
-    \lean{MPSTensor.CPSVCanonicalFormData.isNormalTensor_of_r_eq_one_of_fullSupport}
+    \lean{MPTensor.CPSVCanonicalFormData.isNormalTensor_of_r_eq_one_of_fullSupport}
     \leanok
     \uses{def:mpu_full_support}
     Suppose that canonical-form data have one block and full
@@ -4498,7 +4498,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Ambient inclusion of a canonical block]
     \label{def:mpu_ambient_block_inclusion}
-    \lean{MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion}
+    \lean{MPTensor.CPSVCanonicalFormData.ambientBlockInclusion}
     \leanok
     \uses{def:cpsv_canonical_form,def:mpu_dependent_block_inclusion}
     If $U$ is the reconstruction coisometry and $J_k$ is the inclusion of the
@@ -4510,8 +4510,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Ambient block isometry and intertwining]
     \label{thm:mpu_ambient_block_isometry_intertwining}
-    \lean{MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion_conjTranspose_mul_self,
-        MPSTensor.CPSVCanonicalFormData.mul_ambientBlockInclusion}
+    \lean{MPTensor.CPSVCanonicalFormData.ambientBlockInclusion_conjTranspose_mul_self,
+        MPTensor.CPSVCanonicalFormData.mul_ambientBlockInclusion}
     \leanok
     \uses{def:cpsv_canonical_form,def:mpu_ambient_block_inclusion}
     For every retained block and physical index $i$,
@@ -4541,7 +4541,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Weighted-block transfer eigenvalue]
     \label{def:mpu_transfer_eigenvalue}
-    \lean{MPSTensor.CPSVCanonicalFormData.transferEigenvalue}
+    \lean{MPTensor.CPSVCanonicalFormData.transferEigenvalue}
     \leanok
     \uses{def:cpsv_canonical_form}
     For a block $k$, define its weighted transfer eigenvalue by
@@ -4552,7 +4552,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Shifted traces normalize every weight]
     \label{thm:mpu_transfer_eigenvalue_one}
-    \lean{MPSTensor.CPSVCanonicalFormData.transferEigenvalue_eq_one}
+    \lean{MPTensor.CPSVCanonicalFormData.transferEigenvalue_eq_one}
     \leanok
     \uses{def:mpu_transfer_eigenvalue}
     If the ambient transfer matrix satisfies $\tr(E^N)=1$ for every integer
@@ -4577,8 +4577,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Unique full-support block geometry]
     \label{thm:mpu_unique_full_support_geometry}
-    \lean{MPSTensor.CPSVCanonicalFormData.dim_eq_of_r_eq_one_of_fullSupport,
-        MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion_mul_conjTranspose_eq_one}
+    \lean{MPTensor.CPSVCanonicalFormData.dim_eq_of_r_eq_one_of_fullSupport,
+        MPTensor.CPSVCanonicalFormData.ambientBlockInclusion_mul_conjTranspose_eq_one}
     \leanok
     \uses{def:mpu_full_support,def:mpu_ambient_block_inclusion}
     If there is exactly one block $k$ and the blocks fill the
@@ -4601,7 +4601,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Shifted transfer traces determine one block]
     \label{thm:mpu_shifted_transfer_trace_single_block}
-    \lean{MPSTensor.CPSVCanonicalFormData.r_eq_one_of_shifted_transfer_trace}
+    \lean{MPTensor.CPSVCanonicalFormData.r_eq_one_of_shifted_transfer_trace}
     \leanok
     \uses{def:cpsv_canonical_form}
     Let $A$ have CPSV canonical-form data with $r$ blocks.  If its
@@ -5250,9 +5250,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[MPU canonical form]
     \label{def:mpu_canonical_form}
-    \lean{MPSTensor.IsMPUCanonicalBlock,
-        MPSTensor.MPUCanonicalFormData,
-        MPSTensor.IsMPUCanonicalForm}
+    \lean{MPTensor.IsMPUCanonicalBlock,
+        MPTensor.MPUCanonicalFormData,
+        MPTensor.IsMPUCanonicalForm}
     \leanok
     \uses{def:transfer_map,def:block_diagonal_tensor}
     A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU

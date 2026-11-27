@@ -29,7 +29,7 @@ normalization or grouping into a basis of normal tensors is asserted here.
   tensor is reducing under normalized BNT-refined horizontal form.
 * `BNTRefinement.hasInvariantProjectorClosure_verticalTensor`: the same
   closure from explicit literal-CF data and its BNT refinement.
-* `MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor`:
+* `MPTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor`:
   the predicate-level literal-CF conclusion.
 * `MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry`:
   the physical space splits into complete orthogonal irreducible reducing
@@ -93,7 +93,9 @@ theorem IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor
 
 end MPOTensor
 
-namespace MPSTensor.CPSVCanonicalFormData.BNTRefinement
+namespace MPTensor.CPSVCanonicalFormData.BNTRefinement
+
+open MPSTensor
 
 open MPOTensor
 
@@ -109,7 +111,7 @@ give right invariance.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
 theorem hasInvariantProjectorClosure_verticalTensor
-    (M : MPOTensor d D) (data : MPSTensor.CPSVCanonicalFormData M.toMPSTensor)
+    (M : MPOTensor d D) (data : MPTensor.CPSVCanonicalFormData M.toMPSTensor)
     (ref : data.BNTRefinement) (hM : IsMPDO M) :
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
   intro P hP hInv v
@@ -139,9 +141,11 @@ theorem hasInvariantProjectorClosure_verticalTensor
   rw [← verticalTensor_braRightMul, hRight, verticalTensor_braRightMul,
     verticalTensor_ketLeftMul]
 
-end MPSTensor.CPSVCanonicalFormData.BNTRefinement
+end MPTensor.CPSVCanonicalFormData.BNTRefinement
 
-namespace MPSTensor.IsCPSVCanonicalForm
+namespace MPTensor.IsCPSVCanonicalForm
+
+open MPSTensor
 
 open MPOTensor
 
@@ -152,14 +156,14 @@ vertically viewed tensor.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
 theorem hasInvariantProjectorClosure_verticalTensor
-    (M : MPOTensor d D) (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (M : MPOTensor d D) (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
   let data := Classical.choice hCanonical
   let ref := data.bntRefinement
   exact ref.hasInvariantProjectorClosure_verticalTensor M data hM
 
-end MPSTensor.IsCPSVCanonicalForm
+end MPTensor.IsCPSVCanonicalForm
 
 namespace MPOTensor
 
@@ -193,8 +197,8 @@ theorem IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry
       (∀ k v, blocks k v = (V k)ᴴ * verticalTensor M v * V k) ∧
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       MPTensor.SameMPV₂Pos (verticalTensor M)
-        (MPSTensor.toTensorFromBlocks
-          (d := D * D) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+        (MPTensor.toTensorFromBlocks
+          (α := Fin (D * D)) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   obtain ⟨r, dim, blocks, V, hdim, hIso, hSum, hOrth, hIntertwine,
       hIntertwineStar, hCompress, hIrred, hSame⟩ :=
     MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
@@ -290,7 +294,7 @@ theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧
-      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
       (∀ k v, verticalTensor M v * V k = V k * (μ k • blocks k v)) ∧

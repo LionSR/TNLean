@@ -18,6 +18,8 @@ of its local ground-space projection. This is the finite-window continuity
 step in arXiv:1010.3732, Appendix A, lines 2575--2578.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -148,7 +150,7 @@ theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     (L : ℕ) (hSpan : ∀ x, WordTupleSpanTop (A x) L) :
     Continuous fun x =>
-      (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L).starProjection := by
+      (groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).starProjection := by
   have hEq (x : X) := groundSpaceES_toTensorFromBlocks_eq_iSup (μ x) (A x) (hμ x) L
   simpa only [hEq] using
     continuous_iSup_groundSpaceES_starProjection_family A hA L hSpan

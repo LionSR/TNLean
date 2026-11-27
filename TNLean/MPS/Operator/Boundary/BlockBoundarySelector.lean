@@ -34,9 +34,9 @@ def blockSum (O : (a : Fin r) → MPOTensor d (dim a)) :
 assembly of its doubled-index component tensors. -/
 @[simp] theorem blockSum_toMPSTensor (O : (a : Fin r) → MPOTensor d (dim a)) :
     (blockSum O).toMPSTensor =
-      MPSTensor.toTensorFromBlocks (fun _ ↦ 1) (fun a ↦ (O a).toMPSTensor) := by
+      MPTensor.toTensorFromBlocks (fun _ ↦ 1) (fun a ↦ (O a).toMPSTensor) := by
   funext ij
-  simp only [toMPSTensor, blockSum, MPSTensor.toTensorFromBlocks, one_smul]
+  simp only [toMPSTensor, blockSum, MPTensor.toTensorFromBlocks, one_smul]
 
 /-- Word evaluation of a finite MPO direct sum is the flattened block
 diagonal of the component word evaluations. -/

@@ -27,6 +27,8 @@ short-range claim are documented in
 `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
 -/
 
+open MPTensor
+
 open scoped ComplexOrder
 
 namespace MPSTensor
@@ -37,7 +39,7 @@ variable {d D : ℕ}
 on the open chain: it is the parent interaction of the block sum of the distinct normal
 representatives. Source: CPSV16, arXiv:1606.00608, equations `II_CF1`,
 `eq:II_ABasicTensors`, and `decBSV`. -/
-theorem CPSVCanonicalFormData.parentChainInteraction_eq_representatives
+theorem _root_.MPTensor.CPSVCanonicalFormData.parentChainInteraction_eq_representatives
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A)
     {R : ℕ} (hR : 0 < R) (N : ℕ) :
     parentChainInteraction A R N = parentChainInteraction
@@ -48,11 +50,13 @@ theorem CPSVCanonicalFormData.parentChainInteraction_eq_representatives
 
 variable [NeZero d]
 
+set_option linter.style.longLine false in
 /-- The normal representatives of a canonical tensor give a uniform open-chain
 gap at every range \(R\geq S+1\), for every chain length \(N\geq R\).
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
-theorem CPSVCanonicalFormData.exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
@@ -71,12 +75,14 @@ theorem CPSVCanonicalFormData.exists_hamiltonian_parentChainInteraction_gap_of_w
   rw [data.parentChainInteraction_eq_representatives (by omega : 0 < R) N]
   exact hGap N hN
 
+set_option linter.style.longLine false in
 /-- A canonical tensor of positive bond dimension \(D\) has a uniform
 open-chain gap at every range \(R\geq3D^5\) and every length \(N\geq R\).
 The simultaneous injectivity length is derived from the canonical data.
 Source: arXiv:1606.00608, lines 317--345; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem IsCPSVCanonicalForm.exists_parentChainInteraction_gap_of_three_bondDim_pow_five_le
+theorem
+    _root_.MPTensor.IsCPSVCanonicalForm.exists_parentChainInteraction_gap_of_three_bondDim_pow_five_le
     [NeZero D]
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R) :
@@ -93,7 +99,7 @@ theorem IsCPSVCanonicalForm.exists_parentChainInteraction_gap_of_three_bondDim_p
 at every admissible supplied simultaneous injectivity range.
 Source: CPSV16, arXiv:1606.00608, equations `II_CF1` and `decBSV`;
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop
+theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
@@ -108,11 +114,13 @@ theorem IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop
   exact fun {_S _R} hS hSpan hR ↦
     data.exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop hS hSpan hR
 
+set_option linter.style.longLine false in
 /-- At an admissible simultaneous injectivity range, the kernel of the Hamiltonian of the parent
 interaction on the open chain of a canonical tensor is its full boundary-condition space,
 including multiplicities and ambient reconstruction. Source: CPGSV21, arXiv:2011.12127,
 Section IV.C, lines 2114--2129; CPSV16, arXiv:1606.00608, equations `II_CF1` and `decBSV`. -/
-theorem CPSVCanonicalFormData.ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop
+theorem
+    _root_.MPTensor.CPSVCanonicalFormData.ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R N : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop

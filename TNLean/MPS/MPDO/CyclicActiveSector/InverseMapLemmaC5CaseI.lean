@@ -49,7 +49,7 @@ Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5, lines
 theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
     (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (a b : F.ActiveSector p → ℝ),
       (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
@@ -97,7 +97,7 @@ corollary, lines 1374--1505. -/
 theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL
     (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (a b : F.ActiveSector p → ℝ),
       (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
@@ -127,7 +127,7 @@ corollary, lines 1374--1505. -/
 theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL
     (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (aActive bActive : F.ActiveSector p → ℝ)
       (a b : Fin F.sectorCount → ℝ),
@@ -202,7 +202,7 @@ Source: arXiv:1606.00608, Appendix C.2, the corollary after Lemma C.5, lines
 theorem exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL
     (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
     ∃ F : PhysicalSectorFactorization K, ∃ a b : Fin F.sectorCount → ℝ,
       (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
         (∀ k h, (F.neighboringOperator k h).trace = (a k * b h : ℂ)) ∧

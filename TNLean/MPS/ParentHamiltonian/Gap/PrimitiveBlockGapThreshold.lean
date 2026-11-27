@@ -97,17 +97,18 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_e
     (hKernel : ∀ W, R ≤ W →
       LinearMap.ker
           (Matrix.toEuclideanLin
-              (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R W).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) W) :
+              (parentChainInteraction (toTensorFromBlocks (α := Fin d)
+                (μ := μ) A) R W).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) W) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨W, hRW, _, γ, hγ, hGap⟩ :=
     exists_ge_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap
       μ A hμ ρ hP hρ hDistinct (2 * R)
   exact exists_hamiltonian_parentRingInteraction_gap_of_larger_range
-    (toTensorFromBlocks (d := d) (μ := μ) A) hR hRW (hKernel W (by omega)) hγ hGap
+    (toTensorFromBlocks (α := Fin d) (μ := μ) A) hR hRW (hKernel W (by omega)) hγ hGap
 
 /-- Under the hypotheses of
 `exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq`,
@@ -124,18 +125,19 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hKernel : ∀ W, R ≤ W →
       LinearMap.ker
           (Matrix.toEuclideanLin
-              (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R W).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) W) :
+              (parentChainInteraction (toTensorFromBlocks (α := Fin d)
+                (μ := μ) A) R W).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) W) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
       μ A hμ ρ hP hρ hDistinct hR hKernel
   obtain ⟨M, hM⟩ := hGap.exists_forall_of_atTop
   exact hamiltonian_parentRingInteraction_gap_of_eventual_gap
-    (toTensorFromBlocks (d := d) (μ := μ) A) R M hγ fun N _ hN ↦ hM N hN
+    (toTensorFromBlocks (α := Fin d) (μ := μ) A) R M hγ fun N _ hN ↦ hM N hN
 
 /-- Every interaction range above a fixed threshold gives a uniformly gapped
 periodic parent Hamiltonian for a direct sum of inequivalent normalized
@@ -152,7 +154,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshol
     ∃ R₀ : ℕ, 0 < R₀ ∧ ∀ R : ℕ, R₀ ≤ R → ∃ γ : ℝ, 0 < γ ∧
       ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨R₀, hR₀, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
@@ -182,15 +184,16 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   have hKernel : ∀ W, R ≤ W →
       LinearMap.ker
           (Matrix.toEuclideanLin
-              (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) B) R W).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) B) W :=
+              (parentChainInteraction (toTensorFromBlocks (α := Fin d)
+                (μ := μ) B) R W).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) B) W :=
     fun W hRW ↦ ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ B hμ (fun j ↦ (hP j).norm)
       (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving B hSpanB
@@ -233,7 +236,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_three
     (hr : 2 ≤ r) (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   exact exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
     μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦
@@ -267,7 +270,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hr : 2 ≤ r) (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   exact exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_ker_eq
     μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦

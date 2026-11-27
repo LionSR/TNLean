@@ -76,8 +76,8 @@ structure TwistedTPGaugeSetup [NeZero D]
   hB'_def : B' = Kraus.tpGauge (d := d) (D := D) B σ
   hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1
   hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1
-  hIrrA' : Kraus.IsIrreducibleFamily (d := d) (D := D) A'
-  hIrrB' : Kraus.IsIrreducibleFamily (d := d) (D := D) B'
+  hIrrA' : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A'
+  hIrrB' : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B'
 
 /-- Constructs a `TwistedTPGaugeSetup` from an irreducible, normalized MPS tensor and
 a unitary twist matrix `u`. This is the Perron gauge reduction used for
@@ -98,7 +98,7 @@ noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
   have hEqBA : Kraus.transferMap B = Kraus.transferMap A := LinearMap.ext hB_eq
   have hIrrB : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := by
     simpa [hEqBA] using hIrrA
-  have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
+  have hIrrTensor : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
@@ -146,10 +146,10 @@ noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
   have hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1 := by
     simpa [B', Kraus.IsTP] using
       Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint (K := B) (ρ := σ) hσ_pd hσ_fixB
-  have hIrrA' : Kraus.IsIrreducibleFamily (d := d) (D := D) A' := by
+  have hIrrA' : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A' := by
     simpa [A'] using Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
       (K := A) (σ := σ) hσ_pd hIrrA
-  have hIrrB' : Kraus.IsIrreducibleFamily (d := d) (D := D) B' := by
+  have hIrrB' : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) B' := by
     simpa [B'] using Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
       (K := B) (σ := σ) hσ_pd hIrrB
   exact
@@ -683,7 +683,7 @@ theorem boundaryState_invariant_of_virtualUnitary_of_irreducible
   have hρ_ne : ρ ≠ 0 := by
     intro hρ0
     simp [hρ0] at hρ_tr
-  have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
+  have hIrrTensor : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   have hIrrAdj :
       IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) :=

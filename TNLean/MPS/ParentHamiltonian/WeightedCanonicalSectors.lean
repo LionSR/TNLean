@@ -63,6 +63,8 @@ lines 954–993. The multiplicity, normalization and indexing conventions
 are recorded in `docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`.
 -/
 
+open MPTensor
+
 section
 
 open Filter

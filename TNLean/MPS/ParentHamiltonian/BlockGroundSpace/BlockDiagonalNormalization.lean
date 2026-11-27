@@ -89,8 +89,8 @@ theorem groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
     (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hν : ∀ j, ν j ≠ 0) {L : ℕ}
     (hGS : ∀ j, groundSpace (A j) L = groundSpace (B j) L) :
-    groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L =
-      groundSpace (toTensorFromBlocks (d := d) (μ := ν) B) L := by
+    groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
+      groundSpace (toTensorFromBlocks (α := Fin d) (μ := ν) B) L := by
   simp only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     groundSpace_toTensorFromBlocks_eq_iSup ν B hν, hGS]
 
@@ -102,8 +102,8 @@ theorem hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_of_block_groundS
     (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hν : ∀ j, ν j ≠ 0) {L : ℕ}
     (hGS : ∀ j, groundSpace (A j) L = groundSpace (B j) L) (N : ℕ) [NeZero N] :
-    (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) L N).hamiltonian =
-      (parentRingInteraction (toTensorFromBlocks (d := d) (μ := ν) B) L N).hamiltonian :=
+    (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian =
+      (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := ν) B) L N).hamiltonian :=
   hamiltonian_parentRingInteraction_eq_of_groundSpace_eq
     (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ ν A B hμ hν hGS) N
 
@@ -123,8 +123,9 @@ theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
       (∀ (L N : ℕ) [NeZero N],
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) L N).hamiltonian =
-          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) B) L N).hamiltonian) := by
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian =
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d)
+            (μ := μ) B) L N).hamiltonian) := by
   exact (exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct).elim
     fun B ⟨ρ, hP, hρ, hGS, hDistinctB⟩ ↦
       ⟨B, ρ, hP, hρ, hDistinctB, fun L N _ ↦
@@ -159,8 +160,9 @@ theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isN
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
       (∀ (L N : ℕ) [NeZero N],
-        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) L N).hamiltonian =
-          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) B) L N).hamiltonian) := by
+        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian =
+          (parentRingInteraction (toTensorFromBlocks (α := Fin d)
+            (μ := μ) B) L N).hamiltonian) := by
   classical
   choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using
     fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal ⟨L₀, hL₀, hBlk j⟩

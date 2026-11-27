@@ -38,6 +38,8 @@ kernel condition, and equation (3.12). These are sector membership statements;
 classification of all ground states is a separate result.
 -/
 
+open MPTensor
+
 section
 
 open MPSTensor
@@ -106,7 +108,7 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hRN : R ≤ N)
-    (hker : groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N ≤
+    (hker : groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian))) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by

@@ -21,6 +21,8 @@ specified length and all local matrix product spaces.
 Source: arXiv:2011.12127, Section IV.C, lines 2114--2129.
 -/
 
+open MPTensor
+
 namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]

@@ -145,7 +145,7 @@ of eq. `eq:B_TM`. Normality is the source's definition after
 eq. `eq:transfer_matrix`: the letters have no nontrivial common invariant
 subspace, and `1` is the only eigenvalue of `E_A` of modulus one.
 
-Normality is taken as `MPSTensor.IsNormalTensor`; the proof uses its fields
+Normality is taken as `MPTensor.IsNormalTensor`; the proof uses its fields
 `no_invariant_proj` and `primitive_transfer`. Its remaining field `spectral_radius_one` adds
 nothing to the source's hypotheses here: in the left-canonical gauge `hA` the transfer map is a
 channel, so a caller holding only the source's two conditions obtains `IsNormalTensor A` from

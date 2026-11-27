@@ -318,7 +318,7 @@ theorem basisCount_le_totalDim (P : SectorDecomposition d)
 
 /-- The total tensor, obtained by flattening `(j, q)` and applying `toTensorFromBlocks`. -/
 noncomputable def toTensor (P : SectorDecomposition d) : MPSTensor d P.totalDim :=
-  toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis
+  toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis
 
 /-- Multiply every copy weight in a sector decomposition by the same nonzero scalar.
 
@@ -404,7 +404,7 @@ theorem scaleWeights_toTensor (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 
 
 /-- `toTensor` is `toTensorFromBlocks` for the flattened sector data. -/
 theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition d) :
-    P.toTensor = toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis :=
+    P.toTensor = toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis :=
   rfl
 
 /-! ## Direct sums with one marked letter -/
@@ -433,7 +433,7 @@ proof of Proposition 4.13, lines 1909--1919. -/
 noncomputable def markedTensor {e : ℕ} (P : SectorDecomposition d)
     (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j)) :
     MPSTensor e P.totalDim :=
-  toTensorFromBlocks (d := e) P.flatWeight (P.flatMarked C)
+  toTensorFromBlocks (α := Fin e) P.flatWeight (P.flatMarked C)
 
 /-- Trace expansion for a weighted direct sum with one marked letter.
 

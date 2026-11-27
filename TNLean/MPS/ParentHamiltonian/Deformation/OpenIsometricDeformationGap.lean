@@ -26,6 +26,8 @@ and Section 6. The initial joint one-site span is supplied or derived by
 blocking; normality alone is not identified with one-site injectivity.
 -/
 
+open MPTensor
+
 open scoped Matrix BigOperators ComplexOrder Topology
 open Kraus (blockTensor)
 

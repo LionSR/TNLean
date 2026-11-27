@@ -90,7 +90,7 @@ noncomputable def physicalAdjointNormalizedFlattening
   blocks := fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
     (MPSTensor.mapStar (data.blocks k))
   blocks_normal := fun k ↦
-    (MPSTensor.IsNormalTensor.mapStar (data.blocks_normal k)).reindexPhysical
+    (MPTensor.IsNormalTensor.mapStar (data.blocks_normal k)).reindexPhysical
       (MPOTensor.physicalPairSwapEquiv d)
   total_dim_le := data.total_dim_le
   ambient_coisometry := data.ambient_coisometry.map (starRingEnd ℂ)
@@ -104,12 +104,12 @@ noncomputable def physicalAdjointNormalizedFlattening
     have hmap := congrArg (fun M ↦ M.map (starRingEnd ℂ))
       (data.reconstruct (MPOTensor.physicalPairSwapEquiv d i))
     have hmiddle :
-        (MPSTensor.toTensorFromBlocks data.weights data.blocks
+        (MPTensor.toTensorFromBlocks data.weights data.blocks
           (MPOTensor.physicalPairSwapEquiv d i)).map (starRingEnd ℂ) =
-          MPSTensor.toTensorFromBlocks (fun k ↦ star (data.weights k))
+          MPTensor.toTensorFromBlocks (fun k ↦ star (data.weights k))
             (fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
               (MPSTensor.mapStar (data.blocks k))) i := by
-      simp only [MPSTensor.toTensorFromBlocks, Kraus.reindexPhysical]
+      simp only [MPTensor.toTensorFromBlocks, Kraus.reindexPhysical]
       rw [show ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' fun k => data.weights k •
             data.blocks k (MPOTensor.physicalPairSwapEquiv d i))).map (starRingEnd ℂ) =

@@ -325,12 +325,12 @@ private theorem rightVerticalRepresentative_transferMap :
     ring_nf
 
 private theorem leftVerticalRepresentative_isNormalTensor :
-    MPSTensor.IsNormalTensor leftVerticalRepresentative :=
+    MPTensor.IsNormalTensor leftVerticalRepresentative :=
   MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     leftVerticalRepresentative leftVerticalRepresentative_transferMap
 
 private theorem rightVerticalRepresentative_isNormalTensor :
-    MPSTensor.IsNormalTensor rightVerticalRepresentative :=
+    MPTensor.IsNormalTensor rightVerticalRepresentative :=
   MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     rightVerticalRepresentative rightVerticalRepresentative_transferMap
 

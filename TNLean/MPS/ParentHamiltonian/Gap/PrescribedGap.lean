@@ -120,9 +120,9 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_o
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian) z →
           z = 0 ∨ (((1 - η) : ℝ) : ℂ) ≤ z := by
-  let B := toTensorFromBlocks (d := d) (μ := μ) A
+  let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
   let ε := η / (4 * Real.sqrt 2)
   have hsqrt : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hε : 0 < ε := div_pos hη (mul_pos (by norm_num) hsqrt)
@@ -199,7 +199,7 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_o
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N).hamiltonian) z →
+            (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian) z →
           z = 0 ∨ (((1 - η) : ℝ) : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal

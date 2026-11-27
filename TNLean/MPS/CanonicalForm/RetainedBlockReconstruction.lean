@@ -19,7 +19,9 @@ arXiv:1703.09188, canonical form, lines 259--265.
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor.RetainedBlockReconstructionData
+namespace MPTensor.RetainedBlockReconstructionData
+
+open MPSTensor
 
 variable {d D : ℕ} {A : MPSTensor d D}
 
@@ -58,4 +60,4 @@ theorem mul_ambientBlockInclusion (data : RetainedBlockReconstructionData A)
   rw [← Matrix.mul_assoc data.ambient_coisometry data.ambient_coisometryᴴ,
     data.coisometric, Matrix.one_mul, toTensorFromBlocks_mul_blockInclusion]
 
-end MPSTensor.RetainedBlockReconstructionData
+end MPTensor.RetainedBlockReconstructionData

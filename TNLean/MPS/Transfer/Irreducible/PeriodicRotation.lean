@@ -248,8 +248,8 @@ sums. -/
 theorem rotatePhysical_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
     (M : Matrix (Fin d) (Fin d) ℂ) (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k)) :
-    rotatePhysical M (toTensorFromBlocks (d := d) μ A) =
-    toTensorFromBlocks (d := d) μ (fun k => rotatePhysical M (A k)) := by
+    rotatePhysical M (toTensorFromBlocks (α := Fin d) μ A) =
+    toTensorFromBlocks (α := Fin d) μ (fun k => rotatePhysical M (A k)) := by
   funext i; ext a b
   simp only [rotatePhysical_apply, toTensorFromBlocks, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.reindex_apply, Matrix.submatrix_apply,

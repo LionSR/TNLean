@@ -27,7 +27,7 @@ claim attributed to that passage.
 
 * `MPSTensor.CPSVCanonicalFormIIData.tensorProduct` assembles canonical-form-II
   data for the independent tensor product from the two supplied data.
-* `MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical` preserves CPSV
+* `MPTensor.IsNormalTensor.tensorProduct_of_leftCanonical` preserves CPSV
   normality for two left-canonical normal blocks;
   `MPSTensor.leftCanonical_tensorProduct`
   supplies the accompanying left-canonical conclusion.
@@ -70,7 +70,7 @@ left-canonical hypotheses are the project inputs for the retained
 canonical-form blocks described around arXiv:1606.00608, equation `II_CF1`,
 lines 214--245; the passage itself is not cited as asserting left-canonicality.
 -/
-theorem IsNormalTensor.tensorProduct_of_leftCanonical {A : MPSTensor d D}
+theorem _root_.MPTensor.IsNormalTensor.tensorProduct_of_leftCanonical {A : MPSTensor d D}
     (hA : IsNormalTensor A)
     {B : MPSTensor e E} (hB : IsNormalTensor B)
     (hLeftA : IsLeftCanonical A) (hLeftB : IsLeftCanonical B) :

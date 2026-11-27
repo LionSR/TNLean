@@ -62,7 +62,7 @@ cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
 The singleton-sector proof is by contradiction, following the source-facing repair
 documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>: the overlap formula and
-normality (`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
+normality (`MPTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
 self-overlap limit) give `tr(S^N) → 1`.  Conjugating the primitive `T` by its
 Perron vector (`QICLean/Algebra/PerronFrobenius/PerronVector.lean`) gives a
 stochastic matrix `P`, while the matching squared conjugation of `S` is bounded
@@ -591,7 +591,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
     [hne : Nonempty (F.ActiveSector p)] :
     Fintype.card (F.ActiveSector p) = 1 := by
   have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
@@ -666,7 +666,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
     [hne : Nonempty (F.ActiveSector p)] :
     (F.activeSectorTraceMatrix p) ^ 2 = F.activeSectorTraceMatrix p := by
   have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
@@ -714,7 +714,7 @@ theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
     [hne : Nonempty (F.ActiveSector p)] :
     ∃ a b : F.ActiveSector p → ℝ,
       (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
@@ -765,7 +765,7 @@ theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
       ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor)
     [hne : Nonempty (F.ActiveSector p)] :
     let L : Matrix (Fin D) (F.ActiveSector p) ℂ :=
       fun beta h ↦ (F.leftTensor h beta).trace

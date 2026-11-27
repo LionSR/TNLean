@@ -390,7 +390,7 @@ theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorCl
         (μ k • blocks k i) * (V k)ᴴ) ∧
       (∀ (k : Fin r) (i : Fin d), μ k • blocks k i = (V k)ᴴ * A i * V k) ∧
       (∀ i : Fin d, A i = ∑ k, V k * (μ k • blocks k i) * (V k)ᴴ) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       (∑ k, dim k) ≤ D := by
   classical
   obtain ⟨r₀, dim₀, blocks₀, V₀, hpos, hiso, hsum, horth, hint, hintStar,
@@ -537,7 +537,7 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorCl
     (hPer : HasNoPeriodicVectors A) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       (∀ k, IsNormalTensor (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧

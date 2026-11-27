@@ -557,7 +557,7 @@ units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`). Together `{1, lambd
 characterizes the per-site map `φ`, not `transferMap R.toMPSTensor` itself.
 The primitivity, spectral-radius-one, and irreducibility lemmas needed for
 `IsNormalTensor` and the literal CPSV canonical form
-(`MPSTensor.IsCPSVCanonicalForm`) are proved directly from
+(`MPTensor.IsCPSVCanonicalForm`) are proved directly from
 `transferMap R.toMPSTensor`'s own rank-one closed form (not from a
 Kronecker-product factorization in terms of `φ`) in
 `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`

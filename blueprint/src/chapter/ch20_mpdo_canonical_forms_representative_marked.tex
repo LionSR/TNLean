@@ -173,11 +173,11 @@
 % Source anchors: CPSV16 Appendix C.3, lines 1835--1858 and 1909--1919.
 \begin{lemma}[Full-coordinate marked trace identity]
     \label{thm:cpsv_full_coordinate_marked_trace_identity}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedBlocks}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedTensor}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         trace_groupedMarkedTensor_eq_representative_markedTensor}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_representative_sector_decomposition,def:marked_representative_direct_sum,lem:marked_representative_trace_expansion}
@@ -214,9 +214,9 @@
 
 \begin{lemma}[Retained-coordinate representative-grouped Lemma L]
     \label{thm:cpsv_retained_representative_grouped_lemma_l}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedTensor_basis_eq_of_trace_agree}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         insertedTensor_representative_eq_of_firstSiteActionAgree}
     \leanok
     \uses{thm:cpsv_full_coordinate_marked_trace_identity,thm:cpsv_representative_sector_decomposition,thm:representative_grouped_marked_separation,thm:representative_grouped_insert_eq}
@@ -265,11 +265,11 @@
     \lean{MPSTensor.trace_marked_mul_evalWord_of_coisometry_reconstruction}
     \lean{MPSTensor.linearMarkedTensor_coisometry_reconstruction}
     \lean{MPSTensor.trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor}
-    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+    \lean{MPTensor.CPSVCanonicalFormData.BNTRefinement.%
         linearMarkedTensor_eq_of_trace_agree}
-    \lean{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
+    \lean{MPTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_full_coordinate_marked_trace_identity,thm:cpsv_retained_representative_grouped_lemma_l}
     Let $A$ be in CPSV canonical form. For canonical-form data and

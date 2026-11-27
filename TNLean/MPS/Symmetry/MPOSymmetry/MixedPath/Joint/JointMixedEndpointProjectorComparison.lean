@@ -16,6 +16,8 @@ inequalities follow from the actual boundary-map support.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
+open MPTensor
+
 open scoped Matrix InnerProductSpace ComplexOrder
 
 namespace MPSTensor.MPOSymmetry

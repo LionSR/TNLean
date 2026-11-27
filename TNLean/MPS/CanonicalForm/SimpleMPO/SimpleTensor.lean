@@ -150,7 +150,7 @@ theorem doubledPhysTraceTransfer_toTensor (S : MPSTensor.SectorDecomposition (d 
   classical
   ext a b
   simp only [doubledPhysTraceTransfer, MPSTensor.SectorDecomposition.toTensor,
-    MPSTensor.toTensorFromBlocks, Matrix.sum_apply, Matrix.reindex_apply,
+    MPTensor.toTensorFromBlocks, Matrix.sum_apply, Matrix.reindex_apply,
     Matrix.submatrix_apply, Matrix.blockDiagonal'_apply]
   by_cases h : (finSigmaFinEquiv.symm a).1 = (finSigmaFinEquiv.symm b).1
   · simp only [dite_eq_left h, Matrix.smul_apply, Matrix.sum_apply, smul_eq_mul, Finset.mul_sum]

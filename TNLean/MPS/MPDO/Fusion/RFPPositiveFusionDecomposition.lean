@@ -232,7 +232,7 @@ theorem HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition
       h.grouping
   let C := MPSTensor.mpvPhaseClassData blocks
   have hSame : MPTensor.SameMPV₂Pos (verticalTensor M)
-      (MPSTensor.toTensorFromBlocks (d := D * D) (μ := mu) blocks) :=
+      (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := mu) blocks) :=
     MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) mu blocks V hIso hInterStar hReconstruct
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)

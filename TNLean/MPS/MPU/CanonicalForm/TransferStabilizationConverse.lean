@@ -211,7 +211,7 @@ private noncomputable def IsMPU.canonicalFormIIOfTransferPowerWithRho
   have ⟨hrad, hprim⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace T
       (fun N hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
-  have hnormal : MPSTensor.IsNormalTensor A := ⟨hIrr, hrad, hprim⟩
+  have hnormal : MPTensor.IsNormalTensor A := ⟨hIrr, hrad, hprim⟩
   let cfii :=
     MPSTensor.CPSVCanonicalFormIIData.ofNormalLeftCanonical hnormal hTP ρ hρpd hρdiag hρfix
   refine ⟨{
