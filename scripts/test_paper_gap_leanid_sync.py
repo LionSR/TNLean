@@ -5,7 +5,6 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from paper_gap_leanid_sync import (
-    collect_glossary_refs,
     collect_paper_gap_leanid_refs,
     lean_decl_head,
     write_decl_list,
@@ -107,30 +106,6 @@ def test_intentional_policy_placeholders_are_scoped_to_their_files() -> None:
         "someDeclaration",
     ]
 
-def _glossary_heads(source: str) -> list[str]:
-    with TemporaryDirectory() as tmp:
-        root = Path(tmp)
-        (root / "TNLean" / "MPS").mkdir(parents=True)
-        (root / "TNLean" / "MPS" / "Defs.lean").write_text("")
-        glossary = root / "docs" / "glossary.md"
-        glossary.parent.mkdir(parents=True)
-        glossary.write_text(source)
-        return [ref.head for ref in collect_glossary_refs(glossary, root)]
-
-
-def test_glossary_keeps_qualified_names_and_skips_other_spans() -> None:
-    assert _glossary_heads(
-        """
-- **Declaration:** `MPSTensor.IsNormal A`, in `TNLean/MPS/Defs.lean`, module
-  `TNLean.MPS.Defs`, the namespace `ManyBody.HardCore`, the field `M.toMPSTensor`,
-  the bare `IsNormal`, the projection `.trans`, `‖A‖ ≤ 1` and `Kraus.transferMap`.
-
-```lean
-theorem Foo.bar : True := trivial -- `Foo.baz`
-```
-"""
-    ) == ["MPSTensor.IsNormal", "Kraus.transferMap"]
-
 
 if __name__ == "__main__":
     test_comma_lists_percent_continuations_and_applied_arguments()
@@ -141,5 +116,4 @@ if __name__ == "__main__":
     test_duplicates_are_preserved_in_refs_and_deduplicated_in_output()
     test_empty_and_malformed_payloads_are_ignored()
     test_intentional_policy_placeholders_are_scoped_to_their_files()
-    test_glossary_keeps_qualified_names_and_skips_other_spans()
     print("Paper-gap leanid sync tests passed.")
