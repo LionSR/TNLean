@@ -128,24 +128,6 @@ private theorem middle_threeCut_rank_eq
   exact Matrix.operatorSchmidtRank_reindex_prodCongr _ ρ c
 end
 
-
-
-open scoped BigOperators
-
-/-- Ordered word sums commute with a change of configuration coordinates.
-This transports the original coefficients in ALVV, arXiv:1602.08828v2,
-`eq:H-mid-cut`, lines 810–821, and Proposition 5.7, lines 1324–1333. -/
-private theorem reindex_sum_word_products
-    {I m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-    (F : I → Matrix m m ℂ) (e : m ≃ n) (r : ℕ) (W : Finset (Fin r → I)) :
-    (∑ w ∈ W, (List.ofFn (fun t ↦ F (w t))).prod).reindex e e =
-      ∑ w ∈ W, (List.ofFn (fun t ↦ (F (w t)).reindex e e)).prod := by
-  change (Matrix.reindexAlgEquiv ℂ ℂ e)
-    (∑ w ∈ W, (List.ofFn (fun t ↦ F (w t))).prod) = _
-  simp only [map_sum, map_list_prod, List.map_ofFn, Matrix.coe_reindexAlgEquiv,
-    Function.comp_def]
-
-
 open Matrix
 open scoped BigOperators Kronecker
 
@@ -309,7 +291,7 @@ private theorem operatorSchmidtRank_two_window_regional_full_counts_le
         (fun w ↦ (WordMultiplicity.countsFinsupp w : _ → ℕ) = α),
       (List.ofFn (fun t ↦ H (w t))).prod
   have hcoeff (α) : coefficientH α = (coefficient α).reindex g g :=
-    (reindex_sum_word_products F g r _).symm
+    (Matrix.reindex_sum_word_products F g r _).symm
   have hsum : (∑ α ∈ S, weight α • coefficientH α) =
       (∑ α ∈ S, weight α • coefficient α).reindex g g := by
     simp_rw [hcoeff]
@@ -562,42 +544,6 @@ private theorem operatorSchmidtRank_two_window_pow_le_sum
 end TNLean.MPS.AreaLaw
 end
 
-
-open scoped BigOperators
-
-namespace Matrix
-
-/-- Summing the operator Schmidt ranks of every power through a polynomial degree bound.
-Supporting algebra for ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_aeval_le_sum
-    {l n : Type*} [Fintype l] [Fintype n] [DecidableEq l] [DecidableEq n]
-    (M : Matrix (l × n) (l × n) ℂ) (P : Polynomial ℂ) (k : ℕ)
-    (hdeg : P.natDegree ≤ k) :
-    operatorSchmidtRank (Polynomial.aeval M P) ≤
-      ∑ r ∈ Finset.range (k + 1), operatorSchmidtRank (M ^ r) := by
-  rw [Polynomial.aeval_eq_sum_range' (Nat.lt_succ_of_le hdeg) M]
-  exact (operatorSchmidtRank_sum_le _ _).trans
-    (Finset.sum_le_sum fun r _ ↦ operatorSchmidtRank_smul_le (P.coeff r) (M ^ r))
-
-end Matrix
-
-
-/-- A one-dimensional left configuration space gives operator Schmidt rank at most one.
-This supplies the local-dimension-one case of the regional estimate in ALVV,
-arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_le_one_of_unique_left
-    {m n : Type*} [Fintype m] [Unique m] [Finite n]
-    (M : Matrix (m × n) (m × n) ℂ) : Matrix.operatorSchmidtRank M ≤ 1 := by
-  simpa only [Fintype.card_fin] using
-    Matrix.operatorSchmidtRank_le_card_of_blocks_mem_span M
-      (fun _ : Fin 1 ↦ Matrix.operatorBlock M default default)
-      (by
-        intro x y
-        apply Submodule.subset_span
-        refine ⟨0, ?_⟩
-        exact congrArg₂ (Matrix.operatorBlock M)
-          (Subsingleton.elim _ _) (Subsingleton.elim _ _))
-
 noncomputable section
 namespace TNLean.MPS.AreaLaw
 
@@ -706,7 +652,7 @@ theorem operatorSchmidtRank_aeval_two_window_le_pow
     · subst q
       have hrank : operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
           (ManyBody.cutEquiv (fun _ ↦ Fin 1) J) (ManyBody.cutEquiv (fun _ ↦ Fin 1) J)) ≤ 1 :=
-        operatorSchmidtRank_le_one_of_unique_left _
+        Matrix.operatorSchmidtRank_le_one_of_unique_left _
       exact hrank.trans (by
         simpa only [one_mul] using (one_le_pow₀ hk : 1 ≤ k ^ (17 * (ℓ + bnd))))
     · have hq2 : 2 ≤ q := by omega
