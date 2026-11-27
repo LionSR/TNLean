@@ -245,7 +245,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
         normalizedDiagonalLift U.normalizedFlattening x ((i, j), (a, b)) by
       simp [Kraus.reindexPhysical]]
   simp only [normalizedFlattening, Matrix.smul_apply]
-  rw [tensorPhysicalId_apply, normalizedDiagonalLift_apply,
+  rw [tensorPhysicalId_apply, normalizedDiagonalLift_apply, Nat.cast_mul,
     Real.sqrt_mul (by positivity)]
   push_cast
   rw [mul_inv]

@@ -149,9 +149,16 @@ theorem dimerTarget_eq (f : Fin 2) (a : Fin 64) :
     dimerTarget f a = (16 : ℂ)⁻¹ • complexOfInt (dimerTargetInt f a) := rfl
 
 theorem dimerStacked_eq (f f' : Fin 2) (a : Fin 64) :
-    dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) :=
-  mulTensor_smul_complexOfRing _ (16 : ℂ)⁻¹ (Function.uncurry (dimerMInt f))
-    (Function.uncurry (dimerMInt f')) _
+    dimerStacked f f' a = ((16 : ℂ)⁻¹ * (16 : ℂ)⁻¹) • complexOfInt (dimerStackedInt f f' a) := by
+  have hM : ∀ g : Fin 2, dimerM g = fun ij ↦
+      (16 : ℂ)⁻¹ • Matrix.complexOfRing (Int.castRingHom ℂ) (Function.uncurry (dimerMInt g) ij) := by
+    intro g
+    funext ⟨i, j⟩
+    rfl
+  change MPOTensor.mulTensor (dimerM f) (dimerM f')
+      (Fin.divNat (m := 8) (n := 8) a, Fin.modNat (m := 8) (n := 8) a) = _
+  rw [hM f, hM f', mulTensor_smul_complexOfRing]
+  rfl
 
 /-- **The sector tensors are the flag sectors of the twisted dimer**: the sector-`f` tensor is
 `μ = 5/8` times the normalized flag sector `MPOTensor.TwistedDimer.flagMPO f`
