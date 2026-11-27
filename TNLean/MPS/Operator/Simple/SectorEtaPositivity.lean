@@ -230,7 +230,7 @@ transfers the abstract positivity results proved above for
 `etaOfSectorTensors` to the concrete `sectorEta` operators used in the rest
 of the development. -/
 theorem sectorEta_eq_etaOfSectorTensors
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m) :
     sectorEta K hK hη R α₁ β₃ k h =
       etaOfSectorTensors hη (fun q => sectorTensorL K hK hη R α₁ β₃ q)
@@ -245,7 +245,7 @@ $0 \le [Q_k]\,\tilde\sigma^{(1)}\,[Q_k] = \eta_{k,k}$.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
 theorem sectorEta_self_posSemidef
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K) (k : Fin hη.m) :
@@ -263,7 +263,7 @@ $0 \le [Q_k \otimes Q_h]\,\tilde\sigma^{(2)}\,[Q_k \otimes Q_h]
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
 theorem sectorEta_kronecker_posSemidef
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K) (k h : Fin hη.m) :
@@ -283,7 +283,7 @@ choice absorbs the scalar into the sector tensors as in the source.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
 theorem exists_smul_posSemidef_sectorEta
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K) (k h : Fin hη.m)
@@ -320,7 +320,7 @@ sufficient recurrence hypothesis are recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1455. -/
 theorem exists_explicitEtaOperators_sectorEta
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
     {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (hM : IsMPDO K)

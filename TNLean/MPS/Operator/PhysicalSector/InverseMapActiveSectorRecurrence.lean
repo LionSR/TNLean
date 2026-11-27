@@ -79,7 +79,7 @@ makes the original neighboring operator vanish.
 Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
 theorem probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     {k h : Fin hη.m}
@@ -114,7 +114,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1445. -/
 theorem exists_active_sectorVirtualMatrix_ne_zero
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (k : Fin hη.m) (hk : hη.p k ≠ 0) :
@@ -181,7 +181,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1450. -/
 theorem zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0) :
     IsRecurrentSupport (fun k h ↦
@@ -214,7 +214,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1450. -/
 theorem exists_rephase_zeroWeightInverseMap_posSemidef
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) :
@@ -254,7 +254,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1450. -/
 theorem exists_positive_inverseMapPhysicalSectorFactorization
     {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
     (hM : IsMPDO K) :
@@ -280,7 +280,7 @@ right tensors are set to zero before the coherent rephasing.
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1450. -/
 theorem exists_positive_physicalSectorFactorization_of_isSAL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K) :
     ∃ F : PhysicalSectorFactorization K,
       ∀ k h, (F.neighboringOperator k h).PosSemidef := by
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
@@ -297,7 +297,7 @@ positive commuting nearest-neighbor product structure of Proposition C.8.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1571--1593. -/
 theorem nonempty_commutingForm_of_isSAL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K) :
     Nonempty (CommutingForm K) := by
   obtain ⟨F, hF⟩ := exists_positive_physicalSectorFactorization_of_isSAL K hK hSAL
   exact ⟨F.commutingForm hF⟩

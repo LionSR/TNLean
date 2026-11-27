@@ -122,7 +122,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `Qketc` and `formK`, lines 141
 the factor $p_k$ is attached to the left tensor in the chosen factorization. The zero-weight
 boundary is recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 @[simp] theorem sectorTensorL_eq_zero_of_weight_eq_zero
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure rho)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure rho)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k : Fin hη.m) (beta : Fin D)
     (hk : hη.p k = 0) :
     sectorTensorL K hK hη R α₁ β₃ k beta = 0 := by
@@ -135,7 +135,7 @@ vanish.
 Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. The zero-weight
 boundary is recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem sectorEta_eq_zero_of_target_weight_eq_zero
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure rho)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure rho)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m)
     (hh : hη.p h = 0) :
     sectorEta K hK hη R α₁ β₃ k h = 0 := by
@@ -157,7 +157,7 @@ in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines 1434--1445. -/
 noncomputable def zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0) :
     PhysicalSectorFactorization K := by
@@ -175,7 +175,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. The 
 remove outgoing edges of zero-weight sectors is recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
     (k h : Fin hη.m) :
