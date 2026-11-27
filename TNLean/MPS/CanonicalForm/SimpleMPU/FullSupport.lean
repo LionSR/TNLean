@@ -436,8 +436,9 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
   rw [Kraus.evalWord_smul, List.length_ofFn, hsqrtC, inv_pow]
 
 /-- A blocked operator tensor is the doubled-index blocking of its relabelling, relabelled
-back to the pair alphabet. -/
-private theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
+back to the pair alphabet. This bridges to the canonical-form blocking statements that are still
+stated on a `Fin` alphabet. -/
+theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
     MPOTensor.blockTensor X p = Kraus.reindexPhysical finProdFinEquiv
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
         (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
