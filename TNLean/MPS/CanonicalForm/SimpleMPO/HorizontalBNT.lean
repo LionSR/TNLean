@@ -123,7 +123,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Normalized BNT-refined horizontal form for an MPO tensor.
+/-- BNT-refined horizontal form for an MPO tensor.
 
 The doubled-index tensor is the representative-indexed BNT sector
 decomposition, with one invertible gauge on each repeated copy. Thus the
@@ -158,7 +158,7 @@ def IsHorizontalCF (M : MPOTensor d D) : Prop :=
                     GL (Fin S.totalDim) ℂ) :
                   Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
 
-/-- Normalized BNT-refined horizontal form gives its positive-length BNT MPV
+/-- BNT-refined horizontal form gives its positive-length BNT MPV
 representation.
 
 The block direct sum of the copy similarities leaves every closed
@@ -203,7 +203,7 @@ theorem insertedTensor_braRightAction_toMPSTensor
 
 /-- **Lemma L on the original bond space.**
 
-Let `M` be in normalized BNT-refined horizontal form. If two physical operators
+Let `M` be in BNT-refined horizontal form. If two physical operators
 have the same first-site action on every matrix product vector of `M`, then
 their inserted tensors are equal on the original bond space:
 \[
@@ -242,7 +242,7 @@ theorem IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree
     S.insertedTensor_toTensor_eq_of_basis Y Z hBasis
   exact MPSTensor.insertedTensor_eq_of_gauge X hX' Y Z hSector
 
-/-- A displaced idempotent for a tensor in normalized BNT-refined horizontal
+/-- A displaced idempotent for a tensor in BNT-refined horizontal
 form fails to commute with the generated density operator at some positive
 chain length.
 
@@ -264,7 +264,7 @@ theorem IsHorizontalCF.exists_not_commute_of_displaced
   exact exists_not_commute_of_displaced_of_insertedTensor_eq M
     (hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M) hQidem hdisp
 
-/-- The normalized BNT-refined horizontal-form predicate supplies the
+/-- The BNT-refined horizontal-form predicate supplies the
 representative-indexed invariant-projection conclusion.
 
 The witness is the BNT sector decomposition occurring in `IsHorizontalCF`.

@@ -331,11 +331,14 @@ theorem threeRegion_gap
     (hh : ∀ i, IsStarProjection (h i))
     (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
-    (hgap : ∀ y ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) y⟫_ℂ)
+    (hgap : ∀ y ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i)).toLinearMap)ᗮ,
+      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i) y⟫_ℂ)
     {a b ℓ : ℕ} (hab : a + 2 * ℓ ≤ b) (hbm : b + 2 * ℓ ≤ m)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
-    (hxperp : x ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap)ᗮ) :
+    (hxperp : x ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i)).toLinearMap)ᗮ) :
     γ / (3 * (γ + 4)) ≤ Complex.re ⟪x,
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ α, threeRegionFamily h a b ℓ α) x⟫_ℂ := by
@@ -509,7 +512,8 @@ theorem threeRegion_apply_eq_zero_iff
 private theorem toEuclideanCLM_sum_apply_eq_zero_iff
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i)) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) x = 0 ↔ ∀ i < m, chainTerm h i x = 0 := by
+    (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) x = 0 ↔
+      ∀ i < m, chainTerm h i x = 0 := by
   have hp (i : Fin m) : (chainTerm h i).toLinearMap.IsPositive :=
     (ContinuousLinearMap.IsPositive.of_isStarProjection
       (isStarProjection_chainTerm hh i)).toLinearMap
@@ -527,7 +531,8 @@ theorem ker_threeRegion
       (interval L i (i + 2))) (a b ℓ : ℕ) :
     LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ α, threeRegionFamily h a b ℓ α)).toLinearMap =
-      LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i)).toLinearMap := by
+      LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
+        (∑ i, h i)).toLinearMap := by
   ext x
   exact (threeRegion_apply_eq_zero_iff hh hsupp a b ℓ x).trans
     (toEuclideanCLM_sum_apply_eq_zero_iff hh x).symm

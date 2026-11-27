@@ -124,7 +124,7 @@ character used in the source declaration.
 
 \section{Boundary of the result}
 
-The normalized BNT-refined horizontal predicate
+The BNT-refined horizontal predicate
 \path{MPOTensor.IsHorizontalCF} is strictly stronger than the literal CPSV
 canonical form used in Proposition~4.13 of
 Ref.~\cite{Cirac2016MPDO_arXiv}. Its retained sectors fill the horizontal bond
@@ -268,7 +268,7 @@ The normalized corners are grouped by matrix-product-vector phase class under
 literal CPSV canonical form in
 \path{MPTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry},
 proved in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean}. The wrapper under the
-normalized BNT-refined horizontal hypothesis remains
+BNT-refined horizontal hypothesis remains
 \path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}.
 The construction chooses one normal representative from each phase class.
 Every copy has the representative's bond dimension and is a unit-modulus
@@ -292,7 +292,7 @@ follows from non-decay of the positive-length rectangular overlap, as in
 Lemma~\texttt{equalMPS} of Ref.~\cite{Cirac2016MPDO_arXiv}; the comparison
 does not use the empty-word coefficient.
 
-Under either the literal CPSV hypothesis or the normalized BNT-refined
+Under either the literal CPSV hypothesis or the BNT-refined
 horizontal hypothesis, write $\nu_{\alpha,k}$ for a raw sector weight,
 $\zeta_{\alpha,k}$ for its phase relative to the chosen representative, and
 define
@@ -345,7 +345,7 @@ diagram at source lines~1914--1919 is proved in
 \path{TNLean/MPS/MPDO/Vertical/FigureEightPairwise.lean}. Its dependent identification
 with the actual grouped sector and distinguished copy is proved once, for any
 tensor with the grouped-corner Gram-dressing property, in
-\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. Normalized BNT-refined
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. BNT-refined
 horizontal form and literal CPSV canonical form each supply that property
 independently, by
 \path{MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing} and
@@ -383,7 +383,7 @@ The formal results hold for any tensor with the grouped-corner Gram-dressing
 property: \path{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing} in
 \path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean} and
 \path{MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing} in
-\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. Both the normalized
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. Both the
 BNT-refined hypothesis and literal CPSV canonical form furnish that property,
 so each gives these identities without any implication between the two
 canonical-form predicates.

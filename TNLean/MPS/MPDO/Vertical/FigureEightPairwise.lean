@@ -20,7 +20,7 @@ have equal marked chains after Gram dressing.
 
 The final separation uses only marks in the span of the physical letters of
 the horizontal tensor.  The corner equations give the required coefficient
-families explicitly.  This module uses normalized BNT-refined horizontal form;
+families explicitly.  This module uses BNT-refined horizontal form;
 `TNLean.MPS.MPDO.CPSVFigureEight` gives the literal-CPSV counterpart.
 
 ## Main results
@@ -326,7 +326,7 @@ variable {d D n : ℕ}
 
 Suppose two vertical corners of the same representative tensor are positive
 scalar multiples of similarities by `X` and `Y`.  If the horizontal tensor
-is in normalized BNT-refined form and defines positive operators at every
+is in BNT-refined form and defines positive operators at every
 length, then
 conjugation of the representative by the two Gram matrices gives the same
 tensor:
@@ -335,7 +335,7 @@ $X^\dagger X A^v (X^\dagger X)^{-1}
 
 Hermiticity first identifies both marked chains with the common reflected
 chain of the representative.  The corner equations express the two marks as
-linear combinations of physical letters, so normalized BNT-refined horizontal
+linear combinations of physical letters, so BNT-refined horizontal
 form separates them.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines

@@ -110,7 +110,8 @@ theorem basis_irreducible (h : IsLeftCanonicalBNTPresentation P) (j : Fin P.basi
 
 /-- The normalized self-overlap of every basis tensor tends to one
 (arXiv:1606.00608, lines 1080--1097). -/
-theorem basis_normalized_self_overlap (h : IsLeftCanonicalBNTPresentation P) (j : Fin P.basisCount) :
+theorem basis_normalized_self_overlap (h : IsLeftCanonicalBNTPresentation P)
+    (j : Fin P.basisCount) :
     Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis j) N)
       atTop (𝓝 1) :=
   (h.basis_normal j).selfOverlap_tendsto_one
@@ -199,7 +200,8 @@ theorem IsBNTSectorPresentation.exists_leftCanonical_withBasis {D' : ℕ}
     {A : MPSTensor d D'} {P : SectorDecomposition d} (h : IsBNTSectorPresentation A P) :
     ∃ B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j),
       (∀ j, GaugeEquiv (P.basis j) (B j)) ∧
-      IsLeftCanonicalBNTPresentation (P.withBasis B) ∧ IsBNTSectorPresentation A (P.withBasis B) := by
+      IsLeftCanonicalBNTPresentation (P.withBasis B) ∧
+        IsBNTSectorPresentation A (P.withBasis B) := by
   choose σ _hσ _hσfix hLeft hGauge hPrim hIrr using fun j => (h.basis_normal j).exists_tpGauge
   let B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j) := fun j =>
     Kraus.tpGauge (P.basis j) (σ j)
@@ -212,8 +214,9 @@ theorem IsBNTSectorPresentation.exists_leftCanonical_withBasis {D' : ℕ}
     have hState : (fun j => mpvState ((P.withBasis B).basis j) N) =
         fun j => mpvState (P.basis j) N := by
       funext j
-      ext τ
-      simp only [mpvState_apply]
+      unfold mpvState
+      congr 1
+      funext τ
       exact (GaugeEquiv.sameMPV (hGauge j) N τ).symm
     rw [hState]
     exact hN₀ N hN

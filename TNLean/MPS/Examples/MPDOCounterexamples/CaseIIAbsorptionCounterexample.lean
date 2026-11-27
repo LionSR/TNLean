@@ -429,7 +429,7 @@ theorem ambient_toMPSTensor_eq_sectors_toTensor :
   rw [sectors_toTensor_eq_diagonal]
   exact ambient_eq_weighted_basis_blocks i j
 
-/-- The ambient MPO is in normalized BNT-refined horizontal form, with the
+/-- The ambient MPO is in BNT-refined horizontal form, with the
 displayed sector decomposition and identity gauge on both bond-one blocks. -/
 theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
   refine ⟨sectors, sectors_isLeftCanonicalBNTPresentation, ?_⟩

@@ -239,6 +239,10 @@ is deliberately source-faithful.
   `MPTensor.CPSVCanonicalFormData.isBNTSectorPresentation`, and presentations
   of the same tensor agree up to permutation, dimension identification, gauge,
   and phase through `MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`.
+  `MPSTensor.IsLeftCanonicalBNTPresentation` extends this predicate (a
+  presentation of `P.toTensor` with left-canonical basis tensors), and
+  `MPSTensor.IsBNTSectorPresentation.exists_leftCanonical_withBasis` puts every
+  presentation into that gauge.
 - **Caveat:** this is the grouped presentation used by the sector fundamental
   theorem and the MPDO simplicity predicate, not a second BNT definition; the
   literal interface remains `MPSTensor.IsCPSVBasisOfNormalTensors`.
@@ -1066,35 +1070,52 @@ model different levels of data and different sources.
 
 - **Declaration:**
   `MPSTensor.IsLeftCanonicalBNTPresentation (P : MPSTensor.SectorDecomposition d)`.
-- **Defined in:** `TNLean/MPS/Tensor/DirectSum/SectorBNT.lean`.
-- **Meaning:** the core paper-faithful two-layer sector canonical form: positive
-  basis dimensions, irreducible and left-canonical basis tensors, normalized
-  self-overlap, eventual BNT independence, separation of basis representatives,
-  and normalized raw copy weights while retaining each copy and coefficient
-  `∑q (μ[j,q])^N`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/BNTPresentation/LeftCanonical.lean`.
+- **Meaning:** `P` is a presentation of its own assembled tensor `P.toTensor`
+  by a basis of normal tensors (`extends MPSTensor.IsBNTSectorPresentation
+  P.toTensor P`: nonempty basis, normal basis tensors, eventual linear
+  independence) whose basis tensors are left-canonical. It retains each copy
+  and the raw coefficient `∑q (μ[j,q])^N`; no normalization of the copy
+  weights (arXiv:1606.00608, line 246) is imposed. Positive basis dimensions,
+  irreducibility, normalized self-overlap and the separation of distinct basis
+  tensors are theorems of the same names (`basis_dim_pos`, `basis_irreducible`,
+  `basis_normalized_self_overlap`, `basis_distinct`).
 - **Source:** arXiv:1606.00608 §II, lines 271--301, and arXiv:2011.12127
-  Definition 4.2 and two-layer display, lines 1846--1884.
+  Definition 4.2 and two-layer display, lines 1846--1884; left-canonicality is
+  a gauge choice (arXiv:2011.12127, lines 1815--1837) that no source statement
+  contains.
 - **Sanctioned bridges:**
-  `MPSTensor.IsLeftCanonicalBNTPresentation.basis_isNormal` projects algebraic normality of
-  each basis block. Further bridges are
+  `MPSTensor.IsBNTSectorPresentation.exists_leftCanonical_withBasis` brings
+  every presentation into this gauge with the same sectors and weights.
+  `MPSTensor.IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap` is the
+  constructor from irreducible left-canonical basis tensors with normalized
+  self-overlap. Further bridges are
   `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor`,
   `MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical`, and the
   supplier declarations
   `MPSTensor.exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks` and
   `MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized`.
-- **Caveat:** `IsLeftCanonicalBNTPresentation.blockTensor` requires a strictly positive
-  blocking length `0 < p`; it does not assert preservation at length zero.
-  `exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` assumes a nonzero
-  positive-length MPV family (the standing convention of arXiv:1606.00608,
-  line 246) and realizes the weight normalization itself, at the cost of a
-  per-site scalar. This is the canonical predicate when
-  multiplicities and raw sector weights matter; multiplicity recovery is genuine
-  mathematical content, not a change of packaging.
+- **Caveat:** the Fundamental Theorem comparisons stated on this predicate
+  (`fundamentalTheorem_proportional_canonicalForm`,
+  `fundamentalTheorem_equal_canonicalForm`) are scope-restricted variants of
+  arXiv:1606.00608, Theorem 2.10 and Corollary 2.11; the source-faithful
+  statements on presentations with no gauge condition are
+  `MPSTensor.fundamentalTheorem_proportional_of_isBNTSectorPresentation` and
+  `MPSTensor.fundamentalTheorem_equal_of_isBNTSectorPresentation`; see
+  `docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`.
+  `IsLeftCanonicalBNTPresentation.blockTensor` requires a strictly positive
+  blocking length `0 < p`.
+  `exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` assumes a
+  nonzero positive-length MPV family and states the line-246 weight
+  normalization of its presentation explicitly in its conclusion, at the cost
+  of a per-site scalar. This is the canonical predicate when multiplicities and
+  raw sector weights matter; multiplicity recovery is genuine mathematical
+  content, not a change of packaging.
 
 ### MPDO canonical-form predicates
 
 - `MPOTensor.IsHorizontalCF` in `TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT.lean` is the
-  normalized representative-indexed BNT-refined horizontal decomposition. It
+  representative-indexed BNT-refined horizontal decomposition. It
   is stronger than the literal CPSV canonical form from arXiv:1606.00608,
   lines 237--244; see
   `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
@@ -1124,7 +1145,7 @@ model different levels of data and different sources.
 - The bundle has two independent suppliers, each assuming the matrix product
   density operator condition `MPOTensor.IsMPDO` alongside its own canonical
   form: `MPOTensor.IsHorizontalCF.hasVerticalBNTGroupingInputs` from
-  normalized BNT-refined horizontal form, and
+  BNT-refined horizontal form, and
   `MPTensor.IsCPSVCanonicalForm.hasVerticalBNTGroupingInputs` from literal
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and

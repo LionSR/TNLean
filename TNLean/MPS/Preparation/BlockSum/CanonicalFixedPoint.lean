@@ -28,7 +28,8 @@ namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
 variable {d : ℕ} {P : SectorDecomposition d}
 
-private theorem exists_basisFixedPoint (h : IsLeftCanonicalBNTPresentation P) (j : Fin P.basisCount) :
+private theorem exists_basisFixedPoint (h : IsLeftCanonicalBNTPresentation P)
+    (j : Fin P.basisCount) :
     ∃ σ : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ,
       σ ∈ densityMatrices (P.basisDim j) ∧ σ.PosDef ∧
       Kraus.transferMap (P.basis j) σ = σ ∧

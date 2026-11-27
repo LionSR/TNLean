@@ -19,7 +19,7 @@ $$
 $$
 where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
 Lemma L transfers these identities to every minimal representative, where they
-say $(\Id-P)MP=0$. For tensors in the normalized BNT-refined horizontal form
+say $(\Id-P)MP=0$. For tensors in the BNT-refined horizontal form
 of `TNLean.MPS.MPDO.HorizontalBNT`, these identities also hold for the original
 MPO letters.
 
@@ -27,7 +27,7 @@ The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
 implication in source lines 1888--1893.  The cyclic projector and its word
 invariance are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`; for a
-tensor in normalized BNT-refined horizontal form, one noncommuting length
+tensor in BNT-refined horizontal form, one noncommuting length
 suffices for the periodic-sector contradiction.  No corresponding literal
 canonical-form transport is asserted.
 
@@ -415,7 +415,7 @@ This is the final operator implication in the contradiction at
 arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
 period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
-combined in `TNLean/MPS/MPDO/CyclicProjector.lean` under normalized BNT-refined
+combined in `TNLean/MPS/MPDO/CyclicProjector.lean` under BNT-refined
 horizontal form and in `TNLean/MPS/MPDO/CPSVPeriodicExclusion.lean` under
 literal CPSV canonical form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)

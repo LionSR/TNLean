@@ -441,7 +441,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts}
-    Let $M$ be in normalized BNT-refined horizontal form, generate positive
+    Let $M$ be in BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
     fixed-point equations. This horizontal hypothesis is stronger than
     CPSV canonical form.
@@ -449,7 +449,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \end{lemma}
 
 \begin{proof}\leanok
-    Normalized BNT-refined horizontal form gives a nonzero sector compression
+    BNT-refined horizontal form gives a nonzero sector compression
     for one positive length. Positivity makes its trace nonzero. The fixed-point
     equations make the physical-trace transfer idempotent, so the trace of its
     positive powers is independent of the positive exponent.
@@ -482,7 +482,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \lean{MPOTensor.isSAL_of_isRFPViaTS}
     \leanok
     \uses{lem:mpdo_rfp_positive_length_trace_nonzero,thm:mpdo_rfp_implies_sal}
-    Let $M$ be in normalized BNT-refined horizontal form, generate positive
+    Let $M$ be in BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
     fixed-point equations of Definition~4.1. Then $M$ saturates the area law.
 \end{corollary}
@@ -519,7 +519,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{cor:mpdo_horizontal_rfp_implies_zcl_and_sal}
     \leanok
     \uses{lem:mpdo_rfp_positive_length_trace_nonzero,thm:mpdo_rfp_implies_zcl_and_sal,cor:mpdo_horizontal_rfp_implies_sal}
-    Let $M$ be in normalized BNT-refined horizontal form, generate positive
+    Let $M$ be in BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
     fixed-point equations of Definition~4.1. Then
     $\mathcal T_M^2=\mathcal T_M$ and $M$ saturates the area law.

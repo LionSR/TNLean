@@ -23,8 +23,8 @@ block sum by an equivalence of flattened bond coordinates
 It also contains the following results.
 
 * `MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation_exact`,
-  `MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation`: CPSV canonical forms as SectorBNT
-  decompositions.
+  `MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation`: CPSV canonical forms as
+  SectorBNT decompositions.
 -/
 
 open MPTensor
@@ -396,10 +396,10 @@ Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.r_pos_of_ne_zero
     (data : CPSVCanonicalFormData A) (hA : A ≠ 0) : 0 < data.r := by
   refine Nat.pos_of_ne_zero fun hr0 => hA ?_
-  have : IsEmpty (Fin (∑ k : Fin data.r, data.dim k)) := by
+  have hsum : (∑ k : Fin data.r, data.dim k) = 0 := by
     have : IsEmpty (Fin data.r) := Fin.isEmpty_iff.mpr hr0
-    rw [Fintype.sum_empty]
-    infer_instance
+    exact Fintype.sum_empty _
+  have : IsEmpty (Fin (∑ k : Fin data.r, data.dim k)) := Fin.isEmpty_iff.mpr hsum
   funext i
   rw [data.reconstruct i]
   ext x y

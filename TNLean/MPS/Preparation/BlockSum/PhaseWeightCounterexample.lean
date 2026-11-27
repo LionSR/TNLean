@@ -34,8 +34,8 @@ approximating state is the target itself (`nonNormalApproxOverlap_phaseBlockTens
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II with weights
-`(1, μ)` (`isLeftCanonicalBNTPresentation_phaseBlockSector`, `reindex_toTensor_phaseBlockSector`), and it is
-the direct sum `⊕ⱼ μⱼ A_j` (`blockSum_phaseBlock`). Both blocks are one-dimensional, so their
+`(1, μ)` (`isLeftCanonicalBNTPresentation_phaseBlockSector`, `reindex_toTensor_phaseBlockSector`),
+and it is the direct sum `⊕ⱼ μⱼ A_j` (`blockSum_phaseBlock`). Both blocks are one-dimensional, so their
 transfer maps have no eigenvalue other than `1`, and the hypothesis on the subleading eigenvalue
 that defines `ξ_diag` holds for every `λ₂`. For `μ = -1` and every `λ₂` with `0 < |λ₂| < 1`,
 along `q = M` odd (`N = q²`, so `q = o(N)`) the error stays `1` while
@@ -61,8 +61,8 @@ carries the phase. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overla
 * `MPSTensor.phaseBlockSector`, `MPSTensor.isLeftCanonicalBNTPresentation_phaseBlockSector`,
   `MPSTensor.reindex_toTensor_phaseBlockSector` — the tensor is, after ordering its bond
   coordinates, the canonical form of eq. (S2) of a basis of normal tensors.
-* `MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_phaseBlock` — for `μ = -1` the
-  tensor satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
+* `MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_phaseBlock` — for
+  `μ = -1` the tensor satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
 
 ## References
 
@@ -279,7 +279,8 @@ theorem coeff_phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) (N : ℕ) :
 self-overlap, their states are linearly independent, they are not related by a gauge
 transformation and a phase, and the weights `1` and `μ` have modulus one. -/
 theorem isLeftCanonicalBNTPresentation_phaseBlockSector {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    IsLeftCanonicalBNTPresentation (phaseBlockSector (norm_ne_zero_iff.1 (hμ.trans_ne one_ne_zero))) :=
+    IsLeftCanonicalBNTPresentation 
+      (phaseBlockSector (norm_ne_zero_iff.1 (hμ.trans_ne one_ne_zero))) :=
   isLeftCanonicalBNTPresentation_repeatedBlockBasisSector _ _ _ _
 
 /-- The bond coordinates of the two blocks in the canonical form. -/
@@ -358,7 +359,8 @@ theorem embeddedFixedPointPair_phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) (j :
 /-- **Lemma 1'(ii) of arXiv:2307.01696 fails for a tensor satisfying all its hypotheses, with
 weights of modulus one.** The tensor `A⁰ = diag(1, 0)`, `A¹ = diag(0, -1)` is, after ordering
 its bond coordinates, the canonical form `⊕ⱼ μ_{j,1} A_j` of eq. (S2) of a basis of two normal
-blocks in canonical form II, with weights `μ_{1,1} = 1` and `μ_{2,1} = -1` (`IsLeftCanonicalBNTPresentation`,
+blocks in canonical form II, with weights `μ_{1,1} = 1` and `μ_{2,1} = -1`
+(`IsLeftCanonicalBNTPresentation`,
 normality, and the diagonal positive-definite fixed point `1` of each block), whose states
 "produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696, line 973). The
 transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` bounds their
@@ -392,7 +394,8 @@ theorem isLeftCanonicalBNTPresentation_and_not_approximationError_le_phaseBlock 
                 (fun j => ⟨0, (phaseBlockSector (neg_ne_zero.2 one_ne_zero)).copies_pos j⟩) j
                 ((phaseBlockEquiv (neg_ne_zero.2 one_ne_zero)).symm p.1,
                   (phaseBlockEquiv (neg_ne_zero.2 one_ne_zero)).symm p.2))‖ := by
-  have hBNT : IsLeftCanonicalBNTPresentation (phaseBlockSector (neg_ne_zero.2 (one_ne_zero (α := ℂ)))) :=
+  have hBNT : IsLeftCanonicalBNTPresentation 
+      (phaseBlockSector (neg_ne_zero.2 (one_ne_zero (α := ℂ)))) :=
     isLeftCanonicalBNTPresentation_phaseBlockSector (by simp)
   refine ⟨hBNT, fun _ _ hjk => hBNT.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (repeatedBlockBasis_norm j),

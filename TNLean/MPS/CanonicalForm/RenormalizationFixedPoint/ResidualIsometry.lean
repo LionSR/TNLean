@@ -499,7 +499,8 @@ This is the multiplicity-one, phase-one form of CPSV16, Corollary `III.cor3`
 construction remains outside this statement; see
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum
-    (hCF : IsLeftCanonicalBNTPresentation P) (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
+    (hCF : IsLeftCanonicalBNTPresentation P)
+    (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     ∃ (X : (j : Fin P.basisCount) →
         Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
       (Λ : (j : Fin P.basisCount) → Fin (P.basisDim j) → ℝ)

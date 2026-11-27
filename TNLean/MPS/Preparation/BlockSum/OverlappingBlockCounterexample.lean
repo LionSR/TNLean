@@ -67,11 +67,12 @@ the approximating state of eq. (S7) even when every multiplicity is one. Documen
   between `(9/25)^q / 16` and `M (9/25)^q`.
 * `MPSTensor.not_approximationError_le_overlappingBlockTensor` — the bound of Lemma 1'(ii)
   fails.
-* `MPSTensor.overlappingBlockSector`, `MPSTensor.isLeftCanonicalBNTPresentation_overlappingBlockSector`,
+* `MPSTensor.overlappingBlockSector`,
+  `MPSTensor.isLeftCanonicalBNTPresentation_overlappingBlockSector`,
   `MPSTensor.reindex_toTensor_overlappingBlockSector` — the tensor is, after ordering its bond
   coordinates, the canonical form of eq. (S2) of a basis of normal tensors.
-* `MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlappingBlock` — the tensor
-  satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
+* `MPSTensor.isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlappingBlock` — the
+  tensor satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
 
 ## References
 
@@ -481,7 +482,8 @@ theorem hasBNTSectorData_overlappingBlockSector : HasBNTSectorData overlappingBl
 /-- **The canonical form of `overlappingBlockTensor` is a basis of normal tensors**
 (arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
 self-overlap, and their states are linearly independent. -/
-theorem isLeftCanonicalBNTPresentation_overlappingBlockSector : IsLeftCanonicalBNTPresentation overlappingBlockSector :=
+theorem isLeftCanonicalBNTPresentation_overlappingBlockSector :
+    IsLeftCanonicalBNTPresentation overlappingBlockSector :=
   IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.two_pos (fun _ => Nat.one_pos)
     (fun j => isIrreducibleFamily_of_bondDim_one (overlappingBlockBasis j))
     (fun j => isLeftCanonical_of_dim_one _ (overlappingBlockBasis_norm j))
@@ -596,7 +598,8 @@ theorem isLeftCanonicalBNTPresentation_and_not_approximationError_le_overlapping
                 (fun j => ⟨0, overlappingBlockSector.copies_pos j⟩) j
                 (overlappingBlockEquiv.symm p.1, overlappingBlockEquiv.symm p.2))‖ := by
   refine ⟨isLeftCanonicalBNTPresentation_overlappingBlockSector,
-    fun _ _ hjk => isLeftCanonicalBNTPresentation_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
+    fun _ _ hjk =>
+      isLeftCanonicalBNTPresentation_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (overlappingBlockBasis_norm j),
     fun j => posDef_isDiag_transferMap_one_of_dim_one _ (overlappingBlockBasis_norm j),
     reindex_toTensor_overlappingBlockSector,

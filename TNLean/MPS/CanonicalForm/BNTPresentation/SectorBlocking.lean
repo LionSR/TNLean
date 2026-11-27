@@ -99,7 +99,8 @@ theorem IsLeftCanonicalBNTPresentation.reindexPhysical {d' : ℕ}
     {P : SectorDecomposition d} (hCF : IsLeftCanonicalBNTPresentation P)
     (e : Fin d' ≃ Fin d) :
     IsLeftCanonicalBNTPresentation (P.reindexPhysical e) := by
-  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap hCF.basisCount_pos hCF.basis_dim_pos
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
+    hCF.basisCount_pos hCF.basis_dim_pos
     (fun j ↦ (isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
       (hCF.basis_irreducible j))
     (fun j ↦ (Kraus.isTP_reindexPhysical_iff e (P.basis j)).2 (hCF.basis_left_canonical j))
@@ -272,7 +273,8 @@ theorem IsLeftCanonicalBNTPresentation.blockTensor
     · have hNp : N₀ < N * p := by
         exact lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)
       exact hLI (N * p) hNp
-  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap hCF.basisCount_pos hCF.basis_dim_pos
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
+    hCF.basisCount_pos hCF.basis_dim_pos
     ?_ ?_ ?_ hData
   · intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩

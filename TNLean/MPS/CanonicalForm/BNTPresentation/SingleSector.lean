@@ -61,7 +61,8 @@ theorem isLeftCanonicalBNTPresentation_singleSectorDecomposition [NeZero D]
     (hLeft : IsLeftCanonical A)
     (hSelf : Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) A A N) atTop (𝓝 1)) :
     IsLeftCanonicalBNTPresentation (singleSectorDecomposition A) := by
-  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap Nat.one_pos (fun _ => NeZero.pos D)
+  refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
+    Nat.one_pos (fun _ => NeZero.pos D)
     (fun _ => hIrr) (fun _ => hLeft) (fun _ => hSelf) ?_
   classical
   obtain ⟨N₀, hN₀⟩ := (eventually_atTop.1 (hSelf.eventually_ne one_ne_zero))

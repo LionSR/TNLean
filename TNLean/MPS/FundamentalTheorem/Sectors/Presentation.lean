@@ -77,8 +77,10 @@ block-diagonal similarity (arXiv:1606.00608, lines 281--301). -/
 private lemma gaugeEquiv_toTensor_withBasis (P : SectorDecomposition d)
     {B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j)}
     (hB : ∀ j, GaugeEquiv (P.basis j) (B j)) :
-    GaugeEquiv P.toTensor (P.withBasis B).toTensor :=
-  gaugeEquiv_toTensorFromBlocks_of_blockGauge fun s => hB (P.flatIndexEquiv.symm s).1
+    GaugeEquiv P.toTensor (P.withBasis B).toTensor := by
+  change GaugeEquiv (toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis)
+    (toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) (P.withBasis B).flatBasis)
+  exact gaugeEquiv_toTensorFromBlocks_of_blockGauge fun s => hB (P.flatIndexEquiv.symm s).1
 
 /-- **Fundamental Theorem of matrix product vectors, proportional case**
 (arXiv:1606.00608, Theorem 2.10, lines 349--352; arXiv:2011.12127, Theorem 4.4).
@@ -113,7 +115,8 @@ theorem fundamentalTheorem_proportional_of_isBNTSectorPresentation
     refine ⟨c, hc, fun σ => ?_⟩
     rw [← hPresP.sameMPV₂Pos N hNpos σ, ← hPresQ.sameMPV₂Pos N hNpos σ]
     exact hEq σ
-  obtain ⟨β, hDim, ζ, Y, hζ, hConj⟩ := fundamentalTheorem_proportional_canonicalForm hCFP hCFQ hProp'
+  obtain ⟨β, hDim, ζ, Y, hζ, hConj⟩ :=
+    fundamentalTheorem_proportional_canonicalForm hCFP hCFQ hProp'
   choose Z hZ using fun k => exists_conj_of_conj_of_gaugeEquiv (hConj k)
     (gaugeEquiv_cast (hDim k) (hGP (β k))) (hGQ k).symm
   exact ⟨β, hDim, ζ, Z, hζ, hZ⟩

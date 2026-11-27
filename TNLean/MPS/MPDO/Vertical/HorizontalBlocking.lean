@@ -8,9 +8,9 @@ import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalBNT
 import TNLean.MPS.Operator.Product.PhysicalBlocking
 
 /-!
-# Normalized BNT-refined horizontal form under two-site blocking
+# BNT-refined horizontal form under two-site blocking
 
-Two-site physical blocking preserves normalized BNT-refined horizontal form.
+Two-site physical blocking preserves BNT-refined horizontal form.
 The sector representatives and copy weights are blocked, the physical alphabet is
 relabeled by the canonical ket--bra equivalence, and every copy retains its
 original virtual gauge.
@@ -26,7 +26,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Two-site physical blocking preserves normalized BNT-refined horizontal
+/-- Two-site physical blocking preserves BNT-refined horizontal
 form.
 
 The proof blocks the BNT sector decomposition, transports it through the

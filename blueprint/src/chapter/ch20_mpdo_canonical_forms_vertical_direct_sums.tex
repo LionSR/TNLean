@@ -277,7 +277,7 @@
     \lean{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}
     \leanok
     \uses{def:mpdo,def:horizontal_cf_mpdo,def:vertical_tensor_mpdo,def:invariant_projector_closure,thm:representative_one_sub_mp_zero}
-    Let $M$ be in normalized BNT-refined horizontal form and generate matrix
+    Let $M$ be in BNT-refined horizontal form and generate matrix
     product density operators. If an orthogonal projection $P$ satisfies
     $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then it
     also satisfies $\widetilde M_vP=P\widetilde M_vP$ for every vertical
@@ -289,7 +289,7 @@
     \leanok
     \uses{thm:representative_one_sub_mp_zero}
     Translating the left-invariance identity into the one-site ket and bra
-    actions of the original tensor, applying the normalized BNT-refined
+    actions of the original tensor, applying the BNT-refined
     version of Lemma~L, and translating the resulting opposite one-sided
     identity back to the vertically viewed tensor gives
     $\widetilde M_vP=P\widetilde M_vP$.
@@ -772,7 +772,7 @@
 
 \begin{proof}
     \leanok
-    The copy of unit-modulus weight in the normalized BNT-refined horizontal
+    The copy of unit-modulus weight in the BNT-refined horizontal
     form, together with left canonicity of its representative, makes the doubled-index tensor
     nonzero, so its vertical reshaping $\widetilde M$ is nonzero. If the
     retained decomposition had no sector,
@@ -787,14 +787,14 @@
     \leanok
     \uses{def:horizontal_cf_mpdo,def:vertical_tensor_mpdo}
     As used in \cite[Proposition~4.13, lines~1895--1902]{Cirac2016MPDO_arXiv},
-    if an MPO tensor $M$ is in normalized BNT-refined horizontal form, then
+    if an MPO tensor $M$ is in BNT-refined horizontal form, then
     its vertical reshaping is nonzero: $\widetilde M\ne0$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:horizontal_cf_mpdo,def:vertical_tensor_mpdo,lem:sector_bnt_weight_unit_exists}
-    In the normalized BNT-refined horizontal form $\widehat M=GSG^{-1}$, where
+    In the BNT-refined horizontal form $\widehat M=GSG^{-1}$, where
     $S$ is the weighted direct sum of its basis tensors, any copy whose weight
     has unit modulus has a basis tensor that cannot vanish on every letter,
     since left canonicity gives $\sum_i(A^i)^\dagger A^i=\Id$.
@@ -1019,7 +1019,7 @@
     \uses{def:mpdo,def:horizontal_cf_mpdo,def:vertical_cf_mpdo}
     Complementing the CPSV canonical-form formulation of
     Lemma~\ref{thm:vertical_cf_of_cpsv_canonical_form}, a tensor in
-    normalized BNT-refined horizontal form (Definition~\ref{def:horizontal_cf_mpdo})
+    BNT-refined horizontal form (Definition~\ref{def:horizontal_cf_mpdo})
     that generates matrix product density operators is also in canonical form in
     the vertical direction:
     there exist a basis of normal tensors $\{M_\alpha\}_\alpha$ for the

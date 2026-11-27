@@ -26,8 +26,8 @@ matrix product coefficients.
   $\mu_1, \dots, \mu_r$ there is $m > 0$ with $|\mu_k / m| \le 1$ for every $k$, equality for
   some $k$, and $\mu_k / m \ne 0$ for every $k$ (the choice at line 246 of the source, with
   $m = \max_k |\mu_k|$).
-* `MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` — for a tensor whose
-  matrix product family has a nonzero positive-length coefficient, some blocking length $p$
+* `MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized` — for a tensor
+  whose matrix product family has a nonzero positive-length coefficient, some blocking length $p$
   admits a basis-of-normal-tensors canonical form $P$ and a scale $m > 0$ with
   $V^{(N)}(A^{[p]}) = m^N V^{(N)}(P)$ at every positive length $N$.
 
@@ -241,7 +241,9 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
   -- prepared-block constructor directly.
   let ν : Fin r → ℂ := fun k => μ k / (m : ℂ)
   let P := collapsedBntSectorDecomp (d := blockPhysDim d p) ν blocks hne
-  have hSame := collapsedBntSectorDecomp_sameMPV₂Pos (d := blockPhysDim d p) ν blocks hne
+  have hSame : SameMPV₂Pos P.toTensor
+      (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := ν) blocks) :=
+    collapsedBntSectorDecomp_sameMPV₂Pos (d := blockPhysDim d p) ν blocks hne
   have hNormP := norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
     ν blocks hDim hTP hPrim hIrr hne
   refine ⟨p, hp, m, hm, P,

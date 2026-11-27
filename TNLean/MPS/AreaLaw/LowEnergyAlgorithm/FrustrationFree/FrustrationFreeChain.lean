@@ -287,8 +287,8 @@ theorem parityReplacement_gap
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ i, h i)).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
-        (∑ i, h i) y⟫_ℂ) {s t : Finset ℕ}
+      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y,
+        (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) (∑ i, h i) y⟫_ℂ) {s t : Finset ℕ}
     (hs : ∀ i ∈ s, i % 2 = 0) (ht : ∀ i ∈ t, i % 2 = 1)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
     (hxperp : x ∈ (LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))

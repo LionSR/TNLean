@@ -361,36 +361,35 @@ step that relies on the basis-of-normal-tensors power-sum argument rather than
 external coefficient limits.
 
 The active blueprint and the current Lean definitions agree that weight moduli
-need not be strictly ordered. The one-copy normal canonical form uses
-non-increasing indexing, while the paper-faithful sector BNT definition imposes
-the global source normalization $|\mu_{j,q}|\leq1$ together with the existence
-of at least one unit-modulus weight.
+need not be strictly ordered, and the presentation predicates impose no
+normalization of the weights at all.
 
 \section{What a corrected formalization would say}
 
 A source-faithful formalization requires two adjustments.
 
-First, the paper-faithful sector data must include the source's global
-normalization: every retained weight has modulus at most one and at least one
-retained weight has modulus one. The current sector predicate records these as
-\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_norm_le_one} and
-\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_unit_exists}. Thus
+First, the normalization of line~246 must be treated as what the source makes
+it, a convention on the representative (``something which we will assume''):
+every retained weight has modulus at most one and at least one retained weight
+has modulus one,
 \begin{align}
     |\mu_k|
         &\leq 1
         \qquad (1\leq k\leq r),
     \label{eq:cpsv16_cf_normalization_and_proportional_comparison_all_weight_bound}
 \end{align}
-and some weight attains equality. Non-increasing indexing may place a
-unit-modulus weight first, but it gives no strict inequality for later
-weights.\footnote{%
-    The sector normalization fields are in
-    \path{TNLean/MPS/Tensor/DirectSum/SectorBNT.lean}, lines 139--162.
-    The one-copy ordering field is
-    \leanid{MPSTensor.HasOrderedNonzeroWeights.mu_antitone} in
-    \path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}. There is
-    no field named \texttt{mu\_strict\_anti} or
-    \texttt{mu\_dom\_norm\_one}.}
+and some weight attains equality. No step of the proof of the Fundamental
+Theorem uses this convention beyond the existence of at least one retained
+block; the power-sum comparison needs only nonzero weights. The presentation
+predicates \leanid{MPSTensor.IsBNTSectorPresentation} and
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation} therefore carry the
+nonempty-basis condition and no weight bound, and the convention is stated
+explicitly where a statement asserts it: on canonical-form data as
+\leanid{MPTensor.CPSVCanonicalFormData.IsWeightNormalized}, and in the
+conclusion of the normalized supplier below. Non-increasing indexing may place
+a unit-modulus weight first, but it gives no strict inequality for later
+weights; there is no field named \texttt{mu\_strict\_anti} or
+\texttt{mu\_dom\_norm\_one}.
 
 Second, the proportional comparison must use finite power-sum relations. In the
 general setting with coefficient multiplicities, the blockwise hypothesis takes
@@ -465,8 +464,9 @@ prepared weights are rescaled by their maximal modulus
 \end{align}
 via weight normalization.\footnote{Formal declarations:
 \leanid{MPSTensor.exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized}
-and \leanid{MPSTensor.exists_weight_normalization}.} The rescaled weights
-satisfy
+and \leanid{MPSTensor.exists_weight_normalization}.} The rescaled weights,
+and the copy weights of the resulting presentation, which differ from them by
+phases of unit modulus, satisfy
 \begin{align}
     |\mu_k|
         &\leq 1
@@ -514,13 +514,14 @@ clause.
 \paragraph{Status: structural realignment.}
 
 The structural realignment is complete on the paper-faithful sector surface.
-The formal BNT canonical-form predicate now includes the source convention as
-the fields
-\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_norm_le_one} and
-\leanid{MPSTensor.IsLeftCanonicalBNTPresentation.weight_unit_exists},\footnote{%
+The presentation in left-canonical gauge
+\leanid{MPSTensor.IsLeftCanonicalBNTPresentation}\footnote{%
     Formal structure: \leanid{MPSTensor.IsLeftCanonicalBNTPresentation} in
-    \path{TNLean/MPS/Tensor/DirectSum/SectorBNT.lean}, lines 107--162.}
-and its constructors propagate these fields. The former auxiliary one-copy structure
+    \path{TNLean/MPS/CanonicalForm/BNTPresentation/LeftCanonical.lean}.}
+is a presentation by a basis of normal tensors whose basis tensors are
+left-canonical; it carries no weight normalization, since no proof consumed
+the former weight fields beyond the nonemptiness of the basis.
+The former auxiliary one-copy structure
 \texttt{MPSTensor.IsNormalCanonicalFormBNT} had no dominant-normalization field.
 The convergence-to-nonzero-limit fields and the per-$N$ coefficient package
 have been removed. Until a source-faithful

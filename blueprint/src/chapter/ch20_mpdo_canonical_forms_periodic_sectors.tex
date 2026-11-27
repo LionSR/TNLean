@@ -377,7 +377,7 @@
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}
     \leanok
     \uses{def:mpdo,def:horizontal_cf_mpdo,def:vertical_tensor_mpdo,def:no_periodic_vectors,thm:representative_one_sub_mp_zero,lem:mpdo_first_site_insertions_vertical_mul,thm:mpdo_displaced_invariant_projector,thm:mpo_stacked_layers_power,thm:mpdo_first_site_invariant_comm,thm:psd_commute_of_commute_pow}
-    Let $M$ be in normalized BNT-refined horizontal form. If an idempotent
+    Let $M$ be in BNT-refined horizontal form. If an idempotent
     $Q$ satisfies
     $Q\widetilde M\ne Q\widetilde MQ$, then for some $N\ge 0$,
     $Q_1H^{(N+1)}\ne H^{(N+1)}Q_1$.
@@ -385,7 +385,7 @@
     $\widetilde M$ has no nontrivial periodic vectors.
 
     \textbf{Scope restriction (BNT-refined horizontal form):}
-    The normalized BNT-refined horizontal hypothesis is stronger than the
+    The BNT-refined horizontal hypothesis is stronger than the
     CPSV canonical-form hypothesis; documented in
     \cite{gap:cpgsv17_vertical_cf_grouping}.
 \end{lemma}
@@ -451,7 +451,7 @@
 \begin{proof}
     \leanok
     Whereas Lemma~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
-    treats normalized BNT-refined horizontal form, here a nontrivial periodic
+    treats BNT-refined horizontal form, here a nontrivial periodic
     vector gives the invariant, displaced projector $Q$ of
     Lemma~\ref{thm:mpdo_displaced_invariant_projector}. Its word
     invariance transfers to the stacked tensor, giving commutation with

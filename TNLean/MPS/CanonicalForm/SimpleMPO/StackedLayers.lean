@@ -319,7 +319,7 @@ invariance through the stacked-layers identity
 The projector, its word invariance, and its single-letter displacement are
 constructed unconditionally in
 `exists_displaced_invariant_projector_of_periodic_vector`
-(`TNLean/MPS/MPDO/CyclicProjector.lean`).  For a tensor in normalized
+(`TNLean/MPS/MPDO/CyclicProjector.lean`).  For a tensor in
 BNT-refined horizontal form, the direct theorem
 `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` avoids this stronger
 all-length hypothesis by using one noncommuting length.
