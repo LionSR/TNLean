@@ -37,12 +37,12 @@ lines 2649--2675, the finite-volume commutator energy. -/
 theorem observableInsertionExpectation_adjoint_commutator_nonneg
     (A : MPSTensor d D) {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (H B : Matrix (Cfg d N) (Cfg d N) ℂ) (hH : H.PosSemidef)
-    (hker : groundSpaceES A N ≤ LinearMap.ker (Matrix.toEuclideanLin H)) :
+    (hker : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin H)) :
     0 ≤ observableInsertionExpectation A ρ (Bᴴ * (H * B - B * H)) := by
-  have hsecond : groundSpaceES A N ≤ LinearMap.ker (Matrix.toEuclideanLin ((Bᴴ * B) * H)) := by
+  have hsecond : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin ((Bᴴ * B) * H)) := by
     rw [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same]
     exact hker.trans (LinearMap.ker_le_ker_comp _ _)
-  have hzero := observableInsertionExpectation_eq_zero_of_groundSpaceES_le_ker
+  have hzero := observableInsertionExpectation_eq_zero_of_map_groundSpace_le_ker
     A ρ ((Bᴴ * B) * H) hsecond
   change 0 ≤ observableInsertionExpectationₗ A ρ N (Bᴴ * (H * B - B * H))
   rw [Matrix.mul_sub, ← Matrix.mul_assoc, ← Matrix.mul_assoc, map_sub]
@@ -68,12 +68,12 @@ theorem IsParentInteraction.localCommutatorObservable_nonneg
   have hH : ((chainTranslates R w h).hamiltonian).PosSemidef :=
     ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
       (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) w
-  have hker : groundSpaceES (A α) w ≤
+  have hker : ((groundSpace (A α) w).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R w h).hamiltonian)) := by
     rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
-    apply le_trans ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction
+    apply le_trans ?_ (map_groundSpace_le_ker_hamiltonian_parentChainInteraction
       (toTensorFromBlocks (α := Fin d) (μ := μ) A) R w)
-    exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α w
+    exact map_groundSpace_block_le_toTensorFromBlocks μ A hμ α w
   exact observableInsertionExpectation_adjoint_commutator_nonneg
     (A α) hρ ((chainTranslates R w h).hamiltonian) (bulkObservable X (R - 1) (R - 1)) hH hker
 

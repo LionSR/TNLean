@@ -73,8 +73,8 @@ theorem norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
     (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j)) (K M r : ℕ) :
     ‖(∑ j, (residualWindowLeftMapES (B j) K M r).range.starProjection) -
       (⨆ j, (residualWindowLeftMapES (B j) K M r).range).starProjection‖ ≤
-      ‖(∑ j, (groundSpaceES (B j) (K + M)).starProjection) -
-        (⨆ j, groundSpaceES (B j) (K + M)).starProjection‖ := by
+      ‖(∑ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
+        (⨆ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection‖ := by
   simp only [residualWindowLeftMapES_eq_fiberwise]
   have hFiber := ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le
     (S := Cfg d r) (fun j : ι => groundSpaceMapES (B j) (K + M))
@@ -108,13 +108,13 @@ theorem eventually_norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
       ‖(∑ j, (residualWindowLeftMapES (B j) K M r).range.starProjection) -
         (⨆ j, (residualWindowLeftMapES (B j) K M r).range).starProjection‖ ≤ ε := by
   have hPrefix : Filter.Tendsto (fun N =>
-      ‖(∑ j, (groundSpaceES (B j) N).starProjection) -
-        (⨆ j, groundSpaceES (B j) N).starProjection‖) Filter.atTop (nhds 0) := by
+      ‖(∑ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
+        (⨆ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection‖) Filter.atTop (nhds 0) := by
     apply Submodule.tendsto_norm_sum_starProjection_sub_iSup_zero
     intro η hη
     filter_upwards [Filter.eventually_all.2 fun i => Filter.eventually_all.2 fun j =>
       Filter.eventually_all.2 fun hij =>
-        (hP i).eventually_norm_inner_groundSpaceES_le_of_inequivalent
+        (hP i).eventually_norm_inner_map_groundSpace_le_of_inequivalent
           (hP j) (hρ i) (hρ j) (hDistinct i j hij) hη] with N hN
     exact hN
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 ((tendsto_order.1 hPrefix).2 ε hε)

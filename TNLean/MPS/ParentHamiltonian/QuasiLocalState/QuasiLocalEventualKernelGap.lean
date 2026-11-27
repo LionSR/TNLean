@@ -66,7 +66,7 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
     {R k : ℕ} (hR : 0 < R) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N)
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
     0 ≤ quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
@@ -76,10 +76,10 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
   let N := (n + k) + n
   have hH : ((chainTranslates R N h).hamiltonian).PosSemidef :=
     ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N
-  have hsupport : groundSpaceES (A α) N ≤
+  have hsupport : ((groundSpace (A α) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) := by
     rw [hN₀ N (by dsimp [N, n]; omega)]
-    exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
+    exact map_groundSpace_block_le_toTensorFromBlocks μ A hμ α N
   have hnonneg := observableInsertionExpectation_adjoint_commutator_nonneg
     (A α) hρ ((chainTranslates R N h).hamiltonian) (bulkObservable X n n) hH hsupport
   rw [← quasiLocalIntervalObservable_bulkObservable_commutator a h X hR
@@ -102,7 +102,7 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧
       (∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) z →
@@ -119,11 +119,11 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   have hN : Tendsto N atTop atTop :=
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
-  obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_groundSpaceES (hρ α) N hN
+  obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_map_groundSpace (hρ α) N hN
   apply multiblock_localCommutator_gap_of_openInteraction_gap
     A ρ hP hρ hDistinct α h hh X hR hcenter ψ hγ.le
   · filter_upwards [hN.eventually hker] with n hn
-    rwa [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ] at hn
+    rwa [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] at hn
   · exact Eventually.of_forall fun n => hgap (N n)
   · exact Eventually.of_forall hg
   · exact hu
@@ -142,7 +142,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     let ω := fun α => quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
       (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
     ∃ γ : ℝ, 0 < γ ∧
@@ -183,7 +183,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     let ω := fun α => quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
       (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
     ∃ γ : ℝ, 0 < γ ∧
@@ -286,7 +286,7 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_eventual_kernel
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧
       (∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) z →
@@ -333,7 +333,7 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_wordTupleSpanTop
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧
       (∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) z →
@@ -359,7 +359,7 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_wordTupleSpanTop
       μ A hμ hS hSpan h hh hker
   have hkerB : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=
+        ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     hker.mono fun N hN => hN.trans (hJoint N)
   have hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i) := fun i j hij e => by

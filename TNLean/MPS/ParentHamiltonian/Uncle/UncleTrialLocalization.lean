@@ -89,7 +89,7 @@ theorem uncleInteraction_uniform_slice_left_eq_zero
     Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (fun σ ↦ Matrix.trace (P * Kraus.evalWord A (u ++ List.ofFn σ ++ v) * Q))) = 0 := by
   apply uncleInteraction_apply_eq_zero_left
-  rw [mem_groundSpaceES_iff]
+  rw [mem_map_groundSpace_iff]
   simpa only [LinearEquiv.apply_symm_apply, Kraus.evalWord_append, Matrix.mul_assoc] using
     trace_evalWord_pair_mem_groundSpace A (P * Kraus.evalWord A u) (Kraus.evalWord A v * Q)
 
@@ -102,7 +102,7 @@ theorem uncleInteraction_uniform_slice_right_eq_zero
     Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (fun σ ↦ Matrix.trace (P * Kraus.evalWord B (u ++ List.ofFn σ ++ v) * Q))) = 0 := by
   apply uncleInteraction_apply_eq_zero_right
-  rw [mem_groundSpaceES_iff]
+  rw [mem_map_groundSpace_iff]
   simpa only [LinearEquiv.apply_symm_apply, Kraus.evalWord_append, Matrix.mul_assoc] using
     trace_evalWord_pair_mem_groundSpace B (P * Kraus.evalWord B u) (Kraus.evalWord B v * Q)
 
@@ -359,7 +359,7 @@ private theorem uncleTrial_wrap_cancel
       List.ofFn_zero, Fin.succ_zero_eq_one, M, Matrix.mul_assoc] using
         Matrix.trace_mul_comm (A (σ 1) * M) (A (σ 0))
   apply uncleInteraction_apply_eq_zero_left
-  rw [mem_groundSpaceES_iff, LinearEquiv.apply_symm_apply, hfun]
+  rw [mem_map_groundSpace_iff, LinearEquiv.apply_symm_apply, hfun]
   exact ⟨M, rfl⟩
 
 /-- Every actual cyclic local projector vanishes on the source trial away

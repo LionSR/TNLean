@@ -49,11 +49,11 @@ theorem placeAlong_chainWindow_groundSpaceProjection_mul
     apply Matrix.toEuclideanLin.injective
     rw [Matrix.toEuclideanLin_mul, map_zero]
     ext1 v
-    have hmem : Matrix.toEuclideanLin (groundSpaceProjectionMatrix A N) v ∈ groundSpaceES A N := by
+    have hmem : Matrix.toEuclideanLin (groundSpaceProjectionMatrix A N) v ∈ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
       change (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (groundSpaceProjectionMatrix A N)) v ∈ _
       rw [groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
-      exact (groundSpaceES A N).starProjection_apply_mem v
-    have hv := groundSpaceES_le_ker_hamiltonian_parentChainInteraction A k N hmem
+      exact ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection_apply_mem v
+    have hv := map_groundSpace_le_ker_hamiltonian_parentChainInteraction A k N hmem
     rw [LinearMap.comp_apply, LinearMap.zero_apply]
     generalize Matrix.toEuclideanLin (groundSpaceProjectionMatrix A N) v = w at hv ⊢
     rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero]

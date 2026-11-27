@@ -396,7 +396,7 @@ matrix is taken with `Matrix.toEuclideanLin` where a statement is about vectors.
 complement of the local ground space \(G_L(A)\). -/
 theorem toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ) :
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)) =
-      (groundSpaceES A L)ᗮ.starProjection.toLinearMap := by
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection.toLinearMap := by
   ext v σ
   simp [Matrix.toEuclideanLin, parentInteraction]
 
@@ -427,9 +427,9 @@ theorem posSemidef_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ) :
 theorem toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff (A : MPSTensor d D)
     (L : ℕ) (v : EuclideanSpace ℂ (Cfg d L)) :
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)) v = 0 ↔
-      v ∈ groundSpaceES A L := by
+      v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [toEuclideanLin_toMatrix'_parentInteraction]
-  change (groundSpaceES A L)ᗮ.starProjection v = 0 ↔ v ∈ groundSpaceES A L
+  change ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection v = 0 ↔ v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   rw [Submodule.starProjection_orthogonal']
   simp only [sub_apply, one_apply_eq_self]
   rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
@@ -479,7 +479,7 @@ theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D
     (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0 ↔
-      ∀ τ : Cfg d N, LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ groundSpaceES A L := by
+      ∀ τ : Cfg d N, LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have : NeZero N := NeZero.of_pos i.pos
   constructor
   · intro hv τ
@@ -493,11 +493,11 @@ theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D
 
 /-- If a term of the parent interaction on the ring annihilates a vector, every cyclic
 restriction of the vector to the window of the term lies in the local ground space. -/
-theorem withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero
+theorem withLpMap_cyclicRestrictₗ_mem_map_groundSpace_of_parentRingInteraction_term_eq_zero
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) (i : Fin N) {v : EuclideanSpace ℂ (Cfg d N)}
     (hv : haveI : NeZero N := NeZero.of_pos i.pos;
       Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0) (τ : Cfg d N) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ groundSpaceES A L :=
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
   haveI : NeZero N := NeZero.of_pos i.pos
   (toEuclideanLin_parentRingInteraction_term_eq_zero_iff A hLN i v).1 hv τ
 
@@ -505,55 +505,55 @@ theorem withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_t
 the ring based at `0` and `1` annihilate a vector, the vector lies in the \((L+1)\)-site ground
 space. This is the open-chain intersection property `groundSpace_intersection` in the language of
 the local terms. -/
-theorem mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero
+theorem mem_map_groundSpace_succ_of_parentRingInteraction_term_zero_one_eq_zero
     {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))}
     (hleft : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0)
     (hright : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0) :
-    v ∈ groundSpaceES A (L + 1) := by
+    v ∈ ((groundSpace A (L + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
   have hLeft : InLeftGround A L (eN v) := by
     intro j
-    have hmemNS := (mem_groundSpaceES_iff A L _).1
-      (withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero A L.le_succ 0
+    have hmemNS := (mem_map_groundSpace_iff A L _).1
+      (withLpMap_cyclicRestrictₗ_mem_map_groundSpace_of_parentRingInteraction_term_eq_zero A L.le_succ 0
         hleft fun _ => j)
     rwa [restrictLast_eq_withLpMap_cyclicRestrictₗ_zero v (fun _ => j)]
   have hRight : InRightGround A L (eN v) := by
     intro i
-    have hmemNS := (mem_groundSpaceES_iff A L _).1
-      (withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero A L.le_succ 1
+    have hmemNS := (mem_map_groundSpace_iff A L _).1
+      (withLpMap_cyclicRestrictₗ_mem_map_groundSpace_of_parentRingInteraction_term_eq_zero A L.le_succ 1
         hright fun _ => i)
     rwa [restrictFirst_eq_withLpMap_cyclicRestrictₗ_one (by omega : 0 < L) v (fun _ => i)]
-  exact (mem_groundSpaceES_iff A (L + 1) v).2 (groundSpace_intersection hA hL hLeft hRight)
+  exact (mem_map_groundSpace_iff A (L + 1) v).2 (groundSpace_intersection hA hL hLeft hRight)
 
 /-- Vectors of the \((L+1)\)-site ground space are annihilated by the two terms of the parent
 interaction on the ring based at `0` and `1`. -/
-theorem parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ
+theorem parentRingInteraction_term_zero_one_eq_zero_of_mem_map_groundSpace_succ
     (A : MPSTensor d D) {L : ℕ} (hL : 0 < L) {v : EuclideanSpace ℂ (Cfg d (L + 1))}
-    (hv : v ∈ groundSpaceES A (L + 1)) :
+    (hv : v ∈ ((groundSpace A (L + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0 ∧
       Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0 := by
-  have hψ := (mem_groundSpaceES_iff A (L + 1) v).1 hv
+  have hψ := (mem_map_groundSpace_iff A (L + 1) v).1 hv
   constructor
   · rw [toEuclideanLin_parentRingInteraction_term_eq_zero_iff A L.le_succ]
     intro τ
-    rw [mem_groundSpaceES_iff, ← restrictLast_eq_withLpMap_cyclicRestrictₗ_zero v τ]
+    rw [mem_map_groundSpace_iff, ← restrictLast_eq_withLpMap_cyclicRestrictₗ_zero v τ]
     exact groundSpace_inLeftGround A L hψ (τ (Fin.last L))
   · rw [toEuclideanLin_parentRingInteraction_term_eq_zero_iff A L.le_succ]
     intro τ
-    rw [mem_groundSpaceES_iff, ← restrictFirst_eq_withLpMap_cyclicRestrictₗ_one hL v τ]
+    rw [mem_map_groundSpace_iff, ← restrictFirst_eq_withLpMap_cyclicRestrictₗ_one hL v τ]
     exact groundSpace_inRightGround A L hψ (τ 0)
 
 /-- Adjacent terms of the parent interaction on the ring of \(L+1\) sites have the
 \((L+1)\)-site ground space as their common kernel. -/
-theorem parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
+theorem parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ
     {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
     Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0 ∧
       Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0 ↔
-        v ∈ groundSpaceES A (L + 1) :=
-  ⟨fun h ↦ mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero hA hL h.1 h.2,
-    parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ A (by omega)⟩
+        v ∈ ((groundSpace A (L + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+  ⟨fun h ↦ mem_map_groundSpace_succ_of_parentRingInteraction_term_zero_one_eq_zero hA hL h.1 h.2,
+    parentRingInteraction_term_zero_one_eq_zero_of_mem_map_groundSpace_succ A (by omega)⟩
 
 /-- Every term of the parent interaction on the ring is an orthogonal projection. -/
 theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ) {N : ℕ}
@@ -695,7 +695,7 @@ theorem toMatrix'_parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)
   have hmem := (toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff A L
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)).mp
       (by simp only [hzero, map_zero, LinearMap.zero_apply])
-  simpa using (mem_groundSpaceES_iff A L _).mp hmem
+  simpa using (mem_map_groundSpace_iff A L _).mp hmem
 
 /-- If \(d^L > D^2\), the canonical parent interaction is nonzero in the
 original function-space coordinates. -/

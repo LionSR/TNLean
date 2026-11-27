@@ -82,15 +82,15 @@ theorem isExtreme_parentGroundStateFace
 annihilates its finite-interval MPS space. Primitivity is unnecessary.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1 and
 local support equations (3.1)--(3.2b). -/
-theorem quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker
+theorem quasiLocalExpectation_mem_parentGroundStateFace_of_map_groundSpace_le_ker
     {D : ℕ} (A : MPSTensor d D) (hTP : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hX : groundSpaceES A R ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
+    (hX : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
     quasiLocalExpectation A hTP hρ hfix htr ∈ parentGroundStateFace h := by
   refine ⟨quasiLocalExpectation_isState A hTP hρ hfix htr, ?_⟩
-  exact fun a => quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
+  exact fun a => quasiLocalExpectation_interval_eq_zero_of_map_groundSpace_le_ker
     A hTP hρ hfix htr a h hX
 
 /-- Each normalized sector state belongs to the zero-energy face of every
@@ -107,10 +107,10 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_toTensorFromBlocks
     (hParent : IsParentInteraction (toTensorFromBlocks (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     quasiLocalExpectation (A α) hTP hρ hfix htr ∈ parentGroundStateFace h := by
-  apply quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker
+  apply quasiLocalExpectation_mem_parentGroundStateFace_of_map_groundSpace_le_ker
     (A α) hTP hρ hfix htr h
   rw [hParent.ker_eq]
-  exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α R
+  exact map_groundSpace_block_le_toTensorFromBlocks μ A hμ α R
 
 end MPSTensor
 
@@ -133,7 +133,7 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_canonicalParentInteracti
     (hFix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0) (R : ℕ) :
     quasiLocalExpectation A hTP hρ hFix htr ∈
       parentGroundStateFace (LinearMap.toMatrix' (parentInteraction A R)) := by
-  apply quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker
+  apply quasiLocalExpectation_mem_parentGroundStateFace_of_map_groundSpace_le_ker
     A hTP hρ hFix htr
   exact (isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction A R).ker_eq.ge
 

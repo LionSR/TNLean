@@ -152,17 +152,17 @@ private theorem norm_inner_le_of_residualPrefixFiber_bound {N r : ℕ}
       (fun τ => ‖residualPrefixFiber (L := L) x τ‖)
       (fun τ => ‖residualPrefixFiber (L := L) y τ‖)
 
-private theorem residualPrefixFiber_mem_groundSpaceES
+private theorem residualPrefixFiber_mem_map_groundSpace
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (V : Matrix (Fin D) (Fin E) ℂ) {N r : ℕ}
     {x : EuclideanSpace ℂ (Cfg d (N * L + r))}
     (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range) (τ : Cfg d r) :
-    residualPrefixFiber (L := L) x τ ∈ groundSpaceES B N := by
+    residualPrefixFiber (L := L) x τ ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨z, rfl⟩ := hx
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).surjective z
   change residualPrefixFiber (L := L)
     (blockedResidualBoundaryMapES A L B V N r
-      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ ∈ groundSpaceES B N
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   rw [residualPrefixFiber_boundaryMap A B V N r Y τ, ← range_groundSpaceMapES]
   exact ⟨_, rfl⟩
 
@@ -177,15 +177,15 @@ theorem norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound {D₂ : ℕ}
     (B : MPSTensor (blockPhysDim d L) E) (B' : MPSTensor (blockPhysDim d L) F)
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {N r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
-    (hAngle : ∀ x ∈ groundSpaceES B N, ∀ y ∈ groundSpaceES B' N,
+    (hAngle : ∀ x ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈ ((groundSpace B' N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
     {x y : EuclideanSpace ℂ (Cfg d (N * L + r))}
     (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range)
     (hy : y ∈ (blockedResidualBoundaryMapES C L B' W N r).range) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   apply norm_inner_le_of_residualPrefixFiber_bound x y hε
-  exact fun τ => hAngle _ (residualPrefixFiber_mem_groundSpaceES A B V hx τ)
-    _ (residualPrefixFiber_mem_groundSpaceES C B' W hy τ)
+  exact fun τ => hAngle _ (residualPrefixFiber_mem_map_groundSpace A B V hx τ)
+    _ (residualPrefixFiber_mem_map_groundSpace C B' W hy τ)
 
 end MPSTensor
 
@@ -215,7 +215,7 @@ theorem eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
       ∀ x ∈ (blockedResidualBoundaryMapES A L B V N r).range,
       ∀ y ∈ (blockedResidualBoundaryMapES C L B' W N r).range,
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
-  filter_upwards [hB.eventually_norm_inner_groundSpaceES_le_of_inequivalent
+  filter_upwards [hB.eventually_norm_inner_map_groundSpace_le_of_inequivalent
     hB' hρ hσ hDistinct hε] with N hN
   exact fun r x hx y hy =>
     norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound A C B B' V W hε.le hN hx hy
@@ -283,11 +283,11 @@ theorem IsPeriodic.exists_residual_primitive_projection_sum
         BlocksNotGaugePhaseEquiv B ∧
         (∀ j, (V j)ᴴ * V j = 1) ∧ (∑ j, V j * (V j)ᴴ) = 1 ∧
         (∀ j i, (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ) ∧
-        (∀ N r, groundSpaceES A (N * m + r) =
+        (∀ N r, ((groundSpace A (N * m + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
           ⨆ j, (blockedResidualBoundaryMapES A m (B j) (V j) N r).range) ∧
         (∀ r : ℕ → ℕ, Tendsto (fun N =>
           ‖(∑ j, ((blockedResidualBoundaryMapES A m (B j) (V j) N (r N)).range).starProjection) -
-            (groundSpaceES A (N * m + r N)).starProjection‖) atTop (nhds 0)) := by
+            ((groundSpace A (N * m + r N)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖) atTop (nhds 0)) := by
   classical
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨dim, hdim, B, P, V, ρ, hP, hρ, hDistinct, hproj, hsum,
@@ -295,7 +295,7 @@ theorem IsPeriodic.exists_residual_primitive_projection_sum
   let : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
   have hResolution : (∑ j, V j * (V j)ᴴ) = 1 := by simpa only [hV] using hsum
   have hGS (N r : ℕ) :=
-    groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES A B V hResolution hCoInt N r
+    map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES A B V hResolution hCoInt N r
   have hSep : ∀ i j : Fin m, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i) := by
     intro i j hij e

@@ -97,7 +97,7 @@ arXiv:1010.3732, Appendix A, lines 2477--2480 and 2575--2578. -/
 theorem exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     {X : Type*} [TopologicalSpace X] {R N₀ : ℕ}
     (A : X → MPSTensor d D)
-    (hProj : Continuous fun x ↦ (groundSpaceES (A x) R).starProjection)
+    (hProj : Continuous fun x ↦ ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) {γ : ℝ} (hγ : 0 < γ)

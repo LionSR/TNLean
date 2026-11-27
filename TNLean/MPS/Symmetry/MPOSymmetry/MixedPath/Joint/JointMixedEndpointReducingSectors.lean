@@ -155,8 +155,8 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpointLeftTensor_starProjection_eq_outerCorner
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
-    (groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).starProjection.toLinearMap =
+    (((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
+      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.toLinearMap =
       jointMixedRowSector d₀ d₁ D₀ D₁ (0 : Fin 2) *
         jointMixedColumnSector d₀ d₁ D₀ D₁ (1 : Fin 2) *
           (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
@@ -179,7 +179,7 @@ theorem jointMixedEndpointLeftTensor_starProjection_eq_outerCorner
   symm
   apply hprod.ext (Submodule.isSymmetricProjection_starProjection _)
   rw [Submodule.range_starProjection,
-    ← jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES A₀ A₁]
+    ← jointMixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace A₀ A₁]
   change LinearMap.range (R * C * S.starProjection.toLinearMap) = S.map (R.comp C)
   apply le_antisymm
   · rintro _ ⟨v, rfl⟩

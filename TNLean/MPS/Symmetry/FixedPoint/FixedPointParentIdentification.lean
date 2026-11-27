@@ -68,8 +68,8 @@ theorem twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor
       (twoSiteBondInteraction
         (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
           (bondPenalty (matrixUnitBondVector D)))) v = 0 ↔
-      v ∈ groundSpaceES (sptFixedPointTensor D) 2 := by
-  rw [mem_groundSpaceES_iff, groundSpace, LinearMap.mem_range]
+      v ∈ ((groundSpace (sptFixedPointTensor D) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  rw [mem_map_groundSpace_iff, groundSpace, LinearMap.mem_range]
   constructor
   · intro hv
     refine ⟨fun d a => ∑ x : Fin D,

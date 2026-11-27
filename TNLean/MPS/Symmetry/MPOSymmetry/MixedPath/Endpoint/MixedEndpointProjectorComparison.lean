@@ -67,7 +67,7 @@ No commutation or support identity is assumed: both were derived from
 boundary matrix transport. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointLeftTensor_starProjection_eq_outerCorner
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    (groundSpaceES (mixedEndpointLeftTensor A₀ D₁) 2).starProjection.toLinearMap =
+    ((groundSpace (mixedEndpointLeftTensor A₀ D₁) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap =
       mixedEndpointRowSector D₀ D₁ 0 * mixedEndpointColumnSector D₀ D₁ 1 *
         (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
           (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
@@ -89,7 +89,7 @@ theorem mixedEndpointLeftTensor_starProjection_eq_outerCorner
   symm
   apply hprod.ext (Submodule.isSymmetricProjection_starProjection _)
   rw [Submodule.range_starProjection]
-  rw [← mixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES A₀ A₁]
+  rw [← mixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace A₀ A₁]
   change LinearMap.range (R * C * S.starProjection.toLinearMap) = S.map (R.comp C)
   apply le_antisymm
   · rintro _ ⟨v, rfl⟩
@@ -122,13 +122,13 @@ theorem mixedEndpointParentInteraction_zero_le_parentInteraction
     Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) ≤
       Matrix.toEuclideanLin
         (LinearMap.toMatrix' (parentInteraction (mixedEndpointLeftTensor A₀ D₁) 2)) := by
-  have hle : (groundSpaceES (mixedEndpointLeftTensor A₀ D₁) 2).starProjection.toLinearMap ≤
+  have hle : ((groundSpace (mixedEndpointLeftTensor A₀ D₁) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap ≤
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
     apply (Submodule.isSymmetricProjection_starProjection _).le_iff_range_le_range
       (Submodule.isSymmetricProjection_starProjection _) |>.mpr
     simpa only [Submodule.range_starProjection] using
-      groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport A₀ A₁
+      map_groundSpace_mixedEndpointLeftTensor_le_extendedSupport A₀ A₁
   simpa only [toEuclideanLin_mixedEndpointParentInteraction,
     toEuclideanLin_toMatrix'_parentInteraction,
     Submodule.starProjection_orthogonal', ContinuousLinearMap.toLinearMap_sub,

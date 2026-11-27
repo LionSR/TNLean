@@ -76,7 +76,7 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
       Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant N h).hamiltonian (mpvState A N) = 0) :
     ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀,
-      Kraus.IsNormal B ∧ groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h) ∧ ∃ M₀ : ℕ,
+      Kraus.IsNormal B ∧ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h) ∧ ∃ M₀ : ℕ,
       ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
         LinearMap.ker (Matrix.toEuclideanLin
           (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by
@@ -117,7 +117,7 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
     have hSpan : WordTupleSpanTop B (N - L) :=
       wordTupleSpanTop_of_ge_of_isNBlkInjective (L₀ := q) B hdim hunital hDual hIrr hq
         hC1 hDistinct (max_le hqNL hSepNL)
-    have hker := groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
+    have hker := map_groundSpace_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
       B c hc h hh hPrime.pos (by omega) hSpan (by rwa [← hsum])
     let j : Fin r := ⟨0, hr⟩
     let : NeZero (dim j) := ⟨(hdim j).ne'⟩
@@ -133,7 +133,7 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
       simpa only [mpvState_apply, PiLp.zero_apply, Pi.zero_apply] using
         congrArg (fun v : MPVSpace d M => v σ) hMzero
     have hGround :=
-      toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+      toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
         (B j) h (hker j) hLM
     exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one
       (hUnique M hLM) hGround hnonzero⟩

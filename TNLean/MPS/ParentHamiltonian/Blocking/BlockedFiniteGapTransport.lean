@@ -108,19 +108,19 @@ theorem exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_fami
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
-    (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =
-      groundSpaceES (toTensorFromBlocks (μ := μ) B) N)
+    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hcover : R + L ≤ K * L + 1)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES A n) :
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N,
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian)) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   have hker' :=
-    eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES
+    eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_map_groundSpace
       A h hh (K := K) hcover hker
   obtain ⟨γ, hγ, hGap⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
     μ B hμ ρ hP hρ hDistinct (blockedInteractionMatrix h L K)
@@ -149,7 +149,7 @@ theorem IsPeriodic.exists_aligned_hamiltonian_chainTranslates_gap_of_eventual_ke
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES A n) :
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N,
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R (N * m) h).hamiltonian)) z →

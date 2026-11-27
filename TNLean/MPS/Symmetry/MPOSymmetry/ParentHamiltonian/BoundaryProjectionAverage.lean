@@ -43,30 +43,30 @@ namespace MPOTensor
 
 variable {d D₁ D₂ L n : ℕ} {T : MPOTensor d D₁} {A : MPSTensor d D₂}
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- Adjoint closure of the actual boundary range makes the canonical support
 projection commute with every boundary operator. This is the orthogonal
 reduction used in GLM23 Appendix B, lines 2463--2466; no averaging identity
 is assumed. The closure hypothesis is explicit as in
 `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
-theorem IsBoundaryCompatible.groundSpaceES_starProjection_commute_mpoWithBoundary
+theorem IsBoundaryCompatible.map_groundSpace_starProjection_commute_mpoWithBoundary
     (h : IsBoundaryCompatible T A) (hn : 0 < n)
     (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X n)ᴴ = mpoWithBoundary T Y n)
     (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    Commute (MPSTensor.groundSpaceES A n).starProjection.toLinearMap
+    Commute ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap
       (Matrix.toEuclideanLin (mpoWithBoundary T X n)) := by
   apply LinearMap.ext
   intro ψ
-  change (MPSTensor.groundSpaceES A n).starProjection
+  change ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
       (Matrix.toEuclideanLin (mpoWithBoundary T X n) ψ) =
     Matrix.toEuclideanLin (mpoWithBoundary T X n)
-      ((MPSTensor.groundSpaceES A n).starProjection ψ)
+      (((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection ψ)
   let S := StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y n))
   exact S.starProjection_toEuclideanLin_comm
-    (h.groundSpaceES_invariant_boundaryStarAlgebra hn hstar)
+    (h.map_groundSpace_invariant_boundaryStarAlgebra hn hstar)
     (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩) ψ
 
 variable {ι : Type*} [Fintype ι]
@@ -79,7 +79,7 @@ This proves the averaging consequence relevant to GLM23 Appendix B,
 lines 2463--2466. The finite families and their normalization are supplied,
 not constructed from a weak-Hopf integral; see
 `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
-theorem IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection
+theorem IsBoundaryCompatible.sum_mpoWithBoundary_map_groundSpace_starProjection
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsNBlkInjective A L)
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n)
@@ -90,9 +90,9 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) :
     (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap *
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
-      (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
+      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
   have hsum :
       (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
@@ -103,16 +103,16 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection
   calc
     _ = (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
           Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) *
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
       rw [Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro i _
       rw [mul_assoc,
-        (h.groundSpaceES_starProjection_commute_mpoWithBoundary hn hstar (Y i)).eq,
+        (h.map_groundSpace_starProjection_commute_mpoWithBoundary hn hstar (Y i)).eq,
         ← mul_assoc]
     _ = _ := by
       rw [hsum]
-      exact h.toEuclideanLin_comp_groundSpaceES_starProjection hInj hL hU hn
+      exact h.toEuclideanLin_comp_map_groundSpace_starProjection hInj hL hU hn
 
 /-- Averaging the canonical parent gives \(Q_n-P_n\), which can vanish even
 when the ambient complement \(I-P_n\) is nonzero. This is the linearity
@@ -133,13 +133,13 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_toEuclideanLin_toMatrix'_parent
         Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
       Matrix.toEuclideanLin (mpoWithBoundary T U n) -
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
   rw [MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   change (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-      (1 - (MPSTensor.groundSpaceES A n).starProjection.toLinearMap) *
+      (1 - ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap) *
       Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) = _
   simp only [mul_sub, mul_one, sub_mul, Finset.sum_sub_distrib]
-  rw [h.sum_mpoWithBoundary_groundSpaceES_starProjection hInj hL hU hn hstar X Y hXY]
+  rw [h.sum_mpoWithBoundary_map_groundSpace_starProjection hInj hL hU hn hstar X Y hXY]
   congr 1
   simpa only [Matrix.toEuclideanLin, map_sum, Matrix.toLpLin_mul_same,
     Module.End.mul_eq_comp] using
@@ -150,7 +150,7 @@ parent. This is the completed construction associated with GLM23 Appendix B,
 lines 2463--2466, under the explicit sufficient hypotheses; it does not
 identify this complement with the literal average of the parent.
 See `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
-theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection
+theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_map_groundSpace_starProjection
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsNBlkInjective A L)
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n)
@@ -161,10 +161,10 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProje
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) :
     1 - (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap *
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) := by
-  rw [h.sum_mpoWithBoundary_groundSpaceES_starProjection hInj hL hU hn hstar X Y hXY,
+  rw [h.sum_mpoWithBoundary_map_groundSpace_starProjection hInj hL hU hn hstar X Y hXY,
     MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   rfl
 
@@ -173,7 +173,7 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProje
 averaging argument of GLM23 Appendix B, lines 2463--2466. No corresponding
 claim is made for the literal average \(Q_n-P_n\); see
 `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
-theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection_ne_zero
+theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_map_groundSpace_starProjection_ne_zero
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsNBlkInjective A L)
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n)
@@ -184,9 +184,9 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProje
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) (hDim : d ^ n > D₂ ^ 2) :
     1 - (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap *
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) ≠ 0 := by
-  rw [h.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection
+  rw [h.one_sub_sum_mpoWithBoundary_map_groundSpace_starProjection
     hInj hL hU hn hstar X Y hXY]
   exact fun h0 ↦ MPSTensor.toMatrix'_parentInteraction_ne_zero A n hDim
     (Matrix.toEuclideanLin.injective (h0.trans (map_zero _).symm))

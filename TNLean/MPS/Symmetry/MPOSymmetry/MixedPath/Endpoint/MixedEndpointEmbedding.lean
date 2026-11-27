@@ -124,9 +124,9 @@ theorem insertedTwoSiteMap_first_boundary
 /-- The canonical two-site support of the embedded first endpoint is
 contained in the extended zero-parameter support. Source: arXiv:2203.12563,
 Section 5, lines 1690–1692. -/
-theorem groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport
+theorem map_groundSpace_mixedEndpointLeftTensor_le_extendedSupport
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    groundSpaceES (mixedEndpointLeftTensor A₀ D₁) 2 ≤
+    ((groundSpace (mixedEndpointLeftTensor A₀ D₁) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ 0)).range := by
   rintro ψ ⟨_, ⟨X, rfl⟩, rfl⟩

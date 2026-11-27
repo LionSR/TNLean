@@ -56,7 +56,7 @@ noncomputable def cornerGroundSpaceES (A : MPSTensor d D)
 
 /-- The corner of the identity gives the full open-boundary space. -/
 theorem cornerGroundSpaceES_one (A : MPSTensor d D) (L : ℕ) :
-    cornerGroundSpaceES A 1 L = groundSpaceES A L := by
+    cornerGroundSpaceES A 1 L = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hTop : cornerSubmodule (1 : Matrix (Fin D) (Fin D) ℂ) = ⊤ :=
     eq_top_iff.mpr fun X _ => by
       change (1 : Matrix (Fin D) (Fin D) ℂ) * X * 1 = X
@@ -90,12 +90,12 @@ theorem groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner
 
 /-- Euclidean form of
 `groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner`. -/
-theorem groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner
+theorem map_groundSpace_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner
     (A : MPSTensor d D) (B : MPSTensor d E)
     (V : Matrix (Fin D) (Fin E) ℂ) (hV : Vᴴ * V = 1)
     (hInt : ∀ i, A i * V = V * B i) (L : ℕ) :
-    groundSpaceES B L = cornerGroundSpaceES A (V * Vᴴ) L := by
-  rw [groundSpaceES, cornerGroundSpaceES,
+    ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = cornerGroundSpaceES A (V * Vᴴ) L := by
+  rw [cornerGroundSpaceES,
     groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner A B V hV hInt L]
 
 /-- For a nonzero positive stationary virtual matrix \(\rho\), which need not be
@@ -114,7 +114,7 @@ theorem observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff_of_sta
     exists_faithful_stationary_supportCompression A hρ htr hFix
   have : NeZero E := ⟨hE.ne'⟩
   rw [hObs, observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff B hσ X,
-    groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner A B V hV hInt,
+    map_groundSpace_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner A B V hV hInt,
     hVrange]
 
 /-- A left-canonical tensor and a nonzero positive stationary virtual matrix,
@@ -133,9 +133,9 @@ theorem exists_local_density_range_eq_cornerGroundSpaceES_of_stationary
   obtain ⟨E, hE, V, B, τ, hV, hVrange, -, -, hτ, hB, hInt, -, -, hObs⟩ :=
     exists_faithful_stationary_supportCompression_of_leftCanonical A hA hρ htr hFix
   have : NeZero E := ⟨hE.ne'⟩
-  obtain ⟨σ, hσ, hσtr, hrep, hrange⟩ := exists_local_density_range_eq_groundSpaceES B hB hτ k
+  obtain ⟨σ, hσ, hσtr, hrep, hrange⟩ := exists_local_density_range_eq_map_groundSpace B hB hτ k
   refine ⟨σ, hσ, hσtr, fun X => (hObs k X).trans (hrep X), ?_⟩
-  rw [hrange, groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner A B V hV hInt,
+  rw [hrange, map_groundSpace_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner A B V hV hInt,
     hVrange]
 
 end MPSTensor

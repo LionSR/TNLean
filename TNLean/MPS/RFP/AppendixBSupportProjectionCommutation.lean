@@ -335,11 +335,11 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjectionES_range
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (hφ : hStruct.virtualBondNormSq ≠ 0) :
     LinearMap.range hStruct.transportedTwoSiteBondProjectionES =
-      groundSpaceES hStruct.coreTensor 2 := by
+      ((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   ext ψ
   constructor
   · rintro ⟨v, rfl⟩
-    apply (mem_groundSpaceES_iff hStruct.coreTensor 2 _).2
+    apply (mem_map_groundSpace_iff hStruct.coreTensor 2 _).2
     change hStruct.transportedTwoSiteBondProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) v) ∈
         groundSpace hStruct.coreTensor 2
@@ -352,7 +352,7 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjectionES_range
         LinearMap.range hStruct.transportedTwoSiteBondProjection := by
       rw [hStruct.transportedTwoSiteBondProjection_range hφ,
         hStruct.twoSiteBasicEmbedding_range]
-      exact (mem_groundSpaceES_iff hStruct.coreTensor 2 ψ).1 hψ
+      exact (mem_map_groundSpace_iff hStruct.coreTensor 2 ψ).1 hψ
     obtain ⟨v, hv⟩ := hraw
     refine ⟨(WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v, ?_⟩
     apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).injective
@@ -367,7 +367,7 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjection_eq_supp
     hStruct.transportedTwoSiteBondProjection =
       hStruct.twoSiteBasicSupportProjection := by
   have hEq : hStruct.transportedTwoSiteBondProjectionES =
-      (groundSpaceES hStruct.coreTensor 2).starProjection.toLinearMap :=
+      ((groundSpace hStruct.coreTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap :=
     (hStruct.transportedTwoSiteBondProjectionES_isSymmetricProjection hφ).ext
       (Submodule.isSymmetricProjection_starProjection _)
       (by

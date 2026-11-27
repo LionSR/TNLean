@@ -28,11 +28,11 @@ namespace MPSTensor
 /-- Injectivity after blocking \(L\) sites at the base point suffices for
 continuity of the actual local MPS ground-space projector. No injectivity
 away from that point is assumed. -/
-theorem continuousAt_groundSpaceES_starProjection_of_isNBlkInjective
+theorem continuousAt_map_groundSpace_starProjection_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) {x₀ : X} (hA : ContinuousAt A x₀) (L : ℕ)
     (hInj : Kraus.IsNBlkInjective (A x₀) L) :
-    ContinuousAt (fun x => (groundSpaceES (A x) L).starProjection) x₀ := by
+    ContinuousAt (fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) x₀ := by
   have hT : ContinuousAt (fun x => groundSpaceMapES (A x) L) x₀ :=
     (continuous_groundSpaceMapES_family
       (fun B : MPSTensor d D => B) continuous_id L).continuousAt.comp hA
@@ -51,12 +51,12 @@ theorem continuousAt_toMatrix'_parentInteraction_of_isNBlkInjective
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d L) (Cfg d L) ℂ ≃⋆ₐ[ℂ] _).symm
   have he : Continuous e := e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional
   have heq : (fun x => LinearMap.toMatrix' (parentInteraction (A x) L)) =
-      fun x => e (1 - (groundSpaceES (A x) L).starProjection) := by
+      fun x => e (1 - ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) := by
     funext x
     rw [← toEuclideanCLM_toMatrix'_parentInteraction, StarAlgEquiv.symm_apply_apply]
   rw [heq]
   exact he.continuousAt.comp (continuousAt_const.sub
-    (continuousAt_groundSpaceES_starProjection_of_isNBlkInjective A hA L hInj))
+    (continuousAt_map_groundSpace_starProjection_of_isNBlkInjective A hA L hInj))
 
 /-- The explicit uncle interaction on the original two physical sites: the matrix of the
 canonical one-site parent projector of the blocked uncle tensor, read in the coordinates of the
@@ -73,9 +73,9 @@ private theorem toEuclideanLin_submatrix_blockedConfigEquiv_apply {d D : ℕ}
     Matrix.toEuclideanLin ((LinearMap.toMatrix' (parentInteraction T 1)).submatrix
         (Kraus.blockedConfigEquiv d 1 2).symm (Kraus.blockedConfigEquiv d 1 2).symm) v =
       blockedConfigLinearIsometryEquiv d 1 2
-        ((groundSpaceES T 1)ᗮ.starProjection
+        (((groundSpace T 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection
           ((blockedConfigLinearIsometryEquiv d 1 2).symm v)) := by
-  have hP : (groundSpaceES T 1)ᗮ.starProjection
+  have hP : ((groundSpace T 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection
       ((blockedConfigLinearIsometryEquiv d 1 2).symm v) =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction T 1))
         ((blockedConfigLinearIsometryEquiv d 1 2).symm v) := by
@@ -96,7 +96,7 @@ theorem toEuclideanLin_uncleInteraction_apply {d a b : ℕ}
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (v : EuclideanSpace ℂ (Cfg d 2)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v =
       blockedConfigLinearIsometryEquiv d 1 2
-        ((groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection
+        (((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection
           ((blockedConfigLinearIsometryEquiv d 1 2).symm v)) :=
   toEuclideanLin_submatrix_blockedConfigEquiv_apply (uncleTensor A B R L) v
 
@@ -111,17 +111,17 @@ private theorem toMatrix'_parentInteraction_eq_uncleInterpolant_submatrix {d a b
       groundSpace (blockTensor (twoBlockPerturbation A P B Q R L ε) 2) 1 := by
     rw [← twoBlockVirtualScale_blockTensor A P B Q R L hε]
     exact groundSpace_twoBlockVirtualScale_one (inv_ne_zero hε) _
-  have hGES : groundSpaceES (uncleTensorInterpolant A P B Q R L ε) 1 =
-      groundSpaceES (blockTensor (twoBlockPerturbation A P B Q R L ε) 2) 1 := by
-    simp only [groundSpaceES, hG]
+  have hGES : ((groundSpace (uncleTensorInterpolant A P B Q R L ε) 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace (blockTensor (twoBlockPerturbation A P B Q R L ε) 2) 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    simp only [hG]
   apply Matrix.toEuclideanLin.injective
   ext v : 1
   rw [toEuclideanLin_submatrix_blockedConfigEquiv_apply, toEuclideanLin_toMatrix'_parentInteraction,
     hGES]
-  change (groundSpaceES (twoBlockPerturbation A P B Q R L ε) 2)ᗮ.starProjection v = _
+  change ((groundSpace (twoBlockPerturbation A P B Q R L ε) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection v = _
   simp only [Submodule.starProjection_orthogonal, sub_apply,
     ContinuousLinearMap.id_apply, map_sub, LinearIsometryEquiv.apply_symm_apply]
-  rw [starProjection_groundSpaceES_blockTensor_map_apply
+  rw [starProjection_map_groundSpace_blockTensor_map_apply
     (twoBlockPerturbation A P B Q R L ε) 2 1]
 
 /-- The two-block uncle interaction is the punctured operator-norm limit of

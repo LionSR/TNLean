@@ -145,19 +145,19 @@ theorem continuous_range_insertedTwoSiteMap_starProjection
 reparametrizes the boundary matrix. Thus the extended support is exactly
 the two-site ground space of the right-weighted tensor.
 Source: arXiv:2203.12563, Section 5, line 1690, `Sγ = S′γ`. -/
-theorem range_insertedTwoSiteMap_eq_groundSpaceES
+theorem range_insertedTwoSiteMap_eq_map_groundSpace
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ) (hW : IsUnit W) :
-    (insertedTwoSiteMap A W).range = groundSpaceES (fun i => A i * W) 2 := by
+    (insertedTwoSiteMap A W).range = ((groundSpace (fun i => A i * W) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨u, rfl⟩ := hW
   apply le_antisymm
   · rintro ψ ⟨v, rfl⟩
-    rw [mem_groundSpaceES_iff]
+    rw [mem_map_groundSpace_iff]
     refine ⟨(↑u⁻¹ : Matrix (Fin D) (Fin D) ℂ) * Matrix.of (fun a b => v (a, b)), ?_⟩
     funext σ
     simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc,
       insertedTwoSiteMap_apply, WithLp.linearEquiv_apply]
   · intro ψ hψ
-    rw [mem_groundSpaceES_iff] at hψ
+    rw [mem_map_groundSpace_iff] at hψ
     obtain ⟨X, hX⟩ := hψ
     refine ⟨WithLp.toLp 2 (fun p : Fin D × Fin D => ((u : Matrix (Fin D) (Fin D) ℂ) * X)
       p.1 p.2), ?_⟩
@@ -174,13 +174,13 @@ theorem range_insertedTwoSiteMap_eq_groundSpaceES
 /-- In the open interval, the extended support of the mixed interpolation
 coincides with its canonical two-site MPS ground space.
 Source: arXiv:2203.12563, Section 5, line 1690. -/
-theorem mixedEndpoint_extendedSupport_eq_groundSpaceES
+theorem mixedEndpoint_extendedSupport_eq_map_groundSpace
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
     (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
       (bondInterpolationMatrix D₀ D₁ γ)).range =
-      groundSpaceES (mixedEndpointInterpolation A₀ A₁ γ) 2 :=
-  range_insertedTwoSiteMap_eq_groundSpaceES _ _
+      ((groundSpace (mixedEndpointInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+  range_insertedTwoSiteMap_eq_map_groundSpace _ _
     (isUnit_bondInterpolationMatrix_of_mem_Ioo hγ)
 
 /-- The source mixed-tensor path has extended local support of dimension
@@ -258,7 +258,7 @@ theorem mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction
   have hproj := congrArg
     (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)) =>
       S.starProjection)
-    (mixedEndpoint_extendedSupport_eq_groundSpaceES A₀ A₁ hγ)
+    (mixedEndpoint_extendedSupport_eq_map_groundSpace A₀ A₁ hγ)
   apply Matrix.toEuclideanLin.injective
   rw [toEuclideanLin_mixedEndpointParentInteraction, toEuclideanLin_toMatrix'_parentInteraction,
     hproj, Submodule.starProjection_orthogonal]

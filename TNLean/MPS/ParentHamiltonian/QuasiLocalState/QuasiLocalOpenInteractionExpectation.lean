@@ -101,22 +101,22 @@ constructed sector state has zero expectation of the local interaction.
 No positivity assumption on the interaction is needed. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2, the finite-volume kernel condition,
 and equation (3.12). -/
-theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
+theorem quasiLocalExpectation_interval_eq_zero_of_open_map_groundSpace_le_ker
     {b : ℕ} {dim : Fin b → ℕ}
     (μ : Fin b → ℂ) (A : ∀ α, MPSTensor d (dim α)) (hμ : ∀ α, μ α ≠ 0)
     (α : Fin b) (hTP : ∑ i, (A α i)ᴴ * A α i = 1)
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hRN : R ≤ N)
-    (hker : groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N ≤
+    (hker : ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian))) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
-  have hkerα : groundSpaceES (A α) N ≤
+  have hkerα : ((groundSpace (A α) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) := by
     apply le_trans ?_ hker
-    exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
-  have hzero := quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
+    exact map_groundSpace_block_le_toTensorFromBlocks μ A hμ α N
+  have hzero := quasiLocalExpectation_interval_eq_zero_of_map_groundSpace_le_ker
     (A α) hTP hρ hfix htr a ((chainTranslates R N h).hamiltonian) hkerα
   rw [quasiLocalIntervalObservable_hamiltonian_chainTranslates a h N, map_sum] at hzero
   simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const,
@@ -136,11 +136,11 @@ theorem quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_cha
     {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hker : ∀ᶠ N in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N) (a : ℤ) :
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
   obtain ⟨N, hN, hRN⟩ := (hker.and (Filter.eventually_ge_atTop R)).exists
-  exact quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
+  exact quasiLocalExpectation_interval_eq_zero_of_open_map_groundSpace_le_ker
     μ A hμ α hTP hρ hfix htr h hRN hN.ge a
 
 end MPSTensor

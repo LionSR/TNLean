@@ -50,12 +50,12 @@ theorem residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES
 with the original prefix boundary range in the common physical coordinates.
 No primitivity or normalization is required. Source context: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.10)--(3.15) and Lemma commutation (ii). -/
-theorem iSup_range_residualWindowLeftMapES_eq_of_groundSpaceES_eq_iSup
+theorem iSup_range_residualWindowLeftMapES_eq_of_map_groundSpace_eq_iSup
     {ι : Type*} {dim : ι → ℕ}
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (K M r : ℕ)
-    (hGS : groundSpaceES (blockTensor A L) (K + M) =
-      ⨆ j, groundSpaceES (B j) (K + M)) :
+    (hGS : ((groundSpace (blockTensor A L) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ⨆ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     (⨆ j, (residualWindowLeftMapES (B j) K M r).range) =
       ((leftBoundaryMapES A ((K + M) * L) r).range).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
@@ -97,8 +97,8 @@ theorem iSup_range_residualWindowLeftMapES_eq_reindex_leftBoundaryMapES
       ((leftBoundaryMapES A ((K + M) * L) r).range).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
           (residualWindowConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
-  exact iSup_range_residualWindowLeftMapES_eq_of_groundSpaceES_eq_iSup A B K M r
-    (groundSpaceES_eq_iSup_of_isometric_sector_resolution
+  exact iSup_range_residualWindowLeftMapES_eq_of_map_groundSpace_eq_iSup A B K M r
+    (map_groundSpace_eq_iSup_of_isometric_sector_resolution
       (blockTensor A L) B V hV hSum hInt (K + M))
 
 /-- The joint left-window range in the physical cover of length \(KL+ML+r\).

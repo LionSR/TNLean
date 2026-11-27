@@ -312,12 +312,12 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpac
       ContinuousLinearMap.rightFiber
           (rightSpectatorConfigLinearIsometryEquiv d n 1 v) s ∈
         LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) n).hamiltonian)) ↔ _
-  rw [ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+  rw [ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
     hInj hL₀ hL₀n]
   constructor
   · intro hv j
     have hs := hv (fun _ => j)
-    rw [mem_groundSpaceES_iff] at hs
+    rw [mem_map_groundSpace_iff] at hs
     change WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
         (ContinuousLinearMap.rightFiber
           (rightSpectatorConfigLinearIsometryEquiv d n 1 v) (fun _ => j)) ∈
@@ -325,7 +325,7 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpac
     rw [rightFiber_rightSpectatorConfigLinearIsometryEquiv_one] at hs
     exact hs
   · intro hv s
-    rw [mem_groundSpaceES_iff,
+    rw [mem_map_groundSpace_iff,
       rightFiber_rightSpectatorConfigLinearIsometryEquiv_one]
     exact hv (s 0)
 
@@ -407,16 +407,16 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSp
 
 /-- For a block-injective tensor, the kernel of the prefix Hamiltonian that
 fills its own volume is the whole open-chain ground space. -/
-theorem ker_hamiltonian_prefix_parentChainInteraction_self_eq_groundSpaceES
+theorem ker_hamiltonian_prefix_parentChainInteraction_self_eq_map_groundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ n : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
     LinearMap.ker
         (Matrix.toEuclideanLin
             ((parentChainInteraction A (L₀ + 1) n).restrict fun i ↦ i.val + (L₀ + 1) ≤
                 n).hamiltonian) =
-      groundSpaceES A n := by
+      ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction,
-    ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀n]
+    ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective hInj hL₀ hL₀n]
 
 /-- If the right-spectator coordinate isometry conjugates an operator to the
 fiberwise extension of an active-volume operator, it conjugates the kernel
@@ -471,7 +471,7 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
         ((openPrefixGroundProjectionES A (L₀ + 1) (n + r) n).comp
           (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-        (groundSpaceES A n).starProjection).toLinearMap := by
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection).toLinearMap := by
   let G := Matrix.toEuclideanLin
       ((parentChainInteraction A (L₀ + 1) (n + r)).restrict fun i ↦ i.val + (L₀ + 1) ≤
           n).hamiltonian
@@ -481,8 +481,8 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
     hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
       A (L := L₀ + 1) (n := n) (r := r) (p := n) le_rfl
   have hproj := ker_starProjection_conj_of_rightFiberwiseMap G H hHamiltonian
-  rw [show LinearMap.ker H = groundSpaceES A n from
-    ker_hamiltonian_prefix_parentChainInteraction_self_eq_groundSpaceES hInj hL₀ hL₀n] at hproj
+  rw [show LinearMap.ker H = ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) from
+    ker_hamiltonian_prefix_parentChainInteraction_self_eq_map_groundSpace hInj hL₀ hL₀n] at hproj
   exact hproj
 
 /-- In a fixed larger volume, a full suffix-window ground projection is the

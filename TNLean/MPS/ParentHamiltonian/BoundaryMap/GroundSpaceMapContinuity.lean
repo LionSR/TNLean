@@ -70,11 +70,11 @@ theorem continuous_groundSpaceMapES_family
 /-- Along a continuously varying family of tensors that is block-injective
 at one fixed length, the orthogonal projector onto that local ground space
 varies continuously. This is a finite-window statement. -/
-theorem continuous_groundSpaceES_starProjection_family
+theorem continuous_map_groundSpace_starProjection_family
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) (hA : Continuous A) (L : ℕ)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
-    Continuous fun x => (groundSpaceES (A x) L).starProjection := by
+    Continuous fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   have hT := continuous_groundSpaceMapES_family A hA L
   have hTinj (x : X) : Function.Injective (groundSpaceMapES (A x) L) :=
     groundSpaceMapES_injective_of_isNBlkInjective (hInj x)
@@ -83,7 +83,7 @@ theorem continuous_groundSpaceES_starProjection_family
   have heq :
       (fun x => ContinuousLinearMap.injectiveRangeProjector
         (groundSpaceMapES (A x) L) (hTinj x)) =
-      (fun x => (groundSpaceES (A x) L).starProjection) := by
+      (fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) := by
     funext x
     exact injectiveRangeProjector_groundSpaceMapES_eq_starProjection (A x) L (hInj x)
   rw [← heq]
@@ -104,7 +104,7 @@ theorem toEuclideanCLM_toMatrix'_parentInteraction {d D : ℕ} (A : MPSTensor d 
     (L : ℕ) :
     (Matrix.toEuclideanCLM : Matrix (Cfg d L) (Cfg d L) ℂ ≃⋆ₐ[ℂ] _)
         (LinearMap.toMatrix' (parentInteraction A L)) =
-      1 - (groundSpaceES A L).starProjection := by
+      1 - ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   apply ContinuousLinearMap.coe_injective
   rw [Matrix.coe_toEuclideanCLM_eq_toEuclideanLin, toEuclideanLin_toMatrix'_parentInteraction,
     Submodule.starProjection_orthogonal]
@@ -115,12 +115,12 @@ canonical parent interaction. No injectivity of the full tensor is required. -/
 theorem continuous_toMatrix'_parentInteraction_family_of_groundProjection
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) (L : ℕ)
-    (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
+    (hProj : Continuous fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) :
     Continuous fun x => LinearMap.toMatrix' (parentInteraction (A x) L) := by
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d L) (Cfg d L) ℂ ≃⋆ₐ[ℂ] _).symm
   have he : Continuous e := e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional
   have heq : (fun x => LinearMap.toMatrix' (parentInteraction (A x) L)) =
-      fun x => e (1 - (groundSpaceES (A x) L).starProjection) := by
+      fun x => e (1 - ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) := by
     funext x
     rw [← toEuclideanCLM_toMatrix'_parentInteraction, StarAlgEquiv.symm_apply_apply]
   rw [heq]
@@ -131,7 +131,7 @@ its fixed-range ground-space projection is continuous. -/
 theorem continuous_parentRingInteraction_term_family_of_groundProjection
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
-    (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection)
+    (hProj : Continuous fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)
     (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Continuous fun x => (parentRingInteraction (A x) L N).term i := by
@@ -145,7 +145,7 @@ the parent interaction on the open chain at fixed volume. -/
 theorem continuous_hamiltonian_parentChainInteraction_family_of_groundProjection
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) {L N : ℕ}
-    (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
+    (hProj : Continuous fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) :
     Continuous fun x => (parentChainInteraction (A x) L N).hamiltonian := by
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.Interaction.ofPlaceAlong_term]
   exact continuous_finsetSum _ fun i _ ↦ (continuous_placeAlong _).comp
@@ -156,7 +156,7 @@ the parent interaction on the ring at fixed volume. -/
 theorem continuous_hamiltonian_parentRingInteraction_family_of_groundProjection
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) {L N : ℕ} [NeZero N] (hLN : L ≤ N)
-    (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
+    (hProj : Continuous fun x => ((groundSpace (A x) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) :
     Continuous fun x => (parentRingInteraction (A x) L N).hamiltonian := by
   simp only [ManyBody.Interaction.hamiltonian]
   exact continuous_finsetSum _ fun i _ ↦
@@ -170,7 +170,7 @@ theorem continuous_toMatrix'_parentInteraction_family
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
     Continuous fun x => LinearMap.toMatrix' (parentInteraction (A x) L) :=
   continuous_toMatrix'_parentInteraction_family_of_groundProjection A L
-    (continuous_groundSpaceES_starProjection_family A hA L hInj)
+    (continuous_map_groundSpace_starProjection_family A hA L hInj)
 
 /-- The Hamiltonian of the parent interaction on the open chain at fixed volume varies
 continuously along a tensor family injective at the interaction range. -/
@@ -180,7 +180,7 @@ theorem continuous_hamiltonian_parentChainInteraction_family
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
     Continuous fun x => (parentChainInteraction (A x) L N).hamiltonian :=
   continuous_hamiltonian_parentChainInteraction_family_of_groundProjection A
-    (continuous_groundSpaceES_starProjection_family A hA L hInj)
+    (continuous_map_groundSpace_starProjection_family A hA L hInj)
 
 /-- The Hamiltonian of the parent interaction on the ring at fixed volume varies continuously
 along a tensor family injective at the interaction range. -/
@@ -190,6 +190,6 @@ theorem continuous_hamiltonian_parentRingInteraction_family
     (hLN : L ≤ N) (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
     Continuous fun x => (parentRingInteraction (A x) L N).hamiltonian :=
   continuous_hamiltonian_parentRingInteraction_family_of_groundProjection A hLN
-    (continuous_groundSpaceES_starProjection_family A hA L hInj)
+    (continuous_map_groundSpace_starProjection_family A hA L hInj)
 
 end MPSTensor

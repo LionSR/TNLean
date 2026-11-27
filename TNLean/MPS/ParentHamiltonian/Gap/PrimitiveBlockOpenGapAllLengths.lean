@@ -73,13 +73,13 @@ private theorem open_gap_at_all_large_lengths (A : MPSTensor d D) {p : ℕ} (hp 
     {γ η : ℝ} (hγ : 0 < γ) (hη : 0 < η)
     (hKernel : ∀ N, 2 * p ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) N).hamiltonian) =
-          groundSpaceES A N)
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hLong : ∀ M, 2 ≤ M → ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
       (parentChainInteraction A (2 * p) (p * M)).hamiltonian) μ → μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hShort : ∀ W, W < 3 * p → ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
       (parentChainInteraction A (2 * p) W).hamiltonian) μ → μ = 0 ∨ (η : ℂ) ≤ μ)
     (hDefect : ∀ (K Q : ℕ), 0 < Q → Q < p →
-      ‖((groundSpaceES A (K + 2 * p + Q)).starProjection :
+      ‖(((groundSpace A (K + 2 * p + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection :
         EuclideanSpace ℂ (Cfg d (K + 2 * p + Q)) →L[ℂ]
           EuclideanSpace ℂ (Cfg d (K + 2 * p + Q))) -
         ((leftBoundaryMapES A (K + 2 * p) Q).range.starProjection :
@@ -151,7 +151,7 @@ theorem exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_
         (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian)
           z → z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨L₁, hDefect⟩ := Filter.eventually_atTop.1
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct
@@ -204,7 +204,7 @@ theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_word
   let T := toTensorFromBlocks (α := Fin d) (μ := μ) B
   have hKernel : ∀ L N : ℕ, S + 1 ≤ L → L ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T L N).hamiltonian) =
-          groundSpaceES T N :=
+          ((groundSpace T N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     fun L N hSL hLN ↦
       ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
         μ B hμ hS hSpanB hSL hLN

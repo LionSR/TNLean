@@ -55,7 +55,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-attribute [local instance] groundSpaceES_hasOrthogonalProjection
+attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 private theorem tendsto_sqrt_succ_mul_pow_of_lt_one {r : ℝ}
     (hr : 0 ≤ r) (hr_lt_one : r < 1) :
@@ -112,7 +112,7 @@ open MPSTensor
 
 variable {d D : ℕ}
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
@@ -123,7 +123,7 @@ theorem eventually_wholeIncrement_groundProjection_defect_le
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       ‖(reassocTailBoundaryMapES A K L Q).range.starProjection ∘L
             (leftBoundaryMapES A (K + L) Q).range.starProjection -
-          (groundSpaceES A (K + L + Q)).starProjection‖ ≤ ε := by
+          ((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ ε := by
   obtain ⟨c, lam, L₀, hc, hlam, hlam_one, hL₀, hInj, hDefect⟩ :=
     hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ
   have hsmall : Tendsto (fun n : ℕ ↦ c * lam ^ n) atTop (𝓝 0) := by
@@ -151,7 +151,7 @@ theorem exists_uniform_wholeIncrement_defect_le_seven_sixteenths
         ∀ K : ℕ,
           ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
                 (leftBoundaryMapES A (K + p) p).range.starProjection -
-              (groundSpaceES A (K + p + p)).starProjection‖ ≤ 7 / 16 := by
+              ((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ 7 / 16 := by
   obtain ⟨L, hLpos, hLinj⟩ := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   obtain ⟨p, hp, hDefect⟩ :=
     ((eventually_ge_atTop (max 1 L)).and
@@ -170,7 +170,7 @@ theorem exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
               (leftBoundaryMapES A (p + p) p).range.starProjection -
-            (groundSpaceES A (p + p + p)).starProjection‖ ≤ 7 / 16 := by
+            ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ 7 / 16 := by
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_uniform_wholeIncrement_defect_le_seven_sixteenths hρ
   exact ⟨p, hp, hInj, hDefect p⟩
@@ -188,7 +188,7 @@ theorem eventually_openChain_groundProjection_defect_mul_sqrt_lt
       ∀ K : ℕ,
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
               openChainLeftGroundProjectionES A (K + l) -
-            (groundSpaceES A (K + l + 1)).starProjection‖ ≤ ε := by
+            ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ ε := by
   obtain ⟨c, lam, L, hc, hlam, hlam_lt_one, hLpos, hLinj, hDefect⟩ :=
     hP.exists_openChain_groundProjection_defect_le_fnw_geometric hρ
   have hlam_pow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
@@ -234,7 +234,7 @@ theorem exists_openChain_groundProjection_defect_lt_c3_threshold
       ∀ K : ℕ,
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
               openChainLeftGroundProjectionES A (K + l) -
-            (groundSpaceES A (K + l + 1)).starProjection‖ ≤ ε := by
+            ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ ε := by
   obtain ⟨l, hl, hInj, ε, hε, hsmall, hDefect⟩ :=
     (hP.eventually_openChain_groundProjection_defect_mul_sqrt_lt hρ zero_lt_one).exists
   exact ⟨l, ε, hl, hInj, hε,

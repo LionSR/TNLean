@@ -275,11 +275,12 @@ orthogonal projector is the canonical representative used here.
     canonical computational-basis identification. The local ground space under
     this $\ell^2$ identification is
     $G_L^{\mathrm{ES}}(A):=\iota_L(G_L(A))
-        \subseteq\ell^2(\Fin{d}^{L})$.
+        \subseteq\ell^2(\Fin{d}^{L})$, the image of $G_L(A)$ and not a
+    separate space.
 \end{definition}
 
 \begin{lemma}[Membership under the canonical \texorpdfstring{$\ell^2$}{l2} identification]\label{lem:mem_ground_space_es}
-    \lean{MPSTensor.mem_groundSpaceES_iff}
+    \lean{MPSTensor.mem_map_groundSpace_iff}
     \leanok
     \uses{def:ground_space_es,def:ground_space_parent}
     For $v\in\ell^2(\Fin{d}^{L})$, one has $v\in G_L^{\mathrm{ES}}(A)$ if and
@@ -3074,7 +3075,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Physical ground-space inverse-Gram projector formula]
     \label{thm:ground_space_es_projection_inverse_gram}
-    \lean{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
+    \lean{MPSTensor.map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
     \leanok
     \uses{def:ground_space_es,def:ground_space_map_es,def:inverse_gram,thm:ground_space_map_es_injective_block_of_le}
     Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that

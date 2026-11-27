@@ -124,7 +124,7 @@ theorem exists_parentGroundStateFace_classification_of_periodic_family
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N) :
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ (L : ℕ) (hL : 0 < L),
       let _ : NeZero L := ⟨Nat.ne_of_gt hL⟩
       ∃ (g : ℕ) (bdim : Fin g → ℕ) (hdim : ∀ j, 0 < bdim j),
@@ -133,8 +133,8 @@ theorem exists_parentGroundStateFace_classification_of_periodic_family
           (ρ : ∀ j, Matrix (Fin (bdim j)) (Fin (bdim j)) ℂ)
           (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)),
           (∀ j, (ρ j).PosDef) ∧ BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
-            groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N) ∧
+          (∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+            ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
           let ω := fun j => quasiLocalBlockingFunctional d L
             (quasiLocalExpectation (B j) (hP j).norm (hP j).fixedPoint_psd
               (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero)
@@ -213,7 +213,7 @@ theorem IsPeriodic.exists_parentGroundStateFace_classification_of_eventually_ope
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N) :
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (g : ℕ), 0 < g ∧
       ∃ (dim : Fin g → ℕ) (hdim : ∀ j, 0 < dim j),
@@ -222,8 +222,8 @@ theorem IsPeriodic.exists_parentGroundStateFace_classification_of_eventually_ope
           (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
           (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)),
           (∀ j, (ρ j).PosDef) ∧ BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, groundSpaceES (blockTensor A m) N =
-            groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) ∧
+          (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+            ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
           let ω := fun j => quasiLocalBlockingFunctional d m
             (quasiLocalExpectation (B j) (hP j).norm (hP j).fixedPoint_psd
               (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero)
@@ -368,7 +368,7 @@ theorem exists_common_translation_period_of_pure_parentGroundStates_of_periodic_
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N) :
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ L : ℕ, 0 < L ∧ ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
       φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
       ∀ (b : ℤ) (X : QuasiLocalAlgebra d), φ (quasiLocalTranslation d (b * L) X) = φ X := by

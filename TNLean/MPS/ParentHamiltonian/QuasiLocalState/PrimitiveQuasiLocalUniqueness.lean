@@ -63,12 +63,12 @@ matrix coordinates. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Section 3, local support spaces after equation (3.6). -/
 noncomputable def groundSpaceProjectionMatrix (A : MPSTensor d D) (N : ℕ) :
     Matrix (Cfg d N) (Cfg d N) ℂ :=
-  (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)).symm (groundSpaceES A N).starProjection
+  (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)).symm ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
 
 /-- The matrix of the ground-space projection is self-adjoint and idempotent. -/
 theorem isStarProjection_groundSpaceProjectionMatrix (A : MPSTensor d D) (N : ℕ) :
     IsStarProjection (groundSpaceProjectionMatrix A N) :=
-  (groundSpaceES A N).isStarProjection_starProjectionMatrix
+  ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).isStarProjection_starProjectionMatrix
 
 variable [NeZero d]
 
@@ -156,11 +156,11 @@ theorem _root_.TNLean.MPS.ParentHamiltonian.quasiLocalState_interval_eq_insertio
     (ℓ := id) (r := id) tendsto_id tendsto_id
   have hbound (n : ℕ) :
       ‖φ (quasiLocalIntervalObservable d a k X) - observableInsertionExpectation A ρ X‖ ≤
-        ‖(groundSpaceES A ((n + k) + n)).starProjection.comp
+        ‖((groundSpace A ((n + k) + n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.comp
           ((Matrix.toEuclideanCLM (n := Cfg d ((n + k) + n)) (𝕜 := ℂ)
-            (bulkObservable X n n)).comp (groundSpaceES A ((n + k) + n)).starProjection) -
+            (bulkObservable X n n)).comp ((groundSpace A ((n + k) + n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection) -
           observableInsertionExpectation A ρ X •
-            (groundSpaceES A ((n + k) + n)).starProjection‖ := by
+            ((groundSpace A ((n + k) + n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ := by
     have h := norm_quasiLocalState_interval_sub_scalar_le_projection_compression
       φ hφ (a - n) (groundSpaceProjectionMatrix A ((n + k) + n))
       (bulkObservable X n n) (isStarProjection_groundSpaceProjectionMatrix A _)
@@ -223,7 +223,7 @@ theorem quasiLocalExpectation_groundSpaceProjection_eq_one
     (a : ℤ) (N : ℕ) :
     quasiLocalExpectation A hTP hρ hfix htr
       (quasiLocalIntervalObservable d a N (groundSpaceProjectionMatrix A N)) = 1 := by
-  have hX : groundSpaceES A N ≤ LinearMap.ker
+  have hX : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
       (Matrix.toEuclideanLin (1 - groundSpaceProjectionMatrix A N)) := by
     intro v hv
     change Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
@@ -231,7 +231,7 @@ theorem quasiLocalExpectation_groundSpaceProjection_eq_one
     rw [map_sub, map_one]
     simp only [groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply,
       sub_apply, one_apply_eq_self, Submodule.starProjection_eq_self_iff.mpr hv, sub_self]
-  have hzero := quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
+  have hzero := quasiLocalExpectation_interval_eq_zero_of_map_groundSpace_le_ker
     A hTP hρ hfix htr a (1 - groundSpaceProjectionMatrix A N) hX
   rw [map_sub, map_one, map_sub,
     (quasiLocalExpectation_isState A hTP hρ hfix htr).2.1] at hzero

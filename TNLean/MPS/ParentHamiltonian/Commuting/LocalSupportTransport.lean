@@ -63,9 +63,9 @@ theorem adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
     Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (0 : Fin (L + 1))) v = 0 ∧
         Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (1 : Fin (L + 1))) v = 0 ↔
       v ∈ groundSpace A (L + 1) := by
-  have h := parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
+  have h := parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ
     hA hL (v := WithLp.toLp 2 v)
-  rw [mem_groundSpaceES_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
+  rw [mem_map_groundSpace_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
     WithLp.toLp_eq_zero] at h
   rw [Matrix.toLin'_apply, Matrix.toLin'_apply]
   exact h

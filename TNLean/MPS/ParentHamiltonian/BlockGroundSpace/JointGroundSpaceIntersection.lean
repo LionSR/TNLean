@@ -181,10 +181,10 @@ theorem iSup_groundSpace_eq_restriction_intersection_of_middle_independent
 passing to their Euclidean realization. This coordinate observation relates
 the geometric spaces in Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 to their orthogonal projections. -/
-theorem groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep
+theorem groundSpace_iSupIndep_iff_map_groundSpace_iSupIndep
     {dim : ι → ℕ} (A : ∀ i, MPSTensor d (dim i)) (N : ℕ) :
     iSupIndep (fun i => groundSpace (A i) N) ↔
-      iSupIndep (fun i => groundSpaceES (A i) N) := by
+      iSupIndep (fun i => ((groundSpace (A i) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
   exact (iSupIndep_map_orderIso_iff
     (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)).symm
 

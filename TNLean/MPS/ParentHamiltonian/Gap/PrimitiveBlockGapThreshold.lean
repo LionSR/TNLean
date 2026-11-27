@@ -99,7 +99,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_e
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (α := Fin d)
                 (μ := μ) A) R W).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) W) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
@@ -127,7 +127,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (α := Fin d)
                 (μ := μ) A) R W).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) W) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
@@ -157,7 +157,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshol
           (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨R₀, hR₀, hKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
   exact ⟨R₀, hR₀, fun R hR ↦
     exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
@@ -193,8 +193,8 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (α := Fin d)
                 (μ := μ) B) R W).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) B) W :=
-    fun W hRW ↦ ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) B) W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+    fun W hRW ↦ ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ B hμ (fun j ↦ (hP j).norm)
       (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving B hSpanB
         (fun j ↦ (hP j).norm) hn) hR hRW

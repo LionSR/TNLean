@@ -51,7 +51,7 @@ theorem exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_f
         (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p)
           (p * M)).hamiltonian) z → z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hp, hDefect⟩ := ((eventually_ge_atTop (max L₀ Rmin)).and
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct

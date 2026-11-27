@@ -40,7 +40,7 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
 \begin{lemma}[The entire active MPS space is in the interaction kernel]
     \label{lem:finite_volume_local_kernel_inclusion}
     \lean{MPSTensor.boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero,
-        MPSTensor.groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero}
+        MPSTensor.map_groundSpace_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero}
     \leanok
     \uses{lem:local_weighted_boundary_annihilation,def:periodic-fixed-interaction}
     Suppose $N>0$, $L\le N$, $h\ge0$, and every $c_j\ne0$. If the length-$N-L$
@@ -61,8 +61,8 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
 
 \begin{lemma}[A fixed local kernel annihilates every permitted periodic volume]
     \label{lem:local_mps_kernel_all_volumes}
-    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpaceES_le_ker,
-        MPSTensor.toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_map_groundSpace_le_ker,
+        MPSTensor.toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker}
     \leanok
     \uses{lem:cyclic_mpv_active_boundary,def:periodic-fixed-interaction}
     Let $h$ be linear on $L$ sites and suppose $G_L(A)\subseteq\ker h$.

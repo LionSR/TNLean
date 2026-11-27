@@ -48,7 +48,7 @@ theorem exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef
     (hFix : Kraus.map A ρ = ρ) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-        groundSpaceES A N := by
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨b, _hb, dim, _hdim, B, _V, m, hPeriodic, _hV, _hSum, _hOrth,
     _hInt, _hCoInt, _hCorner, hGS⟩ :=
@@ -57,7 +57,7 @@ theorem exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef
   obtain ⟨R₀, hR₀, hKernel⟩ := exists_ker_hamiltonian_parentChainInteraction_of_periodic_family
     (fun _ => 1) B (fun _ => one_ne_zero) m hPeriodic
   refine ⟨R₀, hR₀, fun R N hR hN => ?_⟩
-  rw [hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hGS R) N, hKernel R N hR hN]
+  rw [hamiltonian_parentChainInteraction_eq_of_map_groundSpace_eq (hGS R) N, hKernel R N hR hN]
   exact (hGS N).symm
 
 /-- One constructed positive parent interaction has exact open kernels and
@@ -74,7 +74,7 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
         parentGroundStateFace h ∧
       ∃ γ : ℝ, 0 < γ ∧
@@ -101,7 +101,7 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
   let h := LinearMap.toMatrix' (parentInteraction A R)
   have hh : h.PosSemidef := posSemidef_toMatrix'_parentInteraction A R
   have hKernel : ∀ N, R ≤ N → LinearMap.ker
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N := by
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     intro N hN
     exact hCanonicalKernel R N le_rfl hN
   obtain ⟨γ, hγ, hGap⟩ :=
@@ -125,7 +125,7 @@ theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_leftCanonical_of_po
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES A N := by
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix

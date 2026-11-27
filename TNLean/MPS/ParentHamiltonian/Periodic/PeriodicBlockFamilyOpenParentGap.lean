@@ -424,7 +424,7 @@ theorem exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) n) :
+        ((groundSpace (toTensorFromBlocks μ A) n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N,
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian)) z →
@@ -450,7 +450,7 @@ theorem exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) n) :
+        ((groundSpace (toTensorFromBlocks μ A) n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ L : ℕ, 0 < L ∧ ∃ γ : ℝ, 0 < γ ∧ ∀ N,
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian)) z →
@@ -513,7 +513,7 @@ theorem residual_cover_projection_defect_tendsto_zero_of_primitive_resolution
       (V j * (V j)ᴴ) * Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q j r)
     {κ : Type*} {f : Filter κ} {K M r : κ → ℕ} (hM : Filter.Tendsto M f Filter.atTop) :
     Filter.Tendsto (fun n =>
-      ‖(groundSpaceES A (K n * L + M n * L + r n)).starProjection -
+      ‖((groundSpace A (K n * L + M n * L + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K n * L + M n * L) (r n)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K n * L) (M n * L) (r n)).range.starProjection‖)
       f (nhds 0) := by
@@ -524,14 +524,14 @@ theorem residual_cover_projection_defect_tendsto_zero_of_primitive_resolution
           (residualWindowRightMapES A (B j) (V j) (K n) (M n) (r n)).range).starProjection.comp
           (⨆ j, (residualWindowLeftMapES (B j) (K n) (M n) (r n)).range).starProjection -
         (⨆ j, (residualWindowMapES A (B j) (V j) (K n) (M n) (r n)).range).starProjection‖ =
-      ‖(groundSpaceES A (K n * L + M n * L + r n)).starProjection -
+      ‖((groundSpace A (K n * L + M n * L + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K n * L + M n * L) (r n)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K n * L) (M n * L) (r n)).range.starProjection‖ := by
     simp only [iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES
       A B V hSum hCoInt,
       iSup_range_residualWindowLeftMapES_eq_reindex_cover_leftBoundaryMapES
         A B V hV hSum hInt,
-      iSup_range_residualWindowMapES_eq_reindex_groundSpaceES_cover A B V hSum hCoInt]
+      iSup_range_residualWindowMapES_eq_reindex_map_groundSpace_cover A B V hSum hCoInt]
     exact Submodule.norm_map_starProjection_comp_sub_eq _ _ _ _
   simpa only [hNorm] using hJoint
 
@@ -558,7 +558,7 @@ theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_prim
     {R N₀ : ℕ} (hR : 0 < R) (hL : 0 < L)
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-          groundSpaceES A N)
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {γ : ℝ} (hγ : 0 < γ)
     (hAligned : ∀ n ≥ N₀, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R (n * L)).hamiltonian) μ →
@@ -595,7 +595,7 @@ private theorem exists_aligned_canonical_gap_of_periodic_family
       LinearMap.ker
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) N)
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (L : ℕ) (hL : 0 < L) (hdiv : ∀ j, m j ∣ L) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ n, ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
@@ -604,7 +604,7 @@ private theorem exists_aligned_canonical_gap_of_periodic_family
   let T := toTensorFromBlocks (fun _ => 1) A
   have hEventual : ∀ᶠ N in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
-        groundSpaceES T N := by
+        ((groundSpace T N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     filter_upwards [eventually_ge_atTop R] with N hN using hKernel N hN
   exact exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd
     (fun _ => 1) A (fun _ => one_ne_zero) m hPeriodic L hL hdiv
@@ -618,7 +618,7 @@ private theorem exists_canonical_gap_of_empty_periodic_family {D : Fin 0 → ℕ
       LinearMap.ker
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) N) :
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
           (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) z →
@@ -644,7 +644,7 @@ private theorem exists_canonical_gap_of_periodic_family
       LinearMap.ker
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) N) :
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
           (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) z →
@@ -685,7 +685,7 @@ theorem exists_hamiltonian_parentChainInteraction_gap_of_periodic_family
         LinearMap.ker
             (Matrix.toEuclideanLin
                 (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks μ A) N) ∧
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
             (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) z →
@@ -698,12 +698,12 @@ theorem exists_hamiltonian_parentChainInteraction_gap_of_periodic_family
   refine ⟨R₀, hR₀, ?_⟩
   intro R hRR
   have hR : 0 < R := hR₀.trans_le hRR
-  have hEq (N : ℕ) := hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hJoint R) N
+  have hEq (N : ℕ) := hamiltonian_parentChainInteraction_eq_of_map_groundSpace_eq (hJoint R) N
   have hKernelB (N : ℕ) (hRN : R ≤ N) :
       LinearMap.ker
           (Matrix.toEuclideanLin
               (parentChainInteraction (toTensorFromBlocks (fun _ => 1) B) R N).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N := by
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     rw [← hEq N]
     exact (hKernel R N hRR hRN).trans (hJoint N)
   obtain ⟨δ, hδ, hGap⟩ := exists_canonical_gap_of_periodic_family
@@ -725,7 +725,7 @@ theorem exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_fam
       h = LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R) ∧ h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks μ A) N) ∧
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
     ∃ δ : ℝ, 0 < δ ∧
       (∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) z →
@@ -788,7 +788,7 @@ theorem exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_ke
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N) :
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) z →
@@ -809,7 +809,7 @@ theorem exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N) :
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ δ : ℝ, 0 < δ ∧
       (∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) z →

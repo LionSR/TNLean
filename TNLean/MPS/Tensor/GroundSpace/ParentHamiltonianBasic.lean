@@ -33,10 +33,10 @@ theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
     parentInteraction A L * parentInteraction A L = parentInteraction A L := by
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
   let P : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
-    (groundSpaceES A L)ᗮ.starProjection.toLinearMap
+    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection.toLinearMap
   have hP : P * P = P := by
     simpa [P] using
-      (Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)).isIdempotentElem.eq
+      (Submodule.isSymmetricProjection_starProjection (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ)).isIdempotentElem.eq
   apply LinearMap.ext
   intro v
   change e (P (e.symm (e (P (e.symm v))))) = e (P (e.symm v))
@@ -51,7 +51,7 @@ is a function of \(G_L(A)\) alone. -/
 theorem parentInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) :
     parentInteraction A L = parentInteraction B L := by
-  simp [parentInteraction, groundSpaceES, h]
+  simp [parentInteraction, h]
 
 /-- Equal parent interactions give equal parent interactions on the ring. -/
 theorem parentRingInteraction_eq_of_parentInteraction_eq {A B : MPSTensor d D} {L : ℕ}
@@ -118,10 +118,10 @@ onto \(G_L(A)^\perp\), so it kills everything in `groundSpace A L`. -/
 lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
     parentInteraction A L v = 0 := by
-  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ groundSpaceES A L := by
-    simp only [groundSpaceES, Submodule.mem_map]
+  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    simp only [Submodule.mem_map]
     exact ⟨v, hv, rfl⟩
-  have hkill : (groundSpaceES A L)ᗮ.starProjection
+  have hkill : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v) = 0 := by
     rw [Submodule.starProjection_orthogonal']
     simp only [sub_apply, one_apply_eq_self]
@@ -130,7 +130,7 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
   -- Unfold `parentInteraction` to expose the equiv ∘ projection ∘ equiv⁻¹ structure.
   -- This `change` is definitional; update it if `parentInteraction` is restated.
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
-    ((groundSpaceES A L)ᗮ.starProjection
+    (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
   rw [hkill, map_zero]
 

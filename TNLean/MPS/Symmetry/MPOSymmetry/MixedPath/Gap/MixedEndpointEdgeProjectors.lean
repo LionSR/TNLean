@@ -351,10 +351,10 @@ def mixedEndpointInteriorEdgeSupportES
 
 /-- The actual interior support is the ordinary two-site endpoint support.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointInteriorEdgeSupportES_eq_groundSpaceES
+theorem mixedEndpointInteriorEdgeSupportES_eq_map_groundSpace
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    mixedEndpointInteriorEdgeSupportES A₀ A₁ = groundSpaceES A₀ 2 := by
-  unfold mixedEndpointInteriorEdgeSupportES groundSpaceES
+    mixedEndpointInteriorEdgeSupportES A₀ A₁ = ((groundSpace A₀ 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  unfold mixedEndpointInteriorEdgeSupportES
   rw [range_mixedEndpointInteriorEdgeBoundaryMap]
 
 /-- The actual interior canonical constraint.
@@ -375,7 +375,7 @@ theorem mixedEndpointInteriorEdgeConstraintES_eq_toEuclideanLin_parentInteractio
   exact congrArg
     (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) =>
       Sᗮ.starProjection.toLinearMap)
-    (mixedEndpointInteriorEdgeSupportES_eq_groundSpaceES A₀ A₁)
+    (mixedEndpointInteriorEdgeSupportES_eq_map_groundSpace A₀ A₁)
 
 end
 

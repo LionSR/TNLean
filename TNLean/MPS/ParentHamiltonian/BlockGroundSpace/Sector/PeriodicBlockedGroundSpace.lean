@@ -83,15 +83,14 @@ theorem groundSpace_eq_iSup_of_isometric_sector_resolution
 /-- The isometric sector resolution gives the same exact decomposition in the
 physical Euclidean Hilbert space. Source context: Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, lines 1504--1538. -/
-theorem groundSpaceES_eq_iSup_of_isometric_sector_resolution
+theorem map_groundSpace_eq_iSup_of_isometric_sector_resolution
     (C : MPSTensor d D) (B : (j : ι) → MPSTensor d (dim j))
     (V : (j : ι) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
     (hInt : ∀ j i, C i * V j = V j * B j i) (N : ℕ) :
-    groundSpaceES C N = ⨆ j, groundSpaceES (B j) N := by
-  simp only [groundSpaceES,
-    groundSpace_eq_iSup_of_isometric_sector_resolution C B V hV hSum hInt N,
+    ((groundSpace C N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ⨆ j, ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  simp only [groundSpace_eq_iSup_of_isometric_sector_resolution C B V hV hSum hInt N,
     Submodule.map_iSup]
 
 /-- Prescribed positive blocking of a periodic tensor retains its support
@@ -117,8 +116,8 @@ theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
       (∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a) ∧
       (∀ a i, blocks a i = (V a)ᴴ * blockTensor A p i * V a) ∧
       (∀ a i, blockTensor A p i * V a = V a * blocks a i) ∧
-      (∀ N, groundSpaceES (blockTensor A p) N =
-        groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) blocks) N) ∧
+      (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) blocks) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       (∀ a, IsPeriodic (m / m.gcd p) (blocks a)) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, blocks, V, hproj, hsum, hne, hshift, hdim, htotal, hcan,
@@ -131,8 +130,8 @@ theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
   refine ⟨P, dim, blocks, V, hproj, hsum, hne, hshift, hdim, htotal, hcan,
     hiso, hV, hC, hInt, ?_, hperiod hp⟩
   intro N
-  rw [groundSpaceES_toTensorFromBlocks_eq_iSup _ blocks (fun _ => one_ne_zero)]
-  refine groundSpaceES_eq_iSup_of_isometric_sector_resolution
+  rw [map_groundSpace_toTensorFromBlocks_eq_iSup _ blocks (fun _ => one_ne_zero)]
+  refine map_groundSpace_eq_iSup_of_isometric_sector_resolution
     (blockTensor A p) blocks V hiso ?_ hInt N
   simp only [hV, sum_stepOrbitProjection, hsum]
 

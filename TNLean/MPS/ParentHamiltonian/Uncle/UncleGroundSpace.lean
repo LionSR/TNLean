@@ -71,7 +71,7 @@ theorem mem_uncleBoundarySpace_two_iff
       subst i
       exact (decodeBlockEquiv d 2).symm_apply_apply (σ 0)
     rw [hcfg]
-  rw [uncleInteraction_apply_eq_zero_iff, mem_groundSpaceES_iff]
+  rw [uncleInteraction_apply_eq_zero_iff, mem_map_groundSpace_iff]
   have hcoords :
       (WithLp.linearEquiv 2 ℂ (NSiteSpace (blockPhysDim d 2) 1))
           ((blockedConfigLinearIsometryEquiv d 1 2).symm

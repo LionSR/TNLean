@@ -137,7 +137,7 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf
     (exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_weakHopf
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hW) hγ hN
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 /-- On the open interval, the enlarged mixed interaction is the ambient
 complement \(I-E(P_\gamma)\) of the weak-Hopf average of the two-site support
@@ -153,8 +153,7 @@ theorem toEuclideanLin_arbitraryPhysicalMixedInteraction_eq_one_sub_weakHopfAver
     (hW : Wh.tensor = arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
     Matrix.toEuclideanLin (arbitraryPhysicalMixedInteraction A₀ A₁ γ) =
-      1 - Wh.weakHopfAverage 2 (MPSTensor.groundSpaceES
-        (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) 2).starProjection.toLinearMap := by
+      1 - Wh.weakHopfAverage 2 ((groundSpace (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap := by
   have hcompat : MPOTensor.IsBoundaryCompatible Wh.tensor
       (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) := hW ▸
     isBoundaryCompatible_arbitraryPhysicalMixedInterpolation A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ h₀ h₁ γ

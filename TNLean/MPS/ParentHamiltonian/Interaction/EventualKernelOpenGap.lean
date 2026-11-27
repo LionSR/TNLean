@@ -57,13 +57,13 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) N) :
+        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ, ∀ ν : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) ν → ν = 0 ∨ (γ : ℂ) ≤ ν := by
   have hpos (N : ℕ) := ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hker
   obtain ⟨L₀, hL₀, hCanonicalKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hpBound, hp, δ, hδ, hCanonicalGap⟩ :=
     exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_of_fixedPointGap

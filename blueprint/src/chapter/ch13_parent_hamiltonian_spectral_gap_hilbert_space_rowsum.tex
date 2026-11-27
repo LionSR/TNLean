@@ -137,7 +137,7 @@
 \begin{lemma}[Local-term kernel via cyclic restrictions]
     \label{lem:local_term_es_kernel_restrictions}
     \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_eq_zero_iff}
-    \lean{MPSTensor.withLpMap_cyclicRestrictₗ_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero}
+    \lean{MPSTensor.withLpMap_cyclicRestrictₗ_mem_map_groundSpace_of_parentRingInteraction_term_eq_zero}
     \leanok
     \uses{lem:parent_interaction_es_kernel,rem:euclidean_local_projector_ingredients}
     For $L\le N$, a Hilbert-space local term $h_{i,\mathrm{ES}}$ annihilates a
@@ -309,9 +309,9 @@
 
 \begin{lemma}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
-    \lean{MPSTensor.mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero}
-    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ}
-    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ}
+    \lean{MPSTensor.mem_map_groundSpace_succ_of_parentRingInteraction_term_zero_one_eq_zero}
+    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_of_mem_map_groundSpace_succ}
+    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ}
     \leanok
     \uses{thm:ground_space_intersection,lem:local_term_es_kernel_restrictions,lem:mem_ground_space_es}
     If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels

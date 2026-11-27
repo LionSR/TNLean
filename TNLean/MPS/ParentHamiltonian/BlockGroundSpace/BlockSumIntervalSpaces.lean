@@ -32,23 +32,23 @@ variable {d r : ℕ} {dim : Fin r → ℕ}
 /-- The weighted block sum has the sum of the block ground spaces in the
 physical Hilbert space. This is the local identity used in PGVWC07,
 Theorem 12, with nonzero block coefficients. -/
-theorem groundSpaceES_toTensorFromBlocks_eq_iSup
+theorem map_groundSpace_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (L : ℕ) :
-    groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
-      ⨆ j, groundSpaceES (A j) L := by
-  simp only [groundSpaceES, groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
+    ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ⨆ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  simp only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     Submodule.map_iSup]
 
 /-- Each block ground space is contained in the joint ground space of a weighted
 block sum with nonzero coefficients. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2444--2463. -/
-theorem groundSpaceES_block_le_toTensorFromBlocks
+theorem map_groundSpace_block_le_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (α : Fin r) (L : ℕ) :
-    groundSpaceES (A α) L ≤ groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
-  simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ] using
-    (le_iSup (fun β ↦ groundSpaceES (A β) L) α)
+    ((groundSpace (A α) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] using
+    (le_iSup (fun β ↦ ((groundSpace (A β) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) α)
 
 private theorem leftBoundaryMap_range_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))

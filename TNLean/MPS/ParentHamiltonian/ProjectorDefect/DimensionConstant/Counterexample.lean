@@ -54,7 +54,7 @@ theorem dimensionFour_projection_defect_exceeds_coefficient :
         (1 - 16 * (1 / 1000 : ℝ) ^ 2) <
       ‖(tailBoundaryMapES (matrixUnitTensor markovAmplitude) 1 3).range.starProjection.comp
           (leftBoundaryMapES (matrixUnitTensor markovAmplitude) 3 1).range.starProjection -
-        (groundSpaceES (matrixUnitTensor markovAmplitude) 4).starProjection‖ :=
+        ((groundSpace (matrixUnitTensor markovAmplitude) 4).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ :=
   dimensionFour_coefficient_lt.2.trans_le dimensionFour_projection_defect_lower
 
 /-- An injective tensor with a faithful primitive stationary state violates the
@@ -77,7 +77,7 @@ theorem exists_dimensionFour_counterexample :
           (1 - 16 * (1 / 1000 : ℝ) ^ 2) <
         ‖(reassocTailBoundaryMapES A 1 2 1).range.starProjection.comp
             (leftBoundaryMapES A 3 1).range.starProjection -
-          (groundSpaceES A 4).starProjection‖ := by
+          ((groundSpace A 4).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ := by
   refine ⟨markovTensor, markovDensity, markovTensor_isInjective,
     markovTensor_hasComplementaryFixedPointGap, markovDensity_posDef, markovDensity_trace,
     markovDensity_fixed, by norm_num, by norm_num, ?_,

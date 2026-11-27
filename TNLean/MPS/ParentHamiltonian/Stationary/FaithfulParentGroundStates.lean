@@ -49,7 +49,7 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_of_eventual_open_kernel
     (hFix : Kraus.map A ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     quasiLocalExpectation A hA hρ hFix htr ∈ parentGroundStateFace h := by
   apply (mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
     A h hR hh hKernel _).mpr
@@ -69,7 +69,7 @@ theorem exists_parentGroundStateFace_classification_of_leftCanonical_of_posDef_f
     (hFix : Kraus.map A ρ = ρ)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
     quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
       parentGroundStateFace h ∧
@@ -81,8 +81,8 @@ theorem exists_parentGroundStateFace_classification_of_leftCanonical_of_posDef_f
           (σ : ∀ j, Matrix (Fin (bdim j)) (Fin (bdim j)) ℂ)
           (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (σ j)),
           (∀ j, (σ j).PosDef) ∧ BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, groundSpaceES (blockTensor A L) N =
-            groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N) ∧
+          (∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+            ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
           let ω := fun j => quasiLocalBlockingFunctional d L
             (quasiLocalExpectation (B j) (hP j).norm (hP j).fixedPoint_psd
               (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero)
@@ -113,11 +113,11 @@ theorem exists_parentGroundStateFace_classification_of_leftCanonical_of_posDef_f
     simp at hSum
   refine ⟨hOwn, L, hL, g, hg, bdim, hdim, B, σ, hP, hσ, hDistinct, ?_, hFace, hPure⟩
   intro N
-  have hBlocked : groundSpaceES (blockTensor A L) N =
-      groundSpaceES (blockTensor (toTensorFromBlocks (fun _ => 1) C) L) N := by
+  have hBlocked : ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace (blockTensor (toTensorFromBlocks (fun _ => 1) C) L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     apply Submodule.map_injective_of_injective
       (blockedConfigLinearIsometryEquiv d N L).injective
-    rw [groundSpaceES_blockTensor_map, groundSpaceES_blockTensor_map, hGS (N * L)]
+    rw [map_groundSpace_blockTensor_map, map_groundSpace_blockTensor_map, hGS (N * L)]
   exact hBlocked.trans (hJoint N)
 
 end MPSTensor

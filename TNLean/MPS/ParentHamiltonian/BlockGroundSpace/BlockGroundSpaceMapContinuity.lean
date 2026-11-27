@@ -97,12 +97,12 @@ theorem blockGroundSpaceMap_injective_of_wordTupleSpanTop
 /-- At a common simultaneous injectivity length, the projector onto the sum of the block ground
 spaces is continuous.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_iSup_groundSpaceES_starProjection_of_injective_family
+theorem continuous_iSup_map_groundSpace_starProjection_of_injective_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
-    Continuous fun x => (⨆ j, groundSpaceES (A x j) L).starProjection := by
+    Continuous fun x => (⨆ j, ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection := by
   have hT := continuous_blockGroundSpaceMapES_family A hA L
   have hP := ContinuousLinearMap.continuous_injectiveRangeProjector
     (fun x => blockGroundSpaceMapES (A x) L) hT hInj
@@ -112,16 +112,16 @@ theorem continuous_iSup_groundSpaceES_starProjection_of_injective_family
 /-- The ground-space projector of a weighted block sum is continuous when the block family is
 continuous and simultaneously injective. Nonzero weights need not vary continuously.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+theorem continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injective_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x =>
-      (groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).starProjection := by
-  simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
-    continuous_iSup_groundSpaceES_starProjection_of_injective_family A hA L hInj
+      (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection := by
+  simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
+    continuous_iSup_map_groundSpace_starProjection_of_injective_family A hA L hInj
 
 /-- The matrix of the canonical parent interaction of a weighted block sum varies continuously at
 a common simultaneous injectivity length.
@@ -135,7 +135,7 @@ theorem continuous_toMatrix'_parentInteraction_toTensorFromBlocks_family
     Continuous fun x =>
       LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ x) (A x)) L) :=
   continuous_toMatrix'_parentInteraction_family_of_groundProjection _ L
-    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+    (continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injective_family
       A hA μ hμ L hInj)
 
 /-- The Hamiltonian of the parent interaction on the open chain of a weighted block sum is
@@ -150,7 +150,7 @@ theorem continuous_hamiltonian_parentChainInteraction_toTensorFromBlocks_family
     Continuous fun x =>
       (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) L N).hamiltonian :=
   continuous_hamiltonian_parentChainInteraction_family_of_groundProjection _
-    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+    (continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injective_family
       A hA μ hμ L hInj)
 
 /-- The Hamiltonian of the parent interaction on the ring of a weighted block sum is continuous at
@@ -165,7 +165,7 @@ theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family
     Continuous fun x =>
       (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) L N).hamiltonian :=
   continuous_hamiltonian_parentRingInteraction_family_of_groundProjection _ hLN
-    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+    (continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injective_family
       A hA μ hμ L hInj)
 
 /-- Injectivity of the joint boundary map at a fixed length is an open condition on a continuous

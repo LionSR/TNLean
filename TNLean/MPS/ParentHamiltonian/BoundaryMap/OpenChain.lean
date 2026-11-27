@@ -49,7 +49,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-attribute [local instance] groundSpaceES_hasOrthogonalProjection
+attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 /-- The open-chain left-window ground subspace on \(L + 1\) sites.
 
@@ -98,7 +98,7 @@ noncomputable def openChainMartingaleDifferenceES [NeZero D]
     EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
       EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
   openChainLeftGroundProjectionES A (K + l) -
-    (groundSpaceES A (K + l + 1)).starProjection
+    ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
 
 /-- Membership in the left-window Hilbert subspace is exactly
 `InLeftGround` after transport by the canonical `WithLp` equivalence. -/
@@ -131,10 +131,10 @@ theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
     (hL₀ : 0 < L₀) :
     openChainLeftGroundSpaceES A (K + L₀) ⊓
       openChainTailGroundSpaceES A K (L₀ + 1) =
-        groundSpaceES A (K + L₀ + 1) := by
+        ((groundSpace A (K + L₀ + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   ext v
   rw [Submodule.mem_inf, mem_openChainLeftGroundSpaceES_iff,
-    mem_openChainTailGroundSpaceES_iff, mem_groundSpaceES_iff]
+    mem_openChainTailGroundSpaceES_iff, mem_map_groundSpace_iff]
   constructor
   · rintro ⟨hLeft, hTail⟩
     exact groundSpace_extend_right_of_isNBlkInjective hInj hL₀ hLeft hTail
@@ -144,11 +144,11 @@ theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
 
 /-- The whole ground space on \(\Lambda_{n+1}\) lies in the tail ground space
 \(G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\), where \(n=K+l\). -/
-theorem groundSpaceES_le_openChainTailGroundSpaceES
+theorem map_groundSpace_le_openChainTailGroundSpaceES
     {A : MPSTensor d D} {K l : ℕ} :
-    groundSpaceES A (K + l + 1) ≤ openChainTailGroundSpaceES A K (l + 1) := by
+    ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ openChainTailGroundSpaceES A K (l + 1) := by
   intro v hv
-  rw [mem_groundSpaceES_iff] at hv
+  rw [mem_map_groundSpace_iff] at hv
   rw [mem_openChainTailGroundSpaceES_iff]
   exact groundSpace_inTailGround A K (l + 1) hv
 
@@ -159,15 +159,15 @@ condition C3. -/
 theorem openChainTailGroundProjection_comp_groundSpaceProjection
     {A : MPSTensor d D} {K l : ℕ} :
     openChainTailGroundProjectionES A K (l + 1) ∘L
-        (groundSpaceES A (K + l + 1)).starProjection =
-      (groundSpaceES A (K + l + 1)).starProjection := by
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
+      ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   apply ContinuousLinearMap.ext
   intro v
   change (openChainTailGroundSpaceES A K (l + 1)).starProjection
-      ((groundSpaceES A (K + l + 1)).starProjection v) =
-    (groundSpaceES A (K + l + 1)).starProjection v
+      (((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v) =
+    ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v
   apply Submodule.starProjection_eq_self_iff.mpr
-  exact groundSpaceES_le_openChainTailGroundSpaceES
+  exact map_groundSpace_le_openChainTailGroundSpaceES
     (Submodule.starProjection_apply_mem _ _)
 
 /-- The exact projector identity following Nachtergaele's condition C3:
@@ -188,7 +188,7 @@ theorem openChainTailGroundProjection_comp_martingaleDifference [NeZero D]
         openChainMartingaleDifferenceES A K l hInj hl hK =
       openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainLeftGroundProjectionES A (K + l) -
-        (groundSpaceES A (K + l + 1)).starProjection := by
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   rw [openChainMartingaleDifferenceES, ContinuousLinearMap.comp_sub,
     openChainTailGroundProjection_comp_groundSpaceProjection]
 
@@ -211,7 +211,7 @@ theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
     (hDefect :
       ‖openChainTailGroundProjectionES A K (L₀ + 1) ∘L
           openChainLeftGroundProjectionES A (K + L₀) -
-        (groundSpaceES A (K + L₀ + 1)).starProjection‖ ≤ η)
+        ((groundSpace A (K + L₀ + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ η)
     (v : EuclideanSpace ℂ (Cfg d (K + L₀ + 1))) :
     -η *
         (RCLike.re
@@ -226,11 +226,11 @@ theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
             (openChainTailGroundSpaceES A K (L₀ + 1))ᗮ.starProjection v⟫_ℂ) := by
   let U := openChainTailGroundSpaceES A K (L₀ + 1)
   let V := openChainLeftGroundSpaceES A (K + L₀)
-  have hInter : U ⊓ V = groundSpaceES A (K + L₀ + 1) := by
+  have hInter : U ⊓ V = ((groundSpace A (K + L₀ + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     rw [inf_comm]
     exact openChainLeft_inf_tailGroundSpaceES hInj hL₀
   change ‖U.starProjection ∘L V.starProjection -
-    (groundSpaceES A (K + L₀ + 1)).starProjection‖ ≤ η at hDefect
+    ((groundSpace A (K + L₀ + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ ≤ η at hDefect
   have hη : 0 ≤ η := (norm_nonneg _).trans hDefect
   have hAngle : Submodule.IsFriedrichsBound U V η := by
     apply Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le

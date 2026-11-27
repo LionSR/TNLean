@@ -90,22 +90,22 @@ theorem blockInsertedBoundaryMap_jointMixed_first_boundary
 is the full canonical support of the embedded first family. No physical
 orthogonality of block labels is assumed.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES
+theorem jointMixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
     (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
       (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.map
         ((jointMixedRowSector d₀ d₁ D₀ D₁ (0 : Fin 2)).comp
           (jointMixedColumnSector d₀ d₁ D₀ D₁ (1 : Fin 2))) =
-      groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 := by
+      ((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
+        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let V := fun x => Matrix.coordinateInclusion
     (Fin.castAddEmb (D₁ x) : Fin (D₀ x) ↪ Fin (D₀ x + D₁ x))
   let P := fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0
   have hP (x) : P x = V x * (V x)ᴴ :=
     coordinateInclusion_first_projection_eq_bondWeight.symm
   have hV (x) : (V x)ᴴ * V x = 1 := Matrix.coordinateInclusion_isometry _
-  rw [groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (fun _ => one_ne_zero),
+  rw [map_groundSpace_toTensorFromBlocks_eq_iSup _ _ (fun _ => one_ne_zero),
     ← range_blockGroundSpaceMapES]
   apply le_antisymm
   · rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩

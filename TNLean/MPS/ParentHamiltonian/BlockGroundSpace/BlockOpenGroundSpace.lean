@@ -144,16 +144,16 @@ direct sum is its full boundary-condition space once the interaction range excee
 simultaneous word-span threshold. This is the open-chain conclusion of PGVWC07, Theorem 12,
 proof lines 1430--1454, used in Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.12)--(3.16). -/
-theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
     [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
     {L₀ L N : ℕ} (hSpan : ∀ n ≥ L₀, WordTupleSpanTop A n)
     (hL : L₀ + 1 ≤ L) (hLN : L ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks μ A) L N).hamiltonian) =
-      groundSpaceES (toTensorFromBlocks μ A) N := by
-  apply le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction _ L N)
-  exact fun v hv ↦ (mem_groundSpaceES_iff _ N v).mpr
+      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  apply le_antisymm ?_ (map_groundSpace_le_ker_hamiltonian_parentChainInteraction _ L N)
+  exact fun v hv ↦ (mem_map_groundSpace_iff _ N v).mpr
     (contiguous_mem_groundSpace_toTensorFromBlocks μ A hμ hTP hSpan hL hLN fun s hs τ ↦
       contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction _ hv
         s hs τ)
@@ -174,7 +174,7 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 the Hamiltonian of the parent interaction on the open chain for a direct sum of inequivalent
 primitive blocks. The threshold is independent of the chain length. This is the open-segment
 conclusion of PGVWC07, Theorem 12, lines 1430--1454. -/
-theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -184,11 +184,11 @@ theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_grou
     ∃ L₀ : ℕ, 0 < L₀ ∧ ∀ L N : ℕ, L₀ ≤ L → L ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin
           (parentChainInteraction (toTensorFromBlocks μ A) L N).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N := by
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   exact
     (exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap A ρ hP hρ hDistinct).elim
     fun L₀ hSpan ↦ ⟨L₀ + 1, Nat.succ_pos L₀, fun L N hL hLN ↦
-      ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+      ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
         μ A hμ (fun j ↦ (hP j).norm) hSpan hL hLN⟩
 
 end MPSTensor
@@ -219,7 +219,7 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlo
     (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) (hRN : R ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-      groundSpaceES (toTensorFromBlocks μ A) N := by
+      ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hSpan := wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
     A (fun j ↦ (hP j).isIrreducibleFamily_of_posDef (hρ j))
     (fun j ↦ (hP j).norm)
@@ -230,7 +230,7 @@ theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlo
       simpa only [eqRec_eq_cast] using hDistinct j i hij.symm hdim)
     hBlk (fun j ↦ Kraus.isNBlkInjective_of_le hL₀ (hBlk j) (Nat.le_succ L₀))
     (fun j ↦ Kraus.isNBlkInjective_of_le hL₀ (hBlk j) (by omega)) hL₀ hr
-  exact ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+  exact ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
     μ A hμ (fun j ↦ (hP j).norm)
     (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving A hSpan
       (fun j ↦ (hP j).norm) hn) (by nlinarith) hRN

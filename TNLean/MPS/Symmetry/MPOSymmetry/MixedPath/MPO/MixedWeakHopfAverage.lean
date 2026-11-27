@@ -72,7 +72,7 @@ theorem rep_one_commute_mpoWithBoundary [FiniteDimensional ℂ H]
 
 end MPOTensor.WeakHopfRepresentation
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+attribute [local instance] MPSTensor.map_groundSpace_hasOrthogonalProjection
 
 namespace MPSTensor.MPOSymmetry
 
@@ -124,9 +124,9 @@ theorem averageMatrix_mixedEndpointInteraction_of_mem_Ioo
     rfl
   rw [hone]
   change Matrix.toEuclideanLin (W.rep 2 1) -
-      (groundSpaceES (mixedEndpointInterpolation A₀ A₁ γ) 2).starProjection.toLinearMap =
+      ((groundSpace (mixedEndpointInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap =
     Matrix.toEuclideanLin (W.rep 2 1) - 1 +
-      (1 - (groundSpaceES (mixedEndpointInterpolation A₀ A₁ γ) 2).starProjection.toLinearMap)
+      (1 - ((groundSpace (mixedEndpointInterpolation A₀ A₁ γ) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap)
   abel
 
 include h₀ h₁ hW hInj₀ hInj₁ in

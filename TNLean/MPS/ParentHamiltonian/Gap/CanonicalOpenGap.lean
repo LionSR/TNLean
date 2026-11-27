@@ -45,8 +45,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.parentChainInteraction_eq_represen
     parentChainInteraction A R N = parentChainInteraction
       (toTensorFromBlocks (fun _ ↦ 1)
         (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
-  simp only [parentChainInteraction, parentInteraction, groundSpaceES,
-    data.groundSpace_eq_toTensorFromBlocks_representatives hR]
+  simp only [parentChainInteraction, parentInteraction, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]
 
@@ -127,11 +126,11 @@ theorem
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-      groundSpaceES A N := by
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let : ∀ j, NeZero (data.dim (data.representativeIndex j)) :=
     fun j ↦ ⟨(data.dim_pos (data.representativeIndex j)).ne'⟩
   simpa only [← data.parentChainInteraction_eq_representatives (by omega : 0 < R) N,
-    groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives
+    data.groundSpace_eq_toTensorFromBlocks_representatives
       (by omega : 0 < N)] using
     ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
       (fun _ ↦ 1) (fun j ↦ data.blocks (data.representativeIndex j))

@@ -37,7 +37,7 @@ theorem norm_uncleInteraction_apply_le
     (v : EuclideanSpace ℂ (Cfg d 2)) :
     ‖Matrix.toEuclideanLin (uncleInteraction A B R L) v‖ ≤ ‖v‖ := by
   let e := blockedConfigLinearIsometryEquiv d 1 2
-  let K := (groundSpaceES (uncleTensor A B R L) 1)ᗮ
+  let K := ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ
   rw [toEuclideanLin_uncleInteraction_apply]
   change ‖e (K.starProjection (e.symm v))‖ ≤ ‖v‖
   rw [e.norm_map]
@@ -64,7 +64,7 @@ theorem re_inner_uncleInteraction_eq_norm_sq
     (⟪Matrix.toEuclideanLin (uncleInteraction A B R L) v, v⟫_ℂ).re =
       ‖Matrix.toEuclideanLin (uncleInteraction A B R L) v‖ ^ 2 := by
   let e := blockedConfigLinearIsometryEquiv d 1 2
-  let K := (groundSpaceES (uncleTensor A B R L) 1)ᗮ
+  let K := ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)ᗮ
   have hact (w : EuclideanSpace ℂ (Cfg d 2)) :
       Matrix.toEuclideanLin (uncleInteraction A B R L) w = e (K.starProjection (e.symm w)) :=
     toEuclideanLin_uncleInteraction_apply A B R L w

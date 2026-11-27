@@ -54,13 +54,13 @@ theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
 /-- The Hilbert-space realization has exactly the physical local ground space
 as its range. -/
 theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
-    (groundSpaceMapES A L).range = groundSpaceES A L := by
+    (groundSpaceMapES A L).range = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   ext v
   constructor
   · rintro ⟨x, rfl⟩
     obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
-      (groundSpaceMap A L X) ∈ groundSpaceES A L
+      (groundSpaceMap A L X) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
     exact ⟨groundSpaceMap A L X, ⟨X, rfl⟩, rfl⟩
   · rintro ⟨ψ, ⟨X, rfl⟩, rfl⟩
     exact ⟨Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X,
@@ -99,7 +99,7 @@ theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
     (A : MPSTensor d D) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L) :
     ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
       (groundSpaceMapES_injective_of_isNBlkInjective hInj) =
-        (groundSpaceES A L).starProjection := by
+        ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
   exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) => K.starProjection)
     (range_groundSpaceMapES A L)
@@ -113,10 +113,10 @@ theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
 Here the inverse is `ContinuousLinearMap.inverseGram`. This is the physical
 range projector, not the virtual `fixedPointProj`; it does not assert an
 overlapping-window estimate. -/
-theorem groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
+theorem map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
     (A : MPSTensor d D) {L₀ L : ℕ} (hL₀ : 0 < L₀)
     (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
-    (groundSpaceES A L).starProjection =
+    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (groundSpaceMapES A L).comp
         ((ContinuousLinearMap.inverseGram (groundSpaceMapES A L)
           (groundSpaceMapES_injective_of_isNBlkInjective_of_le hL₀ hInj hL)).comp

@@ -22,7 +22,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-attribute [local instance] groundSpaceES_hasOrthogonalProjection
+attribute [local instance] map_groundSpace_hasOrthogonalProjection
 
 /-- A rectangular physical map transports the local boundary map by its
 tensor power. Source context: arXiv:1010.3732, Section II.F.2,
@@ -51,12 +51,12 @@ theorem groundSpace_rotatePhysical_rectangular {d m D : ℕ}
 /-- Hilbert-space form of the boundary-space image identity for a
 rectangular physical map. Source context: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
-theorem groundSpaceES_rotatePhysical_rectangular {d m D : ℕ}
+theorem map_groundSpace_rotatePhysical_rectangular {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ) :
-    groundSpaceES (rotatePhysical E A) L =
-      (groundSpaceES A L).map (Matrix.toEuclideanLin
+    ((groundSpace (rotatePhysical E A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin
         (Matrix.piKronecker fun _ : Fin L => E)) := by
-  rw [groundSpaceES, groundSpaceES, groundSpace_rotatePhysical_rectangular,
+  rw [groundSpace_rotatePhysical_rectangular,
     ← Submodule.map_comp, ← Submodule.map_comp]
   rfl
 
@@ -68,7 +68,7 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
     (A : MPSTensor d D) (L : ℕ) :
     let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) =
-      1 - T ∘ₗ (groundSpaceES A L).starProjection.toLinearMap ∘ₗ T.adjoint := by
+      1 - T ∘ₗ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection.toLinearMap ∘ₗ T.adjoint := by
   let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
@@ -80,15 +80,15 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
     rw [← LinearMap.adjoint_inner_right]
     rw [← LinearMap.comp_apply, hT, LinearMap.id_apply]
   let I := T.isometryOfInner hinner
-  let : CompleteSpace ((groundSpaceES A L).map I.toLinearMap) :=
+  let : CompleteSpace (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map I.toLinearMap) :=
     FiniteDimensional.complete ℂ _
-  let : ((groundSpaceES A L).map I.toLinearMap).HasOrthogonalProjection :=
+  let : (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map I.toLinearMap).HasOrthogonalProjection :=
     Submodule.HasOrthogonalProjection.ofCompleteSpace _
-  have hproj := I.starProjection_map_eq_comp_adjoint (groundSpaceES A L)
-  have hmap : (groundSpaceES A L).map I.toLinearMap =
-      groundSpaceES (rotatePhysical E A) L := by
+  have hproj := I.starProjection_map_eq_comp_adjoint ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+  have hmap : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map I.toLinearMap =
+      ((groundSpace (rotatePhysical E A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
-      (groundSpaceES_rotatePhysical_rectangular E A L).symm
+      (map_groundSpace_rotatePhysical_rectangular E A L).symm
   simp only [hmap] at hproj
   simp only [I, LinearMap.isometryOfInner_toLinearMap] at hproj
   rw [toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal,

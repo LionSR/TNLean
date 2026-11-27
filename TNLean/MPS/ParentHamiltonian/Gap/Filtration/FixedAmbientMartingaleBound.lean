@@ -140,7 +140,7 @@ theorem fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometr
   exact congrArg ContinuousLinearMap.toLinearMap
     (ContinuousLinearMap.rightFiberwiseMap_sub
       (S := Cfg d r) (openChainLeftGroundProjectionES A (K + l))
-        (groundSpaceES A (K + l + 1)).starProjection).symm
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection).symm
 
 /-- Conjugating the fixed C3 product gives the fiberwise extension of the
 physical open-chain C3 product. -/

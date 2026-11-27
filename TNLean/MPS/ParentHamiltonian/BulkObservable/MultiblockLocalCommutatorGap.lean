@@ -55,14 +55,14 @@ theorem bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
     (ψ : (n : κ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
-    (hψ : ∀ᶠ n in f, ψ n ∈ groundSpaceES (A α) ((ℓ n + k) + r n))
+    (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hbound : ∀ᶠ n in f, ‖ψ n‖ ≤ 1) :
     Tendsto (fun n =>
-      ‖(⨆ i, groundSpaceES (A i) ((ℓ n + k) + r n)).starProjection
+      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection
         ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖ ^ 2) f (𝓝 0) := by
   have hnorm : Tendsto (fun n =>
-      ‖(⨆ i, groundSpaceES (A i) ((ℓ n + k) + r n)).starProjection
+      ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection
         ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖) f (𝓝 0) := by
     apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
@@ -73,8 +73,8 @@ theorem bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
     let Y := Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
       (bulkObservable X (ℓ n) (r n))
     calc
-      _ = ‖((⨆ i, groundSpaceES (A i) ((ℓ n + k) + r n)).starProjection.comp
-          (Y.comp (groundSpaceES (A α) ((ℓ n + k) + r n)).starProjection)) (ψ n)‖ := by
+      _ = ‖((⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.comp
+          (Y.comp ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)) (ψ n)‖ := by
         simp only [ContinuousLinearMap.comp_apply, hfix, Y]
       _ ≤ _ := ContinuousLinearMap.le_opNorm _ (ψ n)
       _ ≤ _ := mul_le_of_le_one_right (norm_nonneg _) hb
@@ -101,8 +101,8 @@ theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
       μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hKernel : ∀ᶠ n in atTop,
-      LinearMap.ker (H n) = ⨆ i, groundSpaceES (A i) ((ℓ n + k) + r n))
-    (hGround : ∀ᶠ n in atTop, ψ n ∈ groundSpaceES (A α) ((ℓ n + k) + r n))
+      LinearMap.ker (H n) = ⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
+    (hGround : ∀ᶠ n in atTop, ψ n ∈ ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1)
     (hEnergy :
       let B (n : ℕ) := ((Matrix.toEuclideanCLM
@@ -118,7 +118,7 @@ theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
   have hGround' : ∀ᶠ n in atTop, ψ n ∈ LinearMap.ker (H n) := by
     filter_upwards [hKernel, hGround] with n hkern hg
     rw [hkern]
-    exact (le_iSup (fun i => groundSpaceES (A i) ((ℓ n + k) + r n)) α) hg
+    exact (le_iSup (fun i => ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) α) hg
   have hNorm : Tendsto (fun n => ‖B n (ψ n)‖ ^ 2) atTop
       (𝓝 (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re) :=
     (hP α).bulkObservable_groundState_norm_sq_tendsto (hρ α) X hℓ hr ψ hGround hUnit
@@ -151,13 +151,13 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
     (hKernel : ∀ᶠ n in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R
         ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) =
-          ⨆ i, groundSpaceES (A i) ((n + (R - 1) + k) + (R - 1 + n)))
+          ⨆ i, ((groundSpace (A i) ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hGap : ∀ᶠ n in atTop, ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R
         ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z)
     (hGround : ∀ᶠ n in atTop,
-      ψ n ∈ groundSpaceES (A α) ((n + (R - 1) + k) + (R - 1 + n)))
+      ψ n ∈ ((groundSpace (A α) ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
       (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
@@ -202,7 +202,7 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
   have hRpos : 0 < R := by omega
   have hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
-          groundSpaceES T N :=
+          ((groundSpace T N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     fun N hN =>
       ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
         μ A hμ hS hSpan hR hN
@@ -219,13 +219,13 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   have hN : Tendsto N atTop atTop :=
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
-  obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_groundSpaceES (hρ α) N hN
+  obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_map_groundSpace (hρ α) N hN
   apply multiblock_localCommutator_gap_of_openInteraction_gap
     A ρ hP hρ hDistinct α h (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) X hRpos
     hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
       rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction,
-        hKernel (N n) (by dsimp [N]; omega), groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ]
+        hKernel (N n) (by dsimp [N]; omega), map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ]
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
   · exact hu
@@ -245,7 +245,7 @@ theorem exists_pos_multiblock_localCommutator_gap_of_wordTupleSpanTop
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable
             ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-              (groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ) A) R)ᗮ.starProjection)
+              (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))ᗮ.starProjection)
             X)).re := by
   let T := toTensorFromBlocks (α := Fin d) (μ := μ) A
   let h := LinearMap.toMatrix' (parentInteraction T R)

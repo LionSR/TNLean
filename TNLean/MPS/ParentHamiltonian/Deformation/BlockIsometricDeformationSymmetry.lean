@@ -649,15 +649,15 @@ private theorem onSiteTensorPow_smul (L : ℕ) (a : ℂ) (u : Matrix (Fin d) (Fi
 /-- A symmetry up to a phase of a block-diagonal tensor whose blocks jointly span at one
 site preserves every local MPS space of the tensor.
 Source: arXiv:1010.3732, lines 672--676, for several normal blocks. -/
-theorem groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase
+theorem map_groundSpace_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (L : ℕ) :
-    (groundSpaceES (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) L).map
+    (((groundSpace (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L (U g))) =
-        groundSpaceES (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) L := by
+        ((groundSpace (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨c, hc, hTr⟩ :=
     exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul A hA U hU hSymm g
   obtain ⟨hu', hTr', -⟩ := rescaled_rotation_data A (hU g) hc hTr
@@ -666,18 +666,17 @@ theorem groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase
   have hUg : U g = c • (star c • U g) := (smul_star_smul_of_norm_eq_one hc _).symm
   have hc0 : c ^ L ≠ 0 := pow_ne_zero _ (by rintro rfl; simp at hc)
   rw [hUg, onSiteTensorPow_smul, map_smul, Submodule.map_smul _ _ _ hc0]
-  have hblock : ∀ k, groundSpaceES (rotatePhysical (star c • U g) (A (σ k))) L =
-      groundSpaceES (A k) L := by
+  have hblock : ∀ k, ((groundSpace (rotatePhysical (star c • U g) (A (σ k))) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace (A k) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     intro k
     have hre := reindex_finCongr_transport (hdim k)
-      (fun _ C => groundSpaceES C L =
-        groundSpaceES (rotatePhysical (star c • U g) (A (σ k))) L) rfl
+      (fun _ C => ((groundSpace C L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+        ((groundSpace (rotatePhysical (star c • U g) (A (σ k))) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) rfl
     rw [← hre]
-    unfold groundSpaceES
     rw [GaugeEquiv.groundSpace_eq (A := A k) ⟨X k, hX k⟩ L]
-  rw [← groundSpaceES_rotatePhysical, rotatePhysical_toTensorFromBlocks,
-    groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (fun _ => one_ne_zero),
-    groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (fun _ => one_ne_zero),
+  rw [← map_groundSpace_rotatePhysical, rotatePhysical_toTensorFromBlocks,
+    map_groundSpace_toTensorFromBlocks_eq_iSup _ _ (fun _ => one_ne_zero),
+    map_groundSpace_toTensorFromBlocks_eq_iSup _ _ (fun _ => one_ne_zero),
     ← σ.iSup_comp]
   exact iSup_congr hblock
 
@@ -706,7 +705,7 @@ theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymm
   toMatrix'_parentInteraction_isometricDeformation_commute A (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase
       A hA hTP U hU hSymm g)
-    (groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase A hA U hU hSymm g 2) γ
+    (map_groundSpace_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase A hA U hU hSymm g 2) γ
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
 canonical normalization persists in the inverse-conjugated positive
@@ -723,7 +722,7 @@ theorem isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase
   isometricDeformationInteraction_commute A (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase
       A hA hTP U hU hSymm g)
-    (groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase A hA U hU hSymm g 2) γ
+    (map_groundSpace_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase A hA U hU hSymm g 2) γ
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
 canonical normalization persists in the periodic canonical parent Hamiltonian

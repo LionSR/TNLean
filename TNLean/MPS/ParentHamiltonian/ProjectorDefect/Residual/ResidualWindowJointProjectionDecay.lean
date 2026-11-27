@@ -161,7 +161,7 @@ Lemma commutation (ii), lines 2442--2531, and Section 6. -/
 theorem IsPeriodic.residual_cover_projection_defect_tendsto_zero
     {A : MPSTensor d D} (hA : IsPeriodic m A) (K r : ℕ → ℕ) :
     Filter.Tendsto (fun M =>
-      ‖(groundSpaceES A (K M * m + M * m + r M)).starProjection -
+      ‖((groundSpace A (K M * m + M * m + r M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K M * m + M * m) (r M)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K M * m) (M * m) (r M)).range.starProjection‖)
       Filter.atTop (nhds 0) := by
@@ -172,14 +172,14 @@ theorem IsPeriodic.residual_cover_projection_defect_tendsto_zero
       ‖(⨆ j, (residualWindowRightMapES A (B j) (V j) (K M) M (r M)).range).starProjection.comp
           (⨆ j, (residualWindowLeftMapES (B j) (K M) M (r M)).range).starProjection -
         (⨆ j, (residualWindowMapES A (B j) (V j) (K M) M (r M)).range).starProjection‖ =
-      ‖(groundSpaceES A (K M * m + M * m + r M)).starProjection -
+      ‖((groundSpace A (K M * m + M * m + r M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K M * m + M * m) (r M)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K M * m) (M * m) (r M)).range.starProjection‖ := by
     simp only [iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES
       A B V hSum hCoInt,
       iSup_range_residualWindowLeftMapES_eq_reindex_cover_leftBoundaryMapES
         A B V hV hSum hInt,
-      iSup_range_residualWindowMapES_eq_reindex_groundSpaceES_cover A B V hSum hCoInt]
+      iSup_range_residualWindowMapES_eq_reindex_map_groundSpace_cover A B V hSum hCoInt]
     exact Submodule.norm_map_starProjection_comp_sub_eq _ _ _ _
   simpa only [hNorm] using hJoint K r
 

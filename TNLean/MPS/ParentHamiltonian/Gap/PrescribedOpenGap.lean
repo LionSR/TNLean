@@ -42,10 +42,10 @@ theorem hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal
     (hq : 0 < q) (hqp : q < p)
     (hKernel : ∀ N, 2 * p ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) N).hamiltonian) =
-          groundSpaceES A N)
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hDefect : ∀ L, p ≤ L → ∀ K Q, 0 < Q →
-      ‖(groundSpaceES A (K + L + Q)).starProjection -
+      ‖((groundSpace A (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES A K L Q).range.starProjection‖ ≤ ε) :
     ∀ z : ℂ, Module.End.HasEigenvalue
@@ -180,7 +180,7 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_
       nlinarith
     nlinarith [mul_nonneg (sub_nonneg.mpr hκone) hε.le]
   obtain ⟨L₀, _, hKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨L₁, hDefect⟩ := Filter.eventually_atTop.1
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct hε)
@@ -188,10 +188,10 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_
   have hp0 : 0 < p := by omega
   have hK : ∀ n, 2 * p ≤ n →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction B (2 * p) n).hamiltonian) =
-          groundSpaceES B n :=
+          ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     fun n hn => hKernel (2 * p) n (by omega) hn
   have hD : ∀ L, p ≤ L → ∀ K Q, 0 < Q →
-      ‖(groundSpaceES B (K + L + Q)).starProjection -
+      ‖((groundSpace B (K + L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES B (K + L) Q).range.starProjection.comp
           (reassocTailBoundaryMapES B K L Q).range.starProjection‖ ≤ ε :=
     fun L hL => hDefect L (by omega)

@@ -46,13 +46,12 @@ theorem onSiteTensorPow_conjTranspose_mul_self {d : ℕ}
 /-- If physical rotation is an invertible virtual gauge change, the
 finite-window ground space is invariant under the tensor power of the
 physical rotation. Source: arXiv:1010.3732, Section II.F.2. -/
-theorem groundSpaceES_invariant_of_gauge_covariance {d D : ℕ}
+theorem map_groundSpace_invariant_of_gauge_covariance {d D : ℕ}
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hCov : GaugeEquiv A (rotatePhysical U A)) (L : ℕ) :
-    (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-      groundSpaceES A L := by
-  rw [← groundSpaceES_rotatePhysical]
-  unfold groundSpaceES
+    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  rw [← map_groundSpace_rotatePhysical]
   rw [← hCov.groundSpace_eq L]
 
 /-- In cyclic-window coordinates, the on-site tensor power factors into
@@ -143,7 +142,7 @@ theorem parentInteraction_matrix_commute_onSiteTensorPow {d D : ℕ}
   rw [Matrix.toEuclideanLin_mul, Matrix.toEuclideanLin_mul,
     toEuclideanLin_toMatrix'_parentInteraction]
   let T := Matrix.toEuclideanLin (onSiteTensorPow L U)
-  let G := groundSpaceES A L
+  let G := ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   have hadj : T.adjoint ∘ₗ T = 1 := by
     apply LinearMap.ext
     intro v
@@ -167,8 +166,8 @@ theorem parentInteraction_matrix_commute_onSiteTensorPow {d D : ℕ}
   let I := T.isometryOfInner hinner
   have hG : G.map I.toLinearMap = G := by
     simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
-      groundSpaceES_invariant_of_gauge_covariance A U hCov L
-  let : G.HasOrthogonalProjection := groundSpaceES_hasOrthogonalProjection A L
+      map_groundSpace_invariant_of_gauge_covariance A U hCov L
+  let : G.HasOrthogonalProjection := map_groundSpace_hasOrthogonalProjection A L
   let : (G.map I.toLinearMap).HasOrthogonalProjection := by rw [hG]; infer_instance
   have hproj (v : EuclideanSpace ℂ (Cfg d L)) :
       T (G.starProjection v) = G.starProjection (T v) := by
