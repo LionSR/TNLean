@@ -35,17 +35,17 @@ open MPTensor
 
 open scoped Matrix ComplexOrder
 namespace MPSTensor
-variable {d DA DB : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {DA DB : ℕ}
 
 /-- Gauge and nonzero phase rescaling preserve the open-boundary MPS space
 at every length. Source: arXiv:1606.00608, Theorem thm1, gauge relation;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem _root_.MPTensor.GaugePhaseEquiv.map_groundSpace_eq {A B : MPSTensor d DA}
+theorem _root_.MPTensor.GaugePhaseEquiv.map_groundSpace_eq {A B : MPTensor α (Fin DA)}
     (h : GaugePhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) = ((groundSpace B N).map
             (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨X, ζ, hζ, hX⟩ := h
-  let C : MPSTensor d DA := fun i =>
+  let C : MPTensor α (Fin DA) := fun i =>
     (X : Matrix (Fin DA) (Fin DA) ℂ) * A i *
       ((X⁻¹ : GL (Fin DA) ℂ) : Matrix (Fin DA) (Fin DA) ℂ)
   have hC : GaugeEquiv A C := ⟨X, fun _ => rfl⟩
@@ -56,7 +56,7 @@ have exactly the same open-boundary spaces. The fundamental theorem supplies
 the dimension equality and gauge transformation first.
 Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1. -/
 theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor
-    {A : MPSTensor d DA} {B : MPSTensor d DB}
+    {A : MPTensor α (Fin DA)} {B : MPTensor α (Fin DB)}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) = ((groundSpace B N).map
@@ -74,7 +74,7 @@ can be absorbed into the boundary matrices.
 Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1;
 Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
 theorem MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives
-    [∀ j, NeZero (dim j)] (A : ∀ j, MPSTensor d (dim j))
+    [∀ j, NeZero (dim j)] (A : ∀ j, MPTensor α (Fin (dim j)))
     (classes : MPVPhaseClassData A) (hNormal : ∀ j, IsNormalTensor (A j))
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0) (N : ℕ) :
     ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
@@ -100,7 +100,7 @@ The family need not be nonempty.
 Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1;
 Nachtergaele, arXiv:cond-mat/9410110, Section 3 and Lemma disjoint. -/
 theorem exists_primitive_sector_representatives [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    (μ : Fin r → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef) :
     ∃ (g : ℕ) (sel : Fin g → Fin r), Function.Injective sel ∧

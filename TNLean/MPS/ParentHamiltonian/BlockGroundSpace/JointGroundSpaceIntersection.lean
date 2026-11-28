@@ -65,8 +65,8 @@ private theorem iInf_comap_iSup_of_linearEquiv [Finite ι]
 end Submodule
 namespace MPSTensor
 
-private noncomputable def firstRestrictionEquiv (d n : ℕ) :
-    NSiteSpace (Fin d) (n + 1) ≃ₗ[ℂ] (Fin d → NSiteSpace (Fin d) n) where
+private noncomputable def firstRestrictionEquiv (n : ℕ) :
+    NSiteSpace α (n + 1) ≃ₗ[ℂ] (α → NSiteSpace α n) where
   toFun ψ := fun a => restrictFirst ψ a
   invFun φ := fun σ => φ (σ 0) (Fin.tail σ)
   left_inv ψ := by
@@ -78,8 +78,8 @@ private noncomputable def firstRestrictionEquiv (d n : ℕ) :
   map_add' ψ φ := rfl
   map_smul' c ψ := rfl
 
-private noncomputable def lastRestrictionEquiv (d n : ℕ) :
-    NSiteSpace (Fin d) (n + 1) ≃ₗ[ℂ] (Fin d → NSiteSpace (Fin d) n) where
+private noncomputable def lastRestrictionEquiv (n : ℕ) :
+    NSiteSpace α (n + 1) ≃ₗ[ℂ] (α → NSiteSpace α n) where
   toFun ψ := fun b => restrictLast ψ b
   invFun φ := fun σ => φ (σ (Fin.last n)) (Fin.init σ)
   left_inv ψ := by
@@ -91,20 +91,20 @@ private noncomputable def lastRestrictionEquiv (d n : ℕ) :
   map_add' ψ φ := rfl
   map_smul' c ψ := rfl
 
-variable {d n : ℕ} {ι : Type*}
+variable {α : Type*} [Fintype α] [DecidableEq α] {n : ℕ} {ι : Type*}
 
 /-- Adjoining the first and last physical indices preserves independence
 of the middle support spaces. No tensor representation is needed.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (4.2) and
 Lemma intersectionequivalence. -/
 theorem iSupIndep_middleRestriction_comap
-    (G : ι → Submodule ℂ (NSiteSpace (Fin d) n)) (hG : iSupIndep G) :
-    iSupIndep (fun i => ⨅ a : Fin d, ⨅ b : Fin d,
+    (G : ι → Submodule ℂ (NSiteSpace α n)) (hG : iSupIndep G) :
+    iSupIndep (fun i => ⨅ a : α, ⨅ b : α,
       (G i).comap ((restrictLastₗ b).comp (restrictFirstₗ a))) := by
   have h := Submodule.iSupIndep_iInf_comap_of_separating G hG
-    (fun ab : Fin d × Fin d => (restrictLastₗ ab.2).comp (restrictFirstₗ ab.1))
-  have hSep : ∀ ψ : NSiteSpace (Fin d) (n + 2),
-      (∀ ab : Fin d × Fin d, ((restrictLastₗ ab.2).comp (restrictFirstₗ ab.1)) ψ = 0) →
+    (fun ab : α × α => (restrictLastₗ ab.2).comp (restrictFirstₗ ab.1))
+  have hSep : ∀ ψ : NSiteSpace α (n + 2),
+      (∀ ab : α × α, ((restrictLastₗ ab.2).comp (restrictFirstₗ ab.1)) ψ = 0) →
       ψ = 0 := by
     intro ψ hψ
     apply eq_of_forall_restrictFirst_eq
@@ -121,18 +121,18 @@ intersection of their two enlarged sums is the sum of their individual
 intersections. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 Proposition forintersection and Lemma intersectionequivalence. -/
 theorem restriction_intersection_iSup_eq_of_middle_independent [Finite ι]
-    (G : ι → Submodule ℂ (NSiteSpace (Fin d) n))
-    (H : ι → Submodule ℂ (NSiteSpace (Fin d) (n + 1)))
+    (G : ι → Submodule ℂ (NSiteSpace α n))
+    (H : ι → Submodule ℂ (NSiteSpace α (n + 1)))
     (hG : iSupIndep G)
     (hFirst : ∀ i ψ, ψ ∈ H i → ∀ a, restrictFirst ψ a ∈ G i)
     (hLast : ∀ i ψ, ψ ∈ H i → ∀ b, restrictLast ψ b ∈ G i) :
-    ((⨅ b : Fin d, (⨆ i, H i).comap (restrictLastₗ b)) ⊓
-      ⨅ a : Fin d, (⨆ i, H i).comap (restrictFirstₗ a)) =
-      ⨆ i, (⨅ b : Fin d, (H i).comap (restrictLastₗ b)) ⊓
-        ⨅ a : Fin d, (H i).comap (restrictFirstₗ a) := by
-  let U := fun i => ⨅ b : Fin d, (H i).comap (restrictLastₗ b)
-  let V := fun i => ⨅ a : Fin d, (H i).comap (restrictFirstₗ a)
-  let W := fun i => ⨅ a : Fin d, ⨅ b : Fin d,
+    ((⨅ b : α, (⨆ i, H i).comap (restrictLastₗ b)) ⊓
+      ⨅ a : α, (⨆ i, H i).comap (restrictFirstₗ a)) =
+      ⨆ i, (⨅ b : α, (H i).comap (restrictLastₗ b)) ⊓
+        ⨅ a : α, (H i).comap (restrictFirstₗ a) := by
+  let U := fun i => ⨅ b : α, (H i).comap (restrictLastₗ b)
+  let V := fun i => ⨅ a : α, (H i).comap (restrictFirstₗ a)
+  let W := fun i => ⨅ a : α, ⨅ b : α,
     (G i).comap ((restrictLastₗ b).comp (restrictFirstₗ a))
   have hU : ∀ i, U i ≤ W i := by
     intro i ψ hψ
@@ -148,10 +148,10 @@ theorem restriction_intersection_iSup_eq_of_middle_independent [Finite ι]
     simp only [W, Submodule.mem_iInf, Submodule.mem_comap, LinearMap.comp_apply]
     intro a b
     exact hLast i (restrictFirst ψ a) ((Submodule.mem_iInf _).mp hψ a) b
-  have hULift : (⨅ b : Fin d, (⨆ i, H i).comap (restrictLastₗ b)) = ⨆ i, U i := by
-    exact Submodule.iInf_comap_iSup_of_linearEquiv H (lastRestrictionEquiv d (n + 1))
-  have hVLift : (⨅ a : Fin d, (⨆ i, H i).comap (restrictFirstₗ a)) = ⨆ i, V i := by
-    exact Submodule.iInf_comap_iSup_of_linearEquiv H (firstRestrictionEquiv d (n + 1))
+  have hULift : (⨅ b : α, (⨆ i, H i).comap (restrictLastₗ b)) = ⨆ i, U i := by
+    exact Submodule.iInf_comap_iSup_of_linearEquiv H (lastRestrictionEquiv (n + 1))
+  have hVLift : (⨅ a : α, (⨆ i, H i).comap (restrictFirstₗ a)) = ⨆ i, V i := by
+    exact Submodule.iInf_comap_iSup_of_linearEquiv H (firstRestrictionEquiv (n + 1))
   rw [hULift, hVLift]
   exact Submodule.iSup_inf_iSup_eq_of_le_independent U V W
     (iSupIndep_middleRestriction_comap G hG) hU hV
@@ -162,14 +162,14 @@ independent. No cyclic-boundary or normalization hypotheses are added.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (4.4), Proposition
 forintersection, and Lemma intersectionequivalence. -/
 theorem iSup_groundSpace_eq_restriction_intersection_of_middle_independent
-    [Finite ι] {dim : ι → ℕ} (A : ∀ i, MPSTensor d (dim i))
+    [Finite ι] {dim : ι → ℕ} (A : ∀ i, MPTensor α (Fin (dim i)))
     (hIndep : iSupIndep (fun i => groundSpace (A i) n))
     (hInter : ∀ i,
-      ((⨅ b : Fin d, (groundSpace (A i) (n + 1)).comap (restrictLastₗ b)) ⊓
-        ⨅ a : Fin d, (groundSpace (A i) (n + 1)).comap (restrictFirstₗ a)) =
+      ((⨅ b : α, (groundSpace (A i) (n + 1)).comap (restrictLastₗ b)) ⊓
+        ⨅ a : α, (groundSpace (A i) (n + 1)).comap (restrictFirstₗ a)) =
         groundSpace (A i) (n + 2)) :
-    ((⨅ b : Fin d, (⨆ i, groundSpace (A i) (n + 1)).comap (restrictLastₗ b)) ⊓
-      ⨅ a : Fin d, (⨆ i, groundSpace (A i) (n + 1)).comap (restrictFirstₗ a)) =
+    ((⨅ b : α, (⨆ i, groundSpace (A i) (n + 1)).comap (restrictLastₗ b)) ⊓
+      ⨅ a : α, (⨆ i, groundSpace (A i) (n + 1)).comap (restrictFirstₗ a)) =
       ⨆ i, groundSpace (A i) (n + 2) := by
   rw [restriction_intersection_iSup_eq_of_middle_independent
     (fun i => groundSpace (A i) n) (fun i => groundSpace (A i) (n + 1)) hIndep
@@ -182,11 +182,11 @@ passing to their Euclidean realization. This coordinate observation relates
 the geometric spaces in Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 to their orthogonal projections. -/
 theorem groundSpace_iSupIndep_iff_map_groundSpace_iSupIndep
-    {dim : ι → ℕ} (A : ∀ i, MPSTensor d (dim i)) (N : ℕ) :
+    {dim : ι → ℕ} (A : ∀ i, MPTensor α (Fin (dim i))) (N : ℕ) :
     iSupIndep (fun i => groundSpace (A i) N) ↔
       iSupIndep (fun i => ((groundSpace (A i) N).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)) := by
   exact (iSupIndep_map_orderIso_iff
-    (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm)).symm
+    (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm)).symm
 
 end MPSTensor

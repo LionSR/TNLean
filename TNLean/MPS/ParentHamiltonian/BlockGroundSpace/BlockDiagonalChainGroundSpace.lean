@@ -38,7 +38,7 @@ cyclic-local part of PGVWC07, Theorem 12, before the periodic-boundary
 comparison.
 -/
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Periodic local constraints land in a propagated sequence of subspaces.
 
@@ -50,12 +50,12 @@ for all \(m\ge L\), then \(\mathcal G_{N,L}(A)\subseteq S_N\).  This is the
 cyclic-local part of the proof of PGVWC07, Theorem 12, before the
 periodic-boundary comparison. -/
 theorem chainGroundSpace_le_of_local_le_restriction_intersection_submodules
-    (A : MPSTensor d D) (S : (M : ℕ) → Submodule ℂ (NSiteSpace (Fin d) M))
-    {L N : ℕ} (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N) [NeZero d]
+    (A : MPTensor α (Fin D)) (S : (M : ℕ) → Submodule ℂ (NSiteSpace α M))
+    {L N : ℕ} (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N) [Nonempty α]
     (hlocal : groundSpace A L ≤ S L)
     (hstep : ∀ M : ℕ, L ≤ M →
-      ((⨅ b : Fin d, (S M).comap (restrictLastₗ b)) ⊓
-        (⨅ a : Fin d, (S M).comap (restrictFirstₗ a))) = S (M + 1)) :
+      ((⨅ b : α, (S M).comap (restrictLastₗ b)) ⊓
+        (⨅ a : α, (S M).comap (restrictFirstₗ a))) = S (M + 1)) :
     chainGroundSpace A L N ≤ S N := by
   intro ψ hψ
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
@@ -70,7 +70,7 @@ end CyclicSubmoduleIteration
 
 section BlockDiagonalChainGroundSpace
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- The periodic chain ground space of a single block is contained in the
 periodic chain ground space of the block-diagonal tensor.
@@ -82,18 +82,18 @@ For every cyclic window, the local identity
 sends \(G_L(A_j)\) into the local ground space of the block-diagonal tensor. -/
 theorem chainGroundSpace_block_le_toTensorFromBlocks
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {j : Fin r} (hμj : μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     chainGroundSpace (A j) L N ≤
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N := by
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N := by
   classical
   intro ψ hψ
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ ⊢
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
   intro i τ
   have hlocal : groundSpace (A j) L ≤
-      groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
+      groundSpace (toTensorFromBlocks (μ := μ) A) L := by
     exact groundSpace_block_le_toTensorFromBlocks μ A hμj L
   exact hlocal (hψ i τ)
 
@@ -101,11 +101,11 @@ theorem chainGroundSpace_block_le_toTensorFromBlocks
 periodic chain ground space of the block-diagonal tensor. -/
 theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N := by
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N := by
   exact iSup_le fun j =>
     chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
 
@@ -120,7 +120,7 @@ the easy inclusion in the parent-Hamiltonian ground-space spanning equation;
 the reverse inclusion is the periodic-boundary comparison. -/
 theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -128,7 +128,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
       LinearMap.ker
         (Matrix.toLin'
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) := by
+            (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) := by
   rw [bntMPSVectorSpan]
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨j, rfl⟩
@@ -138,7 +138,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
   refine Finset.sum_eq_zero fun i _ => ?_
   exact ManyBody.Interaction.mem_zeroSpace_iff.mp
     (toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) hN hLN
+      (toTensorFromBlocks (μ := μ) A) hN hLN
       ((chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN)
         (mpv_mem_chainGroundSpace (A j) L N hN hLN))) i
 
@@ -158,13 +158,13 @@ chain as a single hypothesis; it does not prove that hypothesis. See
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (hClose :
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) L N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N :=
   le_antisymm hClose (iSup_chainGroundSpace_block_le_toTensorFromBlocks μ A hμ hN hLN)
 
@@ -190,22 +190,22 @@ block-diagonal boundary conditions, replacing \(S_N\) by the periodic
 block-chain sum. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
-    {L N : ℕ} (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N) [NeZero d]
+    {L N : ℕ} (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N) [Nonempty α]
     (hstep : ∀ M : ℕ, L ≤ M →
-      ((⨅ b : Fin d,
+      ((⨅ b : α,
           (⨆ j : Fin r, groundSpace (A j) M).comap (restrictLastₗ b)) ⊓
-        (⨅ a : Fin d,
+        (⨅ a : α,
           (⨆ j : Fin r, groundSpace (A j) M).comap (restrictFirstₗ a))) =
         ⨆ j : Fin r, groundSpace (A j) (M + 1)) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
-  let S : (M : ℕ) → Submodule ℂ (NSiteSpace (Fin d) M) :=
+  let S : (M : ℕ) → Submodule ℂ (NSiteSpace α M) :=
     fun M => ⨆ j : Fin r, groundSpace (A j) M
   apply chainGroundSpace_le_of_local_le_restriction_intersection_submodules
-    (A := toTensorFromBlocks (α := Fin d) (μ := μ) A) (S := S) hN hL hLN
+    (A := toTensorFromBlocks (μ := μ) A) (S := S) hN hL hLN
   · rw [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L]
   · intro M hM
     exact hstep M hM

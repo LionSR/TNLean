@@ -27,11 +27,11 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The Hamiltonian of the windows of the open chain that start at one position is the term of
 that window, and vanishes when no window starts there. -/
-theorem hamiltonian_restrict_parentChainInteraction_val_eq (A : MPSTensor d D) (R N k : ℕ) :
+theorem hamiltonian_restrict_parentChainInteraction_val_eq (A : MPTensor α (Fin D)) (R N k : ℕ) :
     ((parentChainInteraction A R N).restrict fun i ↦ i.val = k).hamiltonian =
       if h : k < N + 1 - R then (parentChainInteraction A R N).term ⟨k, h⟩ else 0 := by
   rw [ManyBody.Interaction.hamiltonian]
@@ -45,7 +45,7 @@ theorem hamiltonian_restrict_parentChainInteraction_val_eq (A : MPSTensor d D) (
 /-- Every member of the zero-padded cyclic family of an open chain, the Hamiltonian of the
 windows starting at one position, is an orthogonal projection, including the zero members. -/
 theorem isStarProjection_hamiltonian_restrict_parentChainInteraction_val_eq
-    (A : MPSTensor d D) (R N k : ℕ) :
+    (A : MPTensor α (Fin D)) (R N k : ℕ) :
     IsStarProjection ((parentChainInteraction A R N).restrict fun i ↦ i.val = k).hamiltonian := by
   rw [hamiltonian_restrict_parentChainInteraction_val_eq]
   split_ifs
@@ -55,7 +55,7 @@ theorem isStarProjection_hamiltonian_restrict_parentChainInteraction_val_eq
 /-- The members of the zero-padded cyclic family of an open chain commute at every oriented
 cyclic separation between \(R\) and \(P-R\), as required by the cyclic Knabe inequality. -/
 theorem commute_hamiltonian_restrict_parentChainInteraction_of_oriented_separation
-    {N P R e : ℕ} [NeZero P] (A : MPSTensor d D)
+    {N P R e : ℕ} [NeZero P] (A : MPTensor α (Fin D))
     (hR : 0 < R) (heR : R ≤ e) (heP : e + R ≤ P) (s : ZMod P) :
     Commute ((parentChainInteraction A R N).restrict fun i ↦ i.val = s.val).hamiltonian
       ((parentChainInteraction A R N).restrict fun i ↦
@@ -81,7 +81,7 @@ theorem commute_hamiltonian_restrict_parentChainInteraction_of_oriented_separati
 /-- If the cyclic period is at least the physical volume, summing the zero-padded cyclic family
 gives the Hamiltonian of the parent interaction on the open chain. -/
 theorem sum_hamiltonian_restrict_parentChainInteraction_val_eq
-    {N P R : ℕ} [NeZero P] (A : MPSTensor d D) (hR : 0 < R) (hNP : N ≤ P) :
+    {N P R : ℕ} [NeZero P] (A : MPTensor α (Fin D)) (hR : 0 < R) (hNP : N ≤ P) :
     ∑ s : ZMod P, ((parentChainInteraction A R N).restrict fun i ↦ i.val = s.val).hamiltonian =
       (parentChainInteraction A R N).hamiltonian := by
   rw [ManyBody.Interaction.sum_hamiltonian_restrict_eq_hamiltonian_restrict Finset.univ _

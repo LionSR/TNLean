@@ -28,21 +28,21 @@ open MeasureTheory Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 private theorem wallMatrix_secondCountableTopology (a b : ℕ) :
     SecondCountableTopology (Matrix (Fin a) (Fin b) ℂ) := by
   let : SecondCountableTopology (Fin b → ℂ) := inferInstance
   exact inferInstanceAs (SecondCountableTopology (Fin a → Fin b → ℂ))
 
-private theorem wallFamily_secondCountableTopology (d a b : ℕ) :
-    SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) := by
+private theorem wallFamily_secondCountableTopology (a b : ℕ) :
+    SecondCountableTopology (α → Matrix (Fin a) (Fin b) ℂ) := by
   let : SecondCountableTopology (Matrix (Fin a) (Fin b) ℂ) :=
     wallMatrix_secondCountableTopology a b
   infer_instance
 
-private theorem wallFamily_borelSpace (d a b : ℕ) :
-    BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) := by
+private theorem wallFamily_borelSpace (a b : ℕ) :
+    BorelSpace (α → Matrix (Fin a) (Fin b) ℂ) := by
   let : SecondCountableTopology (Matrix (Fin a) (Fin b) ℂ) :=
     wallMatrix_secondCountableTopology a b
   let : BorelSpace (Fin b → ℂ) := Pi.borelSpace
@@ -54,11 +54,11 @@ linear radical. This is derived from nonnegative finite Gram
 weights, not assumed as a genericity premise; arXiv:1210.6613,
 proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_mem_radical_iff
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosSemidef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+    (R : α → Matrix (Fin a) (Fin b) ℂ) :
     R ∈ (uncleWallSlopeQuadratic A B ρ hSpect).radical ↔
       uncleWallSlopeQuadratic A B ρ hSpect R = 0 :=
   QuadraticForm.mem_radical_iff_of_nonneg _ (uncleWallSlopeQuadratic_nonneg A B ρ hρ hA hB hSpect) R
@@ -67,9 +67,9 @@ theorem uncleWallSlopeQuadratic_mem_radical_iff
 the source full-perturbation setting; arXiv:1210.6613, proof of Lemma
 lowenergystates, nonzero quadratic coefficient. -/
 theorem uncleWallSlopeQuadratic_radical_ne_top [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
@@ -90,9 +90,9 @@ canonical normalizations and full perturbation span. This assertion
 concerns the coefficient itself, not the full two-wall trial norm;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_positive_open_dense [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
@@ -113,26 +113,26 @@ theorem uncleWallSlopeQuadratic_positive_open_dense [NeZero a] [NeZero b]
 arXiv:1210.6613, proof of Lemma lowenergystates. The exceptional set is
 the derived proper linear radical of its nonnegative quadratic form. -/
 theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [hμ : Measure.IsAddHaarMeasure μ] :
+    (μ : Measure (α → Matrix (Fin a) (Fin b) ℂ)) [hμ : Measure.IsAddHaarMeasure μ] :
     μ {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} = 0 := by
-  let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
-    wallFamily_secondCountableTopology d a b
-  let hBorel : BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
+  let : SecondCountableTopology (α → Matrix (Fin a) (Fin b) ℂ) :=
+    wallFamily_secondCountableTopology a b
+  let hBorel : BorelSpace (α → Matrix (Fin a) (Fin b) ℂ) :=
     wallFamily_borelSpace d a b
   have hset : {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} =
       ((uncleWallSlopeQuadratic A B ρ hSpect).radical :
-        Set (Fin d → Matrix (Fin a) (Fin b) ℂ)) := by
+        Set (α → Matrix (Fin a) (Fin b) ℂ)) := by
     ext R
     exact (uncleWallSlopeQuadratic_mem_radical_iff A B ρ hρ.posSemidef hA hB hSpect R).symm
   rw [hset]
-  exact @Measure.addHaar_submodule (Fin d → Matrix (Fin a) (Fin b) ℂ)
+  exact @Measure.addHaar_submodule (α → Matrix (Fin a) (Fin b) ℂ)
     _ _ _ hBorel _ μ hμ _
     (uncleWallSlopeQuadratic_radical_ne_top A B R₀ L₀ hPert ρ hρ hSpect)
 
@@ -142,14 +142,14 @@ This supplies the one-wall generic positivity step; the two-wall norm
 factorization estimate remains separate. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, lines 1250–1265. -/
 theorem uncleWallNormSlope_ae_pos [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
+    (μ : Measure (α → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ R ∂μ, 0 < uncleWallNormSlope A B R ρ := by
   have hq : ∀ᵐ R ∂μ, 0 < uncleWallSlopeQuadratic A B ρ hSpect R := by
     have hset : {R | ¬ 0 < uncleWallSlopeQuadratic A B ρ hSpect R} =
@@ -172,9 +172,9 @@ the pair space is used; independence of component measures is not a
 hypothesis. Source: arXiv:1210.6613, proof of Lemma lowenergystates,
 the two quadratic coefficients in the norm factorization. -/
 theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef)
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef)
@@ -182,18 +182,18 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1)
-    (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [hμ : Measure.IsAddHaarMeasure μ] :
+    (μ : Measure ((α → Matrix (Fin a) (Fin b) ℂ) ×
+      (α → Matrix (Fin b) (Fin a) ℂ))) [hμ : Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, 0 < uncleWallNormSlope A B P.1 ρA ∧
       0 < uncleWallNormSlope B A P.2 ρB := by
-  let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
-    wallFamily_secondCountableTopology d a b
-  let : BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) := wallFamily_borelSpace d a b
-  let : SecondCountableTopology (Fin d → Matrix (Fin b) (Fin a) ℂ) :=
-    wallFamily_secondCountableTopology d b a
-  let : BorelSpace (Fin d → Matrix (Fin b) (Fin a) ℂ) := wallFamily_borelSpace d b a
-  let hBorel : BorelSpace ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ)) := Prod.borelSpace
+  let : SecondCountableTopology (α → Matrix (Fin a) (Fin b) ℂ) :=
+    wallFamily_secondCountableTopology a b
+  let : BorelSpace (α → Matrix (Fin a) (Fin b) ℂ) := wallFamily_borelSpace d a b
+  let : SecondCountableTopology (α → Matrix (Fin b) (Fin a) ℂ) :=
+    wallFamily_secondCountableTopology b a
+  let : BorelSpace (α → Matrix (Fin b) (Fin a) ℂ) := wallFamily_borelSpace d b a
+  let hBorel : BorelSpace ((α → Matrix (Fin a) (Fin b) ℂ) ×
+      (α → Matrix (Fin b) (Fin a) ℂ)) := Prod.borelSpace
   have hdim : (a + b) * (a + b) ≤ d := by
     have h := finrank_le_of_span_eq_top hPert.span_eq_top
     simpa [Module.finrank_matrix] using h
@@ -215,48 +215,48 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt A B ρA hρA hdB hAB)
   have hS₂ : S₂ ≠ ⊤ := QuadraticForm.radical_ne_top_of_ne_zero Q₂
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt B A ρB hρB hdA hBA)
-  have hprod₁ : S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) ≠ ⊤ := by
+  have hprod₁ : S₁.prod (⊤ : Submodule ℝ (α → Matrix (Fin b) (Fin a) ℂ)) ≠ ⊤ := by
     intro h
     apply hS₁
     apply eq_top_iff.mpr
     intro R _
-    have hmem : (R, (0 : Fin d → Matrix (Fin b) (Fin a) ℂ)) ∈
-        S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) := by
+    have hmem : (R, (0 : α → Matrix (Fin b) (Fin a) ℂ)) ∈
+        S₁.prod (⊤ : Submodule ℝ (α → Matrix (Fin b) (Fin a) ℂ)) := by
       rw [h]
       trivial
     exact hmem.1
-  have hprod₂ : (⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ ≠ ⊤ := by
+  have hprod₂ : (⊤ : Submodule ℝ (α → Matrix (Fin a) (Fin b) ℂ)).prod S₂ ≠ ⊤ := by
     intro h
     apply hS₂
     apply eq_top_iff.mpr
     intro L _
-    have hmem : ((0 : Fin d → Matrix (Fin a) (Fin b) ℂ), L) ∈
-        (⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ := by
+    have hmem : ((0 : α → Matrix (Fin a) (Fin b) ℂ), L) ∈
+        (⊤ : Submodule ℝ (α → Matrix (Fin a) (Fin b) ℂ)).prod S₂ := by
       rw [h]
       trivial
     exact hmem.2
-  have hnull₁ : μ (S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) :
-      Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-        (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
-    @Measure.addHaar_submodule ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ hμ _ hprod₁
-  have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ :
-      Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-        (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
-    @Measure.addHaar_submodule ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ hμ _ hprod₂
+  have hnull₁ : μ (S₁.prod (⊤ : Submodule ℝ (α → Matrix (Fin b) (Fin a) ℂ)) :
+      Set ((α → Matrix (Fin a) (Fin b) ℂ) ×
+        (α → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
+    @Measure.addHaar_submodule ((α → Matrix (Fin a) (Fin b) ℂ) ×
+      (α → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ hμ _ hprod₁
+  have hnull₂ : μ ((⊤ : Submodule ℝ (α → Matrix (Fin a) (Fin b) ℂ)).prod S₂ :
+      Set ((α → Matrix (Fin a) (Fin b) ℂ) ×
+        (α → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
+    @Measure.addHaar_submodule ((α → Matrix (Fin a) (Fin b) ℂ) ×
+      (α → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ hμ _ hprod₂
   have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
-    have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-        (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
-        Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) : Set _) := by
+    have hset : {P : (α → Matrix (Fin a) (Fin b) ℂ) ×
+        (α → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
+        Submodule ℝ (α → Matrix (Fin b) (Fin a) ℂ)) : Set _) := by
       ext P
       simp
     rw [ae_iff]
     simpa only [not_not, hset] using hnull₁
   have hae₂ : ∀ᵐ P ∂μ, P.2 ∉ S₂ := by
-    have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-        (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.2 ∈ S₂} = ((⊤ :
-        Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ : Set _) := by
+    have hset : {P : (α → Matrix (Fin a) (Fin b) ℂ) ×
+        (α → Matrix (Fin b) (Fin a) ℂ) | P.2 ∈ S₂} = ((⊤ :
+        Submodule ℝ (α → Matrix (Fin a) (Fin b) ℂ)).prod S₂ : Set _) := by
       ext P
       simp
     rw [ae_iff]

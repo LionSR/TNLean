@@ -53,14 +53,14 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Martingale quadratic-form reduction
 
 Statements about vectors take the operators (`Matrix.toEuclideanLin`) of the terms \(h_i\) and of
 the Hamiltonian \(H\) of the parent interaction on the ring (`parentRingInteraction`). -/
 
-private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D) (L N : ℕ)
+private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPTensor α (Fin D)) (L N : ℕ)
     [NeZero N] :
     ∑ i, Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) =
       Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian := by
@@ -82,14 +82,14 @@ Under these hypotheses the Hamiltonian satisfies \(H² ≥ γ H\)
 as a quadratic form, the shape consumed by the abstract spectral-theorem step
 `FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional`. -/
 theorem hamiltonian_parentRingInteraction_quadratic_form_of_ordered_local_term_bounds
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
+    (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
     (c : Fin N → Fin N → ℝ)
     (hRow : ∀ i : Fin N, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
     (hCross : ∀ i j : Fin N, j ∈ Finset.univ.erase i →
-      ∀ v : EuclideanSpace ℂ (Cfg d N),
+      ∀ v : EuclideanSpace ℂ (Fin N → α),
         let h (k : Fin N) := Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - γ) * c i j * (⟪h i v, v⟫_ℂ).re ≤ (⟪h i v, h j v⟫_ℂ).re) :
-    ∀ v : EuclideanSpace ℂ (Cfg d N),
+    ∀ v : EuclideanSpace ℂ (Fin N → α),
       let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re := by
   intro v
@@ -110,16 +110,16 @@ for the parent interaction on the ring. The column-sum
 hypothesis is stated separately; it follows from the row-sum condition when the
 coefficient matrix is symmetric. -/
 theorem hamiltonian_parentRingInteraction_quadratic_form_of_anticommutator_local_term_bounds
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
+    (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
     (c : Fin N → Fin N → ℝ)
     (hRow : ∀ i : Fin N, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
     (hCol : ∀ j : Fin N, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
     (hAnti : ∀ i j : Fin N, j ∈ Finset.univ.erase i →
-      ∀ v : EuclideanSpace ℂ (Cfg d N),
+      ∀ v : EuclideanSpace ℂ (Fin N → α),
         let h (k : Fin N) := Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - γ) * c i j * ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
           (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
-    ∀ v : EuclideanSpace ℂ (Cfg d N),
+    ∀ v : EuclideanSpace ℂ (Fin N → α),
       let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re := by
   intro v
@@ -149,22 +149,22 @@ The row and column cardinality hypotheses make the coefficient sums at most
 one; non-overlapping pairs are handled by non-negativity of the corresponding
 anticommutator quadratic form. -/
 theorem hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_anticommutator
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
+    (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
     (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
     (hRowCard : ∀ i : Fin N,
       ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
     (hColCard : ∀ j : Fin N,
       ((Finset.univ.erase j).filter (fun i => overlaps i j)).card ≤ m)
     (hDisjointAnti : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
-      ∀ v : EuclideanSpace ℂ (Cfg d N),
+      ∀ v : EuclideanSpace ℂ (Fin N → α),
         let h (k : Fin N) := Matrix.toEuclideanLin ((parentRingInteraction A L N).term k)
         0 ≤ (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re)
     (hAnti : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
-      ∀ v : EuclideanSpace ℂ (Cfg d N),
+      ∀ v : EuclideanSpace ℂ (Fin N → α),
         let h (k : Fin N) := Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - γ) * ((m : ℝ)⁻¹) * ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
           (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
-    ∀ v : EuclideanSpace ℂ (Cfg d N),
+    ∀ v : EuclideanSpace ℂ (Fin N → α),
       let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re := by
   intro v
@@ -185,19 +185,19 @@ cross terms are nonnegative, and every overlap obeys the ordered estimate with
 coefficient \(1 / m\), then the Hamiltonian of the parent interaction on the ring satisfies
 \(H² ≥ γ H\) as a quadratic form. -/
 theorem hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_ordered_cross_term
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
+    (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] {γ : ℝ} (hγle : γ ≤ 1)
     (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
     (hCard : ∀ i : Fin N,
       ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
     (hDisjoint : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
-      ∀ v : EuclideanSpace ℂ (Cfg d N),
+      ∀ v : EuclideanSpace ℂ (Fin N → α),
         let h (k : Fin N) := Matrix.toEuclideanLin ((parentRingInteraction A L N).term k)
         0 ≤ (⟪h i v, h j v⟫_ℂ).re)
     (hCrossTerm : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
-      ∀ v : EuclideanSpace ℂ (Cfg d N),
+      ∀ v : EuclideanSpace ℂ (Fin N → α),
         let h (k : Fin N) := Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - γ) * ((m : ℝ)⁻¹) * (⟪h i v, v⟫_ℂ).re ≤ (⟪h i v, h j v⟫_ℂ).re) :
-    ∀ v : EuclideanSpace ℂ (Cfg d N),
+    ∀ v : EuclideanSpace ℂ (Fin N → α),
       let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re := by
   intro v
@@ -221,8 +221,8 @@ interaction on a ring implies that every eigenvalue of \(H\) other than zero is 
 by positivity of \(H\) and the abstract spectral-theorem step
 `FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional`. -/
 theorem hamiltonian_parentRingInteraction_gap_of_quadratic_form
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] {γ : ℝ} (hγ : 0 < γ)
-    (hQuad : ∀ v : EuclideanSpace ℂ (Cfg d N),
+    (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] {γ : ℝ} (hγ : 0 < γ)
+    (hQuad : ∀ v : EuclideanSpace ℂ (Fin N → α),
       let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) (μ : ℂ)
     (hμ : Module.End.HasEigenvalue
@@ -236,8 +236,8 @@ theorem hamiltonian_parentRingInteraction_gap_of_quadratic_form
 interaction on the rings of \(N ≥ 2L\) sites follows from the corresponding uniform
 quadratic-form estimate. -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hQuad : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
+    (hQuad : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Fin N → α)),
       haveI : NeZero N := ⟨by omega⟩;
       let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       ((1 : ℝ) / (4 * (L : ℝ))) * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
@@ -261,12 +261,12 @@ ring of \(N ≥ 2L\) sites the terms \(h_i\) of the parent interaction satisfy
 -(1 - γ)c_{ij}\operatorname{Re}\langle h_i v, v\rangle\) with \(γ = 1/(4L)\) and row sums of
 \(c\) at most one, the Hamiltonian has the gap bound with constant \(1/(4L)\). -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_ordered_local_term_bounds
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (c : ∀ N : ℕ, Fin N → Fin N → ℝ)
     (hRow : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
       (∑ j ∈ Finset.univ.erase i, c N i j) ≤ 1)
     (hCross : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Cfg d N),
+      j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Fin N → α),
         haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
           Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
@@ -299,14 +299,14 @@ For the explicit choice \(\gamma=1/(4L)\), this theorem converts that condition 
 the parent interaction on the rings of \(N ≥ 2L\) sites, with row and column coefficient sums
 bounded by one for every ring, into the gap bound with constant \(1/(4L)\). -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_anticommutator_local_term_bounds
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (c : ∀ N : ℕ, Fin N → Fin N → ℝ)
     (hRow : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
       (∑ j ∈ Finset.univ.erase i, c N i j) ≤ 1)
     (hCol : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (j : Fin N),
       (∑ i ∈ Finset.univ.erase j, c N i j) ≤ 1)
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Cfg d N),
+      j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Fin N → α),
         haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
           Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
@@ -335,7 +335,7 @@ column, non-overlapping pairs have nonnegative anticommutator form, and overlapp
 the source anticommutator estimate (arXiv:2011.12127, Section IV.C, lines 2176-2179) with
 coefficient \(1/m\), then the gap bound with constant \(1/(4L)\) follows. -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
     [∀ N : ℕ, DecidableRel (overlaps N)]
     (hRowCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
@@ -343,13 +343,13 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommut
     (hColCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (j : Fin N),
       ((Finset.univ.erase j).filter (fun i => overlaps N i j)).card ≤ 2 * (L - 1))
     (hDisjointAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → ¬ overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+      j ∈ Finset.univ.erase i → ¬ overlaps N i j → ∀ v : EuclideanSpace ℂ (Fin N → α),
         haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
           Matrix.toEuclideanLin ((parentRingInteraction A L N).term k)
         0 ≤ (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re)
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+      j ∈ Finset.univ.erase i → overlaps N i j → ∀ v : EuclideanSpace ℂ (Fin N → α),
         haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
           Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
@@ -379,19 +379,19 @@ row has at most \(m\) overlapping off-diagonal pairs, the non-overlap cross term
 nonnegative, and every overlap obeys the ordered estimate with coefficient \(1/m\); then the gap
 bound with constant \(1/(4L)\) follows. -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_ordered_cross_term
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
     [∀ N : ℕ, DecidableRel (overlaps N)]
     (hCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
       ((Finset.univ.erase i).filter (fun j => overlaps N i j)).card ≤ 2 * (L - 1))
     (hDisjoint : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → ¬ overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+      j ∈ Finset.univ.erase i → ¬ overlaps N i j → ∀ v : EuclideanSpace ℂ (Fin N → α),
         haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
           Matrix.toEuclideanLin ((parentRingInteraction A L N).term k)
         0 ≤ (⟪h i v, h j v⟫_ℂ).re)
     (hCrossTerm : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+      j ∈ Finset.univ.erase i → overlaps N i j → ∀ v : EuclideanSpace ℂ (Fin N → α),
         haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
           Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
@@ -420,10 +420,10 @@ the projection structure of the terms of the parent interaction is
 `re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap`; the only remaining
 hypothesis is the ordered cross-term estimate for overlapping pairs. -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_ordered_cross_term
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (hCrossTerm : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
+        ∀ v : EuclideanSpace ℂ (Fin N → α),
           haveI : NeZero N := ⟨by omega⟩;
           let h (k : Fin N) :=
             Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
@@ -455,10 +455,10 @@ lines 2176-2179) on overlapping pairs:
 \]
 Non-overlapping pairs are handled by the disjoint-window positivity. -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
+        ∀ v : EuclideanSpace ℂ (Fin N → α),
           haveI : NeZero N := ⟨by omega⟩;
           let h (k : Fin N) :=
             Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
@@ -497,7 +497,7 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
@@ -518,10 +518,10 @@ This is the public gapped theorem matching the martingale condition in
 arXiv:2011.12127, Section IV.C, lines 2176-2179. The MPS-specific proof of the
 anticommutator estimate remains the open input. -/
 theorem hamiltonian_parentRingInteraction_gapped_of_anticommutator
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (A : MPTensor α (Fin D)) (L : ℕ) (hL : 1 < L)
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
+        ∀ v : EuclideanSpace ℂ (Fin N → α),
           haveI : NeZero N := ⟨by omega⟩;
           let h (k : Fin N) :=
             Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);

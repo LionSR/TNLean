@@ -63,24 +63,23 @@ open MPTensor
 section
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d D E F L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E F L : ℕ}
 
-private noncomputable def residualConfigEquiv (d N L r : ℕ) :
-    Cfg (blockPhysDim d L) N × Cfg d r ≃ Cfg d (N * L + r) :=
-  (Equiv.prodCongr (Kraus.blockedConfigEquiv d N L) (Equiv.refl (Cfg d r))).trans
+private noncomputable def residualConfigEquiv (N L r : ℕ) :
+    (Fin N → Fin L → α) × (Fin r → α) ≃ (Fin (N * L + r) → α) :=
+  (Equiv.prodCongr (Kraus.blockConfigEquiv α N L) (Equiv.refl (Fin r → α))).trans
     (Fin.appendEquiv (N * L) r)
 
 private noncomputable def residualPrefixFiber {N r : ℕ}
-    (x : EuclideanSpace ℂ (Cfg d (N * L + r))) (τ : Cfg d r) :
-    EuclideanSpace ℂ (Cfg (blockPhysDim d L) N) :=
-  WithLp.toLp 2 fun σ => x (residualConfigEquiv d N L r (σ, τ))
+    (x : EuclideanSpace ℂ (Fin (N * L + r) → α)) (τ : Fin r → α) :
+    EuclideanSpace ℂ ((Fin N → Fin L → α)) :=
+  WithLp.toLp 2 fun σ => x (residualConfigEquiv N L r (σ, τ))
 
 private theorem residualPrefixFiber_boundaryMap
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ)
-    (Y : Matrix (Fin D) (Fin E) ℂ) (τ : Cfg d r) :
+    (Y : Matrix (Fin D) (Fin E) ℂ) (τ : Fin r → α) :
     residualPrefixFiber (L := L)
       (blockedResidualBoundaryMapES A L B V N r
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ =
@@ -93,14 +92,14 @@ private theorem residualPrefixFiber_boundaryMap
     groundSpaceMap_apply, Matrix.mul_assoc, Fin.appendEquiv, Function.comp_def]
 
 private theorem inner_eq_sum_residualPrefixFiber {N r : ℕ}
-    (x y : EuclideanSpace ℂ (Cfg d (N * L + r))) :
-    ⟪x, y⟫_ℂ = ∑ τ : Cfg d r,
+    (x y : EuclideanSpace ℂ (Fin (N * L + r) → α)) :
+    ⟪x, y⟫_ℂ = ∑ τ : (Fin r → α),
       ⟪residualPrefixFiber (L := L) x τ, residualPrefixFiber (L := L) y τ⟫_ℂ := by
   rw [PiLp.inner_apply]
-  trans ∑ p : Cfg (blockPhysDim d L) N × Cfg d r,
-    ⟪x (residualConfigEquiv d N L r p), y (residualConfigEquiv d N L r p)⟫_ℂ
+  trans ∑ p : (Fin N → Fin L → α) × (Fin r → α),
+    ⟪x (residualConfigEquiv N L r p), y (residualConfigEquiv N L r p)⟫_ℂ
   · symm
-    exact Fintype.sum_equiv (residualConfigEquiv d N L r) _ _ (fun _ => rfl)
+    exact Fintype.sum_equiv (residualConfigEquiv N L r) _ _ (fun _ => rfl)
   · simp only [Fintype.sum_prod_type, PiLp.inner_apply, residualPrefixFiber]
     exact Finset.sum_comm
 
@@ -112,14 +111,14 @@ Source: the residual coordinate decomposition of DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451, and
 Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint, lines 1744--1820. -/
 theorem inner_blockedResidualBoundaryMapES_eq_sum_groundSpaceMapES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ)
     (Y Z : Matrix (Fin D) (Fin E) ℂ) :
     ⟪blockedResidualBoundaryMapES A L B V N r
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y),
       blockedResidualBoundaryMapES A L B V N r
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Z)⟫_ℂ =
-      ∑ τ : Cfg d r,
+      ∑ τ : (Fin r → α),
         ⟪groundSpaceMapES B N (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
             (Vᴴ * Kraus.evalWord A (List.ofFn τ) * Y)),
           groundSpaceMapES B N (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
@@ -132,14 +131,14 @@ theorem inner_blockedResidualBoundaryMapES_eq_sum_groundSpaceMapES
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Z))
 
 private theorem sum_norm_sq_residualPrefixFiber {N r : ℕ}
-    (x : EuclideanSpace ℂ (Cfg d (N * L + r))) :
-    ∑ τ : Cfg d r, ‖residualPrefixFiber (L := L) x τ‖ ^ 2 = ‖x‖ ^ 2 := by
+    (x : EuclideanSpace ℂ (Fin (N * L + r) → α)) :
+    ∑ τ : (Fin r → α), ‖residualPrefixFiber (L := L) x τ‖ ^ 2 = ‖x‖ ^ 2 := by
   simpa only [map_sum, ← norm_sq_eq_re_inner] using
     (congrArg (RCLike.re : ℂ →+ ℝ) (inner_eq_sum_residualPrefixFiber (L := L) x x)).symm
 
 private theorem norm_inner_le_of_residualPrefixFiber_bound {N r : ℕ}
-    (x y : EuclideanSpace ℂ (Cfg d (N * L + r))) {ε : ℝ} (hε : 0 ≤ ε)
-    (h : ∀ τ : Cfg d r,
+    (x y : EuclideanSpace ℂ (Fin (N * L + r) → α)) {ε : ℝ} (hε : 0 ≤ ε)
+    (h : ∀ τ : (Fin r → α),
       ‖⟪residualPrefixFiber (L := L) x τ, residualPrefixFiber (L := L) y τ⟫_ℂ‖ ≤
         ε * ‖residualPrefixFiber (L := L) x τ‖ * ‖residualPrefixFiber (L := L) y τ‖) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
@@ -153,10 +152,10 @@ private theorem norm_inner_le_of_residualPrefixFiber_bound {N r : ℕ}
       (fun τ => ‖residualPrefixFiber (L := L) y τ‖)
 
 private theorem residualPrefixFiber_mem_map_groundSpace
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) {N r : ℕ}
-    {x : EuclideanSpace ℂ (Cfg d (N * L + r))}
-    (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range) (τ : Cfg d r) :
+    {x : EuclideanSpace ℂ (Fin (N * L + r) → α)}
+    (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range) (τ : Fin r → α) :
     residualPrefixFiber (L := L) x τ ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) := by
   obtain ⟨z, rfl⟩ := hx
@@ -175,14 +174,14 @@ Source: the fiberwise consequence of Nachtergaele,
 arXiv:cond-mat/9410110, Lemma disjoint, lines 1744--1820, in the residual
 coordinates of DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary. -/
 theorem norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound {D₂ : ℕ}
-    (A : MPSTensor d D) (C : MPSTensor d D₂)
-    (B : MPSTensor (blockPhysDim d L) E) (B' : MPSTensor (blockPhysDim d L) F)
+    (A : MPTensor α (Fin D)) (C : MPTensor α (Fin D₂))
+    (B : MPTensor (Fin L → α) (Fin E)) (B' : MPTensor (Fin L → α) (Fin F))
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {N r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (hAngle : ∀ x ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B' N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
-    {x y : EuclideanSpace ℂ (Cfg d (N * L + r))}
+    {x y : EuclideanSpace ℂ (Fin (N * L + r) → α)}
     (hx : x ∈ (blockedResidualBoundaryMapES A L B V N r).range)
     (hy : y ∈ (blockedResidualBoundaryMapES C L B' W N r).range) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
@@ -196,7 +195,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D E F L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E F L : ℕ}
 
 /-- Inequivalent normalized primitive prefixes have asymptotically
 orthogonal correlated residual ranges, uniformly over every original tail
@@ -205,8 +204,8 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint,
 lines 1744--1820, followed by the exact fiberwise residual bound. -/
 theorem eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
     [NeZero E] [NeZero F] {D₂ : ℕ}
-    (A : MPSTensor d D) (C : MPSTensor d D₂)
-    {B : MPSTensor (blockPhysDim d L) E} {B' : MPSTensor (blockPhysDim d L) F}
+    (A : MPTensor α (Fin D)) (C : MPTensor α (Fin D₂))
+    {B : MPTensor (Fin L → α) (Fin E)} {B' : MPTensor (Fin L → α) (Fin F)}
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
     (hB : Kraus.HasComplementaryFixedPointGap B ρ)
@@ -227,7 +226,7 @@ end Kraus.HasComplementaryFixedPointGap
 
 namespace MPSTensor
 
-variable {d D E F L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E F L : ℕ}
 
 /-- For a finite inequivalent primitive prefix family, the sum of the
 correlated residual-sector projections approaches the projection onto their
@@ -237,7 +236,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (i),
 lines 2442--2531, applied to the residual overlap estimate. -/
 theorem tendsto_norm_residual_sector_projection_sum_sub_iSup_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -249,7 +248,7 @@ theorem tendsto_norm_residual_sector_projection_sum_sub_iSup_zero
         (⨆ j, (blockedResidualBoundaryMapES A L (B j) (V j) (N n) (r n)).range).starProjection‖)
       f (nhds 0) := by
   apply Submodule.tendsto_norm_sum_starProjection_sub_iSup_zero
-    (E := fun n => EuclideanSpace ℂ (Cfg d (N n * L + r n)))
+    (E := fun n => EuclideanSpace ℂ (Fin (N n * L + r n) → α))
   intro ε hε
   filter_upwards [hN.eventually (Filter.eventually_all.2 fun i =>
     Filter.eventually_all.2 fun j => Filter.eventually_all.2 fun hij =>
@@ -265,9 +264,8 @@ section
 
 open Filter
 open scoped Matrix BigOperators ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- A periodic tensor admits primitive faithful inequivalent residual sectors
 whose ranges give the exact original ground space at every length, including
@@ -276,16 +274,16 @@ varying tail length. All normalization and separation data are derived.
 Source: DCCSP17, arXiv:1708.00029, Lemma bdcf, lines 404--423;
 Nachtergaele, arXiv:cond-mat/9410110, Lemmas disjoint and commutation (i). -/
 theorem IsPeriodic.exists_residual_primitive_projection_sum
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (hdim : ∀ j, 0 < dim j),
       let _ : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
-      ∃ (B : ∀ j, MPSTensor (blockPhysDim d m) (dim j))
+      ∃ (B : ∀ j, MPTensor (Fin m → α) (Fin (dim j)))
         (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
         (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
         (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
         (∀ j, (V j)ᴴ * V j = 1) ∧ (∑ j, V j * (V j)ᴴ) = 1 ∧
-        (∀ j i, (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ) ∧
+        (∀ j i, (V j)ᴴ * Kraus.block A m i = B j i * (V j)ᴴ) ∧
         (∀ N r, ((groundSpace A (N * m + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
           ⨆ j, (blockedResidualBoundaryMapES A m (B j) (V j) N r).range) ∧
         (∀ r : ℕ → ℕ, Tendsto (fun N =>

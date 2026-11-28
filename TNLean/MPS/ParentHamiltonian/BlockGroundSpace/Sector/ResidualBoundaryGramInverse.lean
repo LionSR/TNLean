@@ -32,9 +32,8 @@ they do not assert the three-interval projection defect or a spectral gap.
 -/
 
 open scoped Kronecker Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- Right multiplication by the invariant matrix, divided by its trace, on rectangular Frobenius
 coordinates. -/
@@ -93,12 +92,12 @@ theorem rectangularRowProjection_isStarProjection
 
 /-- The Gram operator of the correlated tail acts by its exact row-support matrix. -/
 theorem correlatedTailMapES_adjoint_comp_apply
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
     (Y : Matrix (Fin D) (Fin E) ℂ) :
     (correlatedTailMapES A V r).adjoint.comp (correlatedTailMapES A V r)
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y) =
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)
-        ((∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+        ((∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
           Kraus.evalWord A (List.ofFn τ)) * Y) := by
   rw [ContinuousLinearMap.comp_apply, correlatedTailMapES_adjoint_apply]
   simp only [boundaryFamilyEquiv_correlatedTailMapES_apply, Matrix.sum_mul, Matrix.mul_assoc]
@@ -126,9 +125,9 @@ theorem rectangularRightGramMetric_inverse_apply [NeZero E]
 /-- An exact projected tail Gram matrix identifies the tail Gram operator with the row
 projection. -/
 theorem correlatedTailMapES_adjoint_comp_eq_rowProjection
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
     (Q : Matrix (Fin D) (Fin D) ℂ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     (correlatedTailMapES A V r).adjoint.comp (correlatedTailMapES A V r) =
       rectangularRowProjection E Q := by
@@ -173,9 +172,9 @@ theorem rectangularRightGramMetric_isSelfAdjoint [NeZero E]
 
 /-- The correlated tail vanishes outside its exact projected row corner. -/
 theorem correlatedTailMapES_comp_rowProjection
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     (correlatedTailMapES A V r).comp (rectangularRowProjection E Q) =
       correlatedTailMapES A V r := by
@@ -185,10 +184,10 @@ theorem correlatedTailMapES_comp_rowProjection
 
 /-- The residual boundary map vanishes outside the row corner determined by the correlated tail. -/
 theorem blockedResidualBoundaryMapES_comp_rowProjection
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     (blockedResidualBoundaryMapES A L B V N r).comp (rectangularRowProjection E Q) =
       blockedResidualBoundaryMapES A L B V N r := by
@@ -199,10 +198,10 @@ theorem blockedResidualBoundaryMapES_comp_rowProjection
 /-- The residual limiting Gram metric is the fixed right metric restricted to the exact row
 corner. -/
 theorem residualBoundaryGramLimit_eq_rightMetric_comp_rowProjection
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (ρ : Matrix (Fin E) (Fin E) ℂ) (htr : Matrix.trace ρ ≠ 0) (r : ℕ)
     (Q : Matrix (Fin D) (Fin D) ℂ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     residualBoundaryGramLimit A V ρ htr r =
       (rectangularRightGramMetric D ρ).comp (rectangularRowProjection E Q) := by
@@ -249,7 +248,7 @@ private theorem supported_inverse_algebra
 
 /-- The residual Gram operator extended by the fixed metric on the complementary row corner. -/
 noncomputable def residualBoundaryGramExtension
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (N r : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D) :=
@@ -260,7 +259,7 @@ noncomputable def residualBoundaryGramExtension
 /-- The inverse of the extended Gram operator restricted to the row corner. The inverse
 equations require the small-error hypotheses below. -/
 noncomputable def residualBoundaryGramInverse
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (N r : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D) :=
@@ -269,10 +268,10 @@ noncomputable def residualBoundaryGramInverse
 
 /-- The extended Gram error equals the original supported residual Gram error exactly. -/
 theorem residualBoundaryGramExtension_sub_rightMetric
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (htr : Matrix.trace ρ ≠ 0) (Q : Matrix (Fin D) (Fin D) ℂ) (N r : ℕ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     residualBoundaryGramExtension A B V ρ Q N r - rectangularRightGramMetric D ρ =
       (blockedResidualBoundaryMapES A L B V N r).adjoint.comp
@@ -284,11 +283,11 @@ theorem residualBoundaryGramExtension_sub_rightMetric
   noncomm_ring
 
 private theorem norm_residualBoundaryGramExtension_sub_rightMetric_le
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (htr : Matrix.trace ρ ≠ 0) (Q : Matrix (Fin D) (Fin D) ℂ)
     (hQ : IsOrthogonalProjection Q) (N r : ℕ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     ‖residualBoundaryGramExtension A B V ρ Q N r - rectangularRightGramMetric D ρ‖ ≤
       ‖groundSpaceGram B N - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ := by
@@ -308,11 +307,11 @@ self-adjoint supported inverse, its exact inverse equation, and a quantitative n
 This is an intermediate estimate for Nachtergaele, arXiv:cond-mat/9410110, Lemma
 commutation (ii). -/
 theorem residualBoundaryGramInverse_properties_of_small_error [NeZero D] [NeZero E]
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hρ : ρ.PosDef) (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
     (N r : ℕ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q)
     {a : ℝ} (ha : a < 1)
     (hsmall : ‖Ring.inverse (rectangularRightGramMetric D ρ)‖ *
@@ -358,11 +357,11 @@ theorem residualBoundaryGramInverse_properties_of_small_error [NeZero D] [NeZero
 /-- The squared residual boundary-map norm is bounded by the fixed metric norm and the
 primitive-prefix Gram error. -/
 theorem norm_blockedResidualBoundaryMapES_sq_le_rightMetric_add_gram_error
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (htr : Matrix.trace ρ ≠ 0) (Q : Matrix (Fin D) (Fin D) ℂ)
     (hQ : IsOrthogonalProjection Q) (N r : ℕ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q) :
     ‖blockedResidualBoundaryMapES A L B V N r‖ ^ 2 ≤
       ‖rectangularRightGramMetric D ρ‖ +
@@ -397,11 +396,11 @@ uniform bounds for all tail lengths once the prefix is sufficiently long. This i
 intermediate estimate for Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_residualBoundaryGramInverse_properties
     [NeZero D] [NeZero E]
-    {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
+    {B : MPTensor (Fin L → α) (Fin E)} {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
-    (hGram : ∀ r, ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∀ r, ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q r) :
     ∀ᶠ N in Filter.atTop, ∀ r : ℕ,
       IsUnit (residualBoundaryGramExtension A B V ρ (Q r) N r) ∧
@@ -455,11 +454,11 @@ private theorem norm_inverse_sub_le
 /-- The supported inverse error is at most twice the squared fixed-inverse norm times the
 primitive-prefix Gram error. -/
 theorem norm_residualBoundaryGramInverse_sub_limit_le [NeZero D] [NeZero E]
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hρ : ρ.PosDef) (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
     (N r : ℕ)
-    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q)
     (hsmall : ‖Ring.inverse (rectangularRightGramMetric D ρ)‖ *
       ‖groundSpaceGram B N - Matrix.gramReshuffle
@@ -507,7 +506,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 local instance : HasSummableGeomSeries
     (EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D)) :=
   have : CompleteSpace
@@ -520,11 +519,11 @@ every diverging prefix length, with arbitrary tail lengths. This is an intermedi
 for Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
 theorem residualBoundaryGramInverse_sub_limit_tendsto_zero
     [NeZero D] [NeZero E]
-    {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
+    {B : MPTensor (Fin L → α) (Fin E)} {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
-    (hGram : ∀ r, ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∀ r, ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) = Q r)
     {κ : Type*} {f : Filter κ} {N r : κ → ℕ} (hN : Filter.Tendsto N f Filter.atTop) :
     Filter.Tendsto (fun i =>

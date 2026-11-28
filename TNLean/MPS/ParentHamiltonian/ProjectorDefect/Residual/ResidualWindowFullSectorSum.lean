@@ -31,9 +31,8 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 open MPTensor
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D L : ℕ}
 
 /-- The full-window sector projection-sum error tends to zero as the common
 blocked interval grows, while the prefix and tail may vary arbitrarily.
@@ -42,7 +41,7 @@ lines 2442--2531, with the residual blocking coordinates of DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem tendsto_norm_residualWindow_sector_projection_sum_sub_iSup_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -56,7 +55,7 @@ theorem tendsto_norm_residualWindow_sector_projection_sum_sub_iSup_zero
   have hKM : Filter.Tendsto (fun n => K n + M n) f Filter.atTop :=
     Filter.tendsto_atTop_mono (fun n => Nat.le_add_left (M n) (K n)) hM
   let U := fun n => LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (residualWindowConfigEquiv d L (K n) (M n) (r n)).symm
+    (residualWindowConfigEquiv L (K n) (M n) (r n)).symm
   have hBase := tendsto_norm_isometric_residual_sector_projection_sum_sub_iSup_zero
     A B V ρ hP hρ hDistinct U hKM
   simpa only [residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES, U] using hBase
@@ -69,14 +68,14 @@ lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
 theorem iSup_range_residualWindowMapES_eq_reindex_map_groundSpace
     {ι : Type*} [Fintype ι] {dim : ι → ℕ}
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ) (K M r : ℕ) :
+    (hInt : ∀ j i, (V j)ᴴ * Kraus.block A L i = B j i * (V j)ᴴ) (K M r : ℕ) :
     (⨆ j, (residualWindowMapES A (B j) (V j) K M r).range) =
       ((groundSpace A ((K + M) * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualWindowConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
+          (residualWindowConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap := by
   simp only [residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES,
     ContinuousLinearMap.toLinearMap_comp, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp]
@@ -91,26 +90,26 @@ Lemma lem:blocking-arbitrary, lines 434--451. Only the virtual resolution
 and blocked cointertwining are required. -/
 theorem iSup_range_residualWindowMapES_eq_reindex_map_groundSpace_cover
     {ι : Type*} [Fintype ι] {dim : ι → ℕ}
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ) (K M r : ℕ) :
+    (hInt : ∀ j i, (V j)ᴴ * Kraus.block A L i = B j i * (V j)ᴴ) (K M r : ℕ) :
     (⨆ j, (residualWindowMapES A (B j) (V j) K M r).range) =
       ((groundSpace A (K * L + M * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualCoverConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
+          (residualCoverConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap := by
   have hCast {n n' : ℕ} (h : n = n')
-      (e : Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) ≃ Cfg d n) :
+      (e : (Fin K → Fin L → α) × ((Fin M → Fin L → α) × (Fin r → α)) ≃ (Fin n → α)) :
       ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).toLinearEquiv.toLinearMap =
       ((groundSpace A n').map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
           (e.trans (Equiv.arrowCongr (finCongr h)
-            (Equiv.refl (Fin d)))).symm).toLinearEquiv.toLinearMap := by
+            (Equiv.refl α))).symm).toLinearEquiv.toLinearMap := by
     subst n'
     simp only [finCongr_refl, Equiv.arrowCongr_refl, Equiv.trans_refl]
   exact (iSup_range_residualWindowMapES_eq_reindex_map_groundSpace A B V hSum hInt K M r).trans
-    (hCast (by rw [Nat.add_mul]) (residualWindowConfigEquiv d L K M r))
+    (hCast (by rw [Nat.add_mul]) (residualWindowConfigEquiv L K M r))
 
 
 end MPSTensor

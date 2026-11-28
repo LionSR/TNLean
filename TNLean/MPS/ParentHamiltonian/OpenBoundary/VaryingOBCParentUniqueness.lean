@@ -31,23 +31,23 @@ open scoped Matrix BigOperators InnerProductSpace
 
 namespace Matrix
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- The actual open-chain state, obtained by reading the singleton endpoint entry
 of the ordered rectangular product. No state or canonical supplier is assumed.
 Source: PGVWC07, Theorem 9, lines 1195–1205. -/
 noncomputable def obcScalarState (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1) :
-    EuclideanSpace ℂ (Fin N → Fin d) :=
+    EuclideanSpace ℂ (Fin N → α) :=
   WithLp.toLp 2 fun w ↦ Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w
     (Fin.cast hleft.symm 0) (Fin.cast hright.symm 0)
 
 /-- The coefficients of the actual scalar-endpoint open chain.
 Source: PGVWC07, Theorem 9, lines 1195–1205. -/
 @[simp] theorem obcScalarState_apply (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1) (w : Fin N → Fin d) :
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1) (w : Fin N → α) :
     obcScalarState b A N hleft hright w =
       Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w
         (Fin.cast hleft.symm 0) (Fin.cast hright.symm 0) := rfl
@@ -56,7 +56,7 @@ Source: PGVWC07, Theorem 9, lines 1195–1205. -/
 actual open-chain state. This proves nonvanishing rather than assuming it.
 Source: PGVWC07, canonical form and Theorem 9 proof, lines 1195–1237. -/
 theorem norm_obcScalarState_eq_one (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ)) :
     ‖obcScalarState b A N hleft hright‖ = 1 := by
@@ -66,7 +66,7 @@ theorem norm_obcScalarState_eq_one (b : ℕ → ℕ)
   let r : Fin (b N) := Fin.cast hright.symm 0
   have hrow := obc_rectangularEval_row_isometry b A N hA
   have hd : (default : Fin (b N)) = r := Subsingleton.elim _ _
-  have hentry : ∑ w : Fin N → Fin d,
+  have hentry : ∑ w : Fin N → α,
       ‖Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w l r‖ ^ 2 = 1 := by
     have h := congrArg (fun M : Matrix (Fin (b 0)) (Fin (b 0)) ℂ ↦ (M l l).re) hrow
     simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
@@ -82,16 +82,16 @@ of the represented state. Pair sections are derived from that kernel equation.
 Source: PGVWC07, Theorem 9 proof, equation unique-OBC and scalar endpoints,
 lines 1212–1237. -/
 theorem exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_zero (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤)
-    (ψ : EuclideanSpace ℂ (Fin N → Fin d))
+    (ψ : EuclideanSpace ℂ (Fin N → α))
     (hzero : Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian ψ = 0) :
     ∃ c : ℂ, ψ = c • obcScalarState b A N hleft hright := by
   classical
-  let f : List (Fin d) → ℂ := Function.extend List.ofFn (fun w ↦ ψ w) 0
-  have hf (w : Fin N → Fin d) : f (List.ofFn w) = ψ w :=
+  let f : List α → ℂ := Function.extend List.ofFn (fun w ↦ ψ w) 0
+  have hf (w : Fin N → α) : f (List.ofFn w) = ψ w :=
     List.ofFn_injective.extend_apply (fun w ↦ ψ w) 0 w
   have hpair :=
     pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero b A ψ f hf hzero
@@ -105,7 +105,7 @@ theorem exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_
 actual open-chain state, with no endpoint normalization factor.
 Source: PGVWC07, Theorem 9 proof, scalar boundary at lines 1233–1237. -/
 theorem obcBoundaryState_one_eq_obcScalarState (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1) :
     obcBoundaryState b A N (fun _ _ ↦ 1) = obcScalarState b A N hleft hright := by
   classical
@@ -123,7 +123,7 @@ theorem obcBoundaryState_one_eq_obcScalarState (b : ℕ → ℕ)
 Hamiltonian. No local annihilation equation is supplied as a hypothesis.
 Source: PGVWC07, Theorem 9, lines 1195–1217. -/
 theorem hamiltonian_obcParentInteraction_apply_obcScalarState (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1) :
     Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian
       (obcScalarState b A N hleft hright) = 0 := by
@@ -136,7 +136,7 @@ canonical row-isometry and singleton endpoints are the source's data; no kernel,
 local section, boundary reconstruction or ground-state supplier is assumed.
 Source: PGVWC07, Theorem 9 and proof, lines 1195–1237. -/
 theorem ker_hamiltonian_obcParentInteraction_eq_span (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤) :
@@ -159,7 +159,7 @@ theorem ker_hamiltonian_obcParentInteraction_eq_span (b : ℕ → ℕ)
 Its spanning state is proved normalized from the original canonical equations.
 Source: PGVWC07, Theorem 9 and proof, lines 1195–1237. -/
 theorem finrank_ker_hamiltonian_obcParentInteraction_eq_one (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤) :

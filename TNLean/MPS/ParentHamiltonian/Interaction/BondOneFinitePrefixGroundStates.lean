@@ -33,32 +33,32 @@ open scoped Matrix ComplexOrder
 
 namespace MPSTensor
 
-variable {d L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {L : ℕ}
 
 /-- Normality supplies a nonzero letter; the bond-one product formula
 then proves actual state nonvanishing at every positive length.
 Source: SPWC10, Theorem 5, lines 850--880, product-branch specialization. -/
-theorem mpvState_ne_zero_of_normal_bondOne (B : MPSTensor d 1)
+theorem mpvState_ne_zero_of_normal_bondOne (B : MPTensor α (Fin 1))
     (hB : Kraus.IsNormal B) (M : ℕ) (hM : 0 < M) : mpvState B M ≠ 0 := by
   obtain ⟨σ, hσ⟩ := exists_mpv_ne_zero_of_bondOne B (exists_apply_ne_zero_of_isNormal hB) hM
   intro hzero
   apply hσ
   simpa only [mpvState_apply, PiLp.zero_apply] using
-    congrArg (fun v : MPVSpace (Fin d) M ↦ v σ) hzero
+    congrArg (fun v : MPVSpace α M ↦ v σ) hzero
 
 /-- The actual derived local-kernel inclusion gives nonzero
 zero-momentum ground vectors at every permitted positive length in the
 normal bond-one branch. In particular it covers the entire finite prefix.
 Source: SPWC10, Theorem 5 proof, lines 873--880, product-branch specialization. -/
 theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (B : MPSTensor d 1)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) (B : MPTensor α (Fin 1))
     (hB : Kraus.IsNormal B) (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     (M : ℕ) (hM : 0 < M) (hLM : L ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
-    ∃ ψ : MPVSpace (Fin d) M, ψ ≠ 0 ∧
+    ∃ ψ : MPVSpace α M, ψ ≠ 0 ∧
       Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 ∧
-      ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ := by
+      ∀ (s : Fin M) (σ : Fin M → α), ψ (fun k ↦ σ (k + s)) = ψ σ := by
   have : NeZero M := ⟨by omega⟩
   exact ⟨mpvState B M, mpvState_ne_zero_of_normal_bondOne B hB M hM,
     toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
@@ -70,11 +70,11 @@ product vectors as one uniform bond-one family, including every positive short v
 MPS representation or zero-momentum premise is assumed. Source: SPWC10, Theorem 5,
 lines 850--880, normal bond-one branch. -/
 theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ)
     (hUnique : ∀ M [NeZero M], L ≤ M →
       Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
       (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
-    (B : MPSTensor d 1) (hB : Kraus.IsNormal B)
+    (B : MPTensor α (Fin 1)) (hB : Kraus.IsNormal B)
     (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
         (Matrix.toEuclideanLin h)) :
     ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; mpvState B M ≠ 0 ∧
@@ -94,16 +94,16 @@ positive volume. The normal tensor and local-kernel inclusion are derived
 by the actual prime-length reduction, not assumed as hypotheses.
 Source: SPWC10, Theorem 5 proof, lines 861--880, bond-one input branch. -/
 theorem exists_uniform_bondOne_ground_family_of_prime_length_bound
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) (hh : h.PosSemidef)
     (hUnique : ∀ M [NeZero M], L ≤ M →
       Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
-    {N : ℕ} (A : MPSTensor d 1) (hPrime : N.Prime) (hBound : L + 4 ≤ N)
+    {N : ℕ} (A : MPTensor α (Fin 1)) (hPrime : N.Prime) (hBound : L + 4 ≤ N)
     (hA : mpvState A N ≠ 0)
     (hzero : haveI : NeZero N := ⟨hPrime.ne_zero⟩;
       Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant N h).hamiltonian (mpvState A N) = 0) :
-    ∃ B : MPSTensor d 1, ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩;
+    ∃ B : MPTensor α (Fin 1), ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩;
       mpvState B M ≠ 0 ∧
       LinearMap.ker (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by

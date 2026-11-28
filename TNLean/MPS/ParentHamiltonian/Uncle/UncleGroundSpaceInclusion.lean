@@ -24,7 +24,6 @@ the source's intersection and closure properties and is not asserted here.
 
 open MPTensor
 
-open Kraus (decodeBlock blockTensor)
 
 noncomputable section
 
@@ -34,7 +33,7 @@ namespace MPSTensor
 
 open ManyBody.Interaction (translationInvariant)
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 private theorem trace_uncleBlockMatrix
     (A : Matrix (Fin a) (Fin a) ℂ) (R : Matrix (Fin a) (Fin b) ℂ)
@@ -59,68 +58,68 @@ private theorem trace_mul_uncleBlockMatrix
 first tensor's two-site boundary map. Source: arXiv:1210.6613,
 eq:uncletensor-2site and proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem groundSpaceMap_uncleTensor_left
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (X : Matrix (Fin a) (Fin a) ℂ) :
     groundSpaceMap (uncleTensor A B R L) 1 (uncleBlockMatrix X 0 0 0) =
-      groundSpaceMap (blockTensor A 2) 1 X := by
+      groundSpaceMap (Kraus.block A 2) 1 X := by
   ext σ
   simp only [groundSpaceMap_apply, List.ofFn_succ, List.ofFn_zero,
     Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
   rw [uncleTensor, trace_mul_uncleBlockMatrix]
-  simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ,
+  simp [Kraus.block, Kraus.reindexPhysical, List.ofFn_succ,
     Kraus.evalWord, decodeBlock]
 
 /-- A boundary matrix supported on the second diagonal block recovers the
 second tensor's two-site boundary map. Source: arXiv:1210.6613,
 eq:uncletensor-2site and proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem groundSpaceMap_uncleTensor_right
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (X : Matrix (Fin b) (Fin b) ℂ) :
     groundSpaceMap (uncleTensor A B R L) 1 (uncleBlockMatrix 0 0 0 X) =
-      groundSpaceMap (blockTensor B 2) 1 X := by
+      groundSpaceMap (Kraus.block B 2) 1 X := by
   ext σ
   simp only [groundSpaceMap_apply, List.ofFn_succ, List.ofFn_zero,
     Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
   rw [uncleTensor, trace_mul_uncleBlockMatrix]
-  simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ,
+  simp [Kraus.block, Kraus.reindexPhysical, List.ofFn_succ,
     Kraus.evalWord, decodeBlock]
 
 /-- The first blocked local parent space lies in the uncle boundary space.
 Source: arXiv:1210.6613, proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem groundSpace_blockTensor_le_uncleTensor_left
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
-    groundSpace (blockTensor A 2) 1 ≤ groundSpace (uncleTensor A B R L) 1 := by
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
+    groundSpace (Kraus.block A 2) 1 ≤ groundSpace (uncleTensor A B R L) 1 := by
   rintro _ ⟨X, rfl⟩
   exact ⟨uncleBlockMatrix X 0 0 0, groundSpaceMap_uncleTensor_left A B R L X⟩
 
 /-- The second blocked local parent space lies in the uncle boundary space.
 Source: arXiv:1210.6613, proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem groundSpace_blockTensor_le_uncleTensor_right
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
-    groundSpace (blockTensor B 2) 1 ≤ groundSpace (uncleTensor A B R L) 1 := by
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
+    groundSpace (Kraus.block B 2) 1 ≤ groundSpace (uncleTensor A B R L) 1 := by
   rintro _ ⟨X, rfl⟩
   exact ⟨uncleBlockMatrix 0 0 0 X, groundSpaceMap_uncleTensor_right A B R L X⟩
 
 private theorem uncleInteraction_apply_eq_zero_of_blocked_groundSpace
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    {c : ℕ} (C : MPSTensor d c)
-    (hC : groundSpace (blockTensor C 2) 1 ≤ groundSpace (uncleTensor A B R L) 1)
-    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ ((groundSpace C 2).map (WithLp.linearEquiv 2 ℂ
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    {c : ℕ} (C : MPTensor α (Fin c))
+    (hC : groundSpace (Kraus.block C 2) 1 ≤ groundSpace (uncleTensor A B R L) 1)
+    (v : EuclideanSpace ℂ (Fin 2 → α)) (hv : v ∈ ((groundSpace C 2).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 := by
-  have hv' : v ∈ ((groundSpace (blockTensor C 2) 1).map (WithLp.linearEquiv 2 ℂ
+  have hv' : v ∈ ((groundSpace (Kraus.block C 2) 1).map (WithLp.linearEquiv 2 ℂ
       _).symm.toLinearMap).map
-      (blockedConfigLinearIsometryEquiv d 1 2).toLinearEquiv.toLinearMap := by
+      (blockedConfigLinearIsometryEquiv 1 2).toLinearEquiv.toLinearMap := by
     simpa only [map_groundSpace_blockTensor_map, one_mul] using hv
   obtain ⟨w, hw, rfl⟩ := hv'
   have hwU : w ∈ ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
@@ -131,21 +130,21 @@ private theorem uncleInteraction_apply_eq_zero_of_blocked_groundSpace
       _).symm.toLinearMap)ᗮ.starProjection w = 0 := by
     rwa [Submodule.starProjection_apply_eq_zero_iff, Submodule.orthogonal_orthogonal]
   rw [toEuclideanLin_uncleInteraction_apply]
-  change blockedConfigLinearIsometryEquiv d 1 2
+  change blockedConfigLinearIsometryEquiv 1 2
       (((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)ᗮ.starProjection
-        ((blockedConfigLinearIsometryEquiv d 1 2).symm
-          (blockedConfigLinearIsometryEquiv d 1 2 w))) = 0
+        ((blockedConfigLinearIsometryEquiv 1 2).symm
+          (blockedConfigLinearIsometryEquiv 1 2 w))) = 0
   rw [LinearIsometryEquiv.symm_apply_apply, hkill, map_zero]
 
 /-- The actual two-site uncle interaction annihilates the first local parent
 space, without a perturbation-injectivity premise. Source: arXiv:1210.6613,
 proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem uncleInteraction_apply_eq_zero_left
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ ((groundSpace A 2).map (WithLp.linearEquiv 2 ℂ
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (v : EuclideanSpace ℂ (Fin 2 → α)) (hv : v ∈ ((groundSpace A 2).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 :=
   uncleInteraction_apply_eq_zero_of_blocked_groundSpace A B R L A
@@ -155,35 +154,35 @@ theorem uncleInteraction_apply_eq_zero_left
 space, without a perturbation-injectivity premise. Source: arXiv:1210.6613,
 proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem uncleInteraction_apply_eq_zero_right
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ ((groundSpace B 2).map (WithLp.linearEquiv 2 ℂ
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (v : EuclideanSpace ℂ (Fin 2 → α)) (hv : v ∈ ((groundSpace B 2).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 :=
   uncleInteraction_apply_eq_zero_of_blocked_groundSpace A B R L B
     (groundSpace_blockTensor_le_uncleTensor_right A B R L) v hv
 
 private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    {c : ℕ} (C : MPSTensor d c)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    {c : ℕ} (C : MPTensor α (Fin c))
     (hC : ∀ v ∈ ((groundSpace C 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
         Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0)
     {N : ℕ} (hN : 2 ≤ N)
-    (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace C 2 N) :
+    (ψ : NSiteSpace α N) (hψ : ψ ∈ chainGroundSpace C 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm ψ) = 0 := by
   have : NeZero N := ⟨by omega⟩
   have hNpos : 0 < N := by omega
   rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
-  have hlocal (i : Fin N) (τ : Cfg d N) :
+  have hlocal (i : Fin N) (τ : Fin N → α) :
       Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos i) 2 i τ)
-          ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ)) = 0 := by
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
+          ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm ψ)) = 0 := by
     apply hC
     apply (mem_map_groundSpace_iff C 2 _).mpr
     simpa [LinearMap.withLpMap] using hψ i τ
@@ -195,14 +194,14 @@ private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
 actual uncle Hamiltonian. Source: arXiv:1210.6613, proof of
 thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_left
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
-    (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace A 2 N) :
+    (ψ : NSiteSpace α N) (hψ : ψ ∈ chainGroundSpace A 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 :=
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm ψ) = 0 :=
   hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows A B R L A
     (uncleInteraction_apply_eq_zero_left A B R L) hN ψ hψ
 
@@ -210,14 +209,14 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_left
 actual uncle Hamiltonian. Source: arXiv:1210.6613, proof of
 thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_right
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
-    (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace B 2 N) :
+    (ψ : NSiteSpace α N) (hψ : ψ ∈ chainGroundSpace B 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 :=
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm ψ) = 0 :=
   hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows A B R L B
     (uncleInteraction_apply_eq_zero_right A B R L) hN ψ hψ
 
@@ -226,14 +225,14 @@ Hamiltonian kernel. This is the lower inclusion of arXiv:1210.6613,
 thm:gs-subspace-uncle, lines 1050–1065; no converse or dimension assertion
 is made without the intersection and closure arguments. -/
 theorem span_mpv_le_ker_hamiltonian_uncleInteraction
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Submodule.span ℂ
-      {(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv B)} ≤
+      {(WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv A),
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv B)} ≤
       LinearMap.ker (Matrix.toEuclideanLin
         (translationInvariant N (uncleInteraction A B R L)).hamiltonian) := by
   apply Submodule.span_le.mpr

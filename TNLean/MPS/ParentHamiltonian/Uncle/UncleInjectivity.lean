@@ -31,7 +31,6 @@ also holds for zero-dimensional blocks; no extra hypothesis is imposed.
 -/
 
 open scoped Matrix BigOperators Topology
-open Kraus (decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm)
 
 namespace MPSTensor
 
@@ -64,9 +63,9 @@ contraction with the first uncle leg recovers the full one-site family.
 The algebraic implication needs no separate block-injectivity or positive
 dimension assumption. -/
 theorem isInjective_uncleTensor_of_isInjective_perturbation {d a b : ℕ}
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (fun i ↦ uncleBlockMatrix (A i) (R i) (L i) (B i))) :
     Kraus.IsInjective (uncleTensor A B R L) := by
   classical
@@ -81,7 +80,7 @@ theorem isInjective_uncleTensor_of_isInjective_perturbation {d a b : ℕ}
     apply Matrix.fromBlocks_inj.mp
     exact (Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv).injective hc
   obtain ⟨hA, hR, hL, hB⟩ := hBlocks
-  have hContract (j : Fin d) :
+  have hContract (j : α) :
       (∑ i, c i • uncleTensor A B R L ((decodeBlockEquiv d 2).symm ![i, j])) =
         uncleBlockMatrix (A j) (R j) (L j) (B j) := by
     simp only [uncleTensor, decodeBlock_decodeBlockEquiv_symm, Matrix.cons_val_zero,
@@ -105,9 +104,9 @@ input of the existing two-site uncle interaction limit. Source:
 arXiv:1210.6613, Lemma "lemma:inj-perturbation" and Theorem
 "thm:unclehamiltonian", lines 910–1016. -/
 theorem tendsto_toMatrix'_parentInteraction_twoBlockPerturbation_of_isInjective_perturbation
-    {d a b : ℕ} (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    {d a b : ℕ} (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (fun i ↦ uncleBlockMatrix (A i) (R i) (L i) (B i))) :
     Filter.Tendsto (fun ε : ℂ => Matrix.toEuclideanCLM (𝕜 := ℂ)
       (LinearMap.toMatrix' (parentInteraction (twoBlockPerturbation A P B Q R L ε) 2)))
@@ -120,9 +119,9 @@ limit at each fixed periodic length. Source: arXiv:1210.6613,
 Lemma "lemma:inj-perturbation" and Theorem "thm:unclehamiltonian",
 lines 910–1016. -/
 theorem tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_of_isInjective_perturbation
-    {d a b : ℕ} (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    {d a b : ℕ} (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (fun i ↦ uncleBlockMatrix (A i) (R i) (L i) (B i)))
     {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;

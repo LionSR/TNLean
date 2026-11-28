@@ -32,7 +32,7 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
@@ -40,7 +40,7 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 mixing quantity \(a(N)\). -/
 theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C‖ ≤
@@ -53,7 +53,7 @@ theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
 boundary norm square is at most \(a(N)\lVert B\rVert_\rho^2\). -/
 theorem abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ) (B : Mat) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     |‖fnwBoundaryMapCLM ρ hρ A N B‖ ^ 2 - ‖B‖ ^ 2| ≤
       fnwMixingQuantity ρ hρ A htr N * ‖B‖ ^ 2 := by
@@ -78,7 +78,7 @@ theorem abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le
 No nonnegativity assumption on \(a(N)\) is needed. -/
 theorem one_sub_fnwMixingQuantity_mul_norm_sq_le_fnwBoundaryMapCLM_norm_sq
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ) (B : Mat) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     (1 - fnwMixingQuantity ρ hρ A htr N) * ‖B‖ ^ 2 ≤
       ‖fnwBoundaryMapCLM ρ hρ A N B‖ ^ 2 := by
@@ -91,14 +91,14 @@ theorem one_sub_fnwMixingQuantity_mul_norm_sq_le_fnwBoundaryMapCLM_norm_sq
 /-- The nonzero boundary norm-square ratio whose infimum is the source constant
 \(a_-(N)\). -/
 noncomputable def fnwBoundaryNormRatio
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ)
     (B : {B : Mat // B ≠ 0}) : ℝ := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   exact ‖fnwBoundaryMapCLM ρ hρ A N B.1‖ ^ 2 / ‖B.1‖ ^ 2
 
 /-- The weighted Gram operator \(F_N^*F_N\) on the virtual matrix Hilbert space. -/
 noncomputable def fnwBoundaryGram
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     weighted_matrix_instances ρ hρ in
     Mat →ₗ[ℂ] Mat := by
   weighted_matrix_instances ρ hρ
@@ -108,7 +108,7 @@ noncomputable def fnwBoundaryGram
 /-- The boundary norm-square ratio is exactly the Rayleigh quotient of the
 weighted Gram operator \(F_N^*F_N\). -/
 theorem fnwBoundaryNormRatio_eq_gram_rayleighQuotient
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ)
     (B : Mat) (hB : B ≠ 0) :
     weighted_matrix_norm_instances ρ hρ in
     fnwBoundaryNormRatio ρ hρ A N ⟨B, hB⟩ =
@@ -123,13 +123,13 @@ theorem fnwBoundaryNormRatio_eq_gram_rayleighQuotient
 /-- The lower boundary constant \(a_-(N)\) from FNW 1992, Lemma 5.3. It is the
 infimum of the boundary norm-square ratio over nonzero virtual matrices. -/
 noncomputable def fnwLowerBoundaryConstant [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) : ℝ :=
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) : ℝ :=
   ⨅ B : {B : Mat // B ≠ 0}, fnwBoundaryNormRatio ρ hρ A N B
 
 /-- The source infimum is the infimum of the Rayleigh quotient of the weighted
 Gram operator. -/
 theorem fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     weighted_matrix_norm_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A N =
       ⨅ B : {B : Mat // B ≠ 0},
@@ -142,7 +142,7 @@ theorem fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf [NeZero D]
 
 /-- The weighted Gram operator is symmetric. -/
 theorem fnwBoundaryGram_isSymmetric
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     weighted_matrix_instances ρ hρ in
     (fnwBoundaryGram ρ hρ A N).IsSymmetric := by
   weighted_matrix_instances ρ hρ
@@ -150,7 +150,7 @@ theorem fnwBoundaryGram_isSymmetric
 
 /-- The weighted Gram operator is positive. -/
 theorem fnwBoundaryGram_isPositive
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     weighted_matrix_instances ρ hρ in
     (fnwBoundaryGram ρ hρ A N).IsPositive := by
   weighted_matrix_instances ρ hρ
@@ -160,7 +160,7 @@ theorem fnwBoundaryGram_isPositive
 without ordering the complex spectrum: \(a_-(N)\), coerced to \(ℂ\), belongs to
 the spectrum of the weighted Gram operator. -/
 theorem fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     weighted_matrix_instances ρ hρ in
     (fnwLowerBoundaryConstant ρ hρ A N : ℂ) ∈
       spectrum ℂ (fnwBoundaryGram ρ hρ A N) := by
@@ -170,7 +170,7 @@ theorem fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram [NeZero D]
   exact (fnwBoundaryGram_isSymmetric ρ hρ A N).hasEigenvalue_iInf_of_finiteDimensional
 
 private theorem fnwBoundaryNormRatio_bddBelow
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     BddBelow (Set.range (fnwBoundaryNormRatio ρ hρ A N)) := by
   refine ⟨0, ?_⟩
   rintro _ ⟨B, rfl⟩
@@ -179,7 +179,7 @@ private theorem fnwBoundaryNormRatio_bddBelow
 /-- The lower boundary constant is at most every nonzero boundary norm-square
 ratio. -/
 theorem fnwLowerBoundaryConstant_le_ratio [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ)
     (B : Mat) (hB : B ≠ 0) :
     fnwLowerBoundaryConstant ρ hρ A N ≤
       fnwBoundaryNormRatio ρ hρ A N ⟨B, hB⟩ := by
@@ -190,7 +190,7 @@ theorem fnwLowerBoundaryConstant_le_ratio [NeZero D]
 `fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram`, this is the ordered
 meaning of \(a_-(N)=\inf\operatorname{spec}(F_N^*F_N)\). -/
 theorem fnwLowerBoundaryConstant_le_re_of_mem_spectrum_fnwBoundaryGram [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ)
     (z : ℂ) (hz : z ∈ spectrum ℂ (fnwBoundaryGram ρ hρ A N)) :
     weighted_matrix_norm_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A N ≤ z.re := by
@@ -221,7 +221,7 @@ boundary map, indexed only over the finite-dimensional weighted virtual domain.
 The first clause gives an attaining domain index; the second gives minimality
 among all domain-indexed singular values. -/
 theorem fnwLowerBoundaryConstant_eq_least_sq_singularValue [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     weighted_matrix_instances ρ hρ in
     let T := (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
     (∃ i : Fin (Module.finrank ℂ Mat),
@@ -262,7 +262,7 @@ theorem fnwLowerBoundaryConstant_eq_least_sq_singularValue [NeZero D]
 /-- Block injectivity makes the FNW lower boundary constant strictly positive.
 This is the positivity input used in FNW 1992, Lemma 6.2. -/
 theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ)
     (hInj : Kraus.IsNBlkInjective A N) :
     0 < fnwLowerBoundaryConstant ρ hρ A N := by
   weighted_matrix_instances ρ hρ
@@ -270,8 +270,8 @@ theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective [NeZero D]
   have hT : Function.Injective T := by
     change Function.Injective (fnwBoundaryMapCLM ρ hρ A N)
     rw [fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp]
-    exact (physicalSiteReverseES d N).injective.comp
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.injective.comp
+    exact (physicalSiteReverseES N).injective.comp
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.injective.comp
         (groundSpaceMap_injective_of_isNBlkInjective hInj))
   have hSingular : ∀ i < Module.finrank ℂ Mat, 0 < T.singularValues i :=
     T.injective_iff_forall_lt_finrank_singularValues_pos.mp hT
@@ -284,7 +284,7 @@ theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective [NeZero D]
 /-- The source constant gives its universal quadratic lower bound, including at
 the zero matrix. -/
 theorem fnwLowerBoundaryConstant_mul_norm_sq_le [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B : Mat) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) (B : Mat) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     fnwLowerBoundaryConstant ρ hρ A N * ‖B‖ ^ 2 ≤
       ‖fnwBoundaryMapCLM ρ hρ A N B‖ ^ 2 := by
@@ -297,7 +297,7 @@ theorem fnwLowerBoundaryConstant_mul_norm_sq_le [NeZero D]
 /-- A real number is at most the lower boundary constant exactly when it is a
 universal quadratic lower bound for the boundary map. -/
 theorem le_fnwLowerBoundaryConstant_iff [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (c : ℝ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) (c : ℝ) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     c ≤ fnwLowerBoundaryConstant ρ hρ A N ↔
       ∀ B : Mat, c * ‖B‖ ^ 2 ≤ ‖fnwBoundaryMapCLM ρ hρ A N B‖ ^ 2 := by
@@ -316,7 +316,7 @@ theorem le_fnwLowerBoundaryConstant_iff [NeZero D]
 \(1-a(N)\le a_-(N)\). -/
 theorem one_sub_fnwMixingQuantity_le_fnwLowerBoundaryConstant [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ) :
+    (A : MPTensor α (Fin D)) (N : ℕ) :
     1 - fnwMixingQuantity ρ hρ A htr N ≤
       fnwLowerBoundaryConstant ρ hρ A N := by
   rw [le_fnwLowerBoundaryConstant_iff]
@@ -327,7 +327,7 @@ theorem one_sub_fnwMixingQuantity_le_fnwLowerBoundaryConstant [NeZero D]
 quantity is strictly below one. -/
 theorem fnwLowerBoundaryConstant_pos [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ)
+    (A : MPTensor α (Fin D)) (N : ℕ)
     (ha : fnwMixingQuantity ρ hρ A htr N < 1) :
     0 < fnwLowerBoundaryConstant ρ hρ A N :=
   lt_of_lt_of_le (sub_pos.mpr ha)
@@ -336,14 +336,14 @@ theorem fnwLowerBoundaryConstant_pos [NeZero D]
 /-- Stationarity of \(ρ\) gives the weighted right-multiplication identity
 \(\sum_\mu\lVert BA^\mu\rVert_ρ^2=\lVert B\rVert_ρ^2\). -/
 theorem sum_rhoWeighted_norm_sq_mul_eq
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) (B : Mat) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    ∑ μ : Fin d, ‖B * A μ‖ ^ 2 = ‖B‖ ^ 2 := by
+    ∑ μ : α, ‖B * A μ‖ ^ 2 = ‖B‖ ^ 2 := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   simp_rw [Matrix.rhoWeighted_norm_sq ρ hρ]
   have htrace :
-      ∑ μ : Fin d, Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ)) =
+      ∑ μ : α, Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ)) =
         Matrix.trace (Kraus.transferMap A ρ * Bᴴ * B) := by
     rw [Kraus.transferMap_apply, Matrix.sum_mul, Finset.sum_mul,
       Matrix.trace_sum]
@@ -353,10 +353,10 @@ theorem sum_rhoWeighted_norm_sq_mul_eq
     simpa only [Matrix.mul_assoc] using
       Matrix.trace_mul_comm (ρ * (A μ)ᴴ * Bᴴ * B) (A μ)
   calc
-    ∑ μ : Fin d, (Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ))).re =
-        (∑ μ : Fin d, Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ))).re :=
+    ∑ μ : α, (Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ))).re =
+        (∑ μ : α, Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ))).re :=
       (map_sum Complex.reCLM
-        (fun μ : Fin d ↦ Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ)))
+        (fun μ : α ↦ Matrix.trace (ρ * (B * A μ)ᴴ * (B * A μ)))
         Finset.univ).symm
     _ = (Matrix.trace (Kraus.transferMap A ρ * Bᴴ * B)).re :=
       congrArg Complex.re htrace
@@ -365,7 +365,7 @@ theorem sum_rhoWeighted_norm_sq_mul_eq
 /-- Stationarity and the exact boundary recursion make the lower boundary
 constant nondecreasing in one step. -/
 theorem fnwLowerBoundaryConstant_le_succ [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) (N : ℕ) :
     fnwLowerBoundaryConstant ρ hρ A N ≤
       fnwLowerBoundaryConstant ρ hρ A (N + 1) := by
@@ -374,9 +374,9 @@ theorem fnwLowerBoundaryConstant_le_succ [NeZero D]
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   calc
     fnwLowerBoundaryConstant ρ hρ A N * ‖B‖ ^ 2 =
-        ∑ μ : Fin d, fnwLowerBoundaryConstant ρ hρ A N * ‖B * A μ‖ ^ 2 := by
+        ∑ μ : α, fnwLowerBoundaryConstant ρ hρ A N * ‖B * A μ‖ ^ 2 := by
       rw [← Finset.mul_sum, sum_rhoWeighted_norm_sq_mul_eq ρ hρ A hρfix B]
-    _ ≤ ∑ μ : Fin d, ‖fnwBoundaryMapCLM ρ hρ A N (B * A μ)‖ ^ 2 :=
+    _ ≤ ∑ μ : α, ‖fnwBoundaryMapCLM ρ hρ A N (B * A μ)‖ ^ 2 :=
       Finset.sum_le_sum fun μ _ ↦
         fnwLowerBoundaryConstant_mul_norm_sq_le ρ hρ A N (B * A μ)
     _ = ‖fnwBoundaryMapCLM ρ hρ A (N + 1) B‖ ^ 2 :=
@@ -384,7 +384,7 @@ theorem fnwLowerBoundaryConstant_le_succ [NeZero D]
 
 /-- The lower boundary constants are nondecreasing with the boundary length. -/
 theorem fnwLowerBoundaryConstant_mono [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) :
     Monotone (fnwLowerBoundaryConstant ρ hρ A) := by
   intro N M hNM
@@ -396,7 +396,7 @@ theorem fnwLowerBoundaryConstant_mono [NeZero D]
 /-- Block injectivity at an interaction length gives positivity at every longer
 boundary length, as used in FNW 1992, Lemma 6.2. -/
 theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hLm : L ≤ m) :
     0 < fnwLowerBoundaryConstant ρ hρ A m :=
@@ -405,7 +405,7 @@ theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le [NeZero D]
 
 /-- Primitive-MPS specialization of lower-boundary monotonicity. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwLowerBoundaryConstant_mono [NeZero D]
-    {ρ : Mat} {A : MPSTensor d D} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    {ρ : Mat} {A : MPTensor α (Fin D)} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     Monotone (fnwLowerBoundaryConstant ρ hρ A) :=
   MPSTensor.fnwLowerBoundaryConstant_mono ρ hρ A hP.fixedPoint_is_fixed

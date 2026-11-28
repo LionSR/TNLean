@@ -63,7 +63,7 @@ window lengths, together with the identification of the kernel with the canonica
 space. Source: arXiv:1010.3732, Appendix A, finite-window gap continuity. -/
 theorem eventually_hamiltonian_parentChainInteraction_gap
     {X : Type*} [TopologicalSpace X] {d D R N : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hR : ∀ x, Kraus.IsNBlkInjective (A x) R)
     (hN : ∀ x, Kraus.IsNBlkInjective (A x) N) {x₀ : X}
     {δ δ' : ℝ} (hδ' : δ' < δ)
@@ -103,7 +103,7 @@ Source: arXiv:1010.3732, Appendix A; the finite-size estimate is the
 nearest-neighbor case of Knabe's inequality. -/
 theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap
     {X : Type*} [TopologicalSpace X] {d D m : ℕ} [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hInj : ∀ x, Kraus.IsInjective (A x)) (hm : 2 ≤ m) {x₀ : X}
     {γ : ℝ} (hnum : 1 < (m : ℝ) * γ)
     (hgap : ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -163,7 +163,7 @@ parent interaction on the long rings is at least the gap. Source: arXiv:1010.373
 Appendix A. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_strict_openWindows
     {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hInj : ∀ x, Kraus.IsInjective (A x)) {S : Set X} (hS : IsCompact S)
     (hWindows : ∀ x ∈ S, ∃ m : ℕ, 2 ≤ m ∧ ∃ γ : ℝ,
       1 < (m : ℝ) * γ ∧
@@ -191,7 +191,7 @@ sufficiently large rings. No finite-window estimate is
 assumed: it follows from injectivity. Source: arXiv:1010.3732, Appendix A. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective
     {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hInj : ∀ x, Kraus.IsInjective (A x)) {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ x ∈ S, ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -206,7 +206,7 @@ gap valid on every ring of at least two sites: the Hamiltonian of the two-site p
 interaction is gapped above its zero ground energy. Source: arXiv:1010.3732, Appendix A. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths
     {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hInj : ∀ x, Kraus.IsInjective (A x)) {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
       ManyBody.IsGapped (parentRingInteraction (A x) 2 N).hamiltonian 0 δ := by

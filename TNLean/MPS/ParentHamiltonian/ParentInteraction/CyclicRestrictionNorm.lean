@@ -23,28 +23,28 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- Split a configuration into a cyclic window of length L and its ordered
 complement, starting at the supplied physical site. -/
 def cyclicWindowCfgEquiv {N L : ℕ} (hN : L ≤ N) (i : Fin N) :
-    Cfg d L × Cfg d (N - L) ≃ Cfg d N :=
-  (Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) (Fin d)).symm.trans
-    (Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d) (cyclicWindowIndexEquiv L N hN i))
+    (Fin L → α) × (Fin (N - L) → α) ≃ (Fin N → α) :=
+  (Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) α).symm.trans
+    (Equiv.piCongrLeft (fun _ : Fin N ↦ α) (cyclicWindowIndexEquiv L N hN i))
 
 /-- The window coordinates occupy their prescribed cyclic sites. -/
 @[simp] theorem cyclicWindowCfgEquiv_apply_window {N L : ℕ} (hN : L ≤ N)
-    (i : Fin N) (σ : Cfg d L) (τ : Cfg d (N - L)) (r : Fin L) :
+    (i : Fin N) (σ : (Fin L → α)) (τ : (Fin (N - L) → α)) (r : Fin L) :
     cyclicWindowCfgEquiv hN i (σ, τ) (cyclicForwardSite i r.val) = σ r := by
-  change Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d) (cyclicWindowIndexEquiv L N hN i)
-    ((Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) (Fin d)).symm (σ, τ))
+  change Equiv.piCongrLeft (fun _ : Fin N ↦ α) (cyclicWindowIndexEquiv L N hN i)
+    ((Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) α).symm (σ, τ))
     (cyclicWindowIndexEquiv L N hN i (Sum.inl r)) = σ r
   rw [Equiv.piCongrLeft_apply_apply]
   rfl
 
 /-- Replacing the window keeps its ordered complement and discards the old window. -/
-theorem cyclicCfg_cyclicWindowCfgEquiv {N L : ℕ} {η : Cfg d L} (hN : L ≤ N)
-    (i : Fin N) (σ : Cfg d L) (τ : Cfg d (N - L)) :
+theorem cyclicCfg_cyclicWindowCfgEquiv {N L : ℕ} {η : (Fin L → α)} (hN : L ≤ N)
+    (i : Fin N) (σ : (Fin L → α)) (τ : (Fin (N - L) → α)) :
     cyclicCfg (Fin.pos i) L i σ (cyclicWindowCfgEquiv hN i (η, τ)) =
       cyclicWindowCfgEquiv hN i (σ, τ) := by
   funext k
@@ -71,13 +71,13 @@ theorem cyclicCfg_cyclicWindowCfgEquiv {N L : ℕ} {η : Cfg d L} (hN : L ≤ N)
         simpa [cyclicForwardSite] using
           offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hN)]
       exact r.isLt
-    · change Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
+    · change Equiv.piCongrLeft (fun _ : Fin N ↦ α)
           (cyclicWindowIndexEquiv L N hN i)
-          ((Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) (Fin d)).symm
+          ((Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) α).symm
             (η, τ)) k =
-        Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
+        Equiv.piCongrLeft (fun _ : Fin N ↦ α)
           (cyclicWindowIndexEquiv L N hN i)
-          ((Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) (Fin d)).symm
+          ((Equiv.sumArrowEquivProdArrow (Fin L) (Fin (N - L)) α).symm
             (σ, τ)) k
       rw [← hkx, Equiv.piCongrLeft_apply_apply, Equiv.piCongrLeft_apply_apply]
       rfl
@@ -87,30 +87,30 @@ theorem cyclicCfg_cyclicWindowCfgEquiv {N L : ℕ} {η : Cfg d L} (hN : L ≤ N)
 times. This identity includes zero physical dimension and empty windows;
 the supplied cyclic site already forces the full chain to be nonempty. -/
 theorem sum_norm_sq_withLpMap_cyclicRestrictₗ {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
-    (∑ τ : Cfg d N, ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2) =
+    (v : EuclideanSpace ℂ (Fin N → α)) :
+    (∑ τ : (Fin N → α), ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^ 2) =
       (d : ℝ) ^ L * ‖v‖ ^ 2 := by
   classical
-  let e := cyclicWindowCfgEquiv (d := d) hLN i
-  have hv : (∑ τ : Cfg d (N - L), ∑ σ : Cfg d L, ‖v (e (σ, τ))‖ ^ 2) =
+  let e := cyclicWindowCfgEquiv hLN i
+  have hv : (∑ τ : (Fin (N - L) → α), ∑ σ : (Fin L → α), ‖v (e (σ, τ))‖ ^ 2) =
       ‖v‖ ^ 2 := by
     rw [Finset.sum_comm]
     simpa only [Fintype.sum_prod_type, PiLp.norm_sq_eq_of_L2] using
       e.sum_comp (fun ξ ↦ ‖v ξ‖ ^ 2)
   calc
-    _ = ∑ z : Cfg d L × Cfg d (N - L),
+    _ = ∑ z : (Fin L → α) × (Fin (N - L) → α),
         ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i (e z)) v‖ ^ 2 := by
       exact (e.sum_comp (fun τ ↦ ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^
           2)).symm
-    _ = ∑ η : Cfg d L, ∑ τ : Cfg d (N - L),
-        ∑ σ : Cfg d L, ‖v (e (σ, τ))‖ ^ 2 := by
+    _ = ∑ η : (Fin L → α), ∑ τ : (Fin (N - L) → α),
+        ∑ σ : (Fin L → α), ‖v (e (σ, τ))‖ ^ 2 := by
       simp only [Fintype.sum_prod_type, PiLp.norm_sq_eq_of_L2]
       refine Finset.sum_congr₂ fun η _ τ _ ↦ ?_
       apply Finset.sum_congr rfl
       intro σ _
       change ‖v (cyclicCfg (Fin.pos i) L i σ (e (η, τ)))‖ ^ 2 = _
       rw [cyclicCfg_cyclicWindowCfgEquiv]
-    _ = (Fintype.card (Cfg d L) : ℝ) * ‖v‖ ^ 2 := by
+    _ = (Fintype.card (Fin L → α) : ℝ) * ‖v‖ ^ 2 := by
       rw [hv]
       simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
     _ = _ := by simp only [Fintype.card_fun, Fintype.card_fin, Nat.cast_pow]
@@ -120,9 +120,9 @@ actual full-chain norm. This is the normalization in the periodic parent
 and uncle Hamiltonians, rather than an additional state estimate. -/
 theorem inv_pow_mul_sum_norm_sq_withLpMap_cyclicRestrictₗ {N L : ℕ}
     (hd : d ≠ 0) (hLN : L ≤ N) (i : Fin N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
-    (((d ^ L : ℕ) : ℝ)⁻¹) *
-        (∑ τ : Cfg d N, ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^
+    (v : EuclideanSpace ℂ (Fin N → α)) :
+    (((Fintype.card α ^ L : ℕ) : ℝ)⁻¹) *
+        (∑ τ : (Fin N → α), ‖LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v‖ ^
             2) = ‖v‖ ^ 2 := by
   rw [sum_norm_sq_withLpMap_cyclicRestrictₗ hLN i v, Nat.cast_pow, ← mul_assoc,
     inv_mul_cancel₀ (pow_ne_zero L (Nat.cast_ne_zero.mpr hd)), one_mul]

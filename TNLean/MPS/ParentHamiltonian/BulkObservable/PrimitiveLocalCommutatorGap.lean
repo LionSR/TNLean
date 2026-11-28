@@ -61,31 +61,31 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The squared norm of an interior excitation converges to the expectation
 of the squared observable, for every varying unit boundary ground vector.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundState_norm_sq_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
-    (ψ : (n : ι) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
+    (ψ : (n : ι) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
     (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap))
     (hunit : ∀ᶠ n in f, ‖ψ n‖ = 1) :
     Tendsto (fun n =>
-      ‖((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+      ‖((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
         (bulkObservable X (ℓ n) (r n))) (ψ n)‖ ^ 2) f
       (nhds (observableInsertionExpectation A ρ (Xᴴ * X)).re) := by
   have heq (n : ι) :
-      Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+      Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
         (bulkObservable (Xᴴ * X) (ℓ n) (r n)) =
-      (Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+      (Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
         (bulkObservable X (ℓ n) (r n))).adjoint *
-      Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+      Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
         (bulkObservable X (ℓ n) (r n)) := by
     rw [bulkObservable_mul, bulkObservable_conjTranspose, map_mul,
       ← Matrix.star_eq_conjTranspose, map_star, ContinuousLinearMap.star_eq_adjoint]
@@ -101,14 +101,14 @@ primitive sector. Both the excitation norm limit and the vanishing full
 ground-space projection are derived from the tensor, rather than assumed.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.commutator_gap_of_bulkObservable_energy_limit
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     {ℓ r : ℕ → ℕ} (hℓ : Tendsto ℓ atTop atTop) (hr : Tendsto r atTop atTop)
-    (H : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)) →ₗ[ℂ]
-      EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
-    (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
+    (H : (n : ℕ) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α) →ₗ[ℂ]
+      EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
+    (ψ : (n : ℕ) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
     {γ e : ℝ} (hγ : 0 ≤ γ)
     (hPos : ∀ᶠ n in atTop, (H n).IsPositive)
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
@@ -121,14 +121,14 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.commutator_gap_of_bulkObserva
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1)
     (hEnergy :
       let B (n : ℕ) := ((Matrix.toEuclideanCLM
-        (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+        (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))).toLinearMap
       Tendsto (fun n =>
         (⟪((B n).adjoint.comp ((H n).comp (B n) - (B n).comp (H n))) (ψ n),
           ψ n⟫_ℂ).re) atTop (nhds e)) :
     γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤ e := by
   let B (n : ℕ) := ((Matrix.toEuclideanCLM
-    (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+    (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
       (bulkObservable X (ℓ n) (r n))).toLinearMap
   have hGround' : ∀ᶠ n in atTop, ψ n ∈ LinearMap.ker (H n) := by
     filter_upwards [hKernel, hGround] with n hk hg
@@ -157,19 +157,19 @@ open ManyBody.Interaction (chainTranslates)
 
 namespace MPSTensor
 
-variable {d D R k : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D R k : ℕ}
 
 private noncomputable def reindexChainVector {N M : ℕ} (h : N = M)
-    (v : EuclideanSpace ℂ (Cfg d N)) : EuclideanSpace ℂ (Cfg d M) :=
+    (v : EuclideanSpace ℂ (Fin N → α)) : EuclideanSpace ℂ (Fin M → α) :=
   h ▸ v
 
 private theorem reindexChainVector_norm {N M : ℕ} (h : N = M)
-    (v : EuclideanSpace ℂ (Cfg d N)) : ‖reindexChainVector h v‖ = ‖v‖ := by
+    (v : EuclideanSpace ℂ (Fin N → α)) : ‖reindexChainVector h v‖ = ‖v‖ := by
   subst M
   rfl
 
 private theorem reindexChainVector_mem {N M : ℕ} (h : N = M)
-    (A : MPSTensor d D) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (A : MPTensor α (Fin D)) (v : EuclideanSpace ℂ (Fin N → α)) :
     reindexChainVector h v ∈ ((groundSpace A M).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) ↔ v ∈ ((groundSpace A N).map
             (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
@@ -177,14 +177,14 @@ private theorem reindexChainVector_mem {N M : ℕ} (h : N = M)
   rfl
 
 private theorem reindexChainVector_inner_window {N M : ℕ} (h : N = M)
-    (v : EuclideanSpace ℂ (Cfg d N)) (a : ℕ) (ha : a + k ≤ N)
-    (Y : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (v : EuclideanSpace ℂ (Fin N → α)) (a : ℕ) (ha : a + k ≤ N)
+    (Y : Matrix (Fin k → α) (Fin k → α) ℂ) :
     inner ℂ (reindexChainVector h v)
-      ((Matrix.toEuclideanCLM (n := Cfg d M) (𝕜 := ℂ))
-        (placeAlong (X := fun _ ↦ Fin d) (chainWindow a (h ▸ ha : a + k ≤ M)) Y)
+      ((Matrix.toEuclideanCLM (n := (Fin M → α)) (𝕜 := ℂ))
+        (placeAlong (X := fun _ ↦ α) (chainWindow a (h ▸ ha : a + k ≤ M)) Y)
           (reindexChainVector h v)) =
-      inner ℂ v ((Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ))
-        (placeAlong (X := fun _ ↦ Fin d) (chainWindow a ha) Y) v) := by
+      inner ℂ v ((Matrix.toEuclideanCLM (n := (Fin N → α)) (𝕜 := ℂ))
+        (placeAlong (X := fun _ ↦ α) (chainWindow a ha) Y) v) := by
   subst M
   rfl
 
@@ -192,19 +192,19 @@ private theorem reindexChainVector_inner_window {N M : ℕ} (h : N = M)
 fixed local patch. No energy-limit assumption is needed.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_expectation_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hR : 0 < R)
     (N : ℕ → ℕ) (hN : ∀ n, N n = (n + ((R - 1 + k) + (R - 1))) + n)
-    (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d (N n)))
+    (ψ : (n : ℕ) → EuclideanSpace ℂ (Fin (N n) → α))
     (hGround : ∀ᶠ n in atTop, ψ n ∈ ((groundSpace A (N n)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     Tendsto (fun n =>
-      let B : Matrix (Cfg d (N n)) (Cfg d (N n)) ℂ := placeAlong (X := fun _ ↦ Fin d)
+      let B : Matrix (Fin (N n) → α) (Fin (N n) → α) ℂ := placeAlong (X := fun _ ↦ α)
         (chainWindow (n + (R - 1)) (by rw [hN n]; omega)) X
-      (inner ℂ (((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+      (inner ℂ (((Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
         (Bᴴ * ((chainTranslates R (N n) h).hamiltonian * B -
           B * (chainTranslates R (N n) h).hamiltonian)))
           (ψ n)) (ψ n)).re) atTop
@@ -230,14 +230,14 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
   rw [placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator h X hR hwin,
     bulkObservable_eq_placeAlong_chainWindow]
   calc
-    _ = (inner ℂ (ψ n) ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-        (placeAlong (X := fun _ ↦ Fin d) (chainWindow n hwin) (localCommutatorObservable h X))
+    _ = (inner ℂ (ψ n) ((Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
+        (placeAlong (X := fun _ ↦ α) (chainWindow n hwin) (localCommutatorObservable h X))
           (ψ n))).re :=
       congrArg Complex.re (reindexChainVector_inner_window (hN n) (ψ n) n hwin _)
     _ = _ := by
       simpa only [← RCLike.re_eq_complex_re] using inner_re_symm (ψ n)
-        ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-          (placeAlong (X := fun _ ↦ Fin d) (chainWindow n hwin) (localCommutatorObservable h X))
+        ((Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
+          (placeAlong (X := fun _ ↦ α) (chainWindow n hwin) (localCommutatorObservable h X))
             (ψ n))
 
 /-- Expanding primitive MPS spaces have normalized boundary vectors without
@@ -245,10 +245,10 @@ assuming finite-volume uniqueness. At short lengths the chosen vectors may
 vanish, but their norms are eventually one. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, the finite-volume boundary approximation. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_eventually_unit_map_groundSpace
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     {ι : Type*} {f : Filter ι} (N : ι → ℕ) (hN : Tendsto N f atTop) :
-    ∃ ψ : (n : ι) → EuclideanSpace ℂ (Cfg d (N n)),
+    ∃ ψ : (n : ι) → EuclideanSpace ℂ (Fin (N n) → α),
       (∀ n, ψ n ∈ ((groundSpace A (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧ (∀ᶠ n
           in f, ‖ψ n‖ = 1) := by
   let u := (EuclideanSpace.basisFun (Fin D × Fin D) ℂ) (0, 0)
@@ -275,9 +275,9 @@ from its eventual ground-space identity and uniform gap above the kernel. The co
 energy limit is derived from locality and primitive transfer convergence.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_gap
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
@@ -297,13 +297,13 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
       (observableInsertionExpectation A ρ (localCommutatorObservable
-        ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
+        ((Matrix.toEuclideanCLM (n := (Fin R → α)) (𝕜 := ℂ)).symm
           ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap)ᗮ.starProjection) X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let h := LinearMap.toMatrix' (parentInteraction A R)
   have hEnergy :
-      let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+      let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
         (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
       Tendsto (fun n =>
         (inner ℂ (((B n).adjoint.comp
@@ -314,7 +314,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
     apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
       N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
     filter_upwards [Filter.eventually_ge_atTop 1] with n hn
-    have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
+    have hH : Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ)
         ((chainTranslates R (N n) h).hamiltonian) =
             (Matrix.toEuclideanLin
                 (parentChainInteraction A R (N n)).hamiltonian).toContinuousLinearMap :=
@@ -342,13 +342,13 @@ The finite-volume kernel, gap, and unit boundary approximants are derived
 internally. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and
 Section 6; arXiv:0909.5347, the quantum Wielandt injectivity bound. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_wielandt_range
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (hR : D ^ 4 + 1 ≤ R) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ),
+    ∃ γ : ℝ, 0 < γ ∧ ∀ {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ),
       0 < k → observableInsertionExpectation A ρ X = 0 →
         γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
           (observableInsertionExpectation A ρ (localCommutatorObservable
-            ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
+            ((Matrix.toEuclideanCLM (n := (Fin R → α)) (𝕜 := ℂ)).symm
               ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
                   _).symm.toLinearMap)ᗮ.starProjection) X)).re := by
   have hNormal := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ

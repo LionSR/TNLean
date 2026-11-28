@@ -37,18 +37,18 @@ open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
-variable {d D E : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E : ℕ}
 
 /-- Left-canonical normalization passes through an isometric intertwiner.
 This is the trace-preserving compression identity used in DCCSP17,
 arXiv:1708.00029, Section 2.1, equation eq:unital. -/
 theorem _root_.MPTensor.IsLeftCanonical.of_isometry_intertwine
-    {A : MPSTensor d D} (hA : IsLeftCanonical A)
-    (B : MPSTensor d E) (V : Matrix (Fin D) (Fin E) ℂ)
+    {A : MPTensor α (Fin D)} (hA : IsLeftCanonical A)
+    (B : MPTensor α (Fin E)) (V : Matrix (Fin D) (Fin E) ℂ)
     (hV : Vᴴ * V = 1) (hInt : ∀ i, A i * V = V * B i) :
     IsLeftCanonical B := by
-  change (∑ i : Fin d, (B i)ᴴ * B i) = 1
-  have hGram (i : Fin d) : (B i)ᴴ * B i = Vᴴ * ((A i)ᴴ * A i) * V := by
+  change (∑ i : α, (B i)ᴴ * B i) = 1
+  have hGram (i : α) : (B i)ᴴ * B i = Vᴴ * ((A i)ᴴ * A i) * V := by
     have h := congrArg (fun T => Tᴴ * T) (hInt i)
     simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc,
       ← Matrix.mul_assoc Vᴴ V (B i), hV, Matrix.one_mul] at h
@@ -64,11 +64,11 @@ Nachtergaele, arXiv:cond-mat/9410110, Section 3, lines 1394--1483, and the finit
 support spaces at lines 1724--1738; it does not construct generators from a
 GVBS boundary limit. -/
 theorem exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint
-    [NeZero D] (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (hFix : Kraus.transferMap A ρ = ρ) :
     ∃ r : ℕ, 0 < r ∧ ∃ (dim : Fin r → ℕ), (∀ j, 0 < dim j) ∧
-      ∃ (B : ∀ j, MPSTensor d (dim j))
+      ∃ (B : ∀ j, MPTensor α (Fin (dim j)))
         (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ) (period : Fin r → ℕ),
         (∀ j, IsPeriodic (period j) (B j)) ∧
         (∀ j, (V j)ᴴ * V j = 1) ∧ (∑ j, V j * (V j)ᴴ) = 1 ∧

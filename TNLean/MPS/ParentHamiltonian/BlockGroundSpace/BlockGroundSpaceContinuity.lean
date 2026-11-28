@@ -24,19 +24,19 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- The joint boundary map on diagonal virtual matrix blocks,
 \(\Gamma_L((X_j)_j)=\sum_j\Gamma_L^{A_j}(X_j)\), realized between Euclidean spaces.
 Source: PGVWC07, Theorem 12, proof lines 1430--1434. -/
 noncomputable def blockGroundSpaceMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     EuclideanSpace ℂ ((j : Fin r) × (Fin (dim j) × Fin (dim j))) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d L) :=
+      EuclideanSpace ℂ (Fin L → α) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.toLinearMap.comp
       (show EuclideanSpace ℂ ((j : Fin r) × (Fin (dim j) × Fin (dim j))) →ₗ[ℂ]
-        NSiteSpace (Fin d) L from
+        NSiteSpace α L from
       { toFun := fun v => ∑ j, groundSpaceMap (A j) L
           (Matrix.of fun a b => v ⟨j, b, a⟩)
         map_add' := by
@@ -55,9 +55,9 @@ noncomputable def blockGroundSpaceMapES
 
 @[simp]
 theorem blockGroundSpaceMapES_apply
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ)
     (v : EuclideanSpace ℂ ((j : Fin r) × (Fin (dim j) × Fin (dim j))))
-    (σ : Cfg d L) :
+    (σ : (Fin L → α)) :
     blockGroundSpaceMapES A L v σ =
       ∑ j, (groundSpaceMap (A j) L (Matrix.of fun a b => v ⟨j, b, a⟩)) σ := by
   simp [blockGroundSpaceMapES, Finset.sum_apply]
@@ -66,11 +66,11 @@ theorem blockGroundSpaceMapES_apply
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem continuous_blockGroundSpaceMapES_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ) :
     Continuous fun x => blockGroundSpaceMapES (A x) L := by
   apply continuous_clm_apply.2
-  refine fun v => (EuclideanSpace.equiv (Cfg d L) ℂ).symm.continuous.comp ?_
+  refine fun v => (EuclideanSpace.equiv (Fin L → α) ℂ).symm.continuous.comp ?_
   change Continuous fun x => ∑ j,
     groundSpaceMap (A x j) L (Matrix.of fun a b => v ⟨j, b, a⟩)
   apply continuous_finsetSum _ fun j _ => ?_
@@ -80,11 +80,11 @@ theorem continuous_blockGroundSpaceMapES_family
 /-- Simultaneous spanning by length-\(L\) words makes the diagonal-block
 boundary map injective. Source: PGVWC07, Theorem 12, proof lines 1430--1434. -/
 theorem blockGroundSpaceMapES_injective_of_wordTupleSpanTop
-    (A : (j : Fin r) → MPSTensor d (dim j)) {L : ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {L : ℕ}
     (hSpan : WordTupleSpanTop A L) :
     Function.Injective (blockGroundSpaceMapES A L) := by
   refine (injective_iff_map_eq_zero (blockGroundSpaceMapES A L)).2 fun v hv => ?_
-  have htrace (σ : Cfg d L) :
+  have htrace (σ : (Fin L → α)) :
       (∑ j, Matrix.trace (Matrix.of (fun a b => v ⟨j, b, a⟩) *
         Kraus.evalWord (A j) (List.ofFn σ))) = 0 := by
     rw [Finset.sum_congr rfl (fun j _ => Matrix.trace_mul_comm
@@ -99,12 +99,12 @@ theorem blockGroundSpaceMapES_injective_of_wordTupleSpanTop
 /-- The range of the joint boundary map is the sum of the block local spaces.
 Source: PGVWC07, Theorem 12, proof lines 1430--1434. -/
 theorem range_blockGroundSpaceMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     (blockGroundSpaceMapES A L).range = ⨆ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) := by
   apply le_antisymm
   · rintro ψ ⟨v, rfl⟩
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
       (∑ j, groundSpaceMap (A j) L (Matrix.of fun a b => v ⟨j, b, a⟩)) ∈ _
     rw [map_sum]
     exact Submodule.sum_mem _ fun j _ => Submodule.mem_iSup_of_mem j
@@ -131,7 +131,7 @@ continuous when the simultaneous word span is full at that length.
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem continuous_iSup_map_groundSpace_starProjection_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hSpan : ∀ x, WordTupleSpanTop (A x) L) :
     Continuous fun x => (⨆ j, ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ
@@ -148,11 +148,11 @@ block sum. Only the block tensors need to vary continuously.
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     {X : Type*} [TopologicalSpace X]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     (L : ℕ) (hSpan : ∀ x, WordTupleSpanTop (A x) L) :
     Continuous fun x =>
-      (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2
+      (((groundSpace (toTensorFromBlocks (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2
           ℂ _).symm.toLinearMap)).starProjection := by
   have hEq (x : X) := map_groundSpace_toTensorFromBlocks_eq_iSup (μ x) (A x) (hμ x) L
   simpa only [hEq] using
@@ -163,7 +163,7 @@ between two block local spaces depends continuously on the tensor family.
 Source: arXiv:1010.3732, Appendix A, lines 2510--2533. -/
 theorem continuous_norm_map_groundSpace_overlap_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hInj : ∀ x j, Kraus.IsNBlkInjective (A x j) L) (i j : Fin r) :
     Continuous fun x => ‖((groundSpace (A x i) L).map (WithLp.linearEquiv 2 ℂ

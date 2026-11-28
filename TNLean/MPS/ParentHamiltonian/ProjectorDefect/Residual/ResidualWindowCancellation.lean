@@ -22,20 +22,19 @@ neither injectivity nor a transfer fixed-point equation.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 /-- The inverse right boundary metric cancels the limiting Gram after recombining
 the correlated tail. This algebraic identity supplies the limiting cancellation
 in Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii),
 lines 2442--2531; no transfer normalization is needed. -/
 theorem rectangularRightGramMetric_inverse_comp_correlatedTailMapES_adjoint [NeZero E]
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (ρ : Matrix (Fin E) (Fin E) ℂ) (hρ : ρ.PosDef) (r : ℕ) :
     (Ring.inverse (rectangularRightGramMetric D ρ)).comp
       ((correlatedTailMapES A V r).adjoint.comp
-        (boundaryFiberwiseMap (Cfg d r)
+        (boundaryFiberwiseMap (Fin r → α)
           (Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))))) =
       (correlatedTailMapES A V r).adjoint := by
   refine ContinuousLinearMap.ext fun x => ?_
@@ -52,25 +51,25 @@ This is the rectangular boundary cancellation in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma commutation (ii), lines 2442--2531.
 The supported inverse acts only on this derived corner. -/
 theorem inner_residualWindow_limitingMixedGramIntertwining [NeZero E]
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (hρ : ρ.PosDef) (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
-    (K r : ℕ) (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
+    (K r : ℕ) (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) = Q)
-    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
-    (y : BoundaryFamilySpace (D := E) (Cfg d r)) :
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)))
+    (y : BoundaryFamilySpace (D := E) (Fin r → α)) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
       (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r)
-    let Kleft := boundaryFiberwiseMap (Cfg d r) Kinf
+    let Kleft := boundaryFiberwiseMap (Fin r → α) Kinf
     inner ℂ x (Ktail.comp ((residualWindowRightVirtualMapES (D := D) B K).comp
       (((rectangularRowProjection E Q).comp (Ring.inverse (rectangularRightGramMetric D ρ))).comp
         ((correlatedTailMapES A V r).adjoint.comp Kleft))) y) =
-      ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
+      ∑ u : (Fin K → Fin L → α), ∑ τ : (Fin r → α),
         inner ℂ (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
           (Vᴴ * Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x))
           (Kinf (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
-            (boundaryFamilyEquiv (Cfg d r) y τ * Kraus.evalWord B (List.ofFn u)))) := by
+            (boundaryFamilyEquiv (Fin r → α) y τ * Kraus.evalWord B (List.ofFn u)))) := by
   dsimp only
   have hCancel := congrArg (fun F => F y)
     (rectangularRightGramMetric_inverse_comp_correlatedTailMapES_adjoint A V ρ hρ r)
@@ -84,10 +83,10 @@ theorem inner_residualWindow_limitingMixedGramIntertwining [NeZero E]
     simpa only [ContinuousLinearMap.adjoint_comp,
       (show (rectangularRowProjection E Q).adjoint = rectangularRowProjection E Q from
         (rectangularRowProjection_isStarProjection (E := E) hQ).isSelfAdjoint.star_eq)] using h
-  have hQZ : Q * (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
-      boundaryFamilyEquiv (Cfg d r) y τ) =
-      ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
-        boundaryFamilyEquiv (Cfg d r) y τ := by
+  have hQZ : Q * (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
+      boundaryFamilyEquiv (Fin r → α) y τ) =
+      ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
+        boundaryFamilyEquiv (Fin r → α) y τ := by
     apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).injective
     simpa only [ContinuousLinearMap.comp_apply, correlatedTailMapES_adjoint_apply,
       rectangularRowProjection_apply] using congrArg (fun F => F y) hAdj
@@ -97,8 +96,8 @@ theorem inner_residualWindow_limitingMixedGramIntertwining [NeZero E]
     (rectangularBoundaryFamilyFiberₗ u x))
     (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)
-        ((∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
-          boundaryFamilyEquiv (Cfg d r) y τ) * Kraus.evalWord B (List.ofFn u)))) = _
+        ((∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
+          boundaryFamilyEquiv (Fin r → α) y τ) * Kraus.evalWord B (List.ofFn u)))) = _
   rw [residualBoundaryGramLimit_frobeniusEquivEuclidean_apply, hGram,
     ← Matrix.mul_assoc, hQZ]
   simp_rw [Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
@@ -111,27 +110,27 @@ Gram error. This finite identity is the algebraic step preceding the estimates
 in Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii),
 lines 2442--2531. -/
 theorem inner_residualWindow_centeredMixedGram_eq_gramError [NeZero E]
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (hρ : ρ.PosDef) (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
-    (K M r : ℕ) (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
+    (K M r : ℕ) (hGram : ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) = Q)
-    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
-    (y : BoundaryFamilySpace (D := E) (Cfg d r)) :
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)))
+    (y : BoundaryFamilySpace (D := E) (Fin r → α)) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
       (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r)
-    let Kleft := boundaryFiberwiseMap (Cfg d r) Kinf
+    let Kleft := boundaryFiberwiseMap (Fin r → α) Kinf
     let Iinf := (rectangularRowProjection E Q).comp (Ring.inverse (rectangularRightGramMetric D ρ))
     inner ℂ x (((residualWindowRightMapES A B V K M r).adjoint.comp
       (residualWindowLeftMapES B K M r) -
       Ktail.comp ((residualWindowRightVirtualMapES (D := D) B K).comp
         (Iinf.comp ((correlatedTailMapES A V r).adjoint.comp Kleft)))) y) =
-      ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
+      ∑ u : (Fin K → Fin L → α), ∑ τ : (Fin r → α),
         inner ℂ (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
           (Vᴴ * Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x))
           ((groundSpaceGram B M - Kinf) (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
-            (boundaryFamilyEquiv (Cfg d r) y τ * Kraus.evalWord B (List.ofFn u)))) := by
+            (boundaryFamilyEquiv (Fin r → α) y τ * Kraus.evalWord B (List.ofFn u)))) := by
   dsimp only
   rw [sub_apply, inner_sub_right, ContinuousLinearMap.comp_apply,
     ContinuousLinearMap.adjoint_inner_right, inner_residualWindowRightMapES_leftMapES]

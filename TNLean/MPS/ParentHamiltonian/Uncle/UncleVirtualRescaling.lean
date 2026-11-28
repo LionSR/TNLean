@@ -55,7 +55,7 @@ theorem twoBlockVirtualScale_inv {a b : ℕ} {z : ℂ} (hz : z ≠ 0)
 /-- The bilinear boundary map transfers virtual rescaling to its boundary
 matrix, rather than treating it as a similarity gauge. -/
 theorem groundSpaceMap_twoBlockVirtualScale_one {d a b : ℕ} (z : ℂ)
-    (T : MPSTensor d (a + b)) (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
+    (T : MPTensor α (Fin (a + b))) (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
     groundSpaceMap (fun i => twoBlockVirtualScale (a := a) z (T i)) 1 X =
       groundSpaceMap T 1 (twoBlockVirtualScale (a := a) z X) := by
   funext σ
@@ -66,7 +66,7 @@ theorem groundSpaceMap_twoBlockVirtualScale_one {d a b : ℕ} (z : ℂ)
 /-- Nonzero off-diagonal rescaling preserves the full physical boundary-map
 range of a blocked tensor. -/
 theorem groundSpace_twoBlockVirtualScale_one {d a b : ℕ} {z : ℂ} (hz : z ≠ 0)
-    (T : MPSTensor d (a + b)) :
+    (T : MPTensor α (Fin (a + b))) :
     groundSpace (fun i => twoBlockVirtualScale (a := a) z (T i)) 1 =
       groundSpace T 1 := by
   apply le_antisymm

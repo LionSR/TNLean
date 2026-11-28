@@ -44,57 +44,57 @@ private theorem norm_inner_le_of_reindexed_fibers
   simpa only [F.inner_map_map, F.norm_map] using norm_inner_le_of_fibers (F x) (F y) hε hF
 
 namespace MPSTensor
-variable {d D₁ D₂ : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D₁ D₂ : ℕ}
 
 /-- An overlap bound on the common middle interval controls vectors whose
 restrictions to that interval lie in the two ground spaces, uniformly in
 both spectator lengths. This is the finite-sum form of the overlap bound
 in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_le_of_middle_map_groundSpace
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
-    (x y : EuclideanSpace ℂ (Cfg d (K + L + Q)))
-    (hx : ∀ u : Cfg d K, ∀ v : Cfg d Q,
+    (x y : EuclideanSpace ℂ (Fin (K + L + Q) → α))
+    (hx : ∀ u : (Fin K → α), ∀ v : (Fin Q → α),
       (WithLp.toLp 2 (fun w ↦ x (Fin.append (Fin.append u w) v)) :
-        EuclideanSpace ℂ (Cfg d L)) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        EuclideanSpace ℂ (Fin L → α)) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap))
-    (hy : ∀ u : Cfg d K, ∀ v : Cfg d Q,
+    (hy : ∀ u : (Fin K → α), ∀ v : (Fin Q → α),
       (WithLp.toLp 2 (fun w ↦ y (Fin.append (Fin.append u w) v)) :
-        EuclideanSpace ℂ (Cfg d L)) ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
+        EuclideanSpace ℂ (Fin L → α)) ∈ ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   apply norm_inner_le_of_reindexed_fibers
-    ((Equiv.prodComm (Cfg d Q) (Cfg d (K + L))).trans (Fin.appendEquiv (K + L) Q))
+    ((Equiv.prodComm (Fin Q → α) (Fin (K + L) → α)).trans (Fin.appendEquiv (K + L) Q))
     x y hε
   exact fun v ↦ norm_inner_le_of_reindexed_fibers (Fin.appendEquiv K L) _ _ hε
     (fun u ↦ hAB _ (hx u v) _ (hy u v))
 
 private theorem leftBoundaryMapES_middle_mem
-    (A : MPSTensor d D₁) (K L Q : ℕ)
-    (x : BoundaryFamilySpace (D := D₁) (Cfg d Q))
-    (u : Cfg d K) (v : Cfg d Q) :
+    (A : MPTensor α (Fin D₁)) (K L Q : ℕ)
+    (x : BoundaryFamilySpace (D := D₁) (Fin Q → α))
+    (u : (Fin K → α)) (v : (Fin Q → α)) :
     (WithLp.toLp 2 (fun w ↦ leftBoundaryMapES A (K + L) Q x
-      (Fin.append (Fin.append u w) v)) : EuclideanSpace ℂ (Cfg d L)) ∈
+      (Fin.append (Fin.append u w) v)) : EuclideanSpace ℂ (Fin L → α)) ∈
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [mem_map_groundSpace_iff]
   change (fun w ↦ leftBoundaryMap A (K + L) Q
-    (boundaryFamilyEquiv (D := D₁) (Cfg d Q) x) (Fin.append (Fin.append u w) v)) ∈ _
+    (boundaryFamilyEquiv (D := D₁) (Fin Q → α) x) (Fin.append (Fin.append u w) v)) ∈ _
   simpa only [tailRestrictₗ,
     LinearMap.coe_mk, AddHom.coe_mk, leftBoundaryMap_append] using
       (groundSpace_inTailGround A K L
         (show groundSpaceMap A (K + L)
-          (boundaryFamilyEquiv (D := D₁) (Cfg d Q) x v) ∈ groundSpace A (K + L) from
+          (boundaryFamilyEquiv (D := D₁) (Fin Q → α) x v) ∈ groundSpace A (K + L) from
             ⟨_, rfl⟩) u)
 
 private theorem reassocTailBoundaryMapES_middle_mem
-    (A : MPSTensor d D₁) (K L Q : ℕ)
-    (x : BoundaryFamilySpace (D := D₁) (Cfg d K))
-    (u : Cfg d K) (v : Cfg d Q) :
+    (A : MPTensor α (Fin D₁)) (K L Q : ℕ)
+    (x : BoundaryFamilySpace (D := D₁) (Fin K → α))
+    (u : (Fin K → α)) (v : (Fin Q → α)) :
     (WithLp.toLp 2 (fun w ↦ reassocTailBoundaryMapES A K L Q x
-      (Fin.append (Fin.append u w) v)) : EuclideanSpace ℂ (Cfg d L)) ∈
+      (Fin.append (Fin.append u w) v)) : EuclideanSpace ℂ (Fin L → α)) ∈
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [mem_map_groundSpace_iff]
   change (fun w ↦ reassocTailBoundaryMapES A K L Q x
@@ -102,20 +102,20 @@ private theorem reassocTailBoundaryMapES_middle_mem
   simpa only [prefixRestrictₗ, LinearMap.coe_mk, AddHom.coe_mk,
     reassocTailBoundaryMapES_apply_threeBlock] using
       (show prefixRestrictₗ v (groundSpaceMap A (L + Q)
-        (boundaryFamilyEquiv (D := D₁) (Cfg d K) x u)) ∈ groundSpace A L from
+        (boundaryFamilyEquiv (D := D₁) (Fin K → α) x u)) ∈ groundSpace A L from
           (prefixRestrictₗ_groundSpaceMap A v _).symm ▸ ⟨_, rfl⟩)
 
 /-- The middle-interval overlap bound also bounds two left boundary vectors,
 independently of both spectator lengths. This supplies the within-family
 bound in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_leftBoundaryMapES_le
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
-    (x : BoundaryFamilySpace (D := D₁) (Cfg d Q))
-    (y : BoundaryFamilySpace (D := D₂) (Cfg d Q)) :
+    (x : BoundaryFamilySpace (D := D₁) (Fin Q → α))
+    (y : BoundaryFamilySpace (D := D₂) (Fin Q → α)) :
     ‖⟪leftBoundaryMapES A (K + L) Q x, leftBoundaryMapES B (K + L) Q y⟫_ℂ‖ ≤
       ε * ‖leftBoundaryMapES A (K + L) Q x‖ * ‖leftBoundaryMapES B (K + L) Q y‖ := by
   exact norm_inner_le_of_middle_map_groundSpace A B K L Q hε hAB _ _
@@ -125,13 +125,13 @@ theorem norm_inner_leftBoundaryMapES_le
 independently of both spectator lengths. This is the other within-family
 bound in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_reassocTailBoundaryMapES_le
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
-    (x : BoundaryFamilySpace (D := D₁) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D₂) (Cfg d K)) :
+    (x : BoundaryFamilySpace (D := D₁) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D₂) (Fin K → α)) :
     ‖⟪reassocTailBoundaryMapES A K L Q x, reassocTailBoundaryMapES B K L Q y⟫_ℂ‖ ≤
       ε * ‖reassocTailBoundaryMapES A K L Q x‖ * ‖reassocTailBoundaryMapES B K L Q y‖ := by
   exact norm_inner_le_of_middle_map_groundSpace A B K L Q hε hAB _ _
@@ -142,13 +142,13 @@ theorem norm_inner_reassocTailBoundaryMapES_le
 right boundary vector of another tensor. This is the cross-family bound
 in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem norm_inner_left_reassocTailBoundaryMapES_le
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (K L Q : ℕ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (K L Q : ℕ)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hAB : ∀ x ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
-    (x : BoundaryFamilySpace (D := D₁) (Cfg d Q))
-    (y : BoundaryFamilySpace (D := D₂) (Cfg d K)) :
+    (x : BoundaryFamilySpace (D := D₁) (Fin Q → α))
+    (y : BoundaryFamilySpace (D := D₂) (Fin K → α)) :
     ‖⟪leftBoundaryMapES A (K + L) Q x, reassocTailBoundaryMapES B K L Q y⟫_ℂ‖ ≤
       ε * ‖leftBoundaryMapES A (K + L) Q x‖ * ‖reassocTailBoundaryMapES B K L Q y‖ := by
   exact norm_inner_le_of_middle_map_groundSpace A B K L Q hε hAB _ _

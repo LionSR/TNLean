@@ -45,35 +45,35 @@ variable {ι : Type*} [Finite ι] {d : ℕ} {D : ι → ℕ} [∀ i, NeZero (D i
 excitation tends to zero for all bounded boundary vectors in that sector.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
-    (A : ∀ i, MPSTensor d (D i))
+    (A : ∀ i, MPTensor α (Fin (D i)))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
-    (ψ : (n : κ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
+    (ψ : (n : κ) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
     (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap))
     (hbound : ∀ᶠ n in f, ‖ψ n‖ ≤ 1) :
     Tendsto (fun n =>
       ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)).starProjection
-        ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+        ((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖ ^ 2) f (𝓝 0) := by
   have hnorm : Tendsto (fun n =>
       ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)).starProjection
-        ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+        ((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖) f (𝓝 0) := by
     apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
       (bulkObservable_iSup_groundSpace_compression_tendsto_zero A ρ hP hρ hDistinct
         α X hcenter hℓ hr)
     filter_upwards [hψ, hbound] with n hn hb
     have hfix := Submodule.starProjection_eq_self_iff.mpr hn
-    let Y := Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+    let Y := Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
       (bulkObservable X (ℓ n) (r n))
     calc
       _ = ‖((⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
@@ -90,17 +90,17 @@ its commutator bound in every distinguished primitive sector. The excitation
 norm and the full ground-projection limits are derived from the tensors.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
-    (A : ∀ i, MPSTensor d (D i))
+    (A : ∀ i, MPTensor α (Fin (D i)))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     {ℓ r : ℕ → ℕ} (hℓ : Tendsto ℓ atTop atTop) (hr : Tendsto r atTop atTop)
-    (H : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)) →ₗ[ℂ]
-      EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
-    (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
+    (H : (n : ℕ) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α) →ₗ[ℂ]
+      EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
+    (ψ : (n : ℕ) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
     {γ e : ℝ} (hγ : 0 ≤ γ)
     (hPos : ∀ᶠ n in atTop, (H n).IsPositive)
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
@@ -113,14 +113,14 @@ theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1)
     (hEnergy :
       let B (n : ℕ) := ((Matrix.toEuclideanCLM
-        (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+        (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))).toLinearMap
       Tendsto (fun n =>
         (⟪((B n).adjoint.comp ((H n).comp (B n) - (B n).comp (H n))) (ψ n),
           ψ n⟫_ℂ).re) atTop (𝓝 e)) :
     γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤ e := by
   let B (n : ℕ) := ((Matrix.toEuclideanCLM
-    (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+    (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
       (bulkObservable X (ℓ n) (r n))).toLinearMap
   have hGround' : ∀ᶠ n in atTop, ψ n ∈ LinearMap.ker (H n) := by
     filter_upwards [hKernel, hGround] with n hkern hg
@@ -145,14 +145,14 @@ uniform gap obeys the local commutator inequality in every primitive sector.
 The energy limit follows from finite-range locality and primitive convergence.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem multiblock_localCommutator_gap_of_openInteraction_gap
-    (A : ∀ i, MPSTensor d (D i))
+    (A : ∀ i, MPTensor α (Fin (D i)))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (α : ι) {R k : ℕ} (h : Matrix (Fin R → α) (Fin R → α) ℂ)
     (hh : h.PosSemidef)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
@@ -187,7 +187,7 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
 
 end FiniteFamily
 section BlockFamily
-variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d] [∀ i, NeZero (D i)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {b : ℕ} {D : Fin b → ℕ} [Nonempty α] [∀ i, NeZero (D i)]
 
 /-- Every positive parent interaction of a weighted multiblock tensor has one
 positive local commutator constant for all primitive sectors and all centered
@@ -196,19 +196,19 @@ The finite-volume gap, joint kernel, separation, and boundary approximants are
 derived internally. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2
 and Section 6; CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
-    (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
+    (μ : Fin b → ℂ) (A : ∀ i, MPTensor α (Fin (D i))) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : IsParentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ)
+    (hh : IsParentInteraction (toTensorFromBlocks (μ := μ) A) R
       (Matrix.toEuclideanLin h)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ α : Fin b, ∀ {k : ℕ}
-      (X : Matrix (Cfg d k) (Cfg d k) ℂ),
+      (X : Matrix (Fin k → α) (Fin k → α) ℂ),
       0 < k → observableInsertionExpectation (A α) (ρ α) X = 0 →
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
-  let T := toTensorFromBlocks (α := Fin d) (μ := μ) A
+  let T := toTensorFromBlocks (μ := μ) A
   have hRpos : 0 < R := by omega
   have hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
@@ -245,20 +245,20 @@ positive commutator constant for all primitive sectors and all centered local
 observables. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and
 Section 6, lines 2649--2675. -/
 theorem exists_pos_multiblock_localCommutator_gap_of_wordTupleSpanTop
-    (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
+    (μ : Fin b → ℂ) (A : ∀ i, MPTensor α (Fin (D i))) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ α : Fin b, ∀ {k : ℕ}
-      (X : Matrix (Cfg d k) (Cfg d k) ℂ),
+      (X : Matrix (Fin k → α) (Fin k → α) ℂ),
       0 < k → observableInsertionExpectation (A α) (ρ α) X = 0 →
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable
-            ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-              (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) R).map (WithLp.linearEquiv
+            ((Matrix.toEuclideanCLM (n := (Fin R → α)) (𝕜 := ℂ)).symm
+              (((groundSpace (toTensorFromBlocks (μ := μ) A) R).map (WithLp.linearEquiv
                   2 ℂ _).symm.toLinearMap))ᗮ.starProjection)
             X)).re := by
-  let T := toTensorFromBlocks (α := Fin d) (μ := μ) A
+  let T := toTensorFromBlocks (μ := μ) A
   let h := LinearMap.toMatrix' (parentInteraction T R)
   exact exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     μ A hμ ρ hP hρ hS hSpan hR h

@@ -28,7 +28,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- A fixed boundary-crossing local constraint gives the corresponding trace
 decomposition.
@@ -52,22 +52,22 @@ trace-decomposition comparison used in Perez-Garcia--Verstraete--Wolf--Cirac,
 Theorem 12. -/
 theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (i : Fin N) (τ : Fin N → α) (hi : N < i.val + L)
     (hmem :
       (∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
             (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
         ⨆ j : Fin r, groundSpace (A j) L) :
     ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ∀ σ : Fin L → Fin d,
-        let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
+      ∀ σ : Fin L → α,
+        let headWord : List α := List.ofFn fun k : Fin (i.val + L - N) =>
           σ ⟨N - i.val + k.val, by omega⟩
-        let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
+        let middleWord : List α := List.ofFn fun k : Fin (N - L) =>
           τ ⟨i.val + L - N + k.val, by omega⟩
-        let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
+        let tailWord : List α := List.ofFn fun k : Fin (N - i.val) =>
           σ ⟨k.val, by omega⟩
         (∑ j : Fin r,
           Matrix.trace
@@ -101,11 +101,11 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
   choose C hC using hMatrix
   refine ⟨C, ?_⟩
   intro σ
-  let headWord : List (Fin d) := List.ofFn fun k : Fin (i.val + L - N) =>
+  let headWord : List α := List.ofFn fun k : Fin (i.val + L - N) =>
     σ ⟨N - i.val + k.val, by omega⟩
-  let middleWord : List (Fin d) := List.ofFn fun k : Fin (N - L) =>
+  let middleWord : List α := List.ofFn fun k : Fin (N - L) =>
     τ ⟨i.val + L - N + k.val, by omega⟩
-  let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
+  let tailWord : List α := List.ofFn fun k : Fin (N - i.val) =>
     σ ⟨k.val, by omega⟩
   have hσ : List.ofFn σ = tailWord ++ headWord := by
     simpa [tailWord, headWord] using
@@ -221,20 +221,20 @@ is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
-    {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
+    {L N : ℕ} [Nonempty α] (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (i : Fin N) (hi : N < i.val + L)
-    (ρ : Fin (N - L) → Fin d) :
+    (ρ : Fin (N - L) → α) :
     ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ∀ β : Fin (i.val + L - N) → Fin d,
-        ∀ w : Fin (N - i.val) → Fin d,
+      ∀ β : Fin (i.val + L - N) → α,
+        ∀ w : Fin (N - i.val) → α,
           (∑ j : Fin r,
             Matrix.trace
               ((Kraus.evalWord (A j) (List.ofFn β) * C j) *
@@ -245,11 +245,11 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
                   Kraus.evalWord (A j) (List.ofFn ρ)) *
                 Kraus.evalWord (A j) (List.ofFn w))) := by
   classical
-  let τ : Fin N → Fin d := fun t =>
+  let τ : Fin N → α := fun t =>
     if htail : i.val + L - N ≤ t.val ∧ t.val < i.val then
       ρ ⟨t.val - (i.val + L - N), by omega⟩
     else
-      (0 : Fin d)
+      (0 : α)
   have hρ : (List.ofFn fun k : Fin (N - L) =>
       τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ :=
     List.ofFn_inj.mpr (funext fun k => by
@@ -269,7 +269,7 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
       μ A hN hLN X i τ hi hmem
   refine ⟨C, ?_⟩
   intro β w
-  let σ : Fin L → Fin d := fun k =>
+  let σ : Fin L → α := fun k =>
     if hk : k.val < N - i.val then
       w ⟨k.val, hk⟩
     else
@@ -317,22 +317,22 @@ hypothesis is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
-    {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
+    {L N : ℕ} [Nonempty α] (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X))) :
     ∃ C : ∀ (j : Fin r) (_ : Fin N),
-        (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ i : Fin N,
         N < i.val + L →
-          ∀ ρ : Fin (N - L) → Fin d,
-            ∀ β : Fin (i.val + L - N) → Fin d,
-              ∀ w : Fin (N - i.val) → Fin d,
+          ∀ ρ : Fin (N - L) → α,
+            ∀ β : Fin (i.val + L - N) → α,
+              ∀ w : Fin (N - i.val) → α,
                 (∑ j : Fin r,
                   Matrix.trace
                     ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -344,11 +344,11 @@ theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
                       Kraus.evalWord (A j) (List.ofFn w))) := by
   classical
   have hExists :
-      ∀ i : Fin N, ∀ ρ : Fin (N - L) → Fin d,
+      ∀ i : Fin N, ∀ ρ : Fin (N - L) → α,
         ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           N < i.val + L →
-            ∀ β : Fin (i.val + L - N) → Fin d,
-              ∀ w : Fin (N - i.val) → Fin d,
+            ∀ β : Fin (i.val + L - N) → α,
+              ∀ w : Fin (N - i.val) → α,
                 (∑ j : Fin r,
                   Matrix.trace
                     ((Kraus.evalWord (A j) (List.ofFn β) * C j) *
@@ -395,10 +395,10 @@ the local coordinates as \(i_1,\ldots,i_{m+1}\); here \(\beta\) is the wrapped
 word before the cut and \(\rho\) is the complementary outside word. -/
 theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (i : Fin N) (τ : Fin N → α) (hi : N < i.val + L)
     (hSpan : WordTupleSpanTop A (N - i.val))
     (hmem :
       (∑ j : Fin r,
@@ -406,9 +406,9 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
             (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
         ⨆ j : Fin r, groundSpace (A j) L) :
     ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      let ρ : Fin (N - L) → Fin d := fun k =>
+      let ρ : Fin (N - L) → α := fun k =>
         τ ⟨i.val + L - N + k.val, by omega⟩
-      ∀ j : Fin r, ∀ β : Fin (i.val + L - N) → Fin d,
+      ∀ j : Fin r, ∀ β : Fin (i.val + L - N) → α,
         Kraus.evalWord (A j) (List.ofFn β) * C j =
           (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
             Kraus.evalWord (A j) (List.ofFn ρ) := by
@@ -417,14 +417,14 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
     blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
       μ A hN hLN X i τ hi hmem
   refine ⟨C, ?_⟩
-  let ρ : Fin (N - L) → Fin d := fun k =>
+  let ρ : Fin (N - L) → α := fun k =>
     τ ⟨i.val + L - N + k.val, by omega⟩
   refine
     pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition
       (A := A) (m := N - i.val) (K := i.val + L - N) (M := N - L)
       hSpan (fun j => (μ j) ^ N • X j) C ρ ?_
   intro β w
-  let σ : Fin L → Fin d := fun k =>
+  let σ : Fin L → α := fun k =>
     if hk : k.val < N - i.val then
       w ⟨k.val, hk⟩
     else
@@ -461,10 +461,10 @@ coordinates used in arXiv:2011.12127, Section IV.C, lines 2126--2128. -/
 theorem
     blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (i : Fin N) (τ : Fin N → Fin d) (hi : N < i.val + L)
+    (i : Fin N) (τ : Fin N → α) (hi : N < i.val + L)
     (hSpan : WordTupleSpanTop A (N - i.val))
     (hmem :
       (∑ j : Fin r,

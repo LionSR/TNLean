@@ -33,14 +33,14 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A tensor injective after \(p\) sites has a positive uniform open-chain
 gap at the fixed interaction range \(p+1\), for every sufficiently long
 interval. Source: arXiv:2011.12127, Section IV.C, lines 2183--2187;
 arXiv:cond-mat/9410110, Section 6. -/
 theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
-    [NeZero D] (A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) :
     ∃ W : ℕ, p + 1 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ N : ℕ, W ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -96,7 +96,7 @@ range \(p+1\), without assuming a gap estimate. Source: arXiv:2011.12127,
 Section IV.C, lines 2183--2187. The finite-range threshold is recorded in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
 theorem exists_strict_hamiltonian_parentChainInteraction_window_of_isNBlkInjective
-    [NeZero D] (A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) :
     ∃ m : ℕ, p + 1 ≤ m ∧ ∃ γ : ℝ,
       (p : ℝ) ^ 2 < (m : ℝ) * γ ∧
@@ -123,7 +123,7 @@ and a common volume threshold throughout that neighborhood. Source:
 arXiv:1010.3732, Appendix A. -/
 theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] [NeZero D] {p m : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) (hm : p + 1 ≤ m) {x₀ : X}
     {γ : ℝ} (hnum : (p : ℝ) ^ 2 < (m : ℝ) * γ)
     (hgap : ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -172,7 +172,7 @@ in the parameter and all sufficiently large volumes. No finite-window gap is
 assumed. Source: arXiv:1010.3732, Appendix A, single-block case. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective
     {X : Type*} [TopologicalSpace X] [NeZero D] {p : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ x ∈ S, ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -195,18 +195,18 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkIn
 at every periodic length \(N\ge p+1\). Source: arXiv:quant-ph/0608197,
 Theorem `uniqueGS`, nonvanishing of the periodic ground vector. -/
 theorem periodicMpvLineMap_injective_of_isNBlkInjective
-    [NeZero D] (A : MPSTensor d D) {p N : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p N : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) (hN : p + 1 ≤ N) :
     Function.Injective (periodicMpvLineMap A N) := by
-  have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) ≠ 0 := by
+  have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv A) ≠ 0 := by
     intro hzero
-    have h := congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)) hzero
-    have hmpv : (mpv A : NSiteSpace (Fin d) N) ≠ 0 :=
+    have h := congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)) hzero
+    have hmpv : (mpv A : NSiteSpace α N) ≠ 0 :=
       mpv_ne_zero_of_isNBlkInjective hA hp hN
     exact hmpv (by simpa using h)
   intro c c' hcc
   have hsmul : (c - c') •
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) = 0 := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv A) = 0 := by
     simpa [periodicMpvLineMap, sub_smul] using
       congrArg (fun v => v - periodicMpvLineMap A N c') hcc
   exact sub_eq_zero.mp ((smul_eq_zero.mp hsmul).resolve_right hψ)
@@ -215,7 +215,7 @@ theorem periodicMpvLineMap_injective_of_isNBlkInjective
 interaction on the ring is the range of the scalar-to-state map at every volume containing the
 interaction. Source: arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
 theorem ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
-    [NeZero D] (A : MPSTensor d D) {p R N : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p R N : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) (hR : p < R) (hRN : R ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) =
@@ -229,17 +229,17 @@ theorem ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isN
   simp only [mpvSubmodule, periodicMpvLineMap]
   rw [Submodule.map_span]
   simp only [Set.image_singleton]
-  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))) = _
+  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv A))) = _
   exact
     (ContinuousLinearMap.range_smulRight_apply
       (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A))).symm
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv A))).symm
 
 /-- Above a positive injectivity length \(p\), zero is an eigenvalue of the Hamiltonian of the
 parent interaction on every ring containing the interaction: the periodic vector is a nonzero
 zero-energy vector. -/
 theorem groundSpace_hamiltonian_parentRingInteraction_ne_bot_of_isNBlkInjective
-    [NeZero D] (A : MPSTensor d D) {p R N : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p R N : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) (hR : p < R) (hRN : R ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     ManyBody.groundSpace (parentRingInteraction A R N).hamiltonian 0 ≠ ⊥ := by
@@ -256,7 +256,7 @@ fixed volume containing the interaction. Source: arXiv:1010.3732, Appendix A,
 lines 2575--2578, single-block case. -/
 theorem continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] [NeZero D] {p R N : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) (hR : p < R) (hRN : R ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Continuous fun x => (LinearMap.ker
@@ -275,7 +275,7 @@ theorem continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_
     funext x
     rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
     exact congrArg
-      (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) => K.starProjection)
+      (fun K : Submodule ℂ (EuclideanSpace ℂ (Fin N → α)) => K.starProjection)
       (ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
         (A x) hp (hInj x) hR hRN).symm
   rw [← heq]
@@ -287,7 +287,7 @@ range \(p<R\le N\): every member is gapped above its zero ground energy. Source:
 arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] [NeZero D] {p R N : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) {S : Set X} (hS : IsCompact S)
     (hR : p < R) (hRN : R ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -314,7 +314,7 @@ range-\(p+1\) parent interaction is gapped above its zero ground energy. No fini
 normalized gauge is assumed. Source: arXiv:1010.3732, Appendix A, single-block case. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_all_lengths
     {X : Type*} [TopologicalSpace X] [NeZero D] {p : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ (N : ℕ) (hN : p + 1 ≤ N), haveI : NeZero N := ⟨by omega⟩;
       ManyBody.IsGapped (parentRingInteraction (A x) (p + 1) N).hamiltonian 0 δ := by
@@ -348,7 +348,7 @@ no common blocking length or finite-window gap is assumed. Source:
 arXiv:1010.3732, Appendix A, single-block case; arXiv:0909.5347, Theorem 1. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_all_lengths
     {X : Type*} [TopologicalSpace X] [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hNormal : ∀ x, Kraus.IsNormal (A x)) {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ (N : ℕ) (hN : D ^ 4 + 1 ≤ N),
       haveI : NeZero N := ⟨by omega⟩;
@@ -364,7 +364,7 @@ Source: arXiv:1010.3732, Appendix A, single-block case;
 arXiv:0909.5347, lines 828--831. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_at_range
     {X : Type*} [TopologicalSpace X] [NeZero D] {p R : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) (hR : p < R)
     {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
@@ -381,7 +381,7 @@ arXiv:1010.3732, Appendix A, single-block case;
 arXiv:0909.5347, lines 828--831. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_at_range
     {X : Type*} [TopologicalSpace X] [NeZero D] {R : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hNormal : ∀ x, Kraus.IsNormal (A x)) (hR : D ^ 4 + 1 ≤ R)
     {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;

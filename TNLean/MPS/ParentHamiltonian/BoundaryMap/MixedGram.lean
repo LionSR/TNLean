@@ -35,21 +35,21 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 open scoped Matrix.Norms.Frobenius
 
 /-- Three consecutive configuration blocks are equivalent to a configuration on
 their concatenated chain. -/
-private def cfgAppendThreeEquiv (d K l R : ℕ) :
-    Cfg d K × (Cfg d l × Cfg d R) ≃ Cfg d (K + (l + R)) :=
-  (Equiv.prodCongr (Equiv.refl (Cfg d K)) (Fin.appendEquiv l R)).trans
+private def cfgAppendThreeEquiv (K l R : ℕ) :
+    (Fin K → α) × ((Fin l → α) × (Fin R → α)) ≃ (Fin (K + (l + R)) → α) :=
+  (Equiv.prodCongr (Equiv.refl (Fin K → α)) (Fin.appendEquiv l R)).trans
     (Fin.appendEquiv K (l + R))
 
 @[simp]
-private theorem cfgAppendThreeEquiv_apply (d K l R : ℕ)
-    (u : Cfg d K) (τ : Cfg d l) (j : Cfg d R) :
-    cfgAppendThreeEquiv d K l R (u, (τ, j)) = Fin.append u (Fin.append τ j) := rfl
+private theorem cfgAppendThreeEquiv_apply (K l R : ℕ)
+    (u : (Fin K → α)) (τ : (Fin l → α)) (j : (Fin R → α)) :
+    cfgAppendThreeEquiv K l R (u, (τ, j)) = Fin.append u (Fin.append τ j) := rfl
 
 /-- Exact arbitrary-increment mixed-Gram identity for the overlapping windows in
 Nachtergaele's C3' geometry (arXiv:cond-mat/9410110, equation (2.5)).
@@ -64,31 +64,31 @@ This is an algebraic identity reconstructed from the definitions. It is not the
 analytic C3' norm estimate in equation (2.5), and it asserts no contraction or
 uniformity in the increment. -/
 theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
-    (A : MPSTensor d D) (K l q : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d q)) :
+    (A : MPTensor α (Fin D)) (K l q : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin q → α)) :
     inner ℂ x ((tailBoundaryMapES A K (l + q)).adjoint
       ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.arrowCongr (finCongr (Nat.add_assoc K l q)) (Equiv.refl (Fin d))))
+        (Equiv.arrowCongr (finCongr (Nat.add_assoc K l q)) (Equiv.refl α)))
         (leftBoundaryMapES A (K + l) q y))) =
-      ∑ u : Cfg d K, ∑ j : Cfg d q,
+      ∑ u : (Fin K → α), ∑ j : (Fin q → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           (groundSpaceGram A l
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (boundaryFamilyEquiv (D := D) (Cfg d q) y j *
+              (boundaryFamilyEquiv (D := D) (Fin q → α) y j *
                 Kraus.evalWord A (List.ofFn u)))) := by
   rw [ContinuousLinearMap.adjoint_inner_right, PiLp.inner_apply]
-  trans ∑ p : Cfg d K × (Cfg d l × Cfg d q),
+  trans ∑ p : (Fin K → α) × ((Fin l → α) × (Fin q → α)),
       inner ℂ
-        ((tailBoundaryMapES A K (l + q) x) (cfgAppendThreeEquiv d K l q p))
+        ((tailBoundaryMapES A K (l + q) x) (cfgAppendThreeEquiv K l q p))
         ((leftBoundaryMapES A (K + l) q y)
           ((Equiv.arrowCongr (finCongr (Nat.add_assoc K l q))
-            (Equiv.refl (Fin d))).symm (cfgAppendThreeEquiv d K l q p)))
+            (Equiv.refl α)).symm (cfgAppendThreeEquiv K l q p)))
   · symm
-    apply Fintype.sum_equiv (cfgAppendThreeEquiv d K l q)
+    apply Fintype.sum_equiv (cfgAppendThreeEquiv K l q)
     intro p
     rfl
   · simp only [Fintype.sum_prod_type]
@@ -113,7 +113,7 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
       simp [Fin.append_right]
     have hAssoc :
         (Equiv.arrowCongr (finCongr (Nat.add_assoc K l q))
-          (Equiv.refl (Fin d))).symm (Fin.append u (Fin.append τ j)) =
+          (Equiv.refl α)).symm (Fin.append u (Fin.append τ j)) =
             Fin.append (Fin.append u τ) j := by
       rw [Equiv.arrowCongr_symm]
       ext i
@@ -124,14 +124,14 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
       exact congrFun (Fin.append_assoc u τ j).symm i
     have hLeftPrefix :
         (Equiv.arrowCongr (finCongr (Nat.add_assoc K l q))
-            (Equiv.refl (Fin d))).symm (Fin.append u (Fin.append τ j)) ∘
+            (Equiv.refl α)).symm (Fin.append u (Fin.append τ j)) ∘
               Fin.castAdd q = Fin.append u τ := by
       rw [hAssoc]
       ext i
       simp [Fin.append_left]
     have hLeftSuffix :
         (Equiv.arrowCongr (finCongr (Nat.add_assoc K l q))
-            (Equiv.refl (Fin d))).symm (Fin.append u (Fin.append τ j)) ∘
+            (Equiv.refl α)).symm (Fin.append u (Fin.append τ j)) ∘
               Fin.natAdd (K + l) = j := by
       rw [hAssoc]
       ext i
@@ -139,26 +139,26 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
     have hTailTrace :
         Matrix.trace
             (Kraus.evalWord A (List.ofFn (Fin.append τ j)) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u) =
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u) =
           Matrix.trace
             (Kraus.evalWord A (List.ofFn τ) *
               (Kraus.evalWord A (List.ofFn j) *
-                boundaryFamilyEquiv (D := D) (Cfg d K) x u)) := by
+                boundaryFamilyEquiv (D := D) (Fin K → α) x u)) := by
       rw [List.ofFn_fin_append, Kraus.evalWord_append]
       simp only [Matrix.mul_assoc]
     have hLeftTrace :
         Matrix.trace
             (Kraus.evalWord A (List.ofFn (Fin.append u τ)) *
-              boundaryFamilyEquiv (D := D) (Cfg d q) y j) =
+              boundaryFamilyEquiv (D := D) (Fin q → α) y j) =
           Matrix.trace
             (Kraus.evalWord A (List.ofFn τ) *
-              (boundaryFamilyEquiv (D := D) (Cfg d q) y j *
+              (boundaryFamilyEquiv (D := D) (Fin q → α) y j *
                 Kraus.evalWord A (List.ofFn u))) := by
       rw [List.ofFn_fin_append, Kraus.evalWord_append]
       symm
       simpa only [Matrix.mul_assoc] using Matrix.trace_mul_cycle
         (Kraus.evalWord A (List.ofFn τ))
-        (boundaryFamilyEquiv (D := D) (Cfg d q) y j)
+        (boundaryFamilyEquiv (D := D) (Fin q → α) y j)
         (Kraus.evalWord A (List.ofFn u))
     simp only [tailBoundaryMapES_apply, WithLp.linearEquiv_symm_apply,
       AddEquiv.toEquiv_eq_coe, Equiv.invFun_as_coe, AddEquiv.coe_toEquiv_symm,
@@ -182,19 +182,19 @@ This is an algebraic identity reconstructed from the definitions, not the FNW
 contraction estimate quoted by Nachtergaele after equation (2.4) and in equation
 (6.1). -/
 theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES
-    (A : MPSTensor d D) (K l : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
+    (A : MPTensor α (Fin D)) (K l : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin 1 → α)) :
     inner ℂ x ((tailBoundaryMapES A K (l + 1)).adjoint
       (leftBoundaryMapES A (K + l) 1 y)) =
-      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+      ∑ u : (Fin K → α), ∑ j : (Fin 1 → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           (groundSpaceGram A l
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+              (boundaryFamilyEquiv (D := D) (Fin 1 → α) y j *
                 Kraus.evalWord A (List.ofFn u)))) := by
   convert inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q A K l 1 x y using 1
   apply congrArg (fun z => inner ℂ x ((tailBoundaryMapES A K (l + 1)).adjoint z))
@@ -207,54 +207,54 @@ reassociated tail boundary map.  This is the same operator as
 `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q`; the only difference is that
 `reassocTailBoundaryMapES` carries out the canonical physical reassociation. -/
 theorem inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES
-    (A : MPSTensor d D) (K L Q : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d Q)) :
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin Q → α)) :
     inner ℂ x ((reassocTailBoundaryMapES A K L Q).adjoint
       (leftBoundaryMapES A (K + L) Q y)) =
-      ∑ u : Cfg d K, ∑ j : Cfg d Q,
+      ∑ u : (Fin K → α), ∑ j : (Fin Q → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           (groundSpaceGram A L
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+              (boundaryFamilyEquiv (D := D) (Fin Q → α) y j *
                 Kraus.evalWord A (List.ofFn u)))) := by
   rw [reassocTailBoundaryMapES, ContinuousLinearMap.adjoint_comp,
     ContinuousLinearMap.comp_apply]
-  rw [show (physicalReassocES (d := d) K L Q).toContinuousLinearMap.adjoint =
-      (physicalReassocES (d := d) K L Q).symm.toContinuousLinearMap from
+  rw [show (physicalReassocES K L Q).toContinuousLinearMap.adjoint =
+      (physicalReassocES K L Q).symm.toContinuousLinearMap from
     LinearIsometryEquiv.adjoint_eq_symm _]
   exact inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q A K L Q x y
 
 /-- Centered form of the arbitrary-increment mixed Gram, written with the named
 reassociated tail boundary map. -/
 theorem inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered
-    (A : MPSTensor d D) (K L Q : ℕ)
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d Q)) :
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin Q → α)) :
     inner ℂ x ((reassocTailBoundaryMapES A K L Q).adjoint
         (leftBoundaryMapES A (K + L) Q y)) -
-      ∑ u : Cfg d K, ∑ j : Cfg d Q,
+      ∑ u : (Fin K → α), ∑ j : (Fin Q → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             ((Matrix.trace ρ)⁻¹ •
-              ((boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+              ((boundaryFamilyEquiv (D := D) (Fin Q → α) y j *
                 Kraus.evalWord A (List.ofFn u)) * ρ))) =
-      ∑ u : Cfg d K, ∑ j : Cfg d Q,
+      ∑ u : (Fin K → α), ∑ j : (Fin Q → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           ((groundSpaceGram A L -
               Matrix.gramReshuffle (fixedPointProj ρ htr))
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+              (boundaryFamilyEquiv (D := D) (Fin Q → α) y j *
                 Kraus.evalWord A (List.ofFn u)))) := by
   rw [inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES]
   simp_rw [sub_apply, inner_sub_right,
@@ -274,30 +274,30 @@ This identity is reconstructed algebraically from the mixed-Gram formula and
 the limiting-metric computation. It is not attributed to FNW or Nachtergaele,
 and it asserts no convergence or norm estimate. -/
 theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin 1 → α)) :
     inner ℂ x ((tailBoundaryMapES A K (l + 1)).adjoint
         (leftBoundaryMapES A (K + l) 1 y)) -
-      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+      ∑ u : (Fin K → α), ∑ j : (Fin 1 → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             ((Matrix.trace ρ)⁻¹ •
-              ((boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+              ((boundaryFamilyEquiv (D := D) (Fin 1 → α) y j *
                 Kraus.evalWord A (List.ofFn u)) * ρ))) =
-      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+      ∑ u : (Fin K → α), ∑ j : (Fin 1 → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           ((groundSpaceGram A l -
               Matrix.gramReshuffle (fixedPointProj ρ htr))
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+              (boundaryFamilyEquiv (D := D) (Fin 1 → α) y j *
                 Kraus.evalWord A (List.ofFn u)))) := by
   rw [inner_tailBoundaryMapES_adjoint_leftBoundaryMapES]
   simp_rw [sub_apply, inner_sub_right,

@@ -38,7 +38,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- The opened-boundary \(C^j\)-comparison with the block boundary expression
 implies the corresponding boundary trace comparison.
@@ -57,23 +57,23 @@ in arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451. Here
 proof. -/
 theorem blockDiagonal_boundary_trace_decomposition_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {m L N : ℕ}
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (C : ∀ (j : Fin r) (_ : Fin N),
-      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+      (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hComparison : ∀ (j : Fin r) (i : Fin N),
       N < i.val + L →
-        ∀ ρ : Fin (N - L) → Fin d,
-          ∀ β : Fin (i.val + L - N) → Fin d,
+        ∀ ρ : Fin (N - L) → α,
+          ∀ β : Fin (i.val + L - N) → α,
             Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
               (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
                 Kraus.evalWord (A j) (List.ofFn ρ)) :
     ∀ i : Fin N,
       N < i.val + L →
-        ∀ ρ : Fin (N - L) → Fin d,
-          ∀ β : Fin (i.val + L - N) → Fin d,
-            ∀ w : Fin m → Fin d,
+        ∀ ρ : Fin (N - L) → α,
+          ∀ β : Fin (i.val + L - N) → α,
+            ∀ w : Fin m → α,
               (∑ j : Fin r,
                 Matrix.trace
                   ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -128,19 +128,19 @@ replaces the source's \(E^j=\sum_k C^j_kA^j_k\) by
 theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {m L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hTraceSpan : WordTupleSpanTop A m)
     (hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     (hNlarge : L + L₀ ≤ N)
     (C : ∀ (j : Fin r) (_ : Fin N),
-      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+      (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hCoeff : ∀ i : Fin N,
       N < i.val + L →
-        ∀ ρ : Fin (N - L) → Fin d, ∀ β : Fin (i.val + L - N) → Fin d,
-          ∀ w : Fin m → Fin d,
+        ∀ ρ : Fin (N - L) → α, ∀ β : Fin (i.val + L - N) → α,
+          ∀ w : Fin m → α,
             (∑ j : Fin r,
               Matrix.trace
                 ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -196,29 +196,29 @@ decompositions are hypotheses here. Removing these remaining inputs is documente
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {m L₀ L N : ℕ}
     (hTraceSpan : WordTupleSpanTop A m)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     (hN : 0 < N) (hLN : L ≤ N)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
+    {ψ : NSiteSpace α N}
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hTrace :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
-            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
             ∀ i : Fin N,
               N < i.val + L →
-                ∀ ρ : Fin (N - L) → Fin d,
-                  ∀ β : Fin (i.val + L - N) → Fin d,
-                    ∀ w : Fin m → Fin d,
+                ∀ ρ : Fin (N - L) → α,
+                  ∀ β : Fin (i.val + L - N) → α,
+                    ∀ w : Fin m → α,
                       (∑ j : Fin r,
                         Matrix.trace
                           ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -229,7 +229,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of
                               Kraus.evalWord (A j) (List.ofFn ρ)) *
                             Kraus.evalWord (A j) (List.ofFn w)))) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -278,33 +278,33 @@ is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {m L₀ L N : ℕ}
     (hTraceSpan : WordTupleSpanTop A m)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     (hN : 0 < N) (hLN : L ≤ N)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
+    {ψ : NSiteSpace α N}
     (hBoundary :
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hComparison :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
-            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
             ∀ (j : Fin r) (i : Fin N),
               N < i.val + L →
-                ∀ ρ : Fin (N - L) → Fin d,
-                  ∀ β : Fin (i.val + L - N) → Fin d,
+                ∀ ρ : Fin (N - L) → α,
+                  ∀ β : Fin (i.val + L - N) → α,
                     Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
                       (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
                         Kraus.evalWord (A j) (List.ofFn ρ)) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -343,35 +343,35 @@ block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {m L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hTraceSpan : WordTupleSpanTop A m)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N)
     (hTrace :
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
-            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
             ∀ i : Fin N,
               N < i.val + L →
-                ∀ ρ : Fin (N - L) → Fin d,
-                  ∀ β : Fin (i.val + L - N) → Fin d,
-                    ∀ w : Fin m → Fin d,
+                ∀ ρ : Fin (N - L) → α,
+                  ∀ β : Fin (i.val + L - N) → α,
+                    ∀ w : Fin m → α,
                       (∑ j : Fin r,
                         Matrix.trace
                           ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -382,7 +382,7 @@ theorem
                               Kraus.evalWord (A j) (List.ofFn ρ)) *
                             Kraus.evalWord (A j) (List.ofFn w)))) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -408,36 +408,36 @@ with \(D^j_\beta\) specialized to \((\mu_j^NX_j)A^j_\beta\). -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N)
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N)
     (hTrace :
       let m : ℕ :=
         (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
       ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+        ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
           ∃ C : ∀ (j : Fin r) (_ : Fin N),
-            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
             ∀ i : Fin N,
               N < i.val + L →
-                ∀ ρ : Fin (N - L) → Fin d,
-                  ∀ β : Fin (i.val + L - N) → Fin d,
-                    ∀ w : Fin m → Fin d,
+                ∀ ρ : Fin (N - L) → α,
+                  ∀ β : Fin (i.val + L - N) → α,
+                    ∀ w : Fin m → α,
                       (∑ j : Fin r,
                         Matrix.trace
                           ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -448,7 +448,7 @@ theorem
                               Kraus.evalWord (A j) (List.ofFn ρ)) *
                             Kraus.evalWord (A j) (List.ofFn w)))) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -477,35 +477,35 @@ requiring this trace-decomposition hypothesis. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {m L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hTraceSpan : WordTupleSpanTop A m)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hTrace :
-      ∀ {ψ : NSiteSpace (Fin d) N},
-        ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
+      ∀ {ψ : NSiteSpace α N},
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
             ∃ C : ∀ (j : Fin r) (_ : Fin N),
-              (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+              (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
               ∀ i : Fin N,
                 N < i.val + L →
-                  ∀ ρ : Fin (N - L) → Fin d,
-                    ∀ β : Fin (i.val + L - N) → Fin d,
-                      ∀ w : Fin m → Fin d,
+                  ∀ ρ : Fin (N - L) → α,
+                    ∀ β : Fin (i.val + L - N) → α,
+                      ∀ w : Fin m → α,
                         (∑ j : Fin r,
                           Matrix.trace
                             ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -515,7 +515,7 @@ theorem
                             ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
                                 Kraus.evalWord (A j) (List.ofFn ρ)) *
                               Kraus.evalWord (A j) (List.ofFn w)))) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   exact
@@ -537,36 +537,36 @@ Theorem 12, proof lines 1436--1448, with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\). -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
     (hTrace :
       let m : ℕ :=
         (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
-      ∀ {ψ : NSiteSpace (Fin d) N},
-        ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
+      ∀ {ψ : NSiteSpace α N},
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N →
         ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+          ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
             ∃ C : ∀ (j : Fin r) (_ : Fin N),
-              (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+              (Fin (N - L) → α) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
               ∀ i : Fin N,
                 N < i.val + L →
-                  ∀ ρ : Fin (N - L) → Fin d,
-                    ∀ β : Fin (i.val + L - N) → Fin d,
-                      ∀ w : Fin m → Fin d,
+                  ∀ ρ : Fin (N - L) → α,
+                    ∀ β : Fin (i.val + L - N) → α,
+                      ∀ w : Fin m → α,
                         (∑ j : Fin r,
                           Matrix.trace
                             ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
@@ -576,7 +576,7 @@ theorem
                             ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
                                 Kraus.evalWord (A j) (List.ofFn ρ)) *
                               Kraus.evalWord (A j) (List.ofFn w)))) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   classical

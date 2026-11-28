@@ -26,43 +26,43 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Reversal of the physical sites of a finite-chain configuration. -/
-def physicalSiteReverseConfigEquiv (d N : ℕ) : Cfg d N ≃ Cfg d N :=
-  Equiv.arrowCongr Fin.revPerm (Equiv.refl (Fin d))
+def physicalSiteReverseConfigEquiv (N : ℕ) : (Fin N → α) ≃ (Fin N → α) :=
+  Equiv.arrowCongr Fin.revPerm (Equiv.refl α)
 
 /-- The raw linear equivalence that reverses the physical sites of a coefficient
 function.  This definition does not use a Hilbert-space structure. -/
-def physicalSiteReverse (d N : ℕ) : NSiteSpace (Fin d) N ≃ₗ[ℂ] NSiteSpace (Fin d) N :=
-  LinearEquiv.piCongrLeft' ℂ (fun _ : Cfg d N => ℂ)
-    (physicalSiteReverseConfigEquiv d N)
+def physicalSiteReverse (N : ℕ) : NSiteSpace α N ≃ₗ[ℂ] NSiteSpace α N :=
+  LinearEquiv.piCongrLeft' ℂ (fun _ : (Fin N → α) => ℂ)
+    (physicalSiteReverseConfigEquiv N)
 
 /-- Physical-site reversal evaluates a coefficient function on the reversed
 configuration. -/
-@[simp] theorem physicalSiteReverse_apply {N : ℕ} (ψ : NSiteSpace (Fin d) N) (σ : Cfg d N) :
-    physicalSiteReverse d N ψ σ = ψ (σ ∘ Fin.rev) := by
+@[simp] theorem physicalSiteReverse_apply {N : ℕ} (ψ : NSiteSpace α N) (σ : (Fin N → α)) :
+    physicalSiteReverse N ψ σ = ψ (σ ∘ Fin.rev) := by
   rfl
 
 /-- The FNW boundary map of equation (5.5).  The matrix family \(v\) follows the
 source convention, before the identification \(A_\mu=v(\mu)^*\). -/
-noncomputable def fnwBoundaryMap (v : MPSTensor d D) (N : ℕ) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace (Fin d) N :=
-  LinearMap.pi fun σ : Cfg d N =>
+noncomputable def fnwBoundaryMap (v : MPTensor α (Fin D)) (N : ℕ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace α N :=
+  LinearMap.pi fun σ : (Fin N → α) =>
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
       (LinearMap.mulRight ℂ (Kraus.evalWord v (List.ofFn σ))ᴴ)
 
 /-- Pointwise form of FNW 1992 equation (5.5). -/
-@[simp] theorem fnwBoundaryMap_apply (v : MPSTensor d D) (N : ℕ)
-    (B : Matrix (Fin D) (Fin D) ℂ) (σ : Cfg d N) :
+@[simp] theorem fnwBoundaryMap_apply (v : MPTensor α (Fin D)) (N : ℕ)
+    (B : Matrix (Fin D) (Fin D) ℂ) (σ : (Fin N → α)) :
     fnwBoundaryMap v N B σ =
       Matrix.trace (B * (Kraus.evalWord v (List.ofFn σ))ᴴ) := by
   simp [fnwBoundaryMap, Matrix.traceLinearMap_apply]
 
 /-- Expanding the adjoint in equation (5.5) gives the reversed word of the
 pointwise adjoint family. -/
-theorem fnwBoundaryMap_apply_eq_trace_reverse (v : MPSTensor d D) (N : ℕ)
-    (B : Matrix (Fin D) (Fin D) ℂ) (σ : Cfg d N) :
+theorem fnwBoundaryMap_apply_eq_trace_reverse (v : MPTensor α (Fin D)) (N : ℕ)
+    (B : Matrix (Fin D) (Fin D) ℂ) (σ : (Fin N → α)) :
     fnwBoundaryMap v N B σ =
       Matrix.trace
         (B * Kraus.evalWord (fun μ => (v μ)ᴴ) (List.ofFn σ).reverse) := by
@@ -71,9 +71,9 @@ theorem fnwBoundaryMap_apply_eq_trace_reverse (v : MPSTensor d D) (N : ℕ)
 /-- With \(A_\mu=v(\mu)^*\), the FNW boundary map is TNLean's ground-space
 map followed by physical-site reversal. -/
 theorem fnwBoundaryMap_eq_physicalSiteReverse_comp_groundSpaceMap
-    (v : MPSTensor d D) (N : ℕ) :
+    (v : MPTensor α (Fin D)) (N : ℕ) :
     fnwBoundaryMap v N =
-      (physicalSiteReverse d N).toLinearMap.comp
+      (physicalSiteReverse N).toLinearMap.comp
         (groundSpaceMap (fun μ => (v μ)ᴴ) N) := by
   apply LinearMap.ext
   intro B

@@ -53,7 +53,7 @@ open scoped ComplexOrder InnerProductSpace Topology
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 
 private theorem tendsto_sqrt_succ_mul_pow_of_lt_one {r : ℝ}
@@ -109,14 +109,14 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
 uniformly in the prefix length and in every positive suffix length. -/
 theorem eventually_wholeIncrement_groundProjection_defect_le
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       ‖(reassocTailBoundaryMapES A K L Q).range.starProjection ∘L
@@ -143,7 +143,7 @@ The coefficient decays because it is the rational function
 \(c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)\) of Nachtergaele,
 arXiv:cond-mat/9410110, display (6.1) at lines 2401--2412. -/
 theorem exists_uniform_wholeIncrement_defect_le_seven_sixteenths
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
@@ -164,7 +164,7 @@ theorem exists_uniform_wholeIncrement_defect_le_seven_sixteenths
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector
 defect at most \(7/16\). -/
 theorem exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
@@ -182,7 +182,7 @@ number. This retains the decay used in Nachtergaele,
 arXiv:cond-mat/9410110, display (6.1), rather than choosing only the C3
 threshold one. -/
 theorem eventually_openChain_groundProjection_defect_mul_sqrt_lt
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {η : ℝ} (hη : 0 < η) :
     ∀ᶠ l : ℕ in atTop, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ ε : ℝ,
       0 ≤ ε ∧ ε * Real.sqrt ((l + 1 : ℕ) : ℝ) < η ∧
@@ -228,7 +228,7 @@ The coefficient is the imported Fannes--Nachtergaele--Werner coefficient
 1180--1194 and display (6.1) at lines 2401--2412, evaluated at the chosen overlap
 length. -/
 theorem exists_openChain_groundProjection_defect_lt_c3_threshold
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧ 0 ≤ ε ∧
@@ -255,7 +255,7 @@ and \(\varepsilon_l\) are supplied by
 exact projector identification following condition C3 in Nachtergaele,
 arXiv:cond-mat/9410110, equation (2.4); no new decay estimate enters. -/
 theorem exists_openChain_martingaleDifference_norm_lt_c3_threshold
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ hl : 1 < l, ∃ hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
@@ -273,11 +273,11 @@ the complementary excitation projections. Nachtergaele's identity following cond
 C3 identifies the projector defect, arXiv:cond-mat/9410110, eq. (2.4); the
 anticommutator estimate is the two-projection consequence proved in this development. -/
 theorem exists_re_inner_openChain_anticommutator_ge_c3_threshold
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ 0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
-      ∀ (K : ℕ) (v : EuclideanSpace ℂ (Cfg d (K + l + 1))),
+      ∀ (K : ℕ) (v : EuclideanSpace ℂ (Fin (K + l + 1) → α)),
         -ε *
             (RCLike.re
                 (⟪(openChainTailGroundSpaceES A K (l + 1))ᗮ.starProjection v, v⟫_ℂ) +

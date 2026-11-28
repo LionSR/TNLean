@@ -57,7 +57,7 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
@@ -68,7 +68,7 @@ mixing quantity, the FNW Lemma 6.2 coefficient \(a(m)(1+a(m))/a_-(m)\) is at mos
 \(c\lambda^m(1+c\lambda^m)/(1-c\lambda^m)\). -/
 theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hL : 0 < L) (hLm : L ≤ m)
     {c lam : ℝ}
@@ -110,7 +110,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 
@@ -124,7 +124,7 @@ exports only that the chosen rate is positive and below one. A caller that needs
 particular admissible rate uses the rate-parameterized mixing estimate together with the
 fixed-length geometric bound instead. -/
 theorem exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
-    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
       0 < c ∧ 0 < lam ∧ lam < 1 ∧ 0 < L ∧ Kraus.IsNBlkInjective A L ∧
@@ -161,13 +161,13 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 
 /-- The open-chain projector defect at overlap length \(l\) is the whole-increment defect
 with a one-site suffix. -/
 theorem openChain_groundProjection_defect_eq_wholeIncrement
-    (A : MPSTensor d D) (K l : ℕ) :
+    (A : MPTensor α (Fin D)) (K l : ℕ) :
     openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainLeftGroundProjectionES A (K + l) -
         ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
@@ -187,7 +187,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 
@@ -198,7 +198,7 @@ length give the projector defect
 at most \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\). The one-site suffix supplies
 the source's positive spectator length, so no restriction on the prefix remains. -/
 theorem exists_openChain_groundProjection_defect_le_fnw_geometric
-    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
       0 < c ∧ 0 < lam ∧ lam < 1 ∧ 0 < L ∧ Kraus.IsNBlkInjective A L ∧

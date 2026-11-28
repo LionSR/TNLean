@@ -34,7 +34,7 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- A supplied simultaneous injectivity length gives a positive open-chain
 gap at every range \(R\geq S+1\), uniformly over lengths \(pM\) for some
@@ -43,16 +43,16 @@ inequivalence hypothesis is imposed on the original blocks.
 Source: arXiv:cond-mat/9410110, Theorem 2.1(ii) and Section 6, with the
 block-injective local spaces of arXiv:2011.12127, lines 2114--2129. -/
 theorem exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ p : ℕ, 0 < p ∧ R ≤ 2 * p ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ M : ℕ, 2 ≤ M → ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R (p * M)).hamiltonian)
+        (parentChainInteraction (toTensorFromBlocks (μ := μ) A) R (p * M)).hamiltonian)
           z → z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
-  let T := toTensorFromBlocks (α := Fin d) (μ := μ) B
+  let T := toTensorFromBlocks (μ := μ) B
   have hKernel : ∀ L N : ℕ, S + 1 ≤ L → L ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T L N).hamiltonian) =
           ((groundSpace T N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
@@ -67,7 +67,7 @@ theorem exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_word
   obtain ⟨κ, C, hκ, _hC, hLocal, _hUpper⟩ :=
     exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
       T (hKernel R (2 * p) hR (by omega))
-  have hLocalGS : groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) R = groundSpace T R :=
+  have hLocalGS : groundSpace (toTensorFromBlocks (μ := μ) A) R = groundSpace T R :=
     groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ μ A B hμ hμ (fun j ↦ hGS j R)
   refine ⟨p, hp, by omega, κ * γ / (2 * p - R + 1 : ℕ),
     div_pos (mul_pos hκ hγ) (Nat.cast_pos.mpr (by omega)), fun M hM ↦ ?_⟩
@@ -83,13 +83,13 @@ satisfies the strict finite-range Knabe threshold at the prescribed range.
 Source: arXiv:2011.12127, Section IV.C, lines 2183--2187; the coefficient
 is recorded in `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
 theorem exists_strict_parentChainInteraction_toTensorFromBlocks_window_of_wordTupleSpanTop
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ m : ℕ, R ≤ m ∧ ∃ γ : ℝ, 0 < γ ∧
       ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ ∧
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R
+        (parentChainInteraction (toTensorFromBlocks (μ := μ) A) R
           (m + R - 1)).hamiltonian) z → z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨p, hp, _hRp, δ, hδ, hGap⟩ :=
     exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop

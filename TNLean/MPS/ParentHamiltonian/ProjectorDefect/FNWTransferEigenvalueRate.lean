@@ -50,13 +50,13 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Every nonzero FNW remainder eigenvalue is a transfer eigenvalue.
 This is the algebraic step in the rate prescription following `boundAm`
 in Nachtergaele, Section 6, lines 2407--2412. -/
 theorem fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) {ν : ℂ} (hν0 : ν ≠ 0)
     (hν : Module.End.HasEigenvalue
       (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ν) :
@@ -79,7 +79,7 @@ theorem fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
 (Section 6, lines 2407--2412) implies the weighted remainder spectral-radius
 bound. Eigenvalues are compared by modulus, and the rate is positive. -/
 theorem fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (rate : ℝ≥0)
     (hrate : 0 < rate)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
@@ -103,7 +103,7 @@ theorem fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues
 rate, with a positive rate-dependent prefactor. The dimension-only constant
 in the source projector estimate is not asserted. -/
 theorem exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
@@ -124,14 +124,14 @@ open scoped Topology ComplexOrder ENNReal NNReal
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Any positive prefactor bounds the FNW mixing quantity eventually at a
 prescribed rate above every nonunit transfer eigenvalue modulus. This is the
 version of Nachtergaele's `boundAm` with the rate-dependent onset specified
 in the module's scope-restriction statement. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_fnwMixingQuantity_le_of_pos_prefactor
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
@@ -157,7 +157,7 @@ holds beyond a state- and rate-dependent overlap threshold. This is the
 corrected eventual form of Nachtergaele, Section 6, equation `boundAm`.
 The bound is uniform in the prefix and every positive suffix length. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_projector_defect_le_of_pos_prefactor
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate) (hrate1 : rate < 1)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →

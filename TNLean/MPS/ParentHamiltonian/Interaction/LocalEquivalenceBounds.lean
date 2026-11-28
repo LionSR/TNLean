@@ -83,22 +83,22 @@ theorem norm_rightFiberwiseLinearEquiv_symm_apply_le
       ‖e.symm.toLinearMap.toContinuousLinearMap‖ * ‖v‖ :=
   norm_rightFiberwiseLinearEquiv_apply_le e.symm v
 
-variable {d R N : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ}
 
 /-- Extend an invertible local-window map to its cyclic placement in the
 chain, retaining identity on every exterior physical coordinate. -/
 noncomputable def localPhysicalLinearEquivES
-    (e : EuclideanSpace ℂ (Cfg d R) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
+    (e : EuclideanSpace ℂ (Fin R → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R → α))
     (hRN : R ≤ N) (i : Fin N) :
-    EuclideanSpace ℂ (Cfg d N) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+    EuclideanSpace ℂ (Fin N → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N → α) :=
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
-  U.toLinearEquiv.trans ((rightFiberwiseLinearEquiv (S := Cfg d (N - R)) e).trans
+  U.toLinearEquiv.trans ((rightFiberwiseLinearEquiv (S := (Fin (N - R) → α)) e).trans
     U.symm.toLinearEquiv)
 
 /-- A local physical change has a forward norm bound independent of volume. -/
 theorem norm_localPhysicalLinearEquivES_apply_le
-    (e : EuclideanSpace ℂ (Cfg d R) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (e : EuclideanSpace ℂ (Fin R → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R → α))
+    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α)) :
     ‖localPhysicalLinearEquivES e hRN i v‖ ≤
       ‖e.toLinearMap.toContinuousLinearMap‖ * ‖v‖ := by
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
@@ -108,8 +108,8 @@ theorem norm_localPhysicalLinearEquivES_apply_le
 
 /-- A local physical change has an inverse norm bound independent of volume. -/
 theorem norm_localPhysicalLinearEquivES_symm_apply_le
-    (e : EuclideanSpace ℂ (Cfg d R) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (e : EuclideanSpace ℂ (Fin R → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R → α))
+    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α)) :
     ‖(localPhysicalLinearEquivES e hRN i).symm v‖ ≤
       ‖e.symm.toLinearMap.toContinuousLinearMap‖ * ‖v‖ := by
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
@@ -121,10 +121,10 @@ theorem norm_localPhysicalLinearEquivES_symm_apply_le
 of their placement and of the chain length. -/
 theorem norm_two_localPhysicalLinearEquivES_apply_le
     {R₀ R₁ : ℕ}
-    (e₀ : EuclideanSpace ℂ (Cfg d R₀) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R₀))
-    (e₁ : EuclideanSpace ℂ (Cfg d R₁) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R₁))
+    (e₀ : EuclideanSpace ℂ (Fin R₀ → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R₀ → α))
+    (e₁ : EuclideanSpace ℂ (Fin R₁ → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R₁ → α))
     (hR₀ : R₀ ≤ N) (hR₁ : R₁ ≤ N) (i j : Fin N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
+    (v : EuclideanSpace ℂ (Fin N → α)) :
     ‖((localPhysicalLinearEquivES e₀ hR₀ i).trans
       (localPhysicalLinearEquivES e₁ hR₁ j)) v‖ ≤
       (‖e₀.toLinearMap.toContinuousLinearMap‖ *
@@ -140,10 +140,10 @@ theorem norm_two_localPhysicalLinearEquivES_apply_le
 of their placement and of the chain length. -/
 theorem norm_two_localPhysicalLinearEquivES_symm_apply_le
     {R₀ R₁ : ℕ}
-    (e₀ : EuclideanSpace ℂ (Cfg d R₀) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R₀))
-    (e₁ : EuclideanSpace ℂ (Cfg d R₁) ≃ₗ[ℂ] EuclideanSpace ℂ (Cfg d R₁))
+    (e₀ : EuclideanSpace ℂ (Fin R₀ → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R₀ → α))
+    (e₁ : EuclideanSpace ℂ (Fin R₁ → α) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin R₁ → α))
     (hR₀ : R₀ ≤ N) (hR₁ : R₁ ≤ N) (i j : Fin N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
+    (v : EuclideanSpace ℂ (Fin N → α)) :
     ‖((localPhysicalLinearEquivES e₀ hR₀ i).trans
       (localPhysicalLinearEquivES e₁ hR₁ j)).symm v‖ ≤
       (‖e₀.symm.toLinearMap.toContinuousLinearMap‖ *

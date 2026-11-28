@@ -81,7 +81,7 @@ lines 1744--1820, combined with Lemma overlapestimate, lines 2109--2175.
 The primitive faithful generating data and their inequivalence are supplied. -/
 theorem eventually_map_groundSpace_iSupIndep_of_primitive
     {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (B : ∀ j, MPSTensor d (dim j))
+    (B : ∀ j, MPTensor α (Fin (dim j)))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
@@ -106,9 +106,8 @@ section
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 section
 open scoped Matrix.Norms.Frobenius
@@ -138,9 +137,9 @@ adjoint sector isometry. Source: arXiv:1708.00029, equation Aoffdiag. -/
 boundary \(YV^\dagger\); neither the original site order nor the boundary trace is
 reversed. Source: arXiv:1708.00029, Lemma bdcf and equation Aoffdiag. -/
 theorem blockedResidualBoundaryMapES_eq_groundSpaceMapES_comp
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ)
-    (hInt : ∀ i, Vᴴ * blockTensor A L i = B i * Vᴴ) (N r : ℕ) :
+    (hInt : ∀ i, Vᴴ * Kraus.block A L i = B i * Vᴴ) (N r : ℕ) :
     blockedResidualBoundaryMapES A L B V N r =
       (groundSpaceMapES A (N * L + r)).comp (residualBoundaryEmbeddingES V) := by
   ext1 x
@@ -192,16 +191,16 @@ open scoped Matrix.Norms.L2Operator
 
 private theorem exists_eventually_boundary_lift_of_residual_resolution
     [NeZero D] {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i, ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ)
+    (hInt : ∀ j i, (V j)ᴴ * Kraus.block A L i = B j i * (V j)ᴴ)
     (Q : ι → ℕ → Matrix (Fin D) (Fin D) ℂ)
     (hQ : ∀ j r, IsOrthogonalProjection (Q j r))
-    (hGram : ∀ j r, ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
+    (hGram : ∀ j r, ∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V j * (V j)ᴴ) * Kraus.evalWord A (List.ofFn τ) = Q j r) :
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ N in atTop, ∀ r,
       ∀ x ∈ ((groundSpace A (N * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∃ u,
@@ -232,17 +231,17 @@ private theorem exists_eventually_boundary_lift_of_residual_resolution
   let S (j : ι) := blockedResidualBoundaryMapES A L (B j) (V j) N r
   let H (j : ι) := residualBoundaryGramInverse A (B j) (V j) (ρ j) (Q j r) N r
   have hLower (v : ∀ j, (S j).range) :
-      (1 / 2 : ℝ) * (∑ j, ‖(v j : EuclideanSpace ℂ (Cfg d (N * L + r)))‖ ^ 2) ≤
-        ‖∑ j, (v j : EuclideanSpace ℂ (Cfg d (N * L + r)))‖ ^ 2 := by
+      (1 / 2 : ℝ) * (∑ j, ‖(v j : EuclideanSpace ℂ (Fin (N * L + r) → α))‖ ^ 2) ≤
+        ‖∑ j, (v j : EuclideanSpace ℂ (Fin (N * L + r) → α))‖ ^ 2 := by
     have h := Submodule.norm_sum_sq_ge_of_overlapMatrix
-      (fun j => (v j : EuclideanSpace ℂ (Cfg d (N * L + r)))) (ε • C₀)
+      (fun j => (v j : EuclideanSpace ℂ (Fin (N * L + r) → α))) (ε • C₀)
       (fun i => by change ε * (if i = i then 0 else 1) = 0; simp)
       (fun i j hij => by
-        change ‖⟪(v i : EuclideanSpace ℂ (Cfg d (N * L + r))),
-          (v j : EuclideanSpace ℂ (Cfg d (N * L + r)))⟫_ℂ‖ ≤
+        change ‖⟪(v i : EuclideanSpace ℂ (Fin (N * L + r) → α)),
+          (v j : EuclideanSpace ℂ (Fin (N * L + r) → α))⟫_ℂ‖ ≤
           (ε * (if i = j then 0 else 1)) *
-            ‖(v i : EuclideanSpace ℂ (Cfg d (N * L + r)))‖ *
-            ‖(v j : EuclideanSpace ℂ (Cfg d (N * L + r)))‖
+            ‖(v i : EuclideanSpace ℂ (Fin (N * L + r) → α))‖ *
+            ‖(v j : EuclideanSpace ℂ (Fin (N * L + r) → α))‖
         simpa only [ite_eq_right hij, mul_one] using hO i j hij r _ (v i).property _ (v j).property)
     exact (mul_le_mul_of_nonneg_right (by linarith : (1 / 2 : ℝ) ≤ 1 - ‖ε • C₀‖)
       (Finset.sum_nonneg fun j _ => sq_nonneg _)).trans h
@@ -273,7 +272,7 @@ Source: the boundary normalization argument in Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma disjoint, equations C1C2 and limP12,
 combined with arXiv:1708.00029, Lemma bdcf. -/
 theorem IsPeriodic.exists_eventually_groundSpaceMapES_preimage_norm_le
-    {m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ n in atTop,
       ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap), ∃ u, groundSpaceMapES A n u = x ∧ ‖u‖ ≤ C * ‖x‖ := by
@@ -287,7 +286,7 @@ theorem IsPeriodic.exists_eventually_groundSpaceMapES_preimage_norm_le
   have hQ : ∀ j r, IsOrthogonalProjection (Q j r) :=
     fun j r => hProj (j - r • (1 : Fin m))
   have hGram (j : Fin m) (r : ℕ) :
-      (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V j * (V j)ᴴ) *
+      (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V j * (V j)ᴴ) *
         Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q j r := by
     simpa only [Q, hV] using
       sum_word_conjTranspose_inverseCyclic_projection_mul_word A P hA.leftCanonical hShift j r
@@ -311,7 +310,7 @@ Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma disjoint,
 equations C1C2 and limP12. This is a statement about periodic generating
 tensors and does not assert purity of their associated states. -/
 theorem IsPeriodic.eventually_norm_inner_map_groundSpace_le_of_inequivalent
-    {D₂ m m₂ : ℕ} {A : MPSTensor d D} {B : MPSTensor d D₂}
+    {D₂ m m₂ : ℕ} {A : MPTensor α (Fin D)} {B : MPTensor α (Fin D₂)}
     (hA : IsPeriodic m A) (hB : IsPeriodic m₂ B)
     (hDistinct : ∀ e : D₂ = D, ¬ GaugePhaseEquiv (e ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
@@ -374,7 +373,7 @@ arXiv:cond-mat/9410110, Lemma disjoint, followed by the lower Gram estimate
 of Lemma overlapestimate, lines 2109--2175. -/
 theorem eventually_map_groundSpace_iSupIndep_of_isPeriodic
     {ι : Type*} [Finite ι] {dim : ι → ℕ}
-    (A : ∀ j, MPSTensor d (dim j)) (m : ι → ℕ)
+    (A : ∀ j, MPTensor α (Fin (dim j))) (m : ι → ℕ)
     (hA : ∀ j, IsPeriodic (m j) (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
@@ -418,15 +417,14 @@ C1C2 and limP12.
 
 open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
 open Filter
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D E D₂ F L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E D₂ F L : ℕ}
 
 /-- An isometric virtual embedding with the adjoint letter intertwiner
 places every sector boundary vector in the original boundary space.
 Source: arXiv:1708.00029, Lemma bdcf and equation Aoffdiag. -/
 theorem map_groundSpace_le_of_isometric_cointertwiner
-    (A : MPSTensor d D) (B : MPSTensor d E) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E)) (V : Matrix (Fin D) (Fin E) ℂ)
     (hV : Vᴴ * V = 1) (hInt : ∀ i, Vᴴ * A i = B i * Vᴴ) (N : ℕ) :
     ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace A N).map
         (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
@@ -460,17 +458,17 @@ Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma disjoint, equations
 C1C2 and limP12. The proof uses original-chain boundary-space separation,
 not an unproved separation assumption on compressed sectors. -/
 theorem IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners
-    [NeZero E] {m m₂ : ℕ} {A : MPSTensor d D} {A' : MPSTensor d D₂}
+    [NeZero E] {m m₂ : ℕ} {A : MPTensor α (Fin D)} {A' : MPTensor α (Fin D₂)}
     (hA : IsPeriodic m A) (hA' : IsPeriodic m₂ A')
     (hDistinct : ∀ e : D₂ = D, ¬ GaugePhaseEquiv (e ▸ A') A)
-    (hL : 0 < L) (B : MPSTensor (blockPhysDim d L) E)
-    (C : MPSTensor (blockPhysDim d L) F)
+    (hL : 0 < L) (B : MPTensor (Fin L → α) (Fin E))
+    (C : MPTensor (Fin L → α) (Fin F))
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     (hρ : ρ.PosDef)
     (hV : Vᴴ * V = 1) (hW : Wᴴ * W = 1)
-    (hInt : ∀ i, Vᴴ * blockTensor A L i = B i * Vᴴ)
-    (hInt' : ∀ i, Wᴴ * blockTensor A' L i = C i * Wᴴ) :
+    (hInt : ∀ i, Vᴴ * Kraus.block A L i = B i * Vᴴ)
+    (hInt' : ∀ i, Wᴴ * Kraus.block A' L i = C i * Wᴴ) :
     ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ C) B := by
   intro e hGauge
   subst F
@@ -499,15 +497,15 @@ theorem IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners
     have hGauge' : GaugePhaseEquiv C B := by simpa using hGauge
     rw [hGauge'.map_groundSpace_eq N]
     exact hx
-  let U := blockedConfigLinearIsometryEquiv d N L
+  let U := blockedConfigLinearIsometryEquiv N L
   have hxA : U x ∈ ((groundSpace A (N * L)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     rw [← map_groundSpace_blockTensor_map A L N]
     exact ⟨x, map_groundSpace_le_of_isometric_cointertwiner
-      (blockTensor A L) B V hV hInt N hx, rfl⟩
+      (Kraus.block A L) B V hV hInt N hx, rfl⟩
   have hxA' : U x ∈ ((groundSpace A' (N * L)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     rw [← map_groundSpace_blockTensor_map A' L N]
     exact ⟨x, map_groundSpace_le_of_isometric_cointertwiner
-      (blockTensor A' L) C W hW hInt' N hxC, rfl⟩
+      (Kraus.block A' L) C W hW hInt' N hxC, rfl⟩
   have h := hN (U x) hxA (U x) hxA'
   rw [U.inner_map_map, U.norm_map] at h
   simp only [inner_self_eq_norm_sq_to_K, norm_pow, RCLike.norm_ofReal,

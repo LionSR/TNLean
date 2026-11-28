@@ -34,42 +34,42 @@ namespace MPSTensor
 
 /-- Split a configuration on \(n+r\) sites into its first \(n\) active sites and
 its final \(r\) right-spectator sites. -/
-def rightSpectatorConfigEquiv (d n r : ℕ) :
-    Cfg d (n + r) ≃ Cfg d n × Cfg d r :=
+def rightSpectatorConfigEquiv (n r : ℕ) :
+    (Fin (n + r) → α) ≃ (Fin n → α) × (Fin r → α) :=
   (Fin.appendEquiv n r).symm
 
 /-- Joining active and spectator configurations is the inverse spectator split. -/
 @[simp] theorem rightSpectatorConfigEquiv_symm_apply
-    (d n r : ℕ) (p : Cfg d n × Cfg d r) :
-    (rightSpectatorConfigEquiv d n r).symm p = Fin.appendEquiv n r p :=
+    (n r : ℕ) (p : (Fin n → α) × (Fin r → α)) :
+    (rightSpectatorConfigEquiv n r).symm p = Fin.appendEquiv n r p :=
   rfl
 
 /-- The active component of the spectator split is the initial coordinate
 restriction. -/
 @[simp] theorem rightSpectatorConfigEquiv_apply_fst
-    (d n r : ℕ) (σ : Cfg d (n + r)) (i : Fin n) :
-    (rightSpectatorConfigEquiv d n r σ).1 i = σ (Fin.castAdd r i) :=
+    (n r : ℕ) (σ : (Fin (n + r) → α)) (i : Fin n) :
+    (rightSpectatorConfigEquiv n r σ).1 i = σ (Fin.castAdd r i) :=
   rfl
 
 /-- The spectator component of the split is the final coordinate restriction. -/
 @[simp] theorem rightSpectatorConfigEquiv_apply_snd
-    (d n r : ℕ) (σ : Cfg d (n + r)) (j : Fin r) :
-    (rightSpectatorConfigEquiv d n r σ).2 j = σ (Fin.natAdd n j) :=
+    (n r : ℕ) (σ : (Fin (n + r) → α)) (j : Fin r) :
+    (rightSpectatorConfigEquiv n r σ).2 j = σ (Fin.natAdd n j) :=
   rfl
 
 /-- The Euclidean-space reindexing that displays the last \(r\) sites as a
 finite right-spectator coordinate. -/
-noncomputable def rightSpectatorConfigLinearIsometryEquiv (d n r : ℕ) :
-    EuclideanSpace ℂ (Cfg d (n + r)) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (Cfg d n × Cfg d r) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (rightSpectatorConfigEquiv d n r)
+noncomputable def rightSpectatorConfigLinearIsometryEquiv (n r : ℕ) :
+    EuclideanSpace ℂ (Fin (n + r) → α) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ ((Fin n → α) × (Fin r → α)) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (rightSpectatorConfigEquiv n r)
 
 /-- The spectator-splitting isometry evaluates by joining the two
 configurations. -/
 @[simp] theorem rightSpectatorConfigLinearIsometryEquiv_apply_apply
-    (d n r : ℕ) (v : EuclideanSpace ℂ (Cfg d (n + r)))
-    (p : Cfg d n × Cfg d r) :
-    rightSpectatorConfigLinearIsometryEquiv d n r v p =
+    (n r : ℕ) (v : EuclideanSpace ℂ (Fin (n + r) → α))
+    (p : (Fin n → α) × (Fin r → α)) :
+    rightSpectatorConfigLinearIsometryEquiv n r v p =
       v (Fin.appendEquiv n r p) := by
   rw [rightSpectatorConfigLinearIsometryEquiv,
     LinearIsometryEquiv.piLpCongrLeft_apply]
@@ -78,10 +78,10 @@ configurations. -/
 /-- The inverse spectator isometry evaluates through the canonical
 configuration split. -/
 @[simp] theorem rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply
-    (d n r : ℕ) (v : EuclideanSpace ℂ (Cfg d n × Cfg d r))
-    (σ : Cfg d (n + r)) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).symm v σ =
-      v (rightSpectatorConfigEquiv d n r σ) := by
+    (n r : ℕ) (v : EuclideanSpace ℂ ((Fin n → α) × (Fin r → α)))
+    (σ : (Fin (n + r) → α)) :
+    (rightSpectatorConfigLinearIsometryEquiv n r).symm v σ =
+      v (rightSpectatorConfigEquiv n r σ) := by
   rw [rightSpectatorConfigLinearIsometryEquiv,
     LinearIsometryEquiv.piLpCongrLeft_symm,
     LinearIsometryEquiv.piLpCongrLeft_apply]
@@ -91,19 +91,19 @@ end MPSTensor
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A term of the parent interaction on the open chain of the first \(n\) sites acts
 independently on every configuration of the final \(r\) right-spectator sites: under the
 spectator split, the term starting at `j` on \(n + r\) sites is the fiberwise extension of the
 term starting at `j` on \(n\) sites. -/
 theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {n r L : ℕ} (j : Fin (n + 1 - L)) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+    (A : MPTensor α (Fin D)) {n r L : ℕ} (j : Fin (n + 1 - L)) :
+    (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
         ((Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term
             ⟨j.val, by omega⟩)).comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.toContinuousLinearMap
           (Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)))).toLinearMap := by
   have hj : j.val + L ≤ n := by omega
@@ -113,14 +113,14 @@ theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLine
   apply PiLp.ext
   rintro ⟨σ, s⟩
   change (Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term ⟨j.val, by omega⟩)
-      ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) (Fin.appendEquiv n r (σ, s)) =
+      ((rightSpectatorConfigLinearIsometryEquiv n r).symm x)) (Fin.appendEquiv n r (σ, s)) =
     Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)
       (ContinuousLinearMap.rightFiber x s) σ
   rw [Matrix.toLpLin_apply, Matrix.toLpLin_apply, PiLp.toLp_apply, PiLp.toLp_apply,
     ManyBody.Interaction.ofPlaceAlong_term, ManyBody.Interaction.ofPlaceAlong_term,
     placeAlong_chainWindow_mulVec_apply hj', placeAlong_chainWindow_mulVec_apply hj]
-  have hcfg (ω : Cfg d L) :
-      rightSpectatorConfigEquiv d n r (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
+  have hcfg (ω : (Fin L → α)) :
+      rightSpectatorConfigEquiv n r (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
         (contiguousCfg j.val L ω σ, s) := by
     apply Prod.ext
     · funext k
@@ -137,10 +137,10 @@ theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLine
         omega
       · exact Fin.append_right σ s k
   have hres : contiguousRestrictₗ j.val L hj' (Fin.appendEquiv n r (σ, s))
-      (WithLp.ofLp ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) =
+      (WithLp.ofLp ((rightSpectatorConfigLinearIsometryEquiv n r).symm x)) =
       contiguousRestrictₗ j.val L hj σ (WithLp.ofLp (ContinuousLinearMap.rightFiber x s)) := by
     funext ω
-    change ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
+    change ((rightSpectatorConfigLinearIsometryEquiv n r).symm x)
         (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
       x (contiguousCfg j.val L ω σ, s)
     rw [rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply, hcfg]
@@ -157,13 +157,13 @@ theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLine
 restricted to a set of windows inside the first \(n\) sites is the fiberwise extension of the
 Hamiltonian of the interaction on \(n\) sites restricted to the same windows. -/
 theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_conj_rightSpectator
-    (A : MPSTensor d D) {L n r : ℕ} (q : ℕ → Prop) [DecidablePred q]
+    (A : MPTensor α (Fin D)) {L n r : ℕ} (q : ℕ → Prop) [DecidablePred q]
     (hq : ∀ k, q k → k + L ≤ n) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+    (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
         ((Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).restrict
             fun i ↦ q i.val).hamiltonian).comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
           ((parentChainInteraction A L n).restrict fun i ↦ q i.val).hamiltonian))).toLinearMap := by
   apply LinearMap.ext
@@ -188,12 +188,12 @@ theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_conj_rightSpe
 right-spectator isometry gives the fiberwise extension of the same prefix
 Hamiltonian in the smaller ambient volume. -/
 theorem hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {L n r p : ℕ} (hp : p ≤ n) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+    (A : MPTensor α (Fin D)) {L n r p : ℕ} (hp : p ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
         ((Matrix.toEuclideanLin
             ((parentChainInteraction A L (n + r)).restrict fun i ↦ i.val + L ≤ p).hamiltonian).comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.toContinuousLinearMap
           (Matrix.toEuclideanLin
               ((parentChainInteraction A L n).restrict fun i ↦ i.val + L ≤
@@ -205,13 +205,13 @@ theorem hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinea
 right-spectator isometry gives the fiberwise extension of the same interval
 Hamiltonian in the smaller ambient volume. -/
 theorem hamiltonian_restrict_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {L l n r p : ℕ} (hp : p ≤ n) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+    (A : MPTensor α (Fin D)) {L l n r p : ℕ} (hp : p ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
         ((Matrix.toEuclideanLin
             ((parentChainInteraction A L (n + r)).restrict fun i ↦ p - l ≤ i.val ∧ i.val + L ≤
                 p).hamiltonian).comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.toContinuousLinearMap
           (Matrix.toEuclideanLin
               ((parentChainInteraction A L n).restrict fun i ↦ p - l ≤ i.val ∧ i.val + L ≤
@@ -222,7 +222,7 @@ theorem hamiltonian_restrict_parentChainInteraction_conj_rightSpectatorConfigLin
 /-- When the prefix is the entire ambient volume, the fixed-ambient prefix
 Hamiltonian is the ordinary nonwrapping open parent Hamiltonian. -/
 theorem hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction
-    (A : MPSTensor d D) (L n : ℕ) :
+    (A : MPTensor α (Fin D)) (L n : ℕ) :
     Matrix.toEuclideanLin
         ((parentChainInteraction A L n).restrict fun i ↦ i.val + L ≤ n).hamiltonian =
             Matrix.toEuclideanLin (parentChainInteraction A L n).hamiltonian := by
@@ -232,12 +232,12 @@ theorem hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChai
 /-- Under the one-site right-spectator splitting, a fiber is restriction to a
 fixed final physical index. -/
 theorem rightFiber_rightSpectatorConfigLinearIsometryEquiv_one {n : ℕ}
-    (v : EuclideanSpace ℂ (Cfg d (n + 1))) (s : Cfg d 1) :
-    WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)
+    (v : EuclideanSpace ℂ (Fin (n + 1) → α)) (s : (Fin 1 → α)) :
+    WithLp.linearEquiv 2 ℂ (NSiteSpace α n)
         (ContinuousLinearMap.rightFiber
-          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) s) =
+          (rightSpectatorConfigLinearIsometryEquiv n 1 v) s) =
       restrictLastₗ (s 0)
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 1)) v) := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 1)) v) := by
   funext σ
   change v (Fin.append σ s) = v (Fin.snoc σ (s 0))
   rw [Fin.append_right_eq_snoc]
@@ -245,7 +245,7 @@ theorem rightFiber_rightSpectatorConfigLinearIsometryEquiv_one {n : ℕ}
 /-- For a block-injective tensor, the kernel of the prefix Hamiltonian in the
 one-site-larger volume is the left open-chain ground space. -/
 theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpaceES
-    {A : MPSTensor d D} [NeZero D] {L₀ n : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ n : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
     LinearMap.ker
         (Matrix.toEuclideanLin
@@ -259,58 +259,58 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpac
     hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
       A (L := L₀ + 1) (n := n) (r := 1) (p := n) le_rfl
   have happly := LinearMap.congr_fun hconj
-    (rightSpectatorConfigLinearIsometryEquiv d n 1 v)
-  change rightSpectatorConfigLinearIsometryEquiv d n 1
+    (rightSpectatorConfigLinearIsometryEquiv n 1 v)
+  change rightSpectatorConfigLinearIsometryEquiv n 1
       (Matrix.toEuclideanLin
           ((parentChainInteraction A (L₀ + 1) (n + 1)).restrict fun i ↦ i.val + (L₀ + 1) ≤
               n).hamiltonian
-        ((rightSpectatorConfigLinearIsometryEquiv d n 1).symm
-          (rightSpectatorConfigLinearIsometryEquiv d n 1 v))) = _ at happly
+        ((rightSpectatorConfigLinearIsometryEquiv n 1).symm
+          (rightSpectatorConfigLinearIsometryEquiv n 1 v))) = _ at happly
   rw [LinearIsometryEquiv.symm_apply_apply] at happly
   rw [LinearMap.mem_ker]
   have hzero :
       Matrix.toEuclideanLin
           ((parentChainInteraction A (L₀ + 1) (n + 1)).restrict fun i ↦ i.val + (L₀ + 1) ≤
               n).hamiltonian v = 0 ↔
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d 1)
+        ContinuousLinearMap.rightFiberwiseMap (S := (Fin 1 → α))
           (LinearMap.toContinuousLinearMap
             (Matrix.toEuclideanLin
                 ((parentChainInteraction A (L₀ + 1) n).restrict fun i ↦ i.val + (L₀ + 1) ≤
                     n).hamiltonian))
-          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) = 0 := by
+          (rightSpectatorConfigLinearIsometryEquiv n 1 v) = 0 := by
     constructor
     · intro hv
       calc
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d 1)
+        ContinuousLinearMap.rightFiberwiseMap (S := (Fin 1 → α))
             (LinearMap.toContinuousLinearMap
               (Matrix.toEuclideanLin
                   ((parentChainInteraction A (L₀ + 1) n).restrict fun i ↦ i.val + (L₀ + 1) ≤
                       n).hamiltonian))
-            (rightSpectatorConfigLinearIsometryEquiv d n 1 v) =
-          rightSpectatorConfigLinearIsometryEquiv d n 1
+            (rightSpectatorConfigLinearIsometryEquiv n 1 v) =
+          rightSpectatorConfigLinearIsometryEquiv n 1
             (Matrix.toEuclideanLin
                 ((parentChainInteraction A (L₀ + 1) (n + 1)).restrict fun i ↦ i.val + (L₀ + 1) ≤
                     n).hamiltonian v) := happly.symm
-        _ = rightSpectatorConfigLinearIsometryEquiv d n 1 0 :=
-          congrArg (rightSpectatorConfigLinearIsometryEquiv d n 1) hv
+        _ = rightSpectatorConfigLinearIsometryEquiv n 1 0 :=
+          congrArg (rightSpectatorConfigLinearIsometryEquiv n 1) hv
         _ = 0 := map_zero _
     · intro hv
-      apply (rightSpectatorConfigLinearIsometryEquiv d n 1).injective
+      apply (rightSpectatorConfigLinearIsometryEquiv n 1).injective
       rw [map_zero]
       exact happly.trans hv
   rw [hzero]
-  change rightSpectatorConfigLinearIsometryEquiv d n 1 v ∈
+  change rightSpectatorConfigLinearIsometryEquiv n 1 v ∈
       LinearMap.ker
-        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d 1)
+        (ContinuousLinearMap.rightFiberwiseMap (S := (Fin 1 → α))
           (LinearMap.toContinuousLinearMap
             (Matrix.toEuclideanLin
                 ((parentChainInteraction A (L₀ + 1) n).restrict fun i ↦ i.val + (L₀ + 1) ≤
                     n).hamiltonian))).toLinearMap ↔ _
   rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff]
   rw [hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction]
-  change (∀ s : Cfg d 1,
+  change (∀ s : (Fin 1 → α),
       ContinuousLinearMap.rightFiber
-          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) s ∈
+          (rightSpectatorConfigLinearIsometryEquiv n 1 v) s ∈
         LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) n).hamiltonian)) ↔ _
   rw [ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
     hInj hL₀ hL₀n]
@@ -318,9 +318,9 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpac
   · intro hv j
     have hs := hv (fun _ => j)
     rw [mem_map_groundSpace_iff] at hs
-    change WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)
+    change WithLp.linearEquiv 2 ℂ (NSiteSpace α n)
         (ContinuousLinearMap.rightFiber
-          (rightSpectatorConfigLinearIsometryEquiv d n 1 v) (fun _ => j)) ∈
+          (rightSpectatorConfigLinearIsometryEquiv n 1 v) (fun _ => j)) ∈
       groundSpace A n at hs
     rw [rightFiber_rightSpectatorConfigLinearIsometryEquiv_one] at hs
     exact hs
@@ -331,7 +331,7 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpac
 
 /-- The suffix interval equal to the full final window contains one term of the parent
 interaction, beginning after the prefix of length \(K\). -/
-theorem hamiltonian_restrict_parentChainInteraction_full_window_eq_term (A : MPSTensor d D)
+theorem hamiltonian_restrict_parentChainInteraction_full_window_eq_term (A : MPTensor α (Fin D))
     {K L : ℕ} :
     Matrix.toEuclideanLin
         ((parentChainInteraction A L (K + L)).restrict fun i ↦ K + L - L ≤ i.val ∧ i.val + L ≤ K +
@@ -340,8 +340,8 @@ theorem hamiltonian_restrict_parentChainInteraction_full_window_eq_term (A : MPS
   rw [hamiltonian_restrict_parentChainInteraction_eq_term A (Nat.le_add_left L K) le_rfl]
   simp only [Nat.add_sub_cancel]
 
-private theorem contiguousRestrictₗ_tail_window {K L : ℕ} (τ : Cfg d (K + L))
-    (ψ : NSiteSpace (Fin d) (K + L)) :
+private theorem contiguousRestrictₗ_tail_window {K L : ℕ} (τ : (Fin (K + L) → α))
+    (ψ : NSiteSpace α (K + L)) :
     contiguousRestrictₗ K L le_rfl τ ψ =
       tailRestrictₗ (fun k : Fin K => τ (Fin.castAdd L k)) ψ := by
   funext ω
@@ -371,7 +371,7 @@ private theorem contiguousRestrictₗ_tail_window {K L : ℕ} (τ : Cfg d (K + L
 /-- The kernel of a full suffix-window Hamiltonian is the corresponding tail
 open-chain ground space. -/
 theorem ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSpaceES
-    (A : MPSTensor d D) {K L : ℕ} (hL : 0 < L) :
+    (A : MPTensor α (Fin D)) {K L : ℕ} (hL : 0 < L) :
     LinearMap.ker
         (Matrix.toEuclideanLin
             ((parentChainInteraction A L (K + L)).restrict fun i ↦ K + L - L ≤ i.val ∧ i.val + L ≤
@@ -380,21 +380,21 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSp
   classical
   rw [hamiltonian_restrict_parentChainInteraction_full_window_eq_term A]
   ext v
-  cases isEmpty_or_nonempty (Fin d) with
+  cases isEmpty_or_nonempty α with
   | inl hd =>
-      let _ : IsEmpty (Fin d) := hd
-      let _ : IsEmpty (Cfg d (K + L)) :=
+      let _ : IsEmpty α := hd
+      let _ : IsEmpty (Fin (K + L) → α) :=
         ⟨fun σ => isEmptyElim (σ ⟨0, by omega⟩)⟩
       have hv : v = 0 := Subsingleton.elim _ _
       subst v
       simp
   | inr hd =>
-      let _ : Nonempty (Fin d) := hd
+      let _ : Nonempty α := hd
       rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff, Matrix.toLpLin_apply,
         WithLp.toLp_eq_zero, parentChainInteraction_term_mulVec_eq_zero_iff]
       constructor
       · intro hv u
-        let τ : Cfg d (K + L) := Fin.append u (fun _ => Classical.choice hd)
+        let τ : (Fin (K + L) → α) := Fin.append u (fun _ => Classical.choice hd)
         have hτ := hv τ
         have hpref : (fun k : Fin K => τ (Fin.castAdd L k)) = u := by
           funext k
@@ -408,7 +408,7 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSp
 /-- For a block-injective tensor, the kernel of the prefix Hamiltonian that
 fills its own volume is the whole open-chain ground space. -/
 theorem ker_hamiltonian_prefix_parentChainInteraction_self_eq_map_groundSpace
-    {A : MPSTensor d D} [NeZero D] {L₀ n : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ n : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
     LinearMap.ker
         (Matrix.toEuclideanLin
@@ -423,16 +423,16 @@ fiberwise extension of an active-volume operator, it conjugates the kernel
 projection of the first to the fiberwise extension of the kernel projection of
 the second. -/
 theorem ker_starProjection_conj_of_rightFiberwiseMap {n r : ℕ}
-    (G : EuclideanSpace ℂ (Cfg d (n + r)) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d (n + r)))
-    (H : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n))
-    (hconj : (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
-        (G.comp (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+    (G : EuclideanSpace ℂ (Fin (n + r) → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin (n + r) → α))
+    (H : EuclideanSpace ℂ (Fin n → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin n → α))
+    (hconj : (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
+        (G.comp (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.toContinuousLinearMap H)).toLinearMap) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+    (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
         ((LinearMap.ker G).starProjection.toLinearMap.comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.ker H).starProjection).toLinearMap := by
   have hproj := LinearIsometryEquiv.conj_starProjection_ker_of_conj _ G _ hconj
   rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
@@ -441,12 +441,12 @@ theorem ker_starProjection_conj_of_rightFiberwiseMap {n r : ℕ}
 /-- In a fixed larger volume, the prefix ground projection is the fiberwise
 extension of the left open-chain ground projection in the active volume. -/
 theorem openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
-    {A : MPSTensor d D} [NeZero D] {L₀ n r : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ n r : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
-    (rightSpectatorConfigLinearIsometryEquiv d (n + 1) r).toLinearEquiv.toLinearMap.comp
+    (rightSpectatorConfigLinearIsometryEquiv (n + 1) r).toLinearEquiv.toLinearMap.comp
         ((openPrefixGroundProjectionES A (L₀ + 1) ((n + 1) + r) n).comp
-          (rightSpectatorConfigLinearIsometryEquiv d (n + 1) r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv (n + 1) r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (openChainLeftGroundProjectionES A n)).toLinearMap := by
   let G := Matrix.toEuclideanLin
       ((parentChainInteraction A (L₀ + 1) ((n + 1) + r)).restrict fun i ↦ i.val + (L₀ + 1) ≤
@@ -465,12 +465,12 @@ theorem openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEqui
 /-- In a fixed larger volume, the ground projection of the whole active prefix
 is the fiberwise extension of the whole open-chain ground projection. -/
 theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
-    {A : MPSTensor d D} [NeZero D] {L₀ n r : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ n r : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀n : L₀ + 1 ≤ n) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+    (rightSpectatorConfigLinearIsometryEquiv n r).toLinearEquiv.toLinearMap.comp
         ((openPrefixGroundProjectionES A (L₀ + 1) (n + r) n).comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (rightSpectatorConfigLinearIsometryEquiv n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection).toLinearMap := by
   let G := Matrix.toEuclideanLin
@@ -491,13 +491,13 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
 fiberwise extension of the tail open-chain ground projection in the active
 volume. -/
 theorem openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {K l r : ℕ} :
-    (rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r).toLinearEquiv.toLinearMap.comp
+    (A : MPTensor α (Fin D)) {K l r : ℕ} :
+    (rightSpectatorConfigLinearIsometryEquiv (K + (l + 1)) r).toLinearEquiv.toLinearMap.comp
         ((openIntervalGroundProjectionES A (l + 1) l
           ((K + (l + 1)) + r) (K + l)).comp
-          (rightSpectatorConfigLinearIsometryEquiv d
+          (rightSpectatorConfigLinearIsometryEquiv
             (K + (l + 1)) r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (openChainTailGroundProjectionES A K (l + 1))).toLinearMap := by
   have hKl : K + l + 1 = K + (l + 1) := by omega
   let G := Matrix.toEuclideanLin

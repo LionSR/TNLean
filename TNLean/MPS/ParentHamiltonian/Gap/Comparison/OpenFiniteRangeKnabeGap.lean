@@ -48,14 +48,14 @@ open scoped InnerProductSpace ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Adjoining free sites to a prefix preserves its finite-interval gap: every eigenvalue of the
 prefix Hamiltonian on the longer chain is `0` or at least the gap. This is the fixed-ambient
 interpretation of the local gap in Nachtergaele, arXiv:cond-mat/9410110, condition C2,
 lines 1045--1056. -/
 theorem hamiltonian_prefix_parentChainInteraction_gap_of_local_gap
-    (A : MPSTensor d D) {R n q : ℕ} {κ : ℝ} (hκ : 0 < κ)
+    (A : MPTensor α (Fin D)) {R n q : ℕ} {κ : ℝ} (hκ : 0 < κ)
     (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) μ →
         μ = 0 ∨ (κ : ℂ) ≤ μ) :
@@ -66,7 +66,7 @@ theorem hamiltonian_prefix_parentChainInteraction_gap_of_local_gap
     hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
       A (L := R) (n := n) (r := q) (p := n) le_rfl
   exact ContinuousLinearMap.forall_hasEigenvalue_of_conj_rightFiberwiseMap
-    (rightSpectatorConfigLinearIsometryEquiv d n q) _
+    (rightSpectatorConfigLinearIsometryEquiv n q) _
     (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) hκ
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A R n))
     (by simpa only [LinearEquiv.conj_apply, LinearMap.comp_assoc,
@@ -80,7 +80,7 @@ The physical coordinate isometry places its active sites first and the free site
 is the fixed-ambient form of Nachtergaele's condition C2, arXiv:cond-mat/9410110,
 lines 1045--1056. -/
 theorem hamiltonian_restrict_parentChainInteraction_gap_of_local_gap
-    (A : MPSTensor d D) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
+    (A : MPTensor α (Fin D)) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
     (hWn : W ≤ n) (hnN : n ≤ N) {κ : ℝ} (hκ : 0 < κ)
     (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) μ →
@@ -107,10 +107,10 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 private theorem cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_eq_interval
-    {N P R m a b : ℕ} [NeZero P] (A : MPSTensor d D)
+    {N P R m a b : ℕ} [NeZero P] (A : MPTensor α (Fin D))
     (hR : 0 < R) (hmP : m ≤ P) (hab : a < b)
     (s : ZMod P)
     (hactive : ∀ q : Fin m, (s + (q.val : ZMod P)).val + R ≤ N ↔
@@ -151,7 +151,7 @@ private theorem cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_eq_i
 /-- Each nonzero window of the zero-padded family is an open Hamiltonian on
 an interval containing at most \(m\) interactions. -/
 theorem cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_eq_zero_or_interval
-    {N R m : ℕ} [NeZero (N + 2 * m)] (A : MPSTensor d D) (hR : 0 < R) (hm : 0 < m) (hRN : R ≤ N)
+    {N R m : ℕ} [NeZero (N + 2 * m)] (A : MPTensor α (Fin D)) (hR : 0 < R) (hm : 0 < m) (hRN : R ≤ N)
     (s : ZMod (N + 2 * m)) :
     ProjectionGeometry.cyclicWindowSum (fun t : ZMod (N + 2 * m) ↦ Matrix.toEuclideanLin
         ((parentChainInteraction A R N).restrict fun i ↦ i.val = t.val).hamiltonian) m s = 0 ∨
@@ -227,13 +227,13 @@ theorem cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_eq_zero_or_i
 /-- Gaps above the kernel on the active open volumes supply the quadratic-form estimate for
 all windows of the zero-padded family. -/
 theorem cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_quadraticForm_gap
-    {N R m : ℕ} [NeZero (N + 2 * m)] (A : MPSTensor d D)
+    {N R m : ℕ} [NeZero (N + 2 * m)] (A : MPTensor α (Fin D))
     (hR : 0 < R) (hm : 0 < m) (hRN : R ≤ N) {γ : ℝ} (hγ : 0 < γ)
     (hOpenGap : ∀ W : ℕ, R ≤ W → W ≤ m + R - 1 →
       ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) μ →
           μ = 0 ∨ (γ : ℂ) ≤ μ)
-    (s : ZMod (N + 2 * m)) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (s : ZMod (N + 2 * m)) (v : EuclideanSpace ℂ (Fin N → α)) :
     γ * (⟪ProjectionGeometry.cyclicWindowSum (fun t : ZMod (N + 2 * m) ↦ Matrix.toEuclideanLin
         ((parentChainInteraction A R N).restrict fun i ↦ i.val = t.val).hamiltonian) m s v,
         v⟫_ℂ).re ≤
@@ -260,7 +260,7 @@ zero padding and applying the finite-range cyclic Knabe inequality; see
 The test volume \(W\) ranges from \(R\) through \(m+R-1\), so boundary windows
 are included as well as windows containing all \(m\) interactions. -/
 theorem hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
-    (A : MPSTensor d D) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
+    (A : MPTensor α (Fin D)) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
     {γ : ℝ} (hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ)
     (hOpenGap : ∀ W : ℕ, R ≤ W → W ≤ m + R - 1 →
       ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -322,12 +322,12 @@ estimate of Nachtergaele, arXiv:cond-mat/9410110, condition C3-prime.
 
 open scoped ComplexOrder
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 /-- Equality of the active local kernel with the MPS ground space identifies
 an embedded terminal Hamiltonian with the full-window terminal ground space.
 This is the interval kernel identification used in Nachtergaele,
 arXiv:cond-mat/9410110, condition C3-prime, lines 1095--1107. -/
-theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : MPSTensor d D)
+theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : MPTensor α (Fin D))
     {R W N n : ℕ}
     (hR : 0 < R) (hRW : R ≤ W) (hWn : W ≤ n) (hnN : n ≤ N)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
@@ -346,7 +346,7 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : 
       U (Matrix.toEuclideanLin
           ((parentChainInteraction A T N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + T ≤
               n).hamiltonian v) =
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+        ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - W) → α))
           (Matrix.toEuclideanLin (parentChainInteraction A T W).hamiltonian).toContinuousLinearMap
               (U v) := by
     simpa only [U, LinearMap.comp_apply, LinearEquiv.coe_coe, ContinuousLinearMap.coe_coe,
@@ -356,11 +356,11 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : 
   rw [LinearMap.mem_ker, ← U.map_eq_zero_iff, hconj R hR hRW,
     LinearMap.mem_ker, ← U.map_eq_zero_iff, hconj W (hR.trans_le hRW) le_rfl]
   change U v ∈ LinearMap.ker
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+    (ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - W) → α))
       (Matrix.toEuclideanLin
           (parentChainInteraction A R W).hamiltonian).toContinuousLinearMap).toLinearMap ↔
     U v ∈ LinearMap.ker
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+    (ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - W) → α))
       (Matrix.toEuclideanLin
           (parentChainInteraction A W W).hamiltonian).toContinuousLinearMap).toLinearMap
   rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
@@ -373,7 +373,7 @@ boundary space whenever its active finite-interval kernel is the MPS ground
 space. Source: Nachtergaele, arXiv:cond-mat/9410110, condition C3-prime,
 lines 1095--1107. -/
 theorem ker_hamiltonian_restrict_parentChainInteraction_eq_range_reassocTailBoundaryMapES
-    (A : MPSTensor d D) {R K L Q : ℕ}
+    (A : MPTensor α (Fin D)) {R K L Q : ℕ}
     (hR : 0 < R) (hRW : R ≤ L + Q)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R (L + Q)).hamiltonian) =
       ((groundSpace A (L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :

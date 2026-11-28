@@ -90,7 +90,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A spectral-radius-one normal tensor admits the source-unital PGVWC07
 orientation, together with a positive-definite fixed point of the dual
@@ -100,12 +100,12 @@ This is the Perron normalization used in arXiv:quant-ph/0608197, canonical
 normalization lines 742--763 and 816--832, specialized to a normal tensor in
 the sense of arXiv:1606.00608, lines 231--235. -/
 private theorem _root_.MPTensor.IsNormalTensor.exists_pgvwc07_unital_dualFixedPoint_gauge
-    {A : MPSTensor d D} (hA : IsNormalTensor A) :
-    ∃ (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ),
+    {A : MPTensor α (Fin D)} (hA : IsNormalTensor A) :
+    ∃ (B : MPTensor α (Fin D)) (Λ : Matrix (Fin D) (Fin D) ℂ),
       GaugeEquiv A B ∧
       Λ.PosDef ∧
-      (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
-      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
+      (∑ i : α, B i * (B i)ᴴ = 1) ∧
+      Kraus.transferMap (ι := α) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.linftyOpNormedAddCommGroup
@@ -115,26 +115,26 @@ private theorem _root_.MPTensor.IsNormalTensor.exists_pgvwc07_unital_dualFixedPo
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible
       A hIrr hA.exists_apply_ne_zero
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := α) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   have hradius :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) A))).toReal = r :=
+          (Kraus.transferMap (ι := α) (n := Fin D) A))).toReal = r :=
     spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) A) (Kraus.transferMap_isCPMap A)
+      (Kraus.transferMap (ι := α) (n := Fin D) A) (Kraus.transferMap_isCPMap A)
       hIrrMap ρ r hρ hr hρeig
   have hradius_one :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) A))).toReal = 1 := by
+          (Kraus.transferMap (ι := α) (n := Fin D) A))).toReal = 1 := by
     rw [hA.spectral_radius_one]
     simp
   have hr_one : r = 1 := hradius.symm.trans hradius_one
-  have hρfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ := by
+  have hρfix : Kraus.transferMap (ι := α) (n := Fin D) A ρ = ρ := by
     simpa [hr_one] using hρeig
-  let C : MPSTensor d D := Kraus.unitalGauge A ρ
-  have hCUnital : ∑ i : Fin d, C i * (C i)ᴴ = 1 := by
+  let C : MPTensor α (Fin D) := Kraus.unitalGauge A ρ
+  have hCUnital : ∑ i : α, C i * (C i)ᴴ = 1 := by
     simpa [C, Kraus.IsUnital] using
       Kraus.unitalGauge_isUnital_of_map_fixedPoint A ρ hρ hρfix
   have hGaugeAC : GaugeEquiv A C := by
@@ -144,7 +144,7 @@ private theorem _root_.MPTensor.IsNormalTensor.exists_pgvwc07_unital_dualFixedPo
   obtain ⟨U, Λ, _hSame, hΛ, _hΛdiag, hBUnital, hDualFixed⟩ :=
     exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
       C hCUnital hCNormal.no_invariant_proj (NeZero.pos D)
-  let B : MPSTensor d D := fun i =>
+  let B : MPTensor α (Fin D) := fun i =>
     (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * C i *
       (↑U : Matrix (Fin D) (Fin D) ℂ)
   have hGaugeCB : GaugeEquiv C B := by
@@ -155,7 +155,7 @@ private theorem _root_.MPTensor.IsNormalTensor.exists_pgvwc07_unital_dualFixedPo
 /-- Blockwise pure gauges preserve a CPSV basis of normal tensors. -/
 private theorem IsCPSVBasisOfNormalTensors.of_family_gaugeEquiv
     {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B C : (j : Fin g) → MPSTensor d (dim j)}
+    {A : MPTensor α (Fin D)} {B C : (j : Fin g) → MPTensor α (Fin (dim j))}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩))
     (hGauge : ∀ j, GaugeEquiv (B j) (C j)) :
     IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, C j⟩) := by
@@ -169,8 +169,8 @@ private theorem IsCPSVBasisOfNormalTensors.of_family_gaugeEquiv
   · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
     refine ⟨N₀, fun N hN => ?_⟩
     have hEq :
-        (fun j : Fin g => mpvState (α := Fin d) (B j) N) =
-          fun j : Fin g => mpvState (α := Fin d) (C j) N := by
+        (fun j : Fin g => mpvState (B j) N) =
+          fun j : Fin g => mpvState (C j) N := by
       funext j
       ext σ
       exact (hGauge j).sameMPV N σ
@@ -389,18 +389,18 @@ projector nonzero.  The conditions \(D>0\) and \(1<d\) record the positive
 bond-dimension and nontrivial physical-spin boundaries; Perron-gauge and
 short-ring data are derived internally. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
-    {A : MPSTensor d D} [NeZero D] (hd : 1 < d) (hA : IsCPSVCanonicalForm A) :
+    {A : MPTensor α (Fin D)} [NeZero D] (hd : 1 < d) (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
-      ∃ B : (j : Fin g) → MPSTensor d (dim j), ∃ L : ℕ,
+      ∃ B : (j : Fin g) → MPTensor α (Fin (dim j)), ∃ L : ℕ,
         IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
-        0 < L ∧ D ^ 2 < d ^ L ∧ L ≤ 3 * D ^ 5 ∧
+        0 < L ∧ D ^ 2 < Fintype.card α ^ L ∧ L ≤ 3 * D ^ 5 ∧
         HasParentHamiltonianGroundSpaceSpanning A L B := by
   classical
   let data := Classical.choice hA
   let ref := data.bntRefinement
   let dim : Fin data.phaseClasses.g → ℕ := fun j =>
     data.dim (data.representativeIndex j)
-  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (dim j) := fun j =>
+  let B : (j : Fin data.phaseClasses.g) → MPTensor α (Fin (dim j)) := fun j =>
     data.blocks (data.representativeIndex j)
   have hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) := by
     simpa [dim, B] using ref.representativesBNT
@@ -410,7 +410,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
   have hLmaxPos : 0 < Lmax := by
     dsimp [Lmax]
     exact Nat.mul_pos (by omega) (Nat.pow_pos (NeZero.pos D))
-  have hLmaxDim : D ^ 2 < d ^ Lmax := by
+  have hLmaxDim : D ^ 2 < Fintype.card α ^ Lmax := by
     simpa [Lmax] using
       sq_lt_pow_three_mul_pow_five hd (NeZero.pos D)
   let : NeZero d := ⟨by omega⟩
@@ -433,17 +433,17 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
   have hNormal : ∀ j, IsNormalTensor (C j) := hCBNT.blocks_normal
   have hIrr : ∀ k, Kraus.IsIrreducibleFamily (C k) :=
     fun j => (hNormal j).no_invariant_proj
-  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) C :=
+  have hBlocks : BlocksNotGaugePhaseEquiv C :=
     hCBNT.blocks_not_gaugePhaseEquiv
   have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>
     (hNormal j).isNBlkInjective_of_bondDim_le (hDimLe j)
   have hLocal :
       groundSpace A Lmax =
-        groundSpace (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) Lmax := by
+        groundSpace (toTensorFromBlocks (fun _ => 1) C) Lmax := by
     simpa [B, dim] using
       data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
   suffices h : ∃ L ≤ Lmax, HasParentHamiltonianGroundSpaceSpanning
-      (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) L C by
+      (toTensorFromBlocks (fun _ => 1) C) L C by
     obtain ⟨L, hL, hDirect⟩ := h
     exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim, le_rfl,
       (hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
@@ -463,7 +463,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
       exact Submodule.zero_mem _
     have hDirectSmall :
         HasParentHamiltonianGroundSpaceSpanning
-          (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) 2 C :=
+          (toTensorFromBlocks (fun _ => 1) C) 2 C :=
       hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one
         (fun _ => 1) C (by simp) hOne
     have hTwoLe : 2 ≤ Lmax := by
@@ -495,22 +495,22 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
           (fun j : Fin data.phaseClasses.g => chainGroundSpace (C j) L M) j₀
     have hL₀ : 0 < L₀ := Nat.pow_pos (NeZero.pos D)
     have hDirectLocal :
-        groundSpace (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) L =
+        groundSpace (toTensorFromBlocks (fun _ => 1) C) L =
           ⨆ j : Fin data.phaseClasses.g, groundSpace (C j) L :=
       groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1) C (by simp) L
     have hDirect :
         HasParentHamiltonianGroundSpaceSpanning
-          (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) L C := by
+          (toTensorFromBlocks (fun _ => 1) C) L C := by
       apply
         hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain
           (fun _ => 1) C (by simp)
       · intro N hN
         have hLocalSingle :
-            groundSpace (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) L =
+            groundSpace (toTensorFromBlocks (fun _ => 1) C) L =
               groundSpace (C j₀) L :=
           hDirectLocal.trans (hGroundSup L)
         calc
-          chainGroundSpace (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) L N =
+          chainGroundSpace (toTensorFromBlocks (fun _ => 1) C) L N =
               chainGroundSpace (C j₀) L N :=
             chainGroundSpace_eq_of_groundSpace_eq hLocalSingle
           _ = ⨆ j : Fin data.phaseClasses.g, chainGroundSpace (C j) L N := by
@@ -534,7 +534,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
       omega
     have hDirect :
         HasParentHamiltonianGroundSpaceSpanning
-          (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) L C := by
+          (toTensorFromBlocks (fun _ => 1) C) L C := by
       rw [hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan
         (fun _ => 1) C (by simp)]
       intro N hN
@@ -551,11 +551,11 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
       intro ψ hψ
       rw [← hSmall]
       rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
-        (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) hNpos hLN] at hψ
+        (toTensorFromBlocks (fun _ => 1) C) hNpos hLN] at hψ
       rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
-        (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) hNpos hRN]
+        (toTensorFromBlocks (fun _ => 1) C) hNpos hRN]
       exact chainGroundSpace_le_chainGroundSpace_of_le
-        (toTensorFromBlocks (α := Fin d) (fun _ => 1) C) hNpos hRleL hLN hψ
+        (toTensorFromBlocks (fun _ => 1) C) hNpos hRleL hLN hψ
     have hPredLe : data.phaseClasses.g - 1 ≤ D - 1 :=
       Nat.sub_le_sub_right hCountLe 1
     have hBaseLe : base ≤
@@ -583,29 +583,29 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- At every positive length, the local ground space of a canonical tensor,
 including its repeated block copies and ambient reconstruction, is that of the
 unweighted block sum of its distinct normal representatives. Source: CPSV16,
 arXiv:1606.00608, equations `II_CF1` and `decBSV`. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {L : ℕ} (hL : 0 < L) :
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {L : ℕ} (hL : 0 < L) :
     groundSpace A L = groundSpace
-      (toTensorFromBlocks (α := Fin d) (fun _ ↦ 1)
+      (toTensorFromBlocks (fun _ ↦ 1)
         (fun j ↦ data.blocks (data.representativeIndex j))) L :=
   (data.groundSpace_eq_iSup_representatives data.bntRefinement hL).trans
     (groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1)
       (fun j ↦ data.blocks (data.representativeIndex j)) (by simp) L).symm
 
-variable [NeZero d]
+variable [Nonempty α]
 
 /-- The original canonical tensor, including all repeated block copies, has
 the periodic ground space of its distinct normal representatives. The
 supplied simultaneous injectivity length is retained. Source: CPGSV21,
 arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTupleSpanTop
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S L N : ℕ}
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S L N : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
@@ -617,7 +617,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTu
   let : ∀ j, NeZero (data.dim (data.representativeIndex j)) :=
     fun j ↦ ⟨(data.dim_pos (data.representativeIndex j)).ne'⟩
   have hGS : groundSpace A L =
-      groundSpace (toTensorFromBlocks (α := Fin d) (fun _ ↦ 1) B) L :=
+      groundSpace (toTensorFromBlocks (fun _ ↦ 1) B) L :=
     data.groundSpace_eq_toTensorFromBlocks_representatives (by omega)
   rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hLN,
     chainGroundSpace_eq_of_groundSpace_eq hGS]
@@ -629,18 +629,18 @@ kernel for the original canonical tensor, including repeated copies.
 Source: CPGSV21, arXiv:2011.12127, parent interactions at lines 1995--2007
 and the block-injective closure theorem at lines 2126--2129. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S L N : ℕ}
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S L N : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N)
-    (H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N))
+    (H : Fin N → EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α))
     (hH : ∀ i, (H i).IsPositive)
     (hker : haveI : NeZero N := ⟨by omega⟩; ∀ i, LinearMap.ker (H i) =
       LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) :
     LinearMap.ker (∑ i, H i) =
       (bntMPSVectorSpan (fun j ↦ data.blocks (data.representativeIndex j)) N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   have hEq : LinearMap.ker (∑ i, H i) =
       LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) := by
@@ -658,17 +658,17 @@ identity, for all positive parent interactions with the prescribed kernels.
 Repeated copies in the original canonical form are retained in the original
 Hamiltonian. Source: CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_wordTupleSpanTop
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
-    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) :
+    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPTensor α (Fin (dim j))),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       ∀ {S L N : ℕ}, 0 < S → WordTupleSpanTop B S → ∀ (hSL : S + 1 ≤ L) (hLN : L ≤ N),
         haveI : NeZero N := ⟨by omega⟩;
-        ∀ H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N),
+        ∀ H : Fin N → EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α),
           (∀ i, (H i).IsPositive) →
           (∀ i, LinearMap.ker (H i) =
             LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) →
           LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan B N).map
-            (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   let data := Classical.choice hA
   refine ⟨data.phaseClasses.g, (fun j ↦ data.dim (data.representativeIndex j)),
     (fun j ↦ data.blocks (data.representativeIndex j)),

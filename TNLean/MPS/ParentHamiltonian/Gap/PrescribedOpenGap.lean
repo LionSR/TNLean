@@ -32,13 +32,13 @@ open scoped BigOperators Topology ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A sparse grouped prefix and one terminal interaction retain the grouped
 coefficient up to the three-interval projector error. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 2.1(ii) and Section 6, Lemma `commutation` (ii). -/
 theorem hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal
-    (A : MPSTensor d D) {p M q : ℕ} (hp : 0 < p) (hM : 2 ≤ M)
+    (A : MPTensor α (Fin D)) {p M q : ℕ} (hp : 0 < p) (hM : 2 ≤ M)
     (hq : 0 < q) (hqp : q < p)
     (hKernel : ∀ N, 2 * p ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) N).hamiltonian) =
@@ -145,8 +145,8 @@ chain length at least the interaction range. This follows from Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 2.1(ii) and Section 6, Lemma `commutation` (ii),
 using a sparse grouped interaction and one terminal projection. -/
 theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_one_sub
-    {r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -155,9 +155,9 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ p : ℕ in atTop, ∀ N : ℕ, 2 * p ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian)
+        (parentChainInteraction (toTensorFromBlocks (μ := μ) A) (2 * p) N).hamiltonian)
           z → z = 0 ∨ ((1 - η : ℝ) : ℂ) ≤ z := by
-  let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
+  let B := toTensorFromBlocks (μ := μ) A
   let ε := η / (4 * Real.sqrt 2)
   have hsqrt : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hsqrtone : 1 ≤ Real.sqrt 2 := by
@@ -224,15 +224,15 @@ normalization hypothesis. Independent primitive normalization preserves every
 local ground space, and therefore every canonical open-chain interaction.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and Section 6. -/
 theorem eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_one_sub_of_isNormal
-    {r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ p : ℕ in atTop, ∀ N : ℕ, 2 * p ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian)
+        (parentChainInteraction (toTensorFromBlocks (μ := μ) A) (2 * p) N).hamiltonian)
           z → z = 0 ∨ ((1 - η : ℝ) : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hGS, hDistinctB⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct

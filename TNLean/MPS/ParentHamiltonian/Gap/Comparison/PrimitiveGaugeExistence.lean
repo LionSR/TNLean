@@ -75,13 +75,13 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Transport of the parent Hamiltonian along equal local MPS spaces -/
 
 /-- Two tensors with the same local MPS space at length \(L\) have the same
 Hamiltonian of the parent interaction on every ring. -/
-theorem hamiltonian_parentRingInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
+theorem hamiltonian_parentRingInteraction_eq_of_groundSpace_eq {A B : MPTensor α (Fin D)} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) (N : ℕ) [NeZero N] :
     (parentRingInteraction A L N).hamiltonian = (parentRingInteraction B L N).hamiltonian := by
   simp only [parentRingInteraction, parentInteraction_eq_of_groundSpace_eq h]
@@ -98,7 +98,7 @@ representative with a positive definite fixed point, which is where the
 finite-range Knabe estimate applies; the parent Hamiltonian is unchanged by that
 replacement, and block injectivity transfers back through the rescaling and the
 gauge. -/
-theorem exists_hamiltonian_parentRingInteraction_gap_of_isNormal [NeZero D] {A : MPSTensor d D}
+theorem exists_hamiltonian_parentRingInteraction_gap_of_isNormal [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧
@@ -130,7 +130,7 @@ The finite-range Knabe estimate treats all sufficiently large lengths; taking
 a minimum with the finitely many remaining positive bounds removes its volume
 threshold. No normalization hypothesis is imposed on the tensor. -/
 theorem exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal [NeZero D]
-    {A : MPSTensor d D} (hA : Kraus.IsNormal A) :
+    {A : MPTensor α (Fin D)} (hA : Kraus.IsNormal A) :
     ∃ l : ℕ, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ γ : ℝ, 0 < γ ∧
       ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentRingInteraction A (l + 1) N).hamiltonian) μ →

@@ -67,13 +67,13 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D N L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D N L : ℕ}
 
 /-- Joining the two cyclic blocks factors the closed-word amplitude.
 Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
 theorem mpv_cyclicActiveBlockConfigEquiv_symm
-    (A : MPSTensor d D) (hLN : L ≤ N) (i : Fin N)
-    (σ : Cfg d L) (τ : Cfg d (N - L)) :
+    (A : MPTensor α (Fin D)) (hLN : L ≤ N) (i : Fin N)
+    (σ : (Fin L → α)) (τ : (Fin (N - L) → α)) :
     mpv A ((cyclicActiveBlockConfigEquiv d L hLN i).symm (σ, τ)) =
       groundSpaceMap A L (Kraus.evalWord A (List.ofFn τ)) σ := by
   let ω := (cyclicActiveBlockConfigEquiv d L hLN i).symm (σ, τ)
@@ -107,8 +107,8 @@ theorem mpv_cyclicActiveBlockConfigEquiv_symm
 are the active boundary map with the complementary word as boundary matrix.
 Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
 theorem cyclicActiveBlock_mpvState_apply
-    (A : MPSTensor d D) (hLN : L ≤ N) (i : Fin N)
-    (σ : Cfg d L) (τ : Cfg d (N - L)) :
+    (A : MPTensor α (Fin D)) (hLN : L ≤ N) (i : Fin N)
+    (σ : (Fin L → α)) (τ : (Fin (N - L) → α)) :
     cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i (mpvState A N) (σ, τ) =
       groundSpaceMap A L (Kraus.evalWord A (List.ofFn τ)) σ := by
   rw [cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply, mpvState_apply,
@@ -124,13 +124,13 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d r N L : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r N L : ℕ} {dim : Fin r → ℕ}
 
 /-- A simultaneous word span makes the periodic block vectors linearly
 independent when every virtual block is nonempty. This gives the degeneracy
 conclusion in PGVWC07, Theorem 11, `2blocks.1`, lines 1407–1416. -/
 theorem linearIndependent_mpvState_of_wordTupleSpanTop
-    [∀ j, NeZero (dim j)] (A : (j : Fin r) → MPSTensor d (dim j))
+    [∀ j, NeZero (dim j)] (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hSpan : WordTupleSpanTop A N) :
     LinearIndependent ℂ (fun j => mpvState (A j) N) := by
   classical
@@ -139,7 +139,7 @@ theorem linearIndependent_mpvState_of_wordTupleSpanTop
   have hMatrices := block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan
     (fun k => c k • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) (by
       intro w
-      have hw := congrArg (fun v : MPVSpace (Fin d) N => v w) hc
+      have hw := congrArg (fun v : MPVSpace α N => v w) hc
       simpa only [WithLp.ofLp_sum, Finset.sum_apply, PiLp.smul_apply,
         mpvState_apply, mpv_eq, coeff_eq, Matrix.smul_mul, Matrix.one_mul,
         Matrix.trace_smul, smul_eq_mul, PiLp.zero_apply] using hw)
@@ -152,21 +152,21 @@ translates of a local matrix on the ring into annihilation of every virtual boun
 weighted block. Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422; SPWC10,
 arXiv:0909.5347, Theorem 5 proof, lines 869–880. -/
 theorem weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq_zero
-    (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (c : Fin r → ℂ)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L)) (i : Fin N)
     (hzero : haveI : NeZero N := NeZero.of_pos i.pos;
       Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
       (∑ j, c j • mpvState (A j) N) = 0) :
     ∀ j (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      c j • Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+      c j • Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
         (groundSpaceMap (A j) L X)) = 0 := by
   have : NeZero N := NeZero.of_pos i.pos
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
-  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
   let T : ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ]
-      MPVSpace (Fin d) L :=
+      MPVSpace α L :=
     LinearMap.lsum ℂ (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
       (fun j => c j • (Matrix.toEuclideanLin h).comp (e.toLinearMap.comp (groundSpaceMap (A j) L)))
   have hT : T = 0 := by
@@ -182,14 +182,14 @@ theorem weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq
         cyclicActiveBlock_mpvState_apply, U]
       rfl
     have hUzero := congrArg U hzero
-    have hRight : ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - L))
+    have hRight : ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - L) → α))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin h))
         (U (∑ j, c j • mpvState (A j) N)) = 0 := by
       simpa only [U, cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply, map_zero]
         using hUzero
     have hτ := congrArg (fun v => ContinuousLinearMap.rightFiber v τ) hRight
     have hzeroFiber : ContinuousLinearMap.rightFiber
-        (0 : EuclideanSpace ℂ (Cfg d L × Cfg d (N - L))) τ = 0 := by
+        (0 : EuclideanSpace ℂ ((Fin L → α) × (Fin (N - L) → α))) τ = 0 := by
       apply PiLp.ext
       intro σ
       rfl
@@ -212,8 +212,8 @@ blocks kills each weighted summand, provided complementary words span the block 
 No parent-interaction or positivity assumption is used at this local step.
 Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
 theorem toEuclideanLin_translationInvariant_term_smul_mpvState_eq_zero_of_wordTupleSpanTop
-    (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (c : Fin r → ℂ)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L)) (i : Fin N)
     (hzero : haveI : NeZero N := NeZero.of_pos i.pos;
       Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
@@ -224,7 +224,7 @@ theorem toEuclideanLin_translationInvariant_term_smul_mpvState_eq_zero_of_wordTu
   have : NeZero N := NeZero.of_pos i.pos
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
-  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
   have hEach := weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq_zero
     A c h hLN hSpan i hzero
   intro j
@@ -250,9 +250,9 @@ zero energy and the complementary word tuples span. Positivity supplies the indi
 annihilation equations rather than adding them as hypotheses.
 Source: PGVWC07, Theorem 11, `2blocks.1`, lines 1407–1422. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_wordTupleSpanTop
-    [NeZero N] (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
+    [NeZero N] (A : (j : Fin r) → MPTensor α (Fin (dim j))) (c : Fin r → ℂ)
     (hc : ∀ j, c j ≠ 0)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) (hh : h.PosSemidef)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L))
     (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
@@ -289,7 +289,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)}
 
 /-- At the source volume bound, the Hamiltonian of the translates on the ring of any positive
 semidefinite local matrix annihilating the original canonical vector annihilates every block
@@ -303,7 +303,7 @@ theorem PGVWC07CanonicalFormData.toEuclideanLin_hamiltonian_translationInvariant
     {L₀ L N : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ j, Kraus.IsNBlkInjective (data.blocks j) L₀)
     (hN : 3 * (data.r - 1) * (L₀ + 1) + L ≤ N)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) (hh : h.PosSemidef)
     (hzero : haveI : NeZero N := ⟨by
       have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
       omega⟩;
@@ -350,7 +350,7 @@ theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_hamiltonian_translati
     {L₀ L N : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ j, Kraus.IsNBlkInjective (data.blocks j) L₀)
     (hN : 3 * (data.r - 1) * (L₀ + 1) + L ≤ N)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) (hh : h.PosSemidef)
     (hzero : haveI : NeZero N := ⟨by
       have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
       omega⟩;

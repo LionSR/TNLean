@@ -32,7 +32,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The functional \(X \mapsto \operatorname{tr}(\rho X)\) of a stationary density.
 Source: arXiv:1210.6613, the rank-one limit in Lemma exptransferoperator,
@@ -51,7 +51,7 @@ private theorem uncleDensityFunctional_one (ρ : Matrix (Fin D) (Fin D) ℂ)
     (htr : Matrix.trace ρ = 1) : uncleDensityFunctional ρ 1 = 1 := by
   simp [uncleDensityFunctional, htr]
 
-private theorem uncleDensityFunctional_map (A : MPSTensor d D)
+private theorem uncleDensityFunctional_map (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hfix : Kraus.adjointMap A ρ = ρ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     uncleDensityFunctional ρ (Kraus.mapLM A X) = uncleDensityFunctional ρ X := by
@@ -63,7 +63,7 @@ peripheral primitivity; arXiv:1210.6613, Lemma exptransferoperator.
 The trace-preserving bridge is applied to the adjoint family and then
 transported back algebraically, with no adjoint norm comparison. -/
 theorem uncleTransfer_isPrimitive_of_injective_unital [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1) :
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1) :
     _root_.IsPrimitive (Kraus.mapLM A) := by
   classical
   have hspan : Kraus.wordSpan (fun i ↦ (A i)ᴴ) 1 = ⊤ :=
@@ -85,7 +85,7 @@ theorem uncleTransfer_isPrimitive_of_injective_unital [NeZero D]
 injective unital transfer leaves spectral radius strictly below one.
 Source: arXiv:1210.6613, Lemma exptransferoperator, lines 1165–1175. -/
 theorem uncleTransfer_complement_spectralRadius_lt_one [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ = 1)
     (hfix : Kraus.adjointMap A ρ = ρ) :
     spectralRadius ℂ ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
@@ -130,7 +130,7 @@ theorem uncleTransfer_complement_spectralRadius_lt_one [NeZero D]
     simp [hν0]
 
 private theorem uncleTransfer_pow_decomposition
-    (A : MPSTensor d D) (hU : Kraus.mapLM A 1 = 1)
+    (A : MPTensor α (Fin D)) (hU : Kraus.mapLM A 1 = 1)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ = 1)
     (hfix : Kraus.adjointMap A ρ = ρ) (n : ℕ) :
     Kraus.mapLM A ^ (n + 1) = uncleDensityProjection ρ +
@@ -172,7 +172,7 @@ canonical weighted trace contraction. The strict complementary gap and
 peripheral primitivity are derived from block injectivity and unitality,
 not assumed. Source: arXiv:1210.6613, Lemma exptransferoperator. -/
 theorem uncleTransfer_pow_sub_projection_bound [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) (hU : Kraus.mapLM A 1 = 1)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ = 1)
     (hfix : Kraus.adjointMap A ρ = ρ) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧

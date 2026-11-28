@@ -33,15 +33,15 @@ the canonical parent projections below by one positive constant. Source:
 arXiv:1010.3732, Appendix A; arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_uniform_pos_toMatrix'_parentInteraction_le_of_compact
     {X : Type*} [TopologicalSpace X] {d D R : ℕ}
-    (A : X → MPSTensor d D)
+    (A : X → MPTensor α (Fin D))
     (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) :
     ∃ κ : ℝ, 0 < κ ∧ ∀ x ∈ S,
       (κ : ℂ) • LinearMap.toMatrix' (parentInteraction (A x) R) ≤ H x := by
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d R) (Cfg d R) ℂ ≃⋆ₐ[ℂ] _)
+  let e := (Matrix.toEuclideanCLM : Matrix (Fin R → α) (Fin R → α) ℂ ≃⋆ₐ[ℂ] _)
   have hH' : Continuous fun x ↦ e (H x) :=
     e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp hH
   have hParent' : ∀ x, IsParentInteraction (A x) R (e (H x)).toLinearMap := hParent
@@ -63,10 +63,10 @@ other than zero of their Hamiltonians on the rings is at least one common consta
 Source: arXiv:1010.3732, Appendix A, lines 2477--2480 and 2575--2578. -/
 theorem exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap
     {X : Type*} [TopologicalSpace X] {d D R N₀ : ℕ}
-    (A : X → MPSTensor d D)
+    (A : X → MPTensor α (Fin D))
     (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ x ∈ S, ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
@@ -97,9 +97,9 @@ Source: arXiv:1010.3732, Appendix A, single-block case;
 arXiv:0909.5347, lines 828--831. -/
 theorem exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
     {X : Type*} [TopologicalSpace X] {d D R : ℕ} [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hNormal : ∀ x, Kraus.IsNormal (A x)) (hR : D ^ 4 + 1 ≤ R)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
@@ -125,9 +125,9 @@ parent interactions at the explicit range \(D^4+1\). Source:
 arXiv:1010.3732, Appendix A, single-block case; arXiv:0909.5347, Theorem 1. -/
 theorem exists_uniform_parentInteraction_gap_of_compact_isNormal
     {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
-    (A : X → MPSTensor d D) (hA : Continuous A)
+    (A : X → MPTensor α (Fin D)) (hA : Continuous A)
     (hNormal : ∀ x, Kraus.IsNormal (A x))
-    (H : X → Matrix (Cfg d (D ^ 4 + 1)) (Cfg d (D ^ 4 + 1)) ℂ)
+    (H : X → Matrix (Fin (D ^ 4 + 1) → α) (Fin (D ^ 4 + 1) → α) ℂ)
     (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction (A x) (D ^ 4 + 1) (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) :
@@ -144,15 +144,15 @@ at every range exceeding a common simultaneous injectivity length. Nonzero
 weights need not be continuous. Source: arXiv:1010.3732, Appendix A. -/
 theorem exists_uniform_block_parentInteraction_gap_of_compact
     {X : Type*} [TopologicalSpace X] {d r : ℕ} {dim : Fin r → ℕ}
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ)
     (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction
-      (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
+      (toTensorFromBlocks (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
@@ -165,7 +165,7 @@ theorem exists_uniform_block_parentInteraction_gap_of_compact
       μ A hμ hA hS hSpan hR hK
   obtain ⟨δ, hδ, h⟩ :=
     exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap (N₀ := R)
-      (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
+      (fun x => toTensorFromBlocks (μ := μ x) (A x))
       (continuous_map_groundSpace_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
       H hH hParent hK hγ fun x hx N _ hN ↦ hGap x hx N hN
   exact ⟨δ, hδ, fun x hx N hN ↦

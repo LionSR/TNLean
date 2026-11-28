@@ -25,13 +25,13 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A nonwrapping suffix interval, viewed in cyclic active-block coordinates,
 is the same Hamiltonian on the active interval acting independently of all
 spectator coordinates. -/
 theorem hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
-    (A : MPSTensor d D) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
+    (A : MPTensor α (Fin D)) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
     (hWn : W ≤ n) (hnN : n ≤ N) :
     let s : Fin N := ⟨n - W, by omega⟩
     let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
@@ -40,7 +40,7 @@ theorem hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
           ((parentChainInteraction A R N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + R ≤
               n).hamiltonian).comp
         U.symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - W) → α))
         (LinearMap.toContinuousLinearMap
             (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian))).toLinearMap := by
   classical
@@ -74,7 +74,7 @@ theorem hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
       rw [Nat.mod_eq_of_lt (by omega)]
     have hW : NeZero W := ⟨by omega⟩
     have hN : NeZero N := ⟨by omega⟩
-    change (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+    change (ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - W) → α))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
           ((parentChainInteraction A R W).term ⟨q.val, by omega⟩)))) x =
       U (Matrix.toEuclideanLin ((parentChainInteraction A R N).term ⟨n - W + q.val, by omega⟩)
@@ -90,7 +90,7 @@ theorem hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
 /-- Summing all complete suffix windows of length \(W\) counts every range-\(W\)
 open-chain parent term exactly once. -/
 theorem sum_hamiltonian_restrict_parentChainInteraction_full_window
-    (A : MPSTensor d D) (W N : ℕ) :
+    (A : MPTensor α (Fin D)) (W N : ℕ) :
     ∑ n ∈ Finset.Icc W N, Matrix.toEuclideanLin
         ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
             n).hamiltonian =
@@ -127,14 +127,14 @@ matrix `h` on `W` sites dominates a multiple of the local parent projection on `
 every open chain the Hamiltonian of the translates of `h`, times the window multiplicity
 \(W-R+1\), dominates the same multiple of the open-chain parent Hamiltonian of range `W`.
 Nachtergaele, arXiv:cond-mat/9410110, condition C1 and Section 6. -/
-theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W N : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (hRW : R ≤ W) {κ : ℝ}
+theorem hamiltonian_chainTranslates_comparison_of_local (A : MPTensor α (Fin D)) {R W N : ℕ}
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef) (hRW : R ≤ W) {κ : ℝ}
     (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
       (chainTranslates R W h).hamiltonian) :
     (κ : ℂ) • (parentChainInteraction A W N).hamiltonian ≤
       ((W - R + 1 : ℕ) : ℂ) • (chainTranslates R N h).hamiltonian := by
-  let g : ℕ → Matrix (Cfg d N) (Cfg d N) ℂ := fun i ↦
-    if hi : i + R ≤ N then ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow i hi) h
+  let g : ℕ → Matrix (Fin N → α) (Fin N → α) ℂ := fun i ↦
+    if hi : i + R ≤ N then ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.chainWindow i hi) h
     else 0
   have hg : ∀ i, 0 ≤ g i := fun i ↦ by
     by_cases hi : i + R ≤ N
@@ -142,7 +142,7 @@ theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W
       exact Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_placeAlong _ hh)
     · simp only [g, dite_eq_right hi, le_refl]
   have hwindow (n : ℕ) (hn : n + W ≤ N) :
-      (κ : ℂ) • ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow n hn)
+      (κ : ℂ) • ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.chainWindow n hn)
           (LinearMap.toMatrix' (parentInteraction A W)) ≤
         ∑ j ∈ Finset.range (W + 1 - R), g (n + j) := by
     rw [← ManyBody.placeAlong_smul]
@@ -155,7 +155,7 @@ theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W
   rw [hamiltonian_chainTranslates_eq_sum_range, hamiltonian_chainTranslates_eq_sum_range,
     Finset.smul_sum, show W - R + 1 = W + 1 - R by omega, Nat.cast_smul_eq_nsmul]
   calc ∑ n ∈ Finset.range (N + 1 - W), (κ : ℂ) • (if hn : n + W ≤ N then
-          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow n hn)
+          ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.chainWindow n hn)
             (LinearMap.toMatrix' (parentInteraction A W)) else 0)
       ≤ ∑ n ∈ Finset.range (N + 1 - W), ∑ j ∈ Finset.range (W + 1 - R), g (n + j) := by
         refine Finset.sum_le_sum fun n hn ↦ ?_
@@ -172,7 +172,7 @@ or at least \(γ\)) gives the gap \(κγ/(W-R+1)\) above the kernel of the forme
 hypothesis on the kernel of the local matrix `h` itself. Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
-    (A : MPSTensor d D) {R W N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (A : MPTensor α (Fin D)) {R W N : ℕ} (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef)
     (hRW : R ≤ W) {κ γ : ℝ} (hκ : 0 < κ)
     (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
       (chainTranslates R W h).hamiltonian)
@@ -189,7 +189,7 @@ theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
   have hOrder := hamiltonian_chainTranslates_comparison_of_local A h hh hRW (N := N) hLocal
   rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_smul, map_smul] at hOrder
   exact LinearMap.IsPositive.forall_hasEigenvalue_of_scaled_comparison
-    (E := EuclideanSpace ℂ (Cfg d N))
+    (E := EuclideanSpace ℂ (Fin N → α))
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A W N))
     hκ (by positivity : 0 < ((W - R + 1 : ℕ) : ℝ)) (by exact_mod_cast hOrder)
     (hLongKer.trans hShortKer.symm) hLong
@@ -197,7 +197,7 @@ theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
 /-- Equality of the local MPS spaces at one length makes the parent interactions on the open
 chain equal at every volume. -/
 theorem parentChainInteraction_eq_of_groundSpace_eq
-    {A B : MPSTensor d D} {L : ℕ}
+    {A B : MPTensor α (Fin D)} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) (N : ℕ) :
     parentChainInteraction A L N = parentChainInteraction B L N := by
   unfold parentChainInteraction
@@ -208,7 +208,7 @@ interaction, uniformly in the interval length once that length is sufficiently l
 eigenvalue of the open-chain Hamiltonian is `0` or at least the gap. The interaction range is
 fixed at two sites; the constant and the starting length may depend on the tensor. -/
 theorem exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) :
     ∃ W : ℕ, 2 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ N : ℕ, W ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction A 2 N).hamiltonian) μ →
@@ -246,7 +246,7 @@ theorem exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective
 /-- Every one-site injective tensor has a finite nearest-neighbor open window whose gap above
 the kernel satisfies the strict Knabe threshold. -/
 theorem exists_strict_hamiltonian_parentChainInteraction_two_window_of_isInjective
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) :
     ∃ m : ℕ, 2 ≤ m ∧ ∃ γ : ℝ,
       1 < (m : ℝ) * γ ∧
       ∀ μ : ℂ, Module.End.HasEigenvalue

@@ -26,13 +26,13 @@ open scoped ComplexOrder Matrix MatrixOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The local observable insertion expectation as a complex-linear functional.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-noncomputable def observableInsertionExpectationₗ (A : MPSTensor d D)
+noncomputable def observableInsertionExpectationₗ (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (k : ℕ) :
-    Matrix (Cfg d k) (Cfg d k) ℂ →ₗ[ℂ] ℂ where
+    Matrix (Fin k → α) (Fin k → α) ℂ →ₗ[ℂ] ℂ where
   toFun := observableInsertionExpectation A ρ
   map_add' := observableInsertionExpectation_add A ρ
   map_smul' := by
@@ -43,10 +43,10 @@ noncomputable def observableInsertionExpectationₗ (A : MPSTensor d D)
 operator norm on its domain. Normalization is established separately at an
 invariant matrix of nonzero trace. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-noncomputable def observableInsertionExpectationPositive (A : MPSTensor d D)
+noncomputable def observableInsertionExpectationPositive (A : MPTensor α (Fin D))
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (k : ℕ) :
-    CStarMatrix (Cfg d k) (Cfg d k) ℂ →P[ℂ] ℂ := by
-  let f : CStarMatrix (Cfg d k) (Cfg d k) ℂ →ₚ[ℂ] ℂ :=
+    CStarMatrix (Fin k → α) (Fin k → α) ℂ →P[ℂ] ℂ := by
+  let f : CStarMatrix (Fin k → α) (Fin k → α) ℂ →ₚ[ℂ] ℂ :=
     { toLinearMap := (observableInsertionExpectationₗ A ρ k).comp
         CStarMatrix.ofMatrixₗ.symm.toLinearMap
       monotone' := by
@@ -59,20 +59,20 @@ noncomputable def observableInsertionExpectationPositive (A : MPSTensor d D)
 
 /-- The positive functional agrees with the trace insertion formula.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-@[simp] theorem observableInsertionExpectationPositive_apply (A : MPSTensor d D)
+@[simp] theorem observableInsertionExpectationPositive_apply (A : MPTensor α (Fin D))
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     observableInsertionExpectationPositive A hρ k (CStarMatrix.ofMatrix X) =
       observableInsertionExpectation A ρ X := rfl
 
 /-- The local positive functional at an invariant matrix of nonzero trace
 has norm one. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), normalized local GVBS expectations. -/
-theorem norm_observableInsertionExpectationPositive (A : MPSTensor d D)
+theorem norm_observableInsertionExpectationPositive (A : MPTensor α (Fin D))
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0) (k : ℕ) :
     ‖(observableInsertionExpectationPositive A hρ k :
-      CStarMatrix (Cfg d k) (Cfg d k) ℂ →L[ℂ] ℂ)‖ = 1 := by
+      CStarMatrix (Fin k → α) (Fin k → α) ℂ →L[ℂ] ℂ)‖ = 1 := by
   apply Complex.ofReal_injective
   rw [PositiveContinuousLinearMap.ofReal_opNorm_eq_map_one, Complex.ofReal_one]
   exact observableInsertionExpectation_one A ρ hfix htr k
@@ -80,10 +80,10 @@ theorem norm_observableInsertionExpectationPositive (A : MPSTensor d D)
 /-- The absolute value of a normalized local expectation is bounded by the
 observable operator norm. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), local state property. -/
-theorem norm_observableInsertionExpectation_le (A : MPSTensor d D)
+theorem norm_observableInsertionExpectation_le (A : MPTensor α (Fin D))
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     ‖observableInsertionExpectation A ρ X‖ ≤ ‖CStarMatrix.ofMatrix X‖ := by
   change ‖(observableInsertionExpectationPositive A hρ k).toContinuousLinearMap
     (CStarMatrix.ofMatrix X)‖ ≤ _
@@ -94,11 +94,11 @@ theorem norm_observableInsertionExpectation_le (A : MPSTensor d D)
 /-- Taking the adjoint of a local observable conjugates its expectation.
 Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), positivity of the local GVBS expectations. -/
-theorem observableInsertionExpectation_conjTranspose (A : MPSTensor d D)
+theorem observableInsertionExpectation_conjTranspose (A : MPTensor α (Fin D))
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     observableInsertionExpectation A ρ Xᴴ = star (observableInsertionExpectation A ρ X) := by
-  let f : Matrix (Cfg d k) (Cfg d k) ℂ →ₚ[ℂ] ℂ :=
+  let f : Matrix (Fin k → α) (Fin k → α) ℂ →ₚ[ℂ] ℂ :=
     { toLinearMap := observableInsertionExpectationₗ A ρ k
       monotone' := by
         apply (monotone_iff_map_nonneg (observableInsertionExpectationₗ A ρ k)).mpr

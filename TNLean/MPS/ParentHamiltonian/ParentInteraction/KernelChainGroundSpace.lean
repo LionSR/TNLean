@@ -25,7 +25,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The kernel of the finite periodic parent Hamiltonian is contained in the
 periodic chain ground space.
@@ -33,7 +33,7 @@ periodic chain ground space.
 Equivalently, a zero-energy vector for \(H_N(A,L)\) satisfies every cyclic
 \(L\)-site local MPS constraint. -/
 theorem ker_hamiltonian_parentRingInteraction_le_chainGroundSpace
-    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) ≤
       chainGroundSpace A L N := by
@@ -60,7 +60,7 @@ periodic parent Hamiltonian.
 Equivalently, imposing every cyclic \(L\)-site local MPS constraint makes every
 translated parent interaction vanish, and hence gives zero total energy. -/
 theorem chainGroundSpace_le_ker_hamiltonian_parentRingInteraction
-    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     chainGroundSpace A L N ≤
       LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) := by
@@ -74,7 +74,7 @@ theorem chainGroundSpace_le_ker_hamiltonian_parentRingInteraction
 /-- In the nondegenerate range, the finite periodic parent-Hamiltonian kernel is
 exactly the cyclic chain ground space. -/
 theorem ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
-    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian) =
       chainGroundSpace A L N :=
@@ -85,11 +85,11 @@ theorem ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace
 \(0 < N\), \(L \le N\), the ground space at energy \(0\) of the Hamiltonian of the parent
 interaction on the ring is the cyclic chain ground space, read in the Euclidean space. -/
 theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace
-    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
       (chainGroundSpace A L N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace A hN hLN]
@@ -100,11 +100,11 @@ those of the cyclic chain ground space, read in the Euclidean space: the frustra
 ground space is the intersection of the local ground-space constraints. [PGVWC07]
 (quant-ph/0608197), Section 3.3. -/
 theorem zeroSpace_parentRingInteraction_eq_map_chainGroundSpace
-    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     (parentRingInteraction A L N).zeroSpace =
       (chainGroundSpace A L N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   rw [ManyBody.Interaction.zeroSpace_eq_groundSpace
     fun i ↦ posSemidef_parentRingInteraction_term A L i]
@@ -117,7 +117,7 @@ range \(L₀<L\le N\): the periodic MPS vector is nonzero and the ground space a
 of the parent Hamiltonian on the ring is the line through it. This strengthens the finite-size
 assumption \(N\ge 2L₀\) printed in [PGVWC07] (quant-ph/0608197), Theorem `uniqueGS`,
 `MPSarchive.tex`, lines 1272--1274, to \(N\ge L₀+1\), together with \(N\ge2\). -/
-theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
+theorem parentHamiltonian_unique_gs {A : MPTensor α (Fin D)} [NeZero D]
     {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hL : L₀ < L) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -135,7 +135,7 @@ theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
 \(1<L\le N\): the periodic MPS vector is nonzero and the ground space at energy \(0\) of the
 parent Hamiltonian on the ring is the line through it. This is the case \(L₀=1\) of
 `parentHamiltonian_unique_gs`. -/
-theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : Kraus.IsInjective A)
+theorem groundSpace_unique_periodic {A : MPTensor α (Fin D)} [NeZero D] (hA : Kraus.IsInjective A)
     {L N : ℕ} (hL : 1 < L) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 = ℂ ∙ mpvState A N ∧
@@ -146,7 +146,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : Kraus.I
 MPS vector is nonzero and spans the ground space at energy \(0\) of the parent Hamiltonian
 on the ring. This includes the endpoint \(L₀=1,N=2\). This is the one-dimensional
 specialization of arXiv:2011.12127, Section IV.C, lines 2041--2048. -/
-theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
+theorem parentHamiltonian_unique_gs_injective {A : MPTensor α (Fin D)} [NeZero D]
     {L₀ : ℕ} (hA : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -162,7 +162,7 @@ with \(L₀+1\le N\): the periodic MPS vector is nonzero and spans the ground sp
 
 The normality hypothesis is redundant because positive-length block injectivity already
 implies normality; it is retained in this specialization. -/
-theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
+theorem parentHamiltonian_unique_gs_normal {A : MPTensor α (Fin D)} [NeZero D]
     {L₀ : ℕ} (_hA : Kraus.IsNormal A) (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;

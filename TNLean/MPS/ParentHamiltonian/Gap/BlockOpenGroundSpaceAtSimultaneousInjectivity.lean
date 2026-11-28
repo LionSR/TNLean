@@ -25,13 +25,13 @@ open MPTensor
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
 
 /-- Simultaneous injectivity at a positive length propagates to every larger
 length, without normalization assumptions on the original blocks.
 Source: arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem wordTupleSpanTop_of_ge
-    (A : (j : Fin r) → MPSTensor d (dim j)) {S n : ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {S n : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hSn : S ≤ n) :
     WordTupleSpanTop A n := by
   classical
@@ -53,7 +53,7 @@ Hamiltonian of the parent interaction on the open chain is the full local matrix
 The original blocks need no normalization hypotheses.
 Source: arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
-    [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S R N : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin

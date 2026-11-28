@@ -61,7 +61,7 @@ the eventual ground-state degeneracy used in Beigi, J. Phys. A 45 (2012)
 025306, Section IV. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
-    {d : ℕ} {P : SectorDecomposition (Fin d)}
+    {d : ℕ} {P : SectorDecomposition α}
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis) :
     ∃ N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
@@ -74,16 +74,16 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
   have hN₁ : N₁ < N := lt_of_le_of_lt (Nat.le_max_left _ _) hN
   have hTwo : 2 < N := lt_of_le_of_lt (Nat.le_max_right _ _) hN
   have hImage : LinearIndependent ℂ
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘
-        fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace (Fin d) N)) := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap ∘
+        fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace α N)) := by
     convert hLI N hN₁ using 1
     funext j
     ext σ
     simp [Function.comp_apply]
   have hCoefficients : LinearIndependent ℂ
-      (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace (Fin d) N)) :=
+      (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace α N)) :=
     LinearIndependent.of_comp
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap hImage
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap hImage
   have : NeZero N := ⟨by omega⟩
   rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
   simpa using finrank_span_eq_card hCoefficients
@@ -100,7 +100,7 @@ namespace MPSTensor.BeigiSectorGraphData
 
 open FiniteWeightedDigraph
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)}
 
 /-- The dimension of the ground space carried by a directed sector edge.
 
@@ -215,7 +215,7 @@ sector loops.
 Source: CPSV16, Definition 3.9 and Theorem 3.10, lines 517--540; Beigi,
 J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_hasBNTSectorData
-    {P : SectorDecomposition (Fin d)} (F : BeigiSectorGraphData P.toTensor)
+    {P : SectorDecomposition α} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis)
     {N : ℕ} (hN : 2 < N) :
@@ -233,7 +233,7 @@ theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_ha
     intro M hM
     have : NeZero M := ⟨Nat.ne_zero_of_lt hM⟩
     rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker]
-    exact (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) M)).symm _).trans
+    exact (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace α M)).symm _).trans
       (hraw M hM)
   exact F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop hparent hN
 

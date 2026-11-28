@@ -34,7 +34,7 @@ open FrustrationFree.NestedGroundProjections
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Ordered nonwrapping windows are cyclically site-disjoint. -/
 theorem cyclicWindowsDisjoint_of_nonwrapping_ordered {N L : ℕ} {i j : Fin N}
@@ -56,9 +56,9 @@ theorem cyclicWindowsDisjoint_of_nonwrapping_ordered {N L : ℕ} {i j : Fin N}
   omega
 
 /-- The fixed-ambient ground projection of the prefix \([0,n)\). -/
-noncomputable def openPrefixGroundProjectionES (A : MPSTensor d D)
+noncomputable def openPrefixGroundProjectionES (A : MPTensor α (Fin D))
     (L N n : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+    EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α) :=
   (LinearMap.ker
       (Matrix.toEuclideanLin
           ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤
@@ -68,16 +68,16 @@ noncomputable def openPrefixGroundProjectionES (A : MPSTensor d D)
 
 Its Hamiltonian sums exactly the starts satisfying \(n-l\leq i\) and
 \(i+L\leq n+1\). -/
-noncomputable def openIntervalGroundProjectionES (A : MPSTensor d D)
+noncomputable def openIntervalGroundProjectionES (A : MPTensor α (Fin D))
     (L l N n : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+    EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α) :=
   (LinearMap.ker
     (Matrix.toEuclideanLin
         ((parentChainInteraction A L N).restrict fun i ↦ n + 1 - (l + 1) ≤ i.val ∧ i.val + L ≤ n +
             1).hamiltonian)).starProjection.toLinearMap
 
 /-- Prefix kernels decrease when the prefix grows. -/
-theorem ker_hamiltonian_prefix_parentChainInteraction_antitone (A : MPSTensor d D)
+theorem ker_hamiltonian_prefix_parentChainInteraction_antitone (A : MPTensor α (Fin D))
     (L N : ℕ) :
     Antitone fun n => LinearMap.ker
         (Matrix.toEuclideanLin
@@ -89,10 +89,10 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_antitone (A : MPSTensor d 
 
 /-- The prefix kernel projections form Nachtergaele's decreasing ground-space
 filtration on the single ambient \(N\)-site Hilbert space. -/
-noncomputable def fixedAmbientNestedGroundProjectionsES (A : MPSTensor d D)
+noncomputable def fixedAmbientNestedGroundProjectionsES (A : MPTensor α (Fin D))
     (L N : ℕ) :
     FrustrationFree.NestedGroundProjections
-      (E := EuclideanSpace ℂ (Cfg d N)) where
+      (E := EuclideanSpace ℂ (Fin N → α)) where
   projection := openPrefixGroundProjectionES A L N
   isSymmetricProjection n := by
     exact Submodule.isSymmetricProjection_starProjection _
@@ -104,7 +104,7 @@ noncomputable def fixedAmbientNestedGroundProjectionsES (A : MPSTensor d D)
 /-- A prefix Hamiltonian ending before a suffix interval starts commutes with
 that interval Hamiltonian: every pair of their terms has disjoint windows. -/
 theorem hamiltonian_prefix_parentChainInteraction_commute_restrict
-    (A : MPSTensor d D) {L l N m n : ℕ} (hsep : m ≤ n - l) :
+    (A : MPTensor α (Fin D)) {L l N m n : ℕ} (hsep : m ≤ n - l) :
     (Matrix.toEuclideanLin
         ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ m).hamiltonian).comp
         (Matrix.toEuclideanLin
@@ -123,7 +123,7 @@ theorem hamiltonian_prefix_parentChainInteraction_commute_restrict
 Hamiltonians are disjoint.  Hamiltonian commutation makes both kernels and their
 orthogonal complements invariant, which yields projection commutation. -/
 theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
-    (A : MPSTensor d D) {L l N m n : ℕ} (hsep : m ≤ n - l) :
+    (A : MPTensor α (Fin D)) {L l N m n : ℕ} (hsep : m ≤ n - l) :
     (openPrefixGroundProjectionES A L N m).comp
         (openIntervalGroundProjectionES A L l N n) =
       (openIntervalGroundProjectionES A L l N n).comp
@@ -136,7 +136,7 @@ theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_l
 /-- Once a prefix extends past \(n\), its ground space is contained in the local
 ground space on \([n-l,n+1)\). -/
 theorem ker_hamiltonian_prefix_parentChainInteraction_le_ker_restrict
-    (A : MPSTensor d D) {L l N m n : ℕ} (hnm : n < m) :
+    (A : MPTensor α (Fin D)) {L l N m n : ℕ} (hnm : n < m) :
     LinearMap.ker
         (Matrix.toEuclideanLin
             ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ m).hamiltonian) ≤
@@ -152,7 +152,7 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_le_ker_restrict
 /-- Prefix and local-interval ground projections commute when the local ground
 space contains the prefix ground space. -/
 theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
-    (A : MPSTensor d D) {L l N m n : ℕ} (hnm : n < m) :
+    (A : MPTensor α (Fin D)) {L l N m n : ℕ} (hnm : n < m) :
     (openPrefixGroundProjectionES A L N m).comp
         (openIntervalGroundProjectionES A L l N n) =
       (openIntervalGroundProjectionES A L l N n).comp
@@ -168,7 +168,7 @@ For \(m<n-l\), both prefix projections in \(E_m=G_m-G_{m+1}\) are supported to
 the left of \([n-l,n+1)\). For \(n<m\), both prefix kernels are contained in the
 local interval kernel. -/
 theorem fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
-    (A : MPSTensor d D) {L l N m n : ℕ} (hout : m < n - l ∨ n < m) :
+    (A : MPTensor α (Fin D)) {L l N m n : ℕ} (hout : m < n - l ∨ n < m) :
     ((fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m).comp
         (openIntervalGroundProjectionES A L l N n) =
       (openIntervalGroundProjectionES A L l N n).comp
@@ -192,8 +192,8 @@ Here \(G_m\) is the kernel projection of the prefix Hamiltonian on \([0,m)\),
 \(E_m=G_m-G_{m+1}\), and \(Q_n\) is the kernel projection of the local Hamiltonian
 on \([n-l,n+1)\). -/
 theorem inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc
-    (A : MPSTensor d D) {L N n l : ℕ} (hn : n < N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
+    (A : MPTensor α (Fin D)) {L N n l : ℕ} (hn : n < N)
+    (v : EuclideanSpace ℂ (Fin N → α)) :
     inner ℂ v (∑ m ∈ Finset.range N,
         (fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m
           (openIntervalGroundProjectionES A L l N n

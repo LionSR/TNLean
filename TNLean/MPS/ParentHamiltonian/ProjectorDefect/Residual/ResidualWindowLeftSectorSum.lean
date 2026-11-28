@@ -35,34 +35,33 @@ lines 2442--2531; the remaining within-sector projector defect is separate.
 open MPTensor
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder InnerProductSpace
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {E L : ℕ}
 /-- Split the concatenated blocked interval, keeping the original tail as the spectator
 coordinate. The coordinate bijection includes all zero lengths. -/
-noncomputable def residualWindowLeftConfigEquiv (d L K M r : ℕ) :
-    Cfg (blockPhysDim d L) (K + M) × Cfg d r ≃
-      Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) :=
-  (Equiv.prodCongr (Fin.appendEquiv K M).symm (Equiv.refl (Cfg d r))).trans
+noncomputable def residualWindowLeftConfigEquiv (L K M r : ℕ) :
+    (Fin (K + M) → Fin L → α) × (Fin r → α) ≃
+      (Fin K → Fin L → α) × ((Fin M → Fin L → α) × (Fin r → α)) :=
+  (Equiv.prodCongr (Fin.appendEquiv K M).symm (Equiv.refl (Fin r → α))).trans
     (Equiv.prodAssoc _ _ _)
 
 /-- The aligned left window is a physical reindexing of the ordinary full-prefix boundary map
 applied independently to each tail configuration. -/
 theorem residualWindowLeftMapES_eq_fiberwise
-    (B : MPSTensor (blockPhysDim d L) E) (K M r : ℕ) :
+    (B : MPTensor (Fin L → α) (Fin E)) (K M r : ℕ) :
     residualWindowLeftMapES B K M r =
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (residualWindowLeftConfigEquiv d L K M r)).toContinuousLinearMap.comp
-          ((ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (residualWindowLeftConfigEquiv L K M r)).toContinuousLinearMap.comp
+          ((ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
             (groundSpaceMapES B (K + M))).comp
             (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (Equiv.prodComm (Cfg d r) (Fin E × Fin E))).toContinuousLinearMap) := by
+              (Equiv.prodComm (Fin r → α) (Fin E × Fin E))).toContinuousLinearMap) := by
   ext x ⟨u, v, τ⟩
   change Matrix.trace ((Kraus.evalWord B (List.ofFn u) * Kraus.evalWord B (List.ofFn v)) *
-    boundaryFamilyEquiv (D := E) (Cfg d r) x τ) = _
+    boundaryFamilyEquiv (D := E) (Fin r → α) x τ) = _
   change Matrix.trace ((Kraus.evalWord B (List.ofFn u) * Kraus.evalWord B (List.ofFn v)) *
-    boundaryFamilyEquiv (D := E) (Cfg d r) x τ) =
-    groundSpaceMap B (K + M) (boundaryFamilyEquiv (D := E) (Cfg d r) x τ) (Fin.append u v)
+    boundaryFamilyEquiv (D := E) (Fin r → α) x τ) =
+    groundSpaceMap B (K + M) (boundaryFamilyEquiv (D := E) (Fin r → α) x τ) (Fin.append u v)
   rw [groundSpaceMap_apply, List.ofFn_fin_append, Kraus.evalWord_append]
 
 /-- The aligned left-window sector projection-sum error is at most the ordinary sector
@@ -70,7 +69,7 @@ projection-sum error on the combined blocked prefix. The estimate is independent
 original-tail length. -/
 theorem norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
     {ι : Type*} [Fintype ι] {dim : ι → ℕ}
-    (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j)) (K M r : ℕ) :
+    (B : (j : ι) → MPTensor (Fin L → α) (Fin (dim j))) (K M r : ℕ) :
     ‖(∑ j, (residualWindowLeftMapES (B j) K M r).range.starProjection) -
       (⨆ j, (residualWindowLeftMapES (B j) K M r).range).starProjection‖ ≤
       ‖(∑ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ
@@ -79,19 +78,19 @@ theorem norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
             _).symm.toLinearMap)).starProjection‖ := by
   simp only [residualWindowLeftMapES_eq_fiberwise]
   have hFiber := ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le
-    (S := Cfg d r) (fun j : ι => groundSpaceMapES (B j) (K + M))
-  have hR (j : ι) : ((ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+    (S := (Fin r → α)) (fun j : ι => groundSpaceMapES (B j) (K + M))
+  have hR (j : ι) : ((ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
       (groundSpaceMapES (B j) (K + M))).comp (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.prodComm (Cfg d r) (Fin (dim j) × Fin (dim j)))).toContinuousLinearMap).range =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (Equiv.prodComm (Fin r → α) (Fin (dim j) × Fin (dim j)))).toContinuousLinearMap).range =
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (groundSpaceMapES (B j) (K + M))).range :=
     LinearMap.range_comp_of_range_eq_top
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (groundSpaceMapES (B j) (K + M))).toLinearMap
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.prodComm (Cfg d r) (Fin (dim j) × Fin (dim j)))).toLinearEquiv.range
+        (Equiv.prodComm (Fin r → α) (Fin (dim j) × Fin (dim j)))).toLinearEquiv.range
   refine (norm_sum_isometric_range_projection_sub_iSup_le
-    (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (residualWindowLeftConfigEquiv d L K M r)) _).trans ?_
+    (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (residualWindowLeftConfigEquiv L K M r)) _).trans ?_
   simp only [hR]
   simpa only [range_groundSpaceMapES] using hFiber
 
@@ -101,7 +100,7 @@ the middle interval is sufficiently long. Source: Nachtergaele, arXiv:cond-mat/9
 Lemma commutation (i), lines 2442--2531. -/
 theorem eventually_norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
+    (B : (j : ι) → MPTensor (Fin L → α) (Fin (dim j)))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
@@ -132,7 +131,7 @@ interval, with arbitrary outer-prefix and original-tail lengths. Source: Nachter
 arXiv:cond-mat/9410110, Lemma commutation (i), lines 2442--2531. -/
 theorem tendsto_norm_residualWindowLeft_sector_projection_sum_sub_iSup_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
+    (B : (j : ι) → MPTensor (Fin L → α) (Fin (dim j)))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,

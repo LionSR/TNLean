@@ -32,13 +32,13 @@ open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Independent nonzero rescalings preserve simultaneous injectivity at each
 fixed word length. This is the scalar part of the normalization implicit in
 CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem wordTupleSpanTop_of_family_smul
-    (A : (j : Fin r) → MPSTensor d (dim j)) (ζ : Fin r → ℂ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (ζ : Fin r → ℂ)
     (hζ : ∀ j, ζ j ≠ 0) {S : ℕ} (hSpan : WordTupleSpanTop A S) :
     WordTupleSpanTop (fun j ↦ ζ j • A j) S := by
   classical
@@ -55,7 +55,7 @@ theorem wordTupleSpanTop_of_family_smul
   have hcj : (∑ w, c w • Kraus.evalWord (A j) (List.ofFn w)) =
       ((ζ j) ^ S)⁻¹ • M j := by
     simpa [wordTuple, Fintype.linearCombination_apply] using congrFun hc j
-  have hword (w : Fin S → Fin d) :
+  have hword (w : Fin S → α) :
       Kraus.evalWord (ζ j • A j) (List.ofFn w) =
         (ζ j) ^ S • Kraus.evalWord (A j) (List.ofFn w) := by
     have h := Kraus.evalWord_smul (ζ j) (A j) (List.ofFn w)
@@ -72,9 +72,9 @@ vectors. No inequivalence or normalization hypothesis is required on the
 original family. Source: CPGSV21, arXiv:2011.12127, Section IV.C,
 block-injective canonical form and closure, lines 2114--2129. -/
 theorem exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop
-    [∀ j, NeZero (dim j)] (A : (j : Fin r) → MPSTensor d (dim j))
+    [∀ j, NeZero (dim j)] (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) :
-    ∃ (B : (j : Fin r) → MPSTensor d (dim j))
+    ∃ (B : (j : Fin r) → MPTensor α (Fin (dim j)))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       WordTupleSpanTop B S ∧
@@ -92,7 +92,7 @@ theorem exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop
     ← iSup_mpvSubmodule_eq_bntMPSVectorSpan B N]
   apply iSup_congr
   intro j
-  have hvec : (mpv (B j) : NSiteSpace (Fin d) N) = (ζ j) ^ N • mpv (A j) :=
+  have hvec : (mpv (B j) : NSiteSpace α N) = (ζ j) ^ N • mpv (A j) :=
     funext (hmpv j N)
   simp only [mpvSubmodule, hvec,
     Submodule.span_singleton_smul_eq (pow_ne_zero N (hζ j)).isUnit]
@@ -102,14 +102,14 @@ length and both sides of the periodic parent ground-space identity.
 Source: CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_wordTupleSpanTop
     [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) :
-    ∃ (B : (j : Fin r) → MPSTensor d (dim j))
+    ∃ (B : (j : Fin r) → MPTensor α (Fin (dim j)))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       WordTupleSpanTop B S ∧
-      (∀ L, parentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
-        parentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) B) L) ∧
+      (∀ L, parentInteraction (toTensorFromBlocks (μ := μ) A) L =
+        parentInteraction (toTensorFromBlocks (μ := μ) B) L) ∧
       (∀ N, bntMPSVectorSpan A N = bntMPSVectorSpan B N) := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, hBNT⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
@@ -143,15 +143,15 @@ spaces and are nonzero because the boundary maps are injective.
 Source: arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem not_gaugePhaseEquiv_of_wordTupleSpanTop
     {d r S : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
-    (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A S)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (hSpan : WordTupleSpanTop A S)
     (i j : Fin r) (hij : i ≠ j) (h : dim j = dim i) :
     ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (A j)) (A i) := by
   rintro ⟨X, ζ, hζ, hX⟩
-  have hvec : (mpv (A i) : NSiteSpace (Fin d) S) = ζ ^ S • mpv (A j) := by
+  have hvec : (mpv (A i) : NSiteSpace α S) = ζ ^ S • mpv (A j) := by
     ext σ
     simpa only [Pi.smul_apply, smul_eq_mul, mpv_cast_dim h (A j) S σ] using
       mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX S σ
-  have hzero : (mpv (A i) : NSiteSpace (Fin d) S) = 0 :=
+  have hzero : (mpv (A i) : NSiteSpace α S) = 0 :=
     (Submodule.disjoint_def.mp
       ((groundSpace_iSupIndep_of_wordTupleSpanTop A hSpan).pairwiseDisjoint hij)) _
       (mpv_mem_groundSpace (A i) S)

@@ -36,22 +36,22 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- A length at which a tensor is block injective identifies the two boundary
 matrices in a word intertwiner and promotes the relation to one-site
 commutation. This is the boundary-identification step in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
-    {D S : ℕ} {A : MPSTensor d D}
+    {D S : ℕ} {A : MPTensor α (Fin D)}
     (hBlk : Kraus.IsNBlkInjective A S) (hS : 0 < S)
     (X Y : Matrix (Fin D) (Fin D) ℂ)
-    (hIntertwine : ∀ α : Fin S → Fin d,
+    (hIntertwine : ∀ α : Fin S → α,
       X * Kraus.evalWord A (List.ofFn α) = Kraus.evalWord A (List.ofFn α) * Y) :
-    X = Y ∧ ∀ a : Fin d, X * A a = A a * X := by
+    X = Y ∧ ∀ a : α, X * A a = A a * X := by
   have hMaps : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ Y := by
     apply LinearMap.ext_on_range
-      (v := fun α : Fin S → Fin d ↦ Kraus.evalWord A (List.ofFn α))
+      (v := fun α : Fin S → α ↦ Kraus.evalWord A (List.ofFn α))
     · simpa [Kraus.wordSpan] using (show Kraus.wordSpan A S = ⊤ from hBlk)
     · intro α
       simpa only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply] using
@@ -91,14 +91,14 @@ arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456, following the
 single-block change-of-cut argument in proof lines 1276--1289. -/
 theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {K S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A K)
     (X Y : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hEq :
       cyclicTranslateState (⟨K, by omega⟩ : Fin (K + S))
           (∑ j : Fin r, groundSpaceMap (A j) (K + S) (X j)) =
         ∑ j : Fin r, groundSpaceMap (A j) (K + S) (Y j)) :
-    ∀ (α : Fin S → Fin d) (j : Fin r),
+    ∀ (α : Fin S → α) (j : Fin r),
       X j * Kraus.evalWord (A j) (List.ofFn α) =
         Kraus.evalWord (A j) (List.ofFn α) * Y j := by
   classical
@@ -155,7 +155,7 @@ kept as a separate variable. This is the change-of-cut comparison in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {N K S : ℕ} (hKS : K + S = N) (hS : 0 < S)
     (hSpan : WordTupleSpanTop A K)
     (X Y : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -163,7 +163,7 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_a
       cyclicTranslateState (⟨K, by omega⟩ : Fin N)
           (∑ j : Fin r, groundSpaceMap (A j) N (X j)) =
         ∑ j : Fin r, groundSpaceMap (A j) N (Y j)) :
-    ∀ (α : Fin S → Fin d) (j : Fin r),
+    ∀ (α : Fin S → α) (j : Fin r),
       X j * Kraus.evalWord (A j) (List.ofFn α) =
         Kraus.evalWord (A j) (List.ofFn α) * Y j := by
   subst N
@@ -179,21 +179,21 @@ The change-of-cut argument formalized here is the boundary-closing step in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {L₀ L N : ℕ}
     (hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) L₀)
-    (hL₀ : 0 < L₀) [NeZero d]
+    (hL₀ : 0 < L₀) [Nonempty α]
     (hN : 0 < N) (hLN : L ≤ N) (hL₀N : L₀ ≤ N)
-    (hOpenBoundary : ∀ {φ : NSiteSpace (Fin d) N},
-      φ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N →
+    (hOpenBoundary : ∀ {φ : NSiteSpace α N},
+      φ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N →
         ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          φ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+          φ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hSpan : WordTupleSpanTop A (N - L₀))
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -202,14 +202,14 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
   let s : Fin N := ⟨N - L₀, by omega⟩
   have hTranslate :
       cyclicTranslateState s ψ ∈
-        chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N :=
+        chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N :=
     cyclicTranslateState_mem_chainGroundSpace
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) hN hLN s hψ
+      (toTensorFromBlocks (μ := μ) A) hN hLN s hψ
   obtain ⟨Y, hψY⟩ := hOpenBoundary hTranslate
   have hXsum :
       ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
     calc
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
             (Matrix.blockDiagonal' X)) := hψX
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
@@ -219,7 +219,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
         ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
     calc
       cyclicTranslateState s ψ =
-          groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+          groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
               (Matrix.blockDiagonal' Y)) := hψY
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
@@ -232,20 +232,20 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
     rw [← hXsum]
     exact hYsum
   have hIntertwine :
-      ∀ (α : Fin L₀ → Fin d) (j : Fin r),
+      ∀ (α : Fin L₀ → α) (j : Fin r),
         ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn α) =
           Kraus.evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
     apply block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
       A hSplit hL₀ hSpan
         (fun j ↦ (μ j) ^ N • X j) (fun j ↦ (μ j) ^ N • Y j)
     simpa only [s] using hSumTranslate
-  have hComm : ∀ j : Fin r, ∀ a : Fin d,
+  have hComm : ∀ j : Fin r, ∀ a : α,
       ((μ j) ^ N • X j) * A j a = A j a * ((μ j) ^ N • X j) := by
     intro j
     exact (boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
       (hBlk j) hL₀ ((μ j) ^ N • X j) ((μ j) ^ N • Y j)
       (fun α ↦ hIntertwine α j)).2
-  have hCommWord : ∀ j : Fin r, ∀ w : List (Fin d),
+  have hCommWord : ∀ j : Fin r, ∀ w : List α,
       ((μ j) ^ N • X j) * Kraus.evalWord (A j) w =
         Kraus.evalWord (A j) w * ((μ j) ^ N • X j) := by
     intro j w
@@ -273,25 +273,25 @@ periodic local constraint. This is arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1424--1456. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -322,26 +322,26 @@ Theorem 12 global change-of-cut lines 1454--1456 in
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
+    {ψ : NSiteSpace α N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
@@ -372,29 +372,29 @@ Theorem 12 proof lines 1424--1456 in
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
   have hClose :
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
@@ -417,23 +417,23 @@ Theorem 12 proof lines 1424--1456 in
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N :=
   (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
     μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
@@ -449,19 +449,19 @@ Theorem 12 proof lines 1424--1456 in
 theorem
     ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
@@ -470,7 +470,7 @@ theorem
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
       (Matrix.toLin'
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
@@ -490,26 +490,26 @@ Theorem 12 proof lines 1424--1456 in
 theorem
     ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
       (Matrix.toLin'
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   have hL : L₀ < L := by
     calc
@@ -548,23 +548,23 @@ and the chain length satisfies \(L+L_0\leq N\). -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (_hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (_hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
   apply
@@ -580,23 +580,23 @@ This is the equality in arXiv:quant-ph/0608197, Theorem 12, proof lines
 1424--1456. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   exact
     (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
@@ -610,19 +610,19 @@ This is the final conditional step in arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1424--1456. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N)
@@ -631,7 +631,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
       (Matrix.toLin'
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) ≤
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) ≤
       bntMPSVectorSpan A N := by
   have hN : 0 < N := by omega
   have hLN : L ≤ N := by omega
@@ -655,26 +655,26 @@ positive dual fixed point to \(\Lambda_j=1\). See
 -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (_hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (_hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d]
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
+    [Nonempty α]
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
     (hNlarge : L + L₀ ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
       (Matrix.toLin'
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   apply
     ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint

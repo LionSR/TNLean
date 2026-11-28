@@ -22,13 +22,13 @@ open scoped Matrix InnerProductSpace ComplexOrder
 
 namespace MPSTensor
 
-variable {d D₁ D₂ : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D₁ D₂ : ℕ}
 
 /-- A strict mixed-transfer spectral-radius bound gives operator-norm decay
 of the mixed boundary Gram operator, as in Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equation `limP12`. -/
 theorem adjoint_groundSpaceMapES_comp_tendsto_zero_of_spectralRadius_lt_one
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hgap : Kraus.mixedMapSpectralRadius B A < 1) :
     Filter.Tendsto (fun n ↦ (groundSpaceMapES A n).adjoint.comp (groundSpaceMapES B n))
       Filter.atTop (nhds 0) :=
@@ -41,7 +41,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D₁ D₂ : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D₁ D₂ : ℕ}
 variable [NeZero D₁] [NeZero D₂]
 
 /-- The ground spaces of two primitive tensors become uniformly orthogonal
@@ -51,7 +51,7 @@ arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equations `C1C2` and `limP12`
 The spectral-radius hypothesis is supplied separately by inequivalence of the
 normalized blocks. -/
 theorem eventually_norm_inner_map_groundSpace_le_of_mixed_gap
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
@@ -90,7 +90,7 @@ ground spaces. This is Nachtergaele, arXiv:cond-mat/9410110, equation
 `limitepsilonm` (lines 1661--1675), in the trace-preserving tensor convention.
 Inequivalence is imposed only when the bond dimensions agree. -/
 theorem eventually_norm_inner_map_groundSpace_le_of_inequivalent
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)

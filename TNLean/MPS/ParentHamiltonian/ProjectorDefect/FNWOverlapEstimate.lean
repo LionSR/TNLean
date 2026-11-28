@@ -23,7 +23,7 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
@@ -32,18 +32,18 @@ combined by finite Cauchy--Schwarz. This is the analytic numerator in FNW
 1992, equation (6.5), before the lower-boundary estimate is used. -/
 theorem norm_inner_overlap_sub_inner_aggregates_le [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    (A : MPTensor α (Fin D)) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α))) :
     weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
           (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) -
         inner ℂ (fnwLeftOverlapAggregate ρ A r Φ)
           (fnwRightOverlapAggregate A ℓ Ψ)‖ ≤
       fnwMixingQuantity ρ hρ A htr m *
-        (Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
+        (Real.sqrt (∑ p : (Fin ℓ → α) × (Fin r → α),
           ‖fnwLeftMiddleBoundary A Φ p‖ ^ 2) *
-        Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
+        Real.sqrt (∑ p : (Fin ℓ → α) × (Fin r → α),
           ‖fnwRightMiddleBoundary A Ψ p‖ ^ 2)) := by
   weighted_matrix_norm_instances ρ hρ
   rw [inner_overlap_sub_inner_aggregates]
@@ -56,17 +56,17 @@ theorem norm_inner_overlap_sub_inner_aggregates_le [NeZero D]
 /-- The squared norm of the left overlap vector is the sum of the squared
 boundary-map norms of its right-spectator family. -/
 theorem norm_fnwLeftOverlapMap_sq
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r)) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α)) :
     weighted_matrix_instances ρ hρ in
     ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ ^ 2 =
-      ∑ μr : Cfg d r, ‖fnwBoundaryMapCLM ρ hρ A (ℓ + m) (Φ.ofLp μr)‖ ^ 2 := by
+      ∑ μr : (Fin r → α), ‖fnwBoundaryMapCLM ρ hρ A (ℓ + m) (Φ.ofLp μr)‖ ^ 2 := by
   weighted_matrix_instances ρ hρ
   rw [PiLp.norm_sq_eq_of_L2]
-  trans ∑ p : (Cfg d ℓ × Cfg d m) × Cfg d r,
-      ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ (fnwThreeBlockConfigEquiv d ℓ m r p)‖ ^ 2
+  trans ∑ p : ((Fin ℓ → α) × (Fin m → α)) × (Fin r → α),
+      ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ (fnwThreeBlockConfigEquiv ℓ m r p)‖ ^ 2
   · symm
-    apply Fintype.sum_equiv (fnwThreeBlockConfigEquiv d ℓ m r)
+    apply Fintype.sum_equiv (fnwThreeBlockConfigEquiv ℓ m r)
     intro p
     rfl
   · rw [Fintype.sum_prod_type, Finset.sum_comm]
@@ -85,25 +85,25 @@ theorem norm_fnwLeftOverlapMap_sq
 /-- The squared norm of the right overlap vector is the sum of the squared
 boundary-map norms of its left-spectator family. -/
 theorem norm_fnwRightOverlapMap_sq
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ)
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α))) :
     weighted_matrix_instances ρ hρ in
     ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ ^ 2 =
-      ∑ μℓ : Cfg d ℓ, ‖fnwBoundaryMapCLM ρ hρ A (m + r) (Ψ.ofLp μℓ)‖ ^ 2 := by
+      ∑ μℓ : (Fin ℓ → α), ‖fnwBoundaryMapCLM ρ hρ A (m + r) (Ψ.ofLp μℓ)‖ ^ 2 := by
   weighted_matrix_instances ρ hρ
   rw [PiLp.norm_sq_eq_of_L2]
-  trans ∑ p : (Cfg d ℓ × Cfg d m) × Cfg d r,
-      ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ (fnwThreeBlockConfigEquiv d ℓ m r p)‖ ^ 2
+  trans ∑ p : ((Fin ℓ → α) × (Fin m → α)) × (Fin r → α),
+      ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ (fnwThreeBlockConfigEquiv ℓ m r p)‖ ^ 2
   · symm
-    apply Fintype.sum_equiv (fnwThreeBlockConfigEquiv d ℓ m r)
+    apply Fintype.sum_equiv (fnwThreeBlockConfigEquiv ℓ m r)
     intro p
     rfl
   · simp only [Fintype.sum_prod_type]
     apply Finset.sum_congr rfl
     intro μℓ _
-    trans ∑ q : Cfg d m × Cfg d r,
+    trans ∑ q : (Fin m → α) × (Fin r → α),
         ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ
-          (fnwThreeBlockConfigEquiv d ℓ m r ((μℓ, q.1), q.2))‖ ^ 2
+          (fnwThreeBlockConfigEquiv ℓ m r ((μℓ, q.1), q.2))‖ ^ 2
     · rw [Fintype.sum_prod_type]
     · rw [PiLp.norm_sq_eq_of_L2]
       apply Fintype.sum_equiv (Fin.appendEquiv m r)
@@ -118,8 +118,8 @@ theorem norm_fnwRightOverlapMap_sq
 /-- The source lower-boundary constant controls the left spectator-family
 norm through the left overlap vector. -/
 theorem fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r)) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ)
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α)) :
     weighted_matrix_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A (ℓ + m) * ‖Φ‖ ^ 2 ≤
       ‖fnwLeftOverlapMap ρ hρ A ℓ m r Φ‖ ^ 2 := by
@@ -131,8 +131,8 @@ theorem fnwLowerBoundaryConstant_mul_familyNorm_sq_le_leftOverlap [NeZero D]
 /-- The source lower-boundary constant controls the right spectator-family
 norm through the right overlap vector. -/
 theorem fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ)
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α))) :
     weighted_matrix_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A (m + r) * ‖Ψ‖ ^ 2 ≤
       ‖fnwRightOverlapMap ρ hρ A ℓ m r Ψ‖ ^ 2 := by
@@ -144,9 +144,9 @@ theorem fnwLowerBoundaryConstant_mul_familyNorm_sq_le_rightOverlap [NeZero D]
 /-- The square root of the middle lower-boundary constant controls the left
 spectator-family norm by the left physical overlap norm. -/
 theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
     weighted_matrix_instances ρ hρ in
     Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m) * ‖Φ‖ ≤
@@ -167,9 +167,9 @@ theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_leftOverlap [NeZero D]
 /-- The square root of the middle lower-boundary constant controls the right
 spectator-family norm by the right physical overlap norm. -/
 theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
     weighted_matrix_instances ρ hρ in
     Real.sqrt (fnwLowerBoundaryConstant ρ hρ A m) * ‖Ψ‖ ≤
@@ -190,10 +190,10 @@ theorem sqrt_fnwLowerBoundaryConstant_mul_familyNorm_le_rightOverlap [NeZero D]
 /-- Monotonicity of the lower-boundary constant converts both spectator
 family norms into the two physical overlap norms at the common middle length. -/
 theorem fnwLowerBoundaryConstant_mul_familyNorms_le_overlapNorms [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D))
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
     weighted_matrix_instances ρ hρ in
     fnwLowerBoundaryConstant ρ hρ A m * ‖Φ‖ * ‖Ψ‖ ≤
@@ -221,10 +221,10 @@ identities are inserted. The two factors remain the genuine rho-weighted
 \(\ell^2\) family norms. -/
 theorem norm_inner_overlap_sub_inner_aggregates_le_familyNorms [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ)) :
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α))) :
     weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
           (fnwRightOverlapMap ρ hρ A ℓ m r Ψ) -
@@ -244,10 +244,10 @@ lower-boundary constant is assumed directly, without replacing it by
 \(1-a(m)\) or assuming \(a(m)<1\). -/
 theorem norm_inner_overlap_sub_inner_aggregates_le_div_lowerBoundary [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
     weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)

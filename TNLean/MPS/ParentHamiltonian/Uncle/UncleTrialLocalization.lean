@@ -25,11 +25,11 @@ namespace MPSTensor
 
 open ManyBody.Interaction (translationInvariant)
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- A local pair disjoint from a numbered segment leaves its word fixed. -/
 theorem uncleConfigSegment_contiguous_outside {T : ℕ}
-    (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (σ : Cfg d 2)
+    (τ : (Fin T → α)) (s n i : ℕ) (hs : s + n ≤ T) (σ : (Fin 2 → α))
     (h : s + n ≤ i ∨ i + 2 ≤ s) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
       uncleConfigSegment τ s n hs := by
@@ -41,7 +41,7 @@ theorem uncleConfigSegment_contiguous_outside {T : ℕ}
     rcases h with h | h <;> omega)]
 
 private theorem uncleConfigSegment_contiguous_inside {T : ℕ}
-    (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (σ : Cfg d 2)
+    (τ : (Fin T → α)) (s n i : ℕ) (hs : s + n ≤ T) (σ : (Fin 2 → α))
     (hsi : s ≤ i) (hi : i + 2 ≤ s + n) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
       uncleConfigSegment τ s (i - s) (by omega) ++ List.ofFn σ ++
@@ -71,9 +71,9 @@ private theorem uncleConfigSegment_contiguous_inside {T : ℕ}
     apply congrArg τ
     exact Fin.ext (by change s + (i - s + 2 + j.val) = i + 2 + j.val; omega)
 
-private theorem trace_evalWord_pair_mem_groundSpace {c : ℕ} (C : MPSTensor d c)
+private theorem trace_evalWord_pair_mem_groundSpace {c : ℕ} (C : MPTensor α (Fin c))
     (P Q : Matrix (Fin c) (Fin c) ℂ) :
-    (fun σ : Cfg d 2 ↦ Matrix.trace (P * Kraus.evalWord C (List.ofFn σ) * Q)) ∈
+    (fun σ : (Fin 2 → α) ↦ Matrix.trace (P * Kraus.evalWord C (List.ofFn σ) * Q)) ∈
       groundSpace C 2 := by
   refine ⟨Q * P, ?_⟩
   ext σ
@@ -82,11 +82,11 @@ private theorem trace_evalWord_pair_mem_groundSpace {c : ℕ} (C : MPSTensor d c
 
 /-- Fixed exterior contractions of a pure A pair lie in the actual local uncle kernel. -/
 theorem uncleInteraction_uniform_slice_left_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (P Q : Matrix (Fin a) (Fin a) ℂ) (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (P Q : Matrix (Fin a) (Fin a) ℂ) (u v : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ Matrix.trace (P * Kraus.evalWord A (u ++ List.ofFn σ ++ v) * Q))) = 0 := by
   apply uncleInteraction_apply_eq_zero_left
   rw [mem_map_groundSpace_iff]
@@ -95,11 +95,11 @@ theorem uncleInteraction_uniform_slice_left_eq_zero
 
 /-- Fixed exterior contractions of a pure B pair lie in the actual local uncle kernel. -/
 theorem uncleInteraction_uniform_slice_right_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (P Q : Matrix (Fin b) (Fin b) ℂ) (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (P Q : Matrix (Fin b) (Fin b) ℂ) (u v : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ Matrix.trace (P * Kraus.evalWord B (u ++ List.ofFn σ ++ v) * Q))) = 0 := by
   apply uncleInteraction_apply_eq_zero_right
   rw [mem_map_groundSpace_iff]
@@ -107,14 +107,14 @@ theorem uncleInteraction_uniform_slice_right_eq_zero
     trace_evalWord_pair_mem_groundSpace B (P * Kraus.evalWord B u) (Kraus.evalWord B v * Q)
 
 private theorem uncle_uniform_middle
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (p r u v x y : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (p r u v x y : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p r (u ++ List.ofFn σ ++ v) x y)) = 0 := by
   have hfun :
-      (fun σ : Cfg d 2 ↦
+      (fun σ : (Fin 2 → α) ↦
         uncleTwoWallCoefficient A B R L p r (u ++ List.ofFn σ ++ v) x y) =
       (fun σ ↦ Matrix.trace (Kraus.evalWord B (u ++ List.ofFn σ ++ v) *
         (uncleDomainWallWord B A L x * Kraus.evalWord A y *
@@ -151,13 +151,13 @@ theorem uncleTrialEndpointBonds_card (N : ℕ) (hN : 0 < N) :
     ne_of_lt (h01.trans (h12.trans h23))]
 
 private theorem uncleTrial_contiguous_cancel
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (i : ℕ) (hi : i + 2 ≤ 6 * N + 1)
     (h0 : i ≠ N - 1) (h1 : i ≠ 2 * N) (h2 : i ≠ 4 * N - 1) (h3 : i ≠ 5 * N)
-    (τ : Cfg d (6 * N + 1)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (τ : (Fin (6 * N + 1) → α)) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (contiguousRestrictₗ i 2 hi τ (uncleTwoWallTrialSource A B R L N))) = 0 := by
   have hcases : i + 2 ≤ N ∨
       (N ≤ i ∧ i + 2 ≤ 2 * N + 1) ∨
@@ -272,7 +272,7 @@ private theorem uncleTrial_contiguous_cancel
         (uncleConfigSegment τ (i + 2) (6 * N + 1 - (i + 2)) (by omega))
 
 private theorem uncleConfigSegment_last_outside
-    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) (σ : Cfg d 2)
+    (N : ℕ) (hN : 0 < N) (τ : (Fin (6 * N + 1) → α)) (σ : (Fin 2 → α))
     (s n : ℕ) (hs : 1 ≤ s) (hn : s + n ≤ 6 * N) :
     uncleConfigSegment
         (cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ)
@@ -283,7 +283,7 @@ private theorem uncleConfigSegment_last_outside
     (show 2 - 1 ≤ s + j.val by omega) (show s + j.val < 6 * N + 1 - 1 by omega)
 
 private theorem uncleConfigSegment_last_prefix
-    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) (σ : Cfg d 2) :
+    (N : ℕ) (hN : 0 < N) (τ : (Fin (6 * N + 1) → α)) (σ : (Fin 2 → α)) :
     uncleConfigSegment
         (cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ)
         0 N (by omega) = [σ 1] ++ uncleConfigSegment τ 1 (N - 1) (by omega) := by
@@ -305,7 +305,7 @@ private theorem uncleConfigSegment_last_prefix
       (show 2 - 1 ≤ 1 + j.val by omega) (show 1 + j.val < 6 * N + 1 - 1 by omega)
 
 private theorem uncleConfigSegment_last_suffix
-    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) (σ : Cfg d 2) :
+    (N : ℕ) (hN : 0 < N) (τ : (Fin (6 * N + 1) → α)) (σ : (Fin 2 → α)) :
     uncleConfigSegment
         (cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ)
         (5 * N + 1) N (by omega) =
@@ -332,11 +332,11 @@ private theorem uncleConfigSegment_last_suffix
     exact cyclicCfg_last_eq (by omega) (by omega) (by omega) σ τ
 
 private theorem uncleTrial_wrap_cancel
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (τ : (Fin (6 * N + 1) → α)) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (cyclicRestrictₗ (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) τ
         (uncleTwoWallTrialSource A B R L N))) = 0 := by
   let M := Kraus.evalWord A (uncleConfigSegment τ 1 (N - 1) (by omega)) *
@@ -367,21 +367,21 @@ from its four interval-end bonds. This includes the periodic A/A bond.
 No perturbation injectivity or normalization is assumed. Source:
 arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem uncleInteraction_trial_cyclicRestrict_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1))
-    (hi : i ∉ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
+    (hi : i ∉ uncleTrialEndpointBonds N hN) (τ : (Fin (6 * N + 1) → α)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L)
       (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N))) = 0 := by
   have hidx : i.val ≠ N - 1 ∧ i.val ≠ 2 * N ∧
       i.val ≠ 4 * N - 1 ∧ i.val ≠ 5 * N := by
     simpa only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton,
       not_or, Fin.ext_iff] using hi
   change Matrix.toEuclideanLin (uncleInteraction A B R L)
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (cyclicRestrictₗ (Fin.pos i) 2 i τ (uncleTwoWallTrialSource A B R L N))) = 0
   by_cases hlast : i.val = 6 * N
   · have heq : i = ⟨6 * N, by omega⟩ := Fin.ext hlast
@@ -397,26 +397,26 @@ exactly the sum of its four endpoint contributions. This is a finite
 identity, without an energy estimate or supplied support condition.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem hamiltonian_uncleInteraction_trial_eq_sum_endpoints
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) :
-    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)
     Matrix.toEuclideanLin
         (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ =
-      ∑ i ∈ uncleTrialEndpointBonds N hN, (((d ^ 2 : ℕ) : ℂ)⁻¹) •
-        ∑ τ : Cfg d (6 * N + 1), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
+      ∑ i ∈ uncleTrialEndpointBonds N hN, (((Fintype.card α ^ 2 : ℕ) : ℂ)⁻¹) •
+        ∑ τ : (Fin (6 * N + 1) → α), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
           (Matrix.toEuclideanLin
               (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)
                   φ)) := by
   dsimp only
   calc
-    _ = ∑ i : Fin (6 * N + 1), (((d ^ 2 : ℕ) : ℂ)⁻¹) •
-        ∑ τ : Cfg d (6 * N + 1), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
+    _ = ∑ i : Fin (6 * N + 1), (((Fintype.card α ^ 2 : ℕ) : ℂ)⁻¹) •
+        ∑ τ : (Fin (6 * N + 1) → α), (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ)).adjoint
           (Matrix.toEuclideanLin (uncleInteraction A B R L) (LinearMap.withLpMap 2 (cyclicRestrictₗ
               (Fin.pos i) 2 i τ)
-            ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+            ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
               (uncleTwoWallTrialSource A B R L N)))) := by
       rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
       refine Finset.sum_congr rfl fun i _ ↦ ?_

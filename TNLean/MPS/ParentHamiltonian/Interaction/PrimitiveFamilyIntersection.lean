@@ -65,7 +65,7 @@ lines 2195--2230, the orthogonal-complement construction of the interaction.
 
 open scoped ComplexOrder
 namespace MPSTensor
-variable {d D R : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D R : ℕ}
 
 open ManyBody.Interaction (chainTranslates) in
 /-- Exact kernels of the Hamiltonians of the parent interaction on the open chain give a positive
@@ -73,11 +73,11 @@ semidefinite interaction equal to the matrix of the canonical parent interaction
 kernels at every volume at least its range. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma `existenceinteraction`, lines 2195--2230. -/
 theorem exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction
-    (A : MPSTensor d D)
+    (A : MPTensor α (Fin D))
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
         ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
-    ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+    ∃ h : Matrix (Fin R → α) (Fin R → α) ℂ,
       h = LinearMap.toMatrix' (parentInteraction A R) ∧ h.PosSemidef ∧
       ∀ N, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
@@ -94,7 +94,7 @@ section PrimitiveFamilyIntersection
 open Filter
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 variable {ι : Type*} [Finite ι] {dim : ι → ℕ}
 
@@ -103,15 +103,15 @@ intersection identities imply the eventual joint intersection identity.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4, Proposition
 forintersection and Lemma intersectionequivalence. -/
 theorem eventually_iSup_groundSpace_restriction_intersection_of_independent_middle
-    (A : ∀ j, MPSTensor d (dim j))
+    (A : ∀ j, MPTensor α (Fin (dim j)))
     (hIndep : ∀ᶠ n in atTop, iSupIndep (fun j => groundSpace (A j) n))
     (hInter : ∀ j, ∀ᶠ n in atTop,
-      ((⨅ b : Fin d, (groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-        ⨅ a : Fin d, (groundSpace (A j) (n + 1)).comap (restrictFirstₗ a)) =
+      ((⨅ b : α, (groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+        ⨅ a : α, (groundSpace (A j) (n + 1)).comap (restrictFirstₗ a)) =
         groundSpace (A j) (n + 2)) :
     ∀ᶠ n in atTop,
-      ((⨅ b : Fin d, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-        ⨅ a : Fin d, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a)) =
+      ((⨅ b : α, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+        ⨅ a : α, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a)) =
         ⨆ j, groundSpace (A j) (n + 2) := by
   filter_upwards [hIndep, Filter.eventually_all.mpr hInter] with n hn hStep
   exact iSup_groundSpace_eq_restriction_intersection_of_middle_independent A hn hStep
@@ -124,14 +124,14 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 Proposition forintersection, Lemmas disjoint and intersectionequivalence. -/
 theorem eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap
     [∀ j, NeZero (dim j)]
-    (A : ∀ j, MPSTensor d (dim j))
+    (A : ∀ j, MPTensor α (Fin (dim j)))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∀ᶠ n in atTop,
-      ((⨅ b : Fin d, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-        ⨅ a : Fin d, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a)) =
+      ((⨅ b : α, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+        ⨅ a : α, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a)) =
         ⨆ j, groundSpace (A j) (n + 2) := by
   have hPeriodic : ∀ j, IsPeriodic 1 (A j) := fun j =>
     (IsPeriodic.one_iff_primitive (A j)).mpr
@@ -149,8 +149,8 @@ chain at every volume at least any sufficiently large interaction range. No join
 condition is supplied. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 Lemma existenceinteraction, and equations (3.12)--(3.13). -/
 theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_primitive_overlap
-    [NeZero d] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    [Nonempty α] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
@@ -173,13 +173,13 @@ range. The interaction is constructed from the overlap-based joint intersection.
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1 and Lemma existenceinteraction, in the supplied
 primitive-family setting. -/
 theorem exists_positive_parent_interaction_of_primitive_overlap
-    [NeZero d] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    [Nonempty α] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
-    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Fin R → α) (Fin R → α) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
@@ -210,7 +210,7 @@ lines 2195--2230, the orthogonal-complement construction of the interaction.
 -/
 
 namespace MPSTensor
-variable {d DA DB R : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+variable {α : Type*} [Fintype α] [DecidableEq α] {DA DB R : ℕ} {A : MPTensor α (Fin DA)} {B : MPTensor α (Fin DB)}
 
 /-- Equal local support spaces give equal canonical interaction matrices,
 also for tensors of different bond dimensions. Source: Nachtergaele,

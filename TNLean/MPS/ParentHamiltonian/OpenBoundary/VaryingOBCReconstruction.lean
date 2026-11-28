@@ -29,14 +29,14 @@ open scoped Matrix BigOperators
 
 namespace Matrix
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- Prepending one physical letter prepends its rectangular site matrix, with the
 remaining bonds shifted by one.
 Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
 private theorem rectangularEval_cons (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    {n : ℕ} (x : Fin d) (s : Fin n → Fin d) :
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    {n : ℕ} (x : α) (s : Fin n → α) :
     Kraus.rectangularEval b (fun k : Fin (n + 1) ↦ A k.val) (Fin.cons x s) =
       A 0 x * Kraus.rectangularEval (fun k ↦ b (k + 1)) (fun k : Fin n ↦ A (k.val + 1)) s :=
   rfl
@@ -44,8 +44,8 @@ private theorem rectangularEval_cons (b : ℕ → ℕ)
 /-- Appending one physical letter appends its rectangular site matrix.
 Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
 theorem obc_rectangularEval_snoc (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    {n : ℕ} (w : Fin n → Fin d) (i : Fin d) :
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    {n : ℕ} (w : Fin n → α) (i : α) :
     Kraus.rectangularEval b (fun k : Fin (n + 1) ↦ A k.val) (Fin.snoc w i) =
       Kraus.rectangularEval b (fun k : Fin n ↦ A k.val) w * A n i := by
   induction n generalizing b with
@@ -60,9 +60,9 @@ theorem obc_rectangularEval_snoc (b : ℕ → ℕ)
 The identity is proved on the true endpoint spaces, without square padding.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1237. -/
 theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (n : ℕ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (n : ℕ)
     (hA : ∀ k < n, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ)) :
-    ∑ w : Fin n → Fin d,
+    ∑ w : Fin n → α,
       Kraus.rectangularEval b (fun k : Fin n ↦ A k.val) w *
         (Kraus.rectangularEval b (fun k : Fin n ↦ A k.val) w)ᴴ =
       (1 : Matrix (Fin (b 0)) _ ℂ) := by
@@ -72,11 +72,11 @@ theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
     have htail := ih (fun k ↦ b (k + 1)) (fun k ↦ A (k + 1))
       (fun k hk ↦ hA (k + 1) (by omega))
     have hprod := obc_block_row_isometry (A 0)
-      (fun w : Fin n → Fin d ↦
+      (fun w : Fin n → α ↦
         Kraus.rectangularEval (fun k ↦ b (k + 1))
           (fun k : Fin n ↦ A (k.val + 1)) w)
       (hA 0 (by omega)) htail
-    rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
+    rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ α)).sum_comp]
     refine Eq.trans (Finset.sum_congr rfl fun x _ ↦ ?_) hprod
     simp only [Fin.consEquiv_apply, Kraus.rectangularEval, Fin.cons_succ]
     rfl
@@ -87,22 +87,22 @@ are assumed. The physical length is at least two, so an adjacent interaction exi
 Source: PGVWC07, Theorem 9 proof, equation unique-OBC and the final induction,
 lines 1212–1237. -/
 theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤)
-    (ψ : List (Fin d) → ℂ)
-    (hpair : ∀ (u v : List (Fin d)), u.length + 2 + v.length = N →
+    (ψ : List α → ℂ)
+    (hpair : ∀ (u v : List α), u.length + 2 + v.length = N →
       ∃ X : Matrix (Fin (b (u.length + 2))) (Fin (b u.length)) ℂ,
         ∀ i j, ψ (u ++ i :: j :: v) = Matrix.trace (X * A u.length i * A (u.length + 1) j)) :
     ∃ X : Matrix (Fin (b N)) (Fin (b 0)) ℂ,
-      ∀ w : Fin N → Fin d,
+      ∀ w : Fin N → α,
         ψ (List.ofFn w) =
           Matrix.trace (X * Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w) := by
   classical
-  have hprefix : ∀ r : ℕ, r + 2 ≤ N → ∀ v : List (Fin d), r + 2 + v.length = N →
+  have hprefix : ∀ r : ℕ, r + 2 ≤ N → ∀ v : List α, r + 2 + v.length = N →
       ∃ X : Matrix (Fin (b (r + 2))) (Fin (b 0)) ℂ,
-        ∀ w : Fin (r + 2) → Fin d,
+        ∀ w : Fin (r + 2) → α,
           ψ (List.ofFn w ++ v) = Matrix.trace
             (X * Kraus.rectangularEval b (fun k : Fin (r + 2) ↦ A k.val) w) := by
     intro r
@@ -114,20 +114,20 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
       simpa [List.ofFn_succ, Kraus.rectangularEval, Matrix.mul_assoc] using hX (w 0) (w 1)
     | succ r ih =>
       intro hr v hv
-      let P : (Fin (r + 1) → Fin d) → Matrix (Fin (b 0)) (Fin (b (r + 1))) ℂ :=
+      let P : (Fin (r + 1) → α) → Matrix (Fin (b 0)) (Fin (b (r + 1))) ℂ :=
         fun u ↦ Kraus.rectangularEval b (fun k : Fin (r + 1) ↦ A k.val) u
-      let φ : (Fin (r + 1) → Fin d) → Fin d → Fin d → ℂ :=
+      let φ : (Fin (r + 1) → α) → α → α → ℂ :=
         fun u i j ↦ ψ (List.ofFn u ++ i :: j :: v)
       have hP : ∑ u, P u * (P u)ᴴ = (1 : Matrix (Fin (b 0)) _ ℂ) :=
         obc_rectangularEval_row_isometry b A (r + 1) (fun k hk ↦ hA k (by omega))
-      have hLeft (j : Fin d) : ∃ X : Matrix (Fin (b (r + 2))) (Fin (b 0)) ℂ,
+      have hLeft (j : α) : ∃ X : Matrix (Fin (b (r + 2))) (Fin (b 0)) ℂ,
           ∀ u i, φ u i j = Matrix.trace (X * P u * A (r + 1) i) := by
         obtain ⟨X, hX⟩ := ih (by omega) (j :: v) (by simp only [List.length_cons]; omega)
         refine ⟨X, fun u i ↦ ?_⟩
         have hx := hX (Fin.snoc u i)
         rw [List.ofFn_snoc, obc_rectangularEval_snoc] at hx
         simpa only [φ, P, List.append_assoc, List.singleton_append, Matrix.mul_assoc] using hx
-      have hRight (u : Fin (r + 1) → Fin d) :
+      have hRight (u : Fin (r + 1) → α) :
           ∃ Y : Matrix (Fin (b (r + 3))) (Fin (b (r + 1))) ℂ,
             ∀ i j, φ u i j = Matrix.trace (Y * A (r + 1) i * A (r + 2) j) := by
         have key : ∀ m : ℕ, m = (List.ofFn u).length →
@@ -165,15 +165,15 @@ This is the final scalar-boundary step, rather than an assertion that normalized
 vectors have the same global phase.
 Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
 theorem obc_scalar_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤)
-    (ψ : List (Fin d) → ℂ)
-    (hpair : ∀ (u v : List (Fin d)), u.length + 2 + v.length = N →
+    (ψ : List α → ℂ)
+    (hpair : ∀ (u v : List α), u.length + 2 + v.length = N →
       ∃ X : Matrix (Fin (b (u.length + 2))) (Fin (b u.length)) ℂ,
         ∀ i j, ψ (u ++ i :: j :: v) = Matrix.trace (X * A u.length i * A (u.length + 1) j)) :
-    ∃ c : ℂ, ∀ w : Fin N → Fin d,
+    ∃ c : ℂ, ∀ w : Fin N → α,
       ψ (List.ofFn w) = c *
         Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w
           (Fin.cast hleft.symm 0) (Fin.cast hright.symm 0) := by

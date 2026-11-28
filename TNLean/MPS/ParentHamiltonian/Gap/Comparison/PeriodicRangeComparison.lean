@@ -34,7 +34,7 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### The comparison for the Hamiltonians of the parent interactions
 
@@ -49,7 +49,7 @@ open Fin.CommRing
 
 /-- The term with index `0` of the parent interaction on the ring of `W` sites is the local
 parent interaction: its window is the whole ring. -/
-theorem parentRingInteraction_term_zero_self (A : MPSTensor d D) {W : ℕ} (hW : 0 < W) :
+theorem parentRingInteraction_term_zero_self (A : MPTensor α (Fin D)) {W : ℕ} (hW : 0 < W) :
     haveI : NeZero W := ⟨by omega⟩;
     (parentRingInteraction A W W).term ⟨0, hW⟩ =
       LinearMap.toMatrix' (parentInteraction A W) := by
@@ -66,7 +66,7 @@ gives a two-sided comparison of the periodic parent Hamiltonians of ranges \(m +
 \(R\): each range-\(R\) term occurs in exactly \(m\) windows. This is the finite-range comparison
 used in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`. -/
 theorem hamiltonian_parentRingInteraction_comparison_of_local_open_comparison
-    (A : MPSTensor d D) {R m N : ℕ}
+    (A : MPTensor α (Fin D)) {R m N : ℕ}
     (hR : 1 ≤ R) (hmR : R ≤ m) (hN : 2 * m ≤ N) {κ C : ℝ}
     (hLower : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A (m + R - 1)) ≤
       (parentChainInteraction A R (m + R - 1)).hamiltonian)
@@ -79,7 +79,7 @@ theorem hamiltonian_parentRingInteraction_comparison_of_local_open_comparison
         (C : ℂ) • (parentRingInteraction A (m + R - 1) N).hamiltonian := by
   have : NeZero N := ⟨by omega⟩
   have hWN : m + R - 1 ≤ N := by omega
-  have hsum : ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hWN i)
+  have hsum : ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.ringWindow hWN i)
       (parentChainInteraction A R (m + R - 1)).hamiltonian =
       (m : ℂ) • (parentRingInteraction A R N).hamiltonian := by
     simp only [← ManyBody.Interaction.translationInvariant_term_of_le _ hWN,
@@ -92,7 +92,7 @@ theorem hamiltonian_parentRingInteraction_comparison_of_local_open_comparison
     simp only [hshift, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
       show m + R - 1 + 1 - R = m by omega, Nat.cast_smul_eq_nsmul]
   have hring (W : ℕ) (hW : W ≤ N) (c : ℂ) : c • (parentRingInteraction A W N).hamiltonian =
-      ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hW i)
+      ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.ringWindow hW i)
         (c • LinearMap.toMatrix' (parentInteraction A W)) := by
     simp only [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hW,
       ManyBody.placeAlong_smul, Finset.smul_sum]
@@ -120,7 +120,7 @@ transfers to a prescribed range whose open-chain Hamiltonian on that longer inte
 full local MPS space as kernel. Each gap is stated above the kernel: every eigenvalue is `0` or
 at least the gap. -/
 theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
-    {d D R W : ℕ} (A : MPSTensor d D) (hR : 0 < R) (hRW : 2 * R ≤ W)
+    {d D R W : ℕ} (A : MPTensor α (Fin D)) (hR : 0 < R) (hRW : 2 * R ≤ W)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
       ((groundSpace A W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {γ : ℝ} (hγ : 0 < γ)

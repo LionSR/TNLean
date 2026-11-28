@@ -27,7 +27,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 namespace BlockSumGroundSpace
 
@@ -35,9 +35,9 @@ namespace BlockSumGroundSpace
 boundary parametrizations applied to the diagonal boundary blocks. -/
 theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ)
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ) :
-    groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L X =
+    groundSpaceMap (toTensorFromBlocks (μ := μ) A) L X =
       ∑ j : Fin r, groundSpaceMap (A j) L
         ((μ j) ^ L • Matrix.finSigmaDiagonalBlock X j) := by
   ext σ
@@ -60,9 +60,9 @@ This is the block-diagonal boundary-condition identity used in PGVWC07,
 Theorem 12, proof lines 1430--1434. -/
 theorem groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
-    groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L
+    groundSpaceMap (toTensorFromBlocks (μ := μ) A) L
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) =
       ∑ j : Fin r, groundSpaceMap (A j) L ((μ j) ^ L • X j) := by
   rw [groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock]
@@ -78,11 +78,11 @@ component represented by each diagonal block remains in its corresponding
 open-boundary space. -/
 theorem exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
-    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} {ψ : NSiteSpace (Fin d) L}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
+    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} {ψ : NSiteSpace α L}
     (hψ : ψ ∈ ⨆ j : Fin r, groundSpace (A j) L) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) L
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) L ((μ j) ^ L • X j) ∈ groundSpace (A j) L := by
@@ -124,9 +124,9 @@ This is the single-summand direction of the local identity
 \] -/
 theorem groundSpace_block_le_toTensorFromBlocks
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {j : Fin r} (hμj : μ j ≠ 0) (L : ℕ) :
-    groundSpace (A j) L ≤ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L := by
+    groundSpace (A j) L ≤ groundSpace (toTensorFromBlocks (μ := μ) A) L := by
   classical
   intro ψ hψ
   rw [groundSpace, LinearMap.mem_range] at hψ
@@ -178,9 +178,9 @@ local identity \(G_L(B)=S_L\) used in the proof of PGVWC07,
 Theorem 12. -/
 theorem groundSpace_toTensorFromBlocks_eq_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0) (L : ℕ) :
-    groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
+    groundSpace (toTensorFromBlocks (μ := μ) A) L =
       ⨆ j : Fin r, groundSpace (A j) L := by
   classical
   apply le_antisymm

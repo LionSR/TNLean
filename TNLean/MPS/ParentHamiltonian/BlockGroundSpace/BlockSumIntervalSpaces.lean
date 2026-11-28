@@ -27,15 +27,15 @@ private theorem pi_univ_iSup_const {ι α M : Type*} [Finite α]
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- The weighted block sum has the sum of the block ground spaces in the
 physical Hilbert space. This is the local identity used in PGVWC07,
 Theorem 12, with nonzero block coefficients. -/
 theorem map_groundSpace_toTensorFromBlocks_eq_iSup
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (L : ℕ) :
-    ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ
+    ((groundSpace (toTensorFromBlocks (μ := μ) A) L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) =
       ⨆ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
@@ -45,27 +45,27 @@ theorem map_groundSpace_toTensorFromBlocks_eq_iSup
 block sum with nonzero coefficients. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2444--2463. -/
 theorem map_groundSpace_block_le_toTensorFromBlocks
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (α : Fin r) (L : ℕ) :
     ((groundSpace (A α) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace
-        (toTensorFromBlocks (α := Fin d) (μ := μ)
+        (toTensorFromBlocks (μ := μ)
         A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] using
     (le_iSup (fun β ↦ ((groundSpace (A β) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) α)
 
 private theorem leftBoundaryMap_range_toTensorFromBlocks
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (leftBoundaryMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
+    (leftBoundaryMap (toTensorFromBlocks (μ := μ) A) K L).range =
       ⨆ j, (leftBoundaryMap (A j) K L).range := by
-  let T : (Cfg d L → NSiteSpace (Fin d) K) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) :=
+  let T : ((Fin L → α) → NSiteSpace α K) →ₗ[ℂ] NSiteSpace α (K + L) :=
     LinearMap.pi fun σ ↦
-      (LinearMap.proj (σ ∘ Fin.castAdd L) : NSiteSpace (Fin d) K →ₗ[ℂ] ℂ).comp
+      (LinearMap.proj (σ ∘ Fin.castAdd L) : NSiteSpace α K →ₗ[ℂ] ℂ).comp
         (LinearMap.proj (σ ∘ Fin.natAdd K))
-  have hfac {D : ℕ} (B : MPSTensor d D) :
-      leftBoundaryMap B K L = T.comp ((groundSpaceMap B K).compLeft (Cfg d L)) := rfl
+  have hfac {D : ℕ} (B : MPTensor α (Fin D)) :
+      leftBoundaryMap B K L = T.comp ((groundSpaceMap B K).compLeft (Fin L → α)) := rfl
   simp only [hfac, LinearMap.range_comp, LinearMap.range_compLeft,
-    show (groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K).range =
+    show (groundSpaceMap (toTensorFromBlocks (μ := μ) A) K).range =
       ⨆ j, (groundSpaceMap (A j) K).range from
         groundSpace_toTensorFromBlocks_eq_iSup μ A hμ K,
     pi_univ_iSup_const, Submodule.map_iSup]
@@ -74,27 +74,27 @@ private theorem leftBoundaryMap_range_toTensorFromBlocks
 spaces. This identifies the left interval in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), for a weighted direct sum. -/
 theorem range_leftBoundaryMapES_toTensorFromBlocks_eq_iSup
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (leftBoundaryMapES (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
+    (leftBoundaryMapES (toTensorFromBlocks (μ := μ) A) K L).range =
       ⨆ j, (leftBoundaryMapES (A j) K L).range := by
   simp only [leftBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
     leftBoundaryMap_range_toTensorFromBlocks μ A hμ, Submodule.map_iSup]
 
 private theorem tailBoundaryMap_range_toTensorFromBlocks
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (tailBoundaryMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
+    (tailBoundaryMap (toTensorFromBlocks (μ := μ) A) K L).range =
       ⨆ j, (tailBoundaryMap (A j) K L).range := by
-  let T : (Cfg d K → NSiteSpace (Fin d) L) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) :=
+  let T : ((Fin K → α) → NSiteSpace α L) →ₗ[ℂ] NSiteSpace α (K + L) :=
     LinearMap.pi fun σ ↦
-      (LinearMap.proj (σ ∘ Fin.natAdd K) : NSiteSpace (Fin d) L →ₗ[ℂ] ℂ).comp
+      (LinearMap.proj (σ ∘ Fin.natAdd K) : NSiteSpace α L →ₗ[ℂ] ℂ).comp
         (LinearMap.proj (σ ∘ Fin.castAdd L))
-  have hfac {D : ℕ} (B : MPSTensor d D) :
-      tailBoundaryMap B K L = T.comp ((groundSpaceMap B L).compLeft (Cfg d K)) := rfl
+  have hfac {D : ℕ} (B : MPTensor α (Fin D)) :
+      tailBoundaryMap B K L = T.comp ((groundSpaceMap B L).compLeft (Fin K → α)) := rfl
   simp only [hfac, LinearMap.range_comp, LinearMap.range_compLeft,
-    show (groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L).range =
+    show (groundSpaceMap (toTensorFromBlocks (μ := μ) A) L).range =
       ⨆ j, (groundSpaceMap (A j) L).range from
         groundSpace_toTensorFromBlocks_eq_iSup μ A hμ L,
     pi_univ_iSup_const, Submodule.map_iSup]
@@ -103,9 +103,9 @@ private theorem tailBoundaryMap_range_toTensorFromBlocks
 spaces. This identifies the right interval in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), for a weighted direct sum. -/
 theorem range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
-    (tailBoundaryMapES (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
+    (tailBoundaryMapES (toTensorFromBlocks (μ := μ) A) K L).range =
       ⨆ j, (tailBoundaryMapES (A j) K L).range := by
   simp only [tailBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
@@ -115,9 +115,9 @@ theorem range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup
 right interval ground spaces of the blocks. This is the right projector
 space in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii). -/
 theorem range_reassocTailBoundaryMapES_toTensorFromBlocks_eq_iSup
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (K L Q : ℕ) :
-    (reassocTailBoundaryMapES (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L Q).range =
+    (reassocTailBoundaryMapES (toTensorFromBlocks (μ := μ) A) K L Q).range =
       ⨆ j, (reassocTailBoundaryMapES (A j) K L Q).range := by
   simp only [reassocTailBoundaryMapES, ContinuousLinearMap.toLinearMap_comp,
     LinearMap.range_comp, range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup μ A hμ,

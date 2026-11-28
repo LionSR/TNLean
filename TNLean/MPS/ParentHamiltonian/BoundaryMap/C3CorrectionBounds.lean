@@ -40,11 +40,11 @@ open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Injectivity of the finite-volume ground-space map makes its Gram a unit. -/
 theorem groundSpaceGram_isUnit_of_groundSpaceMapES_injective
-    {A : MPSTensor d D} {n : ℕ}
+    {A : MPTensor α (Fin D)} {n : ℕ}
     (h : Function.Injective (groundSpaceMapES A n)) :
     IsUnit (groundSpaceGram A n) := by
   have hinj : Function.Injective (groundSpaceGram A n) := by
@@ -57,7 +57,7 @@ theorem groundSpaceGram_isUnit_of_groundSpaceMapES_injective
 /-- The right-oriented finite/limiting resolvent identity.  This orientation
 keeps the finite inverse next to the finite boundary-map adjoint. -/
 theorem inverseGram_sub_limitingInverse_eq_resolvent [NeZero D]
-    (A : MPSTensor d D) (n : ℕ)
+    (A : MPTensor α (Fin D)) (n : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (h : Function.Injective (groundSpaceMapES A n)) :
     let Kinf := Matrix.gramReshuffle
@@ -94,13 +94,13 @@ theorem inverseGram_sub_limitingInverse_eq_resolvent [NeZero D]
 
 /-- The tail finite-Gram correction sandwich, before taking norms. -/
 noncomputable def c3TailFiniteGramCorrectionES [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
     (hFull : Function.Injective (groundSpaceMapES A (K + l + 1))) :
-    EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
+    EuclideanSpace ℂ (Fin (K + l + 1) → α) →L[ℂ]
+      EuclideanSpace ℂ (Fin (K + l + 1) → α) :=
   let Ttail := tailBoundaryMapES A K (l + 1)
   let Tleft := leftBoundaryMapES A (K + l) 1
   let Itail := ContinuousLinearMap.inverseGram
@@ -111,26 +111,26 @@ noncomputable def c3TailFiniteGramCorrectionES [NeZero D]
     (groundSpaceMapES A (K + l + 1)) hFull
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-  let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K)
+  let Ktail := boundaryFiberwiseMap (D := D) (Fin K → α)
     (groundSpaceGram A (l + 1))
-  let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-  let Kleft := boundaryFiberwiseMap (D := D) (Cfg d 1)
+  let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+  let Kleft := boundaryFiberwiseMap (D := D) (Fin 1 → α)
     (groundSpaceGram A (K + l))
-  Ttail.comp ((boundaryFiberwiseMap (D := D) (Cfg d K) Itail).comp
+  Ttail.comp ((boundaryFiberwiseMap (D := D) (Fin K → α) Itail).comp
     ((Ktail - Kinftail).comp ((tailVirtualMapES A K).comp
       (Ifull.comp ((leftVirtualMapES A 1).adjoint.comp
-        (Kleft.comp ((boundaryFiberwiseMap (D := D) (Cfg d 1) Ileft).comp
+        (Kleft.comp ((boundaryFiberwiseMap (D := D) (Fin 1 → α) Ileft).comp
           Tleft.adjoint)))))))
 
 /-- The full inverse-Gram correction sandwich, before taking norms. -/
 noncomputable def c3FullInverseGramCorrectionES [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
     (hFull : Function.Injective (groundSpaceMapES A (K + l + 1))) :
-    EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
+    EuclideanSpace ℂ (Fin (K + l + 1) → α) →L[ℂ]
+      EuclideanSpace ℂ (Fin (K + l + 1) → α) :=
   let Ttail := tailBoundaryMapES A K (l + 1)
   let Tleft := leftBoundaryMapES A (K + l) 1
   let Itail := ContinuousLinearMap.inverseGram
@@ -142,23 +142,23 @@ noncomputable def c3FullInverseGramCorrectionES [NeZero D]
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
   let Iinf := Ring.inverse Kinf
-  let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-  let Kleft := boundaryFiberwiseMap (D := D) (Cfg d 1)
+  let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+  let Kleft := boundaryFiberwiseMap (D := D) (Fin 1 → α)
     (groundSpaceGram A (K + l))
-  Ttail.comp ((boundaryFiberwiseMap (D := D) (Cfg d K) Itail).comp
+  Ttail.comp ((boundaryFiberwiseMap (D := D) (Fin K → α) Itail).comp
     (Kinftail.comp ((tailVirtualMapES A K).comp
       ((Ifull - Iinf).comp ((leftVirtualMapES A 1).adjoint.comp
-        (Kleft.comp ((boundaryFiberwiseMap (D := D) (Cfg d 1) Ileft).comp
+        (Kleft.comp ((boundaryFiberwiseMap (D := D) (Fin 1 → α) Ileft).comp
           Tleft.adjoint)))))))
 
 /-- The left finite-Gram correction sandwich, before taking norms. -/
 noncomputable def c3LeftFiniteGramCorrectionES [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l))) :
-    EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
+    EuclideanSpace ℂ (Fin (K + l + 1) → α) →L[ℂ]
+      EuclideanSpace ℂ (Fin (K + l + 1) → α) :=
   let Ttail := tailBoundaryMapES A K (l + 1)
   let Tleft := leftBoundaryMapES A (K + l) 1
   let Itail := ContinuousLinearMap.inverseGram
@@ -168,42 +168,42 @@ noncomputable def c3LeftFiniteGramCorrectionES [NeZero D]
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
   let Iinf := Ring.inverse Kinf
-  let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-  let Kleft := boundaryFiberwiseMap (D := D) (Cfg d 1)
+  let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+  let Kleft := boundaryFiberwiseMap (D := D) (Fin 1 → α)
     (groundSpaceGram A (K + l))
-  let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
-  Ttail.comp ((boundaryFiberwiseMap (D := D) (Cfg d K) Itail).comp
+  let Kinfleft := boundaryFiberwiseMap (D := D) (Fin 1 → α) Kinf
+  Ttail.comp ((boundaryFiberwiseMap (D := D) (Fin K → α) Itail).comp
     (Kinftail.comp ((tailVirtualMapES A K).comp
       (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp
         ((Kleft - Kinfleft).comp
-          ((boundaryFiberwiseMap (D := D) (Cfg d 1) Ileft).comp
+          ((boundaryFiberwiseMap (D := D) (Fin 1 → α) Ileft).comp
             Tleft.adjoint)))))))
 
 /-- The left fiberwise finite Gram cancels its inverse before the boundary
 adjoint, and the remaining virtual/boundary composition reconstructs the
 adjoint of the full ground-space map. -/
 theorem leftFiniteGramCancellation_eq_groundSpaceMapES_adjoint
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A K)) :
     (leftVirtualMapES A L).adjoint.comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d L)
+      ((boundaryFiberwiseMap (D := D) (Fin L → α)
         (groundSpaceGram A K)).comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d L)
+      ((boundaryFiberwiseMap (D := D) (Fin L → α)
         (ContinuousLinearMap.inverseGram (groundSpaceMapES A K) h)).comp
         (leftBoundaryMapES A K L).adjoint)) =
       (groundSpaceMapES A (K + L)).adjoint := by
-  have hcancel : (boundaryFiberwiseMap (D := D) (Cfg d L)
+  have hcancel : (boundaryFiberwiseMap (D := D) (Fin L → α)
       (groundSpaceGram A K)).comp
-      (boundaryFiberwiseMap (D := D) (Cfg d L)
+      (boundaryFiberwiseMap (D := D) (Fin L → α)
         (ContinuousLinearMap.inverseGram (groundSpaceMapES A K) h)) =
       ContinuousLinearMap.id ℂ _ := by
     rw [boundaryFiberwiseMap_comp, groundSpaceGram,
       ContinuousLinearMap.adjoint_comp_self_comp_inverseGram,
       boundaryFiberwiseMap_id]
   change ((leftVirtualMapES A L).adjoint.comp
-    ((boundaryFiberwiseMap (D := D) (Cfg d L)
+    ((boundaryFiberwiseMap (D := D) (Fin L → α)
       (groundSpaceGram A K)).comp
-    (boundaryFiberwiseMap (D := D) (Cfg d L)
+    (boundaryFiberwiseMap (D := D) (Fin L → α)
       (ContinuousLinearMap.inverseGram (groundSpaceMapES A K) h)))).comp
       (leftBoundaryMapES A K L).adjoint = _
   rw [hcancel, ContinuousLinearMap.comp_id,
@@ -213,7 +213,7 @@ theorem leftFiniteGramCancellation_eq_groundSpaceMapES_adjoint
 /-- Exact factorization of the tail finite-Gram correction.  Both exterior
 pseudoinverse factors remain adjacent to their boundary maps. -/
 theorem c3TailFiniteGramCorrectionES_eq_factored [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
@@ -227,7 +227,7 @@ theorem c3TailFiniteGramCorrectionES_eq_factored [NeZero D]
     c3TailFiniteGramCorrectionES A K l ρ hρ hLocalTail hLocalLeft hFull =
       ((tailBoundaryMapES A K (l + 1)).comp
         (ContinuousLinearMap.inverseGram (tailBoundaryMapES A K (l + 1)) hTail)).comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d K)
+      ((boundaryFiberwiseMap (D := D) (Fin K → α)
         (groundSpaceGram A (l + 1) - Kinf)).comp
       ((tailVirtualMapES A K).comp
         (Ifull.comp (groundSpaceMapES A (K + l + 1)).adjoint))) := by
@@ -243,7 +243,7 @@ theorem c3TailFiniteGramCorrectionES_eq_factored [NeZero D]
 /-- Exact factorization of the full inverse-Gram correction using the
 right-oriented resolvent identity. -/
 theorem c3FullInverseGramCorrectionES_eq_factored [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
@@ -258,7 +258,7 @@ theorem c3FullInverseGramCorrectionES_eq_factored [NeZero D]
     c3FullInverseGramCorrectionES A K l ρ hρ hLocalTail hLocalLeft hFull =
       ((tailBoundaryMapES A K (l + 1)).comp
         (ContinuousLinearMap.inverseGram (tailBoundaryMapES A K (l + 1)) hTail)).comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d K) Kinf).comp
+      ((boundaryFiberwiseMap (D := D) (Fin K → α) Kinf).comp
       ((tailVirtualMapES A K).comp
       (Iinf.comp
       ((Kinf - groundSpaceGram A (K + l + 1)).comp
@@ -275,7 +275,7 @@ theorem c3FullInverseGramCorrectionES_eq_factored [NeZero D]
 /-- Exact factorization of the left finite-Gram correction.  The inverse Gram
 of the left spectator boundary map stays adjacent to its adjoint. -/
 theorem c3LeftFiniteGramCorrectionES_eq_factored [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l))) :
@@ -289,11 +289,11 @@ theorem c3LeftFiniteGramCorrectionES_eq_factored [NeZero D]
     c3LeftFiniteGramCorrectionES A K l ρ hρ hLocalTail hLocalLeft =
       ((tailBoundaryMapES A K (l + 1)).comp
         (ContinuousLinearMap.inverseGram (tailBoundaryMapES A K (l + 1)) hTail)).comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d K) Kinf).comp
+      ((boundaryFiberwiseMap (D := D) (Fin K → α) Kinf).comp
       ((tailVirtualMapES A K).comp
       (Iinf.comp
       ((leftVirtualMapES A 1).adjoint.comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d 1)
+      ((boundaryFiberwiseMap (D := D) (Fin 1 → α)
         (groundSpaceGram A (K + l) - Kinf)).comp
       ((ContinuousLinearMap.inverseGram
         (leftBoundaryMapES A (K + l) 1) hLeft).comp
@@ -310,7 +310,7 @@ theorem c3LeftFiniteGramCorrectionES_eq_factored [NeZero D]
 /-- The tail spectator pseudoinverse factor is controlled by the inverse
 finite Gram, with no spectator-cardinality factor. -/
 theorem norm_tailBoundaryMapES_comp_inverseGram_le_sqrt
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A L)) :
     let hTail := tailBoundaryMapES_injective_of_groundSpaceMapES_injective A K L h
     ‖(tailBoundaryMapES A K L).comp
@@ -325,7 +325,7 @@ theorem norm_tailBoundaryMapES_comp_inverseGram_le_sqrt
 /-- The adjoint-side left spectator pseudoinverse factor is controlled by the
 inverse finite Gram, with no spectator-cardinality factor. -/
 theorem norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A K)) :
     let hLeft := leftBoundaryMapES_injective_of_groundSpaceMapES_injective A K L h
     ‖(ContinuousLinearMap.inverseGram (leftBoundaryMapES A K L) hLeft).comp
@@ -347,7 +347,7 @@ private theorem norm_comp_le_of_le {E F G : Type*}
 
 /-- Raw operator-norm bound for the tail finite-Gram correction. -/
 theorem c3TailFiniteGramCorrectionES_norm_le [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
@@ -369,7 +369,7 @@ theorem c3TailFiniteGramCorrectionES_norm_le [NeZero D]
     (ContinuousLinearMap.inverseGram (tailBoundaryMapES A K (l + 1))
       (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
         A K (l + 1) hLocalTail))
-  let E := boundaryFiberwiseMap (D := D) (Cfg d K)
+  let E := boundaryFiberwiseMap (D := D) (Fin K → α)
     (groundSpaceGram A (l + 1) - Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))
   let J := tailVirtualMapES A K
@@ -386,7 +386,7 @@ theorem c3TailFiniteGramCorrectionES_norm_le [NeZero D]
 
 /-- Raw operator-norm bound for the full inverse-Gram correction. -/
 theorem c3FullInverseGramCorrectionES_norm_le [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
@@ -411,7 +411,7 @@ theorem c3FullInverseGramCorrectionES_norm_le [NeZero D]
         A K (l + 1) hLocalTail))
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-  let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
+  let Ktail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
   let J := tailVirtualMapES A K
   let Iinf := Ring.inverse Kinf
   let Efull := Kinf - groundSpaceGram A (K + l + 1)
@@ -431,7 +431,7 @@ theorem c3FullInverseGramCorrectionES_norm_le [NeZero D]
 
 /-- Raw operator-norm bound for the left finite-Gram correction. -/
 theorem c3LeftFiniteGramCorrectionES_norm_le [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l))) :
@@ -456,11 +456,11 @@ theorem c3LeftFiniteGramCorrectionES_norm_le [NeZero D]
         A K (l + 1) hLocalTail))
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-  let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
+  let Ktail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
   let Jtail := tailVirtualMapES A K
   let Iinf := Ring.inverse Kinf
   let JleftAdj := (leftVirtualMapES A 1).adjoint
-  let Eleft := boundaryFiberwiseMap (D := D) (Cfg d 1)
+  let Eleft := boundaryFiberwiseMap (D := D) (Fin 1 → α)
     (groundSpaceGram A (K + l) - Kinf)
   let Pleft := (ContinuousLinearMap.inverseGram
     (leftBoundaryMapES A (K + l) 1)

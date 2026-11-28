@@ -25,7 +25,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Two-index boundary-matrix identities in the \(C,D,E\) boundary comparison.
 
@@ -104,13 +104,13 @@ theorem pgvwc07_boundary_matrix_identities_of_indexed_compatibility
 
 /-- Boundary-matrix identities in the block-diagonal intersection proof. -/
 theorem pgvwc07_boundary_matrix_identities_of_compatibility
-    (A : MPSTensor d D)
-    (C Dmat : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
-    (hCompat : ∀ a b : Fin d, A b * C a = Dmat b * A a) :
-    (∀ b : Fin d, Dmat b = A b * (∑ a : Fin d, C a * (A a)ᴴ)) ∧
-      (∀ a b : Fin d,
-        A b * C a = A b * (∑ c : Fin d, C c * (A c)ᴴ) * A a) := by
+    (A : MPTensor α (Fin D))
+    (C Dmat : α → Matrix (Fin D) (Fin D) ℂ)
+    (hUnital : ∑ a : α, A a * (A a)ᴴ = 1)
+    (hCompat : ∀ a b : α, A b * C a = Dmat b * A a) :
+    (∀ b : α, Dmat b = A b * (∑ a : α, C a * (A a)ᴴ)) ∧
+      (∀ a b : α,
+        A b * C a = A b * (∑ c : α, C c * (A c)ᴴ) * A a) := by
   exact pgvwc07_boundary_matrix_identities_of_indexed_compatibility
     A C Dmat hUnital hCompat
 
@@ -125,24 +125,24 @@ to be words of a fixed length:
 It is the algebraic form needed before the complementary-word boundary identity
 in the periodic block-diagonal argument. -/
 theorem pgvwc07_boundary_word_matrix_identities_of_compatibility
-    (A : MPSTensor d D) {K : ℕ}
-    (C Dmat : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) {K : ℕ}
+    (C Dmat : (Fin K → α) → Matrix (Fin D) (Fin D) ℂ)
     (hUnital :
-      ∑ β : Fin K → Fin d,
+      ∑ β : Fin K → α,
         Kraus.evalWord A (List.ofFn β) * (Kraus.evalWord A (List.ofFn β))ᴴ = 1)
-    (hCompat : ∀ α β : Fin K → Fin d,
+    (hCompat : ∀ α β : Fin K → α,
       Kraus.evalWord A (List.ofFn β) * C α = Dmat β * Kraus.evalWord A (List.ofFn α)) :
-    (∀ β : Fin K → Fin d,
+    (∀ β : Fin K → α,
       Dmat β =
         Kraus.evalWord A (List.ofFn β) *
-          (∑ α : Fin K → Fin d, C α * (Kraus.evalWord A (List.ofFn α))ᴴ)) ∧
-      (∀ α β : Fin K → Fin d,
+          (∑ α : Fin K → α, C α * (Kraus.evalWord A (List.ofFn α))ᴴ)) ∧
+      (∀ α β : Fin K → α,
         Kraus.evalWord A (List.ofFn β) * C α =
           Kraus.evalWord A (List.ofFn β) *
-            (∑ γ : Fin K → Fin d, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ) *
+            (∑ γ : Fin K → α, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ) *
               Kraus.evalWord A (List.ofFn α)) := by
   exact pgvwc07_boundary_matrix_identities_of_indexed_compatibility
-    (fun β : Fin K → Fin d => Kraus.evalWord A (List.ofFn β)) C Dmat hUnital hCompat
+    (fun β : Fin K → α => Kraus.evalWord A (List.ofFn β)) C Dmat hUnital hCompat
 
 /-- Two-length word-indexed boundary-matrix identities.
 
@@ -157,27 +157,27 @@ The two index sets are words of lengths \(K\) and \(M\):
 This is the word form needed when a boundary-crossing cyclic interval has a
 cut word and a complementary word of different lengths. -/
 theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
-    (A : MPSTensor d D) {K M : ℕ}
-    (C : (Fin M → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (Dmat : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) {K M : ℕ}
+    (C : (Fin M → α) → Matrix (Fin D) (Fin D) ℂ)
+    (Dmat : (Fin K → α) → Matrix (Fin D) (Fin D) ℂ)
     (hUnital :
-      ∑ ρ : Fin M → Fin d,
+      ∑ ρ : Fin M → α,
         Kraus.evalWord A (List.ofFn ρ) * (Kraus.evalWord A (List.ofFn ρ))ᴴ = 1)
-    (hCompat : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+    (hCompat : ∀ ρ : Fin M → α, ∀ β : Fin K → α,
       Kraus.evalWord A (List.ofFn β) * C ρ =
         Dmat β * Kraus.evalWord A (List.ofFn ρ)) :
-    (∀ β : Fin K → Fin d,
+    (∀ β : Fin K → α,
       Dmat β =
         Kraus.evalWord A (List.ofFn β) *
-          (∑ ρ : Fin M → Fin d, C ρ * (Kraus.evalWord A (List.ofFn ρ))ᴴ)) ∧
-      (∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+          (∑ ρ : Fin M → α, C ρ * (Kraus.evalWord A (List.ofFn ρ))ᴴ)) ∧
+      (∀ ρ : Fin M → α, ∀ β : Fin K → α,
         Kraus.evalWord A (List.ofFn β) * C ρ =
           Kraus.evalWord A (List.ofFn β) *
-            (∑ γ : Fin M → Fin d, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ) *
+            (∑ γ : Fin M → α, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ) *
               Kraus.evalWord A (List.ofFn ρ)) := by
   exact pgvwc07_boundary_matrix_identities_of_two_index_compatibility
-    (fun β : Fin K → Fin d => Kraus.evalWord A (List.ofFn β))
-    (fun ρ : Fin M → Fin d => Kraus.evalWord A (List.ofFn ρ))
+    (fun β : Fin K → α => Kraus.evalWord A (List.ofFn β))
+    (fun ρ : Fin M → α => Kraus.evalWord A (List.ofFn ρ))
     C Dmat hUnital hCompat
 
 /-- Complementary-word boundary identities, with the \(E_\rho\) formula, from a
@@ -202,27 +202,27 @@ with
   E_\rho=\left(\sum_\gamma C_\gamma A_\gamma^\dagger\right)A_\rho .
 \]. -/
 theorem pgvwc07_complementary_word_boundary_identities_formula_of_compatibility
-    (A : MPSTensor d D) {K M : ℕ}
+    (A : MPTensor α (Fin D)) {K M : ℕ}
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (C : (Fin M → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (C : (Fin M → α) → Matrix (Fin D) (Fin D) ℂ)
     (hUnital :
-      ∑ ρ : Fin M → Fin d,
+      ∑ ρ : Fin M → α,
         Kraus.evalWord A (List.ofFn ρ) * (Kraus.evalWord A (List.ofFn ρ))ᴴ = 1)
-    (hCompat : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+    (hCompat : ∀ ρ : Fin M → α, ∀ β : Fin K → α,
       Kraus.evalWord A (List.ofFn β) * C ρ =
         (X * Kraus.evalWord A (List.ofFn β)) * Kraus.evalWord A (List.ofFn ρ)) :
-    ∀ ρ : Fin M → Fin d,
+    ∀ ρ : Fin M → α,
       ∃ E : Matrix (Fin D) (Fin D) ℂ,
         E =
-          (∑ γ : Fin M → Fin d, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ) *
+          (∑ γ : Fin M → α, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ) *
             Kraus.evalWord A (List.ofFn ρ) ∧
-        ∀ β : Fin K → Fin d,
+        ∀ β : Fin K → α,
           (X * Kraus.evalWord A (List.ofFn β)) * Kraus.evalWord A (List.ofFn ρ) =
             Kraus.evalWord A (List.ofFn β) * E := by
   classical
   intro ρ
   let E₀ : Matrix (Fin D) (Fin D) ℂ :=
-    ∑ γ : Fin M → Fin d, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ
+    ∑ γ : Fin M → α, C γ * (Kraus.evalWord A (List.ofFn γ))ᴴ
   refine ⟨E₀ * Kraus.evalWord A (List.ofFn ρ), rfl, ?_⟩
   intro β
   have hRect :
@@ -230,7 +230,7 @@ theorem pgvwc07_complementary_word_boundary_identities_formula_of_compatibility
         Kraus.evalWord A (List.ofFn β) * E₀ * Kraus.evalWord A (List.ofFn ρ) :=
     (pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
       (A := A) (C := C)
-      (Dmat := fun β : Fin K → Fin d => X * Kraus.evalWord A (List.ofFn β))
+      (Dmat := fun β : Fin K → α => X * Kraus.evalWord A (List.ofFn β))
       hUnital hCompat).2 ρ β
   calc
     (X * Kraus.evalWord A (List.ofFn β)) * Kraus.evalWord A (List.ofFn ρ)
@@ -257,18 +257,18 @@ cut word \(\beta\),
   (X A_\beta)A_\rho=A_\beta E_\rho
 \]. -/
 theorem pgvwc07_complementary_word_boundary_identities_of_compatibility
-    (A : MPSTensor d D) {K M : ℕ}
+    (A : MPTensor α (Fin D)) {K M : ℕ}
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (C : (Fin M → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (C : (Fin M → α) → Matrix (Fin D) (Fin D) ℂ)
     (hUnital :
-      ∑ ρ : Fin M → Fin d,
+      ∑ ρ : Fin M → α,
         Kraus.evalWord A (List.ofFn ρ) * (Kraus.evalWord A (List.ofFn ρ))ᴴ = 1)
-    (hCompat : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+    (hCompat : ∀ ρ : Fin M → α, ∀ β : Fin K → α,
       Kraus.evalWord A (List.ofFn β) * C ρ =
         (X * Kraus.evalWord A (List.ofFn β)) * Kraus.evalWord A (List.ofFn ρ)) :
-    ∀ ρ : Fin M → Fin d,
+    ∀ ρ : Fin M → α,
       ∃ E : Matrix (Fin D) (Fin D) ℂ,
-        ∀ β : Fin K → Fin d,
+        ∀ β : Fin K → α,
           (X * Kraus.evalWord A (List.ofFn β)) * Kraus.evalWord A (List.ofFn ρ) =
             Kraus.evalWord A (List.ofFn β) * E := by
   intro ρ

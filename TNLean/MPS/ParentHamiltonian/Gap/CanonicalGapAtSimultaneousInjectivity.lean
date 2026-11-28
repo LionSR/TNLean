@@ -34,24 +34,24 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Positive-range parent Hamiltonians of a canonical tensor coincide with
 those of its distinct normal representatives, including all multiplicity
 copies and the ambient reconstruction in CPSV16, equations `II_CF1` and
 `decBSV`. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.hamiltonian_parentRingInteraction_eq_representatives
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A)
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A)
     {R : ℕ} (hR : 0 < R) (N : ℕ) [NeZero N] :
     (parentRingInteraction A R N).hamiltonian = (parentRingInteraction
-      (toTensorFromBlocks (α := Fin d) (fun _ ↦ 1)
+      (toTensorFromBlocks (fun _ ↦ 1)
         (fun j ↦ data.blocks (data.representativeIndex j))) R N).hamiltonian := by
   -- `hamiltonian_parentRingInteraction_eq_of_groundSpace_eq` needs equal bond dimensions; the
   -- representative block sum has a different one, so the definitions are unfolded.
   simp only [parentRingInteraction, parentInteraction,
     data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
-variable [NeZero d]
+variable [Nonempty α]
 
 set_option linter.style.longLine false in
 /-- A canonical tensor has a positive uniform periodic gap at every range
@@ -60,7 +60,7 @@ representatives. Multiplicities and ambient reconstruction remain part of the
 original tensor. Source: CPGSV21, Section IV.C, lines 2114--2129 and 2183--2187. -/
 theorem
     _root_.MPTensor.CPSVCanonicalFormData.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
@@ -83,8 +83,8 @@ every supplied simultaneous injectivity length yields the uniform gap at the
 corresponding interaction range. Source: CPGSV21, Section IV.C,
 lines 2114--2129 and 2183--2187. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
-    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) :
+    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPTensor α (Fin (dim j))),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       ∀ {S R : ℕ}, 0 < S → WordTupleSpanTop B S → S + 1 ≤ R →
         ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue

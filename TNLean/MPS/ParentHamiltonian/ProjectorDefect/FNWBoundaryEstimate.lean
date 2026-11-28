@@ -32,40 +32,40 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- Physical-site reversal as an isometric equivalence of the standard physical
 Euclidean space. -/
-noncomputable def physicalSiteReverseES (d N : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (physicalSiteReverseConfigEquiv d N)
+noncomputable def physicalSiteReverseES (N : ℕ) :
+    EuclideanSpace ℂ (Fin N → α) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin N → α) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (physicalSiteReverseConfigEquiv N)
 
 /-- Physical-site reversal evaluates a Euclidean vector on the reversed configuration. -/
 @[simp]
 theorem physicalSiteReverseES_apply {N : ℕ}
-    (ψ : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
-    physicalSiteReverseES d N ψ σ = ψ (σ ∘ Fin.rev) := by
+    (ψ : EuclideanSpace ℂ (Fin N → α)) (σ : (Fin N → α)) :
+    physicalSiteReverseES N ψ σ = ψ (σ ∘ Fin.rev) := by
   rfl
 
 /-- The FNW boundary map in TNLean coordinates \(A^\mu=v(\mu)^\dagger\), with
 its source carrying the rho-weighted matrix norm and its target carrying the
 ordinary physical Euclidean norm. -/
 noncomputable def fnwBoundaryMapCLM
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    Mat →L[ℂ] EuclideanSpace ℂ (Cfg d N) := by
+    Mat →L[ℂ] EuclideanSpace ℂ (Fin N → α) := by
   exact LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap.comp
       (fnwBoundaryMap (fun μ => (A μ)ᴴ) N)
 
 /-- Application of the continuous FNW boundary map is the raw boundary
 coefficient function, viewed in the physical Euclidean space. -/
 @[simp]
 theorem fnwBoundaryMapCLM_apply
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ)
-    (B : Mat) (σ : Cfg d N) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ)
+    (B : Mat) (σ : (Fin N → α)) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     fnwBoundaryMapCLM ρ hρ A N B σ =
       fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ := by
@@ -74,44 +74,44 @@ theorem fnwBoundaryMapCLM_apply
 /-- The continuous FNW boundary map is the ordinary TNLean boundary map
 followed by the isometric reversal of physical sites. -/
 theorem fnwBoundaryMapCLM_eq_physicalSiteReverseES_comp
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     fnwBoundaryMapCLM ρ hρ A N =
-      (physicalSiteReverseES d N).toLinearIsometry.toContinuousLinearMap.comp
+      (physicalSiteReverseES N).toLinearIsometry.toContinuousLinearMap.comp
         (LinearMap.toContinuousLinearMap <|
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap.comp
             (groundSpaceMap A N)) := by
   apply ContinuousLinearMap.ext
   intro B
   ext σ
   simp only [fnwBoundaryMapCLM_apply, ContinuousLinearMap.comp_apply,
     LinearIsometry.coe_toContinuousLinearMap]
-  have hraw := congrArg (fun f : NSiteSpace (Fin d) N => f σ)
+  have hraw := congrArg (fun f : NSiteSpace α N => f σ)
     (LinearMap.congr_fun
       (fnwBoundaryMap_eq_physicalSiteReverse_comp_groundSpaceMap
         (fun μ => (A μ)ᴴ) N) B)
   simpa using hraw
 
 private theorem sum_tracePairing_evalWord
-    (K : Fin d → Mat) (N : ℕ) (B C : Mat) :
-    ∑ σ : Cfg d N,
+    (K : α → Mat) (N : ℕ) (B C : Mat) :
+    ∑ σ : (Fin N → α),
         Matrix.trace (Bᴴ * Kraus.evalWord K (List.ofFn σ)) *
           star (Matrix.trace (Cᴴ * Kraus.evalWord K (List.ofFn σ))) =
       ∑ i : Fin D, ∑ k : Fin D,
         (Bᴴ * (Kraus.mapLM K ^ N) (Matrix.single i k 1) * C) i k := by
   simp only [Kraus.mapLM_pow_apply]
   have hpush : ∀ (i k : Fin D),
-      (Bᴴ * (∑ σ : Cfg d N,
+      (Bᴴ * (∑ σ : (Fin N → α),
         Kraus.evalWord K (List.ofFn σ) * Matrix.single i k (1 : ℂ) *
           (Kraus.evalWord K (List.ofFn σ))ᴴ) * C) i k =
-      ∑ σ : Cfg d N,
+      ∑ σ : (Fin N → α),
         (Bᴴ * Kraus.evalWord K (List.ofFn σ)) i i *
           ((Kraus.evalWord K (List.ofFn σ))ᴴ * C) k k := by
     intro i k
-    have hdist : Bᴴ * (∑ σ : Cfg d N,
+    have hdist : Bᴴ * (∑ σ : (Fin N → α),
         Kraus.evalWord K (List.ofFn σ) * Matrix.single i k (1 : ℂ) *
           (Kraus.evalWord K (List.ofFn σ))ᴴ) * C =
-        ∑ σ : Cfg d N,
+        ∑ σ : (Fin N → α),
           Bᴴ * Kraus.evalWord K (List.ofFn σ) * Matrix.single i k (1 : ℂ) *
             ((Kraus.evalWord K (List.ofFn σ))ᴴ * C) := by
       rw [Matrix.mul_sum, Finset.sum_mul]
@@ -125,16 +125,16 @@ private theorem sum_tracePairing_evalWord
       (Bᴴ * Kraus.evalWord K (List.ofFn σ))
       ((Kraus.evalWord K (List.ofFn σ))ᴴ * C) i k
   simp_rw [hpush]
-  rw [show (∑ i : Fin D, ∑ k : Fin D, ∑ σ : Cfg d N,
+  rw [show (∑ i : Fin D, ∑ k : Fin D, ∑ σ : (Fin N → α),
         (Bᴴ * Kraus.evalWord K (List.ofFn σ)) i i *
           ((Kraus.evalWord K (List.ofFn σ))ᴴ * C) k k) =
-      ∑ σ : Cfg d N, ∑ i : Fin D, ∑ k : Fin D,
+      ∑ σ : (Fin N → α), ∑ i : Fin D, ∑ k : Fin D,
         (Bᴴ * Kraus.evalWord K (List.ofFn σ)) i i *
           ((Kraus.evalWord K (List.ofFn σ))ᴴ * C) k k from by
     simpa using Finset.sum_comm_cycle
       (s := (Finset.univ : Finset (Fin D)))
       (t := (Finset.univ : Finset (Fin D)))
-      (u := (Finset.univ : Finset (Cfg d N)))
+      (u := (Finset.univ : Finset (Fin N → α)))
       (f := fun i k σ =>
         (Bᴴ * Kraus.evalWord K (List.ofFn σ)) i i *
           ((Kraus.evalWord K (List.ofFn σ))ᴴ * C) k k)]
@@ -157,8 +157,8 @@ private theorem sum_tracePairing_evalWord
   simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
 
 private theorem sum_tracePairing_evalWord_source
-    (K : Fin d → Mat) (N : ℕ) (B C : Mat) :
-    ∑ σ : Cfg d N,
+    (K : α → Mat) (N : ℕ) (B C : Mat) :
+    ∑ σ : (Fin N → α),
         Matrix.trace (Bᴴ * Kraus.evalWord K (List.ofFn σ)) *
           star (Matrix.trace (Cᴴ * Kraus.evalWord K (List.ofFn σ))) =
       ∑ i : Fin D, ∑ k : Fin D,
@@ -166,10 +166,10 @@ private theorem sum_tracePairing_evalWord_source
           (Bᴴ * Matrix.single i k (1 : ℂ) * C)) i k := by
   simp only [Kraus.mapLM_pow_apply]
   have hpush : ∀ (i k : Fin D),
-      (∑ σ : Cfg d N, Kraus.evalWord K (List.ofFn σ) *
+      (∑ σ : (Fin N → α), Kraus.evalWord K (List.ofFn σ) *
           (Bᴴ * Matrix.single i k (1 : ℂ) * C) *
             (Kraus.evalWord K (List.ofFn σ))ᴴ) i k =
-        ∑ σ : Cfg d N,
+        ∑ σ : (Fin N → α),
           (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
             (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k := by
     intro i k
@@ -185,16 +185,16 @@ private theorem sum_tracePairing_evalWord_source
     rw [hmul]
     exact Matrix.entry_mul_single_mul (V * Bᴴ) (C * Vᴴ) i k
   simp_rw [hpush]
-  rw [show (∑ i : Fin D, ∑ k : Fin D, ∑ σ : Cfg d N,
+  rw [show (∑ i : Fin D, ∑ k : Fin D, ∑ σ : (Fin N → α),
         (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
           (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k) =
-      ∑ σ : Cfg d N, ∑ i : Fin D, ∑ k : Fin D,
+      ∑ σ : (Fin N → α), ∑ i : Fin D, ∑ k : Fin D,
         (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
           (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k from by
     simpa using Finset.sum_comm_cycle
       (s := (Finset.univ : Finset (Fin D)))
       (t := (Finset.univ : Finset (Fin D)))
-      (u := (Finset.univ : Finset (Cfg d N)))
+      (u := (Finset.univ : Finset (Fin N → α)))
       (f := fun i k σ =>
         (Kraus.evalWord K (List.ofFn σ) * Bᴴ) i i *
           (C * (Kraus.evalWord K (List.ofFn σ))ᴴ) k k)]
@@ -215,7 +215,7 @@ private theorem sum_tracePairing_evalWord_source
   exact Matrix.trace_mul_comm (Kraus.evalWord K (List.ofFn σ))ᴴ C
 
 private theorem boundary_term_eq
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) (σ : Cfg d N) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) (σ : (Fin N → α)) :
     star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
         fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
       Matrix.trace (Bᴴ * Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn σ)) *
@@ -233,8 +233,8 @@ private theorem boundary_term_eq
   exact congrArg₂ (· * ·) hB hC
 
 private theorem boundary_scalarProduct_formula
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    ∑ σ : Cfg d N,
+    (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
+    ∑ σ : (Fin N → α),
         star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
           fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
       ∑ i : Fin D, ∑ k : Fin D,
@@ -246,8 +246,8 @@ private theorem boundary_scalarProduct_formula
   exact boundary_term_eq A N B C σ
 
 private theorem boundary_scalarProduct_formula_source
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    ∑ σ : Cfg d N,
+    (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
+    ∑ σ : (Fin N → α),
         star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
           fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
       ∑ i : Fin D, ∑ k : Fin D,
@@ -262,7 +262,7 @@ private theorem boundary_scalarProduct_formula_source
 /-- Exact scalar-product formula from FNW 1992, equation (5.8), in TNLean
 coordinates \(A^\mu=v(\mu)^\dagger\), in Choi-reshuffled form. -/
 theorem inner_fnwBoundaryMapCLM
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) =
@@ -276,7 +276,7 @@ theorem inner_fnwBoundaryMapCLM
 the rank-one boundary operator \(B^*|i\rangle\langle k|C\), after which the
 \((i,k)\)-entry is summed. -/
 theorem inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) =
@@ -306,7 +306,7 @@ private theorem sum_fnwLimitMap_rankOne
 its rho-weighted limit is the Choi reshuffling of the transfer remainder. -/
 theorem inner_fnwBoundaryMapCLM_sub_rhoWeighted
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C =
@@ -323,7 +323,7 @@ The exact loss is the real trace of the inverse density times the weighted
 operator norm of the transfer remainder; no dimension factor occurs. -/
 theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B C : Mat) :
     weighted_matrix_norm_instances ρ hρ in
     ‖inner ℂ (fnwBoundaryMapCLM ρ hρ A N B)
         (fnwBoundaryMapCLM ρ hρ A N C) - inner ℂ B C‖ ≤
@@ -339,7 +339,7 @@ theorem norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le
     LinearMap.mulRight_apply, Matrix.mul_assoc, fnwWeightedOperatorNorm] using hbound
 
 private theorem fnwBoundaryMap_snoc
-    (A : MPSTensor d D) (N : ℕ) (B : Mat) (μ : Fin d) (σ : Cfg d N) :
+    (A : MPTensor α (Fin D)) (N : ℕ) (B : Mat) (μ : α) (σ : (Fin N → α)) :
     fnwBoundaryMap (fun ν => (A ν)ᴴ) (N + 1) B (Fin.snoc σ μ) =
       fnwBoundaryMap (fun ν => (A ν)ᴴ) N (B * A μ) σ := by
   rw [fnwBoundaryMap_apply, fnwBoundaryMap_apply, List.ofFn_snoc,
@@ -353,13 +353,13 @@ and used in the proof of Lemma 5.3. In TNLean coordinates, adjoining the final
 physical index multiplies the boundary matrix on the right by the corresponding
 \(A^\mu\). -/
 theorem fnwBoundaryMapCLM_norm_sq_succ
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) (B : Mat) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) (B : Mat) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     ‖fnwBoundaryMapCLM ρ hρ A (N + 1) B‖ ^ 2 =
-      ∑ μ : Fin d, ‖fnwBoundaryMapCLM ρ hρ A N (B * A μ)‖ ^ 2 := by
+      ∑ μ : α, ‖fnwBoundaryMapCLM ρ hρ A N (B * A μ)‖ ^ 2 := by
   rw [PiLp.norm_sq_eq_of_L2]
   simp_rw [PiLp.norm_sq_eq_of_L2]
-  rw [← Equiv.sum_comp (Fin.snocEquiv (fun _ : Fin (N + 1) => Fin d))]
+  rw [← Equiv.sum_comp (Fin.snocEquiv (fun _ : Fin (N + 1) => α))]
   rw [Fintype.sum_prod_type]
   refine Finset.sum_congr₂ fun μ _ σ _ ↦ ?_
   change ‖fnwBoundaryMap (fun ν => (A ν)ᴴ) (N + 1) B

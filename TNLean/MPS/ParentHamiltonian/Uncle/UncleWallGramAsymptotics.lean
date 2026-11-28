@@ -27,26 +27,26 @@ open Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The mixed-transfer series entering the source wall norm
 coefficient. Its convergence follows below from the source strict mixed
 spectral-radius condition; arXiv:1210.6613, proof of Lemma lowenergystates. -/
-noncomputable def uncleWallCorrelationLimit (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) : Matrix (Fin a) (Fin b) ℂ :=
+noncomputable def uncleWallCorrelationLimit (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) : Matrix (Fin a) (Fin b) ℂ :=
   ∑' k : ℕ, ((Kraus.mixedMapLM A B) ^ k) (uncleWallSeed B R)
 
 /-- The explicit linear limiting coefficient of the source one-wall Gram
 weight, formed from the convergent mixed-transfer series and wall
 contractions; arXiv:1210.6613, proof of Lemma lowenergystates. -/
-noncomputable def uncleWallNormSlope (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+noncomputable def uncleWallNormSlope (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) : ℂ :=
   Matrix.trace (ρ * ∑ i, R i * (R i)ᴴ) +
     uncleWallCrossWeight A R ρ (uncleWallCorrelationLimit A B R) +
     star (uncleWallCrossWeight A R ρ (uncleWallCorrelationLimit A B R))
 
-private theorem mixedContinuous_pow_apply (A : MPSTensor d a) (B : MPSTensor d b)
+private theorem mixedContinuous_pow_apply (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (n : ℕ) (X : Matrix (Fin a) (Fin b) ℂ) :
     ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ)
         (Kraus.mixedMapLM A B)) ^ n) X = ((Kraus.mixedMapLM A B) ^ n) X := by
@@ -59,8 +59,8 @@ private theorem mixedContinuous_pow_apply (A : MPSTensor d a) (B : MPSTensor d b
 strictly below one. The proof uses geometric power decay from Gelfand's
 formula, not the stronger condition that the operator norm is below one;
 arXiv:1210.6613, Lemma offdiagonal-damping and the norm calculation. -/
-theorem uncleWallCorrelation_summable (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+theorem uncleWallCorrelation_summable (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     Summable (fun k : ℕ ↦ ((Kraus.mixedMapLM A B) ^ k) (uncleWallSeed B R)) := by
   let F := Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ)
@@ -76,8 +76,8 @@ theorem uncleWallCorrelation_summable (A : MPSTensor d a) (B : MPSTensor d b)
 /-- Under source unital right-block normalization and strict mixed-transfer
 damping, the finite wall correlation converges to its mixed series;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
-theorem uncleWallCorrelation_tendsto (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+theorem uncleWallCorrelation_tendsto (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     Tendsto (fun n : ℕ ↦ uncleWallCorrelation A B R n) atTop
       (𝓝 (uncleWallCorrelationLimit A B R)) := by
@@ -85,8 +85,8 @@ theorem uncleWallCorrelation_tendsto (A : MPSTensor d a) (B : MPSTensor d b)
   simpa only [← uncleWallCorrelation_eq_sum A B R hB, uncleWallCorrelationLimit] using h
 
 private theorem uncleWallGramWeight_eq_sum_increments
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.IsHermitian)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1) (n : ℕ) :
     uncleWallGramWeight A B R ρ n = ∑ k ∈ Finset.range n,
@@ -105,8 +105,8 @@ normalizations and strict mixed spectral-radius condition. This does not
 assert strict positivity or a genericity statement; arXiv:1210.6613,
 proof of Lemma lowenergystates, linear asymptotic of the wall coefficient. -/
 theorem uncleWallGramWeight_normalized_tendsto
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.IsHermitian)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :

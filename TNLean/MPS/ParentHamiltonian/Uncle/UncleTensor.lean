@@ -16,7 +16,6 @@ Theorem `thm:unclehamiltonian`, equation "eq:uncletensor-2site".
 -/
 
 open scoped Matrix
-open Kraus (blockPhysDim decodeBlock blockTensor)
 
 namespace MPSTensor
 
@@ -52,19 +51,19 @@ private theorem twoBlockVirtualScale_uncleBlockMatrix {a b : ℕ} (z : ℂ)
 
 /-- A general perturbation of a two-block diagonal tensor. -/
 noncomputable def twoBlockPerturbation {d a b : ℕ}
-    (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (ε : ℂ) :
-    MPSTensor d (a + b) := fun i =>
+    (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (ε : ℂ) :
+    MPTensor α (Fin (a + b)) := fun i =>
   uncleBlockMatrix (A i + ε • P i) (ε • R i) (ε • L i) (B i + ε • Q i)
 
 /-- The regular two-site tensor obtained after rescaling the off-diagonal
 blocks. Its diagonal perturbations disappear at zero. -/
 noncomputable def uncleTensorInterpolant {d a b : ℕ}
-    (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (ε : ℂ) :
-    MPSTensor (blockPhysDim d 2) (a + b) := fun σ =>
+    (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (ε : ℂ) :
+    MPTensor (Fin 2 → α) (Fin (a + b)) := fun σ =>
   let i := decodeBlock d 2 σ 0
   let j := decodeBlock d 2 σ 1
   uncleBlockMatrix
@@ -76,10 +75,10 @@ noncomputable def uncleTensorInterpolant {d a b : ℕ}
 /-- The explicit two-block uncle tensor. Only the off-diagonal perturbation
 blocks survive in this first-order physical limit. -/
 noncomputable def uncleTensor {d a b : ℕ}
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
-    MPSTensor (blockPhysDim d 2) (a + b) := fun σ =>
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
+    MPTensor (Fin 2 → α) (Fin (a + b)) := fun σ =>
   let i := decodeBlock d 2 σ 0
   let j := decodeBlock d 2 σ 1
   uncleBlockMatrix (A i * A j) (A i * R j + R i * B j)
@@ -87,9 +86,9 @@ noncomputable def uncleTensor {d a b : ℕ}
 
 /-- The regular interpolant has the printed uncle tensor as its value at zero. -/
 @[simp] theorem uncleTensorInterpolant_zero {d a b : ℕ}
-    (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
+    (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
     uncleTensorInterpolant A P B Q R L 0 = uncleTensor A B R L := by
   funext σ
   simp [uncleTensorInterpolant, uncleTensor]
@@ -98,17 +97,17 @@ noncomputable def uncleTensor {d a b : ℕ}
 is exactly the regular interpolant. This is the printed singular-rescaling
 step, with its nonzero-parameter hypothesis explicit. -/
 theorem twoBlockVirtualScale_blockTensor {d a b : ℕ}
-    (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {ε : ℂ} (hε : ε ≠ 0) :
+    (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) {ε : ℂ} (hε : ε ≠ 0) :
     (fun σ => twoBlockVirtualScale (a := a) ε⁻¹
-      (blockTensor (twoBlockPerturbation A P B Q R L ε) 2 σ)) =
+      (Kraus.block (twoBlockPerturbation A P B Q R L ε) 2 σ)) =
       uncleTensorInterpolant A P B Q R L ε := by
   funext σ
-  have hb : blockTensor (twoBlockPerturbation A P B Q R L ε) 2 σ =
+  have hb : Kraus.block (twoBlockPerturbation A P B Q R L ε) 2 σ =
       twoBlockPerturbation A P B Q R L ε (decodeBlock d 2 σ 0) *
         twoBlockPerturbation A P B Q R L ε (decodeBlock d 2 σ 1) := by
-    simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ, decodeBlock]
+    simp [Kraus.block, Kraus.reindexPhysical, List.ofFn_succ, decodeBlock]
   rw [hb]
   simp only [twoBlockPerturbation, uncleBlockMatrix_mul,
     twoBlockVirtualScale_uncleBlockMatrix, uncleTensorInterpolant]
@@ -125,9 +124,9 @@ theorem twoBlockVirtualScale_blockTensor {d a b : ℕ}
 /-- The rescaled two-site interpolant is polynomial, hence continuous,
 including at the singular parameter of the original rescaling. -/
 theorem continuous_uncleTensorInterpolant {d a b : ℕ}
-    (A P : MPSTensor d a) (B Q : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
+    (A P : MPTensor α (Fin a)) (B Q : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
     Continuous (uncleTensorInterpolant A P B Q R L) := by
   apply continuous_pi
   intro σ

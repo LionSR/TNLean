@@ -33,7 +33,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Appendix B structural form used below -/
 
@@ -44,13 +44,13 @@ The theorem `rfp_nt_structural_full_unit_pair` proves existence of this
 structural form from the RFP, normality, and left-canonical hypotheses. The
 coefficient formulas and parent-term identities use the same
 \(X,\Lambda,U\). -/
-structure AppendixBStructuralData (A : MPSTensor d D) where
+structure AppendixBStructuralData (A : MPTensor α (Fin D)) where
   /-- The virtual-bond change of basis. -/
   X : Matrix (Fin D) (Fin D) ℂ
   /-- Positive diagonal weights. -/
   Λ : Fin D → ℝ
   /-- The residual tensor family satisfying the source pair-index isometry. -/
-  U : MPSTensor d D
+  U : MPTensor α (Fin D)
   /-- The change-of-basis matrix is invertible. -/
   hX_det : X.det ≠ 0
   /-- The diagonal weights are strictly positive. -/
@@ -58,7 +58,7 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The residual tensor satisfies the source unit pair-index orthonormality
   condition from arXiv:1606.00608, lines 550--554, restricted to one block. -/
   hU_pair : ∀ p q : Fin D × Fin D,
-    ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+    ∑ i : α, star (U i p.1 p.2) * U i q.1 q.2 =
       if p = q then 1 else 0
   /-- The original tensor has the Appendix B structural form. -/
   hA_eq : ∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹
@@ -78,8 +78,8 @@ The virtual tensor product is written in the basis indexed by pairs
 
 Source: arXiv:1606.00608, Theorem 3.11 and lines 543--578. -/
 noncomputable def AppendixBStructuralData.physicalIsometry
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    ((Fin D × Fin D → ℂ) →ₗ[ℂ] (Fin d → ℂ)) where
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) :
+    ((Fin D × Fin D → ℂ) →ₗ[ℂ] (α → ℂ)) where
   toFun v i := ∑ p : Fin D × Fin D, hStruct.U i p.1 p.2 * v p
   map_add' v w := by
     funext i
@@ -101,18 +101,18 @@ isometry.
 
 Source: arXiv:1606.00608, isometry equation (3.16), lines 549--554. -/
 noncomputable def AppendixBStructuralData.physicalIsometryLeftInverse
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    ((Fin d → ℂ) →ₗ[ℂ] (Fin D × Fin D → ℂ)) where
-  toFun ψ p := ∑ i : Fin d, star (hStruct.U i p.1 p.2) * ψ i
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) :
+    ((α → ℂ) →ₗ[ℂ] (Fin D × Fin D → ℂ)) where
+  toFun ψ p := ∑ i : α, star (hStruct.U i p.1 p.2) * ψ i
   map_add' ψ φ := by
     funext p
     simp only [Pi.add_apply, mul_add, Finset.sum_add_distrib]
   map_smul' c ψ := by
     funext p
-    change (∑ i : Fin d, star (hStruct.U i p.1 p.2) * (c * ψ i)) =
-      c * ∑ i : Fin d, star (hStruct.U i p.1 p.2) * ψ i
+    change (∑ i : α, star (hStruct.U i p.1 p.2) * (c * ψ i)) =
+      c * ∑ i : α, star (hStruct.U i p.1 p.2) * ψ i
     calc
-      _ = ∑ i : Fin d, c * (star (hStruct.U i p.1 p.2) * ψ i) := by
+      _ = ∑ i : α, c * (star (hStruct.U i p.1 p.2) * ψ i) := by
         apply Finset.sum_congr rfl
         intro i _
         ring
@@ -122,16 +122,16 @@ noncomputable def AppendixBStructuralData.physicalIsometryLeftInverse
 
 Source: arXiv:1606.00608, isometry equation (3.16), lines 549--554. -/
 @[simp] theorem AppendixBStructuralData.physicalIsometryLeftInverse_comp
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) :
     hStruct.physicalIsometryLeftInverse.comp hStruct.physicalIsometry = 1 := by
   classical
   apply LinearMap.ext
   intro v
   funext p
-  change (∑ i : Fin d, star (hStruct.U i p.1 p.2) *
+  change (∑ i : α, star (hStruct.U i p.1 p.2) *
       ∑ q : Fin D × Fin D, hStruct.U i q.1 q.2 * v q) = v p
   calc
-    _ = ∑ i : Fin d, ∑ q : Fin D × Fin D,
+    _ = ∑ i : α, ∑ q : Fin D × Fin D,
         (star (hStruct.U i p.1 p.2) * hStruct.U i q.1 q.2) * v q := by
       apply Finset.sum_congr rfl
       intro i _
@@ -139,10 +139,10 @@ Source: arXiv:1606.00608, isometry equation (3.16), lines 549--554. -/
       apply Finset.sum_congr rfl
       intro q _
       simp only [mul_assoc]
-    _ = ∑ q : Fin D × Fin D, ∑ i : Fin d,
+    _ = ∑ q : Fin D × Fin D, ∑ i : α,
         (star (hStruct.U i p.1 p.2) * hStruct.U i q.1 q.2) * v q :=
       Finset.sum_comm
-    _ = ∑ q : Fin D × Fin D, (∑ i : Fin d,
+    _ = ∑ q : Fin D × Fin D, (∑ i : α,
         star (hStruct.U i p.1 p.2) * hStruct.U i q.1 q.2) * v q := by
       apply Finset.sum_congr rfl
       intro q _
@@ -156,14 +156,14 @@ Source: arXiv:1606.00608, isometry equation (3.16), lines 549--554. -/
 Source: arXiv:1606.00608, Theorem 3.11 and isometry equation (3.16), lines
 543--578. -/
 theorem AppendixBStructuralData.physicalIsometry_injective
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) :
     Function.Injective hStruct.physicalIsometry :=
   LinearMap.injective_of_comp_eq_id _ _ hStruct.physicalIsometryLeftInverse_comp
 
 /-- The proved structural form gives a nonempty bundled Appendix B form. -/
-theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
+theorem AppendixBStructuralData.exists_ofRFP (A : MPTensor α (Fin D)) [NeZero D]
     (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    (hLeft : ∑ i : α, (A i)ᴴ * A i = 1) :
     Nonempty (AppendixBStructuralData A) := by
   classical
   obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_pair, hA_eq⟩ :=
@@ -182,9 +182,9 @@ theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
 This is a noncomputable definition only because it chooses an element of the
 nonempty type produced by `AppendixBStructuralData.exists_ofRFP`; it introduces
 no new assumptions or trusted constants. -/
-noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
+noncomputable def AppendixBStructuralData.ofRFP (A : MPTensor α (Fin D)) [NeZero D]
     (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    (hLeft : ∑ i : α, (A i)ᴴ * A i = 1) :
     AppendixBStructuralData A :=
   Classical.choice (AppendixBStructuralData.exists_ofRFP A hNT hRFP hLeft)
 
@@ -193,8 +193,8 @@ form.
 
 This amplitude is the two-site periodic coefficient of the chosen
 decomposition \(X,\Lambda,U\). -/
-noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : NSiteSpace (Fin d) 2 :=
+noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) : NSiteSpace α 2 :=
   let L : Matrix (Fin D) (Fin D) ℂ :=
     Matrix.diagonal fun k => (hStruct.Λ k : ℂ)
   fun σ =>
@@ -207,13 +207,13 @@ noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
 The structural equality says that `A` is a similarity transform of this tensor.
 Separating it out makes the equality of periodic coefficients a consequence of
 trace cyclicity applied to the basis-change matrices \(X\) and \(X^{-1}\). -/
-noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : MPSTensor d D :=
+noncomputable def AppendixBStructuralData.coreTensor {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) : MPTensor α (Fin D) :=
   fun i => Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i
 
 /-- The Appendix B core tensor is the residual tensor weighted by the diagonal factor. -/
-@[simp] theorem AppendixBStructuralData.coreTensor_apply {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) (i : Fin d) :
+@[simp] theorem AppendixBStructuralData.coreTensor_apply {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) (i : α) :
     hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=
   rfl
 
@@ -223,18 +223,18 @@ Source: arXiv:1606.00608, lines 543--555, especially the source unit
 pair-index isometry equation.  Multiplication by \(\Lambda\) on the left
 weights the two virtual left indices. -/
 theorem AppendixBStructuralData.coreTensor_pair_orthogonality
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
     (p q : Fin D × Fin D) :
-    ∑ i : Fin d, star (hStruct.coreTensor i p.1 p.2) *
+    ∑ i : α, star (hStruct.coreTensor i p.1 p.2) *
         hStruct.coreTensor i q.1 q.2 =
       (hStruct.Λ p.1 : ℂ) * (hStruct.Λ q.1 : ℂ) *
         (if p = q then 1 else 0) := by
   classical
   calc
-    ∑ i : Fin d, star (hStruct.coreTensor i p.1 p.2) *
+    ∑ i : α, star (hStruct.coreTensor i p.1 p.2) *
         hStruct.coreTensor i q.1 q.2 =
       (hStruct.Λ p.1 : ℂ) * (hStruct.Λ q.1 : ℂ) *
-        (∑ i : Fin d, star (hStruct.U i p.1 p.2) *
+        (∑ i : α, star (hStruct.U i p.1 p.2) *
           hStruct.U i q.1 q.2) := by
         simp [AppendixBStructuralData.coreTensor, Matrix.diagonal_mul,
           Finset.mul_sum, mul_assoc, mul_left_comm, mul_comm]
@@ -266,8 +266,8 @@ description
 \]
 with \(\varphi_j\) shared between \(b_n\) and \(a_{n+1}\). -/
 noncomputable def AppendixBStructuralData.cyclicVirtualPairState
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {L : ℕ} (hL : 0 < L) : NSiteSpace (Fin d) L :=
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
+    {L : ℕ} (hL : 0 < L) : NSiteSpace α L :=
   fun σ =>
     ∑ α : Fin L → Fin D, ∏ t : Fin L,
       (hStruct.Λ (α t) : ℂ) *
@@ -285,8 +285,8 @@ This is the coefficient form of
 with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It does not assert
 factorization over disjoint physical pairs. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
+    {L : ℕ} (hL : 0 < L) (σ : (Fin L → α)) :
     mpv hStruct.coreTensor σ = hStruct.cyclicVirtualPairState hL σ := by
   classical
   have : NeZero L := ⟨Nat.ne_of_gt hL⟩
@@ -295,7 +295,7 @@ theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
     AppendixBStructuralData.coreTensor, cyclicVirtualSucc, Matrix.diagonal_mul]
 
 /-- The original tensor is gauge equivalent to its Appendix B core tensor. -/
-theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPSTensor d D}
+theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPTensor α (Fin D)}
     (hStruct : AppendixBStructuralData A) :
     GaugeEquiv hStruct.coreTensor A := by
   let Xg : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.mkOfDetNeZero hStruct.X hStruct.hX_det
@@ -304,7 +304,7 @@ theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPSTensor d D}
   simp [Xg, AppendixBStructuralData.coreTensor, hStruct.hA_eq i, Matrix.mul_assoc]
 
 /-- The Appendix B basis change leaves every local ground space unchanged. -/
-theorem AppendixBStructuralData.groundSpace_eq_coreTensor {A : MPSTensor d D}
+theorem AppendixBStructuralData.groundSpace_eq_coreTensor {A : MPTensor α (Fin D)}
     (hStruct : AppendixBStructuralData A) (L : ℕ) :
     groundSpace A L = groundSpace hStruct.coreTensor L :=
   (hStruct.gaugeEquiv_coreTensor.groundSpace_eq L).symm
@@ -312,7 +312,7 @@ theorem AppendixBStructuralData.groundSpace_eq_coreTensor {A : MPSTensor d D}
 /-- The Appendix B basis change leaves the canonical parent interaction unchanged.
 
 Source: arXiv:1606.00608, lines 543--555. -/
-theorem AppendixBStructuralData.parentInteraction_eq_coreTensor {A : MPSTensor d D}
+theorem AppendixBStructuralData.parentInteraction_eq_coreTensor {A : MPTensor α (Fin D)}
     (hStruct : AppendixBStructuralData A) (L : ℕ) :
     parentInteraction A L = parentInteraction hStruct.coreTensor L := by
   simp [parentInteraction, hStruct.groundSpace_eq_coreTensor L]
@@ -321,8 +321,8 @@ theorem AppendixBStructuralData.parentInteraction_eq_coreTensor {A : MPSTensor d
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-noncomputable def AppendixBStructuralData.twoSiteBasicSpace {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : Submodule ℂ (NSiteSpace (Fin d) 2) :=
+noncomputable def AppendixBStructuralData.twoSiteBasicSpace {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) : Submodule ℂ (NSiteSpace α 2) :=
   groundSpace hStruct.coreTensor 2
 
 /-- The \(AX\) two-site coefficient-space representative associated with the
@@ -335,8 +335,8 @@ the source projector \(Q_{AX}\) as an operator on
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-noncomputable def AppendixBStructuralData.appendixBQAXOnCoeffSpace {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
+noncomputable def AppendixBStructuralData.appendixBQAXOnCoeffSpace {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2 :=
   parentInteraction hStruct.coreTensor 2
 
 /-- The Appendix B \(AX\) coefficient representative is the canonical two-site
@@ -344,7 +344,7 @@ parent interaction of the original tensor.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction {A : MPSTensor d D}
+theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction {A : MPTensor α (Fin D)}
     (hStruct : AppendixBStructuralData A) :
     hStruct.appendixBQAXOnCoeffSpace = parentInteraction A 2 := by
   rw [AppendixBStructuralData.appendixBQAXOnCoeffSpace]
@@ -354,7 +354,7 @@ theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction {A
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent {A : MPSTensor d D}
+theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent {A : MPTensor α (Fin D)}
     (hStruct : AppendixBStructuralData A) :
     hStruct.appendixBQAXOnCoeffSpace * hStruct.appendixBQAXOnCoeffSpace =
       hStruct.appendixBQAXOnCoeffSpace := by
@@ -371,13 +371,13 @@ commutation of their lifted operators.
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
     (hcomm :
       leftPairLift hStruct.appendixBQAXOnCoeffSpace *
           rightPairLift hStruct.appendixBQAXOnCoeffSpace =
         rightPairLift hStruct.appendixBQAXOnCoeffSpace *
           leftPairLift hStruct.appendixBQAXOnCoeffSpace) :
-    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
+    HasOverlappingTwoSiteCommutation hStruct.appendixBQAXOnCoeffSpace
       hStruct.appendixBQAXOnCoeffSpace where
   left_idempotent := hStruct.appendixBQAXOnCoeffSpace_idempotent
   right_idempotent := hStruct.appendixBQAXOnCoeffSpace_idempotent
@@ -395,13 +395,13 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem
     AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
-    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
-    (hD2 : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
+    {KAXB : Submodule ℂ (NSiteSpace α 3)}
+    {QAX QXB : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2}
+    (hD2 : HasAppendixD2ParentCommutingHamiltonian KAXB QAX QXB)
     (hAX : QAX = hStruct.appendixBQAXOnCoeffSpace)
     (hXB : QXB = hStruct.appendixBQAXOnCoeffSpace) :
-    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
+    HasOverlappingTwoSiteCommutation hStruct.appendixBQAXOnCoeffSpace
       hStruct.appendixBQAXOnCoeffSpace := by
   simpa [hAX, hXB] using hD2.toHasOverlappingTwoSiteCommutation
 
@@ -411,7 +411,7 @@ theorem
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.term_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) =
       leftPairLift hStruct.appendixBQAXOnCoeffSpace := by
   rw [term_two_three_zero_eq_leftPairLift_parentInteraction,
@@ -424,7 +424,7 @@ theorem AppendixBStructuralData.term_two_three_zero_eq_appendixBQAXOnCoeffSpace_
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.term_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       rightPairLift hStruct.appendixBQAXOnCoeffSpace := by
   rw [term_two_three_one_eq_rightPairLift_parentInteraction,
@@ -442,8 +442,8 @@ Appendix B basic-vector form.
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_overlapping
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    (h : HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
+    (h : HasOverlappingTwoSiteCommutation hStruct.appendixBQAXOnCoeffSpace
       hStruct.appendixBQAXOnCoeffSpace) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
         Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
@@ -463,7 +463,7 @@ statements and the supplied Definition D.2 lifted commutator.
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_commute_lifts
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
     (hcomm :
       leftPairLift hStruct.appendixBQAXOnCoeffSpace *
           rightPairLift hStruct.appendixBQAXOnCoeffSpace =
@@ -490,10 +490,10 @@ projectors remains a separate hypothesis.
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.term_two_three_zero_one_commute_of_appendixD2
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
+    {KAXB : Submodule ℂ (NSiteSpace α 3)}
     (hD2 : HasAppendixD2ParentCommutingHamiltonian
-      (d := d) KAXB hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQAXOnCoeffSpace) :
+      KAXB hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQAXOnCoeffSpace) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
         Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) *
@@ -511,10 +511,10 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem
     AppendixBStructuralData.term_two_three_zero_one_commute_of_appendixD2_identified_projectors
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {KAXB : Submodule ℂ (NSiteSpace (Fin d) 3)}
-    {QAX QXB : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2}
-    (hD2 : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A)
+    {KAXB : Submodule ℂ (NSiteSpace α 3)}
+    {QAX QXB : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2}
+    (hD2 : HasAppendixD2ParentCommutingHamiltonian KAXB QAX QXB)
     (hAX : QAX = hStruct.appendixBQAXOnCoeffSpace)
     (hXB : QXB = hStruct.appendixBQAXOnCoeffSpace) :
     Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
@@ -526,8 +526,8 @@ theorem
       hD2 hAX hXB)
 
 /-- The Appendix B basis change does not change any MPV coefficient. -/
-theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) {N : ℕ} (σ : Cfg d N) :
+theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) {N : ℕ} (σ : (Fin N → α)) :
     mpv A σ = mpv hStruct.coreTensor σ :=
   (GaugeEquiv.sameMPV hStruct.gaugeEquiv_coreTensor N σ).symm
 
@@ -538,29 +538,29 @@ Source: arXiv:1606.00608, lines 543--555.
 This combines the gauge-invariance of MPV coefficients with the coefficient
 formula for the core tensor \(\Lambda U^i\).  The conclusion is the source
 cyclic virtual-pair expression, not a factorization over disjoint physical pairs. -/
-theorem AppendixBStructuralData.mpv_eq_cyclicVirtualPairState {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
+theorem AppendixBStructuralData.mpv_eq_cyclicVirtualPairState {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) {L : ℕ} (hL : 0 < L) (σ : (Fin L → α)) :
     mpv A σ = hStruct.cyclicVirtualPairState hL σ := by
   rw [hStruct.mpv_eq_coreTensor σ, hStruct.mpv_coreTensor_eq_cyclicVirtualPairState hL σ]
 
 /-- The structural two-site amplitude is exactly the two-site MPV coefficient. -/
-theorem AppendixBStructuralData.twoSiteAmplitude_eq_mpv {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
+theorem AppendixBStructuralData.twoSiteAmplitude_eq_mpv {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) (σ : (Fin 2 → α)) :
     hStruct.twoSiteAmplitude σ = mpv A σ := by
   simp [mpv, coeff, AppendixBStructuralData.twoSiteAmplitude, hStruct.hA_eq,
     Kraus.evalWord, List.ofFn_succ, List.ofFn_zero]
 
 /-- Equivalently, the structural two-site amplitude is the two-site coefficient of
 \(\Lambda U^i\). -/
-theorem AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv {A : MPSTensor d D}
-    (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
+theorem AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv {A : MPTensor α (Fin D)}
+    (hStruct : AppendixBStructuralData A) (σ : (Fin 2 → α)) :
     hStruct.twoSiteAmplitude σ = mpv hStruct.coreTensor σ := by
   rw [hStruct.twoSiteAmplitude_eq_mpv σ, hStruct.mpv_eq_coreTensor σ]
 
 /-- On two sites, the Appendix B cyclic basic-vector coefficient is the
 structural two-site amplitude. -/
 theorem AppendixBStructuralData.cyclicVirtualPairState_two_eq_twoSiteAmplitude
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
+    {A : MPTensor α (Fin D)} (hStruct : AppendixBStructuralData A) (σ : (Fin 2 → α)) :
     hStruct.cyclicVirtualPairState (by decide : 0 < 2) σ =
       hStruct.twoSiteAmplitude σ := by
   rw [← hStruct.mpv_coreTensor_eq_cyclicVirtualPairState (by decide : 0 < 2) σ,

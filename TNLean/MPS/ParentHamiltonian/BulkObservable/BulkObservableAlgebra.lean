@@ -24,22 +24,22 @@ open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- Placing an observable between free intervals is placing it on the window of
 the chain starting after the left free interval. Source: Nachtergaele,
 arXiv:cond-mat/9410110, the local observable convention in lines 933--947 and
 2649--2675. -/
 theorem bulkObservable_eq_placeAlong_chainWindow {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     bulkObservable X ℓ r =
-      ManyBody.placeAlong (X := fun _ ↦ Fin d)
+      ManyBody.placeAlong (X := fun _ ↦ α)
         (ManyBody.chainWindow ℓ (Nat.le_add_right (ℓ + k) r)) X := by
   classical
   ext τ σ
   simp only [ManyBody.placeAlong_apply, bulkObservable, appendObservable_apply,
     Matrix.one_apply]
-  have hw : ∀ ν : Cfg d ((ℓ + k) + r), (fun i ↦ ν (Fin.castAdd r (Fin.natAdd ℓ i))) =
+  have hw : ∀ ν : (Fin ((ℓ + k) + r) → α), (fun i ↦ ν (Fin.castAdd r (Fin.natAdd ℓ i))) =
       fun u ↦ ν (ManyBody.chainWindow ℓ (Nat.le_add_right (ℓ + k) r) u) :=
     fun ν ↦ funext fun i ↦ congrArg ν (Fin.ext rfl)
   have hiff : (∀ v, (∀ u, ManyBody.chainWindow ℓ (Nat.le_add_right (ℓ + k) r) u ≠ v) →
@@ -80,13 +80,13 @@ theorem bulkObservable_eq_placeAlong_chainWindow {k : ℕ}
 
 /-- Placing two observables on the same interior interval preserves their product. -/
 theorem bulkObservable_mul {k : ℕ}
-    (X Y : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (X Y : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     bulkObservable (X * Y) ℓ r = bulkObservable X ℓ r * bulkObservable Y ℓ r := by
   simp only [bulkObservable, appendObservable_mul, Matrix.one_mul]
 
 /-- The interior inclusion preserves adjoints. -/
 theorem bulkObservable_conjTranspose {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     bulkObservable Xᴴ ℓ r = (bulkObservable X ℓ r)ᴴ := by
   simp only [bulkObservable, appendObservable, Matrix.conjTranspose_reindex,
     Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one]
@@ -94,12 +94,12 @@ theorem bulkObservable_conjTranspose {k : ℕ}
 /-- Placing an observable on an interior interval does not increase its
 operator norm. -/
 theorem norm_toEuclideanCLM_bulkObservable_le {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
-    ‖Matrix.toEuclideanCLM (n := Cfg d ((ℓ + k) + r)) (𝕜 := ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
+    ‖Matrix.toEuclideanCLM (n := (Fin ((ℓ + k) + r) → α)) (𝕜 := ℂ)
       (bulkObservable X ℓ r)‖ ≤
-        ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ := by
+        ‖Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X‖ := by
   open scoped Matrix.Norms.L2Operator in
-  have h := ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d)
+  have h := ManyBody.norm_placeAlong_le (X := fun _ ↦ α)
     (ManyBody.chainWindow ℓ (Nat.le_add_right (ℓ + k) r)) X
   rw [Matrix.cstar_norm_def, Matrix.cstar_norm_def] at h
   rw [bulkObservable_eq_placeAlong_chainWindow]

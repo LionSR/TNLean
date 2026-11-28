@@ -26,25 +26,24 @@ equations (3.10)--(3.15), and Lemma commutation (ii), lines 2458--2465.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 namespace MPSTensor
-variable {d D L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D L : ℕ}
 /-- The blocked original left window equals the reindexed original prefix boundary map.
 This includes zero blocking and zero interval lengths. Source: DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES
-    (A : MPSTensor d D) (K M r : ℕ) :
-    residualWindowLeftMapES (blockTensor A L) K M r =
+    (A : MPTensor α (Fin D)) (K M r : ℕ) :
+    residualWindowLeftMapES (Kraus.block A L) K M r =
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (residualWindowConfigEquiv d L K M r).symm).toContinuousLinearMap.comp
+        (residualWindowConfigEquiv L K M r).symm).toContinuousLinearMap.comp
           (leftBoundaryMapES A ((K + M) * L) r) := by
   ext x ⟨u, v, τ⟩
-  change Matrix.trace ((Kraus.evalWord (blockTensor A L) (List.ofFn u) *
-    Kraus.evalWord (blockTensor A L) (List.ofFn v)) * boundaryFamilyEquiv (Cfg d r) x τ) =
-      leftBoundaryMap A ((K + M) * L) r (boundaryFamilyEquiv (Cfg d r) x)
-        (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
+  change Matrix.trace ((Kraus.evalWord (Kraus.block A L) (List.ofFn u) *
+    Kraus.evalWord (Kraus.block A L) (List.ofFn v)) * boundaryFamilyEquiv (Fin r → α) x τ) =
+      leftBoundaryMap A ((K + M) * L) r (boundaryFamilyEquiv (Fin r → α) x)
+        (Fin.append (Kraus.blockConfigEquiv α (K + M) L (Fin.append u v)) τ)
   rw [leftBoundaryMap_append, groundSpaceMap_apply, ← Kraus.evalWord_append,
-    ← List.ofFn_fin_append, evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv]
+    ← List.ofFn_fin_append, Kraus.evalWord_block, ← Kraus.ofFn_blockConfigEquiv]
 
 /-- An exact blocked-sector ground-space presentation identifies the joint aligned left window
 with the original prefix boundary range in the common physical coordinates.
@@ -52,30 +51,30 @@ No primitivity or normalization is required. Source context: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.10)--(3.15) and Lemma commutation (ii). -/
 theorem iSup_range_residualWindowLeftMapES_eq_of_map_groundSpace_eq_iSup
     {ι : Type*} {dim : ι → ℕ}
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (K M r : ℕ)
-    (hGS : ((groundSpace (blockTensor A L) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+    (hGS : ((groundSpace (Kraus.block A L) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
         =
       ⨆ j, ((groundSpace (B j) (K + M)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     (⨆ j, (residualWindowLeftMapES (B j) K M r).range) =
       ((leftBoundaryMapES A ((K + M) * L) r).range).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualWindowConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
+          (residualWindowConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap := by
   rw [← LinearMap.range_comp (leftBoundaryMapES A ((K + M) * L) r).toLinearMap
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (residualWindowConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap]
+      (residualWindowConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap]
   change (⨆ j, (residualWindowLeftMapES (B j) K M r).range) =
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (residualWindowConfigEquiv d L K M r).symm).toContinuousLinearMap.comp
+      (residualWindowConfigEquiv L K M r).symm).toContinuousLinearMap.comp
         (leftBoundaryMapES A ((K + M) * L) r)).range
   rw [← residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES A K M r]
-  have hR {n : ℕ} (T : EuclideanSpace ℂ ((Fin n × Fin n) × Cfg d r) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r))) :
+  have hR {n : ℕ} (T : EuclideanSpace ℂ ((Fin n × Fin n) × (Fin r → α)) →L[ℂ]
+      EuclideanSpace ℂ ((Fin K → Fin L → α) × ((Fin M → Fin L → α) × (Fin r → α)))) :
       (T.comp (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.prodComm (Cfg d r) (Fin n × Fin n))).toContinuousLinearMap).range = T.range :=
+        (Equiv.prodComm (Fin r → α) (Fin n × Fin n))).toContinuousLinearMap).range = T.range :=
     LinearMap.range_comp_of_range_eq_top T.toLinearMap
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.prodComm (Cfg d r) (Fin n × Fin n))).toLinearEquiv.range
+        (Equiv.prodComm (Fin r → α) (Fin n × Fin n))).toLinearEquiv.range
   simp_rw [residualWindowLeftMapES_eq_fiberwise, ← ContinuousLinearMap.comp_assoc, hR]
   simp only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp, ← Submodule.map_iSup]
   congr 1
@@ -90,17 +89,17 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.15). -/
 theorem iSup_range_residualWindowLeftMapES_eq_reindex_leftBoundaryMapES
     {ι : Type*} [Fintype ι] {dim : ι → ℕ}
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1) (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, blockTensor A L i * V j = V j * B j i) (K M r : ℕ) :
+    (hInt : ∀ j i, Kraus.block A L i * V j = V j * B j i) (K M r : ℕ) :
     (⨆ j, (residualWindowLeftMapES (B j) K M r).range) =
       ((leftBoundaryMapES A ((K + M) * L) r).range).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualWindowConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
+          (residualWindowConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap := by
   exact iSup_range_residualWindowLeftMapES_eq_of_map_groundSpace_eq_iSup A B K M r
     (map_groundSpace_eq_iSup_of_isometric_sector_resolution
-      (blockTensor A L) B V hV hSum hInt (K + M))
+      (Kraus.block A L) B V hV hSum hInt (K + M))
 
 /-- The joint left-window range in the physical cover of length \(KL+ML+r\).
 The configuration isometry agrees exactly with that used by the right and full windows.
@@ -109,27 +108,27 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.15) and Lemma commutat
 DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem iSup_range_residualWindowLeftMapES_eq_reindex_cover_leftBoundaryMapES
     {ι : Type*} [Fintype ι] {dim : ι → ℕ}
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1) (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, blockTensor A L i * V j = V j * B j i) (K M r : ℕ) :
+    (hInt : ∀ j i, Kraus.block A L i * V j = V j * B j i) (K M r : ℕ) :
     (⨆ j, (residualWindowLeftMapES (B j) K M r).range) =
       ((leftBoundaryMapES A (K * L + M * L) r).range).map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualCoverConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
+          (residualCoverConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap := by
   have hCast {n n' : ℕ} (h : n = n')
-      (e : Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) ≃
-        Cfg d (n + r)) :
+      (e : (Fin K → Fin L → α) × ((Fin M → Fin L → α) × (Fin r → α)) ≃
+        (Fin (n + r) → α)) :
       (leftBoundaryMapES A n r).range.map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A n' r).range.map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
           (e.trans (Equiv.arrowCongr (finCongr (congrArg (fun n => n + r) h))
-            (Equiv.refl (Fin d)))).symm).toLinearEquiv.toLinearMap := by
+            (Equiv.refl α))).symm).toLinearEquiv.toLinearMap := by
     subst n'
     simp only [finCongr_refl, Equiv.arrowCongr_refl, Equiv.trans_refl]
   exact (iSup_range_residualWindowLeftMapES_eq_reindex_leftBoundaryMapES
     A B V hV hSum hInt K M r).trans
-      (hCast (by rw [Nat.add_mul]) (residualWindowConfigEquiv d L K M r))
+      (hCast (by rw [Nat.add_mul]) (residualWindowConfigEquiv L K M r))
 
 end MPSTensor

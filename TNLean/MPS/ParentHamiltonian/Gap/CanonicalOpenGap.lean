@@ -33,14 +33,14 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Multiplicities and ambient reconstruction preserve every positive-range parent interaction
 on the open chain: it is the parent interaction of the block sum of the distinct normal
 representatives. Source: CPSV16, arXiv:1606.00608, equations `II_CF1`,
 `eq:II_ABasicTensors`, and `decBSV`. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.parentChainInteraction_eq_representatives
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A)
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A)
     {R : ℕ} (hR : 0 < R) (N : ℕ) :
     parentChainInteraction A R N = parentChainInteraction
       (toTensorFromBlocks (fun _ ↦ 1)
@@ -48,7 +48,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.parentChainInteraction_eq_represen
   simp only [parentChainInteraction, parentInteraction,
       data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
-variable [NeZero d]
+variable [Nonempty α]
 
 set_option linter.style.longLine false in
 /-- The normal representatives of a canonical tensor give a uniform open-chain
@@ -57,7 +57,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem
     _root_.MPTensor.CPSVCanonicalFormData.exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
@@ -84,7 +84,7 @@ arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem
     _root_.MPTensor.IsCPSVCanonicalForm.exists_parentChainInteraction_gap_of_three_bondDim_pow_five_le
     [NeZero D]
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) z →
@@ -100,8 +100,8 @@ at every admissible supplied simultaneous injectivity range.
 Source: CPSV16, arXiv:1606.00608, equations `II_CF1` and `decBSV`;
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
-    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) :
+    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPTensor α (Fin (dim j))),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       ∀ {S R : ℕ}, 0 < S → WordTupleSpanTop B S → S + 1 ≤ R →
         ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
@@ -121,7 +121,7 @@ including multiplicities and ambient reconstruction. Source: CPGSV21, arXiv:2011
 Section IV.C, lines 2114--2129; CPSV16, arXiv:1606.00608, equations `II_CF1` and `decBSV`. -/
 theorem
     _root_.MPTensor.CPSVCanonicalFormData.ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R N : ℕ}
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S R N : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)

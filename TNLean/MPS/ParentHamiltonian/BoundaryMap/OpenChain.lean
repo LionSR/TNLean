@@ -47,7 +47,7 @@ open scoped InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 
 /-- The open-chain left-window ground subspace on \(L + 1\) sites.
@@ -56,10 +56,10 @@ Membership says that every restriction obtained by fixing the final site lies
 in \(G_L(A)\). This is the Hilbert-space range of the projector
 \(G_{\Lambda_n}\) acting in the ambient space for \(\Lambda_{n+1}\) in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
-noncomputable def openChainLeftGroundSpaceES (A : MPSTensor d D) (L : ℕ) :
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d (L + 1))) :=
-  (⨅ j : Fin d, (groundSpace A L).comap (restrictLastₗ j)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))).symm.toLinearMap
+noncomputable def openChainLeftGroundSpaceES (A : MPTensor α (Fin D)) (L : ℕ) :
+    Submodule ℂ (EuclideanSpace ℂ (Fin (L + 1) → α)) :=
+  (⨅ j : α, (groundSpace A L).comap (restrictLastₗ j)).map
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (L + 1))).symm.toLinearMap
 
 /-- The open-chain tail-window ground subspace on \(K + L\) sites.
 
@@ -67,19 +67,19 @@ Membership says that every restriction obtained by fixing the \(K\)-site prefix
 lies in \(G_L(A)\). For \(L = l + 1\), this is the Hilbert-space range of
 \(G_{\Lambda_{n+1} \setminus \Lambda_{n-l}}\) in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
-noncomputable def openChainTailGroundSpaceES (A : MPSTensor d D) (K L : ℕ) :
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d (K + L))) :=
-  (⨅ u : Fin K → Fin d, (groundSpace A L).comap (tailRestrictₗ u)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.toLinearMap
+noncomputable def openChainTailGroundSpaceES (A : MPTensor α (Fin D)) (K L : ℕ) :
+    Submodule ℂ (EuclideanSpace ℂ (Fin (K + L) → α)) :=
+  (⨅ u : Fin K → α, (groundSpace A L).comap (tailRestrictₗ u)).map
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm.toLinearMap
 
 /-- The orthogonal projector onto the open-chain left-window ground subspace. -/
-noncomputable def openChainLeftGroundProjectionES (A : MPSTensor d D) (L : ℕ) :
-    EuclideanSpace ℂ (Cfg d (L + 1)) →L[ℂ] EuclideanSpace ℂ (Cfg d (L + 1)) :=
+noncomputable def openChainLeftGroundProjectionES (A : MPTensor α (Fin D)) (L : ℕ) :
+    EuclideanSpace ℂ (Fin (L + 1) → α) →L[ℂ] EuclideanSpace ℂ (Fin (L + 1) → α) :=
   (openChainLeftGroundSpaceES A L).starProjection
 
 /-- The orthogonal projector onto the open-chain tail-window ground subspace. -/
-noncomputable def openChainTailGroundProjectionES (A : MPSTensor d D) (K L : ℕ) :
-    EuclideanSpace ℂ (Cfg d (K + L)) →L[ℂ] EuclideanSpace ℂ (Cfg d (K + L)) :=
+noncomputable def openChainTailGroundProjectionES (A : MPTensor α (Fin D)) (K L : ℕ) :
+    EuclideanSpace ℂ (Fin (K + L) → α) →L[ℂ] EuclideanSpace ℂ (Fin (K + L) → α) :=
   (openChainTailGroundSpaceES A K L).starProjection
 
 /-- Nachtergaele's physical open-chain martingale difference
@@ -92,28 +92,28 @@ and \(0<K\) excludes the undersized volume with no nonwrapping window. See
 arXiv:cond-mat/9410110, equation `(En)` and the identity following condition C3
 in equation (2.4). -/
 noncomputable def openChainMartingaleDifferenceES [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ) (_hInj : Kraus.IsNBlkInjective A l)
+    (A : MPTensor α (Fin D)) (K l : ℕ) (_hInj : Kraus.IsNBlkInjective A l)
     (_hl : 0 < l) (_hK : 0 < K) :
-    EuclideanSpace ℂ (Cfg d (K + l + 1)) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d (K + l + 1)) :=
+    EuclideanSpace ℂ (Fin (K + l + 1) → α) →L[ℂ]
+      EuclideanSpace ℂ (Fin (K + l + 1) → α) :=
   openChainLeftGroundProjectionES A (K + l) -
     ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection
 
 /-- Membership in the left-window Hilbert subspace is exactly
 `InLeftGround` after transport by the canonical `WithLp` equivalence. -/
-@[simp] theorem mem_openChainLeftGroundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d (L + 1))) :
+@[simp] theorem mem_openChainLeftGroundSpaceES_iff (A : MPTensor α (Fin D)) (L : ℕ)
+    (v : EuclideanSpace ℂ (Fin (L + 1) → α)) :
     v ∈ openChainLeftGroundSpaceES A L ↔
-      InLeftGround A L (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1)) v) := by
+      InLeftGround A L (WithLp.linearEquiv 2 ℂ (NSiteSpace α (L + 1)) v) := by
   rw [openChainLeftGroundSpaceES, Submodule.mem_map_equiv]
   simp [InLeftGround, restrictLast]
 
 /-- Membership in the tail-window Hilbert subspace is exactly `InTailGround`
 after transport by the canonical `WithLp` equivalence. -/
-@[simp] theorem mem_openChainTailGroundSpaceES_iff (A : MPSTensor d D) (K L : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d (K + L))) :
+@[simp] theorem mem_openChainTailGroundSpaceES_iff (A : MPTensor α (Fin D)) (K L : ℕ)
+    (v : EuclideanSpace ℂ (Fin (K + L) → α)) :
     v ∈ openChainTailGroundSpaceES A K L ↔
-      InTailGround A K L (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L)) v) := by
+      InTailGround A K L (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L)) v) := by
   rw [openChainTailGroundSpaceES, Submodule.mem_map_equiv]
   simp [InTailGround]
 
@@ -126,7 +126,7 @@ With \(n = K + L₀\) and \(l = L₀\), this identifies the common range of
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). The proof is the existing
 open-chain grow-back theorem at the block-injectivity length. -/
 theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
-    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
+    {A : MPTensor α (Fin D)} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hL₀ : 0 < L₀) :
     openChainLeftGroundSpaceES A (K + L₀) ⊓
       openChainTailGroundSpaceES A K (L₀ + 1) =
@@ -144,7 +144,7 @@ theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
 /-- The whole ground space on \(\Lambda_{n+1}\) lies in the tail ground space
 \(G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}\), where \(n=K+l\). -/
 theorem map_groundSpace_le_openChainTailGroundSpaceES
-    {A : MPSTensor d D} {K l : ℕ} :
+    {A : MPTensor α (Fin D)} {K l : ℕ} :
     ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) ≤ openChainTailGroundSpaceES A K (l + 1) := by
   intro v hv
@@ -157,7 +157,7 @@ space leaves the whole-ground projection unchanged. This is the reverse
 projector composition required in the identity following Nachtergaele's
 condition C3. -/
 theorem openChainTailGroundProjection_comp_groundSpaceProjection
-    {A : MPSTensor d D} {K l : ℕ} :
+    {A : MPTensor α (Fin D)} {K l : ℕ} :
     openChainTailGroundProjectionES A K (l + 1) ∘L
         ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection =
@@ -185,7 +185,7 @@ composition used in the proof is independent of block injectivity; the latter
 is needed only to identify the MPS spaces in `openChainMartingaleDifferenceES`
 with the physical open-parent ground spaces. -/
 theorem openChainTailGroundProjection_comp_martingaleDifference [NeZero D]
-    {A : MPSTensor d D} {K l : ℕ} (hInj : Kraus.IsNBlkInjective A l)
+    {A : MPTensor α (Fin D)} {K l : ℕ} (hInj : Kraus.IsNBlkInjective A l)
     (hl : 0 < l) (hK : 0 < K) :
     openChainTailGroundProjectionES A K (l + 1) ∘L
         openChainMartingaleDifferenceES A K l hInj hl hK =
@@ -210,14 +210,14 @@ arXiv:cond-mat/9410110, eq. (2.4),
 after identifying its common ground-space range. The later FNW transfer-mixing
 estimate supplies the numerical bound on this defect; it is not asserted here. -/
 theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
-    [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ}
+    [NeZero D] {A : MPTensor α (Fin D)} {K L₀ : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) {η : ℝ}
     (hDefect :
       ‖openChainTailGroundProjectionES A K (L₀ + 1) ∘L
           openChainLeftGroundProjectionES A (K + L₀) -
         ((groundSpace A (K + L₀ + 1)).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection‖ ≤ η)
-    (v : EuclideanSpace ℂ (Cfg d (K + L₀ + 1))) :
+    (v : EuclideanSpace ℂ (Fin (K + L₀ + 1) → α)) :
     -η *
         (RCLike.re
             (⟪(openChainTailGroundSpaceES A K (L₀ + 1))ᗮ.starProjection v, v⟫_ℂ) +

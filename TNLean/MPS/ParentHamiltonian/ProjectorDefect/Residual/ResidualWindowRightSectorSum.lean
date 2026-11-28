@@ -27,15 +27,14 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 open MPTensor
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 /-- Decode the blocked common interval and append its original tail.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451. -/
-noncomputable def residualBoundaryConfigEquiv (d L M r : ℕ) :
-    Cfg (blockPhysDim d L) M × Cfg d r ≃ Cfg d (M * L + r) :=
-  (Equiv.prodCongr (Kraus.blockedConfigEquiv d M L) (Equiv.refl (Cfg d r))).trans
+noncomputable def residualBoundaryConfigEquiv (L M r : ℕ) :
+    (Fin M → Fin L → α) × (Fin r → α) ≃ (Fin (M * L + r) → α) :=
+  (Equiv.prodCongr (Kraus.blockConfigEquiv α M L) (Equiv.refl (Fin r → α))).trans
     (Fin.appendEquiv (M * L) r)
 
 /-- The right window is a finite direct sum of the residual boundary map,
@@ -44,15 +43,15 @@ front. This includes zero lengths.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, Lemma commutation (i), lines 2442--2531. -/
 theorem residualWindowRightMapES_eq_fiberwise
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
     residualWindowRightMapES A B V K M r =
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.prodComm (Cfg (blockPhysDim d L) M × Cfg d r)
-          (Cfg (blockPhysDim d L) K))).toContinuousLinearMap.comp
-        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+        (Equiv.prodComm ((Fin M → Fin L → α) × (Fin r → α))
+          ((Fin K → Fin L → α)))).toContinuousLinearMap.comp
+        (ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
           ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-            (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
+            (residualBoundaryConfigEquiv L M r).symm).toContinuousLinearMap.comp
               (blockedResidualBoundaryMapES A L B V M r))) := by
   ext x ⟨u, v, τ⟩
   change Matrix.trace ((Kraus.evalWord B (List.ofFn v) * Vᴴ *
@@ -60,7 +59,7 @@ theorem residualWindowRightMapES_eq_fiberwise
     blockedResidualBoundaryMap A L B V M r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm
         (ContinuousLinearMap.rightFiber x u))
-      (Fin.append (Kraus.blockedConfigEquiv d M L v) τ)
+      (Fin.append (Kraus.blockConfigEquiv α M L v) τ)
   simp [blockedResidualBoundaryMap, Function.comp_def]
   rfl
 
@@ -70,7 +69,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (i),
 lines 2442--2531. -/
 theorem tendsto_norm_isometric_residual_sector_projection_sum_sub_iSup_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -78,7 +77,7 @@ theorem tendsto_norm_isometric_residual_sector_projection_sum_sub_iSup_zero
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     {κ : Type*} {f : Filter κ} {M r : κ → ℕ}
     {J : κ → Type} [∀ n, Fintype (J n)]
-    (U : ∀ n, EuclideanSpace ℂ (Cfg d (M n * L + r n)) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (J n))
+    (U : ∀ n, EuclideanSpace ℂ (Fin (M n * L + r n) → α) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (J n))
     (hM : Filter.Tendsto M f Filter.atTop) :
     let T := fun n j => (U n).toContinuousLinearMap.comp
       (blockedResidualBoundaryMapES A L (B j) (V j) (M n) (r n))
@@ -111,7 +110,7 @@ lines 2442--2531, with the residual coordinates of DCCSP17,
 Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem tendsto_norm_residualWindowRight_sector_projection_sum_sub_iSup_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -123,14 +122,14 @@ theorem tendsto_norm_residualWindowRight_sector_projection_sum_sub_iSup_zero
         (⨆ j, (residualWindowRightMapES A (B j) (V j) (K n) (M n) (r n)).range).starProjection‖)
       f (nhds 0) := by
   let U := fun n => LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (residualBoundaryConfigEquiv d L (M n) (r n)).symm
+    (residualBoundaryConfigEquiv L (M n) (r n)).symm
   have hBase := tendsto_norm_isometric_residual_sector_projection_sum_sub_iSup_zero
     A B V ρ hP hρ hDistinct U hM
   apply squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hBase
   simp_rw [residualWindowRightMapES_eq_fiberwise]
   exact (norm_sum_isometric_range_projection_sub_iSup_le _ _).trans
     (ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le
-      (S := Cfg (blockPhysDim d L) (K n))
+      (S := (Fin (K n) → Fin L → α))
       (fun j => (U n).toContinuousLinearMap.comp
         (blockedResidualBoundaryMapES A L (B j) (V j) (M n) (r n))))
 

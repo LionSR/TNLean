@@ -52,10 +52,10 @@ Here equivalence allows both a virtual gauge and any nonzero complex scalar.
 The normalization is that of Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), lines 1394--1435. -/
 theorem exists_hasComplementaryFixedPointGap_family_of_isNormal
-    (A : ∀ i, MPSTensor d (D i)) (hNormal : ∀ i, Kraus.IsNormal (A i))
+    (A : ∀ i, MPTensor α (Fin (D i))) (hNormal : ∀ i, Kraus.IsNormal (A i))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
-    ∃ (B : ∀ i, MPSTensor d (D i))
+    ∃ (B : ∀ i, MPTensor α (Fin (D i)))
       (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ),
       (∀ i, Kraus.HasComplementaryFixedPointGap (B i) (ρ i)) ∧ (∀ i, (ρ i).PosDef) ∧
       (∀ i L, groundSpace (A i) L = groundSpace (B i) L) ∧
@@ -80,17 +80,17 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Equal block ground spaces give equal assembled ground spaces, independently
 of the nonzero block coefficients. This follows from the local direct-sum
 identity in PGVWC07, Theorem 12, proof lines 1430--1434. -/
 theorem groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
-    (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPSTensor d (dim j))
+    (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hν : ∀ j, ν j ≠ 0) {L : ℕ}
     (hGS : ∀ j, groundSpace (A j) L = groundSpace (B j) L) :
-    groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L =
-      groundSpace (toTensorFromBlocks (α := Fin d) (μ := ν) B) L := by
+    groundSpace (toTensorFromBlocks (μ := μ) A) L =
+      groundSpace (toTensorFromBlocks (μ := ν) B) L := by
   simp only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     groundSpace_toTensorFromBlocks_eq_iSup ν B hν, hGS]
 
@@ -99,11 +99,11 @@ periodic parent Hamiltonian. The parent interaction is the orthogonal
 projection onto the complement of the local ground space, as in
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
 theorem hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_of_block_groundSpace_eq
-    (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPSTensor d (dim j))
+    (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hν : ∀ j, ν j ≠ 0) {L : ℕ}
     (hGS : ∀ j, groundSpace (A j) L = groundSpace (B j) L) (N : ℕ) [NeZero N] :
-    (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian =
-      (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := ν) B) L N).hamiltonian :=
+    (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian =
+      (parentRingInteraction (toTensorFromBlocks (μ := ν) B) L N).hamiltonian :=
   hamiltonian_parentRingInteraction_eq_of_groundSpace_eq
     (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ ν A B hμ hν hGS) N
 
@@ -113,18 +113,18 @@ normalization in Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), before the gap argument of Section 6. -/
 theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
     [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
-    ∃ (B : (j : Fin r) → MPSTensor d (dim j))
+    ∃ (B : (j : Fin r) → MPTensor α (Fin (dim j)))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
       (∀ (L N : ℕ) [NeZero N],
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian =
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d)
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian =
+          (parentRingInteraction (toTensorFromBlocks 
             (μ := μ) B) L N).hamiltonian) := by
   exact (exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct).elim
     fun B ⟨ρ, hP, hρ, hGS, hDistinctB⟩ ↦
@@ -148,20 +148,20 @@ This retains the C1 length used in PGVWC07, arXiv:quant-ph/0608197,
 Theorem 12, lines 1424--1458. -/
 theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isNBlkInjective
     {d r L₀ : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hL₀ : 0 < L₀)
     (hBlk : ∀ j, Kraus.IsNBlkInjective (A j) L₀)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
-    ∃ (B : (j : Fin r) → MPSTensor d (dim j))
+    ∃ (B : (j : Fin r) → MPTensor α (Fin (dim j)))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       (∀ j, Kraus.IsNBlkInjective (B j) L₀) ∧
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
       (∀ (L N : ℕ) [NeZero N],
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian =
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d)
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian =
+          (parentRingInteraction (toTensorFromBlocks 
             (μ := μ) B) L N).hamiltonian) := by
   classical
   choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using

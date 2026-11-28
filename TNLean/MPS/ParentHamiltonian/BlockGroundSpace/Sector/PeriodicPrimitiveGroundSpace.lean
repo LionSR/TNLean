@@ -61,17 +61,16 @@ section PeriodicPrimitiveGroundSpace
 section
 
 open scoped ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- A period-one normalized irreducible tensor has primitive fixed-point
 witnesses with a faithful invariant matrix. This is the finite-dimensional
 Perron--Frobenius step underlying the normalization in Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435. -/
-theorem exists_hasComplementaryFixedPointGap_of_isPeriodic_one [NeZero D] {A : MPSTensor d D}
+theorem exists_hasComplementaryFixedPointGap_of_isPeriodic_one [NeZero D] {A : MPTensor α (Fin D)}
     (hA : IsPeriodic 1 A) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
@@ -87,15 +86,15 @@ The sector dimensions sum to the original bond dimension. Source: DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd
-    {A : MPSTensor d D} (hA : IsPeriodic m A) (p : ℕ)
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) (p : ℕ)
     (hp : 0 < p) (hdiv : m ∣ p) :
     ∃ (dim : Fin (m.gcd p) → ℕ) (hdim : ∀ a, 0 < dim a),
       let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-      ∃ (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+      ∃ (B : (a : Fin (m.gcd p)) → MPTensor (Fin p → α) (Fin (dim a)))
         (ρ : (a : Fin (m.gcd p)) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
       (∑ a, dim a) = D ∧
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
-      (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      (∀ N, ((groundSpace (Kraus.block A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
         ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) := by
   classical
@@ -116,14 +115,14 @@ retaining the original blocked support spaces for all lengths, including zero.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451, specialized to the block length equal to the period. -/
 theorem IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (hdim : ∀ a, 0 < dim a),
       let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-      ∃ (B : (a : Fin m) → MPSTensor (blockPhysDim d m) (dim a))
+      ∃ (B : (a : Fin m) → MPTensor (Fin m → α) (Fin (dim a)))
         (ρ : (a : Fin m) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
       (∑ a, dim a) = D ∧
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
-      (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      (∀ N, ((groundSpace (Kraus.block A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
         ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) := by
   have h := hA.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd
@@ -138,9 +137,8 @@ end
 section
 
 open scoped Matrix BigOperators ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- Periodicity supplies a primitive faithful inequivalent cyclic sector
 resolution, including its support projections and both rectangular block
@@ -148,11 +146,11 @@ intertwiners. Every sector dimension is positive.
 Source: arXiv:1708.00029, Lemma bdcf and equation Aoffdiag;
 Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem IsPeriodic.exists_cyclic_primitive_sector_resolution
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (dim : Fin m → ℕ) (hdim : ∀ j, 0 < dim j),
       let _ : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
-      ∃ (B : (j : Fin m) → MPSTensor (blockPhysDim d m) (dim j))
+      ∃ (B : (j : Fin m) → MPTensor (Fin m → α) (Fin (dim j)))
         (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
         (V : (j : Fin m) → Matrix (Fin D) (Fin (dim j)) ℂ)
         (ρ : (j : Fin m) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
@@ -161,8 +159,8 @@ theorem IsPeriodic.exists_cyclic_primitive_sector_resolution
         (∀ j, IsOrthogonalProjection (P j)) ∧ (∑ j, P j) = 1 ∧
         (∀ j i, P (j + 1) * A i = A i * P j) ∧
         (∀ j, (V j)ᴴ * V j = 1) ∧ (∀ j, V j * (V j)ᴴ = P j) ∧
-        (∀ j i, blockTensor A m i * V j = V j * B j i) ∧
-        (∀ j i, (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ) := by
+        (∀ j i, Kraus.block A m i * V j = V j * B j i) ∧
+        (∀ j i, (V j)ᴴ * Kraus.block A m i = B j i * (V j)ᴴ) := by
   classical
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨dim, B, P, φ, V, hTP, hMPV, hproj, hsum, hcycle, hComm, hTrace,
@@ -185,21 +183,21 @@ theorem IsPeriodic.exists_cyclic_primitive_sector_resolution
   have hShift : ∀ j i, P (j + 1) * A i = A i * P j :=
     offDiag_shift_of_adjoint_cyclic_shift A hA.leftCanonical hproj hcycle'
   choose ρ hP hρ using fun j => exists_hasComplementaryFixedPointGap_of_isPeriodic_one (hOne j)
-  have hCorner (j : Fin m) (i : Fin (blockPhysDim d m)) :
-      V j * B j i * (V j)ᴴ = P j * blockTensor A m i * P j :=
+  have hCorner (j : Fin m) (i : Fin m → α) :
+      V j * B j i * (V j)ᴴ = P j * Kraus.block A m i * P j :=
     (hEmbed j (B j i)).symm.trans (hLetter j i)
   have hVPleft (j : Fin m) : (V j)ᴴ * P j = (V j)ᴴ := by
     rw [← hV, ← Matrix.mul_assoc, hiso, Matrix.one_mul]
   have hVPright (j : Fin m) : P j * V j = V j := by
     rw [← hV, Matrix.mul_assoc, hiso, Matrix.mul_one]
-  have hInt (j : Fin m) (i : Fin (blockPhysDim d m)) :
-      blockTensor A m i * V j = V j * B j i := by
+  have hInt (j : Fin m) (i : Fin m → α) :
+      Kraus.block A m i * V j = V j * B j i := by
     have h := congrArg (fun X => X * V j) (hCorner j i)
     simp only [Matrix.mul_assoc, hiso, Matrix.mul_one, hVPright] at h
     rw [← Matrix.mul_assoc, hComm, Matrix.mul_assoc, hVPright] at h
     exact h.symm
-  have hCoInt (j : Fin m) (i : Fin (blockPhysDim d m)) :
-      (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ := by
+  have hCoInt (j : Fin m) (i : Fin m → α) :
+      (V j)ᴴ * Kraus.block A m i = B j i * (V j)ᴴ := by
     have h := congrArg (fun X => (V j)ᴴ * X) (hCorner j i)
     simp only [← Matrix.mul_assoc, hiso, Matrix.one_mul, hVPleft] at h
     rw [Matrix.mul_assoc, ← hComm, ← Matrix.mul_assoc, hVPleft] at h
@@ -240,11 +238,10 @@ docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 -/
 
 open scoped ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- A periodic tensor, blocked by any positive multiple of its period,
 admits a nonempty finite family of pairwise gauge-phase inequivalent primitive
@@ -254,16 +251,16 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; CPSV16, arXiv:1606.00608, Proposition prop:char-BNT
 and Theorem thm1; Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint. -/
 theorem IsPeriodic.exists_inequivalent_primitive_groundStatePresentation_of_dvd
-    {A : MPSTensor d D} (hA : IsPeriodic m A) (p : ℕ)
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) (p : ℕ)
     (hp : 0 < p) (hdiv : m ∣ p) :
     ∃ (g : ℕ), 0 < g ∧
       ∃ (dim : Fin g → ℕ) (hdim : ∀ a, 0 < dim a),
         let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-        ∃ (B : (a : Fin g) → MPSTensor (blockPhysDim d p) (dim a))
+        ∃ (B : (a : Fin g) → MPTensor (Fin p → α) (Fin (dim a)))
           (ρ : (a : Fin g) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
           (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
           BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+          (∀ N, ((groundSpace (Kraus.block A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
               =
             ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
                 _).symm.toLinearMap)) := by
@@ -287,15 +284,15 @@ inequivalence, and exact support at every chain length, including zero.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary;
 CPSV16, arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1. -/
 theorem IsPeriodic.exists_inequivalent_primitive_groundStatePresentation
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ (g : ℕ), 0 < g ∧
       ∃ (dim : Fin g → ℕ) (hdim : ∀ a, 0 < dim a),
         let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-        ∃ (B : (a : Fin g) → MPSTensor (blockPhysDim d m) (dim a))
+        ∃ (B : (a : Fin g) → MPTensor (Fin m → α) (Fin (dim a)))
           (ρ : (a : Fin g) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
           (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
           BlocksNotGaugePhaseEquiv B ∧
-          (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+          (∀ N, ((groundSpace (Kraus.block A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
               =
             ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
                 _).symm.toLinearMap)) := by

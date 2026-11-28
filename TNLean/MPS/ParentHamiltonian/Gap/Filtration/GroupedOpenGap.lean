@@ -68,13 +68,13 @@ private theorem sum_grouped_le {p M : ℕ} (hp : 0 < p)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The grouped windows satisfy the upper and lower energy bounds in
 Nachtergaele's condition C1-prime with constant one, because they form a
 subfamily of the open-chain interaction terms. -/
-theorem grouped_hamiltonian_parentChainInteraction_C1 (A : MPSTensor d D) {p M : ℕ}
-    (hp : 0 < p) (x : EuclideanSpace ℂ (Cfg d (p * M))) :
+theorem grouped_hamiltonian_parentChainInteraction_C1 (A : MPTensor α (Fin D)) {p M : ℕ}
+    (hp : 0 < p) (x : EuclideanSpace ℂ (Fin (p * M) → α)) :
     0 ≤ ∑ n ∈ Finset.range M,
       (⟪Matrix.toEuclideanLin
           ((parentChainInteraction A (2 * p) (p * M)).restrict fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧
@@ -101,10 +101,10 @@ theorem grouped_hamiltonian_parentChainInteraction_C1 (A : MPSTensor d D) {p M :
 
 /-- Each grouped window has local gap one, including the initial zero window.
 This is Nachtergaele's condition C2 for the grouped filtration at range \(2p\). -/
-theorem grouped_hamiltonian_restrict_parentChainInteraction_C2 (A : MPSTensor d D) {p M n : ℕ}
-    (hn : n < M) (x : EuclideanSpace ℂ (Cfg d (p * M))) :
-    ‖((LinearMap.id : EuclideanSpace ℂ (Cfg d (p * M)) →ₗ[ℂ]
-        EuclideanSpace ℂ (Cfg d (p * M))) -
+theorem grouped_hamiltonian_restrict_parentChainInteraction_C2 (A : MPTensor α (Fin D)) {p M n : ℕ}
+    (hn : n < M) (x : EuclideanSpace ℂ (Fin (p * M) → α)) :
+    ‖((LinearMap.id : EuclideanSpace ℂ (Fin (p * M) → α) →ₗ[ℂ]
+        EuclideanSpace ℂ (Fin (p * M) → α)) -
       groupedIntervalGroundProjectionES A p (p * M) n) x‖ ^ 2 ≤
       (⟪Matrix.toEuclideanLin
           ((parentChainInteraction A (2 * p) (p * M)).restrict fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧
@@ -120,12 +120,12 @@ section GroupedOpenGap
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The first grouped difference vanishes: neither the empty prefix nor the
 length-\(p\) prefix contains a range-\(2p\) interaction. This discharges the
 first index of the full-range martingale estimate. -/
-theorem grouped_martingaleDifference_zero (A : MPSTensor d D)
+theorem grouped_martingaleDifference_zero (A : MPTensor α (Fin D))
     {p N : ℕ} (hp : 0 < p) :
     (groupedNestedGroundProjectionsES A p N).martingaleDifference 0 = 0 := by
   simp only [FrustrationFree.NestedGroundProjections.martingaleDifference,
@@ -136,7 +136,7 @@ theorem grouped_martingaleDifference_zero (A : MPSTensor d D)
 /-- At the first complete grouped window, the local ground projection
 annihilates the grouped martingale difference by idempotence. -/
 theorem groupedIntervalGroundProjectionES_comp_martingaleDifference_one
-    (A : MPSTensor d D) {p N : ℕ} (hp : 0 < p) :
+    (A : MPTensor α (Fin D)) {p N : ℕ} (hp : 0 < p) :
     (groupedIntervalGroundProjectionES A p N 1).comp
       ((groupedNestedGroundProjectionsES A p N).martingaleDifference 1) = 0 := by
   have hQ : groupedIntervalGroundProjectionES A p N 1 =
@@ -157,7 +157,7 @@ theorem groupedIntervalGroundProjectionES_comp_martingaleDifference_one
 /-- The grouped C3 bound needs verification only from the second grouped
 index onwards. The omitted products vanish identically. -/
 theorem grouped_martingaleDifference_norm_le_of_two_le
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p)
+    (A : MPTensor α (Fin D)) {p N M : ℕ} (hp : 0 < p)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hC3 : ∀ n, 2 ≤ n → n < M →
       ‖LinearMap.toContinuousLinearMap
@@ -183,7 +183,7 @@ C2 have constants one; the active grouped window has two indices, giving this co
 This is the chosen-range specialization of Nachtergaele's Theorem 2.1(ii),
 arXiv:cond-mat/9410110, lines 1131--1136. -/
 theorem hamiltonian_parentChainInteraction_gap_of_grouped_c3
-    (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p)
+    (A : MPTensor α (Fin D)) {p M : ℕ} (hp : 0 < p)
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hC3 : ∀ n ∈ Finset.range M,
       ‖LinearMap.toContinuousLinearMap

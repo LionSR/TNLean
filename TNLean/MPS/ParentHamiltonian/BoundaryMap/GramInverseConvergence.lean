@@ -38,7 +38,7 @@ open scoped ComplexOrder Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Operators on the finite-dimensional boundary space have summable geometric series, since
 that operator space is complete. Stating the completeness directly keeps instance search
@@ -52,7 +52,7 @@ local instance : HasSummableGeomSeries
 
 /-- A unit finite-volume Gram operator implies injectivity of the corresponding
 Hilbert-space boundary map. -/
-theorem groundSpaceMapES_injective_of_isUnit_groundSpaceGram {A : MPSTensor d D} {n : ℕ}
+theorem groundSpaceMapES_injective_of_isUnit_groundSpaceGram {A : MPTensor α (Fin D)} {n : ℕ}
     (hGramUnit : IsUnit (groundSpaceGram A n)) :
     Function.Injective (groundSpaceMapES A n) := by
   have hGramInj : Function.Injective (groundSpaceGram A n) :=
@@ -77,7 +77,7 @@ operator is a unit and both its inverse norm and its displacement from
 The direct choice \(g=\sqrt{D^3} C_G\) is obtained by taking square roots
 of the available squared Gram estimate, without an additional dimension loss. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_geometric_inverse_bounds
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     let Iinf := Ring.inverse Kinf
@@ -143,7 +143,7 @@ With \(K_\infty\), \(I_\infty\), \(g\), \(c\), and \(r\) as in
 ring inverse of the finite Gram operator and satisfies the same inverse-norm
 and inverse-displacement estimates. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     let Iinf := Ring.inverse Kinf
@@ -195,7 +195,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 local instance : HasSummableGeomSeries
     (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
   have : CompleteSpace
@@ -214,7 +214,7 @@ Positive definiteness of \(\rho\) is explicit: primitivity alone only supplies a
 positive-semidefinite fixed point and does not justify invertibility of the
 limiting Gram operator. -/
 theorem eventually_groundSpaceGram_isUnit_and_inverse_bound
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
     (ha_lt_one : a < 1) :
     ∀ᶠ n in Filter.atTop,
@@ -247,7 +247,7 @@ tensor converge to the inverse of the nonidentity limiting Gram operator.
 Positive definiteness of the fixed point is required to place the limit in the
 open set of units. -/
 theorem groundSpaceGram_ringInverse_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     Filter.Tendsto (fun n => Ring.inverse (groundSpaceGram A n)) Filter.atTop
       (nhds (Ring.inverse (Matrix.gramReshuffle
@@ -267,7 +267,7 @@ reshuffled fixed-point projection.
 The equality is independent of the chosen injectivity proof by proof
 irrelevance. -/
 theorem eventually_groundSpaceMapES_injective_and_inverseGram_bound
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
     (ha_lt_one : a < 1) :
     ∀ᶠ n in Filter.atTop,

@@ -64,21 +64,21 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The compression of a fixed interior observable approaches its scalar
 expectation, in operator norm on the complete finite-chain ground space.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem bulkObservable_groundSpace_compression_tendsto_scalar
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
       ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.comp
-          (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+          (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))).comp
               ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
                   _).symm.toLinearMap).starProjection) -
@@ -89,7 +89,7 @@ theorem bulkObservable_groundSpace_compression_tendsto_scalar
   let η := observableInsertionExpectation A ρ X
   let Iinf := Ring.inverse (Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))
   let C (n : ι) := (groundSpaceMapES A (N n)).adjoint.comp
-    (((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+    (((Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
       (bulkObservable X (ℓ n) (r n))).comp (groundSpaceMapES A (N n))) -
         η • groundSpaceGram A (N n)
   have hN : Tendsto N f atTop := by
@@ -122,9 +122,9 @@ theorem bulkObservable_groundSpace_compression_tendsto_scalar
     simpa only [norm_zero] using hC.norm
   have h := ContinuousLinearMap.tendsto_starProjection_comp_sub_smul_zero_of_inverseGram_bound
     (E := fun _ : ι => EuclideanSpace ℂ (Fin D × Fin D))
-    (F := fun n => EuclideanSpace ℂ (Cfg d (N n)))
+    (F := fun n => EuclideanSpace ℂ (Fin (N n) → α))
     (fun n => groundSpaceMapES A (N n))
-    (fun n => (Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+    (fun n => (Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
       (bulkObservable X (ℓ n) (r n))) (fun _ => η) hInv
     (by simpa only [C, groundSpaceGram] using hnorm)
   simpa only [range_groundSpaceMapES] using h
@@ -133,16 +133,16 @@ theorem bulkObservable_groundSpace_compression_tendsto_scalar
 vanish in operator norm. Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 933--947 and 2649--2675. -/
 theorem bulkObservable_groundSpace_compression_tendsto_zero
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
       ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.comp
-          (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+          (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))).comp
               ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
                   _).symm.toLinearMap).starProjection)‖) f (nhds 0) := by
@@ -153,9 +153,9 @@ theorem bulkObservable_groundSpace_compression_tendsto_zero
 uniformly in the boundary condition. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem bulkObservable_groundSpace_projection_eventually_near_expectation
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
     {ε : ℝ} (hε : 0 < ε) :
@@ -163,7 +163,7 @@ theorem bulkObservable_groundSpace_projection_eventually_near_expectation
         _).symm.toLinearMap), ‖ψ‖ ≤ 1 →
       ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection
-          (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+          (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))) ψ) -
         observableInsertionExpectation A ρ X • ψ‖ < ε := by
   have hlim := hP.bulkObservable_groundSpace_compression_tendsto_scalar hρ X hℓ hr
@@ -173,7 +173,7 @@ theorem bulkObservable_groundSpace_projection_eventually_near_expectation
   calc
     _ = ‖(((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection.comp
-        (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+        (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))).comp
             ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
                 _).symm.toLinearMap).starProjection) -
@@ -191,25 +191,25 @@ vanishes along every eventually bounded family of boundary vectors. This is
 precisely the finite-volume subtraction term in Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
-    (ψ : (n : ι) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
+    (ψ : (n : ι) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
     (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap))
     (hbound : ∀ᶠ n in f, ‖ψ n‖ ≤ 1) :
     Tendsto (fun n =>
       ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection
-        (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+        (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖ ^ 2) f (nhds 0) := by
   have hnorm : Tendsto (fun n =>
       ‖((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection
-        (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+        (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖) f (nhds 0) := by
     apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
       (hP.bulkObservable_groundSpace_compression_tendsto_zero hρ X hcenter hℓ hr)
@@ -218,7 +218,7 @@ theorem bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
     calc
       _ = ‖(((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection.comp
-          (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+          (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
             (bulkObservable X (ℓ n) (r n))).comp
               ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
                   _).symm.toLinearMap).starProjection)) (ψ n)‖ := by
@@ -231,17 +231,17 @@ theorem bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
 expectation. The boundary condition may vary with the chain length.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem bulkObservable_groundState_expectation_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
-    (ψ : (n : ι) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
+    (ψ : (n : ι) → EuclideanSpace ℂ (Fin ((ℓ n + k) + r n) → α))
     (hψ : ∀ᶠ n in f, ψ n ∈ ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap))
     (hunit : ∀ᶠ n in f, ‖ψ n‖ = 1) :
     Tendsto (fun n => inner ℂ (ψ n)
-      (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+      (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
         (bulkObservable X (ℓ n) (r n))) (ψ n))) f
       (nhds (observableInsertionExpectation A ρ X)) := by
   apply tendsto_iff_norm_sub_tendsto_zero.2
@@ -250,7 +250,7 @@ theorem bulkObservable_groundState_expectation_tendsto
   filter_upwards [hψ, hunit] with n hg hu
   exact ContinuousLinearMap.norm_inner_sub_scalar_le_compression
     ((groundSpace A ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
-    ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+    ((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
       (bulkObservable X (ℓ n) (r n))) (observableInsertionExpectation A ρ X)
         (ψ n) hg hu
 
@@ -272,19 +272,19 @@ full joint ground space of finitely many inequivalent primitive sectors.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675, combined with
 Lemma commutation (i) and the distinct-sector overlap limit limP12. -/
 theorem bulkObservable_iSup_groundSpace_compression_tendsto_zero
-    (A : ∀ i, MPSTensor d (D i))
+    (A : ∀ i, MPTensor α (Fin (D i)))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
       ‖(⨆ i, ((groundSpace (A i) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)).starProjection.comp
-        ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+        ((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
           (bulkObservable X (ℓ n) (r n))).comp
             ((groundSpace (A α) ((ℓ n + k) + r n)).map (WithLp.linearEquiv 2 ℂ
                 _).symm.toLinearMap).starProjection)‖) f (𝓝 0) := by
@@ -296,11 +296,11 @@ theorem bulkObservable_iSup_groundSpace_compression_tendsto_zero
     dsimp [N]
     omega
   refine Submodule.tendsto_norm_iSup_starProjection_comp_zero_of_sector_compressions
-    (E := fun n => EuclideanSpace ℂ (Cfg d (N n)))
-    (C := ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖)
+    (E := fun n => EuclideanSpace ℂ (Fin (N n) → α))
+    (C := ‖Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X‖)
     (fun n i => ((groundSpace (A i) (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (fun n
         => ((groundSpace (A α) (N n)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
-    (fun n => Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
+    (fun n => Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ)
       (bulkObservable X (ℓ n) (r n))) ?_ ?_ ?_
   · intro ε hε
     exact hN.eventually (eventually_all.2 fun i => eventually_all.2 fun j =>

@@ -36,9 +36,8 @@ this corrected period one.
 open MPTensor
 
 open scoped Matrix ComplexOrder BigOperators
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Blocking preserves the sum of open-boundary block spaces under the literal
 configuration isometry. Nonzero weights do not affect these spaces, and no
@@ -46,14 +45,14 @@ periodicity or positivity is needed. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, lines 1504--1538; DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem map_groundSpace_blockTensor_toTensorFromBlocks_eq_iSup
-    (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    (μ : Fin r → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (L N : ℕ) :
-    ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+    ((groundSpace (Kraus.block (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) =
-      ⨆ j, ((groundSpace (blockTensor (A j) L) N).map (WithLp.linearEquiv 2 ℂ
+      ⨆ j, ((groundSpace (Kraus.block (A j) L) N).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap) := by
   apply Submodule.map_injective_of_injective
-    (blockedConfigLinearIsometryEquiv d N L).injective
+    (blockedConfigLinearIsometryEquiv N L).injective
   rw [map_groundSpace_blockTensor_map, Submodule.map_iSup]
   simp only [map_groundSpace_blockTensor_map,
     map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ]
@@ -66,13 +65,13 @@ Section 3 and Lemma disjoint. -/
 theorem exists_primitive_nestedFamilyPresentation
     (c : Fin r → ℕ) (dims : ∀ j, Fin (c j) → ℕ)
     [∀ j a, NeZero (dims j a)]
-    (B : ∀ j a, MPSTensor d (dims j a))
+    (B : ∀ j a, MPTensor α (Fin (dims j a)))
     (ρ : ∀ j a, Matrix (Fin (dims j a)) (Fin (dims j a)) ℂ)
     (hP : ∀ j a, Kraus.HasComplementaryFixedPointGap (B j a) (ρ j a))
     (hρ : ∀ j a, (ρ j a).PosDef) :
     ∃ (g : ℕ) (bdim : Fin g → ℕ) (hdim : ∀ a, 0 < bdim a),
       let _ : ∀ a, NeZero (bdim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-      ∃ (C : ∀ a, MPSTensor d (bdim a))
+      ∃ (C : ∀ a, MPTensor α (Fin (bdim a)))
         (σ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
       (∀ a, Kraus.HasComplementaryFixedPointGap (C a) (σ a)) ∧ (∀ a, (σ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv C ∧
@@ -83,7 +82,7 @@ theorem exists_primitive_nestedFamilyPresentation
   obtain ⟨e⟩ : Nonempty (Fin (Fintype.card (Σ j : Fin r, Fin (c j))) ≃
       (Σ j : Fin r, Fin (c j))) := ⟨(Fintype.equivFin _).symm⟩
   let fdim := fun a => dims (e a).1 (e a).2
-  let C : ∀ a, MPSTensor d (fdim a) := fun a => B (e a).1 (e a).2
+  let C : ∀ a, MPTensor α (Fin (fdim a)) := fun a => B (e a).1 (e a).2
   let σ : ∀ a, Matrix (Fin (fdim a)) (Fin (fdim a)) ℂ := fun a => ρ (e a).1 (e a).2
   let : ∀ a, NeZero (fdim a) := fun a => inferInstanceAs (NeZero (dims (e a).1 (e a).2))
   obtain ⟨g, sel, _hinj, hpos, hprim, hfaithful, hsep, _hcover, hselected⟩ :=
@@ -107,16 +106,16 @@ may be empty. Source: DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451; CPSV16, arXiv:1606.00608,
 Proposition prop:char-BNT and Theorem thm1. -/
 theorem exists_primitive_blockFamilyPresentation_of_period_dvd
-    (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    (μ : Fin r → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin r → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (L : ℕ) (hL : 0 < L) (hdiv : ∀ j, m j ∣ L) :
     ∃ (g : ℕ) (bdim : Fin g → ℕ) (hdim : ∀ a, 0 < bdim a),
       let _ : ∀ a, NeZero (bdim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-      ∃ (B : ∀ a, MPSTensor (blockPhysDim d L) (bdim a))
+      ∃ (B : ∀ a, MPTensor (Fin L → α) (Fin (bdim a)))
         (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv B ∧
-      ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+      ∀ N, ((groundSpace (Kraus.block (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap) =
         ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap) := by
@@ -140,16 +139,16 @@ an empty family. Source: DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451, followed by CPSV16,
 arXiv:1606.00608, Proposition prop:char-BNT. -/
 theorem exists_primitive_blockFamilyPresentation_of_isPeriodic
-    (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    (μ : Fin r → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin r → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) :
     ∃ (L : ℕ), 0 < L ∧
       ∃ (g : ℕ) (bdim : Fin g → ℕ) (hdim : ∀ a, 0 < bdim a),
         let _ : ∀ a, NeZero (bdim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-        ∃ (B : ∀ a, MPSTensor (blockPhysDim d L) (bdim a))
+        ∃ (B : ∀ a, MPTensor (Fin L → α) (Fin (bdim a)))
           (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
         (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
-        ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+        ∀ N, ((groundSpace (Kraus.block (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap) =
           ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap) := by

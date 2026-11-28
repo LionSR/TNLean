@@ -31,7 +31,7 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- A direct sum of inequivalent normal blocks has a canonical parent
 interaction of positive range whose periodic Hamiltonians have a uniform
@@ -39,14 +39,14 @@ positive gap at all sufficiently large volumes. The interaction range is
 chosen sufficiently large in this block-injective case of Cirac--Pérez-García--Schuch--Verstraete,
 arXiv:2011.12127, Section IV.C, lines 2183--2187. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_isNormal
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N],
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+          (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
@@ -59,14 +59,14 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_isNor
 normal block sum has a uniform eventual periodic gap. The threshold does not
 depend on the chosen interaction range. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshold_of_isNormal
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ R₀ : ℕ, 0 < R₀ ∧ ∀ R : ℕ, R₀ ≤ R →
       ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+          (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
@@ -80,7 +80,7 @@ uniform over every chain length. This is the block-injective gap assertion of
 CPGSV21, arXiv:2011.12127, Section IV.C, lines 2183--2187, at the admissible
 range in PGVWC07, Theorem 12, lines 1424--1458. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_isNBlkInjective
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
@@ -89,7 +89,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hBlkB, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isNBlkInjective

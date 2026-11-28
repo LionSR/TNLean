@@ -50,15 +50,15 @@ open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Whole-increment centered overlap -/
 
 /-- The left direct-sum factor for a suffix increment of length \(Q\). -/
 noncomputable def wholeIncrementLeftOverlapFactorES
-    (A : MPSTensor d D) (K Q : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d Q) :=
+    (A : MPTensor α (Fin D)) (K Q : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin K → α) →L[ℂ]
+      BoundaryFamilySpace (D := D) ((Fin K → α) × (Fin Q → α)) :=
   LinearMap.toContinuousLinearMap
     { toFun := fun x => WithLp.toLp 2 fun sp =>
         leftVirtualMapES A Q (boundaryFamilyFiber (D := D) x sp.1.1) (sp.1.2, sp.2)
@@ -89,9 +89,9 @@ noncomputable def wholeIncrementLeftOverlapFactorES
 
 /-- The right direct-sum factor for a suffix increment of length \(Q\). -/
 noncomputable def wholeIncrementRightOverlapFactorES
-    (A : MPSTensor d D) (K Q : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d Q) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d Q) :=
+    (A : MPTensor α (Fin D)) (K Q : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin Q → α) →L[ℂ]
+      BoundaryFamilySpace (D := D) ((Fin K → α) × (Fin Q → α)) :=
   LinearMap.toContinuousLinearMap
     { toFun := fun y => WithLp.toLp 2 fun sp =>
         tailVirtualMapES A K (boundaryFamilyFiber (D := D) y sp.1.2) (sp.1.1, sp.2)
@@ -122,13 +122,13 @@ noncomputable def wholeIncrementRightOverlapFactorES
 
 @[simp]
 theorem boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply
-    (A : MPSTensor d D) (K Q : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (u : Cfg d K) (j : Cfg d Q) :
-    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d Q)
+    (A : MPTensor α (Fin D)) (K Q : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (u : (Fin K → α)) (j : (Fin Q → α)) :
+    boundaryFamilyEquiv (D := D) ((Fin K → α) × (Fin Q → α))
         (wholeIncrementLeftOverlapFactorES A K Q x) (u, j) =
       Kraus.evalWord A (List.ofFn j) *
-        boundaryFamilyEquiv (D := D) (Cfg d K) x u := by
+        boundaryFamilyEquiv (D := D) (Fin K → α) x u := by
   apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
   rw [← boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
   calc
@@ -139,7 +139,7 @@ theorem boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply
       intro p
       rfl
     _ = Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (boundaryFamilyEquiv (D := D) (Cfg d Q)
+        (boundaryFamilyEquiv (D := D) (Fin Q → α)
           (leftVirtualMapES A Q (boundaryFamilyFiber (D := D) x u)) j) :=
       boundaryFamilyFiber_eq_frobeniusEquivEuclidean _ _
     _ = _ := by
@@ -149,12 +149,12 @@ theorem boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply
 
 @[simp]
 theorem boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply
-    (A : MPSTensor d D) (K Q : ℕ)
-    (y : BoundaryFamilySpace (D := D) (Cfg d Q))
-    (u : Cfg d K) (j : Cfg d Q) :
-    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d Q)
+    (A : MPTensor α (Fin D)) (K Q : ℕ)
+    (y : BoundaryFamilySpace (D := D) (Fin Q → α))
+    (u : (Fin K → α)) (j : (Fin Q → α)) :
+    boundaryFamilyEquiv (D := D) ((Fin K → α) × (Fin Q → α))
         (wholeIncrementRightOverlapFactorES A K Q y) (u, j) =
-      boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+      boundaryFamilyEquiv (D := D) (Fin Q → α) y j *
         Kraus.evalWord A (List.ofFn u) := by
   apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
   rw [← boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
@@ -166,7 +166,7 @@ theorem boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply
       intro p
       rfl
     _ = Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (boundaryFamilyEquiv (D := D) (Cfg d K)
+        (boundaryFamilyEquiv (D := D) (Fin K → α)
           (tailVirtualMapES A K (boundaryFamilyFiber (D := D) y j)) u) :=
       boundaryFamilyFiber_eq_frobeniusEquivEuclidean _ _
     _ = _ := by
@@ -176,20 +176,20 @@ theorem boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply
 
 /-- The arbitrary-increment left factor has no spectator-cardinality loss. -/
 theorem wholeIncrementLeftOverlapFactorES_norm_le
-    (A : MPSTensor d D) (K Q : ℕ) :
+    (A : MPTensor α (Fin D)) (K Q : ℕ) :
     ‖wholeIncrementLeftOverlapFactorES A K Q‖ ≤ ‖leftVirtualMapES A Q‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
   rw [← sq_le_sq₀ (norm_nonneg _)
     (mul_nonneg (norm_nonneg _) (norm_nonneg _)), mul_pow,
     EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
   calc
-    ∑ sp : (Cfg d K × Cfg d Q) × (Fin D × Fin D),
+    ∑ sp : ((Fin K → α) × (Fin Q → α)) × (Fin D × Fin D),
         ‖wholeIncrementLeftOverlapFactorES A K Q x sp‖ ^ 2 =
-        ∑ u : Cfg d K, ‖leftVirtualMapES A Q
+        ∑ u : (Fin K → α), ‖leftVirtualMapES A Q
           (boundaryFamilyFiber (D := D) x u)‖ ^ 2 := by
       simp only [Fintype.sum_prod_type, EuclideanSpace.norm_sq_eq]
       rfl
-    _ ≤ ∑ u : Cfg d K,
+    _ ≤ ∑ u : (Fin K → α),
         (‖leftVirtualMapES A Q‖ * ‖boundaryFamilyFiber (D := D) x u‖) ^ 2 := by
       apply Finset.sum_le_sum
       intro u _
@@ -197,7 +197,7 @@ theorem wholeIncrementLeftOverlapFactorES_norm_le
         (mul_nonneg (norm_nonneg _) (norm_nonneg _))).mpr
           (ContinuousLinearMap.le_opNorm _ _)
     _ = ‖leftVirtualMapES A Q‖ ^ 2 *
-        ∑ sp : Cfg d K × (Fin D × Fin D), ‖x sp‖ ^ 2 := by
+        ∑ sp : (Fin K → α) × (Fin D × Fin D), ‖x sp‖ ^ 2 := by
       rw [Fintype.sum_prod_type, Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro u _
@@ -206,21 +206,21 @@ theorem wholeIncrementLeftOverlapFactorES_norm_le
 
 /-- The arbitrary-increment right factor has no spectator-cardinality loss. -/
 theorem wholeIncrementRightOverlapFactorES_norm_le
-    (A : MPSTensor d D) (K Q : ℕ) :
+    (A : MPTensor α (Fin D)) (K Q : ℕ) :
     ‖wholeIncrementRightOverlapFactorES A K Q‖ ≤ ‖tailVirtualMapES A K‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun y => ?_
   rw [← sq_le_sq₀ (norm_nonneg _)
     (mul_nonneg (norm_nonneg _) (norm_nonneg _)), mul_pow,
     EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
   calc
-    ∑ sp : (Cfg d K × Cfg d Q) × (Fin D × Fin D),
+    ∑ sp : ((Fin K → α) × (Fin Q → α)) × (Fin D × Fin D),
         ‖wholeIncrementRightOverlapFactorES A K Q y sp‖ ^ 2 =
-        ∑ j : Cfg d Q, ‖tailVirtualMapES A K
+        ∑ j : (Fin Q → α), ‖tailVirtualMapES A K
           (boundaryFamilyFiber (D := D) y j)‖ ^ 2 := by
       simp only [Fintype.sum_prod_type, EuclideanSpace.norm_sq_eq]
       rw [Finset.sum_comm]
       rfl
-    _ ≤ ∑ j : Cfg d Q,
+    _ ≤ ∑ j : (Fin Q → α),
         (‖tailVirtualMapES A K‖ * ‖boundaryFamilyFiber (D := D) y j‖) ^ 2 := by
       apply Finset.sum_le_sum
       intro j _
@@ -228,7 +228,7 @@ theorem wholeIncrementRightOverlapFactorES_norm_le
         (mul_nonneg (norm_nonneg _) (norm_nonneg _))).mpr
           (ContinuousLinearMap.le_opNorm _ _)
     _ = ‖tailVirtualMapES A K‖ ^ 2 *
-        ∑ sp : Cfg d Q × (Fin D × Fin D), ‖y sp‖ ^ 2 := by
+        ∑ sp : (Fin Q → α) × (Fin D × Fin D), ‖y sp‖ ^ 2 := by
       rw [Fintype.sum_prod_type, Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro j _
@@ -237,78 +237,78 @@ theorem wholeIncrementRightOverlapFactorES_norm_le
 
 /-- The left direct-sum factor in the centered overlapping Gram. This is the one-site
 specialization of `wholeIncrementLeftOverlapFactorES`. -/
-noncomputable def c3LeftOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
+noncomputable def c3LeftOverlapFactorES (A : MPTensor α (Fin D)) (K : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin K → α) →L[ℂ]
+      BoundaryFamilySpace (D := D) ((Fin K → α) × (Fin 1 → α)) :=
   wholeIncrementLeftOverlapFactorES A K 1
 
 /-- The right direct-sum factor in the centered overlapping Gram. This is the one-site
 specialization of `wholeIncrementRightOverlapFactorES`. -/
-noncomputable def c3RightOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d 1) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
+noncomputable def c3RightOverlapFactorES (A : MPTensor α (Fin D)) (K : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin 1 → α) →L[ℂ]
+      BoundaryFamilySpace (D := D) ((Fin K → α) × (Fin 1 → α)) :=
   wholeIncrementRightOverlapFactorES A K 1
 
 /-- Fiber formula for the left overlap factor. -/
 @[simp]
 theorem boundaryFamilyEquiv_c3LeftOverlapFactorES_apply
-    (A : MPSTensor d D) (K : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (u : Cfg d K) (j : Cfg d 1) :
-    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
+    (A : MPTensor α (Fin D)) (K : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (u : (Fin K → α)) (j : (Fin 1 → α)) :
+    boundaryFamilyEquiv (D := D) ((Fin K → α) × (Fin 1 → α))
         (c3LeftOverlapFactorES A K x) (u, j) =
       Kraus.evalWord A (List.ofFn j) *
-        boundaryFamilyEquiv (D := D) (Cfg d K) x u := by
+        boundaryFamilyEquiv (D := D) (Fin K → α) x u := by
   simpa only [c3LeftOverlapFactorES] using
     boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply A K 1 x u j
 
 /-- Fiber formula for the right overlap factor. -/
 @[simp]
 theorem boundaryFamilyEquiv_c3RightOverlapFactorES_apply
-    (A : MPSTensor d D) (K : ℕ)
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1))
-    (u : Cfg d K) (j : Cfg d 1) :
-    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
+    (A : MPTensor α (Fin D)) (K : ℕ)
+    (y : BoundaryFamilySpace (D := D) (Fin 1 → α))
+    (u : (Fin K → α)) (j : (Fin 1 → α)) :
+    boundaryFamilyEquiv (D := D) ((Fin K → α) × (Fin 1 → α))
         (c3RightOverlapFactorES A K y) (u, j) =
-      boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+      boundaryFamilyEquiv (D := D) (Fin 1 → α) y j *
         Kraus.evalWord A (List.ofFn u) := by
   simpa only [c3RightOverlapFactorES] using
     boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply A K 1 y u j
 
 /-- The left direct-sum factor has no spectator-cardinality loss. -/
-theorem c3LeftOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
+theorem c3LeftOverlapFactorES_norm_le (A : MPTensor α (Fin D)) (K : ℕ) :
     ‖c3LeftOverlapFactorES A K‖ ≤ ‖leftVirtualMapES A 1‖ := by
   simpa only [c3LeftOverlapFactorES] using
     wholeIncrementLeftOverlapFactorES_norm_le A K 1
 
 /-- The right direct-sum factor has no spectator-cardinality loss. -/
-theorem c3RightOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
+theorem c3RightOverlapFactorES_norm_le (A : MPTensor α (Fin D)) (K : ℕ) :
     ‖c3RightOverlapFactorES A K‖ ≤ ‖tailVirtualMapES A K‖ := by
   simpa only [c3RightOverlapFactorES] using
     wholeIncrementRightOverlapFactorES_norm_le A K 1
 
 /-- The centered mixed residual for a whole suffix increment. -/
 noncomputable def wholeIncrementCenteredResidualES
-    (A : MPSTensor d D) (K L Q : ℕ)
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :
-    BoundaryFamilySpace (D := D) (Cfg d Q) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K) :=
+    BoundaryFamilySpace (D := D) (Fin Q → α) →L[ℂ]
+      BoundaryFamilySpace (D := D) (Fin K → α) :=
   let Kinf := Matrix.gramReshuffle (fixedPointProj ρ htr)
   (reassocTailBoundaryMapES A K L Q).adjoint.comp
       (leftBoundaryMapES A (K + L) Q) -
     (wholeIncrementLeftOverlapFactorES A K Q).adjoint.comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q) Kinf).comp
+      ((boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α)) Kinf).comp
         (wholeIncrementRightOverlapFactorES A K Q))
 
 /-- The whole-increment centered residual factors through the finite Gram difference
 \(\mathcal K_L-\mathcal K_\infty\) in the exact common ambient. -/
 theorem wholeIncrementCenteredResidualES_eq_overlapFactors
-    (A : MPSTensor d D) (K L Q : ℕ)
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ htr)
     wholeIncrementCenteredResidualES A K L Q ρ htr =
       (wholeIncrementLeftOverlapFactorES A K Q).adjoint.comp
-        ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q)
+        ((boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α))
           (groundSpaceGram A L - Kinf)).comp
             (wholeIncrementRightOverlapFactorES A K Q)) := by
   dsimp only
@@ -319,7 +319,7 @@ theorem wholeIncrementCenteredResidualES_eq_overlapFactors
   change inner ℂ x (((reassocTailBoundaryMapES A K L Q).adjoint.comp
       (leftBoundaryMapES A (K + L) Q) -
     (wholeIncrementLeftOverlapFactorES A K Q).adjoint.comp
-      ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q)
+      ((boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α))
         (Matrix.gramReshuffle (fixedPointProj ρ htr))).comp
           (wholeIncrementRightOverlapFactorES A K Q))) y) = _
   simp only [sub_apply, inner_sub_right, ContinuousLinearMap.comp_apply,
@@ -337,7 +337,7 @@ theorem wholeIncrementCenteredResidualES_eq_overlapFactors
 
 /-- Norm bound for the whole-increment centered overlap factorization. -/
 theorem wholeIncrementCenteredResidualES_norm_le
-    (A : MPSTensor d D) (K L Q : ℕ)
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ htr)
     ‖wholeIncrementCenteredResidualES A K L Q ρ htr‖ ≤
@@ -347,19 +347,19 @@ theorem wholeIncrementCenteredResidualES_norm_le
   rw [wholeIncrementCenteredResidualES_eq_overlapFactors A K L Q ρ htr]
   calc
     _ ≤ ‖(wholeIncrementLeftOverlapFactorES A K Q).adjoint‖ *
-        ‖boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q)
+        ‖boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α))
           (groundSpaceGram A L -
             Matrix.gramReshuffle (fixedPointProj ρ htr))‖ *
           ‖wholeIncrementRightOverlapFactorES A K Q‖ := by
       calc
         _ ≤ ‖(wholeIncrementLeftOverlapFactorES A K Q).adjoint‖ *
-            ‖(boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q)
+            ‖(boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α))
               (groundSpaceGram A L - Matrix.gramReshuffle
                 (fixedPointProj ρ htr))).comp
                 (wholeIncrementRightOverlapFactorES A K Q)‖ :=
           ContinuousLinearMap.opNorm_comp_le _ _
         _ ≤ ‖(wholeIncrementLeftOverlapFactorES A K Q).adjoint‖ *
-            (‖boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q)
+            (‖boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α))
               (groundSpaceGram A L - Matrix.gramReshuffle
                 (fixedPointProj ρ htr))‖ *
               ‖wholeIncrementRightOverlapFactorES A K Q‖) := by
@@ -367,7 +367,7 @@ theorem wholeIncrementCenteredResidualES_norm_le
           exact ContinuousLinearMap.opNorm_comp_le _ _
         _ = _ := by ring
     _ = ‖wholeIncrementLeftOverlapFactorES A K Q‖ *
-        ‖boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q)
+        ‖boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin Q → α))
           (groundSpaceGram A L -
             Matrix.gramReshuffle (fixedPointProj ρ htr))‖ *
           ‖wholeIncrementRightOverlapFactorES A K Q‖ := by
@@ -385,9 +385,9 @@ theorem wholeIncrementCenteredResidualES_norm_le
 /-- Under left canonicality, the whole-increment left virtual factor contributes
 at most one to the centered residual bound. -/
 theorem wholeIncrementCenteredResidualES_norm_le_of_leftCanonical
-    (A : MPSTensor d D) (K L Q : ℕ)
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    (hLeft : ∑ i : α, (A i)ᴴ * A i = 1) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ htr)
     ‖wholeIncrementCenteredResidualES A K L Q ρ htr‖ ≤
       ‖groundSpaceGram A L - Kinf‖ * ‖tailVirtualMapES A K‖ := by
@@ -407,7 +407,7 @@ theorem wholeIncrementCenteredResidualES_norm_le_of_leftCanonical
 /-- Primitive MPS tensors inherit the whole-increment bound with unit
 left-virtual prefactor from their left-canonical normalization. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.wholeIncrementCenteredResidualES_norm_le
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (K L Q : ℕ) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
@@ -418,14 +418,14 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.wholeIncrementCenteredResidua
 
 /-- The centered virtual residual in the tail-after-left overlap orientation. -/
 noncomputable def c3CenteredVirtualResidualES [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    BoundaryFamilySpace (D := D) (Cfg d 1) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K) :=
+    BoundaryFamilySpace (D := D) (Fin 1 → α) →L[ℂ]
+      BoundaryFamilySpace (D := D) (Fin K → α) :=
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-  let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-  let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
+  let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+  let Kinfleft := boundaryFiberwiseMap (D := D) (Fin 1 → α) Kinf
   let Iinf := Ring.inverse Kinf
   (tailBoundaryMapES A K (l + 1)).adjoint.comp
       (leftBoundaryMapES A (K + l) 1) -
@@ -433,7 +433,7 @@ noncomputable def c3CenteredVirtualResidualES [NeZero D]
       (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft)))
 
 private theorem c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES
-    [NeZero D] (A : MPSTensor d D) (K l : ℕ)
+    [NeZero D] (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     c3CenteredVirtualResidualES A K l ρ hρ =
       wholeIncrementCenteredResidualES A K l 1 ρ (ne_of_gt hρ.trace_pos) := by
@@ -456,13 +456,13 @@ private theorem c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES
 /-- The centered overlap residual factors exactly through the length-\(l\) Gram
 error on the common direct sum. -/
 theorem c3_centeredVirtualResidualES_eq_overlapFactors [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     c3CenteredVirtualResidualES A K l ρ hρ =
       (c3LeftOverlapFactorES A K).adjoint.comp
-        ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d 1)
+        ((boundaryFiberwiseMap (D := D) ((Fin K → α) × (Fin 1 → α))
           (groundSpaceGram A l - Kinf)).comp
             (c3RightOverlapFactorES A K)) := by
   rw [c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES]
@@ -472,7 +472,7 @@ theorem c3_centeredVirtualResidualES_eq_overlapFactors [NeZero D]
 
 /-- Operator-norm bound for the exact centered overlap factorization. -/
 theorem c3_centeredVirtualResidualES_norm_le [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
@@ -488,7 +488,7 @@ squared norm of the centered overlap residual decays geometrically in the
 overlap length, uniformly in the prefix length.  The prefactor retains the
 explicit dimension-cubed conversion from the Gram convergence estimate. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.c3_centeredVirtualResidualES_norm_sq_le_geometric
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ K l : ℕ, 1 ≤ l →
       ‖c3CenteredVirtualResidualES A K l ρ hρ‖ ^ 2 ≤

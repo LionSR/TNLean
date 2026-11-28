@@ -42,20 +42,20 @@ open MPTensor
 
 open scoped Matrix ComplexOrder
 namespace MPSTensor
-variable {d D E k : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E k : ℕ}
 
 /-- The open-boundary vectors of \(A\) on \(L\) sites whose boundary matrices lie in
 the corner \(P M_D P\), as a subspace of the Euclidean configuration space.
 For a support projection this is the local support space of
 Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738. -/
-noncomputable def cornerGroundSpaceES (A : MPSTensor d D)
+noncomputable def cornerGroundSpaceES (A : MPTensor α (Fin D))
     (P : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
+    Submodule ℂ (EuclideanSpace ℂ (Fin L → α)) :=
   ((cornerSubmodule P).map (groundSpaceMap A L)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.toLinearMap
 
 /-- The corner of the identity gives the full open-boundary space. -/
-theorem cornerGroundSpaceES_one (A : MPSTensor d D) (L : ℕ) :
+theorem cornerGroundSpaceES_one (A : MPTensor α (Fin D)) (L : ℕ) :
     cornerGroundSpaceES A 1 L = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) := by
   have hTop : cornerSubmodule (1 : Matrix (Fin D) (Fin D) ℂ) = ⊤ :=
@@ -70,7 +70,7 @@ space of \(B\) is the image of the corner \((V V^*) M_D (V V^*)\) under the boun
 of \(A\). Source context: Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738,
 the spanning vectors of the local support spaces. -/
 theorem groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner
-    (A : MPSTensor d D) (B : MPSTensor d E)
+    (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (hV : Vᴴ * V = 1)
     (hInt : ∀ i, A i * V = V * B i) (L : ℕ) :
     groundSpace B L = (cornerSubmodule (V * Vᴴ)).map (groundSpaceMap A L) := by
@@ -92,7 +92,7 @@ theorem groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner
 /-- Euclidean form of
 `groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner`. -/
 theorem map_groundSpace_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner
-    (A : MPSTensor d D) (B : MPSTensor d E)
+    (A : MPTensor α (Fin D)) (B : MPTensor α (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (hV : Vᴴ * V = 1)
     (hInt : ∀ i, A i * V = V * B i) (L : ℕ) :
     ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = cornerGroundSpaceES A (V *
@@ -107,9 +107,9 @@ corner of \(\rho\). No tensor normalization is required.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738, the local
 support spaces of stationary generating data. -/
 theorem observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff_of_stationary
-    (A : MPSTensor d D) {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
+    (A : MPTensor α (Fin D)) {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (htr : Matrix.trace ρ ≠ 0) (hFix : Kraus.map A ρ = ρ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     observableInsertionExpectation A ρ (Xᴴ * X) = 0 ↔
       cornerGroundSpaceES A hρ.supportProj k ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
   obtain ⟨E, hE, V, B, σ, hV, hVrange, -, -, hσ, hInt, -, -, hObs⟩ :=
@@ -126,10 +126,10 @@ corner of the stationary matrix. Intervals of length zero are included.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.5) and
 lines 1724--1738, the local support spaces of normalized generating data. -/
 theorem exists_local_density_range_eq_cornerGroundSpaceES_of_stationary
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (htr : Matrix.trace ρ ≠ 0) (hFix : Kraus.map A ρ = ρ) (k : ℕ) :
-    ∃ σ : Matrix (Cfg d k) (Cfg d k) ℂ, σ.PosSemidef ∧ Matrix.trace σ = 1 ∧
+    ∃ σ : Matrix (Fin k → α) (Fin k → α) ℂ, σ.PosSemidef ∧ Matrix.trace σ = 1 ∧
       (∀ X, observableInsertionExpectation A ρ X = Matrix.trace (σ * X)) ∧
       LinearMap.range (Matrix.toEuclideanLin σ) = cornerGroundSpaceES A hρ.supportProj k := by
   obtain ⟨E, hE, V, B, τ, hV, hVrange, -, -, hτ, hB, hInt, -, -, hObs⟩ :=

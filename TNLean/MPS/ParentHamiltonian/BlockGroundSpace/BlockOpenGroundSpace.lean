@@ -52,7 +52,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- In the trace-preserving normalization, the boundary compatibility relation
 \(A_b C_a=D_b A_a\) gives \(C_a=E A_a\), where
@@ -63,10 +63,10 @@ the dual normalization \(\sum_a A_aA_a^\dagger=I\) of the canonical form
 \(A_bC_a=A_bEA_a\); the normalization \(\sum_a A_a^\dagger A_a=I\) used
 here gives \(C_a=EA_a\) directly. -/
 theorem boundary_matrix_eq_of_compatibility_of_tracePreserving
-    {D : ℕ} (A : MPSTensor d D)
-    (C Dmat : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    {D : ℕ} (A : MPTensor α (Fin D))
+    (C Dmat : α → Matrix (Fin D) (Fin D) ℂ)
     (hTP : ∑ b, (A b)ᴴ * A b = 1)
-    (hCompat : ∀ a b, A b * C a = Dmat b * A a) (a : Fin d) :
+    (hCompat : ∀ a b, A b * C a = Dmat b * A a) (a : α) :
     C a = (∑ b, (A b)ᴴ * Dmat b) * A a := by
   calc
     C a = (∑ b, (A b)ᴴ * A b) * C a := by rw [hTP, one_mul]
@@ -77,10 +77,10 @@ theorem boundary_matrix_eq_of_compatibility_of_tracePreserving
 trace-preserving normalization. This is the one-step open-chain argument of
 PGVWC07, Theorem 12, lines 1442--1452. -/
 theorem mem_iSup_groundSpace_of_iSup_restrictions_of_tracePreserving
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
-    (ψ : NSiteSpace (Fin d) (n + 2))
+    (ψ : NSiteSpace α (n + 2))
     (hLeft : ∀ b, restrictLast ψ b ∈ ⨆ j, groundSpace (A j) (n + 1))
     (hRight : ∀ a, restrictFirst ψ a ∈ ⨆ j, groundSpace (A j) (n + 1)) :
     ψ ∈ ⨆ j, groundSpace (A j) (n + 2) := by
@@ -100,7 +100,7 @@ theorem mem_iSup_groundSpace_of_iSup_restrictions_of_tracePreserving
 intersection identity for trace-preserving blocks with full simultaneous
 word span. This is PGVWC07, Theorem 12, lines 1442--1452. -/
 theorem iSup_groundSpace_eq_restriction_intersection_of_tracePreserving
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1) :
     ((⨅ b, (⨆ j, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
@@ -121,17 +121,17 @@ of a weighted direct sum. The common word span is assumed at every length
 at least \(L_0\), and the interaction range is at least \(L_0+1\).
 This is the open-segment iteration in PGVWC07, Theorem 12, lines 1430--1454. -/
 theorem contiguous_mem_groundSpace_toTensorFromBlocks
-    [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
     {L₀ L N : ℕ} (hSpan : ∀ n ≥ L₀, WordTupleSpanTop A n)
     (hL : L₀ + 1 ≤ L) (hLN : L ≤ N)
-    {ψ : NSiteSpace (Fin d) N}
-    (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
+    {ψ : NSiteSpace α N}
+    (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → α),
       contiguousRestrictₗ s L hs τ ψ ∈
-        groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L) :
-    ψ ∈ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N := by
+        groundSpace (toTensorFromBlocks (μ := μ) A) L) :
+    ψ ∈ groundSpace (toTensorFromBlocks (μ := μ) A) N := by
   apply contiguous_mem_of_restriction_intersection_submodules
-    (fun M ↦ groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) M)
+    (fun M ↦ groundSpace (toTensorFromBlocks (μ := μ) A) M)
     (by omega : 0 < L) hLN ?_ hwindow
   rintro (_ | n) hM
   · omega
@@ -145,7 +145,7 @@ simultaneous word-span threshold. This is the open-chain conclusion of PGVWC07, 
 proof lines 1430--1454, used in Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.12)--(3.16). -/
 theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
-    [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
     {L₀ L N : ℕ} (hSpan : ∀ n ≥ L₀, WordTupleSpanTop A n)
     (hL : L₀ + 1 ≤ L) (hLN : L ≤ N) :
@@ -169,14 +169,14 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- Every sufficiently long interaction gives the full boundary-condition space as the kernel of
 the Hamiltonian of the parent interaction on the open chain for a direct sum of inequivalent
 primitive blocks. The threshold is independent of the chain length. This is the open-segment
 conclusion of PGVWC07, Theorem 12, lines 1430--1454. -/
 theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -203,14 +203,14 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- The kernel of the Hamiltonian of the parent interaction on the open chain of a primitive
 block sum equals its boundary space at the printed PGVWC07 interaction threshold. The common
 injective length is supplied, rather than replaced by a larger one. Source: PGVWC07, Theorem 12,
 label `2blocks.2`, lines 1424--1454. -/
 theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlock_bound
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)

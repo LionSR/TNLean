@@ -25,7 +25,7 @@ and Lemma existenceinteraction; arXiv:1708.00029, Lemma bdcf.
 
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- The opposite cyclic degree-\(n\) boundary matrices satisfy
 \(P_{u+n}X=XP_u\). Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -46,10 +46,10 @@ def cyclicBoundarySpace
 /-- Multiplication by one physical matrix lowers the opposite cyclic degree.
 Source: arXiv:1708.00029, Lemma bdcf. -/
 theorem cyclicBoundarySpace_mul_left
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hCycle : ∀ u i, P u * A i = A i * P (u + 1))
     {n : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ cyclicBoundarySpace P (n + 1)) (i : Fin d) :
+    (hX : X ∈ cyclicBoundarySpace P (n + 1)) (i : α) :
     A i * X ∈ cyclicBoundarySpace P n := by
   intro u
   rw [← Matrix.mul_assoc, hCycle, Matrix.mul_assoc]
@@ -59,10 +59,10 @@ theorem cyclicBoundarySpace_mul_left
 /-- Right multiplication by one physical matrix lowers the opposite cyclic degree.
 Source: arXiv:1708.00029, Lemma bdcf. -/
 theorem cyclicBoundarySpace_mul_right
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hCycle : ∀ u i, P u * A i = A i * P (u + 1))
     {n : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ cyclicBoundarySpace P (n + 1)) (i : Fin d) :
+    (hX : X ∈ cyclicBoundarySpace P (n + 1)) (i : α) :
     X * A i ∈ cyclicBoundarySpace P n := by
   intro u
   have h := hX (u - 1)
@@ -76,14 +76,14 @@ property. Source: Nachtergaele, arXiv:cond-mat/9410110, equations
 (3.10)--(3.11) and Lemma existenceinteraction. The hypotheses concern
 only the relevant cyclic matrix corners, not the full matrix algebra. -/
 theorem mem_groundSpace_of_cyclicBoundary_restrictions
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hCycle : ∀ u i, P u * A i = A i * P (u + 1))
     (hLeftCanonical : ∑ i, (A i)ᴴ * A i = 1) {n : ℕ}
     (hRepresent : ∀ ψ ∈ groundSpace A (n + 1),
       ∃ X ∈ cyclicBoundarySpace P (n + 1), groundSpaceMap A (n + 1) X = ψ)
     (hInjective : Set.InjOn (groundSpaceMap A n)
       (cyclicBoundarySpace P n : Set (Matrix (Fin D) (Fin D) ℂ)))
-    {ψ : NSiteSpace (Fin d) (n + 2)}
+    {ψ : NSiteSpace α (n + 2)}
     (hLeft : InLeftGround A (n + 1) ψ)
     (hRight : InRightGround A (n + 1) ψ) :
     ψ ∈ groundSpace A (n + 2) := by
@@ -102,15 +102,15 @@ theorem mem_groundSpace_of_cyclicBoundary_restrictions
 one-site restrictions with the enlarged ground space.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11). -/
 theorem groundSpace_eq_restriction_intersection_of_cyclicBoundary
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hCycle : ∀ u i, P u * A i = A i * P (u + 1))
     (hLeftCanonical : ∑ i, (A i)ᴴ * A i = 1) {n : ℕ}
     (hRepresent : ∀ ψ ∈ groundSpace A (n + 1),
       ∃ X ∈ cyclicBoundarySpace P (n + 1), groundSpaceMap A (n + 1) X = ψ)
     (hInjective : Set.InjOn (groundSpaceMap A n)
       (cyclicBoundarySpace P n : Set (Matrix (Fin D) (Fin D) ℂ))) :
-    ((⨅ b : Fin d, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
-      ⨅ a : Fin d, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) =
+    ((⨅ b : α, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
+      ⨅ a : α, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) =
       groundSpace A (n + 2) := by
   ext ψ
   simp only [Submodule.mem_inf, Submodule.mem_iInf, Submodule.mem_comap]
@@ -139,10 +139,10 @@ theorem sum_cyclicBoundary_mem [NeZero m]
 /-- Compression to opposite cyclic corners preserves every open-boundary MPS vector.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11). -/
 theorem groundSpaceMap_sum_cyclicBoundary [NeZero m]
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hOrth : ∀ u v, P u * P v = if u = v then P u else 0)
     (hSum : ∑ u : ZMod m, P u = 1) (n : ℕ)
-    (hWord : ∀ u (σ : Fin n → Fin d),
+    (hWord : ∀ u (σ : Fin n → α),
       P u * Kraus.evalWord A (List.ofFn σ) =
         Kraus.evalWord A (List.ofFn σ) * P (u + n))
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -165,13 +165,13 @@ theorem groundSpaceMap_sum_cyclicBoundary [NeZero m]
 /-- Every open-boundary MPS vector has a representative in its opposite cyclic degree.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11). -/
 theorem exists_cyclicBoundary_of_mem_groundSpace [NeZero m]
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hOrth : ∀ u v, P u * P v = if u = v then P u else 0)
     (hSum : ∑ u : ZMod m, P u = 1) (n : ℕ)
-    (hWord : ∀ u (σ : Fin n → Fin d),
+    (hWord : ∀ u (σ : Fin n → α),
       P u * Kraus.evalWord A (List.ofFn σ) =
         Kraus.evalWord A (List.ofFn σ) * P (u + n))
-    {ψ : NSiteSpace (Fin d) n} (hψ : ψ ∈ groundSpace A n) :
+    {ψ : NSiteSpace α n} (hψ : ψ ∈ groundSpace A n) :
     ∃ X ∈ cyclicBoundarySpace P n, groundSpaceMap A n X = ψ := by
   obtain ⟨X, rfl⟩ := LinearMap.mem_range.mp hψ
   exact ⟨_, sum_cyclicBoundary_mem P hOrth n X,
@@ -181,7 +181,7 @@ theorem exists_cyclicBoundary_of_mem_groundSpace [NeZero m]
 The trace pairing tests each difference against its own adjoint.
 Source: FNW92, Section 3; Nachtergaele, arXiv:cond-mat/9410110, equation (3.7). -/
 theorem groundSpaceMap_injOn_of_adjoint_mem_wordSpan
-    (A : MPSTensor d D) (n : ℕ)
+    (A : MPTensor α (Fin D)) (n : ℕ)
     (S : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
     (hAdjoint : ∀ X ∈ S, Xᴴ ∈ Kraus.wordSpan A n) :
     Set.InjOn (groundSpaceMap A n) (S : Set (Matrix (Fin D) (Fin D) ℂ)) := by
@@ -213,15 +213,15 @@ theorem conjTranspose_mem_cyclicMatrixSubspace_of_cyclicBoundary
 intersection. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.10)--(3.11) and Lemma existenceinteraction. -/
 theorem groundSpace_eq_restriction_intersection_of_cyclic_wordSpan [NeZero m]
-    (A : MPSTensor d D) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (P : ZMod m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ u, (P u).IsHermitian)
     (hOrth : ∀ u v, P u * P v = if u = v then P u else 0)
     (hSum : ∑ u : ZMod m, P u = 1)
     (hCycle : ∀ u i, P u * A i = A i * P (u + 1))
     (hLeftCanonical : ∑ i, (A i)ᴴ * A i = 1) {n : ℕ}
     (hSpan : Kraus.wordSpan A n = cyclicMatrixSubspace P n) :
-    ((⨅ b : Fin d, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
-      ⨅ a : Fin d, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) =
+    ((⨅ b : α, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
+      ⨅ a : α, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) =
       groundSpace A (n + 2) := by
   apply groundSpace_eq_restriction_intersection_of_cyclicBoundary A P hCycle hLeftCanonical
   case hInjective =>

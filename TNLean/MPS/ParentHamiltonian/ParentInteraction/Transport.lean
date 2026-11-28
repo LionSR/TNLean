@@ -56,7 +56,7 @@ open scoped BigOperators ComplexOrder InnerProductSpace Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Disjoint cyclic windows and the ground space of the parent Hamiltonian -/
 
@@ -94,21 +94,21 @@ theorem CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap {N L : ℕ}
 attribute [local instance] Classical.propDecidable
 
 private theorem cyclicCfg_eq_replaceWindow {N : ℕ} (hN : 0 < N) (L : ℕ)
-    (hLN : L ≤ N) (i : Fin N) (σ : Cfg d L) (τ : Cfg d N) :
+    (hLN : L ≤ N) (i : Fin N) (σ : (Fin L → α)) (τ : (Fin N → α)) :
     cyclicCfg hN L i σ τ = replaceWindow L hLN i τ σ := by
   rfl
 
 @[simp] private theorem withLpMap_cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
-    (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) (ω : Cfg d L) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ) v ω = v (cyclicCfg hN L i ω τ) := rfl
+    (i : Fin N) (τ : (Fin N → α)) (v : EuclideanSpace ℂ (Fin N → α)) (ω : (Fin L → α)) :
+    LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ) v ω = v (cyclicCfg hN L i ω τ) := rfl
 
-private def SameOutsideWindow {N : ℕ} (L : ℕ) (i : Fin N) (σ τ : Cfg d N) : Prop :=
+private def SameOutsideWindow {N : ℕ} (L : ℕ) (i : Fin N) (σ τ : (Fin N → α)) : Prop :=
   ∀ k : Fin N, ¬ ((k.val + N - i.val) % N < L) → τ k = σ k
 
 private theorem withLpMap_cyclicRestrictₗ_eq_of_sameOutsideWindow {N : ℕ} (hN : 0 < N)
-    {L : ℕ} (i : Fin N) {σ τ : Cfg d N}
+    {L : ℕ} (i : Fin N) {σ τ : (Fin N → α)}
     (hστ : SameOutsideWindow (L := L) i σ τ) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i
+    LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i
         τ) = LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i σ) := by
   ext v ω
   change v.ofLp (cyclicCfg hN L i ω τ) = v.ofLp (cyclicCfg hN L i ω σ)
@@ -119,7 +119,7 @@ private theorem withLpMap_cyclicRestrictₗ_eq_of_sameOutsideWindow {N : ℕ} (h
     · simp [cyclicCfg, hk, hστ k hk]
 
 private theorem sameOutsideWindow_of_cyclicCfg_eq {N : ℕ} (hN : 0 < N) {L : ℕ}
-    (i : Fin N) {σ τ : Cfg d N} {ω : Cfg d L}
+    (i : Fin N) {σ τ : (Fin N → α)} {ω : (Fin L → α)}
     (hEq : cyclicCfg hN L i ω τ = σ) :
     SameOutsideWindow (L := L) i σ τ := by
   intro k hk
@@ -134,7 +134,7 @@ private theorem cyclic_offset_window_site_lt {N L : ℕ} (hLN : L ≤ N) (i : Fi
 
 private theorem extractWindow_replaceWindow_of_cyclic_windows_disjoint {N L : ℕ}
     (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
-    (σ : Cfg d N) (τ : Cfg d L) :
+    (σ : (Fin N → α)) (τ : (Fin L → α)) :
     extractWindow L i (replaceWindow L hLN j σ τ) = extractWindow L i σ := by
   funext r
   unfold extractWindow replaceWindow
@@ -147,7 +147,7 @@ private theorem extractWindow_replaceWindow_of_cyclic_windows_disjoint {N L : �
 
 private theorem replaceWindow_commute_of_cyclic_windows_disjoint {N L : ℕ}
     (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
-    (σ : Cfg d N) (α β : Cfg d L) :
+    (σ : (Fin N → α)) (α β : (Fin L → α)) :
     replaceWindow L hLN j (replaceWindow L hLN i σ α) β =
       replaceWindow L hLN i (replaceWindow L hLN j σ β) α := by
   funext k
@@ -211,9 +211,9 @@ private theorem separateLinearMap_apply_commute
       rw [linearMap_apply_eq_sum]
 
 private theorem withLpMap_cyclicRestrictₗ_single_of_sameOutsideWindow {N : ℕ} (hN : 0 < N) {L : ℕ}
-    (hLN : L ≤ N) (i : Fin N) (σ τ : Cfg d N)
+    (hLN : L ≤ N) (i : Fin N) (σ τ : (Fin N → α))
     (hστ : SameOutsideWindow (L := L) i σ τ) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ) (EuclideanSpace.single σ (1 : ℂ)) =
+    LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ) (EuclideanSpace.single σ (1 : ℂ)) =
       EuclideanSpace.single (extractWindow L i σ) (1 : ℂ) := by
   ext ω
   by_cases hω : ω = extractWindow L i σ
@@ -238,9 +238,9 @@ private theorem withLpMap_cyclicRestrictₗ_single_of_sameOutsideWindow {N : ℕ
 
 private theorem withLpMap_cyclicRestrictₗ_single_of_not_sameOutsideWindow {N : ℕ} (hN : 0 < N) {L :
     ℕ}
-    (i : Fin N) (σ τ : Cfg d N)
+    (i : Fin N) (σ τ : (Fin N → α))
     (hστ : ¬ SameOutsideWindow (L := L) i σ τ) :
-    LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ) (EuclideanSpace.single σ (1 :
+    LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ) (EuclideanSpace.single σ (1 :
         ℂ)) = 0 := by
   ext ω
   have hneq : cyclicCfg hN L i ω τ ≠ σ := by
@@ -249,17 +249,17 @@ private theorem withLpMap_cyclicRestrictₗ_single_of_not_sameOutsideWindow {N :
   simp [LinearMap.withLpMap, hneq]
 
 private theorem withLpMap_cyclicRestrictₗ_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
-    (hLN : L ≤ N) (i : Fin N) (σ τ : Cfg d N)
-    (v : EuclideanSpace ℂ (Cfg d L)) :
-    ((LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ)).adjoint v) σ =
+    (hLN : L ≤ N) (i : Fin N) (σ τ : (Fin N → α))
+    (v : EuclideanSpace ℂ (Fin L → α)) :
+    ((LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ)).adjoint v) σ =
       if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
   classical
-  have h : ((LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ)).adjoint v) σ =
-      ⟪LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ) (EuclideanSpace.single σ (1 : ℂ)),
+  have h : ((LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ)).adjoint v) σ =
+      ⟪LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ) (EuclideanSpace.single σ (1 : ℂ)),
           v⟫_ℂ := by
     rw [← LinearMap.adjoint_inner_right]
     simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
-      ((LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ)).adjoint v)).symm
+      ((LinearMap.withLpMap 2 (cyclicRestrictₗ hN L i τ)).adjoint v)).symm
   split_ifs with hστ
   · rw [h, withLpMap_cyclicRestrictₗ_single_of_sameOutsideWindow hN hLN i σ τ hστ]
     simpa using EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v
@@ -271,14 +271,14 @@ cyclic length-\(L\) restriction in the canonical Hilbert-space coordinates.
 This realizes the left open-chain ground projection in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictLast_eq_withLpMap_cyclicRestrictₗ_zero {L : ℕ}
-    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
-    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))) v) (τ (Fin.last L)) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L))
-        (LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L +
+    (v : EuclideanSpace ℂ (Fin (L + 1) → α)) (τ : (Fin (L + 1) → α)) :
+    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (L + 1))) v) (τ (Fin.last L)) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α L))
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L +
             1)) τ) v) := by
   ext σ
   change v.ofLp (Fin.snoc σ (τ (Fin.last L))) = v.ofLp
-    (cyclicCfg (α := Fin d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
+    (cyclicCfg (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
   apply congrArg v.ofLp
   funext k
   rcases Fin.eq_castSucc_or_eq_last k with ⟨r, rfl⟩ | rfl
@@ -293,14 +293,14 @@ coordinates.
 This realizes the tail open-chain ground projection in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictFirst_eq_withLpMap_cyclicRestrictₗ_one {L : ℕ} (hL : 0 < L)
-    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
-    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))) v) (τ 0) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L))
-        (LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L +
+    (v : EuclideanSpace ℂ (Fin (L + 1) → α)) (τ : (Fin (L + 1) → α)) :
+    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (L + 1))) v) (τ 0) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α L))
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L +
             1)) τ) v) := by
   ext σ
   change v.ofLp (Fin.cons (τ 0) σ) = v.ofLp
-    (cyclicCfg (α := Fin d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
+    (cyclicCfg (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
   apply congrArg v.ofLp
   funext k
   have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (Nat.succ_lt_succ hL)
@@ -313,16 +313,16 @@ theorem restrictFirst_eq_withLpMap_cyclicRestrictₗ_one {L : ℕ} (hL : 0 < L)
     simp [cyclicCfg, hOneNat, hmod]
 
 private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)
-    (i : Fin N) (σ : Cfg d N) :
-    Fintype.card {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} = d ^ L := by
-  let f : Cfg d L → {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} :=
+    (i : Fin N) (σ : (Fin N → α)) :
+    Fintype.card {τ : (Fin N → α) // SameOutsideWindow (L := L) i σ τ} = Fintype.card α ^ L := by
+  let f : (Fin L → α) → {τ : (Fin N → α) // SameOutsideWindow (L := L) i σ τ} :=
     fun ω => ⟨replaceWindow L hLN i σ ω, by
       intro k hk
       simp [replaceWindow, hk]⟩
   have hf : Function.Bijective f := by
     constructor
     · intro ω₁ ω₂ h
-      have h' := congrArg (fun τ : {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} =>
+      have h' := congrArg (fun τ : {τ : (Fin N → α) // SameOutsideWindow (L := L) i σ τ} =>
         extractWindow L i τ.1) h
       simpa [f] using h'
     · intro τ
@@ -336,23 +336,23 @@ private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)
         · simp [replaceWindow, hk, τ.2 k hk]
       simpa [f] using hreplace.trans (replaceWindow_extractWindow L hLN i τ.1)
   calc
-    Fintype.card {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ}
-        = Fintype.card (Cfg d L) := (Fintype.card_of_bijective (f := f) hf).symm
-    _ = d ^ L := by simp [Cfg]
+    Fintype.card {τ : (Fin N → α) // SameOutsideWindow (L := L) i σ τ}
+        = Fintype.card (Fin L → α) := (Fintype.card_of_bijective (f := f) hf).symm
+    _ = Fintype.card α ^ L := by simp [Cfg]
 
 /-- The cyclic average of the conjugates \(R_{i,\tau}^\dagger T R_{i,\tau}\) of an operator
 \(T\) on \(L\) sites by the restrictions to the window starting at \(i\) applies \(T\) to the
 section of the vector on that window. -/
 theorem inv_smul_sum_adjoint_comp_withLpMap_cyclicRestrictₗ_apply {N L : ℕ} (hLN : L ≤ N) (i : Fin
     N)
-    (T : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L))
-    (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
-    ((((d ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+    (T : EuclideanSpace ℂ (Fin L → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin L → α))
+    (v : EuclideanSpace ℂ (Fin N → α)) (σ : (Fin N → α)) :
+    ((((Fintype.card α ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : (Fin N → α),
       (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)).adjoint ∘ₗ T ∘ₗ
         LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)) v σ =
       T (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i σ) v) (extractWindow L i σ) := by
   classical
-  have hsummand (τ : Cfg d N) :
+  have hsummand (τ : (Fin N → α)) :
       ((LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)).adjoint
         (T (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v))) σ =
         if SameOutsideWindow (L := L) i σ τ then
@@ -363,17 +363,17 @@ theorem inv_smul_sum_adjoint_comp_withLpMap_cyclicRestrictₗ_apply {N L : ℕ} 
     · rw [ite_eq_left hστ, ite_eq_left hστ,
         withLpMap_cyclicRestrictₗ_eq_of_sameOutsideWindow (Fin.pos i) i hστ]
     · rw [ite_eq_right hστ, ite_eq_right hστ]
-  have hne : (((d ^ L : ℕ) : ℂ)) ≠ 0 := by
-    have hcard : Fintype.card (Cfg d L) = d ^ L := by simp [Cfg]
-    have : Fintype.card (Cfg d L) ≠ 0 := by
-      let _ : Nonempty (Cfg d L) := ⟨extractWindow L i σ⟩
+  have hne : (((Fintype.card α ^ L : ℕ) : ℂ)) ≠ 0 := by
+    have hcard : Fintype.card (Fin L → α) = Fintype.card α ^ L := by simp [Cfg]
+    have : Fintype.card (Fin L → α) ≠ 0 := by
+      let _ : Nonempty (Fin L → α) := ⟨extractWindow L i σ⟩
       exact Fintype.card_ne_zero
     rw [hcard] at this
     exact_mod_cast this
-  have happly : ((((d ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+  have happly : ((((Fintype.card α ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : (Fin N → α),
       (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)).adjoint ∘ₗ T ∘ₗ
         LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)) v σ =
-      (((d ^ L : ℕ) : ℂ)⁻¹) * ∑ τ : Cfg d N,
+      (((Fintype.card α ^ L : ℕ) : ℂ)⁻¹) * ∑ τ : (Fin N → α),
         ((LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)).adjoint
           (T (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v))) σ := by
     simp only [LinearMap.smul_apply, LinearMap.sum_apply, LinearMap.comp_apply, PiLp.smul_apply,
@@ -394,7 +394,7 @@ matrix is taken with `Matrix.toEuclideanLin` where a statement is about vectors.
 
 /-- The operator of the local parent interaction is the orthogonal projection onto the orthogonal
 complement of the local ground space \(G_L(A)\). -/
-theorem toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ) :
+theorem toEuclideanLin_toMatrix'_parentInteraction (A : MPTensor α (Fin D)) (L : ℕ) :
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)ᗮ.starProjection.toLinearMap := by
@@ -402,7 +402,7 @@ theorem toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ)
   simp [Matrix.toEuclideanLin, parentInteraction]
 
 /-- The operator of the local parent interaction is a symmetric projection. -/
-theorem isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D)
+theorem isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction (A : MPTensor α (Fin D))
     (L : ℕ) :
     (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L))).IsSymmetricProjection :=
   toEuclideanLin_toMatrix'_parentInteraction A L ▸
@@ -410,7 +410,7 @@ theorem isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction (A : MP
 
 /-- The local parent interaction is an orthogonal projection. Source: arXiv:1010.3732,
 Section II.B, the choice of the local term as a projector. -/
-theorem isStarProjection_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ) :
+theorem isStarProjection_toMatrix'_parentInteraction (A : MPTensor α (Fin D)) (L : ℕ) :
     IsStarProjection (LinearMap.toMatrix' (parentInteraction A L)) := by
   have h := isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction A L
   refine ⟨Matrix.toEuclideanLin.injective ?_, ?_⟩
@@ -419,14 +419,14 @@ theorem isStarProjection_toMatrix'_parentInteraction (A : MPSTensor d D) (L : �
   · exact (Matrix.isSymmetric_toEuclideanLin_iff.mp h.isSymmetric).isSelfAdjoint
 
 /-- The local parent interaction is positive semidefinite. -/
-theorem posSemidef_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ) :
+theorem posSemidef_toMatrix'_parentInteraction (A : MPTensor α (Fin D)) (L : ℕ) :
     (LinearMap.toMatrix' (parentInteraction A L)).PosSemidef :=
   Matrix.isPositive_toEuclideanLin_iff.mp
     (isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction A L).isPositive
 
 /-- The kernel of the local parent interaction is the local ground space \(G_L(A)\). -/
-theorem toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff (A : MPSTensor d D)
-    (L : ℕ) (v : EuclideanSpace ℂ (Cfg d L)) :
+theorem toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff (A : MPTensor α (Fin D))
+    (L : ℕ) (v : EuclideanSpace ℂ (Fin L → α)) :
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)) v = 0 ↔
       v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [toEuclideanLin_toMatrix'_parentInteraction]
@@ -439,8 +439,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff (A : MPSTen
 
 /-- A term of the parent interaction on the ring acts at a configuration \(σ\) as the local
 parent interaction on the cyclic restriction to its window, read at the window of \(σ\). -/
-theorem toEuclideanLin_parentRingInteraction_term_apply (A : MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
+theorem toEuclideanLin_parentRingInteraction_term_apply (A : MPTensor α (Fin D)) {L N : ℕ}
+    (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α)) (σ : (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v σ =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L))
@@ -456,7 +456,7 @@ theorem toEuclideanLin_parentRingInteraction_term_apply (A : MPSTensor d D) {L N
 
 private theorem withLpMap_cyclicRestrictₗ_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d
     D)
-    {L N : ℕ} (hLN : L ≤ N) (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    {L N : ℕ} (hLN : L ≤ N) (i : Fin N) (τ : (Fin N → α)) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ)
         (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v) =
@@ -466,25 +466,25 @@ private theorem withLpMap_cyclicRestrictₗ_toEuclideanLin_parentRingInteraction
   ext ω
   rw [withLpMap_cyclicRestrictₗ_apply,
     toEuclideanLin_parentRingInteraction_term_apply A hLN i v (cyclicCfg (Fin.pos i) L i ω τ)]
-  have hsame : SameOutsideWindow (L := L) i (cyclicCfg (α := Fin d) (Fin.pos i) L i ω τ) τ :=
-    sameOutsideWindow_of_cyclicCfg_eq (d := d) (Fin.pos i) i rfl
-  have hrestrict : LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos i) L i τ) =
-      LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i (cyclicCfg (α := Fin d) (Fin.pos i) L i ω
+  have hsame : SameOutsideWindow (L := L) i (cyclicCfg (Fin.pos i) L i ω τ) τ :=
+    sameOutsideWindow_of_cyclicCfg_eq (Fin.pos i) i rfl
+  have hrestrict : LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) =
+      LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i (cyclicCfg (Fin.pos i) L i ω
           τ)) :=
-    withLpMap_cyclicRestrictₗ_eq_of_sameOutsideWindow (d := d) (Fin.pos i) i hsame
-  have hextract : extractWindow L i (cyclicCfg (α := Fin d) (Fin.pos i) L i ω τ) = ω := by
-    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
+    withLpMap_cyclicRestrictₗ_eq_of_sameOutsideWindow (Fin.pos i) i hsame
+  have hextract : extractWindow L i (cyclicCfg (Fin.pos i) L i ω τ) = ω := by
+    rw [cyclicCfg_eq_replaceWindow (Fin.pos i) L hLN]
     exact extractWindow_replaceWindow L hLN i τ ω
   rw [← hrestrict, hextract]
 
 /-- A term of the parent interaction on the ring annihilates a vector exactly when every
 boundary-filled cyclic restriction of the vector to the window of the term lies in the local
 ground space \(G_L(A)\). -/
-theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPTensor α (Fin D)) {L N : ℕ}
+    (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0 ↔
-      ∀ τ : Cfg d N, LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ ((groundSpace A
+      ∀ τ : (Fin N → α), LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ ((groundSpace A
           L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have : NeZero N := NeZero.of_pos i.pos
   constructor
@@ -501,9 +501,9 @@ theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D
 /-- If a term of the parent interaction on the ring annihilates a vector, every cyclic
 restriction of the vector to the window of the term lies in the local ground space. -/
 theorem withLpMap_cyclicRestrictₗ_mem_map_groundSpace_of_parentRingInteraction_term_eq_zero
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) (i : Fin N) {v : EuclideanSpace ℂ (Cfg d N)}
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hLN : L ≤ N) (i : Fin N) {v : EuclideanSpace ℂ (Fin N → α)}
     (hv : haveI : NeZero N := NeZero.of_pos i.pos;
-      Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0) (τ : Cfg d N) :
+      Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0) (τ : (Fin N → α)) :
     LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) L i τ) v ∈ ((groundSpace A L).map
         (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
   haveI : NeZero N := NeZero.of_pos i.pos
@@ -514,12 +514,12 @@ the ring based at `0` and `1` annihilate a vector, the vector lies in the \((L+1
 space. This is the open-chain intersection property `groundSpace_intersection` in the language of
 the local terms. -/
 theorem mem_map_groundSpace_succ_of_parentRingInteraction_term_zero_one_eq_zero
-    {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
-    {v : EuclideanSpace ℂ (Cfg d (L + 1))}
+    {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : EuclideanSpace ℂ (Fin (L + 1) → α)}
     (hleft : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0)
     (hright : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0) :
     v ∈ ((groundSpace A (L + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))
+  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace α (L + 1))
   have hLeft : InLeftGround A L (eN v) := by
     intro j
     have hmemNS := (mem_map_groundSpace_iff A L _).1
@@ -539,7 +539,7 @@ theorem mem_map_groundSpace_succ_of_parentRingInteraction_term_zero_one_eq_zero
 /-- Vectors of the \((L+1)\)-site ground space are annihilated by the two terms of the parent
 interaction on the ring based at `0` and `1`. -/
 theorem parentRingInteraction_term_zero_one_eq_zero_of_mem_map_groundSpace_succ
-    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L) {v : EuclideanSpace ℂ (Cfg d (L + 1))}
+    (A : MPTensor α (Fin D)) {L : ℕ} (hL : 0 < L) {v : EuclideanSpace ℂ (Fin (L + 1) → α)}
     (hv : v ∈ ((groundSpace A (L + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0 ∧
       Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0 := by
@@ -557,8 +557,8 @@ theorem parentRingInteraction_term_zero_one_eq_zero_of_mem_map_groundSpace_succ
 /-- Adjacent terms of the parent interaction on the ring of \(L+1\) sites have the
 \((L+1)\)-site ground space as their common kernel. -/
 theorem parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ
-    {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
-    {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
+    {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : EuclideanSpace ℂ (Fin (L + 1) → α)} :
     Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0 ∧
       Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0 ↔
         v ∈ ((groundSpace A (L + 1)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
@@ -566,7 +566,7 @@ theorem parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ
     parentRingInteraction_term_zero_one_eq_zero_of_mem_map_groundSpace_succ A (by omega)⟩
 
 /-- Every term of the parent interaction on the ring is an orthogonal projection. -/
-theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ) {N : ℕ}
+theorem isStarProjection_parentRingInteraction_term (A : MPTensor α (Fin D)) (L : ℕ) {N : ℕ}
     (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     IsStarProjection ((parentRingInteraction A L N).term i) := by
@@ -580,7 +580,7 @@ theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ
 
 /-- The operator of every term of the parent interaction on the ring is a symmetric
 projection. -/
-theorem isSymmetricProjection_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
+theorem isSymmetricProjection_toEuclideanLin_parentRingInteraction_term (A : MPTensor α (Fin D))
     (L : ℕ) {N : ℕ} (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i)).IsSymmetricProjection :=
@@ -589,7 +589,7 @@ theorem isSymmetricProjection_toEuclideanLin_parentRingInteraction_term (A : MPS
     (isStarProjection_parentRingInteraction_term A L i)
 
 /-- Every term of the parent interaction on the ring is positive semidefinite. -/
-theorem posSemidef_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ) {N : ℕ}
+theorem posSemidef_parentRingInteraction_term (A : MPTensor α (Fin D)) (L : ℕ) {N : ℕ}
     (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     ((parentRingInteraction A L N).term i).PosSemidef :=
@@ -598,21 +598,21 @@ theorem posSemidef_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ) {N :
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A L i).isPositive
 
 /-- The Hamiltonian of the parent interaction on the ring is positive semidefinite. -/
-theorem posSemidef_hamiltonian_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
+theorem posSemidef_hamiltonian_parentRingInteraction (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] :
     (parentRingInteraction A L N).hamiltonian.PosSemidef :=
   ManyBody.Interaction.posSemidef_hamiltonian fun i ↦ posSemidef_parentRingInteraction_term A L i
 
 /-- **Disjoint windows.** Terms of the parent interaction on the ring whose cyclic windows have
 no common site commute. This is the non-overlap commutation input for the finite-overlap
 martingale reduction. -/
-theorem commute_parentRingInteraction_term_of_cyclic_windows_disjoint (A : MPSTensor d D)
+theorem commute_parentRingInteraction_term_of_cyclic_windows_disjoint (A : MPTensor α (Fin D))
     {L N : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Commute ((parentRingInteraction A L N).term i) ((parentRingInteraction A L N).term j) := by
   have : NeZero N := NeZero.of_pos i.pos
   rw [ManyBody.Interaction.translationInvariant_term_of_le _ hLN,
     ManyBody.Interaction.translationInvariant_term_of_le _ hLN]
-  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d) _
+  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ α) _
     (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
   exact hij k ((mem_map_ringWindow_iff hLN i k).mp hki) ((mem_map_ringWindow_iff hLN j k).mp hkj)
 
@@ -620,8 +620,8 @@ theorem commute_parentRingInteraction_term_of_cyclic_windows_disjoint (A : MPSTe
 windows have no common site, the ordered cross term is nonnegative:
 \(0 ≤ \operatorname{Re}\langle h_i v, h_j v\rangle\). -/
 theorem re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) {i j : Fin N}
-    (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hLN : L ≤ N) {i j : Fin N}
+    (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     0 ≤ (⟪Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v,
       Matrix.toEuclideanLin ((parentRingInteraction A L N).term j) v⟫_ℂ).re :=
@@ -637,8 +637,8 @@ theorem re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint
 /-- Non-overlap positivity for the cyclic-window overlap predicate: when the windows of the
 terms based at `i` and `j` do not overlap, their ordered cross term is nonnegative. -/
 theorem re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) {i j : Fin N}
-    (hij : ¬ cyclicWindowsOverlap N L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hLN : L ≤ N) {i j : Fin N}
+    (hij : ¬ cyclicWindowsOverlap N L i j) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     0 ≤ (⟪Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v,
       Matrix.toEuclideanLin ((parentRingInteraction A L N).term j) v⟫_ℂ).re :=
@@ -650,8 +650,8 @@ on \(N\) sites is nonzero: its terms are positive semidefinite and annihilate th
 is the statement that every MPS is a ground state of a frustration-free parent Hamiltonian,
 [PGVWC07] (quant-ph/0608197), `MPSarchive.tex`, lines 311--330, and arXiv:2011.12127,
 `TN-Review-main.tex`, line 537. -/
-theorem isFrustrationFree_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N]
-    (hA : (mpv A : NSiteSpace (Fin d) N) ≠ 0) : (parentRingInteraction A L N).IsFrustrationFree :=
+theorem isFrustrationFree_parentRingInteraction (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N]
+    (hA : (mpv A : NSiteSpace α N) ≠ 0) : (parentRingInteraction A L N).IsFrustrationFree :=
   ManyBody.Interaction.isFrustrationFree_of_zeroSpace_ne_bot
     (fun i ↦ posSemidef_parentRingInteraction_term A L i)
     ((Submodule.ne_bot_iff _).mpr
@@ -660,10 +660,10 @@ theorem isFrustrationFree_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) 
 /-- The ground space at energy \(0\) of the Hamiltonian of the parent interaction on the ring
 is the kernel of the parent Hamiltonian, read in the Euclidean space. -/
 theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_ker
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
+    (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] :
     ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
       (LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian)).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   ext v
   rw [ManyBody.mem_groundSpace_iff_mulVec, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
     LinearMap.mem_ker, Complex.ofReal_zero, zero_smul]
@@ -679,7 +679,7 @@ interaction, while CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines
 534--540, only uses chain lengths greater than two. This restriction is documented
 in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 @[simp] theorem groundSpace_hamiltonian_parentRingInteraction_two_one_eq_top
-    (A : MPSTensor d D) :
+    (A : MPTensor α (Fin D)) :
     ManyBody.groundSpace (parentRingInteraction A 2 1).hamiltonian 0 = ⊤ := by
   rw [hamiltonian_parentRingInteraction_two_one]
   ext v
@@ -693,24 +693,24 @@ section
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- If \(d^L > D^2\), the matrix of the canonical parent interaction is nonzero. -/
-theorem toMatrix'_parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)
-    (hDim : d ^ L > D ^ 2) : LinearMap.toMatrix' (parentInteraction A L) ≠ 0 := by
+theorem toMatrix'_parentInteraction_ne_zero (A : MPTensor α (Fin D)) (L : ℕ)
+    (hDim : Fintype.card α ^ L > D ^ 2) : LinearMap.toMatrix' (parentInteraction A L) ≠ 0 := by
   intro hzero
   apply groundSpace_ne_top A L (by simpa using hDim)
   apply top_unique
   intro v _
   have hmem := (toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff A L
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm v)).mp
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm v)).mp
       (by simp only [hzero, map_zero, LinearMap.zero_apply])
   simpa using (mem_map_groundSpace_iff A L _).mp hmem
 
 /-- If \(d^L > D^2\), the canonical parent interaction is nonzero in the
 original function-space coordinates. -/
-theorem parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)
-    (hDim : d ^ L > D ^ 2) : parentInteraction A L ≠ 0 := fun hzero ↦
+theorem parentInteraction_ne_zero (A : MPTensor α (Fin D)) (L : ℕ)
+    (hDim : Fintype.card α ^ L > D ^ 2) : parentInteraction A L ≠ 0 := fun hzero ↦
   toMatrix'_parentInteraction_ne_zero A L hDim (by rw [hzero, map_zero])
 
 end MPSTensor
@@ -735,11 +735,11 @@ open scoped Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Canonical parent interactions have Hilbert-space operator norm at most
 one, as do the projector local terms of arXiv:1010.3732, Section II.B. -/
-theorem parentInteraction_toMatrix'_norm_le_one (A : MPSTensor d D) (L : ℕ) :
+theorem parentInteraction_toMatrix'_norm_le_one (A : MPTensor α (Fin D)) (L : ℕ) :
     ‖LinearMap.toMatrix' (parentInteraction A L)‖ ≤ 1 :=
   (isStarProjection_toMatrix'_parentInteraction A L).norm_le _
 

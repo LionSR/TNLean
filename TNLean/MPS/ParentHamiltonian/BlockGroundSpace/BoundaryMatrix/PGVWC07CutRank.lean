@@ -53,12 +53,12 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Bridge: a family of at most one block spans the product algebra at a length where its
 block is injective. -/
 theorem wordTupleSpanTop_of_le_one {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) (hr : r ≤ 1) {L : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (hr : r ≤ 1) {L : ℕ}
     (hA : ∀ k, Kraus.IsNBlkInjective (A k) L) : WordTupleSpanTop A L := by
   classical
   unfold WordTupleSpanTop
@@ -66,7 +66,7 @@ theorem wordTupleSpanTop_of_le_one {r : ℕ} {dim : Fin r → ℕ}
   interval_cases r
   · rw [Subsingleton.elim M 0]; exact Submodule.zero_mem _
   · have hM : M 0 ∈ Submodule.span ℂ
-        (Set.range fun σ : Fin L → Fin d => Kraus.evalWord (A 0) (List.ofFn σ)) := by
+        (Set.range fun σ : Fin L → α => Kraus.evalWord (A 0) (List.ofFn σ)) := by
       rw [(hA 0).span_eq_top]; exact Submodule.mem_top
     obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hM
     refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, funext fun k => ?_⟩
@@ -91,13 +91,13 @@ groups the blocks by `mpvPhaseClassData`, whose representatives satisfy it. The 
 threshold covers a single block, where the direct-sum lemma is vacuous and the source length
 \(3(b-1)(L_0+1)\) is zero. -/
 theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) (hdim : ∀ k, 0 < dim k)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (hdim : ∀ k, 0 < dim k)
     (hUnital : ∀ k, ∑ i, A k i * (A k i)ᴴ = 1)
     (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun a => (A k a)ᴴ) Λ = Λ)
+      Kraus.transferMap (ι := α) (n := Fin (dim k)) (fun a => (A k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (A k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hDistinct : BlocksNotGaugePhaseEquiv A)
     {n : ℕ} (hn : max L₀ (3 * (r - 1) * (L₀ + 1)) ≤ n) :
     WordTupleSpanTop A n := by
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hdim k).ne'⟩
@@ -113,7 +113,7 @@ theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ
 
 namespace PGVWC07CanonicalFormData
 
-variable {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
+variable {A : MPTensor α (Fin D)} (h : PGVWC07CanonicalFormData A)
 
 /-- Source: arXiv:quant-ph/0608197, direct-sum lemma (lines 1346–1349) together with
 condition C1 in each block (lines 1314–1323), for the blocks of a canonical form; the
@@ -121,7 +121,7 @@ specialization of `wordTupleSpanTop_of_ge_of_isNBlkInjective`, whose docstring r
 reading of the distinctness hypothesis. -/
 theorem wordTupleSpanTop_of_ge {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
-    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) h.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv h.blocks)
     {n : ℕ} (hn : max L₀ (3 * (h.r - 1) * (L₀ + 1)) ≤ n) :
     WordTupleSpanTop h.blocks n :=
   wordTupleSpanTop_of_ge_of_isNBlkInjective h.blocks h.dim_pos h.unital
@@ -132,9 +132,9 @@ end PGVWC07CanonicalFormData
 /-- The linear map sending a tuple of block matrices \(\Delta\) to the function
 \(\sigma\mapsto\sum_k\operatorname{tr}(\Delta_kA^k_\sigma)\) on words of length \(R\). -/
 noncomputable def blockTracePairing {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) (R : ℕ) :
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (R : ℕ) :
     ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ]
-      ((Fin R → Fin d) → ℂ) where
+      ((Fin R → α) → ℂ) where
   toFun Δ σ := ∑ k, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn σ))
   map_add' Δ Δ' := by
     funext σ
@@ -148,18 +148,18 @@ linear combination of rows of the cut matrix. This is the spanning step in the
 W-state argument of arXiv:quant-ph/0608197, lines 2193--2204; it does not require
 simultaneous injectivity on the short side. -/
 theorem blockTracePairing_range_le_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
     {R R' : ℕ} (hR' : WordTupleSpanTop A R')
-    (V : Submodule ℂ ((Fin R → Fin d) → ℂ))
-    (hV : ∀ τ : Fin R' → Fin d,
-      (fun σ : Fin R → Fin d => ∑ k, c k *
+    (V : Submodule ℂ ((Fin R → α) → ℂ))
+    (hV : ∀ τ : Fin R' → α,
+      (fun σ : Fin R → α => ∑ k, c k *
         Matrix.trace (Kraus.evalWord (A k) (List.ofFn σ) *
           Kraus.evalWord (A k) (List.ofFn τ))) ∈ V) :
     LinearMap.range (blockTracePairing A R) ≤ V := by
   classical
   set Ψ := blockTracePairing A R
   -- The scaled word tuples of length `R'` still span.
-  set T : (Fin R' → Fin d) → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
+  set T : (Fin R' → α) → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
     fun τ k => c k • Kraus.evalWord (A k) (List.ofFn τ)
   have hT : Submodule.span ℂ (Set.range T) = ⊤ := by
     refine eq_top_iff.mpr fun M _ => ?_
@@ -195,11 +195,11 @@ in a subspace \(V\), then \(\sum_kD_k^2\le\dim V\). The span hypotheses are the 
 direct-sum lemma and condition C1 by blocks, supplied by
 `PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge`. -/
 theorem sum_sq_dim_le_finrank_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
     {R R' : ℕ} (hR : WordTupleSpanTop A R) (hR' : WordTupleSpanTop A R')
-    (V : Submodule ℂ ((Fin R → Fin d) → ℂ))
-    (hV : ∀ τ : Fin R' → Fin d,
-      (fun σ : Fin R → Fin d => ∑ k, c k *
+    (V : Submodule ℂ ((Fin R → α) → ℂ))
+    (hV : ∀ τ : Fin R' → α,
+      (fun σ : Fin R → α => ∑ k, c k *
         Matrix.trace (Kraus.evalWord (A k) (List.ofFn σ) *
           Kraus.evalWord (A k) (List.ofFn τ))) ∈ V) :
     ∑ k, dim k ^ 2 ≤ Module.finrank ℂ V := by
@@ -227,19 +227,19 @@ This refines the two-sided simultaneous-spanning argument of
 arXiv:quant-ph/0608197, lines 2193--2204. In contrast to the sum-of-squares bound,
 only \(D_j^2\) dimensions must survive on the short side. -/
 theorem sq_dim_le_finrank_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k)) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
     (j : Fin r) {R R' : ℕ} (hR : Kraus.IsNBlkInjective (A j) R)
     (hR' : WordTupleSpanTop A R')
-    (V : Submodule ℂ ((Fin R → Fin d) → ℂ))
-    (hV : ∀ τ : Fin R' → Fin d,
-      (fun σ : Fin R → Fin d => ∑ k, c k *
+    (V : Submodule ℂ ((Fin R → α) → ℂ))
+    (hV : ∀ τ : Fin R' → α,
+      (fun σ : Fin R → α => ∑ k, c k *
         Matrix.trace (Kraus.evalWord (A k) (List.ofFn σ) *
           Kraus.evalWord (A k) (List.ofFn τ))) ∈ V) :
     dim j ^ 2 ≤ Module.finrank ℂ V := by
   classical
   let Ψ := (blockTracePairing A R).comp
     (LinearMap.single ℂ (fun k ↦ Matrix (Fin (dim k)) (Fin (dim k)) ℂ) j)
-  have hΨ (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) (σ : Fin R → Fin d) :
+  have hΨ (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) (σ : Fin R → α) :
       Ψ X σ = Matrix.trace (X * Kraus.evalWord (A j) (List.ofFn σ)) := by
     change ∑ k, Matrix.trace (Pi.single j X k * Kraus.evalWord (A k) (List.ofFn σ)) = _
     rw [Finset.sum_eq_single j]
@@ -249,7 +249,7 @@ theorem sq_dim_le_finrank_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
     intro X hX
     have hφ : Matrix.traceBilinForm (Fin (dim j)) X = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin R → Fin d ↦ Kraus.evalWord (A j) (List.ofFn σ))
+        (v := fun σ : Fin R → α ↦ Kraus.evalWord (A j) (List.ofFn σ))
         (hv := hR.span_eq_top)
       intro σ
       simpa [hΨ] using congrFun hX σ

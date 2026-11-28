@@ -29,9 +29,8 @@ Lemma commutation (ii), lines 2442--2531.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- A surjective linear isometry of the common target preserves the error between a finite
 sum of range projections and the projection onto their joint span. -/
@@ -72,12 +71,12 @@ noncomputable def rectangularBoundaryFamilyFiberₗ {S : Type*} [Fintype S] (u :
 boundary fiber. Source: the boundary-word factorization underlying
 Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii), lines 2442--2531. -/
 noncomputable def residualWindowRightVirtualMapES
-    (B : MPSTensor (blockPhysDim d L) E) (K : ℕ) :
+    (B : MPTensor (Fin L → α) (Fin E)) (K : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ]
-      EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) :=
+      EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)) :=
   LinearMap.toContinuousLinearMap <|
     (WithLp.linearEquiv 2 ℂ
-      ((Fin E × Fin D) × Cfg (blockPhysDim d L) K → ℂ)).symm.toLinearMap.comp
+      ((Fin E × Fin D) × (Fin K → Fin L → α) → ℂ)).symm.toLinearMap.comp
     (LinearMap.pi fun p => ((LinearMap.proj p.1.1).comp (LinearMap.proj p.1.2)).comp
       ((mulRightLinearMap (l := Fin D) ℂ (Kraus.evalWord B (List.ofFn p.2))).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm.toLinearEquiv.toLinearMap))
@@ -87,14 +86,14 @@ Its coefficient at \((u,v,\tau)\) is \(\operatorname{tr}(B^vV^*A^\tau X_u)\).
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, Lemma commutation (ii). -/
 noncomputable def residualWindowRightMapES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
-    EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-        (Cfg (blockPhysDim d L) M × Cfg d r)) :=
+    EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)) →L[ℂ]
+      EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+        ((Fin M → Fin L → α) × (Fin r → α))) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r) → ℂ)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)) → ℂ)).symm.toLinearMap.comp
     (LinearMap.pi fun p => (Matrix.traceLinearMap (Fin E) ℂ ℂ).comp
       ((mulLeftLinearMap (n := Fin E) ℂ
         (Kraus.evalWord B (List.ofFn p.2.1) * Vᴴ *
@@ -105,32 +104,32 @@ Its coefficient at \((u,v,\tau)\) is \(\operatorname{tr}(B^uB^vY_\tau)\).
 Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma commutation (ii), lines 2442--2531. -/
 noncomputable def residualWindowLeftMapES
-    (B : MPSTensor (blockPhysDim d L) E) (K M r : ℕ) :
-    BoundaryFamilySpace (D := E) (Cfg d r) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-        (Cfg (blockPhysDim d L) M × Cfg d r)) :=
+    (B : MPTensor (Fin L → α) (Fin E)) (K M r : ℕ) :
+    BoundaryFamilySpace (D := E) (Fin r → α) →L[ℂ]
+      EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+        ((Fin M → Fin L → α) × (Fin r → α))) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r) → ℂ)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)) → ℂ)).symm.toLinearMap.comp
     (LinearMap.pi fun p => (Matrix.traceLinearMap (Fin E) ℂ ℂ).comp
       ((mulLeftLinearMap (n := Fin E) ℂ
         (Kraus.evalWord B (List.ofFn p.1) * Kraus.evalWord B (List.ofFn p.2.1))).comp
         ((LinearMap.proj p.2.2).comp
-          (boundaryFamilyEquiv (D := E) (Cfg d r)).toLinearMap)))
+          (boundaryFamilyEquiv (D := E) (Fin r → α)).toLinearMap)))
 
 /-- The full residual contraction in three consecutive configuration blocks.
 Its coefficient is \(\operatorname{tr}(B^uB^vV^*A^\tau Y)\).
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, Lemma commutation (ii). -/
 noncomputable def residualWindowMapES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-        (Cfg (blockPhysDim d L) M × Cfg d r)) :=
+      EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+        ((Fin M → Fin L → α) × (Fin r → α))) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r) → ℂ)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)) → ℂ)).symm.toLinearMap.comp
     (LinearMap.pi fun p => (Matrix.traceLinearMap (Fin E) ℂ ℂ).comp
       ((mulLeftLinearMap (n := Fin E) ℂ
         (Kraus.evalWord B (List.ofFn p.1) * Kraus.evalWord B (List.ofFn p.2.1) *
@@ -142,7 +141,7 @@ blocked prefix word to the right of the rectangular boundary.
 This is exact trace cyclicity, with no injectivity assumption.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
 theorem residualWindowRightMapES_comp_rightVirtualMapES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
     (residualWindowRightMapES A B V K M r).comp
       (residualWindowRightVirtualMapES (D := D) B K) = residualWindowMapES A B V K M r := by
@@ -164,11 +163,11 @@ boundary family \(V^*A^\tau Y\). The physical tail is retained in that family.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, Lemma commutation (ii). -/
 theorem residualWindowLeftMapES_correlatedTailFamily
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ)
     (Y : Matrix (Fin D) (Fin E) ℂ) :
     residualWindowLeftMapES B K M r
-      ((boundaryFamilyEquiv (D := E) (Cfg d r)).symm
+      ((boundaryFamilyEquiv (D := E) (Fin r → α)).symm
         (fun τ => Vᴴ * Kraus.evalWord A (List.ofFn τ) * Y)) =
       residualWindowMapES A B V K M r
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y) := by
@@ -185,16 +184,16 @@ No limiting metric or quantitative contraction is asserted.
 Reconstructed for Nachtergaele, arXiv:cond-mat/9410110,
 Lemma commutation (ii), lines 2442--2531. -/
 theorem inner_residualWindowRightMapES_leftMapES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ)
-    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
-    (y : BoundaryFamilySpace (D := E) (Cfg d r)) :
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)))
+    (y : BoundaryFamilySpace (D := E) (Fin r → α)) :
     ⟪residualWindowRightMapES A B V K M r x, residualWindowLeftMapES B K M r y⟫_ℂ =
-      ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
+      ∑ u : (Fin K → Fin L → α), ∑ τ : (Fin r → α),
         ⟪Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
             (Vᴴ * Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x),
           groundSpaceGram B M (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
-            (boundaryFamilyEquiv (D := E) (Cfg d r) y τ *
+            (boundaryFamilyEquiv (D := E) (Fin r → α) y τ *
               Kraus.evalWord B (List.ofFn u)))⟫_ℂ := by
   simp_rw [groundSpaceGram, ContinuousLinearMap.comp_apply,
     ContinuousLinearMap.adjoint_inner_right]
@@ -207,27 +206,27 @@ theorem inner_residualWindowRightMapES_leftMapES
   change ⟪Matrix.trace ((Kraus.evalWord B (List.ofFn v) * Vᴴ *
     Kraus.evalWord A (List.ofFn τ)) * rectangularBoundaryFamilyFiberₗ u x),
     Matrix.trace ((Kraus.evalWord B (List.ofFn u) * Kraus.evalWord B (List.ofFn v)) *
-      boundaryFamilyEquiv (D := E) (Cfg d r) y τ)⟫_ℂ =
+      boundaryFamilyEquiv (D := E) (Fin r → α) y τ)⟫_ℂ =
     ⟪Matrix.trace (Kraus.evalWord B (List.ofFn v) *
       (Vᴴ * Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x)),
       Matrix.trace (Kraus.evalWord B (List.ofFn v) *
-        (boundaryFamilyEquiv (D := E) (Cfg d r) y τ * Kraus.evalWord B (List.ofFn u)))⟫_ℂ
+        (boundaryFamilyEquiv (D := E) (Fin r → α) y τ * Kraus.evalWord B (List.ofFn u)))⟫_ℂ
   simpa only [Matrix.mul_assoc] using congrArg (fun z : ℂ =>
     inner ℂ (Matrix.trace (Kraus.evalWord B (List.ofFn v) * Vᴴ *
       Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x)) z)
       (Matrix.trace_mul_comm (Kraus.evalWord B (List.ofFn u))
-        (Kraus.evalWord B (List.ofFn v) * boundaryFamilyEquiv (D := E) (Cfg d r) y τ))
+        (Kraus.evalWord B (List.ofFn v) * boundaryFamilyEquiv (D := E) (Fin r → α) y τ))
 
 /-- Concatenate two blocked configurations, decode their physical sites,
 and append the original tail. This bijection includes all zero lengths.
 Source: the blocking coordinates of DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451. -/
-noncomputable def residualWindowConfigEquiv (d L K M r : ℕ) :
-    Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) ≃
-      Cfg d ((K + M) * L + r) :=
+noncomputable def residualWindowConfigEquiv (L K M r : ℕ) :
+    (Fin K → Fin L → α) × ((Fin M → Fin L → α) × (Fin r → α)) ≃
+      (Fin ((K + M) * L + r) → α) :=
   (Equiv.prodAssoc _ _ _).symm.trans
-    ((Equiv.prodCongr ((Fin.appendEquiv K M).trans (Kraus.blockedConfigEquiv d (K + M) L))
-      (Equiv.refl (Cfg d r))).trans (Fin.appendEquiv ((K + M) * L) r))
+    ((Equiv.prodCongr ((Fin.appendEquiv K M).trans (Kraus.blockConfigEquiv α (K + M) L))
+      (Equiv.refl (Fin r → α))).trans (Fin.appendEquiv ((K + M) * L) r))
 
 /-- The three-window full map is precisely the residual boundary map
 transported by the configuration bijection. Thus the product coordinates
@@ -235,11 +234,11 @@ preserve the physical inner product.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, Lemma commutation (ii). -/
 theorem residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
     residualWindowMapES A B V K M r =
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (residualWindowConfigEquiv d L K M r).symm).toContinuousLinearMap.comp
+        (residualWindowConfigEquiv L K M r).symm).toContinuousLinearMap.comp
           (blockedResidualBoundaryMapES A L B V (K + M) r) := by
   ext x ⟨u, v, τ⟩
   change Matrix.trace ((Kraus.evalWord B (List.ofFn u) *
@@ -247,7 +246,7 @@ theorem residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm x) =
     blockedResidualBoundaryMap A L B V (K + M) r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm x)
-        (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
+        (Fin.append (Kraus.blockConfigEquiv α (K + M) L (Fin.append u v)) τ)
   simp [blockedResidualBoundaryMap, Function.comp_def, List.ofFn_fin_append,
     Kraus.evalWord_append]
 end MPSTensor

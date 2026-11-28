@@ -25,15 +25,15 @@ open scoped Matrix BigOperators ComplexOrder TNOperatorSpace Topology
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
-private theorem uncleWallSeed_add (B : MPSTensor d b)
-    (R S : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+private theorem uncleWallSeed_add (B : MPTensor α (Fin b))
+    (R S : α → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallSeed B (R + S) = uncleWallSeed B R + uncleWallSeed B S := by
   simp [uncleWallSeed, Matrix.add_mul, Finset.sum_add_distrib]
 
-private theorem uncleWallSeed_smul (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (c : ℂ) :
+private theorem uncleWallSeed_smul (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (c : ℂ) :
     uncleWallSeed B (c • R) = c • uncleWallSeed B R := by
   simp [uncleWallSeed, Matrix.smul_mul, Finset.smul_sum]
 
@@ -41,9 +41,9 @@ private theorem uncleWallSeed_smul (B : MPSTensor d b)
 wall argument under strict mixed spectral-radius damping;
 arXiv:1210.6613, quadratic coefficient in the proof of Lemma lowenergystates. -/
 noncomputable def uncleWallCorrelationLimitLinear
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
-    (Fin d → Matrix (Fin a) (Fin b) ℂ) →ₗ[ℂ] Matrix (Fin a) (Fin b) ℂ where
+    (α → Matrix (Fin a) (Fin b) ℂ) →ₗ[ℂ] Matrix (Fin a) (Fin b) ℂ where
   toFun := uncleWallCorrelationLimit A B
   map_add' R S := by
     simp only [uncleWallCorrelationLimit, uncleWallSeed_add, map_add]
@@ -54,20 +54,20 @@ noncomputable def uncleWallCorrelationLimitLinear
     exact (uncleWallCorrelation_summable A B R hSpect).tsum_const_smul c
 
 @[simp] theorem uncleWallCorrelationLimitLinear_apply
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+    (R : α → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallCorrelationLimitLinear A B hSpect R = uncleWallCorrelationLimit A B R := rfl
 
 /-- The real bilinear contraction whose diagonal is the wall slope.
 The mixed correlation is taken in the first wall and the adjoint in the
 second; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 noncomputable def uncleWallSlopeBilin
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
-    (Fin d → Matrix (Fin a) (Fin b) ℂ) →ₗ[ℝ]
-      (Fin d → Matrix (Fin a) (Fin b) ℂ) →ₗ[ℝ] ℝ := by
+    (α → Matrix (Fin a) (Fin b) ℂ) →ₗ[ℝ]
+      (α → Matrix (Fin a) (Fin b) ℂ) →ₗ[ℝ] ℝ := by
   let Z := (uncleWallCorrelationLimitLinear A B hSpect).restrictScalars ℝ
   refine LinearMap.mk₂ ℝ (fun R S ↦
     (Matrix.trace (ρ * ∑ i, R i * (S i)ᴴ)).re +
@@ -93,10 +93,10 @@ noncomputable def uncleWallSlopeBilin
 pairing and the convergent correlation series;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeBilin_apply
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (R S : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+    (R S : α → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallSlopeBilin A B ρ hSpect R S =
       (Matrix.trace (ρ * ∑ i, R i * (S i)ᴴ)).re +
         2 * (Matrix.trace (ρ * ∑ i,
@@ -106,20 +106,20 @@ theorem uncleWallSlopeBilin_apply
 space of rectangular walls; arXiv:1210.6613, proof of Lemma lowenergystates.
 No positivity or genericity premise is used in this definition. -/
 noncomputable def uncleWallSlopeQuadratic
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
-    QuadraticForm ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
+    QuadraticForm ℝ (α → Matrix (Fin a) (Fin b) ℂ) :=
   LinearMap.BilinMap.toQuadraticMap (uncleWallSlopeBilin A B ρ hSpect)
 
 /-- Evaluating the real quadratic form gives exactly the real part of the
 mixed-series slope, not a replacement coefficient;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_apply
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+    (R : α → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallSlopeQuadratic A B ρ hSpect R = (uncleWallNormSlope A B R ρ).re := by
   rw [uncleWallSlopeQuadratic, LinearMap.BilinMap.toQuadraticMap_apply]
   rw [uncleWallSlopeBilin_apply]
@@ -130,11 +130,11 @@ theorem uncleWallSlopeQuadratic_apply
 /-- The source normalized wall quadratic form is nonnegative at every wall;
 arXiv:1210.6613, norm coefficient in the proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_nonneg
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosSemidef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+    (R : α → Matrix (Fin a) (Fin b) ℂ) :
     0 ≤ uncleWallSlopeQuadratic A B ρ hSpect R := by
   rw [uncleWallSlopeQuadratic_apply]
   exact (Complex.nonneg_iff.mp (uncleWallNormSlope_nonneg A B R ρ hρ hA hB hSpect)).1
@@ -143,14 +143,14 @@ theorem uncleWallSlopeQuadratic_nonneg
 quadratic form whenever the physical dimension exceeds the right-block
 matrix dimension. Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef) (hd : b * b < d)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     uncleWallSlopeQuadratic A B ρ hSpect ≠ 0 := by
   obtain ⟨R, _, _, hR⟩ := exists_uncleWallNormSlope_pos A B ρ hρ hd
   intro hzero
   have hq := congrArg
-    (fun Q : QuadraticForm ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ) ↦ Q R) hzero
+    (fun Q : QuadraticForm ℝ (α → Matrix (Fin a) (Fin b) ℂ) ↦ Q R) hzero
   change uncleWallSlopeQuadratic A B ρ hSpect R = 0 at hq
   rw [uncleWallSlopeQuadratic_apply] at hq
   exact (ne_of_gt (Complex.pos_iff.mp hR).1) hq
@@ -159,9 +159,9 @@ theorem uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt [NeZero a] [NeZero b]
 full-perturbation setting with a faithful density;
 arXiv:1210.6613, proof of Lemma lowenergystates, nonzero quadratic coefficient. -/
 theorem uncleWallSlopeQuadratic_ne_zero [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
@@ -170,7 +170,7 @@ theorem uncleWallSlopeQuadratic_ne_zero [NeZero a] [NeZero b]
     exists_uncleWallNormSlope_pos_of_injective_perturbation A B R₀ L₀ hPert ρ hρ
   intro hzero
   have hq := congrArg
-    (fun Q : QuadraticForm ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ) ↦ Q R) hzero
+    (fun Q : QuadraticForm ℝ (α → Matrix (Fin a) (Fin b) ℂ) ↦ Q R) hzero
   change uncleWallSlopeQuadratic A B ρ hSpect R = 0 at hq
   rw [uncleWallSlopeQuadratic_apply] at hq
   exact (ne_of_gt (Complex.pos_iff.mp hR).1) hq

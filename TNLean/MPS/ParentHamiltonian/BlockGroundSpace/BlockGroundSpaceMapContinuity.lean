@@ -30,7 +30,7 @@ open scoped Matrix Topology
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- The diagonal virtual boundary space in finite Hilbert coordinates. The coordinate \( (j,b,a)
 \) records the matrix entry \( (X_j)_{ab} \).
@@ -48,8 +48,8 @@ noncomputable def blockBoundaryEquiv :
 /-- The joint boundary map \(\Gamma_L((X_j)_j)=\sum_j\Gamma_L^{A_j}(X_j)\).
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 noncomputable def blockGroundSpaceMap
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
-    ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) L :=
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
+    ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ] NSiteSpace α L :=
   LinearMap.lsum ℂ (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
     (fun j => groundSpaceMap (A j) L)
 
@@ -57,7 +57,7 @@ noncomputable def blockGroundSpaceMap
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 @[simp]
 theorem blockGroundSpaceMap_apply
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
     blockGroundSpaceMap A L X = ∑ j, groundSpaceMap (A j) L (X j) := by
   simp [blockGroundSpaceMap, LinearMap.lsum_apply]
@@ -65,7 +65,7 @@ theorem blockGroundSpaceMap_apply
 /-- The joint boundary map has the sum of the block ground spaces as its range.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem range_blockGroundSpaceMap
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     (blockGroundSpaceMap A L).range = ⨆ j, groundSpace (A j) L := by
   apply le_antisymm
   · rintro ψ ⟨X, rfl⟩
@@ -81,7 +81,7 @@ theorem range_blockGroundSpaceMap
 /-- A full simultaneous word span separates all diagonal virtual boundaries by trace pairing.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem blockGroundSpaceMap_injective_of_wordTupleSpanTop
-    {A : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
+    {A : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hSpan : WordTupleSpanTop A L) : Function.Injective (blockGroundSpaceMap A L) := by
   refine (injective_iff_map_eq_zero _).mpr ?_
   intro Δ hΔ
@@ -99,7 +99,7 @@ spaces is continuous.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem continuous_iSup_map_groundSpace_starProjection_of_injective_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x => (⨆ j, ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ
@@ -115,12 +115,12 @@ continuous and simultaneously injective. Nonzero weights need not vary continuou
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injective_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x =>
-      (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2
+      (((groundSpace (toTensorFromBlocks (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2
           ℂ _).symm.toLinearMap)).starProjection := by
   simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
     continuous_iSup_map_groundSpace_starProjection_of_injective_family A hA L hInj
@@ -130,7 +130,7 @@ a common simultaneous injectivity length.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem continuous_toMatrix'_parentInteraction_toTensorFromBlocks_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
@@ -145,7 +145,7 @@ continuous at fixed range and volume.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem continuous_hamiltonian_parentChainInteraction_toTensorFromBlocks_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ}
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
@@ -160,7 +160,7 @@ fixed range and volume.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ} [NeZero N]
     (hLN : L ≤ N) (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
@@ -175,7 +175,7 @@ block family.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem isOpen_setOf_blockGroundSpaceMapES_injective_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ) :
     IsOpen {x | Function.Injective (blockGroundSpaceMapES (A x) L)} :=
   ContinuousLinearMap.isOpen_injective.preimage
@@ -184,11 +184,11 @@ theorem isOpen_setOf_blockGroundSpaceMapES_injective_family
 /-- Hilbert coordinates preserve injectivity of the joint boundary map.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem blockGroundSpaceMapES_injective_iff
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     Function.Injective (blockGroundSpaceMapES A L) ↔
       Function.Injective (blockGroundSpaceMap A L) := by
   have hEq (v) : blockGroundSpaceMapES A L v =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
         (blockGroundSpaceMap A L (blockBoundaryEquiv v)) := by
     ext σ
     simp only [blockGroundSpaceMapES_apply, WithLp.coe_symm_linearEquiv,
@@ -203,7 +203,7 @@ theorem blockGroundSpaceMapES_injective_iff
   · intro h x y hxy
     apply blockBoundaryEquiv.injective
     apply h
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.injective
     rw [hEq, hEq] at hxy
     exact hxy
 

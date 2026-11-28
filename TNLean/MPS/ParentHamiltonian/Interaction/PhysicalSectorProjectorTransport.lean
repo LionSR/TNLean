@@ -228,7 +228,7 @@ variable {a b d R M : ℕ}
 /-- Disjoint letter embeddings have disjoint word ranges at every positive
 length. No coordinate label or support assumption is supplied.
 Source: physical-sector separation in the SPWC10 finite-prefix investigation. -/
-theorem disjoint_physical_word_ranges (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d)
+theorem disjoint_physical_word_ranges (e : Fin a ↪ α) (f : Fin b ↪ α)
     (h : ∀ i j, e i ≠ f j) (hR : 0 < R) :
     Disjoint
       (Set.range (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)))
@@ -241,7 +241,7 @@ theorem disjoint_physical_word_ranges (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d
 spaces restricts to the original complementary projection on the first sector.
 Source: orthogonal physical-sector sums in the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_parent_projection_embed
-    (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
+    (e : Fin a ↪ α) (f : Fin b ↪ α) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
     (v : MPVSpace (Fin a) R) :
     (S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
@@ -281,7 +281,7 @@ theorem physical_sector_parent_projection_embed
   rw [hproj, map_sub]
 
 private theorem physical_embedding_cyclic_active_block
-    (e : Fin a ↪ Fin d) (hRM : R ≤ M) (i : Fin M) (v : MPVSpace (Fin a) M) :
+    (e : Fin a ↪ α) (hRM : R ≤ M) (i : Fin M) (v : MPVSpace (Fin a) M) :
     cyclicActiveBlockConfigLinearIsometryEquiv d R hRM i
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
       ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).prodMap
@@ -298,8 +298,8 @@ complementary projection; statements about vectors take its operator
 `Matrix.toEuclideanLin`. -/
 
 private theorem toEuclideanLin_translationInvariant_term_extend_physical
-    (e : Fin a ↪ Fin d) (hRM : R ≤ M)
-    (G : Matrix (Cfg a R) (Cfg a R) ℂ) (H : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (e : Fin a ↪ α) (hRM : R ≤ M)
+    (G : Matrix (Cfg a R) (Cfg a R) ℂ) (H : Matrix (Fin R → α) (Fin R → α) ℂ)
     (h : ∀ v, Matrix.toEuclideanLin H ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
         |>.euclideanExtendByZero v) =
       (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero
@@ -343,7 +343,7 @@ vector, is the embedding of the Hamiltonian of the first sector's complementary 
 The local covariance is derived from the spaces themselves, not assumed.
 Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_hamiltonian_translationInvariant_embed
-    (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
+    (e : Fin a ↪ α) (f : Fin b ↪ α) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (hRM : R ≤ M)
     (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
     (v : MPVSpace (Fin a) M) :
@@ -372,7 +372,7 @@ projections. The reverse direction uses injectivity of the physical isometry, ra
 assumed kernel decomposition.
 Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_hamiltonian_translationInvariant_embed_eq_zero_iff
-    (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
+    (e : Fin a ↪ α) (f : Fin b ↪ α) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (hRM : R ≤ M)
     (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
     (v : MPVSpace (Fin a) M) :
@@ -398,7 +398,7 @@ projections. The component separation is derived from physical orthogonality, no
 a kernel decomposition or an assumed dynamics relation.
 Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem physical_sector_hamiltonian_translationInvariant_sum_eq_zero_iff
-    (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
+    (e : Fin a ↪ α) (f : Fin b ↪ α) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (hRM : R ≤ M)
     (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
     (v : MPVSpace (Fin a) M) (w : MPVSpace (Fin b) M) :

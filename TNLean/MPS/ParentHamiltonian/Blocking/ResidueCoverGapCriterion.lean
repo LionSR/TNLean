@@ -64,14 +64,14 @@ section
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The finitely many terminal volumes W+r, with r<m, of the Hamiltonian of the parent
 interaction on the open chain have a common positive gap above their actual kernels: every
 eigenvalue is `0` or at least the gap. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). -/
 theorem exists_pos_hamiltonian_parentChainInteraction_gap_over_residues
-    (A : MPSTensor d D) (R W m : ℕ) (hm : 0 < m) :
+    (A : MPTensor α (Fin D)) (R W m : ℕ) (hm : 0 < m) :
     ∃ η : ℝ, 0 < η ∧ ∀ r < m, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R (W + r)).hamiltonian) μ →
         μ = 0 ∨ (η : ℂ) ≤ μ := by
@@ -92,7 +92,7 @@ common quotient threshold give the same gap at every sufficiently large original
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii), and equations
 (3.12)--(3.16). -/
 theorem hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps
-    (A : MPSTensor d D) {R m M K₀ : ℕ} (hm : 0 < m) {δ : ℝ}
+    (A : MPTensor α (Fin D)) {R m M K₀ : ℕ} (hm : 0 < m) {δ : ℝ}
     (hGap : ∀ K ≥ K₀, ∀ r < m, ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (parentChainInteraction A R (K * m + M * m + r)).hamiltonian) μ → μ = 0 ∨ (δ : ℂ) ≤ μ) :
     ∀ N, (K₀ + M) * m ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -110,7 +110,7 @@ theorem hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). -/
 theorem ker_hamiltonian_parentChainInteraction_le_ker_hamiltonian_prefix
-    (A : MPSTensor d D) (R N n : ℕ) :
+    (A : MPTensor α (Fin D)) (R N n : ℕ) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) ≤
       LinearMap.ker (Matrix.toEuclideanLin
         ((parentChainInteraction A R N).restrict fun i ↦ i.val + R ≤ n).hamiltonian) := by
@@ -126,7 +126,7 @@ dimensionality.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). -/
 theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_cover_defect
-    (A : MPSTensor d D) {R m M K₀ : ℕ} (hR : 0 < R) (hm : 0 < m)
+    (A : MPTensor α (Fin D)) {R m M K₀ : ℕ} (hR : 0 < R) (hm : 0 < m)
     (hRW : R ≤ M * m)
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
@@ -165,7 +165,7 @@ every local interaction window is contained in one of them.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). -/
 theorem ker_hamiltonian_prefix_inf_ker_hamiltonian_restrict_parentChainInteraction
-    (A : MPSTensor d D) {R N n W : ℕ}
+    (A : MPTensor α (Fin D)) {R N n W : ℕ}
     (hcover : N + R ≤ n + W + 1) :
     LinearMap.ker
         (Matrix.toEuclideanLin
@@ -187,7 +187,7 @@ G_N whenever the original canonical open kernels are the boundary spaces.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.16)
 and Section 6, Lemma commutation (ii). -/
 theorem leftBoundary_inf_reassocTail_range_eq_map_groundSpace_of_open_kernel
-    (A : MPSTensor d D) {R K L r : ℕ} (hR : 0 < R) (hRL : R ≤ L)
+    (A : MPTensor α (Fin D)) {R K L r : ℕ} (hR : 0 < R) (hRL : R ≤ L)
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
           ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
@@ -207,7 +207,7 @@ terminal gaps are derived, not supplied.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii). This remains an auxiliary angle criterion. -/
 theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_all_of_residue_cover_defect
-    [NeZero d] {m R M K₀ : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A)
+    [Nonempty α] {m R M K₀ : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
     (hR : 0 < R) (hRW : R ≤ M * m)
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
@@ -250,7 +250,7 @@ section
 open Filter
 open scoped InnerProductSpace ComplexOrder
 namespace MPSTensor
-variable {d D R L N₀ : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D R L N₀ : ℕ}
 
 /-- An eventual aligned gap, exact canonical open kernels, and residual
 cover projection limits imply a single gap at every original length: every eigenvalue of the
@@ -258,7 +258,7 @@ open-chain parent Hamiltonian is `0` or at least the gap. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii).
 The three supplied estimates are explicit hypotheses of this criterion. -/
 theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_residue_cover_limit
-    (A : MPSTensor d D) (hR : 0 < R) (hL : 0 < L)
+    (A : MPTensor α (Fin D)) (hR : 0 < R) (hL : 0 < L)
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
           ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
@@ -313,7 +313,7 @@ section
 
 open scoped InnerProductSpace ComplexOrder
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- Vanishing physical cover defects along every prefix and tail selection
 imply a common canonical open-parent gap at every sufficiently large original
@@ -322,7 +322,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). The projection limit
 remains an explicit hypothesis of this auxiliary criterion. -/
 theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit
-    [NeZero d] {A : MPSTensor d D} (hA : IsPeriodic m A)
+    [Nonempty α] {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
     (hDefect : ∀ K r : ℕ → ℕ, Filter.Tendsto (fun M =>
       ‖((groundSpace A (K M * m + M * m + r M)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection -

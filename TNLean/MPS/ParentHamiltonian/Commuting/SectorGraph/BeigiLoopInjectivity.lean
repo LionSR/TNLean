@@ -85,20 +85,20 @@ end Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A unitary change of physical coordinates preserves one-site
 injectivity. -/
-private theorem isInjective_rotatePhysical (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
+private theorem isInjective_rotatePhysical (A : MPTensor α (Fin D))
+    (u : Matrix α α ℂ) (hu : u * uᴴ = 1)
     (hA : Kraus.IsInjective A) :
     Kraus.IsInjective (rotatePhysical u A) := by
   classical
   have hstar : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hletter (j : Fin d) :
-      A j = ∑ i : Fin d, (uᴴ) j i • rotatePhysical u A i := by
-    have hentry (k : Fin d) :
-        ∑ i : Fin d, (uᴴ) j i * u i k = if j = k then 1 else 0 := by
+  have hletter (j : α) :
+      A j = ∑ i : α, (uᴴ) j i • rotatePhysical u A i := by
+    have hentry (k : α) :
+        ∑ i : α, (uᴴ) j i * u i k = if j = k then 1 else 0 := by
       exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
         u hstar j k
     simp only [rotatePhysical_apply]
@@ -119,7 +119,7 @@ namespace BeigiSectorGraphData
 
 open FiniteWeightedDigraph
 
-variable {A : MPSTensor d D}
+variable {A : MPTensor α (Fin D)}
 
 private theorem loopSchmidtFactorization_rightFactor_rank
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :

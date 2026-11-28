@@ -34,7 +34,7 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
@@ -95,7 +95,7 @@ theorem fnwLimitMap_mul_self (ρ : Mat) (htr : Matrix.trace ρ ≠ 0) :
 /-- Under left-canonical normalization, the FNW transfer map absorbs its
 limiting rank-one map on the left: \(E E_\infty=E_\infty\). This is the
 unital identity from FNW equations (5.2)--(5.3). -/
-theorem fnwTransferMap_mul_fnwLimitMap (A : MPSTensor d D) (ρ : Mat)
+theorem fnwTransferMap_mul_fnwLimitMap (A : MPTensor α (Fin D)) (ρ : Mat)
     (htr : Matrix.trace ρ ≠ 0) (hA : IsLeftCanonical A) :
     fnwTransferMap A * fnwLimitMap ρ htr = fnwLimitMap ρ htr := by
   ext B
@@ -105,7 +105,7 @@ theorem fnwTransferMap_mul_fnwLimitMap (A : MPSTensor d D) (ρ : Mat)
 absorbs the FNW transfer map on the left:
 \(E_\infty E=E_\infty\). Under the convention bridge of equations
 (5.1)--(5.3), this is exactly stationarity of \(\rho\). -/
-theorem fnwLimitMap_mul_fnwTransferMap (A : MPSTensor d D) (ρ : Mat)
+theorem fnwLimitMap_mul_fnwTransferMap (A : MPTensor α (Fin D)) (ρ : Mat)
     (htr : Matrix.trace ρ ≠ 0)
     (hρ : Kraus.transferMap A ρ = ρ) :
     fnwLimitMap ρ htr * fnwTransferMap A = fnwLimitMap ρ htr := by
@@ -117,7 +117,7 @@ theorem fnwLimitMap_mul_fnwTransferMap (A : MPSTensor d D) (ρ : Mat)
 \((E-E_\infty)^n=E^n-E_\infty\). The proof uses only unitality, stationarity,
 and the rank-one projection identities, before the weighted norm of FNW
 equation (5.6) enters. -/
-theorem fnwTransferMap_sub_fnwLimitMap_pow (A : MPSTensor d D) (ρ : Mat)
+theorem fnwTransferMap_sub_fnwLimitMap_pow (A : MPTensor α (Fin D)) (ρ : Mat)
     (htr : Matrix.trace ρ ≠ 0) (hA : IsLeftCanonical A)
     (hρ : Kraus.transferMap A ρ = ρ) {n : ℕ} (hn : 1 ≤ n) :
     (fnwTransferMap A - fnwLimitMap ρ htr) ^ n =
@@ -146,7 +146,7 @@ theorem fnwTransferMap_sub_fnwLimitMap_pow (A : MPSTensor d D) (ρ : Mat)
 /-- A primitive MPS tensor supplies the trace nonvanishing, left-canonical
 normalization, and stationarity hypotheses for the FNW remainder identity. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwTransferMap_sub_fnwLimitMap_pow [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    {A : MPTensor α (Fin D)} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     {n : ℕ} (hn : 1 ≤ n) :
     (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ^ n =
       fnwTransferMap A ^ n - fnwLimitMap ρ hP.trace_ne_zero :=

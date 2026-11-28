@@ -16,7 +16,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The first-product equation for the boundary-crossing window beginning at
 \(M\) remains true after right
@@ -26,10 +26,10 @@ multiplication by any length-\(L_0\) word:
   Y_{\tau^+_\eta(\mu)} A^j A^\sigma .
 \] -/
 theorem wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word
-    {A : MPSTensor d D} {L₀ M : ℕ}
+    {A : MPTensor α (Fin D)} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
-    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
+    {ψ : NSiteSpace α (M + 1)} (η : α)
+    (μ : Fin (M + 1 - (L₀ + 1)) → α) (ρ : Fin (M + 1) → α)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
       ρ ⟨k.val + L₀, by omega⟩ = μ k)
@@ -40,7 +40,7 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word
         (⟨M, by omega⟩ : Fin (M + 1))
         (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
       groundSpaceMap A (L₀ + 1) Yτ) :
-    ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+    ∀ (j : α) (σ : Fin L₀ → α),
       Yρ * A j * Kraus.evalWord A (List.ofFn σ) =
         Yτ * A j * Kraus.evalWord A (List.ofFn σ) := by
   intro j σ
@@ -55,10 +55,10 @@ true after right multiplication by any length-\(L_0\) word:
   Y_{\tau^-_\eta(\mu)} A^j A^\sigma .
 \] -/
 theorem mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word
-    {A : MPSTensor d D} {L₀ M : ℕ}
+    {A : MPTensor α (Fin D)} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace (Fin d) (M + 1)} (η : Fin d)
-    (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
+    {ψ : NSiteSpace α (M + 1)} (η : α)
+    (μ : Fin (M + 1 - (L₀ + 1)) → α) (ρ : Fin (M + 1) → α)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ∀ k : Fin (M + 1 - (L₀ + 1)),
       ρ ⟨k.val + 1, by omega⟩ = μ k)
@@ -69,7 +69,7 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word
         (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
         (mirrorMiddleBackground L₀ (M + 1) η μ) ψ =
       groundSpaceMap A (L₀ + 1) Yτ) :
-    ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
+    ∀ (j : α) (σ : Fin L₀ → α),
       Yρ * A j * Kraus.evalWord A (List.ofFn σ) =
         Yτ * A j * Kraus.evalWord A (List.ofFn σ) := by
   intro j σ
@@ -85,15 +85,15 @@ multiplication by an arbitrary matrix:
   A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho)R .
 \] -/
 theorem closure_property_boundary_condition_product_of_window_witnesses_mul_right
-    {A : MPSTensor d D} {L₀ M : ℕ}
+    {A : MPTensor α (Fin D)} {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace (Fin d) (M + 1)}
-    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+    {ψ : NSiteSpace α (M + 1)}
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → α) →
       Matrix (Fin D) (Fin D) ℂ)
-    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → α),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
         groundSpaceMap A (L₀ + 1) (YAt i τ))
-    (ρ : Fin (M + 1) → Fin d) (R : Matrix (Fin D) (Fin D) ℂ) :
+    (ρ : Fin (M + 1) → α) (R : Matrix (Fin D) (Fin D) ℂ) :
     YAt ⟨M + 1 - L₀, by omega⟩ ρ *
         Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
           ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * R =
@@ -120,16 +120,16 @@ transport identity supplied by the adjacent-window argument; for
 \(\rho=\tau^-_\eta(\mu)\) it is distinct from the remaining padded identity
 in the periodic-boundary comparison. -/
 theorem closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap
-    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
-    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace α (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
-    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
+    (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → α) →
       Matrix (Fin D) (Fin D) ℂ)
-    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+    (hYAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → α),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
         groundSpaceMap A (L₀ + 1) (YAt i τ))
-    (ρ : Fin (M + 1) → Fin d) (j : Fin d) :
+    (ρ : Fin (M + 1) → α) (j : α) :
     YAt ⟨M + 1 - L₀, by omega⟩ ρ *
         Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
           ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * A j =

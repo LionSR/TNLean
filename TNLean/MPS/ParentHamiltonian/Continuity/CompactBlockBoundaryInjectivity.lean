@@ -29,14 +29,14 @@ open scoped Matrix Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Continuous fixed-size block families with positive-length simultaneous spanning at each
 point of a compact set have one positive spanning threshold, valid at every larger length.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem exists_uniform_wordTupleSpanTop_of_compact
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) {K : Set X} (hK : IsCompact K)
     (hSpan : ∀ x ∈ K, ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop (A x) L) :
     ∃ L : ℕ, 0 < L ∧ ∀ x ∈ K, ∀ n : ℕ, L ≤ n → WordTupleSpanTop (A x) n := by
@@ -58,7 +58,7 @@ theorem exists_uniform_wordTupleSpanTop_of_compact
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanTop
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) {S : Set X} (hS : IsCompact S)
     (hTP : ∀ x ∈ S, ∀ j, ∑ i, (A x j i)ᴴ * A x j i = 1)
     (hSpan : ∀ x ∈ S, ∃ L, WordTupleSpanTop (A x) L) :
@@ -77,7 +77,7 @@ joint-boundary injectivity threshold. Fixed-point matrices need not vary continu
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_hasComplementaryFixedPointGap
     {X : Type*} [TopologicalSpace X] [∀ j, NeZero (dim j)]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) {S : Set X} (hS : IsCompact S)
     (ρ : X → ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ x ∈ S, ∀ j, Kraus.HasComplementaryFixedPointGap (A x j) (ρ x j))

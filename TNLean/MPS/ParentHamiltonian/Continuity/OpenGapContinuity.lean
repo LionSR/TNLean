@@ -44,7 +44,7 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- A compact continuous family of simultaneously injective blocks has one positive gap above the
 kernel of the Hamiltonian of the parent interaction on the open chain on each fixed admissible
@@ -53,8 +53,8 @@ assumption. Source: arXiv:1010.3732, Appendix A,
 lines 2575--2578, for the finite-window continuity argument. -/
 theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume
     {X : Type*} [TopologicalSpace X] {r : ℕ} {dim : Fin r → ℕ}
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x ↦ A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
@@ -81,8 +81,8 @@ and every admissible interval below that bound. The constant may depend on the u
 arXiv:1010.3732, Appendix A, lines 2575--2578, by finite minima. -/
 theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes
     {X : Type*} [TopologicalSpace X] {r : ℕ} {dim : Fin r → ℕ}
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x ↦ A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (M : ℕ) :
@@ -112,7 +112,7 @@ section
 open scoped Topology ComplexOrder
 
 namespace MPSTensor
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 /-- A strict gap above the kernel of the Hamiltonian of the parent interaction on the open chain
 at a fixed admissible volume persists near its parameter when the block tensors vary
 continuously: if every eigenvalue at \(x_0\) is `0` or at least `γ`, then for every
@@ -121,8 +121,8 @@ arXiv:1010.3732, Appendix A,
 lines 2575--2578. -/
 theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume
     {X : Type*} [TopologicalSpace X] {r : ℕ} {dim : Fin r → ℕ}
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x ↦ A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) {x₀ : X} {γ δ : ℝ} (hδ : δ < γ)
@@ -153,8 +153,8 @@ eigenvalue is `0` or at least the smaller gap there. Source: arXiv:1010.3732, Ap
 lines 2575--2578, by a finite intersection of neighborhoods. -/
 theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes
     {X : Type*} [TopologicalSpace X] {r : ℕ} {dim : Fin r → ℕ}
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x ↦ A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) (M : ℕ) {x₀ : X} {γ δ : ℝ} (hδ : δ < γ)

@@ -44,11 +44,10 @@ comparison at the periodic boundary.
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim wordOfBlock flattenBlockedWord)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- **Block-to-letter translation of the boundary block matrix equation.**
 
@@ -71,16 +70,16 @@ length-\(L_0 K\) complement word \(\sigma_{\mathrm{comp}}\).
 The conclusion is the block matrix equation used by the boundary-matrix
 commutation step. -/
 theorem block_matEq_of_blocked_matEq
-    {A : MPSTensor d D} {L₀ Kb : ℕ}
+    {A : MPTensor α (Fin D)} {L₀ Kb : ℕ}
     {X : Matrix (Fin D) (Fin D) ℂ}
     (YB : Fin (blockPhysDim (blockPhysDim d L₀) Kb) → Matrix (Fin D) (Fin D) ℂ)
-    (hBlk : ∀ (b : Fin (blockPhysDim d L₀))
+    (hBlk : ∀ (b : (Fin L₀ → α))
         (cb : Fin (blockPhysDim (blockPhysDim d L₀) Kb)),
-      X * Kraus.evalWord A (wordOfBlock d L₀ b)
+      X * Kraus.evalWord A (List.ofFn b)
           * Kraus.evalWord A (flattenBlockedWord d L₀ (wordOfBlock (blockPhysDim d L₀) Kb cb))
-        = Kraus.evalWord A (wordOfBlock d L₀ b) * YB cb) :
-    ∃ Y : (Fin (L₀ * Kb) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
-      ∀ (s : Fin L₀ → Fin d) (c : Fin (L₀ * Kb) → Fin d),
+        = Kraus.evalWord A (List.ofFn b) * YB cb) :
+    ∃ Y : (Fin (L₀ * Kb) → α) → Matrix (Fin D) (Fin D) ℂ,
+      ∀ (s : Fin L₀ → α) (c : Fin (L₀ * Kb) → α),
         X * Kraus.evalWord A (List.ofFn s) * Kraus.evalWord A (List.ofFn c)
           = Kraus.evalWord A (List.ofFn s) * Y c := by
   refine ⟨fun c =>
@@ -88,12 +87,12 @@ theorem block_matEq_of_blocked_matEq
       (blockIndexOfList d (L₀ * Kb) (List.ofFn c) (by simp))), ?_⟩
   intro s c
   -- Regard the head word as a single block letter.
-  set b : Fin (blockPhysDim d L₀) :=
+  set b : (Fin L₀ → α) :=
     blockIndexOfList d L₀ (List.ofFn s) (by simp) with hb
-  have hbword : wordOfBlock d L₀ b = List.ofFn s := by
+  have hbword : List.ofFn b = List.ofFn s := by
     rw [hb]; exact wordOfBlock_blockIndexOfList d L₀ (List.ofFn s) (by simp)
   -- Regard the complement word as a grouped iterated block index.
-  set i : Fin (blockPhysDim d (L₀ * Kb)) :=
+  set i : (Fin (L₀ * Kb) → α) :=
     blockIndexOfList d (L₀ * Kb) (List.ofFn c) (by simp) with hi
   set cb : Fin (blockPhysDim (blockPhysDim d L₀) Kb) :=
     directToIteratedBlockIndex d L₀ Kb i with hcb

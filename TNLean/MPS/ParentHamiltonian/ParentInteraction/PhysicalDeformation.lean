@@ -52,11 +52,10 @@ the periodic chain.
 open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder
-open Kraus (decodeBlockEquiv)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### The tensor power of an on-site map -/
 
@@ -65,25 +64,25 @@ as a matrix on \(L\)-site configurations:
 \((\Lambda^{\otimes L})_{\sigma,\tau} = \prod_{n} \Lambda_{\sigma_n \tau_n}\).
 This is the map written \(\Lambda^{\otimes k}\) and \(R^{\otimes N}\) in arXiv:2011.12127,
 lines 2035--2037 and 2190--2192. -/
-noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Cfg d L) (Cfg d L) ℂ :=
+noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix α α ℂ) :
+    Matrix (Fin L → α) (Fin L → α) ℂ :=
   Matrix.of fun σ τ => ∏ n : Fin L, Λ (σ n) (τ n)
 
-@[simp] lemma onSiteTensorPow_apply (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    (σ τ : Cfg d L) :
+@[simp] lemma onSiteTensorPow_apply (L : ℕ) (Λ : Matrix α α ℂ)
+    (σ τ : Fin L → α) :
     onSiteTensorPow L Λ σ τ = ∏ n : Fin L, Λ (σ n) (τ n) := rfl
 
 /-- The tensor power is the constant-family finite Kronecker product
 \(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
 `QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`. -/
-lemma onSiteTensorPow_eq_piKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
+lemma onSiteTensorPow_eq_piKronecker (L : ℕ) (Λ : Matrix α α ℂ) :
     onSiteTensorPow L Λ = Matrix.piKronecker fun _ : Fin L => Λ := by
   ext σ τ
   simp [onSiteTensorPow, Matrix.piKronecker_apply]
 
 /-- The tensor power is the blocked Kronecker lift read through the decoding of blocked
 physical indices. -/
-lemma onSiteTensorPow_eq_submatrix_blockKron (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
+lemma onSiteTensorPow_eq_submatrix_blockKron (L : ℕ) (Λ : Matrix α α ℂ) :
     onSiteTensorPow L Λ =
       (blockKron L Λ).submatrix (decodeBlockEquiv d L).symm (decodeBlockEquiv d L).symm := by
   ext σ τ
@@ -91,33 +90,33 @@ lemma onSiteTensorPow_eq_submatrix_blockKron (L : ℕ) (Λ : Matrix (Fin d) (Fin
 
 /-- The tensor power is multiplicative: \((\Lambda\Lambda')^{\otimes L} =
 \Lambda^{\otimes L}\Lambda'^{\otimes L}\). -/
-lemma onSiteTensorPow_mul (L : ℕ) (Λ Λ' : Matrix (Fin d) (Fin d) ℂ) :
+lemma onSiteTensorPow_mul (L : ℕ) (Λ Λ' : Matrix α α ℂ) :
     onSiteTensorPow L (Λ * Λ') = onSiteTensorPow L Λ * onSiteTensorPow L Λ' := by
   rw [onSiteTensorPow_eq_submatrix_blockKron, onSiteTensorPow_eq_submatrix_blockKron,
     onSiteTensorPow_eq_submatrix_blockKron, Matrix.submatrix_mul_equiv, blockKron_mul]
 
 /-- The tensor power of the identity is the identity. -/
 lemma onSiteTensorPow_one (L : ℕ) :
-    onSiteTensorPow L (1 : Matrix (Fin d) (Fin d) ℂ) = 1 := by
+    onSiteTensorPow L (1 : Matrix α α ℂ) = 1 := by
   rw [onSiteTensorPow_eq_submatrix_blockKron, blockKron_one, Matrix.submatrix_one_equiv]
 
 /-- The tensor power commutes with the conjugate transpose:
 \((\Lambda^{\otimes L})^\dagger = (\Lambda^\dagger)^{\otimes L}\). -/
-lemma onSiteTensorPow_conjTranspose (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
+lemma onSiteTensorPow_conjTranspose (L : ℕ) (Λ : Matrix α α ℂ) :
     (onSiteTensorPow L Λ)ᴴ = onSiteTensorPow L Λᴴ := by
   rw [onSiteTensorPow_eq_submatrix_blockKron, onSiteTensorPow_eq_submatrix_blockKron,
     Matrix.conjTranspose_submatrix, blockKron_conjTranspose]
 
 /-- For an invertible on-site map, the tensor power of the inverse is a left inverse of the
 tensor power. -/
-lemma onSiteTensorPow_inv_mul (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ) :
+lemma onSiteTensorPow_inv_mul (L : ℕ) {Λ : Matrix α α ℂ} (hΛ : IsUnit Λ) :
     onSiteTensorPow L Λ⁻¹ * onSiteTensorPow L Λ = 1 := by
   rw [← onSiteTensorPow_mul, Matrix.nonsing_inv_mul Λ ((Matrix.isUnit_iff_isUnit_det Λ).1 hΛ),
     onSiteTensorPow_one]
 
 /-- For an invertible on-site map, the tensor power of the inverse is a right inverse of the
 tensor power. -/
-lemma onSiteTensorPow_mul_inv (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ) :
+lemma onSiteTensorPow_mul_inv (L : ℕ) {Λ : Matrix α α ℂ} (hΛ : IsUnit Λ) :
     onSiteTensorPow L Λ * onSiteTensorPow L Λ⁻¹ = 1 := by
   rw [← onSiteTensorPow_mul, Matrix.mul_nonsing_inv Λ ((Matrix.isUnit_iff_isUnit_det Λ).1 hΛ),
     onSiteTensorPow_one]
@@ -125,10 +124,10 @@ lemma onSiteTensorPow_mul_inv (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ :
 /-- The matrix product vector of the deformed tensor is the tensor power applied to the
 original matrix product vector: \(\ket{\psi'} = \Lambda^{\otimes N}\ket{\psi}\), arXiv:2011.12127,
 line 2036. -/
-theorem mpv_rotatePhysical_eq_toLin' (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
+theorem mpv_rotatePhysical_eq_toLin' (Λ : Matrix α α ℂ) (A : MPTensor α (Fin D))
     (N : ℕ) :
-    (mpv (rotatePhysical Λ A) : NSiteSpace (Fin d) N) =
-      Matrix.toLin' (onSiteTensorPow N Λ) (mpv A : NSiteSpace (Fin d) N) := by
+    (mpv (rotatePhysical Λ A) : NSiteSpace α N) =
+      Matrix.toLin' (onSiteTensorPow N Λ) (mpv A : NSiteSpace α N) := by
   ext s
   rw [mpv_rotatePhysical]
   simp [Matrix.toLin'_apply, Matrix.mulVec, dotProduct]
@@ -137,7 +136,7 @@ theorem mpv_rotatePhysical_eq_toLin' (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPST
 
 /-- The boundary map of the deformed tensor is the tensor power applied to the boundary
 map of the original tensor. -/
-theorem groundSpaceMap_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
+theorem groundSpaceMap_rotatePhysical (Λ : Matrix α α ℂ) (A : MPTensor α (Fin D))
     (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical Λ A) L X =
       Matrix.toLin' (onSiteTensorPow L Λ) (groundSpaceMap A L X) := by
@@ -149,7 +148,7 @@ the original tensor under the tensor power: \(\mathcal G_L(\Lambda A) =
 \Lambda^{\otimes L}\mathcal G_L(A)\).  This is the parenthetical generalization of
 arXiv:2011.12127, lines 2035--2037, at the level of local ground spaces; no invertibility of
 \(\Lambda\) is needed for this inclusion-as-equality. -/
-theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
+theorem groundSpace_rotatePhysical (Λ : Matrix α α ℂ) (A : MPTensor α (Fin D))
     (L : ℕ) :
     groundSpace (rotatePhysical Λ A) L =
       (groundSpace A L).map (Matrix.toLin' (onSiteTensorPow L Λ)) := by
@@ -158,7 +157,7 @@ theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTen
 
 /-- The Hilbert-space realization of the local ground space of the deformed tensor is the
 image under the tensor power of the realization for the original tensor. -/
-theorem map_groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
+theorem map_groundSpace_rotatePhysical (Λ : Matrix α α ℂ) (A : MPTensor α (Fin D))
     (L : ℕ) :
     ((groundSpace (rotatePhysical Λ A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin
@@ -171,8 +170,8 @@ theorem map_groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MP
 /-- A parent interaction on \(L\) sites for the tensor \(A\), in the sense of
 arXiv:2011.12127, lines 1996--1999: a hermitian positive semidefinite operator \(h \ge 0\)
 on the \(L\)-site Hilbert space whose kernel is the local ground space \(\mathcal G_L(A)\). -/
-structure IsParentInteraction (A : MPSTensor d D) (L : ℕ)
-    (h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)) : Prop where
+structure IsParentInteraction (A : MPTensor α (Fin D)) (L : ℕ)
+    (h : EuclideanSpace ℂ (Fin L → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin L → α)) : Prop where
   /-- The interaction is hermitian and positive semidefinite. -/
   isPositive : h.IsPositive
   /-- The kernel of the interaction is the local ground space. -/
@@ -181,14 +180,14 @@ structure IsParentInteraction (A : MPSTensor d D) (L : ℕ)
 /-- The deformed interaction
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes L}\, h\, (\Lambda^{-1})^{\otimes L}\) of
 arXiv:2011.12127, lines 2190--2192, and equation deformed-parent-1 at lines 2033--2035. -/
-noncomputable def deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) : Matrix (Cfg d L) (Cfg d L) ℂ :=
+noncomputable def deformedInteraction (L : ℕ) (Λ : Matrix α α ℂ)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) : Matrix (Fin L → α) (Fin L → α) ℂ :=
   onSiteTensorPow L (Λ⁻¹)ᴴ * h * onSiteTensorPow L Λ⁻¹
 
 /-- The operator of the deformed interaction is the operator of the interaction between the
 operators of the two tensor powers. -/
-theorem toEuclideanLin_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    (h : Matrix (Cfg d L) (Cfg d L) ℂ) :
+theorem toEuclideanLin_deformedInteraction (L : ℕ) (Λ : Matrix α α ℂ)
+    (h : Matrix (Fin L → α) (Fin L → α) ℂ) :
     Matrix.toEuclideanLin (deformedInteraction L Λ h) =
       Matrix.toEuclideanLin (onSiteTensorPow L (Λ⁻¹)ᴴ) ∘ₗ Matrix.toEuclideanLin h ∘ₗ
         Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹) := by
@@ -197,16 +196,16 @@ theorem toEuclideanLin_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d
 
 /-- The deformed interaction of a positive semidefinite matrix is positive semidefinite: it is
 the conjugate \(S^\dagger h S\) with \(S = (\Lambda^{-1})^{\otimes L}\). -/
-theorem posSemidef_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    {h : Matrix (Cfg d L) (Cfg d L) ℂ} (hh : h.PosSemidef) :
+theorem posSemidef_deformedInteraction (L : ℕ) (Λ : Matrix α α ℂ)
+    {h : Matrix (Fin L → α) (Fin L → α) ℂ} (hh : h.PosSemidef) :
     (deformedInteraction L Λ h).PosSemidef := by
   rw [deformedInteraction, ← onSiteTensorPow_conjTranspose]
   exact hh.conjTranspose_mul_mul_same _
 
 /-- Composition of the Hilbert-space maps of two tensor powers is the map of the tensor
 power of the product. -/
-lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix (Fin d) (Fin d) ℂ)
-    (v : EuclideanSpace ℂ (Cfg d L)) :
+lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix α α ℂ)
+    (v : EuclideanSpace ℂ (Fin L → α)) :
     Matrix.toEuclideanLin (onSiteTensorPow L Λ)
         (Matrix.toEuclideanLin (onSiteTensorPow L Λ') v) =
       Matrix.toEuclideanLin (onSiteTensorPow L (Λ * Λ')) v := by
@@ -215,26 +214,26 @@ lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix (Fin d
 
 /-- The kernel of the deformed interaction is the local ground space of the deformed
 tensor: \(\ker h' = \Lambda^{\otimes L}\ker h = \mathcal G_L(\Lambda A)\). -/
-theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
+theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix α α ℂ}
+    (hΛ : IsUnit Λ) {A : MPTensor α (Fin D)} {h : Matrix (Fin L → α) (Fin L → α) ℂ}
     (hker : LinearMap.ker (Matrix.toEuclideanLin h) = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap)) :
     LinearMap.ker (Matrix.toEuclideanLin (deformedInteraction L Λ h)) =
       ((groundSpace (rotatePhysical Λ A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hdet : IsUnit Λ.det := (Matrix.isUnit_iff_isUnit_det Λ).1 hΛ
-  have hleft : ∀ v : EuclideanSpace ℂ (Cfg d L),
+  have hleft : ∀ v : EuclideanSpace ℂ (Fin L → α),
       Matrix.toEuclideanLin (onSiteTensorPow L Λ)
         (Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹) v) = v := by
     intro v
     rw [toEuclideanLin_onSiteTensorPow_mul_apply, Matrix.mul_nonsing_inv Λ hdet,
       onSiteTensorPow_one, Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
-  have hright : ∀ v : EuclideanSpace ℂ (Cfg d L),
+  have hright : ∀ v : EuclideanSpace ℂ (Fin L → α),
       Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹)
         (Matrix.toEuclideanLin (onSiteTensorPow L Λ) v) = v := by
     intro v
     rw [toEuclideanLin_onSiteTensorPow_mul_apply, Matrix.nonsing_inv_mul Λ hdet,
       onSiteTensorPow_one, Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
-  have hadj : ∀ v : EuclideanSpace ℂ (Cfg d L),
+  have hadj : ∀ v : EuclideanSpace ℂ (Fin L → α),
       Matrix.toEuclideanLin (onSiteTensorPow L Λᴴ)
         (Matrix.toEuclideanLin (onSiteTensorPow L (Λ⁻¹)ᴴ) v) = v := by
     intro v
@@ -259,8 +258,8 @@ theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (F
 invertible and \(h\) is a parent interaction for \(B\) on \(k\) sites, then
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes k} h (\Lambda^{-1})^{\otimes k}\) is a parent
 interaction for \(A\).  Here \(B\) is the tensor `A` and \(A\) is `rotatePhysical Λ A`. -/
-theorem IsParentInteraction.deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
+theorem IsParentInteraction.deformedInteraction (L : ℕ) {Λ : Matrix α α ℂ}
+    (hΛ : IsUnit Λ) {A : MPTensor α (Fin D)} {h : Matrix (Fin L → α) (Fin L → α) ℂ}
     (hh : IsParentInteraction A L (Matrix.toEuclideanLin h)) :
     IsParentInteraction (rotatePhysical Λ A) L
       (Matrix.toEuclideanLin (MPSTensor.deformedInteraction L Λ h)) where
@@ -294,21 +293,21 @@ private lemma prod_eq_window_mul_compl {N L : ℕ} (hLN : L ≤ N) (i : Fin N) (
 
 /-- Outside the cyclic window the replaced configuration agrees with the original one. -/
 private lemma replaceWindow_apply_of_notMem {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
-    (σ : Cfg d N) (τ : Cfg d L) {k : Fin N} (hk : k ∉ cyclicWindowSupport N L i) :
+    (σ : Fin N → α) (τ : Fin L → α) {k : Fin N} (hk : k ∉ cyclicWindowSupport N L i) :
     replaceWindow L hLN i σ τ k = σ k := by
   rw [mem_cyclicWindowSupport_iff hLN] at hk
   simp [replaceWindow, hk]
 
 /-- Inside the cyclic window the replaced configuration reads the inserted word. -/
 private lemma replaceWindow_cyclicForwardSite {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
-    (σ : Cfg d N) (τ : Cfg d L) (r : Fin L) :
+    (σ : Fin N → α) (τ : Fin L → α) (r : Fin L) :
     replaceWindow L hLN i σ τ (cyclicForwardSite i r.val) = τ r :=
   congrFun (extractWindow_replaceWindow L hLN i σ τ) r
 
 /-- The involution on pairs (word, configuration) exchanging the inserted window word with
 the window read from the configuration. -/
 private def windowSwap {N L : ℕ} (hLN : L ≤ N) (i : Fin N) :
-    Cfg d L × Cfg d N ≃ Cfg d L × Cfg d N where
+    (Fin L → α) × (Fin N → α) ≃ (Fin L → α) × (Fin N → α) where
   toFun p := (extractWindow L i p.2, replaceWindow L hLN i p.2 p.1)
   invFun p := (extractWindow L i p.2, replaceWindow L hLN i p.2 p.1)
   left_inv p := by
@@ -326,29 +325,29 @@ restrictions of \(\phi\); the coefficients are the products of the entries of \(
 over the sites outside the window.  This is the factorization behind the operator \(X\) of
 arXiv:2011.12127, lines 2035--2037. -/
 theorem cyclicRestrictₗ_toLin'_onSiteTensorPow {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
-    (i : Fin N) (τ : Cfg d N) (Λ : Matrix (Fin d) (Fin d) ℂ) (φ : NSiteSpace (Fin d) N) :
+    (i : Fin N) (τ : Fin N → α) (Λ : Matrix α α ℂ) (φ : NSiteSpace α N) :
     cyclicRestrictₗ hN L i τ (Matrix.toLin' (onSiteTensorPow N Λ) φ) =
       Matrix.toLin' (onSiteTensorPow L Λ)
-        (∑ ω : Cfg d N,
+        (∑ ω : (Fin N → α),
           (if extractWindow L i ω = extractWindow L i τ then
             ∏ k ∈ (cyclicWindowSupport N L i)ᶜ, Λ (τ k) (ω k) else 0) •
             cyclicRestrictₗ hN L i ω φ) := by
   ext σ
-  have hcfg : ∀ (σ' : Cfg d L) (ω : Cfg d N),
+  have hcfg : ∀ (σ' : Fin L → α) (ω : Fin N → α),
       cyclicCfg hN L i σ' ω = replaceWindow L hLN i ω σ' := fun _ _ => rfl
   -- Reindex a double sum over (window word, configuration) by the window swap.
-  have key : ∀ F : Cfg d L → Cfg d N → ℂ,
-      ∑ σ' : Cfg d L, ∑ ω : Cfg d N, F σ' ω =
-        ∑ σ' : Cfg d L, ∑ ω : Cfg d N,
+  have key : ∀ F : (Fin L → α) → (Fin N → α) → ℂ,
+      ∑ σ' : (Fin L → α), ∑ ω : (Fin N → α), F σ' ω =
+        ∑ σ' : (Fin L → α), ∑ ω : (Fin N → α),
           F (extractWindow L i ω) (replaceWindow L hLN i ω σ') := by
     intro F
     calc
-      ∑ σ' : Cfg d L, ∑ ω : Cfg d N, F σ' ω
-          = ∑ p : Cfg d L × Cfg d N, F p.1 p.2 := (Fintype.sum_prod_type' F).symm
-      _ = ∑ p : Cfg d L × Cfg d N,
-            F (windowSwap (d := d) hLN i p).1 (windowSwap (d := d) hLN i p).2 :=
-          ((windowSwap (d := d) hLN i).sum_comp fun p => F p.1 p.2).symm
-      _ = ∑ σ' : Cfg d L, ∑ ω : Cfg d N,
+      ∑ σ' : (Fin L → α), ∑ ω : (Fin N → α), F σ' ω
+          = ∑ p : (Fin L → α) × (Fin N → α), F p.1 p.2 := (Fintype.sum_prod_type' F).symm
+      _ = ∑ p : (Fin L → α) × (Fin N → α),
+            F (windowSwap hLN i p).1 (windowSwap hLN i p).2 :=
+          ((windowSwap hLN i).sum_comp fun p => F p.1 p.2).symm
+      _ = ∑ σ' : (Fin L → α), ∑ ω : (Fin N → α),
             F (extractWindow L i ω) (replaceWindow L hLN i ω σ') :=
           Fintype.sum_prod_type'
             fun σ' ω => F (extractWindow L i ω) (replaceWindow L hLN i ω σ')
@@ -379,7 +378,7 @@ theorem cyclicRestrictₗ_toLin'_onSiteTensorPow {N L : ℕ} (hN : 0 < N) (hLN :
 /-- The tensor power maps the chain ground space of \(A\) into the chain ground space of
 the deformed tensor \(\Lambda A\).  No invertibility of \(\Lambda\) is needed. -/
 theorem map_chainGroundSpace_le_chainGroundSpace_rotatePhysical
-    (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (L N : ℕ) :
+    (Λ : Matrix α α ℂ) (A : MPTensor α (Fin D)) (L N : ℕ) :
     (chainGroundSpace A L N).map (Matrix.toLin' (onSiteTensorPow N Λ)) ≤
       chainGroundSpace (rotatePhysical Λ A) L N := by
   intro ψ hψ
@@ -400,8 +399,8 @@ states of the parent Hamiltonians of \(\ket\psi\) and \(\ket{\psi'} = R^{\otimes
 for an invertible on-site map \(R\), in its instance for matrix product states on the
 periodic chain: the chain ground space of the deformed tensor is the image of the chain
 ground space of the original tensor under \(R^{\otimes N}\). -/
-theorem chainGroundSpace_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ)
-    (A : MPSTensor d D) (L N : ℕ) :
+theorem chainGroundSpace_rotatePhysical {Λ : Matrix α α ℂ} (hΛ : IsUnit Λ)
+    (A : MPTensor α (Fin D)) (L N : ℕ) :
     chainGroundSpace (rotatePhysical Λ A) L N =
       (chainGroundSpace A L N).map (Matrix.toLin' (onSiteTensorPow N Λ)) := by
   refine le_antisymm ?_ (map_chainGroundSpace_le_chainGroundSpace_rotatePhysical Λ A L N)
@@ -419,8 +418,8 @@ theorem chainGroundSpace_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ :
 (arXiv:2011.12127, lines 2035--2037), stated for the kernels of the finite parent
 Hamiltonians in the range \(0 < N\), \(L \le N\) where the local terms act on genuine
 cyclic windows. -/
-theorem ker_hamiltonian_parentRingInteraction_rotatePhysical {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+theorem ker_hamiltonian_parentRingInteraction_rotatePhysical {Λ : Matrix α α ℂ}
+    (hΛ : IsUnit Λ) (A : MPTensor α (Fin D)) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toLin' (parentRingInteraction (rotatePhysical Λ A) L N).hamiltonian) =
       (LinearMap.ker (Matrix.toLin' (parentRingInteraction A L N).hamiltonian)).map
@@ -431,8 +430,8 @@ theorem ker_hamiltonian_parentRingInteraction_rotatePhysical {Λ : Matrix (Fin d
 
 /-- The tensor power of an invertible on-site map as a linear automorphism of the
 \(N\)-site space. -/
-noncomputable def onSiteTensorPowEquiv (N : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) : NSiteSpace (Fin d) N ≃ₗ[ℂ] NSiteSpace (Fin d) N :=
+noncomputable def onSiteTensorPowEquiv (N : ℕ) {Λ : Matrix α α ℂ}
+    (hΛ : IsUnit Λ) : NSiteSpace α N ≃ₗ[ℂ] NSiteSpace α N :=
   LinearEquiv.ofLinearMap (Matrix.toLin' (onSiteTensorPow N Λ))
     (Matrix.toLin' (onSiteTensorPow N Λ⁻¹))
     (by rw [← Matrix.toLin'_mul, onSiteTensorPow_mul_inv N hΛ, Matrix.toLin'_one])
@@ -444,8 +443,8 @@ the two ground spaces correspond through the invertible map \(\Lambda^{\otimes N
 chain ground space of \(A\) is the line through a nonzero vector \(\psi\), the chain ground
 space of \(\Lambda A\) is the line through the nonzero vector \(\Lambda^{\otimes N}\psi\). -/
 theorem chainGroundSpace_rotatePhysical_eq_span
-    {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ) {A : MPSTensor d D} {L N : ℕ}
-    {ψ : NSiteSpace (Fin d) N} (hA : chainGroundSpace A L N = ℂ ∙ ψ ∧ ψ ≠ 0) :
+    {Λ : Matrix α α ℂ} (hΛ : IsUnit Λ) {A : MPTensor α (Fin D)} {L N : ℕ}
+    {ψ : NSiteSpace α N} (hA : chainGroundSpace A L N = ℂ ∙ ψ ∧ ψ ≠ 0) :
     chainGroundSpace (rotatePhysical Λ A) L N = ℂ ∙ Matrix.toLin' (onSiteTensorPow N Λ) ψ ∧
       Matrix.toLin' (onSiteTensorPow N Λ) ψ ≠ 0 := by
   refine ⟨?_, (onSiteTensorPowEquiv N hΛ).map_ne_zero_iff.mpr hA.2⟩
@@ -456,7 +455,7 @@ theorem chainGroundSpace_rotatePhysical_eq_span
 /-- The canonical parent interaction, whose operator is the orthogonal projector onto
 \(\mathcal G_L(A)^\perp\), is a parent interaction in the sense of arXiv:2011.12127,
 lines 1996--1999. -/
-theorem isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D)
+theorem isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction (A : MPTensor α (Fin D))
     (L : ℕ) :
     IsParentInteraction A L (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)))
       where

@@ -27,7 +27,7 @@ interaction of a local matrix (`ManyBody.Interaction.translationInvariant`).
 
 namespace MPSTensor
 
-variable {d R N : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ}
 
 /-! ### Translates of a local matrix on the ring
 
@@ -43,7 +43,7 @@ open ManyBody.Interaction (translationInvariant)
 /-- Restricting a term of the translates of `h` to its own window gives `h` applied to that same
 section. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
 theorem withLpMap_cyclicRestrictₗ_toEuclideanLin_translationInvariant_term (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (τ : Cfg d N) (ψ : MPVSpace (Fin d) N) :
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N) (τ : (Fin N → α)) (ψ : MPVSpace α N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ)
         (Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ) =
@@ -64,10 +64,10 @@ theorem withLpMap_cyclicRestrictₗ_toEuclideanLin_translationInvariant_term (hR
 /-- A term of the translates of `h` annihilates a vector precisely when `h` kills every actual
 coefficient section on its window. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
 theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (ψ : MPVSpace (Fin d) N) :
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N) (ψ : MPVSpace α N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ = 0 ↔
-      ∀ τ : Cfg d N, Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i
+      ∀ τ : (Fin N → α), Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i
           τ) ψ) = 0 := by
   have : NeZero N := NeZero.of_pos i.pos
   constructor
@@ -77,15 +77,15 @@ theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R �
   · intro hzero
     ext σ
     rw [toEuclideanLin_translationInvariant_term_apply hRN]
-    exact congrArg (fun v : MPVSpace (Fin d) R ↦ v (extractWindow R i σ)) (hzero σ)
+    exact congrArg (fun v : MPVSpace α R ↦ v (extractWindow R i σ)) (hzero σ)
 
 /-- For a positive semidefinite `h`, the kernel equation of the Hamiltonian of the translates of
 `h` on the ring is equivalent to every local section equation. Source: SPWC10, Theorem 5 proof,
 lines 869--880. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections [NeZero N]
-    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace (Fin d) N) :
+    (hRN : R ≤ N) (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace α N) :
     Matrix.toEuclideanLin (translationInvariant N h).hamiltonian ψ = 0 ↔
-      ∀ (i : Fin N) (τ : Cfg d N),
+      ∀ (i : Fin N) (τ : (Fin N → α)),
         Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ)
             ψ) = 0 := by
   have hterm (i : Fin N) :
@@ -103,11 +103,11 @@ section of an active interval containing its window, the corresponding term of t
 of `h` on that interval annihilates the section. The interaction range stays fixed. Source:
 finite-range identity extension in Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
 theorem toEuclideanLin_translationInvariant_term_rightFiber_eq_zero_of_eq_zero
-    {W : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hWN : W ≤ N) (s : Fin N) (q : Fin W)
-    (hqR : q.val + R ≤ W) (ψ : MPVSpace (Fin d) N)
+    {W : ℕ} (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hWN : W ≤ N) (s : Fin N) (q : Fin W)
+    (hqR : q.val + R ≤ W) (ψ : MPVSpace α N)
     (hzero : haveI : NeZero N := ⟨by omega⟩; Matrix.toEuclideanLin ((translationInvariant N h).term
       (cyclicForwardSite s q.val)) ψ = 0)
-    (τ : Cfg d (N - W)) :
+    (τ : (Fin (N - W) → α)) :
     haveI : NeZero W := ⟨by omega⟩;
     Matrix.toEuclideanLin ((translationInvariant W h).term q)
       (ContinuousLinearMap.rightFiber

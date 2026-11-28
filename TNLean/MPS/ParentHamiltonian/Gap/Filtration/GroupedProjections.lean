@@ -23,13 +23,13 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Prefix ground projections sampled at lengths \(pn\), as in the grouped
 martingale argument of Nachtergaele, Theorem 2.1(ii). -/
-noncomputable def groupedNestedGroundProjectionsES (A : MPSTensor d D)
+noncomputable def groupedNestedGroundProjectionsES (A : MPTensor α (Fin D))
     (p N : ℕ) :
-    FrustrationFree.NestedGroundProjections (E := EuclideanSpace ℂ (Cfg d N)) where
+    FrustrationFree.NestedGroundProjections (E := EuclideanSpace ℂ (Fin N → α)) where
   projection n := openPrefixGroundProjectionES A (2 * p) N (p * n)
   isSymmetricProjection n := Submodule.isSymmetricProjection_starProjection _
   antitone_range := fun _ _ h ↦ by
@@ -38,9 +38,9 @@ noncomputable def groupedNestedGroundProjectionsES (A : MPSTensor d D)
 
 /-- The ground projection of the length-\(2p\) interval ending at
 \(p(n+1)\), as in Nachtergaele's condition C3-prime. -/
-noncomputable def groupedIntervalGroundProjectionES (A : MPSTensor d D)
+noncomputable def groupedIntervalGroundProjectionES (A : MPTensor α (Fin D))
     (p N n : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+    EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α) :=
   (LinearMap.ker
     (Matrix.toEuclideanLin
         ((parentChainInteraction A (2 * p) N).restrict fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧ i.val +
@@ -49,7 +49,7 @@ noncomputable def groupedIntervalGroundProjectionES (A : MPSTensor d D)
 /-- Outside the two active grouped indices, the grouped martingale difference
 commutes with the local ground projection. This is the locality step in
 Nachtergaele's proof of Theorem 2.1(ii). -/
-theorem grouped_martingaleDifference_commute (A : MPSTensor d D)
+theorem grouped_martingaleDifference_commute (A : MPTensor α (Fin D))
     {p N m n : ℕ} (hp : 0 < p)
     (hout : m < n - 1 ∨ n < m) :
     ((groupedNestedGroundProjectionsES A p N).martingaleDifference m).comp

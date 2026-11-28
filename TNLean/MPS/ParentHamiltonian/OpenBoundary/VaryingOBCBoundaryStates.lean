@@ -22,13 +22,13 @@ open scoped Matrix
 
 namespace Matrix
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- Concatenation splits the rectangular product at its intermediate
 bond. Source: PGVWC07, Theorem 9 proof, equation unique-OBC, lines 1213–1220. -/
 theorem obc_rectangularEval_append (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    {m n : ℕ} (u : Fin m → Fin d) (v : Fin n → Fin d) :
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    {m n : ℕ} (u : Fin m → α) (v : Fin n → α) :
     Kraus.rectangularEval b (fun k : Fin (m + n) ↦ A k.val) (Fin.append u v) =
       Kraus.rectangularEval b (fun k : Fin m ↦ A k.val) u *
         Kraus.rectangularEval (fun k ↦ b (m + k))
@@ -52,22 +52,22 @@ theorem obc_rectangularEval_append (b : ℕ → ℕ)
 an arbitrary endpoint boundary matrix. Source: PGVWC07, equation unique-OBC
 and its full-chain conclusion, lines 1213–1237. -/
 noncomputable def obcBoundaryState (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
     (Z : Matrix (Fin (b N)) (Fin (b 0)) ℂ) :
-    EuclideanSpace ℂ (Fin N → Fin d) :=
-  (WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm
+    EuclideanSpace ℂ (Fin N → α) :=
+  (WithLp.linearEquiv 2 ℂ ((Fin N → α) → ℂ)).symm
     (fun w ↦ Matrix.trace (Z * Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w))
 
 /-- Fixing the outside configurations gives the explicit pair boundary
 \(X=P_{\mathrm{suffix}}ZP_{\mathrm{prefix}}\) on the virtual spaces.
 Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
 theorem obcBoundaryState_pair_section (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N p q : ℕ} (h : p + 2 + q = N)
     (Z : Matrix (Fin (b N)) (Fin (b 0)) ℂ)
-    (u : Fin p → Fin d) (v : Fin q → Fin d) :
+    (u : Fin p → α) (v : Fin q → α) :
     ∃ X : Matrix (Fin (b (p + 2))) (Fin (b p)) ℂ,
-      ∀ σ : Fin 2 → Fin d,
+      ∀ σ : Fin 2 → α,
         obcPairSection h u v (obcBoundaryState b A N Z) σ =
           Matrix.trace (X * A p (σ 0) * A (p + 1) (σ 1)) := by
   subst N
@@ -90,7 +90,7 @@ theorem obcBoundaryState_pair_section (b : ℕ → ℕ)
 parent Hamiltonian. No spanning or canonical normalization hypothesis is used.
 Source: PGVWC07, Theorem 9 and equation unique-OBC, lines 1201–1220. -/
 theorem hamiltonian_obcParentInteraction_apply_obcBoundaryState (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
+    (A : ∀ k, α → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
     (Z : Matrix (Fin (b N)) (Fin (b 0)) ℂ) :
     Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian
       (obcBoundaryState b A N Z) = 0 := by

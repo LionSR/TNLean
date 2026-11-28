@@ -31,7 +31,7 @@ namespace MPSTensor.BeigiSectorGraphData
 
 open FiniteWeightedDigraph
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)}
 
 /-- The Schmidt rank of the bond vector carried by a positive loop.
 
@@ -134,7 +134,7 @@ Section IV, equation (10) and the paragraph following it, with the
 Schmidt-support refinement recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 private noncomputable def loopSchmidtBridge (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) (i : Fin d) :
+    (l : Loop F.edgeWeight) (i : α) :
     Matrix (Fin (F.leftDim l.1)) (Fin (F.loopSchmidtRank l)) ℂ :=
   fun a α ↦
     if hq : (F.sectorEquiv.symm i).1 = l.1 then
@@ -160,7 +160,7 @@ minimal realization compatible with Beigi's product-of-pairs state; see
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 noncomputable def minimalLoopCoordinateTensor (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
+    (l : Loop F.edgeWeight) : MPTensor α (Fin (F.loopSchmidtRank l)) :=
   fun i ↦ (F.loopSchmidtFactorization l).leftFactor *
     F.loopSchmidtBridge l i
 
@@ -174,7 +174,7 @@ Schmidt support as documented in
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 noncomputable def minimalLoopTensor (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
+    (l : Loop F.edgeWeight) : MPTensor α (Fin (F.loopSchmidtRank l)) :=
   rotatePhysical F.unitary (F.minimalLoopCoordinateTensor l)
 
 /-- At a coordinate in the loop sector, the minimal tensor letter is the
@@ -262,8 +262,8 @@ private theorem loopCoordinateTensor_eq_bridge_mul_leftFactor
 \(RY\) and \(YR\), respectively, for a common rectangular matrix \(R\). -/
 private theorem exists_schmidtWordCore {r L : ℕ}
     (Y : Matrix (Fin r) (Fin L) ℂ)
-    (S : Fin d → Matrix (Fin L) (Fin r) ℂ)
-    (w : List (Fin d)) (hw : w ≠ []) :
+    (S : α → Matrix (Fin L) (Fin r) ℂ)
+    (w : List α) (hw : w ≠ []) :
     ∃ R : Matrix (Fin L) (Fin r) ℂ,
       Kraus.evalWord (fun i ↦ S i * Y) w = R * Y ∧
         Kraus.evalWord (fun i ↦ Y * S i) w = Y * R := by
@@ -287,7 +287,7 @@ Schmidt-support refinement recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 private theorem trace_evalWord_loopCoordinateTensor_eq_minimal
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
-    (w : List (Fin d)) (hw : w ≠ []) :
+    (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord (F.loopCoordinateTensor l) w) =
       Matrix.trace (Kraus.evalWord (F.minimalLoopCoordinateTensor l) w) := by
   rw [F.loopCoordinateTensor_eq_bridge_mul_leftFactor l]
@@ -313,7 +313,7 @@ this restriction is recorded in
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 theorem mpv_minimalLoopCoordinateTensor (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → α) :
     mpv (F.minimalLoopCoordinateTensor l) s = F.loopCyclicProduct l s := by
   rw [← F.mpv_loopCoordinateTensor l s]
   unfold mpv coeff
@@ -333,7 +333,7 @@ virtual directions does not alter the physical loop state; see
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 theorem mpv_minimalLoopTensor (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → α) :
     mpv (F.minimalLoopTensor l) s = F.loopProductState l s := by
   rw [minimalLoopTensor, MPSTensor.mpv_rotatePhysical]
   simp only [loopProductState]

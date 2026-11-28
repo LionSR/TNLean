@@ -33,12 +33,12 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- A full simultaneous one-site span propagates to every positive word
 length by concatenation. -/
 theorem WordTupleSpanTop.of_one_of_pos
-    {A : (j : Fin r) → MPSTensor d (dim j)}
+    {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     (hOne : WordTupleSpanTop A 1) {n : ℕ} (hn : 0 < n) :
     WordTupleSpanTop A n := by
   have h := wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hOne hOne (n - 1)
@@ -48,9 +48,9 @@ theorem WordTupleSpanTop.of_one_of_pos
 /-- A full simultaneous one-site span gives a common linear expression for
 the identity matrix in every block. -/
 theorem WordTupleSpanTop.exists_one_letter_identity_coefficients
-    {A : (j : Fin r) → MPSTensor d (dim j)}
+    {A : (j : Fin r) → MPTensor α (Fin (dim j))}
     (hOne : WordTupleSpanTop A 1) :
-    ∃ c : (Fin 1 → Fin d) → ℂ, ∀ j : Fin r,
+    ∃ c : (Fin 1 → α) → ℂ, ∀ j : Fin r,
       ∑ w, c w • A j (w 0) = 1 := by
   classical
   let I : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ := fun _ ↦ 1
@@ -67,27 +67,27 @@ theorem WordTupleSpanTop.exists_one_letter_identity_coefficients
 right-canonical normalization in the restriction argument of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coefficients
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
-    (c : (Fin 1 → Fin d) → ℂ)
+    (c : (Fin 1 → α) → ℂ)
     (hId : ∀ j : Fin r, ∑ w, c w • A j (w 0) = 1)
-    (C Dmat : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hCoeff : ∀ a b : Fin d, ∀ w : Fin n → Fin d,
+    (C Dmat : (j : Fin r) → α → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCoeff : ∀ a b : α, ∀ w : Fin n → α,
       (∑ j : Fin r,
         Matrix.trace ((A j b * C j a) * Kraus.evalWord (A j) (List.ofFn w))) =
       (∑ j : Fin r,
         Matrix.trace ((Dmat j b * A j a) * Kraus.evalWord (A j) (List.ofFn w))))
-    (ψ : NSiteSpace (Fin d) (n + 2))
+    (ψ : NSiteSpace α (n + 2))
     (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) :
     ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   classical
   rw [hψ]
   let E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
     fun j ↦ ∑ w, c w • C j (w 0)
-  have hCompat : ∀ j : Fin r, ∀ a b : Fin d,
+  have hCompat : ∀ j : Fin r, ∀ a b : α,
       A j b * C j a = Dmat j b * A j a :=
     pgvwc07_blockwise_compatibility_of_trace_decomposition A hSpan C Dmat hCoeff
-  have hDE : ∀ j : Fin r, ∀ b : Fin d, A j b * E j = Dmat j b := by
+  have hDE : ∀ j : Fin r, ∀ b : α, A j b * E j = Dmat j b := by
     intro j b
     calc
       A j b * E j = ∑ w, c w • (A j b * C j (w 0)) := by
@@ -99,7 +99,7 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coeffici
       _ = Dmat j b * (∑ w, c w • A j (w 0)) := by
         simp [Matrix.mul_sum]
       _ = Dmat j b := by rw [hId j, Matrix.mul_one]
-  have hACE : ∀ j : Fin r, ∀ a b : Fin d,
+  have hACE : ∀ j : Fin r, ∀ a b : α,
       A j b * C j a = A j b * E j * A j a := by
     intro j a b
     rw [hCompat j a b, hDE j b]
@@ -110,14 +110,14 @@ ground-space sum when the identity tuple has a common one-letter expansion.
 This is the common-identity-coefficient variant of the local step in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions_of_identity_coefficients
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
-    (c : (Fin 1 → Fin d) → ℂ)
+    (c : (Fin 1 → α) → ℂ)
     (hId : ∀ j : Fin r, ∑ w, c w • A j (w 0) = 1)
-    (ψ : NSiteSpace (Fin d) (n + 2))
-    (hLeft : ∀ b : Fin d,
+    (ψ : NSiteSpace α (n + 2))
+    (hLeft : ∀ b : α,
       restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1))
-    (hRight : ∀ a : Fin d,
+    (hRight : ∀ a : α,
       restrictFirst ψ a ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1)) :
     ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   rcases pgvwc07_trace_decompositions_of_iSup_restrictions A ψ hLeft hRight with
@@ -130,13 +130,13 @@ one-letter expansion of the block identities, rather than right-canonical
 normalization. This is a local variant of the intersection step in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452. -/
 theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection_of_identity_coefficients
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
-    (c : (Fin 1 → Fin d) → ℂ)
+    (c : (Fin 1 → α) → ℂ)
     (hId : ∀ j : Fin r, ∑ w, c w • A j (w 0) = 1) :
-    ((⨅ b : Fin d,
+    ((⨅ b : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-      (⨅ a : Fin d,
+      (⨅ a : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   classical
@@ -181,11 +181,11 @@ constraints into the sum of the open-boundary block spaces. This is the
 restriction-intersection propagation in arXiv:quant-ph/0608197, Theorem 12,
 proof lines 1430--1452. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_wordTupleSpanTop_one
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
-    (hOne : WordTupleSpanTop A 1) [NeZero d]
+    (hOne : WordTupleSpanTop A 1) [Nonempty α]
     {N : ℕ} (hN : 2 < N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N ≤
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) 2 N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
   obtain ⟨c, hId⟩ := hOne.exists_one_letter_identity_coefficients
@@ -208,14 +208,14 @@ when the simultaneous one-site word tuples span the product algebra. This is
 the block-boundary decomposition in arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1430--1452. -/
 theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_one
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
-    (hOne : WordTupleSpanTop A 1) [NeZero d]
-    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace (Fin d) N}
+    (hOne : WordTupleSpanTop A 1) [Nonempty α]
+    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace α N}
     (hψ : ψ ∈ chainGroundSpace
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) :
+      (toTensorFromBlocks (μ := μ) A) 2 N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' X)) := by
   have hOpen : ψ ∈ ⨆ j : Fin r, groundSpace (A j) N :=
@@ -230,14 +230,14 @@ theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_on
 matrices of a nearest-neighbor chain vector. This is the boundary-closing step
 in arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
-    (hOne : WordTupleSpanTop A 1) [NeZero d]
-    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace (Fin d) N}
+    (hOne : WordTupleSpanTop A 1) [Nonempty α]
+    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace α N}
     (hψ : ψ ∈ chainGroundSpace
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) :
+      (toTensorFromBlocks (μ := μ) A) 2 N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
@@ -250,16 +250,16 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
   let s : Fin N := ⟨N - 1, by omega⟩
   have hTranslate :
       cyclicTranslateState s ψ ∈
-        chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N :=
+        chainGroundSpace (toTensorFromBlocks (μ := μ) A) 2 N :=
     cyclicTranslateState_mem_chainGroundSpace
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) (by omega) (by omega) s hψ
+      (toTensorFromBlocks (μ := μ) A) (by omega) (by omega) s hψ
   obtain ⟨Y, hψY⟩ :=
     exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_one
       μ A hμ hOne hN hTranslate
   have hXsum :
       ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
     calc
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
           ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
             (Matrix.blockDiagonal' X)) := hψX
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
@@ -269,7 +269,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
         ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
     calc
       cyclicTranslateState s ψ =
-          groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N
+          groundSpaceMap (toTensorFromBlocks (μ := μ) A) N
             ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
               (Matrix.blockDiagonal' Y)) := hψY
       _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • Y j) := by
@@ -284,7 +284,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
   have hLongSpan : WordTupleSpanTop A (N - 1) :=
     hOne.of_one_of_pos (by omega)
   have hIntertwine :
-      ∀ (α : Fin 1 → Fin d) (j : Fin r),
+      ∀ (α : Fin 1 → α) (j : Fin r),
         ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn α) =
           Kraus.evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
     apply block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
@@ -293,13 +293,13 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
     simpa only [s] using hSumTranslate
   have hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) 1 := fun j ↦
     Kraus.isNBlkInjective_one_of_isInjective (hOne.isInjective_one j)
-  have hComm : ∀ j : Fin r, ∀ a : Fin d,
+  have hComm : ∀ j : Fin r, ∀ a : α,
       ((μ j) ^ N • X j) * A j a = A j a * ((μ j) ^ N • X j) := by
     intro j
     exact (boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
       (hBlk j) (by omega) ((μ j) ^ N • X j) ((μ j) ^ N • Y j)
       (fun α ↦ hIntertwine α j)).2
-  have hCommWord : ∀ j : Fin r, ∀ w : List (Fin d),
+  have hCommWord : ∀ j : Fin r, ∀ w : List α,
       ((μ j) ^ N • X j) * Kraus.evalWord (A j) w =
         Kraus.evalWord (A j) w * ((μ j) ^ N • X j) := by
     intro j w
@@ -321,14 +321,14 @@ chain space into the periodic chain spaces of the blocks. This is the
 multiplicity-one distinct-block specialization of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1430--1456. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop_one
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
-    (hOne : WordTupleSpanTop A 1) [NeZero d]
+    (hOne : WordTupleSpanTop A 1) [Nonempty α]
     {N : ℕ} (hN : 2 < N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) 2 N =
       ⨆ j : Fin r, chainGroundSpace (A j) 2 N := by
   have hClose :
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N ≤
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) 2 N ≤
         ⨆ j : Fin r, chainGroundSpace (A j) 2 N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
@@ -346,11 +346,11 @@ while the one-letter span makes each component injective. This is the
 parent-Hamiltonian consequence of the block-injective argument in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1430--1456. -/
 theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
-    (hOne : WordTupleSpanTop A 1) [NeZero d] [∀ j, NeZero (dim j)] :
+    (hOne : WordTupleSpanTop A 1) [Nonempty α] [∀ j, NeZero (dim j)] :
     HasParentHamiltonianGroundSpaceSpanning
-      (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 A := by
+      (toTensorFromBlocks (μ := μ) A) 2 A := by
   apply hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain
     μ A hμ
   · intro N hN

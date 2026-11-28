@@ -40,7 +40,7 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 section Interaction
 
@@ -53,7 +53,7 @@ comparable in both directions to the Hamiltonian of the canonical parent interac
 open chain, with constants independent of the chain length.
 Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem IsParentInteraction.exists_pos_hamiltonian_chainTranslates_comparison
-    {R : ℕ} {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {R : ℕ} {A : MPTensor α (Fin D)} {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ N : ℕ,
       (κ : ℂ) • (parentChainInteraction A R N).hamiltonian ≤
@@ -72,7 +72,7 @@ transfers to the open-chain translates of a fixed positive parent interaction. E
 above the kernel: every eigenvalue is `0` or at least the gap.
 Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap
-    {R : ℕ} {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {R : ℕ} {A : MPTensor α (Fin D)} {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ N : ℕ, R ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
@@ -96,10 +96,10 @@ the canonical family gap is supplied. Source: CPGSV21, arXiv:2011.12127, lines 2
 arXiv:1010.3732, Appendix A, lines 2477--2480 and 2575--2578. -/
 theorem exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     {X : Type*} [TopologicalSpace X] {R N₀ : ℕ}
-    (A : X → MPSTensor d D)
+    (A : X → MPTensor α (Fin D))
     (hProj : Continuous fun x ↦ ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap).starProjection)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -108,7 +108,7 @@ theorem exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (chainTranslates R N (H x)).hamiltonian) μ →
         μ = 0 ∨ (δ : ℂ) ≤ μ := by
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d R) (Cfg d R) ℂ ≃⋆ₐ[ℂ] _)
+  let e := (Matrix.toEuclideanCLM : Matrix (Fin R → α) (Fin R → α) ℂ ≃⋆ₐ[ℂ] _)
   have hE : Continuous fun x ↦ e (H x) :=
     e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp hH
   have hKer : Continuous fun x ↦ (LinearMap.ker (e (H x)).toLinearMap).starProjection := by
@@ -137,10 +137,10 @@ Hamiltonian of its open-chain translates is `0` or at least the gap.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, lines 2114--2129 and 2170--2172. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.exists_openInteraction_uniform_gap_of_wordTupleSpanTop
-    [NeZero d] {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
+    [Nonempty α] {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S) (hR : S + 1 ≤ R)
-    {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
@@ -156,11 +156,11 @@ The tensor and its simultaneous injectivity length are fixed. This is a conseque
 local projector comparison in CPGSV21, arXiv:2011.12127, lines 2170--2172, and Nachtergaele's
 finite-interval gap, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact
-    [NeZero d] {X : Type*} [TopologicalSpace X]
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
+    [Nonempty α] {X : Type*} [TopologicalSpace X]
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S) (hR : S + 1 ≤ R)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction A R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -180,9 +180,9 @@ Source: arXiv:1606.00608, lines 317--345; the positive comparison is
 CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem
     _root_.MPTensor.IsCPSVCanonicalForm.exists_uniform_openInteraction_gap_of_compact_of_bounded_range
-    [NeZero d] [NeZero D] {X : Type*} [TopologicalSpace X]
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ} (hR : 3 * D ^ 5 ≤ R)
-    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
+    [Nonempty α] [NeZero D] {X : Type*} [TopologicalSpace X]
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) {R : ℕ} (hR : 3 * D ^ 5 ≤ R)
+    (H : X → Matrix (Fin R → α) (Fin R → α) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction A R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue

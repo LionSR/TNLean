@@ -53,16 +53,15 @@ section ResidualWindowMixedGramDecay
 section
 
 open scoped Matrix Matrix.Norms.Frobenius InnerProductSpace BigOperators
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- Taking the trace of left-canonical word normalization gives the total
 squared Frobenius norm at every word length. This includes zero bond
 dimension and zero length. -/
 theorem sum_evalWord_frobenius_norm_sq_of_leftCanonical
-    (B : MPSTensor d E) (hLeft : ∑ i, (B i)ᴴ * B i = 1) (K : ℕ) :
-    (∑ u : Cfg d K, ‖Kraus.evalWord B (List.ofFn u)‖ ^ 2) = (E : ℝ) := by
+    (B : MPTensor α (Fin E)) (hLeft : ∑ i, (B i)ᴴ * B i = 1) (K : ℕ) :
+    (∑ u : (Fin K → α), ‖Kraus.evalWord B (List.ofFn u)‖ ^ 2) = (E : ℝ) := by
   have h := congrArg (fun X : Matrix (Fin E) (Fin E) ℂ => (Matrix.trace X).re)
     (Kraus.sum_evalWord_conjTranspose_mul_evalWord B hLeft K)
   simpa only [Matrix.trace_sum, Complex.re_sum,
@@ -73,34 +72,34 @@ theorem sum_evalWord_frobenius_norm_sq_of_leftCanonical
 Source: the boundary-word factorization in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma commutation (ii), lines 2442--2531. -/
 theorem norm_residualWindowRightVirtualMapES_le_sqrt
-    (B : MPSTensor (blockPhysDim d L) E) (hLeft : ∑ i, (B i)ᴴ * B i = 1) (K : ℕ) :
-    ‖residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K‖ ≤ Real.sqrt E := by
-  refine (residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K).opNorm_le_bound
+    (B : MPTensor (Fin L → α) (Fin E)) (hLeft : ∑ i, (B i)ᴴ * B i = 1) (K : ℕ) :
+    ‖residualWindowRightVirtualMapES (L := L) (D := D) B K‖ ≤ Real.sqrt E := by
+  refine (residualWindowRightVirtualMapES (L := L) (D := D) B K).opNorm_le_bound
     (Real.sqrt_nonneg _) ?_
   intro x
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).surjective x
-  have hnorm : ‖residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K
+  have hnorm : ‖residualWindowRightVirtualMapES (L := L) (D := D) B K
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)‖ ^ 2 =
-      ∑ u : Cfg (blockPhysDim d L) K, ‖Y * Kraus.evalWord B (List.ofFn u)‖ ^ 2 := by
+      ∑ u : (Fin K → Fin L → α), ‖Y * Kraus.evalWord B (List.ofFn u)‖ ^ 2 := by
     rw [EuclideanSpace.norm_sq_eq, Fintype.sum_prod_type_right]
-    change (∑ u : Cfg (blockPhysDim d L) K, ∑ p : Fin E × Fin D,
+    change (∑ u : (Fin K → Fin L → α), ∑ p : Fin E × Fin D,
       ‖(Y * Kraus.evalWord B (List.ofFn u)) p.2 p.1‖ ^ 2) = _
     apply Finset.sum_congr rfl
     intro u _
     rw [← (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).norm_map
       (Y * Kraus.evalWord B (List.ofFn u)), EuclideanSpace.norm_sq_eq]
     rfl
-  have hbound : ‖residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K
+  have hbound : ‖residualWindowRightVirtualMapES (L := L) (D := D) B K
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)‖ ^ 2 ≤ (E : ℝ) * ‖Y‖ ^ 2 := by
     rw [hnorm]
     calc
-      (∑ u : Cfg (blockPhysDim d L) K, ‖Y * Kraus.evalWord B (List.ofFn u)‖ ^ 2) ≤
-          ∑ u : Cfg (blockPhysDim d L) K, (‖Y‖ * ‖Kraus.evalWord B (List.ofFn u)‖) ^ 2 := by
+      (∑ u : (Fin K → Fin L → α), ‖Y * Kraus.evalWord B (List.ofFn u)‖ ^ 2) ≤
+          ∑ u : (Fin K → Fin L → α), (‖Y‖ * ‖Kraus.evalWord B (List.ofFn u)‖) ^ 2 := by
         apply Finset.sum_le_sum
         intro u _
         exact pow_le_pow_left₀ (norm_nonneg _)
           (Matrix.frobenius_norm_mul Y (Kraus.evalWord B (List.ofFn u))) 2
-      _ = ‖Y‖ ^ 2 * ∑ u : Cfg (blockPhysDim d L) K,
+      _ = ‖Y‖ ^ 2 * ∑ u : (Fin K → Fin L → α),
           ‖Kraus.evalWord B (List.ofFn u)‖ ^ 2 := by
         simp only [mul_pow, Finset.mul_sum]
       _ = (E : ℝ) * ‖Y‖ ^ 2 := by
@@ -117,24 +116,23 @@ end
 section
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 /-- The finite mixed residual from the two window Grams and the supported
 full-boundary inverse. Source: Nachtergaele, arXiv:cond-mat/9410110,
 commutation (ii), equation (3.15), lines 1567--1574; the boundary-word
 estimate is A_m and boundAm, lines 2394--2409. -/
 noncomputable def residualWindowMixedGramResidualES
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (K M r : ℕ) :
-    BoundaryFamilySpace (D := E) (Cfg d r) →L[ℂ]
-      EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) :=
+    BoundaryFamilySpace (D := E) (Fin r → α) →L[ℂ]
+      EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)) :=
   let T := residualWindowRightMapES A B V K M r
   let F := residualWindowLeftMapES B K M r
   T.adjoint.comp F - (T.adjoint.comp T).comp
-    ((residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K).comp
+    ((residualWindowRightVirtualMapES (L := L) (D := D) B K).comp
       ((residualBoundaryGramInverse A B V ρ Q (K + M) r).comp
         ((correlatedTailMapES A V r).adjoint.comp (F.adjoint.comp F))))
 /-- A growing common primitive prefix makes the mixed Gram residual vanish,
@@ -144,17 +142,17 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, commutation (ii),
 equation (3.15), lines 1567--1574; A_m and boundAm, lines 2394--2409. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidual_tendsto_zero
     [NeZero D] [NeZero E]
-    {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
+    {B : MPTensor (Fin L → α) (Fin E)} {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
-    (hGram : ∀ r : ℕ, (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∀ r : ℕ, (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q r)
     {ι : Type*} {l : Filter ι} {K M r : ι → ℕ} (hM : Filter.Tendsto M l Filter.atTop) :
     Filter.Tendsto (fun i =>
       ‖(residualWindowMixedGramResidualES A B V ρ (Q (r i)) (K i) (M i) (r i) :
-        BoundaryFamilySpace (D := E) (Cfg d (r i)) →L[ℂ]
-          EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) (K i)))‖)
+        BoundaryFamilySpace (D := E) (Fin (r i) → α) →L[ℂ]
+          EuclideanSpace ℂ ((Fin E × Fin D) × (Fin (K i) → Fin L → α)))‖)
       l (nhds 0) := by
   have hKM : Filter.Tendsto (fun i => K i + M i) l Filter.atTop :=
     Filter.tendsto_atTop_mono (fun i => Nat.le_add_left (M i) (K i)) hM
@@ -163,11 +161,11 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
     hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   let GT i := (residualWindowRightMapES A B V (K i) (M i) (r i)).adjoint.comp
     (residualWindowRightMapES A B V (K i) (M i) (r i))
-  let KT i := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) (K i))
+  let KT i := ContinuousLinearMap.rightFiberwiseMap (S := (Fin (K i) → Fin L → α))
     (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) (r i))
-  let GLeft i := boundaryFiberwiseMap (Cfg d (r i)) (groundSpaceGram B (K i + M i))
-  let KL i := boundaryFiberwiseMap (Cfg d (r i)) Kinf
-  let J i := residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B (K i)
+  let GLeft i := boundaryFiberwiseMap (Fin (r i) → α) (groundSpaceGram B (K i + M i))
+  let KL i := boundaryFiberwiseMap (Fin (r i) → α) Kinf
+  let J i := residualWindowRightVirtualMapES (L := L) (D := D) B (K i)
   let C i := correlatedTailMapES A V (r i)
   let H i := residualBoundaryGramInverse A B V ρ (Q (r i)) (K i + M i) (r i)
   let I i := (rectangularRowProjection E (Q (r i))).comp
@@ -176,7 +174,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
     norm_correlatedTailMapES_le_one_of_wordGram_eq_projection A V (r i)
       (Q (r i)) (hQ (r i)) (hGram (r i))
   have hJ : ∀ i, ‖J i‖ ≤ Real.sqrt E := fun i =>
-    norm_residualWindowRightVirtualMapES_le_sqrt (d := d) (L := L) (D := D) B hP.norm (K i)
+    norm_residualWindowRightVirtualMapES_le_sqrt (L := L) (D := D) B hP.norm (K i)
   have hδ := tendsto_iff_norm_sub_tendsto_zero.mp hconv
   have hδM := hδ.comp hM
   have hδKM := hδ.comp hKM
@@ -188,8 +186,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
   have hGLeft : Filter.Tendsto (fun i => ‖GLeft i - KL i‖) l (nhds 0) := by
     refine squeeze_zero' (Filter.Eventually.of_forall fun i => norm_nonneg _)
       (Filter.Eventually.of_forall fun i => ?_) hδKM
-    change ‖boundaryFiberwiseMap (Cfg d (r i)) (groundSpaceGram B (K i + M i)) -
-      boundaryFiberwiseMap (Cfg d (r i)) Kinf‖ ≤ _
+    change ‖boundaryFiberwiseMap (Fin (r i) → α) (groundSpaceGram B (K i + M i)) -
+      boundaryFiberwiseMap (Fin (r i) → α) Kinf‖ ≤ _
     rw [← boundaryFiberwiseMap_sub]
     exact norm_boundaryFiberwiseMap_le _ _
   have hH : Filter.Tendsto (fun i => ‖H i - I i‖) l (nhds 0) :=
@@ -291,7 +289,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
         gcongr
         · exact hC i
         · exact norm_residualWindowRightVirtualMapES_le_sqrt
-            (d := d) (L := L) (D := E) B hP.norm (K i)
+            (L := L) (D := E) B hP.norm (K i)
       _ = _ := by ring
   have hUpper : Filter.Tendsto (fun i => ‖Z i‖ + ‖Pfin i - Plim i‖) l (nhds 0) := by
     simpa only [add_zero] using hZ.add hPerr
@@ -337,11 +335,10 @@ cancellation. Primitivity supplies them in the subsequent convergence result.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 
 namespace MPSTensor
 
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- The supported inverse identities give an exact factorization of the two
 window projection product minus the full-window projection through the finite
@@ -349,11 +346,11 @@ mixed residual. Source: Nachtergaele, arXiv:cond-mat/9410110,
 commutation (ii), equation (3.15), lines 1567--1574; A_m, boundAm,
 lines 2394--2409. -/
 theorem residualWindow_supported_projector_factorization
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
     (K M r : ℕ)
-    (hGram : (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
+    (hGram : (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q)
     (hHM : IsSelfAdjoint (residualBoundaryGramInverse A B V ρ Q M r))
     (hGM : ((blockedResidualBoundaryMapES A L B V M r).adjoint.comp
@@ -366,9 +363,9 @@ theorem residualWindow_supported_projector_factorization
     let T := residualWindowRightMapES A B V K M r
     let F := residualWindowLeftMapES B K M r
     let C := residualWindowMapES A B V K M r
-    let HT := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+    let HT := ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
       (residualBoundaryGramInverse A B V ρ Q M r)
-    let HL := boundaryFiberwiseMap (Cfg d r) (Ring.inverse (groundSpaceGram B (K + M)))
+    let HL := boundaryFiberwiseMap (Fin r → α) (Ring.inverse (groundSpaceGram B (K + M)))
     T.range.starProjection.comp F.range.starProjection - C.range.starProjection =
       T.comp (HT.comp ((residualWindowMixedGramResidualES A B V ρ Q K M r).comp
         (HL.comp F.adjoint))) := by
@@ -376,14 +373,14 @@ theorem residualWindow_supported_projector_factorization
   refine ContinuousLinearMap.starProjection_comp_sub_of_supportedGramFactorizations
     (residualWindowRightMapES A B V K M r) (residualWindowLeftMapES B K M r)
     (residualWindowMapES A B V K M r)
-    (residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K)
+    (residualWindowRightVirtualMapES (L := L) (D := D) B K)
     (correlatedTailMapES A V r)
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+    (ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
       (residualBoundaryGramInverse A B V ρ Q M r))
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+    (ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
       (rectangularRowProjection E Q))
-    (boundaryFiberwiseMap (Cfg d r) (Ring.inverse (groundSpaceGram B (K + M))))
-    (ContinuousLinearMap.id ℂ (BoundaryFamilySpace (D := E) (Cfg d r)))
+    (boundaryFiberwiseMap (Fin r → α) (Ring.inverse (groundSpaceGram B (K + M))))
+    (ContinuousLinearMap.id ℂ (BoundaryFamilySpace (D := E) (Fin r → α)))
     (residualBoundaryGramInverse A B V ρ Q (K + M) r) (rectangularRowProjection E Q)
     ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_
   · rw [ContinuousLinearMap.rightFiberwiseMap_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
@@ -417,11 +414,11 @@ arXiv:cond-mat/9410110, commutation (ii), equation (3.15), lines 1567--1574;
 A_m, boundAm, lines 2394--2409. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_projection_comp_sub_tendsto_zero
     [NeZero D] [NeZero E]
-    {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
+    {B : MPTensor (Fin L → α) (Fin E)} {ρ : Matrix (Fin E) (Fin E) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
-    (hGram : ∀ r : ℕ, (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+    (hGram : ∀ r : ℕ, (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
       Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q r)
     {ι : Type*} {l : Filter ι} {K M r : ι → ℕ} (hM : Filter.Tendsto M l Filter.atTop) :
     Filter.Tendsto (fun i =>
@@ -441,9 +438,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_projection_com
     (fun i => residualWindowRightMapES A B V (K i) (M i) (r i))
     (fun i => residualWindowLeftMapES B (K i) (M i) (r i))
     (fun i => residualWindowMapES A B V (K i) (M i) (r i))
-    (fun i => ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) (K i))
+    (fun i => ContinuousLinearMap.rightFiberwiseMap (S := (Fin (K i) → Fin L → α))
       (residualBoundaryGramInverse A B V ρ (Q (r i)) (M i) (r i)))
-    (fun i => boundaryFiberwiseMap (Cfg d (r i))
+    (fun i => boundaryFiberwiseMap (Fin (r i) → α)
       (Ring.inverse (groundSpaceGram B (K i + M i))))
     (fun i => residualWindowMixedGramResidualES A B V ρ (Q (r i)) (K i) (M i) (r i))
     (K := (‖rectangularRightGramMetric D ρ‖ + 2) *
@@ -459,27 +456,27 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_projection_com
     have hT := (norm_residualWindowRightMapES_le A B V (K i) (M i) (r i)).trans
       (hiM (r i)).2.2.2.2.2
     have hHT := (ContinuousLinearMap.norm_rightFiberwiseMap_le
-      (S := Cfg (blockPhysDim d L) (K i))
+      (S := (Fin (K i) → Fin L → α))
       (residualBoundaryGramInverse A B V ρ (Q (r i)) (M i) (r i))).trans
       (hiM (r i)).2.2.2.2.1
     have hInv : ‖Ring.inverse (groundSpaceGram B (K i + M i)) - Ring.inverse Kinf‖ ≤
         ‖Ring.inverse Kinf‖ := by
       simpa only [Kinf] using (show (1 - (1 / 2 : ℝ))⁻¹ * (1 / 2) *
         ‖Ring.inverse Kinf‖ = ‖Ring.inverse Kinf‖ by ring_nf) ▸ hiOrd.2
-    have hHL : ‖boundaryFiberwiseMap (Cfg d (r i))
+    have hHL : ‖boundaryFiberwiseMap (Fin (r i) → α)
         (Ring.inverse (groundSpaceGram B (K i + M i)))‖ ≤ 2 * ‖Ring.inverse Kinf‖ :=
       (norm_boundaryFiberwiseMap_le _ _).trans ((norm_le_norm_sub_add
         (Ring.inverse (groundSpaceGram B (K i + M i))) (Ring.inverse Kinf)).trans
           (by linarith))
-    have hFSq : ‖residualWindowLeftMapES (d := d) B (K i) (M i) (r i)‖ ^ 2 ≤
+    have hFSq : ‖residualWindowLeftMapES B (K i) (M i) (r i)‖ ^ 2 ≤
         ‖groundSpaceGram B (K i + M i)‖ := by
       rw [sq, ← ContinuousLinearMap.norm_adjoint_comp_self,
         residualWindowLeftMapES_adjoint_comp_self]
       exact norm_boundaryFiberwiseMap_le _ _
-    have hF : ‖residualWindowLeftMapES (d := d) B (K i) (M i) (r i)‖ ≤ ‖Kinf‖ + 2 := by
+    have hF : ‖residualWindowLeftMapES B (K i) (M i) (r i)‖ ≤ ‖Kinf‖ + 2 := by
       have hG := norm_le_norm_sub_add (groundSpaceGram B (K i + M i)) Kinf
       nlinarith [norm_nonneg Kinf,
-        norm_nonneg (residualWindowLeftMapES (d := d) B (K i) (M i) (r i))]
+        norm_nonneg (residualWindowLeftMapES B (K i) (M i) (r i))]
     exact mul_le_mul (mul_le_mul (mul_le_mul hT hHT (norm_nonneg _)
       (by positivity)) hHL (norm_nonneg _) (by positivity)) hF
       (norm_nonneg _) (by positivity)

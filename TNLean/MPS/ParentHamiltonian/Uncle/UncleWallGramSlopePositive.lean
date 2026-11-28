@@ -28,13 +28,13 @@ open Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- Nonnegativity of the limiting wall coefficient follows from the
 positive finite Gram weights; arXiv:1210.6613, proof of Lemma lowenergystates.
 This does not assert strict positivity or genericity. -/
-theorem uncleWallNormSlope_nonneg (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+theorem uncleWallNormSlope_nonneg (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosSemidef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
@@ -54,19 +54,19 @@ theorem uncleWallNormSlope_nonneg (A : MPSTensor d a) (B : MPSTensor d b)
 /-- If the correlation seed vanishes, every mixed correlation term
 vanishes, so the source slope is exactly its one-site Gram contraction;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
-theorem uncleWallNormSlope_of_seed_eq_zero (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+theorem uncleWallNormSlope_of_seed_eq_zero (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hC : uncleWallSeed B R = 0) :
     uncleWallNormSlope A B R ρ = Matrix.trace (ρ * ∑ i, R i * (R i)ᴴ) := by
   simp [uncleWallNormSlope, uncleWallCorrelationLimit, hC]
 
 private theorem uncleWall_oneSiteGram_ne_zero
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (hR : R ≠ 0) :
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (hR : R ≠ 0) :
     (∑ i, R i * (R i)ᴴ) ≠ 0 := by
   intro hG
   apply hR
   funext i
-  have hnonneg (j : Fin d) : 0 ≤ (Matrix.trace (R j * (R j)ᴴ)).re :=
+  have hnonneg (j : α) : 0 ≤ (Matrix.trace (R j * (R j)ᴴ)).re :=
     (Complex.nonneg_iff.mp (Matrix.posSemidef_self_mul_conjTranspose (R j)).trace_nonneg).1
   have hsum : ∑ j, (Matrix.trace (R j * (R j)ᴴ)).re = 0 := by
     rw [← Complex.re_sum, ← Matrix.trace_sum, hG]
@@ -81,8 +81,8 @@ private theorem uncleWall_oneSiteGram_ne_zero
 slope for a faithful density. This is a derived positive case, not a
 norm-growth premise; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallNormSlope_pos_of_seed_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hC : uncleWallSeed B R = 0) (hR : R ≠ 0) :
     0 < uncleWallNormSlope A B R ρ := by
@@ -95,7 +95,7 @@ theorem uncleWallNormSlope_pos_of_seed_eq_zero
 makes a rectangular scalar wall have zero correlation seed;
 arXiv:1210.6613, positive norm-coefficient construction in the proof of
 Lemma lowenergystates. -/
-theorem uncleWallSeed_smul_of_annihilator (B : MPSTensor d b) (c : Fin d → ℂ)
+theorem uncleWallSeed_smul_of_annihilator (B : MPTensor α (Fin b)) (c : α → ℂ)
     (M : Matrix (Fin a) (Fin b) ℂ) (hc : ∑ i, c i • (B i)ᴴ = 0) :
     uncleWallSeed B (fun i ↦ c i • M) = 0 := by
   unfold uncleWallSeed
@@ -107,10 +107,10 @@ right-block letters when the physical dimension exceeds their matrix
 space dimension. This constructs the source positive case rather than
 assuming a nonzero asymptotic norm coefficient; arXiv:1210.6613,
 proof of Lemma lowenergystates. -/
-theorem exists_uncleWall_adjoint_annihilator (B : MPSTensor d b) (hd : b * b < d) :
-    ∃ c : Fin d → ℂ, c ≠ 0 ∧ ∑ i, c i • (B i)ᴴ = 0 := by
+theorem exists_uncleWall_adjoint_annihilator (B : MPTensor α (Fin b)) (hd : b * b < d) :
+    ∃ c : α → ℂ, c ≠ 0 ∧ ∑ i, c i • (B i)ᴴ = 0 := by
   classical
-  let f := Fintype.linearCombination ℂ (fun i : Fin d ↦ (B i)ᴴ)
+  let f := Fintype.linearCombination ℂ (fun i : α ↦ (B i)ᴴ)
   have hnot : ¬ Function.Injective f := by
     intro hf
     have hdim := LinearMap.finrank_le_finrank_of_injective hf
@@ -128,9 +128,9 @@ right-block matrix dimension and both bond dimensions are positive.
 This proves existence of a positive value, not an almost-everywhere
 assertion; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem exists_uncleWallNormSlope_pos [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef) (hd : b * b < d) :
-    ∃ R : Fin d → Matrix (Fin a) (Fin b) ℂ,
+    ∃ R : α → Matrix (Fin a) (Fin b) ℂ,
       uncleWallSeed B R = 0 ∧ R ≠ 0 ∧ 0 < uncleWallNormSlope A B R ρ := by
   classical
   obtain ⟨c, hc, hczero⟩ := exists_uncleWall_adjoint_annihilator B hd
@@ -139,7 +139,7 @@ theorem exists_uncleWallNormSlope_pos [NeZero a] [NeZero b]
     intro h
     have he := congrFun (congrFun h 0) 0
     simp [M] at he
-  let R : Fin d → Matrix (Fin a) (Fin b) ℂ := fun i ↦ c i • M
+  let R : α → Matrix (Fin a) (Fin b) ℂ := fun i ↦ c i • M
   have hR : R ≠ 0 := by
     intro h
     apply hc
@@ -156,12 +156,12 @@ constructed witness preserve the full perturbation span, and it does not
 assert a genericity theorem. Source: arXiv:1210.6613, proof of Lemma
 lowenergystates, nonzero quadratic norm coefficients. -/
 theorem exists_uncleWallNormSlope_pos_of_injective_perturbation [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef) :
-    ∃ R : Fin d → Matrix (Fin a) (Fin b) ℂ,
+    ∃ R : α → Matrix (Fin a) (Fin b) ℂ,
       uncleWallSeed B R = 0 ∧ R ≠ 0 ∧ 0 < uncleWallNormSlope A B R ρ := by
   have hdim : (a + b) * (a + b) ≤ d := by
     have h := finrank_le_of_span_eq_top hPert.span_eq_top

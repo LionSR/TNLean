@@ -56,7 +56,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 open scoped Matrix.Norms.Frobenius
 
@@ -95,66 +95,66 @@ theorem boundaryFamilyEquiv_apply_apply (S : Type*) [Fintype S]
         (WithLp.toLp 2 fun p => x (s, p)) := rfl
 
 /-- The tail spectator boundary map as a continuous map between Euclidean Hilbert spaces. -/
-noncomputable def tailBoundaryMapES (A : MPSTensor d D) (K L : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ] EuclideanSpace ℂ (Cfg d (K + L)) :=
+noncomputable def tailBoundaryMapES (A : MPTensor α (Fin D)) (K L : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin K → α) →L[ℂ] EuclideanSpace ℂ (Fin (K + L) → α) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.toLinearMap.comp
-      ((tailBoundaryMap A K L).comp (boundaryFamilyEquiv (D := D) (Cfg d K)).toLinearMap)
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm.toLinearMap.comp
+      ((tailBoundaryMap A K L).comp (boundaryFamilyEquiv (D := D) (Fin K → α)).toLinearMap)
 
 /-- The left spectator boundary map as a continuous map between Euclidean Hilbert spaces. -/
-noncomputable def leftBoundaryMapES (A : MPSTensor d D) (K L : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d L) →L[ℂ] EuclideanSpace ℂ (Cfg d (K + L)) :=
+noncomputable def leftBoundaryMapES (A : MPTensor α (Fin D)) (K L : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin L → α) →L[ℂ] EuclideanSpace ℂ (Fin (K + L) → α) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.toLinearMap.comp
-      ((leftBoundaryMap A K L).comp (boundaryFamilyEquiv (D := D) (Cfg d L)).toLinearMap)
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm.toLinearMap.comp
+      ((leftBoundaryMap A K L).comp (boundaryFamilyEquiv (D := D) (Fin L → α)).toLinearMap)
 
 /-- Evaluation of the Euclidean tail boundary map in the underlying site-space coordinates. -/
 @[simp]
-theorem tailBoundaryMapES_apply (A : MPSTensor d D) (K L : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K)) :
+theorem tailBoundaryMapES_apply (A : MPTensor α (Fin D)) (K L : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α)) :
     tailBoundaryMapES A K L x =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
-        (tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) x)) := rfl
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm
+        (tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin K → α) x)) := rfl
 
 /-- Evaluation of the Euclidean left boundary map in the underlying site-space coordinates. -/
 @[simp]
-theorem leftBoundaryMapES_apply (A : MPSTensor d D) (K L : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d L)) :
+theorem leftBoundaryMapES_apply (A : MPTensor α (Fin D)) (K L : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin L → α)) :
     leftBoundaryMapES A K L x =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
-        (leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d L) x)) := rfl
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm
+        (leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin L → α) x)) := rfl
 
 /-- The Hilbert-space tail boundary map has exactly the open-chain tail ground space as range. -/
-theorem range_tailBoundaryMapES (A : MPSTensor d D) (K L : ℕ) :
+theorem range_tailBoundaryMapES (A : MPTensor α (Fin D)) (K L : ℕ) :
     (tailBoundaryMapES A K L).range = openChainTailGroundSpaceES A K L := by
   rw [← tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES A K L]
   ext v
   constructor
   · rintro ⟨x, rfl⟩
-    exact ⟨tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) x),
-      ⟨boundaryFamilyEquiv (D := D) (Cfg d K) x, rfl⟩, rfl⟩
+    exact ⟨tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin K → α) x),
+      ⟨boundaryFamilyEquiv (D := D) (Fin K → α) x, rfl⟩, rfl⟩
   · rintro ⟨v, ⟨Y, rfl⟩, rfl⟩
-    exact ⟨(boundaryFamilyEquiv (D := D) (Cfg d K)).symm Y, by simp⟩
+    exact ⟨(boundaryFamilyEquiv (D := D) (Fin K → α)).symm Y, by simp⟩
 
 /-- At suffix length one, the Hilbert-space left boundary map has exactly the
 open-chain left ground space as range. -/
-theorem range_leftBoundaryMapES_one (A : MPSTensor d D) (K : ℕ) :
+theorem range_leftBoundaryMapES_one (A : MPTensor α (Fin D)) (K : ℕ) :
     (leftBoundaryMapES A K 1).range = openChainLeftGroundSpaceES A K := by
   rw [← leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES A K]
   ext v
   constructor
   · rintro ⟨x, rfl⟩
-    exact ⟨leftBoundaryMap A K 1 (boundaryFamilyEquiv (D := D) (Cfg d 1) x),
-      ⟨boundaryFamilyEquiv (D := D) (Cfg d 1) x, rfl⟩, rfl⟩
+    exact ⟨leftBoundaryMap A K 1 (boundaryFamilyEquiv (D := D) (Fin 1 → α) x),
+      ⟨boundaryFamilyEquiv (D := D) (Fin 1 → α) x, rfl⟩, rfl⟩
   · rintro ⟨v, ⟨Y, rfl⟩, rfl⟩
-    exact ⟨(boundaryFamilyEquiv (D := D) (Cfg d 1)).symm Y, by simp⟩
+    exact ⟨(boundaryFamilyEquiv (D := D) (Fin 1 → α)).symm Y, by simp⟩
 
 /-! ### Virtual factorizations -/
 
 /-- The virtual tail family before flattening, with fibers \(X A^u\). -/
-private noncomputable def tailVirtualFamilyMap (A : MPSTensor d D) (K : ℕ) :
+private noncomputable def tailVirtualFamilyMap (A : MPTensor α (Fin D)) (K : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →ₗ[ℂ]
-      (Cfg d K → Matrix (Fin D) (Fin D) ℂ) where
+      ((Fin K → α) → Matrix (Fin D) (Fin D) ℂ) where
   toFun x u := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x *
     Kraus.evalWord A (List.ofFn u)
   map_add' x y := by
@@ -165,17 +165,17 @@ private noncomputable def tailVirtualFamilyMap (A : MPSTensor d D) (K : ℕ) :
     simp only [map_smul, RingHom.id_apply, Pi.smul_apply, Matrix.smul_mul]
 
 /-- The virtual tail map with fibers \(X A^u\). -/
-noncomputable def tailVirtualMapES (A : MPSTensor d D) (K : ℕ) :
+noncomputable def tailVirtualMapES (A : MPTensor α (Fin D)) (K : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K) :=
+      BoundaryFamilySpace (D := D) (Fin K → α) :=
   LinearMap.toContinuousLinearMap <|
-    (boundaryFamilyEquiv (D := D) (Cfg d K)).symm.toLinearMap.comp
+    (boundaryFamilyEquiv (D := D) (Fin K → α)).symm.toLinearMap.comp
       (tailVirtualFamilyMap A K)
 
 /-- The virtual left family before flattening, with fibers \(A^\tau X\). -/
-private noncomputable def leftVirtualFamilyMap (A : MPSTensor d D) (L : ℕ) :
+private noncomputable def leftVirtualFamilyMap (A : MPTensor α (Fin D)) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →ₗ[ℂ]
-      (Cfg d L → Matrix (Fin D) (Fin D) ℂ) where
+      ((Fin L → α) → Matrix (Fin D) (Fin D) ℂ) where
   toFun x τ := Kraus.evalWord A (List.ofFn τ) *
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x
   map_add' x y := by
@@ -186,48 +186,48 @@ private noncomputable def leftVirtualFamilyMap (A : MPSTensor d D) (L : ℕ) :
     simp only [map_smul, RingHom.id_apply, Pi.smul_apply, Matrix.mul_smul]
 
 /-- The virtual left map with fibers \(A^\tau X\). -/
-noncomputable def leftVirtualMapES (A : MPSTensor d D) (L : ℕ) :
+noncomputable def leftVirtualMapES (A : MPTensor α (Fin D)) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d L) :=
+      BoundaryFamilySpace (D := D) (Fin L → α) :=
   LinearMap.toContinuousLinearMap <|
-    (boundaryFamilyEquiv (D := D) (Cfg d L)).symm.toLinearMap.comp
+    (boundaryFamilyEquiv (D := D) (Fin L → α)).symm.toLinearMap.comp
       (leftVirtualFamilyMap A L)
 
 /-- A tail virtual vector has fiber \(X A^u\) at the prefix \(u\). -/
 @[simp]
 theorem boundaryFamilyEquiv_tailVirtualMapES_apply
-    (A : MPSTensor d D) (K : ℕ) (x : EuclideanSpace ℂ (Fin D × Fin D))
-    (u : Cfg d K) :
-    boundaryFamilyEquiv (D := D) (Cfg d K) (tailVirtualMapES A K x) u =
+    (A : MPTensor α (Fin D)) (K : ℕ) (x : EuclideanSpace ℂ (Fin D × Fin D))
+    (u : (Fin K → α)) :
+    boundaryFamilyEquiv (D := D) (Fin K → α) (tailVirtualMapES A K x) u =
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x *
         Kraus.evalWord A (List.ofFn u) := by
-  change boundaryFamilyEquiv (D := D) (Cfg d K)
-    ((boundaryFamilyEquiv (D := D) (Cfg d K)).symm (tailVirtualFamilyMap A K x)) u = _
-  rw [(boundaryFamilyEquiv (D := D) (Cfg d K)).apply_symm_apply]
+  change boundaryFamilyEquiv (D := D) (Fin K → α)
+    ((boundaryFamilyEquiv (D := D) (Fin K → α)).symm (tailVirtualFamilyMap A K x)) u = _
+  rw [(boundaryFamilyEquiv (D := D) (Fin K → α)).apply_symm_apply]
   rfl
 
 /-- A left virtual vector has fiber \(A^\tau X\) at the suffix \(\tau\). -/
 @[simp]
 theorem boundaryFamilyEquiv_leftVirtualMapES_apply
-    (A : MPSTensor d D) (L : ℕ) (x : EuclideanSpace ℂ (Fin D × Fin D))
-    (τ : Cfg d L) :
-    boundaryFamilyEquiv (D := D) (Cfg d L) (leftVirtualMapES A L x) τ =
+    (A : MPTensor α (Fin D)) (L : ℕ) (x : EuclideanSpace ℂ (Fin D × Fin D))
+    (τ : (Fin L → α)) :
+    boundaryFamilyEquiv (D := D) (Fin L → α) (leftVirtualMapES A L x) τ =
       Kraus.evalWord A (List.ofFn τ) *
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x := by
-  change boundaryFamilyEquiv (D := D) (Cfg d L)
-    ((boundaryFamilyEquiv (D := D) (Cfg d L)).symm (leftVirtualFamilyMap A L x)) τ = _
-  rw [(boundaryFamilyEquiv (D := D) (Cfg d L)).apply_symm_apply]
+  change boundaryFamilyEquiv (D := D) (Fin L → α)
+    ((boundaryFamilyEquiv (D := D) (Fin L → α)).symm (leftVirtualFamilyMap A L x)) τ = _
+  rw [(boundaryFamilyEquiv (D := D) (Fin L → α)).apply_symm_apply]
   rfl
 
 /-- The adjoint of the tail virtual word map sums right-adjointed word
 multiplication over the spectator fibers. -/
 theorem tailVirtualMapES_adjoint_apply
-    (A : MPSTensor d D) (K : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K)) :
+    (A : MPTensor α (Fin D)) (K : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin K → α)) :
     (tailVirtualMapES A K).adjoint x =
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (∑ u : Cfg d K,
-          boundaryFamilyEquiv (D := D) (Cfg d K) x u *
+        (∑ u : (Fin K → α),
+          boundaryFamilyEquiv (D := D) (Fin K → α) x u *
             (Kraus.evalWord A (List.ofFn u))ᴴ) := by
   apply ext_inner_left ℂ
   intro z
@@ -236,29 +236,29 @@ theorem tailVirtualMapES_adjoint_apply
   rw [ContinuousLinearMap.adjoint_inner_right,
     Matrix.inner_frobeniusEquivEuclidean, PiLp.inner_apply,
     Fintype.sum_prod_type]
-  change (∑ u : Cfg d K, inner ℂ
+  change (∑ u : (Fin K → α), inner ℂ
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (Z * Kraus.evalWord A (List.ofFn u)))
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (boundaryFamilyEquiv (D := D) (Cfg d K) x u))) = _
+        (boundaryFamilyEquiv (D := D) (Fin K → α) x u))) = _
   simp only [Matrix.inner_frobeniusEquivEuclidean,
     Matrix.conjTranspose_mul, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
   apply Finset.sum_congr rfl
   intro u _
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
     (Kraus.evalWord A (List.ofFn u))ᴴ
-    (Zᴴ * boundaryFamilyEquiv (D := D) (Cfg d K) x u)
+    (Zᴴ * boundaryFamilyEquiv (D := D) (Fin K → α) x u)
 
 /-- The adjoint of the left virtual word map sums left-adjointed word
 multiplication over the spectator fibers. -/
 theorem leftVirtualMapES_adjoint_apply
-    (A : MPSTensor d D) (L : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d L)) :
+    (A : MPTensor α (Fin D)) (L : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Fin L → α)) :
     (leftVirtualMapES A L).adjoint x =
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (∑ τ : Cfg d L,
+        (∑ τ : (Fin L → α),
           (Kraus.evalWord A (List.ofFn τ))ᴴ *
-            boundaryFamilyEquiv (D := D) (Cfg d L) x τ) := by
+            boundaryFamilyEquiv (D := D) (Fin L → α) x τ) := by
   apply ext_inner_left ℂ
   intro z
   obtain ⟨Z, rfl⟩ :=
@@ -266,11 +266,11 @@ theorem leftVirtualMapES_adjoint_apply
   rw [ContinuousLinearMap.adjoint_inner_right,
     Matrix.inner_frobeniusEquivEuclidean, PiLp.inner_apply,
     Fintype.sum_prod_type]
-  change (∑ τ : Cfg d L, inner ℂ
+  change (∑ τ : (Fin L → α), inner ℂ
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (Kraus.evalWord A (List.ofFn τ) * Z))
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (boundaryFamilyEquiv (D := D) (Cfg d L) x τ))) = _
+        (boundaryFamilyEquiv (D := D) (Fin L → α) x τ))) = _
   simp only [Matrix.inner_frobeniusEquivEuclidean,
     Matrix.conjTranspose_mul, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
 
@@ -278,8 +278,8 @@ theorem leftVirtualMapES_adjoint_apply
 isometry.  This is the uniform relation needed when the C3 filtration advances
 by a whole block rather than by one input site. -/
 theorem leftVirtualMapES_norm_map_of_leftCanonical
-    (A : MPSTensor d D) (L : ℕ)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (A : MPTensor α (Fin D)) (L : ℕ)
+    (hLeft : ∑ i : α, (A i)ᴴ * A i = 1)
     (x : EuclideanSpace ℂ (Fin D × Fin D)) :
     ‖leftVirtualMapES A L x‖ = ‖x‖ := by
   obtain ⟨X, rfl⟩ :=
@@ -293,7 +293,7 @@ theorem leftVirtualMapES_norm_map_of_leftCanonical
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X) := by
     rw [PiLp.inner_apply, Fintype.sum_prod_type]
-    change (∑ τ : Cfg d L, inner ℂ
+    change (∑ τ : (Fin L → α), inner ℂ
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (Kraus.evalWord A (List.ofFn τ) * X))
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
@@ -317,31 +317,31 @@ theorem leftVirtualMapES_norm_map_of_leftCanonical
 /-- The norm of every fixed-length left virtual word map is uniformly at most one
 for a left-canonical tensor. -/
 theorem leftVirtualMapES_norm_le_one_of_leftCanonical
-    (A : MPSTensor d D) (L : ℕ)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    (A : MPTensor α (Fin D)) (L : ℕ)
+    (hLeft : ∑ i : α, (A i)ᴴ * A i = 1) :
     ‖leftVirtualMapES A L‖ ≤ 1 := by
   refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
   rw [one_mul, leftVirtualMapES_norm_map_of_leftCanonical A L hLeft x]
 
 /-- The ordinary Euclidean boundary map factors through the tail spectator map. -/
 theorem tailBoundaryMapES_comp_tailVirtualMapES
-    (A : MPSTensor d D) (K L : ℕ) :
+    (A : MPTensor α (Fin D)) (K L : ℕ) :
     (tailBoundaryMapES A K L).comp (tailVirtualMapES A K) =
       groundSpaceMapES A (K + L) := by
   apply ContinuousLinearMap.ext
   intro x
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm
       (tailBoundaryMap A K L
-        (boundaryFamilyEquiv (D := D) (Cfg d K)
+        (boundaryFamilyEquiv (D := D) (Fin K → α)
           (tailVirtualMapES A K
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)))) =
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm
       (groundSpaceMap A (K + L) X)
-  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm ?_
+  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm ?_
   have hfamily :
-      boundaryFamilyEquiv (D := D) (Cfg d K)
+      boundaryFamilyEquiv (D := D) (Fin K → α)
           (tailVirtualMapES A K
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
         fun u => X * Kraus.evalWord A (List.ofFn u) := by
@@ -352,23 +352,23 @@ theorem tailBoundaryMapES_comp_tailVirtualMapES
 
 /-- The ordinary Euclidean boundary map factors through the left spectator map. -/
 theorem leftBoundaryMapES_comp_leftVirtualMapES
-    (A : MPSTensor d D) (K L : ℕ) :
+    (A : MPTensor α (Fin D)) (K L : ℕ) :
     (leftBoundaryMapES A K L).comp (leftVirtualMapES A L) =
       groundSpaceMapES A (K + L) := by
   apply ContinuousLinearMap.ext
   intro x
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm
       (leftBoundaryMap A K L
-        (boundaryFamilyEquiv (D := D) (Cfg d L)
+        (boundaryFamilyEquiv (D := D) (Fin L → α)
           (leftVirtualMapES A L
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)))) =
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm
       (groundSpaceMap A (K + L) X)
-  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm ?_
+  refine congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm ?_
   have hfamily :
-      boundaryFamilyEquiv (D := D) (Cfg d L)
+      boundaryFamilyEquiv (D := D) (Fin L → α)
           (leftVirtualMapES A L
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
         fun τ => Kraus.evalWord A (List.ofFn τ) * X := by
@@ -382,41 +382,41 @@ theorem leftBoundaryMapES_comp_leftVirtualMapES
 /-- Injectivity of the local length-\(L\) boundary map implies injectivity of the
 tail spectator boundary map, including when the spectator configuration type is empty. -/
 theorem tailBoundaryMapES_injective_of_groundSpaceMapES_injective
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A L)) :
     Function.Injective (tailBoundaryMapES A K L) := by
   intro x y hxy
-  apply (boundaryFamilyEquiv (D := D) (Cfg d K)).injective
+  apply (boundaryFamilyEquiv (D := D) (Fin K → α)).injective
   funext u
   apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
   apply h
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
     groundSpaceMapES_frobeniusEquivEuclidean_apply]
-  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
   have hraw :
-      tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) x) =
-        tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d K) y) := by
-    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.injective hxy
+      tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin K → α) x) =
+        tailBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin K → α) y) := by
+    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm.injective hxy
   simpa using congrArg (tailRestrictₗ u) hraw
 
 /-- Injectivity of the local length-\(K\) boundary map implies injectivity of the
 left spectator boundary map, including when the spectator configuration type is empty. -/
 theorem leftBoundaryMapES_injective_of_groundSpaceMapES_injective
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A K)) :
     Function.Injective (leftBoundaryMapES A K L) := by
   intro x y hxy
-  apply (boundaryFamilyEquiv (D := D) (Cfg d L)).injective
+  apply (boundaryFamilyEquiv (D := D) (Fin L → α)).injective
   funext τ
   apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
   apply h
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
     groundSpaceMapES_frobeniusEquivEuclidean_apply]
-  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) K)).symm
+  apply congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace α K)).symm
   have hraw :
-      leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d L) x) =
-        leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Cfg d L) y) := by
-    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.injective hxy
+      leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin L → α) x) =
+        leftBoundaryMap A K L (boundaryFamilyEquiv (D := D) (Fin L → α) y) := by
+    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm.injective hxy
   simpa using congrArg (prefixRestrictₗ τ) hraw
 
 /-! ### C3 overlapping-window projector identity -/
@@ -424,23 +424,23 @@ theorem leftBoundaryMapES_injective_of_groundSpaceMapES_injective
 /-- Reassociate the physical configuration coordinates from \(K+(L+Q)\) sites to
 \((K+L)+Q\) sites. -/
 noncomputable def physicalReassocES (K L Q : ℕ) :
-    EuclideanSpace ℂ (Cfg d (K + (L + Q))) ≃L[ℂ]
-      EuclideanSpace ℂ (Cfg d (K + L + Q)) :=
+    EuclideanSpace ℂ (Fin (K + (L + Q)) → α) ≃L[ℂ]
+      EuclideanSpace ℂ (Fin (K + L + Q) → α) :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (Equiv.arrowCongr (finCongr (Nat.add_assoc K L Q).symm)
-      (Equiv.refl (Fin d)))).toContinuousLinearEquiv
+      (Equiv.refl α))).toContinuousLinearEquiv
 
 /-- Reassociation is the identity when the suffix increment has length one. -/
 theorem physicalReassocES_one (K L : ℕ) :
-    physicalReassocES (d := d) K L 1 = 1 := by
+    physicalReassocES K L 1 = 1 := by
   have hfin : finCongr (Nat.add_assoc K L 1).symm = Equiv.refl (Fin (K + L + 1)) := by
     apply Equiv.ext
     intro i
     apply Fin.ext
     exact finCongr_apply_coe _ _
   have harrow :
-      Equiv.arrowCongr (finCongr (Nat.add_assoc K L 1).symm) (Equiv.refl (Fin d)) =
-        Equiv.refl (Cfg d (K + L + 1)) := by
+      Equiv.arrowCongr (finCongr (Nat.add_assoc K L 1).symm) (Equiv.refl α) =
+        Equiv.refl (Fin (K + L + 1) → α) := by
     rw [hfin]
     rfl
   apply ContinuousLinearEquiv.coe_injective
@@ -448,15 +448,15 @@ theorem physicalReassocES_one (K L : ℕ) :
   intro v
   change LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (Equiv.arrowCongr (finCongr (Nat.add_assoc K L 1).symm)
-        (Equiv.refl (Fin d))) v = v
+        (Equiv.refl α)) v = v
   rw [harrow]
   rfl
 
 /-- Reassociation sends the length-\(K+(L+Q)\) ground-space map to the
 length-\((K+L)+Q\) ground-space map in the common physical coordinates. -/
 theorem physicalReassocES_comp_groundSpaceMapES
-    (A : MPSTensor d D) (K L Q : ℕ) :
-    (physicalReassocES (d := d) K L Q).toContinuousLinearMap.comp
+    (A : MPTensor α (Fin D)) (K L Q : ℕ) :
+    (physicalReassocES K L Q).toContinuousLinearMap.comp
         (groundSpaceMapES A (K + (L + Q))) =
       groundSpaceMapES A (K + L + Q) := by
   apply ContinuousLinearMap.ext
@@ -465,7 +465,7 @@ theorem physicalReassocES_comp_groundSpaceMapES
   intro σ
   have hword :
       List.ofFn (((finCongr (Nat.add_assoc K L Q)).arrowCongr
-        (Equiv.refl (Fin d))) σ) = List.ofFn σ := by
+        (Equiv.refl α)) σ) = List.ofFn σ := by
     convert (List.ofFn_congr (m := K + L + Q) (n := K + (L + Q))
       (Nat.add_assoc K L Q) σ).symm using 1
     ext i
@@ -475,14 +475,14 @@ theorem physicalReassocES_comp_groundSpaceMapES
 
 /-- The tail window of length \(L+Q\), reassociated into the
 \((K+L)+Q\)-site ambient Euclidean space. -/
-noncomputable def reassocTailBoundaryMapES (A : MPSTensor d D) (K L Q : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d (K + L + Q)) :=
-  (physicalReassocES (d := d) K L Q).toContinuousLinearMap.comp
+noncomputable def reassocTailBoundaryMapES (A : MPTensor α (Fin D)) (K L Q : ℕ) :
+    BoundaryFamilySpace (D := D) (Fin K → α) →L[ℂ]
+      EuclideanSpace ℂ (Fin (K + L + Q) → α) :=
+  (physicalReassocES K L Q).toContinuousLinearMap.comp
     (tailBoundaryMapES A K (L + Q))
 
 /-- A one-site suffix increment needs no physical-coordinate reassociation. -/
-theorem reassocTailBoundaryMapES_one (A : MPSTensor d D) (K L : ℕ) :
+theorem reassocTailBoundaryMapES_one (A : MPTensor α (Fin D)) (K L : ℕ) :
     reassocTailBoundaryMapES A K L 1 = tailBoundaryMapES A K (L + 1) := by
   rw [reassocTailBoundaryMapES, physicalReassocES_one]
   rfl
@@ -490,7 +490,7 @@ theorem reassocTailBoundaryMapES_one (A : MPSTensor d D) (K L : ℕ) :
 /-- The reassociated tail map has the same whole-window factorization as the
 left window with \(Q\) spectator sites. -/
 theorem reassocTailBoundaryMapES_comp_tailVirtualMapES
-    (A : MPSTensor d D) (K L Q : ℕ) :
+    (A : MPTensor α (Fin D)) (K L Q : ℕ) :
     (reassocTailBoundaryMapES A K L Q).comp (tailVirtualMapES A K) =
       groundSpaceMapES A (K + L + Q) := by
   rw [reassocTailBoundaryMapES, ContinuousLinearMap.comp_assoc,
@@ -503,7 +503,7 @@ advances by an arbitrary suffix increment \(Q\). The tail window has length
 window has length \(K+L+Q\). Reassociation places all three maps in that last
 Euclidean ambient space. This identity is algebraic and asserts no norm estimate. -/
 theorem whole_increment_injectiveRangeProjector_residual_eq
-    (A : MPSTensor d D) (K L Q : ℕ)
+    (A : MPTensor α (Fin D)) (K L Q : ℕ)
     (hTail : Function.Injective (reassocTailBoundaryMapES A K L Q))
     (hLeft : Function.Injective (leftBoundaryMapES A (K + L) Q))
     (hFull : Function.Injective (groundSpaceMapES A (K + L + Q))) :
@@ -545,7 +545,7 @@ ground space, by `range_tailBoundaryMapES`, `range_leftBoundaryMapES_one`, and
 `range_groundSpaceMapES`. All three map injectivity assumptions are explicit.
 This identity is purely algebraic and asserts no norm estimate. -/
 theorem c3_injectiveRangeProjector_residual_eq
-    (A : MPSTensor d D) (K L₀ : ℕ)
+    (A : MPTensor α (Fin D)) (K L₀ : ℕ)
     (hTail : Function.Injective (tailBoundaryMapES A K (L₀ + 1)))
     (hLeft : Function.Injective (leftBoundaryMapES A (K + L₀) 1))
     (hFull : Function.Injective (groundSpaceMapES A (K + L₀ + 1))) :
@@ -750,13 +750,13 @@ theorem norm_boundaryFiberwiseMap_le (S : Type*) [Fintype S]
 /-- The tail Gram is the direct sum, over prefix spectators, of copies of the
 length-`L` MPS Gram. This bilinear identity remains valid for empty spectator types. -/
 theorem inner_tailBoundaryMapES_adjoint_comp_self
-    (A : MPSTensor d D) (K L : ℕ)
-    (x y : BoundaryFamilySpace (D := D) (Cfg d K)) :
+    (A : MPTensor α (Fin D)) (K L : ℕ)
+    (x y : BoundaryFamilySpace (D := D) (Fin K → α)) :
     inner ℂ y ((tailBoundaryMapES A K L).adjoint (tailBoundaryMapES A K L x)) =
-      ∑ u : Cfg d K, inner ℂ (boundaryFamilyFiber (D := D) y u)
+      ∑ u : (Fin K → α), inner ℂ (boundaryFamilyFiber (D := D) y u)
         (groundSpaceGram A L (boundaryFamilyFiber (D := D) x u)) := by
   rw [ContinuousLinearMap.adjoint_inner_right, PiLp.inner_apply]
-  trans ∑ p : Cfg d K × Cfg d L,
+  trans ∑ p : (Fin K → α) × (Fin L → α),
       inner ℂ ((tailBoundaryMapES A K L y) (Fin.appendEquiv K L p))
         ((tailBoundaryMapES A K L x) (Fin.appendEquiv K L p))
   · symm
@@ -782,13 +782,13 @@ theorem inner_tailBoundaryMapES_adjoint_comp_self
 /-- The left Gram is the direct sum, over suffix spectators, of copies of the
 length-`K` MPS Gram. This bilinear identity remains valid for empty spectator types. -/
 theorem inner_leftBoundaryMapES_adjoint_comp_self
-    (A : MPSTensor d D) (K L : ℕ)
-    (x y : BoundaryFamilySpace (D := D) (Cfg d L)) :
+    (A : MPTensor α (Fin D)) (K L : ℕ)
+    (x y : BoundaryFamilySpace (D := D) (Fin L → α)) :
     inner ℂ y ((leftBoundaryMapES A K L).adjoint (leftBoundaryMapES A K L x)) =
-      ∑ τ : Cfg d L, inner ℂ (boundaryFamilyFiber (D := D) y τ)
+      ∑ τ : (Fin L → α), inner ℂ (boundaryFamilyFiber (D := D) y τ)
         (groundSpaceGram A K (boundaryFamilyFiber (D := D) x τ)) := by
   rw [ContinuousLinearMap.adjoint_inner_right, PiLp.inner_apply]
-  trans ∑ p : Cfg d K × Cfg d L,
+  trans ∑ p : (Fin K → α) × (Fin L → α),
       inner ℂ ((leftBoundaryMapES A K L y) (Fin.appendEquiv K L p))
         ((leftBoundaryMapES A K L x) (Fin.appendEquiv K L p))
   · symm
@@ -814,26 +814,26 @@ theorem inner_leftBoundaryMapES_adjoint_comp_self
 
 /-- Operator form of the exact tail direct-sum Gram identity. -/
 theorem tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram
-    (A : MPSTensor d D) (K L : ℕ) :
+    (A : MPTensor α (Fin D)) (K L : ℕ) :
     (tailBoundaryMapES A K L).adjoint.comp (tailBoundaryMapES A K L) =
-      boundaryFiberwiseMap (D := D) (Cfg d K) (groundSpaceGram A L) := by
+      boundaryFiberwiseMap (D := D) (Fin K → α) (groundSpaceGram A L) := by
   apply ContinuousLinearMap.ext
   intro x
   apply ext_inner_left ℂ
   intro y
   change inner ℂ y ((tailBoundaryMapES A K L).adjoint (tailBoundaryMapES A K L x)) =
-    inner ℂ y (boundaryFiberwiseMap (D := D) (Cfg d K) (groundSpaceGram A L) x)
+    inner ℂ y (boundaryFiberwiseMap (D := D) (Fin K → α) (groundSpaceGram A L) x)
   rw [inner_tailBoundaryMapES_adjoint_comp_self,
     inner_boundaryFiberwiseMap]
 
 /-- The inverse Gram of the tail spectator map acts independently by the inverse
 length-`L` Gram on every prefix fiber. -/
 theorem inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A L)) :
     ContinuousLinearMap.inverseGram (tailBoundaryMapES A K L)
         (tailBoundaryMapES_injective_of_groundSpaceMapES_injective A K L h) =
-      boundaryFiberwiseMap (D := D) (Cfg d K)
+      boundaryFiberwiseMap (D := D) (Fin K → α)
         (ContinuousLinearMap.inverseGram (groundSpaceMapES A L) h) := by
   rw [ContinuousLinearMap.inverseGram_eq_inverse]
   apply ContinuousLinearMap.inverse_eq
@@ -848,26 +848,26 @@ theorem inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram
 
 /-- Operator form of the exact left direct-sum Gram identity. -/
 theorem leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram
-    (A : MPSTensor d D) (K L : ℕ) :
+    (A : MPTensor α (Fin D)) (K L : ℕ) :
     (leftBoundaryMapES A K L).adjoint.comp (leftBoundaryMapES A K L) =
-      boundaryFiberwiseMap (D := D) (Cfg d L) (groundSpaceGram A K) := by
+      boundaryFiberwiseMap (D := D) (Fin L → α) (groundSpaceGram A K) := by
   apply ContinuousLinearMap.ext
   intro x
   apply ext_inner_left ℂ
   intro y
   change inner ℂ y ((leftBoundaryMapES A K L).adjoint (leftBoundaryMapES A K L x)) =
-    inner ℂ y (boundaryFiberwiseMap (D := D) (Cfg d L) (groundSpaceGram A K) x)
+    inner ℂ y (boundaryFiberwiseMap (D := D) (Fin L → α) (groundSpaceGram A K) x)
   rw [inner_leftBoundaryMapES_adjoint_comp_self,
     inner_boundaryFiberwiseMap]
 
 /-- The inverse Gram of the left spectator map acts independently by the inverse
 length-`K` Gram on every suffix fiber. -/
 theorem inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram
-    (A : MPSTensor d D) (K L : ℕ)
+    (A : MPTensor α (Fin D)) (K L : ℕ)
     (h : Function.Injective (groundSpaceMapES A K)) :
     ContinuousLinearMap.inverseGram (leftBoundaryMapES A K L)
         (leftBoundaryMapES_injective_of_groundSpaceMapES_injective A K L h) =
-      boundaryFiberwiseMap (D := D) (Cfg d L)
+      boundaryFiberwiseMap (D := D) (Fin L → α)
         (ContinuousLinearMap.inverseGram (groundSpaceMapES A K) h) := by
   rw [ContinuousLinearMap.inverseGram_eq_inverse]
   apply ContinuousLinearMap.inverse_eq
@@ -887,34 +887,34 @@ end
 section
 
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Fixing the prefix of the reassociated tail boundary map leaves the
 ordinary boundary vector on the middle and right intervals. -/
 theorem reassocTailBoundaryMapES_apply_threeBlock
-    (A : MPSTensor d D) (r m ℓ : ℕ)
-    (y : BoundaryFamilySpace (D := D) (Cfg d r))
-    (μr : Cfg d r) (μm : Cfg d m) (μℓ : Cfg d ℓ) :
+    (A : MPTensor α (Fin D)) (r m ℓ : ℕ)
+    (y : BoundaryFamilySpace (D := D) (Fin r → α))
+    (μr : (Fin r → α)) (μm : (Fin m → α)) (μℓ : (Fin ℓ → α)) :
     reassocTailBoundaryMapES A r m ℓ y
         (Fin.append (Fin.append μr μm) μℓ) =
       groundSpaceMap A (m + ℓ)
-        (boundaryFamilyEquiv (D := D) (Cfg d r) y μr)
+        (boundaryFamilyEquiv (D := D) (Fin r → α) y μr)
         (Fin.append μm μℓ) := by
   change tailBoundaryMapES A r (m + ℓ) y
       (((finCongr (Nat.add_assoc r m ℓ)).arrowCongr
-        (Equiv.refl (Fin d))) (Fin.append (Fin.append μr μm) μℓ)) = _
+        (Equiv.refl α)) (Fin.append (Fin.append μr μm) μℓ)) = _
   have hcfg :
       ((finCongr (Nat.add_assoc r m ℓ)).arrowCongr
-        (Equiv.refl (Fin d))) (Fin.append (Fin.append μr μm) μℓ) =
+        (Equiv.refl α)) (Fin.append (Fin.append μr μm) μℓ) =
         Fin.append μr (Fin.append μm μℓ) := by
     rw [Fin.append_assoc]
     rfl
   rw [hcfg]
   change tailBoundaryMap A r (m + ℓ)
-      (boundaryFamilyEquiv (D := D) (Cfg d r) y)
+      (boundaryFamilyEquiv (D := D) (Fin r → α) y)
       (Fin.append μr (Fin.append μm μℓ)) = _
   exact tailBoundaryMap_append A r (m + ℓ)
-    (boundaryFamilyEquiv (D := D) (Cfg d r) y) μr (Fin.append μm μℓ)
+    (boundaryFamilyEquiv (D := D) (Fin r → α) y) μr (Fin.append μm μℓ)
 
 end MPSTensor
 

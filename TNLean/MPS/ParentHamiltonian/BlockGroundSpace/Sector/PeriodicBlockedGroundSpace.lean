@@ -31,11 +31,10 @@ docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ} {ι : Type*} [Fintype ι] {dim : ι → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {ι : Type*} [Fintype ι] {dim : ι → ℕ}
 
 /-- An isometric resolution of the virtual identity identifies the ambient
 open MPS space with the sum of the sector spaces at every length, including zero.
@@ -43,7 +42,7 @@ The hypotheses express the letterwise sector decomposition in DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. This is a
 trace-cyclicity consequence, rather than a consequence of equality of MPVs. -/
 theorem groundSpace_eq_iSup_of_isometric_sector_resolution
-    (C : MPSTensor d D) (B : (j : ι) → MPSTensor d (dim j))
+    (C : MPTensor α (Fin D)) (B : (j : ι) → MPTensor α (Fin (dim j)))
     (V : (j : ι) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
@@ -84,7 +83,7 @@ theorem groundSpace_eq_iSup_of_isometric_sector_resolution
 physical Euclidean Hilbert space. Source context: Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, lines 1504--1538. -/
 theorem map_groundSpace_eq_iSup_of_isometric_sector_resolution
-    (C : MPSTensor d D) (B : (j : ι) → MPSTensor d (dim j))
+    (C : MPTensor α (Fin D)) (B : (j : ι) → MPTensor α (Fin (dim j)))
     (V : (j : ι) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hV : ∀ j, (V j)ᴴ * V j = 1)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
@@ -103,11 +102,11 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451;
 the open-space conclusion is the supported word contraction underlying the
 local support spaces of Nachtergaele, arXiv:cond-mat/9410110, Section 3. -/
 theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
-    {A : MPSTensor d D} (hA : IsPeriodic m A) (p : ℕ) (hp : 0 < p) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) (p : ℕ) (hp : 0 < p) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
       (dim : Fin (m.gcd p) → ℕ)
-      (blocks : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+      (blocks : (a : Fin (m.gcd p)) → MPTensor (Fin p → α) (Fin (dim a)))
       (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ),
       (∀ u, IsOrthogonalProjection (P u)) ∧ (∑ u, P u) = 1 ∧
       (∀ u, P u ≠ 0) ∧ (∀ u i, P u * A i = A i * P (u + 1)) ∧
@@ -115,17 +114,17 @@ theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
       (∀ a, IsLeftCanonical (blocks a)) ∧
       (∀ a, (V a)ᴴ * V a = 1) ∧
       (∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a) ∧
-      (∀ a i, blocks a i = (V a)ᴴ * blockTensor A p i * V a) ∧
-      (∀ a i, blockTensor A p i * V a = V a * blocks a i) ∧
-      (∀ N, ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      (∀ a i, blocks a i = (V a)ᴴ * Kraus.block A p i * V a) ∧
+      (∀ a i, Kraus.block A p i * V a = V a * blocks a i) ∧
+      (∀ N, ((groundSpace (Kraus.block A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
         ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) blocks) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) ∧
       (∀ a, IsPeriodic (m / m.gcd p) (blocks a)) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, blocks, V, hproj, hsum, hne, hshift, hdim, htotal, hcan,
     _hMPV, hiso, hV, hC, hperiod⟩ := hA.exists_stepOrbit_blockDecomposition p
-  have hInt (a : Fin (m.gcd p)) (i : Fin (blockPhysDim d p)) :
-      blockTensor A p i * V a = V a * blocks a i := by
+  have hInt (a : Fin (m.gcd p)) (i : Fin p → α) :
+      Kraus.block A p i * V a = V a * blocks a i := by
     simp only [hC, ← Matrix.mul_assoc, hV]
     rw [stepOrbitProjection_mul_block P A hshift,
       ← hV, Matrix.mul_assoc, Matrix.mul_assoc, hiso, Matrix.mul_one]
@@ -134,7 +133,7 @@ theorem IsPeriodic.exists_stepOrbit_groundSpaceDecomposition {m : ℕ}
   intro N
   rw [map_groundSpace_toTensorFromBlocks_eq_iSup _ blocks (fun _ => one_ne_zero)]
   refine map_groundSpace_eq_iSup_of_isometric_sector_resolution
-    (blockTensor A p) blocks V hiso ?_ hInt N
+    (Kraus.block A p) blocks V hiso ?_ hInt N
   simp only [hV, sum_stepOrbitProjection, hsum]
 
 end MPSTensor

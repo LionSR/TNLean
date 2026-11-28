@@ -58,7 +58,7 @@ open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A start site whose length-`L` window does not cross the right endpoint of an
 `N`-site open chain.
@@ -71,7 +71,7 @@ abbrev NonwrappingStart (L N : ℕ) :=
 
 /-- The canonical \(\ell^2\) realization of the local ground space has dimension
 \(D^2\) under block injectivity at length \(L\). -/
-theorem map_groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
+theorem map_groundSpace_finrank_eq_of_isNBlkInjective {A : MPTensor α (Fin D)} {L : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) :
     Module.finrank ℂ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) = D ^ 2 := by
@@ -88,22 +88,22 @@ section ChainInteraction
 
 open scoped Matrix MatrixOrder
 
-private theorem contiguousCfg_chainWindow {L N a : ℕ} (h : a + L ≤ N) (ω : Cfg d L)
-    (σ : Cfg d N) (u : Fin L) : contiguousCfg a L ω σ (ManyBody.chainWindow a h u) = ω u := by
+private theorem contiguousCfg_chainWindow {L N a : ℕ} (h : a + L ≤ N) (ω : (Fin L → α))
+    (σ : (Fin N → α)) (u : Fin L) : contiguousCfg a L ω σ (ManyBody.chainWindow a h u) = ω u := by
   unfold contiguousCfg
   rw [dite_eq_left (show a ≤ (ManyBody.chainWindow a h u).val ∧
     (ManyBody.chainWindow a h u).val < a + L by simp)]
   exact congrArg ω (Fin.ext (by simp))
 
 private theorem contiguousCfg_of_forall_chainWindow_ne {L N a : ℕ} (h : a + L ≤ N)
-    (ω : Cfg d L) (σ : Cfg d N) {v : Fin N} (hv : ∀ u, ManyBody.chainWindow a h u ≠ v) :
+    (ω : (Fin L → α)) (σ : (Fin N → α)) {v : Fin N} (hv : ∀ u, ManyBody.chainWindow a h u ≠ v) :
     contiguousCfg a L ω σ v = σ v := by
   unfold contiguousCfg
   rw [dite_eq_right]
   rintro ⟨h₁, h₂⟩
   exact hv ⟨v.val - a, by omega⟩ (Fin.ext (by simp only [ManyBody.val_chainWindow]; omega))
 
-private theorem contiguousCfg_contiguousCfg {L N a : ℕ} (ω ω' : Cfg d L) (τ : Cfg d N) :
+private theorem contiguousCfg_contiguousCfg {L N a : ℕ} (ω ω' : (Fin L → α)) (τ : (Fin N → α)) :
     contiguousCfg a L ω' (contiguousCfg a L ω τ) = contiguousCfg a L ω' τ := by
   funext k
   unfold contiguousCfg
@@ -113,16 +113,16 @@ private theorem contiguousCfg_contiguousCfg {L N a : ℕ} (ω ω' : Cfg d L) (τ
 the matrix on the restriction of the vector to that window, the other sites fixed by `σ`, read
 at the window of `σ`. -/
 theorem placeAlong_chainWindow_mulVec_apply {L N a : ℕ} (h : a + L ≤ N)
-    (K : Matrix (Cfg d L) (Cfg d L) ℂ) (ψ : Cfg d N → ℂ) (σ : Cfg d N) :
-    (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a h) K *ᵥ ψ) σ =
+    (K : Matrix (Fin L → α) (Fin L → α) ℂ) (ψ : (Fin N → α) → ℂ) (σ : (Fin N → α)) :
+    (ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.chainWindow a h) K *ᵥ ψ) σ =
       (K *ᵥ contiguousRestrictₗ a L h σ ψ) (fun u ↦ σ (ManyBody.chainWindow a h u)) := by
   rw [ManyBody.placeAlong_mulVec_apply_of _ _ ψ σ (fun ω ↦ contiguousCfg a L ω σ)
     (contiguousCfg_chainWindow h · σ)
     (fun ω _ hv ↦ contiguousCfg_of_forall_chainWindow_ne h ω σ hv)]
   rfl
 
-private theorem toMatrix'_parentInteraction_mulVec_eq_zero_iff (A : MPSTensor d D) {L : ℕ}
-    (f : Cfg d L → ℂ) :
+private theorem toMatrix'_parentInteraction_mulVec_eq_zero_iff (A : MPTensor α (Fin D)) {L : ℕ}
+    (f : (Fin L → α) → ℂ) :
     LinearMap.toMatrix' (parentInteraction A L) *ᵥ f = 0 ↔ f ∈ groundSpace A L := by
   have hf : f ∈ groundSpace A L ↔ WithLp.toLp 2 f ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
       _).symm.toLinearMap) :=
@@ -134,10 +134,10 @@ private theorem toMatrix'_parentInteraction_mulVec_eq_zero_iff (A : MPSTensor d 
 annihilates a vector exactly when every restriction of the vector to the window of the term,
 the other sites fixed, lies in the local ground space \(G_L(A)\). Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
-theorem parentChainInteraction_term_mulVec_eq_zero_iff (A : MPSTensor d D) {L N : ℕ}
-    (i : Fin (N + 1 - L)) (ψ : Cfg d N → ℂ) :
+theorem parentChainInteraction_term_mulVec_eq_zero_iff (A : MPTensor α (Fin D)) {L N : ℕ}
+    (i : Fin (N + 1 - L)) (ψ : (Fin N → α) → ℂ) :
     (parentChainInteraction A L N).term i *ᵥ ψ = 0 ↔
-      ∀ τ : Cfg d N, contiguousRestrictₗ i.val L (by omega) τ ψ ∈ groundSpace A L := by
+      ∀ τ : (Fin N → α), contiguousRestrictₗ i.val L (by omega) τ ψ ∈ groundSpace A L := by
   have hi : i.val + L ≤ N := by omega
   rw [ManyBody.Interaction.ofPlaceAlong_term]
   constructor
@@ -161,13 +161,13 @@ theorem parentChainInteraction_term_mulVec_eq_zero_iff (A : MPSTensor d D) {L N 
     rfl
 
 /-- Every term of the parent interaction on the open chain is positive semidefinite. -/
-theorem posSemidef_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
+theorem posSemidef_parentChainInteraction_term (A : MPTensor α (Fin D)) (L N : ℕ)
     (i : Fin (N + 1 - L)) : ((parentChainInteraction A L N).term i).PosSemidef :=
   Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.ofPlaceAlong_term_nonneg _
     (fun _ ↦ Matrix.nonneg_iff_posSemidef.mpr (posSemidef_toMatrix'_parentInteraction A L)) i)
 
 /-- Every term of the parent interaction on the open chain is an orthogonal projection. -/
-theorem isStarProjection_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
+theorem isStarProjection_parentChainInteraction_term (A : MPTensor α (Fin D)) (L N : ℕ)
     (i : Fin (N + 1 - L)) : IsStarProjection ((parentChainInteraction A L N).term i) := by
   have hP := isStarProjection_toMatrix'_parentInteraction A L
   rw [ManyBody.Interaction.ofPlaceAlong_term]
@@ -178,17 +178,17 @@ theorem isStarProjection_parentChainInteraction_term (A : MPSTensor d D) (L N : 
 
 /-- Two terms of the parent interaction on the open chain whose windows are ordered and do not
 meet commute. -/
-theorem commute_parentChainInteraction_term_of_add_le (A : MPSTensor d D) {L N : ℕ}
+theorem commute_parentChainInteraction_term_of_add_le (A : MPTensor α (Fin D)) {L N : ℕ}
     {i j : Fin (N + 1 - L)} (hij : i.val + L ≤ j.val) :
     Commute ((parentChainInteraction A L N).term i) ((parentChainInteraction A L N).term j) := by
-  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d) _
+  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ α) _
     (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
   rw [ManyBody.map_chainWindow, ManyBody.mem_interval] at hki hkj
   omega
 
 /-- The Hamiltonian of a restriction of the parent interaction on the open chain to a set of
 windows is positive semidefinite. -/
-theorem posSemidef_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D) (L N : ℕ)
+theorem posSemidef_hamiltonian_restrict_parentChainInteraction (A : MPTensor α (Fin D)) (L N : ℕ)
     (p : Fin (N + 1 - L) → Prop) [DecidablePred p] :
     ((parentChainInteraction A L N).restrict p).hamiltonian.PosSemidef :=
   ManyBody.Interaction.posSemidef_hamiltonian fun i ↦
@@ -196,7 +196,7 @@ theorem posSemidef_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d 
       (posSemidef_parentChainInteraction_term A L N i)
 
 /-- The Hamiltonian of the parent interaction on the open chain is positive semidefinite. -/
-theorem posSemidef_hamiltonian_parentChainInteraction (A : MPSTensor d D) (L N : ℕ) :
+theorem posSemidef_hamiltonian_parentChainInteraction (A : MPTensor α (Fin D)) (L N : ℕ) :
     (parentChainInteraction A L N).hamiltonian.PosSemidef :=
   ManyBody.Interaction.posSemidef_hamiltonian (posSemidef_parentChainInteraction_term A L N)
 
@@ -204,9 +204,9 @@ theorem posSemidef_hamiltonian_parentChainInteraction (A : MPSTensor d D) (L N :
 interaction on the open chain has every restriction to a window of `L` sites in the local
 ground space. Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
 theorem contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction
-    (A : MPSTensor d D) {L N : ℕ} {v : EuclideanSpace ℂ (Cfg d N)}
+    (A : MPTensor α (Fin D)) {L N : ℕ} {v : EuclideanSpace ℂ (Fin N → α)}
     (hv : v ∈ LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian))
-    (s : ℕ) (hs : s + L ≤ N) (τ : Cfg d N) :
+    (s : ℕ) (hs : s + L ≤ N) (τ : (Fin N → α)) :
     contiguousRestrictₗ s L hs τ (WithLp.ofLp v) ∈ groundSpace A L := by
   have hH : (parentChainInteraction A L N).hamiltonian *ᵥ WithLp.ofLp v = 0 := by
     rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero] at hv
@@ -218,10 +218,10 @@ theorem contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChain
 /-- The cyclic form of the frustration-free extraction: for a window that does not cross the
 right endpoint, the cyclic restriction is the contiguous one. -/
 theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) {v : EuclideanSpace ℂ (Cfg d N)}
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hLN : L ≤ N) {v : EuclideanSpace ℂ (Fin N → α)}
     (hv : v ∈ LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian))
-    (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → Fin d) :
-    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N) v) ∈
+    (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → α) :
+    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace α N) v) ∈
       groundSpace A L := by
   rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i) hLN hi]
   exact contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
@@ -230,7 +230,7 @@ theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInte
 /-- The open MPS boundary-condition space lies in the kernel of the Hamiltonian of the parent
 interaction on the open chain: every window restriction of an open-boundary MPS vector is an
 open-boundary MPS vector. Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem map_groundSpace_le_ker_hamiltonian_parentChainInteraction (A : MPSTensor d D)
+theorem map_groundSpace_le_ker_hamiltonian_parentChainInteraction (A : MPTensor α (Fin D))
     (L N : ℕ) :
     ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian) := by
@@ -249,7 +249,7 @@ theorem map_groundSpace_le_ker_hamiltonian_parentChainInteraction (A : MPSTensor
 length-\((L_0+1)\) parent interaction on the open chain lies in the open MPS boundary-condition
 space. Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
 theorem ker_hamiltonian_parentChainInteraction_le_map_groundSpace_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian) ≤
       ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
@@ -262,7 +262,7 @@ theorem ker_hamiltonian_parentChainInteraction_le_map_groundSpace_of_isNBlkInjec
 open chain is exactly the open MPS boundary-condition space. Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
 theorem ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian) =
       ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
@@ -276,7 +276,7 @@ arXiv:cond-mat/9410110, lines 1484--1486, 1505--1510, 1545--1558; Pérez-García
 Wolf--Cirac, arXiv:quant-ph/0608197, lines 1211--1233; arXiv:2011.12127, line 1174 (a lower
 bound; the theorem is sharper than the review's statement). -/
 theorem finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     Module.finrank ℂ (LinearMap.ker
       (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian)) = D ^ 2 := by
@@ -286,7 +286,7 @@ theorem finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective
 
 /-- At volume \(N = L\) the Hamiltonian of the parent interaction on the open chain is the local
 parent interaction itself: the only window is the whole chain. -/
-theorem hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L : ℕ) :
+theorem hamiltonian_parentChainInteraction_self (A : MPTensor α (Fin D)) (L : ℕ) :
     (parentChainInteraction A L L).hamiltonian = LinearMap.toMatrix' (parentInteraction A L) := by
   rw [ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_range, Nat.add_sub_cancel_left,
     Finset.sum_range_one, dite_eq_left (by omega)]
@@ -297,7 +297,7 @@ theorem hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L : ℕ) :
 /-- At the first full-window volume the operator of the open-chain parent Hamiltonian preserves
 the norm on the orthogonal complement of its kernel. -/
 theorem norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker
-    (A : MPSTensor d D) (L : ℕ) (v : EuclideanSpace ℂ (Cfg d L))
+    (A : MPTensor α (Fin D)) (L : ℕ) (v : EuclideanSpace ℂ (Fin L → α))
     (hv : v ∈ (LinearMap.ker
       (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian))ᗮ) :
     ‖Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian v‖ = ‖v‖ := by
@@ -320,7 +320,7 @@ arXiv:cond-mat/9410110, Theorem 2.1(i), for \(L = l + 1\).
 **Scope restriction (single-window volume):** This proves only the volume \(N=L\). It does not
 establish the general-volume C1--C3 martingale gap; see
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
-theorem unit_gap_hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L : ℕ) :
+theorem unit_gap_hamiltonian_parentChainInteraction_self (A : MPTensor α (Fin D)) (L : ℕ) :
     ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian) μ →
         μ = 0 ∨ (1 : ℂ) ≤ μ := by
@@ -337,7 +337,7 @@ Hamiltonian of the interaction restricted to the windows inside it. Therefore
 \]
 The source gives \(d_l=pl-r+1\) for \(\Lambda_n=[1,pn]\); here \(p=1\) and \(r=L\). Nachtergaele,
 arXiv:cond-mat/9410110, condition C1, lines 1030--1041. -/
-theorem parentChainInteraction_C1 (A : MPSTensor d D) {L l : ℕ} (hLl : L ≤ l) (N : ℕ) :
+theorem parentChainInteraction_C1 (A : MPTensor α (Fin D)) {L l : ℕ} (hLl : L ≤ l) (N : ℕ) :
     0 ≤ ∑ n ∈ Finset.Icc l N, ((parentChainInteraction A L N).restrict
         fun i ↦ n - l ≤ i.val ∧ i.val + L ≤ n).hamiltonian ∧
       ∑ n ∈ Finset.Icc l N, ((parentChainInteraction A L N).restrict
@@ -361,7 +361,7 @@ section
 open Filter
 open scoped BigOperators
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Iterating one-step intersections identifies the kernel of the Hamiltonian of the parent
 interaction on the open chain at every volume at least the interaction range. The intersection
@@ -369,7 +369,7 @@ assumption is explicit; no injectivity is assumed. Source: Nachtergaele, arXiv:c
 equations (3.10)--(3.13), Lemma existenceinteraction; PGVWC07, arXiv:quant-ph/0608197,
 Theorem 12. -/
 theorem ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_restriction_intersection
-    [NeZero d] (A : MPSTensor d D) {R N : ℕ} (hR : 0 < R) (hRN : R ≤ N)
+    [Nonempty α] (A : MPTensor α (Fin D)) {R N : ℕ} (hR : 0 < R) (hRN : R ≤ N)
     (hStep : ∀ M, R ≤ M →
       ((⨅ b, (groundSpace A M).comap (restrictLastₗ b)) ⊓
         ⨅ a, (groundSpace A M).comap (restrictFirstₗ a)) = groundSpace A (M + 1)) :
@@ -388,7 +388,7 @@ Hamiltonian of the parent interaction on the open chain has, for every range, th
 boundary-condition space as its kernel. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
 existenceinteraction and equations (3.10)--(3.13). -/
 theorem exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_eventually_intersection
-    [NeZero d] (A : MPSTensor d D)
+    [Nonempty α] (A : MPTensor α (Fin D))
     (hStep : ∀ᶠ n in atTop,
       ((⨅ b, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
         ⨅ a, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) = groundSpace A (n + 2)) :
@@ -451,7 +451,7 @@ open scoped MatrixOrder
 is the local MPS space, that Hamiltonian and the local parent interaction bound one another, in
 the Loewner order, by positive constants. -/
 theorem exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
-    {d D R W : ℕ} (A : MPSTensor d D)
+    {d D R W : ℕ} (A : MPTensor α (Fin D))
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
       ((groundSpace A W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
@@ -485,8 +485,8 @@ when both operators vanish.
 
 Source: CPGSV21, arXiv:2011.12127, lines 1996--1999 and line 2170. -/
 theorem IsParentInteraction.exists_pos_comparison_toEuclideanLin_toMatrix'_parentInteraction
-    {d D R : ℕ} {A : MPSTensor d D}
-    {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
+    {d D R : ℕ} {A : MPTensor α (Fin D)}
+    {h : EuclideanSpace ℂ (Fin R → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin R → α)}
     (hh : IsParentInteraction A R h) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
       (κ : ℂ) • Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A R)) ≤ h ∧

@@ -44,7 +44,7 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Three-site kernel intersection -/
 
@@ -58,8 +58,8 @@ operators.
 
 Source: arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
-    {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
-    {v : NSiteSpace (Fin d) (L + 1)} :
+    {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : NSiteSpace α (L + 1)} :
     Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (0 : Fin (L + 1))) v = 0 ∧
         Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (1 : Fin (L + 1))) v = 0 ↔
       v ∈ groundSpace A (L + 1) := by
@@ -82,7 +82,7 @@ in the local-support notation of arXiv:1606.00608, Definition D.2.
 Source: arXiv:1606.00608, Definition D.2, lines 2205--2218;
 arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem groundSpace_three_eq_adjacent_twoSite_parent_kernels
-    {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
+    {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A) :
     groundSpace A 3 =
       LinearMap.ker (leftPairLift (parentInteraction A 2)) ⊓
         LinearMap.ker (rightPairLift (parentInteraction A 2)) := by
@@ -94,7 +94,7 @@ theorem groundSpace_three_eq_adjacent_twoSite_parent_kernels
     hA (by omega : 1 < 2)).symm
 
 private theorem extractWindow_two_replaceWindow_three_left
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N) (σ : Cfg d 3) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α)) (σ : (Fin 3 → α)) :
     extractWindow 2 i (replaceWindow 3 hN i τ σ) = extractWindow 2 (0 : Fin 3) σ := by
   funext j
   have hfull := congrFun (extractWindow_replaceWindow 3 hN i τ σ)
@@ -109,7 +109,7 @@ private theorem extractWindow_two_replaceWindow_three_left
     (Nat.mod_eq_of_lt (by omega : j.val < 3)).symm
 
 private theorem extractWindow_two_replaceWindow_three_right
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N) (σ : Cfg d 3) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α)) (σ : (Fin 3 → α)) :
     extractWindow 2 (cyclicForwardSite i 1) (replaceWindow 3 hN i τ σ) =
       extractWindow 2 (1 : Fin 3) σ := by
   funext j
@@ -132,8 +132,8 @@ private theorem extractWindow_two_replaceWindow_three_right
     Nat.mod_eq_of_lt (by omega)]
 
 private theorem replaceWindow_three_replaceWindow_two_left
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N) (σ : Cfg d 3)
-    (α : Cfg d 2) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α)) (σ : (Fin 3 → α))
+    (α : (Fin 2 → α)) :
     replaceWindow 3 hN i τ (replaceWindow 2 (by omega) (0 : Fin 3) σ α) =
       replaceWindow 2 (by omega) i (replaceWindow 3 hN i τ σ) α := by
   funext k
@@ -151,8 +151,8 @@ private theorem replaceWindow_three_replaceWindow_two_left
     simp [replaceWindow, off, h3, h2]
 
 private theorem replaceWindow_three_replaceWindow_two_right
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N) (σ : Cfg d 3)
-    (β : Cfg d 2) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α)) (σ : (Fin 3 → α))
+    (β : (Fin 2 → α)) :
     replaceWindow 3 hN i τ (replaceWindow 2 (by omega) (1 : Fin 3) σ β) =
       replaceWindow 2 (by omega) (cyclicForwardSite i 1)
         (replaceWindow 3 hN i τ σ) β := by
@@ -223,8 +223,8 @@ This is the left-face transport for the local relation
 \([\tau_1(P_2),P_2]=0\) in arXiv:1606.00608, Definition 3.9, source lines
 517--524. -/
 theorem cyclicRestrictₗ_three_parentRingInteraction_term_left
-    {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
-    (ψ : NSiteSpace (Fin d) N) :
+    {A : MPTensor α (Fin D)} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α))
+    (ψ : NSiteSpace α N) :
     haveI : NeZero N := ⟨by omega⟩;
     cyclicRestrictₗ (by omega) 3 i τ (Matrix.toLin' ((parentRingInteraction A 2 N).term i) ψ) =
       Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3))
@@ -260,8 +260,8 @@ This is the right-face transport for the local relation
 \([\tau_1(P_2),P_2]=0\) in arXiv:1606.00608, Definition 3.9, source lines
 517--524. -/
 theorem cyclicRestrictₗ_three_parentRingInteraction_term_right
-    {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
-    (ψ : NSiteSpace (Fin d) N) :
+    {A : MPTensor α (Fin D)} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α))
+    (ψ : NSiteSpace α N) :
     haveI : NeZero N := ⟨by omega⟩;
     cyclicRestrictₗ (by omega) 3 i τ
         (Matrix.toLin' ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) ψ) =
@@ -293,7 +293,7 @@ theorem cyclicRestrictₗ_three_parentRingInteraction_term_right
   rw [hfun]
 
 private theorem cyclicRestrictₗ_three_extractWindow
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (σ : Cfg d N) (ψ : NSiteSpace (Fin d) N) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (σ : (Fin N → α)) (ψ : NSiteSpace α N) :
     cyclicRestrictₗ (by omega) 3 i σ ψ (extractWindow 3 i σ) = ψ σ := by
   change ψ (replaceWindow 3 hN i σ (extractWindow 3 i σ)) = ψ σ
   rw [replaceWindow_extractWindow]
@@ -301,15 +301,15 @@ private theorem cyclicRestrictₗ_three_extractWindow
 /-! ### Transport of three-site quadratic forms -/
 
 private theorem re_inner_eq_sum_cyclicRestrict_three {N : ℕ} (hN : 3 ≤ N)
-    [NeZero d] (i : Fin N) (u v : EuclideanSpace ℂ (Cfg d N)) :
+    [Nonempty α] (i : Fin N) (u v : EuclideanSpace ℂ (Fin N → α)) :
     (⟪u, v⟫_ℂ).re =
-      ∑ τ : Cfg d (N - 3),
-        (⟪LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (by omega) 3 i
+      ∑ τ : (Fin (N - 3) → α),
+        (⟪LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i
               (cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ))) u,
-            LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (by omega) 3 i
+            LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i
               (cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ))) v⟫_ℂ).re := by
   rw [PiLp.inner_apply]
-  trans (∑ p : Cfg d 3 × Cfg d (N - 3),
+  trans (∑ p : (Fin 3 → α) × (Fin (N - 3) → α),
     inner ℂ (u.ofLp (cyclicWindowCfgEquiv hN i p))
       (v.ofLp (cyclicWindowCfgEquiv hN i p))).re
   · congr 1
@@ -359,7 +359,7 @@ This is the finite-chain transport of the source relation
 source lines 534--540.  No assertion is made for (N=2), where the two cyclic
 windows traverse the same pair of sites in opposite orders. -/
 theorem parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_one_commute
-    {A : MPSTensor d D}
+    {A : MPTensor α (Fin D)}
     (h₃ :
       Matrix.toLin' ((parentRingInteraction A 2 3).term (0 : Fin 3)) *
           Matrix.toLin' ((parentRingInteraction A 2 3).term (1 : Fin 3)) =
@@ -391,8 +391,8 @@ theorem parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_on
 /-! ### The parent interaction on the ring -/
 
 private theorem withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_left
-    {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
+    {A : MPTensor α (Fin D)} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α))
+    (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ)
         (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v) =
@@ -405,8 +405,8 @@ private theorem withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_lef
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
 private theorem withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_right
-    {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
+    {A : MPTensor α (Fin D)} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : (Fin N → α))
+    (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ)
         (Matrix.toEuclideanLin
@@ -428,8 +428,8 @@ whose three-site window crosses the periodic cut. This is the source form
 \(h_i h_j + h_j h_i \geq -c(h_i+h_j)\) from arXiv:2011.12127, Section IV.C,
 lines 2170--2180. -/
 theorem re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite
-    [NeZero d] {A : MPSTensor d D} {c : ℝ}
-    (h₃ : ∀ w : EuclideanSpace ℂ (Cfg d 3),
+    [Nonempty α] {A : MPTensor α (Fin D)} {c : ℝ}
+    (h₃ : ∀ w : EuclideanSpace ℂ (Fin 3 → α),
       -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0) w,
             w⟫_ℂ).re +
           (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
@@ -440,7 +440,7 @@ theorem re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_three
           (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
             Matrix.toEuclideanLin
               ((parentRingInteraction A 2 3).term 0) w⟫_ℂ).re)
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := ⟨by omega⟩;
     -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v,
           v⟫_ℂ).re +
@@ -471,8 +471,8 @@ coefficient. The proof starts the forward three-site window at the cyclic predec
 \(i\); when \(i = 0\), this is the wrapping pair between sites \(0\) and \(N-1\). Source:
 arXiv:2011.12127, Section IV.C, lines 2170--2180. -/
 theorem re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite
-    [NeZero d] {A : MPSTensor d D} {c : ℝ}
-    (h₃ : ∀ w : EuclideanSpace ℂ (Cfg d 3),
+    [Nonempty α] {A : MPTensor α (Fin D)} {c : ℝ}
+    (h₃ : ∀ w : EuclideanSpace ℂ (Fin 3 → α),
       -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0) w,
             w⟫_ℂ).re +
           (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
@@ -483,7 +483,7 @@ theorem re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_thre
           (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
             Matrix.toEuclideanLin
               ((parentRingInteraction A 2 3).term 0) w⟫_ℂ).re)
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := ⟨by omega⟩;
     -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v,
           v⟫_ℂ).re +

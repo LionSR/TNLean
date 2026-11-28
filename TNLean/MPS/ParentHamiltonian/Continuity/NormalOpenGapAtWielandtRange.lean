@@ -35,14 +35,14 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Injectivity at \(p>0\) gives a uniform positive gap of the original
 range-\(p+1\) open parent Hamiltonian at every admissible chain length,
 including \(N=p+1\): every eigenvalue is `0` or at least the gap. Source: arXiv:2011.12127,
 Section IV.C, lines 2183--2187; arXiv:cond-mat/9410110, Section 6. -/
 theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective_all_lengths
-    [NeZero D] (A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, p + 1 ≤ N →
       ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -65,7 +65,7 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
 at least the gap. Source: arXiv:0909.5347, lines 827--832; arXiv:2011.12127,
 Section IV.C, lines 2183--2187. -/
 theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective_of_lt
-    [NeZero D] (A : MPSTensor d D) {p R : ℕ} (hp : 0 < p)
+    [NeZero D] (A : MPTensor α (Fin D)) {p R : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) (hR : p < R) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N →
       ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -81,7 +81,7 @@ positive open-chain gap for an arbitrary normal tensor of bond dimension
 formed from the original tensor's local ground space. Source: arXiv:0909.5347, Theorem 1
 and lines 827--832; arXiv:2011.12127, Section IV.C, lines 2183--2187. -/
 theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsNormal A)
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsNormal A)
     {R : ℕ} (hR : D ^ 4 + 1 ≤ R) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N →
       ∀ μ : ℂ, Module.End.HasEigenvalue
@@ -96,7 +96,7 @@ interaction range \(D^4+1\), uniformly over every chain length
 finite-window gap is assumed. Source: arXiv:0909.5347, Theorem 1 and lines 827--832;
 arXiv:2011.12127, Section IV.C, lines 2183--2187. -/
 theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_all_lengths
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsNormal A) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, D ^ 4 + 1 ≤ N →
       ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction A (D ^ 4 + 1) N).hamiltonian) μ →

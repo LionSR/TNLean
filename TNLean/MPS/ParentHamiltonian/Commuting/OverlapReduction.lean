@@ -17,7 +17,7 @@ whose cyclic supports overlap.
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- To prove that a finite periodic parent Hamiltonian has commuting local
 terms, it suffices to check pairs of translated local terms with overlapping
@@ -28,7 +28,7 @@ non-overlap lemma. This is the finite-chain reduction behind the source
 condition \([\tau_j(P_L),P_L]=0\) for interacting translates in
 arXiv:1606.00608, Definition 3.9. -/
 theorem isCommutingParentHam_of_cyclicWindowsOverlap_commute
-    {A : MPSTensor d D} {L N : ℕ} (hLN : L ≤ N)
+    {A : MPTensor α (Fin D)} {L N : ℕ} (hLN : L ≤ N)
     (hOverlap : ∀ i j : Fin N, cyclicWindowsOverlap N L i j →
       haveI : NeZero N := NeZero.of_pos i.pos;
       Matrix.toLin' ((parentRingInteraction A L N).term i) *
@@ -48,7 +48,7 @@ theorem isCommutingParentHam_of_cyclicWindowsOverlap_commute
 /-- Nearest-neighbor specialization of the overlap reduction for the source
 NNCPH commutation equations. -/
 theorem isNNCPH_of_twoSite_cyclicWindowsOverlap_commute
-    {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
+    {A : MPTensor α (Fin D)} {N : ℕ} (hN : 2 ≤ N)
     (hOverlap : ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
       haveI : NeZero N := NeZero.of_pos i.pos;
       Matrix.toLin' ((parentRingInteraction A 2 N).term i) *
@@ -64,7 +64,7 @@ its cyclic right neighbor implies the full pairwise commutation condition.
 The proof uses the preceding case split for overlapping length-two windows and
 the locality lemma for disjoint windows. -/
 theorem isNNCPH_of_adjacent_twoSite_commute
-    {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
+    {A : MPTensor α (Fin D)} {N : ℕ} (hN : 2 ≤ N)
     (hAdjacent : ∀ i : Fin N,
       haveI : NeZero N := NeZero.of_pos i.pos;
       Matrix.toLin' ((parentRingInteraction A 2 N).term i) *

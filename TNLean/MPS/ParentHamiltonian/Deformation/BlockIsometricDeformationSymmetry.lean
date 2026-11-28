@@ -51,7 +51,7 @@ open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-! ### Algebra automorphisms from equal word traces -/
 
@@ -59,12 +59,12 @@ section WordTraceAutomorphism
 
 /-- Word evaluation extended linearly to finitely supported combinations of
 words, with values in the product of the block matrix algebras. -/
-private noncomputable def wordCombinationTuple (A : (k : Fin r) → MPSTensor d (dim k)) :
-    (List (Fin d) →₀ ℂ) →ₗ[ℂ] ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
+private noncomputable def wordCombinationTuple (A : (k : Fin r) → MPTensor α (Fin (dim k))) :
+    (List α →₀ ℂ) →ₗ[ℂ] ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
   Finsupp.linearCombination ℂ (fun w k => Kraus.evalWord (A k) w)
 
-private theorem wordTuple_mul (A : (k : Fin r) → MPSTensor d (dim k))
-    (v w : List (Fin d)) :
+private theorem wordTuple_mul (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (v w : List α) :
     ((fun k => Kraus.evalWord (A k) v) * fun k => Kraus.evalWord (A k) w) =
       fun k => Kraus.evalWord (A k) (v ++ w) := by
   funext k
@@ -73,10 +73,10 @@ private theorem wordTuple_mul (A : (k : Fin r) → MPSTensor d (dim k))
 /-- The trace pairing against a word is the same on both sides once all word
 traces agree. -/
 private theorem trace_pairing_wordCombinationTuple
-    {A B : (k : Fin r) → MPSTensor d (dim k)}
-    (hTr : ∀ w : List (Fin d), ∑ k, (Kraus.evalWord (A k) w).trace =
+    {A B : (k : Fin r) → MPTensor α (Fin (dim k))}
+    (hTr : ∀ w : List α, ∑ k, (Kraus.evalWord (A k) w).trace =
       ∑ k, (Kraus.evalWord (B k) w).trace)
-    (v : List (Fin d)) (c : List (Fin d) →₀ ℂ) :
+    (v : List α) (c : List α →₀ ℂ) :
     ∑ k, (wordCombinationTuple A c k * Kraus.evalWord (A k) v).trace =
       ∑ k, (wordCombinationTuple B c k * Kraus.evalWord (B k) v).trace := by
   induction c using Finsupp.induction_linear with
@@ -90,8 +90,8 @@ private theorem trace_pairing_wordCombinationTuple
         hTr (w ++ v)]
 
 private theorem ker_wordCombinationTuple_le
-    {A B : (k : Fin r) → MPSTensor d (dim k)}
-    (hTr : ∀ w : List (Fin d), ∑ k, (Kraus.evalWord (A k) w).trace =
+    {A B : (k : Fin r) → MPTensor α (Fin (dim k))}
+    (hTr : ∀ w : List α, ∑ k, (Kraus.evalWord (A k) w).trace =
       ∑ k, (Kraus.evalWord (B k) w).trace)
     (hB : WordTupleSpanTop B 1) :
     LinearMap.ker (wordCombinationTuple A) ≤ LinearMap.ker (wordCombinationTuple B) := by
@@ -103,7 +103,7 @@ private theorem ker_wordCombinationTuple_le
   simp
 
 private theorem range_wordCombinationTuple_eq_top
-    {A : (k : Fin r) → MPSTensor d (dim k)} (hA : WordTupleSpanTop A 1) :
+    {A : (k : Fin r) → MPTensor α (Fin (dim k))} (hA : WordTupleSpanTop A 1) :
     LinearMap.range (wordCombinationTuple A) = ⊤ := by
   rw [wordCombinationTuple, Finsupp.range_linearCombination, eq_top_iff, ← hA]
   apply Submodule.span_mono
@@ -116,13 +116,13 @@ matrix algebras that carries every word of the first family to the same word
 of the second. Source: arXiv:1010.3732, lines 652--660, where state symmetry
 is converted to a virtual action. -/
 theorem exists_algEquiv_of_sum_trace_evalWord_eq
-    {A B : (k : Fin r) → MPSTensor d (dim k)}
-    (hTr : ∀ w : List (Fin d), ∑ k, (Kraus.evalWord (A k) w).trace =
+    {A B : (k : Fin r) → MPTensor α (Fin (dim k))}
+    (hTr : ∀ w : List α, ∑ k, (Kraus.evalWord (A k) w).trace =
       ∑ k, (Kraus.evalWord (B k) w).trace)
     (hA : WordTupleSpanTop A 1) (hB : WordTupleSpanTop B 1) :
     ∃ T : ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) ≃ₐ[ℂ]
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      ∀ w : List (Fin d),
+      ∀ w : List α,
         T (fun k => Kraus.evalWord (A k) w) = fun k => Kraus.evalWord (B k) w := by
   classical
   set FA := wordCombinationTuple A
@@ -143,15 +143,15 @@ theorem exists_algEquiv_of_sum_trace_evalWord_eq
       rw [LinearEquiv.symm_apply_eq]
       rfl
     simp only [T₀, LinearMap.comp_apply, LinearEquiv.coe_coe, hmk, Submodule.liftQ_apply]
-  have hgen : ∀ w : List (Fin d),
+  have hgen : ∀ w : List α,
       T₀ (fun k => Kraus.evalWord (A k) w) = fun k => Kraus.evalWord (B k) w := by
     intro w
     simpa [FA, FB, wordCombinationTuple] using hT₀ (Finsupp.single w 1)
   have hspan : Submodule.span ℂ
-      (Set.range fun w : List (Fin d) => fun k => Kraus.evalWord (A k) w) = ⊤ := by
+      (Set.range fun w : List α => fun k => Kraus.evalWord (A k) w) = ⊤ := by
     rw [← Finsupp.range_linearCombination]
     exact range_wordCombinationTuple_eq_top hA
-  have hmulGen : ∀ (w : List (Fin d)) x,
+  have hmulGen : ∀ (w : List α) x,
       T₀ (x * fun k => Kraus.evalWord (A k) w) = T₀ x * fun k => Kraus.evalWord (B k) w := by
     intro w x
     have h := LinearMap.ext_on hspan
@@ -221,16 +221,16 @@ private theorem blockTrace_one_ne_zero [∀ k, NeZero (dim k)] (hr : r ≠ 0) :
       ⟨⟨0, Nat.pos_of_ne_zero hr⟩, Finset.mem_univ _⟩
   omega
 
-private theorem list_prod_map_letter (A : (k : Fin r) → MPSTensor d (dim k))
-    (w : List (Fin d)) :
+private theorem list_prod_map_letter (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (w : List α) :
     (w.map fun i k => A k i).prod = fun k => Kraus.evalWord (A k) w := by
   induction w with
   | nil => funext k; simp
   | cons i w ih => rw [List.map_cons, List.prod_cons, ih]; funext k; simp
 
-private theorem span_range_letter_eq_top {A : (k : Fin r) → MPSTensor d (dim k)}
+private theorem span_range_letter_eq_top {A : (k : Fin r) → MPTensor α (Fin (dim k))}
     (hA : WordTupleSpanTop A 1) :
-    Submodule.span ℂ (Set.range fun i : Fin d => fun k => A k i) = ⊤ := by
+    Submodule.span ℂ (Set.range fun i : α => fun k => A k i) = ⊤ := by
   rw [eq_top_iff, ← hA]
   apply Submodule.span_mono
   rintro _ ⟨w, rfl⟩
@@ -244,7 +244,7 @@ private theorem mem_unitary_of_norm_eq_one {c : ℂ} (hc : ‖c‖ = 1) : c ∈ 
   Unitary.mem_iff_star_mul_self.mpr (by rw [RCLike.star_def, RCLike.conj_mul, hc]; simp)
 
 private theorem smul_star_smul_of_norm_eq_one {c : ℂ} (hc : ‖c‖ = 1)
-    (u : Matrix (Fin d) (Fin d) ℂ) : c • (star c • u) = u := by
+    (u : Matrix α α ℂ) : c • (star c • u) = u := by
   rw [smul_smul, Unitary.mul_star_self_of_mem (mem_unitary_of_norm_eq_one hc), one_smul]
 
 variable {G : Type*} [Monoid G]
@@ -257,32 +257,32 @@ has phases that are powers of one unimodular scalar: the summed word traces of t
 rotated by \(U_g\) are \(c^{|w|}\) times those of the original blocks, with \(|c|=1\).
 Source: arXiv:1010.3732, lines 655--657 and 2590--2593. -/
 theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hA : WordTupleSpanTop A 1) (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hA : WordTupleSpanTop A 1) (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) :
-    ∃ c : ℂ, ‖c‖ = 1 ∧ ∀ w : List (Fin d),
+    ∃ c : ℂ, ‖c‖ = 1 ∧ ∀ w : List α,
       ∑ k, (Kraus.evalWord (rotatePhysical (U g) (A k)) w).trace =
         c ^ w.length * ∑ k, (Kraus.evalWord (A k) w).trace := by
   classical
   rcases eq_or_ne r 0 with rfl | hr
   · exact ⟨1, by simp, fun w => by simp⟩
-  set x : Fin d → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := fun i k => A k i
+  set x : α → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := fun i k => A k i
     with hxdef
-  set y : Fin d → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
+  set y : α → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
     fun i k => rotatePhysical (U g) (A k) i with hydef
   have hx : Submodule.span ℂ (Set.range x) = ⊤ := span_range_letter_eq_top hA
   have hy : Submodule.span ℂ (Set.range y) = ⊤ :=
     span_range_letter_eq_top (A := fun k => rotatePhysical (U g) (A k))
       ((wordTupleSpanTop_rotatePhysical_iff (U g) (isUnit_of_mem_unitaryGroup (hU g)) A 1).mpr
         hA)
-  have hwx : ∀ w : List (Fin d), (w.map x).prod = fun k => Kraus.evalWord (A k) w :=
+  have hwx : ∀ w : List α, (w.map x).prod = fun k => Kraus.evalWord (A k) w :=
     list_prod_map_letter A
-  have hwy : ∀ w : List (Fin d),
+  have hwy : ∀ w : List α,
       (w.map y).prod = fun k => Kraus.evalWord (rotatePhysical (U g) (A k)) w :=
     list_prod_map_letter (fun k => rotatePhysical (U g) (A k))
-  have hphase : ∀ N, ∃ c : ℂ, ∀ w : List (Fin d), w.length = N →
+  have hphase : ∀ N, ∃ c : ℂ, ∀ w : List α, w.length = N →
       blockTrace dim (w.map y).prod = c * blockTrace dim (w.map x).prod := by
     intro N
     obtain ⟨c, hc⟩ := hSymm g N
@@ -304,7 +304,7 @@ theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
     (fun i j k => by simpa [mul_assoc] using h₃ [i, j, k] rfl)
   refine ⟨c₁, ?_, fun w => by simpa [hwx, hwy, blockTrace_apply] using hpow w⟩
   -- the one-site traces form an eigenvector of \(U_g\) with eigenvalue \(c_1\)
-  set v : Fin d → ℂ := fun i => blockTrace dim (x i) with hvdef
+  set v : α → ℂ := fun i => blockTrace dim (x i) with hvdef
   have hv : v ≠ 0 := by
     intro hv0
     apply blockTrace_one_ne_zero (dim := dim) hr
@@ -333,22 +333,22 @@ theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
   exact CStarRing.norm_of_mem_unitary (Unitary.mem_iff_star_mul_self.mpr hcc)
 
 /-- Rotation by a rescaled physical matrix rescales every rotated letter. -/
-private theorem rotatePhysical_smul_apply {D : ℕ} (a : ℂ) (u : Matrix (Fin d) (Fin d) ℂ)
-    (B : MPSTensor d D) (i : Fin d) :
+private theorem rotatePhysical_smul_apply {D : ℕ} (a : ℂ) (u : Matrix α α ℂ)
+    (B : MPTensor α (Fin D)) (i : α) :
     rotatePhysical (a • u) B i = a • rotatePhysical u B i := by
   simp [rotatePhysical_apply, Finset.smul_sum, smul_smul]
 
 /-- Rescaling a symmetry with phases \(c^N\) by \(\bar c\) gives a unitary physical matrix
 whose rotation preserves all summed word traces. -/
-private theorem rescaled_rotation_data (A : (k : Fin r) → MPSTensor d (dim k))
-    {u : Matrix (Fin d) (Fin d) ℂ} (hu : u ∈ Matrix.unitaryGroup (Fin d) ℂ) {c : ℂ}
+private theorem rescaled_rotation_data (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    {u : Matrix α α ℂ} (hu : u ∈ Matrix.unitaryGroup α ℂ) {c : ℂ}
     (hc : ‖c‖ = 1)
-    (hTr : ∀ w : List (Fin d), ∑ k, (Kraus.evalWord (rotatePhysical u (A k)) w).trace =
+    (hTr : ∀ w : List α, ∑ k, (Kraus.evalWord (rotatePhysical u (A k)) w).trace =
       c ^ w.length * ∑ k, (Kraus.evalWord (A k) w).trace) :
-    star c • u ∈ Matrix.unitaryGroup (Fin d) ℂ ∧
-      (∀ w : List (Fin d), ∑ k, (Kraus.evalWord (A k) w).trace =
+    star c • u ∈ Matrix.unitaryGroup α ℂ ∧
+      (∀ w : List α, ∑ k, (Kraus.evalWord (A k) w).trace =
         ∑ k, (Kraus.evalWord (rotatePhysical (star c • u) (A k)) w).trace) ∧
-      ∀ (k : Fin r) (i : Fin d),
+      ∀ (k : Fin r) (i : α),
         rotatePhysical u (A k) i = c • rotatePhysical (star c • u) (A k) i := by
   have hcu := mem_unitary_of_norm_eq_one hc
   have hstar : star c * c = 1 := (Unitary.mem_iff.mp hcu).1
@@ -370,13 +370,13 @@ section BlockPermutation
 /-- A property of tensors of every bond dimension transfers along the
 identification of two equal bond dimensions. -/
 private theorem reindex_finCongr_transport {m n : ℕ} (h : m = n)
-    (P : (D : ℕ) → MPSTensor d D → Prop) {B : MPSTensor d m} (hB : P m B) :
+    (P : (D : ℕ) → MPTensor α (Fin D) → Prop) {B : MPTensor α (Fin m)} (hB : P m B) :
     P n (fun i => Matrix.reindex (finCongr h) (finCongr h) (B i)) := by
   subst h
   simpa using hB
 
 private theorem isInjective_of_wordTupleSpanTop_one
-    {A : (k : Fin r) → MPSTensor d (dim k)} (hA : WordTupleSpanTop A 1) (k : Fin r) :
+    {A : (k : Fin r) → MPTensor α (Fin (dim k))} (hA : WordTupleSpanTop A 1) (k : Fin r) :
     Kraus.IsInjective (A k) := by
   classical
   rw [Kraus.IsInjective, eq_top_iff]
@@ -397,9 +397,9 @@ private theorem isInjective_of_wordTupleSpanTop_one
 /-- A physical rotation preserving all summed word traces of jointly spanning blocks
 permutes the blocks up to gauge. -/
 private theorem exists_perm_gauge_rotatePhysical_of_sum_trace_eq
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k)) (hA : WordTupleSpanTop A 1)
-    (u : Matrix (Fin d) (Fin d) ℂ) (hu : IsUnit u)
-    (hTr : ∀ w : List (Fin d), ∑ k, (Kraus.evalWord (A k) w).trace =
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k))) (hA : WordTupleSpanTop A 1)
+    (u : Matrix α α ℂ) (hu : IsUnit u)
+    (hTr : ∀ w : List α, ∑ k, (Kraus.evalWord (A k) w).trace =
       ∑ k, (Kraus.evalWord (rotatePhysical u (A k)) w).trace) :
     ∃ (σ : Equiv.Perm (Fin r)) (hdim : ∀ k, dim (σ k) = dim k)
       (X : ∀ k, GL (Fin (dim k)) ℂ),
@@ -419,10 +419,10 @@ private theorem exists_perm_gauge_rotatePhysical_of_sum_trace_eq
 /-- In the trace-preserving canonical normalization, the gauges of
 `exists_perm_gauge_rotatePhysical_of_sum_trace_eq` for a unitary rotation are unitary. -/
 private theorem exists_perm_unitary_rotatePhysical_of_sum_trace_eq
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (u : Matrix (Fin d) (Fin d) ℂ) (hU : u ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hTr : ∀ w : List (Fin d), ∑ k, (Kraus.evalWord (A k) w).trace =
+    (u : Matrix α α ℂ) (hU : u ∈ Matrix.unitaryGroup α ℂ)
+    (hTr : ∀ w : List α, ∑ k, (Kraus.evalWord (A k) w).trace =
       ∑ k, (Kraus.evalWord (rotatePhysical u (A k)) w).trace) :
     ∃ (σ : Equiv.Perm (Fin r)) (hdim : ∀ k, dim (σ k) = dim k)
       (V : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -460,9 +460,9 @@ whose blocks jointly span at one site permutes the blocks: for a unimodular scal
 the twist of the block \(\sigma(k)\) by \(U_g\) is \(c\) times a gauge transform of the
 block \(k\). Source: arXiv:1010.3732, lines 652--660, for several normal blocks. -/
 theorem exists_perm_gauge_rotatePhysical_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hA : WordTupleSpanTop A 1) (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hA : WordTupleSpanTop A 1) (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) :
     ∃ c : ℂ, ‖c‖ = 1 ∧ ∃ (σ : Equiv.Perm (Fin r)) (hdim : ∀ k, dim (σ k) = dim k)
@@ -485,10 +485,10 @@ which a symmetry up to a phase permutes the blocks are unitary. Source: arXiv:10
 lines 652--660, for several normal blocks in the standard form
 \(\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I\). -/
 theorem exists_perm_unitary_rotatePhysical_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) :
     ∃ c : ℂ, ‖c‖ = 1 ∧ ∃ (σ : Equiv.Perm (Fin r)) (hdim : ∀ k, dim (σ k) = dim k)
@@ -549,7 +549,7 @@ private theorem blockVirtualAction_mem_unitaryGroup (σ : Equiv.Perm (Fin r))
     Matrix.submatrix_one_equiv]
 
 private theorem blockPhysicalMatrix_mul_blockVirtualAction
-    (A : (k : Fin r) → MPSTensor d (dim k)) (u : Matrix (Fin d) (Fin d) ℂ)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) (u : Matrix α α ℂ)
     (σ : Equiv.Perm (Fin r)) (hdim : ∀ k, dim (σ k) = dim k)
     (V : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
     (hCov : ∀ k i, Matrix.reindex (finCongr (hdim k)) (finCongr (hdim k))
@@ -582,10 +582,10 @@ variable {G : Type*} [Monoid G]
 normalization has a unitary virtual action on the joint physical map: \(U_gP=PX_g\).
 Source: arXiv:1010.3732, lines 652--660, for several normal blocks. -/
 theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) :
     ∃ X : Matrix (BlockEntryIndex dim) (BlockEntryIndex dim) ℂ,
@@ -607,10 +607,10 @@ theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetricUpToPh
 normalization commutes with a symmetry up to a phase.
 Source: arXiv:1010.3732, lines 660--676, for several normal blocks. -/
 theorem commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) :
     Commute (U g) (leftPolarPhysicalFactor A) := by
@@ -623,10 +623,10 @@ theorem commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase
 intertwines the whole constructed isometric deformation.
 Source: arXiv:1010.3732, lines 672--676, for several normal blocks. -/
 theorem exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) :
     ∃ X : Matrix (BlockEntryIndex dim) (BlockEntryIndex dim) ℂ,
@@ -641,7 +641,7 @@ theorem exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetri
     blockPhysicalMatrix_isometricDeformationBlocks_covariance A (U g) X (hU g) hX hCov γ⟩
 
 /-- The \(L\)-fold on-site power of a rescaled matrix is the rescaled power. -/
-private theorem onSiteTensorPow_smul (L : ℕ) (a : ℂ) (u : Matrix (Fin d) (Fin d) ℂ) :
+private theorem onSiteTensorPow_smul (L : ℕ) (a : ℂ) (u : Matrix α α ℂ) :
     onSiteTensorPow L (a • u) = a ^ L • onSiteTensorPow L u := by
   ext σ τ
   simp [onSiteTensorPow_apply, Finset.prod_mul_distrib, Finset.prod_const]
@@ -650,9 +650,9 @@ private theorem onSiteTensorPow_smul (L : ℕ) (a : ℂ) (u : Matrix (Fin d) (Fi
 site preserves every local MPS space of the tensor.
 Source: arXiv:1010.3732, lines 672--676, for several normal blocks. -/
 theorem map_groundSpace_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hA : WordTupleSpanTop A 1) (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hA : WordTupleSpanTop A 1) (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (L : ℕ) :
     (((groundSpace (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) L).map (WithLp.linearEquiv 2 ℂ
@@ -697,10 +697,10 @@ canonical normalization persists in the matrix of the canonical two-site parent 
 along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
 theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) :
     Commute (LinearMap.toMatrix' (parentInteraction
@@ -717,10 +717,10 @@ canonical normalization persists in the inverse-conjugated positive
 interaction along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
 theorem isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) :
     Commute (isometricDeformationInteraction A γ) (onSiteTensorPow 2 (U g)) :=
@@ -736,10 +736,10 @@ along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
 theorem
     hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -759,10 +759,10 @@ along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
 theorem
     hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) (N : ℕ) :
     Commute (parentChainInteraction
@@ -777,10 +777,10 @@ canonical normalization persists in the periodic sum of inverse-conjugated
 positive interactions along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
 theorem isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -797,10 +797,10 @@ canonical normalization persists in the open sum of inverse-conjugated
 positive interactions along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
 theorem isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetricUpToPhase
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) (N : ℕ) :
     Commute (ManyBody.Interaction.chainTranslates 2 N

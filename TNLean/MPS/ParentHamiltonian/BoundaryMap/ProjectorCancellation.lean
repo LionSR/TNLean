@@ -33,7 +33,7 @@ open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The virtual residual inside the exact C3 projector factorization, expanded
 around the limiting Gram metric.  The three correction terms isolate,
@@ -47,17 +47,17 @@ This is an exact telescoping identity.  Positive definiteness is used only to
 supply the invertible center \(K_\infty\); no rational contraction coefficient
 is asserted. -/
 theorem c3_virtualResidual_eq_centered_sub_gramErrors [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hFull : Function.Injective (groundSpaceMapES A (K + l + 1))) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K)
+    let Ktail := boundaryFiberwiseMap (D := D) (Fin K → α)
       (groundSpaceGram A (l + 1))
-    let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-    let Kleft := boundaryFiberwiseMap (D := D) (Cfg d 1)
+    let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+    let Kleft := boundaryFiberwiseMap (D := D) (Fin 1 → α)
       (groundSpaceGram A (K + l))
-    let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
+    let Kinfleft := boundaryFiberwiseMap (D := D) (Fin 1 → α) Kinf
     let Ifull := ContinuousLinearMap.inverseGram
       (groundSpaceMapES A (K + l + 1)) hFull
     let Iinf := Ring.inverse Kinf
@@ -88,49 +88,49 @@ No transfer fixed-point equation is needed for this zeroth-order identity: the
 only data used are positive definiteness, which supplies the nonsingular
 right-multiplication metric, and the explicit Frobenius adjoint formulas. -/
 theorem inner_limitingMixedGramIntertwining [NeZero D]
-    (A : MPSTensor d D) (K : ℕ)
+    (A : MPTensor α (Fin D)) (K : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin 1 → α)) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-    let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
+    let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+    let Kinfleft := boundaryFiberwiseMap (D := D) (Fin 1 → α) Kinf
     let Iinf := Ring.inverse Kinf
     inner ℂ x
         (Kinftail.comp ((tailVirtualMapES A K).comp
           (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft))) y) =
-      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+      ∑ u : (Fin K → α), ∑ j : (Fin 1 → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             ((Matrix.trace ρ)⁻¹ •
-              ((boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+              ((boundaryFamilyEquiv (D := D) (Fin 1 → α) y j *
                 Kraus.evalWord A (List.ofFn u)) * ρ))) := by
   dsimp only
   simp only [ContinuousLinearMap.comp_apply]
-  have hKfiber (j : Cfg d 1) :
-      boundaryFamilyEquiv (D := D) (Cfg d 1)
-          (boundaryFiberwiseMap (D := D) (Cfg d 1)
+  have hKfiber (j : (Fin 1 → α)) :
+      boundaryFamilyEquiv (D := D) (Fin 1 → α)
+          (boundaryFiberwiseMap (D := D) (Fin 1 → α)
             (Matrix.gramReshuffle
               (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) y) j =
         (Matrix.trace ρ)⁻¹ •
-          (boundaryFamilyEquiv (D := D) (Cfg d 1) y j * ρ) := by
+          (boundaryFamilyEquiv (D := D) (Fin 1 → α) y j * ρ) := by
     rw [boundaryFamilyEquiv_boundaryFiberwiseMap_apply,
       Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
   rw [leftVirtualMapES_adjoint_apply]
   have hsum :
-      (∑ j : Cfg d 1, (Kraus.evalWord A (List.ofFn j))ᴴ *
-        boundaryFamilyEquiv (D := D) (Cfg d 1)
-          (boundaryFiberwiseMap (D := D) (Cfg d 1)
+      (∑ j : (Fin 1 → α), (Kraus.evalWord A (List.ofFn j))ᴴ *
+        boundaryFamilyEquiv (D := D) (Fin 1 → α)
+          (boundaryFiberwiseMap (D := D) (Fin 1 → α)
             (Matrix.gramReshuffle
               (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) y) j) =
-        ∑ j : Cfg d 1, (Kraus.evalWord A (List.ofFn j))ᴴ *
+        ∑ j : (Fin 1 → α), (Kraus.evalWord A (List.ofFn j))ᴴ *
           ((Matrix.trace ρ)⁻¹ •
-            (boundaryFamilyEquiv (D := D) (Cfg d 1) y j * ρ)) := by
+            (boundaryFamilyEquiv (D := D) (Fin 1 → α) y j * ρ)) := by
     apply Finset.sum_congr rfl
     intro j _
     rw [hKfiber j]
@@ -157,28 +157,28 @@ error.  The limiting product is identified by
 `inner_limitingMixedGramIntertwining`; subtracting it from the exact mixed Gram
 therefore leaves precisely the finite length-\(l\) Gram error. -/
 theorem inner_c3_centeredVirtualResidual_eq_gramError [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
+    (x : BoundaryFamilySpace (D := D) (Fin K → α))
+    (y : BoundaryFamilySpace (D := D) (Fin 1 → α)) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-    let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
+    let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+    let Kinfleft := boundaryFiberwiseMap (D := D) (Fin 1 → α) Kinf
     let Iinf := Ring.inverse Kinf
     inner ℂ x
         (((tailBoundaryMapES A K (l + 1)).adjoint.comp
             (leftBoundaryMapES A (K + l) 1) -
           Kinftail.comp ((tailVirtualMapES A K).comp
             (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft)))) y) =
-      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+      ∑ u : (Fin K → α), ∑ j : (Fin 1 → α),
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             (Kraus.evalWord A (List.ofFn j) *
-              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+              boundaryFamilyEquiv (D := D) (Fin K → α) x u))
           ((groundSpaceGram A l - Kinf)
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+              (boundaryFamilyEquiv (D := D) (Fin 1 → α) y j *
                 Kraus.evalWord A (List.ofFn u)))) := by
   dsimp only
   rw [sub_apply, inner_sub_right,
@@ -195,7 +195,7 @@ difference from \(K_\infty^{-1}\).
 The order is the C3 tail projector after the left projector.  This statement is
 purely algebraic and asserts no uniform norm bound. -/
 theorem c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors [NeZero D]
-    (A : MPSTensor d D) (K l : ℕ)
+    (A : MPTensor α (Fin D)) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hLocalTail : Function.Injective (groundSpaceMapES A (l + 1)))
     (hLocalLeft : Function.Injective (groundSpaceMapES A (K + l)))
@@ -206,12 +206,12 @@ theorem c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors [NeZero D
       A (K + l) 1 hLocalLeft
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K)
+    let Ktail := boundaryFiberwiseMap (D := D) (Fin K → α)
       (groundSpaceGram A (l + 1))
-    let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-    let Kleft := boundaryFiberwiseMap (D := D) (Cfg d 1)
+    let Kinftail := boundaryFiberwiseMap (D := D) (Fin K → α) Kinf
+    let Kleft := boundaryFiberwiseMap (D := D) (Fin 1 → α)
       (groundSpaceGram A (K + l))
-    let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
+    let Kinfleft := boundaryFiberwiseMap (D := D) (Fin 1 → α) Kinf
     let IlocalTail := ContinuousLinearMap.inverseGram
       (groundSpaceMapES A (l + 1)) hLocalTail
     let IlocalLeft := ContinuousLinearMap.inverseGram
@@ -238,9 +238,9 @@ theorem c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors [NeZero D
       ContinuousLinearMap.injectiveRangeProjector
         (groundSpaceMapES A (K + l + 1)) hFull =
       (tailBoundaryMapES A K (l + 1)).comp
-        ((boundaryFiberwiseMap (D := D) (Cfg d K) IlocalTail).comp
+        ((boundaryFiberwiseMap (D := D) (Fin K → α) IlocalTail).comp
           (centeredErrors.comp
-            ((boundaryFiberwiseMap (D := D) (Cfg d 1) IlocalLeft).comp
+            ((boundaryFiberwiseMap (D := D) (Fin 1 → α) IlocalLeft).comp
               (leftBoundaryMapES A (K + l) 1).adjoint))) := by
   dsimp only
   rw [c3_injectiveRangeProjector_residual_eq]

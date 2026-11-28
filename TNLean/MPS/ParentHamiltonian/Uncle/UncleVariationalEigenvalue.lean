@@ -109,13 +109,13 @@ are finite scalar inequalities, to be supplied by the canonical transfer
 limits and the mixed-overlap decay. Source application:
 arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/
 theorem norm_mpv_span_projection_sq_le
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b) (N : ℕ)
-    (φ : EuclideanSpace ℂ (Cfg d N))
+    {d a b : ℕ} (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b)) (N : ℕ)
+    (φ : EuclideanSpace ℂ (Fin N → α))
     (hA : (1 / 2 : ℝ) ≤ ‖mpvState A N‖ ^ 2)
     (hB : (1 / 2 : ℝ) ≤ ‖mpvState B N‖ ^ 2)
     (hAB : ‖inner ℂ (mpvState A N) (mpvState B N)‖ ≤ 1 / 4) :
     ‖(Submodule.span ℂ ({mpvState A N, mpvState B N} :
-        Set (EuclideanSpace ℂ (Cfg d N)))).starProjection φ‖ ^ 2 ≤
+        Set (EuclideanSpace ℂ (Fin N → α)))).starProjection φ‖ ^ 2 ≤
       4 * (‖inner ℂ (mpvState A N) φ‖ ^ 2 + ‖inner ℂ (mpvState B N) φ‖ ^ 2) :=
   norm_span_pair_projection_sq_le _ _ _ hA hB hAB
 
@@ -136,9 +136,9 @@ periodic ground sectors. The actual overlap limits are derived from unital
 normalization and mixed damping, rather than supplied as an orthogonality
 premise. Source: arXiv:1210.6613, proof of Theorem thm:gapless. -/
 theorem uncleTwoWallTrialSource_span_projection_tendsto_zero
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    {d a b : ℕ} (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (hGram :
       Tendsto (fun M ↦ ‖mpvState A M‖ ^ 2) atTop (nhds (1 : ℝ)) ∧
@@ -148,8 +148,8 @@ theorem uncleTwoWallTrialSource_span_projection_tendsto_zero
     (hBA : Kraus.mixedMapSpectralRadius B A < 1) :
     Tendsto (fun N : ℕ ↦
       ‖(Submodule.span ℂ ({mpvState A (6 * N + 1), mpvState B (6 * N + 1)} :
-          Set (EuclideanSpace ℂ (Cfg d (6 * N + 1))))).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+          Set (EuclideanSpace ℂ (Fin (6 * N + 1) → α)))).starProjection
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N))‖ ^ 2) atTop (nhds (0 : ℝ)) := by
   have hlen : Tendsto (fun N : ℕ ↦ 6 * N + 1) atTop atTop := by
     apply tendsto_atTop.mpr
@@ -195,10 +195,10 @@ complement vector is derived by subtracting its actual orthogonal projection.
 This is the analytic step of arXiv:1210.6613, proof of thm:gapless,
 lines 1302–1314; no source tensor estimate is asserted by this lemma alone. -/
 theorem eventually_exists_pos_eigenvalue_hamiltonian_uncleInteraction_lt_of_trial_bounds
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (v : (N : ℕ) → EuclideanSpace ℂ (Cfg d (6 * N + 1)))
+    {d a b : ℕ} (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (v : (N : ℕ) → EuclideanSpace ℂ (Fin (6 * N + 1) → α))
     (c : ℝ) (hc : 0 < c)
     (hNorm : ∀ᶠ N : ℕ in atTop, c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤ ‖v N‖ ^ 2)
     (hProj : Tendsto (fun N : ℕ ↦

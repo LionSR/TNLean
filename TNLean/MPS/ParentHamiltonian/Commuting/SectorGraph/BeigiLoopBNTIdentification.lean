@@ -37,11 +37,11 @@ open FiniteWeightedDigraph
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
-/-- The transfer-idempotent normal-tensor criterion on the alphabet `Fin d`. -/
+/-- The transfer-idempotent normal-tensor criterion on the alphabet `α`. -/
 private theorem isNormalTensor_of_isNormal_isTransferIdempotent_fin [NeZero D]
-    (A : MPSTensor d D) (hNormal : Kraus.IsNormal A)
+    (A : MPTensor α (Fin D)) (hNormal : Kraus.IsNormal A)
     (hRFP : IsTransferIdempotent A) : IsNormalTensor A := by
   have hInjective : Kraus.IsInjective A := rfp_nt_structural A hNormal hRFP
   have hIrr : Kraus.IsIrreducibleFamily A :=
@@ -147,16 +147,16 @@ Wielandt Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 -/
 theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
     {D₀ : ℕ}
-    {A : MPSTensor d D₀} (hA : IsNormalTensor A)
+    {A : MPTensor α (Fin D₀)} (hA : IsNormalTensor A)
     {ι : Type*} [Finite ι] {dim : ι → ℕ}
-    (B : (j : ι) → MPSTensor d (dim j))
+    (B : (j : ι) → MPTensor α (Fin (dim j)))
     (hB : ∀ j, IsNormalTensor (B j))
     (hBCross : ∀ i j, i ≠ j →
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (B i) (B j) N)
+      Filter.Tendsto (fun N => mpvOverlap (B i) (B j) N)
         Filter.atTop (nhds 0))
     (hMem : ∀ᶠ N in Filter.atTop,
-      mpvState (α := Fin d) A N ∈
-        Submodule.span ℂ (Set.range fun j : ι => mpvState (α := Fin d) (B j) N)) :
+      mpvState A N ∈
+        Submodule.span ℂ (Set.range fun j : ι => mpvState (B j) N)) :
     ∃ j, MPVBlockPhaseEquiv A (B j) := by
   have : ∀ j, NeZero (dim j) := fun j ↦ ⟨(hB j).bondDim_ne_zero⟩
   have : NeZero D₀ := ⟨hA.bondDim_ne_zero⟩
@@ -164,17 +164,17 @@ theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
   by_contra hNo
   push Not at hNo
   let C :
-      (x : Option ι) → MPSTensor d (Option.rec D₀ dim x) :=
+      (x : Option ι) → MPTensor α (Fin (Option.rec D₀ dim x)) :=
     fun x => Option.rec A B x
   have hSelf : ∀ x,
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C x) N)
+      Filter.Tendsto (fun N => mpvOverlap (C x) (C x) N)
         Filter.atTop (nhds (1 : ℂ)) := by
     intro x
     cases x with
     | none => simpa [C] using hA.selfOverlap_tendsto_one
     | some j => simpa [C] using (hB j).selfOverlap_tendsto_one
   have hCross : ∀ x y, x ≠ y →
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C y) N)
+      Filter.Tendsto (fun N => mpvOverlap (C x) (C y) N)
         Filter.atTop (nhds (0 : ℂ)) := by
     intro x y hxy
     cases x with
@@ -196,15 +196,15 @@ theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
               exact hxy (congrArg some hij)
             simpa [C] using hBCross i j hij
   have hLI : ∀ᶠ N in Filter.atTop,
-      LinearIndependent ℂ (fun x : Option ι => mpvState (α := Fin d) (C x) N) :=
+      LinearIndependent ℂ (fun x : Option ι => mpvState (C x) N) :=
     eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal C hSelf hCross
   obtain ⟨NLI, hNLI⟩ := Filter.eventually_atTop.1 hLI
   obtain ⟨NMem, hNMem⟩ := Filter.eventually_atTop.1 hMem
   let N := max NLI NMem
   have hLIN := hNLI N (Nat.le_max_left NLI NMem)
   have hNmem := hNMem N (Nat.le_max_right NLI NMem)
-  have hNotMem : mpvState (α := Fin d) A N ∉
-      Submodule.span ℂ (Set.range fun j : ι => mpvState (α := Fin d) (B j) N) := by
+  have hNotMem : mpvState A N ∉
+      Submodule.span ℂ (Set.range fun j : ι => mpvState (B j) N) := by
     simpa [C, Function.comp_def] using (linearIndependent_option.mp hLIN).2
   exact hNotMem hNmem
 
@@ -217,11 +217,11 @@ normalization of lines 224--235, related to algebraic normality by quantum Wiela
 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 -/
 theorem isTransferIdempotent_of_unit_gaugePhase
-    (A B : MPSTensor d D) (X : GL (Fin D) ℂ) (ζ : ℂ) (hζ : ‖ζ‖ = 1)
+    (A B : MPTensor α (Fin D)) (X : GL (Fin D) ℂ) (ζ : ℂ) (hζ : ‖ζ‖ = 1)
     (hrel : ∀ i, B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
       (↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ)))
     (hRFP : IsTransferIdempotent A) : IsTransferIdempotent B := by
-  let C : MPSTensor d D := fun i =>
+  let C : MPTensor α (Fin D) := fun i =>
     (X : Matrix (Fin D) (Fin D) ℂ) * A i *
       (↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ)
   have hGauge : GaugeEquiv A C := ⟨X, fun _ => rfl⟩
@@ -243,7 +243,7 @@ related to algebraic normality by quantum Wielandt Proposition 3 (arXiv:0909.534
 Wolf, Theorem 6.3.
 -/
 theorem isTransferIdempotent_cast_iff
-    {D₁ D₂ : ℕ} (hdim : D₁ = D₂) (A : MPSTensor d D₁) :
+    {D₁ D₂ : ℕ} (hdim : D₁ = D₂) (A : MPTensor α (Fin D₁)) :
     IsTransferIdempotent (cast (congr_arg (MPSTensor d) hdim) A) ↔
       IsTransferIdempotent A := by
   subst D₂
@@ -259,7 +259,7 @@ quantum Wielandt Proposition 3 (arXiv:0909.5347), Wolf, Theorem 6.3, and the spe
 normalization of arXiv:1606.00608, lines 224--235.
 -/
 theorem _root_.MPTensor.GaugePhaseEquiv.isTransferIdempotent
-    {A B : MPSTensor d D} (h : GaugePhaseEquiv A B)
+    {A B : MPTensor α (Fin D)} (h : GaugePhaseEquiv A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hRFP : IsTransferIdempotent A) : IsTransferIdempotent B := by
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
@@ -272,10 +272,10 @@ theorem _root_.MPTensor.GaugePhaseEquiv.isTransferIdempotent
 independence of the spanning family and the all-chain NNCPH hypotheses. -/
 private theorem
     eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_eventually_li
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
+    {B : MPTensor α (Fin D)}
     (hLI : ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun j : Fin r => mpvState (α := Fin d) (A j) N))
+      LinearIndependent ℂ (fun j : Fin r => mpvState (A j) N))
     (hNNCPH : HasNNCPHGroundSpaces B A) :
     ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c := by
@@ -286,27 +286,27 @@ private theorem
   have hN₀ : N₀ < N := lt_of_le_of_lt (Nat.le_max_left N₀ 2) hN
   have hTwo : 2 < N := lt_of_le_of_lt (Nat.le_max_right N₀ 2) hN
   have hImage : LinearIndependent ℂ
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘
-        fun j : Fin r => (mpv (A j) : NSiteSpace (Fin d) N)) := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap ∘
+        fun j : Fin r => (mpv (A j) : NSiteSpace α N)) := by
     convert hLI N hN₀ using 1
     funext j
     ext σ
     simp [Function.comp_apply, mpvState_apply]
   have hCoefficients : LinearIndependent ℂ
-      (fun j : Fin r => (mpv (A j) : NSiteSpace (Fin d) N)) :=
+      (fun j : Fin r => (mpv (A j) : NSiteSpace α N)) :=
     LinearIndependent.of_comp
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap hImage
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap hImage
   rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     (hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
-  refine (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm _).trans ?_
+  refine (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm _).trans ?_
   simpa using finrank_span_eq_card hCoefficients
 
 /-- The normalized minimal loop MPV state is the corresponding Euclidean loop-product state
 times the inverse bond norm at every site. -/
 private theorem BeigiSectorGraphData.mpvState_normalizedMinimalLoopTensor
-    {A : MPSTensor d D} (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
+    {A : MPTensor α (Fin D)} (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] :
-    mpvState (α := Fin d) (F.normalizedMinimalLoopTensor l) N =
+    mpvState (F.normalizedMinimalLoopTensor l) N =
       (((F.loopBondNorm l : ℂ)⁻¹) ^ N) • WithLp.toLp 2 (F.loopProductState l) := by
   apply PiLp.ext
   intro s
@@ -317,10 +317,10 @@ private theorem BeigiSectorGraphData.mpvState_normalizedMinimalLoopTensor
 /-- Distinct normalized minimal loop tensors have vanishing overlap at every positive length,
 and hence asymptotically. -/
 private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto_zero
-    {A : MPSTensor d D} (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
+    {A : MPTensor α (Fin D)} (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
     (hlm : l ≠ m) :
     Filter.Tendsto
-      (fun N => mpvOverlap (α := Fin d) (F.normalizedMinimalLoopTensor l)
+      (fun N => mpvOverlap (F.normalizedMinimalLoopTensor l)
         (F.normalizedMinimalLoopTensor m) N)
       Filter.atTop (nhds 0) := by
   refine tendsto_const_nhds.congr' ?_
@@ -328,7 +328,7 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
   intro N hN
   let : NeZero N := ⟨hN.ne'⟩
   symm
-  change mpvOverlap (α := Fin d) (F.normalizedMinimalLoopTensor l)
+  change mpvOverlap (F.normalizedMinimalLoopTensor l)
     (F.normalizedMinimalLoopTensor m) N = 0
   rw [mpvOverlap_eq_star_mpvInner, mpvInner,
     F.mpvState_normalizedMinimalLoopTensor l,
@@ -338,20 +338,20 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
 /-- A periodic MPV state in the parent ground space belongs to the span of the
 normalized minimal-loop MPV states. -/
 private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTensor
-    {D' : ℕ} {B : MPSTensor d D} (F : BeigiSectorGraphData B)
+    {D' : ℕ} {B : MPTensor α (Fin D)} (F : BeigiSectorGraphData B)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c)
-    {C : MPSTensor d D'} {N : ℕ} (hN : 2 < N)
+    {C : MPTensor α (Fin D')} {N : ℕ} (hN : 2 < N)
     (hGround : haveI : NeZero N := ⟨by omega⟩;
-      mpvState (α := Fin d) C N ∈
+      mpvState C N ∈
         ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) :
-    mpvState (α := Fin d) C N ∈
+    mpvState C N ∈
       Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
-        mpvState (α := Fin d) (F.normalizedMinimalLoopTensor l) N) := by
+        mpvState (F.normalizedMinimalLoopTensor l) N) := by
   let : NeZero N := ⟨by omega⟩
   have hLoopSpan :=
     F.span_toLp_loopProductState_eq_groundSpace hparent hN
-  have hInLoopSpan : mpvState (α := Fin d) C N ∈
+  have hInLoopSpan : mpvState C N ∈
       Submodule.span ℂ
         (Set.range fun l : Loop F.edgeWeight => WithLp.toLp 2 (F.loopProductState l)) := by
     rw [hLoopSpan]
@@ -361,40 +361,40 @@ private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTens
   let c : ℂ := ((F.loopBondNorm l : ℂ)⁻¹) ^ N
   have hc : c ≠ 0 := by
     exact pow_ne_zero N (inv_ne_zero (Complex.ofReal_ne_zero.mpr (F.loopBondNorm_ne_zero l)))
-  have hNormalized : mpvState (α := Fin d) (F.normalizedMinimalLoopTensor l) N ∈
+  have hNormalized : mpvState (F.normalizedMinimalLoopTensor l) N ∈
       Submodule.span ℂ (Set.range fun k : Loop F.edgeWeight =>
-        mpvState (α := Fin d) (F.normalizedMinimalLoopTensor k) N) :=
+        mpvState (F.normalizedMinimalLoopTensor k) N) :=
     Submodule.subset_span ⟨l, rfl⟩
   have hScaled := Submodule.smul_mem
     (Submodule.span ℂ (Set.range fun k : Loop F.edgeWeight =>
-      mpvState (α := Fin d) (F.normalizedMinimalLoopTensor k) N)) c⁻¹ hNormalized
+      mpvState (F.normalizedMinimalLoopTensor k) N)) c⁻¹ hNormalized
   have hEq : WithLp.toLp 2 (F.loopProductState l) =
-      c⁻¹ • mpvState (α := Fin d) (F.normalizedMinimalLoopTensor l) N := by
+      c⁻¹ • mpvState (F.normalizedMinimalLoopTensor l) N := by
     rw [F.mpvState_normalizedMinimalLoopTensor l, smul_smul, inv_mul_cancel₀ hc, one_smul]
   change WithLp.toLp 2 (F.loopProductState l) ∈
     Submodule.span ℂ (Set.range fun k : Loop F.edgeWeight =>
-      mpvState (α := Fin d) (F.normalizedMinimalLoopTensor k) N)
+      mpvState (F.normalizedMinimalLoopTensor k) N)
   rw [hEq]
   exact hScaled
 
 /-- The periodic MPV state of the NNCPH tensor eventually belongs to the span of the normalized
 minimal loop MPV states. -/
 private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMinimalLoopTensor
-    {B : MPSTensor d D} (F : BeigiSectorGraphData B)
+    {B : MPTensor α (Fin D)} (F : BeigiSectorGraphData B)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c) :
     ∀ᶠ N in Filter.atTop,
-      mpvState (α := Fin d) B N ∈
+      mpvState B N ∈
         Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
-          mpvState (α := Fin d) (F.normalizedMinimalLoopTensor l) N) := by
+          mpvState (F.normalizedMinimalLoopTensor l) N) := by
   refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
   intro N hN
   have hTwo : 2 < N := by omega
   have : NeZero N := ⟨by omega⟩
-  have hGround : mpvState (α := Fin d) B N ∈
+  have hGround : mpvState B N ∈
       ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0 := by
     rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker, Submodule.mem_map]
-    refine ⟨(mpv B : NSiteSpace (Fin d) N), ?_, rfl⟩
+    refine ⟨(mpv B : NSiteSpace α N), ?_, rfl⟩
     rw [LinearMap.mem_ker, Matrix.toLin'_apply, ManyBody.Interaction.hamiltonian,
       Matrix.sum_mulVec]
     apply Finset.sum_eq_zero
@@ -406,30 +406,30 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
 belongs to the span of the normalized minimal-loop MPV states. -/
 private theorem
     BeigiSectorGraphData.eventually_component_mpvState_mem_span_normalizedMinimalLoopTensor
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    {B : MPSTensor d D} (F : BeigiSectorGraphData B)
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPTensor α (Fin (dim j))}
+    {B : MPTensor α (Fin D)} (F : BeigiSectorGraphData B)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c)
     (hNNCPH : HasNNCPHGroundSpaces B A) (j : Fin r) :
     ∀ᶠ N in Filter.atTop,
-      mpvState (α := Fin d) (A j) N ∈
+      mpvState (A j) N ∈
         Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
-          mpvState (α := Fin d) (F.normalizedMinimalLoopTensor l) N) := by
+          mpvState (F.normalizedMinimalLoopTensor l) N) := by
   refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
   intro N hN
   have hTwo : 2 < N := by omega
   have : NeZero N := ⟨by omega⟩
-  have hGround : mpvState (α := Fin d) (A j) N ∈
+  have hGround : mpvState (A j) N ∈
       ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0 := by
     rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker, Submodule.mem_map]
-    refine ⟨(mpv (A j) : NSiteSpace (Fin d) N), ?_, rfl⟩
+    refine ⟨(mpv (A j) : NSiteSpace α N), ?_, rfl⟩
     rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
     exact Submodule.subset_span ⟨j, rfl⟩
   exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround
 
 /-- Each normalized minimal loop tensor is a spectrally normalized normal tensor. -/
 private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_isNormalTensor
-    {A : MPSTensor d D} (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
+    {A : MPTensor α (Fin D)} (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     IsNormalTensor (F.normalizedMinimalLoopTensor l) := by
   have : NeZero (F.loopSchmidtRank l) := ⟨(F.loopSchmidtRank_pos l).ne'⟩
   exact isNormalTensor_of_isNormal_isTransferIdempotent
@@ -440,7 +440,7 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_isNormalTensor
 /-- A block-phase match of a normal tensor with a transfer-idempotent normal tensor transports
 transfer idempotence. -/
 private theorem isTransferIdempotent_of_mpvBlockPhaseEquiv
-    {D' : ℕ} {B : MPSTensor d D} {C : MPSTensor d D'}
+    {D' : ℕ} {B : MPTensor α (Fin D)} {C : MPTensor α (Fin D')}
     (hB : IsNormalTensor B) (hC : IsNormalTensor C)
     (hCRFP : IsTransferIdempotent C) (h : MPVBlockPhaseEquiv B C) :
     IsTransferIdempotent B := by
@@ -480,10 +480,10 @@ and raw-weight canonical-form case remains unproved.
 This restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 theorem nncph_implies_rfp
-    (B : MPSTensor d D) [NeZero D]
-    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
+    (B : MPTensor α (Fin D)) [NeZero D]
+    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hLI : ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun j : Fin r => mpvState (α := Fin d) (A j) N))
+      LinearIndependent ℂ (fun j : Fin r => mpvState (A j) N))
     (hNNCPH : HasNNCPHGroundSpaces B A)
     (hNT : Kraus.IsNormal B) (hLeft : IsLeftCanonical B) :
     IsTransferIdempotent B := by
@@ -502,7 +502,7 @@ theorem nncph_implies_rfp
   have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent
   have hCross : ∀ l m : Loop F.edgeWeight, l ≠ m →
       Filter.Tendsto
-        (fun N => mpvOverlap (α := Fin d) (F.normalizedMinimalLoopTensor l)
+        (fun N => mpvOverlap (F.normalizedMinimalLoopTensor l)
           (F.normalizedMinimalLoopTensor m) N)
         Filter.atTop (nhds 0) := by
     intro l m hlm
@@ -515,7 +515,7 @@ theorem nncph_implies_rfp
 
 namespace IsLeftCanonicalBNTPresentation
 
-variable {P : SectorDecomposition (Fin d)}
+variable {P : SectorDecomposition α}
 
 /-- The all-chain NNCPH ground-space condition for the distinct BNT basis
 sectors implies transfer idempotence of their unit-weight direct sum.

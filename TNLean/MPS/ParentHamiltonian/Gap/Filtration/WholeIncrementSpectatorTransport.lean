@@ -43,16 +43,16 @@ private theorem norm_projection_difference
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A vector lies in the extended left ground space precisely when every
 right-coordinate restriction lies in the active local ground space. -/
 theorem mem_range_leftBoundaryMapES_iff_rightFiber
-    (A : MPSTensor d D) (n r : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d (n + r))) :
-    v ∈ (leftBoundaryMapES A n r).range ↔ ∀ s : Cfg d r,
+    (A : MPTensor α (Fin D)) (n r : ℕ)
+    (v : EuclideanSpace ℂ (Fin (n + r) → α)) :
+    v ∈ (leftBoundaryMapES A n r).range ↔ ∀ s : (Fin r → α),
       ContinuousLinearMap.rightFiber
-        (rightSpectatorConfigLinearIsometryEquiv d n r v) s ∈ ((groundSpace A n).map
+        (rightSpectatorConfigLinearIsometryEquiv n r v) s ∈ ((groundSpace A n).map
             (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [leftBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
@@ -63,7 +63,7 @@ theorem mem_range_leftBoundaryMapES_iff_rightFiber
 /-- An identification of the active open-chain kernel with the local ground
 space identifies the larger-volume prefix kernel with its right extension. -/
 theorem ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES
-    (A : MPSTensor d D) {R n r : ℕ}
+    (A : MPTensor α (Fin D)) {R n r : ℕ}
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) =
         ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     LinearMap.ker
@@ -71,24 +71,24 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES
             ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤ n).hamiltonian) =
       (leftBoundaryMapES A n r).range := by
   ext v
-  have hconj : rightSpectatorConfigLinearIsometryEquiv d n r
+  have hconj : rightSpectatorConfigLinearIsometryEquiv n r
       (Matrix.toEuclideanLin
           ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤ n).hamiltonian v) =
-      ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (LinearMap.toContinuousLinearMap
             (Matrix.toEuclideanLin
                 ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤ n).hamiltonian))
-        (rightSpectatorConfigLinearIsometryEquiv d n r v) := by
+        (rightSpectatorConfigLinearIsometryEquiv n r v) := by
     simpa only [LinearMap.comp_apply, LinearEquiv.coe_coe, ContinuousLinearMap.coe_coe,
       LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.symm_apply_apply] using
       LinearMap.congr_fun
         (hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
           A (n := n) (r := r) (p := n) le_rfl)
-        (rightSpectatorConfigLinearIsometryEquiv d n r v)
+        (rightSpectatorConfigLinearIsometryEquiv n r v)
   rw [mem_range_leftBoundaryMapES_iff_rightFiber, LinearMap.mem_ker,
-    ← (rightSpectatorConfigLinearIsometryEquiv d n r).map_eq_zero_iff, hconj]
-  change (rightSpectatorConfigLinearIsometryEquiv d n r v) ∈
-    LinearMap.ker (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+    ← (rightSpectatorConfigLinearIsometryEquiv n r).map_eq_zero_iff, hconj]
+  change (rightSpectatorConfigLinearIsometryEquiv n r v) ∈
+    LinearMap.ker (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
       (LinearMap.toContinuousLinearMap
           (Matrix.toEuclideanLin
               ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤
@@ -100,13 +100,13 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES
 /-- Reassociation transports any length-indexed subspace to the same subspace
 in the equal ambient length. -/
 theorem physicalReassocES_map_submodule
-    (S : ∀ n, Submodule ℂ (EuclideanSpace ℂ (Cfg d n))) (K L Q : ℕ) :
+    (S : ∀ n, Submodule ℂ (EuclideanSpace ℂ (Fin n → α))) (K L Q : ℕ) :
     (S (K + (L + Q))).map
-      (physicalReassocES (d := d) K L Q).toLinearEquiv.toLinearMap =
+      (physicalReassocES K L Q).toLinearEquiv.toLinearMap =
       S (K + L + Q) := by
   suffices ∀ (n m : ℕ) (h : n = m),
       (S n).map (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.arrowCongr (finCongr h) (Equiv.refl (Fin d)))).toLinearEquiv.toLinearMap =
+        (Equiv.arrowCongr (finCongr h) (Equiv.refl α))).toLinearEquiv.toLinearMap =
       S m from this _ _ (Nat.add_assoc K L Q).symm
   rintro n m rfl
   change (S n).map LinearMap.id = S n
@@ -115,7 +115,7 @@ theorem physicalReassocES_map_submodule
 /-- The reassociated right interval is the kernel of the parent interaction
 on the full suffix window. -/
 theorem range_reassocTailBoundaryMapES_eq_ker_hamiltonian_restrict_parentChainInteraction
-    (A : MPSTensor d D) {K L Q : ℕ} (hR : 0 < L + Q) :
+    (A : MPTensor α (Fin D)) {K L Q : ℕ} (hR : 0 < L + Q) :
     (reassocTailBoundaryMapES A K L Q).range =
       LinearMap.ker
           (Matrix.toEuclideanLin
@@ -135,7 +135,7 @@ error, provided the two prefix kernels are their boundary-condition spaces.
 This is the projector identity underlying Nachtergaele's condition C3-prime,
 arXiv:cond-mat/9410110, lines 1095--1107. -/
 theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
-    (A : MPSTensor d D) {K L Q : ℕ} (hR : 0 < L + Q)
+    (A : MPTensor α (Fin D)) {K L Q : ℕ} (hR : 0 < L + Q)
     (hleft : LinearMap.ker
         (Matrix.toEuclideanLin (parentChainInteraction A (L + Q) (K + L)).hamiltonian) =
       ((groundSpace A (K + L)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
@@ -184,7 +184,7 @@ Nachtergaele, arXiv:cond-mat/9410110, condition C3-prime and Theorem 2.1(ii).
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Adding right spectator sites does not increase the norm of the grouped
 martingale expression. The active suffix ends at the full active volume, and
@@ -192,7 +192,7 @@ both prefix endpoints lie within that volume. This is the fixed-volume
 extension of Nachtergaele's condition C3-prime, arXiv:cond-mat/9410110,
 lines 1095--1104. -/
 theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
-    (A : MPSTensor d D) {R l n r p : ℕ} (hp : p ≤ n) :
+    (A : MPTensor α (Fin D)) {R l n r p : ℕ} (hp : p ≤ n) :
     ‖LinearMap.toContinuousLinearMap
       (((LinearMap.ker
         (Matrix.toEuclideanLin
@@ -206,14 +206,14 @@ theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
                 ((parentChainInteraction A R n).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
                     n).hamiltonian)).starProjection.toLinearMap).comp
           (openPrefixGroundProjectionES A R n p - openPrefixGroundProjectionES A R n n))‖ := by
-  let U := rightSpectatorConfigLinearIsometryEquiv d n r
+  let U := rightSpectatorConfigLinearIsometryEquiv n r
   have hP (q : ℕ) (hq : q ≤ n) :
       U.toLinearEquiv.conj
           (LinearMap.ker
               (Matrix.toEuclideanLin
                   ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤
                       q).hamiltonian)).starProjection.toLinearMap =
-        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
           (LinearMap.ker
               (Matrix.toEuclideanLin
                   ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤
@@ -226,7 +226,7 @@ theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
           (Matrix.toEuclideanLin
               ((parentChainInteraction A R (n + r)).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
                   n).hamiltonian)).starProjection.toLinearMap =
-        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
           (LinearMap.ker
               (Matrix.toEuclideanLin
                   ((parentChainInteraction A R n).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
@@ -241,7 +241,7 @@ theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
                 n).hamiltonian)).starProjection.toLinearMap).comp
         (openPrefixGroundProjectionES A R (n + r) p -
           openPrefixGroundProjectionES A R (n + r) n)) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         ((LinearMap.ker
             (Matrix.toEuclideanLin
                 ((parentChainInteraction A R n).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
@@ -284,14 +284,14 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A uniform three-interval projector error implies grouped C3 for the
 range-\(2p\) parent Hamiltonian. The open-chain kernel identities are required
 only from the interaction length onwards. This is Nachtergaele's condition
 C3-prime with increment and overlap both equal to \(p\). -/
 theorem grouped_martingaleDifference_norm_le_of_projector_defect
-    (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p)
+    (A : MPTensor α (Fin D)) {p M : ℕ} (hp : 0 < p)
     (hKernel : ∀ n, 2 * p ≤ n →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) n).hamiltonian) =
           ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))

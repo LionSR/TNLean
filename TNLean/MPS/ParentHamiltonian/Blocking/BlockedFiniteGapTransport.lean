@@ -40,18 +40,17 @@ equations (3.12)--(3.14), lines 1547--1570, and Theorem 1.2.
 open MPTensor
 
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
-open Kraus (blockPhysDim blockTensor)
 open ManyBody.Interaction (chainTranslates)
 
 namespace MPSTensor
-variable {d R L K N : ℕ} [NeZero d] [NeZero L]
+variable {α : Type*} [Fintype α] [DecidableEq α] {R L K N : ℕ} [Nonempty α] [NeZero L]
 
 /-- A coarse open-chain gap transfers to the original volume of length
 \(NL\), with divisor \(KL+1-R\). The kernels coincide by the
 positive window comparison. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, equations (3.12)--(3.14). -/
 theorem hamiltonian_chainTranslates_gap_of_blocked_gap
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef)
     (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1)
     {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ z : ℂ, Module.End.HasEigenvalue
@@ -64,13 +63,13 @@ theorem hamiltonian_chainTranslates_gap_of_blocked_gap
   obtain ⟨hLower, hUpper⟩ :=
     hamiltonian_chainTranslates_blockedInteractionMatrix_comparison h hh hKN hcover
   have hLower' : Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) ≤
-      Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
-        (Kraus.blockedConfigEquiv d N L)
+      Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockConfigEquiv α N L)
+        (Kraus.blockConfigEquiv α N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) := by
     rw [LinearMap.le_def, ← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hLower
-  have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockedConfigEquiv d N L)
-      (Kraus.blockedConfigEquiv d N L)
+  have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (Kraus.blockConfigEquiv α N L)
+      (Kraus.blockConfigEquiv α N L)
       ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) ≤
       ((K * L + 1 - R : ℕ) : ℂ) •
         Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) := by
@@ -84,10 +83,10 @@ theorem hamiltonian_chainTranslates_gap_of_blocked_gap
     have hL := NeZero.pos L
     exact_mod_cast (show 0 < K * L + 1 - R by omega)
   have hGap' : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-      (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
+      (Matrix.reindex (Kraus.blockConfigEquiv α N L) (Kraus.blockConfigEquiv α N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ := fun μ hμ ↦
-    hGap μ ((Matrix.hasEigenvalue_toEuclideanLin_reindex_iff (Kraus.blockedConfigEquiv d N L)
+    hGap μ ((Matrix.hasEigenvalue_toEuclideanLin_reindex_iff (Kraus.blockConfigEquiv α N L)
       ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) μ).mp hμ)
   have hTransfer := hP.forall_hasEigenvalue_of_smul_le_of_le_smul hQ
     zero_lt_one hM hM hγ
@@ -102,17 +101,17 @@ kernels give a uniform gap above the kernel at every block-divisible volume, inc
 short volumes with their actual kernels. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 3, equations (3.12)--(3.14). -/
 theorem exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_family
-    (A : MPSTensor d D) (μ : Fin b → ℂ)
-    (B : ∀ j, MPSTensor (blockPhysDim d L) (E j)) (hμ : ∀ j, μ j ≠ 0)
+    (A : MPTensor α (Fin D)) (μ : Fin b → ℂ)
+    (B : ∀ j, MPTensor (Fin L → α) (Fin (E j))) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (E j)) (Fin (E j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
-    (hJoint : ∀ N, ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ
+    (hJoint : ∀ N, ((groundSpace (Kraus.block A L) N).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) =
       ((groundSpace (toTensorFromBlocks (μ := μ) B) N).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap))
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef)
     (hcover : R + L ≤ K * L + 1)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
@@ -147,8 +146,8 @@ derive a uniform gap above the kernel at every period-divisible volume. No primi
 sector witnesses are supplied. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and the regrouping at lines 825--836. -/
 theorem IsPeriodic.exists_aligned_hamiltonian_chainTranslates_gap_of_eventual_kernel
-    {m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    {m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
         ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :

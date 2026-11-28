@@ -18,13 +18,13 @@ open scoped Matrix InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D₁ D₂ : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D₁ D₂ : ℕ}
 
 /-- The matrix-unit entries of the mixed boundary Gram operator are entries
 of the iterated rectangular mixed transfer map. This is the boundary-coordinate
 calculation in Nachtergaele, arXiv:cond-mat/9410110, Lemma `disjoint`. -/
 theorem inner_single_mixed_groundSpaceGram_single
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (n : ℕ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (n : ℕ)
     (a b : Fin D₁) (c e : Fin D₂) :
     ⟪EuclideanSpace.single (b, a) 1,
       ((groundSpaceMapES A n).adjoint.comp (groundSpaceMapES B n))
@@ -44,7 +44,7 @@ theorem inner_single_mixed_groundSpaceGram_single
 Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equations
 `ip` and `P12` (local source lines 1744--1777). -/
 theorem adjoint_groundSpaceMapES_comp_eq_mixedTransfer
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (n : ℕ) :
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (n : ℕ) :
     (groundSpaceMapES A n).adjoint.comp (groundSpaceMapES B n) =
       (Matrix.toEuclideanLin (fun (b, a) (e, c) ↦
         ((Kraus.mixedMapLM B A) ^ n) (Matrix.single c a 1) e b)).toContinuousLinearMap := by
@@ -66,7 +66,7 @@ mixed boundary Gram operators. This is the finite-dimensional passage in
 Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equations
 `ip`--`limP12` (local source lines 1744--1820). -/
 theorem adjoint_groundSpaceMapES_comp_tendsto_zero
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hdecay : ∀ X : Matrix (Fin D₂) (Fin D₁) ℂ,
       Filter.Tendsto (fun n ↦ ((Kraus.mixedMapLM B A) ^ n) X)
         Filter.atTop (nhds 0)) :
@@ -105,10 +105,10 @@ with the inverse Gram norms accounting for boundary normalization. This is
 the estimate combining `ip` with `C1C2` in Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma `disjoint`, lines 1744--1815. -/
 theorem norm_inner_map_groundSpace_le_mixedGram
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (n : ℕ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (n : ℕ)
     (hA : Function.Injective (groundSpaceMapES A n))
     (hB : Function.Injective (groundSpaceMapES B n))
-    {x y : EuclideanSpace ℂ (Cfg d n)}
+    {x y : EuclideanSpace ℂ (Fin n → α)}
     (hx : x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (hy : y ∈
         ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ‖⟪x, y⟫_ℂ‖ ≤

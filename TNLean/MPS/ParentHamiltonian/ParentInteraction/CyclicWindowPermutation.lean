@@ -74,7 +74,7 @@ theorem finEquiv_cyclicSuccessorEquiv_symm {N : ℕ} [NeZero N] (i : Fin N) :
 /-- Exchanging two entries of an extracted window exchanges the corresponding
 sites when the window is inserted back into the chain. -/
 theorem cyclicCfg_extractWindow_comp_swap_of_le {d N L : ℕ}
-    (hN : 0 < N) (hLN : L ≤ N) (i : Fin N) (σ : Cfg d N) (a b : Fin L) :
+    (hN : 0 < N) (hLN : L ≤ N) (i : Fin N) (σ : (Fin N → α)) (a b : Fin L) :
     cyclicCfg hN L i (extractWindow L i σ ∘ Equiv.swap a b) σ =
       σ ∘ Equiv.swap (cyclicForwardSite i a.val) (cyclicForwardSite i b.val) := by
   rw [Equiv.comp_swap_eq_update, Equiv.comp_swap_eq_update, ← update_cyclicCfg hN hLN,

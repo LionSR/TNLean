@@ -31,22 +31,22 @@ open scoped BigOperators Matrix Topology Matrix.Norms.Operator
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The limiting local expectation associated with the transfer invariant
 matrix. Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b)
 and lines 2649--2675. -/
-noncomputable def observableInsertionExpectation (A : MPSTensor d D)
+noncomputable def observableInsertionExpectation (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) : ℂ :=
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) : ℂ :=
   Matrix.trace (physicalObservableTransfer A k X ρ) / Matrix.trace ρ
 
 /-- The two rank-one limiting transfer projections reduce an insertion to its
 scalar expectation. Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 2649--2675, the pure-sector local expectation limit. -/
 theorem fixedPointProj_physicalObservableTransfer_fixedPointProj
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (htr : Matrix.trace ρ ≠ 0) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (A : MPTensor α (Fin D)) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (htr : Matrix.trace ρ ≠ 0) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     (fixedPointProj ρ htr).comp
       ((physicalObservableTransfer A k X).comp (fixedPointProj ρ htr)) =
       observableInsertionExpectation A ρ X • fixedPointProj ρ htr := by
@@ -60,8 +60,8 @@ theorem fixedPointProj_physicalObservableTransfer_fixedPointProj
 converges to its scalar local expectation times the limiting transfer projection.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem _root_.TNLean.MPS.ParentHamiltonian.physicalObservableTransfer_sandwich_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D) (Fin D) ℂ)
@@ -97,9 +97,9 @@ theorem _root_.TNLean.MPS.ParentHamiltonian.physicalObservableTransfer_sandwich_
 reshuffling of its insertion transfer map. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and lines 2649--2675. -/
 theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
-    (A : MPSTensor d D) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (A : MPTensor α (Fin D)) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     (groundSpaceMapES A k).adjoint.comp
-      ((Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X).comp (groundSpaceMapES A k)) =
+      ((Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X).comp (groundSpaceMapES A k)) =
         Matrix.gramReshuffle (physicalObservableTransfer A k X) := by
   classical
   apply ContinuousLinearMap.coe_injective
@@ -108,7 +108,7 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
   rintro ⟨b, a⟩
   have h : inner ℂ (EuclideanSpace.single (b, a) 1)
       (((groundSpaceMapES A k).adjoint.comp
-        ((Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X).comp (groundSpaceMapES A k)))
+        ((Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X).comp (groundSpaceMapES A k)))
           (EuclideanSpace.single (e, c) 1)) =
       Matrix.rectangularChoi (physicalObservableTransfer A k X) (c, e) (a, b) := by
     rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right,
@@ -116,7 +116,7 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
       ← Matrix.frobeniusEquivEuclidean_single, groundSpaceMapES_frobeniusEquivEuclidean_apply,
       groundSpaceMapES_frobeniusEquivEuclidean_apply]
     change inner ℂ (WithLp.toLp 2 (groundSpaceMap A k (Matrix.single a b 1)))
-      (Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X
+      (Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X
         (WithLp.toLp 2 (groundSpaceMap A k (Matrix.single c e 1)))) = _
     rw [Matrix.toEuclideanCLM_toLp, EuclideanSpace.inner_toLp_toLp,
       Matrix.rectangularChoi_apply, physicalObservableTransfer_apply, Finset.sum_comm]
@@ -132,16 +132,16 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
 \(\ell\) and \(r\). Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 933--947 and 2649--2675. -/
 noncomputable def bulkObservable {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
-    Matrix (Cfg d ((ℓ + k) + r)) (Cfg d ((ℓ + k) + r)) ℂ :=
-  appendObservable (appendObservable (1 : Matrix (Cfg d ℓ) (Cfg d ℓ) ℂ) X)
-    (1 : Matrix (Cfg d r) (Cfg d r) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
+    Matrix (Fin ((ℓ + k) + r) → α) (Fin ((ℓ + k) + r) → α) ℂ :=
+  appendObservable (appendObservable (1 : Matrix ((Fin ℓ → α)) ((Fin ℓ → α)) ℂ) X)
+    (1 : Matrix (Fin r → α) (Fin r → α) ℂ)
 
 /-- The transfer insertion of an interior observable has ordinary transfer
 powers on both sides. Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 2649--2675. -/
 theorem physicalObservableTransfer_bulkObservable
-    (A : MPSTensor d D) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (A : MPTensor α (Fin D)) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     physicalObservableTransfer A ((ℓ + k) + r) (bulkObservable X ℓ r) =
       (Kraus.transferMap A) ^ ℓ * physicalObservableTransfer A k X *
         (Kraus.transferMap A) ^ r := by
@@ -154,9 +154,9 @@ primitive transfer convergence supply the tensor-specific scalarity estimate
 required in the infinite-volume argument of Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES
-    (A : MPSTensor d D) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (A : MPTensor α (Fin D)) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     (groundSpaceMapES A ((ℓ + k) + r)).adjoint.comp
-      (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ + k) + r)) (𝕜 := ℂ))
+      (((Matrix.toEuclideanCLM (n := (Fin ((ℓ + k) + r) → α)) (𝕜 := ℂ))
         (bulkObservable X ℓ r)).comp (groundSpaceMapES A ((ℓ + k) + r))) =
       Matrix.gramReshuffle ((Kraus.transferMap A) ^ ℓ *
         physicalObservableTransfer A k X * (Kraus.transferMap A) ^ r) := by
@@ -192,19 +192,19 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The virtual Gram compression of a fixed interior observable converges to
 its scalar expectation times the limiting boundary Gram operator. Both free
 intervals may expand along any common filter. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem _root_.TNLean.MPS.ParentHamiltonian.groundSpaceMapES_bulkObservable_compression_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n => (groundSpaceMapES A ((ℓ n + k) + r n)).adjoint.comp
-      (((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ))
+      (((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ))
         (bulkObservable X (ℓ n) (r n))).comp
           (groundSpaceMapES A ((ℓ n + k) + r n)))) f
       (nhds (observableInsertionExpectation A ρ X •

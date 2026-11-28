@@ -31,7 +31,7 @@ open scoped Matrix BigOperators InnerProductSpace
 
 namespace MPSTensor
 
-variable {d a b c : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b c : ℕ}
 
 private def familyMixedMap {ι : Type*} [Fintype ι] {u v : ℕ}
     (U : ι → Matrix (Fin u) (Fin v) ℂ) (V : ι → Matrix (Fin c) (Fin c) ℂ) :
@@ -58,9 +58,9 @@ private theorem familyMixedMap_comp {ι κ : Type*} [Fintype ι] [Fintype κ]
     Matrix.mul_sum, Matrix.sum_mul, Fintype.sum_prod_type,
     Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
-private theorem wordMixedMap_eq_pow (A : MPSTensor d a) (C : MPSTensor d c) (n : ℕ) :
-    familyMixedMap (fun σ : Cfg d n ↦ Kraus.evalWord A (List.ofFn σ))
-        (fun σ : Cfg d n ↦ Kraus.evalWord C (List.ofFn σ)) =
+private theorem wordMixedMap_eq_pow (A : MPTensor α (Fin a)) (C : MPTensor α (Fin c)) (n : ℕ) :
+    familyMixedMap (fun σ : (Fin n → α) ↦ Kraus.evalWord A (List.ofFn σ))
+        (fun σ : (Fin n → α) ↦ Kraus.evalWord C (List.ofFn σ)) =
       Kraus.mixedMapLM A C ^ n := by
   apply LinearMap.ext
   intro X
@@ -83,31 +83,31 @@ private theorem trace_familyMixedMap {ι : Type*} [Fintype ι]
 /-- The wall-word map paired with a pure sector of the same physical
 alphabet. Its two rectangular endpoint spaces are retained. Source:
 arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
-def uncleWallMixedMap (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) (n : ℕ) :
+def uncleWallMixedMap (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (C : MPTensor α (Fin c)) (n : ℕ) :
     Matrix (Fin b) (Fin c) ℂ →ₗ[ℂ] Matrix (Fin a) (Fin c) ℂ :=
-  familyMixedMap (fun σ : Cfg d n ↦ uncleDomainWallWord A B R (List.ofFn σ))
-    (fun σ : Cfg d n ↦ Kraus.evalWord C (List.ofFn σ))
+  familyMixedMap (fun σ : (Fin n → α) ↦ uncleDomainWallWord A B R (List.ofFn σ))
+    (fun σ : (Fin n → α) ↦ Kraus.evalWord C (List.ofFn σ))
 
 /-- The wall mixed map is its finite coefficient contraction.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
-theorem uncleWallMixedMap_apply (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) (n : ℕ)
+theorem uncleWallMixedMap_apply (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (C : MPTensor α (Fin c)) (n : ℕ)
     (X : Matrix (Fin b) (Fin c) ℂ) :
-    uncleWallMixedMap A B R C n X = ∑ σ : Cfg d n,
+    uncleWallMixedMap A B R C n X = ∑ σ : (Fin n → α),
       uncleDomainWallWord A B R (List.ofFn σ) * X *
         (Kraus.evalWord C (List.ofFn σ))ᴴ := familyMixedMap_apply _ _ _
 
-private theorem uncleWallMixedMap_zero (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) :
+private theorem uncleWallMixedMap_zero (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (C : MPTensor α (Fin c)) :
     uncleWallMixedMap A B R C 0 = 0 := by
   apply LinearMap.ext
   intro X
   simp [uncleWallMixedMap_apply, uncleDomainWallWord]
 
 private theorem uncleWallMixedMap_succ_left
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) (n : ℕ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (C : MPTensor α (Fin c)) (n : ℕ) :
     uncleWallMixedMap A B R C (n + 1) =
       (Kraus.mixedMapLM A C).comp (uncleWallMixedMap A B R C n) +
         (familyMixedMap R C).comp (Kraus.mixedMapLM B C ^ n) := by
@@ -116,17 +116,17 @@ private theorem uncleWallMixedMap_succ_left
   intro X
   simp only [LinearMap.add_apply, LinearMap.comp_apply, uncleWallMixedMap_apply,
     familyMixedMap_apply, Kraus.mixedMapLM_apply, Kraus.mixedMapLM_pow_apply]
-  rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
-  have hcons (i : Fin d) (τ : Cfg d n) :
-      (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)) (i, τ) = Fin.cons i τ := rfl
+  rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ α)).sum_comp]
+  have hcons (i : α) (τ : (Fin n → α)) :
+      (Fin.consEquiv (fun _ : Fin (n + 1) ↦ α)) (i, τ) = Fin.cons i τ := rfl
   simp only [Fintype.sum_prod_type, hcons, List.ofFn_cons,
     uncleDomainWallWord, Kraus.evalWord_cons, Matrix.conjTranspose_mul,
     Matrix.add_mul, Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_assoc,
     Finset.sum_add_distrib]
 
 private theorem uncleWallMixedMap_succ_right
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) (n : ℕ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (C : MPTensor α (Fin c)) (n : ℕ) :
     uncleWallMixedMap A B R C (n + 1) =
       (uncleWallMixedMap A B R C n).comp (Kraus.mixedMapLM B C) +
         (Kraus.mixedMapLM A C ^ n).comp (familyMixedMap R C) := by
@@ -135,12 +135,12 @@ private theorem uncleWallMixedMap_succ_right
   intro X
   simp only [LinearMap.add_apply, LinearMap.comp_apply, uncleWallMixedMap_apply,
     familyMixedMap_apply, Kraus.mixedMapLM_apply, Kraus.mixedMapLM_pow_apply]
-  rw [← (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
+  rw [← (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ α)).sum_comp]
   simp only [Fintype.sum_prod_type]
   rw [Finset.sum_comm]
-  have hsnocEquiv (i : Fin d) (τ : Cfg d n) :
-      (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ Fin d)) (i, τ) = Fin.snoc τ i := rfl
-  have hsnoc (i : Fin d) (τ : Cfg d n) :
+  have hsnocEquiv (i : α) (τ : (Fin n → α)) :
+      (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ α)) (i, τ) = Fin.snoc τ i := rfl
+  have hsnoc (i : α) (τ : (Fin n → α)) :
       List.ofFn (Fin.snoc τ i) = List.ofFn τ ++ [i] := by
     rw [List.ofFn_succ']
     simp only [Fin.snoc_castSucc, Fin.snoc_last, List.concat_eq_append]
@@ -154,9 +154,9 @@ private theorem uncleWallMixedMap_succ_right
 /-- The ordered mixed-transfer contraction for the five-segment
 trial against one pure periodic sector. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
-def uncleTwoWallMixedTransfer (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c) (p r q s t : ℕ) :
+def uncleTwoWallMixedTransfer (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (C : MPTensor α (Fin c)) (p r q s t : ℕ) :
     Matrix (Fin a) (Fin c) ℂ →ₗ[ℂ] Matrix (Fin a) (Fin c) ℂ :=
   (Kraus.mixedMapLM A C ^ p).comp ((uncleWallMixedMap A B R C r).comp
     ((Kraus.mixedMapLM B C ^ q).comp
@@ -166,13 +166,13 @@ def uncleTwoWallMixedTransfer (A : MPSTensor d a) (B : MPSTensor d b)
 and the conjugated pure-sector coefficient on their concatenated word.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem trace_uncleTwoWallMixedTransfer_eq_sum
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c) (p r q s t : ℕ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (C : MPTensor α (Fin c)) (p r q s t : ℕ) :
     LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
         (uncleTwoWallMixedTransfer A B R L C p r q s t) =
-      ∑ u : Cfg d p, ∑ v : Cfg d r, ∑ w : Cfg d q,
-        ∑ x : Cfg d s, ∑ y : Cfg d t,
+      ∑ u : (Fin p → α), ∑ v : (Fin r → α), ∑ w : (Fin q → α),
+        ∑ x : (Fin s → α), ∑ y : (Fin t → α),
           uncleTwoWallCoefficient A B R L (List.ofFn u) (List.ofFn v)
               (List.ofFn w) (List.ofFn x) (List.ofFn y) *
             star (Matrix.trace (Kraus.evalWord C
@@ -189,19 +189,19 @@ theorem trace_uncleTwoWallMixedTransfer_eq_sum
 trial is the ordered mixed-transfer trace. No overlap estimate is assumed.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_uncleTwoWallTrial_eq_trace
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c) (p r q s t : ℕ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (C : MPTensor α (Fin c)) (p r q s t : ℕ) :
     ⟪mpvState C (p + r + q + s + t),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + s + t))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (p + r + q + s + t))).symm
         (uncleTwoWallTrial A B R L p r q s t)⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
         (uncleTwoWallMixedTransfer A B R L C p r q s t) := by
   classical
   rw [PiLp.inner_apply]
-  change (∑ σ : Cfg d (p + r + q + s + t),
+  change (∑ σ : (Fin (p + r + q + s + t) → α),
     uncleTwoWallTrial A B R L p r q s t σ * star (mpv C σ)) = _
-  rw [← (uncleFiveConfigEquiv (d := d) p r q s t).sum_comp
+  rw [← (uncleFiveConfigEquiv p r q s t).sum_comp
     (fun σ ↦ uncleTwoWallTrial A B R L p r q s t σ * star (mpv C σ))]
   simp only [Fintype.sum_prod_type, uncleFiveConfigEquiv_apply,
     uncleTwoWallTrial_append_apply, mpv, coeff_eq, List.ofFn_fin_append,
@@ -211,9 +211,9 @@ theorem inner_mpvState_uncleTwoWallTrial_eq_trace
 For the numbered source trial their joined A separation is exactly 2N.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem trace_uncleTwoWallMixedTransfer_join_exterior
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c) (p r q s t : ℕ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (C : MPTensor α (Fin c)) (p r q s t : ℕ) :
     LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
         (uncleTwoWallMixedTransfer A B R L C p r q s t) =
       LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
@@ -228,10 +228,10 @@ theorem trace_uncleTwoWallMixedTransfer_join_exterior
       (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
 
 private theorem inner_mpvState_config_cast {n m : ℕ} (h : n = m)
-    (C : MPSTensor d c) (f : NSiteSpace (Fin d) n) :
-    ⟪mpvState C m, (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) m)).symm
+    (C : MPTensor α (Fin c)) (f : NSiteSpace α n) :
+    ⟪mpvState C m, (WithLp.linearEquiv 2 ℂ (NSiteSpace α m)).symm
       (fun σ ↦ f (σ ∘ Fin.cast h))⟫_ℂ =
-      ⟪mpvState C n, (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)).symm f⟫_ℂ := by
+      ⟪mpvState C n, (WithLp.linearEquiv 2 ℂ (NSiteSpace α n)).symm f⟫_ℂ := by
   subst m
   rfl
 
@@ -239,12 +239,12 @@ private theorem inner_mpvState_config_cast {n m : ℕ} (h : n = m)
 2N in A after closing the exterior intervals and 2N−1 in B.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_uncleTwoWallTrialSource_eq_trace
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (C : MPSTensor d c)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (C : MPTensor α (Fin c))
     (N : ℕ) (hN : 0 < N) :
     ⟪mpvState C (6 * N + 1),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ)
         (uncleTwoWallMixedTransfer A B R L C (2 * N) (N + 1)
@@ -260,7 +260,7 @@ theorem inner_mpvState_uncleTwoWallTrialSource_eq_trace
       (2 * N - 1) (N + 1) N
 
 open scoped TNOperatorSpace in
-private theorem mixedMapSpectralRadius_eq_end (A : MPSTensor d a) (B : MPSTensor d b) :
+private theorem mixedMapSpectralRadius_eq_end (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b)) :
     Kraus.mixedMapSpectralRadius A B = spectralRadius ℂ (Kraus.mixedMapLM A B) := by
   unfold Kraus.mixedMapSpectralRadius
   simp only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq]
@@ -269,7 +269,7 @@ section OperatorNorm
 
 open scoped Matrix.Norms.L2Operator
 
-private theorem mixed_pow_norm_le_geometric (A : MPSTensor d a) (B : MPSTensor d b)
+private theorem mixed_pow_norm_le_geometric (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ K r : ℝ, 0 < K ∧ 0 < r ∧ r < 1 ∧ ∀ (n : ℕ)
       (X : Matrix (Fin a) (Fin b) ℂ),
@@ -291,7 +291,7 @@ private theorem mixed_pow_norm_le_geometric (A : MPSTensor d a) (B : MPSTensor d
     rfl
   simpa only [hApply] using hbound n X
 
-private theorem unital_transfer_norm_le (A : MPSTensor d a)
+private theorem unital_transfer_norm_le (A : MPTensor α (Fin a))
     (hA : Kraus.mapLM A 1 = 1) (X : Matrix (Fin a) (Fin a) ℂ) :
     ‖Kraus.mapLM A X‖ ≤ ‖X‖ := by
   have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
@@ -302,8 +302,8 @@ linear in the interval length. Strict mixed damping supplies bounded powers;
 no overlap estimate is assumed. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
 theorem uncleWallMixedMap_left_norm_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ) (X : Matrix (Fin b) (Fin a) ℂ),
       ‖uncleWallMixedMap A B R A n X‖ ≤ C * n * ‖X‖ := by
@@ -342,8 +342,8 @@ theorem uncleWallMixedMap_left_norm_le_mul
 has the same uniform linear control. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
 theorem uncleWallMixedMap_right_norm_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ) (X : Matrix (Fin b) (Fin b) ℂ),
       ‖uncleWallMixedMap A B R B n X‖ ≤ C * n * ‖X‖ := by
@@ -405,13 +405,13 @@ prefactor and a strict geometric rate. Its separating B interval is
 2N−1, which is at least N for N>0. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
 theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState A (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * (N : ℝ) ^ 2 * r ^ N := by
   obtain ⟨CR, hCR, hR⟩ := uncleWallMixedMap_left_norm_le_mul A B R hA hSpect
   obtain ⟨CL, hCL, hL⟩ := uncleWallMixedMap_right_norm_le_mul B A L hA hSpect
@@ -460,13 +460,13 @@ theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul
 of exact length 2N, that supplies geometric damping. Source:
 arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState B (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * (N : ℝ) ^ 2 * r ^ N := by
   obtain ⟨CR, hCR, hR⟩ := uncleWallMixedMap_right_norm_le_mul A B R hB hSpect
   obtain ⟨CL, hCL, hL⟩ := uncleWallMixedMap_left_norm_le_mul B A L hB hSpect
@@ -543,13 +543,13 @@ geometric rate. The polynomial number of possible wall positions is absorbed
 by a weaker rate between the derived mixed rate and one; no fixed printed
 exponent is assumed. Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C z : ℝ, 0 < C ∧ 0 < z ∧ z < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState A (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * z ^ N := by
   obtain ⟨C, r, hC, hr, hr1, hbound⟩ :=
     norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul A B R L hA hSpect
@@ -565,13 +565,13 @@ theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric
 geometrically, with its rate derived from strict mixed damping.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C z : ℝ, 0 < C ∧ 0 < z ∧ z < 1 ∧ ∀ N : ℕ, 0 < N →
       ‖⟪mpvState B (6 * N + 1),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)⟫_ℂ‖ ≤ C * z ^ N := by
   obtain ⟨C, r, hC, hr, hr1, hbound⟩ :=
     norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul A B R L hB hSpect
@@ -587,12 +587,12 @@ theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric
 trial, as a consequence of the derived geometric estimate.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     Filter.Tendsto (fun N : ℕ ↦ ⟪mpvState A (6 * N + 1),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)⟫_ℂ) Filter.atTop (nhds 0) := by
   obtain ⟨C, z, _, hz, hz1, hbound⟩ :=
     norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric A B R L hA hSpect
@@ -605,12 +605,12 @@ theorem inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero
 trial, without supplying an orthogonality hypothesis.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     Filter.Tendsto (fun N : ℕ ↦ ⟪mpvState B (6 * N + 1),
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)⟫_ℂ) Filter.atTop (nhds 0) := by
   obtain ⟨C, z, _, hz, hz1, hbound⟩ :=
     norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric A B R L hB hSpect

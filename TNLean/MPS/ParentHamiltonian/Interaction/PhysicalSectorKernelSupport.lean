@@ -24,15 +24,15 @@ No full all-volume model or source counterexample is asserted here.
 
 namespace MPSTensor
 
-variable {d R M : ℕ} {κ : Type*}
+variable {α : Type*} [Fintype α] [DecidableEq α] {R M : ℕ} {κ : Type*}
 
 /-- A vector embedded from one physical alphabet has zero coefficients on
 words with two different sector labels, when the alphabet lies in one sector.
 The extension is Mathlib's extension by zero on the actual word embedding.
 Source: physical-sector separation for SPWC10, Theorem 5, lines 850--880. -/
 theorem embedded_physical_vector_apply_eq_zero_of_labels_ne
-    {a : ℕ} (e : Fin a ↪ Fin d) (label : Fin d → κ) (c : κ)
-    (he : ∀ i, label (e i) = c) (v : MPVSpace (Fin a) R) (ω : Cfg d R)
+    {a : ℕ} (e : Fin a ↪ α) (label : α → κ) (c : κ)
+    (he : ∀ i, label (e i) = c) (v : MPVSpace (Fin a) R) (ω : (Fin R → α))
     (i j : Fin R) (hij : label (ω i) ≠ label (ω j)) :
     (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero v ω = 0 := by
   apply Function.Embedding.euclideanExtendByZero_apply_not_mem_range
@@ -44,15 +44,15 @@ coefficient on a word with two different sector labels. This is derived from
 the actual extension maps, not assumed as a support condition.
 Source: physical-sector separation for SPWC10, Theorem 5, lines 850--880. -/
 theorem coeff_eq_zero_of_mem_two_embedded_physical_sectors
-    {a b : ℕ} (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (label : Fin d → κ)
+    {a b : ℕ} (e : Fin a ↪ α) (f : Fin b ↪ α) (label : α → κ)
     (c₁ c₂ : κ) (he : ∀ i, label (e i) = c₁) (hf : ∀ i, label (f i) = c₂)
     (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
-    (v : MPVSpace (Fin d) R)
+    (v : MPVSpace α R)
     (hv : v ∈ S.map
         (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero.toLinearMap ⊔
       T.map
         (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f)).euclideanExtendByZero.toLinearMap)
-    (ω : Cfg d R) (i j : Fin R) (hij : label (ω i) ≠ label (ω j)) : v ω = 0 := by
+    (ω : (Fin R → α)) (i j : Fin R) (hij : label (ω i) ≠ label (ω j)) : v ω = 0 := by
   obtain ⟨x, hx, y, hy, rfl⟩ := Submodule.mem_sup.mp hv
   obtain ⟨x, _, rfl⟩ := Submodule.mem_map.mp hx
   obtain ⟨y, _, rfl⟩ := Submodule.mem_map.mp hy
@@ -74,14 +74,14 @@ support is assumed; all local annihilation and global support conclusions are de
 Hamiltonian equation. Source: physical-sector separation in the finite-prefix investigation of
 SPWC10, Theorem 5, lines 850--880. -/
 theorem physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
-    (S : Submodule ℂ (MPVSpace (Fin d) R)) (label : Fin d → κ)
+    (S : Submodule ℂ (MPVSpace α R)) (label : α → κ)
     (hR : 2 ≤ R) (hRM : R ≤ M)
-    (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
+    (hS : ∀ v ∈ S, ∀ ω : (Fin R → α),
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
-    (ψ : MPVSpace (Fin d) M)
+    (ψ : MPVSpace α M)
     (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
-    (σ : Cfg d M) (hσ : ψ σ ≠ 0) :
+    (σ : (Fin M → α)) (hσ : ψ σ ≠ 0) :
     ∀ i : Fin M, label (σ i) = label (σ ⟨0, by omega⟩) := by
   have : NeZero M := ⟨by omega⟩
   let _ : NeZero M := ⟨by omega⟩
@@ -131,14 +131,14 @@ of the Hamiltonian of the translates on the ring of the complementary projection
 physical-sector separation in the finite-prefix investigation of SPWC10, Theorem 5,
 lines 850--880. -/
 theorem coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne
-    (S : Submodule ℂ (MPVSpace (Fin d) R)) (label : Fin d → κ)
+    (S : Submodule ℂ (MPVSpace α R)) (label : α → κ)
     (hR : 2 ≤ R) (hRM : R ≤ M)
-    (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
+    (hS : ∀ v ∈ S, ∀ ω : (Fin R → α),
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
-    (ψ : MPVSpace (Fin d) M)
+    (ψ : MPVSpace α M)
     (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
-    (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
+    (σ : (Fin M → α)) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
   have : NeZero M := ⟨by omega⟩
   by_contra hσ
   have heq := physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
@@ -150,10 +150,10 @@ embedded sector subspaces has no mixed-sector coefficients in its kernel. Neithe
 conclusion nor a global kernel decomposition is supplied. Source: physical-sector separation in
 the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880. -/
 theorem coeff_eq_zero_of_two_sector_translationInvariant_projector
-    {a b : ℕ} (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (label : Fin d → κ)
+    {a b : ℕ} (e : Fin a ↪ α) (f : Fin b ↪ α) (label : α → κ)
     (c₁ c₂ : κ) (he : ∀ i, label (e i) = c₁) (hf : ∀ i, label (f i) = c₂)
     (S : Submodule ℂ (MPVSpace (Fin a) R)) (T : Submodule ℂ (MPVSpace (Fin b) R))
-    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (Fin d) M)
+    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace α M)
     (hzero : haveI : NeZero M := ⟨by omega⟩;
       Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map
@@ -161,7 +161,7 @@ theorem coeff_eq_zero_of_two_sector_translationInvariant_projector
         T.map
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f)).euclideanExtendByZero.toLinearMap)ᗮ
         |>.starProjection.toLinearMap))).hamiltonian ψ = 0)
-    (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
+    (σ : (Fin M → α)) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
   have : NeZero M := ⟨by omega⟩
   apply coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne _ label hR hRM
     (fun v hv ω hω ↦ coeff_eq_zero_of_mem_two_embedded_physical_sectors

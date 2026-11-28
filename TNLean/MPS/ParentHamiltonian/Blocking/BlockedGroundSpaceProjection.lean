@@ -61,7 +61,7 @@ theorem groundSpaceProjectionMatrix_blockTensor_reindex
     ((Kraus.blockedConfigEquiv d N L).symm σ) ((Kraus.blockedConfigEquiv d N L).symm τ) =
       groundSpaceProjectionMatrix A (N * L) σ τ
   rw [hcol, hcol, starProjection_map_groundSpace_blockTensor_map_apply]
-  have hsingle : (blockedConfigLinearIsometryEquiv d N L).symm
+  have hsingle : (blockedConfigLinearIsometryEquiv (α := Fin d) N L).symm
       (toLp 2 (Pi.single τ 1)) =
       toLp 2 (Pi.single ((Kraus.blockedConfigEquiv d N L).symm τ) 1) := by
     ext ν

@@ -85,7 +85,7 @@ namespace MPSTensor.BeigiSectorGraphData
 
 open FiniteWeightedDigraph
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)}
 
 /-- The Euclidean norm of the loop bond vector.
 
@@ -155,7 +155,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13); CPSV16,
 the fixed-point normal-form derivation, source lines 1293--1300. -/
 noncomputable def normalizedMinimalLoopCoordinateTensor
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    MPSTensor d (F.loopSchmidtRank l) :=
+    MPTensor α (Fin (F.loopSchmidtRank l)) :=
   fun i ↦ ((F.loopBondNorm l : ℂ)⁻¹) • F.minimalLoopCoordinateTensor l i
 
 /-- The physical minimal loop tensor divided by the Euclidean norm of its
@@ -170,7 +170,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13); CPSV16,
 `eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578, and
 the fixed-point normal-form derivation, source lines 1293--1300. -/
 noncomputable def normalizedMinimalLoopTensor (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
+    (l : Loop F.edgeWeight) : MPTensor α (Fin (F.loopSchmidtRank l)) :=
   fun i ↦ ((F.loopBondNorm l : ℂ)⁻¹) • F.minimalLoopTensor l i
 
 private theorem normalizedMinimalLoopTensor_eq_rotatePhysical
@@ -194,13 +194,13 @@ private theorem normalizedMinimalLoopCoordinateTensor_mixedMapLM_eq_zero_of_ne
   intro Z
   simp only [Kraus.mixedMapLM_apply, LinearMap.zero_apply]
   calc
-    (∑ i : Fin d, F.normalizedMinimalLoopCoordinateTensor l i * Z *
+    (∑ i : α, F.normalizedMinimalLoopCoordinateTensor l i * Z *
         (F.normalizedMinimalLoopCoordinateTensor m i)ᴴ) =
         ∑ z : Σ k, Fin (F.rightDim k) × Fin (F.leftDim k),
           F.normalizedMinimalLoopCoordinateTensor l (F.sectorEquiv z) * Z *
             (F.normalizedMinimalLoopCoordinateTensor m (F.sectorEquiv z))ᴴ := by
       exact Fintype.sum_equiv F.sectorEquiv.symm
-        (fun i : Fin d ↦ F.normalizedMinimalLoopCoordinateTensor l i * Z *
+        (fun i : α ↦ F.normalizedMinimalLoopCoordinateTensor l i * Z *
           (F.normalizedMinimalLoopCoordinateTensor m i)ᴴ)
         (fun z ↦ F.normalizedMinimalLoopCoordinateTensor l (F.sectorEquiv z) * Z *
           (F.normalizedMinimalLoopCoordinateTensor m (F.sectorEquiv z))ᴴ)
@@ -274,13 +274,13 @@ theorem transferMap_minimalLoopCoordinateTensor
   classical
   transfer_simp
   calc
-    (∑ i : Fin d, F.minimalLoopCoordinateTensor l i * Z *
+    (∑ i : α, F.minimalLoopCoordinateTensor l i * Z *
         (F.minimalLoopCoordinateTensor l i)ᴴ) =
         ∑ z : Σ k, Fin (F.rightDim k) × Fin (F.leftDim k),
           F.minimalLoopCoordinateTensor l (F.sectorEquiv z) * Z *
             (F.minimalLoopCoordinateTensor l (F.sectorEquiv z))ᴴ := by
       exact Fintype.sum_equiv F.sectorEquiv.symm
-        (fun i : Fin d ↦ F.minimalLoopCoordinateTensor l i * Z *
+        (fun i : α ↦ F.minimalLoopCoordinateTensor l i * Z *
           (F.minimalLoopCoordinateTensor l i)ᴴ)
         (fun z ↦ F.minimalLoopCoordinateTensor l (F.sectorEquiv z) * Z *
           (F.minimalLoopCoordinateTensor l (F.sectorEquiv z))ᴴ)
@@ -503,7 +503,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13); CPSV16,
 `eq:basic-vectors-RFP-pure` and `eq:III_varphi`, source lines 570--578, and
 the fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem mpv_normalizedMinimalLoopTensor (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
+    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → α) :
     mpv (F.normalizedMinimalLoopTensor l) s =
       ((F.loopBondNorm l : ℂ)⁻¹) ^ N * F.loopProductState l s := by
   unfold normalizedMinimalLoopTensor

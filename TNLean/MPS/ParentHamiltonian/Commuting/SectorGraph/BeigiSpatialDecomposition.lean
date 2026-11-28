@@ -37,7 +37,7 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Coordinate transport -/
 
@@ -54,19 +54,19 @@ two-site operator is its left overlapping matrix lift.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem leftPairLift_toMatrix_reindex_leftAssociated
-    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
-    Matrix.reindex (threeSiteParentInteractionEquiv (Fin d))
-        (threeSiteParentInteractionEquiv (Fin d))
+    (Q : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2) :
+    Matrix.reindex (threeSiteParentInteractionEquiv α)
+        (threeSiteParentInteractionEquiv α)
         (LinearMap.toMatrix' (leftPairLift Q)) =
       Matrix.leftOverlappingLift
-        (Matrix.reindex (finTwoArrowEquiv (Fin d))
-          (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
+        (Matrix.reindex (finTwoArrowEquiv α)
+          (finTwoArrowEquiv α) (LinearMap.toMatrix' Q)) := by
   classical
   rw [threeSiteParentInteractionEquiv]
-  change Matrix.reindex (Equiv.prodAssoc (Fin d) (Fin d) (Fin d)).symm
-      (Equiv.prodAssoc (Fin d) (Fin d) (Fin d)).symm
-      (Matrix.reindex (finThreeArrowEquiv (Fin d))
-        (finThreeArrowEquiv (Fin d))
+  change Matrix.reindex (Equiv.prodAssoc α α α).symm
+      (Equiv.prodAssoc α α α).symm
+      (Matrix.reindex (finThreeArrowEquiv α)
+        (finThreeArrowEquiv α)
         (LinearMap.toMatrix' (leftPairLift Q))) = _
   rw [leftPairLift_toMatrix_reindex]
   ext p q
@@ -78,19 +78,19 @@ two-site operator is its right overlapping matrix lift.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem rightPairLift_toMatrix_reindex_leftAssociated
-    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
-    Matrix.reindex (threeSiteParentInteractionEquiv (Fin d))
-        (threeSiteParentInteractionEquiv (Fin d))
+    (Q : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2) :
+    Matrix.reindex (threeSiteParentInteractionEquiv α)
+        (threeSiteParentInteractionEquiv α)
         (LinearMap.toMatrix' (rightPairLift Q)) =
       Matrix.rightOverlappingLift
-        (Matrix.reindex (finTwoArrowEquiv (Fin d))
-          (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
+        (Matrix.reindex (finTwoArrowEquiv α)
+          (finTwoArrowEquiv α) (LinearMap.toMatrix' Q)) := by
   classical
   rw [threeSiteParentInteractionEquiv]
-  change Matrix.reindex (Equiv.prodAssoc (Fin d) (Fin d) (Fin d)).symm
-      (Equiv.prodAssoc (Fin d) (Fin d) (Fin d)).symm
-      (Matrix.reindex (finThreeArrowEquiv (Fin d))
-        (finThreeArrowEquiv (Fin d))
+  change Matrix.reindex (Equiv.prodAssoc α α α).symm
+      (Equiv.prodAssoc α α α).symm
+      (Matrix.reindex (finThreeArrowEquiv α)
+        (finThreeArrowEquiv α)
         (LinearMap.toMatrix' (rightPairLift Q))) = _
   rw [rightPairLift_toMatrix_reindex]
   ext p q
@@ -102,15 +102,15 @@ theorem rightPairLift_toMatrix_reindex_leftAssociated
 /-- The canonical two-site parent interaction in ordered-pair coordinates.
 
 Source: arXiv:1606.00608, Definition 3.9 and Theorem 3.10, lines 517--540. -/
-noncomputable def twoSiteParentInteractionMatrix (A : MPSTensor d D) :
-    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
-  Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
+noncomputable def twoSiteParentInteractionMatrix (A : MPTensor α (Fin D)) :
+    Matrix (α × α) (α × α) ℂ :=
+  Matrix.reindex (finTwoArrowEquiv α) (finTwoArrowEquiv α)
     (LinearMap.toMatrix' (parentInteraction A 2))
 
 /-- The canonical two-site parent interaction matrix is Hermitian.
 
 Source: arXiv:1606.00608, Definition 3.9, lines 517--525. -/
-theorem twoSiteParentInteractionMatrix_isHermitian (A : MPSTensor d D) :
+theorem twoSiteParentInteractionMatrix_isHermitian (A : MPTensor α (Fin D)) :
     (twoSiteParentInteractionMatrix A).IsHermitian := by
   apply Matrix.IsHermitian.reindex
   exact (isStarProjection_toMatrix'_parentInteraction A 2).isSelfAdjoint.isHermitian
@@ -121,7 +121,7 @@ the two natural overlapping lifts of the canonical two-site interaction.
 Source: arXiv:1606.00608, Theorem 3.10, lines 534--540; Beigi,
 J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem IsNNCPH.twoSiteParentInteractionMatrix_overlappingLifts_commute
-    {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
+    {A : MPTensor α (Fin D)} (hNNCPH : IsNNCPH A 3) :
     Matrix.leftOverlappingLift (twoSiteParentInteractionMatrix A) *
         Matrix.rightOverlappingLift (twoSiteParentInteractionMatrix A) =
       Matrix.rightOverlappingLift (twoSiteParentInteractionMatrix A) *
@@ -131,7 +131,7 @@ theorem IsNNCPH.twoSiteParentInteractionMatrix_overlappingLifts_commute
     term_two_three_one_eq_rightPairLift_parentInteraction] at hComm
   have hMatrix := congrArg LinearMap.toMatrix' hComm
   simp only [LinearMap.toMatrix'_mul] at hMatrix
-  let e := threeSiteParentInteractionEquiv (Fin d)
+  let e := threeSiteParentInteractionEquiv α
   rw [twoSiteParentInteractionMatrix,
     ← leftPairLift_toMatrix_reindex_leftAssociated,
     ← rightPairLift_toMatrix_reindex_leftAssociated]
@@ -153,7 +153,7 @@ lifts commute on three sites.
 This is exactly the local input to the spatial decomposition of Beigi,
 J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem IsNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute
-    {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
+    {A : MPTensor α (Fin D)} (hNNCPH : IsNNCPH A 3) :
     (twoSiteParentInteractionMatrix A).IsHermitian ∧
       Matrix.leftOverlappingLift (twoSiteParentInteractionMatrix A) *
           Matrix.rightOverlappingLift (twoSiteParentInteractionMatrix A) =
@@ -170,27 +170,27 @@ block-action decomposition on the middle physical site.
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3;
 arXiv:1606.00608, Theorem 3.10, lines 534--540. -/
 theorem IsNNCPH.exists_unitary_blockActions_of_twoSiteParentInteractionMatrix
-    {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
+    {A : MPTensor α (Fin D)} (hNNCPH : IsNNCPH A 3) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
-      (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ Fin d)
-      (U : Matrix (Fin d) (Fin d) ℂ)
-      (R : ∀ q, Matrix (Fin d × Fin (dl q)) (Fin d × Fin (dl q)) ℂ)
-      (S : ∀ q, Matrix (Fin (dr q) × Fin d) (Fin (dr q) × Fin d) ℂ),
-      U ∈ Matrix.unitaryGroup (Fin d) ℂ ∧
+      (e : ((q : Fin K) × (Fin (dr q) × Fin (dl q))) ≃ α)
+      (U : Matrix α α ℂ)
+      (R : ∀ q, Matrix (α × Fin (dl q)) (α × Fin (dl q)) ℂ)
+      (S : ∀ q, Matrix (Fin (dr q) × α) (Fin (dr q) × α) ℂ),
+      U ∈ Matrix.unitaryGroup α ℂ ∧
         (∀ q, 0 < dl q) ∧ (∀ q, 0 < dr q) ∧
         (∀ q, (R q).IsHermitian) ∧ (∀ q, (S q).IsHermitian) ∧
         Matrix.reindex (Matrix.leftSpatialBlockEquiv e).symm
             (Matrix.leftSpatialBlockEquiv e).symm
-            (star ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ U) *
+            (star ((1 : Matrix α α ℂ) ⊗ₖ U) *
               twoSiteParentInteractionMatrix A *
-              ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ U)) =
+              ((1 : Matrix α α ℂ) ⊗ₖ U)) =
           (Matrix.blockDiagonal' fun q =>
             R q ⊗ₖ (1 : Matrix (Fin (dr q)) (Fin (dr q)) ℂ)) ∧
         Matrix.reindex (Matrix.rightSpatialBlockEquiv e).symm
             (Matrix.rightSpatialBlockEquiv e).symm
-            (star (U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) *
+            (star (U ⊗ₖ (1 : Matrix α α ℂ)) *
               twoSiteParentInteractionMatrix A *
-              (U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))) =
+              (U ⊗ₖ (1 : Matrix α α ℂ))) =
           (Matrix.blockDiagonal' fun q =>
             (1 : Matrix (Fin (dl q)) (Fin (dl q)) ℂ) ⊗ₖ S q) := by
   rcases hNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute

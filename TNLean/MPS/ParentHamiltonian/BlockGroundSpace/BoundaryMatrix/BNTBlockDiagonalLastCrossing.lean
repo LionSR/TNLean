@@ -20,7 +20,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- The complementary word for the cyclic window of length \(m+2\) beginning at
 site \(M\) in a chain of length \(M+1\).
@@ -30,7 +30,7 @@ For an outside configuration \(\tau\), this is
   \rho=\tau_{m+1}\cdots\tau_{M-1}.
 \] -/
 def lastCrossingComplementWord {m M : ℕ} (hLen : m + 2 ≤ M + 1)
-    (τ : Fin (M + 1) → Fin d) : List (Fin d) :=
+    (τ : Fin (M + 1) → α) : List α :=
   List.ofFn fun k : Fin (M + 1 - (m + 2)) =>
     τ ⟨k.val + (m + 1), by omega⟩
 
@@ -46,27 +46,27 @@ This is the block-summand form of the boundary-crossing specialization of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1452. -/
 theorem blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComponent
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (τ : Fin (M + 1) → Fin d) (j : Fin r) :
+    (τ : Fin (M + 1) → α) (j : Fin r) :
     cyclicRestrictₗ (show 0 < M + 1 by omega) (m + 2) ⟨M, by omega⟩ τ
         (groundSpaceMap (A j) (M + 1) ((μ j) ^ (M + 1) • X j)) =
       pgvwc07LeftBoundaryComponent (A j)
-        (fun a : Fin d =>
+        (fun a : α =>
           Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
             ((μ j) ^ (M + 1) • X j))
         m := by
   classical
   ext σ
-  let middleWord : List (Fin d) := lastCrossingComplementWord hLen τ
+  let middleWord : List α := lastCrossingComplementWord hLen τ
   let W : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
     Kraus.evalWord (A j) (List.ofFn (Fin.tail (Fin.init σ)))
-  let b : Fin d := σ (Fin.last (m + 1))
-  let a : Fin d := σ 0
+  let b : α := σ (Fin.last (m + 1))
+  let a : α := σ 0
   let Xj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ := (μ j) ^ (M + 1) • X j
   have htail :
-      (Fin.tail σ : Fin (m + 1) → Fin d) =
+      (Fin.tail σ : Fin (m + 1) → α) =
         Fin.snoc (Fin.tail (Fin.init σ)) b := by
     have hinit : Fin.init (Fin.tail σ) = Fin.tail (Fin.init σ) := by
       ext k
@@ -135,16 +135,16 @@ decompositions in arXiv:quant-ph/0608197, Theorem 12, proof lines
 1436--1452. -/
 theorem blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (τ : Fin (M + 1) → Fin d) :
+    (τ : Fin (M + 1) → α) :
     (∑ j : Fin r,
         cyclicRestrictₗ (show 0 < M + 1 by omega) (m + 2) ⟨M, by omega⟩ τ
           (groundSpaceMap (A j) (M + 1) ((μ j) ^ (M + 1) • X j))) =
       ∑ j : Fin r,
         pgvwc07LeftBoundaryComponent (A j)
-          (fun a : Fin d =>
+          (fun a : α =>
             Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
               ((μ j) ^ (M + 1) • X j))
           m := by
@@ -176,10 +176,10 @@ This is the direct cyclic-window instance of the coefficient comparison
 1436--1452. -/
 theorem blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (τ : Fin (M + 1) → Fin d)
+    (τ : Fin (M + 1) → α)
     (hSpan : WordTupleSpanTop A m)
     (hmem :
       (∑ j : Fin r,
@@ -187,17 +187,17 @@ theorem blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup
             (groundSpaceMap (A j) (M + 1) ((μ j) ^ (M + 1) • X j))) ∈
         ⨆ j : Fin r, groundSpace (A j) (m + 2)) :
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ∀ j : Fin r, ∀ a b : Fin d,
+      ∀ j : Fin r, ∀ a b : α,
         A j b *
             (Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
               ((μ j) ^ (M + 1) • X j)) =
           A j b * E j * A j a := by
   classical
-  let C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+  let C : (j : Fin r) → α → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
     fun j a =>
       Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
         ((μ j) ^ (M + 1) • X j)
-  let ψ : NSiteSpace (Fin d) (m + 2) :=
+  let ψ : NSiteSpace α (m + 2) :=
     ∑ j : Fin r,
       cyclicRestrictₗ (show 0 < M + 1 by omega) (m + 2) ⟨M, by omega⟩ τ
         (groundSpaceMap (A j) (M + 1) ((μ j) ^ (M + 1) • X j))
@@ -222,10 +222,10 @@ Theorem 12, proof lines 1436--1452. -/
 theorem
     blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (τ : Fin (M + 1) → Fin d)
+    (τ : Fin (M + 1) → α)
     (hSpan : WordTupleSpanTop A m)
     (hmem :
       (∑ j : Fin r,
@@ -243,7 +243,7 @@ theorem
   rw [blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComponent
     μ A hLen X τ j]
   exact pgvwc07LeftBoundaryComponent_mem_groundSpace (A j)
-    (fun a : Fin d =>
+    (fun a : α =>
       Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
         ((μ j) ^ (M + 1) • X j))
     (E j) m (hE j)
@@ -267,20 +267,20 @@ Here \(\rho=\tau_{m+1}\cdots\tau_{M-1}\) is the complementary word determined
 by the outside configuration. -/
 theorem blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpace
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
-    {ψ : NSiteSpace (Fin d) (M + 1)}
+    {ψ : NSiteSpace α (M + 1)}
     (hψ : ψ ∈
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) (m + 2) (M + 1))
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) (m + 2) (M + 1))
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) (M + 1)
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) (M + 1)
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
-    (τ : Fin (M + 1) → Fin d)
+    (τ : Fin (M + 1) → α)
     (hSpan : WordTupleSpanTop A m) :
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ∀ j : Fin r, ∀ a b : Fin d,
+      ∀ j : Fin r, ∀ a b : α,
         A j b *
             (Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
               ((μ j) ^ (M + 1) • X j)) =
@@ -306,17 +306,17 @@ the last site belongs to \(G_{m+2}(A^j)\). -/
 theorem
     blockDiagonal_boundary_last_component_mem_groundSpace_of_blockDiagonal_chainGroundSpace
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     {m M : ℕ} (hLen : m + 2 ≤ M + 1)
-    {ψ : NSiteSpace (Fin d) (M + 1)}
+    {ψ : NSiteSpace α (M + 1)}
     (hψ : ψ ∈
-      chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) (m + 2) (M + 1))
+      chainGroundSpace (toTensorFromBlocks (μ := μ) A) (m + 2) (M + 1))
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hψX :
-      ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) (M + 1)
+      ψ = groundSpaceMap (toTensorFromBlocks (μ := μ) A) (M + 1)
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
-    (τ : Fin (M + 1) → Fin d)
+    (τ : Fin (M + 1) → α)
     (hSpan : WordTupleSpanTop A m)
     (j : Fin r) :
     cyclicRestrictₗ (show 0 < M + 1 by omega) (m + 2) ⟨M, by omega⟩ τ

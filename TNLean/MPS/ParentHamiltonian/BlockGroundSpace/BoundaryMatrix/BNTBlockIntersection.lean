@@ -43,7 +43,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-variable {d L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {L : ℕ}
 
 /-- Length-\(L_0\) injectivity form of the PGVWC one-step block-intersection
 identity.
@@ -57,12 +57,12 @@ This is the equation used in PGVWC07, Theorem 12, proof lines
 1430--1452. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
@@ -72,10 +72,10 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     {n : ℕ}
     (hn : n =
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
-    ((⨅ b : Fin d,
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1) :
+    ((⨅ b : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-      (⨅ a : Fin d,
+      (⨅ a : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   subst n
@@ -101,10 +101,10 @@ block-separating equations of length \(S\) gives
 for \(n\ge L+(r-1)S\). -/
 theorem wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S n : ℕ}
     (hInj : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1)
+    (hUnital : ∀ k : Fin r, ∑ a : α, A k a * (A k a)ᴴ = 1)
     (hPair : HasPairBlockSeparatingWords A S)
     (hn : L + (r - 1) * S ≤ n) :
     WordTupleSpanTop A n := by
@@ -122,10 +122,10 @@ theorem wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSe
 
 private theorem isNBlkInjective_succ_and_three_mul_succ_of_unital
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
-    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1) :
+    (hUnital : ∀ k : Fin r, ∑ a : α, A k a * (A k a)ᴴ = 1) :
     (∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1)) ∧
       ∀ k : Fin r,
         Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
@@ -149,16 +149,16 @@ then gives the simultaneous product span for every
 \] -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
@@ -196,14 +196,14 @@ or parent-Hamiltonian kernel conclusions. The remaining conclusion is documented
 in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
@@ -212,7 +212,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     (hL₀ : 0 < L₀) :
     WordTupleSpanTop A
       ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) := by
-  let prepared : (j : Fin r) → MPSTensor d (dim j) :=
+  let prepared : (j : Fin r) → MPTensor α (Fin (dim j)) :=
     fun j => Kraus.tpGauge (A j) (Λ j)
   have hGauge : ∀ j, GaugeEquiv (A j) (prepared j) := by
     intro j
@@ -222,7 +222,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
       Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
         (A j) (Λ j) (hΛ j)
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (A j) (hIrr j))
-  have hPreparedLeft : ∀ k, ∑ i : Fin d, (prepared k i)ᴴ * (prepared k i) = 1 :=
+  have hPreparedLeft : ∀ k, ∑ i : α, (prepared k i)ᴴ * (prepared k i) = 1 :=
     fun j =>
       Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint
         (A j) (Λ j) (hΛ j) (hDualFixed j)
@@ -234,11 +234,11 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     fun j => isNormalTensor_of_isNormal_leftCanonical
       (prepared j) (hPreparedNormal j) (hPreparedLeft j)
   have hPreparedOverlap : ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (prepared k) (prepared k) N)
+      Filter.Tendsto (fun N => mpvOverlap (prepared k) (prepared k) N)
         Filter.atTop (nhds (1 : ℂ)) :=
     fun j =>
       (hPreparedNormalTensor j).selfOverlap_tendsto_one
-  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) prepared := by
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv prepared := by
     intro j k hjk hdim hGPE
     apply hBlocks j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
@@ -264,17 +264,17 @@ needed. The base span is arXiv:quant-ph/0608197, lines 1346--1421; the unital
 propagation is lines 893--898. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     WordTupleSpanTop A n := by
@@ -306,18 +306,18 @@ or parent-Hamiltonian kernel conclusions. The remaining conclusion is documented
 in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     WordTupleSpanTop A n := by
@@ -332,16 +332,16 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
 the block local spaces. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
@@ -356,17 +356,17 @@ internal direct sum.
 This is the direct-sum lemma in arXiv:quant-ph/0608197, lines 1346--1421. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     iSupIndep fun j : Fin r => groundSpace (A j) n :=
@@ -389,18 +389,18 @@ conclusion is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     iSupIndep fun j : Fin r => groundSpace (A j) n :=
@@ -412,22 +412,22 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
 at every length above the BNT block-separation bound. -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
-    ((⨅ b : Fin d,
+    ((⨅ b : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-      (⨅ a : Fin d,
+      (⨅ a : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
@@ -442,22 +442,22 @@ The internal middle-word length is at least \(3(r-1)(L_0+1)\). This is the
 intersection step in arXiv:quant-ph/0608197, lines 1424--1452. -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
-    ((⨅ b : Fin d,
+    ((⨅ b : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-      (⨅ a : Fin d,
+      (⨅ a : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
@@ -482,23 +482,23 @@ conclusion is documented in
 theorem
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hr : 2 ≤ r)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := α) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
-    ((⨅ b : Fin d,
+    ((⨅ b : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-      (⨅ a : Fin d,
+      (⨅ a : α,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
@@ -510,24 +510,24 @@ theorem
 an internal direct sum. -/
 theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
     (hn :
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     iSupIndep (fun j : Fin r => groundSpace (A j) (n + 1)) ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) (n + 2)) ∧
-        ((⨅ b : Fin d,
+        ((⨅ b : α,
             (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-          (⨅ a : Fin d,
+          (⨅ a : α,
             (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
           ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact ⟨
@@ -554,12 +554,12 @@ complete period window. The abstract period-window block-intersection theorem
 then gives the eventual intersection identity. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
     (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
     (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
@@ -568,11 +568,11 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
     (hBlkPeriod : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) period)
     (hBlkWindow : ∀ s : ℕ, s < period + (r - 1) * (L + (L + L)) →
       ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (start + s))
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →
-      ((⨅ b : Fin d,
+      ((⨅ b : α,
           (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-        (⨅ a : Fin d,
+        (⨅ a : α,
           (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
         ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   let S : ℕ := L + (L + L)
@@ -601,20 +601,20 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
 without a separate one-site injectivity assumption. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * (A k i) = 1)
+    (hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv A)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    (hUnital : ∀ j : Fin r, ∑ a : α, A j a * (A j a)ᴴ = 1) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →
-      ((⨅ b : Fin d,
+      ((⨅ b : α,
           (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
-        (⨅ a : Fin d,
+        (⨅ a : α,
           (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
         ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   refine ⟨(L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))), ?_⟩

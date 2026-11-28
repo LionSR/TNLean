@@ -29,20 +29,19 @@ blocking; normality alone is not identified with one-site injectivity.
 open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder Topology
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- The supplied affine positive physical deformation has one canonical
 two-site open-chain gap uniform in its parameter and every length at least
 two. Source: arXiv:1010.3732, lines 589--594 and Appendix A; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem exists_uniform_hamiltonian_parentChainInteraction_gap_positivePhysicalDeformation
-    (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (hSpan : WordTupleSpanTop A 1)
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
-    (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) :
+    (Q : Matrix α α ℂ) (hQ : Q.PosDef) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction
@@ -67,9 +66,9 @@ positive affine path has one gap uniform in the parameter and every open
 length at least two. Source: arXiv:1010.3732, lines 610--625 and Appendix A;
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem exists_uniform_positiveDeformedParentInteraction_open_gap
-    (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (hSpan : WordTupleSpanTop A 1)
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
-    (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) :
+    (Q : Matrix α α ℂ) (hQ : Q.PosDef) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (ManyBody.Interaction.chainTranslates 2 N
@@ -102,7 +101,7 @@ The positive polar factor is derived from the original blocks.
 Source: arXiv:1010.3732, lines 575--625 and Appendix A; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem exists_uniform_isometricDeformation_open_parent_gap
-    (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (hSpan : WordTupleSpanTop A 1) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction
@@ -117,7 +116,7 @@ path has one gap uniform in the parameter and every open length at least two.
 Source: arXiv:1010.3732, lines 610--625 and Appendix A; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem exists_uniform_isometricDeformation_open_interaction_gap
-    (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (hSpan : WordTupleSpanTop A 1) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (ManyBody.Interaction.chainTranslates 2 N
@@ -135,20 +134,20 @@ The blocking satisfies \(L+1\leq3\max(\sum_jD_j,1)^5\).
 Source: arXiv:1010.3732, lines 575--625 and Appendix A; arXiv:1606.00608,
 lines 317--345, for the simultaneous blocking bound. -/
 theorem exists_blocked_isometricDeformation_open_parent_gap_of_isNormalTensor
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hNormal : ∀ j, IsNormalTensor (A j)) (hDistinct : BlocksNotGaugePhaseEquiv A) :
     ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * (max (∑ j, dim j) 1) ^ 5 ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
         ∀ z : ℂ, Module.End.HasEigenvalue
           (Matrix.toEuclideanLin (parentChainInteraction
             (toTensorFromBlocks (fun _ => 1)
-              (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N).hamiltonian) z →
+              (isometricDeformationBlocks (fun j => Kraus.block (A j) L) γ)) 2 N).hamiltonian) z →
             z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
     exists_positive_block_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
   exact ⟨L, hL, hBound, exists_uniform_isometricDeformation_open_parent_gap
-    (fun j => blockTensor (A j) L) hSpan⟩
+    (fun j => Kraus.block (A j) L) hSpan⟩
 
 omit [∀ j, NeZero (dim j)] in
 /-- Pairwise inequivalent normalized normal blocks have a finite initial
@@ -158,18 +157,18 @@ least two. The blocking satisfies \(L+1\leq3\max(\sum_jD_j,1)^5\).
 Source: arXiv:1010.3732, lines 575--625 and Appendix A; arXiv:1606.00608,
 lines 317--345, for the simultaneous blocking bound. -/
 theorem exists_blocked_isometricDeformation_open_interaction_gap_of_isNormalTensor
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hNormal : ∀ j, IsNormalTensor (A j)) (hDistinct : BlocksNotGaugePhaseEquiv A) :
     ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * (max (∑ j, dim j) 1) ^ 5 ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
         ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
           (ManyBody.Interaction.chainTranslates 2 N
-            (isometricDeformationInteraction (fun j => blockTensor (A j) L) γ)).hamiltonian) z →
+            (isometricDeformationInteraction (fun j => Kraus.block (A j) L) γ)).hamiltonian) z →
             z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
     exists_positive_block_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
   exact ⟨L, hL, hBound, exists_uniform_isometricDeformation_open_interaction_gap
-    (fun j => blockTensor (A j) L) hSpan⟩
+    (fun j => Kraus.block (A j) L) hSpan⟩
 
 end MPSTensor

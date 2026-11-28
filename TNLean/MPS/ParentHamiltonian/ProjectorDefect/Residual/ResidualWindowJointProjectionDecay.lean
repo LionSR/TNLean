@@ -53,11 +53,10 @@ open MPTensor
 section
 
 open scoped Matrix InnerProductSpace ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D L : ℕ}
 
 /-- Primitive, faithful, inequivalent sectors with exact correlated-tail
 Gram projections have a vanishing joint window projection defect, with
@@ -66,14 +65,14 @@ commutation (i)--(ii), lines 2442--2531. The algebraic support hypotheses
 are explicit; the following periodic consequence derives them. -/
 theorem tendsto_norm_residualWindow_joint_projection_comp_sub_zero
     [NeZero D] {ι : Type*} [Finite ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i, ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (Q : ι → ℕ → Matrix (Fin D) (Fin D) ℂ)
     (hQ : ∀ j r, IsOrthogonalProjection (Q j r))
-    (hGram : ∀ j r, (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
+    (hGram : ∀ j r, (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V j * (V j)ᴴ) * Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q j r)
     {κ : Type*} {f : Filter κ} {K M r : κ → ℕ} (hM : Filter.Tendsto M f Filter.atTop) :
     Filter.Tendsto (fun n =>
@@ -109,14 +108,14 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, commutation (i)--(ii),
 lines 2442--2531; the cyclic resolution is DCCSP17, arXiv:1708.00029,
 Lemma bdcf and equation Aoffdiag. -/
 theorem IsPeriodic.exists_residualWindow_joint_projection_comp_sub_tendsto_zero
-    {m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (hdim : ∀ j, 0 < dim j),
       let _ : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
-      ∃ (B : ∀ j, MPSTensor (blockPhysDim d m) (dim j))
+      ∃ (B : ∀ j, MPTensor (Fin m → α) (Fin (dim j)))
         (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ),
         (∀ j, (V j)ᴴ * V j = 1) ∧ (∑ j, V j * (V j)ᴴ) = 1 ∧
-        (∀ j i, blockTensor A m i * V j = V j * B j i) ∧
-        (∀ j i, (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ) ∧
+        (∀ j i, Kraus.block A m i * V j = V j * B j i) ∧
+        (∀ j i, (V j)ᴴ * Kraus.block A m i = B j i * (V j)ᴴ) ∧
         ∀ K r : ℕ → ℕ, Filter.Tendsto (fun M =>
           ‖(⨆ j, (residualWindowRightMapES A (B j) (V j) (K M) M (r M)).range).starProjection.comp
             (⨆ j, (residualWindowLeftMapES (B j) (K M) M (r M)).range).starProjection -
@@ -132,7 +131,7 @@ theorem IsPeriodic.exists_residualWindow_joint_projection_comp_sub_tendsto_zero
   have hQ : ∀ j r, IsOrthogonalProjection (Q j r) :=
     fun j r => hProj (j - r • (1 : Fin m))
   have hGram (j : Fin m) (r : ℕ) :
-      (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V j * (V j)ᴴ) *
+      (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * (V j * (V j)ᴴ) *
         Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q j r := by
     simpa only [Q, hV] using
       sum_word_conjTranspose_inverseCyclic_projection_mul_word A P hA.leftCanonical hShift j r
@@ -152,14 +151,14 @@ section
 
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- Periodicity derives the vanishing physical cover projection defect,
 uniformly along every prefix and tail selection as the overlap tends to
 infinity. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma commutation (ii), lines 2442--2531, and Section 6. -/
 theorem IsPeriodic.residual_cover_projection_defect_tendsto_zero
-    {A : MPSTensor d D} (hA : IsPeriodic m A) (K r : ℕ → ℕ) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) (K r : ℕ → ℕ) :
     Filter.Tendsto (fun M =>
       ‖((groundSpace A (K M * m + M * m + r M)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection -

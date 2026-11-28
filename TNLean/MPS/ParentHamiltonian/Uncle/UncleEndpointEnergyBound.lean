@@ -29,32 +29,32 @@ namespace MPSTensor
 
 open ManyBody.Interaction (translationInvariant)
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The four actual globally pinned trials, on the original source chain.
 Their five segment lengths place the fixed wall at the indicated physical
 endpoint; every cast is the proved source length equality.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 def uncleTrialPinnedGlobalState
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1)) :
-    EuclideanSpace ℂ (Cfg d (6 * N + 1)) :=
+    EuclideanSpace ℂ (Fin (6 * N + 1) → α) :=
   if i.val = N - 1 then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L N 1 (3 * N - 1) (N + 1) N
         (σ ∘ Fin.cast (by omega))
   else if i.val = 2 * N then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L (2 * N) 1 (2 * N - 1) (N + 1) N
         (σ ∘ Fin.cast (by omega))
   else if i.val = 4 * N - 1 then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) 1 (2 * N)
         (σ ∘ Fin.cast (by omega))
   else if i.val = 5 * N then
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm fun σ ↦
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm fun σ ↦
       uncleTwoWallTrial A B R L N (N + 1) (3 * N - 1) 1 N
         (σ ∘ Fin.cast (by omega))
   else 0
@@ -63,11 +63,11 @@ def uncleTrialPinnedGlobalState
 explicit local pinned endpoint vector, including every exterior word.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem withLpMap_cyclicRestrictₗ_pinnedGlobalState_eq
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1))
-    (hi : i ∈ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
+    (hi : i ∈ uncleTrialEndpointBonds N hN) (τ : (Fin (6 * N + 1) → α)) :
     LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) (uncleTrialPinnedGlobalState A B R L N
         hN i) =
       uncleTrialPinnedEndpointState A B R L N hN i τ := by
@@ -188,9 +188,9 @@ squared-norm bound in N+1, under precisely the normalized block inputs
 needed for their actual one-wall Gram bounds. No state-rate premise is
 supplied. Source: arXiv:1210.6613, Lemma lowenergystates, lines 1289–1296. -/
 theorem norm_uncleTrialPinnedGlobalState_sq_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef)
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef)
@@ -213,14 +213,14 @@ theorem norm_uncleTrialPinnedGlobalState_sq_le_mul
   have hRC : CR ≤ C := le_max_left _ _
   have hLC : CL ≤ C := le_max_right _ _
   have hRcast (p q s t : ℕ) (hlen : p + 1 + q + s + t = 6 * N + 1) :
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (fun σ ↦ uncleTwoWallTrial A B R L p 1 q s t (σ ∘ Fin.cast hlen))‖ ^ 2 ≤
           C * s := by
     rw [norm_uncleTwoWallTrial_cast A B R L p 1 q s t (6 * N + 1) hlen]
     exact (hR p q s t).trans
       (mul_le_mul_of_nonneg_right hRC (Nat.cast_nonneg s))
   have hLcast (p r q t : ℕ) (hlen : p + r + q + 1 + t = 6 * N + 1) :
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (fun σ ↦ uncleTwoWallTrial A B R L p r q 1 t (σ ∘ Fin.cast hlen))‖ ^ 2 ≤
           C * r := by
     rw [norm_uncleTwoWallTrial_cast A B R L p r q 1 t (6 * N + 1) hlen]
@@ -247,9 +247,9 @@ hypotheses used for the variational construction; no injective perturbation
 or generic nonvanishing is needed for this energy upper bound alone.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 3, lines 1289–1296. -/
 theorem re_inner_hamiltonian_uncleInteraction_trial_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef)
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef)
@@ -257,7 +257,7 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_le_mul
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (N : ℕ), 0 < N →
-      let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)
       (⟪Matrix.toEuclideanLin
           (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ, φ⟫_ℂ).re ≤ C
@@ -274,8 +274,8 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_le_mul
     simp only [hzero, map_zero, inner_zero_left, Complex.zero_re]
     positivity
   calc
-    _ ≤ (((d ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
-        ∑ τ : Cfg d (6 * N + 1), ‖uncleTrialPinnedEndpointState A B R L N hN i τ‖ ^ 2 :=
+    _ ≤ (((Fintype.card α ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
+        ∑ τ : (Fin (6 * N + 1) → α), ‖uncleTrialPinnedEndpointState A B R L N hN i τ‖ ^ 2 :=
       re_inner_hamiltonian_uncleInteraction_trial_le_pinnedEndpoint_norms A B R L N hN
     _ = ∑ i ∈ uncleTrialEndpointBonds N hN,
         ‖uncleTrialPinnedGlobalState A B R L N hN i‖ ^ 2 := by

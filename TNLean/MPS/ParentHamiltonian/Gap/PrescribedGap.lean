@@ -32,14 +32,14 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A gap \(1-\eta/2\) of the open-chain parent Hamiltonian on a sufficiently long comparison
 window implies the gap \(1-\eta\) of the Hamiltonian of the parent interaction on the ring; each
 gap is stated above the kernel: every eigenvalue is `0` or at least the gap. The explicit window
 condition is \(2(R-1)^2\le m\eta\), where \(m\) counts local interactions. -/
 theorem hamiltonian_parentRingInteraction_gap_ge_one_sub_of_open_gap
-    (A : MPSTensor d D) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
+    (A : MPTensor α (Fin D)) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
     {η : ℝ} (hη : 0 < η) (hηone : η < 1)
     (hmη : 2 * ((R : ℝ) - 1) ^ 2 ≤ (m : ℝ) * η)
     (hOpen : ∀ z : ℂ, Module.End.HasEigenvalue
@@ -71,7 +71,7 @@ periodic gap at least \(1-\eta\). A comparison window containing \(m\)
 interactions suffices when \(l+1\le m\) and \(2l^2\le m\eta\); the
 periodic chain then needs at least \(2m\) sites. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_parentRingInteraction_gap_ge_one_sub
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {η : ℝ}
     (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ l : ℕ in atTop, ∀ (m : ℕ) (hm : l + 1 ≤ m),
@@ -108,8 +108,8 @@ large even interaction range has periodic gap at least \(1-\eta\) at all
 sufficiently large chain lengths. The block weights are nonzero; the local
 interactions remain orthogonal projectors with coefficient one. -/
 theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_one_sub
-    {r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -120,9 +120,9 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_o
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ) A) (2 * p) N).hamiltonian) z →
           z = 0 ∨ (((1 - η) : ℝ) : ℂ) ≤ z := by
-  let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
+  let B := toTensorFromBlocks (μ := μ) A
   let ε := η / (4 * Real.sqrt 2)
   have hsqrt : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hε : 0 < ε := div_pos hη (mul_pos (by norm_num) hsqrt)
@@ -169,7 +169,7 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_o
 normalization hypothesis. Primitive normalization preserves each parent
 Hamiltonian exactly, so the same interaction and chain-length bounds apply. -/
 theorem eventually_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal
-    [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsNormal A)
+    [NeZero D] {A : MPTensor α (Fin D)} (hA : Kraus.IsNormal A)
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ l : ℕ in atTop, ∀ (m : ℕ) (hm : l + 1 ≤ m),
       2 * (l : ℝ) ^ 2 ≤ (m : ℝ) * η →
@@ -189,8 +189,8 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal
 /-- Independent normalization also preserves the prescribed gap of a weighted
 sum of inequivalent normal blocks at sufficiently large even ranges. -/
 theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal
-    {r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
@@ -199,7 +199,7 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_o
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p) N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ) A) (2 * p) N).hamiltonian) z →
           z = 0 ∨ (((1 - η) : ℝ) : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
     exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal

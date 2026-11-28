@@ -24,7 +24,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 section FrobeniusRealization
 
@@ -36,10 +36,10 @@ space with \(\ell^2(D \times D)\) and the identification of the physical configu
 with \(\ell^2\). Its facts that are not about the Hilbert structure (adjoint, Gram operator,
 range, inverse-Gram projection) are those of `groundSpaceMap A L`, read through
 `groundSpaceMapES_frobeniusEquivEuclidean_apply`. -/
-noncomputable def groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
-    EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Cfg d L) :=
+noncomputable def groundSpaceMapES (A : MPTensor α (Fin D)) (L : ℕ) :
+    EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin L → α) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.toLinearMap.comp
       ((groundSpaceMap A L).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.toLinearEquiv.toLinearMap)
 
@@ -56,10 +56,10 @@ theorem _root_.Matrix.frobeniusEquivEuclidean_single (a b : Fin D) :
 boundary map `groundSpaceMap`. -/
 @[simp]
 theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
-    (A : MPSTensor d D) (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
+    (A : MPTensor α (Fin D)) (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMapES A L (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm (groundSpaceMap A L X) := by
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm (groundSpaceMap A L X) := by
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
       (groundSpaceMap A L
         ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X))) = _
@@ -67,14 +67,14 @@ theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
 
 /-- The Hilbert-space realization has exactly the physical local ground space
 as its range. -/
-theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
+theorem range_groundSpaceMapES (A : MPTensor α (Fin D)) (L : ℕ) :
     (groundSpaceMapES A L).range = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) := by
   ext v
   constructor
   · rintro ⟨x, rfl⟩
     obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm
       (groundSpaceMap A L X) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
     exact ⟨groundSpaceMap A L X, ⟨X, rfl⟩, rfl⟩
   · rintro ⟨ψ, ⟨X, rfl⟩, rfl⟩
@@ -87,15 +87,15 @@ physical local ground space. This is the physical range projector, not the
 virtual transfer fixed-point projector `fixedPointProj`; it does not assert an
 overlapping-window estimate. -/
 theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
-    (A : MPSTensor d D) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L) :
+    (A : MPTensor α (Fin D)) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L) :
     ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
       (show Function.Injective (groundSpaceMapES A L) from
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective.comp
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.injective.comp
           ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective)) =
         ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
-  exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) => K.starProjection)
+  exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Fin L → α)) => K.starProjection)
     (range_groundSpaceMapES A L)
 
 /-- If \(L₀ > 0\), \(A\) is \(L₀\)-block injective, and \(L \ge L₀\), then
@@ -108,13 +108,13 @@ Here the inverse is `ContinuousLinearMap.inverseGram`. This is the physical
 range projector, not the virtual `fixedPointProj`; it does not assert an
 overlapping-window estimate. -/
 theorem map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
-    (A : MPSTensor d D) {L₀ L : ℕ} (hL₀ : 0 < L₀)
+    (A : MPTensor α (Fin D)) {L₀ L : ℕ} (hL₀ : 0 < L₀)
     (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
     ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (groundSpaceMapES A L).comp
         ((ContinuousLinearMap.inverseGram (groundSpaceMapES A L)
           (show Function.Injective (groundSpaceMapES A L) from
-            (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective.comp
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.injective.comp
               ((groundSpaceMap_injective_of_isNBlkInjective
                 (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).comp
                   (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective))).comp
@@ -125,7 +125,7 @@ theorem map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp
 end FrobeniusRealization
 
 /-- The finite-dimensional Gram operator \(\Gamma_L^\dagger\Gamma_L\). -/
-noncomputable def groundSpaceGram (A : MPSTensor d D) (L : ℕ) :
+noncomputable def groundSpaceGram (A : MPTensor α (Fin D)) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D) :=
   (groundSpaceMapES A L).adjoint.comp (groundSpaceMapES A L)
 
@@ -133,10 +133,10 @@ noncomputable def groundSpaceGram (A : MPSTensor d D) (L : ℕ) :
 precise Choi reshuffling: it is not the Hilbert--Schmidt pairing with the
 iterated transfer map. -/
 theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
-    (A : MPSTensor d D) (L : ℕ) (a b c e : Fin D) :
+    (A : MPTensor α (Fin D)) (L : ℕ) (a b c e : Fin D) :
     inner ℂ (EuclideanSpace.single (b, a) 1)
       (groundSpaceGram A L (EuclideanSpace.single (e, c) 1)) =
-      Matrix.rectangularChoi ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L)
+      Matrix.rectangularChoi ((Kraus.transferMap (ι := α) (n := Fin D) A) ^ L)
         (c, e) (a, b) := by
   classical
   rw [groundSpaceGram, ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right]
@@ -151,10 +151,10 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
         W e c * star (W b a) := by
     simp [Matrix.mul_apply, Matrix.single_apply, ite_and]
-  rw [show (∑ σ : Fin L → Fin d,
+  rw [show (∑ σ : Fin L → α,
       Kraus.evalWord A (List.ofFn σ) * Matrix.single c a 1 *
         (Kraus.evalWord A (List.ofFn σ))ᴴ) =
-      ∑ σ ∈ (Finset.univ : Finset (Fin L → Fin d)),
+      ∑ σ ∈ (Finset.univ : Finset (Fin L → α)),
         Kraus.evalWord A (List.ofFn σ) * Matrix.single c a 1 *
           (Kraus.evalWord A (List.ofFn σ))ᴴ by rfl, Matrix.sum_apply]
   simp_rw [hmul]
@@ -162,7 +162,7 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
 
 /-- The Gram operator of \(\Gamma_L\) equals the reshuffling of the Choi matrix
 of the \(L\)-fold transfer map. -/
-theorem groundSpaceGram_eq_gramReshuffle (A : MPSTensor d D) (L : ℕ) :
+theorem groundSpaceGram_eq_gramReshuffle (A : MPTensor α (Fin D)) (L : ℕ) :
     groundSpaceGram A L = Matrix.gramReshuffle ((Kraus.transferMap A) ^ L) := by
   apply ContinuousLinearMap.coe_injective
   refine (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.ext fun ⟨e, c⟩ => ?_

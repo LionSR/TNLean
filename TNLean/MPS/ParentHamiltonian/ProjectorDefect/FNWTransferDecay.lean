@@ -34,7 +34,7 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
@@ -43,7 +43,7 @@ Schrödinger remainder. Hence primitivity bounds every eigenvalue in modulus by
 one strictly. This norm-independent bridge is the spectral step in FNW 1992,
 Lemma 5.2, before the weighted norm in equations (5.9)--(5.10) is chosen. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwRemainder_eigenvalue_norm_lt_one [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ) (ν : ℂ)
+    {A : MPTensor α (Fin D)} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ) (ν : ℂ)
     (hν : Module.End.HasEigenvalue
       (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ν) :
     ‖ν‖ < 1 := by
@@ -75,7 +75,7 @@ the local rho-weighted matrix norm of equation (5.6). This definition keeps
 the norm choice explicit without comparing it to TNLean's ambient matrix norm. -/
 noncomputable def fnwWeightedRemainderSpectralRadius {D : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    {d : ℕ} (A : MPSTensor d D) (htr : Matrix.trace ρ ≠ 0) : ℝ≥0∞ := by
+    {d : ℕ} (A : MPTensor α (Fin D)) (htr : Matrix.trace ρ ≠ 0) : ℝ≥0∞ := by
   weighted_matrix_norm_instances ρ hρ
   let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ)
     (Matrix (Fin D) (Fin D) ℂ)
@@ -106,7 +106,7 @@ radius strictly below one. The proof uses only finite dimensionality and the
 norm-independent eigenvalue bridge, rather than comparing spectral radii
 across different matrix norm instances. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainder_spectralRadius_lt_one
-    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero < 1 := by
   simpa only [fnwWeightedRemainderSpectralRadius] using
@@ -121,7 +121,7 @@ trace-one normalization explicit:
 The norm is the local rho-weighted continuous-operator norm. -/
 noncomputable def fnwMixingQuantity {D : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    {d : ℕ} (A : MPSTensor d D) (htr : Matrix.trace ρ = 1) (n : ℕ) : ℝ :=
+    {d : ℕ} (A : MPTensor α (Fin D)) (htr : Matrix.trace ρ = 1) (n : ℕ) : ℝ :=
   fnwTraceInverseFactor ρ * fnwWeightedOperatorNorm ρ hρ
     (fnwTransferMap A ^ n - fnwLimitMap ρ (by simp [htr]))
 
@@ -136,7 +136,7 @@ theorem fnwWeightedOperatorNorm_nonneg {D : ℕ}
 /-- The source mixing quantity \(a(n)\) of FNW 1992, equations (5.9)--(5.10), is
 nonnegative. -/
 theorem fnwMixingQuantity_nonneg [NeZero D]
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (htr : Matrix.trace ρ = 1)
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (htr : Matrix.trace ρ = 1)
     (n : ℕ) :
     0 ≤ fnwMixingQuantity ρ hρ A htr n :=
   mul_nonneg (fnwTraceInverseFactor_pos hρ).le
@@ -149,7 +149,7 @@ the FNW remainder, there is a positive, rate-dependent prefactor bounding
 below one is needed for this generic power estimate, and no dimension-only
 value of the prefactor is asserted. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    {A : MPTensor α (Fin D)} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) (rate : ℝ≥0)
     (hrate : fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero <
       (rate : ℝ≥0∞)) :

@@ -24,7 +24,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The left-boundary summand in the source block-diagonal intersection proof:
 \[
@@ -34,8 +34,8 @@ variable {d D : ℕ}
 \]
 -/
 noncomputable def pgvwc07LeftBoundaryComponent
-    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
-    NSiteSpace (Fin d) (n + 2) :=
+    (A : MPTensor α (Fin D)) (C : α → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
+    NSiteSpace α (n + 2) :=
   fun σ => Matrix.trace
     (A (σ (Fin.last (n + 1))) * C (σ 0) *
       Kraus.evalWord A (List.ofFn (Fin.tail (Fin.init σ))))
@@ -43,8 +43,8 @@ noncomputable def pgvwc07LeftBoundaryComponent
 /-- Fixing the first physical index in the source left-boundary summand gives the
 usual ground-space parametrization with boundary matrix \(C_a\). -/
 theorem restrictFirst_pgvwc07LeftBoundaryComponent
-    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (n : ℕ) (a : Fin d) :
+    (A : MPTensor α (Fin D)) (C : α → Matrix (Fin D) (Fin D) ℂ)
+    (n : ℕ) (a : α) :
     restrictFirst (pgvwc07LeftBoundaryComponent A C n) a =
       groundSpaceMap A (n + 1) (C a) := by
   ext σ
@@ -52,25 +52,25 @@ theorem restrictFirst_pgvwc07LeftBoundaryComponent
       σ = Fin.snoc (Fin.init σ) (σ (Fin.last n)) := by
     exact (Fin.snoc_init_self σ).symm
   have hinit :
-      (Fin.init (Fin.cons a σ : Fin (n + 2) → Fin d) : Fin (n + 1) → Fin d) =
-        (Fin.cons a (Fin.init σ : Fin n → Fin d) : Fin (n + 1) → Fin d) := by
+      (Fin.init (Fin.cons a σ : Fin (n + 2) → α) : Fin (n + 1) → α) =
+        (Fin.cons a (Fin.init σ : Fin n → α) : Fin (n + 1) → α) := by
     ext k
     cases k using Fin.cases with
     | zero => simp [Fin.init, Fin.cons]
     | succ k => simp [Fin.init, Fin.cons]
   have htail :
       (Fin.tail
-        (Fin.init (Fin.cons a σ : Fin (n + 2) → Fin d) : Fin (n + 1) → Fin d) :
-          Fin n → Fin d) =
-        (Fin.init σ : Fin n → Fin d) := by
+        (Fin.init (Fin.cons a σ : Fin (n + 2) → α) : Fin (n + 1) → α) :
+          Fin n → α) =
+        (Fin.init σ : Fin n → α) := by
     rw [hinit]
-    exact @Fin.tail_cons n (fun _ => Fin d) a (Fin.init σ : Fin n → Fin d)
+    exact @Fin.tail_cons n (fun _ => α) a (Fin.init σ : Fin n → α)
   have hlast :
-      (Fin.cons a σ : Fin (n + 2) → Fin d) (Fin.last (n + 1)) = σ (Fin.last n) := by
-    change (Fin.cons a σ : Fin (n + 2) → Fin d) (Fin.succ (Fin.last n)) =
+      (Fin.cons a σ : Fin (n + 2) → α) (Fin.last (n + 1)) = σ (Fin.last n) := by
+    change (Fin.cons a σ : Fin (n + 2) → α) (Fin.succ (Fin.last n)) =
       σ (Fin.last n)
     rw [Fin.cons_succ]
-  have hfirst : (Fin.cons a σ : Fin (n + 2) → Fin d) 0 = a := by
+  have hfirst : (Fin.cons a σ : Fin (n + 2) → α) 0 = a := by
     rw [Fin.cons_zero]
   simp only [restrictFirst_apply, pgvwc07LeftBoundaryComponent, groundSpaceMap_apply,
     htail, hlast, hfirst]
@@ -87,8 +87,8 @@ theorem restrictFirst_pgvwc07LeftBoundaryComponent
 
 /-- Boundary form of a ground-space vector after fixing the final physical index. -/
 theorem groundSpaceMap_snoc_trace_boundary
-    (A : MPSTensor d D) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
-    (w : Fin n → Fin d) (b : Fin d) :
+    (A : MPTensor α (Fin D)) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
+    (w : Fin n → α) (b : α) :
     groundSpaceMap A (n + 1) X (Fin.snoc w b) =
       Matrix.trace ((A b * X) * Kraus.evalWord A (List.ofFn w)) := by
   simp only [groundSpaceMap_apply, evalWord_ofFn_snoc]
@@ -101,8 +101,8 @@ theorem groundSpaceMap_snoc_trace_boundary
 
 /-- Boundary form of a ground-space vector after fixing the initial physical index. -/
 theorem groundSpaceMap_cons_trace_boundary
-    (A : MPSTensor d D) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
-    (a : Fin d) (w : Fin n → Fin d) :
+    (A : MPTensor α (Fin D)) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
+    (a : α) (w : Fin n → α) :
     groundSpaceMap A (n + 1) X (Fin.cons a w) =
       Matrix.trace ((X * A a) * Kraus.evalWord A (List.ofFn w)) := by
   simp only [groundSpaceMap_apply, evalWord_ofFn_cons]
@@ -118,8 +118,8 @@ theorem groundSpaceMap_cons_trace_boundary
 /-- Boundary form of a ground-space vector after fixing the initial and final
 physical indices. -/
 theorem groundSpaceMap_cons_snoc_trace_boundary
-    (A : MPSTensor d D) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
-    (a b : Fin d) (w : Fin n → Fin d) :
+    (A : MPTensor α (Fin D)) {n : ℕ} (X : Matrix (Fin D) (Fin D) ℂ)
+    (a b : α) (w : Fin n → α) :
     groundSpaceMap A (n + 2) X (Fin.cons a (Fin.snoc w b)) =
       Matrix.trace ((A b * X * A a) * Kraus.evalWord A (List.ofFn w)) := by
   simp only [groundSpaceMap_apply, evalWord_ofFn_cons, evalWord_ofFn_snoc]
@@ -137,9 +137,9 @@ theorem groundSpaceMap_cons_snoc_trace_boundary
 /-- The left-boundary summand is a ground-space vector once the boundary
 identity \(A_bC_a=A_bEA_a\) holds. -/
 theorem pgvwc07LeftBoundaryComponent_eq_groundSpaceMap
-    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (C : α → Matrix (Fin D) (Fin D) ℂ)
     (E : Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
-    (hACE : ∀ a b : Fin d, A b * C a = A b * E * A a) :
+    (hACE : ∀ a b : α, A b * C a = A b * E * A a) :
     pgvwc07LeftBoundaryComponent A C n = groundSpaceMap A (n + 2) E := by
   ext σ
   let M := Kraus.evalWord A (List.ofFn (Fin.tail (Fin.init σ)))
@@ -179,9 +179,9 @@ theorem pgvwc07LeftBoundaryComponent_eq_groundSpaceMap
 /-- The left-boundary summand belongs to \(G_{n+2}(A)\) once the
 boundary identity \(A_bC_a=A_bEA_a\) holds. -/
 theorem pgvwc07LeftBoundaryComponent_mem_groundSpace
-    (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (C : α → Matrix (Fin D) (Fin D) ℂ)
     (E : Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
-    (hACE : ∀ a b : Fin d, A b * C a = A b * E * A a) :
+    (hACE : ∀ a b : α, A b * C a = A b * E * A a) :
     pgvwc07LeftBoundaryComponent A C n ∈ groundSpace A (n + 2) := by
   rw [pgvwc07LeftBoundaryComponent_eq_groundSpaceMap A C E n hACE]
   rw [groundSpace, LinearMap.mem_range]
@@ -191,11 +191,11 @@ theorem pgvwc07LeftBoundaryComponent_mem_groundSpace
 corresponding block ground spaces. -/
 theorem pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
+    (C : (j : Fin r) → α → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (n : ℕ)
-    (hACE : ∀ j : Fin r, ∀ a b : Fin d,
+    (hACE : ∀ j : Fin r, ∀ a b : α,
       A j b * C j a = A j b * E j * A j a) :
     (∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) ∈
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
@@ -225,7 +225,7 @@ The product span and nondegeneracy of the product trace pairing force
 \(X_j=0\) for every \(j\), hence \(\phi_j=0\). -/
 theorem groundSpace_iSupIndep_of_wordTupleSpanTop
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n) :
     iSupIndep fun j : Fin r => groundSpace (A j) n := by
   classical
@@ -254,11 +254,11 @@ theorem groundSpace_iSupIndep_of_wordTupleSpanTop
       _ = s.sum φ := by
               exact Finset.sum_congr rfl fun i hi => hX i hi
       _ = 0 := by simpa using hsum
-  have hTraceEval : ∀ w : Fin n → Fin d,
+  have hTraceEval : ∀ w : Fin n → α,
       (∑ i : Fin r, Matrix.trace (Kraus.evalWord (A i) (List.ofFn w) * X i)) = 0 := by
     intro w
     simpa [groundSpaceMap_apply] using congrFun hsum_all w
-  have hTrace : ∀ w : Fin n → Fin d,
+  have hTrace : ∀ w : Fin n → α,
       (∑ i : Fin r, Matrix.trace (X i * Kraus.evalWord (A i) (List.ofFn w))) = 0 := by
     intro w
     calc
@@ -287,10 +287,10 @@ and if, for every length-\(n\) word \(w\),
 then \(X_j=Y_j\) for every block \(j\). -/
 theorem block_matrices_eq_of_wordTupleSpanTop_trace
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (X Y : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hTrace : ∀ w : Fin n → Fin d,
+    (hTrace : ∀ w : Fin n → α,
       (∑ j : Fin r, Matrix.trace (X j * Kraus.evalWord (A j) (List.ofFn w))) =
       (∑ j : Fin r, Matrix.trace (Y j * Kraus.evalWord (A j) (List.ofFn w)))) :
     ∀ j : Fin r, X j = Y j := by
@@ -319,14 +319,14 @@ matrix \(E_j\) such that
 \] -/
 theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j))
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
-    (C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (ψ : NSiteSpace (Fin d) (n + 2))
+    (C : (j : Fin r) → α → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (ψ : NSiteSpace α (n + 2))
     (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n)
     (hmem : ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2)) :
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-      ∀ j : Fin r, ∀ a b : Fin d, A j b * C j a = A j b * E j * A j a := by
+      ∀ j : Fin r, ∀ a b : α, A j b * C j a = A j b * E j * A j a := by
   classical
   obtain ⟨φ, hφmem, hφsum⟩ :=
     (Submodule.mem_iSup_iff_exists_finsupp
@@ -344,7 +344,7 @@ theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
   choose E hE using hMatrix
   refine ⟨E, ?_⟩
   intro j a b
-  have hCoeff : ∀ w : Fin n → Fin d,
+  have hCoeff : ∀ w : Fin n → α,
       (∑ k : Fin r,
         Matrix.trace ((A k b * C k a) * Kraus.evalWord (A k) (List.ofFn w))) =
       (∑ k : Fin r,

@@ -78,7 +78,7 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- A primitive-block parent Hamiltonian has an eventual uniform periodic gap
 at every positive range whose open-chain parent Hamiltonians have the
@@ -87,7 +87,7 @@ constructed longer interaction is transferred to the given range. This is the
 fixed-interaction consequence of Nachtergaele's Theorem 2.1(ii),
 arXiv:cond-mat/9410110, with the open kernels of Section 3. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -97,26 +97,26 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_e
     (hKernel : ∀ W, R ≤ W →
       LinearMap.ker
           (Matrix.toEuclideanLin
-              (parentChainInteraction (toTensorFromBlocks (α := Fin d)
+              (parentChainInteraction (toTensorFromBlocks 
                 (μ := μ) A) R W).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ
+        ((groundSpace (toTensorFromBlocks (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨W, hRW, _, γ, hγ, hGap⟩ :=
     exists_ge_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap
       μ A hμ ρ hP hρ hDistinct (2 * R)
   exact exists_hamiltonian_parentRingInteraction_gap_of_larger_range
-    (toTensorFromBlocks (α := Fin d) (μ := μ) A) hR hRW (hKernel W (by omega)) hγ hGap
+    (toTensorFromBlocks (μ := μ) A) hR hRW (hKernel W (by omega)) hγ hGap
 
 /-- Under the hypotheses of
 `exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq`,
 the gap holds uniformly over every chain length: each of the finitely many
 shorter chains has its own positive gap. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_ker_eq
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -126,20 +126,20 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hKernel : ∀ W, R ≤ W →
       LinearMap.ker
           (Matrix.toEuclideanLin
-              (parentChainInteraction (toTensorFromBlocks (α := Fin d)
+              (parentChainInteraction (toTensorFromBlocks 
                 (μ := μ) A) R W).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ
+        ((groundSpace (toTensorFromBlocks (μ := μ) A) W).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
       μ A hμ ρ hP hρ hDistinct hR hKernel
   obtain ⟨M, hM⟩ := hGap.exists_forall_of_atTop
   exact hamiltonian_parentRingInteraction_gap_of_eventual_gap
-    (toTensorFromBlocks (α := Fin d) (μ := μ) A) R M hγ fun N _ hN ↦ hM N hN
+    (toTensorFromBlocks (μ := μ) A) R M hγ fun N _ hN ↦ hM N hN
 
 /-- Every interaction range above a fixed threshold gives a uniformly gapped
 periodic parent Hamiltonian for a direct sum of inequivalent normalized
@@ -147,7 +147,7 @@ primitive blocks. The gap constant may depend on the interaction range.
 This is the fixed-interaction consequence of Nachtergaele's Theorem 2.1(ii),
 arXiv:cond-mat/9410110, with the open kernels of Section 3. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshold_of_fixedPointGap
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -156,7 +156,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshol
     ∃ R₀ : ℕ, 0 < R₀ ∧ ∀ R : ℕ, R₀ ≤ R → ∃ γ : ℝ, 0 < γ ∧
       ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+          (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
           z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨R₀, hR₀, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
@@ -180,22 +180,22 @@ namespace MPSTensor
 every range at least \(S + 1\), with no normalization hypotheses on the blocks.
 Source: CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129 and 2183--2187. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop
-    {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {d r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   have hKernel : ∀ W, R ≤ W →
       LinearMap.ker
           (Matrix.toEuclideanLin
-              (parentChainInteraction (toTensorFromBlocks (α := Fin d)
+              (parentChainInteraction (toTensorFromBlocks 
                 (μ := μ) B) R W).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) B) W).map (WithLp.linearEquiv 2 ℂ
+        ((groundSpace (toTensorFromBlocks (μ := μ) B) W).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap) :=
     fun W hRW ↦ ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ B hμ (fun j ↦ (hP j).norm)
@@ -222,14 +222,14 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- The primitive-block parent Hamiltonian has a uniform periodic gap at every
 range above the three-block bound determined by a common injectivity length,
 as in PGVWC07, Theorem 12 (`2blocks.2`). The gap conclusion is stated in
 arXiv:2011.12127, Gaps subsection, lines 2183--2187. -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_threeBlock_bound
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -239,7 +239,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_three
     (hr : 2 ≤ r) (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   exact exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
     μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦
@@ -257,13 +257,13 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- Primitive inequivalent blocks with a common injectivity length have a
 positive parent-Hamiltonian gap uniform over every finite chain length, at
 each range satisfying PGVWC07, Theorem 12 (`2blocks.2`). -/
 theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_threeBlock_bound
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
@@ -273,7 +273,7 @@ theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_
     (hr : 2 ≤ r) (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) R N).hamiltonian) z →
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) R N).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   exact exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_ker_eq
     μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦

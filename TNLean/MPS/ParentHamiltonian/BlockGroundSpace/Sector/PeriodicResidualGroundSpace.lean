@@ -36,21 +36,20 @@ recorded in docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- The rectangular residual boundary contraction has coefficient
 \(\operatorname{tr}(B^uV^*A^\tau Y)\), with a decoded blocked prefix and an original tail.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
-noncomputable def blockedResidualBoundaryMap (A : MPSTensor d D)
-    (L : ℕ) (B : MPSTensor (blockPhysDim d L) E)
+noncomputable def blockedResidualBoundaryMap (A : MPTensor α (Fin D))
+    (L : ℕ) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) :
-    Matrix (Fin D) (Fin E) ℂ →ₗ[ℂ] NSiteSpace (Fin d) (N * L + r) where
+    Matrix (Fin D) (Fin E) ℂ →ₗ[ℂ] NSiteSpace α (N * L + r) where
   toFun Y σ := Matrix.trace
-    (Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
+    (Kraus.evalWord B (List.ofFn ((Kraus.blockConfigEquiv α N L).symm (σ ∘ Fin.castAdd r))) *
       Vᴴ * Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd (N * L))) * Y)
   map_add' Y Z := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c Y := by ext σ; simp [Matrix.trace_smul]
@@ -61,23 +60,23 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
 theorem blockedResidualBoundaryMap_eq_groundSpaceMap_mul_conjTranspose
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ)
-    (hInt : ∀ i, Vᴴ * blockTensor A L i = B i * Vᴴ)
+    (hInt : ∀ i, Vᴴ * Kraus.block A L i = B i * Vᴴ)
     (N r : ℕ) (Y : Matrix (Fin D) (Fin E) ℂ) :
     blockedResidualBoundaryMap A L B V N r Y =
       groundSpaceMap A (N * L + r) (Y * Vᴴ) := by
-  have hWord (u : Cfg d (N * L)) :
-      Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm u)) * Vᴴ =
+  have hWord (u : (Fin (N * L) → α)) :
+      Kraus.evalWord B (List.ofFn ((Kraus.blockConfigEquiv α N L).symm u)) * Vᴴ =
         Vᴴ * Kraus.evalWord A (List.ofFn u) := by
-    have h := Kraus.evalWord_intertwine B (blockTensor A L) Vᴴ (fun i => (hInt i).symm)
-      (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm u))
-    rw [evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv, Equiv.apply_symm_apply] at h
+    have h := Kraus.evalWord_intertwine B (Kraus.block A L) Vᴴ (fun i => (hInt i).symm)
+      (List.ofFn ((Kraus.blockConfigEquiv α N L).symm u))
+    rw [Kraus.evalWord_block, ← Kraus.ofFn_blockConfigEquiv, Equiv.apply_symm_apply] at h
     exact h
   ext σ
   rw [← leftBoundaryMap_factorization A (N * L) r, leftBoundaryMap_apply]
   change Matrix.trace
-    (Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
+    (Kraus.evalWord B (List.ofFn ((Kraus.blockConfigEquiv α N L).symm (σ ∘ Fin.castAdd r))) *
       Vᴴ * Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd (N * L))) * Y) = _
   rw [hWord]
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm Vᴴ
@@ -93,10 +92,10 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
 theorem groundSpace_eq_iSup_range_blockedResidualBoundaryMap
-    (A : MPSTensor d D) (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : (j : ι) → MPTensor (Fin L → α) (Fin (dim j)))
     (V : (j : ι) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ) (N r : ℕ) :
+    (hInt : ∀ j i, (V j)ᴴ * Kraus.block A L i = B j i * (V j)ᴴ) (N r : ℕ) :
     groundSpace A (N * L + r) = ⨆ j, (blockedResidualBoundaryMap A L (B j) (V j) N r).range := by
   classical
   have hSplit (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -132,12 +131,12 @@ followed by row index, as in the rectangular Frobenius equivalence.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
-noncomputable def blockedResidualBoundaryMapES (A : MPSTensor d D)
-    (L : ℕ) (B : MPSTensor (blockPhysDim d L) E)
+noncomputable def blockedResidualBoundaryMapES (A : MPTensor α (Fin D))
+    (L : ℕ) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) :
-    EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Cfg d (N * L + r)) :=
+    EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin (N * L + r) → α) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (N * L + r))).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α (N * L + r))).symm.toLinearMap.comp
       ((blockedResidualBoundaryMap A L B V N r).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm.toLinearEquiv.toLinearMap)
 
@@ -147,13 +146,13 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
 @[simp] theorem blockedResidualBoundaryMapES_frobeniusEquivEuclidean_apply
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) (Y : Matrix (Fin D) (Fin E) ℂ) :
     blockedResidualBoundaryMapES A L B V N r
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (N * L + r))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (N * L + r))).symm
         (blockedResidualBoundaryMap A L B V N r Y) := by
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (N * L + r))).symm
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace α (N * L + r))).symm
     (blockedResidualBoundaryMap A L B V N r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y))) = _
@@ -165,10 +164,10 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
 theorem map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES
-    (A : MPSTensor d D) (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : (j : ι) → MPTensor (Fin L → α) (Fin (dim j)))
     (V : (j : ι) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ) (N r : ℕ) :
+    (hInt : ∀ j i, (V j)ᴴ * Kraus.block A L i = B j i * (V j)ᴴ) (N r : ℕ) :
     ((groundSpace A (N * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
       ⨆ j, (blockedResidualBoundaryMapES A L (B j) (V j) N r).range := by
   simp only [groundSpace_eq_iSup_range_blockedResidualBoundaryMap A B V hSum hInt N r,
@@ -184,24 +183,24 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
 theorem IsPeriodic.exists_stepOrbit_residualGroundSpaceDecomposition {m : ℕ}
-    {A : MPSTensor d D} (hA : IsPeriodic m A) (L : ℕ) (hL : 0 < L) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) (L : ℕ) (hL : 0 < L) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (dim : Fin (m.gcd L) → ℕ)
-      (B : (a : Fin (m.gcd L)) → MPSTensor (blockPhysDim d L) (dim a))
+      (B : (a : Fin (m.gcd L)) → MPTensor (Fin L → α) (Fin (dim a)))
       (V : (a : Fin (m.gcd L)) → Matrix (Fin D) (Fin (dim a)) ℂ),
       (∀ a, 0 < dim a) ∧ (∑ a, dim a) = D ∧
       (∀ a, IsLeftCanonical (B a)) ∧ (∀ a, (V a)ᴴ * V a = 1) ∧
       (∑ a, V a * (V a)ᴴ) = 1 ∧
-      (∀ a i, blockTensor A L i * V a = V a * B a i) ∧
-      (∀ a i, (V a)ᴴ * blockTensor A L i = B a i * (V a)ᴴ) ∧
+      (∀ a i, Kraus.block A L i * V a = V a * B a i) ∧
+      (∀ a i, (V a)ᴴ * Kraus.block A L i = B a i * (V a)ᴴ) ∧
       (∀ a, IsPeriodic (m / m.gcd L) (B a)) ∧
       (∀ N r, ((groundSpace A (N * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
         ⨆ a, (blockedResidualBoundaryMapES A L (B a) (V a) N r).range) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, B, V, _hproj, hsum, _hne, hshift, hdim, htotal, hcan,
     hiso, hV, hC, hInt, _hGS, hPeriod⟩ := hA.exists_stepOrbit_groundSpaceDecomposition L hL
-  have hCoInt (a : Fin (m.gcd L)) (i : Fin (blockPhysDim d L)) :
-      (V a)ᴴ * blockTensor A L i = B a i * (V a)ᴴ := by
+  have hCoInt (a : Fin (m.gcd L)) (i : Fin L → α) :
+      (V a)ᴴ * Kraus.block A L i = B a i * (V a)ᴴ := by
     rw [hC, Matrix.mul_assoc, Matrix.mul_assoc, hV,
       ← stepOrbitProjection_mul_block P A hshift, ← hV,
       ← Matrix.mul_assoc, ← Matrix.mul_assoc, hiso, Matrix.one_mul]

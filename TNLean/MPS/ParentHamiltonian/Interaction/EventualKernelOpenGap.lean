@@ -41,23 +41,23 @@ open scoped Topology ComplexOrder MatrixOrder
 open ManyBody.Interaction (chainTranslates)
 
 namespace MPSTensor
-variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d] [∀ j, NeZero (D j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {b : ℕ} {D : Fin b → ℕ} [Nonempty α] [∀ j, NeZero (D j)]
 /-- The eventual open-chain kernel identity suffices for a uniform gap at
 all finite lengths: every eigenvalue of the Hamiltonian of the open-chain translates is `0` or at
 least the gap. No condition is imposed on the local kernel or on the range. Source:
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947; this is its finite-chain
 conclusion. -/
 theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
-    (μ : Fin b → ℂ) (A : (j : Fin b) → MPSTensor d (D j))
+    (μ : Fin b → ℂ) (A : (j : Fin b) → MPTensor α (Fin (D j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) {R : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        ((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
+        ((groundSpace (toTensorFromBlocks (μ := μ) A) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ, ∀ ν : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) ν → ν = 0 ∨ (γ : ℂ) ≤ ν := by
@@ -74,7 +74,7 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
       (Matrix.isPositive_toEuclideanLin_iff.mpr (hpos (2 * p)))
   rw [hN₀ (2 * p) (by omega)] at hLocal
   have hLocal' : (κ : ℂ) • LinearMap.toMatrix'
-      (parentInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) (2 * p)) ≤
+      (parentInteraction (toTensorFromBlocks (μ := μ) A) (2 * p)) ≤
       (chainTranslates R (2 * p) h).hamiltonian := by
     rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_smul,
       toEuclideanLin_toMatrix'_parentInteraction]
@@ -89,7 +89,7 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
     (div_pos (mul_pos hκ hδ) (Nat.cast_pos.mpr (by omega))) ?_
   intro N hN
   exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
-    (toTensorFromBlocks (α := Fin d) (μ := μ) A) h hh (by omega) hκ
+    (toTensorFromBlocks (μ := μ) A) h hh (by omega) hκ
     hLocal' (hN₀ N (by omega)) (hCanonicalKernel (2 * p) N (by omega) hN)
     (hCanonicalGap N)
 

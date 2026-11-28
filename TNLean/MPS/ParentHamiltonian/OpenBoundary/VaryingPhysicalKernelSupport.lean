@@ -285,35 +285,35 @@ private theorem pair_coordinates_append {α : Type*} {p q : ℕ}
       apply Subtype.ext
       exact Fin.ext h
 
-variable {d : ℕ} [Nonempty (Fin d)]
+variable {α : Type*} [Fintype α] [DecidableEq α] [Nonempty α]
 
 private theorem uniform_parent_list_sections_of_eq_zero
     (D : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ) {N : ℕ}
-    (ψ : EuclideanSpace ℂ (Fin N → Fin d)) (f : List (Fin d) → ℂ)
-    (hf : ∀ w : Fin N → Fin d, f (List.ofFn w) = ψ w)
-    (hzero : varyingPhysicalParentHamiltonian (fun _ : Fin N ↦ Fin d) D
+    (A : ∀ k, α → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ) {N : ℕ}
+    (ψ : EuclideanSpace ℂ (Fin N → α)) (f : List α → ℂ)
+    (hf : ∀ w : Fin N → α, f (List.ofFn w) = ψ w)
+    (hzero : varyingPhysicalParentHamiltonian (fun _ : Fin N ↦ α) D
       (fun k ↦ A k.val) ψ = 0) :
-    ∀ u v : List (Fin d), u.length + 2 + v.length = N →
+    ∀ u v : List α, u.length + 2 + v.length = N →
       ∃ X : Matrix (Fin (D (u.length + 2))) (Fin (D u.length)) ℂ,
         ∀ i j, f (u ++ i :: j :: v) = Matrix.trace (X * A u.length i * A (u.length + 1) j) := by
   classical
   intro u v hlength
   subst N
-  let δ : Fin d := Classical.choice inferInstance
-  let t : Fin 2 → Fin d := fun _ ↦ δ
-  let Q := pairConfigurationEquiv (fun _ : Fin (u.length + 2 + v.length) ↦ Fin d)
+  let δ : α := Classical.choice inferInstance
+  let t : Fin 2 → α := fun _ ↦ δ
+  let Q := pairConfigurationEquiv (fun _ : Fin (u.length + 2 + v.length) ↦ α)
     (pairLeft u.length v.length) (pairRight u.length v.length)
     (pairRight_ne_left u.length v.length)
   let w0 := Fin.append (Fin.append u.get t) v.get
   have hlocal := varyingPhysicalParentHamiltonian_pair_apply_eq_zero
-    (fun _ : Fin (u.length + 2 + v.length) ↦ Fin d) D (fun k ↦ A k.val)
+    (fun _ : Fin (u.length + 2 + v.length) ↦ α) D (fun k ↦ A k.val)
     ψ hzero u.length (by omega)
   obtain ⟨X, hX⟩ := physicalPairParentTerm_boundary_of_apply_eq_zero
-    (fun _ : Fin (u.length + 2 + v.length) ↦ Fin d) _ _ _
+    (fun _ : Fin (u.length + 2 + v.length) ↦ α) _ _ _
     (A u.length) (A (u.length + 1)) ψ hlocal (Q w0).2
   refine ⟨X, fun i j ↦ ?_⟩
-  let s : Fin 2 → Fin d := ![i, j]
+  let s : Fin 2 → α := ![i, j]
   let w := Fin.append (Fin.append u.get s) v.get
   have hw : List.ofFn w = u ++ i :: j :: v := by
     simp only [w, List.ofFn_fin_append, List.ofFn_get]
@@ -327,27 +327,27 @@ private theorem uniform_parent_list_sections_of_eq_zero
 
 private theorem uniform_pair_term_eq_zero_of_list_sections
     (D : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ) {N : ℕ}
-    (ψ : EuclideanSpace ℂ (Fin N → Fin d)) (f : List (Fin d) → ℂ)
-    (hf : ∀ w : Fin N → Fin d, f (List.ofFn w) = ψ w)
+    (A : ∀ k, α → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ) {N : ℕ}
+    (ψ : EuclideanSpace ℂ (Fin N → α)) (f : List α → ℂ)
+    (hf : ∀ w : Fin N → α, f (List.ofFn w) = ψ w)
     (p q : ℕ) (hlength : p + 2 + q = N)
-    (hpair : ∀ u v : List (Fin d), u.length + 2 + v.length = N →
+    (hpair : ∀ u v : List α, u.length + 2 + v.length = N →
       ∃ X : Matrix (Fin (D (u.length + 2))) (Fin (D u.length)) ℂ,
         ∀ i j, f (u ++ i :: j :: v) = Matrix.trace (X * A u.length i * A (u.length + 1) j)) :
-    physicalPairParentTerm (fun _ : Fin N ↦ Fin d) ⟨p, by omega⟩ ⟨p + 1, by omega⟩
+    physicalPairParentTerm (fun _ : Fin N ↦ α) ⟨p, by omega⟩ ⟨p + 1, by omega⟩
       (fun h ↦ Nat.succ_ne_self p (congrArg Fin.val h)) (A p) (A (p + 1)) ψ = 0 := by
   classical
   subst N
-  let Q := pairConfigurationEquiv (fun _ : Fin (p + 2 + q) ↦ Fin d)
+  let Q := pairConfigurationEquiv (fun _ : Fin (p + 2 + q) ↦ α)
     (pairLeft p q) (pairRight p q) (pairRight_ne_left p q)
   apply (physicalPairParentTerm_apply_eq_zero_iff_boundary _ _ _ _ _ _ ψ).mpr
   intro η
-  let δ : Fin d := Classical.choice inferInstance
+  let δ : α := Classical.choice inferInstance
   let τ := Q.symm ((δ, δ), η)
-  let pref : Fin (p + 2) → Fin d := fun k ↦ τ (Fin.castAdd q k)
-  let u : Fin p → Fin d := fun k ↦ pref (Fin.castAdd 2 k)
-  let t : Fin 2 → Fin d := fun k ↦ pref (Fin.natAdd p k)
-  let v : Fin q → Fin d := fun k ↦ τ (Fin.natAdd (p + 2) k)
+  let pref : Fin (p + 2) → α := fun k ↦ τ (Fin.castAdd q k)
+  let u : Fin p → α := fun k ↦ pref (Fin.castAdd 2 k)
+  let t : Fin 2 → α := fun k ↦ pref (Fin.natAdd p k)
+  let v : Fin q → α := fun k ↦ τ (Fin.natAdd (p + 2) k)
   have hprefix : Fin.append u t = pref := Fin.append_castAdd_natAdd
   have hτ : Fin.append (Fin.append u t) v = τ := by
     rw [hprefix]
@@ -365,7 +365,7 @@ private theorem uniform_pair_term_eq_zero_of_list_sections
     exact hpair (List.ofFn u) (List.ofFn v) (by simp only [List.length_ofFn])
   obtain ⟨X, hX⟩ := key p List.length_ofFn.symm
   refine ⟨X, fun x y ↦ ?_⟩
-  let s : Fin 2 → Fin d := ![x, y]
+  let s : Fin 2 → α := ![x, y]
   let w := Fin.append (Fin.append u s) v
   have hw : w = Q.symm ((x, y), η) := by
     apply Q.injective
@@ -387,13 +387,13 @@ supplied representation condition.
 Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
 theorem varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff
     (D : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ)
-    {N : ℕ} (ψ : EuclideanSpace ℂ (Fin N → Fin d)) :
-    varyingPhysicalParentHamiltonian (fun _ : Fin N ↦ Fin d) D (fun k ↦ A k.val) ψ = 0 ↔
+    (A : ∀ k, α → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ)
+    {N : ℕ} (ψ : EuclideanSpace ℂ (Fin N → α)) :
+    varyingPhysicalParentHamiltonian (fun _ : Fin N ↦ α) D (fun k ↦ A k.val) ψ = 0 ↔
       Matrix.toEuclideanLin (obcParentInteraction D A N).hamiltonian ψ = 0 := by
   classical
-  let f : List (Fin d) → ℂ := Function.extend List.ofFn (fun w ↦ ψ w) 0
-  have hf (w : Fin N → Fin d) : f (List.ofFn w) = ψ w :=
+  let f : List α → ℂ := Function.extend List.ofFn (fun w ↦ ψ w) 0
+  have hf (w : Fin N → α) : f (List.ofFn w) = ψ w :=
     List.ofFn_injective.extend_apply (fun w ↦ ψ w) 0 w
   constructor
   · intro hzero

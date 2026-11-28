@@ -28,23 +28,23 @@ open scoped BigOperators Matrix Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- The linear combination map of the periodic component vectors,
 \(c\mapsto\sum_j c_j V^{(N)}(A_j)\), in Euclidean coordinates.
 Source: arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 noncomputable def blockPeriodicMpvMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
-    EuclideanSpace ℂ (Fin r) →L[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (N : ℕ) :
+    EuclideanSpace ℂ (Fin r) →L[ℂ] EuclideanSpace ℂ (Fin N → α) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
-      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace (Fin d) N))).comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap.comp
+      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace α N))).comp
         (WithLp.linearEquiv 2 ℂ (Fin r → ℂ)).toLinearMap)
 
 @[simp]
 theorem blockPeriodicMpvMapES_apply
-    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ)
-    (c : EuclideanSpace ℂ (Fin r)) (σ : Cfg d N) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (N : ℕ)
+    (c : EuclideanSpace ℂ (Fin r)) (σ : (Fin N → α)) :
     blockPeriodicMpvMapES A N c σ = ∑ j, c j * mpv (A j) σ := by
   simp [blockPeriodicMpvMapES, Fintype.linearCombination, Finset.sum_apply]
 
@@ -52,7 +52,7 @@ theorem blockPeriodicMpvMapES_apply
 restricted to scalar identity matrices on the diagonal virtual blocks.
 Source: arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem blockPeriodicMpvMapES_eq_blockGroundSpaceMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (N : ℕ)
     (c : EuclideanSpace ℂ (Fin r)) :
     blockPeriodicMpvMapES A N c = blockGroundSpaceMapES A N
       (WithLp.toLp 2 (fun ⟨j, b, a⟩ =>
@@ -72,7 +72,7 @@ boundary map to scalar identity matrices. Source: arXiv:2011.12127,
 Section IV.C, lines 2114--2129. -/
 theorem blockPeriodicMpvMapES_injective_of_wordTupleSpanTop
     [∀ j, NeZero (dim j)]
-    (A : (j : Fin r) → MPSTensor d (dim j)) {N : ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {N : ℕ}
     (hSpan : WordTupleSpanTop A N) :
     Function.Injective (blockPeriodicMpvMapES A N) := by
   refine (injective_iff_map_eq_zero (blockPeriodicMpvMapES A N)).2 fun c hc => ?_
@@ -96,12 +96,12 @@ theorem blockPeriodicMpvMapES_injective_of_wordTupleSpanTop
 component MPS vectors, expressed in Euclidean coordinates. Source:
 arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem range_blockPeriodicMpvMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (N : ℕ) :
     (blockPeriodicMpvMapES A N).range = (bntMPSVectorSpan A N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   change LinearMap.range
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap.comp
-      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace (Fin d) N))).comp
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap.comp
+      ((Fintype.linearCombination ℂ (fun j => (mpv (A j) : NSiteSpace α N))).comp
         (WithLp.linearEquiv 2 ℂ (Fin r → ℂ)).toLinearMap)) = _
   rw [LinearMap.range_comp, LinearMap.range_comp, LinearEquiv.range,
     Submodule.map_top, Fintype.range_linearCombination]
@@ -111,13 +111,13 @@ theorem range_blockPeriodicMpvMapES
 component tensors. Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem continuous_blockPeriodicMpvMapES_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (N : ℕ) :
     Continuous fun x => blockPeriodicMpvMapES (A x) N := by
   apply continuous_clm_apply.2
   intro c
   have h : Continuous fun x => ∑ j, c j •
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv (A x j)) :=
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm (mpv (A x j)) :=
     continuous_finsetSum _ fun j _ =>
       (continuous_mpvES_family (fun x => A x j) (hA j) N).const_smul (c j)
   convert h using 1
@@ -130,8 +130,8 @@ theorem continuous_blockPeriodicMpvMapES_family
 interaction on the ring is the range of the component-vector map, including at the shortest ring
 containing the interaction. Source: arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S R N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
@@ -150,8 +150,8 @@ continuous for a family with one common positive simultaneous injectivity length
 weights may vary arbitrarily, since they leave the periodic component span unchanged.
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family
-    {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    {X : Type*} [TopologicalSpace X] [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
@@ -178,8 +178,8 @@ kernel of the Hamiltonian of the parent interaction on the ring: every eigenvalu
 least the gap. Nonzero weights need no continuity assumption. Source: arXiv:1010.3732,
 Appendix A, lines 2575--2578. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
-    {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    {X : Type*} [TopologicalSpace X] [Nonempty α] [∀ j, NeZero (dim j)]
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (hRN : R ≤ N) :

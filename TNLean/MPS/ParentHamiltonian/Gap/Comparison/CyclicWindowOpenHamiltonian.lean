@@ -33,7 +33,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Two range-\(R\) cyclic windows are disjoint when their oriented start
 separation \(e\) satisfies \(R \leq e\) and \(e + R \leq N\). -/
@@ -70,30 +70,30 @@ theorem cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation
 
 /-- Split a periodic configuration into a cyclic active block of length \(W\) and
 its ordered complement. -/
-def cyclicActiveBlockConfigEquiv {N : ℕ} (d W : ℕ) (hWN : W ≤ N) (s : Fin N) :
-    Cfg d N ≃ Cfg d W × Cfg d (N - W) :=
-  ((Equiv.sumArrowEquivProdArrow (Fin W) (Fin (N - W)) (Fin d)).symm.trans
-    (Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
+def cyclicActiveBlockConfigEquiv {N : ℕ} (W : ℕ) (hWN : W ≤ N) (s : Fin N) :
+    (Fin N → α) ≃ (Fin W → α) × (Fin (N - W) → α) :=
+  ((Equiv.sumArrowEquivProdArrow (Fin W) (Fin (N - W)) α).symm.trans
+    (Equiv.piCongrLeft (fun _ : Fin N ↦ α)
       (cyclicWindowIndexEquiv W N hWN s))).symm
 
 /-- The Hilbert-space reindexing that exposes a cyclic active block and its
 spectator sites. -/
 noncomputable def cyclicActiveBlockConfigLinearIsometryEquiv {N : ℕ}
-    (d W : ℕ) (hWN : W ≤ N) (s : Fin N) :
-    EuclideanSpace ℂ (Cfg d N) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (Cfg d W × Cfg d (N - W)) :=
+    (W : ℕ) (hWN : W ≤ N) (s : Fin N) :
+    EuclideanSpace ℂ (Fin N → α) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ ((Fin W → α) × (Fin (N - W) → α)) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (cyclicActiveBlockConfigEquiv d W hWN s)
 
 /-- Joining active and spectator configurations is the inverse cyclic-block split. -/
 @[simp] theorem cyclicActiveBlockConfigEquiv_symm_apply_window {N W : ℕ}
-    (hWN : W ≤ N) (s : Fin N) (σ : Cfg d W) (τ : Cfg d (N - W))
+    (hWN : W ≤ N) (s : Fin N) (σ : (Fin W → α)) (τ : (Fin (N - W) → α))
     (r : Fin W) :
     (cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)
         (cyclicForwardSite s r.val) = σ r := by
-  change Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
+  change Equiv.piCongrLeft (fun _ : Fin N ↦ α)
       (cyclicWindowIndexEquiv W N hWN s)
-      ((Equiv.sumArrowEquivProdArrow (Fin W) (Fin (N - W)) (Fin d)).symm
+      ((Equiv.sumArrowEquivProdArrow (Fin W) (Fin (N - W)) α).symm
         (σ, τ))
       (cyclicWindowIndexEquiv W N hWN s (Sum.inl r)) = σ r
   rw [Equiv.piCongrLeft_apply_apply]
@@ -102,8 +102,8 @@ noncomputable def cyclicActiveBlockConfigLinearIsometryEquiv {N : ℕ}
 /-- The cyclic active-block isometry evaluates by joining the active and
 spectator configurations in cyclic order. -/
 @[simp] theorem cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply {N W : ℕ}
-    (hWN : W ≤ N) (s : Fin N) (v : EuclideanSpace ℂ (Cfg d N))
-    (p : Cfg d W × Cfg d (N - W)) :
+    (hWN : W ≤ N) (s : Fin N) (v : EuclideanSpace ℂ (Fin N → α))
+    (p : (Fin W → α) × (Fin (N - W) → α)) :
     cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s v p =
       v ((cyclicActiveBlockConfigEquiv d W hWN s).symm p) := by
   rw [cyclicActiveBlockConfigLinearIsometryEquiv,
@@ -113,7 +113,7 @@ spectator configurations in cyclic order. -/
 /-- The inverse cyclic active-block isometry evaluates through the block split. -/
 @[simp] theorem cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply
     {N W : ℕ} (hWN : W ≤ N) (s : Fin N)
-    (v : EuclideanSpace ℂ (Cfg d W × Cfg d (N - W))) (σ : Cfg d N) :
+    (v : EuclideanSpace ℂ ((Fin W → α) × (Fin (N - W) → α))) (σ : (Fin N → α)) :
     (cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm v σ =
       v (cyclicActiveBlockConfigEquiv d W hWN s σ) := by
   rw [cyclicActiveBlockConfigLinearIsometryEquiv,
@@ -124,13 +124,13 @@ spectator configurations in cyclic order. -/
 /-- The complementary coordinates of the cyclic block occur after all active
 coordinates in cyclic order. -/
 @[simp] theorem cyclicActiveBlockConfigEquiv_symm_apply_spectator {N W : ℕ}
-    (hWN : W ≤ N) (s : Fin N) (σ : Cfg d W) (τ : Cfg d (N - W))
+    (hWN : W ≤ N) (s : Fin N) (σ : (Fin W → α)) (τ : (Fin (N - W) → α))
     (r : Fin (N - W)) :
     (cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)
         (cyclicForwardSite s (W + r.val)) = τ r := by
-  change Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
+  change Equiv.piCongrLeft (fun _ : Fin N ↦ α)
       (cyclicWindowIndexEquiv W N hWN s)
-      ((Equiv.sumArrowEquivProdArrow (Fin W) (Fin (N - W)) (Fin d)).symm
+      ((Equiv.sumArrowEquivProdArrow (Fin W) (Fin (N - W)) α).symm
         (σ, τ))
       (cyclicWindowIndexEquiv W N hWN s (Sum.inr r)) = τ r
   rw [Equiv.piCongrLeft_apply_apply]
@@ -141,8 +141,8 @@ configuration unchanged. This is the finite-interval geometry in Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
 theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
     (hWN : W ≤ N) (s : Fin N) (q : Fin W)
-    (hqR : q.val + R ≤ W) (ω : Cfg d R) (σ : Cfg d W)
-    (τ : Cfg d (N - W)) :
+    (hqR : q.val + R ≤ W) (ω : (Fin R → α)) (σ : (Fin W → α))
+    (τ : (Fin (N - W) → α)) :
     cyclicCfg (Fin.pos s) R (cyclicForwardSite s q.val) ω
         ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)) =
       (cyclicActiveBlockConfigEquiv d W hWN s).symm
@@ -259,7 +259,7 @@ restriction inside the active block. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
 theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
     (hWN : W ≤ N) (s : Fin N) (q : Fin W) (hqR : q.val + R ≤ W)
-    (σ : Cfg d W) (τ : Cfg d (N - W)) :
+    (σ : (Fin W → α)) (τ : (Fin (N - W) → α)) :
     extractWindow R (cyclicForwardSite s q.val)
         ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)) =
       extractWindow R q σ := by
@@ -296,8 +296,8 @@ variable {R N : ℕ}
 /-- A term of the translates of `h` on the ring acts at a configuration \(σ\) as `h` on the
 cyclic restriction to its window, read at the window of \(σ\). -/
 theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N))
-    (σ : Cfg d N) :
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N) (v : EuclideanSpace ℂ (Fin N → α))
+    (σ : (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) v σ =
       Matrix.toEuclideanLin h (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i σ)
@@ -305,7 +305,7 @@ theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
   have : NeZero N := NeZero.of_pos i.pos
   rw [ManyBody.Interaction.translationInvariant_term_of_le _ hRN i, Matrix.toLpLin_apply,
     Matrix.toLpLin_apply]
-  change Matrix.mulVec (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) h)
+  change Matrix.mulVec (ManyBody.placeAlong (X := fun _ ↦ α) (ManyBody.ringWindow hRN i) h)
     (WithLp.ofLp v) σ = Matrix.mulVec h _ _
   rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
     (replaceWindow_ringWindow hRN i σ)
@@ -315,10 +315,10 @@ theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
 /-- A term of the translates of `h` on the ring is the cyclic average of the conjugates of `h`
 by the restrictions to its window. -/
 theorem toEuclideanLin_translationInvariant_term_eq_inv_smul_sum (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) :
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) =
-      (((d ^ R : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+      (((Fintype.card α ^ R : ℕ) : ℂ)⁻¹) • ∑ τ : (Fin N → α),
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i
             τ)).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
           LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) := by
@@ -331,7 +331,7 @@ theorem toEuclideanLin_translationInvariant_term_eq_inv_smul_sum (hRN : R ≤ N)
 of `W` sites becomes, in the coordinates of that block, the corresponding term of the translates
 of `h` on the ring of `W` sites, acting independently on every spectator configuration. -/
 theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
-    {W : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hWN : W ≤ N) (s : Fin N)
+    {W : ℕ} (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hWN : W ≤ N) (s : Fin N)
     (q : Fin W) (hqR : q.val + R ≤ W) :
     haveI : NeZero N := NeZero.of_pos s.pos;
     haveI : NeZero W := NeZero.of_pos q.pos;
@@ -339,7 +339,7 @@ theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
         ((Matrix.toEuclideanLin
           ((ManyBody.Interaction.translationInvariant N h).term (cyclicForwardSite s q.val))).comp
           (cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - W) → α))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
           ((ManyBody.Interaction.translationInvariant W h).term q)))).toLinearMap := by
   have : NeZero N := NeZero.of_pos s.pos
@@ -358,10 +358,10 @@ theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
   rw [toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ N),
     toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ W)]
   have hrestrict :
-      LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos (cyclicForwardSite s q.val)) R
+      LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos (cyclicForwardSite s q.val)) R
           (cyclicForwardSite s q.val) ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)))
           ((cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm x) =
-        LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos q) R q σ)
+        LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos q) R q σ)
           (ContinuousLinearMap.rightFiber x τ) := by
     apply PiLp.ext
     intro ω
@@ -380,12 +380,12 @@ theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
 ring is `h` on the active block, acting independently on every spectator configuration. Source:
 PGVWC07, arXiv:quant-ph/0608197, Theorem 11 proof, lines 1418–1422. -/
 theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply
-    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N)
-    (ψ : EuclideanSpace ℂ (Cfg d N)) :
+    (hRN : R ≤ N) (h : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N)
+    (ψ : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
         (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) ψ) =
-      ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
+      ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - R) → α))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin h))
         (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i ψ) := by
   have : NeZero N := NeZero.of_pos i.pos
@@ -399,14 +399,14 @@ theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply
   change Matrix.toEuclideanLin h _ (extractWindow R i σ) =
     Matrix.toEuclideanLin h (ContinuousLinearMap.rightFiber (U ψ) (e σ).2) (extractWindow R i σ)
   apply congrArg
-    (fun w : EuclideanSpace ℂ (Cfg d R) => Matrix.toEuclideanLin h w (extractWindow R i σ))
+    (fun w : EuclideanSpace ℂ (Fin R → α) => Matrix.toEuclideanLin h w (extractWindow R i σ))
   ext ω
   change ψ (cyclicCfg (Fin.pos i) R i ω σ) = ψ (e.symm (ω, (e σ).2))
   rcases Nat.eq_zero_or_pos R with rfl | hR
   · have hω : ω = (e σ).1 := Subsingleton.elim _ _
     rw [hω, Prod.mk.eta, Equiv.symm_apply_apply]
     exact congrArg ψ (funext fun k ↦ by simp [cyclicCfg])
-  · have hfull (ξ : Cfg d R) : cyclicCfg hR R (⟨0, hR⟩ : Fin R) ω ξ = ω := by
+  · have hfull (ξ : (Fin R → α)) : cyclicCfg hR R (⟨0, hR⟩ : Fin R) ω ξ = ω := by
       funext j
       simp [cyclicCfg, Nat.mod_eq_of_lt j.isLt]
     have hj := cyclicCfg_join_cyclicActiveBlock hRN i (⟨0, hR⟩ : Fin R)

@@ -81,7 +81,7 @@ over every ring: its Hamiltonian is bounded below and above by multiples of the 
 the canonical parent interaction. Source: CPGSV21, Section IV.C,
 arXiv:2011.12127, lines 2170--2172. -/
 theorem IsParentInteraction.exists_pos_periodic_comparison
-    {d D R : ℕ} {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {d D R : ℕ} {A : MPTensor α (Fin D)} {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ (N : ℕ) [NeZero N],
       (κ : ℂ) • (parentRingInteraction A R N).hamiltonian ≤
@@ -102,7 +102,7 @@ interaction: every eigenvalue other than zero of its Hamiltonian on a ring is at
 constant that may depend on the interaction but not on the volume.
 Source: CPGSV21, Section IV.C, lines 2170--2172 and 2183--2187. -/
 theorem IsParentInteraction.exists_uniform_gap_of_canonical_gap
-    {d D R : ℕ} {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {d D R : ℕ} {A : MPTensor α (Fin D)} {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
@@ -123,12 +123,12 @@ gap on the rings at the supplied simultaneous injectivity range plus one.
 Source: CPGSV21, Section IV.C, lines 2114--2129 and 2170--2187. -/
 theorem
     _root_.MPTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop
-    {d D : ℕ} [NeZero d] {A : MPSTensor d D}
+    {d D : ℕ} [Nonempty α] {A : MPTensor α (Fin D)}
     (data : CPSVCanonicalFormData A) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
     (hR : S + 1 ≤ R)
-    {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian) μ →
@@ -142,11 +142,11 @@ positive parent interaction at every admissible simultaneous injectivity range.
 Source: CPGSV21, Section IV.C, lines 2114--2129 and 2170--2187. -/
 theorem
     _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop
-    {d D : ℕ} [NeZero d] {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
-    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
+    {d D : ℕ} [Nonempty α] {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) :
+    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPTensor α (Fin (dim j))),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       ∀ {S R : ℕ}, 0 < S → WordTupleSpanTop B S → S + 1 ≤ R →
-        ∀ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+        ∀ h : Matrix (Fin R → α) (Fin R → α) ℂ,
           IsParentInteraction A R (Matrix.toEuclideanLin h) →
           ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
             (Matrix.toEuclideanLin
@@ -167,7 +167,7 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ} [NeZero d] [NeZero D]
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} [Nonempty α] [NeZero D]
 
 set_option linter.style.longLine false in
 /-- Every canonical parent Hamiltonian at interaction range
@@ -176,7 +176,7 @@ Source: arXiv:1606.00608, lines 317--345, and arXiv:2011.12127,
 Section IV.C, lines 2114--2129 and 2183--2187. -/
 theorem
     _root_.MPTensor.IsCPSVCanonicalForm.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
@@ -194,9 +194,9 @@ The constant may depend on the interaction. Source: arXiv:1606.00608,
 lines 317--345, and arXiv:2011.12127, Section IV.C, lines 2170--2187. -/
 theorem
     _root_.MPTensor.IsCPSVCanonicalForm.exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R)
-    {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian) μ →
@@ -238,7 +238,7 @@ The transfer is stated for the open-chain translates of a local matrix
 open Filter
 open scoped Topology ComplexOrder
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 section Interaction
 
@@ -253,7 +253,7 @@ arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947, condition C1, lines 1030--1
 Section 6, lines 2593--2675. This is a generic finite-window criterion; canonical gaps are
 explicit inputs. -/
 theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel
-    (A : MPSTensor d D) {R₀ : ℕ} (_hR₀ : 0 < R₀)
+    (A : MPTensor α (Fin D)) {R₀ : ℕ} (_hR₀ : 0 < R₀)
     (hCanonical : ∀ W, R₀ ≤ W →
       (∀ N, W ≤ N → LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction A W N).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
@@ -261,7 +261,7 @@ theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_
       ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ)
-    {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    {R : ℕ} (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :

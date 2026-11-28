@@ -44,12 +44,12 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The Hamiltonian of an interval of exactly the interaction length vanishes before its window
 fits. This supplies the early-index part of the full-range C1 and C2 hypotheses. -/
 theorem hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt
-    (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hnL : n < L) :
     ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian = 0 := by
   rw [ManyBody.Interaction.hamiltonian_restrict,
@@ -58,7 +58,7 @@ theorem hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt
 /-- Shifting the full filtration range by one gives the C1 sum over intervals. Terms
 before the first complete length-\(L\) window are zero. -/
 theorem sum_range_hamiltonian_restrict_parentChainInteraction_succ_eq_Icc
-    (A : MPSTensor d D) {L N : ℕ} (hL : 0 < L) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hL : 0 < L) :
     ∑ n ∈ Finset.range N, ((parentChainInteraction A L N).restrict
         fun i ↦ n + 1 - L ≤ i.val ∧ i.val + L ≤ n + 1).hamiltonian =
       ∑ n ∈ Finset.Icc L N, ((parentChainInteraction A L N).restrict
@@ -98,7 +98,7 @@ counting constant \(d_L=1\). The range indices are shifted because the local Ham
 martingale index \(n\) acts on \([n+1-L,n+1)\). Nachtergaele, arXiv:cond-mat/9410110, condition
 C1, lines 1030--1041. -/
 theorem parentChainInteraction_C1_full_range_quadratic_form
-    (A : MPSTensor d D) {L N : ℕ} (hL : 0 < L) (x : EuclideanSpace ℂ (Cfg d N)) :
+    (A : MPTensor α (Fin D)) {L N : ℕ} (hL : 0 < L) (x : EuclideanSpace ℂ (Fin N → α)) :
     0 ≤ ∑ n ∈ Finset.range N,
         (⟪Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
           fun i ↦ n + 1 - L ≤ i.val ∧ i.val + L ≤ n + 1).hamiltonian x, x⟫_ℂ).re ∧
@@ -122,8 +122,8 @@ interaction length. Before the window fits both sides vanish; once it fits, the 
 Hamiltonian is the orthogonal projection \(I-Q\) onto the complement of its kernel.
 Nachtergaele, arXiv:cond-mat/9410110, condition C2, lines 1045--1056. -/
 theorem parentChainInteraction_C2_full_range_norm_sq
-    (A : MPSTensor d D) {L N n : ℕ} (hnN : n ≤ N) (x : EuclideanSpace ℂ (Cfg d N)) :
-    ‖((LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)) -
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hnN : n ≤ N) (x : EuclideanSpace ℂ (Fin N → α)) :
+    ‖((LinearMap.id : EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α)) -
         (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
           fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap)
           x‖ ^ 2 ≤
@@ -150,7 +150,7 @@ of the open-chain parent Hamiltonian is `0` or at least \((1-\epsilon_l\sqrt{l+1
 \(L=l+1\), conditions C1 and C2 have constants one. Nachtergaele, arXiv:cond-mat/9410110,
 Theorem 2.1(i), lines 1119--1130. -/
 theorem hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3
-    (A : MPSTensor d D) {l N : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
+    (A : MPTensor α (Fin D)) {l N : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (hεlt : ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ))
     (hC3 : ∀ n ∈ Finset.range N,
       ‖LinearMap.toContinuousLinearMap
@@ -167,7 +167,7 @@ theorem hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3
   let H := Matrix.toEuclideanLin (parentChainInteraction A (l + 1) N).hamiltonian
   have hzero : G.projection 0 = LinearMap.id := by
     change openPrefixGroundProjectionES A (l + 1) N 0 =
-      (1 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N))
+      (1 : EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α))
     exact openPrefixGroundProjectionES_eq_one_of_lt A (N := N) (by omega)
   have hQ : ∀ n ∈ Finset.range N, (Q n).IsSymmetricProjection := by
     intro n hn
@@ -204,7 +204,7 @@ is `0` or at least \((1-\epsilon_l\sqrt{l+1})^2\). The witnesses use the same \(
 \(\epsilon_l\) as the physical C3 estimate, uniformly for every \(N\) with \(l+1\leq N\).
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(i), lines 1119--1130. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentChainInteraction_gap
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧

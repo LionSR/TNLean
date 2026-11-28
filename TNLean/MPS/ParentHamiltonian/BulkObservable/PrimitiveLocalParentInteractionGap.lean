@@ -34,13 +34,13 @@ open ManyBody.Interaction (chainTranslates)
 
 namespace MPSTensor
 
-variable {d D R k : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D R k : ℕ}
 
 /-- The Hamiltonians of the open-chain translates of a positive parent interaction and of the
 canonical parent interaction on the open chain have identical kernels at every length.
 Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem IsParentInteraction.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction
-    {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    {A : MPTensor α (Fin D)} {h : Matrix (Fin R → α) (Fin R → α) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (N : ℕ) :
     LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) := by
@@ -60,10 +60,10 @@ with a bulk observable converge to the insertion expectation of the local
 commutator observable. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_energy_tendsto
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (hR : 0 < R)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     (hGround : ∀ᶠ n in atTop,
       ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
@@ -71,7 +71,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
     let H (n : ℕ) := Matrix.toEuclideanLin (chainTranslates R (N n) h).hamiltonian
-    let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+    let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ))
       (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
     Tendsto (fun n =>
       (inner ℂ (((B n).adjoint.comp ((H n).comp (B n) - (B n).comp (H n)))
@@ -81,7 +81,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
   apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
     N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
   filter_upwards [Filter.eventually_ge_atTop 1] with n hn
-  have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
+  have hH : Matrix.toEuclideanCLM (n := (Fin (N n) → α)) (𝕜 := ℂ)
       ((chainTranslates R (N n) h).hamiltonian) = (H n).toContinuousLinearMap := rfl
   dsimp only
   rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
@@ -94,11 +94,11 @@ from its eventual kernel identity and uniform gap above the kernel. Tensor conve
 derives the energy, excitation norm, and ground-projection limits.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openInteraction_gap
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ)
     (hh : h.PosSemidef)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
@@ -135,7 +135,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D R k : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D R k : ℕ}
 
 /-- Every positive parent interaction at range at least \(D^4+1\) has one
 positive local commutator bound throughout the normalized primitive sector.
@@ -143,11 +143,11 @@ All finite-volume and limiting estimates are derived internally.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_pos_localCommutator_gap_of_isParentInteraction
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ)
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (hR : D ^ 4 + 1 ≤ R) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ),
+    ∃ γ : ℝ, 0 < γ ∧ ∀ {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ),
       0 < k → observableInsertionExpectation A ρ X = 0 →
         γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
           (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by

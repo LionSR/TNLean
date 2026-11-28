@@ -52,12 +52,12 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A gap of the Hamiltonians of the parent interaction on all sufficiently large rings extends
 to all rings by taking the minimum with finitely many positive bounds. The gap is stated above
 the kernel: every eigenvalue is `0` or at least the gap. -/
-theorem hamiltonian_parentRingInteraction_gap_of_eventual_gap (A : MPSTensor d D) (R M : ℕ)
+theorem hamiltonian_parentRingInteraction_gap_of_eventual_gap (A : MPTensor α (Fin D)) (R M : ℕ)
     {δ : ℝ} (hδ : 0 < δ)
     (hGap : ∀ (N : ℕ) [NeZero N], M ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
@@ -86,7 +86,7 @@ Here \(m\) counts local terms, so the active open volume is exactly
 The coefficient is the finite-range cyclic Knabe coefficient derived in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
 theorem hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap
-    (A : MPSTensor d D) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
+    (A : MPTensor α (Fin D)) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
     {γ : ℝ} (hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ)
     (hOpenGap : ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R (m + R - 1)).hamiltonian) μ →
@@ -112,11 +112,11 @@ theorem hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteract
   have : NeZero N := ⟨by omega⟩
   have hWN : m + R - 1 ≤ N := by omega
   have hPSD := posSemidef_hamiltonian_parentRingInteraction A R N
-  let P : ZMod N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) := fun s ↦
+  let P : ZMod N → EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α) := fun s ↦
     Matrix.toEuclideanLin ((parentRingInteraction A R N).term ((ZMod.finEquiv N).symm s))
   have hProj (s : ZMod N) : (P s).IsSymmetricProjection :=
     isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A R _
-  have hWindowGap (s : ZMod N) (x : EuclideanSpace ℂ (Cfg d N)) :
+  have hWindowGap (s : ZMod N) (x : EuclideanSpace ℂ (Fin N → α)) :
       γ * (⟪ProjectionGeometry.cyclicWindowSum P m s x, x⟫_ℂ).re ≤
       (⟪ProjectionGeometry.cyclicWindowSum P m s x,
         ProjectionGeometry.cyclicWindowSum P m s x⟫_ℂ).re := by
@@ -124,17 +124,17 @@ theorem hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteract
       ((ZMod.finEquiv N).symm s)
     -- Caching this instance is load-bearing: without it, synthesizing
     -- `ContinuousSMul ℂ` on this Euclidean space times out in the statements below.
-    let : T2Space (EuclideanSpace ℂ (Cfg d (m + R - 1))) := inferInstance
-    let G : EuclideanSpace ℂ (Cfg d (m + R - 1)) →L[ℂ] EuclideanSpace ℂ (Cfg d (m + R - 1)) :=
+    let : T2Space (EuclideanSpace ℂ (Fin (m + R - 1) → α)) := inferInstance
+    let G : EuclideanSpace ℂ (Fin (m + R - 1) → α) →L[ℂ] EuclideanSpace ℂ (Fin (m + R - 1) → α) :=
       LinearMap.toContinuousLinearMap
         (Matrix.toEuclideanLin (parentChainInteraction A R (m + R - 1)).hamiltonian)
     have hFiber :=
       LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_forall_hasEigenvalue
-        (S := Cfg d (N - (m + R - 1))) G
+        (S := (Fin (N - (m + R - 1)) → α)) G
         (Matrix.isPositive_toEuclideanLin_iff.mpr
           (posSemidef_hamiltonian_parentChainInteraction A R (m + R - 1))) hγ.le hOpenGap
     have hApply : U (ProjectionGeometry.cyclicWindowSum P m s x) =
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1))) G (U x) := by
+        ContinuousLinearMap.rightFiberwiseMap (S := (Fin (N - (m + R - 1)) → α)) G (U x) := by
       rw [ManyBody.Interaction.cyclicWindowSum_toEuclideanLin_translationInvariant_term _ hR hWN]
       exact cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply hWN _ _ x
     have h := hFiber (U x)
@@ -157,7 +157,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A primitive MPS has a positive finite-range Knabe gap for its canonical
 range-\(l + 1\) parent Hamiltonian on every periodic chain with \(N \geq 2m\).
@@ -166,7 +166,7 @@ The open coefficient is
 \(\gamma = (1 - \varepsilon\sqrt{l + 1})^2\), the active Knabe volume is \(m + l\), and
 \(m\) is chosen so that \(l^2 < m\gamma\). -/
 theorem exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧
@@ -224,7 +224,7 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A positive gap of the open-chain parent Hamiltonians on all sufficiently large multiples of
 a fixed positive integer implies a positive gap of the Hamiltonians of the parent interaction on
@@ -233,7 +233,7 @@ least the gap. This applies to the divisible open lengths in Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 2.1(ii), using the finite-range comparison in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
 theorem exists_hamiltonian_parentRingInteraction_gap_of_eventually_divisible_gap
-    (A : MPSTensor d D) {p R : ℕ} (hp : 1 ≤ p) (hR : 1 ≤ R)
+    (A : MPTensor α (Fin D)) {p R : ℕ} (hp : 1 ≤ p) (hR : 1 ≤ R)
     {γ : ℝ} (hγ : 0 < γ)
     (hOpen : ∀ᶠ M : ℕ in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A R (p * M)).hamiltonian) μ →

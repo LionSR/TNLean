@@ -28,15 +28,15 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The range of the full FNW boundary map at a fixed chain length. -/
 noncomputable def fnwBoundaryRange
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (N : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (N : ℕ) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) := by
+    Submodule ℂ (EuclideanSpace ℂ (Fin N → α)) := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   exact LinearMap.range (fnwBoundaryMapCLM ρ hρ A N).toLinearMap
 
@@ -45,9 +45,9 @@ one special full-ground family gives the unconverted dual estimate for its
 aggregate. -/
 theorem norm_inner_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
     (horth : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (B : Mat) :
@@ -77,9 +77,9 @@ one special full-ground family gives the unconverted dual estimate for its
 aggregate. -/
 theorem norm_inner_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (horth : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (B : Mat) :
@@ -104,9 +104,9 @@ theorem norm_inner_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
 \(a(m)\) times its spectator-family norm. -/
 theorem norm_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
     (horth : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ) :
     weighted_matrix_norm_instances ρ hρ in
@@ -143,9 +143,9 @@ theorem norm_fnwLeftOverlapAggregate_le_familyNorm [NeZero D]
 \(a(m)\) times its spectator-family norm. -/
 theorem norm_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (horth : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ) :
     weighted_matrix_norm_instances ρ hρ in
@@ -188,9 +188,9 @@ theorem norm_fnwRightOverlapAggregate_le_familyNorm [NeZero D]
 bound for the corresponding left overlap map. -/
 theorem norm_fnwLeftOverlapAggregate_le_div_sqrt_lowerBoundary [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
     (horth : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
@@ -221,9 +221,9 @@ theorem norm_fnwLeftOverlapAggregate_le_div_sqrt_lowerBoundary [NeZero D]
 bound for the corresponding right overlap map. -/
 theorem norm_fnwRightOverlapAggregate_le_div_sqrt_lowerBoundary [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (horth : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
@@ -254,10 +254,10 @@ theorem norm_fnwRightOverlapAggregate_le_div_sqrt_lowerBoundary [NeZero D]
 quadratic aggregate pairing coefficient \(a(m)^2/a_-(m)\). -/
 theorem norm_inner_fnwOverlapAggregates_le_sq_div_lowerBoundary [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (horthΦ : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (horthΨ : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈
@@ -301,10 +301,10 @@ contribution combine with the unfactored coefficient
 \(a(m)/a_-(m)+a(m)^2/a_-(m)\). -/
 theorem norm_inner_fnwOverlapMaps_le_linear_add_quadratic [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
-    (Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r))
-    (Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ))
+    (Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α))
+    (Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)))
     (horthΦ : fnwLeftOverlapMap ρ hρ A ℓ m r Φ ∈
       (fnwBoundaryRange ρ hρ A ((ℓ + m) + r))ᗮ)
     (horthΨ : fnwRightOverlapMap ρ hρ A ℓ m r Ψ ∈

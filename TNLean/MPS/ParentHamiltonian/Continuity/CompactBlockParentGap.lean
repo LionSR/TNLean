@@ -47,21 +47,21 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- A strict finite-range open Knabe window for a block tensor persists on a
 parameter neighborhood, giving one periodic gap at all sufficiently large
 lengths. Source: arXiv:1010.3732, Appendix A, lines 2475--2580. -/
 theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_strict_openGap
     {X : Type*} [TopologicalSpace X]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R m : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) (hm : R ≤ m) {x₀ : X} {γ : ℝ}
     (hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ)
     (hgap : ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x₀) (A x₀)) R
+        (parentChainInteraction (toTensorFromBlocks (μ := μ x₀) (A x₀)) R
           (m + R - 1)).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ x in 𝓝 x₀, ∀ (N : ℕ) (hN : 2 * m ≤ N),
@@ -69,13 +69,13 @@ theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_s
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   have hmpos : 0 < (m : ℝ) := by exact_mod_cast (by omega : 0 < m)
   have hthreshold : ((R : ℝ) - 1) ^ 2 / (m : ℝ) < γ :=
     (div_lt_iff₀ hmpos).2 (by simpa only [mul_comm] using hnum)
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
-  let B := fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)
+  let B := fun x => toTensorFromBlocks (μ := μ x) (A x)
   have hProjR := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x => wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   have hProjW := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
@@ -110,7 +110,7 @@ chain length. No finite-window gap or normalization is assumed.
 Source: arXiv:1010.3732, Appendix A, lines 2475--2580. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_compact
     {X : Type*} [TopologicalSpace X]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) {K : Set X} (hK : IsCompact K) :
@@ -118,13 +118,13 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   refine hK.exists_uniform_pos_nat_bounds (fun δ N₀ x ↦ ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z)
     (fun hle hgap N _ hN ↦ ManyBody.forall_hasEigenvalue_mono hle (hgap N hN))
     (fun hle hgap N _ hN ↦ hgap N (hle.trans hN)) fun x _ ↦ ?_
@@ -142,7 +142,7 @@ No finite-window gap or normalization is assumed.
 Source: arXiv:1010.3732, Appendix A, lines 2475--2580. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths
     {X : Type*} [TopologicalSpace X]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) {K : Set X} (hK : IsCompact K) :
@@ -150,7 +150,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨δ₀, hδ₀, N₀, hlong⟩ :=
     exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_compact
@@ -160,7 +160,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z)
     (fun N γ δ hle h hN x hx => ManyBody.forall_hasEigenvalue_mono hle (h hN x hx))
     (fun N => by
@@ -182,7 +182,7 @@ A common simultaneous injectivity length is derived from the dimensions.
 Source: arXiv:1010.3732, Appendix A, and arXiv:1606.00608, lines 317--345. -/
 theorem exists_uniform_block_hamiltonian_parentRingInteraction_gap_of_compact_isNormalTensor
     {X : Type*} [TopologicalSpace X]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     (hNormal : ∀ x j, IsNormalTensor (A x j))
     (hDistinct : ∀ x, BlocksNotGaugePhaseEquiv (A x)) {R : ℕ}
@@ -193,7 +193,7 @@ theorem exists_uniform_block_hamiltonian_parentRingInteraction_gap_of_compact_is
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
           (parentRingInteraction
-            (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) R N).hamiltonian) z →
+            (toTensorFromBlocks (μ := μ x) (A x)) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   classical
   rcases isEmpty_or_nonempty X with hX | hX

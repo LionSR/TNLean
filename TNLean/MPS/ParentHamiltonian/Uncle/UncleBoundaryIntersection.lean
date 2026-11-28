@@ -24,7 +24,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 private noncomputable def uncleTraceRight
     (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
@@ -33,11 +33,11 @@ private noncomputable def uncleTraceRight
 
 /-- Fixing the final site preserves the source boundary-space constraint. -/
 theorem restrictLast_mem_uncleBoundarySpace
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
-    {ψ : NSiteSpace (Fin d) (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
-    (i : Fin d) : restrictLast ψ i ∈ uncleBoundarySpace A B R L n := by
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
+    {ψ : NSiteSpace α (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
+    (i : α) : restrictLast ψ i ∈ uncleBoundarySpace A B R L n := by
   obtain ⟨X, rfl⟩ := hψ
   let f := (uncleTraceRight X).comp
     (uncleBoundaryMulRight (uncleBoundaryLetter A B R L i))
@@ -55,11 +55,11 @@ theorem restrictLast_mem_uncleBoundarySpace
 
 /-- Fixing the initial site preserves the source boundary-space constraint. -/
 theorem restrictFirst_mem_uncleBoundarySpace
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
-    {ψ : NSiteSpace (Fin d) (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
-    (i : Fin d) : restrictFirst ψ i ∈ uncleBoundarySpace A B R L n := by
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
+    {ψ : NSiteSpace α (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
+    (i : α) : restrictFirst ψ i ∈ uncleBoundarySpace A B R L n := by
   obtain ⟨X, rfl⟩ := hψ
   let f := (uncleTraceRight X).comp
     (uncleBoundaryMulLeft (uncleBoundaryLetter A B R L i))
@@ -80,11 +80,11 @@ matrix on the larger chain. This proves the reverse intersection inclusion
 from full perturbation injectivity, with no supplied reconstruction premise.
 Source: arXiv:1210.6613, Appendix intersection proof, lines 1768–1940. -/
 theorem mem_uncleBoundarySpace_of_overlap
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ)
-    (ψ : NSiteSpace (Fin d) (n + 3))
+    (ψ : NSiteSpace α (n + 3))
     (hLeft : ∀ i, restrictLast ψ i ∈ uncleBoundarySpace A B R L (n + 2))
     (hRight : ∀ i, restrictFirst ψ i ∈ uncleBoundarySpace A B R L (n + 2)) :
     ψ ∈ uncleBoundarySpace A B R L (n + 3) := by
@@ -95,7 +95,7 @@ theorem mem_uncleBoundarySpace_of_overlap
   choose Y hY using hY
   obtain ⟨c, hc⟩ := exists_uncleBoundary_identity_coefficients A B R L hPert
   let Z := ∑ i, c i • Y i
-  have hCompat (i k : Fin d) (w : Fin (n + 1) → Fin d) :
+  have hCompat (i k : α) (w : Fin (n + 1) → α) :
       Matrix.trace (uncleBoundaryWord A B R L (i :: List.ofFn w) * X k) =
         Matrix.trace (uncleBoundaryWord A B R L (List.ofFn w ++ [k]) * Y i) := by
     have hx := congrFun (hX k) (Fin.cons i w)
@@ -104,7 +104,7 @@ theorem mem_uncleBoundarySpace_of_overlap
     simp only [uncleBoundaryMap_apply, restrictFirst_apply, List.ofFn_snoc] at hy
     rw [Fin.cons_snoc_eq_snoc_cons] at hy
     exact hx.trans hy.symm
-  have hMiddle (k : Fin d) (w : Fin (n + 1) → Fin d) :
+  have hMiddle (k : α) (w : Fin (n + 1) → α) :
       Matrix.trace (uncleBoundaryWord A B R L (List.ofFn w) * X k) =
         Matrix.trace (uncleBoundaryWord A B R L (List.ofFn w ++ [k]) * Z) := by
     calc
@@ -119,7 +119,7 @@ theorem mem_uncleBoundarySpace_of_overlap
         simp_rw [hCompat]
       _ = _ := by
         simp [Z, Matrix.mul_sum, Matrix.trace_sum, Matrix.trace_smul]
-  have hExtend (k : Fin d) (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
+  have hExtend (k : α) (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
       Matrix.trace (M * X k) =
         Matrix.trace (uncleBoundaryMul M (uncleBoundaryLetter A B R L k) * Z) := by
     let f := uncleTraceRight (X k)
@@ -152,12 +152,12 @@ theorem mem_uncleBoundarySpace_of_overlap
 The Appendix starts at two, so the overlapping middle length is positive.
 Source: arXiv:1210.6613, Lemma intersection and Appendix lines 1768–1940. -/
 theorem uncleBoundarySpace_intersection
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ) :
-    (⨅ i : Fin d, (uncleBoundarySpace A B R L (n + 2)).comap (restrictLastₗ i)) ⊓
-        (⨅ i : Fin d, (uncleBoundarySpace A B R L (n + 2)).comap (restrictFirstₗ i)) =
+    (⨅ i : α, (uncleBoundarySpace A B R L (n + 2)).comap (restrictLastₗ i)) ⊓
+        (⨅ i : α, (uncleBoundarySpace A B R L (n + 2)).comap (restrictFirstₗ i)) =
       uncleBoundarySpace A B R L (n + 3) := by
   ext ψ
   simp only [Submodule.mem_inf, Submodule.mem_iInf, Submodule.mem_comap]

@@ -55,20 +55,20 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 section Sums
 
 variable {M : Type*} [AddCommMonoid M]
 
 /-- A sum over two-site configurations is a double sum over the two letters. -/
-theorem sum_cfg_two (f : Cfg d 2 → M) : ∑ σ, f σ = ∑ a, ∑ b, f ![a, b] := by
-  rw [← (finTwoArrowEquiv (Fin d)).symm.sum_comp, Fintype.sum_prod_type]
+theorem sum_cfg_two (f : (Fin 2 → α) → M) : ∑ σ, f σ = ∑ a, ∑ b, f ![a, b] := by
+  rw [← (finTwoArrowEquiv α).symm.sum_comp, Fintype.sum_prod_type]
   rfl
 
 /-- A sum over three-site configurations is a triple sum over the three letters. -/
-theorem sum_cfg_three (f : Cfg d 3 → M) : ∑ σ, f σ = ∑ a, ∑ b, ∑ c, f ![a, b, c] := by
-  rw [← (Fin.consEquiv fun _ : Fin 3 => Fin d).sum_comp, Fintype.sum_prod_type]
+theorem sum_cfg_three (f : (Fin 3 → α) → M) : ∑ σ, f σ = ∑ a, ∑ b, ∑ c, f ![a, b, c] := by
+  rw [← (Fin.consEquiv fun _ : Fin 3 => α).sum_comp, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun a _ => ?_
   rw [sum_cfg_two]
   refine Finset.sum_congr rfl fun b _ => Finset.sum_congr rfl fun c _ => ?_
@@ -78,11 +78,11 @@ end Sums
 
 /-- The adjoint of the boundary parametrization \(\Gamma_n\) for the Hilbert--Schmidt inner product:
 \(\psi \mapsto \sum_\tau \psi(\tau) (A^\tau)^\dagger\). -/
-noncomputable def groundSpaceMapAdjoint (A : MPSTensor d D) (n : ℕ) :
-    NSiteSpace (Fin d) n →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  ∑ τ : Cfg d n, (LinearMap.proj τ).smulRight (Kraus.evalWord A (List.ofFn τ))ᴴ
+noncomputable def groundSpaceMapAdjoint (A : MPTensor α (Fin D)) (n : ℕ) :
+    NSiteSpace α n →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+  ∑ τ : (Fin n → α), (LinearMap.proj τ).smulRight (Kraus.evalWord A (List.ofFn τ))ᴴ
 
-theorem groundSpaceMapAdjoint_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace (Fin d) n) :
+theorem groundSpaceMapAdjoint_apply (A : MPTensor α (Fin D)) (n : ℕ) (ψ : NSiteSpace α n) :
     groundSpaceMapAdjoint A n ψ = ∑ τ, ψ τ • (Kraus.evalWord A (List.ofFn τ))ᴴ := by
   simp [groundSpaceMapAdjoint]
 
@@ -91,18 +91,18 @@ theorem groundSpaceMapAdjoint_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpa
 arXiv:1001.3807, equation "eq:iso:ham-proj-from-A" (`Papers/1001.3807/paper_v3.tex`
 lines 2103–2107, figure `figs4/ham-proj-from-A.pdf`), in which the tensors \(A^\dagger\) are
 the adjoint matrices. -/
-noncomputable def groundSpaceFrame (A : MPSTensor d D) (n : ℕ) :
-    Module.End ℂ (NSiteSpace (Fin d) n) :=
+noncomputable def groundSpaceFrame (A : MPTensor α (Fin D)) (n : ℕ) :
+    Module.End ℂ (NSiteSpace α n) :=
   groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n
 
-theorem groundSpaceFrame_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace (Fin d) n)
-    (σ : Cfg d n) :
+theorem groundSpaceFrame_apply (A : MPTensor α (Fin D)) (n : ℕ) (ψ : NSiteSpace α n)
+    (σ : (Fin n → α)) :
     groundSpaceFrame A n ψ σ = ∑ τ, ψ τ *
       Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
   simp [groundSpaceFrame, groundSpaceMapAdjoint_apply, Matrix.mul_sum, Matrix.trace_sum]
 
 /-- The matrix of \(\Gamma_n \Gamma_n^\dagger\) is Hermitian. -/
-theorem groundSpaceFrame_isHermitian (A : MPSTensor d D) (n : ℕ) :
+theorem groundSpaceFrame_isHermitian (A : MPTensor α (Fin D)) (n : ℕ) :
     (LinearMap.toMatrix' (groundSpaceFrame A n)).IsHermitian := by
   classical
   ext σ τ
@@ -112,7 +112,7 @@ theorem groundSpaceFrame_isHermitian (A : MPSTensor d D) (n : ℕ) :
 
 /-- If \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c \neq 0\), then
 \(c^{-1} \Gamma_n \Gamma_n^\dagger\) is idempotent. -/
-theorem isIdempotentElem_smul_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c : ℂ}
+theorem isIdempotentElem_smul_groundSpaceFrame {A : MPTensor α (Fin D)} {n : ℕ} {c : ℂ}
     (hc : c ≠ 0)
     (h : groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n ∘ₗ groundSpaceMap A n =
       c • groundSpaceMap A n) :
@@ -126,7 +126,7 @@ theorem isIdempotentElem_smul_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c 
 
 /-- If \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c \neq 0\), then the range of
 \(\Gamma_n \Gamma_n^\dagger\) is the local ground space \(G_n(A)\). -/
-theorem range_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c : ℂ} (hc : c ≠ 0)
+theorem range_groundSpaceFrame {A : MPTensor α (Fin D)} {n : ℕ} {c : ℂ} (hc : c ≠ 0)
     (h : groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n ∘ₗ groundSpaceMap A n =
       c • groundSpaceMap A n) :
     LinearMap.range (groundSpaceFrame A n) = groundSpace A n := by
@@ -141,7 +141,7 @@ theorem range_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c : ℂ} (hc : c �
 /-- If \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c > 0\), then
 \(c^{-1} \Gamma_n \Gamma_n^\dagger\) is the orthogonal projector onto the local ground space, so
 the parent interaction \(1 - \Pi_{G_n(A)}\) is \(1 - c^{-1} \Gamma_n \Gamma_n^\dagger\). -/
-theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {n : ℕ}
+theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPTensor α (Fin D)} {n : ℕ}
     {c : ℝ} (hc : 0 < c)
     (h : groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n ∘ₗ groundSpaceMap A n =
       (c : ℂ) • groundSpaceMap A n) :
@@ -149,9 +149,9 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
   classical
   have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
   set P := (c : ℂ)⁻¹ • groundSpaceFrame A n with hP
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) n)
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace α n)
   -- The Euclidean form of \(P\) is a symmetric projection with range \(G_n(A)\).
-  let PES : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n) :=
+  let PES : EuclideanSpace ℂ (Fin n → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin n → α) :=
     e.symm.toLinearMap ∘ₗ P ∘ₗ e.toLinearMap
   have hPES : PES = Matrix.toEuclideanLin (LinearMap.toMatrix' P) := by
     refine LinearMap.ext fun v => ?_
@@ -189,48 +189,48 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
 /-! ### Three sites -/
 
 /-- The lift to the first pair of sites is linear. -/
-theorem leftPairLift_smul (k : ℂ) (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
+theorem leftPairLift_smul (k : ℂ) (Q : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2) :
     leftPairLift (k • Q) = k • leftPairLift Q := by
   ext ψ σ
   simp
 
 /-- The lift to the second pair of sites is linear. -/
-theorem rightPairLift_smul (k : ℂ) (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
+theorem rightPairLift_smul (k : ℂ) (Q : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2) :
     rightPairLift (k • Q) = k • rightPairLift Q := by
   ext ψ σ
   simp
 
 /-- Replacing the first pair of sites of \((s_0, s_1, s_2)\). -/
-@[simp] theorem replaceAXCfg_vecCons (s₀ s₁ s₂ a b : Fin d) :
+@[simp] theorem replaceAXCfg_vecCons (s₀ s₁ s₂ a b : α) :
     replaceAXCfg ![s₀, s₁, s₂] ![a, b] = ![a, b, s₂] := by
   funext k
   fin_cases k <;> rfl
 
 /-- Replacing the second pair of sites of \((s_0, s_1, s_2)\). -/
-@[simp] theorem replaceXBCfg_vecCons (s₀ s₁ s₂ a b : Fin d) :
+@[simp] theorem replaceXBCfg_vecCons (s₀ s₁ s₂ a b : α) :
     replaceXBCfg ![s₀, s₁, s₂] ![a, b] = ![s₀, a, b] := by
   funext k
   fin_cases k <;> rfl
 
 /-- The first pair of sites of \((s_0, s_1, s_2)\). -/
-@[simp] theorem axPairCfg_vecCons (s₀ s₁ s₂ : Fin d) :
+@[simp] theorem axPairCfg_vecCons (s₀ s₁ s₂ : α) :
     axPairCfg ![s₀, s₁, s₂] = ![s₀, s₁] := by
   funext k
   fin_cases k <;> rfl
 
 /-- The second pair of sites of \((s_0, s_1, s_2)\). -/
-@[simp] theorem xbPairCfg_vecCons (s₀ s₁ s₂ : Fin d) :
+@[simp] theorem xbPairCfg_vecCons (s₀ s₁ s₂ : α) :
     xbPairCfg ![s₀, s₁, s₂] = ![s₁, s₂] := by
   funext k
   fin_cases k <;> rfl
 
 /-- The word of a two-letter configuration. -/
-theorem evalWord_ofFn_two (A : MPSTensor d D) (a b : Fin d) :
+theorem evalWord_ofFn_two (A : MPTensor α (Fin D)) (a b : α) :
     Kraus.evalWord A (List.ofFn ![a, b]) = A a * A b := by
   simp [List.ofFn_succ]
 
 /-- The word of a three-letter configuration. -/
-theorem evalWord_ofFn_three (A : MPSTensor d D) (a b c : Fin d) :
+theorem evalWord_ofFn_three (A : MPTensor α (Fin D)) (a b c : α) :
     Kraus.evalWord A (List.ofFn ![a, b, c]) = A a * A b * A c := by
   simp [List.ofFn_succ, Matrix.mul_assoc]
 
@@ -240,8 +240,8 @@ lift to the second pair has the matrix \(\sum_b t_b t'_b\), with
 \(t'_b = \operatorname{tr}[A^b A^{s_2} (A^{w_1} A^{w_2})^\dagger]\); if this sum is
 \(c \operatorname{tr}[A^{s_0 s_1 s_2} (A^{w_0 w_1 w_2})^\dagger]\), the product is
 \(c \Gamma_3 \Gamma_3^\dagger\). -/
-theorem leftPairLift_mul_rightPairLift_groundSpaceFrame (A : MPSTensor d D) (c : ℂ)
-    (h : ∀ s₀ s₁ s₂ w₀ w₁ w₂ : Fin d,
+theorem leftPairLift_mul_rightPairLift_groundSpaceFrame (A : MPTensor α (Fin D)) (c : ℂ)
+    (h : ∀ s₀ s₁ s₂ w₀ w₁ w₂ : α,
       ∑ b, Matrix.trace (A s₀ * A s₁ * (A w₀ * A b)ᴴ) *
           Matrix.trace (A b * A s₂ * (A w₁ * A w₂)ᴴ) =
         c * Matrix.trace (A s₀ * A s₁ * A s₂ * (A w₀ * A w₁ * A w₂)ᴴ)) :
@@ -253,7 +253,7 @@ theorem leftPairLift_mul_rightPairLift_groundSpaceFrame (A : MPSTensor d D) (c :
     LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul]
   rw [sum_cfg_two, sum_cfg_three, Finset.mul_sum]
   simp only [replaceAXCfg_vecCons, replaceXBCfg_vecCons, axPairCfg_vecCons, xbPairCfg_vecCons,
-    evalWord_ofFn_two, evalWord_ofFn_three, sum_cfg_two (d := d), Finset.sum_mul, Finset.mul_sum]
+    evalWord_ofFn_two, evalWord_ofFn_three, sum_cfg_two, Finset.sum_mul, Finset.mul_sum]
   refine Finset.sum_congr rfl fun a _ => ?_
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun x _ => ?_
@@ -268,8 +268,8 @@ lift to the first pair has the matrix \(\sum_b t_b t'_b\), with
 \(t'_b = \operatorname{tr}[A^{s_1} A^{s_2} (A^b A^{w_2})^\dagger]\); if this sum is
 \(c \operatorname{tr}[A^{s_0 s_1 s_2} (A^{w_0 w_1 w_2})^\dagger]\), the product is
 \(c \Gamma_3 \Gamma_3^\dagger\). -/
-theorem rightPairLift_mul_leftPairLift_groundSpaceFrame (A : MPSTensor d D) (c : ℂ)
-    (h : ∀ s₀ s₁ s₂ w₀ w₁ w₂ : Fin d,
+theorem rightPairLift_mul_leftPairLift_groundSpaceFrame (A : MPTensor α (Fin D)) (c : ℂ)
+    (h : ∀ s₀ s₁ s₂ w₀ w₁ w₂ : α,
       ∑ b, Matrix.trace (A s₀ * A b * (A w₀ * A w₁)ᴴ) *
           Matrix.trace (A s₁ * A s₂ * (A b * A w₂)ᴴ) =
         c * Matrix.trace (A s₀ * A s₁ * A s₂ * (A w₀ * A w₁ * A w₂)ᴴ)) :
@@ -281,7 +281,7 @@ theorem rightPairLift_mul_leftPairLift_groundSpaceFrame (A : MPSTensor d D) (c :
     LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul]
   rw [sum_cfg_two, sum_cfg_three, Finset.mul_sum]
   simp only [replaceAXCfg_vecCons, replaceXBCfg_vecCons, axPairCfg_vecCons, xbPairCfg_vecCons,
-    evalWord_ofFn_two, evalWord_ofFn_three, sum_cfg_two (d := d), Finset.sum_mul, Finset.mul_sum]
+    evalWord_ofFn_two, evalWord_ofFn_three, sum_cfg_two, Finset.sum_mul, Finset.mul_sum]
   rw [Fintype.sum_last_two_first_four]
   refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun x _ => ?_
   rw [Finset.sum_comm]
@@ -292,7 +292,7 @@ theorem rightPairLift_mul_leftPairLift_groundSpaceFrame (A : MPSTensor d D) (c :
 /-- If \(\Gamma_2 \Gamma_2^\dagger \Gamma_2 = c \Gamma_2\) with \(c > 0\) and the lifts of
 \(\Gamma_2 \Gamma_2^\dagger\) to the two overlapping pairs of three sites commute, then the
 translated two-site parent terms commute on every ring of at least three sites. -/
-theorem isNNCPH_of_pairLift_groundSpaceFrame {A : MPSTensor d D} {c : ℝ} (hc : 0 < c)
+theorem isNNCPH_of_pairLift_groundSpaceFrame {A : MPTensor α (Fin D)} {c : ℝ} (hc : 0 < c)
     (h : groundSpaceMap A 2 ∘ₗ groundSpaceMapAdjoint A 2 ∘ₗ groundSpaceMap A 2 =
       (c : ℂ) • groundSpaceMap A 2)
     (hcomm : leftPairLift (groundSpaceFrame A 2) * rightPairLift (groundSpaceFrame A 2) =

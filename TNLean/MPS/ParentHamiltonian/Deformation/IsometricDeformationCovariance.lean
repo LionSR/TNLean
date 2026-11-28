@@ -25,12 +25,12 @@ open scoped Matrix MatrixOrder ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Commutation with the positive factor persists along its affine path.
 Source: arXiv:1010.3732, lines 672--676. -/
 theorem commute_positivePhysicalDeformation
-    (U Q : Matrix (Fin d) (Fin d) ℂ) (hComm : Commute U Q) (γ : unitInterval) :
+    (U Q : Matrix α α ℂ) (hComm : Commute U Q) (γ : unitInterval) :
     Commute U (positivePhysicalDeformation Q γ) := by
   exact (hComm.smul_right (γ : ℝ)).add_right
     ((Commute.one_right U).smul_right (1 - (γ : ℝ)))
@@ -39,10 +39,10 @@ theorem commute_positivePhysicalDeformation
 unitary when the original joint physical map intertwines it with a virtual
 unitary. Source: arXiv:1010.3732, lines 658--676. -/
 theorem commute_leftPolarPhysicalFactor_of_unitary_covariance
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (U : Matrix (Fin d) (Fin d) ℂ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
+    (U : Matrix α α ℂ)
     (X : Matrix (BlockEntryIndex dim) (BlockEntryIndex dim) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup α ℂ)
     (hX : X ∈ Matrix.unitaryGroup (BlockEntryIndex dim) ℂ)
     (hCov : U * blockPhysicalMatrix A = blockPhysicalMatrix A * X) :
     Commute U (leftPolarPhysicalFactor A) := by
@@ -52,7 +52,7 @@ theorem commute_leftPolarPhysicalFactor_of_unitary_covariance
 /-- Physical rotation acts on the joint tensor map by multiplication on
 its physical index. Source: arXiv:1010.3732, lines 589--594 and 658--676. -/
 theorem blockPhysicalMatrix_rotatePhysical
-    (Λ : Matrix (Fin d) (Fin d) ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) :
+    (Λ : Matrix α α ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j))) :
     blockPhysicalMatrix (fun j => rotatePhysical Λ (A j)) = Λ * blockPhysicalMatrix A := by
   ext i p
   simp [blockPhysicalMatrix, rotatePhysical, Matrix.mul_apply, Matrix.sum_apply]
@@ -61,10 +61,10 @@ theorem blockPhysicalMatrix_rotatePhysical
 an exact physical--virtual unitary covariance of its original physical map.
 Source: arXiv:1010.3732, lines 672--676. -/
 theorem blockPhysicalMatrix_isometricDeformationBlocks_covariance
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (U : Matrix (Fin d) (Fin d) ℂ)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j)))
+    (U : Matrix α α ℂ)
     (X : Matrix (BlockEntryIndex dim) (BlockEntryIndex dim) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup α ℂ)
     (hX : X ∈ Matrix.unitaryGroup (BlockEntryIndex dim) ℂ)
     (hCov : U * blockPhysicalMatrix A = blockPhysicalMatrix A * X) (γ : unitInterval) :
     U * blockPhysicalMatrix (isometricDeformationBlocks A γ) =

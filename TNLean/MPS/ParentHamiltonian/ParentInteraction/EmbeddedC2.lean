@@ -28,12 +28,12 @@ open scoped InnerProductSpace MatrixOrder ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The interval of length \(L\) ending at \(n\) contains exactly the window of the term
 starting at \(n-L\): the restriction of the parent interaction to the windows inside it has that
 term as its Hamiltonian. -/
-theorem hamiltonian_restrict_parentChainInteraction_eq_term (A : MPSTensor d D)
+theorem hamiltonian_restrict_parentChainInteraction_eq_term (A : MPTensor α (Fin D))
     {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
     ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
@@ -49,7 +49,7 @@ theorem hamiltonian_restrict_parentChainInteraction_eq_term (A : MPSTensor d D)
 
 /-- The Hamiltonian of the single window inside an interval of length \(L\) is an orthogonal
 projection. -/
-theorem isStarProjection_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D)
+theorem isStarProjection_hamiltonian_restrict_parentChainInteraction (A : MPTensor α (Fin D))
     {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
     IsStarProjection ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian := by
@@ -59,7 +59,7 @@ theorem isStarProjection_hamiltonian_restrict_parentChainInteraction (A : MPSTen
 /-- The operator of the single-window Hamiltonian is the orthogonal projection onto the
 orthogonal complement of its kernel. -/
 theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection
-    (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
     Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
       (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
@@ -73,7 +73,7 @@ theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjec
 /-- The single-window identity \(H=I-G\), where \(G\) is the orthogonal projection onto the
 kernel of \(H\). -/
 theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection
-    (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
     Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
       LinearMap.id - (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
@@ -89,7 +89,7 @@ theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_sta
 
 /-- Nachtergaele's condition C2 in Loewner order, with \(\gamma_L=1\). Nachtergaele,
 arXiv:cond-mat/9410110, condition C2, lines 1043--1058. -/
-theorem parentChainInteraction_C2 (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n)
+theorem parentChainInteraction_C2 (A : MPTensor α (Fin D)) {L N n : ℕ} (hLn : L ≤ n)
     (hnN : n ≤ N) :
     LinearMap.id - (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap ≤
@@ -100,9 +100,9 @@ theorem parentChainInteraction_C2 (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤
 
 /-- Quadratic-form version of condition C2 with \(\gamma_L=1\). Nachtergaele,
 arXiv:cond-mat/9410110, condition C2, lines 1043--1058. -/
-theorem parentChainInteraction_C2_quadratic_form (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n)
-    (hnN : n ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    (⟪((LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)) -
+theorem parentChainInteraction_C2_quadratic_form (A : MPTensor α (Fin D)) {L N n : ℕ} (hLn : L ≤ n)
+    (hnN : n ≤ N) (v : EuclideanSpace ℂ (Fin N → α)) :
+    (⟪((LinearMap.id : EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α)) -
         (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap) v,
         v⟫_ℂ).re ≤
@@ -116,8 +116,8 @@ theorem parentChainInteraction_C2_quadratic_form (A : MPSTensor d D) {L N n : �
 /-- On the orthogonal complement of its kernel, the single-window Hamiltonian preserves the
 norm. -/
 theorem norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_orthogonal_ker
-    (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N)
-    (v : EuclideanSpace ℂ (Cfg d N))
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N)
+    (v : EuclideanSpace ℂ (Fin N → α))
     (hv : v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian))ᗮ) :
     ‖Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
@@ -128,7 +128,7 @@ theorem norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_o
 /-- The single-window Hamiltonian has unit gap: every eigenvalue is `0` or at least `1`. Under
 \(L=l+1\) and with endpoint \(m=n+1\), this is \(\gamma_{l+1}=1\) in Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 2.1(i), lines 1119--1130. -/
-theorem unit_gap_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D) {L N n : ℕ}
+theorem unit_gap_hamiltonian_restrict_parentChainInteraction (A : MPTensor α (Fin D)) {L N n : ℕ}
     (hLn : L ≤ n) (hnN : n ≤ N) :
     ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict

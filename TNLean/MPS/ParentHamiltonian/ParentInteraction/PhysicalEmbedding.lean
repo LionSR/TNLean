@@ -27,7 +27,7 @@ namespace MPSTensor
 tensor power. Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym, physical endpoint embeddings. -/
 theorem groundSpaceMap_rotatePhysical_rectangular {d m D : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ)
+    (E : Matrix (Fin m) α ℂ) (A : MPTensor α (Fin D)) (L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical E A) L X =
       (Matrix.piKronecker fun _ : Fin L => E).mulVec (groundSpaceMap A L X) := by
@@ -39,7 +39,7 @@ theorem groundSpaceMap_rotatePhysical_rectangular {d m D : ℕ}
 its original boundary space under the tensor power. Source context:
 arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem groundSpace_rotatePhysical_rectangular {d m D : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ) :
+    (E : Matrix (Fin m) α ℂ) (A : MPTensor α (Fin D)) (L : ℕ) :
     groundSpace (rotatePhysical E A) L =
       (groundSpace A L).map (Matrix.toLin' (Matrix.piKronecker fun _ : Fin L => E)) := by
   have h : groundSpaceMap (rotatePhysical E A) L =
@@ -51,7 +51,7 @@ theorem groundSpace_rotatePhysical_rectangular {d m D : ℕ}
 rectangular physical map. Source context: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem map_groundSpace_rotatePhysical_rectangular {d m D : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ) :
+    (E : Matrix (Fin m) α ℂ) (A : MPTensor α (Fin D)) (L : ℕ) :
     ((groundSpace (rotatePhysical E A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
       ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin
         (Matrix.piKronecker fun _ : Fin L => E)) := by
@@ -63,8 +63,8 @@ theorem map_groundSpace_rotatePhysical_rectangular {d m D : ℕ}
 of the isometric image of its boundary-space projection.
 Source context: arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m D : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
-    (A : MPSTensor d D) (L : ℕ) :
+    (E : Matrix (Fin m) α ℂ) (hE : Eᴴ * E = 1)
+    (A : MPTensor α (Fin D)) (L : ℕ) :
     let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) =
       1 - T ∘ₗ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
@@ -75,7 +75,7 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
       congrArg Matrix.toEuclideanLin (show (Matrix.piKronecker fun _ : Fin L => E)ᴴ *
         Matrix.piKronecker (fun _ : Fin L => E) = 1 from Matrix.IsIsometry.piKronecker fun _ ↦ hE)
-  have hinner (x y : EuclideanSpace ℂ (Cfg d L)) :
+  have hinner (x y : EuclideanSpace ℂ (Fin L → α)) :
       inner ℂ (T x) (T y) = inner ℂ x y := by
     rw [← LinearMap.adjoint_inner_right]
     rw [← LinearMap.comp_apply, hT, LinearMap.id_apply]
@@ -103,8 +103,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
 onto unused physical states. Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
 theorem parentInteraction_matrix_rotatePhysical_isometry {d m D : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
-    (A : MPSTensor d D) (L : ℕ) :
+    (E : Matrix (Fin m) α ℂ) (hE : Eᴴ * E = 1)
+    (A : MPTensor α (Fin D)) (L : ℕ) :
     let T := Matrix.piKronecker fun _ : Fin L => E
     LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L) =
       T * LinearMap.toMatrix' (parentInteraction A L) * Tᴴ + (1 - T * Tᴴ) := by
@@ -124,8 +124,8 @@ theorem parentInteraction_matrix_rotatePhysical_isometry {d m D : ℕ}
 the embedded physical space. Source context: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry_apply_of_adjoint_eq_zero
-    {d m D : ℕ} (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
-    (A : MPSTensor d D) (L : ℕ) (v : EuclideanSpace ℂ (Cfg m L))
+    {d m D : ℕ} (E : Matrix (Fin m) α ℂ) (hE : Eᴴ * E = 1)
+    (A : MPTensor α (Fin D)) (L : ℕ) (v : EuclideanSpace ℂ (Cfg m L))
     (hv : (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)).adjoint v = 0) :
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) v =
       v := by

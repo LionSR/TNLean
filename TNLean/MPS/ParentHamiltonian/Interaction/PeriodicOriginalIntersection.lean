@@ -38,13 +38,13 @@ arXiv:1708.00029, Lemma bdcf, for the cyclic sector resolution.
 
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 /-- Periodicity gives a cyclic projection resolution whose every sufficiently
 large matrix degree is spanned by words of that original length.
 Source: arXiv:1708.00029, Lemma bdcf; Nachtergaele,
 arXiv:cond-mat/9410110, Section 6 and equations (3.10)--(3.11). -/
 theorem IsPeriodic.exists_eventually_cyclic_wordSpan
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ P : ZMod m → Matrix (Fin D) (Fin D) ℂ,
       (∀ u, (P u).IsHermitian) ∧
@@ -90,10 +90,10 @@ theorem IsPeriodic.exists_eventually_cyclic_wordSpan
 intersection at all sufficiently large lengths, without a residue restriction.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11). -/
 theorem IsPeriodic.exists_eventually_groundSpace_restriction_intersection
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ n₀, ∀ n ≥ n₀,
-      ((⨅ b : Fin d, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
-        ⨅ a : Fin d, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) =
+      ((⨅ b : α, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
+        ⨅ a : α, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) =
         groundSpace A (n + 2) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, hP, hOrth, hSum, hCycle, n₀, hSpan⟩ := hA.exists_eventually_cyclic_wordSpan
@@ -110,7 +110,7 @@ on the open chain is exactly the original boundary-condition space, including th
 volume. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction and
 equations (3.10)--(3.16). -/
 theorem IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
         ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
@@ -136,8 +136,8 @@ canonical parent interaction, whose open-chain translates have the boundary spac
 at every volume at least its range. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
 existenceinteraction and Theorem 1.1, in the explicit periodic tensor setting. -/
 theorem IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_map_groundSpace
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
-    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+    {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
+    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Fin R → α) (Fin R → α) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by

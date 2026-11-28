@@ -41,17 +41,17 @@ section
 
 open scoped Matrix Kronecker BigOperators
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The physical matrix slices of a supplied virtual-to-physical-virtual map.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation defEA, lines 1445--1450. -/
-def tensorOfPhysicalIsometry (V : Matrix (Fin d × Fin D) (Fin D) ℂ) : MPSTensor d D :=
+def tensorOfPhysicalIsometry (V : Matrix (α × Fin D) (Fin D) ℂ) : MPTensor α (Fin D) :=
   fun i a b => V (i, a) b
 
 /-- The normalization sum is the Gram matrix of the supplied map.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation defEA, lines 1445--1450. -/
 theorem sum_conjTranspose_mul_tensorOfPhysicalIsometry
-    (V : Matrix (Fin d × Fin D) (Fin D) ℂ) :
+    (V : Matrix (α × Fin D) (Fin D) ℂ) :
     (∑ i, (tensorOfPhysicalIsometry V i)ᴴ * tensorOfPhysicalIsometry V i) = Vᴴ * V := by
   ext a b
   simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
@@ -60,15 +60,15 @@ theorem sum_conjTranspose_mul_tensorOfPhysicalIsometry
 /-- An isometry yields trace-preserving physical matrix slices.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation defEA, lines 1445--1450. -/
 theorem isLeftCanonical_tensorOfPhysicalIsometry
-    (V : Matrix (Fin d × Fin D) (Fin D) ℂ) (hV : Vᴴ * V = 1) :
+    (V : Matrix (α × Fin D) (Fin D) ℂ) (hV : Vᴴ * V = 1) :
     IsLeftCanonical (tensorOfPhysicalIsometry V) := by
   exact (sum_conjTranspose_mul_tensorOfPhysicalIsometry V).trans hV
 
 /-- A supplied physical map has the stated one-site Heisenberg insertion.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation defEA, lines 1445--1450. -/
 theorem physicalIsometry_heisenbergInsertion
-    (V : Matrix (Fin d × Fin D) (Fin D) ℂ)
-    (X : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin D) (Fin D) ℂ) :
+    (V : Matrix (α × Fin D) (Fin D) ℂ)
+    (X : Matrix α α ℂ) (B : Matrix (Fin D) (Fin D) ℂ) :
     Vᴴ * (X ⊗ₖ B) * V = ∑ i, ∑ j,
       X i j • ((tensorOfPhysicalIsometry V i)ᴴ * B * tensorOfPhysicalIsometry V j) := by
   ext a b
@@ -87,16 +87,16 @@ theorem physicalIsometry_heisenbergInsertion
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation defEA, lines 1445--1450,
 and its trace-dual Schrödinger insertion. -/
 theorem physicalObservableTransfer_oneSite_apply
-    (A : MPSTensor d D) (X : Matrix (Fin d) (Fin d) ℂ)
+    (A : MPTensor α (Fin D)) (X : Matrix α α ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     physicalObservableTransfer A 1 (X.submatrix (fun σ => σ 0) (fun τ => τ 0)) ρ =
       ∑ i, ∑ j, X i j • (A j * ρ * (A i)ᴴ) := by
   rw [physicalObservableTransfer_apply]
-  rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) (Fin d)).symm
-    (fun σ : Fin 1 → Fin d => ∑ τ : Fin 1 → Fin d,
+  rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) α).symm
+    (fun σ : Fin 1 → α => ∑ τ : Fin 1 → α,
       X.submatrix (fun σ => σ 0) (fun τ => τ 0) τ σ •
         (Kraus.evalWord A (List.ofFn σ) * ρ * (Kraus.evalWord A (List.ofFn τ))ᴴ))]
-  simp_rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) (Fin d)).symm]
+  simp_rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) α).symm]
   simp only [Matrix.submatrix_apply, Equiv.funUnique_symm_apply, uniqueElim_const,
     List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
   exact Finset.sum_comm
@@ -106,7 +106,7 @@ one-site physical observable transfer. No isometry or stationary-state
 hypothesis is needed for this identity.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation defEA, lines 1445--1450. -/
 theorem trace_physicalIsometry_heisenbergInsertion
-    (V : Matrix (Fin d × Fin D) (Fin D) ℂ) (X : Matrix (Fin d) (Fin d) ℂ)
+    (V : Matrix (α × Fin D) (Fin D) ℂ) (X : Matrix α α ℂ)
     (B ρ : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (ρ * (Vᴴ * (X ⊗ₖ B) * V)) =
       Matrix.trace (B * physicalObservableTransfer (tensorOfPhysicalIsometry V) 1
@@ -126,16 +126,16 @@ section
 
 open scoped Matrix Kronecker BigOperators
 namespace MPSTensor
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The tensor product of a list of one-site observables, in reversed physical
 order. Source: the trace-dual order of Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.5)--(3.6), lines 1436--1450. -/
 noncomputable def reversedProductObservable :
-    (Xs : List (Matrix (Fin d) (Fin d) ℂ)) → Matrix (Cfg d Xs.length) (Cfg d Xs.length) ℂ
+    (Xs : List (Matrix α α ℂ)) → Matrix (Fin Xs.length → α) (Fin Xs.length → α) ℂ
   | [] => 1
   | X :: Xs => appendObservable (reversedProductObservable Xs)
-      (X.submatrix (fun σ : Cfg d 1 => σ 0) (fun τ => τ 0))
+      (X.submatrix (fun σ : (Fin 1 → α) => σ 0) (fun τ => τ 0))
 
 /-- Source-written Heisenberg composition is the expectation of the reversed
 physical product in the existing Schrödinger insertion convention. No
@@ -143,8 +143,8 @@ normalization, positivity, or stationarity is needed for this trace identity.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.5)--(3.6),
 lines 1436--1450. -/
 theorem sourceOrderedHeisenberg_trace_eq_reversedProduct_transfer
-    (V : Matrix (Fin d × Fin D) (Fin D) ℂ)
-    (Xs : List (Matrix (Fin d) (Fin d) ℂ)) (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    (V : Matrix (α × Fin D) (Fin D) ℂ)
+    (Xs : List (Matrix α α ℂ)) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (ρ * Xs.foldr (fun X B => Vᴴ * (X ⊗ₖ B) * V) 1) =
       Matrix.trace (physicalObservableTransfer (tensorOfPhysicalIsometry V)
         Xs.length (reversedProductObservable Xs) ρ) := by

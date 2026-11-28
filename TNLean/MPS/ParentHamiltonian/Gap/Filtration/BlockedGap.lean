@@ -33,49 +33,47 @@ In the namespace `Kraus.HasComplementaryFixedPointGap`:
 -/
 
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.Frobenius
-open Kraus (blockPhysDim decodeBlockEquiv decodeBlockEquiv_apply blockTensor
-  isNBlkInjective_iff_blockTensor_isInjective evalWord_blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The common physical-coordinate isometry from three blocked sites to three
 consecutive original blocks. -/
-private noncomputable def blockedThreeConfigLinearIsometryEquiv (d p : ℕ) :
-    EuclideanSpace ℂ (Cfg (blockPhysDim d p) 3) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (Cfg d (p + p + p)) :=
-  (blockedConfigLinearIsometryEquiv d 3 p).trans
+private noncomputable def blockedThreeConfigLinearIsometryEquiv (p : ℕ) :
+    EuclideanSpace ℂ ((Fin 3 → Fin p → α)) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ (Fin (p + p + p) → α) :=
+  (blockedConfigLinearIsometryEquiv 3 p).trans
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (Equiv.arrowCongr (finCongr (by omega : 3 * p = p + p + p))
-        (Equiv.refl (Fin d))))
+        (Equiv.refl α)))
 
 /-- Reindex a one-block spectator configuration as a length-`p` original-site
 spectator configuration, retaining the virtual matrix coordinates. -/
-private noncomputable def blockSpectatorLinearIsometryEquiv (d D p : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1) ≃ₗᵢ[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d p) :=
+private noncomputable def blockSpectatorLinearIsometryEquiv (D p : ℕ) :
+    BoundaryFamilySpace (D := D) ((Fin 1 → Fin p → α)) ≃ₗᵢ[ℂ]
+      BoundaryFamilySpace (D := D) (Fin p → α) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (((Kraus.blockedConfigEquiv d 1 p).trans
+    (((Kraus.blockConfigEquiv α 1 p).trans
       (Equiv.arrowCongr (finCongr (by omega : 1 * p = p))
-        (Equiv.refl (Fin d)))).prodCongr (Equiv.refl (Fin D × Fin D)))
+        (Equiv.refl α))).prodCongr (Equiv.refl (Fin D × Fin D)))
 
 /-- The blocked tail spectator map intertwines with the original whole-block
 tail spectator map in the common three-block coordinates. -/
 private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
-    (A : MPSTensor d D) (p : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1)) :
-    blockedThreeConfigLinearIsometryEquiv d p
-        (tailBoundaryMapES (blockTensor A p) 1 2 x) =
+    (A : MPTensor α (Fin D)) (p : ℕ)
+    (x : BoundaryFamilySpace (D := D) ((Fin 1 → Fin p → α))) :
+    blockedThreeConfigLinearIsometryEquiv p
+        (tailBoundaryMapES (Kraus.block A p) 1 2 x) =
       reassocTailBoundaryMapES A p p p
-        (blockSpectatorLinearIsometryEquiv d D p x) := by
+        (blockSpectatorLinearIsometryEquiv D p x) := by
   ext σ
   simp only [blockedThreeConfigLinearIsometryEquiv, LinearIsometryEquiv.trans_apply,
     tailBoundaryMapES_apply, reassocTailBoundaryMapES, ContinuousLinearMap.comp_apply]
-  change Matrix.trace (Kraus.evalWord (blockTensor A p) (List.ofFn _) * _) =
+  change Matrix.trace (Kraus.evalWord (Kraus.block A p) (List.ofFn _) * _) =
     Matrix.trace (Kraus.evalWord A (List.ofFn _) * _)
   congr 2
-  rw [evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv d 2 p]
+  rw [Kraus.evalWord_block, ← Kraus.ofFn_blockConfigEquiv d 2 p]
   congr 1
   congr 1
   · omega
@@ -103,19 +101,19 @@ private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
 /-- The blocked left spectator map intertwines with the original whole-block
 left spectator map in the common three-block coordinates. -/
 private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
-    (A : MPSTensor d D) (p : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1)) :
-    blockedThreeConfigLinearIsometryEquiv d p
-        (leftBoundaryMapES (blockTensor A p) 2 1 x) =
+    (A : MPTensor α (Fin D)) (p : ℕ)
+    (x : BoundaryFamilySpace (D := D) ((Fin 1 → Fin p → α))) :
+    blockedThreeConfigLinearIsometryEquiv p
+        (leftBoundaryMapES (Kraus.block A p) 2 1 x) =
       leftBoundaryMapES A (p + p) p
-        (blockSpectatorLinearIsometryEquiv d D p x) := by
+        (blockSpectatorLinearIsometryEquiv D p x) := by
   ext σ
   simp only [blockedThreeConfigLinearIsometryEquiv, LinearIsometryEquiv.trans_apply,
     leftBoundaryMapES_apply]
-  change Matrix.trace (Kraus.evalWord (blockTensor A p) (List.ofFn _) * _) =
+  change Matrix.trace (Kraus.evalWord (Kraus.block A p) (List.ofFn _) * _) =
     Matrix.trace (Kraus.evalWord A (List.ofFn _) * _)
   congr 2
-  · rw [evalWord_blockTensor, ← Kraus.ofFn_blockedConfigEquiv d 2 p]
+  · rw [Kraus.evalWord_block, ← Kraus.ofFn_blockConfigEquiv d 2 p]
     congr 1
     congr 1
     · omega
@@ -158,21 +156,21 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
 /-- The three-block Euclidean boundary map intertwines with the common
 reassociated physical-coordinate isometry. -/
 private theorem blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES
-    (A : MPSTensor d D) (p : ℕ)
+    (A : MPTensor α (Fin D)) (p : ℕ)
     (x : EuclideanSpace ℂ (Fin D × Fin D)) :
-    blockedThreeConfigLinearIsometryEquiv d p
-        (groundSpaceMapES (blockTensor A p) 3 x) =
+    blockedThreeConfigLinearIsometryEquiv p
+        (groundSpaceMapES (Kraus.block A p) 3 x) =
       groundSpaceMapES A (p + p + p) x := by
   rw [blockedThreeConfigLinearIsometryEquiv]
   change (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ _)
-    (blockedConfigLinearIsometryEquiv d 3 p
-      (groundSpaceMapES (blockTensor A p) 3 x)) = _
+    (blockedConfigLinearIsometryEquiv 3 p
+      (groundSpaceMapES (Kraus.block A p) 3 x)) = _
   rw [blockedConfigLinearIsometryEquiv_groundSpaceMapES]
   apply PiLp.ext
   intro σ
   have hword :
       List.ofFn ((((finCongr (by omega : 3 * p = p + p + p)).arrowCongr
-        (Equiv.refl (Fin d))).symm) σ) = List.ofFn σ := by
+        (Equiv.refl α)).symm) σ) = List.ofFn σ := by
     convert (List.ofFn_congr (m := p + p + p) (n := 3 * p)
       (by omega) σ).symm using 1
     ext i
@@ -198,9 +196,9 @@ private theorem map_range_eq_range_of_intertwine {M N P Q : Type*}
 /-- The full three-block ground space maps exactly to the original-site ground
 space in the common coordinates. -/
 private theorem map_groundSpace_three_blockTensor_map
-    (A : MPSTensor d D) (p : ℕ) :
-    ((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
-        (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
+    (A : MPTensor α (Fin D)) (p : ℕ) :
+    ((groundSpace (Kraus.block A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+        (blockedThreeConfigLinearIsometryEquiv p).toLinearEquiv.toLinearMap =
       ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [← range_groundSpaceMapES, ← range_groundSpaceMapES]
   exact map_range_eq_range_of_intertwine _ _ _ (LinearEquiv.refl ℂ _)
@@ -209,25 +207,25 @@ private theorem map_groundSpace_three_blockTensor_map
 /-- The blocked one-site-prefix tail space maps exactly to the original whole-block
 tail spectator range. -/
 private theorem openChainTailGroundSpaceES_blockTensor_map
-    (A : MPSTensor d D) (p : ℕ) :
-    (openChainTailGroundSpaceES (blockTensor A p) 1 2).map
-        (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
+    (A : MPTensor α (Fin D)) (p : ℕ) :
+    (openChainTailGroundSpaceES (Kraus.block A p) 1 2).map
+        (blockedThreeConfigLinearIsometryEquiv p).toLinearEquiv.toLinearMap =
       (reassocTailBoundaryMapES A p p p).range := by
   rw [← range_tailBoundaryMapES]
   exact map_range_eq_range_of_intertwine _ _ _
-    (blockSpectatorLinearIsometryEquiv d D p).toLinearEquiv
+    (blockSpectatorLinearIsometryEquiv D p).toLinearEquiv
     (blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES A p)
 
 /-- The blocked one-site-suffix left space maps exactly to the original
 whole-block left spectator range. -/
 private theorem openChainLeftGroundSpaceES_blockTensor_map
-    (A : MPSTensor d D) (p : ℕ) :
-    (openChainLeftGroundSpaceES (blockTensor A p) 2).map
-        (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
+    (A : MPTensor α (Fin D)) (p : ℕ) :
+    (openChainLeftGroundSpaceES (Kraus.block A p) 2).map
+        (blockedThreeConfigLinearIsometryEquiv p).toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A (p + p) p).range := by
   rw [← range_leftBoundaryMapES_one]
   exact map_range_eq_range_of_intertwine _ _ _
-    (blockSpectatorLinearIsometryEquiv d D p).toLinearEquiv
+    (blockSpectatorLinearIsometryEquiv D p).toLinearEquiv
     (blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES A p)
 
 /-- The whole-block C3-prime projector defect on three consecutive blocks is the
@@ -238,19 +236,19 @@ from the \(3p\)-site original Hilbert space by `blockedConfigLinearIsometryEquiv
 This statement transports only the two whole-block spectator spaces and the full
 three-block ground space. -/
 theorem blockTensor_threeSite_openChain_defect_norm_eq
-    [NeZero d] (A : MPSTensor d D) (p : ℕ) :
-    ‖openChainTailGroundProjectionES (blockTensor A p) 1 2 ∘L
-          openChainLeftGroundProjectionES (blockTensor A p) 2 -
-        ((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ
+    [Nonempty α] (A : MPTensor α (Fin D)) (p : ℕ) :
+    ‖openChainTailGroundProjectionES (Kraus.block A p) 1 2 ∘L
+          openChainLeftGroundProjectionES (Kraus.block A p) 2 -
+        ((groundSpace (Kraus.block A p) 3).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection‖ =
       ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
             (leftBoundaryMapES A (p + p) p).range.starProjection -
           ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap).starProjection‖ := by
-  let U := blockedThreeConfigLinearIsometryEquiv d p
-  let T := openChainTailGroundSpaceES (blockTensor A p) 1 2
-  let L := openChainLeftGroundSpaceES (blockTensor A p) 2
-  let G := ((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
+  let U := blockedThreeConfigLinearIsometryEquiv p
+  let T := openChainTailGroundSpaceES (Kraus.block A p) 1 2
+  let L := openChainLeftGroundSpaceES (Kraus.block A p) 2
+  let G := ((groundSpace (Kraus.block A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   let X := T.starProjection ∘L L.starProjection - G.starProjection
   have hT : T.map U.toLinearEquiv.toLinearMap =
       (reassocTailBoundaryMapES A p p p).range :=
@@ -313,22 +311,22 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
     simpa using h
 
 private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_anticommutator
-    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [Nonempty α] [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (hN : 2 * 2 ≤ N) (i j : Fin N),
           j ∈ Finset.univ.erase i → cyclicWindowsOverlap N 2 i j →
-            ∀ v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N),
+            ∀ v : EuclideanSpace ℂ ((Fin N → Fin p → α)),
               haveI : NeZero N := ⟨by omega⟩;
               let h (k : Fin N) := Matrix.toEuclideanLin
-                ((parentRingInteraction (blockTensor A p) 2 N).term k);
+                ((parentRingInteraction (Kraus.block A p) 2 N).term k);
               - (1 - ((1 : ℝ) / (4 * (2 : ℝ)))) * (((2 * (2 - 1) : ℕ) : ℝ)⁻¹) *
                   ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
                 (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re := by
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths hρ
-  let B := blockTensor A p
+  let B := Kraus.block A p
   have hBInj : Kraus.IsInjective B :=
     (isNBlkInjective_iff_blockTensor_isInjective A p).mp hInj
   have hBlockedDefect :
@@ -340,7 +338,7 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
     simpa only [B, Nat.add_assoc] using hDefect
   let T₀ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)
   let T₁ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)
-  have hThree : ∀ w : EuclideanSpace ℂ (Cfg (blockPhysDim d p) 3),
+  have hThree : ∀ w : EuclideanSpace ℂ ((Fin 3 → Fin p → α)),
       -(7 / 16 : ℝ) * ((⟪T₀ w, w⟫_ℂ).re + (⟪T₁ w, w⟫_ℂ).re) ≤
         (⟪T₀ w, T₁ w⟫_ℂ).re + (⟪T₁ w, T₀ w⟫_ℂ).re := by
     intro w
@@ -379,7 +377,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
 range-two blocked parent interaction on the ring has gap constant \(1/8\).
@@ -390,22 +388,22 @@ three-site anticommutator estimate for the terms of the parent interaction on th
 forward and backward cyclic transports then cover every overlapping off-diagonal pair, and the
 finite-overlap martingale reduction gives the displayed bound.
 
-The conclusion concerns only `blockTensor A p`; it makes no comparison with an original-site
+The conclusion concerns only `Kraus.block A p`; it makes no comparison with an original-site
 parent interaction. -/
 theorem exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
-    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [Nonempty α] [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
           Module.End.HasEigenvalue (Matrix.toEuclideanLin
-            (parentRingInteraction (Kraus.blockTensor A p) 2 N).hamiltonian) μ →
+            (parentRingInteraction (Kraus.block A p) 2 N).hamiltonian) μ →
           μ = 0 ∨ ((1 / 8 : ℝ) : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
   obtain ⟨_, hGap⟩ :=
     hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator
-      (Kraus.blockTensor A p) 2 (by omega) hAnti
+      (Kraus.block A p) 2 (by omega) hAnti
   refine ⟨p, hp, hInj, fun N hN μ hμ ↦ ?_⟩
   have hγ : (1 / 8 : ℝ) = 1 / (4 * ((2 : ℕ) : ℝ)) := by norm_num
   rw [hγ]
@@ -414,17 +412,17 @@ theorem exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
 /-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
 range-two blocked parent interaction on the ring has a uniform positive gap.
 
-The conclusion concerns only `blockTensor A p`; it makes no comparison with an original-site
+The conclusion concerns only `Kraus.block A p`; it makes no comparison with an original-site
 parent interaction. -/
 theorem exists_blockTensor_hamiltonian_parentRingInteraction_gapped
-    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [Nonempty α] [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
           Module.End.HasEigenvalue (Matrix.toEuclideanLin
-            (parentRingInteraction (Kraus.blockTensor A p) 2 N).hamiltonian) μ →
+            (parentRingInteraction (Kraus.block A p) 2 N).hamiltonian) μ →
           μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hGap⟩ :=
     hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ

@@ -33,21 +33,20 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 open MPTensor
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim)
 namespace MPSTensor
-variable {d D E F L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E F L : ℕ}
 
 private noncomputable def windowMiddleFiber {K M r : ℕ}
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r)))
-    (u : Cfg (blockPhysDim d L) K) (τ : Cfg d r) :
-    EuclideanSpace ℂ (Cfg (blockPhysDim d L) M) :=
+    (x : EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α))))
+    (u : (Fin K → Fin L → α)) (τ : Fin r → α) :
+    EuclideanSpace ℂ ((Fin M → Fin L → α)) :=
   WithLp.toLp 2 fun v => x (u, (v, τ))
 
 private theorem inner_eq_sum_windowMiddleFiber {K M r : ℕ}
-    (x y : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r))) :
-    ⟪x, y⟫_ℂ = ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
+    (x y : EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)))) :
+    ⟪x, y⟫_ℂ = ∑ u : (Fin K → Fin L → α), ∑ τ : (Fin r → α),
       ⟪windowMiddleFiber x u τ, windowMiddleFiber y u τ⟫_ℂ := by
   simp only [PiLp.inner_apply, Fintype.sum_prod_type, windowMiddleFiber]
   apply Finset.sum_congr rfl
@@ -55,18 +54,18 @@ private theorem inner_eq_sum_windowMiddleFiber {K M r : ℕ}
   exact Finset.sum_comm
 
 private theorem sum_norm_sq_windowMiddleFiber {K M r : ℕ}
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r))) :
-    ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
+    (x : EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)))) :
+    ∑ u : (Fin K → Fin L → α), ∑ τ : (Fin r → α),
       ‖windowMiddleFiber x u τ‖ ^ 2 = ‖x‖ ^ 2 := by
   simpa only [map_sum, ← norm_sq_eq_re_inner] using
     (congrArg (RCLike.re : ℂ →+ ℝ) (inner_eq_sum_windowMiddleFiber x x)).symm
 
 private theorem windowMiddleFiber_rightMap
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ)
-    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
-    (u : Cfg (blockPhysDim d L) K) (τ : Cfg d r) :
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)))
+    (u : (Fin K → Fin L → α)) (τ : Fin r → α) :
     windowMiddleFiber (residualWindowRightMapES A B V K M r x) u τ =
       groundSpaceMapES B M (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
         (Vᴴ * Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x)) := by
@@ -81,47 +80,47 @@ private theorem windowMiddleFiber_rightMap
   simp only [Matrix.mul_assoc]
 
 private theorem windowMiddleFiber_leftMap
-    (B : MPSTensor (blockPhysDim d L) F) (K M r : ℕ)
-    (y : BoundaryFamilySpace (D := F) (Cfg d r))
-    (u : Cfg (blockPhysDim d L) K) (τ : Cfg d r) :
+    (B : MPTensor (Fin L → α) (Fin F)) (K M r : ℕ)
+    (y : BoundaryFamilySpace (D := F) (Fin r → α))
+    (u : (Fin K → Fin L → α)) (τ : Fin r → α) :
     windowMiddleFiber (residualWindowLeftMapES B K M r y) u τ =
       groundSpaceMapES B M (Matrix.frobeniusEquivEuclidean (Fin F) (Fin F)
-        (boundaryFamilyEquiv (D := F) (Cfg d r) y τ *
+        (boundaryFamilyEquiv (D := F) (Fin r → α) y τ *
           Kraus.evalWord B (List.ofFn u))) := by
   ext v
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply]
   change Matrix.trace ((Kraus.evalWord B (List.ofFn u) * Kraus.evalWord B (List.ofFn v)) *
-    boundaryFamilyEquiv (D := F) (Cfg d r) y τ) =
+    boundaryFamilyEquiv (D := F) (Fin r → α) y τ) =
     Matrix.trace (Kraus.evalWord B (List.ofFn v) *
-      (boundaryFamilyEquiv (D := F) (Cfg d r) y τ * Kraus.evalWord B (List.ofFn u)))
+      (boundaryFamilyEquiv (D := F) (Fin r → α) y τ * Kraus.evalWord B (List.ofFn u)))
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
     (Kraus.evalWord B (List.ofFn u))
-    (Kraus.evalWord B (List.ofFn v) * boundaryFamilyEquiv (D := F) (Cfg d r) y τ)
+    (Kraus.evalWord B (List.ofFn v) * boundaryFamilyEquiv (D := F) (Fin r → α) y τ)
 
 /-- The mixed inner product of a right residual window and a left window is the sum of their
 middle-interval boundary pairings. The sector bond dimensions may differ, and every length
 may be zero. -/
 theorem inner_residualWindowRightMapES_leftMapES_cross_sector
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
-    (B' : MPSTensor (blockPhysDim d L) F) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
+    (B' : MPTensor (Fin L → α) (Fin F)) (V : Matrix (Fin D) (Fin E) ℂ)
     (K M r : ℕ)
-    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
-    (y : BoundaryFamilySpace (D := F) (Cfg d r)) :
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × (Fin K → Fin L → α)))
+    (y : BoundaryFamilySpace (D := F) (Fin r → α)) :
     ⟪residualWindowRightMapES A B V K M r x, residualWindowLeftMapES B' K M r y⟫_ℂ =
-      ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
+      ∑ u : (Fin K → Fin L → α), ∑ τ : (Fin r → α),
         ⟪groundSpaceMapES B M (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
             (Vᴴ * Kraus.evalWord A (List.ofFn τ) * rectangularBoundaryFamilyFiberₗ u x)),
           groundSpaceMapES B' M (Matrix.frobeniusEquivEuclidean (Fin F) (Fin F)
-            (boundaryFamilyEquiv (D := F) (Cfg d r) y τ *
+            (boundaryFamilyEquiv (D := F) (Fin r → α) y τ *
               Kraus.evalWord B' (List.ofFn u)))⟫_ℂ := by
   simpa only [windowMiddleFiber_rightMap, windowMiddleFiber_leftMap] using
     inner_eq_sum_windowMiddleFiber (residualWindowRightMapES A B V K M r x)
       (residualWindowLeftMapES B' K M r y)
 
 private theorem norm_inner_le_of_windowMiddleFiber_bound {K M r : ℕ}
-    (x y : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r))) {ε : ℝ} (hε : 0 ≤ ε)
-    (h : ∀ u : Cfg (blockPhysDim d L) K, ∀ τ : Cfg d r,
+    (x y : EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)))) {ε : ℝ} (hε : 0 ≤ ε)
+    (h : ∀ u : (Fin K → Fin L → α), ∀ τ : (Fin r → α),
       ‖⟪windowMiddleFiber x u τ, windowMiddleFiber y u τ⟫_ℂ‖ ≤
         ε * ‖windowMiddleFiber x u τ‖ * ‖windowMiddleFiber y u τ‖) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
@@ -129,7 +128,7 @@ private theorem norm_inner_le_of_windowMiddleFiber_bound {K M r : ℕ}
   simpa only [Fintype.sum_prod_type, sum_norm_sq_windowMiddleFiber, Real.sqrt_sq_eq_abs,
     abs_of_nonneg (norm_nonneg _), mul_assoc] using
     Finset.norm_sum_le_mul_sqrt_mul_sqrt Finset.univ
-      (fun p : Cfg (blockPhysDim d L) K × Cfg d r =>
+      (fun p : (Fin K → Fin L → α) × (Fin r → α) =>
         ⟪windowMiddleFiber x p.1 p.2, windowMiddleFiber y p.1 p.2⟫_ℂ)
       (fun p => ‖windowMiddleFiber x p.1 p.2‖) (fun p => ‖windowMiddleFiber y p.1 p.2‖)
       hε (fun p _ => h p.1 p.2)
@@ -137,14 +136,14 @@ private theorem norm_inner_le_of_windowMiddleFiber_bound {K M r : ℕ}
 /-- A relative middle-interval angle bound transfers to the full right and left window ranges
 with the same coefficient. No normalization, injectivity, or boundary inverse is assumed. -/
 theorem norm_inner_residualWindowRightMapES_leftMapES_le_of_prefix_bound
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
-    (B' : MPSTensor (blockPhysDim d L) F) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
+    (B' : MPTensor (Fin L → α) (Fin F)) (V : Matrix (Fin D) (Fin E) ℂ)
     {K M r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (hAngle : ∀ x ∈ ((groundSpace B M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B' M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖)
-    {x y : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
-      (Cfg (blockPhysDim d L) M × Cfg d r))}
+    {x y : EuclideanSpace ℂ ((Fin K → Fin L → α) ×
+      ((Fin M → Fin L → α) × (Fin r → α)))}
     (hx : x ∈ (residualWindowRightMapES A B V K M r).range)
     (hy : y ∈ (residualWindowLeftMapES B' K M r).range) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
@@ -167,8 +166,8 @@ theorem norm_inner_residualWindowRightMapES_leftMapES_le_of_prefix_bound
 /-- A relative middle-interval angle bound controls the product of the right and left orthogonal
 range projections with the same coefficient. -/
 theorem norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
-    (B' : MPSTensor (blockPhysDim d L) F) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
+    (B' : MPTensor (Fin L → α) (Fin F)) (V : Matrix (Fin D) (Fin E) ℂ)
     {K M r : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (hAngle : ∀ x ∈ ((groundSpace B M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∀ y ∈
         ((groundSpace B' M).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
@@ -188,7 +187,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D E F L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E F L : ℕ}
 
 /-- Inequivalent primitive middle tensors with faithful invariant matrices have uniformly small
 cross-sector window projections once the middle interval is sufficiently long. The bound
@@ -196,8 +195,8 @@ holds simultaneously for every outer blocked-prefix length and original-tail len
 Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint, lines 1744--1820. -/
 theorem eventually_norm_residualWindow_cross_projection_le_of_inequivalent
     [NeZero E] [NeZero F]
-    (A : MPSTensor d D) {B : MPSTensor (blockPhysDim d L) E}
-    {B' : MPSTensor (blockPhysDim d L) F} (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) {B : MPTensor (Fin L → α) (Fin E)}
+    {B' : MPTensor (Fin L → α) (Fin F)} (V : Matrix (Fin D) (Fin E) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
     (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
@@ -218,8 +217,8 @@ while both outer lengths may vary arbitrarily. Source: Nachtergaele, arXiv:cond-
 Lemma disjoint, lines 1744--1820. -/
 theorem residualWindow_cross_projection_tendsto_zero_of_inequivalent
     [NeZero E] [NeZero F]
-    (A : MPSTensor d D) {B : MPSTensor (blockPhysDim d L) E}
-    {B' : MPSTensor (blockPhysDim d L) F} (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) {B : MPTensor (Fin L → α) (Fin E)}
+    {B' : MPTensor (Fin L → α) (Fin F)} (V : Matrix (Fin D) (Fin E) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
     (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     (hB' : Kraus.HasComplementaryFixedPointGap B' σ)

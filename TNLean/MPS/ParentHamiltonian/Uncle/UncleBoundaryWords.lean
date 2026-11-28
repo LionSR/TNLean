@@ -41,44 +41,43 @@ open MPTensor
 section UncleBoundaryWords
 
 open scoped Matrix BigOperators
-open Kraus (decodeBlockEquiv)
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The full one-site letter in the source injective-perturbation condition;
 arXiv:1210.6613, equation (inj-condition-tensor), lines 973–983. -/
-noncomputable def uncleBoundaryLetter (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (i : Fin d) :
+noncomputable def uncleBoundaryLetter (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (i : α) :
     Matrix (Fin (a + b)) (Fin (a + b)) ℂ :=
   uncleBlockMatrix (A i) (R i) (L i) (B i)
 
 /-- An ordered coefficient word with at most one wall; source equation
 (Sn-def), Appendix intersection-closure, arXiv:1210.6613. -/
-noncomputable def uncleBoundaryWord (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
-    List (Fin d) → Matrix (Fin (a + b)) (Fin (a + b)) ℂ
+noncomputable def uncleBoundaryWord (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
+    List α → Matrix (Fin (a + b)) (Fin (a + b)) ℂ
   | [] => 1
   | i :: w => uncleBoundaryMul (uncleBoundaryLetter A B R L i)
       (uncleBoundaryWord A B R L w)
 
-@[simp] theorem uncleBoundaryWord_nil (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) : uncleBoundaryWord A B R L [] = 1 := rfl
+@[simp] theorem uncleBoundaryWord_nil (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) : uncleBoundaryWord A B R L [] = 1 := rfl
 
-@[simp] theorem uncleBoundaryWord_singleton (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (i : Fin d) :
+@[simp] theorem uncleBoundaryWord_singleton (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (i : α) :
     uncleBoundaryWord A B R L [i] = uncleBoundaryLetter A B R L i :=
   uncleBoundaryMul_one _
 
 /-- Concatenation multiplies the source single-wall coefficients. -/
-theorem uncleBoundaryWord_append (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (u v : List (Fin d)) :
+theorem uncleBoundaryWord_append (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (u v : List α) :
     uncleBoundaryWord A B R L (u ++ v) =
       uncleBoundaryMul (uncleBoundaryWord A B R L u) (uncleBoundaryWord A B R L v) := by
   induction u with
@@ -87,20 +86,20 @@ theorem uncleBoundaryWord_append (A : MPSTensor d a) (B : MPSTensor d b)
       simp only [List.cons_append, uncleBoundaryWord, ih, uncleBoundaryMul_assoc]
 
 /-- Appending a physical site is right multiplication by its source letter. -/
-theorem uncleBoundaryWord_ofFn_snoc (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
-    (w : Fin n → Fin d) (i : Fin d) :
+theorem uncleBoundaryWord_ofFn_snoc (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
+    (w : Fin n → α) (i : α) :
     uncleBoundaryWord A B R L (List.ofFn (Fin.snoc w i)) =
       uncleBoundaryMul (uncleBoundaryWord A B R L (List.ofFn w))
         (uncleBoundaryLetter A B R L i) := by
   rw [List.ofFn_snoc, uncleBoundaryWord_append, uncleBoundaryWord_singleton]
 
 /-- Prepending a physical site is left multiplication by its source letter. -/
-theorem uncleBoundaryWord_ofFn_cons (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
-    (i : Fin d) (w : Fin n → Fin d) :
+theorem uncleBoundaryWord_ofFn_cons (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
+    (i : α) (w : Fin n → α) :
     uncleBoundaryWord A B R L (List.ofFn (Fin.cons i w)) =
       uncleBoundaryMul (uncleBoundaryLetter A B R L i)
         (uncleBoundaryWord A B R L (List.ofFn w)) := by
@@ -109,15 +108,15 @@ theorem uncleBoundaryWord_ofFn_cons (A : MPSTensor d a) (B : MPSTensor d b)
 
 /-- The explicit rectangular sum with one wall, padded by A on the left
 and B on the right; source equation (Sn-def), arXiv:1210.6613. -/
-noncomputable def uncleDomainWallWord (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
-    List (Fin d) → Matrix (Fin a) (Fin b) ℂ
+noncomputable def uncleDomainWallWord (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) :
+    List α → Matrix (Fin a) (Fin b) ℂ
   | [] => 0
   | i :: w => A i * uncleDomainWallWord A B R w + R i * Kraus.evalWord B w
 
 /-- Every wall position occurs exactly once in the source domain-wall sum. -/
-theorem uncleDomainWallWord_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (w : List (Fin d)) :
+theorem uncleDomainWallWord_eq_sum (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (w : List α) :
     uncleDomainWallWord A B R w =
       ∑ k : Fin w.length, Kraus.evalWord A (w.take k) * R (w.get k) *
         Kraus.evalWord B (w.drop (k + 1)) := by
@@ -129,9 +128,9 @@ theorem uncleDomainWallWord_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
 
 /-- The actual four blocks of the source coefficient word. In particular
 the off-diagonal terms contain a single wall, not alternating walls. -/
-theorem uncleBoundaryWord_block (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (w : List (Fin d)) :
+theorem uncleBoundaryWord_block (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (w : List α) :
     uncleBoundaryWord A B R L w =
       uncleBlockMatrix (Kraus.evalWord A w) (uncleDomainWallWord A B R w)
         (uncleDomainWallWord B A L w) (Kraus.evalWord B w) := by
@@ -142,9 +141,9 @@ theorem uncleBoundaryWord_block (A : MPSTensor d a) (B : MPSTensor d b)
         uncleDomainWallWord, Kraus.evalWord, add_comm]
 
 /-- At length two the source coefficient word is exactly the existing uncle letter. -/
-theorem uncleBoundaryWord_two (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (i j : Fin d) :
+theorem uncleBoundaryWord_two (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (i j : α) :
     uncleBoundaryWord A B R L [i, j] =
       uncleTensor A B R L ((decodeBlockEquiv d 2).symm ![i, j]) := by
   simp [uncleBoundaryWord, uncleBoundaryLetter, uncleBoundaryMul_block, uncleTensor,
@@ -152,9 +151,9 @@ theorem uncleBoundaryWord_two (A : MPSTensor d a) (B : MPSTensor d b)
 
 /-- The coefficient on any original two-site configuration is the existing
 uncle-tensor letter with that blocked physical index. -/
-theorem uncleBoundaryWord_ofFn_two (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (σ : Fin 2 → Fin d) :
+theorem uncleBoundaryWord_ofFn_two (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (σ : Fin 2 → α) :
     uncleBoundaryWord A B R L (List.ofFn σ) =
       uncleTensor A B R L ((decodeBlockEquiv d 2).symm σ) := by
   have hσ : σ = ![σ 0, σ 1] := by
@@ -165,11 +164,11 @@ theorem uncleBoundaryWord_ofFn_two (A : MPSTensor d a) (B : MPSTensor d b)
 
 /-- The full perturbation span supplies coefficients for the identity. -/
 theorem exists_uncleBoundary_identity_coefficients
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) :
-    ∃ c : Fin d → ℂ, ∑ i, c i • uncleBoundaryLetter A B R L i = 1 := by
+    ∃ c : α → ℂ, ∑ i, c i • uncleBoundaryLetter A B R L i = 1 := by
   apply (Submodule.mem_span_range_iff_exists_fun ℂ).mp
   rw [hPert.span_eq_top]
   exact Submodule.mem_top
@@ -178,11 +177,11 @@ theorem exists_uncleBoundary_identity_coefficients
 removes it without adding a wall. This is the inverse-coefficient step in
 the Appendix intersection proof of arXiv:1210.6613. -/
 theorem sum_smul_uncleBoundaryWord_cons
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (c : Fin d → ℂ) (hc : ∑ i, c i • uncleBoundaryLetter A B R L i = 1)
-    (w : List (Fin d)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (c : α → ℂ) (hc : ∑ i, c i • uncleBoundaryLetter A B R L i = 1)
+    (w : List α) :
     (∑ i, c i • uncleBoundaryWord A B R L (i :: w)) = uncleBoundaryWord A B R L w := by
   calc
     _ = uncleBoundaryMulRight (uncleBoundaryWord A B R L w)
@@ -194,11 +193,11 @@ theorem sum_smul_uncleBoundaryWord_cons
 positive word length, as required in the Appendix intersection and closure
 proofs of arXiv:1210.6613, lines 1925–1940. -/
 theorem uncleBoundary_span_eq_top_succ
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ) :
-    Submodule.span ℂ (Set.range fun σ : Fin (n + 1) → Fin d ↦
+    Submodule.span ℂ (Set.range fun σ : Fin (n + 1) → α ↦
       uncleBoundaryWord A B R L (List.ofFn σ)) = ⊤ := by
   classical
   obtain ⟨c, hc⟩ := exists_uncleBoundary_identity_coefficients A B R L hPert
@@ -222,34 +221,34 @@ theorem uncleBoundary_span_eq_top_succ
         rw [List.ofFn_cons]⟩
 
 /-- The trace boundary map for the four source sectors \(S_n\). -/
-noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) :
-    Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] NSiteSpace (Fin d) n where
+noncomputable def uncleBoundaryMap (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) :
+    Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] NSiteSpace α n where
   toFun X σ := Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X)
   map_add' X Y := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c X := by ext σ; simp [Matrix.trace_smul]
 
 /-- The actual four-sector source boundary space, equation (Sn-def) of
 arXiv:1210.6613. Its word-block formula separates \(A_n,B_n,R_n,L_n\). -/
-noncomputable def uncleBoundarySpace (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) : Submodule ℂ (NSiteSpace (Fin d) n) :=
+noncomputable def uncleBoundarySpace (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) : Submodule ℂ (NSiteSpace α n) :=
   LinearMap.range (uncleBoundaryMap A B R L n)
 
-@[simp] theorem uncleBoundaryMap_apply (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ)
-    (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) (σ : Fin n → Fin d) :
+@[simp] theorem uncleBoundaryMap_apply (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (n : ℕ)
+    (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) (σ : Fin n → α) :
     uncleBoundaryMap A B R L n X σ =
       Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X) := rfl
 
 /-- The length-two source boundary map is exactly the blocked uncle map,
 written on the original pair of physical indices. -/
-theorem uncleBoundaryMap_two (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) (σ : Fin 2 → Fin d) :
+theorem uncleBoundaryMap_two (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) (σ : Fin 2 → α) :
     uncleBoundaryMap A B R L 2 X σ =
       groundSpaceMap (uncleTensor A B R L) 1 X
         (fun _ ↦ (decodeBlockEquiv d 2).symm σ) := by
@@ -289,14 +288,14 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder TNOperatorSpace ENNReal
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 private theorem uncleBoundary_separating_coefficients
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) :
-    ∃ c : Fin d → ℂ, (∑ i, c i • (A i)ᴴ) = 0 ∧ (∑ i, c i • (B i)ᴴ) = 1 := by
+    ∃ c : α → ℂ, (∑ i, c i • (A i)ᴴ) = 0 ∧ (∑ i, c i • (B i)ᴴ) = 1 := by
   classical
   have hmem : uncleBlockMatrix (a := a) (b := b) 0 0 0 1 ∈
       Submodule.span ℂ (Set.range (uncleBoundaryLetter A B R L)) := by
@@ -327,9 +326,9 @@ nonvanishing of the block dimensions is assumed: when one of them vanishes,
 the mixed map acts on the zero space and its spectral radius is zero.
 Source: arXiv:1210.6613, Lemma exptransferoperator. -/
 theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L))
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef)
@@ -341,7 +340,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
   · unfold Kraus.mixedMapSpectralRadius
     rw [spectrum.SpectralRadius.of_subsingleton]
     exact zero_lt_one
-  let K : Fin d → Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ :=
+  let K : α → Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ :=
     fun i ↦ Matrix.fromBlocks (A i) 0 0 (B i)
   let ρ : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ :=
     Matrix.fromBlocks ρA 0 0 ρB
@@ -397,7 +396,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
   have hKS := Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
     K hKU hρ hF M μ hEM hnorm
   have hComm := Kraus.kraus_commute_of_ks_equality K hKU M hKS
-  have hInter (i : Fin d) : X * (B i)ᴴ = μ • ((A i)ᴴ * X) := by
+  have hInter (i : α) : X * (B i)ᴴ = μ • ((A i)ᴴ * X) := by
     ext j k
     have h := congrArg (fun T ↦ T (Sum.inl j) (Sum.inr k)) (hComm i)
     rw [hEM] at h
@@ -424,9 +423,9 @@ reverse orientation. The conjugate-transpose mixed eigenvector reduces
 this to the preceding block-separation argument.
 Source: arXiv:1210.6613, Lemma exptransferoperator. -/
 theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L))
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef)
@@ -498,10 +497,10 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
-private theorem cyclicTranslateCfg_cons_append (n : ℕ) (i : Fin d)
-    (τ : Fin (n + 1) → Fin d) :
+private theorem cyclicTranslateCfg_cons_append (n : ℕ) (i : α)
+    (τ : Fin (n + 1) → α) :
     cyclicTranslateCfg (1 : Fin (n + 2)) (Fin.cons i τ) =
       Fin.append τ (fun _ : Fin 1 ↦ i) := by
   have h1 : (1 : Fin (n + 2)).val = 1 := by
@@ -515,7 +514,7 @@ private theorem cyclicTranslateCfg_cons_append (n : ℕ) (i : Fin d)
       simp only [Fin.val_last, h1, Fin.val_zero]
       rw [ite_eq_left (by omega)]
       omega
-    change Fin.cons (α := fun _ : Fin (n + 2) ↦ Fin d) i τ
+    change Fin.cons (α := fun _ : Fin (n + 2) ↦ α) i τ
       (Fin.last (n + 1) + 1) = _
     rw [hlast, Fin.cons_zero]
     exact (Fin.append_right τ (fun _ : Fin 1 ↦ i) 0).symm
@@ -524,7 +523,7 @@ private theorem cyclicTranslateCfg_cons_append (n : ℕ) (i : Fin d)
       rw [Fin.val_add_eq_ite]
       simp only [Fin.val_castSucc, Fin.val_succ, h1]
       rw [ite_eq_right (by omega)]
-    change Fin.cons (α := fun _ : Fin (n + 2) ↦ Fin d) i τ (j.castSucc + 1) = _
+    change Fin.cons (α := fun _ : Fin (n + 2) ↦ α) i τ (j.castSucc + 1) = _
     rw [hsite, Fin.cons_succ]
     exact (Fin.append_left τ (fun _ : Fin 1 ↦ i) j).symm
 
@@ -533,12 +532,12 @@ private def uncleTracePair (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
   (Matrix.traceLinearMap (Fin (a + b)) ℂ ℂ).comp (LinearMap.mulRight ℂ X)
 
 private theorem uncleBoundary_cyclic_pairing_of_word_pairing
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ)
     (X Y : Matrix (Fin (a + b)) (Fin (a + b)) ℂ)
-    (hword : ∀ i : Fin d, ∀ τ : Fin (n + 1) → Fin d,
+    (hword : ∀ i : α, ∀ τ : Fin (n + 1) → α,
       Matrix.trace (uncleBoundaryMul (uncleBoundaryLetter A B R L i)
           (uncleBoundaryWord A B R L (List.ofFn τ)) * X) =
         Matrix.trace (uncleBoundaryMul (uncleBoundaryWord A B R L (List.ofFn τ))
@@ -546,7 +545,7 @@ private theorem uncleBoundary_cyclic_pairing_of_word_pairing
     ∀ M N : Matrix (Fin (a + b)) (Fin (a + b)) ℂ,
       Matrix.trace (uncleBoundaryMul M N * X) =
         Matrix.trace (uncleBoundaryMul N M * Y) := by
-  have hletter (i : Fin d) (N : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
+  have hletter (i : α) (N : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
       Matrix.trace (uncleBoundaryMul (uncleBoundaryLetter A B R L i) N * X) =
         Matrix.trace (uncleBoundaryMul N (uncleBoundaryLetter A B R L i) * Y) := by
     have heq : (uncleTracePair X).comp (uncleBoundaryMulLeft (uncleBoundaryLetter A B R L i)) =
@@ -562,19 +561,19 @@ private theorem uncleBoundary_cyclic_pairing_of_word_pairing
 /-- Scalar sector boundaries give exactly the two actual MPS vectors.
 Source: arXiv:1210.6613, Appendix closure proof, lines 1943–1984. -/
 theorem uncleBoundaryMap_scalar_blocks
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (α β : ℂ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (α β : ℂ) :
     uncleBoundaryMap A B R L N
         (uncleBlockMatrix (Matrix.scalar (Fin a) α) 0 0 (Matrix.scalar (Fin b) β)) =
-      α • (mpv A : NSiteSpace (Fin d) N) + β • (mpv B : NSiteSpace (Fin d) N) := by
+      α • (mpv A : NSiteSpace α N) + β • (mpv B : NSiteSpace α N) := by
   funext σ
   rw [uncleBoundaryMap_apply, uncleBoundaryWord_block, trace_uncleBlockMatrix_mul]
   simp [Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal,
     Matrix.trace_smul, mpv, coeff, smul_eq_mul]
 
-private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
-    cyclicTranslateState (1 : Fin (n + 2)) (mpv A : NSiteSpace (Fin d) (n + 2)) = mpv A := by
+private theorem cyclicTranslateState_one_mpv (A : MPTensor α (Fin a)) (n : ℕ) :
+    cyclicTranslateState (1 : Fin (n + 2)) (mpv A : NSiteSpace α (n + 2)) = mpv A := by
   funext σ
   obtain ⟨i, τ, rfl⟩ := Fin.exists_cons σ
   change Matrix.trace (Kraus.evalWord A
@@ -589,18 +588,18 @@ private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
 for every chain length at least two. Source: arXiv:1210.6613, Lemma "closure",
 lines 1117–1127 and Appendix closure proof, lines 1943–1984. -/
 theorem uncleBoundarySpace_inf_cyclicTranslate
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ) :
     uncleBoundarySpace A B R L (n + 2) ⊓
         (uncleBoundarySpace A B R L (n + 2)).map
           (cyclicTranslateState (1 : Fin (n + 2))) =
-      Submodule.span ℂ {(mpv A : NSiteSpace (Fin d) (n + 2)), mpv B} := by
+      Submodule.span ℂ {(mpv A : NSiteSpace α (n + 2)), mpv B} := by
   apply le_antisymm
   · rintro ψ ⟨⟨X, rfl⟩, hrotate⟩
     obtain ⟨_, ⟨Y, rfl⟩, hY⟩ := hrotate
-    have hword (i : Fin d) (τ : Fin (n + 1) → Fin d) :
+    have hword (i : α) (τ : Fin (n + 1) → α) :
         Matrix.trace (uncleBoundaryMul (uncleBoundaryLetter A B R L i)
             (uncleBoundaryWord A B R L (List.ofFn τ)) * X) =
           Matrix.trace (uncleBoundaryMul (uncleBoundaryWord A B R L (List.ofFn τ))
@@ -622,12 +621,12 @@ theorem uncleBoundarySpace_inf_cyclicTranslate
       (Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_insert_of_mem _ rfl)))
   · apply Submodule.span_le.mpr
     rintro ψ (rfl | rfl)
-    · have hA : (mpv A : NSiteSpace (Fin d) (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
+    · have hA : (mpv A : NSiteSpace α (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
         refine ⟨uncleBlockMatrix (Matrix.scalar (Fin a) 1) 0 0
           (Matrix.scalar (Fin b) 0), ?_⟩
         simpa using uncleBoundaryMap_scalar_blocks A B R L (n + 2) 1 0
       exact ⟨hA, ⟨mpv A, hA, cyclicTranslateState_one_mpv A n⟩⟩
-    · have hB : (mpv B : NSiteSpace (Fin d) (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
+    · have hB : (mpv B : NSiteSpace α (n + 2)) ∈ uncleBoundarySpace A B R L (n + 2) := by
         refine ⟨uncleBlockMatrix (Matrix.scalar (Fin a) 0) 0 0
           (Matrix.scalar (Fin b) 1), ?_⟩
         simpa using uncleBoundaryMap_scalar_blocks A B R L (n + 2) 0 1

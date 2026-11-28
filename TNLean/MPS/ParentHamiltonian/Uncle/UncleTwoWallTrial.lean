@@ -28,22 +28,22 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The exact five-segment coefficient with one wall in each moving interval.
 Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
-def uncleTwoWallCoefficient (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (u v w x y : List (Fin d)) : ℂ :=
+def uncleTwoWallCoefficient (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (u v w x y : List α) : ℂ :=
   Matrix.trace (Kraus.evalWord A u * uncleDomainWallWord A B R v *
     Kraus.evalWord B w * uncleDomainWallWord B A L x * Kraus.evalWord A y)
 
 /-- Rotate the first rectangular wall around the actual two-wall trace.
 Source: arXiv:1210.6613, the two-wall coefficient in phiN-def. -/
-theorem uncleTwoWallCoefficient_rotate (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r w x y : List (Fin d)) :
+theorem uncleTwoWallCoefficient_rotate (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r w x y : List α) :
     uncleTwoWallCoefficient A B R L p r w x y =
       Matrix.trace (Kraus.evalWord B w * uncleDomainWallWord B A L x *
         (Kraus.evalWord A y * Kraus.evalWord A p * uncleDomainWallWord A B R r)) := by
@@ -53,8 +53,8 @@ theorem uncleTwoWallCoefficient_rotate (A : MPSTensor d a) (B : MPSTensor d b)
 
 /-- Concatenating a one-wall word separates walls in its left and right
 pieces. Source: arXiv:1210.6613, the one-wall sums in phiN-def. -/
-theorem uncleDomainWallWord_append (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (u v : List (Fin d)) :
+theorem uncleDomainWallWord_append (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (u v : List α) :
     uncleDomainWallWord A B R (u ++ v) =
       Kraus.evalWord A u * uncleDomainWallWord A B R v +
         uncleDomainWallWord A B R u * Kraus.evalWord B v := by
@@ -67,9 +67,9 @@ theorem uncleDomainWallWord_append (A : MPSTensor d a) (B : MPSTensor d b)
 
 /-- Both wall positions are summed independently and occur exactly once.
 Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
-theorem uncleTwoWallCoefficient_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (u v w x y : List (Fin d)) :
+theorem uncleTwoWallCoefficient_eq_sum (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (u v w x y : List α) :
     uncleTwoWallCoefficient A B R L u v w x y =
       ∑ i : Fin v.length, ∑ j : Fin x.length,
         Matrix.trace (Kraus.evalWord A u *
@@ -86,26 +86,26 @@ theorem uncleTwoWallCoefficient_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
 /-- The finite two-wall trial on five consecutive segments. The moving
 interval lengths are r and s; no norm or nonvanishing is assumed.
 Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
-def uncleTwoWallTrial (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
-    NSiteSpace (Fin d) (p + r + q + s + t) := fun σ ↦
+def uncleTwoWallTrial (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
+    NSiteSpace α (p + r + q + s + t) := fun σ ↦
   let z := List.ofFn σ
   uncleTwoWallCoefficient A B R L (z.take p) ((z.drop p).take r)
     ((z.drop (p + r)).take q) ((z.drop (p + r + q)).take s)
     (z.drop (p + r + q + s))
 
 /-- The physical word on a numbered consecutive segment. -/
-def uncleConfigSegment {T : ℕ} (σ : Cfg d T) (s n : ℕ) (h : s + n ≤ T) :
-    List (Fin d) := List.ofFn fun j : Fin n ↦ σ ⟨s + j.val, by omega⟩
+def uncleConfigSegment {T : ℕ} (σ : (Fin T → α)) (s n : ℕ) (h : s + n ≤ T) :
+    List α := List.ofFn fun j : Fin n ↦ σ ⟨s + j.val, by omega⟩
 
 /-- The source trial on 6N+1 sites, with wall intervals N through 2N and
 4N through 5N in zero-based coordinates. For N positive the five lengths
 are N, N+1, 2N-1, N+1, N, giving exactly the source two separated windows.
 Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
-def uncleTwoWallTrialSource (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) : NSiteSpace (Fin d) (6 * N + 1) := fun σ ↦
+def uncleTwoWallTrialSource (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) : NSiteSpace α (6 * N + 1) := fun σ ↦
   uncleTwoWallCoefficient A B R L
     (uncleConfigSegment σ 0 N (by omega))
     (uncleConfigSegment σ N (N + 1) (by omega))
@@ -114,9 +114,9 @@ def uncleTwoWallTrialSource (A : MPSTensor d a) (B : MPSTensor d b)
     (uncleConfigSegment σ (5 * N + 1) N (by omega))
 
 private theorem uncleTwoWallCoefficient_five_list_cuts
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (u r w x y : List (Fin d)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (u r w x y : List α) :
     let z := u ++ (r ++ (w ++ (x ++ y)))
     uncleTwoWallCoefficient A B R L (z.take u.length) ((z.drop u.length).take r.length)
       ((z.drop (u.length + r.length)).take w.length)
@@ -129,10 +129,10 @@ private theorem uncleTwoWallCoefficient_five_list_cuts
 This identifies the finite tuple coefficient used in the source norm sum,
 arXiv:1210.6613, phiN-def and the proof of Lemma lowenergystates. -/
 theorem uncleTwoWallTrial_append_apply
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ)
-    (u : Cfg d p) (v : Cfg d r) (w : Cfg d q) (x : Cfg d s) (y : Cfg d t) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ)
+    (u : (Fin p → α)) (v : (Fin r → α)) (w : (Fin q → α)) (x : (Fin s → α)) (y : (Fin t → α)) :
     uncleTwoWallTrial A B R L p r q s t
         (Fin.append (Fin.append (Fin.append (Fin.append u v) w) x) y) =
       uncleTwoWallCoefficient A B R L
@@ -143,7 +143,7 @@ theorem uncleTwoWallTrial_append_apply
       (List.ofFn u) (List.ofFn v) (List.ofFn w) (List.ofFn x) (List.ofFn y)
 
 /-- A numbered physical segment is the corresponding exact list slice. -/
-theorem uncleConfigSegment_eq_drop_take {T : ℕ} (σ : Cfg d T)
+theorem uncleConfigSegment_eq_drop_take {T : ℕ} (σ : (Fin T → α))
     (s n : ℕ) (hs : s + n ≤ T) :
     uncleConfigSegment σ s n hs = ((List.ofFn σ).drop s).take n := by
   apply List.ext_getElem
@@ -155,10 +155,10 @@ theorem uncleConfigSegment_eq_drop_take {T : ℕ} (σ : Cfg d T)
 /-- Every coefficient of the general trial uses its five exact numbered
 physical segments. The last segment reaches the end of the chain. -/
 theorem uncleTwoWallTrial_apply_segments
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ)
-    (σ : Cfg d (p + r + q + s + t)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ)
+    (σ : (Fin (p + r + q + s + t) → α)) :
     uncleTwoWallTrial A B R L p r q s t σ =
       uncleTwoWallCoefficient A B R L
         (uncleConfigSegment σ 0 p (by omega))
@@ -175,7 +175,7 @@ theorem uncleTwoWallTrial_apply_segments
   rw [hlast]
 
 /-- Numbered physical segments commute with the actual finite-length cast. -/
-theorem uncleConfigSegment_cast {T U : ℕ} (h : T = U) (σ : Cfg d U)
+theorem uncleConfigSegment_cast {T U : ℕ} (h : T = U) (σ : (Fin U → α))
     (s n : ℕ) (hs : s + n ≤ T) :
     uncleConfigSegment (σ ∘ Fin.cast h) s n hs =
       uncleConfigSegment σ s n (by omega) := by
@@ -184,7 +184,7 @@ theorem uncleConfigSegment_cast {T U : ℕ} (h : T = U) (σ : Cfg d U)
   exact congrArg σ (Fin.ext rfl)
 
 /-- Numbered adjacent physical words concatenate to their union. -/
-theorem uncleConfigSegment_add {T : ℕ} (σ : Cfg d T) (s m n : ℕ)
+theorem uncleConfigSegment_add {T : ℕ} (σ : (Fin T → α)) (s m n : ℕ)
     (hs : s + (m + n) ≤ T) :
     uncleConfigSegment σ s (m + n) hs =
       uncleConfigSegment σ s m (by omega) ++
@@ -202,10 +202,10 @@ theorem uncleConfigSegment_add {T : ℕ} (σ : Cfg d T) (s m n : ℕ)
 /-- Evaluate a trial after the exact total-length cast using physical
 coordinates in the target chain. -/
 theorem uncleTwoWallTrial_cast_apply_segments
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
-    (h : p + r + q + s + t = T) (σ : Cfg d T) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
+    (h : p + r + q + s + t = T) (σ : (Fin T → α)) :
     uncleTwoWallTrial A B R L p r q s t (σ ∘ Fin.cast h) =
       uncleTwoWallCoefficient A B R L
         (uncleConfigSegment σ 0 p (by omega))
@@ -220,10 +220,10 @@ theorem uncleTwoWallTrial_cast_apply_segments
 finite-length equality, for every positive source size. Source:
 arXiv:1210.6613, phiN-def, lines 1196–1224. -/
 theorem uncleTwoWallTrialSource_cast_apply
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (N : ℕ) (hN : 0 < N) (σ : Cfg d (6 * N + 1)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (σ : (Fin (6 * N + 1) → α)) :
     uncleTwoWallTrialSource A B R L N σ =
       uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N
         (σ ∘ Fin.cast (by omega : N + (N + 1) + (2 * N - 1) + (N + 1) + N =
@@ -234,35 +234,35 @@ theorem uncleTwoWallTrialSource_cast_apply
     show 2 * N + 1 + (2 * N - 1) = 4 * N by omega,
     show 4 * N + (N + 1) = 5 * N + 1 by omega]
 
-private theorem norm_config_cast {T U : ℕ} (h : T = U) (f : NSiteSpace (Fin d) T) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) U)).symm (fun σ ↦ f (σ ∘ Fin.cast h))‖ =
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) T)).symm f‖ := by
+private theorem norm_config_cast {T U : ℕ} (h : T = U) (f : NSiteSpace α T) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α U)).symm (fun σ ↦ f (σ ∘ Fin.cast h))‖ =
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α T)).symm f‖ := by
   cases h
   rfl
 
 /-- The Euclidean norm of any actual trial is preserved by its finite
 physical-length cast. -/
 theorem norm_uncleTwoWallTrial_cast
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
     (h : p + r + q + s + t = T) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) T)).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α T)).symm
         (fun σ ↦ uncleTwoWallTrial A B R L p r q s t (σ ∘ Fin.cast h))‖ =
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + s + t))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (p + r + q + s + t))).symm
         (uncleTwoWallTrial A B R L p r q s t)‖ := norm_config_cast h _
 
 /-- The actual source norm is exactly the five-segment trial norm; the
 finite-length transport is a reindexing, not a norm approximation.
 Source: arXiv:1210.6613, phiN-def and Lemma lowenergystates. -/
 theorem norm_uncleTwoWallTrialSource_eq
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)‖ =
       ‖(WithLp.linearEquiv 2 ℂ
-          (NSiteSpace (Fin d) (N + (N + 1) + (2 * N - 1) + (N + 1) + N))).symm
+          (NSiteSpace α (N + (N + 1) + (2 * N - 1) + (N + 1) + N))).symm
         (uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N)‖ := by
   have hfun : uncleTwoWallTrialSource A B R L N =
       fun σ ↦ uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N
@@ -277,12 +277,12 @@ theorem norm_uncleTwoWallTrialSource_eq
 membership of a varying local pair in the actual two-site boundary space.
 This is the local cancellation step of arXiv:1210.6613, lines 1289–1296. -/
 theorem uncleBoundaryWord_slice_mem
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (f : Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] ℂ)
-    (u v : List (Fin d)) :
-    (fun σ : Fin 2 → Fin d ↦ f (uncleBoundaryWord A B R L (u ++ List.ofFn σ ++ v))) ∈
+    (u v : List α) :
+    (fun σ : Fin 2 → α ↦ f (uncleBoundaryWord A B R L (u ++ List.ofFn σ ++ v))) ∈
       uncleBoundarySpace A B R L 2 := by
   let f' := f.comp ((uncleBoundaryMulLeft (uncleBoundaryWord A B R L u)).comp
     (uncleBoundaryMulRight (uncleBoundaryWord A B R L v)))
@@ -311,10 +311,10 @@ private def uncleBoundaryBlockTrace {p q : ℕ}
       Matrix.trace_smul]
 
 private theorem uncleBoundaryBlockTrace_upper_word
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin b) (Fin a) ℂ) (w : List (Fin d)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin b) (Fin a) ℂ) (w : List α) :
     uncleBoundaryBlockTrace Sum.inl Sum.inr P Q (uncleBoundaryWord A B R L w) =
       Matrix.trace (P * uncleDomainWallWord A B R w * Q) := by
   let e : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ ≃ₐ[ℂ]
@@ -328,10 +328,10 @@ private theorem uncleBoundaryBlockTrace_upper_word
   rfl
 
 private theorem uncleBoundaryBlockTrace_lower_word
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (P : Matrix (Fin b) (Fin b) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ) (w : List (Fin d)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (P : Matrix (Fin b) (Fin b) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ) (w : List α) :
     uncleBoundaryBlockTrace Sum.inr Sum.inl P Q (uncleBoundaryWord A B R L w) =
       Matrix.trace (P * uncleDomainWallWord B A L w * Q) := by
   let e : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ ≃ₐ[ℂ]
@@ -349,12 +349,12 @@ in the actual uncle projector kernel, even with arbitrary exterior factors.
 No perturbation injectivity or canonical normalization is needed for this
 algebraic cancellation. Source: arXiv:1210.6613, lines 1289–1296. -/
 theorem uncleInteraction_upper_wall_slice_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin b) (Fin a) ℂ)
-    (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (u v : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ Matrix.trace (P * uncleDomainWallWord A B R (u ++ List.ofFn σ ++ v) * Q))) =
       0 := by
   apply (mem_uncleBoundarySpace_two_iff A B R L _).mp
@@ -365,12 +365,12 @@ theorem uncleInteraction_upper_wall_slice_eq_zero
 with the second rectangular wall orientation. Source: arXiv:1210.6613,
 lines 1289–1296. -/
 theorem uncleInteraction_lower_wall_slice_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (P : Matrix (Fin b) (Fin b) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ)
-    (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (u v : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ Matrix.trace (P * uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) * Q))) =
       0 := by
   apply (mem_uncleBoundarySpace_two_iff A B R L _).mp
@@ -382,11 +382,11 @@ moving interval, with every exterior physical letter fixed. This includes
 all wall positions in that interval, not just the two local positions.
 Source: arXiv:1210.6613, lines 1289–1296. -/
 theorem uncleInteraction_twoWall_slice_first_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (p u v w x y : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (p u v w x y : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p (u ++ List.ofFn σ ++ v) w x y)) = 0 := by
   simpa only [uncleTwoWallCoefficient, Matrix.mul_assoc] using
     uncleInteraction_upper_wall_slice_eq_zero A B R L (Kraus.evalWord A p)
@@ -396,14 +396,14 @@ theorem uncleInteraction_twoWall_slice_first_eq_zero
 second moving interval. The rectangular trace identity moves the exterior
 first wall around the periodic trace. Source: arXiv:1210.6613, lines 1289–1296. -/
 theorem uncleInteraction_twoWall_slice_second_eq_zero
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (p r w u v y : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (p r w u v y : List α) :
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p r w (u ++ List.ofFn σ ++ v) y)) = 0 := by
   have hslice :
-      (fun σ : Fin 2 → Fin d ↦
+      (fun σ : Fin 2 → α ↦
         uncleTwoWallCoefficient A B R L p r w (u ++ List.ofFn σ ++ v) y) =
       (fun σ ↦ Matrix.trace (Kraus.evalWord B w *
         uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) *

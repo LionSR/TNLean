@@ -27,15 +27,15 @@ namespace MPSTensor
 
 open ManyBody.Interaction (translationInvariant)
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The actual uncle interaction is positive semidefinite, with no injectivity premise.
 Source: arXiv:1210.6613, the projector defining the uncle interaction and
 proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem posSemidef_uncleInteraction
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) :
     (uncleInteraction A B R L).PosSemidef :=
   (posSemidef_toMatrix'_parentInteraction (uncleTensor A B R L) 1).submatrix _
 
@@ -43,9 +43,9 @@ theorem posSemidef_uncleInteraction
 semidefinite. This is the positivity used in the spectral conclusion of arXiv:1210.6613, proof
 of thm:gapless. -/
 theorem posSemidef_hamiltonian_uncleInteraction
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) [NeZero N] :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) [NeZero N] :
     (translationInvariant N (uncleInteraction A B R L)).hamiltonian.PosSemidef :=
   ManyBody.Interaction.posSemidef_hamiltonian fun i ↦ Matrix.nonneg_iff_posSemidef.mp
     (ManyBody.Interaction.translationInvariant_term_nonneg
@@ -56,12 +56,12 @@ blocked boundary space, transported to the original two physical sites.
 Source: arXiv:1210.6613, eq:uncletensor-2site and the local kernel in
 thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem uncleInteraction_apply_eq_zero_iff
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (v : EuclideanSpace ℂ (Cfg d 2)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    (v : EuclideanSpace ℂ (Fin 2 → α)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 ↔
-      (blockedConfigLinearIsometryEquiv d 1 2).symm v ∈
+      (blockedConfigLinearIsometryEquiv 1 2).symm v ∈
         ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap) := by
   rw [toEuclideanLin_uncleInteraction_apply, LinearIsometryEquiv.map_eq_zero_iff]
@@ -73,14 +73,14 @@ This is the common-kernel step of arXiv:1210.6613,
 thm:gs-subspace-uncle, lines 1050–1065. No perturbation injectivity is
 assumed; classifying this intersection is a separate argument. -/
 theorem hamiltonian_uncleInteraction_apply_eq_zero_iff
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    {N : ℕ} (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    {N : ℕ} (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Fin N → α)) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin
         (translationInvariant N (uncleInteraction A B R L)).hamiltonian v = 0 ↔
-      ∀ (i : Fin N) (τ : Cfg d N),
+      ∀ (i : Fin N) (τ : (Fin N → α)),
         Matrix.toEuclideanLin (uncleInteraction A B R L)
           (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) v) = 0 :=
   haveI : NeZero N := ⟨by omega⟩

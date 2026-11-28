@@ -39,7 +39,7 @@ open ManyBody (placeAlong chainWindow)
 open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace MPSTensor
-variable {d R k N a : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {R k N a : ℕ}
 
 private theorem sum_range_eq_sum_range_shift {α : Type*} [AddCommMonoid α]
     (f : ℕ → α) {a m n : ℕ} (ham : a + m ≤ n)
@@ -57,8 +57,8 @@ private theorem sum_range_eq_sum_range_shift {α : Type*} [AddCommMonoid α]
 adding \(R-1\) sites on either side of the support of \(X\). This definition
 requires neither self-adjointness nor positivity of the interaction. -/
 noncomputable def localCommutatorObservable
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
-    Matrix (Cfg d ((R - 1 + k) + (R - 1))) (Cfg d ((R - 1 + k) + (R - 1))) ℂ :=
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
+    Matrix (Fin ((R - 1 + k) + (R - 1)) → α) (Fin ((R - 1 + k) + (R - 1)) → α) ℂ :=
   (bulkObservable X (R - 1) (R - 1))ᴴ *
     ((chainTranslates R ((R - 1 + k) + (R - 1)) h).hamiltonian * bulkObservable X (R - 1) (R - 1) -
       bulkObservable X (R - 1) (R - 1) * (chainTranslates R ((R - 1 + k) + (R - 1)) h).hamiltonian)
@@ -66,16 +66,16 @@ noncomputable def localCommutatorObservable
 /-- The commutator of an open-chain interaction sum with an interior observable
 is supported on the interval enlarged by \(R-1\) sites on either side. -/
 theorem hamiltonian_chainTranslates_commutator_placeAlong_chainWindow
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (X : Matrix (Fin k → α) (Fin k → α) ℂ) (hR : 0 < R)
     (ha : a + ((R - 1 + k) + (R - 1)) ≤ N) :
     (chainTranslates R N h).hamiltonian *
-          placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X -
-        placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X *
+          placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) (by omega)) X -
+        placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) (by omega)) X *
           (chainTranslates R N h).hamiltonian =
-      placeAlong (X := fun _ ↦ Fin d) (chainWindow a ha)
+      placeAlong (X := fun _ ↦ α) (chainWindow a ha)
         ((chainTranslates R ((R - 1 + k) + (R - 1)) h).hamiltonian *
-            placeAlong (X := fun _ ↦ Fin d) (chainWindow (R - 1) (by omega)) X -
-          placeAlong (X := fun _ ↦ Fin d) (chainWindow (R - 1) (by omega)) X *
+            placeAlong (X := fun _ ↦ α) (chainWindow (R - 1) (by omega)) X -
+          placeAlong (X := fun _ ↦ α) (chainWindow (R - 1) (by omega)) X *
             (chainTranslates R ((R - 1 + k) + (R - 1)) h).hamiltonian) := by
   have hP : a + (R - 1) + k ≤ N := by omega
   simp only [hamiltonian_chainTranslates_eq_sum_range, Finset.sum_mul, Finset.mul_sum,
@@ -84,15 +84,15 @@ theorem hamiltonian_chainTranslates_commutator_placeAlong_chainWindow
   simp only [ManyBody.placeAlong_sub, ManyBody.placeAlong_mul]
   rw [ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
   refine (sum_range_eq_sum_range_shift
-    (fun i => (if hi : i + R ≤ N then placeAlong (X := fun _ ↦ Fin d) (chainWindow i hi) h
-          else 0) * placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) hP) X -
-      placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) hP) X *
-        (if hi : i + R ≤ N then placeAlong (X := fun _ ↦ Fin d) (chainWindow i hi) h else 0))
+    (fun i => (if hi : i + R ≤ N then placeAlong (X := fun _ ↦ α) (chainWindow i hi) h
+          else 0) * placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) hP) X -
+      placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) hP) X *
+        (if hi : i + R ≤ N then placeAlong (X := fun _ ↦ α) (chainWindow i hi) h else 0))
     (a := a) (m := (R - 1 + k) + (R - 1) + 1 - R) (by omega) ?_).trans ?_
   · intro i hi hsep
     simp only [Finset.mem_range] at hi
     simp only [dite_eq_left (show i + R ≤ N by omega)]
-    refine sub_eq_zero.mpr (ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d)
+    refine sub_eq_zero.mpr (ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ α)
       (chainWindow i (show i + R ≤ N by omega)) ?_ h X).eq
     rw [ManyBody.map_chainWindow, ManyBody.map_chainWindow, Finset.disjoint_left]
     intro s hs hs'
@@ -107,11 +107,11 @@ theorem hamiltonian_chainTranslates_commutator_placeAlong_chainWindow
 /-- Localization of the open-chain commutator for an observable between
 free intervals of lengths at least \(R-1\). -/
 theorem hamiltonian_chainTranslates_commutator_bulkObservable {ℓ r : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     (chainTranslates R ((ℓ + k) + r) h).hamiltonian * bulkObservable X ℓ r -
         bulkObservable X ℓ r * (chainTranslates R ((ℓ + k) + r) h).hamiltonian =
-      placeAlong (X := fun _ ↦ Fin d) (chainWindow (ℓ - (R - 1)) (by omega))
+      placeAlong (X := fun _ ↦ α) (chainWindow (ℓ - (R - 1)) (by omega))
         ((chainTranslates R ((R - 1 + k) + (R - 1)) h).hamiltonian *
             bulkObservable X (R - 1) (R - 1) -
           bulkObservable X (R - 1) (R - 1) *
@@ -131,14 +131,14 @@ theorem hamiltonian_chainTranslates_commutator_bulkObservable {ℓ r : ℕ}
 /-- The finite-volume operator \(X^\dagger[H,X]\) is the placement of a fixed
 local observable on the enlarged support interval. -/
 theorem placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hR : 0 < R) (ha : a + ((R - 1 + k) + (R - 1)) ≤ N) :
-    (placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X)ᴴ *
+    (placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) (by omega)) X)ᴴ *
         ((chainTranslates R N h).hamiltonian *
-            placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X -
-          placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X *
+            placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) (by omega)) X -
+          placeAlong (X := fun _ ↦ α) (chainWindow (a + (R - 1)) (by omega)) X *
             (chainTranslates R N h).hamiltonian) =
-      placeAlong (X := fun _ ↦ Fin d) (chainWindow a ha) (localCommutatorObservable h X) := by
+      placeAlong (X := fun _ ↦ α) (chainWindow a ha) (localCommutatorObservable h X) := by
   rw [hamiltonian_chainTranslates_commutator_placeAlong_chainWindow h X hR ha,
     localCommutatorObservable, bulkObservable_eq_placeAlong_chainWindow,
     ManyBody.placeAlong_mul, ManyBody.placeAlong_conjTranspose, ManyBody.placeAlong_placeAlong,
@@ -147,12 +147,12 @@ theorem placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutato
 /-- For an interior observable, the commutator energy operator is the
 placement of the fixed local commutator observable. -/
 theorem bulkObservable_adjoint_mul_hamiltonian_chainTranslates_commutator {ℓ r : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     (bulkObservable X ℓ r)ᴴ *
         ((chainTranslates R ((ℓ + k) + r) h).hamiltonian * bulkObservable X ℓ r -
           bulkObservable X ℓ r * (chainTranslates R ((ℓ + k) + r) h).hamiltonian) =
-      placeAlong (X := fun _ ↦ Fin d) (chainWindow (ℓ - (R - 1)) (by omega))
+      placeAlong (X := fun _ ↦ α) (chainWindow (ℓ - (R - 1)) (by omega))
         (localCommutatorObservable h X) := by
   have hlocal := placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator
     (N := (ℓ + k) + r) (a := ℓ - (R - 1)) h X hR (by omega)
@@ -169,13 +169,13 @@ theorem bulkObservable_adjoint_mul_hamiltonian_chainTranslates_commutator {ℓ r
 /-- The canonical local ground-space complement projection gives the
 Hamiltonian of the parent interaction on the open chain under the matrix representation. -/
 theorem toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction {D : ℕ}
-    (A : MPSTensor d D) (R N : ℕ) :
-    (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      ((chainTranslates R N ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
+    (A : MPTensor α (Fin D)) (R N : ℕ) :
+    (Matrix.toEuclideanCLM (n := (Fin N → α)) (𝕜 := ℂ)
+      ((chainTranslates R N ((Matrix.toEuclideanCLM (n := (Fin R → α)) (𝕜 := ℂ)).symm
           ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap)ᗮ.starProjection)).hamiltonian)).toLinearMap =
       Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
-  have hlocal : (Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
+  have hlocal : (Matrix.toEuclideanCLM (n := (Fin R → α)) (𝕜 := ℂ)).symm
       ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap)ᗮ.starProjection = LinearMap.toMatrix' (parentInteraction A R) := by
     rw [StarAlgEquiv.symm_apply_eq]
@@ -201,13 +201,13 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12).
 open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace MPSTensor
-variable {d R N : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ}
 
 /-- The open matrix sum vanishes when the interval is shorter than its
 interaction range. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equation (3.12), the empty interaction sum. -/
 theorem hamiltonian_chainTranslates_eq_zero_of_length_lt
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hN : N < R) :
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hN : N < R) :
     (chainTranslates R N h).hamiltonian = 0 := by
   have hEmpty : N + 1 - R = 0 := Nat.sub_eq_zero_of_le (by omega)
   simp [hamiltonian_chainTranslates_eq_sum_range, hEmpty]

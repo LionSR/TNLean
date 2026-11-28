@@ -26,13 +26,13 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Joint boundary injectivity at length \(L\) implies simultaneous spanning by length-\(L\)
 words. This is the finite-dimensional trace duality behind the boundary parametrization in
 PGVWC07, Theorem 12, proof lines 1430–1434. -/
 theorem wordTupleSpanTop_of_blockGroundSpaceMap_injective
-    {A : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
+    {A : (j : Fin r) → MPTensor α (Fin (dim j))} {L : ℕ}
     (hInj : Function.Injective (blockGroundSpaceMap A L)) : WordTupleSpanTop A L := by
   unfold WordTupleSpanTop
   apply Matrix.eq_top_of_pi_trace_separating
@@ -51,7 +51,7 @@ theorem wordTupleSpanTop_of_blockGroundSpaceMap_injective
 Hilbert boundary map. This is the trace-duality form of the boundary parametrization in
 PGVWC07, Theorem 12, proof lines 1430–1434. -/
 theorem wordTupleSpanTop_iff_blockGroundSpaceMapES_injective
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     WordTupleSpanTop A L ↔ Function.Injective (blockGroundSpaceMapES A L) := by
   refine ⟨fun hSpan => blockGroundSpaceMapES_injective_of_wordTupleSpanTop (A := A) hSpan, ?_⟩
   intro hInj
@@ -63,7 +63,7 @@ This is the finite-dimensional injectivity ingredient in arXiv:1010.3732, Append
 lines 2499–2503 and 2575–2578. -/
 theorem isOpen_setOf_wordTupleSpanTop_family
     {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (A : X → (j : Fin r) → MPTensor α (Fin (dim j)))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ) :
     IsOpen {x | WordTupleSpanTop (A x) L} := by
   simpa only [wordTupleSpanTop_iff_blockGroundSpaceMapES_injective] using
@@ -73,13 +73,13 @@ theorem isOpen_setOf_wordTupleSpanTop_family
 This is a normalization-free form of the word-span propagation in PGVWC07,
 arXiv:quant-ph/0608197, lines 893–898. -/
 theorem blockGroundSpaceMap_injective_succ_of_pos
-    (A : (j : Fin r) → MPSTensor d (dim j)) {L : ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {L : ℕ}
     (hInj : Function.Injective (blockGroundSpaceMap A L))
     (hL : 0 < L) :
     Function.Injective (blockGroundSpaceMap A (L + 1)) := by
   refine (injective_iff_map_eq_zero _).mpr ?_
   intro Δ hΔ
-  have hleft (i : Fin d) : blockGroundSpaceMap A L (fun j => A j i * Δ j) = 0 := by
+  have hleft (i : α) : blockGroundSpaceMap A L (fun j => A j i * Δ j) = 0 := by
     ext w
     have hw := congrFun hΔ (Fin.append w (fun _ : Fin 1 => i))
     simp only [blockGroundSpaceMap_apply, Finset.sum_apply, groundSpaceMap_apply,
@@ -88,9 +88,9 @@ theorem blockGroundSpaceMap_injective_succ_of_pos
       Pi.zero_apply, List.ofFn_succ, List.ofFn_zero,
       Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one,
       Matrix.mul_assoc] using hw
-  have hzero (i : Fin d) (j : Fin r) : A j i * Δ j = 0 :=
+  have hzero (i : α) (j : Fin r) : A j i * Δ j = 0 :=
     congrFun (hInj ((hleft i).trans (map_zero _).symm)) j
-  have hword (j : Fin r) (w : Fin L → Fin d) :
+  have hword (j : Fin r) (w : Fin L → α) :
       Kraus.evalWord (A j) (List.ofFn w) * Δ j = 0 := by
     have hInt := Kraus.evalWord_intertwine (A j) (fun _ => 0) (Δ j)
       (fun i => by simp only [hzero, Matrix.mul_zero]) (List.ofFn w)
@@ -109,7 +109,7 @@ theorem blockGroundSpaceMap_injective_succ_of_pos
 This is the Hilbert-coordinate form of homogeneous word-span propagation in PGVWC07,
 arXiv:quant-ph/0608197, lines 893–898. -/
 theorem blockGroundSpaceMapES_injective_of_ge_of_pos
-    (A : (j : Fin r) → MPSTensor d (dim j)) {L n : ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {L n : ℕ}
     (hInj : Function.Injective (blockGroundSpaceMapES A L))
     (hL : 0 < L) (hLn : L ≤ n) :
     Function.Injective (blockGroundSpaceMapES A n) := by
@@ -121,7 +121,7 @@ theorem blockGroundSpaceMapES_injective_of_ge_of_pos
 with zero block dimensions. This is a normalization-free form of homogeneous word-span
 propagation in PGVWC07, arXiv:quant-ph/0608197, lines 893–898. -/
 theorem wordTupleSpanTop_of_ge_of_pos
-    (A : (j : Fin r) → MPSTensor d (dim j)) {L n : ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {L n : ℕ}
     (hSpan : WordTupleSpanTop A L) (hL : 0 < L) (hLn : L ≤ n) :
     WordTupleSpanTop A n := by
   exact (wordTupleSpanTop_iff_blockGroundSpaceMapES_injective A n).mpr

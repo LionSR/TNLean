@@ -24,7 +24,7 @@ open scoped BigOperators ComplexOrder InnerProductSpace MatrixOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 private theorem grouped_window_iff {p M n i : ℕ} (hp : 0 < p) (hn : n < M) :
     (p * (n + 1) - 2 * p ≤ i ∧ i + 2 * p ≤ p * (n + 1)) ↔
@@ -49,7 +49,7 @@ private theorem grouped_window_iff {p M n i : ℕ} (hp : 0 < p) (hn : n < M) :
 up to the Hamiltonian of the range-\(2p\) parent interaction restricted to the starts
 \(0,p,\ldots,p(M-2)\); the initial window, ending at \(p\), contributes zero.
 Source: Nachtergaele, arXiv:cond-mat/9410110, conditions C1-prime and C2. -/
-theorem sum_range_hamiltonian_restrict_parentChainInteraction_grouped (A : MPSTensor d D)
+theorem sum_range_hamiltonian_restrict_parentChainInteraction_grouped (A : MPTensor α (Fin D))
     {p : ℕ} (hp : 0 < p) (N M : ℕ) :
     ∑ n ∈ Finset.range M, ((parentChainInteraction A (2 * p) N).restrict
         fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧ i.val + 2 * p ≤ p * (n + 1)).hamiltonian =
@@ -71,7 +71,7 @@ theorem sum_range_hamiltonian_restrict_parentChainInteraction_grouped (A : MPSTe
 in the number of sampled windows. Source: Nachtergaele,
 arXiv:cond-mat/9410110, condition C3-prime, lines 1095--1107. -/
 theorem grouped_martingaleDifference_norm_le_of_projector_defect_of_le
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
+    (A : MPTensor α (Fin D)) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     (hKernel : ∀ n, 2 * p ≤ n →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) n).hamiltonian) =
           ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
@@ -118,13 +118,13 @@ full grouped energy lower bound on the orthogonal complement of the prefix groun
 sum is exactly the Hamiltonian of this restriction, so its comparison constant is one.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(ii), lines 1131--1136. -/
 theorem sparseGrouped_energy_bound_of_grouped_c3
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
+    (A : MPTensor α (Fin D)) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hC3 : ∀ n ∈ Finset.range M,
       ‖LinearMap.toContinuousLinearMap
         ((groupedIntervalGroundProjectionES A p N n).comp
           ((groupedNestedGroundProjectionsES A p N).martingaleDifference n))‖ ≤ ε)
-    (v : EuclideanSpace ℂ (Cfg d N))
+    (v : EuclideanSpace ℂ (Fin N → α))
     (hv : v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A (2 * p) N).restrict
       fun i ↦ i.val + 2 * p ≤ p * M).hamiltonian))ᗮ) :
     (1 - ε * Real.sqrt 2) ^ 2 * ‖v‖ ^ 2 ≤
@@ -163,7 +163,7 @@ theorem sparseGrouped_energy_bound_of_grouped_c3
 martingale coefficient. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(ii),
 lines 1131--1136. -/
 theorem sparseGrouped_projection_bound_of_grouped_c3
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
+    (A : MPTensor α (Fin D)) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hC3 : ∀ n ∈ Finset.range M,
       ‖LinearMap.toContinuousLinearMap
@@ -186,7 +186,7 @@ theorem sparseGrouped_projection_bound_of_grouped_c3
 /-- A positive residual interval permits one additional terminal interaction without repeating
 any sampled local term: the Hamiltonians of the restriction to the starts \(0,p,\ldots,p(M-2)\)
 and of the terminal window add up to at most the open-chain Hamiltonian. -/
-theorem sparseGrouped_add_terminal_le (A : MPSTensor d D) (p M : ℕ) {q : ℕ} (hq : 0 < q) :
+theorem sparseGrouped_add_terminal_le (A : MPTensor α (Fin D)) (p M : ℕ) {q : ℕ} (hq : 0 < q) :
     ((parentChainInteraction A (2 * p) (p * M + q)).restrict
         fun i ↦ p ∣ i.val ∧ i.val + 2 * p ≤ p * M).hamiltonian +
       ((parentChainInteraction A (2 * p) (p * M + q)).restrict

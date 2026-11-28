@@ -52,54 +52,53 @@ open MPTensor
 section
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- The correlated original tail has square virtual fibers \(V^\dagger A^\tau Y\)
 and a rectangular boundary domain, with column index before row index.
 This is the virtual factor of the residual boundary contraction in DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
-noncomputable def correlatedTailMapES (A : MPSTensor d D)
+noncomputable def correlatedTailMapES (A : MPTensor α (Fin D))
     (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ) :
-    EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] BoundaryFamilySpace (D := E) (Cfg d r) :=
+    EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] BoundaryFamilySpace (D := E) (Fin r → α) :=
   LinearMap.toContinuousLinearMap
-    ((boundaryFamilyEquiv (D := E) (Cfg d r)).symm.toLinearMap.comp
+    ((boundaryFamilyEquiv (D := E) (Fin r → α)).symm.toLinearMap.comp
       ({ toFun := fun x τ => Vᴴ * Kraus.evalWord A (List.ofFn τ) *
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm x
          map_add' := by intros; funext τ; simp [Matrix.mul_add]
          map_smul' := by intros; funext τ; simp } :
         EuclideanSpace ℂ (Fin E × Fin D) →ₗ[ℂ]
-          (Cfg d r → Matrix (Fin E) (Fin E) ℂ)))
+          ((Fin r → α) → Matrix (Fin E) (Fin E) ℂ)))
 
 /-- Each fiber of the correlated tail map is the literal matrix
 \(V^\dagger A^\tau Y\), including an empty tail. -/
 @[simp] theorem boundaryFamilyEquiv_correlatedTailMapES_apply
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
-    (Y : Matrix (Fin D) (Fin E) ℂ) (τ : Cfg d r) :
-    boundaryFamilyEquiv (D := E) (Cfg d r)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (Y : Matrix (Fin D) (Fin E) ℂ) (τ : Fin r → α) :
+    boundaryFamilyEquiv (D := E) (Fin r → α)
       (correlatedTailMapES A V r (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ =
       Vᴴ * Kraus.evalWord A (List.ofFn τ) * Y := by
-  change boundaryFamilyEquiv (D := E) (Cfg d r)
-    ((boundaryFamilyEquiv (D := E) (Cfg d r)).symm
+  change boundaryFamilyEquiv (D := E) (Fin r → α)
+    ((boundaryFamilyEquiv (D := E) (Fin r → α)).symm
       (fun τ => Vᴴ * Kraus.evalWord A (List.ofFn τ) *
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y))) τ = _
-  rw [(boundaryFamilyEquiv (D := E) (Cfg d r)).apply_symm_apply,
+  rw [(boundaryFamilyEquiv (D := E) (Fin r → α)).apply_symm_apply,
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm_apply_apply]
 
 /-- The correlated tail Gram form is \(\operatorname{tr}(Y^\dagger Q_r Z)\),
 where \(Q_r=\sum_\tau A^{\tau\dagger}VV^\dagger A^\tau\). -/
 theorem inner_correlatedTailMapES
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
     (Y Z : Matrix (Fin D) (Fin E) ℂ) :
     ⟪correlatedTailMapES A V r (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y),
       correlatedTailMapES A V r (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Z)⟫_ℂ =
-      Matrix.trace (Yᴴ * (∑ τ : Cfg d r,
+      Matrix.trace (Yᴴ * (∑ τ : (Fin r → α),
         (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
           Kraus.evalWord A (List.ofFn τ)) * Z) := by
   rw [PiLp.inner_apply, Fintype.sum_prod_type]
-  change (∑ τ : Cfg d r,
+  change (∑ τ : (Fin r → α),
     inner ℂ (boundaryFamilyFiber (D := E)
       (correlatedTailMapES A V r (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ)
     (boundaryFamilyFiber (D := E)
@@ -114,11 +113,11 @@ exact row corner \(\sum_\tau A^{\tau\dagger}P_aA^\tau=P_{a+r}\).
 Source: DCCSP17, arXiv:1708.00029, the off-diagonal cyclic equation iterated
 in Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem sum_word_conjTranspose_cyclic_projection_mul_word
-    {m : ℕ} [NeZero m] (A : MPSTensor d D)
+    {m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
     (hShift : ∀ a i, P a * A i = A i * P (a + 1)) (a : Fin m) (r : ℕ) :
-    ∑ τ : Cfg d r,
+    ∑ τ : (Fin r → α),
       (Kraus.evalWord A (List.ofFn τ))ᴴ * P a * Kraus.evalWord A (List.ofFn τ) =
       P (a + r • (1 : Fin m)) := by
   simp_rw [Matrix.mul_assoc,
@@ -131,9 +130,9 @@ theorem sum_word_conjTranspose_cyclic_projection_mul_word
 /-- If the exact tail Gram matrix is an orthogonal projection, the
 correlated tail map is a contraction on the ambient rectangular space. -/
 theorem norm_correlatedTailMapES_le_one_of_wordGram_eq_projection
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
-    (hGram : ∑ τ : Cfg d r,
+    (hGram : ∑ τ : (Fin r → α),
       (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
         Kraus.evalWord A (List.ofFn τ) = Q) :
     ‖correlatedTailMapES A V r‖ ≤ 1 := by
@@ -154,12 +153,12 @@ theorem norm_correlatedTailMapES_le_one_of_wordGram_eq_projection
 prefix Gram operator. This exact factorization requires no normalization
 or letter intertwining. -/
 theorem blockedResidualBoundaryMapES_adjoint_comp_self
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) :
     (blockedResidualBoundaryMapES A L B V N r).adjoint.comp
         (blockedResidualBoundaryMapES A L B V N r) =
       (correlatedTailMapES A V r).adjoint.comp
-        ((boundaryFiberwiseMap (Cfg d r) (groundSpaceGram B N)).comp
+        ((boundaryFiberwiseMap (Fin r → α) (groundSpaceGram B N)).comp
           (correlatedTailMapES A V r)) := by
   apply ContinuousLinearMap.ext
   intro x
@@ -176,18 +175,18 @@ theorem blockedResidualBoundaryMapES_adjoint_comp_self
 tail map. Its rectangular action is \(Y\mapsto(\operatorname{tr}\rho)^{-1}Q_rY\rho\).
 This is the limiting form used in the residual estimate underlying
 Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (i). -/
-noncomputable def residualBoundaryGramLimit (A : MPSTensor d D)
+noncomputable def residualBoundaryGramLimit (A : MPTensor α (Fin D))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (htr : Matrix.trace ρ ≠ 0) (r : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D) :=
   (correlatedTailMapES A V r).adjoint.comp
-    ((boundaryFiberwiseMap (Cfg d r) (Matrix.gramReshuffle (fixedPointProj ρ htr))).comp
+    ((boundaryFiberwiseMap (Fin r → α) (Matrix.gramReshuffle (fixedPointProj ρ htr))).comp
       (correlatedTailMapES A V r))
 
 /-- A contractive correlated tail does not increase the prefix Gram error.
 The coefficient is one, independently of the tail length. -/
 theorem norm_blockedResidualBoundaryMapES_gram_sub_limit_le
-    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (A : MPTensor α (Fin D)) (B : MPTensor (Fin L → α) (Fin E))
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (htr : Matrix.trace ρ ≠ 0) (N r : ℕ)
     (hC : ‖correlatedTailMapES A V r‖ ≤ 1) :
@@ -200,7 +199,7 @@ theorem norm_blockedResidualBoundaryMapES_gram_sub_limit_le
   refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
   refine (mul_le_mul_of_nonneg_left (ContinuousLinearMap.opNorm_comp_le _ _)
     (norm_nonneg _)).trans ?_
-  have hb := norm_boundaryFiberwiseMap_le (Cfg d r)
+  have hb := norm_boundaryFiberwiseMap_le (Fin r → α)
     (groundSpaceGram B N - Matrix.gramReshuffle (fixedPointProj ρ htr))
   calc
     _ ≤ 1 * (‖groundSpaceGram B N - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ * 1) := by
@@ -211,16 +210,16 @@ theorem norm_blockedResidualBoundaryMapES_gram_sub_limit_le
 /-- The adjoint recombines the correlated tail fibers as
 \(\sum_\tau A^{\tau\dagger}Vx_\tau\). -/
 theorem correlatedTailMapES_adjoint_apply
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
-    (x : BoundaryFamilySpace (D := E) (Cfg d r)) :
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ) (r : ℕ)
+    (x : BoundaryFamilySpace (D := E) (Fin r → α)) :
     (correlatedTailMapES A V r).adjoint x =
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)
-        (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
-          boundaryFamilyEquiv (D := E) (Cfg d r) x τ) := by
+        (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * V *
+          boundaryFamilyEquiv (D := E) (Fin r → α) x τ) := by
   refine ext_inner_left ℂ fun y => ?_
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).surjective y
   rw [ContinuousLinearMap.adjoint_inner_right, PiLp.inner_apply, Fintype.sum_prod_type]
-  change (∑ τ : Cfg d r,
+  change (∑ τ : (Fin r → α),
     inner ℂ (boundaryFamilyFiber (D := E)
       (correlatedTailMapES A V r (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)) τ)
       (boundaryFamilyFiber (D := E) x τ)) = _
@@ -232,13 +231,13 @@ theorem correlatedTailMapES_adjoint_apply
 /-- The pulled-back limiting metric acts by right multiplication by
 \(\rho/\operatorname{tr}\rho\), after the exact tail Gram matrix on the left. -/
 theorem residualBoundaryGramLimit_frobeniusEquivEuclidean_apply
-    (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
+    (A : MPTensor α (Fin D)) (V : Matrix (Fin D) (Fin E) ℂ)
     (ρ : Matrix (Fin E) (Fin E) ℂ) (htr : Matrix.trace ρ ≠ 0) (r : ℕ)
     (Y : Matrix (Fin D) (Fin E) ℂ) :
     residualBoundaryGramLimit A V ρ htr r
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y) =
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)
-        ((Matrix.trace ρ)⁻¹ • ((∑ τ : Cfg d r,
+        ((Matrix.trace ρ)⁻¹ • ((∑ τ : (Fin r → α),
           (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
             Kraus.evalWord A (List.ofFn τ)) * Y * ρ)) := by
   rw [residualBoundaryGramLimit, ContinuousLinearMap.comp_apply,
@@ -253,7 +252,7 @@ theorem residualBoundaryGramLimit_frobeniusEquivEuclidean_apply
 correlated tail map contractive, uniformly in the tail length.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary. -/
 theorem norm_correlatedTailMapES_le_one_of_cyclic_support
-    {m : ℕ} [NeZero m] (A : MPSTensor d D)
+    {m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ a, IsOrthogonalProjection (P a))
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
@@ -271,7 +270,7 @@ On the row corner \(P_{a+r}Y=Y\), this is simply right multiplication.
 Source: the cyclic compression of DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, and Nachtergaele, Lemma commutation (i). -/
 theorem residualBoundaryGramLimit_apply_of_cyclic_support
-    {m : ℕ} [NeZero m] (A : MPSTensor d D)
+    {m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
     (hShift : ∀ a i, P a * A i = A i * P (a + 1))
@@ -291,7 +290,7 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- Primitive prefix convergence bounds the residual Gram error
 geometrically, uniformly over every original tail length. The cyclic corner
@@ -299,9 +298,9 @@ and contraction are derived from the original trace-preserving tensor.
 This is a quantitative intermediate estimate for Nachtergaele,
 arXiv:cond-mat/9410110, Lemma commutation (i), lines 2442--2531. -/
 theorem residualBoundaryGram_sub_limit_norm_sq_le_geometric
-    [NeZero E] {B : MPSTensor (blockPhysDim d L) E}
+    [NeZero E] {B : MPTensor (Fin L → α) (Fin E)}
     {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : Kraus.HasComplementaryFixedPointGap B ρ)
-    {m : ℕ} [NeZero m] (A : MPSTensor d D)
+    {m : ℕ} [NeZero m] (A : MPTensor α (Fin D))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hProj : ∀ a, IsOrthogonalProjection (P a))
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
@@ -327,7 +326,7 @@ end Kraus.HasComplementaryFixedPointGap
 
 namespace MPSTensor
 
-variable {d D E L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D E L : ℕ}
 
 /-- Blocking by the period leaves each individual cyclic projection as
 its own step-orbit projection. Source: DCCSP17, arXiv:1708.00029,
@@ -355,12 +354,12 @@ Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110,
 Lemma commutation (i), lines 2442--2531. -/
 theorem IsPeriodic.exists_cyclic_residualBoundaryGram_bound
-    {m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    {m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
       (dim : Fin (m.gcd m) → ℕ) (hdim : ∀ a, 0 < dim a),
       let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-      ∃ (B : (a : Fin (m.gcd m)) → MPSTensor (blockPhysDim d m) (dim a))
+      ∃ (B : (a : Fin (m.gcd m)) → MPTensor (Fin m → α) (Fin (dim a)))
         (V : (a : Fin (m.gcd m)) → Matrix (Fin D) (Fin (dim a)) ℂ)
         (ρ : (a : Fin (m.gcd m)) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ)
         (hPrimitive : ∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)),
@@ -368,9 +367,9 @@ theorem IsPeriodic.exists_cyclic_residualBoundaryGram_bound
         (∀ u i, P u * A i = A i * P (u + 1)) ∧ (∑ a, dim a) = D ∧
         (∀ a, (V a)ᴴ * V a = 1) ∧
         (∀ a, V a * (V a)ᴴ = P (Fin.cast (Nat.gcd_self m) a)) ∧
-        (∀ a i, B a i = (V a)ᴴ * blockTensor A m i * V a) ∧
-        (∀ a i, blockTensor A m i * V a = V a * B a i) ∧
-        (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+        (∀ a i, B a i = (V a)ᴴ * Kraus.block A m i * V a) ∧
+        (∀ a i, Kraus.block A m i * V a = V a * B a i) ∧
+        (∀ N, ((groundSpace (Kraus.block A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
           ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
               _).symm.toLinearMap)) ∧
         ∀ a,
@@ -413,16 +412,16 @@ section
 
 open scoped Matrix BigOperators
 namespace MPSTensor
-variable {d D m : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D m : ℕ}
 
 /-- The cyclic word Gram in the inverse projection convention. Source:
 arXiv:1708.00029, equation Aoffdiag; Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem sum_word_conjTranspose_inverseCyclic_projection_mul_word
-    [NeZero m] (A : MPSTensor d D) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    [NeZero m] (A : MPTensor α (Fin D)) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hTP : IsLeftCanonical A) (hShift : ∀ j i, P (j + 1) * A i = A i * P j)
     (j : Fin m) (r : ℕ) :
-    (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * P j *
+    (∑ τ : (Fin r → α), (Kraus.evalWord A (List.ofFn τ))ᴴ * P j *
       Kraus.evalWord A (List.ofFn τ)) = P (j - r • (1 : Fin m)) := by
   let P' : Fin m → Matrix (Fin D) (Fin D) ℂ := fun a => P (-a)
   have hShift' : ∀ a i, P' a * A i = A i * P' (a + 1) := by

@@ -32,27 +32,27 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The FNW 1992 transfer map from equations (5.1)--(5.3), in TNLean coordinates
 \(A^\mu=v(\mu)^\dagger\). -/
-def fnwTransferMap (A : MPSTensor d D) : Mat →ₗ[ℂ] Mat :=
+def fnwTransferMap (A : MPTensor α (Fin D)) : Mat →ₗ[ℂ] Mat :=
   Kraus.transferMap fun μ => (A μ)ᴴ
 
 /-- Under \(A^\mu=v(\mu)^\dagger\), the FNW map in equations (5.1)--(5.3) is the
 bilinear trace-pairing adjoint of TNLean's transfer map. It also agrees with
 the Hilbert-space adjoint for the unweighted Frobenius inner product, but is
 generally different from the rho-weighted adjoint of equation (5.6). -/
-theorem fnwTransferMap_eq_traceAdjointMap (A : MPSTensor d D) :
+theorem fnwTransferMap_eq_traceAdjointMap (A : MPTensor α (Fin D)) :
     fnwTransferMap A = Matrix.traceAdjointMap (Kraus.transferMap A) := by
   simpa only [fnwTransferMap] using
     (Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose A).symm
 
 /-- The unitality identity in FNW 1992, equations (5.2)--(5.3), follows exactly
 from TNLean's left-canonical, equivalently trace-preserving, normalization. -/
-theorem fnwTransferMap_one (A : MPSTensor d D) (hA : IsLeftCanonical A) :
+theorem fnwTransferMap_one (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A) :
     fnwTransferMap A 1 = 1 := by
   rw [fnwTransferMap_eq_traceAdjointMap]
   exact isTracePreservingMap_iff_traceAdjointMap_one.mp
@@ -62,7 +62,7 @@ theorem fnwTransferMap_one (A : MPSTensor d D) (hA : IsLeftCanonical A) :
 pairing a density \(\rho\) against the FNW map equals pairing TNLean's transfer
 of \(\rho\) against the observable \(X\). The displayed identity uses the
 bilinear matrix trace rather than the rho-weighted Hilbert pairing. -/
-theorem trace_mul_fnwTransferMap (A : MPSTensor d D) (ρ X : Mat) :
+theorem trace_mul_fnwTransferMap (A : MPTensor α (Fin D)) (ρ X : Mat) :
     Matrix.trace (ρ * fnwTransferMap A X) =
       Matrix.trace (Kraus.transferMap A ρ * X) := by
   rw [fnwTransferMap_eq_traceAdjointMap, Matrix.trace_mul_comm]

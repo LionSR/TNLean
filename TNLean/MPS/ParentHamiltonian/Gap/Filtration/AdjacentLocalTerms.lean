@@ -37,7 +37,7 @@ applied; no injectivity or nonzero bond-dimension assumption is needed.
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Open-chain and cyclic coordinate identifications -/
 
@@ -46,8 +46,8 @@ exactly `restrictFirst` at that coordinate.
 
 This coordinate identity is used to realize the tail open-chain ground
 projection in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
-    (ψ : NSiteSpace (Fin d) (1 + 2)) :
+theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → α)
+    (ψ : NSiteSpace α (1 + 2)) :
     tailRestrictₗ u ψ = restrictFirst ψ (u 0) := by
   ext σ
   simp only [tailRestrictₗ_apply, restrictFirst_apply]
@@ -70,7 +70,7 @@ private theorem range_eq_orthogonal_ker_of_isSymmetricProjection
 
 Source terminology: this is the ground condition on \(Λ_n\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem ker_toEuclideanLin_term_two_three_zero (B : MPSTensor d D) :
+theorem ker_toEuclideanLin_term_two_three_zero (B : MPTensor α (Fin D)) :
     LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)) =
       openChainLeftGroundSpaceES B 2 := by
   ext v
@@ -90,7 +90,7 @@ theorem ker_toEuclideanLin_term_two_three_zero (B : MPSTensor d D) :
 
 Source terminology: this is the tail condition on \(Λ_{n+1} \ Λ_{n-l}\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem ker_toEuclideanLin_term_two_three_one (B : MPSTensor d D) :
+theorem ker_toEuclideanLin_term_two_three_one (B : MPTensor α (Fin D)) :
     LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)) =
       openChainTailGroundSpaceES B 1 2 := by
   ext v
@@ -111,7 +111,7 @@ theorem ker_toEuclideanLin_term_two_three_one (B : MPSTensor d D) :
 operator of the range-two term at site \(0\) of the parent interaction on the ring: both are
 symmetric projections with the same kernel. -/
 theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term
-    (B : MPSTensor d D) :
+    (B : MPTensor α (Fin D)) :
     (openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap =
       Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0) := by
   have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B 2 (0 : Fin 3)
@@ -124,7 +124,7 @@ theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingIntera
 operator of the range-two term at site \(1\) of the parent interaction on the ring: both are
 symmetric projections with the same kernel. -/
 theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term
-    (B : MPSTensor d D) :
+    (B : MPTensor α (Fin D)) :
     (openChainTailGroundSpaceES B 1 2)ᗮ.starProjection.toLinearMap =
       Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1) := by
   have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B 2 (1 : Fin 3)

@@ -23,12 +23,12 @@ open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
 theorem hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt
-    (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hnL : n < L) :
     Matrix.toEuclideanLin
         ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ n).hamiltonian = 0 := by
   rw [ManyBody.Interaction.hamiltonian_restrict,
@@ -38,7 +38,7 @@ theorem hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt
 /-- Before the first full interaction window fits, the fixed-ambient ground
 projection is the identity. -/
 theorem openPrefixGroundProjectionES_eq_one_of_lt
-    (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
+    (A : MPTensor α (Fin D)) {L N n : ℕ} (hnL : n < L) :
     openPrefixGroundProjectionES A L N n = 1 := by
   have hzero := hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt A (N := N) hnL
   simp only [openPrefixGroundProjectionES, hzero, LinearMap.ker_zero,
@@ -48,7 +48,7 @@ theorem openPrefixGroundProjectionES_eq_one_of_lt
 /-- For indices strictly below the C3 endpoint, the fixed-ambient martingale
 difference vanishes because both adjacent prefix Hamiltonians are zero. -/
 theorem fixedAmbient_martingaleDifference_eq_zero_of_lt
-    (A : MPSTensor d D) {l N n : ℕ} (hnl : n < l) :
+    (A : MPTensor α (Fin D)) {l N n : ℕ} (hnl : n < l) :
     (fixedAmbientNestedGroundProjectionsES A (l + 1) N).martingaleDifference n = 0 := by
   rw [FrustrationFree.NestedGroundProjections.martingaleDifference]
   change openPrefixGroundProjectionES A (l + 1) N n -
@@ -59,7 +59,7 @@ theorem fixedAmbient_martingaleDifference_eq_zero_of_lt
 /-- At the first full-window prefix, the prefix and local-interval Hamiltonians
 are the same single local interaction. -/
 theorem hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint
-    (A : MPSTensor d D) (L N : ℕ) :
+    (A : MPTensor α (Fin D)) (L N : ℕ) :
     Matrix.toEuclideanLin
         ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ L).hamiltonian =
       Matrix.toEuclideanLin
@@ -71,7 +71,7 @@ theorem hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint
 /-- At the endpoint \(n=l\), the local ground projection is the next prefix
 ground projection. -/
 theorem openIntervalGroundProjectionES_at_endpoint
-    (A : MPSTensor d D) (l N : ℕ) :
+    (A : MPTensor α (Fin D)) (l N : ℕ) :
     openIntervalGroundProjectionES A (l + 1) l N l =
       openPrefixGroundProjectionES A (l + 1) N (l + 1) := by
   have hHamiltonian :=
@@ -87,13 +87,13 @@ theorem openIntervalGroundProjectionES_at_endpoint
                     1).hamiltonian) :=
     congrArg LinearMap.ker hHamiltonian.symm
   simp only [openIntervalGroundProjectionES, openPrefixGroundProjectionES]
-  exact congrArg (fun U : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) =>
+  exact congrArg (fun U : Submodule ℂ (EuclideanSpace ℂ (Fin N → α)) =>
     U.starProjection.toLinearMap) hker
 
 /-- Nachtergaele's C3 product vanishes at the endpoint \(n=l\):
 \(Q_l E_l = G_{[0,l+1)} (1 - G_{[0,l+1)}) = 0\). -/
 theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
-    (A : MPSTensor d D) (l N : ℕ) :
+    (A : MPTensor α (Fin D)) (l N : ℕ) :
     (openIntervalGroundProjectionES A (l + 1) l N l).comp
         ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).martingaleDifference l) = 0 := by
   rw [FrustrationFree.NestedGroundProjections.martingaleDifference]
@@ -114,14 +114,14 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
 /-- After splitting off the right spectators, the fixed-ambient martingale
 component is the fiberwise extension of the physical open-chain component. -/
 theorem fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv
-    {A : MPSTensor d D} [NeZero D] {K l r : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {K l r : ℕ}
     (hInj : Kraus.IsNBlkInjective A l) (hl : 0 < l) (hK : 0 < K) :
-    (rightSpectatorConfigLinearIsometryEquiv d (K + l + 1) r).toLinearEquiv.toLinearMap.comp
+    (rightSpectatorConfigLinearIsometryEquiv (K + l + 1) r).toLinearEquiv.toLinearMap.comp
         (((fixedAmbientNestedGroundProjectionsES A (l + 1)
           ((K + l + 1) + r)).martingaleDifference (K + l)).comp
-          (rightSpectatorConfigLinearIsometryEquiv d
+          (rightSpectatorConfigLinearIsometryEquiv
             (K + l + 1) r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (openChainMartingaleDifferenceES A K l hInj hl hK)).toLinearMap := by
   have hleft :=
     openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
@@ -130,35 +130,35 @@ theorem fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometr
     openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv
       (r := r) hInj hl (show l + 1 ≤ K + l + 1 by omega)
   rw [FrustrationFree.NestedGroundProjections.martingaleDifference]
-  change (rightSpectatorConfigLinearIsometryEquiv d (K + l + 1) r).toLinearEquiv.toLinearMap.comp
+  change (rightSpectatorConfigLinearIsometryEquiv (K + l + 1) r).toLinearEquiv.toLinearMap.comp
       ((openPrefixGroundProjectionES A (l + 1) ((K + l + 1) + r) (K + l) -
         openPrefixGroundProjectionES A (l + 1) ((K + l + 1) + r) (K + l + 1)).comp
-        (rightSpectatorConfigLinearIsometryEquiv d
+        (rightSpectatorConfigLinearIsometryEquiv
           (K + l + 1) r).symm.toLinearEquiv.toLinearMap) = _
   rw [LinearMap.sub_comp, LinearMap.comp_sub]
   rw [hleft, hwhole]
   exact congrArg ContinuousLinearMap.toLinearMap
     (ContinuousLinearMap.rightFiberwiseMap_sub
-      (S := Cfg d r) (openChainLeftGroundProjectionES A (K + l))
+      (S := (Fin r → α)) (openChainLeftGroundProjectionES A (K + l))
         ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection).symm
 
 /-- Conjugating the fixed C3 product gives the fiberwise extension of the
 physical open-chain C3 product. -/
 theorem openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator
-    {A : MPSTensor d D} [NeZero D] {K l r : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {K l r : ℕ}
     (hInj : Kraus.IsNBlkInjective A l) (hl : 0 < l) (hK : 0 < K) :
-    (rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r).toLinearEquiv.toLinearMap.comp
+    (rightSpectatorConfigLinearIsometryEquiv (K + (l + 1)) r).toLinearEquiv.toLinearMap.comp
         (((openIntervalGroundProjectionES A (l + 1) l
           ((K + (l + 1)) + r) (K + l)).comp
           ((fixedAmbientNestedGroundProjectionsES A (l + 1)
             ((K + (l + 1)) + r)).martingaleDifference (K + l))).comp
-          (rightSpectatorConfigLinearIsometryEquiv d
+          (rightSpectatorConfigLinearIsometryEquiv
             (K + (l + 1)) r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α))
         (openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainMartingaleDifferenceES A K l hInj hl hK)).toLinearMap := by
-  let U := rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r
+  let U := rightSpectatorConfigLinearIsometryEquiv (K + (l + 1)) r
   let Q := openIntervalGroundProjectionES A (l + 1) l
     ((K + (l + 1)) + r) (K + l)
   let E := (fixedAmbientNestedGroundProjectionsES A (l + 1)
@@ -174,14 +174,14 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpect
   apply LinearMap.ext
   intro x
   change U (Q (E (U.symm x))) =
-    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) (q.comp e) x
+    ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α)) (q.comp e) x
   have hQx := LinearMap.congr_fun hQ (U (E (U.symm x)))
   change U (Q (U.symm (U (E (U.symm x))))) =
-    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) q (U (E (U.symm x))) at hQx
+    ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α)) q (U (E (U.symm x))) at hQx
   rw [LinearIsometryEquiv.symm_apply_apply] at hQx
   have hEx := LinearMap.congr_fun hE x
   change U (E (U.symm x)) =
-    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) e x at hEx
+    ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α)) e x at hEx
   rw [hEx] at hQx
   exact hQx
 
@@ -189,7 +189,7 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpect
 open-chain representative.  This inequality also covers an empty spectator
 configuration type. -/
 theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
-    {A : MPSTensor d D} [NeZero D] {K l r : ℕ}
+    {A : MPTensor α (Fin D)} [NeZero D] {K l r : ℕ}
     (hInj : Kraus.IsNBlkInjective A l) (hl : 0 < l) (hK : 0 < K) :
     ‖LinearMap.toContinuousLinearMap
         ((openIntervalGroundProjectionES A (l + 1) l
@@ -198,7 +198,7 @@ theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openCha
             ((K + (l + 1)) + r)).martingaleDifference (K + l)))‖ ≤
       ‖openChainTailGroundProjectionES A K (l + 1) ∘L
         openChainMartingaleDifferenceES A K l hInj hl hK‖ := by
-  let U := rightSpectatorConfigLinearIsometryEquiv d (K + (l + 1)) r
+  let U := rightSpectatorConfigLinearIsometryEquiv (K + (l + 1)) r
   let T := LinearMap.toContinuousLinearMap
     ((openIntervalGroundProjectionES A (l + 1) l
       ((K + (l + 1)) + r) (K + l)).comp
@@ -212,7 +212,7 @@ theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openCha
   have hconjCLM :
       U.toLinearIsometry.toContinuousLinearMap.comp
           (T.comp U.symm.toLinearIsometry.toContinuousLinearMap) =
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) t := by
+        ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α)) t := by
     apply ContinuousLinearMap.ext
     intro x
     exact LinearMap.congr_fun hconj x
@@ -220,7 +220,7 @@ theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openCha
     ‖T‖ = ‖U.toLinearIsometry.toContinuousLinearMap.comp
         (T.comp U.symm.toLinearIsometry.toContinuousLinearMap)‖ :=
       (ContinuousLinearMap.norm_conj_linearIsometryEquiv U T).symm
-    _ = ‖ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r) t‖ :=
+    _ = ‖ContinuousLinearMap.rightFiberwiseMap (S := (Fin r → α)) t‖ :=
       congrArg norm hconjCLM
     _ ≤ ‖t‖ := ContinuousLinearMap.norm_rightFiberwiseMap_le t
 
@@ -228,7 +228,7 @@ theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openCha
 exactly the same bound at every index of every fixed final volume. The
 products at the early indices vanish. -/
 theorem fixedAmbient_martingaleDifference_norm_le_of_openChain
-    [NeZero D] {A : MPSTensor d D} {l : ℕ} (hl : 1 < l)
+    [NeZero D] {A : MPTensor α (Fin D)} {l : ℕ} (hl : 1 < l)
     (hInj : Kraus.IsNBlkInjective A l) {ε : ℝ} (hε : 0 ≤ ε)
     (hOpen : ∀ (K : ℕ) (hK : 0 < K),
       ‖openChainTailGroundProjectionES A K (l + 1) ∘L
@@ -256,13 +256,13 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A primitive MPS satisfies Nachtergaele's C3 bound on every active index of
 the fixed final-volume filtration.  The same overlap length and coefficient as
 in the physical open-chain estimate are used. -/
 theorem exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧

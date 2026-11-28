@@ -24,8 +24,6 @@ kernel equality is supplied as an extra hypothesis.
 
 open MPTensor
 
-open Kraus (blockPhysDim decodeBlock wordOfBlock decodeBlockEquiv flattenBlockedWord_nil
-  flattenBlockedWord_cons)
 
 noncomputable section
 
@@ -35,12 +33,12 @@ namespace MPSTensor
 
 open ManyBody.Interaction (translationInvariant)
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
-private theorem blockedConfigEquiv_one_two (σ : Cfg (blockPhysDim d 2) 1) :
-    Kraus.blockedConfigEquiv d 1 2 σ = decodeBlock d 2 (σ 0) := by
+private theorem blockedConfigEquiv_one_two (σ : (Fin 1 → Fin 2 → α)) :
+    Kraus.blockConfigEquiv α 1 2 σ = decodeBlock d 2 (σ 0) := by
   apply List.ofFn_injective
-  rw [Kraus.ofFn_blockedConfigEquiv]
+  rw [Kraus.ofFn_blockConfigEquiv]
   simp only [flattenBlockedWord_cons,
     flattenBlockedWord_nil, List.append_nil, wordOfBlock, Kraus.wordOfBlock, List.ofFn_succ,
     List.ofFn_zero]
@@ -50,19 +48,19 @@ kernel in the original physical coordinates. Source: arXiv:1210.6613,
 equation Sn-def and the local starting point in thm:gs-subspace-uncle,
 lines 1073–1105. -/
 theorem mem_uncleBoundarySpace_two_iff
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (ψ : NSiteSpace (Fin d) 2) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (ψ : NSiteSpace α 2) :
     ψ ∈ uncleBoundarySpace A B R L 2 ↔
       Matrix.toEuclideanLin (uncleInteraction A B R L)
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ) = 0 := by
-  let f : NSiteSpace (Fin d) 2 ≃ₗ[ℂ] NSiteSpace (Fin (blockPhysDim d 2)) 1 :=
-    LinearEquiv.funCongrLeft ℂ ℂ (Kraus.blockedConfigEquiv d 1 2)
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm ψ) = 0 := by
+  let f : NSiteSpace α 2 ≃ₗ[ℂ] NSiteSpace ((Fin 2 → α)) 1 :=
+    LinearEquiv.funCongrLeft ℂ ℂ (Kraus.blockConfigEquiv α 1 2)
   have hmap (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
       f (uncleBoundaryMap A B R L 2 X) =
         groundSpaceMap (uncleTensor A B R L) 1 X := by
     ext σ
-    change uncleBoundaryMap A B R L 2 X (Kraus.blockedConfigEquiv d 1 2 σ) = _
+    change uncleBoundaryMap A B R L 2 X (Kraus.blockConfigEquiv α 1 2 σ) = _
     rw [uncleBoundaryMap_two, blockedConfigEquiv_one_two]
     have hcfg : (fun _ : Fin 1 ↦ (decodeBlockEquiv d 2).symm
         (decodeBlock d 2 (σ 0))) = σ := by
@@ -73,12 +71,12 @@ theorem mem_uncleBoundarySpace_two_iff
     rw [hcfg]
   rw [uncleInteraction_apply_eq_zero_iff, mem_map_groundSpace_iff]
   have hcoords :
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (blockPhysDim d 2)) 1))
-          ((blockedConfigLinearIsometryEquiv d 1 2).symm
-            ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ)) = f ψ := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace ((Fin 2 → α)) 1))
+          ((blockedConfigLinearIsometryEquiv 1 2).symm
+            ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm ψ)) = f ψ := by
     funext σ
-    exact blockedConfigLinearIsometryEquiv_symm_apply_apply d 1 2
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ) σ
+    exact blockedConfigLinearIsometryEquiv_symm_apply_apply 1 2
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α 2)).symm ψ) σ
   rw [hcoords]
   constructor
   · rintro ⟨X, rfl⟩
@@ -90,14 +88,14 @@ theorem mem_uncleBoundarySpace_two_iff
 length-two source boundary constraints. Source: arXiv:1210.6613,
 thm:gs-subspace-uncle, lines 1050–1073. -/
 theorem hamiltonian_uncleInteraction_apply_eq_zero_iff_boundary_windows
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    {N : ℕ} (hN : 2 ≤ N) (ψ : NSiteSpace (Fin d) N) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
+    {N : ℕ} (hN : 2 ≤ N) (ψ : NSiteSpace α N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ) = 0 ↔
-      ∀ (i : Fin N) (τ : Cfg d N),
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm ψ) = 0 ↔
+      ∀ (i : Fin N) (τ : Fin N → α),
         cyclicRestrictₗ (Fin.pos i) 2 i τ ψ ∈ uncleBoundarySpace A B R L 2 := by
   rw [hamiltonian_uncleInteraction_apply_eq_zero_iff A B R L hN]
   apply forall_congr' fun i ↦ forall_congr' fun τ ↦ ?_
@@ -109,12 +107,12 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_iff_boundary_windows
 boundary space from nonwrapping two-site constraints. Source:
 arXiv:1210.6613, thm:gs-subspace-uncle, lines 1098–1113. -/
 theorem mem_uncleBoundarySpace_of_cyclic_windows
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L))
-    {N : ℕ} (hN : 2 ≤ N) (ψ : NSiteSpace (Fin d) N)
-    (hwindow : ∀ (i : Fin N) (τ : Cfg d N),
+    {N : ℕ} (hN : 2 ≤ N) (ψ : NSiteSpace α N)
+    (hwindow : ∀ (i : Fin N) (τ : Fin N → α),
       cyclicRestrictₗ (Fin.pos i) 2 i τ ψ ∈ uncleBoundarySpace A B R L 2) :
     ψ ∈ uncleBoundarySpace A B R L N := by
   by_cases hd : d = 0
@@ -143,27 +141,27 @@ thm:gs-subspace-uncle, lines 1043–1150, at every length n+2.
 The intersection and closure properties are derived from the injective
 perturbation; neither is a premise of this statement. -/
 theorem ker_hamiltonian_uncleInteraction_eq_span_mpv
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ) :
     LinearMap.ker (Matrix.toEuclideanLin
         (translationInvariant (n + 2) (uncleInteraction A B R L)).hamiltonian) =
       Submodule.span ℂ
-        {(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm (mpv A),
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm (mpv B)} := by
+        {(WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm (mpv A),
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm (mpv B)} := by
   apply le_antisymm
   · intro v hv
     change Matrix.toEuclideanLin
       (translationInvariant (n + 2) (uncleInteraction A B R L)).hamiltonian v = 0 at hv
-    let ψ : NSiteSpace (Fin d) (n + 2) := (WithLp.linearEquiv 2 ℂ _) v
-    have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm ψ = v :=
+    let ψ : NSiteSpace α (n + 2) := (WithLp.linearEquiv 2 ℂ _) v
+    have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm ψ = v :=
       LinearEquiv.symm_apply_apply _ v
     have hwindow := (hamiltonian_uncleInteraction_apply_eq_zero_iff_boundary_windows
       A B R L (by omega) ψ).mp (by simpa only [hψ] using hv)
     have hleft := mem_uncleBoundarySpace_of_cyclic_windows A B R L hPert (by omega) ψ hwindow
     let t : Fin (n + 2) := 1
-    have hshift : ∀ (i : Fin (n + 2)) (τ : Cfg d (n + 2)),
+    have hshift : ∀ (i : Fin (n + 2)) (τ : (Fin (n + 2) → α)),
         cyclicRestrictₗ (Fin.pos i) 2 i τ (cyclicTranslateState (-t) ψ) ∈
           uncleBoundarySpace A B R L 2 := by
       intro i τ
@@ -182,13 +180,13 @@ theorem ker_hamiltonian_uncleInteraction_eq_span_mpv
       simp only [cyclicTranslateCfg, add_zero]
     rw [uncleBoundarySpace_inf_cyclicTranslate A B R L hPert n] at hclose
     have hm := Submodule.mem_map_of_mem
-      (f := (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm.toLinearMap) hclose
+      (f := (WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm.toLinearMap) hclose
     rw [Submodule.map_span] at hm
     simp only [Set.image_insert_eq, Set.image_singleton] at hm
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm ψ ∈
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm ψ ∈
       Submodule.span ℂ
-        {(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm (mpv A),
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (n + 2))).symm (mpv B)} at hm
+        {(WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm (mpv A),
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace α (n + 2))).symm (mpv B)} at hm
     rwa [hψ] at hm
   · exact span_mpv_le_ker_hamiltonian_uncleInteraction A B R L (by omega)
 

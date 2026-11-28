@@ -45,30 +45,30 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The actual moving-wall Gram map, with one Kraus matrix for each physical
 word. Its value at the identity is the finite Gram matrix in the source norm
 calculation; arXiv:1210.6613, proof of Lemma lowenergystates. -/
-def uncleWallGramMap (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
+def uncleWallGramMap (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
     Matrix (Fin b) (Fin b) ℂ →ₗ[ℂ] Matrix (Fin a) (Fin a) ℂ :=
   Matrix.rectangularKrausMap
-    (fun σ : Cfg d n ↦ uncleDomainWallWord A B R (List.ofFn σ))
+    (fun σ : (Fin n → α) ↦ uncleDomainWallWord A B R (List.ofFn σ))
 
 /-- The finite source Gram matrix is exactly the Gram map at the identity.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
-@[simp] theorem uncleWallGramMap_one (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
+@[simp] theorem uncleWallGramMap_one (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
     uncleWallGramMap A B R n 1 = uncleWallGram A B R n := by
   simp [uncleWallGramMap, Matrix.rectangularKrausMap, uncleWallGram]
 
 /-- The finite contraction of the five actual transfer maps. The two wall
 maps are rectangular and act on the actual A/B bond spaces. Source:
 arXiv:1210.6613, phiN-def and the norm calculation in Lemma lowenergystates. -/
-def uncleTwoWallTransfer (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
+def uncleTwoWallTransfer (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
     Matrix (Fin a) (Fin a) ℂ →ₗ[ℂ] Matrix (Fin a) (Fin a) ℂ :=
   (Kraus.mapLM A ^ p).comp ((uncleWallGramMap A B R r).comp
     ((Kraus.mapLM B ^ q).comp ((uncleWallGramMap B A L s).comp (Kraus.mapLM A ^ t))))
@@ -76,13 +76,13 @@ def uncleTwoWallTransfer (A : MPSTensor d a) (B : MPSTensor d b)
 /-- The operator trace is exactly the sum of squared five-segment
 coefficients, before identifying the product of configuration spaces with the
 physical chain. Source: arXiv:1210.6613, the norm of phiN-def. -/
-theorem trace_uncleTwoWallTransfer_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
+theorem trace_uncleTwoWallTransfer_eq_sum (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
     LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
         (uncleTwoWallTransfer A B R L p r q s t) =
-      ∑ u : Cfg d p, ∑ v : Cfg d r, ∑ w : Cfg d q,
-        ∑ x : Cfg d s, ∑ y : Cfg d t,
+      ∑ u : (Fin p → α), ∑ v : (Fin r → α), ∑ w : (Fin q → α),
+        ∑ x : (Fin s → α), ∑ y : (Fin t → α),
           uncleTwoWallCoefficient A B R L (List.ofFn u) (List.ofFn v)
               (List.ofFn w) (List.ofFn x) (List.ofFn y) *
             star (uncleTwoWallCoefficient A B R L (List.ofFn u) (List.ofFn v)
@@ -100,9 +100,9 @@ source trial their common length N therefore becomes one separation of
 length 2N. Source: arXiv:1210.6613, the cyclic contraction in the proof of
 Lemma lowenergystates. -/
 theorem trace_uncleTwoWallTransfer_join_exterior
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
     LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
         (uncleTwoWallTransfer A B R L p r q s t) =
       LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
@@ -119,22 +119,22 @@ theorem trace_uncleTwoWallTransfer_join_exterior
 /-- Canonical concatenation of five consecutive physical configuration segments.
 Source: arXiv:1210.6613, the five intervals in phiN-def. -/
 def uncleFiveConfigEquiv (p r q s t : ℕ) :
-    Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t))) ≃
-      Cfg d (p + r + q + s + t) := by
-  let e₁ := (Equiv.prodAssoc (Cfg d p) (Cfg d r) (Cfg d q × (Cfg d s × Cfg d t))).symm
-  let e₂ := (Fin.appendEquiv (α := Fin d) p r).prodCongr
-    (Equiv.refl (Cfg d q × (Cfg d s × Cfg d t)))
-  let e₃ := (Equiv.prodAssoc (Cfg d (p + r)) (Cfg d q) (Cfg d s × Cfg d t)).symm
-  let e₄ := (Fin.appendEquiv (α := Fin d) (p + r) q).prodCongr (Equiv.refl (Cfg d s × Cfg d t))
-  let e₅ := (Equiv.prodAssoc (Cfg d (p + r + q)) (Cfg d s) (Cfg d t)).symm
-  let e₆ := (Fin.appendEquiv (α := Fin d) (p + r + q) s).prodCongr (Equiv.refl (Cfg d t))
+    (Fin p → α) × ((Fin r → α) × ((Fin q → α) × ((Fin s → α) × (Fin t → α)))) ≃
+      (Fin (p + r + q + s + t) → α) := by
+  let e₁ := (Equiv.prodAssoc (Fin p → α) (Fin r → α) ((Fin q → α) × ((Fin s → α) × (Fin t → α)))).symm
+  let e₂ := (Fin.appendEquiv p r).prodCongr
+    (Equiv.refl ((Fin q → α) × ((Fin s → α) × (Fin t → α))))
+  let e₃ := (Equiv.prodAssoc (Fin (p + r) → α) (Fin q → α) ((Fin s → α) × (Fin t → α))).symm
+  let e₄ := (Fin.appendEquiv (p + r) q).prodCongr (Equiv.refl ((Fin s → α) × (Fin t → α)))
+  let e₅ := (Equiv.prodAssoc (Fin (p + r + q) → α) (Fin s → α) (Fin t → α)).symm
+  let e₆ := (Fin.appendEquiv (p + r + q) s).prodCongr (Equiv.refl (Fin t → α))
   exact e₁.trans (e₂.trans (e₃.trans (e₄.trans (e₅.trans (e₆.trans
-    (Fin.appendEquiv (α := Fin d) (p + r + q + s) t))))))
+    (Fin.appendEquiv (p + r + q + s) t))))))
 
 /-- The five-segment configuration equivalence is left-associated concatenation.
 Source: arXiv:1210.6613, the physical word ordering in phiN-def. -/
 theorem uncleFiveConfigEquiv_apply (p r q s t : ℕ)
-    (z : Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t)))) :
+    (z : (Fin p → α) × ((Fin r → α) × ((Fin q → α) × ((Fin s → α) × (Fin t → α))))) :
     uncleFiveConfigEquiv p r q s t z =
       Fin.append (Fin.append (Fin.append (Fin.append z.1 z.2.1) z.2.2.1)
         z.2.2.2.1) z.2.2.2.2 := rfl
@@ -145,18 +145,18 @@ not an assumed large-separation factorization or norm-growth conclusion.
 Source: arXiv:1210.6613, phiN-def and the norm computation in the proof of
 Lemma lowenergystates, lines 1196–1265. -/
 theorem norm_uncleTwoWallTrial_sq_eq_trace_transfer
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + s + t))).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (p + r + q + s + t))).symm
         (uncleTwoWallTrial A B R L p r q s t)‖ ^ 2 =
       (LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
         (uncleTwoWallTransfer A B R L p r q s t)).re := by
   classical
   rw [PiLp.norm_sq_eq_of_L2]
-  change (∑ σ : Cfg d (p + r + q + s + t),
+  change (∑ σ : (Fin (p + r + q + s + t) → α),
     ‖uncleTwoWallTrial A B R L p r q s t σ‖ ^ 2) = _
-  rw [← (uncleFiveConfigEquiv (d := d) p r q s t).sum_comp
+  rw [← (uncleFiveConfigEquiv p r q s t).sum_comp
     (fun σ ↦ ‖uncleTwoWallTrial A B R L p r q s t σ‖ ^ 2)]
   simp only [Fintype.sum_prod_type, uncleFiveConfigEquiv_apply, uncleTwoWallTrial_append_apply]
   rw [trace_uncleTwoWallTransfer_eq_sum]
@@ -169,10 +169,10 @@ lengths 2N in A and 2N−1 in B, and two moving intervals of N+1 sites.
 No limiting factorization is supplied. Source: arXiv:1210.6613,
 phiN-def and the norm calculation in Lemma lowenergystates. -/
 theorem norm_uncleTwoWallTrialSource_sq_eq_trace_transfer
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)‖ ^ 2 =
       (LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
         (uncleTwoWallTransfer A B R L (2 * N) (N + 1) (2 * N - 1) (N + 1) 0)).re := by
@@ -187,9 +187,9 @@ one-wall weights. This identifies the leading term without assuming that
 the transfer powers have already converged. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, lines 1230–1265. -/
 theorem trace_uncleWallGram_rankOne_factorization
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (ρB : Matrix (Fin b) (Fin b) ℂ)
     (r s : ℕ) :
     let fA := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
@@ -224,7 +224,7 @@ open scoped Matrix.Norms.L2Operator in
 /-- Every power of a unital transfer map contracts the matrix operator norm.
 The trial-norm, factorization and overlap estimates of arXiv:1210.6613,
 proof of Lemma lowenergystates, bound their pure transfer powers this way. -/
-theorem norm_mapLM_pow_apply_le_of_mapLM_one (A : MPSTensor d a)
+theorem norm_mapLM_pow_apply_le_of_mapLM_one (A : MPTensor α (Fin a))
     (hA : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
     ‖((Kraus.mapLM A) ^ n) X‖ ≤ ‖X‖ := by
   have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
@@ -263,7 +263,7 @@ open Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- Replacing the separated transfer powers by their canonical
 contractions gives an error bounded by a quadratic length factor times a
@@ -271,9 +271,9 @@ geometric sequence. The leading term is the product of the two
 finite wall Gram weights. Source: arXiv:1210.6613, proof of Lemma
 lowenergystates, lines 1230–1265. -/
 theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hIA : Kraus.IsInjective A) (hIB : Kraus.IsInjective B)
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
@@ -394,9 +394,9 @@ moving-window length, converges to the product of the limiting
 wall coefficients. No positive-slope or norm-growth premise is required.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hIA : Kraus.IsInjective A) (hIB : Kraus.IsInjective B)
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
@@ -405,14 +405,14 @@ theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1) :
     Tendsto (fun N : ℕ ↦
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)‖ ^ 2 / ((N + 1 : ℕ) : ℝ) ^ 2) atTop
       (𝓝 ((uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re)) := by
   obtain ⟨C, z, _, hz, hz1, hbound⟩ := uncleTwoWallTransfer_factorization_bound
     A B R L hIA hIB hUA hUB ρA hρA htrA ρB hρB htrB hFA hFB hAB hBA
   let m := fun N : ℕ ↦ ((N + 1 : ℕ) : ℝ)
   let s := fun N : ℕ ↦
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
       (uncleTwoWallTrialSource A B R L N)‖ ^ 2
   let w := fun N : ℕ ↦
     (uncleWallGramWeight A B R ρA (N + 1) * uncleWallGramWeight B A L ρB (N + 1)).re /
@@ -486,7 +486,7 @@ open scoped Matrix BigOperators Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 private theorem norm_linearMap_trace_le_entry_bound
     (T : Matrix (Fin a) (Fin a) ℂ →ₗ[ℂ] Matrix (Fin a) (Fin a) ℂ)
@@ -516,15 +516,15 @@ The stationary faithful density and mixed damping are the source normalized
 block assumptions used for the actual L-wall Gram estimate.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem norm_uncleTwoWallTrial_one_wall_sq_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hB : Kraus.mapLM B 1 = 1)
     (ρ : Matrix (Fin b) (Fin b) ℂ) (hρ : ρ.PosDef)
     (hρB : Kraus.adjointMap B ρ = ρ)
     (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ p q s t : ℕ,
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + 1 + q + s + t))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (p + 1 + q + s + t))).symm
           (uncleTwoWallTrial A B R L p 1 q s t)‖ ^ 2 ≤ C * s := by
   obtain ⟨C, hC, hL⟩ := uncleWallGramMap_apply_l2_opNorm_le_mul B A L ρ hρ hρB hA hSpect
   let S := (Matrix.trace (uncleWallGram A B R 1)).re
@@ -535,7 +535,7 @@ theorem norm_uncleTwoWallTrial_one_wall_sq_le_mul
   have hR (X : Matrix (Fin b) (Fin b) ℂ) :
       ‖uncleWallGramMap A B R 1 X‖ ≤ K * ‖X‖ := by
     change ‖Matrix.rectangularKrausMap
-      (fun σ : Cfg d 1 ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤ _
+      (fun σ : (Fin 1 → α) ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤ _
     exact (uncleWallGramMap_apply_l2_opNorm_le_trace A B R 1 X).trans
       (mul_le_mul_of_nonneg_right (by dsimp [K]; linarith) (norm_nonneg X))
   have hLbound (s : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
@@ -576,15 +576,15 @@ theorem norm_uncleTwoWallTrial_one_wall_sq_le_mul
 also has a uniform linear squared-norm bound in the first moving interval.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem norm_uncleTwoWallTrial_second_wall_sq_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hA : Kraus.mapLM A 1 = 1) (hB : Kraus.mapLM B 1 = 1)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hρA : Kraus.adjointMap A ρ = ρ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ p r q t : ℕ,
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + 1 + t))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (p + r + q + 1 + t))).symm
           (uncleTwoWallTrial A B R L p r q 1 t)‖ ^ 2 ≤ C * r := by
   obtain ⟨C, hC, hR⟩ := uncleWallGramMap_apply_l2_opNorm_le_mul A B R ρ hρ hρA hB hSpect
   let S := (Matrix.trace (uncleWallGram B A L 1)).re

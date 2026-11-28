@@ -26,43 +26,43 @@ open scoped ComplexOrder Kronecker Matrix MatrixOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The canonical two-site parent interaction is an orthogonal projection.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section II, paragraph before Lemma 2.1, and
 Section III, equation (2). -/
-theorem twoSiteParentInteractionMatrix_isStarProjection (A : MPSTensor d D) :
+theorem twoSiteParentInteractionMatrix_isStarProjection (A : MPTensor α (Fin D)) :
     IsStarProjection (twoSiteParentInteractionMatrix A) := by
   rw [isStarProjection_iff']
   constructor
   · have h := congrArg LinearMap.toMatrix' (parentInteraction_idempotent A 2)
     simp only [LinearMap.toMatrix'_mul] at h
     rw [twoSiteParentInteractionMatrix]
-    change (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv (Fin d))
-          (finTwoArrowEquiv (Fin d))) (LinearMap.toMatrix' (parentInteraction A 2)) *
-        (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv (Fin d))
-          (finTwoArrowEquiv (Fin d))) (LinearMap.toMatrix' (parentInteraction A 2)) =
-      (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv (Fin d))
-        (finTwoArrowEquiv (Fin d))) (LinearMap.toMatrix' (parentInteraction A 2))
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (finTwoArrowEquiv (Fin d))
-      (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))]
-    exact congrArg (Matrix.reindex (finTwoArrowEquiv (Fin d))
-      (finTwoArrowEquiv (Fin d))) h
+    change (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv α)
+          (finTwoArrowEquiv α)) (LinearMap.toMatrix' (parentInteraction A 2)) *
+        (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv α)
+          (finTwoArrowEquiv α)) (LinearMap.toMatrix' (parentInteraction A 2)) =
+      (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv α)
+        (finTwoArrowEquiv α)) (LinearMap.toMatrix' (parentInteraction A 2))
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (finTwoArrowEquiv α)
+      (finTwoArrowEquiv α) (finTwoArrowEquiv α)]
+    exact congrArg (Matrix.reindex (finTwoArrowEquiv α)
+      (finTwoArrowEquiv α)) h
   · simpa [Matrix.star_eq_conjTranspose] using
       (twoSiteParentInteractionMatrix_isHermitian A).eq
 
 /-- The complementary two-site parent interaction is an orthogonal projection.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2). -/
-theorem twoSiteParentGroundProjectorMatrix_isStarProjection (A : MPSTensor d D) :
+theorem twoSiteParentGroundProjectorMatrix_isStarProjection (A : MPTensor α (Fin D)) :
     IsStarProjection (twoSiteParentGroundProjectorMatrix A) := by
   exact (twoSiteParentInteractionMatrix_isStarProjection A).one_sub
 
 /-- The complementary two-site parent interaction is positive semidefinite.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2). -/
-theorem twoSiteParentGroundProjectorMatrix_posSemidef (A : MPSTensor d D) :
+theorem twoSiteParentGroundProjectorMatrix_posSemidef (A : MPTensor α (Fin D)) :
     (twoSiteParentGroundProjectorMatrix A).PosSemidef := by
   rw [← Matrix.nonneg_iff_posSemidef]
   exact (twoSiteParentGroundProjectorMatrix_isStarProjection A).nonneg
@@ -74,19 +74,19 @@ decomposition.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2). -/
 theorem IsNNCPH.twoSiteParentGroundProjectorMatrix_overlappingLifts_commute
-    {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
+    {A : MPTensor α (Fin D)} (hNNCPH : IsNNCPH A 3) :
     Matrix.leftOverlappingLift (twoSiteParentGroundProjectorMatrix A) *
         Matrix.rightOverlappingLift (twoSiteParentGroundProjectorMatrix A) =
       Matrix.rightOverlappingLift (twoSiteParentGroundProjectorMatrix A) *
         Matrix.leftOverlappingLift (twoSiteParentGroundProjectorMatrix A) := by
   let H := twoSiteParentInteractionMatrix A
-  have hLeft : Matrix.leftOverlappingLift (c := Fin d) (1 - H) =
-      1 - Matrix.leftOverlappingLift (c := Fin d) H := by
+  have hLeft : Matrix.leftOverlappingLift (c := α) (1 - H) =
+      1 - Matrix.leftOverlappingLift (c := α) H := by
     ext x y
     simp [Matrix.leftOverlappingLift, Matrix.one_apply, Prod.ext_iff]
     split_ifs <;> simp_all
-  have hRight : Matrix.rightOverlappingLift (a := Fin d) (1 - H) =
-      1 - Matrix.rightOverlappingLift (a := Fin d) H := by
+  have hRight : Matrix.rightOverlappingLift (a := α) (1 - H) =
+      1 - Matrix.rightOverlappingLift (a := α) H := by
     ext x y
     simp [Matrix.rightOverlappingLift, Matrix.one_apply, Prod.ext_iff]
     split_ifs <;> simp_all
@@ -150,7 +150,7 @@ data in the symmetric two-sided coordinates.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2). -/
 theorem IsNNCPH.nonempty_beigiSectorGraphData
-    {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
+    {A : MPTensor α (Fin D)} (hNNCPH : IsNNCPH A 3) :
     Nonempty (BeigiSectorGraphData A) := by
   classical
   obtain ⟨K, dl, dr, e, U, η, hU, hdl, hdr, hηpos, hηblock⟩ :=
@@ -158,7 +158,7 @@ theorem IsNNCPH.nonempty_beigiSectorGraphData
       (twoSiteParentGroundProjectorMatrix A)
       (twoSiteParentGroundProjectorMatrix_posSemidef A)
       hNNCPH.twoSiteParentGroundProjectorMatrix_overlappingLifts_commute
-  have hUU : (U ⊗ₖ U) ∈ Matrix.unitaryGroup (Fin d × Fin d) ℂ :=
+  have hUU : (U ⊗ₖ U) ∈ Matrix.unitaryGroup (α × α) ℂ :=
     Matrix.kronecker_mem_unitary hU hU
   have hConj : IsStarProjection
       (star (U ⊗ₖ U) * twoSiteParentGroundProjectorMatrix A * (U ⊗ₖ U)) := by
@@ -199,7 +199,7 @@ theorem IsNNCPH.nonempty_beigiSectorGraphData
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2). -/
 noncomputable def IsNNCPH.beigiSectorGraphData
-    {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) : BeigiSectorGraphData A :=
+    {A : MPTensor α (Fin D)} (hNNCPH : IsNNCPH A 3) : BeigiSectorGraphData A :=
   Classical.choice hNNCPH.nonempty_beigiSectorGraphData
 
 end MPSTensor

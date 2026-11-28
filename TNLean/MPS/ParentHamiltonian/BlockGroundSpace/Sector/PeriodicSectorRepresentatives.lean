@@ -32,7 +32,7 @@ open MPTensor
 open Filter
 open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
-variable {d DA DB m n : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {DA DB m n : ℕ}
 
 /-- Periodic tensors whose periodic vectors differ by a fixed nonzero scalar
 power have equal bond dimensions and are gauge-phase equivalent.
@@ -40,7 +40,7 @@ Proportionality is part of the explicit phase-relation hypothesis.
 Source: arXiv:1708.00029, Proposition equal-or-orthogonal-generalized;
 Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint. -/
 theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic
-    {A : MPSTensor d DA} {B : MPSTensor d DB}
+    {A : MPTensor α (Fin DA)} {B : MPTensor α (Fin DB)}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (h : MPVBlockPhaseEquiv A B) :
     ∃ e : DA = DB, GaugePhaseEquiv (e ▸ A) B := by
@@ -95,7 +95,7 @@ all lengths. The gauge is recovered before passing to open boundaries.
 Source: arXiv:1708.00029, Proposition equal-or-orthogonal-generalized;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isPeriodic
-    {A : MPSTensor d DA} {B : MPSTensor d DB}
+    {A : MPTensor α (Fin DA)} {B : MPTensor α (Fin DB)}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
         _).symm.toLinearMap) = ((groundSpace B N).map
@@ -112,7 +112,7 @@ that space. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
 commutation (ii) and Section 4; arXiv:1708.00029, Proposition
 equal-or-orthogonal-generalized. -/
 theorem MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives_of_isPeriodic
-    (A : ∀ j, MPSTensor d (dim j)) (classes : MPVPhaseClassData A)
+    (A : ∀ j, MPTensor α (Fin (dim j))) (classes : MPVPhaseClassData A)
     (hA : ∀ j, IsPeriodic (per j) (A j))
     (μ : Fin b → ℂ) (hμ : ∀ j, μ j ≠ 0) (N : ℕ) :
     ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
@@ -138,7 +138,7 @@ may be empty. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4 and
 Lemma disjoint; arXiv:1708.00029, Proposition
 equal-or-orthogonal-generalized. -/
 theorem exists_periodic_sector_representatives
-    (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
+    (μ : Fin b → ℂ) (A : ∀ j, MPTensor α (Fin (dim j))) (hμ : ∀ j, μ j ≠ 0)
     (hA : ∀ j, IsPeriodic (per j) (A j)) :
     ∃ (g : ℕ) (sel : Fin g → Fin b), Function.Injective sel ∧
       (∀ k, 0 < dim (sel k)) ∧

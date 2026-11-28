@@ -62,7 +62,7 @@ The matrix bounds the distinct-block ground-space overlaps on the common
 interval of length \(L\). The bound is uniform in the spectator lengths
 \(K,Q\); the remaining errors are the individual block projector defects. -/
 theorem norm_iSup_map_groundSpace_sub_comp_le_of_overlapMatrix
-    (A : ∀ i, MPSTensor d (D i)) (K L Q : ℕ) (B : Matrix ι ι ℝ)
+    (A : ∀ i, MPTensor α (Fin (D i))) (K L Q : ℕ) (B : Matrix ι ι ℝ)
     (hdiag : ∀ i, B i i = 0) (hB : ‖B‖ < 1 / 2)
     (hBnonneg : ∀ i j, 0 ≤ B i j)
     (hpair : ∀ i j, i ≠ j → ∀ x ∈ ((groundSpace (A i) L).map (WithLp.linearEquiv 2 ℂ
@@ -156,7 +156,7 @@ implies uniform decay of the joint projector error. This is the last
 estimate in Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (ii),
 combined with the limits in Section 6. -/
 theorem eventually_iSup_map_groundSpace_projector_defect_le
-    (A : ∀ i, MPSTensor d (D i))
+    (A : ∀ i, MPTensor α (Fin (D i)))
     (hOverlap : ∀ ε : ℝ, 0 < ε → ∀ᶠ L : ℕ in atTop,
       ∀ i j, i ≠ j → ∀ x ∈ ((groundSpace (A i) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
         ∀ y ∈ ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ
@@ -221,7 +221,7 @@ has positive length, as required in Nachtergaele, arXiv:cond-mat/9410110,
 condition C3′; the estimate follows from Lemma `commutation` (ii) and the
 limits in Section 6. -/
 theorem eventually_iSup_map_groundSpace_projector_defect_le_of_inequivalent
-    (A : ∀ i, MPSTensor d (D i))
+    (A : ∀ i, MPTensor α (Fin (D i)))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
@@ -252,21 +252,21 @@ open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
 
 /-- The projector error of a weighted direct sum tends uniformly to zero
 in the overlap length. This is the consequence of Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), used in condition C3′
 with a positive right outer interval. The block coefficients are nonzero. -/
 theorem eventually_toTensorFromBlocks_projector_defect_le
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {η : ℝ} (hη : 0 < η) :
-    let B := toTensorFromBlocks (α := Fin d) (μ := μ) A
+    let B := toTensorFromBlocks (μ := μ) A
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       ‖((groundSpace B (K + L + Q)).map (WithLp.linearEquiv 2 ℂ
           _).symm.toLinearMap).starProjection -

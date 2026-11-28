@@ -54,10 +54,10 @@ namespace MPSTensor
 /-- Propagating adjacent boundary intertwiners around one full cycle gives
 commutation with every matrix word of that length. -/
 theorem boundary_commutes_evalWord_of_cyclic_intertwining
-    {d D N : ℕ} [NeZero N] (A : MPSTensor d D)
+    {d D N : ℕ} [NeZero N] (A : MPTensor α (Fin D))
     (Y : Fin N → Matrix (Fin D) (Fin D) ℂ) (s : Fin N)
     (hStep : ∀ i a, Y i * A a = A a * Y (s + i))
-    (ω : Fin N → Fin d) (i : Fin N) :
+    (ω : Fin N → α) (i : Fin N) :
     Y i * Kraus.evalWord A (List.ofFn ω) =
       Kraus.evalWord A (List.ofFn ω) * Y i := by
   have hcycle : N • s = 0 := by simpa using (card_nsmul_eq_zero (x := s))
@@ -78,14 +78,14 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Simultaneous injectivity on the complementary \(N-1\) sites closes a family
 of open-boundary representations at every cyclic cut. This is the cyclic
 closure step of arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem mem_bntMPSVectorSpan_of_cyclic_openBoundary
-    (A : (j : Fin r) → MPSTensor d (dim j)) {N : ℕ} (hN : 2 ≤ N)
-    (hSpan : WordTupleSpanTop A (N - 1)) (ψ : NSiteSpace (Fin d) N)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {N : ℕ} (hN : 2 ≤ N)
+    (hSpan : WordTupleSpanTop A (N - 1)) (ψ : NSiteSpace α N)
     (hBoundary : ∀ i : Fin N,
       ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
         cyclicTranslateState i ψ = ∑ j, groundSpaceMap (A j) N (X j)) :
@@ -94,7 +94,7 @@ theorem mem_bntMPSVectorSpan_of_cyclic_openBoundary
   let : NeZero N := ⟨by omega⟩
   choose X hX using hBoundary
   let s : Fin N := ⟨N - 1, by omega⟩
-  have hStep : ∀ (i : Fin N) (a : Fin d) (j : Fin r),
+  have hStep : ∀ (i : Fin N) (a : α) (j : Fin r),
       X i j * A j a = A j a * X (s + i) j := by
     intro i a j
     have h := block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
@@ -122,19 +122,19 @@ interaction range exceeds a simultaneous injectivity length. Trace-preserving
 normalization supplies the open-chain intersection property. This is the
 normalized form of arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_tracePreserving
-    [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    [Nonempty α] (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
     {S L N : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
         (Matrix.toLin'
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
+          (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   have hSpans : ∀ n ≥ S, WordTupleSpanTop A n := fun n hn ↦
     wordTupleSpanTop_of_ge_of_tracePreserving A hSpan hTP hn
-  have hOpen : chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
-      groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) N := by
+  have hOpen : chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N ≤
+      groundSpace (toTensorFromBlocks (μ := μ) A) N := by
     intro φ hφ
     apply contiguous_mem_groundSpace_toTensorFromBlocks μ A hμ hTP hSpans hSL hLN
     intro k hk τ
@@ -150,7 +150,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_trace
     (hSpans (N - 1) (by omega)) ψ
   intro i
   have hcyclic := cyclicTranslateState_mem_chainGroundSpace
-    (toTensorFromBlocks (α := Fin d) (μ := μ) A) (by omega) hLN i
+    (toTensorFromBlocks (μ := μ) A) (by omega) hLN i
     (ker_hamiltonian_parentRingInteraction_le_chainGroundSpace _ (by omega) hLN hψ)
   obtain ⟨X, hX⟩ := hOpen hcyclic
   refine ⟨fun j ↦ (μ j) ^ N • Matrix.finSigmaDiagonalBlock X j, ?_⟩
@@ -167,7 +167,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+variable {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [Nonempty α] [∀ j, NeZero (dim j)]
 
 /-- The periodic local constraints have exactly the span of the component
 MPS vectors as their ground space once the interaction range exceeds the
@@ -176,11 +176,11 @@ arXiv:2011.12127, Section IV.C, lines 2126--2129. The interaction range on
 \(S+1\) sites is that of the normal-tensor theorem at lines 2087--2094; the
 closure argument at lines 2078--2079 allows larger interactions. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
-    chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N =
+    chainGroundSpace (toTensorFromBlocks (μ := μ) A) L N =
       bntMPSVectorSpan A N := by
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hHam, hBNT⟩ :=
     exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_wordTupleSpanTop
@@ -195,14 +195,14 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
 MPS span as its kernel, including at the minimal ring length \(S+1\).
 Source: CPGSV21, arXiv:2011.12127, Section IV.C, lines 2126--2129. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker
       (Matrix.toLin'
-        (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N).hamiltonian) =
+        (parentRingInteraction (toTensorFromBlocks (μ := μ) A) L N).hamiltonian) =
       bntMPSVectorSpan A N := by
   rw [ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace _ (by omega) hLN]
   exact chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hSL hLN
@@ -212,16 +212,16 @@ same periodic ground space. The terms need not be orthogonal projections.
 Source: CPGSV21, arXiv:2011.12127, the parent-Hamiltonian definition at
 lines 1995--2007 and the block-injective conclusion at lines 2126--2129. -/
 theorem ker_sum_eq_bntMPSVectorSpan_of_wordTupleSpanTop
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (hμ : ∀ j, μ j ≠ 0) {S L N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hSL : S + 1 ≤ L) (hLN : L ≤ N)
-    (H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N))
+    (H : Fin N → EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α))
     (hH : ∀ i, (H i).IsPositive)
     (hker : haveI : NeZero N := ⟨by omega⟩; ∀ i, LinearMap.ker (H i) = LinearMap.ker
       (Matrix.toEuclideanLin ((parentRingInteraction (toTensorFromBlocks μ A) L N).term i))) :
     LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan A N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   have hEq : LinearMap.ker (∑ i, H i) = LinearMap.ker
       (Matrix.toEuclideanLin (parentRingInteraction (toTensorFromBlocks μ A) L N).hamiltonian) := by

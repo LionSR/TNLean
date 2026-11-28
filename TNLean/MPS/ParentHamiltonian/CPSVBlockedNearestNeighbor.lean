@@ -35,11 +35,10 @@ ring. The distinction is documented in
 
 open MPTensor
 
-open Kraus (blockPhysDim blockPhysDim_eq_pow)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- **CPSV16 blocked nearest-neighbor parent Hamiltonian.**
 
@@ -53,33 +52,33 @@ This is the blocked-lattice statement in arXiv:1606.00608, line 527, using
 Proposition `propblockinj` (lines 342--345) and Definition 3.9
 (lines 511--525). -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltonian
-    {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
+    {A : MPTensor α (Fin D)} [NeZero D] (hA : IsCPSVCanonicalForm A) :
     ∃ g : ℕ, ∃ dim : Fin g → ℕ,
-      ∃ B : (j : Fin g) → MPSTensor d (dim j),
+      ∃ B : (j : Fin g) → MPTensor α (Fin (dim j)),
       IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
       ∃ p, 0 < p ∧ p ≤ 3 * D ^ 5 ∧
-        IsCPSVBasisOfNormalTensors (Kraus.blockTensor A p)
-          (fun j => ⟨dim j, Kraus.blockTensor (B j) p⟩) ∧
+        IsCPSVBasisOfNormalTensors (Kraus.block A p)
+          (fun j => ⟨dim j, Kraus.block (B j) p⟩) ∧
         HasParentHamiltonianGroundSpaceSpanning
-          (Kraus.blockTensor A p) 2
-          (fun j => Kraus.blockTensor (B j) p) := by
+          (Kraus.block A p) 2
+          (fun j => Kraus.block (B j) p) := by
   let data := Classical.choice hA
   let ref := data.bntRefinement
   let dim : Fin data.phaseClasses.g → ℕ := fun j =>
     data.dim (data.representativeIndex j)
-  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (dim j) := fun j =>
+  let B : (j : Fin data.phaseClasses.g) → MPTensor α (Fin (dim j)) := fun j =>
     data.blocks (data.representativeIndex j)
   have hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) := by
     simpa [dim, B] using ref.representativesBNT
   obtain ⟨p, hp, hpBound, hSpan⟩ :=
     hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
       (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
-  have hOne : WordTupleSpanTop (fun j => Kraus.blockTensor (B j) p) 1 :=
+  have hOne : WordTupleSpanTop (fun j => Kraus.block (B j) p) 1 :=
     wordTupleSpanTop_block_one B hSpan
   have hLocal :
-      groundSpace (Kraus.blockTensor A p) 2 =
+      groundSpace (Kraus.block A p) 2 =
         ⨆ j : Fin data.phaseClasses.g,
-          groundSpace (Kraus.blockTensor (B j) p) 2 := by
+          groundSpace (Kraus.block (B j) p) 2 := by
     simpa [B] using
       data.groundSpace_blockTensor_eq_iSup_representatives ref hp (by omega : 0 < 2)
   refine ⟨data.phaseClasses.g, dim, B, hBNT, p, hp, hpBound,
@@ -97,25 +96,25 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighbo
     simp
   · let : NeZero d := ⟨hd⟩
     let blocks : (j : Fin data.phaseClasses.g) →
-        MPSTensor (blockPhysDim d p) (dim j) :=
-      fun j ↦ Kraus.blockTensor (B j) p
+        MPTensor (Fin p → α) (Fin (dim j)) :=
+      fun j ↦ Kraus.block (B j) p
     let : ∀ j : Fin data.phaseClasses.g, NeZero (dim j) := fun j ↦
       ⟨(hBNT.blocks_normal j).bondDim_ne_zero⟩
     have hDirect :
         HasParentHamiltonianGroundSpaceSpanning
-          (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (fun _ ↦ 1) blocks) 2 blocks := by
+          (toTensorFromBlocks (α := (Fin p → α)) (fun _ ↦ 1) blocks) 2 blocks := by
       exact
         hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one
           (fun _ ↦ 1) blocks (by simp) hOne
     have hDirectLocal :
         groundSpace
-            (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (fun _ ↦ 1) blocks) 2 =
+            (toTensorFromBlocks (α := (Fin p → α)) (fun _ ↦ 1) blocks) 2 =
           ⨆ j : Fin data.phaseClasses.g, groundSpace (blocks j) 2 :=
       groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) blocks (by simp) 2
     have hActualDirect :
-        groundSpace (Kraus.blockTensor A p) 2 =
+        groundSpace (Kraus.block A p) 2 =
           groundSpace
-            (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (fun _ ↦ 1) blocks) 2 := by
+            (toTensorFromBlocks (α := (Fin p → α)) (fun _ ↦ 1) blocks) 2 := by
       exact hLocal.trans hDirectLocal.symm
     exact hDirect.of_groundSpace_eq hActualDirect
 

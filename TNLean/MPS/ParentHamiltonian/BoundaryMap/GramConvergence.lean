@@ -31,13 +31,13 @@ open Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- If the complementary transfer map has spectral radius less than one, then the
 squared distance from the ground-space Gram operator to the reshuffled fixed-point
 projection decays geometrically, up to the dimension-cubed norm-conversion factor. -/
 theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (htr : trace ρ ≠ 0)
     (hTP : IsTracePreservingMap (Kraus.transferMap A))
     (hρ : Kraus.transferMap A ρ = ρ)
@@ -77,7 +77,7 @@ theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
 /-- Under the same complementary spectral-radius hypothesis, the ground-space Gram
 operators converge to the reshuffled fixed-point projection. -/
 theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (A : MPTensor α (Fin D)) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (htr : trace ρ ≠ 0)
     (hTP : IsTracePreservingMap (Kraus.transferMap A))
     (hρ : Kraus.transferMap A ρ = ρ)
@@ -123,12 +123,12 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- A primitive MPS tensor satisfies the quantitative geometric bound for convergence of
 its ground-space Gram operators to the reshuffled fixed-point projection. -/
 theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, 1 ≤ n →
       ‖groundSpaceGram A n - Matrix.gramReshuffle
@@ -144,7 +144,7 @@ theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
 /-- The ground-space Gram operators of a primitive MPS tensor converge to the reshuffled
 fixed-point projection. -/
 theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop
       (nhds (Matrix.gramReshuffle

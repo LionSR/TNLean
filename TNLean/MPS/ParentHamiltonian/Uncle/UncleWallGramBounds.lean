@@ -26,14 +26,14 @@ open Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The one-wall Gram weight is uniformly bounded in norm by a
 constant times its length. The bound is derived from its mixed-series
 limit; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallGramWeight_norm_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.IsHermitian)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
@@ -79,8 +79,8 @@ theorem uncleWallGramWeight_norm_le_mul
 trace by its weighted trace. Source: arXiv:1210.6613, the faithful fixed
 densities in the normalized standard form used by Lemma lowenergystates. -/
 theorem uncleWallGram_trace_re_le_weight
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef) :
     ∃ K : ℝ, 0 < K ∧ ∀ n : ℕ,
       (Matrix.trace (uncleWallGram A B R n)).re ≤ K * (uncleWallGramWeight A B R ρ n).re := by
@@ -109,8 +109,8 @@ theorem uncleWallGram_trace_re_le_weight
 word length under source faithful stationary/unital normalizations and
 mixed spectral damping; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallGram_trace_re_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
@@ -137,14 +137,14 @@ Gram trace times its input norm. This uses each wall word and the
 rectangular Hilbert--Schmidt trace bound; arXiv:1210.6613, transfer estimates
 in the proof of Lemma lowenergystates. -/
 theorem uncleWallGramMap_apply_l2_opNorm_le_trace
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ) (n : ℕ)
     (X : Matrix (Fin b) (Fin b) ℂ) :
     ‖Matrix.rectangularKrausMap
-        (fun σ : Fin n → Fin d ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤
+        (fun σ : Fin n → α ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤
       (Matrix.trace (uncleWallGram A B R n)).re * ‖X‖ := by
-  let W := fun σ : Fin n → Fin d ↦ uncleDomainWallWord A B R (List.ofFn σ)
-  have hterm (σ : Fin n → Fin d) :
+  let W := fun σ : Fin n → α ↦ uncleDomainWallWord A B R (List.ofFn σ)
+  have hterm (σ : Fin n → α) :
       ‖W σ * X * (W σ)ᴴ‖ ≤ (Matrix.trace (W σ * (W σ)ᴴ)).re * ‖X‖ := by
     calc
       ‖W σ * X * (W σ)ᴴ‖ ≤ (‖W σ‖ * ‖X‖) * ‖(W σ)ᴴ‖ :=
@@ -170,14 +170,14 @@ theorem uncleWallGramMap_apply_l2_opNorm_le_trace
 the Euclidean matrix operator norm, derived from its Gram trace.
 Source: arXiv:1210.6613, transfer estimates in Lemma lowenergystates. -/
 theorem uncleWallGramMap_apply_l2_opNorm_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, ∀ X : Matrix (Fin b) (Fin b) ℂ,
       ‖Matrix.rectangularKrausMap
-          (fun σ : Fin n → Fin d ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤
+          (fun σ : Fin n → α ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤
         C * n * ‖X‖ := by
   obtain ⟨C, hC, hbound⟩ := uncleWallGram_trace_re_le_mul A B R ρ hρ hA hB hSpect
   exact ⟨C, hC, fun n X ↦ (uncleWallGramMap_apply_l2_opNorm_le_trace A B R n X).trans
@@ -187,8 +187,8 @@ theorem uncleWallGramMap_apply_l2_opNorm_le_mul
 Euclidean operator norm. This follows from its positive trace bound;
 arXiv:1210.6613, endpoint norm estimates in Lemma lowenergystates. -/
 theorem uncleWallGram_l2_opNorm_le_mul
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :

@@ -27,7 +27,7 @@ open scoped BigOperators InnerProductSpace ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Gaps for a prefix and a terminal interval give a full-chain gap if the
 product of their ground projections differs from the full-chain ground
@@ -37,7 +37,7 @@ the full-chain energy, so a common interval gap \(\kappa\) gives a gap
 auxiliary two-interval consequence of the projector estimate in Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, Lemma `commutation` (ii). -/
 theorem hamiltonian_parentChainInteraction_gap_of_overlapping_interval_gaps
-    (A : MPSTensor d D) (R N n W : ℕ) {κ : ℝ} (hκ : 0 ≤ κ)
+    (A : MPTensor α (Fin D)) (R N n W : ℕ) {κ : ℝ} (hκ : 0 ≤ κ)
     (hLeft : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
       ((parentChainInteraction A R N).restrict fun i ↦ i.val + R ≤ n).hamiltonian) μ →
         μ = 0 ∨ (κ : ℂ) ≤ μ)

@@ -432,23 +432,23 @@ final-pair lift is the identity Kronecker the two-site matrix.
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α]
 
 /-! ### Matrices of adjacent pair lifts -/
 
-@[simp] private theorem axPairCfg_vecCons (a b c : Fin d) :
+@[simp] private theorem axPairCfg_vecCons (a b c : α) :
     axPairCfg ![a, b, c] = ![a, b] := by
   funext k
   fin_cases k <;> rfl
 
-@[simp] private theorem xbPairCfg_vecCons (a b c : Fin d) :
+@[simp] private theorem xbPairCfg_vecCons (a b c : α) :
     xbPairCfg ![a, b, c] = ![b, c] := by
   funext k
   fin_cases k <;> rfl
 
 /-- Replacing the first pair gives a prescribed triple precisely when the new
 pair and untouched final coordinate agree. -/
-private theorem replaceAXCfg_eq_iff (sigma tau : Cfg d 3) (alpha : Cfg d 2) :
+private theorem replaceAXCfg_eq_iff (sigma tau : (Fin 3 → α)) (alpha : (Fin 2 → α)) :
     replaceAXCfg sigma alpha = tau ↔
       alpha = axPairCfg tau ∧ sigma 2 = tau 2 := by
   constructor
@@ -461,7 +461,7 @@ private theorem replaceAXCfg_eq_iff (sigma tau : Cfg d 3) (alpha : Cfg d 2) :
 
 /-- Replacing the final pair gives a prescribed triple precisely when the new
 pair and untouched initial coordinate agree. -/
-private theorem replaceXBCfg_eq_iff (sigma tau : Cfg d 3) (beta : Cfg d 2) :
+private theorem replaceXBCfg_eq_iff (sigma tau : (Fin 3 → α)) (beta : (Fin 2 → α)) :
     replaceXBCfg sigma beta = tau ↔
       beta = xbPairCfg tau ∧ sigma 0 = tau 0 := by
   constructor
@@ -479,29 +479,29 @@ This is the homogeneous three-single-site coefficient-space specialization of
 the \(AX\) factor action in arXiv:1606.00608, lines 2185--2186 and 2205--2218.
 -/
 theorem leftPairLift_toMatrix_reindex
-    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
-    Matrix.reindex (finThreeArrowEquiv (Fin d))
-        (finThreeArrowEquiv (Fin d))
+    (Q : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2) :
+    Matrix.reindex (finThreeArrowEquiv α)
+        (finThreeArrowEquiv α)
         (LinearMap.toMatrix' (leftPairLift Q)) =
-      appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
-        (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
+      appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv α)
+        (finTwoArrowEquiv α) (LinearMap.toMatrix' Q)) := by
   classical
   ext σ τ
   change Q (fun α ↦
-      (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-        NSiteSpace (Fin d) 3)
-        (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α))
-      (axPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
-    Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ))
-      ((finTwoArrowEquiv (Fin d)).symm (σ.1, σ.2.1)) *
+      (Pi.single ((finThreeArrowEquiv α).symm τ) (1 : ℂ) :
+        NSiteSpace α 3)
+        (replaceAXCfg ((finThreeArrowEquiv α).symm σ) α))
+      (axPairCfg ((finThreeArrowEquiv α).symm σ)) =
+    Q (Pi.single ((finTwoArrowEquiv α).symm (τ.1, τ.2.1)) (1 : ℂ))
+      ((finTwoArrowEquiv α).symm (σ.1, σ.2.1)) *
         (if σ.2.2 = τ.2.2 then 1 else 0)
   by_cases h : σ.2.2 = τ.2.2
   · have hslice : (fun α ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace (Fin d) 3)
-          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α)) =
-        (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ) :
-          NSiteSpace (Fin d) 2) := by
+        (Pi.single ((finThreeArrowEquiv α).symm τ) (1 : ℂ) :
+          NSiteSpace α 3)
+          (replaceAXCfg ((finThreeArrowEquiv α).symm σ) α)) =
+        (Pi.single ((finTwoArrowEquiv α).symm (τ.1, τ.2.1)) (1 : ℂ) :
+          NSiteSpace α 2) := by
       funext α
       simp only [Pi.single_apply]
       simp only [replaceAXCfg_eq_iff]
@@ -509,9 +509,9 @@ theorem leftPairLift_toMatrix_reindex
     rw [hslice]
     simp [finTwoArrowEquiv, h]
   · have hslice : (fun α ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace (Fin d) 3)
-          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α)) = 0 := by
+        (Pi.single ((finThreeArrowEquiv α).symm τ) (1 : ℂ) :
+          NSiteSpace α 3)
+          (replaceAXCfg ((finThreeArrowEquiv α).symm σ) α)) = 0 := by
       funext α
       simp only [Pi.single_apply, Pi.zero_apply]
       simp only [replaceAXCfg_eq_iff]
@@ -526,29 +526,29 @@ This is the homogeneous three-single-site coefficient-space specialization of
 the \(XB\) factor action in arXiv:1606.00608, lines 2185--2186 and 2205--2218.
 -/
 theorem rightPairLift_toMatrix_reindex
-    (Q : NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2) :
-    Matrix.reindex (finThreeArrowEquiv (Fin d))
-        (finThreeArrowEquiv (Fin d))
+    (Q : NSiteSpace α 2 →ₗ[ℂ] NSiteSpace α 2) :
+    Matrix.reindex (finThreeArrowEquiv α)
+        (finThreeArrowEquiv α)
         (LinearMap.toMatrix' (rightPairLift Q)) =
-      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
-        (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
+      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv α)
+        (finTwoArrowEquiv α) (LinearMap.toMatrix' Q)) := by
   classical
   ext σ τ
   change Q (fun β ↦
-      (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-        NSiteSpace (Fin d) 3)
-        (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β))
-      (xbPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
+      (Pi.single ((finThreeArrowEquiv α).symm τ) (1 : ℂ) :
+        NSiteSpace α 3)
+        (replaceXBCfg ((finThreeArrowEquiv α).symm σ) β))
+      (xbPairCfg ((finThreeArrowEquiv α).symm σ)) =
     (if σ.1 = τ.1 then 1 else 0) *
-      Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ))
-        ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
+      Q (Pi.single ((finTwoArrowEquiv α).symm (τ.2.1, τ.2.2)) (1 : ℂ))
+        ((finTwoArrowEquiv α).symm (σ.2.1, σ.2.2))
   by_cases h : σ.1 = τ.1
   · have hslice : (fun β ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace (Fin d) 3)
-          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β)) =
-        (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ) :
-          NSiteSpace (Fin d) 2) := by
+        (Pi.single ((finThreeArrowEquiv α).symm τ) (1 : ℂ) :
+          NSiteSpace α 3)
+          (replaceXBCfg ((finThreeArrowEquiv α).symm σ) β)) =
+        (Pi.single ((finTwoArrowEquiv α).symm (τ.2.1, τ.2.2)) (1 : ℂ) :
+          NSiteSpace α 2) := by
       funext β
       simp only [Pi.single_apply]
       simp only [replaceXBCfg_eq_iff]
@@ -556,9 +556,9 @@ theorem rightPairLift_toMatrix_reindex
     rw [hslice]
     simp [finTwoArrowEquiv, h]
   · have hslice : (fun β ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace (Fin d) 3)
-          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β)) = 0 := by
+        (Pi.single ((finThreeArrowEquiv α).symm τ) (1 : ℂ) :
+          NSiteSpace α 3)
+          (replaceXBCfg ((finThreeArrowEquiv α).symm σ) β)) = 0 := by
       funext β
       simp only [Pi.single_apply, Pi.zero_apply]
       simp only [replaceXBCfg_eq_iff]

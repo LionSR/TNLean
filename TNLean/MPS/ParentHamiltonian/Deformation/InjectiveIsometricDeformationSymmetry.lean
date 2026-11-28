@@ -45,10 +45,10 @@ variable {G : Type*} [Monoid G] {d D : ℕ}
 unitary virtual conjugations. Source: arXiv:1010.3732, lines 652--660.
 The faithful adjoint fixed point needed to normalize the gauge is derived. -/
 theorem exists_unitary_virtual_of_isOnSiteSymmetric [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     ∃ V : Matrix (Fin D) (Fin D) ℂ,
       V ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
@@ -93,7 +93,7 @@ private theorem singletonVirtualAction_mem_unitaryGroup
     (Matrix.transpose_mem_unitaryGroup_iff.mpr hV) (Unitary.star_mem hV))
 
 private theorem blockPhysicalMatrix_singleton_covariance
-    (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+    (A : MPTensor α (Fin D)) (u : Matrix α α ℂ)
     (V : Matrix (Fin D) (Fin D) ℂ)
     (hCov : ∀ i, rotatePhysical u A i = V * A i * Vᴴ) :
     u * blockPhysicalMatrix (fun _ : Fin 1 => A) =
@@ -115,10 +115,10 @@ private theorem blockPhysicalMatrix_singleton_covariance
 unitary covariance on its joint physical map. Source: arXiv:1010.3732,
 lines 652--660, in the already-blocked single-block case. -/
 theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     ∃ X : Matrix (BlockEntryIndex (fun _ : Fin 1 => D))
         (BlockEntryIndex (fun _ : Fin 1 => D)) ℂ,
@@ -134,10 +134,10 @@ theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric [NeZe
 an exact on-site symmetry of an injective unital-normalized tensor.
 Source: arXiv:1010.3732, lines 660--676. -/
 theorem commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     Commute (U g) (leftPolarPhysicalFactor (fun _ : Fin 1 => A)) := by
   exact (exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric
@@ -150,10 +150,10 @@ entire constructed single-block isometric deformation. Source:
 arXiv:1010.3732, lines 672--676. The same virtual unitary works at every
 parameter; no adjoint fixed point is supplied as a hypothesis. -/
 theorem exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetric
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     ∃ X : Matrix (BlockEntryIndex (fun _ : Fin 1 => D))
         (BlockEntryIndex (fun _ : Fin 1 => D)) ℂ,
@@ -170,10 +170,10 @@ theorem exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetri
 on-site symmetry admits a unitary virtual conjugation. Source:
 arXiv:1010.3732, lines 652--660. No faithful fixed point is supplied. -/
 theorem exists_unitary_virtual_of_isOnSiteSymmetric_of_isTP [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     ∃ V : Matrix (Fin D) (Fin D) ℂ,
       V ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
@@ -196,10 +196,10 @@ theorem exists_unitary_virtual_of_isOnSiteSymmetric_of_isTP [NeZero D]
 physical map. Source: arXiv:1010.3732, lines 652--660; this uses the
 partial-trace normalization printed at line 653. -/
 theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_of_isTP
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     ∃ X : Matrix (BlockEntryIndex (fun _ : Fin 1 => D))
         (BlockEntryIndex (fun _ : Fin 1 => D)) ℂ,
@@ -215,10 +215,10 @@ theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_of_is
 in the source's trace-preserving canonical orientation. Source:
 arXiv:1010.3732, lines 652--676. -/
 theorem commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     Commute (U g) (leftPolarPhysicalFactor (fun _ : Fin 1 => A)) := by
   exact (exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_of_isTP
@@ -230,10 +230,10 @@ theorem commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP [NeZero D]
 unitary derived from exact state symmetry intertwines the entire constructed
 isometric deformation. Source: arXiv:1010.3732, lines 652--676. -/
 theorem exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetric_of_isTP
-    [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    [NeZero D] (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix α α ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup α ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) :
     ∃ X : Matrix (BlockEntryIndex (fun _ : Fin 1 => D))
         (BlockEntryIndex (fun _ : Fin 1 => D)) ℂ,

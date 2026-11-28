@@ -32,26 +32,26 @@ open scoped InnerProductSpace ComplexConjugate ComplexOrder
 
 namespace MPSTensor
 
-variable {d L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {L : ℕ}
 
 /-- Precomposing configurations with a transposition of two sites permutes the
 configurations, so it leaves sums over all configurations unchanged. -/
-theorem sum_cfg_comp_swap {M : Type*} [AddCommMonoid M] (f : Cfg d L → M) (a b : Fin L) :
-    ∑ σ : Cfg d L, f (σ ∘ Equiv.swap a b) = ∑ σ, f σ :=
+theorem sum_cfg_comp_swap {M : Type*} [AddCommMonoid M] (f : (Fin L → α) → M) (a b : Fin L) :
+    ∑ σ : (Fin L → α), f (σ ∘ Equiv.swap a b) = ∑ σ, f σ :=
   Fintype.sum_equiv ((Equiv.swap a b).arrowCongr (Equiv.refl _)) _ _ fun _ => rfl
 
 /-- The inner product of two coefficient vectors transported to the \(\ell^2\) space
 is the sum over configurations of \(\overline{f(\sigma)}\,g(\sigma)\). -/
-theorem inner_withLpLinearEquiv_symm (f g : NSiteSpace (Fin d) L) :
-    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm f,
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm g⟫_ℂ =
+theorem inner_withLpLinearEquiv_symm (f g : NSiteSpace α L) :
+    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm f,
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm g⟫_ℂ =
       ∑ σ, conj (f σ) * g σ := by
   simp only [PiLp.inner_apply, RCLike.inner_apply]
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
 /-- Moving one transposition of sites from the right to the left argument of the
 \(\ell^2\) pairing of coefficient vectors. -/
-theorem sum_conj_mul_comp_swap (f g : NSiteSpace (Fin d) L) (a b : Fin L) :
+theorem sum_conj_mul_comp_swap (f g : NSiteSpace α L) (a b : Fin L) :
     ∑ σ, conj (f σ) * g (σ ∘ Equiv.swap a b) =
       ∑ σ, conj (f (σ ∘ Equiv.swap a b)) * g σ := by
   rw [← sum_cfg_comp_swap (fun σ => conj (f σ) * g (σ ∘ Equiv.swap a b)) a b]
@@ -60,12 +60,12 @@ theorem sum_conj_mul_comp_swap (f g : NSiteSpace (Fin d) L) (a b : Fin L) :
 
 /-- An operator on coefficient vectors whose transport to the \(\ell^2\) space is
 positive has only nonnegative eigenvalues. -/
-theorem nonneg_of_hasEigenvalue_of_isPositive_conj {T : NSiteSpace (Fin d) L →ₗ[ℂ] NSiteSpace (Fin d) L}
-    (hT : ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.toLinearMap ∘ₗ T ∘ₗ
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).toLinearMap).IsPositive)
+theorem nonneg_of_hasEigenvalue_of_isPositive_conj {T : NSiteSpace α L →ₗ[ℂ] NSiteSpace α L}
+    (hT : ((WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.toLinearMap ∘ₗ T ∘ₗ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).toLinearMap).IsPositive)
     {μ : ℂ} (hμ : Module.End.HasEigenvalue T μ) : 0 ≤ μ := by
   obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
-  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)
+  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace α L)
   refine hT.nonneg_of_apply_eq_smul (v := e.symm v) (by simpa using hv.2) ?_
   simp [Module.End.mem_eigenspace_iff.1 hv.1]
 

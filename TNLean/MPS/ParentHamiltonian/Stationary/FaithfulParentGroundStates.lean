@@ -122,7 +122,7 @@ theorem exists_parentGroundStateFace_classification_of_leftCanonical_of_posDef_f
       ((groundSpace (blockTensor (toTensorFromBlocks (fun _ => 1) C) L) N).map (WithLp.linearEquiv 2
           ℂ _).symm.toLinearMap) := by
     apply Submodule.map_injective_of_injective
-      (blockedConfigLinearIsometryEquiv d N L).injective
+      (blockedConfigLinearIsometryEquiv (α := Fin d) N L).injective
     rw [map_groundSpace_blockTensor_map, map_groundSpace_blockTensor_map, hGS (N * L)]
   exact hBlocked.trans (hJoint N)
 

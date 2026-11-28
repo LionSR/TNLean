@@ -28,7 +28,7 @@ open scoped BigOperators Matrix Topology Matrix.Norms.Operator InnerProductSpace
 
 namespace MPSTensor
 
-variable {d D₁ D₂ : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D₁ D₂ : ℕ}
 
 /- Local shortcuts for the scalar-action continuity of Euclidean spaces and
 rectangular matrices; without them these instances are re-synthesized through
@@ -45,26 +45,26 @@ private local instance instContinuousSMulRectMatrix {m n : ℕ} :
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint, equations
 ip--P12, with a local observable inserted in the physical contraction. -/
 noncomputable def mixedPhysicalObservableTransfer
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁) (k : ℕ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁)) (k : ℕ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     Matrix (Fin D₂) (Fin D₁) ℂ →ₗ[ℂ] Matrix (Fin D₂) (Fin D₁) ℂ :=
-  ∑ σ : Cfg d k, ∑ τ : Cfg d k, X τ σ •
+  ∑ σ : (Fin k → α), ∑ τ : (Fin k → α), X τ σ •
     ((mulLeftLinearMap (n := Fin D₁) ℂ (Kraus.evalWord B (List.ofFn σ))).comp
       (mulRightLinearMap (l := Fin D₂) ℂ (Kraus.evalWord A (List.ofFn τ))ᴴ))
 
 /-- Explicit physical contraction defining the rectangular insertion. -/
 theorem mixedPhysicalObservableTransfer_apply
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁) (k : ℕ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (Y : Matrix (Fin D₂) (Fin D₁) ℂ) :
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁)) (k : ℕ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (Y : Matrix (Fin D₂) (Fin D₁) ℂ) :
     mixedPhysicalObservableTransfer B A k X Y =
-      ∑ σ : Cfg d k, ∑ τ : Cfg d k,
+      ∑ σ : (Fin k → α), ∑ τ : (Fin k → α),
         X τ σ • (Kraus.evalWord B (List.ofFn σ) * Y * (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
   simp [mixedPhysicalObservableTransfer, Matrix.mul_assoc]
 
 /-- The diagonal mixed insertion is the usual single-tensor insertion.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem mixedPhysicalObservableTransfer_self {D : ℕ}
-    (A : MPSTensor d D) (k : ℕ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (A : MPTensor α (Fin D)) (k : ℕ) (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     mixedPhysicalObservableTransfer A A k X = physicalObservableTransfer A k X :=
   LinearMap.ext fun Y ↦ by
     simp only [mixedPhysicalObservableTransfer_apply, physicalObservableTransfer_apply]
@@ -72,12 +72,12 @@ theorem mixedPhysicalObservableTransfer_self {D : ℕ}
 /-- Matrix-unit entries of a mixed physical observable pullback. Source:
 Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint, equations ip--P12. -/
 theorem inner_single_mixed_observable_groundSpaceMapES_single
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) {k : ℕ}
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     (a b : Fin D₁) (c e : Fin D₂) :
     ⟪EuclideanSpace.single (b, a) 1,
       ((groundSpaceMapES A k).adjoint.comp
-        ((Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X).comp
+        ((Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X).comp
           (groundSpaceMapES B k))) (EuclideanSpace.single (e, c) 1)⟫_ℂ =
       mixedPhysicalObservableTransfer B A k X (Matrix.single c a 1) e b := by
   rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right,
@@ -85,7 +85,7 @@ theorem inner_single_mixed_observable_groundSpaceMapES_single
       ← Matrix.frobeniusEquivEuclidean_single, groundSpaceMapES_frobeniusEquivEuclidean_apply,
       groundSpaceMapES_frobeniusEquivEuclidean_apply]
   change inner ℂ (WithLp.toLp 2 (groundSpaceMap A k (Matrix.single a b 1)))
-    (Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X
+    (Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X
       (WithLp.toLp 2 (groundSpaceMap B k (Matrix.single c e 1)))) = _
   rw [Matrix.toEuclideanCLM_toLp, EuclideanSpace.inner_toLp_toLp,
     mixedPhysicalObservableTransfer_apply, Finset.sum_comm]
@@ -97,10 +97,10 @@ theorem inner_single_mixed_observable_groundSpaceMapES_single
 physical boundary pullback. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma disjoint, equations ip--P12. -/
 theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES_eq_mixedTransfer
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) {k : ℕ}
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     (groundSpaceMapES A k).adjoint.comp
-      ((Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X).comp (groundSpaceMapES B k)) =
+      ((Matrix.toEuclideanCLM (n := (Fin k → α)) (𝕜 := ℂ) X).comp (groundSpaceMapES B k)) =
       (Matrix.toEuclideanLin
         (fun (b, a) (e, c) ↦ mixedPhysicalObservableTransfer B A k X
           (Matrix.single c a 1) e b)).toContinuousLinearMap := by
@@ -118,8 +118,8 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES_eq_mixedTransfer
 /-- Inserting the identity gives the ordinary mixed transfer power. Source:
 Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint, equation ip. -/
 theorem mixedPhysicalObservableTransfer_one
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁) (k : ℕ) :
-    mixedPhysicalObservableTransfer B A k (1 : Matrix (Cfg d k) (Cfg d k) ℂ) =
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁)) (k : ℕ) :
+    mixedPhysicalObservableTransfer B A k (1 : Matrix (Fin k → α) (Fin k → α) ℂ) =
       Kraus.mixedMapLM B A ^ k := by
   classical
   apply LinearMap.ext
@@ -130,13 +130,13 @@ theorem mixedPhysicalObservableTransfer_one
 maps. Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b),
 the ordered transfer contraction underlying Lemma disjoint. -/
 theorem mixedPhysicalObservableTransfer_appendObservable
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁) {k l : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (Z : Matrix (Cfg d l) (Cfg d l) ℂ) :
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁)) {k l : ℕ}
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (Z : Matrix (Fin l → α) (Fin l → α) ℂ) :
     mixedPhysicalObservableTransfer B A (k + l) (appendObservable X Z) =
       mixedPhysicalObservableTransfer B A k X * mixedPhysicalObservableTransfer B A l Z := by
   classical
-  have hsum : ∀ f : Cfg d (k + l) → Matrix (Fin D₂) (Fin D₁) ℂ,
-      ∑ σ, f σ = ∑ σ₁ : Cfg d k, ∑ σ₂ : Cfg d l, f (Fin.append σ₁ σ₂) :=
+  have hsum : ∀ f : (Fin (k + l) → α) → Matrix (Fin D₂) (Fin D₁) ℂ,
+      ∑ σ, f σ = ∑ σ₁ : (Fin k → α), ∑ σ₂ : (Fin l → α), f (Fin.append σ₁ σ₂) :=
     fun f ↦ by
       rw [← (Fin.appendEquiv k l).sum_comp, Fintype.sum_prod_type]
       rfl
@@ -153,8 +153,8 @@ theorem mixedPhysicalObservableTransfer_appendObservable
 mixed transfer powers. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma disjoint and lines 2649--2675. -/
 theorem mixedPhysicalObservableTransfer_bulkObservable
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁)) {k : ℕ}
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     mixedPhysicalObservableTransfer B A ((ℓ + k) + r) (bulkObservable X ℓ r) =
       (Kraus.mixedMapLM B A) ^ ℓ * mixedPhysicalObservableTransfer B A k X *
         (Kraus.mixedMapLM B A) ^ r := by
@@ -166,7 +166,7 @@ theorem mixedPhysicalObservableTransfer_bulkObservable
 rectangular transfer powers. This is the finite-dimensional decay step in
 Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma disjoint. -/
 theorem mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁)
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁))
     (h : Kraus.mixedMapSpectralRadius B A < 1) :
     let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D₂) (Fin D₁) ℂ)
     Tendsto (fun n : ℕ ↦ Φ ((Kraus.mixedMapLM B A) ^ n)) atTop (nhds 0) := by
@@ -177,9 +177,9 @@ theorem mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one
 mixed spectral radius is strict. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma disjoint and the distinct-sector estimates used in lines 2649--2675. -/
 theorem mixedPhysicalObservableTransfer_sandwich_tendsto_zero
-    (B : MPSTensor d D₂) (A : MPSTensor d D₁)
+    (B : MPTensor α (Fin D₂)) (A : MPTensor α (Fin D₁))
     (h : Kraus.mixedMapSpectralRadius B A < 1) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D₂) (Fin D₁) ℂ)
@@ -196,10 +196,10 @@ theorem mixedPhysicalObservableTransfer_sandwich_tendsto_zero
 reshuffling of its mixed transfer sandwich. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma disjoint and lines 2649--2675. -/
 theorem adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES_eq_mixedTransfer
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ℓ r : ℕ) :
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) {k : ℕ}
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ℓ r : ℕ) :
     (groundSpaceMapES A ((ℓ + k) + r)).adjoint.comp
-      ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ + k) + r)) (𝕜 := ℂ)
+      ((Matrix.toEuclideanCLM (n := (Fin ((ℓ + k) + r) → α)) (𝕜 := ℂ)
         (bulkObservable X ℓ r)).comp (groundSpaceMapES B ((ℓ + k) + r))) =
       (Matrix.toEuclideanLin (fun (b, a) (e, c) ↦
         ((Kraus.mixedMapLM B A) ^ ℓ * mixedPhysicalObservableTransfer B A k X *
@@ -212,13 +212,13 @@ observable vanish in operator norm as both free intervals grow. This is an
 intermediate distinct-sector estimate in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma disjoint and lines 2649--2675. -/
 theorem adjoint_groundSpaceMapES_bulkObservable_comp_tendsto_zero
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (h : Kraus.mixedMapSpectralRadius B A < 1) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n ↦ (groundSpaceMapES A ((ℓ n + k) + r n)).adjoint.comp
-      ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
+      ((Matrix.toEuclideanCLM (n := (Fin ((ℓ n + k) + r n) → α)) (𝕜 := ℂ)
         (bulkObservable X (ℓ n) (r n))).comp
           (groundSpaceMapES B ((ℓ n + k) + r n)))) f (nhds 0) := by
   let F n := (Kraus.mixedMapLM B A) ^ ℓ n * mixedPhysicalObservableTransfer B A k X *

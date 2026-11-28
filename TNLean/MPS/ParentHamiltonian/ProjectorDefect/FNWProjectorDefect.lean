@@ -27,13 +27,13 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The full FNW boundary range lies in the left-overlap range. -/
 private theorem fnwBoundaryRange_le_leftOverlapRange
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) :
     weighted_matrix_instances ρ hρ in
     fnwBoundaryRange ρ hρ A ((ℓ + m) + r) ≤
       LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r) := by
@@ -44,7 +44,7 @@ private theorem fnwBoundaryRange_le_leftOverlapRange
 
 /-- The full FNW boundary range lies in the right-overlap range. -/
 private theorem fnwBoundaryRange_le_rightOverlapRange
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) :
     weighted_matrix_instances ρ hρ in
     fnwBoundaryRange ρ hρ A ((ℓ + m) + r) ≤
       LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r) := by
@@ -58,7 +58,7 @@ coefficient is kept as the separate linear and quadratic contributions from
 Lemma 6.2. -/
 private theorem norm_fnwOverlapRange_projector_defect_le [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) (ℓ m r : ℕ)
     (hminus : 0 < fnwLowerBoundaryConstant ρ hρ A m) :
     weighted_matrix_instances ρ hρ in
@@ -93,33 +93,33 @@ private theorem norm_fnwOverlapRange_projector_defect_le [NeZero D]
     exact norm_inner_fnwOverlapMaps_le_linear_add_quadratic
       ρ hρ htr A hA hρfix ℓ m r Φ Ψ hxW hyW hminus
 
-private theorem cfg_comp_rev_comp_rev (N : ℕ) (μ : Cfg d N) :
+private theorem cfg_comp_rev_comp_rev (N : ℕ) (μ : (Fin N → α)) :
     (μ ∘ Fin.rev) ∘ Fin.rev = μ := by
   ext i
   simp
 
 private theorem physicalSiteReverseConfigEquiv_apply_cfg
-    (N : ℕ) (μ : Cfg d N) :
-    physicalSiteReverseConfigEquiv d N μ = μ ∘ Fin.rev := rfl
+    (N : ℕ) (μ : (Fin N → α)) :
+    physicalSiteReverseConfigEquiv N μ = μ ∘ Fin.rev := rfl
 
 private theorem physicalSiteReverseConfigEquiv_apply_apply_cfg
-    (N : ℕ) (μ : Cfg d N) :
-    physicalSiteReverseConfigEquiv d N
-        (physicalSiteReverseConfigEquiv d N μ) = μ := by
+    (N : ℕ) (μ : (Fin N → α)) :
+    physicalSiteReverseConfigEquiv N
+        (physicalSiteReverseConfigEquiv N μ) = μ := by
   ext i
   simp [physicalSiteReverseConfigEquiv, Equiv.arrowCongr, Function.comp_def]
 
 /-- Reversal and reordering of the three separate configuration blocks. -/
-private def fnwReverseThreeBlocksEquiv (d ℓ m r : ℕ) :
-    ((Cfg d ℓ × Cfg d m) × Cfg d r) ≃ ((Cfg d r × Cfg d m) × Cfg d ℓ) where
+private def fnwReverseThreeBlocksEquiv (ℓ m r : ℕ) :
+    (((Fin ℓ → α) × (Fin m → α)) × (Fin r → α)) ≃ (((Fin r → α) × (Fin m → α)) × (Fin ℓ → α)) where
   toFun blocks :=
-    ((physicalSiteReverseConfigEquiv d r blocks.2,
-        physicalSiteReverseConfigEquiv d m blocks.1.2),
-      physicalSiteReverseConfigEquiv d ℓ blocks.1.1)
+    ((physicalSiteReverseConfigEquiv r blocks.2,
+        physicalSiteReverseConfigEquiv m blocks.1.2),
+      physicalSiteReverseConfigEquiv ℓ blocks.1.1)
   invFun blocks :=
-    ((physicalSiteReverseConfigEquiv d ℓ blocks.2,
-        physicalSiteReverseConfigEquiv d m blocks.1.2),
-      physicalSiteReverseConfigEquiv d r blocks.1.1)
+    ((physicalSiteReverseConfigEquiv ℓ blocks.2,
+        physicalSiteReverseConfigEquiv m blocks.1.2),
+      physicalSiteReverseConfigEquiv r blocks.1.1)
   left_inv := by
     rintro ⟨⟨μℓ, μm⟩, μr⟩
     simp only [physicalSiteReverseConfigEquiv_apply_apply_cfg]
@@ -130,24 +130,24 @@ private def fnwReverseThreeBlocksEquiv (d ℓ m r : ℕ) :
 /-- Global physical reversal sends the source block order \(\ell,m,r\) to
 the whole-increment order \(r,m,\ell\), reversing the sites inside each
 block. -/
-private def fnwGlobalPhysicalReverseConfigEquiv (d ℓ m r : ℕ) :
-    Cfg d ((ℓ + m) + r) ≃ Cfg d (r + m + ℓ) :=
-  (fnwThreeBlockConfigEquiv d ℓ m r).symm |>.trans
-    (fnwReverseThreeBlocksEquiv d ℓ m r) |>.trans
-      (fnwThreeBlockConfigEquiv d r m ℓ)
+private def fnwGlobalPhysicalReverseConfigEquiv (ℓ m r : ℕ) :
+    (Fin ((ℓ + m) + r) → α) ≃ (Fin (r + m + ℓ) → α) :=
+  (fnwThreeBlockConfigEquiv ℓ m r).symm |>.trans
+    (fnwReverseThreeBlocksEquiv ℓ m r) |>.trans
+      (fnwThreeBlockConfigEquiv r m ℓ)
 
 /-- The exact Hilbert-space equivalence implementing global physical reversal
 between the FNW source coordinates and the whole-increment coordinates. -/
-private noncomputable def fnwGlobalPhysicalReverseES (d ℓ m r : ℕ) :
-    EuclideanSpace ℂ (Cfg d ((ℓ + m) + r)) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (Cfg d (r + m + ℓ)) :=
+private noncomputable def fnwGlobalPhysicalReverseES (ℓ m r : ℕ) :
+    EuclideanSpace ℂ (Fin ((ℓ + m) + r) → α) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ (Fin (r + m + ℓ) → α) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (fnwGlobalPhysicalReverseConfigEquiv d ℓ m r)
+    (fnwGlobalPhysicalReverseConfigEquiv ℓ m r)
 
 private theorem fnwGlobalPhysicalReverseES_apply_append
-    (ℓ m r : ℕ) (ψ : EuclideanSpace ℂ (Cfg d ((ℓ + m) + r)))
-    (μr : Cfg d r) (μm : Cfg d m) (μℓ : Cfg d ℓ) :
-    fnwGlobalPhysicalReverseES d ℓ m r ψ
+    (ℓ m r : ℕ) (ψ : EuclideanSpace ℂ (Fin ((ℓ + m) + r) → α))
+    (μr : (Fin r → α)) (μm : (Fin m → α)) (μℓ : (Fin ℓ → α)) :
+    fnwGlobalPhysicalReverseES ℓ m r ψ
         (Fin.append (Fin.append μr μm) μℓ) =
       ψ (Fin.append
         (Fin.append (μℓ ∘ Fin.rev) (μm ∘ Fin.rev)) (μr ∘ Fin.rev)) := by
@@ -157,38 +157,38 @@ private theorem fnwGlobalPhysicalReverseES_apply_append
 
 /-- Extensionality in the three separate configuration blocks. -/
 private theorem euclideanSpace_threeBlock_ext
-    (r m ℓ : ℕ) {x y : EuclideanSpace ℂ (Cfg d (r + m + ℓ))}
-    (h : ∀ μr : Cfg d r, ∀ μm : Cfg d m, ∀ μℓ : Cfg d ℓ,
+    (r m ℓ : ℕ) {x y : EuclideanSpace ℂ (Fin (r + m + ℓ) → α)}
+    (h : ∀ μr : (Fin r → α), ∀ μm : (Fin m → α), ∀ μℓ : (Fin ℓ → α),
       x (Fin.append (Fin.append μr μm) μℓ) =
         y (Fin.append (Fin.append μr μm) μℓ)) :
     x = y := by
   apply PiLp.ext
   intro σ
-  rw [← (fnwThreeBlockConfigEquiv d r m ℓ).apply_symm_apply σ]
-  obtain ⟨⟨μr, μm⟩, μℓ⟩ := (fnwThreeBlockConfigEquiv d r m ℓ).symm σ
+  rw [← (fnwThreeBlockConfigEquiv r m ℓ).apply_symm_apply σ]
+  obtain ⟨⟨μr, μm⟩, μℓ⟩ := (fnwThreeBlockConfigEquiv r m ℓ).symm σ
   exact h μr μm μℓ
 
 /-- Global physical reversal carries the left FNW overlap range to the
 reassociated tail boundary range. -/
 private theorem fnwGlobalPhysicalReverseES_map_leftOverlapRange
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) :
     weighted_matrix_instances ρ hρ in
     (LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)).map
-        (fnwGlobalPhysicalReverseES d ℓ m r).toLinearEquiv.toLinearMap =
+        (fnwGlobalPhysicalReverseES ℓ m r).toLinearEquiv.toLinearMap =
       (reassocTailBoundaryMapES A r m ℓ).range := by
   weighted_matrix_instances ρ hρ
   ext x
   constructor
   · rintro ⟨v, ⟨Φ, rfl⟩, rfl⟩
-    let Y : Cfg d r → Mat := fun μr => Φ.ofLp (μr ∘ Fin.rev)
-    let y : BoundaryFamilySpace (D := D) (Cfg d r) :=
-      (boundaryFamilyEquiv (D := D) (Cfg d r)).symm Y
+    let Y : (Fin r → α) → Mat := fun μr => Φ.ofLp (μr ∘ Fin.rev)
+    let y : BoundaryFamilySpace (D := D) (Fin r → α) :=
+      (boundaryFamilyEquiv (D := D) (Fin r → α)).symm Y
     refine ⟨y, ?_⟩
     apply euclideanSpace_threeBlock_ext r m ℓ
     intro μr μm μℓ
     change reassocTailBoundaryMapES A r m ℓ y
         (Fin.append (Fin.append μr μm) μℓ) =
-      fnwGlobalPhysicalReverseES d ℓ m r
+      fnwGlobalPhysicalReverseES ℓ m r
         (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
         (Fin.append (Fin.append μr μm) μℓ)
     rw [reassocTailBoundaryMapES_apply_threeBlock,
@@ -204,13 +204,13 @@ private theorem fnwGlobalPhysicalReverseES_map_leftOverlapRange
       (Kraus.evalWord A (List.ofFn μm) * Kraus.evalWord A (List.ofFn μℓ))
       (Φ.ofLp (μr ∘ Fin.rev))
   · rintro ⟨y, rfl⟩
-    let Y := boundaryFamilyEquiv (D := D) (Cfg d r) y
-    let Φ : FNWBoundaryFamilySpace (D := D) (Cfg d r) :=
+    let Y := boundaryFamilyEquiv (D := D) (Fin r → α) y
+    let Φ : FNWBoundaryFamilySpace (D := D) (Fin r → α) :=
       WithLp.toLp 2 fun μr => Y (μr ∘ Fin.rev)
     refine ⟨fnwLeftOverlapMap ρ hρ A ℓ m r Φ, ⟨Φ, rfl⟩, ?_⟩
     apply euclideanSpace_threeBlock_ext r m ℓ
     intro μr μm μℓ
-    change fnwGlobalPhysicalReverseES d ℓ m r
+    change fnwGlobalPhysicalReverseES ℓ m r
         (fnwLeftOverlapMap ρ hρ A ℓ m r Φ)
         (Fin.append (Fin.append μr μm) μℓ) =
       reassocTailBoundaryMapES A r m ℓ y
@@ -225,45 +225,45 @@ private theorem fnwGlobalPhysicalReverseES_map_leftOverlapRange
       Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       cfg_comp_rev_comp_rev]
     exact Matrix.trace_mul_comm
-      (boundaryFamilyEquiv (D := D) (Cfg d r) y μr)
+      (boundaryFamilyEquiv (D := D) (Fin r → α) y μr)
       (Kraus.evalWord A (List.ofFn μm) * Kraus.evalWord A (List.ofFn μℓ))
 
 private theorem leftBoundaryMapES_apply_threeBlock
-    (A : MPSTensor d D) (r m ℓ : ℕ)
-    (y : BoundaryFamilySpace (D := D) (Cfg d ℓ))
-    (μr : Cfg d r) (μm : Cfg d m) (μℓ : Cfg d ℓ) :
+    (A : MPTensor α (Fin D)) (r m ℓ : ℕ)
+    (y : BoundaryFamilySpace (D := D) ((Fin ℓ → α)))
+    (μr : (Fin r → α)) (μm : (Fin m → α)) (μℓ : (Fin ℓ → α)) :
     leftBoundaryMapES A (r + m) ℓ y
         (Fin.append (Fin.append μr μm) μℓ) =
       groundSpaceMap A (r + m)
-        (boundaryFamilyEquiv (D := D) (Cfg d ℓ) y μℓ)
+        (boundaryFamilyEquiv (D := D) ((Fin ℓ → α)) y μℓ)
         (Fin.append μr μm) := by
   change leftBoundaryMap A (r + m) ℓ
-      (boundaryFamilyEquiv (D := D) (Cfg d ℓ) y)
+      (boundaryFamilyEquiv (D := D) ((Fin ℓ → α)) y)
       (Fin.append (Fin.append μr μm) μℓ) = _
   exact leftBoundaryMap_append A (r + m) ℓ
-    (boundaryFamilyEquiv (D := D) (Cfg d ℓ) y) (Fin.append μr μm) μℓ
+    (boundaryFamilyEquiv (D := D) ((Fin ℓ → α)) y) (Fin.append μr μm) μℓ
 
 /-- Global physical reversal carries the right FNW overlap range to the left
 boundary range in whole-increment coordinates. -/
 private theorem fnwGlobalPhysicalReverseES_map_rightOverlapRange
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) :
     weighted_matrix_instances ρ hρ in
     (LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)).map
-        (fnwGlobalPhysicalReverseES d ℓ m r).toLinearEquiv.toLinearMap =
+        (fnwGlobalPhysicalReverseES ℓ m r).toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A (r + m) ℓ).range := by
   weighted_matrix_instances ρ hρ
   ext x
   constructor
   · rintro ⟨v, ⟨Ψ, rfl⟩, rfl⟩
-    let Z : Cfg d ℓ → Mat := fun μℓ => Ψ.ofLp (μℓ ∘ Fin.rev)
-    let z : BoundaryFamilySpace (D := D) (Cfg d ℓ) :=
-      (boundaryFamilyEquiv (D := D) (Cfg d ℓ)).symm Z
+    let Z : (Fin ℓ → α) → Mat := fun μℓ => Ψ.ofLp (μℓ ∘ Fin.rev)
+    let z : BoundaryFamilySpace (D := D) ((Fin ℓ → α)) :=
+      (boundaryFamilyEquiv (D := D) ((Fin ℓ → α))).symm Z
     refine ⟨z, ?_⟩
     apply euclideanSpace_threeBlock_ext r m ℓ
     intro μr μm μℓ
     change leftBoundaryMapES A (r + m) ℓ z
         (Fin.append (Fin.append μr μm) μℓ) =
-      fnwGlobalPhysicalReverseES d ℓ m r
+      fnwGlobalPhysicalReverseES ℓ m r
         (fnwRightOverlapMap ρ hρ A ℓ m r Ψ)
         (Fin.append (Fin.append μr μm) μℓ)
     rw [leftBoundaryMapES_apply_threeBlock,
@@ -279,13 +279,13 @@ private theorem fnwGlobalPhysicalReverseES_map_rightOverlapRange
       (Kraus.evalWord A (List.ofFn μr) * Kraus.evalWord A (List.ofFn μm))
       (Ψ.ofLp (μℓ ∘ Fin.rev))
   · rintro ⟨z, rfl⟩
-    let Z := boundaryFamilyEquiv (D := D) (Cfg d ℓ) z
-    let Ψ : FNWBoundaryFamilySpace (D := D) (Cfg d ℓ) :=
+    let Z := boundaryFamilyEquiv (D := D) ((Fin ℓ → α)) z
+    let Ψ : FNWBoundaryFamilySpace (D := D) ((Fin ℓ → α)) :=
       WithLp.toLp 2 fun μℓ => Z (μℓ ∘ Fin.rev)
     refine ⟨fnwRightOverlapMap ρ hρ A ℓ m r Ψ, ⟨Ψ, rfl⟩, ?_⟩
     apply euclideanSpace_threeBlock_ext r m ℓ
     intro μr μm μℓ
-    change fnwGlobalPhysicalReverseES d ℓ m r
+    change fnwGlobalPhysicalReverseES ℓ m r
         (fnwRightOverlapMap ρ hρ A ℓ m r Ψ)
         (Fin.append (Fin.append μr μm) μℓ) =
       leftBoundaryMapES A (r + m) ℓ z
@@ -300,22 +300,22 @@ private theorem fnwGlobalPhysicalReverseES_map_rightOverlapRange
       Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       cfg_comp_rev_comp_rev]
     exact Matrix.trace_mul_comm
-      (boundaryFamilyEquiv (D := D) (Cfg d ℓ) z μℓ)
+      (boundaryFamilyEquiv (D := D) ((Fin ℓ → α)) z μℓ)
       (Kraus.evalWord A (List.ofFn μr) * Kraus.evalWord A (List.ofFn μm))
 
 /-- Global physical reversal sends a full FNW boundary vector to the
 corresponding full-ground-space vector. -/
 private theorem fnwGlobalPhysicalReverseES_fnwBoundaryMapCLM
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) (B : Mat) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) (B : Mat) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
-    fnwGlobalPhysicalReverseES d ℓ m r
+    fnwGlobalPhysicalReverseES ℓ m r
         (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B) =
       groundSpaceMapES A (r + m + ℓ)
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) B) := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   apply euclideanSpace_threeBlock_ext r m ℓ
   intro μr μm μℓ
-  change fnwGlobalPhysicalReverseES d ℓ m r
+  change fnwGlobalPhysicalReverseES ℓ m r
       (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B)
       (Fin.append (Fin.append μr μm) μℓ) =
     groundSpaceMap A (r + m + ℓ) B (Fin.append (Fin.append μr μm) μℓ)
@@ -331,18 +331,18 @@ private theorem fnwGlobalPhysicalReverseES_fnwBoundaryMapCLM
 /-- Global physical reversal carries the full FNW boundary range to the
 full ground space. -/
 private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) :
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     (fnwBoundaryRange ρ hρ A ((ℓ + m) + r)).map
-        (fnwGlobalPhysicalReverseES d ℓ m r).toLinearEquiv.toLinearMap =
+        (fnwGlobalPhysicalReverseES ℓ m r).toLinearEquiv.toLinearMap =
       ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   ext x
   constructor
   · rintro ⟨v, ⟨B, rfl⟩, rfl⟩
     rw [mem_map_groundSpace_iff]
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (r + m + ℓ)))
-      (fnwGlobalPhysicalReverseES d ℓ m r
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace α (r + m + ℓ)))
+      (fnwGlobalPhysicalReverseES ℓ m r
         (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B)) ∈
       groundSpace A (r + m + ℓ)
     rw [fnwGlobalPhysicalReverseES_fnwBoundaryMapCLM,
@@ -353,18 +353,18 @@ private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
     rw [mem_map_groundSpace_iff] at hx
     obtain ⟨B, hB⟩ := hx
     refine ⟨fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B, ⟨B, rfl⟩, ?_⟩
-    change fnwGlobalPhysicalReverseES d ℓ m r
+    change fnwGlobalPhysicalReverseES ℓ m r
         (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B) = x
     rw [fnwGlobalPhysicalReverseES_fnwBoundaryMapCLM,
       groundSpaceMapES_frobeniusEquivEuclidean_apply]
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (r + m + ℓ))).injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace α (r + m + ℓ))).injective
     rw [LinearEquiv.apply_symm_apply]
     exact hB
 
 /-- The source-coordinate projector defect and the whole-increment
 defect have equal operator norm under global physical reversal. -/
 private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
-    (ρ : Mat) (hρ : ρ.PosDef) (A : MPSTensor d D) (ℓ m r : ℕ) :
+    (ρ : Mat) (hρ : ρ.PosDef) (A : MPTensor α (Fin D)) (ℓ m r : ℕ) :
     weighted_matrix_instances ρ hρ in
     ‖(LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)).starProjection ∘L
           (LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)).starProjection -
@@ -374,7 +374,7 @@ private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
         ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection‖ := by
   weighted_matrix_instances ρ hρ
-  let E := fnwGlobalPhysicalReverseES d ℓ m r
+  let E := fnwGlobalPhysicalReverseES ℓ m r
   let U := LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)
   let V := LinearMap.range (fnwRightOverlapMap ρ hρ A ℓ m r)
   let W := fnwBoundaryRange ρ hρ A ((ℓ + m) + r)
@@ -447,7 +447,7 @@ positivity hypothesis on the spectator length retains the source statement. The
 right-hand side displays the separate linear and quadratic source terms. -/
 theorem wholeIncrement_groundProjection_defect_le_fnw [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (_hL : 0 < L) (hLm : L ≤ m)
     (r ℓ : ℕ) (_hℓ : 0 < ℓ) :
@@ -469,7 +469,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw [NeZero D]
 /-- The factored coefficient in FNW 1992, Lemma 6.2. -/
 theorem wholeIncrement_groundProjection_defect_le_fnw_factored [NeZero D]
     (ρ : Mat) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (A : MPTensor α (Fin D)) (hA : IsLeftCanonical A)
     (hρfix : Kraus.transferMap A ρ = ρ) {L m : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) (hL : 0 < L) (hLm : L ≤ m)
     (r ℓ : ℕ) (hℓ : 0 < ℓ) :
@@ -498,14 +498,14 @@ namespace Kraus.HasComplementaryFixedPointGap
 
 open MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- A primitive MPS admits a positive interaction length after which the
 fixed-length FNW Lemma 6.2 estimate holds for every prefix length and every
 positive spectator length. -/
 theorem exists_wholeIncrement_groundProjection_defect_le_fnw
-    [NeZero D] {ρ : Mat} {A : MPSTensor d D} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    [NeZero D] {ρ : Mat} {A : MPTensor α (Fin D)} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) :
     ∃ L : ℕ, 0 < L ∧ Kraus.IsNBlkInjective A L ∧
       ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ, 0 < ℓ →

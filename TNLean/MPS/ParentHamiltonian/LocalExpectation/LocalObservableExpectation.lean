@@ -26,12 +26,12 @@ open scoped Matrix BigOperators Kronecker ComplexOrder
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 set_option backward.isDefEq.respectTransparency false in
-private theorem physicalObservableTransfer_wordMatrix (A : MPSTensor d D) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    let B : Matrix (Fin D) (Cfg d k × Fin D) ℂ :=
+private theorem physicalObservableTransfer_wordMatrix (A : MPTensor α (Fin D)) {k : ℕ}
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    let B : Matrix (Fin D) ((Fin k → α) × Fin D) ℂ :=
       fun i p => Kraus.evalWord A (List.ofFn p.1) i p.2
     physicalObservableTransfer A k X ρ = B * (Xᵀ ⊗ₖ ρ) * Bᴴ := by
   classical
@@ -40,15 +40,15 @@ private theorem physicalObservableTransfer_wordMatrix (A : MPSTensor d D) {k : �
     smul_eq_mul, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply,
     Matrix.transpose_apply, Fintype.sum_prod_type, Finset.sum_mul, Finset.mul_sum]
   simp_rw [Finset.sum_comm (s := Finset.univ (α := Fin D))
-    (t := Finset.univ (α := Cfg d k))]
+    (t := Finset.univ (α := (Fin k → α)))]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
     Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
 
 /-- A positive local observable inserts a positive map on virtual matrices.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem physicalObservableTransfer_posSemidef (A : MPSTensor d D) {k : ℕ}
-    {X : Matrix (Cfg d k) (Cfg d k) ℂ} {ρ : Matrix (Fin D) (Fin D) ℂ}
+theorem physicalObservableTransfer_posSemidef (A : MPTensor α (Fin D)) {k : ℕ}
+    {X : Matrix (Fin k → α) (Fin k → α) ℂ} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) (hρ : ρ.PosSemidef) :
     (physicalObservableTransfer A k X ρ).PosSemidef := by
   rw [physicalObservableTransfer_wordMatrix]
@@ -56,10 +56,10 @@ theorem physicalObservableTransfer_posSemidef (A : MPSTensor d D) {k : ℕ}
 
 /-- The expectation of the identity is one at any nonzero-trace transfer fixed
 point. Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem observableInsertionExpectation_one (A : MPSTensor d D)
+theorem observableInsertionExpectation_one (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hfix : Kraus.transferMap A ρ = ρ)
     (htr : Matrix.trace ρ ≠ 0) (k : ℕ) :
-    observableInsertionExpectation A ρ (1 : Matrix (Cfg d k) (Cfg d k) ℂ) = 1 := by
+    observableInsertionExpectation A ρ (1 : Matrix (Fin k → α) (Fin k → α) ℂ) = 1 := by
   have hpow : (Kraus.transferMap A ^ k) ρ = ρ := by
     rw [Module.End.pow_apply]
     exact Function.IsFixedPt.iterate hfix k
@@ -69,8 +69,8 @@ theorem observableInsertionExpectation_one (A : MPSTensor d D)
 /-- A positive observable has a nonnegative local expectation at a positive
 virtual matrix. Source: Nachtergaele, arXiv:cond-mat/9410110, equations
 (3.1)--(3.2b). -/
-theorem observableInsertionExpectation_nonneg (A : MPSTensor d D) {k : ℕ}
-    {ρ : Matrix (Fin D) (Fin D) ℂ} {X : Matrix (Cfg d k) (Cfg d k) ℂ}
+theorem observableInsertionExpectation_nonneg (A : MPTensor α (Fin D)) {k : ℕ}
+    {ρ : Matrix (Fin D) (Fin D) ℂ} {X : Matrix (Fin k → α) (Fin k → α) ℂ}
     (hρ : ρ.PosSemidef) (hX : X.PosSemidef) :
     0 ≤ observableInsertionExpectation A ρ X := by
   exact div_nonneg (physicalObservableTransfer_posSemidef A hX hρ).trace_nonneg
@@ -78,9 +78,9 @@ theorem observableInsertionExpectation_nonneg (A : MPSTensor d D) {k : ℕ}
 
 /-- Local expectations are additive in the observable. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem observableInsertionExpectation_add (A : MPSTensor d D)
+theorem observableInsertionExpectation_add (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) {k : ℕ}
-    (X Y : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X Y : Matrix (Fin k → α) (Fin k → α) ℂ) :
     observableInsertionExpectation A ρ (X + Y) =
       observableInsertionExpectation A ρ X + observableInsertionExpectation A ρ Y := by
   have h := congrArg (fun T => Matrix.trace (T ρ) / Matrix.trace ρ)
@@ -90,9 +90,9 @@ theorem observableInsertionExpectation_add (A : MPSTensor d D)
 
 /-- Local expectations are complex linear in the observable. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem observableInsertionExpectation_smul (A : MPSTensor d D)
+theorem observableInsertionExpectation_smul (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) {k : ℕ} (c : ℂ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X : Matrix (Fin k → α) (Fin k → α) ℂ) :
     observableInsertionExpectation A ρ (c • X) =
       c * observableInsertionExpectation A ρ X := by
   have h := congrArg (fun T => Matrix.trace (T ρ) / Matrix.trace ρ)
@@ -103,11 +103,11 @@ theorem observableInsertionExpectation_smul (A : MPSTensor d D)
 /-- Adjoining identity sites on the right preserves a local expectation at a
 transfer fixed point. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), consistency of the finite local expectations. -/
-theorem observableInsertionExpectation_appendObservable_one (A : MPSTensor d D)
+theorem observableInsertionExpectation_appendObservable_one (A : MPTensor α (Fin D))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hfix : Kraus.transferMap A ρ = ρ)
-    {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ) (m : ℕ) :
+    {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ) (m : ℕ) :
     observableInsertionExpectation A ρ
-      (appendObservable X (1 : Matrix (Cfg d m) (Cfg d m) ℂ)) =
+      (appendObservable X (1 : Matrix (Fin m → α) (Fin m → α) ℂ)) =
         observableInsertionExpectation A ρ X := by
   have hpow : (Kraus.transferMap A ^ m) ρ = ρ := by
     rw [Module.End.pow_apply]
@@ -118,11 +118,11 @@ theorem observableInsertionExpectation_appendObservable_one (A : MPSTensor d D)
 /-- Adjoining identity sites on the left preserves a local expectation for a
 trace-preserving tensor. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), consistency of the finite local expectations. -/
-theorem observableInsertionExpectation_one_appendObservable (A : MPSTensor d D)
+theorem observableInsertionExpectation_one_appendObservable (A : MPTensor α (Fin D))
     (hTP : ∑ i, (A i)ᴴ * A i = 1) (ρ : Matrix (Fin D) (Fin D) ℂ)
-    {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ) (m : ℕ) :
+    {k : ℕ} (X : Matrix (Fin k → α) (Fin k → α) ℂ) (m : ℕ) :
     observableInsertionExpectation A ρ
-      (appendObservable (1 : Matrix (Cfg d m) (Cfg d m) ℂ) X) =
+      (appendObservable (1 : Matrix (Fin m → α) (Fin m → α) ℂ) X) =
         observableInsertionExpectation A ρ X := by
   have hpow : ∀ Y, Matrix.trace ((Kraus.transferMap A ^ m) Y) = Matrix.trace Y := by
     intro Y
@@ -137,16 +137,16 @@ theorem observableInsertionExpectation_one_appendObservable (A : MPSTensor d D)
 /-- A normalized primitive tensor has normalized local expectations. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.observableInsertionExpectation_one [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (k : ℕ) :
-    observableInsertionExpectation A ρ (1 : Matrix (Cfg d k) (Cfg d k) ℂ) = 1 :=
+    observableInsertionExpectation A ρ (1 : Matrix (Fin k → α) (Fin k → α) ℂ) = 1 :=
   MPSTensor.observableInsertionExpectation_one A ρ hP.fixedPoint_is_fixed hP.trace_ne_zero k
 
 /-- A normalized primitive tensor has positive local expectations. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.observableInsertionExpectation_nonneg [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} {X : Matrix (Cfg d k) (Cfg d k) ℂ}
+    {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} {X : Matrix (Fin k → α) (Fin k → α) ℂ}
     (hX : X.PosSemidef) : 0 ≤ observableInsertionExpectation A ρ X :=
   MPSTensor.observableInsertionExpectation_nonneg A hP.fixedPoint_psd hX
 

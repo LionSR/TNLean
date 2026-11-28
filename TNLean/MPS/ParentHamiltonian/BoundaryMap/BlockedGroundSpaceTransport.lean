@@ -48,31 +48,30 @@ configuration-basis identification implicit in this blocking convention.
 -/
 
 open scoped Matrix.Norms.Frobenius
-open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- The Euclidean computational-basis reindexing from a chain of \(N\) sites blocked in groups
 of \(p\) to the corresponding chain of \(N p\) original sites. -/
-noncomputable def blockedConfigLinearIsometryEquiv (d N p : ℕ) :
-    EuclideanSpace ℂ (Cfg (blockPhysDim d p) N) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (Cfg d (N * p)) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Kraus.blockedConfigEquiv d N p)
+noncomputable def blockedConfigLinearIsometryEquiv (N p : ℕ) :
+    EuclideanSpace ℂ ((Fin N → Fin p → α)) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ (Fin (N * p) → α) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Kraus.blockConfigEquiv α N p)
 
 @[simp]
-theorem blockedConfigLinearIsometryEquiv_apply_apply (d N p : ℕ)
-    (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)) (σ : Cfg d (N * p)) :
-    blockedConfigLinearIsometryEquiv d N p v σ =
-      v ((Kraus.blockedConfigEquiv d N p).symm σ) :=
+theorem blockedConfigLinearIsometryEquiv_apply_apply (N p : ℕ)
+    (v : EuclideanSpace ℂ ((Fin N → Fin p → α))) (σ : (Fin (N * p) → α)) :
+    blockedConfigLinearIsometryEquiv N p v σ =
+      v ((Kraus.blockConfigEquiv α N p).symm σ) :=
   rfl
 
 @[simp]
-theorem blockedConfigLinearIsometryEquiv_symm_apply_apply (d N p : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d (N * p))) (σ : Cfg (blockPhysDim d p) N) :
-    (blockedConfigLinearIsometryEquiv d N p).symm v σ =
-      v (Kraus.blockedConfigEquiv d N p σ) := by
+theorem blockedConfigLinearIsometryEquiv_symm_apply_apply (N p : ℕ)
+    (v : EuclideanSpace ℂ (Fin (N * p) → α)) (σ : (Fin N → Fin p → α)) :
+    (blockedConfigLinearIsometryEquiv N p).symm v σ =
+      v (Kraus.blockConfigEquiv α N p σ) := by
   rw [blockedConfigLinearIsometryEquiv, LinearIsometryEquiv.piLpCongrLeft_symm]
   rfl
 
@@ -80,26 +79,26 @@ theorem blockedConfigLinearIsometryEquiv_symm_apply_apply (d N p : ℕ)
 canonical configuration reindexing. -/
 @[simp]
 theorem groundSpaceMap_blockTensor_blockedConfigEquiv
-    (A : MPSTensor d D) (p N : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
-    (σ : Cfg d (N * p)) :
-    groundSpaceMap (blockTensor A p) N X ((Kraus.blockedConfigEquiv d N p).symm σ) =
+    (A : MPTensor α (Fin D)) (p N : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
+    (σ : (Fin (N * p) → α)) :
+    groundSpaceMap (Kraus.block A p) N X ((Kraus.blockConfigEquiv α N p).symm σ) =
       groundSpaceMap A (N * p) X σ := by
-  simp only [groundSpaceMap_apply, evalWord_blockTensor]
-  rw [← Kraus.ofFn_blockedConfigEquiv d N p ((Kraus.blockedConfigEquiv d N p).symm σ)]
+  simp only [groundSpaceMap_apply, Kraus.evalWord_block]
+  rw [← Kraus.ofFn_blockConfigEquiv d N p ((Kraus.blockConfigEquiv α N p).symm σ)]
   simp
 
 /-- The Euclidean boundary map of the blocked tensor intertwines with the canonical
 configuration isometry.  The source has \(N\) blocked sites and the target has \(N p\)
 original sites. -/
 theorem blockedConfigLinearIsometryEquiv_groundSpaceMapES
-    (A : MPSTensor d D) (p N : ℕ)
+    (A : MPTensor α (Fin D)) (p N : ℕ)
     (x : EuclideanSpace ℂ (Fin D × Fin D)) :
-    blockedConfigLinearIsometryEquiv d N p (groundSpaceMapES (blockTensor A p) N x) =
+    blockedConfigLinearIsometryEquiv N p (groundSpaceMapES (Kraus.block A p) N x) =
       groundSpaceMapES A (N * p) x := by
   obtain ⟨X, rfl⟩ :=
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).toLinearEquiv.surjective x
-  change blockedConfigLinearIsometryEquiv d N p
-      (groundSpaceMapES (blockTensor A p) N
+  change blockedConfigLinearIsometryEquiv N p
+      (groundSpaceMapES (Kraus.block A p) N
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
     groundSpaceMapES A (N * p) (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)
   rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
@@ -109,9 +108,9 @@ theorem blockedConfigLinearIsometryEquiv_groundSpaceMapES
 
 /-- Physical blocking transports the local ground space on \(N\) blocked sites exactly to the
 local ground space on \(N p\) original sites. -/
-theorem map_groundSpace_blockTensor_map (A : MPSTensor d D) (p N : ℕ) :
-    ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
-        (blockedConfigLinearIsometryEquiv d N p).toLinearEquiv.toLinearMap =
+theorem map_groundSpace_blockTensor_map (A : MPTensor α (Fin D)) (p N : ℕ) :
+    ((groundSpace (Kraus.block A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+        (blockedConfigLinearIsometryEquiv N p).toLinearEquiv.toLinearMap =
       ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [← range_groundSpaceMapES, ← range_groundSpaceMapES]
   ext v
@@ -119,32 +118,32 @@ theorem map_groundSpace_blockTensor_map (A : MPSTensor d D) (p N : ℕ) :
   · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
     exact ⟨x, (blockedConfigLinearIsometryEquiv_groundSpaceMapES A p N x).symm⟩
   · rintro ⟨x, rfl⟩
-    exact ⟨groundSpaceMapES (blockTensor A p) N x, ⟨x, rfl⟩,
+    exact ⟨groundSpaceMapES (Kraus.block A p) N x, ⟨x, rfl⟩,
       blockedConfigLinearIsometryEquiv_groundSpaceMapES A p N x⟩
 
 /-- Pointwise conjugacy of orthogonal ground-space projectors under physical blocking. -/
 theorem starProjection_map_groundSpace_blockTensor_map_apply
-    (A : MPSTensor d D) (p N : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d (N * p))) :
+    (A : MPTensor α (Fin D)) (p N : ℕ)
+    (v : EuclideanSpace ℂ (Fin (N * p) → α)) :
     ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v =
-      blockedConfigLinearIsometryEquiv d N p
-        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ
+      blockedConfigLinearIsometryEquiv N p
+        (((groundSpace (Kraus.block A p) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection
-          ((blockedConfigLinearIsometryEquiv d N p).symm v)) := by
+          ((blockedConfigLinearIsometryEquiv N p).symm v)) := by
   rw [← map_groundSpace_blockTensor_map A p N]
   exact Submodule.starProjection_map_apply
-    (blockedConfigLinearIsometryEquiv d N p) ((groundSpace (blockTensor A p) N).map
+    (blockedConfigLinearIsometryEquiv N p) ((groundSpace (Kraus.block A p) N).map
         (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) v
 
 /-- Operator conjugacy of orthogonal ground-space projectors under physical blocking. -/
 theorem starProjection_map_groundSpace_blockTensor_conj
-    (A : MPSTensor d D) (p N : ℕ) :
+    (A : MPTensor α (Fin D)) (p N : ℕ) :
     ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
-      (blockedConfigLinearIsometryEquiv d N p).toContinuousLinearEquiv.toContinuousLinearMap.comp
-        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ
+      (blockedConfigLinearIsometryEquiv N p).toContinuousLinearEquiv.toContinuousLinearMap.comp
+        (((groundSpace (Kraus.block A p) N).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.comp
           (ContinuousLinearEquiv.toContinuousLinearMap
-            (blockedConfigLinearIsometryEquiv d N p).symm.toContinuousLinearEquiv)) := by
+            (blockedConfigLinearIsometryEquiv N p).symm.toContinuousLinearEquiv)) := by
   apply ContinuousLinearMap.ext
   intro v
   exact starProjection_map_groundSpace_blockTensor_map_apply A p N v
@@ -155,13 +154,13 @@ set_option synthInstance.maxHeartbeats 100000 in
 orthogonal ground-space projector.  This is the direct three-block specialization used in
 blocked overlap estimates; it does not replace a one-site spectator by one original site. -/
 theorem starProjection_map_groundSpace_three_blockTensor_conj
-    (A : MPSTensor d D) (p : ℕ) :
+    (A : MPTensor α (Fin D)) (p : ℕ) :
     ((groundSpace A (3 * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
-      (blockedConfigLinearIsometryEquiv d 3 p).toContinuousLinearEquiv.toContinuousLinearMap.comp
-        (((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ
+      (blockedConfigLinearIsometryEquiv 3 p).toContinuousLinearEquiv.toContinuousLinearMap.comp
+        (((groundSpace (Kraus.block A p) 3).map (WithLp.linearEquiv 2 ℂ
             _).symm.toLinearMap).starProjection.comp
           (ContinuousLinearEquiv.toContinuousLinearMap
-            (blockedConfigLinearIsometryEquiv d 3 p).symm.toContinuousLinearEquiv)) :=
+            (blockedConfigLinearIsometryEquiv 3 p).symm.toContinuousLinearEquiv)) :=
   starProjection_map_groundSpace_blockTensor_conj A p 3
 
 end MPSTensor

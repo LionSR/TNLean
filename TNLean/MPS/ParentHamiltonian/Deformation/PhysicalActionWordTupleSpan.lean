@@ -25,19 +25,19 @@ open scoped Matrix BigOperators Topology ComplexOrder
 
 namespace MPSTensor
 
-variable {d e r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {e r : ℕ} {dim : Fin r → ℕ}
 
 /-- A physical linear transformation cannot enlarge the joint word span.
 Source: arXiv:1010.3732, Appendix A, the deformation of the block matrices. -/
 theorem span_wordTuple_rotatePhysical_le
-    (M : Matrix (Fin e) (Fin d) ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (M : Matrix (Fin e) α ℂ) (A : (j : Fin r) → MPTensor α (Fin (dim j)))
     (L : ℕ) :
     Submodule.span ℂ (Set.range (wordTuple (fun j => rotatePhysical M (A j)) L)) ≤
       Submodule.span ℂ (Set.range (wordTuple A L)) := by
   apply Submodule.span_le.2
   rintro _ ⟨w, rfl⟩
   have hexp : wordTuple (fun j => rotatePhysical M (A j)) L w =
-      ∑ t : Fin L → Fin d, (∏ n, M (w n) (t n)) • wordTuple A L t := by
+      ∑ t : Fin L → α, (∏ n, M (w n) (t n)) • wordTuple A L t := by
     ext j a b
     simp [wordTuple, evalWord_rotatePhysical_ofFn, Finset.sum_apply]
   rw [hexp]
@@ -47,8 +47,8 @@ theorem span_wordTuple_rotatePhysical_le
 /-- A physical map with a left inverse preserves the joint word span, including
 rectangular embeddings. Source: arXiv:1010.3732, the isometric deformation. -/
 theorem span_wordTuple_rotatePhysical_eq_of_leftInverse
-    (M : Matrix (Fin e) (Fin d) ℂ) (N : Matrix (Fin d) (Fin e) ℂ)
-    (hNM : N * M = 1) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (M : Matrix (Fin e) α ℂ) (N : Matrix α (Fin e) ℂ)
+    (hNM : N * M = 1) (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     Submodule.span ℂ (Set.range (wordTuple (fun j => rotatePhysical M (A j)) L)) =
       Submodule.span ℂ (Set.range (wordTuple A L)) := by
   apply le_antisymm (span_wordTuple_rotatePhysical_le M A L)
@@ -58,8 +58,8 @@ theorem span_wordTuple_rotatePhysical_eq_of_leftInverse
 /-- An invertible physical transformation preserves simultaneous spanning at
 any fixed length. Source: arXiv:1010.3732, Appendix A. -/
 theorem wordTupleSpanTop_rotatePhysical_iff
-    (M : Matrix (Fin d) (Fin d) ℂ) (hM : IsUnit M)
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
+    (M : Matrix α α ℂ) (hM : IsUnit M)
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (L : ℕ) :
     WordTupleSpanTop (fun j => rotatePhysical M (A j)) L ↔ WordTupleSpanTop A L := by
   unfold WordTupleSpanTop
   rw [span_wordTuple_rotatePhysical_eq_of_leftInverse M M⁻¹
@@ -69,7 +69,7 @@ theorem wordTupleSpanTop_rotatePhysical_iff
 Source: arXiv:1010.3732, the path defined following eq. (1d-iso:polardec). -/
 theorem continuous_rotatePhysical_family
     {X : Type*} [TopologicalSpace X] {D : ℕ}
-    (M : X → Matrix (Fin e) (Fin d) ℂ) (A : X → MPSTensor d D)
+    (M : X → Matrix (Fin e) α ℂ) (A : X → MPTensor α (Fin D))
     (hM : Continuous M) (hA : Continuous A) :
     Continuous fun x => rotatePhysical (M x) (A x) := by
   exact continuous_pi fun i => continuous_finsetSum _ fun j _ =>
@@ -80,16 +80,16 @@ fixed simultaneously injective block tensor has a common periodic gap.
 For a jointly one-site injective tensor, this applies directly at range two.
 Source: arXiv:1010.3732, Appendix A, and the isometric path at lines 589--594. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_physicalAction
-    {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
-    (A : (j : Fin r) → MPSTensor d (dim j)) {S R : ℕ}
+    {X : Type*} [TopologicalSpace X] [Nonempty α] [∀ j, NeZero (dim j)]
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) {S R : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
-    (M : X → Matrix (Fin d) (Fin d) ℂ) (hM : Continuous M)
+    (M : X → Matrix α α ℂ) (hM : Continuous M)
     (hUnit : ∀ x, IsUnit (M x)) (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0)
     {K : Set X} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (α := Fin d) (μ := μ x)
+          (parentRingInteraction (toTensorFromBlocks (μ := μ x)
             (fun j => rotatePhysical (M x) (A j))) R N).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
   exact exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths

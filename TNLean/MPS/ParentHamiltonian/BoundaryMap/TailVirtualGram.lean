@@ -26,7 +26,7 @@ open scoped Matrix Kraus
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 section FrobeniusCoordinate
 
@@ -36,7 +36,7 @@ open scoped Matrix.Norms.Frobenius
 
 /-- The adjoint-self composition of the tail virtual map acts by right multiplication by the
 iterated transfer map applied to the identity. -/
-theorem tailVirtualMapES_adjoint_comp_self_apply (A : MPSTensor d D) (K : ℕ)
+theorem tailVirtualMapES_adjoint_comp_self_apply (A : MPTensor α (Fin D)) (K : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (tailVirtualMapES A K).adjoint (tailVirtualMapES A K
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
@@ -44,8 +44,8 @@ theorem tailVirtualMapES_adjoint_comp_self_apply (A : MPSTensor d D) (K : ℕ)
   rw [tailVirtualMapES_adjoint_apply]
   simp_rw [boundaryFamilyEquiv_tailVirtualMapES_apply,
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
-  have hsum : (∑ u : Cfg d K, Kraus.evalWord A (List.ofFn u) * (Kraus.evalWord A (List.ofFn u))ᴴ) =
-      ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ K) 1 := by
+  have hsum : (∑ u : (Fin K → α), Kraus.evalWord A (List.ofFn u) * (Kraus.evalWord A (List.ofFn u))ᴴ) =
+      ((Kraus.transferMap (ι := α) (n := Fin D) A) ^ K) 1 := by
     symm
     simpa only [Matrix.mul_one] using Kraus.mapLM_pow_apply A K 1
   simpa only [Matrix.mul_assoc, Matrix.mul_sum] using
@@ -77,11 +77,11 @@ private lemma frobenius_vec_mul_norm_sq_le (X M : Matrix (Fin D) (Fin D) ℂ) :
 /-- The fourth power of the tail virtual map norm is bounded by the squared entrywise mass
 of the iterated transfer map applied to the identity. -/
 theorem tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq
-    (A : MPSTensor d D) (K : ℕ) :
+    (A : MPTensor α (Fin D)) (K : ℕ) :
     ‖tailVirtualMapES A K‖ ^ 4 ≤
       ∑ p : (Fin D × Fin D),
-        ‖(((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ K) 1) p.1 p.2‖ ^ 2 := by
-  let M := ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ K) 1
+        ‖(((Kraus.transferMap (ι := α) (n := Fin D) A) ^ K) 1) p.1 p.2‖ ^ 2 := by
+  let M := ((Kraus.transferMap (ι := α) (n := Fin D) A) ^ K) 1
   let U := Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
   have hnorm_adj_sq : ‖(tailVirtualMapES A K).adjoint ∘L (tailVirtualMapES A K)‖ =
       ‖tailVirtualMapES A K‖ * ‖tailVirtualMapES A K‖ :=
@@ -129,11 +129,11 @@ geometrically bounded complementary power. The entrywise mass from the Gram esti
 then controlled by the L² operator norm with an explicit bond-dimension factor. No
 positive-definiteness assumption on the fixed point is needed. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_four_pow_uniform
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ^ 4 ≤ C := by
   let : NormedRing (Matrix (Fin D) (Fin D) ℂ) := Matrix.instL2OpNormedRing
-  let E := Kraus.transferMap (ι := Fin d) (n := Fin D) A
+  let E := Kraus.transferMap (ι := α) (n := Fin D) A
   have htr : Matrix.trace ρ ≠ 0 := by
     intro h
     exact hP.fixedPoint_ne_zero
@@ -216,7 +216,7 @@ independent of the tail length. The proof preserves the fourth-power Gram normal
 it first bounds the fourth powers uniformly and then chooses a strictly positive bound for
 the norms themselves. No positive-definiteness assumption on the fixed point is required. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_uniform
-    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    [NeZero D] {A : MPTensor α (Fin D)} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ≤ C := by
   obtain ⟨Q, hQ, hbound⟩ := hP.tailVirtualMapES_norm_four_pow_uniform

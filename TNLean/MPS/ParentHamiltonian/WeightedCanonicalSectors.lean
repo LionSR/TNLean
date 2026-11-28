@@ -72,7 +72,7 @@ open scoped Matrix BigOperators Topology
 
 namespace MPSTensor.PGVWC07CanonicalFormData
 
-variable {d D : ℕ} {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)} (h : PGVWC07CanonicalFormData A)
 
 /-- The actual physical contribution of subunit canonical weights has a
 finite geometric bound. No irreducibility, peripheral simplicity, or
@@ -137,7 +137,7 @@ open scoped Matrix BigOperators Matrix.Norms.L2Operator ComplexOrder Topology EN
 
 namespace MPSTensor.PGVWC07CanonicalFormData
 
-variable {d D : ℕ} {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)} (h : PGVWC07CanonicalFormData A)
 
 /-- Each canonical block supplies its own strictly positive diagonal dual
 fixed point normalized to trace one. No stationary density is assumed in
@@ -443,7 +443,7 @@ open scoped Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} {A : MPTensor α (Fin D)}
 
 /-- The actual normalized half-chain ordered spectrum of a general
 weighted canonical tensor converges to the doubled diagonal fixed-point

@@ -38,18 +38,18 @@ namespace MPSTensor
 /-- A multiplier on the prefix spectator sites is absorbed into the boundary
 matrix of the tail interval. -/
 theorem marked_groundSpaceMap_mem_tailBoundaryRange
-    {d D : ℕ} (A : MPSTensor d D) (K L : ℕ)
-    (X : Matrix (Fin D) (Fin D) ℂ) (u : Cfg d K → ℂ) :
-    WithLp.toLp 2 (fun σ : Cfg d (K + L) ↦
+    {d D : ℕ} (A : MPTensor α (Fin D)) (K L : ℕ)
+    (X : Matrix (Fin D) (Fin D) ℂ) (u : (Fin K → α) → ℂ) :
+    WithLp.toLp 2 (fun σ : (Fin (K + L) → α) ↦
       u (σ ∘ Fin.castAdd L) * groundSpaceMap A (K + L) X σ) ∈
         (tailBoundaryMapES A K L).range := by
-  refine ⟨(boundaryFamilyEquiv (D := D) (Cfg d K)).symm
+  refine ⟨(boundaryFamilyEquiv (D := D) (Fin K → α)).symm
     (fun τ ↦ u τ • (X * Kraus.evalWord A (List.ofFn τ))), ?_⟩
   apply PiLp.ext
   intro σ
   change tailBoundaryMap A K L
-    (boundaryFamilyEquiv (D := D) (Cfg d K)
-      ((boundaryFamilyEquiv (D := D) (Cfg d K)).symm _)) σ = _
+    (boundaryFamilyEquiv (D := D) (Fin K → α)
+      ((boundaryFamilyEquiv (D := D) (Fin K → α)).symm _)) σ = _
   rw [LinearEquiv.apply_symm_apply, tailBoundaryMap_apply,
     Matrix.mul_smul, Matrix.trace_smul]
   change u (σ ∘ Fin.castAdd L) *
@@ -59,18 +59,18 @@ theorem marked_groundSpaceMap_mem_tailBoundaryRange
 /-- A multiplier on the suffix spectator sites is absorbed into the boundary
 matrix of the left interval. -/
 theorem marked_groundSpaceMap_mem_leftBoundaryRange
-    {d D : ℕ} (A : MPSTensor d D) (K L : ℕ)
-    (X : Matrix (Fin D) (Fin D) ℂ) (u : Cfg d L → ℂ) :
-    WithLp.toLp 2 (fun σ : Cfg d (K + L) ↦
+    {d D : ℕ} (A : MPTensor α (Fin D)) (K L : ℕ)
+    (X : Matrix (Fin D) (Fin D) ℂ) (u : (Fin L → α) → ℂ) :
+    WithLp.toLp 2 (fun σ : (Fin (K + L) → α) ↦
       u (σ ∘ Fin.natAdd K) * groundSpaceMap A (K + L) X σ) ∈
         (leftBoundaryMapES A K L).range := by
-  refine ⟨(boundaryFamilyEquiv (D := D) (Cfg d L)).symm
+  refine ⟨(boundaryFamilyEquiv (D := D) (Fin L → α)).symm
     (fun τ ↦ u τ • (Kraus.evalWord A (List.ofFn τ) * X)), ?_⟩
   apply PiLp.ext
   intro σ
   change leftBoundaryMap A K L
-    (boundaryFamilyEquiv (D := D) (Cfg d L)
-      ((boundaryFamilyEquiv (D := D) (Cfg d L)).symm _)) σ = _
+    (boundaryFamilyEquiv (D := D) (Fin L → α)
+      ((boundaryFamilyEquiv (D := D) (Fin L → α)).symm _)) σ = _
   rw [LinearEquiv.apply_symm_apply, leftBoundaryMap_apply,
     Matrix.mul_smul, Matrix.trace_smul]
   change u (σ ∘ Fin.natAdd K) *

@@ -56,15 +56,15 @@ open MeasureTheory Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- Full source perturbation span implies injectivity of both diagonal
 blocks, by the two surjective diagonal block projections.
 Source: arXiv:1210.6613, injective perturbations and Lemma lowenergystates. -/
 theorem uncleBoundaryLetter_isInjective_diagonal_blocks
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) :
     Kraus.IsInjective A ∧ Kraus.IsInjective B := by
   classical
@@ -79,7 +79,7 @@ theorem uncleBoundaryLetter_isInjective_diagonal_blocks
       map_smul' := by intros; rfl }
   have hproj {D : ℕ}
       (f : Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      (K : MPSTensor d D) (hf : Function.Surjective f)
+      (K : MPTensor α (Fin D)) (hf : Function.Surjective f)
       (hK : ∀ i, f (uncleBoundaryLetter A B R L i) = K i) : Kraus.IsInjective K := by
     have hmap : (Submodule.span ℂ (Set.range (uncleBoundaryLetter A B R L))).map f =
         Submodule.span ℂ (Set.range K) := by
@@ -118,9 +118,9 @@ quadratic upper and lower bounds on the squared norm of the source
 trial. The following generic theorem derives this positivity without
 assuming it. Source: arXiv:1210.6613, Lemma lowenergystates, first assertion. -/
 theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hIA : Kraus.IsInjective A) (hIB : Kraus.IsInjective B)
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
@@ -131,9 +131,9 @@ theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
     (hκ : 0 < (uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re) :
     ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∀ᶠ N : ℕ in atTop,
       c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤
-        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)‖ ^ 2 ∧
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B R L N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
   let κ := (uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re
   have hlim := uncleTwoWallTrialSource_normalized_norm_sq_tendsto
@@ -151,21 +151,21 @@ proper-radical exceptional-set theorem, not by a norm-growth premise.
 A single additive Haar measure on the pair space is used. Source:
 arXiv:1210.6613, Lemma lowenergystates, first assertion, lines 1196–1265. -/
 theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef) (htrB : Matrix.trace ρB = 1)
     (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB)
-    (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
+    (μ : Measure ((α → Matrix (Fin a) (Fin b) ℂ) ×
+      (α → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∀ᶠ N : ℕ in atTop,
       c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤
-        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+        ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ∧
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
   have : NeZero a := Matrix.neZero_of_trace_eq_one htrA
   have : NeZero b := Matrix.neZero_of_trace_eq_one htrB
@@ -196,14 +196,14 @@ open Filter
 
 namespace MPSTensor
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 /-- The periodic squared norm of a normalized injective source block
 tends to one, \(\|\psi_A^N\|^2\to1\). This follows from the derived canonical transfer contraction,
 not a supplied state-normalization limit. Source: arXiv:1210.6613,
 Lemma exptransferoperator. -/
 theorem uncleMPV_norm_sq_tendsto_one
-    (A : MPSTensor d a) (hIA : Kraus.IsInjective A) (hUA : Kraus.mapLM A 1 = 1)
+    (A : MPTensor α (Fin a)) (hIA : Kraus.IsInjective A) (hUA : Kraus.mapLM A 1 = 1)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (htr : Matrix.trace ρ = 1)
     (hF : Kraus.adjointMap A ρ = ρ) :
     Tendsto (fun N ↦ ‖mpvState A N‖ ^ 2) atTop (nhds (1 : ℝ)) := by
@@ -256,9 +256,9 @@ to one. The full perturbation witness and
 normalized canonical data derive every transfer and Gram condition.
 Source: arXiv:1210.6613, Lemmas exptransferoperator and lowenergystates. -/
 theorem uncleGroundGram_tendsto
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L))
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
@@ -312,19 +312,19 @@ namespace MPSTensor
 
 open ManyBody.Interaction (translationInvariant)
 
-variable {d a b : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {a b : ℕ}
 
 private theorem ker_hamiltonian_uncleInteraction_eq_span_mpvState
-    (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
+    (R : α → Matrix (Fin a) (Fin b) ℂ)
+    (L : α → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L))
     (M : ℕ) (hM : 2 ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
     LinearMap.ker (Matrix.toEuclideanLin
         (translationInvariant M (uncleInteraction A B R L)).hamiltonian) =
       Submodule.span ℂ ({mpvState A M, mpvState B M} :
-        Set (EuclideanSpace ℂ (Cfg d M))) := by
+        Set (EuclideanSpace ℂ (Fin M → α))) := by
   obtain ⟨n, rfl⟩ : ∃ n : ℕ, M = n + 2 := ⟨M - 2, by omega⟩
   rw [ker_hamiltonian_uncleInteraction_eq_span_mpv A B R L hPert n]
   rfl
@@ -339,13 +339,13 @@ injective-perturbation assumption, not an assumed variational estimate.
 Source: arXiv:1210.6613, thm:gapless, lines 1154–1314; injective
 perturbations at lines 1017–1018 and 1041–1042. -/
 theorem hamiltonian_uncleInteraction_ae_eventually_exists_pos_eigenvalue_lt
-    (A : MPSTensor d a) (B : MPSTensor d b)
+    (A : MPTensor α (Fin a)) (B : MPTensor α (Fin b))
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef) (htrB : Matrix.trace ρB = 1)
     (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB)
-    (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [μ.IsAddHaarMeasure] :
+    (μ : Measure ((α → Matrix (Fin a) (Fin b) ℂ) ×
+      (α → Matrix (Fin b) (Fin a) ℂ))) [μ.IsAddHaarMeasure] :
     ∀ᵐ P ∂μ, Kraus.IsInjective (uncleBoundaryLetter A B P.1 P.2) →
       ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
         ∃ η : ℝ, 0 < η ∧ η < ε ∧
@@ -354,8 +354,8 @@ theorem hamiltonian_uncleInteraction_ae_eventually_exists_pos_eigenvalue_lt
                 (translationInvariant (6 * N + 1) (uncleInteraction A B P.1 P.2)).hamiltonian) (η :
                   ℂ) := by
   classical
-  by_cases hExists : ∃ (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
-      (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ),
+  by_cases hExists : ∃ (R₀ : α → Matrix (Fin a) (Fin b) ℂ)
+      (L₀ : α → Matrix (Fin b) (Fin a) ℂ),
       Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀)
   · obtain ⟨R₀, L₀, hPert₀⟩ := hExists
     have : NeZero a := Matrix.neZero_of_trace_eq_one htrA
@@ -371,8 +371,8 @@ theorem hamiltonian_uncleInteraction_ae_eventually_exists_pos_eigenvalue_lt
     filter_upwards [hNorm] with P hP
     intro hPert
     obtain ⟨c, C, hc, _hC, hBounds⟩ := hP
-    let v : (N : ℕ) → EuclideanSpace ℂ (Cfg d (6 * N + 1)) := fun N ↦
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
+    let v : (N : ℕ) → EuclideanSpace ℂ (Fin (6 * N + 1) → α) := fun N ↦
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B P.1 P.2 N)
     have hNormLower : ∀ᶠ N : ℕ in atTop,
         c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤ ‖v N‖ ^ 2 :=
@@ -387,7 +387,7 @@ theorem hamiltonian_uncleInteraction_ae_eventually_exists_pos_eigenvalue_lt
       filter_upwards [eventually_gt_atTop 0] with N hN
       have hK := ker_hamiltonian_uncleInteraction_eq_span_mpvState A B P.1 P.2 hPert
         (6 * N + 1) (by omega)
-      have key : ∀ (K₁ K₂ : Submodule ℂ (EuclideanSpace ℂ (Cfg d (6 * N + 1))))
+      have key : ∀ (K₁ K₂ : Submodule ℂ (EuclideanSpace ℂ (Fin (6 * N + 1) → α)))
           [K₁.HasOrthogonalProjection] [K₂.HasOrthogonalProjection], K₁ = K₂ →
           ∀ x, K₁.starProjection x = K₂.starProjection x := by
         rintro K₁ K₂ _ _ rfl x

@@ -82,27 +82,27 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Prefix restriction (left symmetric of `tailRestrictₗ`) -/
 
-/-- Fix a suffix \(τ : Fin L → Fin d\) and restrict a \(K+L\)-site state to its
+/-- Fix a suffix \(τ : Fin L → α\) and restrict a \(K+L\)-site state to its
 first \(K\) sites.  This is the left-sided analogue of \(tailRestrictₗ\). -/
-def prefixRestrictₗ {d K L : ℕ} (τ : Fin L → Fin d) :
-    NSiteSpace (Fin d) (K + L) →ₗ[ℂ] NSiteSpace (Fin d) K where
+def prefixRestrictₗ {d K L : ℕ} (τ : Fin L → α) :
+    NSiteSpace α (K + L) →ₗ[ℂ] NSiteSpace α K where
   toFun ψ := fun σ => ψ (Fin.append σ τ)
   map_add' ψ₁ ψ₂ := by ext σ; simp
   map_smul' c ψ := by ext σ; simp
 
-@[simp] theorem prefixRestrictₗ_apply {d K L : ℕ} (τ : Fin L → Fin d)
-    (ψ : NSiteSpace (Fin d) (K + L)) (σ : Fin K → Fin d) :
+@[simp] theorem prefixRestrictₗ_apply {d K L : ℕ} (τ : Fin L → α)
+    (ψ : NSiteSpace α (K + L)) (σ : Fin K → α) :
     prefixRestrictₗ τ ψ σ = ψ (Fin.append σ τ) := rfl
 
 /-- The prefix restriction of a ground-space vector: fixing the suffix τ and
 keeping the prefix variable moves the suffix word to the left factor of the
 virtual matrix. -/
-@[simp] theorem prefixRestrictₗ_groundSpaceMap (A : MPSTensor d D) {K L : ℕ}
-    (τ : Fin L → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
+@[simp] theorem prefixRestrictₗ_groundSpaceMap (A : MPTensor α (Fin D)) {K L : ℕ}
+    (τ : Fin L → α) (X : Matrix (Fin D) (Fin D) ℂ) :
     prefixRestrictₗ τ (groundSpaceMap A (K + L) X) =
       groundSpaceMap A K (Kraus.evalWord A (List.ofFn τ) * X) := by
   ext σ
@@ -118,7 +118,7 @@ virtual matrix. -/
 
 /-- Spectator-indexed tail boundary map.
 
-For a family \(Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ\) indexed by
+For a family \(Y : (Fin K → α) → Matrix (Fin D) (Fin D) ℂ\) indexed by
 \(K\)-site prefix configurations, the map produces a vector on \(K+L\) sites by
 \[
   (\Gamma^{\mathrm{tail}}_{K,L}(Y))(u,\tau)
@@ -126,15 +126,15 @@ For a family \(Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ\) indexed by
 \]
 where \(u\) is the prefix and \(τ\) is the suffix.
 When \(Y_u = X·A^u\) the output equals the standard \(Γ_{K+L}(X)\). -/
-noncomputable def tailBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
-    ((Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) where
+noncomputable def tailBoundaryMap (A : MPTensor α (Fin D)) (K L : ℕ) :
+    ((Fin K → α) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace α (K + L) where
   toFun Y σ := Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
     Y (σ ∘ Fin.castAdd L))
   map_add' Y₁ Y₂ := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c Y := by ext σ; simp [Matrix.trace_smul, smul_eq_mul]
 
-@[simp] theorem tailBoundaryMap_apply (A : MPSTensor d D) (K L : ℕ)
-    (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) (σ : Cfg d (K + L)) :
+@[simp] theorem tailBoundaryMap_apply (A : MPTensor α (Fin D)) (K L : ℕ)
+    (Y : (Fin K → α) → Matrix (Fin D) (Fin D) ℂ) (σ : (Fin (K + L) → α)) :
     tailBoundaryMap A K L Y σ =
       Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
         Y (σ ∘ Fin.castAdd L)) :=
@@ -142,9 +142,9 @@ noncomputable def tailBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
 
 /-- The tail boundary map on a prefix–suffix pair reduces to the local
 ground-space map on the suffix. -/
-theorem tailBoundaryMap_append (A : MPSTensor d D) (K L : ℕ)
-    (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (u : Fin K → Fin d) (τ : Fin L → Fin d) :
+theorem tailBoundaryMap_append (A : MPTensor α (Fin D)) (K L : ℕ)
+    (Y : (Fin K → α) → Matrix (Fin D) (Fin D) ℂ)
+    (u : Fin K → α) (τ : Fin L → α) :
     tailBoundaryMap A K L Y (Fin.append u τ) =
       groundSpaceMap A L (Y u) τ := by
   calc
@@ -162,8 +162,8 @@ theorem tailBoundaryMap_append (A : MPSTensor d D) (K L : ℕ)
 
 /-- Restricting the tail boundary map to the suffix for a fixed prefix \(u\)
 recovers \(Γ_L(Y_u)\). -/
-@[simp] theorem tailRestrictₗ_tailBoundaryMap (A : MPSTensor d D) (K L : ℕ)
-    (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) (u : Fin K → Fin d) :
+@[simp] theorem tailRestrictₗ_tailBoundaryMap (A : MPTensor α (Fin D)) (K L : ℕ)
+    (Y : (Fin K → α) → Matrix (Fin D) (Fin D) ℂ) (u : Fin K → α) :
     tailRestrictₗ u (tailBoundaryMap A K L Y) = groundSpaceMap A L (Y u) := by
   ext τ
   simp [tailBoundaryMap_append A K L Y u τ]
@@ -173,10 +173,10 @@ factors through the tail boundary map by \(X ↦ (λ u, X·A^u)\).
 \[
   \Gamma_{K+L}(X) = \Gamma^{\mathrm{tail}}_{K,L}(\lambda u,\; X\,A^u).
 \] -/
-theorem tailBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
+theorem tailBoundaryMap_factorization (A : MPTensor α (Fin D)) (K L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     tailBoundaryMap A K L
-      (fun u : Fin K → Fin d => X * Kraus.evalWord A (List.ofFn u)) =
+      (fun u : Fin K → α => X * Kraus.evalWord A (List.ofFn u)) =
         groundSpaceMap A (K + L) X := by
   ext σ
   rw [tailBoundaryMap_apply, groundSpaceMap_apply]
@@ -200,9 +200,9 @@ theorem tailBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
 /-- The range of the tail boundary map equals the tail ground space:
 vectors whose suffix restriction lies in the local ground space for
 every prefix configuration. -/
-theorem tailBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
+theorem tailBoundaryMap_range_eq (A : MPTensor α (Fin D)) (K L : ℕ) :
     (tailBoundaryMap A K L).range =
-      {ψ : NSiteSpace (Fin d) (K + L) | ∀ u : Fin K → Fin d,
+      {ψ : NSiteSpace α (K + L) | ∀ u : Fin K → α,
         tailRestrictₗ u ψ ∈ groundSpace A L} := by
   ext ψ
   constructor
@@ -211,7 +211,7 @@ theorem tailBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
     exact ⟨Y u, rfl⟩
   · intro hψ
     -- For each prefix u, pick a matrix Y_u representing the suffix slice
-    have hY : ∀ u : Fin K → Fin d,
+    have hY : ∀ u : Fin K → α,
         tailRestrictₗ u ψ ∈ (groundSpaceMap A L).range := by
       intro u
       have hu := hψ u
@@ -235,7 +235,7 @@ theorem tailBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
 
 /-- Spectator-indexed left boundary map.
 
-For a family \(Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ\) indexed by
+For a family \(Z : (Fin L → α) → Matrix (Fin D) (Fin D) ℂ\) indexed by
 \(L\)-site suffix configurations, the map produces a vector on \(K+L\) sites by
 \[
   (\Gamma^{\mathrm{left}}_{K,L}(Z))(u,\tau)
@@ -243,15 +243,15 @@ For a family \(Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ\) indexed by
 \]
 where \(u\) is the prefix and \(τ\) is the suffix.
 When \(Z_τ = A^τ·X\) the output equals the standard \(Γ_{K+L}(X)\). -/
-noncomputable def leftBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
-    ((Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) where
+noncomputable def leftBoundaryMap (A : MPTensor α (Fin D)) (K L : ℕ) :
+    ((Fin L → α) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace α (K + L) where
   toFun Z σ := Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
     Z (σ ∘ Fin.natAdd K))
   map_add' Z₁ Z₂ := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c Z := by ext σ; simp [Matrix.trace_smul, smul_eq_mul]
 
-@[simp] theorem leftBoundaryMap_apply (A : MPSTensor d D) (K L : ℕ)
-    (Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) (σ : Cfg d (K + L)) :
+@[simp] theorem leftBoundaryMap_apply (A : MPTensor α (Fin D)) (K L : ℕ)
+    (Z : (Fin L → α) → Matrix (Fin D) (Fin D) ℂ) (σ : (Fin (K + L) → α)) :
     leftBoundaryMap A K L Z σ =
       Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
         Z (σ ∘ Fin.natAdd K)) :=
@@ -259,9 +259,9 @@ noncomputable def leftBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
 
 /-- The left boundary map on a prefix–suffix pair reduces to the local
 ground-space map on the prefix. -/
-theorem leftBoundaryMap_append (A : MPSTensor d D) (K L : ℕ)
-    (Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (u : Fin K → Fin d) (τ : Fin L → Fin d) :
+theorem leftBoundaryMap_append (A : MPTensor α (Fin D)) (K L : ℕ)
+    (Z : (Fin L → α) → Matrix (Fin D) (Fin D) ℂ)
+    (u : Fin K → α) (τ : Fin L → α) :
     leftBoundaryMap A K L Z (Fin.append u τ) =
       groundSpaceMap A K (Z τ) u := by
   calc
@@ -279,8 +279,8 @@ theorem leftBoundaryMap_append (A : MPSTensor d D) (K L : ℕ)
 
 /-- Restricting the left boundary map to the prefix for a fixed suffix \(τ\)
 recovers \(Γ_K(Z_τ)\). -/
-@[simp] theorem prefixRestrictₗ_leftBoundaryMap (A : MPSTensor d D) (K L : ℕ)
-    (Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) (τ : Fin L → Fin d) :
+@[simp] theorem prefixRestrictₗ_leftBoundaryMap (A : MPTensor α (Fin D)) (K L : ℕ)
+    (Z : (Fin L → α) → Matrix (Fin D) (Fin D) ℂ) (τ : Fin L → α) :
     prefixRestrictₗ τ (leftBoundaryMap A K L Z) = groundSpaceMap A K (Z τ) := by
   ext σ
   simp [leftBoundaryMap_append A K L Z σ τ]
@@ -290,10 +290,10 @@ boundary map factors through the left boundary map by \(X ↦ (λ τ, A^τ·X)\)
 \[
   \Gamma_{K+L}(X) = \Gamma^{\mathrm{left}}_{K,L}(\lambda \tau,\; A^\tau\,X).
 \] -/
-theorem leftBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
+theorem leftBoundaryMap_factorization (A : MPTensor α (Fin D)) (K L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     leftBoundaryMap A K L
-      (fun τ : Fin L → Fin d => Kraus.evalWord A (List.ofFn τ) * X) =
+      (fun τ : Fin L → α => Kraus.evalWord A (List.ofFn τ) * X) =
         groundSpaceMap A (K + L) X := by
   ext σ
   rw [leftBoundaryMap_apply, groundSpaceMap_apply]
@@ -314,9 +314,9 @@ theorem leftBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
 /-- The range of the left boundary map equals the left ground space:
 vectors whose prefix restriction lies in the local ground space for
 every suffix configuration. -/
-theorem leftBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
+theorem leftBoundaryMap_range_eq (A : MPTensor α (Fin D)) (K L : ℕ) :
     (leftBoundaryMap A K L).range =
-      {ψ : NSiteSpace (Fin d) (K + L) | ∀ τ : Fin L → Fin d,
+      {ψ : NSiteSpace α (K + L) | ∀ τ : Fin L → α,
         prefixRestrictₗ τ ψ ∈ groundSpace A K} := by
   ext ψ
   constructor
@@ -324,7 +324,7 @@ theorem leftBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
     rw [prefixRestrictₗ_leftBoundaryMap A K L Z τ]
     exact ⟨Z τ, rfl⟩
   · intro hψ
-    have hZ : ∀ τ : Fin L → Fin d,
+    have hZ : ∀ τ : Fin L → α,
         prefixRestrictₗ τ ψ ∈ (groundSpaceMap A K).range := by
       intro τ
       have hτ := hψ τ
@@ -353,8 +353,8 @@ Hilbert-space ground submodules used in the open-chain martingale condition
 with last-site restriction at \(\tau(0)\).  This is used to connect the left boundary map range
 (at \(L=1\)) to the open-chain left ground space defined by fixing the
 last site. -/
-lemma prefixRestrictₗ_one_eq_restrictLast {d K : ℕ} (τ : Fin 1 → Fin d)
-    (ψ : NSiteSpace (Fin d) (K + 1)) :
+lemma prefixRestrictₗ_one_eq_restrictLast {d K : ℕ} (τ : Fin 1 → α)
+    (ψ : NSiteSpace α (K + 1)) :
     prefixRestrictₗ τ ψ = restrictLast ψ (τ 0) := by
   ext σ
   simp [prefixRestrictₗ_apply, restrictLast_apply, Fin.append_right_eq_snoc]
@@ -365,20 +365,20 @@ with `openChainTailGroundSpaceES`.  This is the exact common-ambient
 identification required for the open-chain martingale condition C3
 (Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4)). -/
 theorem tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES
-    (A : MPSTensor d D) (K L : ℕ) :
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm).toLinearMap
+    (A : MPTensor α (Fin D)) (K L : ℕ) :
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm).toLinearMap
       (tailBoundaryMap A K L).range =
     openChainTailGroundSpaceES A K L :=
   calc
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm).toLinearMap
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm).toLinearMap
         (tailBoundaryMap A K L).range
-      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm).toLinearMap
-          (⨅ u : Fin K → Fin d, (groundSpace A L).comap (tailRestrictₗ u)) := by
+      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + L))).symm).toLinearMap
+          (⨅ u : Fin K → α, (groundSpace A L).comap (tailRestrictₗ u)) := by
         congr 1
         apply Submodule.ext
         intro ψ
         have h_set := tailBoundaryMap_range_eq A K L
-        have h_mem := congrArg (fun (s : Set (NSiteSpace (Fin d) (K + L))) => ψ ∈ s) h_set
+        have h_mem := congrArg (fun (s : Set (NSiteSpace α (K + L))) => ψ ∈ s) h_set
         simpa [Submodule.mem_iInf, groundSpace, tailRestrictₗ] using h_mem
     _ = openChainTailGroundSpaceES A K L := by
       simp [openChainTailGroundSpaceES]
@@ -389,25 +389,25 @@ transport of the left boundary map range identifies with
 theorem to place both overlapping ground spaces in the same ambient
 Hilbert space. -/
 theorem leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES
-    (A : MPSTensor d D) (K : ℕ) :
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + 1))).symm).toLinearMap
+    (A : MPTensor α (Fin D)) (K : ℕ) :
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + 1))).symm).toLinearMap
       (leftBoundaryMap A K 1).range =
     openChainLeftGroundSpaceES A K :=
   calc
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + 1))).symm).toLinearMap
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + 1))).symm).toLinearMap
         (leftBoundaryMap A K 1).range
-      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + 1))).symm).toLinearMap
-          (⨅ j : Fin d, (groundSpace A K).comap (restrictLastₗ j)) := by
+      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace α (K + 1))).symm).toLinearMap
+          (⨅ j : α, (groundSpace A K).comap (restrictLastₗ j)) := by
         congr 1
         apply Submodule.ext
         intro ψ
         have h_set := leftBoundaryMap_range_eq A K 1
         have h1 : ψ ∈ (leftBoundaryMap A K 1).range ↔
-            ∀ τ : Fin 1 → Fin d, prefixRestrictₗ τ ψ ∈ groundSpace A K := by
-          have := congrArg (fun (s : Set (NSiteSpace (Fin d) (K + 1))) => ψ ∈ s) h_set
+            ∀ τ : Fin 1 → α, prefixRestrictₗ τ ψ ∈ groundSpace A K := by
+          have := congrArg (fun (s : Set (NSiteSpace α (K + 1))) => ψ ∈ s) h_set
           simpa using this
-        have h2 : (∀ τ : Fin 1 → Fin d, prefixRestrictₗ τ ψ ∈ groundSpace A K) ↔
-            (∀ j : Fin d, (restrictLastₗ j) ψ ∈ groundSpace A K) := by
+        have h2 : (∀ τ : Fin 1 → α, prefixRestrictₗ τ ψ ∈ groundSpace A K) ↔
+            (∀ j : α, (restrictLastₗ j) ψ ∈ groundSpace A K) := by
           constructor
           · intro h j
             have h_pre := h (fun _ => j)
@@ -421,8 +421,8 @@ theorem leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES
               simpa [restrictLast] using prefixRestrictₗ_one_eq_restrictLast τ ψ
             rw [eq_last]
             exact h_last
-        have h3 : (∀ j : Fin d, (restrictLastₗ j) ψ ∈ groundSpace A K) ↔
-            ψ ∈ ⨅ j : Fin d, (groundSpace A K).comap (restrictLastₗ j) := by
+        have h3 : (∀ j : α, (restrictLastₗ j) ψ ∈ groundSpace A K) ↔
+            ψ ∈ ⨅ j : α, (groundSpace A K).comap (restrictLastₗ j) := by
           simp [Submodule.mem_iInf]
         exact (h1.trans h2).trans h3
     _ = openChainLeftGroundSpaceES A K := by

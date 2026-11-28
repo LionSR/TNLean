@@ -30,7 +30,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ} [NeZero D]
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ} [NeZero D]
 
 set_option linter.style.longLine false in
 /-- The distinct normal representatives of a canonical tensor have a
@@ -41,20 +41,20 @@ Source: arXiv:1606.00608, lines 317--345; the additional site is that of
 the intersection argument in arXiv:2011.12127, lines 2087--2094. -/
 theorem
     _root_.MPTensor.CPSVCanonicalFormData.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) :
     ∃ S : ℕ, 0 < S ∧ S + 1 ≤ 3 * D ^ 5 ∧
       WordTupleSpanTop (fun j ↦ data.blocks (data.representativeIndex j)) S := by
   exact IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five
     (NeZero.pos D) data.sum_representative_dim_le data.bntRefinement.representativesBNT
 
-variable [NeZero d]
+variable [Nonempty α]
 
 /-- Every canonical parent interaction of range \(L\geq 3D^5\) has
 precisely the periodic BNT span as its kernel on every ring \(N\geq L\).
 This includes \(N=L=3D^5\). Source: arXiv:1606.00608, lines 317--345,
 and arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le
-    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {L N : ℕ}
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) {L N : ℕ}
     (hL : 3 * D ^ 5 ≤ L) (hLN : L ≤ N) :
     haveI : NeZero N := ⟨by
       obtain ⟨S, hS, hBound, -⟩ :=
@@ -76,17 +76,17 @@ This combines the blocking estimate of arXiv:1606.00608, lines 317--345,
 with the block-injective ground-space theorem of arXiv:2011.12127,
 Section IV.C, lines 2114--2129. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range
-    {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
-    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)) (R : ℕ),
+    {A : MPTensor α (Fin D)} (hA : IsCPSVCanonicalForm A) :
+    ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPTensor α (Fin (dim j))) (R : ℕ),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       0 < R ∧ R ≤ 3 * D ^ 5 ∧
       ∀ {L N : ℕ} [NeZero N], R ≤ L → L ≤ N →
-        ∀ H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N),
+        ∀ H : Fin N → EuclideanSpace ℂ (Fin N → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → α),
           (∀ i, (H i).IsPositive) →
           (∀ i, LinearMap.ker (H i) =
             LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) →
           LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan B N).map
-            (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace α N)).symm.toLinearMap := by
   let data := Classical.choice hA
   obtain ⟨S, hS, hBound, hSpan⟩ :=
     data.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five

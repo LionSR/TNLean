@@ -27,64 +27,63 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
-open Kraus (blockPhysDim blockTensor flattenBlockedWord)
 namespace MPSTensor
-variable {d D L : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D L : ℕ}
 
 /-- Decode the three physical configuration blocks into the original cover
 length \(KL+ML+r\). Source: the grouping in Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, and DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451. -/
-noncomputable def residualCoverConfigEquiv (d L K M r : ℕ) :
-    Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) ≃
-      Cfg d (K * L + M * L + r) :=
-  (residualWindowConfigEquiv d L K M r).trans
-    (Equiv.arrowCongr (finCongr (by rw [Nat.add_mul])) (Equiv.refl (Fin d)))
+noncomputable def residualCoverConfigEquiv (L K M r : ℕ) :
+    (Fin K → Fin L → α) × ((Fin M → Fin L → α) × (Fin r → α)) ≃
+      (Fin (K * L + M * L + r) → α) :=
+  (residualWindowConfigEquiv L K M r).trans
+    (Equiv.arrowCongr (finCongr (by rw [Nat.add_mul])) (Equiv.refl α))
 
 /-- The cover configuration consists of the decoded prefix, decoded middle,
 and original tail, in that order. This includes zero lengths.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451. -/
 theorem residualCoverConfigEquiv_apply (K M r : ℕ)
-    (u : Cfg (blockPhysDim d L) K) (v : Cfg (blockPhysDim d L) M) (τ : Cfg d r) :
-    residualCoverConfigEquiv d L K M r (u, v, τ) =
-      Fin.append (Fin.append (Kraus.blockedConfigEquiv d K L u)
-        (Kraus.blockedConfigEquiv d M L v)) τ := by
+    (u : (Fin K → Fin L → α)) (v : (Fin M → Fin L → α)) (τ : Fin r → α) :
+    residualCoverConfigEquiv L K M r (u, v, τ) =
+      Fin.append (Fin.append (Kraus.blockConfigEquiv α K L u)
+        (Kraus.blockConfigEquiv α M L v)) τ := by
   apply List.ofFn_injective
   have hCast := List.ofFn_congr
     (show (K + M) * L + r = K * L + M * L + r by rw [Nat.add_mul])
-    (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ)
+    (Fin.append (Kraus.blockConfigEquiv α (K + M) L (Fin.append u v)) τ)
   calc
-    _ = List.ofFn (Fin.append (Kraus.blockedConfigEquiv d (K + M) L (Fin.append u v)) τ) :=
+    _ = List.ofFn (Fin.append (Kraus.blockConfigEquiv α (K + M) L (Fin.append u v)) τ) :=
       hCast.symm
     _ = _ := by
-      simp only [List.ofFn_fin_append, Kraus.ofFn_blockedConfigEquiv, flattenBlockedWord,
+      simp only [List.ofFn_fin_append, Kraus.ofFn_blockConfigEquiv, flattenBlockedWord,
         Kraus.flattenBlockedWord, List.map_append, List.flatten_append]
 
 /-- Physical reindexing writes the terminal boundary map as independent
 ordinary boundary maps on its prefix fibers. -/
 private theorem reindex_reassocTailBoundaryMapES_eq_fiberwise
-    (A : MPSTensor d D) (K M r : ℕ) :
+    (A : MPTensor α (Fin D)) (K M r : ℕ) :
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (residualCoverConfigEquiv d L K M r).symm).toContinuousLinearMap.comp
+      (residualCoverConfigEquiv L K M r).symm).toContinuousLinearMap.comp
         (reassocTailBoundaryMapES A (K * L) (M * L) r) =
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (Equiv.prodComm (Cfg (blockPhysDim d L) M × Cfg d r)
-        (Cfg (blockPhysDim d L) K))).toContinuousLinearMap.comp
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+      (Equiv.prodComm ((Fin M → Fin L → α) × (Fin r → α))
+        ((Fin K → Fin L → α)))).toContinuousLinearMap.comp
+      (ContinuousLinearMap.rightFiberwiseMap (S := (Fin K → Fin L → α))
         ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
+          (residualBoundaryConfigEquiv L M r).symm).toContinuousLinearMap.comp
             (groundSpaceMapES A (M * L + r))))).comp
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        ((Equiv.prodComm (Fin D × Fin D) (Cfg (blockPhysDim d L) K)).trans
-          (Equiv.prodCongr (Kraus.blockedConfigEquiv d K L)
+        ((Equiv.prodComm (Fin D × Fin D) ((Fin K → Fin L → α))).trans
+          (Equiv.prodCongr (Kraus.blockConfigEquiv α K L)
             (Equiv.refl (Fin D × Fin D)))).symm).toContinuousLinearMap := by
   ext x ⟨u, v, τ⟩
   change reassocTailBoundaryMapES A (K * L) (M * L) r x
-      (residualCoverConfigEquiv d L K M r (u, v, τ)) =
+      (residualCoverConfigEquiv L K M r (u, v, τ)) =
     groundSpaceMapES A (M * L + r)
-      (WithLp.toLp 2 (fun p => x (Kraus.blockedConfigEquiv d K L u, p)))
-      (Fin.append (Kraus.blockedConfigEquiv d M L v) τ)
+      (WithLp.toLp 2 (fun p => x (Kraus.blockConfigEquiv α K L u, p)))
+      (Fin.append (Kraus.blockConfigEquiv α M L v) τ)
   rw [residualCoverConfigEquiv_apply, reassocTailBoundaryMapES_apply_threeBlock]
   rfl
 
@@ -96,23 +95,23 @@ Lemma commutation (i), lines 2442--2531; DCCSP17, arXiv:1708.00029,
 Lemma lem:blocking-arbitrary, lines 434--451. -/
 theorem iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES
     {ι : Type*} [Fintype ι] {dim : ι → ℕ}
-    (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
+    (A : MPTensor α (Fin D)) (B : ∀ j, MPTensor (Fin L → α) (Fin (dim j)))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
-    (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ) (K M r : ℕ) :
+    (hInt : ∀ j i, (V j)ᴴ * Kraus.block A L i = B j i * (V j)ᴴ) (K M r : ℕ) :
     (⨆ j, (residualWindowRightMapES A (B j) (V j) K M r).range) =
       (reassocTailBoundaryMapES A (K * L) (M * L) r).range.map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualCoverConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
+          (residualCoverConfigEquiv L K M r).symm).toLinearEquiv.toLinearMap := by
   simp_rw [residualWindowRightMapES_eq_fiberwise]
   simp only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp, ← Submodule.map_iSup]
   rw [ContinuousLinearMap.iSup_range_rightFiberwiseMap_eq]
   have hJoint :
       (⨆ j, ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
+        (residualBoundaryConfigEquiv L M r).symm).toContinuousLinearMap.comp
           (blockedResidualBoundaryMapES A L (B j) (V j) M r)).range) =
       ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
+        (residualBoundaryConfigEquiv L M r).symm).toContinuousLinearMap.comp
           (groundSpaceMapES A (M * L + r))).range := by
     simp only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp,
       ← Submodule.map_iSup]
