@@ -77,7 +77,7 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coeffici
         Matrix.trace ((A j b * C j a) * Kraus.evalWord (A j) (List.ofFn w))) =
       (∑ j : Fin r,
         Matrix.trace ((Dmat j b * A j a) * Kraus.evalWord (A j) (List.ofFn w))))
-    (ψ : NSiteSpace d (n + 2))
+    (ψ : NSiteSpace (Fin d) (n + 2))
     (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) :
     ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   classical
@@ -114,7 +114,7 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions_of_identity_coefficien
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
     (c : (Fin 1 → Fin d) → ℂ)
     (hId : ∀ j : Fin r, ∑ w, c w • A j (w 0) = 1)
-    (ψ : NSiteSpace d (n + 2))
+    (ψ : NSiteSpace (Fin d) (n + 2))
     (hLeft : ∀ b : Fin d,
       restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1))
     (hRight : ∀ a : Fin d,
@@ -211,7 +211,7 @@ theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_on
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     (hOne : WordTupleSpanTop A 1) [NeZero d]
-    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace d N}
+    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace
       (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -233,7 +233,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
     (hOne : WordTupleSpanTop A 1) [NeZero d]
-    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace d N}
+    {N : ℕ} (hN : 2 < N) {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace
       (toTensorFromBlocks (α := Fin d) (μ := μ) A) 2 N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,

@@ -48,37 +48,39 @@ open scoped BigOperators Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Transport between `NSiteSpace` and `EuclideanSpace`
 
-`NSiteSpace d L` is the function space on length-\(L\) configurations with
+`NSiteSpace α L` is the function space on length-\(L\) configurations with
 values in \(\mathbb C\), and
-`EuclideanSpace ℂ (Cfg d L)` is the same underlying
+`EuclideanSpace ℂ (Fin L → α)` is the same underlying
 function space equipped with the canonical ℓ² inner product via `WithLp 2`
-(concretely, `EuclideanSpace ℂ (Cfg d L) = WithLp 2 (Cfg d L → ℂ)`). We use
+(concretely, `EuclideanSpace ℂ (Fin L → α) = WithLp 2 ((Fin L → α) → ℂ)`). We use
 `WithLp.linearEquiv` to view the local ground space in this ℓ² realization, where
 Mathlib provides `InnerProductSpace` and orthogonal projection. -/
 
 /-- The local ground space \(G_L(A)\) in the canonical ℓ² realization of the
 \(L\)-site configuration space. -/
-noncomputable def groundSpaceES (A : MPSTensor d D) (L : ℕ) :
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
-  (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
+noncomputable def groundSpaceES (A : MPTensor α (Fin D)) (L : ℕ) :
+    Submodule ℂ (EuclideanSpace ℂ (Fin L → α)) :=
+  (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm.toLinearMap
 
+omit [Fintype α] [DecidableEq α] in
 /-- Membership in the canonical ℓ² realization of \(G_L(A)\) is the same as
 membership of the corresponding function in the original local ground space. -/
-theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d L)) :
+theorem mem_groundSpaceES_iff (A : MPTensor α (Fin D)) (L : ℕ)
+    (v : EuclideanSpace ℂ (Fin L → α)) :
     v ∈ groundSpaceES A L ↔
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)) v ∈ groundSpace A L := by
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)) v ∈ groundSpace A L := by
   rw [groundSpaceES]
   exact Submodule.mem_map_equiv (p := groundSpace A L)
-    (e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm) (x := v)
+    (e := (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm) (x := v)
 
+omit [DecidableEq α] in
 /-- The finite-dimensional local ground space \(G_L(A)\) admits an orthogonal projection. -/
 theorem groundSpaceES_hasOrthogonalProjection
-    (A : MPSTensor d D) (L : ℕ) : (groundSpaceES A L).HasOrthogonalProjection := by
+    (A : MPTensor α (Fin D)) (L : ℕ) : (groundSpaceES A L).HasOrthogonalProjection := by
   let : CompleteSpace (groundSpaceES A L) := FiniteDimensional.complete ℂ _
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
@@ -90,9 +92,9 @@ projector onto \(G_L(A)^\perp\) in the \(L\)-site Hilbert space.
 Mathematically, \(h_L = 𝟙 - P_{G_L(A)}\), where \(P_{G_L(A)}\) is the
 orthogonal projector onto \(G_L(A)\). This is a PSD operator with
 \(\ker h_L = G_L(A)\). -/
-noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
-    NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
+noncomputable def parentInteraction (A : MPTensor α (Fin D)) (L : ℕ) :
+    NSiteSpace α L →ₗ[ℂ] NSiteSpace α L :=
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace α L)
   e.toLinearMap.comp ((groundSpaceES A L)ᗮ.starProjection.toLinearMap.comp e.symm.toLinearMap)
 
 /-! ### Window extraction and replacement (periodic boundary conditions) -/
@@ -115,7 +117,7 @@ starting at position \(i\), with values from \(\tau\) (periodic boundary conditi
 Requires \(L ≤ N\) to ensure the \(L\)-site window is represented faithfully.
 
 Note: the offset logic mirrors `cyclicCfg` in `CyclicWindow.lean`, but this
-function is type-generic (`α` instead of `Fin d`) and *replaces* a window
+function is type-generic (`α` instead of a numbered alphabet) and *replaces* a window
 rather than constructing a full configuration from one. -/
 def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
@@ -288,8 +290,8 @@ starting at \(i\), and zero for \(L > N\) (`ManyBody.Interaction.translationInva
 terms are the translated local terms and its Hamiltonian is the parent Hamiltonian; the
 frustration-free ground vectors of the parent model are the vectors of its zero space
 (`ManyBody.Interaction.zeroSpace`). -/
-noncomputable abbrev parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N] :=
-  ManyBody.Interaction.translationInvariant (α := Fin d) N
+noncomputable abbrev parentRingInteraction (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] :=
+  ManyBody.Interaction.translationInvariant (α := α) N
     (LinearMap.toMatrix' (parentInteraction A L))
 
 /-- **The parent interaction on the open chain.** On the open chain of `N` sites, the translates
@@ -301,8 +303,8 @@ arXiv:cond-mat/9410110, equation (3.12).
 **Convention at range zero.** For `L = 0` the windows are the `N + 1` empty windows at the
 positions `0, …, N`, so the Hamiltonian is `N + 1` times the one-by-one matrix of \(h_0\)
 (which is `0` when `D > 0` and `1` when `D = 0`). The source has no range-zero interaction. -/
-noncomputable abbrev parentChainInteraction (A : MPSTensor d D) (L N : ℕ) :
-    ManyBody.Interaction (fun _ : Fin N ↦ Fin d) (fun i : Fin (N + 1 - L) ↦
+noncomputable abbrev parentChainInteraction (A : MPTensor α (Fin D)) (L N : ℕ) :
+    ManyBody.Interaction (fun _ : Fin N ↦ α) (fun i : Fin (N + 1 - L) ↦
       Finset.univ.map (ManyBody.chainWindow (N := N) (k := L) i.val (by omega))) :=
   ManyBody.Interaction.chainTranslates L N (LinearMap.toMatrix' (parentInteraction A L))
 
@@ -311,8 +313,8 @@ noncomputable abbrev parentChainInteraction (A : MPSTensor d D) (L N : ℕ) :
 /-- Pointwise formula for the term with index `i` of the parent interaction on the ring when the
 window length is at most the chain length: it acts as `parentInteraction A L` on the window
 \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as the identity on the complement. -/
-theorem parentRingInteraction_term_mulVec_apply_of_le (A : MPSTensor d D) (L N : ℕ) [NeZero N]
-    (hLN : L ≤ N) (i : Fin N) (ψ : NSiteSpace d N) (σ : Cfg d N) :
+theorem parentRingInteraction_term_mulVec_apply_of_le (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N]
+    (hLN : L ≤ N) (i : Fin N) (ψ : NSiteSpace α N) (σ : (Fin N → α)) :
     ((parentRingInteraction A L N).term i *ᵥ ψ) σ =
       parentInteraction A L
         (fun τ => ψ (replaceWindow L hLN i σ τ)) (extractWindow L i σ) := by
@@ -333,7 +335,7 @@ the convention of `ManyBody.Interaction.translationInvariant`, not a one-site ca
 ordered-cycle formula. CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines 534--540,
 only uses chain lengths greater than two. This restriction is documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
-@[simp] theorem hamiltonian_parentRingInteraction_two_one (A : MPSTensor d D) :
+@[simp] theorem hamiltonian_parentRingInteraction_two_one (A : MPTensor α (Fin D)) :
     (parentRingInteraction A 2 1).hamiltonian = 0 :=
   Finset.sum_eq_zero fun _ _ ↦
     ManyBody.Interaction.translationInvariant_term_of_not_le _ (by norm_num) _

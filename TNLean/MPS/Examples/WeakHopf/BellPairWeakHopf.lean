@@ -804,7 +804,7 @@ theorem starProjection_groundSpaceES_stateTensor {n : ℕ} (hn : 0 < n) :
     refine LinearMap.ext fun v ↦ Submodule.starProjection_eq_self_iff.mpr ?_
     rw [MPSTensor.mem_groundSpaceES_iff]
     change (weakHopfRepresentation r).rep (m + 1) 1 *ᵥ
-      (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (r * r) (m + 1))) v ∈ _
+      (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin (r * r)) (m + 1))) v ∈ _
     rw [rep_one_eq_sum, Matrix.sum_mulVec]
     refine Submodule.sum_mem _ fun p _ ↦ ?_
     rw [Matrix.smul_mulVec, Matrix.vecMulVec_mulVec, op_smul_eq_smul]

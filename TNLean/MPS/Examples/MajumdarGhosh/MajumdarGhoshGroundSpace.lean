@@ -135,7 +135,7 @@ lemma majumdarGhosh_groundSpaceMap_conj (K : ℕ) (X : Matrix (Fin 3) (Fin 3) �
 
 /-- Every vector of the local space \(\mathcal G_K\) is \(\Gamma_K(X)\) for a
 boundary matrix of parity \((-1)^K\). -/
-lemma majumdarGhosh_exists_parity_rep {K : ℕ} {ψ : NSiteSpace 2 K}
+lemma majumdarGhosh_exists_parity_rep {K : ℕ} {ψ : NSiteSpace (Fin 2) K}
     (hψ : ψ ∈ groundSpace majumdarGhoshTensor K) :
     ∃ X : Matrix (Fin 3) (Fin 3) ℂ,
       majumdarGhoshGrading * X = (-1 : ℂ) ^ K • (X * majumdarGhoshGrading) ∧
@@ -252,7 +252,7 @@ private lemma groundSpaceMap_four_apply (X : Matrix (Fin 3) (Fin 3) ℂ) (a b c 
   simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
 
 /-- The four coordinate conditions of a three-site vector of \(\mathcal G_3\). -/
-private lemma majumdarGhosh_coords_of_mem {v : NSiteSpace 2 3}
+private lemma majumdarGhosh_coords_of_mem {v : NSiteSpace (Fin 2) 3}
     (hv : v ∈ groundSpace majumdarGhoshTensor 3) :
     v ![0, 0, 0] = 0 ∧ v ![1, 1, 1] = 0 ∧
       v ![0, 0, 1] + v ![0, 1, 0] + v ![1, 0, 0] = 0 ∧
@@ -262,7 +262,7 @@ private lemma majumdarGhosh_coords_of_mem {v : NSiteSpace 2 3}
 
 /-- The intersection property at three sites, by a computation on the sixteen
 coordinates of a four-site vector. -/
-private lemma majumdarGhosh_mem_groundSpace_four {ψ : NSiteSpace 2 (3 + 1)}
+private lemma majumdarGhosh_mem_groundSpace_four {ψ : NSiteSpace (Fin 2) (3 + 1)}
     (hL : ∀ b : Fin 2, restrictLast ψ b ∈ groundSpace majumdarGhoshTensor 3)
     (hR : ∀ a : Fin 2, restrictFirst ψ a ∈ groundSpace majumdarGhoshTensor 3) :
     ψ ∈ groundSpace majumdarGhoshTensor (3 + 1) := by
@@ -304,7 +304,7 @@ private lemma majumdarGhosh_mem_groundSpace_four {ψ : NSiteSpace 2 (3 + 1)}
 the two restrictions is decided by graded injectivity at \(M-1\ge3\) sites,
 and the left-canonical equation grows the boundary matrix back. -/
 private lemma majumdarGhosh_mem_groundSpace_succ {M : ℕ} (hM : 4 ≤ M)
-    {ψ : NSiteSpace 2 (M + 1)}
+    {ψ : NSiteSpace (Fin 2) (M + 1)}
     (hL : ∀ b : Fin 2, restrictLast ψ b ∈ groundSpace majumdarGhoshTensor M)
     (hR : ∀ a : Fin 2, restrictFirst ψ a ∈ groundSpace majumdarGhoshTensor M) :
     ψ ∈ groundSpace majumdarGhoshTensor (M + 1) := by
@@ -358,7 +358,7 @@ theorem majumdarGhosh_chainGroundSpace_le_groundSpace {N : ℕ} (hN3 : 3 ≤ N) 
 /-- Comparing a vector of the periodic chain ground space with its translate by
 one site: the two parity representatives intertwine every matrix of the tensor. -/
 private lemma majumdarGhosh_exists_intertwine {n : ℕ} (hn : 3 ≤ n)
-    {ψ : NSiteSpace 2 (n + 1)} (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 (n + 1))
+    {ψ : NSiteSpace (Fin 2) (n + 1)} (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 (n + 1))
     {X : Matrix (Fin 3) (Fin 3) ℂ}
     (hXpar : majumdarGhoshGrading * X = (-1 : ℂ) ^ (n + 1) • (X * majumdarGhoshGrading))
     (hX : groundSpaceMap majumdarGhoshTensor (n + 1) X = ψ) :
@@ -411,7 +411,7 @@ second. -/
 private lemma majumdarGhosh_groundSpaceMap_one_grading {N : ℕ} (hN : Even N) (hNpos : 0 < N)
     (α β : ℂ) :
     groundSpaceMap majumdarGhoshTensor N (α • 1 + β • majumdarGhoshGrading) =
-      (α + β) • (pairCoveringEven majumdarGhoshSinglet : NSiteSpace 2 N) +
+      (α + β) • (pairCoveringEven majumdarGhoshSinglet : NSiteSpace (Fin 2) N) +
         (α - β) • pairCoveringOdd majumdarGhoshSinglet := by
   ext σ
   have hmpv := majumdarGhosh_mpv_eq_pairCovering hN hNpos σ
@@ -463,7 +463,7 @@ theorem majumdarGhosh_ker_parentHamiltonian_eq_span {N : ℕ} (hN : Even N) (hN4
 /-- Project result: on an even ring of \(N\ge4\) sites the two singlet coverings
 are linearly independent. -/
 theorem majumdarGhosh_pairCovering_linearIndependent {N : ℕ} (hN : Even N) (hN4 : 4 ≤ N) :
-    LinearIndependent ℂ ![(pairCoveringEven majumdarGhoshSinglet : NSiteSpace 2 N),
+    LinearIndependent ℂ ![(pairCoveringEven majumdarGhoshSinglet : NSiteSpace (Fin 2) N),
       pairCoveringOdd majumdarGhoshSinglet] := by
   rw [LinearIndependent.pair_iff]
   intro a b hab

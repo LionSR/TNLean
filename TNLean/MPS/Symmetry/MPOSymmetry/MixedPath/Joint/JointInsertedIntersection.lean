@@ -31,7 +31,7 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 noncomputable def blockInsertedGroundSpace
     (A : (x : Fin r) → MPSTensor d (dim x))
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ) (N : ℕ) :
-    Submodule ℂ (NSiteSpace d N) :=
+    Submodule ℂ (NSiteSpace (Fin d) N) :=
   (blockInsertedGroundSpaceMap A W N).range
 
 /-- The two restrictions agree on their common interior in joint boundary coordinates.
@@ -39,7 +39,7 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem blockInsertedGroundSpaceMap_mul_eq_of_restrict
     (A : (x : Fin r) → MPSTensor d (dim x))
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
-    {K : ℕ} (hK : 0 < K) {ψ : NSiteSpace d (K + 2)}
+    {K : ℕ} (hK : 0 < K) {ψ : NSiteSpace (Fin d) (K + 2)}
     {Y Z : Fin d → (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ}
     (hY : ∀ i, restrictFirst ψ i = blockInsertedGroundSpaceMap A W (K + 1) (Y i))
     (hZ : ∀ j, restrictLast ψ j = blockInsertedGroundSpaceMap A W (K + 1) (Z j))
@@ -56,7 +56,7 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem mem_blockInsertedGroundSpace_succ_of_intertwine
     (A : (x : Fin r) → MPSTensor d (dim x))
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
-    {K : ℕ} (hK : 0 < K) {ψ : NSiteSpace d (K + 1)}
+    {K : ℕ} (hK : 0 < K) {ψ : NSiteSpace (Fin d) (K + 1)}
     {Y Z : Fin d → (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ}
     (R : (x : Fin r) → Fin d → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
     (hR : ∀ x, ∑ j, R x j * W x * A x j = 1)
@@ -89,7 +89,7 @@ comparison of physical spaces. Source: arXiv:2203.12563, Section 5, lines 1695�
 theorem blockInsertedGroundSpace_intersection
     (A : (x : Fin r) → MPSTensor d (dim x)) (hA : WordTupleSpanTop A 1)
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
-    (hW : ∀ x, W x ≠ 0) {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
+    (hW : ∀ x, W x ≠ 0) {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace (Fin d) (L + 1)}
     (hLeft : ∀ j, restrictLast ψ j ∈ blockInsertedGroundSpace A W L)
     (hRight : ∀ i, restrictFirst ψ i ∈ blockInsertedGroundSpace A W L) :
     ψ ∈ blockInsertedGroundSpace A W (L + 1) := by
@@ -113,7 +113,7 @@ restriction spaces. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem blockInsertedGroundSpace_iff_left_right
     (A : (x : Fin r) → MPSTensor d (dim x)) (hA : WordTupleSpanTop A 1)
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
-    (hW : ∀ x, W x ≠ 0) {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)} :
+    (hW : ∀ x, W x ≠ 0) {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace (Fin d) (L + 1)} :
     ψ ∈ blockInsertedGroundSpace A W (L + 1) ↔
       (∀ j, restrictLast ψ j ∈ blockInsertedGroundSpace A W L) ∧
       (∀ i, restrictFirst ψ i ∈ blockInsertedGroundSpace A W L) := by
@@ -136,7 +136,7 @@ theorem contiguousRestrictₗ_blockInsertedGroundSpace_mem
     (A : (x : Fin r) → MPSTensor d (dim x))
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
     {N L : ℕ} (hL : 0 < L) (s : ℕ) (hs : s + L ≤ N)
-    (τ : Cfg d N) {ψ : NSiteSpace d N} (hψ : ψ ∈ blockInsertedGroundSpace A W N) :
+    (τ : Cfg d N) {ψ : NSiteSpace (Fin d) N} (hψ : ψ ∈ blockInsertedGroundSpace A W N) :
     contiguousRestrictₗ s L hs τ ψ ∈ blockInsertedGroundSpace A W L := by
   apply contiguousRestrictₗ_mem_of_restriction_closed (blockInsertedGroundSpace A W)
     ?_ ?_ hL s hs τ hψ

@@ -48,7 +48,7 @@ open Filter Topology
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {β : Type*} [Fintype β]
 
 /-- **Matching before blocking** (exclusion of unmatched periodic classes).
 
@@ -58,24 +58,24 @@ the equal dimensions, to one of the targets `M γ`.
 
 Source: `t1_unblocked.tex`, Proposition `moa-t1:exclusion`. -/
 theorem exists_matching_of_span
-    {DB : ℕ} (B : MPSTensor d DB) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
-    (M : ∀ γ, MPSTensor d (DM γ))
+    {DB : ℕ} (B : MPTensor β (Fin DB)) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
+    (M : ∀ γ, MPTensor β (Fin (DM γ)))
     (hM : ∀ γ, Kraus.IsNormal (M γ)) (hD : ∀ γ, 0 < DM γ)
     (hdistinct : ∀ γ δ : Γ, γ ≠ δ → ∀ h : DM γ = DM δ,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (M γ)) (M δ))
-    (hspan : ∀ N : ℕ, 0 < N → ∃ c : Γ → ℂ, ∀ σ : Fin N → Fin d,
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (M γ)) (M δ))
+    (hspan : ∀ N : ℕ, 0 < N → ∃ c : Γ → ℂ, ∀ σ : Fin N → β,
       mpv B σ = ∑ γ, c γ * mpv (M γ) σ)
-    {g : ℕ} {dimRep : Fin g → ℕ} (A : (j : Fin g) → MPSTensor d (dimRep j))
+    {g : ℕ} {dimRep : Fin g → ℕ} (A : (j : Fin g) → MPTensor β (Fin (dimRep j)))
     (per : Fin g → ℕ) (copies : Fin g → ℕ) (α : (j : Fin g) → Fin (copies j) → ℂ)
     (hPer : ∀ j, IsPeriodic (per j) (A j))
     (hCopiesPos : ∀ j, 0 < copies j)
     (hα : ∀ j q, α j q ≠ 0)
     (hRepDistinct : ∀ j k : Fin g, j ≠ k → ∀ h : dimRep j = dimRep k,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
-    (hBeq : ∀ L : ℕ, 0 < L → ∀ σ : Fin L → Fin d,
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (A k))
+    (hBeq : ∀ L : ℕ, 0 < L → ∀ σ : Fin L → β,
       mpv B σ = ∑ j : Fin g, (∑ q : Fin (copies j), (α j q) ^ L) * mpv (A j) σ) :
     ∀ j : Fin g, ∃ γ : Γ, ∃ h : dimRep j = DM γ,
-      GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (M γ) := by
+      GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (M γ) := by
   classical
   have hDneC : ∀ γ, NeZero (DM γ) := fun γ => ⟨(hD γ).ne'⟩
   choose C τ0 hτ0 hGaugeC hmpvC hLCC hNTC using
@@ -84,29 +84,29 @@ theorem exists_matching_of_span
     (IsPeriodic.one_iff_primitive (C γ)).2
       ⟨(hNTC γ).no_invariant_proj, hLCC γ, (hNTC γ).primitive_transfer⟩
   have hdistinctC : ∀ γ δ : Γ, γ ≠ δ → ∀ h : DM γ = DM δ,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (C γ)) (C δ) := by
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (C γ)) (C δ) := by
     intro γ δ hne h hGPE
     exact hdistinct γ δ hne h
       (gaugePhaseEquiv_of_smul_smul_cast h (hτ0 γ) (hτ0 δ)
         (gaugePhaseEquiv_of_gaugeEquiv_left_right_cast h (hGaugeC γ) hGPE (hGaugeC δ)))
   set lab : Fin g → Option Γ := fun j =>
     if h : ∃ γ : Γ, ∃ hd : dimRep j = DM γ,
-        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hd) (A j)) (C γ) then
+        GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) hd) (A j)) (C γ) then
       some (Classical.choose h) else none with hlab_def
   have hUnmatched : ∀ j, lab j = none → ∀ γ : Γ, ∀ h : dimRep j = DM γ,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (C γ) := by
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (C γ) := by
     intro j hlabj γ h hGPE
     have hwit : ∃ γ' : Γ, ∃ hd : dimRep j = DM γ',
-        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hd) (A j)) (C γ') := ⟨γ, h, hGPE⟩
+        GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) hd) (A j)) (C γ') := ⟨γ, h, hGPE⟩
     have hsome : lab j = some (Classical.choose hwit) := by
       simp only [hlab_def, dite_eq_left hwit]
     rw [hlabj] at hsome
     exact Option.some_ne_none _ hsome.symm
   have hMatched : ∀ j γ, lab j = some γ → ∃ h : dimRep j = DM γ,
-      GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (C γ) := by
+      GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (A j)) (C γ) := by
     intro j γ hlabj
     by_cases hex : ∃ γ' : Γ, ∃ hd : dimRep j = DM γ',
-        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hd) (A j)) (C γ')
+        GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) hd) (A j)) (C γ')
     · have hsome : lab j = some (Classical.choose hex) := by simp only [hlab_def, dite_eq_left hex]
       rw [hlabj] at hsome
       have hγeq : γ = Classical.choose hex := Option.some_injective _ hsome
@@ -118,7 +118,7 @@ theorem exists_matching_of_span
   -- Combined family of unmatched representatives and normal targets.
   set U : Type := {j : Fin g // lab j = none} with hU_def
   set dimF : U ⊕ Γ → ℕ := Sum.elim (fun u => dimRep u.1) DM with hdimF_def
-  set F : (x : U ⊕ Γ) → MPSTensor d (dimF x) := Sum.rec (fun u => A u.1) C with hF_def
+  set F : (x : U ⊕ Γ) → MPTensor β (Fin (dimF x)) := Sum.rec (fun u => A u.1) C with hF_def
   set perF : U ⊕ Γ → ℕ := Sum.elim (fun u => per u.1) (fun _ => 1) with hperF_def
   have hPerF : ∀ x, IsPeriodic (perF x) (F x) := by rintro (u | γ); exacts [hPer u.1, hPerC γ]
   set p : ℕ := Finset.univ.lcm per with hp_def
@@ -133,7 +133,7 @@ theorem exists_matching_of_span
     · exact Finset.dvd_lcm (Finset.mem_univ u.1)
     · exact one_dvd p
   have hNonrepF : ∀ x y : U ⊕ Γ, x ≠ y → ∀ h : dimF x = dimF y,
-      ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) h) (F x)) (F y) := by
+      ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (F x)) (F y) := by
     rintro (u | γ) (u' | γ') hxy h
     · exact not_repeatedBlocks_of_not_gaugePhaseEquiv
         (hRepDistinct u.1 u'.1 (fun heq => hxy (by rw [Subtype.ext heq])) h)
@@ -149,7 +149,7 @@ theorem exists_matching_of_span
   -- Matching scalars: whenever `lab j = some γ`, the periodic vectors of `C γ`
   -- are a power of a fixed nonzero scalar times those of `A j`.
   have hθex : ∀ j : Fin g, ∃ θ : ℂ, θ ≠ 0 ∧
-      ∀ γ : Γ, lab j = some γ → ∀ N, 0 < N → ∀ σ : Fin N → Fin d,
+      ∀ γ : Γ, lab j = some γ → ∀ N, 0 < N → ∀ σ : Fin N → β,
         mpv (C γ) σ = θ ^ N * mpv (A j) σ := by
     intro j
     rcases hlj : lab j with _ | γ₀
@@ -177,7 +177,7 @@ theorem exists_matching_of_span
         (fun γ => (∑ j ∈ Finset.univ.filter (fun j => lab j = some γ),
             (∑ q : Fin (copies j), (α j q) ^ (p * n)) * (θ j)⁻¹ ^ (p * n))
           - c γ * (τ0 γ)⁻¹ ^ (p * n)) with hgW_def
-      have hzero : ∑ x : U ⊕ Γ, gW x • mpvState (α := Fin d) (F x) (p * n) = 0 := by
+      have hzero : ∑ x : U ⊕ Γ, gW x • mpvState (α := β) (F x) (p * n) = 0 := by
         apply sum_smul_mpvState_eq_zero
         intro σ
         have hBσ := hBeq (p * n) hpn_pos σ
@@ -290,9 +290,9 @@ theorem exists_matching_of_span
   push Not at hj
   have hlabNone : lab j = none := by
     by_cases hex : ∃ γ' : Γ, ∃ hd : dimRep j = DM γ',
-        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hd) (A j)) (C γ')
+        GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) hd) (A j)) (C γ')
     · obtain ⟨γ', h', hGPE'⟩ := hex
-      have hGPE'' : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h') (A j))
+      have hGPE'' : GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h') (A j))
           (fun i => τ0 γ' • M γ' i) :=
         gaugePhaseEquiv_trans hGPE' (hGaugeC γ').symm.toGaugePhaseEquiv
       exact absurd (gaugePhaseEquiv_of_gaugePhaseEquiv_smul_right (hτ0 γ') hGPE'')
@@ -327,19 +327,19 @@ composition factor of `B` matched to `M γ` has bond dimension `DM γ`.
 Source: `Notes/OpenProblemsTN/followup/asymmetric_mpoa/sections/t1_unblocked.tex`,
 Theorem `moa-t1:theorem`. -/
 theorem exists_unblocked_powerSum_coeff
-    {DB : ℕ} (B : MPSTensor d DB) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
-    (M : ∀ γ, MPSTensor d (DM γ))
+    {DB : ℕ} (B : MPTensor β (Fin DB)) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
+    (M : ∀ γ, MPTensor β (Fin (DM γ)))
     (hM : ∀ γ, Kraus.IsNormal (M γ)) (hD : ∀ γ, 0 < DM γ)
     (hdistinct : ∀ γ δ : Γ, γ ≠ δ → ∀ h : DM γ = DM δ,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (M γ)) (M δ))
-    (hspan : ∀ N : ℕ, 0 < N → ∃ c : Γ → ℂ, ∀ σ : Fin N → Fin d,
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (M γ)) (M δ))
+    (hspan : ∀ N : ℕ, 0 < N → ∃ c : Γ → ℂ, ∀ σ : Fin N → β,
       mpv B σ = ∑ γ, c γ * mpv (M γ) σ) :
     ∃ (n : Γ → ℕ) (μ : ∀ γ, Fin (n γ) → ℂ),
       (∀ γ k, μ γ k ≠ 0) ∧
-      (∀ L : ℕ, 0 < L → ∀ σ : Fin L → Fin d,
+      (∀ L : ℕ, 0 < L → ∀ σ : Fin L → β,
         mpv B σ = ∑ γ, (∑ k, (μ γ k) ^ L) * mpv (M γ) σ) ∧
       (∃ L₀ : ℕ, 0 < L₀ ∧ ∀ L, L₀ ≤ L → ∀ c : Γ → ℂ,
-        (∀ σ : Fin L → Fin d, mpv B σ = ∑ γ, c γ * mpv (M γ) σ) →
+        (∀ σ : Fin L → β, mpv B σ = ∑ γ, c γ * mpv (M γ) σ) →
         ∀ γ, c γ = ∑ k, (μ γ k) ^ L) ∧
       ∑ γ, n γ * DM γ ≤ DB := by
   classical
@@ -354,7 +354,7 @@ theorem exists_unblocked_powerSum_coeff
     fun j => MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (A j) (M (labFn j)) (labH j) (labGPE j)
   set lamW : (j : Fin g) → Fin (copies j) → ℂ := fun j q => (α j q) * (θ j)⁻¹ with hlamW_def
   have hlamWne : ∀ j q, lamW j q ≠ 0 := fun j q => mul_ne_zero (hαne j q) (inv_ne_zero (hθne j))
-  have hAeq : ∀ L : ℕ, 0 < L → ∀ σ : Fin L → Fin d,
+  have hAeq : ∀ L : ℕ, 0 < L → ∀ σ : Fin L → β,
       mpv B σ = ∑ j : Fin g, (∑ q : Fin (copies j), (lamW j q) ^ L) * mpv (M (labFn j)) σ := by
     intro L hL σ
     rw [hBeq L hL σ]
@@ -388,7 +388,7 @@ theorem exists_unblocked_powerSum_coeff
     · simp [hlab]
     · simp [hlab]
   choose n μ hn hμne hμsum using hpack
-  have hCanonical : ∀ L : ℕ, 0 < L → ∀ σ : Fin L → Fin d,
+  have hCanonical : ∀ L : ℕ, 0 < L → ∀ σ : Fin L → β,
       mpv B σ = ∑ γ, (∑ k, (μ γ k) ^ L) * mpv (M γ) σ := by
     intro L hL σ
     rw [hAeq L hL σ]
@@ -426,7 +426,7 @@ theorem exists_unblocked_powerSum_coeff
   choose C τ0 hτ0 hGaugeC hmpvC hLCC hNTC using
     fun γ => letI := hDne γ; exists_leftCanonical_normalTensor_scale_of_isNormal (hM γ)
   have hCdist : ∀ γ δ : Γ, γ ≠ δ → ∀ h : DM γ = DM δ,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (C γ)) (C δ) := by
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor β (Fin n)) h) (C γ)) (C δ) := by
     intro γ δ hne h hGPE
     exact hdistinct γ δ hne h
       (gaugePhaseEquiv_of_smul_smul_cast h (hτ0 γ) (hτ0 δ)
@@ -436,7 +436,7 @@ theorem exists_unblocked_powerSum_coeff
       (fun γ => (hNTC γ)) hCdist
   refine ⟨N₀ + 1, Nat.succ_pos _, fun L hL c hc γ => ?_⟩
   have hL0 : 0 < L := by omega
-  have hzero : ∀ σ : Fin L → Fin d,
+  have hzero : ∀ σ : Fin L → β,
       ∑ γ, ((c γ - ∑ k, (μ γ k) ^ L) * ((τ0 γ) ^ L)⁻¹) * mpv (C γ) σ = 0 := by
     intro σ
     have hdiff : ∑ γ, c γ * mpv (M γ) σ = ∑ γ, (∑ k, (μ γ k) ^ L) * mpv (M γ) σ :=
@@ -477,51 +477,7 @@ In addition to the conclusions of `exists_unblocked_powerSum_coeff`, any other
 finite families of nonzero weights whose power sums give an expansion of the
 periodic vectors of `B` at all sufficiently large lengths have, target by
 target, the same multiset of weights, counting repetitions. -/
-private theorem exists_unblocked_powerSum_coeff_unique_fin
-    {DB : ℕ} (B : MPSTensor d DB) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
-    (M : ∀ γ, MPSTensor d (DM γ))
-    (hM : ∀ γ, Kraus.IsNormal (M γ)) (hD : ∀ γ, 0 < DM γ)
-    (hdistinct : ∀ γ δ : Γ, γ ≠ δ → ∀ h : DM γ = DM δ,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (M γ)) (M δ))
-    (hspan : ∀ N : ℕ, 0 < N → ∃ c : Γ → ℂ, ∀ σ : Fin N → Fin d,
-      mpv B σ = ∑ γ, c γ * mpv (M γ) σ) :
-    ∃ (n : Γ → ℕ) (μ : ∀ γ, Fin (n γ) → ℂ),
-      (∀ γ k, μ γ k ≠ 0) ∧
-      (∀ L : ℕ, 0 < L → ∀ σ : Fin L → Fin d,
-        mpv B σ = ∑ γ, (∑ k, (μ γ k) ^ L) * mpv (M γ) σ) ∧
-      (∃ L₀ : ℕ, 0 < L₀ ∧ ∀ L, L₀ ≤ L → ∀ c : Γ → ℂ,
-        (∀ σ : Fin L → Fin d, mpv B σ = ∑ γ, c γ * mpv (M γ) σ) →
-        ∀ γ, c γ = ∑ k, (μ γ k) ^ L) ∧
-      ∑ γ, n γ * DM γ ≤ DB ∧
-      ∀ (n' : Γ → ℕ) (μ' : ∀ γ, Fin (n' γ) → ℂ), (∀ γ k, μ' γ k ≠ 0) →
-        (∃ L₁ : ℕ, ∀ L, L₁ ≤ L → ∀ σ : Fin L → Fin d,
-          mpv B σ = ∑ γ, (∑ k, (μ' γ k) ^ L) * mpv (M γ) σ) →
-        ∀ γ, (↑(List.ofFn (μ' γ)) : Multiset ℂ) = ↑(List.ofFn (μ γ)) := by
-  obtain ⟨n, μ, hμne, hexp, ⟨L₀, hL₀, hrig⟩, hbound⟩ :=
-    exists_unblocked_powerSum_coeff B M hM hD hdistinct hspan
-  refine ⟨n, μ, hμne, hexp, ⟨L₀, hL₀, hrig⟩, hbound, ?_⟩
-  intro n' μ' hμ'ne ⟨L₁, hL₁⟩ γ
-  have hnz : ∀ (m : ℕ) (w : Fin m → ℂ), (∀ k, w k ≠ 0) →
-      (0 : ℂ) ∉ (↑(List.ofFn w) : Multiset ℂ) := by
-    intro m w hw h0
-    rw [Multiset.mem_coe, List.mem_ofFn'] at h0
-    obtain ⟨k, hk⟩ := h0
-    exact hw k hk
-  refine Multiset.eq_of_notMem_zero_of_forall_sum_map_pow_eq (hnz _ _ (hμ'ne γ))
-    (hnz _ _ (hμne γ)) ⟨max L₀ L₁, fun L hL => ?_⟩
-  rw [sum_map_pow_ofFn, sum_map_pow_ofFn]
-  exact (hrig L (le_trans (le_max_left _ _) hL) (fun γ => ∑ k, (μ' γ k) ^ L)
-    (hL₁ L (le_trans (le_max_right _ _) hL)) γ)
-
-/-- **Unblocked power-sum coefficients with unique weight multisets**
-(`t1_unblocked.tex`, Theorem `moa-t1:theorem`, uniqueness clause).
-
-In addition to the conclusions of `exists_unblocked_powerSum_coeff`, any other
-finite families of nonzero weights whose power sums give an expansion of the
-periodic vectors of `B` at all sufficiently large lengths have, target by
-target, the same multiset of weights, counting repetitions.  The physical alphabet is
-relabelled by `Fin (Fintype.card β)`. -/
-theorem exists_unblocked_powerSum_coeff_unique {β : Type*} [Fintype β]
+theorem exists_unblocked_powerSum_coeff_unique
     {DB : ℕ} (B : MPTensor β (Fin DB)) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
     (M : ∀ γ, MPTensor β (Fin (DM γ)))
     (hM : ∀ γ, Kraus.IsNormal (M γ)) (hD : ∀ γ, 0 < DM γ)
@@ -541,23 +497,20 @@ theorem exists_unblocked_powerSum_coeff_unique {β : Type*} [Fintype β]
         (∃ L₁ : ℕ, ∀ L, L₁ ≤ L → ∀ σ : Fin L → β,
           mpv B σ = ∑ γ, (∑ k, (μ' γ k) ^ L) * mpv (M γ) σ) →
         ∀ γ, (↑(List.ofFn (μ' γ)) : Multiset ℂ) = ↑(List.ofFn (μ γ)) := by
-  let f : Fin (Fintype.card β) ≃ β := (Fintype.equivFin β).symm
-  have hσ : ∀ {L : ℕ} (σ : Fin L → β), (fun n ↦ f (f.symm (σ n))) = σ := fun σ ↦ by
-    funext n; exact f.apply_symm_apply (σ n)
-  obtain ⟨n, μ, hμne, hexp, ⟨L₀, hL₀, hrig⟩, hbound, huniq⟩ :=
-    exists_unblocked_powerSum_coeff_unique_fin (Kraus.reindexPhysical f B)
-      (fun γ ↦ Kraus.reindexPhysical f (M γ))
-      (fun γ ↦ (isNormal_reindexPhysical_equiv f _).2 (hM γ)) hD
-      (fun γ δ hγδ h hG ↦ hdistinct γ δ hγδ h <| (gaugePhaseEquiv_reindexPhysical_equiv f _ _).1
-        (by rw [reindexPhysical_cast_dim f h (M γ)]; exact hG))
-      (fun N hN ↦ by
-        obtain ⟨c, hc⟩ := hspan N hN
-        exact ⟨c, fun σ ↦ by simp only [MPTensor.mpv_reindexPhysical]; exact hc _⟩)
-  refine ⟨n, μ, hμne, fun L hL σ ↦ ?_, ⟨L₀, hL₀, fun L hL c hc ↦ hrig L hL c fun τ ↦ ?_⟩,
-    hbound, fun n' μ' hμ' ⟨L₁, h⟩ ↦ huniq n' μ' hμ' ⟨L₁, fun L hL τ ↦ ?_⟩⟩
-  · have h := hexp L hL fun n ↦ f.symm (σ n)
-    simpa only [MPTensor.mpv_reindexPhysical, hσ] using h
-  · simp only [MPTensor.mpv_reindexPhysical]; exact hc _
-  · simp only [MPTensor.mpv_reindexPhysical]; exact h L hL _
+  obtain ⟨n, μ, hμne, hexp, ⟨L₀, hL₀, hrig⟩, hbound⟩ :=
+    exists_unblocked_powerSum_coeff B M hM hD hdistinct hspan
+  refine ⟨n, μ, hμne, hexp, ⟨L₀, hL₀, hrig⟩, hbound, ?_⟩
+  intro n' μ' hμ'ne ⟨L₁, hL₁⟩ γ
+  have hnz : ∀ (m : ℕ) (w : Fin m → ℂ), (∀ k, w k ≠ 0) →
+      (0 : ℂ) ∉ (↑(List.ofFn w) : Multiset ℂ) := by
+    intro m w hw h0
+    rw [Multiset.mem_coe, List.mem_ofFn'] at h0
+    obtain ⟨k, hk⟩ := h0
+    exact hw k hk
+  refine Multiset.eq_of_notMem_zero_of_forall_sum_map_pow_eq (hnz _ _ (hμ'ne γ))
+    (hnz _ _ (hμne γ)) ⟨max L₀ L₁, fun L hL => ?_⟩
+  rw [sum_map_pow_ofFn, sum_map_pow_ofFn]
+  exact (hrig L (le_trans (le_max_left _ _) hL) (fun γ => ∑ k, (μ' γ k) ^ L)
+    (hL₁ L (le_trans (le_max_right _ _) hL)) γ)
 
 end MPSTensor

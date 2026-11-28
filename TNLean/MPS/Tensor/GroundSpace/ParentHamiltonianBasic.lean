@@ -21,18 +21,19 @@ open scoped BigOperators Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-! ### Parent interaction as a projector -/
 
+omit [DecidableEq α] in
 /-- The parent interaction is idempotent.
 
 This is the algebraic form of the fact that it is the orthogonal projector onto
 \(G_L(A)^\perp\). -/
-theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
+theorem parentInteraction_idempotent (A : MPTensor α (Fin D)) (L : ℕ) :
     parentInteraction A L * parentInteraction A L = parentInteraction A L := by
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  let P : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace α L)
+  let P : EuclideanSpace ℂ (Fin L → α) →ₗ[ℂ] EuclideanSpace ℂ (Fin L → α) :=
     (groundSpaceES A L)ᗮ.starProjection.toLinearMap
   have hP : P * P = P := by
     simpa [P] using
@@ -43,40 +44,42 @@ theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
   rw [LinearEquiv.symm_apply_apply]
   exact congr_arg e (LinearMap.congr_fun hP (e.symm v))
 
+omit [DecidableEq α] in
 /-- Two tensors with the same local MPS space at length \(L\) have the same
 canonical parent interaction at that length.
 
 The parent interaction is the orthogonal projector onto \(G_L(A)^\perp\), so it
 is a function of \(G_L(A)\) alone. -/
-theorem parentInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
+theorem parentInteraction_eq_of_groundSpace_eq {A B : MPTensor α (Fin D)} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) :
     parentInteraction A L = parentInteraction B L := by
   simp [parentInteraction, groundSpaceES, h]
 
 /-- Equal parent interactions give equal parent interactions on the ring. -/
-theorem parentRingInteraction_eq_of_parentInteraction_eq {A B : MPSTensor d D} {L : ℕ}
+theorem parentRingInteraction_eq_of_parentInteraction_eq {A B : MPTensor α (Fin D)} {L : ℕ}
     (h : parentInteraction A L = parentInteraction B L) (N : ℕ) [NeZero N] :
     parentRingInteraction A L N = parentRingInteraction B L N := by
   simp only [parentRingInteraction, h]
 
 /-- Two tensors with the same local MPS space at length \(L\) have the same
 parent interaction on every ring, hence the same finite-chain parent Hamiltonian. -/
-theorem parentRingInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
+theorem parentRingInteraction_eq_of_groundSpace_eq {A B : MPTensor α (Fin D)} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) (N : ℕ) [NeZero N] :
     parentRingInteraction A L N = parentRingInteraction B L N :=
   parentRingInteraction_eq_of_parentInteraction_eq (parentInteraction_eq_of_groundSpace_eq h) N
 
+omit [DecidableEq α] in
 /-- A virtual gauge change leaves the canonical parent interaction unchanged.
 
 The parent interaction depends only on the local MPS space, and gauge-equivalent
 tensors have the same local MPS space at every length. -/
-theorem _root_.MPTensor.GaugeEquiv.parentInteraction_eq {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.parentInteraction_eq {A B : MPTensor α (Fin D)}
     (h : GaugeEquiv A B) (L : ℕ) :
     parentInteraction A L = parentInteraction B L :=
   parentInteraction_eq_of_groundSpace_eq (h.groundSpace_eq L)
 
 /-- A virtual gauge change leaves the parent interaction on every ring unchanged. -/
-theorem _root_.MPTensor.GaugeEquiv.parentRingInteraction_eq {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.parentRingInteraction_eq {A B : MPTensor α (Fin D)}
     (h : GaugeEquiv A B) (L N : ℕ) [NeZero N] :
     parentRingInteraction A L N = parentRingInteraction B L N :=
   parentRingInteraction_eq_of_parentInteraction_eq (h.parentInteraction_eq L) N
@@ -85,7 +88,7 @@ theorem _root_.MPTensor.GaugeEquiv.parentRingInteraction_eq {A B : MPSTensor d D
 
 This is the finite-chain form of the fact that the local parent interaction is an
 orthogonal projector. -/
-theorem parentRingInteraction_term_mul_self (A : MPSTensor d D) (L N : ℕ) [NeZero N]
+theorem parentRingInteraction_term_mul_self (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N]
     (i : Fin N) :
     (parentRingInteraction A L N).term i * (parentRingInteraction A L N).term i =
       (parentRingInteraction A L N).term i := by
@@ -95,7 +98,7 @@ theorem parentRingInteraction_term_mul_self (A : MPSTensor d D) (L N : ℕ) [NeZ
     rw [Matrix.toLin'_apply, ← Matrix.mulVec_mulVec,
       parentRingInteraction_term_mulVec_apply_of_le A L N hLN i _ σ, Matrix.toLin'_apply,
       parentRingInteraction_term_mulVec_apply_of_le A L N hLN i ψ σ]
-    let f : NSiteSpace d L := fun τ => ψ (replaceWindow L hLN i σ τ)
+    let f : NSiteSpace α L := fun τ => ψ (replaceWindow L hLN i σ τ)
     have hwindow :
         (fun τ => ((parentRingInteraction A L N).term i *ᵥ ψ) (replaceWindow L hLN i σ τ)) =
           parentInteraction A L f := by
@@ -112,43 +115,46 @@ theorem parentRingInteraction_term_mul_self (A : MPSTensor d D) (L N : ℕ) [NeZ
 
 /-! ### Parent interaction kills ground space elements -/
 
+omit [DecidableEq α] in
 /-- The parent interaction annihilates any vector in the ground space.
 This is the core property: `parentInteraction A L` is the orthogonal projector
 onto \(G_L(A)^\perp\), so it kills everything in `groundSpace A L`. -/
-lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
-    (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
+lemma parentInteraction_apply_mem_groundSpace (A : MPTensor α (Fin D)) (L : ℕ)
+    (v : NSiteSpace α L) (hv : v ∈ groundSpace A L) :
     parentInteraction A L v = 0 := by
-  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ groundSpaceES A L := by
+  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm v ∈ groundSpaceES A L := by
     simp only [groundSpaceES, Submodule.mem_map]
     exact ⟨v, hv, rfl⟩
   have hkill : (groundSpaceES A L)ᗮ.starProjection
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v) = 0 := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm v) = 0 := by
     rw [Submodule.starProjection_orthogonal']
     simp only [sub_apply, one_apply_eq_self]
     rw [sub_eq_zero]
     exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
   -- Unfold `parentInteraction` to expose the equiv ∘ projection ∘ equiv⁻¹ structure.
   -- This `change` is definitional; update it if `parentInteraction` is restated.
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace α L))
     ((groundSpaceES A L)ᗮ.starProjection
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace α L)).symm v)) = 0
   rw [hkill, map_zero]
 
 /-! ### Periodic MPS vector window membership -/
 
+omit [Fintype α] [DecidableEq α] in
 /-- A boundary matrix that commutes with every letter up to a scalar \(c\) moves
 past a word of length \(n\) at the cost of \(c^n\). -/
-theorem mul_evalWord_of_mul_eq_smul (A : MPSTensor d D)
+theorem mul_evalWord_of_mul_eq_smul (A : MPTensor α (Fin D))
     (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G)) :
-    ∀ w : List (Fin d),
+    ∀ w : List α,
       G * Kraus.evalWord A w = c ^ w.length • (Kraus.evalWord A w * G)
   | w => by
       simpa using mul_evalWord_of_mul_eq_smul_letter A G (fun _ => c) hG w
 
+omit [Fintype α] [DecidableEq α] in
 /-- The configuration with a window replaced, rotated to start at the window, is
 the window followed by the outside sites in cyclic order starting from \(i+L\). -/
 theorem rotate_ofFn_replaceWindow (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (σ : Cfg d N) (τ : Fin L → Fin d) (hN : 0 < N) :
+    (σ : (Fin N → α)) (τ : Fin L → α) (hN : 0 < N) :
     (List.ofFn (replaceWindow L hLN i σ τ)).rotate i.val =
       List.ofFn τ ++ List.ofFn fun (j : Fin (N - L)) =>
         σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ hN⟩ := by
@@ -176,6 +182,7 @@ theorem rotate_ofFn_replaceWindow (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
       change (k + i.val) % N = (i.val + L + (k - L)) % N
       rw [show i.val + L + (k - L) = k + i.val by omega]
 
+omit [Fintype α] [DecidableEq α] in
 /-- If \(GA^i=c\,A^iG\) for every letter, the twisted periodic vector
 \(\sigma\mapsto\operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)\) restricted
 to any window of \(L\) sites lies in `groundSpace A L`.
@@ -184,9 +191,9 @@ The witness is \(c^i\) times the product of \(A\)-matrices on the sites outside 
 window, cyclically ordered from \(i+L\), followed by \(G\). Trace cyclicity
 rotates the full product so that the window comes first, and \(G\) is moved past
 the \(i\) letters in front of the window. -/
-theorem twistedMPV_window_mem_groundSpace (A : MPSTensor d D)
+theorem twistedMPV_window_mem_groundSpace (A : MPTensor α (Fin D))
     (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G))
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (σ : Cfg d N) :
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (σ : (Fin N → α)) :
     (fun τ => Matrix.trace (Kraus.evalWord A (List.ofFn (replaceWindow L hLN i σ τ)) * G))
       ∈ groundSpace A L := by
   rw [groundSpace, LinearMap.mem_range]
@@ -213,18 +220,19 @@ theorem twistedMPV_window_mem_groundSpace (A : MPSTensor d D)
             Matrix.mul_assoc, mul_evalWord_of_mul_eq_smul A G c hG, htake, Matrix.mul_smul,
             Matrix.trace_smul, smul_eq_mul]
 
+omit [Fintype α] [DecidableEq α] in
 /-- The periodic MPS vector restricted to any window of \(L\) sites lies in
 `groundSpace A L`: the case \(G=1\), \(c=1\) of
 `twistedMPV_window_mem_groundSpace`. -/
-lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
-    (i : Fin N) (σ : Cfg d N) :
+lemma mpv_window_mem_groundSpace (A : MPTensor α (Fin D)) (L N : ℕ) (hLN : L ≤ N)
+    (i : Fin N) (σ : (Fin N → α)) :
     (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
   simpa [mpv, coeff] using
     twistedMPV_window_mem_groundSpace A 1 1 (fun _ => by simp) L N hLN i σ
 
 /-- Each term of the parent interaction on the ring annihilates the periodic MPS vector
 (for \(L > N\) the terms vanish). -/
-lemma parentRingInteraction_term_mulVec_mpv (A : MPSTensor d D) (L N : ℕ) [NeZero N]
+lemma parentRingInteraction_term_mulVec_mpv (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N]
     (i : Fin N) : (parentRingInteraction A L N).term i *ᵥ mpv A = 0 := by
   by_cases hLN : L ≤ N
   · ext σ
@@ -235,7 +243,7 @@ lemma parentRingInteraction_term_mulVec_mpv (A : MPSTensor d D) (L N : ℕ) [NeZ
 
 /-- The parent Hamiltonian annihilates the periodic MPS vector:
 \(H_N V^{(N)}(A) = 0\). -/
-lemma hamiltonian_parentRingInteraction_mulVec_mpv (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
+lemma hamiltonian_parentRingInteraction_mulVec_mpv (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] :
     (parentRingInteraction A L N).hamiltonian *ᵥ mpv A = 0 := by
   rw [ManyBody.Interaction.hamiltonian, Matrix.sum_mulVec]
   exact Finset.sum_eq_zero fun i _ => parentRingInteraction_term_mulVec_mpv A L N i
@@ -244,8 +252,8 @@ lemma hamiltonian_parentRingInteraction_mulVec_mpv (A : MPSTensor d D) (L N : �
 of the parent interaction on the ring annihilates it, for every window length \(L\) (for
 \(L > N\) the terms vanish). [PGVWC07] (quant-ph/0608197), `MPSarchive.tex`, lines 311--330;
 arXiv:2011.12127, `TN-Review-main.tex`, line 2011. -/
-lemma toLp_mpv_mem_zeroSpace_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
-    WithLp.toLp 2 (mpv A : NSiteSpace d N) ∈ (parentRingInteraction A L N).zeroSpace := by
+lemma toLp_mpv_mem_zeroSpace_parentRingInteraction (A : MPTensor α (Fin D)) (L N : ℕ) [NeZero N] :
+    WithLp.toLp 2 (mpv A : NSiteSpace α N) ∈ (parentRingInteraction A L N).zeroSpace := by
   rw [ManyBody.Interaction.mem_zeroSpace_iff]
   exact parentRingInteraction_term_mulVec_mpv A L N
 

@@ -174,7 +174,7 @@ Source: arXiv:2011.12127, lines 1171--1174. -/
 theorem aklt_finrank_groundSpace_inf_ker_totalSpinSq {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (groundSpace akltTensor N ⊓ LinearMap.ker (totalSpinSq spinOneOperator) :
-        Submodule ℂ (NSiteSpace 3 N)) = 1 := by
+        Submodule ℂ (NSiteSpace (Fin 3) N)) = 1 := by
   rw [aklt_groundSpace_inf_ker_totalSpinSq hN]
   apply finrank_span_singleton
   have hinj := groundSpaceMap_injective_of_isNBlkInjective
@@ -211,7 +211,7 @@ Source: arXiv:2011.12127, lines 1171--1174. -/
 theorem aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (groundSpace akltTensor N ⊓ Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
-        Submodule ℂ (NSiteSpace 3 N)) = 3 := by
+        Submodule ℂ (NSiteSpace (Fin 3) N)) = 3 := by
   rw [aklt_groundSpace_inf_eigenspace_totalSpinSq_two hN]
   have hinj := groundSpaceMap_injective_of_isNBlkInjective
     (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)
@@ -227,8 +227,8 @@ theorem aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two {N : ℕ} (hN : 
 
 private lemma groundSpaceES_map_withLp (N : ℕ) :
     (groundSpaceES akltTensor N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap = groundSpace akltTensor N :=
-  (Submodule.map_symm_eq_iff (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N))).mp rfl
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).toLinearMap = groundSpace akltTensor N :=
+  (Submodule.map_symm_eq_iff (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N))).mp rfl
 
 /-- The actual open two-site AKLT parent Hamiltonian has a one-dimensional
 spin-zero ground sector, using the standard coefficient realization of the
@@ -237,8 +237,8 @@ theorem aklt_finrank_openParent_ground_spinZero {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       ((LinearMap.ker
           (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian)).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
-          LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).toLinearMap ⊓
+          LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace (Fin 3) N)) = 1 := by
   rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
     groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_ker_totalSpinSq hN
@@ -249,9 +249,9 @@ theorem aklt_finrank_openParent_ground_spinOne {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       ((LinearMap.ker
           (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian)).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).toLinearMap ⊓
           Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
-            Submodule ℂ (NSiteSpace 3 N)) = 3 := by
+            Submodule ℂ (NSiteSpace (Fin 3) N)) = 3 := by
   rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
     groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two hN
@@ -261,7 +261,7 @@ spin-zero ground state. Source: arXiv:2011.12127, lines 1171--1174. -/
 theorem akltOpenHamiltonian_ground_spinZero_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) ⊓
-        LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
+        LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace (Fin 3) N)) = 1 := by
   rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_ker_totalSpinSq hN
 
@@ -271,7 +271,7 @@ theorem akltOpenHamiltonian_ground_spinOne_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) ⊓
         Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
-          Submodule ℂ (NSiteSpace 3 N)) = 3 := by
+          Submodule ℂ (NSiteSpace (Fin 3) N)) = 3 := by
   rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two hN
 

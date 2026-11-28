@@ -64,11 +64,11 @@ namespace MPSTensor
 
 /-- The shifted and rescaled three-site term \(\tfrac43(h+\tfrac38)\). -/
 local notation "𝐐" => ((4 / 3 : ℂ) •
-  (majumdarGhoshTerm + (3 / 8 : ℂ) • (LinearMap.id : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3)))
+  (majumdarGhoshTerm + (3 / 8 : ℂ) • (LinearMap.id : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3)))
 
 /-- The shifted and rescaled three-site term \(\tfrac43(h+\tfrac38)\) acts as one
 third of the sum of the three transpositions of the sites. -/
-lemma majumdarGhoshTerm_shift_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
+lemma majumdarGhoshTerm_shift_apply (v : NSiteSpace (Fin 2) 3) (σ : Cfg 2 3) :
     𝐐 v σ = (1 / 3) * (v (σ ∘ Equiv.swap 0 1) + v (σ ∘ Equiv.swap 1 2) +
       v (σ ∘ Equiv.swap 0 2)) := by
   simp only [LinearMap.smul_apply, LinearMap.add_apply, LinearMap.id_apply, Pi.smul_apply,
@@ -77,7 +77,7 @@ lemma majumdarGhoshTerm_shift_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
 
 /-- The operator \(\tfrac43(h+\tfrac38)\) is symmetric for the \(\ell^2\) pairing
 of coefficient vectors. -/
-private lemma majumdarGhoshTerm_shift_symm (f g : NSiteSpace 2 3) :
+private lemma majumdarGhoshTerm_shift_symm (f g : NSiteSpace (Fin 2) 3) :
     ∑ σ, conj (f σ) * 𝐐 g σ = ∑ σ, conj (𝐐 f σ) * g σ := by
   have hL : ∀ σ : Cfg 2 3, conj (f σ) * 𝐐 g σ =
       1 / 3 * (conj (f σ) * g (σ ∘ Equiv.swap 0 1)) +
@@ -96,7 +96,7 @@ private lemma majumdarGhoshTerm_shift_symm (f g : NSiteSpace 2 3) :
 /-- The operator \(\tfrac43(h+\tfrac38)\) is idempotent. For three
 spin-\(\tfrac12\) sites the sum \(T\) of the three transpositions satisfies
 \(T^2=3T\), because the antisymmetric part of three qubits vanishes. -/
-private lemma majumdarGhoshTerm_shift_idem (v : NSiteSpace 2 3) :
+private lemma majumdarGhoshTerm_shift_idem (v : NSiteSpace (Fin 2) 3) :
     𝐐 (𝐐 v) = 𝐐 v := by
   ext σ
   rw [Matrix.eq_vecCons_fin_three σ]
@@ -106,7 +106,7 @@ private lemma majumdarGhoshTerm_shift_idem (v : NSiteSpace 2 3) :
   fin_cases a <;> fin_cases b <;> fin_cases c <;> simp only [Fin.zero_eta, Fin.mk_one] <;> ring
 
 /-- The kernel of \(\tfrac43(h+\tfrac38)\) is the three-site local ground space. -/
-private lemma mem_groundSpace_three_iff (u : NSiteSpace 2 3) :
+private lemma mem_groundSpace_three_iff (u : NSiteSpace (Fin 2) 3) :
     u ∈ groundSpace majumdarGhoshTensor 3 ↔ 𝐐 u = 0 := by
   rw [majumdarGhosh_groundSpace_three_eq_eigenspace, Module.End.mem_eigenspace_iff]
   simp only [LinearMap.smul_apply, LinearMap.add_apply, LinearMap.id_apply, smul_eq_zero,
@@ -122,7 +122,7 @@ theorem majumdarGhoshTerm_shift_eq_parentInteraction :
     (4 / 3 : ℂ) • (majumdarGhoshTerm + (3 / 8 : ℂ) • LinearMap.id) =
       parentInteraction majumdarGhoshTensor 3 := by
   set Q := 𝐐 with hQ
-  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)
+  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 3)
   set G := groundSpaceES majumdarGhoshTensor 3
   have hker : ∀ u, u ∈ G ↔ Q (e u) = 0 := fun u => by
     rw [mem_groundSpaceES_iff, mem_groundSpace_three_iff]
@@ -150,7 +150,7 @@ theorem majumdarGhoshTerm_shift_eq_parentInteraction :
 Hamiltonian of `majumdarGhoshTensor` is one third of the sum, over the windows of
 three consecutive sites, of the three transpositions within the window. -/
 theorem majumdarGhosh_parentHamiltonian_three_apply {N : ℕ} (hN3 : 3 ≤ N)
-    (ψ : NSiteSpace 2 N) (σ : Cfg 2 N) :
+    (ψ : NSiteSpace (Fin 2) N) (σ : Cfg 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
     Matrix.toLin' (parentRingInteraction majumdarGhoshTensor 3 N).hamiltonian ψ σ =
       (1 / 3) * ∑ i : Fin N, (ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 1)) +
@@ -190,9 +190,9 @@ theorem majumdarGhoshHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN3 : 3 ≤
 \(H+\tfrac{3N}8\), transported to the \(\ell^2\) space of coefficient vectors, is
 positive, that is, \(H\ge-\tfrac{3N}8\) as operators. -/
 theorem majumdarGhoshHamiltonian_add_isPositive {N : ℕ} (hN3 : 3 ≤ N) :
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).symm.toLinearMap ∘ₗ
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) N)).symm.toLinearMap ∘ₗ
       (majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id) ∘ₗ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).toLinearMap).IsPositive :=
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) N)).toLinearMap).IsPositive :=
   haveI : NeZero N := ⟨by omega⟩
   isPositive_conj_of_add_eq_smul_parentHamiltonian
     (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num [Complex.le_def])
@@ -240,8 +240,8 @@ theorem majumdarGhoshHamiltonian_hasEigenvalue {N : ℕ} (hN : Even N) (hN4 : 4 
     Module.End.HasEigenvalue (majumdarGhoshHamiltonian N) (-(3 * N / 8) : ℂ) := by
   rw [Module.End.hasEigenvalue_iff, majumdarGhoshHamiltonian_eigenspace_eq_span hN hN4]
   intro h
-  have hmem : (pairCoveringEven majumdarGhoshSinglet : NSiteSpace 2 N) ∈
-      (⊥ : Submodule ℂ (NSiteSpace 2 N)) :=
+  have hmem : (pairCoveringEven majumdarGhoshSinglet : NSiteSpace (Fin 2) N) ∈
+      (⊥ : Submodule ℂ (NSiteSpace (Fin 2) N)) :=
     h ▸ Submodule.subset_span (Set.mem_insert _ _)
   exact (majumdarGhosh_pairCovering_linearIndependent hN hN4).ne_zero 0
     (by simpa using hmem)

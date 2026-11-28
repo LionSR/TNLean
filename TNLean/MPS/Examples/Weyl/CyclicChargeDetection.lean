@@ -183,11 +183,11 @@ see `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 /-- Global boundary vectors with cyclic agreement close to the
 periodic trace line at every degree at least seven. -/
 theorem exists_smul_mpv_of_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    {n : ℕ} (hn : 6 ≤ n) (f g : NSiteSpace 3 (n + 1))
+    {n : ℕ} (hn : 6 ≤ n) (f g : NSiteSpace (Fin 3) (n + 1))
     (hf : f ∈ groundSpace (threeLetterTensor ζ) (n + 1))
     (hg : g ∈ groundSpace (threeLetterTensor ζ) (n + 1))
     (hfg : ∀ (i : Fin 3) (σ : Cfg 3 n), f (Fin.cons i σ) = g (Fin.snoc σ i)) :
-    ∃ c : ℂ, f = c • (mpv (threeLetterTensor ζ) : NSiteSpace 3 (n + 1)) := by
+    ∃ c : ℂ, f = c • (mpv (threeLetterTensor ζ) : NSiteSpace (Fin 3) (n + 1)) := by
   obtain ⟨F, G, hF, _, hcmp⟩ :=
     exists_charge_comparison_of_cyclic_agreement hζ f g hf hg hfg
   have hFzero (p : ZMod 5 × ZMod 5) (hp : p ≠ 0) : F p = 0 := by
@@ -215,7 +215,7 @@ theorem exists_smul_mpv_of_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ
 global boundary vector lies in the periodic trace line. -/
 theorem mem_mpvSubmodule_of_cyclic_local_membership {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) {n : ℕ} (hn : 6 ≤ n)
-    (f : NSiteSpace 3 (n + 1)) (hf : f ∈ groundSpace (threeLetterTensor ζ) (n + 1))
+    (f : NSiteSpace (Fin 3) (n + 1)) (hf : f ∈ groundSpace (threeLetterTensor ζ) (n + 1))
     (hrotate : (fun σ : Cfg 3 (n + 1) ↦ f (Fin.cons (σ (Fin.last n)) (Fin.init σ))) ∈
       groundSpace (threeLetterTensor ζ) (n + 1)) :
     f ∈ mpvSubmodule (threeLetterTensor ζ) (n + 1) := by

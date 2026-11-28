@@ -92,7 +92,7 @@ theorem exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop
     ← iSup_mpvSubmodule_eq_bntMPSVectorSpan B N]
   apply iSup_congr
   intro j
-  have hvec : (mpv (B j) : NSiteSpace d N) = (ζ j) ^ N • mpv (A j) :=
+  have hvec : (mpv (B j) : NSiteSpace (Fin d) N) = (ζ j) ^ N • mpv (A j) :=
     funext (hmpv j N)
   simp only [mpvSubmodule, hvec,
     Submodule.span_singleton_smul_eq (pow_ne_zero N (hζ j)).isUnit]
@@ -147,11 +147,11 @@ theorem not_gaugePhaseEquiv_of_wordTupleSpanTop
     (i j : Fin r) (hij : i ≠ j) (h : dim j = dim i) :
     ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (A j)) (A i) := by
   rintro ⟨X, ζ, hζ, hX⟩
-  have hvec : (mpv (A i) : NSiteSpace d S) = ζ ^ S • mpv (A j) := by
+  have hvec : (mpv (A i) : NSiteSpace (Fin d) S) = ζ ^ S • mpv (A j) := by
     ext σ
     simpa only [Pi.smul_apply, smul_eq_mul, mpv_cast_dim h (A j) S σ] using
       mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX S σ
-  have hzero : (mpv (A i) : NSiteSpace d S) = 0 :=
+  have hzero : (mpv (A i) : NSiteSpace (Fin d) S) = 0 :=
     (Submodule.disjoint_def.mp
       ((groundSpace_iSupIndep_of_wordTupleSpanTop A hSpan).pairwiseDisjoint hij)) _
       (mpv_mem_groundSpace (A i) S)

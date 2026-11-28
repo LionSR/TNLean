@@ -66,7 +66,7 @@ end Submodule
 namespace MPSTensor
 
 private noncomputable def firstRestrictionEquiv (d n : ℕ) :
-    NSiteSpace d (n + 1) ≃ₗ[ℂ] (Fin d → NSiteSpace d n) where
+    NSiteSpace (Fin d) (n + 1) ≃ₗ[ℂ] (Fin d → NSiteSpace (Fin d) n) where
   toFun ψ := fun a => restrictFirst ψ a
   invFun φ := fun σ => φ (σ 0) (Fin.tail σ)
   left_inv ψ := by
@@ -79,7 +79,7 @@ private noncomputable def firstRestrictionEquiv (d n : ℕ) :
   map_smul' c ψ := rfl
 
 private noncomputable def lastRestrictionEquiv (d n : ℕ) :
-    NSiteSpace d (n + 1) ≃ₗ[ℂ] (Fin d → NSiteSpace d n) where
+    NSiteSpace (Fin d) (n + 1) ≃ₗ[ℂ] (Fin d → NSiteSpace (Fin d) n) where
   toFun ψ := fun b => restrictLast ψ b
   invFun φ := fun σ => φ (σ (Fin.last n)) (Fin.init σ)
   left_inv ψ := by
@@ -98,12 +98,12 @@ of the middle support spaces. No tensor representation is needed.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (4.2) and
 Lemma intersectionequivalence. -/
 theorem iSupIndep_middleRestriction_comap
-    (G : ι → Submodule ℂ (NSiteSpace d n)) (hG : iSupIndep G) :
+    (G : ι → Submodule ℂ (NSiteSpace (Fin d) n)) (hG : iSupIndep G) :
     iSupIndep (fun i => ⨅ a : Fin d, ⨅ b : Fin d,
       (G i).comap ((restrictLastₗ b).comp (restrictFirstₗ a))) := by
   have h := Submodule.iSupIndep_iInf_comap_of_separating G hG
     (fun ab : Fin d × Fin d => (restrictLastₗ ab.2).comp (restrictFirstₗ ab.1))
-  have hSep : ∀ ψ : NSiteSpace d (n + 2),
+  have hSep : ∀ ψ : NSiteSpace (Fin d) (n + 2),
       (∀ ab : Fin d × Fin d, ((restrictLastₗ ab.2).comp (restrictFirstₗ ab.1)) ψ = 0) →
       ψ = 0 := by
     intro ψ hψ
@@ -121,8 +121,8 @@ intersection of their two enlarged sums is the sum of their individual
 intersections. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 Proposition forintersection and Lemma intersectionequivalence. -/
 theorem restriction_intersection_iSup_eq_of_middle_independent [Finite ι]
-    (G : ι → Submodule ℂ (NSiteSpace d n))
-    (H : ι → Submodule ℂ (NSiteSpace d (n + 1)))
+    (G : ι → Submodule ℂ (NSiteSpace (Fin d) n))
+    (H : ι → Submodule ℂ (NSiteSpace (Fin d) (n + 1)))
     (hG : iSupIndep G)
     (hFirst : ∀ i ψ, ψ ∈ H i → ∀ a, restrictFirst ψ a ∈ G i)
     (hLast : ∀ i ψ, ψ ∈ H i → ∀ b, restrictLast ψ b ∈ G i) :
@@ -186,6 +186,6 @@ theorem groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep
     iSupIndep (fun i => groundSpace (A i) N) ↔
       iSupIndep (fun i => groundSpaceES (A i) N) := by
   exact (iSupIndep_map_orderIso_iff
-    (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)).symm
+    (Submodule.orderIsoMapComap (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm)).symm
 
 end MPSTensor

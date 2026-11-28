@@ -640,7 +640,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop
       LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) :
     LinearMap.ker (∑ i, H i) =
       (bntMPSVectorSpan (fun j ↦ data.blocks (data.representativeIndex j)) N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   have hEq : LinearMap.ker (∑ i, H i) =
       LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) := by
@@ -668,7 +668,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_wordTupleSp
           (∀ i, LinearMap.ker (H i) =
             LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) →
           LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan B N).map
-            (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   let data := Classical.choice hA
   refine ⟨data.phaseClasses.g, (fun j ↦ data.dim (data.representativeIndex j)),
     (fun j ↦ data.blocks (data.representativeIndex j)),

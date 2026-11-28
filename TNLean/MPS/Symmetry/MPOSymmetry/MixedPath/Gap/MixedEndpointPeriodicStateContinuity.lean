@@ -38,15 +38,15 @@ namespace MPSTensor
 /-- A nonzero periodic vector gives an injective scalar-to-state map, without
 requiring the tensor itself to be injective. -/
 theorem periodicMpvLineMap_injective_of_mpv_ne_zero
-    {d D N : ℕ} (A : MPSTensor d D) (hψ : (mpv A : NSiteSpace d N) ≠ 0) :
+    {d D N : ℕ} (A : MPSTensor d D) (hψ : (mpv A : NSiteSpace (Fin d) N) ≠ 0) :
     Function.Injective (periodicMpvLineMap A N) := by
-  have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) ≠ 0 := by
+  have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) ≠ 0 := by
     intro hzero
     apply hψ
-    simpa using congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)) hzero
+    simpa using congrArg (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)) hzero
   apply (injective_iff_map_eq_zero (periodicMpvLineMap A N)).2
   intro c hc
-  change c • (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) = 0 at hc
+  change c • (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm (mpv A) = 0 at hc
   exact (smul_eq_zero.mp hc).resolve_right hstate
 
 namespace MPOSymmetry
@@ -63,7 +63,7 @@ theorem mpv_mixedEndpointInterpolation_zero
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 0 < N) :
     (mpv (mixedEndpointInterpolation A₀ A₁ 0) :
-      NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N) =
+      NSiteSpace (Fin ((D₀ + D₁) * (D₀ + D₁))) N) =
       mpv (mixedEndpointLeftTensor A₀ D₁) := by
   let V := Matrix.coordinateInclusion (Fin.castAddEmb D₁ : Fin D₀ ↪ Fin (D₀ + D₁))
   have hiso : Vᴴ * V = 1 := Matrix.coordinateInclusion_isometry _
@@ -121,7 +121,7 @@ theorem mpv_mixedEndpointInterpolation_one
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 0 < N) :
     (mpv (mixedEndpointInterpolation A₀ A₁ 1) :
-      NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N) =
+      NSiteSpace (Fin ((D₀ + D₁) * (D₀ + D₁))) N) =
       mpv (mixedEndpointRightTensor A₁ D₀) := by
   let e := mixedEndpointPhysicalSwap D₀ D₁
   let Φ := Matrix.reindexAlgEquiv ℂ ℂ (mixedEndpointBondSwap D₀ D₁)
@@ -156,7 +156,7 @@ theorem mpv_mixedEndpointInterpolation_ne_zero [NeZero D₀] [NeZero D₁]
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
     (mpv (mixedEndpointInterpolation A₀ A₁ γ) :
-      NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N) ≠ 0 := by
+      NSiteSpace (Fin ((D₀ + D₁) * (D₀ + D₁))) N) ≠ 0 := by
   by_cases hzero : (γ : ℝ) = 0
   · rw [hzero, mpv_mixedEndpointInterpolation_zero A₀ A₁ (by omega)]
     exact mpv_ne_zero_of_isNBlkInjective

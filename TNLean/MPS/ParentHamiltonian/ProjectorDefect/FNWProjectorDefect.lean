@@ -341,7 +341,7 @@ private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
   constructor
   · rintro ⟨v, ⟨B, rfl⟩, rfl⟩
     rw [mem_groundSpaceES_iff]
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d (r + m + ℓ)))
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (r + m + ℓ)))
       (fnwGlobalPhysicalReverseES d ℓ m r
         (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B)) ∈
       groundSpace A (r + m + ℓ)
@@ -357,7 +357,7 @@ private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
         (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B) = x
     rw [fnwGlobalPhysicalReverseES_fnwBoundaryMapCLM,
       groundSpaceMapES_frobeniusEquivEuclidean_apply]
-    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d (r + m + ℓ))).injective
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (r + m + ℓ))).injective
     rw [LinearEquiv.apply_symm_apply]
     exact hB
 

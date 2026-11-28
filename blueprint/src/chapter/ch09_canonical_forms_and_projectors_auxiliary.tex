@@ -387,8 +387,8 @@ coefficients.
 
 \begin{lemma}[Positive blocking preserves CPSV normal tensors]
     \label{thm:cpsv_normal_tensor_positive_blocking}
-    \lean{MPTensor.GaugeEquiv.blockTensor}
-    \lean{MPTensor.IsNormalTensor.blockTensor}
+    \lean{MPTensor.GaugeEquiv.block}
+    \lean{MPTensor.IsNormalTensor.block}
     \leanok
     \uses{def:nt_cpsv,def:blocked_tensor,thm:cpsv_normal_tp_gauge,thm:tp_primitive_irreducible_extra_blocking,thm:cpsv_normal_tensor_gauge_transport,thm:is_normal_tensor_of_is_normal_left_canonical}
     Let $A$ be a CPSV normal tensor and let $L\geq1$. Then the blocked tensor
@@ -413,9 +413,9 @@ coefficients.
 \begin{lemma}[CPSV canonical form is preserved by positive blocking]
     \label{thm:cpsv_literal_canonical_form_positive_blocking}
     \lean{MPSTensor.evalWord_eq_coisometry_reconstruction_of_ne_nil}
-    \lean{MPSTensor.blockTensor_toTensorFromBlocks_apply}
-    \lean{MPTensor.CPSVCanonicalFormData.blockTensor}
-    \lean{MPTensor.IsCPSVCanonicalForm.blockTensor}
+    \lean{MPSTensor.block_toTensorFromBlocks_apply}
+    \lean{MPTensor.CPSVCanonicalFormData.block}
+    \lean{MPTensor.IsCPSVCanonicalForm.block}
     \leanok
     \uses{def:cpsv_canonical_form,def:blocked_tensor,thm:cpsv_normal_tensor_positive_blocking}
     Let $A$ have canonical-form data

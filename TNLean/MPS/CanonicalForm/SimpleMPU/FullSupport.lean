@@ -54,10 +54,10 @@ def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport (data : CPSVCanonicalFo
 /-- Full support is preserved by blocking a positive number of sites.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor {A : MPSTensor d D}
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_block
     (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullSupport) (p : ℕ) (hp : 0 < p) :
-    (data.blockTensor p hp).HasFullSupport := by
+    (data.block p hp).HasFullSupport := by
   change ∑ k, data.dim k = D
   exact hfull
 
@@ -435,13 +435,12 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
     Kraus.evalWord (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • U i) (List.ofFn _)
   rw [Kraus.evalWord_smul, List.length_ofFn, hsqrtC, inv_pow]
 
-/-- A blocked operator tensor is the doubled-index blocking of its relabelling, relabelled
-back to the pair alphabet. This bridges to the canonical-form blocking statements that are still
-stated on a `Fin` alphabet. -/
+/-- A blocked operator tensor is the blocking of its doubled-index relabelling, read through
+the doubled blocked index and relabelled back to the pair alphabet. -/
 theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
     MPOTensor.blockTensor X p = Kraus.reindexPhysical finProdFinEquiv
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
-        (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
+        (Kraus.block (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
   rw [← toMPSTensor_eq_reindexPhysical, ← toMPSTensor_blockTensor]
   funext ⟨i, j⟩
   simp [Kraus.reindexPhysical, toMPSTensor]
@@ -458,7 +457,7 @@ noncomputable def blockTensorCFIIData (U : MPOTensor d D)
     MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening :=
   ((normalizedFlattening_blockTensor U p).trans
     (blockTensor_eq_reindexPhysical U.normalizedFlattening p)).symm ▸
-    (((data.reindexPhysical finProdFinEquiv.symm).blockTensor p hp).reindexPhysical
+    (((data.reindexPhysical finProdFinEquiv.symm).block p hp).reindexPhysical
       (blockedDoubledIndexEquiv d p)).reindexPhysical finProdFinEquiv
 
 /-- Full support of canonical-form-II data is preserved by any positive physical blocking.

@@ -78,7 +78,7 @@ def cycleArcBoundaryMatrixEquiv (hn : 3 ≤ n) (hL : 0 < L) (hLn : L < n)
 Source: arXiv:2011.12127, lines 1987–2011. -/
 def cycleArcPhysicalEquiv (hLn : L < n) (s : Fin n) :
     (RegionPhysicalConfig (d := d) (cycleArcFrom s L) → ℂ) ≃ₗ[ℂ]
-      MPSTensor.NSiteSpace d L :=
+      MPSTensor.NSiteSpace (Fin d) L :=
   LinearEquiv.funCongrLeft ℂ ℂ (cycleArcConfigEquiv hLn s)
 
 /-- The globally indexed arc contraction and the genuine open contraction differ

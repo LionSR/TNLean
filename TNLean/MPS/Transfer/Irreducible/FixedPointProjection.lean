@@ -196,7 +196,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (hρ_not_pd : ¬ ρ.PosDef) :
     ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
-        SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
+        SameMPV₂ A (twoBlockTensor (α := Fin d) (n := n) (m := m) A₁ A₂) := by
   -- Step 1: obtain the invariant support projection
   let P : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
   have hρ_fix' : Kraus.map A ρ = ρ := by
@@ -227,7 +227,7 @@ theorem exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint
     (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
-        SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
+        SameMPV₂ A (twoBlockTensor (α := Fin d) (n := n) (m := m) A₁ A₂) := by
   obtain ⟨ρ, hρ_psd, hρ_fix, hρ_ne, hρ_not_pd⟩ :=
     exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
       (d := d) (D := D) A X h_unital hX_herm hX_fix hX_nonscalar

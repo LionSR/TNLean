@@ -28,13 +28,13 @@ positive-length contiguous restriction. The proof enlarges the chosen
 window one site at a time and then fixes the added site to its exterior
 configuration value. -/
 theorem contiguousRestrictₗ_mem_of_restriction_closed
-    (S : (N : ℕ) → Submodule ℂ (NSiteSpace d N))
-    (hLast : ∀ {M : ℕ}, 0 < M → ∀ {φ : NSiteSpace d (M + 1)},
+    (S : (N : ℕ) → Submodule ℂ (NSiteSpace (Fin d) N))
+    (hLast : ∀ {M : ℕ}, 0 < M → ∀ {φ : NSiteSpace (Fin d) (M + 1)},
       φ ∈ S (M + 1) → ∀ j : Fin d, restrictLast φ j ∈ S M)
-    (hFirst : ∀ {M : ℕ}, 0 < M → ∀ {φ : NSiteSpace d (M + 1)},
+    (hFirst : ∀ {M : ℕ}, 0 < M → ∀ {φ : NSiteSpace (Fin d) (M + 1)},
       φ ∈ S (M + 1) → ∀ i : Fin d, restrictFirst φ i ∈ S M)
     {N L : ℕ} (hL : 0 < L) (s : ℕ) (hs : s + L ≤ N)
-    (τ : Cfg d N) {ψ : NSiteSpace d N} (hψ : ψ ∈ S N) :
+    (τ : Cfg d N) {ψ : NSiteSpace (Fin d) N} (hψ : ψ ∈ S N) :
     contiguousRestrictₗ s L hs τ ψ ∈ S L := by
   suffices h : ∀ k M, N - M = k → 0 < M → ∀ t (ht : t + M ≤ N),
       contiguousRestrictₗ t M ht τ ψ ∈ S M by
@@ -75,7 +75,7 @@ extended support, without an injectivity hypothesis.
 Source: arXiv:2203.12563, Section 5, line 1690. -/
 theorem restrictLast_insertedGroundSpace_mem
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ)
-    {L : ℕ} (hL : 0 < L) {ψ : NSiteSpace d (L + 1)}
+    {L : ℕ} (hL : 0 < L) {ψ : NSiteSpace (Fin d) (L + 1)}
     (hψ : ψ ∈ insertedGroundSpace A W (L + 1)) (j : Fin d) :
     restrictLast ψ j ∈ insertedGroundSpace A W L := by
   obtain ⟨X, rfl⟩ := hψ
@@ -87,7 +87,7 @@ extended support, without an injectivity hypothesis.
 Source: arXiv:2203.12563, Section 5, line 1690. -/
 theorem restrictFirst_insertedGroundSpace_mem
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ)
-    {L : ℕ} (hL : 0 < L) {ψ : NSiteSpace d (L + 1)}
+    {L : ℕ} (hL : 0 < L) {ψ : NSiteSpace (Fin d) (L + 1)}
     (hψ : ψ ∈ insertedGroundSpace A W (L + 1)) (i : Fin d) :
     restrictFirst ψ i ∈ insertedGroundSpace A W L := by
   obtain ⟨X, rfl⟩ := hψ
@@ -101,7 +101,7 @@ Source: arXiv:2203.12563, Section 5, lines 1687–1692. -/
 theorem contiguousRestrictₗ_insertedGroundSpace_mem
     (A : MPSTensor d D) (W : Matrix (Fin D) (Fin D) ℂ)
     {N L : ℕ} (hL : 0 < L) (s : ℕ) (hs : s + L ≤ N)
-    (τ : Cfg d N) {ψ : NSiteSpace d N}
+    (τ : Cfg d N) {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ insertedGroundSpace A W N) :
     contiguousRestrictₗ s L hs τ ψ ∈ insertedGroundSpace A W L :=
   contiguousRestrictₗ_mem_of_restriction_closed (insertedGroundSpace A W)

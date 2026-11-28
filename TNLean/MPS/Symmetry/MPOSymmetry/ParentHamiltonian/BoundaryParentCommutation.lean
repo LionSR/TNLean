@@ -91,7 +91,7 @@ theorem IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule
   intro x hx
   apply (MPSTensor.mem_groundSpaceES_iff A L _).mpr
   change mpoWithBoundary T X L *ᵥ
-    ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d L)) x) ∈
+    ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) L)) x) ∈
       MPSTensor.groundSpace A L
   exact h.mulVec_mem_groundSpace X hL
     ((MPSTensor.mem_groundSpaceES_iff A L x).mp hx)
@@ -166,7 +166,7 @@ theorem IsBoundaryCompatible.parentInteraction_mpoWithBoundary_mulVec
     (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
-    (X : Matrix (Fin D₁) (Fin D₁) ℂ) (x : MPSTensor.NSiteSpace d L) :
+    (X : Matrix (Fin D₁) (Fin D₁) ℂ) (x : MPSTensor.NSiteSpace (Fin d) L) :
     MPSTensor.parentInteraction A L (mpoWithBoundary T X L *ᵥ x) =
       mpoWithBoundary T X L *ᵥ MPSTensor.parentInteraction A L x := by
   have hc := MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A

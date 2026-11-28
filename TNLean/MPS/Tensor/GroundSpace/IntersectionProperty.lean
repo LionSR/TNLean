@@ -112,7 +112,7 @@ theorem evalWord_ofFn_cons (A : MPSTensor d D) {L : ℕ}
 
 /-- Restrict an \((L+1)\)-site state to the first \(L\) sites by fixing the last
 physical index to \(j\) (using `Fin.snoc`). -/
-def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] NSiteSpace d L where
+def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace (Fin d) (L + 1) →ₗ[ℂ] NSiteSpace (Fin d) L where
   toFun ψ := fun σ => ψ (Fin.snoc σ j)
   map_add' ψ₁ ψ₂ := by
     ext σ
@@ -123,13 +123,13 @@ def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] N
 
 /-- Restrict an \((L+1)\)-site state to the first \(L\) sites by fixing the last
 physical index to \(j\) (using `Fin.snoc`). -/
-noncomputable def restrictLast {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (j : Fin d) :
-    NSiteSpace d L :=
+noncomputable def restrictLast {d L : ℕ} (ψ : NSiteSpace (Fin d) (L + 1)) (j : Fin d) :
+    NSiteSpace (Fin d) L :=
   restrictLastₗ j ψ
 
 /-- Restrict an \((L+1)\)-site state to the last \(L\) sites by fixing the first
 physical index to \(i\) (using `Fin.cons`). -/
-def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] NSiteSpace d L where
+def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace (Fin d) (L + 1) →ₗ[ℂ] NSiteSpace (Fin d) L where
   toFun ψ := fun σ => ψ (Fin.cons i σ)
   map_add' ψ₁ ψ₂ := by
     ext σ
@@ -140,21 +140,21 @@ def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] 
 
 /-- Restrict an \((L+1)\)-site state to the last \(L\) sites by fixing the first
 physical index to \(i\) (using `Fin.cons`). -/
-noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) :
-    NSiteSpace d L :=
+noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace (Fin d) (L + 1)) (i : Fin d) :
+    NSiteSpace (Fin d) L :=
   restrictFirstₗ i ψ
 
-@[simp] theorem restrictLast_apply {d L : ℕ} (ψ : NSiteSpace d (L + 1))
+@[simp] theorem restrictLast_apply {d L : ℕ} (ψ : NSiteSpace (Fin d) (L + 1))
     (j : Fin d) (σ : Fin L → Fin d) :
     restrictLast ψ j σ = ψ (Fin.snoc σ j) := rfl
 
-@[simp] theorem restrictFirst_apply {d L : ℕ} (ψ : NSiteSpace d (L + 1))
+@[simp] theorem restrictFirst_apply {d L : ℕ} (ψ : NSiteSpace (Fin d) (L + 1))
     (i : Fin d) (σ : Fin L → Fin d) :
     restrictFirst ψ i σ = ψ (Fin.cons i σ) := rfl
 
 /-- A vector on \(L + 1\) sites is determined by all restrictions obtained by
 fixing its first physical index. -/
-theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace d (L + 1)}
+theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace (Fin d) (L + 1)}
     (h : ∀ i : Fin d, restrictFirst ψ i = restrictFirst φ i) :
     ψ = φ := by
   ext σ
@@ -165,12 +165,12 @@ theorem eq_of_forall_restrictFirst_eq {d L : ℕ} {ψ φ : NSiteSpace d (L + 1)}
 
 /-- A state on \(L+1\) sites has its left restriction in \(G_L(A)\): for each value of the
 last physical index, the resulting \(L\)-site state lies in the ground space. -/
-def InLeftGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace d (L + 1)) : Prop :=
+def InLeftGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace (Fin d) (L + 1)) : Prop :=
   ∀ j : Fin d, restrictLast ψ j ∈ groundSpace A L
 
 /-- A state on \(L+1\) sites has its right restriction in \(G_L(A)\): for each value of the
 first physical index, the resulting \(L\)-site state lies in the ground space. -/
-def InRightGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace d (L + 1)) : Prop :=
+def InRightGround (A : MPSTensor d D) (L : ℕ) (ψ : NSiteSpace (Fin d) (L + 1)) : Prop :=
   ∀ i : Fin d, restrictFirst ψ i ∈ groundSpace A L
 
 /-! ### Forward direction: ground-space elements restrict to ground-space elements
@@ -184,7 +184,7 @@ matrix \(A^jX\). Similarly, fixing the first index \(i\) gives
 /-- An element of \(G_{L+1}(A)\) restricts to \(G_L(A)\) on the first \(L\) sites
 (left window, fixing the last index). -/
 theorem groundSpace_inLeftGround (A : MPSTensor d D) (L : ℕ)
-    {ψ : NSiteSpace d (L + 1)} (hψ : ψ ∈ groundSpace A (L + 1)) :
+    {ψ : NSiteSpace (Fin d) (L + 1)} (hψ : ψ ∈ groundSpace A (L + 1)) :
     InLeftGround A L ψ := by
   intro j
   rw [groundSpace, LinearMap.mem_range] at hψ ⊢
@@ -196,7 +196,7 @@ theorem groundSpace_inLeftGround (A : MPSTensor d D) (L : ℕ)
 /-- An element of \(G_{L+1}(A)\) restricts to \(G_L(A)\) on the last \(L\) sites
 (right window, fixing the first index). -/
 theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
-    {ψ : NSiteSpace d (L + 1)} (hψ : ψ ∈ groundSpace A (L + 1)) :
+    {ψ : NSiteSpace (Fin d) (L + 1)} (hψ : ψ ∈ groundSpace A (L + 1)) :
     InRightGround A L ψ := by
   intro i
   rw [groundSpace, LinearMap.mem_range] at hψ ⊢
@@ -310,7 +310,7 @@ letter to \(i\) gives \(\Gamma_{K+1}(Y_i)\) and fixing the last letter to
 This is the overlap comparison in the "inverting and growing back" step of
 arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem groundSpaceMap_mul_eq_of_restrict {A : MPSTensor d D} {K : ℕ}
-    {ψ : NSiteSpace d (K + 2)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (K + 2)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hY : ∀ i, restrictFirst ψ i = groundSpaceMap A (K + 1) (Y i))
     (hZ : ∀ j, restrictLast ψ j = groundSpaceMap A (K + 1) (Z j)) (i j : Fin d) :
     groundSpaceMap A K (A j * Y i) = groundSpaceMap A K (Z j * A i) := by
@@ -352,7 +352,7 @@ the identity; for a left-canonical tensor they are the adjoints
 \((A^j)^\dagger\). This is the final step of the "inverting and growing back"
 argument of arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem mem_groundSpace_succ_of_intertwine {A : MPSTensor d D} {K : ℕ}
-    {ψ : NSiteSpace d (K + 1)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (K + 1)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (R : Fin d → Matrix (Fin D) (Fin D) ℂ) (hR : ∑ j, R j * A j = 1)
     (hY : ∀ i, restrictFirst ψ i = groundSpaceMap A K (Y i))
     (hCompat : ∀ i j, A j * Y i = Z j * A i) :
@@ -408,7 +408,7 @@ This is the "inverting and growing back" step. The proof proceeds as follows:
 The formal overlap argument uses the \((L - 1)\)-site intersection, so we state
 the theorem with the exact hypothesis \(1 < L\). -/
 theorem groundSpace_intersection {A : MPSTensor d D} (hA : Kraus.IsInjective A)
-    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
+    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace (Fin d) (L + 1)}
     (hLeft : InLeftGround A L ψ) (hRight : InRightGround A L ψ) :
     ψ ∈ groundSpace A (L + 1) := by
   classical
@@ -426,7 +426,7 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : Kraus.IsInjective A)
 /-- The ground space on \(L+1\) sites is characterized by the intersection property:
 \(ψ ∈ G_{L+1}(A)\) iff both the left and right \(L\)-site restrictions lie in \(G_L(A)\). -/
 theorem groundSpace_iff_left_right {A : MPSTensor d D} (hA : Kraus.IsInjective A)
-    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)} :
+    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace (Fin d) (L + 1)} :
     ψ ∈ groundSpace A (L + 1) ↔ InLeftGround A L ψ ∧ InRightGround A L ψ :=
   ⟨fun h => ⟨groundSpace_inLeftGround A L h, groundSpace_inRightGround A L h⟩,
    fun ⟨hL', hR'⟩ => groundSpace_intersection hA hL hL' hR'⟩

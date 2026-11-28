@@ -35,14 +35,19 @@ namespace MPOTensor
 
 variable {d D₁ D₂ : ℕ}
 
-/-- Blocking commutes with the action tensor. The contracted input word is
-reindexed by `decodeBlockEquiv`; the output uses the same blocked alphabet
-on both sides.
+/-- The state tensor `A` blocked at length `L`, with its words numbered by `decodeBlockEquiv` so
+that it shares the numbered alphabet of the blocked operator tensors. -/
+local notation "𝔅[" A ", " L "]" =>
+  Kraus.reindexPhysical (Kraus.decodeBlockEquiv _ L) (Kraus.block A L)
+
+/-- Blocking commutes with the action tensor. The blocked state tensors are numbered by
+`decodeBlockEquiv`, the numbering of the blocked operator alphabet, so the contracted input
+word and the output use the same blocked alphabet on both sides.
 
 Source: arXiv:2502.20257, `main.tex` lines 1789--1870. -/
 theorem blockTensor_actTensor (T : MPOTensor d D₁) (A : MPSTensor d D₂) (L : ℕ) :
-    Kraus.blockTensor (actTensor T A) L =
-      actTensor (blockTensor T L) (Kraus.blockTensor A L) := by
+    𝔅[actTensor T A, L] =
+      actTensor (blockTensor T L) 𝔅[A, L] := by
   funext I
   change Kraus.evalWord (actTensor T A) (List.ofFn (Kraus.decodeBlock d L I)) = _
   rw [evalWord_actTensor, actTensor_apply]
@@ -64,15 +69,16 @@ periodic action hypothesis of arXiv:2203.12563, line 1064. -/
 theorem CarriesMPV.blockTensor {D₃ : ℕ} {T : MPOTensor d D₁}
     {B : MPSTensor d D₂} {C : MPSTensor d D₃} (h : CarriesMPV T B C)
     {L : ℕ} (hL : 0 < L) :
-    CarriesMPV (blockTensor T L) (Kraus.blockTensor B L) (Kraus.blockTensor C L) := by
+    CarriesMPV (blockTensor T L) 𝔅[B, L] 𝔅[C, L] := by
   intro N hN
   rw [mpo_mulVec_mpv]
   funext σ
   rw [← blockTensor_actTensor]
   have hSame := h.sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl B)
     (N * L) (Nat.mul_pos hN hL) (Kraus.blockedConfigEquiv d N L σ)
-  simpa only [MPTensor.mpv, MPTensor.coeff, Kraus.evalWord_blockTensor,
-    Kraus.ofFn_blockedConfigEquiv] using hSame
+  simpa only [MPTensor.mpv, MPTensor.coeff, Kraus.evalWord_reindexPhysical, Kraus.evalWord_block,
+    List.map_ofFn, Function.comp_def, Kraus.decodeBlockEquiv_apply, Kraus.blockedConfigEquiv_eq,
+    Kraus.ofFn_blockConfigEquiv] using hSame
 
 namespace BlockActionData
 
@@ -92,13 +98,13 @@ def HasExteriorBufferLength (ad : BlockActionData F A) (m : ℕ) : Prop :=
 and block-dependent source and target bonds.
 Source: arXiv:2502.20257, `eq:action_interior`, lines 1840--1870. -/
 noncomputable def block (ad : BlockActionData F A) (L : ℕ) :
-    BlockActionData (F.block L) (fun x ↦ Kraus.blockTensor (A x) L) where
+    BlockActionData (F.block L) (fun x ↦ 𝔅[A x, L]) where
   V := ad.V
   W := ad.W
   isReduction g x := by
     change MPTensor.IsReduction
-      (actTensor (blockTensor (F.tensor g) L) (Kraus.blockTensor (A x) L))
-      (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x)
+      (actTensor (blockTensor (F.tensor g) L) 𝔅[A x, L])
+      𝔅[A (g • x), L] (ad.V g x) (ad.W g x)
     rw [← blockTensor_actTensor]
     exact ((ad.isReduction g x).block L).reindexPhysical _
 
@@ -130,8 +136,8 @@ theorem block_hasExteriorBufferLength_one (ad : BlockActionData F A)
     (ad.block L).HasExteriorBufferLength 1 := by
   intro g x
   change MPSTensor.IsReductionExteriorBufferLength
-    (actTensor (blockTensor (F.tensor g) L) (Kraus.blockTensor (A x) L))
-    (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x) 1
+    (actTensor (blockTensor (F.tensor g) L) 𝔅[A x, L])
+    𝔅[A (g • x), L] (ad.V g x) (ad.W g x) 1
   rw [← blockTensor_actTensor]
   exact (((ad.isReduction g x).isReductionExteriorBufferLength_nilpotencyLength
     ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl _))).block hL
@@ -209,7 +215,7 @@ theorem exists_block_blockActionData_one [Finite G] [Finite X]
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) :
     ∃ L : ℕ, 0 < L ∧ ∃ ad :
-      BlockActionData (F.block L) (fun x ↦ Kraus.blockTensor (A x) L),
+      BlockActionData (F.block L) (fun x ↦ 𝔅[A x, L]),
       ad.HasExteriorBufferLength 1 := by
   classical
   let := Fintype.ofFinite G
@@ -232,10 +238,10 @@ theorem exists_block_blockActionData_one_of_isPretransitive [Finite G]
     (hA : ∀ x, Kraus.IsInjective (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) :
     ∃ L : ℕ, 0 < L ∧ (F.block L).IsRepresentation ∧
-      (∀ x, Kraus.IsInjective (Kraus.blockTensor (A x) L)) ∧
-      (∀ g x, CarriesMPV ((F.block L).tensor g) (Kraus.blockTensor (A x) L)
-        (Kraus.blockTensor (A (g • x)) L)) ∧
-      ∃ ad : BlockActionData (F.block L) (fun x ↦ Kraus.blockTensor (A x) L),
+      (∀ x, Kraus.IsInjective 𝔅[A x, L]) ∧
+      (∀ g x, CarriesMPV ((F.block L).tensor g) 𝔅[A x, L]
+        𝔅[A (g • x), L]) ∧
+      ∃ ad : BlockActionData (F.block L) (fun x ↦ 𝔅[A x, L]),
         ad.HasExteriorBufferLength 1 := by
   classical
   have : Finite X := by
@@ -248,7 +254,8 @@ theorem exists_block_blockActionData_one_of_isPretransitive [Finite G]
     exists_block_blockActionData_one (fun x ↦ (hA x).isNormal) hD hperm
   refine ⟨L, hL, hF.block F L hL, ?_, fun g x ↦ (hperm g x).blockTensor hL, ad, had⟩
   intro x
-  apply (Kraus.isNBlkInjective_iff_blockTensor_isInjective (A x) L).1
+  refine (MPSTensor.isInjective_reindexPhysical_equiv _ _).2
+    ((Kraus.isNBlkInjective_iff_isInjective_block (A x) L).1 ?_)
   simpa using MPTensor.isNBlkInjective_mul_of_isNBlkInjective (A x) hL
     (Kraus.isNBlkInjective_one_of_isInjective (hA x))
 

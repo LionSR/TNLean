@@ -576,7 +576,7 @@ theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
       [Kraus.IsNormal A,
        ∀ᶠ N in Filter.atTop, Kraus.wordSpan A N = ⊤,
        Kraus.IsNBlkInjective A (D ^ 4),
-       ∃ L, 0 < L ∧ Kraus.IsInjective (Kraus.blockTensor A L)] := by
+       ∃ L, 0 < L ∧ Kraus.IsInjective (Kraus.block A L)] := by
   have hD4 : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
   tfae_have 1 → 3 := fun h => isNBlkInjective_pow_four_of_isNormal A h
   tfae_have 3 → 2 := fun h =>
@@ -585,9 +585,9 @@ theorem normality_tfae [NeZero D] (A : MPSTensor d D) :
     obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp h
     exact ⟨max N 1, by omega, hN _ (le_max_left _ _)⟩
   tfae_have 1 → 4 := fun ⟨N, hN, h⟩ =>
-    ⟨N, hN, (Kraus.isNBlkInjective_iff_blockTensor_isInjective A N).1 h⟩
+    ⟨N, hN, (Kraus.isNBlkInjective_iff_isInjective_block A N).1 h⟩
   tfae_have 4 → 1 := fun ⟨N, hN, h⟩ =>
-    ⟨N, hN, (Kraus.isNBlkInjective_iff_blockTensor_isInjective A N).2 h⟩
+    ⟨N, hN, (Kraus.isNBlkInjective_iff_isInjective_block A N).2 h⟩
   tfae_finish
 
 end MPSTensor

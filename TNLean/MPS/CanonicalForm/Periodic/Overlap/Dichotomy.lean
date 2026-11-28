@@ -123,8 +123,6 @@ theorem periodicOverlapDichotomy
     · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_dim A B hA hB hD)
   · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_period A B hA hB hm)
 
-variable {d : ℕ}
-
 /-- A finite periodic family is eventually linearly independent along a common
 period when every cross overlap tends to zero.
 
@@ -134,7 +132,7 @@ periods, while the cross overlaps tend to zero. -/
 theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
     {ι : Type*} [Finite ι]
     {dim : ι → ℕ}
-    (A : (k : ι) → MPSTensor d (dim k))
+    (A : (k : ι) → MPTensor α (Fin (dim k)))
     (period : ι → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
     (p : ℕ) [NeZero p]
@@ -151,9 +149,9 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   -- `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
   classical
   let : Fintype ι := Fintype.ofFinite ι
-  set V := lp (fun N : ℕ => MPVSpace (Fin d) N) 2 with hV
+  set V := lp (fun N : ℕ => MPVSpace α N) 2 with hV
   set v : ι → ℕ → V :=
-    fun k N => lp.single 2 (p * N) (mpvState (α := Fin d) (A k) (p * N)) with hv
+    fun k N => lp.single 2 (p * N) (mpvState (α := α) (A k) (p * N)) with hv
   set L : Matrix ι ι ℂ := Matrix.diagonal (fun k => (period k : ℂ)) with hLdef
   have hLdet : L.det ≠ 0 := by
     rw [hLdef, Matrix.det_diagonal]
@@ -161,7 +159,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   have hGram : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j)) := by
     intro i j
     have hreduce : (fun N => ⟪v i N, v j N⟫_ℂ)
-        = fun N => star (mpvOverlap (α := Fin d) (A i) (A j) (p * N)) := by
+        = fun N => star (mpvOverlap (α := α) (A i) (A j) (p * N)) := by
       funext N
       simp only [hv]
       rw [lp.inner_single_left, lp.single_apply_self, mpvOverlap_eq_star_mpvInner, star_star]
@@ -178,7 +176,7 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
         · exact h
       have hmap : Tendsto (fun N : ℕ => c * N) atTop atTop :=
         tendsto_atTop_mono (fun n => le_mul_of_one_le_left (Nat.zero_le n) hcpos) tendsto_id
-      have hcomp : Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A i) (p * N)) atTop
+      have hcomp : Tendsto (fun N => mpvOverlap (α := α) (A i) (A i) (p * N)) atTop
           (nhds (period i : ℂ)) :=
         ((periodicSelfOverlap_tendsto (A i) (hPer i)).comp hmap).congr fun N => by
           simp only [Function.comp]; rw [hc, mul_assoc]
@@ -194,9 +192,9 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   rw [Filter.eventually_atTop] at hLI
   obtain ⟨N₀, hN₀⟩ := hLI
   refine ⟨N₀, fun N hN => ?_⟩
-  let fN : MPVSpace (Fin d) (p * N) →ₗ[ℂ] V :=
-    lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace (Fin d) N) 2 (p * N)
-  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (α := Fin d) (A k) (p * N))) := by
+  let fN : MPVSpace α (p * N) →ₗ[ℂ] V :=
+    lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace α N) 2 (p * N)
+  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (α := α) (A k) (p * N))) := by
     convert hN₀ N hN using 1
     ext k L i
     rfl
@@ -226,14 +224,14 @@ source consequence is recorded in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem periodicBasis_eventuallyLinearlyIndependent
     {r : ℕ} {dim : Fin r → ℕ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (period : Fin r → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
     (p : ℕ) [NeZero p]
     (hDiv : ∀ k, period k ∣ p)
     (hNonrep : ∀ i j, i ≠ j →
       ∀ (hdim : dim i = dim j),
-        ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
+        ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
   refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
@@ -277,7 +275,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- **Independence of the non-zero members of a basis of periodic vectors.**
 
@@ -304,15 +302,15 @@ Source: arXiv:1708.00029, proposition `equal-or-orthogonal-generalized`,
 lines 604--608; used at lines 677--679. -/
 theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
     {g : ℕ} {dim : Fin g → ℕ}
-    (A : (j : Fin g) → MPSTensor d (dim j))
+    (A : (j : Fin g) → MPTensor α (Fin (dim j)))
     (period : Fin g → ℕ)
     (hPer : ∀ j, IsPeriodic (period j) (A j))
     (hNonrep : ∀ i j, i ≠ j →
       ∀ (hdim : dim i = dim j),
-        ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
+        ¬ RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ
-        (fun j : {j : Fin g // period j ∣ N} => mpvState (α := Fin d) (A ↑j) N) := by
+        (fun j : {j : Fin g // period j ∣ N} => mpvState (α := α) (A ↑j) N) := by
   classical
   -- Positive bond dimensions, needed as instances by the overlap dichotomy.
   -- Every period is positive, so every least common multiple of periods is.
@@ -325,7 +323,7 @@ theorem periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent
   have key : ∀ S : Finset (Fin g), ∃ M : ℕ, ∀ n ≥ M,
       LinearIndependent ℂ
         (fun k : {j : Fin g // j ∈ S} =>
-          mpvState (α := Fin d) (A ↑k) (S.lcm period * n)) := by
+          mpvState (α := α) (A ↑k) (S.lcm period * n)) := by
     intro S
     have : NeZero (S.lcm period) := ⟨(hlcmPos S).ne'⟩
     refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero

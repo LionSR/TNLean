@@ -126,12 +126,30 @@ theorem isIrreducibleMap_transferMap_of_isNormal
   obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
   simpa only using Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq
 
-/-- A normal tensor has no nontrivial invariant orthogonal projection. -/
-theorem isIrreducibleFamily_of_isNormal
-    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
-    Kraus.IsIrreducibleFamily A :=
-  Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
-    (isIrreducibleMap_transferMap_of_isNormal A hA)
+/-- A normal tensor has no nontrivial invariant orthogonal projection. The alphabet is
+numbered by `Fintype.equivFin`, where the vector-spreading argument applies; neither notion
+depends on the numbering. -/
+theorem isIrreducibleFamily_of_isNormal {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsNormal A) :
+    Kraus.IsIrreducibleFamily A := by
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  have hr : ∀ N : ℕ, Set.range (fun σ : Fin N → Fin (Fintype.card α) ↦
+      Kraus.evalWord (Kraus.reindexPhysical e A) (List.ofFn σ)) =
+      Set.range (fun σ : Fin N → α ↦ Kraus.evalWord A (List.ofFn σ)) := by
+    intro N
+    ext X
+    constructor
+    · rintro ⟨σ, rfl⟩
+      exact ⟨fun i ↦ e (σ i), by
+        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+    · rintro ⟨σ, rfl⟩
+      exact ⟨fun i ↦ e.symm (σ i), by
+        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+  have hN : Kraus.IsNormal (Kraus.reindexPhysical e A) := by
+    simpa only [Kraus.IsNormal, Kraus.IsNBlkInjective, Kraus.wordSpan, hr] using hA
+  exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv e A).1
+    (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
+      (isIrreducibleMap_transferMap_of_isNormal _ hN))
 
 section SpectralPerturbation
 

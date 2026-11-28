@@ -288,7 +288,7 @@ letters lie in the first diagonal sector, so neither boundary change acts.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 def mixedEndpointInteriorEdgeBoundaryMap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    Matrix (Fin D₀ ⊕ Fin D₁) (Fin D₀ ⊕ Fin D₁) ℂ →ₗ[ℂ] NSiteSpace (D₀ * D₀) 2 where
+    Matrix (Fin D₀ ⊕ Fin D₁) (Fin D₀ ⊕ Fin D₁) ℂ →ₗ[ℂ] NSiteSpace (Fin (D₀ * D₀)) 2 where
   toFun X σ := mixedEndpointActiveBoundaryMap A₀ A₁ 0 X
     (.inl (finProdFinEquiv.symm (σ 0)).1,
       ((finProdFinEquiv.symm (σ 0)).2, Fin.elim0, (finProdFinEquiv.symm (σ 1)).1),

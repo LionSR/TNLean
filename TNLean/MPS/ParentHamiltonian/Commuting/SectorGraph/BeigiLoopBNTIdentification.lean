@@ -272,19 +272,19 @@ private theorem
   have hN₀ : N₀ < N := lt_of_le_of_lt (Nat.le_max_left N₀ 2) hN
   have hTwo : 2 < N := lt_of_le_of_lt (Nat.le_max_right N₀ 2) hN
   have hImage : LinearIndependent ℂ
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘
-        fun j : Fin r => (mpv (A j) : NSiteSpace d N)) := by
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap ∘
+        fun j : Fin r => (mpv (A j) : NSiteSpace (Fin d) N)) := by
     convert hLI N hN₀ using 1
     funext j
     ext σ
     simp [Function.comp_apply, mpvState_apply]
   have hCoefficients : LinearIndependent ℂ
-      (fun j : Fin r => (mpv (A j) : NSiteSpace d N)) :=
+      (fun j : Fin r => (mpv (A j) : NSiteSpace (Fin d) N)) :=
     LinearIndependent.of_comp
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap hImage
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap hImage
   rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     (hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
-  refine (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm _).trans ?_
+  refine (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm _).trans ?_
   simpa using finrank_span_eq_card hCoefficients
 
 /-- The normalized minimal loop MPV state is the corresponding Euclidean loop-product state
@@ -380,7 +380,7 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
   have hGround : mpvState (α := Fin d) B N ∈
       ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0 := by
     rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker, Submodule.mem_map]
-    refine ⟨(mpv B : NSiteSpace d N), ?_, rfl⟩
+    refine ⟨(mpv B : NSiteSpace (Fin d) N), ?_, rfl⟩
     rw [LinearMap.mem_ker, Matrix.toLin'_apply, ManyBody.Interaction.hamiltonian,
       Matrix.sum_mulVec]
     apply Finset.sum_eq_zero
@@ -408,7 +408,7 @@ private theorem
   have hGround : mpvState (α := Fin d) (A j) N ∈
       ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0 := by
     rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker, Submodule.mem_map]
-    refine ⟨(mpv (A j) : NSiteSpace d N), ?_, rfl⟩
+    refine ⟨(mpv (A j) : NSiteSpace (Fin d) N), ?_, rfl⟩
     rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
     exact Submodule.subset_span ⟨j, rfl⟩
   exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround

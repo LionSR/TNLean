@@ -173,7 +173,7 @@ Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
@@ -269,7 +269,7 @@ length-\(L_0\) trace-probe reconstruction is still documented in
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hA : Kraus.IsInjective A) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
@@ -328,7 +328,7 @@ The outside-label uniqueness lemma identifies \(Y_M(\rho)\) with \(Y_\nu\), henc
 theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
@@ -541,7 +541,7 @@ pairings, giving the displayed matrix identity. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
-    {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    {ψ : NSiteSpace (Fin d) (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈

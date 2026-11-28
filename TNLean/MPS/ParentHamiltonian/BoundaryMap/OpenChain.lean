@@ -60,7 +60,7 @@ arXiv:cond-mat/9410110, eq. (2.4). -/
 noncomputable def openChainLeftGroundSpaceES (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg d (L + 1))) :=
   (⨅ j : Fin d, (groundSpace A L).comap (restrictLastₗ j)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))).symm.toLinearMap
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1))).symm.toLinearMap
 
 /-- The open-chain tail-window ground subspace on \(K + L\) sites.
 
@@ -71,7 +71,7 @@ arXiv:cond-mat/9410110, eq. (2.4). -/
 noncomputable def openChainTailGroundSpaceES (A : MPSTensor d D) (K L : ℕ) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg d (K + L))) :=
   (⨅ u : Fin K → Fin d, (groundSpace A L).comap (tailRestrictₗ u)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm.toLinearMap
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm.toLinearMap
 
 /-- The orthogonal projector onto the open-chain left-window ground subspace. -/
 noncomputable def openChainLeftGroundProjectionES (A : MPSTensor d D) (L : ℕ) :
@@ -105,7 +105,7 @@ noncomputable def openChainMartingaleDifferenceES [NeZero D]
 @[simp] theorem mem_openChainLeftGroundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) :
     v ∈ openChainLeftGroundSpaceES A L ↔
-      InLeftGround A L (WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1)) v) := by
+      InLeftGround A L (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (L + 1)) v) := by
   rw [openChainLeftGroundSpaceES, Submodule.mem_map_equiv]
   simp [InLeftGround, restrictLast]
 
@@ -114,7 +114,7 @@ after transport by the canonical `WithLp` equivalence. -/
 @[simp] theorem mem_openChainTailGroundSpaceES_iff (A : MPSTensor d D) (K L : ℕ)
     (v : EuclideanSpace ℂ (Cfg d (K + L))) :
     v ∈ openChainTailGroundSpaceES A K L ↔
-      InTailGround A K L (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L)) v) := by
+      InTailGround A K L (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L)) v) := by
   rw [openChainTailGroundSpaceES, Submodule.mem_map_equiv]
   simp [InTailGround]
 

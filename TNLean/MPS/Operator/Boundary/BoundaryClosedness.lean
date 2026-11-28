@@ -191,7 +191,7 @@ positive length. Source: GLM23, arXiv:2203.12563v3, lines 431--433. -/
 theorem IsBoundaryCompatible.mulVec_mem_groundSpace {T : MPOTensor d D₁}
     {A : MPSTensor d D₂} (h : IsBoundaryCompatible T A)
     (X : Matrix (Fin D₁) (Fin D₁) ℂ) {L : ℕ} (hL : 0 < L)
-    {ψ : MPSTensor.NSiteSpace d L} (hψ : ψ ∈ MPSTensor.groundSpace A L) :
+    {ψ : MPSTensor.NSiteSpace (Fin d) L} (hψ : ψ ∈ MPSTensor.groundSpace A L) :
     mpoWithBoundary T X L *ᵥ ψ ∈ MPSTensor.groundSpace A L := by
   obtain ⟨Y, rfl⟩ := hψ
   obtain ⟨Z, hZ⟩ := h X Y

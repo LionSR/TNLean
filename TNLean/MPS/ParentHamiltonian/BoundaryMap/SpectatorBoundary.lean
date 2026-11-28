@@ -89,13 +89,13 @@ variable {d D : ℕ}
 /-- Fix a suffix \(τ : Fin L → Fin d\) and restrict a \(K+L\)-site state to its
 first \(K\) sites.  This is the left-sided analogue of \(tailRestrictₗ\). -/
 def prefixRestrictₗ {d K L : ℕ} (τ : Fin L → Fin d) :
-    NSiteSpace d (K + L) →ₗ[ℂ] NSiteSpace d K where
+    NSiteSpace (Fin d) (K + L) →ₗ[ℂ] NSiteSpace (Fin d) K where
   toFun ψ := fun σ => ψ (Fin.append σ τ)
   map_add' ψ₁ ψ₂ := by ext σ; simp
   map_smul' c ψ := by ext σ; simp
 
 @[simp] theorem prefixRestrictₗ_apply {d K L : ℕ} (τ : Fin L → Fin d)
-    (ψ : NSiteSpace d (K + L)) (σ : Fin K → Fin d) :
+    (ψ : NSiteSpace (Fin d) (K + L)) (σ : Fin K → Fin d) :
     prefixRestrictₗ τ ψ σ = ψ (Fin.append σ τ) := rfl
 
 /-- The prefix restriction of a ground-space vector: fixing the suffix τ and
@@ -127,7 +127,7 @@ For a family \(Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ\) indexed by
 where \(u\) is the prefix and \(τ\) is the suffix.
 When \(Y_u = X·A^u\) the output equals the standard \(Γ_{K+L}(X)\). -/
 noncomputable def tailBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
-    ((Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace d (K + L) where
+    ((Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) where
   toFun Y σ := Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
     Y (σ ∘ Fin.castAdd L))
   map_add' Y₁ Y₂ := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
@@ -202,7 +202,7 @@ vectors whose suffix restriction lies in the local ground space for
 every prefix configuration. -/
 theorem tailBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
     (tailBoundaryMap A K L).range =
-      {ψ : NSiteSpace d (K + L) | ∀ u : Fin K → Fin d,
+      {ψ : NSiteSpace (Fin d) (K + L) | ∀ u : Fin K → Fin d,
         tailRestrictₗ u ψ ∈ groundSpace A L} := by
   ext ψ
   constructor
@@ -244,7 +244,7 @@ For a family \(Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ\) indexed by
 where \(u\) is the prefix and \(τ\) is the suffix.
 When \(Z_τ = A^τ·X\) the output equals the standard \(Γ_{K+L}(X)\). -/
 noncomputable def leftBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
-    ((Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace d (K + L) where
+    ((Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) where
   toFun Z σ := Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
     Z (σ ∘ Fin.natAdd K))
   map_add' Z₁ Z₂ := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
@@ -316,7 +316,7 @@ vectors whose prefix restriction lies in the local ground space for
 every suffix configuration. -/
 theorem leftBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
     (leftBoundaryMap A K L).range =
-      {ψ : NSiteSpace d (K + L) | ∀ τ : Fin L → Fin d,
+      {ψ : NSiteSpace (Fin d) (K + L) | ∀ τ : Fin L → Fin d,
         prefixRestrictₗ τ ψ ∈ groundSpace A K} := by
   ext ψ
   constructor
@@ -354,7 +354,7 @@ with last-site restriction at \(\tau(0)\).  This is used to connect the left bou
 (at \(L=1\)) to the open-chain left ground space defined by fixing the
 last site. -/
 lemma prefixRestrictₗ_one_eq_restrictLast {d K : ℕ} (τ : Fin 1 → Fin d)
-    (ψ : NSiteSpace d (K + 1)) :
+    (ψ : NSiteSpace (Fin d) (K + 1)) :
     prefixRestrictₗ τ ψ = restrictLast ψ (τ 0) := by
   ext σ
   simp [prefixRestrictₗ_apply, restrictLast_apply, Fin.append_right_eq_snoc]
@@ -366,19 +366,19 @@ identification required for the open-chain martingale condition C3
 (Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4)). -/
 theorem tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES
     (A : MPSTensor d D) (K L : ℕ) :
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm).toLinearMap
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm).toLinearMap
       (tailBoundaryMap A K L).range =
     openChainTailGroundSpaceES A K L :=
   calc
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm).toLinearMap
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm).toLinearMap
         (tailBoundaryMap A K L).range
-      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm).toLinearMap
+      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + L))).symm).toLinearMap
           (⨅ u : Fin K → Fin d, (groundSpace A L).comap (tailRestrictₗ u)) := by
         congr 1
         apply Submodule.ext
         intro ψ
         have h_set := tailBoundaryMap_range_eq A K L
-        have h_mem := congrArg (fun (s : Set (NSiteSpace d (K + L))) => ψ ∈ s) h_set
+        have h_mem := congrArg (fun (s : Set (NSiteSpace (Fin d) (K + L))) => ψ ∈ s) h_set
         simpa [Submodule.mem_iInf, groundSpace, tailRestrictₗ] using h_mem
     _ = openChainTailGroundSpaceES A K L := by
       simp [openChainTailGroundSpaceES]
@@ -390,13 +390,13 @@ theorem to place both overlapping ground spaces in the same ambient
 Hilbert space. -/
 theorem leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES
     (A : MPSTensor d D) (K : ℕ) :
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + 1))).symm).toLinearMap
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + 1))).symm).toLinearMap
       (leftBoundaryMap A K 1).range =
     openChainLeftGroundSpaceES A K :=
   calc
-    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + 1))).symm).toLinearMap
+    Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + 1))).symm).toLinearMap
         (leftBoundaryMap A K 1).range
-      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + 1))).symm).toLinearMap
+      = Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (K + 1))).symm).toLinearMap
           (⨅ j : Fin d, (groundSpace A K).comap (restrictLastₗ j)) := by
         congr 1
         apply Submodule.ext
@@ -404,7 +404,7 @@ theorem leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES
         have h_set := leftBoundaryMap_range_eq A K 1
         have h1 : ψ ∈ (leftBoundaryMap A K 1).range ↔
             ∀ τ : Fin 1 → Fin d, prefixRestrictₗ τ ψ ∈ groundSpace A K := by
-          have := congrArg (fun (s : Set (NSiteSpace d (K + 1))) => ψ ∈ s) h_set
+          have := congrArg (fun (s : Set (NSiteSpace (Fin d) (K + 1))) => ψ ∈ s) h_set
           simpa using this
         have h2 : (∀ τ : Fin 1 → Fin d, prefixRestrictₗ τ ψ ∈ groundSpace A K) ↔
             (∀ j : Fin d, (restrictLastₗ j) ψ ∈ groundSpace A K) := by

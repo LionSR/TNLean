@@ -51,7 +51,7 @@ namespace MPSTensor
 
 /-- On three spin-\(\tfrac12\) sites, the squared total spin is \(\tfrac34\) plus
 the sum of the three transpositions of the sites. -/
-lemma totalSpinSq_three_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
+lemma totalSpinSq_three_apply (v : NSiteSpace (Fin 2) 3) (σ : Cfg 2 3) :
     totalSpinSq spinHalfOperator v σ = (3 / 4) * v σ + (v (σ ∘ Equiv.swap 0 1) +
       v (σ ∘ Equiv.swap 1 2) + v (σ ∘ Equiv.swap 0 2)) := by
   rw [totalSpinSq_eq spinHalfOperator spinHalfOperator_sum_mul_self]
@@ -72,7 +72,7 @@ lemma totalSpinSq_three_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
 \(h=\tfrac12(\mathbf S_1\cdot\mathbf S_2+\mathbf S_2\cdot\mathbf S_3
 +\mathbf S_1\cdot\mathbf S_3)\). -/
 theorem totalSpinSq_three_eq_majumdarGhoshTerm :
-    (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) =
+    (totalSpinSq spinHalfOperator : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3) =
       (9 / 4 : ℂ) • LinearMap.id + (4 : ℂ) • majumdarGhoshTerm := by
   refine LinearMap.ext fun v => funext fun σ => ?_
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply, Pi.add_apply,
@@ -85,7 +85,7 @@ theorem totalSpinSq_three_eq_majumdarGhoshTerm :
 the eigenvalue \(\tfrac34\) on \(\ker P\) and \(\tfrac{15}4\) on the range of
 \(P\). -/
 theorem totalSpinSq_three_eq_parentInteraction :
-    (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) =
+    (totalSpinSq spinHalfOperator : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3) =
       (3 / 4 : ℂ) • LinearMap.id + (3 : ℂ) • parentInteraction majumdarGhoshTensor 3 := by
   rw [← majumdarGhoshTerm_shift_eq_parentInteraction, totalSpinSq_three_eq_majumdarGhoshTerm]
   refine LinearMap.ext fun v => funext fun σ => ?_
@@ -101,7 +101,7 @@ of `majumdarGhoshTensor` is the eigenspace of the squared total spin for
 theorem majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace :
     groundSpace majumdarGhoshTensor 3 =
       Module.End.eigenspace
-        (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) (3 / 4) := by
+        (totalSpinSq spinHalfOperator : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3) (3 / 4) := by
   rw [majumdarGhosh_groundSpace_three_eq_eigenspace]
   ext v
   simp only [Module.End.mem_eigenspace_iff, totalSpinSq_three_eq_majumdarGhoshTerm,
@@ -120,14 +120,14 @@ theorem majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace :
 \(\ell^2\) space of coefficient vectors. -/
 def spinThreeHalvesES : Submodule ℂ (EuclideanSpace ℂ (Cfg 2 3)) :=
   (Module.End.eigenspace
-      (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) (15 / 4)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)).symm.toLinearMap
+      (totalSpinSq spinHalfOperator : NSiteSpace (Fin 2) 3 →ₗ[ℂ] NSiteSpace (Fin 2) 3) (15 / 4)).map
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 3)).symm.toLinearMap
 
 /-- The total-spin-\(\tfrac32\) subspace is the orthogonal complement of the
 three-site local ground space of `majumdarGhoshTensor`. -/
 theorem spinThreeHalvesES_eq_orthogonal_groundSpaceES :
     spinThreeHalvesES = (groundSpaceES majumdarGhoshTensor 3)ᗮ := by
-  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)
+  set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 3)
   ext v
   rw [spinThreeHalvesES, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
     ← Submodule.starProjection_eq_self_iff, Module.End.mem_eigenspace_iff,
@@ -153,9 +153,9 @@ of `majumdarGhoshTensor`, which is
 \(P^{3/2}\) onto the total-spin-\(\tfrac32\) subspace. -/
 theorem majumdarGhosh_parentInteraction_eq_spinThreeHalves_starProjection :
     parentInteraction majumdarGhoshTensor 3 =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)).toLinearMap ∘ₗ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 3)).toLinearMap ∘ₗ
         spinThreeHalvesES.starProjection.toLinearMap ∘ₗ
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)).symm.toLinearMap := by
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 3)).symm.toLinearMap := by
   rw [parentInteraction, spinThreeHalvesES_eq_orthogonal_groundSpaceES]
 
 end MPSTensor

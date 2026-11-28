@@ -100,7 +100,7 @@ Source context: SPWC10, arXiv:0909.5347, Theorem 5, lines 850--880.
 -/
 
 private theorem overlap_charge_edge {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    {n : ℕ} (ψ : NSiteSpace 3 (n + 2)) (H K : Fin 3 → (ZMod 5 × ZMod 5) → ℂ)
+    {n : ℕ} (ψ : NSiteSpace (Fin 3) (n + 2)) (H K : Fin 3 → (ZMod 5 × ZMod 5) → ℂ)
     (hH : ∀ j σ, ψ (Fin.snoc σ j) =
       rootCharacter ζ (wordPhase (List.ofFn (Fin.snoc σ j))) *
         H j (wordCharge (List.ofFn (Fin.snoc σ j))))
@@ -144,7 +144,7 @@ private theorem first_endpoint_active_eight (σ : Cfg 3 8) :
 full eight-site boundary space. Only endpoint charges reached by actual words
 are compared. Source: the short overlap in the SPWC10 finite-prefix investigation. -/
 theorem groundSpace_intersection_threeLetterTensor_eight {ζ : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) {ψ : NSiteSpace 3 8}
+    (hζ : IsPrimitiveRoot ζ 5) {ψ : NSiteSpace (Fin 3) 8}
     (hLeft : InLeftGround (threeLetterTensor ζ) 7 ψ)
     (hRight : InRightGround (threeLetterTensor ζ) 7 ψ) :
     ψ ∈ groundSpace (threeLetterTensor ζ) 8 := by
@@ -175,7 +175,7 @@ theorem groundSpace_intersection_threeLetterTensor_eight {ζ : ℂ}
 full nine-site boundary space. Its seven-site middle words realize every
 noncentral charge. Source: the short overlap in the SPWC10 finite-prefix investigation. -/
 theorem groundSpace_intersection_threeLetterTensor_nine {ζ : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) {ψ : NSiteSpace 3 9}
+    (hζ : IsPrimitiveRoot ζ 5) {ψ : NSiteSpace (Fin 3) 9}
     (hLeft : InLeftGround (threeLetterTensor ζ) 8 ψ)
     (hRight : InRightGround (threeLetterTensor ζ) 8 ψ) :
     ψ ∈ groundSpace (threeLetterTensor ζ) 9 := by

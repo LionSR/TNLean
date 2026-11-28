@@ -42,7 +42,7 @@ no incompatible-window conclusion is assumed.
 Source: elementary overlapping-window tensor algebra applied to the
 PVBS one-particle vector, arXiv:1112.4097, Section II. -/
 theorem eq_zero_of_pvbsEdge_overlapping_sections {N : ℕ} (q : ℂ) (hq : q ≠ 0)
-    (ψ : NSiteSpace 2 (N + 3))
+    (ψ : NSiteSpace (Fin 2) (N + 3))
     (hleft : ∀ c : Fin 2, ∃ f : ℂ, ∀ σ : Cfg 2 (N + 2),
       ψ (Fin.snoc σ c) = f * pvbsEdge q (N + 2) σ)
     (hright : ∀ a : Fin 2, ∃ g : ℂ, ∀ σ : Cfg 2 (N + 2),

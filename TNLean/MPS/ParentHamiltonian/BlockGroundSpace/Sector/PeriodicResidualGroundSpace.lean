@@ -48,7 +48,7 @@ lines 1504--1538. -/
 noncomputable def blockedResidualBoundaryMap (A : MPSTensor d D)
     (L : ℕ) (B : MPSTensor (blockPhysDim d L) E)
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) :
-    Matrix (Fin D) (Fin E) ℂ →ₗ[ℂ] NSiteSpace d (N * L + r) where
+    Matrix (Fin D) (Fin E) ℂ →ₗ[ℂ] NSiteSpace (Fin d) (N * L + r) where
   toFun Y σ := Matrix.trace
     (Kraus.evalWord B (List.ofFn ((Kraus.blockedConfigEquiv d N L).symm (σ ∘ Fin.castAdd r))) *
       Vᴴ * Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd (N * L))) * Y)
@@ -137,7 +137,7 @@ noncomputable def blockedResidualBoundaryMapES (A : MPSTensor d D)
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Cfg d (N * L + r)) :=
   LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d (N * L + r))).symm.toLinearMap.comp
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (N * L + r))).symm.toLinearMap.comp
       ((blockedResidualBoundaryMap A L B V N r).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm.toLinearEquiv.toLinearMap)
 
@@ -151,9 +151,9 @@ lines 1504--1538. -/
     (V : Matrix (Fin D) (Fin E) ℂ) (N r : ℕ) (Y : Matrix (Fin D) (Fin E) ℂ) :
     blockedResidualBoundaryMapES A L B V N r
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (N * L + r))).symm
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (N * L + r))).symm
         (blockedResidualBoundaryMap A L B V N r Y) := by
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d (N * L + r))).symm
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (N * L + r))).symm
     (blockedResidualBoundaryMap A L B V N r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y))) = _

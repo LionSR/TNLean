@@ -59,11 +59,10 @@ open MPTensor
 
 open scoped Matrix BigOperators
 open Filter Topology
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-! ### Unit modulus of the phase-class scalar -/
 
@@ -89,27 +88,27 @@ Proof sketch (scout memo §2.4):
 -/
 lemma norm_choose_MPVBlockPhaseEquiv_eq_one
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
-    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    {X : MPTensor α (Fin DX)} {Y : MPTensor α (Fin DY)}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ‖h.choose‖ = 1 := by
   classical
-  have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+  have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
       mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
   exact norm_eq_one_of_selfOverlap_scale_pos
     (by
       simpa using
         (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-          (d := d) (D := DX) X hIrrX hTPX hPrimX).norm)
+          (α := α) (D := DX) X hIrrX hTPX hPrimX).norm)
     (by
       simpa using
         (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-          (d := d) (D := DY) Y hIrrY hTPY hPrimY).norm)
+          (α := α) (D := DY) Y hIrrY hTPY hPrimY).norm)
     (mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos
       (A := X) (B := Y) (ζ := h.choose) hmpv)
 
@@ -141,11 +140,11 @@ different bond dimensions would force that overlap to tend to zero.
 -/
 theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
-    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    {X : MPTensor α (Fin DX)} {Y : MPTensor α (Fin DY)}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
@@ -154,24 +153,24 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
   have hζ_norm : ‖h.choose‖ = 1 :=
     norm_choose_MPVBlockPhaseEquiv_eq_one
       (X := X) (Y := Y) hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
-  have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+  have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
       mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
-  have hXX_c : Tendsto (fun N => mpvOverlap (α := Fin d) X X N) atTop (𝓝 (1 : ℂ)) :=
+  have hXX_c : Tendsto (fun N => mpvOverlap (α := α) X X N) atTop (𝓝 (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (d := d) (D := DX) X hIrrX hTPX hPrimX
-  have hXX : Tendsto (fun N => ‖mpvOverlap (α := Fin d) X X N‖) atTop (𝓝 (1 : ℝ)) := by
+      (α := α) (D := DX) X hIrrX hTPX hPrimX
+  have hXX : Tendsto (fun N => ‖mpvOverlap (α := α) X X N‖) atTop (𝓝 (1 : ℝ)) := by
     simpa using hXX_c.norm
   have hYX_eq : ∀ N : ℕ, 0 < N →
-      mpvOverlap (α := Fin d) Y X N =
-        h.choose ^ N * mpvOverlap (α := Fin d) X X N := by
+      mpvOverlap (α := α) Y X N =
+        h.choose ^ N * mpvOverlap (α := α) X X N := by
     intro N hN
     exact mpvOverlap_eq_mul_of_mpv_eq_mul
-      (α := Fin d) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N hN) X
+      (α := α) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N hN) X
   have hYX_norm_eq : ∀ N : ℕ, 0 < N →
-      ‖mpvOverlap (α := Fin d) Y X N‖ = ‖mpvOverlap (α := Fin d) X X N‖ := by
+      ‖mpvOverlap (α := α) Y X N‖ = ‖mpvOverlap (α := α) X X N‖ := by
     intro N hN
     rw [hYX_eq N hN, norm_mul, norm_pow, hζ_norm, one_pow, one_mul]
-  have hYX : Tendsto (fun N => ‖mpvOverlap (α := Fin d) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
+  have hYX : Tendsto (fun N => ‖mpvOverlap (α := α) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
     hXX.congr' (by
       filter_upwards [eventually_ge_atTop 1] with N hN
       exact (hYX_norm_eq N hN).symm)
@@ -192,16 +191,16 @@ belong to the later MPDO-specific argument at arXiv:1606.00608, lines
 1899–1921. -/
 theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
-    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    {X : MPTensor α (Fin DX)} {Y : MPTensor α (Fin DY)}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ∃ e : DX = DY,
-      GaugePhaseEquiv (cast (congr_arg (MPSTensor d) e) X) Y := by
+      GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) e) X) Y := by
   classical
   have e : DX = DY :=
     dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
@@ -209,13 +208,13 @@ theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
   subst DY
   refine ⟨rfl, ?_⟩
   have hX_self :
-      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) X X N) atTop (nhds (1 : ℂ)) :=
+      Tendsto (fun N : ℕ => mpvOverlap (α := α) X X N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (d := d) (D := DX) X hIrrX hTPX hPrimX
+      (α := α) (D := DX) X hIrrX hTPX hPrimX
   have hY_self :
-      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) Y Y N) atTop (nhds (1 : ℂ)) :=
+      Tendsto (fun N : ℕ => mpvOverlap (α := α) Y Y N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (d := d) (D := DX) Y hIrrY hTPY hPrimY
+      (α := α) (D := DX) Y hIrrY hTPY hPrimY
   by_contra hNot
   obtain ⟨N, hNpos, hN⟩ :=
     exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
@@ -237,36 +236,36 @@ Source: arXiv:1606.00608, Lemma `equalMPS`, lines 1080--1117, and Proposition
 `prop:char-BNT`, lines 1135--1148. -/
 lemma exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
-    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    {X : MPTensor α (Fin DX)} {Y : MPTensor α (Fin DY)}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ∃ e : DX = DY, ∃ G : GL (Fin DY) ℂ, ∀ i,
       Y i = h.choose • ((G : Matrix _ _ ℂ) *
-        (cast (congr_arg (MPSTensor d) e) X) i *
+        (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) e) X) i *
         (↑(G⁻¹) : Matrix _ _ ℂ)) := by
   classical
   obtain ⟨e, hGauge⟩ := gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
   subst DY
   obtain ⟨G, η, hη, hrel⟩ := hGauge
-  have hXX : Tendsto (fun N => mpvOverlap (α := Fin d) X X N) atTop (𝓝 (1 : ℂ)) :=
+  have hXX : Tendsto (fun N => mpvOverlap (α := α) X X N) atTop (𝓝 (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible X hIrrX hTPX hPrimX
-  have hEventually : ∀ᶠ N in atTop, mpvOverlap (α := Fin d) X X N ≠ 0 :=
+  have hEventually : ∀ᶠ N in atTop, mpvOverlap (α := α) X X N ≠ 0 :=
     hXX.eventually_ne one_ne_zero
   rw [eventually_atTop] at hEventually
   obtain ⟨N₀, hN₀⟩ := hEventually
   let M := max N₀ 1
-  have hM : mpvOverlap (α := Fin d) X X M ≠ 0 :=
+  have hM : mpvOverlap (α := α) X X M ≠ 0 :=
     hN₀ M (le_max_left _ _)
-  have hM1 : mpvOverlap (α := Fin d) X X (M + 1) ≠ 0 :=
+  have hM1 : mpvOverlap (α := α) X X (M + 1) ≠ 0 :=
     hN₀ (M + 1) (le_trans (le_max_left _ _) (Nat.le_add_right M 1))
-  have exists_coeff (L : ℕ) (hL : mpvOverlap (α := Fin d) X X L ≠ 0) :
-      ∃ σ : Fin L → Fin d, mpv X σ ≠ 0 := by
+  have exists_coeff (L : ℕ) (hL : mpvOverlap (α := α) X X L ≠ 0) :
+      ∃ σ : Fin L → α, mpv X σ ≠ 0 := by
     by_contra hzero
     push Not at hzero
     apply hL
@@ -276,7 +275,7 @@ lemma exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
     rw [hzero σ, zero_mul]
   obtain ⟨σM, hσM⟩ := exists_coeff M hM
   obtain ⟨σM1, hσM1⟩ := exists_coeff (M + 1) hM1
-  have hpow (L : ℕ) (hL : 0 < L) (σ : Fin L → Fin d) (hσ : mpv X σ ≠ 0) :
+  have hpow (L : ℕ) (hL : 0 < L) (σ : Fin L → α) (hσ : mpv X σ ≠ 0) :
       h.choose ^ L = η ^ L := by
     have hh := h.choose_spec.2 L hL σ
     have hg := mpv_eq_pow_mul_of_gaugePhase X Y G η hrel L σ
@@ -307,7 +306,7 @@ representative.
 -/
 theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
     {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
@@ -317,7 +316,7 @@ theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
         dim ((mpvPhaseClassData blocks).repr j) := by
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  let classes := mpvPhaseClassData (α := Fin d) blocks
+  let classes := mpvPhaseClassData (α := α) blocks
   intro j q
   have hEq :
       dim (classes.repr j) = dim (classes.enum j q) :=
@@ -341,15 +340,15 @@ groups phase-equivalent copies with the same bond dimension.
 theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0) :
-    (collapsedBntSectorDecomp (d := d) μ blocks hμne).totalDim =
+    (collapsedBntSectorDecomp (α := α) μ blocks hμne).totalDim =
       ∑ k : Fin r, dim k :=
-  collapsedBntSectorDecomp_totalDim_eq_sum_dim (d := d) μ blocks hμne
+  collapsedBntSectorDecomp_totalDim_eq_sum_dim (α := α) μ blocks hμne
     (mpvPhaseClassData_dim_eq_of_tp_primitive_irr blocks hDim hTP hPrim hIrr)
 
 /-! ### Prepared-block SectorBNT constructor -/
@@ -369,20 +368,20 @@ expansion.
 theorem isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    IsLeftCanonicalBNTPresentation (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
+    IsLeftCanonicalBNTPresentation (collapsedBntSectorDecomp (α := α) μ blocks hμne) := by
   classical
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  set classes := mpvPhaseClassData (α := Fin d) blocks with hclasses
-  set P := collapsedBntSectorDecomp (d := d) μ blocks hμne with hP
+  set classes := mpvPhaseClassData (α := α) blocks with hclasses
+  set P := collapsedBntSectorDecomp (α := α) μ blocks hμne with hP
   have hBNT : HasBNTSectorData P :=
-    collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
+    collapsedBntSectorDecomp_hasBNT (α := α) μ blocks hTP hIrr hPrim hμne
   -- `P.basis j` is definitionally `blocks (classes.repr j)`.
   have h_normal : ∀ j : Fin P.basisCount, IsNormalTensor (P.basis j) := fun j =>
     isNormalTensor_of_isIrreducibleFamily_leftCanonical (blocks (classes.repr j))
@@ -402,18 +401,18 @@ lines 1831--1885. -/
 theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    ∃ P : SectorDecomposition (Fin d),
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
+    ∃ P : SectorDecomposition (α),
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := α) (μ := μ) blocks) ∧
       IsLeftCanonicalBNTPresentation P := by
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_⟩
+  let P := collapsedBntSectorDecomp (α := α) μ blocks hμne
+  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (α := α) μ blocks hμne, ?_⟩
   exact isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne hr
 
@@ -425,18 +424,18 @@ lines 1831--1885. -/
 theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks_and_totalDim
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    ∃ P : SectorDecomposition (Fin d),
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
+    ∃ P : SectorDecomposition (α),
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := α) (μ := μ) blocks) ∧
       IsLeftCanonicalBNTPresentation P ∧ P.totalDim = ∑ k : Fin r, dim k := by
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_, ?_⟩
+  let P := collapsedBntSectorDecomp (α := α) μ blocks hμne
+  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (α := α) μ blocks hμne, ?_, ?_⟩
   · exact isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
       μ blocks hDim hTP hPrim hIrr hμne hr
   · exact collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
@@ -460,22 +459,13 @@ after-blocking canonical-form existence, and lines 271-279 for the BNT
 definition and prop:char-BNT statement.
 -/
 
-private lemma sameMPV₂Pos_reindexPhysical_aux
-    {d₁ d₂ D₁ D₂ : ℕ} (f : Fin d₁ → Fin d₂)
-    {A : MPSTensor d₂ D₁} {B : MPSTensor d₂ D₂}
-    (hSame : SameMPV₂Pos A B) :
-    SameMPV₂Pos (Kraus.reindexPhysical f A) (Kraus.reindexPhysical f B) := by
-  intro N hN σ
-  rw [mpv_reindexPhysical, mpv_reindexPhysical]
-  exact hSame N hN _
-
 /-- **Arbitrary-input prepared-block supplier (positive-length).**
 
 Given an arbitrary MPS tensor `A` of bond dimension `D`, there is a single
 positive blocking length `p` and a finite family of prepared blocks
 (left-canonical, primitive, irreducible, one-site injective, with nonzero
 weights and positive bond dimensions) whose direct-sum tensor matches the
-`p`-blocked input `blockTensor A p` at every positive length.
+`p`-blocked input `Kraus.block A p` at every positive length.
 
 A nonempty family of these blocks feeds the `IsLeftCanonicalBNTPresentation` constructor
 `exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks`.
@@ -486,30 +476,29 @@ Construction steps:
    apply the two-sided arbitrary-input reduction at `B = A` to obtain a
    positive blocking length `p₀`, a left-canonical / primitive / irreducible
    nonzero-weight block family `blocksA`, and the positive-length identity
-   `SameMPV₂Pos (blockTensor A p₀) (toTensorFromBlocks μA blocksA)`.
+   `SameMPV₂Pos (Kraus.block A p₀) (toTensorFromBlocks μA blocksA)`.
 2. `exists_common_injective_blocking_of_tp_primitive_irr_family` produces a
    common positive extra blocking length `L` at which each block becomes
    one-site injective and preserves left-canonical, primitive, and
    irreducible properties.
 3. Flattening the iterated blocking back to the direct `p₀ * L` alphabet
    transports each block and the positive-length MPV identity to the direct
-   `blockPhysDim d (p₀ * L)` alphabet without changing the relevant
+   `Fin (p₀ * L) → α` alphabet without changing the relevant
    block-level properties (all of them are invariant under physical
    reindexing by an alphabet equivalence).
 -/
 theorem exists_prepared_BNT_blocks_afterBlocking_pos
-    {d D : ℕ} (A : MPSTensor d D) :
+    {D : ℕ} (A : MPTensor α (Fin D)) :
     ∃ p : ℕ, 0 < p ∧
     ∃ r : ℕ, ∃ dim : Fin r → ℕ, ∃ μ : Fin r → ℂ,
-    ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+    ∃ blocks : (k : Fin r) → MPTensor (Fin p → α) (Fin (dim k)),
       (∀ k, 0 < dim k) ∧
       (∀ k, IsLeftCanonical (blocks k)) ∧
       (∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k))) ∧
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, Kraus.IsInjective (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
-      SameMPV₂Pos (blockTensor (d := d) (n := Fin D) A p)
-        (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) := by
+      SameMPV₂Pos (Kraus.block A p) (toTensorFromBlocks (μ := μ) blocks) := by
   classical
   -- Step 1: arbitrary-input two-sided reduction at `B = A`.
   obtain ⟨p₀, hp₀,
@@ -518,139 +507,40 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
       hAPos, _hBPos, _hNonzeroPos,
       hμA, _hμB, hTPA, _hTPB, hPrimA, _hPrimB,
       hIrrA, _hIrrB, hDimA, _hDimB⟩ :=
-    unconditional_commonPrimitiveIrreducibleBlocks
-      (d := d) (D₁ := D) (D₂ := D) A A (fun _ _ _ => rfl)
+    unconditional_commonPrimitiveIrreducibleBlocks A A (fun _ _ _ => rfl)
   -- Step 2: common positive extra blocking that makes each block injective and
   -- preserves trace-preservation, transfer-map primitivity, and tensor
   -- irreducibility.
   obtain ⟨L, hL, hBlocked⟩ :=
     exists_common_injective_blocking_of_tp_primitive_irr_family
-      (d := blockPhysDim d p₀) (r := rA) (dim := dimA)
-      (blocks := blocksA) hDimA hTPA hPrimA hIrrA
-  -- Step 3: assemble the result.  The final blocks live in the direct
-  -- `blockPhysDim d (p₀ * L)` alphabet via `flattenedIteratedBlockTensor`.
+      blocksA hDimA hTPA hPrimA hIrrA
+  -- Step 3: read the iterated blocking on the direct `p₀ * L` alphabet.
+  let e := nestedBlockEquiv α (rfl : p₀ * L = p₀ * L)
   refine ⟨p₀ * L, Nat.mul_pos hp₀ hL, rA, dimA, fun k => (μA k) ^ L,
-    fun k => flattenedIteratedBlockTensor
-      (d := d) (p := p₀) (D := dimA k) (blocksA k) L, hDimA, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  -- IsLeftCanonical of each flattened-iterated block.
+    fun k => Kraus.reindexPhysical e (Kraus.block (blocksA k) L), hDimA, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro k
-    have hLCBlocked : ∑ i : Fin (blockPhysDim (blockPhysDim d p₀) L),
-        (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L i)ᴴ *
-          blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L i = 1 :=
-      (hBlocked k).2.1
-    change IsLeftCanonical
-      (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
-        (blocksA k) L)
-    exact (Kraus.isTP_reindexPhysical_iff
-      (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
-        hLCBlocked
-  -- Transfer-map primitivity of each flattened-iterated block.
+    exact (Kraus.isTP_reindexPhysical_iff e (Kraus.block (blocksA k) L)).mpr (hBlocked k).2.1
   · intro k
-    have hPrimBlocked := (hBlocked k).2.2.1
-    change _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin (blockPhysDim d (p₀ * L))) (n := Fin (dimA k))
-        (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
-          (blocksA k) L))
-    exact (isPrimitive_transferMap_reindexPhysical_equiv
-      (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
-        hPrimBlocked
-  -- Tensor irreducibility of each flattened-iterated block.
+    exact (isPrimitive_transferMap_reindexPhysical_equiv e
+      (Kraus.block (blocksA k) L)).mpr (hBlocked k).2.2.1
   · intro k
-    have hIrrBlocked := (hBlocked k).2.2.2
-    change Kraus.IsIrreducibleFamily
-      (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
-        (blocksA k) L)
-    exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv
-      (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
-        hIrrBlocked
-  -- One-site injectivity of each flattened-iterated block.
+    exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv e
+      (Kraus.block (blocksA k) L)).mpr (hBlocked k).2.2.2
   · intro k
-    have hInjBlocked := (hBlocked k).1
-    change Kraus.IsInjective
-      (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
-        (blocksA k) L)
-    exact (isInjective_reindexPhysical_equiv
-      (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
-        hInjBlocked
-  -- Nonzero weights at the power.
+    exact (isInjective_reindexPhysical_equiv e (Kraus.block (blocksA k) L)).mpr (hBlocked k).1
   · intro k; exact pow_ne_zero L (hμA k)
-  -- Positive-length MPV equality with the blocked input.
-  · -- (i) blocked Pos:
-    have hBlockPos :
-        SameMPV₂Pos
-          (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
-            (blockTensor (d := d) (n := Fin D) A p₀) L)
-          (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
-            (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L) :=
-      sameMPV₂Pos_block
-        (d := blockPhysDim d p₀)
-        (blockTensor (d := d) (n := Fin D) A p₀)
-        (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA)
-        hAPos L hL
-    -- (ii) blocking distributes over toTensorFromBlocks (full-length SameMPV₂):
-    have hDistr : SameMPV₂
-        (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
-          (toTensorFromBlocks (α := Fin (blockPhysDim d p₀)) (μ := μA) blocksA) L)
-        (toTensorFromBlocks
-          (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
-          (fun k => (μA k) ^ L)
-          (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
-            (blocksA k) L)) :=
-      sameMPV₂_block_toTensorFromBlocks
-        (d := blockPhysDim d p₀) (dim := dimA) μA blocksA L
-    -- (iii) combine the two on the iterated phys-dim alphabet:
-    have hIter : SameMPV₂Pos
-        (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
-          (blockTensor (d := d) (n := Fin D) A p₀) L)
-        (toTensorFromBlocks
-          (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
-          (fun k => (μA k) ^ L)
-          (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
-            (blocksA k) L)) := by
-      intro N hN σ
-      exact (hBlockPos N hN σ).trans (hDistr N σ)
-    -- (iv) physically reindex both sides to the direct `blockPhysDim d (p₀ * L)`
-    -- alphabet via `directIteratedBlockEquiv`.
-    have hReindex :
-        SameMPV₂Pos
-          (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
-            (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
-              (blockTensor (d := d) (n := Fin D) A p₀) L))
-          (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
-            (toTensorFromBlocks
-              (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
-              (fun k => (μA k) ^ L)
-              (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
-                (blocksA k) L))) :=
-      sameMPV₂Pos_reindexPhysical_aux
-        (f := (directIteratedBlockEquiv d p₀ L : _ → _)) hIter
-    -- (v) rewrite both sides using `flattenedIteratedBlockTensor_blockTensor`
-    -- and `toTensorFromBlocks_flattenedIteratedBlockTensor`.
-    have hLeft :
-        Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
-          (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
-            (blockTensor (d := d) (n := Fin D) A p₀) L) =
-          blockTensor (d := d) (n := Fin D) A (p₀ * L) :=
-      flattenedIteratedBlockTensor_blockTensor (d := d) (D := D) A p₀ L
-    have hRight :
-        Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
-          (toTensorFromBlocks
-            (α := Fin (blockPhysDim (blockPhysDim d p₀) L))
-            (fun k => (μA k) ^ L)
-            (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
-              (blocksA k) L)) =
-          toTensorFromBlocks
-            (α := Fin (blockPhysDim d (p₀ * L)))
-            (μ := fun k => (μA k) ^ L)
-            (fun k => flattenedIteratedBlockTensor (d := d) (p := p₀)
-              (D := dimA k) (blocksA k) L) :=
-      (toTensorFromBlocks_flattenedIteratedBlockTensor (d := d) (p := p₀)
-        (r := rA) (L := L) (dim := dimA) (fun k => (μA k) ^ L) blocksA).symm
-    rw [hLeft, hRight] at hReindex
-    exact hReindex
+  · -- Block the positive-length identity, distribute the blocking over the direct sum,
+    -- and reindex both sides to the direct alphabet.
+    have hIter : SameMPV₂Pos (Kraus.block (Kraus.block A p₀) L)
+        (toTensorFromBlocks (fun k => (μA k) ^ L) (fun k => Kraus.block (blocksA k) L)) :=
+      fun N hN σ => (sameMPV₂Pos_block _ _ hAPos L hL N hN σ).trans
+        (sameMPV₂_block_toTensorFromBlocks μA blocksA L N σ)
+    intro N hN σ
+    rw [← reindexPhysical_nestedBlockEquiv_block_block A (rfl : p₀ * L = p₀ * L)]
+    change mpv (Kraus.reindexPhysical e _) σ =
+      mpv (Kraus.reindexPhysical e (toTensorFromBlocks (fun k => (μA k) ^ L)
+        (fun k => Kraus.block (blocksA k) L))) σ
+    rw [mpv_reindexPhysical, mpv_reindexPhysical]
+    exact hIter N hN _
 
 end MPSTensor

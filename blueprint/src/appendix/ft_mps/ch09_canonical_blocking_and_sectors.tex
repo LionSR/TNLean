@@ -99,7 +99,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Primitivity under blocking by a multiple]%
     \label{thm:primitive_blocking_divisible}
-    \lean{MPSTensor.isPrimitive_transferMap_blockTensor_of_dvd}\leanok
+    \lean{MPSTensor.isPrimitive_transferMap_block_of_dvd}\leanok
     \uses{def:blocked_tensor}
     Let $A$ have positive bond dimension and let $p_0,p\ge1$ with $p_0\mid p$.
     If $\E_{A^{[p_0]}}$ is primitive, then $\E_{A^{[p]}}$ is primitive.
@@ -194,7 +194,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Blocking preserves irreducibility for primitive irreducible blocks]%
     \label{thm:blocked_irreducible_tp_primitive}
-    \lean{Kraus.isIrreducibleFamily_blockTensor_of_tp_primitive_irr}
+    \lean{Kraus.isIrreducibleFamily_block_of_tp_primitive_irr}
     \leanok
     \uses{def:blocked_tensor,def:irreducible_tensor,def:primitive_mps,lem:blocked_irreducibility_direct_support,thm:transfer_channel}
     Let $A$ be left-canonical, irreducible, primitive, of positive bond
@@ -285,7 +285,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Blocking the weighted block sum]%
     \label{thm:block_tensor_to_tensor_from_blocks}
-    \lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}\leanok
+    \lean{MPSTensor.sameMPV₂_block_toTensorFromBlocks}\leanok
     \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2}
     For nonzero weights $(\mu_k)_{k=1}^r$, blocks $(B_k)_{k=1}^r$, and any
     $p\ge1$, the blocking identity
@@ -295,7 +295,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Blocking a weighted block-sum presentation]%
     \label{thm:block_tensor_of_same_mpv_to_tensor_from_blocks}
-    \lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks}\leanok
+    \lean{MPSTensor.sameMPV₂_block_of_sameMPV₂_toTensorFromBlocks}\leanok
     \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2}
     If $A$ generates the same MPV family as $\bigoplus_k\mu_kB_k$ at every
     length, then for every $p\ge0$ the blocked tensor $A^{[p]}$ generates the
@@ -316,7 +316,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Positive-length equality survives blocking]%
     \label{thm:same_mpv2_pos_block_tensor}
-    \lean{MPSTensor.sameMPV₂Pos_blockTensor}\leanok
+    \lean{MPSTensor.sameMPV₂Pos_block}\leanok
     \uses{def:blocked_tensor,def:same_mpv2_pos}
     If two tensors have the same MPV coefficients at every positive length, then
     so do their blocked tensors after any positive blocking length.
@@ -324,7 +324,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Eventual nonzero proportionality survives blocking]%
     \label{thm:eventual_nonzero_proportional_mpv_blocking}
-    \lean{MPTensor.EventuallyNonzeroProportionalMPV₂.blockTensor}\leanok
+    \lean{MPTensor.EventuallyNonzeroProportionalMPV₂.block}\leanok
     \uses{def:blocked_tensor,def:eventually_nonzero_proportional_mpv}
     If two tensors have eventually nonzero proportional MPV coefficients, then
     so do their blocked tensors after any positive blocking length.
@@ -339,7 +339,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Positive-length blocking of a weighted block sum]%
     \label{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
-    \lean{MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks}\leanok
+    \lean{MPSTensor.sameMPV₂Pos_block_toTensorFromBlocks}\leanok
     \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2_pos,thm:same_mpv2_pos_block_tensor,thm:block_tensor_to_tensor_from_blocks}
     If $A$ and $\bigoplus_k\mu_kB_k$ have the same MPV coefficients at every
     positive length, then after any positive blocking length $p$, $A^{[p]}$ and
@@ -579,7 +579,7 @@ multiple cyclic-sector families into a single common blocked alphabet.
 
 \begin{lemma}[Common-alphabet flattening]%
     \label{thm:common_blocked_cyclic_sector_reindexed_samempv}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_sameMPV₂}\leanok
+    \lean{MPSTensor.reindexPhysical_nestedBlockEquiv_block_block}\leanok
     \uses{thm:exists_common_blocked_cyclic_sector_family}
     With $p=m_ke_k$ for each $k$, the iterated blocked tensor
     $(B_k^{[m_k]})^{[e_k]}$ agrees with $B_k^{[p]}$ in MPV family, after the
@@ -589,7 +589,7 @@ multiple cyclic-sector families into a single common blocked alphabet.
 
 \begin{lemma}[Direct blocking in the common alphabet]%
     \label{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock}\leanok
+    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.block_sameMPV₂_commonSectorTensor}\leanok
     For every original block $B_k$, direct blocking at the common length
     $p=m_ke_k$ agrees, as an MPV family, with the same block carried to the
     common blocked alphabet. Write $\widetilde{B}_k$ for this common-alphabet

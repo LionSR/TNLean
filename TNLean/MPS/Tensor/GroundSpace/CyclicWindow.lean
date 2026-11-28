@@ -47,14 +47,14 @@ def contiguousCfg {N : ℕ} (s M : ℕ)
 
 /-- Linear restriction to a contiguous block \([s, s+1, \ldots, s+M-1]\). -/
 def contiguousRestrictₗ {N : ℕ} (s M : ℕ) (_hsM : s + M ≤ N)
-    (τ : Fin N → Fin d) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d M where
+    (τ : Fin N → Fin d) : NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) M where
   toFun ψ σ := ψ (contiguousCfg s M σ τ)
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
 
 @[simp]
 theorem contiguousRestrictₗ_apply {N : ℕ} (s M : ℕ) (hsM : s + M ≤ N)
-    (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (σ : Fin M → Fin d) :
+    (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (σ : Fin M → Fin d) :
     contiguousRestrictₗ s M hsM τ ψ σ = ψ (contiguousCfg s M σ τ) := rfl
 
 /-- Restricting an open-boundary MPS vector to a contiguous window gives an
@@ -113,7 +113,7 @@ theorem contiguousCfg_zero_full {N : ℕ} (σ : Fin N → Fin d) (τ : Fin N →
 /-- Restricting the last site of a contiguous \((M+1)\)-block peels off
 the rightmost site and extends the outside config. -/
 theorem contiguousRestrictₗ_restrictLast {N : ℕ} (s M : ℕ) (hsM1 : s + (M + 1) ≤ N)
-    (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
+    (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (j : Fin d) :
     restrictLast (contiguousRestrictₗ s (M + 1) hsM1 τ ψ) j =
     contiguousRestrictₗ s M (by omega) (Function.update τ ⟨s + M, by omega⟩ j) ψ := by
   ext σ
@@ -141,7 +141,7 @@ theorem contiguousRestrictₗ_restrictLast {N : ℕ} (s M : ℕ) (hsM1 : s + (M 
 /-- Restricting the first site of a contiguous \((M+1)\)-block peels off
 the leftmost site and shifts the window start. -/
 theorem contiguousRestrictₗ_restrictFirst {N : ℕ} (s M : ℕ) (hsM1 : s + (M + 1) ≤ N)
-    (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (i : Fin d) :
+    (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (i : Fin d) :
     restrictFirst (contiguousRestrictₗ s (M + 1) hsM1 τ ψ) i =
     contiguousRestrictₗ (s + 1) M (by omega) (Function.update τ ⟨s, by omega⟩ i) ψ := by
   ext σ
@@ -179,7 +179,7 @@ via the intersection property to form a window of size \(L + k + 1\).
 **Hypotheses:** \(L ≥ 2\) (from the intersection property) and \(L ≤ N\). -/
 theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {L N : ℕ} (hL : 1 < L) (hLN : L ≤ N) [NeZero d]
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N)
       (τ : Fin N → Fin d),
         contiguousRestrictₗ s L hs τ ψ ∈ groundSpace A L) :
@@ -227,12 +227,12 @@ hold for all \(M\ge L\), then the state lies in \(S_N\). This is the
 open-segment iteration used in PGVWC07, Theorem 12, before the periodic-chain
 conclusion. -/
 theorem contiguous_mem_of_restriction_intersection_submodules
-    (S : (M : ℕ) → Submodule ℂ (NSiteSpace d M))
+    (S : (M : ℕ) → Submodule ℂ (NSiteSpace (Fin d) M))
     {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) [NeZero d]
     (hstep : ∀ M : ℕ, L ≤ M →
       ((⨅ b : Fin d, (S M).comap (restrictLastₗ b)) ⊓
         (⨅ a : Fin d, (S M).comap (restrictFirstₗ a))) = S (M + 1))
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s L hs τ ψ ∈ S L) :
     ψ ∈ S N := by
@@ -610,20 +610,20 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
 
 /-- Linear restriction to a cyclic window at position \(i\). -/
 def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)
-    (i : Fin N) (τ : Fin N → Fin d) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d L where
+    (i : Fin N) (τ : Fin N → Fin d) : NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) L where
   toFun ψ σ := ψ (cyclicCfg hN L i σ τ)
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
 
 @[simp]
 theorem cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
-    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (σ : Fin L → Fin d) :
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (σ : Fin L → Fin d) :
     cyclicRestrictₗ hN L i τ ψ σ = ψ (cyclicCfg hN L i σ τ) := rfl
 
 /-- A cyclic restriction depends on the outside configuration only away from
 the selected cyclic window. -/
 theorem cyclicRestrictₗ_congr_outside {N L : ℕ} (hN : 0 < N) (i : Fin N)
-    {τ₁ τ₂ : Fin N → Fin d} (ψ : NSiteSpace d N)
+    {τ₁ τ₂ : Fin N → Fin d} (ψ : NSiteSpace (Fin d) N)
     (hτ : ∀ k : Fin N, ¬((k.val + N - i.val) % N < L) → τ₁ k = τ₂ k) :
     cyclicRestrictₗ hN L i τ₁ ψ = cyclicRestrictₗ hN L i τ₂ ψ := by
   ext σ
@@ -639,7 +639,7 @@ theorem cyclicRestrictₗ_congr_outside {N L : ℕ} (hN : 0 < N) (i : Fin N)
 change the corresponding cyclic restriction. -/
 theorem cyclicRestrictₗ_cyclicCfg_outside {N L : ℕ} (hN : 0 < N)
     (i : Fin N) (ω : Fin L → Fin d) (τ : Fin N → Fin d)
-    (ψ : NSiteSpace d N) :
+    (ψ : NSiteSpace (Fin d) N) :
     cyclicRestrictₗ hN L i (cyclicCfg hN L i ω τ) ψ =
       cyclicRestrictₗ hN L i τ ψ := by
   apply cyclicRestrictₗ_congr_outside
@@ -704,7 +704,7 @@ theorem update_cyclicCfg {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
 /-- Restricting the final site of a cyclic \((L + 1)\)-window peels off the site with
 cyclic offset \(L\) and stores its value in the outside configuration. -/
 theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
-    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (j : Fin d) :
     restrictLast (cyclicRestrictₗ hN (L + 1) i τ ψ) j =
       cyclicRestrictₗ hN L i
         (fun k => if (k.val + N - i.val) % N = L then j else τ k) ψ := by
@@ -727,7 +727,7 @@ theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
 off the site with cyclic offset `0`, stores its value in the outside
 configuration, and moves the window start one site forward. -/
 theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N)
-    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (j : Fin d) :
     restrictFirst (cyclicRestrictₗ hN (L + 1) i τ ψ) j =
       cyclicRestrictₗ hN L (cyclicForwardSite i 1)
         (fun k => if (k.val + N - i.val) % N = 0 then j else τ k) ψ := by
@@ -835,7 +835,7 @@ theorem cyclicCfg_eq_contiguousCfg {N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤
 the contiguous window condition. -/
 theorem cyclicRestrictₗ_eq_contiguousRestrictₗ {N : ℕ} (hN : 0 < N)
     {L : ℕ} (hLN : L ≤ N) {i : Fin N} (hi : i.val + L ≤ N)
-    (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) :
     cyclicRestrictₗ hN L i τ ψ = contiguousRestrictₗ i.val L (by omega) τ ψ := by
   ext σ
   simp [cyclicCfg_eq_contiguousCfg hN hLN hi]

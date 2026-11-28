@@ -1030,7 +1030,7 @@ $A^{-1}A=\Id$.
 \end{proof}
 
 \begin{lemma}[Blocking preserves MPV coefficients]\label{lem:mpv_block}
-    \lean{MPSTensor.mpv_blockTensor_eq_mpv_blockedFlatConfig}
+    \lean{MPSTensor.mpv_block_eq_mpv_blockConfig}
     \leanok
     \uses{def:blocked_tensor,def:mpv}
     For each basis state $\sigma = (\sigma_1, \ldots, \sigma_N)$ of
@@ -1050,7 +1050,7 @@ $A^{-1}A=\Id$.
 \end{proof}
 
 \begin{lemma}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}
-    \lean{MPTensor.SameMPV.blockTensor}
+    \lean{MPTensor.SameMPV.block}
     \leanok
     \uses{def:same_mpv,def:blocked_tensor}
     If $A$ and $B$ generate the same MPV family, then for any

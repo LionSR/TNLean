@@ -32,11 +32,11 @@ def pvbsTensor (q : ℂ) : MPSTensor 2 2 :=
   fun i => if i = 0 then !![q, 0; 0, 1] else wRaising
 
 /-- The vacuum configuration vector `|0⋯0⟩`. -/
-noncomputable def pvbsVacuum (N : ℕ) : NSiteSpace 2 N := Pi.single 0 1
+noncomputable def pvbsVacuum (N : ℕ) : NSiteSpace (Fin 2) N := Pi.single 0 1
 
 /-- The one-particle PVBS vector. Its coefficient at a particle on site `k`
 is `qᵏ`, with the first site numbered zero. -/
-noncomputable def pvbsEdge (q : ℂ) : (N : ℕ) → NSiteSpace 2 N
+noncomputable def pvbsEdge (q : ℂ) : (N : ℕ) → NSiteSpace (Fin 2) N
   | 0 => 0
   | N + 1 => fun σ => if σ 0 = 0 then q * pvbsEdge q N (Fin.tail σ)
       else pvbsVacuum N (Fin.tail σ)
@@ -137,7 +137,7 @@ theorem groundSpaceMap_pvbsTensor (q : ℂ) (N : ℕ) (X : Matrix (Fin 2) (Fin 2
   ring
 
 /-- Membership in the open MPS space is precisely a vacuum-particle superposition. -/
-theorem mem_groundSpace_pvbsTensor_iff (q : ℂ) (N : ℕ) (v : NSiteSpace 2 N) :
+theorem mem_groundSpace_pvbsTensor_iff (q : ℂ) (N : ℕ) (v : NSiteSpace (Fin 2) N) :
     v ∈ groundSpace (pvbsTensor q) N ↔
       ∃ a b : ℂ, v = a • pvbsVacuum N + b • pvbsEdge q N := by
   rw [groundSpace, LinearMap.mem_range]

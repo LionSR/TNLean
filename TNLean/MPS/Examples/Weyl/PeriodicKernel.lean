@@ -56,7 +56,7 @@ theorem groundSpace_restriction_intersection_threeLetterTensor {ζ : ℂ}
 /-- Actual contiguous seven-site constraints imply the actual global
 boundary space. The one-step intersection is derived internally. -/
 theorem mem_groundSpace_of_seven_contiguous_constraints {ζ : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) {N : ℕ} (hN : 7 ≤ N) {ψ : NSiteSpace 3 N}
+    (hζ : IsPrimitiveRoot ζ 5) {N : ℕ} (hN : 7 ≤ N) {ψ : NSiteSpace (Fin 3) N}
     (hwindow : ∀ (s : ℕ) (hs : s + 7 ≤ N) (τ : Cfg 3 N),
       contiguousRestrictₗ s 7 hs τ ψ ∈ groundSpace (threeLetterTensor ζ) 7) :
     ψ ∈ groundSpace (threeLetterTensor ζ) N := by
@@ -133,7 +133,7 @@ theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span {ζ : �
         (parentRingInteraction (threeLetterTensor ζ) 7 N).hamiltonian) =
       Submodule.span ℂ {mpvState (threeLetterTensor ζ) N} := by
   have : NeZero N := ⟨by omega⟩
-  have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm
+  have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) N)).symm
       (mpv (threeLetterTensor ζ)) = mpvState (threeLetterTensor ζ) N := by
     ext σ
     exact (mpvState_apply (threeLetterTensor ζ) N σ).symm

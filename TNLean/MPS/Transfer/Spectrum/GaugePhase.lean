@@ -599,7 +599,7 @@ The key input for the converse is the overlap decay lemma
 `TNLean.Spectral.TransferOperatorGapInjective`.
 -/
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-! ## Main direction: proportional MPV + primitive overlap ⇒ gauge-phase -/
 
@@ -614,19 +614,19 @@ This is the scalar-control argument used in the primitive single-block branch
 of Cirac et al., arXiv:2011.12127, Theorem IV.4. No common bond dimension is
 required. -/
 theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
-    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {D₁ D₂ : ℕ} (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hA_self :
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A A N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := α) A A N) Filter.atTop (nhds (1 : ℂ)))
     (hB_self :
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) B B N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := α) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hProp :
-      ∀ᶠ N in Filter.atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+      ∀ᶠ N in Filter.atTop, ∃ c : ℂ, ∀ σ : Fin N → α,
         mpv A σ = c * mpv B σ) :
-    Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
+    Filter.Tendsto (fun N => ‖mpvOverlap (α := α) A B N‖) Filter.atTop
       (nhds (1 : ℝ)) := by
   classical
   let proportionalAt : ℕ → Prop := fun N =>
-    ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+    ∃ c : ℂ, ∀ σ : Fin N → α,
       Matrix.trace (Kraus.evalWord A (List.ofFn σ)) =
         c * Matrix.trace (Kraus.evalWord B (List.ofFn σ))
   let c : ℕ → ℂ := fun N =>
@@ -634,7 +634,7 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
       Classical.choose h
     else 0
   have hc_event :
-      ∀ᶠ N in Filter.atTop, ∀ σ : Fin N → Fin d, mpv A σ = c N * mpv B σ := by
+      ∀ᶠ N in Filter.atTop, ∀ σ : Fin N → α, mpv A σ = c N * mpv B σ := by
     filter_upwards [hProp] with N hN σ
     have hN' : proportionalAt N := by
       simpa [proportionalAt, mpv, coeff] using hN
@@ -642,8 +642,8 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     rw [dite_eq_left hN']
     simpa [mpv, coeff] using Classical.choose_spec hN' σ
   have hOverlapAB :
-      (fun N => mpvOverlap (α := Fin d) A B N) =ᶠ[Filter.atTop]
-        fun N => c N * mpvOverlap (α := Fin d) B B N := by
+      (fun N => mpvOverlap (α := α) A B N) =ᶠ[Filter.atTop]
+        fun N => c N * mpvOverlap (α := α) B B N := by
     filter_upwards [hc_event] with N hc
     unfold mpvOverlap
     rw [Finset.mul_sum]
@@ -652,8 +652,8 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     rw [hc σ]
     ring
   have hOverlapAA :
-      (fun N => mpvOverlap (α := Fin d) A A N) =ᶠ[Filter.atTop]
-        fun N => (c N * star (c N)) * mpvOverlap (α := Fin d) B B N := by
+      (fun N => mpvOverlap (α := α) A A N) =ᶠ[Filter.atTop]
+        fun N => (c N * star (c N)) * mpvOverlap (α := α) B B N := by
     filter_upwards [hc_event] with N hc
     unfold mpvOverlap
     rw [Finset.mul_sum]
@@ -663,44 +663,44 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     simp only [star_mul]
     ring
   have hA_self_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := α) A A N‖) Filter.atTop
         (nhds (1 : ℝ)) := by
     simpa using hA_self.norm
   have hB_self_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := α) B B N‖) Filter.atTop
         (nhds (1 : ℝ)) := by
     simpa using hB_self.norm
   have hRatio :
       Filter.Tendsto
-        (fun N => ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖)
+        (fun N => ‖mpvOverlap (α := α) A A N‖ / ‖mpvOverlap (α := α) B B N‖)
         Filter.atTop (nhds (1 : ℝ)) := by
     have hdiv := hA_self_norm.div hB_self_norm one_ne_zero
     have hfun :
-        ((fun N => ‖mpvOverlap (α := Fin d) A A N‖) /
-          (fun N => ‖mpvOverlap (α := Fin d) B B N‖)) =
-            (fun N => ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖) := by
+        ((fun N => ‖mpvOverlap (α := α) A A N‖) /
+          (fun N => ‖mpvOverlap (α := α) B B N‖)) =
+            (fun N => ‖mpvOverlap (α := α) A A N‖ / ‖mpvOverlap (α := α) B B N‖) := by
       funext N
       rfl
     simpa [hfun] using hdiv
   have hB_self_norm_ne :
-      (∀ᶠ N in Filter.atTop, ‖mpvOverlap (α := Fin d) B B N‖ ≠ (0 : ℝ)) :=
+      (∀ᶠ N in Filter.atTop, ‖mpvOverlap (α := α) B B N‖ ≠ (0 : ℝ)) :=
     hB_self_norm.eventually_ne one_ne_zero
   have hRatio_eq :
-      (fun N => ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖)
+      (fun N => ‖mpvOverlap (α := α) A A N‖ / ‖mpvOverlap (α := α) B B N‖)
         =ᶠ[Filter.atTop] fun N => ‖c N‖ ^ 2 := by
     filter_upwards [hOverlapAA, hB_self_norm_ne] with N hAA hN
     calc
-      ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖
-          = ‖(c N * star (c N)) * mpvOverlap (α := Fin d) B B N‖ /
-              ‖mpvOverlap (α := Fin d) B B N‖ := by
+      ‖mpvOverlap (α := α) A A N‖ / ‖mpvOverlap (α := α) B B N‖
+          = ‖(c N * star (c N)) * mpvOverlap (α := α) B B N‖ /
+              ‖mpvOverlap (α := α) B B N‖ := by
                 simp [hAA]
-      _ = (‖c N * star (c N)‖ * ‖mpvOverlap (α := Fin d) B B N‖) /
-            ‖mpvOverlap (α := Fin d) B B N‖ := by
+      _ = (‖c N * star (c N)‖ * ‖mpvOverlap (α := α) B B N‖) /
+            ‖mpvOverlap (α := α) B B N‖ := by
                 simp
       _ = ‖c N * star (c N)‖ := by
             simpa using
               (mul_div_cancel_right₀ (a := ‖c N * star (c N)‖)
-                (b := ‖mpvOverlap (α := Fin d) B B N‖) hN)
+                (b := ‖mpvOverlap (α := α) B B N‖) hN)
       _ = ‖c N‖ ^ 2 := by
             simp [pow_two]
   have hc_normsq :
@@ -710,15 +710,15 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
       Filter.Tendsto (fun N => ‖c N‖) Filter.atTop (nhds (1 : ℝ)) := by
     simpa [Real.sqrt_sq (norm_nonneg _)] using hc_normsq.sqrt
   have hCrossNorm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := α) A B N‖) Filter.atTop
         (nhds (1 : ℝ)) := by
     have hmul :
-        Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (α := Fin d) B B N‖)
+        Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (α := α) B B N‖)
           Filter.atTop (nhds (1 : ℝ)) := by
       simpa using hc_norm.mul hB_self_norm
     have hCross_eq :
-        (fun N => ‖mpvOverlap (α := Fin d) A B N‖) =ᶠ[Filter.atTop]
-          fun N => ‖c N‖ * ‖mpvOverlap (α := Fin d) B B N‖ := by
+        (fun N => ‖mpvOverlap (α := α) A B N‖) =ᶠ[Filter.atTop]
+          fun N => ‖c N‖ * ‖mpvOverlap (α := α) B B N‖ := by
       filter_upwards [hOverlapAB] with N hAB
       simp [hAB]
     exact Filter.Tendsto.congr' hCross_eq.symm hmul
@@ -730,20 +730,20 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
 /-- Non-gauge-phase-equivalent irreducible trace-preserving blocks cannot have
 proportional MPV states at all sufficiently large lengths. -/
 theorem exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
-    (A B : MPSTensor d D)
+    (A B : MPTensor α (Fin D))
     (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hA_norm : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : α, (B i)ᴴ * B i = 1)
     (hA_self :
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A A N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := α) A A N) Filter.atTop (nhds (1 : ℂ)))
     (hB_self :
-      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) B B N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := α) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hNot : ¬ GaugePhaseEquiv A B) (Nmin : ℕ) :
     ∃ N : ℕ, Nmin ≤ N ∧
-      ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ := by
+      ¬ ∃ c : ℂ, ∀ σ : Fin N → α, mpv A σ = c * mpv B σ := by
   by_contra hNo
   have hProp :
-      ∀ᶠ N in Filter.atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+      ∀ᶠ N in Filter.atTop, ∃ c : ℂ, ∀ σ : Fin N → α,
         mpv A σ = c * mpv B σ := by
     exact Filter.eventually_atTop.2 ⟨Nmin, fun N hN => by
       by_contra hNprop

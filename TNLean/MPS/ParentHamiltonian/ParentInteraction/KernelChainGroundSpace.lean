@@ -88,7 +88,7 @@ theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace
     haveI : NeZero N := ⟨by omega⟩;
     ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
       (chainGroundSpace A L N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     ker_hamiltonian_parentRingInteraction_eq_chainGroundSpace A hN hLN]
@@ -103,7 +103,7 @@ theorem zeroSpace_parentRingInteraction_eq_map_chainGroundSpace
     haveI : NeZero N := ⟨by omega⟩;
     (parentRingInteraction A L N).zeroSpace =
       (chainGroundSpace A L N).map
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   have : NeZero N := ⟨by omega⟩
   rw [ManyBody.Interaction.zeroSpace_eq_groundSpace
     fun i ↦ posSemidef_parentRingInteraction_term A L i]

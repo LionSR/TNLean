@@ -165,7 +165,7 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
 
 /-- The direct `p`-blocked tensor of one original block is represented by its common-alphabet
 cyclic sectors. -/
-private theorem block_sameMPV₂_commonSectorTensor
+theorem block_sameMPV₂_commonSectorTensor
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂ (Kraus.block (blocks k) F.p) (F.commonSectorTensor k) := by
   intro N σ

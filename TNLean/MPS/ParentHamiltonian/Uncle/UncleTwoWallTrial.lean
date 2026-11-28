@@ -89,7 +89,7 @@ Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
 def uncleTwoWallTrial (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ) :
-    NSiteSpace d (p + r + q + s + t) := fun σ ↦
+    NSiteSpace (Fin d) (p + r + q + s + t) := fun σ ↦
   let z := List.ofFn σ
   uncleTwoWallCoefficient A B R L (z.take p) ((z.drop p).take r)
     ((z.drop (p + r)).take q) ((z.drop (p + r + q)).take s)
@@ -105,7 +105,7 @@ are N, N+1, 2N-1, N+1, N, giving exactly the source two separated windows.
 Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
 def uncleTwoWallTrialSource (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) : NSiteSpace d (6 * N + 1) := fun σ ↦
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) : NSiteSpace (Fin d) (6 * N + 1) := fun σ ↦
   uncleTwoWallCoefficient A B R L
     (uncleConfigSegment σ 0 N (by omega))
     (uncleConfigSegment σ N (N + 1) (by omega))
@@ -234,9 +234,9 @@ theorem uncleTwoWallTrialSource_cast_apply
     show 2 * N + 1 + (2 * N - 1) = 4 * N by omega,
     show 4 * N + (N + 1) = 5 * N + 1 by omega]
 
-private theorem norm_config_cast {T U : ℕ} (h : T = U) (f : NSiteSpace d T) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d U)).symm (fun σ ↦ f (σ ∘ Fin.cast h))‖ =
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d T)).symm f‖ := by
+private theorem norm_config_cast {T U : ℕ} (h : T = U) (f : NSiteSpace (Fin d) T) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) U)).symm (fun σ ↦ f (σ ∘ Fin.cast h))‖ =
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) T)).symm f‖ := by
   cases h
   rfl
 
@@ -247,9 +247,9 @@ theorem norm_uncleTwoWallTrial_cast
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
     (h : p + r + q + s + t = T) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d T)).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) T)).symm
         (fun σ ↦ uncleTwoWallTrial A B R L p r q s t (σ ∘ Fin.cast h))‖ =
-      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + r + q + s + t))).symm
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (p + r + q + s + t))).symm
         (uncleTwoWallTrial A B R L p r q s t)‖ := norm_config_cast h _
 
 /-- The actual source norm is exactly the five-segment trial norm; the
@@ -259,10 +259,10 @@ theorem norm_uncleTwoWallTrialSource_eq
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
-    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)‖ =
       ‖(WithLp.linearEquiv 2 ℂ
-          (NSiteSpace d (N + (N + 1) + (2 * N - 1) + (N + 1) + N))).symm
+          (NSiteSpace (Fin d) (N + (N + 1) + (2 * N - 1) + (N + 1) + N))).symm
         (uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N)‖ := by
   have hfun : uncleTwoWallTrialSource A B R L N =
       fun σ ↦ uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N
@@ -354,7 +354,7 @@ theorem uncleInteraction_upper_wall_slice_eq_zero
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin b) (Fin a) ℂ)
     (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ Matrix.trace (P * uncleDomainWallWord A B R (u ++ List.ofFn σ ++ v) * Q))) =
       0 := by
   apply (mem_uncleBoundarySpace_two_iff A B R L _).mp
@@ -370,7 +370,7 @@ theorem uncleInteraction_lower_wall_slice_eq_zero
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (P : Matrix (Fin b) (Fin b) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ)
     (u v : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ Matrix.trace (P * uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) * Q))) =
       0 := by
   apply (mem_uncleBoundarySpace_two_iff A B R L _).mp
@@ -386,7 +386,7 @@ theorem uncleInteraction_twoWall_slice_first_eq_zero
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (p u v w x y : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p (u ++ List.ofFn σ ++ v) w x y)) = 0 := by
   simpa only [uncleTwoWallCoefficient, Matrix.mul_assoc] using
     uncleInteraction_upper_wall_slice_eq_zero A B R L (Kraus.evalWord A p)
@@ -400,7 +400,7 @@ theorem uncleInteraction_twoWall_slice_second_eq_zero
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (p r w u v y : List (Fin d)) :
-    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p r w (u ++ List.ofFn σ ++ v) y)) = 0 := by
   have hslice :
       (fun σ : Fin 2 → Fin d ↦

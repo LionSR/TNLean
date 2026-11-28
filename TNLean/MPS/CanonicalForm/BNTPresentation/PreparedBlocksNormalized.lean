@@ -41,11 +41,9 @@ matrix product coefficients.
 
 open MPTensor
 
-open Kraus (blockPhysDim blockTensor flattenBlockedWord evalWord_blockTensor)
-
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- If a matrix has nonzero trace, then for every positive-step subsequence of its powers,
 some trace in that subsequence is nonzero. -/
@@ -74,11 +72,10 @@ private lemma exists_trace_pow_mul_ne_zero {D : ℕ}
 
 /-- A nonzero positive-length matrix product coefficient remains nonzero at some positive
 length after every physical blocking. -/
-private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
-    (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0)
+private lemma exists_mpv_block_ne_zero {D : ℕ} (A : MPTensor α (Fin D))
+    (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → α, mpv A σ ≠ 0)
     (p : ℕ) (hp : 0 < p) :
-    ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin (blockPhysDim d p),
-      mpv (blockTensor (d := d) (n := Fin D) A p) σ ≠ 0 := by
+    ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin p → α, mpv (Kraus.block A p) σ ≠ 0 := by
   classical
   obtain ⟨N₀, hN₀, σ₀, hσ₀⟩ := hNZ
   let w := List.ofFn σ₀
@@ -104,7 +101,7 @@ private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
     calc
       flatWord.length = (p * q) * N₀ := hlenPow (p * q)
       _ = (N₀ * q) * p := by ac_rfl
-  let flatConfig : Fin ((N₀ * q) * p) → Fin d :=
+  let flatConfig : Fin ((N₀ * q) * p) → α :=
     fun i => flatWord.get (Fin.cast hlen.symm i)
   have hofFn : List.ofFn flatConfig = flatWord := by
     simp only [flatConfig]
@@ -113,18 +110,10 @@ private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
       List.ofFn_congr hlen.symm
         (fun i : Fin ((N₀ * q) * p) => flatWord.get (Fin.cast hlen.symm i))
     simpa [Function.comp, Fin.cast_cast] using hcongr
-  let σ : Fin (N₀ * q) → Fin (blockPhysDim d p) :=
-    (Kraus.blockedConfigEquiv d (N₀ * q) p).symm flatConfig
+  let σ : Fin (N₀ * q) → Fin p → α := (Kraus.blockConfigEquiv α (N₀ * q) p).symm flatConfig
   refine ⟨N₀ * q, Nat.mul_pos hN₀ hq, σ, ?_⟩
-  have hflat : flattenBlockedWord d p (List.ofFn σ) = flatWord := by
-    calc
-      flattenBlockedWord d p (List.ofFn σ) =
-          List.ofFn (Kraus.blockedConfigEquiv d (N₀ * q) p σ) :=
-        (Kraus.ofFn_blockedConfigEquiv d (N₀ * q) p σ).symm
-      _ = List.ofFn flatConfig := by
-        simp [σ]
-      _ = flatWord := hofFn
-  simpa [mpv, coeff, evalWord_blockTensor, hflat, flatWord, heval] using htrace
+  rw [mpv_block_eq_mpv_blockConfig, Equiv.apply_symm_apply]
+  simpa [mpv, coeff, hofFn, flatWord, heval] using htrace
 
 /-- **The weight normalization at line 246 of the source.**
 
@@ -167,18 +156,18 @@ phase-equivalent left-canonical, primitive, irreducible blocks has unit modulus.
 Source: arXiv:1606.00608, lines 246 and 1135--1148. -/
 theorem norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
-    (j : Fin (collapsedBntSectorDecomp (d := d) μ blocks hμne).basisCount)
-    (q : Fin ((collapsedBntSectorDecomp (d := d) μ blocks hμne).copies j)) :
-    ‖(collapsedBntSectorDecomp (d := d) μ blocks hμne).weight j q‖ =
-      ‖μ ((mpvPhaseClassData (α := Fin d) blocks).enum j q)‖ := by
+    (j : Fin (collapsedBntSectorDecomp (α := α) μ blocks hμne).basisCount)
+    (q : Fin ((collapsedBntSectorDecomp (α := α) μ blocks hμne).copies j)) :
+    ‖(collapsedBntSectorDecomp (α := α) μ blocks hμne).weight j q‖ =
+      ‖μ ((mpvPhaseClassData (α := α) blocks).enum j q)‖ := by
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
-  set classes := mpvPhaseClassData (α := Fin d) blocks
+  set classes := mpvPhaseClassData (α := α) blocks
   change ‖(classes.enum_phase j q).choose * μ (classes.enum j q)‖ = _
   rw [norm_mul, norm_choose_MPVBlockPhaseEquiv_eq_one
     (hTP (classes.repr j)) (hTP (classes.enum j q))
@@ -213,22 +202,22 @@ input the source's standing normalization excludes, so the hypothesis states the
 convention rather than a sub-case; see
 `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
 theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
-    {d D : ℕ} (A : MPSTensor d D)
-    (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
+    {D : ℕ} (A : MPTensor α (Fin D))
+    (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → α, mpv A σ ≠ 0) :
     ∃ p : ℕ, 0 < p ∧ ∃ m : ℝ, 0 < m ∧
-      ∃ P : SectorDecomposition (Fin (blockPhysDim d p)),
+      ∃ P : SectorDecomposition (Fin p → α),
         IsLeftCanonicalBNTPresentation P ∧
         (∀ j q, ‖P.weight j q‖ ≤ 1) ∧ (∃ j q, ‖P.weight j q‖ = 1) ∧
-        ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin (blockPhysDim d p),
-          mpv (blockTensor (d := d) (n := Fin D) A p) σ = (m : ℂ) ^ N * mpv P.toTensor σ := by
+        ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin p → α,
+          mpv (Kraus.block A p) σ = (m : ℂ) ^ N * mpv P.toTensor σ := by
   classical
   obtain ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, -, hμne, hSamePos⟩ :=
-    exists_prepared_BNT_blocks_afterBlocking_pos (d := d) (D := D) A
+    exists_prepared_BNT_blocks_afterBlocking_pos A
   -- The nonvanishing hypothesis forces a nonempty block family.
   have hr : 0 < r := by
     rcases Nat.eq_zero_or_pos r with hr0 | hpos
     · exfalso
-      obtain ⟨N, hN, σ, hσ⟩ := exists_mpv_blockTensor_ne_zero A hNZ p hp
+      obtain ⟨N, hN, σ, hσ⟩ := exists_mpv_block_ne_zero A hNZ p hp
       apply hσ
       rw [hSamePos N hN σ, mpv_toTensorFromBlocks_eq_sum]
       subst hr0
@@ -240,10 +229,10 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
   -- The block properties do not involve the weights, so the normalized weights feed the
   -- prepared-block constructor directly.
   let ν : Fin r → ℂ := fun k => μ k / (m : ℂ)
-  let P := collapsedBntSectorDecomp (d := blockPhysDim d p) ν blocks hne
+  let P := collapsedBntSectorDecomp (α := Fin p → α) ν blocks hne
   have hSame : SameMPV₂Pos P.toTensor
-      (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := ν) blocks) :=
-    collapsedBntSectorDecomp_sameMPV₂Pos (d := blockPhysDim d p) ν blocks hne
+      (toTensorFromBlocks (α := Fin p → α) (μ := ν) blocks) :=
+    collapsedBntSectorDecomp_sameMPV₂Pos (α := Fin p → α) ν blocks hne
   have hNormP := norm_collapsedBntSectorDecomp_weight_of_tp_primitive_irr
     ν blocks hDim hTP hPrim hIrr hne
   refine ⟨p, hp, m, hm, P,
@@ -251,7 +240,7 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
       ν blocks hDim hTP hPrim hIrr hne hr,
     fun j q => (hNormP j q).trans_le (hLe _), ?_, ?_⟩
   · obtain ⟨k₀, hk₀⟩ := hUnit
-    obtain ⟨j, q, hjq⟩ := (mpvPhaseClassData (α := Fin (blockPhysDim d p)) blocks).exists_enum_eq k₀
+    obtain ⟨j, q, hjq⟩ := (mpvPhaseClassData (α := Fin p → α) blocks).exists_enum_eq k₀
     exact ⟨j, q, (hNormP j q).trans (by rw [hjq]; exact hk₀)⟩
   intro N hN σ
   have hμeq : (fun k => (m : ℂ) * (μ k / (m : ℂ))) = μ := by
@@ -259,13 +248,13 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
     rw [mul_comm]
     exact div_mul_cancel₀ (μ k) hm0
   calc
-    mpv (blockTensor (d := d) (n := Fin D) A p) σ
-        = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p)) (μ := μ) blocks) σ :=
+    mpv (Kraus.block A p) σ
+        = mpv (toTensorFromBlocks (α := Fin p → α) (μ := μ) blocks) σ :=
       hSamePos N hN σ
-    _ = mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
+    _ = mpv (toTensorFromBlocks (α := Fin p → α)
           (μ := fun k => (m : ℂ) * (μ k / (m : ℂ))) blocks) σ := by
       rw [hμeq]
-    _ = (m : ℂ) ^ N * mpv (toTensorFromBlocks (α := Fin (blockPhysDim d p))
+    _ = (m : ℂ) ^ N * mpv (toTensorFromBlocks (α := Fin p → α)
           (μ := fun k => μ k / (m : ℂ)) blocks) σ :=
       mpv_toTensorFromBlocks_weight_mul_left (m : ℂ) _ blocks σ
     _ = (m : ℂ) ^ N * mpv P.toTensor σ := by

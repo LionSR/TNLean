@@ -50,7 +50,7 @@ for all \(m\ge L\), then \(\mathcal G_{N,L}(A)\subseteq S_N\).  This is the
 cyclic-local part of the proof of PGVWC07, Theorem 12, before the
 periodic-boundary comparison. -/
 theorem chainGroundSpace_le_of_local_le_restriction_intersection_submodules
-    (A : MPSTensor d D) (S : (M : ℕ) → Submodule ℂ (NSiteSpace d M))
+    (A : MPSTensor d D) (S : (M : ℕ) → Submodule ℂ (NSiteSpace (Fin d) M))
     {L N : ℕ} (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N) [NeZero d]
     (hlocal : groundSpace A L ≤ S L)
     (hstep : ∀ M : ℕ, L ≤ M →
@@ -202,7 +202,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
     chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
-  let S : (M : ℕ) → Submodule ℂ (NSiteSpace d M) :=
+  let S : (M : ℕ) → Submodule ℂ (NSiteSpace (Fin d) M) :=
     fun M => ⨆ j : Fin r, groundSpace (A j) M
   apply chainGroundSpace_le_of_local_le_restriction_intersection_submodules
     (A := toTensorFromBlocks (α := Fin d) (μ := μ) A) (S := S) hN hL hLN

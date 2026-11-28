@@ -55,9 +55,9 @@ private theorem leftBoundaryMap_range_toTensorFromBlocks
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
     (leftBoundaryMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
       ⨆ j, (leftBoundaryMap (A j) K L).range := by
-  let T : (Cfg d L → NSiteSpace d K) →ₗ[ℂ] NSiteSpace d (K + L) :=
+  let T : (Cfg d L → NSiteSpace (Fin d) K) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) :=
     LinearMap.pi fun σ ↦
-      (LinearMap.proj (σ ∘ Fin.castAdd L) : NSiteSpace d K →ₗ[ℂ] ℂ).comp
+      (LinearMap.proj (σ ∘ Fin.castAdd L) : NSiteSpace (Fin d) K →ₗ[ℂ] ℂ).comp
         (LinearMap.proj (σ ∘ Fin.natAdd K))
   have hfac {D : ℕ} (B : MPSTensor d D) :
       leftBoundaryMap B K L = T.comp ((groundSpaceMap B K).compLeft (Cfg d L)) := rfl
@@ -84,9 +84,9 @@ private theorem tailBoundaryMap_range_toTensorFromBlocks
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :
     (tailBoundaryMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) K L).range =
       ⨆ j, (tailBoundaryMap (A j) K L).range := by
-  let T : (Cfg d K → NSiteSpace d L) →ₗ[ℂ] NSiteSpace d (K + L) :=
+  let T : (Cfg d K → NSiteSpace (Fin d) L) →ₗ[ℂ] NSiteSpace (Fin d) (K + L) :=
     LinearMap.pi fun σ ↦
-      (LinearMap.proj (σ ∘ Fin.natAdd K) : NSiteSpace d L →ₗ[ℂ] ℂ).comp
+      (LinearMap.proj (σ ∘ Fin.natAdd K) : NSiteSpace (Fin d) L →ₗ[ℂ] ℂ).comp
         (LinearMap.proj (σ ∘ Fin.castAdd L))
   have hfac {D : ℕ} (B : MPSTensor d D) :
       tailBoundaryMap B K L = T.comp ((groundSpaceMap B L).compLeft (Cfg d K)) := rfl

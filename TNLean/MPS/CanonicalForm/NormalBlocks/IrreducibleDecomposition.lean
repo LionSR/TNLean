@@ -127,7 +127,7 @@ open Filter
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-!
 ## (1) Irreducible block decomposition
@@ -215,9 +215,9 @@ discarding zero blocks under the physical positive-length relation.
 -/
 
 /-- An all-zero tensor evaluates to zero on every nonempty word. -/
-theorem evalWord_eq_zero_of_all_zero (A : MPSTensor d D)
-    (hzero : ∀ i : Fin d, A i = 0)
-    (w : List (Fin d)) (hw : w ≠ []) :
+theorem evalWord_eq_zero_of_all_zero (A : MPTensor α (Fin D))
+    (hzero : ∀ i : α, A i = 0)
+    (w : List (α)) (hw : w ≠ []) :
     Kraus.evalWord A w = 0 := by
   cases w with
   | nil =>
@@ -226,9 +226,9 @@ theorem evalWord_eq_zero_of_all_zero (A : MPSTensor d D)
       simp only [Kraus.evalWord, hzero i, zero_mul]
 
 /-- An all-zero tensor contributes zero to the MPV for every positive system size. -/
-theorem mpv_eq_zero_of_all_zero (A : MPSTensor d D)
-    (hzero : ∀ i : Fin d, A i = 0)
-    {N : ℕ} (σ : Fin N → Fin d) (hN : 0 < N) :
+theorem mpv_eq_zero_of_all_zero (A : MPTensor α (Fin D))
+    (hzero : ∀ i : α, A i = 0)
+    {N : ℕ} (σ : Fin N → α) (hN : 0 < N) :
     mpv A σ = 0 := by
   have hw : List.ofFn σ ≠ [] :=
     List.length_pos_iff_ne_nil.mp (by simpa only [List.length_ofFn] using hN)
@@ -274,18 +274,18 @@ at most the original bond dimension.
 This is the positive-length form of the recursive decomposition in Pérez-García, Verstraete,
 Wolf, and Cirac, Theorem `Th:TIcanonical`, proof lines 771--826.  The source notes that zero blocks
 may occur; they vanish identically on nonempty rings and are discarded here. -/
-theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
+theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPTensor α (Fin D)) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (blocks : (k : Fin r) → MPTensor α (Fin (dim k))),
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, ∃ i, blocks k i ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A
-        (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+        (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
   obtain ⟨r₀, dim₀, blocks₀, hIrr₀, hSame₀, hDim₀⟩ :=
-    exists_irreducible_blockDecomp (d := d) (D := D) A
+    exists_irreducible_blockDecomp (α := α) (D := D) A
   set isNonzero : Fin r₀ → Prop := fun k => ∃ i, blocks₀ k i ≠ 0 with isNonzero_def
   set nonzeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => isNonzero k)
     with nonzeroSet_def
@@ -293,7 +293,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     with nonzeroEquiv_def
   set r := nonzeroSet.card with r_def
   set dim : Fin r → ℕ := fun j => dim₀ (nonzeroEquiv.symm j).1 with dim_def
-  set newBlocks : (k : Fin r) → MPSTensor d (dim k) :=
+  set newBlocks : (k : Fin r) → MPTensor α (Fin (dim k)) :=
     fun j => blocks₀ (nonzeroEquiv.symm j).1 with newBlocks_def
   refine ⟨r, dim, newBlocks, ?_, ?_, ?_, ?_, ?_⟩
   · intro k
@@ -314,7 +314,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       rw [h, mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
     have hNonzero :
-        mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
+        mpv (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
           ∑ j : Fin r, mpv (newBlocks j) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
@@ -341,7 +341,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := hA
       _ = nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) := hAllEqNonzero
       _ = ∑ j : Fin r, mpv (newBlocks j) σ := hNonzeroSum
-      _ = mpv (toTensorFromBlocks (α := Fin d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ :=
+      _ = mpv (toTensorFromBlocks (α := α) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ :=
         hNonzero.symm
   · have hSelectedDim : nonzeroSet.sum dim₀ = ∑ j : Fin r, dim j := by
       rw [← nonzeroSet.sum_coe_sort dim₀]

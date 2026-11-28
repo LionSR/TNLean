@@ -25,13 +25,13 @@ namespace MPSTensor
 
 /-- The computational two-site vector \(\ket{ab}\) for the physical space
 \((\mathbb C^2)^{\otimes 2}\). -/
-def twoSiteKet (a b : Fin 2) : NSiteSpace 2 2 :=
+def twoSiteKet (a b : Fin 2) : NSiteSpace (Fin 2) 2 :=
   Pi.single (fun k : Fin 2 => if k = 0 then a else b) 1
 
 /-- The computational basis vector \(\ket{a}^{\otimes N}\).
 This is the constant product vector in the two-fold GHZ degeneracy,
 arXiv:2011.12127, line 2205. -/
-def constantKet (a : Fin 2) (N : ℕ) : NSiteSpace 2 N :=
+def constantKet (a : Fin 2) (N : ℕ) : NSiteSpace (Fin 2) N :=
   Pi.single (fun _ : Fin N => a) 1
 
 private theorem ghz_groundSpaceMap_two
@@ -93,7 +93,7 @@ This is arXiv:1210.6613, lines 449--455. -/
 theorem ghz_groundSpace_two_eq_span :
     groundSpace ghzTensor 2 =
       Submodule.span ℂ
-        ({twoSiteKet 0 0, twoSiteKet 1 1} : Set (NSiteSpace 2 2)) := by
+        ({twoSiteKet 0 0, twoSiteKet 1 1} : Set (NSiteSpace (Fin 2) 2)) := by
   apply le_antisymm
   · rintro ψ ⟨X, rfl⟩
     rw [ghz_groundSpaceMap_two]
@@ -124,9 +124,9 @@ private lemma twoSiteKet_same_apply_mixed (c : Fin 2) {a b : Fin 2} (hab : a ≠
     exact h0.symm.trans h1
   rw [twoSiteKet, Pi.single_eq_of_ne hne.symm]
 
-private lemma mem_ghz_two_span_apply_mixed {v : NSiteSpace 2 2}
+private lemma mem_ghz_two_span_apply_mixed {v : NSiteSpace (Fin 2) 2}
     (hv : v ∈ Submodule.span ℂ
-      ({twoSiteKet 0 0, twoSiteKet 1 1} : Set (NSiteSpace 2 2)))
+      ({twoSiteKet 0 0, twoSiteKet 1 1} : Set (NSiteSpace (Fin 2) 2)))
     {a b : Fin 2} (hab : a ≠ b) :
     v (fun k : Fin 2 => if k = 0 then a else b) = 0 := by
   induction hv using Submodule.span_induction with
@@ -139,11 +139,11 @@ private lemma mem_ghz_two_span_apply_mixed {v : NSiteSpace 2 2}
   | add _ _ _ _ h₁ h₂ => rw [Pi.add_apply, h₁, h₂, add_zero]
   | smul c _ _ h => rw [Pi.smul_apply, h, smul_zero]
 
-private lemma mem_ghz_two_span_of_apply_mixed_eq_zero {v : NSiteSpace 2 2}
+private lemma mem_ghz_two_span_of_apply_mixed_eq_zero {v : NSiteSpace (Fin 2) 2}
     (hzero : ∀ {a b : Fin 2}, a ≠ b →
       v (fun k : Fin 2 => if k = 0 then a else b) = 0) :
     v ∈ Submodule.span ℂ
-      ({twoSiteKet 0 0, twoSiteKet 1 1} : Set (NSiteSpace 2 2)) := by
+      ({twoSiteKet 0 0, twoSiteKet 1 1} : Set (NSiteSpace (Fin 2) 2)) := by
   have hdecomp :
       v = v (fun _ : Fin 2 => (0 : Fin 2)) • twoSiteKet 0 0 +
         v (fun _ : Fin 2 => (1 : Fin 2)) • twoSiteKet 1 1 := by
@@ -219,7 +219,7 @@ private lemma cyclicCfg_extractWindow_eq {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
   · rw [dite_eq_right hk]
 
 private lemma ghz_chainGroundSpace_apply_eq_zero_of_adjacent_ne {N : ℕ} (hN : 2 ≤ N)
-    {ψ : NSiteSpace 2 N} (hψ : ψ ∈ chainGroundSpace ghzTensor 2 N)
+    {ψ : NSiteSpace (Fin 2) N} (hψ : ψ ∈ chainGroundSpace ghzTensor 2 N)
     {σ : Fin N → Fin 2} {i : Fin N}
     (hne : σ i ≠ σ (cyclicForwardSite i 1)) :
     ψ σ = 0 := by
@@ -321,7 +321,7 @@ arXiv:2011.12127, line 2205. -/
 theorem ghz_chainGroundSpace_two_eq_constant_span {N : ℕ} (hN : 2 ≤ N) :
     chainGroundSpace ghzTensor 2 N =
       Submodule.span ℂ
-        ({constantKet 0 N, constantKet 1 N} : Set (NSiteSpace 2 N)) := by
+        ({constantKet 0 N, constantKet 1 N} : Set (NSiteSpace (Fin 2) N)) := by
   apply le_antisymm
   · intro ψ hψ
     let zeroCfg : Fin N → Fin 2 := fun _ => 0

@@ -41,7 +41,7 @@ sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$
 
 \begin{definition}[Physical blocking of a sector decomposition]%
     \label{def:sector_decomposition_block_tensor}
-    \lean{MPSTensor.SectorDecomposition.blockTensor}
+    \lean{MPSTensor.SectorDecomposition.block}
     \leanok
     \uses{def:sector_weight_data,def:blocked_tensor}
     For the two-layer decomposition of \cite[lines~283--301]{Cirac2016MPDO_arXiv},
@@ -61,14 +61,14 @@ sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$
 
 \begin{lemma}[Indices, dimensions, weights, and representatives under blocking]%
     \label{thm:sector_decomposition_block_tensor_data}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
+    \lean{MPSTensor.SectorDecomposition.block_basis}
+    \lean{MPSTensor.SectorDecomposition.block_weight}
+    \lean{MPSTensor.SectorDecomposition.block_copies}
+    \lean{MPSTensor.SectorDecomposition.block_totalCopies}
+    \lean{MPSTensor.SectorDecomposition.block_flatDim}
+    \lean{MPSTensor.SectorDecomposition.block_totalDim}
+    \lean{MPSTensor.SectorDecomposition.block_flatWeight}
+    \lean{MPSTensor.SectorDecomposition.block_flatBasis}
     \leanok
     \uses{def:sector_decomposition_block_tensor}
     Physical blocking preserves the copy sets and bond dimensions. On the
@@ -560,7 +560,7 @@ single family.
 
 \begin{lemma}[Positive blocking preserves BNT canonical form]
     \label{thm:sector_bnt_cf_block_tensor}
-    \lean{MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor}
+    \lean{MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.block}
     \leanok
     \uses{def:sector_decomposition_block_tensor,def:sector_bnt_cf,thm:bnt_primitivity_normality_from_self_overlap}
     Let $P$ be a BNT canonical form and let $p\geq1$. Then the blocked
@@ -592,7 +592,7 @@ single family.
 
 \begin{lemma}[Positive blocking preserves a basis of normal tensors]
     \label{thm:cpsv_bnt_positive_blocking}
-    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blockTensor}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.block}
     \leanok
     \uses{def:bnt_cpsv,def:blocked_tensor,thm:cpsv_normal_tensor_positive_blocking}
     If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ and $p\geq1$,

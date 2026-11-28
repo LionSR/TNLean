@@ -71,7 +71,7 @@ private def paritySign {N : ℕ} (s : Fin N → Fin 2) : ℂ :=
   ∏ i : Fin N, (-1 : ℂ) ^ (s i).val
 
 /-- The coefficient-space action of on-site `Z` at every site. -/
-private def globalZ {N : ℕ} : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N where
+private def globalZ {N : ℕ} : NSiteSpace (Fin 2) N →ₗ[ℂ] NSiteSpace (Fin 2) N where
   toFun v s := paritySign s * v s
   map_add' v w := by
     ext s
@@ -81,7 +81,7 @@ private def globalZ {N : ℕ} : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N where
     simp only [RingHom.id_apply, Pi.smul_apply, smul_eq_mul]
     ring
 
-@[simp] private lemma globalZ_apply {N : ℕ} (v : NSiteSpace 2 N) (s : Fin N → Fin 2) :
+@[simp] private lemma globalZ_apply {N : ℕ} (v : NSiteSpace (Fin 2) N) (s : Fin N → Fin 2) :
     globalZ v s = paritySign s * v s := rfl
 
 /-- The invertible virtual gauge relating the source and cluster tensors. -/
@@ -138,7 +138,7 @@ theorem clusterSource_mpv_eq_globalZ {N : ℕ} (_hN : 3 ≤ N) (s : Fin N → Fi
 
 /-- Bundled vector form of `clusterSource_mpv_eq_globalZ`. -/
 private lemma source_mpv_vector_relation {N : ℕ} (hN : 3 ≤ N) :
-    (mpv clusterSourceTensor : NSiteSpace 2 N) =
+    (mpv clusterSourceTensor : NSiteSpace (Fin 2) N) =
       (↑(Real.sqrt 2) : ℂ) ^ N • globalZ (mpv clusterTensor) := by
   funext s
   simp only [Pi.smul_apply, smul_eq_mul, globalZ_apply]
@@ -194,7 +194,7 @@ private lemma paritySign_flip {N : ℕ} (j : Fin N) (s : Fin N → Fin 2) :
   ring
 
 private lemma globalZ_involutive {N : ℕ} :
-    Function.Involutive (fun v : NSiteSpace 2 N => globalZ v) := by
+    Function.Involutive (fun v : NSiteSpace (Fin 2) N => globalZ v) := by
   intro v
   ext s
   simp only [globalZ_apply]
@@ -202,12 +202,12 @@ private lemma globalZ_involutive {N : ℕ} :
   simp
 
 private lemma globalZ_injective {N : ℕ} :
-    Function.Injective (fun v : NSiteSpace 2 N => globalZ v) :=
+    Function.Injective (fun v : NSiteSpace (Fin 2) N => globalZ v) :=
   globalZ_involutive.injective
 
 /-- Applying on-site `Z` at every site anticommutes with every translated `ZXZ`
 stabilizer. -/
-private lemma globalZ_anticommute {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N) :
+private lemma globalZ_anticommute {N : ℕ} (i : Fin N) (v : NSiteSpace (Fin 2) N) :
     clusterChainStabilizer i (globalZ v) = -globalZ (clusterChainStabilizer i v) := by
   ext s
   simp only [clusterChainStabilizer_apply, globalZ_apply, Pi.neg_apply]
@@ -222,7 +222,7 @@ private lemma globalZ_anticommute {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N) :
   ring
 
 /-- Global on-site `Z` reverses the common stabilizer eigenvalue. -/
-private lemma globalZ_mem_common_neg {N : ℕ} (μ : ℂ) (v : NSiteSpace 2 N)
+private lemma globalZ_mem_common_neg {N : ℕ} (μ : ℂ) (v : NSiteSpace (Fin 2) N)
     (hv : v ∈ ⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) μ) :
     globalZ v ∈ ⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) (-μ) := by
   rw [Submodule.mem_iInf] at hv ⊢
@@ -234,7 +234,7 @@ private lemma globalZ_mem_common_neg {N : ℕ} (μ : ℂ) (v : NSiteSpace 2 N)
 
 private lemma source_span_eq_globalZ_cluster_span {N : ℕ} (hN : 3 ≤ N) :
     mpvSubmodule clusterSourceTensor N =
-      Submodule.span ℂ {globalZ (mpv clusterTensor : NSiteSpace 2 N)} := by
+      Submodule.span ℂ {globalZ (mpv clusterTensor : NSiteSpace (Fin 2) N)} := by
   rw [mpvSubmodule, source_mpv_vector_relation hN]
   apply Submodule.span_singleton_smul_eq
   exact (isUnit_iff_ne_zero.mpr (pow_ne_zero N
@@ -245,14 +245,14 @@ invertible global `Z` action and the nonzero scalar `sqrt(2)^N`.
 
 See arXiv:quant-ph/0608197, local TeX lines 374--387. -/
 theorem clusterSource_mpv_ne_zero {N : ℕ} (hN : 3 ≤ N) :
-    (mpv clusterSourceTensor : NSiteSpace 2 N) ≠ 0 := by
-  have hcluster : (mpv clusterTensor : NSiteSpace 2 N) ≠ 0 :=
+    (mpv clusterSourceTensor : NSiteSpace (Fin 2) N) ≠ 0 := by
+  have hcluster : (mpv clusterTensor : NSiteSpace (Fin 2) N) ≠ 0 :=
     mpv_ne_zero_of_isNBlkInjective cluster_isNBlkInjective_two
       (by norm_num) (by omega)
   intro hsource
   have hrel := source_mpv_vector_relation hN
   rw [hsource] at hrel
-  have hz : globalZ (mpv clusterTensor : NSiteSpace 2 N) = 0 := by
+  have hz : globalZ (mpv clusterTensor : NSiteSpace (Fin 2) N) = 0 := by
     apply (smul_eq_zero.mp hrel.symm).resolve_left
     exact pow_ne_zero N
       (Complex.ofReal_ne_zero.mpr (ne_of_gt (Real.sqrt_pos.2 (by norm_num))))
@@ -277,17 +277,17 @@ theorem clusterSource_iInf_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
     rw [Submodule.mem_span_singleton]
     obtain ⟨c, hc⟩ := hzspan
     refine ⟨c, ?_⟩
-    have hzc := congrArg (fun w : NSiteSpace 2 N => globalZ w) hc
+    have hzc := congrArg (fun w : NSiteSpace (Fin 2) N => globalZ w) hc
     simpa only [map_smul, globalZ_involutive v] using hzc
   · intro v hv
     rw [Submodule.mem_span_singleton] at hv
     obtain ⟨c, hc⟩ := hv
-    have hzc := congrArg (fun w : NSiteSpace 2 N => globalZ w) hc
+    have hzc := congrArg (fun w : NSiteSpace (Fin 2) N => globalZ w) hc
     have hzspan : globalZ v ∈ mpvSubmodule clusterTensor N := by
       rw [mpvSubmodule, Submodule.mem_span_singleton]
       refine ⟨c, ?_⟩
       simpa only [map_smul,
-        globalZ_involutive (mpv clusterTensor : NSiteSpace 2 N)] using hzc
+        globalZ_involutive (mpv clusterTensor : NSiteSpace (Fin 2) N)] using hzc
     have hzplus : globalZ v ∈
         ⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) 1 := by
       rw [cluster_iInf_eigenspace_eq_mpvSubmodule hN]
@@ -298,15 +298,15 @@ theorem clusterSource_iInf_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
 /-! ### The stabilizer sum as a sum of squares -/
 
 /-- Squared norm `∑ s, ‖v s‖²` in the computational basis. -/
-private def coefficientNormSq {N : ℕ} (v : NSiteSpace 2 N) : ℝ :=
+private def coefficientNormSq {N : ℕ} (v : NSiteSpace (Fin 2) N) : ℝ :=
   ∑ s, Complex.normSq (v s)
 
 /-- The real expectation `Re ⟨v, K_i v⟩`, without normalizing `v`. -/
-private def stabilizerEnergy {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N) : ℝ :=
+private def stabilizerEnergy {N : ℕ} (i : Fin N) (v : NSiteSpace (Fin 2) N) : ℝ :=
   ∑ s, (star (v s) * (clusterChainStabilizer i v) s).re
 
 /-- The real expectation `Re ⟨v, (∑ i, K_i) v⟩`, without normalizing `v`. -/
-private def hamiltonianEnergy {N : ℕ} (v : NSiteSpace 2 N) : ℝ :=
+private def hamiltonianEnergy {N : ℕ} (v : NSiteSpace (Fin 2) N) : ℝ :=
   ∑ s, (star (v s) * ((∑ i : Fin N, clusterChainStabilizer i) v) s).re
 
 /-- Expansion of a squared complex modulus with its real cross term. -/
@@ -320,7 +320,7 @@ private lemma normSq_add_eq_star_mul_re (z w : ℂ) :
   ring
 
 /-- A stabilizer changes a coefficient only by a sign and a spin flip. -/
-private lemma stabilizer_normSq_apply {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N)
+private lemma stabilizer_normSq_apply {N : ℕ} (i : Fin N) (v : NSiteSpace (Fin 2) N)
     (s : Fin N → Fin 2) :
     Complex.normSq ((clusterChainStabilizer i v) s) =
       Complex.normSq (v (flipConfig (cyclicForwardSite i 1) s)) := by
@@ -333,7 +333,7 @@ private lemma stabilizer_normSq_apply {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N)
 
 /-- The spin flip permutes the basis, so each stabilizer preserves the squared norm. -/
 private lemma stabilizer_preserves_coefficientNormSq {N : ℕ} (i : Fin N)
-    (v : NSiteSpace 2 N) :
+    (v : NSiteSpace (Fin 2) N) :
     ∑ s, Complex.normSq ((clusterChainStabilizer i v) s) = coefficientNormSq v := by
   simp_rw [stabilizer_normSq_apply]
   exact (flipConfig_bijective (cyclicForwardSite i 1)).sum_comp
@@ -341,7 +341,7 @@ private lemma stabilizer_preserves_coefficientNormSq {N : ℕ} (i : Fin N)
 
 /-- The expectation of the stabilizer sum is the sum of the individual expectations. -/
 private lemma hamiltonianEnergy_eq_sum_stabilizerEnergy {N : ℕ}
-    (v : NSiteSpace 2 N) :
+    (v : NSiteSpace (Fin 2) N) :
     hamiltonianEnergy v = ∑ i : Fin N, stabilizerEnergy i v := by
   unfold hamiltonianEnergy stabilizerEnergy
   calc
@@ -355,7 +355,7 @@ private lemma hamiltonianEnergy_eq_sum_stabilizerEnergy {N : ℕ}
     _ = _ := Finset.sum_comm
 
 /-- Expansion of `‖(I + K_i)v‖²` using norm preservation. -/
-private lemma stabilizer_sumOfSquares {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N) :
+private lemma stabilizer_sumOfSquares {N : ℕ} (i : Fin N) (v : NSiteSpace (Fin 2) N) :
     (∑ s, Complex.normSq (v s + (clusterChainStabilizer i v) s)) =
       2 * (coefficientNormSq v + stabilizerEnergy i v) := by
   simp_rw [normSq_add_eq_star_mul_re]
@@ -367,7 +367,7 @@ private lemma stabilizer_sumOfSquares {N : ℕ} (i : Fin N) (v : NSiteSpace 2 N)
 
 /-- The coefficient version of
 `sum_i ‖(I + K_i)v‖² = 2 (N ‖v‖² + Re ⟨v,Hv⟩)`. -/
-private lemma hamiltonian_sumOfSquares {N : ℕ} (v : NSiteSpace 2 N) :
+private lemma hamiltonian_sumOfSquares {N : ℕ} (v : NSiteSpace (Fin 2) N) :
     (∑ i : Fin N, ∑ s,
         Complex.normSq (v s + (clusterChainStabilizer i v) s)) =
       2 * ((N : ℝ) * coefficientNormSq v + hamiltonianEnergy v) := by
@@ -377,7 +377,7 @@ private lemma hamiltonian_sumOfSquares {N : ℕ} (v : NSiteSpace 2 N) :
   simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
 
 /-- An eigenvector of energy `-N` attains the quadratic-form lower bound. -/
-private lemma hamiltonianEnergy_eq_of_eigen {N : ℕ} (v : NSiteSpace 2 N)
+private lemma hamiltonianEnergy_eq_of_eigen {N : ℕ} (v : NSiteSpace (Fin 2) N)
     (hv : (∑ i : Fin N, clusterChainStabilizer i) v = (-(N : ℂ)) • v) :
     hamiltonianEnergy v = -(N : ℝ) * coefficientNormSq v := by
   unfold hamiltonianEnergy coefficientNormSq
@@ -395,7 +395,7 @@ private lemma hamiltonianEnergy_eq_of_eigen {N : ℕ} (v : NSiteSpace 2 N)
 
 /-- A vanishing sum of squared residuals forces every stabilizer eigenvalue to be `-1`. -/
 private lemma mem_common_neg_of_sumOfSquares_eq_zero {N : ℕ}
-    (v : NSiteSpace 2 N)
+    (v : NSiteSpace (Fin 2) N)
     (hzero : (∑ i : Fin N, ∑ s,
       Complex.normSq (v s + (clusterChainStabilizer i v) s)) = 0) :
     v ∈ ⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) (-1) := by
@@ -451,7 +451,7 @@ theorem clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 �
 coefficient-space squared norm.
 
 See arXiv:quant-ph/0608197, local TeX lines 374--387. -/
-theorem clusterSource_energy_lower_bound {N : ℕ} (_hN : 3 ≤ N) (v : NSiteSpace 2 N) :
+theorem clusterSource_energy_lower_bound {N : ℕ} (_hN : 3 ≤ N) (v : NSiteSpace (Fin 2) N) :
     -(N : ℝ) * (∑ s, ‖v s‖ ^ 2) ≤
       (∑ s, star (v s) * ((∑ i : Fin N, clusterChainStabilizer i) v) s).re := by
   have hsos : 0 ≤

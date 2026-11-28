@@ -24,7 +24,7 @@ def cyclicTranslateCfg {N : ℕ} (s : Fin N) (σ : Fin N → Fin d) : Fin N → 
 
 /-- Cyclic translation of a periodic-chain state. -/
 def cyclicTranslateState {N : ℕ} (s : Fin N) :
-    NSiteSpace d N →ₗ[ℂ] NSiteSpace d N where
+    NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N where
   toFun ψ σ := ψ (cyclicTranslateCfg s σ)
   map_add' _ _ := by
     ext
@@ -77,7 +77,7 @@ theorem cyclicCfg_full_eq_cyclicTranslateCfg_neg {R : ℕ} (hR : 0 < R)
 /-- A cyclic restriction of a translated state is the restriction of the
 original state at the translated starting site. -/
 theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
-    (s i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    (s i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) :
     cyclicRestrictₗ hN L i τ (cyclicTranslateState s ψ) =
       cyclicRestrictₗ hN L (i - s) (cyclicTranslateCfg s τ) ψ := by
   ext ω
@@ -86,7 +86,7 @@ theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
   rw [cyclicTranslateCfg_cyclicCfg]
 
 /-- Successive cyclic translations add their offsets. -/
-theorem cyclicTranslateState_add {N : ℕ} (s t : Fin N) (ψ : NSiteSpace d N) :
+theorem cyclicTranslateState_add {N : ℕ} (s t : Fin N) (ψ : NSiteSpace (Fin d) N) :
     cyclicTranslateState s (cyclicTranslateState t ψ) =
       cyclicTranslateState (s + t) ψ := by
   ext σ
@@ -101,7 +101,7 @@ theorem cyclicTranslateState_add {N : ℕ} (s t : Fin N) (ψ : NSiteSpace d N) :
 the physical sites. -/
 theorem cyclicTranslateState_mem_chainGroundSpace (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) (s : Fin N)
-    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
+    {ψ : NSiteSpace (Fin d) N} (hψ : ψ ∈ chainGroundSpace A L N) :
     cyclicTranslateState s ψ ∈ chainGroundSpace A L N := by
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ ⊢
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢

@@ -86,7 +86,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_ran
           (∀ i, LinearMap.ker (H i) =
             LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) →
           LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan B N).map
-            (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm.toLinearMap := by
   let data := Classical.choice hA
   obtain ⟨S, hS, hBound, hSpan⟩ :=
     data.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five

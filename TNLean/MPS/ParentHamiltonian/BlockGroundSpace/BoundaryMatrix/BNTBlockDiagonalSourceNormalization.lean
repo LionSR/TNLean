@@ -124,12 +124,12 @@ theorem
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
-    ∃ φ : (j : Fin r) → NSiteSpace d N,
+    ∃ φ : (j : Fin r) → NSiteSpace (Fin d) N,
       (∀ j, φ j ∈ groundSpace (A j) N) ∧
         ψ = ∑ j, φ j ∧
-          ∀ φ' : (j : Fin r) → NSiteSpace d N,
+          ∀ φ' : (j : Fin r) → NSiteSpace (Fin d) N,
             (∀ j, φ' j ∈ groundSpace (A j) N) →
               ψ = ∑ j, φ' j → φ' = φ := by
   classical
@@ -171,7 +171,7 @@ theorem
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
     (hRange :
       (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
-    {ψ : NSiteSpace d N}
+    {ψ : NSiteSpace (Fin d) N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (α := Fin d) (μ := μ) A) L N) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) N

@@ -113,7 +113,7 @@ constraints: with \(A^0 = c\,\sigma^z\), \(A^1 = b\,\sigma^+\),
 \(\Gamma_2(X)\) has coordinates \(c^2(X_{00}+X_{11})\), \(cbX_{10}\), \(cbX_{01}\),
 \(-cbX_{10}\), \(0\), \(-b^2X_{00}\), \(-cbX_{01}\), \(-b^2X_{11}\), \(0\), and
 \(b^2 = 2c^2\). This is the hand computation behind arXiv:2011.12127, line 2095. -/
-theorem mem_aklt_groundSpace_two_iff (v : NSiteSpace 3 2) :
+theorem mem_aklt_groundSpace_two_iff (v : NSiteSpace (Fin 3) 2) :
     v ∈ groundSpace akltTensor 2 ↔
       v ![1, 1] = 0 ∧ v ![2, 2] = 0 ∧ v ![0, 1] + v ![1, 0] = 0 ∧
         v ![0, 2] + v ![2, 0] = 0 ∧ 2 * v ![0, 0] + v ![1, 2] + v ![2, 1] = 0 := by
@@ -172,14 +172,14 @@ private lemma fin_snoc_two (a b j : Fin 3) :
   fin_cases k <;> rfl
 
 /-- The five constraints on a right restriction \(\psi(i,\cdot,\cdot)\). -/
-private lemma aklt_right_constraints (ψ : NSiteSpace 3 3) (i : Fin 3)
+private lemma aklt_right_constraints (ψ : NSiteSpace (Fin 3) 3) (i : Fin 3)
     (h : restrictFirst ψ i ∈ groundSpace akltTensor 2) :
     ψ ![i, 1, 1] = 0 ∧ ψ ![i, 2, 2] = 0 ∧ ψ ![i, 0, 1] + ψ ![i, 1, 0] = 0 ∧
       ψ ![i, 0, 2] + ψ ![i, 2, 0] = 0 ∧ 2 * ψ ![i, 0, 0] + ψ ![i, 1, 2] + ψ ![i, 2, 1] = 0 :=
   (mem_aklt_groundSpace_two_iff _).1 h
 
 /-- The five constraints on a left restriction \(\psi(\cdot,\cdot,k)\). -/
-private lemma aklt_left_constraints (ψ : NSiteSpace 3 3) (k : Fin 3)
+private lemma aklt_left_constraints (ψ : NSiteSpace (Fin 3) 3) (k : Fin 3)
     (h : restrictLast ψ k ∈ groundSpace akltTensor 2) :
     ψ ![1, 1, k] = 0 ∧ ψ ![2, 2, k] = 0 ∧ ψ ![0, 1, k] + ψ ![1, 0, k] = 0 ∧
       ψ ![0, 2, k] + ψ ![2, 0, k] = 0 ∧ 2 * ψ ![0, 0, k] + ψ ![1, 2, k] + ψ ![2, 1, k] = 0 := by
@@ -197,7 +197,7 @@ matrix is read off from four coefficients,
 and the remaining coordinates are matched using the five constraints on each of
 the six restrictions together with \(b^2 = 2c^2\). -/
 theorem aklt_mem_groundSpace_three_of_inLeftGround_of_inRightGround
-    {ψ : NSiteSpace 3 3} (hLeft : InLeftGround akltTensor 2 ψ)
+    {ψ : NSiteSpace (Fin 3) 3} (hLeft : InLeftGround akltTensor 2 ψ)
     (hRight : InRightGround akltTensor 2 ψ) :
     ψ ∈ groundSpace akltTensor 3 := by
   have R1 : ∀ i : Fin 3, ψ ![i, 1, 1] = 0 := fun i => (aklt_right_constraints ψ i (hRight i)).1

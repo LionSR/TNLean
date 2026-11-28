@@ -75,7 +75,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighbo
     hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
       (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
   have hOne : WordTupleSpanTop (fun j => Kraus.blockTensor (B j) p) 1 :=
-    wordTupleSpanTop_blockTensor_one B hSpan
+    wordTupleSpanTop_block_one B hSpan
   have hLocal :
       groundSpace (Kraus.blockTensor A p) 2 =
         ⨆ j : Fin data.phaseClasses.g,

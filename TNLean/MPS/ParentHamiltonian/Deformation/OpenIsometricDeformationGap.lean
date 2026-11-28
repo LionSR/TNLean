@@ -146,7 +146,7 @@ theorem exists_blocked_isometricDeformation_open_parent_gap_of_isNormalTensor
             z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
-    exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
+    exists_positive_block_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
   exact ⟨L, hL, hBound, exists_uniform_isometricDeformation_open_parent_gap
     (fun j => blockTensor (A j) L) hSpan⟩
 
@@ -168,7 +168,7 @@ theorem exists_blocked_isometricDeformation_open_interaction_gap_of_isNormalTens
             z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
-    exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
+    exists_positive_block_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
   exact ⟨L, hL, hBound, exists_uniform_isometricDeformation_open_interaction_gap
     (fun j => blockTensor (A j) L) hSpan⟩
 

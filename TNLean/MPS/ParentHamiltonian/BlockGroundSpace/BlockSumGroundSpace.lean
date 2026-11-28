@@ -79,7 +79,7 @@ open-boundary space. -/
 theorem exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
-    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} {ψ : NSiteSpace d L}
+    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} {ψ : NSiteSpace (Fin d) L}
     (hψ : ψ ∈ ⨆ j : Fin r, groundSpace (A j) L) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (α := Fin d) (μ := μ) A) L

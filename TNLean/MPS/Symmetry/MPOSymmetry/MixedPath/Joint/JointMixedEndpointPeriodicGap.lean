@@ -200,7 +200,7 @@ theorem mpv_jointMixedEndpointInterpolation_zero
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (x : Fin r) (hN : 0 < N) :
     (mpv (jointMixedEndpointInterpolation A₀ A₁ 0 x) :
-      NSiteSpace (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N) =
+      NSiteSpace (Fin (jointMixedPhysicalDim d₀ d₁ D₀ D₁)) N) =
         mpv (jointMixedEndpointLeftTensor A₀ d₁ D₁ x) := by
   let V := Matrix.coordinateInclusion
     (Fin.castAddEmb (D₁ x) : Fin (D₀ x) ↪ Fin (D₀ x + D₁ x))
@@ -284,7 +284,7 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq_actual
     apply Finset.sum_congr rfl
     intro x _
     exact congrArg
-      (fun w : NSiteSpace (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N => c x * w σ)
+      (fun w : NSiteSpace (Fin (jointMixedPhysicalDim d₀ d₁ D₀ D₁)) N => c x * w σ)
       (mpv_jointMixedEndpointInterpolation_zero A₀ A₁ x (by omega))
   rw [hMap]
   exact jointMixedEndpoint_periodic_groundSpace_eq A₀ A₁ h₀ h₁ hD₀ hN

@@ -252,7 +252,7 @@ namespace MPSTensor
 
 /-- A strict mixed-transfer spectral radius bounds every mixed eigenvalue. -/
 theorem mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one
-    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {α : Type*} [Fintype α] {D₁ D₂ : ℕ} (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hgap : Kraus.mixedMapSpectralRadius A B < 1) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (Kraus.mixedMapLM A B) μ) : ‖μ‖ < 1 := by
   let V := Matrix (Fin D₁) (Fin D₂) ℂ
@@ -269,8 +269,8 @@ theorem mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one
 /-- Inequivalent normal left-canonical blocks have all mixed eigenvalues of norm below one,
 including rectangular mixed maps between blocks of different bond dimensions. -/
 theorem mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent
-    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {α : Type*} [Fintype α] {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B)
     (hAleft : IsLeftCanonical A) (hBleft : IsLeftCanonical B)
     (hneq : ∀ h : D₁ = D₂, ¬ GaugePhaseEquiv (h ▸ A) B) {μ : ℂ}

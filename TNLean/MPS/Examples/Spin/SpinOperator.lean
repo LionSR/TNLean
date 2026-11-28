@@ -45,7 +45,7 @@ variable {d N : ℕ}
 /-- The operator \(X_j\) acting as the one-site matrix \(X\) on site \(j\) of a chain
 of \(N\) sites: \((X_j\psi)(\sigma)=\sum_aX_{\sigma_ja}\,\psi(\sigma\text{ with }\sigma_j=a)\). -/
 def siteOperator (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) :
-    NSiteSpace d N →ₗ[ℂ] NSiteSpace d N where
+    NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N where
   toFun ψ σ := ∑ a, X (σ j) a * ψ (Function.update σ j a)
   map_add' ψ φ := by
     ext σ
@@ -56,7 +56,7 @@ def siteOperator (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) :
     refine Finset.sum_congr rfl fun _ _ => by ring
 
 /-- The coordinate formula for a site operator. -/
-lemma siteOperator_apply (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) (ψ : NSiteSpace d N)
+lemma siteOperator_apply (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) (ψ : NSiteSpace (Fin d) N)
     (σ : Cfg d N) :
     siteOperator X j ψ σ = ∑ a, X (σ j) a * ψ (Function.update σ j a) := rfl
 
@@ -64,14 +64,14 @@ lemma siteOperator_apply (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) (ψ : NSit
 of two sites of a chain of \(N\) sites for the operator family \(S\).
 The composition also applies when the two sites coincide. -/
 def spinExchange (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (j k : Fin N) :
-    NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
+    NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N :=
   ∑ α, siteOperator (S α) j ∘ₗ siteOperator (S α) k
 
 /-- The coordinate formula of the exchange, with the sum over the three spin
 components carried out inside the coefficient, for distinct sites. -/
 lemma spinExchange_apply (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (j k : Fin N)
     (hjk : j ≠ k)
-    (ψ : NSiteSpace d N) (σ : Cfg d N) :
+    (ψ : NSiteSpace (Fin d) N) (σ : Cfg d N) :
     spinExchange S j k ψ σ =
       ∑ a, ∑ b, (∑ α, S α (σ j) a * S α (σ k) b) *
         ψ (Function.update (Function.update σ j a) k b) := by
@@ -113,13 +113,13 @@ theorem spinExchange_self (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {c : ℂ}
 
 /-- The total spin component \(S^\alpha=\sum_jS^\alpha_j\) of a chain of \(N\) sites. -/
 def totalSpin (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (α : Fin 3) :
-    NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
+    NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N :=
   ∑ j, siteOperator (S α) j
 
 /-- The squared total spin \(\mathbf S^2=\sum_\alpha(S^\alpha)^2\) of a chain of
 \(N\) sites, with \(S^\alpha=\sum_jS^\alpha_j\). For the spin-\(s\) operators its
 eigenvalue on the states of total spin \(t\) is \(t(t+1)\). -/
-def totalSpinSq (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
+def totalSpinSq (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) : NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N :=
   ∑ α, totalSpin S α ∘ₗ totalSpin S α
 
 /-- The squared total spin is the Casimir value \(c\) per site plus the exchange of
@@ -128,7 +128,7 @@ every ordered pair of distinct sites, when \(\sum_\alpha(S^\alpha)^2=c\):
 \(\mathbf S_j\cdot\mathbf S_j=c\). -/
 theorem totalSpinSq_eq (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {c : ℂ}
     (hS : ∑ α, S α * S α = c • 1) :
-    (totalSpinSq S : NSiteSpace d N →ₗ[ℂ] NSiteSpace d N) =
+    (totalSpinSq S : NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) N) =
       ∑ j, ∑ k, if j = k then c • LinearMap.id else spinExchange S j k := by
   simp only [totalSpinSq, totalSpin, ← Module.End.mul_eq_comp, Finset.sum_mul_sum]
   rw [Finset.sum_comm]
@@ -142,7 +142,7 @@ theorem totalSpinSq_eq (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {c : ℂ}
 /-- Restricting to the cyclic window of sites \(i,i+1\) intertwines the exchange of
 these two sites with the exchange of a two-site chain. -/
 lemma cyclicRestrictₗ_spinExchange (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (hN : 0 < N)
-    (hN2 : 2 ≤ N) (i : Fin N) (τ : Cfg d N) (ψ : NSiteSpace d N) :
+    (hN2 : 2 ≤ N) (i : Fin N) (τ : Cfg d N) (ψ : NSiteSpace (Fin d) N) :
     cyclicRestrictₗ hN 2 i τ (spinExchange S i (cyclicForwardSite i 1) ψ) =
       spinExchange S 0 1 (cyclicRestrictₗ hN 2 i τ ψ) := by
   ext ω

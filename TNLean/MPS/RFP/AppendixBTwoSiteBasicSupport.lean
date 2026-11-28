@@ -36,7 +36,7 @@ coefficient
 Source: arXiv:1606.00608, basic-vector equation (3.17), lines 564--578. -/
 noncomputable def AppendixBStructuralData.physicalIsometryTensorPower
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (N : ℕ) :
-    (((Fin N → Fin D × Fin D) → ℂ) →ₗ[ℂ] NSiteSpace d N) where
+    (((Fin N → Fin D × Fin D) → ℂ) →ₗ[ℂ] NSiteSpace (Fin d) N) where
   toFun v σ := ∑ p : Fin N → Fin D × Fin D,
     (∏ t : Fin N, hStruct.U (σ t) (p t).1 (p t).2) * v p
   map_add' v w := by
@@ -63,7 +63,7 @@ Source: arXiv:1606.00608, pair-index isometry equation (3.16) and basic-vector
 equation (3.17), lines 549--578. -/
 noncomputable def AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (N : ℕ) :
-    (NSiteSpace d N →ₗ[ℂ] ((Fin N → Fin D × Fin D) → ℂ)) where
+    (NSiteSpace (Fin d) N →ₗ[ℂ] ((Fin N → Fin D × Fin D) → ℂ)) where
   toFun ψ p := ∑ σ : Cfg d N,
     (∏ t : Fin N, star (hStruct.U (σ t) (p t).1 (p t).2)) * ψ σ
   map_add' ψ φ := by
@@ -180,9 +180,9 @@ Source: arXiv:1606.00608, pair-index isometry equation (3.16) and basic-vector
 equation (3.17), lines 549--578. -/
 theorem AppendixBStructuralData.physicalIsometryTensorPower_adjoint_inner
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (N : ℕ)
-    (ψ : NSiteSpace d N) (v : (Fin N → Fin D × Fin D) → ℂ) :
-    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ,
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
+    (ψ : NSiteSpace (Fin d) N) (v : (Fin N → Fin D × Fin D) → ℂ) :
+    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ,
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm
           (hStruct.physicalIsometryTensorPower N v)⟫_ℂ =
       ⟪(WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm
           (hStruct.physicalIsometryTensorPowerLeftInverse N ψ),
@@ -219,7 +219,7 @@ isometry.
 Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
 noncomputable def AppendixBStructuralData.transportedTwoSiteBondProjection
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
+    NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
   (hStruct.physicalIsometryTensorPower 2).comp
     (hStruct.twoSiteVirtualBondProjection.comp
       (hStruct.physicalIsometryTensorPowerLeftInverse 2))
@@ -257,7 +257,7 @@ neighboring virtual sites.
 Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
 noncomputable def AppendixBStructuralData.twoSiteBasicEmbedding
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    ((Fin D × Fin D → ℂ) →ₗ[ℂ] NSiteSpace d 2) :=
+    ((Fin D × Fin D → ℂ) →ₗ[ℂ] NSiteSpace (Fin d) 2) :=
   (hStruct.physicalIsometryTensorPower 2).comp hStruct.twoSiteBondInsertion
 
 /-- For a nonzero bond vector, the transported virtual projector has exactly
@@ -406,8 +406,8 @@ Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578, and
 Definition D.2, lines 2205--2218. -/
 noncomputable def AppendixBStructuralData.twoSiteBasicSupportProjection
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)
+    NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)
   e.toLinearMap.comp ((groundSpaceES hStruct.coreTensor 2).starProjection.toLinearMap.comp
     e.symm.toLinearMap)
 
@@ -421,18 +421,18 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_range
   ext ψ
   constructor
   · rintro ⟨v, rfl⟩
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES hStruct.coreTensor 2).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v)) ∈
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v)) ∈
         groundSpace hStruct.coreTensor 2
     apply (mem_groundSpaceES_iff hStruct.coreTensor 2 _).1
     exact Submodule.starProjection_apply_mem _ _
   · intro hψ
     refine ⟨ψ, ?_⟩
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES hStruct.coreTensor 2).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ)) = ψ
-    have hψES : (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ ∈
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ)) = ψ
+    have hψES : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ ∈
         groundSpaceES hStruct.coreTensor 2 := by
       apply (mem_groundSpaceES_iff hStruct.coreTensor 2 _).2
       simpa using hψ
@@ -450,12 +450,12 @@ theorem AppendixBStructuralData.twoSiteBasicSupportProjection_eq_complement
       1 - parentInteraction hStruct.coreTensor 2 := by
   apply LinearMap.ext
   intro v
-  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES hStruct.coreTensor 2).starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v)) =
-    v - (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2))
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v)) =
+    v - (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
       ((groundSpaceES hStruct.coreTensor 2)ᗮ.starProjection
-        ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v))
+        ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v))
   rw [Submodule.starProjection_orthogonal_val]
   simp
 
