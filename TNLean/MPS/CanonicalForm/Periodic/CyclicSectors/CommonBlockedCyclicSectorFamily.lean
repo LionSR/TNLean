@@ -17,8 +17,8 @@ data that reblocks every sector to a single shared physical blocking length
 so that all sectors can be compared in a uniform canonical form.
 
 Blocking `extra` blocks of length `period` is blocking `p = period * extra` sites; the
-blocked alphabets are identified by `nestedBlockEquiv`, built from
-`Kraus.blockConfigEquiv`.
+blocked alphabets are identified by `nestedBlockEquiv` (from
+`TNLean.MPS.Tensor.Physical.Blocking`), built from `Kraus.blockConfigEquiv`.
 
 The structure and its derived theorems are intermediate constructions — they
 record reindexing, flattening, and common-alphabet transport.  They are
@@ -32,27 +32,6 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 namespace MPSTensor
 
 variable {α : Type*} [Fintype α]
-
-/-- Words of `p = m * e` letters read as `e` blocks of `m` letters. -/
-noncomputable def nestedBlockEquiv (α : Type*) {p m e : ℕ} (h : p = m * e) :
-    (Fin p → α) ≃ (Fin e → Fin m → α) :=
-  (Equiv.arrowCongr (finCongr (h.trans (Nat.mul_comm m e))) (Equiv.refl α)).trans
-    (Kraus.blockConfigEquiv α e m).symm
-
-/-- Reading a word of `p = m * e` letters as `e` blocks of `m` letters, the iterated blocking
-is the direct blocking. -/
-theorem reindexPhysical_nestedBlockEquiv_block_block {D : ℕ} (A : MPTensor α (Fin D))
-    {p m e : ℕ} (h : p = m * e) :
-    Kraus.reindexPhysical (nestedBlockEquiv α h) (Kraus.block (Kraus.block A m) e) =
-      Kraus.block A p := by
-  subst h
-  rw [← reindexPhysical_blockConfigEquiv_block]
-  funext σ
-  simp only [Kraus.reindexPhysical, nestedBlockEquiv, Equiv.trans_apply,
-    Equiv.apply_symm_apply, Kraus.block_apply]
-  change Kraus.evalWord A (List.ofFn fun i : Fin (e * m) => σ (Fin.cast (Nat.mul_comm e m) i)) =
-    Kraus.evalWord A (List.ofFn σ)
-  exact congrArg (Kraus.evalWord A) (List.ofFn_congr (Nat.mul_comm e m).symm σ).symm
 
 /-- **Internal record**: common reblocking data for the cyclic sectors of a finite
 nonzero-weight block family.
