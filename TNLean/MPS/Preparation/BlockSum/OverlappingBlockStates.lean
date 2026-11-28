@@ -100,8 +100,8 @@ variable {d D b : ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (D
 /-- The tensor `P K_j K_jᴴ` of block `j`, with physical index the bond pair of the direct sum:
 the positive part `P` of a tensor `B` of bond dimension `D`, restricted on the right to the bond
 pairs of block `j` placed along `ι_j`. -/
-noncomputable def blockPosTensor {n : ℕ} (ι : (j : Fin b) → Fin (Dj j) → Fin D)
-    (B : MPSTensor n D) (j : Fin b) : MPSTensor (D * D) D :=
+noncomputable def blockPosTensor {α : Type*} [Fintype α] (ι : (j : Fin b) → Fin (Dj j) → Fin D)
+    (B : MPTensor α (Fin D)) (j : Fin b) : MPSTensor (D * D) D :=
   ofPhysicalMatrixLM (Matrix.polarPos (physicalMatrix B) *
     (pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ))
 
@@ -157,7 +157,7 @@ theorem mpvState_eq_blockIsoVector (hι : ∀ j, Function.Injective (ι j))
     {N : ℕ} (hN : ∑ k, ℓ k = N) (hN0 : N ≠ 0) (hℓ : ∀ k, ℓ k ≠ 0) :
     mpvState (Aj j) N = blockIsoVector (fun k => Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) hN
       ((EuclideanSpace.equiv (ι := Cfg (D * D) M) (𝕜 := ℂ)).symm fun τ =>
-        mpvFamily (n := fun _ => D * D)
+        mpvFamily (n := fun _ => Fin (D * D))
           (fun k => blockPosTensor ι (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) j) τ) := by
   classical
   ext s

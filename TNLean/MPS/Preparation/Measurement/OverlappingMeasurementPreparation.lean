@@ -293,7 +293,7 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
   have hN0 : N ≠ 0 := NeZero.ne N
   set y : Fin b → MPVSpace (Fin (D * D)) 1 := fun j =>
     (EuclideanSpace.equiv (ι := Cfg (D * D) 1) (𝕜 := ℂ)).symm fun τ =>
-      mpvFamily (n := fun _ => D * D) (fun _ => blockPosTensor ι B j) τ
+      mpvFamily (n := fun _ => Fin (D * D)) (fun _ => blockPosTensor ι B j) τ
   set Y : MPVSpace (Fin (D * D)) 1 := ∑ j, β j • y j
   have hφY : φ = blockIsoVector (fun _ : Fin 1 => B) hN1 Y := by
     rw [blockIsoVector_sum_smul]

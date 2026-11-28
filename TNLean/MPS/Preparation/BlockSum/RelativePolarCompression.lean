@@ -133,7 +133,7 @@ private theorem polar_column_gram [DecidableEq n] [∀ k, DecidableEq (κ k)]
     one_smul]
 
 /-- The weighted energy of a tensor depends linearly on its physical Gram matrix. -/
-private theorem trace_transfer_eq_gram {d D : ℕ} (X : MPSTensor d D)
+private theorem trace_transfer_eq_gram {α : Type*} [Fintype α] {D : ℕ} (X : MPTensor α (Fin D))
     (σ : Matrix (Fin D) (Fin D) ℂ) :
     (Kraus.transferMap X σ).trace =
       ∑ a, ∑ c, ∑ t, σ c t *
@@ -142,12 +142,12 @@ private theorem trace_transfer_eq_gram {d D : ℕ} (X : MPSTensor d D)
     Matrix.mul_apply, Matrix.conjTranspose_apply, MPSTensor.physicalMatrix, Finset.sum_mul]
   refine Finset.sum_congr rfl fun a _ => ?_
   calc
-    _ = ∑ i : Fin d, ∑ c : Fin D, ∑ t : Fin D,
+    _ = ∑ i : α, ∑ c : Fin D, ∑ t : Fin D,
         X i a c * σ c t * star (X i a t) :=
       Finset.sum_congr rfl fun i _ => Finset.sum_comm
-    _ = ∑ c : Fin D, ∑ i : Fin d, ∑ t : Fin D,
+    _ = ∑ c : Fin D, ∑ i : α, ∑ t : Fin D,
         X i a c * σ c t * star (X i a t) := Finset.sum_comm
-    _ = ∑ c : Fin D, ∑ t : Fin D, ∑ i : Fin d,
+    _ = ∑ c : Fin D, ∑ t : Fin D, ∑ i : α,
         X i a c * σ c t * star (X i a t) :=
       Finset.sum_congr rfl fun c _ => Finset.sum_comm
     _ = _ := by
