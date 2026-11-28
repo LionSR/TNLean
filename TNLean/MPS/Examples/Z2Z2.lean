@@ -47,7 +47,7 @@ split.
   arXiv:2203.12563, lines 2204–2222.
 * `MPOTensor.mpo_mulDiagonal` and `MPOTensor.isNormal_toMPSTensor_mulDiagonal_iff` (diagonal
   dressing): the dressed tensors are an exact representation by normal tensors.
-* `MPSTensor.isNormal_blockTensor` (blocking preserves normality): the original tensors blocked
+* `Kraus.IsNormal.block` (blocking preserves normality): the original tensors blocked
   twice form a normal representation.
 * `MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor` (periodic operators from word traces): the
   sixteen fusion rules `U_g U_h = λ(g,h)^L U_{gh}` from the pair-block compression data.

@@ -88,15 +88,14 @@ theorem mpo_symTensor_mul_even (g h : Fin 4) (N : ℕ) (hN : 0 < N) :
 /-- The blocked tensors are normal.
 
 **Bridge (T.2b):** normality of a blocked tensor is read through the doubled-index view
-(`toMPSTensor_blockTensor`, `MPSTensor.isNormal_blockTensor` on `Fin d`) until the blocking
+(`toMPSTensor_blockTensor`, `Kraus.IsNormal.block`) until the blocking
 lemmas are stated for an arbitrary physical alphabet. -/
 theorem blockedTensor_isNormal (g : Multiplicative (ZMod 2 × ZMod 2)) :
     Kraus.IsNormal (blockedTensor g) := by
   refine (isNormal_toMPSTensor_iff _).1 ?_
   rw [blockedTensor, toMPSTensor_blockTensor]
   refine (isNormal_reindexPhysical_equiv _ _).2 ?_
-  apply MPSTensor.isNormal_blockTensor _ 2 (by omega)
-  exact (isNormal_toMPSTensor_iff _).2 (symMPS_isNormal _)
+  exact ((isNormal_toMPSTensor_iff _).2 (symMPS_isNormal _)).block (by omega)
 
 /-- The original family becomes an exact normal representation after blocking
 two physical sites; the raw odd-ring family is not asserted to be exact. -/

@@ -82,8 +82,8 @@ The comparison `q(E_A) ≤ i(A)` of Proposition 1 is
 
 The proof uses the blocking trick: the sharp Lemma 1 word product of length
 `n ≤ D² − krausRank(A) + 1` becomes a Kraus operator of the `n`-blocked tensor.
-Writing `B := blockTensor A n`, the blocked invertible case uses case (2) to get
-`Kraus.wordSpan B (D² - krausRank B + 1) = ⊤`, which is then padded to level `D²`.
+Writing `B` for `Kraus.block A n` with numbered words, the blocked invertible case uses case (2)
+to get `Kraus.wordSpan B (D² - krausRank B + 1) = ⊤`, which is then padded to level `D²`.
 The blocked noninvertible case uses case (3) to get `Kraus.wordSpan B (D²) = ⊤`
 directly. Transferring the blocked conclusion back to the original tensor
 yields the general bound.
@@ -215,7 +215,7 @@ section
 
 open scoped Matrix ComplexOrder BigOperators
 open Matrix MPSTensor
-open Kraus (blockPhysDim blockTensor)
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 
@@ -400,8 +400,8 @@ The full Wielandt bound combines sharp Lemma 1 (a word product of length
 ≤ D² − krausRank(A) + 1 has nonzero trace) with the blocking trick: the word
 product becomes a Kraus operator of the `n`-blocked tensor. In the blocked
 invertible case, case (2) gives a sharper level
-`D² - krausRank (blockTensor A n) + 1`, which is then padded to `D²`; in the
-blocked noninvertible case, case (3) gives `Kraus.wordSpan (blockTensor A n) (D²) = ⊤`
+`D² - krausRank (Kraus.block A n) + 1`, which is then padded to `D²`; in the
+blocked noninvertible case, case (3) gives `Kraus.wordSpan (Kraus.block A n) (D²) = ⊤`
 directly. This transfers to `Kraus.wordSpan A (D² · n) = ⊤`.
 
 Paper: arXiv:0909.5347, Theorem 1 case (1); Wolf, Theorem 6.9. -/
@@ -413,11 +413,11 @@ Under normality:
 1. By sharp Lemma 1, there exists a word `w` of length
    `n ≤ D² − krausRank(A) + 1` with `tr(Kraus.evalWord A w) ≠ 0`.
 2. This matrix has a nonzero eigenvalue `μ` with eigenvector `φ`.
-3. The `n`-blocked tensor `blockTensor A n` has this matrix as a Kraus operator.
+3. The `n`-blocked tensor `Kraus.block A n` has this matrix as a Kraus operator.
 4. In the blocked invertible case, case (2) yields
-   `Kraus.wordSpan (blockTensor A n) (D² - krausRank (blockTensor A n) + 1) = ⊤`,
-   hence also `Kraus.wordSpan (blockTensor A n) (D²) = ⊤`; in the blocked
-   noninvertible case, case (3) gives `Kraus.wordSpan (blockTensor A n) (D²) = ⊤`
+   `Kraus.wordSpan (Kraus.block A n) (D² - krausRank (Kraus.block A n) + 1) = ⊤`,
+   hence also `Kraus.wordSpan (Kraus.block A n) (D²) = ⊤`; in the blocked
+   noninvertible case, case (3) gives `Kraus.wordSpan (Kraus.block A n) (D²) = ⊤`
    directly.
 5. Transferring back: `Kraus.wordSpan A (D² · n) = ⊤`.
 6. Hence `i(A) ≤ D² · n ≤ (D² − krausRank(A) + 1) · D²`.
@@ -437,19 +437,20 @@ theorem iIndex_le_general_of_isNormal [NeZero D]
     obtain ⟨μ, φ, hμ, hφ, heig⟩ := exists_eigenvector_of_trace_ne_zero _ hw_tr
     set n := w.length with hn_def
     have hn_pos : 0 < n := hw_pos
-    -- Set up the blocked tensor
-    set B := blockTensor (d := d) (n := Fin D) A n
+    -- Number the blocks of length `n`; the case analysis below is stated for numbered letters.
+    set e := Kraus.decodeBlockEquiv d n
+    set B := Kraus.reindexPhysical e (Kraus.block A n)
+    have hWS : ∀ k, Kraus.wordSpan B k = Kraus.wordSpan A (k * n) := fun k ↦ by
+      rw [Kraus.wordSpan_eq_of_range_eq (K := B) (e.surjective.range_comp _), Kraus.wordSpan_block]
     -- B is Kraus.IsNormal
-    have hNB : Kraus.IsNormal B := isNormal_blockTensor A n hn_pos hN
-    -- Encode w as a blocked index
+    have hNB : Kraus.IsNormal B :=
+      (isNormal_reindexPhysical_equiv e _).2 (hN.block hn_pos)
+    -- The blocked letter of w
     set σ₀ : Fin n → Fin d := w.get with hσ₀_def
-    set i₀ := encodeBlock d n σ₀ with hi₀_def
+    set i₀ := e.symm σ₀ with hi₀_def
     -- The Kraus operator B i₀ = Kraus.evalWord A w
     have hBi₀ : B i₀ = Kraus.evalWord A w := by
-      have h1 : B i₀ = Kraus.evalWord A (List.ofFn σ₀) :=
-        blockTensor_apply_encodeBlock A n σ₀
-      have h2 : List.ofFn σ₀ = w := by simp [σ₀, List.ofFn_get]
-      rw [h1, h2]
+      simp [B, i₀, σ₀, Kraus.reindexPhysical, List.ofFn_get]
     -- The eigenvector equation transfers to B i₀
     have heigB : B i₀ *ᵥ φ = μ • φ := by rw [hBi₀]; exact heig
     -- Case split on invertibility
@@ -474,8 +475,7 @@ theorem iIndex_le_general_of_isNormal [NeZero D]
           exact not_isUnit_zero (hBmem ▸ hInv)
         omega
       -- Transfer: Kraus.wordSpan A (D² * n) = ⊤
-      have hAtop : Kraus.wordSpan A (D ^ 2 * n) = ⊤ :=
-        wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A n (D ^ 2) hD2top
+      have hAtop : Kraus.wordSpan A (D ^ 2 * n) = ⊤ := by rwa [hWS] at hD2top
       -- iIndex A ≤ D² * n ≤ D² * (D²-d'+1) = (D²-d'+1) * D²
       calc iIndex A ≤ D ^ 2 * n :=
           Nat.sInf_le ⟨Nat.mul_pos (pow_pos hD_pos 2) hn_pos, hAtop⟩
@@ -489,8 +489,7 @@ theorem iIndex_le_general_of_isNormal [NeZero D]
         wordSpan_eq_top_of_isNormal_of_noninvertible_eigenvector
           B hNB i₀ hNotInv hφ hμ heigB
       -- Transfer: Kraus.wordSpan A (D² * n) = ⊤
-      have hAtop : Kraus.wordSpan A (D ^ 2 * n) = ⊤ :=
-        wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A n (D ^ 2) hD2top
+      have hAtop : Kraus.wordSpan A (D ^ 2 * n) = ⊤ := by rwa [hWS] at hD2top
       calc iIndex A ≤ D ^ 2 * n :=
           Nat.sInf_le ⟨Nat.mul_pos (pow_pos hD_pos 2) hn_pos, hAtop⟩
         _ ≤ D ^ 2 * (D ^ 2 - krausRank A + 1) := by

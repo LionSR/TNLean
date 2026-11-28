@@ -412,10 +412,11 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{lemma}[Chunking: word span embeds into blocked word span]%
     \label{lem:word_span_le_blockTensor}
-    \lean{MPSTensor.wordSpan_le_wordSpan_blockTensor}
+    \lean{Kraus.wordSpan_block}
     \leanok
     \uses{def:word_span,def:blocked_tensor}
-    One has $S_{nL}(A)\subseteq S_n(A^{[L]})$ for all $n,L$.
+    One has $S_n(A^{[L]})=S_{nL}(A)$ for all $n,L$; in particular
+    $S_{nL}(A)\subseteq S_n(A^{[L]})$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -423,25 +424,25 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
     Every length-$nL$ word in the original alphabet
     can be split into $n$ consecutive chunks of length~$L$,
     each of which is a single blocked Kraus operator by
-    (\ref{eq:mps_blocked_tensor}).
+    (\ref{eq:mps_blocked_tensor}); conversely, a length-$n$ word of blocked
+    operators is a length-$nL$ word of~$A$.
     The claim follows by induction on~$n$, using
     Lemma~\ref{lem:word_span_mul}.
 \end{proof}
 
 \begin{lemma}[Word eigenvector gives blocked eigenvector]%
     \label{thm:blockTensor_single_eigenvector}
-    \lean{MPSTensor.blockTensor_single_eigenvector}
+    \lean{Kraus.block_apply}
     \leanok
     \uses{def:blocked_tensor}
     If $A^{w_0}\varphi=\mu\varphi$ for a word $w_0$
-    of length~$L$, then $(A^{[L]})^{j_0}\varphi=\mu\varphi$,
-    where $j_0$ is the encoded blocked index corresponding
-    to $w_0$.
+    of length~$L$, then $(A^{[L]})^{w_0}\varphi=\mu\varphi$,
+    where $w_0$ is read as one letter of the blocked tensor.
 \end{lemma}
 
 \begin{proof}\leanok
     By (\ref{eq:mps_blocked_tensor}),
-    $(A^{[L]})^{j_0}=A^{w_0}$.
+    $(A^{[L]})^{w_0}=A^{w_0}$.
 \end{proof}
 
 \begin{lemma}[Blocked fixed-length matrix spanning]\label{thm:wielandt_blocked_assembly}
@@ -493,7 +494,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{lemma}[Rank-one extraction for blocked tensor]%
     \label{thm:rankone_extraction_blockTensor}
-    \lean{MPSTensor.exists_rankOne_mem_wordSpan_blockTensor}
+    \lean{MPSTensor.exists_rankOne_mem_wordSpan_block}
     \leanok
     \uses{def:word_span,def:normal,def:blocked_tensor}
     Suppose $A$ has bond dimension $D>0$, is normal, and $N_0\ge1$ with
