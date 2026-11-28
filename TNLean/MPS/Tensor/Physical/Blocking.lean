@@ -17,24 +17,20 @@ import Mathlib.Algebra.Star.BigOperators
 /-!
 # Physical blocking of matrix product tensors
 
-The blocked alphabet, the blocked family, and the word and blocking identities
-of a finite matrix family are the declarations of the `Kraus` namespace
-(`Kraus.blockPhysDim`, `Kraus.blockTensor`, `Kraus.evalWord_blockTensor`, and
-their companions). This file holds what is specific to matrix product tensors:
-Kronecker lifts of physical operators, configuration equivalences, canonical
-normalization, and matrix-product-vector statements.
+Blocking `L` sites is `Kraus.block A L`, the family indexed by the words `Fin L → α`; the
+word and configuration identities of a blocked family are `Kraus.evalWord_block` and
+`Kraus.ofFn_blockConfigEquiv`. This file holds what is specific to matrix product tensors:
+Kronecker lifts of physical operators, canonical normalization, and matrix-product-vector
+statements.
 -/
 
 open MPTensor
 
 open scoped Matrix
-open Kraus (blockPhysDim blockPhysDim_eq_pow singleBlockEquiv decodeBlock wordOfBlock
-  decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm blockTensor flattenBlockedWord
-  evalWord_blockTensor length_flattenBlockedWord)
 
 namespace MPSTensor
 
-variable {d D L : ℕ}
+variable {α : Type*} {D L : ℕ}
 
 /-- Fixed-length injectivity persists at positive multiples of the length. -/
 theorem _root_.MPTensor.isNBlkInjective_mul_of_isNBlkInjective {α : Type*}
@@ -64,70 +60,57 @@ theorem _root_.MPTensor.isNBlkInjective_mul_of_isNBlkInjective {α : Type*}
 
 /-! ### The Kronecker-power lift of a physical-index operator through blocking
 
-For a physical-index operator `P` on `Fin d`, the blocked operator `blockKron`
-acts on the blocked physical index `Fin (blockPhysDim d L)` by the entrywise
-product of `P` over the `L` decoded sites.  This is the operator that makes
-blocking commute with physical twisting. -/
+For a physical-index operator `P` from `β` to `α`, the blocked operator `blockKron` acts on
+the blocked physical index `Fin L → α` by the entrywise product of `P` over the `L` sites.
+This is the operator that makes blocking commute with physical twisting. -/
 
 section KroneckerLift
 
-variable {m n p : ℕ}
+variable {β γ : Type*}
 
-/-- The Kronecker-power lift of a physical-index map `P : ℂⁿ → ℂᵐ` through length-`L`
-blocking: `(blockKron P) I J = ∏ k, P (decode I k) (decode J k)`.  The map may be
-rectangular, as for the layers `(V⁽ʲ⁾)^{⊗2^{k-j}}` of arXiv:2307.01696, eq. (16). -/
-noncomputable def blockKron (L : ℕ) (P : Matrix (Fin m) (Fin n) ℂ) :
-    Matrix (Fin (blockPhysDim m L)) (Fin (blockPhysDim n L)) ℂ :=
-  fun I J => ∏ k : Fin L, P (decodeBlock m L I k) (decodeBlock n L J k)
+/-- The Kronecker-power lift of a physical-index map `P : ℂ^β → ℂ^α` through length-`L`
+blocking: `(blockKron P) I J = ∏ k, P (I k) (J k)`.  The map may be rectangular, as for the
+layers `(V⁽ʲ⁾)^{⊗2^{k-j}}` of arXiv:2307.01696, eq. (16). -/
+def blockKron (L : ℕ) (P : Matrix α β ℂ) : Matrix (Fin L → α) (Fin L → β) ℂ :=
+  fun I J => ∏ k : Fin L, P (I k) (J k)
+
+@[simp] lemma blockKron_apply (L : ℕ) (P : Matrix α β ℂ) (I : Fin L → α) (J : Fin L → β) :
+    blockKron L P I J = ∏ k : Fin L, P (I k) (J k) := rfl
 
 /-- The Kronecker lift is multiplicative: `blockKron L (P * Q) = blockKron L P *
 blockKron L Q`.  Summing over the intermediate blocked index is summing over
 length-`L` words, and the product distributes site by site. -/
-lemma blockKron_mul (L : ℕ) (P : Matrix (Fin m) (Fin n) ℂ) (Q : Matrix (Fin n) (Fin p) ℂ) :
+lemma blockKron_mul [Fintype β] (L : ℕ) (P : Matrix α β ℂ)
+    (Q : Matrix β γ ℂ) :
     blockKron L (P * Q) = blockKron L P * blockKron L Q := by
-  classical
   ext I J
   simp only [blockKron, Matrix.mul_apply]
-  -- Sum over the intermediate blocked index = sum over words.
-  rw [← Equiv.sum_comp (decodeBlockEquiv n L).symm
-    (fun K => (∏ k : Fin L, P (decodeBlock m L I k) (decodeBlock n L K k)) *
-      ∏ k : Fin L, Q (decodeBlock n L K k) (decodeBlock p L J k))]
-  simp only [decodeBlock_decodeBlockEquiv_symm]
-  -- Distribute the product over the sum of words.
-  rw [Finset.prod_univ_sum (t := fun _ : Fin L => (Finset.univ : Finset (Fin n)))
-    (f := fun (k : Fin L) (a : Fin n) =>
-      P (decodeBlock m L I k) a * Q a (decodeBlock p L J k)),
-    Fintype.piFinset_univ]
-  refine Finset.sum_congr rfl (fun w _ => ?_)
-  rw [Finset.prod_mul_distrib]
+  rw [Finset.prod_univ_sum (t := fun _ : Fin L => (Finset.univ : Finset β))
+    (f := fun (k : Fin L) (a : β) => P (I k) a * Q a (J k)), Fintype.piFinset_univ]
+  exact Finset.sum_congr rfl fun w _ => Finset.prod_mul_distrib
 
 /-- The Kronecker lift of the identity is the identity. -/
-lemma blockKron_one (L : ℕ) :
-    blockKron L (1 : Matrix (Fin d) (Fin d) ℂ) = 1 := by
-  classical
+lemma blockKron_one [DecidableEq α] (L : ℕ) :
+    blockKron L (1 : Matrix α α ℂ) = 1 := by
   ext I J
   simp only [blockKron, Matrix.one_apply]
   by_cases hIJ : I = J
   · simp [hIJ]
   · rw [ite_eq_right hIJ]
     -- Some site differs, contributing a zero factor.
-    have : ∃ k : Fin L, decodeBlock d L I k ≠ decodeBlock d L J k := by
-      by_contra hcon
-      rw [not_exists] at hcon
-      exact hIJ ((decodeBlockEquiv d L).injective (funext fun k => not_not.1 (hcon k)))
-    obtain ⟨k, hk⟩ := this
+    obtain ⟨k, hk⟩ : ∃ k : Fin L, I k ≠ J k := Function.ne_iff.mp hIJ
     exact Finset.prod_eq_zero (Finset.mem_univ k) (Matrix.one_apply_ne hk)
 
 /-- The Kronecker lift commutes with the conjugate transpose:
 `(blockKron L P)ᴴ = blockKron L (Pᴴ)`. -/
-lemma blockKron_conjTranspose (L : ℕ) (P : Matrix (Fin m) (Fin n) ℂ) :
+lemma blockKron_conjTranspose (L : ℕ) (P : Matrix α β ℂ) :
     (blockKron L P)ᴴ = blockKron L Pᴴ := by
   ext I J
   simp only [Matrix.conjTranspose_apply, blockKron, star_prod]
 
 /-- The Kronecker power preserves unitarity: if `P * Pᴴ = 1` then
 `blockKron L P * (blockKron L P)ᴴ = 1`. -/
-lemma blockKron_mul_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
+lemma blockKron_mul_conjTranspose [Fintype α] [DecidableEq α] (L : ℕ) (P : Matrix α α ℂ)
     (hP : P * Pᴴ = 1) :
     blockKron L P * (blockKron L P)ᴴ = 1 := by
   rw [blockKron_conjTranspose, ← blockKron_mul, hP, blockKron_one]
@@ -137,15 +120,13 @@ lemma blockKron_mul_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
 
 arXiv:2307.01696, eq. (16): the layer `(V⁽ʲ⁾)^{⊗2^{k-j}}` acts sitewise on the regrouped
 block. -/
-theorem blockTensor_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (C : MPSTensor n D)
+theorem block_rotatePhysical [Fintype β] (W : Matrix α β ℂ) (C : MPTensor β (Fin D))
     (L : ℕ) :
-    blockTensor (rotatePhysical W C) L =
-      rotatePhysical (blockKron L W) (blockTensor C L) := by
-  classical
+    Kraus.block (rotatePhysical W C) L =
+      rotatePhysical (blockKron L W) (Kraus.block C L) := by
   funext I
-  change Kraus.evalWord (rotatePhysical W C) (List.ofFn (decodeBlock m L I)) = _
-  rw [evalWord_rotatePhysical_ofFn, rotatePhysical_apply]
-  exact (Fintype.sum_equiv (decodeBlockEquiv n L) _ _ fun J => rfl).symm
+  rw [Kraus.block_apply, evalWord_rotatePhysical_ofFn]
+  rfl
 
 end KroneckerLift
 
@@ -162,22 +143,22 @@ then the same equation holds after replacing letters by words of length \(L\):
 This is the iterated form of the normalization used in arXiv:quant-ph/0608197,
 Theorem 12, proof line 1450. -/
 theorem sum_evalWord_mul_conjTranspose_evalWord
-    (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hRight : ∑ i : Fin d, A i * (A i)ᴴ = 1) :
+    [Fintype α] (A : α → Matrix (Fin D) (Fin D) ℂ)
+    (hRight : ∑ i : α, A i * (A i)ᴴ = 1) :
     ∀ L : ℕ,
-      ∑ ρ : Fin L → Fin d,
+      ∑ ρ : Fin L → α,
         Kraus.evalWord A (List.ofFn ρ) * (Kraus.evalWord A (List.ofFn ρ))ᴴ = 1 := by
   classical
   intro L
-  let Aadj : Fin d → Matrix (Fin D) (Fin D) ℂ := fun i => (A i)ᴴ
-  have hLeft : ∑ i : Fin d, (Aadj i)ᴴ * Aadj i = 1 := by
+  let Aadj : α → Matrix (Fin D) (Fin D) ℂ := fun i => (A i)ᴴ
+  have hLeft : ∑ i : α, (Aadj i)ᴴ * Aadj i = 1 := by
     simpa [Aadj] using hRight
-  let revEquiv : (Fin L → Fin d) ≃ (Fin L → Fin d) :=
-    Equiv.arrowCongr Fin.revPerm (Equiv.refl (Fin d))
+  let revEquiv : (Fin L → α) ≃ (Fin L → α) :=
+    Equiv.arrowCongr Fin.revPerm (Equiv.refl α)
   calc
-    ∑ ρ : Fin L → Fin d,
+    ∑ ρ : Fin L → α,
         Kraus.evalWord A (List.ofFn ρ) * (Kraus.evalWord A (List.ofFn ρ))ᴴ
-      = ∑ ρ : Fin L → Fin d,
+      = ∑ ρ : Fin L → α,
           (Kraus.evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ *
             Kraus.evalWord Aadj (List.ofFn (revEquiv ρ)) := by
             refine Finset.sum_congr rfl ?_
@@ -197,52 +178,34 @@ theorem sum_evalWord_mul_conjTranspose_evalWord
                   (Kraus.evalWord A (List.ofFn ρ))ᴴ := by
               simpa using congrArg Matrix.conjTranspose hAdjEval
             rw [hAdjEval, hEvalAdj]
-    _ = ∑ ρ : Fin L → Fin d,
+    _ = ∑ ρ : Fin L → α,
           (Kraus.evalWord Aadj (List.ofFn ρ))ᴴ * Kraus.evalWord Aadj (List.ofFn ρ) := by
           simpa [revEquiv] using
             (Fintype.sum_equiv revEquiv
-              (f := fun ρ : Fin L → Fin d =>
+              (f := fun ρ : Fin L → α =>
                 (Kraus.evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ *
                   Kraus.evalWord Aadj (List.ofFn (revEquiv ρ)))
-              (g := fun ρ : Fin L → Fin d =>
+              (g := fun ρ : Fin L → α =>
                 (Kraus.evalWord Aadj (List.ofFn ρ))ᴴ * Kraus.evalWord Aadj (List.ofFn ρ))
               (by intro ρ; rfl))
     _ = 1 := Kraus.sum_evalWord_conjTranspose_mul_evalWord Aadj hLeft L
 
-variable {d D : ℕ}
-
-@[simp] lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d 1)) :
-    mpv (blockTensor (d := d) (n := Fin D) A 1) σ =
-      mpv A (fun n => singleBlockEquiv d (σ n)) := by
-  simp [mpv, coeff, evalWord_blockTensor, List.map_ofFn]
-  rfl
+/-- Blocking one site reads every block as its single letter. -/
+@[simp] lemma mpv_block_one (A : MPTensor α (Fin D)) {N : ℕ} (σ : Fin N → Fin 1 → α) :
+    mpv (Kraus.block A 1) σ = mpv A (fun n => σ n 0) := by
+  simp only [mpv, coeff, Kraus.evalWord_block]
+  congr 2
+  induction N with
+  | zero => rfl
+  | succ N ih => simp [List.ofFn_succ, ih (fun n => σ n.succ)]
 
 /-- Physical blocking preserves the `SameMPV` relation. -/
-theorem _root_.MPTensor.SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ) :
-    SameMPV (Kraus.blockTensor (d := d) (n := Fin D) A L)
-      (Kraus.blockTensor (d := d) (n := Fin D) B L) := by
+theorem _root_.MPTensor.SameMPV.block {A B : MPTensor α (Fin D)} (hSame : SameMPV A B)
+    (L : ℕ) : SameMPV (Kraus.block A L) (Kraus.block B L) := by
   intro N σ
-  classical
-  -- Use the same flattened configuration for both tensors.
-  set flat : List (Fin d) := flattenBlockedWord d L (List.ofFn σ) with flat_def
-  have hlen : flat.length = N * L := by
-    simpa [flat_def] using (length_flattenBlockedWord (d := d) (L := L) (List.ofFn σ))
-  set σflat : Fin (N * L) → Fin d :=
-    fun i => flat.get (Fin.cast hlen.symm i) with σflat_def
-  have hofFn : List.ofFn σflat = flat := by
-    rw [σflat_def]
-    conv_rhs => rw [← List.ofFn_get flat]
-    have hcongr :=
-      (List.ofFn_congr (m := N * L) (n := flat.length) hlen.symm
-        (fun i : Fin (N * L) => flat.get (Fin.cast hlen.symm i)))
-    simpa [Function.comp, Fin.cast_cast] using hcongr
-  have hblock (T : MPSTensor d D) :
-      mpv (Kraus.blockTensor (d := d) (n := Fin D) T L) σ = mpv T σflat := by
-    simp [mpv, coeff, hofFn, flat_def, evalWord_blockTensor]
-  calc
-    mpv (Kraus.blockTensor (d := d) (n := Fin D) A L) σ = mpv A σflat := hblock A
-    _ = mpv B σflat := hSame (N * L) σflat
-    _ = mpv (Kraus.blockTensor (d := d) (n := Fin D) B L) σ := (hblock B).symm
+  have hblock (T : MPTensor α (Fin D)) :
+      mpv (Kraus.block T L) σ = mpv T (Kraus.blockConfigEquiv α N L σ) := by
+    simp only [mpv, coeff, Kraus.evalWord_block, Kraus.ofFn_blockConfigEquiv]
+  rw [hblock, hblock, hSame]
 
 end MPSTensor

@@ -53,7 +53,6 @@ the residual.
 open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -110,7 +109,7 @@ theorem ofReal_norm_mpvState_sq (A : MPSTensor d D) (N : ℕ) :
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Linear images of the positive parts.** In the setting of
-`exists_norm_polarPos_blockTensor_sub_le`, with `0 < γ < 1`, every linear map `L` on tensors
+`exists_norm_polarPos_block_sub_le`, with `0 < γ < 1`, every linear map `L` on tensors
 with physical dimension `D²` satisfies `‖L(P_q) - L(P_∞)‖ ≤ K e^{-γ q/ξ}` for all `q`, where
 `P_q` is the positive part of the `q`-site blocked tensor and `P_∞` the fixed-point tensor. -/
 theorem exists_norm_map_polarPosTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
@@ -120,14 +119,14 @@ theorem exists_norm_map_polarPosTensor_sub_le (A : MPSTensor d D) (hN : Kraus.Is
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) {F : Type*} [NormedAddCommGroup F] [NormedSpace ℂ F]
     (L : MPSTensor (D * D) D →ₗ[ℂ] F) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ,
-      ‖L (polarPosTensor (blockTensor A q)) - L (fixedPointTensor σ)‖ ≤
+      ‖L (polarPosTensor (Kraus.block A q)) - L (fixedPointTensor σ)‖ ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ q := by
   obtain ⟨K₁, hK₁, hpos⟩ :=
-    exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+    exists_norm_polarPos_block_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set Φ := LinearMap.toContinuousLinearMap (L ∘ₗ ofPhysicalMatrixLM)
   refine ⟨‖Φ‖ * K₁, by positivity, fun q => ?_⟩
-  have h : L (polarPosTensor (blockTensor A q)) - L (fixedPointTensor σ) =
-      Φ (Matrix.polarPos (physicalMatrix (blockTensor A q)) -
+  have h : L (polarPosTensor (Kraus.block A q)) - L (fixedPointTensor σ) =
+      Φ (Matrix.polarPos (physicalMatrix (Kraus.block A q)) -
         (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
     rw [map_sub, ← ofPhysicalMatrix_sqrt_transpose_kronecker_one σ]
     rfl
@@ -237,7 +236,7 @@ theorem norm_sq_sub_norm_inner_sq_le {F : Type*} [NormedAddCommGroup F]
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Overlap of the positive part with the fixed point, to second order.** In the setting of
-`exists_norm_polarPos_blockTensor_sub_le`, with `0 < γ < 1` and `x = e^{-γ/ξ}`, there is
+`exists_norm_polarPos_block_sub_le`, with `0 < γ < 1` and `x = e^{-γ/ξ}`, there is
 `C > 0` such that for all `q` and all `M ≥ 2` with `C y < 1`, `y = M x^{2q} = M e^{-2γ q/ξ}`,
 `1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩| ≤ C y e^{C y}`.
 
@@ -257,7 +256,7 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ q M : ℕ, 2 ≤ M →
       C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q) < 1 →
-      1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ ≤
+      1 - ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖ ≤
         C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q) *
           Real.exp (C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q)) := by
   have := Matrix.neZero_of_trace_eq_one htr
@@ -309,7 +308,7 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
   have hKιy : Kι ^ 2 * y < 1 := lt_of_le_of_lt (mul_le_mul_of_nonneg_right hC1 hy0) hsmall
   have hzcy : 4 * zc * y < 1 := lt_of_le_of_lt (mul_le_mul_of_nonneg_right hC2 hy0) hsmall
   -- Write `τ_q = α (τ_∞ + Z)` with `τ_∞ Z τ_∞ = 0`.
-  set Pq := polarPosTensor (blockTensor A q) with hPq
+  set Pq := polarPosTensor (Kraus.block A q) with hPq
   set T := transferMatrix (Kraus.mixedMapLM Pq (fixedPointTensor σ)) with hTdef
   set α := (Kraus.mixedMapLM Pq (fixedPointTensor σ) σ).trace with hαdef
   have hTτ : ‖T - τ‖ ≤ Kt * δ := hT q
@@ -317,8 +316,8 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
   have hιi := norm_sqrtWeightLM_fixedPointTensor hσ.posSemidef htr
   have hιq : ‖sqrtWeightLM σ Pq‖ = 1 := by
     refine norm_sqrtWeightLM_eq_one hσ.posSemidef ?_
-    change (Kraus.transferMap (polarPosTensor (blockTensor A q)) σ).trace = 1
-    rw [transferMap_polarPosTensor_blockTensor, Module.End.pow_apply,
+    change (Kraus.transferMap (polarPosTensor (Kraus.block A q)) σ).trace = 1
+    rw [transferMap_polarPosTensor_block, Module.End.pow_apply,
       Function.iterate_fixed hfix, htr]
   have hαι : α = ⟪sqrtWeightLM σ (fixedPointTensor σ), sqrtWeightLM σ Pq⟫_ℂ :=
     (inner_sqrtWeightLM hσ.posSemidef Pq (fixedPointTensor σ)).symm
@@ -433,7 +432,7 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
       (Kι ^ 2 + 2 * E₀ * zc) * y * Real.exp (C * y) := by ring
   linarith only [hlow, h1, h2, h3, h4]
 
-/-- **One block, to second order.** In the setting of `exists_norm_polarPos_blockTensor_sub_le`,
+/-- **One block, to second order.** In the setting of `exists_norm_polarPos_block_sub_le`,
 with `0 < γ < 1` and `x = e^{-γ/ξ}`, there is `K ≥ 0` with
 `‖φ_1(P_q)‖² - |⟨φ_1(P_∞)|φ_1(P_q)⟩|² ≤ K x^{2q}` for all `q`. The left side is at most
 `‖φ_1(P_q) - φ_1(P_∞)‖²` since `φ_1(P_∞)` is a unit vector, and `φ_1` is linear. -/
@@ -443,8 +442,8 @@ theorem exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le (A : MPSTensor d D)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ,
-      ‖mpvState (polarPosTensor (blockTensor A q)) 1‖ ^ 2 -
-          ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) 1‖ ^ 2 ≤
+      ‖mpvState (polarPosTensor (Kraus.block A q)) 1‖ ^ 2 -
+          ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) 1‖ ^ 2 ≤
         K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨Kμ, hKμ, hμ⟩ := exists_norm_map_polarPosTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
@@ -455,15 +454,15 @@ theorem exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le (A : MPSTensor d D)
     rw [mpvOverlap_fixedPointTensor_self hσ.posSemidef htr] at h1
     exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
       (Complex.ofReal_injective (by rw [h1]; simp))
-  have haw : mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) 1 =
-      ⟪mpvState (fixedPointTensor σ) 1, mpvState (polarPosTensor (blockTensor A q)) 1⟫_ℂ := by
+  have haw : mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) 1 =
+      ⟪mpvState (fixedPointTensor σ) 1, mpvState (polarPosTensor (Kraus.block A q)) 1⟫_ℂ := by
     rw [mpvOverlap_eq_star_mpvInner, mpvInner]; exact inner_conj_symm _ _
-  have hdist : ‖mpvState (polarPosTensor (blockTensor A q)) 1 -
+  have hdist : ‖mpvState (polarPosTensor (Kraus.block A q)) 1 -
       mpvState (fixedPointTensor σ) 1‖ ≤ Kμ * Real.exp (-γ / correlationLength lam₂) ^ q :=
     hμ q
   rw [haw]
   refine (norm_sq_sub_norm_inner_sq_le hw).trans ?_
-  calc ‖mpvState (polarPosTensor (blockTensor A q)) 1 - mpvState (fixedPointTensor σ) 1‖ ^ 2
+  calc ‖mpvState (polarPosTensor (Kraus.block A q)) 1 - mpvState (fixedPointTensor σ) 1‖ ^ 2
       ≤ (Kμ * Real.exp (-γ / correlationLength lam₂) ^ q) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) hdist 2
     _ = Kμ ^ 2 * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q := by

@@ -41,7 +41,7 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 * `MPSTensor.exp_neg_div_correlationLength_le_one` — `e^{-γ/ξ} ≤ 1` for `|λ₂| ≤ 1`.
 * `MPSTensor.exists_norm_transferMap_pow_sub_le` — the transfer-map gap.
 * `MPSTensor.exists_norm_gram_transferMatrix_sub_le` — uniform two-sided Gram/transfer bounds.
-* `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` — the rate of `P_q → P_∞`.
+* `MPSTensor.exists_norm_polarPos_block_sub_le` — the rate of `P_q → P_∞`.
 
 ## References
 
@@ -54,7 +54,6 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -319,13 +318,13 @@ open scoped Matrix.Norms.L2Operator in
 
 arXiv:2103.13367, Supplemental Material, eqs. (19) and (21) (`τ_AA = τ_BB + R`, read with the
 lower lines as input). -/
-theorem exists_norm_gram_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
+theorem exists_norm_gram_block_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ,
-      ‖(physicalMatrix (blockTensor A q))ᴴ * physicalMatrix (blockTensor A q) -
+      ‖(physicalMatrix (Kraus.block A q))ᴴ * physicalMatrix (Kraus.block A q) -
           σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ q := by
   obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
@@ -333,7 +332,7 @@ theorem exists_norm_gram_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNo
     (fun (a b : Fin D × Fin D) => Matrix.single b.2 a.2 (1 : ℂ))
     (fun _ b => b.1) (fun a _ => a.1)
   refine ⟨K, hK, fun q => h q _ fun a b => ?_⟩
-  rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, Kraus.transferMap_blockTensor,
+  rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, Kraus.transferMap_block,
     transpose_kronecker_one_apply, Matrix.sub_apply]
 
 /-- The fixed-point tensor `P_∞`, read as a `D² × D²` matrix, is the square root of
@@ -358,23 +357,23 @@ positive parts with the same exponent. This Lipschitz step is due to Murota, Sau
 Matos, and Rinaldi, arXiv:2606.24475, App. B3, eqs. (S27)–(S32), for diagonalizable transfer
 matrices; eqs. (S33)–(S38) there extend it to the remaining normal tensors at every correlation
 length larger than `ξ`. -/
-theorem exists_norm_polarPos_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
+theorem exists_norm_polarPos_block_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ,
-      ‖Matrix.polarPos (physicalMatrix (blockTensor A q)) -
+      ‖Matrix.polarPos (physicalMatrix (Kraus.block A q)) -
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ q := by
-  obtain ⟨K, hK, h⟩ := exists_norm_gram_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨K, hK, h⟩ := exists_norm_gram_block_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   have hpd : (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)).PosDef :=
     (Matrix.PosDef.transpose_iff.2 hσ).kronecker Matrix.PosDef.one
   have hsp : IsStrictlyPositive (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := hpd.isStrictlyPositive
   obtain ⟨L, hL, hlip⟩ := hsp.exists_norm_sqrt_sub_sqrt_le
   refine ⟨L * K, by positivity, fun q => ?_⟩
   have h1 := hlip _
-    (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix (blockTensor A q))).nonneg
+    (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix (Kraus.block A q))).nonneg
   rw [sqrt_transpose_kronecker_one hσ.posSemidef] at h1
   rw [mul_assoc]
   exact h1.trans (mul_le_mul_of_nonneg_left (h q) hL)

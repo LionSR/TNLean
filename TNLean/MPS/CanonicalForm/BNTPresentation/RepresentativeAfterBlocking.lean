@@ -23,8 +23,8 @@ arXiv:1606.00608, lines 249--251.
 * `exists_cpsvCanonicalForm_representative_after_blocking` gives, after a
   positive blocking length, a tensor in literal CPSV canonical form with the same
   positive-length MPV family as the blocked input tensor.
-* `MPSTensor.exists_blockTensor_normal_sectors`,
-  `MPSTensor.exists_blockTensor_normal_sectors_fixedPoints`: normal sectors of an arbitrary tensor
+* `MPSTensor.exists_block_normal_sectors`,
+  `MPSTensor.exists_block_normal_sectors_fixedPoints`: normal sectors of an arbitrary tensor
   after fixed blocking.
 
 ## References
@@ -41,11 +41,10 @@ open MPTensor
 section RepresentativeAfterBlocking
 
 open scoped BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- After a positive blocking length, every tensor has a possibly different
 representative in literal CPSV canonical form which generates the same
@@ -58,12 +57,12 @@ input tensor's original bond coordinates.
 Source: arXiv:1606.00608, lines 214--251, especially eqs. `II_Aiplusk1` and
 `II_CF1` and the proposition at lines 249--251. -/
 theorem exists_leftCanonical_cpsvCanonicalFormData_after_blocking
-    (A : MPSTensor d D) :
+    (A : MPTensor α (Fin D)) :
     ∃ p : ℕ, 0 < p ∧
-      ∃ D' : ℕ, ∃ B : MPSTensor (blockPhysDim d p) D',
+      ∃ D' : ℕ, ∃ B : MPTensor (Fin p → α) (Fin D'),
         ∃ data : CPSVCanonicalFormData B,
           (∀ j, IsLeftCanonical (data.blocks j)) ∧
-          SameMPV₂Pos (blockTensor A p) B := by
+          SameMPV₂Pos (Kraus.block A p) B := by
   have hRefl : SameMPV₂Pos A A := by
     intro N _hN σ
     rfl
@@ -72,8 +71,8 @@ theorem exists_leftCanonical_cpsvCanonicalFormData_after_blocking
       hPrimitiveA, _hPrimitiveB, hIrreducibleA, _hIrreducibleB,
       hDimA, _hDimB⟩ :=
     unconditional_commonPrimitiveIrreducibleBlocks A A hRefl
-  let B : MPSTensor (blockPhysDim d p) (∑ k : Fin rA, dimA k) :=
-    toTensorFromBlocks (α := Fin (blockPhysDim d p)) μA blocksA
+  let B : MPTensor (Fin p → α) (Fin (∑ k : Fin rA, dimA k)) :=
+    toTensorFromBlocks (α := Fin p → α) μA blocksA
   have hNormalA : ∀ k, IsNormalTensor (blocksA k) := by
     intro k
     let : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
@@ -95,11 +94,11 @@ input tensor's original bond coordinates.
 Source: arXiv:1606.00608, lines 214--251, especially eqs. `II_Aiplusk1` and
 `II_CF1` and the proposition at lines 249--251. -/
 theorem exists_cpsvCanonicalForm_representative_after_blocking
-    (A : MPSTensor d D) :
+    (A : MPTensor α (Fin D)) :
     ∃ p : ℕ, 0 < p ∧
-      ∃ D' : ℕ, ∃ B : MPSTensor (blockPhysDim d p) D',
+      ∃ D' : ℕ, ∃ B : MPTensor (Fin p → α) (Fin D'),
         IsCPSVCanonicalForm B ∧
-        SameMPV₂Pos (blockTensor A p) B := by
+        SameMPV₂Pos (Kraus.block A p) B := by
   obtain ⟨p, hp, D', B, data, _, heq⟩ :=
     exists_leftCanonical_cpsvCanonicalFormData_after_blocking A
   exact ⟨p, hp, D', B, data.isCPSVCanonicalForm, heq⟩
@@ -131,19 +130,18 @@ other physical lengths or transport circuits from grouped sites to physical site
 -/
 
 open scoped BigOperators ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- An arbitrary tensor has, after a fixed positive blocking, an exact expansion in
 inequivalent left-canonical normal sectors. The coefficients are the actual copy power sums
 `P.coeff N j`; no coefficient is required to survive at every length.
 Source: arXiv:1606.00608, Section II.C; arXiv:2307.01696, eqs. (S2)--(S4). -/
-theorem exists_blockTensor_normal_sectors (A : MPSTensor d D) :
-    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (Fin (blockPhysDim d p)),
-      SameMPV₂Pos (blockTensor A p) P.toTensor ∧
+theorem exists_block_normal_sectors (A : MPTensor α (Fin D)) :
+    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (Fin p → α),
+      SameMPV₂Pos (Kraus.block A p) P.toTensor ∧
       (∀ j, IsNormalTensor (P.basis j)) ∧
       (∀ j, IsLeftCanonical (P.basis j)) ∧
       BlocksNotGaugePhaseEquiv P.basis := by
@@ -162,10 +160,10 @@ theorem exists_blockTensor_normal_sectors (A : MPSTensor d D) :
 and a strict mixed-transfer gap. All the analytic hypotheses used by overlapping-block
 measurement preparation follow from the canonical reduction.
 Source: arXiv:2307.01696, eq. (5), eq. (S2), and the proof of Lemma 1'(ii). -/
-theorem exists_blockTensor_normal_sectors_fixedPoints (A : MPSTensor d D) :
-    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (Fin (blockPhysDim d p)),
+theorem exists_block_normal_sectors_fixedPoints (A : MPTensor α (Fin D)) :
+    ∃ p : ℕ, 0 < p ∧ ∃ P : SectorDecomposition (Fin p → α),
       ∃ σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ,
-        SameMPV₂Pos (blockTensor A p) P.toTensor ∧
+        SameMPV₂Pos (Kraus.block A p) P.toTensor ∧
         (∀ j, Kraus.IsNormal (P.basis j)) ∧
         (∀ j, IsLeftCanonical (P.basis j)) ∧
         (∀ j, (σ j).PosDef) ∧ (∀ j, (σ j).trace = 1) ∧
@@ -173,7 +171,7 @@ theorem exists_blockTensor_normal_sectors_fixedPoints (A : MPSTensor d D) :
         (∀ j k, j ≠ k → ∀ z,
           Module.End.HasEigenvalue (Kraus.mixedMapLM (P.basis j) (P.basis k)) z → ‖z‖ < 1) := by
   classical
-  obtain ⟨p, hp, P, heq, hnormal, hleft, hneq⟩ := exists_blockTensor_normal_sectors A
+  obtain ⟨p, hp, P, heq, hnormal, hleft, hneq⟩ := exists_block_normal_sectors A
   have hdim : ∀ j, 0 < P.basisDim j := fun j =>
     Nat.pos_of_ne_zero (hnormal j).bondDim_ne_zero
   let : ∀ j, NeZero (P.basisDim j) := fun j => ⟨(hdim j).ne'⟩

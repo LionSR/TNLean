@@ -25,7 +25,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -149,15 +148,14 @@ theorem mpv_blockSum (hι : ∀ j, Function.Injective (ι j))
 /-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1`:
 `B = ∑ⱼ μⱼ^q B_j K_jᴴ`, where `B_j` is the blocked tensor of the block `j` and `K_j` embeds its
 bond pairs. -/
-theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι j))
+theorem physicalMatrix_block_blockSum (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) {q : ℕ} (hq : q ≠ 0) :
-    physicalMatrix (blockTensor (blockSum Aj ι μ) q) =
-      ∑ j, μ j ^ q • (physicalMatrix (blockTensor (Aj j) q) * (pairEmbedding (ι j))ᴴ) := by
+    physicalMatrix (Kraus.block (blockSum Aj ι μ) q) =
+      ∑ j, μ j ^ q • (physicalMatrix (Kraus.block (Aj j) q) * (pairEmbedding (ι j))ᴴ) := by
   ext w p
-  have hw : List.ofFn (Kraus.decodeBlock d q w) ≠ [] := by
+  have hw : List.ofFn w ≠ [] := by
     rw [← List.length_pos_iff, List.length_ofFn]; omega
-  simp only [physicalMatrix, blockTensor, Kraus.blockTensor, Kraus.reindexPhysical,
-    Kraus.block_apply, Kraus.decodeBlockEquiv_apply]
+  simp only [physicalMatrix, Kraus.block_apply]
   rw [evalWord_blockSum hι hdisj μ _ hw, List.length_ofFn, Matrix.sum_apply,
     Matrix.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -169,7 +167,7 @@ theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι
   rcases p with ⟨x, y⟩
   simp only [conjTranspose_apply, pairEmbedding_apply, coordEmbedding, of_apply, Prod.mk.injEq,
     physicalMatrix]
-  by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2, Kraus.reindexPhysical]
+  by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2]
 
 
 /-! ### The bond pairs of the blocks -/

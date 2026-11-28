@@ -16,7 +16,7 @@ import QICLean.Analysis.FunctionalCalculus.MatrixPolarUniqueness
 /-!
 # Polar decomposition of a tensor injective on a set of bond pairs
 
-A tensor `B : MPSTensor n D` is *injective on* a set `S` of pairs of bond indices
+A tensor `B : MPTensor α (Fin D)` is *injective on* a set `S` of pairs of bond indices
 (`MPSTensor.IsInjectiveOn`) if its matrices vanish outside the entries `S` and span all matrices
 supported on `S`. For `S` the rectangle `[0, a) × [0, b)` this may be read as injectivity, in
 the sense of the span of its matrices, of a tensor with bond dimensions `a` and `b` padded with
@@ -51,7 +51,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-variable {n D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- A tensor is **injective on** a set `S` of pairs of bond indices if its matrices vanish
 outside the entries `S` and span every matrix unit `|α⟩⟨β|` with `(α, β) ∈ S`. For the rectangle
@@ -62,12 +62,12 @@ not a statement proved here. For `S` the set of all pairs it is `Kraus.IsInjecti
 
 arXiv:2307.01696, footnote to the paragraph "Approximation through the fixed-point state": the
 blocked tensors are assumed injective. -/
-def IsInjectiveOn (B : MPSTensor n D) (S : Set (Fin D × Fin D)) : Prop :=
+def IsInjectiveOn (B : MPTensor α (Fin D)) (S : Set (Fin D × Fin D)) : Prop :=
   (∀ i p, p ∉ S → B i p.1 p.2 = 0) ∧
     ∀ p ∈ S, Matrix.single p.1 p.2 (1 : ℂ) ∈ Submodule.span ℂ (Set.range B)
 
 /-- Injectivity on all pairs is injectivity. -/
-theorem isInjectiveOn_univ_iff {B : MPSTensor n D} :
+theorem isInjectiveOn_univ_iff {B : MPTensor α (Fin D)} :
     IsInjectiveOn B Set.univ ↔ Kraus.IsInjective B := by
   refine ⟨fun h => ?_, fun h => ⟨fun _ _ hp => absurd (Set.mem_univ _) hp,
     fun _ _ => h.span_eq_top ▸ Submodule.mem_top⟩⟩
@@ -75,7 +75,7 @@ theorem isInjectiveOn_univ_iff {B : MPSTensor n D} :
 
 /-- A tensor injective on `S` is injective, as a map `ℂ^{D²} → ℂ^n`, on the vectors supported
 on `S`. -/
-theorem IsInjectiveOn.eq_zero_of_mulVec_eq_zero {B : MPSTensor n D} {S : Set (Fin D × Fin D)}
+theorem IsInjectiveOn.eq_zero_of_mulVec_eq_zero {B : MPTensor α (Fin D)} {S : Set (Fin D × Fin D)}
     (hB : IsInjectiveOn B S) {x : Fin D × Fin D → ℂ} (hx : ∀ p, p ∉ S → x p = 0)
     (h : (physicalMatrix B).mulVec x = 0) : x = 0 := by
   classical
@@ -99,7 +99,7 @@ theorem IsInjectiveOn.eq_zero_of_mulVec_eq_zero {B : MPSTensor n D} {S : Set (Fi
 
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
 `V†V = Π`. -/
-theorem polarSupportMatrix_eq_diagonal {B : MPSTensor n D} {S : Set (Fin D × Fin D)}
+theorem polarSupportMatrix_eq_diagonal {B : MPTensor α (Fin D)} {S : Set (Fin D × Fin D)}
     [DecidablePred (· ∈ S)] (hB : IsInjectiveOn B S) :
     polarSupportMatrix B = Matrix.diagonal fun x => if virtualPairEquiv D x ∈ S then 1 else 0 := by
   rw [polarSupportMatrix,
@@ -110,7 +110,7 @@ theorem polarSupportMatrix_eq_diagonal {B : MPSTensor n D} {S : Set (Fin D × Fi
 
 /-- **The columns of the isometric factor** of a tensor injective on `S`:
 `∑ᵢ (V_{ix})^* V_{iy}` is `1` if `x = y` lies in `S` and `0` otherwise. -/
-theorem sum_star_polarIsoMatrix_mul {B : MPSTensor n D} {S : Set (Fin D × Fin D)}
+theorem sum_star_polarIsoMatrix_mul {B : MPTensor α (Fin D)} {S : Set (Fin D × Fin D)}
     [DecidablePred (· ∈ S)] (hB : IsInjectiveOn B S) (x y : Fin (D * D)) :
     ∑ i, star (polarIsoMatrix B i x) * polarIsoMatrix B i y =
       if x = y ∧ virtualPairEquiv D x ∈ S then 1 else 0 := by
@@ -124,7 +124,7 @@ theorem sum_star_polarIsoMatrix_mul {B : MPSTensor n D} {S : Set (Fin D × Fin D
 
 /-- The positive part of a tensor injective on `S` has no component outside `S`: `P^x = 0` for
 the pairs `x ∉ S`, as `Π P = P`. -/
-theorem polarPosTensor_eq_zero {B : MPSTensor n D} {S : Set (Fin D × Fin D)}
+theorem polarPosTensor_eq_zero {B : MPTensor α (Fin D)} {S : Set (Fin D × Fin D)}
     (hB : IsInjectiveOn B S) {x : Fin (D * D)} (hx : virtualPairEquiv D x ∉ S) :
     polarPosTensor B x = 0 := by
   classical
@@ -142,7 +142,7 @@ bond pairs, `V_{ix} = ∑ₐ B^i_{a} G_{a x}`, for every tensor.
 arXiv:2307.01696, eq. (13), where `G = P⁻¹` for injective `B`; in general `G` is a right factor
 of `P` onto the support projector, as in the Supplemental Material, "Proof of Lemma 1 and
 extension to non-normal tensors". -/
-theorem exists_polarIsoMatrix_eq_sum (B : MPSTensor n D) :
+theorem exists_polarIsoMatrix_eq_sum (B : MPTensor α (Fin D)) :
     ∃ G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ, ∀ i x, polarIsoMatrix B i x =
       ∑ a, B i (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 * G a x := by
   obtain ⟨R, hR⟩ := Matrix.exists_polarIso_eq_mul (physicalMatrix B)

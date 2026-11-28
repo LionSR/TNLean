@@ -38,9 +38,9 @@ theorem interval_interval {d D N a n b m : ℕ} (A : MPSChainTensor d D N)
 /-- The interval transfer map is the ordered product selected by list drop and take. -/
 theorem transferMap_interval {d D N : ℕ} (A : MPSChainTensor d D N)
     (a n : ℕ) (h : a + n ≤ N) :
-    Kraus.transferMap (blockTensor (interval A a n h)) =
+    Kraus.transferMap (eval (interval A a n h)) =
       (((List.ofFn fun i => Kraus.transferMap (A i)).drop a).take n).prod := by
-  rw [transferMap_blockTensor]
+  rw [transferMap_eval]
   congr 1
   apply List.ext_getElem
   · simp only [List.length_ofFn, List.length_take, List.length_drop]

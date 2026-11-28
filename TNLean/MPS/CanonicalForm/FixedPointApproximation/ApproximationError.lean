@@ -42,7 +42,7 @@ stays bounded. The variants ending in `_mul` state the `O`-bound itself for all 
    (arXiv:2103.13367, eq. (26)), which halves the exponent. Here `P_∞²` is bounded below by a
    positive multiple of the identity, so the Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of
    `CFC.norm_sqrt_sub_sqrt_le_div` applies and keeps the exponent, as in arXiv:2606.24475,
-   App. B3, eqs. (S27)–(S32). `exists_norm_polarPos_blockTensor_sub_le`, called at rate `γ`,
+   App. B3, eqs. (S27)–(S32). `exists_norm_polarPos_block_sub_le`, called at rate `γ`,
    gives `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`.
 3. **Telescoping.** For an idempotent `T_∞` and `‖T - T_∞‖ ≤ δ`,
    `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied with
@@ -69,7 +69,7 @@ stays bounded. The variants ending in `_mul` state the `O`-bound itself for all 
 * `norm_pow_sub_pow_le_of_isIdempotentElem` (in `TNLean.Algebra.NormedRingTelescoping`) — the
   telescoping bound of step 3.
 * Steps 1 and 2 are `MPSTensor.exists_norm_transferMap_pow_sub_le` and
-  `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` in
+  `MPSTensor.exists_norm_polarPos_block_sub_le` in
   `TNLean.MPS.Preparation.PositivePartRate`.
 * `MPSTensor.exists_norm_trace_prod_range_transferMatrix_sub_one_le` — the telescoping
   estimate for a product of mixed transfer matrices, each near the idempotent `τ_∞`.
@@ -102,7 +102,6 @@ stays bounded. The variants ending in `_mul` state the `O`-bound itself for all 
 open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
-open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
@@ -122,7 +121,7 @@ noncomputable def mixedTransferMatrixLeft (B : MPSTensor (D * D) D) :
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Telescoping bound for products of mixed transfer matrices.** In the setting of
-`exists_norm_polarPos_blockTensor_sub_le`, write `τ_L` for the mixed transfer matrix of the
+`exists_norm_polarPos_block_sub_le`, write `τ_L` for the mixed transfer matrix of the
 positive part `P_L` of the `L`-site blocked tensor against the fixed-point tensor `P_∞`, and
 `τ_∞` for that of `P_∞` against itself. There are `K ≥ 0` and `C > 0` such that
 `‖τ_L - τ_∞‖ ≤ K e^{-γ L/ξ}` for every `L`, and every family of matrices `X j` with
@@ -138,7 +137,7 @@ theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d 
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K C : ℝ, 0 ≤ K ∧ 0 < C ∧
-      (∀ L : ℕ, ‖transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L))
+      (∀ L : ℕ, ‖transferMatrix (Kraus.mixedMapLM (polarPosTensor (Kraus.block A L))
           (fixedPointTensor σ)) -
         transferMatrix (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ))‖ ≤
           K * Real.exp (-γ / correlationLength lam₂) ^ L) ∧
@@ -151,7 +150,7 @@ theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d 
             Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K₁, hK₁, hpos⟩ :=
-    exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+    exists_norm_polarPos_block_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
   set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
   have hK₃ : 0 ≤ K₃ := norm_nonneg _
@@ -168,8 +167,8 @@ theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d 
   refine ⟨K₃ * K₁, K₄ * c * K + K + 1, by positivity, by positivity, fun L => ?_,
     fun q M _ X hδ => ?_⟩
   · -- `τ_L - τ_∞ = Ψ(P_L - P_∞)`.
-    have hTΨ : transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L))
-        (fixedPointTensor σ)) - Tinf = Ψ (Matrix.polarPos (physicalMatrix (blockTensor A L)) -
+    have hTΨ : transferMatrix (Kraus.mixedMapLM (polarPosTensor (Kraus.block A L))
+        (fixedPointTensor σ)) - Tinf = Ψ (Matrix.polarPos (physicalMatrix (Kraus.block A L)) -
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
       rw [map_sub]
       congr 1
@@ -224,7 +223,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ ≤
+      ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M - 1‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
@@ -249,23 +248,23 @@ arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", 
 concludes `O(ε_q)` from `ε_q + ε_q² e^{ε_q}(1 + O(ε_q/M))`, which is the present bound in the
 regime where `ε_q` stays bounded. The source states the estimate for `0 < γ < 1/2`; the range
 `γ < 1` is a project result, since the positive parts are estimated with the Lipschitz bound of
-the square root at the positive definite limit (`exists_norm_polarPos_blockTensor_sub_le`). -/
+the square root at the positive definite limit (`exists_norm_polarPos_block_sub_le`). -/
 theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
+      |1 - ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖| ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   obtain ⟨C, hC, h⟩ :=
     exists_norm_mpvOverlap_polarPosTensor_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
   refine ⟨C, hC, fun q M _ => ?_⟩
-  calc |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖|
-      = |‖(1 : ℂ)‖ - ‖mpvOverlap (polarPosTensor (blockTensor A q))
+  calc |1 - ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖|
+      = |‖(1 : ℂ)‖ - ‖mpvOverlap (polarPosTensor (Kraus.block A q))
           (fixedPointTensor σ) M‖| := by rw [norm_one]
-    _ ≤ ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ := by
+    _ ≤ ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M - 1‖ := by
         rw [norm_sub_rev]; exact abs_norm_sub_norm_le _ _
     _ ≤ _ := h q M
 
@@ -372,15 +371,15 @@ theorem norm_mpvOverlap_le {n D₁ D₂ : ℕ} (X : MPSTensor n D₁) (Y : MPSTe
 /-- The positive part of the `q`-site blocked tensor generates, on `M` blocks, a state of the
 same norm as the periodic state of `A` on `qM` sites: both squared norms are `Tr E_A^{qM}`.
 The source states `E_B = E_A^q` (arXiv:2307.01696, text after eq. (6)); `E_P = E_B` follows from
-`B = V P` (`transferMap_polarPosTensor_blockTensor`). -/
-theorem norm_mpvState_polarPosTensor_blockTensor [NeZero D] (A : MPSTensor d D) (q M : ℕ) :
-    ‖mpvState (polarPosTensor (blockTensor A q)) M‖ = ‖mpvState A (q * M)‖ := by
-  have h : ((‖mpvState (polarPosTensor (blockTensor A q)) M‖ ^ 2 : ℝ) : ℂ) =
+`B = V P` (`transferMap_polarPosTensor_block`). -/
+theorem norm_mpvState_polarPosTensor_block [NeZero D] (A : MPSTensor d D) (q M : ℕ) :
+    ‖mpvState (polarPosTensor (Kraus.block A q)) M‖ = ‖mpvState A (q * M)‖ := by
+  have h : ((‖mpvState (polarPosTensor (Kraus.block A q)) M‖ ^ 2 : ℝ) : ℂ) =
       ((‖mpvState A (q * M)‖ ^ 2 : ℝ) : ℂ) := by
     rw [ofReal_norm_mpvState_sq, ofReal_norm_mpvState_sq,
       ← trace_transferMatrix_transferMap_pow_eq_mpvOverlap,
       ← trace_transferMatrix_transferMap_pow_eq_mpvOverlap,
-      transferMap_polarPosTensor_blockTensor, transferMatrix_pow, ← pow_mul]
+      transferMap_polarPosTensor_block, transferMatrix_pow, ← pow_mul]
   exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1
     (Complex.ofReal_injective h)
 
@@ -397,7 +396,7 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
+      |1 - ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖| ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨C, hC, h⟩ :=
@@ -410,14 +409,14 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
     rw [mpvOverlap_fixedPointTensor_self hσ.posSemidef htr] at h1
     exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
       (Complex.ofReal_injective (by rw [h1]; simp))
-  have hz : ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ ≤ 1 + B := by
+  have hz : ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖ ≤ 1 + B := by
     refine (norm_mpvOverlap_le _ _ M).trans ?_
-    rw [hfp, mul_one, norm_mpvState_polarPosTensor_blockTensor]
+    rw [hfp, mul_one, norm_mpvState_polarPosTensor_block]
     nlinarith [hB (q * M), norm_nonneg (mpvState A (q * M))]
   refine le_mul_of_le_mul_exp_of_le hC.le (by linarith) (by positivity) (h q M) ?_
   rw [abs_le]
   constructor <;> linarith [norm_nonneg
-    (mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M)]
+    (mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M)]
 
 /-! ### The approximation error -/
 
@@ -426,7 +425,7 @@ through the regrouping of sites into blocks (arXiv:2307.01696, eqs. (9) and (10)
 noncomputable def approximatingMPVStateRaw (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
     (q M : ℕ) : MPVSpace (Fin d) (M * q) :=
   (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm fun s =>
-    mpv (approximatingTensor (blockTensor A q) σ) ((Kraus.blockedConfigEquiv d M q).symm s)
+    mpv (approximatingTensor (Kraus.block A q) σ) ((Kraus.blockConfigEquiv (Fin d) M q).symm s)
 
 /-- The **approximating state** `|φ'_N⟩ = |φ_M(V P_∞)⟩ / ‖φ_M(V P_∞)‖` on `N = Mq` sites
 (arXiv:2307.01696, eqs. (9) and (10)). -/
@@ -437,7 +436,7 @@ noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D)
 @[simp] lemma approximatingMPVStateRaw_apply (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ) (q M : ℕ) (s : Cfg d (M * q)) :
     approximatingMPVStateRaw A σ q M s =
-      mpv (approximatingTensor (blockTensor A q) σ) ((Kraus.blockedConfigEquiv d M q).symm s) := by
+      mpv (approximatingTensor (Kraus.block A q) σ) ((Kraus.blockConfigEquiv (Fin d) M q).symm s) := by
   simp [approximatingMPVStateRaw, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- For `B_q` injective, the unnormalized approximating state is a unit vector.
@@ -446,11 +445,11 @@ arXiv:2307.01696, eq. (10) and Supplemental Material, line 1013: the approximati
 product of the block unitaries
 applied to "(normalized) nearest-neighbor entangled pairs", hence a unit vector. -/
 theorem norm_approximatingMPVStateRaw (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hB : Kraus.IsInjective (Kraus.block A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
     ‖approximatingMPVStateRaw A σ q M‖ = 1 := by
   have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (approximatingMPVStateRaw A σ q M)).symm
-  rw [PiLp.inner_apply, ← (Kraus.blockedConfigEquiv d M q).sum_comp] at h
+  rw [PiLp.inner_apply, ← (Kraus.blockConfigEquiv (Fin d) M q).sum_comp] at h
   simp only [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply] at h
   refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_injective ?_)
   push_cast
@@ -461,7 +460,7 @@ theorem norm_approximatingMPVStateRaw (A : MPSTensor d D) {q : ℕ}
 
 arXiv:2307.01696, eq. (10), as for `norm_approximatingMPVStateRaw`. -/
 theorem norm_approximatingMPVState (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hB : Kraus.IsInjective (Kraus.block A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
     ‖approximatingMPVState A σ q M‖ = 1 := by
   rw [approximatingMPVState, norm_approximatingMPVStateRaw A hB hσ htr M]
@@ -475,17 +474,17 @@ arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i): the source's step
 term of its triangle inequality "is exactly equal to the LHS of eq. (S9)", which rests on this
 identity. -/
 theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hB : Kraus.IsInjective (Kraus.block A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
     approximatingMPVState A σ q M = approximatingMPVStateRaw A σ q M ∧
       ⟪approximatingMPVState A σ q M, mpvState A (M * q)⟫_ℂ =
-        mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M := by
+        mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M := by
   have hinner : ∀ w : MPVSpace (Fin d) (M * q),
       ⟪approximatingMPVStateRaw A σ q M, w⟫_ℂ =
-        ∑ τ : Fin M → Fin (blockPhysDim d q),
-          star (mpv (approximatingTensor (blockTensor A q) σ) τ) *
-            w (Kraus.blockedConfigEquiv d M q τ) := fun w => by
-    rw [PiLp.inner_apply, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
+        ∑ τ : Fin M → (Fin q → Fin d),
+          star (mpv (approximatingTensor (Kraus.block A q) σ) τ) *
+            w (Kraus.blockConfigEquiv (Fin d) M q τ) := fun w => by
+    rw [PiLp.inner_apply, ← (Kraus.blockConfigEquiv (Fin d) M q).sum_comp]
     refine Finset.sum_congr rfl fun τ _ => ?_
     rw [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply, mul_comm]
     rfl
@@ -493,7 +492,7 @@ theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
     rw [approximatingMPVState, norm_approximatingMPVStateRaw A hB hσ htr M]; simp
   refine ⟨heq, ?_⟩
   rw [heq, hinner]
-  simp only [mpvState_apply, mpv_blockedConfigEquiv_eq_sum_polar, mpv_approximatingTensor]
+  simp only [mpvState_apply, mpv_blockConfigEquiv_eq_sum_polar, mpv_approximatingTensor]
   rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_prod_const]
   simp only [mpvOverlap, mpv_fixedPointTensor]
   exact Finset.sum_congr rfl fun τ _ => mul_comm _ _
@@ -631,14 +630,14 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   have hy0 : 0 ≤ y := by positivity
   have hδy : δ ^ 2 ≤ y := by rw [← hδ2]; exact le_mul_of_one_le_left (by positivity) hM
   have hexp : 1 ≤ Real.exp (C * y) := Real.one_le_exp (by positivity)
-  have hB : Kraus.IsInjective (blockTensor A q) :=
-    (isNBlkInjective_iff_blockTensor_isInjective A q).1 (Kraus.isNBlkInjective_of_le hLpos hL hLq)
+  have hB : Kraus.IsInjective (Kraus.block A q) :=
+    (Kraus.isNBlkInjective_iff_isInjective_block A q).1 (Kraus.isNBlkInjective_of_le hLpos hL hLq)
   obtain ⟨-, hz⟩ := inner_approximatingMPVState_mpvState A hB hσ.posSemidef htr M
   have hφt := (norm_approximatingMPVState A hB hσ.posSemidef htr M).le
   -- It suffices to bound `‖φ_N(A)‖² - |⟨φ_M(P_∞)|φ_M(P_q)⟩|²`.
   suffices h : 1 / 2 ≤ ‖mpvState A (M * q)‖ ^ 2 ∧
       ‖mpvState A (M * q)‖ ^ 2 -
-          ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖ ^ 2 ≤
+          ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖ ^ 2 ≤
         C * y * Real.exp (C * y) / 2 by
     rw [← hz] at h
     exact (one_sub_norm_inner_smul_inv_norm_le_two_mul hφt h.1 h.2).trans_eq (by ring)
@@ -654,8 +653,8 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
       exact ((pow_lt_pow_iff_left₀ (by positivity) (by norm_num) two_ne_zero).1 h6).le
     have hK5' : K₅ * x ^ q ≤ 1 / 2 := hK5
     have hAq : ‖mpvState A (1 * q)‖ = ‖mpvState A q‖ := by rw [one_mul]
-    have hvu : ‖mpvState A q‖ = ‖mpvState (polarPosTensor (blockTensor A q)) 1‖ := by
-      rw [norm_mpvState_polarPosTensor_blockTensor, mul_one]
+    have hvu : ‖mpvState A q‖ = ‖mpvState (polarPosTensor (Kraus.block A q)) 1‖ := by
+      rw [norm_mpvState_polarPosTensor_block, mul_one]
     rw [hAq]
     refine ⟨by linarith only [(abs_le.1 hc1).1, hK5'], ?_⟩
     rw [hvu]
@@ -677,7 +676,7 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
       hsmall
     linarith only [h]
   refine ⟨by linarith only [(abs_le.1 hcy).1, hK5y], ?_⟩
-  set s := ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖
+  set s := ‖mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor σ) M‖
   have hs0 : 0 ≤ s := norm_nonneg _
   set u := C₁ * y * Real.exp (C₁ * y)
   have hu0 : 0 ≤ u := by positivity
